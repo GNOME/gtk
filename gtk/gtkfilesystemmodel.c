@@ -170,6 +170,7 @@ struct _GtkFileSystemModel
   guint                 show_hidden :1; /* whether to show hidden files */
   guint                 show_folders :1;/* whether to show folders */
   guint                 show_files :1;  /* whether to show files */
+  guint                 filter_folders :1;/* whether filter applies to folders */
 };
 
 #define GTK_FILE_SYSTEM_MODEL_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_SYSTEM_MODEL, GtkFileSystemModelClass))
@@ -341,7 +342,7 @@ node_should_be_visible (GtkFileSystemModel *model, guint id)
   FileModelNode *node = get_node (model, id);
   GtkFileFilterInfo filter_info = { 0, };
   GtkFileFilterFlags required;
-  gboolean is_folder, result;
+  gboolean result;
   char *mime_type = NULL;
   char *filename = NULL;
   char *uri = NULL;
@@ -353,15 +354,19 @@ node_should_be_visible (GtkFileSystemModel *model, guint id)
       (g_file_info_get_is_hidden (node->info) || g_file_info_get_is_backup (node->info)))
     return FALSE;
 
-  is_folder = _gtk_file_info_consider_as_directory (node->info);
-  
-  /* wtf? */
-  if (model->show_folders != model->show_files &&
-      model->show_folders != is_folder)
-    return FALSE;
+  if (_gtk_file_info_consider_as_directory (node->info))
+    {
+      if (!model->show_folders)
+        return FALSE;
 
-  if (is_folder)
-    return TRUE;
+      if (!model->filter_folders)
+        return TRUE;
+    }
+  else
+    {
+      if (!model->show_files)
+        return FALSE;
+    }
 
   if (model->filter == NULL)
     return TRUE;
@@ -1036,6 +1041,7 @@ _gtk_file_system_model_init (GtkFileSystemModel *model)
   model->show_files = TRUE;
   model->show_folders = TRUE;
   model->show_hidden = FALSE;
+  model->filter_folders = FALSE;
 
   model->sort_column_id = GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID;
 
@@ -1475,6 +1481,30 @@ _gtk_file_system_model_set_show_files (GtkFileSystemModel *model,
 }
 
 /**
+ * _gtk_file_system_model_set_filter_folders:
+ * @model: a #GtkFileSystemModel
+ * @filter_folders: whether the filter applies to folders
+ * 
+ * Sets whether the filter set by _gtk_file_system_model_set_filter()
+ * applies to folders. By default, it does not and folders are always
+ * visible.
+ **/
+void
+_gtk_file_system_model_set_filter_folders (GtkFileSystemModel *model,
+					   gboolean            filter_folders)
+{
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+
+  filter_folders = filter_folders != FALSE;
+
+  if (filter_folders != model->filter_folders)
+    {
+      model->filter_folders = filter_folders;
+      gtk_file_system_model_refilter_all (model);
+    }
+}
+
+/**
  * _gtk_file_system_model_get_cancellable:
  * @model: the model
  *
@@ -1816,7 +1846,8 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
  * @filter: (allow-none): %NULL or filter to use
  * 
  * Sets a filter to be used for deciding if a row should be visible or not.
- * Directories are always visible.
+ * Whether this filter applies to directories can be toggled with
+ * _gtk_file_system_model_set_filter_folders().
  **/
 void
 _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
