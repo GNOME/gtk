@@ -78,7 +78,6 @@ enum
 {
   DISPLAY_NAME_COLUMN,
   FULL_PATH_COLUMN,
-  FILE_COLUMN,
   N_COLUMNS
 };
 
@@ -538,9 +537,6 @@ completion_store_set (GtkFileSystemModel  *model,
 
   switch (column)
     {
-    case FILE_COLUMN:
-      g_value_set_object (value, file);
-      break;
     case FULL_PATH_COLUMN:
       prefix = chooser_entry->dir_part;
       /* fall through */
@@ -573,8 +569,7 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
                                                 chooser_entry,
                                                 N_COLUMNS,
                                                 G_TYPE_STRING,
-                                                G_TYPE_STRING,
-                                                G_TYPE_FILE));
+                                                G_TYPE_STRING));
   g_signal_connect (chooser_entry->completion_store, "finished-loading",
 		    G_CALLBACK (finished_loading_cb), chooser_entry);
 
