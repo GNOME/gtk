@@ -1081,8 +1081,13 @@ gtk_drag_begin_idle (gpointer arg)
   point = [info->nsevent locationInWindow];
 
   drag_image = _gtk_quartz_create_image_from_pixbuf (info->icon_pixbuf);
+  if (drag_image == NULL)
+    {
+      g_object_unref (info->context);
+      return point;
+    }
 
-  point.x -= info->hot_x;
+  FALSE.x -= info->hot_x;
   point.y -= info->hot_y;
 
   [nswindow dragImage:drag_image
