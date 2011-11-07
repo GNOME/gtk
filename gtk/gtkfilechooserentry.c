@@ -635,106 +635,42 @@ find_common_prefix (GtkFileChooserEntry *chooser_entry,
   return TRUE;
 }
 
-typedef enum {
-  INVALID_INPUT,		/* what the user typed is bogus */
-  NO_MATCH,			/* no matches based on what the user typed */
-  NOTHING_INSERTED_COMPLETE,	/* what the user typed is already completed as far as it will go */
-  NOTHING_INSERTED_UNIQUE,	/* what the user typed is already completed, and is a unique match */
-  COMPLETED,			/* completion inserted (ambiguous suffix) */
-  COMPLETED_UNIQUE,		/* completion inserted, and it is a complete name and a unique match */
-  COMPLETE_BUT_NOT_UNIQUE	/* completion inserted, it is a complete name but not unique */
-} CommonPrefixResult;
-
 /* Finds a common prefix based on the contents of the entry
  * and mandatorily appends it
  */
-static CommonPrefixResult
-append_common_prefix (GtkFileChooserEntry *chooser_entry)
+static void
+explicitly_complete (GtkFileChooserEntry *chooser_entry)
 {
   gchar *common_prefix;
   GFile *unique_file;
   gboolean is_complete_not_unique;
   gboolean prefix_expands_the_file_part;
-  GError *error;
-  CommonPrefixResult result = NO_MATCH;
-  gboolean have_result;
+  gint cursor_pos;
+  gint pos;
 
   clear_completions (chooser_entry);
 
-  if (chooser_entry->completion_store == NULL)
-    return NO_MATCH;
-
-  error = NULL;
-  if (!find_common_prefix (chooser_entry, &common_prefix, &unique_file, &is_complete_not_unique, &prefix_expands_the_file_part, &error))
+  if (chooser_entry->completion_store == NULL
+      || !find_common_prefix (chooser_entry, &common_prefix, &unique_file, &is_complete_not_unique, &prefix_expands_the_file_part, NULL)
+      || !common_prefix
+      || !prefix_expands_the_file_part)
     {
-      g_error_free (error);
-
-      return INVALID_INPUT;
+      beep (chooser_entry);
+      return;
     }
 
-  have_result = FALSE;
+  cursor_pos = gtk_editable_get_position (GTK_EDITABLE (chooser_entry));
+  pos = chooser_entry->file_part_pos;
 
-  if (unique_file)
-    {
-      g_object_unref (unique_file);
+  chooser_entry->in_change = TRUE;
+  gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
+                            pos, cursor_pos);
+  gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
+                            common_prefix, -1,
+                            &pos);
+  chooser_entry->in_change = FALSE;
 
-      if (prefix_expands_the_file_part)
-        result = COMPLETED_UNIQUE;
-      else
-        result = NOTHING_INSERTED_UNIQUE;
-
-      have_result = TRUE;
-    }
-  else
-    {
-      if (is_complete_not_unique)
-        {
-          result = COMPLETE_BUT_NOT_UNIQUE;
-          have_result = TRUE;
-        }
-    }
-
-  if (common_prefix)
-    {
-      gint cursor_pos;
-      gint pos;
-
-      cursor_pos = gtk_editable_get_position (GTK_EDITABLE (chooser_entry));
-
-      pos = chooser_entry->file_part_pos;
-
-      if (prefix_expands_the_file_part)
-        {
-          chooser_entry->in_change = TRUE;
-          gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
-                                    pos, cursor_pos);
-          gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
-                                    common_prefix, -1,
-                                    &pos);
-          chooser_entry->in_change = FALSE;
-
-          gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
-        }
-      else if (!have_result)
-        {
-          result = NOTHING_INSERTED_COMPLETE;
-          have_result = TRUE;
-        }
-
-      g_free (common_prefix);
-
-      if (have_result)
-        return result;
-      else
-        return COMPLETED;
-    }
-  else
-    {
-      if (have_result)
-        return result;
-      else
-        return NO_MATCH;
-    }
+  gtk_editable_set_position (GTK_EDITABLE (chooser_entry), pos);
 }
 
 static void
@@ -742,55 +678,6 @@ gtk_file_chooser_entry_grab_focus (GtkWidget *widget)
 {
   GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->grab_focus (widget);
   _gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (widget));
-}
-
-static void
-explicitly_complete (GtkFileChooserEntry *chooser_entry)
-{
-  CommonPrefixResult result;
-
-  g_assert (chooser_entry->current_folder_loaded);
-
-  /* FIXME: see what Emacs does in case there is no common prefix, or there is more than one match:
-   *
-   * - If there is a common prefix, insert it (done)
-   * - If there is no common prefix, pop up the suggestion window
-   * - If there are no matches at all, beep and bring up a tooltip (done)
-   * - If the suggestion window is already up, scroll it
-   */
-  result = append_common_prefix (chooser_entry);
-
-  switch (result)
-    {
-    case INVALID_INPUT:
-      /* We already beeped in append_common_prefix(); do nothing here */
-      break;
-
-    case NO_MATCH:
-      beep (chooser_entry);
-      break;
-
-    case NOTHING_INSERTED_COMPLETE:
-      /* FIXME: pop up the suggestion window or scroll it */
-      break;
-
-    case NOTHING_INSERTED_UNIQUE:
-      break;
-
-    case COMPLETED:
-      /* Nothing to do */
-      break;
-
-    case COMPLETED_UNIQUE:
-      /* Nothing to do */
-      break;
-
-    case COMPLETE_BUT_NOT_UNIQUE:
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
 }
 
 static void
