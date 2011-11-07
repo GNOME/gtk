@@ -121,8 +121,7 @@ static gboolean completion_match_func     (GtkEntryCompletion  *comp,
 					   GtkTreeIter         *iter,
 					   gpointer             data);
 
-static RefreshStatus refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
-						           const char          *text);
+static void refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry);
 static void finished_loading_cb (GtkFileSystemModel  *model,
                                  GError              *error,
 		                 GtkFileChooserEntry *chooser_entry);
@@ -158,13 +157,9 @@ gtk_file_chooser_entry_dispatch_properties_changed (GObject     *object,
           pspecs[i]->name == I_("selection-bound") ||
           pspecs[i]->name == I_("text"))
         {
-          char *text;
-
           chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
 
-          text = gtk_file_chooser_entry_get_completion_text (chooser_entry);
-          refresh_current_folder_and_file_part (chooser_entry, text);
-          g_free (text);
+          refresh_current_folder_and_file_part (chooser_entry);
 
           break;
         }
@@ -769,9 +764,8 @@ reload_current_folder (GtkFileChooserEntry *chooser_entry,
   return REFRESH_OK;
 }
 
-static RefreshStatus
-refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
-				      const gchar *        text)
+static void
+refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
 {
   GFile *folder_file;
   gchar *file_part;
@@ -779,6 +773,9 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   gint file_part_pos;
   GError *error;
   RefreshStatus result;
+  char *text;
+
+  text = gtk_file_chooser_entry_get_completion_text (chooser_entry);
 
   error = NULL;
   if (!gtk_file_chooser_entry_parse (chooser_entry,
@@ -820,7 +817,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
 
   if (result == REFRESH_OK)
     {
-      result = reload_current_folder (chooser_entry, folder_file);
+      reload_current_folder (chooser_entry, folder_file);
     }
   else
     {
@@ -830,14 +827,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   if (folder_file)
     g_object_unref (folder_file);
 
-  g_assert (/* we are OK and we have a current folder file and (loading process or folder handle)... */
-	    ((result == REFRESH_OK)
-	     && (chooser_entry->current_folder_file != NULL))
-	    /* ... OR we have an error, and we don't have a current folder file nor a loading process nor a folder handle */
-	    || ((result != REFRESH_OK)
-		&& (chooser_entry->current_folder_file == NULL)));
-
-  return result;
+  g_free (text);
 }
 
 #ifdef G_OS_WIN32
