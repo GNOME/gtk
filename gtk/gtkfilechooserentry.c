@@ -79,10 +79,6 @@ struct _GtkFileChooserEntry
 
   GtkTreeModel *completion_store;
 
-  GtkWidget *completion_feedback_window;
-  GtkWidget *completion_feedback_label;
-  guint completion_feedback_timeout_id;
-
   guint current_folder_loaded : 1;
   guint in_change      : 1;
   guint eat_tabs       : 1;
@@ -97,12 +93,9 @@ enum
   N_COLUMNS
 };
 
-#define COMPLETION_FEEDBACK_TIMEOUT_MS 2000
-
 static void     gtk_file_chooser_entry_finalize       (GObject          *object);
 static void     gtk_file_chooser_entry_dispose        (GObject          *object);
 static void     gtk_file_chooser_entry_grab_focus     (GtkWidget        *widget);
-static void     gtk_file_chooser_entry_unmap          (GtkWidget        *widget);
 static gboolean gtk_file_chooser_entry_key_press_event (GtkWidget *widget,
 							GdkEventKey *event);
 static gboolean gtk_file_chooser_entry_focus_out_event (GtkWidget       *widget,
@@ -135,9 +128,6 @@ static RefreshStatus refresh_current_folder_and_file_part (GtkFileChooserEntry *
 static void finished_loading_cb (GtkFileSystemModel  *model,
                                  GError              *error,
 		                 GtkFileChooserEntry *chooser_entry);
-static void remove_completion_feedback (GtkFileChooserEntry *chooser_entry);
-static void pop_up_completion_feedback (GtkFileChooserEntry *chooser_entry,
-					const gchar         *feedback);
 
 G_DEFINE_TYPE (GtkFileChooserEntry, _gtk_file_chooser_entry, GTK_TYPE_ENTRY)
 
@@ -169,7 +159,6 @@ gtk_file_chooser_entry_dispatch_properties_changed (GObject     *object,
 
           chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
 
-          remove_completion_feedback (chooser_entry);
           gtk_editable_get_selection_bounds (editable, &start, &end);
           text = gtk_editable_get_chars (editable, 0, MIN (start, end));
           refresh_current_folder_and_file_part (chooser_entry, text);
@@ -192,7 +181,6 @@ _gtk_file_chooser_entry_class_init (GtkFileChooserEntryClass *class)
   gobject_class->dispatch_properties_changed = gtk_file_chooser_entry_dispatch_properties_changed;
 
   widget_class->grab_focus = gtk_file_chooser_entry_grab_focus;
-  widget_class->unmap = gtk_file_chooser_entry_unmap;
   widget_class->key_press_event = gtk_file_chooser_entry_key_press_event;
   widget_class->focus_out_event = gtk_file_chooser_entry_focus_out_event;
 
@@ -272,7 +260,6 @@ gtk_file_chooser_entry_dispose (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
 
-  remove_completion_feedback (chooser_entry);
   discard_loading_and_current_folder_file (chooser_entry);
 
   if (chooser_entry->completion_store)
@@ -388,8 +375,6 @@ static void
 clear_completions (GtkFileChooserEntry *chooser_entry)
 {
   chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
-
-  remove_completion_feedback (chooser_entry);
 }
 
 static void
@@ -760,207 +745,6 @@ gtk_file_chooser_entry_grab_focus (GtkWidget *widget)
 }
 
 static void
-gtk_file_chooser_entry_unmap (GtkWidget *widget)
-{
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
-
-  remove_completion_feedback (chooser_entry);
-
-  GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->unmap (widget);
-}
-
-static gboolean
-completion_feedback_window_expose_event_cb (GtkWidget      *widget,
-					    GdkEventExpose *event,
-					    gpointer        data)
-{
-  /* Stolen from gtk_tooltip_paint_window() */
-
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
-
-  gtk_paint_flat_box (chooser_entry->completion_feedback_window->style,
-		      chooser_entry->completion_feedback_window->window,
-		      GTK_STATE_NORMAL,
-		      GTK_SHADOW_OUT,
-		      NULL,
-		      chooser_entry->completion_feedback_window,
-		      "tooltip",
-		      0, 0,
-		      chooser_entry->completion_feedback_window->allocation.width,
-		      chooser_entry->completion_feedback_window->allocation.height);
-
-  return FALSE;
-}
-
-static void
-set_invisible_mouse_cursor (GdkWindow *window)
-{
-  GdkDisplay *display;
-  GdkCursor *cursor;
-
-  display = gdk_window_get_display (window);
-  cursor = gdk_cursor_new_for_display (display, GDK_BLANK_CURSOR);
-
-  gdk_window_set_cursor (window, cursor);
-
-  gdk_cursor_unref (cursor);
-}
-
-static void
-completion_feedback_window_realize_cb (GtkWidget *widget,
-				       gpointer data)
-{
-  /* We hide the mouse cursor inside the completion feedback window, since
-   * GtkEntry hides the cursor when the user types.  We don't want the cursor to
-   * come back if the completion feedback ends up where the mouse is.
-   */
-  set_invisible_mouse_cursor (gtk_widget_get_window (widget));
-}
-
-static void
-create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
-{
-  /* Stolen from gtk_tooltip_init() */
-
-  GtkWidget *alignment;
-
-  chooser_entry->completion_feedback_window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_type_hint (GTK_WINDOW (chooser_entry->completion_feedback_window),
-			    GDK_WINDOW_TYPE_HINT_TOOLTIP);
-  gtk_widget_set_app_paintable (chooser_entry->completion_feedback_window, TRUE);
-  gtk_window_set_resizable (GTK_WINDOW (chooser_entry->completion_feedback_window), FALSE);
-  gtk_widget_set_name (chooser_entry->completion_feedback_window, "gtk-tooltip");
-
-  alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
-			     chooser_entry->completion_feedback_window->style->ythickness,
-			     chooser_entry->completion_feedback_window->style->ythickness,
-			     chooser_entry->completion_feedback_window->style->xthickness,
-			     chooser_entry->completion_feedback_window->style->xthickness);
-  gtk_container_add (GTK_CONTAINER (chooser_entry->completion_feedback_window), alignment);
-  gtk_widget_show (alignment);
-
-  g_signal_connect (chooser_entry->completion_feedback_window, "expose-event",
-		    G_CALLBACK (completion_feedback_window_expose_event_cb), chooser_entry);
-  g_signal_connect (chooser_entry->completion_feedback_window, "realize",
-		    G_CALLBACK (completion_feedback_window_realize_cb), chooser_entry);
-  /* FIXME: connect to motion-notify-event, and *show* the cursor when the mouse moves */
-
-  chooser_entry->completion_feedback_label = gtk_label_new (NULL);
-  gtk_container_add (GTK_CONTAINER (alignment), chooser_entry->completion_feedback_label);
-  gtk_widget_show (chooser_entry->completion_feedback_label);
-}
-
-static gboolean
-completion_feedback_timeout_cb (gpointer data)
-{
-  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
-
-  chooser_entry->completion_feedback_timeout_id = 0;
-
-  remove_completion_feedback (chooser_entry);
-  return FALSE;
-}
-
-static void
-install_completion_feedback_timer (GtkFileChooserEntry *chooser_entry)
-{
-  if (chooser_entry->completion_feedback_timeout_id != 0)
-    g_source_remove (chooser_entry->completion_feedback_timeout_id);
-
-  chooser_entry->completion_feedback_timeout_id = gdk_threads_add_timeout (COMPLETION_FEEDBACK_TIMEOUT_MS,
-									   completion_feedback_timeout_cb,
-									   chooser_entry);
-}
-
-/* Gets the x position of the text cursor in the entry, in widget coordinates */
-static void
-get_entry_cursor_x (GtkFileChooserEntry *chooser_entry,
-		    gint                *x_ret)
-{
-  /* FIXME: see the docs for gtk_entry_get_layout_offsets().  As an exercise for
-   * the reader, you have to implement support for the entry's scroll offset and
-   * RTL layouts and all the fancy Pango stuff.
-   */
-
-  PangoLayout *layout;
-  gint layout_x, layout_y;
-  gint layout_index;
-  PangoRectangle strong_pos;
-  gint start_pos, end_pos;
-
-  layout = gtk_entry_get_layout (GTK_ENTRY (chooser_entry));
-
-  gtk_entry_get_layout_offsets (GTK_ENTRY (chooser_entry), &layout_x, &layout_y);
-
-  gtk_editable_get_selection_bounds (GTK_EDITABLE (chooser_entry), &start_pos, &end_pos);
-  layout_index = gtk_entry_text_index_to_layout_index (GTK_ENTRY (chooser_entry),
-                                                       end_pos);
-
-
-  pango_layout_get_cursor_pos (layout, layout_index, &strong_pos, NULL);
-
-  *x_ret = layout_x + strong_pos.x / PANGO_SCALE;
-}
-
-static void
-show_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
-{
-  /* More or less stolen from gtk_tooltip_position() */
-
-  GtkRequisition feedback_req;
-  gint entry_x, entry_y;
-  gint cursor_x;
-  GtkAllocation *entry_allocation;
-  int feedback_x, feedback_y;
-
-  gtk_widget_size_request (chooser_entry->completion_feedback_window, &feedback_req);
-
-  gdk_window_get_origin (GTK_WIDGET (chooser_entry)->window, &entry_x, &entry_y);
-  entry_allocation = &(GTK_WIDGET (chooser_entry)->allocation);
-
-  get_entry_cursor_x (chooser_entry, &cursor_x);
-
-  /* FIXME: fit to the screen if we bump on the screen's edge */
-  /* cheap "half M-width", use height as approximation of character em-size */
-  feedback_x = entry_x + cursor_x + entry_allocation->height / 2;
-  feedback_y = entry_y + (entry_allocation->height - feedback_req.height) / 2;
-
-  gtk_window_move (GTK_WINDOW (chooser_entry->completion_feedback_window), feedback_x, feedback_y);
-  gtk_widget_show (chooser_entry->completion_feedback_window);
-
-  install_completion_feedback_timer (chooser_entry);
-}
-
-static void
-pop_up_completion_feedback (GtkFileChooserEntry *chooser_entry,
-			    const gchar         *feedback)
-{
-  if (chooser_entry->completion_feedback_window == NULL)
-    create_completion_feedback_window (chooser_entry);
-
-  gtk_label_set_text (GTK_LABEL (chooser_entry->completion_feedback_label), feedback);
-
-  show_completion_feedback_window (chooser_entry);
-}
-
-static void
-remove_completion_feedback (GtkFileChooserEntry *chooser_entry)
-{
-  if (chooser_entry->completion_feedback_window)
-    gtk_widget_destroy (chooser_entry->completion_feedback_window);
-
-  chooser_entry->completion_feedback_window = NULL;
-  chooser_entry->completion_feedback_label = NULL;
-
-  if (chooser_entry->completion_feedback_timeout_id != 0)
-    {
-      g_source_remove (chooser_entry->completion_feedback_timeout_id);
-      chooser_entry->completion_feedback_timeout_id = 0;
-    }
-}
-
-static void
 explicitly_complete (GtkFileChooserEntry *chooser_entry)
 {
   CommonPrefixResult result;
@@ -984,10 +768,6 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
 
     case NO_MATCH:
       beep (chooser_entry);
-      /* translators: this text is shown when there are no completions 
-       * for something the user typed in a file chooser entry
-       */
-      pop_up_completion_feedback (chooser_entry, _("No match"));
       break;
 
     case NOTHING_INSERTED_COMPLETE:
@@ -995,10 +775,6 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
       break;
 
     case NOTHING_INSERTED_UNIQUE:
-      /* translators: this text is shown when there is exactly one completion 
-       * for something the user typed in a file chooser entry
-       */
-      pop_up_completion_feedback (chooser_entry, _("Sole completion"));
       break;
 
     case COMPLETED:
@@ -1010,11 +786,6 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
       break;
 
     case COMPLETE_BUT_NOT_UNIQUE:
-      /* translators: this text is shown when the text in a file chooser
-       * entry is a complete filename, but could be continued to find
-       * a longer match
-       */
-      pop_up_completion_feedback (chooser_entry, _("Complete, but not unique"));
       break;
 
     default:
@@ -1027,7 +798,7 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 {
   RefreshStatus status;
   gboolean is_error;
-  char *feedback_msg, *text;
+  char *text;
 
   text = gtk_editable_get_chars (GTK_EDITABLE (chooser_entry),
                                  0, gtk_editable_get_position (GTK_EDITABLE (chooser_entry)));
@@ -1046,57 +817,24 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
       else
 	{
 	  chooser_entry->load_complete_action = LOAD_COMPLETE_EXPLICIT_COMPLETION;
-
-	  /* Translators: this text is shown while the system is searching
-	   * for possible completions for filenames in a file chooser entry. */
-	  pop_up_completion_feedback (chooser_entry, _("Completing..."));
 	}
 
       break;
 
     case REFRESH_INVALID_INPUT:
       is_error = TRUE;
-      /* Translators: this is shown in the feedback for Tab-completion in a file
-       * chooser's text entry, when the user enters an invalid path. */
-      feedback_msg = _("Invalid path");
       break;
 
     case REFRESH_INCOMPLETE_HOSTNAME:
       is_error = TRUE;
-
-      if (chooser_entry->local_only)
-	{
-	  /* hostnames in a local_only file chooser?  user error */
-
-	  /* Translators: this is shown in the feedback for Tab-completion in a
-	   * file chooser's text entry when the user enters something like
-	   * "sftp://blahblah" in an app that only supports local filenames. */
-	  feedback_msg = _("Only local files may be selected");
-	}
-      else
-	{
-	  /* Another option is to complete the hostname based on the remote volumes that are mounted */
-
-	  /* Translators: this is shown in the feedback for Tab-completion in a
-	   * file chooser's text entry when the user hasn't entered the first '/'
-	   * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]") */
-	  feedback_msg = _("Incomplete hostname; end it with '/'");
-	}
-
       break;
 
     case REFRESH_NONEXISTENT:
       is_error = TRUE;
-
-      /* Translators: this is shown in the feedback for Tab-completion in a file
-       * chooser's text entry when the user enters a path that does not exist
-       * and then hits Tab */
-      feedback_msg = _("Path does not exist");
       break;
 
     case REFRESH_NOT_LOCAL:
       is_error = TRUE;
-      feedback_msg = _("Only local files may be selected");
       break;
 
     default:
@@ -1109,7 +847,6 @@ start_explicit_completion (GtkFileChooserEntry *chooser_entry)
       g_assert (chooser_entry->current_folder_file == NULL);
 
       beep (chooser_entry);
-      pop_up_completion_feedback (chooser_entry, feedback_msg);
       chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
     }
 }
@@ -1305,7 +1042,6 @@ finished_loading_cb (GtkFileSystemModel  *model,
 	  /* Since this came from explicit user action (Tab completion), we'll present errors visually */
 
 	  beep (chooser_entry);
-	  pop_up_completion_feedback (chooser_entry, error->message);
 	}
 
       return;
