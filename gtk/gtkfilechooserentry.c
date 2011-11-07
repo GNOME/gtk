@@ -679,59 +679,10 @@ gtk_file_chooser_entry_grab_focus (GtkWidget *widget)
 static void
 start_explicit_completion (GtkFileChooserEntry *chooser_entry)
 {
-  RefreshStatus status;
-  gboolean is_error;
-  char *text;
-
-  text = gtk_editable_get_chars (GTK_EDITABLE (chooser_entry),
-                                 0, gtk_editable_get_position (GTK_EDITABLE (chooser_entry)));
-  status = refresh_current_folder_and_file_part (chooser_entry, text);
-  g_free (text);
-
-  is_error = FALSE;
-
-  switch (status)
-    {
-    case REFRESH_OK:
-      g_assert (chooser_entry->current_folder_file != NULL);
-
-      if (chooser_entry->current_folder_loaded)
-	explicitly_complete (chooser_entry);
-      else
-	{
-	  chooser_entry->load_complete_action = LOAD_COMPLETE_EXPLICIT_COMPLETION;
-	}
-
-      break;
-
-    case REFRESH_INVALID_INPUT:
-      is_error = TRUE;
-      break;
-
-    case REFRESH_INCOMPLETE_HOSTNAME:
-      is_error = TRUE;
-      break;
-
-    case REFRESH_NONEXISTENT:
-      is_error = TRUE;
-      break;
-
-    case REFRESH_NOT_LOCAL:
-      is_error = TRUE;
-      break;
-
-    default:
-      g_assert_not_reached ();
-      return;
-    }
-
-  if (is_error)
-    {
-      g_assert (chooser_entry->current_folder_file == NULL);
-
-      beep (chooser_entry);
-      chooser_entry->load_complete_action = LOAD_COMPLETE_NOTHING;
-    }
+  if (chooser_entry->current_folder_loaded)
+    explicitly_complete (chooser_entry);
+  else
+    chooser_entry->load_complete_action = LOAD_COMPLETE_EXPLICIT_COMPLETION;
 }
 
 static gboolean
