@@ -845,22 +845,6 @@ fill_motion_event (GdkWindow *window,
                    gint       x_root,
                    gint       y_root)
 {
-  GdkModifierType state;
-
-  state = get_keyboard_modifiers_from_ns_event (nsevent);
-
-  switch ([nsevent type])
-    {
-    case NSLeftMouseDragged:
-    case NSRightMouseDragged:
-    case NSOtherMouseDragged:
-      state |= get_mouse_button_modifiers_from_ns_event (nsevent);
-      break;
-
-    case NSMouseMoved:
-      break;
-    }
-
   event->any.type = GDK_MOTION_NOTIFY;
   event->motion.window = window;
   event->motion.time = get_time_from_ns_event (nsevent);
@@ -869,7 +853,8 @@ fill_motion_event (GdkWindow *window,
   event->motion.x_root = x_root;
   event->motion.y_root = y_root;
   /* FIXME event->axes */
-  event->motion.state = state;
+  event->motion.state = get_keyboard_modifiers_from_ns_event (nsevent) |
+                        _gdk_quartz_events_get_current_mouse_modifiers ();
   event->motion.is_hint = FALSE;
   event->motion.device = _gdk_display->core_pointer;
 }
