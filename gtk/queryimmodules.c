@@ -39,6 +39,13 @@
 
 #include "gtk/gtkimmodule.h"
 #include "gtk/gtkversion.h"
+
+#undef GDK_DEPRECATED
+#undef GDK_DEPRECATED_FOR
+#define GDK_DEPRECATED
+#define GDK_DEPRECATED_FOR(f)
+#undef GTK_DISABLE_DEPRECATED
+
 #include "gtk/deprecated/gtkrc.h"
 
 static void
