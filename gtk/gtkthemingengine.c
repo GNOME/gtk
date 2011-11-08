@@ -1622,6 +1622,7 @@ render_background_internal (GtkThemingEngine *engine,
         }
       else
         {
+          cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
           scale_width = width;
           scale_height = height;
         }
