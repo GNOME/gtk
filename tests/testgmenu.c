@@ -387,7 +387,9 @@ menu_holder_get_menu (MenuHolder *holder)
 static const gchar menu_markup[] =
   "<menu id='edit-menu'>\n"
   "  <section>\n"
-  "    <item label='Undo' action='undo'/>\n"
+  "    <item action='undo'>\n"
+  "      <attribute name='label' translatable='yes' context='Stock label'>'_Undo'</attribute>\n"
+  "    </item>\n"
   "    <item label='Redo' action='redo'/>\n"
   "  </section>\n"
   "  <section></section>\n"
@@ -415,7 +417,7 @@ start_element (GMarkupParseContext *context,
                GError             **error)
 {
   if (strcmp (element_name, "menu") == 0)
-    g_menu_markup_parser_start_menu (context, NULL);
+    g_menu_markup_parser_start_menu (context, "gtk30", NULL);
 }
 
 static void
@@ -453,7 +455,7 @@ get_model (void)
    return G_MENU_MODEL (menu);
 }
 
-/* The example actions {{{1 */
+ /* The example actions {{{1 */
 
 static void
 activate_action (GSimpleAction *action, GVariant *parameter, gpointer user_data)
