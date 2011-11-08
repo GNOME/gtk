@@ -738,9 +738,7 @@ static void     gtk_tree_view_queue_draw_arrow               (GtkTreeView       
 static void     gtk_tree_view_draw_arrow                     (GtkTreeView        *tree_view,
                                                               cairo_t            *cr,
 							      GtkRBTree          *tree,
-							      GtkRBNode          *node,
-							      gint                x,
-							      gint                y);
+							      GtkRBNode          *node);
 static void     gtk_tree_view_get_arrow_xrange               (GtkTreeView        *tree_view,
 							      GtkRBTree          *tree,
 							      gint               *x1,
@@ -4690,9 +4688,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
   gboolean has_can_focus_cell;
   gboolean rtl;
   gint n_visible_columns;
-  gint pointer_x, pointer_y;
   gint grid_line_width;
-  gboolean got_pointer = FALSE;
   gboolean draw_vgrid_lines, draw_hgrid_lines;
   GtkStyleContext *context;
   GtkStateFlags state;
@@ -5041,18 +5037,10 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	      if (gtk_tree_view_draw_expanders (tree_view)
 		  && (node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT)
 		{
-		  if (!got_pointer)
-		    {
-		      gdk_window_get_pointer (tree_view->priv->bin_window, 
-					      &pointer_x, &pointer_y, NULL);
-		      got_pointer = TRUE;
-		    }
-
 		  gtk_tree_view_draw_arrow (GTK_TREE_VIEW (widget),
                                             cr,
 					    tree,
-					    node,
-					    pointer_x, pointer_y);
+					    node);
 		}
 	    }
 	  else
@@ -9986,10 +9974,7 @@ static void
 gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
                           cairo_t     *cr,
                           GtkRBTree   *tree,
-			  GtkRBNode   *node,
-			  /* in bin_window coordinates */
-			  gint         x,
-			  gint         y)
+			  GtkRBNode   *node)
 {
   GdkRectangle area;
   GtkStateFlags state = 0;
@@ -10031,11 +10016,6 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
         flags |= GTK_CELL_RENDERER_SELECTED;
 
       state = gtk_cell_renderer_get_state (NULL, widget, flags);
-
-      if (node == tree_view->priv->button_pressed_node &&
-          x >= area.x && x <= (area.x + area.width) &&
-          y >= area.y && y <= (area.y + area.height))
-        state |= GTK_STATE_FLAG_FOCUSED;
 
       if (node == tree_view->priv->prelight_node &&
           tree_view->priv->arrow_prelit)
