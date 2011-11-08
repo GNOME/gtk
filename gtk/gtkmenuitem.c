@@ -558,6 +558,21 @@ gtk_menu_item_dispose (GObject *object)
 }
 
 static void
+gtk_menu_item_do_set_right_justified (GtkMenuItem *menu_item,
+                                      gboolean     right_justified)
+{
+  GtkMenuItemPrivate *priv = menu_item->priv;
+
+  right_justified = right_justified != FALSE;
+
+  if (priv->right_justify != right_justified)
+    {
+      priv->right_justify = right_justified;
+      gtk_widget_queue_resize (GTK_WIDGET (menu_item));
+    }
+}
+
+static void
 gtk_menu_item_set_property (GObject      *object,
                             guint         prop_id,
                             const GValue *value,
@@ -568,7 +583,7 @@ gtk_menu_item_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_RIGHT_JUSTIFIED:
-      gtk_menu_item_set_right_justified (menu_item, g_value_get_boolean (value));
+      gtk_menu_item_do_set_right_justified (menu_item, g_value_get_boolean (value));
       break;
     case PROP_SUBMENU:
       gtk_menu_item_set_submenu (menu_item, g_value_get_object (value));
@@ -606,7 +621,7 @@ gtk_menu_item_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_RIGHT_JUSTIFIED:
-      g_value_set_boolean (value, gtk_menu_item_get_right_justified (menu_item));
+      g_value_set_boolean (value, menu_item->priv->right_justify);
       break;
     case PROP_SUBMENU:
       g_value_set_object (value, gtk_menu_item_get_submenu (menu_item));
@@ -2278,17 +2293,9 @@ void
 gtk_menu_item_set_right_justified (GtkMenuItem *menu_item,
                                    gboolean     right_justified)
 {
-  GtkMenuItemPrivate *priv = menu_item->priv;
-
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
-  right_justified = right_justified != FALSE;
-
-  if (priv->right_justify != right_justified)
-    {
-      priv->right_justify = right_justified;
-      gtk_widget_queue_resize (GTK_WIDGET (menu_item));
-    }
+  gtk_menu_item_do_set_right_justified (menu_item, right_justified);
 }
 
 /**
