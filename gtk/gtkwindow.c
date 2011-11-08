@@ -5902,7 +5902,7 @@ gtk_window_button_press_event (GtkWidget *widget,
       if (get_drag_edge (widget, &edge))
         gdk_window_begin_resize_drag_for_device (gtk_widget_get_window (widget),
                                                  edge,
-                                                 gdk_event_get_device (event),
+                                                 gdk_event_get_device ((GdkEvent *) event),
                                                  event->button,
                                                  event->x_root,
                                                  event->y_root,
