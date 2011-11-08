@@ -1352,8 +1352,7 @@ gtk_paned_realize (GtkWidget *widget)
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK |
-			    GDK_POINTER_MOTION_MASK |
-			    GDK_POINTER_MOTION_HINT_MASK);
+			    GDK_POINTER_MOTION_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y;
   if (gtk_widget_is_sensitive (widget))
     {
@@ -1520,7 +1519,8 @@ is_rtl (GtkPaned *paned)
 }
 
 static void
-update_drag (GtkPaned *paned)
+update_drag (GtkPaned         *paned,
+             GdkEventCrossing *crossing)
 {
   GtkPanedPrivate *priv = paned->priv;
   GtkAllocation allocation;
@@ -1564,7 +1564,7 @@ gtk_paned_enter (GtkWidget        *widget,
   GtkPanedPrivate *priv = paned->priv;
 
   if (priv->in_drag)
-    update_drag (paned);
+    update_drag (paned, event);
   else
     {
       priv->handle_prelit = TRUE;
@@ -1633,8 +1633,7 @@ gtk_paned_button_press (GtkWidget      *widget,
       if (gdk_device_grab (event->device,
                            priv->handle,
                            GDK_OWNERSHIP_WINDOW, FALSE,
-                           GDK_POINTER_MOTION_HINT_MASK
-                           | GDK_BUTTON1_MOTION_MASK
+                           GDK_BUTTON1_MOTION_MASK
                            | GDK_BUTTON_RELEASE_MASK
                            | GDK_ENTER_NOTIFY_MASK
                            | GDK_LEAVE_NOTIFY_MASK,
