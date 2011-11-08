@@ -3253,25 +3253,24 @@ draw_resize_grip (GtkStyle *style,
 }
 
 static void
-draw_handle (GtkStyle *style,
-	     GdkWindow *window,
-	     GtkStateType state_type,
-	     GtkShadowType shadow_type,
-	     GdkRectangle *area,
-	     GtkWidget *widget,
-	     const gchar *detail,
-	     gint x,
-	     gint y, gint width, gint height, GtkOrientation orientation)
+draw_handle (GtkStyle      *style,
+             GdkWindow     *window,
+             GtkStateType   state_type,
+             GtkShadowType  shadow_type,
+             GdkRectangle  *area,
+             GtkWidget     *widget,
+             const gchar   *detail,
+             gint           x,
+             gint           y,
+             gint           width,
+             gint           height,
+             GtkOrientation orientation)
 {
-  HDC dc;
-  RECT rect;
-  XpDCInfo dc_info;
-  cairo_t *cr;
-  
-  cr = gdk_cairo_create (window);
-
   if (is_toolbar_child (widget))
     {
+      HDC dc;
+      RECT rect;
+      XpDCInfo dc_info;
       XpThemeElement hndl;
 
       sanitize_size (window, &width, &height);
@@ -3282,13 +3281,9 @@ draw_handle (GtkStyle *style,
 	  pos = gtk_handle_box_get_handle_position (GTK_HANDLE_BOX (widget));
 
 	  if (pos == GTK_POS_TOP || pos == GTK_POS_BOTTOM)
-	    {
 	      orientation = GTK_ORIENTATION_HORIZONTAL;
-	    }
 	  else
-	    {
 	      orientation = GTK_ORIENTATION_VERTICAL;
-	    }
 	}
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
@@ -3296,11 +3291,8 @@ draw_handle (GtkStyle *style,
       else
 	hndl = XP_THEME_ELEMENT_REBAR_GRIPPER_H;
 
-      if (xp_theme_draw (window, hndl, style, x, y, width, height,
-			 state_type, area))
-	{
-	  return;
-	}
+      if (xp_theme_draw (window, hndl, style, x, y, width, height, state_type, area))
+	return;
 
       dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
@@ -3322,61 +3314,6 @@ draw_handle (GtkStyle *style,
       draw_3d_border (dc, &rect, FALSE);
       release_window_dc (&dc_info);
       return;
-    }
-
-  if (!GTK_IS_PANED (widget))
-    {
-      gint xthick, ythick;
-      GdkColor *light, *dark, *shadow;
-      GdkRectangle dest;
-
-      sanitize_size (window, &width, &height);
-
-      gtk_paint_box (style, window, state_type, shadow_type, area,
-		     widget, detail, x, y, width, height);
-
-      light = &style->light[state_type];
-      dark = &style->dark[state_type];
-      shadow = &style->mid[state_type];
-
-      xthick = style->xthickness;
-      ythick = style->ythickness;
-
-      dest.x = x + xthick;
-      dest.y = y + ythick;
-      dest.width = width - (xthick * 2);
-      dest.height = height - (ythick * 2);
-
-      if (dest.width < dest.height)
-	dest.x += 2;
-      else
-	dest.y += 2;
-
-      gdk_cairo_rectangle (cr, &dest);
-      cairo_clip (cr);
-
-      if (dest.width < dest.height)
-	{
-          _cairo_draw_line (cr, light, dest.x, dest.y, dest.x,
-			 dest.height);
-          _cairo_draw_line (cr, dark, dest.x + (dest.width / 2),
-			 dest.y, dest.x + (dest.width / 2), dest.height);
-          _cairo_draw_line (cr, shadow, dest.x + dest.width,
-			 dest.y, dest.x + dest.width, dest.height);
-	}
-      else
-	{
-          _cairo_draw_line (cr, light, dest.x, dest.y,
-			 dest.x + dest.width, dest.y);
-          _cairo_draw_line (cr, dark, dest.x,
-			 dest.y + (dest.height / 2),
-			 dest.x + dest.width, dest.y + (dest.height / 2));
-          _cairo_draw_line (cr, shadow, dest.x,
-			 dest.y + dest.height, dest.x + dest.width,
-			 dest.y + dest.height);
-	}
-
-      cairo_destroy (cr);
     }
 }
 
