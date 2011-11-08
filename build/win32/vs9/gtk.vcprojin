@@ -231,6 +231,10 @@
 			<File RelativePath="..\..\..\modules\input\imti-et.c" />
 			<File RelativePath="..\..\..\modules\input\imviqr.c" />
 			<File RelativePath="..\..\..\modules\input\thai-charprop.c" />
+			<File RelativePath="..\..\..\modules\engines\ms-windows\msw_rc_style.c" />
+			<File RelativePath="..\..\..\modules\engines\ms-windows\msw_style.c" />
+			<File RelativePath="..\..\..\modules\engines\ms-windows\msw_theme_main.c" />
+			<File RelativePath="..\..\..\modules\engines\ms-windows\xp_theme.c" />
 		</Filter>
 	</Files>
 </VisualStudioProject>
