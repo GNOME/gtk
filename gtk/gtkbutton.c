@@ -1700,7 +1700,7 @@ gtk_button_button_press (GtkWidget      *widget,
 	gtk_widget_grab_focus (widget);
 
       if (event->button == 1)
-	gtk_button_pressed (button);
+        g_signal_emit (button, button_signals[PRESSED], 0);
     }
 
   return TRUE;
@@ -1715,7 +1715,7 @@ gtk_button_button_release (GtkWidget      *widget,
   if (event->button == 1)
     {
       button = GTK_BUTTON (widget);
-      gtk_button_released (button);
+      g_signal_emit (button, button_signals[RELEASED], 0);
     }
 
   return TRUE;
@@ -1734,7 +1734,7 @@ gtk_button_grab_broken (GtkWidget          *widget,
     {
       save_in = priv->in_button;
       priv->in_button = FALSE;
-      gtk_button_released (button);
+      g_signal_emit (button, button_signals[RELEASED], 0);
       if (save_in != priv->in_button)
 	{
 	  priv->in_button = save_in;
@@ -1774,7 +1774,7 @@ gtk_button_enter_notify (GtkWidget        *widget,
       (event->detail != GDK_NOTIFY_INFERIOR))
     {
       priv->in_button = TRUE;
-      gtk_button_enter (button);
+      g_signal_emit (button, button_signals[ENTER], 0);
     }
 
   return FALSE;
@@ -1792,7 +1792,7 @@ gtk_button_leave_notify (GtkWidget        *widget,
       (gtk_widget_get_sensitive (widget)))
     {
       priv->in_button = FALSE;
-      gtk_button_leave (button);
+      g_signal_emit (button, button_signals[LEAVE], 0);
     }
 
   return FALSE;
