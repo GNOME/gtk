@@ -3946,7 +3946,9 @@ gtk_tree_view_motion_resize_column (GtkWidget      *widget,
   column = gtk_tree_view_get_column (tree_view, tree_view->priv->drag_pos);
 
   if (event->is_hint || event->window != gtk_widget_get_window (widget))
-    gtk_widget_get_pointer (widget, &x, NULL);
+    gdk_window_get_device_position (gtk_widget_get_window (widget),
+                                    gdk_event_get_device ((GdkEvent *) event),
+                                    &x, NULL, NULL);
   else
     x = event->x;
 
