@@ -22,19 +22,6 @@
 
 #include <gtk/gtk.h>
 
-G_BEGIN_DECLS
-
-typedef struct _GtkIMContextInfo GtkIMContextInfo;
-
-struct _GtkIMContextInfo
-{
-  const gchar *context_id;
-  const gchar *context_name;
-  const gchar *domain;
-  const gchar *domain_dirname;
-  const gchar *default_locales;
-};
-
 /* The following entry points are exported by each input method module
  */
 
@@ -45,7 +32,5 @@ void          im_module_init   (GtkModule                *module);
 void          im_module_exit   (void);
 GtkIMContext *im_module_create (const gchar              *context_id);
 */
-
-G_END_DECLS
 
 #endif /* __GTK_IM_MODULE_H__ */

@@ -249,6 +249,7 @@ gtk_public_h_sources = 		\
 	gtkimage.h		\
 	gtkimagemenuitem.h	\
 	gtkimcontext.h		\
+	gtkimcontextinfo.h	\
 	gtkimcontextsimple.h	\
 	gtkimmodule.h		\
 	gtkimmulticontext.h	\

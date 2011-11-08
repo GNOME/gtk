@@ -17,20 +17,30 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GTK_IM_MODULE_PRIVATE_H__
-#define __GTK_IM_MODULE_PRIVATE_H__
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
 
-#include <gdk/gdk.h>
-#include <gtk/gtkimcontext.h>
-#include <gtk/gtkimcontextinfo.h>
+#ifndef __GTK_IM_CONTEXT_INFO_H__
+#define __GTK_IM_CONTEXT_INFO_H__
+
+
+#include <glib.h>
 
 G_BEGIN_DECLS
 
-void           _gtk_im_module_list                   (const GtkIMContextInfo ***contexts,
-						      guint                    *n_contexts);
-GtkIMContext * _gtk_im_module_create                 (const gchar              *context_id);
-const gchar  * _gtk_im_module_get_default_context_id (GdkWindow                *client_window);
+typedef struct _GtkIMContextInfo GtkIMContextInfo;
+
+struct _GtkIMContextInfo
+{
+  const gchar *context_id;
+  const gchar *context_name;
+  const gchar *domain;
+  const gchar *domain_dirname;
+  const gchar *default_locales;
+};
+
 
 G_END_DECLS
 
-#endif /* __GTK_IM_MODULE_PRIVATE_H__ */
+#endif /* __GTK_IM_CONTEXT_INFO_H__ */

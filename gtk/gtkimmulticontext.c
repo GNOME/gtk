@@ -23,7 +23,6 @@
 #include <locale.h>
 
 #include "gtkimmulticontext.h"
-#include "gtkimmodule.h"
 #include "gtkimmoduleprivate.h"
 #include "gtklabel.h"
 #include "gtkmain.h"

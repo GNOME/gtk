@@ -32,7 +32,6 @@
 
 #include <glib/gstdio.h>
 #include <gmodule.h>
-#include "gtkimmodule.h"
 #include "gtkimmoduleprivate.h"
 #include "gtkimcontextsimple.h"
 #include "gtksettings.h"
