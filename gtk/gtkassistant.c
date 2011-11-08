@@ -167,6 +167,12 @@ static void       gtk_assistant_buildable_custom_finished    (GtkBuildable  *bui
 
 static GList*     find_page                                  (GtkAssistant  *assistant,
                                                               GtkWidget     *page);
+static void       gtk_assistant_do_set_page_header_image     (GtkAssistant  *assistant,
+                                                              GtkWidget     *page,
+                                                              GdkPixbuf     *pixbuf);
+static void       gtk_assistant_do_set_page_side_image       (GtkAssistant  *assistant,
+                                                              GtkWidget     *page,
+                                                              GdkPixbuf     *pixbuf);
 
 GType             _gtk_assistant_accessible_get_type         (void);
 
@@ -1093,12 +1099,12 @@ gtk_assistant_set_child_property (GtkContainer *container,
                                     g_value_get_string (value));
       break;
     case CHILD_PROP_PAGE_HEADER_IMAGE:
-      gtk_assistant_set_page_header_image (GTK_ASSISTANT (container), child,
-                                           g_value_get_object (value));
+      gtk_assistant_do_set_page_header_image (GTK_ASSISTANT (container), child,
+                                              g_value_get_object (value));
       break;
     case CHILD_PROP_PAGE_SIDEBAR_IMAGE:
-      gtk_assistant_set_page_side_image (GTK_ASSISTANT (container), child,
-                                         g_value_get_object (value));
+      gtk_assistant_do_set_page_side_image (GTK_ASSISTANT (container), child,
+                                            g_value_get_object (value));
       break;
     case CHILD_PROP_PAGE_COMPLETE:
       gtk_assistant_set_page_complete (GTK_ASSISTANT (container), child,
@@ -1117,27 +1123,29 @@ gtk_assistant_get_child_property (GtkContainer *container,
                                   GValue       *value,
                                   GParamSpec   *pspec)
 {
+  GtkAssistant *assistant = GTK_ASSISTANT (container);
+
   switch (property_id)
     {
     case CHILD_PROP_PAGE_TYPE:
       g_value_set_enum (value,
-                        gtk_assistant_get_page_type (GTK_ASSISTANT (container), child));
+                        gtk_assistant_get_page_type (assistant, child));
       break;
     case CHILD_PROP_PAGE_TITLE:
       g_value_set_string (value,
-                          gtk_assistant_get_page_title (GTK_ASSISTANT (container), child));
+                          gtk_assistant_get_page_title (assistant, child));
       break;
     case CHILD_PROP_PAGE_HEADER_IMAGE:
       g_value_set_object (value,
-                          gtk_assistant_get_page_header_image (GTK_ASSISTANT (container), child));
+                          ((GtkAssistantPage*) find_page (assistant, child))->header_image);
       break;
     case CHILD_PROP_PAGE_SIDEBAR_IMAGE:
       g_value_set_object (value,
-                          gtk_assistant_get_page_side_image (GTK_ASSISTANT (container), child));
+                          ((GtkAssistantPage*) find_page (assistant, child))->sidebar_image);
       break;
     case CHILD_PROP_PAGE_COMPLETE:
       g_value_set_boolean (value,
-                           gtk_assistant_get_page_complete (GTK_ASSISTANT (container), child));
+                           gtk_assistant_get_page_complete (assistant, child));
       break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
@@ -1969,12 +1977,20 @@ gtk_assistant_set_page_header_image (GtkAssistant *assistant,
                                      GtkWidget    *page,
                                      GdkPixbuf    *pixbuf)
 {
-  GtkAssistantPage *page_info;
-  GList *child;
-
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
   g_return_if_fail (GTK_IS_WIDGET (page));
   g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
+
+  gtk_assistant_do_set_page_header_image (assistant, page, pixbuf);
+}
+
+static void
+gtk_assistant_do_set_page_header_image (GtkAssistant *assistant,
+                                        GtkWidget    *page,
+                                        GdkPixbuf    *pixbuf)
+{
+  GtkAssistantPage *page_info;
+  GList *child;
 
   child = find_page (assistant, page);
 
@@ -2052,12 +2068,20 @@ gtk_assistant_set_page_side_image (GtkAssistant *assistant,
                                    GtkWidget    *page,
                                    GdkPixbuf    *pixbuf)
 {
-  GtkAssistantPage *page_info;
-  GList *child;
-
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
   g_return_if_fail (GTK_IS_WIDGET (page));
   g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
+
+  gtk_assistant_do_set_page_side_image (assistant, page, pixbuf);
+}
+
+static void
+gtk_assistant_do_set_page_side_image (GtkAssistant *assistant,
+                                      GtkWidget    *page,
+                                      GdkPixbuf    *pixbuf)
+{
+  GtkAssistantPage *page_info;
+  GList *child;
 
   child = find_page (assistant, page);
 
