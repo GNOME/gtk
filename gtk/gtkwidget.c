@@ -9755,6 +9755,8 @@ gtk_widget_get_device_events (GtkWidget *widget,
  * defined as @widget->window coordinates for widgets that are not
  * #GTK_NO_WINDOW widgets, and are relative to @widget->allocation.x,
  * @widget->allocation.y for widgets that are #GTK_NO_WINDOW widgets.
+ *
+ * Deprecated: 3.4: Use gdk_window_get_device_positon() instead.
  **/
 void
 gtk_widget_get_pointer (GtkWidget *widget,
