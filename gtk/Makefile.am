@@ -902,7 +902,7 @@ gtktypebuiltins.h: stamp-gtktypebuiltins.h
 	@true
 stamp-gtktypebuiltins.h: @REBUILD@ $(gtk_public_h_sources) $(deprecated_h_sources) gtktypebuiltins.h.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gtktypebuiltins.h.template \
-		$(gtk_public_h_sources) $(deprecated_h_sources) ) >> xgen-gtbh \
+		$(gtk_public_h_sources) $(deprecated_h_sources) ) > xgen-gtbh \
 	&& (cmp -s xgen-gtbh gtktypebuiltins.h || cp xgen-gtbh gtktypebuiltins.h ) \
 	&& rm -f xgen-gtbh \
 	&& echo timestamp > $(@F)
