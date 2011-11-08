@@ -24,8 +24,10 @@
 
 #include "gtkimmulticontext.h"
 #include "gtkimmodule.h"
+#include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkradiomenuitem.h"
+#include "gtkseparatormenuitem.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 

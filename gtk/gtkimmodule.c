@@ -38,6 +38,8 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+#include "deprecated/gtkrc.h"
+
 #define SIMPLE_ID "gtk-im-context-simple"
 
 /**

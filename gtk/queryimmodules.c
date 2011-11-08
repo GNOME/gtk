@@ -39,6 +39,7 @@
 
 #include "gtk/gtkimmodule.h"
 #include "gtk/gtkversion.h"
+#include "gtk/deprecated/gtkrc.h"
 
 static void
 escape_string (GString *contents, const char *str)
