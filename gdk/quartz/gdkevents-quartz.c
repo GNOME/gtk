@@ -799,9 +799,9 @@ fill_button_event (GdkWindow *window,
 {
   GdkEventType type;
   gint state;
-  gint button;
 
-  state = get_keyboard_modifiers_from_ns_event (nsevent);
+  state = get_keyboard_modifiers_from_ns_event (nsevent) |
+         _gdk_quartz_events_get_current_mouse_modifiers ();
 
   switch ([nsevent type])
     {
@@ -809,18 +809,19 @@ fill_button_event (GdkWindow *window,
     case NSRightMouseDown:
     case NSOtherMouseDown:
       type = GDK_BUTTON_PRESS;
+      state &= ~get_mouse_button_modifiers_from_ns_event (nsevent);
       break;
+
     case NSLeftMouseUp:
     case NSRightMouseUp:
     case NSOtherMouseUp:
       type = GDK_BUTTON_RELEASE;
       state |= get_mouse_button_modifiers_from_ns_event (nsevent);
       break;
+
     default:
       g_assert_not_reached ();
     }
-  
-  button = get_mouse_button_from_ns_event (nsevent);
 
   event->any.type = type;
   event->button.window = window;
@@ -831,7 +832,7 @@ fill_button_event (GdkWindow *window,
   event->button.y_root = y_root;
   /* FIXME event->axes */
   event->button.state = state;
-  event->button.button = button;
+  event->button.button = get_mouse_button_from_ns_event (nsevent);
   event->button.device = _gdk_display->core_pointer;
 }
 
