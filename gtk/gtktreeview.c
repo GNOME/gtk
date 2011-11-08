@@ -4081,9 +4081,9 @@ gtk_tree_view_motion_drag_column (GtkWidget      *widget,
   gdk_window_move (tree_view->priv->drag_window, x, y);
   
   /* autoscroll, if needed */
-  gtk_tree_view_horizontal_autoscroll (tree_view, event);
+  gtk_tree_view_horizontal_autoscroll (tree_view, (GdkEvent *) event);
   /* Update the current reorder position and arrow; */
-  gtk_tree_view_update_current_reorder (tree_view, event);
+  gtk_tree_view_update_current_reorder (tree_view, (GdkEvent *) event);
 
   return TRUE;
 }
