@@ -322,25 +322,11 @@ gtk_layout_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_layout_parent_class)->finalize (object);
 }
 
-/**
- * gtk_layout_set_hadjustment:
- * @layout: a #GtkLayout
- * @adjustment: (allow-none): new scroll adjustment
- *
- * Sets the horizontal scroll adjustment for the layout.
- *
- * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
- *
- * Deprecated: 3.0: Use gtk_scrollable_set_hadjustment()
- **/
-void
-gtk_layout_set_hadjustment (GtkLayout     *layout,
-                            GtkAdjustment *adjustment)
+static void
+gtk_layout_do_set_hadjustment (GtkLayout     *layout,
+                               GtkAdjustment *adjustment)
 {
   GtkLayoutPrivate *priv;
-
-  g_return_if_fail (GTK_IS_LAYOUT (layout));
-  g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
 
   priv = layout->priv;
 
@@ -366,26 +352,32 @@ gtk_layout_set_hadjustment (GtkLayout     *layout,
   g_object_notify (G_OBJECT (layout), "hadjustment");
 }
 
-
 /**
- * gtk_layout_set_vadjustment:
+ * gtk_layout_set_hadjustment:
  * @layout: a #GtkLayout
  * @adjustment: (allow-none): new scroll adjustment
  *
- * Sets the vertical scroll adjustment for the layout.
+ * Sets the horizontal scroll adjustment for the layout.
  *
  * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
  *
- * Deprecated: 3.0: Use gtk_scrollable_set_vadjustment()
+ * Deprecated: 3.0: Use gtk_scrollable_set_hadjustment()
  **/
 void
-gtk_layout_set_vadjustment (GtkLayout     *layout,
+gtk_layout_set_hadjustment (GtkLayout     *layout,
                             GtkAdjustment *adjustment)
 {
-  GtkLayoutPrivate *priv;
-
   g_return_if_fail (GTK_IS_LAYOUT (layout));
   g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
+
+  gtk_layout_do_set_hadjustment (layout, adjustment);
+}
+
+static void
+gtk_layout_do_set_vadjustment (GtkLayout     *layout,
+                               GtkAdjustment *adjustment)
+{
+  GtkLayoutPrivate *priv;
 
   priv = layout->priv;
 
@@ -409,6 +401,27 @@ gtk_layout_set_vadjustment (GtkLayout     *layout,
   gtk_layout_set_vadjustment_values (layout);
 
   g_object_notify (G_OBJECT (layout), "vadjustment");
+}
+
+/**
+ * gtk_layout_set_vadjustment:
+ * @layout: a #GtkLayout
+ * @adjustment: (allow-none): new scroll adjustment
+ *
+ * Sets the vertical scroll adjustment for the layout.
+ *
+ * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_set_vadjustment()
+ **/
+void
+gtk_layout_set_vadjustment (GtkLayout     *layout,
+                            GtkAdjustment *adjustment)
+{
+  g_return_if_fail (GTK_IS_LAYOUT (layout));
+  g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
+
+  gtk_layout_do_set_vadjustment (layout, adjustment);
 }
 
 static GtkLayoutChild*
@@ -735,12 +748,10 @@ gtk_layout_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_HADJUSTMENT:
-      gtk_layout_set_hadjustment (layout, 
-				  (GtkAdjustment*) g_value_get_object (value));
+      gtk_layout_do_set_hadjustment (layout, g_value_get_object (value));
       break;
     case PROP_VADJUSTMENT:
-      gtk_layout_set_vadjustment (layout, 
-				  (GtkAdjustment*) g_value_get_object (value));
+      gtk_layout_do_set_vadjustment (layout, g_value_get_object (value));
       break;
     case PROP_HSCROLL_POLICY:
       priv->hscroll_policy = g_value_get_enum (value);
