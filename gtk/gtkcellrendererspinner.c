@@ -34,6 +34,7 @@
 #include "gtkicontheme.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
+#include "deprecated/gtkstyle.h"
 
 
 /**
