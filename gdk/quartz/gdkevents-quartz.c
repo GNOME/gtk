@@ -45,9 +45,8 @@
 /* This is the window corresponding to the key window */
 static GdkWindow   *current_keyboard_window;
 
-/* This is the event mask and button state from the last event */
+/* This is the event mask from the last event */
 static GdkEventMask current_event_mask;
-static int          current_button_state;
 
 static void append_event                        (GdkEvent  *event,
                                                  gboolean   windowing);
@@ -250,6 +249,25 @@ get_mouse_button_from_ns_event (NSEvent *event)
 }
 
 static GdkModifierType
+get_mouse_button_modifiers_from_ns_buttons (NSUInteger nsbuttons)
+{
+  GdkModifierType modifiers = 0;
+
+  if (nsbuttons & (1 << 0))
+    modifiers |= GDK_BUTTON1_MASK;
+  if (nsbuttons & (1 << 1))
+    modifiers |= GDK_BUTTON3_MASK;
+  if (nsbuttons & (1 << 2))
+    modifiers |= GDK_BUTTON2_MASK;
+  if (nsbuttons & (1 << 3))
+    modifiers |= GDK_BUTTON4_MASK;
+  if (nsbuttons & (1 << 4))
+    modifiers |= GDK_BUTTON5_MASK;
+
+  return modifiers;
+}
+
+static GdkModifierType
 get_mouse_button_modifiers_from_ns_event (NSEvent *event)
 {
   int button;
@@ -264,13 +282,10 @@ get_mouse_button_modifiers_from_ns_event (NSEvent *event)
 }
 
 static GdkModifierType
-get_keyboard_modifiers_from_ns_event (NSEvent *nsevent)
+get_keyboard_modifiers_from_ns_flags (NSUInteger nsflags)
 {
   GdkModifierType modifiers = 0;
-  int nsflags;
 
-  nsflags = [nsevent modifierFlags];
-  
   if (nsflags & NSAlphaShiftKeyMask)
     modifiers |= GDK_LOCK_MASK;
   if (nsflags & NSShiftKeyMask)
@@ -283,6 +298,12 @@ get_keyboard_modifiers_from_ns_event (NSEvent *nsevent)
     modifiers |= GDK_MOD2_MASK;
 
   return modifiers;
+}
+
+static GdkModifierType
+get_keyboard_modifiers_from_ns_event (NSEvent *nsevent)
+{
+  return get_keyboard_modifiers_from_ns_flags ([nsevent modifierFlags]);
 }
 
 /* Return an event mask from an NSEvent */
@@ -457,7 +478,8 @@ generate_motion_event (GdkWindow *window)
   event->motion.x_root = x_root;
   event->motion.y_root = y_root;
   /* FIXME event->axes */
-  event->motion.state = 0;
+  event->motion.state = _gdk_quartz_events_get_current_keyboard_modifiers () |
+                        _gdk_quartz_events_get_current_mouse_modifiers ();
   event->motion.is_hint = FALSE;
   event->motion.device = _gdk_display->core_pointer;
 
@@ -534,7 +556,8 @@ _gdk_quartz_events_send_enter_notify_event (GdkWindow *window)
   event->crossing.y_root = y_root;
   event->crossing.mode = GDK_CROSSING_NORMAL;
   event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-  event->crossing.state = 0;
+  event->crossing.state = _gdk_quartz_events_get_current_keyboard_modifiers () |
+                          _gdk_quartz_events_get_current_mouse_modifiers ();
 
   append_event (event, TRUE);
 }
@@ -759,7 +782,8 @@ fill_crossing_event (GdkWindow       *toplevel,
   event->crossing.y_root = y_root;
   event->crossing.mode = mode;
   event->crossing.detail = detail;
-  event->crossing.state = get_keyboard_modifiers_from_ns_event (nsevent);
+  event->crossing.state = get_keyboard_modifiers_from_ns_event (nsevent) |
+                         _gdk_quartz_events_get_current_mouse_modifiers ();
 
   /* FIXME: Focus and button state? */
 }
@@ -947,7 +971,7 @@ fill_key_event (GdkWindow    *window,
         event->key.state |= mask;
     }
 
-  event->key.state |= current_button_state;
+  event->key.state |= _gdk_quartz_events_get_current_mouse_modifiers ();
 
   event->key.string = NULL;
 
@@ -1054,6 +1078,46 @@ _gdk_quartz_events_get_current_event_mask (void)
   return current_event_mask;
 }
 
+GdkModifierType
+_gdk_quartz_events_get_current_keyboard_modifiers (void)
+{
+  if (gdk_quartz_osx_version () >= GDK_OSX_SNOW_LEOPARD)
+    {
+      return get_keyboard_modifiers_from_ns_flags ([NSClassFromString(@"NSEvent") modifierFlags]);
+    }
+  else
+    {
+      guint carbon_modifiers = GetCurrentKeyModifiers ();
+      GdkModifierType modifiers = 0;
+
+      if (carbon_modifiers & alphaLock)
+        modifiers |= GDK_LOCK_MASK;
+      if (carbon_modifiers & shiftKey)
+        modifiers |= GDK_SHIFT_MASK;
+      if (carbon_modifiers & controlKey)
+        modifiers |= GDK_CONTROL_MASK;
+      if (carbon_modifiers & optionKey)
+        modifiers |= GDK_MOD1_MASK;
+      if (carbon_modifiers & cmdKey)
+        modifiers |= GDK_MOD2_MASK;
+
+      return modifiers;
+    }
+}
+
+GdkModifierType
+_gdk_quartz_events_get_current_mouse_modifiers (void)
+{
+  if (gdk_quartz_osx_version () >= GDK_OSX_SNOW_LEOPARD)
+    {
+      return get_mouse_button_modifiers_from_ns_buttons ([NSClassFromString(@"NSEvent") pressedMouseButtons]);
+    }
+  else
+    {
+      return get_mouse_button_modifiers_from_ns_buttons (GetCurrentButtonState ());
+    }
+}
+
 /* Detect window resizing */
 
 static gboolean
@@ -1136,25 +1200,6 @@ gdk_event_translate (GdkEvent *event,
 
       /* Leave all AppKit events to AppKit. */
       return FALSE;
-    }
-
-  /* Keep track of button state, since we don't get that information
-   * for key events. 
-   */
-  switch (event_type)
-    {
-    case NSLeftMouseDown:
-    case NSRightMouseDown:
-    case NSOtherMouseDown:
-      current_button_state |= get_mouse_button_modifiers_from_ns_event (nsevent);
-      break;
-    case NSLeftMouseUp:
-    case NSRightMouseUp:
-    case NSOtherMouseUp:
-      current_button_state &= ~get_mouse_button_modifiers_from_ns_event (nsevent);
-      break;
-    default:
-      break;
     }
 
   if (_gdk_default_filters)
