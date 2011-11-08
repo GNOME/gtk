@@ -1520,7 +1520,9 @@ is_rtl (GtkPaned *paned)
 
 static void
 update_drag (GtkPaned         *paned,
-             GdkEventCrossing *crossing)
+             /* relative to priv->handle */
+             int               xpos,
+             int               ypos)
 {
   GtkPanedPrivate *priv = paned->priv;
   GtkAllocation allocation;
@@ -1528,11 +1530,18 @@ update_drag (GtkPaned         *paned,
   gint pos;
   gint handle_size;
   gint size;
+  gint x, y;
 
+  gdk_window_get_position (priv->handle, &x, &y);
+  gtk_widget_get_allocation (widget, &allocation);
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_widget_get_pointer (widget, &pos, NULL);
+    {
+      pos = xpos + x - allocation.x;
+    }
   else
-    gtk_widget_get_pointer (widget, NULL, &pos);
+    {
+      pos = ypos + y - allocation.y;
+    }
 
   pos -= priv->drag_pos;
 
@@ -1542,7 +1551,6 @@ update_drag (GtkPaned         *paned,
 			    "handle-size", &handle_size,
 			    NULL);
 
-      gtk_widget_get_allocation (widget, &allocation);
       size = allocation.width - pos - handle_size;
     }
   else
@@ -1564,7 +1572,7 @@ gtk_paned_enter (GtkWidget        *widget,
   GtkPanedPrivate *priv = paned->priv;
 
   if (priv->in_drag)
-    update_drag (paned, event);
+    update_drag (paned, event->x, event->y);
   else
     {
       priv->handle_prelit = TRUE;
@@ -1586,7 +1594,7 @@ gtk_paned_leave (GtkWidget        *widget,
   GtkPanedPrivate *priv = paned->priv;
 
   if (priv->in_drag)
-    update_drag (paned);
+    update_drag (paned, event->x, event->y);
   else
     {
       priv->handle_prelit = FALSE;
@@ -1747,7 +1755,7 @@ gtk_paned_motion (GtkWidget      *widget,
 
   if (priv->in_drag)
     {
-      update_drag (paned);
+      update_drag (paned, event->x, event->y);
       return TRUE;
     }
   
