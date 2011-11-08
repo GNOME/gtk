@@ -9776,7 +9776,11 @@ gtk_widget_get_pointer (GtkWidget *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_get_pointer (priv->window, x, y, NULL);
+      gdk_window_get_device_position (priv->window,
+                                      gdk_device_manager_get_client_pointer (
+                                        gdk_display_get_device_manager (
+                                          gtk_widget_get_display (widget))),
+                                      x, y, NULL);
 
       if (!gtk_widget_get_has_window (widget))
 	{
