@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2005 Jamie McCracken <jamiemcc@gnome.org>
- * Copyright (C) 2009-2010 Nokia <ivan.frade@nokia.com>
+ * Copyright (C) 2009-2011 Nokia <ivan.frade@nokia.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,8 +15,7 @@
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  *
- * Authors: Jamie McCracken <jamiemcc@gnome.org>
- *          Jürg Billeter <juerg.billeter@codethink.co.uk>
+ * Authors: Jürg Billeter <juerg.billeter@codethink.co.uk>
  *          Martyn Russell <martyn@lanedo.com>
  *
  * Based on nautilus-search-engine-tracker.c
@@ -25,164 +23,64 @@
 
 #include "config.h"
 
-#include "gtksearchenginetracker.h"
+#include <string.h>
 
+#include <gio/gio.h>
 #include <gmodule.h>
 #include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
-/* we dlopen() libtracker at runtime */
+#include "gtksearchenginetracker.h"
 
-typedef struct _TrackerClient TrackerClient;
+#define DBUS_SERVICE_RESOURCES   "org.freedesktop.Tracker1"
+#define DBUS_PATH_RESOURCES      "/org/freedesktop/Tracker1/Resources"
+#define DBUS_INTERFACE_RESOURCES "org.freedesktop.Tracker1.Resources"
 
-typedef enum
-{
-  TRACKER_UNAVAILABLE = 0,
-  TRACKER_0_6 = 1 << 0,
-  TRACKER_0_7 = 1 << 1,
-  TRACKER_0_8 = 1 << 2,
-  TRACKER_0_9 = 1 << 3
-} TrackerVersion;
+#define DBUS_SERVICE_STATUS      "org.freedesktop.Tracker1"
+#define DBUS_PATH_STATUS         "/org/freedesktop/Tracker1/Status"
+#define DBUS_INTERFACE_STATUS    "org.freedesktop.Tracker1.Status"
 
+/* Time in second to wait for service before deciding it's not available */
+#define WAIT_TIMEOUT_SECONDS 1
 
-/* Tracker 0.6 API */
-typedef void (*TrackerArrayReply) (char **result,
-				   GError *error,
-				   gpointer user_data);
+/* Time in second to wait for query results to come back */
+#define QUERY_TIMEOUT_SECONDS 10
 
-static TrackerClient *
-            (*tracker_connect)                                    (gboolean           enable_warnings,
-		                                                   gint               timeout)   = NULL;
-static void (*tracker_disconnect)                                 (TrackerClient     *client)    = NULL;
-static int  (*tracker_get_version)                                (TrackerClient     *client,
-								   GError           **error)     = NULL;
-static void (*tracker_cancel_last_call)                           (TrackerClient     *client)    = NULL;
+/* If defined, we use fts:match, this has to be enabled in Tracker to
+ * work which it usually is. The alternative is to undefine it and
+ * use filename matching instead. This doesn't use the content of the
+ * file however.
+ */
+#undef FTS_MATCHING
 
-static void (*tracker_search_metadata_by_text_async)              (TrackerClient     *client,
-								   const char        *query,
-								   TrackerArrayReply  callback,
-								   gpointer           user_data) = NULL;
-static void (*tracker_search_metadata_by_text_and_location_async) (TrackerClient     *client,
-								   const char        *query,
-								   const char        *location,
-								   TrackerArrayReply  callback,
-								   gpointer           user_data) = NULL;
-
-
-/* Tracker 0.7->0.9 API */
-typedef enum {
-	TRACKER_CLIENT_ENABLE_WARNINGS = 1 << 0
-} TrackerClientFlags;
-
-typedef void (*TrackerReplyGPtrArray) (GPtrArray *result,
-				       GError    *error,
-				       gpointer   user_data);
-
-static TrackerClient *	(*tracker_client_new)                    (TrackerClientFlags      flags,
-								  gint                    timeout)   = NULL;
-static gchar *		(*tracker_sparql_escape)		 (const gchar            *str)       = NULL;
-static guint		(*tracker_resources_sparql_query_async)	 (TrackerClient          *client,
-								  const gchar            *query,
-								  TrackerReplyGPtrArray   callback,
-								  gpointer                user_data) = NULL;
-
-
-static struct TrackerDlMapping
-{
-  const char *fn_name;
-  gpointer *fn_ptr_ref;
-  TrackerVersion versions;
-} tracker_dl_mapping[] =
-{
-#define MAP(a,v) { #a, (gpointer *)&a, v }
-  MAP (tracker_connect, TRACKER_0_6 | TRACKER_0_7),
-  MAP (tracker_disconnect, TRACKER_0_6 | TRACKER_0_7),
-  MAP (tracker_get_version, TRACKER_0_6),
-  MAP (tracker_cancel_last_call, TRACKER_0_6 | TRACKER_0_7 | TRACKER_0_8 | TRACKER_0_9),
-  MAP (tracker_search_metadata_by_text_async, TRACKER_0_6 | TRACKER_0_7),
-  MAP (tracker_search_metadata_by_text_and_location_async, TRACKER_0_6 | TRACKER_0_7),
-  MAP (tracker_client_new, TRACKER_0_8 | TRACKER_0_9),
-  MAP (tracker_sparql_escape, TRACKER_0_8 | TRACKER_0_9),
-  MAP (tracker_resources_sparql_query_async, TRACKER_0_8 | TRACKER_0_9)
-#undef MAP
-};
-
-static TrackerVersion
-open_libtracker (void)
-{
-  static gboolean done = FALSE;
-  static TrackerVersion version = TRACKER_UNAVAILABLE;
-
-  if (!done)
-    {
-      gint i;
-      GModule *tracker;
-      GModuleFlags flags;
-
-      done = TRUE;
-      flags = G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL;
-
-      /* So this is the order:
-       *
-       * - 0.9 (latest unstable)
-       * - 0.8 (stable)
-       * - 0.7 (unstable, 0.6 sucks so badly)
-       * - 0.6 (stable)
-       */
-      if ((tracker = g_module_open ("libtracker-client-0.9.so.0", flags)) != NULL)
-	version = TRACKER_0_9;
-      else if ((tracker = g_module_open ("libtracker-client-0.8.so.0", flags)) != NULL)
-	version = TRACKER_0_8;
-      else if ((tracker = g_module_open ("libtracker-client-0.7.so.0", flags)) != NULL)
-	version = TRACKER_0_7;
-      else if ((tracker = g_module_open ("libtrackerclient.so.0", flags)) != NULL)
-	version = TRACKER_0_6;
-      else
-	{
-	  g_debug ("No tracker backend available");
-	  return TRACKER_UNAVAILABLE;
-	}
-
-      for (i = 0; i < G_N_ELEMENTS (tracker_dl_mapping); i++)
-	{
-	  if ((tracker_dl_mapping[i].versions & version) == 0)
-	    continue;
-
-	  if (!g_module_symbol (tracker,
-				tracker_dl_mapping[i].fn_name,
-				tracker_dl_mapping[i].fn_ptr_ref))
-	    {
-	      g_warning ("Missing symbol '%s' in libtracker\n",
-			 tracker_dl_mapping[i].fn_name);
-	      g_module_close (tracker);
-
-	      for (i = 0; i < G_N_ELEMENTS (tracker_dl_mapping); i++)
-		tracker_dl_mapping[i].fn_ptr_ref = NULL;
-
-	      return TRACKER_UNAVAILABLE;
-	    }
-	}
-    }
-
-  return version;
-}
-
+/*
+ * GtkSearchEngineTracker object
+ */
 struct _GtkSearchEngineTrackerPrivate
 {
-  GtkQuery	*query;
-  TrackerClient *client;
-  gboolean	 query_pending;
-  TrackerVersion version;
+  GDBusConnection *connection;
+  GCancellable *cancellable;
+  GtkQuery *query;
+  gboolean query_pending;
 };
 
 G_DEFINE_TYPE (GtkSearchEngineTracker, _gtk_search_engine_tracker, GTK_TYPE_SEARCH_ENGINE);
-
 
 static void
 finalize (GObject *object)
 {
   GtkSearchEngineTracker *tracker;
 
+  g_debug ("Finalizing GtkSearchEngineTracker");
+
   tracker = GTK_SEARCH_ENGINE_TRACKER (object);
+
+  if (tracker->priv->cancellable)
+    {
+      g_cancellable_cancel (tracker->priv->cancellable);
+      g_object_unref (tracker->priv->cancellable);
+      tracker->priv->cancellable = NULL;
+    }
 
   if (tracker->priv->query)
     {
@@ -190,24 +88,169 @@ finalize (GObject *object)
       tracker->priv->query = NULL;
     }
 
-  if (tracker->priv->version == TRACKER_0_8 ||
-      tracker->priv->version == TRACKER_0_9)
-    g_object_unref (tracker->priv->client);
-  else
-    tracker_disconnect (tracker->priv->client);
+  if (tracker->priv->connection)
+    {
+      g_object_unref (tracker->priv->connection);
+      tracker->priv->connection = NULL;
+    }
 
   G_OBJECT_CLASS (_gtk_search_engine_tracker_parent_class)->finalize (object);
 }
 
+static GDBusConnection *
+get_connection (void)
+{
+  GDBusConnection *connection;
+  GError *error = NULL;
+  GVariant *reply;
 
-/* stolen from tracker sources, tracker.c */
+  /* Normally I hate sync calls with UIs, but we need to return NULL
+   * or a GtkSearchEngine as a result of this function.
+   */
+  connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+
+  if (error)
+    {
+      g_debug ("Couldn't connect to D-Bus session bus, %s", error->message);
+      g_error_free (error);
+      return NULL;
+    }
+
+  /* If connection is set, we know it worked. */
+  g_debug ("Finding out if Tracker is available via D-Bus...");
+
+  /* We only wait 1 second max, we expect it to be very fast. If we
+   * don't get a response by then, clearly we're replaying a journal
+   * or cleaning up the DB internally. Either way, services is not
+   * available.
+   *
+   * We use the sync call here because we don't expect to be waiting
+   * long enough to block UI painting.
+   */
+  reply = g_dbus_connection_call_sync (connection,
+                                       DBUS_SERVICE_STATUS,
+                                       DBUS_PATH_STATUS,
+                                       DBUS_INTERFACE_STATUS,
+                                       "Wait",
+                                       NULL,
+                                       NULL,
+                                       G_DBUS_CALL_FLAGS_NONE,
+                                       WAIT_TIMEOUT_SECONDS * 1000,
+                                       NULL,
+                                       &error);
+
+  if (error)
+    {
+      g_debug ("Tracker is not available, %s", error->message);
+      g_error_free (error);
+      g_object_unref (connection);
+      return NULL;
+    }
+
+  g_variant_unref (reply);
+
+  g_debug ("Tracker is ready");
+
+  return connection;
+}
+
+static void
+get_query_results (GtkSearchEngineTracker *engine,
+                   const gchar            *sparql,
+                   GAsyncReadyCallback     callback,
+                   gpointer                user_data)
+{
+  g_dbus_connection_call (engine->priv->connection,
+                          DBUS_SERVICE_RESOURCES,
+                          DBUS_PATH_RESOURCES,
+                          DBUS_INTERFACE_RESOURCES,
+                          "SparqlQuery",
+                          g_variant_new ("(s)", sparql),
+                          NULL,
+                          G_DBUS_CALL_FLAGS_NONE,
+                          QUERY_TIMEOUT_SECONDS * 1000,
+                          engine->priv->cancellable,
+                          callback,
+                          user_data);
+}
+
+/* Stolen from libtracker-common */
+static GList *
+string_list_to_gslist (gchar **strv)
+{
+  GList *list;
+  gsize i;
+
+  list = NULL;
+
+  for (i = 0; strv[i]; i++)
+    list = g_list_prepend (list, g_strdup (strv[i]));
+
+  return g_list_reverse (list);
+}
+
+/* Stolen from libtracker-sparql */
+static gchar *
+sparql_escape_string (const gchar *literal)
+{
+  GString *str;
+  const gchar *p;
+
+  g_return_val_if_fail (literal != NULL, NULL);
+
+  str = g_string_new ("");
+  p = literal;
+
+  while (TRUE)
+     {
+      gsize len;
+
+      if (!((*p) != '\0'))
+        break;
+
+      len = strcspn ((const gchar *) p, "\t\n\r\b\f\"\\");
+      g_string_append_len (str, (const gchar *) p, (gssize) ((glong) len));
+      p = p + len;
+
+      switch (*p)
+        {
+        case '\t':
+          g_string_append (str, "\\t");
+          break;
+        case '\n':
+          g_string_append (str, "\\n");
+          break;
+        case '\r':
+          g_string_append (str, "\\r");
+          break;
+        case '\b':
+          g_string_append (str, "\\b");
+          break;
+        case '\f':
+          g_string_append (str, "\\f");
+          break;
+        case '"':
+          g_string_append (str, "\\\"");
+          break;
+        case '\\':
+          g_string_append (str, "\\\\");
+          break;
+        default:
+          continue;
+        }
+
+      p++;
+     }
+  return g_string_free (str, FALSE);
+ }
+
 static void
 sparql_append_string_literal (GString     *sparql,
                               const gchar *str)
 {
   gchar *s;
 
-  s = tracker_sparql_escape (str);
+  s = sparql_escape_string (str);
 
   g_string_append_c (sparql, '"');
   g_string_append (sparql, s);
@@ -216,26 +259,38 @@ sparql_append_string_literal (GString     *sparql,
   g_free (s);
 }
 
+static void
+sparql_append_string_literal_lower_case (GString     *sparql,
+                                         const gchar *str)
+{
+  gchar *s;
+
+  s = g_utf8_strdown (str, -1);
+  sparql_append_string_literal (sparql, s);
+  g_free (s);
+}
 
 static void
-search_callback (gpointer results,
-		 GError  *error,
-		 gpointer user_data)
+query_callback (GObject      *object,
+                GAsyncResult *res,
+                gpointer      user_data)
 {
   GtkSearchEngineTracker *tracker;
-  gchar **results_p;
-  GList *hit_uris;
-  GPtrArray *OUT_result;
-  gchar *uri;
-  gint i;
+  GList *hits;
+  GVariant *reply;
+  GVariant *r;
+  GVariantIter iter;
+  gchar **result;
+  GError *error = NULL;
+  gint i, n;
 
   gdk_threads_enter ();
 
   tracker = GTK_SEARCH_ENGINE_TRACKER (user_data);
-  hit_uris = NULL;
 
   tracker->priv->query_pending = FALSE;
 
+  reply = g_dbus_connection_call_finish (tracker->priv->connection, res, &error);
   if (error)
     {
       _gtk_search_engine_error (GTK_SEARCH_ENGINE (tracker), error->message);
@@ -244,123 +299,104 @@ search_callback (gpointer results,
       return;
     }
 
-  if (!results)
+  if (!reply)
     {
+      _gtk_search_engine_finished (GTK_SEARCH_ENGINE (tracker));
       gdk_threads_leave ();
       return;
     }
 
-  if (tracker->priv->version == TRACKER_0_8 ||
-      tracker->priv->version == TRACKER_0_9)
+  r = g_variant_get_child_value (reply, 0);
+  g_variant_iter_init (&iter, r);
+  n = g_variant_iter_n_children (&iter);
+  result = g_new0 (gchar *, n + 1);
+  for (i = 0; i < n; i++)
     {
-      OUT_result = (GPtrArray*) results;
+      GVariant *v;
+      const gchar **strv;
 
-      for (i = 0; i < OUT_result->len; i++)
-        {
-          uri = g_strdup (((gchar **) OUT_result->pdata[i])[0]);
-          if (uri)
-            hit_uris = g_list_prepend (hit_uris, uri);
-        }
-
-      g_ptr_array_foreach (OUT_result, (GFunc) g_free, NULL);
-      g_ptr_array_free (OUT_result, TRUE);
-    }
-  else
-    {
-      for (results_p = results; *results_p; results_p++)
-        {
-          if (tracker->priv->version == TRACKER_0_6)
-            uri = g_filename_to_uri (*results_p, NULL, NULL);
-          else
-            uri = g_strdup (*results_p);
-
-          if (uri)
-            hit_uris = g_list_prepend (hit_uris, uri);
-        }
-      g_strfreev ((gchar **) results);
+      v = g_variant_iter_next_value (&iter);
+      strv = g_variant_get_strv (v, NULL);
+      result[i] = (gchar*)strv[0];
+      g_free (strv);
     }
 
-  _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (tracker), hit_uris);
+  /* We iterate result by result, not n at a time. */
+  hits = string_list_to_gslist (result);
+  _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (tracker), hits);
   _gtk_search_engine_finished (GTK_SEARCH_ENGINE (tracker));
-
-  g_list_foreach (hit_uris, (GFunc) g_free, NULL);
-  g_list_free (hit_uris);
+  g_list_free (hits);
+  g_free (result);
+  g_variant_unref (reply);
+  g_variant_unref (r);
 
   gdk_threads_leave ();
 }
-
 
 static void
 gtk_search_engine_tracker_start (GtkSearchEngine *engine)
 {
   GtkSearchEngineTracker *tracker;
-  gchar	*search_text, *location, *location_uri;
+  gchar *search_text;
+#ifdef FTS_MATCHING
+  gchar *location_uri;
+#endif
   GString *sparql;
 
   tracker = GTK_SEARCH_ENGINE_TRACKER (engine);
 
   if (tracker->priv->query_pending)
-    return;
+    {
+      g_debug ("Attempt to start a new search while one is pending, doing nothing");
+      return;
+    }
 
   if (tracker->priv->query == NULL)
-    return;
+    {
+      g_debug ("Attempt to start a new search with no GtkQuery, doing nothing");
+      return;
+    }
 
   search_text = _gtk_query_get_text (tracker->priv->query);
-  location_uri = _gtk_query_get_location (tracker->priv->query);
 
-  location = NULL;
+#ifdef FTS_MATCHING
+  location_uri = _gtk_query_get_location (tracker->priv->query);
+  /* Using FTS: */
+  sparql = g_string_new ("SELECT nie:url(?urn) "
+                         "WHERE {"
+                         "  ?urn a nfo:FileDataObject ;"
+                         "  tracker:available true ; "
+                         "  fts:match ");
+  sparql_append_string_literal (sparql, search_text);
+
   if (location_uri)
     {
-      if (tracker->priv->version == TRACKER_0_6)
-        {
-          location = g_filename_from_uri (location_uri, NULL, NULL);
-          g_free (location_uri);
-        }
-      else
-        location = location_uri;
+      g_string_append (sparql, " . FILTER (fn:starts-with(nie:url(?urn),");
+      sparql_append_string_literal (sparql, location_uri);
+      g_string_append (sparql, "))");
     }
 
-  if (tracker->priv->version == TRACKER_0_8 ||
-      tracker->priv->version == TRACKER_0_9)
-    {
-      sparql = g_string_new ("SELECT nie:url(?urn) WHERE { ?urn a nfo:FileDataObject; fts:match ");
-      sparql_append_string_literal (sparql, search_text);
-      if (location)
-        {
-          g_string_append (sparql, " . FILTER (fn:starts-with(nie:url(?urn),");
-          sparql_append_string_literal (sparql, location);
-          g_string_append (sparql, "))");
-        }
-      g_string_append (sparql, " } ORDER BY DESC(fts:rank(?urn)) ASC(nie:url(?urn))");
+  g_string_append (sparql, " } ORDER BY DESC(fts:rank(?urn)) ASC(nie:url(?urn))");
+#else  /* FTS_MATCHING */
+  /* Using filename matching: */
+  sparql = g_string_new ("SELECT nie:url(?urn) "
+                         "WHERE {"
+                         "  ?urn a nfo:FileDataObject ;"
+                         "    tracker:available true ."
+                         "  FILTER (fn:contains(fn:lower-case(nfo:fileName(?urn)),");
+  sparql_append_string_literal_lower_case (sparql, search_text);
 
-      tracker_resources_sparql_query_async (tracker->priv->client,
-                                            sparql->str,
-                                            (TrackerReplyGPtrArray) search_callback,
-                                            tracker);
-      g_string_free (sparql, TRUE);
-    }
-  else
-    {
-      if (location)
-        {
-          tracker_search_metadata_by_text_and_location_async (tracker->priv->client,
-                                                              search_text,
-                                                              location,
-                                                              (TrackerArrayReply) search_callback,
-                                                              tracker);
-        }
-      else
-        {
-          tracker_search_metadata_by_text_async (tracker->priv->client,
-                                                 search_text,
-                                                 (TrackerArrayReply) search_callback,
-                                                 tracker);
-        }
-    }
+  g_string_append (sparql,
+                   "))"
+                   "} ORDER BY DESC(nie:url(?urn)) DESC(nfo:fileName(?urn))");
+#endif /* FTS_MATCHING */
 
   tracker->priv->query_pending = TRUE;
+
+  get_query_results (tracker, sparql->str, query_callback, tracker);
+
+  g_string_free (sparql, TRUE);
   g_free (search_text);
-  g_free (location);
 }
 
 static void
@@ -372,7 +408,7 @@ gtk_search_engine_tracker_stop (GtkSearchEngine *engine)
 
   if (tracker->priv->query && tracker->priv->query_pending)
     {
-      tracker_cancel_last_call (tracker->priv->client);
+      g_cancellable_cancel (tracker->priv->cancellable);
       tracker->priv->query_pending = FALSE;
     }
 }
@@ -385,7 +421,7 @@ gtk_search_engine_tracker_is_indexed (GtkSearchEngine *engine)
 
 static void
 gtk_search_engine_tracker_set_query (GtkSearchEngine *engine,
-				     GtkQuery        *query)
+                                     GtkQuery        *query)
 {
   GtkSearchEngineTracker *tracker;
 
@@ -415,13 +451,16 @@ _gtk_search_engine_tracker_class_init (GtkSearchEngineTrackerClass *class)
   engine_class->stop = gtk_search_engine_tracker_stop;
   engine_class->is_indexed = gtk_search_engine_tracker_is_indexed;
 
-  g_type_class_add_private (gobject_class, sizeof (GtkSearchEngineTrackerPrivate));
+  g_type_class_add_private (gobject_class,
+                            sizeof (GtkSearchEngineTrackerPrivate));
 }
 
 static void
 _gtk_search_engine_tracker_init (GtkSearchEngineTracker *engine)
 {
-  engine->priv = G_TYPE_INSTANCE_GET_PRIVATE (engine, GTK_TYPE_SEARCH_ENGINE_TRACKER, GtkSearchEngineTrackerPrivate);
+  engine->priv = G_TYPE_INSTANCE_GET_PRIVATE (engine,
+                                              GTK_TYPE_SEARCH_ENGINE_TRACKER,
+                                              GtkSearchEngineTrackerPrivate);
 }
 
 
@@ -429,49 +468,21 @@ GtkSearchEngine *
 _gtk_search_engine_tracker_new (void)
 {
   GtkSearchEngineTracker *engine;
-  TrackerClient *tracker_client;
-  TrackerVersion version;
-  GError *err = NULL;
+  GDBusConnection *connection;
 
-  version = open_libtracker ();
+  g_debug ("--");
 
-  if (version == TRACKER_0_8 ||
-      version == TRACKER_0_9)
-    {
-      tracker_client = tracker_client_new (TRACKER_CLIENT_ENABLE_WARNINGS, G_MAXINT);
-    }
-  else
-    {
-      if (!tracker_connect)
-        return NULL;
-
-      tracker_client = tracker_connect (FALSE, -1);
-    }
-
-  if (!tracker_client)
+  connection = get_connection ();
+  if (!connection)
     return NULL;
 
-
-  if (version == TRACKER_0_6)
-    {
-      if (!tracker_get_version)
-        return NULL;
-
-      tracker_get_version (tracker_client, &err);
-
-      if (err != NULL)
-        {
-          g_error_free (err);
-          tracker_disconnect (tracker_client);
-          return NULL;
-        }
-    }
+  g_debug ("Creating GtkSearchEngineTracker...");
 
   engine = g_object_new (GTK_TYPE_SEARCH_ENGINE_TRACKER, NULL);
 
-  engine->priv->client = tracker_client;
+  engine->priv->connection = connection;
+  engine->priv->cancellable = g_cancellable_new ();
   engine->priv->query_pending = FALSE;
-  engine->priv->version = version;
 
   return GTK_SEARCH_ENGINE (engine);
 }
