@@ -2620,7 +2620,7 @@ draw_themed_tab_button (GtkStyle *style,
                   draw_rect.y + draw_rect.height * 0.5);
 
   if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_RIGHT) {
-    cairo_rotate (cr, M_PI/2.0);
+    cairo_rotate (cr, G_PI/2.0);
   }
 
   if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_BOTTOM) {
