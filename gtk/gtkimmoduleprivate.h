@@ -17,35 +17,19 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GTK_IM_MODULE_H__
-#define __GTK_IM_MODULE_H__
+#ifndef __GTK_IM_MODULE_PRIVATE_H__
+#define __GTK_IM_MODULE_PRIVATE_H__
 
-#include <gtk/gtk.h>
+#include <gdk/gdk.h>
+#include <gtk/gtkimmodule.h>
 
 G_BEGIN_DECLS
 
-typedef struct _GtkIMContextInfo GtkIMContextInfo;
-
-struct _GtkIMContextInfo
-{
-  const gchar *context_id;
-  const gchar *context_name;
-  const gchar *domain;
-  const gchar *domain_dirname;
-  const gchar *default_locales;
-};
-
-/* The following entry points are exported by each input method module
- */
-
-/*
-void          im_module_list   (const GtkIMContextInfo ***contexts,
-				guint                    *n_contexts);
-void          im_module_init   (GtkModule                *module);
-void          im_module_exit   (void);
-GtkIMContext *im_module_create (const gchar              *context_id);
-*/
+void           _gtk_im_module_list                   (const GtkIMContextInfo ***contexts,
+						      guint                    *n_contexts);
+GtkIMContext * _gtk_im_module_create                 (const gchar              *context_id);
+const gchar  * _gtk_im_module_get_default_context_id (GdkWindow                *client_window);
 
 G_END_DECLS
 
-#endif /* __GTK_IM_MODULE_H__ */
+#endif /* __GTK_IM_MODULE_PRIVATE_H__ */

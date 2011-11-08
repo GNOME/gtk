@@ -414,6 +414,7 @@ gtk_private_h_sources =		\
 	gtkfontchooserutils.h	\
 	gtkiconcache.h		\
 	gtkimageprivate.h	\
+	gtkimmoduleprivate.h	\
 	gtkimcontextsimpleseqs.h \
 	gtkintl.h		\
 	gtkkeyhash.h		\
