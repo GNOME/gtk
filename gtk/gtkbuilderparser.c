@@ -847,7 +847,7 @@ parse_menu (GMarkupParseContext  *context,
   object_info->tag.name = element_name;
   state_push (data, object_info);
 
-  g_menu_markup_parser_start_menu (context, NULL);
+  g_menu_markup_parser_start_menu (context, data->domain, NULL);
 
   return TRUE;
 }
@@ -1131,17 +1131,19 @@ text (GMarkupParseContext *context,
 static void
 free_info (CommonInfo *info)
 {
-  if (strcmp (info->tag.name, "object") == 0) 
+  if (strcmp (info->tag.name, "object") == 0)
     free_object_info ((ObjectInfo *)info);
-  else if (strcmp (info->tag.name, "child") == 0) 
+  else if (strcmp (info->tag.name, "child") == 0)
     free_child_info ((ChildInfo *)info);
-  else if (strcmp (info->tag.name, "property") == 0) 
+  else if (strcmp (info->tag.name, "property") == 0)
     free_property_info ((PropertyInfo *)info);
-  else if (strcmp (info->tag.name, "signal") == 0) 
+  else if (strcmp (info->tag.name, "signal") == 0)
     _free_signal_info ((SignalInfo *)info, NULL);
-  else if (strcmp (info->tag.name, "requires") == 0) 
+  else if (strcmp (info->tag.name, "requires") == 0)
     _free_requires_info ((RequiresInfo *)info, NULL);
-  else 
+  else if (strcmp (info->tag.name, "menu") == 0)
+    free_object_info ((ObjectInfo *)info);
+  else
     g_assert_not_reached ();
 }
 
@@ -1150,7 +1152,6 @@ static const GMarkupParser parser = {
   end_element,
   text,
   NULL,
-  NULL
 };
 
 void
