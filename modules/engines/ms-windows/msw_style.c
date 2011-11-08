@@ -937,39 +937,6 @@ is_combo_box_child (GtkWidget *w)
   return FALSE;
 }
 
-/* This function is not needed anymore */
-/* static gboolean
-combo_box_draw_arrow (GtkStyle *style,
-		      GdkWindow *window,
-		      GtkStateType state,
-		      GdkRectangle *area, GtkWidget *widget)
-{
-  if (xp_theme_is_active ())
-    return TRUE;
-
-  if (widget && GTK_IS_TOGGLE_BUTTON (widget->parent))
-    {
-      DWORD border;
-      RECT rect;
-      HDC dc;
-      XpDCInfo dc_info;
-
-      dc = get_window_dc (style, window, state, &dc_info, area->x, area->y, area->width,
-			  area->height, &rect);
-      border = (GTK_TOGGLE_BUTTON (widget->parent)->
-		active ? DFCS_PUSHED | DFCS_FLAT : 0);
-
-      InflateRect (&rect, 1, 1);
-      DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | border);
-
-      release_window_dc (&dc_info);
-
-      return TRUE;
-    }
-
-  return FALSE;
-}*/
-
 static void
 draw_part (GdkDrawable *drawable,
            GdkColor *gc, GdkRectangle *area, gint x, gint y, Part part)
