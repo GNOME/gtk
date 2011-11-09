@@ -222,6 +222,7 @@ gtk_application_get_type
 gtk_application_get_windows
 gtk_application_new
 gtk_application_remove_window
+gtk_application_get_menu
 gtk_arrow_get_type
 gtk_arrow_new
 gtk_arrow_placement_get_type

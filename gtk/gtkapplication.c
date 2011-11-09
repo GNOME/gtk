@@ -31,6 +31,9 @@
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtkwindow.h"
+#include "gtkcheckmenuitem.h"
+#include "gtkseparatormenuitem.h"
+#include "gtkmenu.h"
 
 #include <gdk/gdk.h>
 #ifdef GDK_WINDOWING_X11
@@ -346,4 +349,414 @@ gtk_application_get_windows (GtkApplication *application)
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
   return application->priv->windows;
+}
+
+/* GtkMenu construction {{{1 */
+
+typedef struct {
+  GActionGroup *group;
+  gchar        *name;
+  gchar        *target;
+  gulong        enabled_changed_id;
+  gulong        state_changed_id;
+} ActionData;
+
+static void
+action_data_free (gpointer data)
+{
+  ActionData *a = data;
+
+  if (a->enabled_changed_id)
+    g_signal_handler_disconnect (a->group, a->enabled_changed_id);
+
+  if (a->state_changed_id)
+    g_signal_handler_disconnect (a->group, a->state_changed_id);
+
+  g_object_unref (a->group);
+  g_free (a->name);
+  g_free (a->target);
+
+  g_free (a);
+}
+
+static void
+enabled_changed (GActionGroup *group,
+                 const gchar  *action_name,
+                 gboolean      enabled,
+                 GtkWidget    *widget)
+{
+  gtk_widget_set_sensitive (widget, enabled);
+}
+
+static void
+item_activated (GtkWidget *w,
+                gpointer   data)
+{
+  ActionData *a;
+
+  a = g_object_get_data (G_OBJECT (w), "action");
+  g_action_group_activate_action (a->group, a->name, NULL);
+}
+
+static void
+toggle_item_toggled (GtkCheckMenuItem *w,
+                     gpointer          data)
+{
+  ActionData *a;
+  gboolean b;
+
+  a = g_object_get_data (G_OBJECT (w), "action");
+  b = gtk_check_menu_item_get_active (w);
+  g_action_group_change_action_state (a->group, a->name,
+                                      g_variant_new_boolean (b));
+}
+
+static void
+radio_item_toggled (GtkCheckMenuItem *w,
+                    gpointer          data)
+{
+  ActionData *a;
+  GVariant *v;
+
+  a = g_object_get_data (G_OBJECT (w), "action");
+  if (gtk_check_menu_item_get_active (w))
+    {
+      g_action_group_change_action_state (a->group, a->name,
+                                          g_variant_new_string (a->target));
+    }
+  else
+    {
+      v = g_action_group_get_action_state (a->group, a->name);
+      if (g_strcmp0 (g_variant_get_string (v, NULL), a->target) == 0)
+        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), TRUE);
+      g_variant_unref (v);
+    }
+}
+
+static void
+toggle_state_changed (GActionGroup     *group,
+                      const gchar      *name,
+                      GVariant         *state,
+                      GtkCheckMenuItem *w)
+{
+  gtk_check_menu_item_set_active (w, g_variant_get_boolean (state));
+}
+
+static void
+radio_state_changed (GActionGroup     *group,
+                     const gchar      *name,
+                     GVariant         *state,
+                     GtkCheckMenuItem *w)
+{
+  ActionData *a;
+  gboolean b;
+
+  a = g_object_get_data (G_OBJECT (w), "action");
+  b = g_strcmp0 (a->target, g_variant_get_string (state, NULL)) == 0;
+
+  gtk_check_menu_item_set_active (w, b);
+}
+
+static GtkWidget *
+create_menuitem_from_model (GMenuModelItem *item,
+                            GActionGroup   *group)
+{
+  GtkWidget *w;
+  gchar *label;
+  gchar *action;
+  gchar *target;
+  gchar *s;
+  ActionData *a;
+  const GVariantType *type;
+  GVariant *v;
+
+  g_menu_model_item_get_attribute (item, G_MENU_ATTRIBUTE_LABEL, "s", &label);
+
+  action = NULL;
+  g_menu_model_item_get_attribute (item, G_MENU_ATTRIBUTE_ACTION, "s", &action);
+
+  if (action != NULL)
+    type = g_action_group_get_action_state_type (group, action);
+  else
+    type = NULL;
+
+  if (type == NULL)
+    w = gtk_menu_item_new_with_mnemonic (label);
+  else if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
+    w = gtk_check_menu_item_new_with_label (label);
+  else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
+    {
+      w = gtk_check_menu_item_new_with_label (label);
+      gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (w), TRUE);
+    }
+  else
+    g_assert_not_reached ();
+
+  if (action != NULL)
+    {
+      a = g_new0 (ActionData, 1);
+      a->group = g_object_ref (group);
+      a->name = g_strdup (action);
+      g_object_set_data_full (G_OBJECT (w), "action", a, action_data_free);
+
+      if (!g_action_group_get_action_enabled (group, action))
+        gtk_widget_set_sensitive (w, FALSE);
+
+      s = g_strconcat ("action-enabled-changed::", action, NULL);
+      a->enabled_changed_id = g_signal_connect (group, s,
+                                                G_CALLBACK (enabled_changed), w);
+      g_free (s);
+
+      if (type == NULL)
+        g_signal_connect (w, "activate", G_CALLBACK (item_activated), NULL);
+      else if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
+        {
+          g_signal_connect (w, "toggled", G_CALLBACK (toggle_item_toggled), NULL);
+          s = g_strconcat ("action-state-changed::", action, NULL);
+          a->state_changed_id = g_signal_connect (group, s,
+                                                  G_CALLBACK (toggle_state_changed), w);
+          g_free (s);
+          v = g_action_group_get_action_state (group, action);
+          gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w),
+                                          g_variant_get_boolean (v));
+          g_variant_unref (v);
+        }
+      else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
+        {
+          g_signal_connect (w, "toggled", G_CALLBACK (radio_item_toggled), NULL);
+          s = g_strconcat ("action-state-changed::", action, NULL);
+          a->state_changed_id = g_signal_connect (group, s,
+                                                  G_CALLBACK (radio_state_changed), w);
+          g_free (s);
+          g_menu_model_item_get_attribute (item, G_MENU_ATTRIBUTE_TARGET, "s", &target);
+          a->target = g_strdup (target);
+          v = g_action_group_get_action_state (group, action);
+          gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w),
+                                          g_strcmp0 (g_variant_get_string (v, NULL), target) == 0);
+          g_variant_unref (v);
+          g_free (target);
+        }
+      else
+        g_assert_not_reached ();
+    }
+
+  g_free (label);
+  g_free (action);
+
+  return w;
+}
+
+static void populate_menu_from_model (GtkMenuShell *menu,
+                                      GMenuModel   *model,
+                                      GActionGroup *group);
+
+static void
+append_items_from_model (GtkMenuShell *menu,
+                         GMenuModel   *model,
+                         GActionGroup *group,
+                         gboolean     *need_separator)
+{
+  gint n;
+  gint i;
+  GtkWidget *w;
+  GtkWidget *menuitem;
+  GtkWidget *submenu;
+  GMenuModelItem item;
+  GMenuModel *m;
+
+  n = g_menu_model_get_n_items (model);
+
+  if (*need_separator && n > 0)
+    {
+      w = gtk_separator_menu_item_new ();
+      gtk_widget_show (w);
+      gtk_menu_shell_append (menu, w);
+
+      *need_separator = FALSE;
+    }
+
+  for (i = 0; i < n; i++)
+    {
+      g_menu_model_get_item (model, i, &item);
+
+      if ((m = g_menu_model_item_get_link (&item, G_MENU_LINK_SECTION)))
+        {
+          append_items_from_model (menu, m, group, need_separator);
+          g_object_unref (m);
+          continue;
+        }
+
+      menuitem = create_menuitem_from_model (&item, group);
+
+      if ((m = g_menu_model_item_get_link (&item, G_MENU_LINK_SUBMENU)))
+        {
+          submenu = gtk_menu_new ();
+          populate_menu_from_model (GTK_MENU_SHELL (submenu), m, group);
+          gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+          g_object_unref (m);
+        }
+
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (menu, menuitem);
+
+      *need_separator = TRUE;
+    }
+}
+
+static void
+populate_menu_from_model (GtkMenuShell *menu,
+                          GMenuModel   *model,
+                          GActionGroup *group)
+{
+  gboolean need_separator;
+
+  need_separator = FALSE;
+  append_items_from_model (menu, model, group, &need_separator);
+}
+
+typedef struct {
+  GtkApplication *application;
+  GtkMenuShell   *menu;
+  guint           update_idle;
+  GHashTable     *connected;
+} ItemsChangedData;
+
+static void
+free_items_changed_data (gpointer data)
+{
+  ItemsChangedData *d = data;
+
+  g_object_unref (d->application);
+
+  if (d->update_idle != 0)
+    g_source_remove (d->update_idle);
+
+  g_hash_table_unref (d->connected);
+
+  g_free (d);
+}
+
+static gboolean
+repopulate_menu (gpointer data)
+{
+  ItemsChangedData *d = data;
+  GList *children, *l;
+  GtkWidget *child;
+  GMenuModel *model;
+
+  /* remove current children */
+  children = gtk_container_get_children (GTK_CONTAINER (d->menu));
+  for (l = children; l; l = l->next)
+    {
+      child = l->data;
+      gtk_container_remove (GTK_CONTAINER (d->menu), child);
+    }
+  g_list_free (children);
+
+  /* repopulate */
+  model = g_application_get_menu (G_APPLICATION (d->application));
+  populate_menu_from_model (d->menu, model, G_ACTION_GROUP (d->application));
+
+  d->update_idle = 0;
+
+  return FALSE;
+}
+
+static void
+connect_to_items_changed (GMenuModel *model,
+                          GCallback   callback,
+                          gpointer    data)
+{
+  ItemsChangedData *d = data;
+  gint i;
+  GMenuModel *m;
+  GMenuLinkIter *iter;
+
+  if (!g_hash_table_lookup (d->connected, model))
+    {
+      g_signal_connect (model, "items-changed", callback, data);
+      g_hash_table_insert (d->connected, model, model);
+    }
+
+  for (i = 0; i < g_menu_model_get_n_items (model); i++)
+    {
+      iter = g_menu_model_iterate_item_links (model, i);
+      while (g_menu_link_iter_next (iter))
+        {
+          m = g_menu_link_iter_get_value (iter);
+          connect_to_items_changed (m, callback, data);
+          g_object_unref (m);
+        }
+      g_object_unref (iter);
+    }
+}
+
+static void
+items_changed (GMenuModel *model,
+               gint        position,
+               gint        removed,
+               gint        added,
+               gpointer    data)
+{
+  ItemsChangedData *d = data;
+
+  if (d->update_idle == 0)
+    d->update_idle = gdk_threads_add_idle (repopulate_menu, data);
+  connect_to_items_changed (model, G_CALLBACK (items_changed), data);
+}
+
+/**
+ * gtk_application_get_menu:
+ * @application: a #GtkApplication
+ *
+ * Populates a menu widget from a menu model that is
+ * associated with @application. See g_application_set_menu().
+ * The menu items will be connected to action of @application,
+ * as indicated by the menu model. The menus contents will be
+ * updated automatically in response to menu model changes.
+ *
+ * It is the callers responsibility to add the menu at a
+ * suitable place in the widget hierarchy.
+ *
+ * This function returns %NULL if @application has no associated
+ * menu model. It also returns %NULL if the menu model is
+ * represented outside the application, e.g. by an application
+ * menu in the desktop shell.
+ *
+ * @menu may be a #GtkMenu or a #GtkMenuBar.
+ *
+ * Returns: A #GtkMenu that has been populated from the
+ *     #GMenuModel that is associated with @application,
+ *     or %NULL
+ */
+GtkMenu *
+gtk_application_get_menu (GtkApplication *application)
+{
+  GtkWidget *menu;
+  GMenuModel *model;
+  ItemsChangedData *data;
+
+  model = g_application_get_menu (G_APPLICATION (application));
+
+  if (!model)
+    return NULL;
+
+  /* FIXME: find out if external menu is available. If yes, return NULL */
+
+  menu = gtk_menu_new ();
+
+  populate_menu_from_model (GTK_MENU_SHELL (menu), model, G_ACTION_GROUP (application));
+
+  data = g_new (ItemsChangedData, 1);
+  data->application = g_object_ref (application);
+  data->menu = GTK_MENU_SHELL (menu);
+  data->update_idle = 0;
+  data->connected = g_hash_table_new (NULL, NULL);
+
+  g_object_set_data_full (G_OBJECT (menu), "gtk-application-menu-data",
+                          data, free_items_changed_data);
+
+  connect_to_items_changed (model, G_CALLBACK (items_changed), data);
+
+  return GTK_MENU (menu);
 }

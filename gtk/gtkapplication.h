@@ -27,6 +27,7 @@
 #define __GTK_APPLICATION_H__
 
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkmenu.h>
 #include <gio/gio.h>
 
 G_BEGIN_DECLS
@@ -75,6 +76,8 @@ void                    gtk_application_remove_window                   (GtkAppl
                                                                          GtkWindow         *window);
 
 GList *                 gtk_application_get_windows                     (GtkApplication    *application);
+
+GtkMenu *               gtk_application_get_menu                        (GtkApplication    *application);
 
 G_END_DECLS
 
