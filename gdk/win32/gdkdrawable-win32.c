@@ -1860,7 +1860,7 @@ _gdk_win32_drawable_acquire_dc (GdkDrawable *drawable)
 						    impl->handle);
 	      if (!impl->saved_dc_bitmap)
 		{
-		  WIN32_GDI_FAILED ("CreateCompatibleDC");
+		  WIN32_GDI_FAILED ("SelectObject");
 		  DeleteDC (impl->hdc);
 		  impl->hdc = NULL;
 		}
