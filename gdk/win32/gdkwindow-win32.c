@@ -39,6 +39,10 @@
 static GdkColormap* gdk_window_impl_win32_get_colormap (GdkDrawable *drawable);
 static void         gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
 							GdkColormap *cmap);
+
+static void gdk_window_impl_win32_get_size   (GdkDrawable        *drawable,
+                                              gint               *width,
+                                              gint               *height);
 static void gdk_window_impl_win32_init       (GdkWindowImplWin32      *window);
 static void gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass);
 static void gdk_window_impl_win32_finalize   (GObject                 *object);
@@ -117,6 +121,25 @@ _gdk_window_impl_get_type (void)
 }
 
 static void
+gdk_window_impl_win32_get_size (GdkDrawable *drawable,
+                                gint        *width,
+                                gint        *height)
+{
+  GdkWindowObject *wrapper;
+  GdkDrawableImplWin32 *draw_impl;
+
+  g_return_if_fail (GDK_IS_WINDOW_IMPL_WIN32 (drawable));
+
+  draw_impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
+  wrapper = (GdkWindowObject*) draw_impl->wrapper;
+
+  if (width)
+    *width = wrapper->width;
+  if (height)
+    *height = wrapper->height;
+}
+
+static void
 gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
 {
   impl->toplevel_window_type = -1;
@@ -144,6 +167,7 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
 
   drawable_class->set_colormap = gdk_window_impl_win32_set_colormap;
   drawable_class->get_colormap = gdk_window_impl_win32_get_colormap;
+  drawable_class->get_size = gdk_window_impl_win32_get_size;
 }
 
 static void
