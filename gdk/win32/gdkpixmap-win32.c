@@ -486,6 +486,7 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
   
   draw_impl->handle = hbitmap;
   draw_impl->colormap = NULL;
+  pix_impl->is_foreign = TRUE;
   pix_impl->width = size.cx;
   pix_impl->height = size.cy;
   pix_impl->bits = NULL;
