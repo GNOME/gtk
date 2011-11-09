@@ -4006,7 +4006,11 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
   gint y;
   gint offset;
 
-  gdk_window_get_pointer (tree_view->priv->bin_window, NULL, &y, NULL);
+  gdk_window_get_device_position (tree_view->priv->bin_window,
+                                  gdk_device_manager_get_client_pointer (
+                                    gdk_display_get_device_manager (
+                                      gtk_widget_get_display (GTK_WIDGET (tree_view)))),
+                                  NULL, &y, NULL);
   y += tree_view->priv->dy;
 
   gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
@@ -4352,7 +4356,11 @@ gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
   old_area.width = ABS (tree_view->priv->rubber_band_x - tree_view->priv->press_start_x) + 1;
   old_area.height = ABS (tree_view->priv->rubber_band_y - tree_view->priv->press_start_y) + 1;
 
-  gdk_window_get_pointer (tree_view->priv->bin_window, &x, &y, NULL);
+  gdk_window_get_device_position (tree_view->priv->bin_window,
+                                  gdk_device_manager_get_client_pointer (
+                                    gdk_display_get_device_manager (
+                                      gtk_widget_get_display (GTK_WIDGET (tree_view)))),
+                                  &x, &y, NULL);
 
   x = MAX (x, 0);
   y = MAX (y, 0) + tree_view->priv->dy;
@@ -7162,8 +7170,11 @@ drag_scan_timeout (gpointer data)
 
   tree_view = GTK_TREE_VIEW (data);
 
-  gdk_window_get_pointer (tree_view->priv->bin_window,
-                          &x, &y, &state);
+  gdk_window_get_device_position (tree_view->priv->bin_window,
+                                  gdk_device_manager_get_client_pointer (
+                                    gdk_display_get_device_manager (
+                                      gtk_widget_get_display (GTK_WIDGET (tree_view)))),
+                                  &x, &y, &state);
 
   gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
 
@@ -12759,7 +12770,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   gboolean collapse;
   gint x, y;
   GList *list;
-  GdkWindow *child, *parent;
+  GdkWindow *child;
 
   if (animate)
     g_object_get (gtk_widget_get_settings (GTK_WIDGET (tree_view)),
@@ -12888,10 +12899,12 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       /* now that we've collapsed all rows, we want to try to set the prelight
        * again. To do this, we fake a motion event and send it to ourselves. */
 
-      child = tree_view->priv->bin_window;
-      parent = gdk_window_get_parent (child);
-
-      if (gdk_window_get_pointer (parent, &x, &y, NULL) == child)
+      child = gdk_window_get_device_position (gdk_window_get_parent (tree_view->priv->bin_window),
+                                              gdk_device_manager_get_client_pointer (
+                                                gdk_display_get_device_manager (
+                                                  gtk_widget_get_display (GTK_WIDGET (tree_view)))),
+                                              &x, &y, NULL);
+      if (child == tree_view->priv->bin_window)
 	{
 	  GdkEventMotion event;
 	  gint child_x, child_y;
