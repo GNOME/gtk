@@ -207,6 +207,15 @@ vadjustment_set_cb (GObject    *widget,
 }
 
 static void
+cell_info_free (GtkTreeViewAccessibleCellInfo *cell_info)
+{
+  /* g_object_unref (cell_info->cell); */
+  if (cell_info->cell_row_ref)
+    gtk_tree_row_reference_free (cell_info->cell_row_ref);
+  g_free (cell_info);
+}
+
+static void
 gtk_tree_view_accessible_initialize (AtkObject *obj,
                                      gpointer   data)
 {
@@ -2836,11 +2845,8 @@ garbage_collect_cell_data (gpointer data)
     {
       if (!cell_info->in_use)
         {
-           /* g_object_unref (cell_info->cell); */
-           if (cell_info->cell_row_ref)
-             gtk_tree_row_reference_free (cell_info->cell_row_ref);
-           g_free (cell_info);
-           g_hash_table_iter_remove (&iter);
+          cell_info_free (cell_info);
+          g_hash_table_iter_remove (&iter);
         }
     }
 
