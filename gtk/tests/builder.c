@@ -2576,7 +2576,6 @@ static void
 test_gmenu (void)
 {
   GtkBuilder *builder;
-  GError *error;
   GObject *obj, *obj1;
   const gchar buffer[] =
     "<interface>"
@@ -2604,9 +2603,7 @@ test_gmenu (void)
     "  </menu>"
     "</interface>";
 
-  error = NULL;
   builder = builder_new_from_string (buffer, -1, NULL);
-  g_assert (error == NULL);
   obj = gtk_builder_get_object (builder, "window");
   g_assert (GTK_IS_WINDOW (obj));
   obj1 = gtk_builder_get_object (builder, "edit-menu");
