@@ -225,8 +225,6 @@ motion_notify_event (GtkWidget      *text_view,
 
   set_cursor_if_appropriate (GTK_TEXT_VIEW (text_view), x, y);
 
-  gdk_window_get_pointer (gtk_widget_get_window (text_view),
-                          NULL, NULL, NULL);
   return FALSE;
 }
 
