@@ -8321,8 +8321,9 @@ find_widget_at_pointer (GdkDevice *device)
 
  if (widget)
    {
-     gdk_window_get_pointer (gtk_widget_get_window (widget),
-			     &x, &y, NULL);
+     gdk_window_get_device_position (gtk_widget_get_window (widget),
+                                     device,
+			             &x, &y, NULL);
      
      data.x = x;
      data.y = y;
