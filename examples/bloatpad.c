@@ -1,18 +1,46 @@
+#include <stdlib.h>
 #include <gtk/gtk.h>
+
+static void
+clicked (GtkButton *button, GtkMenu *menu)
+{
+  gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 0, 0);
+}
 
 static void
 new_window (GApplication *app,
             GFile        *file)
 {
-  GtkWidget *window, *scrolled, *view;
+  GtkWidget *window, *grid, *scrolled, *view;
+  GtkMenu *menu;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_application (GTK_WINDOW (window), GTK_APPLICATION (app));
   gtk_window_set_title (GTK_WINDOW (window), "Bloatpad");
+
+  grid = gtk_grid_new ();
+  gtk_container_add (GTK_CONTAINER (window), grid);
+
+  menu = gtk_application_get_menu (GTK_APPLICATION (app));
+  if (menu != NULL)
+    {
+      GtkWidget *button;
+
+      button = gtk_button_new ();
+      gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("help-about", GTK_ICON_SIZE_MENU));
+      gtk_widget_set_halign (button, GTK_ALIGN_START);
+      gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
+      g_signal_connect (button, "clicked", G_CALLBACK (clicked), menu);
+    }
+
   scrolled = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_hexpand (scrolled, TRUE);
+  gtk_widget_set_vexpand (scrolled, TRUE);
   view = gtk_text_view_new ();
+
   gtk_container_add (GTK_CONTAINER (scrolled), view);
-  gtk_container_add (GTK_CONTAINER (window), scrolled);
+
+  gtk_grid_attach (GTK_GRID (grid), scrolled, 0, 1, 1, 1);
 
   if (file != NULL)
     {
@@ -62,8 +90,118 @@ bloat_pad_finalize (GObject *object)
 }
 
 static void
+show_help (GSimpleAction *action,
+           GVariant      *parameter,
+           gpointer       user_data)
+{
+  g_print ("Want help, eh ?!\n");
+}
+
+static void
+show_about (GSimpleAction *action,
+            GVariant      *parameter,
+            gpointer       user_data)
+{
+  GList *list;
+  GtkWindow *win;
+
+  list = gtk_application_get_windows (GTK_APPLICATION (g_application_get_default ()));
+  win = list->data;
+
+  gtk_show_about_dialog (win,
+                         "program-name", "Bloatpad",
+                         "title", "About Bloatpad",
+                         "comments", "Not much to say, really.",
+                         NULL);
+}
+
+static void
+quit_app (GSimpleAction *action,
+          GVariant      *parameter,
+          gpointer       user_data)
+{
+  GList *list, *next;
+  GtkWindow *win;
+
+  g_print ("Going down...\n");
+
+  list = gtk_application_get_windows (GTK_APPLICATION (g_application_get_default ()));
+  while (list)
+    {
+      win = list->data;
+      next = list->next;
+
+      gtk_widget_destroy (GTK_WIDGET (win));
+
+      list = next;
+    }
+}
+
+static GSimpleActionGroup *actions = NULL;
+static GMenu *menu = NULL;
+
+static void
+remove_action (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  GAction *add;
+
+  g_menu_remove (menu, g_menu_model_get_n_items (G_MENU_MODEL (menu)) - 1);
+  g_simple_action_set_enabled (action, FALSE);
+  add = g_simple_action_group_lookup (actions, "add");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (add), TRUE);
+}
+
+static void
+add_action (GSimpleAction *action,
+            GVariant      *parameter,
+            gpointer       user_data)
+{
+  GAction *remove;
+
+  g_menu_append (menu, "Remove", "remove");
+  g_simple_action_set_enabled (action, FALSE);
+  remove = g_simple_action_group_lookup (actions, "remove");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (remove), TRUE);
+}
+
+static GActionEntry entries[] = {
+  { "help", show_help, NULL, NULL, NULL },
+  { "about", show_about, NULL, NULL, NULL },
+  { "quit", quit_app, NULL, NULL, NULL },
+  { "add", add_action, NULL, NULL, NULL },
+  { "remove", remove_action, NULL, NULL, NULL }
+};
+
+static GActionGroup *
+get_actions (void)
+{
+  actions = g_simple_action_group_new ();
+  g_simple_action_group_add_entries (actions,
+                                     entries, G_N_ELEMENTS (entries),
+                                     NULL);
+
+  return G_ACTION_GROUP (actions);
+}
+
+static GMenuModel *
+get_menu (void)
+{
+  menu = g_menu_new ();
+  g_menu_append (menu, "Help", "help");
+  g_menu_append (menu, "About Bloatpad", "about");
+  g_menu_append (menu, "Quit", "quit");
+  g_menu_append (menu, "Add", "add");
+
+  return G_MENU_MODEL (menu);
+}
+
+static void
 bloat_pad_init (BloatPad *app)
 {
+  g_application_set_action_group (G_APPLICATION (app), get_actions ());
+  g_application_set_menu (G_APPLICATION (app), get_menu ());
 }
 
 static void
