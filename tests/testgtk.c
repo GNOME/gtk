@@ -6671,7 +6671,6 @@ shape_motion (GtkWidget      *widget,
 {
   gint xp, yp;
   CursorOffset * p;
-  GdkModifierType mask;
 
   p = g_object_get_data (G_OBJECT (widget), "cursor_offset");
 
@@ -6679,7 +6678,9 @@ shape_motion (GtkWidget      *widget,
    * Can't use event->x / event->y here 
    * because I need absolute coordinates.
    */
-  gdk_window_get_pointer (NULL, &xp, &yp, &mask);
+  gdk_window_get_device_position (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
+                                  gdk_event_get_device ((GdkEvent *) event),
+                                  &xp, &yp, NULL);
   gtk_window_move (GTK_WINDOW (widget), xp  - p->x, yp  - p->y);
 }
 
