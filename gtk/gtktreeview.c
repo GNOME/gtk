@@ -10742,6 +10742,9 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       tree_view->priv->scroll_to_path = NULL;
     }
 
+  if (tree_view->priv->rubber_band_status)
+    gtk_tree_view_stop_rubber_band (tree_view);
+
   if (tree_view->priv->model)
     {
       GList *tmplist = tree_view->priv->columns;
