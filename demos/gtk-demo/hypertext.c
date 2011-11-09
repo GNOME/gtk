@@ -228,27 +228,6 @@ motion_notify_event (GtkWidget      *text_view,
   return FALSE;
 }
 
-/* Also update the cursor image if the window becomes visible
- * (e.g. when a window covering it got iconified).
- */
-static gboolean
-visibility_notify_event (GtkWidget          *text_view,
-                         GdkEventVisibility *event)
-{
-  gint wx, wy, bx, by;
-
-  gdk_window_get_pointer (gtk_widget_get_window (text_view),
-                          &wx, &wy, NULL);
-
-  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
-                                         GTK_TEXT_WINDOW_WIDGET,
-                                         wx, wy, &bx, &by);
-
-  set_cursor_if_appropriate (GTK_TEXT_VIEW (text_view), bx, by);
-
-  return FALSE;
-}
-
 GtkWidget *
 do_hypertext (GtkWidget *do_widget)
 {
@@ -283,8 +262,6 @@ do_hypertext (GtkWidget *do_widget)
                         G_CALLBACK (event_after), NULL);
       g_signal_connect (view, "motion-notify-event",
                         G_CALLBACK (motion_notify_event), NULL);
-      g_signal_connect (view, "visibility-notify-event",
-                        G_CALLBACK (visibility_notify_event), NULL);
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
