@@ -237,7 +237,8 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   accessible->idle_expand_path = NULL;
   accessible->n_children_deleted = 0;
 
-  accessible->cell_info_by_index = g_hash_table_new (g_int_hash, g_int_equal);
+  accessible->cell_info_by_index = g_hash_table_new_full (g_int_hash,
+      g_int_equal, NULL, cell_info_free);
 
   widget = GTK_WIDGET (data);
   tree_view = GTK_TREE_VIEW (widget);
@@ -2845,7 +2846,6 @@ garbage_collect_cell_data (gpointer data)
     {
       if (!cell_info->in_use)
         {
-          cell_info_free (cell_info);
           g_hash_table_iter_remove (&iter);
         }
     }
