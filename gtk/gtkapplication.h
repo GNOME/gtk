@@ -26,7 +26,6 @@
 #ifndef __GTK_APPLICATION_H__
 #define __GTK_APPLICATION_H__
 
-#include <gtk/gtkactiongroup.h>
 #include <gtk/gtkwidget.h>
 #include <gio/gio.h>
 
