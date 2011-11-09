@@ -432,13 +432,13 @@ gdk_init (int *argc, char ***argv)
  * Win32 backend, GDK calls should not be attempted from multiple threads
  * at all.
  *
- * You must call g_thread_init() and gdk_threads_init() before executing
- * any other GTK+ or GDK functions in a threaded GTK+ program.
+ * You must call gdk_threads_init() before executing any other GTK+ or
+ * GDK functions in a threaded GTK+ program.
  *
- * Idles, timeouts, and input functions from GLib, such as g_idle_add(), are
- * executed outside of the main GTK+ lock.
- * So, if you need to call GTK+ inside of such a callback, you must surround
- * the callback with a gdk_threads_enter()/gdk_threads_leave() pair or use
+ * Idles, timeouts, and input functions from GLib, such as g_idle_add(),
+ * are executed outside of the main GTK+ lock. So, if you need to call
+ * GTK+ inside of such a callback, you must surround the callback with
+ * a gdk_threads_enter()/gdk_threads_leave() pair or use
  * gdk_threads_add_idle_full() which does this for you.
  * However, event dispatching from the mainloop is still executed within
  * the main GTK+ lock, so callback functions connected to event signals
@@ -468,7 +468,6 @@ gdk_init (int *argc, char ***argv)
  * {
  *   GtkWidget *window;
  *
- *   g_thread_init (NULL);
  *   gdk_threads_init (<!-- -->);
  *   gdk_threads_enter (<!-- -->);
  *
@@ -593,7 +592,6 @@ gdk_init (int *argc, char ***argv)
  *   pthread_t no_tid, yes_tid;
  *
  *   /<!---->* init threads *<!---->/
- *   g_thread_init (NULL);
  *   gdk_threads_init (<!-- -->);
  *   gdk_threads_enter (<!-- -->);
  *
@@ -641,9 +639,9 @@ gdk_init (int *argc, char ***argv)
 /**
  * gdk_threads_enter:
  *
- * This macro marks the beginning of a critical section in which GDK and
- * GTK+ functions can be called safely and without causing race
- * conditions.  Only one thread at a time can be in such a critial
+ * This function marks the beginning of a critical section in which
+ * GDK and GTK+ functions can be called safely and without causing race
+ * conditions. Only one thread at a time can be in such a critial
  * section.
  */
 void
@@ -682,11 +680,10 @@ gdk_threads_impl_unlock (void)
  *
  * Initializes GDK so that it can be used from multiple threads
  * in conjunction with gdk_threads_enter() and gdk_threads_leave().
- * g_thread_init() must be called previous to this function.
  *
  * This call must be made before any use of the main loop from
  * GTK+; to be safe, call it before gtk_init().
- **/
+ */
 void
 gdk_threads_init (void)
 {
@@ -777,7 +774,7 @@ gdk_threads_dispatch_free (gpointer data)
  * removed from the list of event sources and will not be called again.
  *
  * This variant of g_idle_add_full() calls @function with the GDK lock
- * held. It can be thought of a MT-safe version for GTK+ widgets for the 
+ * held. It can be thought of a MT-safe version for GTK+ widgets for the
  * following use case, where you have to worry about idle_callback()
  * running in thread A and accessing @self after it has been finalized
  * in thread B:
