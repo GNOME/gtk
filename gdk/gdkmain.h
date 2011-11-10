@@ -78,7 +78,6 @@ const gchar *         gdk_get_display_arg_name (void);
 gchar*        gdk_get_display        (void);
 
 #ifndef GDK_MULTIDEVICE_SAFE
-#ifndef GDK_DISABLE_DEPRECATED
 GDK_DEPRECATED_FOR(gdk_device_grab)
 GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
                                       gboolean      owner_events,
@@ -90,20 +89,17 @@ GDK_DEPRECATED_FOR(gdk_device_grab)
 GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
                                       gboolean      owner_events,
                                       guint32       time_);
-#endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIDEVICE_SAFE */
 
 #ifndef GDK_MULTIHEAD_SAFE
 
 #ifndef GDK_MULTIDEVICE_SAFE
-#ifndef GDK_DISABLE_DEPRECATED
 GDK_DEPRECATED_FOR(gdk_device_ungrab)
 void          gdk_pointer_ungrab     (guint32       time_);
 GDK_DEPRECATED_FOR(gdk_device_ungrab)
 void          gdk_keyboard_ungrab    (guint32       time_);
 GDK_DEPRECATED_FOR(gdk_display_device_is_grabbed)
 gboolean      gdk_pointer_is_grabbed (void);
-#endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIDEVICE_SAFE */
 
 gint gdk_screen_width  (void) G_GNUC_CONST;

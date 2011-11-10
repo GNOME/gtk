@@ -52,7 +52,6 @@ GdkScreen * gdk_display_get_screen         (GdkDisplay  *display,
 GdkScreen * gdk_display_get_default_screen (GdkDisplay  *display);
 
 #ifndef GDK_MULTIDEVICE_SAFE
-#ifndef GDK_DISABLE_DEPRECATED
 GDK_DEPRECATED_FOR(gdk_device_ungrab)
 void        gdk_display_pointer_ungrab     (GdkDisplay  *display,
                                             guint32      time_);
@@ -61,7 +60,6 @@ void        gdk_display_keyboard_ungrab    (GdkDisplay  *display,
                                             guint32      time_);
 GDK_DEPRECATED_FOR(gdk_display_device_is_grabbed)
 gboolean    gdk_display_pointer_is_grabbed (GdkDisplay  *display);
-#endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIDEVICE_SAFE */
 
 gboolean    gdk_display_device_is_grabbed  (GdkDisplay  *display,
@@ -73,10 +71,8 @@ void        gdk_display_flush              (GdkDisplay  *display);
 void        gdk_display_close                  (GdkDisplay  *display);
 gboolean    gdk_display_is_closed          (GdkDisplay  *display);
 
-#ifndef GDK_DISABLE_DEPRECATED
 GDK_DEPRECATED_FOR(gdk_device_manager_list_devices)
 GList *     gdk_display_list_devices       (GdkDisplay  *display);
-#endif /* GDK_DISABLE_DEPRECATED */
 
 GdkEvent* gdk_display_get_event  (GdkDisplay     *display);
 GdkEvent* gdk_display_peek_event (GdkDisplay     *display);
@@ -92,7 +88,6 @@ void gdk_display_set_double_click_distance (GdkDisplay   *display,
 GdkDisplay *gdk_display_get_default (void);
 
 #ifndef GDK_MULTIDEVICE_SAFE
-#ifndef GDK_DISABLE_DEPRECATED
 GDK_DEPRECATED_FOR(gdk_device_get_position)
 void             gdk_display_get_pointer           (GdkDisplay             *display,
                                                     GdkScreen             **screen,
@@ -108,7 +103,6 @@ void             gdk_display_warp_pointer          (GdkDisplay             *disp
                                                     GdkScreen              *screen,
                                                     gint                   x,
                                                     gint                   y);
-#endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIDEVICE_SAFE */
 
 GdkDisplay *gdk_display_open_default_libgtk_only (void);
