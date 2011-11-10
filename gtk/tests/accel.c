@@ -21,19 +21,22 @@
 
 static void
 test_one_accel (const char *accel,
-		const char *exp_label)
+		const char *exp_label,
+		gboolean has_keysym)
 {
   guint accel_key;
   GdkModifierType mods;
   guint *keycodes;
   char *label, *name;
 
+  accel_key = 0;
   gtk_accelerator_parse_with_keycode (accel,
 				      &accel_key,
 				      &keycodes,
 				      &mods);
 
-  g_assert (accel_key != 0);
+  if (has_keysym)
+    g_assert (accel_key != 0);
   g_assert (keycodes);
   g_assert (keycodes[0] != 0);
 
@@ -58,7 +61,8 @@ test_one_accel (const char *accel,
 static void
 accel (void)
 {
-  test_one_accel ("<Primary><Alt>z", "Ctrl+Alt+Z");
+  test_one_accel ("0xb3", "0xb3", FALSE);
+  test_one_accel ("<Primary><Alt>z", "Ctrl+Alt+Z", TRUE);
 }
 
 int

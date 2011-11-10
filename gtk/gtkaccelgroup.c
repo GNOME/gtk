@@ -1323,8 +1323,6 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
                gchar *endptr;
                gint tmp_keycode;
 
-               keyval = GDK_KEY_VoidSymbol;
-
                memcpy (keystring, accelerator, 4);
                keystring [4] = '\000';
 
@@ -1367,7 +1365,7 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
 		}
 	    }
 
-          if (keyval != GDK_KEY_VoidSymbol && accelerator_codes != NULL)
+          if (keyval && accelerator_codes != NULL)
             {
               GdkKeymapKey *keys;
               gint n_keys, i, j;
