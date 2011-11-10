@@ -100,7 +100,7 @@ locale.
 
 @void: 
 @Returns: the resulting locale.
-@Deprecated:2.24: Use setlocale() directly
+@Deprecated: 2.24: Use setlocale() directly
 
 
 <!-- ##### FUNCTION gdk_set_sm_client_id ##### -->

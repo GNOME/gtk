@@ -30,6 +30,18 @@ Cairo paths and to use pixbufs as sources for drawing operations.
 <!-- ##### SECTION Image ##### -->
 
 
+<!-- ##### FUNCTION gdk_window_create_similar_surface ##### -->
+<para>
+
+</para>
+
+@window: 
+@content: 
+@width: 
+@height: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_cairo_create ##### -->
 <para>
 
@@ -68,6 +80,17 @@ Cairo paths and to use pixbufs as sources for drawing operations.
 @pixmap: 
 @pixmap_x: 
 @pixmap_y: 
+
+
+<!-- ##### FUNCTION gdk_cairo_set_source_window ##### -->
+<para>
+
+</para>
+
+@cr: 
+@window: 
+@x: 
+@y: 
 
 
 <!-- ##### FUNCTION gdk_cairo_rectangle ##### -->

@@ -73,8 +73,6 @@ an efficient form. This structure should be treated as
 opaque.
 </para>
 
-@list: 
-@ref_count: 
 
 <!-- ##### STRUCT GtkTargetPair ##### -->
 <para>

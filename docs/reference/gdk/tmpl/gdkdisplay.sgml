@@ -164,6 +164,15 @@ of an X display. All its fields are private and should not be accessed directly.
 @display: 
 
 
+<!-- ##### FUNCTION gdk_display_is_closed ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_display_list_devices ##### -->
 <para>
 

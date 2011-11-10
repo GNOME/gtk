@@ -984,10 +984,6 @@ A struct that specifies a border around a rectangular area that can
 be of different width on each side.
 </para>
 
-@left: The width of the left border.
-@right: The width of the right border.
-@top: The width of the top border.
-@bottom: The width of the bottom border.
 
 <!-- ##### FUNCTION gtk_border_new ##### -->
 <para>

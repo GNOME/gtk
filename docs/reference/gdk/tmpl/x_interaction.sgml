@@ -40,7 +40,6 @@ The current display.
 </para>
 
 @Returns: an Xlib <type>Display*</type>.
-
 @Deprecated: 2.22: Use gdk_display_get_default() to get the default #GdkDisplay or gdk_x11_get_default_xdisplay() to get the corresponding Xlib <type>Display *</type>.
 
 
@@ -818,6 +817,34 @@ Since: 2.2
 
 @display: 
 @xatom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_set_sm_client_id ##### -->
+<para>
+
+</para>
+
+@sm_client_id: 
+
+
+<!-- ##### FUNCTION gdk_x11_window_foreign_new_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_x11_window_lookup_for_display ##### -->
+<para>
+
+</para>
+
+@display: 
+@window: 
 @Returns: 
 
 

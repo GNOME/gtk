@@ -164,6 +164,96 @@ Destroys a #GdkImage, freeing any resources allocated for it.
 @colormap: 
 
 
+<!-- ##### FUNCTION gdk_image_get_bits_per_pixel ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_bytes_per_pixel ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_bytes_per_line ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_byte_order ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_depth ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_height ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_image_type ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_visual ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_width ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_pixels ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_image_put_pixel ##### -->
 <para>
 Sets a pixel in a #GdkImage to a given pixel value.

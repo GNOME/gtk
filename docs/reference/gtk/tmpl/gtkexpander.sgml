@@ -115,6 +115,11 @@ a &lt;child&gt; type attribute.
 
 </para>
 
+<!-- ##### ARG GtkExpander:label-fill ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkExpander:label-widget ##### -->
 <para>
 
@@ -263,6 +268,24 @@ a &lt;child&gt; type attribute.
 
 
 <!-- ##### FUNCTION gtk_expander_get_label_widget ##### -->
+<para>
+
+</para>
+
+@expander: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_expander_set_label_fill ##### -->
+<para>
+
+</para>
+
+@expander: 
+@label_fill: 
+
+
+<!-- ##### FUNCTION gtk_expander_get_label_fill ##### -->
 <para>
 
 </para>

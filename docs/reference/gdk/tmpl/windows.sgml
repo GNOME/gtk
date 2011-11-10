@@ -525,6 +525,51 @@ Deprecated equivalent of g_object_unref()
 
 
 
+<!-- ##### FUNCTION gdk_window_get_display ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_screen ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_visual ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_width ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_height ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_get_window_type ##### -->
 <para>
 
@@ -587,6 +632,24 @@ Deprecated equivalent of g_object_unref()
 
 
 <!-- ##### FUNCTION gdk_window_is_viewable ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_is_shaped ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_is_input_only ##### -->
 <para>
 
 </para>
@@ -712,6 +775,15 @@ Deprecated equivalent of g_object_unref()
 @composited: 
 
 
+<!-- ##### FUNCTION gdk_window_get_composited ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_move ##### -->
 <para>
 
@@ -771,6 +843,15 @@ Deprecated equivalent of g_object_unref()
 </para>
 
 @window: 
+
+
+<!-- ##### FUNCTION gdk_window_has_native ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_window_ensure_native ##### -->
@@ -990,7 +1071,8 @@ Registers a window as a potential drop destination.
 @GdkWindow *, gpointer:
 @GdkWindow *, gpointer:
 @GdkWindow *, gpointer:
-@GdkWindow *, gpointer: 
+@GdkWindow *, gpointer:
+@child_func: 
 @user_data: 
 
 
@@ -1098,6 +1180,15 @@ Registers a window as a potential drop destination.
 @accept_focus: 
 
 
+<!-- ##### FUNCTION gdk_window_get_accept_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_set_focus_on_map ##### -->
 <para>
 
@@ -1105,6 +1196,15 @@ Registers a window as a potential drop destination.
 
 @window: 
 @focus_on_map: 
+
+
+<!-- ##### FUNCTION gdk_window_get_focus_on_map ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_window_add_filter ##### -->
@@ -1293,6 +1393,15 @@ backend, <type>MSG</type>s for Win32).
 @parent_relative: 
 
 
+<!-- ##### FUNCTION gdk_window_get_background_pattern ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### MACRO GDK_PARENT_RELATIVE ##### -->
 <para>
 A special value for <literal>GdkPixmap*</literal> variables, indicating
@@ -1377,6 +1486,15 @@ Deprecated equivalent to gdk_drawable_set_colormap()
 @modal: 
 
 
+<!-- ##### FUNCTION gdk_window_get_modal_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_set_type_hint ##### -->
 <para>
 
@@ -1458,12 +1576,13 @@ Deprecated equivalent of gdk_drawable_get_size().
 
 
 
-<!-- ##### MACRO gdk_window_get_visual ##### -->
+<!-- ##### FUNCTION gdk_window_get_visual ##### -->
 <para>
-Deprecated equivalent of gdk_drawable_get_visual().
+
 </para>
 
-@Returns: the #GdkVisual of the window
+@window: 
+@Returns: 
 
 
 <!-- ##### MACRO gdk_window_get_colormap ##### -->
@@ -1514,6 +1633,30 @@ Deprecated equivalent of gdk_drawable_get_type().
 @y: 
 @root_x: 
 @root_y: 
+
+
+<!-- ##### FUNCTION gdk_window_coords_from_parent ##### -->
+<para>
+
+</para>
+
+@window: 
+@parent_x: 
+@parent_y: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_coords_to_parent ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@parent_x: 
+@parent_y: 
 
 
 <!-- ##### FUNCTION gdk_window_get_pointer ##### -->
@@ -1579,7 +1722,25 @@ or %GDK_META_MASK in the state field of key events.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_window_get_effective_parent ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_get_toplevel ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_effective_toplevel ##### -->
 <para>
 
 </para>

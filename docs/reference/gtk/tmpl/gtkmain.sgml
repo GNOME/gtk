@@ -432,6 +432,7 @@ Registers a function to be called when the mainloop is started.
 @data: Data to pass to that function.
 @Deprecated: This function is going to be removed in GTK+ 3.0
 
+
 <!-- ##### FUNCTION gtk_quit_add_destroy ##### -->
 <para>
 Trigger destruction of @object in case the mainloop at level @main_level

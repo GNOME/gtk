@@ -232,3 +232,81 @@ Deprecated equivalent of g_object_unref().
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_visual_get_bits_per_rgb ##### -->
+<para>
+
+</para>
+
+@visual: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_blue_pixel_details ##### -->
+<para>
+
+</para>
+
+@visual: 
+@mask: 
+@shift: 
+@precision: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_byte_order ##### -->
+<para>
+
+</para>
+
+@visual: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_colormap_size ##### -->
+<para>
+
+</para>
+
+@visual: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_depth ##### -->
+<para>
+
+</para>
+
+@visual: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_green_pixel_details ##### -->
+<para>
+
+</para>
+
+@visual: 
+@mask: 
+@shift: 
+@precision: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_red_pixel_details ##### -->
+<para>
+
+</para>
+
+@visual: 
+@mask: 
+@shift: 
+@precision: 
+
+
+<!-- ##### FUNCTION gdk_visual_get_visual_type ##### -->
+<para>
+
+</para>
+
+@visual: 
+@Returns: 
+
+

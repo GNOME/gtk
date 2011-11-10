@@ -77,3 +77,5 @@ Emits the "toggle" signal on the given item.
 
 @item: a #GtkItem.
 @Deprecated: 2.22: This function will be removed in GTK+ 3
+
+

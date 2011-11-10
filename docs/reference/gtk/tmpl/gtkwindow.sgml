@@ -1084,6 +1084,15 @@ Deprecated alias for gtk_window_set_position().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_window_has_group ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_get_window_type ##### -->
 <para>
 
@@ -1147,13 +1156,11 @@ Deprecated alias for gtk_window_set_position().
 @icon: 
 
 
-<!-- ##### FUNCTION gtk_window_set_default_icon_from_file ##### -->
+<!-- ##### MACRO gtk_window_set_default_icon_from_file ##### -->
 <para>
 
 </para>
 
-@filename: 
-@err: 
 @Returns: 
 
 
@@ -1183,14 +1190,11 @@ Deprecated alias for gtk_window_set_position().
 @list: 
 
 
-<!-- ##### FUNCTION gtk_window_set_icon_from_file ##### -->
+<!-- ##### MACRO gtk_window_set_icon_from_file ##### -->
 <para>
 
 </para>
 
-@window: 
-@filename: 
-@err: 
 @Returns: 
 
 

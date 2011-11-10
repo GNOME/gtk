@@ -48,7 +48,6 @@ Creates a new horizontal ruler.
 
 @void: 
 @Returns: a new #GtkHRuler.
-
 @Deprecated: 2.24: #GtkRuler has been removed from GTK 3 for being
     unmaintained and too specialized. There is no replacement.
 

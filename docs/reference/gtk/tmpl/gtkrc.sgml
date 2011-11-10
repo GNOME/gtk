@@ -888,11 +888,12 @@ statement in a RC file.
 @Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
 
 
-<!-- ##### FUNCTION gtk_rc_parse ##### -->
+<!-- ##### MACRO gtk_rc_parse ##### -->
 <para>
 Parses a given resource file.
 </para>
 
+<!-- # Unused Parameters # -->
 @filename: the filename of a file to parse. If @filename is not absolute, it
   is searched in the current directory.
 
@@ -931,11 +932,10 @@ Parses resource information directly from a string.
 @settings: 
 
 
-<!-- ##### FUNCTION gtk_rc_add_default_file ##### -->
+<!-- ##### MACRO gtk_rc_add_default_file ##### -->
 <para>
 </para>
 
-@filename: 
 
 
 <!-- ##### FUNCTION gtk_rc_get_default_files ##### -->
@@ -946,11 +946,10 @@ Parses resource information directly from a string.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_rc_set_default_files ##### -->
+<!-- ##### MACRO gtk_rc_set_default_files ##### -->
 <para>
 </para>
 
-@filenames: 
 
 
 <!-- ##### FUNCTION gtk_rc_parse_color ##### -->

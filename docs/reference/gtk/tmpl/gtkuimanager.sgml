@@ -428,14 +428,11 @@ members and should not be accessed directly.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_ui_manager_add_ui_from_file ##### -->
+<!-- ##### MACRO gtk_ui_manager_add_ui_from_file ##### -->
 <para>
 
 </para>
 
-@self: 
-@filename: 
-@error: 
 @Returns: 
 
 

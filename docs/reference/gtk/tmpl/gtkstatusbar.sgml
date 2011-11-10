@@ -136,6 +136,15 @@ below.
 @message_id: 
 
 
+<!-- ##### FUNCTION gtk_statusbar_remove_all ##### -->
+<para>
+
+</para>
+
+@statusbar: 
+@context_id: 
+
+
 <!-- ##### FUNCTION gtk_statusbar_set_has_resize_grip ##### -->
 <para>
 

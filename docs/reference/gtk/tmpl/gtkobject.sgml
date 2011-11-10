@@ -138,7 +138,6 @@ Tells about the state of the object.
 @GTK_FLOATING: 
 @GTK_RESERVED_1: 
 @GTK_RESERVED_2: reserved for future use
-
 @Deprecated: 2.22: Do not re-use #GtkObject flags but use your own variable to
   store flags.
 
@@ -149,7 +148,6 @@ accessing its members.
 </para>
 
 @obj: the object whose flags are returned.
-
 @Deprecated: 2.22: Do not re-use #GtkObject flags but use your own variable to
   store flags.
 

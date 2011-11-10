@@ -71,7 +71,6 @@ window is used.
 @width: the width of the new pixmap in pixels.
 @height: the height of the new pixmap in pixels.
 @Returns: the #GdkBitmap
-
 @Deprecated: 2.22: You can create a Cairo image surface using
 cairo_image_surface_create_for_data() instead. Specify
 %CAIRO_FORMAT_A1 as the format to get a bitmap. Keep in mind that
@@ -80,6 +79,7 @@ to align your data properly. If you must use a pixmap, use
 gdk_pixmap_new() with a depth of 1 to create a bitmap and then use
 gdk_cairo_create(), cairo_set_source_surface() and cairo_paint()
 to draw the image surface to the bitmap.
+
 
 <!-- ##### FUNCTION gdk_pixmap_create_from_data ##### -->
 <para>
@@ -95,12 +95,12 @@ for the new pixmap. Can be %NULL, if the depth is given.
 @fg: the foreground color.
 @bg: the background color.
 @Returns: the #GdkPixmap
-
 @Deprecated: 2.22: If you must replicate the functionality of this
 function, create a pixmap using gdk_pixmap_new(), cairo_paint() it
 with the background color and then create a Cairo image surface as
 pointed out in the docs to gdk_bitmap_create_from_data() and use
 this surface with cairo_mask_surface() to paint the foreground color.
+
 
 <!-- ##### FUNCTION gdk_pixmap_create_from_xpm ##### -->
 
@@ -142,6 +142,16 @@ this surface with cairo_mask_surface() to paint the foreground color.
 @transparent_color: 
 @data: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixmap_get_size ##### -->
+<para>
+
+</para>
+
+@pixmap: 
+@width: 
+@height: 
 
 
 <!-- ##### MACRO gdk_pixmap_ref ##### -->

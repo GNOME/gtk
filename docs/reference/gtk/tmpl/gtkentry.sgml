@@ -839,7 +839,6 @@ Specifies the side of the entry at which an icon is placed.
 
 @GTK_ENTRY_ICON_PRIMARY: At the beginning of the entry (depending on the text direction).
 @GTK_ENTRY_ICON_SECONDARY: At the end of the entry (depending on the text direction).
-
 @Since: 2.16
 
 <!-- ##### FUNCTION gtk_entry_set_icon_from_pixbuf ##### -->
