@@ -885,6 +885,12 @@ static GObject *gtk_tree_view_buildable_get_internal_child (GtkBuildable      *b
 							    const gchar       *childname);
 static void     gtk_tree_view_buildable_init               (GtkBuildableIface *iface);
 
+static GtkAdjustment *gtk_tree_view_do_get_hadjustment (GtkTreeView   *tree_view);
+static void           gtk_tree_view_do_set_hadjustment (GtkTreeView   *tree_view,
+                                                        GtkAdjustment *adjustment);
+static GtkAdjustment *gtk_tree_view_do_get_vadjustment (GtkTreeView   *tree_view);
+static void           gtk_tree_view_do_set_vadjustment (GtkTreeView   *tree_view,
+                                                        GtkAdjustment *adjustment);
 
 static gboolean scroll_row_timeout                   (gpointer     data);
 static void     add_scroll_timeout                   (GtkTreeView *tree_view);
@@ -1751,8 +1757,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->event_last_x = -10000;
   tree_view->priv->event_last_y = -10000;
 
-  gtk_tree_view_set_vadjustment (tree_view, NULL);
-  gtk_tree_view_set_hadjustment (tree_view, NULL);
+  gtk_tree_view_do_set_vadjustment (tree_view, NULL);
+  gtk_tree_view_do_set_hadjustment (tree_view, NULL);
 }
 
 
@@ -1776,10 +1782,10 @@ gtk_tree_view_set_property (GObject         *object,
       gtk_tree_view_set_model (tree_view, g_value_get_object (value));
       break;
     case PROP_HADJUSTMENT:
-      gtk_tree_view_set_hadjustment (tree_view, g_value_get_object (value));
+      gtk_tree_view_do_set_hadjustment (tree_view, g_value_get_object (value));
       break;
     case PROP_VADJUSTMENT:
-      gtk_tree_view_set_vadjustment (tree_view, g_value_get_object (value));
+      gtk_tree_view_do_set_vadjustment (tree_view, g_value_get_object (value));
       break;
     case PROP_HSCROLL_POLICY:
       tree_view->priv->hscroll_policy = g_value_get_enum (value);
@@ -11502,6 +11508,12 @@ gtk_tree_view_get_hadjustment (GtkTreeView *tree_view)
 {
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
 
+  return gtk_tree_view_do_get_hadjustment (tree_view);
+}
+
+static GtkAdjustment *
+gtk_tree_view_do_get_hadjustment (GtkTreeView *tree_view)
+{
   return tree_view->priv->hadjustment;
 }
 
@@ -11518,10 +11530,17 @@ void
 gtk_tree_view_set_hadjustment (GtkTreeView   *tree_view,
                                GtkAdjustment *adjustment)
 {
-  GtkTreeViewPrivate *priv = tree_view->priv;
-
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
+
+  gtk_tree_view_do_set_hadjustment (tree_view, adjustment);
+}
+
+static void
+gtk_tree_view_do_set_hadjustment (GtkTreeView   *tree_view,
+                                  GtkAdjustment *adjustment)
+{
+  GtkTreeViewPrivate *priv = tree_view->priv;
 
   if (adjustment && priv->hadjustment == adjustment)
     return;
@@ -11565,6 +11584,12 @@ gtk_tree_view_get_vadjustment (GtkTreeView *tree_view)
 {
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
 
+  return gtk_tree_view_do_get_vadjustment (tree_view);
+}
+
+static GtkAdjustment *
+gtk_tree_view_do_get_vadjustment (GtkTreeView *tree_view)
+{
   return tree_view->priv->vadjustment;
 }
 
@@ -11581,10 +11606,17 @@ void
 gtk_tree_view_set_vadjustment (GtkTreeView   *tree_view,
                                GtkAdjustment *adjustment)
 {
-  GtkTreeViewPrivate *priv = tree_view->priv;
-
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
+
+  gtk_tree_view_do_set_vadjustment (tree_view, adjustment);
+}
+
+static void
+gtk_tree_view_do_set_vadjustment (GtkTreeView   *tree_view,
+                                  GtkAdjustment *adjustment)
+{
+  GtkTreeViewPrivate *priv = tree_view->priv;
 
   if (adjustment && priv->vadjustment == adjustment)
     return;
