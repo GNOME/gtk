@@ -301,18 +301,9 @@ convert_keysym_state_to_string (GtkCellRendererAccel *accel,
         {
           gchar *name;
 
-          name = gtk_accelerator_get_label (keysym, mask);
+          name = gtk_accelerator_get_label_with_keycode (NULL, keysym, keycode, mask);
           if (name == NULL)
-            name = gtk_accelerator_name (keysym, mask);
-
-          if (keysym == 0)
-            {
-              gchar *tmp;
-
-              tmp = name;
-              name = g_strdup_printf ("%s0x%02x", tmp, keycode);
-              g_free (tmp);
-            }
+            name = gtk_accelerator_name_with_keycode (NULL, keysym, keycode, mask);
 
           return name;
         }
