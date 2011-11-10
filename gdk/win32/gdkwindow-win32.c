@@ -63,6 +63,8 @@ struct _FullscreenInfo
 static void     update_style_bits         (GdkWindow         *window);
 static gboolean _gdk_window_get_functions (GdkWindow         *window,
                                            GdkWMFunction     *functions);
+static HDC     _gdk_win32_impl_acquire_dc (GdkWindowImplWin32 *impl);
+static void    _gdk_win32_impl_release_dc (GdkWindowImplWin32 *impl);
 
 #define WINDOW_IS_TOPLEVEL(window)		   \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
@@ -3337,20 +3339,68 @@ _gdk_win32_window_translate (GdkWindow *window,
                              gint       dx,
                              gint       dy)
 {
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   GdkRectangle extents;
   RECT rect;
+  HRGN hrgn, area_hrgn;
+  HDC hdc;
+  int ret;
+
+  /* Note: This is the destination area, not the source, and
+     it has been moved by dx, dy from the source area */
+  area_hrgn = cairo_region_to_hrgn (area, 0, 0);
+
+  /* First we copy any outstanding invalid areas in the 
+     source area to the new position in the destination area */
+  hrgn = CreateRectRgn (0, 0, 0, 0);
+  ret = GetUpdateRgn (GDK_WINDOW_HWND (window), hrgn, FALSE);
+  if (ret == ERROR)
+    WIN32_API_FAILED ("GetUpdateRgn");
+  else if (ret != NULLREGION)
+    {
+      /* Convert the source invalid region as it would be copied */
+      OffsetRgn (hrgn, dx, dy);
+      /* Keep what intersects the copy destination area */
+      ret = CombineRgn (hrgn, hrgn, area_hrgn, RGN_AND);
+      /* And invalidate it */
+      if (ret == ERROR)
+        WIN32_API_FAILED ("CombineRgn");
+      else if (ret != NULLREGION)
+	API_CALL (InvalidateRgn, (GDK_WINDOW_HWND (window), hrgn, TRUE));
+    }
+
+  /* Then we copy the bits, invalidating whatever is copied from
+     otherwise invisible areas */
+
+  hdc = _gdk_win32_impl_acquire_dc (impl);
+
+  /* Clip hdc to target region */
+  API_CALL (SelectClipRgn, (hdc, area_hrgn));
 
   cairo_region_get_extents (area, &extents);
-  rect.left = extents.x - dx;
-  rect.top = extents.y - dy;
-  rect.right = rect.left + extents.width;
-  rect.bottom = rect.top + extents.height;
 
-  API_CALL (ScrollWindowEx, (GDK_WINDOW_HWND (window), 
-			     dx, dy, &rect, 
-			     NULL, NULL, NULL, 
-			     SW_INVALIDATE));
+  rect.left = MIN (extents.x, extents.x - dx);
+  rect.top = MIN (extents.y, extents.y - dy);
+  rect.right = MAX (extents.x + extents.width, extents.x - dx  + extents.width);
+  rect.bottom = MAX (extents.y + extents.height, extents.y - dy  + extents.height);
 
+  SetRectRgn (hrgn, 0, 0, 0, 0);
+
+  if (!ScrollDC (hdc, dx, dy, &rect, NULL, hrgn, NULL))
+    WIN32_GDI_FAILED ("ScrollDC");
+  else if (!InvalidateRgn (GDK_WINDOW_HWND (window), hrgn, FALSE))
+    WIN32_GDI_FAILED ("InvalidateRgn");
+
+  /* Unset hdc clip region */
+  API_CALL (SelectClipRgn, (hdc, NULL));
+
+  _gdk_win32_impl_release_dc (impl);
+
+  if (!DeleteObject (hrgn))
+    WIN32_GDI_FAILED ("DeleteObject");
+
+  if (!DeleteObject (area_hrgn))
+    WIN32_GDI_FAILED ("DeleteObject");
 }
 
 static void
