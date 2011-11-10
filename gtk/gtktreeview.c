@@ -39,6 +39,7 @@
 #include "gtkcontainer.h"
 #include "gtkentry.h"
 #include "gtkframe.h"
+#include "gtkmain.h"
 #include "gtktreemodelsort.h"
 #include "gtktooltip.h"
 #include "gtkscrollable.h"
