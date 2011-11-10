@@ -835,10 +835,7 @@ gtk_tree_view_accessible_ref_accessible_at_point (AtkComponent *component,
 
       return gtk_tree_view_accessible_ref_child (ATK_OBJECT (component), index);
     }
-  else
-    {
-      g_warning ("gtk_tree_view_accessible_ref_accessible_at_point: gtk_tree_view_get_path_at_pos () failed\n");
-    }
+
   return NULL;
 }
 
