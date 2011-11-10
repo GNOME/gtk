@@ -8,8 +8,18 @@ typedef struct  {
     int width, height;
 } BroadwayRect;
 
+typedef enum {
+  BROADWAY_WS_CONTINUATION = 0,
+  BROADWAY_WS_TEXT = 1,
+  BROADWAY_WS_BINARY = 2,
+  BROADWAY_WS_CNX_CLOSE = 8,
+  BROADWAY_WS_CNX_PING = 9,
+  BROADWAY_WS_CNX_PONG = 0xa
+} BroadwayWSOpCode;
+
 BroadwayOutput *broadway_output_new             (GOutputStream  *out,
-						 guint32         serial);
+						 guint32         serial,
+						 gboolean        proto_v7_plus);
 void            broadway_output_free            (BroadwayOutput *output);
 int             broadway_output_flush           (BroadwayOutput *output);
 int             broadway_output_has_error       (BroadwayOutput *output);
@@ -66,3 +76,4 @@ void            broadway_output_grab_pointer    (BroadwayOutput *output,
 						 int id,
 						 gboolean owner_event);
 guint32         broadway_output_ungrab_pointer  (BroadwayOutput *output);
+void            broadway_output_pong            (BroadwayOutput *output);

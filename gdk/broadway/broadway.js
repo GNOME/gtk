@@ -2769,10 +2769,19 @@ function connect()
 	    useToplevelWindows = true;
     }
 
+    var loc = window.location.toString().replace("http:", "ws:");
+    loc = loc.substr(0, loc.lastIndexOf('/')) + "/socket";
+    var ws = null;
+
     if ("WebSocket" in window) {
-	var loc = window.location.toString().replace("http:", "ws:");
-	loc = loc.substr(0, loc.lastIndexOf('/')) + "/socket";
-	var ws = new WebSocket(loc, "broadway");
+	ws = new WebSocket(loc, "broadway");
+    } else if ("MozWebSocket" in window) { // Firefox 6
+	ws = new MozWebSocket(loc);
+    } else {
+	alert("WebSocket not supported, input will not work!");
+	return;
+    }
+
 	ws.onopen = function() {
 	    inputSocket = ws;
 	    var w, h;
@@ -2797,9 +2806,7 @@ function connect()
 	ws.onmessage = function(event) {
 	    handleMessage(event.data);
 	};
-    } else {
-	alert("WebSocket not supported, input will not work!");
-    }
+
     setupDocument(document);
     window.onunload = function (ev) {
 	for (var i = 0; i < toplevelWindows.length; i++)

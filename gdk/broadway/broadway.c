@@ -175,30 +175,84 @@ struct BroadwayOutput {
   GOutputStream *out;
   int error;
   guint32 serial;
+  gboolean proto_v7_plus;
 };
 
 static void
-broadway_output_write_header (BroadwayOutput *output)
+broadway_output_send_cmd (BroadwayOutput *output,
+			  gboolean fin, BroadwayWSOpCode code,
+			  const void *buf, gsize count)
 {
-  g_output_stream_write (output->out, "\0", 1, NULL, NULL);
-}
+  gboolean mask = FALSE;
+  guchar header[16];
+  size_t p;
 
-static void
-broadway_output_write (BroadwayOutput *output,
-		       const void *buf, gsize count)
-{
+  gboolean mid_header = count > 125 && count <= 65535;
+  gboolean long_header = count > 65535;
+
+  /* NB. big-endian spec => bit 0 == MSB */
+  header[0] = ( (fin ? 0x80 : 0) | (code & 0x0f) );
+  header[1] = ( (mask ? 0x80 : 0) |
+                (mid_header ? 126 : long_header ? 127 : count) );
+  p = 2;
+  if (mid_header)
+    {
+      *(guint16 *)(header + p) = GUINT16_TO_BE( (guint16)count );
+      p += 2;
+    }
+  else if (long_header)
+    {
+      *(guint64 *)(header + p) = GUINT64_TO_BE( count );
+      p += 8;
+    }
+  // FIXME: if we are paranoid we should 'mask' the data
+  // FIXME: we should really emit these as a single write
+  g_output_stream_write_all (output->out, header, p, NULL, NULL, NULL);
   g_output_stream_write_all (output->out, buf, count, NULL, NULL, NULL);
 }
 
 static void
-send_boundary (BroadwayOutput *output)
+broadway_output_sendmsg (BroadwayOutput *output,
+			 const void *buf, gsize count)
 {
-  broadway_output_write (output, "\xff", 1);
-  broadway_output_write (output, "\0", 1);
+  if (!output->proto_v7_plus)
+    g_output_stream_write_all (output->out, buf, count, NULL, NULL, NULL);
+  else
+    broadway_output_send_cmd (output, TRUE, BROADWAY_WS_TEXT, buf, count);
+}
+
+void broadway_output_pong (BroadwayOutput *output)
+{
+  if (output->proto_v7_plus)
+    broadway_output_send_cmd (output, TRUE, BROADWAY_WS_CNX_PONG, NULL, 0);
+}
+
+static void
+broadway_output_sendmsg_initiate (BroadwayOutput *output)
+{
+  if (!output->proto_v7_plus)
+    g_output_stream_write (output->out, "\0", 1, NULL, NULL);
+  else
+    {
+    }
+}
+
+int
+broadway_output_flush (BroadwayOutput *output)
+{
+  if (!output->proto_v7_plus)
+    {
+      broadway_output_sendmsg (output, "\xff", 1);
+      broadway_output_sendmsg (output, "\0", 1);
+      return !output->error;
+    }
+  else /* no need to flush */
+    return !output->error;
 }
 
 BroadwayOutput *
-broadway_output_new(GOutputStream *out, guint32 serial)
+broadway_output_new(GOutputStream *out, guint32 serial,
+		    gboolean proto_v7_plus)
 {
   BroadwayOutput *output;
 
@@ -206,8 +260,9 @@ broadway_output_new(GOutputStream *out, guint32 serial)
 
   output->out = g_object_ref (out);
   output->serial = serial;
+  output->proto_v7_plus = proto_v7_plus;
 
-  broadway_output_write_header (output);
+  broadway_output_sendmsg_initiate (output);
 
   return output;
 }
@@ -223,13 +278,6 @@ guint32
 broadway_output_get_next_serial (BroadwayOutput *output)
 {
   return output->serial;
-}
-
-int
-broadway_output_flush (BroadwayOutput *output)
-{
-  send_boundary (output);
-  return !output->error;
 }
 
 
@@ -291,7 +339,7 @@ broadway_output_copy_rectangles (BroadwayOutput *output,  int id,
 
   assert (p == len);
 
-  broadway_output_write (output, buf, len);
+  broadway_output_sendmsg (output, buf, len);
   free (buf);
 }
 
@@ -309,7 +357,7 @@ broadway_output_grab_pointer (BroadwayOutput *output,
 
   assert (p == sizeof (buf));
 
-  broadway_output_write (output, buf, sizeof (buf));
+  broadway_output_sendmsg (output, buf, sizeof (buf));
 }
 
 guint32
@@ -324,7 +372,7 @@ broadway_output_ungrab_pointer (BroadwayOutput *output)
 
   assert (p == sizeof (buf));
 
-  broadway_output_write (output, buf, sizeof (buf));
+  broadway_output_sendmsg (output, buf, sizeof (buf));
 
   return serial;
 }
@@ -347,7 +395,7 @@ broadway_output_new_surface(BroadwayOutput *output,
 
   assert (p == sizeof (buf));
 
-  broadway_output_write (output, buf, sizeof (buf));
+  broadway_output_sendmsg (output, buf, sizeof (buf));
 }
 
 void
@@ -361,7 +409,7 @@ broadway_output_show_surface(BroadwayOutput *output,  int id)
 
   assert (p == sizeof (buf));
 
-  broadway_output_write (output, buf, sizeof (buf));
+  broadway_output_sendmsg (output, buf, sizeof (buf));
 }
 
 void
@@ -375,7 +423,7 @@ broadway_output_hide_surface(BroadwayOutput *output,  int id)
 
   assert (p == sizeof (buf));
 
-  broadway_output_write (output, buf, sizeof (buf));
+  broadway_output_sendmsg (output, buf, sizeof (buf));
 }
 
 void
@@ -389,7 +437,7 @@ broadway_output_destroy_surface(BroadwayOutput *output,  int id)
 
   assert (p == sizeof (buf));
 
-  broadway_output_write (output, buf, sizeof (buf));
+  broadway_output_sendmsg (output, buf, sizeof (buf));
 }
 
 
@@ -427,7 +475,7 @@ broadway_output_move_resize_surface (BroadwayOutput *output,
     }
   assert (p <= sizeof (buf));
 
-  broadway_output_write (output, buf, p);
+  broadway_output_sendmsg (output, buf, p);
 }
 
 void
@@ -445,7 +493,7 @@ broadway_output_set_transient_for (BroadwayOutput *output,
 
   assert (p == sizeof (buf));
 
-  broadway_output_write (output, buf, sizeof (buf));
+  broadway_output_sendmsg (output, buf, sizeof (buf));
 }
 
 
@@ -453,10 +501,16 @@ void
 broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
 			 int w, int h, int byte_stride, void *data)
 {
-  char buf[HEADER_LEN + 15];
-  gsize len;
-  char *url;
+  gsize buf_size;
+  gsize url_len;
+  char *url, *buf;
   int p;
+
+  url = to_png_rgb (w, h, byte_stride, (guint32*)data);
+  url_len = strlen (url);
+
+  buf_size = HEADER_LEN + 15 + url_len;
+  buf = g_malloc (buf_size);
 
   p = write_header (output, buf, 'i');
 
@@ -464,16 +518,14 @@ broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
   append_uint16 (x, buf, &p);
   append_uint16 (y, buf, &p);
 
-  url = to_png_rgb (w, h, byte_stride, (guint32*)data);
-  len = strlen (url);
-  append_uint32 (len, buf, &p);
+  append_uint32 (url_len, buf, &p);
 
-  assert (p == sizeof (buf));
+  g_assert (p == HEADER_LEN + 15);
+  strncpy (buf + p, url, url_len);
 
-  broadway_output_write (output, buf, sizeof (buf));
+  broadway_output_sendmsg (output, buf, buf_size);
 
-  broadway_output_write (output, url, len);
-
+  g_free (buf);
   free (url);
 }
 
@@ -704,37 +756,40 @@ void
 broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
 			  int w, int h, int byte_stride, void *data)
 {
-  char buf[HEADER_LEN + 15];
-  gsize len;
-  char *url;
   BroadwayBox *rects;
   int p, i, n_rects;
-  guint8 *subdata;
 
   rects = rgba_find_rects (data, w, h, byte_stride, &n_rects);
 
   for (i = 0; i < n_rects; i++)
     {
+      gsize url_len, buf_size;
+      char *buf, *url;
+      guint8 *subdata;
+
       subdata = (guint8 *)data + rects[i].x1 * 4 + rects[i].y1 * byte_stride;
+      url = to_png_rgba (rects[i].x2 - rects[i].x1,
+			 rects[i].y2 - rects[i].y1,
+			 byte_stride, (guint32*)subdata);
+
+      url_len = strlen (url);
+      buf_size = HEADER_LEN + 15 + url_len;
+      buf = g_malloc (buf_size);
+
 
       p = write_header (output, buf, 'i');
       append_uint16 (id, buf, &p);
       append_uint16 (x + rects[i].x1, buf, &p);
       append_uint16 (y + rects[i].y1, buf, &p);
 
-      url = to_png_rgba (rects[i].x2 - rects[i].x1,
-			 rects[i].y2 - rects[i].y1,
-			 byte_stride, (guint32*)subdata);
-      len = strlen (url);
-      append_uint32 (len, buf, &p);
+      append_uint32 (url_len, buf, &p);
+      g_assert (p == HEADER_LEN + 15);
+      strncpy (buf + p, url, url_len);
 
-      assert (p == sizeof (buf));
-
-      broadway_output_write (output, buf, sizeof (buf));
-
-      broadway_output_write (output, url, len);
+      broadway_output_sendmsg (output, buf, buf_size);
 
       free (url);
+      g_free (buf);
     }
 
   free (rects);
@@ -750,35 +805,7 @@ broadway_output_surface_flush (BroadwayOutput *output,
   p = write_header (output, buf, 'f');
   append_uint16 (id, buf, &p);
 
-  assert (p == sizeof (buf));
+  g_assert (p == sizeof (buf));
 
-  broadway_output_write (output, buf, sizeof (buf));
+  broadway_output_sendmsg (output, buf, sizeof (buf));
 }
-
-#if 0
-static void
-send_image_a (BroadwayOutput *output,  int id, int x, int y,
-	      int w, int h, int byte_stride, guint8 *data)
-{
-  char buf[HEADER_LEN + 15];
-  gsize len;
-  char *url;
-
-  p = write_header (output, buf, 'i');
-  append_uint16 (id, buf, &p);
-  append_uint16 (x, buf, &p);
-  append_uint16 (y, buf, &p);
-
-  url = to_png_a (w, h, byte_stride, data);
-  len = strlen (url);
-  append_uint32 (len, buf, &p);
-
-  assert (p == sizeof (buf));
-
-  broadway_output_write (output, buf, sizeof (buf));
-
-  broadway_output_write (output, url, len);
-
-  free (url);
-}
-#endif
