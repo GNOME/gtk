@@ -422,6 +422,8 @@ static void     gtk_ui_manager_buildable_custom_tag_end (GtkBuildable 	 *buildab
 							 GObject      	 *child,
 							 const gchar  	 *tagname,
 							 gpointer     	 *data);
+static void gtk_ui_manager_do_set_add_tearoffs          (GtkUIManager *manager,
+                                                         gboolean      add_tearoffs);
 
 
 
@@ -775,7 +777,7 @@ gtk_ui_manager_set_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_ADD_TEAROFFS:
-      gtk_ui_manager_set_add_tearoffs (manager, g_value_get_boolean (value));
+      gtk_ui_manager_do_set_add_tearoffs (manager, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -897,18 +899,25 @@ gtk_ui_manager_get_add_tearoffs (GtkUIManager *manager)
  * Deprecated: 3.4: Tearoff menus are deprecated and should not
  *     be used in newly written code.
  **/
-void 
+void
 gtk_ui_manager_set_add_tearoffs (GtkUIManager *manager,
-				 gboolean      add_tearoffs)
+                                 gboolean      add_tearoffs)
 {
   g_return_if_fail (GTK_IS_UI_MANAGER (manager));
 
+  gtk_ui_manager_do_set_add_tearoffs (manager, add_tearoffs);
+}
+
+static void
+gtk_ui_manager_do_set_add_tearoffs (GtkUIManager *manager,
+                                    gboolean      add_tearoffs)
+{
   add_tearoffs = add_tearoffs != FALSE;
 
   if (add_tearoffs != manager->private_data->add_tearoffs)
     {
       manager->private_data->add_tearoffs = add_tearoffs;
-      
+
       dirty_all_nodes (manager);
 
       g_object_notify (G_OBJECT (manager), "add-tearoffs");
