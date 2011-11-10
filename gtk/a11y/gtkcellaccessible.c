@@ -91,8 +91,18 @@ static gint
 gtk_cell_accessible_get_index_in_parent (AtkObject *obj)
 {
   GtkCellAccessible *cell;
+  AtkObject *parent;
+  int index;
 
   cell = GTK_CELL_ACCESSIBLE (obj);
+  parent = gtk_widget_get_accessible (cell->widget);
+  if (parent == NULL)
+    return -1;
+
+  index = _gtk_cell_accessible_parent_get_child_index (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
+  if (index >= 0)
+    return index;
+
   if (atk_state_set_contains_state (cell->state_set, ATK_STATE_STALE) &&
       cell->refresh_index != NULL)
     {
