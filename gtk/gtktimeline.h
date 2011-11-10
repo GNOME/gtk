@@ -84,10 +84,6 @@ void                    gtk_timeline_rewind            (GtkTimeline             
 gboolean                gtk_timeline_is_running        (GtkTimeline             *timeline);
 guint                   gtk_timeline_get_elapsed_time  (GtkTimeline             *timeline);
 
-guint                   gtk_timeline_get_fps           (GtkTimeline             *timeline);
-void                    gtk_timeline_set_fps           (GtkTimeline             *timeline,
-                                                        guint                    fps);
-
 gboolean                gtk_timeline_get_loop          (GtkTimeline             *timeline);
 void                    gtk_timeline_set_loop          (GtkTimeline             *timeline,
                                                         gboolean                 loop);

@@ -29,7 +29,6 @@ typedef struct GtkTimelinePriv GtkTimelinePriv;
 struct GtkTimelinePriv
 {
   guint duration;
-  guint fps;
   guint source_id;
 
   GTimer *timer;
@@ -49,7 +48,6 @@ struct GtkTimelinePriv
 
 enum {
   PROP_0,
-  PROP_FPS,
   PROP_DURATION,
   PROP_LOOP,
   PROP_DIRECTION,
@@ -90,14 +88,6 @@ gtk_timeline_class_init (GtkTimelineClass *klass)
   object_class->get_property = gtk_timeline_get_property;
   object_class->finalize = gtk_timeline_finalize;
 
-  g_object_class_install_property (object_class,
-                                   PROP_FPS,
-                                   g_param_spec_uint ("fps",
-                                                      "FPS",
-                                                      "Frames per second for the timeline",
-                                                      1, G_MAXUINT,
-                                                      DEFAULT_FPS,
-                                                      G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
                                    PROP_DURATION,
                                    g_param_spec_uint ("duration",
@@ -170,7 +160,6 @@ gtk_timeline_init (GtkTimeline *timeline)
                                                        GTK_TYPE_TIMELINE,
                                                        GtkTimelinePriv);
 
-  priv->fps = DEFAULT_FPS;
   priv->duration = 0.0;
   priv->direction = GTK_TIMELINE_DIRECTION_FORWARD;
   priv->screen = gdk_screen_get_default ();
@@ -190,9 +179,6 @@ gtk_timeline_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_FPS:
-      _gtk_timeline_set_fps (timeline, g_value_get_uint (value));
-      break;
     case PROP_DURATION:
       gtk_timeline_set_duration (timeline, g_value_get_uint (value));
       break;
@@ -225,9 +211,6 @@ gtk_timeline_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_FPS:
-      g_value_set_uint (value, priv->fps);
-      break;
     case PROP_DURATION:
       g_value_set_uint (value, priv->duration);
       break;
@@ -416,9 +399,6 @@ gtk_timeline_start (GtkTimeline *timeline)
       else
         priv->timer = g_timer_new ();
 
-      /* sanity check */
-      g_assert (priv->fps > 0);
-
       if (priv->screen)
         {
           settings = gtk_settings_get_for_screen (priv->screen);
@@ -430,7 +410,7 @@ gtk_timeline_start (GtkTimeline *timeline)
       g_signal_emit (timeline, signals [STARTED], 0);
 
       if (enable_animations)
-        priv->source_id = gdk_threads_add_timeout (FRAME_INTERVAL (priv->fps),
+        priv->source_id = gdk_threads_add_timeout (FRAME_INTERVAL (DEFAULT_FPS),
                                                    (GSourceFunc) gtk_timeline_run_frame,
                                                    timeline);
       else
@@ -530,57 +510,6 @@ gtk_timeline_get_elapsed_time (GtkTimeline *timeline)
 
   priv = timeline->priv;
   return priv->elapsed_time;
-}
-
-/*
- * gtk_timeline_get_fps:
- * @timeline: A #GtkTimeline
- *
- * Returns the number of frames per second.
- *
- * Return Value: frames per second
- */
-guint
-gtk_timeline_get_fps (GtkTimeline *timeline)
-{
-  GtkTimelinePriv *priv;
-
-  g_return_val_if_fail (GTK_IS_TIMELINE (timeline), 1);
-
-  priv = timeline->priv;
-  return priv->fps;
-}
-
-/*
- * gtk_timeline_set_fps:
- * @timeline: A #GtkTimeline
- * @fps: frames per second
- *
- * Sets the number of frames per second that
- * the timeline will play.
- */
-void
-gtk_timeline_set_fps (GtkTimeline *timeline,
-                      guint        fps)
-{
-  GtkTimelinePriv *priv;
-
-  g_return_if_fail (GTK_IS_TIMELINE (timeline));
-  g_return_if_fail (fps > 0);
-
-  priv = timeline->priv;
-
-  priv->fps = fps;
-
-  if (gtk_timeline_is_running (timeline))
-    {
-      g_source_remove (priv->source_id);
-      priv->source_id = gdk_threads_add_timeout (FRAME_INTERVAL (priv->fps),
-                                                 (GSourceFunc) gtk_timeline_run_frame,
-                                                 timeline);
-    }
-
-  g_object_notify (G_OBJECT (timeline), "fps");
 }
 
 /**
