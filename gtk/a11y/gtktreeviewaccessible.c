@@ -238,7 +238,7 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   accessible->n_children_deleted = 0;
 
   accessible->cell_info_by_index = g_hash_table_new_full (g_int_hash,
-      g_int_equal, NULL, cell_info_free);
+      g_int_equal, NULL, (GDestroyNotify) cell_info_free);
 
   widget = GTK_WIDGET (data);
   tree_view = GTK_TREE_VIEW (widget);
