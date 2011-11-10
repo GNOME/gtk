@@ -20,7 +20,6 @@
 #ifndef __GTK_SCALE_BUTTON_ACCESSIBLE_H__
 #define __GTK_SCALE_BUTTON_ACCESSIBLE_H__
 
-#include <gtk/gtk.h>
 #include "gtkbuttonaccessible.h"
 
 G_BEGIN_DECLS

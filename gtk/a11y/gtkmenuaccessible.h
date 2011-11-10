@@ -20,6 +20,7 @@
 #ifndef __GTK_MENU_ACCESSIBLE_H__
 #define __GTK_MENU_ACCESSIBLE_H__
 
+#include "gtkmenu.h"
 #include "gtkmenushellaccessible.h"
 
 G_BEGIN_DECLS
