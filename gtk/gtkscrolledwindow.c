@@ -34,6 +34,7 @@
 #include "gtkscrollbar.h"
 #include "gtkscrolledwindow.h"
 #include "gtkwindow.h"
+#include "gtkviewport.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
