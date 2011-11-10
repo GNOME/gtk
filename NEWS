@@ -1,3 +1,63 @@
+Overview of Changes from GTK+ 2.24.7 to 2.24.8
+==============================================
+
+* Win32 updates:
+ Major update of the win32 backend, it now works
+ at least as well as the old 2.16.x version that
+ a lot of windows applications was forced to use
+
+ Some particular highlights:
+ - Tablet support (wintab) works
+ - The MS-Windows theme works better, and is enabled
+   by default on Windows
+ - Pointer grabs on button press now works
+ - Initial Window positioning is improved and now
+   works very similarly to the X11 backend
+ - Scrolling a window with another window overlapping it
+   doesn't produce rendering artifacts on XP
+ - Configure event delivery after window move or resize
+   is much more robust, fixing a variety of rendering hangs
+   and misbehaviours
+ - Scrolling with synaptics touchpads work better
+
+* OS X updates:
+ - Add Command-cursor keyboard navigation in text widgets
+ - Fix loss of motion events after using the menu bar
+ - Handle recursive CFRunLoops, fixing e.g. crashes
+   when dropping files from finder
+ - Set proper event->state values in all events
+
+* Ensure that the MOD1 modifier always means ALT, as this
+  assumption is already used in many places in Gtk+
+
+* Search engine backend updated to Tracker 0.12
+
+* Bugs fixed:
+  84314  gdk_display_sync() and gdk_flush()
+ 142874  use of SetWindowLong in gdkwindow-win32.c causes...
+ 169811  configure_event and window-state-event are not...
+ 171456  "Keep Above" option in Gimp broken on Win32 
+ 324254  Realizing a top-level window widget early positions...
+ 516822  gtk_window_fullscreen does not resize correctly if...
+ 537296  Maximizing a window larger than the screen makes...
+ 542777  Scroll-Wheel doesn't scroll (Win)
+ 552041  Windows' System Menu from taskbar is buggy 
+ 574935  win32: gtk_window_set_geometry_hints() has no effect...
+ 604156  gtk_window_set_modal() freezes application completely 
+ 612359  Dialog positioning hints fail on Windows 7 
+ 631384  Images pasted from clipboard are shifted/wrapped 
+ 647460  typo in msw_style.c?
+ 650300  Notebook tabs are incorrectly displayed with the...
+ 658272  Port gtksearchenginetracker.c to tracker 0.11/0.12
+ 659565  unbreak compilation on OpenBSD
+ 661997  Gtk crashes when changing the TreeView model while ...
+ 662633  Scheduled transaction editor crashes with gtk+-2.24.7
+ 662670  Pressing "Enter" in print dialog box will not cause...
+ 663138  iconview: layout items immediately when setting...
+ 663182  NSImage throws an exception from _gtk_quartz_...
+ 663543  Huge memory leak while using MS-Windows theme (gtk-demo)
+ 663605  Fix event->state of many event types on quartz
+
 Overview of Changes from GTK+ 2.24.6 to 2.24.7
 ==============================================
 
