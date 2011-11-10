@@ -29,6 +29,7 @@
 
 #include "gtkapplication.h"
 #include "gtkmarshalers.h"
+#include "gtkmain.h"
 #include "gtkwindow.h"
 
 #include <gdk/gdk.h>
