@@ -94,7 +94,6 @@ void           gtk_layout_get_size        (GtkLayout     *layout,
 					   guint         *width,
 					   guint         *height);
 
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 GDK_DEPRECATED_FOR(gtk_scrollable_get_hadjustment)
 GtkAdjustment* gtk_layout_get_hadjustment (GtkLayout     *layout);
 GDK_DEPRECATED_FOR(gtk_scrollable_get_vadjustment)
@@ -106,7 +105,6 @@ GDK_DEPRECATED_FOR(gtk_scrollable_set_vadjustment)
 void           gtk_layout_set_vadjustment (GtkLayout     *layout,
                                            GtkAdjustment *adjustment);
 
-#endif
 
 G_END_DECLS
 

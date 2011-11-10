@@ -483,10 +483,9 @@ void	   gtk_widget_queue_draw_region   (GtkWidget	       *widget,
                                            const cairo_region_t*region);
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
-#ifndef GTK_DISABLE_DEPRECATED
-void	   gtk_widget_size_request	  (GtkWidget	       *widget,
-					   GtkRequisition      *requisition);
-#endif
+GDK_DEPRECATED_FOR(gtk_widget_get_preferred_size)
+void       gtk_widget_size_request        (GtkWidget           *widget,
+                                           GtkRequisition      *requisition);
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
 					   GtkAllocation       *allocation);
 
@@ -509,10 +508,9 @@ void                gtk_widget_get_preferred_size             (GtkWidget      *w
                                                                GtkRequisition *minimum_size,
                                                                GtkRequisition *natural_size);
 
-#ifndef GTK_DISABLE_DEPRECATED
-void       gtk_widget_get_child_requisition (GtkWidget	       *widget,
-					     GtkRequisition    *requisition);
-#endif
+GDK_DEPRECATED_FOR(gtk_widget_get_preferred_size)
+void       gtk_widget_get_child_requisition (GtkWidget         *widget,
+                                             GtkRequisition    *requisition);
 void	   gtk_widget_add_accelerator	  (GtkWidget           *widget,
 					   const gchar         *accel_signal,
 					   GtkAccelGroup       *accel_group,
