@@ -263,27 +263,27 @@ AC_ARG_ENABLE(xkb,
               [enable_xkb="maybe"])
 AC_ARG_ENABLE(xinerama,
               [AS_HELP_STRING([--enable-xinerama],
-	                      [support Xinerama extension if available [default=maybe]])],,
+	                      [support Xinerama extension [default=maybe]])],,
               [enable_xinerama="maybe"])
 AC_ARG_ENABLE(xinput,
               [AS_HELP_STRING([--enable-xinput],
-                              [support XInput extension if available [default=yes]])],,
+                              [support XInput extension [default=yes]])],,
               [enable_xinput="maybe"])
 AC_ARG_ENABLE(xrandr,
               [AS_HELP_STRING([--enable-xrandr],
-                              [support XRandR extension if available [default=maybe]])],,
+                              [support XRandR extension [default=maybe]])],,
               [enable_xrandr="maybe"])
 AC_ARG_ENABLE(xfixes,
               [AS_HELP_STRING([--enable-xfixes],
-                              [support XFixes extension if available [default=maybe]])],,
+                              [support XFixes extension [default=maybe]])],,
               [enable_xfixes="maybe"])
 AC_ARG_ENABLE(xcomposite,
               [AS_HELP_STRING([--enable-xcomposite],
-                              [support X Composite extension if available [default=maybe]])],,
+                              [support X Composite extension [default=maybe]])],,
               [enable_xcomposite="maybe"])
 AC_ARG_ENABLE(xdamage,
               [AS_HELP_STRING([--enable-xdamage],
-                              [support X Damage extension if available [default=maybe]])],,
+                              [support X Damage extension [default=maybe]])],,
               [enable_xdamage="maybe"])
 
 AC_ARG_ENABLE(x11-backend,
