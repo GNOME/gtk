@@ -112,7 +112,7 @@ static gboolean gdk_event_dispatch (GSource     *source,
 static GList *client_filters;	/* Filters for client messages */
 extern gint       _gdk_input_ignore_core;
 
-static HCURSOR p_grab_cursor;
+HCURSOR _gdk_win32_grab_cursor;
 
 static GSourceFuncs event_funcs = {
   gdk_event_prepare,
@@ -444,60 +444,6 @@ event_mask_string (GdkEventMask mask)
 }
 
 #endif
-
-GdkGrabStatus
-_gdk_windowing_device_grab (GdkDevice    *device,
-                            GdkWindow    *window,
-                            GdkWindow    *native_window,
-                            gboolean      owner_events,
-                            GdkEventMask	event_mask,
-                            GdkWindow    *confine_to,
-                            GdkCursor    *cursor,
-                            guint32	      time)
-{
-  HCURSOR hcursor;
-  GdkWin32Cursor *cursor_private;
-  gint return_val;
-  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (native_window->impl);
-
-  g_return_val_if_fail (window != NULL, 0);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
-  g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
-  
-  cursor_private = (GdkWin32Cursor*) cursor;
-  
-  if (!cursor)
-    hcursor = NULL;
-  else if ((hcursor = CopyCursor (cursor_private->hcursor)) == NULL)
-    WIN32_API_FAILED ("CopyCursor");
-
-  return_val = GDK_DEVICE_GET_CLASS (device)->grab (device,
-                                                    native_window,
-                                                    owner_events,
-                                                    event_mask,
-                                                    confine_to,
-                                                    cursor,
-                                                    time);
-
-  /* TODO_CSW: grab brokens, confine window, input_grab */
-  if (p_grab_cursor != NULL)
-    {
-      if (GetCursor () == p_grab_cursor)
-        SetCursor (NULL);
-      DestroyCursor (p_grab_cursor);
-    }
-
-  p_grab_cursor = hcursor;
-
-  if (p_grab_cursor != NULL)
-    SetCursor (p_grab_cursor);
-  else if (impl->hcursor != NULL)
-    SetCursor (impl->hcursor);
-  else
-    SetCursor (LoadCursor (NULL, IDC_ARROW));
-
-  return return_val;
-}
 
 static GdkWindow *
 find_window_for_mouse_event (GdkWindow* reported_window,
@@ -2682,8 +2628,8 @@ gdk_event_translate (MSG  *msg,
       if (grab_window == NULL && LOWORD (msg->lParam) != HTCLIENT)
 	break;
 
-      if (grab_window != NULL && p_grab_cursor != NULL)
-	hcursor = p_grab_cursor;
+      if (grab_window != NULL && _gdk_win32_grab_cursor != NULL)
+	hcursor = _gdk_win32_grab_cursor;
       else if (!GDK_WINDOW_DESTROYED (window))
 	hcursor = GDK_WINDOW_IMPL_WIN32 (window->impl)->hcursor;
       else

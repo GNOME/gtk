@@ -318,8 +318,37 @@ gdk_device_win32_grab (GdkDevice    *device,
                        GdkCursor    *cursor,
                        guint32       time_)
 {
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  HCURSOR hcursor;
+  GdkWin32Cursor *cursor_private;
+
+  cursor_private = (GdkWin32Cursor*) cursor;
+
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-    SetCapture (GDK_WINDOW_HWND (window));
+    {
+      if (!cursor)
+	hcursor = NULL;
+      else if ((hcursor = CopyCursor (cursor_private->hcursor)) == NULL)
+	WIN32_API_FAILED ("CopyCursor");
+
+      if (_gdk_win32_grab_cursor != NULL)
+	{
+	  if (GetCursor () == _gdk_win32_grab_cursor)
+	    SetCursor (NULL);
+	  DestroyCursor (_gdk_win32_grab_cursor);
+	}
+
+      _gdk_win32_grab_cursor = hcursor;
+
+      if (_gdk_win32_grab_cursor != NULL)
+	SetCursor (_gdk_win32_grab_cursor);
+      else if (impl->hcursor != NULL)
+	SetCursor (impl->hcursor);
+      else
+	SetCursor (LoadCursor (NULL, IDC_ARROW));
+
+      SetCapture (GDK_WINDOW_HWND (window));
+    }
 
   return GDK_GRAB_SUCCESS;
 }
@@ -338,7 +367,17 @@ gdk_device_win32_ungrab (GdkDevice *device,
     info->serial_end = 0;
 
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-    ReleaseCapture ();
+    {
+      if (_gdk_win32_grab_cursor != NULL)
+	{
+	  if (GetCursor () == _gdk_win32_grab_cursor)
+	    SetCursor (NULL);
+	  DestroyCursor (_gdk_win32_grab_cursor);
+	}
+      _gdk_win32_grab_cursor = NULL;
+
+      ReleaseCapture ();
+    }
 
   _gdk_display_device_grab_update (display, device, NULL, 0);
 }
