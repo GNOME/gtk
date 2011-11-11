@@ -41,7 +41,6 @@ struct _GtkTreeViewAccessibleCellInfo
   GtkTreeRowReference *cell_row_ref;
   GtkTreeViewColumn *cell_col_ref;
   GtkTreeViewAccessible *view;
-  gboolean in_use;
 };
 
 /* signal handling */
@@ -1345,7 +1344,7 @@ gtk_tree_view_accessible_get_cell_area (GtkCellAccessibleParent *parent,
     return;
   path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
   tv_col = cell_info->cell_col_ref;
-  if (path && cell_info->in_use)
+  if (path)
     {
       GtkTreeViewColumn *expander_column;
       gint focus_line_width;
@@ -1484,15 +1483,12 @@ gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
       GList *renderers;
 
       renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (tv_col));
-      if (cell_info->in_use)
-        {
-          index = atk_object_get_index_in_parent (cell_object);
-          renderer = g_list_nth_data (renderers, index);
-        }
+      index = atk_object_get_index_in_parent (cell_object);
+      renderer = g_list_nth_data (renderers, index);
       g_list_free (renderers);
     }
   path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
-  if (path && cell_info->in_use)
+  if (path)
     {
       if (renderer)
         gtk_tree_view_set_cursor_on_cell (tree_view, path, tv_col, renderer, FALSE);
@@ -1713,15 +1709,12 @@ selection_changed_cb (GtkTreeSelection *selection,
   g_hash_table_iter_init (&iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&info))
     {
-      if (info->in_use)
-        {
-          _gtk_cell_accessible_remove_state (info->cell, ATK_STATE_SELECTED, TRUE);
+      _gtk_cell_accessible_remove_state (info->cell, ATK_STATE_SELECTED, TRUE);
 
-          path = gtk_tree_row_reference_get_path (info->cell_row_ref);
-          if (path && gtk_tree_selection_path_is_selected (tree_selection, path))
-            _gtk_cell_accessible_add_state (info->cell, ATK_STATE_SELECTED, TRUE);
-          gtk_tree_path_free (path);
-        }
+      path = gtk_tree_row_reference_get_path (info->cell_row_ref);
+      if (path && gtk_tree_selection_path_is_selected (tree_selection, path))
+        _gtk_cell_accessible_add_state (info->cell, ATK_STATE_SELECTED, TRUE);
+      gtk_tree_path_free (path);
     }
   if (gtk_widget_get_realized (widget))
     g_signal_emit_by_name (accessible, "selection-changed");
@@ -1947,20 +1940,17 @@ model_row_changed (GtkTreeModel *tree_model,
   g_hash_table_iter_init (&hash_iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&hash_iter, NULL, (gpointer *)&cell_info))
     {
-      if (cell_info->in_use)
-        {
-          cell_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+      cell_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
 
-          if (cell_path != NULL)
+      if (cell_path != NULL)
+        {
+          if (path && gtk_tree_path_compare (cell_path, path) == 0)
             {
-              if (path && gtk_tree_path_compare (cell_path, path) == 0)
-                {
-                  if (GTK_IS_RENDERER_CELL_ACCESSIBLE (cell_info->cell))
-                    update_cell_value (GTK_RENDERER_CELL_ACCESSIBLE (cell_info->cell),
-                                       accessible, TRUE);
-                }
-              gtk_tree_path_free (cell_path);
+              if (GTK_IS_RENDERER_CELL_ACCESSIBLE (cell_info->cell))
+                update_cell_value (GTK_RENDERER_CELL_ACCESSIBLE (cell_info->cell),
+                                   accessible, TRUE);
             }
+          gtk_tree_path_free (cell_path);
         }
     }
   g_signal_emit_by_name (accessible, "visible-data-changed");
@@ -1990,27 +1980,24 @@ column_visibility_changed (GObject    *object,
       g_hash_table_iter_init (&iter, accessible->cell_infos);
       while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
         {
-          if (cell_info->in_use)
+          tv_col = cell_info->cell_col_ref;
+          if (tv_col == this_col)
             {
-              tv_col = cell_info->cell_col_ref;
-              if (tv_col == this_col)
+              GtkTreePath *row_path;
+              row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+              if (GTK_IS_RENDERER_CELL_ACCESSIBLE (cell_info->cell))
                 {
-                  GtkTreePath *row_path;
-                  row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
-                  if (GTK_IS_RENDERER_CELL_ACCESSIBLE (cell_info->cell))
+                  if (gtk_tree_view_column_get_visible (tv_col))
+                      set_cell_visibility (tree_view,
+                                           cell_info->cell,
+                                           tv_col, row_path, FALSE);
+                  else
                     {
-                      if (gtk_tree_view_column_get_visible (tv_col))
-                          set_cell_visibility (tree_view,
-                                               cell_info->cell,
-                                               tv_col, row_path, FALSE);
-                      else
-                        {
-                          _gtk_cell_accessible_remove_state (cell_info->cell, ATK_STATE_VISIBLE, TRUE);
-                          _gtk_cell_accessible_remove_state (cell_info->cell, ATK_STATE_SHOWING, TRUE);
-                        }
+                      _gtk_cell_accessible_remove_state (cell_info->cell, ATK_STATE_VISIBLE, TRUE);
+                      _gtk_cell_accessible_remove_state (cell_info->cell, ATK_STATE_SHOWING, TRUE);
                     }
-                  gtk_tree_path_free (row_path);
                 }
+              gtk_tree_path_free (row_path);
             }
         }
     }
@@ -2336,7 +2323,7 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
   if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
     return FALSE;
 
-  if (emit_change_signal && cell_info->in_use)
+  if (emit_change_signal)
     {
       tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible)));
       tree_model = gtk_tree_view_get_model (tree_view);
@@ -2371,18 +2358,12 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
    * in the list. Otherwise, we assume that the cell is represented
    * by the first renderer in the list
    */
+  parent = atk_object_get_parent (ATK_OBJECT (cell));
 
-  if (cell_info->in_use)
-    {
-      parent = atk_object_get_parent (ATK_OBJECT (cell));
-
-      if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
-        cur_renderer = g_list_nth (renderers, atk_object_get_index_in_parent (ATK_OBJECT (cell)));
-      else
-        cur_renderer = renderers;
-    }
+  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
+    cur_renderer = g_list_nth (renderers, atk_object_get_index_in_parent (ATK_OBJECT (cell)));
   else
-    return FALSE;
+    cur_renderer = renderers;
 
   if (cur_renderer == NULL)
     return FALSE;
@@ -2716,16 +2697,13 @@ clean_cell_info (GtkTreeViewAccessible         *accessible,
 {
   GObject *obj;
 
-  if (cell_info->in_use)
-    {
-      obj = G_OBJECT (cell_info->cell);
+  obj = G_OBJECT (cell_info->cell);
 
-      _gtk_cell_accessible_add_state (cell_info->cell, ATK_STATE_DEFUNCT, FALSE);
-      g_object_set_qdata (obj,
-                          gtk_tree_view_accessible_get_data_quark (),
-                          NULL);
-      g_hash_table_remove (accessible->cell_infos, cell_info);
-    }
+  _gtk_cell_accessible_add_state (cell_info->cell, ATK_STATE_DEFUNCT, FALSE);
+  g_object_set_qdata (obj,
+                      gtk_tree_view_accessible_get_data_quark (),
+                      NULL);
+  g_hash_table_remove (accessible->cell_infos, cell_info);
 }
 
 static void
@@ -2802,36 +2780,30 @@ traverse_cells (GtkTreeViewAccessible *accessible,
       GtkTreePath *row_path;
       gboolean act_on_cell;
 
-      if (cell_info->in_use)
+      row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+      g_return_if_fail (row_path != NULL);
+      if (tree_path == NULL)
+        act_on_cell = TRUE;
+      else
         {
-          row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
-          g_return_if_fail (row_path != NULL);
-          if (tree_path == NULL)
+          gint comparison;
+
+          comparison =  gtk_tree_path_compare (row_path, tree_path);
+          if ((comparison > 0) ||
+              (comparison == 0 && inc_row))
             act_on_cell = TRUE;
           else
-            {
-              gint comparison;
-
-              comparison =  gtk_tree_path_compare (row_path, tree_path);
-              if ((comparison > 0) ||
-                  (comparison == 0 && inc_row))
-                act_on_cell = TRUE;
-              else
-                act_on_cell = FALSE;
-            }
-
-          if (!cell_info->in_use)
-            g_warning ("warning: cell info destroyed during traversal");
-
-          if (act_on_cell && cell_info->in_use)
-            {
-              set_cell_visibility (GTK_TREE_VIEW (widget),
-                                   cell_info->cell,
-                                   cell_info->cell_col_ref,
-                                   row_path, TRUE);
-            }
-          gtk_tree_path_free (row_path);
+            act_on_cell = FALSE;
         }
+
+      if (act_on_cell)
+        {
+          set_cell_visibility (GTK_TREE_VIEW (widget),
+                               cell_info->cell,
+                               cell_info->cell_col_ref,
+                               row_path, TRUE);
+        }
+      gtk_tree_path_free (row_path);
     }
 
   g_signal_emit_by_name (accessible, "visible-data-changed");
@@ -2865,72 +2837,69 @@ set_expand_state (GtkTreeView           *tree_view,
   g_hash_table_iter_init (&hash_iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&hash_iter, NULL, (gpointer *) &cell_info))
     {
-      if (cell_info->in_use)
+      cell_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+      found = FALSE;
+
+      if (cell_path != NULL)
         {
-          cell_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
-          found = FALSE;
+          GtkCellAccessible *cell = GTK_CELL_ACCESSIBLE (cell_info->cell);
 
-          if (cell_path != NULL)
+          expander_tv = gtk_tree_view_get_expander_column (tree_view);
+
+          /* Only set state for the cell that is in the column with the
+           * expander toggle
+           */
+          if (expander_tv == cell_info->cell_col_ref)
             {
-              GtkCellAccessible *cell = GTK_CELL_ACCESSIBLE (cell_info->cell);
-
-              expander_tv = gtk_tree_view_get_expander_column (tree_view);
-
-              /* Only set state for the cell that is in the column with the
-               * expander toggle
-               */
-              if (expander_tv == cell_info->cell_col_ref)
-                {
-                  if (tree_path && gtk_tree_path_compare (cell_path, tree_path) == 0)
-                    found = TRUE;
-                  else if (set_on_ancestor &&
-                           gtk_tree_path_get_depth (cell_path) <
-                           gtk_tree_path_get_depth (tree_path) &&
-                           gtk_tree_path_is_ancestor (cell_path, tree_path) == 1)
-                    /* Only set if set_on_ancestor was passed in as TRUE */
-                    found = TRUE;
-                }
-
-              /* Set ATK_STATE_EXPANDABLE and ATK_STATE_EXPANDED
-               * for ancestors and found cells.
-               */
-              if (found)
-                {
-                  /* Must check against cell_path since cell_path
-                   * can be equal to or an ancestor of tree_path.
-                   */
-                  gtk_tree_model_get_iter (tree_model, &iter, cell_path);
-
-                  /* Set or unset ATK_STATE_EXPANDABLE as appropriate */
-                  if (gtk_tree_model_iter_has_child (tree_model, &iter))
-                    {
-                      set_cell_expandable (cell);
-
-                      if (gtk_tree_view_row_expanded (tree_view, cell_path))
-                        _gtk_cell_accessible_add_state (cell, ATK_STATE_EXPANDED, TRUE);
-                      else
-                        _gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDED, TRUE);
-                    }
-                  else
-                    {
-                      _gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDED, TRUE);
-                      if (_gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDABLE, TRUE))
-                      /* The state may have been propagated to the container cell */
-                      if (!GTK_IS_CONTAINER_CELL_ACCESSIBLE (cell))
-                        _gtk_cell_accessible_remove_action_by_name (cell,
-                                                                    "expand or contract");
-                    }
-
-                  /* We assume that each cell in the cache once and
-                   * a container cell is before its child cells so we are
-                   * finished if set_on_ancestor is not set to TRUE.
-                   */
-                  if (!set_on_ancestor)
-                    break;
-                }
+              if (tree_path && gtk_tree_path_compare (cell_path, tree_path) == 0)
+                found = TRUE;
+              else if (set_on_ancestor &&
+                       gtk_tree_path_get_depth (cell_path) <
+                       gtk_tree_path_get_depth (tree_path) &&
+                       gtk_tree_path_is_ancestor (cell_path, tree_path) == 1)
+                /* Only set if set_on_ancestor was passed in as TRUE */
+                found = TRUE;
             }
-          gtk_tree_path_free (cell_path);
+
+          /* Set ATK_STATE_EXPANDABLE and ATK_STATE_EXPANDED
+           * for ancestors and found cells.
+           */
+          if (found)
+            {
+              /* Must check against cell_path since cell_path
+               * can be equal to or an ancestor of tree_path.
+               */
+              gtk_tree_model_get_iter (tree_model, &iter, cell_path);
+
+              /* Set or unset ATK_STATE_EXPANDABLE as appropriate */
+              if (gtk_tree_model_iter_has_child (tree_model, &iter))
+                {
+                  set_cell_expandable (cell);
+
+                  if (gtk_tree_view_row_expanded (tree_view, cell_path))
+                    _gtk_cell_accessible_add_state (cell, ATK_STATE_EXPANDED, TRUE);
+                  else
+                    _gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDED, TRUE);
+                }
+              else
+                {
+                  _gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDED, TRUE);
+                  if (_gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDABLE, TRUE))
+                  /* The state may have been propagated to the container cell */
+                  if (!GTK_IS_CONTAINER_CELL_ACCESSIBLE (cell))
+                    _gtk_cell_accessible_remove_action_by_name (cell,
+                                                                "expand or contract");
+                }
+
+              /* We assume that each cell in the cache once and
+               * a container cell is before its child cells so we are
+               * finished if set_on_ancestor is not set to TRUE.
+               */
+              if (!set_on_ancestor)
+                break;
+            }
         }
+      gtk_tree_path_free (cell_path);
     }
 }
 
@@ -3081,12 +3050,7 @@ cell_destroyed (gpointer data)
 {
   GtkTreeViewAccessibleCellInfo *cell_info = data;
 
-  if (!cell_info)
-    return;
-  if (cell_info->in_use)
-    {
-      g_hash_table_remove (cell_info->view->cell_infos, cell_info);
-    }
+  g_hash_table_remove (cell_info->view->cell_infos, cell_info);
 }
 
 static int
@@ -3122,7 +3086,6 @@ cell_info_new (GtkTreeViewAccessible *accessible,
 
   cell_info->cell_col_ref = tv_col;
   cell_info->cell = cell;
-  cell_info->in_use = TRUE; /* if we've created it, assume it's in use */
   cell_info->view = accessible;
 
   g_object_set_qdata_full (G_OBJECT (cell), 
@@ -3534,15 +3497,8 @@ find_cell_info (GtkTreeViewAccessible *accessible,
                 GtkCellAccessible     *cell,
                 gboolean               live_only)
 {
-  GtkTreeViewAccessibleCellInfo *cell_info;
-
-  cell_info = g_object_get_qdata (G_OBJECT (cell),
+  return g_object_get_qdata (G_OBJECT (cell),
                                   gtk_tree_view_accessible_get_data_quark ());
-  
-  if (live_only && cell_info && !cell_info->in_use)
-    cell_info = NULL;
-
-  return cell_info;
 }
 
 static AtkObject *
