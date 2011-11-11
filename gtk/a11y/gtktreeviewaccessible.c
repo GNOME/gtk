@@ -3160,21 +3160,23 @@ cell_destroyed (gpointer data)
     }
 }
 
-static void
+static int
 cell_info_get_index (GtkTreeView                     *tree_view,
-                     GtkTreeViewAccessibleCellInfo   *info,
-                     gint                            *index)
+                     GtkTreeViewAccessibleCellInfo   *info)
 {
   GtkTreePath *path;
   gint column_number;
+  int index;
 
   path = gtk_tree_row_reference_get_path (info->cell_row_ref);
   if (!path)
-    return;
+    return -1;
 
   column_number = get_column_number (tree_view, info->cell_col_ref, FALSE);
-  *index = get_index (tree_view, path, column_number);
+  index = get_index (tree_view, path, column_number);
   gtk_tree_path_free (path);
+
+  return index;
 }
 
 static void
@@ -3234,7 +3236,7 @@ refresh_cell_index (GtkCellAccessible *cell)
   if (!info)
     return;
 
-  cell_info_get_index (tree_view, info, &index);
+  index = cell_info_get_index (tree_view, info);
   cell->index = index;
   g_hash_table_insert (accessible->cell_info_by_index, &index, info);
 }
