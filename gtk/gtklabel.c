@@ -39,6 +39,7 @@
 #include "gtkintl.h"
 #include "gtkseparatormenuitem.h"
 #include "gtktextutil.h"
+#include "gtkmain.h"
 #include "gtkmenuitem.h"
 #include "gtkmenushellprivate.h"
 #include "gtknotebook.h"
