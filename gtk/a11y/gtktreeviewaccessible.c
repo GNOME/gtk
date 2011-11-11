@@ -3206,12 +3206,19 @@ find_cell (GtkTreeViewAccessible *accessible,
            gint                   index)
 {
   GtkTreeViewAccessibleCellInfo *info;
+  GHashTableIter iter;
+  GtkTreeView *tree_view;
 
-  info = g_hash_table_lookup (accessible->cell_info_by_index, &index);
-  if (!info)
-    return NULL;
+  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible)));
 
-  return info->cell;
+  g_hash_table_iter_init (&iter, accessible->cell_info_by_index);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &info))
+    {
+      if (index == cell_info_get_index (tree_view, info))
+        return info->cell;
+    }
+
+  return NULL;
 }
 
 static void
