@@ -241,7 +241,7 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   accessible->idle_expand_path = NULL;
   accessible->n_children_deleted = 0;
 
-  accessible->cell_info_by_index = g_hash_table_new_full (g_direct_hash,
+  accessible->cell_infos = g_hash_table_new_full (g_direct_hash,
       g_direct_equal, NULL, (GDestroyNotify) cell_info_free);
 
   widget = GTK_WIDGET (data);
@@ -323,8 +323,8 @@ gtk_tree_view_accessible_finalize (GObject *object)
   if (accessible->tree_model)
     disconnect_model_signals (accessible);
 
-  if (accessible->cell_info_by_index)
-    g_hash_table_destroy (accessible->cell_info_by_index);
+  if (accessible->cell_infos)
+    g_hash_table_destroy (accessible->cell_infos);
 
   if (accessible->col_data)
     {
@@ -1713,7 +1713,7 @@ selection_changed_cb (GtkTreeSelection *selection,
   clean_rows (accessible);
 
   /* FIXME: clean rows iterates through all cells too */
-  g_hash_table_iter_init (&iter, accessible->cell_info_by_index);
+  g_hash_table_iter_init (&iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&info))
     {
       if (info->in_use)
@@ -1947,7 +1947,7 @@ model_row_changed (GtkTreeModel *tree_model,
 
   /* Loop through our cached cells */
   /* Must loop through them all */
-  g_hash_table_iter_init (&hash_iter, accessible->cell_info_by_index);
+  g_hash_table_iter_init (&hash_iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&hash_iter, NULL, (gpointer *)&cell_info))
     {
       if (cell_info->in_use)
@@ -1990,7 +1990,7 @@ column_visibility_changed (GObject    *object,
 );
       g_signal_emit_by_name (accessible, "model-changed");
 
-      g_hash_table_iter_init (&iter, accessible->cell_info_by_index);
+      g_hash_table_iter_init (&iter, accessible->cell_infos);
       while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
         {
           if (cell_info->in_use)
@@ -2745,7 +2745,7 @@ clean_rows (GtkTreeViewAccessible *accessible)
   GHashTableIter iter;
 
   /* Clean GtkTreeViewAccessibleCellInfo data */
-  g_hash_table_iter_init (&iter, accessible->cell_info_by_index);
+  g_hash_table_iter_init (&iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
     {
       GtkTreePath *row_path;
@@ -2772,7 +2772,7 @@ clean_cols (GtkTreeViewAccessible *accessible,
   GHashTableIter iter;
 
   /* Clean GtkTreeViewAccessibleCellInfo data */
-  g_hash_table_iter_init (&iter, accessible->cell_info_by_index);
+  g_hash_table_iter_init (&iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &cell_info))
     {
       /* If the cell has become invalid because the column tv_col
@@ -2801,7 +2801,7 @@ garbage_collect_cell_data (gpointer data)
     }
 
   /* Must loop through them all */
-  g_hash_table_iter_init (&iter, accessible->cell_info_by_index);
+  g_hash_table_iter_init (&iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
     {
       if (!cell_info->in_use)
@@ -2857,7 +2857,7 @@ traverse_cells (GtkTreeViewAccessible *accessible,
     return;
 
   /* Must loop through them all */
-  g_hash_table_iter_init (&iter, accessible->cell_info_by_index);
+  g_hash_table_iter_init (&iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
     {
       GtkTreePath *row_path;
@@ -2923,7 +2923,7 @@ set_expand_state (GtkTreeView           *tree_view,
   gboolean found;
   GHashTableIter hash_iter;
 
-  g_hash_table_iter_init (&hash_iter, accessible->cell_info_by_index);
+  g_hash_table_iter_init (&hash_iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&hash_iter, NULL, (gpointer *) &cell_info))
     {
       if (cell_info->in_use)
@@ -3192,12 +3192,13 @@ cell_info_new (GtkTreeViewAccessible *accessible,
   cell_info->cell = cell;
   cell_info->in_use = TRUE; /* if we've created it, assume it's in use */
   cell_info->view = accessible;
-  g_hash_table_insert (accessible->cell_info_by_index, cell, cell_info);
 
   g_object_set_qdata_full (G_OBJECT (cell), 
                            gtk_tree_view_accessible_get_data_quark (),
                            cell_info,
                            cell_destroyed);
+
+  g_hash_table_replace (accessible->cell_infos, cell_info, cell_info);
 }
 
 static GtkCellAccessible *
@@ -3210,7 +3211,7 @@ find_cell (GtkTreeViewAccessible *accessible,
 
   tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible)));
 
-  g_hash_table_iter_init (&iter, accessible->cell_info_by_index);
+  g_hash_table_iter_init (&iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &info))
     {
       if (index == cell_info_get_index (tree_view, info))
@@ -3261,7 +3262,7 @@ clear_cached_data (GtkTreeViewAccessible *accessible)
   GHashTableIter iter;
 
   /* Must loop through them all */
-  g_hash_table_iter_init (&iter, accessible->cell_info_by_index);
+  g_hash_table_iter_init (&iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &cell_info))
     clean_cell_info (accessible, cell_info);
 

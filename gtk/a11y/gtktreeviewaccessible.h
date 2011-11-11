@@ -42,7 +42,7 @@ struct _GtkTreeViewAccessible
   gint           n_rows;
   gint           n_cols;
   GArray*        col_data;
-  GHashTable    *cell_info_by_index;
+  GHashTable    *cell_infos;
   GtkTreeModel  *tree_model;
   AtkObject     *focus_cell;
   GtkAdjustment *old_hadj;
