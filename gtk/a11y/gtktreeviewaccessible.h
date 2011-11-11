@@ -48,9 +48,7 @@ struct _GtkTreeViewAccessible
   GtkAdjustment *old_hadj;
   GtkAdjustment *old_vadj;
   guint          idle_expand_id;
-  guint          idle_garbage_collect_id;
   GtkTreePath   *idle_expand_path;
-  gboolean       garbage_collection_pending;
 };
 
 struct _GtkTreeViewAccessibleClass

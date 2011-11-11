@@ -156,7 +156,6 @@ static GtkTreeViewAccessibleCellInfo* find_cell_info    (GtkTreeViewAccessible  
                                                          GtkCellAccessible               *cell,
                                                          gboolean                live_only);
 static AtkObject *       get_header_from_column         (GtkTreeViewColumn      *tv_col);
-static gboolean          idle_garbage_collect_cell_data (gpointer data);
 
 
 static void atk_table_interface_init                  (AtkTableIface                *iface);
@@ -315,8 +314,6 @@ gtk_tree_view_accessible_finalize (GObject *object)
   clear_cached_data (accessible);
 
   /* remove any idle handlers still pending */
-  if (accessible->idle_garbage_collect_id)
-    g_source_remove (accessible->idle_garbage_collect_id);
   if (accessible->idle_expand_id)
     g_source_remove (accessible->idle_expand_id);
 
@@ -2727,14 +2724,7 @@ clean_cell_info (GtkTreeViewAccessible         *accessible,
       g_object_set_qdata (obj,
                           gtk_tree_view_accessible_get_data_quark (),
                           NULL);
-      cell_info->in_use = FALSE;
-      if (!accessible->garbage_collection_pending)
-        {
-          accessible->garbage_collection_pending = TRUE;
-          g_assert (accessible->idle_garbage_collect_id == 0);
-          accessible->idle_garbage_collect_id =
-            gdk_threads_add_idle (idle_garbage_collect_cell_data, accessible);
-        }
+      g_hash_table_remove (accessible->cell_infos, cell_info);
     }
 }
 
@@ -2782,57 +2772,6 @@ clean_cols (GtkTreeViewAccessible *accessible,
       if (cell_info->cell_col_ref == tv_col)
         clean_cell_info (accessible, cell_info);
     }
-}
-
-static gboolean
-garbage_collect_cell_data (gpointer data)
-{
-  GtkTreeViewAccessible *accessible;
-  GtkTreeViewAccessibleCellInfo *cell_info;
-  GHashTableIter iter;
-
-  accessible = (GtkTreeViewAccessible *)data;
-
-  accessible->garbage_collection_pending = FALSE;
-  if (accessible->idle_garbage_collect_id != 0)
-    {
-      g_source_remove (accessible->idle_garbage_collect_id);
-      accessible->idle_garbage_collect_id = 0;
-    }
-
-  /* Must loop through them all */
-  g_hash_table_iter_init (&iter, accessible->cell_infos);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
-    {
-      if (!cell_info->in_use)
-        {
-          g_hash_table_iter_remove (&iter);
-        }
-    }
-
-  return accessible->garbage_collection_pending;
-}
-
-static gboolean
-idle_garbage_collect_cell_data (gpointer data)
-{
-  GtkTreeViewAccessible *accessible;
-
-  accessible = (GtkTreeViewAccessible *)data;
-
-  /* this is the idle handler (only one instance allowed), so
-   * we can safely delete it.
-   */
-  accessible->garbage_collection_pending = FALSE;
-  accessible->idle_garbage_collect_id = 0;
-
-  accessible->garbage_collection_pending = garbage_collect_cell_data (data);
-
-  /* N.B.: if for some reason another handler has re-enterantly been
-   * queued while this handler was being serviced, it has its own gsource,
-   * therefore this handler should always return FALSE.
-   */
-  return FALSE;
 }
 
 /* If tree_path is passed in as NULL, then all cells are acted on.
@@ -3146,14 +3085,7 @@ cell_destroyed (gpointer data)
     return;
   if (cell_info->in_use)
     {
-      cell_info->in_use = FALSE;
-
-      if (!cell_info->view->garbage_collection_pending)
-        {
-          cell_info->view->garbage_collection_pending = TRUE;
-          cell_info->view->idle_garbage_collect_id =
-            gdk_threads_add_idle (idle_garbage_collect_cell_data, cell_info->view);
-        }
+      g_hash_table_remove (cell_info->view->cell_infos, cell_info);
     }
 }
 
@@ -3265,9 +3197,6 @@ clear_cached_data (GtkTreeViewAccessible *accessible)
   g_hash_table_iter_init (&iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &cell_info))
     clean_cell_info (accessible, cell_info);
-
-  /* FIXME: seems pretty inefficient to loop again here */
-  garbage_collect_cell_data (accessible);
 }
 
 /* Returns the column number of the specified GtkTreeViewColumn
