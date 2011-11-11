@@ -3605,16 +3605,14 @@ find_cell_info (GtkTreeViewAccessible *accessible,
                 gboolean               live_only)
 {
   GtkTreeViewAccessibleCellInfo *cell_info;
-  GHashTableIter iter;
 
-  /* Clean GtkTreeViewAccessibleCellInfo data */
-  g_hash_table_iter_init (&iter, accessible->cell_info_by_index);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &cell_info))
-    {
-      if (cell_info->cell == cell && (!live_only || cell_info->in_use))
-        return cell_info;
-    }
-  return NULL;
+  cell_info = g_object_get_qdata (G_OBJECT (cell),
+                                  gtk_tree_view_accessible_get_data_quark ());
+  
+  if (live_only && cell_info && !cell_info->in_use)
+    cell_info = NULL;
+
+  return cell_info;
 }
 
 static AtkObject *
