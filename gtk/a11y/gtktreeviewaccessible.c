@@ -1526,12 +1526,26 @@ gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
       return FALSE;
 }
 
+static int
+gtk_cell_accessible_parent_get_child_index (GtkCellAccessibleParent *parent,
+                                            GtkCellAccessible       *cell)
+{
+  GtkTreeViewAccessibleCellInfo *cell_info;
+
+  cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell, TRUE);
+  if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
+    return -1;
+
+  return cell_info_get_index (tree_view, info);
+}
+
 static void
 gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface)
 {
   iface->get_cell_extents = gtk_tree_view_accessible_get_cell_extents;
   iface->get_cell_area = gtk_tree_view_accessible_get_cell_area;
   iface->grab_focus = gtk_tree_view_accessible_grab_cell_focus;
+  iface->get_child_index = gtk_tree_view_accessible_get_child_index;
 }
 
 /* signal handling */
