@@ -131,7 +131,6 @@ static GtkCellAccessible *find_cell                       (GtkTreeViewAccessible
 static void             connect_model_signals           (GtkTreeView            *view,
                                                          GtkTreeViewAccessible           *accessible);
 static void             disconnect_model_signals        (GtkTreeViewAccessible           *accessible);
-static void             clear_cached_data               (GtkTreeViewAccessible           *view);
 static gint             get_column_number               (GtkTreeView            *tree_view,
                                                          GtkTreeViewColumn      *column,
                                                          gboolean               visible);
@@ -208,9 +207,27 @@ vadjustment_set_cb (GObject    *widget,
                     G_CALLBACK (adjustment_changed), widget);
 }
 
+static GQuark
+gtk_tree_view_accessible_get_data_quark (void)
+{
+  static GQuark quark = 0;
+
+  if (G_UNLIKELY (quark == 0))
+    quark = g_quark_from_static_string ("gtk-tree-view-accessible-data");
+
+  return quark;
+}
+
 static void
 cell_info_free (GtkTreeViewAccessibleCellInfo *cell_info)
 {
+  if (cell_info->cell)
+    {
+      g_object_steal_qdata (G_OBJECT (cell_info->cell),
+                            gtk_tree_view_accessible_get_data_quark ());
+      _gtk_cell_accessible_add_state (cell_info->cell, ATK_STATE_DEFUNCT, FALSE);
+    }
+
   /* g_object_unref (cell_info->cell); */
   if (cell_info->cell_row_ref)
     gtk_tree_row_reference_free (cell_info->cell_row_ref);
@@ -310,8 +327,6 @@ gtk_tree_view_accessible_finalize (GObject *object)
 {
   GtkTreeViewAccessible *accessible = GTK_TREE_VIEW_ACCESSIBLE (object);
 
-  clear_cached_data (accessible);
-
   /* remove any idle handlers still pending */
   if (accessible->idle_expand_id)
     g_source_remove (accessible->idle_expand_id);
@@ -357,7 +372,7 @@ gtk_tree_view_accessible_notify_gtk (GObject    *obj,
       tree_model = gtk_tree_view_get_model (tree_view);
       if (accessible->tree_model)
         disconnect_model_signals (accessible);
-      clear_cached_data (accessible);
+      g_hash_table_remove_all (accessible->cell_infos);
       accessible->tree_model = tree_model;
       accessible->n_rows = 0;
 
@@ -2680,32 +2695,6 @@ iterate_thru_children (GtkTreeView  *tree_view,
   return;
 }
 
-static GQuark
-gtk_tree_view_accessible_get_data_quark (void)
-{
-  static GQuark quark = 0;
-
-  if (G_UNLIKELY (quark == 0))
-    quark = g_quark_from_static_string ("gtk-tree-view-accessible-data");
-
-  return quark;
-}
-
-static void
-clean_cell_info (GtkTreeViewAccessible         *accessible,
-                 GtkTreeViewAccessibleCellInfo *cell_info)
-{
-  GObject *obj;
-
-  obj = G_OBJECT (cell_info->cell);
-
-  _gtk_cell_accessible_add_state (cell_info->cell, ATK_STATE_DEFUNCT, FALSE);
-  g_object_set_qdata (obj,
-                      gtk_tree_view_accessible_get_data_quark (),
-                      NULL);
-  g_hash_table_remove (accessible->cell_infos, cell_info);
-}
-
 static void
 clean_rows (GtkTreeViewAccessible *accessible)
 {
@@ -2726,7 +2715,7 @@ clean_rows (GtkTreeViewAccessible *accessible)
        * been removed.
        */
       if (row_path == NULL)
-        clean_cell_info (accessible, cell_info);
+        g_hash_table_iter_remove (&iter);
       else
         gtk_tree_path_free (row_path);
     }
@@ -2748,7 +2737,7 @@ clean_cols (GtkTreeViewAccessible *accessible,
        * and remove the cell from accessible->cell_data.
        */
       if (cell_info->cell_col_ref == tv_col)
-        clean_cell_info (accessible, cell_info);
+        g_hash_table_iter_remove (&iter);
     }
 }
 
@@ -3050,6 +3039,8 @@ cell_destroyed (gpointer data)
 {
   GtkTreeViewAccessibleCellInfo *cell_info = data;
 
+  cell_info->cell = NULL;
+
   g_hash_table_remove (cell_info->view->cell_infos, cell_info);
 }
 
@@ -3148,18 +3139,6 @@ disconnect_model_signals (GtkTreeViewAccessible *accessible)
   g_signal_handlers_disconnect_by_func (obj, model_row_inserted, widget);
   g_signal_handlers_disconnect_by_func (obj, model_row_deleted, widget);
   g_signal_handlers_disconnect_by_func (obj, model_rows_reordered, widget);
-}
-
-static void
-clear_cached_data (GtkTreeViewAccessible *accessible)
-{
-  GtkTreeViewAccessibleCellInfo *cell_info;
-  GHashTableIter iter;
-
-  /* Must loop through them all */
-  g_hash_table_iter_init (&iter, accessible->cell_infos);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &cell_info))
-    clean_cell_info (accessible, cell_info);
 }
 
 /* Returns the column number of the specified GtkTreeViewColumn
