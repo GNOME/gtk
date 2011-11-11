@@ -2702,6 +2702,17 @@ iterate_thru_children (GtkTreeView  *tree_view,
   return;
 }
 
+static GQuark
+gtk_tree_view_accessible_get_data_quark (void)
+{
+  static GQuark quark = 0;
+
+  if (G_UNLIKELY (quark == 0))
+    quark = g_quark_from_static_string ("gtk-tree-view-accessible-data");
+
+  return quark;
+}
+
 static void
 clean_cell_info (GtkTreeViewAccessible         *accessible,
                  GtkTreeViewAccessibleCellInfo *cell_info)
@@ -2713,7 +2724,9 @@ clean_cell_info (GtkTreeViewAccessible         *accessible,
       obj = G_OBJECT (cell_info->cell);
 
       _gtk_cell_accessible_add_state (cell_info->cell, ATK_STATE_DEFUNCT, FALSE);
-      g_object_weak_unref (obj, (GWeakNotify) cell_destroyed, cell_info);
+      g_object_set_qdata (obj,
+                          gtk_tree_view_accessible_get_data_quark (),
+                          NULL);
       cell_info->in_use = FALSE;
       if (!accessible->garbage_collection_pending)
         {
@@ -3181,8 +3194,10 @@ cell_info_new (GtkTreeViewAccessible *accessible,
   cell_info->view = accessible;
   g_hash_table_insert (accessible->cell_info_by_index, cell, cell_info);
 
-  /* Setup weak reference notification */
-  g_object_weak_ref (G_OBJECT (cell), (GWeakNotify) cell_destroyed, cell_info);
+  g_object_set_qdata_full (G_OBJECT (cell), 
+                           gtk_tree_view_accessible_get_data_quark (),
+                           cell_info,
+                           cell_destroyed);
 }
 
 static GtkCellAccessible *
