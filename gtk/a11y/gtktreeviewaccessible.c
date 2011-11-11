@@ -566,7 +566,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
       container = _gtk_container_cell_accessible_new ();
 
       container_cell = GTK_CELL_ACCESSIBLE (container);
-      _gtk_cell_accessible_initialise (container_cell, widget, ATK_OBJECT (accessible), i);
+      _gtk_cell_accessible_initialise (container_cell, widget, ATK_OBJECT (accessible));
 
       /* The GtkTreeViewAccessibleCellInfo structure for the container will
        * be before the ones for the cells so that the first one we find for
@@ -596,7 +596,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
       /* Create the GtkTreeViewAccessibleCellInfo structure for this cell */
       cell_info_new (accessible, tree_model, path, tv_col, cell);
 
-      _gtk_cell_accessible_initialise (cell, widget, parent, i);
+      _gtk_cell_accessible_initialise (cell, widget, parent);
 
       /* Set state if it is expandable */
       if (is_expander)
@@ -630,7 +630,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
           /* Create the GtkTreeViewAccessibleCellInfo for this cell */
           cell_info_new (accessible, tree_model, path, tv_col, cell);
 
-          _gtk_cell_accessible_initialise (cell, widget, parent, i);
+          _gtk_cell_accessible_initialise (cell, widget, parent);
 
           if (container)
             _gtk_container_cell_accessible_add_child (container, cell);

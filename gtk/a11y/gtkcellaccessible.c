@@ -92,7 +92,6 @@ gtk_cell_accessible_get_index_in_parent (AtkObject *obj)
 {
   GtkCellAccessible *cell;
   AtkObject *parent;
-  int index;
 
   cell = GTK_CELL_ACCESSIBLE (obj);
 
@@ -104,18 +103,7 @@ gtk_cell_accessible_get_index_in_parent (AtkObject *obj)
   if (parent == NULL)
     return -1;
 
-  index = _gtk_cell_accessible_parent_get_child_index (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
-  if (index >= 0)
-    return index;
-
-  if (atk_state_set_contains_state (cell->state_set, ATK_STATE_STALE) &&
-      cell->refresh_index != NULL)
-    {
-      cell->refresh_index (cell);
-      atk_state_set_remove_state (cell->state_set, ATK_STATE_STALE);
-    }
-
-  return cell->index;
+  return _gtk_cell_accessible_parent_get_child_index (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
 }
 
 static AtkStateSet *
@@ -145,8 +133,6 @@ _gtk_cell_accessible_init (GtkCellAccessible *cell)
 {
   cell->widget = NULL;
   cell->action_list = NULL;
-  cell->index = 0;
-  cell->refresh_index = NULL;
   cell->state_set = atk_state_set_new ();
   atk_state_set_add_state (cell->state_set, ATK_STATE_TRANSIENT);
   atk_state_set_add_state (cell->state_set, ATK_STATE_ENABLED);
@@ -164,12 +150,10 @@ widget_destroyed (GtkWidget         *widget,
 void
 _gtk_cell_accessible_initialise (GtkCellAccessible *cell,
                                  GtkWidget         *widget,
-                                 AtkObject         *parent,
-                                 gint               index)
+                                 AtkObject         *parent)
 {
   cell->widget = widget;
   atk_object_set_parent (ATK_OBJECT (cell), parent);
-  cell->index = index;
 
   g_signal_connect_object (G_OBJECT (widget), "destroy",
                            G_CALLBACK (widget_destroyed), cell, 0);

@@ -100,14 +100,11 @@ void
 _gtk_container_cell_accessible_add_child (GtkContainerCellAccessible *container,
                                           GtkCellAccessible          *child)
 {
-  gint child_index;
-
   g_return_if_fail (GTK_IS_CONTAINER_CELL_ACCESSIBLE (container));
   g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (child));
 
-  child_index = container->NChildren++;
+  container->NChildren++;
   container->children = g_list_append (container->children, child);
-  child->index = child_index;
   atk_object_set_parent (ATK_OBJECT (child), ATK_OBJECT (container));
 }
 
