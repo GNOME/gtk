@@ -1060,7 +1060,7 @@ gtk_progress_bar_set_activity_mode (GtkProgressBar *pbar,
  * of the bar. The fraction should be between 0.0 and 1.0,
  * inclusive.
  *
- **/
+ */
 void
 gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
                                gdouble         fraction)
@@ -1071,7 +1071,7 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
 
   priv = pbar->priv;
 
-  priv->fraction = fraction;
+  priv->fraction = CLAMP(fraction, 0.0, 1.0);
   gtk_progress_bar_set_activity_mode (pbar, FALSE);
   gtk_progress_bar_real_update (pbar);
 
