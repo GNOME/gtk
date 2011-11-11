@@ -660,8 +660,8 @@ send_error (HttpRequest *request,
 static gchar *
 generate_handshake_response_wsietf_v7 (const gchar *key)
 {
-  guchar digest[20];
-  gsize digest_len;
+  gsize digest_len = 20;
+  guchar digest[digest_len];
   GChecksum *checksum;
 
   checksum = g_checksum_new (G_CHECKSUM_SHA1);
