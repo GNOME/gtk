@@ -207,9 +207,12 @@ signal_main_thread (void)
    */
   if (!run_loop_polling_async)
     CFRunLoopSourceSignal (select_main_thread_source);
-  
-  if (CFRunLoopIsWaiting (main_thread_run_loop))
-    CFRunLoopWakeUp (main_thread_run_loop);
+
+  /* Don't check for CFRunLoopIsWaiting() here because it causes a
+   * race condition (the loop could go into waiting state right after
+   * we checked).
+   */
+  CFRunLoopWakeUp (main_thread_run_loop);
 }
 
 static void *
