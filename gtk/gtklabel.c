@@ -51,6 +51,7 @@
 #include "gtktooltip.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkmain.h"
 
 #include "a11y/gtklabelaccessible.h"
 

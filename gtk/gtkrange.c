@@ -39,6 +39,7 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkmain.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtkrangeaccessible.h"
 

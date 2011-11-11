@@ -51,6 +51,7 @@
 #include "gtkmnemonichash.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
+#include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 

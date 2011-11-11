@@ -38,6 +38,7 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
+#include "gtkviewport.h"
 #include "a11y/gtkscrolledwindowaccessible.h"
 
 /**

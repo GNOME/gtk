@@ -49,6 +49,7 @@
 #include "gtkentryprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkmain.h"
 #include "a11y/gtktreeviewaccessible.h"
 
 
