@@ -96,29 +96,6 @@ _gtk_container_cell_accessible_new (void)
   return container;
 }
 
-static void
-recompute_child_indices (GtkContainerCellAccessible *container)
-{
-  gint cur_index = 0;
-  GList *l;
-
-  for (l = container->children; l; l = l->next)
-    {
-      GTK_CELL_ACCESSIBLE (l->data)->index = cur_index;
-      cur_index++;
-    }
-}
-
-static void
-refresh_child_index (GtkCellAccessible *cell)
-{
-  AtkObject *parent;
-
-  parent = atk_object_get_parent (ATK_OBJECT (cell));
-
-  recompute_child_indices (GTK_CONTAINER_CELL_ACCESSIBLE (parent));
-}
-
 void
 _gtk_container_cell_accessible_add_child (GtkContainerCellAccessible *container,
                                           GtkCellAccessible          *child)
@@ -132,7 +109,6 @@ _gtk_container_cell_accessible_add_child (GtkContainerCellAccessible *container,
   container->children = g_list_append (container->children, child);
   child->index = child_index;
   atk_object_set_parent (ATK_OBJECT (child), ATK_OBJECT (container));
-  child->refresh_index = refresh_child_index;
 }
 
 void
@@ -144,6 +120,5 @@ _gtk_container_cell_accessible_remove_child (GtkContainerCellAccessible *contain
   g_return_if_fail (container->NChildren > 0);
 
   container->children = g_list_remove (container->children, child);
-  recompute_child_indices (container);
   container->NChildren--;
 }
