@@ -91,6 +91,8 @@ static void             iterate_thru_children           (GtkTreeView            
                                                          GtkTreePath            *orig,
                                                          gint                   *count,
                                                          gint                   depth);
+static int              cell_info_get_index             (GtkTreeView                     *tree_view,
+                                                         GtkTreeViewAccessibleCellInfo   *info);
 static void             clean_rows                      (GtkTreeViewAccessible           *tree_view);
 static void             clean_cols                      (GtkTreeViewAccessible           *tree_view,
                                                          GtkTreeViewColumn      *tv_col);
@@ -1527,16 +1529,19 @@ gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
 }
 
 static int
-gtk_cell_accessible_parent_get_child_index (GtkCellAccessibleParent *parent,
-                                            GtkCellAccessible       *cell)
+gtk_tree_view_accessible_get_child_index (GtkCellAccessibleParent *parent,
+                                          GtkCellAccessible       *cell)
 {
   GtkTreeViewAccessibleCellInfo *cell_info;
+  GtkTreeView *tree_view;
 
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell, TRUE);
   if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
     return -1;
 
-  return cell_info_get_index (tree_view, info);
+  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
+
+  return cell_info_get_index (tree_view, cell_info);
 }
 
 static void
