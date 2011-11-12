@@ -11290,6 +11290,25 @@ gtk_widget_class_set_accessible_role (GtkWidgetClass *widget_class,
 }
 
 /**
+ * _gtk_widget_peek_accessible:
+ * @widget: a #GtkWidget
+ *
+ * Gets the accessible for @widget, if it has been created yet.
+ * Otherwise, this function returns %NULL. If the @widget's implementation
+ * does not use the default way to create accessibles, %NULL will always be
+ * returned.
+ *
+ * Returns: the accessible for @widget or %NULL if none has been
+ *     created yet.
+ **/
+AtkObject *
+_gtk_widget_peek_accessible (GtkWidget *widget)
+{
+  return g_object_get_qdata (G_OBJECT (widget),
+                             quark_accessible_object);
+}
+
+/**
  * gtk_widget_get_accessible:
  * @widget: a #GtkWidget
  *

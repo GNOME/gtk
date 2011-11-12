@@ -118,6 +118,8 @@ void     _gtk_widget_free_cached_sizes (GtkWidget *widget);
 const gchar*      _gtk_widget_get_accel_path               (GtkWidget *widget,
                                                             gboolean  *locked);
 
+AtkObject *       _gtk_widget_peek_accessible              (GtkWidget *widget);
+
 GdkEventExpose *  _gtk_cairo_get_event                     (cairo_t *cr);
 
 void              _gtk_widget_draw_internal                (GtkWidget *widget,
