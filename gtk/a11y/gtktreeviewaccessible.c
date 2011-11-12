@@ -241,6 +241,28 @@ cell_info_get_path (GtkTreeViewAccessibleCellInfo *cell_info)
                                    cell_info->node);
 }
 
+static guint
+cell_info_hash (gconstpointer info)
+{
+  const GtkTreeViewAccessibleCellInfo *cell_info = info;
+  guint node, col;
+
+  node = GPOINTER_TO_UINT (cell_info->node);
+  col = GPOINTER_TO_UINT (cell_info->cell_col_ref);
+
+  return ((node << sizeof (guint) / 2) | (node >> sizeof (guint) / 2)) ^ col;
+}
+
+static gboolean
+cell_info_equal (gconstpointer a, gconstpointer b)
+{
+  const GtkTreeViewAccessibleCellInfo *cell_info_a = a;
+  const GtkTreeViewAccessibleCellInfo *cell_info_b = b;
+
+  return cell_info_a->node == cell_info_b->node &&
+         cell_info_a->cell_col_ref == cell_info_b->cell_col_ref;
+}
+
 static void
 gtk_tree_view_accessible_initialize (AtkObject *obj,
                                      gpointer   data)
@@ -263,8 +285,8 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   accessible->idle_expand_path = NULL;
   accessible->n_children_deleted = 0;
 
-  accessible->cell_infos = g_hash_table_new_full (g_direct_hash,
-      g_direct_equal, NULL, (GDestroyNotify) cell_info_free);
+  accessible->cell_infos = g_hash_table_new_full (cell_info_hash,
+      cell_info_equal, NULL, (GDestroyNotify) cell_info_free);
 
   widget = GTK_WIDGET (data);
   tree_view = GTK_TREE_VIEW (widget);
