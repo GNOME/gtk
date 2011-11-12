@@ -286,6 +286,8 @@ populate_tree (GtkBuilder *builder)
       gtk_tree_store_append (store, &iter, &iter);
       gtk_tree_store_set (store, &iter, 0, "Bla", 1, "Bla bla", 2, "Bla bla bla", 3, i % 2 == 0 ? TRUE : FALSE, 4, i % 100, 5, i, -1);
     }
+
+  gtk_tree_view_expand_all (tv);
 }
 
 static void
