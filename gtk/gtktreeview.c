@@ -8791,7 +8791,7 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
 {
   GtkTreeView *tree_view = (GtkTreeView *) data;
   gint *indices;
-  GtkRBTree *tmptree, *tree;
+  GtkRBTree *tree;
   GtkRBNode *tmpnode = NULL;
   gint depth;
   gint i = 0;
@@ -8818,7 +8818,7 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
   if (tree_view->priv->tree == NULL)
     tree_view->priv->tree = _gtk_rbtree_new ();
 
-  tmptree = tree = tree_view->priv->tree;
+  tree = tree_view->priv->tree;
 
   /* Update all row-references */
   gtk_tree_row_reference_inserted (G_OBJECT (data), path);
@@ -8828,14 +8828,14 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
   /* First, find the parent tree */
   while (i < depth - 1)
     {
-      if (tmptree == NULL)
+      if (tree == NULL)
 	{
 	  /* We aren't showing the node */
 	  node_visible = FALSE;
           goto done;
 	}
 
-      tmpnode = _gtk_rbtree_find_count (tmptree, indices[i] + 1);
+      tmpnode = _gtk_rbtree_find_count (tree, indices[i] + 1);
       if (tmpnode == NULL)
 	{
 	  g_warning ("A node was inserted with a parent that's not in the tree.\n" \
@@ -8857,8 +8857,7 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
           goto done;
 	}
 
-      tmptree = tmpnode->children;
-      tree = tmptree;
+      tree = tmpnode->children;
       i++;
     }
 
