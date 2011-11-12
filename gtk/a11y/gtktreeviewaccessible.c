@@ -3018,17 +3018,11 @@ static int
 cell_info_get_index (GtkTreeView                     *tree_view,
                      GtkTreeViewAccessibleCellInfo   *info)
 {
-  GtkTreePath *path;
-  gint column_number;
   int index;
 
-  path = cell_info_get_path (info);
-  if (!path)
-    return -1;
-
-  column_number = get_column_number (tree_view, info->cell_col_ref, FALSE);
-  index = get_index (tree_view, path, column_number);
-  gtk_tree_path_free (path);
+  index = _gtk_rbtree_node_get_index (info->tree, info->node) + 1;
+  index *= info->view->n_cols;
+  index += get_column_number (tree_view, info->cell_col_ref, FALSE);
 
   return index;
 }
