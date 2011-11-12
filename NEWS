@@ -1,3 +1,30 @@
+Overview of Changes in GTK+ 3.2.2
+=================================
+
+* Bugs fixed:
+ 658772 Directory paths for resource directories are hard-coded
+ 661858 Add annotations for some GtkRadio* constructors
+ 661859 Add annotations for some GtkSymbolicColor constructors
+ 661997 Gtk crashes when changing the TreeView model while rubber...
+ 662160 gtk_print_operation_cancel fails
+ 662177 Toolbar returns invalid paths for toolbar items
+ 662670 Pressing "Enter" in print dialog box will not cause printing
+ 662691 menuitem: Always treat submenus as popup
+ 662870 Fix introspection annotations for GtkRadioToolButton
+ 662953 x11: Fix window manager change detection
+ 663073 gtk_dialog_new_with_buttons should be G_GNUC_NULL_TERMINATED
+ 663138 iconview: layout items immediately when setting a GtkTreeModel
+ 663396 With multiple master devices, right clicking may show popup...
+ 663605 Fix event->state of many event types on quartz
+ 663694 GtkTreeViewAccessibleCellInfo are leaked
+ 663825 calling gtk_progress_bar_set_fraction with a fraction > 1.0...
+
+* Translation updates:
+ Brazilian Portuguese
+ British English
+ Japanese
+
+
 Overview of Changes in GTK+ 3.2.1
 =================================
 
