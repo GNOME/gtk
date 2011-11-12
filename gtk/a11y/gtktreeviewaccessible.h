@@ -40,7 +40,6 @@ struct _GtkTreeViewAccessible
   GtkContainerAccessible parent;
 
   gint           n_children_deleted;
-  gint           n_rows;
   gint           n_cols;
   GArray*        col_data;
   GHashTable    *cell_infos;
