@@ -82,8 +82,6 @@ static gint             get_row_from_tree_path          (GtkTreeView            
                                                          GtkTreePath            *path);
 static GtkTreeViewColumn* get_column                    (GtkTreeView            *tree_view,
                                                          gint                   in_col);
-static gint             get_actual_column_number        (GtkTreeView            *tree_view,
-                                                         gint                   visible_column);
 static gint             get_visible_column_number       (GtkTreeView            *tree_view,
                                                          gint                   actual_column);
 static void             iterate_thru_children           (GtkTreeView            *tree_view,
@@ -884,12 +882,7 @@ gtk_tree_view_accessible_get_index_at (AtkTable *table,
                                        gint      column)
 {
   GtkWidget *widget;
-  GtkTreeView *tree_view;
-  gint actual_column;
   gint n_cols, n_rows;
-  GtkTreeIter iter;
-  GtkTreePath *path;
-  gint index;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
@@ -901,16 +894,7 @@ gtk_tree_view_accessible_get_index_at (AtkTable *table,
   if (row >= n_rows || column >= n_cols)
     return -1;
 
-  tree_view = GTK_TREE_VIEW (widget);
-  actual_column = get_actual_column_number (tree_view, column);
-
-  set_iter_nth_row (tree_view, &iter, row);
-  path = gtk_tree_model_get_path (gtk_tree_view_get_model (tree_view), &iter);
-
-  index = get_index (tree_view, path, actual_column);
-  gtk_tree_path_free (path);
-
-  return index;
+  return (row + 1) * n_cols + column;
 }
 
 static gint
@@ -2479,30 +2463,6 @@ get_column (GtkTreeView *tree_view,
        return NULL;
     }
   return tv_col;
-}
-
-static gint
-get_actual_column_number (GtkTreeView *tree_view,
-                          gint         visible_column)
-{
-  GtkTreeViewColumn *tv_col;
-  gint actual_column = 0;
-  gint visible_columns = -1;
-
-  /* This function calculates the column number which corresponds
-   * to the specified visible column number
-   */
-  tv_col = gtk_tree_view_get_column (tree_view, actual_column);
-  while (tv_col != NULL)
-    {
-      if (gtk_tree_view_column_get_visible (tv_col))
-        visible_columns++;
-      if (visible_columns == visible_column)
-        return actual_column;
-      tv_col = gtk_tree_view_get_column (tree_view, ++actual_column);
-    }
-  g_warning ("get_actual_column_number failed for %d\n", visible_column);
-  return -1;
 }
 
 static gint
