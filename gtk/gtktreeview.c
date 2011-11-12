@@ -9043,10 +9043,12 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
       if (tree_view->priv->tree == tree)
 	tree_view->priv->tree = NULL;
 
+      _gtk_tree_view_accessible_remove (tree_view, tree, NULL);
       _gtk_rbtree_remove (tree);
     }
   else
     {
+      _gtk_tree_view_accessible_remove (tree_view, tree, node);
       _gtk_rbtree_remove_node (tree, node);
     }
 
@@ -12899,6 +12901,8 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   /* Stop a pending double click */
   tree_view->priv->last_button_x = -1;
   tree_view->priv->last_button_y = -1;
+
+  _gtk_tree_view_accessible_remove (tree_view, node->children, NULL);
 
   if (gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children))
     {

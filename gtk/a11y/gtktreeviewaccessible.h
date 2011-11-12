@@ -21,6 +21,7 @@
 #define __GTK_TREE_VIEW_ACCESSIBLE_H__
 
 #include "gtkcontaineraccessible.h"
+#include "gtktreeprivate.h"
 
 G_BEGIN_DECLS
 
@@ -57,6 +58,11 @@ struct _GtkTreeViewAccessibleClass
 };
 
 GType _gtk_tree_view_accessible_get_type (void);
+
+/* called by treeview code */
+void            _gtk_tree_view_accessible_remove        (GtkTreeView       *treeview,
+                                                         GtkRBTree         *tree,
+                                                         GtkRBNode         *node);
 
 G_END_DECLS
 

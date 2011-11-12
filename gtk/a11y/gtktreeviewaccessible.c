@@ -25,6 +25,7 @@
 #endif
 
 #include "gtktreeprivate.h"
+#include "gtkwidgetprivate.h"
 
 #include "gtktreeviewaccessible.h"
 #include "gtkrenderercellaccessible.h"
@@ -38,7 +39,8 @@ typedef struct _GtkTreeViewAccessibleCellInfo  GtkTreeViewAccessibleCellInfo;
 struct _GtkTreeViewAccessibleCellInfo
 {
   GtkCellAccessible *cell;
-  GtkTreeRowReference *cell_row_ref;
+  GtkRBTree *tree;
+  GtkRBNode *node;
   GtkTreeViewColumn *cell_col_ref;
   GtkTreeViewAccessible *view;
 };
@@ -228,16 +230,15 @@ cell_info_free (GtkTreeViewAccessibleCellInfo *cell_info)
       _gtk_cell_accessible_add_state (cell_info->cell, ATK_STATE_DEFUNCT, FALSE);
     }
 
-  /* g_object_unref (cell_info->cell); */
-  if (cell_info->cell_row_ref)
-    gtk_tree_row_reference_free (cell_info->cell_row_ref);
   g_free (cell_info);
 }
 
 static GtkTreePath *
 cell_info_get_path (GtkTreeViewAccessibleCellInfo *cell_info)
 {
-  return gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+  return _gtk_tree_view_find_path (NULL,
+                                   cell_info->tree,
+                                   cell_info->node);
 }
 
 static void
@@ -3079,7 +3080,16 @@ cell_info_new (GtkTreeViewAccessible *accessible,
   GtkTreeViewAccessibleCellInfo *cell_info;
 
   cell_info = g_new (GtkTreeViewAccessibleCellInfo, 1);
-  cell_info->cell_row_ref = gtk_tree_row_reference_new (tree_model, path);
+
+  if (!_gtk_tree_view_find_node (GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible))),
+				 path,
+                                 &cell_info->tree,
+                                 &cell_info->node))
+    {
+      /* This check needs to happen way earlier */
+      g_free (cell_info);
+      return;
+    }
 
   cell_info->cell_col_ref = tv_col;
   cell_info->cell = cell;
@@ -3504,3 +3514,63 @@ get_header_from_column (GtkTreeViewColumn *tv_col)
 
   return rc;
 }
+
+/**
+ * _gtk_rbtree_get_ancestor_node:
+ * @ancestor: the ancestor tree
+ * @child_tree: the potential child's tree
+ * @child_node: the potential child's node
+ *
+ * Finds the node that is the ancestor of @child_tree and @child_node
+ * and belongs to @ancestor. If @ancestor is not an ancestor tree
+ * of @child_node, %NULL is returned.
+ *
+ * Returns: the ancestor node or %NULL if @ancestor is not an ancestor.
+ **/
+static GtkRBNode *
+_gtk_rbtree_get_ancestor_node (GtkRBTree *ancestor,
+                               GtkRBTree *child_tree,
+                               GtkRBNode *child_node)
+{
+  while (child_tree != NULL)
+    {
+      if (child_tree == ancestor)
+        return child_node;
+
+      child_node = child_tree->parent_node;
+      child_tree = child_tree->parent_tree;
+    }
+
+  return NULL;
+}
+
+void
+_gtk_tree_view_accessible_remove (GtkTreeView *treeview,
+                                  GtkRBTree   *tree,
+                                  GtkRBNode   *node)
+{
+  GtkTreeViewAccessibleCellInfo *cell_info;
+  GHashTableIter iter;
+  GtkTreeViewAccessible *accessible;
+
+  accessible = GTK_TREE_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (treeview)));
+  if (accessible == NULL)
+    return;
+
+  /* if this shows up in profiles, special-case node->children == NULL */
+
+  g_hash_table_iter_init (&iter, accessible->cell_infos);
+  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
+    {
+      GtkRBNode *child_node = _gtk_rbtree_get_ancestor_node (tree,
+                                                             cell_info->tree,
+                                                             cell_info->node);
+
+      if (child_node == NULL)
+        continue;
+
+      if (node == NULL || node == child_node)
+        g_hash_table_iter_remove (&iter);
+    }
+}
+
