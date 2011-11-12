@@ -4821,7 +4821,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
    * order, drawing each successive node.
    */
   
-  parity = !_gtk_rbtree_node_find_parity (tree, node);
+  parity = !(_gtk_rbtree_node_get_index (tree, node) % 2);
 
   do
     {
@@ -14558,7 +14558,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
     {
       GtkRegionFlags row_flags;
 
-      if (_gtk_rbtree_node_find_parity (tree, node))
+      if ((_gtk_rbtree_node_get_index (tree, node) % 2))
         row_flags = GTK_REGION_ODD;
       else
         row_flags = GTK_REGION_EVEN;

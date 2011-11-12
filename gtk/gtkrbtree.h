@@ -133,7 +133,7 @@ void       _gtk_rbtree_set_fixed_height (GtkRBTree              *tree,
 					 gboolean                mark_valid);
 gint       _gtk_rbtree_node_find_offset (GtkRBTree              *tree,
 					 GtkRBNode              *node);
-gint       _gtk_rbtree_node_find_parity (GtkRBTree              *tree,
+guint      _gtk_rbtree_node_get_index   (GtkRBTree              *tree,
 					 GtkRBNode              *node);
 gboolean   _gtk_rbtree_find_index       (GtkRBTree              *tree,
 					 guint                   index,

@@ -988,12 +988,12 @@ _gtk_rbtree_node_find_offset (GtkRBTree *tree,
   return retval;
 }
 
-gint
-_gtk_rbtree_node_find_parity (GtkRBTree *tree,
-                              GtkRBNode *node)
+guint
+_gtk_rbtree_node_get_index (GtkRBTree *tree,
+                            GtkRBNode *node)
 {
   GtkRBNode *last;
-  gint retval;  
+  guint retval;  
   
   g_assert (node);
   g_assert (node->left);
@@ -1020,7 +1020,7 @@ _gtk_rbtree_node_find_parity (GtkRBTree *tree,
 	}
     }
   
-  return retval % 2;
+  return retval;
 }
 
 gint
