@@ -3079,20 +3079,25 @@ static GtkCellAccessible *
 find_cell (GtkTreeViewAccessible *accessible,
            gint                   index)
 {
-  GtkTreeViewAccessibleCellInfo *info;
-  GHashTableIter iter;
+  GtkTreeViewAccessibleCellInfo lookup, *cell_info;
   GtkTreeView *tree_view;
 
   tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible)));
 
-  g_hash_table_iter_init (&iter, accessible->cell_infos);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &info))
+  if (!_gtk_rbtree_find_index (_gtk_tree_view_get_rbtree (tree_view),
+                               index / accessible->n_cols - 1,
+                               &lookup.tree,
+                               &lookup.node))
     {
-      if (index == cell_info_get_index (tree_view, info))
-        return info->cell;
+      g_assert_not_reached ();
     }
+  lookup.cell_col_ref = gtk_tree_view_get_column (tree_view, index % accessible->n_cols);
 
-  return NULL;
+  cell_info = g_hash_table_lookup (accessible->cell_infos, &lookup);
+  if (cell_info == NULL)
+    return NULL;
+
+  return cell_info->cell;
 }
 
 static void
