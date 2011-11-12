@@ -234,6 +234,12 @@ cell_info_free (GtkTreeViewAccessibleCellInfo *cell_info)
   g_free (cell_info);
 }
 
+static GtkTreePath *
+cell_info_get_path (GtkTreeViewAccessibleCellInfo *cell_info)
+{
+  return gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+}
+
 static void
 gtk_tree_view_accessible_initialize (AtkObject *obj,
                                      gpointer   data)
@@ -1357,7 +1363,7 @@ gtk_tree_view_accessible_get_cell_area (GtkCellAccessibleParent *parent,
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), top_cell, TRUE);
   if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
     return;
-  path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+  path = cell_info_get_path (cell_info);
   tv_col = cell_info->cell_col_ref;
   if (path)
     {
@@ -1502,7 +1508,7 @@ gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
       renderer = g_list_nth_data (renderers, index);
       g_list_free (renderers);
     }
-  path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+  path = cell_info_get_path (cell_info);
   if (path)
     {
       if (renderer)
@@ -1726,7 +1732,7 @@ selection_changed_cb (GtkTreeSelection *selection,
     {
       _gtk_cell_accessible_remove_state (info->cell, ATK_STATE_SELECTED, TRUE);
 
-      path = gtk_tree_row_reference_get_path (info->cell_row_ref);
+      path = cell_info_get_path (info);
       if (path && gtk_tree_selection_path_is_selected (tree_selection, path))
         _gtk_cell_accessible_add_state (info->cell, ATK_STATE_SELECTED, TRUE);
       gtk_tree_path_free (path);
@@ -1955,7 +1961,7 @@ model_row_changed (GtkTreeModel *tree_model,
   g_hash_table_iter_init (&hash_iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&hash_iter, NULL, (gpointer *)&cell_info))
     {
-      cell_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+      cell_path = cell_info_get_path (cell_info);
 
       if (cell_path != NULL)
         {
@@ -1999,7 +2005,7 @@ column_visibility_changed (GObject    *object,
           if (tv_col == this_col)
             {
               GtkTreePath *row_path;
-              row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+              row_path = cell_info_get_path (cell_info);
               if (GTK_IS_RENDERER_CELL_ACCESSIBLE (cell_info->cell))
                 {
                   if (gtk_tree_view_column_get_visible (tv_col))
@@ -2342,7 +2348,7 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
     {
       tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible)));
       tree_model = gtk_tree_view_get_model (tree_view);
-      path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+      path = cell_info_get_path (cell_info);
       if (path == NULL)
         return FALSE;
 
@@ -2707,7 +2713,7 @@ clean_rows (GtkTreeViewAccessible *accessible)
     {
       GtkTreePath *row_path;
 
-      row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+      row_path = cell_info_get_path (cell_info);
 
       /* If the cell has become invalid because the row has been removed,
        * then set the cell's state to ATK_STATE_DEFUNCT and schedule
@@ -2769,7 +2775,7 @@ traverse_cells (GtkTreeViewAccessible *accessible,
       GtkTreePath *row_path;
       gboolean act_on_cell;
 
-      row_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+      row_path = cell_info_get_path (cell_info);
       g_return_if_fail (row_path != NULL);
       if (tree_path == NULL)
         act_on_cell = TRUE;
@@ -2826,7 +2832,7 @@ set_expand_state (GtkTreeView           *tree_view,
   g_hash_table_iter_init (&hash_iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&hash_iter, NULL, (gpointer *) &cell_info))
     {
-      cell_path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+      cell_path = cell_info_get_path (cell_info);
       found = FALSE;
 
       if (cell_path != NULL)
@@ -2927,7 +2933,7 @@ toggle_cell_expanded (GtkCellAccessible *cell)
     return;
 
   tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
-  path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+  path = cell_info_get_path (cell_info);
   if (!path)
     return;
 
@@ -2961,7 +2967,7 @@ toggle_cell_toggled (GtkCellAccessible *cell)
   if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
     return;
 
-  path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+  path = cell_info_get_path (cell_info);
   if (!path)
     return;
 
@@ -3003,7 +3009,7 @@ edit_cell (GtkCellAccessible *cell)
     return;
 
   tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
-  path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+  path = cell_info_get_path (cell_info);
   if (!path)
     return;
   gtk_tree_view_set_cursor (tree_view, path, cell_info->cell_col_ref, TRUE);
@@ -3027,7 +3033,7 @@ activate_cell (GtkCellAccessible *cell)
     return;
 
   tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
-  path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
+  path = cell_info_get_path (cell_info);
   if (!path)
     return;
   gtk_tree_view_row_activated (tree_view, path, cell_info->cell_col_ref);
@@ -3052,7 +3058,7 @@ cell_info_get_index (GtkTreeView                     *tree_view,
   gint column_number;
   int index;
 
-  path = gtk_tree_row_reference_get_path (info->cell_row_ref);
+  path = cell_info_get_path (info);
   if (!path)
     return -1;
 
