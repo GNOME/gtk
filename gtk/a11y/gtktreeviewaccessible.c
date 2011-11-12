@@ -1361,7 +1361,7 @@ gtk_tree_view_accessible_get_cell_area (GtkCellAccessibleParent *parent,
   else
     top_cell = cell;
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), top_cell, TRUE);
-  if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
+  if (!cell_info)
     return;
   path = cell_info_get_path (cell_info);
   tv_col = cell_info->cell_col_ref;
@@ -1490,7 +1490,7 @@ gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
   tree_view = GTK_TREE_VIEW (widget);
 
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell, TRUE);
-  if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
+  if (!cell_info)
     return FALSE;
   cell_object = ATK_OBJECT (cell);
   parent_cell = atk_object_get_parent (cell_object);
@@ -1543,7 +1543,7 @@ gtk_tree_view_accessible_get_child_index (GtkCellAccessibleParent *parent,
   GtkTreeView *tree_view;
 
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell, TRUE);
-  if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
+  if (!cell_info)
     return -1;
 
   tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
@@ -2341,7 +2341,7 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
 
   cell = GTK_CELL_ACCESSIBLE (renderer_cell);
   cell_info = find_cell_info (accessible, cell, TRUE);
-  if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
+  if (!cell_info)
     return FALSE;
 
   if (emit_change_signal)
@@ -2929,7 +2929,7 @@ toggle_cell_expanded (GtkCellAccessible *cell)
     parent = atk_object_get_parent (parent);
 
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell, TRUE);
-  if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
+  if (!cell_info)
     return;
 
   tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
@@ -2964,7 +2964,7 @@ toggle_cell_toggled (GtkCellAccessible *cell)
     }
 
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell, TRUE);
-  if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
+  if (!cell_info)
     return;
 
   path = cell_info_get_path (cell_info);
@@ -3005,7 +3005,7 @@ edit_cell (GtkCellAccessible *cell)
     parent = atk_object_get_parent (parent);
 
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell, TRUE);
-  if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
+  if (!cell_info)
     return;
 
   tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
@@ -3029,7 +3029,7 @@ activate_cell (GtkCellAccessible *cell)
     parent = atk_object_get_parent (parent);
 
   cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell, TRUE);
-  if (!cell_info || !cell_info->cell_col_ref || !cell_info->cell_row_ref)
+  if (!cell_info)
     return;
 
   tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
