@@ -92,7 +92,6 @@ static void             iterate_thru_children           (GtkTreeView            
                                                          gint                   depth);
 static int              cell_info_get_index             (GtkTreeView                     *tree_view,
                                                          GtkTreeViewAccessibleCellInfo   *info);
-static void             clean_rows                      (GtkTreeViewAccessible           *tree_view);
 static void             clean_cols                      (GtkTreeViewAccessible           *tree_view,
                                                          GtkTreeViewColumn      *tv_col);
 static void             traverse_cells                  (GtkTreeViewAccessible           *tree_view,
@@ -1684,8 +1683,6 @@ row_collapsed_cb (GtkTreeView *tree_view,
   accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
   tree_model = gtk_tree_view_get_model (tree_view);
 
-  clean_rows (accessible);
-
   /* Update visibility of cells below collapsed row */
   traverse_cells (accessible, path, FALSE);
 
@@ -1737,8 +1734,6 @@ selection_changed_cb (GtkTreeSelection *selection,
 
   tree_view = GTK_TREE_VIEW (widget);
   tree_selection = gtk_tree_view_get_selection (tree_view);
-
-  clean_rows (accessible);
 
   /* FIXME: clean rows iterates through all cells too */
   g_hash_table_iter_init (&iter, accessible->cell_infos);
@@ -2155,9 +2150,6 @@ model_row_deleted (GtkTreeModel *tree_model,
       gtk_tree_path_free (accessible->idle_expand_path);
       accessible->idle_expand_id = 0;
     }
-
-  /* Check to see if row is visible */
-  clean_rows (accessible);
 
   traverse_cells (accessible, path, TRUE);
 
@@ -2686,32 +2678,6 @@ iterate_thru_children (GtkTreeView  *tree_view,
     *count = -1;
 
   return;
-}
-
-static void
-clean_rows (GtkTreeViewAccessible *accessible)
-{
-  GtkTreeViewAccessibleCellInfo *cell_info;
-  GHashTableIter iter;
-
-  /* Clean GtkTreeViewAccessibleCellInfo data */
-  g_hash_table_iter_init (&iter, accessible->cell_infos);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
-    {
-      GtkTreePath *row_path;
-
-      row_path = cell_info_get_path (cell_info);
-
-      /* If the cell has become invalid because the row has been removed,
-       * then set the cell's state to ATK_STATE_DEFUNCT and schedule
-       * its removal.  If row_path is NULL then the row has
-       * been removed.
-       */
-      if (row_path == NULL)
-        g_hash_table_iter_remove (&iter);
-      else
-        gtk_tree_path_free (row_path);
-    }
 }
 
 static void
