@@ -22,6 +22,8 @@
 
 #include <gtk/gtk.h>
 
+#define N_ROWS 10000
+
 const gchar list_ui[] =
   "<interface>"
   "  <object class='GtkListStore' id='liststore1'>"
@@ -136,7 +138,7 @@ populate_list (GtkBuilder *builder)
   store = (GtkListStore *)gtk_tree_view_get_model (tv);
 
   /* append a thousand rows */
-  for (i = 0; i < 1000; i++)
+  for (i = 0; i < N_ROWS; i++)
     {
       gtk_list_store_append (store, &iter);
       gtk_list_store_set (store, &iter, 0, "Bla", 1, "Bla bla", 2, "Bla bla bla", 3, i % 2 == 0 ? TRUE : FALSE, 4, i % 100, 5, i, -1);
@@ -277,7 +279,7 @@ populate_tree (GtkBuilder *builder)
   store = (GtkTreeStore *)gtk_tree_view_get_model (tv);
 
   /* append a thousand rows */
-  for (i = 0; i < 333; i++)
+  for (i = 0; i < N_ROWS / 3; i++)
     {
       gtk_tree_store_append (store, &iter, NULL);
       gtk_tree_store_set (store, &iter, 0, "Bla", 1, "Bla bla", 2, "Bla bla bla", 3, i % 2 == 0 ? TRUE : FALSE, 4, i % 100, 5, i, -1);
