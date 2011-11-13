@@ -682,7 +682,8 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
           renderer_cell = GTK_RENDERER_CELL_ACCESSIBLE (child);
 
           /* Create the GtkTreeViewAccessibleCellInfo for this cell */
-          cell_info_new (accessible, tree_model, tree, node, tv_col, cell);
+          if (parent == ATK_OBJECT (accessible))
+            cell_info_new (accessible, tree_model, tree, node, tv_col, cell);
 
           _gtk_cell_accessible_initialise (cell, widget, parent);
 
@@ -3317,8 +3318,17 @@ find_cell_info (GtkTreeViewAccessible *accessible,
                 GtkCellAccessible     *cell,
                 gboolean               live_only)
 {
+  AtkObject *parent;
+  
+  parent = atk_object_get_parent (ATK_OBJECT (cell));
+  while (parent != ATK_OBJECT (accessible))
+    {
+      cell = GTK_CELL_ACCESSIBLE (parent);
+      parent = atk_object_get_parent (ATK_OBJECT (cell));
+    }
+
   return g_object_get_qdata (G_OBJECT (cell),
-                                  gtk_tree_view_accessible_get_data_quark ());
+                             gtk_tree_view_accessible_get_data_quark ());
 }
 
 static AtkObject *
