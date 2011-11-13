@@ -432,8 +432,9 @@ struct _GtkWidgetClass
 
   void         (* style_updated)          (GtkWidget *widget);
 
-  void         (* captured_event)         (GtkWidget *widget,
-                                           GdkEvent  *event);
+  GtkCapturedEventFlags (* captured_event) (GtkWidget *widget,
+                                            GdkEvent  *event);
+
   gboolean     (* press_and_hold)         (GtkWidget             *widget,
                                            GdkDevice             *device,
                                            GtkPressAndHoldAction  action,
@@ -904,6 +905,8 @@ GtkWidgetPath *   gtk_widget_get_path (GtkWidget *widget);
 GdkModifierType   gtk_widget_get_modifier_mask (GtkWidget         *widget,
                                                 GdkModifierIntent  intent);
 
+void              gtk_widget_release_captured_events (GtkWidget *widget,
+                                                      gboolean   emit);
 
 G_END_DECLS
 

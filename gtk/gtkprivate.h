@@ -59,6 +59,10 @@ gboolean _gtk_single_string_accumulator   (GSignalInvocationHint *ihint,
                                            GValue                *return_accu,
                                            const GValue          *handler_return,
                                            gpointer               dummy);
+gboolean _gtk_captured_enum_accumulator   (GSignalInvocationHint *ihint,
+                                           GValue                *return_accu,
+                                           const GValue          *handler_return,
+                                           gpointer               dummy);
 
 GdkModifierType _gtk_replace_virtual_modifiers (GdkKeymap       *keymap,
                                                 GdkModifierType  modifiers);

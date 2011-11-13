@@ -32,6 +32,7 @@
 #include "gdk/gdk.h"
 
 #include "gtkprivate.h"
+#include "gtkenums.h"
 
 
 #if !defined G_OS_WIN32 && !(defined GDK_WINDOWING_QUARTZ && defined QUARTZ_RELOCATION)
@@ -155,6 +156,22 @@ _gtk_single_string_accumulator (GSignalInvocationHint *ihint,
   str = g_value_get_string (handler_return);
   g_value_set_string (return_accu, str);
   continue_emission = str == NULL;
+
+  return continue_emission;
+}
+
+gboolean
+_gtk_captured_enum_accumulator (GSignalInvocationHint *ihint,
+                                GValue                *return_accu,
+                                const GValue          *handler_return,
+                                gpointer               dummy)
+{
+  gboolean continue_emission;
+  GtkCapturedEventFlags flags;
+
+  flags = g_value_get_flags (handler_return);
+  g_value_set_flags (return_accu, flags);
+  continue_emission = (flags & GTK_CAPTURED_EVENT_HANDLED) == 0;
 
   return continue_emission;
 }
