@@ -932,6 +932,12 @@ typedef enum {
   GTK_BORDER_STYLE_RIDGE
 } GtkBorderStyle;
 
+typedef enum {
+  GTK_CAPTURED_EVENT_NONE    = 0,
+  GTK_CAPTURED_EVENT_HANDLED = 1 << 0,
+  GTK_CAPTURED_EVENT_STORE   = 1 << 1
+} GtkCapturedEventFlags;
+
 G_END_DECLS
 
 

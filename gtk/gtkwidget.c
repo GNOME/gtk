@@ -403,6 +403,8 @@ struct _GtkWidgetPrivate
   /* The widget's parent */
   GtkWidget *parent;
 
+  GSList *captured_events;
+
 #ifdef G_ENABLE_DEBUG
   /* Number of gtk_widget_push_verify_invariants () */
   guint verifying_invariants_count;
@@ -1873,21 +1875,41 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * The event is propagated starting from the top-level container to
    * the widget that received the event going down the hierarchy.
    *
-   * Returns: %TRUE to stop other handlers from being invoked for the event
-   * and to cancel the emission of the ::event signal.
-   *   %FALSE to propagate the event further and to allow the emission of
-   *   the ::event signal.
+   * This signal returns a #GtkCapturedEventFlags with the handling
+   * status of the event, if %GTK_CAPTURED_EVENT_HANDLED is enabled,
+   * the event will be considered to be handled, and thus not propagated
+   * further.
    *
-   * Since: 3.2
+   * If, additionally, %GTK_CAPTURED_EVENT_STORE is enabled, the event will
+   * be stored so it can possibly be re-sent at a later stage. See
+   * gtk_widget_release_captured_events().
+   *
+   * If no flags are enabled, the captured event will be propagated even
+   * further, eventually triggering the emission of the #GtkWidget::event
+   * signal on the widget that received the event if no parent widgets
+   * captured it.
+   *
+   * <note><para>Enabling %GTK_CAPTURED_EVENT_STORE without
+   * %GTK_CAPTURED_EVENT_HANDLED is not allowed to avoid doubly
+   * event emission.</para></note>
+   *
+   * <warning><para>%GTK_CAPTURED_EVENT_STORE will not keep any track of
+   * event parity (eg. ensuring that button/key presses and releases
+   * are paired, or focus/crossing events) nor consistency, so use with
+   * discretion.</para></warning>
+   *
+   * Returns: a #GtkCapturedEventFlags specifying what to do with the event.
+   *
+   * Since: 3.4
    */
   widget_signals[CAPTURED_EVENT] =
     g_signal_new (I_("captured-event"),
 		  G_TYPE_FROM_CLASS (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, captured_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
+		  _gtk_captured_enum_accumulator, NULL,
+		  _gtk_marshal_FLAGS__BOXED,
+		  GTK_TYPE_CAPTURED_EVENT_FLAGS, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
@@ -5996,10 +6018,14 @@ gboolean
 _gtk_widget_captured_event (GtkWidget *widget,
                             GdkEvent  *event)
 {
-  gboolean return_val = FALSE;
+  GtkCapturedEventFlags flags;
+  GtkWidgetPrivate *priv;
+  gboolean return_val;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
+
+  priv = widget->priv;
 
   if (event->type == GDK_EXPOSE)
     {
@@ -6014,8 +6040,25 @@ _gtk_widget_captured_event (GtkWidget *widget,
 
   g_object_ref (widget);
 
-  g_signal_emit (widget, widget_signals[CAPTURED_EVENT], 0, event, &return_val);
-  return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
+  g_signal_emit (widget, widget_signals[CAPTURED_EVENT], 0, event, &flags);
+
+  /* Only store events that have been handled, so we don't end up
+   * sending twice the same event.
+   */
+  if (flags & GTK_CAPTURED_EVENT_STORE)
+    {
+      if ((flags & GTK_CAPTURED_EVENT_HANDLED) != 0)
+        priv->captured_events = g_slist_prepend (priv->captured_events,
+                                                 gdk_event_copy (event));
+      else
+        g_warning ("Captured events can only be stored if they are claimed "
+                   "to be handled by the capturing widget. The use of "
+                   "GTK_CAPTURED_EVENT_HANDLED is mandatory if using "
+                   "GTK_CAPTURED_EVENT_STORE.");
+    }
+
+  return_val = (flags & GTK_CAPTURED_EVENT_HANDLED) != 0 ||
+    !WIDGET_REALIZED_FOR_EVENT (widget, event);
 
   g_object_unref (widget);
 
@@ -10672,6 +10715,12 @@ gtk_widget_finalize (GObject *object)
 
   _gtk_widget_free_cached_sizes (widget);
 
+  if (priv->captured_events)
+    {
+      g_slist_foreach (priv->captured_events, (GFunc) gdk_event_free, NULL);
+      g_slist_free (priv->captured_events);
+    }
+
   if (g_object_is_floating (object))
     g_warning ("A floating object was finalized. This means that someone\n"
                "called g_object_unref() on an object that had only a floating\n"
@@ -14441,4 +14490,69 @@ _gtk_widget_set_style (GtkWidget *widget,
                        GtkStyle  *style)
 {
   widget->priv->style = style;
+}
+
+/**
+ * gtk_widget_release_captured_events:
+ * @widget: the #GtkWidget holding the events
+ * @emit: #TRUE if the events must be emitted on the targed widget
+ *
+ * Releases the events that a widget has captured and stored
+ * in the #GtkWidget::captured-event signal. if @emit is #TRUE,
+ * the events will be emitted on the target widget (the widget
+ * that would receive the event if no signal capturing happened)
+ *
+ * Since: 3.4
+ **/
+void
+gtk_widget_release_captured_events (GtkWidget *widget,
+                                    gboolean   emit)
+{
+  GtkWidgetPrivate *priv;
+  GSList *l;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = widget->priv;
+
+  if (emit)
+    {
+      priv->captured_events = g_slist_reverse (priv->captured_events);
+
+      for (l = priv->captured_events; l; l = l->next)
+        {
+          GtkWidget *event_widget;
+          GdkEvent *event = l->data;
+
+          event_widget = gtk_get_event_widget (event);
+
+          switch (event->type)
+            {
+            case GDK_PROPERTY_NOTIFY:
+            case GDK_FOCUS_CHANGE:
+            case GDK_CONFIGURE:
+            case GDK_MAP:
+            case GDK_UNMAP:
+            case GDK_SELECTION_CLEAR:
+            case GDK_SELECTION_REQUEST:
+            case GDK_SELECTION_NOTIFY:
+            case GDK_CLIENT_EVENT:
+            case GDK_VISIBILITY_NOTIFY:
+            case GDK_WINDOW_STATE:
+            case GDK_GRAB_BROKEN:
+            case GDK_DAMAGE:
+              /* These events are capturable, but don't bubble up */
+              gtk_widget_event (event_widget, event);
+              break;
+            default:
+              /* All other capturable events do bubble up */
+              gtk_propagate_event (event_widget, event);
+              break;
+            }
+        }
+    }
+
+  g_slist_foreach (priv->captured_events, (GFunc) gdk_event_free, NULL);
+  g_slist_free (priv->captured_events);
+  priv->captured_events = NULL;
 }
