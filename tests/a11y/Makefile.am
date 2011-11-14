@@ -62,4 +62,5 @@ EXTRA_DIST += \
 	entries.ui entries.txt \
 	scale-drawvalue.ui scale-drawvalue.txt \
 	placeholder-text.ui placeholder-text.txt \
-	menu.ui menu.txt
+	menu.ui menu.txt \
+	combos.ui combos.txt
