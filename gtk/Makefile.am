@@ -1052,7 +1052,7 @@ Gtk_3_0_gir_SCANNERFLAGS += --c-include="gtk/gtkx.h"
 Gtk_3_0_gir_CFLAGS = \
 		$(AM_CPPFLAGS) \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
-Gtk_3_0_gir_LIBS = libgtk-3.la
+Gtk_3_0_gir_LIBS = libgtk-3.la $(top_builddir)/gdk/libgdk-3.la
 Gtk_3_0_gir_FILES = $(introspection_files)
 Gtk_3_0_gir_EXPORT_PACKAGES = gtk+-3.0
 INTROSPECTION_GIRS += Gtk-3.0.gir
