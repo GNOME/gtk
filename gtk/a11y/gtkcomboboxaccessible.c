@@ -273,7 +273,7 @@ gtk_combo_box_accessible_get_keybinding (AtkAction *action,
     {
       target = atk_relation_get_target (relation);
       target_object = g_ptr_array_index (target, 0);
-      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (target_object));
+      label = gtk_accessible_get_widget (GTK_ACCESSIBLE (target_object));
     }
   g_object_unref (set);
   if (GTK_IS_LABEL (label))
