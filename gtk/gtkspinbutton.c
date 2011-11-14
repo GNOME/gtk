@@ -2147,6 +2147,9 @@ gtk_spin_button_get_increments (GtkSpinButton *spin_button,
  * @max: maximum allowable value
  *
  * Sets the minimum and maximum allowable values for @spin_button.
+ *
+ * If the current value is outside this range, it will be adjusted
+ * to fit within the range, otherwise it will remain unchanged.
  */
 void
 gtk_spin_button_set_range (GtkSpinButton *spin_button,
