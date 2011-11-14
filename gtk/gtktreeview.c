@@ -16286,7 +16286,8 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
  * @x: (inout): the x coordinate (relative to widget coordinates)
  * @y: (inout): the y coordinate (relative to widget coordinates)
  * @keyboard_tip: whether this is a keyboard tooltip or not
- * @model: (out) (allow-none): a pointer to receive a #GtkTreeModel or %NULL
+ * @model: (out) (allow-none) (transfer none): a pointer to receive a
+ *         #GtkTreeModel or %NULL
  * @path: (out) (allow-none): a pointer to receive a #GtkTreePath or %NULL
  * @iter: (out) (allow-none): a pointer to receive a #GtkTreeIter or %NULL
  *
