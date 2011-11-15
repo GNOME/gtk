@@ -12257,20 +12257,10 @@ gtk_tree_view_set_expander_column (GtkTreeView       *tree_view,
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (column == NULL || GTK_IS_TREE_VIEW_COLUMN (column));
+  g_return_if_fail (column == NULL || gtk_tree_view_column_get_tree_view (column) == GTK_WIDGET (tree_view));
 
   if (tree_view->priv->expander_column != column)
     {
-      GList *list;
-
-      if (column)
-	{
-	  /* Confirm that column is in tree_view */
-	  for (list = tree_view->priv->columns; list; list = list->next)
-	    if (list->data == column)
-	      break;
-	  g_return_if_fail (list != NULL);
-	}
-
       tree_view->priv->expander_column = column;
       g_object_notify (G_OBJECT (tree_view), "expander-column");
     }
