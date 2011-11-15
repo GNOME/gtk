@@ -23,39 +23,9 @@ window1
     columns: 2
     selected rows: 0
     column 0 description: Column 1
-    <column 0 header>
-    unnamed-GtkButtonAccessible-0
-      "table column header"
-      parent: tree1
-      index: 0
-      name: Column 1
-      state: enabled sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
+    column 0 header: unnamed-GtkButtonAccessible-0
     column 1 description: Column 2
-    <column 1 header>
-    unnamed-GtkButtonAccessible-1
-      "table column header"
-      parent: tree1
-      index: 1
-      name: Column 2
-      state: enabled sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
+    column 1 header: unnamed-GtkButtonAccessible-1
     unnamed-GtkButtonAccessible-0
       "table column header"
       parent: tree1

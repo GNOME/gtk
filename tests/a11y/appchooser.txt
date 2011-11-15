@@ -105,22 +105,7 @@ window1
               rows: 1
               columns: 1
               column 0 description: 
-              <column 0 header>
-              unnamed-GtkButtonAccessible-6
-                "table column header"
-                parent: unnamed-GtkTreeViewAccessible-5
-                index: 0
-                name: 
-                state: enabled focusable selectable sensitive
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                <AtkImage>
-                image size: -1 x -1
-                image description: (null)
-                <AtkAction>
-                action 0 name: click
+              column 0 header: unnamed-GtkButtonAccessible-6
               unnamed-GtkButtonAccessible-6
                 "table column header"
                 parent: unnamed-GtkTreeViewAccessible-5
