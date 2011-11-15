@@ -1250,7 +1250,8 @@ border_image_value_parse (GtkCssParser *parser,
 {
   GValue temp = G_VALUE_INIT;
   cairo_pattern_t *pattern = NULL;
-  GtkGradient *gradient = NULL;
+  gconstpointer *boxed = NULL;
+  GType boxed_type;
   GtkBorder slice, *width = NULL, *parsed_slice;
   GtkCssBorderImageRepeat repeat, *parsed_repeat;
   gboolean retval = FALSE;
@@ -1261,8 +1262,9 @@ border_image_value_parse (GtkCssParser *parser,
   if (!pattern_value_parse (parser, base, &temp))
     return FALSE;
 
-  if (G_VALUE_TYPE (&temp) == GTK_TYPE_GRADIENT)
-    gradient = g_value_dup_boxed (&temp);
+  boxed_type = G_VALUE_TYPE (&temp);
+  if (boxed_type != CAIRO_GOBJECT_TYPE_PATTERN)
+    boxed = g_value_dup_boxed (&temp);
   else
     pattern = g_value_dup_boxed (&temp);
 
@@ -1297,8 +1299,8 @@ border_image_value_parse (GtkCssParser *parser,
 
   g_value_unset (&temp);
 
-  if (gradient != NULL)
-    image = _gtk_border_image_new_for_gradient (gradient, &slice, width, &repeat);
+  if (boxed != NULL)
+    image = _gtk_border_image_new_for_boxed (boxed_type, boxed, &slice, width, &repeat);
   else if (pattern != NULL)
     image = _gtk_border_image_new (pattern, &slice, width, &repeat);
 
@@ -1312,8 +1314,8 @@ border_image_value_parse (GtkCssParser *parser,
   if (pattern != NULL)
     cairo_pattern_destroy (pattern);
 
-  if (gradient != NULL)
-    gtk_gradient_unref (gradient);
+  if (boxed != NULL)
+    g_boxed_free (boxed_type, boxed);
 
   if (width != NULL)
     gtk_border_free (width);

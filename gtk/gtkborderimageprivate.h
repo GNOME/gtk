@@ -42,7 +42,8 @@ GtkBorderImage *  _gtk_border_image_new              (cairo_pattern_t      *sour
                                                       GtkBorder            *slice,
                                                       GtkBorder            *width,
                                                       GtkCssBorderImageRepeat *repeat);
-GtkBorderImage *  _gtk_border_image_new_for_gradient (GtkGradient          *gradient,
+GtkBorderImage *  _gtk_border_image_new_for_boxed    (GType                 boxed_type,
+						      gpointer              boxed,
                                                       GtkBorder            *slice,
                                                       GtkBorder            *width,
                                                       GtkCssBorderImageRepeat *repeat);

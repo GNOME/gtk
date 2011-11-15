@@ -54,7 +54,8 @@ enum {
 
 struct _GtkBorderImage {
   cairo_pattern_t *source;
-  GtkGradient *source_gradient;
+  gpointer source_boxed;
+  GType boxed_type;
 
   GtkBorder slice;
   GtkBorder *width;
@@ -90,18 +91,21 @@ _gtk_border_image_new (cairo_pattern_t         *pattern,
 }
 
 GtkBorderImage *
-_gtk_border_image_new_for_gradient (GtkGradient             *gradient,
-                                    GtkBorder               *slice,
-                                    GtkBorder               *width,
-                                    GtkCssBorderImageRepeat *repeat)
+_gtk_border_image_new_for_boxed (GType                    boxed_type,
+				 gpointer                 boxed,
+				 GtkBorder               *slice,
+				 GtkBorder               *width,
+				 GtkCssBorderImageRepeat *repeat)
 {
   GtkBorderImage *image;
 
   image = g_slice_new0 (GtkBorderImage);
+
   image->ref_count = 1;
 
-  if (gradient != NULL)
-    image->source_gradient = gtk_gradient_ref (gradient);
+  if (boxed != NULL)
+    image->source_boxed = g_boxed_copy (boxed_type, boxed);
+  image->boxed_type = boxed_type;
 
   if (slice != NULL)
     image->slice = *slice;
@@ -137,8 +141,8 @@ _gtk_border_image_unref (GtkBorderImage *image)
       if (image->source != NULL)
         cairo_pattern_destroy (image->source);
 
-      if (image->source_gradient != NULL)
-        gtk_gradient_unref (image->source_gradient);
+      if (image->source_boxed != NULL)
+	g_boxed_free (image->boxed_type, image->source_boxed);
 
       if (image->width != NULL)
         gtk_border_free (image->width);
@@ -157,8 +161,8 @@ _gtk_border_image_unpack (const GValue *value,
   parameter[0].name = "border-image-source";
 
   if ((image != NULL) && 
-      (image->source_gradient != NULL))
-    g_value_init (&parameter[0].value, GTK_TYPE_GRADIENT);
+      (image->source_boxed != NULL))
+    g_value_init (&parameter[0].value, image->boxed_type);
   else
     g_value_init (&parameter[0].value, CAIRO_GOBJECT_TYPE_PATTERN);
 
@@ -173,8 +177,8 @@ _gtk_border_image_unpack (const GValue *value,
 
   if (image != NULL)
     {
-      if (image->source_gradient != NULL)
-        g_value_set_boxed (&parameter[0].value, image->source_gradient);
+      if (image->source_boxed != NULL)
+        g_value_set_boxed (&parameter[0].value, image->source_boxed);
       else
         g_value_set_boxed (&parameter[0].value, image->source);
 
