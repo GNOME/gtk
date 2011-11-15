@@ -26,11 +26,6 @@
 
 G_BEGIN_DECLS
 
-const GValue * _gtk_style_properties_peek_property            (GtkStyleProperties      *props,
-                                                               const gchar             *prop_name,
-                                                               GtkStateFlags            state,
-							       GtkStylePropertyContext *context,
-                                                               const GtkStyleProperty **property);
 void           _gtk_style_properties_get                      (GtkStyleProperties      *props,
 							       GtkStateFlags            state,
 							       GtkStylePropertyContext *context,
