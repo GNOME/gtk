@@ -12093,9 +12093,7 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
 
   va_end (args);
 
-  gtk_tree_view_insert_column (tree_view, column, position);
-
-  return tree_view->priv->n_columns;
+  return gtk_tree_view_insert_column (tree_view, column, position);
 }
 
 /**
@@ -12138,9 +12136,7 @@ gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_vie
   gtk_tree_view_column_pack_start (column, cell, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, cell, func, data, dnotify);
 
-  gtk_tree_view_insert_column (tree_view, column, position);
-
-  return tree_view->priv->n_columns;
+  return gtk_tree_view_insert_column (tree_view, column, position);
 }
 
 /**
