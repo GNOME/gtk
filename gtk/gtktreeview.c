@@ -12140,6 +12140,24 @@ gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_vie
 }
 
 /**
+ * gtk_tree_view_get_n_columns:
+ * @tree_view: a #GtkTreeView
+ *
+ * Queries the number of columns in the given @tree_view.
+ *
+ * Returns: The number of columns in the @tree_view
+ *
+ * Since: 3.4
+ **/
+guint
+gtk_tree_view_get_n_columns (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), 0);
+
+  return tree_view->priv->n_columns;
+}
+
+/**
  * gtk_tree_view_get_column:
  * @tree_view: A #GtkTreeView.
  * @n: The position of the column, counting from 0.

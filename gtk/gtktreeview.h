@@ -257,6 +257,7 @@ gint                   gtk_tree_view_insert_column_with_data_func  (GtkTreeView 
                                                                     GtkTreeCellDataFunc        func,
                                                                     gpointer                   data,
                                                                     GDestroyNotify             dnotify);
+guint                  gtk_tree_view_get_n_columns                 (GtkTreeView               *tree_view);
 GtkTreeViewColumn     *gtk_tree_view_get_column                    (GtkTreeView               *tree_view,
 								    gint                       n);
 GList                 *gtk_tree_view_get_columns                   (GtkTreeView               *tree_view);
