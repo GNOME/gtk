@@ -2519,19 +2519,20 @@ _gtk_style_property_resolve (const GtkStyleProperty *property,
                              GtkStyleProperties     *props,
                              GtkStateFlags           state,
 			     GtkStylePropertyContext *context,
-                             GValue                 *val)
+                             GValue                 *val,
+			     GValue                 *val_out)
 {
   if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
     {
       if (property->pspec->value_type == GDK_TYPE_RGBA)
         {
           if (resolve_color (props, val))
-            return;
+            goto out;
         }
       else if (property->pspec->value_type == GDK_TYPE_COLOR)
         {
           if (resolve_color_rgb (props, val))
-            return;
+            goto out;
         }
       
       g_value_unset (val);
@@ -2559,6 +2560,9 @@ _gtk_style_property_resolve (const GtkStyleProperty *property,
       if (!resolve_shadow (props, val))
         _gtk_style_property_default_value (property, props, state, val);
     }
+
+ out:
+  g_value_copy (val, val_out);
 }
 
 gboolean

@@ -85,7 +85,8 @@ void                     _gtk_style_property_resolve       (const GtkStyleProper
                                                             GtkStyleProperties     *properties,
                                                             GtkStateFlags           state,
 							    GtkStylePropertyContext *context,
-                                                            GValue                 *orig_value);
+                                                            GValue                 *orig_value,
+                                                            GValue                 *out_value);
 
 gboolean                 _gtk_style_property_is_shorthand  (const GtkStyleProperty *property);
 GParameter *             _gtk_style_property_unpack        (const GtkStyleProperty *property,

@@ -672,10 +672,7 @@ _gtk_style_properties_get_property (GtkStyleProperties *props,
   g_value_init (value, node->pspec->value_type);
 
   if (val)
-    {
-      _gtk_style_property_resolve (node, props, state, context, val);
-      g_value_copy (val, value);
-    }
+    _gtk_style_property_resolve (node, props, state, context, val, value);
   else if (_gtk_style_property_is_shorthand (node))
     _gtk_style_property_pack (node, props, state, context, value);
   else
