@@ -506,10 +506,26 @@ get_n_rows (GtkTreeView *tree_view)
 }
 
 static gint
+get_n_columns (GtkTreeView *tree_view)
+{
+  guint i, visible_columns;
+
+  visible_columns = 0;
+
+  for (i = 0; i < gtk_tree_view_get_n_columns (tree_view); i++)
+    {
+      GtkTreeViewColumn *column = gtk_tree_view_get_column (tree_view, i);
+
+      if (gtk_tree_view_column_get_visible (column))
+        visible_columns++;
+    }
+
+  return visible_columns;
+}
+static gint
 gtk_tree_view_accessible_get_n_children (AtkObject *obj)
 {
   GtkWidget *widget;
-  GtkTreeViewAccessible *accessible;
   GtkTreeView *tree_view;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
@@ -517,8 +533,7 @@ gtk_tree_view_accessible_get_n_children (AtkObject *obj)
     return 0;
 
   tree_view = GTK_TREE_VIEW (widget);
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
-  return (get_n_rows (tree_view) + 1) * accessible->n_cols;
+  return (get_n_rows (tree_view) + 1) * get_n_columns (tree_view);
 }
 
 static AtkObject *
@@ -557,7 +572,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
   tree_view = GTK_TREE_VIEW (widget);
-  if (i < accessible->n_cols)
+  if (i < get_n_columns (tree_view))
     {
       tv_col = gtk_tree_view_get_column (tree_view, i);
       child = get_header_from_column (tv_col);
@@ -737,7 +752,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
         {
           gint parent_index;
 
-          parent_index = get_index (tree_view, path, i % accessible->n_cols);
+          parent_index = get_index (tree_view, path, i % get_n_columns (tree_view));
           parent_node = atk_object_ref_accessible_child (obj, parent_index);
         }
       accessible_array[0] = parent_node;
@@ -929,7 +944,7 @@ gtk_tree_view_accessible_get_column_at_index (AtkTable *table,
   if (index >= gtk_tree_view_accessible_get_n_children (ATK_OBJECT (table)))
     return -1;
 
-  n_columns = GTK_TREE_VIEW_ACCESSIBLE (table)->n_cols;
+  n_columns = get_n_columns (GTK_TREE_VIEW (widget));
 
   /* checked by the n_children() check above */
   g_assert (n_columns > 0);
@@ -950,7 +965,7 @@ gtk_tree_view_accessible_get_row_at_index (AtkTable *table,
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  index /= GTK_TREE_VIEW_ACCESSIBLE (table)->n_cols;
+  index /= get_n_columns (tree_view);
   index--;
   if (index >= get_n_rows (tree_view))
     return -1;
@@ -988,28 +1003,12 @@ static gint
 gtk_tree_view_accessible_get_n_columns (AtkTable *table)
 {
   GtkWidget *widget;
-  GtkTreeView *tree_view;
-  GtkTreeViewColumn *tv_col;
-  gint n_cols = 0;
-  gint i = 0;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     return 0;
 
-  tree_view = GTK_TREE_VIEW (widget);
-  tv_col = gtk_tree_view_get_column (tree_view, i);
-
-  while (tv_col != NULL)
-    {
-      if (gtk_tree_view_column_get_visible (tv_col))
-        n_cols++;
-
-      i++;
-      tv_col = gtk_tree_view_get_column (tree_view, i);
-    }
-
-  return n_cols;
+  return get_n_columns (GTK_TREE_VIEW (widget));
 }
 
 static gboolean
@@ -2101,7 +2100,7 @@ model_row_inserted (GtkTreeModel *tree_model,
       g_signal_emit_by_name (atk_obj, "row-inserted", row, n_inserted);
 
       /* Generate children-changed signals */
-      n_cols = gtk_tree_view_accessible_get_n_columns (ATK_TABLE (atk_obj));
+      n_cols = get_n_columns (tree_view);
       for (child_row = row; child_row < (row + n_inserted); child_row++)
         {
           for (col = 0; col < n_cols; col++)
@@ -2170,11 +2169,11 @@ model_row_deleted (GtkTreeModel *tree_model,
   accessible->n_children_deleted = 0;
 
   /* Generate children-changed signals */
-  for (col = 0; col < accessible->n_cols; col++)
+  for (col = 0; col < get_n_columns (tree_view); col++)
     {
       /* Pass NULL as the child object, 4th argument */
       g_signal_emit_by_name (atk_obj, "children-changed::remove",
-                             ((row * accessible->n_cols) + col), NULL, NULL);
+                             ((row * get_n_columns (tree_view)) + col), NULL, NULL);
     }
 }
 
@@ -2975,7 +2974,7 @@ cell_info_get_index (GtkTreeView                     *tree_view,
   int index;
 
   index = _gtk_rbtree_node_get_index (info->tree, info->node) + 1;
-  index *= info->view->n_cols;
+  index *= get_n_columns (tree_view);
   index += get_column_number (tree_view, info->cell_col_ref);
 
   return index;
@@ -3017,13 +3016,13 @@ find_cell (GtkTreeViewAccessible *accessible,
   tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible)));
 
   if (!_gtk_rbtree_find_index (_gtk_tree_view_get_rbtree (tree_view),
-                               index / accessible->n_cols - 1,
+                               index / get_n_columns (tree_view) - 1,
                                &lookup.tree,
                                &lookup.node))
     {
       g_assert_not_reached ();
     }
-  lookup.cell_col_ref = gtk_tree_view_get_column (tree_view, index % accessible->n_cols);
+  lookup.cell_col_ref = gtk_tree_view_get_column (tree_view, index % get_n_columns (tree_view));
 
   cell_info = g_hash_table_lookup (accessible->cell_infos, &lookup);
   if (cell_info == NULL)
@@ -3105,14 +3104,9 @@ get_index (GtkTreeView *tree_view,
            GtkTreePath *path,
            gint         actual_column)
 {
-  AtkObject *atk_obj;
-  GtkTreeViewAccessible *accessible;
   gint depth = 0;
   gint index = 1;
   gint *indices = NULL;
-
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
 
   if (path)
     {
@@ -3134,7 +3128,7 @@ get_index (GtkTreeView *tree_view,
 
   if (path)
     index += indices[depth - 1];
-  index *= accessible->n_cols;
+  index *= get_n_columns (tree_view);
   index +=  actual_column;
   return index;
 }
@@ -3199,16 +3193,12 @@ get_rbtree_column_from_index (GtkTreeView        *tree_view,
                               GtkRBNode         **node,
                               GtkTreeViewColumn **column)
 {
-  AtkObject *atk_obj;
-  GtkTreeViewAccessible *accessible;
+  guint n_columns = get_n_columns (tree_view);
 
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
-
-  if (accessible->n_cols == 0)
+  if (n_columns == 0)
     return FALSE;
   /* First row is the column headers */
-  index -= accessible->n_cols;
+  index -= n_columns;
   if (index < 0)
     return FALSE;
 
@@ -3217,7 +3207,7 @@ get_rbtree_column_from_index (GtkTreeView        *tree_view,
       g_return_val_if_fail (node != NULL, FALSE);
 
       if (!_gtk_rbtree_find_index (_gtk_tree_view_get_rbtree (tree_view),
-                                   index / accessible->n_cols,
+                                   index / n_columns,
                                    tree,
                                    node))
         return FALSE;
@@ -3225,7 +3215,7 @@ get_rbtree_column_from_index (GtkTreeView        *tree_view,
 
   if (column)
     {
-      *column = gtk_tree_view_get_column (tree_view, index % accessible->n_cols);
+      *column = gtk_tree_view_get_column (tree_view, index % n_columns);
       if (*column == NULL)
         return FALSE;
   }
