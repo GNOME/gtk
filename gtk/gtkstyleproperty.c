@@ -41,6 +41,7 @@
 #include "gtkshadowprivate.h"
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
+#include "gtkwin32themeprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -908,6 +909,11 @@ pattern_value_parse (GtkCssParser *parser,
 {
   if (_gtk_css_parser_begins_with (parser, '-'))
     {
+      int res;
+      res = _gtk_win32_theme_part_parse (parser, base, value);
+      if (res >= 0)
+	return res > 0;
+      /* < 0 => continue */
       g_value_unset (value);
       g_value_init (value, GTK_TYPE_GRADIENT);
       return gradient_value_parse (parser, base, value);
@@ -2475,6 +2481,27 @@ resolve_color_rgb (GtkStyleProperties *props,
 }
 
 static gboolean
+resolve_win32_theme_part (GtkStyleProperties *props,
+			  GValue             *value,
+			  GValue             *value_out,
+			  GtkStylePropertyContext *context)
+{
+  GtkWin32ThemePart  *part;
+  cairo_pattern_t *pattern;
+
+  part = g_value_get_boxed (value);
+  if (part == NULL)
+    return FALSE;
+
+  pattern = _gtk_win32_theme_part_render (part, context->width, context->height);
+
+  g_value_take_boxed (value_out, pattern);
+
+  return TRUE;
+}
+
+
+static gboolean
 resolve_gradient (GtkStyleProperties *props,
                   GValue             *value)
 {
@@ -2559,6 +2586,12 @@ _gtk_style_property_resolve (const GtkStyleProperty *property,
     {
       if (!resolve_shadow (props, val))
         _gtk_style_property_default_value (property, props, state, val);
+    }
+  else if (G_VALUE_TYPE (val) == GTK_TYPE_WIN32_THEME_PART)
+    {
+      if (resolve_win32_theme_part (props, val, val_out, context))
+	return; /* Don't copy val, this sets val_out */
+      _gtk_style_property_default_value (property, props, state, val);
     }
 
  out:

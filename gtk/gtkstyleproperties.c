@@ -37,6 +37,8 @@
 #include "gtkstylepropertyprivate.h"
 #include "gtkintl.h"
 
+#include "gtkwin32themeprivate.h"
+
 /**
  * SECTION:gtkstyleproperties
  * @Short_description: Store for style property information
@@ -465,9 +467,10 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties     *props,
     }
   else if (style_prop->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN)
     {
-      /* Allow GtkGradient as a substitute */
+      /* Allow GtkGradient and theme part as a substitute */
       g_return_if_fail (value_type == CAIRO_GOBJECT_TYPE_PATTERN ||
-                        value_type == GTK_TYPE_GRADIENT);
+                        value_type == GTK_TYPE_GRADIENT	||
+			value_type == GTK_TYPE_WIN32_THEME_PART);
     }
   else if (style_prop->pspec->value_type == G_TYPE_INT)
     {

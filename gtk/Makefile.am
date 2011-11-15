@@ -465,6 +465,7 @@ gtk_private_h_sources =		\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
 	gtkwidgetprivate.h	\
+	gtkwin32themeprivate.h	\
 	gtkwindowprivate.h	\
 	gtktreemenu.h		\
 	$(gtk_clipboard_dnd_h_sources) \
@@ -724,6 +725,7 @@ gtk_base_c_sources = 		\
 	gtkwidget.c		\
 	gtkwidgetpath.c		\
 	gtkwindow.c		\
+	gtkwin32theme.c		\
 	$(gtk_clipboard_dnd_c_sources) \
 	$(gtk_appchooser_impl_c_sources)
 
