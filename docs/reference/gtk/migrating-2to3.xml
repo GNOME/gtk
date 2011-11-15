@@ -1203,8 +1203,6 @@ gtk_arrow_draw (GtkWidget *widget,
   </para>
   </section>
 
-  <xi:include href="migrating-GtkStyleContext.xml" />
-
   </section>
 
 </chapter>
