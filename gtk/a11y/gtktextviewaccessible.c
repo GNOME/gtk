@@ -173,6 +173,7 @@ gtk_text_view_accessible_get_text_after_offset (AtkText         *text,
                                                 gint            *end_offset)
 {
   GtkWidget *widget;
+  GtkTextView *view;
   GtkTextBuffer *buffer;
   GtkTextIter pos;
   GtkTextIter start, end;
@@ -181,12 +182,29 @@ gtk_text_view_accessible_get_text_after_offset (AtkText         *text,
   if (widget == NULL)
     return NULL;
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  view = GTK_TEXT_VIEW (widget);
+  buffer = gtk_text_view_get_buffer (view);
   gtk_text_buffer_get_iter_at_offset (buffer, &pos, offset);
-  _gtk_text_buffer_get_text_after (buffer, boundary_type,
-                                   &pos, &start, &end);
+  start = end = pos;
+  if (boundary_type == ATK_TEXT_BOUNDARY_LINE_START)
+    {
+      gtk_text_view_forward_display_line (view, &end);
+      start = end;
+      gtk_text_view_forward_display_line (view, &end);
+    }
+  else if (boundary_type == ATK_TEXT_BOUNDARY_LINE_END)
+    {
+      gtk_text_view_forward_display_line_end (view, &end);
+      start = end;
+      gtk_text_view_forward_display_line (view, &end);
+      gtk_text_view_forward_display_line_end (view, &end);
+    }
+  else
+    _gtk_text_buffer_get_text_after (buffer, boundary_type, &pos, &start, &end);
+
   *start_offset = gtk_text_iter_get_offset (&start);
   *end_offset = gtk_text_iter_get_offset (&end);
+
   return gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
 }
 
@@ -198,6 +216,7 @@ gtk_text_view_accessible_get_text_at_offset (AtkText         *text,
                                              gint            *end_offset)
 {
   GtkWidget *widget;
+  GtkTextView *view;
   GtkTextBuffer *buffer;
   GtkTextIter pos;
   GtkTextIter start, end;
@@ -206,12 +225,31 @@ gtk_text_view_accessible_get_text_at_offset (AtkText         *text,
   if (widget == NULL)
     return NULL;
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  view = GTK_TEXT_VIEW (widget);
+  buffer = gtk_text_view_get_buffer (view);
   gtk_text_buffer_get_iter_at_offset (buffer, &pos, offset);
-  _gtk_text_buffer_get_text_at (buffer, boundary_type,
-                                &pos, &start, &end);
+  start = end = pos;
+  if (boundary_type == ATK_TEXT_BOUNDARY_LINE_START)
+    {
+      gtk_text_view_backward_display_line_start (view, &start);
+      gtk_text_view_forward_display_line (view, &end);
+    }
+  else if (boundary_type == ATK_TEXT_BOUNDARY_LINE_END)
+    {
+      gtk_text_view_backward_display_line_start (view, &start);
+      if (!gtk_text_iter_is_start (&start))
+        {
+          gtk_text_view_backward_display_line (view, &start);
+          gtk_text_view_forward_display_line_end (view, &start);
+        }
+      gtk_text_view_forward_display_line_end (view, &end);
+    }
+  else
+    _gtk_text_buffer_get_text_at (buffer, boundary_type, &pos, &start, &end);
+
   *start_offset = gtk_text_iter_get_offset (&start);
   *end_offset = gtk_text_iter_get_offset (&end);
+
   return gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
 }
 
@@ -223,6 +261,7 @@ gtk_text_view_accessible_get_text_before_offset (AtkText         *text,
                                                  gint            *end_offset)
 {
   GtkWidget *widget;
+  GtkTextView *view;
   GtkTextBuffer *buffer;
   GtkTextIter pos;
   GtkTextIter start, end;
@@ -231,12 +270,40 @@ gtk_text_view_accessible_get_text_before_offset (AtkText         *text,
   if (widget == NULL)
     return NULL;
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  view = GTK_TEXT_VIEW (widget);
+  buffer = gtk_text_view_get_buffer (view);
   gtk_text_buffer_get_iter_at_offset (buffer, &pos, offset);
-  _gtk_text_buffer_get_text_before (buffer, boundary_type,
-                                    &pos, &start, &end);
+  start = end = pos;
+
+  if (boundary_type == ATK_TEXT_BOUNDARY_LINE_START)
+    {
+      gtk_text_view_backward_display_line_start (view, &start);
+      end = start;
+      gtk_text_view_backward_display_line (view, &start);
+    }
+  else if (boundary_type == ATK_TEXT_BOUNDARY_LINE_END)
+    {
+      gtk_text_view_backward_display_line_start (view, &start);
+      if (!gtk_text_iter_is_start (&start))
+        {
+          gtk_text_view_backward_display_line (view, &start);
+          end = start;
+          if (!gtk_text_iter_is_start (&start))
+            {
+              gtk_text_view_backward_display_line (view, &start);
+              gtk_text_view_forward_display_line_end (view, &start);
+            }
+          gtk_text_view_forward_display_line_end (view, &end);
+        }
+      else
+        end = start;
+    }
+  else
+    _gtk_text_buffer_get_text_before (buffer, boundary_type, &pos, &start, &end);
+
   *start_offset = gtk_text_iter_get_offset (&start);
   *end_offset = gtk_text_iter_get_offset (&end);
+
   return gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
 }
 
