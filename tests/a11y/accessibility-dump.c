@@ -520,7 +520,7 @@ dump_atk_table (AtkTable *table,
 {
   gint *selected;
   gint n_selected;
-  gint i;
+  gint i, j;
   AtkObject *obj;
   const gchar *desc;
 
@@ -578,6 +578,26 @@ dump_atk_table (AtkTable *table,
       obj = atk_table_get_row_header (table, i);
       if (obj)
         g_string_append_printf (string, "%*srow %d header: %s\n", depth, "", i, get_name (obj));
+    }
+
+  g_string_append_printf (string, "%*stable indexes:\n", depth, "");
+  for (i = 0; i < atk_table_get_n_rows (table); i++)
+    {
+      g_string_append_printf (string, "%*s", depth + DEPTH_INCREMENT, "");
+      for (j = 0; j < atk_table_get_n_columns (table); j++)
+        {
+          int id = atk_table_get_index_at (table, i, j);
+
+          obj = atk_object_ref_accessible_child (ATK_OBJECT (table), id);
+          if (j > 0)
+            g_string_append (string, " ");
+
+          g_string_append_printf (string, "%s%s%s",
+                                  atk_table_get_row_at_index (table, id) == i ? "✓" : "⚠",
+                                  atk_table_get_column_at_index (table, id) == j ? "✓" : "⚠",
+                                  get_name (obj));
+        }
+      g_string_append (string, "\n");
     }
 }
 

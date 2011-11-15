@@ -106,6 +106,8 @@ window1
               columns: 1
               column 0 description: 
               column 0 header: unnamed-GtkButtonAccessible-6
+              table indexes:
+                ✓✓unnamed-GtkContainerCellAccessible-7
               unnamed-GtkButtonAccessible-6
                 "table column header"
                 parent: unnamed-GtkTreeViewAccessible-5

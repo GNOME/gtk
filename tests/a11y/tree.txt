@@ -26,6 +26,11 @@ window1
     column 0 header: unnamed-GtkButtonAccessible-0
     column 1 description: Column 2
     column 1 header: unnamed-GtkButtonAccessible-1
+    table indexes:
+      ✓✓One ✓✓Two
+      ✓✓Three ✓✓Four
+      ✓✓Five ✓✓Six
+      ✓✓Seven ✓✓Eight
     unnamed-GtkButtonAccessible-0
       "table column header"
       parent: tree1
