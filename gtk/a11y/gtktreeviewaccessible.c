@@ -132,8 +132,7 @@ static void             connect_model_signals           (GtkTreeView            
                                                          GtkTreeViewAccessible           *accessible);
 static void             disconnect_model_signals        (GtkTreeViewAccessible           *accessible);
 static gint             get_column_number               (GtkTreeView            *tree_view,
-                                                         GtkTreeViewColumn      *column,
-                                                         gboolean               visible);
+                                                         GtkTreeViewColumn      *column);
 static gint             get_focus_index                 (GtkTreeView            *tree_view);
 static gint             get_index                       (GtkTreeView            *tree_view,
                                                          GtkTreePath            *path,
@@ -818,7 +817,7 @@ get_focus_index (GtkTreeView *tree_view)
   gtk_tree_view_get_cursor (tree_view, &focus_path, &focus_column);
   if (focus_path && focus_column)
     index = get_index (tree_view, focus_path,
-                       get_column_number (tree_view, focus_column, FALSE));
+                       get_column_number (tree_view, focus_column));
   else
     index = -1;
 
@@ -879,7 +878,7 @@ gtk_tree_view_accessible_ref_accessible_at_point (AtkComponent *component,
     {
       gint index, column;
 
-      column = get_column_number (tree_view, tv_column, FALSE);
+      column = get_column_number (tree_view, tv_column);
       index = get_index (tree_view, path, column);
       gtk_tree_path_free (path);
 
@@ -3010,7 +3009,7 @@ cell_info_get_index (GtkTreeView                     *tree_view,
 
   index = _gtk_rbtree_node_get_index (info->tree, info->node) + 1;
   index *= info->view->n_cols;
-  index += get_column_number (tree_view, info->cell_col_ref, FALSE);
+  index += get_column_number (tree_view, info->cell_col_ref);
 
   return index;
 }
@@ -3109,8 +3108,7 @@ disconnect_model_signals (GtkTreeViewAccessible *accessible)
  */
 static gint
 get_column_number (GtkTreeView       *tree_view,
-                   GtkTreeViewColumn *column,
-                   gboolean           visible)
+                   GtkTreeViewColumn *column)
 {
   GtkTreeViewColumn *tv_column;
   gint ret_val;
@@ -3127,8 +3125,7 @@ get_column_number (GtkTreeView       *tree_view,
       tv_column = g_array_index (accessible->col_data, GtkTreeViewColumn *, i);
       if (tv_column == column)
         break;
-      if (!visible || gtk_tree_view_column_get_visible (tv_column))
-        ret_val++;
+      ret_val++;
     }
   if (i == accessible->col_data->len)
     ret_val = -1;
