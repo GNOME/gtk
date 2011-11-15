@@ -27,6 +27,7 @@
 #include <math.h>
 
 #include "gtkborderimageprivate.h"
+#include "gtkstylepropertiesprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -194,19 +195,20 @@ _gtk_border_image_unpack (const GValue *value,
 void
 _gtk_border_image_pack (GValue             *value,
                         GtkStyleProperties *props,
-                        GtkStateFlags       state)
+                        GtkStateFlags       state,
+			GtkStylePropertyContext *context)
 {
   GtkBorderImage *image;
   cairo_pattern_t *source;
   GtkBorder *slice, *width;
   GtkCssBorderImageRepeat *repeat;
 
-  gtk_style_properties_get (props, state,
-                            "border-image-source", &source,
-                            "border-image-slice", &slice,
-                            "border-image-repeat", &repeat,
-                            "border-image-width", &width,
-                            NULL);
+  _gtk_style_properties_get (props, state, context,
+			     "border-image-source", &source,
+			     "border-image-slice", &slice,
+			     "border-image-repeat", &repeat,
+			     "border-image-width", &width,
+			     NULL);
 
   if (source == NULL)
     {

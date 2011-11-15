@@ -22,13 +22,30 @@
 
 #include "gtkstyleproperties.h"
 #include "gtkstylepropertyprivate.h"
+#include "gtkstylecontextprivate.h"
 
 G_BEGIN_DECLS
 
 const GValue * _gtk_style_properties_peek_property            (GtkStyleProperties      *props,
                                                                const gchar             *prop_name,
                                                                GtkStateFlags            state,
+							       GtkStylePropertyContext *context,
                                                                const GtkStyleProperty **property);
+void           _gtk_style_properties_get                      (GtkStyleProperties      *props,
+							       GtkStateFlags            state,
+							       GtkStylePropertyContext *context,
+							       ...);
+void           _gtk_style_properties_get_valist               (GtkStyleProperties      *props,
+							       GtkStateFlags            state,
+							       GtkStylePropertyContext *context,
+							       va_list                  args);
+
+const GValue * _gtk_style_properties_resolve_property         (GtkStyleProperties      *props,
+							       const gchar             *prop_name,
+							       GtkStateFlags            state,
+							       const GtkStyleProperty **property,
+							       GtkStylePropertyContext *context,
+							       GValue                  *value);
 
 void           _gtk_style_properties_set_property_by_property (GtkStyleProperties      *props,
                                                                const GtkStyleProperty  *property,

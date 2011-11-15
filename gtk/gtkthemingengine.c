@@ -450,6 +450,25 @@ gtk_theming_engine_get_valist (GtkThemingEngine *engine,
   gtk_style_context_get_valist (priv->context, state, args);
 }
 
+void
+_gtk_theming_engine_get (GtkThemingEngine *engine,
+			 GtkStateFlags     state,
+			 GtkStylePropertyContext *property_context,
+			 ...)
+{
+  GtkThemingEnginePrivate *priv;
+  va_list args;
+
+  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
+
+  priv = engine->priv;
+
+  va_start (args, property_context);
+  _gtk_style_context_get_valist (priv->context, state, property_context, args);
+  va_end (args);
+}
+
+
 /**
  * gtk_theming_engine_get:
  * @engine: a #GtkThemingEngine

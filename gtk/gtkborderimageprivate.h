@@ -29,6 +29,7 @@
 #include "gtkstyleproperties.h"
 #include "gtkthemingengine.h"
 #include "gtkcsstypesprivate.h"
+#include "gtkstylecontextprivate.h"
 
 G_BEGIN_DECLS
 
@@ -63,7 +64,8 @@ GParameter *      _gtk_border_image_unpack           (const GValue         *valu
                                                       guint                *n_params);
 void              _gtk_border_image_pack             (GValue               *value,
                                                       GtkStyleProperties   *props,
-                                                      GtkStateFlags         state);
+                                                      GtkStateFlags         state,
+						      GtkStylePropertyContext *context);
 
 G_END_DECLS
 
