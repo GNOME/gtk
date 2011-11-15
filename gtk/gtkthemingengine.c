@@ -1407,16 +1407,20 @@ render_background_internal (GtkThemingEngine *engine,
   GtkRoundedBox border_box;
   GtkShadow *box_shadow;
   GtkBorder border;
+  GtkStylePropertyContext context;
 
   flags = gtk_theming_engine_get_state (engine);
 
   gtk_theming_engine_get_background_color (engine, flags, &bg_color);
 
-  gtk_theming_engine_get (engine, flags,
-                          "background-image", &pattern,
-                          "background-repeat", &repeat,
-                          "box-shadow", &box_shadow,
-                          NULL);
+  context.width = width;
+  context.height = height;
+
+  _gtk_theming_engine_get (engine, flags, &context, 
+			   "background-image", &pattern,
+			   "background-repeat", &repeat,
+			   "box-shadow", &box_shadow,
+			   NULL);
 
   cairo_save (cr);
   cairo_translate (cr, x, y);
@@ -1870,15 +1874,19 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
   GtkJunctionSides junction;
   GtkBorderImage *border_image;
   GtkBorder border;
+  GtkStylePropertyContext context;
 
   flags = gtk_theming_engine_get_state (engine);
   junction = gtk_theming_engine_get_junction_sides (engine);
   gtk_theming_engine_get_border (engine, flags, &border);
 
-  gtk_theming_engine_get (engine, flags,
-                          "border-image", &border_image,
-                          "border-style", &border_style,
-                          NULL);
+  context.width = width;
+  context.height = height;
+
+  _gtk_theming_engine_get (engine, flags, &context,
+			   "border-image", &border_image,
+			   "border-style", &border_style,
+			   NULL);
 
   if (border_image != NULL)
     {
