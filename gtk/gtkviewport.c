@@ -82,7 +82,6 @@ enum {
 };
 
 
-static void gtk_viewport_finalize                 (GObject          *object);
 static void gtk_viewport_set_property             (GObject         *object,
 						   guint            prop_id,
 						   const GValue    *value,
@@ -126,7 +125,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  gobject_class->finalize = gtk_viewport_finalize;
   gobject_class->set_property = gtk_viewport_set_property;
   gobject_class->get_property = gtk_viewport_get_property;
 
@@ -291,17 +289,6 @@ viewport_disconnect_adjustment (GtkViewport    *viewport,
       g_object_unref (*adjustmentp);
       *adjustmentp = NULL;
     }
-}
-
-static void
-gtk_viewport_finalize (GObject *object)
-{
-  GtkViewport *viewport = GTK_VIEWPORT (object);
-
-  viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL);
-  viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_VERTICAL);
-
-  G_OBJECT_CLASS (gtk_viewport_parent_class)->finalize (object);
 }
 
 static void
