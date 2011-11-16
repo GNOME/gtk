@@ -36,6 +36,18 @@ test_one_accel (const char *accel,
 				      &mods);
 
   if (has_keysym)
+    {
+      guint accel_key_2;
+      GdkModifierType mods_2;
+
+      gtk_accelerator_parse (accel,
+                             &accel_key_2,
+                             &mods_2);
+      g_assert (accel_key == accel_key_2);
+      g_assert (mods == mods_2);
+    }
+
+  if (has_keysym)
     g_assert (accel_key != 0);
   g_assert (keycodes);
   g_assert (keycodes[0] != 0);
