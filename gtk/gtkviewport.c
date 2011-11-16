@@ -175,10 +175,10 @@ gtk_viewport_set_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_HADJUSTMENT:
-      gtk_viewport_set_hadjustment (viewport, g_value_get_object (value));
+      viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, g_value_get_object (value));
       break;
     case PROP_VADJUSTMENT:
-      gtk_viewport_set_vadjustment (viewport, g_value_get_object (value));
+      viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, g_value_get_object (value));
       break;
     case PROP_HSCROLL_POLICY:
       viewport->priv->hscroll_policy = g_value_get_enum (value);
