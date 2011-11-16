@@ -80,8 +80,6 @@ static void             set_iter_nth_row                (GtkTreeView            
                                                          gint                   row);
 static gint             get_row_from_tree_path          (GtkTreeView            *tree_view,
                                                          GtkTreePath            *path);
-static GtkTreeViewColumn* get_column                    (GtkTreeView            *tree_view,
-                                                         gint                   in_col);
 static void             iterate_thru_children           (GtkTreeView            *tree_view,
                                                          GtkTreeModel           *tree_model,
                                                          GtkTreePath            *tree_path,
@@ -536,6 +534,28 @@ gtk_tree_view_accessible_get_n_children (AtkObject *obj)
   return (get_n_rows (tree_view) + 1) * get_n_columns (tree_view);
 }
 
+static GtkTreeViewColumn *
+get_visible_column (GtkTreeView *tree_view,
+                    guint        id)
+{
+  guint i;
+
+  for (i = 0; i < gtk_tree_view_get_n_columns (tree_view); i++)
+    {
+      GtkTreeViewColumn *column = gtk_tree_view_get_column (tree_view, i);
+
+      if (!gtk_tree_view_column_get_visible (column))
+        continue;
+
+      if (id == 0)
+        return column;
+
+      id--;
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
 static AtkObject *
 gtk_tree_view_accessible_ref_child (AtkObject *obj,
                                     gint       i)
@@ -574,7 +594,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   tree_view = GTK_TREE_VIEW (widget);
   if (i < get_n_columns (tree_view))
     {
-      tv_col = gtk_tree_view_get_column (tree_view, i);
+      tv_col = get_visible_column (tree_view, i);
       child = get_header_from_column (tv_col);
       if (child)
         g_object_ref (child);
@@ -1201,7 +1221,10 @@ gtk_tree_view_accessible_get_column_header (AtkTable *table,
     return NULL;
 
   tree_view = GTK_TREE_VIEW (widget);
-  tv_col = get_column (tree_view, in_col);
+  if (in_col < 0 || in_col >= get_n_columns (tree_view))
+    return NULL;
+
+  tv_col = get_visible_column (tree_view, in_col);
   return get_header_from_column (tv_col);
 }
 
@@ -1218,10 +1241,10 @@ gtk_tree_view_accessible_get_column_description (AtkTable *table,
     return NULL;
 
   tree_view = GTK_TREE_VIEW (widget);
-  tv_col = get_column (tree_view, in_col);
-  if (tv_col == NULL)
-     return NULL;
+  if (in_col < 0 || in_col >= get_n_columns (tree_view))
+    return NULL;
 
+  tv_col = get_visible_column (tree_view, in_col);
   return gtk_tree_view_column_get_title (tv_col);
 }
 
@@ -2438,42 +2461,6 @@ get_row_from_tree_path (GtkTreeView *tree_view,
 
 /* Misc Private */
 
-/*
- * Get the specified GtkTreeViewColumn in the GtkTreeView.
- * Only visible columns are considered.
- */
-static GtkTreeViewColumn *
-get_column (GtkTreeView *tree_view,
-            gint         in_col)
-{
-  GtkTreeViewColumn *tv_col;
-  gint n_cols = -1;
-  gint i = 0;
-
-  if (in_col < 0)
-    {
-       g_warning ("Request for invalid column %d\n", in_col);
-       return NULL;
-    }
-
-  tv_col = gtk_tree_view_get_column (tree_view, i);
-  while (tv_col != NULL)
-    {
-      if (gtk_tree_view_column_get_visible (tv_col))
-        n_cols++;
-      if (in_col == n_cols)
-        break;
-      tv_col = gtk_tree_view_get_column (tree_view, ++i);
-    }
-
-  if (in_col != n_cols)
-    {
-       g_warning ("Request for invalid column %d\n", in_col);
-       return NULL;
-    }
-  return tv_col;
-}
-
 /* Helper recursive function that returns an iter to nth row
  */
 static GtkTreeIter *
@@ -3022,7 +3009,7 @@ find_cell (GtkTreeViewAccessible *accessible,
     {
       g_assert_not_reached ();
     }
-  lookup.cell_col_ref = gtk_tree_view_get_column (tree_view, index % get_n_columns (tree_view));
+  lookup.cell_col_ref = get_visible_column (tree_view, index % get_n_columns (tree_view));
 
   cell_info = g_hash_table_lookup (accessible->cell_infos, &lookup);
   if (cell_info == NULL)
@@ -3215,7 +3202,7 @@ get_rbtree_column_from_index (GtkTreeView        *tree_view,
 
   if (column)
     {
-      *column = gtk_tree_view_get_column (tree_view, index % n_columns);
+      *column = get_visible_column (tree_view, index % n_columns);
       if (*column == NULL)
         return FALSE;
   }
