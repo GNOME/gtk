@@ -137,7 +137,7 @@ populate_list (GtkBuilder *builder)
   tv = (GtkTreeView *)gtk_builder_get_object (builder, "treeview1");
   store = (GtkListStore *)gtk_tree_view_get_model (tv);
 
-  /* append a thousand rows */
+  /* append a many rows */
   for (i = 0; i < N_ROWS; i++)
     {
       gtk_list_store_append (store, &iter);
