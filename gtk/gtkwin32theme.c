@@ -365,3 +365,74 @@ _gtk_win32_theme_part_render  (GtkWin32ThemePart  *part,
   return cairo_pattern_create_rgb (color.red, color.green, color.blue);
 #endif
 }
+
+int
+_gtk_win32_theme_int_parse (GtkCssParser      *parser,
+			    GFile             *base,
+			    int               *value)
+{
+  char *class;
+  int arg;
+
+  if (_gtk_css_parser_try (parser,
+			   "-gtk-win32-size",
+			   TRUE))
+    {
+      if (!_gtk_css_parser_try (parser, "(", TRUE))
+	{
+	  _gtk_css_parser_error (parser,
+				 "Expected '(' after '-gtk-win32-size'");
+	  return 0;
+	}
+
+      class = _gtk_css_parser_try_name (parser, TRUE);
+      if (class == NULL)
+	{
+	  _gtk_css_parser_error (parser,
+				 "Expected name as first argument to  '-gtk-win32-size'");
+	  return 0;
+	}
+
+      if (! _gtk_css_parser_try (parser, ",", TRUE))
+	{
+	  g_free (class);
+	  _gtk_css_parser_error (parser,
+				 "Expected ','");
+	  return 0;
+	}
+
+      if (!_gtk_css_parser_try_int (parser, &arg))
+	{
+	  g_free (class);
+	  _gtk_css_parser_error (parser, "Expected a valid integer value");
+	  return 0;
+	}
+
+      if (!_gtk_css_parser_try (parser, ")", TRUE))
+	{
+	  _gtk_css_parser_error (parser,
+				 "Expected ')'");
+	  return 0;
+	}
+
+#ifdef G_OS_WIN32
+      if (use_xp_theme && get_theme_sys_metric != NULL)
+	{
+	  HTHEME theme = lookup_htheme_by_classname (class);
+
+	  /* If theme is NULL it will just return the GetSystemMetrics value */
+	  *value = get_theme_sys_metric (theme, arg);
+	}
+      else
+	*value = GetSystemMetrics (arg);
+#else
+      *value = 1;
+#endif
+
+      g_free (class);
+
+      return 1;
+    }
+
+  return -1;
+}

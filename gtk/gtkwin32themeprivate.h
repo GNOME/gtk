@@ -42,6 +42,9 @@ int                _gtk_win32_theme_part_parse     (GtkCssParser      *parser,
 cairo_pattern_t   *_gtk_win32_theme_part_render   (GtkWin32ThemePart  *part,
 						   int                 width,
 						   int                 height);
+int                _gtk_win32_theme_int_parse     (GtkCssParser      *parser,
+						   GFile             *base,
+						   int               *value);
 
 G_END_DECLS
 

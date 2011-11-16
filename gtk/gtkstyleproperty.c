@@ -385,6 +385,17 @@ int_value_parse (GtkCssParser *parser,
 {
   gint i;
 
+  if (_gtk_css_parser_begins_with (parser, '-'))
+    {
+      int res = _gtk_win32_theme_int_parse (parser, base, &i);
+      if (res >= 0)
+	{
+	  g_value_set_int (value, i);
+	  return res > 0;
+	}
+      /* < 0 => continue */
+    }
+
   if (!_gtk_css_parser_try_int (parser, &i))
     {
       _gtk_css_parser_error (parser, "Expected a valid integer value");
@@ -589,11 +600,26 @@ border_value_parse (GtkCssParser *parser,
 
   for (i = 0; i < G_N_ELEMENTS (numbers); i++)
     {
-      if (!_gtk_css_parser_try_uint (parser, &numbers[i]))
-        break;
+      if (_gtk_css_parser_begins_with (parser, '-'))
+	{
+	  /* These are strictly speaking signed, but we want to be able to use them
+	     for unsigned types too, as the actual ranges of values make this safe */
+	  int res = _gtk_win32_theme_int_parse (parser, base, (int *)&numbers[i]);
 
-      /* XXX: shouldn't allow spaces here? */
-      _gtk_css_parser_try (parser, "px", TRUE);
+	  if (res == 0) /* Parse error, report */
+	    return FALSE;
+
+	  if (res < 0) /* Nothing known to expand */
+	    break;
+	}
+      else
+	{
+	  if (!_gtk_css_parser_try_uint (parser, &numbers[i]))
+	    break;
+
+	  /* XXX: shouldn't allow spaces here? */
+	  _gtk_css_parser_try (parser, "px", TRUE);
+	}
     }
 
   if (i == 0)
