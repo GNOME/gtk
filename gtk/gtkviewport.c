@@ -362,16 +362,9 @@ viewport_get_view_allocation (GtkViewport   *viewport,
 GtkAdjustment*
 gtk_viewport_get_hadjustment (GtkViewport *viewport)
 {
-  GtkViewportPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), NULL);
 
-  priv = viewport->priv;
-
-  if (!priv->hadjustment)
-    gtk_viewport_set_hadjustment (viewport, NULL);
-
-  return priv->hadjustment;
+  return viewport->priv->hadjustment;
 }
 
 /**
@@ -387,16 +380,9 @@ gtk_viewport_get_hadjustment (GtkViewport *viewport)
 GtkAdjustment*
 gtk_viewport_get_vadjustment (GtkViewport *viewport)
 {
-  GtkViewportPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), NULL);
 
-  priv = viewport->priv;
-
-  if (!priv->vadjustment)
-    gtk_viewport_set_vadjustment (viewport, NULL);
-
-  return priv->vadjustment;
+  return viewport->priv->vadjustment;
 }
 
 static void
