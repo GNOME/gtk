@@ -110,6 +110,9 @@ static void gtk_viewport_get_preferred_height     (GtkWidget        *widget,
 						   gint             *minimum_size,
 						   gint             *natural_size);
 
+static void viewport_set_adjustment               (GtkViewport      *viewport,
+                                                   GtkOrientation    orientation,
+                                                   GtkAdjustment    *adjustment);
 
 G_DEFINE_TYPE_WITH_CODE (GtkViewport, gtk_viewport, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
@@ -246,6 +249,9 @@ gtk_viewport_init (GtkViewport *viewport)
   priv->bin_window = NULL;
   priv->hadjustment = NULL;
   priv->vadjustment = NULL;
+
+  viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, NULL);
+  viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, NULL);
 }
 
 /**
