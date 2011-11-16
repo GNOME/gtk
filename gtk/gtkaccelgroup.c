@@ -1380,9 +1380,17 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
                 {
                   *accelerator_codes = g_new0 (guint, n_keys + 1);
 
+                  /* Prefer level-0 keys to modified keys */
                   for (i = 0, j = 0; i < n_keys; ++i)
                     {
                       if (keys[i].level == 0)
+                        (*accelerator_codes)[j++] = keys[i].keycode;
+                    }
+
+                  /* No level-0 keys? Find in the whole keymap */
+                  if (j == 0)
+                    {
+                      for (i = 0, j = 0; i < n_keys; ++i)
                         (*accelerator_codes)[j++] = keys[i].keycode;
                     }
 
