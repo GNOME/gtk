@@ -2181,6 +2181,21 @@ gtk_tree_view_map (GtkWidget *widget)
 }
 
 static void
+gtk_tree_view_ensure_background (GtkTreeView *tree_view)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+  gtk_style_context_set_background (context, tree_view->priv->bin_window);
+  gtk_style_context_restore (context);
+
+  gtk_style_context_set_background (context, tree_view->priv->header_window);
+}
+
+static void
 gtk_tree_view_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
