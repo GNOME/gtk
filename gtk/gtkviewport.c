@@ -390,7 +390,7 @@ viewport_set_hadjustment_values (GtkViewport *viewport)
 {
   GtkBin *bin = GTK_BIN (viewport);
   GtkAllocation view_allocation;
-  GtkAdjustment *hadjustment = gtk_viewport_get_hadjustment (viewport);
+  GtkAdjustment *hadjustment = viewport->priv->hadjustment;
   GtkWidget *child;
   gdouble upper, value;
   
@@ -444,7 +444,7 @@ viewport_set_vadjustment_values (GtkViewport *viewport)
 {
   GtkBin *bin = GTK_BIN (viewport);
   GtkAllocation view_allocation;
-  GtkAdjustment *vadjustment = gtk_viewport_get_vadjustment (viewport);
+  GtkAdjustment *vadjustment = viewport->priv->vadjustment;
   GtkWidget *child;
   gdouble upper;
 
@@ -650,8 +650,8 @@ gtk_viewport_realize (GtkWidget *widget)
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = viewport->priv;
   GtkBin *bin = GTK_BIN (widget);
-  GtkAdjustment *hadjustment = gtk_viewport_get_hadjustment (viewport);
-  GtkAdjustment *vadjustment = gtk_viewport_get_vadjustment (viewport);
+  GtkAdjustment *hadjustment = priv->hadjustment;
+  GtkAdjustment *vadjustment = priv->vadjustment;
   GtkAllocation allocation;
   GtkAllocation view_allocation;
   GtkStyleContext *context;
@@ -814,8 +814,8 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   GtkViewportPrivate *priv = viewport->priv;
   GtkBin *bin = GTK_BIN (widget);
   guint border_width;
-  GtkAdjustment *hadjustment = gtk_viewport_get_hadjustment (viewport);
-  GtkAdjustment *vadjustment = gtk_viewport_get_vadjustment (viewport);
+  GtkAdjustment *hadjustment = priv->hadjustment;
+  GtkAdjustment *vadjustment = priv->vadjustment;
   GtkAllocation child_allocation;
   GtkWidget *child;
 
@@ -887,8 +887,8 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
   if (child && gtk_widget_get_visible (child) &&
       gtk_widget_get_realized (GTK_WIDGET (viewport)))
     {
-      GtkAdjustment *hadjustment = gtk_viewport_get_hadjustment (viewport);
-      GtkAdjustment *vadjustment = gtk_viewport_get_vadjustment (viewport);
+      GtkAdjustment *hadjustment = priv->hadjustment;
+      GtkAdjustment *vadjustment = priv->vadjustment;
       gint old_x, old_y;
       gint new_x, new_y;
 
