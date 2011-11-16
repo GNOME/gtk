@@ -2185,7 +2185,7 @@ gtk_tree_view_ensure_background (GtkTreeView *tree_view)
 {
   GtkStyleContext *context;
 
-  context = gtk_widget_get_style_context (widget);
+  context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
 
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
