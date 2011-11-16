@@ -2198,7 +2198,6 @@ static void
 gtk_tree_view_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
-  GtkStyleContext *context;
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GdkWindow *window;
   GdkWindowAttr attributes;
@@ -2267,14 +2266,7 @@ gtk_tree_view_realize (GtkWidget *widget)
 						   &attributes, attributes_mask);
   gdk_window_set_user_data (tree_view->priv->header_window, widget);
 
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
-  gtk_style_context_set_background (context, tree_view->priv->bin_window);
-  gtk_style_context_restore (context);
-
-  gtk_style_context_set_background (context, tree_view->priv->header_window);
+  gtk_tree_view_ensure_background (tree_view);
 
   tmp_list = tree_view->priv->children;
   while (tmp_list)
@@ -8460,16 +8452,7 @@ gtk_tree_view_style_updated (GtkWidget *widget)
 
   if (gtk_widget_get_realized (widget))
     {
-      GtkStyleContext *context;
-
-      context = gtk_widget_get_style_context (widget);
-
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
-      gtk_style_context_set_background (context, tree_view->priv->bin_window);
-      gtk_style_context_restore (context);
-
-      gtk_style_context_set_background (context, tree_view->priv->header_window);
+      gtk_tree_view_ensure_background (tree_view);
 
       gtk_tree_view_set_grid_lines (tree_view, tree_view->priv->grid_lines);
       gtk_tree_view_set_enable_tree_lines (tree_view, tree_view->priv->tree_lines_enabled);
@@ -15840,13 +15823,7 @@ gtk_tree_view_state_flags_changed (GtkWidget     *widget,
                                    GtkStateFlags  previous_state)
 {
   if (gtk_widget_get_realized (widget))
-    {
-      GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-      GtkStyleContext *context;
-
-      context = gtk_widget_get_style_context (widget);
-      gtk_style_context_set_background (context, tree_view->priv->bin_window);
-    }
+    gtk_tree_view_ensure_background (GTK_TREE_VIEW (widget));
 
   gtk_widget_queue_draw (widget);
 }
