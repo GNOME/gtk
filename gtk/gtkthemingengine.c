@@ -183,6 +183,14 @@ static void gtk_theming_engine_render_icon (GtkThemingEngine *engine,
 					    GdkPixbuf *pixbuf,
                                             gdouble x,
                                             gdouble y);
+static void render_background_internal (GtkThemingEngine *engine,
+					cairo_t          *cr,
+					gdouble           x,
+					gdouble           y,
+					gdouble           width,
+					gdouble           height,
+					GtkJunctionSides  junction,
+					cairo_pattern_t  *optional_background);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -1085,6 +1093,8 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   GtkBorderStyle border_style;
   GtkBorder border;
   gint border_width;
+  GtkStylePropertyContext context;
+  cairo_pattern_t *pattern;
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
@@ -1093,9 +1103,22 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   gtk_theming_engine_get_background_color (engine, flags, &bg_color);
   gtk_theming_engine_get_border (engine, flags, &border);
 
-  gtk_theming_engine_get (engine, flags,
-                          "border-style", &border_style,
-                          NULL);
+  context.width = width;
+  context.height = height;
+
+  _gtk_theming_engine_get (engine, flags, &context,
+			   "background-image", &pattern,
+			   "border-style", &border_style,
+			   NULL);
+
+  if (pattern != NULL)
+    {
+      render_background_internal (engine, cr, x, y, width, height, 
+				  gtk_theming_engine_get_junction_sides (engine), pattern);
+      cairo_restore (cr);
+      cairo_pattern_destroy (pattern);
+      return;
+    }
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
@@ -1205,6 +1228,8 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   gint exterior_size, interior_size, pad, thickness, border_width;
   GtkBorderStyle border_style;
   GtkBorder border;
+  GtkStylePropertyContext context;
+  cairo_pattern_t *pattern;
 
   flags = gtk_theming_engine_get_state (engine);
 
@@ -1214,9 +1239,22 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   gtk_theming_engine_get_background_color (engine, flags, &bg_color);
   gtk_theming_engine_get_border (engine, flags, &border);
 
-  gtk_theming_engine_get (engine, flags,
-                          "border-style", &border_style,
-                          NULL);
+  context.width = width;
+  context.height = height;
+
+  _gtk_theming_engine_get (engine, flags, &context,
+			   "background-image", &pattern,
+			   "border-style", &border_style,
+			   NULL);
+
+  if (pattern != NULL)
+    {
+      render_background_internal (engine, cr, x, y, width, height, 
+				  gtk_theming_engine_get_junction_sides (engine), pattern);
+      cairo_restore (cr);
+      cairo_pattern_destroy (pattern);
+      return;
+    }
 
   exterior_size = MIN (width, height);
   border_width = MIN (MIN (border.top, border.bottom),
@@ -1389,6 +1427,9 @@ color_shade (const GdkRGBA *color,
   gtk_symbolic_color_unref (shade);
 }
 
+/* optional_background is the background-image, in case it was
+   already availible we avoid getting it (and thus possibly
+   rendering it) twice */
 static void
 render_background_internal (GtkThemingEngine *engine,
                             cairo_t          *cr,
@@ -1396,7 +1437,8 @@ render_background_internal (GtkThemingEngine *engine,
                             gdouble           y,
                             gdouble           width,
                             gdouble           height,
-                            GtkJunctionSides  junction)
+                            GtkJunctionSides  junction,
+			    cairo_pattern_t  *optional_background)
 {
   GdkRGBA bg_color;
   cairo_pattern_t *pattern;
@@ -1416,8 +1458,14 @@ render_background_internal (GtkThemingEngine *engine,
   context.width = width;
   context.height = height;
 
+  if (optional_background)
+    pattern = cairo_pattern_reference (optional_background);
+  else
+    _gtk_theming_engine_get (engine, flags, &context, 
+			     "background-image", &pattern,
+			     NULL);
+
   _gtk_theming_engine_get (engine, flags, &context, 
-			   "background-image", &pattern,
 			   "background-repeat", &repeat,
 			   "box-shadow", &box_shadow,
 			   NULL);
@@ -1450,9 +1498,9 @@ render_background_internal (GtkThemingEngine *engine,
         other_flags = flags | GTK_STATE_FLAG_PRELIGHT;
 
       gtk_theming_engine_get_background_color (engine, other_flags, &other_bg);
-      gtk_theming_engine_get (engine, other_flags,
-                              "background-image", &other_pattern,
-                              NULL);
+      _gtk_theming_engine_get (engine, other_flags, &context,
+			       "background-image", &other_pattern,
+			       NULL);
 
       if (pattern && other_pattern)
         {
@@ -1688,7 +1736,7 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
 
   render_background_internal (engine, cr,
                               x, y, width, height,
-                              junction);
+                              junction, NULL);
 }
 
 static void
@@ -2396,11 +2444,11 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
       gap_side == GTK_POS_BOTTOM)
     render_background_internal (engine, cr,
                                 0, 0, width, height,
-                                GTK_JUNCTION_BOTTOM);
+                                GTK_JUNCTION_BOTTOM, NULL);
   else
     render_background_internal (engine, cr,
                                 0, 0, height, width,
-                                GTK_JUNCTION_BOTTOM);
+                                GTK_JUNCTION_BOTTOM, NULL);
   cairo_restore (cr);
 
   cairo_save (cr);
@@ -2466,7 +2514,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   color_shade (&bg_color, 0.7, &darker);
   color_shade (&bg_color, 1.3, &lighter);
 
-  render_background_internal (engine, cr, x, y, width, height, sides);
+  render_background_internal (engine, cr, x, y, width, height, sides, NULL);
 
   if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_GRIP))
     {
