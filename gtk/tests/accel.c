@@ -71,10 +71,39 @@ test_one_accel (const char *accel,
 }
 
 static void
-accel (void)
+accel1 (void)
 {
   test_one_accel ("0xb3", "0xb3", FALSE);
+}
+
+static void
+accel2 (void)
+{
   test_one_accel ("<Primary><Alt>z", "Ctrl+Alt+Z", TRUE);
+}
+
+static void
+accel3 (void)
+{
+  test_one_accel ("KP_7", "7", TRUE);
+}
+
+static void
+accel4 (void)
+{
+  test_one_accel ("<Primary>KP_7", "Ctrl+7", TRUE);
+}
+
+static void
+accel5 (void)
+{
+  test_one_accel ("<Shift>exclam", "Shift+!", TRUE);
+}
+
+static void
+keysyms (void)
+{
+  g_assert (gdk_keyval_from_name ("KP_7") == GDK_KEY_KP_7);
 }
 
 int
@@ -84,6 +113,13 @@ main (int   argc,
   setlocale (LC_ALL, "en_GB.UTF-8");
 
   gtk_test_init (&argc, &argv);
-  g_test_add_func ("/accel", accel);
+
+  g_test_add_func ("/keysyms", keysyms);
+
+  g_test_add_func ("/accel1", accel1);
+  g_test_add_func ("/accel2", accel2);
+  g_test_add_func ("/accel3", accel3);
+  g_test_add_func ("/accel4", accel4);
+  g_test_add_func ("/accel5", accel5);
   return g_test_run();
 }
