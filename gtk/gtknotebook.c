@@ -1679,6 +1679,18 @@ gtk_notebook_destroy (GtkWidget *widget)
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
 
+  if (priv->action_widget[GTK_PACK_START])
+    {
+      gtk_widget_unparent (priv->action_widget[GTK_PACK_START]);
+      priv->action_widget[GTK_PACK_START] = NULL;
+    }
+
+  if (priv->action_widget[GTK_PACK_END])
+    {
+      gtk_widget_unparent (priv->action_widget[GTK_PACK_END]);
+      priv->action_widget[GTK_PACK_END] = NULL;
+    }
+
   if (priv->menu)
     gtk_notebook_popup_disable (notebook);
 
