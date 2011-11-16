@@ -83,8 +83,6 @@ static void             iterate_thru_children           (GtkTreeView            
                                                          gint                   depth);
 static int              cell_info_get_index             (GtkTreeView                     *tree_view,
                                                          GtkTreeViewAccessibleCellInfo   *info);
-static void             clean_cols                      (GtkTreeViewAccessible           *tree_view,
-                                                         GtkTreeViewColumn      *tv_col);
 static void             traverse_cells                  (GtkTreeViewAccessible           *tree_view,
                                                          GtkTreePath            *tree_path,
                                                          gboolean               inc_row);
@@ -2430,26 +2428,6 @@ iterate_thru_children (GtkTreeView  *tree_view,
   return;
 }
 
-static void
-clean_cols (GtkTreeViewAccessible *accessible,
-            GtkTreeViewColumn     *tv_col)
-{
-  GtkTreeViewAccessibleCellInfo *cell_info;
-  GHashTableIter iter;
-
-  /* Clean GtkTreeViewAccessibleCellInfo data */
-  g_hash_table_iter_init (&iter, accessible->cell_infos);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &cell_info))
-    {
-      /* If the cell has become invalid because the column tv_col
-       * has been removed, then set the cell's state to ATK_STATE_DEFUNCT
-       * and remove the cell from accessible->cell_data.
-       */
-      if (cell_info->cell_col_ref == tv_col)
-        g_hash_table_iter_remove (&iter);
-    }
-}
-
 /* If tree_path is passed in as NULL, then all cells are acted on.
  * Otherwise, just act on those cells that are on a row greater than
  * the specified tree_path. If inc_row is passed in as TRUE, then rows
@@ -3182,9 +3160,19 @@ _gtk_tree_view_accessible_do_remove_column (GtkTreeViewAccessible *accessible,
                                             GtkTreeViewColumn     *column,
                                             guint                  id)
 {
+  GtkTreeViewAccessibleCellInfo *cell_info;
+  GHashTableIter iter;
+  gpointer value;
   guint row, n_rows, n_cols;
 
-  clean_cols (accessible, column);
+  /* Clean column from cache */
+  g_hash_table_iter_init (&iter, accessible->cell_infos);
+  while (g_hash_table_iter_next (&iter, NULL, &value))
+    {
+      cell_info = value;
+      if (cell_info->cell_col_ref == column)
+        g_hash_table_iter_remove (&iter);
+    }
 
   /* Generate column-deleted signal */
   g_signal_emit_by_name (accessible, "column-deleted", id, 1);
