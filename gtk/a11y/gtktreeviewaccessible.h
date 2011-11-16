@@ -40,8 +40,6 @@ struct _GtkTreeViewAccessible
   GtkContainerAccessible parent;
 
   gint           n_children_deleted;
-  gint           n_cols;
-  GArray*        col_data;
   GHashTable    *cell_infos;
   GtkTreeModel  *tree_model;
   AtkObject     *focus_cell;
@@ -62,6 +60,18 @@ GType _gtk_tree_view_accessible_get_type (void);
 void            _gtk_tree_view_accessible_remove        (GtkTreeView       *treeview,
                                                          GtkRBTree         *tree,
                                                          GtkRBNode         *node);
+
+void            _gtk_tree_view_accessible_add_column    (GtkTreeView       *treeview,
+                                                         GtkTreeViewColumn *column,
+                                                         guint              id);
+void            _gtk_tree_view_accessible_remove_column (GtkTreeView       *treeview,
+                                                         GtkTreeViewColumn *column,
+                                                         guint              id);
+void            _gtk_tree_view_accessible_reorder_column(GtkTreeView       *treeview,
+                                                         GtkTreeViewColumn *column);
+void            _gtk_tree_view_accessible_toggle_visibility
+                                                        (GtkTreeView       *treeview,
+                                                         GtkTreeViewColumn *column);
 
 G_END_DECLS
 

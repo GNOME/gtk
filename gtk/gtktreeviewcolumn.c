@@ -37,6 +37,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtktreeviewaccessible.h"
 
 
 /**
@@ -1937,7 +1938,11 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
     _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
 
   if (priv->tree_view)
-    _gtk_tree_view_reset_header_styles (GTK_TREE_VIEW (priv->tree_view));
+    {
+      _gtk_tree_view_reset_header_styles (GTK_TREE_VIEW (priv->tree_view));
+      _gtk_tree_view_accessible_toggle_visibility (GTK_TREE_VIEW (priv->tree_view),
+                                                   tree_column);
+    }
 
   gtk_tree_view_column_update_button (tree_column);
   g_object_notify (G_OBJECT (tree_column), "visible");

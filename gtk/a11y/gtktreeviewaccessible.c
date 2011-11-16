@@ -58,16 +58,11 @@ static void     size_allocate_cb     (GtkWidget        *widget,
 static void     selection_changed_cb (GtkTreeSelection *selection,
                                       gpointer          data);
 
-static void     columns_changed      (GtkTreeView      *tree_view);
 static void     cursor_changed       (GtkTreeView      *tree_view,
                                       GtkTreeViewAccessible *accessible);
 static gboolean focus_in             (GtkWidget        *widget);
 static gboolean focus_out            (GtkWidget        *widget);
 
-static void     column_visibility_changed
-                                     (GObject          *object,
-                                      GParamSpec       *param,
-                                      gpointer          user_data);
 static void     destroy_count_func   (GtkTreeView      *tree_view,
                                       GtkTreePath      *path,
                                       gint              count,
@@ -263,14 +258,12 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   GtkTreeViewAccessible *accessible;
   GtkTreeView *tree_view;
   GtkTreeModel *tree_model;
-  GList *tv_cols, *tmp_list;
   GtkWidget *widget;
   GtkTreeSelection *selection;
 
   ATK_OBJECT_CLASS (_gtk_tree_view_accessible_parent_class)->initialize (obj, data);
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
-  accessible->col_data = NULL;
   accessible->focus_cell = NULL;
   accessible->old_hadj = NULL;
   accessible->old_vadj = NULL;
@@ -295,8 +288,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   g_signal_connect (selection, "changed",
                     G_CALLBACK (selection_changed_cb), obj);
 
-  g_signal_connect (tree_view, "columns-changed",
-                    G_CALLBACK (columns_changed), NULL);
   g_signal_connect (tree_view, "cursor-changed",
                     G_CALLBACK (cursor_changed), accessible);
   g_signal_connect (tree_view, "focus-in-event",
@@ -305,7 +296,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
                     G_CALLBACK (focus_out), NULL);
 
   accessible->tree_model = tree_model;
-  accessible->n_cols = 0;
   if (tree_model)
     {
       g_object_add_weak_pointer (G_OBJECT (accessible->tree_model), (gpointer *)&accessible->tree_model);
@@ -323,19 +313,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
                     G_CALLBACK (hadjustment_set_cb), accessible);
   g_signal_connect (widget, "notify::vadjustment",
                     G_CALLBACK (vadjustment_set_cb), accessible);
-
-  accessible->col_data = g_array_sized_new (FALSE, TRUE,
-                                            sizeof (GtkTreeViewColumn *), 0);
-
-  tv_cols = gtk_tree_view_get_columns (tree_view);
-  for (tmp_list = tv_cols; tmp_list; tmp_list = tmp_list->next)
-    {
-      accessible->n_cols++;
-      g_signal_connect (tmp_list->data, "notify::visible",
-                        G_CALLBACK (column_visibility_changed), tree_view);
-      g_array_append_val (accessible->col_data, tmp_list->data);
-    }
-  g_list_free (tv_cols);
 
   gtk_tree_view_set_destroy_count_func (tree_view,
                                         destroy_count_func,
@@ -356,17 +333,6 @@ gtk_tree_view_accessible_finalize (GObject *object)
 
   if (accessible->cell_infos)
     g_hash_table_destroy (accessible->cell_infos);
-
-  if (accessible->col_data)
-    {
-      GArray *array = accessible->col_data;
-
-     /* No need to free the contents of the array since it
-      * just contains pointers to the GtkTreeViewColumn
-      * objects that are in the GtkTreeView.
-      */
-      g_array_free (array, TRUE);
-    }
 
   G_OBJECT_CLASS (_gtk_tree_view_accessible_parent_class)->finalize (object);
 }
@@ -1768,126 +1734,6 @@ selection_changed_cb (GtkTreeSelection *selection,
 }
 
 static void
-columns_changed (GtkTreeView *tree_view)
-{
-  AtkObject *atk_obj;
-  GtkTreeViewAccessible *accessible;
-  GList *tv_cols, *tmp_list;
-  gboolean column_found;
-  gboolean move_found = FALSE;
-  gint column_count = 0;
-  gint i;
-
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET(tree_view));
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
-
-  /* This function must determine if the change is an add, delete
-   * or a move based upon its cache of TreeViewColumns in
-   * accessible->col_data
-   */
-  tv_cols = gtk_tree_view_get_columns (tree_view);
-  accessible->n_cols = g_list_length (tv_cols);
-
-  /* check for adds or moves */
-  for (tmp_list = tv_cols; tmp_list; tmp_list = tmp_list->next)
-    {
-      column_found = FALSE;
-
-      for (i = 0; i < accessible->col_data->len; i++)
-        {
-
-          if ((GtkTreeViewColumn *)tmp_list->data ==
-              (GtkTreeViewColumn *)g_array_index (accessible->col_data,
-               GtkTreeViewColumn *, i))
-            {
-              column_found = TRUE;
-
-              /* If the column isn't in the same position, a move happened */
-              if (!move_found && i != column_count)
-                {
-                  /* Just emit one column reordered signal when a move happens */
-                  g_signal_emit_by_name (atk_obj, "column-reordered");
-                  move_found = TRUE;
-                }
-
-              break;
-            }
-        }
-
-     /* If column_found is FALSE, then an insert happened for column
-      * number column_count
-      */
-      if (!column_found)
-        {
-          gint row;
-
-          /* Generate column-inserted signal */
-          g_signal_emit_by_name (atk_obj, "column-inserted", column_count, 1);
-
-          /* Generate children-changed signals */
-          for (row = 0; row < get_n_rows (tree_view); row++)
-            {
-             /* Pass NULL as the child object, i.e. 4th argument */
-              g_signal_emit_by_name (atk_obj, "children-changed::add",
-                                    ((row * accessible->n_cols) + column_count), NULL, NULL);
-            }
-        }
-
-      column_count++;
-    }
-
-  /* check for deletes */
-  for (i = 0; i < accessible->col_data->len; i++)
-    {
-      column_found = FALSE;
-
-      for (tmp_list = tv_cols; tmp_list; tmp_list = tmp_list->next)
-        {
-            if ((GtkTreeViewColumn *)tmp_list->data ==
-                (GtkTreeViewColumn *)g_array_index (accessible->col_data,
-                 GtkTreeViewColumn *, i))
-              {
-                column_found = TRUE;
-                break;
-              }
-        }
-
-       /* If column_found is FALSE, then a delete happened for column
-        * number i
-        */
-      if (!column_found)
-        {
-          gint row;
-
-          clean_cols (accessible,
-                      (GtkTreeViewColumn *)g_array_index (accessible->col_data,
-                      GtkTreeViewColumn *, i));
-
-          /* Generate column-deleted signal */
-          g_signal_emit_by_name (atk_obj, "column-deleted", i, 1);
-
-          /* Generate children-changed signals */
-          for (row = 0; row < get_n_rows (tree_view); row++)
-            {
-              /* Pass NULL as the child object, 4th argument */
-              g_signal_emit_by_name (atk_obj, "children-changed::remove",
-                                     ((row * accessible->n_cols) + column_count), NULL, NULL);
-            }
-        }
-    }
-
-  traverse_cells (accessible, NULL, FALSE);
-
-  /* rebuild the array */
-  g_array_free (accessible->col_data, TRUE);
-  accessible->col_data = g_array_sized_new (FALSE, TRUE, sizeof (GtkTreeViewColumn *), 0);
-
-  for (tmp_list = tv_cols; tmp_list; tmp_list = tmp_list->next)
-    g_array_append_val (accessible->col_data, tmp_list->data);
-  g_list_free (tv_cols);
-}
-
-static void
 cursor_changed (GtkTreeView           *tree_view,
                 GtkTreeViewAccessible *accessible)
 {
@@ -2001,53 +1847,6 @@ model_row_changed (GtkTreeModel *tree_model,
         }
     }
   g_signal_emit_by_name (accessible, "visible-data-changed");
-}
-
-static void
-column_visibility_changed (GObject    *object,
-                           GParamSpec *pspec,
-                           gpointer    user_data)
-{
-  if (g_strcmp0 (pspec->name, "visible") == 0)
-    {
-      /* A column has been made visible or invisible
-       * We update our cache of cells and emit model_changed signal
-       */
-      GtkTreeView *tree_view = (GtkTreeView *)user_data;
-      GtkTreeViewAccessible *accessible;
-      GtkTreeViewAccessibleCellInfo *cell_info;
-      GtkTreeViewColumn *this_col = GTK_TREE_VIEW_COLUMN (object);
-      GtkTreeViewColumn *tv_col;
-      GHashTableIter iter;
-
-      accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (tree_view))
-);
-      g_signal_emit_by_name (accessible, "model-changed");
-
-      g_hash_table_iter_init (&iter, accessible->cell_infos);
-      while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
-        {
-          tv_col = cell_info->cell_col_ref;
-          if (tv_col == this_col)
-            {
-              GtkTreePath *row_path;
-              row_path = cell_info_get_path (cell_info);
-              if (GTK_IS_RENDERER_CELL_ACCESSIBLE (cell_info->cell))
-                {
-                  if (gtk_tree_view_column_get_visible (tv_col))
-                      set_cell_visibility (tree_view,
-                                           cell_info->cell,
-                                           tv_col, row_path, FALSE);
-                  else
-                    {
-                      _gtk_cell_accessible_remove_state (cell_info->cell, ATK_STATE_VISIBLE, TRUE);
-                      _gtk_cell_accessible_remove_state (cell_info->cell, ATK_STATE_SHOWING, TRUE);
-                    }
-                }
-              gtk_tree_path_free (row_path);
-            }
-        }
-    }
 }
 
 static void
@@ -3053,37 +2852,33 @@ disconnect_model_signals (GtkTreeViewAccessible *accessible)
 }
 
 /* Returns the column number of the specified GtkTreeViewColumn
- *
- * If visible is set, the value returned will be the visible column number,
- * i.e. suitable for use in AtkTable function. If visible is not set, the
- * value returned is the actual column number, which is suitable for use in
- * getting an index value.
+ * The column must be visible.
  */
 static gint
-get_column_number (GtkTreeView       *tree_view,
+get_column_number (GtkTreeView       *treeview,
                    GtkTreeViewColumn *column)
 {
-  GtkTreeViewColumn *tv_column;
-  gint ret_val;
-  gint i;
-  AtkObject *atk_obj;
-  GtkTreeViewAccessible *accessible;
+  GtkTreeViewColumn *cur;
+  guint i, number;
 
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
+  number = 0;
 
-  ret_val = 0;
-  for (i = 0; i < accessible->col_data->len; i++)
+  for (i = 0; i < gtk_tree_view_get_n_columns (treeview); i++)
     {
-      tv_column = g_array_index (accessible->col_data, GtkTreeViewColumn *, i);
-      if (tv_column == column)
-        break;
-      ret_val++;
-    }
-  if (i == accessible->col_data->len)
-    ret_val = -1;
+      cur = gtk_tree_view_get_column (treeview, i);
+      
+      if (!gtk_tree_view_column_get_visible (cur))
+        continue;
 
-  return ret_val;
+      if (cur == column)
+        break;
+
+      number++;
+    }
+
+  g_return_val_if_fail (i < gtk_tree_view_get_n_columns (treeview), 0);
+
+  return number;
 }
 
 static gint
@@ -3314,3 +3109,156 @@ _gtk_tree_view_accessible_remove (GtkTreeView *treeview,
     }
 }
 
+/* NB: id is not checked, only columns < id are.
+ * This is important so the function works for notification of removal of a column */
+guint
+to_visible_column_id (GtkTreeView *treeview,
+                      guint        id)
+{
+  guint i;
+  guint invisible;
+
+  invisible = 0;
+
+  for (i = 0; i < id; i++)
+    {
+      GtkTreeViewColumn *column = gtk_tree_view_get_column (treeview, i);
+
+      if (!gtk_tree_view_column_get_visible (column))
+        invisible++;
+    }
+
+  return id - invisible;
+}
+
+void
+_gtk_tree_view_accessible_do_add_column (GtkTreeViewAccessible *accessible,
+                                         GtkTreeView           *treeview,
+                                         GtkTreeViewColumn     *column,
+                                         guint                  id)
+{
+  guint row, n_rows, n_cols;
+
+  /* Generate column-inserted signal */
+  g_signal_emit_by_name (accessible, "column-inserted", id, 1);
+
+  n_rows = get_n_rows (treeview);
+  n_cols = get_n_columns (treeview);
+
+  /* Generate children-changed signals */
+  for (row = 0; row <= n_rows; row++)
+    {
+     /* Pass NULL as the child object, i.e. 4th argument */
+      g_signal_emit_by_name (accessible, "children-changed::add",
+                             (row * n_cols) + id, NULL, NULL);
+    }
+
+  traverse_cells (accessible, NULL, FALSE);
+}
+
+void
+_gtk_tree_view_accessible_add_column (GtkTreeView       *treeview,
+                                      GtkTreeViewColumn *column,
+                                      guint              id)
+{
+  AtkObject *obj;
+
+  if (!gtk_tree_view_column_get_visible (column))
+    return;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (treeview));
+  if (obj == NULL)
+    return;
+
+  _gtk_tree_view_accessible_do_add_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                           treeview,
+                                           column,
+                                           to_visible_column_id (treeview, id));
+}
+
+void
+_gtk_tree_view_accessible_do_remove_column (GtkTreeViewAccessible *accessible,
+                                            GtkTreeView           *treeview,
+                                            GtkTreeViewColumn     *column,
+                                            guint                  id)
+{
+  guint row, n_rows, n_cols;
+
+  clean_cols (accessible, column);
+
+  /* Generate column-deleted signal */
+  g_signal_emit_by_name (accessible, "column-deleted", id, 1);
+
+  n_rows = get_n_rows (treeview);
+  n_cols = get_n_columns (treeview);
+
+  /* Generate children-changed signals */
+  for (row = 0; row <= n_rows; row++)
+    {
+      /* Pass NULL as the child object, 4th argument */
+      g_signal_emit_by_name (accessible, "children-changed::remove",
+                             (row * n_cols) + id, NULL, NULL);
+    }
+
+  traverse_cells (accessible, NULL, FALSE);
+}
+
+void
+_gtk_tree_view_accessible_remove_column (GtkTreeView       *treeview,
+                                         GtkTreeViewColumn *column,
+                                         guint              id)
+{
+  AtkObject *obj;
+
+  if (!gtk_tree_view_column_get_visible (column))
+    return;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (treeview));
+  if (obj == NULL)
+    return;
+
+  _gtk_tree_view_accessible_do_remove_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                              treeview,
+                                              column,
+                                              to_visible_column_id (treeview, id));
+}
+
+void
+_gtk_tree_view_accessible_reorder_column (GtkTreeView       *treeview,
+                                          GtkTreeViewColumn *column)
+{
+  AtkObject *obj;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (treeview));
+  if (obj == NULL)
+    return;
+
+  g_signal_emit_by_name (obj, "column-reordered");
+
+  traverse_cells (GTK_TREE_VIEW_ACCESSIBLE (obj), NULL, FALSE);
+}
+
+void
+_gtk_tree_view_accessible_toggle_visibility (GtkTreeView       *treeview,
+                                             GtkTreeViewColumn *column)
+{
+  AtkObject *obj;
+  guint id;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (treeview));
+  if (obj == NULL)
+    return;
+
+  id = get_column_number (treeview, column);
+
+  if (gtk_tree_view_column_get_visible (column))
+    _gtk_tree_view_accessible_do_add_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                             treeview,
+                                             column,
+                                             id);
+  else
+    _gtk_tree_view_accessible_do_remove_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                                treeview,
+                                                column,
+                                                id);
+}

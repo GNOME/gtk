@@ -11922,6 +11922,8 @@ gint
 gtk_tree_view_remove_column (GtkTreeView       *tree_view,
                              GtkTreeViewColumn *column)
 {
+  guint position;
+
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), -1);
   g_return_val_if_fail (gtk_tree_view_column_get_tree_view (column) == GTK_WIDGET (tree_view), -1);
@@ -11945,6 +11947,8 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
                                         tree_view);
 
   _gtk_tree_view_column_unset_tree_view (column);
+
+  position = g_list_index (tree_view->priv->columns, column);
 
   tree_view->priv->columns = g_list_remove (tree_view->priv->columns, column);
   tree_view->priv->n_columns--;
@@ -11971,6 +11975,8 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
     }
 
   _gtk_tree_view_reset_header_styles (tree_view);
+
+  _gtk_tree_view_accessible_remove_column (tree_view, column, position);
 
   g_object_unref (column);
   g_signal_emit (tree_view, tree_view_signals[COLUMNS_CHANGED], 0);
@@ -12003,6 +12009,9 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
   if (tree_view->priv->fixed_height_mode)
     g_return_val_if_fail (gtk_tree_view_column_get_sizing (column)
                           == GTK_TREE_VIEW_COLUMN_FIXED, -1);
+
+  if (position < 0 || position > tree_view->priv->n_columns)
+    position = tree_view->priv->n_columns;
 
   g_object_ref_sink (column);
 
@@ -12038,6 +12047,9 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
     }
 
   _gtk_tree_view_reset_header_styles (tree_view);
+
+  _gtk_tree_view_accessible_add_column (tree_view, column, position);
+
   g_signal_emit (tree_view, tree_view_signals[COLUMNS_CHANGED], 0);
 
   return tree_view->priv->n_columns;
@@ -12254,6 +12266,9 @@ gtk_tree_view_move_column_after (GtkTreeView       *tree_view,
     }
 
   _gtk_tree_view_reset_header_styles (tree_view);
+
+  _gtk_tree_view_accessible_reorder_column (tree_view, column);
+
   g_signal_emit (tree_view, tree_view_signals[COLUMNS_CHANGED], 0);
 }
 
