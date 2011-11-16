@@ -66,12 +66,6 @@ struct _GtkRBNode
 {
   guint flags : 14;
 
-  /* count the number of total nodes beneath us, including nodes
-   * of children trees.
-   * i.e. node->left->count + node->right->count + node->children->root->count + 1
-   */
-  guint parity;
-  
   GtkRBNode *left;
   GtkRBNode *right;
   GtkRBNode *parent;
@@ -80,6 +74,11 @@ struct _GtkRBNode
    * i.e. node->left->count + node->right->count + 1
    */
   gint count;
+  /* count the number of total nodes beneath us, including nodes
+   * of children trees.
+   * i.e. node->left->count + node->right->count + node->children->root->count + 1
+   */
+  guint total_count;
   
   /* this is the total of sizes of
    * node->left, node->right, our own height, and the height

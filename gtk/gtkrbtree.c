@@ -34,7 +34,7 @@ static void        _gtk_rbtree_remove_node_fixup  (GtkRBTree  *tree,
 						   GtkRBNode  *node);
 static inline void _fixup_validation              (GtkRBTree  *tree,
 						   GtkRBNode  *node);
-static inline void _fixup_parity                  (GtkRBTree  *tree,
+static inline void _fixup_total_count             (GtkRBTree  *tree,
 						   GtkRBNode  *node);
 
 
@@ -49,7 +49,7 @@ _gtk_rbnode_new (GtkRBTree *tree,
   node->right = tree->nil;
   node->parent = tree->nil;
   node->flags = GTK_RBNODE_RED;
-  node->parity = 1;
+  node->total_count = 1;
   node->count = 1;
   node->children = NULL;
   node->offset = height;
@@ -64,7 +64,7 @@ _gtk_rbnode_free (GtkRBNode *node)
       node->left = (gpointer) 0xdeadbeef;
       node->right = (gpointer) 0xdeadbeef;
       node->parent = (gpointer) 0xdeadbeef;
-      node->parity = 56789;
+      node->total_count = 56789;
       node->offset = 56789;
       node->count = 56789;
       node->flags = 0;
@@ -125,8 +125,8 @@ _gtk_rbnode_rotate_left (GtkRBTree *tree,
 
   _fixup_validation (tree, node);
   _fixup_validation (tree, right);
-  _fixup_parity (tree, node);
-  _fixup_parity (tree, right);
+  _fixup_total_count (tree, node);
+  _fixup_total_count (tree, right);
 }
 
 static void
@@ -186,8 +186,8 @@ _gtk_rbnode_rotate_right (GtkRBTree *tree,
 
   _fixup_validation (tree, node);
   _fixup_validation (tree, left);
-  _fixup_parity (tree, node);
-  _fixup_parity (tree, left);
+  _fixup_total_count (tree, node);
+  _fixup_total_count (tree, left);
 }
 
 static void
@@ -343,7 +343,7 @@ _gtk_rbtree_new (void)
   retval->nil->flags = GTK_RBNODE_BLACK;
   retval->nil->count = 0;
   retval->nil->offset = 0;
-  retval->nil->parity = 0;
+  retval->nil->total_count = 0;
 
   retval->root = retval->nil;
   return retval;
@@ -383,7 +383,7 @@ _gtk_rbtree_remove (GtkRBTree *tree)
   GtkRBNode *tmp_node;
 
   gint height = tree->root->offset;
-  guint parity = tree->root->parity;
+  guint total_count = tree->root->total_count;
 
 #ifdef G_ENABLE_DEBUG  
   if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
@@ -401,7 +401,7 @@ _gtk_rbtree_remove (GtkRBTree *tree)
     {
       _fixup_validation (tmp_tree, tmp_node);
       tmp_node->offset -= height;
-      tmp_node->parity -= parity;
+      tmp_node->total_count -= total_count;
       
       tmp_node = tmp_node->parent;
       if (tmp_node == tmp_tree->nil)
@@ -477,7 +477,7 @@ _gtk_rbtree_insert_after (GtkRBTree *tree,
       if (tmp_tree == tree)
 	tmp_node->count++;
 
-      tmp_node->parity += 1;
+      tmp_node->total_count += 1;
       tmp_node->offset += height;
       tmp_node = tmp_node->parent;
       if (tmp_node == tmp_tree->nil)
@@ -563,7 +563,7 @@ _gtk_rbtree_insert_before (GtkRBTree *tree,
       if (tmp_tree == tree)
 	tmp_node->count++;
 
-      tmp_node->parity += 1;
+      tmp_node->total_count += 1;
       tmp_node->offset += height;
       tmp_node = tmp_node->parent;
       if (tmp_node == tmp_tree->nil)
@@ -829,7 +829,7 @@ typedef struct _GtkRBReorder
   gint flags;
   gint order;
   gint invert_order;
-  gint parity;
+  guint total_count;
 } GtkRBReorder;
 
 static int
@@ -853,25 +853,25 @@ gtk_rbtree_reorder_fixup (GtkRBTree *tree,
   if (node == tree->nil)
     return;
 
-  node->parity = 1;
+  node->total_count = 1;
 
   if (node->left != tree->nil)
     {
       gtk_rbtree_reorder_fixup (tree, node->left);
       node->offset += node->left->offset;
-      node->parity += node->left->parity;
+      node->total_count += node->left->total_count;
     }
   if (node->right != tree->nil)
     {
       gtk_rbtree_reorder_fixup (tree, node->right);
       node->offset += node->right->offset;
-      node->parity += node->right->parity;
+      node->total_count += node->right->total_count;
     }
       
   if (node->children)
     {
       node->offset += node->children->root->offset;
-      node->parity += node->children->root->parity;
+      node->total_count += node->children->root->total_count;
     }
   
   if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
@@ -998,7 +998,7 @@ _gtk_rbtree_node_find_parity (GtkRBTree *tree,
   g_assert (node);
   g_assert (node->left);
   
-  retval = node->left->parity;
+  retval = node->left->total_count;
 
   while (tree && node && node != tree->nil)
     {
@@ -1007,7 +1007,7 @@ _gtk_rbtree_node_find_parity (GtkRBTree *tree,
 
       /* Add left branch, plus children, iff we came from the right */
       if (node->right == last)
-	retval += node->parity - node->right->parity;
+	retval += node->total_count - node->right->total_count;
       
       if (node == tree->nil)
 	{
@@ -1016,7 +1016,7 @@ _gtk_rbtree_node_find_parity (GtkRBTree *tree,
 
           /* Add the parent node, plus the left branch. */
 	  if (node)
-	    retval += node->left->parity + 1; /* 1 == GTK_RBNODE_GET_PARITY() */
+	    retval += node->left->total_count + 1; /* 1 == GTK_RBNODE_GET_PARITY() */
 	}
     }
   
@@ -1154,7 +1154,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
       x->count--;
     }
 
-  /* offsets and parity adjust all the way up through parent trees */
+  /* offsets and total count adjust all the way up through parent trees */
   y_height = GTK_RBNODE_GET_HEIGHT (y);
 
   tmp_tree = tree;
@@ -1163,7 +1163,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
     {
       tmp_node->offset -= (y_height + (y->children?y->children->root->offset:0));
       _fixup_validation (tmp_tree, tmp_node);
-      _fixup_parity (tmp_tree, tmp_node);
+      _fixup_total_count (tmp_tree, tmp_node);
       tmp_node = tmp_node->parent;
       if (tmp_node == tmp_tree->nil)
 	{
@@ -1203,7 +1203,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
       if (tmp_node != tmp_tree->nil)
 	{
 	  _fixup_validation (tmp_tree, tmp_node);
-	  _fixup_parity (tmp_tree, tmp_node);
+	  _fixup_total_count (tmp_tree, tmp_node);
 	}
       tmp_node = tmp_node->parent;
       if (tmp_node == tmp_tree->nil)
@@ -1234,7 +1234,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 	  node->children = NULL;
 	}
       _fixup_validation (tree, node);
-      _fixup_parity (tree, node);
+      _fixup_total_count (tree, node);
       /* We want to see how different our height is from the previous node.
        * To do this, we compare our current height with our supposed height.
        */
@@ -1246,7 +1246,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 	{
 	  tmp_node->offset += diff;
 	  _fixup_validation (tmp_tree, tmp_node);
-	  _fixup_parity (tmp_tree, tmp_node);
+	  _fixup_total_count (tmp_tree, tmp_node);
 	  tmp_node = tmp_node->parent;
 	  if (tmp_node == tmp_tree->nil)
 	    {
@@ -1484,41 +1484,32 @@ void _fixup_validation (GtkRBTree *tree,
 }
 
 static inline
-void _fixup_parity (GtkRBTree *tree,
+void _fixup_total_count (GtkRBTree *tree,
 		    GtkRBNode *node)
 {
-  node->parity = 1 +
-    (node->children != NULL ? node->children->root->parity : 0) + 
-    node->left->parity + node->right->parity;
+  node->total_count = 1 +
+    (node->children != NULL ? node->children->root->total_count : 0) + 
+    node->left->total_count + node->right->total_count;
 }
 
 #ifdef G_ENABLE_DEBUG
 static guint
-get_parity (GtkRBNode *node)
+get_total_count (GtkRBNode *node)
 {
   guint child_total = 0;
 
-  /* The parity of a node is node->parity minus
-   * the parity of left, right, and children.
-   *
-   * This is equivalent to saying that if left, right, children
-   * sum to 0 parity, then node->parity is the parity of node,
-   * and if left, right, children are odd parity, then
-   * node->parity is the reverse of the node's parity.
-   */
-  
-  child_total += (guint) node->left->parity;
-  child_total += (guint) node->right->parity;
+  child_total += (guint) node->left->total_count;
+  child_total += (guint) node->right->total_count;
 
   if (node->children)
-    child_total += (guint) node->children->root->parity;
+    child_total += (guint) node->children->root->total_count;
 
   return child_total + 1;
 }
 
 static guint
-count_parity (GtkRBTree *tree,
-              GtkRBNode *node)
+count_total (GtkRBTree *tree,
+             GtkRBNode *node)
 {
   guint res;
   
@@ -1526,16 +1517,16 @@ count_parity (GtkRBTree *tree,
     return 0;
   
   res =
-    count_parity (tree, node->left) +
-    count_parity (tree, node->right) +
+    count_total (tree, node->left) +
+    count_total (tree, node->right) +
     (guint)1 +
-    (node->children ? count_parity (node->children, node->children->root) : 0);
+    (node->children ? count_total (node->children, node->children->root) : 0);
 
-  if (res != node->parity)
-    g_print ("parity incorrect for node\n");
+  if (res != node->total_count)
+    g_print ("total count incorrect for node\n");
 
-  if (get_parity (node) != node->parity)
-    g_error ("Node has incorrect parity %u, should be %u", node->parity, get_parity (node));
+  if (get_total_count (node) != node->total_count)
+    g_error ("Node has incorrect total count %u, should be %u", node->total_count, get_total_count (node));
   
   return res;
 }
@@ -1692,7 +1683,7 @@ _gtk_rbtree_test (const gchar *where,
       
   _gtk_rbtree_test_height (tmp_tree, tmp_tree->root);
   _gtk_rbtree_test_dirty (tmp_tree, tmp_tree->root, GTK_RBNODE_FLAG_SET (tmp_tree->root, GTK_RBNODE_DESCENDANTS_INVALID));
-  g_assert (count_parity (tmp_tree, tmp_tree->root) == tmp_tree->root->parity);
+  g_assert (count_total (tmp_tree, tmp_tree->root) == tmp_tree->root->total_count);
 }
 
 static void
@@ -1708,7 +1699,7 @@ _gtk_rbtree_debug_spew_helper (GtkRBTree *tree,
 	   node,
 	   (GTK_RBNODE_GET_COLOR (node) == GTK_RBNODE_BLACK)?"BLACK":" RED ",
 	   node->offset,
-	   node->parity,
+	   node->total_count,
 	   (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_DESCENDANTS_INVALID))?1:0,
 	   (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID))?1:0,
 	   (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))?1:0);
