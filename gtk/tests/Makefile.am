@@ -54,11 +54,9 @@ TEST_PROGS			+= floating
 floating_SOURCES		 = floating.c
 floating_LDADD			 = $(progs_ldadd)
 
-# This doesn't work, see:
-# https://bugzilla.gnome.org/show_bug.cgi?id=662755
-#TEST_PROGS			+= accel
-#accel_SOURCES			 = accel.c
-#accel_LDADD			 = $(progs_ldadd)
+TEST_PROGS			+= accel
+accel_SOURCES			 = accel.c
+accel_LDADD			 = $(progs_ldadd)
 
 #TEST_PROGS			+= object
 #object_SOURCES			 = object.c pixbuf-init.c
