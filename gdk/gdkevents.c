@@ -580,7 +580,7 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_SELECTION_REQUEST:
       new_event->selection.requestor = event->selection.requestor;
       if (new_event->selection.requestor)
-        g_object_unref (new_event->selection.requestor);
+        g_object_ref (new_event->selection.requestor);
       break;
 
     default:
