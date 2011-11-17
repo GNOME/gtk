@@ -1922,6 +1922,23 @@ draw_stepper (GtkRange     *range,
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
   gtk_style_context_set_state (context, state);
 
+  switch (arrow_type)
+    {
+    case GTK_ARROW_RIGHT:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+      break;
+    case GTK_ARROW_DOWN:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+      break;
+    case GTK_ARROW_LEFT:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+      break;
+    case GTK_ARROW_UP:
+    default:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+      break;
+    }
+
   gtk_render_background (context, cr,
                          rect->x, rect->y,
                          rect->width, rect->height);
