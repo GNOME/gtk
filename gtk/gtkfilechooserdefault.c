@@ -175,6 +175,7 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 /* Column numbers for the shortcuts tree.  Keep these in sync with shortcuts_model_create() */
 enum {
   SHORTCUTS_COL_PIXBUF,
@@ -194,6 +195,7 @@ typedef enum {
   SHORTCUT_TYPE_SEARCH,
   SHORTCUT_TYPE_RECENT
 } ShortcutType;
+#endif
 
 #define MODEL_ATTRIBUTES "standard::name,standard::type,standard::display-name," \
                          "standard::is-hidden,standard::is-backup,standard::size," \
@@ -234,6 +236,7 @@ enum {
   GTK_TREE_MODEL_ROW,
 };
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 /* Interesting places in the shortcuts bar */
 typedef enum {
   SHORTCUTS_SEARCH,
@@ -248,6 +251,7 @@ typedef enum {
   SHORTCUTS_CURRENT_FOLDER_SEPARATOR,
   SHORTCUTS_CURRENT_FOLDER
 } ShortcutsIndex;
+#endif
 
 /* Icon size for if we can't get it from the theme */
 #define FALLBACK_ICON_SIZE 16
@@ -440,6 +444,7 @@ static void     unset_file_system_backend    (GtkFileChooserDefault *impl);
 
 
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 /* Drag and drop interface declarations */
 
 typedef struct {
@@ -466,6 +471,7 @@ G_DEFINE_TYPE_WITH_CODE (ShortcutsPaneModelFilter,
 static GtkTreeModel *shortcuts_pane_model_filter_new (GtkFileChooserDefault *impl,
 						      GtkTreeModel          *child_model,
 						      GtkTreePath           *root);
+#endif
 
 
 
@@ -726,6 +732,7 @@ gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
   iface->initial_focus = gtk_file_chooser_default_initial_focus;
 }
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 static void
 bookmarks_changed_cb (gpointer data)
 {
@@ -733,6 +740,7 @@ bookmarks_changed_cb (gpointer data)
 
   volumes_bookmarks_changed_cb (impl->file_system, impl);
 }
+#endif
 
 static void
 _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
