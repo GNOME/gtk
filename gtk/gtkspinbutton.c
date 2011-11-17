@@ -998,6 +998,10 @@ gtk_spin_button_draw_arrow (GtkSpinButton   *spin_button,
 
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
+  if (arrow_type == GTK_ARROW_UP)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+  else
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
 
   priv = spin_button->priv;
   widget = GTK_WIDGET (spin_button);
