@@ -196,13 +196,16 @@ struct _GtkWin32ThemePart {
   HTHEME theme;
   int part;
   int state;
+  int part2;
+  int state2;
 
   gint ref_count;
 };
 
 GtkWin32ThemePart *
 _gtk_win32_theme_part_new (const char *class, 
-			   int xp_part, int state)
+			   int xp_part, int state, 
+			   int xp_part2, int state2)
 {
   GtkWin32ThemePart *part;
 
@@ -212,6 +215,8 @@ _gtk_win32_theme_part_new (const char *class,
   part->theme = lookup_htheme_by_classname (class);
   part->part = xp_part;
   part->state = state;
+  part->part2 = xp_part2;
+  part->state2 = state2;
 
   return part;
 }
@@ -245,7 +250,7 @@ _gtk_win32_theme_part_parse (GtkCssParser *parser,
 			     GValue *value)
 {
   char *class;
-  int xp_part, state;
+  int xp_part, state, xp_part2, state2;
   GtkWin32ThemePart *theme_part;
 
   if (!_gtk_css_parser_try (parser, "-gtk-win32-theme-part", TRUE))
@@ -286,20 +291,32 @@ _gtk_win32_theme_part_parse (GtkCssParser *parser,
       return 0;
     }
 
-  if (! _gtk_css_parser_try (parser, ",", TRUE))
-    {
-      g_free (class);
-      _gtk_css_parser_error (parser,
-			     "Expected ','");
-      return 0;
-    }
-
   if (!_gtk_css_parser_try_int (parser, &state))
     {
       g_free (class);
       _gtk_css_parser_error (parser, "Expected a valid integer value");
       return 0;
     }
+
+  xp_part2 = -1;
+  state2 = -1;
+  if ( _gtk_css_parser_try (parser, ",", TRUE))
+    {
+      if (!_gtk_css_parser_try_int (parser, &xp_part2))
+	{
+	  g_free (class);
+	  _gtk_css_parser_error (parser, "Expected a valid integer value");
+	  return 0;
+	}
+
+      if (!_gtk_css_parser_try_int (parser, &state2))
+	{
+	  g_free (class);
+	  _gtk_css_parser_error (parser, "Expected a valid integer value");
+	  return 0;
+	}
+    }
+
 
   if (!_gtk_css_parser_try (parser, ")", TRUE))
     {
@@ -309,26 +326,27 @@ _gtk_win32_theme_part_parse (GtkCssParser *parser,
       return 0;
     }
   
-  theme_part = _gtk_win32_theme_part_new (class, xp_part, state);
+  theme_part = _gtk_win32_theme_part_new (class, 
+					  xp_part, state, 
+					  xp_part2, state2);
   g_free (class);
   
   g_value_take_boxed (value, theme_part);
   return 1;
 }
 
-cairo_pattern_t *
-_gtk_win32_theme_part_render  (GtkWin32ThemePart  *part,
-			       int                 width,
-			       int                 height)
-{
 #ifdef G_OS_WIN32
-  cairo_surface_t *surface, *image;
-  cairo_pattern_t *pattern;
-  cairo_matrix_t matrix;
+cairo_surface_t *
+_gtk_win32_theme_part_create_surface  (GtkWin32ThemePart  *part,
+				       int                 xp_part,
+				       int                 state,
+				       int                 width,
+				       int                 height)
+{
+  cairo_surface_t *surface;
   HDC hdc;
   RECT rect;
   HRESULT res;
-  cairo_user_data_key_t key;
 
   surface = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_ARGB32, width, height);
   hdc = cairo_win32_surface_get_dc (surface);
@@ -338,7 +356,43 @@ _gtk_win32_theme_part_render  (GtkWin32ThemePart  *part,
   rect.right = width;
   rect.bottom = height;
 
-  res = draw_theme_background (part->theme, hdc, part->part, part->state, &rect, &rect);
+  res = draw_theme_background (part->theme, hdc, xp_part, state, &rect, &rect);
+  return surface;
+}
+#endif
+
+
+cairo_pattern_t *
+_gtk_win32_theme_part_render  (GtkWin32ThemePart  *part,
+			       int                 width,
+			       int                 height)
+{
+#ifdef G_OS_WIN32
+  cairo_surface_t *surface, *surface2, *image;
+  cairo_pattern_t *pattern;
+  cairo_t *cr;
+  cairo_matrix_t matrix;
+  cairo_user_data_key_t key;
+
+  surface = _gtk_win32_theme_part_create_surface  (part, part->part, part->state, 
+						   width, height);
+  
+  if (part->state2 >= 0)
+    {
+      surface2 = _gtk_win32_theme_part_create_surface  (part, part->part2, part->state2, 
+							width, height);
+
+      cr = cairo_create (surface);
+
+      pattern = cairo_pattern_create_for_surface (surface2);
+      cairo_set_source (cr, pattern);
+      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+      cairo_paint (cr);
+      
+      cairo_destroy (cr);
+      cairo_pattern_destroy (pattern);
+      cairo_surface_destroy (surface2);
+    }
 
   /* We need to return an image surface, as that is what the code expects in order
      to get the size */

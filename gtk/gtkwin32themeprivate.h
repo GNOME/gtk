@@ -32,8 +32,6 @@ typedef struct _GtkWin32ThemePart GtkWin32ThemePart;
 
 GType              _gtk_win32_theme_part_get_type  (void) G_GNUC_CONST;
 
-GtkWin32ThemePart *_gtk_win32_theme_part_new       (const char *class, 
-						    int xp_part, int state);
 GtkWin32ThemePart *_gtk_win32_theme_part_ref       (GtkWin32ThemePart *part);
 void               _gtk_win32_theme_part_unref     (GtkWin32ThemePart *part);
 int                _gtk_win32_theme_part_parse     (GtkCssParser      *parser, 
