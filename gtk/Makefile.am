@@ -833,7 +833,8 @@ gtk_built_public_sources =			\
 # built headers that don't get installed
 gtk_built_private_headers =			\
 	gtkmarshalers.h				\
-	gtkbuiltincache.h
+	gtkbuiltincache.h			\
+	gtkwin32css.h
 
 gtk_built_sources =				\
 	gtktypebuiltins.c			\
@@ -845,6 +846,7 @@ gtk_built_sources =				\
 stamp_files =					\
 	stamp-gtkmarshalers.h			\
 	stamp-gtktypebuiltins.h			\
+	stamp-gtkwin32css.h			\
 	stamp-icons
 
 # non-header sources (headers should be specified in the above variables)
@@ -901,6 +903,14 @@ gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
 	 $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body) >> xgen-gmlc \
 	&& cp xgen-gmlc gtkmarshalers.c \
 	&& rm -f xgen-gmlc
+
+gtkwin32css.h: stamp-gtkwin32css.h
+	@true
+stamp-gtkwin32css.h: @REBUILD@ gtk-win32.css
+	$(AWK) 'BEGIN { print "static const char *gtk_win32_default_css = " } { print "   \"" $$0 "\\n\""} END { print ";" }' < $(srcdir)/gtk-win32.css >> xgen-gmlh\
+	&& (cmp -s xgen-gmlh gtkwin32css.h || cp xgen-gmlh gtkwin32css.h) \
+	&& rm -f xgen-gmlh \
+	&& echo timestamp > $(@F)
 
 gtktypebuiltins.h: stamp-gtktypebuiltins.h
 	@true
