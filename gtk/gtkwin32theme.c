@@ -192,12 +192,18 @@ G_DEFINE_BOXED_TYPE_WITH_CODE (GtkWin32ThemePart, _gtk_win32_theme_part,
 			       _gtk_win32_theme_part_ref, _gtk_win32_theme_part_unref, 
 			       _gtk_win32_theme_init() )
 
+typedef enum {
+  RENDER_OVER,
+  RENDER_MIX
+} ThemePartRenderOps;
+
 struct _GtkWin32ThemePart {
   HTHEME theme;
   int part;
   int state;
   int part2;
   int state2;
+  ThemePartRenderOps op;
 
   gint ref_count;
 };
@@ -205,7 +211,8 @@ struct _GtkWin32ThemePart {
 GtkWin32ThemePart *
 _gtk_win32_theme_part_new (const char *class, 
 			   int xp_part, int state, 
-			   int xp_part2, int state2)
+			   int xp_part2, int state2, 
+			   ThemePartRenderOps op)
 {
   GtkWin32ThemePart *part;
 
@@ -217,6 +224,7 @@ _gtk_win32_theme_part_new (const char *class,
   part->state = state;
   part->part2 = xp_part2;
   part->state2 = state2;
+  part->op = op;
 
   return part;
 }
@@ -251,6 +259,7 @@ _gtk_win32_theme_part_parse (GtkCssParser *parser,
 {
   char *class;
   int xp_part, state, xp_part2, state2;
+  ThemePartRenderOps op;
   GtkWin32ThemePart *theme_part;
 
   if (!_gtk_css_parser_try (parser, "-gtk-win32-theme-part", TRUE))
@@ -297,11 +306,21 @@ _gtk_win32_theme_part_parse (GtkCssParser *parser,
       _gtk_css_parser_error (parser, "Expected a valid integer value");
       return 0;
     }
-
+  op = RENDER_OVER;
   xp_part2 = -1;
   state2 = -1;
   if ( _gtk_css_parser_try (parser, ",", TRUE))
     {
+
+      if ( _gtk_css_parser_try (parser, "over", TRUE))
+	{
+	  op = RENDER_OVER;
+	}
+      else if ( _gtk_css_parser_try (parser, "mix", TRUE))
+	{
+	  op = RENDER_MIX;
+	}
+
       if (!_gtk_css_parser_try_int (parser, &xp_part2))
 	{
 	  g_free (class);
@@ -328,7 +347,8 @@ _gtk_win32_theme_part_parse (GtkCssParser *parser,
   
   theme_part = _gtk_win32_theme_part_new (class, 
 					  xp_part, state, 
-					  xp_part2, state2);
+					  xp_part2, state2,
+					  op);
   g_free (class);
   
   g_value_take_boxed (value, theme_part);
@@ -382,15 +402,32 @@ _gtk_win32_theme_part_render  (GtkWin32ThemePart  *part,
       surface2 = _gtk_win32_theme_part_create_surface  (part, part->part2, part->state2, 
 							width, height);
 
-      cr = cairo_create (surface);
 
-      pattern = cairo_pattern_create_for_surface (surface2);
-      cairo_set_source (cr, pattern);
-      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-      cairo_paint (cr);
+      if (part->op == RENDER_MIX)
+	{
+	  cr = cairo_create (surface);
+
+	  pattern = cairo_pattern_create_for_surface (surface2);
+	  cairo_set_source (cr, pattern);
+	  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+	  cairo_paint_with_alpha (cr, 0.5);
       
-      cairo_destroy (cr);
-      cairo_pattern_destroy (pattern);
+	  cairo_destroy (cr);
+	  cairo_pattern_destroy (pattern);
+	}
+      else  /* OVER */
+	{
+	  cr = cairo_create (surface);
+
+	  pattern = cairo_pattern_create_for_surface (surface2);
+	  cairo_set_source (cr, pattern);
+	  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+	  cairo_paint (cr);
+      
+	  cairo_destroy (cr);
+	  cairo_pattern_destroy (pattern);
+	}
+
       cairo_surface_destroy (surface2);
     }
 
