@@ -451,6 +451,7 @@ grab_key_callback (GtkWidget            *widget,
   GtkCellRendererAccelPrivate *priv = accel->priv;
   GdkModifierType accel_mods = 0;
   guint accel_key;
+  guint keyval;
   gchar *path;
   gboolean edited;
   gboolean cleared;
@@ -465,16 +466,18 @@ grab_key_callback (GtkWidget            *widget,
   edited = FALSE;
   cleared = FALSE;
 
-  gdk_keymap_translate_keyboard_state (gdk_keymap_get_for_display (display),
+  accel_mods = event->state;
+
+  _gtk_translate_keyboard_accel_state (gdk_keymap_get_for_display (display),
                                        event->hardware_keycode,
                                        event->state,
+                                       gtk_accelerator_get_default_mod_mask (),
                                        event->group,
-                                       NULL, NULL, NULL, &consumed_modifiers);
+                                       &keyval, NULL, NULL, &consumed_modifiers);
 
-  accel_mods = event->state;
   gdk_keymap_add_virtual_modifiers (gdk_keymap_get_for_display (display), &accel_mods);
 
-  accel_key = gdk_keyval_to_lower (event->keyval);
+  accel_key = gdk_keyval_to_lower (keyval);
   if (accel_key == GDK_KEY_ISO_Left_Tab) 
     accel_key = GDK_KEY_Tab;
 
@@ -487,22 +490,22 @@ grab_key_callback (GtkWidget            *widget,
   
   /* Put shift back if it changed the case of the key, not otherwise.
    */
-  if (accel_key != event->keyval)
+  if (accel_key != keyval)
     accel_mods |= GDK_SHIFT_MASK;
     
   if (accel_mods == 0)
     {
-      switch (event->keyval)
-        {
-        case GDK_KEY_Escape:
-          goto out; /* cancel */
-        case GDK_KEY_BackSpace:
-          /* clear the accelerator on Backspace */
-          cleared = TRUE;
-          goto out;
-        default:
-          break;
-        }
+      switch (keyval)
+	{
+	case GDK_KEY_Escape:
+	  goto out; /* cancel */
+	case GDK_KEY_BackSpace:
+	  /* clear the accelerator on Backspace */
+	  cleared = TRUE;
+	  goto out;
+	default:
+	  break;
+	}
     }
 
   if (priv->accel_mode == GTK_CELL_RENDERER_ACCEL_MODE_GTK)
