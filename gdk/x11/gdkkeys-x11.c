@@ -1621,8 +1621,8 @@ gdk_x11_keymap_get_modifier_mask (GdkKeymap         *keymap,
       return keymap_x11->group_switch_mask;
 
     default:
-      GDK_KEYMAP_CLASS (gdk_x11_keymap_parent_class)->get_modifier_mask (keymap,
-                                                                         intent);
+      return GDK_KEYMAP_CLASS (gdk_x11_keymap_parent_class)->get_modifier_mask (keymap,
+                                                                                intent);
     }
 }
 
