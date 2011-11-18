@@ -2652,6 +2652,50 @@ _gtk_button_event_triggers_context_menu (GdkEventButton *event)
   return FALSE;
 }
 
+gboolean
+_gtk_translate_keyboard_accel_state (GdkKeymap       *keymap,
+                                     guint            hardware_keycode,
+                                     GdkModifierType  state,
+                                     GdkModifierType  accel_mask,
+                                     gint             group,
+                                     guint           *keyval,
+                                     gint            *effective_group,
+                                     gint            *level,
+                                     GdkModifierType *consumed_modifiers)
+{
+  gboolean group_mask_disabled = FALSE;
+  gboolean retval;
+
+  /* if the group-toggling modifier is part of the accel mod mask, and
+   * it is active, disable it for matching
+   */
+  if (accel_mask & state & GTK_TOGGLE_GROUP_MOD_MASK)
+    {
+      state &= ~GTK_TOGGLE_GROUP_MOD_MASK;
+      group = 0;
+      group_mask_disabled = TRUE;
+    }
+
+  retval = gdk_keymap_translate_keyboard_state (keymap,
+                                                hardware_keycode, state, group,
+                                                keyval,
+                                                effective_group, level,
+                                                consumed_modifiers);
+
+  /* add back the group mask, we want to match against the modifier,
+   * but not against the keyval from its group
+   */
+  if (group_mask_disabled)
+    {
+      if (effective_group)
+        *effective_group = 1;
+
+      if (consumed_modifiers)
+        *consumed_modifiers &= ~GTK_TOGGLE_GROUP_MOD_MASK;
+    }
+
+  return retval;
+}
 
 #define __GTK_MAIN_C__
 #include "gtkaliasdef.c"

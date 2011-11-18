@@ -18,9 +18,12 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
 #include "config.h"
+
 #include "gtkdebug.h"
 #include "gtkkeyhash.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 typedef struct _GtkKeyHashEntry GtkKeyHashEntry;
@@ -392,6 +395,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
   gint level;
   GdkModifierType modifiers;
   GdkModifierType consumed_modifiers;
+  gboolean group_mod_is_accel_mod = FALSE;
   const GdkModifierType xmods = GDK_MOD2_MASK|GDK_MOD3_MASK|GDK_MOD4_MASK|GDK_MOD5_MASK;
   const GdkModifierType vmods = GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
 
@@ -399,11 +403,18 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
    */
   state &= ~GDK_LOCK_MASK;
 
-  gdk_keymap_map_virtual_modifiers (key_hash->keymap, &mask);
+  _gtk_translate_keyboard_accel_state (key_hash->keymap,
+                                       hardware_keycode, state, mask, group,
+                                       &keyval,
+                                       &effective_group, &level, &consumed_modifiers);
 
-  gdk_keymap_translate_keyboard_state (key_hash->keymap,
-				       hardware_keycode, state, group,
-				       &keyval, &effective_group, &level, &consumed_modifiers);
+  /* if the group-toggling modifier is part of the default accel mod
+   * mask, and it is active, disable it for matching
+   */
+  if (mask & GTK_TOGGLE_GROUP_MOD_MASK)
+    group_mod_is_accel_mod = TRUE;
+
+  gdk_keymap_map_virtual_modifiers (key_hash->keymap, &mask);
   gdk_keymap_add_virtual_modifiers (key_hash->keymap, &state);
 
   GTK_NOTE (KEYBINDINGS,
@@ -433,7 +444,14 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 	    {
 	      gint i;
 
-	      if (keyval == entry->keyval) /* Exact match */
+	      if (keyval == entry->keyval && /* Exact match */
+                  /* but also match for group if it is an accel mod, because
+                   * otherwise we can get multiple exact matches, some being
+                   * bogus */
+                  (!group_mod_is_accel_mod ||
+                   (state & GTK_TOGGLE_GROUP_MOD_MASK) ==
+                   (entry->modifiers & GTK_TOGGLE_GROUP_MOD_MASK)))
+
 		{
 		  GTK_NOTE (KEYBINDINGS,
 			    g_message ("  found exact match, keyval = %u, modifiers = 0x%04x",
@@ -453,8 +471,11 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 		{
 		  for (i = 0; i < entry->n_keys; i++)
 		    {
-		      if (entry->keys[i].keycode == hardware_keycode &&
-			  entry->keys[i].level == level) /* Match for all but group */
+                      if (entry->keys[i].keycode == hardware_keycode &&
+                          entry->keys[i].level == level &&
+                           /* Only match for group if it's an accel mod */
+                          (!group_mod_is_accel_mod ||
+                           entry->keys[i].group == effective_group))
 			{
 			  GTK_NOTE (KEYBINDINGS,
 				    g_message ("  found group = %d, level = %d",

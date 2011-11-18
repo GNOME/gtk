@@ -688,12 +688,18 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
   if (hardware_keycode < 0 || hardware_keycode >= NUM_KEYCODES)
     return FALSE;
-  
-  /* Check if shift or capslock modify the keyval */
-  for (bit = GDK_SHIFT_MASK; bit < GDK_CONTROL_MASK; bit <<= 1)
+
+  /* Check if modifiers modify the keyval */
+  for (bit = GDK_SHIFT_MASK; bit < GDK_BUTTON1_MASK; bit <<= 1)
     {
-      if (translate_keysym (hardware_keycode, group, state & ~bit, NULL, NULL) !=
-	  translate_keysym (hardware_keycode, group, state | bit, NULL, NULL))
+      if (translate_keysym (hardware_keycode,
+                            (bit == GDK_MOD1_MASK) ? 0 : group,
+                            state & ~bit,
+                            NULL, NULL) !=
+	  translate_keysym (hardware_keycode,
+                            (bit == GDK_MOD1_MASK) ? 1 : group,
+                            state | bit,
+                            NULL, NULL))
 	tmp_modifiers |= bit;
     }
 

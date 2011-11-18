@@ -3148,19 +3148,24 @@ gtk_menu_key_press (GtkWidget	*widget,
     }
 
   /* Figure out what modifiers went into determining the key symbol */
-  gdk_keymap_translate_keyboard_state (gdk_keymap_get_for_display (display),
-				       event->hardware_keycode, event->state, event->group,
-				       NULL, NULL, NULL, &consumed_modifiers);
+  _gtk_translate_keyboard_accel_state (gdk_keymap_get_for_display (display),
+                                       event->hardware_keycode,
+                                       event->state,
+                                       gtk_accelerator_get_default_mod_mask (),
+                                       event->group,
+                                       &accel_key, NULL, NULL, &consumed_modifiers);
 
-  accel_key = gdk_keyval_to_lower (event->keyval);
+  accel_key = gdk_keyval_to_lower (accel_key);
   accel_mods = event->state & gtk_accelerator_get_default_mod_mask () & ~consumed_modifiers;
 
-  /* If lowercasing affects the keysym, then we need to include SHIFT in the modifiers,
-   * We re-upper case when we match against the keyval, but display and save in caseless form.
+  /* If lowercasing affects the keysym, then we need to include SHIFT
+   * in the modifiers, We re-upper case when we match against the
+   * keyval, but display and save in caseless form.
    */
   if (accel_key != event->keyval)
     accel_mods |= GDK_SHIFT_MASK;
-  
+
+
   /* Modify the accelerators */
   if (can_change_accels &&
       menu_shell->active_menu_item &&

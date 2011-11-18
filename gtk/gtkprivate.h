@@ -133,7 +133,24 @@ gboolean _gtk_fnmatch (const char *pattern,
 #define GTK_MODIFY_SELECTION_MOD_MASK GDK_MOD2_MASK
 #endif
 
+#ifndef GDK_WINDOWING_QUARTZ
+#define GTK_TOGGLE_GROUP_MOD_MASK 0
+#else
+#define GTK_TOGGLE_GROUP_MOD_MASK GDK_MOD1_MASK
+#endif
+
 gboolean _gtk_button_event_triggers_context_menu (GdkEventButton *event);
+
+gboolean _gtk_translate_keyboard_accel_state     (GdkKeymap       *keymap,
+                                                  guint            hardware_keycode,
+                                                  GdkModifierType  state,
+                                                  GdkModifierType  accel_mask,
+                                                  gint             group,
+                                                  guint           *keyval,
+                                                  gint            *effective_group,
+                                                  gint            *level,
+                                                  GdkModifierType *consumed_modifiers);
+
 
 G_END_DECLS
 
