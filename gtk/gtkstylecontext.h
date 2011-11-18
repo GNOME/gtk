@@ -669,6 +669,15 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_REGION_TAB "tab"
 
+/**
+ * GTK_STYLE_CLASS_PULSE:
+ *
+ * A CSS class to use when rendering a pulse in an indeterminate progress bar.
+ *
+ * This is used by #GtkProgressBar and #GtkEntry.
+ */
+#define GTK_STYLE_CLASS_PULSE "pulse"
+
 
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
 
