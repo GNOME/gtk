@@ -62,6 +62,23 @@ GdkModifierType _gtk_replace_virtual_modifiers (GdkKeymap       *keymap,
                                                 GdkModifierType  modifiers);
 GdkModifierType _gtk_get_primary_accel_mod     (void);
 
+/* temp hack, will go away soon --mitch */
+#ifndef GDK_WINDOWING_QUARTZ
+#define GTK_TOGGLE_GROUP_MOD_MASK 0
+#else
+#define GTK_TOGGLE_GROUP_MOD_MASK GDK_MOD1_MASK
+#endif
+
+gboolean _gtk_translate_keyboard_accel_state   (GdkKeymap       *keymap,
+                                                guint            hardware_keycode,
+                                                GdkModifierType  state,
+                                                GdkModifierType  accel_mask,
+                                                gint             group,
+                                                guint           *keyval,
+                                                gint            *effective_group,
+                                                gint            *level,
+                                                GdkModifierType *consumed_modifiers);
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */
