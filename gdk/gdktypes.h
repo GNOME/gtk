@@ -257,6 +257,8 @@ typedef enum
  * @GDK_MODIFIER_INTENT_NO_TEXT_INPUT: when any of these modifiers is pressed, the
  *  key event cannot produce a symbol directly. This is meant to be used for
  *  input methods, and for use cases like typeahead search.
+ * @GDK_MODIFIER_INTENT_SHIFT_GROUP: the modifier that switches between keyboard
+ *  groups (AltGr on X11/Windows and Option/Alt on OS X).
  *
  * This enum is used with gdk_keymap_get_modifier_mask() and
  * gdk_get_modifier_mask() in order to determine what modifiers the
@@ -274,7 +276,8 @@ typedef enum
   GDK_MODIFIER_INTENT_CONTEXT_MENU,
   GDK_MODIFIER_INTENT_EXTEND_SELECTION,
   GDK_MODIFIER_INTENT_MODIFY_SELECTION,
-  GDK_MODIFIER_INTENT_NO_TEXT_INPUT
+  GDK_MODIFIER_INTENT_NO_TEXT_INPUT,
+  GDK_MODIFIER_INTENT_SHIFT_GROUP
 } GdkModifierIntent;
 
 typedef enum

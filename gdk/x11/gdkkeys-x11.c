@@ -1609,6 +1609,23 @@ gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
   return retval;
 }
 
+static GdkModifierType
+gdk_x11_keymap_get_modifier_mask (GdkKeymap         *keymap,
+                                  GdkModifierIntent  intent)
+{
+  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
+
+  switch (intent)
+    {
+    case GDK_MODIFIER_INTENT_SHIFT_GROUP:
+      return keymap_x11->group_switch_mask;
+
+    default:
+      GDK_KEYMAP_CLASS (gdk_x11_keymap_parent_class)->get_modifier_mask (keymap,
+                                                                         intent);
+    }
+}
+
 static void
 gdk_x11_keymap_class_init (GdkX11KeymapClass *klass)
 {
@@ -1627,4 +1644,5 @@ gdk_x11_keymap_class_init (GdkX11KeymapClass *klass)
   keymap_class->translate_keyboard_state = gdk_x11_keymap_translate_keyboard_state;
   keymap_class->add_virtual_modifiers = gdk_x11_keymap_add_virtual_modifiers;
   keymap_class->map_virtual_modifiers = gdk_x11_keymap_map_virtual_modifiers;
+  keymap_class->get_modifier_mask = gdk_x11_keymap_get_modifier_mask;
 }

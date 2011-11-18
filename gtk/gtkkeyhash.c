@@ -395,6 +395,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
   gint level;
   GdkModifierType modifiers;
   GdkModifierType consumed_modifiers;
+  GdkModifierType shift_group_mask;
   gboolean group_mod_is_accel_mod = FALSE;
   const GdkModifierType xmods = GDK_MOD2_MASK|GDK_MOD3_MASK|GDK_MOD4_MASK|GDK_MOD5_MASK;
   const GdkModifierType vmods = GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
@@ -411,7 +412,9 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
   /* if the group-toggling modifier is part of the default accel mod
    * mask, and it is active, disable it for matching
    */
-  if (mask & GTK_TOGGLE_GROUP_MOD_MASK)
+  shift_group_mask = gdk_keymap_get_modifier_mask (key_hash->keymap,
+                                                   GDK_MODIFIER_INTENT_SHIFT_GROUP);
+  if (mask & shift_group_mask)
     group_mod_is_accel_mod = TRUE;
 
   gdk_keymap_map_virtual_modifiers (key_hash->keymap, &mask);
@@ -449,8 +452,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
                    * otherwise we can get multiple exact matches, some being
                    * bogus */
                   (!group_mod_is_accel_mod ||
-                   (state & GTK_TOGGLE_GROUP_MOD_MASK) ==
-                   (entry->modifiers & GTK_TOGGLE_GROUP_MOD_MASK)))
+                   (state & shift_group_mask) == (entry->modifiers & shift_group_mask)))
 
 		{
 		  GTK_NOTE (KEYBINDINGS,

@@ -216,15 +216,18 @@ _gtk_translate_keyboard_accel_state (GdkKeymap       *keymap,
                                      gint            *level,
                                      GdkModifierType *consumed_modifiers)
 {
+  GdkModifierType shift_group_mask;
   gboolean group_mask_disabled = FALSE;
   gboolean retval;
 
   /* if the group-toggling modifier is part of the accel mod mask, and
    * it is active, disable it for matching
    */
-  if (accel_mask & state & GTK_TOGGLE_GROUP_MOD_MASK)
+  shift_group_mask = gdk_keymap_get_modifier_mask (keymap,
+                                                   GDK_MODIFIER_INTENT_SHIFT_GROUP);
+  if (accel_mask & state & shift_group_mask)
     {
-      state &= ~GTK_TOGGLE_GROUP_MOD_MASK;
+      state &= ~shift_group_mask;
       group = 0;
       group_mask_disabled = TRUE;
     }
@@ -244,7 +247,7 @@ _gtk_translate_keyboard_accel_state (GdkKeymap       *keymap,
         *effective_group = 1;
 
       if (consumed_modifiers)
-        *consumed_modifiers &= ~GTK_TOGGLE_GROUP_MOD_MASK;
+        *consumed_modifiers &= ~shift_group_mask;
     }
 
   return retval;
