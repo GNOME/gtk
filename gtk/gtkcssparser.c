@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkcssparserprivate.h"
+#include "gtkwin32themeprivate.h"
 
 #include <errno.h>
 #include <string.h>
@@ -575,7 +576,8 @@ typedef enum {
   COLOR_DARKER,
   COLOR_SHADE,
   COLOR_ALPHA,
-  COLOR_MIX
+  COLOR_MIX,
+  COLOR_WIN32
 } ColorType;
 
 static GtkSymbolicColor *
@@ -643,6 +645,12 @@ gtk_css_parser_read_symbolic_color_function (GtkCssParser *parser,
         rgba.alpha = 1.0;
       
       symbolic = gtk_symbolic_color_new_literal (&rgba);
+    }
+  else if (color == COLOR_WIN32)
+    {
+      symbolic = _gtk_win32_theme_color_parse (parser);
+      if (symbolic == NULL)
+	return NULL;
     }
   else
     {
@@ -769,7 +777,8 @@ _gtk_css_parser_read_symbolic_color (GtkCssParser *parser)
 {
   GtkSymbolicColor *symbolic;
   guint color;
-  const char *names[] = {"rgba", "rgb",  "lighter", "darker", "shade", "alpha", "mix" };
+  const char *names[] = {"rgba", "rgb",  "lighter", "darker", "shade", "alpha", "mix",
+			 GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME};
   char *name;
 
   g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), NULL);

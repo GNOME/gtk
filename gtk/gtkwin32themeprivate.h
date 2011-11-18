@@ -26,6 +26,8 @@
 
 G_BEGIN_DECLS
 
+#define GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME "-gtk-win32-color"
+
 typedef struct _GtkWin32ThemePart GtkWin32ThemePart;
 
 #define GTK_TYPE_WIN32_THEME_PART (_gtk_win32_theme_part_get_type ())
@@ -43,6 +45,10 @@ cairo_pattern_t   *_gtk_win32_theme_part_render   (GtkWin32ThemePart  *part,
 int                _gtk_win32_theme_int_parse     (GtkCssParser      *parser,
 						   GFile             *base,
 						   int               *value);
+GtkSymbolicColor  *_gtk_win32_theme_color_parse   (GtkCssParser      *parser);
+gboolean           _gtk_win32_theme_color_resolve (const char        *theme_class,
+						   gint               id,
+						   GdkRGBA           *color);
 
 G_END_DECLS
 

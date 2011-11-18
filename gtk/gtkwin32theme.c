@@ -490,3 +490,67 @@ _gtk_win32_theme_int_parse (GtkCssParser      *parser,
 
   return -1;
 }
+
+GtkSymbolicColor *
+_gtk_win32_theme_color_parse (GtkCssParser *parser)
+{
+  GtkSymbolicColor *color;
+  char *class;
+  int id;
+
+  class = _gtk_css_parser_try_name (parser, TRUE);
+  if (class == NULL)
+    {
+      _gtk_css_parser_error (parser,
+			     "Expected name as first argument to  '-gtk-win32-color'");
+      return NULL;
+    }
+
+  if (! _gtk_css_parser_try (parser, ",", TRUE))
+    {
+      g_free (class);
+      _gtk_css_parser_error (parser,
+			     "Expected ','");
+      return NULL;
+    }
+
+  if (!_gtk_css_parser_try_int (parser, &id))
+    {
+      g_free (class);
+      _gtk_css_parser_error (parser, "Expected a valid integer value");
+      return NULL;
+    }
+
+  color = gtk_symbolic_color_new_win32 (class, id);
+  g_free (class);
+  return color;
+}
+
+gboolean
+_gtk_win32_theme_color_resolve (const char *theme_class,
+				gint id,
+				GdkRGBA *color)
+{
+#ifdef G_OS_WIN32
+  DWORD dcolor;
+
+  if (use_xp_theme && get_theme_sys_color != NULL)
+    {
+      HTHEME theme = lookup_htheme_by_classname (theme_class);
+
+      /* if theme is NULL, it will just return the GetSystemColor()
+         value */
+      dcolor = get_theme_sys_color (theme, id);
+    }
+  else
+    dcolor = GetSysColor (id);
+
+  color->alpha = 1.0;
+  color->red = GetRValue (dcolor) / 255.0;
+  color->green = GetGValue (dcolor) / 255.0;
+  color->blue = GetBValue (dcolor) / 255.0;
+#else
+  gdk_rgba_parse (color, "pink");
+#endif
+  return TRUE;
+}

@@ -21,6 +21,7 @@
 #include "gtksymboliccolor.h"
 #include "gtkstyleproperties.h"
 #include "gtkintl.h"
+#include "gtkwin32themeprivate.h"
 
 /**
  * SECTION:gtksymboliccolor
@@ -50,7 +51,8 @@ typedef enum {
   COLOR_TYPE_NAME,
   COLOR_TYPE_SHADE,
   COLOR_TYPE_ALPHA,
-  COLOR_TYPE_MIX
+  COLOR_TYPE_MIX,
+  COLOR_TYPE_WIN32
 } ColorType;
 
 struct _GtkSymbolicColor
@@ -75,6 +77,12 @@ struct _GtkSymbolicColor
       GtkSymbolicColor *color2;
       gdouble factor;
     } mix;
+
+    struct
+    {
+      gchar *theme_class;
+      gint id;
+    } win32;
   };
 };
 
@@ -227,6 +235,35 @@ gtk_symbolic_color_new_mix (GtkSymbolicColor *color1,
 }
 
 /**
+ * gtk_symbolic_color_new_mix: (constructor)
+ * @theme_class: The theme class to pull color from
+ * @id: The color id
+ *
+ * Creates a symbolic color based on the current win32
+ * theme.
+ *
+ * Returns: A newly created #GtkSymbolicColor
+ *
+ * Since: 3.4
+ **/
+GtkSymbolicColor *
+gtk_symbolic_color_new_win32 (const gchar        *theme_class,
+			      gint                id)
+{
+  GtkSymbolicColor *symbolic_color;
+
+  g_return_val_if_fail (theme_class != NULL, NULL);
+
+  symbolic_color = g_slice_new0 (GtkSymbolicColor);
+  symbolic_color->type = COLOR_TYPE_WIN32;
+  symbolic_color->win32.theme_class = g_strdup (theme_class);
+  symbolic_color->win32.id = id;
+  symbolic_color->ref_count = 1;
+
+  return symbolic_color;
+}
+
+/**
  * gtk_symbolic_color_ref:
  * @color: a #GtkSymbolicColor
  *
@@ -278,6 +315,9 @@ gtk_symbolic_color_unref (GtkSymbolicColor *color)
         case COLOR_TYPE_MIX:
           gtk_symbolic_color_unref (color->mix.color1);
           gtk_symbolic_color_unref (color->mix.color2);
+          break;
+        case COLOR_TYPE_WIN32:
+          g_free (color->win32.theme_class);
           break;
         default:
           break;
@@ -557,6 +597,12 @@ gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
       }
 
       break;
+    case COLOR_TYPE_WIN32:
+      return _gtk_win32_theme_color_resolve (color->win32.theme_class,
+					     color->win32.id,
+					     resolved_color);
+
+      break;
     default:
       g_assert_not_reached ();
     }
@@ -621,6 +667,12 @@ gtk_symbolic_color_to_string (GtkSymbolicColor *color)
         s = g_strdup_printf ("mix (%s, %s, %s)", color_string1, color_string2, factor);
         g_free (color_string1);
         g_free (color_string2);
+      }
+      break;
+    case COLOR_TYPE_WIN32:
+      {
+        s = g_strdup_printf (GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME"(%s, %d)", 
+			     color->win32.theme_class, color->win32.id);
       }
       break;
     default:
