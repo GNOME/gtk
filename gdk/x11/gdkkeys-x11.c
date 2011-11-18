@@ -467,23 +467,6 @@ get_keymap (GdkX11Keymap *keymap_x11)
   return keymap_x11->keymap;
 }
 
-#define GET_EFFECTIVE_KEYMAP(keymap) get_effective_keymap ((keymap), G_STRFUNC)
-
-static GdkKeymap *
-get_effective_keymap (GdkKeymap  *keymap,
-                      const char *function)
-{
-  if (!keymap)
-    {
-      GDK_NOTE (MULTIHEAD,
-                g_message ("reverting to default display keymap in %s",
-                           function));
-      return gdk_keymap_get_default ();
-    }
-
-  return keymap;
-}
-
 #ifdef HAVE_XKB
 static PangoDirection
 get_direction (XkbDescRec *xkb,
@@ -698,8 +681,6 @@ _gdk_x11_keymap_keys_changed (GdkDisplay *display)
 static PangoDirection
 gdk_x11_keymap_get_direction (GdkKeymap *keymap)
 {
-  keymap = GET_EFFECTIVE_KEYMAP (keymap);
-
 #ifdef HAVE_XKB
   if (KEYMAP_USE_XKB (keymap))
     {
@@ -725,8 +706,6 @@ gdk_x11_keymap_get_direction (GdkKeymap *keymap)
 static gboolean
 gdk_x11_keymap_have_bidi_layouts (GdkKeymap *keymap)
 {
-  keymap = GET_EFFECTIVE_KEYMAP (keymap);
-
 #ifdef HAVE_XKB
   if (KEYMAP_USE_XKB (keymap))
     {
@@ -756,21 +735,21 @@ gdk_x11_keymap_have_bidi_layouts (GdkKeymap *keymap)
 static gboolean
 gdk_x11_keymap_get_caps_lock_state (GdkKeymap *keymap)
 {
-  keymap = GET_EFFECTIVE_KEYMAP (keymap);
+  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
 
   ensure_lock_state (keymap);
 
-  return GDK_X11_KEYMAP (keymap)->caps_lock_state;
+  return keymap_x11->caps_lock_state;
 }
 
 static gboolean
 gdk_x11_keymap_get_num_lock_state (GdkKeymap *keymap)
 {
-  keymap = GET_EFFECTIVE_KEYMAP (keymap);
+  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
 
   ensure_lock_state (keymap);
 
-  return GDK_X11_KEYMAP (keymap)->num_lock_state;
+  return keymap_x11->num_lock_state;
 }
 
 static gboolean
@@ -779,16 +758,8 @@ gdk_x11_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                        GdkKeymapKey **keys,
                                        gint          *n_keys)
 {
+  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
   GArray *retval;
-  GdkX11Keymap *keymap_x11;
-
-  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
-  g_return_val_if_fail (keys != NULL, FALSE);
-  g_return_val_if_fail (n_keys != NULL, FALSE);
-  g_return_val_if_fail (keyval != 0, FALSE);
-
-  keymap = GET_EFFECTIVE_KEYMAP (keymap);
-  keymap_x11 = GDK_X11_KEYMAP (keymap);
 
   retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
 
@@ -909,16 +880,9 @@ gdk_x11_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
                                         guint        **keyvals,
                                         gint          *n_entries)
 {
-  GdkX11Keymap *keymap_x11;
-
+  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
   GArray *key_array;
   GArray *keyval_array;
-
-  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
-  g_return_val_if_fail (n_entries != NULL, FALSE);
-
-  keymap = GET_EFFECTIVE_KEYMAP (keymap);
-  keymap_x11 = GDK_X11_KEYMAP (keymap);
 
   update_keyrange (keymap_x11);
 
@@ -1048,14 +1012,9 @@ static guint
 gdk_x11_keymap_lookup_key (GdkKeymap          *keymap,
                            const GdkKeymapKey *key)
 {
-  GdkX11Keymap *keymap_x11;
+  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
 
-  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), 0);
-  g_return_val_if_fail (key != NULL, 0);
   g_return_val_if_fail (key->group < 4, 0);
-
-  keymap = GET_EFFECTIVE_KEYMAP (keymap);
-  keymap_x11 = GDK_X11_KEYMAP (keymap);
 
 #ifdef HAVE_XKB
   if (KEYMAP_USE_XKB (keymap))
@@ -1306,15 +1265,11 @@ gdk_x11_keymap_translate_keyboard_state (GdkKeymap       *keymap,
                                          gint            *level,
                                          GdkModifierType *consumed_modifiers)
 {
-  GdkX11Keymap *keymap_x11;
+  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
   KeySym tmp_keyval = NoSymbol;
   guint tmp_modifiers;
 
-  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (group < 4, FALSE);
-
-  keymap = GET_EFFECTIVE_KEYMAP (keymap);
-  keymap_x11 = GDK_X11_KEYMAP (keymap);
 
   if (keyval)
     *keyval = NoSymbol;
@@ -1483,11 +1438,8 @@ void
 _gdk_x11_keymap_add_virt_mods (GdkKeymap       *keymap,
                                GdkModifierType *modifiers)
 {
-  GdkX11Keymap *keymap_x11;
+  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
   int i;
-
-  keymap = GET_EFFECTIVE_KEYMAP (keymap);
-  keymap_x11 = GDK_X11_KEYMAP (keymap);
 
   /* See comment in add_virtual_modifiers() */
   for (i = 4; i < 8; i++)
@@ -1508,11 +1460,8 @@ static void
 gdk_x11_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
                                       GdkModifierType *state)
 {
-  GdkX11Keymap *keymap_x11;
+  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
   int i;
-
-  keymap = GET_EFFECTIVE_KEYMAP (keymap);
-  keymap_x11 = GDK_X11_KEYMAP (keymap);
 
   /*  This loop used to start at 3, which included MOD1 in the
    *  virtual mapping. However, all of GTK+ treats MOD1 as a
@@ -1538,11 +1487,8 @@ gboolean
 _gdk_x11_keymap_key_is_modifier (GdkKeymap *keymap,
                                  guint      keycode)
 {
-  GdkX11Keymap *keymap_x11;
+  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
   gint i;
-
-  keymap = GET_EFFECTIVE_KEYMAP (keymap);
-  keymap_x11 = GDK_X11_KEYMAP (keymap);
 
   if (keycode < keymap_x11->min_keycode ||
       keycode > keymap_x11->max_keycode)
@@ -1573,15 +1519,10 @@ static gboolean
 gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
                                       GdkModifierType *state)
 {
-  GdkX11Keymap *keymap_x11;
-  const guint vmods[] = {
-    GDK_SUPER_MASK, GDK_HYPER_MASK, GDK_META_MASK
-  };
+  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
+  const guint vmods[] = { GDK_SUPER_MASK, GDK_HYPER_MASK, GDK_META_MASK };
   int i, j;
   gboolean retval;
-
-  keymap = GET_EFFECTIVE_KEYMAP (keymap);
-  keymap_x11 = GDK_X11_KEYMAP (keymap);
 
   if (KEYMAP_USE_XKB (keymap))
     get_xkb (keymap_x11);

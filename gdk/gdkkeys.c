@@ -407,6 +407,9 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                    gint          *n_keys)
 {
   g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+  g_return_val_if_fail (keys != NULL, FALSE);
+  g_return_val_if_fail (n_keys != NULL, FALSE);
+  g_return_val_if_fail (keyval != 0, FALSE);
 
   return GDK_KEYMAP_GET_CLASS (keymap)->get_entries_for_keyval (keymap, keyval,
                                                                 keys, n_keys);
@@ -439,6 +442,7 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
                                     gint          *n_entries)
 {
   g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+  g_return_val_if_fail (n_entries != NULL, FALSE);
 
   return GDK_KEYMAP_GET_CLASS (keymap)->get_entries_for_keycode (keymap, hardware_keycode,
                                                                  keys, keyvals, n_entries);
@@ -462,6 +466,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
                        const GdkKeymapKey *key)
 {
   g_return_val_if_fail (GDK_IS_KEYMAP (keymap), 0);
+  g_return_val_if_fail (key != NULL, 0);
 
   return GDK_KEYMAP_GET_CLASS (keymap)->lookup_key (keymap, key);
 }
