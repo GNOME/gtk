@@ -1282,7 +1282,6 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 	node->flags = ((y->flags & (GTK_RBNODE_NON_COLORS)) | GTK_RBNODE_BLACK);
       else
 	node->flags = ((y->flags & (GTK_RBNODE_NON_COLORS)) | GTK_RBNODE_RED);
-      node->children = y->children;
       if (y->children)
 	{
 	  node->children = y->children;
