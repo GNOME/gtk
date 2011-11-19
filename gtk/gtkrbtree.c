@@ -383,43 +383,54 @@ _gtk_rbtree_free (GtkRBTree *tree)
   g_free (tree);
 }
 
+static void
+gtk_rbnode_adjust (GtkRBTree *tree,
+                   GtkRBNode *node,
+                   int        count_diff,
+                   int        total_count_diff,
+                   int        offset_diff)
+{
+  while (tree && node && node != tree->nil)
+    {
+      _fixup_validation (tree, node);
+      node->offset += offset_diff;
+      node->count += count_diff;
+      node->total_count += total_count_diff;
+      
+      node = node->parent;
+      if (node == tree->nil)
+	{
+	  node = tree->parent_node;
+	  tree = tree->parent_tree;
+          count_diff = 0;
+	}
+    }
+}
+
 void
 _gtk_rbtree_remove (GtkRBTree *tree)
 {
-  GtkRBTree *tmp_tree;
-  GtkRBNode *tmp_node;
-
-  gint height = tree->root->offset;
-  guint total_count = tree->root->total_count;
-
 #ifdef G_ENABLE_DEBUG  
+  GtkRBTree *tmp_tree;
+
   if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     _gtk_rbtree_test (G_STRLOC, tree);
 #endif
   
-  tmp_tree = tree->parent_tree;
-  tmp_node = tree->parent_node;
-
   /* ugly hack to make _fixup_validation work in the first iteration of the
    * loop below */
   GTK_RBNODE_UNSET_FLAG (tree->root, GTK_RBNODE_DESCENDANTS_INVALID);
   
-  while (tmp_tree && tmp_node && tmp_node != tmp_tree->nil)
-    {
-      _fixup_validation (tmp_tree, tmp_node);
-      tmp_node->offset -= height;
-      tmp_node->total_count -= total_count;
-      
-      tmp_node = tmp_node->parent;
-      if (tmp_node == tmp_tree->nil)
-	{
-	  tmp_node = tmp_tree->parent_node;
-	  tmp_tree = tmp_tree->parent_tree;
-	}
-    }
+  gtk_rbnode_adjust (tree->parent_tree, 
+                     tree->parent_node,
+                     0,
+                     - (int) tree->root->total_count,
+                     - tree->root->offset);
 
+#ifdef G_ENABLE_DEBUG  
   tmp_tree = tree->parent_tree;
-  tmp_node = tree->parent_node;
+#endif
+
   _gtk_rbtree_free (tree);
 
 #ifdef G_ENABLE_DEBUG  
