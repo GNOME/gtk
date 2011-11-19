@@ -39,7 +39,7 @@ _gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf)
 
   pixbuf_width = gdk_pixbuf_get_width (pixbuf);
   pixbuf_height = gdk_pixbuf_get_height (pixbuf);
-  g_return_val_if_fail (pixbuf_width == 0 && pixbuf_height == 0, NULL);
+  g_return_val_if_fail (pixbuf_width != 0 && pixbuf_height != 0, NULL);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
 
