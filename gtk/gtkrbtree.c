@@ -515,8 +515,6 @@ _gtk_rbtree_insert_before (GtkRBTree *tree,
 {
   GtkRBNode *node;
   gboolean left = TRUE;
-  GtkRBNode *tmp_node;
-  GtkRBTree *tmp_tree;
 
 #ifdef G_ENABLE_DEBUG  
   if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
@@ -546,32 +544,15 @@ _gtk_rbtree_insert_before (GtkRBTree *tree,
 	current->left = node;
       else
 	current->right = node;
-      tmp_node = node->parent;
-      tmp_tree = tree;
+      gtk_rbnode_adjust (tree, node->parent,
+                         1, 1, height);
     }
   else
     {
       g_assert (tree->root == tree->nil);
       tree->root = node;
-      tmp_node = tree->parent_node;
-      tmp_tree = tree->parent_tree;
-    }
-
-  while (tmp_tree && tmp_node && tmp_node != tmp_tree->nil)
-    {
-      /* We only want to propagate the count if we are in the tree we
-       * started in. */
-      if (tmp_tree == tree)
-	tmp_node->count++;
-
-      tmp_node->total_count += 1;
-      tmp_node->offset += height;
-      tmp_node = tmp_node->parent;
-      if (tmp_node == tmp_tree->nil)
-	{
-	  tmp_node = tmp_tree->parent_node;
-	  tmp_tree = tmp_tree->parent_tree;
-	}
+      gtk_rbnode_adjust (tree->parent_tree, tree->parent_node,
+                         0, 1, height);
     }
 
   if (valid)
