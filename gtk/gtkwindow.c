@@ -5297,7 +5297,7 @@ set_grip_shape (GtkWindow *window)
 
   width = gdk_window_get_width (priv->grip_window);
   height = gdk_window_get_height (priv->grip_window);
-  surface = cairo_image_surface_create (CAIRO_FORMAT_A8, width, height);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
 
   cr = cairo_create (surface);
   cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 0.0);
