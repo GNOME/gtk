@@ -193,8 +193,9 @@ radio_item_toggled (GtkCheckMenuItem *w,
 /* GtkMenu construction {{{2 */
 
 static GtkWidget *
-create_menuitem_from_model (GMenuModelItem *item,
-                            GActionGroup   *group)
+create_menuitem_from_model (GMenuModel   *model,
+                            gint          item,
+                            GActionGroup *group)
 {
   GtkWidget *w;
   gchar *label;
@@ -205,10 +206,10 @@ create_menuitem_from_model (GMenuModelItem *item,
   const GVariantType *type;
   GVariant *v;
 
-  g_menu_model_item_get_attribute (item, G_MENU_ATTRIBUTE_LABEL, "s", &label);
+  g_menu_model_get_item_attribute (model, item, G_MENU_ATTRIBUTE_LABEL, "s", &label);
 
   action = NULL;
-  g_menu_model_item_get_attribute (item, G_MENU_ATTRIBUTE_ACTION, "s", &action);
+  g_menu_model_get_item_attribute (model, item, G_MENU_ATTRIBUTE_ACTION, "s", &action);
 
   if (action != NULL)
     type = g_action_group_get_action_state_type (group, action);
@@ -263,7 +264,7 @@ create_menuitem_from_model (GMenuModelItem *item,
           a->state_changed_id = g_signal_connect (group, s,
                                                   G_CALLBACK (radio_state_changed), w);
           g_free (s);
-          g_menu_model_item_get_attribute (item, G_MENU_ATTRIBUTE_TARGET, "s", &target);
+          g_menu_model_get_item_attribute (model, item, G_MENU_ATTRIBUTE_TARGET, "s", &target);
           a->target = g_strdup (target);
           v = g_action_group_get_action_state (group, action);
           gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w),
@@ -295,7 +296,6 @@ append_items_from_model (GtkWidget    *menu,
   GtkWidget *w;
   GtkWidget *menuitem;
   GtkWidget *submenu;
-  GMenuModelItem item;
   GMenuModel *m;
 
   n = g_menu_model_get_n_items (model);
@@ -311,18 +311,16 @@ append_items_from_model (GtkWidget    *menu,
 
   for (i = 0; i < n; i++)
     {
-      g_menu_model_get_item (model, i, &item);
-
-      if ((m = g_menu_model_item_get_link (&item, G_MENU_LINK_SECTION)))
+      if ((m = g_menu_model_get_item_link (model, i, G_MENU_LINK_SECTION)))
         {
           append_items_from_model (menu, m, group, need_separator);
           g_object_unref (m);
           continue;
         }
 
-      menuitem = create_menuitem_from_model (&item, group);
+      menuitem = create_menuitem_from_model (model, i, group);
 
-      if ((m = g_menu_model_item_get_link (&item, G_MENU_LINK_SUBMENU)))
+      if ((m = g_menu_model_get_item_link (model, i, G_MENU_LINK_SUBMENU)))
         {
           submenu = create_menu_from_model (m, group);
           gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
