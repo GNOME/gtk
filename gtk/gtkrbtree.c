@@ -1170,29 +1170,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 	y = y->left;
     }
 
-  /* adjust count only beneath tree */
-  for (x = y; x != tree->nil; x = x->parent)
-    {
-      x->count--;
-    }
-
-  /* offsets and total count adjust all the way up through parent trees */
   y_height = GTK_RBNODE_GET_HEIGHT (y);
-
-  tmp_tree = tree;
-  tmp_node = y;
-  while (tmp_tree && tmp_node && tmp_node != tmp_tree->nil)
-    {
-      tmp_node->offset -= (y_height + (y->children?y->children->root->offset:0));
-      _fixup_validation (tmp_tree, tmp_node);
-      _fixup_total_count (tmp_tree, tmp_node);
-      tmp_node = tmp_node->parent;
-      if (tmp_node == tmp_tree->nil)
-	{
-	  tmp_node = tmp_tree->parent_node;
-	  tmp_tree = tmp_tree->parent_tree;
-	}
-    }
 
   /* x is y's only child, or nil */
   if (y->left != tree->nil)
@@ -1216,25 +1194,9 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 
   /* We need to clean up the validity of the tree.
    */
-
-  tmp_tree = tree;
-  tmp_node = x;
-  do
-    {
-      /* We skip the first time, iff x is nil */
-      if (tmp_node != tmp_tree->nil)
-	{
-	  _fixup_validation (tmp_tree, tmp_node);
-	  _fixup_total_count (tmp_tree, tmp_node);
-	}
-      tmp_node = tmp_node->parent;
-      if (tmp_node == tmp_tree->nil)
-	{
-	  tmp_node = tmp_tree->parent_node;
-	  tmp_tree = tmp_tree->parent_tree;
-	}
-    }
-  while (tmp_tree != NULL);
+  gtk_rbnode_adjust (tree, y,
+                     -1, -1,
+                     - (y_height + (y->children?y->children->root->offset:0)));
 
   if (y != node)
     {
