@@ -207,7 +207,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * @window: the newly-added #GtkWindow
    *
    * Emitted when a #GtkWindow is added to @application through
-   * gtk_application_add_wi!ndow().
+   * gtk_application_add_window().
    *
    * Since: 3.2
    */
