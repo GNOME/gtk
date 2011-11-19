@@ -1,3 +1,93 @@
+Overview of Changes in GTK+ 3.3.4
+=================================
+
+* The beagle search backend has been dropped
+
+* Stop using GDK/GTK_DISABLE_DEPRECATED guards for deprecated
+  functions; instead use function attributes
+
+* Make GtkCellRendererAccel support naked keyvals, so it can
+  be used in gnome-control-center
+
+* GDK changes
+ - Make the Mod1 == Alt assumption official
+ - The Broadway backend has initial support for V7+ websockets
+
+* GtkApplication no longer uses gtk_main internally
+
+* GtkNotebook now destroys its action widgets, instead of leaking them
+
+* Theming improvements:
+ - Background images can now be tiled instead of stretched,
+   using the background-repeat CSS property
+ - Unfocused windows can be themed differently, using
+   the 'window-unfocused' state flag
+
+* Accessibility improvements:
+ - Much better treeview performance
+ - Completely ignore invisible columns in treeviews
+ - Combo box keybindings are reported again
+ - Textview respects display lines again
+
+* OS X improvements:
+ - Improved handling of motion events and event state
+ - Handle recursive CFRunLoops
+ - More fixes to accel handling
+
+* Win32 improvements:
+ - Many fixes, making this the first version of GTK+ 3 that
+   works well on Windows
+
+* Bugs fixed:
+  84314 gdk_display_sync() and gdk_flush()
+ 142874 use of SetWindowLong in gdkwindow-win32.c causes incorrect...
+ 169811 configure_event and window-state-event are not emitted con...
+ 171456 "Keep Above" option in Gimp broken on Win32
+ 324254 Realizing a top-level window widget early positions it at 0,0
+ 516822 gtk_window_fullscreen does not resize correctly if removing...
+ 542777 Scroll-Wheel doesn't scroll (Win)
+ 552041 Windows' System Menu from taskbar is buggy
+ 603559 gtk should handle missing immodules better
+ 604156 gtk_window_set_modal() freezes application completely
+ 606727 Can't bind keys on numerical keypad with numlock on
+ 612359 Dialog positioning hints fail on Windows 7
+ 616544 win32 drag and drop (DnD) broken for GTK+ 3
+ 628049 Native windows don't work very well
+ 631384 Images pasted from clipboard are shifted/wrapped
+ 647460 typo in msw_style.c?
+ 652239 win32: resurect Windows clipboard selection notification
+ 658841 Ensure native window in gdk_win32_drawable_get_handle()...
+ 658842 Fix win32 _gdk_windowing_window_at_pointer - port to gtk3
+ 659151 Cannot obtain accessible keybinding for comboboxes
+ 659257 Gtk-WARNING **: GtkRecentChooserWidget 0x80da890 is mapped...
+ 661858 Add annotations for some GtkRadio* constructors
+ 661859 Add annotations for some GtkSymbolicColor constructors
+ 661997 Gtk crashes when changing the TreeView model while rubber...
+ 662160 gtk_print_operation_cancel fails
+ 662628 Add keyboard brightness to keyname-table.h
+ 662670 Pressing "Enter" in print dialog box will not cause printing
+ 662691 menuitem: Always treat submenus as popup
+ 662755 Keycode support in GtkCellRendererAccel broken
+ 662839 Fix XIGrabKeycode usage
+ 662870 Fix introspection annotations for GtkRadioToolButton
+ 662953 x11: Fix window manager change detection
+ 663073 gtk_dialog_new_with_buttons should be G_GNUC_NULL_TERMINATED
+ 663138 iconview: layout items immediately when setting a GtkTreeModel
+ 663182 Dragging any item on OS X crashes Banshee
+ 663345 'from gi.repository import Gtk' fails in jhbuild
+ 663396 With multiple master devices, right clicking may show popup...
+ 663522 css: start background-repeat
+ 663605 Fix event->state of many event types on quartz
+ 663694 GtkTreeViewAccessibleCellInfo are leaked
+ 663761 gtk: Fix GtkCellRenderer ignoring keycodes
+ 663825 calling gtk_progress_bar_set_fraction with a fraction > 1.0...
+ 663856 Make option-foo accelerators use the right symbol
+ 663994 GtkTextView no longer reports the correct line text to ATs...
+ 664021 GtkSpinButton: Clarify clamping behavior in gtk_spin_button...
+ 664027 Build fails with undefined reference to `gdk_keymap_get_mod...
+ 664132 gdk_cairo_region_create_from_surface broken on PPC...
+
+
 Overview of Changes in GTK+ 3.3.2
 =================================
 
