@@ -3089,7 +3089,7 @@ _gtk_tree_view_accessible_remove (GtkTreeView *treeview,
 
 /* NB: id is not checked, only columns < id are.
  * This is important so the function works for notification of removal of a column */
-guint
+static guint
 to_visible_column_id (GtkTreeView *treeview,
                       guint        id)
 {
