@@ -603,22 +603,12 @@ _gtk_rbtree_node_set_height (GtkRBTree *tree,
 			     gint       height)
 {
   gint diff = height - GTK_RBNODE_GET_HEIGHT (node);
-  GtkRBNode *tmp_node = node;
-  GtkRBTree *tmp_tree = tree;
 
   if (diff == 0)
     return;
 
-  while (tmp_tree && tmp_node && tmp_node != tmp_tree->nil)
-    {
-      tmp_node->offset += diff;
-      tmp_node = tmp_node->parent;
-      if (tmp_node == tmp_tree->nil)
-	{
-	  tmp_node = tmp_tree->parent_node;
-	  tmp_tree = tmp_tree->parent_tree;
-	}
-    }
+  gtk_rbnode_adjust (tree, node, 0, 0, diff);
+
 #ifdef G_ENABLE_DEBUG  
   if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     _gtk_rbtree_test (G_STRLOC, tree);
