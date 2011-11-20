@@ -7594,7 +7594,14 @@ gtk_tree_view_drag_begin (GtkWidget      *widget,
                                  &cell_x,
                                  &cell_y);
 
-  g_return_if_fail (path != NULL);
+  /* If path is NULL, there's nothing we can drag.  For now, we silently
+   * bail out.  Actually, dragging should not be possible from an empty
+   * tree view, but there's no way we can cancel that from here.
+   * Automatically unsetting the tree view as drag source for empty models
+   * is something that would likely break other people's code ...
+   */
+  if (!path)
+    return;
 
   row_pix = gtk_tree_view_create_row_drag_icon (tree_view,
                                                 path);
