@@ -1141,22 +1141,23 @@ gtk_drag_begin_internal (GtkWidget         *widget,
         }
       time = (double)gdk_event_get_time (event);
     }
+
   nstime = [[NSDate dateWithTimeIntervalSince1970: time / 1000] timeIntervalSinceReferenceDate];
   nsevent = [NSEvent mouseEventWithType: NSLeftMouseDown
-        	      location: point
-		      modifierFlags: 0
-	              timestamp: nstime
-		      windowNumber: [nswindow windowNumber]
-		      context: [nswindow graphicsContext]
-		      eventNumber: 0
-		      clickCount: 1
-	              pressure: 0.0 ];
+                      location: point
+                      modifierFlags: 0
+                      timestamp: nstime
+                      windowNumber: [nswindow windowNumber]
+                      context: [nswindow graphicsContext]
+                      eventNumber: 0
+                      clickCount: 1
+                      pressure: 0.0 ];
 
   window = [(id<GdkNSView>)[nswindow contentView] gdkWindow];
-  g_return_val_if_fail(nsevent != NULL, NULL);
+  g_return_val_if_fail (nsevent != NULL, NULL);
 
   context = gdk_drag_begin (window, NULL);
-  g_return_val_if_fail( context != NULL, NULL);
+  g_return_val_if_fail (context != NULL, NULL);
 
   info = gtk_drag_get_source_info (context, TRUE);
   info->nsevent = nsevent;
@@ -1168,7 +1169,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   gtk_target_list_ref (target_list);
 
   info->possible_actions = actions;
-  
+
   g_signal_emit_by_name (widget, "drag-begin", info->context);
 
   /* Ensure that we have an icon before we start the drag; the
@@ -1178,30 +1179,32 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   if (!info->icon_pixbuf)
     {
       if (!site || site->icon_type == GTK_IMAGE_EMPTY)
-	gtk_drag_set_icon_default (context);
+        gtk_drag_set_icon_default (context);
       else
-	switch (site->icon_type)
-	  {
-	  case GTK_IMAGE_PIXBUF:
-	    gtk_drag_set_icon_pixbuf (context,
-				      site->icon_data.pixbuf.pixbuf,
-				      -2, -2);
-	    break;
-	  case GTK_IMAGE_STOCK:
-	    gtk_drag_set_icon_stock (context,
-				     site->icon_data.stock.stock_id,
-				     -2, -2);
-	    break;
-	  case GTK_IMAGE_ICON_NAME:
-	    gtk_drag_set_icon_name (context,
-			    	    site->icon_data.name.icon_name,
-				    -2, -2);
-	    break;
-	  case GTK_IMAGE_EMPTY:
-	  default:
-	    g_assert_not_reached();
-	    break;
-	  }
+        {
+          switch (site->icon_type)
+            {
+              case GTK_IMAGE_PIXBUF:
+                  gtk_drag_set_icon_pixbuf (context,
+                                            site->icon_data.pixbuf.pixbuf,
+                                            -2, -2);
+                  break;
+              case GTK_IMAGE_STOCK:
+                  gtk_drag_set_icon_stock (context,
+                                           site->icon_data.stock.stock_id,
+                                           -2, -2);
+                  break;
+              case GTK_IMAGE_ICON_NAME:
+                  gtk_drag_set_icon_name (context,
+                                          site->icon_data.name.icon_name,
+                                          -2, -2);
+                  break;
+              case GTK_IMAGE_EMPTY:
+              default:
+                  g_assert_not_reached();
+                  break;
+            }
+        }
     }
 
   /* drag will begin in an idle handler to avoid nested run loops */
