@@ -7988,8 +7988,9 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
                    (gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE),
                    time);
 
-  if (gtk_tree_path_get_depth (dest_row) == 1
-      && gtk_tree_path_get_indices (dest_row)[0] == 0)
+  if (gtk_tree_path_get_depth (dest_row) == 1 &&
+      gtk_tree_path_get_indices (dest_row)[0] == 0 &&
+      gtk_tree_model_iter_n_children (tree_view->priv->model, NULL) != 0)
     {
       /* special special case drag to "0", scroll to first item */
       if (!tree_view->priv->scroll_to_path)
