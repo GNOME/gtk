@@ -167,6 +167,7 @@ struct _GtkScrolledWindowPrivate
 
   /* Kinetic scrolling */
   GdkEvent              *button_press_event;
+  GdkWindow             *overshoot_window;
   guint                  kinetic_scrolling_enabled : 1;
   guint                  in_drag                   : 1;
   guint                  hmoving                   : 1;
@@ -268,6 +269,11 @@ static void  gtk_scrolled_window_get_preferred_width_for_height  (GtkWidget     
 							gint                *minimum_height,
 							gint                *natural_height);
 
+static void  gtk_scrolled_window_realize               (GtkWidget           *widget);
+static void  gtk_scrolled_window_unrealize             (GtkWidget           *widget);
+static void  gtk_scrolled_window_map                   (GtkWidget           *widget);
+static void  gtk_scrolled_window_unmap                 (GtkWidget           *widget);
+
 static void     motion_event_list_init                 (MotionEventList     *motion_events,
                                                         guint                size);
 static void     motion_event_list_clear                (MotionEventList     *motion_events);
@@ -334,6 +340,10 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->get_preferred_height = gtk_scrolled_window_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_scrolled_window_get_preferred_height_for_width;
   widget_class->get_preferred_width_for_height = gtk_scrolled_window_get_preferred_width_for_height;
+  widget_class->realize = gtk_scrolled_window_realize;
+  widget_class->unrealize = gtk_scrolled_window_unrealize;
+  widget_class->map = gtk_scrolled_window_map;
+  widget_class->unmap = gtk_scrolled_window_unmap;
 
   container_class->add = gtk_scrolled_window_add;
   container_class->remove = gtk_scrolled_window_remove;
@@ -1706,8 +1716,8 @@ gtk_scrolled_window_allocate_child (GtkScrolledWindow *swindow,
   gtk_widget_get_allocation (widget, &allocation);
 
   gtk_scrolled_window_relative_allocation (widget, relative_allocation);
-  child_allocation.x = relative_allocation->x + allocation.x;
-  child_allocation.y = relative_allocation->y + allocation.y;
+  child_allocation.x = 0;
+  child_allocation.y = 0;
   child_allocation.width = relative_allocation->width;
   child_allocation.height = relative_allocation->height;
 
@@ -2043,6 +2053,13 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
     }
   else if (gtk_widget_get_visible (priv->vscrollbar))
     gtk_widget_hide (priv->vscrollbar);
+
+  if (gtk_widget_get_realized (widget))
+    gdk_window_move_resize (priv->overshoot_window,
+                            allocation->x + relative_allocation.x,
+                            allocation->y + relative_allocation.y,
+                            relative_allocation.width,
+                            relative_allocation.height);
 }
 
 static gboolean
@@ -3041,6 +3058,9 @@ gtk_scrolled_window_add (GtkContainer *container,
   scrolled_window = GTK_SCROLLED_WINDOW (container);
   priv = scrolled_window->priv;
 
+  if (gtk_widget_get_realized (GTK_WIDGET (bin)))
+    gtk_widget_set_parent_window (child, priv->overshoot_window);
+
   _gtk_bin_set_child (bin, child);
   gtk_widget_set_parent (child, GTK_WIDGET (bin));
 
@@ -3348,6 +3368,80 @@ gtk_scrolled_window_get_preferred_width_for_height (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
+}
+
+static void
+gtk_scrolled_window_realize (GtkWidget *widget)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  GtkAllocation allocation, relative_allocation;
+  GdkWindowAttr attributes;
+  GtkWidget *child_widget;
+  gint attributes_mask;
+
+  gtk_widget_set_realized (widget, TRUE);
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
+
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.x = allocation.x + relative_allocation.x;
+  attributes.y = allocation.y + relative_allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
+  attributes.wclass = GDK_INPUT_OUTPUT;
+  attributes.visual = gtk_widget_get_visual (widget);
+  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK |
+    GDK_BUTTON_MOTION_MASK | GDK_TOUCH_MASK;
+
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+
+  scrolled_window->priv->overshoot_window =
+    gdk_window_new (gtk_widget_get_parent_window (widget),
+                    &attributes, attributes_mask);
+
+  gdk_window_set_user_data (scrolled_window->priv->overshoot_window, widget);
+
+  child_widget = gtk_bin_get_child (GTK_BIN (widget));
+
+  if (child_widget)
+    gtk_widget_set_parent_window (child_widget,
+                                  scrolled_window->priv->overshoot_window);
+
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->realize (widget);
+}
+
+static void
+gtk_scrolled_window_unrealize (GtkWidget *widget)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+
+  gdk_window_set_user_data (scrolled_window->priv->overshoot_window, NULL);
+  gdk_window_destroy (scrolled_window->priv->overshoot_window);
+  scrolled_window->priv->overshoot_window = NULL;
+
+  gtk_widget_set_realized (widget, FALSE);
+
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unrealize (widget);
+}
+
+static void
+gtk_scrolled_window_map (GtkWidget *widget)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+
+  gdk_window_show (scrolled_window->priv->overshoot_window);
+
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->map (widget);
+}
+
+static void
+gtk_scrolled_window_unmap (GtkWidget *widget)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+
+  gdk_window_hide (scrolled_window->priv->overshoot_window);
+
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unmap (widget);
 }
 
 /**
