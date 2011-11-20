@@ -280,6 +280,7 @@ gtk_text_view_accessible_get_text_before_offset (AtkText         *text,
       gtk_text_view_backward_display_line_start (view, &start);
       end = start;
       gtk_text_view_backward_display_line (view, &start);
+      gtk_text_view_backward_display_line_start (view, &start);
     }
   else if (boundary_type == ATK_TEXT_BOUNDARY_LINE_END)
     {
@@ -288,12 +289,14 @@ gtk_text_view_accessible_get_text_before_offset (AtkText         *text,
         {
           gtk_text_view_backward_display_line (view, &start);
           end = start;
+          gtk_text_view_forward_display_line_end (view, &end);
           if (!gtk_text_iter_is_start (&start))
             {
-              gtk_text_view_backward_display_line (view, &start);
-              gtk_text_view_forward_display_line_end (view, &start);
+              if (gtk_text_view_backward_display_line (view, &start))
+                gtk_text_view_forward_display_line_end (view, &start);
+              else
+                gtk_text_iter_set_offset (&start, 0);
             }
-          gtk_text_view_forward_display_line_end (view, &end);
         }
       else
         end = start;
