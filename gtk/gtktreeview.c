@@ -5939,7 +5939,9 @@ gtk_tree_view_leave_notify (GtkWidget        *widget,
 {
   GtkTreeView *tree_view;
 
-  if (event->mode == GDK_CROSSING_GRAB)
+  if (event->mode == GDK_CROSSING_GRAB ||
+      event->mode == GDK_CROSSING_GTK_GRAB ||
+      event->mode == GDK_CROSSING_GTK_UNGRAB)
     return TRUE;
 
   tree_view = GTK_TREE_VIEW (widget);
