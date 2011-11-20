@@ -1124,8 +1124,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   GtkDragSourceInfo *info;
   GdkDevice *pointer;
   GdkWindow *window;
-  GdkDragContext *context = gdk_drag_begin (gtk_widget_get_window (widget),
-					    NULL);
+  GdkDragContext *context;
   NSWindow *nswindow = get_toplevel_nswindow (widget);
   NSPoint point = {0, 0};
   gdouble x, y;
