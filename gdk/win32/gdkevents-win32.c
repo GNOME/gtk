@@ -2730,7 +2730,8 @@ gdk_event_translate (MSG  *msg,
 		gdk_pointer_ungrab (msg->time);
 	    }
 
-	  if (keyboard_grab->window == window)
+	  if (keyboard_grab != NULL &&
+	      keyboard_grab->window == window)
 	    gdk_keyboard_ungrab (msg->time);
 	}
 
