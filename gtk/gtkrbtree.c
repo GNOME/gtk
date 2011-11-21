@@ -36,6 +36,11 @@ static inline void _fixup_validation              (GtkRBTree  *tree,
 						   GtkRBNode  *node);
 static inline void _fixup_total_count             (GtkRBTree  *tree,
 						   GtkRBNode  *node);
+#ifdef G_ENABLE_DEBUG  
+static void        _gtk_rbtree_test               (const gchar *where,
+                                                   GtkRBTree  *tree);
+static void        _gtk_rbtree_debug_spew         (GtkRBTree  *tree);
+#endif
 
 
 
@@ -1706,7 +1711,7 @@ _gtk_rbtree_test_structure (GtkRBTree *tree)
   _gtk_rbtree_test_structure_helper (tree, tree->root);
 }
 
-void
+static void
 _gtk_rbtree_test (const gchar *where,
                   GtkRBTree   *tree)
 {
@@ -1769,7 +1774,7 @@ _gtk_rbtree_debug_spew_helper (GtkRBTree *tree,
     }
 }
 
-void
+static void
 _gtk_rbtree_debug_spew (GtkRBTree *tree)
 {
   g_return_if_fail (tree != NULL);
