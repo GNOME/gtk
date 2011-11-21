@@ -1,0 +1,608 @@
+@define-color bg_color -gtk-win32-color(button, 15);
+
+/* Buttons */
+
+.button {
+    background-image: -gtk-win32-theme-part(button, 1 1);
+    border-width: 0;
+    -GtkWidget-focus-line-width: 1;
+    -GtkWidget-focus-padding: 3;
+    -GtkButton-interior-focuse: true;
+}
+
+.button:insensitive {
+    background-image: -gtk-win32-theme-part(button, 1 4);
+}
+
+.button:focused {
+    background-image: -gtk-win32-theme-part(button, 1 5);
+}
+
+.button:prelight, .button:prelight:focused {
+    background-image: -gtk-win32-theme-part(button, 1 2);
+    color: #000000;
+}
+
+.button:active, .button:active:focused, .button:active:focused:prelight {
+    background-image: -gtk-win32-theme-part(button, 1 3);
+}
+
+/* Check buttons */
+
+.check {
+    background-image: -gtk-win32-theme-part(button, 3 1);
+    border-width: 0;
+}
+
+.check:insensitive {
+    background-image: -gtk-win32-theme-part(button, 3 4);
+}
+
+.check:prelight {
+    background-image: -gtk-win32-theme-part(button, 3 2);
+}
+
+.check:active {
+    background-image: -gtk-win32-theme-part(button, 3 5);
+}
+
+.check:active:insensitive {
+    background-image: -gtk-win32-theme-part(button, 1 8);
+}
+
+.check:active:prelight {
+    background-image: -gtk-win32-theme-part(button, 3 6);
+}
+
+.check:inconsistent {
+    background-image: -gtk-win32-theme-part(button, 3 9);
+}
+
+.check:inconsistent:insensitive {
+    background-image: -gtk-win32-theme-part(button, 3 12);
+}
+
+.check:inconsistent:prelight {
+    background-image: -gtk-win32-theme-part(button, 3 10);
+}
+
+/* Radio buttons */
+
+.radio {
+    background-image: -gtk-win32-theme-part(button, 2 1);
+    border-width: 0;
+}
+
+.radio:insensitive {
+    background-image: -gtk-win32-theme-part(button, 2 4);
+}
+
+.radio:prelight {
+    background-image: -gtk-win32-theme-part(button, 2 2);
+}
+
+.radio:active {
+    background-image: -gtk-win32-theme-part(button, 2 5);
+}
+
+.radio:active:insensitive {
+    background-image: -gtk-win32-theme-part(button, 1 8);
+}
+
+.radio:active:prelight {
+    background-image: -gtk-win32-theme-part(button, 2 6);
+}
+
+
+.radio:inconsistent {
+    background-image: -gtk-win32-theme-part(button, 2 1, mix 2 5);
+}
+
+.radio:inconsistent:prelight {
+    background-image: -gtk-win32-theme-part(button, 2 4 , mix 2 6);
+}
+
+/* Scrollbars */
+
+/* TODO: Win32 has different concept for upper and lower trough, we
+   don't use this atm */
+
+.scrollbar {
+    -GtkRange-trough-border: 0;
+    -GtkRange-arrow-scaling: 0.0;
+    -GtkRange-slider-width: -gtk-win32-size(scrollbar, 3);
+}
+
+.scrollbar.vertical {
+    -GtkRange-slider-width: -gtk-win32-size(scrollbar, 2);
+}
+
+.scrollbar.button.bottom {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 5);
+}
+
+.scrollbar.button.bottom:prelight {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 6);
+}
+
+.scrollbar.button.bottom:active,
+.scrollbar.button.bottom:active:prelight {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 7);
+}
+
+.scrollbar.button.bottom:insensitive {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 8);
+}
+
+.scrollbar.button.top {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 1);
+}
+
+.scrollbar.button.top:prelight {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 2);
+}
+
+.scrollbar.button.top:active,
+.scrollbar.button.top:active:prelight {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 3);
+}
+
+.scrollbar.button.top:insensitive {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 4);
+}
+
+.scrollbar.button.left {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 9);
+}
+
+.scrollbar.button.left:prelight {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 10);
+}
+
+.scrollbar.button.left:active,
+.scrollbar.button.left:active:prelight {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 11);
+}
+
+.scrollbar.button.left:insensitive {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 12);
+}
+
+.scrollbar.button.right {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 13);
+}
+
+.scrollbar.button.right:prelight {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 14);
+}
+
+.scrollbar.button.right:active,
+.scrollbar.button.right:active:prelight {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 15);
+}
+
+.scrollbar.button.right:insensitive {
+    background-image: -gtk-win32-theme-part(scrollbar, 1 16);
+}
+
+.scrollbar.trough {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(scrollbar, 2 1, 4 1);
+}
+
+.scrollbar.trough.vertical {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(scrollbar, 2 1, 6 1);
+}
+
+.scrollbar.slider {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(scrollbar, 2 1, 8 1);
+}
+
+.scrollbar.slider:prelight {
+    background-image: -gtk-win32-theme-part(scrollbar, 2 2, 8 2);
+}
+
+.scrollbar.slider.vertical {
+    background-image: -gtk-win32-theme-part(scrollbar, 3 1, 9 1);
+}
+
+.scrollbar.slider.vertical:prelight {
+    background-image: -gtk-win32-theme-part(scrollbar, 3 2, 9 2);
+}
+
+/* Entry */
+
+/* TODO: For entries with set_has_frame FALSE we should use 'edit, 3 1', not 
+   sure how to select for this though */
+.entry {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(edit, 1 1);
+}
+.entry:insensitive {
+    background-image: -gtk-win32-theme-part(edit, 1 4);
+}
+.entry:prelight {
+    background-image: -gtk-win32-theme-part(edit, 1 4);
+}
+
+/* Spinbuttons */
+
+.spinbutton.button,
+.spinbutton.button:focused {
+    border-width: 1 1 0 0;
+    border-style: none;
+    background-image: -gtk-win32-theme-part(spin, 1 1);
+    color: rgba(0, 0, 0, 0);
+}
+
+.spinbutton.button:prelight,
+.spinbutton.button:prelight:focused {
+    background-image: -gtk-win32-theme-part(spin, 1 2);
+    color: rgba(0, 0, 0, 0);
+}
+
+.spinbutton.button:active,
+.spinbutton.button:active:prelight {
+    background-image: -gtk-win32-theme-part(spin, 1 3);
+    color: rgba(0, 0, 0, 0);
+}
+
+.spinbutton.button:insensitive {
+    background-image: -gtk-win32-theme-part(spin, 1 4);
+    color: rgba(0, 0, 0, 0);
+}
+
+.spinbutton.button.bottom,
+.spinbutton.button.bottom:focused {
+    border-width: 0 1 1 0;
+    background-image: -gtk-win32-theme-part(spin, 2 1);
+    color: rgba(0, 0, 0, 0);
+}
+
+.spinbutton.button.bottom:prelight,
+.spinbutton.button.bottom:prelight:focused {
+    background-image: -gtk-win32-theme-part(spin, 2 2);
+    color: rgba(0, 0, 0, 0);
+}
+
+.spinbutton.button.bottom:active,
+.spinbutton.button.bottom:active:prelight {
+    background-image: -gtk-win32-theme-part(spin, 2 3);
+    color: rgba(0, 0, 0, 0);
+}
+
+.spinbutton.button.bottom:insensitive {
+    background-image: -gtk-win32-theme-part(spin, 2 4);
+    color: rgba(0, 0, 0, 0);
+}
+
+/* Ranges */
+
+/* TODO: The trough is not quite right, it covers everything,
+   but in win32 the slider 'sticks out' on the sides of the
+   trough */
+
+.scale {
+    -GtkScale-value-spacing: 0;
+    -GtkScale-slider-length: 9;
+    -GtkRange-slider-width: 20;
+    -GtkRange-trough-border: 0;
+}
+
+.scale.trough {
+    border-style: none;
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(trackbar, 1 1);
+}
+
+.scale.slider {
+    border-width: 0;
+    color: rgba(0,0,0,0);
+    background-image: -gtk-win32-theme-part(trackbar, 3 1);
+}
+
+.scale.slider:prelight {
+    background-image: -gtk-win32-theme-part(trackbar, 3 2);
+}
+
+.scale.slider:active,
+.scale.slider:prelight:active {
+    background-image: -gtk-win32-theme-part(trackbar, 3 3);
+}
+
+.scale.slider:focus {
+    background-image: -gtk-win32-theme-part(trackbar, 3 4);
+}
+
+.scale.slider:insensitive {
+    background-image: -gtk-win32-theme-part(trackbar, 3 5);
+}
+
+.scale.slider.vertical {
+    background-image: -gtk-win32-theme-part(trackbar, 6 1);
+}
+
+.scale.slider.vertical:prelight {
+    background-image: -gtk-win32-theme-part(trackbar, 6 2);
+}
+
+.scale.slider.vertical:active,
+.scale.slider.vertical:prelight:active {
+    background-image: -gtk-win32-theme-part(trackbar, 6 3);
+}
+
+.scale.slider.vertical:focus {
+    background-image: -gtk-win32-theme-part(trackbar, 6 4);
+}
+
+.scale.slider.vertical:insensitive {
+    background-image: -gtk-win32-theme-part(trackbar, 6 5);
+}
+
+.scale.slider.scale-has-marks-below {
+    background-image: -gtk-win32-theme-part(trackbar, 4 1);
+}
+
+.scale.slider.scale-has-marks-below:prelight {
+    background-image: -gtk-win32-theme-part(trackbar, 4 2);
+}
+
+.scale.slider.scale-has-marks-below:active,
+.scale.slider.scale-has-marks-below:prelight:active {
+    background-image: -gtk-win32-theme-part(trackbar, 4 3);
+}
+
+.scale.slider.scale-has-marks-below:focus {
+    background-image: -gtk-win32-theme-part(trackbar, 4 4);
+}
+
+.scale.slider.scale-has-marks-below:insensitive {
+    background-image: -gtk-win32-theme-part(trackbar, 4 5);
+}
+
+.scale.slider.scale-has-marks-below.vertical {
+    background-image: -gtk-win32-theme-part(trackbar, 8 1);
+}
+
+.scale.slider.scale-has-marks-below.vertical:prelight {
+    background-image: -gtk-win32-theme-part(trackbar, 8 2);
+}
+
+.scale.slider.scale-has-marks-below.vertical:active,
+.scale.slider.scale-has-marks-below.vertical:prelight:active {
+    background-image: -gtk-win32-theme-part(trackbar, 8 3);
+}
+
+.scale.slider.scale-has-marks-below.vertical:focus {
+    background-image: -gtk-win32-theme-part(trackbar, 8 4);
+}
+
+.scale.slider.scale-has-marks-below.vertical:insensitive {
+    background-image: -gtk-win32-theme-part(trackbar, 8 5);
+}
+
+
+
+.scale.slider.scale-has-marks-above {
+    background-image: -gtk-win32-theme-part(trackbar, 5 1);
+}
+
+.scale.slider.scale-has-marks-above:prelight {
+    background-image: -gtk-win32-theme-part(trackbar, 5 2);
+}
+
+.scale.slider.scale-has-marks-above:active,
+.scale.slider.scale-has-marks-above:prelight:active {
+    background-image: -gtk-win32-theme-part(trackbar, 5 3);
+}
+
+.scale.slider.scale-has-marks-above:focus {
+    background-image: -gtk-win32-theme-part(trackbar, 5 4);
+}
+
+.scale.slider.scale-has-marks-above:insensitive {
+    background-image: -gtk-win32-theme-part(trackbar, 5 5);
+}
+
+.scale.slider.scale-has-marks-above.vertical {
+    background-image: -gtk-win32-theme-part(trackbar, 7 1);
+}
+
+.scale.slider.scale-has-marks-above.vertical:prelight {
+    background-image: -gtk-win32-theme-part(trackbar, 7 2);
+}
+
+.scale.slider.scale-has-marks-above.vertical:active,
+.scale.slider.scale-has-marks-above.vertical:prelight:active {
+    background-image: -gtk-win32-theme-part(trackbar, 7 3);
+}
+
+.scale.slider.scale-has-marks-above.vertical:focus {
+    background-image: -gtk-win32-theme-part(trackbar, 7 4);
+}
+
+.scale.slider.scale-has-marks-above.vertical:insensitive {
+    background-image: -gtk-win32-theme-part(trackbar, 7 5);
+}
+
+/* Progress bars */
+
+GtkProgressBar {
+    padding: 0;
+}
+
+GtkProgressBar.trough {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(progress, 1 1);
+}
+
+GtkProgressBar.progressbar,
+GtkEntry.progressbar {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(progress, 5 1);
+}
+
+GtkProgressBar.progressbar.pulse,
+GtkEntry.progressbar.pulse {
+    background-image: -gtk-win32-theme-part(progress, 8 1);
+}
+
+GtkProgressBar.trough.vertical {
+    background-image: -gtk-win32-theme-part(progress, 2 1);
+}
+
+.progressbar.vertical {
+    background-image: -gtk-win32-theme-part(progress, 6 1);
+}
+
+.progressbar.pulse.vertical {
+    background-image: -gtk-win32-theme-part(progress, 10 1);
+}
+
+/* Menus */
+
+.menubar {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(menu, 7 1);
+}
+
+.menubar .menuitem {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(menu, 8 1);
+}
+
+.menubar .menuitem:prelight {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(menu, 8 3);
+}
+
+.menuitem:prelight {
+    background-image: -gtk-win32-theme-part(menu, 14 2);
+
+}
+
+.menuitem.radio,
+.menuitem.radio:prelight {
+    background-image: none;
+    border-width: 0;
+}
+
+.menuitem.radio:active, 
+.menuitem.radio:active:prelight {
+    background-image: -gtk-win32-theme-part(menu, 11 3);
+    border-width: 0;
+}
+
+.menuitem.radio:inconsistent,
+.menuitem.radio:inconsistent:prelight {
+    background-image: -gtk-win32-theme-part(menu, 11 3, mix 0 0);
+    border-width: 0;
+}
+
+.menuitem.radio:insensitive,
+.menuitem.radio:insensitive:prelight{
+    background-image: -gtk-win32-theme-part(menu, 11 4);
+    border-width: 0;
+}
+
+
+.menuitem.check,
+.menuitem.check:prelight {
+    background-image: none;
+    border-width: 0;
+}
+
+.menuitem.check:active, 
+.menuitem.check:active:prelight {
+    background-image: -gtk-win32-theme-part(menu, 11 1);
+    border-width: 0;
+}
+
+.menuitem.check:inconsistent,
+.menuitem.check:inconsistent:prelight {
+    background-image: -gtk-win32-theme-part(menu, 11 1, mix 0 0);
+    border-width: 0;
+}
+
+.menuitem.check:insensitive,
+.menuitem.check:insensitive:prelight{
+    background-image: -gtk-win32-theme-part(menu, 11 2);
+    border-width: 0;
+}
+
+/* Combobox */
+
+
+GtkComboBox.combobox-entry .button {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(combobox, 1 1);
+    color: rgba(0, 0, 0, 0);
+}
+
+GtkComboBox.combobox-entry .button:prelight,
+GtkComboBox.combobox-entry .button:focused,
+GtkComboBox.combobox-entry .button:prelight:focused {
+    background-image: -gtk-win32-theme-part(combobox, 1 2);
+}
+GtkComboBox.combobox-entry .button:active,
+GtkComboBox.combobox-entry .button:active:focused,
+GtkComboBox.combobox-entry .button:active:prelight,
+GtkComboBox.combobox-entry .button:active:focused:prelight {
+    background-image: -gtk-win32-theme-part(combobox, 1 3);
+}
+GtkComboBox.combobox-entry .button:insensitive {
+    background-image: -gtk-win32-theme-part(combobox, 1 4);
+}
+
+/* Notebook */
+
+.notebook {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(tab, 9 1);
+    -GtkNotebook-tab-overlap: 0;
+    -GtkNotebook-tab-curvature: 20;
+}
+
+.notebook tab {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(tab, 1 1);
+}
+
+.notebook tab:active {
+    background-image: -gtk-win32-theme-part(tab, 1 3);
+}
+
+.notebook {
+    background-color: #ffffff;
+}
+
+/* Toolbar */
+
+.toolbar {
+    border-width: 0;
+    background-image: -gtk-win32-theme-part(rebar, 6 1);
+}
+
+.toolbar .button,
+.toolbar .button:focused {
+    background-image: -gtk-win32-theme-part(toolbar, 1 1);
+}
+
+.toolbar .button:prelight,
+.toolbar .button:prelight:focused {
+    background-image: -gtk-win32-theme-part(toolbar, 1 2);
+}
+
+.toolbar .button:active {
+    background-image: -gtk-win32-theme-part(toolbar, 1 3);
+}
+
+.toolbar .button:active:prelight {
+    background-image: -gtk-win32-theme-part(toolbar, 1 6);
+}
+
+.toolbar .button:insensitive {
+    background-image: -gtk-win32-theme-part(toolbar, 1 4);
+}

@@ -41,6 +41,7 @@
 #include "gtkshadowprivate.h"
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
+#include "gtkwin32themeprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -384,6 +385,17 @@ int_value_parse (GtkCssParser *parser,
 {
   gint i;
 
+  if (_gtk_css_parser_begins_with (parser, '-'))
+    {
+      int res = _gtk_win32_theme_int_parse (parser, base, &i);
+      if (res >= 0)
+	{
+	  g_value_set_int (value, i);
+	  return res > 0;
+	}
+      /* < 0 => continue */
+    }
+
   if (!_gtk_css_parser_try_int (parser, &i))
     {
       _gtk_css_parser_error (parser, "Expected a valid integer value");
@@ -588,11 +600,26 @@ border_value_parse (GtkCssParser *parser,
 
   for (i = 0; i < G_N_ELEMENTS (numbers); i++)
     {
-      if (!_gtk_css_parser_try_uint (parser, &numbers[i]))
-        break;
+      if (_gtk_css_parser_begins_with (parser, '-'))
+	{
+	  /* These are strictly speaking signed, but we want to be able to use them
+	     for unsigned types too, as the actual ranges of values make this safe */
+	  int res = _gtk_win32_theme_int_parse (parser, base, (int *)&numbers[i]);
 
-      /* XXX: shouldn't allow spaces here? */
-      _gtk_css_parser_try (parser, "px", TRUE);
+	  if (res == 0) /* Parse error, report */
+	    return FALSE;
+
+	  if (res < 0) /* Nothing known to expand */
+	    break;
+	}
+      else
+	{
+	  if (!_gtk_css_parser_try_uint (parser, &numbers[i]))
+	    break;
+
+	  /* XXX: shouldn't allow spaces here? */
+	  _gtk_css_parser_try (parser, "px", TRUE);
+	}
     }
 
   if (i == 0)
@@ -908,6 +935,11 @@ pattern_value_parse (GtkCssParser *parser,
 {
   if (_gtk_css_parser_begins_with (parser, '-'))
     {
+      int res;
+      res = _gtk_win32_theme_part_parse (parser, base, value);
+      if (res >= 0)
+	return res > 0;
+      /* < 0 => continue */
       g_value_unset (value);
       g_value_init (value, GTK_TYPE_GRADIENT);
       return gradient_value_parse (parser, base, value);
@@ -1250,7 +1282,8 @@ border_image_value_parse (GtkCssParser *parser,
 {
   GValue temp = G_VALUE_INIT;
   cairo_pattern_t *pattern = NULL;
-  GtkGradient *gradient = NULL;
+  gconstpointer *boxed = NULL;
+  GType boxed_type;
   GtkBorder slice, *width = NULL, *parsed_slice;
   GtkCssBorderImageRepeat repeat, *parsed_repeat;
   gboolean retval = FALSE;
@@ -1261,8 +1294,9 @@ border_image_value_parse (GtkCssParser *parser,
   if (!pattern_value_parse (parser, base, &temp))
     return FALSE;
 
-  if (G_VALUE_TYPE (&temp) == GTK_TYPE_GRADIENT)
-    gradient = g_value_dup_boxed (&temp);
+  boxed_type = G_VALUE_TYPE (&temp);
+  if (boxed_type != CAIRO_GOBJECT_TYPE_PATTERN)
+    boxed = g_value_dup_boxed (&temp);
   else
     pattern = g_value_dup_boxed (&temp);
 
@@ -1297,8 +1331,8 @@ border_image_value_parse (GtkCssParser *parser,
 
   g_value_unset (&temp);
 
-  if (gradient != NULL)
-    image = _gtk_border_image_new_for_gradient (gradient, &slice, width, &repeat);
+  if (boxed != NULL)
+    image = _gtk_border_image_new_for_boxed (boxed_type, boxed, &slice, width, &repeat);
   else if (pattern != NULL)
     image = _gtk_border_image_new (pattern, &slice, width, &repeat);
 
@@ -1312,8 +1346,8 @@ border_image_value_parse (GtkCssParser *parser,
   if (pattern != NULL)
     cairo_pattern_destroy (pattern);
 
-  if (gradient != NULL)
-    gtk_gradient_unref (gradient);
+  if (boxed != NULL)
+    g_boxed_free (boxed_type, boxed);
 
   if (width != NULL)
     gtk_border_free (width);
@@ -1853,7 +1887,8 @@ unpack_border_width (const GValue *value,
 static void
 pack_border_width (GValue             *value,
                    GtkStyleProperties *props,
-                   GtkStateFlags       state)
+                   GtkStateFlags       state,
+		   GtkStylePropertyContext *context)
 {
   pack_border (value, props, state,
                "border-top-width", "border-left-width",
@@ -1872,7 +1907,8 @@ unpack_padding (const GValue *value,
 static void
 pack_padding (GValue             *value,
               GtkStyleProperties *props,
-              GtkStateFlags       state)
+              GtkStateFlags       state,
+	      GtkStylePropertyContext *context)
 {
   pack_border (value, props, state,
                "padding-top", "padding-left",
@@ -1891,7 +1927,8 @@ unpack_margin (const GValue *value,
 static void
 pack_margin (GValue             *value,
              GtkStyleProperties *props,
-             GtkStateFlags       state)
+             GtkStateFlags       state,
+	     GtkStylePropertyContext *context)
 {
   pack_border (value, props, state,
                "margin-top", "margin-left",
@@ -1933,7 +1970,8 @@ unpack_border_radius (const GValue *value,
 static void
 pack_border_radius (GValue             *value,
                     GtkStyleProperties *props,
-                    GtkStateFlags       state)
+                    GtkStateFlags       state,
+		    GtkStylePropertyContext *context)
 {
   GtkCssBorderCornerRadius *top_left;
 
@@ -2033,7 +2071,8 @@ unpack_font_description (const GValue *value,
 static void
 pack_font_description (GValue             *value,
                        GtkStyleProperties *props,
-                       GtkStateFlags       state)
+                       GtkStateFlags       state,
+		       GtkStylePropertyContext *context)
 {
   PangoFontDescription *description;
   char **families;
@@ -2111,7 +2150,8 @@ unpack_border_color (const GValue *value,
 static void
 pack_border_color (GValue             *value,
                    GtkStyleProperties *props,
-                   GtkStateFlags       state)
+                   GtkStateFlags       state,
+		   GtkStylePropertyContext *context)
 {
   /* NB: We are a color property, so we have to resolve to a color here.
    * So we just resolve to a color. We pick one and stick to it.
@@ -2467,6 +2507,27 @@ resolve_color_rgb (GtkStyleProperties *props,
 }
 
 static gboolean
+resolve_win32_theme_part (GtkStyleProperties *props,
+			  GValue             *value,
+			  GValue             *value_out,
+			  GtkStylePropertyContext *context)
+{
+  GtkWin32ThemePart  *part;
+  cairo_pattern_t *pattern;
+
+  part = g_value_get_boxed (value);
+  if (part == NULL)
+    return FALSE;
+
+  pattern = _gtk_win32_theme_part_render (part, context->width, context->height);
+
+  g_value_take_boxed (value_out, pattern);
+
+  return TRUE;
+}
+
+
+static gboolean
 resolve_gradient (GtkStyleProperties *props,
                   GValue             *value)
 {
@@ -2510,19 +2571,21 @@ void
 _gtk_style_property_resolve (const GtkStyleProperty *property,
                              GtkStyleProperties     *props,
                              GtkStateFlags           state,
-                             GValue                 *val)
+			     GtkStylePropertyContext *context,
+                             GValue                 *val,
+			     GValue                 *val_out)
 {
   if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
     {
       if (property->pspec->value_type == GDK_TYPE_RGBA)
         {
           if (resolve_color (props, val))
-            return;
+            goto out;
         }
       else if (property->pspec->value_type == GDK_TYPE_COLOR)
         {
           if (resolve_color_rgb (props, val))
-            return;
+            goto out;
         }
       
       g_value_unset (val);
@@ -2550,6 +2613,15 @@ _gtk_style_property_resolve (const GtkStyleProperty *property,
       if (!resolve_shadow (props, val))
         _gtk_style_property_default_value (property, props, state, val);
     }
+  else if (G_VALUE_TYPE (val) == GTK_TYPE_WIN32_THEME_PART)
+    {
+      if (resolve_win32_theme_part (props, val, val_out, context))
+	return; /* Don't copy val, this sets val_out */
+      _gtk_style_property_default_value (property, props, state, val);
+    }
+
+ out:
+  g_value_copy (val, val_out);
 }
 
 gboolean
@@ -2577,6 +2649,7 @@ void
 _gtk_style_property_pack (const GtkStyleProperty *property,
                           GtkStyleProperties     *props,
                           GtkStateFlags           state,
+			  GtkStylePropertyContext *context,
                           GValue                 *value)
 {
   g_return_if_fail (property != NULL);
@@ -2584,7 +2657,7 @@ _gtk_style_property_pack (const GtkStyleProperty *property,
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
   g_return_if_fail (G_IS_VALUE (value));
 
-  property->pack_func (value, props, state);
+  property->pack_func (value, props, state, context);
 }
 
 static void

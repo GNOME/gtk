@@ -42,6 +42,8 @@ GtkSymbolicColor * gtk_symbolic_color_new_alpha   (GtkSymbolicColor   *color,
 GtkSymbolicColor * gtk_symbolic_color_new_mix     (GtkSymbolicColor   *color1,
                                                    GtkSymbolicColor   *color2,
                                                    gdouble             factor);
+GtkSymbolicColor * gtk_symbolic_color_new_win32   (const gchar        *theme_class,
+						   gint                id);
 
 GtkSymbolicColor * gtk_symbolic_color_ref         (GtkSymbolicColor   *color);
 void               gtk_symbolic_color_unref       (GtkSymbolicColor   *color);

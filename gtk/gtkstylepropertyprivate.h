@@ -21,6 +21,7 @@
 #define __GTK_STYLEPROPERTY_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkstylecontextprivate.h"
 
 G_BEGIN_DECLS
 
@@ -33,7 +34,8 @@ typedef GParameter *     (* GtkStyleUnpackFunc)            (const GValue        
                                                             guint                  *n_params);
 typedef void             (* GtkStylePackFunc)              (GValue                 *value,
                                                             GtkStyleProperties     *props,
-                                                            GtkStateFlags           state);
+                                                            GtkStateFlags           state,
+							    GtkStylePropertyContext *context);
 typedef gboolean         (* GtkStyleParseFunc)             (GtkCssParser           *parser,
                                                             GFile                  *base,
                                                             GValue                 *value);
@@ -82,7 +84,9 @@ void                     _gtk_style_property_default_value (const GtkStyleProper
 void                     _gtk_style_property_resolve       (const GtkStyleProperty *property,
                                                             GtkStyleProperties     *properties,
                                                             GtkStateFlags           state,
-                                                            GValue                 *value);
+							    GtkStylePropertyContext *context,
+                                                            GValue                 *orig_value,
+                                                            GValue                 *out_value);
 
 gboolean                 _gtk_style_property_is_shorthand  (const GtkStyleProperty *property);
 GParameter *             _gtk_style_property_unpack        (const GtkStyleProperty *property,
@@ -91,6 +95,7 @@ GParameter *             _gtk_style_property_unpack        (const GtkStyleProper
 void                     _gtk_style_property_pack          (const GtkStyleProperty *property,
                                                             GtkStyleProperties     *props,
                                                             GtkStateFlags           state,
+							    GtkStylePropertyContext *context,
                                                             GValue                 *value);
 
 gboolean                 _gtk_style_property_parse_value   (const GtkStyleProperty *property,

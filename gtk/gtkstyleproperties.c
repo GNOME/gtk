@@ -37,6 +37,8 @@
 #include "gtkstylepropertyprivate.h"
 #include "gtkintl.h"
 
+#include "gtkwin32themeprivate.h"
+
 /**
  * SECTION:gtkstyleproperties
  * @Short_description: Store for style property information
@@ -465,9 +467,10 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties     *props,
     }
   else if (style_prop->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN)
     {
-      /* Allow GtkGradient as a substitute */
+      /* Allow GtkGradient and theme part as a substitute */
       g_return_if_fail (value_type == CAIRO_GOBJECT_TYPE_PATTERN ||
-                        value_type == GTK_TYPE_GRADIENT);
+                        value_type == GTK_TYPE_GRADIENT	||
+			value_type == GTK_TYPE_WIN32_THEME_PART);
     }
   else if (style_prop->pspec->value_type == G_TYPE_INT)
     {
@@ -635,44 +638,50 @@ gtk_style_properties_set (GtkStyleProperties *props,
   va_end (args);
 }
 
-/* NB: Will return NULL for shorthands */
-const GValue *
-_gtk_style_properties_peek_property (GtkStyleProperties      *props,
-                                     const gchar             *prop_name,
-                                     GtkStateFlags            state,
-                                     const GtkStyleProperty **property)
+gboolean
+_gtk_style_properties_get_property (GtkStyleProperties *props,
+				    const gchar        *property,
+				    GtkStateFlags       state,
+				    GtkStylePropertyContext *context,
+				    GValue             *value)
 {
   GtkStylePropertiesPrivate *priv;
   const GtkStyleProperty *node;
   PropertyData *prop;
-  GValue *val;
+  GValue *val = NULL;
 
-  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), NULL);
-  g_return_val_if_fail (prop_name != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
+  g_return_val_if_fail (property != NULL, FALSE);
+  g_return_val_if_fail (value != NULL, FALSE);
 
-  node = _gtk_style_property_lookup (prop_name);
-  if (property)
-    *property = node;
-
+  node = _gtk_style_property_lookup (property);
   if (!node)
     {
-      g_warning ("Style property \"%s\" is not registered", prop_name);
-      return NULL;
+      g_warning ("Style property \"%s\" is not registered", property);
+      return FALSE;
     }
 
   priv = props->priv;
   prop = g_hash_table_lookup (priv->properties, node);
 
-  if (!prop)
-    return NULL;
+  val = NULL;
 
-  val = property_data_match_state (prop, state);
-  if (val == NULL)
-    return NULL;
-  
-  _gtk_style_property_resolve (node, props, state, val);
+  if (prop)
+    {
+      /* NB: Will return NULL for shorthands */
+      val = property_data_match_state (prop, state);
+    }
 
-  return val;
+  g_value_init (value, node->pspec->value_type);
+
+  if (val)
+    _gtk_style_property_resolve (node, props, state, context, val, value);
+  else if (_gtk_style_property_is_shorthand (node))
+    _gtk_style_property_pack (node, props, state, context, value);
+  else
+    _gtk_style_property_default_value (node, props, state, value);
+
+  return TRUE;
 }
 
 /**
@@ -695,28 +704,53 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
                                    GtkStateFlags       state,
                                    GValue             *value)
 {
-  const GtkStyleProperty *node;
-  const GValue *val;
+  GtkStylePropertyContext context = { 100, 100};
 
   g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
   g_return_val_if_fail (property != NULL, FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
 
-  val = _gtk_style_properties_peek_property (props, property, state, &node);
+  return _gtk_style_properties_get_property (props,
+					     property,
+					     state, &context, value);
+}
 
-  if (!node)
-    return FALSE;
+void
+_gtk_style_properties_get_valist (GtkStyleProperties *props,
+				  GtkStateFlags       state,
+				  GtkStylePropertyContext *context,
+				  va_list             args)
+{
+  const gchar *property_name;
 
-  g_value_init (value, node->pspec->value_type);
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
 
-  if (val)
-    g_value_copy (val, value);
-  else if (_gtk_style_property_is_shorthand (node))
-    _gtk_style_property_pack (node, props, state, value);
-  else
-    _gtk_style_property_default_value (node, props, state, value);
+  property_name = va_arg (args, const gchar *);
 
-  return TRUE;
+  while (property_name)
+    {
+      gchar *error = NULL;
+      GValue value = G_VALUE_INIT;
+
+      if (!_gtk_style_properties_get_property (props,
+					       property_name,
+					       state,
+					       context,
+					       &value))
+	break;
+
+      G_VALUE_LCOPY (&value, args, 0, &error);
+      g_value_unset (&value);
+
+      if (error)
+        {
+          g_warning ("Could not get style property \"%s\": %s", property_name, error);
+          g_free (error);
+          break;
+        }
+
+      property_name = va_arg (args, const gchar *);
+    }
 }
 
 /**
@@ -734,54 +768,24 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
                                  GtkStateFlags       state,
                                  va_list             args)
 {
-  const gchar *property_name;
+  GtkStylePropertyContext context = { 100, 100};
+  
+  return _gtk_style_properties_get_valist (props, state, &context, args);
+}
+
+void
+_gtk_style_properties_get (GtkStyleProperties *props,
+			   GtkStateFlags       state,
+			   GtkStylePropertyContext *context,
+			   ...)
+{
+  va_list args;
 
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
 
-  property_name = va_arg (args, const gchar *);
-
-  while (property_name)
-    {
-      const GtkStyleProperty *node;
-      gchar *error = NULL;
-      const GValue *val;
-
-      val = _gtk_style_properties_peek_property (props, property_name, state, &node);
-      if (!node)
-        break;
-
-      if (val)
-        {
-          G_VALUE_LCOPY (val, args, 0, &error);
-        }
-      else if (_gtk_style_property_is_shorthand (node))
-        {
-          GValue packed = G_VALUE_INIT;
-
-          g_value_init (&packed, node->pspec->value_type);
-          _gtk_style_property_pack (node, props, state, &packed);
-          G_VALUE_LCOPY (&packed, args, 0, &error);
-          g_value_unset (&packed);
-        }
-      else
-        {
-          GValue default_value = G_VALUE_INIT;
-
-          g_value_init (&default_value, node->pspec->value_type);
-          _gtk_style_property_default_value (node, props, state, &default_value);
-          G_VALUE_LCOPY (&default_value, args, 0, &error);
-          g_value_unset (&default_value);
-        }
-
-      if (error)
-        {
-          g_warning ("Could not get style property \"%s\": %s", property_name, error);
-          g_free (error);
-          break;
-        }
-
-      property_name = va_arg (args, const gchar *);
-    }
+  va_start (args, context);
+  _gtk_style_properties_get_valist (props, state, context, args);
+  va_end (args);
 }
 
 /**

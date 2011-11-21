@@ -760,6 +760,7 @@ gtk_progress_bar_paint_activity (GtkProgressBar *pbar,
 
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PULSE);
 
   gtk_render_activity (context, cr, area.x, area.y, area.width, area.height);
 

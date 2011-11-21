@@ -3522,6 +3522,8 @@ gtk_entry_draw_progress (GtkWidget       *widget,
                          GtkStyleContext *context,
                          cairo_t         *cr)
 {
+  GtkEntry *entry = GTK_ENTRY (widget);
+  GtkEntryPrivate *private = entry->priv;
   gint x, y, width, height;
 
   get_progress_area (widget, &x, &y, &width, &height);
@@ -3531,6 +3533,8 @@ gtk_entry_draw_progress (GtkWidget       *widget,
 
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
+  if (private->progress_pulse_mode)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_PULSE);
 
   gtk_render_activity (context, cr,
                        x, y, width, height);
