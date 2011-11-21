@@ -235,12 +235,16 @@ gtk_symbolic_color_new_mix (GtkSymbolicColor *color1,
 }
 
 /**
- * gtk_symbolic_color_new_mix: (constructor)
+ * gtk_symbolic_color_new_win32: (constructor)
  * @theme_class: The theme class to pull color from
  * @id: The color id
  *
  * Creates a symbolic color based on the current win32
  * theme.
+ *
+ * Note that while this call is availible on all platforms
+ * the actual value returned is not reliable on non-win32
+ * platforms.
  *
  * Returns: A newly created #GtkSymbolicColor
  *
