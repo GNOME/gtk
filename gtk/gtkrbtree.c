@@ -31,7 +31,8 @@ static void        _gtk_rbnode_rotate_right       (GtkRBTree  *tree,
 static void        _gtk_rbtree_insert_fixup       (GtkRBTree  *tree,
 						   GtkRBNode  *node);
 static void        _gtk_rbtree_remove_node_fixup  (GtkRBTree  *tree,
-						   GtkRBNode  *node);
+						   GtkRBNode  *node,
+                                                   GtkRBNode  *parent);
 static inline void _fixup_validation              (GtkRBTree  *tree,
 						   GtkRBNode  *node);
 static inline void _fixup_total_count             (GtkRBTree  *tree,
@@ -264,10 +265,9 @@ _gtk_rbtree_insert_fixup (GtkRBTree *tree,
 
 static void
 _gtk_rbtree_remove_node_fixup (GtkRBTree *tree,
-			       GtkRBNode *node)
+			       GtkRBNode *node,
+                               GtkRBNode *parent)
 {
-  GtkRBNode *parent = node->parent;
-
   while (node != tree->root && GTK_RBNODE_GET_COLOR (node) == GTK_RBNODE_BLACK)
     {
       if (node == parent->left)
@@ -1184,7 +1184,8 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
     x = y->right;
 
   /* remove y from the parent chain */
-  x->parent = y->parent;
+  if (x != tree->nil)
+    x->parent = y->parent;
   if (y->parent != tree->nil)
     {
       if (y == y->parent->left)
@@ -1201,6 +1202,9 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
    */
   gtk_rbnode_adjust (tree, y, -1, - y_total_count, - y_height);
 
+  if (GTK_RBNODE_GET_COLOR (y) == GTK_RBNODE_BLACK)
+    _gtk_rbtree_remove_node_fixup (tree, x, y->parent);
+
   if (y != node)
     {
       gint node_height, node_total_count;
@@ -1215,10 +1219,7 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 
       /* Move the node over */
       if (GTK_RBNODE_GET_COLOR (node) != GTK_RBNODE_GET_COLOR (y))
-        {
-	  node->flags ^= (GTK_RBNODE_BLACK | GTK_RBNODE_RED);
-	  y->flags ^= (GTK_RBNODE_BLACK | GTK_RBNODE_RED);
-        }
+	y->flags ^= (GTK_RBNODE_BLACK | GTK_RBNODE_RED);
 
       y->left = node->left;
       if (y->left != tree->nil)
@@ -1248,8 +1249,6 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
                          y_height - node_height);
     }
 
-  if (GTK_RBNODE_GET_COLOR (node) == GTK_RBNODE_BLACK)
-    _gtk_rbtree_remove_node_fixup (tree, x);
   _gtk_rbnode_free (node);
 
 #ifdef G_ENABLE_DEBUG  
