@@ -2524,7 +2524,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @x: the x coordinate of the current cursor position
    * @y: the y coordinate of the current cursor position
    * @time: the timestamp of the motion event
-   * @returns: whether the cursor position is in a drop zone
    *
    * The drag-motion signal is emitted on the drop site when the user
    * moves the cursor over the widget during a drag. The signal handler
@@ -2609,6 +2608,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *    }
    * }
    * ]|
+   *
+   * Returns: whether the cursor position is in a drop zone
    */
   widget_signals[DRAG_MOTION] =
     g_signal_new (I_("drag-motion"),
@@ -2630,7 +2631,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @x: the x coordinate of the current cursor position
    * @y: the y coordinate of the current cursor position
    * @time: the timestamp of the motion event
-   * @returns: whether the cursor position is in a drop zone
    *
    * The ::drag-drop signal is emitted on the drop site when the user drops
    * the data onto the widget. The signal handler must determine whether
@@ -2642,6 +2642,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * directly or in a #GtkWidget::drag-data-received handler which gets
    * triggered by calling gtk_drag_get_data() to receive the data for one
    * or more of the supported targets.
+   *
+   * Returns: whether the cursor position is in a drop zone
    */
   widget_signals[DRAG_DROP] =
     g_signal_new (I_("drag-drop"),

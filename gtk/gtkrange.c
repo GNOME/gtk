@@ -377,8 +377,6 @@ gtk_range_class_init (GtkRangeClass *class)
    * @range: the #GtkRange that received the signal
    * @scroll: the type of scroll action that was performed
    * @value: the new value resulting from the scroll action
-   * @returns: %TRUE to prevent other handlers from being invoked for the
-   * signal, %FALSE to propagate the signal further
    *
    * The #GtkRange::change-value signal is emitted when a scroll action is
    * performed on a range.  It allows an application to determine the
@@ -395,6 +393,9 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * It is not possible to use delayed update policies in an overridden
    * #GtkRange::change-value handler.
+   *
+   * Returns: %TRUE to prevent other handlers from being invoked for
+   *     the signal, %FALSE to propagate the signal further
    *
    * Since: 2.6
    */
