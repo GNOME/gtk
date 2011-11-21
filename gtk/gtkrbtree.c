@@ -1199,37 +1199,54 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 
   if (y != node)
     {
-      gint count_diff, height_diff;
+      gint node_height, node_total_count;
 
-      /* We want to see how different our height is from the previous node.
-       * To do this, we compare our current height with our supposed height.
+      /* We want to see how much we remove from the aggregate values.
+       * This is all the children we remove plus the node's values.
        */
-      height_diff = y_height 
-                    - GTK_RBNODE_GET_HEIGHT (node)
-                    - (node->children ? node->children->root->offset : 0);
-      count_diff = y->total_count - node->total_count;
+      node_height = GTK_RBNODE_GET_HEIGHT (node)
+                    + (node->children ? node->children->root->offset : 0);
+      node_total_count = 1
+                         + (node->children ? node->children->root->total_count : 0);
 
-      /* Copy the node over */
-      if (GTK_RBNODE_GET_COLOR (node) == GTK_RBNODE_BLACK)
-	node->flags = ((y->flags & (GTK_RBNODE_NON_COLORS)) | GTK_RBNODE_BLACK);
-      else
-	node->flags = ((y->flags & (GTK_RBNODE_NON_COLORS)) | GTK_RBNODE_RED);
-      if (y->children)
-	{
-	  node->children = y->children;
-	  node->children->parent_node = node;
-	}
-      else
-	{
-	  node->children = NULL;
-	}
+      /* Move the node over */
+      if (GTK_RBNODE_GET_COLOR (node) != GTK_RBNODE_GET_COLOR (y))
+        {
+	  node->flags ^= (GTK_RBNODE_BLACK | GTK_RBNODE_RED);
+	  y->flags ^= (GTK_RBNODE_BLACK | GTK_RBNODE_RED);
+        }
 
-      gtk_rbnode_adjust (tree, node, 0, count_diff, height_diff);
+      y->left = node->left;
+      if (y->left != tree->nil)
+        y->left->parent = y;
+      y->right = node->right;
+      if (y->right != tree->nil)
+        y->right->parent = y;
+      y->parent = node->parent;
+      if (y->parent != tree->nil)
+        {
+          if (y->parent->left == node)
+            y->parent->left = y;
+          else
+            y->parent->right = y;
+        }
+      else
+        {
+          tree->root = y;
+        }
+      y->count = node->count;
+      y->total_count = node->total_count;
+      y->offset = node->offset;
+
+      gtk_rbnode_adjust (tree, y, 
+                         0,
+                         y_total_count - node_total_count,
+                         y_height - node_height);
     }
 
-  if (GTK_RBNODE_GET_COLOR (y) == GTK_RBNODE_BLACK)
+  if (GTK_RBNODE_GET_COLOR (node) == GTK_RBNODE_BLACK)
     _gtk_rbtree_remove_node_fixup (tree, x);
-  _gtk_rbnode_free (y);
+  _gtk_rbnode_free (node);
 
 #ifdef G_ENABLE_DEBUG  
   if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
