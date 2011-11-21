@@ -64,6 +64,7 @@ _gtk_rbnode_new (GtkRBTree *tree,
 static void
 _gtk_rbnode_free (GtkRBNode *node)
 {
+#ifdef G_ENABLE_DEBUG
   if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
     {
       node->left = (gpointer) 0xdeadbeef;
@@ -74,6 +75,7 @@ _gtk_rbnode_free (GtkRBNode *node)
       node->count = 56789;
       node->flags = 0;
     }
+#endif
   g_slice_free (GtkRBNode, node);
 }
 
