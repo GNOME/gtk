@@ -180,7 +180,7 @@ gdk_win32_drag_context_finalize (GObject *object)
 
 /* Drag Contexts */
 
-GdkDragContext *
+static GdkDragContext *
 gdk_drag_context_new (void)
 {
   GdkWin32DragContext *context_win32;
