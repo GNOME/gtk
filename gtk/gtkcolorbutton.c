@@ -791,6 +791,8 @@ gtk_color_button_set_rgba (GtkColorButton *color_button,
 
   gtk_widget_queue_draw (color_button->priv->draw_area);
 
+  g_object_notify (G_OBJECT (color_button), "color");
+  g_object_notify (G_OBJECT (color_button), "alpha");
   g_object_notify (G_OBJECT (color_button), "rgba");
 }
 
