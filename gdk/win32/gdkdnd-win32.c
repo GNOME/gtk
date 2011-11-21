@@ -150,14 +150,6 @@ gdk_win32_drag_context_finalize (GObject *object)
   context = GDK_DRAG_CONTEXT (object);
   context_win32 = GDK_WIN32_DRAG_CONTEXT (object);
 
-  g_list_free (context->targets);
-
-  if (context->source_window)
-    g_object_unref (context->source_window);
-
-  if (context->dest_window)
-    g_object_unref (context->dest_window);
-
   if (!use_ole2_dnd)
     {
       contexts = g_list_remove (contexts, context);
