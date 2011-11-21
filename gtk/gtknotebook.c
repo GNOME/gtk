@@ -5436,9 +5436,6 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  allocation.x += initial_gap;
-  allocation.width -= 2 * initial_gap;
-
   switch (tab_pos)
     {
     case GTK_POS_TOP:
@@ -5503,6 +5500,9 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
         }
       break;
     }
+
+  *min += initial_gap;
+  *max -= (2 * initial_gap);
 
   if (!priv->scrollable)
     *show_arrows = FALSE;
