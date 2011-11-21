@@ -2589,6 +2589,7 @@ gtk_symbolic_color_get_type
 gtk_symbolic_color_new_alpha
 gtk_symbolic_color_new_literal
 gtk_symbolic_color_new_mix
+gtk_symbolic_color_new_win32
 gtk_symbolic_color_new_name
 gtk_symbolic_color_new_shade
 gtk_symbolic_color_ref
