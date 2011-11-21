@@ -472,6 +472,7 @@ _gtk_rbtree_insert_after (GtkRBTree *tree,
     }
   else
     {
+      g_assert (tree->root == tree->nil);
       tree->root = node;
       tmp_node = tree->parent_node;
       tmp_tree = tree->parent_tree;
@@ -558,6 +559,7 @@ _gtk_rbtree_insert_before (GtkRBTree *tree,
     }
   else
     {
+      g_assert (tree->root == tree->nil);
       tree->root = node;
       tmp_node = tree->parent_node;
       tmp_tree = tree->parent_tree;
