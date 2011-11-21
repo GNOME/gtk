@@ -129,6 +129,11 @@ TEST_PROGS			+= grid
 grid_SOURCES			 = grid.c
 grid_LDADD			 = $(progs_ldadd)
 
+TEST_PROGS			+= rbtree
+rbtree_CFLAGS			 = -DGTK_COMPILATION -UG_ENABLE_DEBUG
+rbtree_SOURCES			 = rbtree.c ../gtkrbtree.h ../gtkrbtree.c
+rbtree_LDADD			 = $(GTK_DEP_LIBS)
+
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \
 	file-chooser-test-dir/text.txt
