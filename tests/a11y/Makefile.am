@@ -17,6 +17,10 @@ LDADD = \
 	$(top_builddir)/gtk/libgtk-3.la \
 	$(GTK_DEP_LIBS)
 
+# work around random file systems showing up in the file chooser,
+# breaking the 'pickers' test
+TESTS_ENVIRONMENT = GIO_USE_VOLUME_MONITOR=unix
+
 TEST_PROGS += accessibility-dump
 
 TEST_PROGS += tree-performance
