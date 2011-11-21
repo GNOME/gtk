@@ -26,6 +26,7 @@ Overview of Changes in GTK+ 3.3.4
 * Accessibility improvements:
  - Much better treeview performance
  - Completely ignore invisible columns in treeviews
+ - Many a11y/treeview-related crashes fixed
  - Combo box keybindings are reported again
  - Textview respects display lines again
 
