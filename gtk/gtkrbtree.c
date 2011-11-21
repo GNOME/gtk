@@ -266,22 +266,24 @@ static void
 _gtk_rbtree_remove_node_fixup (GtkRBTree *tree,
 			       GtkRBNode *node)
 {
+  GtkRBNode *parent = node->parent;
+
   while (node != tree->root && GTK_RBNODE_GET_COLOR (node) == GTK_RBNODE_BLACK)
     {
-      if (node == node->parent->left)
+      if (node == parent->left)
 	{
-	  GtkRBNode *w = node->parent->right;
+	  GtkRBNode *w = parent->right;
 	  if (GTK_RBNODE_GET_COLOR (w) == GTK_RBNODE_RED)
 	    {
 	      GTK_RBNODE_SET_COLOR (w, GTK_RBNODE_BLACK);
-	      GTK_RBNODE_SET_COLOR (node->parent, GTK_RBNODE_RED);
-	      _gtk_rbnode_rotate_left (tree, node->parent);
-	      w = node->parent->right;
+	      GTK_RBNODE_SET_COLOR (parent, GTK_RBNODE_RED);
+	      _gtk_rbnode_rotate_left (tree, parent);
+	      w = parent->right;
 	    }
 	  if (GTK_RBNODE_GET_COLOR (w->left) == GTK_RBNODE_BLACK && GTK_RBNODE_GET_COLOR (w->right) == GTK_RBNODE_BLACK)
 	    {
 	      GTK_RBNODE_SET_COLOR (w, GTK_RBNODE_RED);
-	      node = node->parent;
+	      node = parent;
 	    }
 	  else
 	    {
@@ -290,29 +292,29 @@ _gtk_rbtree_remove_node_fixup (GtkRBTree *tree,
 		  GTK_RBNODE_SET_COLOR (w->left, GTK_RBNODE_BLACK);
 		  GTK_RBNODE_SET_COLOR (w, GTK_RBNODE_RED);
 		  _gtk_rbnode_rotate_right (tree, w);
-		  w = node->parent->right;
+		  w = parent->right;
 		}
-	      GTK_RBNODE_SET_COLOR (w, GTK_RBNODE_GET_COLOR (node->parent));
-	      GTK_RBNODE_SET_COLOR (node->parent, GTK_RBNODE_BLACK);
+	      GTK_RBNODE_SET_COLOR (w, GTK_RBNODE_GET_COLOR (parent));
+	      GTK_RBNODE_SET_COLOR (parent, GTK_RBNODE_BLACK);
 	      GTK_RBNODE_SET_COLOR (w->right, GTK_RBNODE_BLACK);
-	      _gtk_rbnode_rotate_left (tree, node->parent);
+	      _gtk_rbnode_rotate_left (tree, parent);
 	      node = tree->root;
 	    }
 	}
       else
 	{
-	  GtkRBNode *w = node->parent->left;
+	  GtkRBNode *w = parent->left;
 	  if (GTK_RBNODE_GET_COLOR (w) == GTK_RBNODE_RED)
 	    {
 	      GTK_RBNODE_SET_COLOR (w, GTK_RBNODE_BLACK);
-	      GTK_RBNODE_SET_COLOR (node->parent, GTK_RBNODE_RED);
-	      _gtk_rbnode_rotate_right (tree, node->parent);
-	      w = node->parent->left;
+	      GTK_RBNODE_SET_COLOR (parent, GTK_RBNODE_RED);
+	      _gtk_rbnode_rotate_right (tree, parent);
+	      w = parent->left;
 	    }
 	  if (GTK_RBNODE_GET_COLOR (w->right) == GTK_RBNODE_BLACK && GTK_RBNODE_GET_COLOR (w->left) == GTK_RBNODE_BLACK)
 	    {
 	      GTK_RBNODE_SET_COLOR (w, GTK_RBNODE_RED);
-	      node = node->parent;
+	      node = parent;
 	    }
 	  else
 	    {
@@ -321,15 +323,17 @@ _gtk_rbtree_remove_node_fixup (GtkRBTree *tree,
 		  GTK_RBNODE_SET_COLOR (w->right, GTK_RBNODE_BLACK);
 		  GTK_RBNODE_SET_COLOR (w, GTK_RBNODE_RED);
 		  _gtk_rbnode_rotate_left (tree, w);
-		  w = node->parent->left;
+		  w = parent->left;
 		}
-	      GTK_RBNODE_SET_COLOR (w, GTK_RBNODE_GET_COLOR (node->parent));
-	      GTK_RBNODE_SET_COLOR (node->parent, GTK_RBNODE_BLACK);
+	      GTK_RBNODE_SET_COLOR (w, GTK_RBNODE_GET_COLOR (parent));
+	      GTK_RBNODE_SET_COLOR (parent, GTK_RBNODE_BLACK);
 	      GTK_RBNODE_SET_COLOR (w->left, GTK_RBNODE_BLACK);
-	      _gtk_rbnode_rotate_right (tree, node->parent);
+	      _gtk_rbnode_rotate_right (tree, parent);
 	      node = tree->root;
 	    }
 	}
+
+      parent = node->parent;
     }
   GTK_RBNODE_SET_COLOR (node, GTK_RBNODE_BLACK);
 }
