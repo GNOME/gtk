@@ -27,7 +27,7 @@
 #include <gdk/gdkcolor.h>
 #include <gdk/gdkrgba.h>
 #include <gdk/gdkpixbuf.h>
-#include <pango/pangocairo.h>
+#include <cairo.h>
 
 G_BEGIN_DECLS
 
