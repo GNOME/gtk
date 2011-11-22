@@ -43,7 +43,7 @@ G_BEGIN_DECLS
  *     draw this color on the screen. Not used anymore.
  * @red: The red component of the color. This is
  *     a value between 0 and 65535, with 65535 indicating
- *     full intensitiy
+ *     full intensity
  * @green: The green component of the color
  * @blue: The blue component of the color
  *
