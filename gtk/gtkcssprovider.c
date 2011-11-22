@@ -1220,7 +1220,7 @@ gtk_css_provider_emit_error (GtkCssProvider *provider,
                              const GError   *error)
 {
   g_signal_emit (provider, css_provider_signals[PARSING_ERROR], 0,
-                 scanner->section, error);
+                 scanner != NULL ? scanner->section : NULL, error);
 }
 
 static void
@@ -1532,7 +1532,7 @@ gtk_css_provider_take_error (GtkCssProvider *provider,
                              GtkCssScanner  *scanner,
                              GError         *error)
 {
-  gtk_css_provider_emit_error (scanner->provider,
+  gtk_css_provider_emit_error (provider,
                                scanner,
                                error);
 
