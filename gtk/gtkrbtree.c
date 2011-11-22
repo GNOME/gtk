@@ -767,65 +767,48 @@ _gtk_rbtree_set_fixed_height (GtkRBTree *tree,
   while ((node = _gtk_rbtree_next (tree, node)) != NULL);
 }
 
-typedef struct _GtkRBReorder
+static void
+reorder_prepare (GtkRBTree *tree,
+                 GtkRBNode *node,
+                 gpointer   data)
 {
-  GtkRBTree *children;
-  gint height;
-  gint flags;
-  gint order;
-  gint invert_order;
-  guint total_count;
-} GtkRBReorder;
-
-static int
-gtk_rbtree_reorder_sort_func (gconstpointer a,
-			      gconstpointer b)
-{
-  return ((GtkRBReorder *) a)->order - ((GtkRBReorder *) b)->order;
-}
-
-static int
-gtk_rbtree_reorder_invert_func (gconstpointer a,
-				gconstpointer b)
-{
-  return ((GtkRBReorder *) a)->invert_order - ((GtkRBReorder *) b)->invert_order;
+  node->offset -= node->left->offset + node->right->offset;
+  GTK_RBNODE_UNSET_FLAG (node, GTK_RBNODE_DESCENDANTS_INVALID);
 }
 
 static void
-gtk_rbtree_reorder_fixup (GtkRBTree *tree,
-			  GtkRBNode *node)
+reorder_fixup (GtkRBTree *tree,
+               GtkRBNode *node,
+               gpointer   data)
 {
-  if (_gtk_rbtree_is_nil (node))
-    return;
+  node->offset += node->left->offset + node->right->offset;
+  node->count = 1 + node->left->count + node->right->count;
+  _fixup_validation (tree, node);
+  _fixup_total_count (tree, node);
+}
 
-  node->total_count = 1;
+static void
+reorder_copy_node (GtkRBTree *tree,
+                   GtkRBNode *to,
+                   GtkRBNode *from)
+{
+  to->flags = (to->flags & GTK_RBNODE_NON_COLORS) | GTK_RBNODE_GET_COLOR (from);
 
-  if (!_gtk_rbtree_is_nil (node->left))
-    {
-      gtk_rbtree_reorder_fixup (tree, node->left);
-      node->offset += node->left->offset;
-      node->total_count += node->left->total_count;
-    }
-  if (!_gtk_rbtree_is_nil (node->right))
-    {
-      gtk_rbtree_reorder_fixup (tree, node->right);
-      node->offset += node->right->offset;
-      node->total_count += node->right->total_count;
-    }
-      
-  if (node->children)
-    {
-      node->offset += node->children->root->offset;
-      node->total_count += node->children->root->total_count;
-    }
-  
-  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
-      GTK_RBNODE_FLAG_SET (node->right, GTK_RBNODE_DESCENDANTS_INVALID) ||
-      GTK_RBNODE_FLAG_SET (node->left, GTK_RBNODE_DESCENDANTS_INVALID) ||
-      (node->children && GTK_RBNODE_FLAG_SET (node->children->root, GTK_RBNODE_DESCENDANTS_INVALID)))
-    GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_DESCENDANTS_INVALID);
-  else
-    GTK_RBNODE_UNSET_FLAG (node, GTK_RBNODE_DESCENDANTS_INVALID);
+  to->left = from->left;
+  if (!_gtk_rbtree_is_nil (to->left))
+    to->left->parent = to;
+
+  to->right = from->right;
+  if (!_gtk_rbtree_is_nil (to->right))
+    to->right->parent = to;
+
+  to->parent = from->parent;
+  if (_gtk_rbtree_is_nil (to->parent))
+    tree->root = to;
+  else if (to->parent->left == from)
+    to->parent->left = to;
+  else if (to->parent->right == from)
+    to->parent->right = to;
 }
 
 /* It basically pulls everything out of the tree, rearranges it, and puts it
@@ -839,59 +822,62 @@ _gtk_rbtree_reorder (GtkRBTree *tree,
 		     gint      *new_order,
 		     gint       length)
 {
-  GtkRBReorder reorder = { NULL };
-  GArray *array;
+  GtkRBNode **nodes;
   GtkRBNode *node;
-  gint i;
+  gint i, j;
   
   g_return_if_fail (tree != NULL);
   g_return_if_fail (length > 0);
   g_return_if_fail (tree->root->count == length);
   
-  /* Sort the trees values in the new tree. */
-  array = g_array_sized_new (FALSE, FALSE, sizeof (GtkRBReorder), length);
-  for (i = 0; i < length; i++)
+  nodes = g_new (GtkRBNode *, length);
+
+  _gtk_rbtree_traverse (tree, tree->root, G_PRE_ORDER, reorder_prepare, NULL);
+
+  for (node = _gtk_rbtree_first (tree), i = 0;
+       node;
+       node = _gtk_rbtree_next (tree, node), i++)
     {
-      reorder.order = new_order[i];
-      reorder.invert_order = i;
-      g_array_append_val (array, reorder);
+      nodes[i] = node;
     }
-
-  g_array_sort(array, gtk_rbtree_reorder_sort_func);
-
-  /* rewind node*/
-  node = _gtk_rbtree_first (tree);
 
   for (i = 0; i < length; i++)
     {
-      g_assert (!_gtk_rbtree_is_nil (node));
-      g_array_index (array, GtkRBReorder, i).children = node->children;
-      g_array_index (array, GtkRBReorder, i).flags = GTK_RBNODE_NON_COLORS & node->flags;
-      g_array_index (array, GtkRBReorder, i).height = GTK_RBNODE_GET_HEIGHT (node);
+      GtkRBNode tmp = { 0, };
+      GSList *l, *cycle = NULL;
 
-      node = _gtk_rbtree_next (tree, node);
+      tmp.offset = -1;
+
+      /* already swapped */
+      if (nodes[i] == NULL)
+        continue;
+      /* no need to swap */
+      if (new_order[i] == i)
+        continue;
+
+      /* make a list out of the pending nodes */
+      for (j = i; new_order[j] != i; j = new_order[j])
+        {
+          cycle = g_slist_prepend (cycle, nodes[j]);
+          nodes[j] = NULL;
+        }
+
+      node = nodes[j];
+      reorder_copy_node (tree, &tmp, node);
+      for (l = cycle; l; l = l->next)
+        {
+          reorder_copy_node (tree, node, l->data);
+          node = l->data;
+        }
+
+      reorder_copy_node (tree, node, &tmp);
+      nodes[j] = NULL;
+      g_slist_free (cycle);
     }
 
-  g_array_sort (array, gtk_rbtree_reorder_invert_func);
- 
-  /* rewind node*/
-  node = _gtk_rbtree_first (tree);
+  _gtk_rbtree_traverse (tree, tree->root, G_POST_ORDER, reorder_fixup, NULL);
 
-  /* Go through the tree and change the values to the new ones. */
-  for (i = 0; i < length; i++)
-    {
-      reorder = g_array_index (array, GtkRBReorder, i);
-      node->children = reorder.children;
-      if (node->children)
-	node->children->parent_node = node;
-      node->flags = GTK_RBNODE_GET_COLOR (node) | reorder.flags;
-      /* We temporarily set the height to this. */
-      node->offset = reorder.height;
-      node = _gtk_rbtree_next (tree, node);
-    }
-  gtk_rbtree_reorder_fixup (tree, tree->root);
-
-  g_array_free (array, TRUE);
+  g_free (nodes);
 }
 
 
