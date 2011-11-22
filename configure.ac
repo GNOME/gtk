@@ -1305,8 +1305,9 @@ else
 fi
 
 GTK_PACKAGES="atk cairo cairo-gobject gdk-pixbuf-2.0 gio-2.0"
+GTK_PRIVATE_PACKAGES=""
 if test "x$enable_x11_backend" = xyes; then
-  GTK_PACKAGES="$GTK_PACKAGES pangoft2"
+  GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES pangoft2"
 fi
 GTK_EXTRA_LIBS=
 
@@ -1324,6 +1325,7 @@ PANGO_PREFIX="`$PKG_CONFIG --variable=prefix pango`"
 CAIRO_PREFIX="`$PKG_CONFIG --variable=prefix cairo`"
 
 AC_SUBST(GTK_PACKAGES)
+AC_SUBST(GTK_PRIVATE_PACKAGES)
 AC_SUBST(GTK_EXTRA_LIBS)
 AC_SUBST(GTK_EXTRA_CFLAGS)
 AC_SUBST(GTK_DEP_LIBS)
