@@ -43,6 +43,11 @@ static void        _gtk_rbtree_test               (const gchar *where,
 static void        _gtk_rbtree_debug_spew         (GtkRBTree  *tree);
 #endif
 
+static const GtkRBNode nil = {
+  /* .flags = */ GTK_RBNODE_BLACK,
+
+  /* rest is NULL */
+};
 
 
 static GtkRBNode *
@@ -347,14 +352,7 @@ _gtk_rbtree_new (void)
   retval->parent_tree = NULL;
   retval->parent_node = NULL;
 
-  retval->nil = g_slice_new (GtkRBNode);
-  retval->nil->left = NULL;
-  retval->nil->right = NULL;
-  retval->nil->parent = NULL;
-  retval->nil->flags = GTK_RBNODE_BLACK;
-  retval->nil->count = 0;
-  retval->nil->offset = 0;
-  retval->nil->total_count = 0;
+  retval->nil = (GtkRBNode *) &nil;
 
   retval->root = retval->nil;
   return retval;
@@ -383,7 +381,6 @@ _gtk_rbtree_free (GtkRBTree *tree)
   if (tree->parent_node &&
       tree->parent_node->children == tree)
     tree->parent_node->children = NULL;
-  _gtk_rbnode_free (tree->nil);
   g_free (tree);
 }
 
