@@ -722,11 +722,8 @@ _gtk_rbtree_column_invalid (GtkRBTree *tree)
 
   if (tree == NULL)
     return;
-  node = tree->root;
-  g_assert (node);
 
-  while (node->left != tree->nil)
-    node = node->left;
+  node = _gtk_rbtree_first (tree);
 
   do
     {
@@ -747,11 +744,8 @@ _gtk_rbtree_mark_invalid (GtkRBTree *tree)
 
   if (tree == NULL)
     return;
-  node = tree->root;
-  g_assert (node);
 
-  while (node->left != tree->nil)
-    node = node->left;
+  node = _gtk_rbtree_first (tree);
 
   do
     {
@@ -774,11 +768,7 @@ _gtk_rbtree_set_fixed_height (GtkRBTree *tree,
   if (tree == NULL)
     return;
 
-  node = tree->root;
-  g_assert (node);
-
-  while (node->left != tree->nil)
-    node = node->left;
+  node = _gtk_rbtree_first (tree);
 
   do
     {
@@ -888,9 +878,7 @@ _gtk_rbtree_reorder (GtkRBTree *tree,
   g_array_sort(array, gtk_rbtree_reorder_sort_func);
 
   /* rewind node*/
-  node = tree->root;
-  while (node && node->left != tree->nil)
-    node = node->left;
+  node = _gtk_rbtree_first (tree);
 
   for (i = 0; i < length; i++)
     {
@@ -905,9 +893,7 @@ _gtk_rbtree_reorder (GtkRBTree *tree,
   g_array_sort (array, gtk_rbtree_reorder_invert_func);
  
   /* rewind node*/
-  node = tree->root;
-  while (node && node->left != tree->nil)
-    node = node->left;
+  node = _gtk_rbtree_first (tree);
 
   /* Go through the tree and change the values to the new ones. */
   for (i = 0; i < length; i++)
@@ -1257,6 +1243,22 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
       _gtk_rbtree_test (G_STRLOC, tree);
     }
 #endif /* G_ENABLE_DEBUG */  
+}
+
+GtkRBNode *
+_gtk_rbtree_first (GtkRBTree *tree)
+{
+  GtkRBNode *node;
+
+  node = tree->root;
+
+  if (node == tree->nil)
+    return NULL;
+
+  while (node->left != tree->nil)
+    node = node->left;
+
+  return node;
 }
 
 GtkRBNode *

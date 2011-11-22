@@ -148,6 +148,7 @@ void       _gtk_rbtree_traverse         (GtkRBTree              *tree,
 					 GTraverseType           order,
 					 GtkRBTreeTraverseFunc   func,
 					 gpointer                data);
+GtkRBNode *_gtk_rbtree_first            (GtkRBTree              *tree);
 GtkRBNode *_gtk_rbtree_next             (GtkRBTree              *tree,
 					 GtkRBNode              *node);
 GtkRBNode *_gtk_rbtree_prev             (GtkRBTree              *tree,

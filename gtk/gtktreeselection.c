@@ -605,10 +605,7 @@ gtk_tree_selection_get_selected_rows (GtkTreeSelection   *selection,
       return NULL;
     }
 
-  node = tree->root;
-
-  while (node->left != tree->nil)
-    node = node->left;
+  node = _gtk_rbtree_first (tree);
   path = gtk_tree_path_new_first ();
 
   do
@@ -619,10 +616,7 @@ gtk_tree_selection_get_selected_rows (GtkTreeSelection   *selection,
       if (node->children)
         {
 	  tree = node->children;
-	  node = tree->root;
-
-	  while (node->left != tree->nil)
-	    node = node->left;
+          node = _gtk_rbtree_first (tree);
 
 	  gtk_tree_path_append_index (path, 0);
 	}
@@ -786,10 +780,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
       return;
     }
 
-  node = tree->root;
-  
-  while (node->left != tree->nil)
-    node = node->left;
+  node = _gtk_rbtree_first (tree);
 
   g_object_ref (model);
 
@@ -824,10 +815,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
       if (node->children)
 	{
 	  tree = node->children;
-	  node = tree->root;
-
-	  while (node->left != tree->nil)
-	    node = node->left;
+          node = _gtk_rbtree_first (tree);
 
 	  gtk_tree_path_append_index (path, 0);
 	}
@@ -1377,9 +1365,7 @@ gtk_tree_selection_real_modify_range (GtkTreeSelection *selection,
       if (start_node->children)
 	{
 	  start_tree = start_node->children;
-	  start_node = start_tree->root;
-	  while (start_node->left != start_tree->nil)
-	    start_node = start_node->left;
+          start_node = _gtk_rbtree_first (start_tree);
 	}
       else
 	{

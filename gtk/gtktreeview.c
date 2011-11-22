@@ -4233,9 +4233,7 @@ skip_first:
       if (start_node->children)
         {
 	  start_tree = start_node->children;
-	  start_node = start_tree->root;
-	  while (start_node->left != start_tree->nil)
-	    start_node = start_node->left;
+          start_node = _gtk_rbtree_first (start_tree);
 	}
       else
         {
@@ -5270,12 +5268,8 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	  gboolean has_child;
 
 	  tree = node->children;
-	  node = tree->root;
+          node = _gtk_rbtree_first (tree);
 
-          g_assert (node != tree->nil);
-
-	  while (node->left != tree->nil)
-	    node = node->left;
 	  has_child = gtk_tree_model_iter_children (tree_view->priv->model,
 						    &iter,
 						    &parent);
@@ -6371,12 +6365,8 @@ validate_visible_area (GtkTreeView *tree_view)
 	  gboolean has_child;
 
 	  tree = node->children;
-	  node = tree->root;
+          node = _gtk_rbtree_first (tree);
 
-          g_assert (node != tree->nil);
-
-	  while (node->left != tree->nil)
-	    node = node->left;
 	  has_child = gtk_tree_model_iter_children (tree_view->priv->model,
 						    &iter,
 						    &parent);
@@ -9579,10 +9569,7 @@ gtk_tree_view_unref_tree_helper (GtkTreeModel *model,
 	  GtkRBNode *new_node;
 
 	  new_tree = node->children;
-	  new_node = new_tree->root;
-
-	  while (new_node && new_node->left != new_tree->nil)
-	    new_node = new_node->left;
+          new_node = _gtk_rbtree_first (new_tree);
 
 	  if (!gtk_tree_model_iter_children (model, &child, iter))
 	    return FALSE;
@@ -9612,9 +9599,7 @@ gtk_tree_view_unref_and_check_selection_tree (GtkTreeView *tree_view,
   if (!tree)
     return FALSE;
 
-  node = tree->root;
-  while (node && node->left != tree->nil)
-    node = node->left;
+  node = _gtk_rbtree_first (tree);
 
   g_return_val_if_fail (node != NULL, FALSE);
   path = _gtk_tree_view_find_path (tree_view, tree, node);
@@ -10553,12 +10538,10 @@ gtk_tree_view_move_cursor_start_end (GtkTreeView *tree_view,
   gtk_tree_view_get_cursor (tree_view, &old_path, NULL);
 
   cursor_tree = tree_view->priv->tree;
-  cursor_node = cursor_tree->root;
 
   if (count == -1)
     {
-      while (cursor_node && cursor_node->left != cursor_tree->nil)
-	cursor_node = cursor_node->left;
+      cursor_node = _gtk_rbtree_first (cursor_tree);
 
       /* Now go forward to find the first focusable row. */
       path = _gtk_tree_view_find_path (tree_view, cursor_tree, cursor_node);
@@ -10567,6 +10550,8 @@ gtk_tree_view_move_cursor_start_end (GtkTreeView *tree_view,
     }
   else
     {
+      cursor_node = cursor_tree->root;
+
       do
 	{
 	  while (cursor_node && cursor_node->right != cursor_tree->nil)
@@ -12623,9 +12608,7 @@ gtk_tree_view_collapse_all (GtkTreeView *tree_view)
   indices = gtk_tree_path_get_indices (path);
 
   tree = tree_view->priv->tree;
-  node = tree->root;
-  while (node && node->left != tree->nil)
-    node = node->left;
+  node = _gtk_rbtree_first (tree);
 
   while (node)
     {
@@ -12717,9 +12700,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 
       gtk_tree_path_append_index (tmp_path, 0);
       tree = node->children;
-      node = tree->root;
-      while (node->left != tree->nil)
-	node = node->left;
+      node = _gtk_rbtree_first (tree);
       /* try to expand the children */
       do
         {
@@ -13037,10 +13018,7 @@ gtk_tree_view_map_expanded_rows_helper (GtkTreeView            *tree_view,
   if (tree == NULL || tree->root == NULL)
     return;
 
-  node = tree->root;
-
-  while (node && node->left != tree->nil)
-    node = node->left;
+  node = _gtk_rbtree_first (tree);
 
   while (node)
     {
@@ -15449,10 +15427,7 @@ gtk_tree_view_search_iter (GtkTreeModel     *model,
 	  GtkTreeIter tmp;
 
 	  tree = node->children;
-	  node = tree->root;
-
-	  while (node->left != tree->nil)
-	    node = node->left;
+          node = _gtk_rbtree_first (tree);
 
 	  tmp = *iter;
 	  has_child = gtk_tree_model_iter_children (model, iter, &tmp);
