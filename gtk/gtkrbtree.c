@@ -95,24 +95,20 @@ _gtk_rbnode_rotate_left (GtkRBTree *tree,
 			 GtkRBNode *node)
 {
   gint node_height, right_height;
-  GtkRBNode *right = node->right;
+  GtkRBNode *right;
 
   g_return_if_fail (!_gtk_rbtree_is_nil (node));
+  g_return_if_fail (!_gtk_rbtree_is_nil (node->right));
 
-  node_height = node->offset -
-    (node->left?node->left->offset:0) -
-    (node->right?node->right->offset:0) -
-    (node->children?node->children->root->offset:0);
-  right_height = right->offset -
-    (right->left?right->left->offset:0) -
-    (right->right?right->right->offset:0) -
-    (right->children?right->children->root->offset:0);
+  right = node->right;
+
+  node_height = GTK_RBNODE_GET_HEIGHT (node);
+  right_height = GTK_RBNODE_GET_HEIGHT (right);
   node->right = right->left;
   if (!_gtk_rbtree_is_nil (right->left))
     right->left->parent = node;
 
-  if (!_gtk_rbtree_is_nil (right))
-    right->parent = node->parent;
+  right->parent = node->parent;
   if (!_gtk_rbtree_is_nil (node->parent))
     {
       if (node == node->parent->left)
@@ -124,22 +120,15 @@ _gtk_rbnode_rotate_left (GtkRBTree *tree,
     }
 
   right->left = node;
-  if (!_gtk_rbtree_is_nil (node))
-    node->parent = right;
+  node->parent = right;
 
-  node->count = 1 + (node->left?node->left->count:0) +
-    (node->right?node->right->count:0);
-  right->count = 1 + (right->left?right->left->count:0) +
-    (right->right?right->right->count:0);
+  node->count = 1 + node->left->count + node->right->count;
+  right->count = 1 + right->left->count + right->right->count;
 
-  node->offset = node_height +
-    (node->left?node->left->offset:0) +
-    (node->right?node->right->offset:0) +
-    (node->children?node->children->root->offset:0);
-  right->offset = right_height +
-    (right->left?right->left->offset:0) +
-    (right->right?right->right->offset:0) +
-    (right->children?right->children->root->offset:0);
+  node->offset = node_height + node->left->offset + node->right->offset +
+                 (node->children ? node->children->root->offset : 0);
+  right->offset = right_height + right->left->offset + right->right->offset +
+                  (right->children ? right->children->root->offset : 0);
 
   _fixup_validation (tree, node);
   _fixup_validation (tree, right);
@@ -152,25 +141,21 @@ _gtk_rbnode_rotate_right (GtkRBTree *tree,
 			  GtkRBNode *node)
 {
   gint node_height, left_height;
-  GtkRBNode *left = node->left;
+  GtkRBNode *left;
 
   g_return_if_fail (!_gtk_rbtree_is_nil (node));
+  g_return_if_fail (!_gtk_rbtree_is_nil (node->left));
 
-  node_height = node->offset -
-    (node->left?node->left->offset:0) -
-    (node->right?node->right->offset:0) -
-    (node->children?node->children->root->offset:0);
-  left_height = left->offset -
-    (left->left?left->left->offset:0) -
-    (left->right?left->right->offset:0) -
-    (left->children?left->children->root->offset:0);
+  left = node->left;
+
+  node_height = GTK_RBNODE_GET_HEIGHT (node);
+  left_height = GTK_RBNODE_GET_HEIGHT (left);
   
   node->left = left->right;
   if (!_gtk_rbtree_is_nil (left->right))
     left->right->parent = node;
 
-  if (!_gtk_rbtree_is_nil (left))
-    left->parent = node->parent;
+  left->parent = node->parent;
   if (!_gtk_rbtree_is_nil (node->parent))
     {
       if (node == node->parent->right)
@@ -185,22 +170,15 @@ _gtk_rbnode_rotate_right (GtkRBTree *tree,
 
   /* link node and left */
   left->right = node;
-  if (!_gtk_rbtree_is_nil (node))
-    node->parent = left;
+  node->parent = left;
 
-  node->count = 1 + (node->left?node->left->count:0) +
-    (node->right?node->right->count:0);
-  left->count = 1 + (left->left?left->left->count:0) +
-    (left->right?left->right->count:0);
+  node->count = 1 + node->left->count + node->right->count;
+  left->count = 1 + left->left->count + left->right->count;
 
-  node->offset = node_height +
-    (node->left?node->left->offset:0) +
-    (node->right?node->right->offset:0) +
-    (node->children?node->children->root->offset:0);
-  left->offset = left_height +
-    (left->left?left->left->offset:0) +
-    (left->right?left->right->offset:0) +
-    (left->children?left->children->root->offset:0);
+  node->offset = node_height + node->left->offset + node->right->offset +
+                 (node->children ? node->children->root->offset : 0);
+  left->offset = left_height + left->left->offset + left->right->offset +
+                 (left->children?left->children->root->offset:0);
 
   _fixup_validation (tree, node);
   _fixup_validation (tree, left);
