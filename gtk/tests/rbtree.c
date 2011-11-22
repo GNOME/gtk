@@ -213,8 +213,6 @@ _gtk_rbtree_test (GtkRBTree *tree)
   while (tmp_tree->parent_tree)
     tmp_tree = tmp_tree->parent_tree;
   
-  g_assert (tmp_tree->nil != NULL);
-
   if (_gtk_rbtree_is_nil (tmp_tree->root))
     return;
 

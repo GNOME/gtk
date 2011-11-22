@@ -61,9 +61,9 @@ _gtk_rbnode_new (GtkRBTree *tree,
 {
   GtkRBNode *node = g_slice_new (GtkRBNode);
 
-  node->left = tree->nil;
-  node->right = tree->nil;
-  node->parent = tree->nil;
+  node->left = (GtkRBNode *) &nil;
+  node->right = (GtkRBNode *) &nil;
+  node->parent = (GtkRBNode *) &nil;
   node->flags = GTK_RBNODE_RED;
   node->total_count = 1;
   node->count = 1;
@@ -357,9 +357,8 @@ _gtk_rbtree_new (void)
   retval->parent_tree = NULL;
   retval->parent_node = NULL;
 
-  retval->nil = (GtkRBNode *) &nil;
+  retval->root = (GtkRBNode *) &nil;
 
-  retval->root = retval->nil;
   return retval;
 }
 
@@ -473,11 +472,11 @@ _gtk_rbtree_insert_after (GtkRBTree *tree,
     }
   /* setup new node */
   node = _gtk_rbnode_new (tree, height);
-  node->parent = (current?current:tree->nil);
 
   /* insert node in tree */
   if (current)
     {
+      node->parent = current;
       if (right)
 	current->right = node;
       else
@@ -541,11 +540,11 @@ _gtk_rbtree_insert_before (GtkRBTree *tree,
 
   /* setup new node */
   node = _gtk_rbnode_new (tree, height);
-  node->parent = (current?current:tree->nil);
 
   /* insert node in tree */
   if (current)
     {
+      node->parent = current;
       if (left)
 	current->left = node;
       else
@@ -1666,8 +1665,6 @@ _gtk_rbtree_test (const gchar *where,
   while (tmp_tree->parent_tree)
     tmp_tree = tmp_tree->parent_tree;
   
-  g_assert (tmp_tree->nil != NULL);
-
   if (_gtk_rbtree_is_nil (tmp_tree->root))
     return;
 

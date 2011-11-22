@@ -57,7 +57,6 @@ typedef void (*GtkRBTreeTraverseFunc) (GtkRBTree  *tree,
 struct _GtkRBTree
 {
   GtkRBNode *root;
-  GtkRBNode *nil;
   GtkRBTree *parent_tree;
   GtkRBNode *parent_node;
 };
