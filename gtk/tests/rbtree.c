@@ -122,8 +122,8 @@ _gtk_rbtree_test_dirty (GtkRBTree *tree,
     {
       g_assert (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID) ||
 		GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
-		(!_gtk_rbtree_is_nil (node->left) && GTK_RBNODE_FLAG_SET (node->left, GTK_RBNODE_DESCENDANTS_INVALID)) ||
-		(!_gtk_rbtree_is_nil (node->right) && GTK_RBNODE_FLAG_SET (node->right, GTK_RBNODE_DESCENDANTS_INVALID)) ||
+		GTK_RBNODE_FLAG_SET (node->left, GTK_RBNODE_DESCENDANTS_INVALID) ||
+		GTK_RBNODE_FLAG_SET (node->right, GTK_RBNODE_DESCENDANTS_INVALID) ||
 		(node->children && GTK_RBNODE_FLAG_SET (node->children->root, GTK_RBNODE_DESCENDANTS_INVALID)));
     }
   else
