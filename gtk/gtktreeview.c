@@ -6627,12 +6627,12 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
 
 	  do
 	    {
-	      if (node->left != tree->nil &&
+	      if (!_gtk_rbtree_is_nil (node->left) &&
 		  GTK_RBNODE_FLAG_SET (node->left, GTK_RBNODE_DESCENDANTS_INVALID))
 		{
 		  node = node->left;
 		}
-	      else if (node->right != tree->nil &&
+              else if (!_gtk_rbtree_is_nil (node->right) &&
 		       GTK_RBNODE_FLAG_SET (node->right, GTK_RBNODE_DESCENDANTS_INVALID))
 		{
 		  node = node->right;
@@ -9406,7 +9406,6 @@ _gtk_tree_view_find_path (GtkTreeView *tree_view,
   path = gtk_tree_path_new ();
 
   g_return_val_if_fail (node != NULL, path);
-  g_return_val_if_fail (node != tree->nil, path);
 
   count = 1 + node->left->count;
 
@@ -9415,7 +9414,7 @@ _gtk_tree_view_find_path (GtkTreeView *tree_view,
   tmp_tree = tree;
   while (tmp_tree)
     {
-      while (tmp_node != tmp_tree->nil)
+      while (!_gtk_rbtree_is_nil (tmp_node))
 	{
 	  if (tmp_node->right == last)
 	    count += 1 + tmp_node->left->count;
@@ -10554,7 +10553,7 @@ gtk_tree_view_move_cursor_start_end (GtkTreeView *tree_view,
 
       do
 	{
-	  while (cursor_node && cursor_node->right != cursor_tree->nil)
+	  while (cursor_node && !_gtk_rbtree_is_nil (cursor_node))
 	    cursor_node = cursor_node->right;
 	  if (cursor_node->children == NULL)
 	    break;

@@ -114,6 +114,7 @@ GtkRBNode *_gtk_rbtree_insert_after     (GtkRBTree              *tree,
 					 gboolean                valid);
 void       _gtk_rbtree_remove_node      (GtkRBTree              *tree,
 					 GtkRBNode              *node);
+gboolean   _gtk_rbtree_is_nil           (GtkRBNode              *node);
 void       _gtk_rbtree_reorder          (GtkRBTree              *tree,
 					 gint                   *new_order,
 					 gint                    length);
