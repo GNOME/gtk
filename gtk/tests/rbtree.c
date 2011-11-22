@@ -281,6 +281,7 @@ static guint
 append_elements (GtkRBTree *tree,
                  guint      depth,
                  guint      elements_per_depth,
+                 gboolean   check,
                  guint      height)
 {
   GtkRBNode *node;
@@ -299,9 +300,10 @@ append_elements (GtkRBTree *tree,
           node->children = _gtk_rbtree_new ();
           node->children->parent_tree = tree;
           node->children->parent_node = node;
-          height = append_elements (node->children, depth, elements_per_depth, height);
+          height = append_elements (node->children, depth, elements_per_depth, check, height);
         }
-      _gtk_rbtree_test (tree);
+      if (check)
+        _gtk_rbtree_test (tree);
     }
 
   return height;
@@ -309,13 +311,16 @@ append_elements (GtkRBTree *tree,
 
 static GtkRBTree *
 create_rbtree (guint depth,
-               guint elements_per_depth)
+               guint elements_per_depth,
+               gboolean check)
 {
   GtkRBTree *tree;
 
   tree = _gtk_rbtree_new ();
 
-  append_elements (tree, depth, elements_per_depth, 0);
+  append_elements (tree, depth, elements_per_depth, check, 0);
+
+  _gtk_rbtree_test (tree);
 
   return tree;
 }
@@ -325,7 +330,7 @@ test_create (void)
 {
   GtkRBTree *tree;
 
-  tree = create_rbtree (5, 5);
+  tree = create_rbtree (5, 5, TRUE);
 
   _gtk_rbtree_free (tree);
 }
@@ -379,7 +384,7 @@ test_remove_node (void)
 {
   GtkRBTree *tree;
 
-  tree = create_rbtree (3, 16);
+  tree = create_rbtree (3, 16, g_test_thorough ());
 
   while (tree->root->count > 1)
     {
