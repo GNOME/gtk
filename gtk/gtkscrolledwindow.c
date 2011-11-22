@@ -275,6 +275,8 @@ static void  gtk_scrolled_window_realize               (GtkWidget           *wid
 static void  gtk_scrolled_window_unrealize             (GtkWidget           *widget);
 static void  gtk_scrolled_window_map                   (GtkWidget           *widget);
 static void  gtk_scrolled_window_unmap                 (GtkWidget           *widget);
+static void  gtk_scrolled_window_grab_notify           (GtkWidget           *widget,
+                                                        gboolean             was_grabbed);
 
 static gboolean _gtk_scrolled_window_set_adjustment_value      (GtkScrolledWindow *scrolled_window,
                                                                 GtkAdjustment     *adjustment,
@@ -346,6 +348,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->unrealize = gtk_scrolled_window_unrealize;
   widget_class->map = gtk_scrolled_window_map;
   widget_class->unmap = gtk_scrolled_window_unmap;
+  widget_class->grab_notify = gtk_scrolled_window_grab_notify;
 
   container_class->add = gtk_scrolled_window_add;
   container_class->remove = gtk_scrolled_window_remove;
@@ -3266,6 +3269,32 @@ gtk_scrolled_window_unmap (GtkWidget *widget)
   gdk_window_hide (scrolled_window->priv->overshoot_window);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unmap (widget);
+}
+
+static void
+gtk_scrolled_window_grab_notify (GtkWidget *widget,
+                                 gboolean   was_grabbed)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+
+  if (priv->drag_device &&
+      gtk_widget_device_is_shadowed (widget,
+                                     priv->drag_device))
+    {
+      gdk_device_ungrab (priv->drag_device,
+                         gtk_get_current_event_time ());
+      priv->drag_device = NULL;
+      priv->in_drag = FALSE;
+
+      if (priv->release_timeout_id)
+        {
+          g_source_remove (priv->release_timeout_id);
+          priv->release_timeout_id = 0;
+        }
+
+      gtk_scrolled_window_cancel_deceleration (scrolled_window);
+    }
 }
 
 /**
