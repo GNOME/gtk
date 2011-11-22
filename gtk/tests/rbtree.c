@@ -430,6 +430,85 @@ test_remove_root (void)
   _gtk_rbtree_free (tree);
 }
 
+static gint *
+fisher_yates_shuffle (guint n_items)
+{
+  gint *list;
+  guint i, j;
+
+  list = g_new (gint, n_items);
+
+  for (i = 0; i < n_items; i++)
+    {
+      j = g_random_int_range (0, i + 1);
+      list[i] = list[j];
+      list[j] = i;
+    }
+
+  return list;
+}
+
+static GtkRBTree *
+create_unsorted_tree (gint  *order,
+                      guint  n)
+{
+  GtkRBTree *tree;
+  GtkRBNode *node;
+  guint i;
+
+  tree = _gtk_rbtree_new ();
+  node = NULL;
+
+  for (i = 0; i < n; i++)
+    {
+      node = _gtk_rbtree_insert_after (tree, node, 0, TRUE);
+    }
+
+  for (i = 0; i < n; i++)
+    {
+      node = _gtk_rbtree_find_count (tree, order[i] + 1);
+      _gtk_rbtree_node_set_height (tree, node, i);
+    }
+
+  _gtk_rbtree_test (tree);
+
+  return tree;
+}
+
+static void
+test_reorder (void)
+{
+  guint n = g_test_perf () ? 1000000 : 100;
+  GtkRBTree *tree;
+  GtkRBNode *node;
+  gint *reorder;
+  guint i;
+  double elapsed;
+
+  reorder = fisher_yates_shuffle (n);
+  tree = create_unsorted_tree (reorder, n);
+
+  g_test_timer_start ();
+
+  _gtk_rbtree_reorder (tree, reorder, n);
+
+  elapsed = g_test_timer_elapsed ();
+  if (g_test_perf ())
+    g_test_minimized_result (elapsed, "reordering rbtree with %u items: %gsec", n, elapsed);
+
+  _gtk_rbtree_test (tree);
+
+  for (node = _gtk_rbtree_first (tree), i = 0;
+       node != NULL;
+       node = _gtk_rbtree_next (tree, node), i++)
+    {
+      g_assert (GTK_RBNODE_GET_HEIGHT (node) == i);
+    }
+  g_assert (i == n);
+
+  _gtk_rbtree_free (tree);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -441,8 +520,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/rbtree/insert_after", test_insert_after);
   g_test_add_func ("/rbtree/insert_before", test_insert_before);
   g_test_add_func ("/rbtree/remove_node", test_remove_node);
-
   g_test_add_func ("/rbtree/remove_root", test_remove_root);
+  g_test_add_func ("/rbtree/reorder", test_reorder);
 
   return g_test_run ();
 }
