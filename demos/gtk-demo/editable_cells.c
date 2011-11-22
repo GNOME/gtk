@@ -48,27 +48,27 @@ add_items (void)
   g_return_if_fail (articles != NULL);
 
   foo.number = 3;
-  foo.product = "bottles of coke";
+  foo.product = g_strdup ("bottles of coke");
   foo.yummy = 20;
   g_array_append_vals (articles, &foo, 1);
 
   foo.number = 5;
-  foo.product = "packages of noodles";
+  foo.product = g_strdup ("packages of noodles");
   foo.yummy = 50;
   g_array_append_vals (articles, &foo, 1);
 
   foo.number = 2;
-  foo.product = "packages of chocolate chip cookies";
+  foo.product = g_strdup ("packages of chocolate chip cookies");
   foo.yummy = 90;
   g_array_append_vals (articles, &foo, 1);
 
   foo.number = 1;
-  foo.product = "can vanilla ice cream";
+  foo.product = g_strdup ("can vanilla ice cream");
   foo.yummy = 60;
   g_array_append_vals (articles, &foo, 1);
 
   foo.number = 6;
-  foo.product = "eggs";
+  foo.product = g_strdup ("eggs");
   foo.yummy = 10;
   g_array_append_vals (articles, &foo, 1);
 }
