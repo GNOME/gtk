@@ -57,6 +57,7 @@ struct _GtkTreeViewAccessibleClass
 GType _gtk_tree_view_accessible_get_type (void);
 
 /* called by treeview code */
+void            _gtk_tree_view_accessible_reorder       (GtkTreeView       *treeview);
 void            _gtk_tree_view_accessible_remove        (GtkTreeView       *treeview,
                                                          GtkRBTree         *tree,
                                                          GtkRBNode         *node);

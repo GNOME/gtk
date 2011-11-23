@@ -1995,19 +1995,14 @@ destroy_count_func (GtkTreeView *tree_view,
   accessible->n_children_deleted = count;
 }
 
-static void
-model_rows_reordered (GtkTreeModel *tree_model,
-                      GtkTreePath  *path,
-                      GtkTreeIter  *iter,
-                      gint         *new_order,
-                      gpointer      user_data)
+void
+_gtk_tree_view_accessible_reorder (GtkTreeView *treeview)
 {
-  GtkTreeView *tree_view = (GtkTreeView *)user_data;
-  AtkObject *atk_obj;
   GtkTreeViewAccessible *accessible;
 
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
+  accessible = GTK_TREE_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (treeview)));
+  if (accessible == NULL)
+    return;
 
   if (accessible->idle_expand_id)
     {
@@ -2017,7 +2012,7 @@ model_rows_reordered (GtkTreeModel *tree_model,
     }
   traverse_cells (accessible, NULL, FALSE);
 
-  g_signal_emit_by_name (atk_obj, "row-reordered");
+  g_signal_emit_by_name (accessible, "row-reordered");
 }
 
 static void
@@ -2781,9 +2776,6 @@ connect_model_signals (GtkTreeView           *view,
   g_signal_connect_data (obj, "row-deleted",
                          G_CALLBACK (model_row_deleted), view, NULL,
                          G_CONNECT_AFTER);
-  g_signal_connect_data (obj, "rows-reordered",
-                         G_CALLBACK (model_rows_reordered), view, NULL,
-                         G_CONNECT_AFTER);
 }
 
 static void
@@ -2797,7 +2789,6 @@ disconnect_model_signals (GtkTreeViewAccessible *accessible)
   g_signal_handlers_disconnect_by_func (obj, model_row_changed, widget);
   g_signal_handlers_disconnect_by_func (obj, model_row_inserted, widget);
   g_signal_handlers_disconnect_by_func (obj, model_row_deleted, widget);
-  g_signal_handlers_disconnect_by_func (obj, model_rows_reordered, widget);
 }
 
 /* Returns the column number of the specified GtkTreeViewColumn

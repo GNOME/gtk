@@ -9113,6 +9113,8 @@ gtk_tree_view_rows_reordered (GtkTreeModel *model,
 
   _gtk_rbtree_reorder (tree, new_order, len);
 
+  _gtk_tree_view_accessible_reorder (tree_view);
+
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 
   gtk_tree_view_dy_to_top_row (tree_view);
