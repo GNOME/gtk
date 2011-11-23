@@ -111,3 +111,19 @@ _gtk_cell_accessible_parent_get_child_index (GtkCellAccessibleParent *parent,
   else
     return -1;
 }
+
+void
+_gtk_cell_accessible_parent_set_cell_data (GtkCellAccessibleParent *parent,
+                                           GtkCellAccessible       *cell)
+{
+  GtkCellAccessibleParentIface *iface;
+
+  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent));
+  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (cell));
+
+  iface = GTK_CELL_ACCESSIBLE_PARENT_GET_IFACE (parent);
+
+  if (iface->set_cell_data)
+    (iface->set_cell_data) (parent, cell);
+}
+

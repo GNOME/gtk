@@ -50,6 +50,8 @@ struct _GtkCellAccessibleClass
 
 GType    _gtk_cell_accessible_get_type      (void);
 
+void     _gtk_cell_accessible_set_cell_data (GtkCellAccessible *cell);
+
 void     _gtk_cell_accessible_initialise    (GtkCellAccessible *cell,
                                              GtkWidget         *widget,
                                              AtkObject         *parent);

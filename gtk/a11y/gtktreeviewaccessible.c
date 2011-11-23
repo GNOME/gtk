@@ -1517,12 +1517,58 @@ gtk_tree_view_accessible_get_child_index (GtkCellAccessibleParent *parent,
 }
 
 static void
+gtk_tree_view_accessible_set_cell_data (GtkCellAccessibleParent *parent,
+                                        GtkCellAccessible       *cell)
+{
+  GtkTreeViewAccessibleCellInfo *cell_info;
+  GtkTreeView *treeview;
+  gboolean is_expander, is_expanded;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+
+  cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell);
+  if (!cell_info)
+    return;
+
+  treeview = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
+  model = gtk_tree_view_get_model (treeview);
+
+  if (GTK_RBNODE_FLAG_SET (cell_info->node, GTK_RBNODE_IS_PARENT) &&
+      cell_info->cell_col_ref == gtk_tree_view_get_expander_column (treeview))
+    {
+      is_expander = TRUE;
+      is_expanded = cell_info->node->children != NULL;
+    }
+  else
+    {
+      is_expander = FALSE;
+      is_expanded = FALSE;
+    }
+
+  path = cell_info_get_path (cell_info);
+  if (path == NULL ||
+      !gtk_tree_model_get_iter (model, &iter, path))
+    {
+      /* We only track valid cells, this should never happen */
+      g_return_if_reached ();
+    }
+
+  gtk_tree_view_column_cell_set_cell_data (cell_info->cell_col_ref,
+                                           model,
+                                           &iter,
+                                           is_expander,
+                                           is_expanded);
+}
+
+static void
 gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface)
 {
   iface->get_cell_extents = gtk_tree_view_accessible_get_cell_extents;
   iface->get_cell_area = gtk_tree_view_accessible_get_cell_area;
   iface->grab_focus = gtk_tree_view_accessible_grab_cell_focus;
   iface->get_child_index = gtk_tree_view_accessible_get_child_index;
+  iface->set_cell_data = gtk_tree_view_accessible_set_cell_data;
 }
 
 /* signal handling */
