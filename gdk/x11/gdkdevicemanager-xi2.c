@@ -242,19 +242,6 @@ translate_device_classes (GdkDisplay      *display,
                                       valuator_info->resolution);
           }
           break;
-#ifdef XINPUT_2_1
-        case XITouchValuatorClass:
-          {
-            XITouchValuatorClassInfo *valuator_info = (XITouchValuatorClassInfo *) class_info;
-
-            translate_valuator_class (display, device,
-                                      valuator_info->label,
-                                      valuator_info->min,
-                                      valuator_info->max,
-                                      valuator_info->resolution);
-          }
-          break;
-#endif /* XINPUT_2_1 */
         default:
           /* Ignore */
           break;
@@ -268,22 +255,21 @@ static gint
 count_device_touches (XIAnyClassInfo **classes,
 		      guint            n_classes)
 {
-  gint n_touches = 0;
-#ifdef XINPUT_2_1
+#ifdef XINPUT_2_2
   guint i;
 
   for (i = 0; i < n_classes; i++)
     {
-      XITouchValuatorClassInfo *valuator_info = (XITouchValuatorClassInfo *) classes[i];
+      XITouchClassInfo *valuator_info = (XITouchClassInfo *) classes[i];
 
-      if (valuator_info->type != XITouchValuatorClass)
+      if (valuator_info->type != XITouchClass)
         continue;
 
-      n_touches = MAX (n_touches, valuator_info->number);
+      return valuator_info->num_touches;
     }
 #endif
 
-  return n_touches;
+  return 0;
 }
 
 static GdkDevice *
@@ -898,11 +884,11 @@ get_event_window (GdkEventTranslator *translator,
     case XI_ButtonPress:
     case XI_ButtonRelease:
     case XI_Motion:
-#ifdef XINPUT_2_1
+#ifdef XINPUT_2_2
     case XI_TouchUpdate:
     case XI_TouchBegin:
     case XI_TouchEnd:
-#endif /* XINPUT_2_1 */
+#endif /* XINPUT_2_2 */
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
 
@@ -1123,10 +1109,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       break;
     case XI_ButtonPress:
     case XI_ButtonRelease:
-#ifdef XINPUT_2_1
+#ifdef XINPUT_2_2
     case XI_TouchBegin:
     case XI_TouchEnd:
-#endif /* XINPUT_2_1 */
+#endif /* XINPUT_2_2 */
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkDevice *source_device;
@@ -1164,13 +1150,13 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           }
         else
           {
-#ifdef XINPUT_2_1
+#ifdef XINPUT_2_2
             if (ev->evtype == XI_TouchBegin)
               event->button.type = GDK_TOUCH_PRESS;
 	    else if (ev->evtype == XI_TouchEnd)
               event->button.type = GDK_TOUCH_RELEASE;
             else
-#endif /* XINPUT_2_1 */
+#endif /* XINPUT_2_2 */
               event->button.type = (ev->evtype == XI_ButtonPress) ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
 
             event->button.window = window;
@@ -1204,7 +1190,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
             event->button.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
-#ifdef XINPUT_2_1
+#ifdef XINPUT_2_2
             if (ev->evtype == XI_TouchBegin ||
                 ev->evtype == XI_TouchEnd)
               {
@@ -1212,7 +1198,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                 event->button.touch_id = xev->detail;
               }
             else
-#endif /* XINPUT_2_1 */
+#endif /* XINPUT_2_2 */
               event->button.button = xev->detail;
           }
 
@@ -1231,9 +1217,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         break;
       }
     case XI_Motion:
-#ifdef XINPUT_2_1
+#ifdef XINPUT_2_2
     case XI_TouchUpdate:
-#endif /* XINPUT_2_1 */
+#endif /* XINPUT_2_2 */
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkDevice *source_device;
@@ -1243,7 +1229,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->motion.touch_id = 0;
             event->motion.type = GDK_MOTION_NOTIFY;
           }
-#ifdef XINPUT_2_1
+#ifdef XINPUT_2_2
         else
           {
             event->motion.touch_id = xev->detail;

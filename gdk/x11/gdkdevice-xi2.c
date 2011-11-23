@@ -690,14 +690,14 @@ _gdk_x11_device_xi2_translate_event_mask (GdkEventMask  event_mask,
       XISetMask (mask, XI_FocusOut);
     }
 
-#ifdef XINPUT_2_1
+#ifdef XINPUT_2_2
   if (event_mask & GDK_TOUCH_MASK)
     {
       XISetMask (mask, XI_TouchBegin);
       XISetMask (mask, XI_TouchUpdate);
       XISetMask (mask, XI_TouchEnd);
     }
-#endif /* XINPUT_2_1 */
+#endif /* XINPUT_2_2 */
 
   return mask;
 }
