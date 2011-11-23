@@ -7050,7 +7050,8 @@ _gtk_widget_press_and_hold_check_cancel (GtkWidget      *widget,
 {
   PressAndHoldData *data;
 
-  if (event->type != GDK_BUTTON_RELEASE)
+  if (event->type != GDK_BUTTON_RELEASE &&
+      event->type != GDK_TOUCH_RELEASE)
     return FALSE;
 
   data = gtk_widget_peek_press_and_hold_data (widget);
@@ -7072,7 +7073,8 @@ _gtk_widget_press_and_hold_check_threshold (GtkWidget      *widget,
   PressAndHoldData *data;
   GdkDevice *device;
 
-  if (event->type != GDK_MOTION_NOTIFY)
+  if (event->type != GDK_MOTION_NOTIFY &&
+      event->type != GDK_TOUCH_MOTION)
     return FALSE;
 
   data = gtk_widget_peek_press_and_hold_data (widget);
@@ -7236,7 +7238,8 @@ _gtk_widget_press_and_hold_check_start (GtkWidget      *widget,
 {
   PressAndHoldData *data = gtk_widget_peek_press_and_hold_data (widget);
 
-  if (event->type != GDK_BUTTON_PRESS)
+  if (event->type != GDK_BUTTON_PRESS &&
+      event->type != GDK_TOUCH_PRESS)
     return FALSE;
 
   /* Press and hold already in process? */
@@ -7244,6 +7247,7 @@ _gtk_widget_press_and_hold_check_start (GtkWidget      *widget,
     return FALSE;
 
   data = gtk_widget_get_press_and_hold_data (widget);
+  data->device = gdk_event_get_device ((GdkEvent *) event);
 
   if (gtk_widget_press_and_hold_query (widget, data->device,
                                        event->x, event->y))
@@ -7308,8 +7312,6 @@ _gtk_widget_press_and_hold_check_start (GtkWidget      *widget,
         gdk_threads_add_timeout (begin_ani_timeout,
                                  gtk_widget_press_and_hold_begin_animation_timeout,
                                  widget);
-
-      data->device = gdk_event_get_device ((GdkEvent *) event);
     }
 
   return FALSE;
