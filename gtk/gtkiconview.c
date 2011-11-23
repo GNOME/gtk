@@ -3769,11 +3769,18 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
       else
 	list = g_list_last (icon_view->priv->items);
 
-      item = list ? list->data : NULL;
+      if (list)
+        {
+          item = list->data;
 
-      /* Give focus to the first cell initially */
-      gtk_icon_view_set_cell_data (icon_view, item);
-      gtk_cell_area_focus (icon_view->priv->cell_area, direction);
+          /* Give focus to the first cell initially */
+          gtk_icon_view_set_cell_data (icon_view, item);
+          gtk_cell_area_focus (icon_view->priv->cell_area, direction);
+        }
+      else
+        {
+          item = NULL;
+        }
     }
   else
     {
@@ -3914,11 +3921,18 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
       else
 	list = g_list_last (icon_view->priv->items);
 
-      item = list ? list->data : NULL;
+      if (list)
+        {
+          item = list->data;
 
-      /* Give focus to the first cell initially */
-      gtk_icon_view_set_cell_data (icon_view, item);
-      gtk_cell_area_focus (icon_view->priv->cell_area, direction);
+          /* Give focus to the first cell initially */
+          gtk_icon_view_set_cell_data (icon_view, item);
+          gtk_cell_area_focus (icon_view->priv->cell_area, direction);
+        }
+      else
+        {
+          item = NULL;
+        }
     }
   else
     {
