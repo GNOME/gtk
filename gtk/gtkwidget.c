@@ -546,6 +546,7 @@ typedef struct
   /* animation */
   GtkWidget *popup;
   guint delay_animation_id;
+  guint size;
 
   gint start_x;
   gint start_y;
@@ -7037,14 +7038,9 @@ _gtk_widget_press_and_hold_check_threshold (GtkWidget      *widget,
     }
 
   if (data->popup)
-    {
-      guint cursor_size;
-
-      cursor_size = gdk_display_get_default_cursor_size (gtk_widget_get_display (widget));
-      gtk_window_move (GTK_WINDOW (data->popup),
-                       event->x_root - cursor_size / 2,
-                       event->y_root - cursor_size / 2);
-    }
+    gtk_window_move (GTK_WINDOW (data->popup),
+                     event->x_root - data->size / 2,
+                     event->y_root - data->size / 2);
 
   return FALSE;
 }
@@ -7140,17 +7136,15 @@ gtk_widget_press_and_hold_begin_animation_timeout (gpointer user_data)
   GtkWidget *widget = GTK_WIDGET (user_data);
   PressAndHoldData *data;
   gint x, y;
-  guint cursor_size;
 
   data = gtk_widget_peek_press_and_hold_data (widget);
   g_assert (data != NULL);
 
   gdk_window_get_device_position (gdk_screen_get_root_window (gtk_widget_get_screen (widget)),
                                   data->device, &x, &y, NULL);
-  cursor_size = gdk_display_get_default_cursor_size (gtk_widget_get_display (widget));
   gtk_window_move (GTK_WINDOW (data->popup),
-                   x - cursor_size / 2,
-                   y - cursor_size / 2);
+                   x - data->size / 2,
+                   y - data->size / 2);
   gtk_widget_show (data->popup);
 
   gtk_widget_set_state_flags (GTK_WIDGET (data->popup),
@@ -7195,11 +7189,13 @@ _gtk_widget_press_and_hold_check_start (GtkWidget      *widget,
   if (gtk_widget_press_and_hold_query (widget, data->device,
                                        event->x, event->y))
     {
-      gint timeout, begin_ani_timeout, cursor_size;
+      gint timeout, begin_ani_timeout;
       GdkScreen *screen;
       GdkVisual *visual;
       GtkStyleContext *context;
       cairo_region_t *region;
+      GdkDevice *source_device;
+      GdkInputSource source;
 
       _gtk_widget_find_at_coords (event->window,
                                   event->x, event->y,
@@ -7230,8 +7226,19 @@ _gtk_widget_press_and_hold_check_start (GtkWidget      *widget,
                         G_CALLBACK (press_and_hold_animation_draw),
                         widget);
 
-      cursor_size = gdk_display_get_default_cursor_size (gtk_widget_get_display (widget));
-      gtk_window_resize (GTK_WINDOW (data->popup), cursor_size, cursor_size);
+      source_device = gdk_event_get_source_device ((GdkEvent *) event);
+      source = gdk_device_get_source (source_device);
+
+      if (source == GDK_SOURCE_TOUCH)
+        {
+          /* Have an indicator with 2.5cm of diameter */
+          data->size = (25 * gdk_screen_get_width (screen)) /
+            gdk_screen_get_width_mm (screen);
+        }
+      else
+        data->size = gdk_display_get_default_cursor_size (gtk_widget_get_display (widget));
+
+      gtk_window_resize (GTK_WINDOW (data->popup), data->size, data->size);
 
       region = cairo_region_create ();
       gdk_window_input_shape_combine_region (gtk_widget_get_window (data->popup), region, 0, 0);
