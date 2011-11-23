@@ -860,6 +860,9 @@ gtk_frame_get_preferred_size (GtkWidget      *request,
   gint minimum, natural;
   guint border_width;
 
+  get_padding_and_border (frame, &padding);
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
   if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -901,9 +904,6 @@ gtk_frame_get_preferred_size (GtkWidget      *request,
           natural += child_nat;
         }
     }
-
-  get_padding_and_border (frame, &padding);
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
