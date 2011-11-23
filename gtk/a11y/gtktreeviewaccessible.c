@@ -604,10 +604,10 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
 
   renderer_list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (tv_col));
 
-  /* If there are more than one renderer in the list,
+  /* If there is not exactly one renderer in the list,
    * make a container
    */
-  if (renderer_list && renderer_list->next)
+  if (renderer_list == NULL || renderer_list->next)
     {
       GtkCellAccessible *container_cell;
 
@@ -628,23 +628,38 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
 
   child = NULL;
 
-  /* Now we make a fake cell_renderer if there is no cell
-   * in renderer_list
-   */
-  if (renderer_list == NULL)
+  for (l = renderer_list; l; l = l->next)
     {
-      GtkCellRenderer *fake_renderer;
+      renderer = GTK_CELL_RENDERER (l->data);
 
-      fake_renderer = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT, NULL);
-      child = _gtk_text_cell_accessible_new ();
+      if (GTK_IS_CELL_RENDERER_TEXT (renderer))
+        {
+          g_object_get (G_OBJECT (renderer), "editable", &editable, NULL);
+          child = _gtk_text_cell_accessible_new ();
+        }
+      else if (GTK_IS_CELL_RENDERER_TOGGLE (renderer))
+        child = _gtk_boolean_cell_accessible_new ();
+      else if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
+        child = _gtk_image_cell_accessible_new ();
+      else
+        child = _gtk_renderer_cell_accessible_new ();
+
       cell = GTK_CELL_ACCESSIBLE (child);
       renderer_cell = GTK_RENDERER_CELL_ACCESSIBLE (child);
-      renderer_cell->renderer = fake_renderer;
 
-      /* Create the GtkTreeViewAccessibleCellInfo structure for this cell */
-      cell_info_new (accessible, tree_model, tree, node, tv_col, cell);
+      /* Create the GtkTreeViewAccessibleCellInfo for this cell */
+      if (parent == ATK_OBJECT (accessible))
+        cell_info_new (accessible, tree_model, tree, node, tv_col, cell);
 
       _gtk_cell_accessible_initialise (cell, widget, parent);
+
+      if (container)
+        _gtk_container_cell_accessible_add_child (container, cell);
+
+      update_cell_value (renderer_cell, accessible, FALSE);
+
+      /* Add the actions appropriate for this cell */
+      add_cell_actions (cell, editable);
 
       /* Set state if it is expandable */
       if (is_expander)
@@ -653,72 +668,28 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
           if (is_expanded)
             _gtk_cell_accessible_add_state (cell, ATK_STATE_EXPANDED, FALSE);
         }
-    }
-  else
-    {
-      for (l = renderer_list; l; l = l->next)
+
+      /* If the column is visible, sets the cell's state */
+      if (gtk_tree_view_column_get_visible (tv_col))
+        set_cell_visibility (tree_view, cell, tv_col, path, FALSE);
+
+      /* If the row is selected, all cells on the row are selected */
+      selection = gtk_tree_view_get_selection (tree_view);
+
+      if (gtk_tree_selection_path_is_selected (selection, path))
+        _gtk_cell_accessible_add_state (cell, ATK_STATE_SELECTED, FALSE);
+
+      _gtk_cell_accessible_add_state (cell, ATK_STATE_FOCUSABLE, FALSE);
+      if (focus_index == i)
         {
-          renderer = GTK_CELL_RENDERER (l->data);
-
-          if (GTK_IS_CELL_RENDERER_TEXT (renderer))
-            {
-              g_object_get (G_OBJECT (renderer), "editable", &editable, NULL);
-              child = _gtk_text_cell_accessible_new ();
-            }
-          else if (GTK_IS_CELL_RENDERER_TOGGLE (renderer))
-            child = _gtk_boolean_cell_accessible_new ();
-          else if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
-            child = _gtk_image_cell_accessible_new ();
-          else
-            child = _gtk_renderer_cell_accessible_new ();
-
-          cell = GTK_CELL_ACCESSIBLE (child);
-          renderer_cell = GTK_RENDERER_CELL_ACCESSIBLE (child);
-
-          /* Create the GtkTreeViewAccessibleCellInfo for this cell */
-          if (parent == ATK_OBJECT (accessible))
-            cell_info_new (accessible, tree_model, tree, node, tv_col, cell);
-
-          _gtk_cell_accessible_initialise (cell, widget, parent);
-
-          if (container)
-            _gtk_container_cell_accessible_add_child (container, cell);
-
-          update_cell_value (renderer_cell, accessible, FALSE);
-
-          /* Add the actions appropriate for this cell */
-          add_cell_actions (cell, editable);
-
-          /* Set state if it is expandable */
-          if (is_expander)
-            {
-              set_cell_expandable (cell);
-              if (is_expanded)
-                _gtk_cell_accessible_add_state (cell, ATK_STATE_EXPANDED, FALSE);
-            }
-
-          /* If the column is visible, sets the cell's state */
-          if (gtk_tree_view_column_get_visible (tv_col))
-            set_cell_visibility (tree_view, cell, tv_col, path, FALSE);
-
-          /* If the row is selected, all cells on the row are selected */
-          selection = gtk_tree_view_get_selection (tree_view);
-
-          if (gtk_tree_selection_path_is_selected (selection, path))
-            _gtk_cell_accessible_add_state (cell, ATK_STATE_SELECTED, FALSE);
-
-          _gtk_cell_accessible_add_state (cell, ATK_STATE_FOCUSABLE, FALSE);
-          if (focus_index == i)
-            {
-              accessible->focus_cell = g_object_ref (cell);
-              _gtk_cell_accessible_add_state (cell, ATK_STATE_FOCUSED, FALSE);
-              g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
-            }
+          accessible->focus_cell = g_object_ref (cell);
+          _gtk_cell_accessible_add_state (cell, ATK_STATE_FOCUSED, FALSE);
+          g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
         }
-      g_list_free (renderer_list);
-      if (container)
-        child = ATK_OBJECT (container);
     }
+  g_list_free (renderer_list);
+  if (container)
+    child = ATK_OBJECT (container);
 
   if (expander_tv == tv_col)
     {
