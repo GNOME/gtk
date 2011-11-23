@@ -208,18 +208,18 @@ gtk_test_spin_button_click (GtkSpinButton  *spinner,
                             guint           button,
                             gboolean        upwards)
 {
-  GdkWindow *panel;
+  GdkWindow *down_panel = NULL, *up_panel = NULL, *panel;
   gboolean b1res = FALSE, b2res = FALSE;
 
-  panel = _gtk_spin_button_get_panel (spinner);
+  _gtk_spin_button_get_panels (spinner, &down_panel, &up_panel);
+
+  panel = (upwards) ? up_panel : down_panel;
 
   if (panel)
     {
-      gint width, pos;
-      width = gdk_window_get_width (panel);
-      pos = upwards ? 0 : gdk_window_get_height (panel) - 1;
-      b1res = gdk_test_simulate_button (panel, width - 1, pos, button, 0, GDK_BUTTON_PRESS);
-      b2res = gdk_test_simulate_button (panel, width - 1, pos, button, 0, GDK_BUTTON_RELEASE);
+      gint width = gdk_window_get_width (panel);
+      b1res = gdk_test_simulate_button (panel, width - 1, 1, button, 0, GDK_BUTTON_PRESS);
+      b2res = gdk_test_simulate_button (panel, width - 1, 1, button, 0, GDK_BUTTON_RELEASE);
     }
   return b1res && b2res;
 }

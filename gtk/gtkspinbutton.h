@@ -207,7 +207,9 @@ gboolean        gtk_spin_button_get_snap_to_ticks  (GtkSpinButton  *spin_button)
 void            gtk_spin_button_update             (GtkSpinButton  *spin_button);
 
 /* private */
-GdkWindow*      _gtk_spin_button_get_panel         (GtkSpinButton  *spin_button);
+void            _gtk_spin_button_get_panels        (GtkSpinButton  *spin_button,
+                                                    GdkWindow     **down_panel,
+                                                    GdkWindow     **up_panel);
 
 G_END_DECLS
 
