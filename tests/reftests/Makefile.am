@@ -57,6 +57,9 @@ EXTRA_DIST += \
 	border-radius-clamp.css\
 	border-radius-clamp.ref.ui \
 	border-radius-clamp.ui \
+	border-style-none.css \
+	border-style-none.ref.ui \
+	border-style-none.ui \
 	box-packing.css \
 	box-packing.ref.ui \
 	box-packing.ui \

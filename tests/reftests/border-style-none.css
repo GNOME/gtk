@@ -1,0 +1,19 @@
+* {
+  border-color: red;
+  border-image: none;
+  background-image: none;
+}
+
+GtkButton {
+  background-color: purple;
+  border-style: none;
+  border-width: 5;
+  border-radius: 15;
+}
+
+#reference {
+  border-style: solid;
+  border-width: 0;
+  border-radius: 15;
+}
+
