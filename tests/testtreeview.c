@@ -792,6 +792,9 @@ main (int    argc,
   
   gtk_container_add (GTK_CONTAINER (sw), tv);
   
+  create_prop_editor (G_OBJECT (tv), GTK_TYPE_TREE_VIEW);
+  create_prop_editor (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tv))), GTK_TYPE_TREE_SELECTION);
+
   gtk_widget_show_all (window);
   
   gtk_main ();
