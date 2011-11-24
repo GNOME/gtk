@@ -32,6 +32,10 @@ EXTRA_DIST += \
 	background-color-transparent.css \
 	background-color-transparent.ref.ui \
 	background-color-transparent.ui \
+	background-origin.css \
+	background-origin.ref.ui \
+	background-origin.ui \
+	reference-background-origin.png	\
 	border-color-default.css \
 	border-color-default.ref.ui \
 	border-color-default.ui \
