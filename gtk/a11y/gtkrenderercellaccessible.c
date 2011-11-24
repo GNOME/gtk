@@ -25,7 +25,6 @@
 
 G_DEFINE_TYPE (GtkRendererCellAccessible, _gtk_renderer_cell_accessible, GTK_TYPE_CELL_ACCESSIBLE)
 
-
 static void
 gtk_renderer_cell_accessible_finalize (GObject *object)
 {

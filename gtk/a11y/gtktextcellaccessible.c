@@ -125,6 +125,17 @@ static void atk_text_interface_init (AtkTextIface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkTextCellAccessible, _gtk_text_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
+static AtkStateSet *
+gtk_text_cell_accessible_ref_state_set (AtkObject *accessible)
+{
+  AtkStateSet *state_set;
+
+  state_set = ATK_OBJECT_CLASS (_gtk_text_cell_accessible_parent_class)->ref_state_set (accessible);
+
+  atk_state_set_add_state (state_set, ATK_STATE_SINGLE_LINE);
+
+  return state_set;
+}
 
 static void
 gtk_text_cell_accessible_finalize (GObject *object)
@@ -221,6 +232,7 @@ _gtk_text_cell_accessible_class_init (GtkTextCellAccessibleClass *klass)
   renderer_cell_class->property_list = property_list;
 
   atk_object_class->get_name = gtk_text_cell_accessible_get_name;
+  atk_object_class->ref_state_set = gtk_text_cell_accessible_ref_state_set;
 
   gobject_class->finalize = gtk_text_cell_accessible_finalize;
 }
@@ -231,8 +243,6 @@ _gtk_text_cell_accessible_init (GtkTextCellAccessible *text_cell)
   text_cell->cell_text = NULL;
   text_cell->caret_pos = 0;
   text_cell->cell_length = 0;
-  atk_state_set_add_state (GTK_CELL_ACCESSIBLE (text_cell)->state_set,
-                           ATK_STATE_SINGLE_LINE);
 }
 
 AtkObject *

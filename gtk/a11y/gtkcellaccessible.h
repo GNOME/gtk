@@ -39,7 +39,6 @@ struct _GtkCellAccessible
   AtkObject parent;
 
   GtkWidget    *widget;
-  AtkStateSet *state_set;
   GList       *action_list;
 };
 

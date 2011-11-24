@@ -66,7 +66,7 @@ window1
       parent: tree1
       index: 2
       name: One
-      state: enabled focusable focused selectable selected sensitive single-line transient visible
+      state: enabled focusable selectable selected sensitive showing single-line transient visible
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -146,7 +146,7 @@ window1
       parent: tree1
       index: 4
       name: Three
-      state: enabled focusable selectable sensitive single-line transient visible
+      state: enabled focusable selectable sensitive showing single-line transient visible
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -226,7 +226,7 @@ window1
       parent: tree1
       index: 6
       name: Five
-      state: enabled focusable selectable sensitive single-line transient visible
+      state: enabled focusable selectable sensitive showing single-line transient visible
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -306,7 +306,7 @@ window1
       parent: tree1
       index: 8
       name: Seven
-      state: enabled focusable selectable sensitive single-line transient visible
+      state: enabled focusable selectable sensitive showing single-line transient visible
       <AtkComponent>
       layer: widget
       alpha: 1
