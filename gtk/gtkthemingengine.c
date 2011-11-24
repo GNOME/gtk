@@ -1721,10 +1721,14 @@ render_background_internal (GtkThemingEngine *engine,
 
   _gtk_rounded_box_path (&clip_box, cr);
 
+  gdk_cairo_set_source_rgba (cr, &bg_color);
   if (pattern)
     {
       cairo_surface_t *surface;
       int scale_width, scale_height;
+
+      /* Fill background color first */
+      cairo_fill_preserve (cr);
 
       if (cairo_pattern_get_surface (pattern, &surface) != CAIRO_STATUS_SUCCESS)
           surface = NULL;
@@ -1752,8 +1756,6 @@ render_background_internal (GtkThemingEngine *engine,
       cairo_scale (cr, 1.0 / scale_width, 1.0 / scale_height);
       cairo_translate (cr, -bg_x, -bg_y);
     }
-  else
-    gdk_cairo_set_source_rgba (cr, &bg_color);
 
   cairo_fill (cr);
 
