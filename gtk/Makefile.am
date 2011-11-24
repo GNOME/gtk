@@ -1120,7 +1120,7 @@ endif
 endif
 
 gtk_query_immodules_3_0_DEPENDENCIES = $(DEPS)
-gtk_query_immodules_3_0_LDADD = $(LDADDS)
+gtk_query_immodules_3_0_LDADD = $(LDADDS) $(GMODULE_LIBS)
 gtk_query_immodules_3_0_SOURCES = queryimmodules.c
 
 if BUILD_ICON_CACHE

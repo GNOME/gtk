@@ -495,6 +495,8 @@ PKG_CHECK_MODULES(BASE_DEPENDENCIES,
 
 PKG_CHECK_MODULES(CAIRO_BACKEND, [$cairo_backends])
 
+PKG_CHECK_MODULES(GMODULE, [gmodule-2.0])
+
 if test "$os_win32" != yes; then
     # libtool option to control which symbols are exported
     # right now, symbols starting with _ are not exported
