@@ -47,7 +47,7 @@
 }
 
 .check:active:insensitive {
-    background-image: -gtk-win32-theme-part(button, 1 8);
+    background-image: -gtk-win32-theme-part(button, 3 8);
 }
 
 .check:active:prelight {
@@ -86,16 +86,19 @@
 }
 
 .radio:active:insensitive {
-    background-image: -gtk-win32-theme-part(button, 1 8);
+    background-image: -gtk-win32-theme-part(button, 2 8);
 }
 
 .radio:active:prelight {
     background-image: -gtk-win32-theme-part(button, 2 6);
 }
 
-
 .radio:inconsistent {
     background-image: -gtk-win32-theme-part(button, 2 1, mix 2 5);
+}
+
+.radio:inconsistent:insensitive {
+    background-image: -gtk-win32-theme-part(button, 2 4, mix 2 8);
 }
 
 .radio:inconsistent:prelight {
@@ -484,7 +487,8 @@ GtkProgressBar.trough.vertical {
 }
 
 .menuitem.radio,
-.menuitem.radio:prelight {
+.menuitem.radio:prelight,
+.menuitem.radio:insensitive {
     background-image: none;
     border-width: 0;
 }
@@ -496,20 +500,23 @@ GtkProgressBar.trough.vertical {
 }
 
 .menuitem.radio:inconsistent,
-.menuitem.radio:inconsistent:prelight {
-    background-image: -gtk-win32-theme-part(menu, 11 3, mix 0 0);
+.menuitem.radio:inconsistent:insensitive,
+.menuitem.radio:inconsistent:prelight,
+.menuitem.radio:inconsistent:active,
+.menuitem.radio:inconsistent:active:prelight {
+    background-image: none; /* Fall back to default, this state is not in win32 */
     border-width: 0;
 }
 
-.menuitem.radio:insensitive,
-.menuitem.radio:insensitive:prelight{
+.menuitem.radio:insensitive:active,
+.menuitem.radio:insensitive:active:prelight {
     background-image: -gtk-win32-theme-part(menu, 11 4);
     border-width: 0;
 }
 
-
 .menuitem.check,
-.menuitem.check:prelight {
+.menuitem.check:prelight,
+.menuitem.check:insensitive {
     background-image: none;
     border-width: 0;
 }
@@ -521,13 +528,16 @@ GtkProgressBar.trough.vertical {
 }
 
 .menuitem.check:inconsistent,
-.menuitem.check:inconsistent:prelight {
-    background-image: -gtk-win32-theme-part(menu, 11 1, mix 0 0);
+.menuitem.check:inconsistent:insensitive,
+.menuitem.check:inconsistent:prelight,
+.menuitem.check:inconsistent:active,
+.menuitem.check:inconsistent:active:prelight {
+    background-image: none; /* Fall back to default, this state is not in win32 */
     border-width: 0;
 }
 
-.menuitem.check:insensitive,
-.menuitem.check:insensitive:prelight{
+.menuitem.check:insensitive:active,
+.menuitem.check:insensitive:active:prelight{
     background-image: -gtk-win32-theme-part(menu, 11 2);
     border-width: 0;
 }
