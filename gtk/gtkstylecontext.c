@@ -3347,6 +3347,7 @@ gtk_style_context_get_border (GtkStyleContext *context,
   GtkStyleContextPrivate *priv;
   StyleData *data;
   int top, left, bottom, right;
+  GtkBorderStyle border_style;
 
   g_return_if_fail (border != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
@@ -3357,16 +3358,27 @@ gtk_style_context_get_border (GtkStyleContext *context,
   data = style_data_lookup (context);
   gtk_style_properties_get (data->store,
                             state,
+			    "border-style", &border_style,
+                            "border-top-width", &top,
                             "border-top-width", &top,
                             "border-left-width", &left,
                             "border-bottom-width", &bottom,
                             "border-right-width", &right,
                             NULL);
-
-  border->top = top;
-  border->left = left;
-  border->bottom = bottom;
-  border->right = right;
+  if (border_style == GTK_BORDER_STYLE_NONE)
+    {
+      border->top = 0;
+      border->left = 0;
+      border->bottom = 0;
+      border->right = 0;
+    }
+  else
+    {
+      border->top = top;
+      border->left = left;
+      border->bottom = bottom;
+      border->right = right;
+    }
 }
 
 /**
