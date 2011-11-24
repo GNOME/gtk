@@ -2945,6 +2945,18 @@ gtk_style_property_init (void)
                                                              "Border style",
                                                              GTK_TYPE_BORDER_STYLE,
                                                              GTK_BORDER_STYLE_NONE, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_enum ("background-clip",
+                                                             "Background clip",
+                                                             "Background clip",
+                                                             GTK_TYPE_CSS_AREA,
+                                                             GTK_CSS_AREA_BORDER_BOX, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_enum ("background-origin",
+                                                             "Background origin",
+                                                             "Background origin",
+                                                             GTK_TYPE_CSS_AREA,
+                                                             GTK_CSS_AREA_PADDING_BOX, 0));
   _gtk_style_property_register           (g_param_spec_boxed ("border-top-color",
                                                               "Border top color",
                                                               "Border top color",

@@ -1446,17 +1446,55 @@ render_background_internal (GtkThemingEngine *engine,
   GtkStateFlags flags;
   gboolean running;
   gdouble progress;
-  GtkRoundedBox border_box;
+  GtkRoundedBox padding_box;
+  GtkRoundedBox clip_box;
   GtkShadow *box_shadow;
-  GtkBorder border;
+  GtkBorder border, padding;
   GtkStylePropertyContext context;
+  GtkCssArea clip, origin;
+  gdouble bg_width, bg_height, bg_x, bg_y;
 
   flags = gtk_theming_engine_get_state (engine);
 
   gtk_theming_engine_get_background_color (engine, flags, &bg_color);
 
-  context.width = width;
-  context.height = height;
+  gtk_theming_engine_get (engine, flags,
+			  "background-origin", &origin,
+			  "background-clip", &clip,
+			  "background-repeat", &repeat,
+			  "box-shadow", &box_shadow,
+			  NULL);
+
+  gtk_theming_engine_get_border (engine, flags, &border);
+  gtk_theming_engine_get_padding (engine, flags, &padding);
+
+  /* The default size of the background image depends on the
+     background-origin value as this affects the top left
+     and the bottom right corners. */
+  switch (origin) {
+  case GTK_CSS_AREA_BORDER_BOX:
+    bg_x = 0;
+    bg_y = 0;
+    bg_width = width;
+    bg_height = height;
+    break;
+  case GTK_CSS_AREA_PADDING_BOX:
+  default:
+    bg_x = border.left;
+    bg_y = border.top;
+    bg_width = width - border.left - border.left;
+    bg_height = height - border.top - border.bottom;
+    break;
+  case GTK_CSS_AREA_CONTENT_BOX:
+    bg_x = border.left + padding.left;
+    bg_y = border.top + padding.top;
+    bg_width = width - border.left - border.right - padding.left - padding.right;
+    bg_height = height - border.top - border.bottom - padding.top - padding.bottom;
+    break;
+  }
+
+  context.width = bg_width;
+  context.height = bg_height;
 
   if (optional_background)
     pattern = cairo_pattern_reference (optional_background);
@@ -1465,10 +1503,6 @@ render_background_internal (GtkThemingEngine *engine,
 			     "background-image", &pattern,
 			     NULL);
 
-  _gtk_theming_engine_get (engine, flags, &context, 
-			   "background-repeat", &repeat,
-			   "box-shadow", &box_shadow,
-			   NULL);
 
   cairo_save (cr);
   cairo_translate (cr, x, y);
@@ -1656,8 +1690,6 @@ render_background_internal (GtkThemingEngine *engine,
         cairo_pattern_destroy (other_pattern);
     }
 
-  gtk_theming_engine_get_border (engine, flags, &border);
-
   /* In the CSS box model, by default the background positioning area is
    * the padding-box, i.e. all the border-box minus the borders themselves,
    * which determines also its default size, see
@@ -1666,12 +1698,28 @@ render_background_internal (GtkThemingEngine *engine,
    * In the future we might want to support different origins or clips, but
    * right now we just shrink to the default.
    */
-  _gtk_rounded_box_init_rect (&border_box, 0, 0, width, height);
-  _gtk_rounded_box_apply_border_radius (&border_box, engine, flags, junction);
-  _gtk_rounded_box_shrink (&border_box,
-                           border.top, border.right,
-                           border.bottom, border.left);
-  _gtk_rounded_box_path (&border_box, cr);
+  _gtk_rounded_box_init_rect (&padding_box, 0, 0, width, height);
+  _gtk_rounded_box_apply_border_radius (&padding_box, engine, flags, junction);
+  clip_box = padding_box;
+  _gtk_rounded_box_shrink (&padding_box,
+			   border.top, border.right,
+			   border.bottom, border.left);
+  if (clip == GTK_CSS_AREA_PADDING_BOX)
+    {
+      _gtk_rounded_box_shrink (&clip_box,
+			       border.top, border.right,
+			       border.bottom, border.left);
+    }
+  else if (clip == GTK_CSS_AREA_CONTENT_BOX)
+    {
+      _gtk_rounded_box_shrink (&clip_box,
+			       border.top + padding.top,
+			       border.right + padding.right,
+			       border.bottom + padding.bottom,
+			       border.left + padding.left);
+    }
+
+  _gtk_rounded_box_path (&clip_box, cr);
 
   if (pattern)
     {
@@ -1694,13 +1742,15 @@ render_background_internal (GtkThemingEngine *engine,
       else
         {
           cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
-          scale_width = width;
-          scale_height = height;
+          scale_width = bg_width;
+          scale_height = bg_height;
         }
 
+      cairo_translate (cr, bg_x, bg_y);
       cairo_scale (cr, scale_width, scale_height);
       cairo_set_source (cr, pattern);
       cairo_scale (cr, 1.0 / scale_width, 1.0 / scale_height);
+      cairo_translate (cr, -bg_x, -bg_y);
     }
   else
     gdk_cairo_set_source_rgba (cr, &bg_color);
@@ -1715,7 +1765,7 @@ render_background_internal (GtkThemingEngine *engine,
 
   if (box_shadow != NULL)
     {
-      _gtk_box_shadow_render (box_shadow, cr, &border_box);
+      _gtk_box_shadow_render (box_shadow, cr, &padding_box);
       _gtk_shadow_unref (box_shadow);
     }
 
