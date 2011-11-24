@@ -1076,7 +1076,7 @@ gtk-update-icon-cache.exe.manifest:
 endif
 
 gtk_query_immodules_2_0_DEPENDENCIES = $(DEPS)
-gtk_query_immodules_2_0_LDADD = $(LDADDS)
+gtk_query_immodules_2_0_LDADD = $(LDADDS) $(GMODULE_LIBS)
 gtk_query_immodules_2_0_SOURCES = queryimmodules.c
 
 gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS)
