@@ -445,3 +445,38 @@ _gtk_cell_accessible_set_cell_data (GtkCellAccessible *cell)
   _gtk_cell_accessible_parent_set_cell_data (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
 }
 
+/**
+ * _gtk_cell_accessible_get_state:
+ * @cell: a #GtkCellAccessible
+ * @expandable: (out): %NULL or pointer to boolean that gets set to
+ *     whether the cell can be expanded
+ * @expanded: (out): %NULL or pointer to boolean that gets set to
+ *     whether the cell is expanded
+ *
+ * Gets the state that would be used to render the area referenced by @cell.
+ *
+ * Returns: the #GtkCellRendererState for cell
+ **/
+GtkCellRendererState
+_gtk_cell_accessible_get_state (GtkCellAccessible *cell,
+                                gboolean          *expandable,
+                                gboolean          *expanded)
+{
+  AtkObject *parent;
+
+  g_return_val_if_fail (GTK_IS_CELL_ACCESSIBLE (cell), 0);
+
+  if (expandable)
+    *expandable = FALSE;
+  if (expanded)
+    *expanded = FALSE;
+
+  parent = gtk_widget_get_accessible (cell->widget);
+  if (parent == NULL)
+    return 0;
+
+  return _gtk_cell_accessible_parent_get_renderer_state (GTK_CELL_ACCESSIBLE_PARENT (parent),
+                                                         cell,
+                                                         expandable,
+                                                         expanded);
+}

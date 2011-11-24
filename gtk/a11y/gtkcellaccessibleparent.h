@@ -60,6 +60,11 @@ struct _GtkCellAccessibleParentIface
                                  GtkCellAccessible       *cell);
   int      ( *get_child_index)  (GtkCellAccessibleParent *parent,
                                  GtkCellAccessible       *cell);
+  GtkCellRendererState
+           ( *get_renderer_state) (GtkCellAccessibleParent *parent,
+                                 GtkCellAccessible       *cell,
+                                 gboolean                *expandable,
+                                 gboolean                *expanded);
   void     ( *set_cell_data)    (GtkCellAccessibleParent *parent,
                                  GtkCellAccessible       *cell);
 
@@ -81,6 +86,11 @@ gboolean _gtk_cell_accessible_parent_grab_focus       (GtkCellAccessibleParent *
                                                        GtkCellAccessible       *cell);
 int      _gtk_cell_accessible_parent_get_child_index  (GtkCellAccessibleParent *parent,
                                                        GtkCellAccessible       *cell);
+GtkCellRendererState
+         _gtk_cell_accessible_parent_get_renderer_state(GtkCellAccessibleParent *parent,
+                                                       GtkCellAccessible       *cell,
+                                                       gboolean                *expandable,
+                                                       gboolean                *expanded);
 void     _gtk_cell_accessible_parent_set_cell_data    (GtkCellAccessibleParent *parent,
                                                        GtkCellAccessible       *cell);
 

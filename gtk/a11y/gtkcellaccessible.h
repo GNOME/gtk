@@ -50,6 +50,10 @@ struct _GtkCellAccessibleClass
 
 GType    _gtk_cell_accessible_get_type      (void);
 
+GtkCellRendererState
+         _gtk_cell_accessible_get_state     (GtkCellAccessible *cell,
+                                             gboolean          *expandable,
+                                             gboolean          *expanded);
 void     _gtk_cell_accessible_set_cell_data (GtkCellAccessible *cell);
 
 void     _gtk_cell_accessible_initialise    (GtkCellAccessible *cell,
