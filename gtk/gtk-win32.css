@@ -587,8 +587,8 @@ GtkComboBox.combobox-entry .button:insensitive {
     background-color: none;
     border-width: 0;
     background-image: -gtk-win32-theme-part(tab, 9 1);
-    -GtkNotebook-tab-overlap: 0;
-    -GtkNotebook-tab-curvature: 20;
+    -GtkNotebook-tab-overlap: 1;
+    -GtkNotebook-tab-curvature: 1;
 }
 
 .notebook tab {
@@ -599,6 +599,7 @@ GtkComboBox.combobox-entry .button:insensitive {
 
 .notebook tab:active {
     background-image: -gtk-win32-theme-part(tab, 1 3);
+    padding: 4;
 }
 
 .notebook {
