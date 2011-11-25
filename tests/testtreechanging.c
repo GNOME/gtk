@@ -155,6 +155,68 @@ add_or_delete (GtkTreeView *treeview)
     delete (treeview);
 }
 
+/* XXX: We only expand/collapse from the top and not randomly */
+static void
+expand (GtkTreeView *treeview)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  gboolean valid;
+
+  model = gtk_tree_view_get_model (treeview);
+  
+  for (valid = gtk_tree_model_get_iter_first (model, &iter);
+       valid;
+       valid = tree_model_iter_step (model, &iter))
+    {
+      if (gtk_tree_model_iter_has_child (model, &iter))
+        {
+          path = gtk_tree_model_get_path (model, &iter);
+          if (!gtk_tree_view_row_expanded (treeview, path))
+            {
+              gtk_tree_view_expand_row (treeview, path, FALSE);
+              gtk_tree_path_free (path);
+              return;
+            }
+          gtk_tree_path_free (path);
+        }
+    }
+}
+
+static void
+collapse (GtkTreeView *treeview)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GtkTreePath *last, *path;
+  gboolean valid;
+
+  model = gtk_tree_view_get_model (treeview);
+  last = NULL;
+  
+  for (valid = gtk_tree_model_get_iter_first (model, &iter);
+       valid;
+       valid = tree_model_iter_step (model, &iter))
+    {
+      path = gtk_tree_model_get_path (model, &iter);
+      if (gtk_tree_view_row_expanded (treeview, path))
+        {
+          if (last)
+            gtk_tree_path_free (last);
+          last = path;
+        }
+      else
+        gtk_tree_path_free (path);
+    }
+
+  if (last)
+    {
+      gtk_tree_view_collapse_row (treeview, last);
+      gtk_tree_path_free (last);
+    }
+}
+
 static void
 check_cursor (GtkTreeView *treeview)
 {
@@ -193,7 +255,9 @@ dance (gpointer treeview)
 {
   static const DoStuffFunc funcs[] = {
     add_or_delete,
-    add_or_delete
+    add_or_delete,
+    expand,
+    collapse
   };
 
   funcs[g_random_int_range (0, G_N_ELEMENTS(funcs))] (treeview);
