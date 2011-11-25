@@ -32,6 +32,7 @@
 #include "gtkcssprovider.h"
 #include "gtkcssparserprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gtkprivatetypebuiltins.h"
 
 /* the actual parsers we have */
 #include "gtkanimationdescription.h"
@@ -1205,34 +1206,16 @@ background_repeat_value_parse (GtkCssParser *parser,
                                GValue *value)
 {
   GtkCssBackgroundRepeat repeat;
-  GtkCssBackgroundRepeatStyle style;
+  int style;
 
-  if (_gtk_css_parser_try (parser, "repeat", TRUE))
-    style = GTK_CSS_BACKGROUND_REPEAT_STYLE_REPEAT;
-  else if (_gtk_css_parser_try (parser, "no-repeat", TRUE))
-    style = GTK_CSS_BACKGROUND_REPEAT_STYLE_NO_REPEAT;
-  else
-    style = GTK_CSS_BACKGROUND_REPEAT_STYLE_NONE;
+  if (!enum_parse (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT_STYLE, &style))
+    return FALSE;
 
   repeat.repeat = style;
 
   g_value_set_boxed (value, &repeat);
 
   return TRUE;
-}
-
-static const gchar *
-background_repeat_style_to_string (GtkCssBackgroundRepeatStyle repeat)
-{
-  switch (repeat)
-    {
-    case GTK_CSS_BACKGROUND_REPEAT_STYLE_REPEAT:
-      return "repeat";
-    case GTK_CSS_BACKGROUND_REPEAT_STYLE_NO_REPEAT:
-      return "no-repeat";
-    default:
-      return NULL;
-    }
 }
 
 static void
@@ -1243,7 +1226,7 @@ background_repeat_value_print (const GValue *value,
 
   repeat = g_value_get_boxed (value);
 
-  g_string_append (string, background_repeat_style_to_string (repeat->repeat));
+  enum_print (repeat->repeat, GTK_TYPE_CSS_BACKGROUND_REPEAT_STYLE, string);
 }
 
 static gboolean
