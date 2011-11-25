@@ -236,7 +236,7 @@ enum {
   GTK_TREE_MODEL_ROW,
 };
 
-#if REMOVE_FOR_PLACES_SIDEBAR
+/* #if REMOVE_FOR_PLACES_SIDEBAR - this is used in operation_mode_set(), so don't remove it yet */
 /* Interesting places in the shortcuts bar */
 typedef enum {
   SHORTCUTS_SEARCH,
@@ -251,7 +251,6 @@ typedef enum {
   SHORTCUTS_CURRENT_FOLDER_SEPARATOR,
   SHORTCUTS_CURRENT_FOLDER
 } ShortcutsIndex;
-#endif
 
 /* Icon size for if we can't get it from the theme */
 #define FALLBACK_ICON_SIZE 16
@@ -364,6 +363,7 @@ static void check_preview_change (GtkFileChooserDefault *impl);
 static void filter_combo_changed       (GtkComboBox           *combo_box,
 					GtkFileChooserDefault *impl);
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 static gboolean shortcuts_key_press_event_cb (GtkWidget             *widget,
 					      GdkEventKey           *event,
 					      GtkFileChooserDefault *impl);
@@ -381,6 +381,7 @@ static int shortcuts_get_index (GtkFileChooserDefault *impl,
 				ShortcutsIndex         where);
 static int shortcut_find_position (GtkFileChooserDefault *impl,
 				   GFile                 *file);
+#endif
 
 static void bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl);
 
@@ -403,10 +404,12 @@ static void path_bar_clicked (GtkPathBar            *path_bar,
                               gboolean               child_is_hidden,
                               GtkFileChooserDefault *impl);
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 static void add_bookmark_button_clicked_cb    (GtkButton             *button,
 					       GtkFileChooserDefault *impl);
 static void remove_bookmark_button_clicked_cb (GtkButton             *button,
 					       GtkFileChooserDefault *impl);
+#endif
 
 static void update_cell_renderer_attributes (GtkFileChooserDefault *impl);
 
@@ -732,7 +735,6 @@ gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
   iface->initial_focus = gtk_file_chooser_default_initial_focus;
 }
 
-#if REMOVE_FOR_PLACES_SIDEBAR
 static void
 bookmarks_changed_cb (gpointer data)
 {
@@ -740,7 +742,6 @@ bookmarks_changed_cb (gpointer data)
 
   volumes_bookmarks_changed_cb (impl->file_system, impl);
 }
-#endif
 
 static void
 _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
@@ -777,6 +778,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   profile_end ("end", NULL);
 }
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 /* Frees the data columns for the specified iter in the shortcuts model*/
 static void
 shortcuts_free_row_data (GtkFileChooserDefault *impl,
@@ -838,6 +840,7 @@ shortcuts_free (GtkFileChooserDefault *impl)
   g_object_unref (impl->shortcuts_model);
   impl->shortcuts_model = NULL;
 }
+#endif
 
 static void
 pending_select_files_free (GtkFileChooserDefault *impl)
@@ -862,10 +865,12 @@ gtk_file_chooser_default_finalize (GObject *object)
 
   unset_file_system_backend (impl);
 
+#if REMOVE_FOR_PLACES_SIDEBAR
   if (impl->shortcuts_pane_filter_model)
     g_object_unref (impl->shortcuts_pane_filter_model);
 
   shortcuts_free (impl);
+#endif
 
   g_free (impl->browse_files_last_selected_name);
 
@@ -1178,6 +1183,7 @@ set_preview_widget (GtkFileChooserDefault *impl,
   update_preview_widget_visibility (impl);
 }
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 /* Renders a "Search" icon at an appropriate size for a tree view */
 static GdkPixbuf *
 render_search_icon (GtkFileChooserDefault *impl)
@@ -2220,6 +2226,7 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
 					  impl,
 					  NULL);
 }
+#endif
 
 /* Callback used when the "New Folder" button is clicked */
 static void
@@ -2408,6 +2415,7 @@ toolbutton_new (GtkFileChooserDefault *impl,
   return GTK_WIDGET (item);
 }
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 /* Looks for a path among the shortcuts; returns its index or -1 if it doesn't exist */
 static int
 shortcut_find_position (GtkFileChooserDefault *impl,
@@ -2606,6 +2614,7 @@ remove_bookmark_button_clicked_cb (GtkButton *button,
 {
   remove_selected_bookmarks (impl);
 }
+#endif
 
 struct selection_check_closure {
   GtkFileChooserDefault *impl;
@@ -2744,7 +2753,7 @@ update_tooltip (GtkTreeModel      *model,
     }
 }
 
-
+#if REMOVE_FOR_PLACES_SIDEBAR
 /* Sensitize the "add bookmark" button if all the selected items are folders, or
  * if there are no selected items *and* the current folder is not in the
  * bookmarks list.  De-sensitize the button otherwise.
@@ -3721,6 +3730,15 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 
   return vbox;
 }
+#endif
+
+/* Creates the widgets for the shortcuts/bookmarks pane */
+static GtkWidget *
+shortcuts_pane_create (GtkFileChooserDefault *impl,
+		       GtkSizeGroup          *size_group)
+{
+  return gtk_label_new ("yay");
+}
 
 static gboolean
 key_is_left_or_right (GdkEventKey *event)
@@ -3766,7 +3784,9 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 
   if (key_is_left_or_right (event))
     {
+#if REMOVE_FOR_PLACES_SIDEBAR
       gtk_widget_grab_focus (impl->browse_shortcuts_tree_view);
+#endif
       return TRUE;
     }
 
@@ -3823,7 +3843,9 @@ static void
 add_to_shortcuts_cb (GtkMenuItem           *item,
 		     GtkFileChooserDefault *impl)
 {
+#if REMOVE_FOR_PLACES_SIDEBAR
   bookmarks_add_selected_folder (impl);
+#endif
 }
 
 /* callback used to set data to clipboard */
@@ -4210,7 +4232,9 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
   impl->browse_files_popup_menu_size_column_item	= file_list_add_check_menu_item (impl, _("Show _Size Column"),
 											 G_CALLBACK (show_size_column_toggled_cb));
 
+#if REMOVE_FOR_PLACES_SIDEBAR
   bookmarks_check_add_sensitivity (impl);
+#endif
   check_copy_file_location_sensitivity (impl);
 }
 
@@ -5107,8 +5131,10 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   gtk_widget_push_composite_child ();
 
+#if REMOVE_FOR_PLACES_SIDEBAR
   /* Shortcuts model */
   shortcuts_model_create (impl);
+#endif
 
   /* The browse widgets */
   browse_widgets_create (impl);
@@ -5168,8 +5194,10 @@ set_local_only (GtkFileChooserDefault *impl,
 
       if (impl->shortcuts_model && impl->file_system)
 	{
+#if REMOVE_FOR_PLACES_SIDEBAR
 	  shortcuts_add_volumes (impl);
 	  shortcuts_add_bookmarks (impl);
+#endif
 	}
 
       if (local_only && impl->current_folder &&
@@ -5198,12 +5226,14 @@ static void
 volumes_bookmarks_changed_cb (GtkFileSystem         *file_system,
 			      GtkFileChooserDefault *impl)
 {
+#if REMOVE_FOR_PLACES_SIDEBAR
   shortcuts_add_volumes (impl);
   shortcuts_add_bookmarks (impl);
 
   bookmarks_check_add_sensitivity (impl);
   bookmarks_check_remove_sensitivity (impl);
   shortcuts_check_popup_sensitivity (impl);
+#endif
 }
 
 /* Sets the file chooser to multiple selection mode */
@@ -5448,6 +5478,7 @@ operation_mode_set_recent (GtkFileChooserDefault *impl)
 static void
 shortcuts_select_item_without_activating (GtkFileChooserDefault *impl, int pos)
 {
+#if REMOVE_FOR_PLACES_SIDEBAR
   GtkTreeSelection *selection;
   GtkTreePath *path;
 
@@ -5460,6 +5491,7 @@ shortcuts_select_item_without_activating (GtkFileChooserDefault *impl, int pos)
   gtk_tree_path_free (path);
 
   g_signal_handlers_unblock_by_func (selection, G_CALLBACK (shortcuts_selection_changed_cb), impl);
+#endif
 }
 
 static void
@@ -5493,8 +5525,10 @@ operation_mode_set (GtkFileChooserDefault *impl, OperationMode mode)
       return;
     }
 
+#if REMOVE_FOR_PLACES_SIDEBAR
   if (shortcut_to_select != SHORTCUTS_CURRENT_FOLDER)
     shortcuts_select_item_without_activating (impl, shortcuts_get_index (impl, shortcut_to_select));
+#endif
 }
 
 /* This function is basically a do_all function.
@@ -5915,7 +5949,9 @@ change_icon_theme (GtkFileChooserDefault *impl)
   else
     impl->icon_size = FALLBACK_ICON_SIZE;
 
+#if REMOVE_FOR_PLACES_SIDEBAR
   shortcuts_reload_icons (impl);
+#endif
   /* the first cell in the first column is the icon column, and we have a fixed size there */
   cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (
         gtk_tree_view_get_column (GTK_TREE_VIEW (impl->browse_files_tree_view), 0)));
@@ -7366,7 +7402,9 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
     {
       impl->changing_folder = TRUE;
 
+#if REMOVE_FOR_PLACES_SIDEBAR
       shortcuts_update_current_folder (impl);
+#endif
 
       impl->changing_folder = FALSE;
     }
@@ -7390,7 +7428,9 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
 
   /* Refresh controls */
 
+#if REMOVE_FOR_PLACES_SIDEBAR
   shortcuts_find_current_folder (impl);
+#endif
 
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 
@@ -7965,6 +8005,7 @@ gtk_file_chooser_default_list_filters (GtkFileChooser *chooser)
   return g_slist_copy (impl->filters);
 }
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 /* Returns the position in the shortcuts tree where the nth specified shortcut would appear */
 static int
 shortcuts_get_pos_for_shortcut_folder (GtkFileChooserDefault *impl,
@@ -8008,12 +8049,14 @@ out:
 
   g_object_unref (cancellable);
 }
+#endif
 
 static gboolean
 gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser  *chooser,
 					      GFile           *file,
 					      GError         **error)
 {
+#if REMOVE_FOR_PLACES_SIDEBAR
   GCancellable *cancellable;
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   struct AddShortcutData *data;
@@ -8075,6 +8118,9 @@ gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser  *chooser,
   g_object_set_data (G_OBJECT (cancellable), "add-shortcut-path-key", data->file);
 
   return TRUE;
+#else
+  return FALSE;
+#endif
 }
 
 static gboolean
@@ -8082,6 +8128,7 @@ gtk_file_chooser_default_remove_shortcut_folder (GtkFileChooser  *chooser,
 						 GFile           *file,
 						 GError         **error)
 {
+#if REMOVE_FOR_PLACES_SIDEBAR
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   int pos;
   GtkTreeIter iter;
@@ -8147,11 +8194,15 @@ gtk_file_chooser_default_remove_shortcut_folder (GtkFileChooser  *chooser,
   g_free (uri);
 
   return FALSE;
+#else
+  return FALSE;
+#endif
 }
 
 static GSList *
 gtk_file_chooser_default_list_shortcut_folders (GtkFileChooser *chooser)
 {
+#if REMOVE_FOR_PLACES_SIDEBAR
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   int pos;
   GtkTreeIter iter;
@@ -8191,6 +8242,9 @@ gtk_file_chooser_default_list_shortcut_folders (GtkFileChooser *chooser)
     }
 
   return g_slist_reverse (list);
+#else
+  return NULL;
+#endif
 }
 
 /* Guesses a size based upon font sizes */
@@ -9801,6 +9855,7 @@ check_preview_change (GtkFileChooserDefault *impl)
     }
 }
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 static void
 shortcuts_activate_volume_mount_cb (GCancellable        *cancellable,
 				    GtkFileSystemVolume *volume,
@@ -10098,6 +10153,7 @@ shortcuts_select_func  (GtkTreeSelection  *selection,
 
   return shortcut_type != SHORTCUT_TYPE_SEPARATOR;
 }
+#endif
 
 static gboolean
 list_select_func  (GtkTreeSelection  *selection,
@@ -10352,20 +10408,24 @@ static void
 switch_to_shortcut (GtkFileChooserDefault *impl,
 		    int pos)
 {
+#if REMOVE_FOR_PLACES_SIDEBAR
   GtkTreeIter iter;
 
   if (!gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (impl->shortcuts_model), &iter, NULL, pos))
     g_assert_not_reached ();
 
   shortcuts_activate_iter (impl, &iter);
+#endif
 }
 
 /* Handler for the "home-folder" keybinding signal */
 static void
 home_folder_handler (GtkFileChooserDefault *impl)
 {
+#if REMOVE_FOR_PLACES_SIDEBAR
   if (impl->has_home)
     switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_HOME));
+#endif
 }
 
 /* Handler for the "desktop-folder" keybinding signal */
@@ -10412,9 +10472,11 @@ quick_bookmark_handler (GtkFileChooserDefault *impl,
   bookmark_pos = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS) + bookmark_index;
 
   path = gtk_tree_path_new_from_indices (bookmark_pos, -1);
+#if REMOVE_FOR_PLACES_SIDEBAR
   gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view),
 				path, NULL,
 				FALSE, 0.0, 0.0);
+#endif
   gtk_tree_path_free (path);
 
   switch_to_shortcut (impl, bookmark_pos);
@@ -10429,6 +10491,7 @@ show_hidden_handler (GtkFileChooserDefault *impl)
 }
 
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 /* Drag and drop interfaces */
 
 static void
@@ -10507,3 +10570,4 @@ shortcuts_pane_model_filter_new (GtkFileChooserDefault *impl,
   return GTK_TREE_MODEL (model);
 }
 
+#endif
