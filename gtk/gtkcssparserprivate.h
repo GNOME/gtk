@@ -70,6 +70,9 @@ gboolean        _gtk_css_parser_try_uint          (GtkCssParser          *parser
                                                    guint                 *value);
 gboolean        _gtk_css_parser_try_double        (GtkCssParser          *parser,
                                                    gdouble               *value);
+gboolean        _gtk_css_parser_try_enum          (GtkCssParser          *parser,
+						   GType                  enum_type,
+						   int                   *value);
 
 void            _gtk_css_parser_skip_whitespace   (GtkCssParser          *parser);
 char *          _gtk_css_parser_read_string       (GtkCssParser          *parser);

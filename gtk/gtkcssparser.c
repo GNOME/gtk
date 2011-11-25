@@ -569,6 +569,53 @@ _gtk_css_parser_try_double (GtkCssParser *parser,
   return TRUE;
 }
 
+gboolean
+_gtk_css_parser_try_enum (GtkCssParser *parser,
+			  GType         enum_type,
+			  int          *value)
+{
+  GEnumClass *enum_class;
+  gboolean result;
+  const char *start;
+  char *str;
+
+  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
+  g_return_val_if_fail (value != NULL, FALSE);
+
+  result = FALSE;
+
+  enum_class = g_type_class_ref (enum_type);
+
+  start = parser->data;
+
+  str = _gtk_css_parser_try_ident (parser, TRUE);
+  if (str == NULL)
+    return FALSE;
+
+  if (enum_class->n_values)
+    {
+      GEnumValue *enum_value;
+
+      for (enum_value = enum_class->values; enum_value->value_name; enum_value++)
+	{
+	  if (enum_value->value_nick &&
+	      g_ascii_strcasecmp (str, enum_value->value_nick) == 0)
+	    {
+	      *value = enum_value->value;
+	      result = TRUE;
+	      break;
+	    }
+	}
+    }
+
+  g_type_class_unref (enum_class);
+
+  if (!result)
+    parser->data = start;
+
+  return result;
+}
+
 typedef enum {
   COLOR_RGBA,
   COLOR_RGB,
