@@ -4,6 +4,7 @@
   padding: 0;
   engine: none;
   font: Monospace;
+  border-image: none;
 }
 
 GtkEntry #padded {
