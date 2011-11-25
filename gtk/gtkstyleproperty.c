@@ -1236,18 +1236,12 @@ border_image_repeat_value_parse (GtkCssParser *parser,
 {
   GtkCssBorderImageRepeat image_repeat;
   GtkCssBorderRepeatStyle styles[2];
-  gint i;
+  gint i, v;
 
   for (i = 0; i < 2; i++)
     {
-      if (_gtk_css_parser_try (parser, "stretch", TRUE))
-        styles[i] = GTK_CSS_REPEAT_STYLE_STRETCH;
-      else if (_gtk_css_parser_try (parser, "repeat", TRUE))
-        styles[i] = GTK_CSS_REPEAT_STYLE_REPEAT;
-      else if (_gtk_css_parser_try (parser, "round", TRUE))
-        styles[i] = GTK_CSS_REPEAT_STYLE_ROUND;
-      else if (_gtk_css_parser_try (parser, "space", TRUE))
-        styles[i] = GTK_CSS_REPEAT_STYLE_SPACE;
+      if (_gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BORDER_REPEAT_STYLE, &v))
+        styles[i] = v;
       else if (i == 0)
         {
           styles[1] = styles[0] = GTK_CSS_REPEAT_STYLE_STRETCH;
@@ -1265,24 +1259,6 @@ border_image_repeat_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-static const gchar *
-border_image_repeat_style_to_string (GtkCssBorderRepeatStyle repeat)
-{
-  switch (repeat)
-    {
-    case GTK_CSS_REPEAT_STYLE_STRETCH:
-      return "stretch";
-    case GTK_CSS_REPEAT_STYLE_REPEAT:
-      return "repeat";
-    case GTK_CSS_REPEAT_STYLE_ROUND:
-      return "round";
-    case GTK_CSS_REPEAT_STYLE_SPACE:
-      return "space";
-    default:
-      return NULL;
-    }
-}
-
 static void
 border_image_repeat_value_print (const GValue *value,
                                  GString      *string)
@@ -1291,11 +1267,11 @@ border_image_repeat_value_print (const GValue *value,
 
   image_repeat = g_value_get_boxed (value);
 
-  g_string_append (string, border_image_repeat_style_to_string (image_repeat->hrepeat));
+  enum_print (image_repeat->hrepeat, GTK_TYPE_CSS_BORDER_REPEAT_STYLE, string);
   if (image_repeat->hrepeat != image_repeat->vrepeat)
     {
       g_string_append (string, " ");
-      g_string_append (string, border_image_repeat_style_to_string (image_repeat->vrepeat));
+      enum_print (image_repeat->vrepeat, GTK_TYPE_CSS_BORDER_REPEAT_STYLE, string);
     }
 }
 
