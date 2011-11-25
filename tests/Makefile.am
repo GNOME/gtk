@@ -86,6 +86,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	teststatusicon			\
 	testtoolbar			\
 	stresstest-toolbar		\
+	testtreechanging                \
 	testtreeedit			\
 	testtreemodel			\
 	testtreeview			\
@@ -201,6 +202,7 @@ testsocket_DEPENDENCIES = $(DEPS)
 testsocket_child_DEPENDENCIES = $(DEPS)
 testspinbutton_DEPENDENCIES = $(TEST_DEPS)
 teststatusicon_DEPENDENCIES = $(TEST_DEPS)
+testtreechanging_DEPENDENCIES =	$(DEPS)
 testtreeedit_DEPENDENCIES = $(DEPS)
 testtreemodel_DEPENDENCIES = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
@@ -300,6 +302,7 @@ teststatusicon_LDADD = $(LDADDS)
 testtoolbar_LDADD = $(LDADDS)
 stresstest_toolbar_LDADD = $(LDADDS)
 testtreeedit_LDADD = $(LDADDS)
+testtreechanging_LDADD = $(LDADDS)
 testtreemodel_LDADD = $(LDADDS)
 testtreeview_LDADD = $(LDADDS)
 testtreefocus_LDADD = $(LDADDS)
@@ -375,6 +378,10 @@ testgrid_SOURCES =	\
 testgtk_SOURCES =	\
 	prop-editor.c   \
 	testgtk.c
+
+testtreechanging_SOURCES =	\
+	prop-editor.c		\
+	testtreechanging.c
 
 testtreeedit_SOURCES = 	\
 	testtreeedit.c
