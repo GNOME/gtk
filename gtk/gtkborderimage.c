@@ -274,7 +274,7 @@ gtk_border_image_render_slice (cairo_t           *cr,
   cairo_pattern_t *pattern;
 
   /* We can't draw center tiles yet */
-  g_assert (hrepeat == GTK_CSS_REPEAT_STYLE_NONE || vrepeat == GTK_CSS_REPEAT_STYLE_NONE);
+  g_assert (hrepeat == GTK_CSS_REPEAT_STYLE_STRETCH || vrepeat == GTK_CSS_REPEAT_STYLE_STRETCH);
 
   hscale = width / slice_width;
   vscale = height / slice_height;
@@ -302,7 +302,7 @@ gtk_border_image_render_slice (cairo_t           *cr,
         width -= 2 * space;
       }
       break;
-    case GTK_CSS_REPEAT_STYLE_NONE:
+    case GTK_CSS_REPEAT_STYLE_STRETCH:
       break;
     case GTK_CSS_REPEAT_STYLE_ROUND:
       extend = CAIRO_EXTEND_REPEAT;
@@ -334,7 +334,7 @@ gtk_border_image_render_slice (cairo_t           *cr,
         height -= 2 * space;
       }
       break;
-    case GTK_CSS_REPEAT_STYLE_NONE:
+    case GTK_CSS_REPEAT_STYLE_STRETCH:
       break;
     case GTK_CSS_REPEAT_STYLE_ROUND:
       extend = CAIRO_EXTEND_REPEAT;
@@ -488,8 +488,8 @@ _gtk_border_image_render (GtkBorderImage   *image,
                                          vertical_border[v].offset,
                                          horizontal_border[h].size,
                                          vertical_border[v].size,
-                                         h == 1 ? image->repeat.hrepeat : GTK_CSS_REPEAT_STYLE_NONE,
-                                         v == 1 ? image->repeat.vrepeat : GTK_CSS_REPEAT_STYLE_NONE);
+                                         h == 1 ? image->repeat.hrepeat : GTK_CSS_REPEAT_STYLE_STRETCH,
+                                         v == 1 ? image->repeat.vrepeat : GTK_CSS_REPEAT_STYLE_STRETCH);
 
           cairo_surface_destroy (slice);
         }

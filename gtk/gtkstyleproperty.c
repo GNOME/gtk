@@ -1241,7 +1241,7 @@ border_image_repeat_value_parse (GtkCssParser *parser,
   for (i = 0; i < 2; i++)
     {
       if (_gtk_css_parser_try (parser, "stretch", TRUE))
-        styles[i] = GTK_CSS_REPEAT_STYLE_NONE;
+        styles[i] = GTK_CSS_REPEAT_STYLE_STRETCH;
       else if (_gtk_css_parser_try (parser, "repeat", TRUE))
         styles[i] = GTK_CSS_REPEAT_STYLE_REPEAT;
       else if (_gtk_css_parser_try (parser, "round", TRUE))
@@ -1250,7 +1250,7 @@ border_image_repeat_value_parse (GtkCssParser *parser,
         styles[i] = GTK_CSS_REPEAT_STYLE_SPACE;
       else if (i == 0)
         {
-          styles[1] = styles[0] = GTK_CSS_REPEAT_STYLE_NONE;
+          styles[1] = styles[0] = GTK_CSS_REPEAT_STYLE_STRETCH;
           break;
         }
       else
@@ -1270,7 +1270,7 @@ border_image_repeat_style_to_string (GtkCssBorderRepeatStyle repeat)
 {
   switch (repeat)
     {
-    case GTK_CSS_REPEAT_STYLE_NONE:
+    case GTK_CSS_REPEAT_STYLE_STRETCH:
       return "stretch";
     case GTK_CSS_REPEAT_STYLE_REPEAT:
       return "repeat";
