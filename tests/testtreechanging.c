@@ -57,31 +57,52 @@ get_rows (GtkTreeView *treeview)
   return GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (treeview), "rows"));
 }
 
+/* moves iter to the next iter in the model in the display order
+ * inside a treeview. Returns FALSE if no more rows exist.
+ */
+static gboolean
+tree_model_iter_step (GtkTreeModel *model,
+                      GtkTreeIter *iter)
+{
+  GtkTreeIter tmp;
+  
+  if (gtk_tree_model_iter_children (model, &tmp, iter))
+    {
+      *iter = tmp;
+      return TRUE;
+    }
+
+  do {
+    tmp = *iter;
+
+    if (gtk_tree_model_iter_next (model, iter))
+      return TRUE;
+    }
+  while (gtk_tree_model_iter_parent (model, iter, &tmp));
+
+  return FALSE;
+}
+
 static void
 delete (GtkTreeView *treeview)
 {
   guint n_rows = get_rows (treeview);
   guint i = g_random_int_range (0, n_rows);
   GtkTreeModel *model;
-  GtkTreeIter iter, next;
+  GtkTreeIter iter;
 
   model = gtk_tree_view_get_model (treeview);
   
   if (!gtk_tree_model_get_iter_first (model, &iter))
     return;
 
-
   while (i-- > 0)
     {
-      next = iter;
-      if (!gtk_tree_model_iter_children (model, &iter, &next) &&
-          !gtk_tree_model_iter_next (model, &next) &&
-          !gtk_tree_model_iter_parent (model, &next, &iter))
+      if (!tree_model_iter_step (model, &iter))
         {
           g_assert_not_reached ();
           return;
         }
-      iter = next;
     }
 
   n_rows -= count_children (model, &iter) + 1;
