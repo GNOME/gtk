@@ -3087,25 +3087,19 @@ gdk_x11_window_set_user_time (GdkWindow *window,
 }
 
 /**
- * gdk_x11_window_set_theme_variant:
+ * gdk_x11_window_set_utf8_property:
  * @window: (type GdkX11Window): a #GdkWindow
- * @variant: the theme variant to export
+ * @name: Property name, will be interned as an X atom
+ * @value: (allow-none): Property value, or %NULL to delete
  *
- * GTK+ applications can request a dark theme variant. In order to
- * make other applications - namely window managers using GTK+ for
- * themeing - aware of this choice, GTK+ uses this function to
- * export the requested theme variant as _GTK_THEME_VARIANT property
- * on toplevel windows.
- *
- * Note that this property is automatically updated by GTK+, so this
- * function should only be used by applications which do not use GTK+
- * to create toplevel windows.
- *
- * Since: 3.2
+ * This function modifies or removes an arbitrary X11 window
+ * property of type UTF8_STRING.  If the given @window is
+ * not a toplevel window, it is ignored.
  */
 void
-gdk_x11_window_set_theme_variant (GdkWindow *window,
-                                  char      *variant)
+gdk_x11_window_set_utf8_property  (GdkWindow *window,
+				   const gchar *name,
+				   const gchar *value)
 {
   GdkDisplay *display;
 
@@ -3114,19 +3108,19 @@ gdk_x11_window_set_theme_variant (GdkWindow *window,
 
   display = gdk_window_get_display (window);
 
-  if (variant != NULL)
+  if (value != NULL)
     {
       XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
                        GDK_WINDOW_XID (window),
-                       gdk_x11_get_xatom_by_name_for_display (display, "_GTK_THEME_VARIANT"),
+                       gdk_x11_get_xatom_by_name_for_display (display, name),
                        gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-                       PropModeReplace, (guchar *)variant, strlen (variant));
+                       PropModeReplace, (guchar *)value, strlen (value));
     }
   else
     {
       XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
                        GDK_WINDOW_XID (window),
-                       gdk_x11_get_xatom_by_name_for_display (display, "_GTK_THEME_VARIANT"));
+                       gdk_x11_get_xatom_by_name_for_display (display, name));
     }
 }
 
@@ -3171,6 +3165,30 @@ gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
                        GDK_WINDOW_XID (window),
                        gdk_x11_get_xatom_by_name_for_display (display, "_GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED"));
     }
+}
+
+/**
+ * gdk_x11_window_set_theme_variant:
+ * @window: (type GdkX11Window): a #GdkWindow
+ * @variant: the theme variant to export
+ *
+ * GTK+ applications can request a dark theme variant. In order to
+ * make other applications - namely window managers using GTK+ for
+ * themeing - aware of this choice, GTK+ uses this function to
+ * export the requested theme variant as _GTK_THEME_VARIANT property
+ * on toplevel windows.
+ *
+ * Note that this property is automatically updated by GTK+, so this
+ * function should only be used by applications which do not use GTK+
+ * to create toplevel windows.
+ *
+ * Since: 3.2
+ */
+void
+gdk_x11_window_set_theme_variant (GdkWindow *window,
+                                  char      *variant)
+{
+  return gdk_x11_window_set_utf8_property (window, "_GTK_THEME_VARIANT", variant);
 }
 
 #define GDK_SELECTION_MAX_SIZE(display)                                 \

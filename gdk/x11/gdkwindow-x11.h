@@ -158,6 +158,10 @@ GType gdk_window_impl_x11_get_type (void);
 void            gdk_x11_window_set_user_time        (GdkWindow *window,
 						     guint32    timestamp);
 
+void            gdk_x11_window_set_utf8_property    (GdkWindow *window,
+						     const gchar *name,
+						     const gchar *value);
+
 GdkToplevelX11 *_gdk_x11_window_get_toplevel        (GdkWindow *window);
 void            _gdk_x11_window_tmp_unset_bg        (GdkWindow *window,
 						     gboolean   recurse);
