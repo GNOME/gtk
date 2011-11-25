@@ -1360,9 +1360,14 @@ enum_value_parse (GtkCssParser *parser,
                   GFile        *base,
                   GValue       *value)
 {
-  GEnumClass *enum_class;
-  GEnumValue *enum_value;
   char *str;
+  int v;
+
+  if (_gtk_css_parser_try_enum (parser, G_VALUE_TYPE (value), &v))
+    {
+      g_value_set_enum (value, v);
+      return TRUE;
+    }
 
   str = _gtk_css_parser_try_ident (parser, TRUE);
   if (str == NULL)
@@ -1370,21 +1375,13 @@ enum_value_parse (GtkCssParser *parser,
       _gtk_css_parser_error (parser, "Expected an identifier");
       return FALSE;
     }
-
-  enum_class = g_type_class_ref (G_VALUE_TYPE (value));
-  enum_value = g_enum_get_value_by_nick (enum_class, str);
-
-  if (enum_value)
-    g_value_set_enum (value, enum_value->value);
-  else
-    _gtk_css_parser_error (parser,
-                           "Unknown value '%s' for enum type '%s'",
-                           str, g_type_name (G_VALUE_TYPE (value)));
   
-  g_type_class_unref (enum_class);
+  _gtk_css_parser_error (parser,
+			 "Unknown value '%s' for enum type '%s'",
+			 str, g_type_name (G_VALUE_TYPE (value)));
   g_free (str);
 
-  return enum_value != NULL;
+  return FALSE;
 }
 
 static void
