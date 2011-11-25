@@ -134,6 +134,39 @@ add_or_delete (GtkTreeView *treeview)
     delete (treeview);
 }
 
+static void
+check_cursor (GtkTreeView *treeview)
+{
+  GtkTreeRowReference *ref = g_object_get_data (G_OBJECT (treeview), "cursor");
+  GtkTreePath *expected, *cursor;
+
+  gtk_tree_view_get_cursor (treeview, &cursor, NULL);
+  if (ref == NULL)
+    {
+      g_assert (cursor == NULL);
+    }
+  else
+    {
+      g_assert (cursor != NULL);
+      g_assert (gtk_tree_row_reference_valid (ref));
+
+      expected = gtk_tree_row_reference_get_path (ref);
+      g_assert (expected != NULL);
+      g_assert (gtk_tree_path_compare (expected, cursor) == 0);
+
+      gtk_tree_path_free (expected);
+    }
+
+  if (cursor)
+    gtk_tree_path_free (cursor);
+}
+
+static void
+check_sanity (GtkTreeView *treeview)
+{
+  check_cursor (treeview);
+}
+
 static gboolean
 dance (gpointer treeview)
 {
@@ -144,7 +177,35 @@ dance (gpointer treeview)
 
   funcs[g_random_int_range (0, G_N_ELEMENTS(funcs))] (treeview);
 
+  check_sanity (treeview);
+
   return TRUE;
+}
+
+static void
+cursor_changed_cb (GtkTreeView *treeview,
+                   gpointer     unused)
+{
+  GtkTreePath *path;
+  GtkTreeRowReference *ref;
+
+  gtk_tree_view_get_cursor (treeview, &path, NULL);
+  if (path)
+    {
+      ref = gtk_tree_row_reference_new (gtk_tree_view_get_model (treeview),
+                                        path);
+      gtk_tree_path_free (path);
+    }
+  else
+    ref = NULL;
+  g_object_set_data_full (G_OBJECT (treeview), "cursor", ref, (GDestroyNotify) gtk_tree_row_reference_free);
+}
+
+static void
+setup_sanity_checks (GtkTreeView *treeview)
+{
+  g_signal_connect (treeview, "cursor-changed", G_CALLBACK (cursor_changed_cb), NULL);
+  cursor_changed_cb (treeview, NULL);
 }
 
 int
@@ -177,6 +238,7 @@ main (int    argc,
   model = GTK_TREE_MODEL (gtk_tree_store_new (1, G_TYPE_UINT));
   treeview = gtk_tree_view_new_with_model (model);
   g_object_unref (model);
+  setup_sanity_checks (GTK_TREE_VIEW (treeview));
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
                                                0,
                                                "Counter",
