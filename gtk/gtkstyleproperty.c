@@ -113,6 +113,47 @@ string_append_string (GString    *str,
 /*** IMPLEMENTATIONS ***/
 
 static gboolean 
+enum_parse (GtkCssParser *parser,
+	    GType         type,
+	    int          *res)
+{
+  char *str;
+
+  if (_gtk_css_parser_try_enum (parser, type, res))
+    return TRUE;
+
+  str = _gtk_css_parser_try_ident (parser, TRUE);
+  if (str == NULL)
+    {
+      _gtk_css_parser_error (parser, "Expected an identifier");
+      return FALSE;
+    }
+
+  _gtk_css_parser_error (parser,
+			 "Unknown value '%s' for enum type '%s'",
+			 str, g_type_name (type));
+  g_free (str);
+
+  return FALSE;
+}
+
+static void
+enum_print (int         value,
+	    GType       type,
+	    GString    *string)
+{
+  GEnumClass *enum_class;
+  GEnumValue *enum_value;
+
+  enum_class = g_type_class_ref (type);
+  enum_value = g_enum_get_value (enum_class, value);
+
+  g_string_append (string, enum_value->value_nick);
+
+  g_type_class_unref (enum_class);
+}
+
+static gboolean
 rgba_value_parse (GtkCssParser *parser,
                   GFile        *base,
                   GValue       *value)
@@ -1360,26 +1401,13 @@ enum_value_parse (GtkCssParser *parser,
                   GFile        *base,
                   GValue       *value)
 {
-  char *str;
   int v;
 
-  if (_gtk_css_parser_try_enum (parser, G_VALUE_TYPE (value), &v))
+  if (enum_parse (parser, G_VALUE_TYPE (value), &v))
     {
       g_value_set_enum (value, v);
       return TRUE;
     }
-
-  str = _gtk_css_parser_try_ident (parser, TRUE);
-  if (str == NULL)
-    {
-      _gtk_css_parser_error (parser, "Expected an identifier");
-      return FALSE;
-    }
-  
-  _gtk_css_parser_error (parser,
-			 "Unknown value '%s' for enum type '%s'",
-			 str, g_type_name (G_VALUE_TYPE (value)));
-  g_free (str);
 
   return FALSE;
 }
@@ -1388,15 +1416,7 @@ static void
 enum_value_print (const GValue *value,
                   GString      *string)
 {
-  GEnumClass *enum_class;
-  GEnumValue *enum_value;
-
-  enum_class = g_type_class_ref (G_VALUE_TYPE (value));
-  enum_value = g_enum_get_value (enum_class, g_value_get_enum (value));
-
-  g_string_append (string, enum_value->value_nick);
-
-  g_type_class_unref (enum_class);
+  enum_print (g_value_get_enum (value), G_VALUE_TYPE (value), string);
 }
 
 static gboolean 
