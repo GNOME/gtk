@@ -382,6 +382,10 @@ gtk_appchooser_impl_c_sources = \
 	gtkappchooseronlinepk.c
 endif
 
+gtk_private_type_h_sources = \
+	gtkcsstypesprivate.h
+
+
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
 	gtkaccelgroupprivate.h	\
@@ -400,7 +404,6 @@ gtk_private_h_sources =		\
 	gtkcssproviderprivate.h	\
 	gtkcsssectionprivate.h 	\
 	gtkcssselectorprivate.h	\
-	gtkcsstypesprivate.h	\
 	gtkcustompaperunixdialog.h \
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
@@ -468,6 +471,7 @@ gtk_private_h_sources =		\
 	gtkwin32themeprivate.h	\
 	gtkwindowprivate.h	\
 	gtktreemenu.h		\
+	$(gtk_private_type_h_sources) \
 	$(gtk_clipboard_dnd_h_sources) \
 	$(gtk_appchooser_impl_h_sources)
 
@@ -636,6 +640,7 @@ gtk_base_c_sources = 		\
 	gtkprintsettings.c	\
 	gtkprintutils.c		\
 	gtkprivate.c		\
+	gtkprivatetypebuiltins.c \
 	gtkprogressbar.c	\
 	gtkradioaction.c	\
 	gtkradiobutton.c	\
@@ -832,18 +837,21 @@ gtk_built_public_sources =			\
 gtk_built_private_headers =			\
 	gtkmarshalers.h				\
 	gtkbuiltincache.h			\
+	gtkprivatetypebuiltins.h		\
 	gtkwin32css.h
 
 gtk_built_sources =				\
 	gtktypebuiltins.c			\
 	gtktypefuncs.c				\
 	gtkmarshalers.c				\
+	gtkprivatetypebuiltins.c		\
 	${gtk_built_private_headers}		\
 	${gtk_built_public_sources}
 
 stamp_files =					\
 	stamp-gtkmarshalers.h			\
 	stamp-gtktypebuiltins.h			\
+	stamp-gtkprivatetypebuiltins.h		\
 	stamp-gtkwin32css.h			\
 	stamp-icons
 
@@ -924,7 +932,23 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) $(deprecated_h_sources) gtk
 	&& cp xgen-gtbc gtktypebuiltins.c  \
 	&& rm -f xgen-gtbc
 
-gtktypefuncs.c: @REBUILD@ stamp-gtktypebuiltins.h $(top_srcdir)/gtk/*.h $(top_srcdir)/gtk/deprecated/*.h $(top_srcdir)/gdk/*.h Makefile
+
+gtkprivatetypebuiltins.h: stamp-gtkprivatetypebuiltins.h
+	@true
+stamp-gtkprivatetypebuiltins.h: @REBUILD@ $(gtk_private_type_h_sources) gtkprivatetypebuiltins.h.template
+	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gtkprivatetypebuiltins.h.template \
+		$(gtk_private_type_h_sources) ) > xgen-gptbh \
+	&& (cmp -s xgen-gptbh gtkprivatetypebuiltins.h || cp xgen-gptbh gtkprivatetypebuiltins.h ) \
+	&& rm -f xgen-gptbh \
+	&& echo timestamp > $(@F)
+gtkprivatetypebuiltins.c: @REBUILD@ $(gtk_private_type_h_sources)  gtkprivatetypebuiltins.c.template
+	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gtkprivatetypebuiltins.c.template \
+		$(gtk_private_type_h_sources) ) > xgen-gptbc \
+	&& cp xgen-gptbc gtkprivatetypebuiltins.c  \
+	&& rm -f xgen-gptbc
+
+
+gtktypefuncs.c: @REBUILD@ stamp-gtktypebuiltins.h stamp-gtkprivatetypebuiltins.h $(top_srcdir)/gtk/*.h $(top_srcdir)/gtk/deprecated/*.h $(top_srcdir)/gdk/*.h Makefile
 	$(AM_V_GEN) echo '#include <gtk/gtkx.h>' > xgen-gtfsrc.c && \
 	  ${CPP} $(DEFS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
 	  $(GREP) -o '\bg[td]k_[a-zA-Z0-9_]*_get_type\b' | \
@@ -1458,6 +1482,8 @@ EXTRA_DIST +=                   \
 	abicheck.sh		\
 	gtktypebuiltins.c.template \
 	gtktypebuiltins.h.template \
+	gtkprivatetypebuiltins.c.template \
+	gtkprivatetypebuiltins.h.template \
 	org.gtk.Settings.FileChooser.gschema.xml
 
 gsettings_SCHEMAS = \

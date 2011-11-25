@@ -30,6 +30,8 @@
 #include <glib-object.h>
 #include <gdk/gdk.h>
 
+#include "gtkcsstypesprivate.h"
+
 G_BEGIN_DECLS
 
 #define GTK_PARAM_READABLE G_PARAM_READABLE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
