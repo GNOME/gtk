@@ -3275,8 +3275,9 @@ refresh_cell_index (GtkCellAccessible *cell)
     return;
 
   cell_info_get_index (tree_view, info, &index);
+  g_hash_table_steal (accessible->cell_info_by_index, &cell->index);
   cell->index = index;
-  g_hash_table_insert (accessible->cell_info_by_index, &index, info);
+  g_hash_table_insert (accessible->cell_info_by_index, &cell->index, info);
 }
 
 static void
