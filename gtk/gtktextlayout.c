@@ -827,8 +827,8 @@ gtk_text_layout_invalidate_cache (GtkTextLayout *layout,
 
       if (cursors_only)
 	{
-	  g_slist_foreach (display->cursors, (GFunc)g_free, NULL);
-	  g_slist_free (display->cursors);
+          if (display->cursors)
+            g_array_free (display->cursors, TRUE);
 	  display->cursors = NULL;
 	  display->cursors_invalid = TRUE;
 	  display->has_block_cursor = FALSE;
@@ -1733,11 +1733,6 @@ add_cursor (GtkTextLayout      *layout,
             GtkTextLineSegment *seg,
             gint                start)
 {
-  PangoRectangle strong_pos, weak_pos;
-  GtkTextCursorDisplay *cursor = NULL; /* Quiet GCC */
-  gboolean add_weak = FALSE;
-  gboolean add_strong = FALSE;
-  
   /* Hide insertion cursor when we have a selection or the layout
    * user has hidden the cursor.
    */
@@ -1767,46 +1762,10 @@ add_cursor (GtkTextLayout      *layout,
 	}
     }
 
-  pango_layout_get_cursor_pos (display->layout, start, &strong_pos, &weak_pos);
+  if (!display->cursors)
+    display->cursors = g_array_new (FALSE, FALSE, sizeof(int));
 
-  if (layout->cursor_direction == GTK_TEXT_DIR_NONE)
-    {
-      add_strong = TRUE;
-      add_weak = TRUE;
-    }
-  else if (display->direction == layout->cursor_direction)
-    add_strong = TRUE;
-  else
-    add_weak = TRUE;
-
-  if (add_strong)
-    {
-      cursor = g_new (GtkTextCursorDisplay, 1);
-
-      cursor->x = PANGO_PIXELS (strong_pos.x);
-      cursor->y = PANGO_PIXELS (strong_pos.y);
-      cursor->height = PANGO_PIXELS (strong_pos.height);
-      cursor->is_strong = TRUE;
-      cursor->is_weak = (layout->cursor_direction == GTK_TEXT_DIR_NONE) ? FALSE : TRUE;
-      display->cursors = g_slist_prepend (display->cursors, cursor);
-    }
-  
-  if (add_weak)
-    {
-      if (weak_pos.x == strong_pos.x && add_strong)
-	cursor->is_weak = TRUE;
-      else
-	{
-	  cursor = g_new (GtkTextCursorDisplay, 1);
-	  
-	  cursor->x = PANGO_PIXELS (weak_pos.x);
-	  cursor->y = PANGO_PIXELS (weak_pos.y);
-	  cursor->height = PANGO_PIXELS (weak_pos.height);
-	  cursor->is_strong = (layout->cursor_direction == GTK_TEXT_DIR_NONE) ? FALSE : TRUE;
-	  cursor->is_weak = TRUE;
-	  display->cursors = g_slist_prepend (display->cursors, cursor);
-	}
-    }
+  display->cursors = g_array_append_val (display->cursors, start);
 }
 
 static gboolean
@@ -2530,10 +2489,7 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
         g_object_unref (display->layout);
 
       if (display->cursors)
-        {
-          g_slist_foreach (display->cursors, (GFunc)g_free, NULL);
-          g_slist_free (display->cursors);
-        }
+        g_array_free (display->cursors, TRUE);
 
       if (display->pg_bg_color)
         gdk_color_free (display->pg_bg_color);

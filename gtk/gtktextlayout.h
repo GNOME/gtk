@@ -109,7 +109,6 @@ typedef struct _GtkTextLineData GtkTextLineData;
 typedef struct _GtkTextLayout         GtkTextLayout;
 typedef struct _GtkTextLayoutClass    GtkTextLayoutClass;
 typedef struct _GtkTextLineDisplay    GtkTextLineDisplay;
-typedef struct _GtkTextCursorDisplay  GtkTextCursorDisplay;
 typedef struct _GtkTextAttrAppearance GtkTextAttrAppearance;
 
 struct _GtkTextLayout
@@ -225,19 +224,11 @@ struct _GtkTextAttrAppearance
   PangoAttribute attr;
   GtkTextAppearance appearance;
 };
-struct _GtkTextCursorDisplay
-{
-  gint x;
-  gint y;
-  gint height;
-  guint is_strong : 1;
-  guint is_weak : 1;
-};
 
 struct _GtkTextLineDisplay
 {
   PangoLayout *layout;
-  GSList *cursors;
+  GArray *cursors;      /* indexes of cursors in the PangoLayout */
 
   GtkTextDirection direction;
 
