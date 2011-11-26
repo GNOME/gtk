@@ -12807,6 +12807,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   gint x, y;
   GList *list;
   GdkWindow *child;
+  gboolean selection_changed;
 
   if (animate)
     g_object_get (gtk_widget_get_settings (GTK_WIDGET (tree_view)),
@@ -12895,19 +12896,18 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       gtk_tree_path_free (anchor_path);
     }
 
+  selection_changed = gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children);
+  
   /* Stop a pending double click */
   tree_view->priv->last_button_x = -1;
   tree_view->priv->last_button_y = -1;
 
   _gtk_tree_view_accessible_remove (tree_view, node->children, NULL);
 
-  if (gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children))
-    {
-      _gtk_rbtree_remove (node->children);
+  _gtk_rbtree_remove (node->children);
+
+  if (selection_changed)
       g_signal_emit_by_name (tree_view->priv->selection, "changed");
-    }
-  else
-    _gtk_rbtree_remove (node->children);
 
   if (animate)
     {
