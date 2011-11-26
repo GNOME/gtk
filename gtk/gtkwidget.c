@@ -6058,6 +6058,17 @@ _gtk_widget_captured_event (GtkWidget *widget,
                    "GTK_CAPTURED_EVENT_STORE.");
     }
 
+  /* The widget that was originally to receive the event
+   * handles motion hints, but the capturing widget might
+   * not, so ensure we get further motion events.
+   */
+  if ((flags & GTK_CAPTURED_EVENT_HANDLED) != 0 &&
+      event->type == GDK_MOTION_NOTIFY &&
+      event->motion.is_hint &&
+      (gdk_window_get_events (event->any.window) &
+       GDK_POINTER_MOTION_HINT_MASK) != 0)
+    gdk_event_request_motions (&event->motion);
+
   return_val = (flags & GTK_CAPTURED_EVENT_HANDLED) != 0 ||
     !WIDGET_REALIZED_FOR_EVENT (widget, event);
 
