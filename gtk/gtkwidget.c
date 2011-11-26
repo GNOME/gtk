@@ -5927,6 +5927,17 @@ _gtk_widget_captured_event (GtkWidget *widget,
   g_signal_emit (widget, widget_signals[CAPTURED_EVENT], 0, event, &return_val);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
 
+  /* The widget that was originally to receive the event
+   * handles motion hints, but the capturing widget might
+   * not, so ensure we get further motion events.
+   */
+  if (return_val &&
+      event->type == GDK_MOTION_NOTIFY &&
+      event->motion.is_hint &&
+      (gdk_window_get_events (event->any.window) &
+       GDK_POINTER_MOTION_HINT_MASK) != 0)
+    gdk_event_request_motions (&event->motion);
+
   g_object_unref (widget);
 
   return return_val;
