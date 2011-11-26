@@ -10820,12 +10820,10 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 	    tree_view->priv->modify_selection_pressed = TRUE;
 	}
 
-      gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
-      gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
+      gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, TRUE);
+      gtk_tree_path_free (cursor_path);
 
       gtk_widget_grab_focus (GTK_WIDGET (tree_view));
-      gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
-      gtk_tree_path_free (cursor_path);
 
       tree_view->priv->modify_selection_pressed = FALSE;
 
