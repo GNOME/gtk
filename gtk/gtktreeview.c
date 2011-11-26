@@ -12807,7 +12807,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   gint x, y;
   GList *list;
   GdkWindow *child;
-  gboolean selection_changed;
+  gboolean selection_changed, cursor_changed;
 
   if (animate)
     g_object_get (gtk_widget_get_settings (GTK_WIDGET (tree_view)),
@@ -12875,13 +12875,8 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
     {
       GtkTreePath *cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
 
-      if (gtk_tree_path_is_ancestor (path, cursor_path))
-	{
-	  gtk_tree_row_reference_free (tree_view->priv->cursor);
-	  tree_view->priv->cursor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
-								      tree_view->priv->model,
-								      path);
-	}
+      cursor_changed = gtk_tree_path_is_ancestor (path, cursor_path);
+
       gtk_tree_path_free (cursor_path);
     }
 
@@ -12906,8 +12901,12 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 
   _gtk_rbtree_remove (node->children);
 
-  if (selection_changed)
-      g_signal_emit_by_name (tree_view->priv->selection, "changed");
+  /* if we change the cursor, we also change the selection,
+   * so no need to emit selection-changed. */
+  if (cursor_changed)
+    gtk_tree_view_real_set_cursor (tree_view, path, TRUE, FALSE);
+  else if (selection_changed)
+    g_signal_emit_by_name (tree_view->priv->selection, "changed");
 
   if (animate)
     {
