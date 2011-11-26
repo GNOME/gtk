@@ -1630,7 +1630,7 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
 
   if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) != select)
     {
-      path = _gtk_tree_view_find_path (priv->tree_view, tree, node);
+      path = _gtk_tree_path_new_from_rbtree (tree, node);
       toggle = _gtk_tree_selection_row_is_selectable (selection, node, path);
       gtk_tree_path_free (path);
     }

@@ -222,9 +222,7 @@ cell_info_free (GtkTreeViewAccessibleCellInfo *cell_info)
 static GtkTreePath *
 cell_info_get_path (GtkTreeViewAccessibleCellInfo *cell_info)
 {
-  return _gtk_tree_view_find_path (NULL,
-                                   cell_info->tree,
-                                   cell_info->node);
+  return _gtk_tree_path_new_from_rbtree (cell_info->tree, cell_info->node);
 }
 
 static guint
@@ -582,7 +580,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   if (!get_rbtree_column_from_index (tree_view, i, &tree, &node, &tv_col))
     return NULL;
 
-  path = _gtk_tree_view_find_path (tree_view, tree, node);
+  path = _gtk_tree_path_new_from_rbtree (tree, node);
   tree_model = gtk_tree_view_get_model (tree_view);
   retval = gtk_tree_model_get_iter (tree_model, &iter, path);
   if (!retval)
