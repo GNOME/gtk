@@ -5842,34 +5842,13 @@ gtk_entry_draw_text (GtkEntry *entry,
 }
 
 static void
-draw_insertion_cursor (GtkEntry      *entry,
-                       cairo_t       *cr,
-		       GdkRectangle  *cursor_location,
-		       gboolean       is_primary,
-		       PangoDirection direction,
-		       gboolean       draw_arrow)
-{
-  GtkWidget *widget = GTK_WIDGET (entry);
-  GtkTextDirection text_dir;
-
-  if (direction == PANGO_DIRECTION_LTR)
-    text_dir = GTK_TEXT_DIR_LTR;
-  else
-    text_dir = GTK_TEXT_DIR_RTL;
-
-  gtk_draw_insertion_cursor (widget, cr,
-			     cursor_location,
-			     is_primary, text_dir, draw_arrow);
-}
-
-static void
 gtk_entry_draw_cursor (GtkEntry  *entry,
                        cairo_t   *cr,
 		       CursorType type)
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
-  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
+  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (widget));
   PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
   GdkRectangle cursor_location;
   gboolean split_cursor;
@@ -5901,8 +5880,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
   if (!block)
     {
       gint strong_x, weak_x;
-      PangoDirection dir1 = PANGO_DIRECTION_NEUTRAL;
-      PangoDirection dir2 = PANGO_DIRECTION_NEUTRAL;
+      GtkTextDirection dir1, dir2;
       gint x1 = 0;
       gint x2 = 0;
 
@@ -5912,15 +5890,16 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
                     "gtk-split-cursor", &split_cursor,
                     NULL);
 
-      dir1 = priv->resolved_dir;
-  
+      dir1 = (priv->resolved_dir == PANGO_DIRECTION_LTR) ? GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+      dir2 = GTK_TEXT_DIR_NONE;
+
       if (split_cursor)
         {
           x1 = strong_x;
 
           if (weak_x != strong_x)
             {
-              dir2 = (priv->resolved_dir == PANGO_DIRECTION_LTR) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
+              dir2 = (priv->resolved_dir == PANGO_DIRECTION_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
               x2 = weak_x;
             }
         }
@@ -5937,16 +5916,16 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       cursor_location.width = 0;
       cursor_location.height = text_area_height - inner_border.top - inner_border.bottom;
 
-      draw_insertion_cursor (entry, cr,
-                             &cursor_location, TRUE, dir1,
-                             dir2 != PANGO_DIRECTION_NEUTRAL);
-  
-      if (dir2 != PANGO_DIRECTION_NEUTRAL)
+      gtk_draw_insertion_cursor (widget, cr,
+                                 &cursor_location, TRUE, dir1,
+                                 dir2 != GTK_TEXT_DIR_NONE);
+
+      if (dir2 != GTK_TEXT_DIR_NONE)
         {
           cursor_location.x = xoffset + x2;
-          draw_insertion_cursor (entry, cr,
-                                 &cursor_location, FALSE, dir2,
-                                 TRUE);
+          gtk_draw_insertion_cursor (widget, cr,
+                                     &cursor_location, FALSE, dir2,
+                                     TRUE);
         }
     }
   else /* overwrite_mode */
