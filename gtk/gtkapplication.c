@@ -450,6 +450,7 @@ create_menuitem_from_model (GMenuModel   *model,
   const GVariantType *type;
   GVariant *v;
 
+  label = NULL;
   g_menu_model_get_item_attribute (model, item, G_MENU_ATTRIBUTE_LABEL, "s", &label);
 
   action = NULL;
@@ -536,7 +537,8 @@ static void
 append_items_from_model (GtkMenuShell *menu,
                          GMenuModel   *model,
                          GActionGroup *group,
-                         gboolean     *need_separator)
+                         gboolean     *need_separator,
+                         const gchar  *heading)
 {
   gint n;
   gint i;
@@ -544,6 +546,7 @@ append_items_from_model (GtkMenuShell *menu,
   GtkWidget *menuitem;
   GtkWidget *submenu;
   GMenuModel *m;
+  gchar *label;
 
   n = g_menu_model_get_n_items (model);
 
@@ -556,12 +559,23 @@ append_items_from_model (GtkMenuShell *menu,
       *need_separator = FALSE;
     }
 
+  if (heading != NULL)
+    {
+      w = gtk_menu_item_new_with_label (heading);
+      gtk_widget_show (w);
+      gtk_widget_set_sensitive (w, FALSE);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), w);
+    }
+
   for (i = 0; i < n; i++)
     {
       if ((m = g_menu_model_get_item_link (model, i, G_MENU_LINK_SECTION)))
         {
-          append_items_from_model (menu, m, group, need_separator);
+          label = NULL;
+          g_menu_model_get_item_attribute (model, i, G_MENU_ATTRIBUTE_LABEL, "s", &label);
+          append_items_from_model (menu, m, group, need_separator, label);
           g_object_unref (m);
+          g_free (label);
           continue;
         }
 
@@ -590,7 +604,7 @@ populate_menu_from_model (GtkMenuShell *menu,
   gboolean need_separator;
 
   need_separator = FALSE;
-  append_items_from_model (menu, model, group, &need_separator);
+  append_items_from_model (menu, model, group, &need_separator, NULL);
 }
 
 typedef struct {
