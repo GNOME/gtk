@@ -2596,7 +2596,7 @@ gtk_scrolled_window_motion_notify_event (GtkWidget *widget,
           priv->in_drag = TRUE;
         }
       else
-        return FALSE;
+        return TRUE;
     }
 
   priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
