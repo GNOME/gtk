@@ -34,6 +34,8 @@ TEST_PROGS += children
 #
 # TEST_PROGS += focus
 
+TEST_PROGS += tree-relationships
+
 TEST_PROGS += util
 
 noinst_PROGS = testfocus
