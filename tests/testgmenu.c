@@ -144,9 +144,10 @@ radio_state_changed (GActionGroup     *group,
   gboolean b;
 
   a = g_object_get_data (G_OBJECT (w), "action");
+  g_signal_handler_block (w, a->activate_handler);
   b = g_strcmp0 (a->target, g_variant_get_string (state, NULL)) == 0;
-
   gtk_check_menu_item_set_active (w, b);
+  g_signal_handler_unblock (w, a->activate_handler);
 }
 
 /* Menuitem callbacks {{{2 */
@@ -156,31 +157,16 @@ item_activated (GtkWidget *w,
                 gpointer   data)
 {
   ActionData *a;
+  GVariant *parameter;
 
   a = g_object_get_data (G_OBJECT (w), "action");
-  g_action_group_activate_action (a->group, a->name, NULL);
-}
-
-static void
-radio_item_toggled (GtkCheckMenuItem *w,
-                    gpointer          data)
-{
-  ActionData *a;
-  GVariant *v;
-
-  a = g_object_get_data (G_OBJECT (w), "action");
-  if (gtk_check_menu_item_get_active (w))
-    {
-      g_action_group_change_action_state (a->group, a->name,
-                                          g_variant_new_string (a->target));
-    }
+  if (a->target)
+    parameter = g_variant_new_string (a->target);
   else
-    {
-      v = g_action_group_get_action_state (a->group, a->name);
-      if (g_strcmp0 (g_variant_get_string (v, NULL), a->target) == 0)
-        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w), TRUE);
-      g_variant_unref (v);
-    }
+    parameter = NULL;
+  g_action_group_activate_action (a->group, a->name, parameter);
+  if (parameter)
+    g_variant_unref (parameter);
 }
 
 /* GtkMenu construction {{{2 */
@@ -236,11 +222,14 @@ create_menuitem_from_model (GMenuModel   *model,
                                                 G_CALLBACK (enabled_changed), w);
       g_free (s);
 
+      a->activate_handler = g_signal_connect (w, "activate", G_CALLBACK (item_activated), NULL);
+
       if (type == NULL)
-        a->activate_handler = g_signal_connect (w, "activate", G_CALLBACK (item_activated), NULL);
+        {
+          /* all set */
+        }
       else if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
         {
-          a->activate_handler = g_signal_connect (w, "activate", G_CALLBACK (item_activated), NULL);
           s = g_strconcat ("action-state-changed::", action, NULL);
           a->state_changed_id = g_signal_connect (group, s,
                                                   G_CALLBACK (toggle_state_changed), w);
@@ -252,7 +241,6 @@ create_menuitem_from_model (GMenuModel   *model,
         }
       else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
         {
-          g_signal_connect (w, "toggled", G_CALLBACK (radio_item_toggled), NULL);
           s = g_strconcat ("action-state-changed::", action, NULL);
           a->state_changed_id = g_signal_connect (group, s,
                                                   G_CALLBACK (radio_state_changed), w);
@@ -472,13 +460,20 @@ activate_toggle (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 }
 
 static void
-radio_changed (GSimpleAction *action, GVariant *value, gpointer user_data)
+activate_radio (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
-  g_print ("Radio action %s state changed to %s\n",
-           g_action_get_name (G_ACTION (action)),
-           g_variant_get_string (value, NULL));
+  GVariant *old_state, *new_state;
 
-  g_simple_action_set_state (action, value);
+  old_state = g_action_get_state (G_ACTION (action));
+  new_state = g_variant_new_string (g_variant_get_string (parameter, NULL));
+
+  g_print ("Radio action %s activated, state changes from %s to %s\n",
+           g_action_get_name (G_ACTION (action)),
+           g_variant_get_string (old_state, NULL),
+           g_variant_get_string (new_state, NULL));
+
+  g_simple_action_set_state (action, new_state);
+  g_variant_unref (old_state);
 }
 
 static GActionEntry actions[] = {
@@ -488,7 +483,7 @@ static GActionEntry actions[] = {
   { "copy",  activate_action, NULL, NULL,      NULL },
   { "paste", activate_action, NULL, NULL,      NULL },
   { "bold",  activate_toggle, NULL, "true",    NULL },
-  { "lang",  NULL,            NULL, "'latin'", radio_changed },
+  { "lang",  activate_radio,  "s",  "'latin'", NULL },
 };
 
 static GActionGroup *
@@ -541,8 +536,10 @@ state_cell_func (GtkTreeViewColumn *column,
   gtk_cell_renderer_set_visible (cell, FALSE);
   g_object_set (cell, "mode", GTK_CELL_RENDERER_MODE_INERT, NULL);
 
-  if (state &&
-      g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN) &&
+  if (state == NULL)
+    return;
+
+  if (g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN) &&
       GTK_IS_CELL_RENDERER_TOGGLE (cell))
     {
       gtk_cell_renderer_set_visible (cell, TRUE);
@@ -550,8 +547,7 @@ state_cell_func (GtkTreeViewColumn *column,
       gtk_cell_renderer_toggle_set_active (GTK_CELL_RENDERER_TOGGLE (cell),
                                            g_variant_get_boolean (state));
     }
-  else if (state &&
-           g_variant_is_of_type (state, G_VARIANT_TYPE_STRING) &&
+  else if (g_variant_is_of_type (state, G_VARIANT_TYPE_STRING) &&
            GTK_IS_CELL_RENDERER_COMBO (cell))
     {
       gtk_cell_renderer_set_visible (cell, TRUE);
@@ -559,8 +555,7 @@ state_cell_func (GtkTreeViewColumn *column,
       g_object_set (cell, "text", g_variant_get_string (state, NULL), NULL);
     }
 
-  if (state)
-    g_variant_unref (state);
+  g_variant_unref (state);
 }
 
 static void
