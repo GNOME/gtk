@@ -90,6 +90,7 @@ typedef struct {
   gchar        *target;
   gulong        enabled_changed_id;
   gulong        state_changed_id;
+  gulong        activate_handler;
 } ActionData;
 
 static void
@@ -125,7 +126,12 @@ toggle_state_changed (GActionGroup     *group,
                       GVariant         *state,
                       GtkCheckMenuItem *w)
 {
+  ActionData *a;
+
+  a = g_object_get_data (G_OBJECT (w), "action");
+  g_signal_handler_block (w, a->activate_handler);
   gtk_check_menu_item_set_active (w, g_variant_get_boolean (state));
+  g_signal_handler_unblock (w, a->activate_handler);
 }
 
 static void
@@ -153,19 +159,6 @@ item_activated (GtkWidget *w,
 
   a = g_object_get_data (G_OBJECT (w), "action");
   g_action_group_activate_action (a->group, a->name, NULL);
-}
-
-static void
-toggle_item_toggled (GtkCheckMenuItem *w,
-                     gpointer          data)
-{
-  ActionData *a;
-  gboolean b;
-
-  a = g_object_get_data (G_OBJECT (w), "action");
-  b = gtk_check_menu_item_get_active (w);
-  g_action_group_change_action_state (a->group, a->name,
-                                      g_variant_new_boolean (b));
 }
 
 static void
@@ -244,10 +237,10 @@ create_menuitem_from_model (GMenuModel   *model,
       g_free (s);
 
       if (type == NULL)
-        g_signal_connect (w, "activate", G_CALLBACK (item_activated), NULL);
+        a->activate_handler = g_signal_connect (w, "activate", G_CALLBACK (item_activated), NULL);
       else if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
         {
-          g_signal_connect (w, "toggled", G_CALLBACK (toggle_item_toggled), NULL);
+          a->activate_handler = g_signal_connect (w, "activate", G_CALLBACK (item_activated), NULL);
           s = g_strconcat ("action-state-changed::", action, NULL);
           a->state_changed_id = g_signal_connect (group, s,
                                                   G_CALLBACK (toggle_state_changed), w);
@@ -462,13 +455,20 @@ activate_action (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 }
 
 static void
-toggle_changed (GSimpleAction *action, GVariant *value, gpointer user_data)
+activate_toggle (GSimpleAction *action, GVariant *parameter, gpointer user_data)
 {
-  g_print ("Toggle action %s state changed to %d\n",
-           g_action_get_name (G_ACTION (action)),
-           g_variant_get_boolean (value));
+  GVariant *old_state, *new_state;
 
-  g_simple_action_set_state (action, value);
+  old_state = g_action_get_state (G_ACTION (action));
+  new_state = g_variant_new_boolean (!g_variant_get_boolean (old_state));
+
+  g_print ("Toggle action %s activated, state changes from %d to %d\n",
+           g_action_get_name (G_ACTION (action)),
+           g_variant_get_boolean (old_state),
+           g_variant_get_boolean (new_state));
+
+  g_simple_action_set_state (action, new_state);
+  g_variant_unref (old_state);
 }
 
 static void
@@ -487,7 +487,7 @@ static GActionEntry actions[] = {
   { "cut",   activate_action, NULL, NULL,      NULL },
   { "copy",  activate_action, NULL, NULL,      NULL },
   { "paste", activate_action, NULL, NULL,      NULL },
-  { "bold",  NULL,            NULL, "true",    toggle_changed },
+  { "bold",  activate_toggle, NULL, "true",    NULL },
   { "lang",  NULL,            NULL, "'latin'", radio_changed },
 };
 
@@ -803,7 +803,7 @@ toggle_italic (GtkToggleButton *button, gpointer data)
     {
       action = g_simple_action_new_stateful ("italic", NULL, g_variant_new_boolean (FALSE));
       g_simple_action_group_insert (G_SIMPLE_ACTION_GROUP (group), G_ACTION (action));
-      g_signal_connect (action, "change-state", G_CALLBACK (toggle_changed), NULL);
+      g_signal_connect (action, "activate", G_CALLBACK (activate_toggle), NULL);
       g_object_unref (action);
       action_list_add (store, "italic");
       g_menu_insert (G_MENU (m), 1, "Italic", "italic");
