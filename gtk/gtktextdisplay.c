@@ -825,7 +825,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   GSList *cursor_list;
   GtkTextRenderer *text_renderer;
   GtkTextIter selection_start, selection_end;
-  gboolean have_selection = FALSE;
+  gboolean have_selection;
   GSList *line_list;
   GSList *tmp_list;
   GList *tmp_widgets;
@@ -852,10 +852,9 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 
   gtk_text_layout_wrap_loop_start (layout);
 
-  if (gtk_text_buffer_get_selection_bounds (layout->buffer,
-                                            &selection_start,
-                                            &selection_end))
-    have_selection = TRUE;
+  have_selection = gtk_text_buffer_get_selection_bounds (layout->buffer,
+                                                         &selection_start,
+                                                         &selection_end);
 
   tmp_list = line_list;
   while (tmp_list != NULL)
