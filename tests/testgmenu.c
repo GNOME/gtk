@@ -289,7 +289,6 @@ append_items_from_model (GtkWidget    *menu,
       w = gtk_separator_menu_item_new ();
       gtk_widget_show (w);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), w);
-
       *need_separator = FALSE;
     }
 
@@ -316,6 +315,14 @@ append_items_from_model (GtkWidget    *menu,
           g_object_unref (m);
           g_free (label);
           continue;
+        }
+
+      if (*need_separator)
+        {
+          w = gtk_separator_menu_item_new ();
+          gtk_widget_show (w);
+          gtk_menu_shell_append (GTK_MENU_SHELL (menu), w);
+          *need_separator = FALSE;
         }
 
       menuitem = create_menuitem_from_model (model, i, group);
