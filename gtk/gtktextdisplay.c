@@ -912,39 +912,56 @@ gtk_text_layout_draw (GtkTextLayout *layout,
                 {
                   int index;
                   PangoRectangle strong_pos, weak_pos;
+                  PangoRectangle *cursor1, *cursor2;
+                  gboolean split_cursor;
+                  GtkTextDirection dir1, dir2;
                   GdkRectangle cursor_location;
 
                   index = g_array_index(line_display->cursors, int, i);
                   pango_layout_get_cursor_pos (line_display->layout, index, &strong_pos, &weak_pos);
 
-                  cursor_location.x = line_display->x_offset + PANGO_PIXELS (strong_pos.x);
-                  cursor_location.y = line_display->top_margin + PANGO_PIXELS (strong_pos.y);
-                  cursor_location.width = 0;
-                  cursor_location.height = PANGO_PIXELS (strong_pos.height);
+                  dir1 = line_display->direction;
+                  dir2 = GTK_TEXT_DIR_NONE;
 
-                  if (layout->cursor_direction == GTK_TEXT_DIR_NONE ||
-                      line_display->direction == layout->cursor_direction)
+                  g_object_get (gtk_widget_get_settings (widget),
+                                "gtk-split-cursor", &split_cursor,
+                                NULL);
+
+                  if (split_cursor)
                     {
-                      gtk_draw_insertion_cursor (widget, cr,
-                                                 &cursor_location, TRUE, line_display->direction,
-                                                 layout->cursor_direction != GTK_TEXT_DIR_NONE);
+                      cursor1 = &strong_pos;
+                      if (strong_pos.x != weak_pos.x || strong_pos.y != weak_pos.y)
+                        {
+                          dir2 = (line_display->direction == GTK_TEXT_DIR_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
+                          cursor2 = &weak_pos;
+                        }
+                    }
+                  else
+                    {
+                      if (layout->keyboard_direction == line_display->direction)
+                        cursor1 = &strong_pos;
+                      else
+                        cursor1 = &weak_pos;
                     }
 
-                  if ((strong_pos.x != weak_pos.x || strong_pos.y != weak_pos.y) &&
-                      (layout->cursor_direction == GTK_TEXT_DIR_NONE ||
-                       line_display->direction != layout->cursor_direction))
+                  cursor_location.x = line_display->x_offset + PANGO_PIXELS (cursor1->x);
+                  cursor_location.y = line_display->top_margin + PANGO_PIXELS (cursor1->y);
+                  cursor_location.width = 0;
+                  cursor_location.height = PANGO_PIXELS (cursor1->height);
+
+                  gtk_draw_insertion_cursor (widget, cr,
+                                             &cursor_location, TRUE, dir1,
+                                             dir2 != GTK_TEXT_DIR_NONE);
+
+                  if (dir2 != GTK_TEXT_DIR_NONE)
                     {
-                      GtkTextDirection dir;
-
-                      dir = (line_display->direction == GTK_TEXT_DIR_RTL) ? GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
-
-                      cursor_location.x = line_display->x_offset + PANGO_PIXELS (weak_pos.x);
-                      cursor_location.y = line_display->top_margin + PANGO_PIXELS (weak_pos.y);
+                      cursor_location.x = line_display->x_offset + PANGO_PIXELS (cursor2->x);
+                      cursor_location.y = line_display->top_margin + PANGO_PIXELS (cursor2->y);
                       cursor_location.width = 0;
-                      cursor_location.height = PANGO_PIXELS (weak_pos.height);
+                      cursor_location.height = PANGO_PIXELS (cursor2->height);
 
                       gtk_draw_insertion_cursor (widget, cr,
-                                                 &cursor_location, FALSE, dir,
+                                                 &cursor_location, FALSE, dir2,
                                                  TRUE);
                     }
                 }
