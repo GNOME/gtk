@@ -5848,29 +5848,20 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
-  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (widget));
-  PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
-  GdkRectangle cursor_location;
-  gboolean split_cursor;
+  GtkStyleContext *context;
   PangoRectangle cursor_rect;
-  GtkBorder inner_border;
-  gint xoffset;
-  gint text_area_height;
   gint cursor_index;
   gboolean block;
   gboolean block_at_line_end;
   PangoLayout *layout;
   const char *text;
 
-  _gtk_entry_effective_inner_border (entry, &inner_border);
-
-  xoffset = inner_border.left - priv->scroll_offset;
-
-  text_area_height = gdk_window_get_height (priv->text_area);
+  context = gtk_widget_get_style_context (widget);
 
   layout = gtk_entry_ensure_layout (entry, TRUE);
   text = pango_layout_get_text (layout);
   cursor_index = g_utf8_offset_to_pointer (text, priv->current_pos + priv->preedit_cursor) - text;
+
   if (!priv->overwrite_mode)
     block = FALSE;
   else
@@ -5879,58 +5870,16 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
   if (!block)
     {
-      gint strong_x, weak_x;
-      GtkTextDirection dir1, dir2;
-      gint x1 = 0;
-      gint x2 = 0;
+      GtkBorder inner_border;
 
-      gtk_entry_get_cursor_locations (entry, type, &strong_x, &weak_x);
+      _gtk_entry_effective_inner_border (entry, &inner_border);
 
-      g_object_get (gtk_widget_get_settings (widget),
-                    "gtk-split-cursor", &split_cursor,
-                    NULL);
-
-      dir1 = (priv->resolved_dir == PANGO_DIRECTION_LTR) ? GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
-      dir2 = GTK_TEXT_DIR_NONE;
-
-      if (split_cursor)
-        {
-          x1 = strong_x;
-
-          if (weak_x != strong_x)
-            {
-              dir2 = (priv->resolved_dir == PANGO_DIRECTION_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
-              x2 = weak_x;
-            }
-        }
-      else
-        {
-          if (keymap_direction == priv->resolved_dir)
-            x1 = strong_x;
-          else
-            x1 = weak_x;
-        }
-
-      cursor_location.x = xoffset + x1;
-      cursor_location.y = inner_border.top;
-      cursor_location.width = 0;
-      cursor_location.height = text_area_height - inner_border.top - inner_border.bottom;
-
-      gtk_draw_insertion_cursor (widget, cr,
-                                 &cursor_location, TRUE, dir1,
-                                 dir2 != GTK_TEXT_DIR_NONE);
-
-      if (dir2 != GTK_TEXT_DIR_NONE)
-        {
-          cursor_location.x = xoffset + x2;
-          gtk_draw_insertion_cursor (widget, cr,
-                                     &cursor_location, FALSE, dir2,
-                                     TRUE);
-        }
+      gtk_render_insertion_cursor (context, cr,
+                                   inner_border.left - priv->scroll_offset, inner_border.top,
+                                   layout, cursor_index, priv->resolved_dir);
     }
   else /* overwrite_mode */
     {
-      GtkStyleContext *context;
       GdkRGBA cursor_color;
       GdkRectangle rect;
       gint x, y;
@@ -5943,8 +5892,6 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       rect.y = PANGO_PIXELS (cursor_rect.y) + y;
       rect.width = PANGO_PIXELS (cursor_rect.width);
       rect.height = PANGO_PIXELS (cursor_rect.height);
-
-      context = gtk_widget_get_style_context (widget);
 
       _gtk_style_context_get_cursor_color (context, &cursor_color, NULL);
       gdk_cairo_set_source_rgba (cr, &cursor_color);

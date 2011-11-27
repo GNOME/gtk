@@ -922,6 +922,14 @@ void        gtk_render_icon        (GtkStyleContext     *context,
                                     GdkPixbuf           *pixbuf,
                                     gdouble              x,
                                     gdouble              y);
+void        gtk_render_insertion_cursor
+                                   (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    PangoLayout         *layout,
+                                    int                  index,
+                                    PangoDirection       direction);
 
 void   gtk_draw_insertion_cursor    (GtkWidget          *widget,
                                      cairo_t            *cr,

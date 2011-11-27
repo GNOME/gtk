@@ -3978,84 +3978,6 @@ get_cursor_direction (GtkLabel *label)
   return PANGO_DIRECTION_LTR;
 }
 
-static void
-gtk_label_draw_cursor (GtkLabel  *label, cairo_t *cr, gint xoffset, gint yoffset)
-{
-  GtkLabelPrivate *priv = label->priv;
-  GtkWidget *widget;
-
-  if (priv->select_info == NULL)
-    return;
-
-  widget = GTK_WIDGET (label);
-  
-  if (gtk_widget_is_drawable (widget))
-    {
-      PangoDirection keymap_direction;
-      PangoDirection cursor_direction;
-      PangoRectangle strong_pos, weak_pos;
-      GtkTextDirection dir1, dir2;
-      gboolean split_cursor;
-      PangoRectangle *cursor1 = NULL;
-      PangoRectangle *cursor2 = NULL;
-      GdkRectangle cursor_location;
-
-      keymap_direction = gdk_keymap_get_direction (gdk_keymap_get_for_display (gtk_widget_get_display (widget)));
-      cursor_direction = get_cursor_direction (label);
-
-      gtk_label_ensure_layout (label);
-      
-      pango_layout_get_cursor_pos (priv->layout, priv->select_info->selection_end,
-				   &strong_pos, &weak_pos);
-
-      g_object_get (gtk_widget_get_settings (widget),
-		    "gtk-split-cursor", &split_cursor,
-		    NULL);
-
-      dir1 = (cursor_direction == PANGO_DIRECTION_LTR) ? GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
-      dir2 = GTK_TEXT_DIR_NONE;
-
-      if (split_cursor)
-	{
-	  cursor1 = &strong_pos;
-
-	  if (strong_pos.x != weak_pos.x || strong_pos.y != weak_pos.y)
-	    {
-              dir2 = (cursor_direction == PANGO_DIRECTION_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
-	      cursor2 = &weak_pos;
-	    }
-	}
-      else
-	{
-	  if (keymap_direction == cursor_direction)
-	    cursor1 = &strong_pos;
-	  else
-	    cursor1 = &weak_pos;
-	}
-
-      cursor_location.x = xoffset + PANGO_PIXELS (cursor1->x);
-      cursor_location.y = yoffset + PANGO_PIXELS (cursor1->y);
-      cursor_location.width = 0;
-      cursor_location.height = PANGO_PIXELS (cursor1->height);
-
-      gtk_draw_insertion_cursor (widget, cr,
-                                 &cursor_location, TRUE, dir1,
-                                 dir2 != GTK_TEXT_DIR_NONE);
-
-      if (dir2 != GTK_TEXT_DIR_NONE)
-	{
-	  cursor_location.x = xoffset + PANGO_PIXELS (cursor2->x);
-	  cursor_location.y = yoffset + PANGO_PIXELS (cursor2->y);
-	  cursor_location.width = 0;
-	  cursor_location.height = PANGO_PIXELS (cursor2->height);
-
-          gtk_draw_insertion_cursor (widget, cr,
-                                     &cursor_location, FALSE, dir2,
-                                     TRUE);
-	}
-    }
-}
-
 static GtkLabelLink *
 gtk_label_get_focus_link (GtkLabel *label)
 {
@@ -4167,8 +4089,18 @@ gtk_label_draw (GtkWidget *widget,
           GdkColor *link_color;
           GdkColor *visited_link_color;
 
-          if (info->selectable && gtk_widget_has_focus (widget))
-            gtk_label_draw_cursor (label, cr, x, y);
+          if (info->selectable &&
+              gtk_widget_has_focus (widget) &&
+              gtk_widget_is_drawable (widget))
+            {
+              PangoDirection cursor_direction;
+
+              cursor_direction = get_cursor_direction (label);
+              gtk_render_insertion_cursor (context, cr,
+                                           x, y,
+                                           priv->layout, priv->select_info->selection_end,
+                                           cursor_direction);
+            }
 
           focus_link = gtk_label_get_focus_link (label);
           active_link = info->active_link;

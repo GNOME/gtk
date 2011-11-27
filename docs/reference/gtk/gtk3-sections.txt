@@ -5738,6 +5738,7 @@ gtk_render_slider
 gtk_render_activity
 gtk_render_icon_pixbuf
 gtk_render_icon
+gtk_render_insertion_cursor
 
 <SUBSECTION Standard>
 GTK_TYPE_STYLE_CONTEXT

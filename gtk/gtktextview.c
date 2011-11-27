@@ -8622,7 +8622,7 @@ text_window_invalidate_cursors (GtkTextWindow *win)
   gtk_text_layout_get_cursor_locations (priv->layout, &iter,
                                         &strong, &weak);
 
-  /* cursor width calculation as in gtkstyle.c:draw_insertion_cursor(),
+  /* cursor width calculation as in gtkstylecontext.c:draw_insertion_cursor(),
    * ignoring the text direction be exposing both sides of the cursor
    */
 

@@ -821,6 +821,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
                       cairo_t *cr,
                       GList **widgets)
 {
+  GtkStyleContext *context;
   gint offset_y;
   GtkTextRenderer *text_renderer;
   GtkTextIter selection_start, selection_end;
@@ -837,6 +838,8 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 
   if (!gdk_cairo_get_clip_rectangle (cr, &clip))
     return;
+
+  context = gtk_widget_get_style_context (widget);
 
   line_list = gtk_text_layout_get_lines (layout, clip.y, clip.y + clip.height, &offset_y);
 
@@ -911,63 +914,17 @@ gtk_text_layout_draw (GtkTextLayout *layout,
               for (i = 0; i < line_display->cursors->len; i++)
                 {
                   int index;
-                  PangoRectangle strong_pos, weak_pos;
-                  PangoRectangle *cursor1, *cursor2;
-                  gboolean split_cursor;
-                  GtkTextDirection dir1, dir2;
-                  GdkRectangle cursor_location;
+                  PangoDirection dir;
 
                   index = g_array_index(line_display->cursors, int, i);
-                  pango_layout_get_cursor_pos (line_display->layout, index, &strong_pos, &weak_pos);
-
-                  dir1 = line_display->direction;
-                  dir2 = GTK_TEXT_DIR_NONE;
-
-                  g_object_get (gtk_widget_get_settings (widget),
-                                "gtk-split-cursor", &split_cursor,
-                                NULL);
-
-                  if (split_cursor)
-                    {
-                      cursor1 = &strong_pos;
-                      if (strong_pos.x != weak_pos.x || strong_pos.y != weak_pos.y)
-                        {
-                          dir2 = (line_display->direction == GTK_TEXT_DIR_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
-                          cursor2 = &weak_pos;
-                        }
-                    }
-                  else
-                    {
-                      if (layout->keyboard_direction == line_display->direction)
-                        cursor1 = &strong_pos;
-                      else
-                        cursor1 = &weak_pos;
-                    }
-
-                  cursor_location.x = line_display->x_offset + PANGO_PIXELS (cursor1->x);
-                  cursor_location.y = line_display->top_margin + PANGO_PIXELS (cursor1->y);
-                  cursor_location.width = 0;
-                  cursor_location.height = PANGO_PIXELS (cursor1->height);
-
-                  gtk_draw_insertion_cursor (widget, cr,
-                                             &cursor_location, TRUE, dir1,
-                                             dir2 != GTK_TEXT_DIR_NONE);
-
-                  if (dir2 != GTK_TEXT_DIR_NONE)
-                    {
-                      cursor_location.x = line_display->x_offset + PANGO_PIXELS (cursor2->x);
-                      cursor_location.y = line_display->top_margin + PANGO_PIXELS (cursor2->y);
-                      cursor_location.width = 0;
-                      cursor_location.height = PANGO_PIXELS (cursor2->height);
-
-                      gtk_draw_insertion_cursor (widget, cr,
-                                                 &cursor_location, FALSE, dir2,
-                                                 TRUE);
-                    }
+                  dir = (line_display->direction == GTK_TEXT_DIR_RTL) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
+                  gtk_render_insertion_cursor (context, cr,
+                                               line_display->x_offset, line_display->top_margin,
+                                               line_display->layout, index, dir);
                 }
             }
         } /* line_display->height > 0 */
-          
+
       cairo_translate (cr, 0, line_display->height);
       gtk_text_layout_free_line_display (layout, line_display);
       
