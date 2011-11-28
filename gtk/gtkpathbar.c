@@ -1671,8 +1671,7 @@ make_directory_button (GtkPathBar  *path_bar,
 
 static gboolean
 gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
-				GFile              *file,
-				GtkFileSystem      *file_system)
+				GFile              *file)
 {
   GList *list;
   GList *current_path = NULL;
@@ -1858,8 +1857,7 @@ _gtk_path_bar_set_file (GtkPathBar      *path_bar,
   /* Check whether the new path is already present in the pathbar as buttons.
    * This could be a parent directory or a previous selected subdirectory.
    */
-  if (keep_trail &&
-      gtk_path_bar_check_parent_path (path_bar, file, path_bar->file_system))
+  if (keep_trail && gtk_path_bar_check_parent_path (path_bar, file))
     return TRUE;
 
   info = g_new0 (struct SetFileInfo, 1);
