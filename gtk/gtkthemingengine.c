@@ -1488,7 +1488,7 @@ render_background_internal (GtkThemingEngine *engine,
   default:
     bg_x = border.left;
     bg_y = border.top;
-    bg_width = width - border.left - border.left;
+    bg_width = width - border.left - border.right;
     bg_height = height - border.top - border.bottom;
     break;
   }
