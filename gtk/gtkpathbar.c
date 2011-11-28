@@ -1755,6 +1755,8 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
 	  GtkWidget *button = BUTTON_DATA (l->data)->button;
 	  gtk_container_add (GTK_CONTAINER (info->path_bar), button);
 	}
+
+      child_ordering_changed (info->path_bar);
     }
   else
     {
@@ -1775,8 +1777,6 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
     g_object_unref (info->file);
   if (info->parent_file)
     g_object_unref (info->parent_file);
-
-  child_ordering_changed (info->path_bar);
 
   g_free (info);
 }
