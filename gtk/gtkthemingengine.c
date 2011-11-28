@@ -1478,18 +1478,18 @@ render_background_internal (GtkThemingEngine *engine,
     bg_width = width;
     bg_height = height;
     break;
+  case GTK_CSS_AREA_CONTENT_BOX:
+    bg_x = border.left + padding.left;
+    bg_y = border.top + padding.top;
+    bg_width = width - border.left - border.right - padding.left - padding.right;
+    bg_height = height - border.top - border.bottom - padding.top - padding.bottom;
+    break;
   case GTK_CSS_AREA_PADDING_BOX:
   default:
     bg_x = border.left;
     bg_y = border.top;
     bg_width = width - border.left - border.left;
     bg_height = height - border.top - border.bottom;
-    break;
-  case GTK_CSS_AREA_CONTENT_BOX:
-    bg_x = border.left + padding.left;
-    bg_y = border.top + padding.top;
-    bg_width = width - border.left - border.right - padding.left - padding.right;
-    bg_height = height - border.top - border.bottom - padding.top - padding.bottom;
     break;
   }
 
