@@ -201,6 +201,8 @@ struct _GtkWin32ThemePart {
   int part2;
   int state2;
 
+  gint margins[4];
+
   gint ref_count;
 };
 
@@ -208,9 +210,11 @@ GtkWin32ThemePart *
 _gtk_win32_theme_part_new (const char *class, 
 			   int xp_part, int state, 
 			   int xp_part2, int state2, 
-			   double over_alpha)
+			   double over_alpha,
+			   gint margins[4])
 {
   GtkWin32ThemePart *part;
+  int i;
 
   part = g_slice_new0 (GtkWin32ThemePart);
   part->ref_count = 1;
@@ -221,6 +225,8 @@ _gtk_win32_theme_part_new (const char *class,
   part->part2 = xp_part2;
   part->state2 = state2;
   part->over_alpha = over_alpha;
+  for (i = 0; i < 4; i++)
+    part->margins[i] = margins[i];
 
   return part;
 }
@@ -257,6 +263,7 @@ _gtk_win32_theme_part_parse (GtkCssParser *parser,
   int xp_part, state, xp_part2, state2;
   double over_alpha;
   GtkWin32ThemePart *theme_part;
+  gint i, margins[4];
 
   if (!_gtk_css_parser_try (parser, "-gtk-win32-theme-part", TRUE))
     {
@@ -304,55 +311,104 @@ _gtk_win32_theme_part_parse (GtkCssParser *parser,
     }
 
 
+  margins[0] = margins[1] = margins[2] = margins[3] = 0;
   over_alpha = 1.0;
   xp_part2 = -1;
   state2 = -1;
 
-  if ( _gtk_css_parser_try (parser, ",", TRUE))
+  while (TRUE)
     {
-
-      if ( _gtk_css_parser_try (parser, "over", TRUE))
+      if ( _gtk_css_parser_try (parser, ",", TRUE))
 	{
-	  if (!_gtk_css_parser_try (parser, "(", TRUE))
+	  if ( _gtk_css_parser_try (parser, "over", TRUE))
 	    {
-	      _gtk_css_parser_error (parser,
-				     "Expected '(' after 'over'");
-	      return 0;
-	    }
+	      if (!_gtk_css_parser_try (parser, "(", TRUE))
+		{
+		  _gtk_css_parser_error (parser,
+					 "Expected '(' after 'over'");
+		  return 0;
+		}
 
-	  if (!_gtk_css_parser_try_int (parser, &xp_part2))
-	    {
-	      g_free (class);
-	      _gtk_css_parser_error (parser, "Expected a valid integer value");
-	      return 0;
-	    }
-
-	  if (!_gtk_css_parser_try_int (parser, &state2))
-	    {
-	      g_free (class);
-	      _gtk_css_parser_error (parser, "Expected a valid integer value");
-	      return 0;
-	    }
-
-	  if ( _gtk_css_parser_try (parser, ",", TRUE))
-	    {
-	      if (!_gtk_css_parser_try_double (parser, &over_alpha))
+	      if (!_gtk_css_parser_try_int (parser, &xp_part2))
 		{
 		  g_free (class);
-		  _gtk_css_parser_error (parser, "Expected a valid double value");
+		  _gtk_css_parser_error (parser, "Expected a valid integer value");
+		  return 0;
+		}
+
+	      if (!_gtk_css_parser_try_int (parser, &state2))
+		{
+		  g_free (class);
+		  _gtk_css_parser_error (parser, "Expected a valid integer value");
+		  return 0;
+		}
+
+	      if ( _gtk_css_parser_try (parser, ",", TRUE))
+		{
+		  if (!_gtk_css_parser_try_double (parser, &over_alpha))
+		    {
+		      g_free (class);
+		      _gtk_css_parser_error (parser, "Expected a valid double value");
+		      return 0;
+		    }
+		}
+
+	      if (!_gtk_css_parser_try (parser, ")", TRUE))
+		{
+		  g_free (class);
+		  _gtk_css_parser_error (parser,
+					 "Expected ')' at end of 'over'");
 		  return 0;
 		}
 	    }
+	  else if ( _gtk_css_parser_try (parser, "margins", TRUE))
+	    {
+	      if (!_gtk_css_parser_try (parser, "(", TRUE))
+		{
+		  g_free (class);
+		  _gtk_css_parser_error (parser,
+					 "Expected '(' after 'margins'");
+		  return 0;
+		}
 
-	  if (!_gtk_css_parser_try (parser, ")", TRUE))
+	      for (i = 0; i < 4; i++)
+		{
+		  if (!_gtk_css_parser_try_int (parser, &margins[i]))
+		    break;
+		}
+	      
+	      if (i == 0)
+		{
+		  g_free (class);
+		  _gtk_css_parser_error (parser, "Expected valid margins");
+		  return 0;
+		}
+
+	      if (i == 1)
+		margins[1] = margins[0];
+	      if (i <= 2)
+		margins[2] = margins[1];
+	      if (i <= 3)
+		margins[3] = margins[2];
+	      
+	      if (!_gtk_css_parser_try (parser, ")", TRUE))
+		{
+		  g_free (class);
+		  _gtk_css_parser_error (parser,
+					 "Expected ')' at end of 'margins'");
+		  return 0;
+		}
+	    }
+	  else
 	    {
 	      _gtk_css_parser_error (parser,
-				     "Expected ')' at end of 'over'");
+				     "Expected identifier");
 	      return 0;
 	    }
 	}
+      else
+	break; /* no comma, break loop */
     }
-
 
   if (!_gtk_css_parser_try (parser, ")", TRUE))
     {
@@ -365,7 +421,8 @@ _gtk_win32_theme_part_parse (GtkCssParser *parser,
   theme_part = _gtk_win32_theme_part_new (class, 
 					  xp_part, state, 
 					  xp_part2, state2,
-					  over_alpha);
+					  over_alpha,
+					  margins);
   g_free (class);
   
   g_value_take_boxed (value, theme_part);
@@ -388,10 +445,10 @@ _gtk_win32_theme_part_create_surface  (GtkWin32ThemePart  *part,
   surface = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_ARGB32, width, height);
   hdc = cairo_win32_surface_get_dc (surface);
   
-  rect.left = 0;
-  rect.top = 0;
-  rect.right = width;
-  rect.bottom = height;
+  rect.left = part->margins[3];
+  rect.top = part->margins[0];
+  rect.right = width - part->margins[1];
+  rect.bottom = height - part->margins[2];
 
   res = draw_theme_background (part->theme, hdc, xp_part, state, &rect, &rect);
   return surface;
