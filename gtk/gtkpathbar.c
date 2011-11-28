@@ -1819,17 +1819,23 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
   if (BUTTON_IS_FAKE_ROOT (button_data))
     file_info->fake_root = file_info->new_buttons;
 
+  /* We have assigned the info for the innermost button, i.e. the deepest directory.
+   * Now, go on to fetch the info for this directory's parent.
+   */
+
   file_info->file = file_info->parent_file;
   file_info->first_directory = FALSE;
 
   if (!file_info->file)
     {
+      /* No parent?  Okay, we are done. */
       gtk_path_bar_set_file_finish (file_info, TRUE);
       return;
     }
 
   file_info->parent_file = g_file_get_parent (file_info->file);
 
+  /* Recurse asynchronously */
   file_info->path_bar->get_info_cancellable =
     _gtk_file_system_get_info (file_info->path_bar->file_system,
 			       file_info->file,
