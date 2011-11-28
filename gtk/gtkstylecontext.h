@@ -389,6 +389,14 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_RAISED "raised"
 
 /**
+ * GTK_STYLE_CLASS_LINKED:
+ *
+ * A CSS class to match a linked area, such as a box containing buttons
+ * belonging to the same control.
+ */
+#define GTK_STYLE_CLASS_LINKED "linked"
+
+/**
  * GTK_STYLE_CLASS_GRIP:
  *
  * A CSS class defining a resize grip.
