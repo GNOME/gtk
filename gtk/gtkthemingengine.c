@@ -2344,21 +2344,27 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
   GtkCssBorderRadius border_radius = { { 0, },  };
   gdouble x0, y0, x1, y1, xc, yc, wc, hc;
+  GtkStylePropertyContext context;
+  GtkBorderImage *border_image;
   GtkBorder border;
 
   xc = yc = wc = hc = 0;
   state = gtk_theming_engine_get_state (engine);
   junction = gtk_theming_engine_get_junction_sides (engine);
 
+  context.width = width;
+  context.height = height;
+
   gtk_theming_engine_get_border (engine, state, &border);
-  gtk_theming_engine_get (engine, state,
-                          /* Can't use border-radius as it's an int for
-                           * backwards compat */
-                          "border-top-left-radius", &top_left_radius,
-                          "border-top-right-radius", &top_right_radius,
-                          "border-bottom-right-radius", &bottom_right_radius,
-                          "border-bottom-left-radius", &bottom_left_radius,
-                          NULL);
+  _gtk_theming_engine_get (engine, state, &context,
+			   "border-image", &border_image,
+			   /* Can't use border-radius as it's an int for
+			    * backwards compat */
+			   "border-top-left-radius", &top_left_radius,
+			   "border-top-right-radius", &top_right_radius,
+			   "border-bottom-right-radius", &bottom_right_radius,
+			   "border-bottom-left-radius", &bottom_left_radius,
+			   NULL);
 
   if (top_left_radius)
     border_radius.top_left = *top_left_radius;
@@ -2440,9 +2446,16 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   cairo_rectangle (cr, x0, yc + hc, x1 - x0, y1 - (yc + hc));
   cairo_clip (cr);
 
-  render_frame_internal (engine, cr,
-                         x, y, width, height,
-                         0, junction);
+  if (border_image != NULL)
+    {
+      _gtk_border_image_render (border_image, &border,
+                                cr, x, y, width, height);
+      _gtk_border_image_unref (border_image);
+    }
+  else
+    render_frame_internal (engine, cr,
+			   x, y, width, height,
+			   0, junction);
 
   cairo_restore (cr);
 }
