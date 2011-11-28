@@ -176,6 +176,8 @@ get_slider_button (GtkPathBar  *path_bar,
 static void
 gtk_path_bar_init (GtkPathBar *path_bar)
 {
+  GtkStyleContext *context;
+
   gtk_widget_set_has_window (GTK_WIDGET (path_bar), FALSE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (path_bar), FALSE);
 
@@ -204,6 +206,9 @@ gtk_path_bar_init (GtkPathBar *path_bar)
                     G_CALLBACK (gtk_path_bar_slider_button_press), path_bar);
   g_signal_connect (path_bar->down_slider_button, "button-release-event",
                     G_CALLBACK (gtk_path_bar_slider_button_release), path_bar);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (path_bar));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
 }
 
 static void
