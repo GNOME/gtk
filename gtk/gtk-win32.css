@@ -304,7 +304,11 @@
 .scale.trough {
     border-style: none;
     border-width: 0;
-    background-image: -gtk-win32-theme-part(trackbar, 1 1);
+    background-image: -gtk-win32-theme-part(trackbar, 1 1, margins (2 0 2 0));
+}
+
+.scale.trough.vertical {
+    background-image: -gtk-win32-theme-part(trackbar, 1 1, margins (0 2 0 2));
 }
 
 .scale.slider {
