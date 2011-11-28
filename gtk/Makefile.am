@@ -913,9 +913,9 @@ gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
 gtkwin32css.h: stamp-gtkwin32css.h
 	@true
 stamp-gtkwin32css.h: @REBUILD@ gtk-win32.css
-	$(AWK) 'BEGIN { print "static const char *gtk_win32_default_css = " } { print "   \"" $$0 "\\n\""} END { print ";" }' < $(srcdir)/gtk-win32.css >> xgen-gmlh\
-	&& (cmp -s xgen-gmlh gtkwin32css.h || cp xgen-gmlh gtkwin32css.h) \
-	&& rm -f xgen-gmlh \
+	$(AWK) 'BEGIN { print "static const char *gtk_win32_default_css = " } { print "   \"" $$0 "\\n\""} END { print ";" }' < $(srcdir)/gtk-win32.css >> xgen-gw3c\
+	&& (cmp -s xgen-gw3c gtkwin32css.h || cp xgen-gw3c gtkwin32css.h) \
+	&& rm -f xgen-gw3c \
 	&& echo timestamp > $(@F)
 
 gtktypebuiltins.h: stamp-gtktypebuiltins.h
