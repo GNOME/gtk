@@ -97,15 +97,15 @@
 }
 
 .radio:inconsistent {
-    background-image: -gtk-win32-theme-part(button, 2 1, mix 2 5);
+    background-image: -gtk-win32-theme-part(button, 2 1, over (2 5, 0.3));
 }
 
 .radio:inconsistent:insensitive {
-    background-image: -gtk-win32-theme-part(button, 2 4, mix 2 8);
+    background-image: -gtk-win32-theme-part(button, 2 4, over (2 8, 0.3));
 }
 
 .radio:inconsistent:prelight {
-    background-image: -gtk-win32-theme-part(button, 2 4 , mix 2 6);
+    background-image: -gtk-win32-theme-part(button, 2 4, over(2 6, 0.3));
 }
 
 /* Scrollbars */
@@ -194,29 +194,29 @@
 
 .scrollbar.trough {
     border-width: 0;
-    background-image: -gtk-win32-theme-part(scrollbar, 2 1, 4 1);
+    background-image: -gtk-win32-theme-part(scrollbar, 2 1, over (4 1));
 }
 
 .scrollbar.trough.vertical {
     border-width: 0;
-    background-image: -gtk-win32-theme-part(scrollbar, 2 1, 6 1);
+    background-image: -gtk-win32-theme-part(scrollbar, 2 1, over (6 1));
 }
 
 .scrollbar.slider {
     border-width: 0;
-    background-image: -gtk-win32-theme-part(scrollbar, 2 1, 8 1);
+    background-image: -gtk-win32-theme-part(scrollbar, 2 1, over (8 1));
 }
 
 .scrollbar.slider:prelight {
-    background-image: -gtk-win32-theme-part(scrollbar, 2 2, 8 2);
+    background-image: -gtk-win32-theme-part(scrollbar, 2 2, over (8 2));
 }
 
 .scrollbar.slider.vertical {
-    background-image: -gtk-win32-theme-part(scrollbar, 3 1, 9 1);
+    background-image: -gtk-win32-theme-part(scrollbar, 3 1, over (9 1));
 }
 
 .scrollbar.slider.vertical:prelight {
-    background-image: -gtk-win32-theme-part(scrollbar, 3 2, 9 2);
+    background-image: -gtk-win32-theme-part(scrollbar, 3 2, over (9 2));
 }
 
 /* Entry */
