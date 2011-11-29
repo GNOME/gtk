@@ -1844,22 +1844,21 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
 			       file_info);
 }
 
-gboolean
+void
 _gtk_path_bar_set_file (GtkPathBar      *path_bar,
                         GFile           *file,
-                        const gboolean   keep_trail,
-                        GError         **error)
+                        const gboolean   keep_trail)
 {
   struct SetFileInfo *info;
 
-  g_return_val_if_fail (GTK_IS_PATH_BAR (path_bar), FALSE);
-  g_return_val_if_fail (G_IS_FILE (file), FALSE);
+  g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
+  g_return_if_fail (G_IS_FILE (file));
 
   /* Check whether the new path is already present in the pathbar as buttons.
    * This could be a parent directory or a previous selected subdirectory.
    */
   if (keep_trail && gtk_path_bar_check_parent_path (path_bar, file))
-    return TRUE;
+    return;
 
   info = g_new0 (struct SetFileInfo, 1);
   info->file = g_object_ref (file);
@@ -1876,8 +1875,6 @@ _gtk_path_bar_set_file (GtkPathBar      *path_bar,
                                "standard::display-name,standard::is-hidden,standard::is-backup",
                                gtk_path_bar_get_info_callback,
                                info);
-
-  return TRUE;
 }
 
 /* FIXME: This should be a construct-only property */
