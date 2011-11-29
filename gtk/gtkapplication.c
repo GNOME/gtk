@@ -741,7 +741,27 @@ gtk_application_get_menu (GtkApplication *application)
   if (!model)
     return NULL;
 
-  /* FIXME: find out if external menu is available. If yes, return NULL */
+  /* FIXME: find out if external menu is available. If yes, return NULL.
+   * For now, we just check if the wm is mutter (ie gnome-shell)
+   */
+#ifdef GDK_WINDOWING_X11
+  if (application->priv->windows)
+    {
+      GtkWidget *window;
+      GdkScreen *screen;
+
+      window = application->priv->windows->data;
+      screen = gtk_widget_get_screen (window);
+      if (GDK_IS_X11_SCREEN (screen))
+        {
+          const gchar *wm;
+
+          wm = gdk_x11_screen_get_window_manager_name (GDK_X11_SCREEN (screen));
+          if (g_strcmp0 (wm, "Mutter") == 0)
+            return NULL;
+        }
+    }
+#endif
 
   menu = gtk_menu_new ();
 
