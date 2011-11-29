@@ -1007,6 +1007,7 @@ main (int argc, char *argv[])
 
   if (do_export)
     {
+#if 0
       g_print ("Exporting menus on the bus...\n");
       if (!g_menu_exporter_export (bus, OBJ_PATH, model, &error))
         {
@@ -1020,6 +1021,7 @@ main (int argc, char *argv[])
           exit (1);
         }
       g_bus_own_name_on_connection (bus, BUS_NAME, 0, NULL, NULL, NULL, NULL);
+#endif
     }
   else
     {
