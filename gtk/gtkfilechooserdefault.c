@@ -4660,21 +4660,18 @@ location_switch_to_filename_entry (GtkFileChooserDefault *impl)
       impl->operation_mode == OPERATION_MODE_RECENT)
     return;
 
-  if (impl->location_entry)
-    {
-      gtk_widget_destroy (impl->location_entry);
-      impl->location_entry = NULL;
-    }
-
   /* Box */
 
   gtk_widget_show (impl->location_entry_box);
 
   /* Entry */
 
-  location_entry_create (impl);
-  gtk_box_pack_start (GTK_BOX (impl->location_entry_box), impl->location_entry, TRUE, TRUE, 0);
-  gtk_label_set_mnemonic_widget (GTK_LABEL (impl->location_label), impl->location_entry);
+  if (!impl->location_entry)
+    {
+      location_entry_create (impl);
+      gtk_box_pack_start (GTK_BOX (impl->location_entry_box), impl->location_entry, TRUE, TRUE, 0);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (impl->location_label), impl->location_entry);
+    }
 
   /* Configure the entry */
 
