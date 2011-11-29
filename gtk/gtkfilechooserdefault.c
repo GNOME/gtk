@@ -10131,7 +10131,6 @@ list_row_activated (GtkTreeView           *tree_view,
   if (is_folder && file)
     {
       change_folder_and_display_error (impl, file, FALSE);
-      g_object_unref (file);
       goto out;
     }
 
