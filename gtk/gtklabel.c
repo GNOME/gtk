@@ -4116,8 +4116,6 @@ gtk_label_draw (GtkWidget *widget,
 
   if (priv->text && (*priv->text != '\0'))
     {
-      GdkRGBA bg_color, fg_color;
-
       get_layout_location (label, &x, &y);
 
       context = gtk_widget_get_style_context (widget);
@@ -4137,6 +4135,7 @@ gtk_label_draw (GtkWidget *widget,
         {
           gint range[2];
           cairo_region_t *clip;
+          GdkRGBA bg_color, fg_color;
 
           range[0] = info->selection_anchor;
           range[1] = info->selection_end;
