@@ -33,8 +33,27 @@ struct _GtkApplicationWindowPrivate
   GSimpleActionGroup *actions;
   GtkMenuBar *menubar;
 
-  gboolean show_app_menu;
+  guint initialized_app_menu : 1;
+  guint default_show_app_menu : 1;
+  guint did_override_show_app_menu : 1;
+  guint override_show_app_menu : 1;
 };
+
+static void
+recalculate_app_menu_state (GtkApplicationWindow   *window);
+
+static void
+on_shell_shows_app_menu_changed (GtkSettings   *settings,
+				 GParamSpec    *pspec,
+				 gpointer       user_data)
+{
+  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (user_data);
+  gboolean val;
+
+  g_object_get (settings, "gtk-shell-shows-app-menu", &val, NULL);
+  window->priv->default_show_app_menu = !val;
+  recalculate_app_menu_state (window);
+}
 
 static gchar **
 gtk_application_window_list_actions (GActionGroup *group)
@@ -257,6 +276,25 @@ gtk_application_window_real_size_allocate (GtkWidget     *widget,
 }
 
 static void
+gtk_application_window_real_realize (GtkWidget *widget)
+{
+  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
+
+  if (!window->priv->initialized_app_menu)
+    {
+      window->priv->initialized_app_menu = TRUE;
+      g_signal_connect (gtk_widget_get_settings ((GtkWidget*)window),
+			"notify::gtk-shell-shows-app-menu",
+			G_CALLBACK (on_shell_shows_app_menu_changed),
+			window);
+      on_shell_shows_app_menu_changed (gtk_widget_get_settings ((GtkWidget*)window), NULL, window);
+    }
+
+  GTK_WIDGET_CLASS (gtk_application_window_parent_class)
+    ->realize (widget);
+}
+
+static void
 gtk_application_window_real_map (GtkWidget *widget)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
@@ -294,7 +332,7 @@ gtk_application_window_get_property (GObject *object, guint prop_id,
   switch (prop_id)
     {
     case PROP_SHOW_APP_MENU:
-      g_value_set_boolean (value, window->priv->show_app_menu);
+      g_value_set_boolean (value, window->priv->override_show_app_menu);
       break;
 
     default:
@@ -366,6 +404,7 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
   widget_class->get_preferred_width = gtk_application_window_real_get_preferred_width;
   widget_class->get_preferred_width_for_height = gtk_application_window_real_get_preferred_width_for_height;
   widget_class->size_allocate = gtk_application_window_real_size_allocate;
+  widget_class->realize = gtk_application_window_real_realize;
   widget_class->map = gtk_application_window_real_map;
   object_class->get_property = gtk_application_window_get_property;
   object_class->set_property = gtk_application_window_set_property;
@@ -392,37 +431,46 @@ gtk_application_window_new (GtkApplication *application)
 gboolean
 gtk_application_window_get_show_app_menu (GtkApplicationWindow *window)
 {
-  return window->priv->show_app_menu;
+  return window->priv->override_show_app_menu;
+}
+
+static void
+recalculate_app_menu_state (GtkApplicationWindow   *window)
+{
+  if ((window->priv->did_override_show_app_menu
+       && window->priv->override_show_app_menu)
+      || window->priv->default_show_app_menu)
+    {
+      GtkWidget *menubar;
+      GtkWidget *item;
+
+      item = gtk_menu_item_new_with_label ("Application");
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), gtk_application_window_get_app_menu (window));
+
+      menubar = gtk_menu_bar_new ();
+      window->priv->menubar = g_object_ref_sink (menubar);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menubar), item);
+      gtk_widget_set_parent (menubar, GTK_WIDGET (window));
+      gtk_widget_show_all (menubar);
+    }
+  else
+    {
+      gtk_widget_unparent (GTK_WIDGET (window->priv->menubar));
+      g_object_unref (window->priv->menubar);
+    }
 }
 
 void
 gtk_application_window_set_show_app_menu (GtkApplicationWindow *window,
                                           gboolean              show_app_menu)
 {
-  if (window->priv->show_app_menu != show_app_menu)
+  show_app_menu = !!show_app_menu;
+  window->priv->did_override_show_app_menu = TRUE;
+  if (window->priv->override_show_app_menu != show_app_menu)
     {
-      window->priv->show_app_menu = show_app_menu;
+      window->priv->override_show_app_menu = show_app_menu;
+      recalculate_app_menu_state (window);
       g_object_notify_by_pspec (G_OBJECT (window), gtk_application_window_properties[PROP_SHOW_APP_MENU]);
-
-      if (show_app_menu)
-        {
-          GtkWidget *menubar;
-          GtkWidget *item;
-
-          item = gtk_menu_item_new_with_label ("Application");
-          gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), gtk_application_window_get_app_menu (window));
-
-          menubar = gtk_menu_bar_new ();
-          window->priv->menubar = g_object_ref_sink (menubar);
-          gtk_menu_shell_append (GTK_MENU_SHELL (menubar), item);
-          gtk_widget_set_parent (menubar, GTK_WIDGET (window));
-          gtk_widget_show_all (menubar);
-        }
-      else
-        {
-          gtk_widget_unparent (GTK_WIDGET (window->priv->menubar));
-          g_object_unref (window->priv->menubar);
-        }
     }
 }
 
