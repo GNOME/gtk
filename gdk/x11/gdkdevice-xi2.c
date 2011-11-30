@@ -192,10 +192,12 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
 
       display = gdk_device_get_display (device);
 
+      gdk_x11_display_error_trap_push (display);
       info = XIQueryDevice (GDK_DISPLAY_XDISPLAY (display),
                             device_xi2->device_id, &ndevices);
+      gdk_x11_display_error_trap_pop_ignored (display);
 
-      for (i = 0, j = 0; i < info->num_classes; i++)
+      for (i = 0, j = 0; info && i < info->num_classes; i++)
         {
           XIAnyClassInfo *class_info = info->classes[i];
           GdkAxisUse use;
@@ -234,7 +236,8 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
           j++;
         }
 
-      XIFreeDeviceInfo (info);
+      if (info)
+        XIFreeDeviceInfo (info);
     }
 
   if (mask)
