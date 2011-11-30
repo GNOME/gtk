@@ -128,8 +128,15 @@ ensure_icon_size (GtkIconHelper *self,
 					       self->priv->icon_size,
 					       &width, &height))
     {
-      g_warning ("Invalid icon size %d\n", self->priv->icon_size);
-      width = height = 24;
+      if (self->priv->icon_size == GTK_ICON_SIZE_INVALID)
+        {
+          width = height = 0;
+        }
+      else
+        {
+          g_warning ("Invalid icon size %d\n", self->priv->icon_size);
+          width = height = 24;
+        }
     }
 
   *width_out = width;
