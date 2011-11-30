@@ -2,12 +2,6 @@
 #include <gtk/gtk.h>
 
 static void
-clicked (GtkButton *button, GtkMenu *menu)
-{
-  gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 0, 0);
-}
-
-static void
 show_about (GSimpleAction *action,
             GVariant      *parameter,
             gpointer       user_data)
@@ -55,28 +49,20 @@ static void
 new_window (GApplication *app,
             GFile        *file)
 {
-  GtkWidget *window, *grid, *scrolled, *view;
+  GtkWidget *window, *button, *grid, *scrolled, *view;
   GtkWidget *menu;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
   g_action_map_add_action_entries (G_ACTION_MAP (window), win_entries, G_N_ELEMENTS (win_entries), window);
-  gtk_application_window_set_show_app_menu (GTK_APPLICATION_WINDOW (window), TRUE);
   gtk_window_set_title (GTK_WINDOW (window), "Bloatpad");
 
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), grid);
 
-  menu = gtk_application_window_get_app_menu (GTK_APPLICATION_WINDOW (window));
-  if (menu != NULL)
-    {
-      GtkWidget *button;
-
-      button = gtk_button_new ();
-      gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("help-about", GTK_ICON_SIZE_MENU));
-      gtk_widget_set_halign (button, GTK_ALIGN_START);
-      gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
-      g_signal_connect (button, "clicked", G_CALLBACK (clicked), menu);
-    }
+  button = gtk_application_menu_button_new ();
+  gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("help-about", GTK_ICON_SIZE_MENU));
+  gtk_widget_set_halign (button, GTK_ALIGN_START);
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (scrolled, TRUE);
