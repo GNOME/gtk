@@ -417,6 +417,7 @@ gtk_private_h_sources =		\
 	gtkfontchooserprivate.h	\
 	gtkfontchooserutils.h	\
 	gtkiconcache.h		\
+	gtkiconhelperprivate.h  \
 	gtkimageprivate.h	\
 	gtkimmoduleprivate.h	\
 	gtkimcontextsimpleseqs.h \
@@ -595,6 +596,7 @@ gtk_base_c_sources = 		\
 	gtkiconcache.c		\
 	gtkiconcachevalidator.c	\
 	gtkiconfactory.c	\
+	gtkiconhelper.c		\
 	gtkicontheme.c		\
 	gtkiconview.c		\
 	gtkimage.c		\
