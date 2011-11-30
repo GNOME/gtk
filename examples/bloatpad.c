@@ -21,8 +21,34 @@ show_about (GSimpleAction *action,
                          NULL);
 }
 
+static void
+activate_toggle (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  GVariant *state;
+
+  state = g_action_get_state (G_ACTION (action));
+  g_action_change_state (G_ACTION (action), g_variant_new_boolean (!g_variant_get_boolean (state)));
+  g_object_unref (state);
+}
+
+static void
+change_fullscreen_state (GSimpleAction *action,
+                         GVariant      *state,
+                         gpointer       user_data)
+{
+  if (g_variant_get_boolean (state))
+    gtk_window_fullscreen (user_data);
+  else
+    gtk_window_unfullscreen (user_data);
+
+  g_simple_action_set_state (action, state);
+}
+
 static GActionEntry win_entries[] = {
-  { "about", show_about }
+  { "about", show_about },
+  { "fullscreen", activate_toggle, NULL, "false", change_fullscreen_state }
 };
 
 static void
@@ -191,6 +217,7 @@ get_menu (void)
   menu = g_menu_new ();
   g_menu_append (menu, "Help", "app.help");
   g_menu_append (menu, "About Bloatpad", "win.about");
+  g_menu_append (menu, "Fullscreen", "win.fullscreen");
   g_menu_append (menu, "Quit", "app.quit");
   g_menu_append (menu, "Add", "app.add");
 
