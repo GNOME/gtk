@@ -183,6 +183,7 @@ gtk_public_h_sources = 		\
 	gtkappchooserwidget.h	\
 	gtkapplication.h	\
 	gtkapplicationwindow.h	\
+	gtkapplicationmenubutton.h	\
 	gtkarrow.h		\
 	gtkaspectframe.h	\
 	gtkassistant.h		\
@@ -532,6 +533,7 @@ gtk_base_c_sources = 		\
 	gtkappchooseronline.c	\
 	gtkapplication.c	\
 	gtkapplicationwindow.c	\
+	gtkapplicationmenubutton.c	\
 	gtkanimationdescription.c \
 	gtkarrow.c		\
 	gtkaspectframe.c	\
