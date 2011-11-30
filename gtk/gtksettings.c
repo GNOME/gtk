@@ -203,7 +203,8 @@ enum {
   PROP_LABEL_SELECT_ON_FOCUS,
   PROP_COLOR_PALETTE,
   PROP_IM_PREEDIT_STYLE,
-  PROP_IM_STATUS_STYLE
+  PROP_IM_STATUS_STYLE,
+  PROP_SHELL_SHOWS_APP_MENU
 };
 
 /* --- prototypes --- */
@@ -1322,6 +1323,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                 GTK_PARAM_READWRITE),
                                              gtk_rc_property_parse_enum);
   g_assert (result == PROP_IM_STATUS_STYLE);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-shell-shows-app-menu",
+                                                                   P_("Desktop shell shows app menu"),
+                                                                   P_("Set to true if the desktop environment is displaying the app menu, FALSE if the app should display it itself."),
+                                                                   FALSE, GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_SHELL_SHOWS_APP_MENU);
+
 
   g_type_class_add_private (class, sizeof (GtkSettingsPrivate));
 }
