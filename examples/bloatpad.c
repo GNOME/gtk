@@ -8,6 +8,24 @@ clicked (GtkButton *button, GtkMenu *menu)
 }
 
 static void
+show_about (GSimpleAction *action,
+            GVariant      *parameter,
+            gpointer       user_data)
+{
+  GtkWindow *window = user_data;
+
+  gtk_show_about_dialog (window,
+                         "program-name", "Bloatpad",
+                         "title", "About Bloatpad",
+                         "comments", "Not much to say, really.",
+                         NULL);
+}
+
+static GActionEntry win_entries[] = {
+  { "about", show_about }
+};
+
+static void
 new_window (GApplication *app,
             GFile        *file)
 {
@@ -15,6 +33,7 @@ new_window (GApplication *app,
   GtkWidget *menu;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
+  g_action_map_add_action_entries (G_ACTION_MAP (window), win_entries, G_N_ELEMENTS (win_entries), window);
   gtk_application_window_set_show_app_menu (GTK_APPLICATION_WINDOW (window), TRUE);
   gtk_window_set_title (GTK_WINDOW (window), "Bloatpad");
 
@@ -98,24 +117,6 @@ show_help (GSimpleAction *action,
 }
 
 static void
-show_about (GSimpleAction *action,
-            GVariant      *parameter,
-            gpointer       user_data)
-{
-  GList *list;
-  GtkWindow *win;
-
-  list = gtk_application_get_windows (GTK_APPLICATION (g_application_get_default ()));
-  win = list->data;
-
-  gtk_show_about_dialog (win,
-                         "program-name", "Bloatpad",
-                         "title", "About Bloatpad",
-                         "comments", "Not much to say, really.",
-                         NULL);
-}
-
-static void
 quit_app (GSimpleAction *action,
           GVariant      *parameter,
           gpointer       user_data)
@@ -166,9 +167,8 @@ add_action (GSimpleAction *action,
   g_simple_action_set_enabled (G_SIMPLE_ACTION (remove), TRUE);
 }
 
-static GActionEntry entries[] = {
+static GActionEntry app_entries[] = {
   { "help", show_help, NULL, NULL, NULL },
-  { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_app, NULL, NULL, NULL },
   { "add", add_action, NULL, NULL, NULL },
   { "remove", remove_action, NULL, NULL, NULL }
@@ -179,7 +179,7 @@ get_actions (void)
 {
   actions = g_simple_action_group_new ();
   g_simple_action_group_add_entries (actions,
-                                     entries, G_N_ELEMENTS (entries),
+                                     app_entries, G_N_ELEMENTS (app_entries),
                                      NULL);
 
   return G_ACTION_GROUP (actions);
@@ -190,7 +190,7 @@ get_menu (void)
 {
   menu = g_menu_new ();
   g_menu_append (menu, "Help", "app.help");
-  g_menu_append (menu, "About Bloatpad", "app.about");
+  g_menu_append (menu, "About Bloatpad", "win.about");
   g_menu_append (menu, "Quit", "app.quit");
   g_menu_append (menu, "Add", "app.add");
 
