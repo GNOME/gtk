@@ -586,9 +586,14 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
     {
       if (ev->info[i].flags & XIDeviceEnabled)
         {
+          gdk_x11_display_error_trap_push (display);
           info = XIQueryDevice (xdisplay, ev->info[i].deviceid, &ndevices);
-          add_device (device_manager, &info[0], TRUE);
-          XIFreeDeviceInfo (info);
+          gdk_x11_display_error_trap_pop_ignored (display);
+          if (info)
+            {
+              add_device (device_manager, &info[0], TRUE);
+              XIFreeDeviceInfo (info);
+            }
         }
       else if (ev->info[i].flags & XIDeviceDisabled)
         remove_device (device_manager, ev->info[i].deviceid);
@@ -614,15 +619,20 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
           /* Add new master if it's an attachment event */
           if (ev->info[i].flags & XISlaveAttached)
             {
+              gdk_x11_display_error_trap_push (display);
               info = XIQueryDevice (xdisplay, ev->info[i].deviceid, &ndevices);
+              gdk_x11_display_error_trap_pop_ignored (display);
+              if (info)
+                {
+                  master = g_hash_table_lookup (device_manager->id_table,
+                                                GINT_TO_POINTER (info->attachment));
+                  XIFreeDeviceInfo (info);
 
-              master = g_hash_table_lookup (device_manager->id_table,
-                                            GINT_TO_POINTER (info->attachment));
+                  _gdk_device_set_associated_device (slave, master);
+                  _gdk_device_add_slave (master, slave);
 
-              _gdk_device_set_associated_device (slave, master);
-              _gdk_device_add_slave (master, slave);
-
-              g_signal_emit_by_name (device_manager, "device-changed", master);
+                  g_signal_emit_by_name (device_manager, "device-changed", master);
+                }
             }
 
           g_signal_emit_by_name (device_manager, "device-changed", slave);
