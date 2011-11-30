@@ -15,6 +15,7 @@ new_window (GApplication *app,
   GtkWidget *menu;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
+  gtk_application_window_set_show_app_menu (GTK_APPLICATION_WINDOW (window), TRUE);
   gtk_window_set_title (GTK_WINDOW (window), "Bloatpad");
 
   grid = gtk_grid_new ();

@@ -30,13 +30,80 @@
 
 struct _GtkApplicationWindowPrivate
 {
+  GSimpleActionGroup *actions;
   GtkMenuBar *menubar;
-  GMenuModel *menu;
 
   gboolean show_app_menu;
 };
 
-G_DEFINE_TYPE (GtkApplicationWindow, gtk_application_window, GTK_TYPE_WINDOW)
+static gchar **
+gtk_application_window_list_actions (GActionGroup *group)
+{
+  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (group);
+
+  return g_action_group_list_actions (G_ACTION_GROUP (window->priv->actions));
+}
+
+static gboolean
+gtk_application_window_query_action (GActionGroup        *group,
+                                     const gchar         *action_name,
+                                     gboolean            *enabled,
+                                     const GVariantType **parameter_type,
+                                     const GVariantType **state_type,
+                                     GVariant           **state_hint,
+                                     GVariant           **state)
+{
+  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (group);
+
+  return g_action_group_query_action (G_ACTION_GROUP (window->priv->actions),
+                                      action_name, enabled, parameter_type, state_type, state_hint, state);
+}
+
+static GAction *
+gtk_application_window_lookup_action (GActionMap *action_map,
+                                      const gchar *action_name)
+{
+  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (action_map);
+
+  return g_action_map_lookup_action (G_ACTION_MAP (window->priv->actions), action_name);
+}
+
+static void
+gtk_application_window_add_action (GActionMap *action_map,
+                                   GAction    *action)
+{
+  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (action_map);
+
+  g_action_map_add_action (G_ACTION_MAP (window->priv->actions), action);
+}
+
+static void
+gtk_application_window_remove_action (GActionMap  *action_map,
+                                      const gchar *action_name)
+{
+  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (action_map);
+
+  g_action_map_remove_action (G_ACTION_MAP (window->priv->actions), action_name);
+}
+
+static void
+gtk_application_window_group_iface_init (GActionGroupInterface *iface)
+{
+  iface->list_actions = gtk_application_window_list_actions;
+  iface->query_action = gtk_application_window_query_action;
+}
+
+static void
+gtk_application_window_map_iface_init (GActionMapInterface *iface)
+{
+  iface->lookup_action = gtk_application_window_lookup_action;
+  iface->add_action = gtk_application_window_add_action;
+  iface->remove_action = gtk_application_window_remove_action;
+}
+
+G_DEFINE_TYPE_WITH_CODE (GtkApplicationWindow, gtk_application_window, GTK_TYPE_WINDOW,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gtk_application_window_group_iface_init)
+                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_MAP, gtk_application_window_map_iface_init))
 
 enum {
   PROP_0,
@@ -238,8 +305,7 @@ gtk_application_window_finalize (GObject *object)
   if (window->priv->menubar)
     g_object_unref (window->priv->menubar);
 
-  if (window->priv->menu)
-    g_object_unref (window->priv->menu);
+  g_object_unref (window->priv->actions);
 
   G_OBJECT_CLASS (gtk_application_window_parent_class)
     ->finalize (object);
@@ -249,6 +315,20 @@ static void
 gtk_application_window_init (GtkApplicationWindow *window)
 {
   window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, GTK_TYPE_APPLICATION_WINDOW, GtkApplicationWindowPrivate);
+
+  window->priv->actions = g_simple_action_group_new ();
+
+  /* window->priv->actions is the one and only ref on the group, so when
+   * we finalize, the action group will die, disconnecting all signals.
+   */
+  g_signal_connect_swapped (window->priv->actions, "action-added",
+                            G_CALLBACK (g_action_group_action_added), window);
+  g_signal_connect_swapped (window->priv->actions, "action-enabled-changed",
+                            G_CALLBACK (g_action_group_action_enabled_changed), window);
+  g_signal_connect_swapped (window->priv->actions, "action-state-changed",
+                            G_CALLBACK (g_action_group_action_state_changed), window);
+  g_signal_connect_swapped (window->priv->actions, "action-removed",
+                            G_CALLBACK (g_action_group_action_removed), window);
 }
 
 static void
@@ -722,7 +802,9 @@ gtk_application_window_get_app_menu (GtkApplicationWindow *window)
 
   muxer = g_action_muxer_new ();
   g_action_muxer_insert (muxer, "app", G_ACTION_GROUP (application));
+  g_action_muxer_insert (muxer, "win", G_ACTION_GROUP (window));
   populate_menu_from_model (GTK_MENU_SHELL (menu), model, G_ACTION_GROUP (muxer));
+  g_object_unref (muxer);
 
   data = g_new (ItemsChangedData, 1);
   data->application = g_object_ref (application);
