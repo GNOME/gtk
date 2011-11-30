@@ -358,17 +358,15 @@ gtk_application_window_set_property (GObject *object, guint prop_id,
 }
 
 static void
-gtk_application_window_finalize (GObject *object)
+gtk_application_window_dispose (GObject *object)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (object);
 
-  if (window->priv->menubar)
-    g_object_unref (window->priv->menubar);
-
-  g_object_unref (window->priv->actions);
+  g_clear_object (&window->priv->menubar);
+  g_clear_object (&window->priv->actions);
 
   G_OBJECT_CLASS (gtk_application_window_parent_class)
-    ->finalize (object);
+    ->dispose (object);
 }
 
 static void
@@ -379,7 +377,7 @@ gtk_application_window_init (GtkApplicationWindow *window)
   window->priv->actions = g_simple_action_group_new ();
 
   /* window->priv->actions is the one and only ref on the group, so when
-   * we finalize, the action group will die, disconnecting all signals.
+   * we dispose, the action group will die, disconnecting all signals.
    */
   g_signal_connect_swapped (window->priv->actions, "action-added",
                             G_CALLBACK (g_action_group_action_added), window);
@@ -408,7 +406,7 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
   widget_class->map = gtk_application_window_real_map;
   object_class->get_property = gtk_application_window_get_property;
   object_class->set_property = gtk_application_window_set_property;
-  object_class->finalize = gtk_application_window_finalize;
+  object_class->dispose = gtk_application_window_dispose;
 
   gtk_application_window_properties[PROP_SHOW_APP_MENU] =
     g_param_spec_boolean ("show-app-menu", "show application menu",
