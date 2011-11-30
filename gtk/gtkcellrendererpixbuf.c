@@ -531,18 +531,14 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
           _gtk_icon_helper_set_pixbuf (icon_helper, priv->pixbuf_expander_closed);
         }
     }
-  else
-    {
-      icon_helper = g_object_ref (priv->icon_helper);
-    }
 
-  if (icon_helper != NULL)
-    {
-      _gtk_icon_helper_draw (icon_helper,
-                             context, cr,
-                             pix_rect.x, pix_rect.y);
-      g_object_unref (icon_helper);
-    }
+  if (icon_helper == NULL)
+    icon_helper = g_object_ref (priv->icon_helper);
+
+  _gtk_icon_helper_draw (icon_helper,
+                         context, cr,
+                         pix_rect.x, pix_rect.y);
+  g_object_unref (icon_helper);
 
   gtk_style_context_restore (context);
 }
