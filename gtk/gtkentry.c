@@ -2450,20 +2450,47 @@ gtk_entry_init (GtkEntry *entry)
   gtk_entry_update_cached_style_values (entry);
 }
 
+static void
+gtk_entry_prepare_context_for_icon (GtkEntry             *entry,
+                                    GtkStyleContext      *context,
+                                    GtkEntryIconPosition  icon_pos)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  EntryIconInfo *icon_info = priv->icons[icon_pos];
+  GtkWidget *widget;
+  GtkStateFlags state;
+
+  widget = GTK_WIDGET (entry);
+  state = GTK_STATE_FLAG_NORMAL;
+
+  if (!gtk_widget_is_sensitive (widget) || icon_info->insensitive)
+    state |= GTK_STATE_FLAG_INSENSITIVE;
+  else if (icon_info->prelight)
+    state |= GTK_STATE_FLAG_PRELIGHT;
+
+  gtk_style_context_save (context);
+
+  gtk_style_context_set_state (context, state);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
+}
+
 static gint
 get_icon_width (GtkEntry             *entry,
                 GtkEntryIconPosition  icon_pos)
 {
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = priv->icons[icon_pos];
+  GtkStyleContext *context;
   gint width;
 
   if (!icon_info)
     return 0;
 
-  _gtk_icon_helper_get_size (icon_info->icon_helper,
-                             gtk_widget_get_style_context (GTK_WIDGET (entry)),
+  context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+  gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
+  _gtk_icon_helper_get_size (icon_info->icon_helper, context,
                              &width, NULL);
+  gtk_style_context_restore (context);
 
   return width;
 }
@@ -3334,30 +3361,6 @@ should_prelight (GtkEntry             *entry,
                         NULL);
 
   return prelight;
-}
-
-static void
-gtk_entry_prepare_context_for_icon (GtkEntry             *entry,
-                                    GtkStyleContext      *context,
-                                    GtkEntryIconPosition  icon_pos)
-{
-  GtkEntryPrivate *priv = entry->priv;
-  EntryIconInfo *icon_info = priv->icons[icon_pos];
-  GtkWidget *widget;
-  GtkStateFlags state;
-
-  widget = GTK_WIDGET (entry);
-  state = GTK_STATE_FLAG_NORMAL;
-
-  if (!gtk_widget_is_sensitive (widget) || icon_info->insensitive)
-    state |= GTK_STATE_FLAG_INSENSITIVE;
-  else if (icon_info->prelight)
-    state |= GTK_STATE_FLAG_PRELIGHT;
-
-  gtk_style_context_save (context);
-
-  gtk_style_context_set_state (context, state);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
 }
 
 static void
