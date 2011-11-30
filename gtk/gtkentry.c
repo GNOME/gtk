@@ -572,6 +572,7 @@ static void         gtk_entry_move_adjustments         (GtkEntry             *en
 static GdkPixbuf *  gtk_entry_ensure_pixbuf            (GtkEntry             *entry,
                                                         GtkEntryIconPosition  icon_pos);
 static void         gtk_entry_update_cached_style_values(GtkEntry      *entry);
+static gboolean     get_middle_click_paste             (GtkEntry *entry);
 
 /* Completion */
 static gint         gtk_entry_completion_timeout       (gpointer            data);
@@ -3962,7 +3963,9 @@ gtk_entry_button_press (GtkWidget      *widget,
 
       return TRUE;
     }
-  else if (event->button == GDK_BUTTON_MIDDLE && event->type == GDK_BUTTON_PRESS)
+  else if (event->type == GDK_BUTTON_PRESS &&
+           event->button == GDK_BUTTON_MIDDLE &&
+           get_middle_click_paste (entry))
     {
       if (priv->editable)
         {
@@ -9155,6 +9158,18 @@ cursor_blinks (GtkEntry *entry)
     }
   else
     return FALSE;
+}
+
+static gboolean
+get_middle_click_paste (GtkEntry *entry)
+{
+  GtkSettings *settings;
+  gboolean paste;
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (entry));
+  g_object_get (settings, "gtk-enable-primary-paste", &paste, NULL);
+
+  return paste;
 }
 
 static gint

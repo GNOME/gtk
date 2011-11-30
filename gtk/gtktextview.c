@@ -338,7 +338,7 @@ static gboolean gtk_text_view_focus            (GtkWidget        *widget,
                                                 GtkDirectionType  direction);
 static void gtk_text_view_select_all           (GtkWidget        *widget,
                                                 gboolean          select);
-
+static gboolean get_middle_click_paste         (GtkTextView      *text_view);
 
 /* Source side drag signals */
 static void gtk_text_view_drag_begin       (GtkWidget        *widget,
@@ -4589,7 +4589,8 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
           return TRUE;
         }
-      else if (event->button == GDK_BUTTON_MIDDLE)
+      else if (event->button == GDK_BUTTON_MIDDLE &&
+               get_middle_click_paste (text_view))
         {
           GtkTextIter iter;
 
@@ -5050,6 +5051,18 @@ cursor_blinks (GtkTextView *text_view)
     }
 
   return FALSE;
+}
+
+static gboolean
+get_middle_click_paste (GtkTextView *text_view)
+{
+  GtkSettings *settings;
+  gboolean paste;
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
+  g_object_get (settings, "gtk-enable-primary-paste", &paste, NULL);
+
+  return paste;
 }
 
 static gint

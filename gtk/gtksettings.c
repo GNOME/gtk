@@ -209,7 +209,8 @@ enum {
   PROP_IM_PREEDIT_STYLE,
   PROP_IM_STATUS_STYLE,
   PROP_SHELL_SHOWS_APP_MENU,
-  PROP_SHELL_SHOWS_MENUBAR
+  PROP_SHELL_SHOWS_MENUBAR,
+  PROP_ENABLE_PRIMARY_PASTE
 };
 
 /* --- prototypes --- */
@@ -1354,6 +1355,23 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    FALSE, GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_SHELL_SHOWS_MENUBAR);
+
+  /**
+   * GtkSettings:gtk-enable-primary-paste:
+   *
+   * Whether a middle click on a mouse should paste the
+   * 'PRIMARY' clipboard content at the cursor location.
+   *
+   * Since: 3.4
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-enable-primary-paste",
+                                                                   P_("Enable primary paste"),
+                                                                   P_("Whether a middle click on a mouse should paste the 'PRIMARY' clipboard content at the cursor location."),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ENABLE_PRIMARY_PASTE);
 
   g_type_class_add_private (class, sizeof (GtkSettingsPrivate));
 }

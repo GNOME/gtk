@@ -81,7 +81,9 @@ static const char gdk_settings_names[] =
   "Gtk/AutoMnemonics\0"       "gtk-auto-mnemonics\0"
   "Gtk/VisibleFocus\0"        "gtk-visible-focus\0"
   "Gtk/ShellShowsAppMenu\0"   "gtk-shell-shows-app-menu\0"
-  "Gtk/ShellShowsMenubar\0"   "gtk-shell-shows-menubar\0";
+  "Gtk/ShellShowsMenubar\0"   "gtk-shell-shows-menubar\0"
+  "Gtk/EnablePrimaryPaste\0"  "gtk-enable-primary-paste\0";
+
 
 
 static const struct
@@ -137,5 +139,6 @@ static const struct
   { 1730, 1748 },
   { 1767, 1784 },
   { 1802, 1824 },
-  { 1849, 1871 }
+  { 1849, 1871 },
+  { 1895, 1918 }
 };
