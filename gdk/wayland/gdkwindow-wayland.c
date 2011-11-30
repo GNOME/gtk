@@ -387,15 +387,13 @@ gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
 {
   GdkWaylandCairoSurfaceData *data;
   cairo_surface_t *surface;
-  struct wl_visual *visual;
 
   data = g_new (GdkWaylandCairoSurfaceData, 1);
   data->display = display;
   data->buffer = NULL;
-  visual = display->premultiplied_argb_visual;
   data->width = width;
   data->height = height;
-  data->pixmap = wl_egl_pixmap_create(width, height, visual, 0);
+  data->pixmap = wl_egl_pixmap_create(width, height, 0);
   data->image =
     display->create_image(display->egl_display, NULL, EGL_NATIVE_PIXMAP_KHR,
 			  (EGLClientBuffer) data->pixmap, NULL);

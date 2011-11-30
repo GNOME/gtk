@@ -168,7 +168,6 @@ static GdkCursor *
 create_cursor(GdkDisplayWayland *display, GdkPixbuf *pixbuf, int x, int y)
 {
   GdkWaylandCursor *cursor;
-  struct wl_visual *visual;
   int stride, fd;
   char *filename;
   GError *error = NULL;
@@ -224,12 +223,11 @@ create_cursor(GdkDisplayWayland *display, GdkPixbuf *pixbuf, int x, int y)
   else
     memset (cursor->map, 0, 4);
 
-  visual = display->premultiplied_argb_visual;
   cursor->buffer = wl_shm_create_buffer(display->shm,
 					fd,
 					cursor->width,
 					cursor->height,
-					stride, visual);
+					stride, WL_SHM_FORMAT_ARGB32);
 
   close(fd);
 
