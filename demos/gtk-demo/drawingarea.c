@@ -205,7 +205,7 @@ close_window (void)
   window = NULL;
 
   if (surface)
-    g_object_unref (surface);
+    cairo_surface_destroy (surface);
   surface = NULL;
 }
 
