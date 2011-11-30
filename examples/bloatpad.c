@@ -24,7 +24,7 @@ activate_toggle (GSimpleAction *action,
 
   state = g_action_get_state (G_ACTION (action));
   g_action_change_state (G_ACTION (action), g_variant_new_boolean (!g_variant_get_boolean (state)));
-  g_object_unref (state);
+  g_variant_unref (state);
 }
 
 static void
