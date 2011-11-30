@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include "gtkcellrendererpixbuf.h"
 #include "gtkiconfactory.h"
+#include "gtkiconhelperprivate.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -54,9 +55,6 @@ static void gtk_cell_renderer_pixbuf_set_property  (GObject                    *
 						    guint                       param_id,
 						    const GValue               *value,
 						    GParamSpec                 *pspec);
-static void gtk_cell_renderer_pixbuf_finalize   (GObject                    *object);
-static void gtk_cell_renderer_pixbuf_create_stock_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
-							  GtkWidget             *widget);
 static void gtk_cell_renderer_pixbuf_get_size   (GtkCellRenderer            *cell,
 						 GtkWidget                  *widget,
 						 const GdkRectangle         *rectangle,
@@ -88,19 +86,14 @@ enum {
 
 struct _GtkCellRendererPixbufPrivate
 {
-  GdkPixbuf *pixbuf;
+  GtkIconHelper *icon_helper;
+
   GdkPixbuf *pixbuf_expander_open;
   GdkPixbuf *pixbuf_expander_closed;
 
-  GIcon *gicon;
-
-  GtkIconSize stock_size;
-
   gboolean follow_state;
 
-  gchar *stock_id;
   gchar *stock_detail;
-  gchar *icon_name;
 };
 
 
@@ -116,8 +109,25 @@ gtk_cell_renderer_pixbuf_init (GtkCellRendererPixbuf *cellpixbuf)
                                                   GTK_TYPE_CELL_RENDERER_PIXBUF,
                                                   GtkCellRendererPixbufPrivate);
   priv = cellpixbuf->priv;
+  priv->icon_helper = _gtk_icon_helper_new ();
+}
 
-  priv->stock_size = GTK_ICON_SIZE_MENU;
+static void
+gtk_cell_renderer_pixbuf_finalize (GObject *object)
+{
+  GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
+  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+
+  g_clear_object (&priv->icon_helper);
+
+  if (priv->pixbuf_expander_open)
+    g_object_unref (priv->pixbuf_expander_open);
+  if (priv->pixbuf_expander_closed)
+    g_object_unref (priv->pixbuf_expander_closed);
+
+  g_free (priv->stock_detail);
+
+  G_OBJECT_CLASS (gtk_cell_renderer_pixbuf_parent_class)->finalize (object);
 }
 
 static void
@@ -242,29 +252,6 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 }
 
 static void
-gtk_cell_renderer_pixbuf_finalize (GObject *object)
-{
-  GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
-  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
-
-  if (priv->pixbuf)
-    g_object_unref (priv->pixbuf);
-  if (priv->pixbuf_expander_open)
-    g_object_unref (priv->pixbuf_expander_open);
-  if (priv->pixbuf_expander_closed)
-    g_object_unref (priv->pixbuf_expander_closed);
-
-  g_free (priv->stock_id);
-  g_free (priv->stock_detail);
-  g_free (priv->icon_name);
-
-  if (priv->gicon)
-    g_object_unref (priv->gicon);
-
-  G_OBJECT_CLASS (gtk_cell_renderer_pixbuf_parent_class)->finalize (object);
-}
-
-static void
 gtk_cell_renderer_pixbuf_get_property (GObject        *object,
 				       guint           param_id,
 				       GValue         *value,
@@ -276,7 +263,7 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
   switch (param_id)
     {
     case PROP_PIXBUF:
-      g_value_set_object (value, priv->pixbuf);
+      g_value_set_object (value, _gtk_icon_helper_peek_pixbuf (priv->icon_helper));
       break;
     case PROP_PIXBUF_EXPANDER_OPEN:
       g_value_set_object (value, priv->pixbuf_expander_open);
@@ -285,10 +272,10 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
       g_value_set_object (value, priv->pixbuf_expander_closed);
       break;
     case PROP_STOCK_ID:
-      g_value_set_string (value, priv->stock_id);
+      g_value_set_string (value, _gtk_icon_helper_get_stock_id (priv->icon_helper));
       break;
     case PROP_STOCK_SIZE:
-      g_value_set_uint (value, priv->stock_size);
+      g_value_set_uint (value, _gtk_icon_helper_get_icon_size (priv->icon_helper));
       break;
     case PROP_STOCK_DETAIL:
       g_value_set_string (value, priv->stock_detail);
@@ -297,15 +284,43 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
       g_value_set_boolean (value, priv->follow_state);
       break;
     case PROP_ICON_NAME:
-      g_value_set_string (value, priv->icon_name);
+      g_value_set_string (value, _gtk_icon_helper_get_icon_name (priv->icon_helper));
       break;
     case PROP_GICON:
-      g_value_set_object (value, priv->gicon);
+      g_value_set_object (value, _gtk_icon_helper_peek_gicon (priv->icon_helper));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
     }
+}
+
+static void
+gtk_cell_renderer_pixbuf_reset (GtkCellRendererPixbuf *cellpixbuf)
+{
+  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+  GtkImageType storage_type = _gtk_icon_helper_get_storage_type (priv->icon_helper);
+
+  switch (storage_type)
+    {
+    case GTK_IMAGE_PIXBUF:
+      g_object_notify (G_OBJECT (cellpixbuf), "pixbuf");
+      break;
+    case GTK_IMAGE_STOCK:
+      g_object_notify (G_OBJECT (cellpixbuf), "stock-id");      
+      break;
+    case GTK_IMAGE_ICON_NAME:
+      g_object_notify (G_OBJECT (cellpixbuf), "icon-name");
+      break;
+    case GTK_IMAGE_GICON:
+      g_object_notify (G_OBJECT (cellpixbuf), "gicon");
+      break;
+    case GTK_IMAGE_EMPTY:
+    default:
+      break;
+    }
+
+  _gtk_icon_helper_clear (priv->icon_helper);
 }
 
 static void
@@ -320,30 +335,8 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
   switch (param_id)
     {
     case PROP_PIXBUF:
-      if (priv->pixbuf)
-        g_object_unref (priv->pixbuf);
-      priv->pixbuf = (GdkPixbuf*) g_value_dup_object (value);
-      if (priv->pixbuf)
-        {
-          if (priv->stock_id)
-            {
-              g_free (priv->stock_id);
-              priv->stock_id = NULL;
-              g_object_notify (object, "stock-id");
-            }
-          if (priv->icon_name)
-            {
-              g_free (priv->icon_name);
-              priv->icon_name = NULL;
-              g_object_notify (object, "icon-name");
-            }
-          if (priv->gicon)
-            {
-              g_object_unref (priv->gicon);
-              priv->gicon = NULL;
-              g_object_notify (object, "gicon");
-            }
-        }
+      gtk_cell_renderer_pixbuf_reset (cellpixbuf);
+      _gtk_icon_helper_set_pixbuf (priv->icon_helper, g_value_get_object (value));
       break;
     case PROP_PIXBUF_EXPANDER_OPEN:
       if (priv->pixbuf_expander_open)
@@ -356,116 +349,26 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       priv->pixbuf_expander_closed = (GdkPixbuf*) g_value_dup_object (value);
       break;
     case PROP_STOCK_ID:
-      if (priv->stock_id)
-        {
-          if (priv->pixbuf)
-            {
-              g_object_unref (priv->pixbuf);
-              priv->pixbuf = NULL;
-              g_object_notify (object, "pixbuf");
-            }
-          g_free (priv->stock_id);
-        }
-      priv->stock_id = g_value_dup_string (value);
-      if (priv->stock_id)
-        {
-          if (priv->pixbuf)
-            {
-              g_object_unref (priv->pixbuf);
-              priv->pixbuf = NULL;
-              g_object_notify (object, "pixbuf");
-            }
-          if (priv->icon_name)
-            {
-              g_free (priv->icon_name);
-              priv->icon_name = NULL;
-              g_object_notify (object, "icon-name");
-            }
-          if (priv->gicon)
-            {
-              g_object_unref (priv->gicon);
-              priv->gicon = NULL;
-              g_object_notify (object, "gicon");
-            }
-        }
+      gtk_cell_renderer_pixbuf_reset (cellpixbuf);
+      _gtk_icon_helper_set_stock_id (priv->icon_helper, g_value_get_string (value), GTK_ICON_SIZE_MENU);
       break;
     case PROP_STOCK_SIZE:
-      priv->stock_size = g_value_get_uint (value);
+      _gtk_icon_helper_set_icon_size (priv->icon_helper, g_value_get_uint (value));
       break;
     case PROP_STOCK_DETAIL:
       g_free (priv->stock_detail);
       priv->stock_detail = g_value_dup_string (value);
       break;
     case PROP_ICON_NAME:
-      if (priv->icon_name)
-        {
-          if (priv->pixbuf)
-            {
-              g_object_unref (priv->pixbuf);
-              priv->pixbuf = NULL;
-              g_object_notify (object, "pixbuf");
-            }
-          g_free (priv->icon_name);
-        }
-      priv->icon_name = g_value_dup_string (value);
-      if (priv->icon_name)
-        {
-          if (priv->pixbuf)
-            {
-              g_object_unref (priv->pixbuf);
-              priv->pixbuf = NULL;
-              g_object_notify (object, "pixbuf");
-            }
-          if (priv->stock_id)
-            {
-              g_free (priv->stock_id);
-              priv->stock_id = NULL;
-              g_object_notify (object, "stock-id");
-            }
-          if (priv->gicon)
-            {
-              g_object_unref (priv->gicon);
-              priv->gicon = NULL;
-              g_object_notify (object, "gicon");
-            }
-        }
+      gtk_cell_renderer_pixbuf_reset (cellpixbuf);
+      _gtk_icon_helper_set_icon_name (priv->icon_helper, g_value_get_string (value), GTK_ICON_SIZE_MENU);
       break;
     case PROP_FOLLOW_STATE:
       priv->follow_state = g_value_get_boolean (value);
       break;
     case PROP_GICON:
-      if (priv->gicon)
-        {
-          if (priv->pixbuf)
-            {
-              g_object_unref (priv->pixbuf);
-              priv->pixbuf = NULL;
-              g_object_notify (object, "pixbuf");
-            }
-          g_object_unref (priv->gicon);
-        }
-      priv->gicon = (GIcon *) g_value_dup_object (value);
-      if (priv->gicon)
-        {
-          if (priv->pixbuf)
-            {
-              g_object_unref (priv->pixbuf);
-              priv->pixbuf = NULL;
-              g_object_notify (object, "pixbuf");
-            }
-          if (priv->stock_id)
-            {
-              g_free (priv->stock_id);
-              priv->stock_id = NULL;
-              g_object_notify (object, "stock-id");
-            }
-          if (priv->icon_name)
-            {
-              g_free (priv->icon_name);
-              priv->icon_name = NULL;
-              g_object_notify (object, "icon-name");
-            }
-        }
+      gtk_cell_renderer_pixbuf_reset (cellpixbuf);
+      _gtk_icon_helper_set_gicon (priv->icon_helper, g_value_get_object (value), GTK_ICON_SIZE_MENU);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -493,144 +396,6 @@ gtk_cell_renderer_pixbuf_new (void)
 }
 
 static void
-gtk_cell_renderer_pixbuf_create_stock_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
-                                              GtkWidget             *widget)
-{
-  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
-
-  if (priv->pixbuf)
-    g_object_unref (priv->pixbuf);
-
-  priv->pixbuf = gtk_widget_render_icon_pixbuf (widget,
-                                                priv->stock_id,
-                                                priv->stock_size);
-
-  g_object_notify (G_OBJECT (cellpixbuf), "pixbuf");
-}
-
-static void 
-gtk_cell_renderer_pixbuf_create_themed_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
-					       GtkWidget             *widget)
-{
-  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
-  GdkScreen *screen;
-  GtkIconTheme *icon_theme;
-  GtkSettings *settings;
-  gint width, height;
-  GtkIconInfo *info;
-
-  if (priv->pixbuf)
-    {
-      g_object_unref (priv->pixbuf);
-      priv->pixbuf = NULL;
-    }
-
-  screen = gtk_widget_get_screen (GTK_WIDGET (widget));
-  icon_theme = gtk_icon_theme_get_for_screen (screen);
-  settings = gtk_settings_get_for_screen (screen);
-
-  if (!gtk_icon_size_lookup_for_settings (settings,
-					  priv->stock_size,
-					  &width, &height))
-    {
-      g_warning ("Invalid icon size %u\n", priv->stock_size);
-      width = height = 24;
-    }
-
-  if (priv->icon_name)
-    info = gtk_icon_theme_lookup_icon (icon_theme,
-                                       priv->icon_name,
-                                       MIN (width, height),
-                                       GTK_ICON_LOOKUP_USE_BUILTIN);
-  else if (priv->gicon)
-    info = gtk_icon_theme_lookup_by_gicon (icon_theme,
-                                           priv->gicon,
-                                           MIN (width, height),
-                                           GTK_ICON_LOOKUP_USE_BUILTIN);
-  else
-    info = NULL;
-
-  if (info)
-    {
-      GtkStyleContext *context;
-
-      context = gtk_widget_get_style_context (GTK_WIDGET (widget));
-      priv->pixbuf = gtk_icon_info_load_symbolic_for_context (info,
-                                                              context,
-                                                              NULL,
-                                                              NULL);
-      gtk_icon_info_free (info);
-    }
-
-  g_object_notify (G_OBJECT (cellpixbuf), "pixbuf");
-}
-
-static GdkPixbuf *
-create_symbolic_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
-			GtkWidget             *widget,
-                        GtkStateFlags          state)
-{
-  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
-  GdkScreen *screen;
-  GtkIconTheme *icon_theme;
-  GtkSettings *settings;
-  gint width, height;
-  GtkIconInfo *info;
-  GdkPixbuf *pixbuf;
-  gboolean is_symbolic;
-
-  screen = gtk_widget_get_screen (GTK_WIDGET (widget));
-  icon_theme = gtk_icon_theme_get_for_screen (screen);
-  settings = gtk_settings_get_for_screen (screen);
-
-  if (!gtk_icon_size_lookup_for_settings (settings,
-					  priv->stock_size,
-					  &width, &height))
-    {
-      g_warning ("Invalid icon size %u\n", priv->stock_size);
-      width = height = 24;
-    }
-
-
-  if (priv->icon_name)
-    info = gtk_icon_theme_lookup_icon (icon_theme,
-                                       priv->icon_name,
-                                       MIN (width, height),
-                                       GTK_ICON_LOOKUP_USE_BUILTIN);
-  else if (priv->gicon)
-    info = gtk_icon_theme_lookup_by_gicon (icon_theme,
-                                           priv->gicon,
-                                           MIN (width, height),
-                                           GTK_ICON_LOOKUP_USE_BUILTIN);
-  else
-    return NULL;
-
-  if (info)
-    {
-      GtkStyleContext *context;
-
-      context = gtk_widget_get_style_context (GTK_WIDGET (widget));
-
-      gtk_style_context_save (context);
-      gtk_style_context_set_state (context, state);
-      pixbuf = gtk_icon_info_load_symbolic_for_context (info,
-                                                        context,
-                                                        &is_symbolic,
-                                                        NULL);
-
-      gtk_style_context_restore (context);
-      gtk_icon_info_free (info);
-
-      if (!is_symbolic)
-	g_clear_object (&pixbuf);
-
-      return pixbuf;
-    }
-
-  return NULL;
-}
-
-static void
 gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
 				   GtkWidget          *widget,
 				   const GdkRectangle *cell_area,
@@ -647,19 +412,11 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
   gint calc_height;
   gint xpad, ypad;
 
-  if (!priv->pixbuf)
-    {
-      if (priv->stock_id)
-	gtk_cell_renderer_pixbuf_create_stock_pixbuf (cellpixbuf, widget);
-      else if (priv->icon_name || priv->gicon)
-	gtk_cell_renderer_pixbuf_create_themed_pixbuf (cellpixbuf, widget);
-    }
-  
-  if (priv->pixbuf)
-    {
-      pixbuf_width  = gdk_pixbuf_get_width (priv->pixbuf);
-      pixbuf_height = gdk_pixbuf_get_height (priv->pixbuf);
-    }
+  if (!_gtk_icon_helper_get_is_empty (priv->icon_helper))
+    _gtk_icon_helper_get_size (priv->icon_helper, 
+                               gtk_widget_get_style_context (widget),
+                               &pixbuf_width, &pixbuf_height);
+
   if (priv->pixbuf_expander_open)
     {
       pixbuf_width  = MAX (pixbuf_width, gdk_pixbuf_get_width (priv->pixbuf_expander_open));
@@ -707,30 +464,6 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
     *height = calc_height;
 }
 
-static GdkPixbuf *
-transform_pixbuf_state (GdkPixbuf *pixbuf,
-			GtkStyleContext *context)
-{
-  GtkIconSource *source;
-  GdkPixbuf *retval;
-
-  source = gtk_icon_source_new ();
-  gtk_icon_source_set_pixbuf (source, pixbuf);
-  /* The size here is arbitrary; since size isn't
-   * wildcarded in the source, it isn't supposed to be
-   * scaled by the engine function
-   */
-  gtk_icon_source_set_size (source, GTK_ICON_SIZE_SMALL_TOOLBAR);
-  gtk_icon_source_set_size_wildcarded (source, FALSE);
-
-  retval = gtk_render_icon_pixbuf (context, source,
-				   (GtkIconSize) -1);
-
-  gtk_icon_source_free (source);
-
-  return retval;
-}
-
 static void
 gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
                                  cairo_t              *cr,
@@ -743,12 +476,12 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;
   GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
   GtkStyleContext *context;
-  GdkPixbuf *pixbuf, *stated;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
   gboolean is_expander;
   gint xpad, ypad;
   GtkStateFlags state;
+  GtkIconHelper *icon_helper = NULL;
 
   gtk_cell_renderer_pixbuf_get_size (cell, widget, (GdkRectangle *) cell_area,
 				     &pix_rect.x, 
@@ -765,28 +498,6 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
     return;
 
-  pixbuf = priv->pixbuf;
-
-  g_object_get (cell, "is-expander", &is_expander, NULL);
-  if (is_expander)
-    {
-      gboolean is_expanded;
-
-      g_object_get (cell, "is-expanded", &is_expanded, NULL);
-
-      if (is_expanded &&
-	  priv->pixbuf_expander_open != NULL)
-	pixbuf = priv->pixbuf_expander_open;
-      else if (!is_expanded &&
-	       priv->pixbuf_expander_closed != NULL)
-	pixbuf = priv->pixbuf_expander_closed;
-    }
-
-  if (!pixbuf)
-    return;
-
-  g_object_ref (pixbuf);
-
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (context);
 
@@ -800,20 +511,38 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
 		     GTK_CELL_RENDERER_PRELIT)) != 0)
     state = gtk_cell_renderer_get_state (cell, widget, flags);
 
-  if (state != GTK_STATE_FLAG_NORMAL)
+  gtk_style_context_set_state (context, state);
+
+  g_object_get (cell, "is-expander", &is_expander, NULL);
+  if (is_expander)
     {
-      stated = create_symbolic_pixbuf (cellpixbuf, widget, state);
+      gboolean is_expanded;
 
-      if (!stated)
-	stated = transform_pixbuf_state (pixbuf, context);
+      g_object_get (cell, "is-expanded", &is_expanded, NULL);
 
-      g_object_unref (pixbuf);
-      pixbuf = stated;
+      if (is_expanded && priv->pixbuf_expander_open != NULL)
+        {
+          icon_helper = _gtk_icon_helper_new ();
+          _gtk_icon_helper_set_pixbuf (icon_helper, priv->pixbuf_expander_open);
+        }
+      else if (!is_expanded && priv->pixbuf_expander_closed != NULL)
+        {
+          icon_helper = _gtk_icon_helper_new ();
+          _gtk_icon_helper_set_pixbuf (icon_helper, priv->pixbuf_expander_closed);
+        }
+    }
+  else
+    {
+      icon_helper = g_object_ref (priv->icon_helper);
     }
 
-  gtk_render_icon (context, cr, pixbuf,
-                   pix_rect.x, pix_rect.y);
+  if (icon_helper != NULL)
+    {
+      _gtk_icon_helper_draw (icon_helper,
+                             context, cr,
+                             pix_rect.x, pix_rect.y);
+      g_object_unref (icon_helper);
+    }
 
   gtk_style_context_restore (context);
-  g_object_unref (pixbuf);
 }
