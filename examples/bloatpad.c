@@ -12,16 +12,15 @@ new_window (GApplication *app,
             GFile        *file)
 {
   GtkWidget *window, *grid, *scrolled, *view;
-  GtkMenu *menu;
+  GtkWidget *menu;
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_application (GTK_WINDOW (window), GTK_APPLICATION (app));
+  window = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_title (GTK_WINDOW (window), "Bloatpad");
 
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), grid);
 
-  menu = gtk_application_get_menu (GTK_APPLICATION (app));
+  menu = gtk_application_window_get_app_menu (GTK_APPLICATION_WINDOW (window));
   if (menu != NULL)
     {
       GtkWidget *button;
@@ -160,7 +159,7 @@ add_action (GSimpleAction *action,
 {
   GAction *remove;
 
-  g_menu_append (menu, "Remove", "remove");
+  g_menu_append (menu, "Remove", "app.remove");
   g_simple_action_set_enabled (action, FALSE);
   remove = g_simple_action_group_lookup (actions, "remove");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (remove), TRUE);
@@ -189,10 +188,10 @@ static GMenuModel *
 get_menu (void)
 {
   menu = g_menu_new ();
-  g_menu_append (menu, "Help", "help");
-  g_menu_append (menu, "About Bloatpad", "about");
-  g_menu_append (menu, "Quit", "quit");
-  g_menu_append (menu, "Add", "add");
+  g_menu_append (menu, "Help", "app.help");
+  g_menu_append (menu, "About Bloatpad", "app.about");
+  g_menu_append (menu, "Quit", "app.quit");
+  g_menu_append (menu, "Add", "app.add");
 
   return G_MENU_MODEL (menu);
 }
