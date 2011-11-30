@@ -59,6 +59,26 @@ gtk_application_window_query_action (GActionGroup        *group,
                                       action_name, enabled, parameter_type, state_type, state_hint, state);
 }
 
+static void
+gtk_application_window_activate_action (GActionGroup *group,
+                                        const gchar  *action_name,
+                                        GVariant     *parameter)
+{
+  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (group);
+
+  return g_action_group_activate_action (G_ACTION_GROUP (window->priv->actions), action_name, parameter);
+}
+
+static void
+gtk_application_window_change_action_state (GActionGroup *group,
+                                            const gchar  *action_name,
+                                            GVariant     *state)
+{
+  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (group);
+
+  return g_action_group_change_action_state (G_ACTION_GROUP (window->priv->actions), action_name, state);
+}
+
 static GAction *
 gtk_application_window_lookup_action (GActionMap *action_map,
                                       const gchar *action_name)
@@ -91,6 +111,8 @@ gtk_application_window_group_iface_init (GActionGroupInterface *iface)
 {
   iface->list_actions = gtk_application_window_list_actions;
   iface->query_action = gtk_application_window_query_action;
+  iface->activate_action = gtk_application_window_activate_action;
+  iface->change_action_state = gtk_application_window_change_action_state;
 }
 
 static void
