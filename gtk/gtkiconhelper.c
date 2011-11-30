@@ -66,7 +66,6 @@ _gtk_icon_helper_clear (GtkIconHelper *self)
 
   self->priv->storage_type = GTK_IMAGE_EMPTY;
   self->priv->icon_size = GTK_ICON_SIZE_INVALID;
-  self->priv->pixel_size = -1;
   self->priv->last_rendered_state = GTK_STATE_FLAG_NORMAL;
 }
 
