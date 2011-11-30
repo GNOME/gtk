@@ -50,7 +50,6 @@ new_window (GApplication *app,
             GFile        *file)
 {
   GtkWidget *window, *button, *grid, *scrolled, *view;
-  GtkWidget *menu;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
   g_action_map_add_action_entries (G_ACTION_MAP (window), win_entries, G_N_ELEMENTS (win_entries), window);
@@ -220,7 +219,7 @@ bloat_pad_init (BloatPad *app)
 static void
 bloat_pad_class_init (BloatPadClass *class)
 {
-  G_OBJECT_CLASS (class)->finalize= bloat_pad_finalize;
+  G_OBJECT_CLASS (class)->finalize = bloat_pad_finalize;
 
   G_APPLICATION_CLASS (class)->activate = bloat_pad_activate;
   G_APPLICATION_CLASS (class)->open = bloat_pad_open;
