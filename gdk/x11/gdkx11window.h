@@ -57,6 +57,9 @@ GType    gdk_x11_window_get_type          (void);
 Window   gdk_x11_window_get_xid           (GdkWindow   *window);
 void     gdk_x11_window_set_user_time     (GdkWindow   *window,
                                            guint32      timestamp);
+void     gdk_x11_window_set_utf8_property    (GdkWindow *window,
+					      const gchar *name,
+					      const gchar *value);
 void     gdk_x11_window_set_theme_variant (GdkWindow   *window,
                                            char        *variant);
 void     gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
