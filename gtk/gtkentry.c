@@ -39,6 +39,7 @@
 #include "gtkdnd.h"
 #include "gtkentry.h"
 #include "gtkentrybuffer.h"
+#include "gtkiconhelperprivate.h"
 #include "gtkimagemenuitem.h"
 #include "gtkimcontextsimple.h"
 #include "gtkimmulticontext.h"
@@ -227,13 +228,7 @@ struct _EntryIconInfo
   guint in_drag        : 1;
   guint pressed        : 1;
 
-  GtkImageType  storage_type;
-  GdkPixbuf    *pixbuf;
-  gchar        *stock_id;
-  gchar        *icon_name;
-  GIcon        *gicon;
-
-  GtkStateFlags last_state;
+  GtkIconHelper *icon_helper;
 
   GtkTargetList *target_list;
   GdkDragAction actions;
@@ -573,7 +568,7 @@ static void         get_frame_size                     (GtkEntry       *entry,
 							gint           *width,
 							gint           *height);
 static void         gtk_entry_move_adjustments         (GtkEntry             *entry);
-static void         gtk_entry_ensure_pixbuf            (GtkEntry             *entry,
+static GdkPixbuf *  gtk_entry_ensure_pixbuf            (GtkEntry             *entry,
                                                         GtkEntryIconPosition  icon_pos);
 static void         gtk_entry_update_cached_style_values(GtkEntry      *entry);
 
@@ -2461,20 +2456,16 @@ get_icon_width (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = priv->icons[icon_pos];
-  GdkScreen *screen;
-  GtkSettings *settings;
-  gint menu_icon_width;
+  gint width;
 
-  if (!icon_info || icon_info->pixbuf == NULL)
+  if (!icon_info)
     return 0;
 
-  screen = gtk_widget_get_screen (GTK_WIDGET (entry));
-  settings = gtk_settings_get_for_screen (screen);
+  _gtk_icon_helper_get_size (icon_info->icon_helper,
+                             gtk_widget_get_style_context (GTK_WIDGET (entry)),
+                             &width, NULL);
 
-  gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU,
-                                     &menu_icon_width, NULL);
-
-  return MAX (gdk_pixbuf_get_width (icon_info->pixbuf), menu_icon_width);
+  return width;
 }
 
 static void
@@ -2624,6 +2615,8 @@ gtk_entry_finalize (GObject *object)
               icon_info->target_list = NULL;
             }
 
+          g_clear_object (&icon_info->icon_helper);
+
           g_slice_free (EntryIconInfo, icon_info);
           priv->icons[i] = NULL;
         }
@@ -2745,7 +2738,8 @@ update_cursors (GtkWidget *widget)
     {
       if ((icon_info = priv->icons[i]) != NULL)
         {
-          if (icon_info->pixbuf != NULL && icon_info->window != NULL)
+          if (!_gtk_icon_helper_get_is_empty (icon_info->icon_helper) && 
+              icon_info->window != NULL)
             gdk_window_show_unraised (icon_info->window);
 
           /* The icon windows are not children of the visible entry window,
@@ -2820,6 +2814,8 @@ construct_icon_info (GtkWidget            *widget,
   icon_info = g_slice_new0 (EntryIconInfo);
   priv->icons[icon_pos] = icon_info;
 
+  icon_info->icon_helper = _gtk_icon_helper_new ();
+
   if (gtk_widget_get_realized (widget))
     realize_icon_info (widget, icon_pos);
 
@@ -2842,7 +2838,8 @@ gtk_entry_map (GtkWidget *widget)
     {
       if ((icon_info = priv->icons[i]) != NULL)
         {
-          if (icon_info->pixbuf != NULL && icon_info->window != NULL)
+          if (!_gtk_icon_helper_get_is_empty (icon_info->icon_helper) &&
+              icon_info->window != NULL)
             gdk_window_show (icon_info->window);
         }
     }
@@ -2862,7 +2859,8 @@ gtk_entry_unmap (GtkWidget *widget)
     {
       if ((icon_info = priv->icons[i]) != NULL)
         {
-          if (icon_info->pixbuf != NULL && icon_info->window != NULL)
+          if (!_gtk_icon_helper_get_is_empty (icon_info->icon_helper) && 
+              icon_info->window != NULL)
             gdk_window_hide (icon_info->window);
         }
     }
@@ -3339,6 +3337,30 @@ should_prelight (GtkEntry             *entry,
 }
 
 static void
+gtk_entry_prepare_context_for_icon (GtkEntry             *entry,
+                                    GtkStyleContext      *context,
+                                    GtkEntryIconPosition  icon_pos)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  EntryIconInfo *icon_info = priv->icons[icon_pos];
+  GtkWidget *widget;
+  GtkStateFlags state;
+
+  widget = GTK_WIDGET (entry);
+  state = GTK_STATE_FLAG_NORMAL;
+
+  if (!gtk_widget_is_sensitive (widget) || icon_info->insensitive)
+    state |= GTK_STATE_FLAG_INSENSITIVE;
+  else if (icon_info->prelight)
+    state |= GTK_STATE_FLAG_PRELIGHT;
+
+  gtk_style_context_save (context);
+
+  gtk_style_context_set_state (context, state);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
+}
+
+static void
 draw_icon (GtkWidget            *widget,
            cairo_t              *cr,
            GtkEntryIconPosition  icon_pos)
@@ -3346,49 +3368,37 @@ draw_icon (GtkWidget            *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = priv->icons[icon_pos];
-  GdkPixbuf *pixbuf;
-  gint x, y, width, height;
+  gint x, y, width, height, pix_width, pix_height;
   GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
 
   if (!icon_info)
     return;
 
-  gtk_entry_ensure_pixbuf (entry, icon_pos);
-
-  if (icon_info->pixbuf == NULL)
-    return;
+  cairo_save (cr);
+  gtk_cairo_transform_to_window (cr, widget, icon_info->window);
 
   width = gdk_window_get_width (icon_info->window);
   height = gdk_window_get_height (icon_info->window);
-
-  context = gtk_widget_get_style_context (widget);
 
   /* size_allocate hasn't been called yet. These are the default values.
    */
   if (width == 1 || height == 1)
     return;
 
-  pixbuf = icon_info->pixbuf;
-  g_object_ref (pixbuf);
+  gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
+  _gtk_icon_helper_get_size (icon_info->icon_helper, context, &pix_width, &pix_height);
 
-  if (gdk_pixbuf_get_height (pixbuf) > height)
-    {
-      GdkPixbuf *temp_pixbuf;
-      gint scale;
+  x = MAX (0, (width  - pix_width) / 2);
+  y = MAX (0, (height - pix_height) / 2);
 
-      scale = height - 2 * priv->icon_margin;
-      temp_pixbuf = gdk_pixbuf_scale_simple (pixbuf, scale, scale,
-                                             GDK_INTERP_BILINEAR);
-      g_object_unref (pixbuf);
-      pixbuf = temp_pixbuf;
-    }
+  _gtk_icon_helper_draw (icon_info->icon_helper,
+                         context, cr,
+                         x, y);
 
-  x = (width  - gdk_pixbuf_get_width (pixbuf)) / 2;
-  y = (height - gdk_pixbuf_get_height (pixbuf)) / 2;
-
-  gtk_render_icon (context, cr, pixbuf, x, y);
-
-  g_object_unref (pixbuf);
+  gtk_style_context_restore (context);
+  cairo_restore (cr);
 }
 
 
@@ -3585,15 +3595,7 @@ gtk_entry_draw (GtkWidget *widget,
       EntryIconInfo *icon_info = priv->icons[i];
 
       if (icon_info != NULL)
-        {
-          cairo_save (cr);
-
-          gtk_cairo_transform_to_window (cr, widget, icon_info->window);
-
-          draw_icon (widget, cr, i);
-
-          cairo_restore (cr);
-        }
+        draw_icon (widget, cr, i);
     }
 
   gtk_style_context_restore (context);
@@ -4506,14 +4508,7 @@ icon_theme_changed (GtkEntry *entry)
     {
       EntryIconInfo *icon_info = priv->icons[i];
       if (icon_info != NULL) 
-        {
-          if (icon_info->storage_type == GTK_IMAGE_ICON_NAME)
-            gtk_entry_set_icon_from_icon_name (entry, i, icon_info->icon_name);
-          else if (icon_info->storage_type == GTK_IMAGE_STOCK)
-            gtk_entry_set_icon_from_stock (entry, i, icon_info->stock_id);
-          else if (icon_info->storage_type == GTK_IMAGE_GICON)
-            gtk_entry_set_icon_from_gicon (entry, i, icon_info->gicon);
-        }
+        _gtk_icon_helper_invalidate (icon_info->icon_helper);
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (entry));
@@ -6656,8 +6651,9 @@ gtk_entry_clear (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = priv->icons[icon_pos];
+  GtkImageType storage_type;
 
-  if (!icon_info || icon_info->storage_type == GTK_IMAGE_EMPTY)
+  if (icon_info && _gtk_icon_helper_get_is_empty (icon_info->icon_helper))
     return;
 
   g_object_freeze_notify (G_OBJECT (entry));
@@ -6668,13 +6664,9 @@ gtk_entry_clear (GtkEntry             *entry,
   if (GDK_IS_WINDOW (icon_info->window))
     gdk_window_hide (icon_info->window);
 
-  if (icon_info->pixbuf)
-    {
-      g_object_unref (icon_info->pixbuf);
-      icon_info->pixbuf = NULL;
-    }
+  storage_type = _gtk_icon_helper_get_storage_type (icon_info->icon_helper);
 
-  switch (icon_info->storage_type)
+  switch (storage_type)
     {
     case GTK_IMAGE_PIXBUF:
       g_object_notify (G_OBJECT (entry),
@@ -6682,25 +6674,16 @@ gtk_entry_clear (GtkEntry             *entry,
       break;
 
     case GTK_IMAGE_STOCK:
-      g_free (icon_info->stock_id);
-      icon_info->stock_id = NULL;
       g_object_notify (G_OBJECT (entry),
                        icon_pos == GTK_ENTRY_ICON_PRIMARY ? "primary-icon-stock" : "secondary-icon-stock");
       break;
 
     case GTK_IMAGE_ICON_NAME:
-      g_free (icon_info->icon_name);
-      icon_info->icon_name = NULL;
       g_object_notify (G_OBJECT (entry),
                        icon_pos == GTK_ENTRY_ICON_PRIMARY ? "primary-icon-name" : "secondary-icon-name");
       break;
 
     case GTK_IMAGE_GICON:
-      if (icon_info->gicon)
-        {
-          g_object_unref (icon_info->gicon);
-          icon_info->gicon = NULL;
-        }
       g_object_notify (G_OBJECT (entry),
                        icon_pos == GTK_ENTRY_ICON_PRIMARY ? "primary-icon-gicon" : "secondary-icon-gicon");
       break;
@@ -6710,7 +6693,8 @@ gtk_entry_clear (GtkEntry             *entry,
       break;
     }
 
-  icon_info->storage_type = GTK_IMAGE_EMPTY;
+  _gtk_icon_helper_clear (icon_info->icon_helper);
+
   g_object_notify (G_OBJECT (entry),
                    icon_pos == GTK_ENTRY_ICON_PRIMARY ? "primary-icon-storage-type" : "secondary-icon-storage-type");
 
@@ -6718,178 +6702,24 @@ gtk_entry_clear (GtkEntry             *entry,
 }
 
 static GdkPixbuf *
-create_normal_pixbuf (GtkStyleContext *context,
-                      const gchar     *stock_id,
-                      GtkIconSize      icon_size)
-{
-  GtkIconSet *icon_set;
-  GdkPixbuf *pixbuf;
-
-  gtk_style_context_save (context);
-
-  /* Unset any state */
-  gtk_style_context_set_state (context, GTK_STATE_FLAG_NORMAL);
-
-  icon_set = gtk_style_context_lookup_icon_set (context, stock_id);
-  pixbuf = gtk_icon_set_render_icon_pixbuf (icon_set, context, icon_size);
-
-  gtk_style_context_restore (context);
-
-  return pixbuf;
-}
-
-static GdkPixbuf *
-ensure_stated_icon_from_info (GtkStyleContext *context,
-                              GtkIconInfo *info)
-{
-  GdkPixbuf *retval = NULL;
-  gboolean symbolic = FALSE;
-
-  if (info != NULL)
-    {
-      retval =
-        gtk_icon_info_load_symbolic_for_context (info,
-                                                 context,
-                                                 &symbolic,
-                                                 NULL);
-    }
-
-  if (retval == NULL)
-    {
-      retval =
-        create_normal_pixbuf (context,
-                              GTK_STOCK_MISSING_IMAGE,
-                              GTK_ICON_SIZE_MENU);
-    }
-  else if (!symbolic)
-    {
-      GdkPixbuf *temp_pixbuf;
-      GtkIconSource *icon_source;
-
-      icon_source = gtk_icon_source_new ();
-      gtk_icon_source_set_pixbuf (icon_source, retval);
-      gtk_icon_source_set_state_wildcarded (icon_source, TRUE);
-
-      temp_pixbuf = gtk_render_icon_pixbuf (context, icon_source, (GtkIconSize)-1);
-
-      gtk_icon_source_free (icon_source);
-
-      g_object_unref (retval);
-      retval = temp_pixbuf;
-    }
-
-  return retval;
-}
-
-static void
 gtk_entry_ensure_pixbuf (GtkEntry             *entry,
                          GtkEntryIconPosition  icon_pos)
 {
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = priv->icons[icon_pos];
   GtkStyleContext *context;
-  GtkIconInfo *info;
-  GtkIconTheme *icon_theme;
-  GtkSettings *settings;
-  GtkWidget *widget;
-  GdkScreen *screen;
-  gint width, height;
-  GtkStateFlags state;
+  GdkPixbuf *pix;
 
-  widget = GTK_WIDGET (entry);
-  context = gtk_widget_get_style_context (widget);
+  context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+  gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
 
-  state = GTK_STATE_FLAG_NORMAL;
-
-  if (!gtk_widget_is_sensitive (widget) || icon_info->insensitive)
-    state |= GTK_STATE_FLAG_INSENSITIVE;
-  else if (icon_info->prelight)
-    state |= GTK_STATE_FLAG_PRELIGHT;
-
-  if ((icon_info == NULL) ||
-      ((icon_info->pixbuf != NULL) && icon_info->last_state == state))
-    return;
-
-  icon_info->last_state = state;
-
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
-
-  switch (icon_info->storage_type)
-    {
-    case GTK_IMAGE_EMPTY:
-    case GTK_IMAGE_PIXBUF:
-      break;
-    case GTK_IMAGE_STOCK:
-      icon_info->pixbuf = create_normal_pixbuf (context, icon_info->stock_id,
-                                                GTK_ICON_SIZE_MENU);
-
-      if (!icon_info->pixbuf)
-        icon_info->pixbuf = create_normal_pixbuf (context,
-                                                  GTK_STOCK_MISSING_IMAGE,
-                                                  GTK_ICON_SIZE_MENU);
-      break;
-
-    case GTK_IMAGE_ICON_NAME:
-      screen = gtk_widget_get_screen (widget);
-      if (screen)
-        {
-          icon_theme = gtk_icon_theme_get_for_screen (screen);
-          settings = gtk_settings_get_for_screen (screen);
-
-          gtk_icon_size_lookup_for_settings (settings,
-                                             GTK_ICON_SIZE_MENU,
-                                             &width, &height);
-
-          info = gtk_icon_theme_lookup_icon (icon_theme,
-                                             icon_info->icon_name,
-                                             MIN (width, height), 
-                                             0);
-
-          icon_info->pixbuf =
-            ensure_stated_icon_from_info (context, info);
-
-          if (info)
-            gtk_icon_info_free (info);
-        }
-      break;
-
-    case GTK_IMAGE_GICON:
-      screen = gtk_widget_get_screen (widget);
-      if (screen)
-        {
-          icon_theme = gtk_icon_theme_get_for_screen (screen);
-          settings = gtk_settings_get_for_screen (screen);
-
-          gtk_icon_size_lookup_for_settings (settings,
-                                             GTK_ICON_SIZE_MENU,
-                                             &width, &height);
-
-          info = gtk_icon_theme_lookup_by_gicon (icon_theme,
-                                                 icon_info->gicon,
-                                                 MIN (width, height), 
-                                                 GTK_ICON_LOOKUP_USE_BUILTIN);
-
-          icon_info->pixbuf =
-            ensure_stated_icon_from_info (context, info);
-
-          if (info)
-            gtk_icon_info_free (info);
-        }
-      break;
-
-    default:
-      g_assert_not_reached ();
-      break;
-    }
+  pix = _gtk_icon_helper_ensure_pixbuf (icon_info->icon_helper,
+                                        context);
 
   gtk_style_context_restore (context);
 
-  if (icon_info->pixbuf != NULL && icon_info->window != NULL)
-    gdk_window_show_unraised (icon_info->window);
+  return pix;
 }
-
 
 /* Public API
  */
@@ -7824,8 +7654,7 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
 
   if (pixbuf)
     {
-      icon_info->storage_type = GTK_IMAGE_PIXBUF;
-      icon_info->pixbuf = pixbuf;
+      _gtk_icon_helper_set_pixbuf (icon_info->icon_helper, pixbuf);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -7840,9 +7669,9 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
 
       if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
           gdk_window_show_unraised (icon_info->window);
-    }
 
-  gtk_entry_ensure_pixbuf (entry, icon_pos);
+      g_object_unref (pixbuf);
+    }
   
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
@@ -7889,8 +7718,7 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
 
   if (new_id != NULL)
     {
-      icon_info->storage_type = GTK_IMAGE_STOCK;
-      icon_info->stock_id = new_id;
+      _gtk_icon_helper_set_stock_id (icon_info->icon_helper, new_id, GTK_ICON_SIZE_MENU);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -7905,9 +7733,9 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
 
       if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
           gdk_window_show_unraised (icon_info->window);
-    }
 
-  gtk_entry_ensure_pixbuf (entry, icon_pos);
+      g_free (new_id);
+    }
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
@@ -7957,8 +7785,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
 
   if (new_name != NULL)
     {
-      icon_info->storage_type = GTK_IMAGE_ICON_NAME;
-      icon_info->icon_name = new_name;
+      _gtk_icon_helper_set_icon_name (icon_info->icon_helper, new_name, GTK_ICON_SIZE_MENU);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -7973,9 +7800,9 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
 
       if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
           gdk_window_show_unraised (icon_info->window);
-    }
 
-  gtk_entry_ensure_pixbuf (entry, icon_pos);
+      g_free (new_name);
+    }
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
@@ -8024,8 +7851,7 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
 
   if (icon)
     {
-      icon_info->storage_type = GTK_IMAGE_GICON;
-      icon_info->gicon = icon;
+      _gtk_icon_helper_set_gicon (icon_info->icon_helper, icon, GTK_ICON_SIZE_MENU);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -8040,9 +7866,9 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
 
       if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
           gdk_window_show_unraised (icon_info->window);
-    }
 
-  gtk_entry_ensure_pixbuf (entry, icon_pos);
+      g_object_unref (icon);
+    }
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
@@ -8139,6 +7965,7 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv;
   EntryIconInfo *icon_info;
+  GdkPixbuf *pixbuf;
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
   g_return_val_if_fail (IS_VALID_ICON_POSITION (icon_pos), NULL);
@@ -8150,9 +7977,13 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  gtk_entry_ensure_pixbuf (entry, icon_pos);
+  /* HACK: unfortunately this is transfer none, so we need to return
+   * the icon helper's cache ref directly.
+   */
+  pixbuf = gtk_entry_ensure_pixbuf (entry, icon_pos);
+  g_object_unref (pixbuf);
 
-  return icon_info->pixbuf;
+  return pixbuf;
 }
 
 /**
@@ -8185,7 +8016,8 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  return icon_info->storage_type == GTK_IMAGE_GICON ? icon_info->gicon : NULL;
+  return _gtk_icon_helper_get_storage_type (icon_info->icon_helper) == GTK_IMAGE_GICON ? 
+    _gtk_icon_helper_peek_gicon (icon_info->icon_helper) : NULL;
 }
 
 /**
@@ -8218,7 +8050,9 @@ gtk_entry_get_icon_stock (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  return icon_info->storage_type == GTK_IMAGE_STOCK ? icon_info->stock_id : NULL;
+  return _gtk_icon_helper_get_storage_type (icon_info->icon_helper) == GTK_IMAGE_STOCK ? 
+    _gtk_icon_helper_get_stock_id (icon_info->icon_helper) : NULL;
+
 }
 
 /**
@@ -8251,7 +8085,9 @@ gtk_entry_get_icon_name (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  return icon_info->storage_type == GTK_IMAGE_ICON_NAME ? icon_info->icon_name : NULL;
+  return _gtk_icon_helper_get_storage_type (icon_info->icon_helper) == GTK_IMAGE_ICON_NAME ? 
+    _gtk_icon_helper_get_icon_name (icon_info->icon_helper) : NULL;
+
 }
 
 /**
@@ -8357,7 +8193,7 @@ gtk_entry_get_icon_storage_type (GtkEntry             *entry,
   if (!icon_info)
     return GTK_IMAGE_EMPTY;
 
-  return icon_info->storage_type;
+  return _gtk_icon_helper_get_storage_type (icon_info->icon_helper);
 }
 
 /**
@@ -9065,24 +8901,14 @@ gtk_entry_drag_begin (GtkWidget      *widget,
         {
           if (icon_info->in_drag) 
             {
-              switch (icon_info->storage_type)
-                {
-                case GTK_IMAGE_STOCK:
-                  gtk_drag_set_icon_stock (context, icon_info->stock_id, -2, -2);
-                  break;
+              GdkPixbuf *pix;
 
-                case GTK_IMAGE_ICON_NAME:
-                  gtk_drag_set_icon_name (context, icon_info->icon_name, -2, -2);
-                  break;
+              pix = _gtk_icon_helper_ensure_pixbuf
+                (icon_info->icon_helper,
+                 gtk_widget_get_style_context (GTK_WIDGET (entry)));
+              gtk_drag_set_icon_pixbuf (context, pix, -2, -2);
 
-                  /* FIXME: No GIcon support for dnd icons */
-                case GTK_IMAGE_GICON:
-                case GTK_IMAGE_PIXBUF:
-                  gtk_drag_set_icon_pixbuf (context, icon_info->pixbuf, -2, -2);
-                  break;
-                default:
-                  g_assert_not_reached ();
-                }
+              g_object_unref (pix);
             }
         }
     }
