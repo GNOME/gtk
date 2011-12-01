@@ -1,6 +1,31 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
+static void
+activate_toggle (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  GVariant *state;
+
+  state = g_action_get_state (G_ACTION (action));
+  g_action_change_state (G_ACTION (action), g_variant_new_boolean (!g_variant_get_boolean (state)));
+  g_variant_unref (state);
+}
+
+static void
+change_fullscreen_state (GSimpleAction *action,
+                         GVariant      *state,
+                         gpointer       user_data)
+{
+  if (g_variant_get_boolean (state))
+    gtk_window_fullscreen (user_data);
+  else
+    gtk_window_unfullscreen (user_data);
+
+  g_simple_action_set_state (action, state);
+}
+
 static GtkClipboard *
 get_clipboard (GtkWidget *widget)
 {
@@ -37,6 +62,7 @@ window_paste (GSimpleAction *action,
 static GActionEntry win_entries[] = {
   { "copy", window_copy, NULL, NULL, NULL },
   { "paste", window_paste, NULL, NULL, NULL },
+  { "fullscreen", activate_toggle, NULL, "false", change_fullscreen_state }
 };
 
 static void
@@ -178,17 +204,21 @@ static GMenuModel *
 create_window_menu (void)
 {
   GMenu *menu;
-  GMenu *edit_menu;
+  GMenu *submenu;
 
-  edit_menu = g_menu_new ();
-  g_menu_append (edit_menu, "_Copy", "win.copy");
-  g_menu_append (edit_menu, "_Paste", "win.paste");
-
-  g_menu_append (edit_menu, "_Fullscreen", "win.fullscreen");
+  submenu = g_menu_new ();
+  g_menu_append (submenu, "_Copy", "win.copy");
+  g_menu_append (submenu, "_Paste", "win.paste");
 
   menu = g_menu_new ();
-  g_menu_append_submenu (menu, "_Edit", (GMenuModel*)edit_menu);
-  g_object_unref (edit_menu);
+  g_menu_append_submenu (menu, "_Edit", (GMenuModel*)submenu);
+  g_object_unref (submenu);
+
+  submenu = g_menu_new ();
+  g_menu_append (submenu, "_Fullscreen", "win.fullscreen");
+
+  g_menu_append_submenu (menu, "_View", (GMenuModel*)submenu);
+  g_object_unref (submenu);
 
   return G_MENU_MODEL (menu);
 }
