@@ -714,7 +714,7 @@ gtk_image_set_from_file   (GtkImage    *image,
     {
       gtk_image_set_from_stock (image,
                                 GTK_STOCK_MISSING_IMAGE,
-                                GTK_ICON_SIZE_BUTTON);
+                                DEFAULT_ICON_SIZE);
       g_object_thaw_notify (G_OBJECT (image));
       return;
     }
