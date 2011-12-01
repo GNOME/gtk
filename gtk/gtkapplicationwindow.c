@@ -67,8 +67,8 @@ recalculate_app_menu_state (GtkApplicationWindow   *window);
 
 static void
 on_shell_shows_app_menu_changed (GtkSettings   *settings,
-				 GParamSpec    *pspec,
-				 gpointer       user_data)
+                                 GParamSpec    *pspec,
+                                 gpointer       user_data)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (user_data);
   gboolean val;
@@ -307,9 +307,9 @@ gtk_application_window_real_realize (GtkWidget *widget)
     {
       window->priv->initialized_app_menu = TRUE;
       g_signal_connect (gtk_widget_get_settings ((GtkWidget*)window),
-			"notify::gtk-shell-shows-app-menu",
-			G_CALLBACK (on_shell_shows_app_menu_changed),
-			window);
+                        "notify::gtk-shell-shows-app-menu",
+                        G_CALLBACK (on_shell_shows_app_menu_changed),
+                        window);
       on_shell_shows_app_menu_changed (gtk_widget_get_settings ((GtkWidget*)window), NULL, window);
     }
 
@@ -347,8 +347,10 @@ gtk_application_window_real_forall_internal (GtkContainer *container,
 
 
 static void
-gtk_application_window_get_property (GObject *object, guint prop_id,
-                                     GValue *value, GParamSpec *pspec)
+gtk_application_window_get_property (GObject    *object,
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (object);
 
@@ -364,8 +366,10 @@ gtk_application_window_get_property (GObject *object, guint prop_id,
 }
 
 static void
-gtk_application_window_set_property (GObject *object, guint prop_id,
-                                     const GValue *value, GParamSpec *pspec)
+gtk_application_window_set_property (GObject      *object,
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (object);
 
@@ -441,6 +445,16 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
   g_type_class_add_private (class, sizeof (GtkApplicationWindowPrivate));
 }
 
+/**
+ * gtk_application_window_new:
+ * @application: a #GtkApplication
+ *
+ * Creates a new #GtkApplicationWindow.
+ *
+ * Returns: a newly created #GtkApplicationWindow
+ *
+ * Since: 3.4
+ */
 GtkWidget *
 gtk_application_window_new (GtkApplication *application)
 {
@@ -908,3 +922,5 @@ gtk_application_window_get_app_menu (GtkApplicationWindow *window)
 
   return menu;
 }
+
+
