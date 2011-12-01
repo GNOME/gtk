@@ -7020,6 +7020,44 @@ GtkApplicationPrivate
 </SECTION>
 
 <SECTION>
+<FILE>gtkapplicationwindow</FILE>
+<TITLE>GtkApplicationWindow</TITLE>
+GtkApplicationWindow
+gtk_application_window_new
+gtk_application_window_set_show_app_menu
+gtk_application_window_get_show_app_menu
+gtk_application_window_get_app_menu
+
+<SUBSECTION Standard>
+GtkApplicationWindowClass
+GTK_TYPE_APPLICATION_WINDOW
+GTK_APPLICATION_WINDOW
+GTK_APPLICATION_WINDOW_CLASS
+GTK_IS_APPLICATION_WINDOW
+GTK_IS_APPLICATION_WINDOW_CLASS
+GTK_APPLICATION_WINDOW_GET_CLASS
+
+<SUBSECTION Private>
+gtk_application_window_get_type
+GtkApplicationWindowPrivate
+</SECTION>
+
+<SECTION>
+<FILE>gtkapplicationmenubutton</FILE>
+<TITLE>GtkApplicationMenuButton</TITLE>
+GtkApplicationMenuButton
+gtk_application_menu_button_new
+
+<SUBSECTION Standard>
+GTK_TYPE_APPLICATION_MENU_BUTTON
+GTK_APPLICATION_MENU_BUTTON
+GTK_IS_APPLICATION_MENU_BUTTON
+
+<SUBSECTION Private>
+gtk_application_menu_button_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkgrid</FILE>
 <TITLE>GtkGrid</TITLE>
 GtkGrid

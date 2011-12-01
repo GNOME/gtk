@@ -338,6 +338,8 @@
     <chapter id="Application">
       <title>Application support</title>
       <xi:include href="xml/gtkapplication.xml" />
+      <xi:include href="xml/gtkapplicationwindow.xml" />
+      <xi:include href="xml/gtkapplicationmenubutton.xml" />
     </chapter>
   </part>
 
