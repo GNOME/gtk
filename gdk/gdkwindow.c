@@ -3765,8 +3765,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 				     cairo_region_t *expose_region)
 {
   GdkWindow *child;
-  cairo_region_t *child_region;
-  GdkRectangle r;
+  cairo_region_t *clipped_expose_region;
   GList *l, *children;
 
   if (cairo_region_is_empty (expose_region))
@@ -3776,57 +3775,13 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
       window == window->impl_window)
     _gdk_window_add_damage ((GdkWindow *) window->impl_window, expose_region);
 
-  /* Make this reentrancy safe for expose handlers freeing windows */
-  children = g_list_copy (window->children);
-  g_list_foreach (children, (GFunc)g_object_ref, NULL);
 
-  /* Iterate over children, starting at topmost */
-  for (l = children; l != NULL; l = l->next)
-    {
-      child = l->data;
+  /* Paint the window before the children, clipped to the window region
+     with visible child windows removed */
+  clipped_expose_region = cairo_region_copy (expose_region);
+  cairo_region_intersect (clipped_expose_region, window->clip_region_with_children);
 
-      if (child->destroyed || !GDK_WINDOW_IS_MAPPED (child) || child->input_only || child->composited)
-	continue;
-
-      /* Ignore offscreen children, as they don't draw in their parent and
-       * don't take part in the clipping */
-      if (gdk_window_is_offscreen (child))
-	continue;
-
-      r.x = child->x;
-      r.y = child->y;
-      r.width = child->width;
-      r.height = child->height;
-
-      child_region = cairo_region_create_rectangle (&r);
-      if (child->shape)
-	{
-	  /* Adjust shape region to parent window coords */
-	  cairo_region_translate (child->shape, child->x, child->y);
-	  cairo_region_intersect (child_region, child->shape);
-	  cairo_region_translate (child->shape, -child->x, -child->y);
-	}
-
-      if (child->impl == window->impl)
-	{
-	  /* Client side child, expose */
-	  cairo_region_intersect (child_region, expose_region);
-	  cairo_region_subtract (expose_region, child_region);
-	  cairo_region_translate (child_region, -child->x, -child->y);
-	  _gdk_window_process_updates_recurse ((GdkWindow *)child, child_region);
-	}
-      else
-	{
-	  /* Native child, just remove area from expose region */
-	  cairo_region_subtract (expose_region, child_region);
-	}
-      cairo_region_destroy (child_region);
-    }
-
-  g_list_foreach (children, (GFunc)g_object_unref, NULL);
-  g_list_free (children);
-
-  if (!cairo_region_is_empty (expose_region) &&
+  if (!cairo_region_is_empty (clipped_expose_region) &&
       !window->destroyed)
     {
       if (window->event_mask & GDK_EXPOSURE_MASK)
@@ -3837,8 +3792,8 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 	  event.expose.window = g_object_ref (window);
 	  event.expose.send_event = FALSE;
 	  event.expose.count = 0;
-	  event.expose.region = expose_region;
-	  cairo_region_get_extents (expose_region, &event.expose.area);
+	  event.expose.region = clipped_expose_region;
+	  cairo_region_get_extents (clipped_expose_region, &event.expose.area);
 
           _gdk_event_emit (&event);
 
@@ -3857,11 +3812,42 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 	   * We use begin/end_paint around the clear so that we can
 	   * piggyback on the implicit paint */
 
-	  gdk_window_begin_paint_region (window, expose_region);
-	  gdk_window_clear_region_internal (window, expose_region);
+	  gdk_window_begin_paint_region (window, clipped_expose_region);
+	  gdk_window_clear_region_internal (window, clipped_expose_region);
 	  gdk_window_end_paint (window);
 	}
     }
+  cairo_region_destroy (clipped_expose_region);
+
+  /* Make this reentrancy safe for expose handlers freeing windows */
+  children = g_list_copy (window->children);
+  g_list_foreach (children, (GFunc)g_object_ref, NULL);
+
+  /* Iterate over children, starting at bottommost */
+  for (l = g_list_last (children); l != NULL; l = l->prev)
+    {
+      child = l->data;
+
+      if (child->destroyed || !GDK_WINDOW_IS_MAPPED (child) || child->input_only || child->composited)
+	continue;
+
+      /* Ignore offscreen children, as they don't draw in their parent and
+       * don't take part in the clipping */
+      if (gdk_window_is_offscreen (child))
+	continue;
+
+      /* Client side child, expose */
+      if (child->impl == window->impl)
+	{
+	  cairo_region_translate (expose_region, -child->x, -child->y);
+	  _gdk_window_process_updates_recurse ((GdkWindow *)child, expose_region);
+	  cairo_region_translate (expose_region, child->x, child->y);
+	}
+    }
+
+  g_list_foreach (children, (GFunc)g_object_unref, NULL);
+  g_list_free (children);
+
 }
 
 /* Process and remove any invalid area on the native window by creating
