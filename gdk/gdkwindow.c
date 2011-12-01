@@ -6476,6 +6476,9 @@ void
 gdk_window_set_background_pattern (GdkWindow *window,
                                    cairo_pattern_t *pattern)
 {
+  gboolean has_alpha;
+  cairo_pattern_type_t type;
+  
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (window->input_only)
@@ -6487,6 +6490,54 @@ gdk_window_set_background_pattern (GdkWindow *window,
     cairo_pattern_destroy (window->background);
   window->background = pattern;
 
+  has_alpha = TRUE;
+  type = cairo_pattern_get_type (pattern);
+  
+  if (type == CAIRO_PATTERN_TYPE_SOLID)
+    {
+      double alpha;
+      cairo_pattern_get_rgba (pattern, NULL, NULL, NULL, &alpha);
+      if (alpha == 1.0)
+	has_alpha = FALSE;
+    }
+  else if (type == CAIRO_PATTERN_TYPE_LINEAR ||
+	   type == CAIRO_PATTERN_TYPE_RADIAL)
+    {
+      int i, n;
+      double alpha;
+
+      n = 0;
+      cairo_pattern_get_color_stop_count (pattern, &n);
+      has_alpha = FALSE;
+      for (i = 0; i < n; i++)
+	{
+	  cairo_pattern_get_color_stop_rgba (pattern, i, NULL,
+					     NULL, NULL, NULL, &alpha);
+	  if (alpha != 1.0)
+	    {
+	      has_alpha = TRUE;
+	      break;
+	    }
+	}
+    }
+  else if (type == CAIRO_PATTERN_TYPE_SURFACE)
+    {
+      cairo_surface_t *surface;
+      cairo_content_t content;
+
+      cairo_pattern_get_surface (pattern, &surface);
+      content = cairo_surface_get_content (surface);
+      has_alpha =
+	(content == CAIRO_CONTENT_ALPHA) ||
+	(content == CAIRO_CONTENT_COLOR_ALPHA);
+    }
+  
+  if (has_alpha != window->has_alpha_background)
+    {
+      window->has_alpha_background = has_alpha;  
+      recompute_visible_regions (window, TRUE, FALSE);
+    }
+  
   if (gdk_window_has_impl (window))
     {
       GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);

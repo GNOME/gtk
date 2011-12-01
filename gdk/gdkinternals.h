@@ -204,6 +204,7 @@ struct _GdkWindow
   guint input_only : 1;
   guint modal_hint : 1;
   guint composited : 1;
+  guint has_alpha_background : 1;
 
   guint destroyed : 2;
 
