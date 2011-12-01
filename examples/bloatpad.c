@@ -188,6 +188,7 @@ create_window_menu (void)
 
   menu = g_menu_new ();
   g_menu_append_submenu (menu, "_Edit", (GMenuModel*)edit_menu);
+  g_object_unref (edit_menu);
 
   return G_MENU_MODEL (menu);
 }
