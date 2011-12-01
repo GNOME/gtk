@@ -77,7 +77,6 @@ void                    gtk_application_remove_window                   (GtkAppl
 
 GList *                 gtk_application_get_windows                     (GtkApplication    *application);
 
-GtkMenu *               gtk_application_get_menu                        (GtkApplication    *application);
 
 G_END_DECLS
 
