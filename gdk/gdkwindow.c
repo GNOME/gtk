@@ -205,7 +205,6 @@ struct _GdkWindowPaint
   cairo_surface_t *surface;
   guint uses_implicit : 1;
   guint flushed : 1;
-  guint32 region_tag;
 };
 
 typedef struct {
@@ -262,14 +261,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static gpointer parent_class = NULL;
 
 static const cairo_user_data_key_t gdk_window_cairo_key;
-
-static guint32
-new_region_tag (void)
-{
-  static guint32 tag = 0;
-
-  return ++tag;
-}
 
 G_DEFINE_ABSTRACT_TYPE (GdkWindow, gdk_window, G_TYPE_OBJECT)
 
@@ -948,10 +939,6 @@ recompute_visible_regions_internal (GdkWindow *private,
       private->clip_region_with_children = cairo_region_copy (private->clip_region);
       if (private->window_type != GDK_WINDOW_ROOT)
 	remove_child_area (private, NULL, FALSE, private->clip_region_with_children);
-
-      if (clip_region_changed ||
-	  !cairo_region_equal (private->clip_region_with_children, old_clip_region_with_children))
-	  private->clip_tag = new_region_tag ();
 
       if (old_clip_region_with_children)
 	cairo_region_destroy (old_clip_region_with_children);
@@ -2859,7 +2846,6 @@ gdk_window_begin_paint_region (GdkWindow       *window,
 
   paint = g_new (GdkWindowPaint, 1);
   paint->region = cairo_region_copy (region);
-  paint->region_tag = new_region_tag ();
 
   cairo_region_intersect (paint->region, window->clip_region_with_children);
   cairo_region_get_extents (paint->region, &clip_box);

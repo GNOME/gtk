@@ -227,7 +227,6 @@ struct _GdkWindow
 
   gint abs_x, abs_y; /* Absolute offset in impl */
   gint width, height;
-  guint32 clip_tag;
 
   cairo_region_t *clip_region; /* Clip region (wrt toplevel) in window coords */
   cairo_region_t *clip_region_with_children; /* Clip region in window coords */
