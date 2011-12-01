@@ -623,7 +623,7 @@ create_menuitem_from_model (GMenuModel   *model,
     type = NULL;
 
   if (type == NULL)
-    w = gtk_menu_item_new_with_mnemonic (label);
+    w = gtk_menu_item_new_with_label (label);
   else if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
     w = gtk_check_menu_item_new_with_label (label);
   else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
@@ -633,6 +633,8 @@ create_menuitem_from_model (GMenuModel   *model,
     }
   else
     g_assert_not_reached ();
+
+  gtk_menu_item_set_use_underline (GTK_MENU_ITEM (w), TRUE);
 
   if (action != NULL)
     {
