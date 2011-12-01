@@ -180,7 +180,7 @@ gtk_application_menu_button_hierarchy_changed (GtkWidget *widget,
 
   toplevel = gtk_widget_get_toplevel (widget);
 
-  if (toplevel != NULL && GTK_IS_APPLICATION_WINDOW (toplevel))
+  if (GTK_IS_APPLICATION_WINDOW (toplevel))
     gtk_application_window_set_show_app_menu (GTK_APPLICATION_WINDOW (toplevel), FALSE);
 }
 
