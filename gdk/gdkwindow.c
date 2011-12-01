@@ -6409,12 +6409,17 @@ gdk_window_move_region (GdkWindow       *window,
   impl_window = gdk_window_get_impl_window (window);
 
   /* compute source regions */
-  copy_area = cairo_region_copy (region);
+  if (window->has_alpha_background)
+    copy_area = cairo_region_create (); /* Copy nothing for alpha windows */
+  else
+    copy_area = cairo_region_copy (region);
   cairo_region_intersect (copy_area, window->clip_region_with_children);
+  cairo_region_subtract (copy_area, window->layered_region);
 
   /* compute destination regions */
   cairo_region_translate (copy_area, dx, dy);
   cairo_region_intersect (copy_area, window->clip_region_with_children);
+  cairo_region_subtract (copy_area, window->layered_region);
 
   /* Invalidate parts of the region (source and dest) not covered
      by the copy */
