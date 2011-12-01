@@ -195,10 +195,10 @@ static GMenuModel *
 get_menu (void)
 {
   menu = g_menu_new ();
-  g_menu_append (menu, "Help", "app.help");
-  g_menu_append (menu, "About Bloatpad", "win.about");
-  g_menu_append (menu, "Fullscreen", "win.fullscreen");
-  g_menu_append (menu, "Quit", "app.quit");
+  g_menu_append (menu, "_Help", "app.help");
+  g_menu_append (menu, "_About Bloatpad", "win.about");
+  g_menu_append (menu, "_Fullscreen", "win.fullscreen");
+  g_menu_append (menu, "_Quit", "app.quit");
   g_menu_append (menu, "Add", "app.add");
 
   return G_MENU_MODEL (menu);
