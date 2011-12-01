@@ -27,6 +27,7 @@
 #include "gtkcheckmenuitem.h"
 #include "gtkmenubar.h"
 #include "gactionmuxer.h"
+#include "gtkintl.h"
 
 /**
  * SECTION:gtkapplicationwindow
@@ -431,8 +432,10 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
   object_class->dispose = gtk_application_window_dispose;
 
   gtk_application_window_properties[PROP_SHOW_APP_MENU] =
-    g_param_spec_boolean ("show-app-menu", "show application menu",
-                          "TRUE if the application menu should be included in the menubar at the top of the window",
+    g_param_spec_boolean ("show-app-menu",
+                          P_("Show application menu"),
+                          P_("TRUE if the application menu should be included "
+                             "in the menubar at the top of the window"),
                           FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE);
   g_object_class_install_properties (object_class, N_PROPS, gtk_application_window_properties);
   g_type_class_add_private (class, sizeof (GtkApplicationWindowPrivate));
@@ -864,8 +867,6 @@ items_changed (GMenuModel *model,
  *
  * This function returns %NULL if @window has no associated
  * menu model.
- *
- * @menu may be a #GtkMenu or a #GtkMenuBar.
  *
  * Returns: A #GtkMenu that has been populated from the
  *     #GMenuModel that is associated with @window, or %NULL
