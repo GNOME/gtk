@@ -322,7 +322,7 @@ gtk_application_window_real_map (GtkWidget *widget)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
 
-  /* XXX could elimate this by tweaking gtk_window_map */
+  /* XXX could eliminate this by tweaking gtk_window_map */
   if (window->priv->menubar)
     gtk_widget_map (GTK_WIDGET (window->priv->menubar));
 
@@ -467,7 +467,7 @@ recalculate_app_menu_state (GtkApplicationWindow   *window)
       GtkWidget *menubar;
       GtkWidget *item;
 
-      item = gtk_menu_item_new_with_label ("Application");
+      item = gtk_menu_item_new_with_label (_("Application"));
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), gtk_application_window_get_app_menu (window));
 
       menubar = gtk_menu_bar_new ();
