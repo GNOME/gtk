@@ -380,6 +380,9 @@ gtk_image_set_property (GObject      *object,
   GtkImagePrivate *priv = image->priv;
   GtkIconSize icon_size = _gtk_icon_helper_get_icon_size (priv->icon_helper);
 
+  if (icon_size == GTK_ICON_SIZE_INVALID)
+    icon_size = DEFAULT_ICON_SIZE;
+
   switch (prop_id)
     {
     case PROP_PIXBUF:
