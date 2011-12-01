@@ -5979,7 +5979,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
 				 gint       width,
 				 gint       height)
 {
-  cairo_region_t *old_region, *new_region, *copy_area;
+  cairo_region_t *old_region, *old_layered, *new_region, *copy_area;
   cairo_region_t *old_native_child_region, *new_native_child_region;
   GdkWindow *impl_window;
   GdkWindowImplClass *impl_class;
@@ -6012,6 +6012,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
 
   expose = FALSE;
   old_region = NULL;
+  old_layered = NULL;
 
   impl_window = gdk_window_get_impl_window (window);
 
@@ -6025,8 +6026,10 @@ gdk_window_move_resize_internal (GdkWindow *window,
       expose = TRUE;
 
       old_region = cairo_region_copy (window->clip_region);
-      /* Adjust region to parent window coords */
+      old_layered = cairo_region_copy (window->layered_region);
+      /* Adjust regions to parent window coords */
       cairo_region_translate (old_region, window->x, window->y);
+      cairo_region_translate (old_layered, window->x, window->y);
 
       old_native_child_region = collect_native_child_region (window, TRUE);
       if (old_native_child_region)
@@ -6106,7 +6109,19 @@ gdk_window_move_resize_internal (GdkWindow *window,
        * Everything in the old and new regions that is not copied must be
        * invalidated (including children) as this is newly exposed
        */
-      copy_area = cairo_region_copy (new_region);
+      if (window->has_alpha_background)
+	copy_area = cairo_region_create (); /* Copy nothing for alpha windows */
+      else
+	copy_area = cairo_region_copy (new_region);
+
+      /* Don't copy from a previously layered region */
+      cairo_region_translate (old_layered, dx, dy);
+      cairo_region_subtract (copy_area, old_layered);
+
+      /* Don't copy into a layered region */
+      cairo_region_translate (copy_area, -window->x, -window->y);
+      cairo_region_subtract (copy_area, window->layered_region);
+      cairo_region_translate (copy_area, window->x, window->y);
 
       cairo_region_union (new_region, old_region);
 
@@ -6155,6 +6170,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
       gdk_window_invalidate_region_full (window->parent, new_region, TRUE, CLEAR_BG_ALL);
 
       cairo_region_destroy (old_region);
+      cairo_region_destroy (old_layered);
       cairo_region_destroy (new_region);
     }
 
