@@ -1,48 +1,42 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
-static void
-show_about (GSimpleAction *action,
-            GVariant      *parameter,
-            gpointer       user_data)
+static GtkClipboard *
+get_clipboard (GtkWidget *widget)
 {
-  GtkWindow *window = user_data;
-
-  gtk_show_about_dialog (window,
-                         "program-name", "Bloatpad",
-                         "title", "About Bloatpad",
-                         "comments", "Not much to say, really.",
-                         NULL);
+  return gtk_widget_get_clipboard (widget, gdk_atom_intern_static_string ("CLIPBOARD"));
 }
 
 static void
-activate_toggle (GSimpleAction *action,
-                 GVariant      *parameter,
-                 gpointer       user_data)
+window_copy (GSimpleAction *action,
+	     GVariant      *parameter,
+	     gpointer       user_data)
 {
-  GVariant *state;
+  GtkWindow *window = GTK_WINDOW (user_data);
+  GtkTextView *text = g_object_get_data ((GObject*)window, "bloatpad-text");
 
-  state = g_action_get_state (G_ACTION (action));
-  g_action_change_state (G_ACTION (action), g_variant_new_boolean (!g_variant_get_boolean (state)));
-  g_variant_unref (state);
+  gtk_text_buffer_copy_clipboard (gtk_text_view_get_buffer (text),
+				  get_clipboard ((GtkWidget*) text));
 }
 
 static void
-change_fullscreen_state (GSimpleAction *action,
-                         GVariant      *state,
-                         gpointer       user_data)
+window_paste (GSimpleAction *action,
+	      GVariant      *parameter,
+	      gpointer       user_data)
 {
-  if (g_variant_get_boolean (state))
-    gtk_window_fullscreen (user_data);
-  else
-    gtk_window_unfullscreen (user_data);
+  GtkWindow *window = GTK_WINDOW (user_data);
+  GtkTextView *text = g_object_get_data ((GObject*)window, "bloatpad-text");
+  
+  gtk_text_buffer_paste_clipboard (gtk_text_view_get_buffer (text),
+				   get_clipboard ((GtkWidget*) text),
+				   NULL,
+				   TRUE);
 
-  g_simple_action_set_state (action, state);
 }
 
 static GActionEntry win_entries[] = {
-  { "about", show_about },
-  { "fullscreen", activate_toggle, NULL, "false", change_fullscreen_state }
+  { "copy", window_copy, NULL, NULL, NULL },
+  { "paste", window_paste, NULL, NULL, NULL },
 };
 
 static void
@@ -62,6 +56,8 @@ new_window (GApplication *app,
   gtk_widget_set_hexpand (scrolled, TRUE);
   gtk_widget_set_vexpand (scrolled, TRUE);
   view = gtk_text_view_new ();
+
+  g_object_set_data ((GObject*)window, "bloatpad-text", view);
 
   gtk_container_add (GTK_CONTAINER (scrolled), view);
 
@@ -115,12 +111,19 @@ bloat_pad_finalize (GObject *object)
 }
 
 static void
-show_help (GSimpleAction *action,
-           GVariant      *parameter,
-           gpointer       user_data)
+show_about (GSimpleAction *action,
+            GVariant      *parameter,
+            gpointer       user_data)
 {
-  g_print ("Want help, eh ?!\n");
+  GtkWindow *window = user_data;
+
+  gtk_show_about_dialog (window,
+                         "program-name", "Bloatpad",
+                         "title", "About Bloatpad",
+                         "comments", "Not much to say, really.",
+                         NULL);
 }
+
 
 static void
 quit_app (GSimpleAction *action,
@@ -144,46 +147,15 @@ quit_app (GSimpleAction *action,
     }
 }
 
-static GSimpleActionGroup *actions = NULL;
-static GMenu *menu = NULL;
-
-static void
-remove_action (GSimpleAction *action,
-               GVariant      *parameter,
-               gpointer       user_data)
-{
-  GAction *add;
-
-  g_menu_remove (menu, g_menu_model_get_n_items (G_MENU_MODEL (menu)) - 1);
-  g_simple_action_set_enabled (action, FALSE);
-  add = g_simple_action_group_lookup (actions, "add");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (add), TRUE);
-}
-
-static void
-add_action (GSimpleAction *action,
-            GVariant      *parameter,
-            gpointer       user_data)
-{
-  GAction *remove;
-
-  g_menu_append (menu, "Remove", "app.remove");
-  g_simple_action_set_enabled (action, FALSE);
-  remove = g_simple_action_group_lookup (actions, "remove");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (remove), TRUE);
-}
-
 static GActionEntry app_entries[] = {
-  { "help", show_help, NULL, NULL, NULL },
+  { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_app, NULL, NULL, NULL },
-  { "add", add_action, NULL, NULL, NULL },
-  { "remove", remove_action, NULL, NULL, NULL }
 };
 
 static GActionGroup *
-get_actions (void)
+create_app_actions (void)
 {
-  actions = g_simple_action_group_new ();
+  GSimpleActionGroup *actions = g_simple_action_group_new ();
   g_simple_action_group_add_entries (actions,
                                      app_entries, G_N_ELEMENTS (app_entries),
                                      NULL);
@@ -192,14 +164,29 @@ get_actions (void)
 }
 
 static GMenuModel *
-get_menu (void)
+create_app_menu (void)
 {
-  menu = g_menu_new ();
-  g_menu_append (menu, "_Help", "app.help");
-  g_menu_append (menu, "_About Bloatpad", "win.about");
-  g_menu_append (menu, "_Fullscreen", "win.fullscreen");
+  GMenu *menu = g_menu_new ();
+  g_menu_append (menu, "_About Bloatpad", "app.about");
   g_menu_append (menu, "_Quit", "app.quit");
-  g_menu_append (menu, "Add", "app.add");
+
+  return G_MENU_MODEL (menu);
+}
+
+static GMenuModel *
+create_window_menu (void)
+{
+  GMenu *menu;
+  GMenu *edit_menu;
+
+  edit_menu = g_menu_new ();
+  g_menu_append (edit_menu, "_Copy", "win.copy");
+  g_menu_append (edit_menu, "_Paste", "win.paste");
+
+  g_menu_append (edit_menu, "_Fullscreen", "win.fullscreen");
+
+  menu = g_menu_new ();
+  g_menu_append_section (menu, "_Edit", (GMenuModel*)edit_menu);
 
   return G_MENU_MODEL (menu);
 }
@@ -207,8 +194,21 @@ get_menu (void)
 static void
 bloat_pad_init (BloatPad *app)
 {
-  g_application_set_action_group (G_APPLICATION (app), get_actions ());
-  g_application_set_app_menu (G_APPLICATION (app), get_menu ());
+  GActionGroup *actions;
+  GMenuModel *app_menu;
+  GMenuModel *window_menu;
+
+  actions = create_app_actions ();
+  g_application_set_action_group (G_APPLICATION (app), actions);
+  g_object_unref (actions);
+
+  app_menu = create_app_menu ();
+  g_application_set_app_menu (G_APPLICATION (app), app_menu);
+  g_object_unref (app_menu);
+
+  window_menu = create_window_menu ();
+  g_application_set_menubar (G_APPLICATION (app), window_menu);
+  g_object_unref (window_menu);
 }
 
 static void

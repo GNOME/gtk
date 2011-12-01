@@ -64,6 +64,8 @@ struct _GtkApplicationWindowPrivate
 
 static void
 recalculate_app_menu_state (GtkApplicationWindow *window);
+static GtkWidget *
+gtk_application_window_create_menubar (GtkApplicationWindow *window);
 
 static void
 on_shell_shows_app_menu_changed (GtkSettings *settings,
@@ -478,15 +480,8 @@ recalculate_app_menu_state (GtkApplicationWindow *window)
        && window->priv->override_show_app_menu)
       || window->priv->default_show_app_menu)
     {
-      GtkWidget *menubar;
-      GtkWidget *item;
-
-      item = gtk_menu_item_new_with_label (_("Application"));
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), gtk_application_window_get_app_menu (window));
-
-      menubar = gtk_menu_bar_new ();
+      GtkWidget *menubar = gtk_application_window_create_menubar (window);
       window->priv->menubar = g_object_ref_sink (menubar);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menubar), item);
       gtk_widget_set_parent (menubar, GTK_WIDGET (window));
       gtk_widget_show_all (menubar);
     }
@@ -768,8 +763,8 @@ append_items_from_model (GtkMenuShell *menu,
 
 static void
 populate_menu_from_model (GtkMenuShell *menu,
-                          GMenuModel   *model,
-                          GActionGroup *group)
+			  GMenuModel   *model,
+			  GActionGroup *group)
 {
   gboolean need_separator;
 
@@ -778,7 +773,9 @@ populate_menu_from_model (GtkMenuShell *menu,
 }
 
 typedef struct {
+  GActionMuxer *muxer;
   GtkApplication *application;
+  GtkApplicationWindow *window;
   GtkMenuShell   *menu;
   guint           update_idle;
   GHashTable     *connected;
@@ -789,6 +786,8 @@ free_items_changed_data (gpointer data)
 {
   ItemsChangedData *d = data;
 
+  g_object_unref (d->muxer);
+  g_object_unref (d->window);
   g_object_unref (d->application);
 
   if (d->update_idle != 0)
@@ -805,7 +804,9 @@ repopulate_menu (gpointer data)
   ItemsChangedData *d = data;
   GList *children, *l;
   GtkWidget *child;
-  GMenuModel *model;
+  GtkMenuShell *app_shell;
+  GMenuModel *app_model;
+  GMenuModel *window_model;
 
   /* remove current children */
   children = gtk_container_get_children (GTK_CONTAINER (d->menu));
@@ -816,9 +817,23 @@ repopulate_menu (gpointer data)
     }
   g_list_free (children);
 
-  /* repopulate */
-  model = g_application_get_app_menu (G_APPLICATION (d->application));
-  populate_menu_from_model (d->menu, model, G_ACTION_GROUP (d->application));
+  app_model = g_application_get_app_menu (G_APPLICATION (d->application));
+
+  if (app_model)
+    {
+      child = gtk_menu_item_new_with_label (_("Application"));
+      app_shell = (GtkMenuShell*)gtk_menu_new ();
+      gtk_menu_item_set_submenu ((GtkMenuItem*)child, (GtkWidget*)app_shell);
+      /* repopulate */
+      populate_menu_from_model (app_shell, app_model, (GActionGroup*)d->muxer);
+      gtk_menu_shell_append ((GtkMenuShell*)d->menu, child);
+    }
+
+  window_model = g_application_get_menubar (G_APPLICATION (d->application));
+  if (window_model)
+    {
+      populate_menu_from_model (d->menu, window_model, (GActionGroup*)d->muxer);
+    }
 
   d->update_idle = 0;
 
@@ -868,60 +883,43 @@ items_changed (GMenuModel *model,
   connect_to_items_changed (model, G_CALLBACK (items_changed), data);
 }
 
-/**
- * gtk_application_window_get_app_menu:
- * @window: a #GtkApplicationWindow
- *
- * Populates a menu widget from a menu model that is
- * associated with @window. See g_application_set_menu().
- * The menu items will be connected to actions of @window or
- * its associated #GtkApplication, as indicated by the menu model.
- * The menus contents will be updated automatically in response
- * to menu model changes.
- *
- * It is the callers responsibility to add the menu at a
- * suitable place in the widget hierarchy.
- *
- * This function returns %NULL if @window has no associated
- * menu model.
- *
- * Returns: A #GtkMenu that has been populated from the
- *     #GMenuModel that is associated with @window, or %NULL
- */
-GtkWidget *
-gtk_application_window_get_app_menu (GtkApplicationWindow *window)
+static GtkWidget *
+gtk_application_window_create_menubar (GtkApplicationWindow *window)
 {
   GtkApplication *application;
-  GtkWidget *menu;
-  GMenuModel *model;
+  GMenuModel *app_model;
+  GMenuModel *win_model;
   ItemsChangedData *data;
-  GActionMuxer *muxer;
+  GtkWidget *menubar;
 
   application = gtk_window_get_application (GTK_WINDOW (window));
+  app_model = g_application_get_app_menu (G_APPLICATION (application));
+  win_model = g_application_get_menubar (G_APPLICATION (application));
 
-  model = g_application_get_app_menu (G_APPLICATION (application));
-
-  if (!model)
+  if (!(app_model || win_model))
     return NULL;
 
-  menu = gtk_menu_new ();
-
-  muxer = g_action_muxer_new ();
-  g_action_muxer_insert (muxer, "app", G_ACTION_GROUP (application));
-  g_action_muxer_insert (muxer, "win", G_ACTION_GROUP (window));
-  populate_menu_from_model (GTK_MENU_SHELL (menu), model, G_ACTION_GROUP (muxer));
-  g_object_unref (muxer);
+  menubar = gtk_menu_bar_new ();
 
   data = g_new (ItemsChangedData, 1);
+  data->muxer = g_action_muxer_new ();
+  g_action_muxer_insert (data->muxer, "app", G_ACTION_GROUP (application));
+  g_action_muxer_insert (data->muxer, "win", G_ACTION_GROUP (window));
+  data->window = g_object_ref (window);
   data->application = g_object_ref (application);
-  data->menu = GTK_MENU_SHELL (menu);
+  data->menu = GTK_MENU_SHELL (menubar);
   data->update_idle = 0;
   data->connected = g_hash_table_new (NULL, NULL);
 
-  g_object_set_data_full (G_OBJECT (menu), "gtk-application-menu-data",
+  g_object_set_data_full (G_OBJECT (menubar), "gtk-application-menu-data",
                           data, free_items_changed_data);
 
-  connect_to_items_changed (model, G_CALLBACK (items_changed), data);
+  if (app_model)
+    connect_to_items_changed (app_model, G_CALLBACK (items_changed), data);
+  if (win_model)
+    connect_to_items_changed (win_model, G_CALLBACK (items_changed), data);
 
-  return menu;
+  repopulate_menu (data);
+
+  return menubar;
 }
