@@ -26,21 +26,21 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_APPLICATION_WINDOW                        (gtk_application_window_get_type ())
-#define GTK_APPLICATION_WINDOW(inst)                       (G_TYPE_CHECK_INSTANCE_CAST ((inst),                      \
-                                                            GTK_TYPE_APPLICATION_WINDOW, GtkApplicationWindow))
-#define GTK_APPLICATION_WINDOW_CLASS(class)                (G_TYPE_CHECK_CLASS_CAST ((class),                        \
-                                                            GTK_TYPE_APPLICATION_WINDOW, GtkApplicationWindowClass))
-#define GTK_IS_APPLICATION_WINDOW(inst)                    (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                      \
-                                                            GTK_TYPE_APPLICATION_WINDOW))
-#define GTK_IS_APPLICATION_WINDOW_CLASS(class)             (G_TYPE_CHECK_CLASS_TYPE ((class),                        \
-                                                            GTK_TYPE_APPLICATION_WINDOW))
-#define GTK_APPLICATION_WINDOW_GET_CLASS(inst)             (G_TYPE_INSTANCE_GET_CLASS ((inst),                       \
-                                                            GTK_TYPE_APPLICATION_WINDOW, GtkApplicationWindowClass))
+#define GTK_TYPE_APPLICATION_WINDOW            (gtk_application_window_get_type ())
+#define GTK_APPLICATION_WINDOW(inst)           (G_TYPE_CHECK_INSTANCE_CAST ((inst), \
+                                                GTK_TYPE_APPLICATION_WINDOW, GtkApplicationWindow))
+#define GTK_APPLICATION_WINDOW_CLASS(class)    (G_TYPE_CHECK_CLASS_CAST ((class),   \
+                                                GTK_TYPE_APPLICATION_WINDOW, GtkApplicationWindowClass))
+#define GTK_IS_APPLICATION_WINDOW(inst)        (G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
+                                                GTK_TYPE_APPLICATION_WINDOW))
+#define GTK_IS_APPLICATION_WINDOW_CLASS(class) (G_TYPE_CHECK_CLASS_TYPE ((class),   \
+                                                GTK_TYPE_APPLICATION_WINDOW))
+#define GTK_APPLICATION_WINDOW_GET_CLASS(inst) (G_TYPE_INSTANCE_GET_CLASS ((inst),  \
+                                                GTK_TYPE_APPLICATION_WINDOW, GtkApplicationWindowClass))
 
-typedef struct _GtkApplicationWindowPrivate                GtkApplicationWindowPrivate;
-typedef struct _GtkApplicationWindowClass                  GtkApplicationWindowClass;
-typedef struct _GtkApplicationWindow                       GtkApplicationWindow;
+typedef struct _GtkApplicationWindowPrivate GtkApplicationWindowPrivate;
+typedef struct _GtkApplicationWindowClass   GtkApplicationWindowClass;
+typedef struct _GtkApplicationWindow        GtkApplicationWindow;
 
 struct _GtkApplicationWindow
 {
@@ -58,14 +58,14 @@ struct _GtkApplicationWindowClass
   gpointer padding[14];
 };
 
-GType                   gtk_application_window_get_type                 (void) G_GNUC_CONST;
-GtkWidget *             gtk_application_window_new                      (GtkApplication       *application);
+GType       gtk_application_window_get_type          (void) G_GNUC_CONST;
+GtkWidget * gtk_application_window_new               (GtkApplication       *application);
 
-void                    gtk_application_window_set_show_app_menu        (GtkApplicationWindow *window,
-                                                                         gboolean              show_app_menu);
-gboolean                gtk_application_window_get_show_app_menu        (GtkApplicationWindow *window);
+void        gtk_application_window_set_show_app_menu (GtkApplicationWindow *window,
+                                                      gboolean              show_app_menu);
+gboolean    gtk_application_window_get_show_app_menu (GtkApplicationWindow *window);
 
-GtkWidget *             gtk_application_window_get_app_menu             (GtkApplicationWindow *window);
+GtkWidget * gtk_application_window_get_app_menu       (GtkApplicationWindow *window);
 
 G_END_DECLS
 

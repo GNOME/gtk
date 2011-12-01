@@ -332,10 +332,10 @@ gtk_application_remove_window (GtkApplication *application,
  * gtk_application_get_windows:
  * @application: a #GtkApplication
  *
- * Gets a list of the #GtkWindow<!-- -->s associated with @application.
+ * Gets a list of the #GtkWindows associated with @application.
  *
  * The list is sorted by most recently focused window, such that the first
- * element is the currently focused window.  (Useful for choosing a parent
+ * element is the currently focused window. (Useful for choosing a parent
  * for a transient window.)
  *
  * The list that is returned should not be modified in any way. It will

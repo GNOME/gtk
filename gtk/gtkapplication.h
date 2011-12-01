@@ -19,7 +19,7 @@
  * Author: Ryan Lortie <desrt@desrt.ca>
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -64,18 +64,18 @@ struct _GtkApplicationClass
   gpointer padding[14];
 };
 
-GType                   gtk_application_get_type                        (void) G_GNUC_CONST;
+GType            gtk_application_get_type      (void) G_GNUC_CONST;
 
-GtkApplication *        gtk_application_new                             (const gchar       *application_id,
-                                                                         GApplicationFlags  flags);
+GtkApplication * gtk_application_new           (const gchar       *application_id,
+                                                GApplicationFlags  flags);
 
-void                    gtk_application_add_window                      (GtkApplication    *application,
-                                                                         GtkWindow         *window);
+void             gtk_application_add_window    (GtkApplication    *application,
+                                                GtkWindow         *window);
 
-void                    gtk_application_remove_window                   (GtkApplication    *application,
-                                                                         GtkWindow         *window);
+void             gtk_application_remove_window (GtkApplication    *application,
+                                                GtkWindow         *window);
 
-GList *                 gtk_application_get_windows                     (GtkApplication    *application);
+GList *          gtk_application_get_windows   (GtkApplication    *application);
 
 
 G_END_DECLS

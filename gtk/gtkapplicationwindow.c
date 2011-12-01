@@ -63,12 +63,12 @@ struct _GtkApplicationWindowPrivate
 };
 
 static void
-recalculate_app_menu_state (GtkApplicationWindow   *window);
+recalculate_app_menu_state (GtkApplicationWindow *window);
 
 static void
-on_shell_shows_app_menu_changed (GtkSettings   *settings,
-                                 GParamSpec    *pspec,
-                                 gpointer       user_data)
+on_shell_shows_app_menu_changed (GtkSettings *settings,
+                                 GParamSpec  *pspec,
+                                 gpointer     user_data)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (user_data);
   gboolean val;
@@ -122,7 +122,7 @@ gtk_application_window_change_action_state (GActionGroup *group,
 }
 
 static GAction *
-gtk_application_window_lookup_action (GActionMap *action_map,
+gtk_application_window_lookup_action (GActionMap  *action_map,
                                       const gchar *action_name)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (action_map);
@@ -472,7 +472,7 @@ gtk_application_window_get_show_app_menu (GtkApplicationWindow *window)
 }
 
 static void
-recalculate_app_menu_state (GtkApplicationWindow   *window)
+recalculate_app_menu_state (GtkApplicationWindow *window)
 {
   if ((window->priv->did_override_show_app_menu
        && window->priv->override_show_app_menu)
@@ -922,5 +922,3 @@ gtk_application_window_get_app_menu (GtkApplicationWindow *window)
 
   return menu;
 }
-
-

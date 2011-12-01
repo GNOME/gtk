@@ -26,18 +26,18 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_APPLICATION_MENU_BUTTON                    (gtk_application_menu_button_get_type ())
-#define GTK_APPLICATION_MENU_BUTTON(inst)                   (G_TYPE_CHECK_INSTANCE_CAST ((inst),                      \
-                                                             GTK_TYPE_APPLICATION_MENU_BUTTON,                        \
-                                                             GtkApplicationMenuButton))
-#define GTK_IS_APPLICATION_MENU_BUTTON(inst)                (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                      \
-                                                             GTK_TYPE_APPLICATION_MENU_BUTTON))
+#define GTK_TYPE_APPLICATION_MENU_BUTTON     (gtk_application_menu_button_get_type ())
+#define GTK_APPLICATION_MENU_BUTTON(inst)    (G_TYPE_CHECK_INSTANCE_CAST ((inst), \
+                                              GTK_TYPE_APPLICATION_MENU_BUTTON,   \
+                                              GtkApplicationMenuButton))
+#define GTK_IS_APPLICATION_MENU_BUTTON(inst) (G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
+                                              GTK_TYPE_APPLICATION_MENU_BUTTON))
 
-typedef struct _GtkApplicationMenuButton                    GtkApplicationMenuButton;
+typedef struct _GtkApplicationMenuButton GtkApplicationMenuButton;
 
-GType                   gtk_application_menu_button_get_type           (void) G_GNUC_CONST;
+GType       gtk_application_menu_button_get_type (void) G_GNUC_CONST;
 
-GtkWidget *             gtk_application_menu_button_new                (void);
+GtkWidget * gtk_application_menu_button_new      (void);
 
 G_END_DECLS
 
