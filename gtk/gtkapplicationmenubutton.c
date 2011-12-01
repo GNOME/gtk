@@ -29,6 +29,26 @@
 
 #include <string.h>
 
+/**
+ * SECTION:gtkapplicationmenubutton
+ * @title: GtkApplicationMenuButton
+ * @short_description: A button that shows the application menu
+ *
+ * A GtkApplicationMenuButton can be added to a #GtkApplicationWindow
+ * as an alternative way to present the application menu, if it is
+ * not shown by the desktop environment. GtkApplicationMenuButton
+ * automatically hides itself, and only appears when necessary. It
+ * is derived from #GtkButton, and you should use regular #GtkButton
+ * API to add a suitable icon or label. Note that #GtkApplicationWindow
+ * already provides a way to present the application menu, so a
+ * #GtkApplicationMenuButton is only needed if the default
+ * appearance (as part of a menubar) is not suitable.
+ *
+ * To configure the contents of the application menu, use
+ * g_application_set_menu() and g_application_set_action_group() on
+ * the #GtkApplication associated with the #GtkApplicationWindow.
+ */
+
 struct _GtkApplicationMenuButton
 {
   GtkButton parent_instance;
@@ -202,6 +222,15 @@ gtk_application_menu_button_class_init (GtkApplicationMenuButtonClass *class)
   object_class->finalize = gtk_application_menu_button_finalize;
 }
 
+/**
+ * gtk_application_menu_button_new:
+ *
+ * Creates a new #GtkApplicationMenuButton.
+ *
+ * Returns: a newly created #GtkApplicationMenuButton
+ *
+ * Since: 3.4
+ */
 GtkWidget *
 gtk_application_menu_button_new (void)
 {
