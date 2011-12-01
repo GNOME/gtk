@@ -492,8 +492,9 @@ recalculate_app_menu_state (GtkApplicationWindow *window)
     }
   else
     {
-      gtk_widget_unparent (GTK_WIDGET (window->priv->menubar));
-      g_object_unref (window->priv->menubar);
+      if (window->priv->menubar)
+	gtk_widget_unparent (GTK_WIDGET (window->priv->menubar));
+      g_clear_object (&window->priv->menubar);
     }
 }
 
