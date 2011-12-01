@@ -50,9 +50,12 @@
  * a one-size-fits-all application model.
  *
  * Currently, GtkApplication handles GTK+ initialization, application
- * uniqueness, provides some basic scriptability by exporting 'actions',
- * and manages a list of toplevel windows whose life-cycle is automatically
- * tied to the life-cycle of your application.
+ * uniqueness, provides some basic scriptability and desktop shell integration
+ * by exporting actions and menus and manages a list of toplevel windows whose
+ * life-cycle is automatically tied to the life-cycle of your application.
+ *
+ * While GtkApplication works fine with plain #GtkWindows, it is recommended
+ * to use it together with #GtkApplicationWindow.
  *
  * <example id="gtkapplication"><title>A simple application</title>
  * <programlisting>
