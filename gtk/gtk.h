@@ -45,7 +45,6 @@
 #include <gtk/gtkappchooserwidget.h>
 #include <gtk/gtkappchooserbutton.h>
 #include <gtk/gtkapplication.h>
-#include <gtk/gtkapplicationmenubutton.h>
 #include <gtk/gtkapplicationwindow.h>
 #include <gtk/gtkarrow.h>
 #include <gtk/gtkaspectframe.h>
