@@ -8019,8 +8019,7 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  return _gtk_icon_helper_get_storage_type (icon_info->icon_helper) == GTK_IMAGE_GICON ? 
-    _gtk_icon_helper_peek_gicon (icon_info->icon_helper) : NULL;
+  return _gtk_icon_helper_peek_gicon (icon_info->icon_helper);
 }
 
 /**
@@ -8053,9 +8052,7 @@ gtk_entry_get_icon_stock (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  return _gtk_icon_helper_get_storage_type (icon_info->icon_helper) == GTK_IMAGE_STOCK ? 
-    _gtk_icon_helper_get_stock_id (icon_info->icon_helper) : NULL;
-
+  return _gtk_icon_helper_get_stock_id (icon_info->icon_helper);
 }
 
 /**
@@ -8088,9 +8085,7 @@ gtk_entry_get_icon_name (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  return _gtk_icon_helper_get_storage_type (icon_info->icon_helper) == GTK_IMAGE_ICON_NAME ? 
-    _gtk_icon_helper_get_icon_name (icon_info->icon_helper) : NULL;
-
+  return _gtk_icon_helper_get_icon_name (icon_info->icon_helper);
 }
 
 /**
