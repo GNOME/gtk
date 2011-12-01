@@ -502,54 +502,36 @@ _gtk_icon_helper_get_pixel_size (GtkIconHelper *self)
 GdkPixbuf *
 _gtk_icon_helper_peek_pixbuf (GtkIconHelper *self)
 {
-  g_return_val_if_fail (self->priv->storage_type == GTK_IMAGE_PIXBUF ||
-                        self->priv->storage_type == GTK_IMAGE_EMPTY, NULL);
-
   return self->priv->orig_pixbuf;
 }
 
 GIcon *
 _gtk_icon_helper_peek_gicon (GtkIconHelper *self)
 {
-  g_return_val_if_fail (self->priv->storage_type == GTK_IMAGE_GICON ||
-                        self->priv->storage_type == GTK_IMAGE_EMPTY, NULL);
-
   return self->priv->gicon;
 }
 
 GdkPixbufAnimation *
 _gtk_icon_helper_peek_animation (GtkIconHelper *self)
 {
-  g_return_val_if_fail (self->priv->storage_type == GTK_IMAGE_ANIMATION ||
-                        self->priv->storage_type == GTK_IMAGE_EMPTY, NULL);
-
   return self->priv->animation;
 }
 
 GtkIconSet *
 _gtk_icon_helper_peek_icon_set (GtkIconHelper *self)
 {
-  g_return_val_if_fail (self->priv->storage_type == GTK_IMAGE_ICON_SET ||
-                        self->priv->storage_type == GTK_IMAGE_EMPTY, NULL);
-
   return self->priv->icon_set;
 }
 
 const gchar *
 _gtk_icon_helper_get_stock_id (GtkIconHelper *self)
 {
-  g_return_val_if_fail (self->priv->storage_type == GTK_IMAGE_STOCK ||
-                        self->priv->storage_type == GTK_IMAGE_EMPTY, NULL);
-
   return self->priv->stock_id;
 }
 
 const gchar *
 _gtk_icon_helper_get_icon_name (GtkIconHelper *self)
 {
-  g_return_val_if_fail (self->priv->storage_type == GTK_IMAGE_ICON_NAME ||
-                        self->priv->storage_type == GTK_IMAGE_EMPTY, NULL);
-
   return self->priv->icon_name;
 }
 
