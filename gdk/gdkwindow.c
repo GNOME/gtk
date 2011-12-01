@@ -5251,8 +5251,6 @@ gdk_window_show_unraised (GdkWindow *window)
 void
 gdk_window_raise (GdkWindow *window)
 {
-  cairo_region_t *old_region, *new_region;
-
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (window->destroyed)
@@ -5260,26 +5258,14 @@ gdk_window_raise (GdkWindow *window)
 
   gdk_window_flush_if_exposing (window);
 
-  old_region = NULL;
-  if (gdk_window_is_viewable (window) &&
-      !window->input_only)
-    old_region = cairo_region_copy (window->clip_region);
-
   /* Keep children in (reverse) stacking order */
   gdk_window_raise_internal (window);
 
   recompute_visible_regions (window, TRUE, FALSE);
 
-  if (old_region)
-    {
-      new_region = cairo_region_copy (window->clip_region);
-
-      cairo_region_subtract (new_region, old_region);
-      gdk_window_invalidate_region_full (window, new_region, TRUE, CLEAR_BG_ALL);
-
-      cairo_region_destroy (old_region);
-      cairo_region_destroy (new_region);
-    }
+  if (gdk_window_is_viewable (window) &&
+      !window->input_only)
+    gdk_window_invalidate_region_full (window, window->clip_region, TRUE, CLEAR_BG_ALL);
 }
 
 static void
