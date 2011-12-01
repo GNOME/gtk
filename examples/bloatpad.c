@@ -46,6 +46,7 @@ new_window (GApplication *app,
   GtkWidget *window, *grid, *scrolled, *view;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
+  gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
   g_action_map_add_action_entries (G_ACTION_MAP (window), win_entries, G_N_ELEMENTS (win_entries), window);
   gtk_window_set_title (GTK_WINDOW (window), "Bloatpad");
 
