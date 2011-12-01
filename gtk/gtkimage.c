@@ -434,37 +434,20 @@ gtk_image_get_property (GObject     *object,
 {
   GtkImage *image = GTK_IMAGE (object);
   GtkImagePrivate *priv = image->priv;
-  GtkImageType storage_type;
 
-  /* The "getter" functions whine if you try to get the wrong
-   * storage type. This function is instead robust against that,
-   * so that GUI builders don't have to jump through hoops
-   * to avoid g_warning
-   */
-  storage_type = _gtk_icon_helper_get_storage_type (priv->icon_helper);
-  
   switch (prop_id)
     {
     case PROP_PIXBUF:
-      if (storage_type != GTK_IMAGE_PIXBUF)
-        g_value_set_object (value, NULL);
-      else
-        g_value_set_object (value, _gtk_icon_helper_peek_pixbuf (priv->icon_helper));
+      g_value_set_object (value, _gtk_icon_helper_peek_pixbuf (priv->icon_helper));
       break;
     case PROP_FILE:
       g_value_set_string (value, priv->filename);
       break;
     case PROP_STOCK:
-      if (storage_type != GTK_IMAGE_STOCK)
-        g_value_set_string (value, NULL);
-      else
-        g_value_set_string (value, _gtk_icon_helper_get_icon_name (priv->icon_helper));
+      g_value_set_string (value, _gtk_icon_helper_get_icon_name (priv->icon_helper));
       break;
     case PROP_ICON_SET:
-      if (storage_type != GTK_IMAGE_ICON_SET)
-        g_value_set_boxed (value, NULL);
-      else
-        g_value_set_boxed (value, _gtk_icon_helper_peek_icon_set (priv->icon_helper));
+      g_value_set_boxed (value, _gtk_icon_helper_peek_icon_set (priv->icon_helper));
       break;      
     case PROP_ICON_SIZE:
       g_value_set_int (value, _gtk_icon_helper_get_icon_size (priv->icon_helper));
@@ -473,28 +456,17 @@ gtk_image_get_property (GObject     *object,
       g_value_set_int (value, _gtk_icon_helper_get_pixel_size (priv->icon_helper));
       break;
     case PROP_PIXBUF_ANIMATION:
-      if (storage_type != GTK_IMAGE_ANIMATION)
-        g_value_set_object (value, NULL);
-      else
-        g_value_set_object (value, _gtk_icon_helper_peek_animation (priv->icon_helper));
+      g_value_set_object (value, _gtk_icon_helper_peek_animation (priv->icon_helper));
       break;
     case PROP_ICON_NAME:
-      if (storage_type != GTK_IMAGE_ICON_NAME)
-	g_value_set_string (value, NULL);
-      else
-	g_value_set_string (value, _gtk_icon_helper_get_icon_name (priv->icon_helper));
+      g_value_set_string (value, _gtk_icon_helper_get_icon_name (priv->icon_helper));
       break;
     case PROP_GICON:
-      if (storage_type != GTK_IMAGE_GICON)
-	g_value_set_object (value, NULL);
-      else
-	g_value_set_object (value, _gtk_icon_helper_peek_gicon (priv->icon_helper));
+      g_value_set_object (value, _gtk_icon_helper_peek_gicon (priv->icon_helper));
       break;
-
     case PROP_USE_FALLBACK:
       g_value_set_boolean (value, _gtk_icon_helper_get_use_fallback (priv->icon_helper));
       break;
-      
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
