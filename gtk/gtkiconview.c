@@ -6133,6 +6133,11 @@ drag_scroll_timeout (gpointer datap)
   return TRUE;
 }
 
+static void
+drag_scroll_data_free (DragScrollData *data)
+{
+  g_slice_free (DragScrollData, data);
+}
 
 static gboolean
 set_destination (GtkIconView    *icon_view,
@@ -6530,7 +6535,7 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
           data->device = gdk_drag_context_get_device (context);
 
 	  icon_view->priv->scroll_timeout_id =
-	    gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 50, drag_scroll_timeout, data, g_free);
+	    gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 50, drag_scroll_timeout, data, (GDestroyNotify) drag_scroll_data_free);
 	}
 
       if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
