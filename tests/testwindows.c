@@ -275,6 +275,13 @@ save_children (GString *s,
 
 
 static void
+refresh_clicked (GtkWidget *button, 
+		 gpointer data)
+{
+  gtk_widget_queue_draw (darea);
+}
+
+static void
 save_clicked (GtkWidget *button, 
 	      gpointer data)
 {
@@ -1050,6 +1057,17 @@ main (int argc, char **argv)
 		    G_CALLBACK (save_clicked), 
 		    NULL);
 
+  button = gtk_button_new_with_label ("Refresh");
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      button,
+		      FALSE, FALSE,
+		      2);
+  gtk_widget_show (button);
+  g_signal_connect (button, "clicked", 
+		    G_CALLBACK (refresh_clicked), 
+		    NULL);
+
+  
   gtk_widget_show (window);
 
   if (argc == 2)
