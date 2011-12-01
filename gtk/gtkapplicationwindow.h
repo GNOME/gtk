@@ -61,11 +61,9 @@ struct _GtkApplicationWindowClass
 GType       gtk_application_window_get_type          (void) G_GNUC_CONST;
 GtkWidget * gtk_application_window_new               (GtkApplication       *application);
 
-void        gtk_application_window_set_show_app_menu (GtkApplicationWindow *window,
-                                                      gboolean              show_app_menu);
-gboolean    gtk_application_window_get_show_app_menu (GtkApplicationWindow *window);
-
-GtkWidget * gtk_application_window_get_app_menu       (GtkApplicationWindow *window);
+void        gtk_application_window_set_show_menubar (GtkApplicationWindow *window,
+						     gboolean              show);
+gboolean    gtk_application_window_get_show_menubar (GtkApplicationWindow *window);
 
 G_END_DECLS
 

@@ -34,15 +34,19 @@
  * @title: GtkApplicationWindow
  * @short_description: GtkWindow subclass with GtkApplication support
  *
- * GtkApplicationWindow is a #GtkWindow subclass that offers some extra
- * functionality for better integration with #GtkApplication features.
- * It implements the #GActionGroup and #GActionMap interfaces, to let
- * you add window-specific actions that will be exported by the associated
- * #GtkApplication, together with its application-wide actions.
- * Window-specific actions are prefixed with the "win." prefix and
- * application-wide actions are prefixed with the "app." prefix.
- * Actions must be addressed with the prefixed name when referring
- * to them from a #GMenuModel.
+ * GtkApplicationWindow is a #GtkWindow subclass that offers some
+ * extra functionality for better integration with #GtkApplication
+ * features.  Notably, it can handle both the application menu as well
+ * as the menubar.  See g_application_set_app_menu() and
+ * g_application_set_menubar().
+ *
+ * This class implements the #GActionGroup and #GActionMap interfaces,
+ * to let you add window-specific actions that will be exported by the
+ * associated #GtkApplication, together with its application-wide
+ * actions.  Window-specific actions are prefixed with the "win."
+ * prefix and application-wide actions are prefixed with the "app."
+ * prefix.  Actions must be addressed with the prefixed name when
+ * referring to them from a #GMenuModel.
  *
  * If the desktop environment does not display the application menu
  * as part of the desktop shell, then #GApplicationWindow will
@@ -50,20 +54,20 @@
  * can be overridden with the #GtkApplicationWindow:show-app-menu
  * property.
  */
-
 struct _GtkApplicationWindowPrivate
 {
   GSimpleActionGroup *actions;
   GtkMenuBar *menubar;
 
-  guint initialized_app_menu : 1;
-  guint default_show_app_menu : 1;
-  guint did_override_show_app_menu : 1;
-  guint override_show_app_menu : 1;
+  guint initialized_gsetting_monitoring : 1;
+  guint shell_shows_app_menu : 1;
+  guint default_show_menubar : 1;
+  guint did_override_show_menubar : 1;
+  guint override_show_menubar : 1;
 };
 
 static void
-recalculate_app_menu_state (GtkApplicationWindow *window);
+recreate_menubar (GtkApplicationWindow *window);
 static GtkWidget *
 gtk_application_window_create_menubar (GtkApplicationWindow *window);
 
@@ -76,8 +80,12 @@ on_shell_shows_app_menu_changed (GtkSettings *settings,
   gboolean val;
 
   g_object_get (settings, "gtk-shell-shows-app-menu", &val, NULL);
-  window->priv->default_show_app_menu = !val;
-  recalculate_app_menu_state (window);
+  
+  if (window->priv->shell_shows_app_menu != val)
+    {
+      window->priv->shell_shows_app_menu = val;
+      recreate_menubar (window);
+    }
 }
 
 static gchar **
@@ -173,7 +181,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkApplicationWindow, gtk_application_window, GTK_TYPE_
 
 enum {
   PROP_0,
-  PROP_SHOW_APP_MENU,
+  PROP_SHOW_MENUBAR,
   N_PROPS
 };
 static GParamSpec *gtk_application_window_properties[N_PROPS];
@@ -305,9 +313,9 @@ gtk_application_window_real_realize (GtkWidget *widget)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
 
-  if (!window->priv->initialized_app_menu)
+  if (!window->priv->initialized_gsetting_monitoring)
     {
-      window->priv->initialized_app_menu = TRUE;
+      window->priv->initialized_gsetting_monitoring = TRUE;
       g_signal_connect (gtk_widget_get_settings ((GtkWidget*)window),
                         "notify::gtk-shell-shows-app-menu",
                         G_CALLBACK (on_shell_shows_app_menu_changed),
@@ -358,8 +366,8 @@ gtk_application_window_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_SHOW_APP_MENU:
-      g_value_set_boolean (value, window->priv->override_show_app_menu);
+    case PROP_SHOW_MENUBAR:
+      g_value_set_boolean (value, window->priv->override_show_menubar);
       break;
 
     default:
@@ -377,8 +385,8 @@ gtk_application_window_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_SHOW_APP_MENU:
-      gtk_application_window_set_show_app_menu (window, g_value_get_boolean (value));
+    case PROP_SHOW_MENUBAR:
+      gtk_application_window_set_show_menubar (window, g_value_get_boolean (value));
       break;
 
     default:
@@ -437,10 +445,10 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
   object_class->set_property = gtk_application_window_set_property;
   object_class->dispose = gtk_application_window_dispose;
 
-  gtk_application_window_properties[PROP_SHOW_APP_MENU] =
-    g_param_spec_boolean ("show-app-menu",
-                          P_("Show application menu"),
-                          P_("TRUE if the application menu should be included "
+  gtk_application_window_properties[PROP_SHOW_MENUBAR] =
+    g_param_spec_boolean ("show-menubar",
+                          P_("Show a menubar"),
+                          P_("TRUE if the application's menus should be included "
                              "in the menubar at the top of the window"),
                           FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE);
   g_object_class_install_properties (object_class, N_PROPS, gtk_application_window_properties);
@@ -468,42 +476,41 @@ gtk_application_window_new (GtkApplication *application)
 }
 
 gboolean
-gtk_application_window_get_show_app_menu (GtkApplicationWindow *window)
+gtk_application_window_get_show_menubar (GtkApplicationWindow *window)
 {
-  return window->priv->override_show_app_menu;
+  return window->priv->override_show_menubar;
 }
 
 static void
-recalculate_app_menu_state (GtkApplicationWindow *window)
+recreate_menubar (GtkApplicationWindow *window)
 {
-  if ((window->priv->did_override_show_app_menu
-       && window->priv->override_show_app_menu)
-      || window->priv->default_show_app_menu)
+  GtkWidget *new_menubar;
+
+  if (window->priv->menubar)
+    gtk_widget_unparent (GTK_WIDGET (window->priv->menubar));
+  g_clear_object (&window->priv->menubar);
+
+  new_menubar = gtk_application_window_create_menubar (window);
+
+  if (new_menubar)
     {
-      GtkWidget *menubar = gtk_application_window_create_menubar (window);
-      window->priv->menubar = g_object_ref_sink (menubar);
-      gtk_widget_set_parent (menubar, GTK_WIDGET (window));
-      gtk_widget_show_all (menubar);
-    }
-  else
-    {
-      if (window->priv->menubar)
-	gtk_widget_unparent (GTK_WIDGET (window->priv->menubar));
-      g_clear_object (&window->priv->menubar);
+      window->priv->menubar = g_object_ref_sink (new_menubar);
+      gtk_widget_set_parent (new_menubar, GTK_WIDGET (window));
+      gtk_widget_show_all (new_menubar);
     }
 }
 
 void
-gtk_application_window_set_show_app_menu (GtkApplicationWindow *window,
-                                          gboolean              show_app_menu)
+gtk_application_window_set_show_menubar (GtkApplicationWindow *window,
+					 gboolean              show)
 {
-  show_app_menu = !!show_app_menu;
-  window->priv->did_override_show_app_menu = TRUE;
-  if (window->priv->override_show_app_menu != show_app_menu)
+  show = !!show;
+  window->priv->did_override_show_menubar = TRUE;
+  if (window->priv->override_show_menubar != show)
     {
-      window->priv->override_show_app_menu = show_app_menu;
-      recalculate_app_menu_state (window);
-      g_object_notify_by_pspec (G_OBJECT (window), gtk_application_window_properties[PROP_SHOW_APP_MENU]);
+      window->priv->override_show_menubar = show;
+      recreate_menubar (window);
+      g_object_notify_by_pspec (G_OBJECT (window), gtk_application_window_properties[PROP_SHOW_MENUBAR]);
     }
 }
 
@@ -819,7 +826,7 @@ repopulate_menu (gpointer data)
 
   app_model = g_application_get_app_menu (G_APPLICATION (d->application));
 
-  if (app_model)
+  if (app_model && !d->window->priv->shell_shows_app_menu)
     {
       child = gtk_menu_item_new_with_label (_("Application"));
       app_shell = (GtkMenuShell*)gtk_menu_new ();
@@ -896,7 +903,9 @@ gtk_application_window_create_menubar (GtkApplicationWindow *window)
   app_model = g_application_get_app_menu (G_APPLICATION (application));
   win_model = g_application_get_menubar (G_APPLICATION (application));
 
-  if (!(app_model || win_model))
+  if (!(app_model || win_model)
+      || (window->priv->did_override_show_menubar
+	  && window->priv->override_show_menubar == FALSE))
     return NULL;
 
   menubar = gtk_menu_bar_new ();
