@@ -186,7 +186,7 @@ create_window_menu (void)
   g_menu_append (edit_menu, "_Fullscreen", "win.fullscreen");
 
   menu = g_menu_new ();
-  g_menu_append_section (menu, "_Edit", (GMenuModel*)edit_menu);
+  g_menu_append_submenu (menu, "_Edit", (GMenuModel*)edit_menu);
 
   return G_MENU_MODEL (menu);
 }
