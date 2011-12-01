@@ -49,8 +49,6 @@ G_DEFINE_INTERFACE (GActionObserver, g_action_observer, G_TYPE_OBJECT)
  *  - even if quarking is acceptable, #GObject signal details are
  *    implemented by scanning a linked list, so there is no real
  *    decrease in complexity
- *
- * Since: 2.32
  */
 
 void
@@ -58,7 +56,7 @@ g_action_observer_default_init (GActionObserverInterface *class)
 {
 }
 
-/**
+/*
  * g_action_observer_action_added:
  * @observer: a #GActionObserver
  * @observable: the source of the event
@@ -74,9 +72,7 @@ g_action_observer_default_init (GActionObserverInterface *class)
  *
  * This function should only be called by objects with which the
  * observer has explicitly registered itself to receive events.
- *
- * Since: 2.32
- **/
+ */
 void
 g_action_observer_action_added (GActionObserver    *observer,
                                 GActionObservable  *observable,
@@ -91,7 +87,7 @@ g_action_observer_action_added (GActionObserver    *observer,
     ->action_added (observer, observable, action_name, parameter_type, enabled, state);
 }
 
-/**
+/*
  * g_action_observer_action_enabled_changed:
  * @observer: a #GActionObserver
  * @observable: the source of the event
@@ -103,9 +99,7 @@ g_action_observer_action_added (GActionObserver    *observer,
  *
  * This function should only be called by objects with which the
  * observer has explicitly registered itself to receive events.
- *
- * Since: 2.32
- **/
+ */
 void
 g_action_observer_action_enabled_changed (GActionObserver   *observer,
                                           GActionObservable *observable,
@@ -118,7 +112,7 @@ g_action_observer_action_enabled_changed (GActionObserver   *observer,
     ->action_enabled_changed (observer, observable, action_name, enabled);
 }
 
-/**
+/*
  * g_action_observer_action_state_changed:
  * @observer: a #GActionObserver
  * @observable: the source of the event
@@ -130,9 +124,7 @@ g_action_observer_action_enabled_changed (GActionObserver   *observer,
  *
  * This function should only be called by objects with which the
  * observer has explicitly registered itself to receive events.
- *
- * Since: 2.32
- **/
+ */
 void
 g_action_observer_action_state_changed (GActionObserver   *observer,
                                         GActionObservable *observable,
@@ -145,7 +137,7 @@ g_action_observer_action_state_changed (GActionObserver   *observer,
     ->action_state_changed (observer, observable, action_name, state);
 }
 
-/**
+/*
  * g_action_observer_action_removed:
  * @observer: a #GActionObserver
  * @observable: the source of the event
@@ -156,9 +148,7 @@ g_action_observer_action_state_changed (GActionObserver   *observer,
  *
  * This function should only be called by objects with which the
  * observer has explicitly registered itself to receive events.
- *
- * Since: 2.32
- **/
+ */
 void
 g_action_observer_action_removed (GActionObserver   *observer,
                                   GActionObservable *observable,

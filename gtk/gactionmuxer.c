@@ -28,7 +28,7 @@
 
 #include <string.h>
 
-/**
+/*
  * SECTION:gactionmuxer
  * @short_description: Aggregate and monitor several action groups
  *
@@ -54,9 +54,7 @@
  * This class is typically only used at the site of "consumption" of
  * actions (eg: when displaying a menu that contains many actions on
  * different objects).
- *
- * Since: 2.32
- **/
+ */
 
 static void     g_action_muxer_group_iface_init         (GActionGroupInterface      *iface);
 static void     g_action_muxer_observable_iface_init    (GActionObservableInterface *iface);
@@ -144,8 +142,6 @@ g_action_muxer_action_enabled_changed (GActionGroup *action_group,
   gchar *fullname;
   Action *action;
   GSList *node;
-
-  g_print ("feeling changes\n");
 
   action = g_action_muxer_lookup_action (group->muxer, group->prefix, action_name, &fullname);
   for (node = action ? action->watchers : NULL; node; node = node->next)
@@ -395,7 +391,7 @@ g_action_muxer_class_init (GObjectClass *class)
   class->finalize = g_action_muxer_finalize;
 }
 
-/**
+/*
  * g_action_muxer_insert:
  * @muxer: a #GActionMuxer
  * @prefix: the prefix string for the action group
@@ -414,9 +410,7 @@ g_action_muxer_class_init (GObjectClass *class)
  * "action_added" notifications will be emitted, as appropriate.
  *
  * @prefix must not contain a dot ('.').
- *
- * Since: 2.32
- **/
+ */
 void
 g_action_muxer_insert (GActionMuxer *muxer,
                        const gchar  *prefix,
@@ -451,7 +445,7 @@ g_action_muxer_insert (GActionMuxer *muxer,
                                             G_CALLBACK (g_action_muxer_action_state_changed), group);
 }
 
-/**
+/*
  * g_action_muxer_remove:
  * @muxer: a #GActionMuxer
  * @prefix: the prefix of the action group to remove
@@ -460,9 +454,7 @@ g_action_muxer_insert (GActionMuxer *muxer,
  *
  * If any #GActionObservers are registered for actions in the group,
  * "action_removed" notifications will be emitted, as appropriate.
- *
- * Since: 2.32
- **/
+ */
 void
 g_action_muxer_remove (GActionMuxer *muxer,
                        const gchar  *prefix)
@@ -491,13 +483,11 @@ g_action_muxer_remove (GActionMuxer *muxer,
     }
 }
 
-/**
+/*
  * g_action_muxer_new:
  *
  * Creates a new #GActionMuxer.
- *
- * Since: 2.32
- **/
+ */
 GActionMuxer *
 g_action_muxer_new (void)
 {

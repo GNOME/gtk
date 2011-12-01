@@ -25,12 +25,10 @@
 
 G_DEFINE_INTERFACE (GActionObservable, g_action_observable, G_TYPE_OBJECT)
 
-/**
+/*
  * SECTION:gactionobserable
  * @short_description: an interface implemented by objects that report
  *                     changes to actions
- *
- * Since: 2.32
  */
 
 void
@@ -38,7 +36,7 @@ g_action_observable_default_init (GActionObservableInterface *iface)
 {
 }
 
-/**
+/*
  * g_action_observable_register_observer:
  * @observable: a #GActionObservable
  * @action_name: the name of the action
@@ -46,9 +44,7 @@ g_action_observable_default_init (GActionObservableInterface *iface)
  *
  * Registers @observer as being interested in changes to @action_name on
  * @observable.
- *
- * Since: 2.32
- **/
+ */
 void
 g_action_observable_register_observer (GActionObservable *observable,
                                        const gchar       *action_name,
@@ -60,7 +56,7 @@ g_action_observable_register_observer (GActionObservable *observable,
     ->register_observer (observable, action_name, observer);
 }
 
-/**
+/*
  * g_action_observable_unregister_observer:
  * @observable: a #GActionObservable
  * @action_name: the name of the action
@@ -71,9 +67,7 @@ g_action_observable_register_observer (GActionObservable *observable,
  *
  * If the observer was registered multiple times, it must be
  * unregistered an equal number of times.
- *
- * Since: 2.32
- **/
+ */
 void
 g_action_observable_unregister_observer (GActionObservable *observable,
                                          const gchar       *action_name,
