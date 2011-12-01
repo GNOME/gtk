@@ -814,7 +814,7 @@ repopulate_menu (gpointer data)
   g_list_free (children);
 
   /* repopulate */
-  model = g_application_get_menu (G_APPLICATION (d->application));
+  model = g_application_get_app_menu (G_APPLICATION (d->application));
   populate_menu_from_model (d->menu, model, G_ACTION_GROUP (d->application));
 
   d->update_idle = 0;
@@ -896,7 +896,7 @@ gtk_application_window_get_app_menu (GtkApplicationWindow *window)
 
   application = gtk_window_get_application (GTK_WINDOW (window));
 
-  model = g_application_get_menu (G_APPLICATION (application));
+  model = g_application_get_app_menu (G_APPLICATION (application));
 
   if (!model)
     return NULL;

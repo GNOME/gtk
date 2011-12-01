@@ -208,7 +208,7 @@ static void
 bloat_pad_init (BloatPad *app)
 {
   g_application_set_action_group (G_APPLICATION (app), get_actions ());
-  g_application_set_menu (G_APPLICATION (app), get_menu ());
+  g_application_set_app_menu (G_APPLICATION (app), get_menu ());
 }
 
 static void
