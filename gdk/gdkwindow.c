@@ -6266,7 +6266,7 @@ gdk_window_scroll (GdkWindow *window,
 		   gint       dy)
 {
   GdkWindow *impl_window;
-  cairo_region_t *copy_area, *noncopy_area;
+  cairo_region_t *copy_area, *noncopy_area, *old_layered_area;
   cairo_region_t *old_native_child_region, *new_native_child_region;
   GList *tmp_list;
 
@@ -6280,6 +6280,7 @@ gdk_window_scroll (GdkWindow *window,
 
   gdk_window_flush_if_exposing (window);
 
+  old_layered_area = cairo_region_copy (window->layered_region);
   old_native_child_region = collect_native_child_region (window, FALSE);
   if (old_native_child_region)
     {
@@ -6320,7 +6321,11 @@ gdk_window_scroll (GdkWindow *window,
   impl_window = gdk_window_get_impl_window (window);
 
   /* Calculate the area that can be gotten by copying the old area */
-  copy_area = cairo_region_copy (window->clip_region);
+  if (window->has_alpha_background)
+    copy_area = cairo_region_create (); /* Copy nothing for alpha windows */
+  else
+    copy_area = cairo_region_copy (window->clip_region);
+  cairo_region_subtract (copy_area, old_layered_area);
   if (old_native_child_region)
     {
       /* Don't copy from inside native children, as this is copied by
@@ -6334,6 +6339,7 @@ gdk_window_scroll (GdkWindow *window,
     }
   cairo_region_translate (copy_area, dx, dy);
   cairo_region_intersect (copy_area, window->clip_region);
+  cairo_region_subtract (copy_area, window->layered_region);
 
   /* And the rest need to be invalidated */
   noncopy_area = cairo_region_copy (window->clip_region);
@@ -6355,6 +6361,7 @@ gdk_window_scroll (GdkWindow *window,
   gdk_window_invalidate_region_full (window, noncopy_area, TRUE, CLEAR_BG_ALL);
 
   cairo_region_destroy (noncopy_area);
+  cairo_region_destroy (old_layered_area);
 
   if (old_native_child_region)
     {
