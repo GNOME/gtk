@@ -28,6 +28,28 @@
 #include "gtkmenubar.h"
 #include "gactionmuxer.h"
 
+/**
+ * SECTION:gtkapplicationwindow
+ * @title: GtkApplicationWindow
+ * @short_description: GtkWindow subclass with GtkApplication support
+ *
+ * GtkApplicationWindow is a #GtkWindow subclass that offers some extra
+ * functionality for better integration with #GtkApplication features.
+ * It implements the #GActionGroup and #GActionMap interfaces, to let
+ * you add window-specific actions that will be exported by the associated
+ * #GtkApplication, together with its application-wide actions.
+ * Window-specific actions are prefixed with the "win." prefix and
+ * application-wide actions are prefixed with the "app." prefix.
+ * Actions must be addressed with the prefixed name when referring
+ * to them from a #GMenuModel.
+ *
+ * If the desktop environment does not display the application menu
+ * as part of the desktop shell, then #GApplicationWindow will
+ * automatically show the menu as part of a menubar. This behaviour
+ * can be overridden with the #GtkApplicationWindow:show-app-menu
+ * property.
+ */
+
 struct _GtkApplicationWindowPrivate
 {
   GSimpleActionGroup *actions;
@@ -828,27 +850,25 @@ items_changed (GMenuModel *model,
 
 /**
  * gtk_application_window_get_app_menu:
- * @application: a #GtkApplication
+ * @window: a #GtkApplicationWindow
  *
  * Populates a menu widget from a menu model that is
- * associated with @application. See g_application_set_menu().
- * The menu items will be connected to action of @application,
- * as indicated by the menu model. The menus contents will be
- * updated automatically in response to menu model changes.
+ * associated with @window. See g_application_set_menu().
+ * The menu items will be connected to actions of @window or
+ * its associated #GtkApplication, as indicated by the menu model.
+ * The menus contents will be updated automatically in response
+ * to menu model changes.
  *
  * It is the callers responsibility to add the menu at a
  * suitable place in the widget hierarchy.
  *
- * This function returns %NULL if @application has no associated
- * menu model. It also returns %NULL if the menu model is
- * represented outside the application, e.g. by an application
- * menu in the desktop shell.
+ * This function returns %NULL if @window has no associated
+ * menu model.
  *
  * @menu may be a #GtkMenu or a #GtkMenuBar.
  *
  * Returns: A #GtkMenu that has been populated from the
- *     #GMenuModel that is associated with @application,
- *     or %NULL
+ *     #GMenuModel that is associated with @window, or %NULL
  */
 GtkWidget *
 gtk_application_window_get_app_menu (GtkApplicationWindow *window)

@@ -1327,7 +1327,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-shell-shows-app-menu",
                                                                    P_("Desktop shell shows app menu"),
-                                                                   P_("Set to true if the desktop environment is displaying the app menu, FALSE if the app should display it itself."),
+                                                                   P_("Set to TRUE if the desktop environment "
+                                                                      "is displaying the app menu, FALSE if "
+                                                                      "the app should display it itself."),
                                                                    FALSE, GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_SHELL_SHOWS_APP_MENU);
