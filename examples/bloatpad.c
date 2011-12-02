@@ -34,28 +34,28 @@ get_clipboard (GtkWidget *widget)
 
 static void
 window_copy (GSimpleAction *action,
-	     GVariant      *parameter,
-	     gpointer       user_data)
+             GVariant      *parameter,
+             gpointer       user_data)
 {
   GtkWindow *window = GTK_WINDOW (user_data);
   GtkTextView *text = g_object_get_data ((GObject*)window, "bloatpad-text");
 
   gtk_text_buffer_copy_clipboard (gtk_text_view_get_buffer (text),
-				  get_clipboard ((GtkWidget*) text));
+                                  get_clipboard ((GtkWidget*) text));
 }
 
 static void
 window_paste (GSimpleAction *action,
-	      GVariant      *parameter,
-	      gpointer       user_data)
+              GVariant      *parameter,
+              gpointer       user_data)
 {
   GtkWindow *window = GTK_WINDOW (user_data);
   GtkTextView *text = g_object_get_data ((GObject*)window, "bloatpad-text");
   
   gtk_text_buffer_paste_clipboard (gtk_text_view_get_buffer (text),
-				   get_clipboard ((GtkWidget*) text),
-				   NULL,
-				   TRUE);
+                                   get_clipboard ((GtkWidget*) text),
+                                   NULL,
+                                   TRUE);
 
 }
 
