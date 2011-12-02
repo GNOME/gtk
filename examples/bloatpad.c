@@ -190,57 +190,36 @@ create_app_actions (void)
   return G_ACTION_GROUP (actions);
 }
 
-static GMenuModel *
-create_app_menu (void)
-{
-  GMenu *menu = g_menu_new ();
-  g_menu_append (menu, "_About Bloatpad", "app.about");
-  g_menu_append (menu, "_Quit", "app.quit");
-
-  return G_MENU_MODEL (menu);
-}
-
-static GMenuModel *
-create_window_menu (void)
-{
-  GMenu *menu;
-  GMenu *submenu;
-
-  submenu = g_menu_new ();
-  g_menu_append (submenu, "_Copy", "win.copy");
-  g_menu_append (submenu, "_Paste", "win.paste");
-
-  menu = g_menu_new ();
-  g_menu_append_submenu (menu, "_Edit", (GMenuModel*)submenu);
-  g_object_unref (submenu);
-
-  submenu = g_menu_new ();
-  g_menu_append (submenu, "_Fullscreen", "win.fullscreen");
-
-  g_menu_append_submenu (menu, "_View", (GMenuModel*)submenu);
-  g_object_unref (submenu);
-
-  return G_MENU_MODEL (menu);
-}
-
 static void
 bloat_pad_init (BloatPad *app)
 {
   GActionGroup *actions;
-  GMenuModel *app_menu;
-  GMenuModel *window_menu;
+  GtkBuilder *builder;
 
   actions = create_app_actions ();
   g_application_set_action_group (G_APPLICATION (app), actions);
   g_object_unref (actions);
 
-  app_menu = create_app_menu ();
-  g_application_set_app_menu (G_APPLICATION (app), app_menu);
-  g_object_unref (app_menu);
-
-  window_menu = create_window_menu ();
-  g_application_set_menubar (G_APPLICATION (app), window_menu);
-  g_object_unref (window_menu);
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder,
+                               "<interface>"
+                               "  <menu id='app-menu'>"
+                               "    <item label='_About Bloatpad' action='app.about'/>"
+                               "    <item label='_Quit' action='app.quit'/>"
+                               "  </menu>"
+                               "  <menu id='menubar'>"
+                               "    <submenu label='_Edit'>"
+                               "      <item label='_Copy' action='win.copy'/>"
+                               "      <item label='_Paste' action='win.paste'/>"
+                               "    </submenu>"
+                               "    <submenu label='_View'>"
+                               "      <item label='_Fullscreen' action='win.fullscreen'/>"
+                               "    </submenu>"
+                               "  </menu>"
+                               "</interface>", -1, NULL);
+  g_application_set_app_menu (G_APPLICATION (app), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+  g_application_set_menubar (G_APPLICATION (app), G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
+  g_object_unref (builder);
 }
 
 static void
