@@ -29,6 +29,7 @@ struct _GtkModelMenuItem
 
   GActionGroup *actions;
   const gchar *action_name;
+  gboolean has_indicator;
   gboolean can_activate;
   GVariant *target;
 };
@@ -46,6 +47,31 @@ gtk_model_menu_item_activate (GtkMenuItem *menu_item)
 
   if (item->can_activate)
     g_action_group_activate_action (item->actions, item->action_name, item->target);
+}
+
+static void
+gtk_model_menu_item_toggle_size_request (GtkMenuItem *menu_item,
+                                         gint        *requisition)
+{
+  GtkModelMenuItem *item = GTK_MODEL_MENU_ITEM (menu_item);
+
+  if (item->has_indicator)
+    GTK_MENU_ITEM_CLASS (gtk_model_menu_item_parent_class)
+      ->toggle_size_request (menu_item, requisition);
+
+  else
+    *requisition = 0;
+}
+
+static void
+gtk_model_menu_item_draw_indicator (GtkCheckMenuItem *check_item,
+                                    cairo_t          *cr)
+{
+  GtkModelMenuItem *item = GTK_MODEL_MENU_ITEM (check_item);
+
+  if (item->has_indicator)
+    GTK_CHECK_MENU_ITEM_CLASS (gtk_model_menu_item_parent_class)
+      ->draw_indicator (check_item, cr);
 }
 
 static void
@@ -88,6 +114,7 @@ gtk_model_menu_item_action_added (GActionObserver    *observer,
           selected = g_variant_equal (state, item->target);
           gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (item), TRUE);
           gtk_model_menu_item_set_active (item, selected);
+          item->has_indicator = TRUE;
         }
 
       else if (state != NULL && g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
@@ -95,15 +122,18 @@ gtk_model_menu_item_action_added (GActionObserver    *observer,
           /* boolean state actions without target are checks */
           gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (item), FALSE);
           gtk_model_menu_item_set_active (item, g_variant_get_boolean (state));
+          item->has_indicator = TRUE;
         }
 
       else
         {
           /* stateless items are just plain actions */
           gtk_model_menu_item_set_active (item, FALSE);
+          item->has_indicator = FALSE;
         }
 
       gtk_widget_set_sensitive (GTK_WIDGET (item), enabled);
+      gtk_widget_queue_resize (GTK_WIDGET (item));
     }
 }
 
@@ -151,6 +181,9 @@ gtk_model_menu_item_action_removed (GActionObserver   *observer,
 
   gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
   gtk_model_menu_item_set_active (item, FALSE);
+  item->has_indicator = FALSE;
+
+  gtk_widget_queue_resize (GTK_WIDGET (item));
 }
 
 static void
@@ -224,10 +257,14 @@ gtk_model_menu_item_observer_iface_init (GActionObserverInterface *iface)
 static void
 gtk_model_menu_item_class_init (GtkModelMenuItemClass *class)
 {
+  GtkCheckMenuItemClass *check_class = GTK_CHECK_MENU_ITEM_CLASS (class);
   GtkMenuItemClass *item_class = GTK_MENU_ITEM_CLASS (class);
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  check_class->draw_indicator = gtk_model_menu_item_draw_indicator;
+
   item_class->activate = gtk_model_menu_item_activate;
+  item_class->toggle_size_request = gtk_model_menu_item_toggle_size_request;
 
   object_class->finalize = gtk_model_menu_item_finalize;
 }
