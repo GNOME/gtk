@@ -628,7 +628,7 @@ append_items_from_model (GtkMenuShell      *menu,
 
   n = g_menu_model_get_n_items (model);
 
-  if (*need_separator && n > 0)
+  if (!GTK_IS_MENU_BAR (menu) && *need_separator && n > 0)
     {
       w = gtk_separator_menu_item_new ();
       gtk_widget_show (w);
@@ -654,7 +654,7 @@ append_items_from_model (GtkMenuShell      *menu,
           g_object_unref (m);
           g_free (label);
 
-          if (*need_separator)
+          if (!GTK_IS_MENU_BAR (menu)  && *need_separator)
             {
               w = gtk_separator_menu_item_new ();
               gtk_widget_show (w);
