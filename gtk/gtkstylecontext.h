@@ -686,6 +686,16 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_PULSE "pulse"
 
+/**
+ * GTK_STYLE_CLASS_ARROW:
+ *
+ * A CSS class used when rendering an arrow element.
+ *
+ * Note that #gtk_render_arrow automatically adds this style class
+ * to the style context when rendering an arrow element.
+ */
+#define GTK_STYLE_CLASS_ARROW "arrow"
+
 
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
 
