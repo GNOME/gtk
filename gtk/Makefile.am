@@ -434,6 +434,7 @@ gtk_private_h_sources =		\
 	gtkmenuitemprivate.h	\
 	gtkmenushellprivate.h	\
 	gtkmnemonichash.h	\
+	gtkmodelmenuitem.h	\
 	gtkmodifierstyle.h	\
 	gtkmodulesprivate.h	\
 	gtkmountoperationprivate.h \
@@ -635,6 +636,7 @@ gtk_base_c_sources = 		\
 	gtkmessagedialog.c	\
 	gtkmisc.c		\
 	gtkmnemonichash.c	\
+	gtkmodelmenuitem.c	\
 	gtkmodifierstyle.c	\
 	gtkmodules.c		\
 	gtkmountoperation.c	\
