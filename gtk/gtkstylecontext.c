@@ -3716,12 +3716,16 @@ gtk_render_arrow (GtkStyleContext *context,
 
   cairo_save (cr);
 
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
+
   store_animation_region (context, x, y, size, size);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_arrow (priv->theming_engine, cr,
                               angle, x, y, size);
 
+  gtk_style_context_restore (context);
   cairo_restore (cr);
 }
 
