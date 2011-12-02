@@ -82,8 +82,6 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
                         (g_menu_model_get_n_items (G_MENU_MODEL (window->priv->app_menu_section)) ||
                          g_menu_model_get_n_items (G_MENU_MODEL (window->priv->menubar_section)));
 
-  g_print ("h %d s %d\n", have_menubar, should_have_menubar);
-
   if (have_menubar && !should_have_menubar)
     {
       gtk_widget_unparent (window->priv->menubar);
@@ -122,8 +120,6 @@ gtk_application_window_update_shell_shows_app_menu (GtkApplicationWindow *window
 
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)), "gtk-shell-shows-app-menu", &shown_by_shell, NULL);
 
-  g_print ("am sbs %d\n", shown_by_shell);
-
   if (shown_by_shell)
     {
       /* the shell shows it, so don't show it locally */
@@ -151,8 +147,6 @@ gtk_application_window_update_shell_shows_menubar (GtkApplicationWindow *window)
   gboolean shown_by_shell;
 
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)), "gtk-shell-shows-menubar", &shown_by_shell, NULL);
-
-  g_print ("mb sbs %d\n", shown_by_shell);
 
   if (shown_by_shell)
     {
