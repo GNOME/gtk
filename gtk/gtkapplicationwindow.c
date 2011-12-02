@@ -87,7 +87,6 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
   if (have_menubar && !should_have_menubar)
     {
       gtk_widget_unparent (window->priv->menubar);
-      g_object_unref (window->priv->menubar);
       window->priv->menubar = NULL;
 
       gtk_widget_queue_resize (GTK_WIDGET (window));
@@ -503,7 +502,11 @@ gtk_application_window_dispose (GObject *object)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (object);
 
-  g_clear_object (&window->priv->menubar);
+  if (window->priv->menubar)
+    {
+      gtk_widget_unparent (window->priv->menubar);
+      window->priv->menubar = NULL;
+    }
   g_clear_object (&window->priv->actions);
 
   G_OBJECT_CLASS (gtk_application_window_parent_class)
