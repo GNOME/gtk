@@ -230,6 +230,9 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
 
       else
         gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
+
+      if (state != NULL)
+        g_variant_unref (state);
     }
 }
 
