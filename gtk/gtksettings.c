@@ -204,7 +204,8 @@ enum {
   PROP_COLOR_PALETTE,
   PROP_IM_PREEDIT_STYLE,
   PROP_IM_STATUS_STYLE,
-  PROP_SHELL_SHOWS_APP_MENU
+  PROP_SHELL_SHOWS_APP_MENU,
+  PROP_SHELL_SHOWS_MENUBAR
 };
 
 /* --- prototypes --- */
@@ -1334,6 +1335,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_SHELL_SHOWS_APP_MENU);
 
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-shell-shows-menubar",
+                                                                   P_("Desktop shell shows the menubar"),
+                                                                   P_("Set to TRUE if the desktop environment "
+                                                                      "is displaying the menubar, FALSE if "
+                                                                      "the app should display it itself."),
+                                                                   FALSE, GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_SHELL_SHOWS_MENUBAR);
 
   g_type_class_add_private (class, sizeof (GtkSettingsPrivate));
 }
