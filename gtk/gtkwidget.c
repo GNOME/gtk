@@ -3784,6 +3784,9 @@ gtk_widget_unparent (GtkWidget *widget)
       gtk_widget_queue_compute_expand (old_parent);
     }
 
+  /* Unset window-unfocused since we are no longer inside a toplevel window */
+  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_WINDOW_UNFOCUSED);
+
   g_signal_emit (widget, widget_signals[PARENT_SET], 0, old_parent);
   if (toplevel)
     {
