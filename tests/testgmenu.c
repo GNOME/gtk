@@ -1009,13 +1009,13 @@ main (int argc, char *argv[])
   if (do_export)
     {
       g_print ("Exporting menus on the bus...\n");
-      if (!g_menu_model_dbus_export_start (bus, OBJ_PATH, model, &error))
+      if (!g_dbus_connection_export_menu_model (bus, OBJ_PATH, model, &error))
         {
           g_warning ("Menu export failed: %s", error->message);
           exit (1);
         }
       g_print ("Exporting actions on the bus...\n");
-      if (!g_action_group_dbus_export_start (bus, OBJ_PATH, group, &error))
+      if (!g_dbus_connection_export_action_group (bus, OBJ_PATH, group, &error))
         {
           g_warning ("Action export failed: %s", error->message);
           exit (1);
