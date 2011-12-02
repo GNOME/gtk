@@ -142,9 +142,7 @@ show_about (GSimpleAction *action,
             GVariant      *parameter,
             gpointer       user_data)
 {
-  GtkWindow *window = user_data;
-
-  gtk_show_about_dialog (window,
+  gtk_show_about_dialog (NULL,
                          "program-name", "Bloatpad",
                          "title", "About Bloatpad",
                          "comments", "Not much to say, really.",
@@ -179,26 +177,12 @@ static GActionEntry app_entries[] = {
   { "quit", quit_app, NULL, NULL, NULL },
 };
 
-static GActionGroup *
-create_app_actions (void)
-{
-  GSimpleActionGroup *actions = g_simple_action_group_new ();
-  g_simple_action_group_add_entries (actions,
-                                     app_entries, G_N_ELEMENTS (app_entries),
-                                     NULL);
-
-  return G_ACTION_GROUP (actions);
-}
-
 static void
 bloat_pad_init (BloatPad *app)
 {
-  GActionGroup *actions;
   GtkBuilder *builder;
 
-  actions = create_app_actions ();
-  g_application_set_action_group (G_APPLICATION (app), actions);
-  g_object_unref (actions);
+  g_action_map_add_action_entries (G_ACTION_MAP (app), app_entries, G_N_ELEMENTS (app_entries), app);
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder,
