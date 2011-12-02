@@ -507,6 +507,9 @@ gtk_application_window_dispose (GObject *object)
       gtk_widget_unparent (window->priv->menubar);
       window->priv->menubar = NULL;
     }
+
+  g_clear_object (&window->priv->app_menu_section);
+  g_clear_object (&window->priv->menubar_section);
   g_clear_object (&window->priv->actions);
 
   G_OBJECT_CLASS (gtk_application_window_parent_class)
