@@ -178,11 +178,14 @@ static GActionEntry app_entries[] = {
 };
 
 static void
-bloat_pad_init (BloatPad *app)
+bloat_pad_startup (GApplication *application)
 {
   GtkBuilder *builder;
 
-  g_action_map_add_action_entries (G_ACTION_MAP (app), app_entries, G_N_ELEMENTS (app_entries), app);
+  G_APPLICATION_CLASS (bloat_pad_parent_class)
+    ->startup (application);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (application), app_entries, G_N_ELEMENTS (app_entries), application);
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder,
@@ -201,18 +204,28 @@ bloat_pad_init (BloatPad *app)
                                "    </submenu>"
                                "  </menu>"
                                "</interface>", -1, NULL);
-  g_application_set_app_menu (G_APPLICATION (app), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
-  g_application_set_menubar (G_APPLICATION (app), G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
+  g_application_set_app_menu (application, G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+  g_application_set_menubar (application, G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
   g_object_unref (builder);
+}
+
+static void
+bloat_pad_init (BloatPad *app)
+{
 }
 
 static void
 bloat_pad_class_init (BloatPadClass *class)
 {
-  G_OBJECT_CLASS (class)->finalize = bloat_pad_finalize;
+  GApplicationClass *application_class = G_APPLICATION_CLASS (class);
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  G_APPLICATION_CLASS (class)->activate = bloat_pad_activate;
-  G_APPLICATION_CLASS (class)->open = bloat_pad_open;
+  application_class->startup = bloat_pad_startup;
+  application_class->activate = bloat_pad_activate;
+  application_class->open = bloat_pad_open;
+
+  object_class->finalize = bloat_pad_finalize;
+
 }
 
 BloatPad *
