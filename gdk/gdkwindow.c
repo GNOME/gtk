@@ -9064,7 +9064,7 @@ do_synthesize_crossing_event (gpointer data)
               _gdk_synthesize_crossing_events (display,
                                                pointer_info->window_under_pointer,
                                                new_window_under_pointer,
-                                               device, NULL,
+                                               device, pointer_info->last_slave,
                                                GDK_CROSSING_NORMAL,
                                                pointer_info->toplevel_x,
                                                pointer_info->toplevel_y,
@@ -9590,6 +9590,17 @@ _gdk_windowing_got_event (GdkDisplay *display,
     {
       GdkInputMode mode;
 
+      pointer_info = _gdk_display_get_pointer_info (display, device);
+
+      if (pointer_info)
+        {
+          if (source_device != pointer_info->last_slave &&
+              gdk_device_get_device_type (source_device) == GDK_DEVICE_TYPE_SLAVE)
+            pointer_info->last_slave = source_device;
+          else
+            source_device = pointer_info->last_slave;
+        }
+
       g_object_get (device, "input-mode", &mode, NULL);
       _gdk_display_device_grab_update (display, device, source_device, serial);
 
@@ -9607,8 +9618,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
   event_window = event->any.window;
   if (!event_window)
     return;
-
-  pointer_info = _gdk_display_get_pointer_info (display, device);
 
 #ifdef DEBUG_WINDOW_PRINTING
   if (event->type == GDK_KEY_PRESS &&
