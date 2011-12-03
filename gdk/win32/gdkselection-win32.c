@@ -865,10 +865,12 @@ gdk_selection_property_get (GdkWindow  *requestor,
 void
 _gdk_selection_property_delete (GdkWindow *window)
 {
+  GdkSelProp *prop;
+
   GDK_NOTE (DND, g_print ("_gdk_selection_property_delete: %p (no-op)\n",
 			   GDK_WINDOW_HWND (window)));
 
-#if 0
+#if 1 /* without this we can only paste the first image from clipboard */
   prop = g_hash_table_lookup (sel_prop_table, GDK_WINDOW_HWND (window));
   if (prop != NULL)
     {
