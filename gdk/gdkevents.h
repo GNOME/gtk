@@ -385,6 +385,15 @@ typedef enum
  * @GDK_CROSSING_GTK_UNGRAB: crossing because a GTK+ grab is deactivated.
  * @GDK_CROSSING_STATE_CHANGED: crossing because a GTK+ widget changed
  *   state (e.g. sensitivity).
+ * @GDK_CROSSING_STATE_CHANGED: crossing because a GTK+ widget changed
+ *   state (e.g. sensitivity).
+ * @GDK_CROSSING_TOUCH_PRESS: crossing because a touch device was pressed,
+ *   this event is synthetic as the pointer might have not left the window.
+ * @GDK_CROSSING_TOUCH_RELEASE: crossing because a touch device was released.
+ *   this event is synthetic as the pointer might have not left the window.
+ * @GDK_CROSSING_DEVICE_SWITCH: crossing because of a device switch (i.e.
+ *   a mouse taking control of the pointer after a touch device), this event
+ *   is synthetic as the pointer didn't leave the window.
  *
  * Specifies the crossing mode for #GdkEventCrossing.
  */
@@ -395,7 +404,10 @@ typedef enum
   GDK_CROSSING_UNGRAB,
   GDK_CROSSING_GTK_GRAB,
   GDK_CROSSING_GTK_UNGRAB,
-  GDK_CROSSING_STATE_CHANGED
+  GDK_CROSSING_STATE_CHANGED,
+  GDK_CROSSING_TOUCH_PRESS,
+  GDK_CROSSING_TOUCH_RELEASE,
+  GDK_CROSSING_DEVICE_SWITCH
 } GdkCrossingMode;
 
 /**

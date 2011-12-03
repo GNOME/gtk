@@ -897,15 +897,25 @@ switch_to_pointer_grab (GdkDisplay        *display,
 
       if (grab == NULL) /* Ungrabbed, send events */
 	{
-	  pointer_window = NULL;
-	  if (new_toplevel)
-	    {
-	      /* Find (possibly virtual) child window */
-	      pointer_window =
-		_gdk_window_find_descendant_at (new_toplevel,
-						x, y,
-						NULL, NULL);
-	    }
+          /* If the source device is a touch device, do not
+           * propagate any enter event yet, until one is
+           * synthesized when needed.
+           */
+          if (source_device &&
+              gdk_device_get_source (source_device) == GDK_SOURCE_TOUCH)
+            info->need_touch_press_enter = TRUE;
+
+          pointer_window = NULL;
+
+          if (new_toplevel &&
+              !info->need_touch_press_enter)
+            {
+              /* Find (possibly virtual) child window */
+              pointer_window =
+                _gdk_window_find_descendant_at (new_toplevel,
+                                                x, y,
+                                                NULL, NULL);
+            }
 
 	  if (pointer_window != last_grab->window)
             synthesize_crossing_events (display, device, source_device,
