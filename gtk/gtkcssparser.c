@@ -608,6 +608,7 @@ _gtk_css_parser_try_enum (GtkCssParser *parser,
 	}
     }
 
+  g_free (str);
   g_type_class_unref (enum_class);
 
   if (!result)
