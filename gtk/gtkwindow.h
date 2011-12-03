@@ -159,6 +159,9 @@ gboolean   gtk_window_get_focus_on_map         (GtkWindow           *window);
 void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
                                                 gboolean             setting);
 gboolean   gtk_window_get_destroy_with_parent  (GtkWindow           *window);
+void       gtk_window_set_hide_titlebar_when_maximized (GtkWindow   *window,
+                                                        gboolean     setting);
+gboolean   gtk_window_get_hide_titlebar_when_maximized (GtkWindow   *window);
 void       gtk_window_set_mnemonics_visible    (GtkWindow           *window,
                                                 gboolean             setting);
 gboolean   gtk_window_get_mnemonics_visible    (GtkWindow           *window);

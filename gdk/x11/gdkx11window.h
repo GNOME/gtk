@@ -59,6 +59,8 @@ void     gdk_x11_window_set_user_time     (GdkWindow   *window,
                                            guint32      timestamp);
 void     gdk_x11_window_set_theme_variant (GdkWindow   *window,
                                            char        *variant);
+void     gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
+                                                          gboolean   hide_titlebar_when_maximized);
 void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);
 
 /**

@@ -152,6 +152,7 @@ struct _GtkWindowPrivate
   guint    has_focus                 : 1;
   guint    has_user_ref_count        : 1;
   guint    has_toplevel_focus        : 1;
+  guint    hide_titlebar_when_maximized : 1;
   guint    iconify_initially         : 1; /* gtk_window_iconify() called before realization */
   guint    is_active                 : 1;
   guint    maximize_initially        : 1;
@@ -206,6 +207,7 @@ enum {
   PROP_DEFAULT_WIDTH,
   PROP_DEFAULT_HEIGHT,
   PROP_DESTROY_WITH_PARENT,
+  PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED,
   PROP_ICON,
   PROP_ICON_NAME,
   PROP_SCREEN,
@@ -696,6 +698,21 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    g_param_spec_boolean ("destroy-with-parent",
 							 P_("Destroy with Parent"),
 							 P_("If this window should be destroyed when the parent is destroyed"),
+                                                         FALSE,
+							 GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWindow:hide-titlebar-when-maximized:
+   *
+   * Whether the titlebar should be hidden during maximization.
+   *
+   * Since: 3.4
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED,
+                                   g_param_spec_boolean ("hide-titlebar-when-maximized",
+							 P_("Hide the titlebar during maximization"),
+							 P_("If this window's titlebar should be hidden when the window is maximized"),
                                                          FALSE,
 							 GTK_PARAM_READWRITE));
 
@@ -1209,6 +1226,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_DESTROY_WITH_PARENT:
       gtk_window_set_destroy_with_parent (window, g_value_get_boolean (value));
       break;
+    case PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED:
+      gtk_window_set_hide_titlebar_when_maximized (window, g_value_get_boolean (value));
+      break;
     case PROP_ICON:
       gtk_window_set_icon (window,
                            g_value_get_object (value));
@@ -1322,6 +1342,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_DESTROY_WITH_PARENT:
       g_value_set_boolean (value, priv->destroy_with_parent);
+      break;
+    case PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED:
+      g_value_set_boolean (value, priv->hide_titlebar_when_maximized);
       break;
     case PROP_ICON:
       g_value_set_object (value, gtk_window_get_icon (window));
@@ -3037,6 +3060,61 @@ gtk_window_get_destroy_with_parent (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
   return window->priv->destroy_with_parent;
+}
+
+/**
+ * gtk_window_set_hide_titlebar_when_maximized:
+ * @window: a #GtkWindow
+ * @setting: whether to hide the titlebar when @window is maximized
+ *
+ * If @setting is %TRUE, then @window will request that it's titlebar
+ * should be hidden when maximized.
+ * This is useful for windows that don't convey any information other
+ * than the application name in the titlebar, to put the available
+ * screen space to better use. If the underlying window system does not
+ * support the request, the setting will not have any effect.
+ *
+ * Since: 3.4
+ **/
+void
+gtk_window_set_hide_titlebar_when_maximized (GtkWindow *window,
+                                             gboolean   setting)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+#ifdef GDK_WINDOWING_X11
+  {
+    GdkWindow *gdk_window;
+
+    gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+
+    if (GDK_IS_X11_WINDOW (gdk_window))
+      gdk_x11_window_set_hide_titlebar_when_maximized (gdk_window, setting);
+  }
+#endif
+
+  window->priv->hide_titlebar_when_maximized = setting;
+  g_object_notify (G_OBJECT (window), "hide-titlebar-when-maximized");
+}
+
+/**
+ * gtk_window_get_hide_titlebar_when_maximized:
+ * @window: a #GtkWindow
+ *
+ * Returns whether the window has requested to have its titlebar hidden
+ * when maximized. See gtk_window_set_hide_titlebar_when_maximized ().
+ *
+ * Return value: %TRUE if the window has requested to have its titlebar
+ *               hidden when maximized
+ *
+ * Since: 3.4
+ **/
+gboolean
+gtk_window_get_hide_titlebar_when_maximized (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  return window->priv->hide_titlebar_when_maximized;
 }
 
 static GtkWindowGeometryInfo*
@@ -4760,7 +4838,11 @@ gtk_window_map (GtkWidget *widget)
   gdk_window_set_keep_below (gdk_window, priv->below_initially);
 
   if (priv->type == GTK_WINDOW_TOPLEVEL)
-    gtk_window_set_theme_variant (window);
+    {
+      gtk_window_set_theme_variant (window);
+      gtk_window_set_hide_titlebar_when_maximized (window,
+                                                   priv->hide_titlebar_when_maximized);
+    }
 
   /* No longer use the default settings */
   priv->need_default_size = FALSE;
