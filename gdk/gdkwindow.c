@@ -8322,9 +8322,11 @@ send_crossing_event (GdkDisplay                 *display,
   GdkEvent *event;
   guint32 window_event_mask, type_event_mask;
   GdkDeviceGrabInfo *grab;
+  GdkPointerWindowInfo *pointer_info;
   gboolean block_event = FALSE;
 
   grab = _gdk_display_has_device_grab (display, device, serial);
+  pointer_info = _gdk_display_get_pointer_info (display, device);
 
   if (grab != NULL &&
       !grab->owner_events)
@@ -8337,7 +8339,14 @@ send_crossing_event (GdkDisplay                 *display,
   else
     window_event_mask = window->event_mask;
 
-  if (type == GDK_LEAVE_NOTIFY)
+  if (type == GDK_ENTER_NOTIFY &&
+      pointer_info->need_touch_press_enter &&
+      mode != GDK_CROSSING_TOUCH_PRESS &&
+      mode != GDK_CROSSING_TOUCH_RELEASE)
+    {
+      block_event = TRUE;
+    }
+  else if (type == GDK_LEAVE_NOTIFY)
     {
       type_event_mask = GDK_LEAVE_NOTIFY_MASK;
       window->devices_inside = g_list_remove (window->devices_inside, device);
@@ -9161,7 +9170,7 @@ proxy_pointer_event (GdkDisplay                 *display,
   guint state;
   gdouble toplevel_x, toplevel_y;
   guint32 time_;
-  gboolean non_linear;
+  gboolean non_linear, need_synthetic_enter = FALSE;
 
   event_window = source_event->any.window;
   gdk_event_get_coords (source_event, &toplevel_x, &toplevel_y);
@@ -9180,6 +9189,13 @@ proxy_pointer_event (GdkDisplay                 *display,
       (source_event->crossing.detail == GDK_NOTIFY_NONLINEAR ||
        source_event->crossing.detail == GDK_NOTIFY_NONLINEAR_VIRTUAL))
     non_linear = TRUE;
+
+  if (pointer_info->need_touch_press_enter &&
+      gdk_device_get_source (pointer_info->last_slave) != GDK_SOURCE_TOUCH)
+    {
+      pointer_info->need_touch_press_enter = FALSE;
+      need_synthetic_enter = TRUE;
+    }
 
   /* If we get crossing events with subwindow unexpectedly being NULL
      that means there is a native subwindow that gdk doesn't know about.
@@ -9304,6 +9320,18 @@ proxy_pointer_event (GdkDisplay                 *display,
           gdk_window_get_device_events (event_win, device) == 0)
         return TRUE;
 
+      /* The last device to interact with the window was a touch device,
+       * which synthesized a leave notify event, so synthesize another enter
+       * notify to tell the pointer is on the window.
+       */
+      if (need_synthetic_enter)
+        _gdk_synthesize_crossing_events (display,
+                                         NULL, pointer_window,
+                                         device, source_device,
+                                         GDK_CROSSING_DEVICE_SWITCH,
+                                         toplevel_x, toplevel_y,
+                                         state, time_, NULL,
+                                         serial, FALSE);
       is_hint = FALSE;
 
       if (event_win &&
@@ -9362,6 +9390,7 @@ proxy_button_event (GdkEvent *source_event,
   GdkWindow *pointer_window;
   GdkWindow *parent;
   GdkEvent *event;
+  GdkPointerWindowInfo *pointer_info;
   guint state;
   guint32 time_;
   GdkEventType type;
@@ -9381,6 +9410,7 @@ proxy_button_event (GdkEvent *source_event,
   toplevel_window = convert_native_coords_to_toplevel (event_window,
 						       toplevel_x, toplevel_y,
 						       &toplevel_x, &toplevel_y);
+  pointer_info = _gdk_display_get_pointer_info (display, device);
 
   if (type == GDK_BUTTON_PRESS &&
       !source_event->any.send_event &&
@@ -9433,6 +9463,30 @@ proxy_button_event (GdkEvent *source_event,
       gdk_window_get_device_events (event_win, device) == 0)
     return TRUE;
 
+  if (type == GDK_BUTTON_PRESS &&
+      pointer_info->need_touch_press_enter)
+    {
+      GdkCrossingMode mode;
+
+      /* The last device to interact with the window was a touch device,
+       * which synthesized a leave notify event, so synthesize another enter
+       * notify to tell the pointer is on the window.
+       */
+      if (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCH)
+        mode = GDK_CROSSING_TOUCH_PRESS;
+      else
+        mode = GDK_CROSSING_DEVICE_SWITCH;
+
+      pointer_info->need_touch_press_enter = FALSE;
+      _gdk_synthesize_crossing_events (display,
+                                       NULL,
+                                       pointer_info->window_under_pointer,
+                                       device, source_device, mode,
+                                       toplevel_x, toplevel_y,
+                                       state, time_, source_event,
+                                       serial, FALSE);
+    }
+
   event = _gdk_make_event (event_win, type, source_event, FALSE);
 
   switch (type)
@@ -9453,7 +9507,23 @@ proxy_button_event (GdkEvent *source_event,
       gdk_event_set_source_device (event, source_device);
 
       if (type == GDK_BUTTON_PRESS)
-	_gdk_event_button_generate (display, event);
+        _gdk_event_button_generate (display, event);
+      else if (type == GDK_BUTTON_RELEASE &&
+               pointer_window == pointer_info->window_under_pointer &&
+               gdk_device_get_source (source_device) == GDK_SOURCE_TOUCH)
+        {
+          /* Synthesize a leave notify event
+           * whenever a touch device is released
+           */
+          pointer_info->need_touch_press_enter = TRUE;
+          _gdk_synthesize_crossing_events (display,
+                                           pointer_window, NULL,
+                                           device, source_device,
+                                           GDK_CROSSING_TOUCH_RELEASE,
+                                           toplevel_x, toplevel_y,
+                                           state, time_, NULL,
+                                           serial, FALSE);
+        }
       return TRUE;
 
     case GDK_SCROLL:
