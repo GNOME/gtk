@@ -75,6 +75,7 @@ typedef struct
   gdouble toplevel_x, toplevel_y;
   guint32 state;
   guint32 button;
+  GdkDevice *last_slave;
 } GdkPointerWindowInfo;
 
 typedef struct
