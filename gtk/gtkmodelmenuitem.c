@@ -23,6 +23,8 @@
 
 #include "gtkmodelmenuitem.h"
 
+#include "gtkmodelmenu.h"
+
 struct _GtkModelMenuItem
 {
   GtkCheckMenuItem parent_instance;
@@ -193,8 +195,15 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
                            GActionObservable *actions)
 {
   GMenuAttributeIter *iter;
+  GMenuModel *submenu;
   const gchar *key;
   GVariant *value;
+
+  if ((submenu = g_menu_model_get_item_link (model, item_index, "submenu")))
+    {
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), gtk_model_menu_create_menu (submenu, actions));
+      g_object_unref (submenu);
+    }
 
   iter = g_menu_model_iterate_item_attributes (model, item_index);
   while (g_menu_attribute_iter_get_next (iter, &key, &value))

@@ -23,10 +23,7 @@
 
 #include "gtkapplicationwindow.h"
 
-#include "gtkseparatormenuitem.h"
-#include "gtkmodelmenuitem.h"
-#include "gtkcheckmenuitem.h"
-#include "gtkmenubar.h"
+#include "gtkmodelmenu.h"
 #include "gactionmuxer.h"
 #include "gtkintl.h"
 
@@ -65,11 +62,6 @@ struct _GtkApplicationWindowPrivate
   gboolean show_menubar;
 };
 
-static GtkWidget *
-gtk_application_window_create_menubar (GMenuModel        *model,
-                                       GActionObservable *actions);
-
-
 static void
 gtk_application_window_update_menubar (GtkApplicationWindow *window)
 {
@@ -103,7 +95,7 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
       g_menu_append_section (combined, NULL, G_MENU_MODEL (window->priv->app_menu_section));
       g_menu_append_section (combined, NULL, G_MENU_MODEL (window->priv->menubar_section));
 
-      window->priv->menubar = gtk_application_window_create_menubar (G_MENU_MODEL (combined), G_ACTION_OBSERVABLE (muxer));
+      window->priv->menubar = gtk_model_menu_create_menu_bar (G_MENU_MODEL (combined), G_ACTION_OBSERVABLE (muxer));
       gtk_widget_set_parent (window->priv->menubar, GTK_WIDGET (window));
       gtk_widget_show_all (window->priv->menubar);
       g_object_unref (combined);
@@ -628,206 +620,4 @@ gtk_application_window_set_show_menubar (GtkApplicationWindow *window,
 
       g_object_notify_by_pspec (G_OBJECT (window), gtk_application_window_properties[PROP_SHOW_MENUBAR]);
     }
-}
-
-/* GtkMenu construction {{{1 */
-
-static void populate_menu_from_model (GtkMenuShell *menu,
-                                      GMenuModel   *model,
-                                      GActionObservable *actions);
-
-static void
-append_items_from_model (GtkMenuShell      *menu,
-                         GMenuModel        *model,
-                         GActionObservable *actions,
-                         gboolean          *need_separator,
-                         const gchar       *heading)
-{
-  gint n;
-  gint i;
-  GtkWidget *w;
-  GtkMenuItem *menuitem;
-  GtkWidget *submenu;
-  GMenuModel *m;
-  gchar *label;
-
-  n = g_menu_model_get_n_items (model);
-
-  if (!GTK_IS_MENU_BAR (menu) && *need_separator && n > 0)
-    {
-      w = gtk_separator_menu_item_new ();
-      gtk_widget_show (w);
-      gtk_menu_shell_append (menu, w);
-      *need_separator = FALSE;
-    }
-
-  if (heading != NULL)
-    {
-      w = gtk_menu_item_new_with_label (heading);
-      gtk_widget_show (w);
-      gtk_widget_set_sensitive (w, FALSE);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), w);
-    }
-
-  for (i = 0; i < n; i++)
-    {
-      if ((m = g_menu_model_get_item_link (model, i, G_MENU_LINK_SECTION)))
-        {
-          label = NULL;
-          g_menu_model_get_item_attribute (model, i, G_MENU_ATTRIBUTE_LABEL, "s", &label);
-          append_items_from_model (menu, m, actions, need_separator, label);
-          g_object_unref (m);
-          g_free (label);
-
-          if (!GTK_IS_MENU_BAR (menu)  && *need_separator)
-            {
-              w = gtk_separator_menu_item_new ();
-              gtk_widget_show (w);
-              gtk_menu_shell_append (menu, w);
-              *need_separator = FALSE;
-            }
-
-          continue;
-        }
-
-      menuitem = gtk_model_menu_item_new (model, i, actions);
-
-      if ((m = g_menu_model_get_item_link (model, i, G_MENU_LINK_SUBMENU)))
-        {
-          submenu = gtk_menu_new ();
-          populate_menu_from_model (GTK_MENU_SHELL (submenu), m, actions);
-          gtk_menu_item_set_submenu (menuitem, submenu);
-          g_object_unref (m);
-        }
-
-      gtk_widget_show (GTK_WIDGET (menuitem));
-      gtk_menu_shell_append (menu, GTK_WIDGET (menuitem));
-
-      *need_separator = TRUE;
-    }
-}
-
-static void
-populate_menu_from_model (GtkMenuShell      *menu,
-                          GMenuModel        *model,
-                          GActionObservable *actions)
-{
-  gboolean need_separator;
-
-  need_separator = FALSE;
-  append_items_from_model (menu, model, actions, &need_separator, NULL);
-}
-
-typedef struct {
-  GActionObservable *actions;
-  GMenuModel        *model;
-  GtkMenuShell      *menu;
-  guint              update_idle;
-  GHashTable        *connected;
-} ItemsChangedData;
-
-static void
-free_items_changed_data (gpointer data)
-{
-  ItemsChangedData *d = data;
-
-  g_object_unref (d->actions);
-  g_object_unref (d->model);
-
-  if (d->update_idle != 0)
-    g_source_remove (d->update_idle);
-
-  g_hash_table_unref (d->connected);
-
-  g_free (d);
-}
-
-static gboolean
-repopulate_menu (gpointer data)
-{
-  ItemsChangedData *d = data;
-  GList *children, *l;
-  GtkWidget *child;
-
-  /* remove current children */
-  children = gtk_container_get_children (GTK_CONTAINER (d->menu));
-  for (l = children; l; l = l->next)
-    {
-      child = l->data;
-      gtk_container_remove (GTK_CONTAINER (d->menu), child);
-    }
-  g_list_free (children);
-
-  populate_menu_from_model (d->menu, d->model, d->actions);
-  d->update_idle = 0;
-
-  return FALSE;
-}
-
-static void
-connect_to_items_changed (GMenuModel *model,
-                          GCallback   callback,
-                          gpointer    data)
-{
-  ItemsChangedData *d = data;
-  gint i;
-  GMenuModel *m;
-  GMenuLinkIter *iter;
-
-  if (!g_hash_table_lookup (d->connected, model))
-    {
-      g_signal_connect (model, "items-changed", callback, data);
-      g_hash_table_insert (d->connected, model, model);
-    }
-
-  for (i = 0; i < g_menu_model_get_n_items (model); i++)
-    {
-      iter = g_menu_model_iterate_item_links (model, i);
-      while (g_menu_link_iter_next (iter))
-        {
-          m = g_menu_link_iter_get_value (iter);
-          connect_to_items_changed (m, callback, data);
-          g_object_unref (m);
-        }
-      g_object_unref (iter);
-    }
-}
-
-static void
-items_changed (GMenuModel *model,
-               gint        position,
-               gint        removed,
-               gint        added,
-               gpointer    data)
-{
-  ItemsChangedData *d = data;
-
-  if (d->update_idle == 0)
-    d->update_idle = gdk_threads_add_idle (repopulate_menu, data);
-  connect_to_items_changed (model, G_CALLBACK (items_changed), data);
-}
-
-static GtkWidget *
-gtk_application_window_create_menubar (GMenuModel        *model,
-                                       GActionObservable *actions)
-{
-  ItemsChangedData *data;
-  GtkWidget *menubar;
-
-  menubar = gtk_menu_bar_new ();
-
-  data = g_new (ItemsChangedData, 1);
-  data->model = g_object_ref (model);
-  data->actions = g_object_ref (actions);
-  data->menu = GTK_MENU_SHELL (menubar);
-  data->update_idle = 0;
-  data->connected = g_hash_table_new (NULL, NULL);
-
-  g_object_set_data_full (G_OBJECT (menubar), "gtk-application-menu-data",
-                          data, free_items_changed_data);
-
-  connect_to_items_changed (model, G_CALLBACK (items_changed), data);
-  repopulate_menu (data);
-
-  return menubar;
 }
