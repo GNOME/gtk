@@ -74,6 +74,7 @@ typedef struct
   guint32 state;
   guint32 button;
   GdkDevice *last_slave;
+  guint need_touch_press_enter : 1;
 } GdkPointerWindowInfo;
 
 typedef struct
