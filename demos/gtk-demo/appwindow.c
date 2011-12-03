@@ -29,6 +29,14 @@ activate_action (GtkAction *action)
                     NULL);
       return;
     }
+
+  if (g_str_equal (name, "HideTitlebar"))
+    {
+      gboolean value = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
+      gtk_window_set_hide_titlebar_when_maximized (GTK_WINDOW (window), value);
+      return;
+    }
+
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                    GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_INFO,
@@ -194,6 +202,11 @@ static GtkToggleActionEntry toggle_entries[] = {
     "Prefer Dark Theme",                       /* tooltip */
     G_CALLBACK (activate_action),
     FALSE },                                   /* is_active */
+  { "HideTitlebar", NULL,
+    "_Hide Titlebar when maximized", NULL,
+    "Hide Titlebar when maximized",
+    G_CALLBACK (activate_action),
+    FALSE }
 };
 static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
@@ -248,6 +261,7 @@ static const gchar *ui_info =
 "    </menu>"
 "    <menu action='PreferencesMenu'>"
 "      <menuitem action='DarkTheme'/>"
+"      <menuitem action='HideTitlebar'/>"
 "      <menu action='ColorMenu'>"
 "       <menuitem action='Red'/>"
 "       <menuitem action='Green'/>"
