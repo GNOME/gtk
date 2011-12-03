@@ -1527,7 +1527,11 @@ gtk_settings_get_for_screen (GdkScreen *screen)
     {
 #ifdef GDK_WINDOWING_QUARTZ
       if (GDK_IS_QUARTZ_SCREEN (screen))
-        settings = g_object_new (GTK_TYPE_SETTINGS, "gtk-key-theme-name", "Mac", NULL);
+        settings = g_object_new (GTK_TYPE_SETTINGS,
+                                 "gtk-key-theme-name", "Mac",
+                                 "gtk-shell-shows-app-menu", TRUE,
+                                 "gtk-shell-shows-menubar", TRUE,
+                                 NULL);
       else
 #endif
         settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
