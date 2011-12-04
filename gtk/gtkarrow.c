@@ -207,15 +207,15 @@ gtk_arrow_get_preferred_width (GtkWidget *widget,
                                gint      *minimum_size,
                                gint      *natural_size)
 {
-  gint xpad;
+  GtkBorder border;
 
-  gtk_misc_get_padding (GTK_MISC (widget), &xpad, NULL);
+  _gtk_misc_get_padding_and_border (GTK_MISC (widget), &border);
 
   if (minimum_size)
-    *minimum_size = MIN_ARROW_SIZE + xpad * 2;
+    *minimum_size = MIN_ARROW_SIZE + border.left + border.right;
 
   if (natural_size)
-    *natural_size = MIN_ARROW_SIZE + xpad * 2;
+    *natural_size = MIN_ARROW_SIZE + border.left + border.right;
 }
 
 static void
@@ -223,17 +223,16 @@ gtk_arrow_get_preferred_height (GtkWidget *widget,
                                 gint      *minimum_size,
                                 gint      *natural_size)
 {
-  gint ypad;
+  GtkBorder border;
 
-  gtk_misc_get_padding (GTK_MISC (widget), NULL, &ypad);
+  _gtk_misc_get_padding_and_border (GTK_MISC (widget), &border);
 
   if (minimum_size)
-    *minimum_size = MIN_ARROW_SIZE + ypad * 2;
+    *minimum_size = MIN_ARROW_SIZE + border.top + border.bottom;
 
   if (natural_size)
-    *natural_size = MIN_ARROW_SIZE + ypad * 2;
+    *natural_size = MIN_ARROW_SIZE + border.top + border.bottom;
 }
-
 
 /**
  * gtk_arrow_new:
@@ -306,19 +305,17 @@ gtk_arrow_set (GtkArrow      *arrow,
     }
 }
 
-
 static gboolean
 gtk_arrow_draw (GtkWidget *widget,
                 cairo_t   *cr)
 {
   GtkArrow *arrow = GTK_ARROW (widget);
   GtkArrowPrivate *priv = arrow->priv;
-  GtkMisc *misc = GTK_MISC (widget);
   GtkStyleContext *context;
   gdouble x, y;
   gint width, height;
   gint extent;
-  gint xpad, ypad;
+  GtkBorder border;
   gfloat xalign, yalign;
   GtkArrowType effective_arrow_type;
   gfloat arrow_scaling;
@@ -330,11 +327,11 @@ gtk_arrow_draw (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
   gtk_widget_style_get (widget, "arrow-scaling", &arrow_scaling, NULL);
 
-  gtk_misc_get_padding (misc, &xpad, &ypad);
-  gtk_misc_get_alignment (misc, &xalign, &yalign);
+  _gtk_misc_get_padding_and_border (GTK_MISC (widget), &border);
+  gtk_misc_get_alignment (GTK_MISC (widget), &xalign, &yalign);
 
-  width = gtk_widget_get_allocated_width (widget) - 2 * xpad;
-  height = gtk_widget_get_allocated_height (widget) - 2 * ypad;
+  width = gtk_widget_get_allocated_width (widget) - border.left - border.right;
+  height = gtk_widget_get_allocated_height (widget) - border.top - border.bottom;
 
   extent = MIN (width, height) * arrow_scaling;
   effective_arrow_type = priv->arrow_type;
@@ -348,8 +345,8 @@ gtk_arrow_draw (GtkWidget *widget,
         effective_arrow_type = GTK_ARROW_LEFT;
     }
 
-  x = xpad + ((width - extent) * xalign);
-  y = ypad + ((height - extent) * yalign);
+  x = border.left + ((width - extent) * xalign);
+  y = border.top + ((height - extent) * yalign);
 
   switch (effective_arrow_type)
     {

@@ -1349,15 +1349,16 @@ gtk_image_get_preferred_size (GtkImage *image,
                               gint     *height_out)
 {
   GtkImagePrivate *priv = image->priv;
-  gint xpad, ypad, width, height;
+  gint width, height;
+  GtkBorder border;
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (image));
-  gtk_misc_get_padding (GTK_MISC (image), &xpad, &ypad);
   _gtk_icon_helper_get_size (priv->icon_helper, context, &width, &height);
+  _gtk_misc_get_padding_and_border (GTK_MISC (image), &border);
 
-  width += 2 * xpad;
-  height += 2 * ypad;
+  width += border.left + border.right;
+  height += border.top + border.bottom;
 
   if (width_out)
     *width_out = width;
@@ -1374,8 +1375,8 @@ gtk_image_draw (GtkWidget *widget,
   GtkMisc *misc;
   GtkStyleContext *context;
   gint x, y, width, height;
-  gint xpad, ypad;
   gfloat xalign, yalign;
+  GtkBorder border;
 
   g_return_val_if_fail (GTK_IS_IMAGE (widget), FALSE);
 
@@ -1386,14 +1387,19 @@ gtk_image_draw (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
 
   gtk_misc_get_alignment (misc, &xalign, &yalign);
-  gtk_misc_get_padding (misc, &xpad, &ypad);
   gtk_image_get_preferred_size (image, &width, &height);
+  _gtk_misc_get_padding_and_border (misc, &border);
 
   if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;
 
-  x = floor (xpad + ((gtk_widget_get_allocated_width (widget) - width) * xalign));
-  y = floor (ypad + ((gtk_widget_get_allocated_height (widget) - height) * yalign));
+  x = floor ((gtk_widget_get_allocated_width (widget) - width) * xalign);
+  y = floor ((gtk_widget_get_allocated_height (widget) - height) * yalign);
+
+  gtk_render_frame (context, cr, x, y, width, height);
+
+  x += border.left;
+  y += border.top;
 
   if (gtk_image_get_storage_type (image) == GTK_IMAGE_ANIMATION)
     {

@@ -3239,14 +3239,14 @@ gtk_label_update_layout_width (GtkLabel *label)
 
   if (priv->ellipsize || priv->wrap)
     {
+      GtkBorder border;
       PangoRectangle logical;
-      gint xpad, ypad;
       gint width, height;
 
-      gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+      _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
 
-      width = gtk_widget_get_allocated_width (GTK_WIDGET (label)) - xpad * 2;
-      height = gtk_widget_get_allocated_height (GTK_WIDGET (label)) - ypad * 2;
+      width = gtk_widget_get_allocated_width (GTK_WIDGET (label)) - border.left - border.right;
+      height = gtk_widget_get_allocated_height (GTK_WIDGET (label)) - border.top - border.bottom;
 
       if (priv->have_transform)
         {
@@ -3606,7 +3606,7 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
   GtkLabelPrivate  *priv = label->priv;
   PangoRectangle required_rect;
   PangoRectangle natural_rect;
-  gint           xpad, ypad;
+  GtkBorder border;
 
   gtk_label_get_preferred_layout_size (label, &required_rect, &natural_rect);
 
@@ -3652,7 +3652,7 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
   natural_rect.width  = PANGO_PIXELS_CEIL (natural_rect.width);
   natural_rect.height = PANGO_PIXELS_CEIL (natural_rect.height);
 
-  gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+  _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -3678,8 +3678,8 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
           *natural_size = natural_rect.width;
         }
 
-      *minimum_size += xpad * 2;
-      *natural_size += xpad * 2;
+      *minimum_size += border.left + border.right;
+      *natural_size += border.left + border.right;
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
@@ -3706,11 +3706,10 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
           *natural_size = natural_rect.height;
         }
 
-      *minimum_size += ypad * 2;
-      *natural_size += ypad * 2;
+      *minimum_size += border.top + border.bottom;
+      *natural_size += border.top + border.bottom;
     }
 }
-
 
 static void
 gtk_label_get_preferred_width (GtkWidget *widget,
@@ -3739,22 +3738,22 @@ gtk_label_get_preferred_width_for_height (GtkWidget *widget,
 
   if (priv->wrap && (priv->angle == 90 || priv->angle == 270))
     {
-      gint xpad, ypad;
+      GtkBorder border;
 
-      gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+      _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
 
       if (priv->wrap)
         gtk_label_clear_layout (label);
 
       get_size_for_allocation (label, GTK_ORIENTATION_VERTICAL,
-                               MAX (1, height - (ypad * 2)),
+                               MAX (1, height - border.top - border.bottom),
                                minimum_width, natural_width);
 
       if (minimum_width)
-        *minimum_width += xpad * 2;
+        *minimum_width += border.right + border.left;
 
       if (natural_width)
-        *natural_width += xpad * 2;
+        *natural_width += border.right + border.left;
     }
   else
     GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
@@ -3771,22 +3770,22 @@ gtk_label_get_preferred_height_for_width (GtkWidget *widget,
 
   if (priv->wrap && (priv->angle == 0 || priv->angle == 180 || priv->angle == 360))
     {
-      gint xpad, ypad;
+      GtkBorder border;
 
-      gtk_misc_get_padding (GTK_MISC (label), &xpad, &ypad);
+      _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
 
       if (priv->wrap)
         gtk_label_clear_layout (label);
 
       get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL,
-                               MAX (1, width - xpad * 2),
+                               MAX (1, width - border.left - border.right),
                                minimum_height, natural_height);
 
       if (minimum_height)
-        *minimum_height += ypad * 2;
+        *minimum_height += border.top + border.bottom;
 
       if (natural_height)
-        *natural_height += ypad * 2;
+        *natural_height += border.top + border.bottom;
     }
   else
     GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, minimum_height, natural_height);
@@ -3906,9 +3905,9 @@ get_layout_location (GtkLabel  *label,
   GtkMisc *misc;
   GtkWidget *widget;
   GtkLabelPrivate *priv;
+  GtkBorder border;
   gint req_width, x, y;
   gint req_height;
-  gint xpad, ypad;
   gfloat xalign, yalign;
   PangoRectangle logical;
 
@@ -3917,7 +3916,7 @@ get_layout_location (GtkLabel  *label,
   priv   = label->priv;
 
   gtk_misc_get_alignment (misc, &xalign, &yalign);
-  gtk_misc_get_padding (misc, &xpad, &ypad);
+  _gtk_misc_get_padding_and_border (GTK_MISC (label), &border);
 
   if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;
@@ -3936,13 +3935,12 @@ get_layout_location (GtkLabel  *label,
   req_width  = logical.width;
   req_height = logical.height;
 
-  req_width  += 2 * xpad;
-  req_height += 2 * ypad;
+  req_width  += border.left + border.right;
+  req_height += border.top + border.bottom;
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  x = floor (allocation.x + xpad + xalign * (allocation.width - req_width) - logical.x);
-
+  x = floor (allocation.x + border.left + xalign * (allocation.width - req_width) - logical.x);
 
   /* bgo#315462 - For single-line labels, *do* align the requisition with
    * respect to the allocation, even if we are under-allocated.  For multi-line
@@ -3958,9 +3956,9 @@ get_layout_location (GtkLabel  *label,
    *   middle".  You want to read the first line, at least, to get some context.
    */
   if (pango_layout_get_line_count (priv->layout) == 1)
-    y = floor (allocation.y + ypad + (allocation.height - req_height) * yalign) - logical.y;
+    y = floor (allocation.y + border.top + (allocation.height - req_height) * yalign) - logical.y;
   else
-    y = floor (allocation.y + ypad + MAX ((allocation.height - req_height) * yalign, 0)) - logical.y;
+    y = floor (allocation.y + border.top + MAX ((allocation.height - req_height) * yalign, 0)) - logical.y;
 
   if (xp)
     *xp = x;

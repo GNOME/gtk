@@ -403,3 +403,36 @@ gtk_misc_realize (GtkWidget *widget)
       gdk_window_set_background_pattern (window, NULL);
     }
 }
+
+/* Semi-private function used by gtk widgets inheriting from
+ * GtkMisc that takes into account both css padding and border
+ * and the padding specified with the GtkMisc properties.
+ */
+void
+_gtk_misc_get_padding_and_border (GtkMisc   *misc,
+                                  GtkBorder *border)
+{
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  GtkBorder tmp;
+  gint xpad, ypad;
+
+  g_return_if_fail (GTK_IS_MISC (misc));
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (misc));
+  state = gtk_widget_get_state_flags (GTK_WIDGET (misc));
+
+  gtk_style_context_get_padding (context, state, border);
+
+  gtk_misc_get_padding (misc, &xpad, &ypad);
+
+  border->right = border->left = xpad;
+  border->top = border->bottom = xpad;
+
+  gtk_style_context_get_border (context, state, &tmp);
+  border->top += tmp.top;
+  border->right += tmp.right;
+  border->bottom += tmp.bottom;
+  border->left += tmp.left;
+}
+
