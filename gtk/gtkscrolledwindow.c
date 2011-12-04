@@ -2425,9 +2425,8 @@ gtk_scrolled_window_release_captured_events (GtkScrolledWindow *scrolled_window)
   if (!priv->button_press_event)
     return FALSE;
 
-  device = gdk_event_get_device (priv->button_press_event);
-  gdk_device_ungrab (device, GDK_CURRENT_TIME);
-  gtk_device_grab_remove (GTK_WIDGET (scrolled_window), device);
+  gtk_device_grab_remove (GTK_WIDGET (scrolled_window), priv->drag_device);
+  priv->drag_device = NULL;
 
   if (priv->motion_notify_id > 0)
     {
@@ -2477,7 +2476,8 @@ gtk_scrolled_window_button_release_event (GtkWidget *widget,
   if (!child)
     return FALSE;
 
-  gdk_device_ungrab (gdk_event_get_device (_event), event->time);
+  gtk_device_grab_remove (widget, priv->drag_device);
+  priv->drag_device = NULL;
 
   if (priv->motion_notify_id > 0)
     {
@@ -2495,7 +2495,9 @@ gtk_scrolled_window_button_release_event (GtkWidget *widget,
       priv->release_timeout_id = 0;
     }
 
-  if (!priv->in_drag)
+  if (priv->in_drag)
+    gdk_device_ungrab (event->device, event->time);
+  else
     {
       /* There hasn't been scrolling at all, so just let the
        * child widget handle the events normally
@@ -2585,6 +2587,14 @@ gtk_scrolled_window_motion_notify_event (GtkWidget *widget,
         return TRUE;
     }
 
+  gdk_device_grab (priv->drag_device,
+                   gtk_widget_get_window (widget),
+                   GDK_OWNERSHIP_WINDOW,
+                   TRUE,
+                   GDK_BUTTON_RELEASE_MASK | GDK_BUTTON1_MOTION_MASK,
+                   NULL,
+                   event->time);
+
   priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
   priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
 
@@ -2657,7 +2667,7 @@ gtk_scrolled_window_button_press_event (GtkWidget *widget,
   gint threshold;
   GtkWidget *event_widget;
   GdkEventButton *event;
-  GdkDevice *device, *source_device;
+  GdkDevice *source_device;
   GdkInputSource source;
 
   if (_event->type != GDK_BUTTON_PRESS)
@@ -2708,15 +2718,8 @@ gtk_scrolled_window_button_press_event (GtkWidget *widget,
   if (priv->hscrollbar == event_widget || priv->vscrollbar == event_widget)
     return FALSE;
 
-  device = gdk_event_get_device (_event);
-  gdk_device_grab (device,
-                   gtk_widget_get_window (widget),
-                   GDK_OWNERSHIP_WINDOW,
-                   TRUE,
-                   GDK_BUTTON_RELEASE_MASK | GDK_BUTTON1_MOTION_MASK,
-                   NULL,
-                   event->time);
-  gtk_device_grab_add (widget, device, TRUE);
+  priv->drag_device = gdk_event_get_device (_event);
+  gtk_device_grab_add (widget, priv->drag_device, TRUE);
 
   gtk_scrolled_window_cancel_deceleration (scrolled_window);
 
