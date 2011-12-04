@@ -116,7 +116,6 @@ struct _GtkTooltip
   GObject parent_instance;
 
   GtkWidget *window;
-  GtkWidget *alignment;
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *label;
