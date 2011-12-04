@@ -7024,9 +7024,8 @@ GtkApplicationPrivate
 <TITLE>GtkApplicationWindow</TITLE>
 GtkApplicationWindow
 gtk_application_window_new
-gtk_application_window_set_show_app_menu
-gtk_application_window_get_show_app_menu
-gtk_application_window_get_app_menu
+gtk_application_window_set_show_menubar
+gtk_application_window_get_show_menubar
 
 <SUBSECTION Standard>
 GtkApplicationWindowClass

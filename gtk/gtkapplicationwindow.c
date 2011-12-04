@@ -49,7 +49,7 @@
  * If the desktop environment does not display the application menu
  * as part of the desktop shell, then #GApplicationWindow will
  * automatically show the menu as part of a menubar. This behaviour
- * can be overridden with the #GtkApplicationWindow:show-app-menu
+ * can be overridden with the #GtkApplicationWindow:show-menubar
  * property.
  */
 struct _GtkApplicationWindowPrivate
@@ -568,11 +568,22 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
   object_class->set_property = gtk_application_window_set_property;
   object_class->dispose = gtk_application_window_dispose;
 
+  /**
+   * GtkApplicationWindow:show-menubar:
+   *
+   * If this property is %TRUE, the window will display a menubar
+   * that includes the app menu and menubar, unless these are
+   * shown by the desktop shell. See g_application_set_app_menu()
+   * and g_application_set_menubar().
+   *
+   * If %FALSE, the window will not display a menubar, regardless
+   * of whether the desktop shell is showing the menus or not.
+   */
   gtk_application_window_properties[PROP_SHOW_MENUBAR] =
     g_param_spec_boolean ("show-menubar",
                           P_("Show a menubar"),
-                          P_("TRUE if the application's menus should be included "
-                             "in the menubar at the top of the window"),
+                          P_("TRUE if the window should show a "
+                             "menubar at the top of the window"),
                           TRUE, G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE);
   g_object_class_install_properties (object_class, N_PROPS, gtk_application_window_properties);
   g_type_class_add_private (class, sizeof (GtkApplicationWindowPrivate));
@@ -598,12 +609,33 @@ gtk_application_window_new (GtkApplication *application)
                        NULL);
 }
 
+/**
+ * gtk_application_window_get_show_menubar:
+ * @window: a #GtkApplicationWindow
+ *
+ * Returns whether the window will display a menubar for the app menu
+ * and menubar as needed.
+ *
+ * Returns: %TRUE if @window will display a menubar when needed
+ *
+ * Since: 3.4
+ */
 gboolean
 gtk_application_window_get_show_menubar (GtkApplicationWindow *window)
 {
   return window->priv->show_menubar;
 }
 
+/**
+ * gtk_application_window_set_show_menubar:
+ * @window: a #GtkApplicationWindow
+ * @show_menubar: whether to show a menubar when needed
+ *
+ * Sets whether the window will display a menubar for the app menu
+ * and menubar as needed.
+ *
+ * Since: 3.4
+ */
 void
 gtk_application_window_set_show_menubar (GtkApplicationWindow *window,
                                          gboolean              show_menubar)
