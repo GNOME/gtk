@@ -179,9 +179,8 @@ accel_path_lookup (const gchar *accel_path)
 void
 _gtk_accel_map_init (void)
 {
-  g_assert (accel_entry_ht == NULL);
-
-  accel_entry_ht = g_hash_table_new (accel_entry_hash, accel_entry_equal);
+  if (accel_entry_ht == NULL)
+    accel_entry_ht = g_hash_table_new (accel_entry_hash, accel_entry_equal);
 }
 
 gboolean
