@@ -25,6 +25,8 @@
 
 #include "gtkmodelmenu.h"
 
+#include "gtkmenu.h"
+#include "gtkmenubar.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkmodelmenuitem.h"
 

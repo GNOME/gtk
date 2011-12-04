@@ -23,8 +23,8 @@
 #define __GTK_MODEL_MENU_H__
 
 #include <gtk/gactionobservable.h>
-#include <gtk/gtkmenubar.h>
-#include <gtk/gtkmenu.h>
+#include <gtk/gtkmenushell.h>
+#include <gio/gio.h>
 
 G_GNUC_INTERNAL
 void                    gtk_model_menu_bind                             (GtkMenuShell      *shell,

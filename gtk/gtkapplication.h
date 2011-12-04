@@ -27,7 +27,6 @@
 #define __GTK_APPLICATION_H__
 
 #include <gtk/gtkwidget.h>
-#include <gtk/gtkmenu.h>
 #include <gio/gio.h>
 
 G_BEGIN_DECLS

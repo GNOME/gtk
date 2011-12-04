@@ -31,9 +31,6 @@
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtkwindow.h"
-#include "gtkcheckmenuitem.h"
-#include "gtkseparatormenuitem.h"
-#include "gtkmenu.h"
 
 #include <gdk/gdk.h>
 #ifdef GDK_WINDOWING_X11
