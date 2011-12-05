@@ -195,7 +195,7 @@ bloat_pad_startup (GApplication *application)
                                "      <item label='_About Bloatpad' action='app.about'/>"
                                "    </section>"
                                "    <section>"
-                               "      <item label='_Quit' action='app.quit'/>"
+                               "      <item label='_Quit' action='app.quit' accel='<Primary>q'/>"
                                "    </section>"
                                "  </menu>"
                                "  <menu id='menubar'>"
