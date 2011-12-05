@@ -254,6 +254,8 @@ main (int argc, char **argv)
   int status;
 
   bloat_pad = bloat_pad_new ();
+  gtk_application_add_accelerator (GTK_APPLICATION (bloat_pad),
+                                   "F11", "win.fullscreen", NULL);
   status = g_application_run (G_APPLICATION (bloat_pad), argc, argv);
   g_object_unref (bloat_pad);
 
