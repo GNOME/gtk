@@ -3374,13 +3374,8 @@ draw_icon (GtkWidget            *widget,
   gint x, y, width, height, pix_width, pix_height;
   GtkStyleContext *context;
 
-  context = gtk_widget_get_style_context (widget);
-
   if (!icon_info)
     return;
-
-  cairo_save (cr);
-  gtk_cairo_transform_to_window (cr, widget, icon_info->window);
 
   width = gdk_window_get_width (icon_info->window);
   height = gdk_window_get_height (icon_info->window);
@@ -3390,6 +3385,10 @@ draw_icon (GtkWidget            *widget,
   if (width == 1 || height == 1)
     return;
 
+  cairo_save (cr);
+  gtk_cairo_transform_to_window (cr, widget, icon_info->window);
+
+  context = gtk_widget_get_style_context (widget);
   gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
   _gtk_icon_helper_get_size (icon_info->icon_helper, context, &pix_width, &pix_height);
 
