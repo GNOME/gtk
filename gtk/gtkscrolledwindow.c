@@ -123,7 +123,6 @@
  */
 
 #define DEFAULT_SCROLLBAR_SPACING  3
-#define AUTO_HIDE_SCROLLBARS_TIMEOUT 1000
 #define TOUCH_BYPASS_CAPTURED_THRESHOLD 30
 
 /* Kinetic scrolling */
@@ -150,8 +149,6 @@ struct _GtkScrolledWindowPrivate
 
   gint     min_content_width;
   gint     min_content_height;
-
-  guint    hide_scrollbars_id;
 
   /* Kinetic scrolling */
   GdkWindow             *overshoot_window;
@@ -278,10 +275,6 @@ static void  gtk_scrolled_window_map                   (GtkWidget           *wid
 static void  gtk_scrolled_window_unmap                 (GtkWidget           *widget);
 static void  gtk_scrolled_window_grab_notify           (GtkWidget           *widget,
                                                         gboolean             was_grabbed);
-
-static void     gtk_scrolled_window_auto_hide_scrollbars_start (GtkScrolledWindow *scrolled_window,
-                                                                guint              delay);
-static void     gtk_scrolled_window_auto_hide_scrollbars_stop  (GtkScrolledWindow *scrolled_window);
 
 static gboolean _gtk_scrolled_window_set_adjustment_value      (GtkScrolledWindow *scrolled_window,
                                                                 GtkAdjustment     *adjustment,
@@ -453,20 +446,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 							     G_MAXINT,
 							     DEFAULT_SCROLLBAR_SPACING,
 							     GTK_PARAM_READABLE));
-  /**
-   * GtkScrolledWindow:auto-hide-scrollbars:
-   *
-   * Whether scrollbars are hidden when not scrolling. This property only takes effect if
-   * GtkScrolledWindow:kinetic-scrolling has %GTK_KINETIC_SCROLLING_ENABLED set.
-   *
-   * Since: 3.2
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("auto-hide-scrollbars",
-                                                                 P_("Auto hide scrollbars"),
-                                                                 P_("Hide scrollbars after an amount of time when not scrolling. This property only takes effect if kinetic mode is enabled."),
-                                                                 FALSE,
-                                                                 GTK_PARAM_READABLE));
 
   /**
    * GtkScrolledWindow:min-content-width:
@@ -1158,10 +1137,6 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow        *scrolled_wi
         g_signal_connect (scrolled_window, "captured-event",
                           G_CALLBACK (gtk_scrolled_window_captured_event),
                           NULL);
-
-      /* Hide the scrollbars */
-      gtk_scrolled_window_auto_hide_scrollbars_start (scrolled_window,
-                                                      AUTO_HIDE_SCROLLBARS_TIMEOUT);
     }
   else
     {
@@ -1180,13 +1155,6 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow        *scrolled_wi
           g_source_remove (priv->deceleration_id);
           priv->deceleration_id = 0;
         }
-
-      /* Restore the scrollbars */
-      gtk_scrolled_window_auto_hide_scrollbars_stop (scrolled_window);
-      if (priv->vscrollbar_visible && !gtk_widget_get_visible (priv->vscrollbar))
-        gtk_widget_show (priv->vscrollbar);
-      if (priv->hscrollbar_visible && !gtk_widget_get_visible (priv->hscrollbar))
-        gtk_widget_show (priv->hscrollbar);
     }
   g_object_notify (G_OBJECT (scrolled_window), "kinetic-scrolling");
 }
@@ -1255,8 +1223,6 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
       g_source_remove (priv->deceleration_id);
       priv->deceleration_id = 0;
     }
-
-  gtk_scrolled_window_auto_hide_scrollbars_stop (scrolled_window);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->destroy (widget);
 }
@@ -1854,7 +1820,6 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   GtkWidget *child;
   gboolean scrollbars_within_bevel;
-  gboolean auto_hide_scrollbars;
   gint sb_spacing;
   gint sb_width;
   gint sb_height;
@@ -1882,11 +1847,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 
   gtk_widget_style_get (widget,
                         "scrollbars-within-bevel", &scrollbars_within_bevel,
-                        "auto-hide-scrollbars", &auto_hide_scrollbars,
                         NULL);
-  auto_hide_scrollbars =
-    (priv->kinetic_scrolling_flags & GTK_KINETIC_SCROLLING_ENABLED) ?
-    auto_hide_scrollbars : FALSE;
 
   gtk_widget_set_allocation (widget, allocation);
   gtk_style_context_restore (context);
@@ -2087,7 +2048,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 
   if (priv->hscrollbar_visible)
     {
-      if (!auto_hide_scrollbars && !gtk_widget_get_visible (priv->hscrollbar))
+      if (!gtk_widget_get_visible (priv->hscrollbar))
 	gtk_widget_show (priv->hscrollbar);
 
       child_allocation.x = relative_allocation.x;
@@ -2131,7 +2092,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 
   if (priv->vscrollbar_visible)
     {
-      if (!auto_hide_scrollbars && !gtk_widget_get_visible (priv->vscrollbar))
+      if (!gtk_widget_get_visible (priv->vscrollbar))
 	gtk_widget_show (priv->vscrollbar);
 
       if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL && 
@@ -2211,53 +2172,6 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
     }
 
   return FALSE;
-}
-
-static gboolean
-hide_scrollbars (GtkScrolledWindow *scrolled_window)
-{
-  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-
-  priv->hide_scrollbars_id = 0;
-
-  if (gtk_widget_get_visible (priv->hscrollbar))
-    gtk_widget_hide (priv->hscrollbar);
-  if (gtk_widget_get_visible (priv->vscrollbar))
-    gtk_widget_hide (priv->vscrollbar);
-
-  return FALSE;
-}
-
-static void
-gtk_scrolled_window_auto_hide_scrollbars_start (GtkScrolledWindow *scrolled_window,
-                                                guint              delay)
-{
-  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-  gboolean auto_hide_scrollbars;
-
-  gtk_widget_style_get (GTK_WIDGET (scrolled_window),
-                        "auto-hide-scrollbars", &auto_hide_scrollbars,
-                        NULL);
-  if (!auto_hide_scrollbars)
-    return;
-
-  if (priv->hide_scrollbars_id)
-    g_source_remove (priv->hide_scrollbars_id);
-  priv->hide_scrollbars_id = gdk_threads_add_timeout (delay,
-                                                      (GSourceFunc)hide_scrollbars,
-                                                      scrolled_window);
-}
-
-static void
-gtk_scrolled_window_auto_hide_scrollbars_stop (GtkScrolledWindow *scrolled_window)
-{
-  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-
-  if (priv->hide_scrollbars_id)
-    {
-      g_source_remove (priv->hide_scrollbars_id);
-      priv->hide_scrollbars_id = 0;
-    }
 }
 
 static gboolean
@@ -2476,10 +2390,6 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
                                   FRAME_INTERVAL,
                                   scrolled_window_deceleration_cb,
                                   data, (GDestroyNotify) g_free);
-#if 0
-  gtk_scrolled_window_auto_hide_scrollbars_start (scrolled_window,
-                                                  duration + AUTO_HIDE_SCROLLBARS_TIMEOUT);
-#endif
 }
 
 static gboolean
@@ -2533,8 +2443,6 @@ gtk_scrolled_window_captured_button_release (GtkWidget *widget,
     gdk_device_ungrab (event->device, event->time);
   else
     {
-      gtk_scrolled_window_auto_hide_scrollbars_start (scrolled_window,
-                                                      AUTO_HIDE_SCROLLBARS_TIMEOUT);
       /* There hasn't been scrolling at all, so just let the
        * child widget handle the events normally
        */
@@ -2759,12 +2667,6 @@ gtk_scrolled_window_captured_button_press (GtkWidget *widget,
       gdk_threads_add_timeout (timeout,
                                (GSourceFunc) gtk_scrolled_window_release_captured_events,
                                scrolled_window);
-
-  gtk_scrolled_window_auto_hide_scrollbars_stop (scrolled_window);
-  if (priv->vscrollbar_visible && !gtk_widget_get_visible (priv->vscrollbar))
-    gtk_widget_show (priv->vscrollbar);
-  if (priv->hscrollbar_visible && !gtk_widget_get_visible (priv->hscrollbar))
-    gtk_widget_show (priv->hscrollbar);
 
   /* If there's a zero drag threshold, start the drag immediately */
   g_object_get (gtk_widget_get_settings (widget),
