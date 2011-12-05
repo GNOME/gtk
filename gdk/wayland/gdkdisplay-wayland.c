@@ -91,38 +91,6 @@ gdk_input_init (GdkDisplay *display)
 }
 
 static void
-shell_handle_configure(void *data, struct wl_shell *shell,
-		       uint32_t time, uint32_t edges,
-		       struct wl_surface *surface,
-		       int32_t width, int32_t height)
-{
-  GdkWindow *window;
-  GdkDisplay *display;
-  GdkEvent *event;
-
-  window = wl_surface_get_user_data(surface);
-
-  display = gdk_window_get_display (window);
-
-  event = gdk_event_new (GDK_CONFIGURE);
-  event->configure.window = window;
-  event->configure.send_event = FALSE;
-  event->configure.width = width;
-  event->configure.height = height;
-
-  _gdk_window_update_size (window);
-  _gdk_wayland_window_update_size (window, width, height, edges);
-
-  g_object_ref(window);
-
-  _gdk_wayland_display_deliver_event (display, event);
-}
-
-static const struct wl_shell_listener shell_listener = {
-  shell_handle_configure,
-};
-
-static void
 output_handle_geometry(void *data,
 		       struct wl_output *wl_output,
 		       int x, int y, int physical_width, int physical_height,
@@ -163,8 +131,6 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
     display_wayland->shm = wl_display_bind(display, id, &wl_shm_interface);
   } else if (strcmp(interface, "wl_shell") == 0) {
     display_wayland->shell = wl_display_bind(display, id, &wl_shell_interface);
-    wl_shell_add_listener(display_wayland->shell,
-			  &shell_listener, display_wayland);
   } else if (strcmp(interface, "wl_output") == 0) {
     display_wayland->output =
       wl_display_bind(display, id, &wl_output_interface);

@@ -99,6 +99,7 @@ struct _GdkWindowImplWayland
   gint8 toplevel_window_type;
 
   struct wl_surface *surface;
+  struct wl_shell_surface *shell_surface;
   unsigned int mapped : 1;
   GdkWindow *transient_for;
 
@@ -337,12 +338,12 @@ gdk_wayland_window_attach_image (GdkWindow *window)
     data->buffer =
       wl_egl_pixmap_create_buffer(data->pixmap);
 
-  if (impl->resize_edges & WL_SHELL_RESIZE_LEFT)
+  if (impl->resize_edges & WL_SHELL_SURFACE_RESIZE_LEFT)
     dx = server_width - data->width;
   else
     dx = 0;
 
-  if (impl->resize_edges & WL_SHELL_RESIZE_TOP)
+  if (impl->resize_edges & WL_SHELL_SURFACE_RESIZE_TOP)
     dy = server_height - data->height;
   else
     dy = 0;
@@ -450,8 +451,6 @@ gdk_wayland_window_map (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindowImplWayland *parent;
-  GdkDisplayWayland *display_wayland =
-		GDK_DISPLAY_WAYLAND (gdk_window_get_display (impl->wrapper));
 
   if (!impl->mapped)
     {
@@ -464,14 +463,46 @@ gdk_wayland_window_map (GdkWindow *window)
 		  window->y);
 
 	  parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
-	  wl_shell_set_transient (display_wayland->shell, impl->surface, parent->surface,
-				    window->x, window->y, 0);
+          wl_shell_surface_set_transient (impl->shell_surface, parent->shell_surface,
+                                          window->x, window->y, 0);
 	}
       else
-      wl_shell_set_toplevel (display_wayland->shell, impl->surface);
+        wl_shell_surface_set_toplevel (impl->shell_surface);
       impl->mapped = TRUE;
     }
 }
+
+static void
+shell_surface_handle_configure(void *data,
+                               struct wl_shell_surface *shell_surface,
+                               uint32_t time,
+                               uint32_t edges,
+                               int32_t width,
+                               int32_t height)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+  GdkDisplay *display;
+  GdkEvent *event;
+
+  display = gdk_window_get_display (window);
+
+  event = gdk_event_new (GDK_CONFIGURE);
+  event->configure.window = window;
+  event->configure.send_event = FALSE;
+  event->configure.width = width;
+  event->configure.height = height;
+
+  _gdk_window_update_size (window);
+  _gdk_wayland_window_update_size (window, width, height, edges);
+
+  g_object_ref(window);
+
+  _gdk_wayland_display_deliver_event (display, event);
+}
+
+static const struct wl_shell_surface_listener shell_surface_listener = {
+  shell_surface_handle_configure,
+};
 
 static void
 gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
@@ -491,6 +522,11 @@ gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
 
   impl->surface = wl_compositor_create_surface(display_wayland->compositor);
   wl_surface_set_user_data(impl->surface, window);
+
+  impl->shell_surface = wl_shell_get_shell_surface (display_wayland->shell,
+                                                    impl->surface);
+  wl_shell_surface_add_listener(impl->shell_surface,
+                                &shell_surface_listener, window);
 
   _gdk_make_event (window, GDK_MAP, NULL, FALSE);
   event = _gdk_make_event (window, GDK_VISIBILITY_NOTIFY, NULL, FALSE);
@@ -1109,7 +1145,6 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
 				      gint           root_y,
 				      guint32        timestamp)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
   GdkWindowImplWayland *impl;
   uint32_t grab_type;
 
@@ -1120,35 +1155,35 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   switch (edge)
     {
     case GDK_WINDOW_EDGE_NORTH_WEST:
-      grab_type = WL_SHELL_RESIZE_TOP_LEFT;
+      grab_type = WL_SHELL_SURFACE_RESIZE_TOP_LEFT;
       break;
 
     case GDK_WINDOW_EDGE_NORTH:
-      grab_type = WL_SHELL_RESIZE_TOP;
+      grab_type = WL_SHELL_SURFACE_RESIZE_TOP;
       break;
 
     case GDK_WINDOW_EDGE_NORTH_EAST:
-      grab_type = WL_SHELL_RESIZE_RIGHT;
+      grab_type = WL_SHELL_SURFACE_RESIZE_RIGHT;
       break;
 
     case GDK_WINDOW_EDGE_WEST:
-      grab_type = WL_SHELL_RESIZE_LEFT;
+      grab_type = WL_SHELL_SURFACE_RESIZE_LEFT;
       break;
 
     case GDK_WINDOW_EDGE_EAST:
-      grab_type = WL_SHELL_RESIZE_RIGHT;
+      grab_type = WL_SHELL_SURFACE_RESIZE_RIGHT;
       break;
 
     case GDK_WINDOW_EDGE_SOUTH_WEST:
-      grab_type = WL_SHELL_RESIZE_BOTTOM_LEFT;
+      grab_type = WL_SHELL_SURFACE_RESIZE_BOTTOM_LEFT;
       break;
 
     case GDK_WINDOW_EDGE_SOUTH:
-      grab_type = WL_SHELL_RESIZE_BOTTOM;
+      grab_type = WL_SHELL_SURFACE_RESIZE_BOTTOM;
       break;
 
     case GDK_WINDOW_EDGE_SOUTH_EAST:
-      grab_type = WL_SHELL_RESIZE_BOTTOM_RIGHT;
+      grab_type = WL_SHELL_SURFACE_RESIZE_BOTTOM_RIGHT;
       break;
 
     default:
@@ -1159,9 +1194,9 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  wl_shell_resize(GDK_DISPLAY_WAYLAND (display)->shell, impl->surface,
-		  _gdk_wayland_device_get_device (device),
-		  timestamp, grab_type);
+  wl_shell_surface_resize(impl->shell_surface,
+                          _gdk_wayland_device_get_device (device),
+                          timestamp, grab_type);
 }
 
 static void
@@ -1181,8 +1216,8 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  wl_shell_move(GDK_DISPLAY_WAYLAND (display)->shell, impl->surface,
-		_gdk_wayland_device_get_device (device), timestamp);
+  wl_shell_surface_move(impl->shell_surface,
+                        _gdk_wayland_device_get_device (device), timestamp);
 }
 
 static void
