@@ -2625,8 +2625,6 @@ gtk_notebook_draw (GtkWidget *widget,
   if (priv->operation == DRAG_OPERATION_REORDER &&
       gtk_cairo_should_draw_window (cr, priv->drag_window))
     {
-      GtkStyleContext *context;
-
       cairo_save (cr);
       gtk_cairo_transform_to_window (cr, widget, priv->drag_window);
 
