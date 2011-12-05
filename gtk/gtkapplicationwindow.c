@@ -26,6 +26,7 @@
 #include "gtkmodelmenu.h"
 #include "gactionmuxer.h"
 #include "gtkaccelgroup.h"
+#include "gtkaccelmap.h"
 #include "gtkintl.h"
 
 /**
@@ -83,6 +84,7 @@ struct _GtkApplicationWindowPrivate
   GSimpleActionGroup *actions;
   GtkWidget *menubar;
   GtkAccelGroup *accels;
+  GSList *accel_closures;
 
   GMenu *app_menu_section;
   GMenu *menubar_section;
@@ -188,6 +190,143 @@ gtk_application_window_update_shell_shows_menubar (GtkApplicationWindow *window,
             g_menu_append_section (window->priv->menubar_section, NULL, menubar);
         }
     }
+}
+
+typedef struct {
+  GClosure closure;
+  gchar *action_name;
+  GVariant *parameter;
+} AccelClosure;
+
+static void
+accel_activate (GClosure     *closure,
+                GValue       *return_value,
+                guint         n_param_values,
+                const GValue *param_values,
+                gpointer      invocation_hint,
+                gpointer      marshal_data)
+{
+  AccelClosure *aclosure = (AccelClosure*)closure;
+  GActionGroup *actions;
+
+  actions = G_ACTION_GROUP (closure->data);
+  if (g_action_group_get_action_enabled (actions, aclosure->action_name))
+    {
+       g_action_group_activate_action (actions, aclosure->action_name, aclosure->parameter);
+
+      /* we handled the accelerator */
+      g_value_set_boolean (return_value, TRUE);
+    }
+}
+
+static void
+free_accel_closures (GtkApplicationWindow *window)
+{
+  GSList *l;
+
+  for (l = window->priv->accel_closures; l; l = l->next)
+    {
+       AccelClosure *closure = l->data;
+
+       gtk_accel_group_disconnect (window->priv->accels, &closure->closure);
+
+       g_object_unref (closure->closure.data);
+       if (closure->parameter)
+         g_variant_unref (closure->parameter);
+       g_free (closure->action_name);
+       g_closure_invalidate (&closure->closure);
+       g_closure_unref (&closure->closure);
+    }
+  g_slist_free (window->priv->accel_closures);
+  window->priv->accel_closures = NULL;
+}
+
+typedef struct {
+  GtkApplicationWindow *window;
+  GActionGroup *actions;
+} AccelData;
+
+/* Hack. We iterate over the accel map instead of the actions,
+ * in order to pull the parameters out of accel map entries
+ */
+static void
+add_accel_closure (gpointer         data,
+                   const gchar     *accel_path,
+                   guint            accel_key,
+                   GdkModifierType  accel_mods,
+                   gboolean         changed)
+{
+  AccelData *d = data;
+  GtkApplicationWindow *window = d->window;
+  GActionGroup *actions = d->actions;
+  const gchar *path;
+  const gchar *p;
+  gchar *action_name;
+  GVariant *parameter;
+  AccelClosure *closure;
+
+  if (accel_key == 0)
+    return;
+
+  if (!g_str_has_prefix (accel_path, "<Actions>/"))
+    return;
+
+  path = accel_path + strlen ("<Actions>/");
+  p = strchr (path, '/');
+  if (p)
+    {
+      action_name = g_strndup (path, p - path);
+      parameter = g_variant_parse (NULL, p + 1, NULL, NULL, NULL);
+      if (!parameter)
+        g_warning ("Failed to parse parameter from '%s'\n", accel_path);
+    }
+  else
+    {
+      action_name = g_strdup (path);
+      parameter = NULL;
+    }
+
+  if (g_action_group_has_action (actions, action_name))
+    {
+      closure = (AccelClosure*) g_closure_new_object (sizeof (AccelClosure), g_object_ref (actions));
+      g_closure_set_marshal (&closure->closure, accel_activate);
+
+      closure->action_name = g_strdup (action_name);
+      closure->parameter = parameter ? g_variant_ref_sink (parameter) : NULL;
+
+      window->priv->accel_closures = g_slist_prepend (window->priv->accel_closures, g_closure_ref (&closure->closure));
+      g_closure_sink (&closure->closure);
+
+      gtk_accel_group_connect_by_path (window->priv->accels, accel_path, &closure->closure);
+    }
+
+  g_free (action_name);
+}
+
+static void
+gtk_application_window_update_accels (GtkApplicationWindow *window)
+{
+  GtkApplication *application;
+  AccelData data;
+  GActionMuxer *muxer;
+
+  /* FIXME: we should keep the muxer around, and listen for changes.
+   * Also, we should listen for accel map changes
+   */
+  application = gtk_window_get_application (GTK_WINDOW (window));
+
+  free_accel_closures (window);
+
+  muxer = g_action_muxer_new ();
+  g_action_muxer_insert (muxer, "app", G_ACTION_GROUP (application));
+  g_action_muxer_insert (muxer, "win", G_ACTION_GROUP (window));
+
+  data.window = window;
+  data.actions = G_ACTION_GROUP (muxer);
+
+  gtk_accel_map_foreach (&data, add_accel_closure);
+
+  g_object_unref (muxer);
 }
 
 static void
@@ -448,6 +587,7 @@ gtk_application_window_real_realize (GtkWidget *widget)
   gtk_application_window_update_shell_shows_app_menu (window, settings);
   gtk_application_window_update_shell_shows_menubar (window, settings);
   gtk_application_window_update_menubar (window);
+  gtk_application_window_update_accels (window);
 
   GTK_WIDGET_CLASS (gtk_application_window_parent_class)
     ->realize (widget);
@@ -544,6 +684,8 @@ gtk_application_window_dispose (GObject *object)
       gtk_widget_unparent (window->priv->menubar);
       window->priv->menubar = NULL;
     }
+
+  free_accel_closures (window);
 
   g_clear_object (&window->priv->app_menu_section);
   g_clear_object (&window->priv->menubar_section);
