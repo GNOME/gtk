@@ -25,6 +25,7 @@
 
 #include "gtkmodelmenu.h"
 #include "gactionmuxer.h"
+#include "gtkaccelgroup.h"
 #include "gtkintl.h"
 
 /**
@@ -81,6 +82,7 @@ struct _GtkApplicationWindowPrivate
 {
   GSimpleActionGroup *actions;
   GtkWidget *menubar;
+  GtkAccelGroup *accels;
 
   GMenu *app_menu_section;
   GMenu *menubar_section;
@@ -546,6 +548,7 @@ gtk_application_window_dispose (GObject *object)
   g_clear_object (&window->priv->app_menu_section);
   g_clear_object (&window->priv->menubar_section);
   g_clear_object (&window->priv->actions);
+  g_clear_object (&window->priv->accels);
 
   G_OBJECT_CLASS (gtk_application_window_parent_class)
     ->dispose (object);
@@ -559,6 +562,8 @@ gtk_application_window_init (GtkApplicationWindow *window)
   window->priv->actions = g_simple_action_group_new ();
   window->priv->app_menu_section = g_menu_new ();
   window->priv->menubar_section = g_menu_new ();
+  window->priv->accels = gtk_accel_group_new ();
+  gtk_window_add_accel_group (GTK_WINDOW (window), window->priv->accels);
 
   /* window->priv->actions is the one and only ref on the group, so when
    * we dispose, the action group will die, disconnecting all signals.
