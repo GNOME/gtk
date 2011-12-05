@@ -132,10 +132,11 @@ struct _GtkStatusIconPrivate
 #ifdef GDK_WINDOWING_X11
   GtkWidget    *tray_icon;
   GtkWidget    *image;
+#else
+  GtkWidget    *dummy_widget;
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
-  GtkWidget     *dummy_widget;
   NOTIFYICONDATAW nid;
   gint          taskbar_top;
   gint		last_click_x, last_click_y;
@@ -145,7 +146,6 @@ struct _GtkStatusIconPrivate
 #endif
 	
 #ifdef GDK_WINDOWING_QUARTZ
-  GtkWidget     *dummy_widget;
   GtkQuartzStatusIcon *status_item;
   gchar         *tooltip_text;
   gchar         *title;
@@ -891,6 +891,8 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   g_signal_connect_swapped (priv->image, "size-allocate",
 			    G_CALLBACK (gtk_status_icon_size_allocate), status_icon);
 
+#else /* !GDK_WINDOWING_X11 */
+  priv->dummy_widget = gtk_label_new ("");
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
@@ -913,7 +915,6 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 
   /* Are the system tray icons always 16 pixels square? */
   priv->size         = 16;
-  priv->dummy_widget = gtk_label_new ("");
 
   memset (&priv->nid, 0, sizeof (priv->nid));
 
@@ -944,8 +945,6 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 #endif
 	
 #ifdef GDK_WINDOWING_QUARTZ
-  priv->dummy_widget = gtk_label_new ("");
-
   QUARTZ_POOL_ALLOC;
 
   priv->status_item = [[GtkQuartzStatusIcon alloc] initWithStatusIcon:status_icon];
@@ -1020,6 +1019,8 @@ gtk_status_icon_finalize (GObject *object)
 		    	                gtk_status_icon_screen_changed, status_icon);
   gtk_widget_destroy (priv->image);
   gtk_widget_destroy (priv->tray_icon);
+#else /* !GDK_WINDOWING_X11 */
+  gtk_widget_destroy (priv->dummy_widget);
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
@@ -1028,8 +1029,6 @@ gtk_status_icon_finalize (GObject *object)
   if (priv->nid.hIcon)
     DestroyIcon (priv->nid.hIcon);
   g_free (priv->tooltip_text);
-
-  gtk_widget_destroy (priv->dummy_widget);
 
   status_icons = g_slist_remove (status_icons, status_icon);
 #endif
@@ -1309,8 +1308,6 @@ emit_size_changed_signal (GtkStatusIcon *status_icon,
 
 #endif
 
-#ifdef GDK_WINDOWING_X11
-
 /* rounds the pixel size to the nearest size avaiable in the theme */
 static gint
 round_pixel_size (GtkWidget *widget, 
@@ -1348,8 +1345,6 @@ round_pixel_size (GtkWidget *widget,
   return size;
 }
 
-#endif
-
 static void
 gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 {
@@ -1358,17 +1353,19 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
   HICON prev_hicon;
 #endif
   GtkStyleContext *context;
+  GtkWidget *widget;
   GtkImageType storage_type = _gtk_icon_helper_get_storage_type (priv->icon_helper);
   GdkPixbuf *pixbuf;
   gint round_size;
 
 #ifdef GDK_WINDOWING_X11
-  context = gtk_widget_get_style_context (priv->image);
+  widget = priv->image;
 #else
-  context = gtk_widget_get_style_context (priv->dummy_widget);
+  widget = priv->dummy_widget;
 #endif
 
-  round_size = round_pixel_size (priv->image, priv->size);
+  context = gtk_widget_get_style_context (widget);
+  round_size = round_pixel_size (widget, priv->size);
 
   if (storage_type == GTK_IMAGE_PIXBUF)
     {
