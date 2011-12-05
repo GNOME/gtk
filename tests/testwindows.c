@@ -15,12 +15,12 @@ static GtkWidget *main_window;
 GdkWindow *
 create_window (GdkWindow *parent,
 	       int x, int y, int w, int h,
-	       GdkColor *color)
+	       GdkRGBA *color)
 {
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkWindow *window;
-  GdkColor *bg;
+  GdkRGBA *bg;
 
   attributes.x = x;
   attributes.y = y;
@@ -41,17 +41,18 @@ create_window (GdkWindow *parent,
   window = gdk_window_new (parent, &attributes, attributes_mask);
   gdk_window_set_user_data (window, darea);
 
-  bg = g_new (GdkColor, 1);
+  bg = g_new (GdkRGBA, 1);
   if (color)
     *bg = *color;
   else
     {
-      bg->red = g_random_int_range (0, 0xffff);
-      bg->blue = g_random_int_range (0, 0xffff);
-      bg->green = g_random_int_range (0, 0xffff);;
+      bg->red = g_random_double ();
+      bg->blue = g_random_double ();
+      bg->green = g_random_double ();
+      bg->alpha = 1.0;
     }
   
-  gdk_window_set_background (window, bg);
+  gdk_window_set_background_rgba (window, bg);
   g_object_set_data_full (G_OBJECT (window), "color", bg, g_free);
   
   gdk_window_show (window);
@@ -238,16 +239,16 @@ save_window (GString *s,
 	     GdkWindow *window)
 {
   gint x, y;
-  GdkColor *color;
+  GdkRGBA *color;
 
   gdk_window_get_position (window, &x, &y);
   color = g_object_get_data (G_OBJECT (window), "color");
   
-  g_string_append_printf (s, "%d,%d %dx%d (%d,%d,%d) %d %d\n",
+  g_string_append_printf (s, "%d,%d %dx%d (%f,%f,%f,%f) %d %d\n",
 			  x, y,
                           gdk_window_get_width (window),
                           gdk_window_get_height (window),
-			  color->red, color->green, color->blue,
+			  color->red, color->green, color->blue, color->alpha,
 			  gdk_window_has_native (window),
 			  g_list_length (gdk_window_peek_children (window)));
 
@@ -272,6 +273,13 @@ save_children (GString *s,
     }
 }
 
+
+static void
+refresh_clicked (GtkWidget *button, 
+		 gpointer data)
+{
+  gtk_widget_queue_draw (darea);
+}
 
 static void
 save_clicked (GtkWidget *button, 
@@ -330,21 +338,23 @@ destroy_children (GdkWindow *window)
 static char **
 parse_window (GdkWindow *parent, char **lines)
 {
-  int x, y, w, h, r, g, b, native, n_children;
+  int x, y, w, h, native, n_children;
+  double r, g, b, a;
   GdkWindow *window;
-  GdkColor color;
+  GdkRGBA color;
   int i;
 
   if (*lines == NULL)
     return lines;
   
-  if (sscanf(*lines, "%d,%d %dx%d (%d,%d,%d) %d %d",
-	     &x, &y, &w, &h, &r, &g, &b, &native, &n_children) == 9)
+  if (sscanf(*lines, "%d,%d %dx%d (%lf,%lf,%lf,%lf) %d %d",
+	     &x, &y, &w, &h, &r, &g, &b, &a, &native, &n_children) == 10)
     {
       lines++;
       color.red = r;
       color.green = g;
       color.blue = b;
+      color.alpha = a;
       window = create_window (parent, x, y, w, h, &color);
       if (native)
 	gdk_window_ensure_native (window);
@@ -685,6 +695,39 @@ native_window_clicked (GtkWidget *button,
   update_store ();
 }
 
+static void
+alpha_clicked (GtkWidget *button, 
+	       gpointer data)
+{
+  GList *selected, *l;
+  GdkWindow *window;
+  GdkRGBA *color;
+
+  selected = get_selected_windows ();
+
+  for (l = selected; l != NULL; l = l->next)
+    {
+      window = l->data;
+
+      color = g_object_get_data (G_OBJECT (window), "color");
+      if (GPOINTER_TO_INT(data) > 0)
+	color->alpha += 0.2;
+      else
+	color->alpha -= 0.2;
+
+      if (color->alpha < 0)
+	color->alpha = 0;
+      if (color->alpha > 1)
+	color->alpha = 1;
+
+      gdk_window_set_background_rgba (window, color);
+    }
+  
+  g_list_free (selected);
+  
+  update_store ();
+}
+
 static gboolean
 darea_button_release_event (GtkWidget *widget,
 			    GdkEventButton *event)
@@ -956,6 +999,20 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), button, 3, 2, 1, 1);
   gtk_widget_show (button);
 
+  button = gtk_button_new_with_label ("More transparent");
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (alpha_clicked),
+		    GINT_TO_POINTER (-1));
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 3, 1, 1);
+  gtk_widget_show (button);
+
+  button = gtk_button_new_with_label ("Less transparent");
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (alpha_clicked),
+		    GINT_TO_POINTER (1));
+  gtk_grid_attach (GTK_GRID (grid), button, 1, 3, 1, 1);
+  gtk_widget_show (button);
+
   button = gtk_button_new_with_label ("Restack above");
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (restack_clicked),
@@ -1000,6 +1057,17 @@ main (int argc, char **argv)
 		    G_CALLBACK (save_clicked), 
 		    NULL);
 
+  button = gtk_button_new_with_label ("Refresh");
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      button,
+		      FALSE, FALSE,
+		      2);
+  gtk_widget_show (button);
+  g_signal_connect (button, "clicked", 
+		    G_CALLBACK (refresh_clicked), 
+		    NULL);
+
+  
   gtk_widget_show (window);
 
   if (argc == 2)

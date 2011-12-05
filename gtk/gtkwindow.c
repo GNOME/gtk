@@ -5521,6 +5521,7 @@ resize_grip_create_window (GtkWindow *window)
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkRectangle rect;
+  GdkRGBA transparent = {0, 0, 0, 0};
 
   priv = window->priv;
   widget = GTK_WIDGET (window);
@@ -5545,6 +5546,7 @@ resize_grip_create_window (GtkWindow *window)
   priv->grip_window = gdk_window_new (gtk_widget_get_window (widget),
                                       &attributes,
                                       attributes_mask);
+  gdk_window_set_background_rgba (priv->grip_window, &transparent);
 
   gdk_window_set_user_data (priv->grip_window, widget);
 
@@ -7440,7 +7442,8 @@ gtk_window_draw (GtkWidget *widget,
 
   gtk_style_context_save (context);
 
-  if (!gtk_widget_get_app_paintable (widget))
+  if (!gtk_widget_get_app_paintable (widget) &&
+      gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
       GtkStateFlags state;
 

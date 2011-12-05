@@ -580,6 +580,10 @@ gboolean gdk_window_get_composited (GdkWindow *window);
 void gdk_window_set_composited   (GdkWindow *window,
                                   gboolean   composited);
 
+gboolean gdk_window_get_layered (GdkWindow *window);
+void gdk_window_set_layered     (GdkWindow *window,
+				 gboolean   layered);
+
 /*
  * This routine allows you to merge (ie ADD) child shapes to your
  * own window's shape keeping its current shape and ADDING the child
