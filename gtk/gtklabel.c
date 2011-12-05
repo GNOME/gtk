@@ -3850,6 +3850,9 @@ gtk_label_state_flags_changed (GtkWidget     *widget,
       gtk_label_update_cursor (label);
     }
 
+  /* We have to clear the layout, fonts etc. may have changed */
+  gtk_label_clear_layout (label);
+
   if (GTK_WIDGET_CLASS (gtk_label_parent_class)->state_flags_changed)
     GTK_WIDGET_CLASS (gtk_label_parent_class)->state_flags_changed (widget, prev_state);
 }
