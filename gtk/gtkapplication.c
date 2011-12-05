@@ -107,6 +107,13 @@ gtk_application_startup (GApplication *application)
 }
 
 static void
+gtk_application_shutdown (GApplication *application)
+{
+  G_APPLICATION_CLASS (gtk_application_parent_class)
+    ->shutdown (application);
+}
+
+static void
 gtk_application_add_platform_data (GApplication    *application,
                                    GVariantBuilder *builder)
 {
@@ -198,6 +205,7 @@ gtk_application_class_init (GtkApplicationClass *class)
   application_class->before_emit = gtk_application_before_emit;
   application_class->after_emit = gtk_application_after_emit;
   application_class->startup = gtk_application_startup;
+  application_class->shutdown = gtk_application_shutdown;
 
   class->window_added = gtk_application_window_added;
   class->window_removed = gtk_application_window_removed;
