@@ -348,9 +348,87 @@ gtk_application_window_removed (GtkApplication *application,
 }
 
 static void
+extract_accel_from_menu_item (GMenuModel     *model,
+                              gint            item,
+                              GtkApplication *app)
+{
+  GMenuAttributeIter *iter;
+  const gchar *key;
+  GVariant *value;
+  const gchar *accel = NULL;
+  const gchar *action = NULL;
+  GVariant *target = NULL;
+
+  iter = g_menu_model_iterate_item_attributes (model, item);
+  while (g_menu_attribute_iter_get_next (iter, &key, &value))
+    {
+      if (g_str_equal (key, "action") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+        action = g_variant_get_string (value, NULL);
+      else if (g_str_equal (key, "accel") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+        accel = g_variant_get_string (value, NULL);
+      else if (g_str_equal (key, "target"))
+        target = g_variant_ref (value);
+      g_variant_unref (value);
+    }
+  g_object_unref (iter);
+
+  if (accel && action)
+    gtk_application_add_accelerator (app, accel, action, target);
+
+  if (target)
+    g_variant_unref (target);
+}
+
+static void
+extract_accels_from_menu (GMenuModel     *model,
+                          GtkApplication *app)
+{
+  gint i;
+  GMenuLinkIter *iter;
+  const gchar *key;
+  GMenuModel *m;
+
+  for (i = 0; i < g_menu_model_get_n_items (model); i++)
+    {
+      extract_accel_from_menu_item (model, i, app);
+
+      iter = g_menu_model_iterate_item_links (model, i);
+      while (g_menu_link_iter_get_next (iter, &key, &m))
+        {
+          extract_accels_from_menu (m, app);
+          g_object_unref (m);
+        }
+      g_object_unref (iter);
+    }
+}
+
+static void
+gtk_application_notify (GObject    *object,
+                        GParamSpec *pspec)
+{
+  if (strcmp (pspec->name, "app-menu") == 0 ||
+      strcmp (pspec->name, "menubar") == 0)
+    {
+      GMenuModel *model;
+      g_object_get (object, pspec->name, &model, NULL);
+      if (model)
+        {
+          extract_accels_from_menu (model, GTK_APPLICATION (object));
+          g_object_unref (model);
+        }
+    }
+
+  if (G_OBJECT_CLASS (gtk_application_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_application_parent_class)->notify (object, pspec);
+}
+
+static void
 gtk_application_class_init (GtkApplicationClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
   GApplicationClass *application_class = G_APPLICATION_CLASS (class);
+
+  object_class->notify = gtk_application_notify;
 
   application_class->add_platform_data = gtk_application_add_platform_data;
   application_class->before_emit = gtk_application_before_emit;
