@@ -623,6 +623,8 @@ static void             gtk_widget_real_get_width_for_height    (GtkWidget      
                                                                  gint              height,
                                                                  gint             *minimum_width,
                                                                  gint             *natural_width);
+static void             gtk_widget_real_state_flags_changed     (GtkWidget        *widget,
+                                                                 GtkStateFlags     old_state);
 static const GtkWidgetAuxInfo* _gtk_widget_get_aux_info_or_defaults (GtkWidget *widget);
 static GtkWidgetAuxInfo* gtk_widget_get_aux_info                (GtkWidget        *widget,
                                                                  gboolean          create);
@@ -881,6 +883,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->get_preferred_width_for_height = gtk_widget_real_get_width_for_height;
   klass->get_preferred_height_for_width = gtk_widget_real_get_height_for_width;
   klass->state_changed = NULL;
+  klass->state_flags_changed = gtk_widget_real_state_flags_changed;
   klass->parent_set = NULL;
   klass->hierarchy_changed = NULL;
   klass->style_set = gtk_widget_real_style_set;
@@ -6514,6 +6517,13 @@ gtk_widget_real_query_tooltip (GtkWidget  *widget,
     }
 
   return FALSE;
+}
+
+static void
+gtk_widget_real_state_flags_changed (GtkWidget     *widget,
+                                     GtkStateFlags  old_state)
+{
+  gtk_widget_update_pango_context (widget);
 }
 
 static void
