@@ -43,6 +43,7 @@ demos =						\
 	textview.c				\
 	textscroll.c				\
 	toolpalette.c				\
+	transparent.c				\
 	tree_store.c				\
 	ui_manager.c
 
