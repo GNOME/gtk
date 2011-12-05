@@ -39,6 +39,7 @@ GType                   gtk_model_menu_item_get_type                    (void) G
 G_GNUC_INTERNAL
 GtkMenuItem *           gtk_model_menu_item_new                         (GMenuModel        *model,
                                                                          gint               item_index,
-                                                                         GActionObservable *actions);
+                                                                         GActionObservable *actions,
+                                                                         GtkAccelGroup     *accels);
 
 #endif /* __GTK_MODEL_MENU_ITEM_H__ */

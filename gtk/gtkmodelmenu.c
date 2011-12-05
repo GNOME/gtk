@@ -33,6 +33,7 @@
 typedef struct {
   GActionObservable *actions;
   GMenuModel        *model;
+  GtkAccelGroup     *accels;
   GtkMenuShell      *shell;
   guint              update_idle;
   GSList            *connected;
@@ -85,7 +86,7 @@ gtk_model_menu_binding_append_item (GtkModelMenuBinding  *binding,
     {
       GtkMenuItem *item;
 
-      item = gtk_model_menu_item_new (model, item_index, binding->actions);
+      item = gtk_model_menu_item_new (model, item_index, binding->actions, binding->accels);
       gtk_menu_shell_append (binding->shell, GTK_WIDGET (item));
       gtk_widget_show (GTK_WIDGET (item));
       binding->n_items++;
@@ -225,6 +226,7 @@ void
 gtk_model_menu_bind (GtkMenuShell      *shell,
                      GMenuModel        *model,
                      GActionObservable *actions,
+                     GtkAccelGroup     *accels,
                      gboolean           with_separators)
 {
   GtkModelMenuBinding *binding;
@@ -232,6 +234,7 @@ gtk_model_menu_bind (GtkMenuShell      *shell,
   binding = g_slice_new (GtkModelMenuBinding);
   binding->model = g_object_ref (model);
   binding->actions = g_object_ref (actions);
+  binding->accels = accels;
   binding->shell = shell;
   binding->update_idle = 0;
   binding->connected = NULL;
@@ -243,24 +246,27 @@ gtk_model_menu_bind (GtkMenuShell      *shell,
 
 GtkWidget *
 gtk_model_menu_create_menu (GMenuModel        *model,
-                            GActionObservable *actions)
+                            GActionObservable *actions,
+                            GtkAccelGroup     *accels)
 {
   GtkWidget *menu;
 
   menu = gtk_menu_new ();
-  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, actions, TRUE);
+  gtk_menu_set_accel_group (GTK_MENU (menu), accels);
+  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, actions, accels, TRUE);
 
   return menu;
 }
 
 GtkWidget *
 gtk_model_menu_create_menu_bar (GMenuModel        *model,
-                                GActionObservable *actions)
+                                GActionObservable *actions,
+                                GtkAccelGroup     *accels)
 {
   GtkWidget *menubar;
 
   menubar = gtk_menu_bar_new ();
-  gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, actions, FALSE);
+  gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, actions, accels, FALSE);
 
   return menubar;
 }

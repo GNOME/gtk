@@ -23,6 +23,7 @@
 
 #include "gtkmodelmenuitem.h"
 
+#include "gtkaccelmap.h"
 #include "gtkmodelmenu.h"
 
 struct _GtkModelMenuItem
@@ -188,11 +189,28 @@ gtk_model_menu_item_action_removed (GActionObserver   *observer,
   gtk_widget_queue_resize (GTK_WIDGET (item));
 }
 
+static gchar *
+get_accel_path (const gchar *action_name,
+                GVariant    *parameter)
+{
+  GString *s;
+
+  s = g_string_new ("<Actions>/");
+  g_string_append (s, action_name);
+  if (parameter)
+    {
+      g_string_append_c (s, '/');
+      g_variant_print_string (parameter, s, FALSE);
+    }
+  return g_string_free (s, FALSE);
+}
+
 static void
 gtk_model_menu_item_setup (GtkModelMenuItem  *item,
                            GMenuModel        *model,
                            gint               item_index,
-                           GActionObservable *actions)
+                           GActionObservable *actions,
+                           GtkAccelGroup     *accels)
 {
   GMenuAttributeIter *iter;
   GMenuModel *submenu;
@@ -201,7 +219,7 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
 
   if ((submenu = g_menu_model_get_item_link (model, item_index, "submenu")))
     {
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), gtk_model_menu_create_menu (submenu, actions));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), gtk_model_menu_create_menu (submenu, actions, accels));
       g_object_unref (submenu);
     }
 
@@ -228,6 +246,7 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
       const GVariantType *type;
       gboolean enabled;
       GVariant *state;
+      gchar *path;
 
       /* observer already causes us to hold a hard ref on the group */
       item->actions = G_ACTION_GROUP (actions);
@@ -242,6 +261,10 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
 
       if (state != NULL)
         g_variant_unref (state);
+
+      path = get_accel_path (item->action_name, item->target);
+      gtk_menu_item_set_accel_path (GTK_MENU_ITEM (item), path);
+      g_free (path);
     }
 }
 
@@ -284,13 +307,14 @@ gtk_model_menu_item_class_init (GtkModelMenuItemClass *class)
 GtkMenuItem *
 gtk_model_menu_item_new (GMenuModel        *model,
                          gint               item_index,
-                         GActionObservable *actions)
+                         GActionObservable *actions,
+                         GtkAccelGroup     *accels)
 {
   GtkModelMenuItem *item;
 
   item = g_object_new (GTK_TYPE_MODEL_MENU_ITEM, NULL);
 
-  gtk_model_menu_item_setup (item, model, item_index, actions);
+  gtk_model_menu_item_setup (item, model, item_index, actions, accels);
 
   return GTK_MENU_ITEM (item);
 }
