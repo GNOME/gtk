@@ -4650,7 +4650,7 @@ cairo_region_t *
 gdk_window_get_update_area (GdkWindow *window)
 {
   GdkWindow *impl_window;
-  cairo_region_t *tmp_region;
+  cairo_region_t *tmp_region, *to_remove;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
@@ -4670,7 +4670,21 @@ gdk_window_get_update_area (GdkWindow *window)
 	}
       else
 	{
-	  cairo_region_subtract (impl_window->update_area, tmp_region);
+	  /* Convert from impl coords */
+	  cairo_region_translate (tmp_region, -window->abs_x, -window->abs_y);
+
+	  /* Don't remove any update area that is overlapped by non-opaque windows
+	     (children or siblings) with alpha, as these really need to be repainted
+	     independently of this window. */
+	  to_remove = cairo_region_copy (tmp_region);
+	  cairo_region_subtract (to_remove, window->parent->layered_region);
+	  remove_layered_child_area (window, to_remove);
+
+	  /* Remove from update_area */
+	  cairo_region_translate (to_remove, window->abs_x, window->abs_y);
+	  cairo_region_subtract (impl_window->update_area, to_remove);
+
+	  cairo_region_destroy (to_remove);
 
 	  if (cairo_region_is_empty (impl_window->update_area) &&
 	      impl_window->outstanding_moves == NULL)
@@ -4681,10 +4695,7 @@ gdk_window_get_update_area (GdkWindow *window)
 	      gdk_window_remove_update_window ((GdkWindow *)impl_window);
 	    }
 
-	  /* Convert from impl coords */
-	  cairo_region_translate (tmp_region, -window->abs_x, -window->abs_y);
 	  return tmp_region;
-
 	}
     }
   else
