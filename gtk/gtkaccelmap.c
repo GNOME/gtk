@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkaccelmap.h"
+#include "gtkaccelmapprivate.h"
 
 #include "gtkmarshalers.h"
 #include "gtkwindowprivate.h"
@@ -1066,3 +1066,20 @@ do_accel_map_changed (AccelEntry *entry)
 		   entry->accel_key,
 		   entry->accel_mods);
 }
+
+gchar *
+_gtk_accel_path_for_action (const gchar *action_name,
+                            GVariant    *parameter)
+{
+  GString *s;
+
+  s = g_string_new ("<Actions>/");
+  g_string_append (s, action_name);
+  if (parameter)
+    {
+      g_string_append_c (s, '/');
+      g_variant_print_string (parameter, s, FALSE);
+    }
+  return g_string_free (s, FALSE);
+}
+

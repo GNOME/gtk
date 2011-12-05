@@ -31,7 +31,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtkapplicationwindow.h"
-#include "gtkaccelmap.h"
+#include "gtkaccelmapprivate.h"
 
 #include <gdk/gdk.h>
 #ifdef GDK_WINDOWING_X11
@@ -510,23 +510,6 @@ gtk_application_get_windows (GtkApplication *application)
   return application->priv->windows;
 }
 
-/* keep this in sync with gtkmodelmenuitem.c */
-static gchar *
-get_accel_path (const gchar *action_name,
-                GVariant    *parameter)
-{
-  GString *s;
-
-  s = g_string_new ("<Actions>/");
-  g_string_append (s, action_name);
-  if (parameter)
-    {
-      g_string_append_c (s, '/');
-      g_variant_print_string (parameter, s, FALSE);
-    }
-  return g_string_free (s, FALSE);
-}
-
 /**
  * gtk_application_add_accelerator:
  * @application: a #GtkApplication
@@ -572,7 +555,7 @@ gtk_application_add_accelerator (GtkApplication *application,
       return;
     }
 
-  accel_path = get_accel_path (action_name, parameter);
+  accel_path = _gtk_accel_path_for_action (action_name, parameter);
 
   if (gtk_accel_map_lookup_entry (accel_path, NULL))
     gtk_accel_map_change_entry (accel_path, accel_key, accel_mods, TRUE);
@@ -603,7 +586,7 @@ gtk_application_remove_accelerator (GtkApplication *application,
 
   g_return_if_fail (GTK_IS_APPLICATION (application));
 
-  accel_path = get_accel_path (action_name, parameter);
+  accel_path = _gtk_accel_path_for_action (action_name, parameter);
 
   if (!gtk_accel_map_lookup_entry (accel_path, NULL))
     {

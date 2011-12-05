@@ -111,7 +111,7 @@
 
 #include "gtkintl.h"
 
-#include "gtkaccelmap.h"
+#include "gtkaccelmapprivate.h"
 #include "gtkbox.h"
 #include "gtkclipboard.h"
 #include "gtkdebug.h"

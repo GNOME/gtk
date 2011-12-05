@@ -395,6 +395,7 @@ gtk_private_h_sources =		\
 	gactionobserver.h	\
 	gactionobservable.h	\
 	gtkaccelgroupprivate.h	\
+	gtkaccelmapprivate.h	\
 	gtkanimationdescription.h \
 	gtkappchooserprivate.h	\
 	gtkappchoosermodule.h	\

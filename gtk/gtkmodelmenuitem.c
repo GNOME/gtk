@@ -23,7 +23,7 @@
 
 #include "gtkmodelmenuitem.h"
 
-#include "gtkaccelmap.h"
+#include "gtkaccelmapprivate.h"
 #include "gtkmodelmenu.h"
 
 struct _GtkModelMenuItem
@@ -189,22 +189,6 @@ gtk_model_menu_item_action_removed (GActionObserver   *observer,
   gtk_widget_queue_resize (GTK_WIDGET (item));
 }
 
-static gchar *
-get_accel_path (const gchar *action_name,
-                GVariant    *parameter)
-{
-  GString *s;
-
-  s = g_string_new ("<Actions>/");
-  g_string_append (s, action_name);
-  if (parameter)
-    {
-      g_string_append_c (s, '/');
-      g_variant_print_string (parameter, s, FALSE);
-    }
-  return g_string_free (s, FALSE);
-}
-
 static void
 gtk_model_menu_item_setup (GtkModelMenuItem  *item,
                            GMenuModel        *model,
@@ -262,7 +246,7 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
       if (state != NULL)
         g_variant_unref (state);
 
-      path = get_accel_path (item->action_name, item->target);
+      path = _gtk_accel_path_for_action (item->action_name, item->target);
       gtk_menu_item_set_accel_path (GTK_MENU_ITEM (item), path);
       g_free (path);
     }

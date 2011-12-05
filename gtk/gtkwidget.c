@@ -35,7 +35,7 @@
 #include <cairo-gobject.h>
 
 #include "gtkcontainer.h"
-#include "gtkaccelmap.h"
+#include "gtkaccelmapprivate.h"
 #include "gtkclipboard.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
