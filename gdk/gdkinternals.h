@@ -400,11 +400,6 @@ void _gdk_display_set_window_under_pointer (GdkDisplay *display,
 
 void _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window);
 
-cairo_region_t *_gdk_window_calculate_full_clip_region    (GdkWindow     *window,
-                                                      GdkWindow     *base_window,
-                                                      gboolean       do_children,
-                                                      gint          *base_x_offset,
-                                                      gint          *base_y_offset);
 gboolean    _gdk_window_has_impl (GdkWindow *window);
 GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
 
