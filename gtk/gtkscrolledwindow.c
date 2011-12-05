@@ -156,7 +156,7 @@ struct _GtkScrolledWindowPrivate
   /* Kinetic scrolling */
   GdkWindow             *overshoot_window;
   GdkDevice             *drag_device;
-  guint                  kinetic_scrolling_enabled : 1;
+  guint                  kinetic_scrolling_flags   : 2;
   guint                  in_drag                   : 1;
   guint                  button_press_id;
   guint                  motion_notify_id;
@@ -457,7 +457,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * GtkScrolledWindow:auto-hide-scrollbars:
    *
    * Whether scrollbars are hidden when not scrolling. This property only takes effect if
-   * GtkScrolledWindow:kinetic-scrolling is %TRUE.
+   * GtkScrolledWindow:kinetic-scrolling has %GTK_KINETIC_SCROLLING_ENABLED set.
    *
    * Since: 3.2
    */
@@ -501,18 +501,21 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   /**
    * GtkScrolledWindow:kinetic-scrolling:
    *
-   * Whether kinetic scrolling mode is enabled,
+   * The kinetic scrolling behavior flags. Kinetic scrolling
    * only applies to devices with source %GDK_SOURCE_TOUCH
    *
    * Since: 3.4
    */
   g_object_class_install_property (gobject_class,
                                    PROP_KINETIC_SCROLLING,
-                                   g_param_spec_boolean ("kinetic-scrolling",
-                                                         P_("Kinetic Scrolling"),
-                                                         P_("Enable kinetic scrolling mode."),
-                                                         TRUE,
-                                                         GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
+                                   g_param_spec_flags ("kinetic-scrolling",
+                                                       P_("Kinetic Scrolling"),
+                                                       P_("Kinetic scrolling mode."),
+                                                       GTK_TYPE_KINETIC_SCROLLING_FLAGS,
+                                                       GTK_KINETIC_SCROLLING_ENABLED |
+                                                       GTK_KINETIC_SCROLLING_CAPTURE_BUTTON_PRESS,
+                                                       GTK_PARAM_READABLE |
+                                                       GTK_PARAM_WRITABLE));
   /**
    * GtkScrolledWindow::scroll-child:
    * @scrolled_window: a #GtkScrolledWindow
@@ -615,7 +618,9 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
   priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
 
-  gtk_scrolled_window_set_kinetic_scrolling (scrolled_window, TRUE);
+  gtk_scrolled_window_set_kinetic_scrolling (scrolled_window,
+                                             GTK_KINETIC_SCROLLING_ENABLED |
+                                             GTK_KINETIC_SCROLLING_CAPTURE_BUTTON_PRESS);
 }
 
 /**
@@ -1127,26 +1132,27 @@ gtk_scrolled_window_get_shadow_type (GtkScrolledWindow *scrolled_window)
 /**
  * gtk_scrolled_window_set_kinetic_scrolling:
  * @scrolled_window: a #GtkScrolledWindow
- * @enable: %TRUE to enable kinetic scrolling
+ * @flags: flags to apply to kinetic scrolling
  *
- * Enables or disables kinetic scrolling in @scrolled_window.
+ * Specifies the kinetic scrolling behavior for @scrolled_window. Kinetic
+ * scrolling only applies to devices with source %GDK_SOURCE_TOUCH.
  *
- * Since: 3.2
+ * Since: 3.4
  **/
 void
-gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
-                                           gboolean           enable)
+gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow        *scrolled_window,
+                                           GtkKineticScrollingFlags  flags)
 {
   GtkScrolledWindowPrivate *priv;
 
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
 
   priv = scrolled_window->priv;
-  if (priv->kinetic_scrolling_enabled == enable)
+  if (priv->kinetic_scrolling_flags == flags)
     return;
 
-  priv->kinetic_scrolling_enabled = enable;
-  if (priv->kinetic_scrolling_enabled)
+  priv->kinetic_scrolling_flags = flags;
+  if (priv->kinetic_scrolling_flags & GTK_KINETIC_SCROLLING_ENABLED)
     {
       priv->button_press_id =
         g_signal_connect (scrolled_window, "captured-event",
@@ -1199,13 +1205,13 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
  * gtk_scrolled_window_get_kinetic_scrolling:
  * @scrolled_window: a #GtkScrolledWindow
  *
- * Returns whether kinetic scrolling is turned on for @scrolled_window.
+ * Returns the specified kinetic scrolling behavior.
  *
- * Return value: %TRUE if kinetic scrolling in @scrolled_window is enabled.
+ * Return value: the scrolling behavior flags.
  *
- * Since: 3.2
+ * Since: 3.4
  **/
-gboolean
+GtkKineticScrollingFlags
 gtk_scrolled_window_get_kinetic_scrolling (GtkScrolledWindow *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv;
@@ -1214,7 +1220,7 @@ gtk_scrolled_window_get_kinetic_scrolling (GtkScrolledWindow *scrolled_window)
 
   priv = scrolled_window->priv;
 
-  return priv->kinetic_scrolling_enabled;
+  return priv->kinetic_scrolling_flags;
 }
 
 static void
@@ -1327,7 +1333,7 @@ gtk_scrolled_window_set_property (GObject      *object,
       break;
     case PROP_KINETIC_SCROLLING:
       gtk_scrolled_window_set_kinetic_scrolling (scrolled_window,
-                                                 g_value_get_boolean (value));
+                                                 g_value_get_flags (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1376,7 +1382,7 @@ gtk_scrolled_window_get_property (GObject    *object,
       g_value_set_int (value, priv->min_content_height);
       break;
     case PROP_KINETIC_SCROLLING:
-      g_value_set_boolean (value, priv->kinetic_scrolling_enabled);
+      g_value_set_boolean (value, priv->kinetic_scrolling_flags);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1899,7 +1905,9 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
                         "scrollbars-within-bevel", &scrollbars_within_bevel,
                         "auto-hide-scrollbars", &auto_hide_scrollbars,
                         NULL);
-  auto_hide_scrollbars = priv->kinetic_scrolling_enabled ? auto_hide_scrollbars : FALSE;
+  auto_hide_scrollbars =
+    (priv->kinetic_scrolling_flags & GTK_KINETIC_SCROLLING_ENABLED) ?
+    auto_hide_scrollbars : FALSE;
 
   gtk_widget_set_allocation (widget, allocation);
   gtk_style_context_restore (context);
@@ -2517,7 +2525,8 @@ gtk_scrolled_window_release_captured_events (GtkScrolledWindow *scrolled_window)
       priv->button_release_id = 0;
     }
 
-  gtk_widget_release_captured_events (GTK_WIDGET (scrolled_window), TRUE);
+  if (priv->kinetic_scrolling_flags & GTK_KINETIC_SCROLLING_CAPTURE_BUTTON_PRESS)
+    gtk_widget_release_captured_events (GTK_WIDGET (scrolled_window), TRUE);
 
   return FALSE;
 }
@@ -2574,7 +2583,8 @@ gtk_scrolled_window_button_release_event (GtkWidget *widget,
       /* There hasn't been scrolling at all, so just let the
        * child widget handle the events normally
        */
-      gtk_widget_release_captured_events (widget, TRUE);
+      if (priv->kinetic_scrolling_flags & GTK_KINETIC_SCROLLING_CAPTURE_BUTTON_PRESS)
+        gtk_widget_release_captured_events (widget, TRUE);
 
       return GTK_CAPTURED_EVENT_NONE;
     }
@@ -2819,10 +2829,15 @@ gtk_scrolled_window_button_press_event (GtkWidget *widget,
   else
     priv->in_drag = FALSE;
 
-  /* Store the button press event in
-   * case we need to propagate it later
-   */
-  return GTK_CAPTURED_EVENT_HANDLED | GTK_CAPTURED_EVENT_STORE;
+  if (priv->kinetic_scrolling_flags & GTK_KINETIC_SCROLLING_CAPTURE_BUTTON_PRESS)
+    {
+      /* Store the button press event in
+       * case we need to propagate it later
+       */
+      return GTK_CAPTURED_EVENT_HANDLED | GTK_CAPTURED_EVENT_STORE;
+    }
+  else
+    return GTK_CAPTURED_EVENT_NONE;
 }
 
 static gboolean
