@@ -31,6 +31,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtkapplicationwindow.h"
+#include "gtkaccelmap.h"
 
 #include <gdk/gdk.h>
 #ifdef GDK_WINDOWING_X11
@@ -507,4 +508,110 @@ gtk_application_get_windows (GtkApplication *application)
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
   return application->priv->windows;
+}
+
+/* keep this in sync with gtkmodelmenuitem.c */
+static gchar *
+get_accel_path (const gchar *action_name,
+                GVariant    *parameter)
+{
+  GString *s;
+
+  s = g_string_new ("<Actions>/");
+  g_string_append (s, action_name);
+  if (parameter)
+    {
+      g_string_append_c (s, '/');
+      g_variant_print_string (parameter, s, FALSE);
+    }
+  return g_string_free (s, FALSE);
+}
+
+/**
+ * gtk_application_add_accelerator:
+ * @application: a #GtkApplication
+ * @accelerator: accelerator string
+ * @action_name: the name of the action to activate
+ * @parameter: (allow-none): parameter to pass when activating the action,
+ *   or %NULL if the action does not accept an activation parameter
+ *
+ * Installs an accelerator that will cause the named action
+ * to be activated when the key combination specificed by @accelerator
+ * is pressed.
+ *
+ * @accelerator must be a string that can be parsed by
+ * gtk_accelerator_parse(), e.g. "<Primary>q" or "<Control><Alt>p".
+ *
+ * @action_name must be the name of an action as it would be used
+ * in the app menu, i.e. actions that have been added to the application
+ * are referred to with an "app." prefix, and window-specific actions
+ * with a "win." prefix.
+ *
+ * Since: 3.4
+ */
+void
+gtk_application_add_accelerator (GtkApplication *application,
+                                 const gchar    *accelerator,
+                                 const gchar    *action_name,
+                                 GVariant       *parameter)
+{
+  gchar *accel_path;
+  guint accel_key;
+  GdkModifierType accel_mods;
+
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+
+  /* Call this here, since gtk_init() is only getting called in startup() */
+  _gtk_accel_map_init ();
+
+  gtk_accelerator_parse (accelerator, &accel_key, &accel_mods);
+
+  if (accel_key == 0)
+    {
+      g_warning ("Failed to parse accelerator: '%s'\n", accelerator);
+      return;
+    }
+
+  accel_path = get_accel_path (action_name, parameter);
+
+  if (gtk_accel_map_lookup_entry (accel_path, NULL))
+    gtk_accel_map_change_entry (accel_path, accel_key, accel_mods, TRUE);
+  else
+    gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
+
+  g_free (accel_path);
+}
+
+/**
+ * gtk_application_remove_accelerator:
+ * @application: a #GtkApplication
+ * @action_name: the name of the action to activate
+ * @parameter: (allow-none): parameter to pass when activating the action,
+ *   or %NULL if the action does not accept an activation parameter
+ *
+ * Removes an accelerator that has been previously added
+ * with gtk_application_add_accelerator().
+ *
+ * Since: 3.4
+ */
+void
+gtk_application_remove_accelerator (GtkApplication *application,
+                                    const gchar    *action_name,
+                                    GVariant       *parameter)
+{
+  gchar *accel_path;
+
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+
+  accel_path = get_accel_path (action_name, parameter);
+
+  if (!gtk_accel_map_lookup_entry (accel_path, NULL))
+    {
+      g_warning ("No accelerator found for '%s'\n", accel_path);
+      g_free (accel_path);
+      return;
+    }
+
+  gtk_accel_map_change_entry (accel_path, 0, 0, FALSE);
+  g_free (accel_path);
 }

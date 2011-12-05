@@ -76,6 +76,13 @@ void             gtk_application_remove_window (GtkApplication    *application,
 
 GList *          gtk_application_get_windows   (GtkApplication    *application);
 
+void             gtk_application_add_accelerator    (GtkApplication  *application,
+                                                     const gchar     *accelerator,
+                                                     const gchar     *action_name,
+                                                     GVariant        *parameter);
+void             gtk_application_remove_accelerator (GtkApplication *application,
+                                                     const gchar    *action_name,
+                                                     GVariant       *parameter);
 
 G_END_DECLS
 
