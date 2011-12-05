@@ -30,7 +30,7 @@
 #include "gtkapplication.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
-#include "gtkwindow.h"
+#include "gtkapplicationwindow.h"
 
 #include <gdk/gdk.h>
 #ifdef GDK_WINDOWING_X11
@@ -76,7 +76,141 @@ G_DEFINE_TYPE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
 struct _GtkApplicationPrivate
 {
   GList *windows;
+
+#ifdef GDK_WINDOWING_X11
+  GDBusConnection *session;
+  gchar *window_prefix;
+  guint next_id;
+#endif
 };
+
+#ifdef GDK_WINDOWING_X11
+typedef struct
+{
+  guint action_export_id;
+  guint window_id;
+} GtkApplicationWindowInfo;
+
+static void
+gtk_application_window_realized_x11 (GtkWindow *window,
+                                     gpointer   user_data)
+{
+  GtkApplication *application = user_data;
+  GtkApplicationWindowInfo *info;
+  GdkWindow *gdkwindow;
+  gchar *window_path;
+  const gchar *unique_id;
+  const gchar *app_id;
+
+  gdkwindow = gtk_widget_get_window (GTK_WIDGET (window));
+
+  if (!GDK_IS_X11_WINDOW (gdkwindow))
+    return;
+
+  info = g_object_get_data (G_OBJECT (window), "GtkApplication::window-info");
+
+  window_path = g_strdup_printf ("%s%d", application->priv->window_prefix, info->window_id);
+  gdk_x11_window_set_utf8_property (gdkwindow, "_DBUS_OBJECT_PATH", window_path);
+  g_free (window_path);
+
+  unique_id = g_dbus_connection_get_unique_name (application->priv->session);
+  gdk_x11_window_set_utf8_property (gdkwindow, "_DBUS_UNIQUE_NAME", unique_id);
+
+  app_id = g_application_get_application_id (G_APPLICATION (application));
+  gdk_x11_window_set_utf8_property (gdkwindow, "_DBUS_APPLICATION_ID", app_id);
+}
+
+static void
+gtk_application_window_added_x11 (GtkApplication *application,
+                                  GtkWindow      *window)
+{
+  GtkApplicationWindowInfo *info;
+
+  if (application->priv->session == NULL)
+    return;
+
+  if (!GTK_IS_APPLICATION_WINDOW (window))
+    return;
+
+  /* GtkApplicationWindow associates with us when it is first created,
+   * so surely it's not realized yet...
+   */
+  g_assert (!gtk_widget_get_realized (GTK_WIDGET (window)));
+
+  /* ...but we want to know when it is. */
+  g_signal_connect (window, "realize", G_CALLBACK (gtk_application_window_realized_x11), application);
+
+  info = g_slice_new (GtkApplicationWindowInfo);
+  do
+    {
+      gchar *window_path;
+
+      info->window_id = application->priv->next_id++;
+      window_path = g_strdup_printf ("%s%d", application->priv->window_prefix, info->window_id);
+      info->action_export_id = g_dbus_connection_export_action_group (application->priv->session, window_path,
+                                                                      G_ACTION_GROUP (window), NULL);
+      g_free (window_path);
+    }
+  while (!info->action_export_id);
+
+  g_object_set_data (G_OBJECT (window), "GtkApplication::window-info", info);
+}
+
+static void
+gtk_application_window_removed_x11 (GtkApplication *application,
+                                    GtkWindow      *window)
+{
+  GtkApplicationWindowInfo *info;
+
+  if (application->priv->session == NULL)
+    return;
+
+  if (!GTK_IS_APPLICATION_WINDOW (window))
+    return;
+
+  info = g_object_steal_data (G_OBJECT (window), "GtkApplication::window-info");
+
+  g_dbus_connection_unexport_action_group (application->priv->session, info->action_export_id);
+
+  g_slice_free (GtkApplicationWindowInfo, info);
+}
+
+static gchar *
+window_prefix_from_appid (const gchar *appid)
+{
+  gchar *appid_path, *iter;
+
+  appid_path = g_strconcat ("/", appid, "/windows/", NULL);
+  for (iter = appid_path; *iter; iter++)
+    {
+      if (*iter == '.')
+        *iter = '/';
+
+      if (*iter == '-')
+        *iter = '_';
+    }
+
+  return appid_path;
+}
+
+static void
+gtk_application_startup_x11 (GtkApplication *application)
+{
+  const gchar *application_id;
+
+  application_id = g_application_get_application_id (G_APPLICATION (application));
+  application->priv->session = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+  application->priv->window_prefix = window_prefix_from_appid (application_id);
+}
+
+static void
+gtk_application_shutdown_x11 (GtkApplication *application)
+{
+  g_free (application->priv->window_prefix);
+  application->priv->window_prefix = NULL;
+  application->priv->session = NULL;
+}
+#endif
 
 static gboolean
 gtk_application_focus_in_event_cb (GtkWindow      *window,
@@ -104,11 +238,19 @@ gtk_application_startup (GApplication *application)
     ->startup (application);
 
   gtk_init (0, 0);
+
+#ifdef GDK_WINDOWING_X11
+  gtk_application_startup_x11 (GTK_APPLICATION (application));
+#endif
 }
 
 static void
 gtk_application_shutdown (GApplication *application)
 {
+#ifdef GDK_WINDOWING_X11
+  gtk_application_shutdown_x11 (GTK_APPLICATION (application));
+#endif
+
   G_APPLICATION_CLASS (gtk_application_parent_class)
     ->shutdown (application);
 }
@@ -179,6 +321,10 @@ gtk_application_window_added (GtkApplication *application,
   g_signal_connect (window, "focus-in-event",
                     G_CALLBACK (gtk_application_focus_in_event_cb),
                     application);
+
+#ifdef GDK_WINDOWING_X11
+  gtk_application_window_added_x11 (application, window);
+#endif
 }
 
 static void
@@ -186,6 +332,10 @@ gtk_application_window_removed (GtkApplication *application,
                                 GtkWindow      *window)
 {
   GtkApplicationPrivate *priv = application->priv;
+
+#ifdef GDK_WINDOWING_X11
+  gtk_application_window_removed_x11 (application, window);
+#endif
 
   g_signal_handlers_disconnect_by_func (window,
                                         gtk_application_focus_in_event_cb,
