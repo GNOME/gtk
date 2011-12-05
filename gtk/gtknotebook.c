@@ -2625,22 +2625,9 @@ gtk_notebook_draw (GtkWidget *widget,
       gtk_cairo_should_draw_window (cr, priv->drag_window))
     {
       GtkStyleContext *context;
-      GdkRGBA bg_color;
 
       cairo_save (cr);
       gtk_cairo_transform_to_window (cr, widget, priv->drag_window);
-      context = gtk_widget_get_style_context (widget);
-
-      /* FIXME: This is a workaround to make tabs reordering work better
-       * with engines with rounded tabs. If the drag window background
-       * isn't set, the rounded corners would be black.
-       *
-       * Ideally, these corners should be made transparent, Either by using
-       * ARGB visuals or shape windows.
-       */
-      gtk_style_context_get_background_color (context, 0, &bg_color);
-      gdk_cairo_set_source_rgba (cr, &bg_color);
-      cairo_paint (cr);
 
       gtk_notebook_draw_tab (notebook,
                              priv->cur_page,
@@ -3112,6 +3099,7 @@ show_drag_window (GtkNotebook        *notebook,
     {
       GdkWindowAttr attributes;
       guint attributes_mask;
+      GdkRGBA transparent = {0, 0, 0, 0};
 
       attributes.x = page->allocation.x;
       attributes.y = page->allocation.y;
@@ -3127,6 +3115,7 @@ show_drag_window (GtkNotebook        *notebook,
                                           &attributes,
                                           attributes_mask);
       gdk_window_set_user_data (priv->drag_window, widget);
+      gdk_window_set_background_rgba (priv->drag_window, &transparent);
     }
 
   g_object_ref (page->tab_label);
