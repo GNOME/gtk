@@ -51,6 +51,31 @@
  * automatically show the menu as part of a menubar. This behaviour
  * can be overridden with the #GtkApplicationWindow:show-menubar
  * property.
+ *
+ * <example><title>A GtkApplicationWindow with a menubar</title>
+ * <programlisting><![CDATA[
+ * app = gtk_application_new ();
+ *
+ * builder = gtk_builder_new ();
+ * gtk_builder_add_from_string (builder,
+ *     "<interface>"
+ *     "  <menu id='menubar'>"
+ *     "    <submenu label='_Edit'>"
+ *     "      <item label='_Copy' action='win.copy'/>"
+ *     "      <item label='_Paste' action='win.paste'/>"
+ *     "    </submenu>"
+ *     "  </menu>"
+ *     "</interface>");
+ * g_application_set_menubar (G_APPLICATION (app),
+ *                            G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
+ * g_object_unref (builder);
+ *
+ * ...
+ *
+ * window = gtk_application_window_new (app);
+ * ]]>
+ * </programlisting>
+ * </example>
  */
 struct _GtkApplicationWindowPrivate
 {
