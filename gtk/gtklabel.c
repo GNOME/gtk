@@ -383,8 +383,8 @@ static void gtk_label_finalize          (GObject          *object);
 static void gtk_label_destroy           (GtkWidget        *widget);
 static void gtk_label_size_allocate     (GtkWidget        *widget,
                                          GtkAllocation    *allocation);
-static void gtk_label_state_changed     (GtkWidget        *widget,
-                                         GtkStateType      state);
+static void gtk_label_state_flags_changed   (GtkWidget        *widget,
+                                             GtkStateFlags     prev_state);
 static void gtk_label_style_updated     (GtkWidget        *widget);
 static void gtk_label_direction_changed (GtkWidget        *widget,
 					 GtkTextDirection  previous_dir);
@@ -569,7 +569,7 @@ gtk_label_class_init (GtkLabelClass *class)
 
   widget_class->destroy = gtk_label_destroy;
   widget_class->size_allocate = gtk_label_size_allocate;
-  widget_class->state_changed = gtk_label_state_changed;
+  widget_class->state_flags_changed = gtk_label_state_flags_changed;
   widget_class->style_updated = gtk_label_style_updated;
   widget_class->query_tooltip = gtk_label_query_tooltip;
   widget_class->direction_changed = gtk_label_direction_changed;
@@ -3836,8 +3836,8 @@ gtk_label_update_cursor (GtkLabel *label)
 }
 
 static void
-gtk_label_state_changed (GtkWidget   *widget,
-                         GtkStateType prev_state)
+gtk_label_state_flags_changed (GtkWidget     *widget,
+                               GtkStateFlags  prev_state)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
@@ -3850,8 +3850,8 @@ gtk_label_state_changed (GtkWidget   *widget,
       gtk_label_update_cursor (label);
     }
 
-  if (GTK_WIDGET_CLASS (gtk_label_parent_class)->state_changed)
-    GTK_WIDGET_CLASS (gtk_label_parent_class)->state_changed (widget, prev_state);
+  if (GTK_WIDGET_CLASS (gtk_label_parent_class)->state_flags_changed)
+    GTK_WIDGET_CLASS (gtk_label_parent_class)->state_flags_changed (widget, prev_state);
 }
 
 static void
