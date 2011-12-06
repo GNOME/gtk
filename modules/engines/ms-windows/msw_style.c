@@ -661,26 +661,27 @@ setup_msw_rc_style (void)
   gtk_rc_parse_string (buf);
 
   /* enable coloring for text on buttons
-   * TODO: use GetThemeMetric for the border and outside border
-   * TODO: child-displacement-x & y should be 0 when XP theme is active */
+   * TODO: use GetThemeMetric for the border and outside border */
   g_snprintf (buf, sizeof (buf),
-	      "style \"msw-button\" = \"msw-default\"\n"
-	      "{\n"
-	      "bg[NORMAL] = { %d, %d, %d }\n"
-	      "bg[PRELIGHT] = { %d, %d, %d }\n"
-	      "bg[INSENSITIVE] = { %d, %d, %d }\n"
-	      "fg[PRELIGHT] = { %d, %d, %d }\n"
-	      "GtkButton::default-border = { 0, 0, 0, 0 }\n"
-	      "GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
-	      "GtkButton::child-displacement-x = 1\n"
-	      "GtkButton::child-displacement-y = 1\n"
-	      "GtkButton::focus-padding = %d\n"
-	      "}widget_class \"*Button*\" style \"msw-button\"\n",
-	      btn_face.red, btn_face.green, btn_face.blue,
-	      btn_face.red, btn_face.green, btn_face.blue,
-	      btn_face.red, btn_face.green, btn_face.blue,
-	      btn_fore.red, btn_fore.green, btn_fore.blue,
-	      xp_theme_is_active ()? 1 : 2);
+              "style \"msw-button\" = \"msw-default\"\n"
+              "{\n"
+              "bg[NORMAL] = { %d, %d, %d }\n"
+              "bg[PRELIGHT] = { %d, %d, %d }\n"
+              "bg[INSENSITIVE] = { %d, %d, %d }\n"
+              "fg[PRELIGHT] = { %d, %d, %d }\n"
+              "GtkButton::default-border = { 0, 0, 0, 0 }\n"
+              "GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
+              "GtkButton::child-displacement-x = %d\n"
+              "GtkButton::child-displacement-y = %d\n"
+              "GtkWidget::focus-padding = %d\n"
+              "}widget_class \"*Button*\" style \"msw-button\"\n",
+              btn_face.red, btn_face.green, btn_face.blue,
+              btn_face.red, btn_face.green, btn_face.blue,
+              btn_face.red, btn_face.green, btn_face.blue,
+              btn_fore.red, btn_fore.green, btn_fore.blue,
+              xp_theme_is_active ()? 0 : 1,
+              xp_theme_is_active ()? 0 : 1,
+              xp_theme_is_active ()? 1 : 2);
   gtk_rc_parse_string (buf);
 
   /* enable coloring for progress bars */
