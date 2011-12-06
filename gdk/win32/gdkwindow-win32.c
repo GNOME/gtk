@@ -655,7 +655,7 @@ _gdk_window_impl_new (GdkWindow     *window,
       /* A temp window is not necessarily a top level window */
       dwStyle = (_gdk_root == real_parent ? WS_POPUP : WS_CHILDWINDOW);
       dwStyle |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-      dwExStyle |= WS_EX_TOOLWINDOW;
+      dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
       offset_x = _gdk_offset_x;
       offset_y = _gdk_offset_y;
       break;
@@ -1266,10 +1266,11 @@ show_window_internal (GdkWindow *window,
     }
 
   /* Sync STATE_ABOVE to TOPMOST */
-  if (((private->state & GDK_WINDOW_STATE_ABOVE) &&
+  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TEMP &&
+      (((private->state & GDK_WINDOW_STATE_ABOVE) &&
        !(exstyle & WS_EX_TOPMOST)) ||
       (!(private->state & GDK_WINDOW_STATE_ABOVE) &&
-       (exstyle & WS_EX_TOPMOST)))
+       (exstyle & WS_EX_TOPMOST))))
     {
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
 			       (private->state & GDK_WINDOW_STATE_ABOVE)?HWND_TOPMOST:HWND_NOTOPMOST,
@@ -3137,9 +3138,10 @@ update_style_bits (GdkWindow *window)
   new_style = old_style;
   new_exstyle = old_exstyle;
 
-  if (private->window_type == GDK_WINDOW_TEMP ||
-      impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY)
-    new_exstyle |= WS_EX_TOOLWINDOW;
+  if (private->window_type == GDK_WINDOW_TEMP)
+    new_exstyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
+  else if (impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY)
+    new_exstyle |= WS_EX_TOOLWINDOW ;
   else
     new_exstyle &= ~WS_EX_TOOLWINDOW;
 
