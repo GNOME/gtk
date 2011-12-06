@@ -162,16 +162,6 @@ modifier_style_set_color (GtkModifierStyle *style,
   g_return_if_fail (GTK_IS_MODIFIER_STYLE (style));
 
   priv = style->priv;
-  gtk_style_properties_get (priv->style, state,
-                            prop, &old_color,
-                            NULL);
-
-  if ((!color && !old_color) ||
-      (color && old_color && gdk_rgba_equal (color, old_color)))
-    {
-      gdk_rgba_free (old_color);
-      return;
-    }
 
   if (color)
     gtk_style_properties_set (priv->style, state,
@@ -214,19 +204,6 @@ _gtk_modifier_style_set_font (GtkModifierStyle           *style,
   g_return_if_fail (GTK_IS_MODIFIER_STYLE (style));
 
   priv = style->priv;
-  gtk_style_properties_get (priv->style, 0,
-                            "font", &old_font,
-                            NULL);
-
-  if ((!old_font && !font_desc) ||
-      (old_font && font_desc &&
-       pango_font_description_equal (old_font, font_desc)))
-    {
-      if (old_font)
-        pango_font_description_free (old_font);
-
-      return;
-    }
 
   if (font_desc)
     gtk_style_properties_set (priv->style, 0,
