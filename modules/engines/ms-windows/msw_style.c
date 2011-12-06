@@ -51,6 +51,9 @@
 #endif
 
 
+#define DETAIL(xx)   ((detail) && (!strcmp(xx, detail)))
+
+
 /* Default values, not normally used
  */
 static const GtkRequisition default_option_indicator_size = { 9, 8 };
@@ -975,7 +978,7 @@ draw_check (GtkStyle *style,
   x -= (1 + PART_SIZE - width) / 2;
   y -= (1 + PART_SIZE - height) / 2;
 
-  if (detail && strcmp (detail, "check") == 0)	/* Menu item */
+  if (DETAIL("check"))	/* Menu item */
     {
       if (shadow == GTK_SHADOW_IN)
 	{
@@ -1003,7 +1006,7 @@ draw_check (GtkStyle *style,
       if (!xp_theme_draw (window, theme_elt,
 			  style, x, y, width, height, state, area))
 	{
-	  if (detail && !strcmp (detail, "cellcheck"))
+	  if (DETAIL("cellcheck"))
 	    state = GTK_STATE_NORMAL;
 
           draw_part (window, &style->black, area, x, y, CHECK_BLACK);
@@ -1129,7 +1132,7 @@ draw_option (GtkStyle *style,
   x -= (1 + PART_SIZE - width) / 2;
   y -= (1 + PART_SIZE - height) / 2;
 
-  if (detail && strcmp (detail, "option") == 0)	/* Menu item */
+  if (DETAIL("option"))	/* Menu item */
     {
       if (shadow == GTK_SHADOW_IN)
 	{
@@ -1146,7 +1149,7 @@ draw_option (GtkStyle *style,
 	}
       else
 	{
-	  if (detail && !strcmp (detail, "cellradio"))
+	  if (DETAIL("cellradio"))
 	    state = GTK_STATE_NORMAL;
 
           draw_part (window, &style->black, area, x, y, RADIO_BLACK);
@@ -1341,7 +1344,7 @@ draw_arrow (GtkStyle *style,
   if (GTK_IS_ARROW (widget) && is_combo_box_child (widget) && xp_theme_is_active ())
     return;
 
-  if (detail && strcmp (detail, "spinbutton") == 0)
+  if (DETAIL("spinbutton"))
     {
       if (xp_theme_is_drawable (XP_THEME_ELEMENT_SPIN_BUTTON_UP))
 	{
@@ -1365,8 +1368,7 @@ draw_arrow (GtkStyle *style,
 
       return;
     }
-  else if (detail && (!strcmp (detail, "vscrollbar")
-		      || !strcmp (detail, "hscrollbar")))
+  else if (DETAIL("vscrollbar") || DETAIL("hscrollbar"))
     {
       gboolean is_disabled = FALSE;
       UINT btn_type = 0;
@@ -1774,7 +1776,7 @@ draw_box (GtkStyle *style,
 	  GtkWidget *widget,
 	  const gchar *detail, gint x, gint y, gint width, gint height)
 {
-  if (is_combo_box_child (widget) && detail && !strcmp (detail, "button"))
+  if (is_combo_box_child (widget) && DETAIL("button"))
     {
       RECT rect;
       XpDCInfo dc_info;
@@ -1804,8 +1806,7 @@ draw_box (GtkStyle *style,
 	}
     }
 
-  if (detail &&
-      (!strcmp (detail, "button") || !strcmp (detail, "buttondefault")))
+  if (DETAIL("button") || DETAIL("buttondefault"))
     {
       if (GTK_IS_TREE_VIEW (widget->parent) || GTK_IS_CLIST (widget->parent))
       {
@@ -1859,18 +1860,17 @@ draw_box (GtkStyle *style,
 
       return;
     }
-  else if (detail && !strcmp (detail, "spinbutton"))
+  else if (DETAIL("spinbutton"))
     {
       if (xp_theme_is_drawable (XP_THEME_ELEMENT_SPIN_BUTTON_UP))
 	{
 	  return;
 	}
     }
-  else if (detail && (!strcmp (detail, "spinbutton_up")
-		      || !strcmp (detail, "spinbutton_down")))
+  else if (DETAIL("spinbutton_up") || DETAIL("spinbutton_down"))
     {
       if (!xp_theme_draw (window,
-			  (!strcmp (detail, "spinbutton_up"))
+			  DETAIL("spinbutton_up")
 			  ? XP_THEME_ELEMENT_SPIN_BUTTON_UP
 			  : XP_THEME_ELEMENT_SPIN_BUTTON_DOWN,
 			  style, x, y, width, height, state_type, area))
@@ -1888,7 +1888,7 @@ draw_box (GtkStyle *style,
 	}
       return;
     }
-  else if (detail && !strcmp (detail, "slider"))
+  else if (DETAIL("slider"))
     {
       if (GTK_IS_SCROLLBAR (widget))
 	{
@@ -1933,7 +1933,7 @@ draw_box (GtkStyle *style,
 	    }
 	}
     }
-  else if (detail && !strcmp (detail, "bar"))
+  else if (DETAIL("bar"))
     {
       if (widget && GTK_IS_PROGRESS_BAR (widget))
 	{
@@ -1950,7 +1950,7 @@ draw_box (GtkStyle *style,
 	  shadow_type = GTK_SHADOW_NONE;
 	}
     }
-  else if (detail && strcmp (detail, "menuitem") == 0)
+  else if (DETAIL("menuitem"))
     {
       shadow_type = GTK_SHADOW_NONE;
       if (draw_menu_item (window, widget, style,
@@ -1959,7 +1959,7 @@ draw_box (GtkStyle *style,
 	  return;
 	}
     }
-  else if (detail && !strcmp (detail, "trough"))
+  else if (DETAIL("trough"))
     {
       if (widget && GTK_IS_PROGRESS_BAR (widget))
 	{
@@ -2052,7 +2052,7 @@ draw_box (GtkStyle *style,
 	  return;
 	}
     }
-  else if (detail && strcmp (detail, "optionmenu") == 0)
+  else if (DETAIL("optionmenu"))
     {
       if (xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT,
 			 style, x, y, width, height, state_type, area))
@@ -2060,16 +2060,11 @@ draw_box (GtkStyle *style,
 	  return;
 	}
     }
-  else if (detail
-	   && (strcmp (detail, "vscrollbar") == 0
-	       || strcmp (detail, "hscrollbar") == 0))
+  else if (DETAIL("vscrollbar") || DETAIL("hscrollbar"))
     {
       return;
     }
-  else if (detail
-	   && (strcmp (detail, "handlebox_bin") == 0
-	       || strcmp (detail, "toolbar") == 0
-	       || strcmp (detail, "menubar") == 0))
+  else if (DETAIL("handlebox_bin") || DETAIL("toolbar") || DETAIL("menubar"))
     {
       sanitize_size (window, &width, &height);
       if (xp_theme_draw (window, XP_THEME_ELEMENT_REBAR,
@@ -2078,14 +2073,14 @@ draw_box (GtkStyle *style,
 	  return;
 	}
     }
-  else if (detail && (!strcmp (detail, "handlebox")))	/* grip */
+  else if (DETAIL("handlebox"))	/* grip */
     {
       if (!xp_theme_is_active ())
 	{
 	  return;
 	}
     }
-  else if (detail && !strcmp (detail, "notebook") && GTK_IS_NOTEBOOK (widget))
+  else if (DETAIL("notebook") && GTK_IS_NOTEBOOK (widget))
     {
       if (xp_theme_draw (window, XP_THEME_ELEMENT_TAB_PANE, style,
 			 x, y, width, height, state_type, area))
@@ -2135,7 +2130,7 @@ draw_box (GtkStyle *style,
   parent_class->draw_box (style, window, state_type, shadow_type, area,
 			  widget, detail, x, y, width, height);
 
-  if (detail && strcmp (detail, "optionmenu") == 0)
+  if (DETAIL("optionmenu"))
     {
       GtkRequisition indicator_size;
       GtkBorder indicator_spacing;
@@ -2182,7 +2177,7 @@ draw_tab (GtkStyle *style,
   g_return_if_fail (style != NULL);
   g_return_if_fail (window != NULL);
 
-  if (detail && !strcmp (detail, "optionmenutab"))
+  if (DETAIL("optionmenutab"))
     {
       if (xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON,
 			 style, x - 5, widget->allocation.y + 1,
@@ -2667,7 +2662,7 @@ draw_extension (GtkStyle *style,
 		gint x, gint y,
 		gint width, gint height, GtkPositionType gap_side)
 {
-  if (widget && GTK_IS_NOTEBOOK (widget) && detail && !strcmp (detail, "tab"))
+  if (widget && GTK_IS_NOTEBOOK (widget) && DETAIL("tab"))
     {
       GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
@@ -2711,7 +2706,7 @@ draw_box_gap (GtkStyle *style,
 	      gint gap_x,
 	      gint gap_width)
 {
-  if (GTK_IS_NOTEBOOK (widget) && detail && !strcmp (detail, "notebook"))
+  if (GTK_IS_NOTEBOOK (widget) && DETAIL("notebook"))
     {
       GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
@@ -2787,7 +2782,7 @@ draw_flat_box (GtkStyle *style, GdkWindow *window,
 
 	  return;
 	}
-      else if (!strcmp (detail, "checkbutton"))
+      else if (DETAIL("checkbutton"))
 	{
 	  if (state_type == GTK_STATE_PRELIGHT)
 	    {
@@ -2839,7 +2834,7 @@ draw_shadow (GtkStyle *style,
   gboolean is_handlebox;
   gboolean is_toolbar;
 
-  if (detail && !strcmp (detail, "frame"))
+  if (DETAIL("frame"))
     {
 
       HDC dc;
@@ -2890,7 +2885,7 @@ draw_shadow (GtkStyle *style,
 
       return;
     }
-  if (detail && (!strcmp (detail, "entry") || !strcmp (detail, "combobox")))
+  if (DETAIL("entry") || DETAIL("combobox"))
     {
       if (shadow_type != GTK_SHADOW_IN)
 	return;
@@ -2912,17 +2907,17 @@ draw_shadow (GtkStyle *style,
       return;
     }
 
-  if (detail && !strcmp (detail, "scrolled_window") &&
+  if (DETAIL("scrolled_window") &&
       xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT, style,
 		     x, y, width, height, state_type, area))
     {
       return;
     }
 
-  if (detail && !strcmp (detail, "spinbutton"))
+  if (DETAIL("spinbutton"))
     return;
 
-  if (detail && !strcmp (detail, "menu"))
+  if (DETAIL("menu"))
     {
       if (draw_menu_border (window, style, x, y, width, height))
 	{
@@ -2930,13 +2925,11 @@ draw_shadow (GtkStyle *style,
 	}
     }
 
-  if (detail && !strcmp (detail, "handlebox"))
+  if (DETAIL("handlebox"))
     return;
 
-  is_handlebox = (detail && !strcmp (detail, "handlebox_bin"));
-  is_toolbar = (detail
-		&& (!strcmp (detail, "toolbar")
-		    || !strcmp (detail, "menubar")));
+  is_handlebox = (DETAIL("handlebox_bin"));
+  is_toolbar = (DETAIL("toolbar") || DETAIL("menubar"));
 
   if (is_toolbar || is_handlebox)
     {
@@ -3036,7 +3029,7 @@ draw_shadow (GtkStyle *style,
       return;
     }
 
-  if (detail && !strcmp (detail, "statusbar"))
+  if (DETAIL("statusbar"))
     {
       return;
     }
@@ -3057,7 +3050,7 @@ draw_hline (GtkStyle *style,
   
   cr = gdk_cairo_create (window);
 
-  if (xp_theme_is_active () && detail && !strcmp (detail, "menuitem"))
+  if (xp_theme_is_active () && DETAIL("menuitem"))
     {
       gint cx, cy;
       gint new_y, new_height;
@@ -3186,7 +3179,7 @@ draw_resize_grip (GtkStyle *style,
   
   cr = gdk_cairo_create (window);
   
-  if (detail && !strcmp (detail, "statusbar"))
+  if (DETAIL("statusbar"))
     {
       if (xp_theme_draw
 	  (window, XP_THEME_ELEMENT_STATUS_GRIPPER, style, x, y, width,
@@ -3340,7 +3333,7 @@ draw_layout (GtkStyle *style,
    * notebook tabs, so we give them a gentle nudge two pixels to the
    * right.  A little hackish, but what are 'ya gonna do?  -- Cody
    */
-  if (xp_theme_is_active () && detail && !strcmp (detail, "label"))
+  if (xp_theme_is_active () && DETAIL("label"))
     {
       if (widget->parent != NULL)
 	{
