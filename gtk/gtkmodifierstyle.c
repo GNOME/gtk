@@ -157,7 +157,6 @@ modifier_style_set_color (GtkModifierStyle *style,
                           const GdkRGBA    *color)
 {
   GtkModifierStylePrivate *priv;
-  GdkRGBA *old_color;
 
   g_return_if_fail (GTK_IS_MODIFIER_STYLE (style));
 
@@ -171,7 +170,6 @@ modifier_style_set_color (GtkModifierStyle *style,
     gtk_style_properties_unset_property (priv->style, prop, state);
 
   g_signal_emit (style, signals[CHANGED], 0);
-  gdk_rgba_free (old_color);
 }
 
 void
@@ -199,7 +197,6 @@ _gtk_modifier_style_set_font (GtkModifierStyle           *style,
                               const PangoFontDescription *font_desc)
 {
   GtkModifierStylePrivate *priv;
-  PangoFontDescription *old_font;
 
   g_return_if_fail (GTK_IS_MODIFIER_STYLE (style));
 
@@ -211,9 +208,6 @@ _gtk_modifier_style_set_font (GtkModifierStyle           *style,
                               NULL);
   else
     gtk_style_properties_unset_property (priv->style, "font", 0);
-
-  if (old_font)
-    pango_font_description_free (old_font);
 
   g_signal_emit (style, signals[CHANGED], 0);
 }
