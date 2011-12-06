@@ -3865,7 +3865,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
     return;
 
   if (gdk_window_is_offscreen (window->impl_window) &&
-      window == window->impl_window)
+      gdk_window_has_impl (window))
     _gdk_window_add_damage ((GdkWindow *) window->impl_window, expose_region);
 
 
