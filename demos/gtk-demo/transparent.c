@@ -191,7 +191,7 @@ do_transparent (GtkWidget *do_widget)
       GtkWidget *overlay;
       GtkWidget *align;
       GtkWidget *entry;
-      GdkRGBA transparent = {0.1, 0, 0, 0};
+      GdkRGBA transparent = {0, 0, 0, 0};
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
