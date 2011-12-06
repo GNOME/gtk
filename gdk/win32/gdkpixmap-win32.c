@@ -138,7 +138,6 @@ _gdk_pixmap_new (GdkDrawable *drawable,
 		gint         depth)
 {
   HDC hdc;
-  HPALETTE holdpal = NULL;
   HBITMAP hbitmap;
   GdkPixmap *pixmap;
   GdkDrawableImplWin32 *drawable_impl;
@@ -147,6 +146,7 @@ _gdk_pixmap_new (GdkDrawable *drawable,
   gint window_depth;
   cairo_surface_t *dib_surface, *image_surface;
   cairo_format_t format;
+  guchar *bits;
 
   g_return_val_if_fail (drawable == NULL || GDK_IS_DRAWABLE (drawable), NULL);
   g_return_val_if_fail ((drawable != NULL) || (depth != -1), NULL);
@@ -173,6 +173,11 @@ _gdk_pixmap_new (GdkDrawable *drawable,
 
     case 8:
       format = CAIRO_FORMAT_A8;
+      break;
+
+    case 15:
+    case 16:
+      format = CAIRO_FORMAT_RGB16_565;
       break;
 
     case 24:
@@ -203,16 +208,93 @@ _gdk_pixmap_new (GdkDrawable *drawable,
         gdk_drawable_set_colormap (pixmap, cmap);
     }
 
-  dib_surface = cairo_win32_surface_create_with_dib (format, width, height);
-  if (dib_surface == NULL)
+  if (depth != 15 && depth != 16)
     {
-      g_object_unref ((GObject *) pixmap);
-      return NULL;
-    }
+      dib_surface = cairo_win32_surface_create_with_dib (format, width, height);
+      if (dib_surface == NULL)
+	{
+	  g_object_unref ((GObject *) pixmap);
+	  return NULL;
+	}
 
-  /* We need to have cairo create the dibsection for us, because
-     creating a cairo surface from a hdc only works for rgb24 format */
-  hdc = cairo_win32_surface_get_dc (dib_surface);
+      /* We need to have cairo create the dibsection for us, because
+	 creating a cairo surface from a hdc only works for rgb24 format */
+      hdc = cairo_win32_surface_get_dc (dib_surface);
+
+      /* Get the bitmap from the cairo hdc */
+      hbitmap = GetCurrentObject (hdc, OBJ_BITMAP);
+
+      image_surface = cairo_win32_surface_get_image (dib_surface);
+      bits = cairo_image_surface_get_data (image_surface);
+    }
+  else
+    {
+      /* 16 bpp not supported by win32 cairo surface */
+      struct {
+	BITMAPINFOHEADER bmiHeader;
+	union {
+	  WORD bmiIndices[256];
+	  DWORD bmiMasks[3];
+	  RGBQUAD bmiColors[256];
+	} u;
+      } bmi;
+      UINT iUsage;
+      HWND hwnd;
+      GdkVisual *visual;
+
+      if (GDK_IS_WINDOW (drawable))
+	hwnd = GDK_WINDOW_HWND (drawable);
+      else
+	hwnd = GetDesktopWindow ();
+      if ((hdc = GetDC (hwnd)) == NULL)
+	{
+	  WIN32_GDI_FAILED ("GetDC");
+	  g_object_unref ((GObject *) pixmap);
+	  return NULL;
+	}
+
+      bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
+      bmi.bmiHeader.biWidth = width;
+      bmi.bmiHeader.biHeight = -height;
+      bmi.bmiHeader.biPlanes = 1;
+      bmi.bmiHeader.biBitCount = 16;
+      bmi.bmiHeader.biCompression = BI_BITFIELDS;
+      bmi.bmiHeader.biSizeImage = 0;
+      bmi.bmiHeader.biXPelsPerMeter =
+	bmi.bmiHeader.biYPelsPerMeter = 0;
+      bmi.bmiHeader.biClrUsed = 0;
+      bmi.bmiHeader.biClrImportant = 0;
+
+      iUsage = DIB_RGB_COLORS;
+      visual = gdk_visual_get_system ();
+      bmi.u.bmiMasks[0] = visual->red_mask;
+      bmi.u.bmiMasks[1] = visual->green_mask;
+      bmi.u.bmiMasks[2] = visual->blue_mask;
+
+      hbitmap = CreateDIBSection (hdc, (BITMAPINFO *) &bmi,
+				  iUsage, (PVOID *) &bits, NULL, 0);
+      GDI_CALL (ReleaseDC, (hwnd, hdc));
+      if (hbitmap == NULL)
+	{
+	  WIN32_GDI_FAILED ("CreateDIBSection");
+	  g_object_unref ((GObject *) pixmap);
+	  return NULL;
+	}
+
+      dib_surface = cairo_image_surface_create_for_data (bits,
+							 format, width, height,
+							 (width * 2 + 3) & ~3);
+
+      hdc = CreateCompatibleDC (NULL);
+      if (!hdc)
+	{
+	  WIN32_GDI_FAILED ("CreateCompatibleDC");
+	  g_object_unref ((GObject *) pixmap);
+	  return NULL;
+	}
+
+      SelectObject (hdc, hbitmap);
+    }
 
   /* We need to use the same hdc, because only one hdc
      can render to the same bitmap */
@@ -221,13 +303,8 @@ _gdk_pixmap_new (GdkDrawable *drawable,
 
   /* No need to create a new surface when needed, as we have one already */
   drawable_impl->cairo_surface = dib_surface;
-
-  /* Get the bitmap from the cairo hdc */
-  hbitmap = GetCurrentObject (hdc, OBJ_BITMAP);
   drawable_impl->handle = hbitmap;
-
-  image_surface = cairo_win32_surface_get_image (dib_surface);
-  pixmap_impl->bits = cairo_image_surface_get_data (image_surface);
+  pixmap_impl->bits = bits;
 
   gdk_win32_handle_table_insert (&GDK_PIXMAP_HBITMAP (pixmap), pixmap);
 
