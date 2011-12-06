@@ -1130,6 +1130,9 @@ _gdk_display_get_pointer_info (GdkDisplay *display,
 {
   GdkPointerWindowInfo *info;
 
+  if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    device = gdk_device_get_associated_device (device);
+
   if (G_UNLIKELY (!device))
     return NULL;
 
