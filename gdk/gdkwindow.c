@@ -2959,21 +2959,25 @@ gdk_window_begin_paint_region (GdkWindow       *window,
                                                           gdk_window_get_content (window),
 			                                  MAX (clip_box.width, 1),
                                                           MAX (clip_box.height, 1));
-
-      /* Normally alpha backgrounded client side windows are composited on the implicit paint
-	 by being drawn in back to front order. However, if implicit paints are not used, for
-	 instance if it was flushed due to a non-double-buffered paint in the middle of the
-	 expose we need to copy in the existing data here. */
-      if (!gdk_window_has_impl (window) && window->has_alpha_background)
-	{
-	  cairo_t *cr = cairo_create (paint->surface);
-	  gdk_cairo_set_source_window (cr, impl_window,
-				       - (window->abs_x + clip_box.x),
-				       - (window->abs_y + clip_box.y));
-	  cairo_paint (cr);
-	  cairo_destroy (cr);
-	}
     }
+
+  /* Normally alpha backgrounded client side windows are composited on the implicit paint
+     by being drawn in back to front order. However, if implicit paints are not used, for
+     instance if it was flushed due to a non-double-buffered paint in the middle of the
+     expose we need to copy in the existing data here. */
+  if (!gdk_window_has_impl (window) &&
+      window->has_alpha_background &&
+      (!implicit_paint ||
+       (implicit_paint && implicit_paint->flushed)))
+    {
+      cairo_t *cr = cairo_create (paint->surface);
+      gdk_cairo_set_source_window (cr, impl_window,
+                                   - (window->abs_x + clip_box.x),
+                                   - (window->abs_y + clip_box.y));
+      cairo_paint (cr);
+      cairo_destroy (cr);
+    }
+
   cairo_surface_set_device_offset (paint->surface, -clip_box.x, -clip_box.y);
 
   for (list = window->paint_stack; list != NULL; list = list->next)
