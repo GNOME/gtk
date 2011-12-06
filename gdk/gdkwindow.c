@@ -9660,10 +9660,10 @@ _gdk_windowing_got_event (GdkDisplay *display,
     {
       GdkInputMode mode;
 
-      pointer_info = _gdk_display_get_pointer_info (display, device);
-
-      if (pointer_info)
+      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
         {
+          pointer_info = _gdk_display_get_pointer_info (display, device);
+
           if (source_device != pointer_info->last_slave &&
               gdk_device_get_device_type (source_device) == GDK_DEVICE_TYPE_SLAVE)
             pointer_info->last_slave = source_device;
@@ -9773,15 +9773,19 @@ _gdk_windowing_got_event (GdkDisplay *display,
 	}
     }
 
-  /* Store last pointer window and position/state */
-  old_state = pointer_info->state;
-  old_button = pointer_info->button;
+  if (pointer_info)
+    {
+      /* Store last pointer window and position/state */
+      old_state = pointer_info->state;
+      old_button = pointer_info->button;
 
-  gdk_event_get_coords (event, &x, &y);
-  convert_native_coords_to_toplevel (event_window, x, y,  &x, &y);
-  pointer_info->toplevel_x = x;
-  pointer_info->toplevel_y = y;
-  gdk_event_get_state (event, &pointer_info->state);
+      gdk_event_get_coords (event, &x, &y);
+      convert_native_coords_to_toplevel (event_window, x, y,  &x, &y);
+      pointer_info->toplevel_x = x;
+      pointer_info->toplevel_y = y;
+      gdk_event_get_state (event, &pointer_info->state);
+    }
+
   if (event->type == GDK_BUTTON_PRESS ||
       event->type == GDK_BUTTON_RELEASE)
     pointer_info->button = event->button.button;
