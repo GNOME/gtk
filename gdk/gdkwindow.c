@@ -3493,7 +3493,7 @@ gdk_window_get_visible_region (GdkWindow *window)
 }
 
 static cairo_t *
-setup_backing_rect (GdkWindow *window, GdkWindowPaint *paint, int x_offset_cairo, int y_offset_cairo)
+setup_backing_rect (GdkWindow *window, GdkWindowPaint *paint)
 {
   GdkWindow *bg_window;
   cairo_pattern_t *pattern = NULL;
@@ -3530,17 +3530,15 @@ gdk_window_clear_backing_region (GdkWindow *window,
 {
   GdkWindowPaint *paint = window->paint_stack->data;
   cairo_region_t *clip;
-  GdkRectangle clipbox;
   cairo_t *cr;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  cr = setup_backing_rect (window, paint, 0, 0);
+  cr = setup_backing_rect (window, paint);
 
   clip = cairo_region_copy (paint->region);
   cairo_region_intersect (clip, region);
-  cairo_region_get_extents (clip, &clipbox);
 
   gdk_cairo_region (cr, clip);
   cairo_fill (cr);
@@ -3556,7 +3554,6 @@ gdk_window_clear_backing_region_direct (GdkWindow *window,
 {
   GdkWindowPaint paint;
   cairo_region_t *clip;
-  GdkRectangle clipbox;
   cairo_t *cr;
 
   if (GDK_WINDOW_DESTROYED (window))
@@ -3564,11 +3561,10 @@ gdk_window_clear_backing_region_direct (GdkWindow *window,
 
   paint.surface = _gdk_window_ref_cairo_surface (window);
 
-  cr = setup_backing_rect (window, &paint, 0, 0);
+  cr = setup_backing_rect (window, &paint);
 
   clip = cairo_region_copy (window->clip_region_with_children);
   cairo_region_intersect (clip, region);
-  cairo_region_get_extents (clip, &clipbox);
 
   gdk_cairo_region (cr, clip);
   cairo_fill (cr);
