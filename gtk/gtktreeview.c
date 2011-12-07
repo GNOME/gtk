@@ -10545,7 +10545,7 @@ gtk_tree_view_move_cursor_start_end (GtkTreeView *tree_view,
 
       do
 	{
-	  while (cursor_node && !_gtk_rbtree_is_nil (cursor_node))
+	  while (cursor_node && !_gtk_rbtree_is_nil (cursor_node->right))
 	    cursor_node = cursor_node->right;
 	  if (cursor_node->children == NULL)
 	    break;
