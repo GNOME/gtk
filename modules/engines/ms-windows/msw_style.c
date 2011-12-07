@@ -2033,7 +2033,9 @@ draw_box (GtkStyle *style,
 	}
       else if (widget && GTK_IS_SCALE (widget))
 	{
-	  gboolean is_vertical = GTK_IS_VSCALE (widget);
+          GtkOrientation orientation;
+
+          orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
 
 	  if (!xp_theme_is_active ())
 	    {
@@ -2042,7 +2044,7 @@ draw_box (GtkStyle *style,
 				      widget, detail, x, y, width, height);
 	    }
 
-	  if (is_vertical)
+	  if (orientation == GTK_ORIENTATION_VERTICAL)
 	    {
 	      if (xp_theme_draw
 		  (window, XP_THEME_ELEMENT_SCALE_TROUGH_V,
