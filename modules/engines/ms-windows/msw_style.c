@@ -2691,9 +2691,9 @@ draw_extension (GtkStyle *style,
       GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
       /* draw_themed_tab_button and draw_tab_button expect to work with tab
-       * position, instead of simply taking the "side of the gap" (gap_side)
-       * which simply said is the side of the tab that touches the notebook
-       * frame and is always the exact opposite of the gap side... */
+       * position, instead of simply taking the "side of the gap" (gap_side).
+       * The gap side, simply said, is the side of the tab that touches the notebook
+       * frame and is always the exact opposite of the tab position... */
       int tab_pos = gtk_notebook_get_tab_pos (notebook);
 
       if (!draw_themed_tab_button (style, window, state_type,
