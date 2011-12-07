@@ -1917,16 +1917,24 @@ draw_box (GtkStyle *style,
       if (GTK_IS_SCROLLBAR (widget))
 	{
 	  GtkScrollbar *scrollbar = GTK_SCROLLBAR (widget);
-	  gboolean is_v = GTK_IS_VSCROLLBAR (widget);
+	  GtkOrientation orientation;
+	  gboolean is_vertical;
+
+          orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
+
+          if (orientation == GTK_ORIENTATION_VERTICAL)
+            is_vertical = TRUE;
+          else
+            is_vertical = FALSE;
 
 	  if (xp_theme_draw (window,
-			     is_v
+			     is_vertical
 			     ? XP_THEME_ELEMENT_SCROLLBAR_V
 			     : XP_THEME_ELEMENT_SCROLLBAR_H,
 			     style, x, y, width, height, state_type, area))
 	    {
 	      XpThemeElement gripper =
-		(is_v ? XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_V :
+		(is_vertical ? XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_V :
 		 XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_H);
 
 	      /* Do not display grippers on tiny scroll bars,
@@ -2003,7 +2011,15 @@ draw_box (GtkStyle *style,
 	}
       else if (widget && GTK_IS_SCROLLBAR (widget))
 	{
-	  gboolean is_vertical = GTK_IS_VSCROLLBAR (widget);
+          GtkOrientation orientation;
+	  gboolean is_vertical;
+
+          orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
+
+          if (orientation == GTK_ORIENTATION_VERTICAL)
+            is_vertical = TRUE;
+          else
+            is_vertical = FALSE;
 
 	  if (xp_theme_draw (window,
 			     is_vertical
