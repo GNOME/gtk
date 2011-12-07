@@ -625,10 +625,14 @@ gtk_overlay_add_overlay (GtkOverlay *overlay,
   child = g_slice_new0 (GtkOverlayChild);
   child->widget = widget;
 
-  gtk_widget_set_parent (widget, GTK_WIDGET (overlay));
-
   priv->children = g_slist_append (priv->children, child);
 
   if (gtk_widget_get_realized (GTK_WIDGET (overlay)))
-    child->window = gtk_overlay_create_child_window (overlay, widget);
+    {
+      child->window = gtk_overlay_create_child_window (overlay, widget);
+      gtk_widget_set_parent (widget, GTK_WIDGET (overlay));
+    }
+  else
+    gtk_widget_set_parent (widget, GTK_WIDGET (overlay));
+
 }
