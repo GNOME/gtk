@@ -1034,21 +1034,41 @@ draw_check (GtkStyle *style,
 }
 
 static void
-draw_expander (GtkStyle *style,
-	       GdkWindow *window,
-	       GtkStateType state,
-	       GdkRectangle *area,
-	       GtkWidget *widget,
-	       const gchar *detail,
-	       gint x, gint y, GtkExpanderStyle expander_style)
+draw_expander (GtkStyle        *style,
+               GdkWindow       *window,
+               GtkStateType     state,
+               GdkRectangle    *area,
+               GtkWidget       *widget,
+               const gchar     *detail,
+               gint             x,
+               gint             y,
+               GtkExpanderStyle expander_style)
 {
   cairo_t *cr = gdk_cairo_create (window);
 
   gint expander_size;
   gint expander_semi_size;
   XpThemeElement xp_expander;
+  GtkOrientation orientation;
 
   gtk_widget_style_get (widget, "expander_size", &expander_size, NULL);
+
+  if (DETAIL("tool-palette-header"))
+    {
+      /* Expanders are usually drawn as little triangles and unfortunately
+       * do not support rotated drawing modes. So a hack is applied (see
+       * gtk_tool_item_group_header_expose_event_cb for details) when
+       * drawing a GtkToolItemGroup's header for horizontal GtkToolShells,
+       * forcing the triangle to point in the right direction. Except we
+       * don't draw expanders as triangles on Windows. Usually, expanders
+       * are represented as "+" and "-". It sucks for "+" to become "-" and
+       * the inverse when we don't want to, so reverse the hack here. */
+
+      orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (widget));
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+          expander_style = GTK_EXPANDER_EXPANDED - expander_style;
+    }
 
   switch (expander_style)
     {
@@ -1057,9 +1077,13 @@ draw_expander (GtkStyle *style,
       xp_expander = XP_THEME_ELEMENT_TREEVIEW_EXPANDER_CLOSED;
       break;
 
-    default:
+    case GTK_EXPANDER_EXPANDED:
+    case GTK_EXPANDER_SEMI_EXPANDED:
       xp_expander = XP_THEME_ELEMENT_TREEVIEW_EXPANDER_OPENED;
       break;
+
+    default:
+      g_assert_not_reached ();
     }
 
   if ((expander_size % 2) == 0)
