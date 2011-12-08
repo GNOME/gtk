@@ -608,6 +608,11 @@ gtk_application_get_windows (GtkApplication *application)
  * are referred to with an "app." prefix, and window-specific actions
  * with a "win." prefix.
  *
+ * GtkApplication also extracts accelerators out of 'accel' attributes
+ * in the #GMenuModels passed to g_application_set_app_menu() and
+ * g_application_set_menubar(), which is usually more convenient
+ * than calling this function for each accelerator.
+ *
  * Since: 3.4
  */
 void
