@@ -431,8 +431,6 @@ grab_key_callback (GtkWidget            *widget,
                                        event->group,
                                        &keyval, NULL, NULL, &consumed_modifiers);
 
-  gdk_keymap_add_virtual_modifiers (gdk_keymap_get_for_display (display), &accel_mods);
-
   accel_key = gdk_keyval_to_lower (keyval);
   if (accel_key == GDK_ISO_Left_Tab) 
     accel_key = GDK_Tab;
