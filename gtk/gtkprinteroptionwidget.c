@@ -882,13 +882,22 @@ update_widgets (GtkPrinterOptionWidget *widget)
 
             basename = g_path_get_basename (filename);
             dirname = g_path_get_dirname (filename);
+
             text = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
+	    
+            /* need to update dirname and basename without triggering function to avoid loosing names */
+            g_signal_handlers_block_by_func (priv->entry, G_CALLBACK (filesave_changed_cb), widget);
+            g_signal_handlers_block_by_func (priv->combo, G_CALLBACK (filesave_changed_cb), widget);
 
             if (text != NULL)
               gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
             if (g_path_is_absolute (dirname))
-              gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (priv->combo),
+              gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (priv->combo),
                                                    dirname);
+
+            g_signal_handlers_unblock_by_func (priv->entry, G_CALLBACK (filesave_changed_cb), widget);
+            g_signal_handlers_unblock_by_func (priv->combo, G_CALLBACK (filesave_changed_cb), widget);
+            
             g_free (text);
             g_free (basename);
             g_free (dirname);
