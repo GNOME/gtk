@@ -90,6 +90,7 @@
 struct _GtkApplicationWindowPrivate
 {
   GSimpleActionGroup *actions;
+  GActionObservable *muxer;
   GtkWidget *menubar;
   GtkAccelGroup *accels;
   GSList *accel_closures;
@@ -121,22 +122,16 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
 
   if (!have_menubar && should_have_menubar)
     {
-      GActionMuxer *muxer;
       GMenu *combined;
-
-      muxer = g_action_muxer_new ();
-      g_action_muxer_insert (muxer, "app", G_ACTION_GROUP (gtk_window_get_application (GTK_WINDOW (window))));
-      g_action_muxer_insert (muxer, "win", G_ACTION_GROUP (window));
 
       combined = g_menu_new ();
       g_menu_append_section (combined, NULL, G_MENU_MODEL (window->priv->app_menu_section));
       g_menu_append_section (combined, NULL, G_MENU_MODEL (window->priv->menubar_section));
 
-      window->priv->menubar = gtk_model_menu_create_menu_bar (G_MENU_MODEL (combined), G_ACTION_OBSERVABLE (muxer), window->priv->accels);
+      window->priv->menubar = gtk_model_menu_create_menu_bar (G_MENU_MODEL (combined), window->priv->muxer, window->priv->accels);
       gtk_widget_set_parent (window->priv->menubar, GTK_WIDGET (window));
       gtk_widget_show_all (window->priv->menubar);
       g_object_unref (combined);
-      g_object_unref (muxer);
 
       gtk_widget_queue_resize (GTK_WIDGET (window));
     }
@@ -314,27 +309,14 @@ add_accel_closure (gpointer         data,
 static void
 gtk_application_window_update_accels (GtkApplicationWindow *window)
 {
-  GtkApplication *application;
   AccelData data;
-  GActionMuxer *muxer;
-
-  /* FIXME: we should keep the muxer around, and listen for changes.
-   * Also, we should listen for accel map changes
-   */
-  application = gtk_window_get_application (GTK_WINDOW (window));
 
   free_accel_closures (window);
 
-  muxer = g_action_muxer_new ();
-  g_action_muxer_insert (muxer, "app", G_ACTION_GROUP (application));
-  g_action_muxer_insert (muxer, "win", G_ACTION_GROUP (window));
-
   data.window = window;
-  data.actions = G_ACTION_GROUP (muxer);
+  data.actions = G_ACTION_GROUP (window->priv->muxer);
 
   gtk_accel_map_foreach (&data, add_accel_closure);
-
-  g_object_unref (muxer);
 }
 
 static void
@@ -592,6 +574,19 @@ gtk_application_window_real_realize (GtkWidget *widget)
   g_signal_connect (settings, "notify::gtk-shell-shows-menubar",
                     G_CALLBACK (gtk_application_window_shell_shows_menubar_changed), window);
 
+  if (window->priv->muxer == NULL)
+    {
+      GtkApplication *application;
+      GActionMuxer *muxer;
+
+      application = gtk_window_get_application (GTK_WINDOW (window));
+
+      muxer = g_action_muxer_new ();
+      g_action_muxer_insert (muxer, "app", G_ACTION_GROUP (application));
+      g_action_muxer_insert (muxer, "win", G_ACTION_GROUP (window));
+      window->priv->muxer = G_ACTION_OBSERVABLE (muxer);
+    }
+
   gtk_application_window_update_shell_shows_app_menu (window, settings);
   gtk_application_window_update_shell_shows_menubar (window, settings);
   gtk_application_window_update_menubar (window);
@@ -699,6 +694,7 @@ gtk_application_window_dispose (GObject *object)
   g_clear_object (&window->priv->menubar_section);
   g_clear_object (&window->priv->actions);
   g_clear_object (&window->priv->accels);
+  g_clear_object (&window->priv->muxer);
 
   G_OBJECT_CLASS (gtk_application_window_parent_class)
     ->dispose (object);
