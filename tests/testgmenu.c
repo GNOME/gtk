@@ -991,9 +991,9 @@ main (int argc, char *argv[])
   if (do_import)
     {
       g_print ("Getting menus from the bus...\n");
-      model = (GMenuModel*)g_menu_proxy_get (bus, BUS_NAME, OBJ_PATH);
+      model = (GMenuModel*)g_dbus_menu_model_get (bus, BUS_NAME, OBJ_PATH);
       g_print ("Getting actions from the bus...\n");
-      group = (GActionGroup*)g_dbus_action_group_new_sync (bus, BUS_NAME, OBJ_PATH, 0, NULL, NULL);
+      group = (GActionGroup*)g_dbus_action_group_get (bus, BUS_NAME, OBJ_PATH);
     }
   else
     {
