@@ -53,6 +53,7 @@ noinst_PROGRAMS = \
 	hello-world				\
 	window-default				\
 	bloatpad				\
+	plugman				\
 	grid-packing				\
 	drawing					\
 	builder
