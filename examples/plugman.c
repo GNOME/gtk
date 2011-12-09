@@ -214,7 +214,22 @@ red_action (GAction  *action,
             GVariant *parameter,
             gpointer  data)
 {
+  GApplication *app;
+  GList *list;
+  GtkWindow *window;
+  GtkWidget *text;
+  GdkRGBA red;
+
   g_print ("Here is where we turn the text red\n");
+
+  app = g_application_get_default ();
+  list = gtk_application_get_windows (GTK_APPLICATION (app));
+  window = GTK_WINDOW (list->data);
+  text = g_object_get_data ((GObject*)window, "plugman-text");
+
+  gdk_rgba_parse (&red, "red");
+
+  gtk_widget_override_color (text, 0, &red);
 }
 
 static void
@@ -258,8 +273,6 @@ disable_red_plugin (void)
 
   g_print ("Disabling 'Red' plugin\n");
 
-  g_action_map_remove_action (G_ACTION_MAP (g_application_get_default ()), "app.red-action");
-
   plugin_menu = find_plugin_menu ();
   if (plugin_menu)
     {
@@ -278,6 +291,9 @@ disable_red_plugin (void)
     }
   else
     g_warning ("Plugin menu not found\n");
+
+  g_action_map_remove_action (G_ACTION_MAP (g_application_get_default ()), "app.red-action");
+  g_print ("Actions of 'Red' plugin removed\n");
 
   is_red_plugin_enabled = FALSE;
 }
