@@ -1828,7 +1828,7 @@ msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3582
 msgid "Print Document"
-msgstr ""
+msgstr "Moullañ an teul"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
@@ -2084,7 +2084,6 @@ msgid "_Cancel"
 msgstr "_Nullañ"
 
 #: gtk/gtkstock.c:326
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "_CD-Rom"
@@ -2145,10 +2144,9 @@ msgid "_Edit"
 msgstr "_Embann"
 
 #: gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "_File"
-msgstr "_Restroù"
+msgstr "_Restr"
 
 #: gtk/gtkstock.c:339
 msgctxt "Stock label"
@@ -2224,10 +2222,9 @@ msgid "_Up"
 msgstr ""
 
 #: gtk/gtkstock.c:360
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Hard Disk"
-msgstr "_Pladenn"
+msgstr "_Kantenn"
 
 #: gtk/gtkstock.c:361
 msgctxt "Stock label"
@@ -2273,7 +2270,7 @@ msgstr "_Mont da"
 #: gtk/gtkstock.c:370
 msgctxt "Stock label"
 msgid "_Center"
-msgstr ""
+msgstr "Krei_zañ"
 
 #. This is about text justification
 #: gtk/gtkstock.c:372
@@ -2327,7 +2324,7 @@ msgstr "_Kent"
 #: gtk/gtkstock.c:389
 msgctxt "Stock label, media"
 msgid "_Record"
-msgstr ""
+msgstr "En_rollañ"
 
 #. Media label
 #: gtk/gtkstock.c:391
@@ -2413,7 +2410,7 @@ msgstr "_Moullañ"
 #: gtk/gtkstock.c:411
 msgctxt "Stock label"
 msgid "Print Pre_view"
-msgstr ""
+msgstr "Alberz ar moullañ"
 
 #: gtk/gtkstock.c:412
 msgctxt "Stock label"
@@ -2448,12 +2445,12 @@ msgstr "Dist_reiñ"
 #: gtk/gtkstock.c:418
 msgctxt "Stock label"
 msgid "_Save"
-msgstr "_Enrollañ"
+msgstr "En_rollañ"
 
 #: gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "Save _As"
-msgstr "Gweradiñ dindan"
+msgstr "_Enrollañ evel"
 
 #: gtk/gtkstock.c:420
 msgctxt "Stock label"
@@ -3359,7 +3356,7 @@ msgstr ""
 #: gtk/paper_names_offsets.c:124
 msgctxt "paper size"
 msgid "Index 3x5"
-msgstr ""
+msgstr "Index 3x5"
 
 #: gtk/paper_names_offsets.c:125
 msgctxt "paper size"
@@ -3369,12 +3366,12 @@ msgstr ""
 #: gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "Index 4x6 ext"
-msgstr ""
+msgstr "Index 4x6 ext"
 
 #: gtk/paper_names_offsets.c:127
 msgctxt "paper size"
-msgid "Index 5x8"
-msgstr ""
+msgid "Index 4x6 ext"
+msgstr "Index 4x6 ext"
 
 #: gtk/paper_names_offsets.c:128
 msgctxt "paper size"
@@ -3399,17 +3396,17 @@ msgstr ""
 #: gtk/paper_names_offsets.c:132
 msgctxt "paper size"
 msgid "US Letter"
-msgstr ""
+msgstr "Lizher US"
 
 #: gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "US Letter Extra"
-msgstr ""
+msgstr "Lizher US Extra"
 
 #: gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "US Letter Plus"
-msgstr ""
+msgstr "Lizher US Plus"
 
 #: gtk/paper_names_offsets.c:135
 msgctxt "paper size"
@@ -3454,12 +3451,12 @@ msgstr ""
 #: gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "Super A"
-msgstr ""
+msgstr "Super A"
 
 #: gtk/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "Super B"
-msgstr ""
+msgstr "Super B"
 
 #: gtk/paper_names_offsets.c:145
 msgctxt "paper size"
@@ -3747,7 +3744,7 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:811
 #: modules/printbackends/cups/gtkprintbackendcups.c:1020
 msgid "Username:"
-msgstr "An_v an arveriad :"
+msgstr "Anv an arveriad :"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:812
 #: modules/printbackends/cups/gtkprintbackendcups.c:1029
