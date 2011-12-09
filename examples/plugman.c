@@ -210,11 +210,25 @@ find_plugin_menu (void)
 }
 
 static void
+red_action (GAction  *action,
+            GVariant *parameter,
+            gpointer  data)
+{
+  g_print ("Here is where we turn the text red\n");
+}
+
+static void
 enable_red_plugin (void)
 {
   GMenu *plugin_menu;
+  GAction *action;
 
   g_print ("Enabling 'Red' plugin\n");
+
+  action = (GAction *)g_simple_action_new ("red-action", NULL);
+  g_signal_connect (action, "activate", G_CALLBACK (red_action), NULL);
+  g_action_map_add_action (G_ACTION_MAP (g_application_get_default ()), action);
+  g_print ("Actions of 'Red' plugin added\n");
 
   plugin_menu = find_plugin_menu ();
   if (plugin_menu)
@@ -223,7 +237,7 @@ enable_red_plugin (void)
       GMenuItem *item;
 
       section = g_menu_new ();
-      g_menu_insert (section, 0, "Turn text red", "app.turn-text-red");
+      g_menu_insert (section, 0, "Turn text red", "app.red-action");
       item = g_menu_item_new_section (NULL, (GMenuModel*)section);
       g_menu_item_set_attribute (item, "id", "s", "red");
       g_menu_append_item (plugin_menu, item);
@@ -243,6 +257,8 @@ disable_red_plugin (void)
   GMenuModel *plugin_menu;
 
   g_print ("Disabling 'Red' plugin\n");
+
+  g_action_map_remove_action (G_ACTION_MAP (g_application_get_default ()), "app.red-action");
 
   plugin_menu = find_plugin_menu ();
   if (plugin_menu)
