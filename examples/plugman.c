@@ -173,11 +173,15 @@ quit_app (GSimpleAction *action,
 }
 
 static gboolean is_red_plugin_enabled;
+static gboolean is_black_plugin_enabled;
 
 static gboolean
-red_plugin_enabled (void)
+plugin_enabled (const gchar *name)
 {
-  return is_red_plugin_enabled;
+  if (g_strcmp0 (name, "red") == 0)
+    return is_red_plugin_enabled;
+  else
+    return is_black_plugin_enabled;
 }
 
 static GMenuModel *
@@ -210,68 +214,75 @@ find_plugin_menu (void)
 }
 
 static void
-red_action (GAction  *action,
-            GVariant *parameter,
-            gpointer  data)
+plugin_action (GAction  *action,
+               GVariant *parameter,
+               gpointer  data)
 {
   GApplication *app;
   GList *list;
   GtkWindow *window;
   GtkWidget *text;
-  GdkRGBA red;
-
-  g_print ("Here is where we turn the text red\n");
+  GdkRGBA color;
 
   app = g_application_get_default ();
   list = gtk_application_get_windows (GTK_APPLICATION (app));
   window = GTK_WINDOW (list->data);
   text = g_object_get_data ((GObject*)window, "plugman-text");
 
-  gdk_rgba_parse (&red, "red");
+  gdk_rgba_parse (&color, g_action_get_name (action));
 
-  gtk_widget_override_color (text, 0, &red);
+  gtk_widget_override_color (text, 0, &color);
 }
 
 static void
-enable_red_plugin (void)
+enable_plugin (const gchar *name)
 {
-  GMenu *plugin_menu;
+  GMenuModel *plugin_menu;
   GAction *action;
 
-  g_print ("Enabling 'Red' plugin\n");
+  g_print ("Enabling '%s' plugin\n", name);
 
-  action = (GAction *)g_simple_action_new ("red-action", NULL);
-  g_signal_connect (action, "activate", G_CALLBACK (red_action), NULL);
+  action = (GAction *)g_simple_action_new (name, NULL);
+  g_signal_connect (action, "activate", G_CALLBACK (plugin_action), (gpointer)name);
   g_action_map_add_action (G_ACTION_MAP (g_application_get_default ()), action);
-  g_print ("Actions of 'Red' plugin added\n");
+  g_print ("Actions of '%s' plugin added\n", name);
 
   plugin_menu = find_plugin_menu ();
   if (plugin_menu)
     {
       GMenu *section;
       GMenuItem *item;
+      gchar *label;
+      gchar *action;
 
       section = g_menu_new ();
-      g_menu_insert (section, 0, "Turn text red", "app.red-action");
+      label = g_strdup_printf ("Turn text %s", name);
+      action = g_strconcat ("app.", name, NULL);
+      g_menu_insert (section, 0, label, action);
+      g_free (label);
+      g_free (action);
       item = g_menu_item_new_section (NULL, (GMenuModel*)section);
-      g_menu_item_set_attribute (item, "id", "s", "red");
-      g_menu_append_item (plugin_menu, item);
+      g_menu_item_set_attribute (item, "id", "s", name);
+      g_menu_append_item (G_MENU (plugin_menu), item);
       g_object_unref (item);
       g_object_unref (section);
-      g_print ("Menus of 'Red' plugin added\n");
+      g_print ("Menus of '%s' plugin added\n", name);
     }
   else
     g_warning ("Plugin menu not found\n");
 
-  is_red_plugin_enabled = TRUE;
+  if (g_strcmp0 (name, "red") == 0)
+    is_red_plugin_enabled = TRUE;
+  else
+    is_black_plugin_enabled = TRUE;
 }
 
 static void
-disable_red_plugin (void)
+disable_plugin (const gchar *name)
 {
   GMenuModel *plugin_menu;
 
-  g_print ("Disabling 'Red' plugin\n");
+  g_print ("Disabling '%s' plugin\n", name);
 
   plugin_menu = find_plugin_menu ();
   if (plugin_menu)
@@ -282,29 +293,33 @@ disable_red_plugin (void)
       for (i = 0; i < g_menu_model_get_n_items (plugin_menu); i++)
         {
            if (g_menu_model_get_item_attribute (plugin_menu, i, "id", "s", &id) &&
-               g_strcmp0 (id, "red") == 0)
+               g_strcmp0 (id, name) == 0)
              {
-               g_menu_remove (plugin_menu, i);
-               g_print ("Menus of 'Red' plugin removed\n");
+               g_menu_remove (G_MENU (plugin_menu), i);
+               g_print ("Menus of '%s' plugin removed\n", name);
              }
         }
     }
   else
     g_warning ("Plugin menu not found\n");
 
-  g_action_map_remove_action (G_ACTION_MAP (g_application_get_default ()), "app.red-action");
-  g_print ("Actions of 'Red' plugin removed\n");
+  g_action_map_remove_action (G_ACTION_MAP (g_application_get_default ()), name);
+  g_print ("Actions of '%s' plugin removed\n", name);
 
-  is_red_plugin_enabled = FALSE;
+  if (g_strcmp0 (name, "red") == 0)
+    is_red_plugin_enabled = FALSE;
+  else
+    is_black_plugin_enabled = FALSE;
 }
 
 static void
-enable_or_disable_red_plugin (void)
+enable_or_disable_plugin (GtkToggleButton *button,
+                          const gchar     *name)
 {
-  if (red_plugin_enabled ())
-    disable_red_plugin ();
+  if (plugin_enabled (name))
+    disable_plugin (name);
   else
-    enable_red_plugin ();
+    enable_plugin (name);
 }
 
 
@@ -315,7 +330,7 @@ configure_plugins (GSimpleAction *action,
 {
   GtkBuilder *builder;
   GtkWidget *dialog;
-  GtkWidget *red;
+  GtkWidget *check;
   GError *error = NULL;
 
   builder = gtk_builder_new ();
@@ -330,6 +345,12 @@ configure_plugins (GSimpleAction *action,
                                "        <child>"
                                "          <object class='GtkCheckButton' id='red-plugin'>"
                                "            <property name='label'>Red Plugin - turn your text red</property>"
+                               "            <property name='visible'>True</property>"
+                               "          </object>"
+                               "        </child>"
+                               "        <child>"
+                               "          <object class='GtkCheckButton' id='black-plugin'>"
+                               "            <property name='label'>Black Plugin - turn your text black</property>"
                                "            <property name='visible'>True</property>"
                                "          </object>"
                                "        </child>"
@@ -359,9 +380,12 @@ configure_plugins (GSimpleAction *action,
     }
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "plugin-dialog");
-  red = (GtkWidget *)gtk_builder_get_object (builder, "red-plugin");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (red), red_plugin_enabled ());
-  g_signal_connect (red, "toggled", G_CALLBACK (enable_or_disable_red_plugin), NULL);
+  check = (GtkWidget *)gtk_builder_get_object (builder, "red-plugin");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), plugin_enabled ("red"));
+  g_signal_connect (check, "toggled", G_CALLBACK (enable_or_disable_plugin), "red");
+  check = (GtkWidget *)gtk_builder_get_object (builder, "black-plugin");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), plugin_enabled ("black"));
+  g_signal_connect (check, "toggled", G_CALLBACK (enable_or_disable_plugin), "black");
 
   g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 
