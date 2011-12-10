@@ -152,6 +152,11 @@ enum
   RUBBER_BAND_ACTIVE = 2
 };
 
+typedef enum {
+  CLEAR_AND_SELECT = (1 << 0),
+  CLAMP_NODE       = (1 << 1)
+} SetCursorFlags;
+
  /* This lovely little value is used to determine how far away from the title bar
   * you can move the mouse and still have a column drag work.
   */
@@ -786,8 +791,7 @@ static gboolean gtk_tree_view_real_expand_row                (GtkTreeView       
 							      gboolean            animate);
 static void     gtk_tree_view_real_set_cursor                (GtkTreeView        *tree_view,
 							      GtkTreePath        *path,
-							      gboolean            clear_and_select,
-							      gboolean            clamp_node);
+                                                              SetCursorFlags      flags);
 static gboolean gtk_tree_view_has_can_focus_cell             (GtkTreeView        *tree_view);
 static void     column_sizing_notify                         (GObject            *object,
                                                               GParamSpec         *pspec,
@@ -3079,17 +3083,17 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
           if (event->state & modify_mod_mask)
             {
-              gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
+              gtk_tree_view_real_set_cursor (tree_view, path, CLAMP_NODE);
               gtk_tree_view_real_toggle_cursor_row (tree_view);
             }
           else if (event->state & extend_mod_mask)
             {
-              gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
+              gtk_tree_view_real_set_cursor (tree_view, path, CLAMP_NODE);
               gtk_tree_view_real_select_cursor_row (tree_view, FALSE);
             }
           else
             {
-              gtk_tree_view_real_set_cursor (tree_view, path, TRUE, TRUE);
+              gtk_tree_view_real_set_cursor (tree_view, path, CLEAR_AND_SELECT | CLAMP_NODE);
             }
 
           tree_view->priv->modify_selection_pressed = FALSE;
@@ -3602,7 +3606,7 @@ prelight_or_select (GtkTreeView *tree_view,
 	      if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
 		{
                   tree_view->priv->draw_keyfocus = FALSE;
-		  gtk_tree_view_real_set_cursor (tree_view, path, FALSE, FALSE);
+		  gtk_tree_view_real_set_cursor (tree_view, path, 0);
 		}
 	      gtk_tree_path_free (path);
 	    }
@@ -4132,7 +4136,7 @@ gtk_tree_view_stop_rubber_band (GtkTreeView *tree_view)
       /* ... and the cursor to the end path */
       tmp_path = _gtk_tree_path_new_from_rbtree (tree_view->priv->rubber_band_end_tree,
                                                  tree_view->priv->rubber_band_end_node);
-      gtk_tree_view_real_set_cursor (GTK_TREE_VIEW (tree_view), tmp_path, FALSE, FALSE);
+      gtk_tree_view_real_set_cursor (GTK_TREE_VIEW (tree_view), tmp_path, 0);
       gtk_tree_path_free (tmp_path);
 
       _gtk_tree_selection_emit_changed (tree_view->priv->selection);
@@ -9095,11 +9099,11 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
         {
           GtkTreePath *cursor_path = _gtk_tree_path_new_from_rbtree (cursor_tree, cursor_node);
           tree_view->priv->cursor_node = NULL;
-          gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
+          gtk_tree_view_real_set_cursor (tree_view, cursor_path, CLEAR_AND_SELECT);
           gtk_tree_path_free (cursor_path);
         }
       else
-        gtk_tree_view_real_set_cursor (tree_view, NULL, TRUE, FALSE);
+        gtk_tree_view_real_set_cursor (tree_view, NULL, CLEAR_AND_SELECT);
     }
   else if (selection_changed)
     g_signal_emit_by_name (tree_view->priv->selection, "changed");
@@ -10134,9 +10138,9 @@ gtk_tree_view_focus_to_cursor (GtkTreeView *tree_view)
       if (cursor_path)
 	{
 	  if (gtk_tree_selection_get_mode (tree_view->priv->selection) == GTK_SELECTION_MULTIPLE)
-	    gtk_tree_view_real_set_cursor (tree_view, cursor_path, FALSE, FALSE);
+	    gtk_tree_view_real_set_cursor (tree_view, cursor_path, 0);
 	  else
-	    gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
+	    gtk_tree_view_real_set_cursor (tree_view, cursor_path, CLEAR_AND_SELECT);
 	}
     }
 
@@ -10294,7 +10298,7 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
   if (new_cursor_node)
     {
       cursor_path = _gtk_tree_path_new_from_rbtree (new_cursor_tree, new_cursor_node);
-      gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, TRUE);
+      gtk_tree_view_real_set_cursor (tree_view, cursor_path, CLEAR_AND_SELECT | CLAMP_NODE);
       gtk_tree_path_free (cursor_path);
 
       /* Give focus to the area in the new row */
@@ -10419,7 +10423,7 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
   /* update y */
   y = _gtk_rbtree_node_find_offset (cursor_tree, cursor_node);
 
-  gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
+  gtk_tree_view_real_set_cursor (tree_view, cursor_path, CLEAR_AND_SELECT);
 
   y -= window_y;
   gtk_tree_view_scroll_to_point (tree_view, -1, y);
@@ -10589,7 +10593,7 @@ gtk_tree_view_move_cursor_start_end (GtkTreeView *tree_view,
 
   if (gtk_tree_path_compare (old_path, path))
     {
-      gtk_tree_view_real_set_cursor (tree_view, path, TRUE, TRUE);
+      gtk_tree_view_real_set_cursor (tree_view, path, CLEAR_AND_SELECT | CLAMP_NODE);
       gtk_widget_grab_focus (GTK_WIDGET (tree_view));
     }
   else
@@ -10826,7 +10830,7 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 	    tree_view->priv->modify_selection_pressed = TRUE;
 	}
 
-      gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, TRUE);
+      gtk_tree_view_real_set_cursor (tree_view, cursor_path, CLEAR_AND_SELECT | CLAMP_NODE);
       gtk_tree_path_free (cursor_path);
 
       gtk_widget_grab_focus (GTK_WIDGET (tree_view));
@@ -12907,7 +12911,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   /* if we change the cursor, we also change the selection,
    * so no need to emit selection-changed. */
   if (cursor_changed)
-    gtk_tree_view_real_set_cursor (tree_view, path, TRUE, FALSE);
+    gtk_tree_view_real_set_cursor (tree_view, path, CLEAR_AND_SELECT);
   else if (selection_changed)
     g_signal_emit_by_name (tree_view->priv->selection, "changed");
 
@@ -13156,8 +13160,7 @@ gtk_tree_view_set_reorderable (GtkTreeView *tree_view,
 static void
 gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
 			       GtkTreePath     *path,
-			       gboolean         clear_and_select,
-			       gboolean         clamp_node)
+                               SetCursorFlags   flags)
 {
   if (tree_view->priv->cursor_node)
     {
@@ -13188,7 +13191,7 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
       GtkRBTree *new_tree = NULL;
       GtkRBNode *new_node = NULL;
 
-      if (clear_and_select && !tree_view->priv->modify_selection_pressed)
+      if ((flags & CLEAR_AND_SELECT) && !tree_view->priv->modify_selection_pressed)
         {
           GtkTreeSelectMode mode = 0;
 
@@ -13212,7 +13215,7 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
       if (tree_view->priv->cursor_node != new_node)
         return;
 
-      if (clamp_node)
+      if (flags & CLAMP_NODE)
         {
 	  gtk_tree_view_clamp_node_visible (tree_view,
                                             tree_view->priv->cursor_tree,
@@ -13342,7 +13345,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
       (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (tree_view->priv->edited_column))))
     gtk_tree_view_stop_editing (tree_view, TRUE);
 
-  gtk_tree_view_real_set_cursor (tree_view, path, TRUE, TRUE);
+  gtk_tree_view_real_set_cursor (tree_view, path, CLEAR_AND_SELECT | CLAMP_NODE);
 
   if (focus_column &&
       gtk_tree_view_column_get_visible (focus_column))
@@ -15399,7 +15402,7 @@ gtk_tree_view_search_iter (GtkTreeModel     *model,
               gtk_tree_view_scroll_to_cell (tree_view, path, NULL,
 					    TRUE, 0.5, 0.0);
               gtk_tree_selection_select_iter (selection, iter);
-              gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
+              gtk_tree_view_real_set_cursor (tree_view, path, CLAMP_NODE);
 
 	      if (path)
 		gtk_tree_path_free (path);
@@ -15603,7 +15606,7 @@ _gtk_tree_view_add_editable (GtkTreeView       *tree_view,
 
   tree_view->priv->edited_column = column;
 
-  gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
+  gtk_tree_view_real_set_cursor (tree_view, path, CLAMP_NODE);
   cell_area->y += pre_val - (int)gtk_adjustment_get_value (tree_view->priv->vadjustment);
 
   gtk_widget_get_preferred_size (GTK_WIDGET (cell_editable),
