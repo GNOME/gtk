@@ -37,6 +37,8 @@ G_BEGIN_DECLS
  * @GTK_CELL_RENDERER_INSENSITIVE: The cell is drawn in an insensitive manner
  * @GTK_CELL_RENDERER_SORTED: The cell is in a sorted row
  * @GTK_CELL_RENDERER_FOCUSED: The cell is in the focus row.
+ * @GTK_CELL_RENDERER_EXPANDABLE: The cell is in a row that can be expanded. Since 3.4
+ * @GTK_CELL_RENDERER_EXPANDED: The cell is in a row that is expanded. Since 3.4
  *
  * Tells how a cell is to be rendererd.
  */
@@ -47,7 +49,9 @@ typedef enum
   GTK_CELL_RENDERER_INSENSITIVE = 1 << 2,
   /* this flag means the cell is in the sort column/row */
   GTK_CELL_RENDERER_SORTED      = 1 << 3,
-  GTK_CELL_RENDERER_FOCUSED     = 1 << 4
+  GTK_CELL_RENDERER_FOCUSED     = 1 << 4,
+  GTK_CELL_RENDERER_EXPANDABLE  = 1 << 5,
+  GTK_CELL_RENDERER_EXPANDED    = 1 << 6
 } GtkCellRendererState;
 
 /**
