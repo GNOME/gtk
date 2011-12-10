@@ -8977,7 +8977,9 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
   GtkRBTree *tree;
   GtkRBNode *node;
   GList *list;
-  gint selection_changed = FALSE;
+  gboolean selection_changed = FALSE, cursor_changed = FALSE;
+  GtkRBTree *cursor_tree = NULL;
+  GtkRBNode *cursor_node = NULL;
   GtkStyleContext *context;
 
   g_return_if_fail (path != NULL);
@@ -9004,6 +9006,52 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
 
   /* Cancel editting if we've started */
   gtk_tree_view_stop_editing (tree_view, TRUE);
+
+  /* If the cursor row got deleted, move the cursor to the next row */
+  if (tree_view->priv->cursor_node &&
+      (tree_view->priv->cursor_node == node ||
+       (node->children &&  _gtk_rbtree_contains (node->children, tree_view->priv->cursor_tree))))
+    {
+      GtkTreePath *cursor_path;
+
+      cursor_tree = tree;
+      cursor_node = _gtk_rbtree_next (tree, node);
+      /* find the first node that is not going to be deleted */
+      while (cursor_node == NULL && cursor_tree->parent_tree)
+        {
+          cursor_node = _gtk_rbtree_next (cursor_tree->parent_tree,
+                                          cursor_tree->parent_node);
+          cursor_tree = cursor_tree->parent_tree;
+        }
+
+      if (cursor_node != NULL)
+        cursor_path = _gtk_tree_path_new_from_rbtree (cursor_tree, cursor_node);
+      else
+        cursor_path = NULL;
+
+      if (cursor_path == NULL ||
+          ! search_first_focusable_path (tree_view, &cursor_path, TRUE, 
+                                         &cursor_tree, &cursor_node))
+        {
+          /* It looks like we reached the end of the view without finding
+           * a focusable row.  We will step backwards to find the last
+           * focusable row.
+           */
+          _gtk_rbtree_prev_full (tree, node, &cursor_tree, &cursor_node);
+          if (cursor_node)
+            {
+              cursor_path = _gtk_tree_path_new_from_rbtree (cursor_tree, cursor_node);
+              if (! search_first_focusable_path (tree_view, &cursor_path, FALSE,
+                                                 &cursor_tree, &cursor_node))
+                cursor_node = NULL;
+              gtk_tree_path_free (cursor_path);
+            }
+        }
+      else if (cursor_path)
+        gtk_tree_path_free (cursor_path);
+
+      cursor_changed = TRUE;
+    }
 
   if (tree_view->priv->destroy_count_func)
     {
@@ -9041,7 +9089,19 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
 
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 
-  if (selection_changed)
+  if (cursor_changed)
+    {
+      if (cursor_node)
+        {
+          GtkTreePath *cursor_path = _gtk_tree_path_new_from_rbtree (cursor_tree, cursor_node);
+          tree_view->priv->cursor_node = NULL;
+          gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
+          gtk_tree_path_free (cursor_path);
+        }
+      else
+        gtk_tree_view_real_set_cursor (tree_view, NULL, TRUE, FALSE);
+    }
+  else if (selection_changed)
     g_signal_emit_by_name (tree_view->priv->selection, "changed");
 }
 
