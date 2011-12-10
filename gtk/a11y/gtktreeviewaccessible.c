@@ -3093,35 +3093,6 @@ get_header_from_column (GtkTreeViewColumn *tv_col)
   return rc;
 }
 
-/**
- * _gtk_rbtree_get_ancestor_node:
- * @ancestor: the ancestor tree
- * @child_tree: the potential child's tree
- * @child_node: the potential child's node
- *
- * Finds the node that is the ancestor of @child_tree and @child_node
- * and belongs to @ancestor. If @ancestor is not an ancestor tree
- * of @child_node, %NULL is returned.
- *
- * Returns: the ancestor node or %NULL if @ancestor is not an ancestor.
- **/
-static GtkRBNode *
-_gtk_rbtree_get_ancestor_node (GtkRBTree *ancestor,
-                               GtkRBTree *child_tree,
-                               GtkRBNode *child_node)
-{
-  while (child_tree != NULL)
-    {
-      if (child_tree == ancestor)
-        return child_node;
-
-      child_node = child_tree->parent_node;
-      child_tree = child_tree->parent_tree;
-    }
-
-  return NULL;
-}
-
 void
 _gtk_tree_view_accessible_remove (GtkTreeView *treeview,
                                   GtkRBTree   *tree,
@@ -3137,17 +3108,15 @@ _gtk_tree_view_accessible_remove (GtkTreeView *treeview,
 
   /* if this shows up in profiles, special-case node->children == NULL */
 
+  if (node != NULL)
+    tree = node->children;
+
   g_hash_table_iter_init (&iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
     {
-      GtkRBNode *child_node = _gtk_rbtree_get_ancestor_node (tree,
-                                                             cell_info->tree,
-                                                             cell_info->node);
-
-      if (child_node == NULL)
-        continue;
-
-      if (node == NULL || node == child_node)
+      if (node == cell_info->node ||
+          tree == cell_info->tree ||
+          (tree && _gtk_rbtree_contains (tree, cell_info->tree)))
         g_hash_table_iter_remove (&iter);
     }
 }
