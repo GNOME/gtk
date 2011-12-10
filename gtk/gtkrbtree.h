@@ -117,6 +117,8 @@ gboolean   _gtk_rbtree_is_nil           (GtkRBNode              *node);
 void       _gtk_rbtree_reorder          (GtkRBTree              *tree,
 					 gint                   *new_order,
 					 gint                    length);
+gboolean   _gtk_rbtree_contains         (GtkRBTree              *tree,
+                                         GtkRBTree              *potential_child);
 GtkRBNode *_gtk_rbtree_find_count       (GtkRBTree              *tree,
 					 gint                    count);
 void       _gtk_rbtree_node_set_height  (GtkRBTree              *tree,

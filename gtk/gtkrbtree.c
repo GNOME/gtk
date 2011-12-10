@@ -880,6 +880,31 @@ _gtk_rbtree_reorder (GtkRBTree *tree,
   g_free (nodes);
 }
 
+/**
+ * _gtk_rbtree_contains:
+ * @tree: a tree
+ * @potential_child: a potential child of @tree
+ *
+ * Checks if @potential_child is a child (direct or via intermediate
+ * trees) of @tree.
+ *
+ * Returns: %TRUE if @potentitial_child is a child of @tree.
+ **/
+gboolean
+_gtk_rbtree_contains (GtkRBTree *tree,
+                      GtkRBTree *potential_child)
+{
+  g_return_val_if_fail (tree != NULL, FALSE);
+  g_return_val_if_fail (potential_child != NULL, FALSE);
+
+  do {
+    potential_child = potential_child->parent_tree;
+    if (potential_child == tree)
+      return TRUE;
+  } while (potential_child != NULL);
+
+  return FALSE;
+}
 
 gint
 _gtk_rbtree_node_find_offset (GtkRBTree *tree,
