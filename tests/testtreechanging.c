@@ -110,27 +110,42 @@ tree_model_iter_step (GtkTreeModel *model,
   return FALSE;
 }
 
+/* NB: may include invisible iters (because they are collapsed) */
 static void
-delete (GtkTreeView *treeview)
+tree_view_random_iter (GtkTreeView *treeview,
+                       GtkTreeIter *iter)
 {
   guint n_rows = get_rows (treeview);
   guint i = g_random_int_range (0, n_rows);
   GtkTreeModel *model;
-  GtkTreeIter iter;
 
   model = gtk_tree_view_get_model (treeview);
   
-  if (!gtk_tree_model_get_iter_first (model, &iter))
+  if (!gtk_tree_model_get_iter_first (model, iter))
     return;
 
   while (i-- > 0)
     {
-      if (!tree_model_iter_step (model, &iter))
+      if (!tree_model_iter_step (model, iter))
         {
           g_assert_not_reached ();
           return;
         }
     }
+
+  return;
+}
+
+static void
+delete (GtkTreeView *treeview)
+{
+  guint n_rows = get_rows (treeview);
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  model = gtk_tree_view_get_model (treeview);
+  
+  tree_view_random_iter (treeview, &iter);
 
   n_rows -= count_children (model, &iter) + 1;
   log_operation (model, &iter, "remove");
@@ -249,6 +264,30 @@ collapse (GtkTreeView *treeview)
     }
 }
 
+static void
+select_ (GtkTreeView *treeview)
+{
+  GtkTreeIter iter;
+
+  tree_view_random_iter (treeview, &iter);
+
+  log_operation (gtk_tree_view_get_model (treeview), &iter, "select");
+  gtk_tree_selection_select_iter (gtk_tree_view_get_selection (treeview),
+                                  &iter);
+}
+
+static void
+unselect (GtkTreeView *treeview)
+{
+  GtkTreeIter iter;
+
+  tree_view_random_iter (treeview, &iter);
+
+  log_operation (gtk_tree_view_get_model (treeview), &iter, "unselect");
+  gtk_tree_selection_unselect_iter (gtk_tree_view_get_selection (treeview),
+                                    &iter);
+}
+
 /* sanity checks */
 
 static void
@@ -322,7 +361,9 @@ dance (gpointer treeview)
     add_or_delete,
     add_or_delete,
     expand,
-    collapse
+    collapse,
+    select_,
+    unselect
   };
   guint i;
 
