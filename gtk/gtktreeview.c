@@ -9105,7 +9105,7 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
       else
         gtk_tree_view_real_set_cursor (tree_view, NULL, CLEAR_AND_SELECT | CURSOR_INVALID);
     }
-  else if (selection_changed)
+  if (selection_changed)
     g_signal_emit_by_name (tree_view->priv->selection, "changed");
 }
 
@@ -12908,11 +12908,9 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 
   _gtk_rbtree_remove (node->children);
 
-  /* if we change the cursor, we also change the selection,
-   * so no need to emit selection-changed. */
   if (cursor_changed)
     gtk_tree_view_real_set_cursor (tree_view, path, CLEAR_AND_SELECT | CURSOR_INVALID);
-  else if (selection_changed)
+  if (selection_changed)
     g_signal_emit_by_name (tree_view->priv->selection, "changed");
 
   if (animate)
