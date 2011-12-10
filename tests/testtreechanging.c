@@ -57,6 +57,33 @@ get_rows (GtkTreeView *treeview)
   return GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (treeview), "rows"));
 }
 
+static void
+log_operation_for_path (GtkTreePath *path,
+                        const char  *operation_name)
+{
+  char *path_string;
+
+  path_string = gtk_tree_path_to_string (path);
+
+  g_printerr ("%10s %s\n", operation_name, path_string);
+
+  g_free (path_string);
+}
+
+static void
+log_operation (GtkTreeModel *model,
+               GtkTreeIter  *iter,
+               const char   *operation_name)
+{
+  GtkTreePath *path;
+
+  path = gtk_tree_model_get_path (model, iter);
+
+  log_operation_for_path (path, operation_name);
+
+  gtk_tree_path_free (path);
+}
+
 /* moves iter to the next iter in the model in the display order
  * inside a treeview. Returns FALSE if no more rows exist.
  */
@@ -106,6 +133,7 @@ delete (GtkTreeView *treeview)
     }
 
   n_rows -= count_children (model, &iter) + 1;
+  log_operation (model, &iter, "remove");
   gtk_tree_store_remove (GTK_TREE_STORE (model), &iter);
   set_rows (treeview, n_rows);
 }
@@ -115,6 +143,7 @@ add_one (GtkTreeModel *model,
          GtkTreeIter *iter)
 {
   guint n = gtk_tree_model_iter_n_children (model, iter);
+  GtkTreeIter new_iter;
   static guint counter = 0;
   
   if (n > 0 && g_random_boolean ())
@@ -126,11 +155,12 @@ add_one (GtkTreeModel *model,
     }
 
   gtk_tree_store_insert_with_values (GTK_TREE_STORE (model),
-                                     NULL,
+                                     &new_iter,
                                      iter,
                                      g_random_int_range (-1, n),
                                      0, ++counter,
                                      -1);
+  log_operation (model, &new_iter, "add");
 }
 
 static void
@@ -175,6 +205,7 @@ expand (GtkTreeView *treeview)
           path = gtk_tree_model_get_path (model, &iter);
           if (!gtk_tree_view_row_expanded (treeview, path))
             {
+              log_operation (model, &iter, "expand");
               gtk_tree_view_expand_row (treeview, path, FALSE);
               gtk_tree_path_free (path);
               return;
@@ -212,6 +243,7 @@ collapse (GtkTreeView *treeview)
 
   if (last)
     {
+      log_operation_for_path (last, "collapse");
       gtk_tree_view_collapse_row (treeview, last);
       gtk_tree_path_free (last);
     }
