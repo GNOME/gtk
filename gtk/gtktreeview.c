@@ -154,7 +154,8 @@ enum
 
 typedef enum {
   CLEAR_AND_SELECT = (1 << 0),
-  CLAMP_NODE       = (1 << 1)
+  CLAMP_NODE       = (1 << 1),
+  CURSOR_INVALID   = (1 << 2)
 } SetCursorFlags;
 
  /* This lovely little value is used to determine how far away from the title bar
@@ -9098,12 +9099,11 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
       if (cursor_node)
         {
           GtkTreePath *cursor_path = _gtk_tree_path_new_from_rbtree (cursor_tree, cursor_node);
-          tree_view->priv->cursor_node = NULL;
-          gtk_tree_view_real_set_cursor (tree_view, cursor_path, CLEAR_AND_SELECT);
+          gtk_tree_view_real_set_cursor (tree_view, cursor_path, CLEAR_AND_SELECT | CURSOR_INVALID);
           gtk_tree_path_free (cursor_path);
         }
       else
-        gtk_tree_view_real_set_cursor (tree_view, NULL, CLEAR_AND_SELECT);
+        gtk_tree_view_real_set_cursor (tree_view, NULL, CLEAR_AND_SELECT | CURSOR_INVALID);
     }
   else if (selection_changed)
     g_signal_emit_by_name (tree_view->priv->selection, "changed");
@@ -12911,7 +12911,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   /* if we change the cursor, we also change the selection,
    * so no need to emit selection-changed. */
   if (cursor_changed)
-    gtk_tree_view_real_set_cursor (tree_view, path, CLEAR_AND_SELECT);
+    gtk_tree_view_real_set_cursor (tree_view, path, CLEAR_AND_SELECT | CURSOR_INVALID);
   else if (selection_changed)
     g_signal_emit_by_name (tree_view->priv->selection, "changed");
 
@@ -13162,7 +13162,7 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
 			       GtkTreePath     *path,
                                SetCursorFlags   flags)
 {
-  if (tree_view->priv->cursor_node)
+  if (!(flags & CURSOR_INVALID) && tree_view->priv->cursor_node)
     {
       _gtk_tree_view_queue_draw_node (tree_view,
                                       tree_view->priv->cursor_tree,
