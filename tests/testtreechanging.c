@@ -259,8 +259,11 @@ dance (gpointer treeview)
     expand,
     collapse
   };
+  guint i;
 
-  funcs[g_random_int_range (0, G_N_ELEMENTS(funcs))] (treeview);
+  i = g_random_int_range (0, G_N_ELEMENTS(funcs));
+
+  funcs[i] (treeview);
 
   check_sanity (treeview);
 
