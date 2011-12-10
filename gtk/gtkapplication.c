@@ -32,6 +32,12 @@
 #include "gtkmain.h"
 #include "gtkapplicationwindow.h"
 #include "gtkaccelmapprivate.h"
+#include "gactionmuxer.h"
+
+#ifdef GDK_WINDOWING_QUARTZ
+#include "gtkquartz-menu.h"
+#import <Cocoa/Cocoa.h>
+#endif
 
 #include <gdk/gdk.h>
 #ifdef GDK_WINDOWING_X11
@@ -82,6 +88,11 @@ struct _GtkApplicationPrivate
   GDBusConnection *session;
   gchar *window_prefix;
   guint next_id;
+#endif
+
+#ifdef GDK_WINDOWING_QUARTZ
+  GActionMuxer *muxer;
+  GMenu *combined;
 #endif
 };
 
@@ -213,6 +224,55 @@ gtk_application_shutdown_x11 (GtkApplication *application)
 }
 #endif
 
+#ifdef GDK_WINDOWING_QUARTZ
+static void
+gtk_application_menu_changed_quartz (GObject    *object,
+                                     GParamSpec *pspec,
+                                     gpointer    user_data)
+{
+  GtkApplication *application = GTK_APPLICATION (object);
+  GMenu *combined;
+
+  combined = g_menu_new ();
+  g_menu_append_submenu (combined, "Application", g_application_get_app_menu (G_APPLICATION (object)));
+  g_menu_append_section (combined, NULL, g_application_get_menubar (G_APPLICATION (object)));
+
+  gtk_quartz_set_main_menu (G_MENU_MODEL (combined), G_ACTION_OBSERVABLE (application->priv->muxer));
+}
+
+static void
+gtk_application_startup_quartz (GtkApplication *application)
+{
+  [NSApp finishLaunching];
+
+  application->priv->muxer = g_action_muxer_new ();
+  g_action_muxer_insert (application->priv->muxer, "app", G_ACTION_GROUP (application));
+
+  g_signal_connect (application, "notify::app-menu", G_CALLBACK (gtk_application_menu_changed_quartz), NULL);
+  g_signal_connect (application, "notify::menubar", G_CALLBACK (gtk_application_menu_changed_quartz), NULL);
+  gtk_application_menu_changed_quartz (G_OBJECT (application), NULL, NULL);
+}
+
+static void
+gtk_application_shutdown_quartz (GtkApplication *application)
+{
+  g_signal_handlers_disconnect_by_func (application, gtk_application_menu_changed_quartz, NULL);
+
+  g_object_unref (application->priv->muxer);
+  application->priv->muxer = NULL;
+}
+
+static void
+gtk_application_focus_changed (GtkApplication *application,
+                               GtkWindow      *window)
+{
+  if (G_IS_ACTION_GROUP (window))
+    g_action_muxer_insert (application->priv->muxer, "win", G_ACTION_GROUP (window));
+  else
+    g_action_muxer_remove (application->priv->muxer, "win");
+}
+#endif
+
 static gboolean
 gtk_application_focus_in_event_cb (GtkWindow      *window,
                                    GdkEventFocus  *event,
@@ -229,6 +289,10 @@ gtk_application_focus_in_event_cb (GtkWindow      *window,
       priv->windows = g_list_concat (link, priv->windows);
     }
 
+#ifdef GDK_WINDOWING_QUARTZ
+  gtk_application_focus_changed (application, window);
+#endif
+
   return FALSE;
 }
 
@@ -243,6 +307,10 @@ gtk_application_startup (GApplication *application)
 #ifdef GDK_WINDOWING_X11
   gtk_application_startup_x11 (GTK_APPLICATION (application));
 #endif
+
+#ifdef GDK_WINDOWING_QUARTZ
+  gtk_application_startup_quartz (GTK_APPLICATION (application));
+#endif
 }
 
 static void
@@ -250,6 +318,10 @@ gtk_application_shutdown (GApplication *application)
 {
 #ifdef GDK_WINDOWING_X11
   gtk_application_shutdown_x11 (GTK_APPLICATION (application));
+#endif
+
+#ifdef GDK_WINDOWING_QUARTZ
+  gtk_application_shutdown_quartz (GTK_APPLICATION (application));
 #endif
 
   G_APPLICATION_CLASS (gtk_application_parent_class)
