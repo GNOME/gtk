@@ -1837,6 +1837,14 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
  *
  * If you simply want an undecorated window (no window borders), use
  * gtk_window_set_decorated(), don't use #GTK_WINDOW_POPUP.
+ *
+ * All top-level windows created by gtk_window_new() are stored in
+ * an internal top-level window list.  This list can be obtained from
+ * gtk_window_list_toplevels().  Due to Gtk+ keeping a reference to
+ * the window internally, gtk_window_new() does not return a reference
+ * to the caller.
+ *
+ * To delete a #GtkWindow, call gtk_window_destroy().
  * 
  * Return value: a new #GtkWindow.
  **/
