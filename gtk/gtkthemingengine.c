@@ -34,6 +34,7 @@
 #include "gtkcsstypesprivate.h"
 #include "gtkthemingengineprivate.h"
 #include "gtkroundedboxprivate.h"
+#include "gtkthemingbackgroundprivate.h"
 
 /**
  * SECTION:gtkthemingengine
@@ -183,14 +184,6 @@ static void gtk_theming_engine_render_icon (GtkThemingEngine *engine,
 					    GdkPixbuf *pixbuf,
                                             gdouble x,
                                             gdouble y);
-static void render_background_internal (GtkThemingEngine *engine,
-					cairo_t          *cr,
-					gdouble           x,
-					gdouble           y,
-					gdouble           width,
-					gdouble           height,
-					GtkJunctionSides  junction,
-					cairo_pattern_t  *optional_background);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -1093,8 +1086,18 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   GtkBorderStyle border_style;
   GtkBorder border;
   gint border_width;
-  GtkStylePropertyContext context;
-  cairo_pattern_t *pattern;
+  GtkThemingBackground bg;
+
+  _gtk_theming_background_init (&bg, engine, 
+                                x, y,
+                                width, height,
+                                gtk_theming_engine_get_junction_sides (engine));
+
+  if (_gtk_theming_background_has_background_image (&bg))
+    {
+      _gtk_theming_background_render (&bg, cr);
+      return;
+    }
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
@@ -1103,22 +1106,9 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   gtk_theming_engine_get_background_color (engine, flags, &bg_color);
   gtk_theming_engine_get_border (engine, flags, &border);
 
-  context.width = width;
-  context.height = height;
-
-  _gtk_theming_engine_get (engine, flags, &context,
-			   "background-image", &pattern,
-			   "border-style", &border_style,
-			   NULL);
-
-  if (pattern != NULL)
-    {
-      render_background_internal (engine, cr, x, y, width, height, 
-				  gtk_theming_engine_get_junction_sides (engine), pattern);
-      cairo_restore (cr);
-      cairo_pattern_destroy (pattern);
-      return;
-    }
+  gtk_theming_engine_get (engine, flags,
+                          "border-style", &border_style,
+                          NULL);
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
@@ -1228,8 +1218,18 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   gint exterior_size, interior_size, pad, thickness, border_width;
   GtkBorderStyle border_style;
   GtkBorder border;
-  GtkStylePropertyContext context;
-  cairo_pattern_t *pattern;
+  GtkThemingBackground bg;
+
+  _gtk_theming_background_init (&bg, engine, 
+                                x, y,
+                                width, height,
+                                gtk_theming_engine_get_junction_sides (engine));
+
+  if (_gtk_theming_background_has_background_image (&bg))
+    {
+      _gtk_theming_background_render (&bg, cr);
+      return;
+    }
 
   flags = gtk_theming_engine_get_state (engine);
 
@@ -1239,22 +1239,9 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   gtk_theming_engine_get_background_color (engine, flags, &bg_color);
   gtk_theming_engine_get_border (engine, flags, &border);
 
-  context.width = width;
-  context.height = height;
-
-  _gtk_theming_engine_get (engine, flags, &context,
-			   "background-image", &pattern,
-			   "border-style", &border_style,
-			   NULL);
-
-  if (pattern != NULL)
-    {
-      render_background_internal (engine, cr, x, y, width, height, 
-				  gtk_theming_engine_get_junction_sides (engine), pattern);
-      cairo_restore (cr);
-      cairo_pattern_destroy (pattern);
-      return;
-    }
+  gtk_theming_engine_get (engine, flags,
+                          "border-style", &border_style,
+                          NULL);
 
   exterior_size = MIN (width, height);
   border_width = MIN (MIN (border.top, border.bottom),
@@ -1427,353 +1414,6 @@ color_shade (const GdkRGBA *color,
   gtk_symbolic_color_unref (shade);
 }
 
-/* optional_background is the background-image, in case it was
-   already availible we avoid getting it (and thus possibly
-   rendering it) twice */
-static void
-render_background_internal (GtkThemingEngine *engine,
-                            cairo_t          *cr,
-                            gdouble           x,
-                            gdouble           y,
-                            gdouble           width,
-                            gdouble           height,
-                            GtkJunctionSides  junction,
-			    cairo_pattern_t  *optional_background)
-{
-  GdkRGBA bg_color;
-  cairo_pattern_t *pattern;
-  GtkCssBackgroundRepeat *repeat;
-  GtkStateFlags flags;
-  gboolean running;
-  gdouble progress;
-  GtkRoundedBox padding_box;
-  GtkRoundedBox clip_box;
-  GtkShadow *box_shadow;
-  GtkBorder border, padding;
-  GtkStylePropertyContext context;
-  GtkCssArea clip, origin;
-  gdouble bg_width, bg_height, bg_x, bg_y;
-
-  flags = gtk_theming_engine_get_state (engine);
-
-  gtk_theming_engine_get_background_color (engine, flags, &bg_color);
-
-  gtk_theming_engine_get (engine, flags,
-			  "background-origin", &origin,
-			  "background-clip", &clip,
-			  "background-repeat", &repeat,
-			  "box-shadow", &box_shadow,
-			  NULL);
-
-  gtk_theming_engine_get_border (engine, flags, &border);
-  gtk_theming_engine_get_padding (engine, flags, &padding);
-
-  /* The default size of the background image depends on the
-     background-origin value as this affects the top left
-     and the bottom right corners. */
-  switch (origin) {
-  case GTK_CSS_AREA_BORDER_BOX:
-    bg_x = 0;
-    bg_y = 0;
-    bg_width = width;
-    bg_height = height;
-    break;
-  case GTK_CSS_AREA_CONTENT_BOX:
-    bg_x = border.left + padding.left;
-    bg_y = border.top + padding.top;
-    bg_width = width - border.left - border.right - padding.left - padding.right;
-    bg_height = height - border.top - border.bottom - padding.top - padding.bottom;
-    break;
-  case GTK_CSS_AREA_PADDING_BOX:
-  default:
-    bg_x = border.left;
-    bg_y = border.top;
-    bg_width = width - border.left - border.right;
-    bg_height = height - border.top - border.bottom;
-    break;
-  }
-
-  context.width = bg_width;
-  context.height = bg_height;
-
-  if (optional_background)
-    pattern = cairo_pattern_reference (optional_background);
-  else
-    _gtk_theming_engine_get (engine, flags, &context, 
-			     "background-image", &pattern,
-			     NULL);
-
-
-  cairo_save (cr);
-  cairo_translate (cr, x, y);
-
-  running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
-
-  if (gtk_theming_engine_has_class (engine, "background"))
-    {
-      cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.0); /* transparent */
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      cairo_paint (cr);
-    }
-
-  if (running)
-    {
-      cairo_pattern_t *other_pattern;
-      GtkStateFlags other_flags;
-      GdkRGBA other_bg;
-      cairo_pattern_t *new_pattern = NULL;
-
-      if (flags & GTK_STATE_FLAG_PRELIGHT)
-        {
-          other_flags = flags & ~(GTK_STATE_FLAG_PRELIGHT);
-          progress = 1 - progress;
-        }
-      else
-        other_flags = flags | GTK_STATE_FLAG_PRELIGHT;
-
-      gtk_theming_engine_get_background_color (engine, other_flags, &other_bg);
-      _gtk_theming_engine_get (engine, other_flags, &context,
-			       "background-image", &other_pattern,
-			       NULL);
-
-      if (pattern && other_pattern)
-        {
-          cairo_pattern_type_t type, other_type;
-          gint n0, n1;
-
-          cairo_pattern_get_color_stop_count (pattern, &n0);
-          cairo_pattern_get_color_stop_count (other_pattern, &n1);
-          type = cairo_pattern_get_type (pattern);
-          other_type = cairo_pattern_get_type (other_pattern);
-
-          if (type == other_type && n0 == n1)
-            {
-              gdouble offset0, red0, green0, blue0, alpha0;
-              gdouble offset1, red1, green1, blue1, alpha1;
-              gdouble x00, x01, y00, y01, x10, x11, y10, y11;
-              gdouble r00, r01, r10, r11;
-              guint i;
-
-              if (type == CAIRO_PATTERN_TYPE_LINEAR)
-                {
-                  cairo_pattern_get_linear_points (pattern, &x00, &y00, &x01, &y01);
-                  cairo_pattern_get_linear_points (other_pattern, &x10, &y10, &x11, &y11);
-
-                  new_pattern = cairo_pattern_create_linear (x00 + (x10 - x00) * progress,
-                                                             y00 + (y10 - y00) * progress,
-                                                             x01 + (x11 - x01) * progress,
-                                                             y01 + (y11 - y01) * progress);
-                }
-              else
-                {
-                  cairo_pattern_get_radial_circles (pattern, &x00, &y00, &r00, &x01, &y01, &r01);
-                  cairo_pattern_get_radial_circles (other_pattern, &x10, &y10, &r10, &x11, &y11, &r11);
-
-                  new_pattern = cairo_pattern_create_radial (x00 + (x10 - x00) * progress,
-                                                             y00 + (y10 - y00) * progress,
-                                                             r00 + (r10 - r00) * progress,
-                                                             x01 + (x11 - x01) * progress,
-                                                             y01 + (y11 - y01) * progress,
-                                                             r01 + (r11 - r01) * progress);
-                }
-
-              cairo_pattern_set_filter (new_pattern, CAIRO_FILTER_FAST);
-              i = 0;
-
-              /* Blend both gradients into one */
-              while (i < n0 && i < n1)
-                {
-                  cairo_pattern_get_color_stop_rgba (pattern, i,
-                                                     &offset0,
-                                                     &red0, &green0, &blue0,
-                                                     &alpha0);
-                  cairo_pattern_get_color_stop_rgba (other_pattern, i,
-                                                     &offset1,
-                                                     &red1, &green1, &blue1,
-                                                     &alpha1);
-
-                  cairo_pattern_add_color_stop_rgba (new_pattern,
-                                                     offset0 + ((offset1 - offset0) * progress),
-                                                     red0 + ((red1 - red0) * progress),
-                                                     green0 + ((green1 - green0) * progress),
-                                                     blue0 + ((blue1 - blue0) * progress),
-                                                     alpha0 + ((alpha1 - alpha0) * progress));
-                  i++;
-                }
-            }
-          else
-            {
-              cairo_save (cr);
-
-              cairo_rectangle (cr, 0, 0, width, height);
-              cairo_clip (cr);
-
-              cairo_push_group (cr);
-
-              cairo_scale (cr, width, height);
-              cairo_set_source (cr, other_pattern);
-              cairo_paint_with_alpha (cr, progress);
-              cairo_set_source (cr, pattern);
-              cairo_paint_with_alpha (cr, 1.0 - progress);
-
-              new_pattern = cairo_pop_group (cr);
-
-              cairo_restore (cr);
-            }
-        }
-      else if (pattern || other_pattern)
-        {
-          cairo_pattern_t *p;
-          const GdkRGBA *c;
-          gdouble x0, y0, x1, y1, r0, r1;
-          gint n, i;
-
-          /* Blend a pattern with a color */
-          if (pattern)
-            {
-              p = pattern;
-              c = &other_bg;
-              progress = 1 - progress;
-            }
-          else
-            {
-              p = other_pattern;
-              c = &bg_color;
-            }
-
-          if (cairo_pattern_get_type (p) == CAIRO_PATTERN_TYPE_LINEAR)
-            {
-              cairo_pattern_get_linear_points (p, &x0, &y0, &x1, &y1);
-              new_pattern = cairo_pattern_create_linear (x0, y0, x1, y1);
-            }
-          else
-            {
-              cairo_pattern_get_radial_circles (p, &x0, &y0, &r0, &x1, &y1, &r1);
-              new_pattern = cairo_pattern_create_radial (x0, y0, r0, x1, y1, r1);
-            }
-
-          cairo_pattern_get_color_stop_count (p, &n);
-
-          for (i = 0; i < n; i++)
-            {
-              gdouble red1, green1, blue1, alpha1;
-              gdouble offset;
-
-              cairo_pattern_get_color_stop_rgba (p, i,
-                                                 &offset,
-                                                 &red1, &green1, &blue1,
-                                                 &alpha1);
-              cairo_pattern_add_color_stop_rgba (new_pattern, offset,
-                                                 c->red + ((red1 - c->red) * progress),
-                                                 c->green + ((green1 - c->green) * progress),
-                                                 c->blue + ((blue1 - c->blue) * progress),
-                                                 c->alpha + ((alpha1 - c->alpha) * progress));
-            }
-        }
-      else
-        {
-          /* Merge just colors */
-          new_pattern = cairo_pattern_create_rgba (CLAMP (bg_color.red + ((other_bg.red - bg_color.red) * progress), 0, 1),
-                                                   CLAMP (bg_color.green + ((other_bg.green - bg_color.green) * progress), 0, 1),
-                                                   CLAMP (bg_color.blue + ((other_bg.blue - bg_color.blue) * progress), 0, 1),
-                                                   CLAMP (bg_color.alpha + ((other_bg.alpha - bg_color.alpha) * progress), 0, 1));
-        }
-
-      if (new_pattern)
-        {
-          /* Replace pattern to use */
-          cairo_pattern_destroy (pattern);
-          pattern = new_pattern;
-        }
-
-      if (other_pattern)
-        cairo_pattern_destroy (other_pattern);
-    }
-
-  /* In the CSS box model, by default the background positioning area is
-   * the padding-box, i.e. all the border-box minus the borders themselves,
-   * which determines also its default size, see
-   * http://dev.w3.org/csswg/css3-background/#background-origin
-   *
-   * In the future we might want to support different origins or clips, but
-   * right now we just shrink to the default.
-   */
-  _gtk_rounded_box_init_rect (&padding_box, 0, 0, width, height);
-  _gtk_rounded_box_apply_border_radius (&padding_box, engine, flags, junction);
-  clip_box = padding_box;
-  _gtk_rounded_box_shrink (&padding_box,
-			   border.top, border.right,
-			   border.bottom, border.left);
-  if (clip == GTK_CSS_AREA_PADDING_BOX)
-    {
-      _gtk_rounded_box_shrink (&clip_box,
-			       border.top, border.right,
-			       border.bottom, border.left);
-    }
-  else if (clip == GTK_CSS_AREA_CONTENT_BOX)
-    {
-      _gtk_rounded_box_shrink (&clip_box,
-			       border.top + padding.top,
-			       border.right + padding.right,
-			       border.bottom + padding.bottom,
-			       border.left + padding.left);
-    }
-
-  _gtk_rounded_box_path (&clip_box, cr);
-
-  gdk_cairo_set_source_rgba (cr, &bg_color);
-  if (pattern)
-    {
-      cairo_surface_t *surface;
-      int scale_width, scale_height;
-
-      /* Fill background color first */
-      cairo_fill_preserve (cr);
-
-      if (cairo_pattern_get_surface (pattern, &surface) != CAIRO_STATUS_SUCCESS)
-          surface = NULL;
-
-      if (surface && repeat &&
-          repeat->repeat != GTK_CSS_BACKGROUND_REPEAT_STYLE_NONE)
-        {
-          scale_width = cairo_image_surface_get_width (surface);
-          scale_height = cairo_image_surface_get_height (surface);
-          if (repeat->repeat == GTK_CSS_BACKGROUND_REPEAT_STYLE_REPEAT)
-            cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-          else if (repeat->repeat == GTK_CSS_BACKGROUND_REPEAT_STYLE_NO_REPEAT)
-            cairo_pattern_set_extend (pattern, CAIRO_EXTEND_NONE);
-        }
-      else
-        {
-          cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
-          scale_width = bg_width;
-          scale_height = bg_height;
-        }
-
-      cairo_translate (cr, bg_x, bg_y);
-      cairo_scale (cr, scale_width, scale_height);
-      cairo_set_source (cr, pattern);
-      cairo_scale (cr, 1.0 / scale_width, 1.0 / scale_height);
-      cairo_translate (cr, -bg_x, -bg_y);
-    }
-
-  cairo_fill (cr);
-
-  if (pattern)
-    cairo_pattern_destroy (pattern);
-
-  if (repeat)
-    g_free (repeat);
-
-  if (box_shadow != NULL)
-    {
-      _gtk_box_shadow_render (box_shadow, cr, &padding_box);
-      _gtk_shadow_unref (box_shadow);
-    }
-
-  cairo_restore (cr);
-}
-
 static void
 gtk_theming_engine_render_background (GtkThemingEngine *engine,
                                       cairo_t          *cr,
@@ -1782,13 +1422,14 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                                       gdouble           width,
                                       gdouble           height)
 {
-  GtkJunctionSides junction;
+  GtkThemingBackground bg;
 
-  junction = gtk_theming_engine_get_junction_sides (engine);
+  _gtk_theming_background_init (&bg, engine,
+                                x, y,
+                                width, height,
+                                gtk_theming_engine_get_junction_sides (engine));
 
-  render_background_internal (engine, cr,
-                              x, y, width, height,
-                              junction, NULL);
+  _gtk_theming_background_render (&bg, cr);
 }
 
 static void
@@ -2469,6 +2110,7 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
                                      gdouble           height,
                                      GtkPositionType   gap_side)
 {
+  GtkThemingBackground bg;
   GtkJunctionSides junction = 0;
   guint hidden_side = 0;
 
@@ -2507,13 +2149,18 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
 
   if (gap_side == GTK_POS_TOP ||
       gap_side == GTK_POS_BOTTOM)
-    render_background_internal (engine, cr,
-                                0, 0, width, height,
-                                GTK_JUNCTION_BOTTOM, NULL);
+    _gtk_theming_background_init (&bg, engine, 
+                                  0, 0,
+                                  width, height,
+                                  GTK_JUNCTION_BOTTOM);
   else
-    render_background_internal (engine, cr,
-                                0, 0, height, width,
-                                GTK_JUNCTION_BOTTOM, NULL);
+    _gtk_theming_background_init (&bg, engine, 
+                                  0, 0,
+                                  height, width,
+                                  GTK_JUNCTION_BOTTOM);
+
+  _gtk_theming_background_render (&bg, cr);
+
   cairo_restore (cr);
 
   cairo_save (cr);
@@ -2567,6 +2214,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   GtkStateFlags flags;
   GdkRGBA bg_color, lighter, darker;
   GtkJunctionSides sides;
+  GtkThemingBackground bg;
   gint xx, yy;
 
   cairo_save (cr);
@@ -2579,7 +2227,8 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   color_shade (&bg_color, 0.7, &darker);
   color_shade (&bg_color, 1.3, &lighter);
 
-  render_background_internal (engine, cr, x, y, width, height, sides, NULL);
+  _gtk_theming_background_init (&bg, engine, x, y, width, height, sides);
+  _gtk_theming_background_render (&bg, cr);
 
   if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_GRIP))
     {
