@@ -249,37 +249,70 @@ collapse (GtkTreeView *treeview)
     }
 }
 
+/* sanity checks */
+
+static void
+assert_row_reference_is_path (GtkTreeRowReference *ref,
+                              GtkTreePath *path)
+{
+  GtkTreePath *expected;
+
+  if (ref == NULL)
+    {
+      g_assert (path == NULL);
+      return;
+    }
+
+  g_assert (path != NULL);
+  g_assert (gtk_tree_row_reference_valid (ref));
+
+  expected = gtk_tree_row_reference_get_path (ref);
+  g_assert (expected != NULL);
+  g_assert (gtk_tree_path_compare (expected, path) == 0);
+  gtk_tree_path_free (expected);
+}
+
 static void
 check_cursor (GtkTreeView *treeview)
 {
   GtkTreeRowReference *ref = g_object_get_data (G_OBJECT (treeview), "cursor");
-  GtkTreePath *expected, *cursor;
+  GtkTreePath *cursor;
 
   gtk_tree_view_get_cursor (treeview, &cursor, NULL);
-  if (ref == NULL)
-    {
-      g_assert (cursor == NULL);
-    }
-  else
-    {
-      g_assert (cursor != NULL);
-      g_assert (gtk_tree_row_reference_valid (ref));
-
-      expected = gtk_tree_row_reference_get_path (ref);
-      g_assert (expected != NULL);
-      g_assert (gtk_tree_path_compare (expected, cursor) == 0);
-
-      gtk_tree_path_free (expected);
-    }
+  assert_row_reference_is_path (ref, cursor);
 
   if (cursor)
     gtk_tree_path_free (cursor);
 }
 
 static void
+check_selection_item (GtkTreeModel *model,
+                      GtkTreePath  *path,
+                      GtkTreeIter  *iter,
+                      gpointer      listp)
+{
+  GList **list = listp;
+
+  g_assert (*list);
+  assert_row_reference_is_path ((*list)->data, path);
+  *list = (*list)->next;
+}
+
+static void
+check_selection (GtkTreeView *treeview)
+{
+  GList *selection = g_object_get_data (G_OBJECT (treeview), "selection");
+
+  gtk_tree_selection_selected_foreach (gtk_tree_view_get_selection (treeview),
+                                       check_selection_item,
+                                       &selection);
+}
+
+static void
 check_sanity (GtkTreeView *treeview)
 {
   check_cursor (treeview);
+  check_selection (treeview);
 }
 
 static gboolean
@@ -322,10 +355,41 @@ cursor_changed_cb (GtkTreeView *treeview,
 }
 
 static void
+selection_list_free (gpointer list)
+{
+  g_list_free_full (list, (GDestroyNotify) gtk_tree_row_reference_free);
+}
+
+static void
+selection_changed_cb (GtkTreeSelection *tree_selection,
+                      gpointer          unused)
+{
+  GList *selected, *list;
+  GtkTreeModel *model;
+
+  selected = gtk_tree_selection_get_selected_rows (tree_selection, &model);
+
+  for (list = selected; list; list = list->next)
+    {
+      GtkTreePath *path = list->data;
+
+      list->data = gtk_tree_row_reference_new (model, path);
+      gtk_tree_path_free (path);
+    }
+
+  g_object_set_data_full (G_OBJECT (gtk_tree_selection_get_tree_view (tree_selection)),
+                          "selection",
+                          selected,
+                          selection_list_free);
+}
+
+static void
 setup_sanity_checks (GtkTreeView *treeview)
 {
   g_signal_connect (treeview, "cursor-changed", G_CALLBACK (cursor_changed_cb), NULL);
   cursor_changed_cb (treeview, NULL);
+  g_signal_connect (gtk_tree_view_get_selection (treeview), "changed", G_CALLBACK (selection_changed_cb), NULL);
+  selection_changed_cb (gtk_tree_view_get_selection (treeview), NULL);
 }
 
 int
