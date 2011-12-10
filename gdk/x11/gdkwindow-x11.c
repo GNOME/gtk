@@ -4296,6 +4296,33 @@ _gdk_x11_moveresize_handle_event (XEvent *event)
       if (event->xbutton.button == mv_resize->moveresize_button)
         finish_drag (mv_resize);
       break;
+
+#ifdef HAVE_XGENERICEVENTS
+    case GenericEvent:
+      {
+        /* we just assume this is an XI2 event */
+        XIEvent *ev = (XIEvent *) event->xcookie.data;
+        XIDeviceEvent *xev = (XIDeviceEvent *)ev;
+        gint state;
+        switch (ev->evtype)
+          {
+          case XI_Motion:
+            update_pos (mv_resize, xev->root_x, xev->root_y);
+            state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+            if ((state & button_mask) == 0)
+            finish_drag (mv_resize);
+            break;
+
+          case XI_ButtonRelease:
+            update_pos (mv_resize, xev->root_x, xev->root_y);
+            if (xev->detail == mv_resize->moveresize_button)
+              finish_drag (mv_resize);
+            break;
+          }
+      }
+      break;
+#endif
+
     }
   return TRUE;
 }
