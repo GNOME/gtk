@@ -342,7 +342,7 @@ main (int    argc,
 
   gtk_widget_show_all (window);
 
-  g_timeout_add (50, dance, treeview);
+  g_idle_add (dance, treeview);
   
   gtk_main ();
 
