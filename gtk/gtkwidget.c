@@ -532,7 +532,6 @@ struct _GtkStateData
 {
   guint         flags : GTK_STATE_FLAGS_BITS;
   guint         operation : 2;
-  guint		use_forall : 1;
 };
 
 /* --- prototypes --- */
@@ -7092,7 +7091,6 @@ _gtk_widget_update_state_flags (GtkWidget     *widget,
 
       data.flags = flags;
       data.operation = operation;
-      data.use_forall = FALSE;
 
       gtk_widget_propagate_state (widget, &data);
 
@@ -7687,8 +7685,6 @@ gtk_widget_set_sensitive (GtkWidget *widget,
       else
         data.operation = STATE_CHANGE_SET;
 
-      data.use_forall = TRUE;
-
       gtk_widget_propagate_state (widget, &data);
 
       gtk_widget_queue_resize (widget);
@@ -7804,7 +7800,6 @@ gtk_widget_set_parent (GtkWidget *widget,
   data.flags |= priv->state_flags;
 
   data.operation = STATE_CHANGE_REPLACE;
-  data.use_forall = gtk_widget_is_sensitive (parent) != gtk_widget_is_sensitive (widget);
   gtk_widget_propagate_state (widget, &data);
 
   gtk_widget_reset_style (widget);
@@ -10760,14 +10755,9 @@ gtk_widget_propagate_state (GtkWidget    *widget,
           /* Make sure to only propate the right states further */
           child_data.flags &= GTK_STATE_FLAGS_DO_PROPAGATE;
 
-          if (child_data.use_forall)
-            gtk_container_forall (GTK_CONTAINER (widget),
-                                  (GtkCallback) gtk_widget_propagate_state,
-                                  &child_data);
-          else
-            gtk_container_foreach (GTK_CONTAINER (widget),
-                                   (GtkCallback) gtk_widget_propagate_state,
-                                   &child_data);
+          gtk_container_forall (GTK_CONTAINER (widget),
+                                (GtkCallback) gtk_widget_propagate_state,
+                                &child_data);
         }
 
       /* Trigger state change transitions for the widget */
