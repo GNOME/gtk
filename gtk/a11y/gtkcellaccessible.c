@@ -495,3 +495,39 @@ _gtk_cell_accessible_get_state (GtkCellAccessible *cell)
 
   return _gtk_cell_accessible_parent_get_renderer_state (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
 }
+
+/**
+ * _gtk_cell_accessible_state_changed:
+ * @cell: a #GtkCellAccessible
+ * @added: the flags that were added from @cell
+ * @removed: the flags that were removed from @cell
+ *
+ * Notifies @cell of state changes. Multiple states may be added
+ * or removed at the same time. A state that is @added may not be
+ * @removed at the same time.
+ **/
+void
+_gtk_cell_accessible_state_changed (GtkCellAccessible    *cell,
+                                    GtkCellRendererState  added,
+                                    GtkCellRendererState  removed)
+{
+  AtkObject *object;
+  guint i;
+
+  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (cell));
+  g_return_if_fail ((added & removed) == 0);
+
+  object = ATK_OBJECT (cell);
+
+  for (i = 0; i < G_N_ELEMENTS (state_map); i++)
+    {
+      if (added & state_map[i].renderer_state)
+        atk_object_notify_state_change (object, 
+                                        state_map[i].atk_state,
+                                        !state_map[i].invert);
+      if (added & state_map[i].renderer_state)
+        atk_object_notify_state_change (object, 
+                                        state_map[i].atk_state,
+                                        state_map[i].invert);
+    }
+}
