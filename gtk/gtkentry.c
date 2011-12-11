@@ -483,6 +483,11 @@ static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
 static void gtk_entry_select_all         (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
 static gboolean gtk_entry_popup_menu     (GtkWidget       *widget);
+static gboolean gtk_entry_press_and_hold (GtkWidget             *widget,
+                                          GdkDevice             *device,
+                                          GtkPressAndHoldAction  action,
+                                          gint                   x,
+                                          gint                   y);
 
 static void keymap_direction_changed     (GdkKeymap       *keymap,
 					  GtkEntry        *entry);
@@ -546,7 +551,9 @@ static void         gtk_entry_paste                    (GtkEntry       *entry,
 							GdkAtom         selection);
 static void         gtk_entry_update_primary_selection (GtkEntry       *entry);
 static void         gtk_entry_do_popup                 (GtkEntry       *entry,
-							GdkEventButton *event);
+                                                        GdkDevice      *device,
+                                                        guint32         _time,
+                                                        guint           button);
 static gboolean     gtk_entry_mnemonic_activate        (GtkWidget      *widget,
 							gboolean        group_cycling);
 static void         gtk_entry_grab_notify              (GtkWidget      *widget,
@@ -705,6 +712,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->drag_data_delete = gtk_entry_drag_data_delete;
 
   widget_class->popup_menu = gtk_entry_popup_menu;
+  widget_class->press_and_hold = gtk_entry_press_and_hold;
 
   class->move_cursor = gtk_entry_move_cursor;
   class->insert_at_cursor = gtk_entry_insert_at_cursor;
@@ -3828,7 +3836,8 @@ gtk_entry_button_press (GtkWidget      *widget,
 
   if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
-      gtk_entry_do_popup (entry, event);
+      gtk_entry_do_popup (entry, event->device,
+                          event->time, event->button);
       priv->button = 0; /* Don't wait for release, since the menu will gtk_grab_add */
       priv->device = NULL;
 
@@ -8784,15 +8793,17 @@ popup_targets_received (GtkClipboard     *clipboard,
 		     info_entry_priv->popup_menu);
 
 
-      if (info->device)
+      if (gdk_device_get_source (info->device) != GDK_SOURCE_KEYBOARD)
 	gtk_menu_popup_for_device (GTK_MENU (info_entry_priv->popup_menu),
                         info->device, NULL, NULL, NULL, NULL, NULL,
 			info->button, info->time);
       else
 	{
-	  gtk_menu_popup (GTK_MENU (info_entry_priv->popup_menu), NULL, NULL,
-			  popup_position_func, entry,
-			  0, gtk_get_current_event_time ());
+	  gtk_menu_popup_for_device (GTK_MENU (info_entry_priv->popup_menu),
+                                     info->device, NULL, NULL,
+                                     popup_position_func,
+                                     entry, NULL,
+                                     0, info->time);
 	  gtk_menu_shell_select_first (GTK_MENU_SHELL (info_entry_priv->popup_menu), FALSE);
 	}
     }
@@ -8800,10 +8811,12 @@ popup_targets_received (GtkClipboard     *clipboard,
   g_object_unref (entry);
   g_slice_free (PopupInfo, info);
 }
-			
+
 static void
 gtk_entry_do_popup (GtkEntry       *entry,
-                    GdkEventButton *event)
+                    GdkDevice      *device,
+                    guint32         _time,
+                    guint           button)
 {
   PopupInfo *info = g_slice_new (PopupInfo);
 
@@ -8812,19 +8825,10 @@ gtk_entry_do_popup (GtkEntry       *entry,
    * we get them, then we actually pop up the menu.
    */
   info->entry = g_object_ref (entry);
-  
-  if (event)
-    {
-      info->button = event->button;
-      info->time = event->time;
-      info->device = event->device;
-    }
-  else
-    {
-      info->button = 0;
-      info->time = gtk_get_current_event_time ();
-      info->device = NULL;
-    }
+
+  info->button = button;
+  info->time = _time;
+  info->device = device;
 
   gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD),
 				  gdk_atom_intern_static_string ("TARGETS"),
@@ -8835,7 +8839,24 @@ gtk_entry_do_popup (GtkEntry       *entry,
 static gboolean
 gtk_entry_popup_menu (GtkWidget *widget)
 {
-  gtk_entry_do_popup (GTK_ENTRY (widget), NULL);
+  gtk_entry_do_popup (GTK_ENTRY (widget),
+                      gtk_get_current_event_device (),
+                      gtk_get_current_event_time (),
+                      0);
+  return TRUE;
+}
+
+static gboolean
+gtk_entry_press_and_hold (GtkWidget             *widget,
+                          GdkDevice             *device,
+                          GtkPressAndHoldAction  action,
+                          gint                   x,
+                          gint                   y)
+{
+  if (action == GTK_PRESS_AND_HOLD_TRIGGER)
+    gtk_entry_do_popup (GTK_ENTRY (widget),
+                        device, GDK_CURRENT_TIME, 1);
+
   return TRUE;
 }
 
