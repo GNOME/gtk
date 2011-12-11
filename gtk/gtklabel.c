@@ -439,6 +439,11 @@ static void gtk_label_hierarchy_changed          (GtkWidget     *widget,
 static void gtk_label_screen_changed             (GtkWidget     *widget,
 						  GdkScreen     *old_screen);
 static gboolean gtk_label_popup_menu             (GtkWidget     *widget);
+static gboolean gtk_label_press_and_hold         (GtkWidget             *widget,
+                                                  GdkDevice             *device,
+                                                  GtkPressAndHoldAction  action,
+                                                  gint                   x,
+                                                  gint                   y);
 
 static void gtk_label_create_window       (GtkLabel *label);
 static void gtk_label_destroy_window      (GtkLabel *label);
@@ -492,7 +497,9 @@ static void gtk_label_move_cursor        (GtkLabel        *label,
 static void gtk_label_copy_clipboard     (GtkLabel        *label);
 static void gtk_label_select_all         (GtkLabel        *label);
 static void gtk_label_do_popup           (GtkLabel        *label,
-					  GdkEventButton  *event);
+                                          GdkDevice       *device,
+                                          guint32          _time,
+                                          guint            button);
 static gint gtk_label_move_forward_word  (GtkLabel        *label,
 					  gint             start);
 static gint gtk_label_move_backward_word (GtkLabel        *label,
@@ -588,6 +595,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->drag_data_get = gtk_label_drag_data_get;
   widget_class->grab_focus = gtk_label_grab_focus;
   widget_class->popup_menu = gtk_label_popup_menu;
+  widget_class->press_and_hold = gtk_label_press_and_hold;
   widget_class->focus = gtk_label_focus;
   widget_class->get_request_mode = gtk_label_get_request_mode;
   widget_class->get_preferred_width = gtk_label_get_preferred_width;
@@ -4625,7 +4633,8 @@ gtk_label_button_press (GtkWidget      *widget,
       if (gdk_event_triggers_context_menu ((GdkEvent *) event))
         {
           info->link_clicked = 1;
-          gtk_label_do_popup (label, event);
+          gtk_label_do_popup (label, event->device,
+                              event->time, event->button);
           return TRUE;
         }
       else if (event->button == 1)
@@ -4643,7 +4652,8 @@ gtk_label_button_press (GtkWidget      *widget,
 
   if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
-      gtk_label_do_popup (label, event);
+      gtk_label_do_popup (label, event->device,
+                          event->time, event->button);
 
       return TRUE;
     }
@@ -4907,6 +4917,8 @@ gtk_label_motion (GtkWidget      *widget,
 
   if ((event->state & GDK_BUTTON1_MASK) == 0)
     return FALSE;
+
+  gdk_event_request_motions (event);
 
   if (info->in_drag)
     {
@@ -6157,14 +6169,32 @@ copy_link_activate_cb (GtkMenuItem *menu_item,
 static gboolean
 gtk_label_popup_menu (GtkWidget *widget)
 {
-  gtk_label_do_popup (GTK_LABEL (widget), NULL);
+  gtk_label_do_popup (GTK_LABEL (widget),
+                      gtk_get_current_event_device (),
+                      gtk_get_current_event_time (),
+                      0);
+  return TRUE;
+}
+
+static gboolean
+gtk_label_press_and_hold (GtkWidget             *widget,
+                          GdkDevice             *device,
+                          GtkPressAndHoldAction  action,
+                          gint                   x,
+                          gint                   y)
+{
+  if (action == GTK_PRESS_AND_HOLD_TRIGGER)
+    gtk_label_do_popup (GTK_LABEL (widget),
+                        device, GDK_CURRENT_TIME, 1);
 
   return TRUE;
 }
 
 static void
 gtk_label_do_popup (GtkLabel       *label,
-                    GdkEventButton *event)
+                    GdkDevice      *device,
+                    guint32         _time,
+                    guint           button)
 {
   GtkLabelPrivate *priv = label->priv;
   GtkWidget *menuitem;
@@ -6186,7 +6216,7 @@ gtk_label_do_popup (GtkLabel       *label,
   have_selection =
     priv->select_info->selection_anchor != priv->select_info->selection_end;
 
-  if (event)
+  if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     {
       if (priv->select_info->link_clicked)
         link = priv->select_info->active_link;
@@ -6246,15 +6276,17 @@ gtk_label_do_popup (GtkLabel       *label,
 
   g_signal_emit (label, signals[POPULATE_POPUP], 0, menu);
 
-  if (event)
-    gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-                    NULL, NULL,
-                    event->button, event->time);
+  if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
+    gtk_menu_popup_for_device (GTK_MENU (menu), device,
+                               NULL, NULL, NULL, NULL, NULL,
+                               button, _time);
   else
     {
-      gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-                      popup_position_func, label,
-                      0, gtk_get_current_event_time ());
+      gtk_menu_popup_for_device (GTK_MENU (menu),
+                                 device, NULL, NULL,
+                                 popup_position_func,
+                                 label, NULL,
+                                 0, _time);
       gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
     }
 }
