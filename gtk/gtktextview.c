@@ -378,6 +378,11 @@ static void     gtk_text_view_drag_data_received (GtkWidget        *widget,
                                                   guint             time);
 
 static gboolean gtk_text_view_popup_menu         (GtkWidget     *widget);
+static gboolean gtk_text_view_press_and_hold     (GtkWidget             *widget,
+                                                  GdkDevice             *device,
+                                                  GtkPressAndHoldAction  action,
+                                                  gint                   x,
+                                                  gint                   y);
 
 static void gtk_text_view_move_cursor       (GtkTextView           *text_view,
                                              GtkMovementStep        step,
@@ -463,7 +468,9 @@ static void gtk_text_view_set_virtual_cursor_pos (GtkTextView       *text_view,
                                                   gint               y);
 
 static void gtk_text_view_do_popup               (GtkTextView       *text_view,
-						  GdkEventButton    *event);
+                                                  GdkDevice         *device,
+                                                  guint32            _time,
+                                                  guint              button);
 
 static void cancel_pending_scroll                (GtkTextView   *text_view);
 static void gtk_text_view_queue_scroll           (GtkTextView   *text_view,
@@ -631,7 +638,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->drag_data_received = gtk_text_view_drag_data_received;
 
   widget_class->popup_menu = gtk_text_view_popup_menu;
-  
+  widget_class->press_and_hold = gtk_text_view_press_and_hold;
+
   container_class->add = gtk_text_view_add;
   container_class->remove = gtk_text_view_remove;
   container_class->forall = gtk_text_view_forall;
@@ -4554,7 +4562,8 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
       if (gdk_event_triggers_context_menu ((GdkEvent *) event))
         {
-	  gtk_text_view_do_popup (text_view, event);
+	  gtk_text_view_do_popup (text_view, event->device,
+                                  event->time, event->button);
 	  return TRUE;
         }
       else if (event->button == 1)
@@ -8318,16 +8327,18 @@ popup_targets_received (GtkClipboard     *clipboard,
 		     signals[POPULATE_POPUP],
 		     0,
 		     priv->popup_menu);
-      
-      if (info->device)
-	gtk_menu_popup_for_device (GTK_MENU (priv->popup_menu), 
-      info->device, NULL, NULL, NULL, NULL, NULL,
-			info->button, info->time);
+
+      if (gdk_device_get_source (info->device) != GDK_SOURCE_KEYBOARD)
+	gtk_menu_popup_for_device (GTK_MENU (priv->popup_menu),
+                                   info->device, NULL, NULL, NULL, NULL, NULL,
+                                   info->button, info->time);
       else
 	{
-	  gtk_menu_popup (GTK_MENU (priv->popup_menu), NULL, NULL,
-			  popup_position_func, text_view,
-			  0, gtk_get_current_event_time ());
+	  gtk_menu_popup_for_device (GTK_MENU (priv->popup_menu),
+                                     info->device, NULL, NULL,
+                                     popup_position_func,
+                                     text_view, NULL,
+                                     0, info->time);
 	  gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->popup_menu), FALSE);
 	}
     }
@@ -8338,7 +8349,9 @@ popup_targets_received (GtkClipboard     *clipboard,
 
 static void
 gtk_text_view_do_popup (GtkTextView    *text_view,
-                        GdkEventButton *event)
+                        GdkDevice      *device,
+                        guint32         _time,
+                        guint           button)
 {
   PopupInfo *info = g_new (PopupInfo, 1);
 
@@ -8347,19 +8360,9 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
    * we get them, then we actually pop up the menu.
    */
   info->text_view = g_object_ref (text_view);
-  
-  if (event)
-    {
-      info->button = event->button;
-      info->time = event->time;
-      info->device = event->device;
-    }
-  else
-    {
-      info->button = 0;
-      info->time = gtk_get_current_event_time ();
-      info->device = NULL;
-    }
+  info->button = button;
+  info->time = _time;
+  info->device = device;
 
   gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (text_view),
 							    GDK_SELECTION_CLIPBOARD),
@@ -8371,7 +8374,24 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
 static gboolean
 gtk_text_view_popup_menu (GtkWidget *widget)
 {
-  gtk_text_view_do_popup (GTK_TEXT_VIEW (widget), NULL);  
+  gtk_text_view_do_popup (GTK_TEXT_VIEW (widget),
+                          gtk_get_current_event_device (),
+                          gtk_get_current_event_time (),
+                          0);
+  return TRUE;
+}
+
+static gboolean
+gtk_text_view_press_and_hold (GtkWidget             *widget,
+                              GdkDevice             *device,
+                              GtkPressAndHoldAction  action,
+                              gint                   x,
+                              gint                   y)
+{
+  if (action == GTK_PRESS_AND_HOLD_TRIGGER)
+    gtk_text_view_do_popup (GTK_TEXT_VIEW (widget), device,
+                            GDK_CURRENT_TIME, 1);
+
   return TRUE;
 }
 
