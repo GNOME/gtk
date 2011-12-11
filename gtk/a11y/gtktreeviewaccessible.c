@@ -1540,6 +1540,16 @@ gtk_tree_view_accessible_get_renderer_state (GtkCellAccessibleParent *parent,
     flags |= GTK_CELL_RENDERER_SORTED;
 
   treeview = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
+
+  if (cell_info->cell_col_ref == gtk_tree_view_get_expander_column (treeview))
+    {
+      if (GTK_RBNODE_FLAG_SET (cell_info->node, GTK_RBNODE_IS_PARENT))
+        flags |= GTK_CELL_RENDERER_EXPANDABLE;
+
+      if (cell_info->node->children)
+        flags |= GTK_CELL_RENDERER_EXPANDED;
+    }
+
   if (gtk_widget_has_focus (GTK_WIDGET (treeview)))
     {
       GtkTreeViewColumn *column;
