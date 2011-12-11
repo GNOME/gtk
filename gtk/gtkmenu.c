@@ -4279,18 +4279,16 @@ gtk_menu_enter_notify (GtkWidget        *widget,
 {
   GtkWidget *menu_item;
   GtkWidget *parent;
-  gboolean   touchscreen_mode;
+  GdkDevice *source_device;
 
   if (event->mode == GDK_CROSSING_GTK_GRAB ||
       event->mode == GDK_CROSSING_GTK_UNGRAB ||
       event->mode == GDK_CROSSING_STATE_CHANGED)
     return TRUE;
 
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-touchscreen-mode", &touchscreen_mode,
-                NULL);
-
+  source_device = gdk_event_get_source_device (event);
   menu_item = gtk_get_event_widget ((GdkEvent*) event);
+
   if (GTK_IS_MENU (widget))
     {
       GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
@@ -4300,7 +4298,8 @@ gtk_menu_enter_notify (GtkWidget        *widget,
                                    event->x_root, event->y_root, TRUE, TRUE);
     }
 
-  if (!touchscreen_mode && GTK_IS_MENU_ITEM (menu_item))
+  if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCH &&
+      GTK_IS_MENU_ITEM (menu_item))
     {
       GtkWidget *menu = gtk_widget_get_parent (menu_item);
 
