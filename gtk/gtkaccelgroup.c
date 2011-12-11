@@ -31,7 +31,7 @@
 #include "gtkaccelgroup.h"
 #include "gtkaccelgroupprivate.h"
 #include "gtkaccellabel.h"
-#include "gtkaccelmap.h"
+#include "gtkaccelmapprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
