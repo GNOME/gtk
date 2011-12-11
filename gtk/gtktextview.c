@@ -4268,8 +4268,15 @@ gtk_text_view_grab_notify (GtkWidget *widget,
   if (priv->grab_device &&
       gtk_widget_device_is_shadowed (widget, priv->grab_device))
     {
+      if (priv->drag_start_x >= 0)
+        {
+          priv->drag_start_x = -1;
+          priv->drag_start_y = -1;
+        }
+
       gtk_text_view_end_selection_drag (GTK_TEXT_VIEW (widget));
       gtk_text_view_unobscure_mouse_cursor (GTK_TEXT_VIEW (widget));
+      priv->grab_device = NULL;
     }
 }
 
@@ -4570,6 +4577,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
                 gtk_widget_get_modifier_mask (widget,
                                               GDK_MODIFIER_INTENT_EXTEND_SELECTION)))
             {
+              priv->grab_device = event->device;
               priv->drag_start_x = event->x;
               priv->drag_start_y = event->y;
               priv->pending_place_cursor_button = event->button;
