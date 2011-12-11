@@ -109,7 +109,6 @@ gtk_cell_accessible_ref_state_set (AtkObject *accessible)
   GtkCellAccessible *cell_accessible;
   AtkStateSet *state_set;
   GtkCellRendererState flags;
-  gboolean expandable, expanded;
 
   cell_accessible = GTK_CELL_ACCESSIBLE (accessible);
 
@@ -121,7 +120,7 @@ gtk_cell_accessible_ref_state_set (AtkObject *accessible)
       return state_set;
     }
 
-  flags = _gtk_cell_accessible_get_state (cell_accessible, &expandable, &expanded);
+  flags = _gtk_cell_accessible_get_state (cell_accessible);
 
   atk_state_set_add_state (state_set, ATK_STATE_TRANSIENT);
 
@@ -151,9 +150,9 @@ gtk_cell_accessible_ref_state_set (AtkObject *accessible)
       atk_state_set_add_state (state_set, ATK_STATE_FOCUSED);
     }
 
-  if (expandable)
+  if (flags & GTK_CELL_RENDERER_EXPANDABLE)
     atk_state_set_add_state (state_set, ATK_STATE_EXPANDABLE);
-  if (expanded)
+  if (flags & GTK_CELL_RENDERER_EXPANDED)
     atk_state_set_add_state (state_set, ATK_STATE_EXPANDED);
   
   return state_set;
@@ -475,35 +474,21 @@ _gtk_cell_accessible_set_cell_data (GtkCellAccessible *cell)
 /**
  * _gtk_cell_accessible_get_state:
  * @cell: a #GtkCellAccessible
- * @expandable: (out): %NULL or pointer to boolean that gets set to
- *     whether the cell can be expanded
- * @expanded: (out): %NULL or pointer to boolean that gets set to
- *     whether the cell is expanded
  *
  * Gets the state that would be used to render the area referenced by @cell.
  *
  * Returns: the #GtkCellRendererState for cell
  **/
 GtkCellRendererState
-_gtk_cell_accessible_get_state (GtkCellAccessible *cell,
-                                gboolean          *expandable,
-                                gboolean          *expanded)
+_gtk_cell_accessible_get_state (GtkCellAccessible *cell)
 {
   AtkObject *parent;
 
   g_return_val_if_fail (GTK_IS_CELL_ACCESSIBLE (cell), 0);
 
-  if (expandable)
-    *expandable = FALSE;
-  if (expanded)
-    *expanded = FALSE;
-
   parent = gtk_widget_get_accessible (cell->widget);
   if (parent == NULL)
     return 0;
 
-  return _gtk_cell_accessible_parent_get_renderer_state (GTK_CELL_ACCESSIBLE_PARENT (parent),
-                                                         cell,
-                                                         expandable,
-                                                         expanded);
+  return _gtk_cell_accessible_parent_get_renderer_state (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
 }

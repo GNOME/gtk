@@ -1516,9 +1516,7 @@ gtk_tree_view_accessible_get_child_index (GtkCellAccessibleParent *parent,
 
 static GtkCellRendererState
 gtk_tree_view_accessible_get_renderer_state (GtkCellAccessibleParent *parent,
-                                             GtkCellAccessible       *cell,
-                                             gboolean                *expandable,
-                                             gboolean                *expanded)
+                                             GtkCellAccessible       *cell)
 {
   GtkTreeViewAccessibleCellInfo *cell_info;
   GtkTreeView *treeview;
@@ -1571,13 +1569,6 @@ gtk_tree_view_accessible_get_renderer_state (GtkCellAccessibleParent *parent,
           && cell_info->node == node)
         flags |= GTK_CELL_RENDERER_FOCUSED;
     }
-
-  if (expandable)
-    *expandable = GTK_RBNODE_FLAG_SET (cell_info->node, GTK_RBNODE_IS_PARENT)
-                  && cell_info->cell_col_ref == gtk_tree_view_get_expander_column (treeview);
-  if (expanded)
-    *expanded = cell_info->node->children
-                && cell_info->cell_col_ref == gtk_tree_view_get_expander_column (treeview);
 
   return flags;
 }

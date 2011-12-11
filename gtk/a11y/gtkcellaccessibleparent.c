@@ -114,9 +114,7 @@ _gtk_cell_accessible_parent_get_child_index (GtkCellAccessibleParent *parent,
 
 GtkCellRendererState
 _gtk_cell_accessible_parent_get_renderer_state (GtkCellAccessibleParent *parent,
-                                                GtkCellAccessible       *cell,
-                                                gboolean                *expandable,
-                                                gboolean                *expanded)
+                                                GtkCellAccessible       *cell)
 {
   GtkCellAccessibleParentIface *iface;
 
@@ -125,13 +123,8 @@ _gtk_cell_accessible_parent_get_renderer_state (GtkCellAccessibleParent *parent,
 
   iface = GTK_CELL_ACCESSIBLE_PARENT_GET_IFACE (parent);
 
-  if (expandable)
-    *expandable = FALSE;
-  if (expanded)
-    *expanded = FALSE;
-
   if (iface->get_renderer_state)
-    return (iface->get_renderer_state) (parent, cell, expandable, expanded);
+    return (iface->get_renderer_state) (parent, cell);
   else
     return 0;
 }
