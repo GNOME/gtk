@@ -32,6 +32,20 @@ struct _ActionInfo {
   void (*do_action_func) (GtkCellAccessible *cell);
 };
 
+static const struct {
+  AtkState atk_state;
+  GtkCellRendererState renderer_state;
+  gboolean invert;
+} state_map[] = {
+  { ATK_STATE_SENSITIVE, GTK_CELL_RENDERER_INSENSITIVE, TRUE },
+  { ATK_STATE_ENABLED,   GTK_CELL_RENDERER_INSENSITIVE, TRUE },
+  { ATK_STATE_SELECTED,  GTK_CELL_RENDERER_SELECTED,    FALSE },
+  /* XXX: why do we map ACTIVE here? */
+  { ATK_STATE_ACTIVE,    GTK_CELL_RENDERER_FOCUSED,     FALSE },
+  { ATK_STATE_FOCUSED,   GTK_CELL_RENDERER_FOCUSED,     FALSE },
+  { ATK_STATE_EXPANDABLE,GTK_CELL_RENDERER_EXPANDABLE,  FALSE },
+  { ATK_STATE_EXPANDED,  GTK_CELL_RENDERER_EXPANDED,    FALSE },
+};
 
 static void atk_action_interface_init    (AtkActionIface    *iface);
 static void atk_component_interface_init (AtkComponentIface *iface);
@@ -109,6 +123,7 @@ gtk_cell_accessible_ref_state_set (AtkObject *accessible)
   GtkCellAccessible *cell_accessible;
   AtkStateSet *state_set;
   GtkCellRendererState flags;
+  guint i;
 
   cell_accessible = GTK_CELL_ACCESSIBLE (accessible);
 
@@ -123,38 +138,26 @@ gtk_cell_accessible_ref_state_set (AtkObject *accessible)
   flags = _gtk_cell_accessible_get_state (cell_accessible);
 
   atk_state_set_add_state (state_set, ATK_STATE_TRANSIENT);
+  atk_state_set_add_state (state_set, ATK_STATE_SELECTABLE);
+  atk_state_set_add_state (state_set, ATK_STATE_VISIBLE);
 
-  if (!(flags & GTK_CELL_RENDERER_INSENSITIVE))
+  for (i = 0; i < G_N_ELEMENTS (state_map); i++)
     {
-      atk_state_set_add_state (state_set, ATK_STATE_SENSITIVE);
-      atk_state_set_add_state (state_set, ATK_STATE_ENABLED);
+      if (flags & state_map[i].renderer_state)
+        {
+          if (!state_map[i].invert)
+            atk_state_set_add_state (state_set, state_map[i].atk_state);
+        }
+      else
+        {
+          if (state_map[i].invert)
+            atk_state_set_add_state (state_set, state_map[i].atk_state);
+        }
     }
 
-  atk_state_set_add_state (state_set, ATK_STATE_SELECTABLE);
-  if (flags & GTK_CELL_RENDERER_SELECTED)
-    atk_state_set_add_state (state_set, ATK_STATE_SELECTED);
-
-  atk_state_set_add_state (state_set, ATK_STATE_VISIBLE);
   if (gtk_widget_get_mapped (cell_accessible->widget))
     atk_state_set_add_state (state_set, ATK_STATE_SHOWING);
 
-  /* This is not completely right. We should be tracking the
-   * focussed cell renderer, but that involves diving into
-   * cell areas...
-   */
-  atk_state_set_add_state (state_set, ATK_STATE_FOCUSABLE);
-  if (flags & GTK_CELL_RENDERER_FOCUSED)
-    {
-      /* XXX: Why do we set ACTIVE here? */
-      atk_state_set_add_state (state_set, ATK_STATE_ACTIVE);
-      atk_state_set_add_state (state_set, ATK_STATE_FOCUSED);
-    }
-
-  if (flags & GTK_CELL_RENDERER_EXPANDABLE)
-    atk_state_set_add_state (state_set, ATK_STATE_EXPANDABLE);
-  if (flags & GTK_CELL_RENDERER_EXPANDED)
-    atk_state_set_add_state (state_set, ATK_STATE_EXPANDED);
-  
   return state_set;
 }
 
