@@ -4892,6 +4892,16 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
           else
             flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
+          if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
+            flags |= GTK_CELL_RENDERER_EXPANDABLE;
+          else
+            flags &= ~GTK_CELL_RENDERER_EXPANDABLE;
+
+          if (node->children)
+            flags |= GTK_CELL_RENDERER_EXPANDED;
+          else
+            flags &= ~GTK_CELL_RENDERER_EXPANDED;
+
 	  background_area.x = cell_offset;
 	  background_area.width = width;
 
