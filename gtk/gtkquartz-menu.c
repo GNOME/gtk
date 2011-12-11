@@ -288,8 +288,8 @@ gtk_quartz_action_observer_new (GNSMenuItem *item)
   return observer;
 }
 
-NSMenu *
-gtk_menu_quartz_create_menu (const gchar       *title,
+static NSMenu *
+gtk_quartz_menu_create_menu (const gchar       *title,
                              GMenuModel        *model,
                              GActionObservable *observable)
 {
@@ -326,8 +326,17 @@ gtk_menu_quartz_create_menu (const gchar       *title,
 
       NSString *text = [NSString stringWithUTF8String:label ? : ""];
 
-      NSMenu *section = gtk_menu_quartz_create_menu (label, g_menu_model_get_item_link (model, i, G_MENU_LINK_SECTION), observable);
-      NSMenu *submenu = gtk_menu_quartz_create_menu (label, g_menu_model_get_item_link (model, i, G_MENU_LINK_SUBMENU), observable);
+      GMenuModel *section_model = g_menu_model_get_item_link (model, i, G_MENU_LINK_SECTION);
+      GMenuModel *submenu_model = g_menu_model_get_item_link (model, i, G_MENU_LINK_SUBMENU);
+
+      NSMenu *section = gtk_quartz_menu_create_menu (label, section_model, observable);
+      NSMenu *submenu = gtk_quartz_menu_create_menu (label, submenu_model, observable);
+
+      if (section_model != NULL)
+        g_object_unref (section_model);
+
+      if (submenu_model != NULL)
+        g_object_unref (submenu_model);
 
       if (section != nil)
         {
@@ -370,7 +379,7 @@ void
 gtk_quartz_set_main_menu (GMenuModel        *model,
                           GActionObservable *observable)
 {
-  [NSApp setMainMenu:gtk_menu_quartz_create_menu ("Main Menu", model, observable)];
+  [NSApp setMainMenu:gtk_quartz_menu_create_menu ("Main Menu", model, observable)];
 }
 
 
@@ -457,6 +466,22 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
   g_free (title);
 
   return self;
+}
+
+- (void)dealloc
+{
+  if (observer != NULL)
+    g_object_unref (observer);
+
+  if (actions != NULL)
+    g_object_unref (actions);
+
+  if (target != NULL)
+    g_variant_unref (target);
+
+  g_free (action);
+
+  [super dealloc];
 }
 
 - (void)observableActionAddedWithParameterType:(const GVariantType *)parameterType enabled:(BOOL)enabled state:(GVariant *)state
