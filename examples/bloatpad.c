@@ -138,6 +138,14 @@ bloat_pad_finalize (GObject *object)
 }
 
 static void
+new_activated (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  g_application_activate (user_data);
+}
+
+static void
 show_about (GSimpleAction *action,
             GVariant      *parameter,
             gpointer       user_data)
@@ -148,7 +156,6 @@ show_about (GSimpleAction *action,
                          "comments", "Not much to say, really.",
                          NULL);
 }
-
 
 static void
 quit_app (GSimpleAction *action,
@@ -173,6 +180,7 @@ quit_app (GSimpleAction *action,
 }
 
 static GActionEntry app_entries[] = {
+  { "new", new_activated, NULL, NULL, NULL },
   { "about", show_about, NULL, NULL, NULL },
   { "quit", quit_app, NULL, NULL, NULL },
 };
@@ -191,6 +199,9 @@ bloat_pad_startup (GApplication *application)
   gtk_builder_add_from_string (builder,
                                "<interface>"
                                "  <menu id='app-menu'>"
+                               "    <section>"
+                               "      <item label='_New Window' action='app.new'/>"
+                               "    </section>"
                                "    <section>"
                                "      <item label='_About Bloatpad' action='app.about'/>"
                                "    </section>"
