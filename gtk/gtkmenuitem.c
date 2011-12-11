@@ -1688,13 +1688,20 @@ static void
 gtk_real_menu_item_select (GtkMenuItem *menu_item)
 {
   GtkMenuItemPrivate *priv = menu_item->priv;
-  gboolean touchscreen_mode;
+  GdkDevice *source_device = NULL;
+  GdkEvent *current_event;
 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu_item)),
-                "gtk-touchscreen-mode", &touchscreen_mode,
-                NULL);
+  current_event = gtk_get_current_event ();
 
-  if (!touchscreen_mode && priv->submenu &&
+  if (current_event)
+    {
+      source_device = gdk_event_get_source_device (current_event);
+      gdk_event_free (current_event);
+    }
+
+  if ((!source_device ||
+       gdk_device_get_source (source_device) != GDK_SOURCE_TOUCH) &&
+      priv->submenu &&
       (!gtk_widget_get_mapped (priv->submenu) ||
        GTK_MENU (priv->submenu)->priv->tearoff_active))
     {
