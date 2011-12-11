@@ -1084,13 +1084,11 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 
                   if (!gtk_widget_get_visible (GTK_MENU_ITEM (menu_item)->priv->submenu))
                     {
-                      gboolean touchscreen_mode;
+                      GdkDevice *source_device;
 
-                      g_object_get (gtk_widget_get_settings (widget),
-                                    "gtk-touchscreen-mode", &touchscreen_mode,
-                                    NULL);
+                      source_device = gdk_event_get_source_device ((GdkEvent *) event);
 
-                      if (touchscreen_mode)
+                      if (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCH)
                         _gtk_menu_item_popup_submenu (menu_item, TRUE);
                     }
                 }
