@@ -1223,12 +1223,17 @@ draw_varrow (GdkWindow *window,
       y_increment = -1;
     }
 
-  for (i = extra; i < height; i++)
-    {
-      _cairo_draw_line (cr, gc,
-		     x + (i - extra), y_start + i * y_increment,
-		     x + width - (i - extra) - 1, y_start + i * y_increment);
-    }
+  gdk_cairo_set_source_color (cr, gc);
+  cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+  cairo_set_line_width (cr, 1.0);
+  cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
+
+  cairo_move_to (cr, x + 0.5, y_start + extra * y_increment + 0.5);
+  cairo_line_to (cr, x + width - 1 + 0.5, y_start + extra * y_increment + 0.5);
+  cairo_line_to (cr, x + (height - 1 - extra) + 0.5, y_start + (height - 1) * y_increment + 0.5);
+  cairo_close_path (cr);
+  cairo_stroke_preserve (cr);
+  cairo_fill (cr);
 
   cairo_destroy(cr);
 }
@@ -1268,12 +1273,17 @@ draw_harrow (GdkWindow *window,
       x_increment = -1;
     }
 
-  for (i = extra; i < width; i++)
-    {
-      _cairo_draw_line (cr, gc,
-		     x_start + i * x_increment, y + (i - extra),
-		     x_start + i * x_increment, y + height - (i - extra) - 1);
-    }
+  gdk_cairo_set_source_color (cr, gc);
+  cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+  cairo_set_line_width (cr, 1.0);
+  cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
+
+  cairo_move_to (cr, x_start + extra * x_increment + 0.5, y + 0.5);
+  cairo_line_to (cr, x_start + extra * x_increment + 0.5, y + height - 1 + 0.5);
+  cairo_line_to (cr, x_start + (width - 1) * x_increment + 0.5, y + height - (width - 1 - extra) - 1 + 0.5);
+  cairo_close_path (cr);
+  cairo_stroke_preserve (cr);
+  cairo_fill (cr);
 
   cairo_destroy(cr);
 }
