@@ -1788,7 +1788,7 @@ model_row_deleted (GtkTreeModel *tree_model,
   GtkTreePath *path_copy;
   AtkObject *atk_obj;
   GtkTreeViewAccessible *accessible;
-  gint row, col;
+  gint row;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
   accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
@@ -1813,14 +1813,6 @@ model_row_deleted (GtkTreeModel *tree_model,
     g_signal_emit_by_name (atk_obj, "row-deleted", row,
                            accessible->n_children_deleted + 1);
   accessible->n_children_deleted = 0;
-
-  /* Generate children-changed signals */
-  for (col = 0; col < get_n_columns (tree_view); col++)
-    {
-      /* Pass NULL as the child object, 4th argument */
-      g_signal_emit_by_name (atk_obj, "children-changed::remove",
-                             ((row * get_n_columns (tree_view)) + col), NULL, NULL);
-    }
 }
 
 /* This function gets called when a row is deleted or when rows are
