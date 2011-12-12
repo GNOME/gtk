@@ -1528,7 +1528,6 @@ row_collapsed_cb (GtkTreeView *tree_view,
   GtkTreeModel *tree_model;
   AtkObject *atk_obj;
   GtkTreeViewAccessible *accessible;
-  gint row;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
   accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
@@ -1536,13 +1535,6 @@ row_collapsed_cb (GtkTreeView *tree_view,
 
   /* Set collapse state */
   set_expand_state (tree_view, tree_model, accessible, path, FALSE);
-  if (accessible->n_children_deleted == 0)
-    return FALSE;
-  row = get_row_from_tree_path (tree_view, path);
-  if (row == -1)
-    return FALSE;
-  g_signal_emit_by_name (atk_obj, "row-deleted", row,
-                         accessible->n_children_deleted);
   accessible->n_children_deleted = 0;
   return FALSE;
 }
@@ -1788,7 +1780,6 @@ model_row_deleted (GtkTreeModel *tree_model,
   GtkTreePath *path_copy;
   AtkObject *atk_obj;
   GtkTreeViewAccessible *accessible;
-  gint row;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
   accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
@@ -1804,14 +1795,7 @@ model_row_deleted (GtkTreeModel *tree_model,
       set_expand_state (tree_view, tree_model, accessible, path_copy, TRUE);
       gtk_tree_path_free (path_copy);
     }
-  row = get_row_from_tree_path (tree_view, path);
 
-  /* If the row which is deleted is not visible because it is a child of
-   * a collapsed row then row will be -1
-   */
-  if (row > 0)
-    g_signal_emit_by_name (atk_obj, "row-deleted", row,
-                           accessible->n_children_deleted + 1);
   accessible->n_children_deleted = 0;
 }
 
@@ -2764,6 +2748,7 @@ _gtk_tree_view_accessible_remove (GtkTreeView *treeview,
   GtkTreeViewAccessibleCellInfo *cell_info;
   GHashTableIter iter;
   GtkTreeViewAccessible *accessible;
+  guint row, n_rows;
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (treeview)));
   if (accessible == NULL)
@@ -2771,8 +2756,20 @@ _gtk_tree_view_accessible_remove (GtkTreeView *treeview,
 
   /* if this shows up in profiles, special-case node->children == NULL */
 
-  if (node != NULL)
-    tree = node->children;
+  if (node == NULL)
+    {
+      row = tree->parent_tree ? _gtk_rbtree_node_get_index (tree->parent_tree, tree->parent_node) : 0;
+      n_rows = tree->root->total_count + 1;
+    }
+  else
+    {
+      row = _gtk_rbtree_node_get_index (tree, node);
+      n_rows = 1 + (node->children ? node->children->root->total_count : 0);
+
+      tree = node->children;
+    }
+
+  g_signal_emit_by_name (accessible, "row-deleted", row, n_rows);
 
   g_hash_table_iter_init (&iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
