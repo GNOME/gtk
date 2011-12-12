@@ -137,8 +137,9 @@ gtk_cell_accessible_ref_state_set (AtkObject *accessible)
 
   flags = _gtk_cell_accessible_get_state (cell_accessible);
 
-  atk_state_set_add_state (state_set, ATK_STATE_TRANSIENT);
+  atk_state_set_add_state (state_set, ATK_STATE_FOCUSABLE);
   atk_state_set_add_state (state_set, ATK_STATE_SELECTABLE);
+  atk_state_set_add_state (state_set, ATK_STATE_TRANSIENT);
   atk_state_set_add_state (state_set, ATK_STATE_VISIBLE);
 
   for (i = 0; i < G_N_ELEMENTS (state_map); i++)
