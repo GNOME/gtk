@@ -193,6 +193,8 @@ typedef struct _GtkQuartzActionObserver GtkQuartzActionObserver;
 
 - (void)model:(GMenuModel *)model didChangeAtPosition:(NSInteger)position removed:(NSInteger)removed added:(NSInteger)added;
 
+- (gboolean)handleChanges;
+
 @end
 
 
@@ -309,6 +311,14 @@ gtk_quartz_action_observer_new (GNSMenuItem *item)
   return observer;
 }
 
+static gboolean
+gtk_quartz_menu_handle_changes (gpointer user_data)
+{
+  GNSMenu *menu = user_data;
+
+  return [menu handleChanges];
+}
+
 static void
 gtk_quartz_menu_items_changed (GMenuModel *model,
                                gint        position,
@@ -340,6 +350,8 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
 
 - (void)model:(GMenuModel *)model didChangeAtPosition:(NSInteger)position removed:(NSInteger)removed added:(NSInteger)added
 {
+  if (update_idle == 0)
+    update_idle = gdk_threads_add_idle (gtk_quartz_menu_handle_changes, self);
 }
 
 - (void)appendItemFromModel:(GMenuModel *)aModel atIndex:(gint)index withHeading:(gchar **)heading
@@ -398,6 +410,23 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
   [self removeAllItems];
 
   [self appendFromModel:model withSeparators:with_separators];
+}
+
+- (gboolean)handleChanges
+{
+  while (connected)
+    {
+      g_signal_handlers_disconnect_by_func (connected->data, gtk_quartz_menu_items_changed, self);
+      g_object_unref (connected->data);
+
+      connected = g_slist_delete_link (connected, connected);
+    }
+
+  [self populate];
+
+  update_idle = 0;
+
+  return G_SOURCE_REMOVE;
 }
 
 - (id)initWithTitle:(NSString *)title model:(GMenuModel *)aModel actions:(GActionObservable *)someActions hasSeparators:(BOOL)hasSeparators
