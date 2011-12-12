@@ -76,6 +76,7 @@ struct _GdkDisplayWayland
   struct wl_shell *shell;
   struct wl_output *output;
   struct wl_input_device *input_device;
+  struct wl_data_device_manager *data_device_manager;
   GSource *event_source;
   EGLDisplay egl_display;
   EGLContext egl_context;

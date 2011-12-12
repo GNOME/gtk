@@ -140,6 +140,10 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
     input = wl_display_bind(display, id, &wl_input_device_interface);
     _gdk_wayland_device_manager_add_device (gdk_display->device_manager,
 					    input);
+  } else if (strcmp(interface, "wl_data_device_manager") == 0) {
+      display_wayland->data_device_manager =
+        wl_display_bind(display, id,
+                        &wl_data_device_manager_interface);
   }
 }
 
