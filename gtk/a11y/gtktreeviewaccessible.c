@@ -806,22 +806,23 @@ gtk_tree_view_accessible_is_row_selected (AtkTable *table,
                                           gint      row)
 {
   GtkWidget *widget;
-  GtkTreeView *tree_view;
-  GtkTreeSelection *selection;
-  GtkTreeIter iter;
+  GtkRBTree *tree;
+  GtkRBNode *node;
+
+  if (row < 0)
+    return FALSE;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     return FALSE;
 
-  if (row < 0)
+  if (!_gtk_rbtree_find_index (_gtk_tree_view_get_rbtree (GTK_TREE_VIEW (widget)),
+                               row,
+                               &tree,
+                               &node))
     return FALSE;
 
-  tree_view = GTK_TREE_VIEW (widget);
-  selection = gtk_tree_view_get_selection (tree_view);
-
-  set_iter_nth_row (tree_view, &iter, row);
-  return gtk_tree_selection_iter_is_selected (selection, &iter);
+  return GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED);
 }
 
 static gboolean
