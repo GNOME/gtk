@@ -220,7 +220,11 @@ gtk_application_shutdown_x11 (GtkApplication *application)
 {
   g_free (application->priv->window_prefix);
   application->priv->window_prefix = NULL;
-  application->priv->session = NULL;
+  if (application->priv->session)
+    {
+      g_object_unref (application->priv->session);
+      application->priv->session = NULL;
+    }
 }
 #endif
 
@@ -360,7 +364,8 @@ gtk_application_before_emit (GApplication *application,
 
           display = gdk_display_get_default ();
           id = g_variant_get_string (value, NULL);
-          gdk_x11_display_set_startup_notification_id (display, id);
+          if (GDK_IS_X11_DISPLAY (display))
+            gdk_x11_display_set_startup_notification_id (display, id);
        }
 #endif
     }
