@@ -1087,7 +1087,7 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 
                       source_device = gdk_event_get_source_device ((GdkEvent *) event);
 
-                      if (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCH)
+                      if (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN)
                         _gtk_menu_item_popup_submenu (menu_item, TRUE);
                     }
                 }
@@ -1609,15 +1609,10 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
   GtkMenuShellPrivate *priv = menu_shell->priv;
   GtkMenuShell *parent_menu_shell = NULL;
   gboolean had_selection;
-  gboolean touchscreen_mode;
 
   priv->in_unselectable_item = FALSE;
 
   had_selection = priv->active_menu_item != NULL;
-
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu_shell)),
-                "gtk-touchscreen-mode", &touchscreen_mode,
-                NULL);
 
   if (priv->parent_menu_shell)
     parent_menu_shell = GTK_MENU_SHELL (priv->parent_menu_shell);
@@ -1625,29 +1620,8 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
   switch (direction)
     {
     case GTK_MENU_DIR_PARENT:
-      if (touchscreen_mode &&
-          priv->active_menu_item &&
-          GTK_MENU_ITEM (priv->active_menu_item)->priv->submenu &&
-          gtk_widget_get_visible (GTK_MENU_ITEM (priv->active_menu_item)->priv->submenu))
+      if (parent_menu_shell)
         {
-          /* if we are on a menu item that has an open submenu but the
-           * focus is not in that submenu (e.g. because it's empty or
-           * has only insensitive items), close that submenu instead of
-           * running into the code below which would close *this* menu.
-           */
-          _gtk_menu_item_popdown_submenu (priv->active_menu_item);
-          _gtk_menu_shell_update_mnemonics (menu_shell);
-        }
-      else if (parent_menu_shell)
-        {
-          if (touchscreen_mode)
-            {
-              /* close menu when returning from submenu. */
-              _gtk_menu_item_popdown_submenu (GTK_MENU (menu_shell)->priv->parent_menu_item);
-              _gtk_menu_shell_update_mnemonics (parent_menu_shell);
-              break;
-            }
-
           if (GTK_MENU_SHELL_GET_CLASS (parent_menu_shell)->submenu_placement ==
               GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement)
             gtk_menu_shell_deselect (menu_shell);
