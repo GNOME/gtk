@@ -84,7 +84,6 @@ static void             set_cell_expandable             (GtkCellAccessible     *
 static void             add_cell_actions                (GtkCellAccessible     *cell,
                                                          gboolean               editable);
 
-static void             toggle_cell_toggled             (GtkCellAccessible     *cell);
 static void             edit_cell                       (GtkCellAccessible     *cell);
 static void             activate_cell                   (GtkCellAccessible     *cell);
 static void             cell_destroyed                  (gpointer               data);
@@ -2209,10 +2208,6 @@ static void
 add_cell_actions (GtkCellAccessible *cell,
                   gboolean           editable)
 {
-  if (GTK_IS_BOOLEAN_CELL_ACCESSIBLE (cell))
-    _gtk_cell_accessible_add_action (cell,
-                                     "toggle", "toggles the cell",
-                                     NULL, toggle_cell_toggled);
   if (editable)
     _gtk_cell_accessible_add_action (cell,
                                      "edit", "creates a widget in which the contents of the cell can be edited",
@@ -2250,52 +2245,6 @@ toggle_cell_expanded (GtkCellAccessible *cell)
   else
     gtk_tree_view_expand_row (tree_view, path, TRUE);
   g_object_unref (stateset);
-  gtk_tree_path_free (path);
-}
-
-static void
-toggle_cell_toggled (GtkCellAccessible *cell)
-{
-  GtkTreeViewAccessibleCellInfo *cell_info;
-  GtkTreePath *path;
-  gchar *pathstring;
-  GList *renderers, *cur_renderer;
-  AtkObject *parent;
-  gboolean is_container_cell = FALSE;
-
-  parent = atk_object_get_parent (ATK_OBJECT (cell));
-  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
-    {
-      is_container_cell = TRUE;
-      parent = atk_object_get_parent (parent);
-    }
-
-  cell_info = find_cell_info (GTK_TREE_VIEW_ACCESSIBLE (parent), cell);
-  if (!cell_info)
-    return;
-
-  path = cell_info_get_path (cell_info);
-  if (!path)
-    return;
-
-  /* If the cell is in a container, its index is used to find the
-   * renderer in the list. Otherwise, we assume that the cell is
-   * represented by the first renderer in the list
-   */
-  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_info->cell_col_ref));
-  if (is_container_cell)
-    cur_renderer = g_list_nth (renderers, atk_object_get_index_in_parent (ATK_OBJECT (cell)));
-  else
-    cur_renderer = renderers;
-
-  if (cur_renderer)
-    {
-      pathstring = gtk_tree_path_to_string (path);
-      g_signal_emit_by_name (cur_renderer->data, "toggled", pathstring);
-      g_free (pathstring);
-    }
-
-  g_list_free (renderers);
   gtk_tree_path_free (path);
 }
 
