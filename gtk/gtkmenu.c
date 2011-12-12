@@ -110,6 +110,7 @@
 #include "gtksettings.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkdnd.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
@@ -227,6 +228,10 @@ static void     gtk_menu_scroll_to         (GtkMenu          *menu,
                                             gint              offset);
 static void     gtk_menu_grab_notify       (GtkWidget        *widget,
                                             gboolean          was_grabbed);
+static GtkCapturedEventFlags
+                gtk_menu_captured_event    (GtkWidget        *widget,
+                                            GdkEvent         *event);
+
 
 static void     gtk_menu_stop_scrolling         (GtkMenu  *menu);
 static void     gtk_menu_remove_scroll_timeout  (GtkMenu  *menu);
@@ -510,6 +515,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->get_preferred_width = gtk_menu_get_preferred_width;
   widget_class->get_preferred_height = gtk_menu_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_menu_get_preferred_height_for_width;
+  widget_class->captured_event = gtk_menu_captured_event;
 
   container_class->remove = gtk_menu_remove;
   container_class->get_child_property = gtk_menu_get_child_property;
@@ -1057,6 +1063,7 @@ gtk_menu_init (GtkMenu *menu)
   priv->needs_destruction_ref = TRUE;
 
   priv->monitor_num = -1;
+  priv->drag_start_y = -1;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (menu));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENU);
@@ -3316,34 +3323,6 @@ gtk_menu_get_preferred_height_for_width (GtkWidget *widget,
   g_free (nat_heights);
 }
 
-
-
-static gboolean
-gtk_menu_button_scroll (GtkMenu        *menu,
-                        GdkEventButton *event)
-{
-  GtkMenuPrivate *priv = menu->priv;
-
-  if (priv->upper_arrow_prelight || priv->lower_arrow_prelight)
-    {
-      gboolean touchscreen_mode;
-
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu)),
-                    "gtk-touchscreen-mode", &touchscreen_mode,
-                    NULL);
-
-      if (touchscreen_mode)
-        gtk_menu_handle_scrolling (menu,
-                                   event->x_root, event->y_root,
-                                   event->type == GDK_BUTTON_PRESS,
-                                   FALSE);
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 static gboolean
 pointer_in_menu_window (GtkWidget *widget,
                         gdouble    x_root,
@@ -3383,11 +3362,6 @@ gtk_menu_button_press (GtkWidget      *widget,
   if (event->type != GDK_BUTTON_PRESS)
     return FALSE;
 
-  /* Don't pass down to menu shell for presses over scroll arrows
-   */
-  if (gtk_menu_button_scroll (GTK_MENU (widget), event))
-    return TRUE;
-
   /*  Don't pass down to menu shell if a non-menuitem part of the menu
    *  was clicked. The check for the event_widget being a GtkMenuShell
    *  works because we have the pointer grabbed on menu_shell->window
@@ -3416,11 +3390,6 @@ gtk_menu_button_release (GtkWidget      *widget,
 
   if (event->type != GDK_BUTTON_RELEASE)
     return FALSE;
-
-  /* Don't pass down to menu shell for releases over scroll arrows
-   */
-  if (gtk_menu_button_scroll (GTK_MENU (widget), event))
-    return TRUE;
 
   /*  Don't pass down to menu shell if a non-menuitem part of the menu
    *  was clicked (see comment in button_press()).
@@ -3665,10 +3634,14 @@ gtk_menu_motion_notify (GtkWidget      *widget,
   GtkMenu *menu;
   GtkMenuShell *menu_shell;
   GtkWidget *parent;
+  GdkDevice *source_device;
 
   gboolean need_enter;
 
-  if (GTK_IS_MENU (widget))
+  source_device = gdk_event_get_source_device ((GdkEvent *) event);
+
+  if (GTK_IS_MENU (widget) &&
+      gdk_device_get_source (source_device) != GDK_SOURCE_TOUCH)
     {
       GtkMenuPrivate *priv = GTK_MENU(widget)->priv;
 
@@ -4286,10 +4259,11 @@ gtk_menu_enter_notify (GtkWidget        *widget,
       event->mode == GDK_CROSSING_STATE_CHANGED)
     return TRUE;
 
-  source_device = gdk_event_get_source_device (event);
+  source_device = gdk_event_get_source_device ((GdkEvent *) event);
   menu_item = gtk_get_event_widget ((GdkEvent*) event);
 
-  if (GTK_IS_MENU (widget))
+  if (GTK_IS_MENU (widget) &&
+      gdk_device_get_source (source_device) != GDK_SOURCE_TOUCH)
     {
       GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
 
@@ -4356,6 +4330,7 @@ gtk_menu_leave_notify (GtkWidget        *widget,
   GtkMenu *menu;
   GtkMenuItem *menu_item;
   GtkWidget *event_widget;
+  GdkDevice *source_device;
 
   if (event->mode == GDK_CROSSING_GTK_GRAB ||
       event->mode == GDK_CROSSING_GTK_UNGRAB ||
@@ -4368,7 +4343,10 @@ gtk_menu_leave_notify (GtkWidget        *widget,
   if (gtk_menu_navigating_submenu (menu, event->x_root, event->y_root))
     return TRUE;
 
-  gtk_menu_handle_scrolling (menu, event->x_root, event->y_root, FALSE, TRUE);
+  source_device = gdk_event_get_source_device ((GdkEvent *) event);
+
+  if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCH)
+    gtk_menu_handle_scrolling (menu, event->x_root, event->y_root, FALSE, TRUE);
 
   event_widget = gtk_get_event_widget ((GdkEvent*) event);
 
@@ -4401,6 +4379,138 @@ gtk_menu_leave_notify (GtkWidget        *widget,
     }
 
   return GTK_WIDGET_CLASS (gtk_menu_parent_class)->leave_notify_event (widget, event);
+}
+
+static gboolean
+pointer_on_menu_widget (GtkMenu *menu,
+                        gdouble  x_root,
+                        gdouble  y_root)
+{
+  GtkMenuPrivate *priv = menu->priv;
+  GtkAllocation allocation;
+  gint window_x, window_y;
+
+  gtk_widget_get_allocation (GTK_WIDGET (menu), &allocation);
+  gdk_window_get_position (gtk_widget_get_window (priv->toplevel),
+                           &window_x, &window_y);
+
+  if (x_root >= window_x && x_root < window_x + allocation.width &&
+      y_root >= window_y && y_root < window_y + allocation.height)
+    return TRUE;
+
+  return FALSE;
+}
+
+static GtkCapturedEventFlags
+gtk_menu_captured_event (GtkWidget *widget,
+                         GdkEvent  *event)
+{
+  GdkDevice *source_device;
+  GtkCapturedEventFlags flags;
+  GtkMenuPrivate *priv;
+  GtkMenu *menu;
+
+  menu = GTK_MENU (widget);
+  priv = menu->priv;
+  flags = GTK_CAPTURED_EVENT_NONE;
+
+  if (!priv->upper_arrow_visible && !priv->lower_arrow_visible)
+    return flags;
+
+  source_device = gdk_event_get_source_device (event);
+
+  switch (event->type)
+    {
+    case GDK_BUTTON_PRESS:
+      if (event->button.button == 1 &&
+          gdk_device_get_source (source_device) == GDK_SOURCE_TOUCH &&
+          pointer_on_menu_widget (menu, event->button.x_root, event->button.y_root))
+        {
+          priv->drag_start_y = event->button.y_root;
+          priv->initial_drag_offset = priv->scroll_offset;
+          priv->drag_scroll_started = FALSE;
+        }
+      else
+        priv->drag_start_y = -1;
+
+      priv->drag_already_pressed = TRUE;
+      break;
+    case GDK_BUTTON_RELEASE:
+      if (priv->drag_scroll_started)
+        {
+          flags = GTK_CAPTURED_EVENT_HANDLED;
+          priv->drag_scroll_started = FALSE;
+          priv->drag_start_y = -1;
+          priv->drag_already_pressed = FALSE;
+        }
+      break;
+    case GDK_MOTION_NOTIFY:
+      if (event->motion.state & GDK_BUTTON1_MASK &&
+          gdk_device_get_source (source_device) == GDK_SOURCE_TOUCH)
+        {
+          if (!priv->drag_already_pressed)
+            {
+              if (pointer_on_menu_widget (menu,
+                                          event->motion.x_root,
+                                          event->motion.y_root))
+                {
+                  priv->drag_start_y = event->motion.y_root;
+                  priv->initial_drag_offset = priv->scroll_offset;
+                  priv->drag_scroll_started = FALSE;
+                }
+              else
+                priv->drag_start_y = -1;
+
+              priv->drag_already_pressed = TRUE;
+            }
+
+          if (priv->drag_start_y < 0 &&
+              !priv->drag_scroll_started)
+            break;
+
+          if (priv->drag_scroll_started)
+            {
+              gint offset, view_height;
+              GtkBorder arrow_border;
+              gdouble y_diff;
+
+              y_diff = event->motion.y_root - priv->drag_start_y;
+              offset = priv->initial_drag_offset - y_diff;
+
+              view_height = gdk_window_get_height (gtk_widget_get_window (widget));
+              get_arrows_border (menu, &arrow_border);
+
+              if (priv->upper_arrow_visible)
+                view_height -= arrow_border.top;
+
+              if (priv->lower_arrow_visible)
+                view_height -= arrow_border.bottom;
+
+              offset = CLAMP (offset, 0, priv->requested_height - view_height);
+              gtk_menu_scroll_to (menu, offset);
+
+              flags = GTK_CAPTURED_EVENT_HANDLED;
+            }
+          else if (gtk_drag_check_threshold (widget,
+                                             0, priv->drag_start_y,
+                                             0, event->motion.y_root))
+            {
+              priv->drag_scroll_started = TRUE;
+              flags = GTK_CAPTURED_EVENT_HANDLED;
+              gtk_menu_shell_deselect (GTK_MENU_SHELL (menu));
+            }
+        }
+      break;
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+      if (priv->drag_scroll_started)
+        flags = GTK_CAPTURED_EVENT_HANDLED;
+      break;
+    default:
+      break;
+    }
+
+  return flags;
 }
 
 static void
@@ -5663,7 +5773,6 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
     }
 }
 
-
 /**
  * gtk_menu_set_monitor:
  * @menu: a #GtkMenu
@@ -5740,11 +5849,13 @@ static void
 gtk_menu_grab_notify (GtkWidget *widget,
                       gboolean   was_grabbed)
 {
+  GtkMenu *menu;
   GtkWidget *toplevel;
   GtkWindowGroup *group;
   GtkWidget *grab;
   GdkDevice *pointer;
 
+  menu = GTK_MENU (widget);
   pointer = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (widget));
 
   if (!pointer ||
@@ -5761,6 +5872,8 @@ gtk_menu_grab_notify (GtkWidget *widget,
 
   if (GTK_MENU_SHELL (widget)->priv->active && !GTK_IS_MENU_SHELL (grab))
     gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
+
+  menu->priv->drag_scroll_started = FALSE;
 }
 
 /**
