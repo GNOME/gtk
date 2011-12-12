@@ -39,7 +39,6 @@ struct _GtkTreeViewAccessible
 {
   GtkContainerAccessible parent;
 
-  gint           n_children_deleted;
   GHashTable    *cell_infos;
   GtkTreeModel  *tree_model;
   AtkObject     *focus_cell;

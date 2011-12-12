@@ -58,11 +58,6 @@ static void     cursor_changed       (GtkTreeView      *tree_view,
 static gboolean focus_in             (GtkWidget        *widget);
 static gboolean focus_out            (GtkWidget        *widget);
 
-static void     destroy_count_func   (GtkTreeView      *tree_view,
-                                      GtkTreePath      *path,
-                                      gint              count,
-                                      gpointer          user_data);
-
 /* Misc */
 
 static void             set_iter_nth_row                (GtkTreeView            *tree_view,
@@ -209,7 +204,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
   accessible->focus_cell = NULL;
-  accessible->n_children_deleted = 0;
 
   accessible->cell_infos = g_hash_table_new_full (cell_info_hash,
       cell_info_equal, NULL, (GDestroyNotify) cell_info_free);
@@ -242,10 +236,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
       else
         obj->role = ATK_ROLE_TREE_TABLE;
     }
-
-  gtk_tree_view_set_destroy_count_func (tree_view,
-                                        destroy_count_func,
-                                        NULL, NULL);
 }
 
 static void
@@ -1535,7 +1525,6 @@ row_collapsed_cb (GtkTreeView *tree_view,
 
   /* Set collapse state */
   set_expand_state (tree_view, tree_model, accessible, path, FALSE);
-  accessible->n_children_deleted = 0;
   return FALSE;
 }
 
@@ -1795,35 +1784,6 @@ model_row_deleted (GtkTreeModel *tree_model,
       set_expand_state (tree_view, tree_model, accessible, path_copy, TRUE);
       gtk_tree_path_free (path_copy);
     }
-
-  accessible->n_children_deleted = 0;
-}
-
-/* This function gets called when a row is deleted or when rows are
- * removed from the view due to a collapse event. Note that the
- * count is the number of visible *children* of the deleted row,
- * so it does not include the row being deleted.
- *
- * As this function is called before the rows are removed we just note
- * the number of rows and then deal with it when we get a notification
- * that rows were deleted or collapsed.
- */
-static void
-destroy_count_func (GtkTreeView *tree_view,
-                    GtkTreePath *path,
-                    gint         count,
-                    gpointer     user_data)
-{
-  AtkObject *atk_obj;
-  GtkTreeViewAccessible *accessible;
-
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
-
-  if (accessible->n_children_deleted != 0)
-    return;
-
-  accessible->n_children_deleted = count;
 }
 
 void
