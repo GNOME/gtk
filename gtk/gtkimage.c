@@ -1305,7 +1305,7 @@ gtk_image_draw (GtkWidget *widget,
 
   gtk_misc_get_alignment (misc, &xalign, &yalign);
   gtk_misc_get_padding (misc, &xpad, &ypad);
-  _gtk_icon_helper_get_size (priv->icon_helper, context, &width, &height);
+  gtk_image_get_preferred_size (image, &width, &height);
 
   if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;
