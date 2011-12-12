@@ -236,8 +236,6 @@ static GtkCapturedEventFlags
 static void     gtk_menu_stop_scrolling         (GtkMenu  *menu);
 static void     gtk_menu_remove_scroll_timeout  (GtkMenu  *menu);
 static gboolean gtk_menu_scroll_timeout         (gpointer  data);
-static gboolean gtk_menu_scroll_timeout_initial (gpointer  data);
-static void     gtk_menu_start_scrolling        (GtkMenu  *menu);
 
 static void     gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
                                               GtkWidget       *menu_item);
@@ -3795,88 +3793,15 @@ gtk_menu_scroll_by (GtkMenu *menu,
     gtk_menu_scroll_to (menu, offset);
 }
 
-static void
-gtk_menu_do_timeout_scroll (GtkMenu  *menu,
-                            gboolean  touchscreen_mode)
-{
-  GtkMenuPrivate *priv = menu->priv;
-  gboolean upper_visible;
-  gboolean lower_visible;
-
-  upper_visible = priv->upper_arrow_visible;
-  lower_visible = priv->lower_arrow_visible;
-
-  gtk_menu_scroll_by (menu, priv->scroll_step);
-
-  if (touchscreen_mode &&
-      (upper_visible != priv->upper_arrow_visible ||
-       lower_visible != priv->lower_arrow_visible))
-    {
-      /* We are about to hide a scroll arrow while the mouse is pressed,
-       * this would cause the uncovered menu item to be activated on button
-       * release. Therefore we need to ignore button release here
-       */
-      GTK_MENU_SHELL (menu)->priv->ignore_enter = TRUE;
-      priv->ignore_button_release = TRUE;
-    }
-}
-
 static gboolean
 gtk_menu_scroll_timeout (gpointer data)
 {
   GtkMenu  *menu;
-  gboolean  touchscreen_mode;
 
   menu = GTK_MENU (data);
-
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu)),
-                "gtk-touchscreen-mode", &touchscreen_mode,
-                NULL);
-
-  gtk_menu_do_timeout_scroll (menu, touchscreen_mode);
+  gtk_menu_scroll_by (menu, menu->priv->scroll_step);
 
   return TRUE;
-}
-
-static gboolean
-gtk_menu_scroll_timeout_initial (gpointer data)
-{
-  GtkMenu  *menu;
-  guint     timeout;
-  gboolean  touchscreen_mode;
-
-  menu = GTK_MENU (data);
-
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu)),
-                "gtk-timeout-repeat", &timeout,
-                "gtk-touchscreen-mode", &touchscreen_mode,
-                NULL);
-
-  gtk_menu_do_timeout_scroll (menu, touchscreen_mode);
-
-  gtk_menu_remove_scroll_timeout (menu);
-
-  menu->priv->scroll_timeout =
-    gdk_threads_add_timeout (timeout, gtk_menu_scroll_timeout, menu);
-
-  return FALSE;
-}
-
-static void
-gtk_menu_start_scrolling (GtkMenu *menu)
-{
-  guint    timeout;
-  gboolean touchscreen_mode;
-
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu)),
-                "gtk-timeout-repeat", &timeout,
-                "gtk-touchscreen-mode", &touchscreen_mode,
-                NULL);
-
-  gtk_menu_do_timeout_scroll (menu, touchscreen_mode);
-
-  menu->priv->scroll_timeout =
-    gdk_threads_add_timeout (timeout, gtk_menu_scroll_timeout_initial, menu);
 }
 
 static gboolean
@@ -4002,13 +3927,8 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
   gboolean in_arrow;
   gboolean scroll_fast = FALSE;
   gint top_x, top_y;
-  gboolean touchscreen_mode;
 
   menu_shell = GTK_MENU_SHELL (menu);
-
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu)),
-                "gtk-touchscreen-mode", &touchscreen_mode,
-                NULL);
 
   gdk_window_get_position (gtk_widget_get_window (priv->toplevel),
                            &top_x, &top_y);
@@ -4027,82 +3947,44 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
       in_arrow = TRUE;
     }
 
-  if (touchscreen_mode)
-    priv->upper_arrow_prelight = in_arrow;
-
   if ((priv->upper_arrow_state & GTK_STATE_FLAG_INSENSITIVE) == 0)
     {
       gboolean arrow_pressed = FALSE;
 
       if (priv->upper_arrow_visible && !priv->tearoff_active)
         {
-          if (touchscreen_mode)
+          scroll_fast = (y < rect.y + MENU_SCROLL_FAST_ZONE);
+
+          if (enter && in_arrow &&
+              (!priv->upper_arrow_prelight ||
+               priv->scroll_fast != scroll_fast))
             {
-              if (enter && priv->upper_arrow_prelight)
-                {
-                  if (priv->scroll_timeout == 0)
-                    {
-                      /* Deselect the active item so that
-                       * any submenus are popped down
-                       */
-                      gtk_menu_shell_deselect (menu_shell);
+              priv->upper_arrow_prelight = TRUE;
+              priv->scroll_fast = scroll_fast;
 
-                      gtk_menu_remove_scroll_timeout (menu);
-                      priv->scroll_step = -MENU_SCROLL_STEP2; /* always fast */
+              /* Deselect the active item so that
+               * any submenus are popped down
+               */
+              gtk_menu_shell_deselect (menu_shell);
 
-                      if (!motion)
-                        {
-                          /* Only do stuff on click. */
-                          gtk_menu_start_scrolling (menu);
-                          arrow_pressed = TRUE;
-                        }
-                    }
-                  else
-                    {
-                      arrow_pressed = TRUE;
-                    }
-                }
-              else if (!enter)
-                {
-                  gtk_menu_stop_scrolling (menu);
-                }
+              gtk_menu_remove_scroll_timeout (menu);
+              priv->scroll_step = scroll_fast
+                                    ? -MENU_SCROLL_STEP2
+                                    : -MENU_SCROLL_STEP1;
+
+              priv->scroll_timeout =
+                gdk_threads_add_timeout (scroll_fast
+                                           ? MENU_SCROLL_TIMEOUT2
+                                           : MENU_SCROLL_TIMEOUT1,
+                                         gtk_menu_scroll_timeout, menu);
             }
-          else /* !touchscreen_mode */
+          else if (!enter && !in_arrow && priv->upper_arrow_prelight)
             {
-              scroll_fast = (y < rect.y + MENU_SCROLL_FAST_ZONE);
-
-              if (enter && in_arrow &&
-                  (!priv->upper_arrow_prelight ||
-                   priv->scroll_fast != scroll_fast))
-                {
-                  priv->upper_arrow_prelight = TRUE;
-                  priv->scroll_fast = scroll_fast;
-
-                  /* Deselect the active item so that
-                   * any submenus are popped down
-                   */
-                  gtk_menu_shell_deselect (menu_shell);
-
-                  gtk_menu_remove_scroll_timeout (menu);
-                  priv->scroll_step = scroll_fast
-                                        ? -MENU_SCROLL_STEP2
-                                        : -MENU_SCROLL_STEP1;
-
-                  priv->scroll_timeout =
-                    gdk_threads_add_timeout (scroll_fast
-                                               ? MENU_SCROLL_TIMEOUT2
-                                               : MENU_SCROLL_TIMEOUT1,
-                                             gtk_menu_scroll_timeout, menu);
-                }
-              else if (!enter && !in_arrow && priv->upper_arrow_prelight)
-                {
-                  gtk_menu_stop_scrolling (menu);
-                }
+              gtk_menu_stop_scrolling (menu);
             }
         }
 
-      /*  gtk_menu_start_scrolling() might have hit the top of the
-       *  menu, so check if the button isn't insensitive before
+      /*  check if the button isn't insensitive before
        *  changing it to something else.
        */
       if ((priv->upper_arrow_state & GTK_STATE_FLAG_INSENSITIVE) == 0)
@@ -4137,82 +4019,44 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
       in_arrow = TRUE;
     }
 
-  if (touchscreen_mode)
-    priv->lower_arrow_prelight = in_arrow;
-
   if ((priv->lower_arrow_state & GTK_STATE_FLAG_INSENSITIVE) == 0)
     {
       gboolean arrow_pressed = FALSE;
 
       if (priv->lower_arrow_visible && !priv->tearoff_active)
         {
-          if (touchscreen_mode)
+          scroll_fast = (y > rect.y + rect.height - MENU_SCROLL_FAST_ZONE);
+
+          if (enter && in_arrow &&
+              (!priv->lower_arrow_prelight ||
+               priv->scroll_fast != scroll_fast))
             {
-              if (enter && priv->lower_arrow_prelight)
-                {
-                  if (priv->scroll_timeout == 0)
-                    {
-                      /* Deselect the active item so that
-                       * any submenus are popped down
-                       */
-                      gtk_menu_shell_deselect (menu_shell);
+              priv->lower_arrow_prelight = TRUE;
+              priv->scroll_fast = scroll_fast;
 
-                      gtk_menu_remove_scroll_timeout (menu);
-                      priv->scroll_step = MENU_SCROLL_STEP2; /* always fast */
+              /* Deselect the active item so that
+               * any submenus are popped down
+               */
+              gtk_menu_shell_deselect (menu_shell);
 
-                      if (!motion)
-                        {
-                          /* Only do stuff on click. */
-                          gtk_menu_start_scrolling (menu);
-                          arrow_pressed = TRUE;
-                        }
-                    }
-                  else
-                    {
-                      arrow_pressed = TRUE;
-                    }
-                }
-              else if (!enter)
-                {
-                  gtk_menu_stop_scrolling (menu);
-                }
+              gtk_menu_remove_scroll_timeout (menu);
+              priv->scroll_step = scroll_fast
+                                    ? MENU_SCROLL_STEP2
+                                    : MENU_SCROLL_STEP1;
+
+              priv->scroll_timeout =
+                gdk_threads_add_timeout (scroll_fast
+                                           ? MENU_SCROLL_TIMEOUT2
+                                           : MENU_SCROLL_TIMEOUT1,
+                                         gtk_menu_scroll_timeout, menu);
             }
-          else /* !touchscreen_mode */
+          else if (!enter && !in_arrow && priv->lower_arrow_prelight)
             {
-              scroll_fast = (y > rect.y + rect.height - MENU_SCROLL_FAST_ZONE);
-
-              if (enter && in_arrow &&
-                  (!priv->lower_arrow_prelight ||
-                   priv->scroll_fast != scroll_fast))
-                {
-                  priv->lower_arrow_prelight = TRUE;
-                  priv->scroll_fast = scroll_fast;
-
-                  /* Deselect the active item so that
-                   * any submenus are popped down
-                   */
-                  gtk_menu_shell_deselect (menu_shell);
-
-                  gtk_menu_remove_scroll_timeout (menu);
-                  priv->scroll_step = scroll_fast
-                                        ? MENU_SCROLL_STEP2
-                                        : MENU_SCROLL_STEP1;
-
-                  priv->scroll_timeout =
-                    gdk_threads_add_timeout (scroll_fast
-                                               ? MENU_SCROLL_TIMEOUT2
-                                               : MENU_SCROLL_TIMEOUT1,
-                                             gtk_menu_scroll_timeout, menu);
-                }
-              else if (!enter && !in_arrow && priv->lower_arrow_prelight)
-                {
-                  gtk_menu_stop_scrolling (menu);
-                }
+              gtk_menu_stop_scrolling (menu);
             }
         }
 
-      /*  gtk_menu_start_scrolling() might have hit the bottom of the
-       *  menu, so check if the button isn't insensitive before
+      /*  check if the button isn't insensitive before
        *  changing it to something else.
        */
       if ((priv->lower_arrow_state & GTK_STATE_FLAG_INSENSITIVE) == 0)
@@ -4946,19 +4790,10 @@ static void
 gtk_menu_stop_scrolling (GtkMenu *menu)
 {
   GtkMenuPrivate *priv = menu->priv;
-  gboolean touchscreen_mode;
 
   gtk_menu_remove_scroll_timeout (menu);
-
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu)),
-                "gtk-touchscreen-mode", &touchscreen_mode,
-                NULL);
-
-  if (!touchscreen_mode)
-    {
-      priv->upper_arrow_prelight = FALSE;
-      priv->lower_arrow_prelight = FALSE;
-    }
+  priv->upper_arrow_prelight = FALSE;
+  priv->lower_arrow_prelight = FALSE;
 }
 
 static void
