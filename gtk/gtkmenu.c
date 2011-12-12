@@ -1471,7 +1471,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
   GtkMenuShell *menu_shell;
   gboolean grab_keyboard;
   GtkWidget *parent_toplevel;
-  GdkDevice *keyboard, *pointer;
+  GdkDevice *keyboard, *pointer, *source_device = NULL;
 
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (device == NULL || GDK_IS_DEVICE (device));
@@ -1608,6 +1608,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
           (current_event->type != GDK_ENTER_NOTIFY))
         menu_shell->priv->ignore_enter = TRUE;
 
+      source_device = gdk_event_get_source_device (current_event);
       gdk_event_free (current_event);
     }
   else
@@ -1677,17 +1678,9 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
   gtk_menu_scroll_to (menu, priv->scroll_offset);
 
   /* if no item is selected, select the first one */
-  if (!menu_shell->priv->active_menu_item)
-    {
-      gboolean touchscreen_mode;
-
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu)),
-                    "gtk-touchscreen-mode", &touchscreen_mode,
-                    NULL);
-
-      if (touchscreen_mode)
-        gtk_menu_shell_select_first (menu_shell, TRUE);
-    }
+  if (!menu_shell->priv->active_menu_item &&
+      source_device && gdk_device_get_source (source_device) == GDK_SOURCE_TOUCH)
+    gtk_menu_shell_select_first (menu_shell, TRUE);
 
   /* Once everything is set up correctly, map the toplevel */
   gtk_widget_show (priv->toplevel);
