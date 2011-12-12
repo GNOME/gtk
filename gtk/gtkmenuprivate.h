@@ -99,6 +99,8 @@ struct _GtkMenuPrivate
   guint seen_item_enter       : 1;
   guint ignore_button_release : 1;
   guint no_toggle_size        : 1;
+  guint drag_already_pressed  : 1;
+  guint drag_scroll_started   : 1;
 
   /* info used for the table */
   guint *heights;
@@ -125,6 +127,9 @@ struct _GtkMenuPrivate
   gint navigation_height;
 
   guint navigation_timeout;
+
+  gdouble drag_start_y;
+  gint initial_drag_offset;
 };
 
 G_END_DECLS
