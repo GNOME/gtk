@@ -39,7 +39,6 @@ struct _GtkCellAccessible
   AtkObject parent;
 
   GtkWidget    *widget;
-  GList       *action_list;
 };
 
 struct _GtkCellAccessibleClass
@@ -65,17 +64,6 @@ gboolean _gtk_cell_accessible_add_state     (GtkCellAccessible *cell,
 gboolean _gtk_cell_accessible_remove_state  (GtkCellAccessible *cell,
                                              AtkStateType       state_type,
                                              gboolean           emit_signal);
-gboolean _gtk_cell_accessible_add_action    (GtkCellAccessible *cell,
-                                             const gchar       *name,
-                                             const gchar       *description,
-                                             const gchar       *keybinding,
-                                             void (*func) (GtkCellAccessible *));
-
-gboolean _gtk_cell_accessible_remove_action (GtkCellAccessible *cell,
-                                             gint               index);
-gboolean _gtk_cell_accessible_remove_action_by_name
-                                            (GtkCellAccessible *cell,
-                                             const gchar       *name);
 
 G_END_DECLS
 

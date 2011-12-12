@@ -65,7 +65,13 @@ struct _GtkCellAccessibleParentIface
                                  GtkCellAccessible       *cell);
   void     ( *set_cell_data)    (GtkCellAccessibleParent *parent,
                                  GtkCellAccessible       *cell);
-
+  /* actions */
+  void     ( *expand_collapse)  (GtkCellAccessibleParent *parent,
+                                 GtkCellAccessible       *cell);
+  void     ( *activate)         (GtkCellAccessibleParent *parent,
+                                 GtkCellAccessible       *cell);
+  void     ( *edit)             (GtkCellAccessibleParent *parent,
+                                 GtkCellAccessible       *cell);
 };
 
 GType    _gtk_cell_accessible_parent_get_type         (void);
@@ -88,6 +94,12 @@ GtkCellRendererState
          _gtk_cell_accessible_parent_get_renderer_state(GtkCellAccessibleParent *parent,
                                                        GtkCellAccessible       *cell);
 void     _gtk_cell_accessible_parent_set_cell_data    (GtkCellAccessibleParent *parent,
+                                                       GtkCellAccessible       *cell);
+void     _gtk_cell_accessible_parent_expand_collapse  (GtkCellAccessibleParent *parent,
+                                                       GtkCellAccessible       *cell);
+void     _gtk_cell_accessible_parent_activate         (GtkCellAccessibleParent *parent,
+                                                       GtkCellAccessible       *cell);
+void     _gtk_cell_accessible_parent_edit             (GtkCellAccessibleParent *parent,
                                                        GtkCellAccessible       *cell);
 
 G_END_DECLS

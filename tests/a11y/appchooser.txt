@@ -132,6 +132,12 @@ window1
                 layer: widget
                 alpha: 1
                 <AtkAction>
+                action 0 name: expand or contract
+                action 0 description: expands or contracts the row in the tree view containing this cell
+                action 1 name: edit
+                action 1 description: creates a widget in which the contents of the cell can be edited
+                action 2 name: activate
+                action 2 description: activate the cell
                 
                   "table cell"
                   index: 0
@@ -169,8 +175,12 @@ window1
                                       weight: <omitted>
                                       wrap-mode: word
                   <AtkAction>
-                  action 0 name: activate
-                  action 0 description: activate the cell
+                  action 0 name: expand or contract
+                  action 0 description: expands or contracts the row in the tree view containing this cell
+                  action 1 name: edit
+                  action 1 description: creates a widget in which the contents of the cell can be edited
+                  action 2 name: activate
+                  action 2 description: activate the cell
                 No applications available to open "(null)" files
 Click "Show other applications", for more options, or "Find applications online" to install a new application
                   "table cell"
@@ -211,8 +221,12 @@ Click "Show other applications", for more options, or "Find applications online"
                                       weight: <omitted>
                                       wrap-mode: word
                   <AtkAction>
-                  action 0 name: activate
-                  action 0 description: activate the cell
+                  action 0 name: expand or contract
+                  action 0 description: expands or contracts the row in the tree view containing this cell
+                  action 1 name: edit
+                  action 1 description: creates a widget in which the contents of the cell can be edited
+                  action 2 name: activate
+                  action 2 description: activate the cell
                 
                   "table cell"
                   index: 2
@@ -250,8 +264,12 @@ Click "Show other applications", for more options, or "Find applications online"
                                       weight: <omitted>
                                       wrap-mode: word
                   <AtkAction>
-                  action 0 name: activate
-                  action 0 description: activate the cell
+                  action 0 name: expand or contract
+                  action 0 description: expands or contracts the row in the tree view containing this cell
+                  action 1 name: edit
+                  action 1 description: creates a widget in which the contents of the cell can be edited
+                  action 2 name: activate
+                  action 2 description: activate the cell
                 unnamed-GtkImageCellAccessible-8
                   "table cell"
                   index: 3
@@ -263,8 +281,12 @@ Click "Show other applications", for more options, or "Find applications online"
                   image size: 0 x 0
                   image description: (null)
                   <AtkAction>
-                  action 0 name: activate
-                  action 0 description: activate the cell
+                  action 0 name: expand or contract
+                  action 0 description: expands or contracts the row in the tree view containing this cell
+                  action 1 name: edit
+                  action 1 description: creates a widget in which the contents of the cell can be edited
+                  action 2 name: activate
+                  action 2 description: activate the cell
                 
                   "table cell"
                   index: 4
@@ -302,8 +324,12 @@ Click "Show other applications", for more options, or "Find applications online"
                                       weight: <omitted>
                                       wrap-mode: word
                   <AtkAction>
-                  action 0 name: activate
-                  action 0 description: activate the cell
+                  action 0 name: expand or contract
+                  action 0 description: expands or contracts the row in the tree view containing this cell
+                  action 1 name: edit
+                  action 1 description: creates a widget in which the contents of the cell can be edited
+                  action 2 name: activate
+                  action 2 description: activate the cell
             unnamed-GtkScrollbarAccessible-9
               "scroll bar"
               parent: unnamed-GtkScrolledWindowAccessible-4

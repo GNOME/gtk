@@ -24,14 +24,6 @@
 #include "gtkcellaccessible.h"
 #include "gtkcellaccessibleparent.h"
 
-typedef struct _ActionInfo ActionInfo;
-struct _ActionInfo {
-  gchar *name;
-  gchar *description;
-  gchar *keybinding;
-  void (*do_action_func) (GtkCellAccessible *cell);
-};
-
 static const struct {
   AtkState atk_state;
   GtkCellRendererState renderer_state;
@@ -55,28 +47,13 @@ G_DEFINE_TYPE_WITH_CODE (GtkCellAccessible, _gtk_cell_accessible, ATK_TYPE_OBJEC
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
 static void
-destroy_action_info (gpointer action_info)
-{
-  ActionInfo *info = (ActionInfo *)action_info;
-
-  g_free (info->name);
-  g_free (info->description);
-  g_free (info->keybinding);
-  g_free (info);
-}
-
-static void
 gtk_cell_accessible_object_finalize (GObject *obj)
 {
-  GtkCellAccessible *cell = GTK_CELL_ACCESSIBLE (obj);
   AtkRelationSet *relation_set;
   AtkRelation *relation;
   GPtrArray *target;
   gpointer target_object;
   gint i;
-
-  if (cell->action_list)
-    g_list_free_full (cell->action_list, destroy_action_info);
 
   relation_set = atk_object_ref_relation_set (ATK_OBJECT (obj));
   if (ATK_IS_RELATION_SET (relation_set))
@@ -179,7 +156,6 @@ static void
 _gtk_cell_accessible_init (GtkCellAccessible *cell)
 {
   cell->widget = NULL;
-  cell->action_list = NULL;
 }
 
 static void
@@ -260,129 +236,51 @@ _gtk_cell_accessible_remove_state (GtkCellAccessible *cell,
   return TRUE;
 }
 
-gboolean
-_gtk_cell_accessible_add_action (GtkCellAccessible *cell,
-                                 const gchar       *name,
-                                 const gchar       *description,
-                                 const gchar       *keybinding,
-                                 void (*func) (GtkCellAccessible *))
-{
-  ActionInfo *info;
-
-  info = g_new (ActionInfo, 1);
-  info->name = g_strdup (name);
-  info->description = g_strdup (description);
-  info->keybinding = g_strdup (keybinding);
-  info->do_action_func = func;
-
-  cell->action_list = g_list_append (cell->action_list, info);
-
-  return TRUE;
-}
-
-gboolean
-_gtk_cell_accessible_remove_action (GtkCellAccessible *cell,
-                                    gint               index)
-{
-  GList *l;
-
-  l = g_list_nth (cell->action_list, index);
-  if (l == NULL)
-    return FALSE;
-
-  destroy_action_info (l->data);
-  cell->action_list = g_list_remove_link (cell->action_list, l);
-
-  return TRUE;
-}
-
-
-gboolean
-_gtk_cell_accessible_remove_action_by_name (GtkCellAccessible *cell,
-                                            const gchar       *name)
-{
-  GList *l;
-
-  for (l = cell->action_list; l; l = l->next)
-    {
-      ActionInfo *info = l->data;
-
-      if (g_strcmp0 (info->name, name) == 0)
-        break;
-    }
-
-  if (l == NULL)
-    return FALSE;
-
-  destroy_action_info (l->data);
-  cell->action_list = g_list_remove_link (cell->action_list, l);
-
-  return TRUE;
-}
-
-static ActionInfo *
-get_action_info (GtkCellAccessible *cell,
-                 gint               index)
-{
-  GList *l;
-
-  l = g_list_nth (cell->action_list, index);
-  if (l == NULL)
-    return NULL;
-
-  return (ActionInfo *) (l->data);
-}
-
 static gint
 gtk_cell_accessible_action_get_n_actions (AtkAction *action)
 {
-  GtkCellAccessible *cell = GTK_CELL_ACCESSIBLE(action);
-  if (cell->action_list != NULL)
-    return g_list_length (cell->action_list);
-  else
-    return 0;
+  return 3;
 }
 
 static const gchar *
 gtk_cell_accessible_action_get_name (AtkAction *action,
                                      gint       index)
 {
-  GtkCellAccessible *cell = GTK_CELL_ACCESSIBLE (action);
-  ActionInfo *info;
-
-  info = get_action_info (cell, index);
-  if (info == NULL)
-    return NULL;
-
-  return info->name;
+  switch (index)
+    {
+    case 0:
+      return "expand or contract";
+    case 1:
+      return "edit";
+    case 2:
+      return "activate";
+    default:
+      return NULL;
+    }
 }
 
 static const gchar *
 gtk_cell_accessible_action_get_description (AtkAction *action,
                                             gint       index)
 {
-  GtkCellAccessible *cell = GTK_CELL_ACCESSIBLE (action);
-  ActionInfo *info;
-
-  info = get_action_info (cell, index);
-  if (info == NULL)
-    return NULL;
-
-  return info->description;
+  switch (index)
+    {
+    case 0:
+      return "expands or contracts the row in the tree view containing this cell";
+    case 1:
+      return "creates a widget in which the contents of the cell can be edited";
+    case 2:
+      return "activate the cell";
+    default:
+      return NULL;
+    }
 }
 
 static const gchar *
 gtk_cell_accessible_action_get_keybinding (AtkAction *action,
                                            gint       index)
 {
-  GtkCellAccessible *cell = GTK_CELL_ACCESSIBLE (action);
-  ActionInfo *info;
-
-  info = get_action_info (cell, index);
-  if (info == NULL)
-    return NULL;
-
-  return info->keybinding;
+  return NULL;
 }
 
 static gboolean
@@ -390,16 +288,25 @@ gtk_cell_accessible_action_do_action (AtkAction *action,
                                       gint       index)
 {
   GtkCellAccessible *cell = GTK_CELL_ACCESSIBLE (action);
-  ActionInfo *info;
+  GtkCellAccessibleParent *parent;
 
-  info = get_action_info (cell, index);
-  if (info == NULL)
+  cell = GTK_CELL_ACCESSIBLE (action);
+  if (cell->widget == NULL)
     return FALSE;
 
-  if (info->do_action_func == NULL)
-    return FALSE;
+  parent = GTK_CELL_ACCESSIBLE_PARENT (gtk_widget_get_accessible (cell->widget));
 
-  info->do_action_func (cell);
+  switch (index)
+    {
+    case 0:
+      _gtk_cell_accessible_parent_expand_collapse (parent, cell);
+    case 1:
+      _gtk_cell_accessible_parent_edit (parent, cell);
+    case 2:
+      _gtk_cell_accessible_parent_activate (parent, cell);
+    default:
+      return FALSE;
+    }
 
   return TRUE;
 }
