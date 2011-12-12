@@ -1699,70 +1699,6 @@ model_row_changed (GtkTreeModel *tree_model,
   g_signal_emit_by_name (accessible, "visible-data-changed");
 }
 
-static void
-model_row_inserted (GtkTreeModel *tree_model,
-                    GtkTreePath  *path,
-                    GtkTreeIter  *iter,
-                    gpointer      user_data)
-{
-  GtkTreeView *tree_view = (GtkTreeView *)user_data;
-  AtkObject *atk_obj;
-  gint row, n_inserted, child_row;
-
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
-
-  /* Check to see if row is visible */
-  row = get_row_from_tree_path (tree_view, path);
-
- /* A row insert is not necessarily visible.  For example,
-  * a row can be draged & dropped into another row, which
-  * causes an insert on the model that isn't visible in the
-  * view.  Only generate a signal if the inserted row is
-  * visible.
-  */
-  if (row != -1)
-    {
-      GtkTreeIter tmp_iter;
-      gint n_cols, col;
-
-      gtk_tree_model_get_iter (tree_model, &tmp_iter, path);
-
-      /* Figure out number of visible children. */
-      if (gtk_tree_model_iter_has_child (tree_model, &tmp_iter))
-        {
-          GtkTreePath *path2;
-         /*
-          * By passing path into this function, we find the number of
-          * visible children of path.
-          */
-          n_inserted = 0;
-          /* iterate_thru_children modifies path, we don't want that, so give
-           * it a copy */
-          path2 = gtk_tree_path_copy (path);
-          iterate_thru_children (tree_view, tree_model,
-                                 path2, NULL, &n_inserted, 0);
-          gtk_tree_path_free (path2);
-
-          /* Must add one to include the row that is being added */
-          n_inserted++;
-        }
-      else
-        n_inserted = 1;
-
-      /* Generate children-changed signals */
-      n_cols = get_n_columns (tree_view);
-      for (child_row = row; child_row < (row + n_inserted); child_row++)
-        {
-          for (col = 0; col < n_cols; col++)
-            {
-             /* Pass NULL as the child object, i.e. 4th argument */
-              g_signal_emit_by_name (atk_obj, "children-changed::add",
-                                    ((row * n_cols) + col), NULL, NULL);
-            }
-        }
-    }
-}
-
 void
 _gtk_tree_view_accessible_reorder (GtkTreeView *treeview)
 {
@@ -2221,9 +2157,6 @@ connect_model_signals (GtkTreeView           *view,
   obj = G_OBJECT (accessible->tree_model);
   g_signal_connect_data (obj, "row-changed",
                          G_CALLBACK (model_row_changed), view, NULL, 0);
-  g_signal_connect_data (obj, "row-inserted",
-                         G_CALLBACK (model_row_inserted), view, NULL,
-                         G_CONNECT_AFTER);
 }
 
 static void
@@ -2235,7 +2168,6 @@ disconnect_model_signals (GtkTreeViewAccessible *accessible)
   obj = G_OBJECT (accessible->tree_model);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   g_signal_handlers_disconnect_by_func (obj, model_row_changed, widget);
-  g_signal_handlers_disconnect_by_func (obj, model_row_inserted, widget);
 }
 
 /* Returns the column number of the specified GtkTreeViewColumn
@@ -2433,7 +2365,7 @@ _gtk_tree_view_accessible_add (GtkTreeView *treeview,
                                GtkRBNode   *node)
 {
   GtkTreeViewAccessible *accessible;
-  guint row, n_rows;
+  guint row, n_rows, n_cols, i;
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (treeview)));
   if (accessible == NULL)
@@ -2451,6 +2383,13 @@ _gtk_tree_view_accessible_add (GtkTreeView *treeview,
     }
 
   g_signal_emit_by_name (accessible, "row-inserted", row, n_rows);
+
+  n_cols = get_n_columns (treeview);
+  for (i = (row + 1) * n_cols; i < (row + n_rows + 1) * n_cols; i++)
+    {
+     /* Pass NULL as the child object, i.e. 4th argument */
+      g_signal_emit_by_name (accessible, "children-changed::add", i, NULL, NULL);
+    }
 }
 
 void
@@ -2461,7 +2400,7 @@ _gtk_tree_view_accessible_remove (GtkTreeView *treeview,
   GtkTreeViewAccessibleCellInfo *cell_info;
   GHashTableIter iter;
   GtkTreeViewAccessible *accessible;
-  guint row, n_rows;
+  guint row, n_rows, n_cols, i;
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (treeview)));
   if (accessible == NULL)
@@ -2483,6 +2422,13 @@ _gtk_tree_view_accessible_remove (GtkTreeView *treeview,
     }
 
   g_signal_emit_by_name (accessible, "row-deleted", row, n_rows);
+
+  n_cols = get_n_columns (treeview);
+  for (i = (n_rows + row + 1) * n_cols - 1; i >= (row + 1) * n_cols; i--)
+    {
+     /* Pass NULL as the child object, i.e. 4th argument */
+      g_signal_emit_by_name (accessible, "children-changed::remove", i, NULL, NULL);
+    }
 
   g_hash_table_iter_init (&iter, accessible->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
