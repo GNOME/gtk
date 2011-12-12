@@ -1,5 +1,5 @@
 /*
- * Copyright © 2011 William Hua
+ * Copyright © 2011 William Hua, Ryan Lortie
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,6 +17,7 @@
  * Boston, MA 02111-1307, USA.
  *
  * Author: William Hua <william@attente.ca>
+ *         Ryan Lortie <desrt@desrt.ca>
  */
 
 #include "gtkquartz-menu.h"
@@ -177,6 +178,25 @@ gtk_quartz_menu_get_unichar (gint key)
 
 typedef struct _GtkQuartzActionObserver GtkQuartzActionObserver;
 
+
+
+@interface GNSMenu : NSMenu
+{
+  GActionObservable *actions;
+  GMenuModel        *model;
+  guint              update_idle;
+  GSList            *connected;
+  gboolean           with_separators;
+}
+
+- (id)initWithTitle:(NSString *)title model:(GMenuModel *)aModel actions:(GActionObservable *)someActions hasSeparators:(BOOL)hasSeparators;
+
+- (void)model:(GMenuModel *)model didChangeAtPosition:(NSInteger)position removed:(NSInteger)removed added:(NSInteger)added;
+
+@end
+
+
+
 @interface GNSMenuItem : NSMenuItem
 {
   gchar                   *action;
@@ -205,6 +225,7 @@ struct _GtkQuartzActionObserver
 
   GNSMenuItem *item;
 };
+
 
 
 typedef GObjectClass GtkQuartzActionObserverClass;
@@ -288,99 +309,130 @@ gtk_quartz_action_observer_new (GNSMenuItem *item)
   return observer;
 }
 
-static NSMenu *
-gtk_quartz_menu_create_menu (const gchar       *title,
-                             GMenuModel        *model,
-                             GActionObservable *observable)
+static void
+gtk_quartz_menu_items_changed (GMenuModel *model,
+                               gint        position,
+                               gint        removed,
+                               gint        added,
+                               gpointer    user_data)
 {
-  if (model == NULL)
-    return nil;
+  GNSMenu *menu = user_data;
 
-  NSMenu *menu = [[[NSMenu alloc] initWithTitle:[NSString stringWithUTF8String:title ? : ""]] autorelease];
-
-  [menu setAutoenablesItems:NO];
-
-  gint n = g_menu_model_get_n_items (model);
-  gint i;
-
-  for (i = 0; i < n; i++)
-    {
-      gchar *label = NULL;
-
-      if (g_menu_model_get_item_attribute (model, i, G_MENU_ATTRIBUTE_LABEL, "s", &label))
-        {
-          gchar *from, *to;
-
-          to = from = label;
-
-          while (*from)
-            {
-              if (*from == '_' && from[1])
-                from++;
-
-              *to++ = *from++;
-            }
-
-          *to = '\0';
-        }
-
-      NSString *text = [NSString stringWithUTF8String:label ? : ""];
-
-      GMenuModel *section_model = g_menu_model_get_item_link (model, i, G_MENU_LINK_SECTION);
-      GMenuModel *submenu_model = g_menu_model_get_item_link (model, i, G_MENU_LINK_SUBMENU);
-
-      NSMenu *section = gtk_quartz_menu_create_menu (label, section_model, observable);
-      NSMenu *submenu = gtk_quartz_menu_create_menu (label, submenu_model, observable);
-
-      if (section_model != NULL)
-        g_object_unref (section_model);
-
-      if (submenu_model != NULL)
-        g_object_unref (submenu_model);
-
-      if (section != nil)
-        {
-          if ([menu numberOfItems] > 0)
-            [menu addItem:[NSMenuItem separatorItem]];
-
-          if ([text length] > 0)
-          {
-            NSMenuItem *header = [[[NSMenuItem alloc] initWithTitle:text action:NULL keyEquivalent:@""] autorelease];
-
-            [header setEnabled:NO];
-
-            [menu addItem:header];
-          }
-
-          for (NSMenuItem *item in [section itemArray])
-            {
-              [item retain];
-              [[item menu] removeItem:item];
-              [menu addItem:item];
-              [item release];
-            }
-        }
-      else if (submenu != nil)
-        {
-          NSMenuItem *item = [[[NSMenuItem alloc] initWithTitle:text action:NULL keyEquivalent:@""] autorelease];
-
-          [item setSubmenu:submenu];
-
-          [menu addItem:item];
-        }
-      else
-        [menu addItem:[[[GNSMenuItem alloc] initWithModel:model index:i observable:observable] autorelease]];
-    }
-
-  return menu;
+  [menu model:model didChangeAtPosition:position removed:removed added:added];
 }
 
 void
 gtk_quartz_set_main_menu (GMenuModel        *model,
                           GActionObservable *observable)
 {
-  [NSApp setMainMenu:gtk_quartz_menu_create_menu ("Main Menu", model, observable)];
+  [NSApp setMainMenu:[[[GNSMenu alloc] initWithTitle:@"Main Menu" model:model actions:observable hasSeparators:NO] autorelease]];
 }
+
+@interface GNSMenu ()
+
+- (void)appendFromModel:(GMenuModel *)aModel withSeparators:(BOOL)withSeparators;
+
+@end
+
+
+
+@implementation GNSMenu
+
+- (void)model:(GMenuModel *)model didChangeAtPosition:(NSInteger)position removed:(NSInteger)removed added:(NSInteger)added
+{
+}
+
+- (void)appendItemFromModel:(GMenuModel *)aModel atIndex:(gint)index withHeading:(gchar **)heading
+{
+  GMenuModel *section;
+
+  if ((section = g_menu_model_get_item_link (aModel, index, G_MENU_LINK_SECTION)))
+    {
+      g_menu_model_get_item_attribute (aModel, index, G_MENU_ATTRIBUTE_LABEL, "s", heading);
+      [self appendFromModel:section withSeparators:NO];
+      g_object_unref (section);
+    }
+  else
+    [self addItem:[[[GNSMenuItem alloc] initWithModel:aModel index:index observable:actions] autorelease]];
+}
+
+- (void)appendFromModel:(GMenuModel *)aModel withSeparators:(BOOL)withSeparators
+{
+  gint n, i;
+
+  g_signal_connect (aModel, "items-changed", G_CALLBACK (gtk_quartz_menu_items_changed), self);
+  connected = g_slist_prepend (connected, g_object_ref (aModel));
+
+  n = g_menu_model_get_n_items (aModel);
+
+  for (i = 0; i < n; i++)
+    {
+      NSInteger ourPosition = [self numberOfItems];
+      gchar *heading = NULL;
+
+      [self appendItemFromModel:aModel atIndex:i withHeading:&heading];
+
+      if (withSeparators && ourPosition < [self numberOfItems])
+        {
+          NSMenuItem *separator = nil;
+
+          if (heading)
+            {
+              separator = [[[NSMenuItem alloc] initWithTitle:[NSString stringWithUTF8String:heading] action:NULL keyEquivalent:@""] autorelease];
+
+              [separator setEnabled:NO];
+            }
+          else if (ourPosition > 0)
+            separator = [NSMenuItem separatorItem];
+
+          if (separator != nil)
+            [self insertItem:separator atIndex:ourPosition];
+        }
+
+      g_free (heading);
+    }
+}
+
+- (void)populate
+{
+  [self removeAllItems];
+
+  [self appendFromModel:model withSeparators:with_separators];
+}
+
+- (id)initWithTitle:(NSString *)title model:(GMenuModel *)aModel actions:(GActionObservable *)someActions hasSeparators:(BOOL)hasSeparators
+{
+  if((self = [super initWithTitle:title]) != nil)
+    {
+      [self setAutoenablesItems:NO];
+
+      model = g_object_ref (aModel);
+      actions = g_object_ref (someActions);
+      with_separators = hasSeparators;
+
+      [self populate];
+    }
+
+  return self;
+}
+
+- (void)dealloc
+{
+  while (connected)
+    {
+      g_signal_handlers_disconnect_by_func (connected->data, gtk_quartz_menu_items_changed, self);
+      g_object_unref (connected->data);
+
+      connected = g_slist_delete_link (connected, connected);
+    }
+
+  g_object_unref (actions);
+  g_object_unref (model);
+
+  [super dealloc];
+}
+
+@end
 
 
 
@@ -409,13 +461,20 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
 
   if ((self = [super initWithTitle:[NSString stringWithUTF8String:title ? : ""] action:@selector(didSelectItem:) keyEquivalent:@""]) != nil)
     {
+      GMenuModel *submenu;
 
       g_menu_model_get_item_attribute (model, index, G_MENU_ATTRIBUTE_ACTION, "s", &action);
       target = g_menu_model_get_item_attribute_value (model, index, G_MENU_ATTRIBUTE_TARGET, NULL);
       actions = g_object_ref (observable);
       observer = gtk_quartz_action_observer_new (self);
 
-      if (action != NULL)
+      if ((submenu = g_menu_model_get_item_link (model, index, G_MENU_LINK_SUBMENU)))
+        {
+          [self setSubmenu:[[[GNSMenu alloc] initWithTitle:[NSString stringWithUTF8String:title] model:submenu actions:observable hasSeparators:YES] autorelease]];
+          g_object_unref (submenu);
+        }
+
+      else if (action != NULL)
         {
           GtkAccelKey key;
           gchar *path;
@@ -456,7 +515,7 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
           const GVariantType *parameterType;
           GVariant           *state;
 
-          if (g_action_group_query_action (G_ACTION_GROUP (actions), action, &enabled, &parameterType, NULL, NULL, &state))
+          if (g_action_group_query_action (actions, action, &enabled, &parameterType, NULL, NULL, &state))
             [self observableActionAddedWithParameterType:parameterType enabled:enabled state:state];
           else
             [self setEnabled:NO];
