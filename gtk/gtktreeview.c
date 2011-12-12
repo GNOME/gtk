@@ -12749,6 +12749,8 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 			    gtk_tree_path_get_depth (path) + 1,
 			    open_all);
 
+  _gtk_tree_view_accessible_expanded (tree_view, tree, node);
+
   if (animate)
     {
       GtkStyleContext *context;

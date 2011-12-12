@@ -47,9 +47,6 @@ struct _GtkTreeViewAccessibleCellInfo
 
 /* signal handling */
 
-static gboolean row_expanded_cb      (GtkTreeView      *tree_view,
-                                      GtkTreeIter      *iter,
-                                      GtkTreePath      *path);
 static gboolean row_collapsed_cb     (GtkTreeView      *tree_view,
                                       GtkTreeIter      *iter,
                                       GtkTreePath      *path);
@@ -212,8 +209,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
   accessible->focus_cell = NULL;
-  accessible->idle_expand_id = 0;
-  accessible->idle_expand_path = NULL;
   accessible->n_children_deleted = 0;
 
   accessible->cell_infos = g_hash_table_new_full (cell_info_hash,
@@ -226,8 +221,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
 
   g_signal_connect_after (widget, "row-collapsed",
                           G_CALLBACK (row_collapsed_cb), NULL);
-  g_signal_connect (widget, "row-expanded",
-                    G_CALLBACK (row_expanded_cb), NULL);
   g_signal_connect (selection, "changed",
                     G_CALLBACK (selection_changed_cb), obj);
 
@@ -259,10 +252,6 @@ static void
 gtk_tree_view_accessible_finalize (GObject *object)
 {
   GtkTreeViewAccessible *accessible = GTK_TREE_VIEW_ACCESSIBLE (object);
-
-  /* remove any idle handlers still pending */
-  if (accessible->idle_expand_id)
-    g_source_remove (accessible->idle_expand_id);
 
   if (accessible->tree_model)
     disconnect_model_signals (accessible);
@@ -340,11 +329,6 @@ gtk_tree_view_accessible_destroyed (GtkWidget     *widget,
     {
       g_object_unref (accessible->focus_cell);
       accessible->focus_cell = NULL;
-    }
-  if (accessible->idle_expand_id)
-    {
-      g_source_remove (accessible->idle_expand_id);
-      accessible->idle_expand_id = 0;
     }
 }
 
@@ -1537,97 +1521,6 @@ gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface)
 /* signal handling */
 
 static gboolean
-idle_expand_row (gpointer data)
-{
-  GtkTreeViewAccessible *accessible = data;
-  GtkTreePath *path;
-  GtkTreeView *tree_view;
-  GtkTreeIter iter;
-  GtkTreeModel *tree_model;
-  gint n_inserted, row;
-
-  accessible->idle_expand_id = 0;
-
-  path = accessible->idle_expand_path;
-  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible)));
-
-  tree_model = gtk_tree_view_get_model (tree_view);
-  if (!tree_model)
-    return FALSE;
-
-  if (!path || !gtk_tree_model_get_iter (tree_model, &iter, path))
-    return FALSE;
-
-  /* Figure out number of visible children, the following test
-   * should not fail
-   */
-  if (gtk_tree_model_iter_has_child (tree_model, &iter))
-    {
-      GtkTreePath *path_copy;
-
-      /* By passing path into this function, we find the number of
-       * visible children of path.
-       */
-      path_copy = gtk_tree_path_copy (path);
-      gtk_tree_path_append_index (path_copy, 0);
-
-      n_inserted = 0;
-      iterate_thru_children (tree_view, tree_model,
-                             path_copy, NULL, &n_inserted, 0);
-      gtk_tree_path_free (path_copy);
-    }
-  else
-    {
-      /* We can get here if the row expanded callback deleted the row */
-      return FALSE;
-    }
-
-  /* Set expand state */
-  set_expand_state (tree_view, tree_model, accessible, path, TRUE);
-
-  row = get_row_from_tree_path (tree_view, path);
-
-  /* shouldn't ever happen */
-  if (row == -1)
-    g_assert_not_reached ();
-
-  /* Must add 1 because the "added rows" are below the row being expanded */
-  row += 1;
-
-  g_signal_emit_by_name (accessible, "row-inserted", row, n_inserted);
-
-  accessible->idle_expand_path = NULL;
-
-  gtk_tree_path_free (path);
-
-  return FALSE;
-}
-
-static gboolean
-row_expanded_cb (GtkTreeView *tree_view,
-                 GtkTreeIter *iter,
-                 GtkTreePath *path)
-{
-  AtkObject *atk_obj;
-  GtkTreeViewAccessible *accessible;
-
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
-
-  /*
-   * The visible rectangle has not been updated when this signal is emitted
-   * so we process the signal when the GTK processing is completed
-   */
-  /* this seems wrong since it overwrites any other pending expand handlers... */
-  accessible->idle_expand_path = gtk_tree_path_copy (path);
-  if (accessible->idle_expand_id)
-    g_source_remove (accessible->idle_expand_id);
-  accessible->idle_expand_id = gdk_threads_add_idle (idle_expand_row, accessible);
-
-  return FALSE;
-}
-
-static gboolean
 row_collapsed_cb (GtkTreeView *tree_view,
                   GtkTreeIter *iter,
                   GtkTreePath *path)
@@ -1820,20 +1713,6 @@ model_row_inserted (GtkTreeModel *tree_model,
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
   accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
 
-  if (accessible->idle_expand_id)
-    {
-      g_source_remove (accessible->idle_expand_id);
-      accessible->idle_expand_id = 0;
-
-      /* don't do this if the insertion precedes the idle path,
-       * since it will now be invalid
-       */
-      if (path && accessible->idle_expand_path &&
-          (gtk_tree_path_compare (path, accessible->idle_expand_path) > 0))
-          set_expand_state (tree_view, tree_model, accessible, accessible->idle_expand_path, FALSE);
-      if (accessible->idle_expand_path)
-          gtk_tree_path_free (accessible->idle_expand_path);
-    }
   /* Check to see if row is visible */
   row = get_row_from_tree_path (tree_view, path);
 
@@ -1914,13 +1793,6 @@ model_row_deleted (GtkTreeModel *tree_model,
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
   accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
 
-  if (accessible->idle_expand_id)
-    {
-      g_source_remove (accessible->idle_expand_id);
-      gtk_tree_path_free (accessible->idle_expand_path);
-      accessible->idle_expand_id = 0;
-    }
-
   /* If deleting a row with a depth > 1, then this may affect the
    * expansion/contraction of its parent(s). Make sure this is
    * handled.
@@ -1986,13 +1858,6 @@ _gtk_tree_view_accessible_reorder (GtkTreeView *treeview)
   accessible = GTK_TREE_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (treeview)));
   if (accessible == NULL)
     return;
-
-  if (accessible->idle_expand_id)
-    {
-      g_source_remove (accessible->idle_expand_id);
-      gtk_tree_path_free (accessible->idle_expand_path);
-      accessible->idle_expand_id = 0;
-    }
 
   g_signal_emit_by_name (accessible, "row-reordered");
 }
@@ -3142,3 +3007,25 @@ _gtk_tree_view_accessible_remove_state (GtkTreeView          *treeview,
       _gtk_cell_accessible_state_changed (cell, 0, state);
     }
 }
+
+void
+_gtk_tree_view_accessible_expanded (GtkTreeView *treeview, 
+                                    GtkRBTree   *tree,
+                                    GtkRBNode   *node)
+{
+  AtkObject *obj;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (treeview));
+  if (obj == NULL)
+    return;
+
+  _gtk_tree_view_accessible_add_state (treeview,
+                                       tree, node,
+                                       GTK_CELL_RENDERER_EXPANDED);
+
+  g_signal_emit_by_name (obj,
+                         "row-inserted",
+                         _gtk_rbtree_node_get_index (tree, node),
+                         node->children->root->total_count);
+}
+
