@@ -700,13 +700,16 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * functionality.
    *
    * Since: 2.10
+   *
+   * Deprecated: 3.4. Generally the behavior touchscreen input should be
+   *             performed dynamically based on gdk_event_get_source_device().
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-touchscreen-mode",
                                                                    P_("Enable Touchscreen Mode"),
                                                                    P_("When TRUE, there are no motion notify events delivered on this screen"),
                                                                    FALSE,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
 
   g_assert (result == PROP_TOUCHSCREEN_MODE);
