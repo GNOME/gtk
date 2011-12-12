@@ -2009,15 +2009,11 @@ gtk_range_draw (GtkWidget *widget,
   GtkStateFlags widget_state;
   gint focus_line_width = 0;
   gint focus_padding = 0;
-  gboolean touchscreen;
   gboolean draw_trough = TRUE;
   gboolean draw_slider = TRUE;
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (widget);
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-touchscreen-mode", &touchscreen,
-                NULL);
 
   if (GTK_IS_SCALE (widget) &&
       gtk_adjustment_get_upper (priv->adjustment) == gtk_adjustment_get_lower (priv->adjustment))
@@ -2279,7 +2275,7 @@ gtk_range_draw (GtkWidget *widget,
 
       state &= ~(GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE);
 
-      if (!touchscreen && priv->mouse_location == MOUSE_SLIDER && !(state & GTK_STATE_FLAG_INSENSITIVE))
+      if (priv->mouse_location == MOUSE_SLIDER && !(state & GTK_STATE_FLAG_INSENSITIVE))
         state |= GTK_STATE_FLAG_PRELIGHT;
 
       if (priv->grab_location == MOUSE_SLIDER)
@@ -2309,28 +2305,28 @@ gtk_range_draw (GtkWidget *widget,
     draw_stepper (range, STEPPER_A, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT,
                   priv->grab_location == MOUSE_STEPPER_A,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_A,
+                  priv->mouse_location == MOUSE_STEPPER_A,
                   widget_state);
 
   if (priv->has_stepper_b)
     draw_stepper (range, STEPPER_B, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   priv->grab_location == MOUSE_STEPPER_B,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_B,
+                  priv->mouse_location == MOUSE_STEPPER_B,
                   widget_state);
 
   if (priv->has_stepper_c)
     draw_stepper (range, STEPPER_C, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT,
                   priv->grab_location == MOUSE_STEPPER_C,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_C,
+                  priv->mouse_location == MOUSE_STEPPER_C,
                   widget_state);
 
   if (priv->has_stepper_d)
     draw_stepper (range, STEPPER_D, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   priv->grab_location == MOUSE_STEPPER_D,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_D,
+                  priv->mouse_location == MOUSE_STEPPER_D,
                   widget_state);
 
   return FALSE;
