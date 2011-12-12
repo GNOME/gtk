@@ -47,9 +47,6 @@ struct _GtkTreeViewAccessibleCellInfo
 
 /* signal handling */
 
-static void     selection_changed_cb (GtkTreeSelection *selection,
-                                      gpointer          data);
-
 static void     cursor_changed       (GtkTreeView      *tree_view,
                                       GtkTreeViewAccessible *accessible);
 static gboolean focus_in             (GtkWidget        *widget);
@@ -184,7 +181,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   GtkTreeView *tree_view;
   GtkTreeModel *tree_model;
   GtkWidget *widget;
-  GtkTreeSelection *selection;
 
   ATK_OBJECT_CLASS (_gtk_tree_view_accessible_parent_class)->initialize (obj, data);
 
@@ -197,10 +193,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   widget = GTK_WIDGET (data);
   tree_view = GTK_TREE_VIEW (widget);
   tree_model = gtk_tree_view_get_model (tree_view);
-  selection = gtk_tree_view_get_selection (tree_view);
-
-  g_signal_connect (selection, "changed",
-                    G_CALLBACK (selection_changed_cb), obj);
 
   g_signal_connect (tree_view, "cursor-changed",
                     G_CALLBACK (cursor_changed), accessible);
@@ -397,7 +389,6 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   GtkCellRenderer *renderer;
   GtkTreeIter iter;
   GtkTreeViewColumn *tv_col;
-  GtkTreeSelection *selection;
   GtkTreePath *path;
   GtkRBTree *tree;
   GtkRBNode *node;
@@ -522,12 +513,6 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
         _gtk_container_cell_accessible_add_child (container, cell);
 
       update_cell_value (renderer_cell, accessible, FALSE);
-
-      /* If the row is selected, all cells on the row are selected */
-      selection = gtk_tree_view_get_selection (tree_view);
-
-      if (gtk_tree_selection_path_is_selected (selection, path))
-        _gtk_cell_accessible_add_state (cell, ATK_STATE_SELECTED, FALSE);
 
       _gtk_cell_accessible_add_state (cell, ATK_STATE_FOCUSABLE, FALSE);
       if (focus_index == i)
@@ -1547,41 +1532,6 @@ gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface)
 }
 
 /* signal handling */
-
-static void
-selection_changed_cb (GtkTreeSelection *selection,
-                      gpointer          data)
-{
-  GtkTreeViewAccessible *accessible;
-  GtkTreeView *tree_view;
-  GtkWidget *widget;
-  GtkTreeViewAccessibleCellInfo *info;
-  GtkTreeSelection *tree_selection;
-  GtkTreePath *path;
-  GHashTableIter iter;
-
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (data);
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-  if (widget == NULL)
-    return;
-
-  tree_view = GTK_TREE_VIEW (widget);
-  tree_selection = gtk_tree_view_get_selection (tree_view);
-
-  /* FIXME: clean rows iterates through all cells too */
-  g_hash_table_iter_init (&iter, accessible->cell_infos);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&info))
-    {
-      _gtk_cell_accessible_remove_state (info->cell, ATK_STATE_SELECTED, TRUE);
-
-      path = cell_info_get_path (info);
-      if (path && gtk_tree_selection_path_is_selected (tree_selection, path))
-        _gtk_cell_accessible_add_state (info->cell, ATK_STATE_SELECTED, TRUE);
-      gtk_tree_path_free (path);
-    }
-  if (gtk_widget_get_realized (widget))
-    g_signal_emit_by_name (accessible, "selection-changed");
-}
 
 static void
 cursor_changed (GtkTreeView           *tree_view,
@@ -2625,6 +2575,9 @@ _gtk_tree_view_accessible_add_state (GtkTreeView          *treeview,
 
       _gtk_cell_accessible_state_changed (cell, state, 0);
     }
+
+  if (state == GTK_CELL_RENDERER_SELECTED)
+    g_signal_emit_by_name (accessible, "selection-changed");
 }
 
 void
@@ -2654,4 +2607,7 @@ _gtk_tree_view_accessible_remove_state (GtkTreeView          *treeview,
 
       _gtk_cell_accessible_state_changed (cell, 0, state);
     }
+
+  if (state == GTK_CELL_RENDERER_SELECTED)
+    g_signal_emit_by_name (accessible, "selection-changed");
 }

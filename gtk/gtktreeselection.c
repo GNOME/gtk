@@ -25,6 +25,7 @@
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtktreeviewaccessible.h"
 
 
 /**
@@ -1636,7 +1637,16 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
 
   if (toggle)
     {
-      node->flags ^= GTK_RBNODE_IS_SELECTED;
+      if (!GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+        {
+          GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SELECTED);
+          _gtk_tree_view_accessible_add_state (priv->tree_view, tree, node, GTK_CELL_RENDERER_SELECTED);
+        }
+      else
+        {
+          GTK_RBNODE_UNSET_FLAG (node, GTK_RBNODE_IS_SELECTED);
+          _gtk_tree_view_accessible_remove_state (priv->tree_view, tree, node, GTK_CELL_RENDERER_SELECTED);
+        }
 
       _gtk_tree_view_queue_draw_node (priv->tree_view, tree, node, NULL);
 
