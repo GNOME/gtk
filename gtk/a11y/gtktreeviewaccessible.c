@@ -57,14 +57,6 @@ static gboolean focus_out            (GtkWidget        *widget);
 static void             set_iter_nth_row                (GtkTreeView            *tree_view,
                                                          GtkTreeIter            *iter,
                                                          gint                   row);
-static gint             get_row_from_tree_path          (GtkTreeView            *tree_view,
-                                                         GtkTreePath            *path);
-static void             iterate_thru_children           (GtkTreeView            *tree_view,
-                                                         GtkTreeModel           *tree_model,
-                                                         GtkTreePath            *tree_path,
-                                                         GtkTreePath            *orig,
-                                                         gint                   *count,
-                                                         gint                   depth);
 static int              cell_info_get_index             (GtkTreeView                     *tree_view,
                                                          GtkTreeViewAccessibleCellInfo   *info);
 static gboolean         update_cell_value               (GtkRendererCellAccessible       *renderer_cell,
@@ -833,88 +825,60 @@ gtk_tree_view_accessible_is_selected (AtkTable *table,
   return gtk_tree_view_accessible_is_row_selected (table, row);
 }
 
+typedef struct {
+  GArray *array;
+  GtkTreeView *treeview;
+} SelectedRowsData;
+
 static void
 get_selected_rows (GtkTreeModel *model,
                    GtkTreePath  *path,
                    GtkTreeIter  *iter,
-                   gpointer      data)
+                   gpointer      datap)
 {
-  GPtrArray *array = (GPtrArray *)data;
+  SelectedRowsData *data = datap;
+  GtkRBTree *tree;
+  GtkRBNode *node;
+  int id;
 
-  g_ptr_array_add (array, gtk_tree_path_copy (path));
+  if (_gtk_tree_view_find_node (data->treeview,
+                                path,
+                                &tree, &node))
+    {
+      g_assert_not_reached ();
+    }
+
+  id = _gtk_rbtree_node_get_index (tree, node);
+
+  g_array_append_val (data->array, id);
 }
 
 static gint
 gtk_tree_view_accessible_get_selected_rows (AtkTable  *table,
                                             gint     **rows_selected)
 {
+  SelectedRowsData data;
   GtkWidget *widget;
-  GtkTreeView *tree_view;
-  GtkTreeModel *tree_model;
-  GtkTreeIter iter;
-  GtkTreeSelection *selection;
-  GtkTreePath *tree_path;
-  gint ret_val = 0;
+  gint n_rows;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     return 0;
 
-  tree_view = GTK_TREE_VIEW (widget);
-  selection = gtk_tree_view_get_selection (tree_view);
+  data.treeview = GTK_TREE_VIEW (widget);
+  data.array = g_array_new (FALSE, FALSE, sizeof (gint));
 
-  switch (gtk_tree_selection_get_mode (selection))
-    {
-    case GTK_SELECTION_SINGLE:
-    case GTK_SELECTION_BROWSE:
-      if (gtk_tree_selection_get_selected (selection, &tree_model, &iter))
-        {
-          gint row;
+  gtk_tree_selection_selected_foreach (gtk_tree_view_get_selection (data.treeview),
+                                       get_selected_rows,
+                                       &data);
 
-          if (rows_selected)
-            {
-              *rows_selected = g_new (gint, 1);
-              tree_path = gtk_tree_model_get_path (tree_model, &iter);
-              row = get_row_from_tree_path (tree_view, tree_path);
-              gtk_tree_path_free (tree_path);
-
-              /* shouldn't ever happen */
-              g_return_val_if_fail (row != -1, 0);
-
-              *rows_selected[0] = row;
-            }
-          ret_val = 1;
-        }
-      break;
-    case GTK_SELECTION_MULTIPLE:
-      {
-        GPtrArray *array = g_ptr_array_new();
-
-        gtk_tree_selection_selected_foreach (selection, get_selected_rows, array);
-        ret_val = array->len;
-
-        if (rows_selected && ret_val)
-          {
-            gint i;
-
-            *rows_selected = g_new (gint, ret_val);
-            for (i = 0; i < ret_val; i++)
-              {
-                gint row;
-
-                tree_path = (GtkTreePath *) g_ptr_array_index (array, i);
-                row = get_row_from_tree_path (tree_view, tree_path);
-                gtk_tree_path_free (tree_path);
-                (*rows_selected)[i] = row;
-              }
-          }
-        g_ptr_array_free (array, FALSE);
-      }
-      break;
-    case GTK_SELECTION_NONE:
-      break;
-    }
-  return ret_val;
+  n_rows = data.array->len;
+  if (rows_selected)
+    *rows_selected = (gint *) g_array_free (data.array, FALSE);
+  else
+    g_array_free (data.array, TRUE);
+  
+  return n_rows;
 }
 
 static gboolean
@@ -1813,29 +1777,6 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
   return _gtk_renderer_cell_accessible_update_cache (renderer_cell, emit_change_signal);
 }
 
-static gint
-get_row_from_tree_path (GtkTreeView *tree_view,
-                        GtkTreePath *path)
-{
-  GtkTreeModel *tree_model;
-  GtkTreePath *root_tree;
-  gint row;
-
-  tree_model = gtk_tree_view_get_model (tree_view);
-
-  if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
-    row = gtk_tree_path_get_indices (path)[0];
-  else
-    {
-      root_tree = gtk_tree_path_new_first ();
-      row = 0;
-      iterate_thru_children (tree_view, tree_model, root_tree, path, &row, 0);
-      gtk_tree_path_free (root_tree);
-    }
-
-  return row;
-}
-
 /* Misc Private */
 
 /* Helper recursive function that returns an iter to nth row
@@ -1882,130 +1823,6 @@ set_iter_nth_row (GtkTreeView *tree_view,
   tree_model = gtk_tree_view_get_model (tree_view);
   gtk_tree_model_get_iter_first (tree_model, iter);
   iter = return_iter_nth_row (tree_view, tree_model, iter, 0, row);
-}
-
-/* Recursively called until the row specified by orig is found.
- *
- * *count will be set to the visible row number of the child
- * relative to the row that was initially passed in as tree_path.
- * tree_path could be modified by this function.
- *
- * *count will be -1 if orig is not found as a child (a row that is
- * not visible will not be found, e.g. if the row is inside a
- * collapsed row).  If NULL is passed in as orig, *count will
- * be a count of the visible children.
- *
- * NOTE: the value for depth must be 0 when this recursive function
- * is initially called, or it may not function as expected.
- */
-static void
-iterate_thru_children (GtkTreeView  *tree_view,
-                       GtkTreeModel *tree_model,
-                       GtkTreePath  *tree_path,
-                       GtkTreePath  *orig,
-                       gint         *count,
-                       gint          depth)
-{
-  GtkTreeIter iter;
-
-  if (!gtk_tree_model_get_iter (tree_model, &iter, tree_path))
-    return;
-
-  if (tree_path && orig && !gtk_tree_path_compare (tree_path, orig))
-    /* Found it! */
-    return;
-
-  if (tree_path && orig && gtk_tree_path_compare (tree_path, orig) > 0)
-    {
-      /* Past it, so return -1 */
-      *count = -1;
-      return;
-    }
-  else if (gtk_tree_view_row_expanded (tree_view, tree_path) &&
-    gtk_tree_model_iter_has_child (tree_model, &iter))
-    {
-      (*count)++;
-      gtk_tree_path_append_index (tree_path, 0);
-      iterate_thru_children (tree_view, tree_model, tree_path,
-                             orig, count, (depth + 1));
-      return;
-    }
-  else if (gtk_tree_model_iter_next (tree_model, &iter))
-    {
-      (*count)++;
-      tree_path = gtk_tree_model_get_path (tree_model, &iter);
-       if (tree_path)
-         {
-           iterate_thru_children (tree_view, tree_model, tree_path,
-                                 orig, count, depth);
-           gtk_tree_path_free (tree_path);
-         }
-      return;
-  }
-  else if (gtk_tree_path_up (tree_path))
-    {
-      GtkTreeIter temp_iter;
-      gboolean exit_loop = FALSE;
-      gint new_depth = depth - 1;
-
-      (*count)++;
-
-     /* Make sure that we back up until we find a row
-      * where gtk_tree_path_next does not return NULL.
-      */
-      while (!exit_loop)
-        {
-          if (gtk_tree_path_get_depth (tree_path) == 0)
-              /* depth is now zero so */
-            return;
-          gtk_tree_path_next (tree_path);
-
-          /* Verify that the next row is a valid row! */
-          exit_loop = gtk_tree_model_get_iter (tree_model, &temp_iter, tree_path);
-
-          if (!exit_loop)
-            {
-              /* Keep going up until we find a row that has a valid next */
-              if (gtk_tree_path_get_depth(tree_path) > 1)
-                {
-                  new_depth--;
-                  gtk_tree_path_up (tree_path);
-                }
-              else
-                {
-                 /* If depth is 1 and gtk_tree_model_get_iter returns FALSE,
-                  * then we are at the last row, so just return.
-                  */
-                  if (orig != NULL)
-                    *count = -1;
-
-                  return;
-                }
-            }
-        }
-
-     /* This guarantees that we will stop when we hit the end of the
-      * children.
-      */
-      if (new_depth < 0)
-        return;
-
-      iterate_thru_children (tree_view, tree_model, tree_path,
-                             orig, count, new_depth);
-      return;
-    }
-
- /* If it gets here, then the path wasn't found.  Situations
-  * that would cause this would be if the path passed in is
-  * invalid or contained within the last row, but not visible
-  * because the last row is not expanded.  If NULL was passed
-  * in then a row count is desired, so only set count to -1
-  * if orig is not NULL.
-  */
-  if (orig != NULL)
-    *count = -1;
-
-  return;
 }
 
 static void
