@@ -47,9 +47,6 @@ struct _GtkTreeViewAccessibleCellInfo
 
 /* signal handling */
 
-static gboolean row_collapsed_cb     (GtkTreeView      *tree_view,
-                                      GtkTreeIter      *iter,
-                                      GtkTreePath      *path);
 static void     selection_changed_cb (GtkTreeSelection *selection,
                                       gpointer          data);
 
@@ -213,8 +210,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   tree_model = gtk_tree_view_get_model (tree_view);
   selection = gtk_tree_view_get_selection (tree_view);
 
-  g_signal_connect_after (widget, "row-collapsed",
-                          G_CALLBACK (row_collapsed_cb), NULL);
   g_signal_connect (selection, "changed",
                     G_CALLBACK (selection_changed_cb), obj);
 
@@ -546,8 +541,6 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
       if (is_expander)
         {
           set_cell_expandable (cell);
-          if (is_expanded)
-            _gtk_cell_accessible_add_state (cell, ATK_STATE_EXPANDED, FALSE);
         }
 
       /* If the row is selected, all cells on the row are selected */
@@ -1510,24 +1503,6 @@ gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface)
 
 /* signal handling */
 
-static gboolean
-row_collapsed_cb (GtkTreeView *tree_view,
-                  GtkTreeIter *iter,
-                  GtkTreePath *path)
-{
-  GtkTreeModel *tree_model;
-  AtkObject *atk_obj;
-  GtkTreeViewAccessible *accessible;
-
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
-  tree_model = gtk_tree_view_get_model (tree_view);
-
-  /* Set collapse state */
-  set_expand_state (tree_view, tree_model, accessible, path, FALSE);
-  return FALSE;
-}
-
 static void
 selection_changed_cb (GtkTreeSelection *selection,
                       gpointer          data)
@@ -2145,12 +2120,10 @@ iterate_thru_children (GtkTreeView  *tree_view,
 }
 
 /* If the tree_path passed in has children, then
- * ATK_STATE_EXPANDABLE is set.  If the row is expanded
- * ATK_STATE_EXPANDED is turned on.  If the row is
- * collapsed, then ATK_STATE_EXPANDED is removed.
+ * ATK_STATE_EXPANDABLE is set.
  *
  * If the tree_path passed in has no children, then
- * ATK_STATE_EXPANDABLE and ATK_STATE_EXPANDED are removed.
+ * ATK_STATE_EXPANDABLE is removed.
  *
  * If set_on_ancestor is TRUE, then this function will also
  * update all cells that are ancestors of the tree_path.
@@ -2196,7 +2169,7 @@ set_expand_state (GtkTreeView           *tree_view,
                 found = TRUE;
             }
 
-          /* Set ATK_STATE_EXPANDABLE and ATK_STATE_EXPANDED
+          /* Set ATK_STATE_EXPANDABLE
            * for ancestors and found cells.
            */
           if (found)
@@ -2210,15 +2183,9 @@ set_expand_state (GtkTreeView           *tree_view,
               if (gtk_tree_model_iter_has_child (tree_model, &iter))
                 {
                   set_cell_expandable (cell);
-
-                  if (gtk_tree_view_row_expanded (tree_view, cell_path))
-                    _gtk_cell_accessible_add_state (cell, ATK_STATE_EXPANDED, TRUE);
-                  else
-                    _gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDED, TRUE);
                 }
               else
                 {
-                  _gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDED, TRUE);
                   if (_gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDABLE, TRUE))
                   /* The state may have been propagated to the container cell */
                   if (!GTK_IS_CONTAINER_CELL_ACCESSIBLE (cell))

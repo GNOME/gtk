@@ -9081,6 +9081,9 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
       if (tree_view->priv->tree == tree)
 	tree_view->priv->tree = NULL;
 
+      _gtk_tree_view_accessible_remove_state (tree_view,
+                                              tree->parent_tree, tree->parent_node,
+                                              GTK_CELL_RENDERER_EXPANDED);
       _gtk_tree_view_accessible_remove (tree_view, tree, NULL);
       _gtk_rbtree_remove (tree);
     }
@@ -12917,6 +12920,9 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   tree_view->priv->last_button_y = -1;
 
   _gtk_tree_view_accessible_remove (tree_view, node->children, NULL);
+  _gtk_tree_view_accessible_remove_state (tree_view,
+                                          tree, node,
+                                          GTK_CELL_RENDERER_EXPANDED);
 
   _gtk_rbtree_remove (node->children);
 
