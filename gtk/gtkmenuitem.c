@@ -1700,7 +1700,7 @@ gtk_real_menu_item_select (GtkMenuItem *menu_item)
     }
 
   if ((!source_device ||
-       gdk_device_get_source (source_device) != GDK_SOURCE_TOUCH) &&
+       gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN) &&
       priv->submenu &&
       (!gtk_widget_get_mapped (priv->submenu) ||
        GTK_MENU (priv->submenu)->priv->tearoff_active))
