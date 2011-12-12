@@ -3084,3 +3084,61 @@ _gtk_tree_view_accessible_toggle_visibility (GtkTreeView       *treeview,
                                                 column,
                                                 id);
 }
+
+void
+_gtk_tree_view_accessible_add_state (GtkTreeView          *treeview,
+                                     GtkRBTree            *tree,
+                                     GtkRBNode            *node,
+                                     GtkCellRendererState  state)
+{
+  GtkTreeViewAccessible *accessible;
+  AtkObject *obj;
+  guint i;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (treeview));
+  if (obj == NULL)
+    return;
+
+  accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
+
+  for (i = 0; i < gtk_tree_view_get_n_columns (treeview); i++)
+    {
+      GtkCellAccessible *cell = peek_cell (accessible,
+                                           tree, node,
+                                           gtk_tree_view_get_column (treeview, i));
+
+      if (cell == NULL)
+        continue;
+
+      _gtk_cell_accessible_state_changed (cell, state, 0);
+    }
+}
+
+void
+_gtk_tree_view_accessible_remove_state (GtkTreeView          *treeview,
+                                        GtkRBTree            *tree,
+                                        GtkRBNode            *node,
+                                        GtkCellRendererState  state)
+{
+  GtkTreeViewAccessible *accessible;
+  AtkObject *obj;
+  guint i;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (treeview));
+  if (obj == NULL)
+    return;
+
+  accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
+
+  for (i = 0; i < gtk_tree_view_get_n_columns (treeview); i++)
+    {
+      GtkCellAccessible *cell = peek_cell (accessible,
+                                           tree, node,
+                                           gtk_tree_view_get_column (treeview, i));
+
+      if (cell == NULL)
+        continue;
+
+      _gtk_cell_accessible_state_changed (cell, 0, state);
+    }
+}
