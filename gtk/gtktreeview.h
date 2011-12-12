@@ -435,6 +435,7 @@ typedef void (* GtkTreeDestroyCountFunc)  (GtkTreeView             *tree_view,
 					   GtkTreePath             *path,
 					   gint                     children,
 					   gpointer                 user_data);
+GDK_DEPRECATED
 void gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
 					   GtkTreeDestroyCountFunc  func,
 					   gpointer                 data,

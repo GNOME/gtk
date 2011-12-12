@@ -14692,6 +14692,8 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
  * This function should almost never be used.  It is meant for private use by
  * ATK for determining the number of visible children that are removed when the
  * user collapses a row, or a row is deleted.
+ *
+ * Deprecated: 3.4: Accessibility does not need the function anymore.
  **/
 void
 gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
