@@ -2629,28 +2629,45 @@ cell_info_new (GtkTreeViewAccessible *accessible,
 }
 
 static GtkCellAccessible *
-find_cell (GtkTreeViewAccessible *accessible,
-           gint                   index)
+peek_cell (GtkTreeViewAccessible *accessible,
+           GtkRBTree             *tree,
+           GtkRBNode             *node,
+           GtkTreeViewColumn     *column)
 {
   GtkTreeViewAccessibleCellInfo lookup, *cell_info;
-  GtkTreeView *tree_view;
 
-  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible)));
-
-  if (!_gtk_rbtree_find_index (_gtk_tree_view_get_rbtree (tree_view),
-                               index / get_n_columns (tree_view) - 1,
-                               &lookup.tree,
-                               &lookup.node))
-    {
-      g_assert_not_reached ();
-    }
-  lookup.cell_col_ref = get_visible_column (tree_view, index % get_n_columns (tree_view));
+  lookup.tree = tree;
+  lookup.node = node;
+  lookup.cell_col_ref = column;
 
   cell_info = g_hash_table_lookup (accessible->cell_infos, &lookup);
   if (cell_info == NULL)
     return NULL;
 
   return cell_info->cell;
+}
+
+static GtkCellAccessible *
+find_cell (GtkTreeViewAccessible *accessible,
+           gint                   index)
+{
+  GtkTreeView *tree_view;
+  GtkRBTree *tree;
+  GtkRBNode *node;
+
+  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible)));
+
+  if (!_gtk_rbtree_find_index (_gtk_tree_view_get_rbtree (tree_view),
+                               index / get_n_columns (tree_view) - 1,
+                               &tree,
+                               &node))
+    {
+      g_assert_not_reached ();
+    }
+
+  return peek_cell (accessible,
+                    tree, node, 
+                    get_visible_column (tree_view, index % get_n_columns (tree_view)));
 }
 
 static void
