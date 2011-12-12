@@ -8870,6 +8870,8 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
       tmpnode = _gtk_rbtree_insert_after (tree, tmpnode, height, FALSE);
     }
 
+  _gtk_tree_view_accessible_add (tree_view, tree, tmpnode);
+
  done:
   if (height > 0)
     {
@@ -11475,6 +11477,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 	{
 	  tree_view->priv->tree = _gtk_rbtree_new ();
 	  gtk_tree_view_build_tree (tree_view, tree_view->priv->tree, &iter, 1, FALSE);
+          _gtk_tree_view_accessible_add (tree_view, tree_view->priv->tree, NULL);
 	}
       gtk_tree_path_free (path);
 
@@ -12758,6 +12761,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 			    gtk_tree_path_get_depth (path) + 1,
 			    open_all);
 
+  _gtk_tree_view_accessible_add (tree_view, node->children, NULL);
   _gtk_tree_view_accessible_expanded (tree_view, tree, node);
 
   if (animate)

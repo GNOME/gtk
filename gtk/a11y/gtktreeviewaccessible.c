@@ -1749,9 +1749,6 @@ model_row_inserted (GtkTreeModel *tree_model,
       else
         n_inserted = 1;
 
-      /* Generate row-inserted signal */
-      g_signal_emit_by_name (atk_obj, "row-inserted", row, n_inserted);
-
       /* Generate children-changed signals */
       n_cols = get_n_columns (tree_view);
       for (child_row = row; child_row < (row + n_inserted); child_row++)
@@ -2431,6 +2428,32 @@ get_header_from_column (GtkTreeViewColumn *tv_col)
 }
 
 void
+_gtk_tree_view_accessible_add (GtkTreeView *treeview,
+                               GtkRBTree   *tree,
+                               GtkRBNode   *node)
+{
+  GtkTreeViewAccessible *accessible;
+  guint row, n_rows;
+
+  accessible = GTK_TREE_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (treeview)));
+  if (accessible == NULL)
+    return;
+
+  if (node == NULL)
+    {
+      row = tree->parent_tree ? _gtk_rbtree_node_get_index (tree->parent_tree, tree->parent_node) : 0;
+      n_rows = tree->root->total_count;
+    }
+  else
+    {
+      row = _gtk_rbtree_node_get_index (tree, node);
+      n_rows = 1 + (node->children ? node->children->root->total_count : 0);
+    }
+
+  g_signal_emit_by_name (accessible, "row-inserted", row, n_rows);
+}
+
+void
 _gtk_tree_view_accessible_remove (GtkTreeView *treeview,
                                   GtkRBTree   *tree,
                                   GtkRBNode   *node)
@@ -2701,10 +2724,5 @@ _gtk_tree_view_accessible_expanded (GtkTreeView *treeview,
   _gtk_tree_view_accessible_add_state (treeview,
                                        tree, node,
                                        GTK_CELL_RENDERER_EXPANDED);
-
-  g_signal_emit_by_name (obj,
-                         "row-inserted",
-                         _gtk_rbtree_node_get_index (tree, node),
-                         node->children->root->total_count);
 }
 
