@@ -3358,8 +3358,16 @@ static gboolean
 gtk_menu_button_press (GtkWidget      *widget,
                        GdkEventButton *event)
 {
+  GdkDevice *source_device;
+  GtkWidget *event_widget;
+  GtkMenu *menu;
+
   if (event->type != GDK_BUTTON_PRESS)
     return FALSE;
+
+  source_device = gdk_event_get_source_device ((GdkEvent *) event);
+  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+  menu = GTK_MENU (widget);
 
   /*  Don't pass down to menu shell if a non-menuitem part of the menu
    *  was clicked. The check for the event_widget being a GtkMenuShell
@@ -3368,9 +3376,15 @@ gtk_menu_button_press (GtkWidget      *widget,
    *  the menu or on its border are delivered relative to
    *  menu_shell->window.
    */
-  if (GTK_IS_MENU_SHELL (gtk_get_event_widget ((GdkEvent *) event)) &&
+  if (GTK_IS_MENU_SHELL (event_widget) &&
       pointer_in_menu_window (widget, event->x_root, event->y_root))
     return TRUE;
+
+  if (GTK_IS_MENU_ITEM (event_widget) &&
+      gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN &&
+      GTK_MENU_ITEM (event_widget)->priv->submenu != NULL &&
+      !gtk_widget_is_drawable (GTK_MENU_ITEM (event_widget)->priv->submenu))
+    menu->priv->ignore_button_release = TRUE;
 
   return GTK_WIDGET_CLASS (gtk_menu_parent_class)->button_press_event (widget, event);
 }
