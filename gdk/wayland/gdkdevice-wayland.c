@@ -52,6 +52,7 @@ struct _GdkWaylandDevice
   GdkWindow *pointer_focus;
   GdkWindow *keyboard_focus;
   struct wl_input_device *device;
+  struct wl_data_device *data_device;
   int32_t x, y, surface_x, surface_y;
   uint32_t time;
 };
@@ -600,12 +601,14 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 					struct wl_input_device *wl_device)
 {
   GdkDisplay *display;
+  GdkDisplayWayland *display_wayland;
   GdkDeviceManagerCore *device_manager_core =
     GDK_DEVICE_MANAGER_CORE(device_manager);
   GdkWaylandDevice *device;
 
   device = g_new0 (GdkWaylandDevice, 1);
   display = gdk_device_manager_get_display (device_manager);
+  display_wayland = GDK_DISPLAY_WAYLAND (display);
 
   device->display = display;
   device->pointer = g_object_new (GDK_TYPE_DEVICE_CORE,
@@ -634,6 +637,10 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 
   wl_input_device_add_listener(device->device,
 			       &input_device_listener, device);
+
+  device->data_device =
+    wl_data_device_manager_get_data_device (display_wayland->data_device_manager,
+                                            device->device);
 
   device_manager_core->devices =
     g_list_prepend (device_manager_core->devices, device->keyboard);
