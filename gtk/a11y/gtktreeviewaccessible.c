@@ -54,9 +54,6 @@ static gboolean focus_out            (GtkWidget        *widget);
 
 /* Misc */
 
-static void             set_iter_nth_row                (GtkTreeView            *tree_view,
-                                                         GtkTreeIter            *iter,
-                                                         gint                   row);
 static int              cell_info_get_index             (GtkTreeView                     *tree_view,
                                                          GtkTreeViewAccessibleCellInfo   *info);
 static gboolean         update_cell_value               (GtkRendererCellAccessible       *renderer_cell,
@@ -885,62 +882,64 @@ static gboolean
 gtk_tree_view_accessible_add_row_selection (AtkTable *table,
                                             gint      row)
 {
-  GtkWidget *widget;
-  GtkTreeView *tree_view;
-  GtkTreeModel *tree_model;
-  GtkTreeSelection *selection;
-  GtkTreePath *tree_path;
-  GtkTreeIter iter_to_row;
+  GtkTreeView *treeview;
+  GtkTreePath *path;
+  GtkRBTree *tree;
+  GtkRBNode *node;
 
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
-  if (widget == NULL)
+  if (row < 0)
     return FALSE;
 
-  if (!gtk_tree_view_accessible_is_row_selected (table, row))
-    {
-      tree_view = GTK_TREE_VIEW (widget);
-      tree_model = gtk_tree_view_get_model (tree_view);
-      selection = gtk_tree_view_get_selection (tree_view);
+  treeview = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (table)));
+  if (treeview == NULL)
+    return FALSE;
 
-      if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
-        {
-          tree_path = gtk_tree_path_new ();
-          gtk_tree_path_append_index (tree_path, row);
-          gtk_tree_selection_select_path (selection,tree_path);
-          gtk_tree_path_free (tree_path);
-        }
-      else
-        {
-          set_iter_nth_row (tree_view, &iter_to_row, row);
-          gtk_tree_selection_select_iter (selection, &iter_to_row);
-        }
-    }
+  if (!_gtk_rbtree_find_index (_gtk_tree_view_get_rbtree (treeview),
+                               row,
+                               &tree,
+                               &node))
+    return FALSE;
 
-  return gtk_tree_view_accessible_is_row_selected (table, row);
+  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+    return FALSE;
+
+  path = _gtk_tree_path_new_from_rbtree (tree, node);
+  gtk_tree_selection_select_path (gtk_tree_view_get_selection (treeview), path);
+  gtk_tree_path_free (path);
+
+  return TRUE;
 }
 
 static gboolean
 gtk_tree_view_accessible_remove_row_selection (AtkTable *table,
                                                gint      row)
 {
-  GtkWidget *widget;
-  GtkTreeView *tree_view;
-  GtkTreeSelection *selection;
+  GtkTreeView *treeview;
+  GtkTreePath *path;
+  GtkRBTree *tree;
+  GtkRBNode *node;
 
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
-  if (widget == NULL)
+  if (row < 0)
     return FALSE;
 
-  tree_view = GTK_TREE_VIEW (widget);
-  selection = gtk_tree_view_get_selection (tree_view);
+  treeview = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (table)));
+  if (treeview == NULL)
+    return FALSE;
 
-  if (gtk_tree_view_accessible_is_row_selected (table, row))
-    {
-      gtk_tree_selection_unselect_all (selection);
-      return TRUE;
-    }
+  if (!_gtk_rbtree_find_index (_gtk_tree_view_get_rbtree (treeview),
+                               row,
+                               &tree,
+                               &node))
+    return FALSE;
 
-  return FALSE;
+  if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+    return FALSE;
+
+  path = _gtk_tree_path_new_from_rbtree (tree, node);
+  gtk_tree_selection_unselect_path (gtk_tree_view_get_selection (treeview), path);
+  gtk_tree_path_free (path);
+
+  return TRUE;
 }
 
 static AtkObject *
@@ -1778,52 +1777,6 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
 }
 
 /* Misc Private */
-
-/* Helper recursive function that returns an iter to nth row
- */
-static GtkTreeIter *
-return_iter_nth_row (GtkTreeView  *tree_view,
-                     GtkTreeModel *tree_model,
-                     GtkTreeIter  *iter,
-                     gint          increment,
-                     gint          row)
-{
-  GtkTreePath *current_path;
-  GtkTreeIter new_iter;
-  gboolean row_expanded;
-
-  current_path = gtk_tree_model_get_path (tree_model, iter);
-  if (increment == row)
-    {
-      gtk_tree_path_free (current_path);
-      return iter;
-    }
-
-  row_expanded = gtk_tree_view_row_expanded (tree_view, current_path);
-  gtk_tree_path_free (current_path);
-
-  new_iter = *iter;
-  if ((row_expanded && gtk_tree_model_iter_children (tree_model, iter, &new_iter)) ||
-      (gtk_tree_model_iter_next (tree_model, iter)) ||
-      (gtk_tree_model_iter_parent (tree_model, iter, &new_iter) &&
-          (gtk_tree_model_iter_next (tree_model, iter))))
-    return return_iter_nth_row (tree_view, tree_model, iter,
-      ++increment, row);
-
-  return NULL;
-}
-
-static void
-set_iter_nth_row (GtkTreeView *tree_view,
-                  GtkTreeIter *iter,
-                  gint         row)
-{
-  GtkTreeModel *tree_model;
-
-  tree_model = gtk_tree_view_get_model (tree_view);
-  gtk_tree_model_get_iter_first (tree_model, iter);
-  iter = return_iter_nth_row (tree_view, tree_model, iter, 0, row);
-}
 
 static void
 cell_destroyed (gpointer data)
