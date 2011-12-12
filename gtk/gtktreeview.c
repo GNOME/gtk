@@ -12762,7 +12762,9 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 			    open_all);
 
   _gtk_tree_view_accessible_add (tree_view, node->children, NULL);
-  _gtk_tree_view_accessible_expanded (tree_view, tree, node);
+  _gtk_tree_view_accessible_add_state (tree_view,
+                                       tree, node,
+                                       GTK_CELL_RENDERER_EXPANDED);
 
   if (animate)
     {

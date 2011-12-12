@@ -81,9 +81,6 @@ void            _gtk_tree_view_accessible_remove_state  (GtkTreeView       *tree
                                                          GtkRBNode         *node,
                                                          GtkCellRendererState state);
 
-void            _gtk_tree_view_accessible_expanded      (GtkTreeView       *treeview, 
-                                                         GtkRBTree         *tree,
-                                                         GtkRBNode         *node);
 G_END_DECLS
 
 #endif /* __GTK_TREE_VIEW_ACCESSIBLE_H__ */

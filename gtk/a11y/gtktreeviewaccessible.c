@@ -2709,20 +2709,3 @@ _gtk_tree_view_accessible_remove_state (GtkTreeView          *treeview,
       _gtk_cell_accessible_state_changed (cell, 0, state);
     }
 }
-
-void
-_gtk_tree_view_accessible_expanded (GtkTreeView *treeview, 
-                                    GtkRBTree   *tree,
-                                    GtkRBNode   *node)
-{
-  AtkObject *obj;
-
-  obj = _gtk_widget_peek_accessible (GTK_WIDGET (treeview));
-  if (obj == NULL)
-    return;
-
-  _gtk_tree_view_accessible_add_state (treeview,
-                                       tree, node,
-                                       GTK_CELL_RENDERER_EXPANDED);
-}
-
