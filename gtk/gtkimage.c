@@ -1256,6 +1256,28 @@ get_animation_frame (GtkImage *image)
   return g_object_ref (gdk_pixbuf_animation_iter_get_pixbuf (priv->animation_iter));
 }
 
+static void
+gtk_image_get_preferred_size (GtkImage *image,
+                              gint     *width_out,
+                              gint     *height_out)
+{
+  GtkImagePrivate *priv = image->priv;
+  gint xpad, ypad, width, height;
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (image));
+  gtk_misc_get_padding (GTK_MISC (image), &xpad, &ypad);
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &width, &height);
+
+  width += 2 * xpad;
+  height += 2 * ypad;
+
+  if (width_out)
+    *width_out = width;
+  if (height_out)
+    *height_out = height;
+}
+
 static gint
 gtk_image_draw (GtkWidget *widget,
                 cairo_t   *cr)
@@ -1385,33 +1407,21 @@ gtk_image_get_preferred_width (GtkWidget *widget,
                                gint      *minimum,
                                gint      *natural)
 {
-  GtkImage *image = GTK_IMAGE (widget);
-  GtkImagePrivate *priv = image->priv;
-  gint xpad, width;
-  GtkStyleContext *context;
+  gint width;
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_misc_get_padding (GTK_MISC (image), &xpad, NULL);
-  _gtk_icon_helper_get_size (priv->icon_helper, context, &width, NULL);
-
-  *minimum = *natural = width + 2 * xpad;
-}
+  gtk_image_get_preferred_size (GTK_IMAGE (widget), &width, NULL);
+  *minimum = *natural = width;
+} 
 
 static void
 gtk_image_get_preferred_height (GtkWidget *widget,
                                 gint      *minimum,
                                 gint      *natural)
 {
-  GtkImage *image = GTK_IMAGE (widget);
-  GtkImagePrivate *priv = image->priv;
-  gint ypad, height;
-  GtkStyleContext *context;
+  gint height;
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_misc_get_padding (GTK_MISC (image), NULL, &ypad);
-  _gtk_icon_helper_get_size (priv->icon_helper, context, NULL, &height);
-
-  *minimum = *natural = height + 2 * ypad;
+  gtk_image_get_preferred_size (GTK_IMAGE (widget), NULL, &height);
+  *minimum = *natural = height;
 }
 
 static void
