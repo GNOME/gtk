@@ -75,12 +75,6 @@ static gboolean         update_cell_value               (GtkRendererCellAccessib
                                                          gboolean               emit_change_signal);
 static gboolean         is_cell_showing                 (GtkTreeView            *tree_view,
                                                          GdkRectangle           *cell_rect);
-static void             set_expand_state                (GtkTreeView            *tree_view,
-                                                         GtkTreeModel           *tree_model,
-                                                         GtkTreeViewAccessible           *accessible,
-                                                         GtkTreePath            *tree_path,
-                                                         gboolean               set_on_ancestor);
-static void             set_cell_expandable             (GtkCellAccessible     *cell);
 
 static void             cell_destroyed                  (gpointer               data);
 static void             cell_info_new                   (GtkTreeViewAccessible           *accessible,
@@ -528,12 +522,6 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
         _gtk_container_cell_accessible_add_child (container, cell);
 
       update_cell_value (renderer_cell, accessible, FALSE);
-
-      /* Set state if it is expandable */
-      if (is_expander)
-        {
-          set_cell_expandable (cell);
-        }
 
       /* If the row is selected, all cells on the row are selected */
       selection = gtk_tree_view_get_selection (tree_view);
@@ -1719,12 +1707,9 @@ model_row_inserted (GtkTreeModel *tree_model,
 {
   GtkTreeView *tree_view = (GtkTreeView *)user_data;
   AtkObject *atk_obj;
-  GtkTreeViewAccessible *accessible;
-  GtkTreePath *path_copy;
   gint row, n_inserted, child_row;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
 
   /* Check to see if row is visible */
   row = get_row_from_tree_path (tree_view, path);
@@ -1778,43 +1763,6 @@ model_row_inserted (GtkTreeModel *tree_model,
                                     ((row * n_cols) + col), NULL, NULL);
             }
         }
-    }
-  else
-    {
-     /* The row has been inserted inside another row.  This can
-      * cause a row that previously couldn't be expanded to now
-      * be expandable.
-      */
-      path_copy = gtk_tree_path_copy (path);
-      gtk_tree_path_up (path_copy);
-      set_expand_state (tree_view, tree_model, accessible, path_copy, TRUE);
-      gtk_tree_path_free (path_copy);
-    }
-}
-
-static void
-model_row_deleted (GtkTreeModel *tree_model,
-                   GtkTreePath  *path,
-                   gpointer      user_data)
-{
-  GtkTreeView *tree_view = (GtkTreeView *)user_data;
-  GtkTreePath *path_copy;
-  AtkObject *atk_obj;
-  GtkTreeViewAccessible *accessible;
-
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (tree_view));
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
-
-  /* If deleting a row with a depth > 1, then this may affect the
-   * expansion/contraction of its parent(s). Make sure this is
-   * handled.
-   */
-  if (gtk_tree_path_get_depth (path) > 1)
-    {
-      path_copy = gtk_tree_path_copy (path);
-      gtk_tree_path_up (path_copy);
-      set_expand_state (tree_view, tree_model, accessible, path_copy, TRUE);
-      gtk_tree_path_free (path_copy);
     }
 }
 
@@ -2176,88 +2124,6 @@ iterate_thru_children (GtkTreeView  *tree_view,
   return;
 }
 
-/* If the tree_path passed in has children, then
- * ATK_STATE_EXPANDABLE is set.
- *
- * If the tree_path passed in has no children, then
- * ATK_STATE_EXPANDABLE is removed.
- *
- * If set_on_ancestor is TRUE, then this function will also
- * update all cells that are ancestors of the tree_path.
- */
-static void
-set_expand_state (GtkTreeView           *tree_view,
-                  GtkTreeModel          *tree_model,
-                  GtkTreeViewAccessible *accessible,
-                  GtkTreePath           *tree_path,
-                  gboolean               set_on_ancestor)
-{
-  GtkTreeViewColumn *expander_tv;
-  GtkTreeViewAccessibleCellInfo *cell_info;
-  GtkTreePath *cell_path;
-  GtkTreeIter iter;
-  gboolean found;
-  GHashTableIter hash_iter;
-
-  g_hash_table_iter_init (&hash_iter, accessible->cell_infos);
-  while (g_hash_table_iter_next (&hash_iter, NULL, (gpointer *) &cell_info))
-    {
-      cell_path = cell_info_get_path (cell_info);
-      found = FALSE;
-
-      if (cell_path != NULL)
-        {
-          GtkCellAccessible *cell = GTK_CELL_ACCESSIBLE (cell_info->cell);
-
-          expander_tv = gtk_tree_view_get_expander_column (tree_view);
-
-          /* Only set state for the cell that is in the column with the
-           * expander toggle
-           */
-          if (expander_tv == cell_info->cell_col_ref)
-            {
-              if (tree_path && gtk_tree_path_compare (cell_path, tree_path) == 0)
-                found = TRUE;
-              else if (set_on_ancestor &&
-                       gtk_tree_path_get_depth (cell_path) <
-                       gtk_tree_path_get_depth (tree_path) &&
-                       gtk_tree_path_is_ancestor (cell_path, tree_path) == 1)
-                /* Only set if set_on_ancestor was passed in as TRUE */
-                found = TRUE;
-            }
-
-          /* Set ATK_STATE_EXPANDABLE
-           * for ancestors and found cells.
-           */
-          if (found)
-            {
-              /* Must check against cell_path since cell_path
-               * can be equal to or an ancestor of tree_path.
-               */
-              gtk_tree_model_get_iter (tree_model, &iter, cell_path);
-
-              /* Set or unset ATK_STATE_EXPANDABLE as appropriate */
-              if (gtk_tree_model_iter_has_child (tree_model, &iter))
-                {
-                  set_cell_expandable (cell);
-                }
-              else
-                {
-                  _gtk_cell_accessible_remove_state (cell, ATK_STATE_EXPANDABLE, TRUE);
-                }
-
-              /* We assume that each cell in the cache once and
-               * a container cell is before its child cells so we are
-               * finished if set_on_ancestor is not set to TRUE.
-               */
-              if (!set_on_ancestor)
-                break;
-            }
-        }
-      gtk_tree_path_free (cell_path);
-    }
-}
-
 static void
 cell_destroyed (gpointer data)
 {
@@ -2361,9 +2227,6 @@ connect_model_signals (GtkTreeView           *view,
   g_signal_connect_data (obj, "row-inserted",
                          G_CALLBACK (model_row_inserted), view, NULL,
                          G_CONNECT_AFTER);
-  g_signal_connect_data (obj, "row-deleted",
-                         G_CALLBACK (model_row_deleted), view, NULL,
-                         G_CONNECT_AFTER);
 }
 
 static void
@@ -2376,7 +2239,6 @@ disconnect_model_signals (GtkTreeViewAccessible *accessible)
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   g_signal_handlers_disconnect_by_func (obj, model_row_changed, widget);
   g_signal_handlers_disconnect_by_func (obj, model_row_inserted, widget);
-  g_signal_handlers_disconnect_by_func (obj, model_row_deleted, widget);
 }
 
 /* Returns the column number of the specified GtkTreeViewColumn
@@ -2530,12 +2392,6 @@ get_rbtree_column_from_index (GtkTreeView        *tree_view,
         return FALSE;
   }
   return TRUE;
-}
-
-static void
-set_cell_expandable (GtkCellAccessible *cell)
-{
-  _gtk_cell_accessible_add_state (cell, ATK_STATE_EXPANDABLE, FALSE);
 }
 
 static GtkTreeViewAccessibleCellInfo *

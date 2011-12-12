@@ -8930,9 +8930,15 @@ gtk_tree_view_row_has_child_toggled (GtkTreeModel *model,
     goto done;
 
   if (has_child)
-    GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_PARENT);
+    {
+      GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_PARENT);
+      _gtk_tree_view_accessible_add_state (tree_view, tree, node, GTK_CELL_RENDERER_EXPANDABLE);
+    }
   else
-    GTK_RBNODE_UNSET_FLAG (node, GTK_RBNODE_IS_PARENT);
+    {
+      GTK_RBNODE_UNSET_FLAG (node, GTK_RBNODE_IS_PARENT);
+      _gtk_tree_view_accessible_remove_state (tree_view, tree, node, GTK_CELL_RENDERER_EXPANDABLE);
+    }
 
   if (has_child && tree_view->priv->is_list)
     {
