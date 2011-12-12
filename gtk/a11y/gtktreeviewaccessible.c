@@ -53,8 +53,6 @@ static gboolean row_expanded_cb      (GtkTreeView      *tree_view,
 static gboolean row_collapsed_cb     (GtkTreeView      *tree_view,
                                       GtkTreeIter      *iter,
                                       GtkTreePath      *path);
-static void     size_allocate_cb     (GtkWidget        *widget,
-                                      GtkAllocation    *allocation);
 static void     selection_changed_cb (GtkTreeSelection *selection,
                                       gpointer          data);
 
@@ -83,17 +81,9 @@ static void             iterate_thru_children           (GtkTreeView            
                                                          gint                   depth);
 static int              cell_info_get_index             (GtkTreeView                     *tree_view,
                                                          GtkTreeViewAccessibleCellInfo   *info);
-static void             traverse_cells                  (GtkTreeViewAccessible           *tree_view,
-                                                         GtkTreePath            *tree_path,
-                                                         gboolean               inc_row);
 static gboolean         update_cell_value               (GtkRendererCellAccessible       *renderer_cell,
                                                          GtkTreeViewAccessible           *accessible,
                                                          gboolean               emit_change_signal);
-static void             set_cell_visibility             (GtkTreeView            *tree_view,
-                                                         GtkCellAccessible      *cell,
-                                                         GtkTreeViewColumn      *tv_col,
-                                                         GtkTreePath            *tree_path,
-                                                         gboolean               emit_signal);
 static gboolean         is_cell_showing                 (GtkTreeView            *tree_view,
                                                          GdkRectangle           *cell_rect);
 static void             set_expand_state                (GtkTreeView            *tree_view,
@@ -155,45 +145,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkTreeViewAccessible, _gtk_tree_view_accessible, GTK_T
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_ACCESSIBLE_PARENT, gtk_cell_accessible_parent_interface_init))
 
-
-static void
-adjustment_changed (GtkAdjustment *adjustment,
-                    GtkWidget     *widget)
-{
-  GtkTreeViewAccessible *accessible;
-
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_widget_get_accessible (widget));
-  traverse_cells (accessible, NULL, FALSE);
-}
-
-static void
-hadjustment_set_cb (GObject    *widget,
-                    GParamSpec *pspec,
-                    gpointer    data)
-{
-  GtkTreeViewAccessible *accessible = data;
-  GtkAdjustment *adj;
-
-  g_object_get (widget, "hadjustment", &adj, NULL);
-  accessible->old_hadj = adj;
-  g_object_add_weak_pointer (G_OBJECT (accessible->old_hadj), (gpointer *)&accessible->old_hadj);
-  g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment_changed), widget);
-}
-
-static void
-vadjustment_set_cb (GObject    *widget,
-                    GParamSpec *pspec,
-                    gpointer    data)
-{
-  GtkTreeViewAccessible *accessible = data;
-  GtkAdjustment *adj;
-
-  g_object_get (widget, "vadjustment", &adj, NULL);
-  accessible->old_vadj = adj;
-  g_object_add_weak_pointer (G_OBJECT (accessible->old_vadj), (gpointer *)&accessible->old_vadj);
-  g_signal_connect (adj, "value-changed",
-                    G_CALLBACK (adjustment_changed), widget);
-}
 
 static GQuark
 gtk_tree_view_accessible_get_data_quark (void)
@@ -261,8 +212,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
   accessible->focus_cell = NULL;
-  accessible->old_hadj = NULL;
-  accessible->old_vadj = NULL;
   accessible->idle_expand_id = 0;
   accessible->idle_expand_path = NULL;
   accessible->n_children_deleted = 0;
@@ -279,8 +228,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
                           G_CALLBACK (row_collapsed_cb), NULL);
   g_signal_connect (widget, "row-expanded",
                     G_CALLBACK (row_expanded_cb), NULL);
-  g_signal_connect (widget, "size-allocate",
-                    G_CALLBACK (size_allocate_cb), NULL);
   g_signal_connect (selection, "changed",
                     G_CALLBACK (selection_changed_cb), obj);
 
@@ -302,13 +249,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
       else
         obj->role = ATK_ROLE_TREE_TABLE;
     }
-
-  hadjustment_set_cb (G_OBJECT (widget), NULL, accessible);
-  vadjustment_set_cb (G_OBJECT (widget), NULL, accessible);
-  g_signal_connect (widget, "notify::hadjustment",
-                    G_CALLBACK (hadjustment_set_cb), accessible);
-  g_signal_connect (widget, "notify::vadjustment",
-                    G_CALLBACK (vadjustment_set_cb), accessible);
 
   gtk_tree_view_set_destroy_count_func (tree_view,
                                         destroy_count_func,
@@ -340,7 +280,6 @@ gtk_tree_view_accessible_notify_gtk (GObject    *obj,
   GtkWidget *widget;
   GtkTreeView *tree_view;
   GtkTreeViewAccessible *accessible;
-  GtkAdjustment *adj;
 
   widget = GTK_WIDGET (obj);
   accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_widget_get_accessible (widget));
@@ -377,26 +316,6 @@ gtk_tree_view_accessible_notify_gtk (GObject    *obj,
       g_signal_emit_by_name (accessible, "visible-data-changed");
       g_object_thaw_notify (G_OBJECT (accessible));
     }
-  else if (g_strcmp0 (pspec->name, "hadjustment") == 0)
-    {
-      g_object_get (tree_view, "hadjustment", &adj, NULL);
-      g_signal_handlers_disconnect_by_func (accessible->old_hadj,
-                                            (gpointer) adjustment_changed,
-                                            widget);
-      accessible->old_hadj = adj;
-      g_object_add_weak_pointer (G_OBJECT (accessible->old_hadj), (gpointer *)&accessible->old_hadj);
-      g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment_changed), tree_view);
-    }
-  else if (g_strcmp0 (pspec->name, "vadjustment") == 0)
-    {
-      g_object_get (tree_view, "vadjustment", &adj, NULL);
-      g_signal_handlers_disconnect_by_func (accessible->old_vadj,
-                                            (gpointer) adjustment_changed,
-                                            widget);
-      accessible->old_vadj = adj;
-      g_object_add_weak_pointer (G_OBJECT (accessible->old_hadj), (gpointer *)&accessible->old_vadj);
-      g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment_changed), tree_view);
-    }
   else
     GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_tree_view_accessible_parent_class)->notify_gtk (obj, pspec);
 }
@@ -405,23 +324,13 @@ static void
 gtk_tree_view_accessible_destroyed (GtkWidget     *widget,
                                     GtkAccessible *gtk_accessible)
 {
-  GtkAdjustment *adj;
   GtkTreeViewAccessible *accessible;
 
   if (!GTK_IS_TREE_VIEW (widget))
     return;
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_accessible);
-  adj = accessible->old_hadj;
-  if (adj)
-    g_signal_handlers_disconnect_by_func (adj,
-                                          (gpointer) adjustment_changed,
-                                          widget);
-  adj = accessible->old_vadj;
-  if (adj)
-    g_signal_handlers_disconnect_by_func (adj,
-                                          (gpointer) adjustment_changed,
-                                          widget);
+
   if (accessible->tree_model)
     {
       disconnect_model_signals (accessible);
@@ -666,10 +575,6 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
           if (is_expanded)
             _gtk_cell_accessible_add_state (cell, ATK_STATE_EXPANDED, FALSE);
         }
-
-      /* If the column is visible, sets the cell's state */
-      if (gtk_tree_view_column_get_visible (tv_col))
-        set_cell_visibility (tree_view, cell, tv_col, path, FALSE);
 
       /* If the row is selected, all cells on the row are selected */
       selection = gtk_tree_view_get_selection (tree_view);
@@ -1653,9 +1558,6 @@ idle_expand_row (gpointer data)
   if (!path || !gtk_tree_model_get_iter (tree_model, &iter, path))
     return FALSE;
 
-  /* Update visibility of cells below expansion row */
-  traverse_cells (accessible, path, FALSE);
-
   /* Figure out number of visible children, the following test
    * should not fail
    */
@@ -1739,9 +1641,6 @@ row_collapsed_cb (GtkTreeView *tree_view,
   accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
   tree_model = gtk_tree_view_get_model (tree_view);
 
-  /* Update visibility of cells below collapsed row */
-  traverse_cells (accessible, path, FALSE);
-
   /* Set collapse state */
   set_expand_state (tree_view, tree_model, accessible, path, FALSE);
   if (accessible->n_children_deleted == 0)
@@ -1753,22 +1652,6 @@ row_collapsed_cb (GtkTreeView *tree_view,
                          accessible->n_children_deleted);
   accessible->n_children_deleted = 0;
   return FALSE;
-}
-
-static void
-size_allocate_cb (GtkWidget     *widget,
-                  GtkAllocation *allocation)
-{
-  AtkObject *atk_obj;
-  GtkTreeViewAccessible *accessible;
-
-  atk_obj = gtk_widget_get_accessible (widget);
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (atk_obj);
-
-  /* If the size allocation changes, the visibility of cells
-   * may change so update the cells visibility.
-   */
-  traverse_cells (accessible, NULL, FALSE);
 }
 
 static void
@@ -1989,8 +1872,6 @@ model_row_inserted (GtkTreeModel *tree_model,
       else
         n_inserted = 1;
 
-      traverse_cells (accessible, path, TRUE);
-
       /* Generate row-inserted signal */
       g_signal_emit_by_name (atk_obj, "row-inserted", row, n_inserted);
 
@@ -2039,8 +1920,6 @@ model_row_deleted (GtkTreeModel *tree_model,
       gtk_tree_path_free (accessible->idle_expand_path);
       accessible->idle_expand_id = 0;
     }
-
-  traverse_cells (accessible, path, TRUE);
 
   /* If deleting a row with a depth > 1, then this may affect the
    * expansion/contraction of its parent(s). Make sure this is
@@ -2114,42 +1993,8 @@ _gtk_tree_view_accessible_reorder (GtkTreeView *treeview)
       gtk_tree_path_free (accessible->idle_expand_path);
       accessible->idle_expand_id = 0;
     }
-  traverse_cells (accessible, NULL, FALSE);
 
   g_signal_emit_by_name (accessible, "row-reordered");
-}
-
-static void
-set_cell_visibility (GtkTreeView       *tree_view,
-                     GtkCellAccessible *cell,
-                     GtkTreeViewColumn *tv_col,
-                     GtkTreePath       *tree_path,
-                     gboolean           emit_signal)
-{
-  GdkRectangle cell_rect;
-
-  /* Get these three values in tree coords */
-  if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
-    gtk_tree_view_get_cell_area (tree_view, tree_path, tv_col, &cell_rect);
-  else
-    cell_rect.height = 0;
-
-  if (cell_rect.height > 0)
-    {
-      /* The height will be zero for a cell for which an antecedent
-       * is not expanded
-       */
-      _gtk_cell_accessible_add_state (cell, ATK_STATE_VISIBLE, emit_signal);
-      if (is_cell_showing (tree_view, &cell_rect))
-        _gtk_cell_accessible_add_state (cell, ATK_STATE_SHOWING, emit_signal);
-      else
-        _gtk_cell_accessible_remove_state (cell, ATK_STATE_SHOWING, emit_signal);
-    }
-  else
-    {
-      _gtk_cell_accessible_remove_state (cell, ATK_STATE_VISIBLE, emit_signal);
-      _gtk_cell_accessible_remove_state (cell, ATK_STATE_SHOWING, emit_signal);
-    }
 }
 
 static gboolean
@@ -2496,63 +2341,6 @@ iterate_thru_children (GtkTreeView  *tree_view,
     *count = -1;
 
   return;
-}
-
-/* If tree_path is passed in as NULL, then all cells are acted on.
- * Otherwise, just act on those cells that are on a row greater than
- * the specified tree_path. If inc_row is passed in as TRUE, then rows
- * greater and equal to the specified tree_path are acted on.
- *
- * The function set_cell_visibility() is called on all cells to be
- * acted on to update the visibility of the cell.
- */
-static void
-traverse_cells (GtkTreeViewAccessible *accessible,
-                GtkTreePath           *tree_path,
-                gboolean               inc_row)
-{
-  GtkTreeViewAccessibleCellInfo *cell_info;
-  GtkWidget *widget;
-  GHashTableIter iter;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-  if (!widget)
-    return;
-
-  /* Must loop through them all */
-  g_hash_table_iter_init (&iter, accessible->cell_infos);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
-    {
-      GtkTreePath *row_path;
-      gboolean act_on_cell;
-
-      row_path = cell_info_get_path (cell_info);
-      g_return_if_fail (row_path != NULL);
-      if (tree_path == NULL)
-        act_on_cell = TRUE;
-      else
-        {
-          gint comparison;
-
-          comparison =  gtk_tree_path_compare (row_path, tree_path);
-          if ((comparison > 0) ||
-              (comparison == 0 && inc_row))
-            act_on_cell = TRUE;
-          else
-            act_on_cell = FALSE;
-        }
-
-      if (act_on_cell)
-        {
-          set_cell_visibility (GTK_TREE_VIEW (widget),
-                               cell_info->cell,
-                               cell_info->cell_col_ref,
-                               row_path, TRUE);
-        }
-      gtk_tree_path_free (row_path);
-    }
-
-  g_signal_emit_by_name (accessible, "visible-data-changed");
 }
 
 /* If the tree_path passed in has children, then
@@ -3165,8 +2953,6 @@ _gtk_tree_view_accessible_do_add_column (GtkTreeViewAccessible *accessible,
       g_signal_emit_by_name (accessible, "children-changed::add",
                              (row * n_cols) + id, NULL, NULL);
     }
-
-  traverse_cells (accessible, NULL, FALSE);
 }
 
 void
@@ -3222,8 +3008,6 @@ _gtk_tree_view_accessible_do_remove_column (GtkTreeViewAccessible *accessible,
       g_signal_emit_by_name (accessible, "children-changed::remove",
                              (row * n_cols) + id, NULL, NULL);
     }
-
-  traverse_cells (accessible, NULL, FALSE);
 }
 
 void
@@ -3257,8 +3041,6 @@ _gtk_tree_view_accessible_reorder_column (GtkTreeView       *treeview,
     return;
 
   g_signal_emit_by_name (obj, "column-reordered");
-
-  traverse_cells (GTK_TREE_VIEW_ACCESSIBLE (obj), NULL, FALSE);
 }
 
 void

@@ -43,8 +43,6 @@ struct _GtkTreeViewAccessible
   GHashTable    *cell_infos;
   GtkTreeModel  *tree_model;
   AtkObject     *focus_cell;
-  GtkAdjustment *old_hadj;
-  GtkAdjustment *old_vadj;
   guint          idle_expand_id;
   GtkTreePath   *idle_expand_path;
 };
