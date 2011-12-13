@@ -47,6 +47,9 @@ struct _GdkWaylandDisplayManager
 
   GdkDisplay *default_display;
   GSList *displays;
+
+  GHashTable *name_to_atoms;
+  guint next_atom;
 };
 
 struct _GdkWaylandDisplayManagerClass
@@ -92,18 +95,51 @@ gdk_wayland_display_manager_get_default_display (GdkDisplayManager *manager)
 }
 
 static GdkAtom
-gdk_wayland_display_manager_atom_intern (GdkDisplayManager *manager,
+gdk_wayland_display_manager_atom_intern (GdkDisplayManager *manager_in,
 					 const gchar       *atom_name,
 					 gboolean           dup)
 {
-  return 0;
+  GdkWaylandDisplayManager *manager = GDK_WAYLAND_DISPLAY_MANAGER (manager_in);
+  GdkAtom atom;
+  gpointer data;
+  const gchar *atom_name_intern;
+
+  atom_name_intern = g_intern_string (atom_name);
+  data = g_hash_table_lookup (manager->name_to_atoms, atom_name_intern);
+
+  if (data)
+    {
+      atom = GDK_POINTER_TO_ATOM (data);
+      return atom;
+    }
+
+  atom = _GDK_MAKE_ATOM (manager->next_atom);
+
+  g_hash_table_insert (manager->name_to_atoms,
+                       (gchar *)atom_name_intern,
+                       GDK_ATOM_TO_POINTER (atom));
+  manager->next_atom++;
+
+  return atom;
 }
 
 static gchar *
-gdk_wayland_display_manager_get_atom_name (GdkDisplayManager *manager,
+gdk_wayland_display_manager_get_atom_name (GdkDisplayManager *manager_in,
 					   GdkAtom            atom)
 {
-  return 0;
+  GdkWaylandDisplayManager *manager = GDK_WAYLAND_DISPLAY_MANAGER (manager_in);
+  GHashTableIter iter;
+  gpointer key, value;
+
+  g_hash_table_iter_init (&iter, manager->name_to_atoms);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      if (GDK_POINTER_TO_ATOM (key) == atom)
+        return g_strdup (value);
+    }
+
+  return NULL;
 }
 
 static guint
@@ -156,9 +192,44 @@ gdk_wayland_display_manager_class_init (GdkWaylandDisplayManagerClass *class)
   manager_class->get_keyval_name = gdk_wayland_display_manager_get_keyval_name;
 }
 
+struct {
+  const gchar *name;
+  guint atom_id;
+} predefined_atoms[] = {
+      { "NONE", 0 },
+      { "PRIMARY", 1 },
+      { "SECONDARY", 2 },
+      { "ATOM", 4 },
+      { "BITMAP", 5 },
+      { "COLORMAP", 7 },
+      { "DRAWABLE", 17 },
+      { "INTEGER", 19 },
+      { "PIXMAP", 20 },
+      { "STRING", 31 },
+      { "WINDOW", 33 },
+      { "CLIPBOARD", 69 },
+};
+
 static void
 gdk_wayland_display_manager_init (GdkWaylandDisplayManager *manager)
 {
+  gint i;
+
+  manager->name_to_atoms = g_hash_table_new (NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (predefined_atoms); i++)
+    {
+      GdkAtom atom;
+      const gchar *atom_name = predefined_atoms[i].name;
+
+      atom = _GDK_MAKE_ATOM (predefined_atoms[i].atom_id);
+      g_hash_table_insert (manager->name_to_atoms,
+                           (gchar *)g_intern_static_string (atom_name),
+                           GDK_ATOM_TO_POINTER (atom));
+    }
+
+  manager->next_atom =
+    predefined_atoms[G_N_ELEMENTS (predefined_atoms) - 1].atom_id + 1;
 }
 
 void
