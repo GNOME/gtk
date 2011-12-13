@@ -6468,10 +6468,15 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 
 	  if (widget)
 	    {
-	      while (widget->priv->parent && widget->priv->parent != focus_widget->priv->parent)
+	      GtkWidget *common_ancestor = gtk_widget_common_ancestor (widget, focus_widget);
+
+	      if (widget != common_ancestor)
 		{
-		  widget = widget->priv->parent;
-		  gtk_container_set_focus_child (GTK_CONTAINER (widget), NULL);
+		  while (widget->priv->parent && widget->priv->parent != common_ancestor)
+		    {
+		      widget = widget->priv->parent;
+		      gtk_container_set_focus_child (GTK_CONTAINER (widget), NULL);
+		    }
 		}
 	    }
 	}
