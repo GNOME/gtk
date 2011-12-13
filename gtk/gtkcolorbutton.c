@@ -193,6 +193,8 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * The selected color.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.4: Use #GtkColorButton:rgba instead.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_COLOR,
@@ -200,7 +202,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                                        P_("Current Color"),
                                                        P_("The selected color"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkColorButton:alpha:
@@ -555,6 +557,8 @@ gtk_color_button_new (void)
  * Returns: a new color button
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.4: Use gtk_color_button_new_with_rgba() instead.
  */
 GtkWidget *
 gtk_color_button_new_with_color (const GdkColor *color)
@@ -691,6 +695,8 @@ gtk_color_button_clicked (GtkButton *button)
  * Sets the current color to be @color.
  *
  * Since: 2.4
+ *
+ * Deprecated: Use gtk_color_button_set_rgba() instead.
  */
 void
 gtk_color_button_set_color (GtkColorButton *color_button,
@@ -741,6 +747,8 @@ gtk_color_button_set_alpha (GtkColorButton *color_button,
  * Sets @color to be the current color in the #GtkColorButton widget.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.4: Use gtk_color_button_get_rgba() instead.
  */
 void
 gtk_color_button_get_color (GtkColorButton *color_button,

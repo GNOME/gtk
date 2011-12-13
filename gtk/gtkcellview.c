@@ -192,13 +192,21 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                                                         P_("Background color as a string"),
                                                         NULL,
                                                         GTK_PARAM_WRITABLE));
+
+  /**
+   * GtkCellView:background-gdk
+   *
+   * The background color as a #GdkColor
+   *
+   * Deprecated: 3.4: Use #GtkCellView:background-rgba instead.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_BACKGROUND_GDK,
                                    g_param_spec_boxed ("background-gdk",
                                                       P_("Background color"),
                                                       P_("Background color as a GdkColor"),
                                                       GDK_TYPE_COLOR,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
   /**
    * GtkCellView:background-rgba
    *
@@ -1268,6 +1276,8 @@ gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
  * Sets the background color of @view.
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.4: Use gtk_cell_view_set_background_rgba() instead.
  */
 void
 gtk_cell_view_set_background_color (GtkCellView    *cell_view,

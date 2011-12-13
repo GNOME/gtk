@@ -98,19 +98,11 @@ void       gtk_color_selection_set_has_palette         (GtkColorSelection *color
 							gboolean           has_palette);
 
 
-void     gtk_color_selection_set_current_color   (GtkColorSelection *colorsel,
-						  const GdkColor    *color);
 void     gtk_color_selection_set_current_alpha   (GtkColorSelection *colorsel,
 						  guint16            alpha);
-void     gtk_color_selection_get_current_color   (GtkColorSelection *colorsel,
-						  GdkColor          *color);
 guint16  gtk_color_selection_get_current_alpha   (GtkColorSelection *colorsel);
-void     gtk_color_selection_set_previous_color  (GtkColorSelection *colorsel,
-						  const GdkColor    *color);
 void     gtk_color_selection_set_previous_alpha  (GtkColorSelection *colorsel,
 						  guint16            alpha);
-void     gtk_color_selection_get_previous_color  (GtkColorSelection *colorsel,
-						  GdkColor          *color);
 guint16  gtk_color_selection_get_previous_alpha  (GtkColorSelection *colorsel);
 
 void     gtk_color_selection_set_current_rgba    (GtkColorSelection *colorsel,
@@ -131,6 +123,20 @@ gchar*   gtk_color_selection_palette_to_string   (const GdkColor    *colors,
                                                   gint               n_colors);
 
 GtkColorSelectionChangePaletteWithScreenFunc gtk_color_selection_set_change_palette_with_screen_hook (GtkColorSelectionChangePaletteWithScreenFunc func);
+
+GDK_DEPRECATED_FOR(gtk_color_selection_set_current_rgba)
+void     gtk_color_selection_set_current_color   (GtkColorSelection *colorsel,
+                                                  const GdkColor    *color);
+GDK_DEPRECATED_FOR(gtk_color_selection_get_current_rgba)
+void     gtk_color_selection_get_current_color   (GtkColorSelection *colorsel,
+                                                  GdkColor          *color);
+GDK_DEPRECATED_FOR(gtk_color_selection_set_previous_rgba)
+void     gtk_color_selection_set_previous_color  (GtkColorSelection *colorsel,
+                                                  const GdkColor    *color);
+GDK_DEPRECATED_FOR(gtk_color_selection_get_previous_rgba)
+void     gtk_color_selection_get_previous_color  (GtkColorSelection *colorsel,
+                                                  GdkColor          *color);
+
 
 G_END_DECLS
 

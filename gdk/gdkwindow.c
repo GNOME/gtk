@@ -6542,6 +6542,8 @@ gdk_window_move_region (GdkWindow       *window,
  * implementing a custom widget.)
  *
  * See also gdk_window_set_background_pattern().
+ *
+ * Deprecated: 3.4: Use gdk_window_set_background_rgba() instead.
  */
 void
 gdk_window_set_background (GdkWindow      *window,

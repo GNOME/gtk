@@ -290,13 +290,20 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                         NULL,
                                                         GTK_PARAM_WRITABLE));
 
+  /**
+   * GtkCellRendererText:background-gdk:
+   *
+   * Background color as a #GdkColor
+   *
+   * Deprecated: 3.4: Use #GtkCellRendererText:background-rgba instead.
+   */
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND_GDK,
                                    g_param_spec_boxed ("background-gdk",
                                                        P_("Background color"),
                                                        P_("Background color as a GdkColor"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE));  
+                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkCellRendererText:background-rgba:
@@ -320,13 +327,20 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                         NULL,
                                                         GTK_PARAM_WRITABLE));
 
+  /**
+   * GtkCellRendererText:foreground-gdk:
+   *
+   * Foreground color as a #GdkColor
+   *
+   * Deprecated: 3.4: Use #GtkCellRendererText:foreground-rgba instead.
+   */
   g_object_class_install_property (object_class,
                                    PROP_FOREGROUND_GDK,
                                    g_param_spec_boxed ("foreground-gdk",
                                                        P_("Foreground color"),
                                                        P_("Foreground color as a GdkColor"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkCellRendererText:foreground-rgba:

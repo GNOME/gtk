@@ -89,6 +89,8 @@ gdk_cairo_get_clip_rectangle (cairo_t      *cr,
  * Sets the specified #GdkColor as the source color of @cr.
  *
  * Since: 2.8
+ *
+ * Deprecated: 3.4: Use gdk_cairo_set_source_rgba() instead
  */
 void
 gdk_cairo_set_source_color (cairo_t        *cr,

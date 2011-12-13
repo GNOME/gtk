@@ -200,13 +200,20 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                         NULL,
                                                         GTK_PARAM_WRITABLE));
 
+  /**
+   * GtkTextTag:background-gdk:
+   *
+   * Background color as a #GdkColor.
+   *
+   * Deprecated: 3.4: Use #GtkTextTag:background-rgba instead.
+   */
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND_GDK,
                                    g_param_spec_boxed ("background-gdk",
                                                        P_("Background color"),
                                                        P_("Background color as a GdkColor"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkTextTag:background-rgba:
@@ -239,13 +246,20 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                         NULL,
                                                         GTK_PARAM_WRITABLE));
 
+  /**
+   * GtkTextTag:foreground-gdk:
+   *
+   * Foreground color as a #GdkColor.
+   *
+   * Deprecated: 3.4: Use #GtkTextTag:foreground-rgba instead.
+   */
   g_object_class_install_property (object_class,
                                    PROP_FOREGROUND_GDK,
                                    g_param_spec_boxed ("foreground-gdk",
                                                        P_("Foreground color"),
                                                        P_("Foreground color as a GdkColor"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkTextTag:foreground-rgba:
@@ -553,6 +567,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * The paragraph background color as a as a #GdkColor.
    *
    * Since: 2.8
+   *
+   * Deprecated: 3.4: Use #GtkTextTag:paragraph-background-rgba instead.
    */
   g_object_class_install_property (object_class,
                                    PROP_PARAGRAPH_BACKGROUND_GDK,
@@ -560,7 +576,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        P_("Paragraph background color"),
                                                        P_("Paragraph background color as a GdkColor"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkTextTag:paragraph-background-rgba:

@@ -75,8 +75,6 @@ GtkTreeModel     *gtk_cell_view_get_model               (GtkCellView     *cell_v
 void              gtk_cell_view_set_displayed_row       (GtkCellView     *cell_view,
                                                          GtkTreePath     *path);
 GtkTreePath      *gtk_cell_view_get_displayed_row       (GtkCellView     *cell_view);
-void              gtk_cell_view_set_background_color    (GtkCellView     *cell_view,
-                                                         const GdkColor  *color);
 void              gtk_cell_view_set_background_rgba     (GtkCellView     *cell_view,
                                                          const GdkRGBA   *rgba);
 gboolean          gtk_cell_view_get_draw_sensitive      (GtkCellView     *cell_view);
@@ -90,6 +88,9 @@ GDK_DEPRECATED_FOR(gtk_widget_get_preferred_size)
 gboolean          gtk_cell_view_get_size_of_row         (GtkCellView     *cell_view,
                                                          GtkTreePath     *path,
                                                          GtkRequisition  *requisition);
+GDK_DEPRECATED_FOR(gtk_cell_view_set_background_rgba)
+void              gtk_cell_view_set_background_color    (GtkCellView     *cell_view,
+                                                         const GdkColor  *color);
 
 G_END_DECLS
 

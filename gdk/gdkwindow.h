@@ -657,6 +657,7 @@ void          gdk_window_set_startup_id    (GdkWindow     *window,
 					    const gchar   *startup_id);
 void          gdk_window_set_transient_for (GdkWindow     *window,
 					    GdkWindow     *parent);
+GDK_DEPRECATED_FOR(gdk_window_set_background_rgba)
 void	      gdk_window_set_background	 (GdkWindow	  *window,
 					  const GdkColor  *color);
 void          gdk_window_set_background_rgba (GdkWindow *window,

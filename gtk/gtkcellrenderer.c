@@ -380,13 +380,20 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							NULL,
 							GTK_PARAM_WRITABLE));
 
+  /**
+   * GtkCellRenderer:cell-background-gdk:
+   *
+   * Cell background as a #GdkColor
+   *
+   * Deprecated: 3.4: Use #GtkCellRenderer:cell-background-rgba instead.
+   */
   g_object_class_install_property (object_class,
 				   PROP_CELL_BACKGROUND_GDK,
 				   g_param_spec_boxed ("cell-background-gdk",
 						       P_("Cell background color"),
 						       P_("Cell background color as a GdkColor"),
 						       GDK_TYPE_COLOR,
-						       GTK_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
   /**
    * GtkCellRenderer:cell-background-rgba:
    *
