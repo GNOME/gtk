@@ -11400,8 +11400,6 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 
       gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
       tree_view->priv->drag_dest_row = NULL;
-      tree_view->priv->cursor_tree = NULL;
-      tree_view->priv->cursor_node = NULL;
       gtk_tree_row_reference_free (tree_view->priv->anchor);
       tree_view->priv->anchor = NULL;
       gtk_tree_row_reference_free (tree_view->priv->top_row);
@@ -11479,11 +11477,20 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 	  gtk_tree_view_build_tree (tree_view, tree_view->priv->tree, &iter, 1, FALSE);
           _gtk_tree_view_accessible_add (tree_view, tree_view->priv->tree, NULL);
 	}
-      gtk_tree_path_free (path);
+
+      if (search_first_focusable_path (tree_view, &path, TRUE, NULL, NULL))
+        {
+          gtk_tree_view_real_set_cursor (tree_view, path, CLEAR_AND_SELECT | CURSOR_INVALID);
+          gtk_tree_path_free (path);
+        }
+      else
+        gtk_tree_view_real_set_cursor (tree_view, NULL, CURSOR_INVALID);
 
       /*  FIXME: do I need to do this? gtk_tree_view_create_buttons (tree_view); */
       install_presize_handler (tree_view);
     }
+  else
+    gtk_tree_view_real_set_cursor (tree_view, NULL, CURSOR_INVALID);
 
   g_object_notify (G_OBJECT (tree_view), "model");
 
@@ -13204,7 +13211,8 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
    * path maps to a non-existing path and we will silently bail out.
    * We unset tree and node to avoid further processing.
    */
-  if (row_is_separator (tree_view, NULL, path)
+  if (path == NULL || 
+      row_is_separator (tree_view, NULL, path)
       || _gtk_tree_view_find_node (tree_view,
                                    path,
                                    &tree_view->priv->cursor_tree,
