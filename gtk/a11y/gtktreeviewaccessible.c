@@ -71,9 +71,6 @@ static void             cell_info_new                   (GtkTreeViewAccessible  
                                                          GtkCellAccessible      *cell);
 static GtkCellAccessible *find_cell                       (GtkTreeViewAccessible           *accessible,
                                                          gint                   index);
-static void             connect_model_signals           (GtkTreeView            *view,
-                                                         GtkTreeViewAccessible           *accessible);
-static void             disconnect_model_signals        (GtkTreeViewAccessible           *accessible);
 static gint             get_column_number               (GtkTreeView            *tree_view,
                                                          GtkTreeViewColumn      *column);
 static gint             get_focus_index                 (GtkTreeView            *tree_view);
@@ -190,12 +187,8 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   g_signal_connect (tree_view, "focus-out-event",
                     G_CALLBACK (focus_out), NULL);
 
-  accessible->tree_model = tree_model;
   if (tree_model)
     {
-      g_object_add_weak_pointer (G_OBJECT (accessible->tree_model), (gpointer *)&accessible->tree_model);
-      connect_model_signals (tree_view, accessible);
-
       if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
         obj->role = ATK_ROLE_TABLE;
       else
@@ -207,9 +200,6 @@ static void
 gtk_tree_view_accessible_finalize (GObject *object)
 {
   GtkTreeViewAccessible *accessible = GTK_TREE_VIEW_ACCESSIBLE (object);
-
-  if (accessible->tree_model)
-    disconnect_model_signals (accessible);
 
   if (accessible->cell_infos)
     g_hash_table_destroy (accessible->cell_infos);
@@ -235,16 +225,10 @@ gtk_tree_view_accessible_notify_gtk (GObject    *obj,
       AtkRole role;
 
       tree_model = gtk_tree_view_get_model (tree_view);
-      if (accessible->tree_model)
-        disconnect_model_signals (accessible);
       g_hash_table_remove_all (accessible->cell_infos);
-      accessible->tree_model = tree_model;
 
       if (tree_model)
         {
-          g_object_add_weak_pointer (G_OBJECT (accessible->tree_model), (gpointer *)&accessible->tree_model);
-          connect_model_signals (tree_view, accessible);
-
           if (gtk_tree_model_get_flags (tree_model) & GTK_TREE_MODEL_LIST_ONLY)
             role = ATK_ROLE_TABLE;
           else
@@ -275,11 +259,6 @@ gtk_tree_view_accessible_destroyed (GtkWidget     *widget,
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_accessible);
 
-  if (accessible->tree_model)
-    {
-      disconnect_model_signals (accessible);
-      accessible->tree_model = NULL;
-    }
   if (accessible->focus_cell)
     {
       g_object_unref (accessible->focus_cell);
@@ -1578,41 +1557,6 @@ focus_out (GtkWidget *widget)
   return FALSE;
 }
 
-static void
-model_row_changed (GtkTreeModel *tree_model,
-                   GtkTreePath  *path,
-                   GtkTreeIter  *iter,
-                   gpointer      user_data)
-{
-  GtkTreeView *tree_view = GTK_TREE_VIEW (user_data);
-  GtkTreeViewAccessible *accessible;
-  GtkTreePath *cell_path;
-  GtkTreeViewAccessibleCellInfo *cell_info;
-  GHashTableIter hash_iter;
-
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (tree_view)));
-
-  /* Loop through our cached cells */
-  /* Must loop through them all */
-  g_hash_table_iter_init (&hash_iter, accessible->cell_infos);
-  while (g_hash_table_iter_next (&hash_iter, NULL, (gpointer *)&cell_info))
-    {
-      cell_path = cell_info_get_path (cell_info);
-
-      if (cell_path != NULL)
-        {
-          if (path && gtk_tree_path_compare (cell_path, path) == 0)
-            {
-              if (GTK_IS_RENDERER_CELL_ACCESSIBLE (cell_info->cell))
-                update_cell_value (GTK_RENDERER_CELL_ACCESSIBLE (cell_info->cell),
-                                   accessible, TRUE);
-            }
-          gtk_tree_path_free (cell_path);
-        }
-    }
-  g_signal_emit_by_name (accessible, "visible-data-changed");
-}
-
 void
 _gtk_tree_view_accessible_reorder (GtkTreeView *treeview)
 {
@@ -1867,28 +1811,6 @@ find_cell (GtkTreeViewAccessible *accessible,
   return peek_cell (accessible,
                     tree, node, 
                     get_visible_column (tree_view, index % get_n_columns (tree_view)));
-}
-
-static void
-connect_model_signals (GtkTreeView           *view,
-                       GtkTreeViewAccessible *accessible)
-{
-  GObject *obj;
-
-  obj = G_OBJECT (accessible->tree_model);
-  g_signal_connect_data (obj, "row-changed",
-                         G_CALLBACK (model_row_changed), view, NULL, 0);
-}
-
-static void
-disconnect_model_signals (GtkTreeViewAccessible *accessible)
-{
-  GObject *obj;
-  GtkWidget *widget;
-
-  obj = G_OBJECT (accessible->tree_model);
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-  g_signal_handlers_disconnect_by_func (obj, model_row_changed, widget);
 }
 
 /* Returns the column number of the specified GtkTreeViewColumn
@@ -2159,6 +2081,32 @@ _gtk_tree_view_accessible_remove (GtkTreeView *treeview,
           (tree && _gtk_rbtree_contains (tree, cell_info->tree)))
         g_hash_table_iter_remove (&iter);
     }
+}
+
+void
+_gtk_tree_view_accessible_changed (GtkTreeView *treeview,
+                                   GtkRBTree   *tree,
+                                   GtkRBNode   *node)
+{
+  GtkTreeViewAccessible *accessible;
+  guint i;
+
+  accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (treeview)));
+
+  for (i = 0; i < gtk_tree_view_get_n_columns (treeview); i++)
+    {
+      GtkCellAccessible *cell = peek_cell (accessible,
+                                           tree, node,
+                                           gtk_tree_view_get_column (treeview, i));
+
+      if (!GTK_IS_RENDERER_CELL_ACCESSIBLE (cell))
+        continue;
+
+      update_cell_value (GTK_RENDERER_CELL_ACCESSIBLE (cell),
+                         accessible, TRUE);
+    }
+
+  g_signal_emit_by_name (accessible, "visible-data-changed");
 }
 
 /* NB: id is not checked, only columns < id are.

@@ -40,7 +40,6 @@ struct _GtkTreeViewAccessible
   GtkContainerAccessible parent;
 
   GHashTable    *cell_infos;
-  GtkTreeModel  *tree_model;
   AtkObject     *focus_cell;
 };
 
@@ -59,6 +58,10 @@ void            _gtk_tree_view_accessible_add           (GtkTreeView       *tree
 void            _gtk_tree_view_accessible_remove        (GtkTreeView       *treeview,
                                                          GtkRBTree         *tree,
                                                          GtkRBNode         *node);
+void            _gtk_tree_view_accessible_changed       (GtkTreeView       *treeview,
+                                                         GtkRBTree         *tree,
+                                                         GtkRBNode         *node);
+
 
 void            _gtk_tree_view_accessible_add_column    (GtkTreeView       *treeview,
                                                          GtkTreeViewColumn *column,

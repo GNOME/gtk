@@ -8742,6 +8742,8 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
   if (tree == NULL)
     goto done;
 
+  _gtk_tree_view_accessible_changed (tree_view, tree, node);
+
   if (tree_view->priv->fixed_height_mode
       && tree_view->priv->fixed_height >= 0)
     {
