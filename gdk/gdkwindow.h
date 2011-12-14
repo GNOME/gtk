@@ -53,8 +53,8 @@ typedef struct _GdkWindowRedirect    GdkWindowRedirect;
  */
 typedef enum
 {
-  GDK_INPUT_OUTPUT,
-  GDK_INPUT_ONLY
+  GDK_INPUT_OUTPUT, /*< nick=input-output >*/
+  GDK_INPUT_ONLY    /*< nick=input-only >*/
 } GdkWindowWindowClass;
 
 /**
