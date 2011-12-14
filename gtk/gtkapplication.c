@@ -61,6 +61,12 @@
  * While GtkApplication works fine with plain #GtkWindows, it is recommended
  * to use it together with #GtkApplicationWindow.
  *
+ * To set an app menu on a GtkApplication, use g_application_set_app_menu().
+ * The #GMenuModel that this function expects is usually constructed using
+ * #GtkBuilder, as seen in the following example. To set a menubar that will
+ * be automatically picked up by #GApplicationWindows, use
+ * g_application_set_menubar().
+ *
  * <example id="gtkapplication"><title>A simple application</title>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/bloatpad.c">
