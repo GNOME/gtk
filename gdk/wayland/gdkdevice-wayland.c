@@ -17,6 +17,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#define _GNU_SOURCE
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
+
 #include "config.h"
 
 #include <string.h>
@@ -31,6 +36,8 @@
 
 #include <X11/extensions/XKBcommon.h>
 #include <X11/keysym.h>
+
+#include <sys/time.h>
 
 #define GDK_TYPE_DEVICE_CORE         (gdk_device_core_get_type ())
 #define GDK_DEVICE_CORE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE_CORE, GdkDeviceCore))
@@ -955,4 +962,112 @@ gdk_wayland_device_get_selection_type_atoms (GdkDevice  *gdk_device,
 
   *atoms_out = atoms;
   return device->selection_offer->types->len;
+}
+
+typedef struct
+{
+  GdkWaylandDevice *device;
+  DataOffer *offer;
+  GIOChannel *channel;
+  GdkDeviceWaylandRequestContentCallback cb;
+  gpointer userdata;
+} RequestContentClosure;
+
+static gboolean
+_request_content_io_func (GIOChannel *channel,
+                          GIOCondition condition,
+                          gpointer userdata)
+{
+  RequestContentClosure *closure = (RequestContentClosure *)userdata;
+  gchar *data = NULL;
+  gsize len = 0;
+  GError *error = NULL;
+
+  /* FIXME: We probably want to do something better than this to avoid
+   * blocking on the transfer of large pieces of data: call the callback
+   * multiple times I should think.
+   */
+  if (g_io_channel_read_to_end (channel,
+                                &data,
+                                &len,
+                                &error) != G_IO_STATUS_NORMAL)
+    {
+      g_warning (G_STRLOC ": Error reading content from pipe: %s", error->message);
+      g_clear_error (&error);
+    }
+
+  /* Since we use _read_to_end we've got a guaranteed EOF and thus can go
+   * ahead and close the fd
+   */
+  g_io_channel_shutdown (channel, TRUE, NULL);
+
+  closure->cb (closure->device->pointer, data, len, closure->userdata);
+
+  data_offer_unref (closure->offer);
+  g_io_channel_unref (channel);
+  g_free (closure);
+
+  return FALSE;
+}
+
+gboolean
+gdk_wayland_device_request_selection_content (GdkDevice                              *gdk_device,
+                                              const gchar                            *requested_mime_type,
+                                              GdkDeviceWaylandRequestContentCallback  cb,
+                                              gpointer                                userdata)
+{
+  int pipe_fd[2];
+  RequestContentClosure *closure;
+  GdkWaylandDevice *device;
+  GError *error = NULL;
+
+  g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), FALSE);
+  g_return_val_if_fail (requested_mime_type != NULL, FALSE);
+  g_return_val_if_fail (cb != NULL, FALSE);
+
+  device = GDK_DEVICE_CORE (gdk_device)->device;
+
+  if (!device->selection_offer)
+      return FALSE;
+
+  /* TODO: Check mimetypes */
+
+  closure = g_new0 (RequestContentClosure, 1);
+
+  device->selection_offer->ref_count++;
+
+  pipe2 (pipe_fd, O_CLOEXEC);
+  wl_data_offer_receive (device->selection_offer->offer,
+                         requested_mime_type,
+                         pipe_fd[1]);
+  close (pipe_fd[1]);
+
+  closure->device = device;
+  closure->offer = device->selection_offer;
+  closure->channel = g_io_channel_unix_new (pipe_fd[0]);
+  closure->cb = cb;
+  closure->userdata = userdata;
+
+  if (!g_io_channel_set_encoding (closure->channel, NULL, &error))
+    {
+      g_warning (G_STRLOC ": Error setting encoding on channel: %s",
+                 error->message);
+      g_clear_error (&error);
+      goto error;
+    }
+
+  g_io_add_watch (closure->channel,
+                  G_IO_IN,
+                  _request_content_io_func,
+                  closure);
+
+  return TRUE;
+
+error:
+  data_offer_unref (closure->offer);
+  g_io_channel_unref (closure->channel);
+  close (pipe_fd[1]);
+  g_free (closure);
+
+  return FALSE;
 }

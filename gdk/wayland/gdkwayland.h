@@ -37,7 +37,18 @@ GType      gdk_wayland_display_manager_get_type   (void);
 #define gdk_wayland_device_get_selection_type_atoms gdk_wayland_device_get_selection_type_atoms_libgtk_only
 int
 gdk_wayland_device_get_selection_type_atoms (GdkDevice  *device,
-                                                         GdkAtom   **atoms_out);
+                                             GdkAtom   **atoms_out);
+
+typedef void (*GdkDeviceWaylandRequestContentCallback) (GdkDevice *device, gchar *data, gsize len, gpointer userdata);
+
+#define gdk_wayland_device_request_selection_content gdk_wayland_device_request_selection_content_libgtk_only
+gboolean
+gdk_wayland_device_request_selection_content (GdkDevice                              *device,
+                                              const gchar                            *requested_mime_type,
+                                              GdkDeviceWaylandRequestContentCallback  cb,
+                                              gpointer                                userdata);
+
+
 #endif
 G_END_DECLS
 
