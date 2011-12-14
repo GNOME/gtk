@@ -368,7 +368,6 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   GtkContainerCellAccessible *container = NULL;
   GtkRendererCellAccessible *renderer_cell;
   gboolean is_expander, is_expanded, retval;
-  gboolean editable = FALSE;
   gint focus_index;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
@@ -457,10 +456,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
       renderer = GTK_CELL_RENDERER (l->data);
 
       if (GTK_IS_CELL_RENDERER_TEXT (renderer))
-        {
-          g_object_get (G_OBJECT (renderer), "editable", &editable, NULL);
-          child = _gtk_text_cell_accessible_new ();
-        }
+        child = _gtk_text_cell_accessible_new ();
       else if (GTK_IS_CELL_RENDERER_TOGGLE (renderer))
         child = _gtk_boolean_cell_accessible_new ();
       else if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
