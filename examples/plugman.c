@@ -187,30 +187,7 @@ plugin_enabled (const gchar *name)
 static GMenuModel *
 find_plugin_menu (void)
 {
-  GMenuModel *menubar;
-  GMenuModel *menu;
-  gint i, j;
-  const gchar *label, *id;
-
-  menubar = g_application_get_menubar (g_application_get_default ());
-  for (i = 0; i < g_menu_model_get_n_items (menubar); i++)
-    {
-       if (g_menu_model_get_item_attribute (menubar, i, "label", "s", &label) &&
-           g_strcmp0 (label, "_Edit") == 0)
-         {
-            menu = g_menu_model_get_item_link (menubar, i, "submenu");
-            for (j = 0; j < g_menu_model_get_n_items (menu); j++)
-              {
-                if (g_menu_model_get_item_attribute (menu, j, "id", "s", &id) &&
-                    g_strcmp0 (id, "plugins") == 0)
-                  {
-                    return g_menu_model_get_item_link (menu, j, "section");
-                  }
-              }
-         }
-    }
-
-  return NULL;
+  return (GMenuModel*) g_object_get_data (G_OBJECT (g_application_get_default ()), "plugin-menu");
 }
 
 static void
@@ -425,8 +402,8 @@ plug_man_startup (GApplication *application)
                                "        <item label='_Copy' action='win.copy'/>"
                                "        <item label='_Paste' action='win.paste'/>"
                                "      </section>"
-                               "      <section id='plugins'>"
-                               "      </section>"
+                               "      <item><link name='section' id='plugins'>"
+                               "      </link></item>"
                                "      <section>"
                                "        <item label='Plugins' action='app.plugins'/>"
                                "      </section>"
@@ -440,6 +417,7 @@ plug_man_startup (GApplication *application)
                                "</interface>", -1, NULL);
   g_application_set_app_menu (application, G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   g_application_set_menubar (application, G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
+  g_object_set_data_full (G_OBJECT (application), "plugin-menu", gtk_builder_get_object (builder, "plugins"), g_object_unref);
   g_object_unref (builder);
 }
 
