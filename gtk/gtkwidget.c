@@ -10704,7 +10704,8 @@ gtk_widget_propagate_state (GtkWidget    *widget,
       g_signal_emit (widget, widget_signals[STATE_CHANGED], 0, old_state);
       g_signal_emit (widget, widget_signals[STATE_FLAGS_CHANGED], 0, old_flags);
 
-      if (!priv->shadowed)
+      if (!priv->shadowed &&
+          (new_flags & GTK_STATE_FLAG_INSENSITIVE) != (old_flags & GTK_STATE_FLAG_INSENSITIVE))
         {
           GList *event_windows = NULL;
           GList *devices, *d;
@@ -10729,7 +10730,7 @@ gtk_widget_propagate_state (GtkWidget    *widget,
               if (!gtk_widget_is_sensitive (widget))
                 _gtk_widget_synthesize_crossing (widget, NULL, d->data,
                                                  GDK_CROSSING_STATE_CHANGED);
-              else if (old_flags & GTK_STATE_FLAG_INSENSITIVE)
+              else
                 _gtk_widget_synthesize_crossing (NULL, widget, d->data,
                                                  GDK_CROSSING_STATE_CHANGED);
 
