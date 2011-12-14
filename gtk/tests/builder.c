@@ -2592,14 +2592,14 @@ test_gmenu (void)
     "      <item label='Copy' action='copy'/>"
     "      <item label='Paste' action='paste'/>"
     "    </section>"
-    "    <section>"
+    "    <item><link name='section' id='blargh'>"
     "      <item label='Bold' action='bold'/>"
     "      <submenu label='Language'>"
     "        <item label='Latin' action='lang' target='latin'/>"
     "        <item label='Greek' action='lang' target='greek'/>"
     "        <item label='Urdu'  action='lang' target='urdu'/>"
     "      </submenu>"
-    "    </section>"
+    "    </link></item>"
     "  </menu>"
     "</interface>";
 
@@ -2607,6 +2607,8 @@ test_gmenu (void)
   obj = gtk_builder_get_object (builder, "window");
   g_assert (GTK_IS_WINDOW (obj));
   obj1 = gtk_builder_get_object (builder, "edit-menu");
+  g_assert (G_IS_MENU_MODEL (obj1));
+  obj1 = gtk_builder_get_object (builder, "blargh");
   g_assert (G_IS_MENU_MODEL (obj1));
   g_object_unref (builder);
 }
