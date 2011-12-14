@@ -63,7 +63,7 @@ log_operation_for_path (GtkTreePath *path,
 {
   char *path_string;
 
-  path_string = gtk_tree_path_to_string (path);
+  path_string = path ? gtk_tree_path_to_string (path) : g_strdup ("");
 
   g_printerr ("%10s %s\n", operation_name, path_string);
 
@@ -288,6 +288,39 @@ unselect (GtkTreeView *treeview)
                                     &iter);
 }
 
+static void
+reset_model (GtkTreeView *treeview)
+{
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GList *list, *selected;
+  GtkTreePath *cursor;
+  
+  selection = gtk_tree_view_get_selection (treeview);
+  model = g_object_ref (gtk_tree_view_get_model (treeview));
+
+  log_operation_for_path (NULL, "reset");
+
+  selected = gtk_tree_selection_get_selected_rows (selection, NULL);
+  gtk_tree_view_get_cursor (treeview, &cursor, NULL);
+
+  gtk_tree_view_set_model (treeview, NULL);
+  gtk_tree_view_set_model (treeview, model);
+
+  if (cursor)
+    {
+      gtk_tree_view_set_cursor (treeview, cursor, NULL, FALSE);
+      gtk_tree_path_free (cursor);
+    }
+  for (list = selected; list; list = list->next)
+    {
+      gtk_tree_selection_select_path (selection, list->data);
+    }
+  g_list_free_full (selected, (GDestroyNotify) gtk_tree_path_free);
+
+  g_object_unref (model);
+}
+
 /* sanity checks */
 
 static void
@@ -363,7 +396,8 @@ dance (gpointer treeview)
     expand,
     collapse,
     select_,
-    unselect
+    unselect,
+    reset_model
   };
   guint i;
 
