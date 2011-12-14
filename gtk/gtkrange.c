@@ -137,6 +137,9 @@ struct _GtkRangePrivate
   guint lower_sensitive        : 1;
   guint upper_sensitive        : 1;
 
+  /* The range has an origin, should be drawn differently. Used by GtkScale */
+  guint has_origin             : 1;
+
   /* Fill level */
   guint show_fill_level        : 1;
   guint restrict_to_fill_level : 1;
@@ -736,6 +739,7 @@ gtk_range_init (GtkRange *range)
   priv->upper_sensitivity = GTK_SENSITIVITY_AUTO;
   priv->lower_sensitive = TRUE;
   priv->upper_sensitive = TRUE;
+  priv->has_origin = FALSE;
   priv->show_fill_level = FALSE;
   priv->restrict_to_fill_level = TRUE;
   priv->fill_level = G_MAXDOUBLE;
@@ -2109,37 +2113,82 @@ gtk_range_draw (GtkWidget *widget,
 
       if (draw_trough)
         {
-          gint trough_change_pos_x = width;
-          gint trough_change_pos_y = height;
+          if (!priv->has_origin)
+            {
+              gtk_render_background (context, cr,
+                                     x, y, width, height);
 
-          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-            trough_change_pos_x = (priv->slider.x +
-                                   priv->slider.width / 2 -
-                                   x);
+              gtk_render_frame (context, cr,
+                                x, y, width, height);
+            }
           else
-            trough_change_pos_y = (priv->slider.y +
-                                   priv->slider.height / 2 -
-                                   y);
+            {
+              gboolean is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
-          /* FIXME: was trough-upper and trough-lower really used,
-           * in that case, it should still be exposed somehow.
-           */
-          gtk_render_background (context, cr, x, y,
-                                 trough_change_pos_x,
-                                 trough_change_pos_y);
+              gint trough_change_pos_x = width;
+              gint trough_change_pos_y = height;
 
-          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-            trough_change_pos_y = 0;
-          else
-            trough_change_pos_x = 0;
+              if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+                trough_change_pos_x = (priv->slider.x +
+                                       priv->slider.width / 2 -
+                                       x);
+              else
+                trough_change_pos_y = (priv->slider.y +
+                                       priv->slider.height / 2 -
+                                       y);
 
-          gtk_render_background (context, cr,
-                                 x + trough_change_pos_x, y + trough_change_pos_y,
-                                 width - trough_change_pos_x,
-                                 height - trough_change_pos_y);
+              gtk_style_context_save (context);
+              if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+                {
+                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
 
-          gtk_render_frame (context, cr,
-                            x, y, width, height);
+                  if (!is_rtl)
+                    gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
+                }
+              else
+                gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+
+              gtk_render_background (context, cr, x, y,
+                                     trough_change_pos_x,
+                                     trough_change_pos_y);
+
+              gtk_render_frame (context, cr, x, y,
+                                trough_change_pos_x,
+                                trough_change_pos_y);
+
+              gtk_style_context_restore (context);
+
+              if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+                trough_change_pos_y = 0;
+              else
+                trough_change_pos_x = 0;
+
+              gtk_style_context_save (context);
+              if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+                {
+                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+
+                  if (is_rtl)
+                    gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
+                }
+              else
+                {
+                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
+                }
+
+              gtk_render_background (context, cr,
+                                     x + trough_change_pos_x, y + trough_change_pos_y,
+                                     width - trough_change_pos_x,
+                                     height - trough_change_pos_y);
+
+              gtk_render_frame (context, cr,
+                                x + trough_change_pos_x, y + trough_change_pos_y,
+                                width - trough_change_pos_x,
+                                height - trough_change_pos_y);
+
+              gtk_style_context_restore (context);
+            }
         }
       else
         {
@@ -4060,6 +4109,19 @@ gtk_range_remove_step_timer (GtkRange *range)
 
       priv->timer = NULL;
     }
+}
+
+void
+_gtk_range_set_has_origin (GtkRange *range,
+                           gboolean  has_origin)
+{
+  range->priv->has_origin = has_origin;
+}
+
+gboolean
+_gtk_range_get_has_origin (GtkRange *range)
+{
+  return range->priv->has_origin;
 }
 
 void

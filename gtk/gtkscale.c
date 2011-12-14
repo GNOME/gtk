@@ -104,6 +104,7 @@ enum {
   PROP_0,
   PROP_DIGITS,
   PROP_DRAW_VALUE,
+  PROP_HAS_ORIGIN,
   PROP_VALUE_POS
 };
 
@@ -248,7 +249,15 @@ gtk_scale_class_init (GtkScaleClass *class)
 							 P_("Whether the current value is displayed as a string next to the slider"),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
-  
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_HAS_ORIGIN,
+                                   g_param_spec_boolean ("has-origin",
+                                                         P_("Has Origin"),
+                                                         P_("Whether the scale has an origin"),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE));
+
   g_object_class_install_property (gobject_class,
                                    PROP_VALUE_POS,
                                    g_param_spec_enum ("value-pos",
@@ -426,6 +435,8 @@ gtk_scale_init (GtkScale *scale)
 
   gtk_range_set_slider_size_fixed (range, TRUE);
 
+  _gtk_range_set_has_origin (range, TRUE);
+
   priv->draw_value = TRUE;
   priv->value_pos = GTK_POS_TOP;
   priv->digits = 1;
@@ -458,6 +469,9 @@ gtk_scale_set_property (GObject      *object,
     case PROP_DRAW_VALUE:
       gtk_scale_set_draw_value (scale, g_value_get_boolean (value));
       break;
+    case PROP_HAS_ORIGIN:
+      gtk_scale_set_has_origin (scale, g_value_get_boolean (value));
+      break;
     case PROP_VALUE_POS:
       gtk_scale_set_value_pos (scale, g_value_get_enum (value));
       break;
@@ -483,6 +497,9 @@ gtk_scale_get_property (GObject      *object,
       break;
     case PROP_DRAW_VALUE:
       g_value_set_boolean (value, priv->draw_value);
+      break;
+    case PROP_HAS_ORIGIN:
+      g_value_set_boolean (value, gtk_scale_get_has_origin (scale));
       break;
     case PROP_VALUE_POS:
       g_value_set_enum (value, priv->value_pos);
@@ -675,6 +692,58 @@ gtk_scale_get_draw_value (GtkScale *scale)
   g_return_val_if_fail (GTK_IS_SCALE (scale), FALSE);
 
   return scale->priv->draw_value;
+}
+
+/**
+ * gtk_scale_set_has_origin:
+ * @scale: a #GtkScale
+ * @has_origin: %TRUE if the scale has an origin
+ * 
+ * If @has_origin is set to %TRUE (the default),
+ * the scale will highlight the part of the scale
+ * between the origin (bottom or left side) of the scale
+ * and the current value.
+ *
+ * Since: 3.4
+ */
+void
+gtk_scale_set_has_origin (GtkScale *scale,
+                          gboolean  has_origin)
+{
+  GtkScalePrivate *priv;
+
+  g_return_if_fail (GTK_IS_SCALE (scale));
+
+  priv = scale->priv;
+
+  has_origin = has_origin != FALSE;
+
+  if (_gtk_range_get_has_origin (GTK_RANGE (scale)) != has_origin)
+    {
+      _gtk_range_set_has_origin (GTK_RANGE (scale), has_origin);
+
+      gtk_widget_queue_draw (GTK_WIDGET (scale));
+
+      g_object_notify (G_OBJECT (scale), "has-origin");
+    }
+}
+
+/**
+ * gtk_scale_get_has_origin:
+ * @scale: a #GtkScale
+ *
+ * Returns whether the scale has an origin.
+ *
+ * Returns: %TRUE if the scale has an origin.
+ * 
+ * Since: 3.4
+ */
+gboolean
+gtk_scale_get_has_origin (GtkScale *scale)
+{
+  g_return_val_if_fail (GTK_IS_SCALE (scale), FALSE);
+
+  return _gtk_range_get_has_origin (GTK_RANGE (scale));
 }
 
 /**

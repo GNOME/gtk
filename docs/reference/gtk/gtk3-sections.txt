@@ -2820,9 +2820,11 @@ gtk_scale_new
 gtk_scale_new_with_range
 gtk_scale_set_digits
 gtk_scale_set_draw_value
+gtk_scale_set_has_origin
 gtk_scale_set_value_pos
 gtk_scale_get_digits
 gtk_scale_get_draw_value
+gtk_scale_get_has_origin
 gtk_scale_get_value_pos
 gtk_scale_get_layout
 gtk_scale_get_layout_offsets
