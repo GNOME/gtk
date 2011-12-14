@@ -43,6 +43,8 @@ typedef struct _GdkDeviceCore GdkDeviceCore;
 typedef struct _GdkDeviceCoreClass GdkDeviceCoreClass;
 typedef struct _GdkWaylandDevice GdkWaylandDevice;
 
+typedef struct _DataOffer DataOffer;
+
 struct _GdkWaylandDevice
 {
   GdkDisplay *display;
@@ -55,6 +57,9 @@ struct _GdkWaylandDevice
   struct wl_data_device *data_device;
   int32_t x, y, surface_x, surface_y;
   uint32_t time;
+
+  DataOffer *drag_offer;
+  DataOffer *selection_offer;
 };
 
 struct _GdkDeviceCore
@@ -596,6 +601,158 @@ static const struct wl_input_device_listener input_device_listener = {
   input_handle_keyboard_focus,
 };
 
+struct _DataOffer {
+  struct wl_data_offer *offer;
+  gint ref_count;
+  GPtrArray *types;
+};
+
+static void
+data_offer_offer (void                 *data,
+                  struct wl_data_offer *wl_data_offer,
+                  const char           *type)
+{
+  DataOffer *offer = (DataOffer *)data;
+  g_debug (G_STRLOC ": %s wl_data_offer = %p type = %s",
+           G_STRFUNC, wl_data_offer, type);
+
+  g_ptr_array_add (offer->types, g_strdup (type));
+}
+
+static void
+data_offer_unref (DataOffer *offer)
+{
+  offer->ref_count--;
+
+  if (offer->ref_count == 0)
+    {
+      g_ptr_array_free (offer->types, TRUE);
+      g_free (offer);
+    }
+}
+
+static const struct wl_data_offer_listener data_offer_listener = {
+  data_offer_offer,
+};
+
+static void
+data_device_data_offer (void                  *data,
+                        struct wl_data_device *data_device,
+                        uint32_t               id)
+{
+  DataOffer *offer;
+
+  g_debug (G_STRLOC ": %s data_device = %p id = %lu",
+           G_STRFUNC, data_device, (long unsigned int)id);
+
+  /* This structure is reference counted to handle the case where you get a
+   * leave but are in the middle of transferring data
+   */
+  offer = g_new0 (DataOffer, 1);
+  offer->ref_count = 1;
+  offer->types = g_ptr_array_new_with_free_func (g_free);
+  offer->offer = (struct wl_data_offer *)
+    wl_proxy_create_for_id ((struct wl_proxy *) data_device,
+                            id,
+                            &wl_data_offer_interface);
+
+  /* The DataOffer structure is then retrieved later since this sets the user
+   * data.
+   */
+  wl_data_offer_add_listener (offer->offer,
+                              &data_offer_listener,
+                              offer);
+}
+
+static void
+data_device_enter (void                  *data,
+                   struct wl_data_device *data_device,
+                   uint32_t               time,
+                   struct wl_surface     *surface,
+                   int32_t                x,
+                   int32_t                y,
+                   struct wl_data_offer  *offer)
+{
+  GdkWaylandDevice *device = (GdkWaylandDevice *)data;
+
+  g_debug (G_STRLOC ": %s data_device = %p time = %d, surface = %p, x = %d y = %d, offer = %p",
+           G_STRFUNC, data_device, time, surface, x, y, offer);
+
+  /* Retrieve the DataOffer associated with with the wl_data_offer - this
+   * association is made when the listener is attached.
+   */
+  g_assert (device->drag_offer == NULL);
+  device->drag_offer = wl_data_offer_get_user_data (offer);
+}
+
+static void
+data_device_leave (void                  *data,
+                   struct wl_data_device *data_device)
+{
+  GdkWaylandDevice *device = (GdkWaylandDevice *)data;
+
+  g_debug (G_STRLOC ": %s data_device = %p",
+           G_STRFUNC, data_device);
+
+  data_offer_unref (device->drag_offer);
+  device->drag_offer = NULL;
+}
+
+static void
+data_device_motion (void                  *data,
+                    struct wl_data_device *data_device,
+                    uint32_t               time,
+                    int32_t                x,
+                    int32_t                y)
+{
+  g_debug (G_STRLOC ": %s data_device = %p, time = %d, x = %d, y = %d",
+           G_STRFUNC, data_device, time, x, y);
+}
+
+static void
+data_device_drop (void                  *data,
+                  struct wl_data_device *data_device)
+{
+  g_debug (G_STRLOC ": %s data_device = %p",
+           G_STRFUNC, data_device);
+}
+
+static void
+data_device_selection (void                  *data,
+                       struct wl_data_device *wl_data_device,
+                       struct wl_data_offer  *offer)
+{
+  GdkWaylandDevice *device = (GdkWaylandDevice *)data;
+  GdkDeviceManager *device_manager =
+    gdk_display_get_device_manager (device->display);
+  GdkDeviceManagerCore *device_manager_core =
+    GDK_DEVICE_MANAGER_CORE (device_manager);
+
+  g_debug (G_STRLOC ": %s wl_data_device = %p wl_data_offer = %p",
+           G_STRFUNC, wl_data_device, offer);
+
+  if (device->selection_offer)
+    {
+      data_offer_unref (device->selection_offer);
+      device->selection_offer = NULL;
+    }
+
+  /* Retrieve the DataOffer associated with with the wl_data_offer - this
+   * association is made when the listener is attached.
+   */
+  g_assert (device->selection_offer == NULL);
+  device->selection_offer = wl_data_offer_get_user_data (offer);
+}
+
+static const struct wl_data_device_listener data_device_listener = {
+  data_device_data_offer,
+  data_device_enter,
+  data_device_leave,
+  data_device_motion,
+  data_device_drop,
+  data_device_selection
+};
+
 void
 _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 					struct wl_input_device *wl_device)
@@ -641,6 +798,8 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
   device->data_device =
     wl_data_device_manager_get_data_device (display_wayland->data_device_manager,
                                             device->device);
+  wl_data_device_add_listener (device->data_device,
+                               &data_device_listener, device);
 
   device_manager_core->devices =
     g_list_prepend (device_manager_core->devices, device->keyboard);
