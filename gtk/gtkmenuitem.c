@@ -1765,16 +1765,16 @@ gtk_menu_item_draw (GtkWidget *widget,
                             NULL);
       if (wide_separators)
         gtk_render_frame (context, cr,
-                          horizontal_padding + padding.left,
-                          (height - separator_height - padding.top) / 2,
-                          width - (2 * horizontal_padding) - padding.left - padding.right,
+                          x + horizontal_padding + padding.left,
+                          y + padding.top,
+                          w - (2 * horizontal_padding) - padding.left - padding.right,
                           separator_height);
       else
         gtk_render_line (context, cr,
-                         horizontal_padding + padding.left,
-                         (height - padding.top) / 2,
-                         width - horizontal_padding - padding.right - 1,
-                         (height - padding.top) / 2);
+                         x + horizontal_padding + padding.left,
+                         y + padding.top,
+                         x + w - horizontal_padding - padding.right - 1,
+                         y + padding.top);
     }
 
   GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->draw (widget, cr);
