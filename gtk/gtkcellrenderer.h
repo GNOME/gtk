@@ -82,6 +82,7 @@ typedef enum
 typedef struct _GtkCellRenderer              GtkCellRenderer;
 typedef struct _GtkCellRendererPrivate       GtkCellRendererPrivate;
 typedef struct _GtkCellRendererClass         GtkCellRendererClass;
+typedef struct _GtkCellRendererClassPrivate  GtkCellRendererClassPrivate;
 
 struct _GtkCellRenderer
 {
@@ -154,8 +155,9 @@ struct _GtkCellRendererClass
 			     GtkCellEditable *editable,
 			     const gchar     *path);
 
+  GtkCellRendererClassPrivate *priv;
+
   /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);

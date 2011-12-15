@@ -128,6 +128,9 @@ struct _GtkCellRendererPrivate
   GdkRGBA cell_background;
 };
 
+struct _GtkCellRendererClassPrivate
+{
+};
 
 enum {
   PROP_0,
@@ -157,8 +160,6 @@ enum {
 };
 
 static guint  cell_renderer_signals[LAST_SIGNAL] = { 0 };
-
-G_DEFINE_ABSTRACT_TYPE(GtkCellRenderer, gtk_cell_renderer, G_TYPE_INITIALLY_UNOWNED)
 
 static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)
@@ -415,6 +416,43 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
                 P_("Whether this tag affects the cell background color"));
 
   g_type_class_add_private (class, sizeof (GtkCellRendererPrivate));
+}
+
+static void
+gtk_cell_renderer_base_class_init (gpointer g_class)
+{
+  GtkCellRendererClass *klass = g_class;
+
+  klass->priv = G_TYPE_CLASS_GET_PRIVATE (g_class, GTK_TYPE_CELL_RENDERER, GtkCellRendererClassPrivate);
+}
+
+GType
+gtk_cell_renderer_get_type (void)
+{
+  static GType cell_renderer_type = 0;
+
+  if (G_UNLIKELY (cell_renderer_type == 0))
+    {
+      const GTypeInfo cell_renderer_info =
+      {
+	sizeof (GtkCellRendererClass),
+	gtk_cell_renderer_base_class_init,
+        NULL,
+	(GClassInitFunc) gtk_cell_renderer_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_init */
+	sizeof (GtkWidget),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_cell_renderer_init,
+	NULL,		/* value_table */
+      };
+      cell_renderer_type = g_type_register_static (G_TYPE_INITIALLY_UNOWNED, "GtkCellRenderer",
+                                                   &cell_renderer_info, G_TYPE_FLAG_ABSTRACT);
+
+      g_type_add_class_private (cell_renderer_type, sizeof (GtkCellRendererClassPrivate));
+    }
+
+  return cell_renderer_type;
 }
 
 static void
