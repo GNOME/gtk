@@ -439,3 +439,31 @@ _gtk_cell_accessible_state_changed (GtkCellAccessible    *cell,
                                         state_map[i].invert);
     }
 }
+
+/**
+ * _gtk_cell_accessible_update_cache:
+ * @cell: the cell that is changed
+ *
+ * Notifies the cell that the values in the data in the row that
+ * is used to feed the cell renderer with has changed. The
+ * cell_changed function of @cell is called to send update
+ * notifications for the properties it takes from its cell
+ * renderer.
+ * 
+ * Note that there is no higher granularity available about which
+ * properties changed, so you will need to make do with this
+ * function.
+ **/
+void
+_gtk_cell_accessible_update_cache (GtkCellAccessible *cell)
+{
+  GtkCellAccessibleClass *klass;
+  
+  g_return_if_fail (GTK_CELL_ACCESSIBLE (cell));
+
+  klass = GTK_CELL_ACCESSIBLE_GET_CLASS (cell);
+
+  if (klass->update_cache)
+    klass->update_cache (cell);
+}
+

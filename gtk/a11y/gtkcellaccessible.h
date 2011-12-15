@@ -44,6 +44,7 @@ struct _GtkCellAccessible
 struct _GtkCellAccessibleClass
 {
   AtkObjectClass parent_class;
+  void (*update_cache) (GtkCellAccessible *cell);
 };
 
 GType    _gtk_cell_accessible_get_type      (void);
@@ -54,6 +55,7 @@ void     _gtk_cell_accessible_state_changed (GtkCellAccessible *cell,
                                              GtkCellRendererState added,
                                              GtkCellRendererState removed);
 void     _gtk_cell_accessible_set_cell_data (GtkCellAccessible *cell);
+void     _gtk_cell_accessible_update_cache  (GtkCellAccessible *cell);
 
 void     _gtk_cell_accessible_initialise    (GtkCellAccessible *cell,
                                              GtkWidget         *widget,

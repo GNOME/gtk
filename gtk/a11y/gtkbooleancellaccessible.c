@@ -27,13 +27,13 @@ G_DEFINE_TYPE (GtkBooleanCellAccessible, _gtk_boolean_cell_accessible, GTK_TYPE_
 
 
 static void
-gtk_boolean_cell_accessible_update_cache (GtkRendererCellAccessible *cell)
+gtk_boolean_cell_accessible_update_cache (GtkCellAccessible *cell)
 {
   GtkBooleanCellAccessible *boolean_cell = GTK_BOOLEAN_CELL_ACCESSIBLE (cell);
   gboolean active;
   gboolean sensitive;
 
-  g_object_get (G_OBJECT (cell->renderer),
+  g_object_get (G_OBJECT (GTK_RENDERER_CELL_ACCESSIBLE (cell)->renderer),
                 "active", &active,
                 "sensitive", &sensitive,
                 NULL);
@@ -62,9 +62,9 @@ gtk_boolean_cell_accessible_update_cache (GtkRendererCellAccessible *cell)
 static void
 _gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
 {
-  GtkRendererCellAccessibleClass *renderer_cell_class = GTK_RENDERER_CELL_ACCESSIBLE_CLASS (klass);
+  GtkCellAccessibleClass *cell_class = GTK_CELL_ACCESSIBLE_CLASS (klass);
 
-  renderer_cell_class->update_cache = gtk_boolean_cell_accessible_update_cache;
+  cell_class->update_cache = gtk_boolean_cell_accessible_update_cache;
 }
 
 static void

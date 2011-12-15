@@ -1651,7 +1651,7 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
                                                is_expander, is_expanded);
     }
 
-  _gtk_renderer_cell_accessible_update_cache (renderer_cell);
+  _gtk_cell_accessible_update_cache (cell);
 }
 
 /* Misc Private */
