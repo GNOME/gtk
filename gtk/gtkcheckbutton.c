@@ -179,7 +179,6 @@ gtk_check_button_paint (GtkWidget    *widget,
     {
       GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
       GtkStyleContext *context;
-      GtkStateFlags state;
       GtkAllocation allocation;
       gint border_width;
       gint interior_focus;
@@ -196,9 +195,6 @@ gtk_check_button_paint (GtkWidget    *widget,
 
       gtk_widget_get_allocation (widget, &allocation);
       context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
-
-      gtk_style_context_set_state (context, state);
 
       if (interior_focus && child && gtk_widget_get_visible (child))
         {
