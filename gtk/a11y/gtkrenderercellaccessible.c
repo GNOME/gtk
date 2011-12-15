@@ -103,16 +103,17 @@ _gtk_renderer_cell_accessible_init (GtkRendererCellAccessible *renderer_cell)
 {
 }
 
-gboolean
-_gtk_renderer_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
-                                            gboolean                   emit_change_signal)
+void
+_gtk_renderer_cell_accessible_update_cache (GtkRendererCellAccessible *cell)
 {
-  GtkRendererCellAccessibleClass *class = GTK_RENDERER_CELL_ACCESSIBLE_GET_CLASS (cell);
+  GtkRendererCellAccessibleClass *klass;
+  
+  g_return_if_fail (GTK_IS_RENDERER_CELL_ACCESSIBLE (cell));
 
-  if (class->update_cache)
-    return (class->update_cache) (cell, emit_change_signal);
+  klass = GTK_RENDERER_CELL_ACCESSIBLE_GET_CLASS (cell);
 
-  return FALSE;
+  if (klass->update_cache)
+    klass->update_cache (cell);
 }
 
 AtkObject *

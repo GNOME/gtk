@@ -56,7 +56,7 @@ static gboolean focus_out            (GtkWidget        *widget);
 
 static int              cell_info_get_index             (GtkTreeView                     *tree_view,
                                                          GtkTreeViewAccessibleCellInfo   *info);
-static gboolean         update_cell_value               (GtkRendererCellAccessible       *renderer_cell,
+static void             update_cell_value               (GtkRendererCellAccessible       *renderer_cell,
                                                          GtkTreeViewAccessible           *accessible,
                                                          gboolean               emit_change_signal);
 static gboolean         is_cell_showing                 (GtkTreeView            *tree_view,
@@ -1605,7 +1605,7 @@ is_cell_showing (GtkTreeView  *tree_view,
  * set to FALSE and in model_row_changed() on receipt of "row-changed"
  * signal when emit_change_signal is set to TRUE
  */
-static gboolean
+static void
 update_cell_value (GtkRendererCellAccessible      *renderer_cell,
                    GtkTreeViewAccessible *accessible,
                    gboolean               emit_change_signal)
@@ -1621,7 +1621,7 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
   cell = GTK_CELL_ACCESSIBLE (renderer_cell);
   cell_info = find_cell_info (accessible, cell);
   if (!cell_info)
-    return FALSE;
+    return;
 
   if (emit_change_signal)
     {
@@ -1629,7 +1629,7 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
       tree_model = gtk_tree_view_get_model (tree_view);
       path = cell_info_get_path (cell_info);
       if (path == NULL)
-        return FALSE;
+        return;
 
       gtk_tree_model_get_iter (tree_model, &iter, path);
       is_expander = FALSE;
@@ -1651,7 +1651,7 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
                                                is_expander, is_expanded);
     }
 
-  return _gtk_renderer_cell_accessible_update_cache (renderer_cell, emit_change_signal);
+  _gtk_renderer_cell_accessible_update_cache (renderer_cell);
 }
 
 /* Misc Private */

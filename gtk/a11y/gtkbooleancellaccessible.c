@@ -26,12 +26,10 @@
 G_DEFINE_TYPE (GtkBooleanCellAccessible, _gtk_boolean_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE)
 
 
-static gboolean
-gtk_boolean_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
-                                          gboolean                   emit_change_signal)
+static void
+gtk_boolean_cell_accessible_update_cache (GtkRendererCellAccessible *cell)
 {
   GtkBooleanCellAccessible *boolean_cell = GTK_BOOLEAN_CELL_ACCESSIBLE (cell);
-  gboolean rv = FALSE;
   gboolean active;
   gboolean sensitive;
 
@@ -42,27 +40,23 @@ gtk_boolean_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
 
   if (boolean_cell->cell_value != active)
     {
-      rv = TRUE;
       boolean_cell->cell_value = !boolean_cell->cell_value;
 
       if (active)
-        _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_CHECKED, emit_change_signal);
+        _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_CHECKED, TRUE);
       else
-        _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_CHECKED, emit_change_signal);
+        _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_CHECKED, TRUE);
     }
 
   if (boolean_cell->cell_sensitive != sensitive)
     {
-      rv = TRUE;
       boolean_cell->cell_sensitive = !boolean_cell->cell_sensitive;
 
       if (sensitive)
-        _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_SENSITIVE, emit_change_signal);
+        _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_SENSITIVE, TRUE);
       else
-        _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_SENSITIVE, emit_change_signal);
+        _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_SENSITIVE, TRUE);
     }
-
-  return rv;
 }
 
 static void

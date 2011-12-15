@@ -80,8 +80,7 @@ static void             add_attr                        (PangoAttrList  *attr_li
 
 /* Misc */
 
-static gboolean gtk_text_cell_accessible_update_cache             (GtkRendererCellAccessible *cell,
-                                                         gboolean       emit_change_signal);
+static void gtk_text_cell_accessible_update_cache       (GtkRendererCellAccessible *cell);
 
 static void atk_text_interface_init (AtkTextIface *iface);
 
@@ -121,9 +120,8 @@ gtk_text_cell_accessible_get_name (AtkObject *atk_obj)
   return text_cell->cell_text;
 }
 
-static gboolean
-gtk_text_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
-                                       gboolean                   emit_change_signal)
+static void
+gtk_text_cell_accessible_update_cache (GtkRendererCellAccessible *cell)
 {
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (cell);
   AtkObject *obj = ATK_OBJECT (cell);
@@ -141,12 +139,9 @@ gtk_text_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
           temp_length = text_cell->cell_length;
           text_cell->cell_text = NULL;
           text_cell->cell_length = 0;
-          if (emit_change_signal)
-            {
-              g_signal_emit_by_name (cell, "text-changed::delete", 0, temp_length);
-              if (obj->name == NULL)
-                g_object_notify (G_OBJECT (obj), "accessible-name");
-            }
+          g_signal_emit_by_name (cell, "text-changed::delete", 0, temp_length);
+          if (obj->name == NULL)
+            g_object_notify (G_OBJECT (obj), "accessible-name");
           if (text)
             rv = TRUE;
         }
@@ -172,16 +167,12 @@ gtk_text_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
 
   if (rv)
     {
-      if (emit_change_signal)
-        {
-          g_signal_emit_by_name (cell, "text-changed::insert",
-                                 0, text_cell->cell_length);
+      g_signal_emit_by_name (cell, "text-changed::insert",
+                             0, text_cell->cell_length);
 
-          if (obj->name == NULL)
-            g_object_notify (G_OBJECT (obj), "accessible-name");
-        }
+      if (obj->name == NULL)
+        g_object_notify (G_OBJECT (obj), "accessible-name");
     }
-  return rv;
 }
 
 static void
