@@ -378,7 +378,8 @@ _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
 {
   _gtk_icon_helper_clear (self);
 
-  if (icon_name != NULL)
+  if (icon_name != NULL &&
+      g_strcmp0 (icon_name, "") != 0)
     {
       self->priv->storage_type = GTK_IMAGE_ICON_NAME;
       self->priv->icon_name = g_strdup (icon_name);
