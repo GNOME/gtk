@@ -448,6 +448,7 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 
   gtk_widget_get_allocation (widget, &allocation);
   context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
   gtk_widget_style_get (widget, 
                         "interior-focus", &interior_focus,
@@ -466,6 +467,11 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   if (!interior_focus || !(child && gtk_widget_get_visible (child)))
     x += focus_width + focus_pad;      
 
+  state &= ~(GTK_STATE_FLAG_INCONSISTENT |
+             GTK_STATE_FLAG_ACTIVE |
+             GTK_STATE_FLAG_SELECTED |
+             GTK_STATE_FLAG_PRELIGHT);
+
   if (gtk_toggle_button_get_inconsistent (toggle_button))
     state |= GTK_STATE_FLAG_INCONSISTENT;
   else if (gtk_toggle_button_get_active (toggle_button) ||
@@ -477,12 +483,11 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 
   if (button->priv->in_button)
     state |= GTK_STATE_FLAG_PRELIGHT;
-  else if (!gtk_widget_is_sensitive (widget))
-    state |= GTK_STATE_FLAG_INSENSITIVE;
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     x = allocation.width - (indicator_size + x);
 
+  gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
 
   if (state & GTK_STATE_FLAG_PRELIGHT)
@@ -491,7 +496,6 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
                            allocation.width - (2 * border_width),
                            allocation.height - (2 * border_width));
 
-  gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
 
   gtk_render_check (context, cr,
