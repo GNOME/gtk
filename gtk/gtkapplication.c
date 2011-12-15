@@ -61,11 +61,21 @@
  * While GtkApplication works fine with plain #GtkWindows, it is recommended
  * to use it together with #GtkApplicationWindow.
  *
- * To set an app menu on a GtkApplication, use g_application_set_app_menu().
- * The #GMenuModel that this function expects is usually constructed using
- * #GtkBuilder, as seen in the following example. To set a menubar that will
- * be automatically picked up by #GApplicationWindows, use
- * g_application_set_menubar().
+ * To set an application menu on a GtkApplication, use
+ * g_application_set_app_menu(). The #GMenuModel that this function
+ * expects is usually constructed using #GtkBuilder, as seen in the
+ * following example. To set a menubar that will be automatically picked
+ * up by #GApplicationWindows, use g_application_set_menubar(). GTK+
+ * makes these menus appear as expected, depending on the platform
+ * the application is running on.
+ *
+ * <figure label="Menu integration in OS X">
+ * <graphic fileref="bloatpad-osx.png" format="PNG"/>
+ * </figure>
+ *
+ * <figure label="Menu integration in GNOME">
+ * <graphic fileref="bloatpad-gnome.png" format="PNG"/>
+ * </figure>
  *
  * <example id="gtkapplication"><title>A simple application</title>
  * <programlisting>
