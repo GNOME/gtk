@@ -560,7 +560,7 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
       if (priv->active ||
           priv->always_show_toggle ||
-          (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_PRELIGHT))
+          (state & GTK_STATE_FLAG_PRELIGHT))
         {
           gtk_style_context_save (context);
 
@@ -568,9 +568,6 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
             state |= GTK_STATE_FLAG_INCONSISTENT;
           else if (priv->active)
             state |= GTK_STATE_FLAG_ACTIVE;
-
-          if (!gtk_widget_is_sensitive (widget))
-            state |= GTK_STATE_FLAG_INSENSITIVE;
 
           gtk_style_context_set_state (context, state);
 
