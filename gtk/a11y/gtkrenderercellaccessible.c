@@ -21,9 +21,53 @@
 
 #include <gtk/gtk.h>
 #include "gtkrenderercellaccessible.h"
+#include "gtkintl.h"
 
+
+enum {
+  PROP_0,
+  PROP_RENDERER
+};
 
 G_DEFINE_TYPE (GtkRendererCellAccessible, _gtk_renderer_cell_accessible, GTK_TYPE_CELL_ACCESSIBLE)
+
+static void
+gtk_renderer_cell_accessible_set_property (GObject         *object,
+                                           guint            prop_id,
+                                           const GValue    *value,
+                                           GParamSpec      *pspec)
+{
+  GtkRendererCellAccessible *accessible = GTK_RENDERER_CELL_ACCESSIBLE (object);
+
+  switch (prop_id)
+    {
+    case PROP_RENDERER:
+      accessible->renderer = g_value_dup_object (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_renderer_cell_accessible_get_property (GObject         *object,
+                                           guint            prop_id,
+                                           GValue          *value,
+                                           GParamSpec      *pspec)
+{
+  GtkRendererCellAccessible *accessible = GTK_RENDERER_CELL_ACCESSIBLE (object);
+
+  switch (prop_id)
+    {
+    case PROP_RENDERER:
+      g_value_set_object (value, accessible->renderer);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
 
 static void
 gtk_renderer_cell_accessible_finalize (GObject *object)
@@ -43,13 +87,22 @@ _gtk_renderer_cell_accessible_class_init (GtkRendererCellAccessibleClass *klass)
 
   klass->property_list = NULL;
 
+  gobject_class->get_property = gtk_renderer_cell_accessible_get_property;
+  gobject_class->set_property = gtk_renderer_cell_accessible_set_property;
   gobject_class->finalize = gtk_renderer_cell_accessible_finalize;
+
+  g_object_class_install_property (gobject_class,
+				   PROP_RENDERER,
+				   g_param_spec_object ("renderer",
+							P_("Cell renderer"),
+							P_("The cell renderer represented by this accessible"),
+							GTK_TYPE_CELL_RENDERER,
+							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void
 _gtk_renderer_cell_accessible_init (GtkRendererCellAccessible *renderer_cell)
 {
-  renderer_cell->renderer = NULL;
 }
 
 gboolean
