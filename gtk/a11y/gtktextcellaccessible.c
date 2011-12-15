@@ -245,28 +245,6 @@ _gtk_text_cell_accessible_init (GtkTextCellAccessible *text_cell)
   text_cell->cell_length = 0;
 }
 
-AtkObject *
-_gtk_text_cell_accessible_new (void)
-{
-  GObject *object;
-  AtkObject *atk_object;
-  GtkRendererCellAccessible *cell;
-
-  object = g_object_new (GTK_TYPE_TEXT_CELL_ACCESSIBLE, NULL);
-
-  g_return_val_if_fail (object != NULL, NULL);
-
-  atk_object = ATK_OBJECT (object);
-  atk_object->role = ATK_ROLE_TABLE_CELL;
-
-  cell = GTK_RENDERER_CELL_ACCESSIBLE(object);
-
-  cell->renderer = gtk_cell_renderer_text_new ();
-  g_object_ref_sink (cell->renderer);
-
-  return atk_object;
-}
-
 static gchar *
 gtk_text_cell_accessible_get_text (AtkText *atk_text,
                                    gint     start_pos,

@@ -86,26 +86,3 @@ _gtk_boolean_cell_accessible_init (GtkBooleanCellAccessible *cell)
 {
 }
 
-AtkObject *
-_gtk_boolean_cell_accessible_new (void)
-{
-  GObject *object;
-  AtkObject *atk_object;
-  GtkRendererCellAccessible *cell;
-  GtkBooleanCellAccessible *boolean_cell;
-
-  object = g_object_new (GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE, NULL);
-
-  atk_object = ATK_OBJECT (object);
-  atk_object->role = ATK_ROLE_TABLE_CELL;
-
-  cell = GTK_RENDERER_CELL_ACCESSIBLE (object);
-  cell->renderer = gtk_cell_renderer_toggle_new ();
-  g_object_ref_sink (cell->renderer);
-
-  boolean_cell = GTK_BOOLEAN_CELL_ACCESSIBLE (object);
-  boolean_cell->cell_value = FALSE;
-  boolean_cell->cell_sensitive = TRUE;
-
-  return atk_object;
-}

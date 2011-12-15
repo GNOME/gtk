@@ -455,14 +455,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
     {
       renderer = GTK_CELL_RENDERER (l->data);
 
-      if (GTK_IS_CELL_RENDERER_TEXT (renderer))
-        child = _gtk_text_cell_accessible_new ();
-      else if (GTK_IS_CELL_RENDERER_TOGGLE (renderer))
-        child = _gtk_boolean_cell_accessible_new ();
-      else if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
-        child = _gtk_image_cell_accessible_new ();
-      else
-        child = _gtk_renderer_cell_accessible_new (renderer);
+      child = _gtk_renderer_cell_accessible_new (renderer);
 
       cell = GTK_CELL_ACCESSIBLE (child);
       renderer_cell = GTK_RENDERER_CELL_ACCESSIBLE (child);

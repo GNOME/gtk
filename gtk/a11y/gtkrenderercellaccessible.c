@@ -125,6 +125,7 @@ _gtk_renderer_cell_accessible_new (GtkCellRenderer *renderer)
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), NULL);
 
   object = g_object_new (_gtk_cell_renderer_get_accessible_type (renderer),
+                         "renderer", renderer,
                          NULL);
 
   atk_object_set_role (object, ATK_ROLE_TABLE_CELL);

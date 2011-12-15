@@ -60,28 +60,6 @@ _gtk_image_cell_accessible_class_init (GtkImageCellAccessibleClass *klass)
   renderer_cell_class->property_list = property_list;
 }
 
-AtkObject *
-_gtk_image_cell_accessible_new (void)
-{
-  GObject *object;
-  AtkObject *atk_object;
-  GtkRendererCellAccessible *cell;
-
-  object = g_object_new (GTK_TYPE_IMAGE_CELL_ACCESSIBLE, NULL);
-
-  g_return_val_if_fail (object != NULL, NULL);
-
-  atk_object = ATK_OBJECT (object);
-  atk_object->role = ATK_ROLE_TABLE_CELL;
-
-  cell = GTK_RENDERER_CELL_ACCESSIBLE (object);
-
-  cell->renderer = gtk_cell_renderer_pixbuf_new ();
-  g_object_ref_sink (cell->renderer);
-
-  return atk_object;
-}
-
 static void
 _gtk_image_cell_accessible_init (GtkImageCellAccessible *image_cell)
 {
