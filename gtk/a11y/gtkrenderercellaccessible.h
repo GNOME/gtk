@@ -51,7 +51,8 @@ struct _GtkRendererCellAccessibleClass
 
 GType      _gtk_renderer_cell_accessible_get_type     (void);
 
-AtkObject *_gtk_renderer_cell_accessible_new          (void);
+AtkObject *_gtk_renderer_cell_accessible_new          (GtkCellRenderer * renderer);
+
 gboolean   _gtk_renderer_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
                                                        gboolean          emit_change_signal);
 

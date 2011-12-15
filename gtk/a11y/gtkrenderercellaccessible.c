@@ -118,15 +118,16 @@ _gtk_renderer_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
 }
 
 AtkObject *
-_gtk_renderer_cell_accessible_new (void)
+_gtk_renderer_cell_accessible_new (GtkCellRenderer *renderer)
 {
-  GObject *object;
-  AtkObject *atk_object;
+  AtkObject *object;
 
-  object = g_object_new (GTK_TYPE_RENDERER_CELL_ACCESSIBLE, NULL);
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), NULL);
 
-  atk_object = ATK_OBJECT (object);
-  atk_object->role = ATK_ROLE_TABLE_CELL;
+  object = g_object_new (_gtk_cell_renderer_get_accessible_type (renderer),
+                         NULL);
 
-  return atk_object;
+  atk_object_set_role (object, ATK_ROLE_TABLE_CELL);
+
+  return object;
 }
