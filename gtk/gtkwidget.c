@@ -7663,7 +7663,6 @@ gtk_widget_set_sensitive (GtkWidget *widget,
 			  gboolean   sensitive)
 {
   GtkWidgetPrivate *priv;
-  GtkStateData data;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -7674,24 +7673,30 @@ gtk_widget_set_sensitive (GtkWidget *widget,
   if (priv->sensitive == sensitive)
     return;
 
-  data.flags = GTK_STATE_FLAG_INSENSITIVE;
-
-  if (sensitive)
+  if (priv->parent == NULL
+      || gtk_widget_is_sensitive (priv->parent))
     {
-      priv->sensitive = TRUE;
-      data.operation = STATE_CHANGE_UNSET;
+      GtkStateData data;
+
+      data.flags = GTK_STATE_FLAG_INSENSITIVE;
+
+      if (sensitive)
+        {
+          priv->sensitive = TRUE;
+          data.operation = STATE_CHANGE_UNSET;
+        }
+      else
+        {
+          priv->sensitive = FALSE;
+          data.operation = STATE_CHANGE_SET;
+        }
+
+      data.use_forall = TRUE;
+
+      gtk_widget_propagate_state (widget, &data);
+
+      gtk_widget_queue_resize (widget);
     }
-  else
-    {
-      priv->sensitive = FALSE;
-      data.operation = STATE_CHANGE_SET;
-    }
-
-  data.use_forall = TRUE;
-
-  gtk_widget_propagate_state (widget, &data);
-
-  gtk_widget_queue_resize (widget);
 
   g_object_notify (G_OBJECT (widget), "sensitive");
 }
