@@ -807,7 +807,7 @@ gtk_font_chooser_widget_get_preview_text_height (GtkFontChooserWidget *fontchoos
                          "font-size", &font_size,
                          NULL);
 
-  return dpi / 72.0 * PANGO_SCALE_X_LARGE * font_size * PANGO_SCALE;
+  return (dpi < 0.0 ? 96.0 : dpi) / 72.0 * PANGO_SCALE_X_LARGE * font_size * PANGO_SCALE;
 }
 
 static PangoAttrList *
