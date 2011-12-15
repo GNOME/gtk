@@ -445,7 +445,6 @@ gtk_accel_label_draw (GtkWidget *widget,
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_ACCELERATOR);
-      gtk_style_context_set_state (context, gtk_widget_get_state_flags (widget));
 
       gtk_render_layout (context, cr, x, y, accel_layout);
       gtk_style_context_restore (context);
