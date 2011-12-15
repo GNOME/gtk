@@ -945,6 +945,16 @@ gtk_menu_item_get_preferred_height (GtkWidget *widget,
           min_height += separator_height;
           nat_height += separator_height;
         }
+      else
+        {
+          /* force odd, so that we can have the same space above and
+           * below the line.
+           */
+          if (min_height % 2 == 0)
+            min_height += 1;
+          if (nat_height % 2 == 0)
+            nat_height += 1;
+        }
     }
 
   accel_width = 0;
@@ -1070,6 +1080,16 @@ gtk_menu_item_get_preferred_height_for_width (GtkWidget *widget,
         {
           min_height += separator_height;
           nat_height += separator_height;
+        }
+      else
+        {
+          /* force odd, so that we can have the same space above and
+           * below the line.
+           */
+          if (min_height % 2 == 0)
+            min_height += 1;
+          if (nat_height % 2 == 0)
+            nat_height += 1;
         }
     }
 
