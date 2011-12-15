@@ -941,11 +941,10 @@ gtk_menu_item_get_preferred_height (GtkWidget *widget,
                             NULL);
 
       if (wide_separators)
-        min_height += separator_height + padding.top;
-      else
-        min_height += padding.top + padding.bottom;
-
-      nat_height = min_height;
+        {
+          min_height += separator_height;
+          nat_height += separator_height;
+        }
     }
 
   accel_width = 0;
@@ -1068,11 +1067,10 @@ gtk_menu_item_get_preferred_height_for_width (GtkWidget *widget,
                             NULL);
 
       if (wide_separators)
-        min_height += separator_height + padding.top;
-      else
-        min_height += padding.top + padding.bottom;
-
-      nat_height = min_height;
+        {
+          min_height += separator_height;
+          nat_height += separator_height;
+        }
     }
 
   if (minimum_size)
