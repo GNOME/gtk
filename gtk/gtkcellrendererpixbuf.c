@@ -87,6 +87,7 @@ enum {
 struct _GtkCellRendererPixbufPrivate
 {
   GtkIconHelper *icon_helper;
+  GtkIconSize    icon_size;
 
   GdkPixbuf *pixbuf_expander_open;
   GdkPixbuf *pixbuf_expander_closed;
@@ -110,6 +111,7 @@ gtk_cell_renderer_pixbuf_init (GtkCellRendererPixbuf *cellpixbuf)
                                                   GtkCellRendererPixbufPrivate);
   priv = cellpixbuf->priv;
   priv->icon_helper = _gtk_icon_helper_new ();
+  priv->icon_size = GTK_ICON_SIZE_MENU;
 }
 
 static void
@@ -275,7 +277,7 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
       g_value_set_string (value, _gtk_icon_helper_get_stock_id (priv->icon_helper));
       break;
     case PROP_STOCK_SIZE:
-      g_value_set_uint (value, _gtk_icon_helper_get_icon_size (priv->icon_helper));
+      g_value_set_uint (value, priv->icon_size);
       break;
     case PROP_STOCK_DETAIL:
       g_value_set_string (value, priv->stock_detail);
@@ -350,10 +352,11 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       break;
     case PROP_STOCK_ID:
       gtk_cell_renderer_pixbuf_reset (cellpixbuf);
-      _gtk_icon_helper_set_stock_id (priv->icon_helper, g_value_get_string (value), GTK_ICON_SIZE_MENU);
+      _gtk_icon_helper_set_stock_id (priv->icon_helper, g_value_get_string (value), priv->icon_size);
       break;
     case PROP_STOCK_SIZE:
-      _gtk_icon_helper_set_icon_size (priv->icon_helper, g_value_get_uint (value));
+      priv->icon_size = g_value_get_uint (value);
+      _gtk_icon_helper_set_icon_size (priv->icon_helper, priv->icon_size);
       break;
     case PROP_STOCK_DETAIL:
       g_free (priv->stock_detail);
@@ -361,14 +364,14 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       break;
     case PROP_ICON_NAME:
       gtk_cell_renderer_pixbuf_reset (cellpixbuf);
-      _gtk_icon_helper_set_icon_name (priv->icon_helper, g_value_get_string (value), GTK_ICON_SIZE_MENU);
+      _gtk_icon_helper_set_icon_name (priv->icon_helper, g_value_get_string (value), priv->icon_size);
       break;
     case PROP_FOLLOW_STATE:
       priv->follow_state = g_value_get_boolean (value);
       break;
     case PROP_GICON:
       gtk_cell_renderer_pixbuf_reset (cellpixbuf);
-      _gtk_icon_helper_set_gicon (priv->icon_helper, g_value_get_object (value), GTK_ICON_SIZE_MENU);
+      _gtk_icon_helper_set_gicon (priv->icon_helper, g_value_get_object (value), priv->icon_size);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
