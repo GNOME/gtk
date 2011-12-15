@@ -85,8 +85,6 @@ _gtk_renderer_cell_accessible_class_init (GtkRendererCellAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  klass->property_list = NULL;
-
   gobject_class->get_property = gtk_renderer_cell_accessible_get_property;
   gobject_class->set_property = gtk_renderer_cell_accessible_set_property;
   gobject_class->finalize = gtk_renderer_cell_accessible_finalize;

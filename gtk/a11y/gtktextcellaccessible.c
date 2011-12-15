@@ -83,43 +83,6 @@ static void             add_attr                        (PangoAttrList  *attr_li
 static gboolean gtk_text_cell_accessible_update_cache             (GtkRendererCellAccessible *cell,
                                                          gboolean       emit_change_signal);
 
-static gchar *property_list[] = {
-  /* Set font_desc first since it resets other values if it is NULL */
-  "font-desc",
-  "attributes",
-  "background-gdk",
-  "editable",
-  "family",
-  "foreground-gdk",
-  "rise",
-  "scale",
-  "size",
-  "size-points",
-  "stretch",
-  "strikethrough",
-  "style",
-  "text",
-  "underline",
-  "variant",
-  "weight",
-
-  /* Also need the sets */
-  "background-set",
-  "editable-set",
-  "family-set",
-  "foreground-set",
-  "rise-set",
-  "scale-set",
-  "size-set",
-  "stretch-set",
-  "strikethrough-set",
-  "style-set",
-  "underline-set",
-  "variant-set",
-  "weight-set",
-  NULL
-};
-
 static void atk_text_interface_init (AtkTextIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkTextCellAccessible, _gtk_text_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
@@ -229,7 +192,6 @@ _gtk_text_cell_accessible_class_init (GtkTextCellAccessibleClass *klass)
   GtkRendererCellAccessibleClass *renderer_cell_class = GTK_RENDERER_CELL_ACCESSIBLE_CLASS (klass);
 
   renderer_cell_class->update_cache = gtk_text_cell_accessible_update_cache;
-  renderer_cell_class->property_list = property_list;
 
   atk_object_class->get_name = gtk_text_cell_accessible_get_name;
   atk_object_class->ref_state_set = gtk_text_cell_accessible_ref_state_set;

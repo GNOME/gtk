@@ -23,13 +23,6 @@
 #include "gtkbooleancellaccessible.h"
 
 
-static gchar *property_list[] = {
-  "active",
-  "radio",
-  "sensitive",
-  NULL
-};
-
 G_DEFINE_TYPE (GtkBooleanCellAccessible, _gtk_boolean_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE)
 
 
@@ -78,7 +71,6 @@ _gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
   GtkRendererCellAccessibleClass *renderer_cell_class = GTK_RENDERER_CELL_ACCESSIBLE_CLASS (klass);
 
   renderer_cell_class->update_cache = gtk_boolean_cell_accessible_update_cache;
-  renderer_cell_class->property_list = property_list;
 }
 
 static void

@@ -44,7 +44,6 @@ struct _GtkRendererCellAccessible
 struct _GtkRendererCellAccessibleClass
 {
   GtkCellAccessibleClass parent_class;
-  gchar **property_list;
   gboolean (*update_cache) (GtkRendererCellAccessible *cell,
                             gboolean                   emit_change_signal);
 };

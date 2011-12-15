@@ -22,11 +22,6 @@
 #include <gtk/gtk.h>
 #include "gtkimagecellaccessible.h"
 
-static gchar *property_list[] = {
-  "pixbuf",
-  NULL
-};
-
 static void atk_image_interface_init (AtkImageIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkImageCellAccessible, _gtk_image_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
@@ -57,7 +52,6 @@ _gtk_image_cell_accessible_class_init (GtkImageCellAccessibleClass *klass)
   gobject_class->finalize = gtk_image_cell_accessible_finalize;
 
   renderer_cell_class->update_cache = gtk_image_cell_accessible_update_cache;
-  renderer_cell_class->property_list = property_list;
 }
 
 static void
