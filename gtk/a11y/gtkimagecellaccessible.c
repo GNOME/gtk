@@ -36,22 +36,12 @@ gtk_image_cell_accessible_finalize (GObject *object)
   G_OBJECT_CLASS (_gtk_image_cell_accessible_parent_class)->finalize (object);
 }
 
-static gboolean
-gtk_image_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
-                                        gboolean                   emit_change_signal)
-{
-  return FALSE;
-}
-
 static void
 _gtk_image_cell_accessible_class_init (GtkImageCellAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkRendererCellAccessibleClass *renderer_cell_class = GTK_RENDERER_CELL_ACCESSIBLE_CLASS (klass);
 
   gobject_class->finalize = gtk_image_cell_accessible_finalize;
-
-  renderer_cell_class->update_cache = gtk_image_cell_accessible_update_cache;
 }
 
 static void
