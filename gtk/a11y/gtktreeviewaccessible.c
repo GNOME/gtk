@@ -1615,22 +1615,8 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
   GtkTreeModel *tree_model;
   GtkTreePath *path;
   GtkTreeIter iter;
-  GList *renderers, *cur_renderer;
-  GParamSpec *spec;
-  GtkRendererCellAccessibleClass *renderer_cell_class;
-  GtkCellRendererClass *gtk_cell_renderer_class;
   GtkCellAccessible *cell;
-  gchar **prop_list;
-  AtkObject *parent;
   gboolean is_expander, is_expanded;
-
-  renderer_cell_class = GTK_RENDERER_CELL_ACCESSIBLE_GET_CLASS (renderer_cell);
-  if (renderer_cell->renderer)
-    gtk_cell_renderer_class = GTK_CELL_RENDERER_GET_CLASS (renderer_cell->renderer);
-  else
-    gtk_cell_renderer_class = NULL;
-
-  prop_list = renderer_cell_class->property_list;
 
   cell = GTK_CELL_ACCESSIBLE (renderer_cell);
   cell_info = find_cell_info (accessible, cell);
@@ -1664,47 +1650,6 @@ update_cell_value (GtkRendererCellAccessible      *renderer_cell,
                                                tree_model, &iter,
                                                is_expander, is_expanded);
     }
-  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_info->cell_col_ref));
-  if (!renderers)
-    return FALSE;
-
-  /* If the cell is in a container, its index is used to find the renderer
-   * in the list. Otherwise, we assume that the cell is represented
-   * by the first renderer in the list
-   */
-  parent = atk_object_get_parent (ATK_OBJECT (cell));
-
-  if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
-    cur_renderer = g_list_nth (renderers, atk_object_get_index_in_parent (ATK_OBJECT (cell)));
-  else
-    cur_renderer = renderers;
-
-  if (cur_renderer == NULL)
-    return FALSE;
-
-  if (gtk_cell_renderer_class)
-    {
-      while (*prop_list)
-        {
-          spec = g_object_class_find_property
-                           (G_OBJECT_CLASS (gtk_cell_renderer_class), *prop_list);
-
-          if (spec != NULL)
-            {
-              GValue value = G_VALUE_INIT;
-
-              g_value_init (&value, spec->value_type);
-              g_object_get_property (cur_renderer->data, *prop_list, &value);
-              g_object_set_property (G_OBJECT (renderer_cell->renderer),
-                                     *prop_list, &value);
-              g_value_unset (&value);
-            }
-          else
-            g_warning ("Invalid property: %s\n", *prop_list);
-          prop_list++;
-        }
-    }
-  g_list_free (renderers);
 
   return _gtk_renderer_cell_accessible_update_cache (renderer_cell, emit_change_signal);
 }
