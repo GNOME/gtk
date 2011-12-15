@@ -710,11 +710,7 @@ void
 gtk_scale_set_has_origin (GtkScale *scale,
                           gboolean  has_origin)
 {
-  GtkScalePrivate *priv;
-
   g_return_if_fail (GTK_IS_SCALE (scale));
-
-  priv = scale->priv;
 
   has_origin = has_origin != FALSE;
 
