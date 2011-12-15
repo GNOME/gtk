@@ -315,7 +315,6 @@ gtk_arrow_draw (GtkWidget *widget,
   GtkArrowPrivate *priv = arrow->priv;
   GtkMisc *misc = GTK_MISC (widget);
   GtkStyleContext *context;
-  GtkStateFlags state;
   gdouble x, y;
   gint width, height;
   gint extent;
@@ -369,13 +368,7 @@ gtk_arrow_draw (GtkWidget *widget,
       break;
     }
 
-  gtk_style_context_save (context);
-
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_set_state (context, state);
   gtk_render_arrow (context, cr, angle, x, y, extent);
-
-  gtk_style_context_restore (context);
 
   return FALSE;
 }
