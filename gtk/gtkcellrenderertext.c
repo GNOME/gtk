@@ -30,6 +30,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktreeprivate.h"
+#include "a11y/gtktextcellaccessible.h"
 
 
 /**
@@ -700,6 +701,8 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 		  G_TYPE_STRING);
 
   g_type_class_add_private (object_class, sizeof (GtkCellRendererTextPrivate));
+
+  _gtk_cell_renderer_class_set_accessible_type (cell_class, GTK_TYPE_TEXT_CELL_ACCESSIBLE);
 }
 
 static void
