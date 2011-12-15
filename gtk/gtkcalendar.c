@@ -2590,6 +2590,7 @@ calendar_paint_day (GtkCalendar *calendar,
   g_return_if_fail (col < 7);
 
   context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
   day = priv->day[row][col];
   show_details = (priv->display_flags & GTK_CALENDAR_SHOW_DETAILS);
@@ -2598,30 +2599,24 @@ calendar_paint_day (GtkCalendar *calendar,
 
   gtk_style_context_save (context);
 
-  if (!gtk_widget_get_sensitive (widget))
-    state |= GTK_STATE_FLAG_INSENSITIVE;
+  state &= ~(GTK_STATE_FLAG_INCONSISTENT | GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_SELECTED);
+
+  if (priv->day_month[row][col] == MONTH_PREV ||
+      priv->day_month[row][col] == MONTH_NEXT)
+    state |= GTK_STATE_FLAG_INCONSISTENT;
   else
     {
-      if (gtk_widget_has_focus (widget))
-        state |= GTK_STATE_FLAG_FOCUSED;
+      if (priv->marked_date[day-1])
+        state |= GTK_STATE_FLAG_ACTIVE;
 
-      if (priv->day_month[row][col] == MONTH_PREV ||
-          priv->day_month[row][col] == MONTH_NEXT)
-        state |= GTK_STATE_FLAG_INCONSISTENT;
-      else
+      if (priv->selected_day == day)
         {
-          if (priv->marked_date[day-1])
-            state |= GTK_STATE_FLAG_ACTIVE;
+          state |= GTK_STATE_FLAG_SELECTED;
 
-          if (priv->selected_day == day)
-            {
-              state |= GTK_STATE_FLAG_SELECTED;
-
-              gtk_style_context_set_state (context, state);
-              gtk_render_background (context, cr,
-                                     day_rect.x, day_rect.y,
-                                     day_rect.width, day_rect.height);
-            }
+          gtk_style_context_set_state (context, state);
+          gtk_render_background (context, cr,
+                                 day_rect.x, day_rect.y,
+                                 day_rect.width, day_rect.height);
         }
     }
 
