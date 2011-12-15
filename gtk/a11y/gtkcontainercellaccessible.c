@@ -60,15 +60,30 @@ gtk_container_cell_accessible_ref_child (AtkObject *obj,
 }
 
 static void
+gtk_container_cell_accessible_update_cache (GtkCellAccessible *cell)
+{
+  GtkContainerCellAccessible *container = GTK_CONTAINER_CELL_ACCESSIBLE (cell);
+  GList *l;
+
+  for (l = container->children; l; l = l->next)
+    {
+      _gtk_cell_accessible_update_cache (l->data);
+    }
+}
+
+static void
 _gtk_container_cell_accessible_class_init (GtkContainerCellAccessibleClass *klass)
 {
-  AtkObjectClass *class = ATK_OBJECT_CLASS(klass);
+  GtkCellAccessibleClass *cell_class = GTK_CELL_ACCESSIBLE_CLASS (klass);
+  AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GObjectClass *g_object_class = G_OBJECT_CLASS (klass);
 
   g_object_class->finalize = gtk_container_cell_accessible_finalize;
 
   class->get_n_children = gtk_container_cell_accessible_get_n_children;
   class->ref_child = gtk_container_cell_accessible_ref_child;
+
+  cell_class->update_cache = gtk_container_cell_accessible_update_cache;
 }
 
 static void
