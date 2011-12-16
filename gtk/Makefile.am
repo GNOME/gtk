@@ -50,6 +50,7 @@ AM_CPPFLAGS =						\
 	-I$(top_srcdir)/gdk				\
 	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED		\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
+	$(GMODULE_CFLAGS)				\
 	$(GTK_DEBUG_FLAGS)				\
 	$(GTK_DEP_CFLAGS)				\
 	$(INCLUDED_IMMODULE_DEFINE)
@@ -107,6 +108,7 @@ libgtkincludedir = $(includedir)/gtk-3.0/gtk
 libadd = \
 	$(top_builddir)/gdk/libgdk-3.la	\
 	$(top_builddir)/gtk/a11y/libgail.la \
+	$(GMODULE_LIBS) \
 	$(GTK_DEP_LIBS)
 deps = \
 	$(top_builddir)/gdk/libgdk-3.la	\

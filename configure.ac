@@ -687,13 +687,11 @@ esac
 # Run AM_PATH_GLIB_2_0 to make sure that GLib is installed and working
 #
 
-GLIB_PACKAGES="gobject-2.0 gio-2.0 gmodule-no-export-2.0"
-
 AM_PATH_GLIB_2_0(glib_required_version, :,
   AC_MSG_ERROR([
 *** GLIB glib_required_version or better is required. The latest version of
 *** GLIB is always available from ftp://ftp.gtk.org/pub/gtk/.]),
-  gobject gmodule-no-export gthread)
+  gobject gmodule-no-export)
 
 dnl
 dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
@@ -1120,6 +1118,7 @@ if test "x$enable_x11_backend" = xyes; then
               [Define to 1 if XFree XInput should be used])
 
     X_PACKAGES="$X_PACKAGES xi"
+    GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xi"
 
     AC_CHECK_HEADER(X11/extensions/XInput2.h,
                     have_xinput2=yes
@@ -1264,7 +1263,7 @@ if test "x$enable_x11_backend" = xyes; then
 fi
 
 GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES $GDK_PRIVATE_PACKAGES` $MATH_LIB"
-GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES $GDK_PRIVATE_PACKAGES` $GDK_EXTRA_CFLAGS"
+GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags $GDK_PACKAGES $GDK_PRIVATE_PACKAGES` $GDK_EXTRA_CFLAGS"
 #
 # If we aren't writing explicit dependencies, then don't put the extra libraries we need
 # into the pkg-config files
@@ -1319,7 +1318,7 @@ GTK_EXTRA_LIBS=
 
 GTK_EXTRA_CFLAGS=
 GTK_DEP_LIBS="$GDK_EXTRA_LIBS $GTK_DEP_LIBS_FOR_X `$PKG_CONFIG --libs $PANGO_PACKAGES $GTK_PACKAGES_FOR_X $GTK_PACKAGES $GTK_PRIVATE_PACKAGES` $GTK_EXTRA_LIBS $MATH_LIB"
-GTK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES $GTK_PACKAGES $GTK_PRIVATE_PACKAGES` $GDK_EXTRA_CFLAGS $GTK_EXTRA_CFLAGS"
+GTK_DEP_CFLAGS="`$PKG_CONFIG --cflags $GDK_PACKAGES $GTK_PACKAGES $GTK_PRIVATE_PACKAGES` $GDK_EXTRA_CFLAGS $GTK_EXTRA_CFLAGS"
 
 if test x"$os_win32" = xyes; then
   GTK_EXTRA_CFLAGS="$msnative_struct"
