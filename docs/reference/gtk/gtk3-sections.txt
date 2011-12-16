@@ -76,6 +76,9 @@ gtk_accelerator_valid
 gtk_accelerator_parse
 gtk_accelerator_name
 gtk_accelerator_get_label
+gtk_accelerator_parse_with_keycode
+gtk_accelerator_name_with_keycode
+gtk_accelerator_get_label_with_keycode
 gtk_accelerator_set_default_mod_mask
 gtk_accelerator_get_default_mod_mask
 
@@ -5848,6 +5851,7 @@ gtk_symbolic_color_new_name
 gtk_symbolic_color_new_shade
 gtk_symbolic_color_new_alpha
 gtk_symbolic_color_new_mix
+gtk_symbolic_color_new_win32
 gtk_symbolic_color_ref
 gtk_symbolic_color_unref
 gtk_symbolic_color_resolve
