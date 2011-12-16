@@ -1881,10 +1881,13 @@ _gtk_tree_view_accessible_add (GtkTreeView *treeview,
   g_signal_emit_by_name (accessible, "row-inserted", row, n_rows);
 
   n_cols = get_n_columns (treeview);
-  for (i = (row + 1) * n_cols; i < (row + n_rows + 1) * n_cols; i++)
+  if (n_cols)
     {
-     /* Pass NULL as the child object, i.e. 4th argument */
-      g_signal_emit_by_name (accessible, "children-changed::add", i, NULL, NULL);
+      for (i = (row + 1) * n_cols; i < (row + n_rows + 1) * n_cols; i++)
+        {
+         /* Pass NULL as the child object, i.e. 4th argument */
+          g_signal_emit_by_name (accessible, "children-changed::add", i, NULL, NULL);
+        }
     }
 }
 
@@ -1920,19 +1923,22 @@ _gtk_tree_view_accessible_remove (GtkTreeView *treeview,
   g_signal_emit_by_name (accessible, "row-deleted", row, n_rows);
 
   n_cols = get_n_columns (treeview);
-  for (i = (n_rows + row + 1) * n_cols - 1; i >= (row + 1) * n_cols; i--)
+  if (n_cols)
     {
-     /* Pass NULL as the child object, i.e. 4th argument */
-      g_signal_emit_by_name (accessible, "children-changed::remove", i, NULL, NULL);
-    }
+      for (i = (n_rows + row + 1) * n_cols - 1; i >= (row + 1) * n_cols; i--)
+        {
+         /* Pass NULL as the child object, i.e. 4th argument */
+          g_signal_emit_by_name (accessible, "children-changed::remove", i, NULL, NULL);
+        }
 
-  g_hash_table_iter_init (&iter, accessible->cell_infos);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
-    {
-      if (node == cell_info->node ||
-          tree == cell_info->tree ||
-          (tree && _gtk_rbtree_contains (tree, cell_info->tree)))
-        g_hash_table_iter_remove (&iter);
+      g_hash_table_iter_init (&iter, accessible->cell_infos);
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
+        {
+          if (node == cell_info->node ||
+              tree == cell_info->tree ||
+              (tree && _gtk_rbtree_contains (tree, cell_info->tree)))
+            g_hash_table_iter_remove (&iter);
+        }
     }
 }
 
