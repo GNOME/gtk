@@ -44,6 +44,12 @@ typedef struct {
 
 typedef struct {
   TagInfo tag;
+  gchar *id;
+  GHashTable *objects;
+} MenuInfo;
+
+typedef struct {
+  TagInfo tag;
   GSList *packing_properties;
   GObject *object;
   CommonInfo *parent;
