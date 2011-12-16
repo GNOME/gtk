@@ -685,6 +685,7 @@ typedef struct _GdkOffscreenWindow      GdkOffscreenWindow;
 #define GDK_OFFSCREEN_WINDOW(object)         (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_OFFSCREEN_WINDOW, GdkOffscreenWindow))
 #define GDK_IS_OFFSCREEN_WINDOW(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_OFFSCREEN_WINDOW))
 GType gdk_offscreen_window_get_type (void);
+GdkDrawable * _gdk_offscreen_window_get_real_drawable (GdkOffscreenWindow *window);
 void       _gdk_offscreen_window_new                 (GdkWindow     *window,
 						      GdkScreen     *screen,
 						      GdkVisual     *visual,

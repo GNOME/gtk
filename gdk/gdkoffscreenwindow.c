@@ -842,6 +842,12 @@ gdk_offscreen_window_get_pointer (GdkWindow       *window,
   return TRUE;
 }
 
+GdkDrawable *
+_gdk_offscreen_window_get_real_drawable (GdkOffscreenWindow *offscreen)
+{
+  return get_real_drawable (offscreen);
+}
+
 /**
  * gdk_offscreen_window_get_pixmap:
  * @window: a #GdkWindow
