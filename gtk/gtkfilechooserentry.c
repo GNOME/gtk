@@ -174,7 +174,6 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   GtkCellRenderer *cell;
 
   chooser_entry->local_only = TRUE;
-  chooser_entry->base_folder = g_file_new_for_path (g_get_home_dir ());
 
   g_object_set (chooser_entry, "truncate-multiline", TRUE, NULL);
 
@@ -217,7 +216,8 @@ gtk_file_chooser_entry_finalize (GObject *object)
 {
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (object);
 
-  g_object_unref (chooser_entry->base_folder);
+  if (chooser_entry->base_folder)
+    g_object_unref (chooser_entry->base_folder);
 
   if (chooser_entry->current_folder_file)
     g_object_unref (chooser_entry->current_folder_file);
@@ -307,8 +307,10 @@ gtk_file_chooser_get_file_for_text (GtkFileChooserEntry *chooser_entry,
 
   if (str[0] == '~' || g_path_is_absolute (str) || has_uri_scheme (str))
     file = g_file_parse_name (str);
-  else
+  else if (chooser_entry->base_folder != NULL)
     file = g_file_resolve_relative_path (chooser_entry->base_folder, str);
+  else
+    file = NULL;
 
   return file;
 }
@@ -320,6 +322,9 @@ gtk_file_chooser_get_directory_for_text (GtkFileChooserEntry *chooser_entry,
   GFile *file, *parent;
 
   file = gtk_file_chooser_get_file_for_text (chooser_entry, text);
+
+  if (file == NULL)
+    return NULL;
 
   if (text[0] == 0 || text[strlen (text) - 1] == G_DIR_SEPARATOR)
     return file;
@@ -716,16 +721,16 @@ void
 _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
 					 GFile               *file)
 {
+  g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry));
+  g_return_if_fail (file == NULL || G_IS_FILE (file));
+
+  if (chooser_entry->base_folder == file ||
+      (file != NULL && chooser_entry->base_folder != NULL 
+       && g_file_equal (chooser_entry->base_folder, file)))
+    return;
+
   if (file)
     g_object_ref (file);
-  else
-    file = g_file_new_for_path (g_get_home_dir ());
-
-  if (g_file_equal (chooser_entry->base_folder, file))
-    {
-      g_object_unref (file);
-      return;
-    }
 
   if (chooser_entry->base_folder)
     g_object_unref (chooser_entry->base_folder);
