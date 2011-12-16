@@ -26,6 +26,25 @@
 G_DEFINE_TYPE (GtkBooleanCellAccessible, _gtk_boolean_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE)
 
 
+static AtkStateSet *
+gtk_boolean_cell_accessible_ref_state_set (AtkObject *accessible)
+{
+  GtkBooleanCellAccessible *cell = GTK_BOOLEAN_CELL_ACCESSIBLE (accessible);
+  AtkStateSet *state_set;
+
+  state_set = ATK_OBJECT_CLASS (_gtk_boolean_cell_accessible_parent_class)->ref_state_set (accessible);
+
+  if (cell->cell_value)
+    atk_state_set_add_state (state_set, ATK_STATE_CHECKED);
+
+  if (cell->cell_sensitive)
+    atk_state_set_add_state (state_set, ATK_STATE_SENSITIVE);
+  else
+    atk_state_set_remove_state (state_set, ATK_STATE_SENSITIVE);
+
+  return state_set;
+}
+
 static void
 gtk_boolean_cell_accessible_update_cache (GtkCellAccessible *cell)
 {
@@ -42,20 +61,14 @@ gtk_boolean_cell_accessible_update_cache (GtkCellAccessible *cell)
     {
       boolean_cell->cell_value = !boolean_cell->cell_value;
 
-      if (active)
-        _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_CHECKED, TRUE);
-      else
-        _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_CHECKED, TRUE);
+      atk_object_notify_state_change (ATK_OBJECT (cell), ATK_STATE_CHECKED, active);
     }
 
   if (boolean_cell->cell_sensitive != sensitive)
     {
       boolean_cell->cell_sensitive = !boolean_cell->cell_sensitive;
 
-      if (sensitive)
-        _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_SENSITIVE, TRUE);
-      else
-        _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_SENSITIVE, TRUE);
+      atk_object_notify_state_change (ATK_OBJECT (cell), ATK_STATE_CHECKED, sensitive);
     }
 }
 
@@ -63,6 +76,9 @@ static void
 _gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
 {
   GtkCellAccessibleClass *cell_class = GTK_CELL_ACCESSIBLE_CLASS (klass);
+  AtkObjectClass *atkobject_class = ATK_OBJECT_CLASS (klass);
+
+  atkobject_class->ref_state_set = gtk_boolean_cell_accessible_ref_state_set;
 
   cell_class->update_cache = gtk_boolean_cell_accessible_update_cache;
 }
