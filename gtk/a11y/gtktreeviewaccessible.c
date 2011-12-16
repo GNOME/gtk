@@ -1364,15 +1364,6 @@ gtk_tree_view_accessible_get_renderer_state (GtkCellAccessibleParent *parent,
 }
 
 static void
-gtk_tree_view_accessible_set_cell_data (GtkCellAccessibleParent *parent,
-                                        GtkCellAccessible       *cell)
-{
-  set_cell_data (GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent))),
-                 GTK_TREE_VIEW_ACCESSIBLE (parent),
-                 cell);
-}
-
-static void
 gtk_tree_view_accessible_expand_collapse (GtkCellAccessibleParent *parent,
                                           GtkCellAccessible       *cell)
 {
@@ -1442,7 +1433,6 @@ gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface)
   iface->grab_focus = gtk_tree_view_accessible_grab_cell_focus;
   iface->get_child_index = gtk_tree_view_accessible_get_child_index;
   iface->get_renderer_state = gtk_tree_view_accessible_get_renderer_state;
-  iface->set_cell_data = gtk_tree_view_accessible_set_cell_data;
   iface->expand_collapse = gtk_tree_view_accessible_expand_collapse;
   iface->activate = gtk_tree_view_accessible_activate;
   iface->edit = gtk_tree_view_accessible_edit;

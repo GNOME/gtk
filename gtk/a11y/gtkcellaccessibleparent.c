@@ -130,21 +130,6 @@ _gtk_cell_accessible_parent_get_renderer_state (GtkCellAccessibleParent *parent,
 }
 
 void
-_gtk_cell_accessible_parent_set_cell_data (GtkCellAccessibleParent *parent,
-                                           GtkCellAccessible       *cell)
-{
-  GtkCellAccessibleParentIface *iface;
-
-  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent));
-  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (cell));
-
-  iface = GTK_CELL_ACCESSIBLE_PARENT_GET_IFACE (parent);
-
-  if (iface->set_cell_data)
-    (iface->set_cell_data) (parent, cell);
-}
-
-void
 _gtk_cell_accessible_parent_expand_collapse (GtkCellAccessibleParent *parent,
                                              GtkCellAccessible       *cell)
 {

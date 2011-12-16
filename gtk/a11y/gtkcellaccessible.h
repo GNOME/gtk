@@ -54,7 +54,6 @@ GtkCellRendererState
 void     _gtk_cell_accessible_state_changed (GtkCellAccessible *cell,
                                              GtkCellRendererState added,
                                              GtkCellRendererState removed);
-void     _gtk_cell_accessible_set_cell_data (GtkCellAccessible *cell);
 void     _gtk_cell_accessible_update_cache  (GtkCellAccessible *cell);
 
 void     _gtk_cell_accessible_initialise    (GtkCellAccessible *cell,

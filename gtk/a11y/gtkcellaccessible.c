@@ -360,29 +360,6 @@ atk_component_interface_init (AtkComponentIface *iface)
 }
 
 /**
- * _gtk_cell_accessible_set_cell_data:
- * @cell: a #GtkCellAccessible
- *
- * Sets the cell data to the row used by @cell. This is useful in
- * particular if you want to work with cell renderers.
- *
- * Note that this function is potentially slow, so be careful.
- **/
-void
-_gtk_cell_accessible_set_cell_data (GtkCellAccessible *cell)
-{
-  AtkObject *parent;
-
-  g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (cell));
-
-  parent = gtk_widget_get_accessible (cell->widget);
-  if (parent == NULL)
-    return;
-
-  _gtk_cell_accessible_parent_set_cell_data (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
-}
-
-/**
  * _gtk_cell_accessible_get_state:
  * @cell: a #GtkCellAccessible
  *
