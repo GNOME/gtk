@@ -9638,7 +9638,7 @@ gtk_tree_view_unref_tree_helper (GtkTreeModel *model,
 	  if (!gtk_tree_model_iter_children (model, &child, iter))
 	    return FALSE;
 
-	  retval = retval || gtk_tree_view_unref_tree_helper (model, &child, new_tree, new_node);
+	  retval = gtk_tree_view_unref_tree_helper (model, &child, new_tree, new_node) | retval;
 	}
 
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
