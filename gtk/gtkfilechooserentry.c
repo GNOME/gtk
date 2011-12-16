@@ -48,12 +48,6 @@ struct _GtkFileChooserEntryClass
   GtkEntryClass parent_class;
 };
 
-/* Action to take when the current folder finishes loading (for explicit or automatic completion) */
-typedef enum {
-  LOAD_COMPLETE_NOTHING,
-  LOAD_COMPLETE_EXPLICIT_COMPLETION
-} LoadCompleteAction;
-
 struct _GtkFileChooserEntry
 {
   GtkEntry parent_instance;
