@@ -7673,6 +7673,8 @@ gtk_widget_set_sensitive (GtkWidget *widget,
   if (priv->sensitive == sensitive)
     return;
 
+  priv->sensitive = sensitive;
+
   if (priv->parent == NULL
       || gtk_widget_is_sensitive (priv->parent))
     {
@@ -7681,15 +7683,9 @@ gtk_widget_set_sensitive (GtkWidget *widget,
       data.flags = GTK_STATE_FLAG_INSENSITIVE;
 
       if (sensitive)
-        {
-          priv->sensitive = TRUE;
-          data.operation = STATE_CHANGE_UNSET;
-        }
+        data.operation = STATE_CHANGE_UNSET;
       else
-        {
-          priv->sensitive = FALSE;
-          data.operation = STATE_CHANGE_SET;
-        }
+        data.operation = STATE_CHANGE_SET;
 
       data.use_forall = TRUE;
 
