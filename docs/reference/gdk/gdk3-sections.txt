@@ -366,7 +366,9 @@ gdk_window_restack
 gdk_window_focus
 gdk_window_register_dnd
 gdk_window_begin_resize_drag
+gdk_window_begin_resize_drag_for_device
 gdk_window_begin_move_drag
+gdk_window_begin_move_drag_for_device
 gdk_window_constrain_size
 gdk_window_beep
 
