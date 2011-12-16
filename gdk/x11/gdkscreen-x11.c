@@ -319,10 +319,11 @@ gdk_x11_screen_get_rgba_visual (GdkScreen *screen)
 
 /**
  * gdk_x11_screen_get_xscreen:
- * @screen: (type GdkX11Screen): a #GdkScreen.
- * @returns: (transfer none): an Xlib <type>Screen*</type>
+ * @screen: (type GdkX11Screen): a #GdkScreen
  *
  * Returns the screen of a #GdkScreen.
+ *
+ * Returns: (transfer none): an Xlib <type>Screen*</type>
  *
  * Since: 2.2
  */
@@ -334,11 +335,12 @@ gdk_x11_screen_get_xscreen (GdkScreen *screen)
 
 /**
  * gdk_x11_screen_get_screen_number:
- * @screen: (type GdkX11Screen): a #GdkScreen.
- * @returns: the position of @screen among the screens of
- *   its display.
+ * @screen: (type GdkX11Screen): a #GdkScreen
  *
  * Returns the index of a #GdkScreen.
+ *
+ * Returns: the position of @screen among the screens
+ *     of its display
  *
  * Since: 2.2
  */
