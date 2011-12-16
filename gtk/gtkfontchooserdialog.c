@@ -190,7 +190,8 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
                                   GTK_FONT_CHOOSER (priv->fontchooser));
 }
 
-/** gtk_font_chooser_dialog_new:
+/**
+ * gtk_font_chooser_dialog_new:
  * @title: (allow-none): Title of the dialog, or %NULL
  * @parent: (allow-none): Transient parent of the dialog, or %NULL
  *
