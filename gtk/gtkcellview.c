@@ -790,8 +790,6 @@ gtk_cell_view_draw (GtkWidget *widget,
 
   if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_PRELIGHT)
     state = GTK_CELL_RENDERER_PRELIT;
-  else if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_INSENSITIVE)
-    state = GTK_CELL_RENDERER_INSENSITIVE;
   else
     state = 0;
       
