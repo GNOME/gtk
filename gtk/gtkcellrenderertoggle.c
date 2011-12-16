@@ -363,10 +363,12 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   if (width <= 0 || height <= 0)
     return;
 
+  state = gtk_cell_renderer_get_state (cell, widget, flags);
+
   if (!priv->activatable)
-    state = GTK_STATE_FLAG_INSENSITIVE;
-  else
-    state = gtk_cell_renderer_get_state (cell, widget, flags);
+    state |= GTK_STATE_FLAG_INSENSITIVE;
+
+  state &= ~(GTK_STATE_FLAG_INCONSISTENT | GTK_STATE_FLAG_ACTIVE);
 
   if (priv->inconsistent)
     state |= GTK_STATE_FLAG_INCONSISTENT;
