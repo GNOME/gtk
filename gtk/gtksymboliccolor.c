@@ -242,17 +242,17 @@ gtk_symbolic_color_new_mix (GtkSymbolicColor *color1,
  * Creates a symbolic color based on the current win32
  * theme.
  *
- * Note that while this call is availible on all platforms
+ * Note that while this call is available on all platforms
  * the actual value returned is not reliable on non-win32
  * platforms.
  *
  * Returns: A newly created #GtkSymbolicColor
  *
  * Since: 3.4
- **/
+ */
 GtkSymbolicColor *
-gtk_symbolic_color_new_win32 (const gchar        *theme_class,
-			      gint                id)
+gtk_symbolic_color_new_win32 (const gchar *theme_class,
+                              gint         id)
 {
   GtkSymbolicColor *symbolic_color;
 
