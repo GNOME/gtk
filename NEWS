@@ -1,3 +1,63 @@
+Overview of Changes in GTK+ 3.3.6
+=================================
+
+* The GtkTreeView accessibility support and the core
+  treeview code have been extensively refactored;
+  performance should be much improved. But watch out
+  for regressions.
+
+* GtkSpinButtons have received a long-overdue face-lift
+  to make them easier to use with both mouse and touch.
+
+* GtkScale has gained a has-origin property to request
+  filled-in drawing of the trough.
+
+* GtkWindow can now request that the window manager hide
+  the titlebar when the window is maximized.
+
+* Excessive dependencies have been culled from Requires:
+  lines in pc files. Dependent modules may have to declare
+  dependencies that they were getting 'for free' in the past.
+
+* Theming improvements:
+ - The background-clip and background-origin CSS properties
+   have been implemented
+
+* Win32 improvements:
+ - Fix theming of column headers, radio buttons and menuitems,
+   notebook tabs
+ - Make menus, tooltips, and other popups show above the
+   task bar.
+
+* Wayland:
+ - The Wayland backend has been updated to the current Wayland API
+
+* Bugs fixed:
+ 603823 Print to File suggests ".ps" as filename...
+ 640317 gtk_draw_insertion_cursor should be moved to gtk_render
+ 646461 Leak in gtkfilechooserbutton.c: model_free_row_data
+ 650943 Clicking resize grip causes strange mouse grabbing beh...
+ 661428 Allow themes to know when a toplevel window appears un...
+ 662814 Request for way to tell gtk_recent_manager_add_item_qu...
+ 664137 Crash in Audacious audio player when browsing the add ...
+ 664456 segfault on arrow keypress in empty GtkIconView
+ 664467 prop-editor is broken for GdkColor properties
+ 664469 color button doesn't notify "color" and "alpha" when c...
+ 664537 GtkCssProvider: don't segfault when CSS file is not found
+ 664640 CUPS authentication does not work
+ 665140 Draw the scale split
+ 665326 FTBFS: missing Xi/Pango/Fc for gtk-query-immodules-3.0
+ 665616 Add hide-titlebar-when-maximized setting
+ 665741 Crashes in treeview when pressing End key.
+ 665999 Introspection wrong for GDK_INPUT_ONLY vs GDK_INPUT_OUTPUT
+ 666242 Separators in menuitem are not vertically aligned
+
+* Updated translations
+ Breton
+ Russian
+ Slovak
+
+
 Overview of Changes in GTK+ 3.3.4
 =================================
 
