@@ -1742,7 +1742,12 @@ gtk_cell_renderer_get_state (GtkCellRenderer      *cell,
   g_return_val_if_fail (!cell || GTK_IS_CELL_RENDERER (cell), 0);
   g_return_val_if_fail (!widget || GTK_IS_WIDGET (widget), 0);
 
-  if ((widget && !gtk_widget_is_sensitive (widget)) ||
+  if (widget)
+    state |= gtk_widget_get_state_flags (widget);
+
+  state &= ~(GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED);
+
+  if ((state & GTK_STATE_FLAG_INSENSITIVE) != 0 ||
       (cell && !gtk_cell_renderer_get_sensitive (cell)) ||
       (cell_state & GTK_CELL_RENDERER_INSENSITIVE) != 0)
     {
