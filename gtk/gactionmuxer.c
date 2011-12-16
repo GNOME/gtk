@@ -35,7 +35,7 @@
  * #GActionMuxer is a #GActionGroup and #GActionObservable that is
  * capable of containing other #GActionGroup instances.
  *
- * The typical use is aggrgating all of the actions applicable to a
+ * The typical use is aggregating all of the actions applicable to a
  * particular context into a single action group, with namespacing.
  *
  * Consider the case of two action groups -- one containing actions
