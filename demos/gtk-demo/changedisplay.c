@@ -78,7 +78,8 @@ find_toplevel_at_pointer (GdkDisplay *display)
   GdkWindow *pointer_window;
   GtkWidget *widget = NULL;
 
-  pointer_window = gdk_display_get_window_at_pointer (display, NULL, NULL);
+  pointer_window = gdk_device_get_window_at_position (gtk_get_current_event_device (),
+                                                      NULL, NULL);
 
   /* The user data field of a GdkWindow is used to store a pointer
    * to the widget that created it.
@@ -131,11 +132,13 @@ query_for_toplevel (GdkScreen  *screen,
   gtk_widget_show_all (popup);
   cursor = gdk_cursor_new_for_display (display, GDK_CROSSHAIR);
 
-  if (gdk_pointer_grab (gtk_widget_get_window (popup), FALSE,
-                        GDK_BUTTON_RELEASE_MASK,
-                        NULL,
-                        cursor,
-                        GDK_CURRENT_TIME) == GDK_GRAB_SUCCESS)
+  if (gdk_device_grab (gtk_get_current_event_device (),
+                       gtk_widget_get_window (popup),
+                       GDK_OWNERSHIP_NONE,
+                       FALSE,
+                       GDK_BUTTON_RELEASE_MASK,
+                       cursor,
+                       GDK_CURRENT_TIME) == GDK_GRAB_SUCCESS)
     {
       gboolean clicked = FALSE;
 
