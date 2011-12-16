@@ -435,13 +435,37 @@ gtk_file_chooser_entry_focus_out_event (GtkWidget     *widget,
 }
 
 static void
+update_inline_completion (GtkFileChooserEntry *chooser_entry)
+{
+  GtkEntryCompletion *completion = gtk_entry_get_completion (GTK_ENTRY (chooser_entry));
+
+  if (!chooser_entry->current_folder_loaded)
+    {
+      gtk_entry_completion_set_inline_completion (completion, FALSE);
+      return;
+    }
+
+  switch (chooser_entry->action)
+    {
+    case GTK_FILE_CHOOSER_ACTION_OPEN:
+    case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+      gtk_entry_completion_set_inline_completion (completion, TRUE);
+      break;
+    case GTK_FILE_CHOOSER_ACTION_SAVE:
+    case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
+      gtk_entry_completion_set_inline_completion (completion, FALSE);
+      break;
+    }
+}
+
+static void
 discard_completion_store (GtkFileChooserEntry *chooser_entry)
 {
   if (!chooser_entry->completion_store)
     return;
 
   gtk_entry_completion_set_model (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), NULL);
-  gtk_entry_completion_set_inline_completion (gtk_entry_get_completion (GTK_ENTRY (chooser_entry)), FALSE);
+  update_inline_completion (chooser_entry);
   g_object_unref (chooser_entry->completion_store);
   chooser_entry->completion_store = NULL;
 }
@@ -532,7 +556,7 @@ finished_loading_cb (GtkFileSystemModel  *model,
   gtk_widget_set_tooltip_text (GTK_WIDGET (chooser_entry), NULL);
 
   completion = gtk_entry_get_completion (GTK_ENTRY (chooser_entry));
-  gtk_entry_completion_set_inline_completion (completion, TRUE);
+  update_inline_completion (chooser_entry);
   gtk_entry_completion_complete (completion);
   gtk_entry_completion_insert_prefix (completion);
 }
@@ -825,6 +849,8 @@ _gtk_file_chooser_entry_set_action (GtkFileChooserEntry *chooser_entry,
         _gtk_file_system_model_set_show_files (GTK_FILE_SYSTEM_MODEL (chooser_entry->completion_store),
                                                action == GTK_FILE_CHOOSER_ACTION_OPEN ||
                                                action == GTK_FILE_CHOOSER_ACTION_SAVE);
+
+      update_inline_completion (chooser_entry);
     }
 }
 
