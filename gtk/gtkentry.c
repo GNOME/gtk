@@ -3564,15 +3564,10 @@ gtk_entry_draw (GtkWidget *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkEntryPrivate *priv = entry->priv;
   int i;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
 
   /* Draw entry_bg, shadow, progress and focus */
   gtk_entry_draw_frame (widget, context, cr);
@@ -3603,8 +3598,6 @@ gtk_entry_draw (GtkWidget *widget,
       if (icon_info != NULL)
         draw_icon (widget, cr, i);
     }
-
-  gtk_style_context_restore (context);
 
   return FALSE;
 }
