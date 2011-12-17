@@ -2810,11 +2810,8 @@ gtk_combo_box_draw (GtkWidget *widget,
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
       GtkStyleContext *context;
-      GtkStateFlags state;
 
       context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
-      gtk_style_context_set_state (context, state);
 
       gtk_render_background (context, cr, 0, 0,
                              gtk_widget_get_allocated_width (widget),
