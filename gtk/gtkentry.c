@@ -2461,9 +2461,11 @@ gtk_entry_prepare_context_for_icon (GtkEntry             *entry,
   GtkStateFlags state;
 
   widget = GTK_WIDGET (entry);
-  state = GTK_STATE_FLAG_NORMAL;
+  state = gtk_widget_get_state_flags (widget);
 
-  if (!gtk_widget_is_sensitive (widget) || icon_info->insensitive)
+  state &= ~(GTK_STATE_FLAG_PRELIGHT);
+
+  if ((state & GTK_STATE_FLAG_INSENSITIVE) || icon_info->insensitive)
     state |= GTK_STATE_FLAG_INSENSITIVE;
   else if (icon_info->prelight)
     state |= GTK_STATE_FLAG_PRELIGHT;
@@ -5717,10 +5719,8 @@ draw_text_with_color (GtkEntry *entry,
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
-      state = GTK_STATE_FLAG_SELECTED;
-
-      if (gtk_widget_has_focus (widget))
-        state |= GTK_STATE_FLAG_FOCUSED;
+      state = gtk_widget_get_state_flags (widget);
+      state |= GTK_STATE_FLAG_SELECTED;
 
       gtk_style_context_get_background_color (context, state, &selection_color);
       gtk_style_context_get_color (context, state, &text_color);
