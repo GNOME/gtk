@@ -23,11 +23,17 @@
 
 #include "gtkapplicationwindow.h"
 
+#include "gtkapplicationprivate.h"
 #include "gtkmodelmenu.h"
 #include "gactionmuxer.h"
 #include "gtkaccelgroup.h"
 #include "gtkaccelmap.h"
 #include "gtkintl.h"
+
+#include <gdk/gdk.h>
+#ifdef GDK_WINDOWING_X11
+#include <gdk/x11/gdkx.h>
+#endif
 
 /**
  * SECTION:gtkapplicationwindow
@@ -98,6 +104,10 @@ struct _GtkApplicationWindowPrivate
   GMenu *app_menu_section;
   GMenu *menubar_section;
   gboolean show_menubar;
+
+  GDBusConnection *session;
+  gchar           *object_path;
+  guint            export_id;
 };
 
 static void
@@ -565,8 +575,10 @@ static void
 gtk_application_window_real_realize (GtkWidget *widget)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
+  GtkApplication *application;
   GtkSettings *settings;
 
+  application = gtk_window_get_application (GTK_WINDOW (window));
   settings = gtk_widget_get_settings (widget);
 
   g_signal_connect (settings, "notify::gtk-shell-shows-app-menu",
@@ -576,10 +588,7 @@ gtk_application_window_real_realize (GtkWidget *widget)
 
   if (window->priv->muxer == NULL)
     {
-      GtkApplication *application;
       GActionMuxer *muxer;
-
-      application = gtk_window_get_application (GTK_WINDOW (window));
 
       muxer = g_action_muxer_new ();
       g_action_muxer_insert (muxer, "app", G_ACTION_GROUP (application));
@@ -594,6 +603,28 @@ gtk_application_window_real_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_application_window_parent_class)
     ->realize (widget);
+
+#ifdef GDK_WINDOWING_X11
+  {
+    GdkWindow *gdkwindow;
+
+    gdkwindow = gtk_widget_get_window (GTK_WIDGET (window));
+
+    if (GDK_IS_X11_WINDOW (gdkwindow))
+      {
+        const gchar *unique_id;
+        const gchar *app_id;
+
+        gdk_x11_window_set_utf8_property (gdkwindow, "_DBUS_OBJECT_PATH", window->priv->object_path);
+
+        unique_id = g_dbus_connection_get_unique_name (window->priv->session);
+        gdk_x11_window_set_utf8_property (gdkwindow, "_DBUS_UNIQUE_NAME", unique_id);
+
+        app_id = g_application_get_application_id (G_APPLICATION (application));
+        gdk_x11_window_set_utf8_property (gdkwindow, "_DBUS_APPLICATION_ID", app_id);
+      }
+  }
+#endif
 }
 
 static void
@@ -608,6 +639,41 @@ gtk_application_window_real_unrealize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_application_window_parent_class)
     ->unrealize (widget);
+}
+
+gboolean
+gtk_application_window_publish (GtkApplicationWindow *window,
+                                GDBusConnection      *session,
+                                const gchar          *object_path)
+{
+  g_assert (window->priv->session == NULL);
+  g_assert (window->priv->export_id == 0);
+  g_assert (window->priv->object_path == NULL);
+
+  window->priv->export_id = g_dbus_connection_export_action_group (session, object_path, G_ACTION_GROUP (window), NULL);
+
+  if (window->priv->export_id == 0)
+    return FALSE;
+
+  window->priv->session = session;
+  window->priv->object_path = g_strdup (object_path);
+
+  return TRUE;
+}
+
+void
+gtk_application_window_unpublish (GtkApplicationWindow *window)
+{
+  g_assert (window->priv->session != NULL);
+  g_assert (window->priv->export_id != 0);
+  g_assert (window->priv->object_path != NULL);
+
+  g_dbus_connection_unexport_action_group (window->priv->session, window->priv->export_id);
+  window->priv->session = NULL;
+  window->priv->export_id = 0;
+
+  g_free (window->priv->object_path);
+  window->priv->object_path = NULL;
 }
 
 static void

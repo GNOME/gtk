@@ -21,16 +21,17 @@
 
 #include "config.h"
 
+#include "gtkapplication.h"
+
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <string.h>
 
-#include "gtkapplication.h"
+#include "gtkapplicationprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
-#include "gtkapplicationwindow.h"
 #include "gtkaccelmapprivate.h"
 #include "gactionmuxer.h"
 
@@ -113,94 +114,46 @@ struct _GtkApplicationPrivate
 };
 
 #ifdef GDK_WINDOWING_X11
-typedef struct
-{
-  guint action_export_id;
-  guint window_id;
-} GtkApplicationWindowInfo;
-
-static void
-gtk_application_window_realized_x11 (GtkWindow *window,
-                                     gpointer   user_data)
-{
-  GtkApplication *application = user_data;
-  GtkApplicationWindowInfo *info;
-  GdkWindow *gdkwindow;
-  gchar *window_path;
-  const gchar *unique_id;
-  const gchar *app_id;
-
-  gdkwindow = gtk_widget_get_window (GTK_WIDGET (window));
-
-  if (!GDK_IS_X11_WINDOW (gdkwindow))
-    return;
-
-  info = g_object_get_data (G_OBJECT (window), "GtkApplication::window-info");
-
-  window_path = g_strdup_printf ("%s%d", application->priv->window_prefix, info->window_id);
-  gdk_x11_window_set_utf8_property (gdkwindow, "_DBUS_OBJECT_PATH", window_path);
-  g_free (window_path);
-
-  unique_id = g_dbus_connection_get_unique_name (application->priv->session);
-  gdk_x11_window_set_utf8_property (gdkwindow, "_DBUS_UNIQUE_NAME", unique_id);
-
-  app_id = g_application_get_application_id (G_APPLICATION (application));
-  gdk_x11_window_set_utf8_property (gdkwindow, "_DBUS_APPLICATION_ID", app_id);
-}
-
 static void
 gtk_application_window_added_x11 (GtkApplication *application,
                                   GtkWindow      *window)
 {
-  GtkApplicationWindowInfo *info;
-
   if (application->priv->session == NULL)
     return;
 
-  if (!GTK_IS_APPLICATION_WINDOW (window))
-    return;
-
-  /* GtkApplicationWindow associates with us when it is first created,
-   * so surely it's not realized yet...
-   */
-  g_assert (!gtk_widget_get_realized (GTK_WIDGET (window)));
-
-  /* ...but we want to know when it is. */
-  g_signal_connect (window, "realize", G_CALLBACK (gtk_application_window_realized_x11), application);
-
-  info = g_slice_new (GtkApplicationWindowInfo);
-  do
+  if (GTK_IS_APPLICATION_WINDOW (window))
     {
-      gchar *window_path;
+      GtkApplicationWindow *app_window = GTK_APPLICATION_WINDOW (window);
+      gboolean success;
 
-      info->window_id = application->priv->next_id++;
-      window_path = g_strdup_printf ("%s%d", application->priv->window_prefix, info->window_id);
-      info->action_export_id = g_dbus_connection_export_action_group (application->priv->session, window_path,
-                                                                      G_ACTION_GROUP (window), NULL);
-      g_free (window_path);
+      /* GtkApplicationWindow associates with us when it is first created,
+       * so surely it's not realized yet...
+       */
+      g_assert (!gtk_widget_get_realized (GTK_WIDGET (window)));
+
+      do
+        {
+          gchar *window_path;
+          guint window_id;
+
+          window_id = application->priv->next_id++;
+          window_path = g_strdup_printf ("%s%d", application->priv->window_prefix, window_id);
+          success = gtk_application_window_publish (app_window, application->priv->session, window_path);
+          g_free (window_path);
+        }
+      while (!success);
     }
-  while (!info->action_export_id);
-
-  g_object_set_data (G_OBJECT (window), "GtkApplication::window-info", info);
 }
 
 static void
 gtk_application_window_removed_x11 (GtkApplication *application,
                                     GtkWindow      *window)
 {
-  GtkApplicationWindowInfo *info;
-
   if (application->priv->session == NULL)
     return;
 
-  if (!GTK_IS_APPLICATION_WINDOW (window))
-    return;
-
-  info = g_object_steal_data (G_OBJECT (window), "GtkApplication::window-info");
-
-  g_dbus_connection_unexport_action_group (application->priv->session, info->action_export_id);
-
-  g_slice_free (GtkApplicationWindowInfo, info);
+  if (GTK_IS_APPLICATION_WINDOW (window))
+    gtk_application_window_unpublish (GTK_APPLICATION_WINDOW (window));
 }
 
 static gchar *
