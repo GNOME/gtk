@@ -2998,7 +2998,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	  return FALSE;
 	}
 
-      tree_view->priv->focus_column = column;
+      _gtk_tree_view_set_focus_column (tree_view, column);
 
       /* decide if we edit */
       if (event->type == GDK_BUTTON_PRESS && event->button == 1 &&
@@ -8330,7 +8330,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
       for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
 	if (gtk_tree_view_column_get_button (GTK_TREE_VIEW_COLUMN (tmp_list->data)) == focus_child)
 	  {
-	    tree_view->priv->focus_column = GTK_TREE_VIEW_COLUMN (tmp_list->data);
+            _gtk_tree_view_set_focus_column (tree_view, GTK_TREE_VIEW_COLUMN (tmp_list->data));
 	    break;
 	  }
 
@@ -8499,7 +8499,7 @@ gtk_tree_view_set_focus_child (GtkContainer *container,
     {
       if (gtk_tree_view_column_get_button (GTK_TREE_VIEW_COLUMN (list->data)) == child)
 	{
-	  tree_view->priv->focus_column = GTK_TREE_VIEW_COLUMN (list->data);
+          _gtk_tree_view_set_focus_column (tree_view, GTK_TREE_VIEW_COLUMN (list->data));
 	  break;
 	}
     }
@@ -10183,7 +10183,7 @@ gtk_tree_view_focus_to_cursor (GtkTreeView *tree_view)
 		{
 		  GtkCellArea *cell_area;
 
-		  tree_view->priv->focus_column = GTK_TREE_VIEW_COLUMN (list->data);
+                  _gtk_tree_view_set_focus_column (tree_view, GTK_TREE_VIEW_COLUMN (list->data));
 
 		  /* This happens when the treeview initially grabs focus and there
 		   * is no column in focus, here we explicitly focus into the first cell */
@@ -10528,7 +10528,7 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
       cell_area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (column));
       if (gtk_cell_area_focus (cell_area, direction))
 	{
-	  tree_view->priv->focus_column = column;
+          _gtk_tree_view_set_focus_column (tree_view, column);
 	  found_column = TRUE;
 	  break;
 	}
@@ -11952,7 +11952,7 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
   g_return_val_if_fail (gtk_tree_view_column_get_tree_view (column) == GTK_WIDGET (tree_view), -1);
 
   if (tree_view->priv->focus_column == column)
-    tree_view->priv->focus_column = NULL;
+    _gtk_tree_view_set_focus_column (tree_view, NULL);
 
   if (tree_view->priv->edited_column == column)
     {
@@ -13398,7 +13398,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
 	    break;
 	  }
       g_return_if_fail (column_in_tree);
-      tree_view->priv->focus_column = focus_column;
+      _gtk_tree_view_set_focus_column (tree_view, focus_column);
       if (focus_cell)
 	gtk_tree_view_column_focus_cell (focus_column, focus_cell);
       if (start_editing)
