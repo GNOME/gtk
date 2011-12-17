@@ -54,6 +54,10 @@
  * prefix.  Actions must be addressed with the prefixed name when
  * referring to them from a #GMenuModel.
  *
+ * As with #GtkApplication, the GDK lock will be acquired when
+ * processing actions arriving from other processes and should therefore
+ * be held when activating actions locally (if GDK threads are enabled).
+ *
  * The settings #GtkSettings:gtk-shell-shows-app-menu and
  * #GtkSettings:gtk-shell-shows-menubar tell GTK+ whether the
  * desktop environment is showing the application menu and menubar

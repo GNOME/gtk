@@ -62,6 +62,15 @@
  * While GtkApplication works fine with plain #GtkWindows, it is recommended
  * to use it together with #GtkApplicationWindow.
  *
+ * When GDK threads are enabled, GtkApplication will acquire the GDK
+ * lock when invoking actions that arrive from other processes.  The GDK
+ * lock is not touched for local action invocations.  In order to have
+ * actions invoked in a predictable context it is therefore recommended
+ * that the GDK lock be held while invoking actions locally with
+ * g_action_group_activate_action().  The same applies to actions
+ * associated with #GtkApplicationWindow and to the 'activate' and
+ * 'open' #GApplication methods.
+ *
  * To set an application menu on a GtkApplication, use
  * g_application_set_app_menu(). The #GMenuModel that this function
  * expects is usually constructed using #GtkBuilder, as seen in the
