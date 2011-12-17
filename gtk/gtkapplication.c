@@ -322,6 +322,8 @@ gtk_application_before_emit (GApplication *application,
   const gchar *key;
   GVariant *value;
 
+  gdk_threads_enter ();
+
   g_variant_iter_init (&iter, platform_data);
   while (g_variant_iter_loop (&iter, "{&sv}", &key, &value))
     {
@@ -345,6 +347,8 @@ gtk_application_after_emit (GApplication *application,
                             GVariant     *platform_data)
 {
   gdk_notify_startup_complete ();
+
+  gdk_threads_leave ();
 }
 
 static void
