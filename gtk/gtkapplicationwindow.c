@@ -93,6 +93,85 @@
  * </programlisting>
  * </example>
  */
+
+typedef GSimpleActionGroupClass GtkApplicationWindowActionsClass;
+typedef struct
+{
+  GSimpleActionGroup parent_instance;
+  GtkWindow *window;
+} GtkApplicationWindowActions;
+
+static GType gtk_application_window_actions_get_type   (void);
+static void  gtk_application_window_actions_iface_init (GRemoteActionGroupInterface *iface);
+G_DEFINE_TYPE_WITH_CODE (GtkApplicationWindowActions, gtk_application_window_actions, G_TYPE_SIMPLE_ACTION_GROUP,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_REMOTE_ACTION_GROUP, gtk_application_window_actions_iface_init))
+
+static void
+gtk_application_window_actions_activate_action_full (GRemoteActionGroup *remote,
+                                                     const gchar        *action_name,
+                                                     GVariant           *parameter,
+                                                     GVariant           *platform_data)
+{
+  GtkApplicationWindowActions *actions = (GtkApplicationWindowActions *) remote;
+  GApplication *application;
+  GApplicationClass *class;
+
+  application = G_APPLICATION (gtk_window_get_application (actions->window));
+  class = G_APPLICATION_GET_CLASS (application);
+
+  class->before_emit (application, platform_data);
+  g_action_group_activate_action (G_ACTION_GROUP (actions), action_name, parameter);
+  class->after_emit (application, platform_data);
+}
+
+static void
+gtk_application_window_actions_change_action_state_full (GRemoteActionGroup *remote,
+                                                         const gchar        *action_name,
+                                                         GVariant           *value,
+                                                         GVariant           *platform_data)
+{
+  GtkApplicationWindowActions *actions = (GtkApplicationWindowActions *) remote;
+  GApplication *application;
+  GApplicationClass *class;
+
+  application = G_APPLICATION (gtk_window_get_application (actions->window));
+  class = G_APPLICATION_GET_CLASS (application);
+
+  class->before_emit (application, platform_data);
+  g_action_group_change_action_state (G_ACTION_GROUP (actions), action_name, value);
+  class->after_emit (application, platform_data);
+}
+
+static void
+gtk_application_window_actions_init (GtkApplicationWindowActions *actions)
+{
+}
+
+static void
+gtk_application_window_actions_iface_init (GRemoteActionGroupInterface *iface)
+{
+  iface->activate_action_full = gtk_application_window_actions_activate_action_full;
+  iface->change_action_state_full = gtk_application_window_actions_change_action_state_full;
+}
+
+static void
+gtk_application_window_actions_class_init (GtkApplicationWindowActionsClass *class)
+{
+}
+
+static GSimpleActionGroup *
+gtk_application_window_actions_new (GtkApplicationWindow *window)
+{
+  GtkApplicationWindowActions *actions;
+
+  actions = g_object_new (gtk_application_window_actions_get_type (), NULL);
+  actions->window = GTK_WINDOW (window);
+
+  return G_SIMPLE_ACTION_GROUP (actions);
+}
+
+/* Now onto GtkApplicationWindow... */
+
 struct _GtkApplicationWindowPrivate
 {
   GSimpleActionGroup *actions;
@@ -650,7 +729,9 @@ gtk_application_window_publish (GtkApplicationWindow *window,
   g_assert (window->priv->export_id == 0);
   g_assert (window->priv->object_path == NULL);
 
-  window->priv->export_id = g_dbus_connection_export_action_group (session, object_path, G_ACTION_GROUP (window), NULL);
+  window->priv->export_id = g_dbus_connection_export_action_group (session, object_path,
+                                                                   G_ACTION_GROUP (window->priv->actions),
+                                                                   NULL);
 
   if (window->priv->export_id == 0)
     return FALSE;
@@ -771,7 +852,7 @@ gtk_application_window_init (GtkApplicationWindow *window)
 {
   window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, GTK_TYPE_APPLICATION_WINDOW, GtkApplicationWindowPrivate);
 
-  window->priv->actions = g_simple_action_group_new ();
+  window->priv->actions = gtk_application_window_actions_new (window);
   window->priv->app_menu_section = g_menu_new ();
   window->priv->menubar_section = g_menu_new ();
   window->priv->accels = gtk_accel_group_new ();
