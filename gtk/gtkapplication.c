@@ -580,6 +580,14 @@ gtk_application_class_init (GtkApplicationClass *class)
  * This function calls g_type_init() for you. gtk_init() is called
  * as soon as the application gets registered as the primary instance.
  *
+ * Note that commandline arguments are not passed to gtk_init().
+ * All GTK+ functionality that is available via commandline arguments
+ * can also be achieved by setting suitable environment variables
+ * such as <envvar>G_DEBUG</envvar>, so this should not be a big
+ * problem. If you absolutely must support GTK+ commandline arguments,
+ * you can explicitly call gtk_init() before creating the application
+ * instance.
+ *
  * The application id must be valid. See g_application_id_is_valid().
  *
  * Returns: a new #GtkApplication instance
