@@ -137,9 +137,16 @@ void
 gtk_accessible_set_widget (GtkAccessible *accessible,
                            GtkWidget     *widget)
 {
+  GtkAccessiblePrivate *priv;
+
   g_return_if_fail (GTK_IS_ACCESSIBLE (accessible));
 
-  accessible->priv->widget = widget;
+  priv = accessible->priv;
+
+  if (priv->widget == widget)
+    return;
+
+  priv->widget = widget;
 
   g_object_notify (G_OBJECT (accessible), "widget");
 }
