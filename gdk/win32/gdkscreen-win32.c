@@ -222,6 +222,7 @@ gdk_win32_screen_class_init (GdkWin32ScreenClass *klass)
   screen_class->get_monitor_height_mm = gdk_win32_screen_get_monitor_height_mm;
   screen_class->get_monitor_plug_name = gdk_win32_screen_get_monitor_plug_name;
   screen_class->get_monitor_geometry = gdk_win32_screen_get_monitor_geometry;
+  screen_class->get_monitor_workarea = gdk_win32_screen_get_monitor_geometry;
   screen_class->get_system_visual = _gdk_win32_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_win32_screen_get_rgba_visual;
   screen_class->is_composited = gdk_win32_screen_is_composited;

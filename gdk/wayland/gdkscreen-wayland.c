@@ -502,6 +502,7 @@ _gdk_screen_wayland_class_init (GdkScreenWaylandClass *klass)
   screen_class->get_monitor_height_mm = gdk_wayland_screen_get_monitor_height_mm;
   screen_class->get_monitor_plug_name = gdk_wayland_screen_get_monitor_plug_name;
   screen_class->get_monitor_geometry = gdk_wayland_screen_get_monitor_geometry;
+  screen_class->get_monitor_workarea = gdk_wayland_screen_get_monitor_geometry;
   screen_class->get_system_visual = gdk_wayland_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_wayland_screen_get_rgba_visual;
   screen_class->is_composited = gdk_wayland_screen_is_composited;

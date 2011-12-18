@@ -62,6 +62,9 @@ struct _GdkScreenClass
   void         (* get_monitor_geometry)  (GdkScreen    *screen,
                                           gint          monitor_num,
                                           GdkRectangle *dest);
+  void         (* get_monitor_workarea)  (GdkScreen    *screen,
+                                          gint          monitor_num,
+                                          GdkRectangle *dest);
   GList *      (* list_visuals)          (GdkScreen *screen);
   GdkVisual *  (* get_system_visual)     (GdkScreen *screen);
   GdkVisual *  (* get_rgba_visual)       (GdkScreen *screen);

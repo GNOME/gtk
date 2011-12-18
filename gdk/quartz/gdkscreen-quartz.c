@@ -462,6 +462,7 @@ gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
   screen_class->get_monitor_height_mm = gdk_quartz_screen_get_monitor_height_mm;
   screen_class->get_monitor_plug_name = gdk_quartz_screen_get_monitor_plug_name;
   screen_class->get_monitor_geometry = gdk_quartz_screen_get_monitor_geometry;
+  screen_class->get_monitor_workarea = gdk_quartz_screen_get_monitor_geometry;
   screen_class->is_composited = gdk_quartz_screen_is_composited;
   screen_class->make_display_name = gdk_quartz_screen_make_display_name;
   screen_class->get_active_window = gdk_quartz_screen_get_active_window;
