@@ -937,8 +937,8 @@ gtk_text_layout_real_invalidate_cursors (GtkTextLayout     *layout,
       GtkTextIter line_start, line_end;
       GtkTextLine *line = layout->one_display_cache->line;
 
-      _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                        &line_start, line, 0);
+      gtk_text_layout_get_iter_at_line (layout, &line_start, line, 0);
+
       line_end = line_start;
       if (!gtk_text_iter_ends_line (&line_end))
 	gtk_text_iter_forward_to_line_end (&line_end);
@@ -1257,9 +1257,7 @@ totally_invisible_line (GtkTextLayout *layout,
    * invisible/noninvisible toggle state; this function can use the whole btree 
    * to get it right.
    */
-  _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-				    iter, line, 0);
-  
+  gtk_text_layout_get_iter_at_line (layout, iter, line, 0);
   if (!_gtk_text_btree_char_is_invisible (iter))
     return FALSE;
 
@@ -1986,11 +1984,10 @@ update_text_display_cursors (GtkTextLayout      *layout,
           seg->type == &gtk_text_pixbuf_type ||
           seg->type == &gtk_text_child_type)
         {
-          _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                            &iter, line,
+          gtk_text_layout_get_iter_at_line (layout, &iter, line,
                                             buffer_byte_offset);
 
-	  if (!_gtk_text_btree_char_is_invisible (&iter))
+          if (!_gtk_text_btree_char_is_invisible (&iter))
             layout_byte_offset += seg->byte_count;
 
 	  buffer_byte_offset += seg->byte_count;
@@ -2539,8 +2536,7 @@ line_display_index_to_iter (GtkTextLayout      *layout,
 	}
     }
 
-  _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                    iter, display->line, 0);
+  gtk_text_layout_get_iter_at_line (layout, iter, display->line, 0);
 
   gtk_text_iter_set_visible_line_index (iter, index);
   
@@ -2549,9 +2545,7 @@ line_display_index_to_iter (GtkTextLayout      *layout,
       /* Clamp to end of line - really this clamping should have been done
        * before here, maybe in Pango, this is a broken band-aid I think
        */
-      _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                        iter, display->line, 0);
-
+      gtk_text_layout_get_iter_at_line (layout, iter, display->line, 0);
       if (!gtk_text_iter_ends_line (iter))
         gtk_text_iter_forward_to_line_end (iter);
     }
@@ -2606,8 +2600,7 @@ gtk_text_layout_get_line_at_y (GtkTextLayout *layout,
   g_return_if_fail (target_iter != NULL);
 
   get_line_at_y (layout, y, &line, line_top);
-  _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                   target_iter, line, 0);
+  gtk_text_layout_get_iter_at_line (layout, target_iter, line, 0);
 }
 
 void
@@ -2980,8 +2973,7 @@ find_display_line_below (GtkTextLayout *layout,
       line = next;
     }
 
-  _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                   iter, found_line, found_byte);
+  gtk_text_layout_get_iter_at_line (layout, iter, found_line, found_byte);
 }
 
 /* Find the iter for the logical beginning of the last display line whose
@@ -3049,10 +3041,9 @@ find_display_line_above (GtkTextLayout *layout,
     }
 
  done:
-  
+
   if (found_line)
-    _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                     iter, found_line, found_byte);
+    gtk_text_layout_get_iter_at_line (layout, iter, found_line, found_byte);
   else
     gtk_text_buffer_get_iter_at_offset (layout->buffer, iter, 0);
 }
@@ -3418,7 +3409,6 @@ gtk_text_layout_get_iter_at_line (GtkTextLayout  *layout,
   _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
                                     iter, line, byte_offset);
 }
-
 
 /**
  * gtk_text_layout_move_iter_to_x:
