@@ -231,6 +231,8 @@ gtk_accessible_get_widget (GtkAccessible *accessible)
  *
  * This function specifies the callback function to be called
  * when the widget corresponding to a GtkAccessible is destroyed.
+ *
+ * Deprecated: 3.4: Use gtk_accessible_set_widget() and its vfuncs.
  */
 void
 gtk_accessible_connect_widget_destroyed (GtkAccessible *accessible)

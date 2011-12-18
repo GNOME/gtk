@@ -66,6 +66,8 @@ GType      gtk_accessible_get_type                 (void) G_GNUC_CONST;
 void       gtk_accessible_set_widget               (GtkAccessible *accessible,
                                                     GtkWidget     *widget);
 GtkWidget *gtk_accessible_get_widget               (GtkAccessible *accessible);
+
+GDK_DEPRECATED_FOR(gtk_accessible_set_widget)
 void       gtk_accessible_connect_widget_destroyed (GtkAccessible *accessible);
 
 G_END_DECLS
