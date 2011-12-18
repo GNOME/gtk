@@ -217,11 +217,18 @@ gtk_accessible_connect_widget_destroyed (GtkAccessible *accessible)
 }
 
 static void
+gtk_accessible_widget_destroyed (GtkWidget     *widget,
+                                 GtkAccessible *accessible)
+{
+  gtk_accessible_set_widget (accessible, NULL);
+}
+
+static void
 gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible)
 {
   GtkAccessiblePrivate *priv = accessible->priv;
 
   if (priv->widget)
     g_signal_connect (priv->widget, "destroy",
-                      G_CALLBACK (gtk_widget_destroyed), &priv->widget);
+                      G_CALLBACK (gtk_accessible_widget_destroyed), accessible);
 }
