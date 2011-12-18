@@ -3328,7 +3328,7 @@ gtk_menu_get_preferred_height_for_width (GtkWidget *widget,
       GdkScreen *screen = gtk_widget_get_screen (priv->toplevel);
       GdkRectangle monitor;
 
-      gdk_screen_get_monitor_geometry (screen, priv->monitor_num, &monitor);
+      gdk_screen_get_monitor_workarea (screen, priv->monitor_num, &monitor);
 
       if (priv->position_y + min_height > monitor.y + monitor.height)
         min_height = monitor.y + monitor.height - priv->position_y;
@@ -4700,7 +4700,7 @@ gtk_menu_position (GtkMenu  *menu,
       if (priv->monitor_num < 0)
         priv->monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
 
-      gdk_screen_get_monitor_geometry (screen, priv->monitor_num, &monitor);
+      gdk_screen_get_monitor_workarea (screen, priv->monitor_num, &monitor);
     }
   else
     {
@@ -4730,7 +4730,7 @@ gtk_menu_position (GtkMenu  *menu,
        * Positioning in the vertical direction is similar: first try below
        * mouse cursor, then above.
        */
-      gdk_screen_get_monitor_geometry (screen, priv->monitor_num, &monitor);
+      gdk_screen_get_monitor_workarea (screen, priv->monitor_num, &monitor);
 
       space_left = x - monitor.x;
       space_right = monitor.x + monitor.width - x - 1;

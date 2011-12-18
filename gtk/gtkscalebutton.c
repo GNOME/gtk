@@ -985,7 +985,7 @@ gtk_scale_popup (GtkWidget *widget,
       monitor = gdk_screen_get_monitor_at_point (screen,
 						 button_event->x_root,
 						 button_event->y_root);
-      gdk_screen_get_monitor_geometry (screen, monitor, &rect);
+      gdk_screen_get_monitor_workarea (screen, monitor, &rect);
 
       if (priv->orientation == GTK_ORIENTATION_VERTICAL)
         y += button_event->y;

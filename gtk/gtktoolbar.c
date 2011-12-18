@@ -2659,7 +2659,7 @@ menu_position_func (GtkMenu  *menu,
                                                   gtk_widget_get_window (priv->arrow_button));
   if (monitor_num < 0)
     monitor_num = 0;
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
   gtk_widget_get_allocation (priv->arrow_button, &allocation);
 

@@ -8604,7 +8604,7 @@ popup_position_func (GtkMenu   *menu,
     monitor_num = 0;
   gtk_menu_set_monitor (menu, monitor_num);
 
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
   gtk_widget_get_preferred_size (priv->popup_menu,
                                  &menu_req, NULL);
   height = gdk_window_get_height (priv->text_area);

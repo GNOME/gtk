@@ -1077,7 +1077,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   monitor_num = gdk_screen_get_monitor_at_point (screen,
                                                  tooltip->last_x,
                                                  tooltip->last_y);
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
   get_bounding_box (new_tooltip_widget, &bounds);
 

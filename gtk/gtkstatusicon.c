@@ -2218,7 +2218,7 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
     monitor_num = 0;
   gtk_menu_set_monitor (menu, monitor_num);
 
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
   gdk_window_get_origin (window, x, y);
 

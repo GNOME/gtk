@@ -15064,7 +15064,7 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
   GdkRectangle monitor;
 
   monitor_num = gdk_screen_get_monitor_at_window (screen, tree_window);
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
   gtk_widget_realize (search_dialog);
 

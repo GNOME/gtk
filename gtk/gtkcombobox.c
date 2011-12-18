@@ -1890,7 +1890,7 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
   screen = gtk_widget_get_screen (GTK_WIDGET (combo_box));
   monitor_num = gdk_screen_get_monitor_at_window (screen,
                                                   gtk_widget_get_window (GTK_WIDGET (combo_box)));
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
   if (*x < monitor.x)
     *x = monitor.x;
@@ -2089,7 +2089,7 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
 
   screen = gtk_widget_get_screen (GTK_WIDGET (combo_box));
   monitor_num = gdk_screen_get_monitor_at_window (screen, window);
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
   if (gtk_widget_get_direction (GTK_WIDGET (combo_box)) == GTK_TEXT_DIR_RTL)
     *x = *x + allocation.width - *width;

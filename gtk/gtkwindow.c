@@ -6612,13 +6612,13 @@ center_window_on_monitor (GtkWindow *window,
   int monitor_num;
 
   monitor_num = get_monitor_containing_pointer (window);
-  
+
   if (monitor_num == -1)
     monitor_num = get_center_monitor_of_window (window);
 
-  gdk_screen_get_monitor_geometry (gtk_window_check_screen (window),
-				   monitor_num, &monitor);
-  
+  gdk_screen_get_monitor_workarea (gtk_window_check_screen (window),
+                                    monitor_num, &monitor);
+
   *x = (monitor.width - w) / 2 + monitor.x;
   *y = (monitor.height - h) / 2 + monitor.y;
 
