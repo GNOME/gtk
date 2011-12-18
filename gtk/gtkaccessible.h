@@ -54,9 +54,9 @@ struct _GtkAccessibleClass
 
   void (*connect_widget_destroyed) (GtkAccessible *accessible);
 
+  void (*widget_set)               (GtkAccessible *accessible);
+  void (*widget_unset)             (GtkAccessible *accessible);
   /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
 };

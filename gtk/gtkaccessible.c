@@ -104,11 +104,23 @@ gtk_accessible_init (GtkAccessible *accessible)
 }
 
 static void
+gtk_accessible_real_widget_set (GtkAccessible *accessible)
+{
+}
+
+static void
+gtk_accessible_real_widget_unset (GtkAccessible *accessible)
+{
+}
+
+static void
 gtk_accessible_class_init (GtkAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   klass->connect_widget_destroyed = gtk_accessible_real_connect_widget_destroyed;
+  klass->widget_set = gtk_accessible_real_widget_set;
+  klass->widget_unset = gtk_accessible_real_widget_unset;
 
   gobject_class->get_property = gtk_accessible_get_property;
   gobject_class->set_property = gtk_accessible_set_property;
@@ -142,15 +154,23 @@ gtk_accessible_set_widget (GtkAccessible *accessible,
                            GtkWidget     *widget)
 {
   GtkAccessiblePrivate *priv;
+  GtkAccessibleClass *klass;
 
   g_return_if_fail (GTK_IS_ACCESSIBLE (accessible));
 
   priv = accessible->priv;
+  klass = GTK_ACCESSIBLE_GET_CLASS (accessible);
 
   if (priv->widget == widget)
     return;
 
+  if (priv->widget)
+    klass->widget_unset (accessible);
+
   priv->widget = widget;
+
+  if (widget);
+    klass->widget_set (accessible);
 
   g_object_notify (G_OBJECT (accessible), "widget");
 }
