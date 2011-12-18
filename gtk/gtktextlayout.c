@@ -1968,9 +1968,6 @@ update_text_display_cursors (GtkTextLayout      *layout,
 
   display->cursors_invalid = FALSE;
 
-  _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                    &iter, line, 0);
-
   /* Special-case optimization for completely
    * invisible lines; makes it faster to deal
    * with sequences of invisible lines.
@@ -2156,9 +2153,6 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   display->size_only = size_only;
   display->line = line;
   display->insert_index = -1;
-
-  _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                    &iter, line, 0);
 
   /* Special-case optimization for completely
    * invisible lines; makes it faster to deal
@@ -3572,12 +3566,8 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
           do
             {
               line = _gtk_text_line_previous (line);
-
               if (!line)
                 goto done;
-              
-              _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                                &lineiter, line, 0);
             }
           while (totally_invisible_line (layout, line, &lineiter));
           
@@ -3593,12 +3583,9 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
               line = _gtk_text_line_next_excluding_last (line);
               if (!line)
                 goto done;
-
-              _gtk_text_btree_get_iter_at_line (_gtk_text_buffer_get_btree (layout->buffer),
-                                                &lineiter, line, 0);
             }
           while (totally_invisible_line (layout, line, &lineiter));
-  
+
  	  gtk_text_layout_free_line_display (layout, display);
  	  display = gtk_text_layout_get_line_display (layout, line, FALSE);
           new_index = 0;
