@@ -119,7 +119,6 @@ gtk_widget_accessible_initialize (AtkObject *obj,
 
   accessible = GTK_ACCESSIBLE (obj);
   gtk_accessible_set_widget (accessible, widget);
-  gtk_accessible_connect_widget_destroyed (accessible);
   g_signal_connect_after (widget, "focus-in-event", G_CALLBACK (focus_cb), NULL);
   g_signal_connect_after (widget, "focus-out-event", G_CALLBACK (focus_cb), NULL);
   g_signal_connect (widget, "notify", G_CALLBACK (notify_cb), NULL);
