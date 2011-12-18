@@ -10107,7 +10107,10 @@ gtk_widget_real_destroy (GtkWidget *object)
       GtkAccessible *accessible = g_object_steal_qdata (G_OBJECT (widget), quark_accessible_object);
       
       if (accessible)
-        gtk_accessible_set_widget (accessible, NULL);
+        {
+          gtk_accessible_set_widget (accessible, NULL);
+          g_object_unref (accessible);
+        }
     }
 
   /* wipe accelerator closures (keep order) */
