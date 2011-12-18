@@ -10101,11 +10101,14 @@ gtk_widget_real_destroy (GtkWidget *object)
   /* gtk_object_destroy() will already hold a refcount on object */
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = widget->priv;
-  GtkAccessible *accessible;
 
-  accessible = g_object_steal_qdata (G_OBJECT (widget), quark_accessible_object);
-  if (GTK_IS_ACCESSIBLE (accessible))
-    gtk_accessible_set_widget (accessible, NULL);
+  if (GTK_WIDGET_GET_CLASS (widget)->priv->accessible_type != GTK_TYPE_ACCESSIBLE)
+    {
+      GtkAccessible *accessible = g_object_steal_qdata (G_OBJECT (widget), quark_accessible_object);
+      
+      if (accessible)
+        gtk_accessible_set_widget (accessible, NULL);
+    }
 
   /* wipe accelerator closures (keep order) */
   g_object_set_qdata (G_OBJECT (widget), quark_accel_path, NULL);
