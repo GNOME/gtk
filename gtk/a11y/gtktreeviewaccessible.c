@@ -244,34 +244,17 @@ gtk_tree_view_accessible_notify_gtk (GObject    *obj,
 }
 
 static void
-gtk_tree_view_accessible_destroyed (GtkWidget     *widget,
-                                    GtkAccessible *gtk_accessible)
+gtk_tree_view_accessible_widget_unset (GtkAccessible *gtkaccessible)
 {
-  GtkTreeViewAccessible *accessible;
-
-  if (!GTK_IS_TREE_VIEW (widget))
-    return;
-
-  accessible = GTK_TREE_VIEW_ACCESSIBLE (gtk_accessible);
+  GtkTreeViewAccessible *accessible = GTK_TREE_VIEW_ACCESSIBLE (gtkaccessible);
 
   if (accessible->focus_cell)
     {
       g_object_unref (accessible->focus_cell);
       accessible->focus_cell = NULL;
     }
-}
 
-static void
-gtk_tree_view_accessible_connect_widget_destroyed (GtkAccessible *accessible)
-{
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (accessible);
-  if (widget)
-    g_signal_connect_after (widget, "destroy",
-                            G_CALLBACK (gtk_tree_view_accessible_destroyed), accessible);
-
-  GTK_ACCESSIBLE_CLASS (_gtk_tree_view_accessible_parent_class)->connect_widget_destroyed (accessible);
+  GTK_ACCESSIBLE_CLASS (_gtk_tree_view_accessible_parent_class)->widget_unset (gtkaccessible);
 }
 
 static gint
@@ -584,7 +567,7 @@ _gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
 
   widget_class->notify_gtk = gtk_tree_view_accessible_notify_gtk;
 
-  accessible_class->connect_widget_destroyed = gtk_tree_view_accessible_connect_widget_destroyed;
+  accessible_class->widget_unset = gtk_tree_view_accessible_widget_unset;
 
   /* The children of a GtkTreeView are the buttons at the top of the columns
    * we do not represent these as children so we do not want to report
