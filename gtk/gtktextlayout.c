@@ -170,8 +170,6 @@ enum {
 
 #define PIXEL_BOUND(d) (((d) + PANGO_SCALE - 1) / PANGO_SCALE)
 
-static void gtk_text_layout_finalize (GObject *object);
-
 static guint signals[LAST_SIGNAL] = { 0 };
 
 PangoAttrType gtk_text_attr_appearance_type = 0;
@@ -179,10 +177,57 @@ PangoAttrType gtk_text_attr_appearance_type = 0;
 G_DEFINE_TYPE (GtkTextLayout, gtk_text_layout, G_TYPE_OBJECT)
 
 static void
+gtk_text_layout_dispose (GObject *object)
+{
+  GtkTextLayout *layout;
+
+  layout = GTK_TEXT_LAYOUT (object);
+
+  gtk_text_layout_set_buffer (layout, NULL);
+
+  if (layout->default_style != NULL)
+    {
+      gtk_text_attributes_unref (layout->default_style);
+      layout->default_style = NULL;
+    }
+
+  g_clear_object (&layout->ltr_context);
+  g_clear_object (&layout->rtl_context);
+
+  if (layout->one_display_cache)
+    {
+      GtkTextLineDisplay *tmp_display = layout->one_display_cache;
+      layout->one_display_cache = NULL;
+      gtk_text_layout_free_line_display (layout, tmp_display);
+    }
+
+  if (layout->preedit_attrs != NULL)
+    {
+      pango_attr_list_unref (layout->preedit_attrs);
+      layout->preedit_attrs = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_text_layout_parent_class)->dispose (object);
+}
+
+static void
+gtk_text_layout_finalize (GObject *object)
+{
+  GtkTextLayout *layout;
+
+  layout = GTK_TEXT_LAYOUT (object);
+
+  g_free (layout->preedit_string);
+
+  G_OBJECT_CLASS (gtk_text_layout_parent_class)->finalize (object);
+}
+
+static void
 gtk_text_layout_class_init (GtkTextLayoutClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = gtk_text_layout_dispose;
   object_class->finalize = gtk_text_layout_finalize;
 
   klass->wrap = gtk_text_layout_real_wrap;
@@ -249,53 +294,6 @@ free_style_cache (GtkTextLayout *text_layout)
       gtk_text_attributes_unref (text_layout->one_style_cache);
       text_layout->one_style_cache = NULL;
     }
-}
-
-static void
-gtk_text_layout_finalize (GObject *object)
-{
-  GtkTextLayout *layout;
-
-  layout = GTK_TEXT_LAYOUT (object);
-
-  gtk_text_layout_set_buffer (layout, NULL);
-
-  if (layout->default_style)
-    gtk_text_attributes_unref (layout->default_style);
-  layout->default_style = NULL;
-
-  if (layout->ltr_context)
-    {
-      g_object_unref (layout->ltr_context);
-      layout->ltr_context = NULL;
-    }
-  if (layout->rtl_context)
-    {
-      g_object_unref (layout->rtl_context);
-      layout->rtl_context = NULL;
-    }
-  
-  if (layout->one_display_cache) 
-    {
-      GtkTextLineDisplay *tmp_display = layout->one_display_cache;
-      layout->one_display_cache = NULL;
-      gtk_text_layout_free_line_display (layout, tmp_display);
-    }
-
-  if (layout->preedit_string)
-    {
-      g_free (layout->preedit_string);
-      layout->preedit_string = NULL;
-    }
-
-  if (layout->preedit_attrs)
-    {
-      pango_attr_list_unref (layout->preedit_attrs);
-      layout->preedit_attrs = NULL;
-    }
-
-
-  G_OBJECT_CLASS (gtk_text_layout_parent_class)->finalize (object);
 }
 
 /**
