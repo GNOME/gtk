@@ -11409,7 +11409,9 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
       }
     else
       {
-        accessible = g_object_new (priv->accessible_type, NULL);
+        accessible = g_object_new (priv->accessible_type,
+                                   "widget", widget,
+                                   NULL);
         if (priv->accessible_role != ATK_ROLE_INVALID)
           atk_object_set_role (accessible, priv->accessible_role);
 
