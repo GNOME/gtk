@@ -605,6 +605,9 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
           slave = g_hash_table_lookup (device_manager->id_table,
                                        GINT_TO_POINTER (ev->info[i].deviceid));
 
+          if (!slave)
+            continue;
+
           /* Remove old master info */
           master = gdk_device_get_associated_device (slave);
 
@@ -627,7 +630,10 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
                   master = g_hash_table_lookup (device_manager->id_table,
                                                 GINT_TO_POINTER (info->attachment));
                   XIFreeDeviceInfo (info);
+                }
 
+              if (master)
+                {
                   _gdk_device_set_associated_device (slave, master);
                   _gdk_device_add_slave (master, slave);
 
@@ -651,10 +657,13 @@ handle_device_changed (GdkX11DeviceManagerXI2 *device_manager,
   device = g_hash_table_lookup (device_manager->id_table,
                                 GUINT_TO_POINTER (ev->deviceid));
 
-  _gdk_device_reset_axes (device);
-  translate_device_classes (display, device, ev->classes, ev->num_classes);
+  if (device)
+    {
+      _gdk_device_reset_axes (device);
+      translate_device_classes (display, device, ev->classes, ev->num_classes);
 
-  g_signal_emit_by_name (G_OBJECT (device), "changed");
+      g_signal_emit_by_name (G_OBJECT (device), "changed");
+    }
 }
 
 static GdkCrossingMode
