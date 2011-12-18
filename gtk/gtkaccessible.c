@@ -103,25 +103,43 @@ gtk_accessible_init (GtkAccessible *accessible)
                                                   GtkAccessiblePrivate);
 }
 
+static AtkStateSet *
+gtk_accessible_ref_state_set (AtkObject *object)
+{
+  GtkAccessible *accessible = GTK_ACCESSIBLE (object);
+  AtkStateSet *state_set;
+
+  state_set = ATK_OBJECT_CLASS (gtk_accessible_parent_class)->ref_state_set (object);
+
+  if (accessible->priv->widget == NULL)
+    atk_state_set_add_state (state_set, ATK_STATE_DEFUNCT);
+
+  return state_set;
+}
+
 static void
 gtk_accessible_real_widget_set (GtkAccessible *accessible)
 {
+  atk_object_notify_state_change (ATK_OBJECT (accessible), ATK_STATE_DEFUNCT, FALSE);
 }
 
 static void
 gtk_accessible_real_widget_unset (GtkAccessible *accessible)
 {
+  atk_object_notify_state_change (ATK_OBJECT (accessible), ATK_STATE_DEFUNCT, TRUE);
 }
 
 static void
 gtk_accessible_class_init (GtkAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  AtkObjectClass *atkobject_class = ATK_OBJECT_CLASS (klass);
 
   klass->connect_widget_destroyed = gtk_accessible_real_connect_widget_destroyed;
   klass->widget_set = gtk_accessible_real_widget_set;
   klass->widget_unset = gtk_accessible_real_widget_unset;
 
+  atkobject_class->ref_state_set = gtk_accessible_ref_state_set;
   gobject_class->get_property = gtk_accessible_get_property;
   gobject_class->set_property = gtk_accessible_set_property;
 
