@@ -17,6 +17,7 @@ gail_c_sources =			\
 	gtkentryaccessible.c		\
 	gtkexpanderaccessible.c		\
 	gtkframeaccessible.c		\
+	gtkiconviewaccessible.c		\
 	gtkimageaccessible.c		\
 	gtkimagecellaccessible.c	\
 	gtklabelaccessible.c		\
@@ -64,6 +65,7 @@ gail_private_h_sources =		\
 	gtkentryaccessible.h		\
 	gtkexpanderaccessible.h		\
 	gtkframeaccessible.h		\
+	gtkiconviewaccessible.h		\
 	gtkimageaccessible.h		\
 	gtkimagecellaccessible.h	\
 	gtklabelaccessible.h		\
