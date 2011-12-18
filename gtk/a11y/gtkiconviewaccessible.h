@@ -40,8 +40,6 @@ struct _GtkIconViewAccessible
   GtkContainerAccessible parent;
 
   GList *items;
-  GtkAdjustment *old_hadj;
-  GtkAdjustment *old_vadj;
   GtkTreeModel *model;
 };
 
@@ -52,9 +50,7 @@ struct _GtkIconViewAccessibleClass
 
 GType           _gtk_icon_view_accessible_get_type            (void);
 
-void            _gtk_icon_view_accessible_set_adjustment      (AtkObject              *accessible,
-                                                               GtkOrientation          orientation,
-                                                               GtkAdjustment          *adjustment);
+void            _gtk_icon_view_accessible_adjustment_changed  (GtkIconView            *icon_view);
 
 G_END_DECLS
 

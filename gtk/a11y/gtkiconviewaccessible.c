@@ -27,6 +27,7 @@
 #include "gtk/gtkcellrendererpixbuf.h"
 #include "gtk/gtkcellrenderertext.h"
 #include "gtk/gtkpango.h"
+#include "gtk/gtkwidgetprivate.h"
 
 #define GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE      (_gtk_icon_view_item_accessible_get_type ())
 #define GTK_ICON_VIEW_ITEM_ACCESSIBLE(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_VIEW_ITEM_ACCESSIBLE, GtkIconViewItemAccessible))
@@ -875,8 +876,6 @@ gtk_icon_view_item_accessible_info_new (AtkObject *accessible,
       items = items->next;
     }
   view->items = g_list_insert_before (view->items, items, info);
-  view->old_hadj = NULL;
-  view->old_vadj = NULL;
 }
 
 static gint
@@ -996,52 +995,16 @@ gtk_icon_view_accessible_traverse_items (GtkIconViewAccessible *view,
    }
 }
 
-static void
-gtk_icon_view_accessible_adjustment_changed (GtkAdjustment         *adjustment,
-                                             GtkIconViewAccessible *view)
-{
-  gtk_icon_view_accessible_traverse_items (view, NULL);
-}
-
 void
-_gtk_icon_view_accessible_set_adjustment (AtkObject      *accessible,
-                                          GtkOrientation  orientation,
-                                          GtkAdjustment  *adjustment)
+_gtk_icon_view_accessible_adjustment_changed (GtkIconView *icon_view)
 {
-  GtkIconViewAccessible *view = (GtkIconViewAccessible*)accessible;
-  GtkAdjustment **old_adj_ptr;
+  GtkIconViewAccessible *view;
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      if (view->old_hadj == adjustment)
-        return;
+  view = GTK_ICON_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (icon_view)));
+  if (view == NULL)
+    return;
 
-      old_adj_ptr = &view->old_hadj;
-    }
-  else
-    {
-      if (view->old_vadj == adjustment)
-        return;
-
-      old_adj_ptr = &view->old_vadj;
-    }
-
-  /* Disconnect signal handlers */
-  if (*old_adj_ptr)
-    {
-      g_object_remove_weak_pointer (G_OBJECT (*old_adj_ptr),
-                                    (gpointer *)old_adj_ptr);
-      g_signal_handlers_disconnect_by_func (*old_adj_ptr,
-                                            gtk_icon_view_accessible_adjustment_changed,
-                                            accessible);
-    }
-
-  /* Connect signal */
-  *old_adj_ptr = adjustment;
-  g_object_add_weak_pointer (G_OBJECT (adjustment), (gpointer *)old_adj_ptr);
-  g_signal_connect (adjustment, "value-changed",
-                    G_CALLBACK (gtk_icon_view_accessible_adjustment_changed),
-                    accessible);
+  gtk_icon_view_accessible_traverse_items (view, NULL);
 }
 
 static void
@@ -1327,14 +1290,6 @@ gtk_icon_view_accessible_initialize (AtkObject *accessible,
   icon_view = (GtkIconView*)data;
   view = (GtkIconViewAccessible*)accessible;
 
-  if (icon_view->priv->hadjustment)
-    _gtk_icon_view_accessible_set_adjustment (accessible,
-                                              GTK_ORIENTATION_HORIZONTAL,
-                                              icon_view->priv->hadjustment);
-  if (icon_view->priv->vadjustment)
-    _gtk_icon_view_accessible_set_adjustment (accessible,
-                                              GTK_ORIENTATION_VERTICAL,
-                                              icon_view->priv->vadjustment);
   g_signal_connect (data, "notify",
                     G_CALLBACK (gtk_icon_view_accessible_notify_gtk), NULL);
 
@@ -1359,59 +1314,12 @@ gtk_icon_view_accessible_finalize (GObject *object)
 }
 
 static void
-gtk_icon_view_accessible_destroyed (GtkWidget     *widget,
-                                    GtkAccessible *accessible)
-{
-  AtkObject *atk_obj;
-  GtkIconViewAccessible *view;
-
-  atk_obj = ATK_OBJECT (accessible);
-  view = (GtkIconViewAccessible*)atk_obj;
-  if (view->old_hadj)
-    {
-      g_object_remove_weak_pointer (G_OBJECT (view->old_hadj),
-                                    (gpointer *)&view->old_hadj);
-
-      g_signal_handlers_disconnect_by_func (view->old_hadj,
-                                            (gpointer) gtk_icon_view_accessible_adjustment_changed,
-                                            accessible);
-      view->old_hadj = NULL;
-    }
-  if (view->old_vadj)
-    {
-      g_object_remove_weak_pointer (G_OBJECT (view->old_vadj),
-                                    (gpointer *)&view->old_vadj);
-
-      g_signal_handlers_disconnect_by_func (view->old_vadj,
-                                            (gpointer) gtk_icon_view_accessible_adjustment_changed,
-                                            accessible);
-      view->old_vadj = NULL;
-    }
-}
-
-static void
-gtk_icon_view_accessible_connect_widget_destroyed (GtkAccessible *accessible)
-{
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-  if (widget)
-    {
-      g_signal_connect_after (widget, "destroy",
-                              G_CALLBACK (gtk_icon_view_accessible_destroyed), accessible);
-    }
-  GTK_ACCESSIBLE_CLASS (_gtk_icon_view_accessible_parent_class)->connect_widget_destroyed (accessible);
-}
-
-static void
 _gtk_icon_view_accessible_class_init (GtkIconViewAccessibleClass *klass)
 {
   GObjectClass *gobject_class;
-  GtkAccessibleClass *accessible_class;
   AtkObjectClass *atk_class;
 
   gobject_class = (GObjectClass *)klass;
-  accessible_class = (GtkAccessibleClass *)klass;
   atk_class = (AtkObjectClass *)klass;
 
   gobject_class->finalize = gtk_icon_view_accessible_finalize;
@@ -1419,8 +1327,6 @@ _gtk_icon_view_accessible_class_init (GtkIconViewAccessibleClass *klass)
   atk_class->get_n_children = gtk_icon_view_accessible_get_n_children;
   atk_class->ref_child = gtk_icon_view_accessible_ref_child;
   atk_class->initialize = gtk_icon_view_accessible_initialize;
-
-  accessible_class->connect_widget_destroyed = gtk_icon_view_accessible_connect_widget_destroyed;
 }
 
 static void

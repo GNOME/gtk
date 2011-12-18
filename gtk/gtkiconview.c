@@ -2446,7 +2446,6 @@ gtk_icon_view_set_hadjustment (GtkIconView   *icon_view,
                                GtkAdjustment *adjustment)
 {
   GtkIconViewPrivate *priv = icon_view->priv;
-  AtkObject *atk_obj;
 
   if (adjustment && priv->hadjustment == adjustment)
     return;
@@ -2468,11 +2467,6 @@ gtk_icon_view_set_hadjustment (GtkIconView   *icon_view,
   priv->hadjustment = g_object_ref_sink (adjustment);
   gtk_icon_view_set_hadjustment_values (icon_view);
 
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
-  _gtk_icon_view_accessible_set_adjustment (atk_obj,
-                                            GTK_ORIENTATION_HORIZONTAL,
-                                            adjustment);
-
   g_object_notify (G_OBJECT (icon_view), "hadjustment");
 }
 
@@ -2481,7 +2475,6 @@ gtk_icon_view_set_vadjustment (GtkIconView   *icon_view,
                                GtkAdjustment *adjustment)
 {
   GtkIconViewPrivate *priv = icon_view->priv;
-  AtkObject *atk_obj;
 
   if (adjustment && priv->vadjustment == adjustment)
     return;
@@ -2503,11 +2496,6 @@ gtk_icon_view_set_vadjustment (GtkIconView   *icon_view,
   priv->vadjustment = g_object_ref_sink (adjustment);
   gtk_icon_view_set_vadjustment_values (icon_view);
 
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
-  _gtk_icon_view_accessible_set_adjustment (atk_obj,
-                                            GTK_ORIENTATION_VERTICAL,
-                                            adjustment);
-
   g_object_notify (G_OBJECT (icon_view), "vadjustment");
 }
 
@@ -2525,6 +2513,8 @@ gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
 
       if (icon_view->priv->doing_rubberband)
         gtk_icon_view_update_rubberband (GTK_WIDGET (icon_view));
+      
+      _gtk_icon_view_accessible_adjustment_changed (icon_view);
 
       gtk_icon_view_process_updates (icon_view);
     }
