@@ -42,6 +42,8 @@ check_focus_tab (gpointer data)
   atk_obj = ATK_OBJECT (data);
   accessible = GTK_NOTEBOOK_ACCESSIBLE (atk_obj);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_obj));
+  if (widget == NULL)
+    return FALSE;
   notebook = GTK_NOTEBOOK (widget);
 
   accessible->idle_focus_id = 0;
@@ -133,17 +135,6 @@ page_removed_cb (GtkNotebook *notebook,
 
 
 static void
-accessible_destroyed (gpointer data)
-{
-  GtkNotebookAccessible *accessible = GTK_NOTEBOOK_ACCESSIBLE (data);
-
-  if (accessible->idle_focus_id)
-    {
-      g_source_remove (accessible->idle_focus_id);
-      accessible->idle_focus_id = 0;
-    }
-}
-static void
 gtk_notebook_accessible_initialize (AtkObject *obj,
                                     gpointer   data)
 {
@@ -170,8 +161,6 @@ gtk_notebook_accessible_initialize (AtkObject *obj,
                     G_CALLBACK (page_added_cb), NULL);
   g_signal_connect (notebook, "page-removed",
                     G_CALLBACK (page_removed_cb), NULL);
-
-  g_object_weak_ref (G_OBJECT (notebook), (GWeakNotify)accessible_destroyed, obj);
 
   obj->role = ATK_ROLE_PAGE_TAB_LIST;
 }
