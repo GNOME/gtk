@@ -440,16 +440,17 @@ gtk_cell_view_set_property (GObject      *object,
       break;
     case PROP_BACKGROUND:
       {
-	GdkColor color;
-	
+        GdkRGBA color;
+
 	if (!g_value_get_string (value))
-	  gtk_cell_view_set_background_color (view, NULL);
-	else if (gdk_color_parse (g_value_get_string (value), &color))
-	  gtk_cell_view_set_background_color (view, &color);
+          gtk_cell_view_set_background_rgba (view, NULL);
+	else if (gdk_rgba_parse (&color, g_value_get_string (value)))
+          gtk_cell_view_set_background_rgba (view, &color);
 	else
 	  g_warning ("Don't know color `%s'", g_value_get_string (value));
-	
-	g_object_notify (object, "background-gdk");
+
+        g_object_notify (object, "background-rgba");
+        g_object_notify (object, "background-gdk");
       }
       break;
     case PROP_BACKGROUND_GDK:
