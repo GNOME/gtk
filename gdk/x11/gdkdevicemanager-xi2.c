@@ -1561,6 +1561,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                              GUINT_TO_POINTER (xev->sourceid));
 
         _gdk_device_manager_core_handle_focus (window,
+                                               xev->event,
                                                device,
                                                source_device,
                                                (ev->evtype == XI_FocusIn) ? TRUE : FALSE,
