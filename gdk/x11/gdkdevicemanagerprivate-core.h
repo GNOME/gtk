@@ -37,6 +37,13 @@ struct _GdkX11DeviceManagerCoreClass
   GdkDeviceManagerClass parent_class;
 };
 
+void            _gdk_device_manager_core_handle_focus           (GdkWindow   *window,
+                                                                 GdkDevice   *device,
+                                                                 GdkDevice   *source_device,
+                                                                 gboolean     focus_in,
+                                                                 int          detail,
+                                                                 gboolean     in);
+
 G_END_DECLS
 
 #endif /* __GDK_DEVICE_MANAGER_PRIVATE_CORE_H__ */
