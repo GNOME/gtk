@@ -9,7 +9,8 @@ DOC_MODULE=gdk3
 DOC_MAIN_SGML_FILE=gdk-docs.sgml
 
 # Extra options to supply to gtkdoc-scan
-SCAN_OPTIONS=--deprecated-guards="GDK_ENABLE_BROKEN|GDK_DISABLE_DEPRECATED"
+SCAN_OPTIONS=--deprecated-guards=GDK_DISABLE_DEPRECATED \
+             --ignore-decorators=G_GNUC_WARN_UNUSED_RESULT
 
 # The directory containing the source code. Relative to $(srcdir)
 DOC_SOURCE_DIR=$(top_srcdir)/gdk $(top_srcdir)/gdk/x11
