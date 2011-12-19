@@ -1604,7 +1604,6 @@ gtk_menu_item_draw (GtkWidget *widget,
   parent = gtk_widget_get_parent (widget);
 
   gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
 
   gtk_style_context_get_padding (context, state, &padding);
 
