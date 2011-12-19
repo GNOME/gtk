@@ -73,8 +73,15 @@ void             gtk_application_add_window    (GtkApplication    *application,
 
 void             gtk_application_remove_window (GtkApplication    *application,
                                                 GtkWindow         *window);
-
 GList *          gtk_application_get_windows   (GtkApplication    *application);
+
+GMenuModel *     gtk_application_get_app_menu  (GtkApplication    *application);
+void             gtk_application_set_app_menu  (GtkApplication    *application,
+                                                GMenuModel        *model);
+
+GMenuModel *     gtk_application_get_menubar   (GtkApplication    *application);
+void             gtk_application_set_menubar   (GtkApplication    *application,
+                                                GMenuModel        *model);
 
 void             gtk_application_add_accelerator    (GtkApplication  *application,
                                                      const gchar     *accelerator,

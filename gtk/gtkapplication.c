@@ -216,8 +216,8 @@ gtk_application_menu_changed_quartz (GObject    *object,
   GMenu *combined;
 
   combined = g_menu_new ();
-  g_menu_append_submenu (combined, "Application", g_application_get_app_menu (G_APPLICATION (object)));
-  g_menu_append_section (combined, NULL, g_application_get_menubar (G_APPLICATION (object)));
+  g_menu_append_submenu (combined, "Application", g_application_get_app_menu (application));
+  g_menu_append_section (combined, NULL, gtk_application_get_menubar (application));
 
   gtk_quartz_set_main_menu (G_MENU_MODEL (combined), G_ACTION_OBSERVABLE (application->priv->muxer));
 }
@@ -747,4 +747,99 @@ gtk_application_remove_accelerator (GtkApplication *application,
 
   gtk_accel_map_change_entry (accel_path, 0, 0, FALSE);
   g_free (accel_path);
+}
+
+/**
+ * gtk_application_set_app_menu:
+ * @application: a #GtkApplication
+ * @app_menu: (allow-none): a #GMenuModel, or %NULL
+ *
+ * Sets or unsets the application menu for @application.
+ *
+ * The application menu is a single menu containing items that typically
+ * impact the application as a whole, rather than acting on a specific
+ * window or document.  For example, you would expect to see
+ * "Preferences" or "Quit" in an application menu, but not "Save" or
+ * "Print".
+ *
+ * If supported, the application menu will be rendered by the desktop
+ * environment.
+ *
+ * Since: 3.4
+ */
+void
+gtk_application_set_app_menu (GtkApplication *application,
+                              GMenuModel     *app_menu)
+{
+  g_object_set (application, "app-menu", app_menu, NULL);
+}
+
+/**
+ * gtk_application_get_app_menu:
+ * @application: a #GtkApplication
+ *
+ * Returns the menu model that has been set with
+ * g_application_set_app_menu().
+ *
+ * Returns: the application menu of @application
+ *
+ * Since: 3.4
+ */
+GMenuModel *
+gtk_application_get_app_menu (GtkApplication *application)
+{
+  GMenuModel *app_menu;
+
+  g_object_get (application, "app-menu", &app_menu, NULL);
+  g_object_unref (app_menu);
+
+  return app_menu;
+}
+
+/**
+ * gtk_application_set_menubar:
+ * @application: a #GtkApplication
+ * @menubar: (allow-none): a #GMenuModel, or %NULL
+ *
+ * Sets or unsets the menubar for windows of @application.
+ *
+ * This is a menubar in the traditional sense.
+ *
+ * Depending on the desktop environment, this may appear at the top of
+ * each window, or at the top of the screen.  In some environments, if
+ * both the application menu and the menubar are set, the application
+ * menu will be presented as if it were the first item of the menubar.
+ * Other environments treat the two as completely separate -- for
+ * example, the application menu may be rendered by the desktop shell
+ * while the menubar (if set) remains in each individual window.
+ *
+ * Since: 3.4
+ */
+void
+gtk_application_set_menubar (GtkApplication *application,
+                             GMenuModel     *menubar)
+{
+  g_object_set (application, "menubar", menubar, NULL);
+}
+
+/**
+ * gtk_application_get_menubar:
+ * @application: a #GtkApplication
+ *
+ * Returns the menu model that has been set with
+ * g_application_set_menubar().
+ *
+ * Returns: the menubar for windows of @application
+ *
+ * Since: 3.4
+ */
+GMenuModel *
+gtk_application_get_menubar (GtkApplication *application)
+{
+  GMenuModel *menubar;
+
+  g_object_get (application, "menubar", &menubar, NULL);
+  g_object_unref (menubar);
+
+  return menubar;
 }

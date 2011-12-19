@@ -415,8 +415,8 @@ plug_man_startup (GApplication *application)
                                "    </submenu>"
                                "  </menu>"
                                "</interface>", -1, NULL);
-  g_application_set_app_menu (application, G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
-  g_application_set_menubar (application, G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
+  gtk_application_set_app_menu (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+  gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
   g_object_set_data_full (G_OBJECT (application), "plugin-menu", gtk_builder_get_object (builder, "plugins"), g_object_unref);
   g_object_unref (builder);
 }

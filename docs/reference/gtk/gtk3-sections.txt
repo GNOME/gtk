@@ -7006,6 +7006,12 @@ gtk_application_add_window
 gtk_application_remove_window
 gtk_application_get_windows
 
+<SUBSECTION>
+gtk_application_get_app_menu
+gtk_application_set_app_menu
+gtk_application_get_menubar
+gtk_application_set_menubar
+
 <SUBSECTION Standard>
 GtkApplicationClass
 GTK_TYPE_APPLICATION

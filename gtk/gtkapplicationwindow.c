@@ -251,7 +251,7 @@ gtk_application_window_update_shell_shows_app_menu (GtkApplicationWindow *window
         {
           GMenuModel *app_menu;
 
-          app_menu = g_application_get_app_menu (G_APPLICATION (gtk_window_get_application (GTK_WINDOW (window))));
+          app_menu = gtk_application_get_app_menu (gtk_window_get_application (GTK_WINDOW (window)));
 
           if (app_menu != NULL)
             g_menu_append_submenu (window->priv->app_menu_section, _("Application"), app_menu);
@@ -280,7 +280,7 @@ gtk_application_window_update_shell_shows_menubar (GtkApplicationWindow *window,
         {
           GMenuModel *menubar;
 
-          menubar = g_application_get_menubar (G_APPLICATION (gtk_window_get_application (GTK_WINDOW (window))));
+          menubar = gtk_application_get_menubar (gtk_window_get_application (GTK_WINDOW (window)));
 
           if (menubar != NULL)
             g_menu_append_section (window->priv->menubar_section, NULL, menubar);
