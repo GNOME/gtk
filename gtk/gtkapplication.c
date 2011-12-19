@@ -87,6 +87,10 @@
  * <graphic fileref="bloatpad-gnome.png" format="PNG"/>
  * </figure>
  *
+ * <figure label="Menu integration in Xfce">
+ * <graphic fileref="bloatpad-xfce.png" format="PNG"/>
+ * </figure>
+ *
  * <example id="gtkapplication"><title>A simple application</title>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/bloatpad.c">

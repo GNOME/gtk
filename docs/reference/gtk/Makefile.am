@@ -367,7 +367,8 @@ HTML_IMAGES = \
 	$(srcdir)/images/numerableicon.png				\
 	$(srcdir)/images/numerableicon2.png				\
 	$(srcdir)/images/bloatpad-osx.png				\
-	$(srcdir)/images/bloatpad-gnome.png
+	$(srcdir)/images/bloatpad-gnome.png				\
+	$(srcdir)/images/bloatpad-xfce.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \
