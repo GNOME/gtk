@@ -759,7 +759,6 @@ gtk_progress_bar_paint_activity (GtkProgressBar *pbar,
     }
 
   gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_PULSE);
 
@@ -814,7 +813,6 @@ gtk_progress_bar_paint_continuous (GtkProgressBar *pbar,
     }
 
   gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
 
   gtk_render_activity (context, cr, area.x, area.y, area.width, area.height);
@@ -921,7 +919,6 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar,
     }
 
   gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
 
   if (start_clip.width > 0 && start_clip.height > 0)
@@ -951,7 +948,6 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar,
   cairo_clip (cr);
 
   gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
 
   gtk_render_layout (context, cr, x, y, layout);
@@ -991,7 +987,6 @@ gtk_progress_bar_draw (GtkWidget      *widget,
   height = gtk_widget_get_allocated_height (widget);
 
   gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
 
   gtk_render_background (context, cr, 0, 0, width, height);
