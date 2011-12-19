@@ -4028,12 +4028,11 @@ gtk_label_draw (GtkWidget *widget,
 
       cairo_translate (cr, -allocation.x, -allocation.y);
 
-      state = gtk_widget_get_state_flags (widget);
-      gtk_style_context_set_state (context, state);
-
       gtk_render_layout (context, cr,
                          x, y,
                          priv->layout);
+
+      state = gtk_widget_get_state_flags (widget);
 
       if (info &&
           (info->selection_anchor != info->selection_end))
@@ -4161,9 +4160,6 @@ gtk_label_draw (GtkWidget *widget,
                                                        range,
                                                        1);
               cairo_region_get_extents (clip, &rect);
-
-              state = gtk_widget_get_state_flags (widget);
-              gtk_style_context_set_state (context, state);
 
               gtk_render_focus (context, cr,
                                 rect.x, rect.y,
