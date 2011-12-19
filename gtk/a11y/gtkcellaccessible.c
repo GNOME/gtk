@@ -42,7 +42,7 @@ static const struct {
 static void atk_action_interface_init    (AtkActionIface    *iface);
 static void atk_component_interface_init (AtkComponentIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkCellAccessible, _gtk_cell_accessible, ATK_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GtkCellAccessible, _gtk_cell_accessible, GTK_TYPE_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
@@ -87,7 +87,7 @@ gtk_cell_accessible_get_index_in_parent (AtkObject *obj)
   if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
     return g_list_index (GTK_CONTAINER_CELL_ACCESSIBLE (parent)->children, obj);
 
-  parent = gtk_widget_get_accessible (cell->widget);
+  parent = gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)));
   if (parent == NULL)
     return -1;
 
@@ -106,7 +106,7 @@ gtk_cell_accessible_ref_state_set (AtkObject *accessible)
 
   state_set = atk_state_set_new ();
 
-  if (cell_accessible->widget == NULL)
+  if (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell_accessible)) == NULL)
     {
       atk_state_set_add_state (state_set, ATK_STATE_DEFUNCT);
       return state_set;
@@ -133,7 +133,7 @@ gtk_cell_accessible_ref_state_set (AtkObject *accessible)
         }
     }
 
-  if (gtk_widget_get_mapped (cell_accessible->widget))
+  if (gtk_widget_get_mapped (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell_accessible))))
     atk_state_set_add_state (state_set, ATK_STATE_SHOWING);
 
   return state_set;
@@ -155,14 +155,6 @@ _gtk_cell_accessible_class_init (GtkCellAccessibleClass *klass)
 static void
 _gtk_cell_accessible_init (GtkCellAccessible *cell)
 {
-  cell->widget = NULL;
-}
-
-static void
-widget_destroyed (GtkWidget         *widget,
-                  GtkCellAccessible *cell)
-{
-  cell->widget = NULL;
 }
 
 void
@@ -170,11 +162,8 @@ _gtk_cell_accessible_initialise (GtkCellAccessible *cell,
                                  GtkWidget         *widget,
                                  AtkObject         *parent)
 {
-  cell->widget = widget;
+  gtk_accessible_set_widget (GTK_ACCESSIBLE (cell), widget);
   atk_object_set_parent (ATK_OBJECT (cell), parent);
-
-  g_signal_connect_object (G_OBJECT (widget), "destroy",
-                           G_CALLBACK (widget_destroyed), cell, 0);
 }
 
 gboolean
@@ -291,10 +280,10 @@ gtk_cell_accessible_action_do_action (AtkAction *action,
   GtkCellAccessibleParent *parent;
 
   cell = GTK_CELL_ACCESSIBLE (action);
-  if (cell->widget == NULL)
+  if (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)) == NULL)
     return FALSE;
 
-  parent = GTK_CELL_ACCESSIBLE_PARENT (gtk_widget_get_accessible (cell->widget));
+  parent = GTK_CELL_ACCESSIBLE_PARENT (gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell))));
 
   switch (index)
     {
@@ -333,7 +322,7 @@ gtk_cell_accessible_get_extents (AtkComponent *component,
   AtkObject *parent;
 
   cell = GTK_CELL_ACCESSIBLE (component);
-  parent = gtk_widget_get_accessible (cell->widget);
+  parent = gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)));
 
   _gtk_cell_accessible_parent_get_cell_extents (GTK_CELL_ACCESSIBLE_PARENT (parent),
                                                 cell,
@@ -347,7 +336,7 @@ gtk_cell_accessible_grab_focus (AtkComponent *component)
   AtkObject *parent;
 
   cell = GTK_CELL_ACCESSIBLE (component);
-  parent = gtk_widget_get_accessible (cell->widget);
+  parent = gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)));
 
   return _gtk_cell_accessible_parent_grab_focus (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
 }
@@ -374,7 +363,7 @@ _gtk_cell_accessible_get_state (GtkCellAccessible *cell)
 
   g_return_val_if_fail (GTK_IS_CELL_ACCESSIBLE (cell), 0);
 
-  parent = gtk_widget_get_accessible (cell->widget);
+  parent = gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)));
   if (parent == NULL)
     return 0;
 

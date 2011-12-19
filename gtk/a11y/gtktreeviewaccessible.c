@@ -120,7 +120,7 @@ cell_info_free (GtkTreeViewAccessibleCellInfo *cell_info)
     {
       g_object_steal_qdata (G_OBJECT (cell_info->cell),
                             gtk_tree_view_accessible_get_data_quark ());
-      _gtk_cell_accessible_add_state (cell_info->cell, ATK_STATE_DEFUNCT, FALSE);
+      gtk_accessible_set_widget (GTK_ACCESSIBLE (cell_info->cell), NULL);
     }
 
   g_free (cell_info);

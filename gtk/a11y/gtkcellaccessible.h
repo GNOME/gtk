@@ -21,6 +21,7 @@
 #define __GTK_CELL_ACCESSIBLE_H__
 
 #include <atk/atk.h>
+#include "gtk/gtkaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,14 +37,12 @@ typedef struct _GtkCellAccessibleClass GtkCellAccessibleClass;
 
 struct _GtkCellAccessible
 {
-  AtkObject parent;
-
-  GtkWidget    *widget;
+  GtkAccessible parent;
 };
 
 struct _GtkCellAccessibleClass
 {
-  AtkObjectClass parent_class;
+  GtkAccessibleClass parent_class;
   void (*update_cache) (GtkCellAccessible *cell);
 };
 
