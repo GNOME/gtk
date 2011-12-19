@@ -1975,11 +1975,11 @@ notebook_tab_prepare_style_context (GtkNotebook *notebook,
 {
   gint tab_pos = get_effective_tab_pos (notebook);
   GtkRegionFlags flags = 0;
-  GtkStateFlags state = GTK_STATE_FLAG_NORMAL;
+  GtkStateFlags state = gtk_style_context_get_state (context);
 
   if (page != NULL &&
       page == notebook->priv->cur_page)
-    state = GTK_STATE_FLAG_ACTIVE;
+    state |= GTK_STATE_FLAG_ACTIVE;
 
   gtk_style_context_set_state (context, state);
 
@@ -5391,6 +5391,7 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
 
   widget = GTK_WIDGET (notebook);
   context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
   gtk_notebook_get_arrow_rect (notebook, &arrow_rect, nbarrow);
 
@@ -5403,20 +5404,19 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
                         "scroll-arrow-vlength", &scroll_arrow_vlength,
                         NULL);
 
-  if (priv->in_child == nbarrow)
+  if (priv->focus_tab &&
+      !gtk_notebook_search_page (notebook, priv->focus_tab,
+                                 left ? STEP_PREV : STEP_NEXT, TRUE))
+    {
+      state |= GTK_STATE_FLAG_INSENSITIVE;
+    }
+  else if (priv->in_child == nbarrow)
     {
       state |= GTK_STATE_FLAG_PRELIGHT;
 
       if (priv->click_child == nbarrow)
         state |= GTK_STATE_FLAG_ACTIVE;
     }
-  else
-    state = gtk_widget_get_state_flags (widget);
-
-  if (priv->focus_tab &&
-      !gtk_notebook_search_page (notebook, priv->focus_tab,
-                                 left ? STEP_PREV : STEP_NEXT, TRUE))
-    state = GTK_STATE_FLAG_INSENSITIVE;
 
   if (priv->tab_pos == GTK_POS_LEFT ||
       priv->tab_pos == GTK_POS_RIGHT)
