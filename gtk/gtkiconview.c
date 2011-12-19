@@ -1502,11 +1502,9 @@ gtk_icon_view_draw (GtkWidget *widget,
       dest_pos != GTK_ICON_VIEW_NO_DROP)
     {
       GtkStyleContext *context;
-      GtkStateFlags state;
       GdkRectangle rect = { 0 };
 
       context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
 
       switch (dest_pos)
 	{
@@ -1540,7 +1538,6 @@ gtk_icon_view_draw (GtkWidget *widget,
 	  break;
         }
 
-      gtk_style_context_set_state (context, state);
       gtk_render_focus (context, cr,
                         rect.x, rect.y,
                         rect.width, rect.height);
