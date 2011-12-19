@@ -1,3 +1,37 @@
+Overview of Changes in GTK+ 3.2.3
+=================================
+
+* GtkNotebook is now properly destroying action widgets
+
+* The XI2 code has been made more robust:
+ - Trap errors due to disappearing devices, which
+   can happen when resuming from suspend
+ - Prevent stuck grabs when using move-resize emulation
+   with XI2
+ - Avoid segfaults due to events on disabled devices
+
+* Bugs fixed:
+ 646461 Leak in gtkfilechooserbutton.c: model_free_row_data
+ 650943 Clicking resize grip causes strange mouse grabbing...
+ 653676 Expand/Collapse doesn't respond after one click
+ 660554 gtk_tree_view_drag_begin: assertion `path != NULL' failed
+ 662814 Request for way to tell gtk_recent_manager_add_item_query...
+ 663322 a11y-related crash
+ 663856 Make option-foo accelerators use the right symbol
+ 664132 gdk_cairo_region_create_from_surface broken on PPC...
+ 664137 Crash in Audacious audio player when browsing...
+ 664238 GTK apps crashe when dragging something
+ 664456 segfault on arrow keypress in empty GtkIconView
+ 664467 prop-editor is broken for GdkColor properties
+ 664469 color button doesn't notify "color" and "alpha"...
+ 664537 GtkCssProvider: don't segfault when CSS file is not found
+ 664640 CUPS authentication does not work
+
+* Translation updates:
+ Slovak
+ Spanish
+
+
 Overview of Changes in GTK+ 3.2.2
 =================================
 
