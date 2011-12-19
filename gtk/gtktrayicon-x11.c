@@ -961,8 +961,8 @@ gtk_tray_icon_realize (GtkWidget *widget)
   if (icon->priv->manager_visual_rgba)
     {
       /* Set a transparent background */
-      GdkColor transparent = { 0, 0, 0, 0 }; /* Only pixel=0 matters */
-      gdk_window_set_background (window, &transparent);
+      GdkRGBA transparent = { 0.0, 0.0, 0.0, 0.0 };
+      gdk_window_set_background_rgba (window, &transparent);
     }
   else
     {
