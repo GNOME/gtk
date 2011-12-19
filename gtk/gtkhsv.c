@@ -1007,7 +1007,6 @@ paint_triangle (GtkHSV   *hsv,
   gint stride;
   int width, height;
   GtkStyleContext *context;
-  GtkStateFlags state;
 
   priv = hsv->priv;
   width = gtk_widget_get_allocated_width (widget); 
@@ -1153,8 +1152,6 @@ paint_triangle (GtkHSV   *hsv,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_set_state (context, state);
 
   if (INTENSITY (r, g, b) > 0.5)
     {
@@ -1214,19 +1211,12 @@ gtk_hsv_draw (GtkWidget *widget,
   if (draw_focus && priv->focus_on_ring)
     {
       GtkStyleContext *context;
-      GtkStateFlags state;
 
       context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
-
-      gtk_style_context_save (context);
-      gtk_style_context_set_state (context, state);
 
       gtk_render_focus (context, cr, 0, 0,
                         gtk_widget_get_allocated_width (widget),
                         gtk_widget_get_allocated_height (widget));
-
-      gtk_style_context_restore (context);
     }
 
   return FALSE;
