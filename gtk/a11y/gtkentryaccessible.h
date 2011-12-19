@@ -38,10 +38,6 @@ struct _GtkEntryAccessible
 {
   GtkWidgetAccessible parent;
 
-  gint position_insert;
-  gint position_delete;
-  gint length_insert;
-  gint length_delete;
   gint cursor_position;
   gint selection_bound;
 };
