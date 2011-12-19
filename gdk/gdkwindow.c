@@ -562,6 +562,9 @@ gdk_window_finalize (GObject *object)
   if (window->devices_inside)
     g_list_free (window->devices_inside);
 
+  if (window->layered_region)
+      cairo_region_destroy (window->layered_region);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
