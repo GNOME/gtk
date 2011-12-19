@@ -32,10 +32,9 @@ Overview of Changes in GTK+ 3.3.6
    have been implemented
 
 * Win32 improvements:
- - Fix theming of column headers, radio buttons and menuitems,
-   notebook tabs
- - Make menus, tooltips, and other popups show above the
-   task bar.
+ - Theming of column headers, radio buttons and menuitems,
+   notebook tabs, etc has been fixed
+ - Menus, tooltips, and other popups show above the task bar
 
 * Wayland:
  - The Wayland backend has been updated to the current Wayland API
@@ -64,6 +63,7 @@ Overview of Changes in GTK+ 3.3.6
  659445 Accessible event.any_data is incorrect for text-removed...
  663573 Rework GtkFileChooserEntry
  666392 widget: Flip the sensitive flag even if the state doesn't...
+ 666552 Layered region is leaked in GdkWindow
 
 * Updated translations
  Breton
