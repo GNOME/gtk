@@ -1285,7 +1285,6 @@ gtk_image_draw (GtkWidget *widget,
   GtkImage *image;
   GtkImagePrivate *priv;
   GtkMisc *misc;
-  GtkStateFlags state;
   GtkStyleContext *context;
   gint x, y, width, height;
   gint xpad, ypad;
@@ -1298,10 +1297,6 @@ gtk_image_draw (GtkWidget *widget,
   priv = image->priv;
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
 
   gtk_misc_get_alignment (misc, &xalign, &yalign);
   gtk_misc_get_padding (misc, &xpad, &ypad);
@@ -1327,8 +1322,6 @@ gtk_image_draw (GtkWidget *widget,
                              context, cr,
                              x, y);
     }
-
-  gtk_style_context_restore (context);
 
   return FALSE;
 }
