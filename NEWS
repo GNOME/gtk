@@ -1,10 +1,10 @@
 Overview of Changes in GTK+ 3.3.6
 =================================
 
-* The GtkTreeView accessibility support and the core
-  treeview code have been extensively refactored;
-  performance should be much improved. But watch out
-  for regressions.
+* GtkApplication has grown support for exporting application
+  menus and menubars on the bus, as a GMenuModel. The
+  new GtkApplicationWindow toplevel automatically
+  displays these menu models when needed.
 
 * GtkSpinButtons have received a long-overdue face-lift
   to make them easier to use with both mouse and touch.
@@ -14,6 +14,14 @@ Overview of Changes in GTK+ 3.3.6
 
 * GtkWindow can now request that the window manager hide
   the titlebar when the window is maximized.
+
+* The GtkTreeView accessibility support and the core
+  treeview code have been extensively refactored;
+  performance should be much improved. But watch out
+  for regressions.
+
+* The GtkFileChooser entry completion code has been
+  extensively refactored; it now uses GtkEntryCompletion
 
 * Excessive dependencies have been culled from Requires:
   lines in pc files. Dependent modules may have to declare
@@ -51,11 +59,18 @@ Overview of Changes in GTK+ 3.3.6
  665741 Crashes in treeview when pressing End key.
  665999 Introspection wrong for GDK_INPUT_ONLY vs GDK_INPUT_OUTPUT
  666242 Separators in menuitem are not vertically aligned
+ 641999 Consider adding a workarea API
+ 657578 Toggling the state of a GtkCheckButton causes accessible...
+ 659445 Accessible event.any_data is incorrect for text-removed...
+ 663573 Rework GtkFileChooserEntry
+ 666392 widget: Flip the sensitive flag even if the state doesn't...
 
 * Updated translations
  Breton
+ Kazakh
  Russian
  Slovak
+ Spanish
 
 
 Overview of Changes in GTK+ 3.3.4
