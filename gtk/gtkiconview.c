@@ -2822,17 +2822,19 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
   _gtk_icon_view_set_cell_data (icon_view, item);
 
   style_context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
   gtk_style_context_save (style_context);
   gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_VIEW);
   gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_CELL);
 
+  state &= ~(GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_PRELIGHT);
+
   if (item->selected)
     {
-      if (gtk_widget_has_focus (widget) &&
+      if ((state & GTK_STATE_FLAG_FOCUSED) &&
           item == icon_view->priv->cursor_item)
         {
-          state |= GTK_STATE_FLAG_FOCUSED;
           flags |= GTK_CELL_RENDERER_FOCUSED;
         }
 
