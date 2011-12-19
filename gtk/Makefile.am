@@ -412,6 +412,7 @@ gtk_private_h_sources =		\
 	gtkcellareaboxcontextprivate.h	\
 	gtkcontainerprivate.h   \
 	gtkcsscustompropertyprivate.h \
+	gtkcssimageprivate.h	\
 	gtkcsslookupprivate.h	\
 	gtkcssparserprivate.h	\
 	gtkcssproviderprivate.h	\
@@ -589,6 +590,7 @@ gtk_base_c_sources = 		\
 	gtkcomboboxtext.c	\
 	gtkcontainer.c		\
 	gtkcsscustomproperty.c	\
+	gtkcssimage.c		\
 	gtkcsslookup.c		\
 	gtkcssparser.c		\
 	gtkcssprovider.c	\
