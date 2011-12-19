@@ -596,12 +596,9 @@ gtk_event_box_draw (GtkWidget *widget,
 
       context = gtk_widget_get_style_context (widget);
 
-      gtk_style_context_save (context);
-      gtk_style_context_set_state (context, gtk_widget_get_state_flags (widget));
       gtk_render_background (context, cr, 0, 0,
                              gtk_widget_get_allocated_width (widget),
                              gtk_widget_get_allocated_height (widget));
-      gtk_style_context_restore (context);
     }
 
   GTK_WIDGET_CLASS (gtk_event_box_parent_class)->draw (widget, cr);
