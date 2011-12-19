@@ -1092,7 +1092,7 @@ main (int argc, char **argv)
         GtkTreeModel *model;
 	GtkTreePath *path;
 	GtkTreeIter iter;
-        GdkColor color;
+	GdkRGBA color;
 	GtkCellArea *area;
 
         gtk_init (&argc, &argv);
@@ -1285,10 +1285,11 @@ main (int argc, char **argv)
         gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (tmp), renderer,
                                         "text", 1,
                                         NULL);
-        color.red = 0xffff;
-        color.blue = 0xffff;
+        color.red = 1.0;
+        color.blue = 1.0;
         color.green = 0;
-        gtk_cell_view_set_background_color (GTK_CELL_VIEW (tmp), &color);
+        color.alpha = 1.0;
+        gtk_cell_view_set_background_rgba (GTK_CELL_VIEW (tmp), &color);
         displayed_row_changed (GTK_COMBO_BOX (combobox), GTK_CELL_VIEW (tmp));
         g_signal_connect (combobox, "changed", G_CALLBACK (displayed_row_changed), tmp); 
            
