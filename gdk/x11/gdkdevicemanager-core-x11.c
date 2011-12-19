@@ -665,6 +665,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
     case FocusIn:
     case FocusOut:
       _gdk_device_manager_core_handle_focus (window,
+                                             xevent->xfocus.window,
                                              device_manager->core_keyboard,
                                              NULL,
                                              xevent->type == FocusIn,
@@ -795,6 +796,7 @@ _gdk_x11_event_translate_keyboard_string (GdkEventKey *event)
  */
 void
 _gdk_device_manager_core_handle_focus (GdkWindow *window,
+                                       Window     original,
                                        GdkDevice *device,
                                        GdkDevice *source_device,
                                        gboolean   focus_in,
@@ -817,6 +819,9 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
   toplevel = _gdk_x11_window_get_toplevel (window);
 
   if (!toplevel)
+    return;
+
+  if (toplevel->focus_window == original)
     return;
 
   had_focus = HAS_FOCUS (toplevel);
