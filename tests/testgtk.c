@@ -4812,55 +4812,6 @@ create_cursors (GtkWidget *widget)
  */
 
 void
-color_selection_ok (GtkWidget               *w,
-                    GtkColorSelectionDialog *cs)
-{
-  GtkWidget *colorsel;
-  GdkColor color;
-
-  colorsel = gtk_color_selection_dialog_get_color_selection (cs);
-
-  gtk_color_selection_get_current_color (GTK_COLOR_SELECTION (colorsel), &color);
-  gtk_color_selection_set_current_color (GTK_COLOR_SELECTION (colorsel), &color);
-}
-
-void
-color_selection_changed (GtkWidget *w,
-                         GtkColorSelectionDialog *cs)
-{
-  GtkWidget *colorsel;
-  GdkColor color;
-
-  colorsel = gtk_color_selection_dialog_get_color_selection (cs);
-  gtk_color_selection_get_current_color (GTK_COLOR_SELECTION (colorsel), &color);
-  gtk_color_selection_set_current_color (GTK_COLOR_SELECTION (colorsel), &color);
-}
-
-#if 0 /* unused */
-static void
-opacity_toggled_cb (GtkWidget *w,
-		    GtkColorSelectionDialog *cs)
-{
-  GtkColorSelection *colorsel;
-
-  colorsel = GTK_COLOR_SELECTION (cs->colorsel);
-  gtk_color_selection_set_has_opacity_control (colorsel,
-					       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)));
-}
-
-static void
-palette_toggled_cb (GtkWidget *w,
-		    GtkColorSelectionDialog *cs)
-{
-  GtkColorSelection *colorsel;
-
-  colorsel = GTK_COLOR_SELECTION (cs->colorsel);
-  gtk_color_selection_set_has_palette (colorsel,
-				       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)));
-}
-#endif
-
-void
 create_color_selection (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
