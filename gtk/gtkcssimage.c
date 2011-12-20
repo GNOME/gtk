@@ -162,21 +162,38 @@ GtkCssImage *
 _gtk_css_image_new_parse (GtkCssParser *parser,
                           GFile        *base)
 {
-  GtkCssImage *image;
-  GtkCssImageClass *klass;
+  static const struct {
+    const char *prefix;
+    GType (* type_func) (void);
+  } image_types[] = {
+    { "url", _gtk_css_image_url_get_type }
+  };
+  guint i;
 
   g_return_val_if_fail (parser != NULL, NULL);
   g_return_val_if_fail (G_IS_FILE (base), NULL);
 
-  image = g_object_new (GTK_TYPE_CSS_IMAGE_URL, NULL);
-
-  klass = GTK_CSS_IMAGE_GET_CLASS (image);
-  if (!klass->parse (image, parser, base))
+  for (i = 0; i < G_N_ELEMENTS (image_types); i++)
     {
-      g_object_unref (image);
-      return NULL;
+      if (_gtk_css_parser_has_prefix (parser, image_types[i].prefix))
+        {
+          GtkCssImage *image;
+          GtkCssImageClass *klass;
+
+          image = g_object_new (image_types[i].type_func (), NULL);
+
+          klass = GTK_CSS_IMAGE_GET_CLASS (image);
+          if (!klass->parse (image, parser, base))
+            {
+              g_object_unref (image);
+              return NULL;
+            }
+
+          return image;
+        }
     }
 
-  return image;
+  _gtk_css_parser_error (parser, "Not a valid image");
+  return NULL;
 }
 
