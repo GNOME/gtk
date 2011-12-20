@@ -47,6 +47,8 @@ guint           _gtk_css_parser_get_position      (GtkCssParser          *parser
 gboolean        _gtk_css_parser_is_eof            (GtkCssParser          *parser);
 gboolean        _gtk_css_parser_begins_with       (GtkCssParser          *parser,
                                                    char                   c);
+gboolean        _gtk_css_parser_has_prefix        (GtkCssParser          *parser,
+                                                   const char            *prefix);
 gboolean        _gtk_css_parser_is_string         (GtkCssParser          *parser);
 
 /* IMPORTANT:
