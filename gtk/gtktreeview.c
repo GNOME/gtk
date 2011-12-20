@@ -12922,6 +12922,8 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       cursor_changed = (node->children == tree_view->priv->cursor_tree)
                        || _gtk_rbtree_contains (node->children, tree_view->priv->cursor_tree);
     }
+  else
+    cursor_changed = FALSE;
 
   if (gtk_tree_row_reference_valid (tree_view->priv->anchor))
     {
