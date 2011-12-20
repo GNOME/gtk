@@ -1822,6 +1822,7 @@ gdk_window_win32_clear_region (GdkWindow *window,
 
   g_free (rectangles);
 }
+
 static void
 gdk_win32_window_raise (GdkWindow *window)
 {
@@ -1835,7 +1836,11 @@ gdk_win32_window_raise (GdkWindow *window)
 	                         0, 0, 0, 0,
 				 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE));
       else if (((GdkWindowObject *)window)->accept_focus)
-        API_CALL (BringWindowToTop, (GDK_WINDOW_HWND (window)));
+        /* Do not wrap this in an API_CALL macro as SetForegroundWindow might
+         * fail when for example dragging a window belonging to a different
+         * application at the time of a gtk_window_present() call due to focus
+         * stealing prevention. */
+        SetForegroundWindow (GDK_WINDOW_HWND (window));
       else
         API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_TOP,
   			         0, 0, 0, 0,
