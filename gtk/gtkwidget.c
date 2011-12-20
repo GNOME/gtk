@@ -5724,6 +5724,19 @@ _gtk_widget_draw_internal (GtkWidget *widget,
       g_signal_emit (widget, widget_signals[DRAW],
                      0, cr,
                      &result);
+
+      if (cairo_status (cr) &&
+          _gtk_cairo_get_event (cr))
+        {
+          /* We check the event so we only warn about internal GTK calls.
+           * Errors might come from PDF streams having write failures and
+           * we don't want to spam stderr in that case.
+           * We do want to catch errors from
+           */
+          g_warning ("drawing failure for widget `%s': %s",
+                     G_OBJECT_TYPE_NAME (widget),
+                     cairo_status_to_string (cairo_status (cr)));
+        }
     }
 
   context = gtk_widget_get_style_context (widget);
