@@ -22,6 +22,9 @@
 
 #include "gtkcssimageprivate.h"
 
+/* for the types only */
+#include "gtk/gtkcssimageurlprivate.h"
+
 G_DEFINE_ABSTRACT_TYPE (GtkCssImage, _gtk_css_image, G_TYPE_OBJECT)
 
 static int
@@ -165,7 +168,7 @@ _gtk_css_image_new_parse (GtkCssParser *parser,
   g_return_val_if_fail (parser != NULL, NULL);
   g_return_val_if_fail (G_IS_FILE (base), NULL);
 
-  image = g_object_new (GTK_TYPE_CSS_IMAGE, NULL);
+  image = g_object_new (GTK_TYPE_CSS_IMAGE_URL, NULL);
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
   if (!klass->parse (image, parser, base))

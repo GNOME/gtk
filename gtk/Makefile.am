@@ -413,6 +413,7 @@ gtk_private_h_sources =		\
 	gtkcontainerprivate.h   \
 	gtkcsscustompropertyprivate.h \
 	gtkcssimageprivate.h	\
+	gtkcssimageurlprivate.h	\
 	gtkcsslookupprivate.h	\
 	gtkcssparserprivate.h	\
 	gtkcssproviderprivate.h	\
@@ -591,6 +592,7 @@ gtk_base_c_sources = 		\
 	gtkcontainer.c		\
 	gtkcsscustomproperty.c	\
 	gtkcssimage.c		\
+	gtkcssimageurl.c	\
 	gtkcsslookup.c		\
 	gtkcssparser.c		\
 	gtkcssprovider.c	\
