@@ -68,9 +68,11 @@
  *
  * If the desktop environment does not display the menubar, then
  * #GApplicationWindow will automatically show a #GtkMenubar for it.
+ * (see the #GtkApplication docs for some screenshots of how this
+ * looks on different platforms).
  * This behaviour can be overridden with the #GtkApplicationWindow:show-menubar
  * property. If the desktop environment does not display the application
- * menu, then it will automatilly be included in the menubar.
+ * menu, then it will automatically be included in the menubar.
  *
  * <example><title>A GtkApplicationWindow with a menubar</title>
  * <programlisting><![CDATA[
