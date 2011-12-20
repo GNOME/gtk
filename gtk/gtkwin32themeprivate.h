@@ -24,6 +24,18 @@
 
 #include "gtkcssparserprivate.h"
 
+#ifdef G_OS_WIN32
+
+#include <windows.h>
+
+typedef HANDLE HTHEME;
+
+#else /* !G_OS_WIN32 */
+
+typedef void * HTHEME;
+
+#endif /* G_OS_WIN32 */
+
 G_BEGIN_DECLS
 
 #define GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME "-gtk-win32-color"
@@ -31,6 +43,8 @@ G_BEGIN_DECLS
 typedef struct _GtkWin32ThemePart GtkWin32ThemePart;
 
 #define GTK_TYPE_WIN32_THEME_PART (_gtk_win32_theme_part_get_type ())
+
+HTHEME             _gtk_win32_lookup_htheme_by_classname (const char  *classname);
 
 GType              _gtk_win32_theme_part_get_type  (void) G_GNUC_CONST;
 

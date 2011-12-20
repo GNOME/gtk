@@ -27,10 +27,7 @@
 
 #ifdef G_OS_WIN32
 
-#include <windows.h>
 #include <cairo-win32.h>
-
-typedef HANDLE HTHEME;
 
 #define UXTHEME_DLL "uxtheme.dll"
 
@@ -139,13 +136,15 @@ _gtk_win32_theme_init (void)
   hthemes_by_class = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
-static HTHEME
-lookup_htheme_by_classname (const char *class)
+HTHEME
+_gtk_win32_lookup_htheme_by_classname (const char *class)
 {
   HTHEME theme;
   guint16 *wclass;
   char *lower;
   
+  _gtk_win32_theme_init ();
+
   lower = g_ascii_strdown (class, -1);
 
   theme = (HTHEME)  g_hash_table_lookup (hthemes_by_class, lower);
@@ -173,15 +172,13 @@ lookup_htheme_by_classname (const char *class)
 
 #else
 
-typedef void * HTHEME;
-
 static void
 _gtk_win32_theme_init (void)
 {
 }
 
-static HTHEME
-lookup_htheme_by_classname (const char *class)
+HTHEME
+_gtk_win32_lookup_htheme_by_classname (const char *class)
 {
   return NULL;
 }
@@ -219,7 +216,7 @@ _gtk_win32_theme_part_new (const char *class,
   part = g_slice_new0 (GtkWin32ThemePart);
   part->ref_count = 1;
 
-  part->theme = lookup_htheme_by_classname (class);
+  part->theme = _gtk_win32_lookup_htheme_by_classname (class);
   part->part = xp_part;
   part->state = state;
   part->part2 = xp_part2;
@@ -568,7 +565,7 @@ _gtk_win32_theme_int_parse (GtkCssParser      *parser,
 #ifdef G_OS_WIN32
       if (use_xp_theme && get_theme_sys_metric != NULL)
 	{
-	  HTHEME theme = lookup_htheme_by_classname (class);
+	  HTHEME theme = _gtk_win32_lookup_htheme_by_classname (class);
 
 	  /* If theme is NULL it will just return the GetSystemMetrics value */
 	  *value = get_theme_sys_metric (theme, arg);
@@ -632,7 +629,7 @@ _gtk_win32_theme_color_resolve (const char *theme_class,
 
   if (use_xp_theme && get_theme_sys_color != NULL)
     {
-      HTHEME theme = lookup_htheme_by_classname (theme_class);
+      HTHEME theme = _gtk_win32_lookup_htheme_by_classname (theme_class);
 
       /* if theme is NULL, it will just return the GetSystemColor()
          value */
