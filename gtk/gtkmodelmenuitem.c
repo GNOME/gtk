@@ -238,13 +238,14 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
       g_action_observable_register_observer (actions, item->action_name, G_ACTION_OBSERVER (item));
 
       if (g_action_group_query_action (G_ACTION_GROUP (actions), item->action_name, &enabled, &type, NULL, NULL, &state))
-        gtk_model_menu_item_action_added (G_ACTION_OBSERVER (item), actions, item->action_name, type, enabled, state);
+        {
+          gtk_model_menu_item_action_added (G_ACTION_OBSERVER (item), actions, item->action_name, type, enabled, state);
+          if (state != NULL)
+            g_variant_unref (state);
+        }
 
       else
         gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
-
-      if (state != NULL)
-        g_variant_unref (state);
 
       path = _gtk_accel_path_for_action (item->action_name, item->target);
       gtk_menu_item_set_accel_path (GTK_MENU_ITEM (item), path);
