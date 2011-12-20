@@ -993,11 +993,7 @@ gtk_app_chooser_widget_dispose (GObject *object)
 {
   GtkAppChooserWidget *self = GTK_APP_CHOOSER_WIDGET (object);
 
-  if (self->priv->selected_app_info != NULL)
-    {
-      g_object_unref (self->priv->selected_app_info);
-      self->priv->selected_app_info = NULL;
-    }
+  g_clear_object (&self->priv->selected_app_info);
 
   G_OBJECT_CLASS (gtk_app_chooser_widget_parent_class)->dispose (object);
 }
