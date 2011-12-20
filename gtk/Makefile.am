@@ -415,6 +415,7 @@ gtk_private_h_sources =		\
 	gtkcssimagegradientprivate.h	\
 	gtkcssimageprivate.h	\
 	gtkcssimageurlprivate.h	\
+	gtkcssimagewin32private.h	\
 	gtkcsslookupprivate.h	\
 	gtkcssparserprivate.h	\
 	gtkcssproviderprivate.h	\
@@ -595,6 +596,7 @@ gtk_base_c_sources = 		\
 	gtkcssimage.c		\
 	gtkcssimagegradient.c	\
 	gtkcssimageurl.c	\
+	gtkcssimagewin32.c	\
 	gtkcsslookup.c		\
 	gtkcssparser.c		\
 	gtkcssprovider.c	\

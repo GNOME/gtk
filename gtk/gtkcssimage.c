@@ -25,6 +25,7 @@
 /* for the types only */
 #include "gtk/gtkcssimagegradientprivate.h"
 #include "gtk/gtkcssimageurlprivate.h"
+#include "gtk/gtkcssimagewin32private.h"
 
 G_DEFINE_ABSTRACT_TYPE (GtkCssImage, _gtk_css_image, G_TYPE_OBJECT)
 
@@ -168,7 +169,8 @@ _gtk_css_image_new_parse (GtkCssParser *parser,
     GType (* type_func) (void);
   } image_types[] = {
     { "url", _gtk_css_image_url_get_type },
-    { "-gtk-gradient", _gtk_css_image_gradient_get_type }
+    { "-gtk-gradient", _gtk_css_image_gradient_get_type },
+    { "-gtk-win32-theme-part", _gtk_css_image_win32_get_type }
   };
   guint i;
 
