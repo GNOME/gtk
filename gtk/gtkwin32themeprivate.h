@@ -45,6 +45,12 @@ typedef struct _GtkWin32ThemePart GtkWin32ThemePart;
 #define GTK_TYPE_WIN32_THEME_PART (_gtk_win32_theme_part_get_type ())
 
 HTHEME             _gtk_win32_lookup_htheme_by_classname (const char  *classname);
+cairo_surface_t *  _gtk_win32_theme_part_create_surface  (HTHEME       theme,
+                                                          int          xp_part,
+                                                          int          state,
+                                                          int          margins[4],
+                                                          int          width,
+                                                          int          height);
 
 GType              _gtk_win32_theme_part_get_type  (void) G_GNUC_CONST;
 

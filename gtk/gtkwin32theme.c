@@ -426,15 +426,18 @@ _gtk_win32_theme_part_parse (GtkCssParser *parser,
   return 1;
 }
 
-#ifdef G_OS_WIN32
 cairo_surface_t *
-_gtk_win32_theme_part_create_surface  (GtkWin32ThemePart  *part,
-				       int                 xp_part,
-				       int                 state,
-				       int                 width,
-				       int                 height)
+_gtk_win32_theme_part_create_surface (HTHEME theme,
+                                      int    xp_part,
+				      int    state,
+				      int    margins[4],
+				      int    width,
+                                      int    height)
 {
   cairo_surface_t *surface;
+  GdkRGBA color;
+  cairo_t *cr;
+#ifdef G_OS_WIN32
   HDC hdc;
   RECT rect;
   HRESULT res;
@@ -442,37 +445,48 @@ _gtk_win32_theme_part_create_surface  (GtkWin32ThemePart  *part,
   surface = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_ARGB32, width, height);
   hdc = cairo_win32_surface_get_dc (surface);
   
-  rect.left = part->margins[3];
-  rect.top = part->margins[0];
-  rect.right = width - part->margins[1];
-  rect.bottom = height - part->margins[2];
+  rect.left = margins[3];
+  rect.top = margins[0];
+  rect.right = width - margins[1];
+  rect.bottom = height - margins[2];
 
-  res = draw_theme_background (part->theme, hdc, xp_part, state, &rect, &rect);
+  res = draw_theme_background (theme, hdc, xp_part, state, &rect, &rect);
+  if (res == S_OK)
+    return surface;
+#else /* !G_OS_WIN32 */
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+#endif /* G_OS_WIN32 */
+
+  cr = cairo_create (surface);
+  
+  /* XXX: Do something better here (like printing the theme parts) */
+  gdk_rgba_parse (&color, "pink");
+  gdk_cairo_set_source_rgba (cr, &color);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+  
   return surface;
 }
-#endif
-
 
 cairo_pattern_t *
 _gtk_win32_theme_part_render  (GtkWin32ThemePart  *part,
 			       int                 width,
 			       int                 height)
 {
-#ifdef G_OS_WIN32
   cairo_surface_t *surface, *surface2, *image;
   cairo_pattern_t *pattern;
   cairo_t *cr;
   cairo_matrix_t matrix;
   cairo_user_data_key_t key;
 
-  surface = _gtk_win32_theme_part_create_surface  (part, part->part, part->state, 
-						   width, height);
+  surface = _gtk_win32_theme_part_create_surface (part->theme, part->part, part->state, part->margins,
+						  width, height);
   
   if (part->state2 >= 0)
     {
-      surface2 = _gtk_win32_theme_part_create_surface  (part, part->part2, part->state2, 
-							width, height);
-
+      surface2 = _gtk_win32_theme_part_create_surface (part->theme, part->part2, part->state2, part->margins,
+						       width, height);
 
       cr = cairo_create (surface);
 
@@ -487,9 +501,13 @@ _gtk_win32_theme_part_render  (GtkWin32ThemePart  *part,
       cairo_surface_destroy (surface2);
     }
 
+#ifdef G_OS_WIN32
   /* We need to return an image surface, as that is what the code expects in order
      to get the size */
   image = cairo_win32_surface_get_image (surface);
+#else
+  image = surface;
+#endif
   pattern = cairo_pattern_create_for_surface (cairo_surface_reference (image));
 
   cairo_matrix_init_scale (&matrix,
@@ -504,13 +522,6 @@ _gtk_win32_theme_part_render  (GtkWin32ThemePart  *part,
 			       surface, (cairo_destroy_func_t) cairo_surface_destroy);
 
   return pattern;
-#else
-  GdkRGBA color;
-  
-  gdk_rgba_parse (&color, "pink");
-
-  return cairo_pattern_create_rgb (color.red, color.green, color.blue);
-#endif
 }
 
 int
