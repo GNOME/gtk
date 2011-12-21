@@ -160,6 +160,159 @@ _gtk_css_image_print (GtkCssImage *image,
   klass->print (image, string);
 }
 
+/* Applies the algorithm outlined in
+ * http://dev.w3.org/csswg/css3-images/#default-sizing
+ */
+void
+_gtk_css_image_get_concrete_size (GtkCssImage *image,
+                                  double       specified_width,
+                                  double       specified_height,
+                                  double       default_width,
+                                  double       default_height,
+                                  double      *concrete_width,
+                                  double      *concrete_height)
+{
+  double image_width, image_height, image_aspect;
+
+  g_return_if_fail (GTK_IS_CSS_IMAGE (image));
+  g_return_if_fail (specified_width >= 0);
+  g_return_if_fail (specified_height >= 0);
+  g_return_if_fail (default_width > 0);
+  g_return_if_fail (default_height > 0);
+  g_return_if_fail (concrete_width != NULL);
+  g_return_if_fail (concrete_height != NULL);
+
+  /* If the specified size is a definite width and height,
+   * the concrete object size is given that width and height.
+   */
+  if (specified_width && specified_height)
+    {
+      *concrete_width = specified_width;
+      *concrete_height = specified_height;
+      return;
+    }
+
+  image_width  = _gtk_css_image_get_width (image);
+  image_height = _gtk_css_image_get_height (image);
+  image_aspect = _gtk_css_image_get_aspect_ratio (image);
+
+  /* If the specified size has neither a definite width nor height,
+   * and has no additional contraints, the dimensions of the concrete
+   * object size are calculated as follows:
+   */
+  if (specified_width == 0.0 && specified_height == 0.0)
+    {
+      /* If the object has only an intrinsic aspect ratio,
+       * the concrete object size must have that aspect ratio,
+       * and additionally be as large as possible without either
+       * its height or width exceeding the height or width of the
+       * default object size.
+       */
+      if (image_aspect > 0 && image_width == 0 && image_height == 0)
+        {
+          if (image_aspect * default_height > default_width)
+            {
+              *concrete_width = default_height * image_aspect;
+              *concrete_height = default_height;
+            }
+          else
+            {
+              *concrete_width = default_width;
+              *concrete_height = default_width / image_aspect;
+            }
+        }
+
+      /* Otherwise, the width and height of the concrete object
+       * size is the same as the object's intrinsic width and
+       * intrinsic height, if they exist.
+       * If the concrete object size is still missing a width or
+       * height, and the object has an intrinsic aspect ratio,
+       * the missing dimension is calculated from the present
+       * dimension and the intrinsic aspect ratio.
+       * Otherwise, the missing dimension is taken from the default
+       * object size. 
+       */
+      if (image_width)
+        *concrete_width = image_width;
+      else if (image_aspect)
+        *concrete_width = image_height * image_aspect;
+      else
+        *concrete_width = default_width;
+
+      if (image_height)
+        *concrete_height = image_height;
+      else if (image_aspect)
+        *concrete_height = image_width / image_aspect;
+      else
+        *concrete_height = default_height;
+
+      return;
+    }
+
+  /* If the specified size has only a width or height, but not both,
+   * then the concrete object size is given that specified width or height.
+   * The other dimension is calculated as follows:
+   * If the object has an intrinsic aspect ratio, the missing dimension of
+   * the concrete object size is calculated using the intrinsic aspect-ratio
+   * and the present dimension.
+   * Otherwise, if the missing dimension is present in the object's intrinsic
+   * dimensions, the missing dimension is taken from the object's intrinsic
+   * dimensions.
+   * Otherwise, the missing dimension of the concrete object size is taken
+   * from the default object size. 
+   */
+  if (specified_width)
+    {
+      *concrete_width = specified_width;
+      if (image_aspect)
+        *concrete_height = specified_width / image_aspect;
+      else if (image_height)
+        *concrete_height = image_height;
+      else
+        *concrete_height = default_height;
+    }
+  else
+    {
+      *concrete_height = specified_height;
+      if (image_aspect)
+        *concrete_width = specified_height * image_aspect;
+      else if (image_width)
+        *concrete_width = image_width;
+      else
+        *concrete_width = default_width;
+    }
+}
+
+cairo_surface_t *
+_gtk_css_image_get_surface (GtkCssImage     *image,
+                            cairo_surface_t *target,
+                            int              surface_width,
+                            int              surface_height)
+{
+  cairo_surface_t *result;
+  cairo_t *cr;
+
+  g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
+  g_return_val_if_fail (surface_width > 0, NULL);
+  g_return_val_if_fail (surface_height > 0, NULL);
+
+  if (target)
+    result = cairo_surface_create_similar (target,
+                                           CAIRO_CONTENT_COLOR_ALPHA,
+                                           surface_width,
+                                           surface_height);
+  else
+    result = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                         surface_width,
+                                         surface_height);
+
+  cr = cairo_create (result);
+  _gtk_css_image_draw (image, cr, surface_width, surface_height);
+  cairo_destroy (cr);
+
+  return result;
+}
+
 GtkCssImage *
 _gtk_css_image_new_parse (GtkCssParser *parser,
                           GFile        *base)

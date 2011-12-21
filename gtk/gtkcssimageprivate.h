@@ -92,6 +92,18 @@ void           _gtk_css_image_draw                 (GtkCssImage        *image,
 void           _gtk_css_image_print                (GtkCssImage        *image,
                                                     GString            *string);
 
+void           _gtk_css_image_get_concrete_size    (GtkCssImage        *image,
+                                                    double              specified_width,
+                                                    double              specified_height,
+                                                    double              default_width,
+                                                    double              default_height,
+                                                    double             *concrete_width,
+                                                    double             *concrete_height);
+cairo_surface_t *
+               _gtk_css_image_get_surface          (GtkCssImage        *image,
+                                                    cairo_surface_t    *target,
+                                                    int                 surface_width,
+                                                    int                 surface_height);
 
 G_END_DECLS
 
