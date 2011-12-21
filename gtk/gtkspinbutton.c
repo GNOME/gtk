@@ -816,21 +816,23 @@ gtk_spin_button_panel_get_state (GtkSpinButton *spin_button,
   GtkStateFlags state;
   GtkSpinButtonPrivate *priv = spin_button->priv;
 
-  if (gtk_spin_button_panel_at_limit (spin_button, panel) ||
+  state = gtk_widget_get_state_flags (GTK_WIDGET (spin_button));
+
+  state &= ~(GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT);
+
+  if ((state & GTK_STATE_FLAG_INSENSITIVE) ||
+      gtk_spin_button_panel_at_limit (spin_button, panel) ||
       !gtk_editable_get_editable (GTK_EDITABLE (spin_button)))
-    state = GTK_STATE_FLAG_INSENSITIVE;
+    {
+      state |= GTK_STATE_FLAG_INSENSITIVE;
+    }
   else
     {
       if (priv->click_child == panel)
-        state = GTK_STATE_ACTIVE;
-      else
-        {
-          if (priv->in_child == panel &&
-              priv->click_child == NULL)
-            state = GTK_STATE_FLAG_PRELIGHT;
-          else
-            state = gtk_widget_get_state_flags (GTK_WIDGET (spin_button));
-        }
+        state |= GTK_STATE_ACTIVE;
+      else if (priv->in_child == panel &&
+               priv->click_child == NULL)
+        state |= GTK_STATE_FLAG_PRELIGHT;
     }
 
   return state;
