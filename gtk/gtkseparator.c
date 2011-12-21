@@ -243,9 +243,6 @@ gtk_separator_draw (GtkWidget *widget,
 
   gtk_style_context_get_padding (context, state, &padding);
 
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
-
   if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (wide_separators)
@@ -268,8 +265,6 @@ gtk_separator_draw (GtkWidget *widget,
                          (width - padding.left) / 2, 0,
                          (width - padding.left) / 2, height - 1);
     }
-
-  gtk_style_context_restore (context);
 
   return FALSE;
 }
