@@ -792,10 +792,12 @@ gtk_application_set_app_menu (GtkApplication *application,
 GMenuModel *
 gtk_application_get_app_menu (GtkApplication *application)
 {
-  GMenuModel *app_menu;
+  GMenuModel *app_menu = NULL;
 
   g_object_get (application, "app-menu", &app_menu, NULL);
-  g_object_unref (app_menu);
+
+  if (app_menu)
+    g_object_unref (app_menu);
 
   return app_menu;
 }
@@ -840,10 +842,12 @@ gtk_application_set_menubar (GtkApplication *application,
 GMenuModel *
 gtk_application_get_menubar (GtkApplication *application)
 {
-  GMenuModel *menubar;
+  GMenuModel *menubar = NULL;
 
   g_object_get (application, "menubar", &menubar, NULL);
-  g_object_unref (menubar);
+
+  if (menubar)
+    g_object_unref (menubar);
 
   return menubar;
 }
