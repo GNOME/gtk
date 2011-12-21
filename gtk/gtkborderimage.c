@@ -54,9 +54,7 @@ enum {
 };
 
 struct _GtkBorderImage {
-  cairo_pattern_t *source;
-  gpointer source_boxed;
-  GType boxed_type;
+  GtkCssImage *source;
 
   GtkBorder slice;
   GtkBorder *width;
@@ -66,7 +64,7 @@ struct _GtkBorderImage {
 };
 
 GtkBorderImage *
-_gtk_border_image_new (cairo_pattern_t         *pattern,
+_gtk_border_image_new (GtkCssImage             *source,
                        GtkBorder               *slice,
                        GtkBorder               *width,
                        GtkCssBorderImageRepeat *repeat)
@@ -76,8 +74,7 @@ _gtk_border_image_new (cairo_pattern_t         *pattern,
   image = g_slice_new0 (GtkBorderImage);
   image->ref_count = 1;
 
-  if (pattern != NULL)
-    image->source = cairo_pattern_reference (pattern);
+  image->source = g_object_ref (source);
 
   if (slice != NULL)
     image->slice = *slice;
@@ -89,35 +86,6 @@ _gtk_border_image_new (cairo_pattern_t         *pattern,
     image->repeat = *repeat;
 
   return image;
-}
-
-GtkBorderImage *
-_gtk_border_image_new_for_boxed (GType                    boxed_type,
-				 gpointer                 boxed,
-				 GtkBorder               *slice,
-				 GtkBorder               *width,
-				 GtkCssBorderImageRepeat *repeat)
-{
-  GtkBorderImage *image;
-
-  image = g_slice_new0 (GtkBorderImage);
-
-  image->ref_count = 1;
-
-  if (boxed != NULL)
-    image->source_boxed = g_boxed_copy (boxed_type, boxed);
-  image->boxed_type = boxed_type;
-
-  if (slice != NULL)
-    image->slice = *slice;
-
-  if (width != NULL)
-    image->width = gtk_border_copy (width);
-
-  if (repeat != NULL)
-    image->repeat = *repeat;
-
-  return image;  
 }
 
 GtkBorderImage *
@@ -139,11 +107,7 @@ _gtk_border_image_unref (GtkBorderImage *image)
 
   if (image->ref_count == 0)
     {
-      if (image->source != NULL)
-        cairo_pattern_destroy (image->source);
-
-      if (image->source_boxed != NULL)
-	g_boxed_free (image->boxed_type, image->source_boxed);
+      g_object_unref (image->source);
 
       if (image->width != NULL)
         gtk_border_free (image->width);
@@ -160,12 +124,7 @@ _gtk_border_image_unpack (const GValue *value,
   GtkBorderImage *image = g_value_get_boxed (value);
 
   parameter[0].name = "border-image-source";
-
-  if ((image != NULL) && 
-      (image->source_boxed != NULL))
-    g_value_init (&parameter[0].value, image->boxed_type);
-  else
-    g_value_init (&parameter[0].value, CAIRO_GOBJECT_TYPE_PATTERN);
+  g_value_init (&parameter[0].value, GTK_TYPE_CSS_IMAGE);
 
   parameter[1].name = "border-image-slice";
   g_value_init (&parameter[1].value, GTK_TYPE_BORDER);
@@ -178,11 +137,7 @@ _gtk_border_image_unpack (const GValue *value,
 
   if (image != NULL)
     {
-      if (image->source_boxed != NULL)
-        g_value_set_boxed (&parameter[0].value, image->source_boxed);
-      else
-        g_value_set_boxed (&parameter[0].value, image->source);
-
+      g_value_set_object (&parameter[0].value, image->source);
       g_value_set_boxed (&parameter[1].value, &image->slice);
       g_value_set_boxed (&parameter[2].value, &image->repeat);
       g_value_set_boxed (&parameter[3].value, image->width);
@@ -198,28 +153,26 @@ _gtk_border_image_pack (GValue             *value,
                         GtkStateFlags       state)
 {
   GtkBorderImage *image;
-  cairo_pattern_t *source;
   GtkBorder *slice, *width;
   GtkCssBorderImageRepeat *repeat;
+  GtkCssImage *source;
+  const GValue *val;
+
+  val = _gtk_style_properties_peek_property (props,
+                                             GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("border-image-source")),
+                                             state);
+  source = g_value_get_object (val);
+  if (source == NULL)
+    return;
 
   gtk_style_properties_get (props, state,
-			    "border-image-source", &source,
 			    "border-image-slice", &slice,
 			    "border-image-repeat", &repeat,
 			    "border-image-width", &width,
 			    NULL);
 
-  if (source == NULL)
-    {
-      g_value_take_boxed (value, NULL);
-    }
-  else
-    {
-      image = _gtk_border_image_new (source, slice, width, repeat);
-      g_value_take_boxed (value, image);
-
-      cairo_pattern_destroy (source);
-    }
+  image = _gtk_border_image_new (source, slice, width, repeat);
+  g_value_take_boxed (value, image);
 
   if (slice != NULL)
     gtk_border_free (slice);
@@ -406,45 +359,29 @@ _gtk_border_image_render (GtkBorderImage   *image,
   cairo_surface_t *surface, *slice;
   GtkBorderImageSliceSize vertical_slice[3], horizontal_slice[3];
   GtkBorderImageSliceSize vertical_border[3], horizontal_border[3];
-  int surface_width, surface_height;
+  double source_width, source_height;
   int h, v;
 
   if (image->width != NULL)
     border_width = image->width;
 
-  if (cairo_pattern_get_type (image->source) != CAIRO_PATTERN_TYPE_SURFACE)
-    {
-      cairo_matrix_t matrix;
-      cairo_t *surface_cr;
+  _gtk_css_image_get_concrete_size (image->source,
+                                    0, 0,
+                                    width, height,
+                                    &source_width, &source_height);
 
-      surface_width = width;
-      surface_height = height;
+  /* XXX: Optimize for (source_width == width && source_height == height) */
 
-      cairo_matrix_init_scale (&matrix, 1 / width, 1 / height);
-      cairo_pattern_set_matrix (image->source, &matrix);
-
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
-      surface_cr = cairo_create (surface);
-      cairo_set_source (surface_cr, image->source);
-      cairo_paint (surface_cr);
-
-      cairo_destroy (surface_cr);
-    }
-  else
-    {
-      cairo_pattern_get_surface (image->source, &surface);
-      cairo_surface_reference (surface);
-
-      surface_width = cairo_image_surface_get_width (surface);
-      surface_height = cairo_image_surface_get_height (surface);
-    }
+  surface = _gtk_css_image_get_surface (image->source,
+                                        cairo_get_target (cr),
+                                        source_width, source_height);
 
   gtk_border_image_compute_slice_size (horizontal_slice,
-                                       surface_width, 
+                                       source_width, 
                                        image->slice.left,
                                        image->slice.right);
   gtk_border_image_compute_slice_size (vertical_slice,
-                                       surface_height, 
+                                       source_height, 
                                        image->slice.top,
                                        image->slice.bottom);
   gtk_border_image_compute_border_size (horizontal_border,

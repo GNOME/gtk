@@ -182,9 +182,18 @@ parse_border_image (GtkCssShorthandProperty *shorthand,
                     GtkCssParser            *parser,
                     GFile                   *base)
 {
-  g_value_init (&values[0], CAIRO_GOBJECT_TYPE_PATTERN);
-  if (!_gtk_css_style_parse_value (&values[0], parser, base))
-    return FALSE;
+  GtkCssImage *image;
+  
+  if (_gtk_css_parser_try (parser, "none", TRUE))
+    image = NULL;
+  else
+    {
+      image = _gtk_css_image_new_parse (parser, base);
+      if (!image)
+        return FALSE;
+    }
+  g_value_init (&values[0], GTK_TYPE_CSS_IMAGE);
+  g_value_set_object (&values[0], image);
 
   if (value_is_done_parsing (parser))
     return TRUE;

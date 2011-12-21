@@ -660,6 +660,13 @@ _gtk_css_style_property_init_properties (void)
                                           &value);
   g_value_unset (&value);
 
+  gtk_style_property_register            ("background-repeat",
+                                          GTK_TYPE_CSS_BACKGROUND_REPEAT,
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          &background_repeat);
   g_value_init (&value, GTK_TYPE_CSS_IMAGE);
   _gtk_style_property_register           ("background-image",
                                           CAIRO_GOBJECT_TYPE_PATTERN,
@@ -668,22 +675,15 @@ _gtk_css_style_property_init_properties (void)
                                           css_image_value_print,
                                           css_image_value_compute,
                                           &value);
-  g_value_unset (&value);
-  gtk_style_property_register            ("background-repeat",
-                                          GTK_TYPE_CSS_BACKGROUND_REPEAT,
-                                          0,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          &background_repeat);
 
-  gtk_style_property_register            ("border-image-source",
+  _gtk_style_property_register           ("border-image-source",
                                           CAIRO_GOBJECT_TYPE_PATTERN,
                                           0,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          NULL);
+                                          css_image_value_parse,
+                                          css_image_value_print,
+                                          css_image_value_compute,
+                                          &value);
+  g_value_unset (&value);
   gtk_style_property_register            ("border-image-repeat",
                                           GTK_TYPE_CSS_BORDER_IMAGE_REPEAT,
                                           0,
