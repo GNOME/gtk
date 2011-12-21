@@ -911,6 +911,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   button = GTK_BUTTON (check_button);
   toggle_button = GTK_TOGGLE_BUTTON (check_button);
   context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
@@ -931,6 +932,11 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   if (!interior_focus || !(child && gtk_widget_get_visible (child)))
     x += focus_width + focus_pad;
 
+  state &= ~(GTK_STATE_FLAG_INCONSISTENT |
+             GTK_STATE_FLAG_ACTIVE |
+             GTK_STATE_FLAG_SELECTED |
+             GTK_STATE_FLAG_PRELIGHT);
+
   if (gtk_toggle_button_get_inconsistent (toggle_button))
     state |= GTK_STATE_FLAG_INCONSISTENT;
   else if (gtk_toggle_button_get_active (toggle_button))
@@ -940,10 +946,8 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       (button->priv->button_down && button->priv->in_button))
     state |= GTK_STATE_FLAG_SELECTED;
 
-  if (button->priv->in_button)
+  if (button->priv->in_button && !(state & GTK_STATE_FLAG_INSENSITIVE))
     state |= GTK_STATE_FLAG_PRELIGHT;
-  else if (!gtk_widget_is_sensitive (widget))
-    state |= GTK_STATE_FLAG_INSENSITIVE;
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     x = allocation.width - (indicator_size + x);
