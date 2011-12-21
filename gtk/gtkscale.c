@@ -1085,7 +1085,6 @@ gtk_scale_draw (GtkWidget *widget,
   GtkScale *scale = GTK_SCALE (widget);
   GtkScalePrivate *priv = scale->priv;
   GtkRange *range = GTK_RANGE (scale);
-  GtkStateFlags state = 0;
   GtkStyleContext *context;
   gint *marks;
   gint focus_padding;
@@ -1104,9 +1103,6 @@ gtk_scale_draw (GtkWidget *widget,
    * GtkRange struct are updated.
    */
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->draw (widget, cr);
-
-  if (!gtk_widget_is_sensitive (widget))
-    state |= GTK_STATE_FLAG_INSENSITIVE;
 
   if (priv->marks)
     {
@@ -1151,7 +1147,6 @@ gtk_scale_draw (GtkWidget *widget,
 
               gtk_style_context_save (context);
               gtk_style_context_add_class (context, GTK_STYLE_CLASS_MARK);
-              gtk_style_context_set_state (context, state);
 
               gtk_render_line (context, cr, x1, y1, x1, y2);
 
@@ -1203,7 +1198,6 @@ gtk_scale_draw (GtkWidget *widget,
 
               gtk_style_context_save (context);
               gtk_style_context_add_class (context, GTK_STYLE_CLASS_MARK);
-              gtk_style_context_set_state (context, state);
 
               gtk_render_line (context, cr, x1, y1, x2, y1);
 
