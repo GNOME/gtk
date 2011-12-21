@@ -584,10 +584,9 @@ render_para (GtkTextRenderer    *text_renderer,
   screen_width = line_display->total_width;
 
   context = gtk_widget_get_style_context (text_renderer->widget);
+  state = gtk_widget_get_state_flags (text_renderer->widget);
 
-  state = GTK_STATE_FLAG_SELECTED;
-  if (gtk_widget_has_focus (text_renderer->widget))
-    state |= GTK_STATE_FLAG_FOCUSED;
+  state |= GTK_STATE_FLAG_SELECTED;
 
   gtk_style_context_get_background_color (context, state, &selection);
 
