@@ -79,7 +79,7 @@ gtk_model_menu_binding_append_item (GtkModelMenuBinding  *binding,
 
   if ((section = g_menu_model_get_item_link (model, item_index, "section")))
     {
-      g_menu_model_get_item_attribute (model, item_index, "label", "s", &heading);
+      g_menu_model_get_item_attribute (model, item_index, "label", "s", heading);
       gtk_model_menu_binding_append_model (binding, section, FALSE);
     }
   else
