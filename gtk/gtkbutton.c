@@ -1701,6 +1701,7 @@ _gtk_button_paint (GtkButton          *button,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
 
   gtk_button_get_props (button, &default_border, &default_outside_border, NULL, NULL, &interior_focus);
   gtk_style_context_get_style (context,
