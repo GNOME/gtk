@@ -39,6 +39,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkStyleProperties GtkStyleProperties;
 typedef struct _GtkStylePropertiesClass GtkStylePropertiesClass;
+typedef struct _GtkStylePropertiesPrivate GtkStylePropertiesPrivate;
 
 typedef struct _GtkSymbolicColor GtkSymbolicColor;
 typedef struct _GtkGradient GtkGradient;
@@ -46,7 +47,7 @@ typedef struct _GtkGradient GtkGradient;
 struct _GtkStyleProperties
 {
   GObject parent_object;
-  gpointer priv;
+  GtkStylePropertiesPrivate *priv;
 };
 
 struct _GtkStylePropertiesClass

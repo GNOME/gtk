@@ -58,7 +58,6 @@
  * should use the APIs provided by #GtkThemingEngine instead.
  */
 
-typedef struct GtkStylePropertiesPrivate GtkStylePropertiesPrivate;
 typedef struct PropertyData PropertyData;
 typedef struct ValueData ValueData;
 
@@ -73,7 +72,7 @@ struct PropertyData
   GArray *values;
 };
 
-struct GtkStylePropertiesPrivate
+struct _GtkStylePropertiesPrivate
 {
   GHashTable *color_map;
   GHashTable *properties;
