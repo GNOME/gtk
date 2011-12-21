@@ -1856,11 +1856,11 @@ draw_stepper (GtkRange     *range,
               cairo_t      *cr,
               GtkArrowType  arrow_type,
               gboolean      clicked,
-              gboolean      prelighted)
+              gboolean      prelighted,
+              GtkStateFlags state)
 {
   GtkRangePrivate *priv = range->priv;
   GtkAllocation allocation;
-  GtkStateFlags state = 0;
   GtkStyleContext *context;
   GtkWidget *widget = GTK_WIDGET (range);
   gfloat arrow_scaling;
@@ -1904,8 +1904,12 @@ draw_stepper (GtkRange     *range,
       arrow_sensitive = priv->lower_sensitive;
     }
 
-  if (!gtk_widget_is_sensitive (GTK_WIDGET (range)) || !arrow_sensitive)
-    state = GTK_STATE_FLAG_INSENSITIVE;
+  state &= ~(GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT);
+
+  if ((state & GTK_STATE_FLAG_INSENSITIVE) || !arrow_sensitive)
+    {
+      state |= GTK_STATE_FLAG_INSENSITIVE;
+    }
   else
     {
       if (clicked)
@@ -2001,8 +2005,7 @@ gtk_range_draw (GtkWidget *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  gboolean sensitive;
-  GtkStateFlags state = 0;
+  GtkStateFlags widget_state;
   gint focus_line_width = 0;
   gint focus_padding = 0;
   gboolean touchscreen;
@@ -2032,7 +2035,7 @@ gtk_range_draw (GtkWidget *widget,
   gtk_range_calc_marks (range);
   gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
 
-  sensitive = gtk_widget_is_sensitive (widget);
+  widget_state = gtk_widget_get_state_flags (widget);
 
   /* Just to be confusing, we draw the trough for the whole
    * range rectangle, not the trough rectangle (the trough
@@ -2060,11 +2063,6 @@ gtk_range_draw (GtkWidget *widget,
                             "stepper-size",          &stepper_size,
                             "stepper-spacing",       &stepper_spacing,
                             NULL);
-
-      gtk_style_context_save (context);
-
-      if (!sensitive)
-        gtk_style_context_set_state (context, GTK_STATE_FLAG_INSENSITIVE);
 
       if (!trough_under_steppers)
         {
@@ -2260,40 +2258,34 @@ gtk_range_draw (GtkWidget *widget,
           gtk_style_context_restore (context);
         }
 
-      gtk_style_context_restore (context);
-
-      if (sensitive && gtk_widget_has_visible_focus (widget))
+      if (!(widget_state & GTK_STATE_FLAG_INSENSITIVE) && gtk_widget_has_visible_focus (widget))
         {
-          gtk_style_context_save (context);
-          gtk_style_context_set_state (context,
-                                       gtk_widget_get_state_flags (widget));
-
           gtk_render_focus (context, cr,
                             priv->range_rect.x,
                             priv->range_rect.y,
                             priv->range_rect.width,
                             priv->range_rect.height);
-
-          gtk_style_context_restore (context);
         }
     }
 
   cairo_restore (cr);
 
-  if (!sensitive)
-    state = GTK_STATE_FLAG_INSENSITIVE;
-  else if (!touchscreen && priv->mouse_location == MOUSE_SLIDER)
-    state = GTK_STATE_FLAG_PRELIGHT;
-
-  if (priv->grab_location == MOUSE_SLIDER)
-    state |= GTK_STATE_FLAG_ACTIVE;
-
-  cairo_save (cr);
-  gdk_cairo_rectangle (cr, &priv->slider);
-  cairo_clip (cr);
-
   if (draw_trough)
     {
+      GtkStateFlags state = widget_state;
+
+      state &= ~(GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE);
+
+      if (!touchscreen && priv->mouse_location == MOUSE_SLIDER && !(state & GTK_STATE_FLAG_INSENSITIVE))
+        state |= GTK_STATE_FLAG_PRELIGHT;
+
+      if (priv->grab_location == MOUSE_SLIDER)
+        state |= GTK_STATE_FLAG_ACTIVE;
+
+      cairo_save (cr);
+      gdk_cairo_rectangle (cr, &priv->slider);
+      cairo_clip (cr);
+
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
       gtk_style_context_set_state (context, state);
@@ -2306,33 +2298,37 @@ gtk_range_draw (GtkWidget *widget,
                          priv->orientation);
 
       gtk_style_context_restore (context);
-    }
 
-  cairo_restore (cr);
+      cairo_restore (cr);
+    }
 
   if (priv->has_stepper_a)
     draw_stepper (range, STEPPER_A, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT,
                   priv->grab_location == MOUSE_STEPPER_A,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_A);
+                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_A,
+                  widget_state);
 
   if (priv->has_stepper_b)
     draw_stepper (range, STEPPER_B, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   priv->grab_location == MOUSE_STEPPER_B,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_B);
+                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_B,
+                  widget_state);
 
   if (priv->has_stepper_c)
     draw_stepper (range, STEPPER_C, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT,
                   priv->grab_location == MOUSE_STEPPER_C,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_C);
+                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_C,
+                  widget_state);
 
   if (priv->has_stepper_d)
     draw_stepper (range, STEPPER_D, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   priv->grab_location == MOUSE_STEPPER_D,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_D);
+                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_D,
+                  widget_state);
 
   return FALSE;
 }
