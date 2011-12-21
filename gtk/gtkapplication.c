@@ -785,7 +785,7 @@ gtk_application_set_app_menu (GtkApplication *application,
  * Returns the menu model that has been set with
  * g_application_set_app_menu().
  *
- * Returns: the application menu of @application
+ * Returns: (transfer none): the application menu of @application
  *
  * Since: 3.4
  */
@@ -833,7 +833,7 @@ gtk_application_set_menubar (GtkApplication *application,
  * Returns the menu model that has been set with
  * g_application_set_menubar().
  *
- * Returns: the menubar for windows of @application
+ * Returns: (transfer none): the menubar for windows of @application
  *
  * Since: 3.4
  */
