@@ -756,7 +756,7 @@ gtk_application_remove_accelerator (GtkApplication *application,
 /**
  * gtk_application_set_app_menu:
  * @application: a #GtkApplication
- * @app_menu: (allow-none): a #GMenuModel, or %NULL
+ * @model: (allow-none): a #GMenuModel, or %NULL
  *
  * Sets or unsets the application menu for @application.
  *
@@ -773,9 +773,9 @@ gtk_application_remove_accelerator (GtkApplication *application,
  */
 void
 gtk_application_set_app_menu (GtkApplication *application,
-                              GMenuModel     *app_menu)
+                              GMenuModel     *model)
 {
-  g_object_set (application, "app-menu", app_menu, NULL);
+  g_object_set (application, "app-menu", model, NULL);
 }
 
 /**
@@ -803,7 +803,7 @@ gtk_application_get_app_menu (GtkApplication *application)
 /**
  * gtk_application_set_menubar:
  * @application: a #GtkApplication
- * @menubar: (allow-none): a #GMenuModel, or %NULL
+ * @model: (allow-none): a #GMenuModel, or %NULL
  *
  * Sets or unsets the menubar for windows of @application.
  *
@@ -821,9 +821,9 @@ gtk_application_get_app_menu (GtkApplication *application)
  */
 void
 gtk_application_set_menubar (GtkApplication *application,
-                             GMenuModel     *menubar)
+                             GMenuModel     *model)
 {
-  g_object_set (application, "menubar", menubar, NULL);
+  g_object_set (application, "menubar", model, NULL);
 }
 
 /**
