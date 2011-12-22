@@ -3885,13 +3885,15 @@ gtk_combo_box_list_select_func (GtkTreeSelection *selection,
                         NULL);
 
           if (cell_visible && cell_sensitive)
-            break;
+            {
+              sensitive = TRUE;
+              break;
+            }
 
           cell = cell->next;
         }
-      g_list_free (cells);
 
-      sensitive = cell_sensitive;
+      g_list_free (cells);
     }
 
   g_list_free (columns);
