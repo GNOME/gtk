@@ -858,16 +858,11 @@ gtk_toolbar_draw (GtkWidget *widget,
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GList *list;
   guint border_width;
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
 
   gtk_render_background (context, cr, border_width, border_width,
                          gtk_widget_get_allocated_width (widget) - 2 * border_width,
@@ -886,8 +881,6 @@ gtk_toolbar_draw (GtkWidget *widget,
   gtk_container_propagate_draw (GTK_CONTAINER (widget),
 				priv->arrow_button,
 				cr);
-
-  gtk_style_context_restore (context);
 
   return FALSE;
 }
