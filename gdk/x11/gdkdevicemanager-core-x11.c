@@ -664,12 +664,14 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
 
     case FocusIn:
     case FocusOut:
-      _gdk_device_manager_core_handle_focus (window,
-                                             device_manager->core_keyboard,
-                                             NULL,
-                                             xevent->type == FocusIn,
-                                             xevent->xfocus.detail,
-                                             xevent->xfocus.mode);
+      if (window)
+        _gdk_device_manager_core_handle_focus (window,
+                                               device_manager->core_keyboard,
+                                               NULL,
+                                               xevent->type == FocusIn,
+                                               xevent->xfocus.detail,
+                                               xevent->xfocus.mode);
+      return_val = FALSE;
       break;
                                               
     default:
