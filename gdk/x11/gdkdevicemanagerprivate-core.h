@@ -20,8 +20,6 @@
 #ifndef __GDK_DEVICE_MANAGER_PRIVATE_CORE_H__
 #define __GDK_DEVICE_MANAGER_PRIVATE_CORE_H__
 
-#include <X11/Xlib.h>
-
 #include "gdkx11devicemanager-core.h"
 #include "gdkdevicemanagerprivate.h"
 
@@ -40,7 +38,6 @@ struct _GdkX11DeviceManagerCoreClass
 };
 
 void            _gdk_device_manager_core_handle_focus           (GdkWindow   *window,
-                                                                 Window       original,
                                                                  GdkDevice   *device,
                                                                  GdkDevice   *source_device,
                                                                  gboolean     focus_in,
