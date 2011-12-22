@@ -4556,17 +4556,10 @@ draw_empty_focus (GtkTreeView *tree_view, cairo_t *cr)
   if (w > 0 && h > 0)
     {
       GtkStyleContext *context;
-      GtkStateFlags state;
 
       context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
-
-      gtk_style_context_save (context);
-      gtk_style_context_set_state (context, state);
 
       gtk_render_focus (context, cr, 1, 1, w, h);
-
-      gtk_style_context_restore (context);
     }
 }
 
@@ -4708,12 +4701,10 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
   gint grid_line_width;
   gboolean draw_vgrid_lines, draw_hgrid_lines;
   GtkStyleContext *context;
-  GtkStateFlags state;
   gboolean parity;
 
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   gtk_widget_style_get (widget,
 			"horizontal-separator", &horizontal_separator,
@@ -4744,7 +4735,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
   if (tree_view->priv->height < bin_window_height)
     {
       gtk_style_context_save (context);
-      gtk_style_context_set_state (context, state);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_CELL);
 
       gtk_render_background (context, cr,
@@ -14538,7 +14528,6 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   GtkRBTree    *tree;
   GtkRBNode    *node;
   GtkStyleContext *context;
-  GtkStateFlags state;
   gint cell_offset;
   GList *list;
   GdkRectangle background_area;
@@ -14578,9 +14567,6 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
-
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_set_state (context, state);
 
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
   gtk_style_context_add_region (context, GTK_STYLE_REGION_COLUMN, 0);
