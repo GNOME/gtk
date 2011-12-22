@@ -7515,26 +7515,18 @@ gtk_window_draw (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
 
-  gtk_style_context_save (context);
-
   if (!gtk_widget_get_app_paintable (widget) &&
       gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
-      GtkStateFlags state;
+      gtk_style_context_save (context);
 
-      state = gtk_widget_get_state_flags (widget);
-
-      if (gtk_window_has_toplevel_focus (GTK_WINDOW (widget)))
-        state |= GTK_STATE_FLAG_FOCUSED;
-
-      gtk_style_context_set_state (context, state);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
       gtk_render_background (context, cr, 0, 0,
 			     gtk_widget_get_allocated_width (widget),
 			     gtk_widget_get_allocated_height (widget));
-    }
 
-  gtk_style_context_restore (context);
+      gtk_style_context_restore (context);
+    }
 
   if (GTK_WIDGET_CLASS (gtk_window_parent_class)->draw)
     ret = GTK_WIDGET_CLASS (gtk_window_parent_class)->draw (widget, cr);
