@@ -10052,7 +10052,7 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   gint x2;
   gint vertical_separator;
   gint expander_size;
-  GtkCellRendererState flags;
+  GtkCellRendererState flags = 0;
 
   widget = GTK_WIDGET (tree_view);
   context = gtk_widget_get_style_context (widget);
@@ -10074,24 +10074,19 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   area.height = gtk_tree_view_get_cell_area_height (tree_view, node,
                                                     vertical_separator);
 
-  if (!gtk_widget_get_sensitive (widget))
-    state |= GTK_STATE_FLAG_INSENSITIVE;
-  else
-    {
-      flags = 0;
+  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+    flags |= GTK_CELL_RENDERER_SELECTED;
 
-      if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
-        flags |= GTK_CELL_RENDERER_SELECTED;
+  if (node == tree_view->priv->prelight_node &&
+      tree_view->priv->arrow_prelit)
+    flags |= GTK_CELL_RENDERER_PRELIT;
 
-      state = gtk_cell_renderer_get_state (NULL, widget, flags);
-
-      if (node == tree_view->priv->prelight_node &&
-          tree_view->priv->arrow_prelit)
-	state |= GTK_STATE_FLAG_PRELIGHT;
-    }
+  state = gtk_cell_renderer_get_state (NULL, widget, flags);
 
   if (node->children != NULL)
     state |= GTK_STATE_FLAG_ACTIVE;
+  else
+    state &= ~(GTK_STATE_FLAG_ACTIVE);
 
   gtk_style_context_save (context);
 
