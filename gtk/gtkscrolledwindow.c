@@ -1200,14 +1200,18 @@ gtk_scrolled_window_draw (GtkWidget *widget,
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_render_background (context, cr, 0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
       GtkAllocation relative_allocation;
-      GtkStyleContext *context;
       gboolean scrollbars_within_bevel;
-
-      context = gtk_widget_get_style_context (widget);
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
