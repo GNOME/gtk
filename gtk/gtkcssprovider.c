@@ -27,6 +27,7 @@
 
 #include "gtkcssproviderprivate.h"
 
+#include "gtkbitmaskprivate.h"
 #include "gtkcssparserprivate.h"
 #include "gtkcsssectionprivate.h"
 #include "gtkcssselectorprivate.h"
@@ -960,6 +961,7 @@ struct GtkCssRuleset
   GtkCssSelector *selector;
   GHashTable *widget_style;
   GHashTable *style;
+  GtkBitmask *set_styles;
 
   guint has_inherit :1;
 };
@@ -1109,6 +1111,8 @@ gtk_css_ruleset_init_copy (GtkCssRuleset       *new,
     g_hash_table_ref (new->widget_style);
   if (new->style)
     g_hash_table_ref (new->style);
+  if (new->set_styles)
+    new->set_styles = _gtk_bitmask_copy (new->set_styles);
 }
 
 static void
@@ -1116,6 +1120,8 @@ gtk_css_ruleset_clear (GtkCssRuleset *ruleset)
 {
   if (ruleset->style)
     g_hash_table_unref (ruleset->style);
+  if (ruleset->set_styles)
+    _gtk_bitmask_free (ruleset->set_styles);
   if (ruleset->widget_style)
     g_hash_table_unref (ruleset->widget_style);
   if (ruleset->selector)
@@ -1173,10 +1179,13 @@ gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
                      PropertyValue          *value)
 {
   if (ruleset->style == NULL)
-    ruleset->style = g_hash_table_new_full (g_direct_hash,
-                                            g_direct_equal,
-                                            NULL,
-                                            (GDestroyNotify) property_value_free);
+    {
+      ruleset->style = g_hash_table_new_full (g_direct_hash,
+                                              g_direct_equal,
+                                              NULL,
+                                              (GDestroyNotify) property_value_free);
+      ruleset->set_styles = _gtk_bitmask_new ();
+    }
 
   if (_gtk_style_property_is_shorthand (prop))
     {
@@ -1200,6 +1209,7 @@ gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
       return;
     }
 
+  _gtk_bitmask_set (ruleset->set_styles, _gtk_style_property_get_id (prop), TRUE);
   ruleset->has_inherit |= _gtk_style_property_is_inherit (prop);
   g_hash_table_insert (ruleset->style, (gpointer) prop, value);
 }
