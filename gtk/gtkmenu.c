@@ -4613,7 +4613,6 @@ gtk_menu_position (GtkMenu  *menu,
   GtkRequisition requisition;
   gint x, y;
   gint scroll_offset;
-  gint menu_height;
   GdkScreen *screen;
   GdkScreen *pointer_screen;
   GdkRectangle monitor;
@@ -4786,12 +4785,10 @@ gtk_menu_position (GtkMenu  *menu,
 
   if (priv->initially_pushed_in)
     {
-      menu_height = requisition.height;
-
-      if (y + menu_height > monitor.y + monitor.height)
+      if (y + requisition.height > monitor.y + monitor.height)
         {
-          scroll_offset -= y + menu_height - (monitor.y + monitor.height);
-          y = (monitor.y + monitor.height) - menu_height;
+          scroll_offset -= y + requisition.height - (monitor.y + monitor.height);
+          y = (monitor.y + monitor.height) - requisition.height;
         }
 
       if (y < monitor.y)
