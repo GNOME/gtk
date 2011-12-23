@@ -4875,7 +4875,6 @@ gtk_menu_scroll_to (GtkMenu *menu,
                     gint    offset)
 {
   GtkMenuPrivate *priv = menu->priv;
-  GtkAllocation allocation;
   GtkBorder arrow_border, padding;
   GtkWidget *widget;
   gint x, y;
@@ -4892,9 +4891,8 @@ gtk_menu_scroll_to (GtkMenu *menu,
     gtk_adjustment_set_value (priv->tearoff_adjustment, offset);
 
   /* Move/resize the viewport according to arrows: */
-  gtk_widget_get_allocation (widget, &allocation);
-  view_width = allocation.width;
-  view_height = allocation.height;
+  view_width = gtk_widget_get_allocated_width (widget);
+  view_height = gtk_widget_get_allocated_height (widget);
 
   gtk_widget_style_get (GTK_WIDGET (menu),
                         "vertical-padding", &vertical_padding,
