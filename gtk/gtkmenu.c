@@ -4807,7 +4807,7 @@ gtk_menu_position (GtkMenu  *menu,
       priv->position_y = y;
     }
 
-  if (scroll_offset > 0)
+  if (scroll_offset != 0)
     {
       GtkBorder arrow_border;
 
