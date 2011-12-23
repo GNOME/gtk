@@ -140,46 +140,6 @@ struct _GtkMenuAttachData
   GtkMenuDetachFunc detacher;
 };
 
-struct _OldGtkMenuPrivate
-{
-  gint x;
-  gint y;
-  gboolean initially_pushed_in;
-
-  GDestroyNotify position_func_data_destroy;
-
-  /* info used for the table */
-  guint *heights;
-  gint heights_length;
-  gint requested_height;
-
-  gint monitor_num;
-
-  /* Cached layout information */
-  gint n_rows;
-  gint n_columns;
-
-  guint accel_size;
-
-  gchar *title;
-
-  /* Arrow states */
-  GtkStateFlags lower_arrow_state;
-  GtkStateFlags upper_arrow_state;
-
-  /* navigation region */
-  int navigation_x;
-  int navigation_y;
-  int navigation_width;
-  int navigation_height;
-
-  guint have_layout           : 1;
-  guint seen_item_enter       : 1;
-  guint have_position         : 1;
-  guint ignore_button_release : 1;
-  guint no_toggle_size        : 1;
-};
-
 struct _GtkMenuPopdownData
 {
   GtkMenu *menu;
