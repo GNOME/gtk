@@ -54,6 +54,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
   <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
+    <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
+    <signal name="delete-event" handler="gtk_false" swapped="no"/>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
