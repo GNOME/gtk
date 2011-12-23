@@ -134,6 +134,11 @@ rbtree_CFLAGS			 = -DGTK_COMPILATION -UG_ENABLE_DEBUG
 rbtree_SOURCES			 = rbtree.c ../gtkrbtree.h ../gtkrbtree.c
 rbtree_LDADD			 = $(GTK_DEP_LIBS)
 
+TEST_PROGS			+= bitmask
+bitmask_CFLAGS			 = -DGTK_COMPILATION -UG_ENABLE_DEBUG
+bitmask_SOURCES			 = bitmask.c ../gtkbitmaskprivate.h ../gtkbitmask.c
+bitmask_LDADD			 = $(GTK_DEP_LIBS)
+
 TEST_PROGS			+= regression-tests
 regression_tests_SOURCES	 = regression-tests.c
 regression_tests_LDADD		 = $(progs_ldadd)
