@@ -52,6 +52,7 @@
 static GHashTable *parse_funcs = NULL;
 static GHashTable *print_funcs = NULL;
 static GHashTable *properties = NULL;
+static guint __n_style_properties = 0;
 
 static void
 register_conversion_function (GType             type,
@@ -3130,6 +3131,7 @@ _gtk_style_property_register (GParamSpec               *pspec,
 
   node = g_slice_new0 (GtkStyleProperty);
   node->flags = flags;
+  node->id = __n_style_properties++;
   node->pspec = pspec;
   node->property_parse_func = property_parse_func;
   node->pack_func = pack_func;
