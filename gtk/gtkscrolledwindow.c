@@ -2411,6 +2411,41 @@ gtk_scrolled_window_release_captured_events (GtkScrolledWindow *scrolled_window)
 }
 
 static gboolean
+gtk_scrolled_window_calculate_velocity (GtkScrolledWindow *scrolled_window,
+					GdkEvent          *event)
+{
+  GtkScrolledWindowPrivate *priv;
+  gdouble x_root, y_root;
+  guint32 _time;
+
+#define STILL_THRESHOLD 40
+
+  if (!gdk_event_get_root_coords (event, &x_root, &y_root))
+    return FALSE;
+
+  priv = scrolled_window->priv;
+  _time = gdk_event_get_time (event);
+
+  if (priv->last_motion_event_x_root != x_root ||
+      priv->last_motion_event_y_root != y_root ||
+      ABS (_time - priv->last_motion_event_time) > STILL_THRESHOLD)
+    {
+      priv->x_velocity = (priv->last_motion_event_x_root - x_root) /
+        (gdouble) (_time - priv->last_motion_event_time);
+      priv->y_velocity = (priv->last_motion_event_y_root - y_root) /
+        (gdouble) (_time - priv->last_motion_event_time);
+    }
+
+  priv->last_motion_event_x_root = x_root;
+  priv->last_motion_event_y_root = y_root;
+  priv->last_motion_event_time = _time;
+
+#undef STILL_THRESHOLD
+
+  return TRUE;
+}
+
+static gboolean
 gtk_scrolled_window_captured_button_release (GtkWidget *widget,
                                              GdkEvent  *_event)
 {
@@ -2453,6 +2488,8 @@ gtk_scrolled_window_captured_button_release (GtkWidget *widget,
       return GTK_CAPTURED_EVENT_NONE;
     }
   priv->in_drag = FALSE;
+
+  gtk_scrolled_window_calculate_velocity (scrolled_window, _event);
 
   /* Zero out vector components without a visible scrollbar */
   if (!priv->hscrollbar_visible)
@@ -2575,18 +2612,7 @@ gtk_scrolled_window_captured_motion_notify (GtkWidget *widget,
         _gtk_scrolled_window_allocate_overshoot_window (scrolled_window);
     }
 
-  /* Find out X/Y components of the velocity vector, in pixels/ms */
-  if (event->time != priv->last_motion_event_time)
-    {
-      priv->x_velocity = (priv->last_motion_event_x_root - event->x_root) /
-        (gdouble) (event->time - priv->last_motion_event_time);
-      priv->y_velocity = (priv->last_motion_event_y_root - event->y_root) /
-        (gdouble) (event->time - priv->last_motion_event_time);
-
-      priv->last_motion_event_x_root = event->x_root;
-      priv->last_motion_event_y_root = event->y_root;
-      priv->last_motion_event_time = event->time;
-    }
+  gtk_scrolled_window_calculate_velocity (scrolled_window, _event);
 
   return GTK_CAPTURED_EVENT_HANDLED;
 }
