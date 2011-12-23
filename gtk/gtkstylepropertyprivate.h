@@ -76,6 +76,7 @@ void                     _gtk_style_property_register      (GParamSpec          
                                                             GtkStyleUnsetFunc       unset_func);
 
 gboolean                 _gtk_style_property_is_inherit    (const GtkStyleProperty *property);
+guint                    _gtk_style_property_get_id        (const GtkStyleProperty *property);
 
 void                     _gtk_style_property_default_value (const GtkStyleProperty *property,
                                                             GtkStyleProperties     *properties,

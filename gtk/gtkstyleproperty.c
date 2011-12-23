@@ -2444,6 +2444,14 @@ _gtk_style_property_is_inherit (const GtkStyleProperty *property)
   return property->flags & GTK_STYLE_PROPERTY_INHERIT ? TRUE : FALSE;
 }
 
+guint
+_gtk_style_property_get_id (const GtkStyleProperty *property)
+{
+  g_return_val_if_fail (property != NULL, FALSE);
+
+  return property->id;
+}
+
 static gboolean
 resolve_color (GtkStyleProperties *props,
 	       GValue             *value)
