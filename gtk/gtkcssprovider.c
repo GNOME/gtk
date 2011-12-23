@@ -1215,6 +1215,8 @@ gtk_css_ruleset_matches (GtkCssRuleset *ruleset,
 static void
 gtk_css_scanner_destroy (GtkCssScanner *scanner)
 {
+  if (scanner->section)
+    gtk_css_section_unref (scanner->section);
   g_object_unref (scanner->provider);
   if (scanner->file)
     g_object_unref (scanner->file);
