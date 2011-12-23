@@ -304,9 +304,6 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
                               "background-repeat", &repeat,
                               NULL);
 
-      /* Fill background color first */
-      cairo_fill_preserve (cr);
-
       if (cairo_pattern_get_surface (bg->pattern, &surface) != CAIRO_STATUS_SUCCESS)
         surface = NULL;
 
@@ -327,16 +324,22 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
           scale_height = bg->image_rect.height;
         }
 
-      cairo_translate (cr, bg->image_rect.x, bg->image_rect.y);
-      cairo_scale (cr, scale_width, scale_height);
-      cairo_set_source (cr, bg->pattern);
-      cairo_scale (cr, 1.0 / scale_width, 1.0 / scale_height);
-      cairo_translate (cr, -bg->image_rect.x, -bg->image_rect.y);
+      if (scale_width && scale_height)
+        {
+          /* Fill background color first */
+          cairo_fill_preserve (cr);
 
-      g_free (repeat);
+          cairo_translate (cr, bg->image_rect.x, bg->image_rect.y);
+          cairo_scale (cr, scale_width, scale_height);
+          cairo_set_source (cr, bg->pattern);
+          cairo_scale (cr, 1.0 / scale_width, 1.0 / scale_height);
+          cairo_translate (cr, -bg->image_rect.x, -bg->image_rect.y);
 
-      cairo_pattern_destroy (bg->pattern);
-      bg->pattern = NULL;
+          g_free (repeat);
+
+          cairo_pattern_destroy (bg->pattern);
+          bg->pattern = NULL;
+        }
     }
 
   cairo_fill (cr);
