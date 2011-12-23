@@ -63,6 +63,8 @@ struct _GtkStyleProperty
   GtkStyleUnsetFunc         unset_func;
 };
 
+guint                    _gtk_style_property_get_count     (void);
+
 const GtkStyleProperty * _gtk_style_property_lookup        (const char             *name);
 
 void                     _gtk_style_property_register      (GParamSpec             *pspec,

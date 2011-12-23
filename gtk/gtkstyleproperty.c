@@ -2241,6 +2241,12 @@ border_color_default_value (GtkStyleProperties *props,
 
 /*** API ***/
 
+guint
+_gtk_style_property_get_count (void)
+{
+  return __n_style_properties;
+}
+
 static void
 css_string_funcs_init (void)
 {
