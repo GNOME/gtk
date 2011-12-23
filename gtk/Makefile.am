@@ -404,6 +404,7 @@ gtk_private_h_sources =		\
 	gtkappchoosermodule.h	\
 	gtkappchooseronline.h	\
 	gtkbindingsprivate.h	\
+	gtkbitmaskprivate.h	\
 	gtkborderimageprivate.h \
 	gtkboxprivate.h         \
 	gtkbuilderprivate.h	\
@@ -547,6 +548,7 @@ gtk_base_c_sources = 		\
 	gtkbbox.c		\
 	gtkbin.c		\
 	gtkbindings.c		\
+	gtkbitmask.c		\
 	gtkborder.c		\
 	gtkborderimage.c	\
 	gtkbox.c		\
