@@ -1384,7 +1384,9 @@ gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
   device_manager = GDK_DEVICE_MANAGER (translator);
 
   event_mask.deviceid = XIAllMasterDevices;
-  event_mask.mask = _gdk_x11_device_xi2_translate_event_mask (evmask, &event_mask.mask_len);
+  event_mask.mask = _gdk_x11_device_xi2_translate_event_mask (GDK_X11_DEVICE_MANAGER_XI2 (device_manager),
+                                                              evmask,
+                                                              &event_mask.mask_len);
 
   _gdk_x11_device_manager_xi2_select_events (device_manager, window, &event_mask);
   g_free (event_mask.mask);
