@@ -1190,6 +1190,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
             event->button.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
+            if (ev->evtype == XI_TouchBegin)
+              event->button.state |= GDK_BUTTON1_MASK;
+
 #ifdef XINPUT_2_2
             if (ev->evtype == XI_TouchBegin ||
                 ev->evtype == XI_TouchEnd)
@@ -1253,6 +1256,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         gdk_event_set_source_device (event, source_device);
 
         event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+
+	if (ev->evtype == XI_TouchUpdate)
+          event->motion.state |= GDK_BUTTON1_MASK;
 
         /* There doesn't seem to be motion hints in XI */
         event->motion.is_hint = FALSE;
