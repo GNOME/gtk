@@ -49,6 +49,8 @@ struct _GdkX11DeviceManagerXI2
   GList *devices;
 
   gint opcode;
+  gint major;
+  gint minor;
 };
 
 struct _GdkX11DeviceManagerXI2Class
@@ -96,7 +98,9 @@ static GdkWindow *  gdk_x11_device_manager_xi2_get_window           (GdkEventTra
 
 enum {
   PROP_0,
-  PROP_OPCODE
+  PROP_OPCODE,
+  PROP_MAJOR,
+  PROP_MINOR
 };
 
 static void
@@ -118,6 +122,20 @@ gdk_x11_device_manager_xi2_class_init (GdkX11DeviceManagerXI2Class *klass)
                                    g_param_spec_int ("opcode",
                                                      P_("Opcode"),
                                                      P_("Opcode for XInput2 requests"),
+                                                     0, G_MAXINT, 0,
+                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+                                   PROP_MAJOR,
+                                   g_param_spec_int ("major",
+                                                     P_("Major"),
+                                                     P_("Major version number"),
+                                                     0, G_MAXINT, 0,
+                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+                                   PROP_MINOR,
+                                   g_param_spec_int ("minor",
+                                                     P_("Minor"),
+                                                     P_("Minor version number"),
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
@@ -412,6 +430,8 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object));
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
+  g_assert (device_manager->major == 2);
+
   masters = g_hash_table_new (NULL, NULL);
   slaves = g_hash_table_new (NULL, NULL);
 
@@ -537,6 +557,12 @@ gdk_x11_device_manager_xi2_set_property (GObject      *object,
     case PROP_OPCODE:
       device_manager->opcode = g_value_get_int (value);
       break;
+    case PROP_MAJOR:
+      device_manager->major = g_value_get_int (value);
+      break;
+    case PROP_MINOR:
+      device_manager->minor = g_value_get_int (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -557,6 +583,12 @@ gdk_x11_device_manager_xi2_get_property (GObject    *object,
     {
     case PROP_OPCODE:
       g_value_set_int (value, device_manager->opcode);
+      break;
+    case PROP_MAJOR:
+      g_value_set_int (value, device_manager->major);
+      break;
+    case PROP_MINOR:
+      g_value_set_int (value, device_manager->minor);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
