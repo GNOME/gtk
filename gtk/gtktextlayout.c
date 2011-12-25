@@ -2143,7 +2143,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
   DV (g_print ("creating one line display cache (%s)\n", G_STRLOC));
 
-  display = g_new0 (GtkTextLineDisplay, 1);
+  display = g_slice_new0 (GtkTextLineDisplay);
 
   display->size_only = size_only;
   display->line = line;
@@ -2486,7 +2486,7 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
       if (display->pg_bg_rgba)
         gdk_rgba_free (display->pg_bg_rgba);
 
-      g_free (display);
+      g_slice_free (GtkTextLineDisplay, display);
     }
 }
 
