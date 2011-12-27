@@ -513,7 +513,7 @@ style_info_hash (gconstpointer elem)
       hash <<= 5;
     }
 
-  return hash;
+  return hash ^ info->state_flags;
 }
 
 static gboolean
@@ -524,6 +524,9 @@ style_info_equal (gconstpointer elem1,
 
   info1 = elem1;
   info2 = elem2;
+
+  if (info1->state_flags != info2->state_flags)
+    return FALSE;
 
   if (info1->junction_sides != info2->junction_sides)
     return FALSE;
@@ -1015,14 +1018,22 @@ style_data_lookup (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   StyleData *data;
+  gboolean state_mismatch;
 
   priv = context->priv;
+  state_mismatch = ((GtkStyleInfo *) priv->info_stack->data)->state_flags != state;
 
   /* Current data in use is cached, just return it */
-  if (priv->current_data)
+  if (priv->current_data && !state_mismatch)
     return priv->current_data;
 
   g_assert (priv->widget_path != NULL);
+
+  if (G_UNLIKELY (state_mismatch))
+    {
+      gtk_style_context_save (context);
+      gtk_style_context_set_state (context, state);
+    }
 
   data = g_hash_table_lookup (priv->style_data, priv->info_stack->data);
 
@@ -1043,17 +1054,25 @@ style_data_lookup (GtkStyleContext *context,
       gtk_widget_path_free (path);
     }
 
-  priv->current_data = data;
+  if (G_UNLIKELY (state_mismatch))
+    {
+      gtk_style_context_restore (context);
+      priv->current_data = NULL;
+    }
+  else
+    {
+      priv->current_data = data;
 
-  if (priv->theming_engine)
-    g_object_unref (priv->theming_engine);
+      if (priv->theming_engine)
+        g_object_unref (priv->theming_engine);
 
-  gtk_style_properties_get (data->store, 0,
-                            "engine", &priv->theming_engine,
-                            NULL);
+      gtk_style_properties_get (data->store, 0,
+                                "engine", &priv->theming_engine,
+                                NULL);
 
-  if (!priv->theming_engine)
-    priv->theming_engine = g_object_ref (gtk_theming_engine_load (NULL));
+      if (!priv->theming_engine)
+        priv->theming_engine = g_object_ref (gtk_theming_engine_load (NULL));
+    }
 
   return data;
 }
