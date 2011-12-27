@@ -2,6 +2,8 @@
  * gtkrecentmanager.c: a manager for the recently used resources
  *
  * Copyright (C) 2006 Emmanuele Bassi
+ * Copyright (C) 2011 Collabora Ltd.
+ *               By Siegfried-Angel Gevatter <sgevatter@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -119,6 +121,19 @@
 /* keep in sync with xdgmime */
 #define GTK_RECENT_DEFAULT_MIME	"application/octet-stream"
 
+/* Zeitgeist D-Bus constants */
+#define ZEITGEIST_BUS_NAME			"org.gnome.zeitgeist.Engine"
+#define ZEITGEIST_INTERFACE_NAME	"org.gnome.zeitgeist.Log"
+#define ZEITGEIST_OBJECT_PATH		"/org/gnome/zeitgeist/log/activity"
+#define ZEITGEIST_WAIT_TIMEOUT		1000
+
+/* Other Zeitgeist constants */
+#define ZEITGEIST_INTERPRETATION_CREATE_EVENT	"http://www.zeitgeist-project.com/ontologies/2010/01/27/zg#CreateEvent"
+#define ZEITGEIST_INTERPRETATION_ACCESS_EVENT	"http://www.zeitgeist-project.com/ontologies/2010/01/27/zg#AccessEvent"
+#define ZEITGEIST_INTERPRETATION_LEAVE_EVENT	"http://www.zeitgeist-project.com/ontologies/2010/01/27/zg#LeaveEvent"
+#define ZEITGEIST_INTERPRETATION_MODIFY_EVENT	"http://www.zeitgeist-project.com/ontologies/2010/01/27/zg#ModifyEvent"
+#define ZEITGEIST_MANIFESTATION_USER_ACTIVITY	"http://www.zeitgeist-project.com/ontologies/2010/01/27/zg#UserActivity"
+
 typedef struct
 {
   gchar *name;
@@ -179,6 +194,9 @@ struct _GtkRecentManagerPrivate
 
   guint changed_timeout;
   guint changed_age;
+
+  GDBusConnection *connection;
+  GCancellable *cancellable;
 };
 
 enum
@@ -337,6 +355,25 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
   g_type_class_add_private (klass, sizeof (GtkRecentManagerPrivate));
 }
 
+static GDBusConnection *
+get_connection (void)
+{
+  GDBusConnection *connection;
+  GError *error = NULL;
+
+  connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+
+  if (error)
+    {
+      g_debug ("Couldn't connect to D-Bus session bus, %s", error->message);
+      g_error_free (error);
+      return NULL;
+    }
+
+  return connection;
+
+}
+
 static void
 gtk_recent_manager_init (GtkRecentManager *manager)
 {
@@ -349,6 +386,8 @@ gtk_recent_manager_init (GtkRecentManager *manager)
 
   priv->size = 0;
   priv->filename = NULL;
+
+  priv->cancellable = g_cancellable_new ();
 }
 
 static void
@@ -397,6 +436,19 @@ gtk_recent_manager_finalize (GObject *object)
 {
   GtkRecentManager *manager = GTK_RECENT_MANAGER (object);
   GtkRecentManagerPrivate *priv = manager->priv;
+
+  if (priv->cancellable)
+    {
+      g_cancellable_cancel (priv->cancellable);
+      g_object_unref (priv->cancellable);
+      priv->cancellable = NULL;
+    }
+
+  if (priv->connection)
+    {
+      g_object_unref (priv->connection);
+      priv->connection = NULL;
+    }
 
   g_free (priv->filename);
 
@@ -958,6 +1010,164 @@ gtk_recent_manager_add_full (GtkRecentManager     *manager,
 }
 
 /**
+ * gtk_recent_manager_add_activity:
+ * @manager: a #GtkRecentManager
+ * @type: a GtkRecentManagerType
+ * @recent_data: information to be logged.
+ *
+ * Adds an activity to the system's activity log.
+ *
+ * Since: FIXME
+ */
+void
+gtk_recent_manager_add_activity (GtkRecentManager  *manager,
+			     const gchar                       type,
+                 const GtkRecentActivityData       *data)
+{
+  GtkRecentManagerPrivate *priv;
+
+  g_return_if_fail (GTK_IS_RECENT_MANAGER (manager));
+  g_return_if_fail (data != NULL);
+
+  /* sanity checks */
+  if (!data->uri)
+    {
+      g_warning ("Attempting to log an activity but no URI was defined");
+      return;
+    }
+
+  if ((data->uri) &&
+      (!g_utf8_validate (data->uri, -1, NULL)))
+    {
+      g_warning ("Attempting to log an activity, but the URI (`%s')"
+        "is not a valid UTF-8 encoded string", data->uri);
+      return;
+    }
+
+  if ((data->display_name) &&
+      (!g_utf8_validate (data->display_name, -1, NULL)))
+    {
+      g_warning ("Attempting to log an activity concerning `%s', but the "
+        "display name is not a valid UTF-8 encoded string",
+        data->uri);
+      return;
+    }
+
+  if (!data->mime_type)
+    {
+      g_warning ("Attempting to log an activity concerning `%s', but "
+        "no MIME-type was defined", data->uri);
+      return;
+    }
+
+  if (data->application && (
+      (!g_str_has_prefix (data->application, "application://")) ||
+      (!g_str_has_suffix (data->application, ".desktop"))))
+    {
+      g_warning ("Attempting to log an activity concerning `%s', but "
+         " the given application identifier is invalid.", data->uri);
+      return;
+    }
+
+  priv = manager->priv;
+
+  /* get missing info */
+  // FIXME: uncomment this
+  /*if (!data->mime_type)
+    {
+      GFile* file;
+      file = g_file_new_for_uri (data->uri);
+
+      // FIXME: use g_file_query_info_async
+      g_file_query_info (file,
+                           G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                           //G_PRIORITY_DEFAULT,
+                           G_FILE_QUERY_INFO_NONE,
+                           priv->cancellable,
+                           NULL);
+                           //gtk_recent_manager_add_activity_query_info,
+                           //g_object_ref (manager));
+
+      g_object_unref (file);
+  }*/
+
+  // FIXME: figure out data->application if it's NULL
+
+  /* send event to Zeitgeist */
+  if (!priv->connection)
+    {
+      priv->connection = get_connection ();
+      if (!priv->connection)
+        return;
+    }
+
+  GError *error = NULL;
+
+  GVariantBuilder vb;
+  GVariant *parameters;
+
+  // FIXME: coalesce insertions?
+  g_variant_builder_init (&vb, G_VARIANT_TYPE ("a(asaasay)"));
+  g_variant_builder_open (&vb, G_VARIANT_TYPE ("a(asaasay)"));
+
+  // Event
+  g_variant_builder_open (&vb, G_VARIANT_TYPE ("as"));
+  g_variant_builder_add (&vb, "s", "" /*timestamp_str, sprintf*/); // FIXME
+  if (type == GTK_RECENT_MANAGER_ACTIVITY_TYPE_CREATED)
+    g_variant_builder_add (&vb, "s", ZEITGEIST_INTERPRETATION_CREATE_EVENT);
+  else if (type == GTK_RECENT_MANAGER_ACTIVITY_TYPE_OPENED)
+    g_variant_builder_add (&vb, "s", ZEITGEIST_INTERPRETATION_ACCESS_EVENT);
+  else if (type == GTK_RECENT_MANAGER_ACTIVITY_TYPE_CLOSED)
+    g_variant_builder_add (&vb, "s", ZEITGEIST_INTERPRETATION_LEAVE_EVENT);
+  else if (type == GTK_RECENT_MANAGER_ACTIVITY_TYPE_MODIFIED)
+    g_variant_builder_add (&vb, "s", ZEITGEIST_INTERPRETATION_MODIFY_EVENT);
+  else
+    {
+      g_warning ("Attempted to log an activity concerning `%s', but the ",
+        "given activity type is invalid.", data->uri);
+      return;
+    }
+  g_variant_builder_add(&vb, "s", ZEITGEIST_MANIFESTATION_USER_ACTIVITY);
+  g_variant_builder_add(&vb, "s", data->application);
+  g_variant_builder_close (&vb);
+
+  // Subject
+  g_variant_builder_open (&vb, G_VARIANT_TYPE ("aas"));
+  g_variant_builder_open (&vb, G_VARIANT_TYPE ("as"));
+  g_variant_builder_add (&vb, "s", data->uri);
+  g_variant_builder_add (&vb, "s", ""); // empty interpretation, new enough
+                                        // ZG will guess it from MIME-type
+  g_variant_builder_add (&vb, "s", ""); // empty manifestation, new enough ZG
+                                        // will guess it from URI
+  g_variant_builder_add (&vb, "s", ""); // no origin - FIXME: add option for it?
+  g_variant_builder_add (&vb, "s", data->mime_type);
+  g_variant_builder_add (&vb, "s", (data->display_name) ? data->display_name : "");
+  g_variant_builder_add (&vb, "s", ""); // empty storage, ZG will guess it
+  g_variant_builder_close (&vb);
+  g_variant_builder_close (&vb);
+
+  // Payload
+  g_variant_builder_open (&vb, G_VARIANT_TYPE ("ay"));
+  g_variant_builder_close (&vb);
+
+  g_variant_builder_close (&vb);
+  parameters = g_variant_builder_end (&vb);
+
+  // FIXME: make async
+  g_dbus_connection_call_sync (priv->connection,
+                                       ZEITGEIST_BUS_NAME,
+                                       ZEITGEIST_OBJECT_PATH,
+                                       ZEITGEIST_INTERFACE_NAME,
+                                       "InsertEvents",
+                                       parameters,
+                                       NULL, // reply type, we don't care
+                                       G_DBUS_CALL_FLAGS_NONE,
+                                       ZEITGEIST_WAIT_TIMEOUT,
+                                       priv->cancellable,
+                                       &error);
+}
+
+/**
  * gtk_recent_manager_remove_item:
  * @manager: a #GtkRecentManager
  * @uri: the URI of the item you wish to remove
@@ -1257,6 +1467,112 @@ gtk_recent_manager_get_items (GtkRecentManager *manager)
 {
   GtkRecentManagerPrivate *priv;
   GList *retval = NULL;
+  //gchar **uris;
+  gsize n_events, i;
+
+  g_return_val_if_fail (GTK_IS_RECENT_MANAGER (manager), NULL);
+
+  priv = manager->priv;
+  //if (!priv->recent_items)
+  //  return NULL;
+
+  if (!priv->connection)
+    {
+      priv->connection = get_connection ();
+      // FIXME: if (!priv->connection) ????
+    }
+
+  GError *error = NULL;
+  GVariant *reply;
+
+  GVariantBuilder vb;
+  GVariant *parameters;
+
+  g_variant_builder_init (&vb, G_VARIANT_TYPE ("((xx)a(asaasay)uuu)"));
+  g_variant_builder_add (&vb, "(xx)", 0, 1000000000000000);
+  g_variant_builder_open (&vb, G_VARIANT_TYPE ("a(asaasay)"));
+  g_variant_builder_close (&vb);
+  g_variant_builder_add (&vb, "u", 0); // storage state
+  g_variant_builder_add (&vb, "u", 100); // num. events
+  g_variant_builder_add (&vb, "u", 2); // MOST_RECENT_SUBJECTS
+  parameters = g_variant_builder_end (&vb);
+
+  reply = g_dbus_connection_call_sync (priv->connection,
+                                       ZEITGEIST_BUS_NAME,
+                                       ZEITGEIST_OBJECT_PATH,
+                                       ZEITGEIST_INTERFACE_NAME,
+                                       "FindEvents",
+                                       parameters,
+                                       NULL, // a(asaasay)
+                                       G_DBUS_CALL_FLAGS_NONE,
+                                       ZEITGEIST_WAIT_TIMEOUT,
+                                       priv->cancellable,
+                                       &error);
+
+  if (error)
+    {
+      g_warning ("Couldn't request events from Zeitgeist: %s", error->message);
+      g_error_free (error);
+      return NULL;
+    }
+
+  GVariant *events;
+  events = g_variant_get_child_value (reply, 0);
+  g_variant_unref (reply);
+
+  n_events = g_variant_n_children (events);
+  for (i = 0; i < n_events; ++i)
+    {
+      GVariant *event, *event_data, *subjects;
+      GVariantIter iter, subjects_iter, *subject_data_iter;
+
+      event = g_variant_get_child_value (events, i);
+      g_variant_iter_init (&iter, event);
+      event_data = g_variant_iter_next_value (&iter);
+      subjects = g_variant_iter_next_value (&iter);
+
+      g_variant_iter_init (&subjects_iter, subjects);
+      while (g_variant_iter_loop (&subjects_iter, "as", &subject_data_iter))
+        {
+          gchar *uri = NULL;
+          GtkRecentInfo *info;
+
+          g_variant_iter_next (subject_data_iter, "s", &uri);
+          info = gtk_recent_info_new (uri);
+          retval = g_list_prepend (retval, info);
+
+          g_free (uri);
+        }
+
+      g_variant_unref (event);
+      g_variant_unref (event_data);
+      g_variant_unref (subjects);
+    }
+  retval = g_list_reverse (retval);
+
+  g_variant_unref (events);
+
+  return retval;
+}
+
+/**
+ * gtk_recent_manager_get_items:
+ * @manager: a #GtkRecentManager
+ *
+ * Gets the list of recently used resources.
+ *
+ * Return value:  (element-type GtkRecentInfo) (transfer full): a list of
+ *   newly allocated #GtkRecentInfo objects. Use
+ *   gtk_recent_info_unref() on each item inside the list, and then
+ *   free the list itself using g_list_free().
+ *
+ * Since: 2.10
+ */
+/*GList *
+gtk_recent_manager_get_items_old (GtkRecentManager *manager)
+{
+  GtkRecentManagerPrivate *priv;
+  GList *retval = NULL;
   gchar **uris;
   gsize uris_len, i;
   
@@ -1280,7 +1596,7 @@ gtk_recent_manager_get_items (GtkRecentManager *manager)
   g_strfreev (uris);
   
   return retval;
-}
+}*/
 
 static void
 purge_recent_items_list (GtkRecentManager  *manager,

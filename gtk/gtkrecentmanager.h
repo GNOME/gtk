@@ -40,8 +40,9 @@ G_BEGIN_DECLS
 #define GTK_IS_RECENT_MANAGER_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RECENT_MANAGER))
 #define GTK_RECENT_MANAGER_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RECENT_MANAGER, GtkRecentManagerClass))
 
-typedef struct _GtkRecentInfo		GtkRecentInfo;
-typedef struct _GtkRecentData		GtkRecentData;
+typedef struct _GtkRecentInfo			GtkRecentInfo;
+typedef struct _GtkRecentData			GtkRecentData;
+typedef struct _GtkRecentActivityData	GtkRecentActivityData;
 typedef struct _GtkRecentManager	GtkRecentManager;
 typedef struct _GtkRecentManagerClass	GtkRecentManagerClass;
 typedef struct _GtkRecentManagerPrivate GtkRecentManagerPrivate;
@@ -74,11 +75,57 @@ struct _GtkRecentData
   gchar *mime_type;
 
   gchar *app_name;
+
+  // FIXME: deprecate
   gchar *app_exec;
 
+  // FIXME: deprecate
   gchar **groups;
 
+  // FIXME: deprecate
   gboolean is_private;
+};
+
+/**
+ * GtkRecentActivityData:
+ * @uri: a UTF-8 encoded string, containing the URI of the resource,
+ *   or %NULL,
+ * @display_name: a UTF-8 encoded string, containing the name of
+ *   the resource to be displayed, or %NULL;
+ * @mime_type: the MIME type of the resource;
+ * @application: the identifier of the application that is registering
+ *   this activity (format: "application://<name>.actor"), or %NULL.
+ *
+ * Information to be passed to gtk_recent_manager_add() when
+ * registering an activity.
+ **/
+struct _GtkRecentActivityData
+{
+  gchar *uri;
+  gchar *display_name;
+
+  gchar *mime_type;
+
+  gchar *application;
+};
+
+/**
+ * GtkRecentManagerActivityType:
+ *
+ *  - GTK_RECENT_MANAGER_ACTIVITY_TYPE_CREATED:
+ *    A new resource has been created.
+ *  - GTK_RECENT_MANAGER_ACTIVITY_TYPE_OPENED:
+ *    An existing resource has been opened for viewing/editing/etc.
+ *  - GTK_RECENT_MANAGER_ACTIVITY_TYPE_MODIFIED:
+ *    An existing resource has been modified.
+ *  - GTK_RECENT_MANAGER_ACTIVITY_TYPE_CLOSED:
+ *    A previously opened resource has been closed.
+ **/
+enum GtkRecentManagerActivityType {
+	GTK_RECENT_MANAGER_ACTIVITY_TYPE_CREATED,
+	GTK_RECENT_MANAGER_ACTIVITY_TYPE_OPENED,
+	GTK_RECENT_MANAGER_ACTIVITY_TYPE_CLOSED,
+	GTK_RECENT_MANAGER_ACTIVITY_TYPE_MODIFIED
 };
 
 /**
@@ -168,7 +215,10 @@ gboolean          gtk_recent_manager_add_item       (GtkRecentManager     *manag
 						     const gchar          *uri);
 gboolean          gtk_recent_manager_add_full       (GtkRecentManager     *manager,
 						     const gchar          *uri,
-						     const GtkRecentData  *recent_data);
+						     const GtkRecentData  *data);
+void              gtk_recent_manager_add_activity  (GtkRecentManager     *manager,
+						     const gchar type, // GtkRecentManagerActivityType
+						     const GtkRecentActivityData *recent_data);
 gboolean          gtk_recent_manager_remove_item    (GtkRecentManager     *manager,
 						     const gchar          *uri,
 						     GError              **error);
