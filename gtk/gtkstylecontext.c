@@ -1010,7 +1010,8 @@ create_query_path (GtkStyleContext *context)
 }
 
 static StyleData *
-style_data_lookup (GtkStyleContext *context)
+style_data_lookup (GtkStyleContext *context,
+                   GtkStateFlags    state)
 {
   GtkStyleContextPrivate *priv;
   StyleData *data;
@@ -1360,7 +1361,7 @@ gtk_style_context_get_property (GtkStyleContext *context,
 
   g_return_if_fail (priv->widget_path != NULL);
 
-  data = style_data_lookup (context);
+  data = style_data_lookup (context, state);
   gtk_style_properties_get_property (data->store, property, state, value);
 }
 
@@ -1378,7 +1379,7 @@ _gtk_style_context_get_valist (GtkStyleContext *context,
   priv = context->priv;
   g_return_if_fail (priv->widget_path != NULL);
 
-  data = style_data_lookup (context);
+  data = style_data_lookup (context, state);
   _gtk_style_properties_get_valist (data->store, state, property_context, args);
 }
 
@@ -1405,7 +1406,7 @@ gtk_style_context_get_valist (GtkStyleContext *context,
   priv = context->priv;
   g_return_if_fail (priv->widget_path != NULL);
 
-  data = style_data_lookup (context);
+  data = style_data_lookup (context, state);
   gtk_style_properties_get_valist (data->store, state, args);
 }
 
@@ -1434,7 +1435,7 @@ gtk_style_context_get (GtkStyleContext *context,
   priv = context->priv;
   g_return_if_fail (priv->widget_path != NULL);
 
-  data = style_data_lookup (context);
+  data = style_data_lookup (context, state);
 
   va_start (args, state);
   gtk_style_properties_get_valist (data->store, state, args);
@@ -2192,7 +2193,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
   guint i;
 
   priv = context->priv;
-  data = style_data_lookup (context);
+  data = style_data_lookup (context, state);
 
   key.widget_type = widget_type;
   key.state = state;
@@ -2493,7 +2494,7 @@ gtk_style_context_lookup_icon_set (GtkStyleContext *context,
   priv = context->priv;
   g_return_val_if_fail (priv->widget_path != NULL, NULL);
 
-  data = style_data_lookup (context);
+  data = style_data_lookup (context, 0);
 
   for (list = data->icon_factories; list; list = list->next)
     {
@@ -2694,7 +2695,7 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
   priv = context->priv;
   g_return_val_if_fail (priv->widget_path != NULL, FALSE);
 
-  data = style_data_lookup (context);
+  data = style_data_lookup (context, 0);
   sym_color = gtk_style_properties_lookup_color (data->store, color_name);
 
   if (!sym_color)
@@ -2807,7 +2808,7 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
   /* Find out if there is any animation description for the given
    * state, it will fallback to the normal state as well if necessary.
    */
-  data = style_data_lookup (context);
+  data = style_data_lookup (context, state);
   gtk_style_properties_get (data->store, flags,
                             "transition", &desc,
                             NULL);
@@ -3352,7 +3353,7 @@ gtk_style_context_get_border (GtkStyleContext *context,
   priv = context->priv;
   g_return_if_fail (priv->widget_path != NULL);
 
-  data = style_data_lookup (context);
+  data = style_data_lookup (context, state);
   gtk_style_properties_get (data->store,
                             state,
 			    "border-style", &border_style,
@@ -3404,7 +3405,7 @@ gtk_style_context_get_padding (GtkStyleContext *context,
   priv = context->priv;
   g_return_if_fail (priv->widget_path != NULL);
 
-  data = style_data_lookup (context);
+  data = style_data_lookup (context, state);
   gtk_style_properties_get (data->store,
                             state,
                             "padding-top", &top,
@@ -3445,7 +3446,7 @@ gtk_style_context_get_margin (GtkStyleContext *context,
   priv = context->priv;
   g_return_if_fail (priv->widget_path != NULL);
 
-  data = style_data_lookup (context);
+  data = style_data_lookup (context, state);
   gtk_style_properties_get (data->store,
                             state,
                             "margin-top", &top,
@@ -3489,7 +3490,7 @@ gtk_style_context_get_font (GtkStyleContext *context,
   priv = context->priv;
   g_return_val_if_fail (priv->widget_path != NULL, NULL);
 
-  data = style_data_lookup (context);
+  data = style_data_lookup (context, state);
 
   /* Yuck, fonts are created on-demand but we don't return a ref.
    * Do bad things to achieve this requirement */
