@@ -9289,7 +9289,9 @@ proxy_pointer_event (GdkDisplay                 *display,
       return TRUE;
     }
 
-  if (pointer_info->window_under_pointer != pointer_window)
+  if ((source_event->type != GDK_TOUCH_MOTION ||
+       _gdk_event_get_pointer_emulated (source_event)) &&
+      pointer_info->window_under_pointer != pointer_window)
     {
       /* Either a toplevel crossing notify that ended up inside a child window,
 	 or a motion notify that got into another child window  */
