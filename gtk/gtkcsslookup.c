@@ -68,6 +68,16 @@ _gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
   return lookup->values[id] == NULL;
 }
 
+/**
+ * _gtk_css_lookup_set:
+ * @lookup: the lookup
+ * @id: id of the property to set, see _gtk_style_property_get_id()
+ * @value: the "cascading value" to use
+ *
+ * Sets the @value for a given @id. No value may have been set for @id
+ * before. See _gtk_css_lookup_is_missing(). This function is used to
+ * set the "winning declaration" of a lookup.
+ **/
 void
 _gtk_css_lookup_set (GtkCssLookup *lookup,
                      guint         id,
@@ -81,6 +91,18 @@ _gtk_css_lookup_set (GtkCssLookup *lookup,
   lookup->values[id] = value;
 }
 
+/**
+ * _gtk_css_lookup_resolve:
+ * @lookup: the lookup
+ *
+ * Resolves the current lookup into a styleproperties object. This is done
+ * by converting from the "winning declaration" to the "computed value".
+ *
+ * XXX: This bypasses the notion of "specified value". If this ever becomes
+ * an issue, go fix it.
+ *
+ * Returns: a new #GtkStyleProperties
+ **/
 GtkStyleProperties *
 _gtk_css_lookup_resolve (GtkCssLookup *lookup)
 {
