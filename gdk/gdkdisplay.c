@@ -1049,12 +1049,15 @@ _gdk_display_device_grab_update (GdkDisplay *display,
 	    next_grab = NULL; /* Actually its not yet active */
 	}
 
+      if (next_grab)
+        _gdk_display_break_touch_grabs (display, device, next_grab->window);
+
       if ((next_grab == NULL && current_grab->implicit_ungrab) ||
-	  (next_grab != NULL && current_grab->window != next_grab->window))
-	generate_grab_broken_event (GDK_WINDOW (current_grab->window),
+          (next_grab != NULL && current_grab->window != next_grab->window))
+        generate_grab_broken_event (GDK_WINDOW (current_grab->window),
                                     device,
-				    current_grab->implicit,
-				    next_grab? next_grab->window : NULL);
+                                    current_grab->implicit,
+                                    next_grab? next_grab->window : NULL);
 
       /* Remove old grab */
       grabs = g_list_delete_link (grabs, grabs);
