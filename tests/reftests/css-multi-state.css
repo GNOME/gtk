@@ -1,0 +1,9 @@
+GtkLabel:active,
+#reference:insensitive {
+  color: green;
+}
+
+GtkLabel:insensitive,
+#reference:active {
+  color: blue;
+}
