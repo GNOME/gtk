@@ -30,6 +30,9 @@ void           _gtk_style_properties_get                      (GtkStylePropertie
 							       GtkStateFlags            state,
 							       GtkStylePropertyContext *context,
 							       ...);
+void           _gtk_style_properties_set_color_lookup_func    (GtkStyleProperties      *props,
+                                                               GtkSymbolicColorLookupFunc func,
+                                                               gpointer                 data);
 void           _gtk_style_properties_get_valist               (GtkStyleProperties      *props,
 							       GtkStateFlags            state,
 							       GtkStylePropertyContext *context,
