@@ -110,6 +110,7 @@ struct _GtkSettingsPrivate
   GdkScreen *screen;
   GtkCssProvider *theme_provider;
   GtkCssProvider *key_theme_provider;
+  GtkStyleProperties *style;
 };
 
 typedef enum
@@ -1348,19 +1349,19 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_type_class_add_private (class, sizeof (GtkSettingsPrivate));
 }
 
-static GtkStyleProperties *
-gtk_settings_get_style (GtkStyleProvider *provider,
-                        GtkWidgetPath    *path)
+static void
+settings_ensure_style (GtkSettings *settings)
 {
+  GtkSettingsPrivate *priv = settings->priv;
   PangoFontDescription *font_desc;
   gchar *font_name, *color_scheme;
-  GtkSettings *settings;
-  GtkStyleProperties *props;
   gchar **colors;
   guint i;
 
-  settings = GTK_SETTINGS (provider);
-  props = gtk_style_properties_new ();
+  if (priv->style)
+    return;
+
+  priv->style = gtk_style_properties_new ();
 
   g_object_get (settings,
                 "gtk-font-name", &font_name,
@@ -1396,7 +1397,7 @@ gtk_settings_get_style (GtkStyleProvider *provider,
         continue;
 
       color = gtk_symbolic_color_new_literal (&col);
-      gtk_style_properties_map_color (props, name, color);
+      gtk_style_properties_map_color (priv->style, name, color);
       gtk_symbolic_color_unref (color);
     }
 
@@ -1420,7 +1421,7 @@ gtk_settings_get_style (GtkStyleProvider *provider,
     pango_font_description_unset_fields (font_desc,
                                          PANGO_FONT_MASK_STYLE);
 
-  gtk_style_properties_set (props, 0,
+  gtk_style_properties_set (priv->style, 0,
                             "font", font_desc,
                             NULL);
 
@@ -1428,8 +1429,19 @@ gtk_settings_get_style (GtkStyleProvider *provider,
   g_strfreev (colors);
   g_free (color_scheme);
   g_free (font_name);
+}
 
-  return props;
+static GtkStyleProperties *
+gtk_settings_get_style (GtkStyleProvider *provider,
+                        GtkWidgetPath    *path)
+{
+  GtkSettings *settings;
+
+  settings = GTK_SETTINGS (provider);
+
+  settings_ensure_style (settings);
+
+  return g_object_ref (settings->priv->style);
 }
 
 static void
@@ -1458,6 +1470,9 @@ gtk_settings_finalize (GObject *object)
 
   if (priv->key_theme_provider)
     g_object_unref (priv->key_theme_provider);
+
+  if (priv->style)
+    g_object_unref (priv->style);
 
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
@@ -1669,6 +1684,18 @@ gtk_settings_get_property (GObject     *object,
 }
 
 static void
+settings_invalidate_style (GtkSettings *settings)
+{
+  GtkSettingsPrivate *priv = settings->priv;
+
+  if (priv->style)
+    {
+      g_object_unref (priv->style);
+      priv->style = NULL;
+    }
+}
+
+static void
 gtk_settings_notify (GObject    *object,
                      GParamSpec *pspec)
 {
@@ -1690,9 +1717,11 @@ gtk_settings_notify (GObject    *object,
       break;
     case PROP_COLOR_SCHEME:
       settings_update_color_scheme (settings);
+      settings_invalidate_style (settings);
       gtk_style_context_reset_widgets (priv->screen);
       break;
     case PROP_FONT_NAME:
+      settings_invalidate_style (settings);
       gtk_style_context_reset_widgets (priv->screen);
       break;
     case PROP_KEY_THEME_NAME:
