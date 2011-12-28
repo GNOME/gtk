@@ -334,6 +334,9 @@ gboolean   _gdk_window_update_viewable   (GdkWindow      *window);
 
 void       _gdk_window_process_updates_recurse (GdkWindow *window,
                                                 cairo_region_t *expose_region);
+gboolean   _gdk_window_finish_touch_id   (GdkWindow      *window,
+                                          GdkDevice      *device,
+                                          guint           touch_id);
 
 void       _gdk_screen_close             (GdkScreen      *screen);
 
