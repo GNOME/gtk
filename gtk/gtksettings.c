@@ -32,6 +32,7 @@
 #include "gtkwidget.h"
 #include "gtkprivate.h"
 #include "gtkcssproviderprivate.h"
+#include "gtkstyleproviderprivate.h"
 #include "gtksymboliccolor.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
@@ -211,6 +212,7 @@ enum {
 
 /* --- prototypes --- */
 static void     gtk_settings_provider_iface_init (GtkStyleProviderIface *iface);
+static void     gtk_settings_provider_private_init (GtkStyleProviderPrivateInterface *iface);
 
 static void     gtk_settings_finalize            (GObject               *object);
 static void     gtk_settings_get_property        (GObject               *object,
@@ -259,7 +261,9 @@ static guint             class_n_properties = 0;
 
 G_DEFINE_TYPE_EXTENDED (GtkSettings, gtk_settings, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
-                                               gtk_settings_provider_iface_init));
+                                               gtk_settings_provider_iface_init)
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER_PRIVATE,
+                                               gtk_settings_provider_private_init));
 
 /* --- functions --- */
 static void
@@ -1448,6 +1452,40 @@ static void
 gtk_settings_provider_iface_init (GtkStyleProviderIface *iface)
 {
   iface->get_style = gtk_settings_get_style;
+}
+
+static GtkSymbolicColor *
+gtk_settings_style_provider_get_color (GtkStyleProviderPrivate *provider,
+                                       const char              *name)
+{
+  GtkSettings *settings = GTK_SETTINGS (provider);
+
+  settings_ensure_style (settings);
+
+  return _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (settings->priv->style), name);
+}
+
+static void
+gtk_settings_style_provider_lookup (GtkStyleProviderPrivate *provider,
+                                    GtkWidgetPath           *path,
+                                    GtkStateFlags            state,
+                                    GtkCssLookup            *lookup)
+{
+  GtkSettings *settings = GTK_SETTINGS (provider);
+
+  settings_ensure_style (settings);
+
+  _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (settings->priv->style),
+                                      path,
+                                      state,
+                                      lookup);
+}
+
+static void
+gtk_settings_provider_private_init (GtkStyleProviderPrivateInterface *iface)
+{
+  iface->get_color = gtk_settings_style_provider_get_color;
+  iface->lookup = gtk_settings_style_provider_lookup;
 }
 
 static void

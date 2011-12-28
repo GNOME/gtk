@@ -64,6 +64,7 @@ struct _GtkStyleProperty
 };
 
 guint                    _gtk_style_property_get_count     (void);
+const GtkStyleProperty * _gtk_style_property_get           (guint                   id);
 
 const GtkStyleProperty * _gtk_style_property_lookup        (const char             *name);
 

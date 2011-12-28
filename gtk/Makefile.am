@@ -411,6 +411,7 @@ gtk_private_h_sources =		\
 	gtkbuttonprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
 	gtkcontainerprivate.h   \
+	gtkcsslookupprivate.h	\
 	gtkcssparserprivate.h	\
 	gtkcssproviderprivate.h	\
 	gtkcsssectionprivate.h 	\
@@ -468,6 +469,7 @@ gtk_private_h_sources =		\
 	gtkstylecontextprivate.h \
 	gtkstylepropertiesprivate.h \
 	gtkstylepropertyprivate.h \
+	gtkstyleproviderprivate.h \
 	gtksymboliccolorprivate.h \
 	gtktextbtree.h		\
 	gtktextbufferserialize.h \
@@ -582,6 +584,7 @@ gtk_base_c_sources = 		\
 	gtkcombobox.c		\
 	gtkcomboboxtext.c	\
 	gtkcontainer.c		\
+	gtkcsslookup.c		\
 	gtkcssparser.c		\
 	gtkcssprovider.c	\
 	gtkcsssection.c 	\
@@ -708,6 +711,7 @@ gtk_base_c_sources = 		\
 	gtkstyleproperties.c	\
 	gtkstyleproperty.c	\
 	gtkstyleprovider.c	\
+	gtkstyleproviderprivate.c	\
 	gtkswitch.c		\
 	gtksymboliccolor.c	\
 	gtktestutils.c		\

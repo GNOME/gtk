@@ -52,7 +52,7 @@
 static GHashTable *parse_funcs = NULL;
 static GHashTable *print_funcs = NULL;
 static GHashTable *properties = NULL;
-static guint __n_style_properties = 0;
+static GPtrArray *__style_property_array = NULL;
 
 static void
 register_conversion_function (GType             type,
@@ -2244,7 +2244,25 @@ border_color_default_value (GtkStyleProperties *props,
 guint
 _gtk_style_property_get_count (void)
 {
-  return __n_style_properties;
+  return __style_property_array ? __style_property_array->len : 0;
+}
+
+const GtkStyleProperty *
+_gtk_style_property_get (guint id)
+{
+  g_assert (__style_property_array);
+  
+  return g_ptr_array_index (__style_property_array, id);
+}
+
+static void
+_gtk_style_property_generate_id (GtkStyleProperty *node)
+{
+  if (__style_property_array == NULL)
+    __style_property_array = g_ptr_array_new ();
+
+  node->id = __style_property_array->len;
+  g_ptr_array_add (__style_property_array, node);
 }
 
 static void
@@ -3145,7 +3163,6 @@ _gtk_style_property_register (GParamSpec               *pspec,
 
   node = g_slice_new0 (GtkStyleProperty);
   node->flags = flags;
-  node->id = __n_style_properties++;
   node->pspec = pspec;
   node->property_parse_func = property_parse_func;
   node->pack_func = pack_func;
@@ -3154,6 +3171,9 @@ _gtk_style_property_register (GParamSpec               *pspec,
   node->print_func = print_func;
   node->default_value_func = default_value_func;
   node->unset_func = unset_func;
+
+  if (!_gtk_style_property_is_shorthand (node))
+    _gtk_style_property_generate_id (node);
 
   /* pspec owns name */
   g_hash_table_insert (properties, (gchar *)pspec->name, node);

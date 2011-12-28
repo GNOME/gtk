@@ -35,6 +35,7 @@
 #include "gtkborderimageprivate.h"
 
 #include "gtkstylepropertyprivate.h"
+#include "gtkstyleproviderprivate.h"
 #include "gtkintl.h"
 
 #include "gtkwin32themeprivate.h"
@@ -76,15 +77,20 @@ struct _GtkStylePropertiesPrivate
 {
   GHashTable *color_map;
   GHashTable *properties;
+  GtkSymbolicColorLookupFunc color_lookup_func;
+  gpointer color_lookup_data;
 };
 
-static void gtk_style_properties_provider_init (GtkStyleProviderIface *iface);
-static void gtk_style_properties_finalize      (GObject      *object);
+static void gtk_style_properties_provider_init         (GtkStyleProviderIface            *iface);
+static void gtk_style_properties_provider_private_init (GtkStyleProviderPrivateInterface *iface);
+static void gtk_style_properties_finalize              (GObject                          *object);
 
 
 G_DEFINE_TYPE_EXTENDED (GtkStyleProperties, gtk_style_properties, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
-                                               gtk_style_properties_provider_init));
+                                               gtk_style_properties_provider_init)
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER_PRIVATE,
+                                               gtk_style_properties_provider_private_init));
 
 static void
 gtk_style_properties_class_init (GtkStylePropertiesClass *klass)
@@ -291,6 +297,57 @@ static void
 gtk_style_properties_provider_init (GtkStyleProviderIface *iface)
 {
   iface->get_style = gtk_style_properties_get_style;
+}
+
+static GtkSymbolicColor *
+gtk_style_properties_provider_get_color (GtkStyleProviderPrivate *provider,
+                                         const char              *name)
+{
+  return gtk_style_properties_lookup_color (GTK_STYLE_PROPERTIES (provider), name);
+}
+
+static void
+gtk_style_properties_provider_lookup (GtkStyleProviderPrivate *provider,
+                                      GtkWidgetPath           *path,
+                                      GtkStateFlags            state,
+                                      GtkCssLookup            *lookup)
+{
+  GtkStyleProperties *props;
+  GtkStylePropertiesPrivate *priv;
+  GHashTableIter iter;
+  gpointer key, value;
+
+  props = GTK_STYLE_PROPERTIES (provider);
+  priv = props->priv;
+
+  /* Merge symbolic style properties */
+  g_hash_table_iter_init (&iter, priv->properties);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GtkStyleProperty *prop = key;
+      PropertyData *data = value;
+      const GValue *value;
+      guint id;
+
+      id = _gtk_style_property_get_id (prop);
+
+      if (!_gtk_css_lookup_is_missing (lookup, id))
+          continue;
+
+      value = property_data_match_state (data, state);
+      if (value == NULL)
+        continue;
+
+      _gtk_css_lookup_set (lookup, id, value);
+    }
+}
+
+static void
+gtk_style_properties_provider_private_init (GtkStyleProviderPrivateInterface *iface)
+{
+  iface->get_color = gtk_style_properties_provider_get_color;
+  iface->lookup = gtk_style_properties_provider_lookup;
 }
 
 /* Property registration functions */

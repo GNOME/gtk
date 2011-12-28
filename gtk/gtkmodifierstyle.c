@@ -19,6 +19,7 @@
 
 #include "config.h"
 #include "gtkmodifierstyle.h"
+#include "gtkstyleproviderprivate.h"
 #include "gtkintl.h"
 
 typedef struct StylePropertyValue StylePropertyValue;
@@ -36,12 +37,15 @@ enum {
 
 static guint signals [LAST_SIGNAL] = { 0 };
 
-static void gtk_modifier_style_provider_init (GtkStyleProviderIface *iface);
-static void gtk_modifier_style_finalize      (GObject      *object);
+static void gtk_modifier_style_provider_init         (GtkStyleProviderIface            *iface);
+static void gtk_modifier_style_provider_private_init (GtkStyleProviderPrivateInterface *iface);
+static void gtk_modifier_style_finalize              (GObject                          *object);
 
 G_DEFINE_TYPE_EXTENDED (GtkModifierStyle, _gtk_modifier_style, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
-                                               gtk_modifier_style_provider_init));
+                                               gtk_modifier_style_provider_init)
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER_PRIVATE,
+                                               gtk_modifier_style_provider_private_init));
 
 static void
 _gtk_modifier_style_class_init (GtkModifierStyleClass *klass)
@@ -129,6 +133,36 @@ gtk_modifier_style_provider_init (GtkStyleProviderIface *iface)
 {
   iface->get_style = gtk_modifier_style_get_style;
   iface->get_style_property = gtk_modifier_style_get_style_property;
+}
+
+static GtkSymbolicColor *
+gtk_modifier_style_provider_get_color (GtkStyleProviderPrivate *provider,
+                                       const char              *name)
+{
+  GtkModifierStyle *style = GTK_MODIFIER_STYLE (provider);
+
+  return _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (style->priv->style), name);
+}
+
+static void
+gtk_modifier_style_provider_lookup (GtkStyleProviderPrivate *provider,
+                                    GtkWidgetPath           *path,
+                                    GtkStateFlags            state,
+                                    GtkCssLookup            *lookup)
+{
+  GtkModifierStyle *style = GTK_MODIFIER_STYLE (provider);
+
+  _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (style->priv->style),
+                                      path,
+                                      state,
+                                      lookup);
+}
+
+static void
+gtk_modifier_style_provider_private_init (GtkStyleProviderPrivateInterface *iface)
+{
+  iface->get_color = gtk_modifier_style_provider_get_color;
+  iface->lookup = gtk_modifier_style_provider_lookup;
 }
 
 static void
