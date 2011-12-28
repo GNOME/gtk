@@ -1765,7 +1765,7 @@ move_to_current_desktop (GdkWindow *window)
           xclient.format = 32;
 
           xclient.data.l[0] = *current_desktop;
-          xclient.data.l[1] = 0;
+          xclient.data.l[1] = 1; /* source indication */
           xclient.data.l[2] = 0;
           xclient.data.l[3] = 0;
           xclient.data.l[4] = 0;
@@ -1804,7 +1804,7 @@ gdk_x11_window_focus (GdkWindow *window,
       xclient.type = ClientMessage;
       xclient.window = GDK_WINDOW_XID (window);
       xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display,
-									"_NET_ACTIVE_WINDOW");
+                                                                    "_NET_ACTIVE_WINDOW");
       xclient.format = 32;
       xclient.data.l[0] = 1; /* requestor type; we're an app */
       xclient.data.l[1] = timestamp;
@@ -1988,7 +1988,7 @@ gdk_wmspec_change_state (gboolean   add,
   xclient.data.l[0] = add ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
   xclient.data.l[1] = gdk_x11_atom_to_xatom_for_display (display, state1);
   xclient.data.l[2] = gdk_x11_atom_to_xatom_for_display (display, state2);
-  xclient.data.l[3] = 0;
+  xclient.data.l[3] = 1; /* source indication */
   xclient.data.l[4] = 0;
   
   XSendEvent (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XROOTWIN (window), False,
@@ -4015,9 +4015,10 @@ static void
 wmspec_moveresize (GdkWindow *window,
                    gint       direction,
                    GdkDevice *device,
+                   gint       button,
                    gint       root_x,
                    gint       root_y,
-                   guint32    timestamp)     
+                   guint32    timestamp)
 {
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
   
@@ -4035,9 +4036,9 @@ wmspec_moveresize (GdkWindow *window,
   xclient.data.l[0] = root_x;
   xclient.data.l[1] = root_y;
   xclient.data.l[2] = direction;
-  xclient.data.l[3] = 0;
-  xclient.data.l[4] = 0;
-  
+  xclient.data.l[3] = button;
+  xclient.data.l[4] = 1;  /* source indication */
+
   XSendEvent (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XROOTWIN (window), False,
 	      SubstructureRedirectMask | SubstructureNotifyMask,
 	      (XEvent *)&xclient);
@@ -4132,7 +4133,7 @@ wmspec_resize_drag (GdkWindow     *window,
       return;
     }
   
-  wmspec_moveresize (window, direction, device, root_x, root_y, timestamp);
+  wmspec_moveresize (window, direction, device, button, root_x, root_y, timestamp);
 }
 
 static MoveResizeData *
@@ -4617,8 +4618,8 @@ gdk_x11_window_begin_move_drag (GdkWindow *window,
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
 					   gdk_atom_intern_static_string ("_NET_WM_MOVERESIZE")))
-    wmspec_moveresize (window, _NET_WM_MOVERESIZE_MOVE, device, root_x, root_y,
-		       timestamp);
+    wmspec_moveresize (window, _NET_WM_MOVERESIZE_MOVE,
+                       device, button, root_x, root_y, timestamp);
   else
     emulate_move_drag (window, device, button, root_x, root_y, timestamp);
 }
