@@ -697,6 +697,33 @@ _gdk_display_add_device_grab (GdkDisplay       *display,
   return info;
 }
 
+static void
+_gdk_display_break_touch_grabs (GdkDisplay *display,
+                                GdkDevice  *device,
+                                GdkWindow  *new_grab_window)
+{
+  guint i = 0;
+
+  while (i < display->touch_implicit_grabs->len)
+    {
+      GdkTouchGrabInfo *info;
+
+      info = &g_array_index (display->touch_implicit_grabs,
+                             GdkTouchGrabInfo, i);
+
+      if (info->device == device &&
+          info->window != new_grab_window)
+        {
+          generate_grab_broken_event (GDK_WINDOW (info->window),
+                                      device, TRUE, new_grab_window);
+          _gdk_window_finish_touch_id (info->window, device, info->touch_id);
+          g_array_remove_index_fast (display->touch_implicit_grabs, i);
+        }
+      else
+        i++;
+    }
+}
+
 void
 _gdk_display_add_touch_grab (GdkDisplay    *display,
                              GdkDevice     *device,
@@ -1025,12 +1052,15 @@ _gdk_display_device_grab_update (GdkDisplay *display,
 	    next_grab = NULL; /* Actually its not yet active */
 	}
 
+      if (next_grab)
+        _gdk_display_break_touch_grabs (display, device, next_grab->window);
+
       if ((next_grab == NULL && current_grab->implicit_ungrab) ||
-	  (next_grab != NULL && current_grab->window != next_grab->window))
-	generate_grab_broken_event (GDK_WINDOW (current_grab->window),
+          (next_grab != NULL && current_grab->window != next_grab->window))
+        generate_grab_broken_event (GDK_WINDOW (current_grab->window),
                                     device,
-				    current_grab->implicit,
-				    next_grab? next_grab->window : NULL);
+                                    current_grab->implicit,
+                                    next_grab? next_grab->window : NULL);
 
       /* Remove old grab */
       grabs = g_list_delete_link (grabs, grabs);
