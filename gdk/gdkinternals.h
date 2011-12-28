@@ -148,7 +148,13 @@ typedef enum
   /* Following flag is set for events on the event queue during
    * translation and cleared afterwards.
    */
-  GDK_EVENT_PENDING = 1 << 0
+  GDK_EVENT_PENDING = 1 << 0,
+
+  /* The following flag is set for:
+   * 1) touch events emulating pointer events
+   * 2) pointer events being emulated by a touch sequence.
+   */
+  GDK_EVENT_POINTER_EMULATED = 1 << 1
 } GdkEventFlags;
 
 struct _GdkEventPrivate
@@ -272,6 +278,10 @@ GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
 void _gdk_event_filter_unref        (GdkWindow      *window,
 				     GdkEventFilter *filter);
+
+void     _gdk_event_set_pointer_emulated (GdkEvent *event,
+                                          gboolean  emulated);
+gboolean _gdk_event_get_pointer_emulated (GdkEvent *event);
 
 void   _gdk_event_emit               (GdkEvent   *event);
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);
