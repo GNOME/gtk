@@ -68,14 +68,14 @@ struct _GtkComposeTableCompact
   gint n_index_stride;
 };
 
-/* This file contains the table of the compose sequences, 
+/* This file contains the table of the compose sequences,
  * static const guint16 gtk_compose_seqs_compact[] = {}
- * IT is generated from the compose-parse.py script.
+ * It is generated from the compose-parse.py script.
  */
 #include "gtkimcontextsimpleseqs.h"
 
-/* From the values below, the value 23 means the number of different first keysyms 
- * that exist in the Compose file (from Xorg). When running compose-parse.py without 
+/* From the values below, the value 24 means the number of different first keysyms
+ * that exist in the Compose file (from Xorg). When running compose-parse.py without
  * parameters, you get the count that you can put here. Needed when updating the
  * gtkimcontextsimpleseqs.h header file (contains the compose sequences).
  */
@@ -253,7 +253,7 @@ check_table (GtkIMContextSimple    *context_simple,
       guint16 *prev_seq;
 
       /* Back up to the first sequence that matches to make sure
-       * we find the exact match if their is one.
+       * we find the exact match if there is one.
        */
       while (seq > table->data)
 	{
@@ -480,7 +480,8 @@ check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
 
   /* Xorg reuses dead_tilde for the perispomeni diacritic mark.
    * We check if base character belongs to Greek Unicode block,
-   * and if so, we replace tilde with perispomeni. */
+   * and if so, we replace tilde with perispomeni.
+   */
   if (combination_buffer[0] >= 0x390 && combination_buffer[0] <= 0x3FF)
     {
       for (i = 1; i < n_compose; i++ )
@@ -494,7 +495,7 @@ check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
     {
       g_unicode_canonical_ordering (combination_buffer_temp, n_compose);
       combination_utf8_temp = g_ucs4_to_utf8 (combination_buffer_temp, -1, NULL, NULL, NULL);
-      nfc_temp = g_utf8_normalize (combination_utf8_temp, -1, G_NORMALIZE_NFC);	       	
+      nfc_temp = g_utf8_normalize (combination_utf8_temp, -1, G_NORMALIZE_NFC);
 
       if (g_utf8_strlen (nfc_temp, -1) == 1)
         {
@@ -589,9 +590,8 @@ check_algorithmically (GtkIMContextSimple *context_simple,
 	  i--;
 	}
       
-      /* If the buffer normalizes to a single character, 
-       * then modify the order of combination_buffer accordingly, if necessary,
-       * and return TRUE. 
+      /* If the buffer normalizes to a single character, then modify the order
+       * of combination_buffer accordingly, if necessary, and return TRUE.
        */
       if (check_normalize_nfc (combination_buffer, n_compose))
         {
@@ -616,8 +616,8 @@ check_algorithmically (GtkIMContextSimple *context_simple,
 /* In addition to the table-driven sequences, we allow Unicode hex
  * codes to be entered. The method chosen here is similar to the
  * one recommended in ISO 14755, but not exactly the same, since we
- * don't want to steal 16 valuable key combinations. 
- * 
+ * don't want to steal 16 valuable key combinations.
+ *
  * A hex Unicode sequence must be started with Ctrl-Shift-U, followed
  * by a sequence of hex digits entered with Ctrl-Shift still held.
  * Releasing one of the modifiers or pressing space while the modifiers
@@ -668,7 +668,7 @@ check_hex (GtkIMContextSimple *context_simple,
 
   n = strtoul (str->str, &nptr, 16);
 
-  /* if strtoul fails it probably means non-latin digits were used;
+  /* If strtoul fails it probably means non-latin digits were used;
    * we should in principle handle that, but we probably don't.
    */
   if (nptr - str->str < str->len)
