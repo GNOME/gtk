@@ -1336,11 +1336,14 @@ rewrite_event_for_window (GdkEvent  *event,
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_PRESS:
+    case GDK_TOUCH_RELEASE:
       rewrite_events_translate (event->any.window,
                                 new_window,
                                 &event->button.x, &event->button.y);
       break;
     case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_MOTION:
       rewrite_events_translate (event->any.window,
                                 new_window,
                                 &event->motion.x, &event->motion.y);
@@ -1390,6 +1393,9 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_PROXIMITY_OUT:
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
+    case GDK_TOUCH_PRESS:
+    case GDK_TOUCH_RELEASE:
+    case GDK_TOUCH_MOTION:
       display = gdk_window_get_display (event->any.window);
       device = gdk_event_get_device (event);
 
