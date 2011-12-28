@@ -49,6 +49,9 @@
  * The entry itself can be accessed by calling gtk_bin_get_child() on the
  * combo box.
  *
+ * You should not call gtk_combo_box_set_model() or attempt to pack more cells
+ * into this combo box via its GtkCellLayout interface.
+ *
  * <refsect2 id="GtkComboBoxText-BUILDER-UI">
  * <title>GtkComboBoxText as GtkBuildable</title>
  * <para>
@@ -99,10 +102,14 @@ gtk_combo_box_text_constructor (GType                  type,
                                 guint                  n_construct_properties,
                                 GObjectConstructParam *construct_properties)
 {
-  GObject            *object;
+  GObject    *object;
+  const gint text_column = 0;
 
   object = G_OBJECT_CLASS (gtk_combo_box_text_parent_class)->constructor
     (type, n_construct_properties, construct_properties);
+
+  gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (object), text_column);
+  gtk_combo_box_set_id_column (GTK_COMBO_BOX (object), 1);
 
   if (!gtk_combo_box_get_has_entry (GTK_COMBO_BOX (object)))
     {
@@ -111,7 +118,7 @@ gtk_combo_box_text_constructor (GType                  type,
       cell = gtk_cell_renderer_text_new ();
       gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (object), cell, TRUE);
       gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (object), cell,
-                                      "text", 0,
+                                      "text", text_column,
                                       NULL);
     }
 
@@ -309,7 +316,7 @@ gtk_combo_box_text_buildable_custom_finished (GtkBuildable *buildable,
  * gtk_combo_box_text_new:
  *
  * Creates a new #GtkComboBoxText, which is a #GtkComboBox just displaying
- * strings. See gtk_combo_box_entry_new_with_text().
+ * strings.
  *
  * Return value: A new #GtkComboBoxText
  *
@@ -319,8 +326,6 @@ GtkWidget *
 gtk_combo_box_text_new (void)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX_TEXT,
-                       "entry-text-column", 0,
-                       "id-column", 1,
                        NULL);
 }
 
@@ -339,8 +344,6 @@ gtk_combo_box_text_new_with_entry (void)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX_TEXT,
                        "has-entry", TRUE,
-                       "entry-text-column", 0,
-                       "id-column", 1,
                        NULL);
 }
 
