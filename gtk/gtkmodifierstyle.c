@@ -21,10 +21,9 @@
 #include "gtkmodifierstyle.h"
 #include "gtkintl.h"
 
-typedef struct GtkModifierStylePrivate GtkModifierStylePrivate;
 typedef struct StylePropertyValue StylePropertyValue;
 
-struct GtkModifierStylePrivate
+struct _GtkModifierStylePrivate
 {
   GtkStyleProperties *style;
   GHashTable *color_properties;
