@@ -21,6 +21,8 @@
 
 #include "gtkcsslookupprivate.h"
 
+#include "gtkcsstypesprivate.h"
+#include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkstylepropertiesprivate.h"
 
@@ -120,13 +122,95 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
 
   for (i = 0; i < n; i++)
     {
-      if (lookup->values[i] == NULL)
-        continue;
+      const GtkStyleProperty *prop = _gtk_style_property_get (i);
+      const GValue *result;
 
-      _gtk_style_properties_set_property_by_property (props,
-                                                      _gtk_style_property_get (i),
-                                                      0,
-                                                      lookup->values[i]);
+      /* http://www.w3.org/TR/css3-cascade/#cascade
+       * Then, for every element, the value for each property can be found
+       * by following this pseudo-algorithm:
+       * 1) Identify all declarations that apply to the element
+       */
+      if (lookup->values[i] != NULL)
+        {
+          /* 2) If the cascading process (described below) yields a winning
+           * declaration and the value of the winning declaration is not
+           * ‘initial’ or ‘inherit’, the value of the winning declaration
+           * becomes the specified value.
+           */
+          if (!G_VALUE_HOLDS (lookup->values[i], GTK_TYPE_CSS_SPECIAL_VALUE))
+            {
+              result = lookup->values[i];
+            }
+          else
+            {
+              switch (g_value_get_enum (lookup->values[i]))
+                {
+                case GTK_CSS_INHERIT:
+                  /* 3) if the value of the winning declaration is ‘inherit’,
+                   * the inherited value (see below) becomes the specified value.
+                   */
+                  result = NULL;
+                  break;
+                case GTK_CSS_INITIAL:
+                  /* if the value of the winning declaration is ‘initial’,
+                   * the initial value (see below) becomes the specified value.
+                   */
+                  result = _gtk_style_property_get_initial_value (prop);
+                  break;
+                default:
+                  /* This is part of (2) above */
+                  result = lookup->values[i];
+                  break;
+                }
+            }
+        }
+      else
+        {
+          if (_gtk_style_property_is_inherit (prop))
+            {
+              /* 4) if the property is inherited, the inherited value becomes
+               * the specified value.
+               */
+              result = NULL;
+            }
+          else
+            {
+              /* 5) Otherwise, the initial value becomes the specified value.
+               */
+              result = _gtk_style_property_get_initial_value (prop);
+            }
+        }
+
+      if (result)
+        {
+          _gtk_style_properties_set_property_by_property (props,
+                                                          prop,
+                                                          0,
+                                                          result);
+        }
+      else if (parent == NULL)
+        {
+          /* If the ‘inherit’ value is set on the root element, the property is
+           * assigned its initial value. */
+          _gtk_style_properties_set_property_by_property (props,
+                                                          prop,
+                                                          0,
+                                                          _gtk_style_property_get_initial_value (prop));
+        }
+      else
+        {
+          GValue value = { 0, };
+          /* Set NULL here and do the inheritance upon lookup? */
+          gtk_style_context_get_property (parent,
+                                          prop->pspec->name,
+                                          gtk_style_context_get_state (parent),
+                                          &value);
+          _gtk_style_properties_set_property_by_property (props,
+                                                          prop,
+                                                          0,
+                                                          &value);
+          g_value_unset (&value);
+        }
     }
 
   return props;
