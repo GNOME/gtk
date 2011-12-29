@@ -740,6 +740,10 @@ void          gtk_style_context_set_path     (GtkStyleContext *context,
                                               GtkWidgetPath   *path);
 const GtkWidgetPath * gtk_style_context_get_path (GtkStyleContext *context);
 
+void          gtk_style_context_set_parent   (GtkStyleContext *context,
+                                              GtkStyleContext *parent);
+GtkStyleContext *gtk_style_context_get_parent (GtkStyleContext *context);
+
 GList *  gtk_style_context_list_classes (GtkStyleContext *context);
 
 void     gtk_style_context_add_class    (GtkStyleContext *context,

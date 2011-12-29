@@ -368,6 +368,7 @@ struct _GtkStyleContextPrivate
   GList *providers;
   GList *providers_last;
 
+  GtkStyleContext *parent;
   GtkWidgetPath *widget_path;
   GHashTable *style_data;
   GSList *info_stack;
@@ -388,7 +389,8 @@ struct _GtkStyleContextPrivate
 enum {
   PROP_0,
   PROP_SCREEN,
-  PROP_DIRECTION
+  PROP_DIRECTION,
+  PROP_PARENT
 };
 
 enum {
@@ -450,6 +452,21 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                                                       GTK_TYPE_TEXT_DIRECTION,
                                                       GTK_TEXT_DIR_LTR,
                                                       GTK_PARAM_READWRITE));
+  /**
+   * GtkStyleContext:parent:
+   *
+   * Sets or gets the style context's parent. See gtk_style_context_set_parent()
+   * for details.
+   *
+   * Since: 3.4
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_PARENT,
+                                   g_param_spec_object ("parent",
+                                                        P_("Parent"),
+                                                        P_("The parent style context"),
+                                                        GTK_TYPE_STYLE_CONTEXT,
+                                                        GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkStyleContextPrivate));
 }
@@ -807,6 +824,8 @@ gtk_style_context_finalize (GObject *object)
   style_context = GTK_STYLE_CONTEXT (object);
   priv = style_context->priv;
 
+  gtk_style_context_set_parent (style_context, NULL);
+
   if (priv->widget_path)
     gtk_widget_path_free (priv->widget_path);
 
@@ -849,6 +868,10 @@ gtk_style_context_impl_set_property (GObject      *object,
       gtk_style_context_set_direction (style_context,
                                        g_value_get_enum (value));
       break;
+    case PROP_PARENT:
+      gtk_style_context_set_parent (style_context,
+                                    g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -874,6 +897,9 @@ gtk_style_context_impl_get_property (GObject    *object,
       break;
     case PROP_DIRECTION:
       g_value_set_enum (value, priv->direction);
+      break;
+    case PROP_PARENT:
+      g_value_set_object (value, priv->parent);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1659,6 +1685,66 @@ gtk_style_context_get_path (GtkStyleContext *context)
 
   priv = context->priv;
   return priv->widget_path;
+}
+
+/**
+ * gtk_style_context_set_parent:
+ * @context: a #GtkStyleContext
+ * @parent: (allow-none): the new parent or %NULL
+ *
+ * Sets the parent style context for @context. The parent style
+ * context is used to implement
+ * <ulink url="http://www.w3.org/TR/css3-cascade/#inheritance>
+ * inheritance</ulink> of properties.
+ *
+ * If you are using a #GtkStyleContext returned from
+ * gtk_widget_get_style_context(), the parent will be set for you.
+ *
+ * Since: 3.4
+ **/
+void
+gtk_style_context_set_parent (GtkStyleContext *context,
+                              GtkStyleContext *parent)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (parent == NULL || GTK_IS_STYLE_CONTEXT (parent));
+
+  priv = context->priv;
+
+  if (priv->parent == parent)
+    return;
+
+  if (parent)
+    g_object_ref (parent);
+
+  if (priv->parent)
+    g_object_unref (priv->parent);
+
+  priv->parent = parent;
+
+  g_object_notify (G_OBJECT (context), "parent");
+  gtk_style_context_invalidate (context);
+}
+
+/**
+ * gtk_style_context_get_parent:
+ * @context: a #GtkStyleContext
+ *
+ * Gets the parent context set via gtk_style_context_set_parent().
+ * See that function for details.
+ *
+ * Returns: (transfer none): the parent context or %NULL
+ *
+ * Since: 3.4
+ **/
+GtkStyleContext *
+gtk_style_context_get_parent (GtkStyleContext *context)
+{
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  return context->priv->parent;
 }
 
 /**
