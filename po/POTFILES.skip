@@ -37,6 +37,7 @@ tests/reftests/css-match-style-property-order.ref.ui
 tests/reftests/css-match-style-property-order.ui
 tests/reftests/entry-progress-coloring.ref.ui
 tests/reftests/entry-progress-coloring.ui
+tests/reftests/grid-empty-with-spacing.ui
 tests/reftests/grid-wfh.ref.ui
 tests/reftests/grid-wfh.ui
 tests/reftests/label-shadows.ref.ui
