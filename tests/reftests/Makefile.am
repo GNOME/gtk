@@ -130,6 +130,9 @@ EXTRA_DIST += \
 	grid-spacing3.css \
 	grid-spacing3.ref.ui \
 	grid-spacing3.ui \
+	inherit-and-initial.css \
+	inherit-and-initial.ref.ui \
+	inherit-and-initial.ui \
 	label-attribute-preference.css \
 	label-attribute-preference.ref.ui \
 	label-attribute-preference.ui \
