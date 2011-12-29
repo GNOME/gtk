@@ -107,6 +107,8 @@ EXTRA_DIST += \
 	entry-progress-coloring.ref.ui \
 	entry-progress-coloring.ui \
 	green-20x20.png \
+	grid-empty-with-spacing.ref.ui \
+	grid-empty-with-spacing.ui \
 	grid-expand.css \
 	grid-expand.ref.ui \
 	grid-expand.ui \
