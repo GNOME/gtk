@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 typedef enum {
   GTK_CSS_INHERIT,
   GTK_CSS_INITIAL,
-  GTK_CSS_CURRENT_COLOR
+  GTK_CSS_CURRENT_COLOR /*< nick=currentColor >*/
 } GtkCssSpecialValue;
 
 typedef enum {

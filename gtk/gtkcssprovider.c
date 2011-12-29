@@ -1533,6 +1533,10 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
       if (ruleset->style == NULL)
         continue;
 
+      if (!_gtk_bitmask_intersects (_gtk_css_lookup_get_missing (lookup),
+                                    ruleset->set_styles))
+        continue;
+
       if (!gtk_css_ruleset_matches (ruleset, path, state))
         continue;
 

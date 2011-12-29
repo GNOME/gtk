@@ -2326,7 +2326,30 @@ _gtk_style_property_parse_value (const GtkStyleProperty *property,
 
   if (property)
     {
-      if (_gtk_css_parser_try (parser, "none", TRUE))
+      if (_gtk_css_parser_try (parser, "initial", TRUE))
+        {
+          /* the initial value can be explicitly specified with the
+           * ‘initial’ keyword which all properties accept.
+           */
+          g_value_unset (value);
+          g_value_init (value, GTK_TYPE_CSS_SPECIAL_VALUE);
+          g_value_set_enum (value, GTK_CSS_INITIAL);
+          return TRUE;
+        }
+      else if (_gtk_css_parser_try (parser, "inherit", TRUE))
+        {
+          /* All properties accept the ‘inherit’ value which
+           * explicitly specifies that the value will be determined
+           * by inheritance. The ‘inherit’ value can be used to
+           * strengthen inherited values in the cascade, and it can
+           * also be used on properties that are not normally inherited.
+           */
+          g_value_unset (value);
+          g_value_init (value, GTK_TYPE_CSS_SPECIAL_VALUE);
+          g_value_set_enum (value, GTK_CSS_INHERIT);
+          return TRUE;
+        }
+      else if (_gtk_css_parser_try (parser, "none", TRUE))
         {
           /* Insert the default value, so it has an opportunity
            * to override other style providers when merged
@@ -2383,7 +2406,9 @@ _gtk_style_property_print_value (const GtkStyleProperty *property,
 
   css_string_funcs_init ();
 
-  if (property)
+  if (G_VALUE_HOLDS (value, GTK_TYPE_CSS_SPECIAL_VALUE))
+    func = enum_value_print;
+  else if (property)
     func = property->print_func;
   else
     func = NULL;
