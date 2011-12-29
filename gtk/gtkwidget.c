@@ -3785,6 +3785,8 @@ gtk_widget_unparent (GtkWidget *widget)
 
   /* Unset window-unfocused since we are no longer inside a toplevel window */
   gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_WINDOW_UNFOCUSED);
+  if (priv->context)
+    gtk_style_context_set_parent (priv->context, NULL);
 
   g_signal_emit (widget, widget_signals[PARENT_SET], 0, old_parent);
   if (toplevel)
@@ -7815,6 +7817,9 @@ gtk_widget_set_parent (GtkWidget *widget,
   data.operation = STATE_CHANGE_REPLACE;
   gtk_widget_propagate_state (widget, &data);
 
+  if (priv->context)
+    gtk_style_context_set_parent (priv->context,
+                                  gtk_widget_get_style_context (parent));
   gtk_widget_reset_style (widget);
 
   g_signal_emit (widget, widget_signals[PARENT_SET], 0, NULL);
@@ -13867,6 +13872,9 @@ gtk_widget_get_style_context (GtkWidget *widget)
         gtk_style_context_set_screen (priv->context, screen);
 
       gtk_style_context_set_path (priv->context, path);
+      if (priv->parent)
+        gtk_style_context_set_parent (priv->context,
+                                      gtk_widget_get_style_context (priv->parent));
     }
 
   return widget->priv->context;
