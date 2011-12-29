@@ -34,6 +34,7 @@
 #include "gtkcsstypesprivate.h"
 #include "gtkborderimageprivate.h"
 
+#include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtkintl.h"
@@ -537,9 +538,10 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties     *props,
   if (style_prop->pspec->value_type == GDK_TYPE_RGBA ||
       style_prop->pspec->value_type == GDK_TYPE_COLOR)
     {
-      /* Allow GtkSymbolicColor as well */
+      /* Allow GtkSymbolicColor and special values as well */
       g_return_if_fail (value_type == GDK_TYPE_RGBA ||
                         value_type == GDK_TYPE_COLOR ||
+                        value_type == GTK_TYPE_CSS_SPECIAL_VALUE ||
                         value_type == GTK_TYPE_SYMBOLIC_COLOR);
     }
   else if (style_prop->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN)
