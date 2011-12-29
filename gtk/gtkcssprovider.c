@@ -963,8 +963,6 @@ struct GtkCssRuleset
   GHashTable *widget_style;
   GHashTable *style;
   GtkBitmask *set_styles;
-
-  guint has_inherit :1;
 };
 
 struct _GtkCssScanner
@@ -1214,7 +1212,6 @@ gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
     }
 
   _gtk_bitmask_set (ruleset->set_styles, _gtk_style_property_get_id (prop), TRUE);
-  ruleset->has_inherit |= _gtk_style_property_is_inherit (prop);
   g_hash_table_insert (ruleset->style, (gpointer) prop, value);
 }
 
