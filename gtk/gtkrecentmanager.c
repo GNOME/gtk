@@ -850,6 +850,8 @@ gtk_recent_manager_add_item_query_info (GObject      *source_object,
  *   to the recently used resources list
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.4: Replaced by gtk_recent_manager_add_activity.
  */
 gboolean
 gtk_recent_manager_add_item (GtkRecentManager  *manager,
@@ -905,6 +907,8 @@ gtk_recent_manager_add_item (GtkRecentManager  *manager,
  * recently used resources list, %FALSE otherwise.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.4: Replaced by gtk_recent_manager_add_activity.
  */
 gboolean
 gtk_recent_manager_add_full (GtkRecentManager     *manager,
@@ -1020,9 +1024,9 @@ gtk_recent_manager_add_full (GtkRecentManager     *manager,
  * Since: FIXME
  */
 void
-gtk_recent_manager_add_activity (GtkRecentManager  *manager,
-			     const gchar                       type,
-                 const GtkRecentActivityData       *data)
+gtk_recent_manager_add_activity (GtkRecentManager        *manager,
+			     const enum GtkRecentManagerActivityType type,
+                 const GtkRecentActivityData             *data)
 {
   GtkRecentManagerPrivate *priv;
 

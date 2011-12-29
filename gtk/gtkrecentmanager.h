@@ -216,9 +216,9 @@ gboolean          gtk_recent_manager_add_item       (GtkRecentManager     *manag
 gboolean          gtk_recent_manager_add_full       (GtkRecentManager     *manager,
 						     const gchar          *uri,
 						     const GtkRecentData  *data);
-void              gtk_recent_manager_add_activity  (GtkRecentManager     *manager,
-						     const gchar type, // GtkRecentManagerActivityType
-						     const GtkRecentActivityData *recent_data);
+void              gtk_recent_manager_add_activity  (GtkRecentManager      *manager,
+						     const enum GtkRecentManagerActivityType      type,
+						     const GtkRecentActivityData                  *recent_data);
 gboolean          gtk_recent_manager_remove_item    (GtkRecentManager     *manager,
 						     const gchar          *uri,
 						     GError              **error);
