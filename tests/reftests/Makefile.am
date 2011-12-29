@@ -85,6 +85,9 @@ EXTRA_DIST += \
 	css-match-inherit.css \
 	css-match-inherit.ref.ui \
 	css-match-inherit.ui \
+	css-match-inherit-different-state.css \
+	css-match-inherit-different-state.ref.ui \
+	css-match-inherit-different-state.ui \
 	css-match-name.css \
 	css-match-name.ref.ui \
 	css-match-name.ui \
