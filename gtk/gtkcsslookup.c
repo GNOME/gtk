@@ -94,6 +94,8 @@ _gtk_css_lookup_set (GtkCssLookup *lookup,
 /**
  * _gtk_css_lookup_resolve:
  * @lookup: the lookup
+ * @parent: the parent properties to look up inherited values from or %NULL
+ *     if none
  *
  * Resolves the current lookup into a styleproperties object. This is done
  * by converting from the "winning declaration" to the "computed value".
@@ -104,12 +106,14 @@ _gtk_css_lookup_set (GtkCssLookup *lookup,
  * Returns: a new #GtkStyleProperties
  **/
 GtkStyleProperties *
-_gtk_css_lookup_resolve (GtkCssLookup *lookup)
+_gtk_css_lookup_resolve (GtkCssLookup    *lookup,
+                         GtkStyleContext *parent)
 {
   GtkStyleProperties *props;
   guint i, n;
 
   g_return_val_if_fail (lookup != NULL, NULL);
+  g_return_val_if_fail (parent == NULL || GTK_IS_STYLE_CONTEXT (parent), NULL);
 
   n = _gtk_style_property_get_count ();
   props = gtk_style_properties_new ();

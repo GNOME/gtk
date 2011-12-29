@@ -22,6 +22,7 @@
 
 #include <glib-object.h>
 #include "gtk/gtkbitmaskprivate.h"
+#include "gtk/gtkstylecontext.h"
 #include "gtk/gtkstyleproperties.h"
 
 
@@ -38,7 +39,8 @@ gboolean                _gtk_css_lookup_is_missing              (const GtkCssLoo
 void                    _gtk_css_lookup_set                     (GtkCssLookup       *lookup,
                                                                  guint               id,
                                                                  const GValue       *value);
-GtkStyleProperties *    _gtk_css_lookup_resolve                 (GtkCssLookup       *lookup);
+GtkStyleProperties *    _gtk_css_lookup_resolve                 (GtkCssLookup       *lookup,
+                                                                 GtkStyleContext    *context);
 
 
 G_END_DECLS
