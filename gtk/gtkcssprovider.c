@@ -1217,11 +1217,10 @@ gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
 
 static gboolean
 gtk_css_ruleset_matches (GtkCssRuleset *ruleset,
-                         GtkWidgetPath *path)
+                         GtkWidgetPath *path,
+                         GtkStateFlags  state)
 {
-  return _gtk_css_selector_matches (ruleset->selector,
-                                    path,
-                                    gtk_widget_path_length (path));
+  return _gtk_css_selector_matches (ruleset->selector, path, state);
 }
 
 static void
@@ -1415,7 +1414,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
       if (ruleset->style == NULL)
         continue;
 
-      if (!gtk_css_ruleset_matches (ruleset, path))
+      if (!gtk_css_ruleset_matches (ruleset, path, 0))
         continue;
 
       g_hash_table_iter_init (&iter, ruleset->style);
@@ -1456,24 +1455,18 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
   for (i = priv->rulesets->len - 1; i >= 0; i--)
     {
       GtkCssRuleset *ruleset;
-      GtkStateFlags selector_state;
 
       ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
 
       if (ruleset->widget_style == NULL)
         continue;
 
-      if (!gtk_css_ruleset_matches (ruleset, path))
+      if (!gtk_css_ruleset_matches (ruleset, path, state))
         continue;
 
-      selector_state = _gtk_css_selector_get_state_flags (ruleset->selector);
       val = g_hash_table_lookup (ruleset->widget_style, prop_name);
 
-      if (val &&
-          (selector_state == 0 ||
-           selector_state == state ||
-           ((selector_state & state) != 0 &&
-            (selector_state & ~(state)) == 0)))
+      if (val)
         {
           GtkCssScanner *scanner;
 
@@ -1534,18 +1527,13 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
       GtkCssRuleset *ruleset;
       GHashTableIter iter;
       gpointer key, val;
-      GtkStateFlags selector_state;
 
       ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
 
       if (ruleset->style == NULL)
         continue;
 
-      selector_state = _gtk_css_selector_get_state_flags (ruleset->selector);
-      if ((selector_state & state) != selector_state)
-        continue;
-
-      if (!gtk_css_ruleset_matches (ruleset, path))
+      if (!gtk_css_ruleset_matches (ruleset, path, state))
         continue;
 
       g_hash_table_iter_init (&iter, ruleset->style);
