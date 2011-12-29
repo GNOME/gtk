@@ -82,6 +82,8 @@ void                     _gtk_style_property_default_value (const GtkStyleProper
                                                             GtkStyleProperties     *properties,
                                                             GtkStateFlags           state,
                                                             GValue                 *value);
+const GValue *           _gtk_style_property_get_initial_value
+                                                           (const GtkStyleProperty *property);
 
 void                     _gtk_style_property_resolve       (const GtkStyleProperty *property,
                                                             GtkStyleProperties     *properties,

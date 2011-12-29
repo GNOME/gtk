@@ -2605,6 +2605,14 @@ _gtk_style_property_resolve (const GtkStyleProperty *property,
   g_value_copy (val, val_out);
 }
 
+const GValue *
+_gtk_style_property_get_initial_value (const GtkStyleProperty *property)
+{
+  g_return_val_if_fail (property != NULL, NULL);
+
+  return &property->initial_value;
+}
+
 gboolean
 _gtk_style_property_is_shorthand  (const GtkStyleProperty *property)
 {
