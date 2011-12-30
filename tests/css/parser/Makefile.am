@@ -295,4 +295,7 @@ EXTRA_DIST += \
 	test.png \
 	value-inherit.css \
 	value-intial.css \
+	value-none.css \
+	value-none.errors \
+	value-none.ref.css \
 	widget-style-property.css
