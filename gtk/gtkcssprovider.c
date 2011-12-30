@@ -3293,6 +3293,8 @@ gtk_css_provider_print_colors (GHashTable *colors,
  * this @provider.
  *
  * Returns: a new string representing the @provider.
+ *
+ * Since: 3.2
  **/
 char *
 gtk_css_provider_to_string (GtkCssProvider *provider)
