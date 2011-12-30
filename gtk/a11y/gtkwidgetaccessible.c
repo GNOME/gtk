@@ -197,20 +197,21 @@ find_label (GtkWidget *widget)
   GList *labels;
   GtkWidget *label;
   GtkWidget *temp_widget;
+  GList *ptr;
 
   labels = gtk_widget_list_mnemonic_labels (widget);
   label = NULL;
-  if (labels)
+  ptr = labels;
+  while (ptr)
     {
-      if (labels->data)
+      if (ptr->data && gtk_widget_get_visible (GTK_WIDGET (ptr->data)))
         {
-          if (labels->next)
-            g_warning ("Widget (%s) has more than one label", G_OBJECT_TYPE_NAME (widget));
-          else
-            label = labels->data;
+          label = ptr->data;
+          break;
         }
-      g_list_free (labels);
+      ptr = ptr->next;
     }
+  g_list_free (labels);
 
   /* Ignore a label within a button; bug #136602 */
   if (label && GTK_IS_BUTTON (widget))
