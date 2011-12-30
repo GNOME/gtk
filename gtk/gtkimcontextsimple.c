@@ -270,7 +270,6 @@ check_table (GtkIMContextSimple    *context_simple,
 	  gunichar value = 
 	    0x10000 * seq[table->max_seq_len] + seq[table->max_seq_len + 1];
 
-	  
 	  /* We found a tentative match. See if there are any longer
 	   * sequences containing this subsequence
 	   */
@@ -281,7 +280,7 @@ check_table (GtkIMContextSimple    *context_simple,
 		{
 		  priv->tentative_match = value;
 		  priv->tentative_match_len = n_compose;
-		
+
 		  g_signal_emit_by_name (context_simple, "preedit-changed");
 
 		  return TRUE;
@@ -368,26 +367,30 @@ check_win32_special_case_after_compact_match (GtkIMContextSimple    *context_sim
 #endif
 
 static gboolean
-check_compact_table (GtkIMContextSimple    *context_simple,
-	     const GtkComposeTableCompact *table,
-	     gint                   n_compose)
+check_compact_table (GtkIMContextSimple           *context_simple,
+                     const GtkComposeTableCompact *table,
+                     gint                          n_compose)
 {
   GtkIMContextSimplePrivate *priv = context_simple->priv;
   gint row_stride;
   guint16 *seq_index;
-  guint16 *seq; 
+  guint16 *seq;
   gint i;
+  gboolean match;
+  gunichar value;
 
   /* Will never match, if the sequence in the compose buffer is longer
    * than the sequences in the table.  Further, compare_seq (key, val)
-   * will overrun val if key is longer than val. */
+   * will overrun val if key is longer than val.
+   */
   if (n_compose > table->max_seq_len)
     return FALSE;
 
   seq_index = bsearch (priv->compose_buffer,
-		 table->data, table->n_index_size,
-		 sizeof (guint16) *  table->n_index_stride, 
-		 compare_seq_index);
+                       table->data,
+                       table->n_index_size,
+                       sizeof (guint16) * table->n_index_stride,
+                       compare_seq_index);
 
   if (!seq_index)
     {
@@ -403,44 +406,47 @@ check_compact_table (GtkIMContextSimple    *context_simple,
 
   GTK_NOTE (MISC, g_print ("compact: %d ", *seq_index));
   seq = NULL;
+  match = FALSE;
 
-  for (i = n_compose-1; i < table->max_seq_len; i++)
+  for (i = n_compose - 1; i < table->max_seq_len; i++)
     {
       row_stride = i + 1;
 
-      if (seq_index[i+1] - seq_index[i] > 0)
+      if (seq_index[i + 1] - seq_index[i] > 0)
         {
-	  seq = bsearch (priv->compose_buffer + 1,
-		 table->data + seq_index[i], (seq_index[i+1] - seq_index[i]) / row_stride,
-		 sizeof (guint16) *  row_stride, 
-		 compare_seq);
+          seq = bsearch (priv->compose_buffer + 1,
+                         table->data + seq_index[i],
+                         (seq_index[i + 1] - seq_index[i]) / row_stride,
+                         sizeof (guint16) *  row_stride,
+                         compare_seq);
 
-	  if (seq)
+          if (seq)
             {
               if (i == n_compose - 1)
-                break;
+                {
+                  value = seq[row_stride - 1];
+                  match = TRUE;
+                }
               else
                 {
+                  if (match)
+                    {
+                      GTK_NOTE (MISC, g_print ("tentative match U+%04X ", value));
+                      priv->tentative_match = value;
+                      priv->tentative_match_len = n_compose;
+                    }
+
                   g_signal_emit_by_name (context_simple, "preedit-changed");
 
-		  GTK_NOTE (MISC, g_print ("yes\n"));
-      		  return TRUE;
+                  GTK_NOTE (MISC, g_print ("yes\n"));
+                  return TRUE;
                 }
              }
         }
     }
 
-  if (!seq)
+  if (match)
     {
-      GTK_NOTE (MISC, g_print ("no\n"));
-      return FALSE;
-    }
-  else
-    {
-      gunichar value;
-
-      value = seq[row_stride - 1];
-
       gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
 #ifdef G_OS_WIN32
       check_win32_special_case_after_compact_match (context_simple, n_compose, value);
@@ -837,6 +843,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  if (priv->tentative_match &&
 	      g_unichar_validate (priv->tentative_match))
 	    {
+g_print ("committing tentative match on release\n");
 	      gtk_im_context_simple_commit_char (context, priv->tentative_match);
 	      priv->compose_buffer[0] = 0;
 
