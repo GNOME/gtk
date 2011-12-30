@@ -2366,14 +2366,6 @@ _gtk_style_property_parse_value (const GtkStyleProperty *property,
           g_value_set_enum (value, GTK_CSS_INHERIT);
           return TRUE;
         }
-      else if (_gtk_css_parser_try (parser, "none", TRUE))
-        {
-          /* Insert the default value, so it has an opportunity
-           * to override other style providers when merged
-           */
-          g_param_value_set_default (property->pspec, value);
-          return TRUE;
-        }
       else if (property->property_parse_func)
         {
           GError *error = NULL;

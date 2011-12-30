@@ -31,34 +31,30 @@ h {
 }
 
 i {
-  border-radius: none;
-}
-
-j {
   border-radius: 1.125 / 5.5;
 }
 
-k {
+j {
   border-radius: 1 2.25 / 5;
 }
 
-l {
+k {
   border-radius: 1 2 3.5 / 5.5 6.75;
 }
 
-m {
+l {
   border-radius: 0 / 0;
 }
 
-n {
+m {
   border-radius: 0;
 }
 
-o {
+n {
   border-radius: 0 / 1;
 }
 
-p {
+o {
   border-radius: 1 / 0;
 }
 

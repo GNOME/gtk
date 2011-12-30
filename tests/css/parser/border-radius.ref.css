@@ -55,31 +55,31 @@ h {
 }
 
 i {
-  border-bottom-left-radius: none;
-  border-bottom-right-radius: none;
-  border-top-left-radius: none;
-  border-top-right-radius: none;
-}
-
-j {
   border-bottom-left-radius: 1.125 5.5;
   border-bottom-right-radius: 1.125 5.5;
   border-top-left-radius: 1.125 5.5;
   border-top-right-radius: 1.125 5.5;
 }
 
-k {
+j {
   border-bottom-left-radius: 2.25 5;
   border-bottom-right-radius: 1 5;
   border-top-left-radius: 1 5;
   border-top-right-radius: 2.25 5;
 }
 
-l {
+k {
   border-bottom-left-radius: 2 6.75;
   border-bottom-right-radius: 3.5 5.5;
   border-top-left-radius: 1 5.5;
   border-top-right-radius: 2 6.75;
+}
+
+l {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 m {
@@ -90,20 +90,13 @@ m {
 }
 
 n {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
-o {
   border-bottom-left-radius: 0 1;
   border-bottom-right-radius: 0 1;
   border-top-left-radius: 0 1;
   border-top-right-radius: 0 1;
 }
 
-p {
+o {
   border-bottom-left-radius: 1 0;
   border-bottom-right-radius: 1 0;
   border-top-left-radius: 1 0;
