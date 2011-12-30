@@ -52,6 +52,8 @@
 #include "gtktypebuiltins.h"
 #include "a11y/gtkwindowaccessible.h"
 
+#include "deprecated/gtkstyle.h"
+
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
 #endif
