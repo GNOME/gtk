@@ -557,6 +557,12 @@ theming_engine_value_parse (GtkCssParser *parser,
   GtkThemingEngine *engine;
   char *str;
 
+  if (_gtk_css_parser_try (parser, "none", TRUE))
+    {
+      g_value_set_object (value, gtk_theming_engine_load (NULL));
+      return TRUE;
+    }
+
   str = _gtk_css_parser_try_ident (parser, TRUE);
   if (str == NULL)
     {
@@ -565,6 +571,7 @@ theming_engine_value_parse (GtkCssParser *parser,
     }
 
   engine = gtk_theming_engine_load (str);
+
   if (engine == NULL)
     {
       _gtk_css_parser_error (parser, "Themeing engine '%s' not found", str);
@@ -976,7 +983,11 @@ pattern_value_parse (GtkCssParser *parser,
                      GFile        *base,
                      GValue       *value)
 {
-  if (_gtk_css_parser_begins_with (parser, '-'))
+  if (_gtk_css_parser_try (parser, "none", TRUE))
+    {
+      /* nothing to do here */
+    }
+  else if (_gtk_css_parser_begins_with (parser, '-'))
     {
       int res;
       res = _gtk_win32_theme_part_parse (parser, base, value);
@@ -1114,6 +1125,9 @@ shadow_value_parse (GtkCssParser *parser,
   guint i;
 
   shadow = _gtk_shadow_new ();
+
+  if (_gtk_css_parser_try (parser, "none", TRUE))
+    return TRUE;
 
   do
     {
@@ -1289,6 +1303,9 @@ border_image_value_parse (GtkCssParser *parser,
   GtkCssBorderImageRepeat repeat, *parsed_repeat;
   gboolean retval = FALSE;
   GtkBorderImage *image = NULL;
+
+  if (_gtk_css_parser_try (parser, "none", TRUE))
+    return TRUE;
 
   g_value_init (&temp, CAIRO_GOBJECT_TYPE_PATTERN);
 
