@@ -3,7 +3,7 @@
 /* Buttons */
 
 .button {
-    background-color: none;
+    background-color: transparent;
     background-image: -gtk-win32-theme-part(button, 1 1);
     border-width: 0;
     -GtkWidget-focus-line-width: 1;
@@ -31,7 +31,7 @@
 /* Check buttons */
 
 .check {
-    background-color: none;
+    background-color: transparent;
     background-image: -gtk-win32-theme-part(button, 3 1);
     border-width: 0;
 }
@@ -71,7 +71,7 @@
 /* Radio buttons */
 
 .radio {
-    background-color: none;
+    background-color: transparent;
     background-image: -gtk-win32-theme-part(button, 2 1);
     border-width: 0;
 }
@@ -114,7 +114,7 @@
    don't use this atm */
 
 .scrollbar {
-    background-color: none;
+    background-color: transparent;
     -GtkRange-trough-border: 0;
     -GtkRange-arrow-scaling: 0.0;
     -GtkRange-slider-width: -gtk-win32-size(scrollbar, 3);
@@ -239,7 +239,7 @@
 
 .spinbutton.button,
 .spinbutton.button:focused {
-    background-color: none;
+    background-color: transparent;
     border-width: 1 1 0 0;
     border-style: none;
     background-image: -gtk-win32-theme-part(spin, 1 1);
@@ -294,7 +294,7 @@
    trough */
 
 .scale {
-    background-color: none;
+    background-color: transparent;
     -GtkScale-value-spacing: 0;
     -GtkScale-slider-length: 9;
     -GtkRange-slider-width: 20;
@@ -312,7 +312,7 @@
 }
 
 .scale.slider {
-    background-color: none;
+    background-color: transparent;
     border-width: 0;
     color: rgba(0,0,0,0);
     background-image: -gtk-win32-theme-part(trackbar, 3 1);
@@ -445,7 +445,7 @@
 /* Progress bars */
 
 GtkProgressBar {
-    background-color: none;
+    background-color: transparent;
     padding: 0;
 }
 
@@ -480,25 +480,25 @@ GtkProgressBar.trough.vertical {
 /* Menus */
 
 .menubar {
-    background-color: none;
+    background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(menu, 7 1);
 }
 
 .menubar .menuitem {
-    background-color: none;
+    background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(menu, 8 1);
 }
 
 .menubar .menuitem:prelight {
-    background-color: none;
+    background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(menu, 8 3);
 }
 
 .menuitem:prelight {
-    background-color: none;
+    background-color: transparent;
     background-image: -gtk-win32-theme-part(menu, 14 2);
 
 }
@@ -506,7 +506,7 @@ GtkProgressBar.trough.vertical {
 .menuitem.radio,
 .menuitem.radio:prelight,
 .menuitem.radio:insensitive {
-    background-color: none;
+    background-color: transparent;
     background-image: none;
     border-width: 0;
 }
@@ -564,7 +564,7 @@ GtkProgressBar.trough.vertical {
 
 
 GtkComboBox.combobox-entry .button {
-    background-color: none;
+    background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(combobox, 1 1);
     color: rgba(0, 0, 0, 0);
@@ -588,7 +588,7 @@ GtkComboBox.combobox-entry .button:insensitive {
 /* Notebook */
 
 .notebook {
-    background-color: none;
+    background-color: transparent;
     border-width: 1 3 2 2;
     border-style: solid;
     background-origin: padding-box;
@@ -600,7 +600,7 @@ GtkComboBox.combobox-entry .button:insensitive {
 }
 
 .notebook tab {
-    background-color: none;
+    background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(tab, 1 1);
 }
@@ -625,14 +625,14 @@ GtkComboBox.combobox-entry .button:insensitive {
 /* Toolbar */
 
 .toolbar {
-    background-color: none;
+    background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(rebar, 6 1);
 }
 
 .toolbar .button,
 .toolbar .button:focused {
-    background-color: none;
+    background-color: transparent;
     background-image: -gtk-win32-theme-part(toolbar, 1 1);
 }
 
@@ -657,7 +657,7 @@ GtkComboBox.combobox-entry .button:insensitive {
 
 column-header .button,
 column-header .button:focus {
-    background-color: none;
+    background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(header, 1 1);
 }
