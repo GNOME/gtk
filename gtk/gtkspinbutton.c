@@ -924,7 +924,7 @@ gtk_spin_button_panel_draw (GtkSpinButton   *spin_button,
                             cairo_t         *cr,
                             GdkWindow       *panel)
 {
-  GtkSpinButtonPrivate *priv = spin_button->priv;;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkWidget *widget;
