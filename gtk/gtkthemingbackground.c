@@ -307,8 +307,7 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       if (cairo_pattern_get_surface (bg->pattern, &surface) != CAIRO_STATUS_SUCCESS)
         surface = NULL;
 
-      if (surface && repeat &&
-          repeat->repeat != GTK_CSS_BACKGROUND_REPEAT_STYLE_NONE)
+      if (surface && repeat)
         {
           scale_width = cairo_image_surface_get_width (surface);
           scale_height = cairo_image_surface_get_height (surface);

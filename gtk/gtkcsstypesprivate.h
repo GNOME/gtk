@@ -31,7 +31,6 @@ typedef enum {
 } GtkCssSpecialValue;
 
 typedef enum {
-  GTK_CSS_BACKGROUND_REPEAT_STYLE_NONE,
   GTK_CSS_BACKGROUND_REPEAT_STYLE_REPEAT,
   GTK_CSS_BACKGROUND_REPEAT_STYLE_NO_REPEAT,
 } GtkCssBackgroundRepeatStyle;
