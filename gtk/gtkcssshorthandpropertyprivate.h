@@ -23,6 +23,8 @@
 
 #include <glib-object.h>
 
+#include "gtk/gtkcssparserprivate.h"
+#include "gtk/gtkcssstylepropertyprivate.h"
 #include "gtk/gtkstylepropertyprivate.h"
 
 G_BEGIN_DECLS
@@ -40,6 +42,8 @@ typedef struct _GtkCssShorthandPropertyClass      GtkCssShorthandPropertyClass;
 struct _GtkCssShorthandProperty
 {
   GtkStyleProperty parent;
+
+  GPtrArray *subproperties;
 };
 
 struct _GtkCssShorthandPropertyClass
@@ -50,6 +54,10 @@ struct _GtkCssShorthandPropertyClass
 void                    _gtk_css_shorthand_property_init_properties     (void);
 
 GType                   _gtk_css_shorthand_property_get_type            (void) G_GNUC_CONST;
+
+GtkCssStyleProperty *   _gtk_css_shorthand_property_get_subproperty     (GtkCssShorthandProperty *shorthand,
+                                                                         guint                    property);
+guint                   _gtk_css_shorthand_property_get_n_subproperties (GtkCssShorthandProperty *shorthand);
 
 
 G_END_DECLS

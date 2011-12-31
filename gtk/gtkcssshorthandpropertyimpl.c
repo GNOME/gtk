@@ -767,6 +767,7 @@ unset_border_image (GtkStyleProperties *props,
 
 static void
 _gtk_css_shorthand_property_register (GParamSpec               *pspec,
+                                      const char              **subproperties,
                                       GtkStylePropertyFlags     flags,
                                       GtkStylePropertyParser    property_parse_func,
                                       GtkStyleUnpackFunc        unpack_func,
@@ -783,6 +784,7 @@ _gtk_css_shorthand_property_register (GParamSpec               *pspec,
 
   node = g_object_new (GTK_TYPE_CSS_SHORTHAND_PROPERTY,
                        "name", pspec->name,
+                       "subproperties", subproperties,
                        NULL);
 
   node->flags = flags;
@@ -798,10 +800,20 @@ _gtk_css_shorthand_property_register (GParamSpec               *pspec,
 void
 _gtk_css_shorthand_property_init_properties (void)
 {
+  const char *font_subproperties[] = { "font-family", "font-style", "font-variant", "font-weight", "font-size", NULL };
+  const char *margin_subproperties[] = { "margin-top", "margin-right", "margin-bottom", "margin-left", NULL };
+  const char *padding_subproperties[] = { "padding-top", "padding-right", "padding-bottom", "padding-left", NULL };
+  const char *border_width_subproperties[] = { "border-top-width", "border-right-width", "border-bottom-width", "border-left-width", NULL };
+  const char *border_radius_subproperties[] = { "border-top-left-radius", "border-top-right-radius",
+                                                "border-bottom-right-radius", "border-bottom-left-radius", NULL };
+  const char *border_color_subproperties[] = { "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", NULL };
+  const char *border_image_subproperties[] = { "border-image-source", "border-image-slice", "border-image-width", "border-image-repeat", NULL };
+
   _gtk_css_shorthand_property_register   (g_param_spec_boxed ("font",
                                                               "Font Description",
                                                               "Font Description",
                                                               PANGO_TYPE_FONT_DESCRIPTION, 0),
+                                          font_subproperties,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           NULL,
                                           unpack_font_description,
@@ -814,6 +826,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                                               "Margin",
                                                               "Margin",
                                                               GTK_TYPE_BORDER, 0),
+                                          margin_subproperties,
                                           0,
                                           NULL,
                                           unpack_margin,
@@ -826,6 +839,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                                               "Padding",
                                                               "Padding",
                                                               GTK_TYPE_BORDER, 0),
+                                          padding_subproperties,
                                           0,
                                           NULL,
                                           unpack_padding,
@@ -838,6 +852,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                                               "Border width",
                                                               "Border width, in pixels",
                                                               GTK_TYPE_BORDER, 0),
+                                          border_width_subproperties,
                                           0,
                                           NULL,
                                           unpack_border_width,
@@ -850,6 +865,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                                             "Border radius",
                                                             "Border radius, in pixels",
                                                             0, G_MAXINT, 0, 0),
+                                          border_radius_subproperties,
                                           0,
                                           NULL,
                                           unpack_border_radius,
@@ -862,6 +878,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                                               "Border color",
                                                               "Border color",
                                                               GDK_TYPE_RGBA, 0),
+                                          border_color_subproperties,
                                           0,
                                           NULL,
                                           unpack_border_color,
@@ -874,6 +891,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                                               "Border Image",
                                                               "Border Image",
                                                               GTK_TYPE_BORDER_IMAGE, 0),
+                                          border_image_subproperties,
                                           0,
                                           NULL,
                                           _gtk_border_image_unpack,
