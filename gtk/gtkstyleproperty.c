@@ -31,6 +31,8 @@
 
 #include "gtkcssprovider.h"
 #include "gtkcssparserprivate.h"
+#include "gtkcssshorthandpropertyprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertiesprivate.h"
@@ -55,7 +57,7 @@ static GHashTable *print_funcs = NULL;
 static GHashTable *properties = NULL;
 static GPtrArray *__style_property_array = NULL;
 
-G_DEFINE_TYPE (GtkStyleProperty, _gtk_style_property, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (GtkStyleProperty, _gtk_style_property, G_TYPE_OBJECT)
 
 static void
 gtk_style_property_finalize (GObject *object)
@@ -3253,7 +3255,10 @@ _gtk_style_property_register (GParamSpec               *pspec,
       return;
     }
 
-  node = g_object_new (GTK_TYPE_STYLE_PROPERTY, NULL);
+  if (pack_func == NULL)
+    node = g_object_new (GTK_TYPE_CSS_STYLE_PROPERTY, NULL);
+  else
+    node = g_object_new (GTK_TYPE_CSS_SHORTHAND_PROPERTY, NULL);
   node->flags = flags;
   node->pspec = pspec;
   node->property_parse_func = property_parse_func;
