@@ -528,54 +528,7 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties *props,
 {
   GtkStylePropertiesPrivate *priv;
   PropertyData *prop;
-  GType value_type, style_prop_type;
   GValue *val;
-
-  value_type = G_VALUE_TYPE (value);
-  style_prop_type = _gtk_style_property_get_value_type (style_prop);
-
-  if (style_prop_type == GDK_TYPE_RGBA ||
-      style_prop_type == GDK_TYPE_COLOR)
-    {
-      /* Allow GtkSymbolicColor and special values as well */
-      g_return_if_fail (value_type == GDK_TYPE_RGBA ||
-                        value_type == GDK_TYPE_COLOR ||
-                        value_type == GTK_TYPE_CSS_SPECIAL_VALUE ||
-                        value_type == GTK_TYPE_SYMBOLIC_COLOR);
-    }
-  else if (style_prop_type == CAIRO_GOBJECT_TYPE_PATTERN)
-    {
-      /* Allow GtkGradient and theme part as a substitute */
-      g_return_if_fail (value_type == CAIRO_GOBJECT_TYPE_PATTERN ||
-                        value_type == GTK_TYPE_GRADIENT	||
-			value_type == GTK_TYPE_WIN32_THEME_PART);
-    }
-  else if (style_prop_type == G_TYPE_INT)
-    {
-      g_return_if_fail (value_type == G_TYPE_INT ||
-                        value_type == GTK_TYPE_CSS_BORDER_RADIUS);
-    }
-  else
-    g_return_if_fail (style_prop_type == value_type);
-
-  if (GTK_IS_CSS_SHORTHAND_PROPERTY (style_prop))
-    {
-      GParameter *parameters;
-      guint i, n_parameters;
-
-      parameters = _gtk_style_property_unpack (style_prop, value, &n_parameters);
-
-      for (i = 0; i < n_parameters; i++)
-        {
-          gtk_style_properties_set_property (props,
-                                             parameters[i].name,
-                                             state,
-                                             &parameters[i].value);
-          g_value_unset (&parameters[i].value);
-        }
-      g_free (parameters);
-      return;
-    }
 
   priv = props->priv;
   prop = g_hash_table_lookup (priv->properties, style_prop);
@@ -588,18 +541,18 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties *props,
 
   val = property_data_get_value (prop, state);
 
-  if (G_VALUE_TYPE (val) == value_type)
+  if (G_VALUE_TYPE (val) == G_VALUE_TYPE (value))
     g_value_reset (val);
   else
     {
       if (G_IS_VALUE (val))
         g_value_unset (val);
 
-      g_value_init (val, value_type);
+      g_value_init (val, G_VALUE_TYPE (value));
     }
 
   g_value_copy (value, val);
-  if (style_prop_type == value_type)
+  if (_gtk_style_property_get_value_type (style_prop) == G_VALUE_TYPE (value))
     g_param_value_validate (style_prop->pspec, val);
 }
 
@@ -633,11 +586,13 @@ gtk_style_properties_set_property (GtkStyleProperties *props,
       g_warning ("Style property \"%s\" is not registered", property);
       return;
     }
-
-  _gtk_style_properties_set_property_by_property (props,
-                                                  node,
-                                                  state,
-                                                  value);
+  if (_gtk_style_property_get_value_type (node) == G_TYPE_NONE)
+    {
+      g_warning ("Style property \"%s\" is not settable", property);
+      return;
+    }
+  
+  _gtk_style_property_assign (node, props, state, value);
 }
 
 /**
@@ -693,7 +648,7 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
           break;
         }
 
-      _gtk_style_properties_set_property_by_property (props, node, state, &val);
+      _gtk_style_property_assign (node, props, state, &val);
       g_value_unset (&val);
 
       property_name = va_arg (args, const gchar *);

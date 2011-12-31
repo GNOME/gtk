@@ -2056,6 +2056,47 @@ _gtk_style_property_pack (GtkStyleProperty   *property,
 }
 
 void
+_gtk_style_property_assign (GtkStyleProperty   *property,
+                            GtkStyleProperties *props,
+                            GtkStateFlags       state,
+                            const GValue       *value)
+{
+  g_return_if_fail (GTK_IS_STYLE_PROPERTY (property));
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
+  g_return_if_fail (value != NULL);
+
+  if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
+    {
+      GParameter *parameters;
+      guint i, n_parameters;
+
+      parameters = _gtk_style_property_unpack (property, value, &n_parameters);
+
+      for (i = 0; i < n_parameters; i++)
+        {
+          _gtk_style_property_assign (_gtk_style_property_lookup (parameters[i].name),
+                                      props,
+                                      state,
+                                      &parameters[i].value);
+          g_value_unset (&parameters[i].value);
+        }
+      g_free (parameters);
+      return;
+    }
+  else if (GTK_IS_CSS_STYLE_PROPERTY (property))
+    {
+      _gtk_style_properties_set_property_by_property (props,
+                                                      property,
+                                                      state,
+                                                      value);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+}
+
+void
 _gtk_style_property_query (GtkStyleProperty        *property,
                            GtkStyleProperties      *props,
                            GtkStateFlags            state,

@@ -120,6 +120,10 @@ void                     _gtk_style_property_query         (GtkStyleProperty *  
                                                             GtkStateFlags           state,
 							    GtkStylePropertyContext *context,
                                                             GValue                 *value);
+void                     _gtk_style_property_assign        (GtkStyleProperty       *property,
+                                                            GtkStyleProperties     *props,
+                                                            GtkStateFlags           state,
+                                                            const GValue           *value);
 
 G_END_DECLS
 
