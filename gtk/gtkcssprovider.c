@@ -3251,8 +3251,8 @@ gtk_css_provider_get_named (const gchar *name,
 static int
 compare_properties (gconstpointer a, gconstpointer b)
 {
-  return strcmp (((GtkStyleProperty *) a)->pspec->name,
-                 ((GtkStyleProperty *) b)->pspec->name);
+  return strcmp (_gtk_style_property_get_name ((GtkStyleProperty *) a),
+                 _gtk_style_property_get_name ((GtkStyleProperty *) b));
 }
 
 static void
@@ -3277,7 +3277,7 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
           const PropertyValue *value = g_hash_table_lookup (ruleset->style, prop);
 
           g_string_append (str, "  ");
-          g_string_append (str, prop->pspec->name);
+          g_string_append (str, _gtk_style_property_get_name (prop));
           g_string_append (str, ": ");
           _gtk_style_property_print_value (prop, &value->value, str);
           g_string_append (str, ";\n");

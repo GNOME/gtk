@@ -202,7 +202,7 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
           GValue value = { 0, };
           /* Set NULL here and do the inheritance upon lookup? */
           gtk_style_context_get_property (parent,
-                                          prop->pspec->name,
+                                          _gtk_style_property_get_name (prop),
                                           gtk_style_context_get_state (parent),
                                           &value);
           _gtk_style_properties_set_property_by_property (props,
