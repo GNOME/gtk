@@ -58,6 +58,7 @@ struct _GtkStyleProperty
   GObject parent;
 
   char *name;
+  GType value_type;
 
   GParamSpec               *pspec;
   GtkStylePropertyFlags     flags;
@@ -113,6 +114,7 @@ void                     _gtk_style_property_print_value   (GtkStyleProperty *  
                                                             const GValue           *value,
                                                             GString                *string);
 
+GType                    _gtk_style_property_get_value_type(GtkStyleProperty *      property);
 void                     _gtk_style_property_query         (GtkStyleProperty *      property,
                                                             GtkStyleProperties     *props,
                                                             GtkStateFlags           state,

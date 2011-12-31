@@ -784,6 +784,7 @@ _gtk_css_shorthand_property_register (GParamSpec               *pspec,
 
   node = g_object_new (GTK_TYPE_CSS_SHORTHAND_PROPERTY,
                        "name", pspec->name,
+                       "value-type", pspec->value_type,
                        "subproperties", subproperties,
                        NULL);
 
