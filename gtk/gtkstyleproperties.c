@@ -377,9 +377,6 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
                                 parse_func,
                                 NULL,
                                 NULL,
-                                NULL,
-                                NULL,
-                                NULL,
                                 NULL);
 }
 

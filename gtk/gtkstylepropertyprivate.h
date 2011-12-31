@@ -91,12 +91,9 @@ const char *             _gtk_style_property_get_name      (GtkStyleProperty    
 void                     _gtk_style_property_register      (GParamSpec             *pspec,
                                                             GtkStylePropertyFlags   flags,
                                                             GtkStylePropertyParser  property_parse_func,
-                                                            GtkStyleUnpackFunc      unpack_func,
-                                                            GtkStylePackFunc        pack_func,
                                                             GtkStyleParseFunc       parse_func,
                                                             GtkStylePrintFunc       print_func,
-                                                            const GValue           *initial_value,
-                                                            GtkStyleUnsetFunc       unset_func);
+                                                            const GValue           *initial_value);
 
 gboolean                 _gtk_style_property_is_inherit    (const GtkStyleProperty *property);
 guint                    _gtk_style_property_get_id        (const GtkStyleProperty *property);
