@@ -1211,9 +1211,17 @@ gtk_css_ruleset_add (GtkCssRuleset    *ruleset,
       property_value_free (value);
       return;
     }
-
-  _gtk_bitmask_set (ruleset->set_styles, _gtk_style_property_get_id (prop), TRUE);
-  g_hash_table_insert (ruleset->style, (gpointer) prop, value);
+  else if (GTK_IS_CSS_STYLE_PROPERTY (prop))
+    {
+      _gtk_bitmask_set (ruleset->set_styles,
+                        _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)),
+                        TRUE);
+      g_hash_table_insert (ruleset->style, prop, value);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
 }
 
 static gboolean
@@ -1422,7 +1430,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
 
       while (g_hash_table_iter_next (&iter, &key, &val))
         {
-          GtkStyleProperty *prop = key;
+          GtkCssStyleProperty *prop = key;
           PropertyValue *value = val;
 
           _gtk_style_properties_set_property_by_property (props,
@@ -1545,13 +1553,14 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
 
       while (g_hash_table_iter_next (&iter, &key, &val))
         {
-          GtkStyleProperty *prop = key;
+          GtkCssStyleProperty *prop = key;
           PropertyValue *value = val;
+          guint id = _gtk_css_style_property_get_id (prop);
 
-          if (!_gtk_css_lookup_is_missing (lookup, _gtk_style_property_get_id (prop)))
+          if (!_gtk_css_lookup_is_missing (lookup, id))
             continue;
 
-          _gtk_css_lookup_set (lookup, _gtk_style_property_get_id (prop), &value->value);
+          _gtk_css_lookup_set (lookup, id, &value->value);
         }
     }
 }

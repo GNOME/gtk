@@ -81,9 +81,6 @@ struct _GtkStylePropertyClass
 
 GType               _gtk_style_property_get_type             (void) G_GNUC_CONST;
 
-guint                    _gtk_style_property_get_count     (void);
-GtkStyleProperty *       _gtk_style_property_get           (guint                   id);
-
 GtkStyleProperty *       _gtk_style_property_lookup        (const char             *name);
 
 const char *             _gtk_style_property_get_name      (GtkStyleProperty       *property);
@@ -94,12 +91,6 @@ void                     _gtk_style_property_register      (GParamSpec          
                                                             GtkStyleParseFunc       parse_func,
                                                             GtkStylePrintFunc       print_func,
                                                             const GValue           *initial_value);
-
-gboolean                 _gtk_style_property_is_inherit    (GtkStyleProperty *      property);
-guint                    _gtk_style_property_get_id        (GtkStyleProperty *      property);
-
-const GValue *           _gtk_style_property_get_initial_value
-                                                           (GtkStyleProperty *      property);
 
 GParameter *             _gtk_style_property_unpack        (GtkStyleProperty *      property,
                                                             const GValue           *value,

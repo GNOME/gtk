@@ -1612,18 +1612,6 @@ transparent_color_value_parse (GtkCssParser *parser,
 
 /*** API ***/
 
-guint
-_gtk_style_property_get_count (void)
-{
-  return _gtk_css_style_property_get_n_properties ();
-}
-
-GtkStyleProperty *
-_gtk_style_property_get (guint id)
-{
-  return GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (id));
-}
-
 static void
 css_string_funcs_init (void)
 {
@@ -1816,25 +1804,6 @@ _gtk_style_property_default_value (GtkStyleProperty   *property,
   g_value_copy (&property->initial_value, value);
 }
 
-gboolean
-_gtk_style_property_is_inherit (GtkStyleProperty *property)
-{
-  g_return_val_if_fail (property != NULL, FALSE);
-
-  return property->flags & GTK_STYLE_PROPERTY_INHERIT ? TRUE : FALSE;
-}
-
-guint
-_gtk_style_property_get_id (GtkStyleProperty *property)
-{
-  g_return_val_if_fail (property != NULL, FALSE);
-
-  if (GTK_IS_CSS_STYLE_PROPERTY (property))
-    return _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (property));
-  else
-    return 0;
-}
-
 static gboolean
 resolve_color (GtkStyleProperties *props,
 	       GValue             *value)
@@ -2009,14 +1978,6 @@ _gtk_style_property_resolve (GtkStyleProperty       *property,
   g_value_copy (val, val_out);
 }
 
-const GValue *
-_gtk_style_property_get_initial_value (GtkStyleProperty *property)
-{
-  g_return_val_if_fail (property != NULL, NULL);
-
-  return &property->initial_value;
-}
-
 GParameter *
 _gtk_style_property_unpack (GtkStyleProperty *property,
                             const GValue     *value,
@@ -2076,7 +2037,7 @@ _gtk_style_property_assign (GtkStyleProperty   *property,
   else if (GTK_IS_CSS_STYLE_PROPERTY (property))
     {
       _gtk_style_properties_set_property_by_property (props,
-                                                      property,
+                                                      GTK_CSS_STYLE_PROPERTY (property),
                                                       state,
                                                       value);
     }
@@ -2093,22 +2054,32 @@ _gtk_style_property_query (GtkStyleProperty        *property,
 			   GtkStylePropertyContext *context,
                            GValue                  *value)
 {
-  const GValue *val;
 
   g_return_if_fail (property != NULL);
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
   g_return_if_fail (context != NULL);
   g_return_if_fail (value != NULL);
 
-  val = _gtk_style_properties_peek_property (props, property, state);
   g_value_init (value, property->pspec->value_type);
 
-  if (val)
-    _gtk_style_property_resolve (property, props, state, context, (GValue *) val, value);
+  if (GTK_IS_CSS_STYLE_PROPERTY (property))
+    {
+      const GValue *val;
+      
+      val = _gtk_style_properties_peek_property (props, GTK_CSS_STYLE_PROPERTY (property), state);
+      if (val)
+        _gtk_style_property_resolve (property, props, state, context, (GValue *) val, value);
+      else
+        _gtk_style_property_default_value (property, props, state, value);
+    }
   else if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
-    _gtk_style_property_pack (property, props, state, context, value);
+    {
+      _gtk_style_property_pack (property, props, state, context, value);
+    }
   else
-    _gtk_style_property_default_value (property, props, state, value);
+    {
+      g_assert_not_reached ();
+    }
 }
 
 #define rgba_init(rgba, r, g, b, a) G_STMT_START{ \

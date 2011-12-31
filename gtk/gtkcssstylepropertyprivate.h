@@ -54,7 +54,10 @@ GType                   _gtk_css_style_property_get_type        (void) G_GNUC_CO
 guint                   _gtk_css_style_property_get_n_properties(void);
 GtkCssStyleProperty *   _gtk_css_style_property_lookup_by_id    (guint                   id);
 
+gboolean                _gtk_css_style_property_is_inherit      (GtkCssStyleProperty    *property);
 guint                   _gtk_css_style_property_get_id          (GtkCssStyleProperty    *property);
+const GValue *          _gtk_css_style_property_get_initial_value
+                                                                (GtkCssStyleProperty    *property);
 
 G_END_DECLS
 

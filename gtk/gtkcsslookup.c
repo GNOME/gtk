@@ -23,7 +23,7 @@
 
 #include "gtkcsstypesprivate.h"
 #include "gtkprivatetypebuiltins.h"
-#include "gtkstylepropertyprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkstylepropertiesprivate.h"
 
 struct _GtkCssLookup {
@@ -35,7 +35,7 @@ GtkCssLookup *
 _gtk_css_lookup_new (void)
 {
   GtkCssLookup *lookup;
-  guint n = _gtk_style_property_get_count ();
+  guint n = _gtk_css_style_property_get_n_properties ();
 
   lookup = g_malloc0 (sizeof (GtkCssLookup) + sizeof (const GValue *) * n);
   lookup->missing = _gtk_bitmask_new ();
@@ -117,12 +117,12 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
   g_return_val_if_fail (lookup != NULL, NULL);
   g_return_val_if_fail (parent == NULL || GTK_IS_STYLE_CONTEXT (parent), NULL);
 
-  n = _gtk_style_property_get_count ();
+  n = _gtk_css_style_property_get_n_properties ();
   props = gtk_style_properties_new ();
 
   for (i = 0; i < n; i++)
     {
-      GtkStyleProperty *prop = _gtk_style_property_get (i);
+      GtkCssStyleProperty *prop = _gtk_css_style_property_lookup_by_id (i);
       const GValue *result;
 
       /* http://www.w3.org/TR/css3-cascade/#cascade
@@ -155,7 +155,7 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
                   /* if the value of the winning declaration is ‘initial’,
                    * the initial value (see below) becomes the specified value.
                    */
-                  result = _gtk_style_property_get_initial_value (prop);
+                  result = _gtk_css_style_property_get_initial_value (prop);
                   break;
                 default:
                   /* This is part of (2) above */
@@ -166,7 +166,7 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
         }
       else
         {
-          if (_gtk_style_property_is_inherit (prop))
+          if (_gtk_css_style_property_is_inherit (prop))
             {
               /* 4) if the property is inherited, the inherited value becomes
                * the specified value.
@@ -177,7 +177,7 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
             {
               /* 5) Otherwise, the initial value becomes the specified value.
                */
-              result = _gtk_style_property_get_initial_value (prop);
+              result = _gtk_css_style_property_get_initial_value (prop);
             }
         }
 
@@ -195,14 +195,14 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
           _gtk_style_properties_set_property_by_property (props,
                                                           prop,
                                                           0,
-                                                          _gtk_style_property_get_initial_value (prop));
+                                                          _gtk_css_style_property_get_initial_value (prop));
         }
       else
         {
           GValue value = { 0, };
           /* Set NULL here and do the inheritance upon lookup? */
           gtk_style_context_get_property (parent,
-                                          _gtk_style_property_get_name (prop),
+                                          _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop)),
                                           gtk_style_context_get_state (parent),
                                           &value);
           _gtk_style_properties_set_property_by_property (props,

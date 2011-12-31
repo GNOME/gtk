@@ -327,12 +327,12 @@ gtk_style_properties_provider_lookup (GtkStyleProviderPrivate *provider,
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      GtkStyleProperty *prop = key;
+      GtkCssStyleProperty *prop = key;
       PropertyData *data = value;
       const GValue *value;
       guint id;
 
-      id = _gtk_style_property_get_id (prop);
+      id = _gtk_css_style_property_get_id (prop);
 
       if (!_gtk_css_lookup_is_missing (lookup, id))
           continue;
@@ -521,10 +521,10 @@ gtk_style_properties_lookup_color (GtkStyleProperties *props,
 }
 
 void
-_gtk_style_properties_set_property_by_property (GtkStyleProperties *props,
-                                                GtkStyleProperty   *style_prop,
-                                                GtkStateFlags       state,
-                                                const GValue       *value)
+_gtk_style_properties_set_property_by_property (GtkStyleProperties  *props,
+                                                GtkCssStyleProperty *style_prop,
+                                                GtkStateFlags        state,
+                                                const GValue        *value)
 {
   GtkStylePropertiesPrivate *priv;
   PropertyData *prop;
@@ -552,8 +552,8 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties *props,
     }
 
   g_value_copy (value, val);
-  if (_gtk_style_property_get_value_type (style_prop) == G_VALUE_TYPE (value))
-    g_param_value_validate (style_prop->pspec, val);
+  if (_gtk_style_property_get_value_type (GTK_STYLE_PROPERTY (style_prop)) == G_VALUE_TYPE (value))
+    g_param_value_validate (GTK_STYLE_PROPERTY (style_prop)->pspec, val);
 }
 
 /**
@@ -680,9 +680,9 @@ gtk_style_properties_set (GtkStyleProperties *props,
 }
 
 const GValue *
-_gtk_style_properties_peek_property (GtkStyleProperties *props,
-                                     GtkStyleProperty   *property,
-                                     GtkStateFlags       state)
+_gtk_style_properties_peek_property (GtkStyleProperties  *props,
+                                     GtkCssStyleProperty *property,
+                                     GtkStateFlags        state)
 {
   GtkStylePropertiesPrivate *priv;
   PropertyData *prop;

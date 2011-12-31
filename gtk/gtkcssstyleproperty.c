@@ -142,3 +142,19 @@ _gtk_css_style_property_get_id (GtkCssStyleProperty *property)
   return property->id;
 }
 
+gboolean
+_gtk_css_style_property_is_inherit (GtkCssStyleProperty *property)
+{
+  g_return_val_if_fail (property != NULL, FALSE);
+
+  return GTK_STYLE_PROPERTY (property)->flags & GTK_STYLE_PROPERTY_INHERIT ? TRUE : FALSE;
+}
+
+const GValue *
+_gtk_css_style_property_get_initial_value (GtkCssStyleProperty *property)
+{
+  g_return_val_if_fail (property != NULL, NULL);
+
+  return &GTK_STYLE_PROPERTY (property)->initial_value;
+}
+
