@@ -22,15 +22,123 @@
 
 #include "gtkcssstylepropertyprivate.h"
 
+#include "gtkintl.h"
+
+enum {
+  PROP_0,
+  PROP_ID,
+};
+
 G_DEFINE_TYPE (GtkCssStyleProperty, _gtk_css_style_property, GTK_TYPE_STYLE_PROPERTY)
+
+static void
+gtk_css_style_property_constructed (GObject *object)
+{
+  GtkCssStyleProperty *property = GTK_CSS_STYLE_PROPERTY (object);
+  GtkCssStylePropertyClass *klass = GTK_CSS_STYLE_PROPERTY_GET_CLASS (property);
+
+  property->id = klass->style_properties->len;
+  g_ptr_array_add (klass->style_properties, property);
+
+  G_OBJECT_CLASS (_gtk_css_style_property_parent_class)->constructed (object);
+}
+
+static void
+gtk_css_style_property_get_property (GObject    *object,
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
+{
+  GtkCssStyleProperty *property = GTK_CSS_STYLE_PROPERTY (object);
+
+  switch (prop_id)
+    {
+    case PROP_ID:
+      g_value_set_boolean (value, property->id);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
 
 static void
 _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->constructed = gtk_css_style_property_constructed;
+  object_class->get_property = gtk_css_style_property_get_property;
+
+  g_object_class_install_property (object_class,
+                                   PROP_ID,
+                                   g_param_spec_uint ("id",
+                                                      P_("ID"),
+                                                      P_("The numeric id for quick access"),
+                                                      0, G_MAXUINT, 0,
+                                                      G_PARAM_READABLE));
+
+  klass->style_properties = g_ptr_array_new ();
 }
+
 
 static void
 _gtk_css_style_property_init (GtkCssStyleProperty *style_property)
 {
+}
+
+/**
+ * _gtk_css_style_property_get_n_properties:
+ *
+ * Gets the number of style properties. This number can increase when new
+ * theme engines are loaded. Shorthand properties are not included here.
+ *
+ * Returns: The number of style properties.
+ **/
+guint
+_gtk_css_style_property_get_n_properties (void)
+{
+  GtkCssStylePropertyClass *klass;
+
+  klass = g_type_class_peek (GTK_TYPE_CSS_STYLE_PROPERTY);
+
+  return klass->style_properties->len;
+}
+
+/**
+ * _gtk_css_style_property_lookup_by_id:
+ * @id: the id of the property
+ *
+ * Gets the style property with the given id. All style properties (but not
+ * shorthand properties) are indexable by id so that it's easy to use arrays
+ * when doing style lookups.
+ *
+ * Returns: (transfer none): The style property with the given id
+ **/
+GtkCssStyleProperty *
+_gtk_css_style_property_lookup_by_id (guint id)
+{
+  GtkCssStylePropertyClass *klass;
+
+  klass = g_type_class_peek (GTK_TYPE_CSS_STYLE_PROPERTY);
+
+  return g_ptr_array_index (klass->style_properties, id);
+}
+
+/**
+ * _gtk_css_style_property_get_id:
+ * @property: the property
+ *
+ * Gets the id for the given property. IDs are used to allow using arrays
+ * for style lookups.
+ *
+ * Returns: The id of the property
+ **/
+guint
+_gtk_css_style_property_get_id (GtkCssStyleProperty *property)
+{
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), 0);
+
+  return property->id;
 }
 

@@ -38,15 +38,23 @@ typedef struct _GtkCssStylePropertyClass      GtkCssStylePropertyClass;
 struct _GtkCssStyleProperty
 {
   GtkStyleProperty parent;
+
+  guint id;
 };
 
 struct _GtkCssStylePropertyClass
 {
   GtkStylePropertyClass parent_class;
+
+  GPtrArray *style_properties;
 };
 
 GType                   _gtk_css_style_property_get_type        (void) G_GNUC_CONST;
 
+guint                   _gtk_css_style_property_get_n_properties(void);
+GtkCssStyleProperty *   _gtk_css_style_property_lookup_by_id    (guint                   id);
+
+guint                   _gtk_css_style_property_get_id          (GtkCssStyleProperty    *property);
 
 G_END_DECLS
 

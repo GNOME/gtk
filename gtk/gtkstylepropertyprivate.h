@@ -62,7 +62,6 @@ struct _GtkStyleProperty
 
   GParamSpec               *pspec;
   GtkStylePropertyFlags     flags;
-  guint                     id;
   GValue                    initial_value;
 
   GtkStylePropertyParser    property_parse_func;
