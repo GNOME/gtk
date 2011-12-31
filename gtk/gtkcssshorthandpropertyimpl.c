@@ -273,81 +273,6 @@ border_color_shorthand_value_parse (GtkCssParser *parser,
   return TRUE;
 }
 
-/*** PRINTING ***/
-
-static void
-string_append_double (GString *string,
-                      double   d)
-{
-  char buf[G_ASCII_DTOSTR_BUF_SIZE];
-
-  g_ascii_dtostr (buf, sizeof (buf), d);
-  g_string_append (string, buf);
-}
-
-static void
-border_radius_value_print (const GValue *value,
-                           GString      *string)
-{
-  GtkCssBorderRadius *border;
-
-  border = g_value_get_boxed (value);
-
-  if (border == NULL)
-    {
-      g_string_append (string, "none");
-      return;
-    }
-
-  string_append_double (string, border->top_left.horizontal);
-  if (border->top_left.horizontal != border->top_right.horizontal ||
-      border->top_left.horizontal != border->bottom_right.horizontal ||
-      border->top_left.horizontal != border->bottom_left.horizontal)
-    {
-      g_string_append_c (string, ' ');
-      string_append_double (string, border->top_right.horizontal);
-      if (border->top_left.horizontal != border->bottom_right.horizontal ||
-          border->top_right.horizontal != border->bottom_left.horizontal)
-        {
-          g_string_append_c (string, ' ');
-          string_append_double (string, border->bottom_right.horizontal);
-          if (border->top_right.horizontal != border->bottom_left.horizontal)
-            {
-              g_string_append_c (string, ' ');
-              string_append_double (string, border->bottom_left.horizontal);
-            }
-        }
-    }
-
-  if (border->top_left.horizontal != border->top_left.vertical ||
-      border->top_right.horizontal != border->top_right.vertical ||
-      border->bottom_right.horizontal != border->bottom_right.vertical ||
-      border->bottom_left.horizontal != border->bottom_left.vertical)
-    {
-      g_string_append (string, " / ");
-      string_append_double (string, border->top_left.vertical);
-      if (border->top_left.vertical != border->top_right.vertical ||
-          border->top_left.vertical != border->bottom_right.vertical ||
-          border->top_left.vertical != border->bottom_left.vertical)
-        {
-          g_string_append_c (string, ' ');
-          string_append_double (string, border->top_right.vertical);
-          if (border->top_left.vertical != border->bottom_right.vertical ||
-              border->top_right.vertical != border->bottom_left.vertical)
-            {
-              g_string_append_c (string, ' ');
-              string_append_double (string, border->bottom_right.vertical);
-              if (border->top_right.vertical != border->bottom_left.vertical)
-                {
-                  g_string_append_c (string, ' ');
-                  string_append_double (string, border->bottom_left.vertical);
-                }
-            }
-        }
-
-    }
-}
-
 /*** PACKING ***/
 
 static GParameter *
@@ -692,89 +617,12 @@ pack_border_color (GValue             *value,
   gtk_style_properties_get_property (props, "border-top-color", state, value);
 }
 
-/*** UNSET FUNCS ***/
-
-static void
-unset_font_description (GtkStyleProperties *props,
-                        GtkStateFlags       state)
-{
-  gtk_style_properties_unset_property (props, "font-family", state);
-  gtk_style_properties_unset_property (props, "font-style", state);
-  gtk_style_properties_unset_property (props, "font-variant", state);
-  gtk_style_properties_unset_property (props, "font-weight", state);
-  gtk_style_properties_unset_property (props, "font-size", state);
-}
-
-static void
-unset_margin (GtkStyleProperties *props,
-              GtkStateFlags       state)
-{
-  gtk_style_properties_unset_property (props, "margin-top", state);
-  gtk_style_properties_unset_property (props, "margin-right", state);
-  gtk_style_properties_unset_property (props, "margin-bottom", state);
-  gtk_style_properties_unset_property (props, "margin-left", state);
-}
-
-static void
-unset_padding (GtkStyleProperties *props,
-               GtkStateFlags       state)
-{
-  gtk_style_properties_unset_property (props, "padding-top", state);
-  gtk_style_properties_unset_property (props, "padding-right", state);
-  gtk_style_properties_unset_property (props, "padding-bottom", state);
-  gtk_style_properties_unset_property (props, "padding-left", state);
-}
-
-static void
-unset_border_width (GtkStyleProperties *props,
-                    GtkStateFlags       state)
-{
-  gtk_style_properties_unset_property (props, "border-top-width", state);
-  gtk_style_properties_unset_property (props, "border-right-width", state);
-  gtk_style_properties_unset_property (props, "border-bottom-width", state);
-  gtk_style_properties_unset_property (props, "border-left-width", state);
-}
-
-static void
-unset_border_radius (GtkStyleProperties *props,
-                     GtkStateFlags       state)
-{
-  gtk_style_properties_unset_property (props, "border-top-right-radius", state);
-  gtk_style_properties_unset_property (props, "border-bottom-right-radius", state);
-  gtk_style_properties_unset_property (props, "border-bottom-left-radius", state);
-  gtk_style_properties_unset_property (props, "border-top-left-radius", state);
-}
-
-static void
-unset_border_color (GtkStyleProperties *props,
-                    GtkStateFlags       state)
-{
-  gtk_style_properties_unset_property (props, "border-top-color", state);
-  gtk_style_properties_unset_property (props, "border-right-color", state);
-  gtk_style_properties_unset_property (props, "border-bottom-color", state);
-  gtk_style_properties_unset_property (props, "border-left-color", state);
-}
-
-static void
-unset_border_image (GtkStyleProperties *props,
-                    GtkStateFlags       state)
-{
-  gtk_style_properties_unset_property (props, "border-image-source", state);
-  gtk_style_properties_unset_property (props, "border-image-slice", state);
-  gtk_style_properties_unset_property (props, "border-image-repeat", state);
-  gtk_style_properties_unset_property (props, "border-image-width", state);
-}
-
 static void
 _gtk_css_shorthand_property_register (GParamSpec               *pspec,
                                       const char              **subproperties,
-                                      GtkStylePropertyParser    property_parse_func,
                                       GtkStyleUnpackFunc        unpack_func,
                                       GtkStylePackFunc          pack_func,
-                                      GtkStyleParseFunc         parse_func,
-                                      GtkStylePrintFunc         print_func,
-                                      const GValue *            initial_value,
-                                      GtkStyleUnsetFunc         unset_func)
+                                      GtkStyleParseFunc         parse_func)
 {
   GtkStyleProperty *node;
 
@@ -788,12 +636,9 @@ _gtk_css_shorthand_property_register (GParamSpec               *pspec,
                        NULL);
 
   node->pspec = pspec;
-  node->property_parse_func = property_parse_func;
   node->pack_func = pack_func;
   node->unpack_func = unpack_func;
   node->parse_func = parse_func;
-  node->print_func = print_func;
-  node->unset_func = unset_func;
 }
 
 void
@@ -813,83 +658,55 @@ _gtk_css_shorthand_property_init_properties (void)
                                                               "Font Description",
                                                               PANGO_TYPE_FONT_DESCRIPTION, 0),
                                           font_subproperties,
-                                          NULL,
                                           unpack_font_description,
                                           pack_font_description,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          unset_font_description);
+                                          NULL);
   _gtk_css_shorthand_property_register   (g_param_spec_boxed ("margin",
                                                               "Margin",
                                                               "Margin",
                                                               GTK_TYPE_BORDER, 0),
                                           margin_subproperties,
-                                          NULL,
                                           unpack_margin,
                                           pack_margin,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          unset_margin);
+                                          NULL);
   _gtk_css_shorthand_property_register   (g_param_spec_boxed ("padding",
                                                               "Padding",
                                                               "Padding",
                                                               GTK_TYPE_BORDER, 0),
                                           padding_subproperties,
-                                          NULL,
                                           unpack_padding,
                                           pack_padding,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          unset_padding);
+                                          NULL);
   _gtk_css_shorthand_property_register   (g_param_spec_boxed ("border-width",
                                                               "Border width",
                                                               "Border width, in pixels",
                                                               GTK_TYPE_BORDER, 0),
                                           border_width_subproperties,
-                                          NULL,
                                           unpack_border_width,
                                           pack_border_width,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          unset_border_width);
+                                          NULL);
   _gtk_css_shorthand_property_register   (g_param_spec_int ("border-radius",
                                                             "Border radius",
                                                             "Border radius, in pixels",
                                                             0, G_MAXINT, 0, 0),
                                           border_radius_subproperties,
-                                          NULL,
                                           unpack_border_radius,
                                           pack_border_radius,
-                                          border_radius_value_parse,
-                                          border_radius_value_print,
-                                          NULL,
-                                          unset_border_radius);
+                                          border_radius_value_parse);
   _gtk_css_shorthand_property_register   (g_param_spec_boxed ("border-color",
                                                               "Border color",
                                                               "Border color",
                                                               GDK_TYPE_RGBA, 0),
                                           border_color_subproperties,
-                                          NULL,
                                           unpack_border_color,
                                           pack_border_color,
-                                          border_color_shorthand_value_parse,
-                                          NULL,
-                                          NULL,
-                                          unset_border_color);
+                                          border_color_shorthand_value_parse);
   _gtk_css_shorthand_property_register   (g_param_spec_boxed ("border-image",
                                                               "Border Image",
                                                               "Border Image",
                                                               GTK_TYPE_BORDER_IMAGE, 0),
                                           border_image_subproperties,
-                                          NULL,
                                           _gtk_border_image_unpack,
                                           _gtk_border_image_pack,
-                                          border_image_value_parse,
-                                          NULL,
-                                          NULL,
-                                          unset_border_image);
+                                          border_image_value_parse);
 }

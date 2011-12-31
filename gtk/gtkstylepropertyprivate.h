@@ -50,8 +50,6 @@ typedef gboolean         (* GtkStyleParseFunc)             (GtkCssParser        
                                                             GValue                 *value);
 typedef void             (* GtkStylePrintFunc)             (const GValue           *value,
                                                             GString                *string);
-typedef void             (* GtkStyleUnsetFunc)             (GtkStyleProperties     *props,
-                                                            GtkStateFlags           state);
 
 struct _GtkStyleProperty
 {
@@ -67,7 +65,6 @@ struct _GtkStyleProperty
   GtkStylePackFunc          pack_func;
   GtkStyleParseFunc         parse_func;
   GtkStylePrintFunc         print_func;
-  GtkStyleUnsetFunc         unset_func;
 };
 
 struct _GtkStylePropertyClass
