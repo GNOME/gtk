@@ -55,6 +55,31 @@ static GHashTable *print_funcs = NULL;
 static GHashTable *properties = NULL;
 static GPtrArray *__style_property_array = NULL;
 
+G_DEFINE_TYPE (GtkStyleProperty, _gtk_style_property, G_TYPE_OBJECT)
+
+static void
+gtk_style_property_finalize (GObject *object)
+{
+  GtkStyleProperty *property = GTK_STYLE_PROPERTY (object);
+
+  g_warning ("finalizing %s `%s', how could this happen?", G_OBJECT_TYPE_NAME (object), property->pspec->name);
+
+  G_OBJECT_CLASS (_gtk_style_property_parent_class)->finalize (object);
+}
+
+static void
+_gtk_style_property_class_init (GtkStylePropertyClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gtk_style_property_finalize;
+}
+
+static void
+_gtk_style_property_init (GtkStyleProperty *property)
+{
+}
+
 static void
 register_conversion_function (GType             type,
                               GtkStyleParseFunc parse,
@@ -3228,7 +3253,7 @@ _gtk_style_property_register (GParamSpec               *pspec,
       return;
     }
 
-  node = g_slice_new0 (GtkStyleProperty);
+  node = g_object_new (GTK_TYPE_STYLE_PROPERTY, NULL);
   node->flags = flags;
   node->pspec = pspec;
   node->property_parse_func = property_parse_func;

@@ -25,7 +25,16 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkStyleProperty GtkStyleProperty;
+#define GTK_TYPE_STYLE_PROPERTY           (_gtk_style_property_get_type ())
+#define GTK_STYLE_PROPERTY(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GTK_TYPE_STYLE_PROPERTY, GtkStyleProperty))
+#define GTK_STYLE_PROPERTY_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GTK_TYPE_STYLE_PROPERTY, GtkStylePropertyClass))
+#define GTK_IS_STYLE_PROPERTY(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GTK_TYPE_STYLE_PROPERTY))
+#define GTK_IS_STYLE_PROPERTY_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_STYLE_PROPERTY))
+#define GTK_STYLE_PROPERTY_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STYLE_PROPERTY, GtkStylePropertyClass))
+
+typedef struct _GtkStyleProperty           GtkStyleProperty;
+typedef struct _GtkStylePropertyClass      GtkStylePropertyClass;
+
 typedef enum {
   GTK_STYLE_PROPERTY_INHERIT = (1 << 0)
 } GtkStylePropertyFlags;
@@ -44,9 +53,10 @@ typedef void             (* GtkStylePrintFunc)             (const GValue        
 typedef void             (* GtkStyleUnsetFunc)             (GtkStyleProperties     *props,
                                                             GtkStateFlags           state);
 
-
 struct _GtkStyleProperty
 {
+  GObject parent;
+
   GParamSpec               *pspec;
   GtkStylePropertyFlags     flags;
   guint                     id;
@@ -59,6 +69,13 @@ struct _GtkStyleProperty
   GtkStylePrintFunc         print_func;
   GtkStyleUnsetFunc         unset_func;
 };
+
+struct _GtkStylePropertyClass
+{
+  GObjectClass  parent_class;
+};
+
+GType               _gtk_style_property_get_type             (void) G_GNUC_CONST;
 
 guint                    _gtk_style_property_get_count     (void);
 const GtkStyleProperty * _gtk_style_property_get           (guint                   id);
