@@ -47,6 +47,8 @@ struct _GtkCssShorthandPropertyClass
   GtkStylePropertyClass parent_class;
 };
 
+void                    _gtk_css_shorthand_property_init_properties     (void);
+
 GType                   _gtk_css_shorthand_property_get_type            (void) G_GNUC_CONST;
 
 
