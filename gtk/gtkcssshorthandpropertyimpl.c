@@ -765,10 +765,40 @@ unset_border_image (GtkStyleProperties *props,
   gtk_style_properties_unset_property (props, "border-image-width", state);
 }
 
+static void
+_gtk_css_shorthand_property_register (GParamSpec               *pspec,
+                                      GtkStylePropertyFlags     flags,
+                                      GtkStylePropertyParser    property_parse_func,
+                                      GtkStyleUnpackFunc        unpack_func,
+                                      GtkStylePackFunc          pack_func,
+                                      GtkStyleParseFunc         parse_func,
+                                      GtkStylePrintFunc         print_func,
+                                      const GValue *            initial_value,
+                                      GtkStyleUnsetFunc         unset_func)
+{
+  GtkStyleProperty *node;
+
+  g_return_if_fail (pack_func != NULL);
+  g_return_if_fail (unpack_func != NULL);
+
+  node = g_object_new (GTK_TYPE_CSS_SHORTHAND_PROPERTY,
+                       "name", pspec->name,
+                       NULL);
+
+  node->flags = flags;
+  node->pspec = pspec;
+  node->property_parse_func = property_parse_func;
+  node->pack_func = pack_func;
+  node->unpack_func = unpack_func;
+  node->parse_func = parse_func;
+  node->print_func = print_func;
+  node->unset_func = unset_func;
+}
+
 void
 _gtk_css_shorthand_property_init_properties (void)
 {
-  _gtk_style_property_register           (g_param_spec_boxed ("font",
+  _gtk_css_shorthand_property_register   (g_param_spec_boxed ("font",
                                                               "Font Description",
                                                               "Font Description",
                                                               PANGO_TYPE_FONT_DESCRIPTION, 0),
@@ -780,7 +810,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           unset_font_description);
-  _gtk_style_property_register           (g_param_spec_boxed ("margin",
+  _gtk_css_shorthand_property_register   (g_param_spec_boxed ("margin",
                                                               "Margin",
                                                               "Margin",
                                                               GTK_TYPE_BORDER, 0),
@@ -792,7 +822,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           unset_margin);
-  _gtk_style_property_register           (g_param_spec_boxed ("padding",
+  _gtk_css_shorthand_property_register   (g_param_spec_boxed ("padding",
                                                               "Padding",
                                                               "Padding",
                                                               GTK_TYPE_BORDER, 0),
@@ -804,7 +834,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           unset_padding);
-  _gtk_style_property_register           (g_param_spec_boxed ("border-width",
+  _gtk_css_shorthand_property_register   (g_param_spec_boxed ("border-width",
                                                               "Border width",
                                                               "Border width, in pixels",
                                                               GTK_TYPE_BORDER, 0),
@@ -816,7 +846,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           unset_border_width);
-  _gtk_style_property_register           (g_param_spec_int ("border-radius",
+  _gtk_css_shorthand_property_register   (g_param_spec_int ("border-radius",
                                                             "Border radius",
                                                             "Border radius, in pixels",
                                                             0, G_MAXINT, 0, 0),
@@ -828,7 +858,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                           border_radius_value_print,
                                           NULL,
                                           unset_border_radius);
-  _gtk_style_property_register           (g_param_spec_boxed ("border-color",
+  _gtk_css_shorthand_property_register   (g_param_spec_boxed ("border-color",
                                                               "Border color",
                                                               "Border color",
                                                               GDK_TYPE_RGBA, 0),
@@ -840,7 +870,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           unset_border_color);
-  _gtk_style_property_register           (g_param_spec_boxed ("border-image",
+  _gtk_css_shorthand_property_register   (g_param_spec_boxed ("border-image",
                                                               "Border Image",
                                                               "Border Image",
                                                               GTK_TYPE_BORDER_IMAGE, 0),
