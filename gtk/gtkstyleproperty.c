@@ -1593,23 +1593,6 @@ border_corner_radius_value_print (const GValue *value,
     }
 }
 
-static gboolean 
-transparent_color_value_parse (GtkCssParser *parser,
-                               GFile        *base,
-                               GValue       *value)
-{
-  if (_gtk_css_parser_try (parser, "transparent", TRUE))
-    {
-      GdkRGBA transparent = { 0, 0, 0, 0 };
-          
-      g_value_set_boxed (value, &transparent);
-
-      return TRUE;
-    }
-
-  return rgba_value_parse (parser, base, value);
-}
-
 /*** API ***/
 
 static void
@@ -2121,7 +2104,7 @@ gtk_style_property_init_properties (void)
                                           GDK_TYPE_RGBA, 0),
                                           0,
                                           NULL,
-                                          transparent_color_value_parse,
+                                          NULL,
                                           NULL,
                                           &value);
   g_value_unset (&value);
@@ -2331,7 +2314,7 @@ gtk_style_property_init_properties (void)
                                                               GDK_TYPE_RGBA, 0),
                                           0,
                                           NULL,
-                                          transparent_color_value_parse,
+                                          NULL,
                                           NULL,
                                           &value);
   _gtk_style_property_register           (g_param_spec_boxed ("border-right-color",
@@ -2340,7 +2323,7 @@ gtk_style_property_init_properties (void)
                                                               GDK_TYPE_RGBA, 0),
                                           0,
                                           NULL,
-                                          transparent_color_value_parse,
+                                          NULL,
                                           NULL,
                                           &value);
   _gtk_style_property_register           (g_param_spec_boxed ("border-bottom-color",
@@ -2349,7 +2332,7 @@ gtk_style_property_init_properties (void)
                                                               GDK_TYPE_RGBA, 0),
                                           0,
                                           NULL,
-                                          transparent_color_value_parse,
+                                          NULL,
                                           NULL,
                                           &value);
   _gtk_style_property_register           (g_param_spec_boxed ("border-left-color",
@@ -2358,7 +2341,7 @@ gtk_style_property_init_properties (void)
                                                               GDK_TYPE_RGBA, 0),
                                           0,
                                           NULL,
-                                          transparent_color_value_parse,
+                                          NULL,
                                           NULL,
                                           &value);
   g_value_unset (&value);

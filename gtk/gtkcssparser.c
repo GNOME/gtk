@@ -831,6 +831,13 @@ _gtk_css_parser_read_symbolic_color (GtkCssParser *parser)
 
   g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), NULL);
 
+  if (_gtk_css_parser_try (parser, "transparent", TRUE))
+    {
+      GdkRGBA transparent = { 0, 0, 0, 0 };
+      
+      return gtk_symbolic_color_new_literal (&transparent);
+    }
+
   if (_gtk_css_parser_try (parser, "@", FALSE))
     {
       name = _gtk_css_parser_try_name (parser, TRUE);
