@@ -717,6 +717,25 @@ gtk_style_properties_set (GtkStyleProperties *props,
   va_end (args);
 }
 
+const GValue *
+_gtk_style_properties_peek_property (GtkStyleProperties      *props,
+                                     const GtkStyleProperty  *property,
+                                     GtkStateFlags            state)
+{
+  GtkStylePropertiesPrivate *priv;
+  PropertyData *prop;
+
+  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
+  g_return_val_if_fail (property != NULL, FALSE);
+
+  priv = props->priv;
+  prop = g_hash_table_lookup (priv->properties, property);
+  if (prop == NULL)
+    return NULL;
+
+  return property_data_match_state (prop, state);
+}
+
 gboolean
 _gtk_style_properties_get_property (GtkStyleProperties *props,
 				    const gchar        *property,
@@ -724,10 +743,8 @@ _gtk_style_properties_get_property (GtkStyleProperties *props,
 				    GtkStylePropertyContext *context,
 				    GValue             *value)
 {
-  GtkStylePropertiesPrivate *priv;
   const GtkStyleProperty *node;
-  PropertyData *prop;
-  GValue *val = NULL;
+  const GValue *val;
 
   g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
   g_return_val_if_fail (property != NULL, FALSE);
@@ -740,21 +757,11 @@ _gtk_style_properties_get_property (GtkStyleProperties *props,
       return FALSE;
     }
 
-  priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties, node);
-
-  val = NULL;
-
-  if (prop)
-    {
-      /* NB: Will return NULL for shorthands */
-      val = property_data_match_state (prop, state);
-    }
-
+  val = _gtk_style_properties_peek_property (props, node, state);
   g_value_init (value, node->pspec->value_type);
 
   if (val)
-    _gtk_style_property_resolve (node, props, state, context, val, value);
+    _gtk_style_property_resolve (node, props, state, context, (GValue *) val, value);
   else if (_gtk_style_property_is_shorthand (node))
     _gtk_style_property_pack (node, props, state, context, value);
   else

@@ -39,6 +39,9 @@ void           _gtk_style_properties_get_valist               (GtkStylePropertie
 							       GtkStylePropertyContext *context,
 							       va_list                  args);
 
+const GValue * _gtk_style_properties_peek_property            (GtkStyleProperties      *props,
+                                                               const GtkStyleProperty  *property,
+                                                               GtkStateFlags            state);
 void           _gtk_style_properties_set_property_by_property (GtkStyleProperties      *props,
                                                                const GtkStyleProperty  *property,
                                                                GtkStateFlags            state,
