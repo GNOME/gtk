@@ -98,7 +98,6 @@ guint                    _gtk_style_property_get_id        (const GtkStyleProper
 const GValue *           _gtk_style_property_get_initial_value
                                                            (const GtkStyleProperty *property);
 
-gboolean                 _gtk_style_property_is_shorthand  (const GtkStyleProperty *property);
 GParameter *             _gtk_style_property_unpack        (const GtkStyleProperty *property,
                                                             const GValue           *value,
                                                             guint                  *n_params);

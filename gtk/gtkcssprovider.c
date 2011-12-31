@@ -31,6 +31,7 @@
 #include "gtkcssparserprivate.h"
 #include "gtkcsssectionprivate.h"
 #include "gtkcssselectorprivate.h"
+#include "gtkcssshorthandpropertyprivate.h"
 #include "gtksymboliccolor.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"
@@ -1189,7 +1190,7 @@ gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
       ruleset->set_styles = _gtk_bitmask_new ();
     }
 
-  if (_gtk_style_property_is_shorthand (prop))
+  if (GTK_IS_CSS_SHORTHAND_PROPERTY (prop))
     {
       GParameter *parameters;
       guint i, n_parameters;

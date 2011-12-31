@@ -2675,14 +2675,6 @@ _gtk_style_property_get_initial_value (const GtkStyleProperty *property)
   return &property->initial_value;
 }
 
-gboolean
-_gtk_style_property_is_shorthand  (const GtkStyleProperty *property)
-{
-  g_return_val_if_fail (property != NULL, FALSE);
-
-  return property->pack_func != NULL;
-}
-
 GParameter *
 _gtk_style_property_unpack (const GtkStyleProperty *property,
                             const GValue           *value,
@@ -2730,7 +2722,7 @@ _gtk_style_property_query (const GtkStyleProperty  *property,
 
   if (val)
     _gtk_style_property_resolve (property, props, state, context, (GValue *) val, value);
-  else if (_gtk_style_property_is_shorthand (property))
+  else if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
     _gtk_style_property_pack (property, props, state, context, value);
   else
     _gtk_style_property_default_value (property, props, state, value);
@@ -3268,7 +3260,7 @@ _gtk_style_property_register (GParamSpec               *pspec,
   node->print_func = print_func;
   node->unset_func = unset_func;
 
-  if (!_gtk_style_property_is_shorthand (node))
+  if (!GTK_IS_CSS_SHORTHAND_PROPERTY (node))
     {
       _gtk_style_property_generate_id (node);
 

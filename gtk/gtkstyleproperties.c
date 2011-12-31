@@ -31,6 +31,7 @@
 #include "gtkanimationdescription.h"
 #include "gtkgradient.h"
 #include "gtkshadowprivate.h"
+#include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkborderimageprivate.h"
 
@@ -559,7 +560,7 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties     *props,
   else
     g_return_if_fail (style_prop->pspec->value_type == value_type);
 
-  if (_gtk_style_property_is_shorthand (style_prop))
+  if (GTK_IS_CSS_SHORTHAND_PROPERTY (style_prop))
     {
       GParameter *parameters;
       guint i, n_parameters;
