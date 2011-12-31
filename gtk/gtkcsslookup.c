@@ -122,7 +122,7 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
 
   for (i = 0; i < n; i++)
     {
-      const GtkStyleProperty *prop = _gtk_style_property_get (i);
+      GtkStyleProperty *prop = _gtk_style_property_get (i);
       const GValue *result;
 
       /* http://www.w3.org/TR/css3-cascade/#cascade

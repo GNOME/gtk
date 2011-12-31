@@ -1604,7 +1604,7 @@ _gtk_style_property_get_count (void)
   return __style_property_array ? __style_property_array->len : 0;
 }
 
-const GtkStyleProperty *
+GtkStyleProperty *
 _gtk_style_property_get (guint id)
 {
   g_assert (__style_property_array);
@@ -1694,10 +1694,10 @@ css_string_funcs_init (void)
 }
 
 gboolean
-_gtk_style_property_parse_value (const GtkStyleProperty *property,
-                                 GValue                 *value,
-                                 GtkCssParser           *parser,
-                                 GFile                  *base)
+_gtk_style_property_parse_value (GtkStyleProperty *property,
+                                 GValue           *value,
+                                 GtkCssParser     *parser,
+                                 GFile            *base)
 {
   GtkStyleParseFunc func;
 
@@ -1772,9 +1772,9 @@ _gtk_style_property_parse_value (const GtkStyleProperty *property,
 }
 
 void
-_gtk_style_property_print_value (const GtkStyleProperty *property,
-                                 const GValue           *value,
-                                 GString                *string)
+_gtk_style_property_print_value (GtkStyleProperty *property,
+                                 const GValue     *value,
+                                 GString          *string)
 {
   GtkStylePrintFunc func;
 
@@ -1806,16 +1806,16 @@ _gtk_style_property_print_value (const GtkStyleProperty *property,
 }
 
 static void
-_gtk_style_property_default_value (const GtkStyleProperty *property,
-                                   GtkStyleProperties     *properties,
-                                   GtkStateFlags           state,
-                                   GValue                 *value)
+_gtk_style_property_default_value (GtkStyleProperty   *property,
+                                   GtkStyleProperties *properties,
+                                   GtkStateFlags       state,
+                                   GValue             *value)
 {
   g_value_copy (&property->initial_value, value);
 }
 
 gboolean
-_gtk_style_property_is_inherit (const GtkStyleProperty *property)
+_gtk_style_property_is_inherit (GtkStyleProperty *property)
 {
   g_return_val_if_fail (property != NULL, FALSE);
 
@@ -1823,7 +1823,7 @@ _gtk_style_property_is_inherit (const GtkStyleProperty *property)
 }
 
 guint
-_gtk_style_property_get_id (const GtkStyleProperty *property)
+_gtk_style_property_get_id (GtkStyleProperty *property)
 {
   g_return_val_if_fail (property != NULL, FALSE);
 
@@ -1931,7 +1931,7 @@ resolve_shadow (GtkStyleProperties *props,
 }
 
 static void
-_gtk_style_property_resolve (const GtkStyleProperty *property,
+_gtk_style_property_resolve (GtkStyleProperty       *property,
                              GtkStyleProperties     *props,
                              GtkStateFlags           state,
 			     GtkStylePropertyContext *context,
@@ -2005,7 +2005,7 @@ _gtk_style_property_resolve (const GtkStyleProperty *property,
 }
 
 const GValue *
-_gtk_style_property_get_initial_value (const GtkStyleProperty *property)
+_gtk_style_property_get_initial_value (GtkStyleProperty *property)
 {
   g_return_val_if_fail (property != NULL, NULL);
 
@@ -2013,9 +2013,9 @@ _gtk_style_property_get_initial_value (const GtkStyleProperty *property)
 }
 
 GParameter *
-_gtk_style_property_unpack (const GtkStyleProperty *property,
-                            const GValue           *value,
-                            guint                  *n_params)
+_gtk_style_property_unpack (GtkStyleProperty *property,
+                            const GValue     *value,
+                            guint            *n_params)
 {
   g_return_val_if_fail (property != NULL, NULL);
   g_return_val_if_fail (property->unpack_func != NULL, NULL);
@@ -2026,11 +2026,11 @@ _gtk_style_property_unpack (const GtkStyleProperty *property,
 }
 
 static void
-_gtk_style_property_pack (const GtkStyleProperty *property,
-                          GtkStyleProperties     *props,
-                          GtkStateFlags           state,
+_gtk_style_property_pack (GtkStyleProperty   *property,
+                          GtkStyleProperties *props,
+                          GtkStateFlags       state,
 			  GtkStylePropertyContext *context,
-                          GValue                 *value)
+                          GValue             *value)
 {
   g_return_if_fail (property != NULL);
   g_return_if_fail (property->pack_func != NULL);
@@ -2041,7 +2041,7 @@ _gtk_style_property_pack (const GtkStyleProperty *property,
 }
 
 void
-_gtk_style_property_query (const GtkStyleProperty  *property,
+_gtk_style_property_query (GtkStyleProperty        *property,
                            GtkStyleProperties      *props,
                            GtkStateFlags            state,
 			   GtkStylePropertyContext *context,
@@ -2419,7 +2419,7 @@ gtk_style_property_init_properties (void)
  * Returns: (transfer none): The property or %NULL if no
  *     property with the given name exists.
  **/
-const GtkStyleProperty *
+GtkStyleProperty *
 _gtk_style_property_lookup (const char *name)
 {
   GtkStylePropertyClass *klass;

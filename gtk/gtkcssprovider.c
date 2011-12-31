@@ -1177,9 +1177,9 @@ gtk_css_ruleset_add_style (GtkCssRuleset *ruleset,
 }
 
 static void
-gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
-                     const GtkStyleProperty *prop,
-                     PropertyValue          *value)
+gtk_css_ruleset_add (GtkCssRuleset    *ruleset,
+                     GtkStyleProperty *prop,
+                     PropertyValue    *value)
 {
   if (ruleset->style == NULL)
     {
@@ -1199,7 +1199,7 @@ gtk_css_ruleset_add (GtkCssRuleset          *ruleset,
 
       for (i = 0; i < n_parameters; i++)
         {
-          const GtkStyleProperty *child;
+          GtkStyleProperty *child;
           PropertyValue *val;
 
           child = _gtk_style_property_lookup (parameters[i].name);
@@ -2305,7 +2305,7 @@ static void
 parse_declaration (GtkCssScanner *scanner,
                    GtkCssRuleset *ruleset)
 {
-  const GtkStyleProperty *property;
+  GtkStyleProperty *property;
   char *name;
 
   gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_DECLARATION);
@@ -3251,8 +3251,8 @@ gtk_css_provider_get_named (const gchar *name,
 static int
 compare_properties (gconstpointer a, gconstpointer b)
 {
-  return strcmp (((const GtkStyleProperty *) a)->pspec->name,
-                 ((const GtkStyleProperty *) b)->pspec->name);
+  return strcmp (((GtkStyleProperty *) a)->pspec->name,
+                 ((GtkStyleProperty *) b)->pspec->name);
 }
 
 static void

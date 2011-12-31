@@ -399,7 +399,7 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
                                       GtkStylePropertyParser  *parse_func,
                                       GParamSpec             **pspec)
 {
-  const GtkStyleProperty *node;
+  GtkStyleProperty *node;
   gboolean found = FALSE;
 
   g_return_val_if_fail (property_name != NULL, FALSE);
@@ -521,10 +521,10 @@ gtk_style_properties_lookup_color (GtkStyleProperties *props,
 }
 
 void
-_gtk_style_properties_set_property_by_property (GtkStyleProperties     *props,
-                                                const GtkStyleProperty *style_prop,
-                                                GtkStateFlags           state,
-                                                const GValue           *value)
+_gtk_style_properties_set_property_by_property (GtkStyleProperties *props,
+                                                GtkStyleProperty   *style_prop,
+                                                GtkStateFlags       state,
+                                                const GValue       *value)
 {
   GtkStylePropertiesPrivate *priv;
   PropertyData *prop;
@@ -619,7 +619,7 @@ gtk_style_properties_set_property (GtkStyleProperties *props,
                                    GtkStateFlags       state,
                                    const GValue       *value)
 {
-  const GtkStyleProperty *node;
+  GtkStyleProperty *node;
 
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
   g_return_if_fail (property != NULL);
@@ -662,7 +662,7 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
 
   while (property_name)
     {
-      const GtkStyleProperty *node;
+      GtkStyleProperty *node;
       gchar *error = NULL;
       GValue val = G_VALUE_INIT;
 
@@ -716,9 +716,9 @@ gtk_style_properties_set (GtkStyleProperties *props,
 }
 
 const GValue *
-_gtk_style_properties_peek_property (GtkStyleProperties      *props,
-                                     const GtkStyleProperty  *property,
-                                     GtkStateFlags            state)
+_gtk_style_properties_peek_property (GtkStyleProperties *props,
+                                     GtkStyleProperty   *property,
+                                     GtkStateFlags       state)
 {
   GtkStylePropertiesPrivate *priv;
   PropertyData *prop;
@@ -741,7 +741,7 @@ _gtk_style_properties_get_property (GtkStyleProperties *props,
 				    GtkStylePropertyContext *context,
 				    GValue             *value)
 {
-  const GtkStyleProperty *node;
+  GtkStyleProperty *node;
 
   g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
   g_return_val_if_fail (property != NULL, FALSE);
@@ -903,7 +903,7 @@ gtk_style_properties_unset_property (GtkStyleProperties *props,
                                      GtkStateFlags       state)
 {
   GtkStylePropertiesPrivate *priv;
-  const GtkStyleProperty *node;
+  GtkStyleProperty *node;
   PropertyData *prop;
   guint pos;
 
