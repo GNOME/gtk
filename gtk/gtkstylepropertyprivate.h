@@ -57,6 +57,8 @@ struct _GtkStyleProperty
 {
   GObject parent;
 
+  char *name;
+
   GParamSpec               *pspec;
   GtkStylePropertyFlags     flags;
   guint                     id;
@@ -73,6 +75,8 @@ struct _GtkStyleProperty
 struct _GtkStylePropertyClass
 {
   GObjectClass  parent_class;
+  
+  GHashTable   *properties;
 };
 
 GType               _gtk_style_property_get_type             (void) G_GNUC_CONST;
@@ -81,6 +85,8 @@ guint                    _gtk_style_property_get_count     (void);
 const GtkStyleProperty * _gtk_style_property_get           (guint                   id);
 
 const GtkStyleProperty * _gtk_style_property_lookup        (const char             *name);
+
+const char *             _gtk_style_property_get_name      (GtkStyleProperty       *property);
 
 void                     _gtk_style_property_register      (GParamSpec             *pspec,
                                                             GtkStylePropertyFlags   flags,

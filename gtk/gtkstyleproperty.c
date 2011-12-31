@@ -34,6 +34,7 @@
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gtkintl.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertiesprivate.h"
 
@@ -52,9 +53,13 @@
  */
 #include "fallback-c89.c"
 
+enum {
+  PROP_0,
+  PROP_NAME
+};
+
 static GHashTable *parse_funcs = NULL;
 static GHashTable *print_funcs = NULL;
-static GHashTable *properties = NULL;
 static GPtrArray *__style_property_array = NULL;
 
 G_DEFINE_ABSTRACT_TYPE (GtkStyleProperty, _gtk_style_property, G_TYPE_OBJECT)
@@ -64,9 +69,51 @@ gtk_style_property_finalize (GObject *object)
 {
   GtkStyleProperty *property = GTK_STYLE_PROPERTY (object);
 
-  g_warning ("finalizing %s `%s', how could this happen?", G_OBJECT_TYPE_NAME (object), property->pspec->name);
+  g_warning ("finalizing %s `%s', how could this happen?", G_OBJECT_TYPE_NAME (object), property->name);
 
   G_OBJECT_CLASS (_gtk_style_property_parent_class)->finalize (object);
+}
+
+static void
+gtk_style_property_set_property (GObject      *object,
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
+{
+  GtkStyleProperty *property = GTK_STYLE_PROPERTY (object);
+  GtkStylePropertyClass *klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      property->name = g_value_dup_string (value);
+      g_assert (property->name);
+      g_assert (g_hash_table_lookup (klass->properties, property->name) == NULL);
+      g_hash_table_insert (klass->properties, property->name, property);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_style_property_get_property (GObject    *object,
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
+{
+  GtkStyleProperty *property = GTK_STYLE_PROPERTY (object);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      g_value_set_string (value, property->name);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -75,6 +122,18 @@ _gtk_style_property_class_init (GtkStylePropertyClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_style_property_finalize;
+  object_class->set_property = gtk_style_property_set_property;
+  object_class->get_property = gtk_style_property_get_property;
+
+  g_object_class_install_property (object_class,
+                                   PROP_NAME,
+                                   g_param_spec_string ("name",
+                                                        P_("Property name"),
+                                                        P_("The name of the property"),
+                                                        NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  klass->properties = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
 static void
@@ -2735,20 +2794,17 @@ _gtk_style_property_query (const GtkStyleProperty  *property,
   (rgba)->alpha = (a); \
 }G_STMT_END
 static void
-gtk_style_property_init (void)
+gtk_style_property_init_properties (void)
 {
+  static gboolean initialized = FALSE;
   GValue value = { 0, };
   char *default_font_family[] = { "Sans", NULL };
   GdkRGBA rgba;
 
-  if (G_LIKELY (properties))
+  if (G_LIKELY (initialized))
     return;
 
-  /* stuff is never freed, so no need for free functions */
-  properties = g_hash_table_new (g_str_hash, g_str_equal);
-
-  /* note that gtk_style_properties_register_property() calls this function,
-   * so make sure we're sanely inited to avoid infloops */
+  initialized = TRUE;
 
   g_value_init (&value, GDK_TYPE_RGBA);
   rgba_init (&rgba, 1, 1, 1, 1);
@@ -3213,13 +3269,46 @@ gtk_style_property_init (void)
                                           NULL);
 }
 
+/**
+ * _gtk_style_property_lookup:
+ * @name: name of the property to lookup
+ *
+ * Looks up the CSS property with the given @name. If no such
+ * property exists, %NULL is returned.
+ *
+ * Returns: (transfer none): The property or %NULL if no
+ *     property with the given name exists.
+ **/
 const GtkStyleProperty *
 _gtk_style_property_lookup (const char *name)
 {
-  gtk_style_property_init ();
+  GtkStylePropertyClass *klass;
 
-  return g_hash_table_lookup (properties, name);
+  g_return_val_if_fail (name != NULL, NULL);
+
+  gtk_style_property_init_properties ();
+
+  klass = g_type_class_peek (GTK_TYPE_STYLE_PROPERTY);
+
+  return g_hash_table_lookup (klass->properties, name);
 }
+
+/**
+ * _gtk_style_property_get_name:
+ * @property: the property to query
+ *
+ * Gets the name of the given property.
+ *
+ * Returns: the name of the property
+ **/
+const char *
+_gtk_style_property_get_name (GtkStyleProperty *property)
+{
+  g_return_val_if_fail (GTK_IS_STYLE_PROPERTY (property), NULL);
+
+  return property->name;
+}
+
 
 void
 _gtk_style_property_register (GParamSpec               *pspec,
@@ -3232,25 +3321,18 @@ _gtk_style_property_register (GParamSpec               *pspec,
                               const GValue *            initial_value,
                               GtkStyleUnsetFunc         unset_func)
 {
-  const GtkStyleProperty *existing;
   GtkStyleProperty *node;
 
   g_return_if_fail ((pack_func == NULL) == (unpack_func == NULL));
 
-  gtk_style_property_init ();
-
-  existing = _gtk_style_property_lookup (pspec->name);
-  if (existing != NULL)
-    {
-      g_warning ("Property \"%s\" was already registered with type %s",
-                 pspec->name, g_type_name (existing->pspec->value_type));
-      return;
-    }
-
   if (pack_func == NULL)
-    node = g_object_new (GTK_TYPE_CSS_STYLE_PROPERTY, NULL);
+    node = g_object_new (GTK_TYPE_CSS_STYLE_PROPERTY,
+                         "name", pspec->name,
+                         NULL);
   else
-    node = g_object_new (GTK_TYPE_CSS_SHORTHAND_PROPERTY, NULL);
+    node = g_object_new (GTK_TYPE_CSS_SHORTHAND_PROPERTY,
+                         "name", pspec->name,
+                         NULL);
   node->flags = flags;
   node->pspec = pspec;
   node->property_parse_func = property_parse_func;
@@ -3291,7 +3373,4 @@ _gtk_style_property_register (GParamSpec               *pspec,
             g_param_value_set_default (pspec, &node->initial_value);
         }
     }
-
-  /* pspec owns name */
-  g_hash_table_insert (properties, (gchar *)pspec->name, node);
 }
