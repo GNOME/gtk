@@ -2395,9 +2395,6 @@ css_string_funcs_init (void)
   register_conversion_function (CAIRO_GOBJECT_TYPE_PATTERN,
                                 pattern_value_parse,
                                 pattern_value_print);
-  register_conversion_function (GTK_TYPE_BORDER_IMAGE,
-                                border_image_value_parse,
-                                NULL);
   register_conversion_function (GTK_TYPE_CSS_BORDER_IMAGE_REPEAT,
                                 border_image_repeat_value_parse,
                                 border_image_repeat_value_print);
