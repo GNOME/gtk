@@ -339,65 +339,6 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
 }
 
 /**
- * gtk_theming_engine_register_property: (skip)
- * @name_space: namespace for the property name
- * @parse_func: parsing function to use, or %NULL
- * @pspec: the #GParamSpec for the new property
- *
- * Registers a property so it can be used in the CSS file format,
- * on the CSS file the property will look like
- * "-${@name_space}-${property_name}". being
- * ${property_name} the given to @pspec. @name_space will usually
- * be the theme engine name.
- *
- * For any type a @parse_func may be provided, being this function
- * used for turning any property value (between ':' and ';') in
- * CSS to the #GValue needed. For basic types there is already
- * builtin parsing support, so %NULL may be provided for these
- * cases.
- *
- * <note>
- * Engines must ensure property registration happens exactly once,
- * usually GTK+ deals with theming engines as singletons, so this
- * should be guaranteed to happen once, but bear this in mind
- * when creating #GtkThemeEngine<!-- -->s yourself.
- * </note>
- *
- * <note>
- * In order to make use of the custom registered properties in
- * the CSS file, make sure the engine is loaded first by specifying
- * the engine property, either in a previous rule or within the same
- * one.
- * <programlisting>
- * &ast; {
- *     engine: someengine;
- *     -SomeEngine-custom-property: 2;
- * }
- * </programlisting>
- * </note>
- *
- * Since: 3.0
- **/
-void
-gtk_theming_engine_register_property (const gchar            *name_space,
-                                      GtkStylePropertyParser  parse_func,
-                                      GParamSpec             *pspec)
-{
-  gchar *name;
-
-  g_return_if_fail (name_space != NULL);
-  g_return_if_fail (strchr (name_space, ' ') == NULL);
-  g_return_if_fail (G_IS_PARAM_SPEC (pspec));
-
-  /* FIXME: hack hack hack, replacing pspec->name to include namespace */
-  name = g_strdup_printf ("-%s-%s", name_space, pspec->name);
-  pspec->name = (char *)g_intern_string (name);
-  g_free (name);
-
-  gtk_style_properties_register_property (parse_func, pspec);
-}
-
-/**
  * gtk_theming_engine_get_property:
  * @engine: a #GtkThemingEngine
  * @property: the property name
