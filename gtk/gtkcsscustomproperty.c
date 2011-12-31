@@ -193,7 +193,7 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
 
   node = _gtk_style_property_lookup (property_name);
 
-  if (node)
+  if (GTK_IS_CSS_CUSTOM_PROPERTY (node))
     {
       if (pspec)
         *pspec = node->pspec;
