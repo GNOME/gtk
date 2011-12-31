@@ -886,10 +886,23 @@ gtk_style_properties_unset_property (GtkStyleProperties *props,
       g_warning ("Style property \"%s\" is not registered", property);
       return;
     }
-
-  if (node->unset_func)
+  if (_gtk_style_property_get_value_type (node) == G_TYPE_NONE)
     {
-      node->unset_func (props, state);
+      g_warning ("Style property \"%s\" is not settable", property);
+      return;
+    }
+
+  if (GTK_IS_CSS_SHORTHAND_PROPERTY (node))
+    {
+      GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (node);
+
+      for (pos = 0; pos < _gtk_css_shorthand_property_get_n_subproperties (shorthand); pos++)
+        {
+          GtkCssStyleProperty *sub = _gtk_css_shorthand_property_get_subproperty (shorthand, pos);
+          gtk_style_properties_unset_property (props,
+                                               _gtk_style_property_get_name (GTK_STYLE_PROPERTY (sub)),
+                                               state);
+        }
       return;
     }
 
