@@ -33,6 +33,7 @@
 #include "gtkcssparserprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkprivatetypebuiltins.h"
+#include "gtkstylepropertiesprivate.h"
 
 /* the actual parsers we have */
 #include "gtkanimationdescription.h"
@@ -2440,7 +2441,7 @@ _gtk_style_property_print_value (const GtkStyleProperty *property,
   func (value, string);
 }
 
-void
+static void
 _gtk_style_property_default_value (const GtkStyleProperty *property,
                                    GtkStyleProperties     *properties,
                                    GtkStateFlags           state,
@@ -2565,7 +2566,7 @@ resolve_shadow (GtkStyleProperties *props,
   return TRUE;
 }
 
-void
+static void
 _gtk_style_property_resolve (const GtkStyleProperty *property,
                              GtkStyleProperties     *props,
                              GtkStateFlags           state,
@@ -2668,7 +2669,7 @@ _gtk_style_property_unpack (const GtkStyleProperty *property,
   return property->unpack_func (value, n_params);
 }
 
-void
+static void
 _gtk_style_property_pack (const GtkStyleProperty *property,
                           GtkStyleProperties     *props,
                           GtkStateFlags           state,
@@ -2681,6 +2682,31 @@ _gtk_style_property_pack (const GtkStyleProperty *property,
   g_return_if_fail (G_IS_VALUE (value));
 
   property->pack_func (value, props, state, context);
+}
+
+void
+_gtk_style_property_query (const GtkStyleProperty  *property,
+                           GtkStyleProperties      *props,
+                           GtkStateFlags            state,
+			   GtkStylePropertyContext *context,
+                           GValue                  *value)
+{
+  const GValue *val;
+
+  g_return_if_fail (property != NULL);
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
+  g_return_if_fail (context != NULL);
+  g_return_if_fail (value != NULL);
+
+  val = _gtk_style_properties_peek_property (props, property, state);
+  g_value_init (value, property->pspec->value_type);
+
+  if (val)
+    _gtk_style_property_resolve (property, props, state, context, (GValue *) val, value);
+  else if (_gtk_style_property_is_shorthand (property))
+    _gtk_style_property_pack (property, props, state, context, value);
+  else
+    _gtk_style_property_default_value (property, props, state, value);
 }
 
 #define rgba_init(rgba, r, g, b, a) G_STMT_START{ \

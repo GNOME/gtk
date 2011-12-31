@@ -78,29 +78,13 @@ void                     _gtk_style_property_register      (GParamSpec          
 gboolean                 _gtk_style_property_is_inherit    (const GtkStyleProperty *property);
 guint                    _gtk_style_property_get_id        (const GtkStyleProperty *property);
 
-void                     _gtk_style_property_default_value (const GtkStyleProperty *property,
-                                                            GtkStyleProperties     *properties,
-                                                            GtkStateFlags           state,
-                                                            GValue                 *value);
 const GValue *           _gtk_style_property_get_initial_value
                                                            (const GtkStyleProperty *property);
-
-void                     _gtk_style_property_resolve       (const GtkStyleProperty *property,
-                                                            GtkStyleProperties     *properties,
-                                                            GtkStateFlags           state,
-							    GtkStylePropertyContext *context,
-                                                            GValue                 *orig_value,
-                                                            GValue                 *out_value);
 
 gboolean                 _gtk_style_property_is_shorthand  (const GtkStyleProperty *property);
 GParameter *             _gtk_style_property_unpack        (const GtkStyleProperty *property,
                                                             const GValue           *value,
                                                             guint                  *n_params);
-void                     _gtk_style_property_pack          (const GtkStyleProperty *property,
-                                                            GtkStyleProperties     *props,
-                                                            GtkStateFlags           state,
-							    GtkStylePropertyContext *context,
-                                                            GValue                 *value);
 
 gboolean                 _gtk_style_property_parse_value   (const GtkStyleProperty *property,
                                                             GValue                 *value,
@@ -109,6 +93,12 @@ gboolean                 _gtk_style_property_parse_value   (const GtkStyleProper
 void                     _gtk_style_property_print_value   (const GtkStyleProperty *property,
                                                             const GValue           *value,
                                                             GString                *string);
+
+void                     _gtk_style_property_query         (const GtkStyleProperty *property,
+                                                            GtkStyleProperties     *props,
+                                                            GtkStateFlags           state,
+							    GtkStylePropertyContext *context,
+                                                            GValue                 *value);
 
 G_END_DECLS
 
