@@ -61,8 +61,6 @@ struct _GtkStyleProperty
   GType value_type;
 
   GParamSpec               *pspec;
-  GtkStylePropertyFlags     flags;
-  GValue                    initial_value;
 
   GtkStylePropertyParser    property_parse_func;
   GtkStyleUnpackFunc        unpack_func;

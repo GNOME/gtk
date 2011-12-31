@@ -1801,7 +1801,7 @@ _gtk_style_property_default_value (GtkStyleProperty   *property,
                                    GtkStateFlags       state,
                                    GValue             *value)
 {
-  g_value_copy (&property->initial_value, value);
+  g_value_copy (_gtk_css_style_property_get_initial_value (GTK_CSS_STYLE_PROPERTY (property)), value);
 }
 
 static gboolean
@@ -2495,41 +2495,42 @@ _gtk_style_property_register (GParamSpec               *pspec,
                               const GValue *            initial_value)
 {
   GtkStyleProperty *node;
+  GValue initial_fallback = { 0, };
+
+  if (initial_value == NULL)
+    {
+      g_value_init (&initial_fallback, pspec->value_type);
+      if (pspec->value_type == GTK_TYPE_THEMING_ENGINE)
+        g_value_set_object (&initial_fallback, gtk_theming_engine_load (NULL));
+      else if (pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
+        g_value_take_boxed (&initial_fallback, pango_font_description_from_string ("Sans 10"));
+      else if (pspec->value_type == GDK_TYPE_RGBA)
+        {
+          GdkRGBA color;
+          gdk_rgba_parse (&color, "pink");
+          g_value_set_boxed (&initial_fallback, &color);
+        }
+      else if (pspec->value_type == GTK_TYPE_BORDER)
+        {
+          g_value_take_boxed (&initial_fallback, gtk_border_new ());
+        }
+      else
+        g_param_value_set_default (pspec, &initial_fallback);
+
+      initial_value = &initial_fallback;
+    }
 
   node = g_object_new (GTK_TYPE_CSS_STYLE_PROPERTY,
+                       "inherit", (flags & GTK_STYLE_PROPERTY_INHERIT) ? TRUE : FALSE,
+                       "initial-value", initial_value,
                        "name", pspec->name,
                        "value-type", pspec->value_type,
                        NULL);
-  node->flags = flags;
   node->pspec = pspec;
   node->property_parse_func = property_parse_func;
   node->parse_func = parse_func;
   node->print_func = print_func;
 
-  /* initialize the initial value */
-  if (initial_value)
-    {
-      g_value_init (&node->initial_value, G_VALUE_TYPE (initial_value));
-      g_value_copy (initial_value, &node->initial_value);
-    }
-  else
-    {
-      g_value_init (&node->initial_value, pspec->value_type);
-      if (pspec->value_type == GTK_TYPE_THEMING_ENGINE)
-        g_value_set_object (&node->initial_value, gtk_theming_engine_load (NULL));
-      else if (pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
-        g_value_take_boxed (&node->initial_value, pango_font_description_from_string ("Sans 10"));
-      else if (pspec->value_type == GDK_TYPE_RGBA)
-        {
-          GdkRGBA color;
-          gdk_rgba_parse (&color, "pink");
-          g_value_set_boxed (&node->initial_value, &color);
-        }
-      else if (pspec->value_type == GTK_TYPE_BORDER)
-        {
-          g_value_take_boxed (&node->initial_value, gtk_border_new ());
-        }
-      else
-        g_param_value_set_default (pspec, &node->initial_value);
-    }
+  if (G_IS_VALUE (&initial_fallback))
+    g_value_unset (&initial_fallback);
 }

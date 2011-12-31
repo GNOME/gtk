@@ -27,6 +27,8 @@
 enum {
   PROP_0,
   PROP_ID,
+  PROP_INHERIT,
+  PROP_INITIAL
 };
 
 G_DEFINE_TYPE (GtkCssStyleProperty, _gtk_css_style_property, GTK_TYPE_STYLE_PROPERTY)
@@ -44,6 +46,32 @@ gtk_css_style_property_constructed (GObject *object)
 }
 
 static void
+gtk_css_style_property_set_property (GObject      *object,
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+{
+  GtkCssStyleProperty *property = GTK_CSS_STYLE_PROPERTY (object);
+  const GValue *initial;
+
+  switch (prop_id)
+    {
+    case PROP_INHERIT:
+      property->inherit = g_value_get_boolean (value);
+      break;
+    case PROP_INITIAL:
+      initial = g_value_get_boxed (value);
+      g_assert (initial);
+      g_value_init (&property->initial_value, G_VALUE_TYPE (initial));
+      g_value_copy (initial, &property->initial_value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_css_style_property_get_property (GObject    *object,
                                      guint       prop_id,
                                      GValue     *value,
@@ -55,6 +83,12 @@ gtk_css_style_property_get_property (GObject    *object,
     {
     case PROP_ID:
       g_value_set_boolean (value, property->id);
+      break;
+    case PROP_INHERIT:
+      g_value_set_boolean (value, property->inherit);
+      break;
+    case PROP_INITIAL:
+      g_value_set_boxed (value, &property->initial_value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -68,6 +102,7 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = gtk_css_style_property_constructed;
+  object_class->set_property = gtk_css_style_property_set_property;
   object_class->get_property = gtk_css_style_property_get_property;
 
   g_object_class_install_property (object_class,
@@ -77,6 +112,20 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
                                                       P_("The numeric id for quick access"),
                                                       0, G_MAXUINT, 0,
                                                       G_PARAM_READABLE));
+  g_object_class_install_property (object_class,
+                                   PROP_INHERIT,
+                                   g_param_spec_boolean ("inherit",
+                                                         P_("Inherit"),
+                                                         P_("Set if the value is inherited by default"),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+                                   PROP_INITIAL,
+                                   g_param_spec_boxed ("initial-value",
+                                                       P_("Initial value"),
+                                                       P_("The initial specified value used for this property"),
+                                                       G_TYPE_VALUE,
+                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   klass->style_properties = g_ptr_array_new ();
 }
@@ -126,6 +175,24 @@ _gtk_css_style_property_lookup_by_id (guint id)
 }
 
 /**
+ * _gtk_css_style_property_is_inherit:
+ * @property: the property
+ *
+ * Queries if the given @property is inherited. See
+ * <ulink url="http://www.w3.org/TR/css3-cascade/#inheritance>
+ * the CSS documentation</ulink> for an explanation of this concept.
+ *
+ * Returns: %TRUE if the property is inherited by default.
+ **/
+gboolean
+_gtk_css_style_property_is_inherit (GtkCssStyleProperty *property)
+{
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), 0);
+
+  return property->inherit;
+}
+
+/**
  * _gtk_css_style_property_get_id:
  * @property: the property
  *
@@ -142,19 +209,21 @@ _gtk_css_style_property_get_id (GtkCssStyleProperty *property)
   return property->id;
 }
 
-gboolean
-_gtk_css_style_property_is_inherit (GtkCssStyleProperty *property)
-{
-  g_return_val_if_fail (property != NULL, FALSE);
-
-  return GTK_STYLE_PROPERTY (property)->flags & GTK_STYLE_PROPERTY_INHERIT ? TRUE : FALSE;
-}
-
+/**
+ * _gtk_css_style_property_get_initial_value:
+ * @property: the property
+ *
+ * Queries the initial value of the given @property. See
+ * <ulink url="http://www.w3.org/TR/css3-cascade/#intial>
+ * the CSS documentation</ulink> for an explanation of this concept.
+ *
+ * Returns: a reference to the initial value. The value will never change.
+ **/
 const GValue *
 _gtk_css_style_property_get_initial_value (GtkCssStyleProperty *property)
 {
-  g_return_val_if_fail (property != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), NULL);
 
-  return &GTK_STYLE_PROPERTY (property)->initial_value;
+  return &property->initial_value;
 }
 

@@ -39,7 +39,9 @@ struct _GtkCssStyleProperty
 {
   GtkStyleProperty parent;
 
+  GValue initial_value;
   guint id;
+  guint inherit :1;
 };
 
 struct _GtkCssStylePropertyClass
