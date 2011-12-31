@@ -768,7 +768,6 @@ unset_border_image (GtkStyleProperties *props,
 static void
 _gtk_css_shorthand_property_register (GParamSpec               *pspec,
                                       const char              **subproperties,
-                                      GtkStylePropertyFlags     flags,
                                       GtkStylePropertyParser    property_parse_func,
                                       GtkStyleUnpackFunc        unpack_func,
                                       GtkStylePackFunc          pack_func,
@@ -788,7 +787,6 @@ _gtk_css_shorthand_property_register (GParamSpec               *pspec,
                        "subproperties", subproperties,
                        NULL);
 
-  node->flags = flags;
   node->pspec = pspec;
   node->property_parse_func = property_parse_func;
   node->pack_func = pack_func;
@@ -815,7 +813,6 @@ _gtk_css_shorthand_property_init_properties (void)
                                                               "Font Description",
                                                               PANGO_TYPE_FONT_DESCRIPTION, 0),
                                           font_subproperties,
-                                          GTK_STYLE_PROPERTY_INHERIT,
                                           NULL,
                                           unpack_font_description,
                                           pack_font_description,
@@ -828,7 +825,6 @@ _gtk_css_shorthand_property_init_properties (void)
                                                               "Margin",
                                                               GTK_TYPE_BORDER, 0),
                                           margin_subproperties,
-                                          0,
                                           NULL,
                                           unpack_margin,
                                           pack_margin,
@@ -841,7 +837,6 @@ _gtk_css_shorthand_property_init_properties (void)
                                                               "Padding",
                                                               GTK_TYPE_BORDER, 0),
                                           padding_subproperties,
-                                          0,
                                           NULL,
                                           unpack_padding,
                                           pack_padding,
@@ -854,7 +849,6 @@ _gtk_css_shorthand_property_init_properties (void)
                                                               "Border width, in pixels",
                                                               GTK_TYPE_BORDER, 0),
                                           border_width_subproperties,
-                                          0,
                                           NULL,
                                           unpack_border_width,
                                           pack_border_width,
@@ -867,7 +861,6 @@ _gtk_css_shorthand_property_init_properties (void)
                                                             "Border radius, in pixels",
                                                             0, G_MAXINT, 0, 0),
                                           border_radius_subproperties,
-                                          0,
                                           NULL,
                                           unpack_border_radius,
                                           pack_border_radius,
@@ -880,7 +873,6 @@ _gtk_css_shorthand_property_init_properties (void)
                                                               "Border color",
                                                               GDK_TYPE_RGBA, 0),
                                           border_color_subproperties,
-                                          0,
                                           NULL,
                                           unpack_border_color,
                                           pack_border_color,
@@ -893,7 +885,6 @@ _gtk_css_shorthand_property_init_properties (void)
                                                               "Border Image",
                                                               GTK_TYPE_BORDER_IMAGE, 0),
                                           border_image_subproperties,
-                                          0,
                                           NULL,
                                           _gtk_border_image_unpack,
                                           _gtk_border_image_pack,
