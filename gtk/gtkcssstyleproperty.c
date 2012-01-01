@@ -244,7 +244,7 @@ _gtk_style_property_resolve (GtkStyleProperty       *property,
       switch (special)
         {
         case GTK_CSS_CURRENT_COLOR:
-          g_assert (property->pspec->value_type == GDK_TYPE_RGBA);
+          g_assert (_gtk_style_property_get_value_type (property) == GDK_TYPE_RGBA);
           gtk_style_properties_get_property (props, "color", state, val);
           break;
         case GTK_CSS_INHERIT:
@@ -255,19 +255,19 @@ _gtk_style_property_resolve (GtkStyleProperty       *property,
     }
   else if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
     {
-      if (property->pspec->value_type == GDK_TYPE_RGBA)
+      if (_gtk_style_property_get_value_type (property) == GDK_TYPE_RGBA)
         {
           if (resolve_color (props, val))
             goto out;
         }
-      else if (property->pspec->value_type == GDK_TYPE_COLOR)
+      else if (_gtk_style_property_get_value_type (property) == GDK_TYPE_COLOR)
         {
           if (resolve_color_rgb (props, val))
             goto out;
         }
       
       g_value_unset (val);
-      g_value_init (val, property->pspec->value_type);
+      g_value_init (val, _gtk_style_property_get_value_type (property));
       _gtk_style_property_default_value (property, props, state, val);
     }
   else if (G_VALUE_TYPE (val) == GDK_TYPE_RGBA)
@@ -277,7 +277,7 @@ _gtk_style_property_resolve (GtkStyleProperty       *property,
     }
   else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
     {
-      g_return_if_fail (property->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN);
+      g_return_if_fail (_gtk_style_property_get_value_type (property) == CAIRO_GOBJECT_TYPE_PATTERN);
 
       if (!resolve_gradient (props, val))
         {

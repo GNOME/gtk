@@ -2356,7 +2356,7 @@ parse_declaration (GtkCssScanner *scanner,
       gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_VALUE);
 
       val = property_value_new (scanner->section);
-      g_value_init (&val->value, property->pspec->value_type);
+      g_value_init (&val->value, _gtk_style_property_get_value_type (property));
 
       if (_gtk_style_property_parse_value (property,
                                            &val->value,
