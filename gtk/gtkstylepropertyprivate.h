@@ -71,6 +71,16 @@ struct _GtkStylePropertyClass
 {
   GObjectClass  parent_class;
   
+  void              (* assign)                             (GtkStyleProperty       *property,
+                                                            GtkStyleProperties     *props,
+                                                            GtkStateFlags           state,
+                                                            const GValue           *value);
+  void              (* query)                              (GtkStyleProperty       *property,
+                                                            GtkStyleProperties     *props,
+                                                            GtkStateFlags           state,
+			                                    GtkStylePropertyContext *context,
+                                                            GValue                 *value);
+
   GHashTable   *properties;
 };
 
