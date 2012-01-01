@@ -95,9 +95,6 @@ gboolean                 _gtk_style_property_parse_value   (GtkStyleProperty *  
                                                             GValue                 *value,
                                                             GtkCssParser           *parser,
                                                             GFile                  *base);
-void                     _gtk_style_property_print_value   (GtkStyleProperty *      property,
-                                                            const GValue           *value,
-                                                            GString                *string);
 
 GType                    _gtk_style_property_get_value_type(GtkStyleProperty *      property);
 void                     _gtk_style_property_query         (GtkStyleProperty *      property,

@@ -22,7 +22,10 @@
 
 #include "gtkcssstylepropertyprivate.h"
 
+#include "gtkcssstylefuncsprivate.h"
+#include "gtkcsstypesprivate.h"
 #include "gtkintl.h"
+#include "gtkprivatetypebuiltins.h"
 
 enum {
   PROP_0,
@@ -225,5 +228,42 @@ _gtk_css_style_property_get_initial_value (GtkCssStyleProperty *property)
   g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), NULL);
 
   return &property->initial_value;
+}
+
+/**
+ * _gtk_css_style_property_print_value:
+ * @property: the property
+ * @value: the value to print
+ * @string: the string to print to
+ *
+ * Prints @value to the given @string in CSS format. The @value must be a
+ * valid specified value as parsed using the parse functions or as assigned
+ * via _gtk_style_property_assign().
+ **/
+void
+_gtk_css_style_property_print_value (GtkCssStyleProperty    *property,
+                                     const GValue           *value,
+                                     GString                *string)
+{
+  g_return_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property));
+  g_return_if_fail (value != NULL);
+  g_return_if_fail (string != NULL);
+
+  if (G_VALUE_HOLDS (value, GTK_TYPE_CSS_SPECIAL_VALUE))
+    {
+      GEnumClass *enum_class;
+      GEnumValue *enum_value;
+
+      enum_class = g_type_class_ref (GTK_TYPE_CSS_SPECIAL_VALUE);
+      enum_value = g_enum_get_value (enum_class, g_value_get_enum (value));
+
+      g_string_append (string, enum_value->value_nick);
+
+      g_type_class_unref (enum_class);
+    }
+  else if (GTK_STYLE_PROPERTY (property)->print_func)
+    (* GTK_STYLE_PROPERTY (property)->print_func) (value, string);
+  else
+    _gtk_css_style_print_value (value, string);
 }
 

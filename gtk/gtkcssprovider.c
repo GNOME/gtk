@@ -3282,13 +3282,13 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
 
       for (walk = keys; walk; walk = walk->next)
         {
-          GtkStyleProperty *prop = walk->data;
+          GtkCssStyleProperty *prop = walk->data;
           const PropertyValue *value = g_hash_table_lookup (ruleset->style, prop);
 
           g_string_append (str, "  ");
-          g_string_append (str, _gtk_style_property_get_name (prop));
+          g_string_append (str, _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop)));
           g_string_append (str, ": ");
-          _gtk_style_property_print_value (prop, &value->value, str);
+          _gtk_css_style_property_print_value (prop, &value->value, str);
           g_string_append (str, ";\n");
         }
 

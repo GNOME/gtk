@@ -201,22 +201,6 @@ string_append_string (GString    *str,
 
 /*** IMPLEMENTATIONS ***/
 
-static void
-enum_print (int         value,
-	    GType       type,
-	    GString    *string)
-{
-  GEnumClass *enum_class;
-  GEnumValue *enum_value;
-
-  enum_class = g_type_class_ref (type);
-  enum_value = g_enum_get_value (enum_class, value);
-
-  g_string_append (string, enum_value->value_nick);
-
-  g_type_class_unref (enum_class);
-}
-
 static gboolean
 font_family_parse (GtkCssParser *parser,
                    GFile        *base,
@@ -451,19 +435,6 @@ _gtk_style_property_parse_value (GtkStyleProperty *property,
     }
 
   return _gtk_css_style_parse_value (value, parser, base);
-}
-
-void
-_gtk_style_property_print_value (GtkStyleProperty *property,
-                                 const GValue     *value,
-                                 GString          *string)
-{
-  if (G_VALUE_HOLDS (value, GTK_TYPE_CSS_SPECIAL_VALUE))
-    enum_print (g_value_get_enum (value), GTK_TYPE_CSS_SPECIAL_VALUE, string);
-  else if (property && property->print_func)
-    (* property->print_func) (value, string);
-  else
-    _gtk_css_style_print_value (value, string);
 }
 
 static void
