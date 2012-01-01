@@ -41,6 +41,7 @@ struct _GtkCssStyleProperty
 
   GValue initial_value;
   guint id;
+  GParamSpec *pspec;
   guint inherit :1;
 };
 

@@ -954,7 +954,7 @@ _gtk_style_property_register (GParamSpec               *pspec,
                        "value-type", pspec->value_type,
                        NULL);
   g_assert (node->value_type == pspec->value_type);
-  node->pspec = pspec;
+  GTK_CSS_STYLE_PROPERTY (node)->pspec = pspec;
   node->property_parse_func = property_parse_func;
   node->parse_func = parse_func;
   node->print_func = print_func;

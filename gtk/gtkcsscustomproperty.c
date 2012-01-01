@@ -126,7 +126,7 @@ gtk_theming_engine_register_property (const gchar            *name_space,
                        "name", name,
                        "value-type", pspec->value_type,
                        NULL);
-  node->pspec = pspec;
+  GTK_CSS_STYLE_PROPERTY (node)->pspec = pspec;
   node->property_parse_func = parse_func;
 
   g_value_unset (&initial);
@@ -161,7 +161,7 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
                        "name", pspec->name,
                        "value-type", pspec->value_type,
                        NULL);
-  node->pspec = pspec;
+  GTK_CSS_STYLE_PROPERTY (node)->pspec = pspec;
   node->property_parse_func = parse_func;
 
   g_value_unset (&initial);
@@ -196,7 +196,7 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
   if (GTK_IS_CSS_CUSTOM_PROPERTY (node))
     {
       if (pspec)
-        *pspec = node->pspec;
+        *pspec = GTK_CSS_STYLE_PROPERTY (node)->pspec;
 
       if (parse_func)
         *parse_func = node->property_parse_func;
