@@ -418,6 +418,7 @@ gtk_private_h_sources =		\
 	gtkcsssectionprivate.h 	\
 	gtkcssselectorprivate.h	\
 	gtkcssshorthandpropertyprivate.h \
+	gtkcssstylefuncsprivate.h \
 	gtkcssstylepropertyprivate.h \
 	gtkcustompaperunixdialog.h \
 	gtkdndcursors.h		\
@@ -595,6 +596,7 @@ gtk_base_c_sources = 		\
 	gtkcssselector.c	\
 	gtkcssshorthandproperty.c \
 	gtkcssshorthandpropertyimpl.c \
+	gtkcssstylefuncs.c	\
 	gtkcssstyleproperty.c	\
 	gtkcsstypes.c		\
 	gtkdialog.c		\
