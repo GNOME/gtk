@@ -78,6 +78,10 @@ struct _GtkStylePropertyClass
                                                             GtkStateFlags           state,
 			                                    GtkStylePropertyContext *context,
                                                             GValue                 *value);
+  gboolean          (* parse_value)                        (GtkStyleProperty *      property,
+                                                            GValue                 *value,
+                                                            GtkCssParser           *parser,
+                                                            GFile                  *base);
 
   GHashTable   *properties;
 };

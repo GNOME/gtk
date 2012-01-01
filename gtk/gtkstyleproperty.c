@@ -119,6 +119,12 @@ gtk_style_property_get_property (GObject    *object,
     }
 }
 
+static gboolean
+gtk_style_property_real_parse_value (GtkStyleProperty *property,
+                                     GValue           *value,
+                                     GtkCssParser     *parser,
+                                     GFile            *base);
+
 static void
 _gtk_style_property_class_init (GtkStylePropertyClass *klass)
 {
@@ -142,6 +148,8 @@ _gtk_style_property_class_init (GtkStylePropertyClass *klass)
                                                        P_("The value type returned by GtkStyleContext"),
                                                        G_TYPE_NONE,
                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  klass->parse_value = gtk_style_property_real_parse_value;
 
   klass->properties = g_hash_table_new (g_str_hash, g_str_equal);
 }
@@ -385,10 +393,23 @@ _gtk_style_property_parse_value (GtkStyleProperty *property,
                                  GtkCssParser     *parser,
                                  GFile            *base)
 {
+  GtkStylePropertyClass *klass;
+
   g_return_val_if_fail (GTK_IS_STYLE_PROPERTY (property), FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
   g_return_val_if_fail (parser != NULL, FALSE);
 
+  klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
+
+  return klass->parse_value (property, value, parser, base);
+}
+
+static gboolean
+gtk_style_property_real_parse_value (GtkStyleProperty *property,
+                                     GValue           *value,
+                                     GtkCssParser     *parser,
+                                     GFile            *base)
+{
   if (_gtk_css_parser_try (parser, "initial", TRUE))
     {
       /* the initial value can be explicitly specified with the
