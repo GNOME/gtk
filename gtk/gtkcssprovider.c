@@ -28,6 +28,7 @@
 #include "gtkcssproviderprivate.h"
 
 #include "gtkbitmaskprivate.h"
+#include "gtkcssstylefuncsprivate.h"
 #include "gtkcssparserprivate.h"
 #include "gtkcsssectionprivate.h"
 #include "gtkcssselectorprivate.h"
@@ -1485,10 +1486,9 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                          gtk_css_section_get_file (val->section),
                                          g_value_get_string (&val->value));
 
-          found = _gtk_style_property_parse_value (NULL,
-                                                   value,
-                                                   scanner->parser,
-                                                   NULL);
+          found = _gtk_css_style_parse_value (value,
+                                              scanner->parser,
+                                              NULL);
 
           gtk_css_scanner_destroy (scanner);
 

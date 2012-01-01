@@ -26,6 +26,7 @@
 #include <math.h>
 
 #include "gtkborderimageprivate.h"
+#include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypesprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
@@ -54,7 +55,7 @@ border_image_value_parse (GtkCssParser *parser,
 
   g_value_init (&temp, CAIRO_GOBJECT_TYPE_PATTERN);
 
-  if (!_gtk_style_property_parse_value (NULL, &temp, parser, base))
+  if (!_gtk_css_style_parse_value (&temp, parser, base))
     return FALSE;
 
   boxed_type = G_VALUE_TYPE (&temp);
@@ -66,7 +67,7 @@ border_image_value_parse (GtkCssParser *parser,
   g_value_unset (&temp);
   g_value_init (&temp, GTK_TYPE_BORDER);
 
-  if (!_gtk_style_property_parse_value (NULL, &temp, parser, base))
+  if (!_gtk_css_style_parse_value (&temp, parser, base))
     goto out;
 
   parsed_slice = g_value_get_boxed (&temp);
@@ -77,7 +78,7 @@ border_image_value_parse (GtkCssParser *parser,
       g_value_unset (&temp);
       g_value_init (&temp, GTK_TYPE_BORDER);
 
-      if (!_gtk_style_property_parse_value (NULL, &temp, parser, base))
+      if (!_gtk_css_style_parse_value (&temp, parser, base))
         goto out;
 
       width = g_value_dup_boxed (&temp);
@@ -86,7 +87,7 @@ border_image_value_parse (GtkCssParser *parser,
   g_value_unset (&temp);
   g_value_init (&temp, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
 
-  if (!_gtk_style_property_parse_value (NULL, &temp, parser, base))
+  if (!_gtk_css_style_parse_value (&temp, parser, base))
     goto out;
 
   parsed_repeat = g_value_get_boxed (&temp);
