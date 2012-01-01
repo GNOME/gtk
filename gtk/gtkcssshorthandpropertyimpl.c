@@ -618,7 +618,8 @@ pack_border_color (GValue             *value,
 }
 
 static void
-_gtk_css_shorthand_property_register (GParamSpec               *pspec,
+_gtk_css_shorthand_property_register (const char               *name,
+                                      GType                     value_type,
                                       const char              **subproperties,
                                       GtkStyleUnpackFunc        unpack_func,
                                       GtkStylePackFunc          pack_func,
@@ -630,12 +631,11 @@ _gtk_css_shorthand_property_register (GParamSpec               *pspec,
   g_return_if_fail (unpack_func != NULL);
 
   node = g_object_new (GTK_TYPE_CSS_SHORTHAND_PROPERTY,
-                       "name", pspec->name,
-                       "value-type", pspec->value_type,
+                       "name", name,
+                       "value-type", value_type,
                        "subproperties", subproperties,
                        NULL);
 
-  node->pspec = pspec;
   node->pack_func = pack_func;
   node->unpack_func = unpack_func;
   node->parse_func = parse_func;
@@ -653,58 +653,44 @@ _gtk_css_shorthand_property_init_properties (void)
   const char *border_color_subproperties[] = { "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", NULL };
   const char *border_image_subproperties[] = { "border-image-source", "border-image-slice", "border-image-width", "border-image-repeat", NULL };
 
-  _gtk_css_shorthand_property_register   (g_param_spec_boxed ("font",
-                                                              "Font Description",
-                                                              "Font Description",
-                                                              PANGO_TYPE_FONT_DESCRIPTION, 0),
+  _gtk_css_shorthand_property_register   ("font",
+                                          PANGO_TYPE_FONT_DESCRIPTION,
                                           font_subproperties,
                                           unpack_font_description,
                                           pack_font_description,
                                           NULL);
-  _gtk_css_shorthand_property_register   (g_param_spec_boxed ("margin",
-                                                              "Margin",
-                                                              "Margin",
-                                                              GTK_TYPE_BORDER, 0),
+  _gtk_css_shorthand_property_register   ("margin",
+                                          GTK_TYPE_BORDER,
                                           margin_subproperties,
                                           unpack_margin,
                                           pack_margin,
                                           NULL);
-  _gtk_css_shorthand_property_register   (g_param_spec_boxed ("padding",
-                                                              "Padding",
-                                                              "Padding",
-                                                              GTK_TYPE_BORDER, 0),
+  _gtk_css_shorthand_property_register   ("padding",
+                                          GTK_TYPE_BORDER,
                                           padding_subproperties,
                                           unpack_padding,
                                           pack_padding,
                                           NULL);
-  _gtk_css_shorthand_property_register   (g_param_spec_boxed ("border-width",
-                                                              "Border width",
-                                                              "Border width, in pixels",
-                                                              GTK_TYPE_BORDER, 0),
+  _gtk_css_shorthand_property_register   ("border-width",
+                                          GTK_TYPE_BORDER,
                                           border_width_subproperties,
                                           unpack_border_width,
                                           pack_border_width,
                                           NULL);
-  _gtk_css_shorthand_property_register   (g_param_spec_int ("border-radius",
-                                                            "Border radius",
-                                                            "Border radius, in pixels",
-                                                            0, G_MAXINT, 0, 0),
+  _gtk_css_shorthand_property_register   ("border-radius",
+                                          G_TYPE_INT,
                                           border_radius_subproperties,
                                           unpack_border_radius,
                                           pack_border_radius,
                                           border_radius_value_parse);
-  _gtk_css_shorthand_property_register   (g_param_spec_boxed ("border-color",
-                                                              "Border color",
-                                                              "Border color",
-                                                              GDK_TYPE_RGBA, 0),
+  _gtk_css_shorthand_property_register   ("border-color",
+                                          GDK_TYPE_RGBA,
                                           border_color_subproperties,
                                           unpack_border_color,
                                           pack_border_color,
                                           border_color_shorthand_value_parse);
-  _gtk_css_shorthand_property_register   (g_param_spec_boxed ("border-image",
-                                                              "Border Image",
-                                                              "Border Image",
-                                                              GTK_TYPE_BORDER_IMAGE, 0),
+  _gtk_css_shorthand_property_register   ("border-image",
+                                          GTK_TYPE_BORDER_IMAGE,
                                           border_image_subproperties,
                                           _gtk_border_image_unpack,
                                           _gtk_border_image_pack,

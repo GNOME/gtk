@@ -26,9 +26,14 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkstylepropertiesprivate.h"
 
+typedef struct {
+  GtkCssSection     *section;
+  const GValue      *value;
+} GtkCssLookupValue;
+
 struct _GtkCssLookup {
-  GtkBitmask    *missing;
-  const GValue  *values[1];
+  GtkBitmask        *missing;
+  GtkCssLookupValue  values[1];
 };
 
 GtkCssLookup *
@@ -37,7 +42,7 @@ _gtk_css_lookup_new (void)
   GtkCssLookup *lookup;
   guint n = _gtk_css_style_property_get_n_properties ();
 
-  lookup = g_malloc0 (sizeof (GtkCssLookup) + sizeof (const GValue *) * n);
+  lookup = g_malloc0 (sizeof (GtkCssLookup) + sizeof (GtkCssLookupValue) * n);
   lookup->missing = _gtk_bitmask_new ();
   _gtk_bitmask_invert_range (lookup->missing, 0, n);
 
@@ -67,30 +72,35 @@ _gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
 {
   g_return_val_if_fail (lookup != NULL, FALSE);
 
-  return lookup->values[id] == NULL;
+  return lookup->values[id].value == NULL;
 }
 
 /**
  * _gtk_css_lookup_set:
  * @lookup: the lookup
  * @id: id of the property to set, see _gtk_style_property_get_id()
+ * @section: (allow-none): The @section the value was defined in or %NULL
  * @value: the "cascading value" to use
  *
  * Sets the @value for a given @id. No value may have been set for @id
  * before. See _gtk_css_lookup_is_missing(). This function is used to
- * set the "winning declaration" of a lookup.
+ * set the "winning declaration" of a lookup. Note that for performance
+ * reasons @value and @section are not copied. It is your responsibility
+ * to ensure they are kept alive until _gtk_css_lookup_free() is called.
  **/
 void
-_gtk_css_lookup_set (GtkCssLookup *lookup,
-                     guint         id,
-                     const GValue *value)
+_gtk_css_lookup_set (GtkCssLookup  *lookup,
+                     guint          id,
+                     GtkCssSection *section,
+                     const GValue  *value)
 {
   g_return_if_fail (lookup != NULL);
   g_return_if_fail (_gtk_bitmask_get (lookup->missing, id));
   g_return_if_fail (value != NULL);
 
   _gtk_bitmask_set (lookup->missing, id, FALSE);
-  lookup->values[id] = value;
+  lookup->values[id].value = value;
+  lookup->values[id].section = section;
 }
 
 /**
@@ -130,20 +140,20 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
        * by following this pseudo-algorithm:
        * 1) Identify all declarations that apply to the element
        */
-      if (lookup->values[i] != NULL)
+      if (lookup->values[i].value != NULL)
         {
           /* 2) If the cascading process (described below) yields a winning
            * declaration and the value of the winning declaration is not
            * ‘initial’ or ‘inherit’, the value of the winning declaration
            * becomes the specified value.
            */
-          if (!G_VALUE_HOLDS (lookup->values[i], GTK_TYPE_CSS_SPECIAL_VALUE))
+          if (!G_VALUE_HOLDS (lookup->values[i].value, GTK_TYPE_CSS_SPECIAL_VALUE))
             {
-              result = lookup->values[i];
+              result = lookup->values[i].value;
             }
           else
             {
-              switch (g_value_get_enum (lookup->values[i]))
+              switch (g_value_get_enum (lookup->values[i].value))
                 {
                 case GTK_CSS_INHERIT:
                   /* 3) if the value of the winning declaration is ‘inherit’,
@@ -159,7 +169,7 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
                   break;
                 default:
                   /* This is part of (2) above */
-                  result = lookup->values[i];
+                  result = lookup->values[i].value;
                   break;
                 }
             }

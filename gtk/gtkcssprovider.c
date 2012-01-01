@@ -1560,7 +1560,7 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
           if (!_gtk_css_lookup_is_missing (lookup, id))
             continue;
 
-          _gtk_css_lookup_set (lookup, id, &value->value);
+          _gtk_css_lookup_set (lookup, id, value->section, &value->value);
         }
     }
 }
