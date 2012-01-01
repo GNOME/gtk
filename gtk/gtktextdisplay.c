@@ -937,10 +937,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   if (widgets)
     *widgets = tmp_widgets;
   else
-    {
-      g_list_foreach (tmp_widgets, (GFunc)g_object_unref, NULL);
-      g_list_free (tmp_widgets);
-    }
+    g_list_free_full (tmp_widgets, g_object_unref);
 
   g_slist_free (line_list);
 }
