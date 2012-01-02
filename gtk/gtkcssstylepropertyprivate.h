@@ -35,6 +35,10 @@ G_BEGIN_DECLS
 typedef struct _GtkCssStyleProperty           GtkCssStyleProperty;
 typedef struct _GtkCssStylePropertyClass      GtkCssStylePropertyClass;
 
+typedef void             (* GtkCssStylePropertyComputeFunc)(GtkCssStyleProperty    *property,
+                                                            GValue                 *computed,
+                                                            GtkStyleContext        *context,
+                                                            const GValue           *specified);
 struct _GtkCssStyleProperty
 {
   GtkStyleProperty parent;
@@ -42,6 +46,8 @@ struct _GtkCssStyleProperty
   GValue initial_value;
   guint id;
   guint inherit :1;
+
+  GtkCssStylePropertyComputeFunc compute_value;
 };
 
 struct _GtkCssStylePropertyClass

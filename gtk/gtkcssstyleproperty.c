@@ -218,10 +218,20 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
   klass->style_properties = g_ptr_array_new ();
 }
 
+static void
+gtk_css_style_property_real_compute_value (GtkCssStyleProperty *property,
+                                           GValue              *computed,
+                                           GtkStyleContext     *context,
+                                           const GValue        *specified)
+{
+  g_value_init (computed, _gtk_style_property_get_value_type (GTK_STYLE_PROPERTY (property)));
+  _gtk_css_style_compute_value (computed, context, specified);
+}
 
 static void
-_gtk_css_style_property_init (GtkCssStyleProperty *style_property)
+_gtk_css_style_property_init (GtkCssStyleProperty *property)
 {
+  property->compute_value = gtk_css_style_property_real_compute_value;
 }
 
 /**
@@ -338,8 +348,7 @@ _gtk_css_style_property_compute_value (GtkCssStyleProperty *property,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (G_IS_VALUE (specified));
 
-  g_value_init (computed, _gtk_style_property_get_value_type (GTK_STYLE_PROPERTY (property)));
-  _gtk_css_style_compute_value (computed, context, specified);
+  property->compute_value (property, computed, context, specified);
 }
 
 /**
