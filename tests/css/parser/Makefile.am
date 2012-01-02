@@ -294,7 +294,11 @@ EXTRA_DIST += \
 	single-slash.ref.css \
 	test.png \
 	value-inherit.css \
+	value-inherit-shorthand.css \
+	value-inherit-shorthand.ref.css \
 	value-intial.css \
+	value-intial-shorthand.css \
+	value-intial-shorthand.ref.css \
 	value-none.css \
 	value-none.errors \
 	value-none.ref.css \
