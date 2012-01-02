@@ -392,25 +392,6 @@ gtk_theming_engine_get_valist (GtkThemingEngine *engine,
   gtk_style_context_get_valist (priv->context, state, args);
 }
 
-void
-_gtk_theming_engine_get (GtkThemingEngine *engine,
-			 GtkStateFlags     state,
-			 GtkStylePropertyContext *property_context,
-			 ...)
-{
-  GtkThemingEnginePrivate *priv;
-  va_list args;
-
-  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
-
-  priv = engine->priv;
-
-  va_start (args, property_context);
-  _gtk_style_context_get_valist (priv->context, state, property_context, args);
-  va_end (args);
-}
-
-
 /**
  * gtk_theming_engine_get:
  * @engine: a #GtkThemingEngine
@@ -1556,19 +1537,15 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
   GtkJunctionSides junction;
   GtkBorderImage *border_image;
   GtkBorder border;
-  GtkStylePropertyContext context;
 
   flags = gtk_theming_engine_get_state (engine);
   junction = gtk_theming_engine_get_junction_sides (engine);
   gtk_theming_engine_get_border (engine, flags, &border);
 
-  context.width = width;
-  context.height = height;
-
-  _gtk_theming_engine_get (engine, flags, &context,
-			   "border-image", &border_image,
-			   "border-style", &border_style,
-			   NULL);
+  gtk_theming_engine_get (engine, flags,
+			  "border-image", &border_image,
+			  "border-style", &border_style,
+			  NULL);
 
   if (border_image != NULL)
     {
@@ -1925,7 +1902,6 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   GtkCssBorderCornerRadius *top_left_radius, *top_right_radius;
   GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
   gdouble x0, y0, x1, y1, xc, yc, wc, hc;
-  GtkStylePropertyContext context;
   GtkBorderImage *border_image;
   GtkBorder border;
 
@@ -1933,17 +1909,14 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   state = gtk_theming_engine_get_state (engine);
   junction = gtk_theming_engine_get_junction_sides (engine);
 
-  context.width = width;
-  context.height = height;
-
   gtk_theming_engine_get_border (engine, state, &border);
-  _gtk_theming_engine_get (engine, state, &context,
-			   "border-image", &border_image,
-			   "border-top-left-radius", &top_left_radius,
-			   "border-top-right-radius", &top_right_radius,
-			   "border-bottom-right-radius", &bottom_right_radius,
-			   "border-bottom-left-radius", &bottom_left_radius,
-			   NULL);
+  gtk_theming_engine_get (engine, state,
+			  "border-image", &border_image,
+			  "border-top-left-radius", &top_left_radius,
+			  "border-top-right-radius", &top_right_radius,
+			  "border-bottom-right-radius", &bottom_right_radius,
+			  "border-bottom-left-radius", &bottom_left_radius,
+			  NULL);
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));

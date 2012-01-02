@@ -21,13 +21,6 @@
 #define __GTK_THEMING_ENGINE_PRIVATE_H__
 
 #include <gdk/gdk.h>
-#include "gtkstylecontextprivate.h"
-
-void _gtk_theming_engine_get          (GtkThemingEngine *engine,
-				       GtkStateFlags     state,
-				       GtkStylePropertyContext *property_context,
-                                      ...) G_GNUC_NULL_TERMINATED;
-
 
 void _gtk_theming_engine_paint_spinner (cairo_t *cr,
                                         gdouble  radius,

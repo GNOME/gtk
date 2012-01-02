@@ -1440,24 +1440,6 @@ gtk_style_context_get_property (GtkStyleContext *context,
   gtk_style_properties_get_property (data->store, property, 0, value);
 }
 
-void
-_gtk_style_context_get_valist (GtkStyleContext *context,
-			       GtkStateFlags    state,
-			       GtkStylePropertyContext *property_context,
-			       va_list          args)
-{
-  GtkStyleContextPrivate *priv;
-  StyleData *data;
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-  priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
-
-  data = style_data_lookup (context, state);
-  _gtk_style_properties_get_valist (data->store, 0, property_context, args);
-}
-
 /**
  * gtk_style_context_get_valist:
  * @context: a #GtkStyleContext

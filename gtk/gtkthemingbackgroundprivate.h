@@ -50,8 +50,6 @@ struct _GtkThemingBackground {
   GtkBorder border;
   GtkBorder padding;
   GdkRGBA bg_color;
-
-  GtkStylePropertyContext prop_context;
 };
 
 void _gtk_theming_background_init (GtkThemingBackground *bg,

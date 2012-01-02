@@ -628,12 +628,25 @@ _gtk_style_properties_peek_property (GtkStyleProperties  *props,
   return property_data_match_state (prop, state);
 }
 
+/**
+ * gtk_style_properties_get_property:
+ * @props: a #GtkStyleProperties
+ * @property: style property name
+ * @state: state to retrieve the property value for
+ * @value: (out) (transfer full):  return location for the style property value.
+ *
+ * Gets a style property from @props for the given state. When done with @value,
+ * g_value_unset() needs to be called to free any allocated memory.
+ *
+ * Returns: %TRUE if the property exists in @props, %FALSE otherwise
+ *
+ * Since: 3.0
+ **/
 gboolean
-_gtk_style_properties_get_property (GtkStyleProperties *props,
-				    const gchar        *property,
-				    GtkStateFlags       state,
-				    GtkStylePropertyContext *context,
-				    GValue             *value)
+gtk_style_properties_get_property (GtkStyleProperties *props,
+                                   const gchar        *property,
+                                   GtkStateFlags       state,
+                                   GValue             *value)
 {
   GtkStyleProperty *node;
 
@@ -658,75 +671,6 @@ _gtk_style_properties_get_property (GtkStyleProperties *props,
 }
 
 /**
- * gtk_style_properties_get_property:
- * @props: a #GtkStyleProperties
- * @property: style property name
- * @state: state to retrieve the property value for
- * @value: (out) (transfer full):  return location for the style property value.
- *
- * Gets a style property from @props for the given state. When done with @value,
- * g_value_unset() needs to be called to free any allocated memory.
- *
- * Returns: %TRUE if the property exists in @props, %FALSE otherwise
- *
- * Since: 3.0
- **/
-gboolean
-gtk_style_properties_get_property (GtkStyleProperties *props,
-                                   const gchar        *property,
-                                   GtkStateFlags       state,
-                                   GValue             *value)
-{
-  GtkStylePropertyContext context = { 100, 100};
-
-  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
-  g_return_val_if_fail (property != NULL, FALSE);
-  g_return_val_if_fail (value != NULL, FALSE);
-
-  return _gtk_style_properties_get_property (props,
-					     property,
-					     state, &context, value);
-}
-
-void
-_gtk_style_properties_get_valist (GtkStyleProperties *props,
-				  GtkStateFlags       state,
-				  GtkStylePropertyContext *context,
-				  va_list             args)
-{
-  const gchar *property_name;
-
-  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
-
-  property_name = va_arg (args, const gchar *);
-
-  while (property_name)
-    {
-      gchar *error = NULL;
-      GValue value = G_VALUE_INIT;
-
-      if (!_gtk_style_properties_get_property (props,
-					       property_name,
-					       state,
-					       context,
-					       &value))
-	break;
-
-      G_VALUE_LCOPY (&value, args, 0, &error);
-      g_value_unset (&value);
-
-      if (error)
-        {
-          g_warning ("Could not get style property \"%s\": %s", property_name, error);
-          g_free (error);
-          break;
-        }
-
-      property_name = va_arg (args, const gchar *);
-    }
-}
-
-/**
  * gtk_style_properties_get_valist:
  * @props: a #GtkStyleProperties
  * @state: state to retrieve the property values for
@@ -741,24 +685,35 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
                                  GtkStateFlags       state,
                                  va_list             args)
 {
-  GtkStylePropertyContext context = { 100, 100};
-  
-  return _gtk_style_properties_get_valist (props, state, &context, args);
-}
-
-void
-_gtk_style_properties_get (GtkStyleProperties *props,
-			   GtkStateFlags       state,
-			   GtkStylePropertyContext *context,
-			   ...)
-{
-  va_list args;
+  const gchar *property_name;
 
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
 
-  va_start (args, context);
-  _gtk_style_properties_get_valist (props, state, context, args);
-  va_end (args);
+  property_name = va_arg (args, const gchar *);
+
+  while (property_name)
+    {
+      gchar *error = NULL;
+      GValue value = G_VALUE_INIT;
+
+      if (!gtk_style_properties_get_property (props,
+					      property_name,
+					      state,
+					      &value))
+	break;
+
+      G_VALUE_LCOPY (&value, args, 0, &error);
+      g_value_unset (&value);
+
+      if (error)
+        {
+          g_warning ("Could not get style property \"%s\": %s", property_name, error);
+          g_free (error);
+          break;
+        }
+
+      property_name = va_arg (args, const gchar *);
+    }
 }
 
 /**

@@ -25,17 +25,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkStylePropertyContext GtkStylePropertyContext;
-struct _GtkStylePropertyContext
-{
-  int width;
-  int height;
-};
-
-void           _gtk_style_context_get_valist (GtkStyleContext *context,
-					      GtkStateFlags    state,
-					      GtkStylePropertyContext *property_context,
-					      va_list          args);
 const GValue * _gtk_style_context_peek_style_property        (GtkStyleContext *context,
                                                               GType            widget_type,
                                                               GtkStateFlags    state,
