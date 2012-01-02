@@ -455,19 +455,6 @@ gtk_style_property_real_parse_value (GtkStyleProperty *property,
     return _gtk_css_style_parse_value (value, parser, base);
 }
 
-GParameter *
-_gtk_style_property_unpack (GtkStyleProperty *property,
-                            const GValue     *value,
-                            guint            *n_params)
-{
-  g_return_val_if_fail (property != NULL, NULL);
-  g_return_val_if_fail (property->unpack_func != NULL, NULL);
-  g_return_val_if_fail (value != NULL, NULL);
-  g_return_val_if_fail (n_params != NULL, NULL);
-
-  return property->unpack_func (value, n_params);
-}
-
 /**
  * _gtk_style_property_assign:
  * @property: the property

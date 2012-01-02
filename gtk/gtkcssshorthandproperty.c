@@ -71,7 +71,7 @@ _gtk_css_shorthand_property_assign (GtkStyleProperty   *property,
   GParameter *parameters;
   guint i, n_parameters;
 
-  parameters = _gtk_style_property_unpack (property, value, &n_parameters);
+  parameters = property->unpack_func (value, &n_parameters);
 
   for (i = 0; i < n_parameters; i++)
     {
@@ -196,7 +196,7 @@ gtk_css_shorthand_property_parse (GtkCssShorthandProperty *shorthand,
       return FALSE;
     }
 
-  parameters = _gtk_style_property_unpack (property, &val, &n_parameters);
+  parameters = property->unpack_func (&val, &n_parameters);
   g_value_unset (&val);
 
   for (i = 0; i < shorthand->subproperties->len; i++)

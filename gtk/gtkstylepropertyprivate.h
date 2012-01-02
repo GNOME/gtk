@@ -99,10 +99,6 @@ void                     _gtk_style_property_register      (GParamSpec          
                                                             GtkStylePrintFunc       print_func,
                                                             const GValue           *initial_value);
 
-GParameter *             _gtk_style_property_unpack        (GtkStyleProperty *      property,
-                                                            const GValue           *value,
-                                                            guint                  *n_params);
-
 gboolean                 _gtk_style_property_parse_value   (GtkStyleProperty *      property,
                                                             GValue                 *value,
                                                             GtkCssParser           *parser,
