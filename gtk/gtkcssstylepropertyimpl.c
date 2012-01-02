@@ -45,14 +45,14 @@
 /*** REGISTRATION ***/
 
 static void
-_gtk_style_property_register (const char *              name,
-                              GType                     value_type,
-                              GtkStylePropertyFlags     flags,
-                              GtkStyleParseFunc         parse_func,
-                              GtkStylePrintFunc         print_func,
-                              const GValue *            initial_value)
+_gtk_style_property_register (const char *                 name,
+                              GType                        value_type,
+                              GtkStylePropertyFlags        flags,
+                              GtkCssStylePropertyParseFunc parse_value,
+                              GtkCssStylePropertyPrintFunc print_value,
+                              const GValue *               initial_value)
 {
-  GtkStyleProperty *node;
+  GtkCssStyleProperty *node;
 
   node = g_object_new (GTK_TYPE_CSS_STYLE_PROPERTY,
                        "inherit", (flags & GTK_STYLE_PROPERTY_INHERIT) ? TRUE : FALSE,
@@ -60,23 +60,26 @@ _gtk_style_property_register (const char *              name,
                        "name", name,
                        "value-type", value_type,
                        NULL);
-  node->parse_func = parse_func;
-  node->print_func = print_func;
+
+  if (parse_value)
+    node->parse_value = parse_value;
+  if (print_value)
+    node->print_value = print_value;
 }
 
 static void
-gtk_style_property_register (const char *              name,
-                             GType                     value_type,
-                             GtkStylePropertyFlags     flags,
-                             GtkStyleParseFunc         parse_func,
-                             GtkStylePrintFunc         print_func,
+gtk_style_property_register (const char *                 name,
+                             GType                        value_type,
+                             GtkStylePropertyFlags        flags,
+                             GtkCssStylePropertyParseFunc parse_value,
+                             GtkCssStylePropertyPrintFunc print_value,
                              ...)
 {
   GValue initial_value = G_VALUE_INIT;
   char *error = NULL;
   va_list args;
 
-  va_start (args, print_func);
+  va_start (args, print_value);
   G_VALUE_COLLECT_INIT (&initial_value, value_type,
                         args, 0, &error);
   if (error)
@@ -88,7 +91,7 @@ gtk_style_property_register (const char *              name,
 
   va_end (args);
 
-  _gtk_style_property_register (name, value_type, flags, parse_func, print_func, &initial_value);
+  _gtk_style_property_register (name, value_type, flags, parse_value, print_value, &initial_value);
 
   g_value_unset (&initial_value);
 }
@@ -145,9 +148,10 @@ string_append_string (GString    *str,
 /*** IMPLEMENTATIONS ***/
 
 static gboolean
-font_family_parse (GtkCssParser *parser,
-                   GFile        *base,
-                   GValue       *value)
+font_family_parse (GtkCssStyleProperty *property,
+                   GValue              *value,
+                   GtkCssParser        *parser,
+                   GFile               *base)
 {
   GPtrArray *names;
   char *name;
@@ -191,8 +195,9 @@ font_family_parse (GtkCssParser *parser,
 }
 
 static void
-font_family_value_print (const GValue *value,
-                         GString      *string)
+font_family_value_print (GtkCssStyleProperty *property,
+                         const GValue        *value,
+                         GString             *string)
 {
   const char **names = g_value_get_boxed (value);
 
@@ -213,9 +218,10 @@ font_family_value_print (const GValue *value,
 }
 
 static gboolean 
-bindings_value_parse (GtkCssParser *parser,
-                      GFile        *base,
-                      GValue       *value)
+bindings_value_parse (GtkCssStyleProperty *property,
+                      GValue              *value,
+                      GtkCssParser        *parser,
+                      GFile               *base)
 {
   GPtrArray *array;
   GtkBindingSet *binding_set;
@@ -252,8 +258,9 @@ bindings_value_parse (GtkCssParser *parser,
 }
 
 static void
-bindings_value_print (const GValue *value,
-                      GString      *string)
+bindings_value_print (GtkCssStyleProperty *property,
+                      const GValue        *value,
+                      GString             *string)
 {
   GPtrArray *array;
   guint i;
@@ -271,9 +278,10 @@ bindings_value_print (const GValue *value,
 }
 
 static gboolean 
-border_corner_radius_value_parse (GtkCssParser *parser,
-                                  GFile        *base,
-                                  GValue       *value)
+border_corner_radius_value_parse (GtkCssStyleProperty *property,
+                                  GValue              *value,
+                                  GtkCssParser        *parser,
+                                  GFile               *base)
 {
   GtkCssBorderCornerRadius corner;
 
@@ -299,8 +307,9 @@ negative:
 }
 
 static void
-border_corner_radius_value_print (const GValue *value,
-                                  GString      *string)
+border_corner_radius_value_print (GtkCssStyleProperty *property,
+                                  const GValue        *value,
+                                  GString             *string)
 {
   GtkCssBorderCornerRadius *corner;
 

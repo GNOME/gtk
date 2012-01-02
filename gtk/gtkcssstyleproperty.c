@@ -143,7 +143,7 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
                                     GtkCssParser     *parser,
                                     GFile            *base)
 {
-  gboolean success;
+  GtkCssStyleProperty *style_property = GTK_CSS_STYLE_PROPERTY (property);
 
   if (_gtk_css_parser_try (parser, "initial", TRUE))
     {
@@ -168,15 +168,13 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
     }
 
   g_value_init (value, _gtk_style_property_get_value_type (property));
-  if (property->parse_func)
-    success = (* property->parse_func) (parser, base, value);
-  else
-    success = _gtk_css_style_parse_value (value, parser, base);
+  if (!(* style_property->parse_value) (style_property, value, parser, base))
+    {
+      g_value_unset (value);
+      return FALSE;
+    }
 
-  if (!success)
-    g_value_unset (value);
-
-  return success;
+  return TRUE;
 }
 
 static void
@@ -218,6 +216,23 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
   klass->style_properties = g_ptr_array_new ();
 }
 
+static gboolean
+gtk_css_style_property_real_parse_value (GtkCssStyleProperty *property,
+                                         GValue              *value,
+                                         GtkCssParser        *parser,
+                                         GFile               *base)
+{
+  return _gtk_css_style_parse_value (value, parser, base);
+}
+
+static void
+gtk_css_style_property_real_print_value (GtkCssStyleProperty *property,
+                                         const GValue        *value,
+                                         GString             *string)
+{
+  _gtk_css_style_print_value (value, string);
+}
+
 static void
 gtk_css_style_property_real_compute_value (GtkCssStyleProperty *property,
                                            GValue              *computed,
@@ -231,6 +246,8 @@ gtk_css_style_property_real_compute_value (GtkCssStyleProperty *property,
 static void
 _gtk_css_style_property_init (GtkCssStyleProperty *property)
 {
+  property->parse_value = gtk_css_style_property_real_parse_value;
+  property->print_value = gtk_css_style_property_real_print_value;
   property->compute_value = gtk_css_style_property_real_compute_value;
 }
 
@@ -382,9 +399,7 @@ _gtk_css_style_property_print_value (GtkCssStyleProperty    *property,
 
       g_type_class_unref (enum_class);
     }
-  else if (GTK_STYLE_PROPERTY (property)->print_func)
-    (* GTK_STYLE_PROPERTY (property)->print_func) (value, string);
   else
-    _gtk_css_style_print_value (value, string);
+    property->print_value (property, value, string);
 }
 

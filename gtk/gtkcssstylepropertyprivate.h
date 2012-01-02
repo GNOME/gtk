@@ -35,6 +35,13 @@ G_BEGIN_DECLS
 typedef struct _GtkCssStyleProperty           GtkCssStyleProperty;
 typedef struct _GtkCssStylePropertyClass      GtkCssStylePropertyClass;
 
+typedef gboolean         (* GtkCssStylePropertyParseFunc)  (GtkCssStyleProperty    *property,
+                                                            GValue                 *value,
+                                                            GtkCssParser           *parser,
+                                                            GFile                  *base);
+typedef void             (* GtkCssStylePropertyPrintFunc)  (GtkCssStyleProperty    *property,
+                                                            const GValue           *value,
+                                                            GString                *string);
 typedef void             (* GtkCssStylePropertyComputeFunc)(GtkCssStyleProperty    *property,
                                                             GValue                 *computed,
                                                             GtkStyleContext        *context,
@@ -47,6 +54,8 @@ struct _GtkCssStyleProperty
   guint id;
   guint inherit :1;
 
+  GtkCssStylePropertyParseFunc parse_value;
+  GtkCssStylePropertyPrintFunc print_value;
   GtkCssStylePropertyComputeFunc compute_value;
 };
 
