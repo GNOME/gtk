@@ -52,30 +52,6 @@ _gtk_style_property_register (GParamSpec               *pspec,
                               const GValue *            initial_value)
 {
   GtkStyleProperty *node;
-  GValue initial_fallback = { 0, };
-
-  if (initial_value == NULL)
-    {
-      g_value_init (&initial_fallback, pspec->value_type);
-      if (pspec->value_type == GTK_TYPE_THEMING_ENGINE)
-        g_value_set_object (&initial_fallback, gtk_theming_engine_load (NULL));
-      else if (pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
-        g_value_take_boxed (&initial_fallback, pango_font_description_from_string ("Sans 10"));
-      else if (pspec->value_type == GDK_TYPE_RGBA)
-        {
-          GdkRGBA color;
-          gdk_rgba_parse (&color, "pink");
-          g_value_set_boxed (&initial_fallback, &color);
-        }
-      else if (pspec->value_type == GTK_TYPE_BORDER)
-        {
-          g_value_take_boxed (&initial_fallback, gtk_border_new ());
-        }
-      else
-        g_param_value_set_default (pspec, &initial_fallback);
-
-      initial_value = &initial_fallback;
-    }
 
   node = g_object_new (GTK_TYPE_CSS_STYLE_PROPERTY,
                        "inherit", (flags & GTK_STYLE_PROPERTY_INHERIT) ? TRUE : FALSE,
@@ -87,9 +63,6 @@ _gtk_style_property_register (GParamSpec               *pspec,
   GTK_CSS_STYLE_PROPERTY (node)->pspec = pspec;
   node->parse_func = parse_func;
   node->print_func = print_func;
-
-  if (G_IS_VALUE (&initial_fallback))
-    g_value_unset (&initial_fallback);
 }
 
 static void
@@ -362,6 +335,9 @@ _gtk_css_style_property_init_properties (void)
   char *default_font_family[] = { "Sans", NULL };
   GdkRGBA rgba;
   GtkCssBorderCornerRadius no_corner_radius = { 0, };
+  GtkBorder border_of_ones = { 1, 1, 1, 1 };
+  GtkCssBackgroundRepeat background_repeat = { GTK_CSS_BACKGROUND_REPEAT_STYLE_REPEAT };
+  GtkCssBorderImageRepeat border_image_repeat = { GTK_CSS_REPEAT_STYLE_STRETCH, GTK_CSS_REPEAT_STYLE_STRETCH };
 
   /* note that gtk_style_properties_register_property() calls this function,
    * so make sure we're sanely inited to avoid infloops */
@@ -448,71 +424,111 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL);
 
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("box-shadow",
+  gtk_style_property_register            (g_param_spec_boxed ("box-shadow",
                                                               "Box shadow",
                                                               "Box shadow",
-                                                              GTK_TYPE_SHADOW, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("margin-top",
+                                                              GTK_TYPE_SHADOW, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL);
+
+  gtk_style_property_register            (g_param_spec_int ("margin-top",
                                                             "margin top",
                                                             "Margin at top",
-                                                            0, G_MAXINT, 0, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("margin-left",
+                                                            0, G_MAXINT, 0, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          0);
+  gtk_style_property_register            (g_param_spec_int ("margin-left",
                                                             "margin left",
                                                             "Margin at left",
-                                                            0, G_MAXINT, 0, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("margin-bottom",
+                                                            0, G_MAXINT, 0, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          0);
+  gtk_style_property_register            (g_param_spec_int ("margin-bottom",
                                                             "margin bottom",
                                                             "Margin at bottom",
-                                                            0, G_MAXINT, 0, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("margin-right",
+                                                            0, G_MAXINT, 0, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          0);
+  gtk_style_property_register            (g_param_spec_int ("margin-right",
                                                             "margin right",
                                                             "Margin at right",
-                                                            0, G_MAXINT, 0, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("padding-top",
+                                                            0, G_MAXINT, 0, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          0);
+  gtk_style_property_register            (g_param_spec_int ("padding-top",
                                                             "padding top",
                                                             "Padding at top",
-                                                            0, G_MAXINT, 0, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("padding-left",
+                                                            0, G_MAXINT, 0, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          0);
+  gtk_style_property_register            (g_param_spec_int ("padding-left",
                                                             "padding left",
                                                             "Padding at left",
-                                                            0, G_MAXINT, 0, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("padding-bottom",
+                                                            0, G_MAXINT, 0, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          0);
+  gtk_style_property_register            (g_param_spec_int ("padding-bottom",
                                                             "padding bottom",
                                                             "Padding at bottom",
-                                                            0, G_MAXINT, 0, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("padding-right",
+                                                            0, G_MAXINT, 0, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          0);
+  gtk_style_property_register            (g_param_spec_int ("padding-right",
                                                             "padding right",
                                                             "Padding at right",
-                                                            0, G_MAXINT, 0, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("border-top-width",
+                                                            0, G_MAXINT, 0, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          0);
+  gtk_style_property_register            (g_param_spec_int ("border-top-width",
                                                             "border top width",
                                                             "Border width at top",
-                                                            0, G_MAXINT, 0, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("border-left-width",
+                                                            0, G_MAXINT, 0, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          0);
+  gtk_style_property_register            (g_param_spec_int ("border-left-width",
                                                             "border left width",
                                                             "Border width at left",
-                                                            0, G_MAXINT, 0, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("border-bottom-width",
+                                                            0, G_MAXINT, 0, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          0);
+  gtk_style_property_register            (g_param_spec_int ("border-bottom-width",
                                                             "border bottom width",
                                                             "Border width at bottom",
-                                                            0, G_MAXINT, 0, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("border-right-width",
+                                                            0, G_MAXINT, 0, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          0);
+  gtk_style_property_register            (g_param_spec_int ("border-right-width",
                                                             "border right width",
                                                             "Border width at right",
-                                                            0, G_MAXINT, 0, 0));
+                                                            0, G_MAXINT, 0, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          0);
 
   gtk_style_property_register            (g_param_spec_boxed ("border-top-left-radius",
                                                               "Border top left radius",
@@ -547,24 +563,35 @@ _gtk_css_style_property_init_properties (void)
                                           border_corner_radius_value_print,
                                           &no_corner_radius);
 
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_enum ("border-style",
+  gtk_style_property_register            (g_param_spec_enum ("border-style",
                                                              "Border style",
                                                              "Border style",
                                                              GTK_TYPE_BORDER_STYLE,
-                                                             GTK_BORDER_STYLE_NONE, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_enum ("background-clip",
+                                                             GTK_BORDER_STYLE_NONE, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          GTK_BORDER_STYLE_NONE);
+  gtk_style_property_register            (g_param_spec_enum ("background-clip",
                                                              "Background clip",
                                                              "Background clip",
                                                              GTK_TYPE_CSS_AREA,
-                                                             GTK_CSS_AREA_BORDER_BOX, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_enum ("background-origin",
+                                                             GTK_CSS_AREA_BORDER_BOX, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          GTK_CSS_AREA_BORDER_BOX);
+                                        
+  gtk_style_property_register            (g_param_spec_enum ("background-origin",
                                                              "Background origin",
                                                              "Background origin",
                                                              GTK_TYPE_CSS_AREA,
-                                                             GTK_CSS_AREA_PADDING_BOX, 0));
+                                                             GTK_CSS_AREA_PADDING_BOX, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          GTK_CSS_AREA_PADDING_BOX);
+
   g_value_init (&value, GTK_TYPE_CSS_SPECIAL_VALUE);
   g_value_set_enum (&value, GTK_CSS_CURRENT_COLOR);
   _gtk_style_property_register           (g_param_spec_boxed ("border-top-color",
@@ -601,32 +628,49 @@ _gtk_css_style_property_init_properties (void)
                                           &value);
   g_value_unset (&value);
 
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("background-image",
+  gtk_style_property_register            (g_param_spec_boxed ("background-image",
                                                               "Background Image",
                                                               "Background Image",
-                                                              CAIRO_GOBJECT_TYPE_PATTERN, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("background-repeat",
+                                                              CAIRO_GOBJECT_TYPE_PATTERN, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL);
+  gtk_style_property_register            (g_param_spec_boxed ("background-repeat",
                                                               "Background repeat",
                                                               "Background repeat",
-                                                              GTK_TYPE_CSS_BACKGROUND_REPEAT, 0));
+                                                              GTK_TYPE_CSS_BACKGROUND_REPEAT, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          &background_repeat);
 
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("border-image-source",
+  gtk_style_property_register            (g_param_spec_boxed ("border-image-source",
                                                               "Border image source",
                                                               "Border image source",
-                                                              CAIRO_GOBJECT_TYPE_PATTERN, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("border-image-repeat",
+                                                              CAIRO_GOBJECT_TYPE_PATTERN, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL);
+  gtk_style_property_register            (g_param_spec_boxed ("border-image-repeat",
                                                               "Border image repeat",
                                                               "Border image repeat",
-                                                              GTK_TYPE_CSS_BORDER_IMAGE_REPEAT, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("border-image-slice",
+                                                              GTK_TYPE_CSS_BORDER_IMAGE_REPEAT, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          &border_image_repeat);
+
+  /* XXX: The initial vaue is wrong, it should be 100% */
+  gtk_style_property_register            (g_param_spec_boxed ("border-image-slice",
                                                               "Border image slice",
                                                               "Border image slice",
-                                                              GTK_TYPE_BORDER, 0));
+                                                              GTK_TYPE_BORDER, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          &border_of_ones);
   gtk_style_property_register            (g_param_spec_boxed ("border-image-width",
                                                               "Border image width",
                                                               "Border image width",
@@ -635,16 +679,22 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL);
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_object ("engine",
+  gtk_style_property_register            (g_param_spec_object ("engine",
                                                                "Theming Engine",
                                                                "Theming Engine",
-                                                               GTK_TYPE_THEMING_ENGINE, 0));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_boxed ("transition",
+                                                               GTK_TYPE_THEMING_ENGINE, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          gtk_theming_engine_load (NULL));
+  gtk_style_property_register            (g_param_spec_boxed ("transition",
                                                               "Transition animation description",
                                                               "Transition animation description",
-                                                              GTK_TYPE_ANIMATION_DESCRIPTION, 0));
+                                                              GTK_TYPE_ANIMATION_DESCRIPTION, 0),
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL);
 
   /* Private property holding the binding sets */
   gtk_style_property_register            (g_param_spec_boxed ("gtk-key-bindings",
