@@ -35,11 +35,12 @@ gtk_css_custom_property_parse_value (GtkStyleProperty *property,
                                      GtkCssParser     *parser,
                                      GFile            *base)
 {
+  GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (property);
   gboolean success;
 
   g_value_init (value, _gtk_style_property_get_value_type (property));
 
-  if (property->property_parse_func)
+  if (custom->property_parse_func)
     {
       GError *error = NULL;
       char *value_str;
@@ -47,7 +48,7 @@ gtk_css_custom_property_parse_value (GtkStyleProperty *property,
       value_str = _gtk_css_parser_read_value (parser);
       if (value_str != NULL)
         {
-          success = (*property->property_parse_func) (value_str, value, &error);
+          success = (* custom->property_parse_func) (value_str, value, &error);
           g_free (value_str);
         }
       else
@@ -147,7 +148,7 @@ gtk_theming_engine_register_property (const gchar            *name_space,
                                       GtkStylePropertyParser  parse_func,
                                       GParamSpec             *pspec)
 {
-  GtkStyleProperty *node;
+  GtkCssCustomProperty *node;
   GValue initial = { 0, };
   gchar *name;
 
@@ -186,7 +187,7 @@ void
 gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
                                         GParamSpec             *pspec)
 {
-  GtkStyleProperty *node;
+  GtkCssCustomProperty *node;
   GValue initial = { 0, };
 
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
@@ -232,11 +233,13 @@ gtk_style_properties_lookup_property (const gchar             *property_name,
 
   if (GTK_IS_CSS_CUSTOM_PROPERTY (node))
     {
+      GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (node);
+
       if (pspec)
         *pspec = GTK_CSS_STYLE_PROPERTY (node)->pspec;
 
       if (parse_func)
-        *parse_func = node->property_parse_func;
+        *parse_func = custom->property_parse_func;
 
       found = TRUE;
     }

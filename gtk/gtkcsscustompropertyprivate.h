@@ -38,6 +38,8 @@ typedef struct _GtkCssCustomPropertyClass      GtkCssCustomPropertyClass;
 struct _GtkCssCustomProperty
 {
   GtkCssStyleProperty parent;
+
+  GtkStylePropertyParser property_parse_func;
 };
 
 struct _GtkCssCustomPropertyClass

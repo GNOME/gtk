@@ -58,7 +58,6 @@ struct _GtkStyleProperty
   char *name;
   GType value_type;
 
-  GtkStylePropertyParser    property_parse_func;
   GtkStyleUnpackFunc        unpack_func;
   GtkStylePackFunc          pack_func;
   GtkStyleParseFunc         parse_func;
