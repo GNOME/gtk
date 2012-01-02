@@ -335,8 +335,7 @@ unpack_border_width (const GValue *value,
 static void
 pack_border_width (GValue             *value,
                    GtkStyleProperties *props,
-                   GtkStateFlags       state,
-		   GtkStylePropertyContext *context)
+                   GtkStateFlags       state)
 {
   pack_border (value, props, state,
                "border-top-width", "border-left-width",
@@ -355,8 +354,7 @@ unpack_padding (const GValue *value,
 static void
 pack_padding (GValue             *value,
               GtkStyleProperties *props,
-              GtkStateFlags       state,
-	      GtkStylePropertyContext *context)
+              GtkStateFlags       state)
 {
   pack_border (value, props, state,
                "padding-top", "padding-left",
@@ -375,8 +373,7 @@ unpack_margin (const GValue *value,
 static void
 pack_margin (GValue             *value,
              GtkStyleProperties *props,
-             GtkStateFlags       state,
-	     GtkStylePropertyContext *context)
+             GtkStateFlags       state)
 {
   pack_border (value, props, state,
                "margin-top", "margin-left",
@@ -412,8 +409,7 @@ unpack_border_radius (const GValue *value,
 static void
 pack_border_radius (GValue             *value,
                     GtkStyleProperties *props,
-                    GtkStateFlags       state,
-		    GtkStylePropertyContext *context)
+                    GtkStateFlags       state)
 {
   GtkCssBorderCornerRadius *top_left;
 
@@ -513,8 +509,7 @@ unpack_font_description (const GValue *value,
 static void
 pack_font_description (GValue             *value,
                        GtkStyleProperties *props,
-                       GtkStateFlags       state,
-		       GtkStylePropertyContext *context)
+                       GtkStateFlags       state)
 {
   PangoFontDescription *description;
   char **families;
@@ -592,8 +587,7 @@ unpack_border_color (const GValue *value,
 static void
 pack_border_color (GValue             *value,
                    GtkStyleProperties *props,
-                   GtkStateFlags       state,
-		   GtkStylePropertyContext *context)
+                   GtkStateFlags       state)
 {
   /* NB: We are a color property, so we have to resolve to a color here.
    * So we just resolve to a color. We pick one and stick to it.

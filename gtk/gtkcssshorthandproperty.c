@@ -91,7 +91,7 @@ _gtk_css_shorthand_property_query (GtkStyleProperty   *property,
 			           GtkStylePropertyContext *context,
                                    GValue             *value)
 {
-  property->pack_func (value, props, state, context);
+  property->pack_func (value, props, state);
 }
 
 static gboolean
