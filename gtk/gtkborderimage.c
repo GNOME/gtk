@@ -195,20 +195,19 @@ _gtk_border_image_unpack (const GValue *value,
 void
 _gtk_border_image_pack (GValue             *value,
                         GtkStyleProperties *props,
-                        GtkStateFlags       state,
-			GtkStylePropertyContext *context)
+                        GtkStateFlags       state)
 {
   GtkBorderImage *image;
   cairo_pattern_t *source;
   GtkBorder *slice, *width;
   GtkCssBorderImageRepeat *repeat;
 
-  _gtk_style_properties_get (props, state, context,
-			     "border-image-source", &source,
-			     "border-image-slice", &slice,
-			     "border-image-repeat", &repeat,
-			     "border-image-width", &width,
-			     NULL);
+  gtk_style_properties_get (props, state,
+			    "border-image-source", &source,
+			    "border-image-slice", &slice,
+			    "border-image-repeat", &repeat,
+			    "border-image-width", &width,
+			    NULL);
 
   if (source == NULL)
     {

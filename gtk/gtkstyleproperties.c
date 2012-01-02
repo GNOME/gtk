@@ -653,7 +653,7 @@ _gtk_style_properties_get_property (GtkStyleProperties *props,
       return FALSE;
     }
 
-  _gtk_style_property_query (node, props, state, context, value);
+  _gtk_style_property_query (node, props, state, value);
   return TRUE;
 }
 

@@ -64,8 +64,7 @@ GParameter *      _gtk_border_image_unpack           (const GValue         *valu
                                                       guint                *n_params);
 void              _gtk_border_image_pack             (GValue               *value,
                                                       GtkStyleProperties   *props,
-                                                      GtkStateFlags         state,
-						      GtkStylePropertyContext *context);
+                                                      GtkStateFlags         state);
 
 G_END_DECLS
 

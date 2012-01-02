@@ -211,21 +211,19 @@ void
 _gtk_style_property_query (GtkStyleProperty        *property,
                            GtkStyleProperties      *props,
                            GtkStateFlags            state,
-			   GtkStylePropertyContext *context,
                            GValue                  *value)
 {
   GtkStylePropertyClass *klass;
 
   g_return_if_fail (property != NULL);
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
-  g_return_if_fail (context != NULL);
   g_return_if_fail (value != NULL);
 
   klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
 
   g_value_init (value, property->value_type);
 
-  klass->query (property, props, state, context, value);
+  klass->query (property, props, state, value);
 }
 
 static void

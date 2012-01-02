@@ -125,7 +125,6 @@ static void
 _gtk_css_style_property_query (GtkStyleProperty   *property,
                                GtkStyleProperties *props,
                                GtkStateFlags       state,
-			       GtkStylePropertyContext *context,
                                GValue             *value)
 {
   const GValue *val;

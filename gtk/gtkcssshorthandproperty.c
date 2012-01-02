@@ -88,7 +88,6 @@ static void
 _gtk_css_shorthand_property_query (GtkStyleProperty   *property,
                                    GtkStyleProperties *props,
                                    GtkStateFlags       state,
-			           GtkStylePropertyContext *context,
                                    GValue             *value)
 {
   property->pack_func (value, props, state);
