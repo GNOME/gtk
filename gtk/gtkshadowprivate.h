@@ -24,7 +24,7 @@
 
 #include <glib-object.h>
 
-#include "gtkstyleproperties.h"
+#include "gtkstylecontext.h"
 #include "gtksymboliccolor.h"
 #include "gtkicontheme.h"
 #include "gtkcsstypesprivate.h"
@@ -54,7 +54,7 @@ void       _gtk_shadow_print          (GtkShadow          *shadow,
                                        GString            *string);
 
 GtkShadow *_gtk_shadow_resolve        (GtkShadow          *shadow,
-                                       GtkStyleProperties *props);
+                                       GtkStyleContext    *context);
 gboolean   _gtk_shadow_get_resolved   (GtkShadow          *shadow);
 
 void       _gtk_text_shadow_paint_layout (GtkShadow       *shadow,

@@ -35,6 +35,7 @@
 #include "gtkgradient.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkshadowprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
 #include "gtkwin32themeprivate.h"
@@ -46,22 +47,31 @@
 
 static GHashTable *parse_funcs = NULL;
 static GHashTable *print_funcs = NULL;
+static GHashTable *compute_funcs = NULL;
 
 typedef gboolean         (* GtkStyleParseFunc)             (GtkCssParser           *parser,
                                                             GFile                  *base,
                                                             GValue                 *value);
 typedef void             (* GtkStylePrintFunc)             (const GValue           *value,
                                                             GString                *string);
+typedef void             (* GtkStylePrintFunc)             (const GValue           *value,
+                                                            GString                *string);
+typedef void             (* GtkStyleComputeFunc)           (GValue                 *computed,
+                                                            GtkStyleContext        *context,
+                                                            const GValue           *specified);
 
 static void
-register_conversion_function (GType             type,
-                              GtkStyleParseFunc parse,
-                              GtkStylePrintFunc print)
+register_conversion_function (GType               type,
+                              GtkStyleParseFunc   parse,
+                              GtkStylePrintFunc   print,
+                              GtkStyleComputeFunc compute)
 {
   if (parse)
     g_hash_table_insert (parse_funcs, GSIZE_TO_POINTER (type), parse);
   if (print)
     g_hash_table_insert (print_funcs, GSIZE_TO_POINTER (type), print);
+  if (compute)
+    g_hash_table_insert (compute_funcs, GSIZE_TO_POINTER (type), compute);
 }
 
 static void
@@ -197,6 +207,26 @@ rgba_value_print (const GValue *value,
     }
 }
 
+static void
+rgba_value_compute (GValue          *computed,
+                    GtkStyleContext *context,
+                    const GValue    *specified)
+{
+  GdkRGBA rgba, white = { 1, 1, 1, 1 };
+
+  if (G_VALUE_HOLDS (specified, GTK_TYPE_SYMBOLIC_COLOR))
+    {
+      if (_gtk_style_context_resolve_color (context,
+                                            g_value_get_boxed (specified),
+                                            &rgba))
+        g_value_set_boxed (computed, &rgba);
+      else
+        g_value_set_boxed (computed, &white);
+    }
+  else
+    g_value_copy (specified, computed);
+}
+
 static gboolean 
 color_value_parse (GtkCssParser *parser,
                    GFile        *base,
@@ -243,6 +273,31 @@ color_value_print (const GValue *value,
       g_string_append (string, s);
       g_free (s);
     }
+}
+
+static void
+color_value_compute (GValue          *computed,
+                     GtkStyleContext *context,
+                     const GValue    *specified)
+{
+  GdkRGBA rgba;
+  GdkColor color = { 0, 65535, 65535, 65535 };
+
+  if (G_VALUE_HOLDS (specified, GTK_TYPE_SYMBOLIC_COLOR))
+    {
+      if (_gtk_style_context_resolve_color (context,
+                                            g_value_get_boxed (specified),
+                                            &rgba))
+        {
+          color.red = rgba.red * 65535. + 0.5;
+          color.green = rgba.green * 65535. + 0.5;
+          color.blue = rgba.blue * 65535. + 0.5;
+        }
+      
+      g_value_set_boxed (computed, &color);
+    }
+  else
+    g_value_copy (specified, computed);
 }
 
 static gboolean
@@ -1044,6 +1099,23 @@ pattern_value_print (const GValue *value,
     }
 }
 
+static void
+pattern_value_compute (GValue          *computed,
+                       GtkStyleContext *context,
+                       const GValue    *specified)
+{
+  if (G_VALUE_HOLDS (specified, GTK_TYPE_GRADIENT))
+    {
+      cairo_pattern_t *gradient;
+      
+      gradient = gtk_gradient_resolve_for_context (g_value_get_boxed (specified), context);
+
+      g_value_take_boxed (computed, gradient);
+    }
+  else
+    g_value_copy (specified, computed);
+}
+
 static gboolean
 shadow_value_parse (GtkCssParser *parser,
                     GFile *base,
@@ -1144,6 +1216,20 @@ shadow_value_print (const GValue *value,
     g_string_append (string, "none");
   else
     _gtk_shadow_print (shadow, string);
+}
+
+static void
+shadow_value_compute (GValue          *computed,
+                      GtkStyleContext *context,
+                      const GValue    *specified)
+{
+  GtkShadow *shadow;
+
+  shadow = g_value_get_boxed (specified);
+  if (shadow)
+    shadow = _gtk_shadow_resolve (shadow, context);
+
+  g_value_take_boxed (computed, shadow);
 }
 
 static gboolean
@@ -1326,67 +1412,88 @@ gtk_css_style_funcs_init (void)
 
   parse_funcs = g_hash_table_new (NULL, NULL);
   print_funcs = g_hash_table_new (NULL, NULL);
+  compute_funcs = g_hash_table_new (NULL, NULL);
 
   register_conversion_function (GDK_TYPE_RGBA,
                                 rgba_value_parse,
-                                rgba_value_print);
+                                rgba_value_print,
+                                rgba_value_compute);
   register_conversion_function (GDK_TYPE_COLOR,
                                 color_value_parse,
-                                color_value_print);
+                                color_value_print,
+                                color_value_compute);
   register_conversion_function (GTK_TYPE_SYMBOLIC_COLOR,
                                 symbolic_color_value_parse,
-                                symbolic_color_value_print);
+                                symbolic_color_value_print,
+                                NULL);
   register_conversion_function (PANGO_TYPE_FONT_DESCRIPTION,
                                 font_description_value_parse,
-                                font_description_value_print);
+                                font_description_value_print,
+                                NULL);
   register_conversion_function (G_TYPE_BOOLEAN,
                                 boolean_value_parse,
-                                boolean_value_print);
+                                boolean_value_print,
+                                NULL);
   register_conversion_function (G_TYPE_INT,
                                 int_value_parse,
-                                int_value_print);
+                                int_value_print,
+                                NULL);
   register_conversion_function (G_TYPE_UINT,
                                 uint_value_parse,
-                                uint_value_print);
+                                uint_value_print,
+                                NULL);
   register_conversion_function (G_TYPE_DOUBLE,
                                 double_value_parse,
-                                double_value_print);
+                                double_value_print,
+                                NULL);
   register_conversion_function (G_TYPE_FLOAT,
                                 float_value_parse,
-                                float_value_print);
+                                float_value_print,
+                                NULL);
   register_conversion_function (G_TYPE_STRING,
                                 string_value_parse,
-                                string_value_print);
+                                string_value_print,
+                                NULL);
   register_conversion_function (GTK_TYPE_THEMING_ENGINE,
                                 theming_engine_value_parse,
-                                theming_engine_value_print);
+                                theming_engine_value_print,
+                                NULL);
   register_conversion_function (GTK_TYPE_ANIMATION_DESCRIPTION,
                                 animation_description_value_parse,
-                                animation_description_value_print);
+                                animation_description_value_print,
+                                NULL);
   register_conversion_function (GTK_TYPE_BORDER,
                                 border_value_parse,
-                                border_value_print);
+                                border_value_print,
+                                NULL);
   register_conversion_function (GTK_TYPE_GRADIENT,
                                 gradient_value_parse,
-                                gradient_value_print);
+                                gradient_value_print,
+                                NULL);
   register_conversion_function (CAIRO_GOBJECT_TYPE_PATTERN,
                                 pattern_value_parse,
-                                pattern_value_print);
+                                pattern_value_print,
+                                pattern_value_compute);
   register_conversion_function (GTK_TYPE_CSS_BORDER_IMAGE_REPEAT,
                                 border_image_repeat_value_parse,
-                                border_image_repeat_value_print);
+                                border_image_repeat_value_print,
+                                NULL);
   register_conversion_function (GTK_TYPE_SHADOW,
                                 shadow_value_parse,
-                                shadow_value_print);
+                                shadow_value_print,
+                                shadow_value_compute);
   register_conversion_function (G_TYPE_ENUM,
                                 enum_value_parse,
-                                enum_value_print);
+                                enum_value_print,
+                                NULL);
   register_conversion_function (G_TYPE_FLAGS,
                                 flags_value_parse,
-                                flags_value_print);
+                                flags_value_print,
+                                NULL);
   register_conversion_function (GTK_TYPE_CSS_BACKGROUND_REPEAT,
                                 background_repeat_value_parse,
-                                background_repeat_value_print);
+                                background_repeat_value_print,
+                                NULL);
 }
 
 /**
@@ -1461,5 +1568,41 @@ _gtk_css_style_print_value (const GValue *value,
     }
   
   func (value, string);
+}
+
+/**
+ * _gtk_css_style_compute_value:
+ * @computed: (out): a value to be filled with the result
+ * @context: the context to use for computing the value
+ * @specified: the value to use for the computation
+ *
+ * Converts the @specified value into the @computed value using the
+ * information in @context. The values must have matching types, ie
+ * @specified must be a result of a call to
+ * _gtk_css_style_parse_value() with the same type as @computed.
+ **/
+void
+_gtk_css_style_compute_value (GValue          *computed,
+                              GtkStyleContext *context,
+                              const GValue    *specified)
+{
+  GtkStyleComputeFunc func;
+
+  g_return_if_fail (G_IS_VALUE (computed));
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (G_IS_VALUE (specified));
+
+  gtk_css_style_funcs_init ();
+
+  func = g_hash_table_lookup (compute_funcs,
+                              GSIZE_TO_POINTER (G_VALUE_TYPE (computed)));
+  if (func == NULL)
+    func = g_hash_table_lookup (compute_funcs,
+                                GSIZE_TO_POINTER (g_type_fundamental (G_VALUE_TYPE (computed))));
+
+  if (func)
+    func (computed, context, specified);
+  else
+    g_value_copy (specified, computed);
 }
 

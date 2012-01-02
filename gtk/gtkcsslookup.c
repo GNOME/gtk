@@ -135,6 +135,7 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
     {
       GtkCssStyleProperty *prop = _gtk_css_style_property_lookup_by_id (i);
       const GValue *result;
+      GValue value = { 0, };
 
       /* http://www.w3.org/TR/css3-cascade/#cascade
        * Then, for every element, the value for each property can be found
@@ -192,36 +193,31 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
             }
         }
 
-      if (result)
-        {
-          _gtk_style_properties_set_property_by_property (props,
-                                                          prop,
-                                                          0,
-                                                          result);
-        }
-      else if (parent == NULL)
+      if (result == NULL && parent == NULL)
         {
           /* If the ‘inherit’ value is set on the root element, the property is
            * assigned its initial value. */
-          _gtk_style_properties_set_property_by_property (props,
-                                                          prop,
-                                                          0,
-                                                          _gtk_css_style_property_get_initial_value (prop));
+          result = _gtk_css_style_property_get_initial_value (prop);
+        }
+
+      if (result)
+        {
+          _gtk_css_style_property_compute_value (prop, &value, context, result);
         }
       else
         {
-          GValue value = { 0, };
           /* Set NULL here and do the inheritance upon lookup? */
           gtk_style_context_get_property (parent,
                                           _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop)),
                                           gtk_style_context_get_state (parent),
                                           &value);
-          _gtk_style_properties_set_property_by_property (props,
-                                                          prop,
-                                                          0,
-                                                          &value);
-          g_value_unset (&value);
         }
+
+      _gtk_style_properties_set_property_by_property (props,
+                                                      prop,
+                                                      0,
+                                                      &value);
+      g_value_unset (&value);
     }
 
   return props;

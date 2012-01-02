@@ -63,9 +63,15 @@ guint                   _gtk_css_style_property_get_id          (GtkCssStyleProp
 const GValue *          _gtk_css_style_property_get_initial_value
                                                                 (GtkCssStyleProperty    *property);
 
+void                    _gtk_css_style_property_compute_value   (GtkCssStyleProperty    *property,
+                                                                 GValue                 *computed,
+                                                                 GtkStyleContext        *context,
+                                                                 const GValue           *specified);
+
 void                    _gtk_css_style_property_print_value     (GtkCssStyleProperty    *property,
                                                                  const GValue           *value,
                                                                  GString                *string);
+                                                                 
 
 G_END_DECLS
 

@@ -28,13 +28,6 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertiesprivate.h"
 
-/* for resolvage */
-#include <cairo-gobject.h>
-#include "gtkgradient.h"
-#include "gtkshadowprivate.h"
-#include "gtkwin32themeprivate.h"
-
-
 enum {
   PROP_0,
   PROP_ID,
@@ -128,180 +121,6 @@ _gtk_style_property_default_value (GtkStyleProperty   *property,
   g_value_copy (_gtk_css_style_property_get_initial_value (GTK_CSS_STYLE_PROPERTY (property)), value);
 }
 
-static gboolean
-resolve_color (GtkStyleProperties *props,
-	       GValue             *value)
-{
-  GdkRGBA color;
-
-  /* Resolve symbolic color to GdkRGBA */
-  if (!gtk_symbolic_color_resolve (g_value_get_boxed (value), props, &color))
-    return FALSE;
-
-  /* Store it back, this is where GdkRGBA caching happens */
-  g_value_unset (value);
-  g_value_init (value, GDK_TYPE_RGBA);
-  g_value_set_boxed (value, &color);
-
-  return TRUE;
-}
-
-static gboolean
-resolve_color_rgb (GtkStyleProperties *props,
-                   GValue             *value)
-{
-  GdkColor color = { 0 };
-  GdkRGBA rgba;
-
-  if (!gtk_symbolic_color_resolve (g_value_get_boxed (value), props, &rgba))
-    return FALSE;
-
-  color.red = rgba.red * 65535. + 0.5;
-  color.green = rgba.green * 65535. + 0.5;
-  color.blue = rgba.blue * 65535. + 0.5;
-
-  g_value_unset (value);
-  g_value_init (value, GDK_TYPE_COLOR);
-  g_value_set_boxed (value, &color);
-
-  return TRUE;
-}
-
-static gboolean
-resolve_win32_theme_part (GtkStyleProperties *props,
-			  GValue             *value,
-			  GValue             *value_out,
-			  GtkStylePropertyContext *context)
-{
-  GtkWin32ThemePart  *part;
-  cairo_pattern_t *pattern;
-
-  part = g_value_get_boxed (value);
-  if (part == NULL)
-    return FALSE;
-
-  pattern = _gtk_win32_theme_part_render (part, context->width, context->height);
-
-  g_value_take_boxed (value_out, pattern);
-
-  return TRUE;
-}
-
-
-static gboolean
-resolve_gradient (GtkStyleProperties *props,
-                  GValue             *value)
-{
-  cairo_pattern_t *gradient;
-
-  if (!gtk_gradient_resolve (g_value_get_boxed (value), props, &gradient))
-    return FALSE;
-
-  /* Store it back, this is where cairo_pattern_t caching happens */
-  g_value_unset (value);
-  g_value_init (value, CAIRO_GOBJECT_TYPE_PATTERN);
-  g_value_take_boxed (value, gradient);
-
-  return TRUE;
-}
-
-static gboolean
-resolve_shadow (GtkStyleProperties *props,
-                GValue *value)
-{
-  GtkShadow *resolved, *base;
-
-  base = g_value_get_boxed (value);
-
-  if (base == NULL)
-    return TRUE;
-  
-  if (_gtk_shadow_get_resolved (base))
-    return TRUE;
-
-  resolved = _gtk_shadow_resolve (base, props);
-  if (resolved == NULL)
-    return FALSE;
-
-  g_value_take_boxed (value, resolved);
-
-  return TRUE;
-}
-
-static void
-_gtk_style_property_resolve (GtkStyleProperty       *property,
-                             GtkStyleProperties     *props,
-                             GtkStateFlags           state,
-			     GtkStylePropertyContext *context,
-                             GValue                 *val,
-			     GValue                 *val_out)
-{
-  if (G_VALUE_TYPE (val) == GTK_TYPE_CSS_SPECIAL_VALUE)
-    {
-      GtkCssSpecialValue special = g_value_get_enum (val);
-
-      g_value_unset (val);
-      switch (special)
-        {
-        case GTK_CSS_CURRENT_COLOR:
-          g_assert (_gtk_style_property_get_value_type (property) == GDK_TYPE_RGBA);
-          gtk_style_properties_get_property (props, "color", state, val);
-          break;
-        case GTK_CSS_INHERIT:
-        case GTK_CSS_INITIAL:
-        default:
-          g_assert_not_reached ();
-        }
-    }
-  else if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
-    {
-      if (_gtk_style_property_get_value_type (property) == GDK_TYPE_RGBA)
-        {
-          if (resolve_color (props, val))
-            goto out;
-        }
-      else if (_gtk_style_property_get_value_type (property) == GDK_TYPE_COLOR)
-        {
-          if (resolve_color_rgb (props, val))
-            goto out;
-        }
-      
-      g_value_unset (val);
-      g_value_init (val, _gtk_style_property_get_value_type (property));
-      _gtk_style_property_default_value (property, props, state, val);
-    }
-  else if (G_VALUE_TYPE (val) == GDK_TYPE_RGBA)
-    {
-      if (g_value_get_boxed (val) == NULL)
-        _gtk_style_property_default_value (property, props, state, val);
-    }
-  else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
-    {
-      g_return_if_fail (_gtk_style_property_get_value_type (property) == CAIRO_GOBJECT_TYPE_PATTERN);
-
-      if (!resolve_gradient (props, val))
-        {
-          g_value_unset (val);
-          g_value_init (val, CAIRO_GOBJECT_TYPE_PATTERN);
-          _gtk_style_property_default_value (property, props, state, val);
-        }
-    }
-  else if (G_VALUE_TYPE (val) == GTK_TYPE_SHADOW)
-    {
-      if (!resolve_shadow (props, val))
-        _gtk_style_property_default_value (property, props, state, val);
-    }
-  else if (G_VALUE_TYPE (val) == GTK_TYPE_WIN32_THEME_PART)
-    {
-      if (resolve_win32_theme_part (props, val, val_out, context))
-	return; /* Don't copy val, this sets val_out */
-      _gtk_style_property_default_value (property, props, state, val);
-    }
-
- out:
-  g_value_copy (val, val_out);
-}
-
 static void
 _gtk_css_style_property_query (GtkStyleProperty   *property,
                                GtkStyleProperties *props,
@@ -313,7 +132,7 @@ _gtk_css_style_property_query (GtkStyleProperty   *property,
   
   val = _gtk_style_properties_peek_property (props, GTK_CSS_STYLE_PROPERTY (property), state);
   if (val)
-    _gtk_style_property_resolve (property, props, state, context, (GValue *) val, value);
+    g_value_copy (val, value);
   else
     _gtk_style_property_default_value (property, props, state, value);
 }
@@ -494,6 +313,33 @@ _gtk_css_style_property_get_initial_value (GtkCssStyleProperty *property)
   g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), NULL);
 
   return &property->initial_value;
+}
+
+/**
+ * _gtk_css_style_property_compute_value:
+ * @property: the property
+ * @computed: (out): an uninitialized value to be filled with the result
+ * @context: the context to use for resolving
+ * @specified: the value to compute from
+ *
+ * Converts the @specified value into the @computed value using the
+ * information in @context. This step is explained in detail in
+ * <ulink url="http://www.w3.org/TR/css3-cascade/#computed>
+ * the CSS documentation</ulink>.
+ **/
+void
+_gtk_css_style_property_compute_value (GtkCssStyleProperty *property,
+                                       GValue              *computed,
+                                       GtkStyleContext     *context,
+                                       const GValue        *specified)
+{
+  g_return_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property));
+  g_return_if_fail (computed != NULL && !G_IS_VALUE (computed));
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (G_IS_VALUE (specified));
+
+  g_value_init (computed, _gtk_style_property_get_value_type (GTK_STYLE_PROPERTY (property)));
+  _gtk_css_style_compute_value (computed, context, specified);
 }
 
 /**

@@ -21,6 +21,7 @@
 #define __GTK_CSS_STYLE_FUNCS_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkstylecontext.h"
 
 G_BEGIN_DECLS
 
@@ -29,6 +30,9 @@ gboolean            _gtk_css_style_parse_value             (GValue              
                                                             GFile                  *base);
 void                _gtk_css_style_print_value             (const GValue           *value,
                                                             GString                *string);
+void                _gtk_css_style_compute_value           (GValue                 *computed,
+                                                            GtkStyleContext        *context,
+                                                            const GValue           *specified);
 
 G_END_DECLS
 
