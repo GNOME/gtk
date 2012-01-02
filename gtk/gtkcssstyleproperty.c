@@ -347,24 +347,6 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
       g_value_set_enum (value, GTK_CSS_INHERIT);
       return TRUE;
     }
-  else if (property->property_parse_func)
-    {
-      GError *error = NULL;
-      char *value_str;
-      
-      value_str = _gtk_css_parser_read_value (parser);
-      if (value_str == NULL)
-        return FALSE;
-      
-      g_value_init (value, _gtk_style_property_get_value_type (property));
-      success = (*property->property_parse_func) (value_str, value, &error);
-
-      g_free (value_str);
-      if (!success)
-        g_value_unset (value);
-
-      return success;
-    }
 
   g_value_init (value, _gtk_style_property_get_value_type (property));
   if (property->parse_func)

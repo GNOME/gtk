@@ -24,13 +24,50 @@
 
 #include <string.h>
 
+#include "gtkcssstylefuncsprivate.h"
 #include "gtkthemingengine.h"
 
 G_DEFINE_TYPE (GtkCssCustomProperty, _gtk_css_custom_property, GTK_TYPE_CSS_STYLE_PROPERTY)
 
+static gboolean
+gtk_css_custom_property_parse_value (GtkStyleProperty *property,
+                                     GValue           *value,
+                                     GtkCssParser     *parser,
+                                     GFile            *base)
+{
+  gboolean success;
+
+  g_value_init (value, _gtk_style_property_get_value_type (property));
+
+  if (property->property_parse_func)
+    {
+      GError *error = NULL;
+      char *value_str;
+      
+      value_str = _gtk_css_parser_read_value (parser);
+      if (value_str != NULL)
+        {
+          success = (*property->property_parse_func) (value_str, value, &error);
+          g_free (value_str);
+        }
+      else
+        success = FALSE;
+    }
+  else
+    success = _gtk_css_style_parse_value (value, parser, base);
+
+  if (!success)
+    g_value_unset (value);
+
+  return success;
+}
+
 static void
 _gtk_css_custom_property_class_init (GtkCssCustomPropertyClass *klass)
 {
+  GtkStylePropertyClass *property_class = GTK_STYLE_PROPERTY_CLASS (klass);
+
+  property_class->parse_value = gtk_css_custom_property_parse_value;
 }
 
 
