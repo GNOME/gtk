@@ -530,6 +530,7 @@ gtk_style_property_init_properties (void)
   GValue value = { 0, };
   char *default_font_family[] = { "Sans", NULL };
   GdkRGBA rgba;
+  GtkCssBorderCornerRadius no_corner_radius = { 0, };
 
   if (G_LIKELY (initialized))
     return;
@@ -703,6 +704,8 @@ gtk_style_property_init_properties (void)
                                                             "Border width at right",
                                                             0, G_MAXINT, 0, 0));
 
+  g_value_init (&value, GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
+  g_value_set_boxed (&value, &no_corner_radius);
   _gtk_style_property_register           (g_param_spec_boxed ("border-top-left-radius",
                                                               "Border top left radius",
                                                               "Border radius of top left corner, in pixels",
@@ -711,7 +714,7 @@ gtk_style_property_init_properties (void)
                                           NULL,
                                           border_corner_radius_value_parse,
                                           border_corner_radius_value_print,
-                                          NULL);
+                                          &value);
   _gtk_style_property_register           (g_param_spec_boxed ("border-top-right-radius",
                                                               "Border top right radius",
                                                               "Border radius of top right corner, in pixels",
@@ -720,7 +723,7 @@ gtk_style_property_init_properties (void)
                                           NULL,
                                           border_corner_radius_value_parse,
                                           border_corner_radius_value_print,
-                                          NULL);
+                                          &value);
   _gtk_style_property_register           (g_param_spec_boxed ("border-bottom-right-radius",
                                                               "Border bottom right radius",
                                                               "Border radius of bottom right corner, in pixels",
@@ -729,7 +732,7 @@ gtk_style_property_init_properties (void)
                                           NULL,
                                           border_corner_radius_value_parse,
                                           border_corner_radius_value_print,
-                                          NULL);
+                                          &value);
   _gtk_style_property_register           (g_param_spec_boxed ("border-bottom-left-radius",
                                                               "Border bottom left radius",
                                                               "Border radius of bottom left corner, in pixels",
@@ -738,7 +741,8 @@ gtk_style_property_init_properties (void)
                                           NULL,
                                           border_corner_radius_value_parse,
                                           border_corner_radius_value_print,
-                                          NULL);
+                                          &value);
+  g_value_unset (&value);
 
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_enum ("border-style",
