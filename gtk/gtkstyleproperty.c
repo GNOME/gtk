@@ -379,6 +379,25 @@ border_corner_radius_value_print (const GValue *value,
 
 /*** API ***/
 
+/**
+ * _gtk_style_property_parse_value:
+ * @property: the property
+ * @value: an uninitialized value
+ * @parser: the parser to parse from
+ * @base: the base file for @aprser
+ *
+ * Tries to parse the given @property from the given @parser into
+ * @value. The type that @value will be assigned is dependant on
+ * the parser and no assumptions must be made about it. If the
+ * parsing fails, %FALSE will be returned and @value will be
+ * left uninitialized.
+ *
+ * Only if @property is a #GtkCssShorthandProperty, the @value will
+ * always contain a #GValueArray with the values to be used for
+ * the subproperties.
+ *
+ * Returns: %TRUE on success
+ **/
 gboolean
 _gtk_style_property_parse_value (GtkStyleProperty *property,
                                  GValue           *value,

@@ -324,12 +324,13 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
                                     GtkCssParser     *parser,
                                     GFile            *base)
 {
+  gboolean success;
+
   if (_gtk_css_parser_try (parser, "initial", TRUE))
     {
       /* the initial value can be explicitly specified with the
        * ‘initial’ keyword which all properties accept.
        */
-      g_value_unset (value);
       g_value_init (value, GTK_TYPE_CSS_SPECIAL_VALUE);
       g_value_set_enum (value, GTK_CSS_INITIAL);
       return TRUE;
@@ -342,7 +343,6 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
        * strengthen inherited values in the cascade, and it can
        * also be used on properties that are not normally inherited.
        */
-      g_value_unset (value);
       g_value_init (value, GTK_TYPE_CSS_SPECIAL_VALUE);
       g_value_set_enum (value, GTK_CSS_INHERIT);
       return TRUE;
@@ -351,22 +351,31 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
     {
       GError *error = NULL;
       char *value_str;
-      gboolean success;
       
       value_str = _gtk_css_parser_read_value (parser);
       if (value_str == NULL)
         return FALSE;
       
+      g_value_init (value, _gtk_style_property_get_value_type (property));
       success = (*property->property_parse_func) (value_str, value, &error);
 
       g_free (value_str);
+      if (!success)
+        g_value_unset (value);
 
       return success;
     }
-  else if (property->parse_func)
-    return (* property->parse_func) (parser, base, value);
+
+  g_value_init (value, _gtk_style_property_get_value_type (property));
+  if (property->parse_func)
+    success = (* property->parse_func) (parser, base, value);
   else
-    return _gtk_css_style_parse_value (value, parser, base);
+    success = _gtk_css_style_parse_value (value, parser, base);
+
+  if (!success)
+    g_value_unset (value);
+
+  return success;
 }
 
 static void

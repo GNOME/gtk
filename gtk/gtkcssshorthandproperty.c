@@ -153,7 +153,6 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
       g_value_set_enum (val, GTK_CSS_INITIAL);
     }
 
-  g_value_unset (value);
   g_value_init (value, G_TYPE_VALUE_ARRAY);
   g_value_set_boxed (value, array);
   return TRUE;
