@@ -28,6 +28,9 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertiesprivate.h"
 
+#include "gtkcssimagegradientprivate.h"
+#include "gtkcssimageprivate.h"
+
 enum {
   PROP_0,
   PROP_ID,
@@ -131,7 +134,36 @@ _gtk_css_style_property_query (GtkStyleProperty   *property,
   
   val = _gtk_style_properties_peek_property (props, GTK_CSS_STYLE_PROPERTY (property), state);
   if (val)
-    g_value_copy (val, value);
+    {
+      /* Somebody make this a vfunc */
+      if (G_VALUE_TYPE (val) == GTK_TYPE_CSS_IMAGE)
+        {
+          GtkCssImage *image = g_value_get_object (val);
+          cairo_pattern_t *pattern;
+          cairo_surface_t *surface;
+          cairo_matrix_t matrix;
+          
+          if (image == NULL)
+            g_value_set_boxed (value, NULL);
+          else if (GTK_IS_CSS_IMAGE_GRADIENT (image))
+            g_value_set_boxed (value, GTK_CSS_IMAGE_GRADIENT (image)->pattern);
+          else
+            {
+              double width, height;
+
+              /* the 100, 100 is rather random */
+              _gtk_css_image_get_concrete_size (image, 0, 0, 100, 100, &width, &height);
+              surface = _gtk_css_image_get_surface (image, NULL, width, height);
+              pattern = cairo_pattern_create_for_surface (surface);
+              cairo_matrix_init_scale (&matrix, width, height);
+              cairo_pattern_set_matrix (pattern, &matrix);
+              cairo_surface_destroy (surface);
+              g_value_take_boxed (value, pattern);
+            }
+        }
+      else
+        g_value_copy (val, value);
+    }
   else
     _gtk_style_property_default_value (property, props, state, value);
 }

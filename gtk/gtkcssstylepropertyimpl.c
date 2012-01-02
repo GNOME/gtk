@@ -36,6 +36,7 @@
 /* the actual parsers we have */
 #include "gtkanimationdescription.h"
 #include "gtkbindings.h"
+#include "gtkcssimageprivate.h"
 #include "gtkgradient.h"
 #include "gtkshadowprivate.h"
 #include "gtkthemingengine.h"
@@ -339,6 +340,57 @@ border_corner_radius_value_print (GtkCssStyleProperty *property,
     }
 }
 
+static gboolean 
+css_image_value_parse (GtkCssStyleProperty *property,
+                       GValue              *value,
+                       GtkCssParser        *parser,
+                       GFile               *base)
+{
+  GtkCssImage *image;
+
+  if (_gtk_css_parser_try (parser, "none", TRUE))
+    image = NULL;
+  else
+    {
+      image = _gtk_css_image_new_parse (parser, base);
+      if (image == NULL)
+        return FALSE;
+    }
+
+  g_value_unset (value);
+  g_value_init (value, GTK_TYPE_CSS_IMAGE);
+  g_value_take_object (value, image);
+  return TRUE;
+}
+
+static void
+css_image_value_print (GtkCssStyleProperty *property,
+                       const GValue        *value,
+                       GString             *string)
+{
+  GtkCssImage *image = g_value_get_object (value);
+
+  if (image)
+    _gtk_css_image_print (image, string);
+  else
+    g_string_append (string, "none");
+}
+
+static void
+css_image_value_compute (GtkCssStyleProperty    *property,
+                         GValue                 *computed,
+                         GtkStyleContext        *context,
+                         const GValue           *specified)
+{
+  GtkCssImage *image = g_value_get_object (specified);
+
+  if (image)
+    image = _gtk_css_image_compute (image, context);
+
+  g_value_init (computed, GTK_TYPE_CSS_IMAGE);
+  g_value_take_object (computed, image);
+}
+
 /*** REGISTRATION ***/
 
 #define rgba_init(rgba, r, g, b, a) G_STMT_START{ \
@@ -608,13 +660,15 @@ _gtk_css_style_property_init_properties (void)
                                           &value);
   g_value_unset (&value);
 
-  gtk_style_property_register            ("background-image",
+  g_value_init (&value, GTK_TYPE_CSS_IMAGE);
+  _gtk_style_property_register           ("background-image",
                                           CAIRO_GOBJECT_TYPE_PATTERN,
                                           0,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          NULL);
+                                          css_image_value_parse,
+                                          css_image_value_print,
+                                          css_image_value_compute,
+                                          &value);
+  g_value_unset (&value);
   gtk_style_property_register            ("background-repeat",
                                           GTK_TYPE_CSS_BACKGROUND_REPEAT,
                                           0,
