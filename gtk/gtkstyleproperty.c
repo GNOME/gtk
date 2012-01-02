@@ -119,12 +119,6 @@ gtk_style_property_get_property (GObject    *object,
     }
 }
 
-static gboolean
-gtk_style_property_real_parse_value (GtkStyleProperty *property,
-                                     GValue           *value,
-                                     GtkCssParser     *parser,
-                                     GFile            *base);
-
 static void
 _gtk_style_property_class_init (GtkStylePropertyClass *klass)
 {
@@ -148,8 +142,6 @@ _gtk_style_property_class_init (GtkStylePropertyClass *klass)
                                                        P_("The value type returned by GtkStyleContext"),
                                                        G_TYPE_NONE,
                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-  klass->parse_value = gtk_style_property_real_parse_value;
 
   klass->properties = g_hash_table_new (g_str_hash, g_str_equal);
 }
@@ -402,57 +394,6 @@ _gtk_style_property_parse_value (GtkStyleProperty *property,
   klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
 
   return klass->parse_value (property, value, parser, base);
-}
-
-static gboolean
-gtk_style_property_real_parse_value (GtkStyleProperty *property,
-                                     GValue           *value,
-                                     GtkCssParser     *parser,
-                                     GFile            *base)
-{
-  if (_gtk_css_parser_try (parser, "initial", TRUE))
-    {
-      /* the initial value can be explicitly specified with the
-       * ‘initial’ keyword which all properties accept.
-       */
-      g_value_unset (value);
-      g_value_init (value, GTK_TYPE_CSS_SPECIAL_VALUE);
-      g_value_set_enum (value, GTK_CSS_INITIAL);
-      return TRUE;
-    }
-  else if (_gtk_css_parser_try (parser, "inherit", TRUE))
-    {
-      /* All properties accept the ‘inherit’ value which
-       * explicitly specifies that the value will be determined
-       * by inheritance. The ‘inherit’ value can be used to
-       * strengthen inherited values in the cascade, and it can
-       * also be used on properties that are not normally inherited.
-       */
-      g_value_unset (value);
-      g_value_init (value, GTK_TYPE_CSS_SPECIAL_VALUE);
-      g_value_set_enum (value, GTK_CSS_INHERIT);
-      return TRUE;
-    }
-  else if (property->property_parse_func)
-    {
-      GError *error = NULL;
-      char *value_str;
-      gboolean success;
-      
-      value_str = _gtk_css_parser_read_value (parser);
-      if (value_str == NULL)
-        return FALSE;
-      
-      success = (*property->property_parse_func) (value_str, value, &error);
-
-      g_free (value_str);
-
-      return success;
-    }
-  else if (property->parse_func)
-    return (* property->parse_func) (parser, base, value);
-  else
-    return _gtk_css_style_parse_value (value, parser, base);
 }
 
 /**
