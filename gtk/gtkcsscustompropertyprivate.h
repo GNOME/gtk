@@ -39,6 +39,7 @@ struct _GtkCssCustomProperty
 {
   GtkCssStyleProperty parent;
 
+  GParamSpec *pspec;
   GtkStylePropertyParser property_parse_func;
 };
 
