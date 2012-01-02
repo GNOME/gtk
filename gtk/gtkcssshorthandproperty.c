@@ -141,6 +141,18 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
       return FALSE;
     }
 
+  /* All values that aren't set by the parse func are set to their
+   * default values here.
+   * XXX: Is the default always initial or can it be inherit? */
+  for (i = 0; i < shorthand->subproperties->len; i++)
+    {
+      GValue *val = g_value_array_get_nth (array, i);
+      if (G_IS_VALUE (val))
+        continue;
+      g_value_init (val, GTK_TYPE_CSS_SPECIAL_VALUE);
+      g_value_set_enum (val, GTK_CSS_INITIAL);
+    }
+
   g_value_unset (value);
   g_value_init (value, G_TYPE_VALUE_ARRAY);
   g_value_set_boxed (value, array);
