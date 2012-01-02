@@ -1193,24 +1193,21 @@ gtk_css_ruleset_add (GtkCssRuleset    *ruleset,
 
   if (GTK_IS_CSS_SHORTHAND_PROPERTY (prop))
     {
-      GParameter *parameters;
-      guint i, n_parameters;
+      GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (prop);
+      GValueArray *array = g_value_get_boxed (&value->value);
+      guint i;
 
-      parameters = _gtk_style_property_unpack (prop, &value->value, &n_parameters);
-
-      for (i = 0; i < n_parameters; i++)
+      for (i = 0; i < _gtk_css_shorthand_property_get_n_subproperties (shorthand); i++)
         {
-          GtkStyleProperty *child;
+          GtkCssStyleProperty *child = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
           PropertyValue *val;
-
-          child = _gtk_style_property_lookup (parameters[i].name);
+          
           val = property_value_new (value->section);
-          memcpy (&val->value, &parameters[i].value, sizeof (GValue));
-          gtk_css_ruleset_add (ruleset, child, val);
+          g_value_init (&val->value, G_VALUE_TYPE (g_value_array_get_nth (array, i)));
+          g_value_copy (g_value_array_get_nth (array, i), &val->value);
+          gtk_css_ruleset_add (ruleset, GTK_STYLE_PROPERTY (child), val);
         }
-      g_free (parameters);
       property_value_free (value);
-      return;
     }
   else if (GTK_IS_CSS_STYLE_PROPERTY (prop))
     {

@@ -39,11 +39,17 @@ G_BEGIN_DECLS
 typedef struct _GtkCssShorthandProperty           GtkCssShorthandProperty;
 typedef struct _GtkCssShorthandPropertyClass      GtkCssShorthandPropertyClass;
 
+typedef gboolean              (* GtkCssShorthandPropertyParseFunc)      (GtkCssShorthandProperty *shorthand,
+                                                                         GValue                  *values,
+                                                                         GtkCssParser            *parser,
+                                                                         GFile                   *base);
 struct _GtkCssShorthandProperty
 {
   GtkStyleProperty parent;
 
   GPtrArray *subproperties;
+
+  GtkCssShorthandPropertyParseFunc parse;
 };
 
 struct _GtkCssShorthandPropertyClass
