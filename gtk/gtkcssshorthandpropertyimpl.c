@@ -137,6 +137,39 @@ parse_border_radius (GtkCssShorthandProperty *shorthand,
   return TRUE;
 }
 
+static gboolean 
+parse_border_color (GtkCssShorthandProperty *shorthand,
+                    GValue                  *values,
+                    GtkCssParser            *parser,
+                    GFile                   *base)
+{
+  GtkSymbolicColor *symbolic;
+  guint i;
+
+  for (i = 0; i < 4; i++)
+    {
+      symbolic = _gtk_css_parser_read_symbolic_color (parser);
+      if (symbolic == NULL)
+        return FALSE;
+
+      g_value_init (&values[i], GTK_TYPE_SYMBOLIC_COLOR);
+      g_value_set_boxed (&values[i], symbolic);
+
+      if (_gtk_css_parser_is_eof (parser) ||
+          _gtk_css_parser_begins_with (parser, ';') ||
+          _gtk_css_parser_begins_with (parser, '}'))
+        break;
+    }
+
+  for (i++; i < 4; i++)
+    {
+      g_value_init (&values[i], GTK_TYPE_SYMBOLIC_COLOR);
+      g_value_copy (&values[(i - 1) >> 1], &values[i]);
+    }
+
+  return TRUE;
+}
+
 /*** OLD PARSING ***/
 
 static gboolean
@@ -220,64 +253,6 @@ border_image_value_parse (GtkCssParser *parser,
     gtk_border_free (width);
 
   return retval;
-}
-
-static gboolean 
-border_color_shorthand_value_parse (GtkCssParser *parser,
-                                    GFile        *base,
-                                    GValue       *value)
-{
-  GtkSymbolicColor *symbolic;
-  GPtrArray *array;
-
-  array = g_ptr_array_new_with_free_func ((GDestroyNotify) gtk_symbolic_color_unref);
-
-  do
-    {
-      if (_gtk_css_parser_try (parser, "transparent", TRUE))
-        {
-          GdkRGBA transparent = { 0, 0, 0, 0 };
-          
-          symbolic = gtk_symbolic_color_new_literal (&transparent);
-        }
-      else
-        {
-          symbolic = _gtk_css_parser_read_symbolic_color (parser);
-      
-          if (symbolic == NULL)
-            return FALSE;
-        }
-      
-      g_ptr_array_add (array, symbolic);
-    }
-  while (array->len < 4 && 
-         !_gtk_css_parser_is_eof (parser) &&
-         !_gtk_css_parser_begins_with (parser, ';') &&
-         !_gtk_css_parser_begins_with (parser, '}'));
-
-  switch (array->len)
-    {
-      default:
-        g_assert_not_reached ();
-        break;
-      case 1:
-        g_ptr_array_add (array, gtk_symbolic_color_ref (g_ptr_array_index (array, 0)));
-        /* fall through */
-      case 2:
-        g_ptr_array_add (array, gtk_symbolic_color_ref (g_ptr_array_index (array, 0)));
-        /* fall through */
-      case 3:
-        g_ptr_array_add (array, gtk_symbolic_color_ref (g_ptr_array_index (array, 1)));
-        /* fall through */
-      case 4:
-        break;
-    }
-
-  g_value_unset (value);
-  g_value_init (value, G_TYPE_PTR_ARRAY);
-  g_value_take_boxed (value, array);
-
-  return TRUE;
 }
 
 /*** PACKING ***/
@@ -696,10 +671,10 @@ _gtk_css_shorthand_property_init_properties (void)
   _gtk_css_shorthand_property_register   ("border-color",
                                           GDK_TYPE_RGBA,
                                           border_color_subproperties,
-                                          NULL,
+                                          parse_border_color,
                                           unpack_border_color,
                                           pack_border_color,
-                                          border_color_shorthand_value_parse);
+                                          NULL);
   _gtk_css_shorthand_property_register   ("border-image",
                                           GTK_TYPE_BORDER_IMAGE,
                                           border_image_subproperties,
