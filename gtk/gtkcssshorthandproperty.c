@@ -180,64 +180,10 @@ _gtk_css_shorthand_property_class_init (GtkCssShorthandPropertyClass *klass)
   property_class->parse_value = gtk_css_shorthand_property_parse_value;
 }
 
-/* XXX: This function is compat only, don't read it */
-static gboolean
-gtk_css_shorthand_property_parse (GtkCssShorthandProperty *shorthand,
-                                  GValue                  *values,
-                                  GtkCssParser            *parser,
-                                  GFile                   *base)
-{
-  GtkStyleProperty *property = GTK_STYLE_PROPERTY (shorthand);
-  GParameter *parameters;
-  guint i, j, n_parameters;
-
-  GValue val = G_VALUE_INIT;
-
-  g_value_init (&val, _gtk_style_property_get_value_type (property));
-  if (property->parse_func)
-    {
-      if (!(* property->parse_func) (parser, base, &val))
-        {
-          g_value_unset (&val);
-          return FALSE;
-        }
-    }
-  else if (!_gtk_css_style_parse_value (&val, parser, base))
-    {
-      g_value_unset (&val);
-      return FALSE;
-    }
-
-  parameters = property->unpack_func (&val, &n_parameters);
-  g_value_unset (&val);
-
-  for (i = 0; i < shorthand->subproperties->len; i++)
-    {
-      for (j = 0; j < n_parameters; j++)
-        {
-          if (GTK_STYLE_PROPERTY (_gtk_css_shorthand_property_get_subproperty (shorthand, i))
-              == _gtk_style_property_lookup (parameters[j].name))
-            {
-              g_value_init (&values[i], G_VALUE_TYPE (&parameters[j].value));
-              g_value_copy (&parameters[j].value, &values[i]);
-              g_value_unset (&parameters[j].value);
-              break;
-            }
-        }
-      g_assert (j < n_parameters);
-    }
-  
-  g_free (parameters);
-
-  return TRUE;
-}
-
 static void
 _gtk_css_shorthand_property_init (GtkCssShorthandProperty *shorthand)
 {
   shorthand->subproperties = g_ptr_array_new_with_free_func (g_object_unref);
-
-  shorthand->parse = gtk_css_shorthand_property_parse;
 }
 
 GtkCssStyleProperty *
