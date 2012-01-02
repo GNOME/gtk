@@ -68,6 +68,75 @@ parse_border (GtkCssShorthandProperty *shorthand,
   return TRUE;
 }
                     
+static gboolean 
+parse_border_radius (GtkCssShorthandProperty *shorthand,
+                     GValue                  *values,
+                     GtkCssParser            *parser,
+                     GFile                   *base)
+{
+  GtkCssBorderCornerRadius borders[4];
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (borders); i++)
+    {
+      if (!_gtk_css_parser_try_double (parser, &borders[i].horizontal))
+        break;
+      if (borders[i].horizontal < 0)
+        {
+          _gtk_css_parser_error (parser, "Border radius values cannot be negative");
+          return FALSE;
+        }
+    }
+
+  if (i == 0)
+    {
+      _gtk_css_parser_error (parser, "Expected a number");
+      return FALSE;
+    }
+
+  /* The magic (i - 1) >> 1 below makes it take the correct value
+   * according to spec. Feel free to check the 4 cases */
+  for (; i < G_N_ELEMENTS (borders); i++)
+    borders[i].horizontal = borders[(i - 1) >> 1].horizontal;
+
+  if (_gtk_css_parser_try (parser, "/", TRUE))
+    {
+      for (i = 0; i < G_N_ELEMENTS (borders); i++)
+        {
+          if (!_gtk_css_parser_try_double (parser, &borders[i].vertical))
+            break;
+          if (borders[i].vertical < 0)
+            {
+              _gtk_css_parser_error (parser, "Border radius values cannot be negative");
+              return FALSE;
+            }
+        }
+
+      if (i == 0)
+        {
+          _gtk_css_parser_error (parser, "Expected a number");
+          return FALSE;
+        }
+
+      for (; i < G_N_ELEMENTS (borders); i++)
+        borders[i].vertical = borders[(i - 1) >> 1].vertical;
+
+    }
+  else
+    {
+      for (i = 0; i < G_N_ELEMENTS (borders); i++)
+        borders[i].vertical = borders[i].horizontal;
+    }
+
+  for (i = 0; i < G_N_ELEMENTS (borders); i++)
+    {
+      g_value_init (&values[i], GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
+      g_value_set_boxed (&values[i], &borders[i]);
+    }
+
+  return TRUE;
+}
+
 /*** OLD PARSING ***/
 
 static gboolean
@@ -151,103 +220,6 @@ border_image_value_parse (GtkCssParser *parser,
     gtk_border_free (width);
 
   return retval;
-}
-
-static gboolean 
-border_radius_value_parse (GtkCssParser *parser,
-                           GFile        *base,
-                           GValue       *value)
-{
-  GtkCssBorderRadius border;
-
-  if (!_gtk_css_parser_try_double (parser, &border.top_left.horizontal))
-    {
-      _gtk_css_parser_error (parser, "Expected a number");
-      return FALSE;
-    }
-  else if (border.top_left.horizontal < 0)
-    goto negative;
-
-  if (_gtk_css_parser_try_double (parser, &border.top_right.horizontal))
-    {
-      if (border.top_right.horizontal < 0)
-        goto negative;
-      if (_gtk_css_parser_try_double (parser, &border.bottom_right.horizontal))
-        {
-          if (border.bottom_right.horizontal < 0)
-            goto negative;
-          if (!_gtk_css_parser_try_double (parser, &border.bottom_left.horizontal))
-            border.bottom_left.horizontal = border.top_right.horizontal;
-          else if (border.bottom_left.horizontal < 0)
-            goto negative;
-        }
-      else
-        {
-          border.bottom_right.horizontal = border.top_left.horizontal;
-          border.bottom_left.horizontal = border.top_right.horizontal;
-        }
-    }
-  else
-    {
-      border.top_right.horizontal = border.top_left.horizontal;
-      border.bottom_right.horizontal = border.top_left.horizontal;
-      border.bottom_left.horizontal = border.top_left.horizontal;
-    }
-
-  if (_gtk_css_parser_try (parser, "/", TRUE))
-    {
-      if (!_gtk_css_parser_try_double (parser, &border.top_left.vertical))
-        {
-          _gtk_css_parser_error (parser, "Expected a number");
-          return FALSE;
-        }
-      else if (border.top_left.vertical < 0)
-        goto negative;
-
-      if (_gtk_css_parser_try_double (parser, &border.top_right.vertical))
-        {
-          if (border.top_right.vertical < 0)
-            goto negative;
-          if (_gtk_css_parser_try_double (parser, &border.bottom_right.vertical))
-            {
-              if (border.bottom_right.vertical < 0)
-                goto negative;
-              if (!_gtk_css_parser_try_double (parser, &border.bottom_left.vertical))
-                border.bottom_left.vertical = border.top_right.vertical;
-              else if (border.bottom_left.vertical < 0)
-                goto negative;
-            }
-          else
-            {
-              border.bottom_right.vertical = border.top_left.vertical;
-              border.bottom_left.vertical = border.top_right.vertical;
-            }
-        }
-      else
-        {
-          border.top_right.vertical = border.top_left.vertical;
-          border.bottom_right.vertical = border.top_left.vertical;
-          border.bottom_left.vertical = border.top_left.vertical;
-        }
-    }
-  else
-    {
-      border.top_left.vertical = border.top_left.horizontal;
-      border.top_right.vertical = border.top_right.horizontal;
-      border.bottom_right.vertical = border.bottom_right.horizontal;
-      border.bottom_left.vertical = border.bottom_left.horizontal;
-    }
-
-  /* border-radius is an int property for backwards-compat reasons */
-  g_value_unset (value);
-  g_value_init (value, GTK_TYPE_CSS_BORDER_RADIUS);
-  g_value_set_boxed (value, &border);
-
-  return TRUE;
-
-negative:
-  _gtk_css_parser_error (parser, "Border radius values cannot be negative");
-  return FALSE;
 }
 
 static gboolean 
@@ -431,28 +403,22 @@ unpack_border_radius (const GValue *value,
                       guint        *n_params)
 {
   GParameter *parameter = g_new0 (GParameter, 4);
-  GtkCssBorderRadius *border;
+  GtkCssBorderCornerRadius border;
   
-  if (G_VALUE_HOLDS_BOXED (value))
-    border = g_value_get_boxed (value);
-  else
-    border = NULL;
+  border.horizontal = border.vertical = g_value_get_int (value);
 
   parameter[0].name = "border-top-left-radius";
   g_value_init (&parameter[0].value, GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
+  g_value_set_boxed (&parameter[0].value, &border);
   parameter[1].name = "border-top-right-radius";
   g_value_init (&parameter[1].value, GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
+  g_value_set_boxed (&parameter[1].value, &border);
   parameter[2].name = "border-bottom-right-radius";
   g_value_init (&parameter[2].value, GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
+  g_value_set_boxed (&parameter[2].value, &border);
   parameter[3].name = "border-bottom-left-radius";
   g_value_init (&parameter[3].value, GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
-  if (border)
-    {
-      g_value_set_boxed (&parameter[0].value, &border->top_left);
-      g_value_set_boxed (&parameter[1].value, &border->top_right);
-      g_value_set_boxed (&parameter[2].value, &border->bottom_right);
-      g_value_set_boxed (&parameter[3].value, &border->bottom_left);
-    }
+  g_value_set_boxed (&parameter[3].value, &border);
 
   *n_params = 4;
   return parameter;
@@ -723,10 +689,10 @@ _gtk_css_shorthand_property_init_properties (void)
   _gtk_css_shorthand_property_register   ("border-radius",
                                           G_TYPE_INT,
                                           border_radius_subproperties,
-                                          NULL,
+                                          parse_border_radius,
                                           unpack_border_radius,
                                           pack_border_radius,
-                                          border_radius_value_parse);
+                                          NULL);
   _gtk_css_shorthand_property_register   ("border-color",
                                           GDK_TYPE_RGBA,
                                           border_color_subproperties,
