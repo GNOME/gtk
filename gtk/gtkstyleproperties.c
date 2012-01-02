@@ -484,8 +484,6 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties  *props,
     }
 
   g_value_copy (value, val);
-  if (_gtk_style_property_get_value_type (GTK_STYLE_PROPERTY (style_prop)) == G_VALUE_TYPE (value))
-    g_param_value_validate (style_prop->pspec, val);
 }
 
 /**
