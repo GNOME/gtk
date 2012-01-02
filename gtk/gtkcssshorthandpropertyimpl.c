@@ -37,6 +37,14 @@
 /*** PARSING ***/
 
 static gboolean
+value_is_done_parsing (GtkCssParser *parser)
+{
+  return _gtk_css_parser_is_eof (parser) ||
+         _gtk_css_parser_begins_with (parser, ';') ||
+         _gtk_css_parser_begins_with (parser, '}');
+}
+
+static gboolean
 parse_border (GtkCssShorthandProperty *shorthand,
               GValue                  *values,
               GtkCssParser            *parser,
@@ -155,9 +163,7 @@ parse_border_color (GtkCssShorthandProperty *shorthand,
       g_value_init (&values[i], GTK_TYPE_SYMBOLIC_COLOR);
       g_value_set_boxed (&values[i], symbolic);
 
-      if (_gtk_css_parser_is_eof (parser) ||
-          _gtk_css_parser_begins_with (parser, ';') ||
-          _gtk_css_parser_begins_with (parser, '}'))
+      if (value_is_done_parsing (parser))
         break;
     }
 
@@ -170,89 +176,38 @@ parse_border_color (GtkCssShorthandProperty *shorthand,
   return TRUE;
 }
 
-/*** OLD PARSING ***/
-
 static gboolean
-border_image_value_parse (GtkCssParser *parser,
-                          GFile *base,
-                          GValue *value)
+parse_border_image (GtkCssShorthandProperty *shorthand,
+                    GValue                  *values,
+                    GtkCssParser            *parser,
+                    GFile                   *base)
 {
-  GValue temp = G_VALUE_INIT;
-  cairo_pattern_t *pattern = NULL;
-  gconstpointer *boxed = NULL;
-  GType boxed_type;
-  GtkBorder slice, *width = NULL, *parsed_slice;
-  GtkCssBorderImageRepeat repeat, *parsed_repeat;
-  gboolean retval = FALSE;
-  GtkBorderImage *image = NULL;
-
-  if (_gtk_css_parser_try (parser, "none", TRUE))
-    return TRUE;
-
-  g_value_init (&temp, CAIRO_GOBJECT_TYPE_PATTERN);
-
-  if (!_gtk_css_style_parse_value (&temp, parser, base))
+  g_value_init (&values[0], CAIRO_GOBJECT_TYPE_PATTERN);
+  if (!_gtk_css_style_parse_value (&values[0], parser, base))
     return FALSE;
 
-  boxed_type = G_VALUE_TYPE (&temp);
-  if (boxed_type != CAIRO_GOBJECT_TYPE_PATTERN)
-    boxed = g_value_dup_boxed (&temp);
-  else
-    pattern = g_value_dup_boxed (&temp);
+  if (value_is_done_parsing (parser))
+    return TRUE;
 
-  g_value_unset (&temp);
-  g_value_init (&temp, GTK_TYPE_BORDER);
-
-  if (!_gtk_css_style_parse_value (&temp, parser, base))
-    goto out;
-
-  parsed_slice = g_value_get_boxed (&temp);
-  slice = *parsed_slice;
+  g_value_init (&values[1], GTK_TYPE_BORDER);
+  if (!_gtk_css_style_parse_value (&values[1], parser, base))
+    return FALSE;
 
   if (_gtk_css_parser_try (parser, "/", TRUE))
     {
-      g_value_unset (&temp);
-      g_value_init (&temp, GTK_TYPE_BORDER);
-
-      if (!_gtk_css_style_parse_value (&temp, parser, base))
-        goto out;
-
-      width = g_value_dup_boxed (&temp);
+      g_value_init (&values[2], GTK_TYPE_BORDER);
+      if (!_gtk_css_style_parse_value (&values[2], parser, base))
+        return FALSE;
     }
 
-  g_value_unset (&temp);
-  g_value_init (&temp, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
+  if (value_is_done_parsing (parser))
+    return TRUE;
 
-  if (!_gtk_css_style_parse_value (&temp, parser, base))
-    goto out;
+  g_value_init (&values[3], GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
+  if (!_gtk_css_style_parse_value (&values[3], parser, base))
+    return FALSE;
 
-  parsed_repeat = g_value_get_boxed (&temp);
-  repeat = *parsed_repeat;
-
-  g_value_unset (&temp);
-
-  if (boxed != NULL)
-    image = _gtk_border_image_new_for_boxed (boxed_type, boxed, &slice, width, &repeat);
-  else if (pattern != NULL)
-    image = _gtk_border_image_new (pattern, &slice, width, &repeat);
-
-  if (image != NULL)
-    {
-      retval = TRUE;
-      g_value_take_boxed (value, image);
-    }
-
- out:
-  if (pattern != NULL)
-    cairo_pattern_destroy (pattern);
-
-  if (boxed != NULL)
-    g_boxed_free (boxed_type, boxed);
-
-  if (width != NULL)
-    gtk_border_free (width);
-
-  return retval;
+  return TRUE;
 }
 
 /*** PACKING ***/
@@ -678,8 +633,8 @@ _gtk_css_shorthand_property_init_properties (void)
   _gtk_css_shorthand_property_register   ("border-image",
                                           GTK_TYPE_BORDER_IMAGE,
                                           border_image_subproperties,
-                                          NULL,
+                                          parse_border_image,
                                           _gtk_border_image_unpack,
                                           _gtk_border_image_pack,
-                                          border_image_value_parse);
+                                          NULL);
 }
