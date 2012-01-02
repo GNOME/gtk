@@ -210,6 +210,61 @@ parse_border_image (GtkCssShorthandProperty *shorthand,
   return TRUE;
 }
 
+static gboolean
+parse_font (GtkCssShorthandProperty *shorthand,
+            GValue                  *values,
+            GtkCssParser            *parser,
+            GFile                   *base)
+{
+  PangoFontDescription *desc;
+  guint mask;
+  char *str;
+
+  str = _gtk_css_parser_read_value (parser);
+  if (str == NULL)
+    return FALSE;
+
+  desc = pango_font_description_from_string (str);
+  g_free (str);
+
+  mask = pango_font_description_get_set_fields (desc);
+
+  if (mask & PANGO_FONT_MASK_FAMILY)
+    {
+      GPtrArray *strv = g_ptr_array_new ();
+
+      g_ptr_array_add (strv, g_strdup (pango_font_description_get_family (desc)));
+      g_ptr_array_add (strv, NULL);
+      g_value_init (&values[0], G_TYPE_STRV);
+      g_value_take_boxed (&values[0], g_ptr_array_free (strv, FALSE));
+    }
+  if (mask & PANGO_FONT_MASK_STYLE)
+    {
+      g_value_init (&values[1], PANGO_TYPE_STYLE);
+      g_value_set_enum (&values[1], pango_font_description_get_style (desc));
+    }
+  if (mask & PANGO_FONT_MASK_VARIANT)
+    {
+      g_value_init (&values[2], PANGO_TYPE_VARIANT);
+      g_value_set_enum (&values[2], pango_font_description_get_variant (desc));
+    }
+  if (mask & PANGO_FONT_MASK_WEIGHT)
+    {
+      g_value_init (&values[3], PANGO_TYPE_WEIGHT);
+      g_value_set_enum (&values[3], pango_font_description_get_weight (desc));
+    }
+  if (mask & PANGO_FONT_MASK_SIZE)
+    {
+      g_value_init (&values[4], G_TYPE_DOUBLE);
+      g_value_set_double (&values[4],
+                          (double) pango_font_description_get_size (desc) / PANGO_SCALE);
+    }
+
+  pango_font_description_free (desc);
+
+  return TRUE;
+}
+
 /*** PACKING ***/
 
 static GParameter *
@@ -591,7 +646,7 @@ _gtk_css_shorthand_property_init_properties (void)
   _gtk_css_shorthand_property_register   ("font",
                                           PANGO_TYPE_FONT_DESCRIPTION,
                                           font_subproperties,
-                                          NULL,
+                                          parse_font,
                                           unpack_font_description,
                                           pack_font_description,
                                           NULL);
