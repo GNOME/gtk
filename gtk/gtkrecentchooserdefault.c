@@ -629,12 +629,8 @@ gtk_recent_chooser_default_dispose (GObject *object)
       impl->load_id = 0;
     }
 
-  if (impl->recent_items)
-    {
-      g_list_foreach (impl->recent_items, (GFunc) gtk_recent_info_unref, NULL);
-      g_list_free (impl->recent_items);
-      impl->recent_items = NULL;
-    }
+  g_list_free_full (impl->recent_items, (GDestroyNotify) gtk_recent_info_unref);
+  impl->recent_items = NULL;
 
   if (impl->manager && impl->manager_changed_id)
     {
@@ -839,10 +835,7 @@ load_recent_items (gpointer user_data)
       /* we have finished loading, so we remove the items cache */
       impl->load_state = LOAD_LOADING;
       
-      g_list_foreach (impl->recent_items,
-      		      (GFunc) gtk_recent_info_unref,
-      		      NULL);
-      g_list_free (impl->recent_items);
+      g_list_free_full (impl->recent_items, (GDestroyNotify) gtk_recent_info_unref);
       
       impl->recent_items = NULL;
       impl->n_recent_items = 0;

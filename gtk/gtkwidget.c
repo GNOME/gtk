@@ -12030,8 +12030,7 @@ gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
 	}
       g_object_unref (relation_set);
 
-      g_slist_foreach (atk_relations, (GFunc)free_relation, NULL);
-      g_slist_free (atk_relations);
+      g_slist_free_full (atk_relations, (GDestroyNotify) free_relation);
       g_object_set_qdata (G_OBJECT (buildable), quark_builder_atk_relations,
 			  NULL);
     }
@@ -12438,8 +12437,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
           else
             g_warning ("accessibility action on a widget that does not implement AtkAction");
 
-	  g_slist_foreach (a11y_data->actions, (GFunc)free_action, NULL);
-	  g_slist_free (a11y_data->actions);
+	  g_slist_free_full (a11y_data->actions, (GDestroyNotify) free_action);
 	}
 
       if (a11y_data->relations)

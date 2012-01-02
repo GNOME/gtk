@@ -2003,8 +2003,7 @@ gtk_drag_find_widget (GtkWidget           *widget,
             g_object_add_weak_pointer (G_OBJECT (parent), (gpointer *) &parent);
         }
 
-      g_list_foreach (hierarchy, (GFunc) g_object_unref, NULL);
-      g_list_free (hierarchy);
+      g_list_free_full (hierarchy, g_object_unref);
 
       if (found)
         return TRUE;

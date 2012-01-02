@@ -168,8 +168,7 @@ search_thread_add_hits_idle (gpointer user_data)
 				    hits->uris);
     }
 
-  g_list_foreach (hits->uris, (GFunc)g_free, NULL);
-  g_list_free (hits->uris);
+  g_list_free_full (hits->uris, g_free);
   g_free (hits);
 	
   return FALSE;

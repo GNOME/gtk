@@ -797,8 +797,7 @@ free_format (GtkRichTextFormat *format)
 static void
 free_format_list (GList *formats)
 {
-  g_list_foreach (formats, (GFunc) free_format, NULL);
-  g_list_free (formats);
+  g_list_free_full (formats, (GDestroyNotify) free_format);
 }
 
 static GQuark

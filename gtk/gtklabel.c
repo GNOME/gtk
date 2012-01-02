@@ -2509,8 +2509,7 @@ parse_uri_markup (GtkLabel     *label,
 failed:
   g_markup_parse_context_free (context);
   g_string_free (pdata.new_str, TRUE);
-  g_list_foreach (pdata.links, (GFunc)link_free, NULL);
-  g_list_free (pdata.links);
+  g_list_free_full (pdata.links, (GDestroyNotify) link_free);
   gdk_color_free (pdata.link_color);
   gdk_color_free (pdata.visited_link_color);
 
@@ -6267,8 +6266,7 @@ gtk_label_clear_links (GtkLabel *label)
   if (!priv->select_info)
     return;
 
-  g_list_foreach (priv->select_info->links, (GFunc)link_free, NULL);
-  g_list_free (priv->select_info->links);
+  g_list_free_full (priv->select_info->links, (GDestroyNotify) link_free);
   priv->select_info->links = NULL;
   priv->select_info->active_link = NULL;
 }

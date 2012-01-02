@@ -820,8 +820,7 @@ shortcuts_free (GtkFileChooserDefault *impl)
 static void
 pending_select_files_free (GtkFileChooserDefault *impl)
 {
-  g_slist_foreach (impl->pending_select_files, (GFunc) g_object_unref, NULL);
-  g_slist_free (impl->pending_select_files);
+  g_slist_free_full (impl->pending_select_files, g_object_unref);
   impl->pending_select_files = NULL;
 }
 

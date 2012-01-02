@@ -1525,8 +1525,7 @@ opentmp:
     }
   cache = NULL;
 
-  g_list_foreach (directories, (GFunc)g_free, NULL);
-  g_list_free (directories);
+  g_list_free_full (directories, g_free);
 
   if (!validate_file (tmp_cache_path))
     {

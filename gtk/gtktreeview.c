@@ -10148,8 +10148,7 @@ gtk_tree_view_focus_to_cursor (GtkTreeView *tree_view)
       if (selected_rows)
 	{
           cursor_path = gtk_tree_path_copy((const GtkTreePath *)(selected_rows->data));
-	  g_list_foreach (selected_rows, (GFunc)gtk_tree_path_free, NULL);
-	  g_list_free (selected_rows);
+	  g_list_free_full (selected_rows, (GDestroyNotify) gtk_tree_path_free);
         }
       else
 	{

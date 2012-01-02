@@ -1540,8 +1540,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
   else
     gtk_widget_hide (priv->advanced_page);
 
-  g_list_foreach (groups, (GFunc) g_free, NULL);
-  g_list_free (groups);
+  g_list_free_full (groups, g_free);
 }
 
 static void

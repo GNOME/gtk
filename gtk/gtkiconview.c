@@ -4768,8 +4768,7 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
 
       g_object_unref (icon_view->priv->model);
       
-      g_list_foreach (icon_view->priv->items, (GFunc)gtk_icon_view_item_free, NULL);
-      g_list_free (icon_view->priv->items);
+      g_list_free_full (icon_view->priv->items, (GDestroyNotify) gtk_icon_view_item_free);
       icon_view->priv->items = NULL;
       icon_view->priv->anchor_item = NULL;
       icon_view->priv->cursor_item = NULL;
@@ -5180,8 +5179,7 @@ gtk_icon_view_unselect_path (GtkIconView *icon_view,
  *
  * To free the return value, use:
  * |[
- * g_list_foreach (list, (GFunc)gtk_tree_path_free, NULL);
- * g_list_free (list);
+ * g_list_free_full (list, (GDestroyNotify) gtk_tree_patch_free);
  * ]|
  *
  * Return value: (element-type GtkTreePath) (transfer full): A #GList containing a #GtkTreePath for each selected row.

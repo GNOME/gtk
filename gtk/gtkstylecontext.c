@@ -584,8 +584,7 @@ style_data_free (StyleData *data)
   g_object_unref (data->store);
   clear_property_cache (data);
 
-  g_slist_foreach (data->icon_factories, (GFunc) g_object_unref, NULL);
-  g_slist_free (data->icon_factories);
+  g_slist_free_full (data->icon_factories, g_object_unref);
 
   g_slice_free (StyleData, data);
 }
@@ -806,11 +805,9 @@ gtk_style_context_finalize (GObject *object)
 
   g_hash_table_destroy (priv->style_data);
 
-  g_list_foreach (priv->providers, (GFunc) style_provider_data_free, NULL);
-  g_list_free (priv->providers);
+  g_list_free_full (priv->providers, (GDestroyNotify) style_provider_data_free);
 
-  g_slist_foreach (priv->info_stack, (GFunc) style_info_free, NULL);
-  g_slist_free (priv->info_stack);
+  g_slist_free_full (priv->info_stack, (GDestroyNotify) style_info_free);
 
   g_slist_free (priv->animation_regions);
 

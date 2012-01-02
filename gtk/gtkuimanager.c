@@ -680,9 +680,7 @@ gtk_ui_manager_finalize (GObject *object)
   g_node_destroy (manager->private_data->root_node);
   manager->private_data->root_node = NULL;
   
-  g_list_foreach (manager->private_data->action_groups,
-                  (GFunc) g_object_unref, NULL);
-  g_list_free (manager->private_data->action_groups);
+  g_list_free_full (manager->private_data->action_groups, g_object_unref);
   manager->private_data->action_groups = NULL;
 
   g_object_unref (manager->private_data->accel_group);
@@ -1392,8 +1390,7 @@ free_node (GNode *node)
 {
   Node *info = NODE_INFO (node);
   
-  g_list_foreach (info->uifiles, (GFunc) node_ui_reference_free, NULL);
-  g_list_free (info->uifiles);
+  g_list_free_full (info->uifiles, node_ui_reference_free);
 
   if (info->action)
     g_object_unref (info->action);
