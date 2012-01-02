@@ -37,6 +37,40 @@
 /*** PARSING ***/
 
 static gboolean
+parse_border (GtkCssShorthandProperty *shorthand,
+              GValue                  *values,
+              GtkCssParser            *parser,
+              GFile                   *base)
+{
+  GValue temp = G_VALUE_INIT;
+  GtkBorder *border;
+
+  g_value_init (&temp, GTK_TYPE_BORDER);
+  if (!_gtk_css_style_parse_value (&temp, parser, base))
+    {
+      g_value_unset (&temp);
+      return FALSE;
+    }
+
+  border = g_value_get_boxed (&temp);
+
+  g_value_init (&values[0], G_TYPE_INT);
+  g_value_init (&values[1], G_TYPE_INT);
+  g_value_init (&values[2], G_TYPE_INT);
+  g_value_init (&values[3], G_TYPE_INT);
+  g_value_set_int (&values[0], border->top);
+  g_value_set_int (&values[1], border->right);
+  g_value_set_int (&values[2], border->bottom);
+  g_value_set_int (&values[3], border->left);
+
+  g_value_unset (&temp);
+
+  return TRUE;
+}
+                    
+/*** OLD PARSING ***/
+
+static gboolean
 border_image_value_parse (GtkCssParser *parser,
                           GFile *base,
                           GValue *value)
@@ -648,6 +682,7 @@ _gtk_css_shorthand_property_register (const char                        *name,
 void
 _gtk_css_shorthand_property_init_properties (void)
 {
+  /* The order is important here, be careful when changing it */
   const char *font_subproperties[] = { "font-family", "font-style", "font-variant", "font-weight", "font-size", NULL };
   const char *margin_subproperties[] = { "margin-top", "margin-right", "margin-bottom", "margin-left", NULL };
   const char *padding_subproperties[] = { "padding-top", "padding-right", "padding-bottom", "padding-left", NULL };
@@ -667,21 +702,21 @@ _gtk_css_shorthand_property_init_properties (void)
   _gtk_css_shorthand_property_register   ("margin",
                                           GTK_TYPE_BORDER,
                                           margin_subproperties,
-                                          NULL,
+                                          parse_border,
                                           unpack_margin,
                                           pack_margin,
                                           NULL);
   _gtk_css_shorthand_property_register   ("padding",
                                           GTK_TYPE_BORDER,
                                           padding_subproperties,
-                                          NULL,
+                                          parse_border,
                                           unpack_padding,
                                           pack_padding,
                                           NULL);
   _gtk_css_shorthand_property_register   ("border-width",
                                           GTK_TYPE_BORDER,
                                           border_width_subproperties,
-                                          NULL,
+                                          parse_border,
                                           unpack_border_width,
                                           pack_border_width,
                                           NULL);
