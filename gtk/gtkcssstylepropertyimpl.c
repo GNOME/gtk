@@ -21,6 +21,7 @@
 
 #include "gtkstylepropertyprivate.h"
 
+#include <gobject/gvaluecollector.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <cairo-gobject.h>
 
@@ -89,6 +90,34 @@ _gtk_style_property_register (GParamSpec               *pspec,
 
   if (G_IS_VALUE (&initial_fallback))
     g_value_unset (&initial_fallback);
+}
+
+static void
+gtk_style_property_register (GParamSpec               *pspec,
+                             GtkStylePropertyFlags     flags,
+                             GtkStyleParseFunc         parse_func,
+                             GtkStylePrintFunc         print_func,
+                             ...)
+{
+  GValue initial_value = G_VALUE_INIT;
+  char *error = NULL;
+  va_list args;
+
+  va_start (args, print_func);
+  G_VALUE_COLLECT_INIT (&initial_value, pspec->value_type,
+                        args, 0, &error);
+  if (error)
+    {
+      g_error ("property `%s' initial value is broken: %s", pspec->name, error);
+      g_value_unset (&initial_value);
+      return;
+    }
+
+  va_end (args);
+
+  _gtk_style_property_register (pspec, flags, parse_func, print_func, &initial_value);
+
+  g_value_unset (&initial_value);
 }
 
 /*** HELPERS ***/
@@ -337,41 +366,34 @@ _gtk_css_style_property_init_properties (void)
   /* note that gtk_style_properties_register_property() calls this function,
    * so make sure we're sanely inited to avoid infloops */
 
-  g_value_init (&value, GDK_TYPE_RGBA);
   rgba_init (&rgba, 1, 1, 1, 1);
-  g_value_set_boxed (&value, &rgba);
-  _gtk_style_property_register           (g_param_spec_boxed ("color",
+  gtk_style_property_register            (g_param_spec_boxed ("color",
                                           "Foreground color",
                                           "Foreground color",
                                           GDK_TYPE_RGBA, 0),
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           NULL,
                                           NULL,
-                                          &value);
+                                          &rgba);
   rgba_init (&rgba, 0, 0, 0, 0);
-  g_value_set_boxed (&value, &rgba);
-  _gtk_style_property_register           (g_param_spec_boxed ("background-color",
+  gtk_style_property_register            (g_param_spec_boxed ("background-color",
                                           "Background color",
                                           "Background color",
                                           GDK_TYPE_RGBA, 0),
                                           0,
                                           NULL,
                                           NULL,
-                                          &value);
-  g_value_unset (&value);
+                                          &rgba);
 
-  g_value_init (&value, G_TYPE_STRV);
-  g_value_set_boxed (&value, default_font_family);
-  _gtk_style_property_register           (g_param_spec_boxed ("font-family",
+  gtk_style_property_register            (g_param_spec_boxed ("font-family",
                                                               "Font family",
                                                               "Font family",
                                                               G_TYPE_STRV, 0),
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           font_family_parse,
                                           font_family_value_print,
-                                          &value);
-  g_value_unset (&value);
-  _gtk_style_property_register           (g_param_spec_enum ("font-style",
+                                          default_font_family);
+  gtk_style_property_register            (g_param_spec_enum ("font-style",
                                                              "Font style",
                                                              "Font style",
                                                              PANGO_TYPE_STYLE,
@@ -379,8 +401,8 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           NULL,
                                           NULL,
-                                          NULL);
-  _gtk_style_property_register           (g_param_spec_enum ("font-variant",
+                                          PANGO_STYLE_NORMAL);
+  gtk_style_property_register            (g_param_spec_enum ("font-variant",
                                                              "Font variant",
                                                              "Font variant",
                                                              PANGO_TYPE_VARIANT,
@@ -388,9 +410,9 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           NULL,
                                           NULL,
-                                          NULL);
+                                          PANGO_VARIANT_NORMAL);
   /* xxx: need to parse this properly, ie parse the numbers */
-  _gtk_style_property_register           (g_param_spec_enum ("font-weight",
+  gtk_style_property_register            (g_param_spec_enum ("font-weight",
                                                              "Font weight",
                                                              "Font weight",
                                                              PANGO_TYPE_WEIGHT,
@@ -398,20 +420,17 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           NULL,
                                           NULL,
-                                          NULL);
-  g_value_init (&value, G_TYPE_DOUBLE);
-  g_value_set_double (&value, 10);
-  _gtk_style_property_register           (g_param_spec_double ("font-size",
+                                          PANGO_WEIGHT_NORMAL);
+  gtk_style_property_register            (g_param_spec_double ("font-size",
                                                                "Font size",
                                                                "Font size",
                                                                0, G_MAXDOUBLE, 0, 0),
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           NULL,
                                           NULL,
-                                          &value);
-  g_value_unset (&value);
+                                          10.0);
 
-  _gtk_style_property_register           (g_param_spec_boxed ("text-shadow",
+  gtk_style_property_register            (g_param_spec_boxed ("text-shadow",
                                                               "Text shadow",
                                                               "Text shadow",
                                                               GTK_TYPE_SHADOW, 0),
@@ -420,7 +439,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL);
 
-  _gtk_style_property_register           (g_param_spec_boxed ("icon-shadow",
+  gtk_style_property_register            (g_param_spec_boxed ("icon-shadow",
                                                               "Icon shadow",
                                                               "Icon shadow",
                                                               GTK_TYPE_SHADOW, 0),
@@ -495,41 +514,38 @@ _gtk_css_style_property_init_properties (void)
                                                             "Border width at right",
                                                             0, G_MAXINT, 0, 0));
 
-  g_value_init (&value, GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
-  g_value_set_boxed (&value, &no_corner_radius);
-  _gtk_style_property_register           (g_param_spec_boxed ("border-top-left-radius",
+  gtk_style_property_register            (g_param_spec_boxed ("border-top-left-radius",
                                                               "Border top left radius",
                                                               "Border radius of top left corner, in pixels",
                                                               GTK_TYPE_CSS_BORDER_CORNER_RADIUS, 0),
                                           0,
                                           border_corner_radius_value_parse,
                                           border_corner_radius_value_print,
-                                          &value);
-  _gtk_style_property_register           (g_param_spec_boxed ("border-top-right-radius",
+                                          &no_corner_radius);
+  gtk_style_property_register            (g_param_spec_boxed ("border-top-right-radius",
                                                               "Border top right radius",
                                                               "Border radius of top right corner, in pixels",
                                                               GTK_TYPE_CSS_BORDER_CORNER_RADIUS, 0),
                                           0,
                                           border_corner_radius_value_parse,
                                           border_corner_radius_value_print,
-                                          &value);
-  _gtk_style_property_register           (g_param_spec_boxed ("border-bottom-right-radius",
+                                          &no_corner_radius);
+  gtk_style_property_register            (g_param_spec_boxed ("border-bottom-right-radius",
                                                               "Border bottom right radius",
                                                               "Border radius of bottom right corner, in pixels",
                                                               GTK_TYPE_CSS_BORDER_CORNER_RADIUS, 0),
                                           0,
                                           border_corner_radius_value_parse,
                                           border_corner_radius_value_print,
-                                          &value);
-  _gtk_style_property_register           (g_param_spec_boxed ("border-bottom-left-radius",
+                                          &no_corner_radius);
+  gtk_style_property_register            (g_param_spec_boxed ("border-bottom-left-radius",
                                                               "Border bottom left radius",
                                                               "Border radius of bottom left corner, in pixels",
                                                               GTK_TYPE_CSS_BORDER_CORNER_RADIUS, 0),
                                           0,
                                           border_corner_radius_value_parse,
                                           border_corner_radius_value_print,
-                                          &value);
-  g_value_unset (&value);
+                                          &no_corner_radius);
 
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_enum ("border-style",
@@ -611,16 +627,14 @@ _gtk_css_style_property_init_properties (void)
                                                               "Border image slice",
                                                               "Border image slice",
                                                               GTK_TYPE_BORDER, 0));
-  g_value_init (&value, GTK_TYPE_BORDER);
-  _gtk_style_property_register           (g_param_spec_boxed ("border-image-width",
+  gtk_style_property_register            (g_param_spec_boxed ("border-image-width",
                                                               "Border image width",
                                                               "Border image width",
                                                               GTK_TYPE_BORDER, 0),
                                           0,
                                           NULL,
                                           NULL,
-                                          &value);
-  g_value_unset (&value);
+                                          NULL);
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_object ("engine",
                                                                "Theming Engine",
@@ -633,7 +647,7 @@ _gtk_css_style_property_init_properties (void)
                                                               GTK_TYPE_ANIMATION_DESCRIPTION, 0));
 
   /* Private property holding the binding sets */
-  _gtk_style_property_register           (g_param_spec_boxed ("gtk-key-bindings",
+  gtk_style_property_register            (g_param_spec_boxed ("gtk-key-bindings",
                                                               "Key bindings",
                                                               "Key bindings",
                                                               G_TYPE_PTR_ARRAY, 0),
