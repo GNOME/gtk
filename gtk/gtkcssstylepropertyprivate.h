@@ -54,6 +54,8 @@ struct _GtkCssStylePropertyClass
 
 GType                   _gtk_css_style_property_get_type        (void) G_GNUC_CONST;
 
+void                    _gtk_css_style_property_init_properties (void);
+
 guint                   _gtk_css_style_property_get_n_properties(void);
 GtkCssStyleProperty *   _gtk_css_style_property_lookup_by_id    (guint                   id);
 

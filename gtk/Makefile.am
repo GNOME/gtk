@@ -598,6 +598,7 @@ gtk_base_c_sources = 		\
 	gtkcssshorthandpropertyimpl.c \
 	gtkcssstylefuncs.c	\
 	gtkcssstyleproperty.c	\
+	gtkcssstylepropertyimpl.c \
 	gtkcsstypes.c		\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\

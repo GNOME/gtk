@@ -92,13 +92,6 @@ GtkStyleProperty *       _gtk_style_property_lookup        (const char          
 
 const char *             _gtk_style_property_get_name      (GtkStyleProperty       *property);
 
-void                     _gtk_style_property_register      (GParamSpec             *pspec,
-                                                            GtkStylePropertyFlags   flags,
-                                                            GtkStylePropertyParser  property_parse_func,
-                                                            GtkStyleParseFunc       parse_func,
-                                                            GtkStylePrintFunc       print_func,
-                                                            const GValue           *initial_value);
-
 gboolean                 _gtk_style_property_parse_value   (GtkStyleProperty *      property,
                                                             GValue                 *value,
                                                             GtkCssParser           *parser,
