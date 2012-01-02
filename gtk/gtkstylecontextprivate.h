@@ -21,6 +21,7 @@
 #define __GTK_STYLE_CONTEXT_PRIVATE_H__
 
 #include "gtkstylecontext.h"
+#include "gtksymboliccolor.h"
 
 G_BEGIN_DECLS
 
@@ -44,6 +45,9 @@ void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *c
                                                               GtkWidget       *widget);
 gboolean       _gtk_style_context_check_region_name          (const gchar     *str);
 
+gboolean       _gtk_style_context_resolve_color              (GtkStyleContext  *context,
+                                                              GtkSymbolicColor *color,
+                                                              GdkRGBA          *result);
 void           _gtk_style_context_get_cursor_color           (GtkStyleContext *context,
                                                               GdkRGBA         *primary_color,
                                                               GdkRGBA         *secondary_color);

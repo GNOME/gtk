@@ -2849,6 +2849,21 @@ gtk_style_context_color_lookup_func (gpointer    contextp,
   return sym_color;
 }
 
+gboolean
+_gtk_style_context_resolve_color (GtkStyleContext  *context,
+                                  GtkSymbolicColor *color,
+                                  GdkRGBA          *result)
+{
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
+  g_return_val_if_fail (color != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  return _gtk_symbolic_color_resolve_full (color,
+                                           gtk_style_context_color_lookup_func,
+                                           context,
+                                           result);
+}
+
 /**
  * gtk_style_context_lookup_color:
  * @context: a #GtkStyleContext
@@ -2874,10 +2889,7 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
   if (sym_color == NULL)
     return FALSE;
 
-  return _gtk_symbolic_color_resolve_full (sym_color,
-                                           gtk_style_context_color_lookup_func,
-                                           context,
-                                           color);
+  return _gtk_style_context_resolve_color (context, sym_color, color);
 }
 
 /**
