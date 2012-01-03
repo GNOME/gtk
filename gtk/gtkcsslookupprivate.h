@@ -41,8 +41,9 @@ void                    _gtk_css_lookup_set                     (GtkCssLookup   
                                                                  guint               id,
                                                                  GtkCssSection      *section,
                                                                  const GValue       *value);
-GtkStyleProperties *    _gtk_css_lookup_resolve                 (GtkCssLookup       *lookup,
-                                                                 GtkStyleContext    *context);
+void                    _gtk_css_lookup_resolve                 (GtkCssLookup       *lookup,
+                                                                 GtkStyleContext    *context,
+                                                                 GtkStyleProperties *props);
 
 
 G_END_DECLS
