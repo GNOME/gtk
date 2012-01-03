@@ -4659,17 +4659,24 @@ _xwindow_get_shape (Display *xdisplay,
   shape = NULL;
   rn = 0;
 
-  xrl = XShapeGetRectangles (xdisplay,
-			     window,
-			     shape_type, &rn, &ord);
+  /* Note that XShapeGetRectangles returns NULL in two situations:
+   * - the server doesn't support the SHAPE extension
+   * - the shape is empty
+   *
+   * Since we can't discriminate these here, we always return
+   * an empty shape. It is the callers responsibility to check
+   * whether the server supports the SHAPE extensions beforehand.
+   */
+  xrl = XShapeGetRectangles (xdisplay, window, shape_type, &rn, &ord);
 
-  if (xrl == NULL || rn == 0)
+  if (rn == 0)
     return gdk_region_new (); /* Empty */
 
   if (ord != YXBanded)
     {
       /* This really shouldn't happen with any xserver, as they
-	 generally convert regions to YXBanded internally */
+       * generally convert regions to YXBanded internally
+       */
       g_warning ("non YXBanded shape masks not supported");
       XFree (xrl);
       return NULL;
@@ -4684,10 +4691,10 @@ _xwindow_get_shape (Display *xdisplay,
       rl[i].height = xrl[i].height;
     }
   XFree (xrl);
-  
+
   shape = _gdk_region_new_from_yxbanded_rects (rl, rn);
   g_free (rl);
-  
+
   return shape;
 }
 
@@ -4736,10 +4743,10 @@ _gdk_windowing_window_get_input_shape (GdkWindow *window)
 {
 #if defined(ShapeInput)
   if (!GDK_WINDOW_DESTROYED (window) &&
-      gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
+      gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
     return _xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
-			      GDK_WINDOW_XID (window),
-			      ShapeInput);
+                              GDK_WINDOW_XID (window),
+                              ShapeInput);
 #endif
 
   return NULL;
