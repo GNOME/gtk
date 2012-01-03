@@ -47,7 +47,7 @@ GtkButton {
 
 #reference3 {
   border-color: rgb(153,102,0);
-  background-color: none;
+  background-color: transparent;
   padding: 5;
 }
 
