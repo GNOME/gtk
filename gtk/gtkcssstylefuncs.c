@@ -798,11 +798,6 @@ pattern_value_parse (GtkCssParser *parser,
     }
   else if (_gtk_css_parser_begins_with (parser, '-'))
     {
-      int res;
-      res = _gtk_win32_theme_part_parse (parser, base, value);
-      if (res >= 0)
-	return res > 0;
-      /* < 0 => continue */
       g_value_unset (value);
       g_value_init (value, GTK_TYPE_GRADIENT);
       return gradient_value_parse (parser, base, value);
