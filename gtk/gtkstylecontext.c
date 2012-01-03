@@ -2298,6 +2298,27 @@ style_property_values_cmp (gconstpointer bsearch_node1,
 }
 
 const GValue *
+_gtk_style_context_peek_property (GtkStyleContext *context,
+                                  const char      *property_name)
+{
+  GtkStyleProperty *property;
+  StyleData *data;
+
+  property = _gtk_style_property_lookup (property_name);
+  if (!GTK_IS_CSS_STYLE_PROPERTY (property))
+    {
+      g_warning ("Style property \"%s\" does not exist", property_name);
+      return NULL;
+    }
+
+  data = style_data_lookup (context, gtk_style_context_get_state (context));
+
+  return _gtk_style_properties_peek_property (data->store,
+                                              GTK_CSS_STYLE_PROPERTY (property),
+                                              0);
+}
+
+const GValue *
 _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                         GType            widget_type,
                                         GtkStateFlags    state,

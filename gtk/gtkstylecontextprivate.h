@@ -25,6 +25,8 @@
 
 G_BEGIN_DECLS
 
+const GValue * _gtk_style_context_peek_property              (GtkStyleContext *context,
+                                                              const char      *property_name);
 const GValue * _gtk_style_context_peek_style_property        (GtkStyleContext *context,
                                                               GType            widget_type,
                                                               GtkStateFlags    state,
