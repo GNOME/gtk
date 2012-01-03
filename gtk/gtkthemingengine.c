@@ -338,6 +338,16 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
   priv->context = context;
 }
 
+const GValue *
+_gtk_theming_engine_peek_property (GtkThemingEngine *engine,
+                                   const char       *property_name)
+{
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), NULL);
+  g_return_val_if_fail (property_name != NULL, NULL);
+
+  return _gtk_style_context_peek_property (engine->priv->context, property_name);
+}
+
 /**
  * gtk_theming_engine_get_property:
  * @engine: a #GtkThemingEngine
