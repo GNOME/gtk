@@ -224,6 +224,7 @@ gtk_application_get_menubar
 gtk_application_get_type
 gtk_application_get_windows
 gtk_application_new
+gtk_application_quit_response
 gtk_application_remove_accelerator
 gtk_application_remove_window
 gtk_application_set_app_menu

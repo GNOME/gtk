@@ -34,6 +34,7 @@
 #include "gtkmain.h"
 #include "gtkaccelmapprivate.h"
 #include "gactionmuxer.h"
+#include "gtkintl.h"
 
 #ifdef GDK_WINDOWING_QUARTZ
 #include "gtkquartz-menu.h"
@@ -103,10 +104,18 @@
 enum {
   WINDOW_ADDED,
   WINDOW_REMOVED,
+  QUIT_REQUESTED,
+  QUIT_CANCELLED,
+  QUIT,
   LAST_SIGNAL
 };
 
 static guint gtk_application_signals[LAST_SIGNAL];
+
+enum {
+  PROP_ZERO,
+  PROP_REGISTER_SESSION
+};
 
 G_DEFINE_TYPE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
 
@@ -114,10 +123,17 @@ struct _GtkApplicationPrivate
 {
   GList *windows;
 
+  gboolean register_session;
+
 #ifdef GDK_WINDOWING_X11
   GDBusConnection *session_bus;
   gchar *window_prefix;
   guint next_id;
+
+  GDBusProxy *sm_proxy;
+  GDBusProxy *client_proxy;
+  gchar *app_id;
+  gchar *client_path;
 #endif
 
 #ifdef GDK_WINDOWING_QUARTZ
@@ -187,6 +203,9 @@ window_prefix_from_appid (const gchar *appid)
   return appid_path;
 }
 
+static void gtk_application_startup_session_dbus (GtkApplication *app);
+
+
 static void
 gtk_application_startup_x11 (GtkApplication *application)
 {
@@ -195,6 +214,8 @@ gtk_application_startup_x11 (GtkApplication *application)
   application_id = g_application_get_application_id (G_APPLICATION (application));
   application->priv->session_bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
   application->priv->window_prefix = window_prefix_from_appid (application_id);
+
+  gtk_application_startup_session_dbus (GTK_APPLICATION (application));
 }
 
 static void
@@ -203,6 +224,11 @@ gtk_application_shutdown_x11 (GtkApplication *application)
   g_free (application->priv->window_prefix);
   application->priv->window_prefix = NULL;
   g_clear_object (&application->priv->session_bus);
+
+  g_clear_object (&application->priv->sm_proxy);
+  g_clear_object (&application->priv->client_proxy);
+  g_free (application->priv->app_id);
+  g_free (application->priv->client_path);
 }
 #endif
 
@@ -482,11 +508,53 @@ gtk_application_notify (GObject    *object,
 }
 
 static void
+gtk_application_get_property (GObject    *object,
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  GtkApplication *application = GTK_APPLICATION (object);
+
+  switch (prop_id)
+    {
+    case PROP_REGISTER_SESSION:
+      g_value_set_boolean (value, application->priv->register_session);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_application_set_property (GObject      *object,
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
+{
+  GtkApplication *application = GTK_APPLICATION (object);
+
+  switch (prop_id)
+    {
+    case PROP_REGISTER_SESSION:
+      application->priv->register_session = g_value_get_boolean (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_application_class_init (GtkApplicationClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GApplicationClass *application_class = G_APPLICATION_CLASS (class);
 
+  object_class->get_property = gtk_application_get_property;
+  object_class->set_property = gtk_application_set_property;
   object_class->notify = gtk_application_notify;
 
   application_class->add_platform_data = gtk_application_add_platform_data;
@@ -534,6 +602,27 @@ gtk_application_class_init (GtkApplicationClass *class)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1, GTK_TYPE_WINDOW);
+
+  gtk_application_signals[QUIT_REQUESTED] =
+    g_signal_new ("quit-requested", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkApplicationClass, quit_requested),
+                  NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+
+  gtk_application_signals[QUIT_CANCELLED] =
+    g_signal_new ("quit-cancelled", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkApplicationClass, quit_cancelled),
+                  NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+
+  gtk_application_signals[QUIT] =
+    g_signal_new ("quit", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkApplicationClass, quit),
+                  NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+
+  g_object_class_install_property (object_class, PROP_REGISTER_SESSION,
+    g_param_spec_boolean ("register-session",
+                          P_("Register session"),
+                          P_("Register with the session manager"),
+                          FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -847,3 +936,180 @@ gtk_application_get_menubar (GtkApplication *application)
 
   return menubar;
 }
+
+/* D-Bus Session Management
+ *
+ * The protocol and the D-Bus API are described here:
+ * http://live.gnome.org/SessionManagement/GnomeSession
+ * http://people.gnome.org/~mccann/gnome-session/docs/gnome-session.html
+ */
+
+#ifdef GDK_WINDOWING_X11
+
+static void
+unregister_client (GtkApplication *app)
+{
+  GError *error = NULL;
+
+  g_debug ("Unregistering client");
+
+  g_dbus_proxy_call_sync (app->priv->sm_proxy,
+                          "UnregisterClient",
+                          g_variant_new ("(o)", app->priv->client_path),
+                          G_DBUS_CALL_FLAGS_NONE,
+                          G_MAXINT,
+                          NULL,
+                          &error);
+
+  if (error)
+    {
+      g_warning ("Failed to unregister client: %s", error->message);
+      g_error_free (error);
+    }
+
+  g_clear_object (&app->priv->client_proxy);
+
+  g_free (app->priv->client_path);
+  app->priv->client_path = NULL;
+}
+
+static void
+client_proxy_signal (GDBusProxy     *proxy,
+                     const gchar    *sender_name,
+                     const gchar    *signal_name,
+                     GVariant       *parameters,
+                     GtkApplication *app)
+{
+  if (strcmp (signal_name, "QueryEndSession") == 0)
+    {
+      g_debug ("Received QueryEndSession");
+      g_signal_emit (app, gtk_application_signals[QUIT_REQUESTED], 0);
+    }
+  else if (strcmp (signal_name, "EndSession") == 0)
+    {
+      g_debug ("Received EndSession");
+      gtk_application_quit_response (app, TRUE, NULL);
+      unregister_client (app);
+      g_signal_emit (app, gtk_application_signals[QUIT], 0);
+    }
+  else if (strcmp (signal_name, "CancelEndSession") == 0)
+    {
+      g_debug ("Received CancelEndSession");
+      g_signal_emit (app, gtk_application_signals[QUIT_CANCELLED], 0);
+    }
+  else if (strcmp (signal_name, "Stop") == 0)
+    {
+      g_debug ("Received Stop");
+      unregister_client (app);
+      g_signal_emit (app, gtk_application_signals[QUIT], 0);
+    }
+}
+
+static void
+gtk_application_startup_session_dbus (GtkApplication *app)
+{
+  static gchar *client_id;
+  GError *error = NULL;
+  GVariant *res;
+
+  if (app->priv->session_bus == NULL)
+    return;
+
+  if (client_id == NULL)
+    {
+      const gchar *desktop_autostart_id;
+
+      desktop_autostart_id = g_getenv ("DESKTOP_AUTOSTART_ID");
+      /* Unset DESKTOP_AUTOSTART_ID in order to avoid child processes to
+       * use the same client id.
+       */
+      g_unsetenv ("DESKTOP_AUTOSTART_ID");
+      client_id = g_strdup (desktop_autostart_id ? desktop_autostart_id : "");
+    }
+
+  g_debug ("Connecting to session manager");
+
+  app->priv->sm_proxy = g_dbus_proxy_new_sync (app->priv->session_bus,
+                                               G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
+                                               G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+                                               NULL,
+                                               "org.gnome.SessionManager",
+                                               "/org/gnome/SessionManager",
+                                               "org.gnome.SessionManager",
+                                               NULL,
+                                               &error);
+  if (error)
+    {
+      g_warning ("Failed to get a session proxy: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  /* FIXME: should we reuse the D-Bus application id here ? */
+  app->priv->app_id = g_strdup (g_get_prgname ());
+
+  if (!app->priv->register_session)
+    return;
+
+  g_debug ("Registering client '%s' '%s'", app->priv->app_id, client_id);
+
+  res = g_dbus_proxy_call_sync (app->priv->sm_proxy,
+                                "RegisterClient",
+                                g_variant_new ("(ss)", app->priv->app_id, client_id),
+                                G_DBUS_CALL_FLAGS_NONE,
+                                G_MAXINT,
+                                NULL,
+                                &error);
+
+  if (error)
+    {
+      g_warning ("Failed to register client: %s", error->message);
+      g_error_free (error);
+      g_clear_object (&app->priv->sm_proxy);
+      return;
+    }
+
+  g_variant_get (res, "(o)", &app->priv->client_path);
+  g_variant_unref (res);
+
+  g_debug ("Registered client at '%s'", app->priv->client_path);
+  app->priv->client_proxy = g_dbus_proxy_new_sync (app->priv->session_bus, 0,
+                                                   NULL,
+                                                   "org.gnome.SessionManager",
+                                                   app->priv->client_path,
+                                                   "org.gnome.SessionManager.ClientPrivate",
+                                                   NULL,
+                                                   &error);
+  if (error)
+    {
+      g_warning ("Failed to get client proxy: %s", error->message);
+      g_error_free (error);
+      g_clear_object (&app->priv->sm_proxy);
+      g_free (app->priv->client_path);
+      app->priv->client_path = NULL;
+      return;
+    }
+
+  g_signal_connect (app->priv->client_proxy, "g-signal", G_CALLBACK (client_proxy_signal), app);
+}
+
+void
+gtk_application_quit_response (GtkApplication *application,
+                               gboolean        will_quit,
+                               const gchar    *reason)
+{
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
+  g_return_if_fail (application->priv->client_proxy != NULL);
+
+  g_debug ("Calling EndSessionResponse %d '%s'", will_quit, reason);
+
+  g_dbus_proxy_call (application->priv->client_proxy,
+                     "EndSessionResponse",
+                     g_variant_new ("(bs)", will_quit, reason ? reason : ""),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     G_MAXINT,
+                     NULL, NULL, NULL);
+}
+
+#endif

@@ -59,8 +59,12 @@ struct _GtkApplicationClass
   void (*window_removed) (GtkApplication *application,
                           GtkWindow      *window);
 
+  void (*quit_requested) (GtkApplication *application);
+  void (*quit_cancelled) (GtkApplication *application);
+  void (*quit)           (GtkApplication *application);
+
   /*< private >*/
-  gpointer padding[14];
+  gpointer padding[11];
 };
 
 GType            gtk_application_get_type      (void) G_GNUC_CONST;
@@ -90,6 +94,10 @@ void             gtk_application_add_accelerator    (GtkApplication  *applicatio
 void             gtk_application_remove_accelerator (GtkApplication *application,
                                                      const gchar    *action_name,
                                                      GVariant       *parameter);
+
+void             gtk_application_quit_response      (GtkApplication *application,
+                                                     gboolean        will_quit,
+                                                     const gchar    *reason);
 
 G_END_DECLS
 
