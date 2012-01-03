@@ -115,7 +115,7 @@ struct _GtkApplicationPrivate
   GList *windows;
 
 #ifdef GDK_WINDOWING_X11
-  GDBusConnection *session;
+  GDBusConnection *session_bus;
   gchar *window_prefix;
   guint next_id;
 #endif
@@ -131,7 +131,7 @@ static void
 gtk_application_window_added_x11 (GtkApplication *application,
                                   GtkWindow      *window)
 {
-  if (application->priv->session == NULL)
+  if (application->priv->session_bus == NULL)
     return;
 
   if (GTK_IS_APPLICATION_WINDOW (window))
@@ -151,7 +151,7 @@ gtk_application_window_added_x11 (GtkApplication *application,
 
           window_id = application->priv->next_id++;
           window_path = g_strdup_printf ("%s%d", application->priv->window_prefix, window_id);
-          success = gtk_application_window_publish (app_window, application->priv->session, window_path);
+          success = gtk_application_window_publish (app_window, application->priv->session_bus, window_path);
           g_free (window_path);
         }
       while (!success);
@@ -162,7 +162,7 @@ static void
 gtk_application_window_removed_x11 (GtkApplication *application,
                                     GtkWindow      *window)
 {
-  if (application->priv->session == NULL)
+  if (application->priv->session_bus == NULL)
     return;
 
   if (GTK_IS_APPLICATION_WINDOW (window))
@@ -193,7 +193,7 @@ gtk_application_startup_x11 (GtkApplication *application)
   const gchar *application_id;
 
   application_id = g_application_get_application_id (G_APPLICATION (application));
-  application->priv->session = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+  application->priv->session_bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
   application->priv->window_prefix = window_prefix_from_appid (application_id);
 }
 
@@ -202,11 +202,7 @@ gtk_application_shutdown_x11 (GtkApplication *application)
 {
   g_free (application->priv->window_prefix);
   application->priv->window_prefix = NULL;
-  if (application->priv->session)
-    {
-      g_object_unref (application->priv->session);
-      application->priv->session = NULL;
-    }
+  g_clear_object (&application->priv->session_bus);
 }
 #endif
 
