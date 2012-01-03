@@ -106,57 +106,34 @@ static void
 _gtk_theming_background_paint (GtkThemingBackground *bg,
                                cairo_t              *cr)
 {
-  _gtk_rounded_box_path (&bg->clip_box, cr);
-  gdk_cairo_set_source_rgba (cr, &bg->bg_color);
+  cairo_save (cr);
 
-  if (bg->pattern)
+  _gtk_rounded_box_path (&bg->clip_box, cr);
+  cairo_clip (cr);
+
+  gdk_cairo_set_source_rgba (cr, &bg->bg_color);
+  cairo_paint (cr);
+
+  if (bg->image)
     {
       GtkCssBackgroundRepeat *repeat;
-      cairo_surface_t *surface;
-      int scale_width, scale_height;
+      double image_width, image_height;
 
       gtk_theming_engine_get (bg->engine, bg->flags,
                               "background-repeat", &repeat,
                               NULL);
 
-      if (cairo_pattern_get_surface (bg->pattern, &surface) != CAIRO_STATUS_SUCCESS)
-        surface = NULL;
+      _gtk_css_image_get_concrete_size (bg->image,
+                                        0, 0, /* XXX: needs background-size support */
+                                        bg->image_rect.width, bg->image_rect.height,
+                                        &image_width, &image_height);
 
-      if (surface && repeat)
-        {
-          scale_width = cairo_image_surface_get_width (surface);
-          scale_height = cairo_image_surface_get_height (surface);
-          if (repeat->repeat == GTK_CSS_BACKGROUND_REPEAT_STYLE_REPEAT)
-            cairo_pattern_set_extend (bg->pattern, CAIRO_EXTEND_REPEAT);
-          else if (repeat->repeat == GTK_CSS_BACKGROUND_REPEAT_STYLE_NO_REPEAT)
-            cairo_pattern_set_extend (bg->pattern, CAIRO_EXTEND_NONE);
-        }
-      else
-        {
-          cairo_pattern_set_extend (bg->pattern, CAIRO_EXTEND_PAD);
-          scale_width = bg->image_rect.width;
-          scale_height = bg->image_rect.height;
-        }
-
-      if (scale_width && scale_height)
-        {
-          /* Fill background color first */
-          cairo_fill_preserve (cr);
-
-          cairo_translate (cr, bg->image_rect.x, bg->image_rect.y);
-          cairo_scale (cr, scale_width, scale_height);
-          cairo_set_source (cr, bg->pattern);
-          cairo_scale (cr, 1.0 / scale_width, 1.0 / scale_height);
-          cairo_translate (cr, -bg->image_rect.x, -bg->image_rect.y);
-
-          g_free (repeat);
-
-          cairo_pattern_destroy (bg->pattern);
-          bg->pattern = NULL;
-        }
+      cairo_translate (cr, bg->image_rect.x, bg->image_rect.y);
+      /* XXX: repeat flags */
+      _gtk_css_image_draw (bg->image, cr, image_width, image_height);
     }
 
-  cairo_fill (cr);
+  cairo_restore (cr);
 }
 
 static void
@@ -204,9 +181,7 @@ _gtk_theming_background_init_engine (GtkThemingBackground *bg)
   _gtk_theming_background_apply_clip (bg);
   _gtk_theming_background_apply_origin (bg);
 
-  gtk_theming_engine_get (bg->engine, bg->flags,
-                          "background-image", &bg->pattern,
-                          NULL);
+  bg->image = g_value_get_object (_gtk_theming_engine_peek_property (bg->engine, "background-image"));
 }
 
 void
@@ -227,7 +202,7 @@ _gtk_theming_background_init (GtkThemingBackground *bg,
   bg->paint_area.width = width;
   bg->paint_area.height = height;
 
-  bg->pattern = NULL;
+  bg->image = NULL;
   bg->junction = junction;
 
   _gtk_theming_background_init_engine (bg);
@@ -250,5 +225,5 @@ _gtk_theming_background_render (GtkThemingBackground *bg,
 gboolean
 _gtk_theming_background_has_background_image (GtkThemingBackground *bg)
 {
-  return (bg->pattern != NULL) ? TRUE : FALSE;
+  return (bg->image != NULL) ? TRUE : FALSE;
 }

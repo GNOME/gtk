@@ -25,7 +25,7 @@
 #include <glib-object.h>
 #include <cairo.h>
 
-#include "gtkstylecontext.h"
+#include "gtkcssimageprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkroundedboxprivate.h"
 #include "gtkshadowprivate.h"
@@ -41,7 +41,7 @@ struct _GtkThemingBackground {
   cairo_rectangle_t image_rect;
 
   GtkJunctionSides junction;
-  cairo_pattern_t *pattern;
+  GtkCssImage *image;
 
   GtkRoundedBox padding_box;
   GtkRoundedBox clip_box;
