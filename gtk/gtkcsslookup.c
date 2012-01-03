@@ -207,10 +207,10 @@ _gtk_css_lookup_resolve (GtkCssLookup    *lookup,
       else
         {
           /* Set NULL here and do the inheritance upon lookup? */
-          gtk_style_context_get_property (parent,
-                                          _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop)),
-                                          gtk_style_context_get_state (parent),
-                                          &value);
+          result = _gtk_style_context_peek_property (parent,
+                                                     _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop)));
+          g_value_init (&value, G_VALUE_TYPE (result));
+          g_value_copy (result, &value);
         }
 
       _gtk_style_properties_set_property_by_property (props,
