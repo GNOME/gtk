@@ -462,7 +462,19 @@ gtk_cell_view_set_property (GObject      *object,
       }
       break;
     case PROP_BACKGROUND_GDK:
-      gtk_cell_view_set_background_color (view, g_value_get_boxed (value));
+      {
+        GdkColor *color;
+        GdkRGBA rgba;
+
+        color = g_value_get_boxed (value);
+
+        rgba.red = color->red / 65535.0;
+        rgba.green = color->green / 65535.0;
+        rgba.blue = color->blue / 65535.0;
+        rgba.alpha = 1.0;
+
+        gtk_cell_view_set_background_rgba (view, &rgba);
+      }
       break;
     case PROP_BACKGROUND_RGBA:
       gtk_cell_view_set_background_rgba (view, g_value_get_boxed (value));
