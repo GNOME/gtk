@@ -430,7 +430,7 @@ pattern_set_bg (GtkWidget   *widget,
 		GdkWindow   *child,
 		gint         level)
 {
-  static const GdkRGBA colors[] = {
+  static GdkRGBA colors[] = {
     { 0.27, 0.27, 1.0, 1.0 },
     { 0.53, 0.53, 1.0, 1.0},
     { 0.67, 0.67, 1.0, 1.0 }
