@@ -1073,6 +1073,7 @@ gtk_application_startup_session_dbus (GtkApplication *app)
   g_variant_unref (res);
 
   g_debug ("Registered client at '%s'", app->priv->client_path);
+
   app->priv->client_proxy = g_dbus_proxy_new_sync (app->priv->session_bus, 0,
                                                    NULL,
                                                    "org.gnome.SessionManager",
@@ -1110,6 +1111,102 @@ gtk_application_quit_response (GtkApplication *application,
                      G_DBUS_CALL_FLAGS_NONE,
                      G_MAXINT,
                      NULL, NULL, NULL);
+}
+
+guint
+gtk_application_inhibit (GtkApplication             *application,
+                         GtkWindow                  *window,
+                         GtkApplicationInhibitFlags  flags,
+                         const gchar                *reason)
+{
+  GVariant *res;
+  GError *error = NULL;
+  guint cookie;
+  guint xid;
+
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), 0);
+  g_return_val_if_fail (!g_application_get_is_remote (G_APPLICATION (application)), 0);
+  g_return_val_if_fail (application->priv->sm_proxy != NULL, 0);
+
+  g_debug ("Calling Inhibit\n");
+
+  if (window != NULL)
+    xid = GDK_WINDOW_XID (gtk_widget_get_window (GTK_WIDGET (window)));
+  else
+    xid = 0;
+
+  res = g_dbus_proxy_call_sync (application->priv->sm_proxy,
+                                "Inhibit",
+                                g_variant_new ("(susu)",
+                                               application->priv->app_id,
+                                               xid,
+                                               reason,
+                                               flags),
+                                G_DBUS_CALL_FLAGS_NONE,
+                                G_MAXINT,
+                                NULL,
+                                &error);
+ if (error)
+    {
+      g_warning ("Calling Inhibit failed: %s\n", error->message);
+      g_error_free (error);
+      return 0;
+    }
+
+  g_variant_get (res, "(u)", &cookie);
+  g_variant_unref (res);
+
+  return cookie;
+}
+
+void
+gtk_application_uninhibit (GtkApplication *application,
+                           guint           cookie)
+{
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
+  g_return_if_fail (application->priv->sm_proxy != NULL);
+
+  g_dbus_proxy_call (application->priv->sm_proxy,
+                     "Uninhibit",
+                     g_variant_new ("(u)", cookie),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     G_MAXINT,
+                     NULL, NULL, NULL);
+}
+
+gboolean
+gtk_application_is_inhibited (GtkApplication             *application,
+                              GtkApplicationInhibitFlags  flags)
+{
+  GVariant *res;
+  GError *error = NULL;
+  gboolean inhibited;
+
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), FALSE);
+  g_return_val_if_fail (!g_application_get_is_remote (G_APPLICATION (application)), FALSE);
+  g_return_val_if_fail (application->priv->sm_proxy != NULL, FALSE);
+
+  g_debug ("Calling IsInhibited\n");
+
+  res = g_dbus_proxy_call_sync (application->priv->sm_proxy,
+                                "IsInhibited",
+                                g_variant_new ("(u)", flags),
+                                G_DBUS_CALL_FLAGS_NONE,
+                                G_MAXINT,
+                                NULL,
+                                &error);
+  if (error)
+    {
+      g_warning ("Calling IsInhibited failed: %s\n", error->message);
+      g_error_free (error);
+      return FALSE;
+    }
+
+  g_variant_get (res, "(b)", &inhibited);
+  g_variant_unref (res);
+
+  return inhibited;
 }
 
 #endif
