@@ -823,8 +823,7 @@ gdk_device_manager_core_finalize (GObject *object)
 
   device_manager_core = GDK_DEVICE_MANAGER_CORE (object);
 
-  g_list_foreach (device_manager_core->devices, free_device, NULL);
-  g_list_free (device_manager_core->devices);
+  g_list_free_full (device_manager_core->devices, free_device);
 
   G_OBJECT_CLASS (gdk_device_manager_core_parent_class)->finalize (object);
 }

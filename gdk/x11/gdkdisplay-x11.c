@@ -1767,12 +1767,10 @@ gdk_x11_display_finalize (GObject *object)
   g_slist_free (display_x11->event_types);
 
   /* input GdkDevice list */
-  g_list_foreach (display_x11->input_devices, (GFunc) g_object_unref, NULL);
-  g_list_free (display_x11->input_devices);
+  g_list_free_full (display_x11->input_devices, g_object_unref);
 
   /* input GdkWindow list */
-  g_list_foreach (display_x11->input_windows, (GFunc) g_free, NULL);
-  g_list_free (display_x11->input_windows);
+  g_list_free_full (display_x11->input_windows, g_free);
 
   /* Free all GdkScreens */
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)

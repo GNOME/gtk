@@ -308,8 +308,8 @@ gdk_x11_device_manager_xi_dispose (GObject *object)
   GdkX11DeviceManagerXI *device_manager;
 
   device_manager = GDK_X11_DEVICE_MANAGER_XI (object);
-  g_list_foreach (device_manager->devices, (GFunc) g_object_unref, NULL);
-  g_list_free (device_manager->devices);
+
+  g_list_free_full (device_manager->devices, g_object_unref);
   device_manager->devices = NULL;
 
   if (device_manager->id_table != NULL)

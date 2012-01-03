@@ -2065,12 +2065,8 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	      window->clip_region_with_children = NULL;
 	    }
 
-	  if (window->outstanding_moves)
-	    {
-	      g_list_foreach (window->outstanding_moves, (GFunc)gdk_window_region_move_free, NULL);
-	      g_list_free (window->outstanding_moves);
-	      window->outstanding_moves = NULL;
-	    }
+	  g_list_free_full (window->outstanding_moves, (GDestroyNotify) gdk_window_region_move_free);
+	  window->outstanding_moves = NULL;
 	}
       break;
     }
@@ -3945,8 +3941,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 	}
     }
 
-  g_list_foreach (children, (GFunc)g_object_unref, NULL);
-  g_list_free (children);
+  g_list_free_full (children, g_object_unref);
 
 }
 

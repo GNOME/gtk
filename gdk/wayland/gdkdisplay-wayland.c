@@ -274,8 +274,7 @@ gdk_wayland_display_finalize (GObject *object)
     g_object_unref (display_wayland->keymap);
 
   /* input GdkDevice list */
-  g_list_foreach (display_wayland->input_devices, (GFunc) g_object_unref, NULL);
-  g_list_free (display_wayland->input_devices);
+  g_list_free_full (display_wayland->input_devices, g_object_unref);
 
   g_object_unref (display_wayland->screen);
 

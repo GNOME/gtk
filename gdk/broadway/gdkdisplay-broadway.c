@@ -1213,8 +1213,7 @@ gdk_broadway_display_finalize (GObject *object)
   _gdk_broadway_cursor_display_finalize (GDK_DISPLAY_OBJECT(broadway_display));
 
   /* input GdkDevice list */
-  g_list_foreach (broadway_display->input_devices, (GFunc) g_object_unref, NULL);
-  g_list_free (broadway_display->input_devices);
+  g_list_free_full (broadway_display->input_devices, g_object_unref);
   /* Free all GdkScreens */
   g_object_unref (broadway_display->screens[0]);
   g_free (broadway_display->screens);

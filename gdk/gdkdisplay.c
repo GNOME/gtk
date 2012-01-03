@@ -154,8 +154,7 @@ free_device_grabs_foreach (gpointer key,
 {
   GList *list = value;
 
-  g_list_foreach (list, (GFunc) free_device_grab, NULL);
-  g_list_free (list);
+  g_list_free_full (list, (GDestroyNotify) free_device_grab);
 
   return TRUE;
 }
@@ -211,8 +210,7 @@ gdk_display_dispose (GObject *object)
 
   device_manager = gdk_display_get_device_manager (GDK_DISPLAY (object));
 
-  g_list_foreach (display->queued_events, (GFunc)gdk_event_free, NULL);
-  g_list_free (display->queued_events);
+  g_list_free_full (display->queued_events, (GDestroyNotify) gdk_event_free);
   display->queued_events = NULL;
   display->queued_tail = NULL;
 
