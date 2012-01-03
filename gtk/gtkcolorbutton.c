@@ -932,7 +932,19 @@ gtk_color_button_set_property (GObject      *object,
       gtk_color_button_set_title (color_button, g_value_get_string (value));
       break;
     case PROP_COLOR:
-      gtk_color_button_set_color (color_button, g_value_get_boxed (value));
+      {
+        GdkColor *color;
+        GdkRGBA rgba;
+
+        color = g_value_get_boxed (value);
+
+        rgba.red = color->red / 65535.0;
+        rgba.green = color->green / 65535.0;
+        rgba.blue = color->blue / 65535.0;
+        rgba.alpha = 1.0;
+
+        gtk_color_button_set_rgba (color_button, &rgba);
+      }
       break;
     case PROP_ALPHA:
       gtk_color_button_set_alpha (color_button, g_value_get_uint (value));
@@ -953,7 +965,6 @@ gtk_color_button_get_property (GObject    *object,
                                GParamSpec *pspec)
 {
   GtkColorButton *color_button = GTK_COLOR_BUTTON (object);
-  GdkColor color;
 
   switch (param_id)
     {
@@ -964,8 +975,18 @@ gtk_color_button_get_property (GObject    *object,
       g_value_set_string (value, gtk_color_button_get_title (color_button));
       break;
     case PROP_COLOR:
-      gtk_color_button_get_color (color_button, &color);
-      g_value_set_boxed (value, &color);
+      {
+        GdkColor color;
+        GdkRGBA rgba;
+
+        gtk_color_button_get_rgba (color_button, &rgba);
+
+        color.red = (guint16) (rgba.red * 65535 + 0.5);
+        color.green = (guint16) (rgba.green * 65535 + 0.5);
+        color.blue = (guint16) (rgba.blue * 65535 + 0.5);
+
+        g_value_set_boxed (value, &color);
+      }
       break;
     case PROP_ALPHA:
       g_value_set_uint (value, gtk_color_button_get_alpha (color_button));
