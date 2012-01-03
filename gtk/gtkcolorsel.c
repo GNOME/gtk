@@ -607,7 +607,19 @@ gtk_color_selection_set_property (GObject         *object,
                                            g_value_get_boolean (value));
       break;
     case PROP_CURRENT_COLOR:
-      gtk_color_selection_set_current_color (colorsel, g_value_get_boxed (value));
+      {
+        GdkColor *color;
+        GdkRGBA rgba;
+
+        color = g_value_get_boxed (value);
+
+        rgba.red = SCALE (color->red);
+        rgba.green = SCALE (color->green);;
+        rgba.blue = SCALE (color->blue);
+        rgba.alpha = 1.0;
+
+        gtk_color_selection_set_current_rgba (colorsel, &rgba);
+      }
       break;
     case PROP_CURRENT_ALPHA:
       gtk_color_selection_set_current_alpha (colorsel, g_value_get_uint (value));
@@ -629,7 +641,6 @@ gtk_color_selection_get_property (GObject     *object,
                                   GParamSpec  *pspec)
 {
   GtkColorSelection *colorsel = GTK_COLOR_SELECTION (object);
-  GdkColor color;
 
   switch (prop_id)
     {
@@ -640,8 +651,18 @@ gtk_color_selection_get_property (GObject     *object,
       g_value_set_boolean (value, gtk_color_selection_get_has_palette (colorsel));
       break;
     case PROP_CURRENT_COLOR:
-      gtk_color_selection_get_current_color (colorsel, &color);
-      g_value_set_boxed (value, &color);
+      {
+        GdkColor color;
+        GdkRGBA rgba;
+
+        gtk_color_selection_get_current_rgba (colorsel, &rgba);
+
+        color.red = UNSCALE (rgba.red);
+        color.green = UNSCALE (rgba.green);
+        color.blue = UNSCALE (rgba.blue);
+
+        g_value_set_boxed (value, &color);
+      }
       break;
     case PROP_CURRENT_ALPHA:
       g_value_set_uint (value, gtk_color_selection_get_current_alpha (colorsel));
