@@ -184,8 +184,7 @@ pixbuf_rc_style_finalize (GObject *object)
 {
   PixbufRcStyle *rc_style = PIXBUF_RC_STYLE (object);
   
-  g_list_foreach (rc_style->img_list, (GFunc) theme_image_unref, NULL);
-  g_list_free (rc_style->img_list);
+  g_list_free_full (rc_style->img_list, theme_image_unref);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
