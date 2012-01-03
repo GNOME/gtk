@@ -46,6 +46,30 @@
 /*** REGISTRATION ***/
 
 static void
+color_compute (GtkCssStyleProperty    *property,
+               GValue                 *computed,
+               GtkStyleContext        *context,
+               const GValue           *specified)
+{
+  g_value_init (computed, GDK_TYPE_RGBA);
+
+  if (G_VALUE_HOLDS (specified, GTK_TYPE_CSS_SPECIAL_VALUE))
+    {
+      GtkStyleContext *parent = gtk_style_context_get_parent (context);
+      g_assert (g_value_get_enum (specified) == GTK_CSS_CURRENT_COLOR);
+
+      if (parent)
+        g_value_copy (_gtk_style_context_peek_property (parent, "color"), computed);
+      else
+        _gtk_css_style_compute_value (computed,
+                                      context,
+                                      _gtk_css_style_property_get_initial_value (property));
+    }
+  else
+    _gtk_css_style_compute_value (computed, context, specified);
+}
+
+static void
 _gtk_style_property_register (const char *                   name,
                               GType                          value_type,
                               GtkStylePropertyFlags          flags,
@@ -420,7 +444,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           NULL,
                                           NULL,
-                                          NULL,
+                                          color_compute,
                                           &rgba);
   gtk_style_property_register            ("font-size",
                                           G_TYPE_DOUBLE,
