@@ -1,5 +1,6 @@
 * {
   engine: none;
+  color: inherit;
 }
 
 GtkButton {
