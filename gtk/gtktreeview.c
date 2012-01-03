@@ -10736,8 +10736,6 @@ gtk_tree_view_real_toggle_cursor_row (GtkTreeView *tree_view)
 {
   GtkRBTree *new_tree = NULL;
   GtkRBNode *new_node = NULL;
-  GtkRBTree *cursor_tree = NULL;
-  GtkRBNode *cursor_node = NULL;
   GtkTreePath *cursor_path = NULL;
 
   if (!gtk_widget_has_focus (GTK_WIDGET (tree_view)))
@@ -10750,8 +10748,8 @@ gtk_tree_view_real_toggle_cursor_row (GtkTreeView *tree_view)
                                                 tree_view->priv->cursor_node);
 
   _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
-					    cursor_node,
-					    cursor_tree,
+					    tree_view->priv->cursor_node,
+					    tree_view->priv->cursor_tree,
 					    cursor_path,
                                             GTK_TREE_SELECT_MODE_TOGGLE,
 					    FALSE);
