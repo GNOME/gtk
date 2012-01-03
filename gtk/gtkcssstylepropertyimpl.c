@@ -410,9 +410,10 @@ _gtk_css_style_property_init_properties (void)
   GtkCssBackgroundRepeat background_repeat = { GTK_CSS_BACKGROUND_REPEAT_STYLE_REPEAT };
   GtkCssBorderImageRepeat border_image_repeat = { GTK_CSS_REPEAT_STYLE_STRETCH, GTK_CSS_REPEAT_STYLE_STRETCH };
 
-  /* note that gtk_style_properties_register_property() calls this function,
-   * so make sure we're sanely inited to avoid infloops */
-
+  /* Initialize "color" and "font-size" first,
+   * so that when computing values later they are
+   * done first. That way, 'currentColor' and font
+   * sizes in em can be looked up properly */
   rgba_init (&rgba, 1, 1, 1, 1);
   gtk_style_property_register            ("color",
                                           GDK_TYPE_RGBA,
@@ -421,6 +422,16 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           &rgba);
+  gtk_style_property_register            ("font-size",
+                                          G_TYPE_DOUBLE,
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          10.0);
+
+  /* properties that aren't referenced when computing values
+   * start here */
   rgba_init (&rgba, 0, 0, 0, 0);
   gtk_style_property_register            ("background-color",
                                           GDK_TYPE_RGBA,
@@ -459,13 +470,6 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           PANGO_WEIGHT_NORMAL);
-  gtk_style_property_register            ("font-size",
-                                          G_TYPE_DOUBLE,
-                                          GTK_STYLE_PROPERTY_INHERIT,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          10.0);
 
   gtk_style_property_register            ("text-shadow",
                                           GTK_TYPE_SHADOW,
