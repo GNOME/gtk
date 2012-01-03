@@ -53,6 +53,9 @@ color_compute (GtkCssStyleProperty    *property,
 {
   g_value_init (computed, GDK_TYPE_RGBA);
 
+  /* for when resolvage fails */
+restart:
+
   if (G_VALUE_HOLDS (specified, GTK_TYPE_CSS_SPECIAL_VALUE))
     {
       GtkStyleContext *parent = gtk_style_context_get_parent (context);
@@ -65,8 +68,22 @@ color_compute (GtkCssStyleProperty    *property,
                                       context,
                                       _gtk_css_style_property_get_initial_value (property));
     }
+  else if (G_VALUE_HOLDS (specified, GTK_TYPE_SYMBOLIC_COLOR))
+    {
+      GdkRGBA rgba;
+
+      if (!_gtk_style_context_resolve_color (context,
+                                             g_value_get_boxed (specified),
+                                             &rgba))
+        {
+          specified = _gtk_css_style_property_get_initial_value (property);
+          goto restart;
+        }
+
+      g_value_set_boxed (computed, &rgba);
+    }
   else
-    _gtk_css_style_compute_value (computed, context, specified);
+    g_value_copy (specified, computed);
 }
 
 static void
@@ -462,7 +479,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           NULL,
                                           NULL,
-                                          NULL,
+                                          color_compute,
                                           &rgba);
 
   gtk_style_property_register            ("font-family",
@@ -663,28 +680,28 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           NULL,
                                           NULL,
-                                          NULL,
+                                          color_compute,
                                           &value);
   _gtk_style_property_register           ("border-right-color",
                                           GDK_TYPE_RGBA,
                                           0,
                                           NULL,
                                           NULL,
-                                          NULL,
+                                          color_compute,
                                           &value);
   _gtk_style_property_register           ("border-bottom-color",
                                           GDK_TYPE_RGBA,
                                           0,
                                           NULL,
                                           NULL,
-                                          NULL,
+                                          color_compute,
                                           &value);
   _gtk_style_property_register           ("border-left-color",
                                           GDK_TYPE_RGBA,
                                           0,
                                           NULL,
                                           NULL,
-                                          NULL,
+                                          color_compute,
                                           &value);
   g_value_unset (&value);
 
