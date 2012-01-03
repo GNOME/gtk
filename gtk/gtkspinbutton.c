@@ -1348,15 +1348,17 @@ gtk_spin_button_button_press (GtkWidget      *widget,
             gtk_widget_grab_focus (widget);
           priv->button = event->button;
 
-          if (gtk_editable_get_editable (GTK_EDITABLE (widget)))
+          if (gtk_editable_get_editable (GTK_EDITABLE (widget))) {
             gtk_spin_button_update (spin);
 
-          if (event->button == 1)
-            start_spinning (spin, event->window, gtk_adjustment_get_step_increment (priv->adjustment));
-          else if (event->button == 2)
-            start_spinning (spin, event->window, gtk_adjustment_get_page_increment (priv->adjustment));
-          else
-            priv->click_child = event->window;
+            if (event->button == 1)
+              start_spinning (spin, event->window, gtk_adjustment_get_step_increment (priv->adjustment));
+            else if (event->button == 2)
+              start_spinning (spin, event->window, gtk_adjustment_get_page_increment (priv->adjustment));
+            else
+              priv->click_child = event->window;
+          } else
+            gtk_widget_error_bell (widget);
 
           return TRUE;
         }
