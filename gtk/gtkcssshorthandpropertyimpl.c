@@ -255,6 +255,74 @@ parse_border_image (GtkCssShorthandProperty *shorthand,
 }
 
 static gboolean
+parse_border (GtkCssShorthandProperty *shorthand,
+              GValue                  *values,
+              GtkCssParser            *parser,
+              GFile                   *base)
+{
+  int width;
+  int style;
+
+  do
+  {
+    if (!G_IS_VALUE (&values[0]) &&
+         _gtk_css_parser_try_length (parser, &width))
+      {
+        g_value_init (&values[0], G_TYPE_INT);
+        g_value_init (&values[1], G_TYPE_INT);
+        g_value_init (&values[2], G_TYPE_INT);
+        g_value_init (&values[3], G_TYPE_INT);
+        g_value_set_int (&values[0], width);
+        g_value_set_int (&values[1], width);
+        g_value_set_int (&values[2], width);
+        g_value_set_int (&values[3], width);
+      }
+    else if (!G_IS_VALUE (&values[4]) &&
+             _gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, &style))
+      {
+        g_value_init (&values[4], GTK_TYPE_BORDER_STYLE);
+        g_value_init (&values[5], GTK_TYPE_BORDER_STYLE);
+        g_value_init (&values[6], GTK_TYPE_BORDER_STYLE);
+        g_value_init (&values[7], GTK_TYPE_BORDER_STYLE);
+        g_value_set_enum (&values[4], style);
+        g_value_set_enum (&values[5], style);
+        g_value_set_enum (&values[6], style);
+        g_value_set_enum (&values[7], style);
+      }
+    else if (!G_IS_VALUE (&values[8]))
+      {
+        GtkSymbolicColor *symbolic;
+
+        symbolic = _gtk_css_parser_read_symbolic_color (parser);
+        if (symbolic == NULL)
+          return FALSE;
+
+        g_value_init (&values[8], GTK_TYPE_SYMBOLIC_COLOR);
+        g_value_init (&values[9], GTK_TYPE_SYMBOLIC_COLOR);
+        g_value_init (&values[10], GTK_TYPE_SYMBOLIC_COLOR);
+        g_value_init (&values[11], GTK_TYPE_SYMBOLIC_COLOR);
+        g_value_set_boxed (&values[8], symbolic);
+        g_value_set_boxed (&values[9], symbolic);
+        g_value_set_boxed (&values[10], symbolic);
+        g_value_take_boxed (&values[11], symbolic);
+      }
+    else
+      {
+        /* We parsed everything and there's still stuff left?
+         * Pretend we didn't notice and let the normal code produce
+         * a 'junk at end of value' error */
+        break;
+      }
+  }
+  while (!value_is_done_parsing (parser));
+
+  /* Note that border-image values are not set: according to the spec
+     they just need to be reset when using the border shorthand */
+
+  return TRUE;
+}
+
+static gboolean
 parse_font (GtkCssShorthandProperty *shorthand,
             GValue                  *values,
             GtkCssParser            *parser,
@@ -797,6 +865,10 @@ _gtk_css_shorthand_property_init_properties (void)
   const char *border_color_subproperties[] = { "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", NULL };
   const char *border_style_subproperties[] = { "border-top-style", "border-right-style", "border-bottom-style", "border-left-style", NULL };
   const char *border_image_subproperties[] = { "border-image-source", "border-image-slice", "border-image-width", "border-image-repeat", NULL };
+  const char *border_subproperties[] = { "border-top-width", "border-right-width", "border-bottom-width", "border-left-width",
+                                         "border-top-style", "border-right-style", "border-bottom-style", "border-left-style",
+                                         "border-top-color", "border-right-color", "border-bottom-color", "border-left-color",
+                                         "border-image-source", "border-image-slice", "border-image-width", "border-image-repeat", NULL };
   const char *background_subproperties[] = { "background-image", "background-repeat", "background-clip", "background-origin",
                                              "background-color", NULL };
 
@@ -846,6 +918,12 @@ _gtk_css_shorthand_property_init_properties (void)
                                           G_TYPE_NONE,
                                           border_image_subproperties,
                                           parse_border_image,
+                                          NULL,
+                                          NULL);
+  _gtk_css_shorthand_property_register   ("border",
+                                          G_TYPE_NONE,
+                                          border_subproperties,
+                                          parse_border,
                                           NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("background",
