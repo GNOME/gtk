@@ -157,6 +157,7 @@ typedef struct {
   GtkBuilder    *builder;
   GObject       *object;
   const gchar   *domain;
+  gchar         *id;
 
   GString       *string;
 
@@ -199,6 +200,8 @@ item_start_element (GMarkupParseContext *context,
 	    }
 	  else if (strcmp (names[i], "context") == 0) 
 	    data->context = g_strdup (values[i]);
+	  else if (strcmp (names[i], "id") == 0)
+	    data->id = g_strdup (values[i]);
 	  else
 	    g_warning ("Unknown custom combo box item attribute: %s", names[i]);
 	}
@@ -244,13 +247,15 @@ item_end_element (GMarkupParseContext *context,
 	  g_string_append (data->string, translated);
 	}
 
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (data->object), data->string->str);
+      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (data->object), data->id, data->string->str);
     }
 
   data->translatable = FALSE;
   g_string_set_size (data->string, 0);
   g_free (data->context);
   data->context = NULL;
+  g_free (data->id);
+  data->id = NULL;
   data->is_text = FALSE;
 }
 
