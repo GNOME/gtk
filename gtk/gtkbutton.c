@@ -1813,7 +1813,8 @@ gtk_button_button_press (GtkWidget      *widget,
   GtkButton *button;
   GtkButtonPrivate *priv;
 
-  if (event->type == GDK_BUTTON_PRESS)
+  if (event->type == GDK_BUTTON_PRESS ||
+      event->type == GDK_TOUCH_PRESS)
     {
       button = GTK_BUTTON (widget);
       priv = button->priv;
@@ -1932,6 +1933,40 @@ gtk_real_button_pressed (GtkButton *button)
   gtk_button_update_state (button);
 }
 
+static gboolean
+touch_release_in_button (GtkButton *button)
+{
+  GtkButtonPrivate *priv;
+  gint width, height;
+  GdkEvent *event;
+  gdouble x, y;
+
+  priv = button->priv;
+  event = gtk_get_current_event ();
+
+  if (!event)
+    return FALSE;
+
+  if (event->type != GDK_TOUCH_RELEASE ||
+      event->button.window != priv->event_window)
+    {
+      gdk_event_free (event);
+      return FALSE;
+    }
+
+  gdk_event_get_coords (event, &x, &y);
+  width = gdk_window_get_width (priv->event_window);
+  height = gdk_window_get_height (priv->event_window);
+
+  gdk_event_free (event);
+
+  if (x >= 0 && x <= width &&
+      y >= 0 && y <= height)
+    return TRUE;
+
+  return FALSE;
+}
+
 static void
 gtk_real_button_released (GtkButton *button)
 {
@@ -1944,7 +1979,8 @@ gtk_real_button_released (GtkButton *button)
       if (priv->activate_timeout)
 	return;
 
-      if (priv->in_button)
+      if (priv->in_button ||
+          touch_release_in_button (button))
 	gtk_button_clicked (button);
 
       gtk_button_update_state (button);
