@@ -122,6 +122,8 @@ static gint gtk_button_button_press (GtkWidget * widget,
 				     GdkEventButton * event);
 static gint gtk_button_button_release (GtkWidget * widget,
 				       GdkEventButton * event);
+static gboolean gtk_button_touch (GtkWidget     *widget,
+                                  GdkEventTouch *event);
 static gint gtk_button_grab_broken (GtkWidget * widget,
 				    GdkEventGrabBroken * event);
 static gint gtk_button_key_release (GtkWidget * widget, GdkEventKey * event);
@@ -207,6 +209,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->draw = gtk_button_draw;
   widget_class->button_press_event = gtk_button_button_press;
   widget_class->button_release_event = gtk_button_button_release;
+  widget_class->touch_event = gtk_button_touch;
   widget_class->grab_broken_event = gtk_button_grab_broken;
   widget_class->key_release_event = gtk_button_key_release;
   widget_class->enter_notify_event = gtk_button_enter_notify;
@@ -1429,9 +1432,10 @@ gtk_button_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
-			    GDK_BUTTON_RELEASE_MASK |
-			    GDK_ENTER_NOTIFY_MASK |
-			    GDK_LEAVE_NOTIFY_MASK);
+                            GDK_BUTTON_RELEASE_MASK |
+                            GDK_TOUCH_MASK |
+                            GDK_ENTER_NOTIFY_MASK |
+                            GDK_LEAVE_NOTIFY_MASK);
 
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
@@ -1842,6 +1846,28 @@ gtk_button_button_release (GtkWidget      *widget,
 }
 
 static gboolean
+gtk_button_touch (GtkWidget     *widget,
+                  GdkEventTouch *event)
+{
+  GtkButton *button = GTK_BUTTON (widget);
+  GtkButtonPrivate *priv = button->priv;
+
+  if (event->type == GDK_TOUCH_BEGIN)
+    {
+      if (priv->focus_on_click && !gtk_widget_has_focus (widget))
+        gtk_widget_grab_focus (widget);
+
+      g_signal_emit (button, button_signals[PRESSED], 0);
+    }
+  else if (event->type == GDK_TOUCH_END)
+    {
+      g_signal_emit (button, button_signals[RELEASED], 0);
+    }
+
+  return TRUE;
+}
+
+static gboolean
 gtk_button_grab_broken (GtkWidget          *widget,
 			GdkEventGrabBroken *event)
 {
@@ -1930,6 +1956,40 @@ gtk_real_button_pressed (GtkButton *button)
   gtk_button_update_state (button);
 }
 
+static gboolean
+touch_release_in_button (GtkButton *button)
+{
+  GtkButtonPrivate *priv;
+  gint width, height;
+  GdkEvent *event;
+  gdouble x, y;
+
+  priv = button->priv;
+  event = gtk_get_current_event ();
+
+  if (!event)
+    return FALSE;
+
+  if (event->type != GDK_TOUCH_END ||
+      event->touch.window != priv->event_window)
+    {
+      gdk_event_free (event);
+      return FALSE;
+    }
+
+  gdk_event_get_coords (event, &x, &y);
+  width = gdk_window_get_width (priv->event_window);
+  height = gdk_window_get_height (priv->event_window);
+
+  gdk_event_free (event);
+
+  if (x >= 0 && x <= width &&
+      y >= 0 && y <= height)
+    return TRUE;
+
+  return FALSE;
+}
+
 static void
 gtk_real_button_released (GtkButton *button)
 {
@@ -1942,7 +2002,8 @@ gtk_real_button_released (GtkButton *button)
       if (priv->activate_timeout)
 	return;
 
-      if (priv->in_button)
+      if (priv->in_button ||
+          touch_release_in_button (button))
 	gtk_button_clicked (button);
 
       gtk_button_update_state (button);
