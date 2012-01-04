@@ -2345,24 +2345,6 @@ gtk_scrolled_window_cancel_deceleration (GtkScrolledWindow *scrolled_window)
       g_source_remove (priv->deceleration_id);
       priv->deceleration_id = 0;
     }
-
-  /* Ensure the overshoot window is clamped to the adjustments' limits */
-  if (_gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
-    {
-      GtkAdjustment *vadjustment, *hadjustment;
-
-      vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
-      hadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
-
-      _gtk_scrolled_window_set_adjustment_value (scrolled_window,
-                                                 vadjustment,
-                                                 gtk_adjustment_get_value (vadjustment),
-                                                 FALSE, TRUE);
-      _gtk_scrolled_window_set_adjustment_value (scrolled_window,
-                                                 hadjustment,
-                                                 gtk_adjustment_get_value (hadjustment),
-                                                 FALSE, TRUE);
-    }
 }
 
 static void
@@ -2405,6 +2387,9 @@ gtk_scrolled_window_release_captured_events (GtkScrolledWindow *scrolled_window)
 
   if (priv->kinetic_scrolling_flags & GTK_KINETIC_SCROLLING_CAPTURE_BUTTON_PRESS)
     gtk_widget_release_captured_events (GTK_WIDGET (scrolled_window), TRUE);
+
+  if (_gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
+    gtk_scrolled_window_start_deceleration (scrolled_window);
 
   return FALSE;
 }
@@ -2452,6 +2437,7 @@ gtk_scrolled_window_captured_button_release (GtkWidget *widget,
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkWidget *child;
   GdkEventButton *event;
+  gboolean overshoot;
 
   event = (GdkEventButton *)_event;
 
@@ -2474,6 +2460,8 @@ gtk_scrolled_window_captured_button_release (GtkWidget *widget,
       priv->release_timeout_id = 0;
     }
 
+  overshoot = _gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL);
+
   if (priv->in_drag)
     gdk_device_ungrab (event->device, event->time);
   else
@@ -2484,7 +2472,8 @@ gtk_scrolled_window_captured_button_release (GtkWidget *widget,
       if (priv->kinetic_scrolling_flags & GTK_KINETIC_SCROLLING_CAPTURE_BUTTON_PRESS)
         gtk_widget_release_captured_events (widget, TRUE);
 
-      return GTK_CAPTURED_EVENT_NONE;
+      if (!overshoot)
+        return GTK_CAPTURED_EVENT_NONE;
     }
   priv->in_drag = FALSE;
 
@@ -2496,8 +2485,7 @@ gtk_scrolled_window_captured_button_release (GtkWidget *widget,
   if (!priv->vscrollbar_visible)
     priv->y_velocity = 0;
 
-  if (priv->x_velocity != 0 || priv->y_velocity != 0 ||
-      _gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
+  if (priv->x_velocity != 0 || priv->y_velocity != 0 || overshoot)
     {
       gtk_scrolled_window_start_deceleration (scrolled_window);
       priv->x_velocity = priv->y_velocity = 0;
@@ -3286,7 +3274,10 @@ gtk_scrolled_window_grab_notify (GtkWidget *widget,
           priv->release_timeout_id = 0;
         }
 
-      gtk_scrolled_window_cancel_deceleration (scrolled_window);
+      if (_gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
+        gtk_scrolled_window_start_deceleration (scrolled_window);
+      else
+        gtk_scrolled_window_cancel_deceleration (scrolled_window);
 
       priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
       priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
