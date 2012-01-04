@@ -37,22 +37,6 @@
 G_DEFINE_BOXED_TYPE (GtkBorderImage, _gtk_border_image,
                      _gtk_border_image_ref, _gtk_border_image_unref)
 
-enum {
-  BORDER_LEFT,
-  BORDER_MIDDLE,
-  BORDER_RIGHT,
-  BORDER_LAST,
-  BORDER_TOP = BORDER_LEFT,
-  BORDER_BOTTOM = BORDER_RIGHT
-};
-
-enum {
-  SIDE_TOP,
-  SIDE_RIGHT,
-  SIDE_BOTTOM,
-  SIDE_LEFT
-};
-
 struct _GtkBorderImage {
   GtkCssImage *source;
 
