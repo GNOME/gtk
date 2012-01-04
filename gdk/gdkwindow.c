@@ -8328,14 +8328,28 @@ send_crossing_event (GdkDisplay                 *display,
   GdkEvent *event;
   guint32 window_event_mask, type_event_mask;
   GdkDeviceGrabInfo *grab;
+  GdkTouchGrabInfo *touch_grab = NULL;
   GdkPointerWindowInfo *pointer_info;
   gboolean block_event = FALSE;
+  guint touch_id;
 
   grab = _gdk_display_has_device_grab (display, device, serial);
   pointer_info = _gdk_display_get_pointer_info (display, device);
 
-  if (grab != NULL &&
-      !grab->owner_events)
+  if (event_in_queue &&
+      gdk_event_get_touch_id (event_in_queue, &touch_id))
+    touch_grab = _gdk_display_has_touch_grab (display, device,
+                                              touch_id, serial);
+
+  if (touch_grab)
+    {
+      if (window != touch_grab->window)
+        return;
+
+      window_event_mask = touch_grab->event_mask;
+    }
+  else if (grab != NULL &&
+           !grab->owner_events)
     {
       /* !owner_event => only report events wrt grab window, ignore rest */
       if ((GdkWindow *)window != grab->window)
