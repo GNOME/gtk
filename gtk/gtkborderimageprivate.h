@@ -33,14 +33,17 @@ G_BEGIN_DECLS
 
 typedef struct _GtkBorderImage GtkBorderImage;
 
-GtkBorderImage *  _gtk_border_image_new              (GtkCssImage          *source,
-                                                      GtkBorder            *slice,
-                                                      GtkBorder            *width,
-                                                      GtkCssBorderImageRepeat *repeat);
-GtkBorderImage *  _gtk_border_image_new_for_engine   (GtkThemingEngine     *engine);
+struct _GtkBorderImage {
+  GtkCssImage *source;
 
-GtkBorderImage *  _gtk_border_image_ref              (GtkBorderImage       *image);
-void              _gtk_border_image_unref            (GtkBorderImage       *image);
+  GtkBorder slice;
+  gboolean has_width;
+  GtkBorder width;
+  GtkCssBorderImageRepeat repeat;
+};
+
+gboolean          _gtk_border_image_init             (GtkBorderImage       *image,
+                                                      GtkThemingEngine     *engine);
 
 void              _gtk_border_image_render           (GtkBorderImage       *image,
                                                       GtkBorder            *border_width,

@@ -35,82 +35,30 @@
  */
 #include "fallback-c89.c"
 
-struct _GtkBorderImage {
-  GtkCssImage *source;
-
-  GtkBorder slice;
+gboolean
+_gtk_border_image_init (GtkBorderImage   *image,
+                        GtkThemingEngine *engine)
+{
   GtkBorder *width;
-  GtkCssBorderImageRepeat repeat;
 
-  gint ref_count;
-};
+  image->source = g_value_get_object (_gtk_theming_engine_peek_property (engine, "border-image-source"));
+  if (image->source == NULL)
+    return FALSE;
 
-GtkBorderImage *
-_gtk_border_image_new (GtkCssImage             *source,
-                       GtkBorder               *slice,
-                       GtkBorder               *width,
-                       GtkCssBorderImageRepeat *repeat)
-{
-  GtkBorderImage *image;
-
-  image = g_slice_new0 (GtkBorderImage);
-  image->ref_count = 1;
-
-  image->source = g_object_ref (source);
-
-  if (slice != NULL)
-    image->slice = *slice;
-
-  if (width != NULL)
-    image->width = gtk_border_copy (width);
-
-  if (repeat != NULL)
-    image->repeat = *repeat;
-
-  return image;
-}
-
-GtkBorderImage *
-_gtk_border_image_new_for_engine (GtkThemingEngine *engine)
-{
-  GtkCssImage *source;
-
-  source = g_value_get_object (_gtk_theming_engine_peek_property (engine, "border-image-source"));
-  if (source == NULL)
-    return NULL;
-
-  return _gtk_border_image_new (source,
-                                g_value_get_boxed (_gtk_theming_engine_peek_property (engine, "border-image-slice")),
-                                g_value_get_boxed (_gtk_theming_engine_peek_property (engine, "border-image-width")),
-                                g_value_get_boxed (_gtk_theming_engine_peek_property (engine, "border-image-repeat")));
-}
-
-GtkBorderImage *
-_gtk_border_image_ref (GtkBorderImage *image)
-{
-  g_return_val_if_fail (image != NULL, NULL);
-
-  image->ref_count++;
-
-  return image;
-}
-
-void
-_gtk_border_image_unref (GtkBorderImage *image)
-{
-  g_return_if_fail (image != NULL);
-
-  image->ref_count--;
-
-  if (image->ref_count == 0)
+  image->slice = *(GtkBorder *) g_value_get_boxed (_gtk_theming_engine_peek_property (engine, "border-image-slice"));
+  width = g_value_get_boxed (_gtk_theming_engine_peek_property (engine, "border-image-width"));
+  if (width)
     {
-      g_object_unref (image->source);
-
-      if (image->width != NULL)
-        gtk_border_free (image->width);
-
-      g_slice_free (GtkBorderImage, image);
+      image->width = *width;
+      image->has_width = TRUE;
     }
+  else
+    image->has_width = FALSE;
+
+  image->repeat = *(GtkCssBorderImageRepeat *) g_value_get_boxed (
+      _gtk_theming_engine_peek_property (engine, "border-image-repeat"));
+
+  return TRUE;
 }
 
 typedef struct _GtkBorderImageSliceSize GtkBorderImageSliceSize;
@@ -291,8 +239,8 @@ _gtk_border_image_render (GtkBorderImage   *image,
   double source_width, source_height;
   int h, v;
 
-  if (image->width != NULL)
-    border_width = image->width;
+  if (image->has_width)
+    border_width = &image->width;
 
   _gtk_css_image_get_concrete_size (image->source,
                                     0, 0,

@@ -1545,24 +1545,20 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
   GtkStateFlags flags;
   GtkBorderStyle border_style;
   GtkJunctionSides junction;
-  GtkBorderImage *border_image;
+  GtkBorderImage border_image;
   GtkBorder border;
 
   flags = gtk_theming_engine_get_state (engine);
   junction = gtk_theming_engine_get_junction_sides (engine);
   gtk_theming_engine_get_border (engine, flags, &border);
 
-  border_image = _gtk_border_image_new_for_engine (engine);
   gtk_theming_engine_get (engine, flags,
 			  "border-style", &border_style,
 			  NULL);
 
-  if (border_image != NULL)
-    {
-      _gtk_border_image_render (border_image, &border,
-                                cr, x, y, width, height);
-      _gtk_border_image_unref (border_image);
-    }
+  if (_gtk_border_image_init (&border_image, engine))
+    _gtk_border_image_render (&border_image, &border,
+                              cr, x, y, width, height);
   else if (border_style != GTK_BORDER_STYLE_NONE)
     render_frame_internal (engine, cr,
                            x, y, width, height,
@@ -1912,7 +1908,7 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   GtkCssBorderCornerRadius *top_left_radius, *top_right_radius;
   GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
   gdouble x0, y0, x1, y1, xc, yc, wc, hc;
-  GtkBorderImage *border_image;
+  GtkBorderImage border_image;
   GtkBorder border;
 
   xc = yc = wc = hc = 0;
@@ -1920,7 +1916,6 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   junction = gtk_theming_engine_get_junction_sides (engine);
 
   gtk_theming_engine_get_border (engine, state, &border);
-  border_image = _gtk_border_image_new_for_engine (engine);
   gtk_theming_engine_get (engine, state,
 			  "border-top-left-radius", &top_left_radius,
 			  "border-top-right-radius", &top_right_radius,
@@ -1995,12 +1990,9 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   cairo_rectangle (cr, x0, yc + hc, x1 - x0, y1 - (yc + hc));
   cairo_clip (cr);
 
-  if (border_image != NULL)
-    {
-      _gtk_border_image_render (border_image, &border,
-                                cr, x, y, width, height);
-      _gtk_border_image_unref (border_image);
-    }
+  if (_gtk_border_image_init (&border_image, engine))
+    _gtk_border_image_render (&border_image, &border,
+                              cr, x, y, width, height);
   else
     render_frame_internal (engine, cr,
 			   x, y, width, height,
