@@ -28,6 +28,7 @@
 #include "gtkcssimageprivate.h"
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gtkprivatetypebuiltins.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -270,6 +271,72 @@ parse_font (GtkCssShorthandProperty *shorthand,
     }
 
   pango_font_description_free (desc);
+
+  return TRUE;
+}
+
+static gboolean
+parse_background (GtkCssShorthandProperty *shorthand,
+                  GValue                  *values,
+                  GtkCssParser            *parser,
+                  GFile                   *base)
+{
+  int enum_value;
+
+  do
+    {
+      /* the image part */
+      if (!G_IS_VALUE (&values[0]) &&
+          (_gtk_css_parser_has_prefix (parser, "none") ||
+           _gtk_css_image_can_parse (parser)))
+        {
+          GtkCssImage *image;
+
+          if (_gtk_css_parser_try (parser, "none", TRUE))
+            image = NULL;
+          else
+            {
+              image = _gtk_css_image_new_parse (parser, base);
+              if (image == NULL)
+                return FALSE;
+            }
+
+          g_value_init (&values[0], GTK_TYPE_CSS_IMAGE);
+          g_value_take_object (&values[0], image);
+        }
+      else if (!G_IS_VALUE (&values[1]) &&
+               _gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT, &enum_value))
+        {
+          g_value_init (&values[1], GTK_TYPE_CSS_BACKGROUND_REPEAT);
+          g_value_set_enum (&values[1], enum_value);
+        }
+      else if ((!G_IS_VALUE (&values[2]) || !G_IS_VALUE (&values[3])) &&
+               _gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_AREA, &enum_value))
+        {
+          guint idx = !G_IS_VALUE (&values[2]) ? 2 : 3;
+          g_value_init (&values[idx], GTK_TYPE_CSS_AREA);
+          g_value_set_enum (&values[idx], enum_value);
+        }
+      else if (!G_IS_VALUE (&values[4]))
+        {
+          GtkSymbolicColor *symbolic;
+          
+          symbolic = _gtk_css_parser_read_symbolic_color (parser);
+          if (symbolic == NULL)
+            return FALSE;
+
+          g_value_init (&values[4], GTK_TYPE_SYMBOLIC_COLOR);
+          g_value_take_boxed (&values[4], symbolic);
+        }
+      else
+        {
+          /* We parsed everything and there's still stuff left?
+           * Pretend we didn't notice and let the normal code produce
+           * a 'junk at end of value' error */
+          break;
+        }
+    }
+  while (!value_is_done_parsing (parser));
 
   return TRUE;
 }
@@ -639,6 +706,8 @@ _gtk_css_shorthand_property_init_properties (void)
                                                 "border-bottom-right-radius", "border-bottom-left-radius", NULL };
   const char *border_color_subproperties[] = { "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", NULL };
   const char *border_image_subproperties[] = { "border-image-source", "border-image-slice", "border-image-width", "border-image-repeat", NULL };
+  const char *background_subproperties[] = { "background-image", "background-repeat", "background-clip", "background-origin",
+                                             "background-color", NULL };
 
   _gtk_css_shorthand_property_register   ("font",
                                           PANGO_TYPE_FONT_DESCRIPTION,
@@ -680,6 +749,12 @@ _gtk_css_shorthand_property_init_properties (void)
                                           G_TYPE_NONE,
                                           border_image_subproperties,
                                           parse_border_image,
+                                          NULL,
+                                          NULL);
+  _gtk_css_shorthand_property_register   ("background",
+                                          G_TYPE_NONE,
+                                          background_subproperties,
+                                          parse_background,
                                           NULL,
                                           NULL);
 }
