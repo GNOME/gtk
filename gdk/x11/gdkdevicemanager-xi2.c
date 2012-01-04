@@ -1206,7 +1206,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
               event->button.button = xev->detail;
           }
 
-        if (xev->flags & XIPointerEmulated)
+        if (xev->flags & (XIPointerEmulated | XITouchEmulatingPointer))
           _gdk_event_set_pointer_emulated (event, TRUE);
 
         if (return_val == FALSE)
@@ -1264,7 +1264,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 	if (ev->evtype == XI_TouchUpdate)
           event->motion.state |= GDK_BUTTON1_MASK;
 
-        if (xev->flags & XIPointerEmulated)
+        if (xev->flags & (XIPointerEmulated | XITouchEmulatingPointer))
           _gdk_event_set_pointer_emulated (event, TRUE);
 
         /* There doesn't seem to be motion hints in XI */
