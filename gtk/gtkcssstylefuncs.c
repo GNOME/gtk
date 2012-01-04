@@ -1062,35 +1062,6 @@ shadow_value_compute (GValue          *computed,
 }
 
 static gboolean
-background_repeat_value_parse (GtkCssParser *parser,
-                               GFile *file,
-                               GValue *value)
-{
-  GtkCssBackgroundRepeat repeat;
-  int style;
-
-  if (!enum_parse (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT_STYLE, &style))
-    return FALSE;
-
-  repeat.repeat = style;
-
-  g_value_set_boxed (value, &repeat);
-
-  return TRUE;
-}
-
-static void
-background_repeat_value_print (const GValue *value,
-                               GString      *string)
-{
-  GtkCssBackgroundRepeat *repeat;
-
-  repeat = g_value_get_boxed (value);
-
-  enum_print (repeat->repeat, GTK_TYPE_CSS_BACKGROUND_REPEAT_STYLE, string);
-}
-
-static gboolean
 border_image_repeat_value_parse (GtkCssParser *parser,
                                  GFile *file,
                                  GValue *value)
@@ -1318,10 +1289,6 @@ gtk_css_style_funcs_init (void)
   register_conversion_function (G_TYPE_FLAGS,
                                 flags_value_parse,
                                 flags_value_print,
-                                NULL);
-  register_conversion_function (GTK_TYPE_CSS_BACKGROUND_REPEAT,
-                                background_repeat_value_parse,
-                                background_repeat_value_print,
                                 NULL);
 }
 

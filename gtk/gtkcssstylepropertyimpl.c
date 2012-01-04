@@ -448,7 +448,6 @@ _gtk_css_style_property_init_properties (void)
   GdkRGBA rgba;
   GtkCssBorderCornerRadius no_corner_radius = { 0, };
   GtkBorder border_of_ones = { 1, 1, 1, 1 };
-  GtkCssBackgroundRepeat background_repeat = { GTK_CSS_BACKGROUND_REPEAT_STYLE_REPEAT };
   GtkCssBorderImageRepeat border_image_repeat = { GTK_CSS_REPEAT_STYLE_STRETCH, GTK_CSS_REPEAT_STYLE_STRETCH };
 
   /* Initialize "color" and "font-size" first,
@@ -711,7 +710,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          &background_repeat);
+                                          GTK_CSS_BACKGROUND_REPEAT);
   g_value_init (&value, GTK_TYPE_CSS_IMAGE);
   _gtk_style_property_register           ("background-image",
                                           CAIRO_GOBJECT_TYPE_PATTERN,

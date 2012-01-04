@@ -116,7 +116,7 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
 
   if (bg->image)
     {
-      GtkCssBackgroundRepeat *repeat;
+      GtkCssBackgroundRepeat repeat;
       double image_width, image_height;
 
       gtk_theming_engine_get (bg->engine, bg->flags,
