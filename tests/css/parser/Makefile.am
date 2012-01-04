@@ -149,6 +149,8 @@ EXTRA_DIST += \
 	at-valid-21.css \
 	at-valid-21.errors \
 	at-valid-21.ref.css \
+	background-shorthand.css \
+	background-shorthand.ref.css \
 	boolean.css \
 	boolean.errors \
 	boolean.ref.css \
