@@ -25,7 +25,7 @@
 #include <cairo-gobject.h>
 #include <math.h>
 
-#include "gtkborderimageprivate.h"
+#include "gtkcssimageprivate.h"
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypesprivate.h"
 
@@ -677,9 +677,9 @@ _gtk_css_shorthand_property_init_properties (void)
                                           unpack_border_color,
                                           pack_border_color);
   _gtk_css_shorthand_property_register   ("border-image",
-                                          GTK_TYPE_BORDER_IMAGE,
+                                          G_TYPE_NONE,
                                           border_image_subproperties,
                                           parse_border_image,
-                                          _gtk_border_image_unpack,
-                                          _gtk_border_image_pack);
+                                          NULL,
+                                          NULL);
 }
