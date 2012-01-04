@@ -26,18 +26,12 @@
 
 #include "gtkborder.h"
 #include "gtkcssimageprivate.h"
-#include "gtkstyleproperties.h"
 #include "gtkthemingengine.h"
 #include "gtkcsstypesprivate.h"
-#include "gtkstylecontextprivate.h"
 
 G_BEGIN_DECLS
 
 typedef struct _GtkBorderImage GtkBorderImage;
-
-#define GTK_TYPE_BORDER_IMAGE (_gtk_border_image_get_type ())
-
-GType             _gtk_border_image_get_type         (void) G_GNUC_CONST;
 
 GtkBorderImage *  _gtk_border_image_new              (GtkCssImage          *source,
                                                       GtkBorder            *slice,
@@ -55,12 +49,6 @@ void              _gtk_border_image_render           (GtkBorderImage       *imag
                                                       gdouble               y,
                                                       gdouble               width,
                                                       gdouble               height);
-
-GParameter *      _gtk_border_image_unpack           (const GValue         *value,
-                                                      guint                *n_params);
-void              _gtk_border_image_pack             (GValue               *value,
-                                                      GtkStyleProperties   *props,
-                                                      GtkStateFlags         state);
 
 G_END_DECLS
 

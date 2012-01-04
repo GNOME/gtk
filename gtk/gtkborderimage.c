@@ -35,9 +35,6 @@
  */
 #include "fallback-c89.c"
 
-G_DEFINE_BOXED_TYPE (GtkBorderImage, _gtk_border_image,
-                     _gtk_border_image_ref, _gtk_border_image_unref)
-
 struct _GtkBorderImage {
   GtkCssImage *source;
 
@@ -114,74 +111,6 @@ _gtk_border_image_unref (GtkBorderImage *image)
 
       g_slice_free (GtkBorderImage, image);
     }
-}
-
-GParameter *
-_gtk_border_image_unpack (const GValue *value,
-                          guint        *n_params)
-{
-  GParameter *parameter = g_new0 (GParameter, 4);
-  GtkBorderImage *image = g_value_get_boxed (value);
-
-  parameter[0].name = "border-image-source";
-  g_value_init (&parameter[0].value, GTK_TYPE_CSS_IMAGE);
-
-  parameter[1].name = "border-image-slice";
-  g_value_init (&parameter[1].value, GTK_TYPE_BORDER);
-
-  parameter[2].name = "border-image-repeat";
-  g_value_init (&parameter[2].value, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
-
-  parameter[3].name = "border-image-width";
-  g_value_init (&parameter[3].value, GTK_TYPE_BORDER);
-
-  if (image != NULL)
-    {
-      g_value_set_object (&parameter[0].value, image->source);
-      g_value_set_boxed (&parameter[1].value, &image->slice);
-      g_value_set_boxed (&parameter[2].value, &image->repeat);
-      g_value_set_boxed (&parameter[3].value, image->width);
-    }
-
-  *n_params = 4;
-  return parameter;
-}
-
-void
-_gtk_border_image_pack (GValue             *value,
-                        GtkStyleProperties *props,
-                        GtkStateFlags       state)
-{
-  GtkBorderImage *image;
-  GtkBorder *slice, *width;
-  GtkCssBorderImageRepeat *repeat;
-  GtkCssImage *source;
-  const GValue *val;
-
-  val = _gtk_style_properties_peek_property (props,
-                                             GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("border-image-source")),
-                                             state);
-  source = g_value_get_object (val);
-  if (source == NULL)
-    return;
-
-  gtk_style_properties_get (props, state,
-			    "border-image-slice", &slice,
-			    "border-image-repeat", &repeat,
-			    "border-image-width", &width,
-			    NULL);
-
-  image = _gtk_border_image_new (source, slice, width, repeat);
-  g_value_take_boxed (value, image);
-
-  if (slice != NULL)
-    gtk_border_free (slice);
-
-  if (width != NULL)
-    gtk_border_free (width);
-
-  if (repeat != NULL)
-    g_free (repeat);
 }
 
 typedef struct _GtkBorderImageSliceSize GtkBorderImageSliceSize;
