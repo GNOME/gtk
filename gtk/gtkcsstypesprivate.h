@@ -51,7 +51,6 @@ typedef enum {
 typedef struct _GtkCssBackgroundRepeat GtkCssBackgroundRepeat;
 
 typedef struct _GtkCssBorderCornerRadius GtkCssBorderCornerRadius;
-typedef struct _GtkCssBorderRadius GtkCssBorderRadius;
 typedef struct _GtkCssBorderImageRepeat GtkCssBorderImageRepeat;
 
 struct _GtkCssBackgroundRepeat {
@@ -62,13 +61,6 @@ struct _GtkCssBackgroundRepeat {
 struct _GtkCssBorderCornerRadius {
   double horizontal;
   double vertical;
-};
-
-struct _GtkCssBorderRadius {
-  GtkCssBorderCornerRadius top_left;
-  GtkCssBorderCornerRadius top_right;
-  GtkCssBorderCornerRadius bottom_right;
-  GtkCssBorderCornerRadius bottom_left;
 };
 
 struct _GtkCssBorderImageRepeat {
