@@ -47,10 +47,10 @@ value_is_done_parsing (GtkCssParser *parser)
 }
 
 static gboolean
-parse_border (GtkCssShorthandProperty *shorthand,
-              GValue                  *values,
-              GtkCssParser            *parser,
-              GFile                   *base)
+parse_border_width (GtkCssShorthandProperty *shorthand,
+                    GValue                  *values,
+                    GtkCssParser            *parser,
+                    GFile                   *base)
 {
   GValue temp = G_VALUE_INIT;
   GtkBorder *border;
@@ -77,7 +77,7 @@ parse_border (GtkCssShorthandProperty *shorthand,
 
   return TRUE;
 }
-                    
+
 static gboolean 
 parse_border_radius (GtkCssShorthandProperty *shorthand,
                      GValue                  *values,
@@ -809,19 +809,19 @@ _gtk_css_shorthand_property_init_properties (void)
   _gtk_css_shorthand_property_register   ("margin",
                                           GTK_TYPE_BORDER,
                                           margin_subproperties,
-                                          parse_border,
+                                          parse_border_width,
                                           unpack_margin,
                                           pack_margin);
   _gtk_css_shorthand_property_register   ("padding",
                                           GTK_TYPE_BORDER,
                                           padding_subproperties,
-                                          parse_border,
+                                          parse_border_width,
                                           unpack_padding,
                                           pack_padding);
   _gtk_css_shorthand_property_register   ("border-width",
                                           GTK_TYPE_BORDER,
                                           border_width_subproperties,
-                                          parse_border,
+                                          parse_border_width,
                                           unpack_border_width,
                                           pack_border_width);
   _gtk_css_shorthand_property_register   ("border-radius",
