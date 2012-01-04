@@ -43,6 +43,7 @@ GtkBorderImage *  _gtk_border_image_new              (GtkCssImage          *sour
                                                       GtkBorder            *slice,
                                                       GtkBorder            *width,
                                                       GtkCssBorderImageRepeat *repeat);
+GtkBorderImage *  _gtk_border_image_new_for_engine   (GtkThemingEngine     *engine);
 
 GtkBorderImage *  _gtk_border_image_ref              (GtkBorderImage       *image);
 void              _gtk_border_image_unref            (GtkBorderImage       *image);

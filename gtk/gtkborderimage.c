@@ -28,6 +28,7 @@
 
 #include "gtkborderimageprivate.h"
 #include "gtkstylepropertiesprivate.h"
+#include "gtkthemingengineprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -70,6 +71,21 @@ _gtk_border_image_new (GtkCssImage             *source,
     image->repeat = *repeat;
 
   return image;
+}
+
+GtkBorderImage *
+_gtk_border_image_new_for_engine (GtkThemingEngine *engine)
+{
+  GtkCssImage *source;
+
+  source = g_value_get_object (_gtk_theming_engine_peek_property (engine, "border-image-source"));
+  if (source == NULL)
+    return NULL;
+
+  return _gtk_border_image_new (source,
+                                g_value_get_boxed (_gtk_theming_engine_peek_property (engine, "border-image-slice")),
+                                g_value_get_boxed (_gtk_theming_engine_peek_property (engine, "border-image-width")),
+                                g_value_get_boxed (_gtk_theming_engine_peek_property (engine, "border-image-repeat")));
 }
 
 GtkBorderImage *

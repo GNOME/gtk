@@ -1552,8 +1552,8 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
   junction = gtk_theming_engine_get_junction_sides (engine);
   gtk_theming_engine_get_border (engine, flags, &border);
 
+  border_image = _gtk_border_image_new_for_engine (engine);
   gtk_theming_engine_get (engine, flags,
-			  "border-image", &border_image,
 			  "border-style", &border_style,
 			  NULL);
 
@@ -1920,8 +1920,8 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   junction = gtk_theming_engine_get_junction_sides (engine);
 
   gtk_theming_engine_get_border (engine, state, &border);
+  border_image = _gtk_border_image_new_for_engine (engine);
   gtk_theming_engine_get (engine, state,
-			  "border-image", &border_image,
 			  "border-top-left-radius", &top_left_radius,
 			  "border-top-right-radius", &top_right_radius,
 			  "border-bottom-right-radius", &bottom_right_radius,
