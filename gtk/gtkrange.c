@@ -2347,15 +2347,11 @@ range_grab_add (GtkRange      *range,
   if (device == priv->grab_device)
     return;
 
-  if (priv->grab_device != NULL)
-    {
-      g_warning ("GtkRange already had a grab device, releasing device grab");
-      gtk_device_grab_remove (GTK_WIDGET (range), priv->grab_device);
-    }
-
-  /* we don't actually gdk_grab, since a button is down */
-  gtk_device_grab_add (GTK_WIDGET (range), device, TRUE);
-
+  /* Don't perform any GDK/GTK+ grab here. Since a button
+   * is down, there's an ongoing implicit grab on
+   * priv->event_window, which pretty much guarantees this
+   * is the only widget receiving the pointer events.
+   */
   priv->grab_location = location;
   priv->grab_button = button;
   priv->grab_device = device;
