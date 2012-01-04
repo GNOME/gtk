@@ -2524,7 +2524,8 @@ gtk_range_button_press (GtkWidget      *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  GdkDevice *device;
+  GdkDevice *device, *source_device;
+  GdkInputSource source;
 
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
@@ -2534,6 +2535,9 @@ gtk_range_button_press (GtkWidget      *widget,
     return FALSE;
 
   device = gdk_event_get_device ((GdkEvent *) event);
+  source_device = gdk_event_get_source_device ((GdkEvent *) event);
+  source = gdk_device_get_source (source_device);
+
   priv->mouse_x = event->x;
   priv->mouse_y = event->y;
 
@@ -2550,7 +2554,8 @@ gtk_range_button_press (GtkWidget      *widget,
       return TRUE;
     }
 
-  if (priv->mouse_location == MOUSE_TROUGH  &&
+  if (source != GDK_SOURCE_TOUCH &&
+      priv->mouse_location == MOUSE_TROUGH &&
       event->button == GDK_BUTTON_PRIMARY)
     {
       /* button 1 steps by page increment, as with button 2 on a stepper
@@ -2601,17 +2606,17 @@ gtk_range_button_press (GtkWidget      *widget,
       return TRUE;
     }
   else if ((priv->mouse_location == MOUSE_TROUGH &&
-            event->button == GDK_BUTTON_MIDDLE) ||
+            (source == GDK_SOURCE_TOUCH || event->button == GDK_BUTTON_MIDDLE)) ||
            priv->mouse_location == MOUSE_SLIDER)
     {
       gboolean need_value_update = FALSE;
 
       /* Any button can be used to drag the slider, but you can start
        * dragging the slider with a trough click using button 2;
-       * On button 2 press, we warp the slider to mouse position,
-       * then begin the slider drag.
+       * On button 2 press and touch devices, we warp the slider to
+       * mouse position, then begin the slider drag.
        */
-      if (event->button == GDK_BUTTON_MIDDLE)
+      if (event->button == GDK_BUTTON_MIDDLE || source == GDK_SOURCE_TOUCH)
         {
           gdouble slider_low_value, slider_high_value, new_value;
           
