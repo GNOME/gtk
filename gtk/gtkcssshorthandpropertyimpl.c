@@ -616,9 +616,6 @@ _gtk_css_shorthand_property_register (const char                        *name,
 {
   GtkStyleProperty *node;
 
-  g_return_if_fail (pack_func != NULL);
-  g_return_if_fail (unpack_func != NULL);
-
   node = g_object_new (GTK_TYPE_CSS_SHORTHAND_PROPERTY,
                        "name", name,
                        "value-type", value_type,
