@@ -313,9 +313,8 @@ _gtk_css_image_get_surface (GtkCssImage     *image,
   return result;
 }
 
-GtkCssImage *
-_gtk_css_image_new_parse (GtkCssParser *parser,
-                          GFile        *base)
+GType
+gtk_css_image_get_parser_type (GtkCssParser *parser)
 {
   static const struct {
     const char *prefix;
@@ -327,30 +326,59 @@ _gtk_css_image_new_parse (GtkCssParser *parser,
   };
   guint i;
 
-  g_return_val_if_fail (parser != NULL, NULL);
-  g_return_val_if_fail (G_IS_FILE (base), NULL);
-
   for (i = 0; i < G_N_ELEMENTS (image_types); i++)
     {
       if (_gtk_css_parser_has_prefix (parser, image_types[i].prefix))
-        {
-          GtkCssImage *image;
-          GtkCssImageClass *klass;
-
-          image = g_object_new (image_types[i].type_func (), NULL);
-
-          klass = GTK_CSS_IMAGE_GET_CLASS (image);
-          if (!klass->parse (image, parser, base))
-            {
-              g_object_unref (image);
-              return NULL;
-            }
-
-          return image;
-        }
+        return image_types[i].type_func ();
     }
 
-  _gtk_css_parser_error (parser, "Not a valid image");
-  return NULL;
+  return G_TYPE_INVALID;
+}
+
+/**
+ * _gtk_css_image_can_parse:
+ * @parser: a css parser
+ *
+ * Checks if the parser can potentially parse the given stream as an
+ * image from looking at the first token of @parser. This is useful for
+ * implementing shorthand properties. A successful parse of an image
+ * can not be guaranteed.
+ *
+ * Returns: %TURE if it looks like an image.
+ **/
+gboolean
+_gtk_css_image_can_parse (GtkCssParser *parser)
+{
+  return gtk_css_image_get_parser_type (parser) != G_TYPE_INVALID;
+}
+
+GtkCssImage *
+_gtk_css_image_new_parse (GtkCssParser *parser,
+                          GFile        *base)
+{
+  GtkCssImageClass *klass;
+  GtkCssImage *image;
+  GType image_type;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+  g_return_val_if_fail (G_IS_FILE (base), NULL);
+
+  image_type = gtk_css_image_get_parser_type (parser);
+  if (image_type == G_TYPE_INVALID)
+    {
+      _gtk_css_parser_error (parser, "Not a valid image");
+      return NULL;
+    }
+
+  image = g_object_new (image_type, NULL);
+
+  klass = GTK_CSS_IMAGE_GET_CLASS (image);
+  if (!klass->parse (image, parser, base))
+    {
+      g_object_unref (image);
+      return NULL;
+    }
+
+  return image;
 }
 
