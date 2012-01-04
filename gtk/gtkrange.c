@@ -2522,7 +2522,8 @@ gtk_range_button_press (GtkWidget      *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  GdkDevice *device;
+  GdkDevice *device, *source_device;
+  GdkInputSource source;
 
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
@@ -2532,6 +2533,9 @@ gtk_range_button_press (GtkWidget      *widget,
     return FALSE;
 
   device = gdk_event_get_device ((GdkEvent *) event);
+  source_device = gdk_event_get_source_device ((GdkEvent *) event);
+  source = gdk_device_get_source (source_device);
+
   priv->mouse_x = event->x;
   priv->mouse_y = event->y;
 
@@ -2548,23 +2552,24 @@ gtk_range_button_press (GtkWidget      *widget,
       return TRUE;
     }
 
-  if (priv->mouse_location == MOUSE_TROUGH  &&
+  if (source != GDK_SOURCE_TOUCHSCREEN &&
+      priv->mouse_location == MOUSE_TROUGH &&
       event->button == GDK_BUTTON_PRIMARY)
     {
       /* button 1 steps by page increment, as with button 2 on a stepper
        */
       GtkScrollType scroll;
       gdouble click_value;
-      
+
       click_value = coord_to_value (range,
                                     priv->orientation == GTK_ORIENTATION_VERTICAL ?
                                     event->y : event->x);
 
       priv->trough_click_forward = click_value > gtk_adjustment_get_value (priv->adjustment);
       range_grab_add (range, device, MOUSE_TROUGH, event->button);
-      
+
       scroll = range_get_scroll_for_grab (range);
-      
+
       gtk_range_add_step_timer (range, scroll);
 
       return TRUE;
@@ -2599,17 +2604,17 @@ gtk_range_button_press (GtkWidget      *widget,
       return TRUE;
     }
   else if ((priv->mouse_location == MOUSE_TROUGH &&
-            event->button == GDK_BUTTON_MIDDLE) ||
+            (source == GDK_SOURCE_TOUCHSCREEN || event->button == GDK_BUTTON_MIDDLE)) ||
            priv->mouse_location == MOUSE_SLIDER)
     {
       gboolean need_value_update = FALSE;
 
       /* Any button can be used to drag the slider, but you can start
        * dragging the slider with a trough click using button 2;
-       * On button 2 press, we warp the slider to mouse position,
-       * then begin the slider drag.
+       * On button 2 press and touch devices, we warp the slider to
+       * mouse position, then begin the slider drag.
        */
-      if (event->button == GDK_BUTTON_MIDDLE)
+      if (event->button == GDK_BUTTON_MIDDLE || source == GDK_SOURCE_TOUCHSCREEN)
         {
           gdouble slider_low_value, slider_high_value, new_value;
           
