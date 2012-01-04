@@ -2027,7 +2027,7 @@ hex_changed (GtkWidget *hex_entry,
 {
   GtkColorSelection *colorsel;
   GtkColorSelectionPrivate *priv;
-  GdkColor color;
+  GdkRGBA color;
   gchar *text;
 
   colorsel = GTK_COLOR_SELECTION (data);
@@ -2037,11 +2037,11 @@ hex_changed (GtkWidget *hex_entry,
     return;
 
   text = gtk_editable_get_chars (GTK_EDITABLE (priv->hex_entry), 0, -1);
-  if (gdk_color_parse (text, &color))
+  if (gdk_rgba_parse (&color, text))
     {
-      priv->color[COLORSEL_RED]   = CLAMP (color.red   / 65535.0, 0.0, 1.0);
-      priv->color[COLORSEL_GREEN] = CLAMP (color.green / 65535.0, 0.0, 1.0);
-      priv->color[COLORSEL_BLUE]  = CLAMP (color.blue  / 65535.0, 0.0, 1.0);
+      priv->color[COLORSEL_RED]   = color.red;
+      priv->color[COLORSEL_GREEN] = color.green;
+      priv->color[COLORSEL_BLUE]  = color.blue;
       gtk_rgb_to_hsv (priv->color[COLORSEL_RED],
                       priv->color[COLORSEL_GREEN],
                       priv->color[COLORSEL_BLUE],
