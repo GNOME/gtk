@@ -816,7 +816,8 @@ gtk_spin_button_panel_get_state (GtkSpinButton *spin_button,
   GtkStateFlags state;
   GtkSpinButtonPrivate *priv = spin_button->priv;
 
-  if (gtk_spin_button_panel_at_limit (spin_button, panel))
+  if (gtk_spin_button_panel_at_limit (spin_button, panel) ||
+      !gtk_editable_get_editable (GTK_EDITABLE (spin_button)))
     state = GTK_STATE_FLAG_INSENSITIVE;
   else
     {
