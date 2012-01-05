@@ -2,15 +2,31 @@
  *
  * Demonstrates some general multitouch event handling,
  * using GdkTouchCluster in order to get grouped motion
- * events for the touches within a cluster.
+ * events for the touches within a cluster. Each of the
+ * created rectangles has one of those GdkTouchCluster
+ * objects.
+ *
+ * Touch events are also enabled on additional widgets,
+ * enabling simultaneous touch interaction on those. Not
+ * all widgets are prepared for multitouch interaction,
+ * as there are constraints that not all widgets may
+ * apply to.
  */
 
 #include <math.h>
 #include <gtk/gtk.h>
 #include "demo-common.h"
 
+#define RECT_BORDER_WIDTH 6
+
 static GtkWidget *window = NULL;
-static GList *shapes = NULL;
+static GtkWidget *area = NULL;
+static GtkWidget *red = NULL;
+static GtkWidget *green = NULL;
+static GtkWidget *blue = NULL;
+static GtkWidget *alpha = NULL;
+
+static GQueue *shapes = NULL;
 
 typedef struct {
   GdkTouchCluster *cluster;
@@ -265,7 +281,7 @@ shape_info_new (gdouble  x,
 
   shape_info_allocate_input_rect (info);
 
-  shapes = g_list_prepend (shapes, info);
+  g_queue_push_tail (shapes, info);
 
   return info;
 }
@@ -282,19 +298,64 @@ shape_info_draw (cairo_t   *cr,
 {
   cairo_save (cr);
 
-  cairo_translate (cr, info->points[0].x, info->points[0].y);
+  cairo_translate (cr,
+                   info->points[0].x + RECT_BORDER_WIDTH / 2,
+                   info->points[0].y + RECT_BORDER_WIDTH / 2);
+
   cairo_scale (cr, info->zoom, info->zoom);
   cairo_rotate (cr, info->angle);
 
-  cairo_rectangle (cr, 0, 0, info->width, info->height);
+  cairo_rectangle (cr, 0, 0,
+                   info->width - RECT_BORDER_WIDTH,
+                   info->height - RECT_BORDER_WIDTH);
   gdk_cairo_set_source_rgba (cr, &info->color);
   cairo_fill_preserve (cr);
 
-  cairo_set_line_width (cr, 6);
+  cairo_set_line_width (cr, RECT_BORDER_WIDTH);
   cairo_set_source_rgb (cr, 0, 0, 0);
   cairo_stroke (cr);
 
   cairo_restore (cr);
+}
+
+static void
+shape_update_scales (ShapeInfo *info)
+{
+  gtk_range_set_value (GTK_RANGE (red), info->color.red);
+  gtk_range_set_value (GTK_RANGE (green), info->color.green);
+  gtk_range_set_value (GTK_RANGE (blue), info->color.blue);
+  gtk_range_set_value (GTK_RANGE (alpha), info->color.alpha);
+}
+
+static void
+range_value_changed_cb (GtkRange *range,
+                        gpointer  user_data)
+{
+  GtkWidget *widget;
+  GdkRectangle rect;
+  ShapeInfo *shape;
+  gdouble value;
+
+  widget = GTK_WIDGET (range);
+  shape = g_queue_peek_head (shapes);
+
+  if (!shape)
+    return;
+
+  value = gtk_range_get_value (range);
+
+  if (widget == red)
+    shape->color.red = value;
+  else if (widget == green)
+    shape->color.green = value;
+  else if (widget == blue)
+    shape->color.blue = value;
+  else if (widget == alpha)
+    shape->color.alpha = value;
+
+  shape_info_bounding_rect (shape, &rect);
+  gdk_window_invalidate_rect (gtk_widget_get_window (area),
+                              &rect, FALSE);
 }
 
 static gboolean
@@ -304,8 +365,15 @@ draw_cb (GtkWidget *widget,
 {
   GList *l;
 
-  for (l = shapes; l; l = l->next)
+  cairo_save (cr);
+
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_paint (cr);
+
+  for (l = shapes->tail; l; l = l->prev)
     shape_info_draw (cr, l->data);
+
+  cairo_restore (cr);
 
   return FALSE;
 }
@@ -322,7 +390,7 @@ button_press_cb (GtkWidget *widget,
     {
       GList *l;
 
-      for (l = shapes; l; l = l->next)
+      for (l = shapes->tail; l; l = l->prev)
         {
           ShapeInfo *info = l->data;
 
@@ -334,6 +402,12 @@ button_press_cb (GtkWidget *widget,
 
       if (!shape)
         return FALSE;
+
+      /* Put on top */
+      g_queue_remove (shapes, shape);
+      g_queue_push_head (shapes, shape);
+
+      shape_update_scales (shape);
 
       if (!shape->cluster)
         shape->cluster = gdk_window_create_touch_cluster (gtk_widget_get_window (widget));
@@ -364,7 +438,7 @@ multitouch_cb (GtkWidget *widget,
   GdkRectangle rect;
   GList *l;
 
-  for (l = shapes; l; l = l->next)
+  for (l = shapes->head; l; l = l->next)
     {
       ShapeInfo *shape = l->data;
 
@@ -456,47 +530,156 @@ multitouch_cb (GtkWidget *widget,
   return TRUE;
 }
 
+static void
+window_destroyed_cb (GtkWidget *widget,
+                     gpointer   user_data)
+{
+  g_queue_foreach (shapes, (GFunc) shape_info_free, NULL);
+  g_queue_free (shapes);
+
+  shapes = NULL;
+  window = NULL;
+}
+
+static void
+new_rectangle_clicked_cb (GtkButton *button,
+                          gpointer   user_data)
+{
+  GdkRectangle rect;
+  ShapeInfo *info;
+  GdkRGBA color;
+
+  color.red = color.green = color.blue = color.alpha = 0.5;
+  info = shape_info_new (0, 0, 100, 150, &color);
+
+  shape_info_bounding_rect (info, &rect);
+  gdk_window_invalidate_rect (gtk_widget_get_window (area), &rect, FALSE);
+}
+
+GtkWidget *
+create_drawing_area (void)
+{
+  area = gtk_drawing_area_new ();
+
+  gtk_widget_add_events (area,
+                         GDK_TOUCH_MASK |
+                         GDK_POINTER_MOTION_MASK |
+                         GDK_BUTTON_PRESS_MASK |
+                         GDK_BUTTON_RELEASE_MASK);
+
+  gtk_widget_set_size_request (area, 600, 600);
+
+  g_signal_connect (area, "draw",
+                    G_CALLBACK (draw_cb), NULL);
+  g_signal_connect (area, "button-press-event",
+                    G_CALLBACK (button_press_cb), NULL);
+  g_signal_connect (area, "multitouch-event",
+                    G_CALLBACK (multitouch_cb), NULL);
+
+  return area;
+}
+
+GtkWidget *
+create_scale (void)
+{
+  GtkWidget *scale;
+
+  scale = gtk_scale_new_with_range (GTK_ORIENTATION_VERTICAL, 0, 1, 0.01);
+  gtk_range_set_inverted (GTK_RANGE (scale), TRUE);
+
+  gtk_widget_set_vexpand (scale, TRUE);
+  gtk_widget_set_margin_left (scale, 15);
+  gtk_widget_set_margin_right (scale, 15);
+
+  gtk_widget_add_events (scale, GDK_TOUCH_MASK);
+
+  g_signal_connect (scale, "value-changed",
+                    G_CALLBACK (range_value_changed_cb), NULL);
+  return scale;
+}
+
+GtkWidget *
+create_window (void)
+{
+  GtkWidget *grid, *label, *button;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "Multitouch demo");
+  g_signal_connect (window, "destroy",
+                    G_CALLBACK (window_destroyed_cb), NULL);
+
+  grid = gtk_grid_new ();
+  gtk_container_add (GTK_CONTAINER (window), grid);
+
+  area = create_drawing_area ();
+  gtk_grid_attach (GTK_GRID (grid),
+                   area, 0, 0, 1, 3);
+  gtk_widget_set_hexpand (area, TRUE);
+  gtk_widget_set_vexpand (area, TRUE);
+
+  /* "red" label/scale */
+  label = gtk_label_new ("Red");
+  gtk_widget_set_vexpand (label, FALSE);
+  gtk_grid_attach (GTK_GRID (grid),
+                   label, 1, 0, 1, 1);
+
+  red = create_scale ();
+  gtk_grid_attach (GTK_GRID (grid),
+                   red, 1, 1, 1, 1);
+
+  /* "green" label/scale */
+  label = gtk_label_new ("Green");
+  gtk_widget_set_vexpand (label, FALSE);
+  gtk_grid_attach (GTK_GRID (grid),
+                   label, 2, 0, 1, 1);
+
+  green = create_scale ();
+  gtk_grid_attach (GTK_GRID (grid),
+                   green, 2, 1, 1, 1);
+
+  /* "blue" label/scale */
+  label = gtk_label_new ("Blue");
+  gtk_widget_set_vexpand (label, FALSE);
+  gtk_grid_attach (GTK_GRID (grid),
+                   label, 3, 0, 1, 1);
+
+  blue = create_scale ();
+  gtk_grid_attach (GTK_GRID (grid),
+                   blue, 3, 1, 1, 1);
+
+  /* "alpha" label/scale */
+  label = gtk_label_new ("Alpha");
+  gtk_widget_set_vexpand (label, FALSE);
+  gtk_grid_attach (GTK_GRID (grid),
+                   label, 4, 0, 1, 1);
+
+  alpha = create_scale ();
+  gtk_grid_attach (GTK_GRID (grid),
+                   alpha, 4, 1, 1, 1);
+
+  /* button */
+  button = gtk_button_new_from_stock (GTK_STOCK_NEW);
+  gtk_widget_add_events (button, GDK_TOUCH_MASK);
+  gtk_grid_attach (GTK_GRID (grid),
+                   button, 1, 2, 4, 1);
+  gtk_widget_set_vexpand (button, FALSE);
+
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (new_rectangle_clicked_cb), NULL);
+
+  gtk_widget_show_all (grid);
+
+  return window;
+}
+
 GtkWidget *
 do_multitouch (GtkWidget *do_widget)
 {
+  if (!shapes)
+    shapes = g_queue_new ();
+
   if (!window)
-    {
-      GdkRGBA color;
-
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_title (GTK_WINDOW (window), "Multitouch demo");
-      gtk_window_set_default_size (GTK_WINDOW (window), 600, 600);
-
-      gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
-
-      gtk_widget_add_events (window,
-                             GDK_TOUCH_MASK |
-                             GDK_POINTER_MOTION_MASK |
-                             GDK_BUTTON_PRESS_MASK |
-                             GDK_BUTTON_RELEASE_MASK);
-
-      gtk_widget_set_app_paintable (window, TRUE);
-
-      g_signal_connect (window, "draw",
-                        G_CALLBACK (draw_cb), NULL);
-      g_signal_connect (window, "button-press-event",
-                        G_CALLBACK (button_press_cb), NULL);
-      g_signal_connect (window, "multitouch-event",
-                        G_CALLBACK (multitouch_cb), NULL);
-
-      gdk_rgba_parse (&color, "red");
-      color.alpha = 0.5;
-      shape_info_new (100, 50, 100, 140, &color);
-
-      gdk_rgba_parse (&color, "green");
-      color.alpha = 0.5;
-      shape_info_new (200, 100, 120, 90, &color);
-
-      gdk_rgba_parse (&color, "blue");
-      color.alpha = 0.5;
-      shape_info_new (150, 190, 140, 90, &color);
-    }
+    window = create_window ();
 
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
@@ -505,8 +688,8 @@ do_multitouch (GtkWidget *do_widget)
       gtk_widget_destroy (window);
       window = NULL;
 
-      g_list_foreach (shapes, (GFunc) shape_info_free, NULL);
-      g_list_free (shapes);
+      g_queue_foreach (shapes, (GFunc) shape_info_free, NULL);
+      g_queue_free (shapes);
       shapes = NULL;
     }
 
