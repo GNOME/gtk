@@ -154,7 +154,7 @@ _gtk_css_selector_print (const GtkCssSelector *selector,
         "insensitive",
         "inconsistent",
         "focus",
-        "window-unfocused"
+        "backdrop"
       };
       guint i;
 

@@ -2073,7 +2073,7 @@ parse_selector_pseudo_class (GtkCssScanner  *scanner,
     { "inconsistent", 0, GTK_STATE_FLAG_INCONSISTENT },
     { "focused",      0, GTK_STATE_FLAG_FOCUSED },
     { "focus",        0, GTK_STATE_FLAG_FOCUSED },
-    { "window-unfocused", 0, GTK_STATE_FLAG_WINDOW_UNFOCUSED },
+    { "backdrop",     0, GTK_STATE_FLAG_BACKDROP },
     { NULL, }
   }, nth_child_classes[] = {
     { "first",        GTK_REGION_FIRST, 0 },

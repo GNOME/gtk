@@ -3783,8 +3783,8 @@ gtk_widget_unparent (GtkWidget *widget)
       gtk_widget_queue_compute_expand (old_parent);
     }
 
-  /* Unset window-unfocused since we are no longer inside a toplevel window */
-  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_WINDOW_UNFOCUSED);
+  /* Unset BACKDROP since we are no longer inside a toplevel window */
+  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_BACKDROP);
   if (priv->context)
     gtk_style_context_set_parent (priv->context, NULL);
 
