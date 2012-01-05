@@ -1581,9 +1581,10 @@ render_fallback_image (GtkStyle          *style,
       _gtk_icon_theme_ensure_builtin_cache ();
 
       index = _gtk_icon_cache_get_directory_index (_builtin_cache, "24");
-      pixbuf = _gtk_icon_cache_get_icon (_builtin_cache,
-					 GTK_STOCK_MISSING_IMAGE,
-					 index);
+      pixbuf = _gtk_icon_cache_get_icon (_builtin_cache, "image-missing", index);
+
+      g_return_val_if_fail(pixbuf != NULL, NULL);
+
       gtk_icon_source_set_pixbuf (&fallback_source, pixbuf);
       g_object_unref (pixbuf);
     }
