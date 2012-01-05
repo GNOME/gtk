@@ -29,8 +29,6 @@
 
 static GHashTable *listener_list = NULL;
 static gint listener_idx = 1;
-static GSList *key_listener_list = NULL;
-static guint key_snooper_id = 0;
 
 typedef struct _GailUtilListenerInfo GailUtilListenerInfo;
 typedef struct _GailKeyEventInfo GailKeyEventInfo;
@@ -320,125 +318,6 @@ gail_util_remove_global_event_listener (guint remove_listener)
   }
 }
 
-static AtkKeyEventStruct *
-atk_key_event_from_gdk_event_key (GdkEventKey *key)
-{
-  AtkKeyEventStruct *event = g_new0 (AtkKeyEventStruct, 1);
-  switch (key->type)
-    {
-    case GDK_KEY_PRESS:
-            event->type = ATK_KEY_EVENT_PRESS;
-            break;
-    case GDK_KEY_RELEASE:
-            event->type = ATK_KEY_EVENT_RELEASE;
-            break;
-    default:
-            g_assert_not_reached ();
-            return NULL;
-    }
-  event->state = key->state;
-  event->keyval = key->keyval;
-  event->length = key->length;
-  if (key->string && key->string [0] &&
-      (key->state & GDK_CONTROL_MASK ||
-       g_unichar_isgraph (g_utf8_get_char (key->string))))
-    {
-      event->string = key->string;
-    }
-  else if (key->type == GDK_KEY_PRESS ||
-           key->type == GDK_KEY_RELEASE)
-    {
-      event->string = gdk_keyval_name (key->keyval);
-    }
-  event->keycode = key->hardware_keycode;
-  event->timestamp = key->time;
-#ifdef GAIL_DEBUG
-  g_print ("GailKey:\tsym %u\n\tmods %x\n\tcode %u\n\ttime %lx\n",
-           (unsigned int) event->keyval,
-           (unsigned int) event->state,
-           (unsigned int) event->keycode,
-           (unsigned long int) event->timestamp);
-#endif
-  return event;
-}
-
-typedef struct {
-  AtkKeySnoopFunc func;
-  gpointer        data;
-  guint           key;
-} KeyEventListener;
-
-static gint
-gail_key_snooper (GtkWidget   *the_widget,
-                  GdkEventKey *event,
-                  gpointer     data)
-{
-  GSList *l;
-  AtkKeyEventStruct *atk_event;
-  gboolean result;
-
-  atk_event = atk_key_event_from_gdk_event_key (event);
-
-  result = FALSE;
-
-  for (l = key_listener_list; l; l = l->next)
-    {
-      KeyEventListener *listener = l->data;
-
-      result |= listener->func (atk_event, listener->data);
-    }
-  g_free (atk_event);
-
-  return result;
-}
-
-static guint
-gail_util_add_key_event_listener (AtkKeySnoopFunc  listener_func,
-                                  gpointer         listener_data)
-{
-  static guint key = 0;
-  KeyEventListener *listener;
-
-  if (key_snooper_id == 0)
-    key_snooper_id = gtk_key_snooper_install (gail_key_snooper, NULL);
-
-  key++;
-
-  listener = g_slice_new0 (KeyEventListener);
-  listener->func = listener_func;
-  listener->data = listener_data;
-  listener->key = key;
-
-  key_listener_list = g_slist_append (key_listener_list, listener);
-
-  return key;
-}
-
-static void
-gail_util_remove_key_event_listener (guint listener_key)
-{
-  GSList *l;
-
-  for (l = key_listener_list; l; l = l->next)
-    {
-      KeyEventListener *listener = l->data;
-
-      if (listener->key == listener_key)
-        {
-          g_slice_free (KeyEventListener, listener);
-          key_listener_list = g_slist_delete_link (key_listener_list, l);
-
-          break;
-        }
-    }
-
-  if (key_listener_list == NULL)
-    {
-      gtk_key_snooper_remove (key_snooper_id);
-      key_snooper_id = 0;
-    }
-}
-
 static AtkObject *
 gail_util_get_root (void)
 {
@@ -472,8 +351,6 @@ _gail_util_install (void)
 
   atk_class->add_global_event_listener = gail_util_add_global_event_listener;
   atk_class->remove_global_event_listener = gail_util_remove_global_event_listener;
-  atk_class->add_key_event_listener = gail_util_add_key_event_listener;
-  atk_class->remove_key_event_listener = gail_util_remove_key_event_listener;
   atk_class->get_root = gail_util_get_root;
   atk_class->get_toolkit_name = gail_util_get_toolkit_name;
   atk_class->get_toolkit_version = gail_util_get_toolkit_version;
