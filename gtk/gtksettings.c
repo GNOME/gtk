@@ -655,7 +655,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Color names must be acceptable as identifiers in the
    * <link linkend="gtk-Resource-Files">gtkrc</link> syntax, and
    * color specifications must be in the format accepted by
-   * gdk_rgba_parse().
+   * gdk_color_parse().
    *
    * Note that due to the way the color tables from different sources are
    * merged, color specifications will be converted to hexadecimal form
@@ -2775,7 +2775,7 @@ settings_update_color_scheme (GtkSettings *settings)
 
       data = g_slice_new0 (ColorSchemeData);
       data->color_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
-                                                (GDestroyNotify) gdk_rgba_free);
+                                                (GDestroyNotify) gdk_color_free);
       g_object_set_data_full (G_OBJECT (settings), "gtk-color-scheme",
                               data, (GDestroyNotify) color_scheme_data_free);
 
@@ -2876,15 +2876,15 @@ settings_update_key_theme (GtkSettings *settings)
 
 static gboolean
 add_color_to_hash (gchar      *name,
-                   GdkRGBA   *color,
+                   GdkColor   *color,
                    GHashTable *target)
 {
-  GdkRGBA *old;
+  GdkColor *old;
 
   old = g_hash_table_lookup (target, name);
-  if (!old || !gdk_rgba_equal (old, color))
+  if (!old || !gdk_color_equal (old, color))
     {
-      g_hash_table_insert (target, g_strdup (name), gdk_rgba_copy (color));
+      g_hash_table_insert (target, g_strdup (name), gdk_color_copy (color));
 
       return TRUE;
     }
@@ -2897,7 +2897,7 @@ add_colors_to_hash_from_string (GHashTable  *hash,
                                 const gchar *colors)
 {
   gchar *s, *p, *name;
-  GdkRGBA color;
+  GdkColor color;
   gboolean changed = FALSE;
   gchar *copy;
 
@@ -2930,7 +2930,7 @@ add_colors_to_hash_from_string (GHashTable  *hash,
           s++;
         }
 
-      if (gdk_rgba_parse (&color, p))
+      if (gdk_color_parse (p, &color))
         changed |= add_color_to_hash (name, &color, hash);
     }
 
@@ -2972,7 +2972,7 @@ update_color_hash (ColorSchemeData   *data,
   if (data->tables[source] == NULL)
     data->tables[source] = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   g_free,
-                                                  (GDestroyNotify) gdk_rgba_free);
+                                                  (GDestroyNotify) gdk_color_free);
 
   g_free (data->lastentry[source]);
   data->lastentry[source] = g_strdup (str);
@@ -2986,7 +2986,7 @@ update_color_hash (ColorSchemeData   *data,
   if (data->color_hash)
     {
       old_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
-                                        (GDestroyNotify) gdk_rgba_free);
+                                        (GDestroyNotify) gdk_color_free);
 
       g_hash_table_iter_init (&iter, data->color_hash);
       while (g_hash_table_iter_next (&iter, &name, &color))
@@ -3022,7 +3022,7 @@ update_color_hash (ColorSchemeData   *data,
           while (g_hash_table_iter_next (&iter, &key, &value))
             {
               new_value = g_hash_table_lookup (data->color_hash, key);
-              if (!new_value || !gdk_rgba_equal (value, new_value))
+              if (!new_value || !gdk_color_equal (value, new_value))
                 {
                   changed = TRUE;
                   break;
