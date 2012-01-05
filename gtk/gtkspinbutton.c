@@ -1504,6 +1504,12 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
   GtkSpinButtonPrivate *priv = spin->priv;
   gdouble old_value;
 
+  if (!gtk_editable_get_editable (GTK_EDITABLE (spin)))
+    {
+      gtk_widget_error_bell (GTK_WIDGET (spin));
+      return;
+    }
+
   /* When the key binding is activated, there may be an outstanding
    * value, so we first have to commit what is currently written in
    * the spin buttons text entry. See #106574
@@ -1512,11 +1518,6 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
 
   old_value = gtk_adjustment_get_value (priv->adjustment);
 
-  /* We don't test whether the entry is editable, since
-   * this key binding conceptually corresponds to changing
-   * the value with the buttons using the mouse, which
-   * we allow for non-editable spin buttons.
-   */
   switch (scroll)
     {
     case GTK_SCROLL_STEP_BACKWARD:
