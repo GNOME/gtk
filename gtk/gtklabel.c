@@ -423,8 +423,6 @@ static void gtk_label_set_use_markup_internal    (GtkLabel      *label,
 						  gboolean       val);
 static void gtk_label_set_use_underline_internal (GtkLabel      *label,
 						  gboolean       val);
-static void gtk_label_set_attributes_internal    (GtkLabel      *label,
-						  PangoAttrList *attrs);
 static void gtk_label_set_uline_text_internal    (GtkLabel      *label,
 						  const gchar   *str);
 static void gtk_label_set_pattern_internal       (GtkLabel      *label,
@@ -2071,23 +2069,6 @@ gtk_label_compose_effective_attrs (GtkLabel *label)
     }
 }
 
-static void
-gtk_label_set_attributes_internal (GtkLabel      *label,
-				   PangoAttrList *attrs)
-{
-  GtkLabelPrivate *priv = label->priv;
-
-  if (attrs)
-    pango_attr_list_ref (attrs);
-
-  if (priv->attrs)
-    pango_attr_list_unref (priv->attrs);
-  priv->attrs = attrs;
-
-  g_object_notify (G_OBJECT (label), "attributes");
-}
-
-
 /* Calculates text, attrs and mnemonic_keyval from
  * label, use_underline and use_markup
  */
@@ -2174,9 +2155,18 @@ void
 gtk_label_set_attributes (GtkLabel         *label,
                           PangoAttrList    *attrs)
 {
+  GtkLabelPrivate *priv = label->priv;
+
   g_return_if_fail (GTK_IS_LABEL (label));
 
-  gtk_label_set_attributes_internal (label, attrs);
+  if (attrs)
+    pango_attr_list_ref (attrs);
+
+  if (priv->attrs)
+    pango_attr_list_unref (priv->attrs);
+  priv->attrs = attrs;
+
+  g_object_notify (G_OBJECT (label), "attributes");
 
   gtk_label_recalculate (label);
 
