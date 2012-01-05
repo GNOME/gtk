@@ -578,6 +578,23 @@ _gtk_css_parser_try_double (GtkCssParser *parser,
   return TRUE;
 }
 
+/* XXX: we should introduce GtkCssLenght that deals with
+ * different kind of units */
+gboolean
+_gtk_css_parser_try_length (GtkCssParser *parser,
+                            int          *value)
+{
+  if (!_gtk_css_parser_try_int (parser, value))
+    return FALSE;
+
+  /* FIXME: _try_uint skips spaces while the
+   * spec forbids them
+   */
+  _gtk_css_parser_try (parser, "px", TRUE);
+
+  return TRUE;
+}
+
 gboolean
 _gtk_css_parser_try_enum (GtkCssParser *parser,
 			  GType         enum_type,

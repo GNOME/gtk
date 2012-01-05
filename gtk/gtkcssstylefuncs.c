@@ -646,7 +646,8 @@ border_value_parse (GtkCssParser *parser,
                     GValue       *value)
 {
   GtkBorder border = { 0, };
-  guint i, numbers[4];
+  guint i;
+  int numbers[4];
 
   for (i = 0; i < G_N_ELEMENTS (numbers); i++)
     {
@@ -654,7 +655,7 @@ border_value_parse (GtkCssParser *parser,
 	{
 	  /* These are strictly speaking signed, but we want to be able to use them
 	     for unsigned types too, as the actual ranges of values make this safe */
-	  int res = _gtk_win32_theme_int_parse (parser, base, (int *)&numbers[i]);
+	  int res = _gtk_win32_theme_int_parse (parser, base, &numbers[i]);
 
 	  if (res == 0) /* Parse error, report */
 	    return FALSE;
@@ -663,13 +664,10 @@ border_value_parse (GtkCssParser *parser,
 	    break;
 	}
       else
-	{
-	  if (!_gtk_css_parser_try_uint (parser, &numbers[i]))
-	    break;
-
-	  /* XXX: shouldn't allow spaces here? */
-	  _gtk_css_parser_try (parser, "px", TRUE);
-	}
+        {
+          if (!_gtk_css_parser_try_length (parser, &numbers[i]))
+            break;
+        }
     }
 
   if (i == 0)
