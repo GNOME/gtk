@@ -432,6 +432,72 @@ css_image_value_compute (GtkCssStyleProperty    *property,
   g_value_take_object (computed, image);
 }
 
+static gboolean
+background_repeat_value_parse (GtkCssStyleProperty *property,
+                               GValue              *value,
+                               GtkCssParser        *parser,
+                               GFile               *base)
+{
+  int repeat, vertical;
+
+  if (!_gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT, &repeat))
+    {
+      _gtk_css_parser_error (parser, "Not a valid value");
+      return FALSE;
+    }
+
+  if (repeat <= GTK_CSS_BACKGROUND_REPEAT_MASK)
+    {
+      if (_gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT, &vertical))
+        {
+          if (vertical >= GTK_CSS_BACKGROUND_REPEAT_MASK)
+            {
+              _gtk_css_parser_error (parser, "Not a valid 2nd value");
+              return FALSE;
+            }
+          else
+            repeat |= vertical << GTK_CSS_BACKGROUND_REPEAT_SHIFT;
+        }
+      else
+        repeat |= repeat << GTK_CSS_BACKGROUND_REPEAT_SHIFT;
+    }
+
+  g_value_set_enum (value, repeat);
+  return TRUE;
+}
+
+static void
+background_repeat_value_print (GtkCssStyleProperty *property,
+                               const GValue        *value,
+                               GString             *string)
+{
+  GEnumClass *enum_class;
+  GEnumValue *enum_value;
+  GtkCssBackgroundRepeat repeat;
+
+  repeat = g_value_get_enum (value);
+  enum_class = g_type_class_ref (GTK_TYPE_CSS_BACKGROUND_REPEAT);
+  enum_value = g_enum_get_value (enum_class, repeat);
+
+  /* only triggers for 'repeat-x' and 'repeat-y' */
+  if (enum_value)
+    g_string_append (string, enum_value->value_nick);
+  else
+    {
+      enum_value = g_enum_get_value (enum_class, GTK_CSS_BACKGROUND_HORIZONTAL (repeat));
+      g_string_append (string, enum_value->value_nick);
+
+      if (GTK_CSS_BACKGROUND_HORIZONTAL (repeat) != GTK_CSS_BACKGROUND_VERTICAL (repeat))
+        {
+          enum_value = g_enum_get_value (enum_class, GTK_CSS_BACKGROUND_VERTICAL (repeat));
+          g_string_append (string, " ");
+          g_string_append (string, enum_value->value_nick);
+        }
+    }
+
+  g_type_class_unref (enum_class);
+}
+
 /*** REGISTRATION ***/
 
 #define rgba_init(rgba, r, g, b, a) G_STMT_START{ \
@@ -707,10 +773,10 @@ _gtk_css_style_property_init_properties (void)
   gtk_style_property_register            ("background-repeat",
                                           GTK_TYPE_CSS_BACKGROUND_REPEAT,
                                           0,
+                                          background_repeat_value_parse,
+                                          background_repeat_value_print,
                                           NULL,
-                                          NULL,
-                                          NULL,
-                                          GTK_CSS_BACKGROUND_REPEAT);
+                                          GTK_CSS_BACKGROUND_REPEAT | (GTK_CSS_BACKGROUND_REPEAT << GTK_CSS_BACKGROUND_REPEAT_SHIFT));
   g_value_init (&value, GTK_TYPE_CSS_IMAGE);
   _gtk_style_property_register           ("background-image",
                                           CAIRO_GOBJECT_TYPE_PATTERN,

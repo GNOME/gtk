@@ -307,6 +307,24 @@ parse_background (GtkCssShorthandProperty *shorthand,
       else if (!G_IS_VALUE (&values[1]) &&
                _gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT, &enum_value))
         {
+          if (enum_value <= GTK_CSS_BACKGROUND_REPEAT_MASK)
+            {
+              int vertical;
+
+              if (_gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT, &vertical))
+                {
+                  if (vertical >= GTK_CSS_BACKGROUND_REPEAT_MASK)
+                    {
+                      _gtk_css_parser_error (parser, "Not a valid 2nd value for border-repeat");
+                      return FALSE;
+                    }
+                  else
+                    enum_value |= vertical << GTK_CSS_BACKGROUND_REPEAT_SHIFT;
+                }
+              else
+                enum_value |= enum_value << GTK_CSS_BACKGROUND_REPEAT_SHIFT;
+            }
+
           g_value_init (&values[1], GTK_TYPE_CSS_BACKGROUND_REPEAT);
           g_value_set_enum (&values[1], enum_value);
         }

@@ -30,9 +30,24 @@ typedef enum {
   GTK_CSS_CURRENT_COLOR /*< nick=currentColor >*/
 } GtkCssSpecialValue;
 
-typedef enum {
-  GTK_CSS_BACKGROUND_REPEAT,
+/* We encode horizontal and vertical repeat in one enum value.
+ * This eases parsing and storage, but you need to be aware that
+ * you have to "unpack" this value.
+ */
+#define GTK_CSS_BACKGROUND_REPEAT_SHIFT (8)
+#define GTK_CSS_BACKGROUND_REPEAT_MASK ((1 << GTK_CSS_BACKGROUND_REPEAT_SHIFT) - 1)
+#define GTK_CSS_BACKGROUND_HORIZONTAL(repeat) ((repeat) & GTK_CSS_BACKGROUND_REPEAT_MASK)
+#define GTK_CSS_BACKGROUND_VERTICAL(repeat) (((repeat) >> GTK_CSS_BACKGROUND_REPEAT_SHIFT) & GTK_CSS_BACKGROUND_REPEAT_MASK)
+typedef enum /*< enum >*/
+{
+  GTK_CSS_BACKGROUND_INVALID, /*< skip >*/
+  GTK_CSS_BACKGROUND_REPEAT, /* start at one so we know if a value has been set */
+  GTK_CSS_BACKGROUND_SPACE,
+  GTK_CSS_BACKGROUND_ROUND,
   GTK_CSS_BACKGROUND_NO_REPEAT,
+  /* need to hardcode the numer or glib-mkenums makes us into a flags type */
+  GTK_CSS_BACKGROUND_REPEAT_X = 1025,
+  GTK_CSS_BACKGROUND_REPEAT_Y = 260
 } GtkCssBackgroundRepeat;
 
 typedef enum {
