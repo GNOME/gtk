@@ -1,7 +1,10 @@
 * {
   background-image: none;
+  border-bottom-style: none;
   border-image-source: none;
-  border-style: none;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
   box-shadow: none;
   engine: none;
   font-family: "none";

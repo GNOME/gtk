@@ -29,6 +29,7 @@
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkprivatetypebuiltins.h"
+#include "gtktypebuiltins.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -172,6 +173,39 @@ parse_border_color (GtkCssShorthandProperty *shorthand,
     {
       g_value_init (&values[i], GTK_TYPE_SYMBOLIC_COLOR);
       g_value_copy (&values[(i - 1) >> 1], &values[i]);
+    }
+
+  return TRUE;
+}
+
+static gboolean
+parse_border_style (GtkCssShorthandProperty *shorthand,
+                    GValue                  *values,
+                    GtkCssParser            *parser,
+                    GFile                   *base)
+{
+  GtkBorderStyle styles[4];
+  guint i;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (!_gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, (int *)&styles[i]))
+        break;
+    }
+
+  if (i == 0)
+    {
+      _gtk_css_parser_error (parser, "Expected a border style");
+      return FALSE;
+    }
+
+  for (; i < G_N_ELEMENTS (styles); i++)
+    styles[i] = styles[(i - 1) >> 1];
+
+  for (i = 0; i < G_N_ELEMENTS (styles); i++)
+    {
+      g_value_init (&values[i], GTK_TYPE_BORDER_STYLE);
+      g_value_set_enum (&values[i], styles[i]);
     }
 
   return TRUE;
@@ -691,6 +725,44 @@ pack_border_color (GValue             *value,
   gtk_style_properties_get_property (props, "border-top-color", state, value);
 }
 
+static GParameter *
+unpack_border_style (const GValue *value,
+                     guint        *n_params)
+{
+  GParameter *parameter = g_new0 (GParameter, 4);
+  GtkBorderStyle style;
+
+  style = g_value_get_enum (value);
+
+  parameter[0].name = "border-top-style";
+  g_value_init (&parameter[0].value, GTK_TYPE_BORDER_STYLE);
+  g_value_set_enum (&parameter[0].value, style);
+  parameter[1].name = "border-right-style";
+  g_value_init (&parameter[1].value, GTK_TYPE_BORDER_STYLE);
+  g_value_set_enum (&parameter[1].value, style);
+  parameter[2].name = "border-bottom-style";
+  g_value_init (&parameter[2].value, GTK_TYPE_BORDER_STYLE);
+  g_value_set_enum (&parameter[2].value, style);
+  parameter[3].name = "border-left-style";
+  g_value_init (&parameter[3].value, GTK_TYPE_BORDER_STYLE);
+  g_value_set_enum (&parameter[3].value, style);
+
+  *n_params = 4;
+  return parameter;
+}
+
+static void
+pack_border_style (GValue             *value,
+                   GtkStyleProperties *props,
+                   GtkStateFlags       state)
+{
+  /* NB: We can just resolve to a style. We pick one and stick to it.
+   * Lesson learned: Don't query border-style shorthand, query the
+   * real properties instead. */
+  g_value_unset (value);
+  gtk_style_properties_get_property (props, "border-top-style", state, value);
+}
+
 static void
 _gtk_css_shorthand_property_register (const char                        *name,
                                       GType                              value_type,
@@ -723,6 +795,7 @@ _gtk_css_shorthand_property_init_properties (void)
   const char *border_radius_subproperties[] = { "border-top-left-radius", "border-top-right-radius",
                                                 "border-bottom-right-radius", "border-bottom-left-radius", NULL };
   const char *border_color_subproperties[] = { "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", NULL };
+  const char *border_style_subproperties[] = { "border-top-style", "border-right-style", "border-bottom-style", "border-left-style", NULL };
   const char *border_image_subproperties[] = { "border-image-source", "border-image-slice", "border-image-width", "border-image-repeat", NULL };
   const char *background_subproperties[] = { "background-image", "background-repeat", "background-clip", "background-origin",
                                              "background-color", NULL };
@@ -763,6 +836,12 @@ _gtk_css_shorthand_property_init_properties (void)
                                           parse_border_color,
                                           unpack_border_color,
                                           pack_border_color);
+  _gtk_css_shorthand_property_register   ("border-style",
+                                          GTK_TYPE_BORDER_STYLE,
+                                          border_style_subproperties,
+                                          parse_border_style,
+                                          unpack_border_style,
+                                          pack_border_style);
   _gtk_css_shorthand_property_register   ("border-image",
                                           G_TYPE_NONE,
                                           border_image_subproperties,

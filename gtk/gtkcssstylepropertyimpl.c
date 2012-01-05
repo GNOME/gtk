@@ -715,13 +715,35 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           &no_corner_radius);
 
-  gtk_style_property_register            ("border-style",
+  gtk_style_property_register            ("border-top-style",
                                           GTK_TYPE_BORDER_STYLE,
                                           0,
                                           NULL,
                                           NULL,
                                           NULL,
                                           GTK_BORDER_STYLE_NONE);
+  gtk_style_property_register            ("border-left-style",
+                                          GTK_TYPE_BORDER_STYLE,
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          GTK_BORDER_STYLE_NONE);
+  gtk_style_property_register            ("border-bottom-style",
+                                          GTK_TYPE_BORDER_STYLE,
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          GTK_BORDER_STYLE_NONE);
+  gtk_style_property_register            ("border-right-style",
+                                          GTK_TYPE_BORDER_STYLE,
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          GTK_BORDER_STYLE_NONE);
+
   gtk_style_property_register            ("background-clip",
                                           GTK_TYPE_CSS_AREA,
                                           0,
