@@ -9395,6 +9395,7 @@ proxy_pointer_event (GdkDisplay                 *display,
       is_hint = FALSE;
 
       if (event_win &&
+          source_event->type == GDK_MOTION_NOTIFY &&
 	  (evmask & GDK_POINTER_MOTION_HINT_MASK))
 	{
           gulong *device_serial;
