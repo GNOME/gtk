@@ -139,14 +139,20 @@ gdk_device_core_set_window_cursor (GdkDevice *device,
   int x, y;
 
   if (cursor)
+    g_object_ref (cursor);
+
+  /* Setting the cursor to NULL means that we should use the default cursor */
+  if (!cursor)
     {
-      buffer = _gdk_wayland_cursor_get_buffer(cursor, &x, &y);
-      wl_input_device_attach(wd->device, wd->time, buffer, x, y);
+      /* FIXME: Is this the best sensible default ? */
+      cursor = _gdk_wayland_display_get_cursor_for_type (device->display,
+                                                         GDK_LEFT_PTR);
     }
-  else
-    {
-      wl_input_device_attach(wd->device, wd->time, NULL, 0, 0);
-    }
+
+  buffer = _gdk_wayland_cursor_get_buffer(cursor, &x, &y);
+  wl_input_device_attach(wd->device, wd->time, buffer, x, y);
+
+  g_object_unref (cursor);
 }
 
 static void
