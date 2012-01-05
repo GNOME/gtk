@@ -2142,6 +2142,9 @@ gtk_device_grab_remove (GtkWidget *widget,
  *
  * Returns: a unique id for this key snooper for use with
  *    gtk_key_snooper_remove().
+ *
+ * Deprecated: 3.4: Key snooping should not be done. Events should
+ *     be handled by widgets.
  */
 guint
 gtk_key_snooper_install (GtkKeySnoopFunc snooper,
@@ -2166,6 +2169,9 @@ gtk_key_snooper_install (GtkKeySnoopFunc snooper,
  * @snooper_handler_id: Identifies the key snooper to remove
  *
  * Removes the key snooper function with the given id.
+ *
+ * Deprecated: 3.4: Key snooping should not be done. Events should
+ *     be handled by widgets.
  */
 void
 gtk_key_snooper_remove (guint snooper_id)
