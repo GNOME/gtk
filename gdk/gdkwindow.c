@@ -1256,11 +1256,12 @@ get_native_device_event_mask (GdkWindow *private,
        * lists due to some non-native child window.
        */
       if (gdk_window_is_toplevel (private) ||
-	  mask & GDK_BUTTON_PRESS_MASK)
-	mask |=
-	  GDK_POINTER_MOTION_MASK |
-	  GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-	  GDK_SCROLL_MASK;
+          mask & GDK_BUTTON_PRESS_MASK)
+        mask |=
+          GDK_TOUCH_MASK |
+          GDK_POINTER_MOTION_MASK |
+          GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+          GDK_SCROLL_MASK;
 
       return mask;
     }
@@ -8201,6 +8202,14 @@ is_motion_type (GdkEventType type)
 	 type == GDK_LEAVE_NOTIFY;
 }
 
+static gboolean
+is_touch_type (GdkEventType type)
+{
+  return type == GDK_TOUCH_PRESS ||
+         type == GDK_TOUCH_RELEASE ||
+         type == GDK_TOUCH_MOTION;
+}
+
 static GdkWindow *
 find_common_ancestor (GdkWindow *win1,
 		      GdkWindow *win2)
@@ -9475,7 +9484,9 @@ proxy_pointer_event (GdkDisplay                 *display,
     non_linear = TRUE;
 
   if (pointer_info->need_touch_press_enter &&
-      gdk_device_get_source (pointer_info->last_slave) != GDK_SOURCE_TOUCH)
+      gdk_device_get_source (pointer_info->last_slave) != GDK_SOURCE_TOUCH &&
+      (source_event->type != GDK_TOUCH_MOTION ||
+       _gdk_event_get_pointer_emulated (source_event)))
     {
       pointer_info->need_touch_press_enter = FALSE;
       need_synthetic_enter = TRUE;
@@ -9606,6 +9617,15 @@ proxy_pointer_event (GdkDisplay                 *display,
                                     state,
                                     &evmask,
                                     serial);
+
+      if ((evmask & GDK_TOUCH_MASK) == 0 &&
+          source_event->type == GDK_TOUCH_MOTION)
+        {
+          if (_gdk_event_get_pointer_emulated (source_event))
+            source_event->type = GDK_MOTION_NOTIFY;
+          else
+            return TRUE;
+        }
 
       if (event_win &&
           gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER &&
@@ -9825,6 +9845,20 @@ proxy_button_event (GdkEvent *source_event,
                                 type, state,
                                 &evmask, serial);
 
+  if ((evmask & GDK_TOUCH_MASK) == 0 &&
+      (type == GDK_TOUCH_PRESS || type == GDK_TOUCH_RELEASE))
+    {
+      if (_gdk_event_get_pointer_emulated (source_event))
+        {
+          if (type == GDK_TOUCH_PRESS)
+            source_event->type = type = GDK_BUTTON_PRESS;
+          else if (type == GDK_TOUCH_RELEASE)
+            source_event->type = type = GDK_BUTTON_RELEASE;
+        }
+      else
+        return TRUE;
+    }
+
   if (event_win == NULL || display->ignore_core_events)
     return TRUE;
 
@@ -9832,7 +9866,9 @@ proxy_button_event (GdkEvent *source_event,
       gdk_window_get_device_events (event_win, device) == 0)
     return TRUE;
 
-  if (type == GDK_BUTTON_PRESS &&
+  if ((type == GDK_BUTTON_PRESS ||
+       (type == GDK_TOUCH_PRESS &&
+        _gdk_event_get_pointer_emulated (source_event))) &&
       pointer_info->need_touch_press_enter)
     {
       GdkCrossingMode mode;
@@ -9880,7 +9916,9 @@ proxy_button_event (GdkEvent *source_event,
 
       if (type == GDK_BUTTON_PRESS)
         _gdk_event_button_generate (display, event);
-      else if (type == GDK_BUTTON_RELEASE &&
+      else if ((type == GDK_BUTTON_RELEASE ||
+                (type == GDK_TOUCH_RELEASE &&
+                 _gdk_event_get_pointer_emulated (source_event))) &&
                pointer_window == pointer_info->window_under_pointer &&
                gdk_device_get_source (source_device) == GDK_SOURCE_TOUCH)
         {
@@ -10151,7 +10189,9 @@ _gdk_windowing_got_event (GdkDisplay *display,
 	}
     }
 
-  if (pointer_info)
+  if (pointer_info &&
+      (!is_touch_type (event->type) ||
+       _gdk_event_get_pointer_emulated (event)))
     {
       /* Store last pointer window and position/state */
       old_state = pointer_info->state;
