@@ -1346,8 +1346,8 @@ setup_page_table (GtkPrinterOptionSet *options,
                                            add_option_to_table,
                                            table);
 
-  nrows = grid_rows (GTK_GRID (page));
-  if (nrows == 1)
+  nrows = grid_rows (GTK_GRID (table));
+  if (nrows == 0)
     gtk_widget_hide (page);
   else
     gtk_widget_show (page);
@@ -1521,7 +1521,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
                                                table);
 
       nrows = grid_rows (GTK_GRID (table));
-      if (nrows == 1)
+      if (nrows == 0)
         gtk_widget_destroy (table);
       else
         {
