@@ -243,7 +243,7 @@ struct _GtkLabelPrivate
   GtkWindow *mnemonic_window;
 
   PangoAttrList *attrs;
-  PangoAttrList *effective_attrs;
+  PangoAttrList *markup_attrs;
   PangoLayout   *layout;
 
   gchar   *label;
@@ -2080,9 +2080,9 @@ gtk_label_recalculate (GtkLabel *label)
     {
       if (!priv->pattern_set)
         {
-          if (priv->effective_attrs)
-            pango_attr_list_unref (priv->effective_attrs);
-          priv->effective_attrs = NULL;
+          if (priv->markup_attrs)
+            pango_attr_list_unref (priv->markup_attrs);
+          priv->markup_attrs = NULL;
         }
       gtk_label_set_text_internal (label, g_strdup (priv->label));
     }
@@ -2593,9 +2593,9 @@ gtk_label_set_markup_internal (GtkLabel    *label,
 
   if (attrs)
     {
-      if (priv->effective_attrs)
-	pango_attr_list_unref (priv->effective_attrs);
-      priv->effective_attrs = attrs;
+      if (priv->markup_attrs)
+	pango_attr_list_unref (priv->markup_attrs);
+      priv->markup_attrs = attrs;
     }
 
   if (accel_char != 0)
@@ -2763,9 +2763,9 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
   else
     attrs = gtk_label_pattern_to_attrs (label, pattern);
 
-  if (priv->effective_attrs)
-    pango_attr_list_unref (priv->effective_attrs);
-  priv->effective_attrs = attrs;
+  if (priv->markup_attrs)
+    pango_attr_list_unref (priv->markup_attrs);
+  priv->markup_attrs = attrs;
 }
 
 /**
@@ -3125,8 +3125,8 @@ gtk_label_finalize (GObject *object)
   if (priv->attrs)
     pango_attr_list_unref (priv->attrs);
 
-  if (priv->effective_attrs)
-    pango_attr_list_unref (priv->effective_attrs);
+  if (priv->markup_attrs)
+    pango_attr_list_unref (priv->markup_attrs);
 
   gtk_label_clear_links (label);
   g_free (priv->select_info);
@@ -3404,17 +3404,17 @@ gtk_label_ensure_layout (GtkLabel *label)
               pango_attr_list_insert (attrs, attribute);
             }
         }
-      else if (priv->effective_attrs && priv->effective_attrs)
+      else if (priv->markup_attrs && priv->markup_attrs)
         attrs = pango_attr_list_new ();
       else
         attrs = NULL;
 
-      if (priv->effective_attrs)
+      if (priv->markup_attrs)
         {
           if (attrs)
-            my_pango_attr_list_merge (attrs, priv->effective_attrs);
+            my_pango_attr_list_merge (attrs, priv->markup_attrs);
           else
-            attrs = pango_attr_list_ref (priv->effective_attrs);
+            attrs = pango_attr_list_ref (priv->markup_attrs);
         }
 	  
       if (priv->attrs)
