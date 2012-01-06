@@ -425,7 +425,8 @@ gdk_wayland_display_after_process_all_updates (GdkDisplay *display)
 static gulong
 gdk_wayland_display_get_next_serial (GdkDisplay *display)
 {
-  return 0;
+  static gulong serial = 0;
+  return ++serial;
 }
 
 void
