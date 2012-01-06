@@ -182,6 +182,7 @@ struct _GtkApplicationWindowPrivate
 {
   GSimpleActionGroup *actions;
   GActionObservable *muxer;
+  gboolean muxer_initialised;
   GtkWidget *menubar;
   GtkAccelGroup *accels;
   GSList *accel_closures;
@@ -671,14 +672,11 @@ gtk_application_window_real_realize (GtkWidget *widget)
   g_signal_connect (settings, "notify::gtk-shell-shows-menubar",
                     G_CALLBACK (gtk_application_window_shell_shows_menubar_changed), window);
 
-  if (window->priv->muxer == NULL)
+  if (!window->priv->muxer_initialised)
     {
-      GActionMuxer *muxer;
-
-      muxer = g_action_muxer_new ();
-      g_action_muxer_insert (muxer, "app", G_ACTION_GROUP (application));
-      g_action_muxer_insert (muxer, "win", G_ACTION_GROUP (window));
-      window->priv->muxer = G_ACTION_OBSERVABLE (muxer);
+      g_action_muxer_insert (G_ACTION_MUXER (window->priv->muxer), "app", G_ACTION_GROUP (application));
+      g_action_muxer_insert (G_ACTION_MUXER (window->priv->muxer), "win", G_ACTION_GROUP (window));
+      window->priv->muxer_initialised = TRUE;
     }
 
   gtk_application_window_update_shell_shows_app_menu (window, settings);
@@ -875,6 +873,8 @@ gtk_application_window_init (GtkApplicationWindow *window)
                             G_CALLBACK (g_action_group_action_state_changed), window);
   g_signal_connect_swapped (window->priv->actions, "action-removed",
                             G_CALLBACK (g_action_group_action_removed), window);
+
+  window->priv->muxer = G_ACTION_OBSERVABLE (g_action_muxer_new ());
 }
 
 static void
@@ -981,4 +981,14 @@ gtk_application_window_set_show_menubar (GtkApplicationWindow *window,
 
       g_object_notify_by_pspec (G_OBJECT (window), gtk_application_window_properties[PROP_SHOW_MENUBAR]);
     }
+}
+
+GSimpleActionObserver *
+gtk_application_window_get_observer (GtkApplicationWindow *window,
+                                     const gchar          *action_name,
+                                     GVariant             *target)
+{
+  g_return_val_if_fail (GTK_IS_APPLICATION_WINDOW (window), NULL);
+
+  return g_simple_action_observer_new (window->priv->muxer, action_name, target);
 }

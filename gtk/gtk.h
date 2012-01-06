@@ -36,6 +36,7 @@
 #include <gtk/gtkaccelmap.h>
 #include <gtk/gtkaccessible.h>
 #include <gtk/gtkaction.h>
+#include <gtk/gtkactionable.h>
 #include <gtk/gtkactiongroup.h>
 #include <gtk/gtkactivatable.h>
 #include <gtk/gtkadjustment.h>

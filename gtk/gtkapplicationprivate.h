@@ -23,6 +23,7 @@
 #ifndef __GTK_APPLICATION_PRIVATE_H__
 #define __GTK_APPLICATION_PRIVATE_H__
 
+#include "gsimpleactionobserver.h"
 #include "gtkapplicationwindow.h"
 
 G_GNUC_INTERNAL
@@ -32,5 +33,10 @@ gboolean                gtk_application_window_publish                  (GtkAppl
 
 G_GNUC_INTERNAL
 void                    gtk_application_window_unpublish                (GtkApplicationWindow *window);
+
+G_GNUC_INTERNAL
+GSimpleActionObserver * gtk_application_window_get_observer             (GtkApplicationWindow *window,
+                                                                         const gchar          *action_name,
+                                                                         GVariant             *target);
 
 #endif /* __GTK_APPLICATION_PRIVATE_H__ */
