@@ -4153,7 +4153,9 @@ gtk_label_draw (GtkWidget *widget,
               gdk_cairo_set_source_rgba (cr, &bg_color);
               cairo_paint (cr);
 
-              gdk_cairo_set_source_color (cr, text_color);
+              cairo_set_source_rgb (cr, text_color->red / 65535., 
+                                        text_color->green / 65535.,
+                                        text_color->blue / 65535.);
               cairo_move_to (cr, x, y);
               _gtk_pango_fill_layout (cr, priv->layout);
 
