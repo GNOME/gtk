@@ -2160,8 +2160,6 @@ gtk_label_set_attributes (GtkLabel         *label,
 
   g_object_notify (G_OBJECT (label), "attributes");
 
-  gtk_label_recalculate (label);
-
   gtk_label_clear_layout (label);
   gtk_widget_queue_resize (GTK_WIDGET (label));
 }
