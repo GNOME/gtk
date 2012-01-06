@@ -113,10 +113,10 @@ void
 _gdk_wayland_display_deliver_event (GdkDisplay *display, GdkEvent *event)
 {
   GList *node;
-  static int serial;
 
   node = _gdk_event_queue_append (display, event);
-  _gdk_windowing_got_event (display, node, event, serial++);
+  _gdk_windowing_got_event (display, node, event,
+                            _gdk_display_get_next_serial (display));
 }
 
 GSource *
