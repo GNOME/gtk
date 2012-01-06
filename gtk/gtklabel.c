@@ -2035,33 +2035,41 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
 }
 
 static void
-gtk_label_compose_effective_attrs (GtkLabel *label)
+my_pango_attr_list_merge (PangoAttrList *into,
+                          PangoAttrList *from)
 {
-  GtkLabelPrivate      *priv = label->priv;
   PangoAttrIterator *iter;
   PangoAttribute    *attr;
   GSList            *iter_attrs, *l;
 
+  iter = pango_attr_list_get_iterator (into);
+
+  if (iter)
+    {
+      do
+        {
+          iter_attrs = pango_attr_iterator_get_attrs (iter);
+          for (l = iter_attrs; l; l = l->next)
+            {
+              attr = l->data;
+              pango_attr_list_insert (from, attr);
+            }
+          g_slist_free (iter_attrs);
+        }
+      while (pango_attr_iterator_next (iter));
+      pango_attr_iterator_destroy (iter);
+    }
+}
+
+static void
+gtk_label_compose_effective_attrs (GtkLabel *label)
+{
+  GtkLabelPrivate *priv = label->priv;
+
   if (priv->attrs)
     {
       if (priv->effective_attrs)
-	{
-	  if ((iter = pango_attr_list_get_iterator (priv->attrs)))
-	    {
-	      do
-		{
-		  iter_attrs = pango_attr_iterator_get_attrs (iter);
-		  for (l = iter_attrs; l; l = l->next)
-		    {
-		      attr = l->data;
-		      pango_attr_list_insert (priv->effective_attrs, attr);
-		    }
-		  g_slist_free (iter_attrs);
-	        }
-	      while (pango_attr_iterator_next (iter));
-	      pango_attr_iterator_destroy (iter);
-	    }
-	}
+        my_pango_attr_list_merge (priv->effective_attrs, priv->attrs);
       else
 	priv->effective_attrs =
 	  pango_attr_list_ref (priv->attrs);
