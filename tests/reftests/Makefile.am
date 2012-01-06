@@ -61,6 +61,9 @@ EXTRA_DIST += \
 	border-radius-clamp.css\
 	border-radius-clamp.ref.ui \
 	border-radius-clamp.ui \
+	border-style.css \
+	border-style.ref.ui \
+	border-style.ui \
 	border-style-none.css \
 	border-style-none.ref.ui \
 	border-style-none.ui \
