@@ -14,6 +14,14 @@ activate_toggle (GSimpleAction *action,
 }
 
 static void
+activate_radio (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  g_action_change_state (G_ACTION (action), parameter);
+}
+
+static void
 change_fullscreen_state (GSimpleAction *action,
                          GVariant      *state,
                          gpointer       user_data)
@@ -22,6 +30,29 @@ change_fullscreen_state (GSimpleAction *action,
     gtk_window_fullscreen (user_data);
   else
     gtk_window_unfullscreen (user_data);
+
+  g_simple_action_set_state (action, state);
+}
+
+static void
+change_justify_state (GSimpleAction *action,
+                      GVariant      *state,
+                      gpointer       user_data)
+{
+  GtkTextView *text = g_object_get_data (user_data, "bloatpad-text");
+  const gchar *str;
+
+  str = g_variant_get_string (state, NULL);
+
+  if (g_str_equal (str, "left"))
+    gtk_text_view_set_justification (text, GTK_JUSTIFY_LEFT);
+  else if (g_str_equal (str, "center"))
+    gtk_text_view_set_justification (text, GTK_JUSTIFY_CENTER);
+  else if (g_str_equal (str, "right"))
+    gtk_text_view_set_justification (text, GTK_JUSTIFY_RIGHT);
+  else
+    /* ignore this attempted change */
+    return;
 
   g_simple_action_set_state (action, state);
 }
@@ -62,7 +93,8 @@ window_paste (GSimpleAction *action,
 static GActionEntry win_entries[] = {
   { "copy", window_copy, NULL, NULL, NULL },
   { "paste", window_paste, NULL, NULL, NULL },
-  { "fullscreen", activate_toggle, NULL, "false", change_fullscreen_state }
+  { "fullscreen", activate_toggle, NULL, "false", change_fullscreen_state },
+  { "justify", activate_radio, "s", "'left'", change_justify_state }
 };
 
 static void
@@ -70,6 +102,8 @@ new_window (GApplication *app,
             GFile        *file)
 {
   GtkWidget *window, *grid, *scrolled, *view;
+  GtkWidget *toolbar;
+  GtkToolItem *button;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
@@ -78,6 +112,21 @@ new_window (GApplication *app,
 
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), grid);
+
+  toolbar = gtk_toolbar_new ();
+  button = gtk_toggle_tool_button_new_from_stock (GTK_STOCK_JUSTIFY_LEFT);
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::left");
+  gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (button));
+
+  button = gtk_toggle_tool_button_new_from_stock (GTK_STOCK_JUSTIFY_CENTER);
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::center");
+  gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (button));
+
+  button = gtk_toggle_tool_button_new_from_stock (GTK_STOCK_JUSTIFY_RIGHT);
+  gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::right");
+  gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (button));
+
+  gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 1, 1);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (scrolled, TRUE);
@@ -88,7 +137,7 @@ new_window (GApplication *app,
 
   gtk_container_add (GTK_CONTAINER (scrolled), view);
 
-  gtk_grid_attach (GTK_GRID (grid), scrolled, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), scrolled, 0, 1, 1, 1);
 
   if (file != NULL)
     {
