@@ -503,8 +503,8 @@ static gboolean      gtk_label_activate_link    (GtkLabel    *label,
 static void          gtk_label_activate_current_link (GtkLabel *label);
 static GtkLabelLink *gtk_label_get_current_link (GtkLabel  *label);
 static void          gtk_label_get_link_colors  (GtkWidget  *widget,
-                                                 GdkColor  **link_color,
-                                                 GdkColor  **visited_link_color);
+                                                 GdkColor   *link_color,
+                                                 GdkColor   *visited_link_color);
 static void          emit_activate_link         (GtkLabel     *label,
                                                  GtkLabelLink *link);
 
@@ -2254,8 +2254,8 @@ typedef struct
   GList *links;
   GString *new_str;
   gsize text_len;
-  GdkColor *link_color;
-  GdkColor *visited_link_color;
+  GdkColor link_color;
+  GdkColor visited_link_color;
 } UriParserData;
 
 static void
@@ -2330,9 +2330,9 @@ start_element_handler (GMarkupParseContext  *context,
         }
 
       if (visited)
-        color = pdata->visited_link_color;
+        color = &pdata->visited_link_color;
       else
-        color = pdata->link_color;
+        color = &pdata->link_color;
 
       g_string_append_printf (pdata->new_str,
                               "<span color=\"#%04x%04x%04x\" underline=\"single\">",
@@ -2436,21 +2436,33 @@ link_free (GtkLabelLink *link)
 }
 
 static void
-gtk_label_get_link_colors (GtkWidget  *widget,
-                           GdkColor  **link_color,
-                           GdkColor  **visited_link_color)
+gtk_label_get_link_colors (GtkWidget *widget,
+                           GdkColor  *link_color,
+                           GdkColor  *visited_link_color)
 {
   GtkStyleContext *context;
+  GdkColor *link, *visited;
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_get_style (context,
-                               "link-color", link_color,
-                               "visited-link-color", visited_link_color,
+                               "link-color", &link,
+                               "visited-link-color", &visited,
                                 NULL);
-  if (!*link_color)
-    *link_color = gdk_color_copy (&default_link_color);
-  if (!*visited_link_color)
-    *visited_link_color = gdk_color_copy (&default_visited_link_color);
+  if (link)
+    {
+      *link_color = *link;
+      gdk_color_free (link);
+    }
+  else
+    *link_color = default_link_color;
+
+  if (visited)
+    {
+      *visited_link_color = *visited;
+      gdk_color_free (visited);
+    }
+  else
+    *visited_link_color = default_visited_link_color;
 }
 
 static gboolean
@@ -2508,17 +2520,12 @@ parse_uri_markup (GtkLabel     *label,
   *new_str = g_string_free (pdata.new_str, FALSE);
   *links = pdata.links;
 
-  gdk_color_free (pdata.link_color);
-  gdk_color_free (pdata.visited_link_color);
-
   return TRUE;
 
 failed:
   g_markup_parse_context_free (context);
   g_string_free (pdata.new_str, TRUE);
   g_list_free_full (pdata.links, (GDestroyNotify) link_free);
-  gdk_color_free (pdata.link_color);
-  gdk_color_free (pdata.visited_link_color);
 
   return FALSE;
 }
@@ -4086,8 +4093,8 @@ gtk_label_draw (GtkWidget *widget,
           cairo_region_t *clip;
           GdkRectangle rect;
           GdkColor *text_color;
-          GdkColor *link_color;
-          GdkColor *visited_link_color;
+          GdkColor link_color;
+          GdkColor visited_link_color;
 
           if (info->selectable &&
               gtk_widget_has_focus (widget) &&
@@ -4124,9 +4131,9 @@ gtk_label_draw (GtkWidget *widget,
 
               gtk_label_get_link_colors (widget, &link_color, &visited_link_color);
               if (active_link->visited)
-                text_color = visited_link_color;
+                text_color = &visited_link_color;
               else
-                text_color = link_color;
+                text_color = &link_color;
 
               if (info->link_clicked)
                 state |= GTK_STATE_FLAG_ACTIVE;
@@ -4141,9 +4148,6 @@ gtk_label_draw (GtkWidget *widget,
               gdk_cairo_set_source_color (cr, text_color);
               cairo_move_to (cr, x, y);
               _gtk_pango_fill_layout (cr, priv->layout);
-
-              gdk_color_free (link_color);
-              gdk_color_free (visited_link_color);
 
               cairo_restore (cr);
             }
