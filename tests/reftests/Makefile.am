@@ -124,6 +124,9 @@ EXTRA_DIST += \
 	grid-spacing3.css \
 	grid-spacing3.ref.ui \
 	grid-spacing3.ui \
+	label-attribute-preference.css \
+	label-attribute-preference.ref.ui \
+	label-attribute-preference.ui \
 	label-shadows.css \
 	label-shadows.ref.ui \
 	label-shadows.ui \

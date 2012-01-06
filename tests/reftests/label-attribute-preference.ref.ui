@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkLabel" id="label1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Hello linky World</property>
+        <attributes>
+          <attribute name="foreground" value="#000080000000" start="1" end="3"/>
+          <attribute name="foreground" value="#ffff00000000" start="3" end="8"/>
+          <attribute name="foreground" value="#0000ffff0000" start="8" end="9"/>
+          <attribute name="foreground" value="#00000000ffff" start="9" end="10"/>
+          <attribute name="foreground" value="#ffff80008000" start="10" end="14"/>
+          <attribute name="foreground" value="#8000ffff8000" start="14" end="16"/>
+          <attribute name="underline" value="True" start="6" end="11"/>
+        </attributes>
+      </object>
+    </child>
+  </object>
+</interface>
