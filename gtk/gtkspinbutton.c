@@ -639,7 +639,7 @@ create_one_pixbuf (GtkStyleContext *context,
       GtkIconSet *icon_set;
 
       icon_set = gtk_style_context_lookup_icon_set (context, GTK_STOCK_MISSING_IMAGE);
-      pix = gtk_icon_set_render_icon_pixbuf (icon_set, context, size);
+      pix = gtk_icon_set_render_icon_pixbuf (icon_set, context, GTK_ICON_SIZE_MENU);
 
       g_warning ("Unable to fetch icon %s from the icon theme", icon_name);
     }
