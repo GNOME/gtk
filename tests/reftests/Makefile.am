@@ -163,6 +163,7 @@ EXTRA_DIST += \
 	paned-undersized.ui \
 	quit-mnemonic.ref.ui \
 	quit-mnemonic.ui \
+	reset-to-defaults.css \
 	rotated-layout.ref.ui \
 	rotated-layout.ui \
 	shorthand-entry-border.css \
