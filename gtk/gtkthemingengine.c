@@ -1543,7 +1543,6 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
                                  gdouble           height)
 {
   GtkStateFlags flags;
-  GtkBorderStyle border_style;
   GtkJunctionSides junction;
   GtkBorderImage border_image;
   GtkBorder border;
@@ -1552,14 +1551,10 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
   junction = gtk_theming_engine_get_junction_sides (engine);
   gtk_theming_engine_get_border (engine, flags, &border);
 
-  gtk_theming_engine_get (engine, flags,
-			  "border-style", &border_style,
-			  NULL);
-
   if (_gtk_border_image_init (&border_image, engine))
     _gtk_border_image_render (&border_image, &border,
                               cr, x, y, width, height);
-  else if (border_style != GTK_BORDER_STYLE_NONE)
+  else
     render_frame_internal (engine, cr,
                            x, y, width, height,
                            0, junction);
