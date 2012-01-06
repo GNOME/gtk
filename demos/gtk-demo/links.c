@@ -63,7 +63,13 @@ do_links (GtkWidget *do_widget)
       label = gtk_label_new ("Some <a href=\"http://en.wikipedia.org/wiki/Text\""
                              "title=\"plain text\">text</a> may be marked up\n"
                              "as hyperlinks, which can be clicked\n"
-                             "or activated via <a href=\"keynav\">keynav</a>");
+                             "or activated via <a href=\"keynav\">keynav</a>\n"
+                             "and they work fine with other markup, like when\n"
+                             "searching on <a href=\"http://www.google.com/\">"
+                             "<span color=\"#0266C8\">G</span><span color=\"#F90101\">o</span>"
+                             "<span color=\"#F2B50F\">o</span><span color=\"#0266C8\">g</span>"
+                             "<span color=\"#00933B\">l</span><span color=\"#F90101\">e</span>"
+                             "</a>.");
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
       g_signal_connect (label, "activate-link", G_CALLBACK (activate_link), NULL);
       gtk_container_add (GTK_CONTAINER (window), label);
