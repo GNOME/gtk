@@ -293,7 +293,7 @@ _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
         {
           gchar *filename;
           filename = g_build_filename (directories[j],
-                                       "wayland",
+                                       "weston",
                                        cursor_definitions[i].filename,
                                        NULL);
           if (g_file_test (filename, G_FILE_TEST_EXISTS))
