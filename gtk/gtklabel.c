@@ -6314,7 +6314,7 @@ emit_activate_link (GtkLabel     *label,
     {
       link->visited = TRUE;
       /* FIXME: shouldn't have to redo everything here */
-      gtk_label_recalculate (label);
+      gtk_label_clear_layout (label);
     }
 }
 
