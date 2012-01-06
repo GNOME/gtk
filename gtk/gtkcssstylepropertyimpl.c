@@ -103,7 +103,7 @@ _gtk_style_property_register (const char *                   name,
                        "name", name,
                        "value-type", value_type,
                        NULL);
-
+  
   if (parse_value)
     node->parse_value = parse_value;
   if (print_value)
@@ -432,6 +432,28 @@ css_image_value_compute (GtkCssStyleProperty    *property,
   g_value_take_object (computed, image);
 }
 
+static void
+compute_border_width (GtkCssStyleProperty    *property,
+                      GValue                 *computed,
+                      GtkStyleContext        *context,
+                      const GValue           *specified)
+{
+  GtkCssStyleProperty *style;
+  GtkBorderStyle border_style;
+  
+  /* The -1 is magic that is only true because we register the style
+   * properties directly after the width properties.
+   */
+  style = _gtk_css_style_property_lookup_by_id (_gtk_css_style_property_get_id (property) - 1);
+  border_style = g_value_get_enum (_gtk_style_context_peek_property (context, _gtk_style_property_get_name (GTK_STYLE_PROPERTY (style))));
+
+  g_value_init (computed, G_TYPE_INT);
+  if (border_style == GTK_BORDER_STYLE_NONE)
+    g_value_set_int (computed, 0);
+  else
+    g_value_copy (specified, computed);
+}
+
 static gboolean
 background_repeat_value_parse (GtkCssStyleProperty *property,
                                GValue              *value,
@@ -657,33 +679,64 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           0);
+  /* IMPORTANT: compute_border_width() requires that the border-width
+   * properties be immeditaly followed by the border-style properties
+   */
+  gtk_style_property_register            ("border-top-style",
+                                          GTK_TYPE_BORDER_STYLE,
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          GTK_BORDER_STYLE_NONE);
   gtk_style_property_register            ("border-top-width",
                                           G_TYPE_INT,
                                           0,
                                           NULL,
                                           NULL,
-                                          NULL,
+                                          compute_border_width,
                                           0);
+  gtk_style_property_register            ("border-left-style",
+                                          GTK_TYPE_BORDER_STYLE,
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          GTK_BORDER_STYLE_NONE);
   gtk_style_property_register            ("border-left-width",
                                           G_TYPE_INT,
                                           0,
                                           NULL,
                                           NULL,
-                                          NULL,
+                                          compute_border_width,
                                           0);
+  gtk_style_property_register            ("border-bottom-style",
+                                          GTK_TYPE_BORDER_STYLE,
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          GTK_BORDER_STYLE_NONE);
   gtk_style_property_register            ("border-bottom-width",
                                           G_TYPE_INT,
                                           0,
                                           NULL,
                                           NULL,
-                                          NULL,
+                                          compute_border_width,
                                           0);
+  gtk_style_property_register            ("border-right-style",
+                                          GTK_TYPE_BORDER_STYLE,
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          GTK_BORDER_STYLE_NONE);
   gtk_style_property_register            ("border-right-width",
                                           G_TYPE_INT,
                                           0,
                                           NULL,
                                           NULL,
-                                          NULL,
+                                          compute_border_width,
                                           0);
 
   gtk_style_property_register            ("border-top-left-radius",
@@ -714,35 +767,6 @@ _gtk_css_style_property_init_properties (void)
                                           border_corner_radius_value_print,
                                           NULL,
                                           &no_corner_radius);
-
-  gtk_style_property_register            ("border-top-style",
-                                          GTK_TYPE_BORDER_STYLE,
-                                          0,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          GTK_BORDER_STYLE_NONE);
-  gtk_style_property_register            ("border-left-style",
-                                          GTK_TYPE_BORDER_STYLE,
-                                          0,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          GTK_BORDER_STYLE_NONE);
-  gtk_style_property_register            ("border-bottom-style",
-                                          GTK_TYPE_BORDER_STYLE,
-                                          0,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          GTK_BORDER_STYLE_NONE);
-  gtk_style_property_register            ("border-right-style",
-                                          GTK_TYPE_BORDER_STYLE,
-                                          0,
-                                          NULL,
-                                          NULL,
-                                          NULL,
-                                          GTK_BORDER_STYLE_NONE);
 
   gtk_style_property_register            ("background-clip",
                                           GTK_TYPE_CSS_AREA,
