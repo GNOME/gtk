@@ -732,6 +732,7 @@ gtk_button_set_action_name (GtkActionable *actionable,
   GtkButton *button = GTK_BUTTON (actionable);
 
   g_return_if_fail (GTK_IS_BUTTON (button));
+  g_return_if_fail (button->priv->action == NULL);
 
   if (g_strcmp0 (action_name, button->priv->action_name) != 0)
     {
@@ -1040,6 +1041,8 @@ gtk_button_set_related_action (GtkButton *button,
 			       GtkAction *action)
 {
   GtkButtonPrivate *priv = button->priv;
+
+  g_return_if_fail (button->priv->action_name == NULL);
 
   if (priv->action == action)
     return;
