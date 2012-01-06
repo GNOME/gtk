@@ -497,7 +497,6 @@ static gint gtk_label_move_backward_word (GtkLabel        *label,
 					  gint             start);
 
 /* For links: */
-static void          gtk_label_rescan_links     (GtkLabel  *label);
 static void          gtk_label_clear_links      (GtkLabel  *label);
 static gboolean      gtk_label_activate_link    (GtkLabel    *label,
                                                  const gchar *uri);
@@ -2078,6 +2077,8 @@ gtk_label_recalculate (GtkLabel *label)
   GtkLabelPrivate *priv = label->priv;
   guint keyval = priv->mnemonic_keyval;
 
+  gtk_label_clear_links (label);
+
   if (priv->use_markup)
     gtk_label_set_markup_internal (label, priv->label, priv->use_underline);
   else if (priv->use_underline)
@@ -2244,6 +2245,7 @@ typedef struct
   GtkLabel *label;
   GList *links;
   GString *new_str;
+  gsize text_len;
   GdkColor *link_color;
   GdkColor *visited_link_color;
 } UriParserData;
@@ -2334,7 +2336,8 @@ start_element_handler (GMarkupParseContext  *context,
       link->uri = g_strdup (uri);
       link->title = g_strdup (title);
       link->visited = visited;
-      pdata->links = g_list_append (pdata->links, link);
+      link->start = pdata->text_len;
+      pdata->links = g_list_prepend (pdata->links, link);
     }
   else
     {
@@ -2372,7 +2375,11 @@ end_element_handler (GMarkupParseContext  *context,
   UriParserData *pdata = user_data;
 
   if (!strcmp (element_name, "a"))
-    g_string_append (pdata->new_str, "</span>");
+    {
+      GtkLabelLink *link = pdata->links->data;
+      link->end = pdata->text_len;
+      g_string_append (pdata->new_str, "</span>");
+    }
   else
     {
       g_string_append (pdata->new_str, "</");
@@ -2393,6 +2400,7 @@ text_handler (GMarkupParseContext  *context,
 
   newtext = g_markup_escape_text (text, text_len);
   g_string_append (pdata->new_str, newtext);
+  pdata->text_len += text_len;
   g_free (newtext);
 }
 
@@ -2457,6 +2465,7 @@ parse_uri_markup (GtkLabel     *label,
   pdata.label = label;
   pdata.links = NULL;
   pdata.new_str = g_string_sized_new (length);
+  pdata.text_len = 0;
 
   gtk_label_get_link_colors (GTK_WIDGET (label), &pdata.link_color, &pdata.visited_link_color);
 
@@ -2547,11 +2556,10 @@ gtk_label_set_markup_internal (GtkLabel    *label,
       return;
     }
 
-  gtk_label_clear_links (label);
   if (links)
     {
       gtk_label_ensure_select_info (label);
-      priv->select_info->links = links;
+      priv->select_info->links = g_list_reverse (links);
       gtk_label_ensure_has_tooltip (label);
     }
 
@@ -3156,8 +3164,6 @@ gtk_label_clear_layout (GtkLabel *label)
     {
       g_object_unref (priv->layout);
       priv->layout = NULL;
-
-      //gtk_label_clear_links (label);
     }
 }
 
@@ -3389,8 +3395,6 @@ gtk_label_ensure_layout (GtkLabel *label)
 
       if (priv->effective_attrs)
 	pango_layout_set_attributes (priv->layout, priv->effective_attrs);
-
-      gtk_label_rescan_links (label);
 
       switch (priv->jtype)
 	{
@@ -6259,61 +6263,6 @@ gtk_label_clear_links (GtkLabel *label)
   g_list_free_full (priv->select_info->links, (GDestroyNotify) link_free);
   priv->select_info->links = NULL;
   priv->select_info->active_link = NULL;
-}
-
-static void
-gtk_label_rescan_links (GtkLabel *label)
-{
-  GtkLabelPrivate *priv = label->priv;
-  PangoLayout *layout = priv->layout;
-  PangoAttrList *attlist;
-  PangoAttrIterator *iter;
-  GList *links;
-
-  if (!priv->select_info || !priv->select_info->links)
-    return;
-
-  attlist = pango_layout_get_attributes (layout);
-
-  if (attlist == NULL)
-    return;
-
-  iter = pango_attr_list_get_iterator (attlist);
-
-  links = priv->select_info->links;
-
-  do
-    {
-      PangoAttribute *underline;
-      PangoAttribute *color;
-
-      underline = pango_attr_iterator_get (iter, PANGO_ATTR_UNDERLINE);
-      color = pango_attr_iterator_get (iter, PANGO_ATTR_FOREGROUND);
-
-      if (underline != NULL && color != NULL)
-        {
-          gint start, end;
-          PangoRectangle start_pos;
-          PangoRectangle end_pos;
-          GtkLabelLink *link;
-
-          pango_attr_iterator_range (iter, &start, &end);
-          pango_layout_index_to_pos (layout, start, &start_pos);
-          pango_layout_index_to_pos (layout, end, &end_pos);
-
-          if (links == NULL)
-            {
-              g_warning ("Ran out of links");
-              break;
-            }
-          link = links->data;
-          links = links->next;
-          link->start = start;
-          link->end = end;
-        }
-      } while (pango_attr_iterator_next (iter));
-
-    pango_attr_iterator_destroy (iter);
 }
 
 static gboolean
