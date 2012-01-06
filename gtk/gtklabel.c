@@ -2034,31 +2034,19 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
     }
 }
 
+static gboolean
+my_pango_attr_list_merge_filter (PangoAttribute *attribute,
+                                 gpointer        list)
+{
+  pango_attr_list_change (list, pango_attribute_copy (attribute));
+  return FALSE;
+}
+
 static void
 my_pango_attr_list_merge (PangoAttrList *into,
                           PangoAttrList *from)
 {
-  PangoAttrIterator *iter;
-  PangoAttribute    *attr;
-  GSList            *iter_attrs, *l;
-
-  iter = pango_attr_list_get_iterator (from);
-
-  if (iter)
-    {
-      do
-        {
-          iter_attrs = pango_attr_iterator_get_attrs (iter);
-          for (l = iter_attrs; l; l = l->next)
-            {
-              attr = l->data;
-              pango_attr_list_insert (into, attr);
-            }
-          g_slist_free (iter_attrs);
-        }
-      while (pango_attr_iterator_next (iter));
-      pango_attr_iterator_destroy (iter);
-    }
+  pango_attr_list_filter (from, my_pango_attr_list_merge_filter, into);
 }
 
 /* Calculates text, attrs and mnemonic_keyval from
