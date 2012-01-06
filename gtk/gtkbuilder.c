@@ -1409,6 +1409,31 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
       return TRUE;
     }
 
+  /*
+   * GParamSpecVariant can specify a GVariantType which can help with
+   * parsing, so we need to take care of that here.
+   */
+  if (G_IS_PARAM_SPEC_VARIANT (pspec))
+    {
+      GParamSpecVariant *variant_pspec = G_PARAM_SPEC_VARIANT (pspec);
+      const GVariantType *type;
+      GVariant *variant;
+
+      g_value_init (value, G_TYPE_VARIANT);
+
+      /* The GVariant parser doesn't deal with indefinite types */
+      if (g_variant_type_is_definite (variant_pspec->type))
+        type = variant_pspec->type;
+      else
+        type = NULL;
+
+      variant = g_variant_parse (type, string, NULL, NULL, error);
+      if (variant == NULL)
+        return FALSE;
+      g_value_take_variant (value, variant);
+      return TRUE;
+    }
+
   return gtk_builder_value_from_string_type (builder,
 					     G_PARAM_SPEC_VALUE_TYPE (pspec),
                                              string, value, error);
@@ -1563,6 +1588,17 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       }
     case G_TYPE_STRING:
       g_value_set_string (value, string);
+      break;
+    case G_TYPE_VARIANT:
+      {
+        GVariant *variant;
+
+        variant = g_variant_parse (NULL, string, NULL, NULL, error);
+        if (value != NULL)
+          g_value_take_variant (value, variant);
+        else
+          ret = FALSE;
+      }
       break;
     case G_TYPE_BOXED:
       if (G_VALUE_HOLDS (value, GDK_TYPE_COLOR))
