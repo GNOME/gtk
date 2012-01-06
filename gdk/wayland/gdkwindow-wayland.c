@@ -1147,6 +1147,9 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
 {
   GdkWindowImplWayland *impl;
   uint32_t grab_type;
+  GdkDeviceGrabInfo *button_implicit_grab;
+  gulong serial;
+  GdkDisplay *display;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -1197,6 +1200,25 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   wl_shell_surface_resize(impl->shell_surface,
                           _gdk_wayland_device_get_device (device),
                           timestamp, grab_type);
+
+  /* We need to break the implicit grab that we created with the button press.
+   * This is because of the semantics on wl_shell_surface_resize. That will
+   * absorb all the events until the resize is completed by the compositor.
+   * This includes the release event that would ordinarily remove the implicit
+   * grab.
+   */
+  display = gdk_window_get_display (window);
+  serial = _gdk_display_get_next_serial (display);
+  button_implicit_grab =
+    _gdk_display_has_device_grab (display, device, serial);
+
+  if (button_implicit_grab &&
+      button_implicit_grab->implicit)
+    {
+      button_implicit_grab->serial_end = serial;
+      button_implicit_grab->implicit_ungrab = FALSE;
+      _gdk_display_device_grab_update (display, device, device, serial);
+    }
 }
 
 static void
