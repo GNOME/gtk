@@ -1,0 +1,10 @@
+<schemalist>
+  <schema id='org.gtk.WindowState'>
+    <key name='size' type='(ii)'>
+      <default>(-1, -1)</default>
+    </key>
+    <key name='is-maximized' type='b'>
+      <default>false</default>
+    </key>
+  </schema>
+</schemalist>

@@ -338,6 +338,10 @@ gboolean gtk_window_get_has_resize_grip    (GtkWindow    *window);
 gboolean gtk_window_resize_grip_is_visible (GtkWindow    *window);
 gboolean gtk_window_get_resize_grip_area   (GtkWindow    *window,
                                             GdkRectangle *rect);
+void     gtk_window_setup_persistent_state (GtkWindow   *window,
+                                            GSettings   *settings,
+                                            const gchar *child_name);
+
 
 G_END_DECLS
 
