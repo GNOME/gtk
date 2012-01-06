@@ -4783,22 +4783,21 @@ gtk_menu_position (GtkMenu  *menu,
 
   scroll_offset = 0;
 
-  if (priv->initially_pushed_in)
+  if (y + requisition.height > monitor.y + monitor.height)
     {
-      if (y + requisition.height > monitor.y + monitor.height)
-        {
-          scroll_offset -= y + requisition.height - (monitor.y + monitor.height);
-          y = (monitor.y + monitor.height) - requisition.height;
-        }
-
-      if (y < monitor.y)
-        {
-          scroll_offset += monitor.y - y;
-          y = monitor.y;
-        }
-
-      x = CLAMP (x, monitor.x, MAX (monitor.x, monitor.x + monitor.width - requisition.width));
+      if (priv->initially_pushed_in)
+        scroll_offset += (monitor.y + monitor.height) - requisition.height - y;
+      y = (monitor.y + monitor.height) - requisition.height;
     }
+
+  if (y < monitor.y)
+    {
+      if (priv->initially_pushed_in)
+        scroll_offset += monitor.y - y;
+      y = monitor.y;
+    }
+
+  x = CLAMP (x, monitor.x, MAX (monitor.x, monitor.x + monitor.width - requisition.width));
 
   if (GTK_MENU_SHELL (menu)->priv->active)
     {
