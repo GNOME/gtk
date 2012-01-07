@@ -58,14 +58,6 @@
  */
 
 enum {
-  SIDE_LEFT   = 1,
-  SIDE_BOTTOM = 1 << 1,
-  SIDE_RIGHT  = 1 << 2,
-  SIDE_TOP    = 1 << 3,
-  SIDE_ALL    = 0xF
-};
-
-enum {
   PROP_0,
   PROP_NAME
 };
@@ -1368,13 +1360,13 @@ static void
 gtk_theming_engine_hide_border_sides (GtkBorder *border,
                                       guint      hidden_side)
 {
-  if (hidden_side & SIDE_TOP)
+  if (hidden_side & (1 << GTK_CSS_TOP))
     border->top = 0;
-  if (hidden_side & SIDE_RIGHT)
+  if (hidden_side & (1 << GTK_CSS_RIGHT))
     border->right = 0;
-  if (hidden_side & SIDE_BOTTOM)
+  if (hidden_side & (1 << GTK_CSS_BOTTOM))
     border->bottom = 0;
-  if (hidden_side & SIDE_LEFT)
+  if (hidden_side & (1 << GTK_CSS_LEFT))
     border->left = 0;
 }
 
@@ -1385,7 +1377,6 @@ render_frame_fill (cairo_t       *cr,
                    GdkRGBA        colors[4],
                    guint          hidden_side)
 {
-  static const guint current_side[4] = { SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM, SIDE_LEFT };
   GtkRoundedBox padding_box;
   guint i, j;
 
@@ -1407,12 +1398,12 @@ render_frame_fill (cairo_t       *cr,
     {
       for (i = 0; i < 4; i++) 
         {
-          if (hidden_side & current_side[i])
+          if (hidden_side & (1 << i))
             continue;
 
           for (j = 0; j < 4; j++)
             { 
-              if (hidden_side & current_side[j])
+              if (hidden_side & (1 << j))
                 continue;
 
               if (i == j || 
@@ -1459,7 +1450,6 @@ render_frame_internal (GtkThemingEngine *engine,
   gdouble progress;
   gboolean running;
   GtkBorder border;
-  static const guint current_side[4] = { SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM, SIDE_LEFT };
   GdkRGBA *alloc_colors[4];
   GdkRGBA colors[4];
   guint i, j;
@@ -1530,7 +1520,7 @@ render_frame_internal (GtkThemingEngine *engine,
 
   for (i = 0; i < 4; i++)
     {
-      if (hidden_side & current_side[i])
+      if (hidden_side & (1 << i))
         continue;
 
       switch (border_style[i])
@@ -1559,9 +1549,9 @@ render_frame_internal (GtkThemingEngine *engine,
             for (j = 0; j < 4; j++)
               {
                 if (border_style[j] == GTK_BORDER_STYLE_DOUBLE)
-                  hidden_side |= current_side[j];
+                  hidden_side |= (1 << j);
                 else
-                  dont_draw |= current_side[j];
+                  dont_draw |= (1 << j);
               }
             other_border.top = (border.top + 2) / 3;
             other_border.right = (border.right + 2) / 3;
@@ -1595,9 +1585,9 @@ render_frame_internal (GtkThemingEngine *engine,
                   color_shade (&colors[j], 1.8, &colors[j]);
                 if (border_style[j] == GTK_BORDER_STYLE_GROOVE ||
                     border_style[j] == GTK_BORDER_STYLE_RIDGE)
-                  hidden_side |= current_side[j];
+                  hidden_side |= (1 << j);
                 else
-                  dont_draw |= current_side[j];
+                  dont_draw |= (1 << j);
               }
             other_border.top = border.top / 2;
             other_border.right = border.right / 2;
@@ -2114,28 +2104,28 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
     {
     case GTK_POS_LEFT:
       junction = GTK_JUNCTION_LEFT;
-      hidden_side = SIDE_LEFT;
+      hidden_side = (1 << GTK_CSS_LEFT);
 
       cairo_translate (cr, x + width, y);
       cairo_rotate (cr, G_PI / 2);
       break;
     case GTK_POS_RIGHT:
       junction = GTK_JUNCTION_RIGHT;
-      hidden_side = SIDE_RIGHT;
+      hidden_side = (1 << GTK_CSS_RIGHT);
 
       cairo_translate (cr, x, y + height);
       cairo_rotate (cr, - G_PI / 2);
       break;
     case GTK_POS_TOP:
       junction = GTK_JUNCTION_TOP;
-      hidden_side = SIDE_TOP;
+      hidden_side = (1 << GTK_CSS_TOP);
 
       cairo_translate (cr, x + width, y + height);
       cairo_rotate (cr, G_PI);
       break;
     case GTK_POS_BOTTOM:
       junction = GTK_JUNCTION_BOTTOM;
-      hidden_side = SIDE_BOTTOM;
+      hidden_side = (1 << GTK_CSS_BOTTOM);
 
       cairo_translate (cr, x, y);
       break;

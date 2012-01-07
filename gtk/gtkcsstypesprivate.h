@@ -63,6 +63,14 @@ typedef enum {
   GTK_CSS_AREA_CONTENT_BOX
 } GtkCssArea;
 
+/* for the order in arrays */
+typedef enum /*< skip >*/ {
+  GTK_CSS_TOP,
+  GTK_CSS_RIGHT,
+  GTK_CSS_BOTTOM,
+  GTK_CSS_LEFT
+} GtkCssSide;
+
 typedef struct _GtkCssBorderCornerRadius GtkCssBorderCornerRadius;
 typedef struct _GtkCssBorderImageRepeat GtkCssBorderImageRepeat;
 
