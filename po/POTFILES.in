@@ -39,6 +39,7 @@ gtk/gtkappchooserbutton.c
 gtk/gtkappchooser.c
 gtk/gtkappchooserdialog.c
 gtk/gtkappchooserwidget.c
+gtk/gtkapplication.c
 gtk/gtkapplicationwindow.c
 gtk/gtkarrow.c
 gtk/gtkaspectframe.c
