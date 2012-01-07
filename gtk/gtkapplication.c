@@ -1209,4 +1209,35 @@ gtk_application_is_inhibited (GtkApplication             *application,
   return inhibited;
 }
 
+gboolean
+gtk_application_end_session (GtkApplication         *application,
+                             GtkApplicationEndStyle  style,
+                             gboolean                request_confirmation)
+{
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), FALSE);
+  g_return_val_if_fail (!g_application_get_is_remote (G_APPLICATION (application)), FALSE);
+  g_return_val_if_fail (application->priv->sm_proxy != NULL, FALSE);
+
+  switch (style)
+    {
+    case GTK_APPLICATION_LOGOUT:
+      g_dbus_proxy_call (application->priv->sm_proxy,
+                         "Logout",
+                         g_variant_new ("(u)", request_confirmation),
+                         G_DBUS_CALL_FLAGS_NONE,
+                         G_MAXINT,
+                         NULL, NULL, NULL);
+      break;
+    case GTK_APPLICATION_REBOOT:
+    case GTK_APPLICATION_SHUTDOWN:
+      g_dbus_proxy_call (application->priv->sm_proxy,
+                         "Shutdown",
+                         NULL,
+                         G_DBUS_CALL_FLAGS_NONE,
+                         G_MAXINT,
+                         NULL, NULL, NULL);
+      break;
+    }
+}
+
 #endif
