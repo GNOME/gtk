@@ -339,7 +339,8 @@ copy $(ConfigurationName)\$(PlatformName)\bin\gailutil.lib $(OutDir)\lib&#x0D;&#
 
 mkdir $(OutDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 copy ..\..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(OutDir)\share\glib-2.0\schemas&#x0D;&#x0A;
-echo &quot;Compiling gsettings XML File(s)...&quot;&#x0D;&#x0A;
+copy ..\..\..\gtk\org.gtk.WindowState.gschema.xml $(OutDir)\share\glib-2.0\schemas&#x0D;&#x0A;
+echo &quot;Compiling gsettings XML Files...&quot;&#x0D;&#x0A;
 $(OutDir)\bin\glib-compile-schemas.exe $(OutDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 "
 	/>

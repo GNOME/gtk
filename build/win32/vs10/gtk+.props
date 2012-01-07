@@ -565,7 +565,9 @@ mkdir $(CopyDir)\share\glib-2.0\schemas
 
 copy ..\..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas
 
-echo "Compiling gsettings XML File(s)..."
+copy ..\..\..\gtk\org.gtk.WindowState.gschema.xml $(CopyDir)\share\glib-2.0\schemas
+
+echo "Compiling gsettings XML Files..."
 
 $(CopyDir)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas
 
