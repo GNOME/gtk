@@ -1444,6 +1444,54 @@ gtk_application_end_session (GtkApplication         *application,
                          NULL, NULL, NULL);
       break;
     }
+
+#else
+
+/* Trivial implementation.
+ *
+ * EggSMClient has working Win32 and OSX implementations of
+ * ::quit-requested, ::quit, ::quit-cancelled that should be
+ * copied here eventually.
+ *
+ * For the inhibit API, see
+ * http://msdn.microsoft.com/en-us/library/ms700677%28VS.85%29.aspx
+ */
+
+void
+gtk_application_quit_response (GtkApplication *application,
+                               gboolean        will_quit,
+                               const gchar    *reason)
+{
+}
+
+guint
+gtk_application_inhibit (GtkApplication             *application,
+                         GtkWindow                  *window,
+                         GtkApplicationInhibitFlags  flags,
+                         const gchar                *reason)
+{
+  return 0;
+}
+
+void
+gtk_application_uninhibit (GtkApplication *application,
+                           guint           cookie)
+{
+}
+
+gboolean
+gtk_application_is_inhibited (GtkApplication             *application,
+                              GtkApplicationInhibitFlags  flags)
+{
+  return FALSE;
+}
+
+gboolean
+gtk_application_end_session (GtkApplication         *application,
+                             GtkApplicationEndStyle *style,
+                             gboolean                request_confirmation)
+{
+  return FALSE;
 }
 
 #endif
