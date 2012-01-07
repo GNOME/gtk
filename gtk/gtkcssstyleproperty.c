@@ -116,15 +116,6 @@ _gtk_css_style_property_assign (GtkStyleProperty   *property,
 }
 
 static void
-_gtk_style_property_default_value (GtkStyleProperty   *property,
-                                   GtkStyleProperties *properties,
-                                   GtkStateFlags       state,
-                                   GValue             *value)
-{
-  g_value_copy (_gtk_css_style_property_get_initial_value (GTK_CSS_STYLE_PROPERTY (property)), value);
-}
-
-static void
 _gtk_css_style_property_query (GtkStyleProperty   *property,
                                GtkStyleProperties *props,
                                GtkStateFlags       state,
@@ -165,7 +156,7 @@ _gtk_css_style_property_query (GtkStyleProperty   *property,
         g_value_copy (val, value);
     }
   else
-    _gtk_style_property_default_value (property, props, state, value);
+    g_value_copy (_gtk_css_style_property_get_initial_value (GTK_CSS_STYLE_PROPERTY (property)), value);
 }
 
 static gboolean
