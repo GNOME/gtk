@@ -1444,6 +1444,8 @@ gtk_application_end_session (GtkApplication         *application,
                          NULL, NULL, NULL);
       break;
     }
+
+  return TRUE;
 }
 
 #else
