@@ -1382,7 +1382,7 @@ static void
 render_frame_fill (cairo_t       *cr,
                    GtkRoundedBox *border_box,
                    GtkBorder     *border,
-                   GdkRGBA       *colors[4],
+                   GdkRGBA        colors[4],
                    guint          hidden_side)
 {
   static const guint current_side[4] = { SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM, SIDE_LEFT };
@@ -1393,11 +1393,11 @@ render_frame_fill (cairo_t       *cr,
   _gtk_rounded_box_shrink (&padding_box, border->top, border->right, border->bottom, border->left);
 
   if (hidden_side == 0 &&
-      gdk_rgba_equal (colors[0], colors[1]) &&
-      gdk_rgba_equal (colors[0], colors[2]) &&
-      gdk_rgba_equal (colors[0], colors[3]))
+      gdk_rgba_equal (&colors[0], &colors[1]) &&
+      gdk_rgba_equal (&colors[0], &colors[2]) &&
+      gdk_rgba_equal (&colors[0], &colors[3]))
     {
-      gdk_cairo_set_source_rgba (cr, colors[0]);
+      gdk_cairo_set_source_rgba (cr, &colors[0]);
 
       _gtk_rounded_box_path (border_box, cr);
       _gtk_rounded_box_path (&padding_box, cr);
@@ -1416,7 +1416,7 @@ render_frame_fill (cairo_t       *cr,
                 continue;
 
               if (i == j || 
-                  (gdk_rgba_equal (colors[i], colors[j])))
+                  (gdk_rgba_equal (&colors[i], &colors[j])))
                 {
                   /* We were already painted when i == j */
                   if (i > j)
@@ -1436,7 +1436,7 @@ render_frame_fill (cairo_t       *cr,
           if (i > j)
             continue;
 
-          gdk_cairo_set_source_rgba (cr, colors[i]);
+          gdk_cairo_set_source_rgba (cr, &colors[i]);
 
           cairo_fill (cr);
         }
@@ -1460,7 +1460,8 @@ render_frame_internal (GtkThemingEngine *engine,
   gboolean running;
   GtkBorder border;
   static const guint current_side[4] = { SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM, SIDE_LEFT };
-  GdkRGBA *colors[4];
+  GdkRGBA *alloc_colors[4];
+  GdkRGBA colors[4];
   guint i, j;
 
   state = gtk_theming_engine_get_state (engine);
@@ -1473,10 +1474,10 @@ render_frame_internal (GtkThemingEngine *engine,
                           "border-right-style", &border_style[1],
                           "border-bottom-style", &border_style[2],
                           "border-left-style", &border_style[3],
-                          "border-top-color", &colors[0],
-                          "border-right-color", &colors[1],
-                          "border-bottom-color", &colors[2],
-                          "border-left-color", &colors[3],
+                          "border-top-color", &alloc_colors[0],
+                          "border-right-color", &alloc_colors[1],
+                          "border-bottom-color", &alloc_colors[2],
+                          "border-left-color", &alloc_colors[3],
                           NULL);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
@@ -1503,11 +1504,20 @@ render_frame_internal (GtkThemingEngine *engine,
 
       for (i = 0; i < 4; i++)
         {
-          colors[i]->red = CLAMP (colors[i]->red + ((other_colors[i]->red - colors[i]->red) * progress), 0, 1);
-          colors[i]->green = CLAMP (colors[i]->green + ((other_colors[i]->green - colors[i]->green) * progress), 0, 1);
-          colors[i]->blue = CLAMP (colors[i]->blue + ((other_colors[i]->blue - colors[i]->blue) * progress), 0, 1);
-          colors[i]->alpha = CLAMP (colors[i]->alpha + ((other_colors[i]->alpha - colors[i]->alpha) * progress), 0, 1);
+          colors[i].red = CLAMP (alloc_colors[i]->red + ((other_colors[i]->red - alloc_colors[i]->red) * progress), 0, 1);
+          colors[i].green = CLAMP (alloc_colors[i]->green + ((other_colors[i]->green - alloc_colors[i]->green) * progress), 0, 1);
+          colors[i].blue = CLAMP (alloc_colors[i]->blue + ((other_colors[i]->blue - alloc_colors[i]->blue) * progress), 0, 1);
+          colors[i].alpha = CLAMP (alloc_colors[i]->alpha + ((other_colors[i]->alpha - alloc_colors[i]->alpha) * progress), 0, 1);
           gdk_rgba_free (other_colors[i]);
+          gdk_rgba_free (alloc_colors[i]);
+        }
+    }
+  else
+    {
+      for (i = 0; i < 4; i++)
+        {
+          colors[i] = *alloc_colors[i];
+          gdk_rgba_free (alloc_colors[i]);
         }
     }
 
@@ -1528,11 +1538,11 @@ render_frame_internal (GtkThemingEngine *engine,
           break;
         case GTK_BORDER_STYLE_INSET:
           if (i == 1 || i == 2)
-            color_shade (colors[i], 1.8, colors[i]);
+            color_shade (&colors[i], 1.8, &colors[i]);
           break;
         case GTK_BORDER_STYLE_OUTSET:
           if (i == 0 || i == 3)
-            color_shade (colors[i], 1.8, colors[i]);
+            color_shade (&colors[i], 1.8, &colors[i]);
           break;
         case GTK_BORDER_STYLE_DOTTED:
         case GTK_BORDER_STYLE_DASHED:
@@ -1576,9 +1586,6 @@ render_frame_internal (GtkThemingEngine *engine,
   render_frame_fill (cr, &border_box, &border, colors, hidden_side);
 
 done:
-  for (i = 0; i < 4; i++)
-    gdk_rgba_free (colors[i]);
-
   cairo_restore (cr);
 }
 
