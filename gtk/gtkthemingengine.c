@@ -1530,6 +1530,9 @@ render_frame_internal (GtkThemingEngine *engine,
 
   for (i = 0; i < 4; i++)
     {
+      if (hidden_side & current_side[i])
+        continue;
+
       switch (border_style[i])
         {
         case GTK_BORDER_STYLE_NONE:
@@ -1549,33 +1552,70 @@ render_frame_internal (GtkThemingEngine *engine,
           break;
         case GTK_BORDER_STYLE_DOUBLE:
           {
-            GtkBorder double_border;
+            GtkRoundedBox other_box;
+            GtkBorder other_border;
             guint dont_draw = hidden_side;
 
             for (j = 0; j < 4; j++)
               {
                 if (border_style[j] == GTK_BORDER_STYLE_DOUBLE)
-                  border_style[j] = GTK_BORDER_STYLE_SOLID;
+                  hidden_side |= current_side[j];
                 else
                   dont_draw |= current_side[j];
               }
-            double_border.top = (border.top + 2) / 3;
-            double_border.right = (border.right + 2) / 3;
-            double_border.bottom = (border.bottom + 2) / 3;
-            double_border.left = (border.left + 2) / 3;
+            other_border.top = (border.top + 2) / 3;
+            other_border.right = (border.right + 2) / 3;
+            other_border.bottom = (border.bottom + 2) / 3;
+            other_border.left = (border.left + 2) / 3;
             
-            render_frame_fill (cr, &border_box, &double_border, colors, dont_draw);
+            render_frame_fill (cr, &border_box, &other_border, colors, dont_draw);
             
-            _gtk_rounded_box_shrink (&border_box,
-                                     border.top - double_border.top,
-                                     border.right - double_border.right,
-                                     border.bottom - double_border.bottom,
-                                     border.left - double_border.left);
-            render_frame_fill (cr, &border_box, &double_border, colors, dont_draw);
-            goto done;
+            other_box = border_box;
+            _gtk_rounded_box_shrink (&other_box,
+                                     border.top - other_border.top,
+                                     border.right - other_border.right,
+                                     border.bottom - other_border.bottom,
+                                     border.left - other_border.left);
+            render_frame_fill (cr, &other_box, &other_border, colors, dont_draw);
           }
         case GTK_BORDER_STYLE_GROOVE:
         case GTK_BORDER_STYLE_RIDGE:
+          {
+            GtkRoundedBox other_box;
+            GdkRGBA other_colors[4];
+            guint dont_draw = hidden_side;
+            GtkBorder other_border;
+
+            for (j = 0; j < 4; j++)
+              {
+                other_colors[j] = colors[j];
+                if ((j == 0 || j == 3) ^ (border_style[j] == GTK_BORDER_STYLE_RIDGE))
+                  color_shade (&other_colors[j], 1.8, &other_colors[j]);
+                else
+                  color_shade (&colors[j], 1.8, &colors[j]);
+                if (border_style[j] == GTK_BORDER_STYLE_GROOVE ||
+                    border_style[j] == GTK_BORDER_STYLE_RIDGE)
+                  hidden_side |= current_side[j];
+                else
+                  dont_draw |= current_side[j];
+              }
+            other_border.top = border.top / 2;
+            other_border.right = border.right / 2;
+            other_border.bottom = border.bottom / 2;
+            other_border.left = border.left / 2;
+            
+            render_frame_fill (cr, &border_box, &other_border, colors, dont_draw);
+            
+            other_box = border_box;
+            _gtk_rounded_box_shrink (&other_box,
+                                     other_border.top, other_border.right,
+                                     other_border.bottom, other_border.left);
+            other_border.top = border.top - other_border.top;
+            other_border.right = border.right - other_border.right;
+            other_border.bottom = border.bottom - other_border.bottom;
+            other_border.left = border.left - other_border.left;
+            render_frame_fill (cr, &other_box, &other_border, other_colors, dont_draw);
+          }
           break;
         default:
           g_assert_not_reached ();
@@ -1585,7 +1625,6 @@ render_frame_internal (GtkThemingEngine *engine,
   
   render_frame_fill (cr, &border_box, &border, colors, hidden_side);
 
-done:
   cairo_restore (cr);
 }
 
