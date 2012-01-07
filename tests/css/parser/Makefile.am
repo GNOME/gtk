@@ -162,6 +162,8 @@ EXTRA_DIST += \
 	border-radius.css \
 	border-radius.errors \
 	border-radius.ref.css \
+	border-shorthand.css \
+	border-shorthand.ref.css \
 	close-at-end-of-file.css \
 	close-at-end-of-file.errors \
 	close-at-end-of-file.ref.css \

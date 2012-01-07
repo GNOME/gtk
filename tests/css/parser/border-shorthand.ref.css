@@ -1,0 +1,771 @@
+a {
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+}
+
+b {
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+}
+
+c {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: initial;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+}
+
+d {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+e {
+  border-top-color: initial;
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+f {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: initial;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: initial;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: initial;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: initial;
+  border-top-width: 3;
+}
+
+g {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: initial;
+  border-bottom-width: initial;
+}
+
+h {
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+i {
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: initial;
+}
+
+j {
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: initial;
+}
+
+k {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+}
+
+l {
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: initial;
+  border-left-style: solid;
+  border-left-width: 3;
+  border-right-color: initial;
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: initial;
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+m {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+n {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+o {
+  border-top-color: rgb(255,192,203);
+  border-top-style: initial;
+  border-top-width: initial;
+}
+
+p {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-right-color: initial;
+  border-right-style: solid;
+  border-right-width: 3;
+}
+
+q {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+r {
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+  border-right-color: initial;
+  border-right-style: solid;
+  border-right-width: 3;
+}
+
+s {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: initial;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: initial;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: initial;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: initial;
+  border-top-width: 3;
+}
+
+t {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: initial;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: initial;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: initial;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: initial;
+}
+
+u {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+}
+
+v {
+  border-top-color: rgb(255,192,203);
+  border-top-style: initial;
+  border-top-width: 3;
+}
+
+w {
+  border-top-color: rgb(255,192,203);
+  border-top-style: initial;
+  border-top-width: initial;
+}
+
+x {
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+y {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-right-color: initial;
+  border-right-style: solid;
+  border-right-width: 3;
+}
+
+z {
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: initial;
+}
+
+ab {
+  border-right-color: initial;
+  border-right-style: solid;
+  border-right-width: initial;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+bb {
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+}
+
+cb {
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+}
+
+db {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: initial;
+  border-bottom-width: 3;
+}
+
+eb {
+  border-left-color: initial;
+  border-left-style: initial;
+  border-left-width: 3;
+}
+
+fb {
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: initial;
+}
+
+gb {
+  border-right-color: rgb(255,192,203);
+  border-right-style: initial;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+hb {
+  border-left-color: rgb(255,192,203);
+  border-left-style: initial;
+  border-left-width: initial;
+}
+
+ib {
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+}
+
+jb {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+}
+
+kb {
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: initial;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: initial;
+  border-left-style: solid;
+  border-left-width: initial;
+  border-right-color: initial;
+  border-right-style: solid;
+  border-right-width: initial;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+lb {
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+mb {
+  border-right-color: rgb(255,192,203);
+  border-right-style: initial;
+  border-right-width: 3;
+}
+
+nb {
+  border-top-color: initial;
+  border-top-style: initial;
+  border-top-width: 3;
+}
+
+ob {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+pb {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: initial;
+  border-bottom-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: initial;
+  border-top-width: initial;
+}
+
+qb {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: initial;
+  border-left-style: solid;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+rb {
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+}
+
+sb {
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: initial;
+}
+
+tb {
+  border-top-color: initial;
+  border-top-style: solid;
+  border-top-width: initial;
+}
+
+ub {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+vb {
+  border-right-color: initial;
+  border-right-style: solid;
+  border-right-width: 3;
+}
+
+wb {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+xb {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: initial;
+  border-left-width: 3;
+  border-right-color: initial;
+  border-right-style: initial;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: initial;
+  border-top-width: 3;
+}
+
+yb {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: initial;
+}
+
+zb {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: initial;
+  border-bottom-width: 3;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+}
+
+ac {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: initial;
+  border-bottom-width: initial;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: initial;
+  border-left-width: initial;
+  border-right-color: rgb(255,192,203);
+  border-right-style: initial;
+  border-right-width: initial;
+  border-top-color: rgb(255,192,203);
+  border-top-style: initial;
+  border-top-width: initial;
+}
+
+bc {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: initial;
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+cc {
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: initial;
+  border-left-style: solid;
+  border-left-width: 3;
+  border-right-color: initial;
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: initial;
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+dc {
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+}
+
+ec {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+  border-top-color: initial;
+  border-top-style: initial;
+  border-top-width: 3;
+}
+
+fc {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: initial;
+  border-bottom-width: 3;
+}
+
+gc {
+  border-top-color: rgb(255,192,203);
+  border-top-style: initial;
+  border-top-width: initial;
+}
+
+hc {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+}
+
+ic {
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+}
+
+jc {
+  border-bottom-color: initial;
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+kc {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-left-color: rgb(255,192,203);
+  border-left-style: initial;
+  border-left-width: 3;
+}
+
+lc {
+  border-bottom-color: initial;
+  border-bottom-style: initial;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: initial;
+  border-left-style: initial;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: initial;
+  border-top-style: initial;
+  border-top-width: 3;
+}
+
+mc {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: initial;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+nc {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: initial;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: initial;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: initial;
+  border-right-width: initial;
+  border-top-color: rgb(255,192,203);
+  border-top-style: initial;
+  border-top-width: 3;
+}
+
+oc {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: initial;
+  border-top-color: initial;
+  border-top-style: solid;
+  border-top-width: 3;
+}
+
+pc {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: initial;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: initial;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: initial;
+  border-right-width: 3;
+  border-top-color: initial;
+  border-top-style: initial;
+  border-top-width: 3;
+}
+
+qc {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: solid;
+  border-bottom-width: initial;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: solid;
+  border-left-width: initial;
+  border-right-color: rgb(255,192,203);
+  border-right-style: solid;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: solid;
+  border-top-width: initial;
+}
+
+rc {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: initial;
+  border-bottom-width: 3;
+  border-image-repeat: initial;
+  border-image-slice: initial;
+  border-image-source: initial;
+  border-image-width: initial;
+  border-left-color: rgb(255,192,203);
+  border-left-style: initial;
+  border-left-width: 3;
+  border-right-color: rgb(255,192,203);
+  border-right-style: initial;
+  border-right-width: 3;
+  border-top-color: rgb(255,192,203);
+  border-top-style: initial;
+  border-top-width: 3;
+}
+
+sc {
+  border-bottom-color: rgb(255,192,203);
+  border-bottom-style: initial;
+  border-bottom-width: initial;
+}
