@@ -71,6 +71,13 @@ typedef enum /*< skip >*/ {
   GTK_CSS_LEFT
 } GtkCssSide;
 
+typedef enum /*< skip >*/ {
+  GTK_CSS_TOP_LEFT,
+  GTK_CSS_TOP_RIGHT,
+  GTK_CSS_BOTTOM_RIGHT,
+  GTK_CSS_BOTTOM_LEFT
+} GtkCssCorner;
+
 typedef struct _GtkCssBorderCornerRadius GtkCssBorderCornerRadius;
 typedef struct _GtkCssBorderImageRepeat GtkCssBorderImageRepeat;
 
