@@ -56,9 +56,10 @@
  * a one-size-fits-all application model.
  *
  * Currently, GtkApplication handles GTK+ initialization, application
- * uniqueness, provides some basic scriptability and desktop shell integration
- * by exporting actions and menus and manages a list of toplevel windows whose
- * life-cycle is automatically tied to the life-cycle of your application.
+ * uniqueness, session management, provides some basic scriptability and
+ * desktop shell integration by exporting actions and menus and manages a
+ * list of toplevel windows whose life-cycle is automatically tied to the
+ * life-cycle of your application.
  *
  * While GtkApplication works fine with plain #GtkWindows, it is recommended
  * to use it together with #GtkApplicationWindow.
@@ -99,6 +100,25 @@
  * </xi:include>
  * </programlisting>
  * </example>
+ *
+ * GtkApplication optionally registers with a session manager
+ * of the users session (if you set the #GtkApplication::register-session
+ * property) and offers various functionality related to the session
+ * life-cycle.
+ *
+ * An application can be informed when the session is about to end
+ * by connecting to the #GtkApplication::quit-requested signal.
+ *
+ * An application can request the session to be ended by calling
+ * gtk_application_end_session().
+ *
+ * An application can block various ways to end the session with
+ * the gtk_application_inhibit() function. Typical use cases for
+ * this kind of inhibiting are long-running, uninterruptible operations,
+ * such as burning a CD or performing a disk backup. The session
+ * manager may not honor the inhibitor, but it can be expected to
+ * inform the user about the negative consequences of ending the
+ * session while inhibitors are present.
  */
 
 enum {
@@ -603,16 +623,77 @@ gtk_application_class_init (GtkApplicationClass *class)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1, GTK_TYPE_WINDOW);
 
+  /**
+   * GtkApplication::quit-requested:
+   * @application: the #GtkApplication
+   *
+   * Emitted when the session manager requests that the application
+   * exit (generally because the user is logging out). The application
+   * should decide whether or not it is willing to quit and then call
+   * g_application_quit_response(), passing %TRUE or %FALSE to give its
+   * answer to the session manager. It does not need to give an answer
+   * before returning from the signal handler; the answer can be given
+   * later on, but <emphasis>the application must not attempt to perform
+   * any actions or interact with the user</emphasis> in response to
+   * this signal. Any actions required for a clean shutdown should take
+   * place in response to the #GtkApplication::quit signal.
+   *
+   * The application should limit its operations until either the
+   * #GApplication::quit or #GtkApplication::quit-cancelled signals is
+   * emitted.
+   *
+   * To receive this signal, you need to set the
+   * #GtkApplication::register-session property
+   * when creating the application object.
+   *
+   * Since: 3.4
+   */
   gtk_application_signals[QUIT_REQUESTED] =
     g_signal_new ("quit-requested", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkApplicationClass, quit_requested),
                   NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 
+  /**
+   * GtkApplication::quit-cancelled:
+   * @application: the #GtkApplication
+   *
+   * Emitted when the session manager decides to cancel a logout after
+   * the application has already agreed to quit. After receiving this
+   * signal, the application can go back to what it was doing before
+   * receiving the #GtkApplication::quit-requested signal.
+   *
+   * To receive this signal, you need to set the
+   * #GtkApplication::register-session property
+   * when creating the application object.
+   *
+   * Since: 3.4
+   */
   gtk_application_signals[QUIT_CANCELLED] =
     g_signal_new ("quit-cancelled", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkApplicationClass, quit_cancelled),
                   NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 
+  /**
+   * GtkApplication::quit:
+   * @application: the #GtkApplication
+   *
+   * Emitted when the session manager wants the application to quit
+   * (generally because the user is logging out). The application
+   * should exit as soon as possible after receiving this signal; if
+   * it does not, the session manager may choose to forcibly kill it.
+   *
+   * Normally, an application would only be sent a ::quit if it
+   * agreed to quit in response to a #GtkApplication::quit-requested
+   * signal. However, this is not guaranteed; in some situations the
+   * session manager may decide to end the session without giving
+   * applications a chance to object.
+   *
+   * To receive this signal, you need to set the
+   * #GtkApplication::register-session property
+   * when creating the application object.
+   *
+   * Since: 3.4
+   */
   gtk_application_signals[QUIT] =
     g_signal_new ("quit", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkApplicationClass, quit),
@@ -946,6 +1027,21 @@ gtk_application_get_menubar (GtkApplication *application)
 
 #ifdef GDK_WINDOWING_X11
 
+/**
+ * GtkApplicationInhibitFlags:
+ * @GTK_APPLICATION_INHIBIT_LOGOUT: Inhibit logging out (including shutdown
+ *     of the computer)
+ * @GTK_APPLICATION_INHIBIT_SWITCH: Inhibit user switching
+ * @GTK_APPLICATION_INHIBIT_SUSPEND: Inhibit suspending the
+ *     session or computer
+ * @GTK_APPLICATION_INHIBIT_IDLE: Inhibit the session being
+ *     marked as idle (and possibly locked)
+ *
+ * Types of user actions that may be blocked by gtk_application_inhibit().
+ *
+ * Since: 3.4
+ */
+
 static void
 unregister_client (GtkApplication *app)
 {
@@ -1094,6 +1190,31 @@ gtk_application_startup_session_dbus (GtkApplication *app)
   g_signal_connect (app->priv->client_proxy, "g-signal", G_CALLBACK (client_proxy_signal), app);
 }
 
+/**
+ * gtk_application_quit_response:
+ * @application: the #GtkApplication
+ * @will_quit: whether the application agrees to quit
+ * @reason: (allow-none): a short human-readable string that explains
+ *     why quitting is not possible
+ *
+ * This function <emphasis>must</emphasis> be called in response to the
+ * #GtkApplication::quit-requested signal, to indicate whether or
+ * not the application is willing to quit. The application may call
+ * it either directly from the signal handler, or at some later point.
+ *
+ * It should be stressed that <emphasis>applications should not assume
+ * that they have the ability to block logout or shutdown</emphasis>,
+ * even when %FALSE is passed for @will_quit.
+ *
+ * After calling this method, the application should wait to receive
+ * either #GtkApplication::quit-cancelled or #GtkApplication::quit.
+ *
+ * If the application does not connect to #GtkApplication::quit-requested,
+ * #GtkApplication will call this method on its behalf (passing %TRUE
+ * for @will_quit).
+ *
+ * Since: 3.4
+ */
 void
 gtk_application_quit_response (GtkApplication *application,
                                gboolean        will_quit,
@@ -1113,6 +1234,41 @@ gtk_application_quit_response (GtkApplication *application,
                      NULL, NULL, NULL);
 }
 
+/**
+ * gtk_application_inhibit:
+ * @application: the #GApplication
+ * @window: (allow-none): a #GtkWindow, or %NULL
+ * @flags: what types of actions should be inhibited
+ * @reason: (allow-none): a short, human-readable string that explains
+ *     why these operations are inhibited
+ *
+ * Inform the session manager that certain types of actions should be
+ * inhibited. This is not guaranteed to work on all platforms and for
+ * all types of actions.
+ *
+ * Applications should invoke this method when they begin an operation
+ * that should not be interrupted, such as creating a CD or DVD. The
+ * types of actions that may be blocked are specified by the @flags
+ * parameter. When the application completes the operation it should
+ * call g_application_uninhibit() to remove the inhibitor.
+ * Inhibitors are also cleared when the application exits.
+ *
+ * Applications should not expect that they will always be able to block
+ * the action. In most cases, users will be given the option to force
+ * the action to take place.
+ *
+ * Reasons should be short and to the point.
+ *
+ * If a window is passed, the session manager may point the user to
+ * this window to find out more about why the action is inhibited.
+ *
+ * Returns: A non-zero cookie that is used to uniquely identify this
+ *     request. It should be used as an argument to g_application_uninhibit()
+ *     in order to remove the request. If the platform does not support
+ *     inhibiting or the request failed for some reason, 0 is returned.
+ *
+ * Since: 3.4
+ */
 guint
 gtk_application_inhibit (GtkApplication             *application,
                          GtkWindow                  *window,
@@ -1159,6 +1315,16 @@ gtk_application_inhibit (GtkApplication             *application,
   return cookie;
 }
 
+/**
+ * gtk_application_uninhibit:
+ * @application: the #GApplication
+ * @cookie: a cookie that was returned by g_application_inhibit()
+ *
+ * Removes an inhibitor that has been established with g_application_inhibit().
+ * Inhibitors are also cleared when the application exits.
+ *
+ * Since: 3.4
+ */
 void
 gtk_application_uninhibit (GtkApplication *application,
                            guint           cookie)
@@ -1175,6 +1341,18 @@ gtk_application_uninhibit (GtkApplication *application,
                      NULL, NULL, NULL);
 }
 
+/**
+ * gtk_application_is_inhibited:
+ * @application: the #GApplication
+ * @flags: what types of actions should be queried
+ *
+ * Determines if any of the actions specified in @flags are
+ * currently inhibited (possibly by another application).
+ *
+ * Returns: %TRUE if any of the actions specified in @flags are inhibited
+ *
+ * Since: 3.4
+ */
 gboolean
 gtk_application_is_inhibited (GtkApplication             *application,
                               GtkApplicationInhibitFlags  flags)
@@ -1209,6 +1387,34 @@ gtk_application_is_inhibited (GtkApplication             *application,
   return inhibited;
 }
 
+/**
+ * GtkApplicationEndStyle:
+ * @GTK_APPLICATION_LOGOUT: End the session by logging out.
+ * @GTK_APPLICATION_REBOOT: Restart the computer.
+ * @GTK_APPLICATION_SHUTDOWN: Shut the computer down.
+ *
+ * Different ways to end a user session, for use with
+ * gtk_application_end_session().
+ */
+
+/**
+ * gtk_application_end_session:
+ * @application: the #GtkApplication
+ * @style: the desired kind of session end
+ * @request_confirmation: whether or not the user should get a chance
+ *     to confirm the action
+ *
+ * Requests that the session manager end the current session.
+ * @style indicates how the session should be ended, and
+ * @request_confirmation indicates whether or not the user should be
+ * given a chance to confirm the action. Both of these flags are merely
+ * hints though; the session manager may choose to ignore them.
+ *
+ * Return value: %TRUE if the request was sent; %FALSE if it could not
+ *     be sent (eg, because it could not connect to the session manager)
+ *
+ * Since: 3.4
+ */
 gboolean
 gtk_application_end_session (GtkApplication         *application,
                              GtkApplicationEndStyle  style,
