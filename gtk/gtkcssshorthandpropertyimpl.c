@@ -255,6 +255,53 @@ parse_border_image (GtkCssShorthandProperty *shorthand,
 }
 
 static gboolean
+parse_border_side (GtkCssShorthandProperty *shorthand,
+                   GValue                  *values,
+                   GtkCssParser            *parser,
+                   GFile                   *base)
+{
+  int width;
+  int style;
+
+  do
+  {
+    if (!G_IS_VALUE (&values[0]) &&
+         _gtk_css_parser_try_length (parser, &width))
+      {
+        g_value_init (&values[0], G_TYPE_INT);
+        g_value_set_int (&values[0], width);
+      }
+    else if (!G_IS_VALUE (&values[1]) &&
+             _gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, &style))
+      {
+        g_value_init (&values[1], GTK_TYPE_BORDER_STYLE);
+        g_value_set_enum (&values[1], style);
+      }
+    else if (!G_IS_VALUE (&values[2]))
+      {
+        GtkSymbolicColor *symbolic;
+
+        symbolic = _gtk_css_parser_read_symbolic_color (parser);
+        if (symbolic == NULL)
+          return FALSE;
+
+        g_value_init (&values[2], GTK_TYPE_SYMBOLIC_COLOR);
+        g_value_take_boxed (&values[2], symbolic);
+      }
+    else
+      {
+        /* We parsed everything and there's still stuff left?
+         * Pretend we didn't notice and let the normal code produce
+         * a 'junk at end of value' error */
+        break;
+      }
+  }
+  while (!value_is_done_parsing (parser));
+
+  return TRUE;
+}
+
+static gboolean
 parse_border (GtkCssShorthandProperty *shorthand,
               GValue                  *values,
               GtkCssParser            *parser,
@@ -865,6 +912,10 @@ _gtk_css_shorthand_property_init_properties (void)
   const char *border_color_subproperties[] = { "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", NULL };
   const char *border_style_subproperties[] = { "border-top-style", "border-right-style", "border-bottom-style", "border-left-style", NULL };
   const char *border_image_subproperties[] = { "border-image-source", "border-image-slice", "border-image-width", "border-image-repeat", NULL };
+  const char *border_top_subproperties[] = { "border-top-width", "border-top-style", "border-top-color", NULL };
+  const char *border_right_subproperties[] = { "border-right-width", "border-right-style", "border-right-color", NULL };
+  const char *border_bottom_subproperties[] = { "border-bottom-width", "border-bottom-style", "border-bottom-color", NULL };
+  const char *border_left_subproperties[] = { "border-left-width", "border-left-style", "border-left-color", NULL };
   const char *border_subproperties[] = { "border-top-width", "border-right-width", "border-bottom-width", "border-left-width",
                                          "border-top-style", "border-right-style", "border-bottom-style", "border-left-style",
                                          "border-top-color", "border-right-color", "border-bottom-color", "border-left-color",
@@ -918,6 +969,30 @@ _gtk_css_shorthand_property_init_properties (void)
                                           G_TYPE_NONE,
                                           border_image_subproperties,
                                           parse_border_image,
+                                          NULL,
+                                          NULL);
+  _gtk_css_shorthand_property_register   ("border-top",
+                                          G_TYPE_NONE,
+                                          border_top_subproperties,
+                                          parse_border_side,
+                                          NULL,
+                                          NULL);
+  _gtk_css_shorthand_property_register   ("border-right",
+                                          G_TYPE_NONE,
+                                          border_right_subproperties,
+                                          parse_border_side,
+                                          NULL,
+                                          NULL);
+  _gtk_css_shorthand_property_register   ("border-bottom",
+                                          G_TYPE_NONE,
+                                          border_bottom_subproperties,
+                                          parse_border_side,
+                                          NULL,
+                                          NULL);
+  _gtk_css_shorthand_property_register   ("border-left",
+                                          G_TYPE_NONE,
+                                          border_left_subproperties,
+                                          parse_border_side,
                                           NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("border",
