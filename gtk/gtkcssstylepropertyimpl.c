@@ -448,7 +448,8 @@ compute_border_width (GtkCssStyleProperty    *property,
   border_style = g_value_get_enum (_gtk_style_context_peek_property (context, _gtk_style_property_get_name (GTK_STYLE_PROPERTY (style))));
 
   g_value_init (computed, G_TYPE_INT);
-  if (border_style == GTK_BORDER_STYLE_NONE)
+  if (border_style == GTK_BORDER_STYLE_NONE ||
+      border_style == GTK_BORDER_STYLE_HIDDEN)
     g_value_set_int (computed, 0);
   else
     g_value_copy (specified, computed);
