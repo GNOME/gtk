@@ -244,6 +244,8 @@ _gtk_rounded_box_path (const GtkRoundedBox *box,
                    box->corner[GTK_CSS_BOTTOM_LEFT].horizontal,
                    box->corner[GTK_CSS_BOTTOM_LEFT].vertical,
                    G_PI / 2, G_PI);
+
+  cairo_close_path (cr);
 }
 
 double
