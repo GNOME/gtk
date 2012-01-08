@@ -1079,6 +1079,7 @@ client_proxy_signal (GDBusProxy     *proxy,
   else if (strcmp (signal_name, "EndSession") == 0)
     {
       g_debug ("Received EndSession");
+      app->priv->quit_requested = TRUE;
       gtk_application_quit_response (app, TRUE, NULL);
       unregister_client (app);
       g_signal_emit (app, gtk_application_signals[QUIT], 0);
@@ -1438,7 +1439,7 @@ gtk_application_end_session (GtkApplication         *application,
     case GTK_APPLICATION_LOGOUT:
       g_dbus_proxy_call (application->priv->sm_proxy,
                          "Logout",
-                         g_variant_new ("(u)", request_confirmation),
+                         g_variant_new ("(u)", request_confirmation ? 0 : 1),
                          G_DBUS_CALL_FLAGS_NONE,
                          G_MAXINT,
                          NULL, NULL, NULL);
