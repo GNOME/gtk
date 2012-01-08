@@ -1292,8 +1292,6 @@ gtk_application_inhibit (GtkApplication             *application,
   g_return_val_if_fail (!g_application_get_is_remote (G_APPLICATION (application)), 0);
   g_return_val_if_fail (application->priv->sm_proxy != NULL, 0);
 
-  g_debug ("Calling Inhibit\n");
-
   if (window != NULL)
     xid = GDK_WINDOW_XID (gtk_widget_get_window (GTK_WIDGET (window)));
   else
@@ -1372,8 +1370,6 @@ gtk_application_is_inhibited (GtkApplication             *application,
   g_return_val_if_fail (GTK_IS_APPLICATION (application), FALSE);
   g_return_val_if_fail (!g_application_get_is_remote (G_APPLICATION (application)), FALSE);
   g_return_val_if_fail (application->priv->sm_proxy != NULL, FALSE);
-
-  g_debug ("Calling IsInhibited\n");
 
   res = g_dbus_proxy_call_sync (application->priv->sm_proxy,
                                 "IsInhibited",
