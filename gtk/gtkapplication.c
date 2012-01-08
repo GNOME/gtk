@@ -39,6 +39,8 @@
 #ifdef GDK_WINDOWING_QUARTZ
 #include "gtkquartz-menu.h"
 #import <Cocoa/Cocoa.h>
+#include <Carbon/Carbon.h>
+#include <CoreServices/CoreServices.h>
 #endif
 
 #include <gdk/gdk.h>
@@ -159,6 +161,9 @@ struct _GtkApplicationPrivate
 #ifdef GDK_WINDOWING_QUARTZ
   GActionMuxer *muxer;
   GMenu *combined;
+
+  AppleEvent quit_event, quit_reply;
+  gboolean quit_requested, quitting;
 #endif
 };
 
@@ -225,7 +230,6 @@ window_prefix_from_appid (const gchar *appid)
 
 static void gtk_application_startup_session_dbus (GtkApplication *app);
 
-
 static void
 gtk_application_startup_x11 (GtkApplication *application)
 {
@@ -268,6 +272,8 @@ gtk_application_menu_changed_quartz (GObject    *object,
   gtk_quartz_set_main_menu (G_MENU_MODEL (combined), G_ACTION_OBSERVABLE (application->priv->muxer));
 }
 
+static void gtk_application_startup_session_quartz (GtkApplication *app);
+
 static void
 gtk_application_startup_quartz (GtkApplication *application)
 {
@@ -279,6 +285,8 @@ gtk_application_startup_quartz (GtkApplication *application)
   g_signal_connect (application, "notify::app-menu", G_CALLBACK (gtk_application_menu_changed_quartz), NULL);
   g_signal_connect (application, "notify::menubar", G_CALLBACK (gtk_application_menu_changed_quartz), NULL);
   gtk_application_menu_changed_quartz (G_OBJECT (application), NULL, NULL);
+
+  gtk_application_startup_session_quartz (application);
 }
 
 static void
@@ -1448,15 +1456,181 @@ gtk_application_end_session (GtkApplication         *application,
   return TRUE;
 }
 
+#elif defined(GDK_WINDOWING_QUARTZ)
+
+/* OS X implementation copied from EggSMClient */
+
+static gboolean
+idle_quit_requested (gpointer client)
+{
+  g_signal_emit (client, gtk_application_signals[QUIT_REQUESTED], 0);
+
+  return FALSE;
+}
+
+static pascal OSErr
+quit_requested (const AppleEvent *aevt,
+                AppleEvent       *reply,
+                long              refcon)
+{
+  GtkApplication *app = GSIZE_TO_POINTER ((gsize)refcon);
+
+  g_return_val_if_fail (!app->priv->quit_requested, userCanceledErr);
+
+  /* FIXME AEInteractWithUser? */
+  osx->quit_requested = TRUE;
+  AEDuplicateDesc (aevt, &app->priv->quit_event);
+  AEDuplicateDesc (reply, &app->priv->quit_reply);
+  AESuspendTheCurrentEvent (aevt);
+
+  /* Don't emit the "quit_requested" signal immediately, since we're
+   * called from a weird point in the guts of gdkeventloop-quartz.c
+   */
+  g_idle_add (idle_quit_requested, app);
+
+  return noErr;
+}
+
+static void
+gtk_application_startup_session_quartz (GtkApplication *app)
+{
+  if (app->priv->register_session)
+    AEInstallEventHandler (kCoreEventClass, kAEQuitApplication,
+                           NewAEEventHandlerUPP (quit_requested),
+                           (long)GPOINTER_TO_SIZE (app), false);
+}
+
+static pascal OSErr
+quit_requested_resumed (const AppleEvent *aevt,
+                        AppleEvent       *reply,
+                        long              refcon)
+{
+  GtkApplication *app = GSIZE_TO_POINTER ((gsize)refcon);
+
+  app->priv->quit_requested = FALSE;
+
+  return app->priv->quitting ? noErr : userCanceledErr;
+}
+
+static gboolean
+idle_will_quit (gpointer data)
+{
+  GtkApplication *app = data;
+
+  /* Resume the event with a new handler that will return
+   * a value to the system
+   */
+  AEResumeTheCurrentEvent (&app->priv->quit_event, &app->priv->quit_reply,
+                           NewAEEventHandlerUPP (quit_requested_resumed),
+                           (long)GPOINTER_TO_SIZE (app));
+
+  AEDisposeDesc (&app->quit->quit_event);
+  AEDisposeDesc (&app->quit->quit_reply);
+
+  if (app->priv->quitting)
+    g_signal_emit (app, gtk_application_signals[QUIT], 0);
+
+  return FALSE;
+}
+
+void
+gtk_application_quit_response (GtkApplication *application,
+                               gboolean        will_quit,
+                               const gchar    *reason)
+{
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
+  g_return_if_fail (application->priv->quit_requested);
+
+  application->priv->quitting = will_quit;
+
+  /* Finish in an idle handler since the caller might have called
+   * gtk_application_quit_response() from inside the ::quit-requested
+   * signal handler, but may not expect the ::quit signal to arrive
+   * during the gtk_application_quit_response() call.
+   */
+  g_idle_add (idle_will_quit, application);
+}
+
+guint
+gtk_application_inhibit (GtkApplication             *application,
+                         GtkWindow                  *window,
+                         GtkApplicationInhibitFlags  flags,
+                         const gchar                *reason)
+{
+  return 0;
+}
+
+void
+gtk_application_uninhibit (GtkApplication *application,
+                           guint           cookie)
+{
+}
+
+gboolean
+gtk_application_is_inhibited (GtkApplication             *application,
+                              GtkApplicationInhibitFlags  flags)
+{
+  return FALSE;
+}
+
+gboolean
+gtk_application_end_session (GtkApplication         *application,
+                             GtkApplicationEndStyle *style,
+                             gboolean                request_confirmation)
+{
+  static const ProcessSerialNumber loginwindow_psn = { 0, kSystemProcess };
+  AppleEvent event = { typeNull, NULL };
+  AppleEvent reply = { typeNull, NULL };
+  AEAddressDesc target;
+  AEEventID id;
+  OSErr err;
+
+  switch (style)
+    {
+    case GTK_APPLICATION_LOGOUT:
+      id = request_confirmation ? kAELogOut : kAEReallyLogOut;
+      break;
+    case GTK_APPLICATION_REBOOT:
+      id = request_confirmation ? kAEShowRestartDialog : kAERestart;
+      break;
+    case GTK_APPLICATION_SHUTDOWN:
+      id = request_confirmation ? kAEShowShutdownDialog : kAEShutDown;
+      break;
+    }
+
+  err = AECreateDesc (typeProcessSerialNumber, &loginwindow_psn,
+                      sizeof (loginwindow_psn), &target);
+  if (err != noErr)
+    {
+      g_warning ("Could not create descriptor for loginwindow: %d", err);
+      return FALSE;
+    }
+
+  err = AECreateAppleEvent (kCoreEventClass, id, &target,
+                            kAutoGenerateReturnID, kAnyTransactionID,
+                            &event);
+  AEDisposeDesc (&target);
+  if (err != noErr)
+    {
+      g_warning ("Could not create logout AppleEvent: %d", err);
+      return FALSE;
+    }
+
+  err = AESend (&event, &reply, kAENoReply, kAENormalPriority,
+                kAEDefaultTimeout, NULL, NULL);
+  AEDisposeDesc (&event);
+ if (err == noErr)
+    AEDisposeDesc (&reply);
+
+  return err == noErr;
+}
+
 #else
 
 /* Trivial implementation.
  *
- * EggSMClient has working Win32 and OSX implementations of
- * ::quit-requested, ::quit, ::quit-cancelled that should be
- * copied here eventually.
- *
- * For the inhibit API, see
+ * For the inhibit API on Windows, see
  * http://msdn.microsoft.com/en-us/library/ms700677%28VS.85%29.aspx
  */
 
