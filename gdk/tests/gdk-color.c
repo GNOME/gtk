@@ -90,6 +90,23 @@ test_color_to_string (void)
   g_free (orig);
 }
 
+static void
+test_color_copy (void)
+{
+  GdkRGBA rgba;
+  GdkRGBA *out;
+
+  rgba.red = 0.0;
+  rgba.green = 0.1;
+  rgba.blue = 0.6;
+  rgba.alpha = 0.9;
+
+  out = gdk_rgba_copy (&rgba);
+  g_assert (gdk_rgba_equal (&rgba, out));
+
+  gdk_rgba_free (out);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -97,6 +114,7 @@ main (int argc, char *argv[])
 
         g_test_add_func ("/color/parse", test_color_parse);
         g_test_add_func ("/color/to-string", test_color_to_string);
+        g_test_add_func ("/color/copy", test_color_copy);
 
         return g_test_run ();
 }
