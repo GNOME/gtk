@@ -146,6 +146,7 @@ struct _GtkApplicationPrivate
   GList *windows;
 
   gboolean register_session;
+  gboolean quit_requested;
 
 #ifdef GDK_WINDOWING_X11
   GDBusConnection *session_bus;
@@ -163,7 +164,7 @@ struct _GtkApplicationPrivate
   GMenu *combined;
 
   AppleEvent quit_event, quit_reply;
-  gboolean quit_requested, quitting;
+  gboolean quitting;
 #endif
 };
 
@@ -1026,28 +1027,13 @@ gtk_application_get_menubar (GtkApplication *application)
   return menubar;
 }
 
+#if defined(GDK_WINDOWING_X11)
+
 /* D-Bus Session Management
  *
  * The protocol and the D-Bus API are described here:
  * http://live.gnome.org/SessionManagement/GnomeSession
  * http://people.gnome.org/~mccann/gnome-session/docs/gnome-session.html
- */
-
-#ifdef GDK_WINDOWING_X11
-
-/**
- * GtkApplicationInhibitFlags:
- * @GTK_APPLICATION_INHIBIT_LOGOUT: Inhibit logging out (including shutdown
- *     of the computer)
- * @GTK_APPLICATION_INHIBIT_SWITCH: Inhibit user switching
- * @GTK_APPLICATION_INHIBIT_SUSPEND: Inhibit suspending the
- *     session or computer
- * @GTK_APPLICATION_INHIBIT_IDLE: Inhibit the session being
- *     marked as idle (and possibly locked)
- *
- * Types of user actions that may be blocked by gtk_application_inhibit().
- *
- * Since: 3.4
  */
 
 static void
@@ -1087,6 +1073,7 @@ client_proxy_signal (GDBusProxy     *proxy,
   if (strcmp (signal_name, "QueryEndSession") == 0)
     {
       g_debug ("Received QueryEndSession");
+      app->priv->quit_requested = TRUE;
       g_signal_emit (app, gtk_application_signals[QUIT_REQUESTED], 0);
     }
   else if (strcmp (signal_name, "EndSession") == 0)
@@ -1231,6 +1218,9 @@ gtk_application_quit_response (GtkApplication *application,
   g_return_if_fail (GTK_IS_APPLICATION (application));
   g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
   g_return_if_fail (application->priv->client_proxy != NULL);
+  g_return_if_fail (application->priv->quit_requested);
+
+  application->priv->quit_requested = FALSE;
 
   g_debug ("Calling EndSessionResponse %d '%s'", will_quit, reason);
 
@@ -1241,6 +1231,21 @@ gtk_application_quit_response (GtkApplication *application,
                      G_MAXINT,
                      NULL, NULL, NULL);
 }
+
+/**
+ * GtkApplicationInhibitFlags:
+ * @GTK_APPLICATION_INHIBIT_LOGOUT: Inhibit logging out (including shutdown
+ *     of the computer)
+ * @GTK_APPLICATION_INHIBIT_SWITCH: Inhibit user switching
+ * @GTK_APPLICATION_INHIBIT_SUSPEND: Inhibit suspending the
+ *     session or computer
+ * @GTK_APPLICATION_INHIBIT_IDLE: Inhibit the session being
+ *     marked as idle (and possibly locked)
+ *
+ * Types of user actions that may be blocked by gtk_application_inhibit().
+ *
+ * Since: 3.4
+ */
 
 /**
  * gtk_application_inhibit:
