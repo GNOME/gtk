@@ -240,7 +240,7 @@
  * <link linkend="GtkTextTagTable-BUILDER-UI">GtkTextTagTable</link>.
  * </para>
  * </refsect2>
- * <refsect2 id="BUILDER-UI">
+ * <refsect2>
  * <title>Embedding other XML</title>
  * <para>
  * Apart from the language for UI descriptions that has been explained
@@ -248,6 +248,8 @@
  * of <link linkend="gio-GMenu-Markup">GMenu markup</link>. The resulting
  * #GMenu object and its named submenus are available via
  * gtk_builder_get_object() like other constructed objects.
+ * </para>
+ * </refsect2>
  */
 
 #include "config.h"
