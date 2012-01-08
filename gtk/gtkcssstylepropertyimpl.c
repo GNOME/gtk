@@ -769,6 +769,28 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           &no_corner_radius);
 
+  gtk_style_property_register            ("outline-style",
+                                          GTK_TYPE_BORDER_STYLE,
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          GTK_BORDER_STYLE_NONE);
+  gtk_style_property_register            ("outline-width",
+                                          G_TYPE_INT,
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          compute_border_width,
+                                          0);
+  gtk_style_property_register            ("outline-offset",
+                                          G_TYPE_INT,
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          0);
+
   gtk_style_property_register            ("background-clip",
                                           GTK_TYPE_CSS_AREA,
                                           0,
@@ -809,6 +831,13 @@ _gtk_css_style_property_init_properties (void)
                                           color_compute,
                                           &value);
   _gtk_style_property_register           ("border-left-color",
+                                          GDK_TYPE_RGBA,
+                                          0,
+                                          NULL,
+                                          NULL,
+                                          color_compute,
+                                          &value);
+  _gtk_style_property_register           ("outline-color",
                                           GDK_TYPE_RGBA,
                                           0,
                                           NULL,

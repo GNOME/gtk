@@ -920,6 +920,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                          "border-top-style", "border-right-style", "border-bottom-style", "border-left-style",
                                          "border-top-color", "border-right-color", "border-bottom-color", "border-left-color",
                                          "border-image-source", "border-image-slice", "border-image-width", "border-image-repeat", NULL };
+  const char *outline_subproperties[] = { "outline-width", "outline-style", "outline-color", NULL };
   const char *background_subproperties[] = { "background-image", "background-repeat", "background-clip", "background-origin",
                                              "background-color", NULL };
 
@@ -999,6 +1000,12 @@ _gtk_css_shorthand_property_init_properties (void)
                                           G_TYPE_NONE,
                                           border_subproperties,
                                           parse_border,
+                                          NULL,
+                                          NULL);
+  _gtk_css_shorthand_property_register   ("outline",
+                                          G_TYPE_NONE,
+                                          outline_subproperties,
+                                          parse_border_side,
                                           NULL,
                                           NULL);
   _gtk_css_shorthand_property_register   ("background",
