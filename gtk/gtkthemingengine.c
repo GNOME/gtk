@@ -1723,6 +1723,7 @@ render_frame_internal (GtkThemingEngine *engine,
                        guint             hidden_side,
                        GtkJunctionSides  junction)
 {
+  GtkBorderImage border_image;
   GtkStateFlags state;
   GtkBorderStyle border_style[4];
   GtkRoundedBox border_box;
@@ -1738,62 +1739,67 @@ render_frame_internal (GtkThemingEngine *engine,
   gtk_theming_engine_get_border (engine, state, &border);
   gtk_theming_engine_hide_border_sides (&border, hidden_side);
 
-  gtk_theming_engine_get (engine, state,
-                          "border-top-style", &border_style[0],
-                          "border-right-style", &border_style[1],
-                          "border-bottom-style", &border_style[2],
-                          "border-left-style", &border_style[3],
-                          "border-top-color", &alloc_colors[0],
-                          "border-right-color", &alloc_colors[1],
-                          "border-bottom-color", &alloc_colors[2],
-                          "border-left-color", &alloc_colors[3],
-                          NULL);
-
-  running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
-
-  if (running)
-    {
-      GtkStateFlags other_state;
-      GdkRGBA *other_colors[4];
-
-      if (state & GTK_STATE_FLAG_PRELIGHT)
-        {
-          other_state = state & ~(GTK_STATE_FLAG_PRELIGHT);
-          progress = 1 - progress;
-        }
-      else
-        other_state = state | GTK_STATE_FLAG_PRELIGHT;
-
-      gtk_theming_engine_get (engine, other_state,
-                              "border-top-color", &other_colors[0],
-                              "border-right-color", &other_colors[1],
-                              "border-bottom-color", &other_colors[2],
-                              "border-left-color", &other_colors[3],
-                              NULL);
-
-      for (i = 0; i < 4; i++)
-        {
-          colors[i].red = CLAMP (alloc_colors[i]->red + ((other_colors[i]->red - alloc_colors[i]->red) * progress), 0, 1);
-          colors[i].green = CLAMP (alloc_colors[i]->green + ((other_colors[i]->green - alloc_colors[i]->green) * progress), 0, 1);
-          colors[i].blue = CLAMP (alloc_colors[i]->blue + ((other_colors[i]->blue - alloc_colors[i]->blue) * progress), 0, 1);
-          colors[i].alpha = CLAMP (alloc_colors[i]->alpha + ((other_colors[i]->alpha - alloc_colors[i]->alpha) * progress), 0, 1);
-          gdk_rgba_free (other_colors[i]);
-          gdk_rgba_free (alloc_colors[i]);
-        }
-    }
+  if (_gtk_border_image_init (&border_image, engine))
+    _gtk_border_image_render (&border_image, &border, cr, x, y, width, height);
   else
     {
-      for (i = 0; i < 4; i++)
+      gtk_theming_engine_get (engine, state,
+                              "border-top-style", &border_style[0],
+                              "border-right-style", &border_style[1],
+                              "border-bottom-style", &border_style[2],
+                              "border-left-style", &border_style[3],
+                              "border-top-color", &alloc_colors[0],
+                              "border-right-color", &alloc_colors[1],
+                              "border-bottom-color", &alloc_colors[2],
+                              "border-left-color", &alloc_colors[3],
+                              NULL);
+
+      running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
+
+      if (running)
         {
-          colors[i] = *alloc_colors[i];
-          gdk_rgba_free (alloc_colors[i]);
+          GtkStateFlags other_state;
+          GdkRGBA *other_colors[4];
+
+          if (state & GTK_STATE_FLAG_PRELIGHT)
+            {
+              other_state = state & ~(GTK_STATE_FLAG_PRELIGHT);
+              progress = 1 - progress;
+            }
+          else
+            other_state = state | GTK_STATE_FLAG_PRELIGHT;
+
+          gtk_theming_engine_get (engine, other_state,
+                                  "border-top-color", &other_colors[0],
+                                  "border-right-color", &other_colors[1],
+                                  "border-bottom-color", &other_colors[2],
+                                  "border-left-color", &other_colors[3],
+                                  NULL);
+
+          for (i = 0; i < 4; i++)
+            {
+              colors[i].red = CLAMP (alloc_colors[i]->red + ((other_colors[i]->red - alloc_colors[i]->red) * progress), 0, 1);
+              colors[i].green = CLAMP (alloc_colors[i]->green + ((other_colors[i]->green - alloc_colors[i]->green) * progress), 0, 1);
+              colors[i].blue = CLAMP (alloc_colors[i]->blue + ((other_colors[i]->blue - alloc_colors[i]->blue) * progress), 0, 1);
+              colors[i].alpha = CLAMP (alloc_colors[i]->alpha + ((other_colors[i]->alpha - alloc_colors[i]->alpha) * progress), 0, 1);
+              gdk_rgba_free (other_colors[i]);
+              gdk_rgba_free (alloc_colors[i]);
+            }
         }
+      else
+        {
+          for (i = 0; i < 4; i++)
+            {
+              colors[i] = *alloc_colors[i];
+              gdk_rgba_free (alloc_colors[i]);
+            }
+        }
+
+      _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
+      _gtk_rounded_box_apply_border_radius (&border_box, engine, state, junction);
+
+      render_border (cr, &border_box, &border, hidden_side, colors, border_style);
     }
-
-  _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-  _gtk_rounded_box_apply_border_radius (&border_box, engine, state, junction);
-
-  render_border (cr, &border_box, &border, hidden_side, colors, border_style);
 
   border_style[0] = g_value_get_enum (_gtk_theming_engine_peek_property (engine, "outline-style"));
   if (border_style[0] != GTK_BORDER_STYLE_NONE)
@@ -1827,22 +1833,13 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
                                  gdouble           width,
                                  gdouble           height)
 {
-  GtkStateFlags flags;
   GtkJunctionSides junction;
-  GtkBorderImage border_image;
-  GtkBorder border;
 
-  flags = gtk_theming_engine_get_state (engine);
   junction = gtk_theming_engine_get_junction_sides (engine);
-  gtk_theming_engine_get_border (engine, flags, &border);
 
-  if (_gtk_border_image_init (&border_image, engine))
-    _gtk_border_image_render (&border_image, &border,
-                              cr, x, y, width, height);
-  else
-    render_frame_internal (engine, cr,
-                           x, y, width, height,
-                           0, junction);
+  render_frame_internal (engine, cr,
+                         x, y, width, height,
+                         0, junction);
 }
 
 static void
@@ -2188,7 +2185,6 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   GtkCssBorderCornerRadius *top_left_radius, *top_right_radius;
   GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
   gdouble x0, y0, x1, y1, xc, yc, wc, hc;
-  GtkBorderImage border_image;
   GtkBorder border;
 
   xc = yc = wc = hc = 0;
@@ -2270,13 +2266,9 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   cairo_rectangle (cr, x0, yc + hc, x1 - x0, y1 - (yc + hc));
   cairo_clip (cr);
 
-  if (_gtk_border_image_init (&border_image, engine))
-    _gtk_border_image_render (&border_image, &border,
-                              cr, x, y, width, height);
-  else
-    render_frame_internal (engine, cr,
-			   x, y, width, height,
-			   0, junction);
+  render_frame_internal (engine, cr,
+                         x, y, width, height,
+                         0, junction);
 
   cairo_restore (cr);
 
