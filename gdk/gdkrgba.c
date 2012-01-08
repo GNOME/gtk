@@ -71,15 +71,7 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
 GdkRGBA *
 gdk_rgba_copy (const GdkRGBA *rgba)
 {
-  GdkRGBA *copy;
-
-  copy = g_slice_new (GdkRGBA);
-  copy->red = rgba->red;
-  copy->green = rgba->green;
-  copy->blue = rgba->blue;
-  copy->alpha = rgba->alpha;
-
-  return copy;
+  return g_slice_dup (GdkRGBA, rgba);
 }
 
 /**
