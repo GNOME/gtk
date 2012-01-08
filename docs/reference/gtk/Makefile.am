@@ -123,7 +123,8 @@ content_files =					\
 	glossary.xml				\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
-	migrating-GtkApplication.xml		\
+	migrating-unique-GtkApplication.xml	\
+	migrating-smclient-GtkApplication.xml	\
 	migrating-GtkGrid.xml			\
 	migrating-GtkStyleContext.xml		\
 	objects_grouped.sgml			\
@@ -146,7 +147,8 @@ expand_content_files = 				\
 	glossary.xml				\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
-	migrating-GtkApplication.xml		\
+	migrating-unique-GtkApplication.xml	\
+	migrating-smclient-GtkApplication.xml	\
 	migrating-GtkGrid.xml			\
 	migrating-GtkStyleContext.xml		\
 	question_index.sgml			\
