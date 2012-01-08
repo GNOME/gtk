@@ -1435,6 +1435,158 @@ render_frame_fill (cairo_t       *cr,
 }
 
 static void
+set_stroke_style (cairo_t        *cr,
+                  double          line_width,
+                  GtkBorderStyle  style,
+                  double          length)
+{
+  double segments[2];
+  double n;
+
+  cairo_set_line_width (cr, line_width);
+
+  if (style == GTK_BORDER_STYLE_DOTTED)
+    {
+      n = round (0.5 * length / line_width);
+
+      segments[0] = 0;
+      segments[1] = n ? length / n : 2;
+      cairo_set_dash (cr, segments, G_N_ELEMENTS (segments), 0);
+
+      cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
+      cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
+    }
+  else
+    {
+      n = length / line_width;
+      /* Optimize the common case of an integer-sized rectangle
+       * Again, we care about focus rectangles.
+       */
+      if (n == nearbyint (n))
+        {
+          segments[0] = 1;
+          segments[1] = 2;
+        }
+      else
+        {
+          n = round ((1. / 3) * n);
+
+          segments[0] = n ? (1. / 3) * length / n : 1;
+          segments[1] = 2 * segments[1];
+        }
+      cairo_set_dash (cr, segments, G_N_ELEMENTS (segments), 0);
+
+      cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+      cairo_set_line_join (cr, CAIRO_LINE_JOIN_MITER);
+    }
+}
+
+static int
+get_border_side (GtkBorder  *border,
+                 GtkCssSide  side)
+{
+  switch (side)
+    {
+    case GTK_CSS_TOP:
+      return border->top;
+    case GTK_CSS_RIGHT:
+      return border->right;
+    case GTK_CSS_BOTTOM:
+      return border->bottom;
+    case GTK_CSS_LEFT:
+      return border->left;
+    default:
+      g_assert_not_reached ();
+      return 0;
+    }
+}
+
+static void
+render_frame_stroke (cairo_t       *cr,
+                     GtkRoundedBox *border_box,
+                     GtkBorder     *border,
+                     GdkRGBA        colors[4],
+                     guint          hidden_side,
+                     GtkBorderStyle stroke_style)
+{
+  gboolean different_colors, different_borders;
+  GtkRoundedBox stroke_box;
+  guint i;
+
+  different_colors = !gdk_rgba_equal (&colors[0], &colors[1]) ||
+                     !gdk_rgba_equal (&colors[0], &colors[2]) ||
+                     !gdk_rgba_equal (&colors[0], &colors[3]);
+  different_borders = border->top != border->right ||
+                      border->top != border->bottom ||
+                      border->top != border->left;
+
+  stroke_box = *border_box;
+  _gtk_rounded_box_shrink (&stroke_box,
+                           border->top / 2.0,
+                           border->right / 2.0,
+                           border->bottom / 2.0,
+                           border->left / 2.0);
+
+  if (!different_colors && !different_borders && hidden_side == 0)
+    {
+      double length = 0;
+
+      /* FAST PATH:
+       * Mostly expected to trigger for focus rectangles */
+      for (i = 0; i < 4; i++) 
+        {
+          length += _gtk_rounded_box_guess_length (&stroke_box, i);
+          _gtk_rounded_box_path_side (&stroke_box, cr, i);
+        }
+
+      gdk_cairo_set_source_rgba (cr, &colors[0]);
+      set_stroke_style (cr, border->top, stroke_style, length);
+      cairo_stroke (cr);
+    }
+  else
+    {
+      GtkRoundedBox padding_box;
+
+      padding_box = *border_box;
+      _gtk_rounded_box_path (&padding_box, cr);
+      _gtk_rounded_box_shrink (&padding_box,
+                               border->top,
+                               border->right,
+                               border->bottom,
+                               border->left);
+
+      for (i = 0; i < 4; i++) 
+        {
+          if (hidden_side & (1 << i))
+            continue;
+
+          cairo_save (cr);
+
+          if (i == 0)
+            _gtk_rounded_box_path_top (border_box, &padding_box, cr);
+          else if (i == 1)
+            _gtk_rounded_box_path_right (border_box, &padding_box, cr);
+          else if (i == 2)
+            _gtk_rounded_box_path_bottom (border_box, &padding_box, cr);
+          else if (i == 3)
+            _gtk_rounded_box_path_left (border_box, &padding_box, cr);
+          cairo_clip (cr);
+
+          _gtk_rounded_box_path_side (&stroke_box, cr, i);
+
+          gdk_cairo_set_source_rgba (cr, &colors[i]);
+          set_stroke_style (cr,
+                            get_border_side (border, i),
+                            stroke_style,
+                            _gtk_rounded_box_guess_length (&stroke_box, i));
+          cairo_stroke (cr);
+
+          cairo_restore (cr);
+        }
+    }
+}
+
+static void
 render_frame_internal (GtkThemingEngine *engine,
                        cairo_t          *cr,
                        gdouble           x,
@@ -1539,6 +1691,19 @@ render_frame_internal (GtkThemingEngine *engine,
           break;
         case GTK_BORDER_STYLE_DOTTED:
         case GTK_BORDER_STYLE_DASHED:
+          {
+            guint dont_draw = hidden_side;
+
+            for (j = 0; j < 4; j++)
+              {
+                if (border_style[j] == border_style[i])
+                  hidden_side |= (1 << j);
+                else
+                  dont_draw |= (1 << j);
+              }
+            
+            render_frame_stroke (cr, &border_box, &border, colors, dont_draw, border_style[i]);
+          }
           break;
         case GTK_BORDER_STYLE_DOUBLE:
           {

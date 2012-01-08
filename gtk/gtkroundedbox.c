@@ -246,6 +246,102 @@ _gtk_rounded_box_path (const GtkRoundedBox *box,
                    G_PI / 2, G_PI);
 }
 
+double
+_gtk_rounded_box_guess_length (const GtkRoundedBox *box,
+                               GtkCssSide           side)
+{
+  double length;
+  GtkCssCorner before, after;
+
+  before = side;
+  after = (side + 1) % 4;
+
+  if (side & 1)
+    length = box->box.height
+             - box->corner[before].vertical
+             - box->corner[after].vertical;
+  else
+    length = box->box.width
+             - box->corner[before].horizontal
+             - box->corner[after].horizontal;
+
+  length += G_PI * 0.125 * (box->corner[before].horizontal
+                            + box->corner[before].vertical
+                            + box->corner[after].horizontal
+                            + box->corner[after].vertical);
+
+  return length;
+}
+
+void
+_gtk_rounded_box_path_side (const GtkRoundedBox *box,
+                            cairo_t             *cr,
+                            GtkCssSide           side)
+{
+  switch (side)
+    {
+    case GTK_CSS_TOP:
+      _cairo_ellipsis (cr,
+                       box->box.x + box->corner[GTK_CSS_TOP_LEFT].horizontal,
+                       box->box.y + box->corner[GTK_CSS_TOP_LEFT].vertical,
+                       box->corner[GTK_CSS_TOP_LEFT].horizontal,
+                       box->corner[GTK_CSS_TOP_LEFT].vertical,
+                       5 * G_PI / 4, 3 * G_PI / 2);
+      _cairo_ellipsis (cr, 
+                       box->box.x + box->box.width - box->corner[GTK_CSS_TOP_RIGHT].horizontal,
+                       box->box.y + box->corner[GTK_CSS_TOP_RIGHT].vertical,
+                       box->corner[GTK_CSS_TOP_RIGHT].horizontal,
+                       box->corner[GTK_CSS_TOP_RIGHT].vertical,
+                       - G_PI / 2, -G_PI / 4);
+      break;
+    case GTK_CSS_RIGHT:
+      _cairo_ellipsis (cr, 
+                       box->box.x + box->box.width - box->corner[GTK_CSS_TOP_RIGHT].horizontal,
+                       box->box.y + box->corner[GTK_CSS_TOP_RIGHT].vertical,
+                       box->corner[GTK_CSS_TOP_RIGHT].horizontal,
+                       box->corner[GTK_CSS_TOP_RIGHT].vertical,
+                       - G_PI / 4, 0);
+      _cairo_ellipsis (cr,
+                       box->box.x + box->box.width - box->corner[GTK_CSS_BOTTOM_RIGHT].horizontal,
+                       box->box.y + box->box.height - box->corner[GTK_CSS_BOTTOM_RIGHT].vertical,
+                       box->corner[GTK_CSS_BOTTOM_RIGHT].horizontal,
+                       box->corner[GTK_CSS_BOTTOM_RIGHT].vertical,
+                       0, G_PI / 4);
+      break;
+    case GTK_CSS_BOTTOM:
+      _cairo_ellipsis (cr,
+                       box->box.x + box->box.width - box->corner[GTK_CSS_BOTTOM_RIGHT].horizontal,
+                       box->box.y + box->box.height - box->corner[GTK_CSS_BOTTOM_RIGHT].vertical,
+                       box->corner[GTK_CSS_BOTTOM_RIGHT].horizontal,
+                       box->corner[GTK_CSS_BOTTOM_RIGHT].vertical,
+                       G_PI / 4, G_PI / 2);
+      _cairo_ellipsis (cr,
+                       box->box.x + box->corner[GTK_CSS_BOTTOM_LEFT].horizontal,
+                       box->box.y + box->box.height - box->corner[GTK_CSS_BOTTOM_LEFT].vertical,
+                       box->corner[GTK_CSS_BOTTOM_LEFT].horizontal,
+                       box->corner[GTK_CSS_BOTTOM_LEFT].vertical,
+                       G_PI / 2, 3 * G_PI / 4);
+      break;
+    case GTK_CSS_LEFT:
+      _cairo_ellipsis (cr,
+                       box->box.x + box->corner[GTK_CSS_BOTTOM_LEFT].horizontal,
+                       box->box.y + box->box.height - box->corner[GTK_CSS_BOTTOM_LEFT].vertical,
+                       box->corner[GTK_CSS_BOTTOM_LEFT].horizontal,
+                       box->corner[GTK_CSS_BOTTOM_LEFT].vertical,
+                       3 * G_PI / 4, G_PI);
+      _cairo_ellipsis (cr,
+                       box->box.x + box->corner[GTK_CSS_TOP_LEFT].horizontal,
+                       box->box.y + box->corner[GTK_CSS_TOP_LEFT].vertical,
+                       box->corner[GTK_CSS_TOP_LEFT].horizontal,
+                       box->corner[GTK_CSS_TOP_LEFT].vertical,
+                       G_PI, 5 * G_PI / 4);
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+}
+
 void
 _gtk_rounded_box_path_top (const GtkRoundedBox *outer,
                            const GtkRoundedBox *inner,
