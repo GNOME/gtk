@@ -945,8 +945,11 @@ find_next_pos (GtkWidget      *widget,
       if (match == (mark->position == pos))
         return marks[i];
     }
-
-  return widget->allocation.width;
+    
+  if (GTK_RANGE(widget)->orientation == GTK_ORIENTATION_HORIZONTAL)
+    return widget->allocation.width;
+  else
+    return widget->allocation.height;
 }
 
 static gboolean
