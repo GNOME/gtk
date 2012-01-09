@@ -146,6 +146,9 @@ struct _GdkWindowImplWayland
 
   /* Time of most recent user interaction. */
   gulong user_time;
+
+  GdkGeometry geometry_hints;
+  GdkWindowHints geometry_mask;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -900,9 +903,16 @@ gdk_wayland_window_set_geometry_hints (GdkWindow         *window,
 				       const GdkGeometry *geometry,
 				       GdkWindowHints     geom_mask)
 {
+  GdkWindowImplWayland *impl;
+
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  impl->geometry_hints = *geometry;
+  impl->geometry_mask = geom_mask;
 
   /*
    * GDK_HINT_POS
