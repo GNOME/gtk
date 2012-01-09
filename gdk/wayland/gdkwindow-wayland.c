@@ -484,11 +484,22 @@ shell_surface_handle_configure(void *data,
                                int32_t height)
 {
   GdkWindow *window = GDK_WINDOW (data);
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkDisplay *display;
   GdkEvent *event;
 
   display = gdk_window_get_display (window);
 
+  gdk_window_constrain_size (&impl->geometry_hints,
+                             impl->geometry_mask,
+                             width,
+                             height,
+                             &width,
+                             &height);
+
+  /* TODO: Only generate a configure event if width or height have actually
+   * changed?
+   */
   event = gdk_event_new (GDK_CONFIGURE);
   event->configure.window = window;
   event->configure.send_event = FALSE;
