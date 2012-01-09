@@ -226,8 +226,8 @@ _gtk_style_property_query (GtkStyleProperty        *property,
   klass->query (property, props, state, value);
 }
 
-static void
-gtk_style_property_init_properties (void)
+void
+_gtk_style_property_init_properties (void)
 {
   static gboolean initialized = FALSE;
 
@@ -258,7 +258,7 @@ _gtk_style_property_lookup (const char *name)
 
   g_return_val_if_fail (name != NULL, NULL);
 
-  gtk_style_property_init_properties ();
+  _gtk_style_property_init_properties ();
 
   klass = g_type_class_peek (GTK_TYPE_STYLE_PROPERTY);
 
