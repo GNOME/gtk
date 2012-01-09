@@ -132,9 +132,6 @@ struct _GtkWindowPrivate
 
   guint16  configure_request_count;
 
-  GSettings *state_settings;
-  guint      state_save_id;
-
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves
    * default-only parameters. Once mapped, we set them to FALSE.
@@ -4593,40 +4590,6 @@ gtk_window_reshow_with_initial_size (GtkWindow *window)
   gtk_widget_show (widget);
 }
 
-static gboolean
-gtk_window_persistent_state_flush (gpointer user_data)
-{
-  GtkWindow *window = user_data;
-  GtkWidget *widget = user_data;
-  gboolean was_maximized;
-  gboolean is_maximized;
-
-  was_maximized = g_settings_get_boolean (window->priv->state_settings, "is-maximized");
-  is_maximized = gdk_window_get_state (gtk_widget_get_window (widget)) & GDK_WINDOW_STATE_MAXIMIZED;
-
-  if (is_maximized != was_maximized)
-    g_settings_set_boolean (window->priv->state_settings, "is-maximized", is_maximized);
-
-  if (!is_maximized)
-    {
-      gint old_width, old_height;
-      GtkAllocation size;
-
-      G_STATIC_ASSERT (sizeof (size.width) == sizeof (int));
-
-      g_settings_get (window->priv->state_settings, "size", "(ii)", &old_width, &old_height);
-      gtk_widget_get_allocation (widget, &size);
-
-      if (size.width != old_width || size.height != old_height)
-        g_settings_set (window->priv->state_settings, "size", "(ii)", size.width, size.height);
-    }
-
-  g_source_remove (window->priv->state_save_id);
-  window->priv->state_save_id = 0;
-
-  return G_SOURCE_REMOVE;
-}
-
 static void
 gtk_window_destroy (GtkWidget *widget)
 {
@@ -5268,9 +5231,6 @@ gtk_window_unrealize (GtkWidget *widget)
   GtkWindowPrivate *priv = window->priv;
   GtkWindowGeometryInfo *info;
 
-  if (window->priv->state_save_id)
-    gtk_window_persistent_state_flush (window);
-
   /* On unrealize, we reset the size of the window such
    * that we will re-apply the default sizing stuff
    * next time we show the window.
@@ -5465,14 +5425,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   GtkWidget *child;
   guint border_width;
-
-  if (window->priv->state_settings)
-    {
-      if (window->priv->state_save_id)
-        g_source_remove (window->priv->state_save_id);
-
-      window->priv->state_save_id = g_timeout_add (1000, gtk_window_persistent_state_flush, window);
-    }
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -9768,84 +9720,4 @@ ensure_state_flag_window_unfocused (GtkWidget *widget)
     gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_WINDOW_UNFOCUSED);
 
   gtk_widget_queue_draw (widget);
-}
-
-/**
- * gtk_window_setup_persistent_state:
- * @window: a #GtkWindow
- * @settings: a #GSettings object
- * @child_name: the name of a child on @settings with schema
- *              'org.gtk.WindowState'
- *
- * Sets up persistent window state using #GSettings.
- *
- * The size of the window and its maximized state is saved.
- *
- * At the time of the call, the values are read out of GSettings and
- * applied to the window as the default size and maximized state.  This
- * must be done before the window is shown.
- *
- * When the size or maximized state of the window is changed, the
- * updated values are stored back into GSettings (with an unspecified
- * delay to prevent trashing).
- *
- * @child_name must be the name of a child of @settings (ie:
- * g_settings_get_child() must succeed).  The resulting #GSettings
- * object must have the schema 'org.gtk.WindowState', which is installed
- * by Gtk.
- *
- * Your application's schema should look something like this:
- *
- * |[<![CDATA[
- *   <schema id='org.example.awesome' path='/org/example/awesome/'>
- *     ... keys ...
- *
- *     <child name='main-window-state' schema='org.gtk.WindowState'/>
- *   </schema>
- * ]]>]|
- *
- * Then you should call this function like this:
- *
- * |[
- *   GSettings *settings;
- *
- *   settings = g_settings_new ("org.example.awesome");
- *   gtk_window_setup_persistent_state (window, settings, "main-window-state");
- * ]|
- *
- * You may only call this function once per window.
- *
- * Since: 3.4
- **/
-void
-gtk_window_setup_persistent_state (GtkWindow   *window,
-                                   GSettings   *settings,
-                                   const gchar *child_name)
-{
-  gint width, height;
-  GSList *node;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (G_IS_SETTINGS (settings));
-  g_return_if_fail (child_name != NULL);
-  g_return_if_fail (window->priv->state_settings == NULL);
-
-  /* Force other windows to flush their state first.  We may be sharing
-   * the same settings as they are and we want to see them up to date...
-   */
-  for (node = toplevel_list; node; node = node->next)
-    {
-      GtkWindow *w = node->data;
-
-      if (w->priv->state_save_id)
-        gtk_window_persistent_state_flush (w);
-      g_assert (w->priv->state_save_id == 0);
-    }
-
-  window->priv->state_settings = g_settings_get_child (settings, child_name);
-  window->priv->maximize_initially = g_settings_get_boolean (window->priv->state_settings, "is-maximized");
-
-  g_settings_get (window->priv->state_settings, "size", "(ii)", &width, &height);
-  if (width > 0 && height > 0)
-    gtk_window_set_default_size (window, width, height);
 }

@@ -1508,12 +1508,10 @@ EXTRA_DIST +=                   \
 	gtktypebuiltins.h.template \
 	gtkprivatetypebuiltins.c.template \
 	gtkprivatetypebuiltins.h.template \
-	org.gtk.Settings.FileChooser.gschema.xml \
-	org.gtk.WindowState.gschema.xml
+	org.gtk.Settings.FileChooser.gschema.xml
 
 gsettings_SCHEMAS = \
-	org.gtk.Settings.FileChooser.gschema.xml	\
-	org.gtk.WindowState.gschema.xml
+	org.gtk.Settings.FileChooser.gschema.xml
 
 @GSETTINGS_RULES@
 

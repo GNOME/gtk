@@ -3883,7 +3883,6 @@ gtk_window_set_transient_for
 gtk_window_set_type_hint
 gtk_window_set_urgency_hint
 gtk_window_set_wmclass
-gtk_window_setup_persistent_state
 gtk_window_stick
 gtk_window_type_get_type
 gtk_window_unfullscreen
