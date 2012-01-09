@@ -932,8 +932,7 @@ static gint
 find_next_pos (GtkWidget      *widget,
                GSList          *list,
                gint            *marks,
-               GtkPositionType  pos,
-               gint             match)
+               GtkPositionType  pos)
 {
   GSList *m;
   gint i;
@@ -942,7 +941,7 @@ find_next_pos (GtkWidget      *widget,
     {
       GtkScaleMark *mark = m->data;
 
-      if (match == (mark->position == pos))
+      if (mark->position == pos)
         return marks[i];
     }
     
@@ -1011,14 +1010,14 @@ gtk_scale_expose (GtkWidget      *widget,
                   y1 = widget->allocation.y + range->range_rect.y;
                   y2 = y1 - slider_width / 2;
                   min_pos = min_pos_before;
-                  max_pos = widget->allocation.x + find_next_pos (widget, m, marks + i, GTK_POS_TOP, 1) - min_sep;
+                  max_pos = widget->allocation.x + find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
                   y1 = widget->allocation.y + range->range_rect.y + range->range_rect.height;
                   y2 = y1 + slider_width / 2;
                   min_pos = min_pos_after;
-                  max_pos = widget->allocation.x + find_next_pos (widget, m, marks + i, GTK_POS_TOP, 0) - min_sep;
+                  max_pos = widget->allocation.x + find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
                 }
 
               gtk_paint_vline (widget->style, widget->window, state_type,
@@ -1059,14 +1058,14 @@ gtk_scale_expose (GtkWidget      *widget,
                   x1 = widget->allocation.x + range->range_rect.x;
                   x2 = widget->allocation.x + range->range_rect.x - slider_width / 2;
                   min_pos = min_pos_before;
-                  max_pos = widget->allocation.y + find_next_pos (widget, m, marks + i, GTK_POS_LEFT, 1) - min_sep;
+                  max_pos = widget->allocation.y + find_next_pos (widget, m, marks + i, GTK_POS_LEFT) - min_sep;
                 }
               else
                 {
                   x1 = widget->allocation.x + range->range_rect.x + range->range_rect.width;
                   x2 = widget->allocation.x + range->range_rect.x + range->range_rect.width + slider_width / 2;
                   min_pos = min_pos_after;
-                  max_pos = widget->allocation.y + find_next_pos (widget, m, marks + i, GTK_POS_LEFT, 0) - min_sep;
+                  max_pos = widget->allocation.y + find_next_pos (widget, m, marks + i, GTK_POS_RIGHT) - min_sep;
                 }
               y1 = widget->allocation.y + marks[i];
 
