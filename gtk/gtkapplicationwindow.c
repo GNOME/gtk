@@ -43,8 +43,8 @@
  * GtkApplicationWindow is a #GtkWindow subclass that offers some
  * extra functionality for better integration with #GtkApplication
  * features.  Notably, it can handle both the application menu as well
- * as the menubar. See g_application_set_app_menu() and
- * g_application_set_menubar().
+ * as the menubar. See gtk_application_set_app_menu() and
+ * gtk_application_set_menubar().
  *
  * This class implements the #GActionGroup and #GActionMap interfaces,
  * to let you add window-specific actions that will be exported by the
@@ -88,8 +88,8 @@
  *     "    </submenu>"
  *     "  </menu>"
  *     "</interface>");
- * g_application_set_menubar (G_APPLICATION (app),
- *                            G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
+ * gtk_application_set_menubar (G_APPLICATION (app),
+ *                              G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
  * g_object_unref (builder);
  *
  * ...
@@ -902,8 +902,8 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
    *
    * If this property is %TRUE, the window will display a menubar
    * that includes the app menu and menubar, unless these are
-   * shown by the desktop shell. See g_application_set_app_menu()
-   * and g_application_set_menubar().
+   * shown by the desktop shell. See gtk_application_set_app_menu()
+   * and gtk_application_set_menubar().
    *
    * If %FALSE, the window will not display a menubar, regardless
    * of whether the desktop shell is showing the menus or not.

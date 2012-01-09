@@ -76,10 +76,10 @@
  * 'open' #GApplication methods.
  *
  * To set an application menu on a GtkApplication, use
- * g_application_set_app_menu(). The #GMenuModel that this function
+ * gtk_application_set_app_menu(). The #GMenuModel that this function
  * expects is usually constructed using #GtkBuilder, as seen in the
  * following example. To set a menubar that will be automatically picked
- * up by #GApplicationWindows, use g_application_set_menubar(). GTK+
+ * up by #GApplicationWindows, use gtk_application_set_menubar(). GTK+
  * makes these menus appear as expected, depending on the platform
  * the application is running on.
  *
@@ -855,8 +855,8 @@ gtk_application_get_windows (GtkApplication *application)
  * with a "win." prefix.
  *
  * GtkApplication also extracts accelerators out of 'accel' attributes
- * in the #GMenuModels passed to g_application_set_app_menu() and
- * g_application_set_menubar(), which is usually more convenient
+ * in the #GMenuModels passed to gtk_application_set_app_menu() and
+ * gtk_application_set_menubar(), which is usually more convenient
  * than calling this function for each accelerator.
  *
  * Since: 3.4
@@ -958,7 +958,7 @@ gtk_application_set_app_menu (GtkApplication *application,
  * @application: a #GtkApplication
  *
  * Returns the menu model that has been set with
- * g_application_set_app_menu().
+ * gtk_application_set_app_menu().
  *
  * Returns: (transfer none): the application menu of @application
  *
@@ -1008,7 +1008,7 @@ gtk_application_set_menubar (GtkApplication *application,
  * @application: a #GtkApplication
  *
  * Returns the menu model that has been set with
- * g_application_set_menubar().
+ * gtk_application_set_menubar().
  *
  * Returns: (transfer none): the menubar for windows of @application
  *
