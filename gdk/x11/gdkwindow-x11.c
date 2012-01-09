@@ -4366,7 +4366,7 @@ _gdk_x11_moveresize_handle_event (XEvent *event)
         finish_drag (mv_resize);
       break;
 
-#ifdef HAVE_XGENERICEVENTS
+#if defined (HAVE_XGENERICEVENTS) && defined (XINPUT_2)
     case GenericEvent:
       {
         /* we just assume this is an XI2 event */
