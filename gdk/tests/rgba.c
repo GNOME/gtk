@@ -49,6 +49,14 @@ test_color_parse (void)
   res = gdk_rgba_parse (&color, "#0080ff");
   g_assert (res);
   g_assert (gdk_rgba_equal (&color, &expected));
+
+  expected.red = 0.0;
+  expected.green = 0.0;
+  expected.blue = 0.0;
+  expected.alpha = 1.0;
+  res = gdk_rgba_parse (&color, "rgb(0,0,0)");
+  g_assert (res);
+  g_assert (gdk_rgba_equal (&color, &expected));
 }
 
 static void
@@ -107,12 +115,48 @@ test_color_copy (void)
   gdk_rgba_free (out);
 }
 
+static void
+test_color_parse_nonsense (void)
+{
+  GdkRGBA color;
+  gboolean res;
+
+  g_test_bug ("667485");
+
+  res = gdk_rgba_parse (&color, "rgb(,,)");
+  g_assert (!res);
+
+  res = gdk_rgba_parse (&color, "rgb(%,%,%)");
+  g_assert (!res);
+
+  res = gdk_rgba_parse (&color, "rgb(nan,nan,nan)");
+  g_assert (!res);
+
+  res = gdk_rgba_parse (&color, "rgb(inf,inf,inf)");
+  g_assert (!res);
+
+  res = gdk_rgba_parse (&color, "rgb(1p12,0,0)");
+  g_assert (!res);
+
+  res = gdk_rgba_parse (&color, "rgb(5d1%,1,1)");
+  g_assert (!res);
+
+  res = gdk_rgba_parse (&color, "rgb(0,0,0)moo");
+  g_assert (!res);
+
+  res = gdk_rgba_parse (&color, "rgb(0,0,0)  moo");
+  g_assert (!res);
+}
+
 int
 main (int argc, char *argv[])
 {
         g_test_init (&argc, &argv, NULL);
 
+        g_test_bug_base ("http://bugzilla.gnome.org");
+
         g_test_add_func ("/rgba/parse", test_color_parse);
+        g_test_add_func ("/rgba/parse/nonsense", test_color_parse_nonsense);
         g_test_add_func ("/rgba/to-string", test_color_to_string);
         g_test_add_func ("/rgba/copy", test_color_copy);
 
