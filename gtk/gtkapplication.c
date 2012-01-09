@@ -1667,7 +1667,7 @@ gtk_application_is_inhibited (GtkApplication             *application,
 
 gboolean
 gtk_application_end_session (GtkApplication         *application,
-                             GtkApplicationEndStyle *style,
+                             GtkApplicationEndStyle  style,
                              gboolean                request_confirmation)
 {
   return FALSE;
