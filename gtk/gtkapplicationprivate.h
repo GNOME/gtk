@@ -35,7 +35,7 @@ G_GNUC_INTERNAL
 void                    gtk_application_window_unpublish                (GtkApplicationWindow *window);
 
 G_GNUC_INTERNAL
-GSimpleActionObserver * gtk_application_window_get_observer             (GtkApplicationWindow *window,
+GSimpleActionObserver * gtk_application_window_create_observer          (GtkApplicationWindow *window,
                                                                          const gchar          *action_name,
                                                                          GVariant             *target);
 

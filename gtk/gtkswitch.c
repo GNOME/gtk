@@ -713,12 +713,11 @@ gtk_switch_update_action_observer (GtkSwitch *sw)
     {
       GSimpleActionObserver *observer;
 
-      observer = gtk_application_window_get_observer (GTK_APPLICATION_WINDOW (window),
-                                                      sw->priv->action_name,
-                                                      sw->priv->action_target);
+      observer = gtk_application_window_create_observer (GTK_APPLICATION_WINDOW (window),
+                                                         sw->priv->action_name,
+                                                         sw->priv->action_target);
 
-      if (g_object_class_find_property (G_OBJECT_GET_CLASS (sw), "active"))
-        g_object_bind_property (observer, "active", sw, "active", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (observer, "active", sw, "active", G_BINDING_SYNC_CREATE);
       g_object_bind_property (observer, "enabled", sw, "sensitive", G_BINDING_SYNC_CREATE);
 
       sw->priv->action_observer = observer;
@@ -733,15 +732,12 @@ gtk_switch_set_action_name (GtkActionable *actionable,
 
   g_return_if_fail (GTK_IS_SWITCH (sw));
 
-  if (g_strcmp0 (action_name, sw->priv->action_name) != 0)
-    {
-      g_free (sw->priv->action_name);
-      sw->priv->action_name = g_strdup (action_name);
+  g_free (sw->priv->action_name);
+  sw->priv->action_name = g_strdup (action_name);
 
-      gtk_switch_update_action_observer (sw);
+  gtk_switch_update_action_observer (sw);
 
-      g_object_notify (G_OBJECT (sw), "action-name");
-    }
+  g_object_notify (G_OBJECT (sw), "action-name");
 }
 
 static void

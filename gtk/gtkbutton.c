@@ -709,9 +709,9 @@ gtk_button_update_action_observer (GtkButton *button)
     {
       GSimpleActionObserver *observer;
 
-      observer = gtk_application_window_get_observer (GTK_APPLICATION_WINDOW (window),
-                                                      button->priv->action_name,
-                                                      button->priv->action_target);
+      observer = gtk_application_window_create_observer (GTK_APPLICATION_WINDOW (window),
+                                                         button->priv->action_name,
+                                                         button->priv->action_target);
 
       _gtk_button_set_depressed (button, g_simple_action_observer_get_active (observer));
 

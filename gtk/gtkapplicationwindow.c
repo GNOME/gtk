@@ -984,9 +984,9 @@ gtk_application_window_set_show_menubar (GtkApplicationWindow *window,
 }
 
 GSimpleActionObserver *
-gtk_application_window_get_observer (GtkApplicationWindow *window,
-                                     const gchar          *action_name,
-                                     GVariant             *target)
+gtk_application_window_create_observer (GtkApplicationWindow *window,
+                                        const gchar          *action_name,
+                                        GVariant             *target)
 {
   g_return_val_if_fail (GTK_IS_APPLICATION_WINDOW (window), NULL);
 
