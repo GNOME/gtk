@@ -1202,17 +1202,45 @@ cleanup_atoms(gpointer data)
   g_free (supported_atoms);
 }
 
-static void
-fetch_net_wm_check_window (GdkScreen *screen)
+static Window
+get_net_supporting_wm_check (GdkX11Screen *screen,
+                             Window        window)
 {
-  GdkX11Screen *x11_screen;
   GdkDisplay *display;
   Atom type;
   gint format;
   gulong n_items;
   gulong bytes_after;
   guchar *data;
-  Window *xwindow;
+  Window value;
+
+  display = screen->display;
+  type = None;
+  data = NULL;
+  value = None;
+
+  gdk_x11_display_error_trap_push (display);
+  XGetWindowProperty (screen->xdisplay, window,
+		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTING_WM_CHECK"),
+		      0, G_MAXLONG, False, XA_WINDOW, &type, &format,
+		      &n_items, &bytes_after, &data);
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (type == XA_WINDOW)
+    value = *(Window *)data;
+
+  if (data)
+    XFree (data);
+
+  return value;
+}
+
+static void
+fetch_net_wm_check_window (GdkScreen *screen)
+{
+  GdkX11Screen *x11_screen;
+  GdkDisplay *display;
+  Window window;
   GTimeVal tv;
   gint error;
 
@@ -1220,57 +1248,46 @@ fetch_net_wm_check_window (GdkScreen *screen)
   display = x11_screen->display;
 
   g_return_if_fail (GDK_X11_DISPLAY (display)->trusted_client);
-  
+
+  if (x11_screen->wmspec_check_window != None)
+    return; /* already have it */
+
   g_get_current_time (&tv);
 
   if (ABS  (tv.tv_sec - x11_screen->last_wmspec_check_time) < 15)
     return; /* we've checked recently */
 
-  x11_screen->last_wmspec_check_time = tv.tv_sec;
+  window = get_net_supporting_wm_check (x11_screen, x11_screen->xroot_window);
+  if (window == None)
+    return;
 
-  data = NULL;
-  XGetWindowProperty (x11_screen->xdisplay, x11_screen->xroot_window,
-		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTING_WM_CHECK"),
-		      0, G_MAXLONG, False, XA_WINDOW, &type, &format,
-		      &n_items, &bytes_after, &data);
-  
-  if (type != XA_WINDOW)
-    {
-      if (data)
-        XFree (data);
-      return;
-    }
-
-  xwindow = (Window *)data;
-
-  if (x11_screen->wmspec_check_window == *xwindow)
-    {
-      XFree (xwindow);
-      return;
-    }
+  if (window != get_net_supporting_wm_check (x11_screen, window))
+    return;
 
   gdk_x11_display_error_trap_push (display);
 
   /* Find out if this WM goes away, so we can reset everything. */
-  XSelectInput (x11_screen->xdisplay, *xwindow, StructureNotifyMask);
+  XSelectInput (x11_screen->xdisplay, window, StructureNotifyMask);
 
   error = gdk_x11_display_error_trap_pop (display);
   if (!error)
     {
-      x11_screen->wmspec_check_window = *xwindow;
+      /* We check the window property again because after XGetWindowProperty()
+       * and before XSelectInput() the window may have been recycled in such a
+       * way that XSelectInput() doesn't fail but the window is no longer what
+       * we want.
+       */
+      if (window != get_net_supporting_wm_check (x11_screen, window))
+        return;
+
+      x11_screen->wmspec_check_window = window;
+      x11_screen->last_wmspec_check_time = tv.tv_sec;
       x11_screen->need_refetch_net_supported = TRUE;
       x11_screen->need_refetch_wm_name = TRUE;
 
       /* Careful, reentrancy */
-      _gdk_x11_screen_window_manager_changed (GDK_SCREEN (x11_screen));
+      _gdk_x11_screen_window_manager_changed (screen);
     }
-  else if (error == BadWindow)
-    {
-      /* Leftover property, try again immediately, new wm may be starting up */
-      x11_screen->last_wmspec_check_time = 0;
-    }
-
-  XFree (xwindow);
 }
 
 /**
