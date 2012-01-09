@@ -29,6 +29,7 @@ gtk/gtkaccelgroup.c
 gtk/gtkaccellabel.c
 gtk/gtkaccelmap.c
 gtk/gtkaccessible.c
+gtk/gtkactionable.c
 gtk/gtkaction.c
 gtk/gtkactiongroup.c
 gtk/gtkactivatable.c
@@ -78,6 +79,8 @@ gtk/gtkcolorseldialog.c
 gtk/gtkcombobox.c
 gtk/gtkcontainer.c
 gtk/gtkcssprovider.c
+gtk/gtkcssshorthandproperty.c
+gtk/gtkcssstyleproperty.c
 gtk/gtkcustompaperunixdialog.c
 gtk/gtkdialog.c
 gtk/gtkdnd.c
@@ -185,6 +188,7 @@ gtk/gtkstatusbar.c
 gtk/gtkstatusicon.c
 gtk/gtkstock.c
 gtk/gtkstylecontext.c
+gtk/gtkstyleproperty.c
 gtk/gtkstyleprovider.c
 gtk/gtkswitch.c
 gtk/gtktextbuffer.c
