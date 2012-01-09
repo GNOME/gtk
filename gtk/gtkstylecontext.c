@@ -1673,8 +1673,8 @@ gtk_style_context_get_path (GtkStyleContext *context)
  *
  * Sets the parent style context for @context. The parent style
  * context is used to implement
- * <ulink url="http://www.w3.org/TR/css3-cascade/#inheritance>
- * inheritance</ulink> of properties.
+ * <ulink url="http://www.w3.org/TR/css3-cascade/#inheritance">inheritance</ulink>
+ * of properties.
  *
  * If you are using a #GtkStyleContext returned from
  * gtk_widget_get_style_context(), the parent will be set for you.
