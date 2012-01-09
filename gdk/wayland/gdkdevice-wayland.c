@@ -57,6 +57,8 @@ struct _GdkWaylandDevice
   struct wl_data_device *data_device;
   int32_t x, y, surface_x, surface_y;
   uint32_t time;
+  GdkWindow *pointer_grab_window;
+  uint32_t pointer_grab_time;
 
   DataOffer *drag_offer;
   DataOffer *selection_offer;
@@ -207,6 +209,33 @@ gdk_device_core_grab (GdkDevice    *device,
                       GdkCursor    *cursor,
                       guint32       time_)
 {
+  GdkDisplay *display;
+  GdkWaylandDevice *wayland_device = GDK_DEVICE_CORE (device)->device;
+
+  display = gdk_device_get_display (device);
+
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    {
+      /* Device is a keyboard */
+      return GDK_GRAB_SUCCESS;
+    }
+  else
+    {
+      /* Device is a pointer */
+
+      if (wayland_device->pointer_grab_window != NULL &&
+          time_ != 0 && wayland_device->pointer_grab_time > time_)
+        {
+          return GDK_GRAB_ALREADY_GRABBED;
+        }
+
+      if (time_ == 0)
+        time_ = wayland_device->time;
+
+      wayland_device->pointer_grab_window = window;
+      wayland_device->pointer_grab_time = time_;
+    }
+
   return GDK_GRAB_SUCCESS;
 }
 
@@ -214,6 +243,23 @@ static void
 gdk_device_core_ungrab (GdkDevice *device,
                         guint32    time_)
 {
+  GdkDisplay *display;
+  GdkDeviceGrabInfo *grab;
+
+  display = gdk_device_get_display (device);
+
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    {
+      /* Device is a keyboard */
+    }
+  else
+    {
+      /* Device is a pointer */
+      grab = _gdk_display_get_last_device_grab (display, device);
+
+      if (grab)
+        grab->serial_end = grab->serial_start;
+    }
 }
 
 static GdkWindow *
