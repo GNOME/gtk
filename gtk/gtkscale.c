@@ -1529,7 +1529,7 @@ compare_marks (gpointer a, gpointer b)
 
   ma = a; mb = b;
 
-  return (gint) (ma->value - mb->value);
+  return (ma->value > mb->value) ? 1 : ((ma->value == mb->value) ? 0 : -1);
 }
 
 /**
