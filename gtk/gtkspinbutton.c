@@ -626,7 +626,8 @@ create_one_pixbuf (GtkStyleContext *context,
 
   icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
                                           icon_name, size,
-                                          GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+                                          GTK_ICON_LOOKUP_GENERIC_FALLBACK |
+                                          GTK_ICON_LOOKUP_USE_BUILTIN);
 
   if (icon_info != NULL)
     {
