@@ -236,7 +236,6 @@ gtk_application_inhibit
 gtk_application_inhibit_flags_get_type
 gtk_application_is_inhibited
 gtk_application_new
-gtk_application_quit_response
 gtk_application_remove_accelerator
 gtk_application_remove_window
 gtk_application_set_app_menu

@@ -21,8 +21,7 @@
 
   <para>
     Starting with GTK+ 3.4, #GtkApplication supports logout notification
-    and negotiation in the same way as EggSMClient, using the same
-    basic API:
+    and negotiation similar to EggSMClient.
   </para>
   <table>
     <tgroup cols="2">
@@ -31,10 +30,10 @@
         <row><entry>EggSMClient</entry><entry>GtkApplication</entry></row>
       </thead>
       <tbody>
-        <row><entry>EggSMClient::quit-requested</entry><entry>#GtkApplication::quit-requested</entry></row>
-        <row><entry>EggSMClient::quit</entry><entry>#GtkApplication::quit</entry></row>
-        <row><entry>EggSMClient::quit-cancelled</entry><entry>#GtkApplication::quit-cancelled</entry></row>
-        <row><entry>egg_sm_client_will_quit</entry><entry>gtk_application_quit_response()</entry></row>
+        <row><entry>EggSMClient::quit-requested</entry><entry>instead of calling will_quit (FALSE,...) in response to this signal, install an inhibitor</entry></row>
+        <row><entry>EggSMClient::quit</entry><entry>the #GtkApplication::quit signal</entry></row>
+        <row><entry>EggSMClient::quit-cancelled</entry><entry></entry></row>
+        <row><entry>egg_sm_client_will_quit</entry><entry>instead of calling will_quit (FALSE,...), install an inhibitor</entry></row>
         <row><entry>egg_sm_client_end_session</entry><entry>gtk_application_end_session()</entry></row>
       </tbody>
     </tgroup>

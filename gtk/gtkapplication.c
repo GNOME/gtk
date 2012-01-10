@@ -109,7 +109,7 @@
  * life-cycle.
  *
  * An application can be informed when the session is about to end
- * by connecting to the #GtkApplication::quit-requested signal.
+ * by connecting to the #GtkApplication::quit signal.
  *
  * An application can request the session to be ended by calling
  * gtk_application_end_session().
@@ -126,8 +126,6 @@
 enum {
   WINDOW_ADDED,
   WINDOW_REMOVED,
-  QUIT_REQUESTED,
-  QUIT_CANCELLED,
   QUIT,
   LAST_SIGNAL
 };
@@ -146,7 +144,6 @@ struct _GtkApplicationPrivate
   GList *windows;
 
   gboolean register_session;
-  gboolean quit_requested;
 
 #ifdef GDK_WINDOWING_X11
   GDBusConnection *session_bus;
@@ -163,6 +160,9 @@ struct _GtkApplicationPrivate
   GActionMuxer *muxer;
   GMenu *combined;
 
+  GHashTable *inhibitors;
+  gint quit_inhibited;
+  guint next_cookie;
   AppleEvent quit_event, quit_reply;
   gboolean quitting;
 #endif
@@ -297,6 +297,8 @@ gtk_application_shutdown_quartz (GtkApplication *application)
 
   g_object_unref (application->priv->muxer);
   application->priv->muxer = NULL;
+
+  g_hash_table_unref (application->priv->inhibitors);
 }
 
 static void
@@ -577,6 +579,13 @@ gtk_application_set_property (GObject      *object,
 }
 
 static void
+gtk_application_quit (GtkApplication *app)
+{
+  /* we are asked to quit, so don't linger */
+  g_application_set_inactivity_timeout (G_APPLICATION (app), 0);
+}
+
+static void
 gtk_application_class_init (GtkApplicationClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -594,6 +603,7 @@ gtk_application_class_init (GtkApplicationClass *class)
 
   class->window_added = gtk_application_window_added;
   class->window_removed = gtk_application_window_removed;
+  class->quit = gtk_application_quit;
 
   g_type_class_add_private (class, sizeof (GtkApplicationPrivate));
 
@@ -633,56 +643,6 @@ gtk_application_class_init (GtkApplicationClass *class)
                   G_TYPE_NONE, 1, GTK_TYPE_WINDOW);
 
   /**
-   * GtkApplication::quit-requested:
-   * @application: the #GtkApplication
-   *
-   * Emitted when the session manager requests that the application
-   * exit (generally because the user is logging out). The application
-   * should decide whether or not it is willing to quit and then call
-   * g_application_quit_response(), passing %TRUE or %FALSE to give its
-   * answer to the session manager. It does not need to give an answer
-   * before returning from the signal handler; the answer can be given
-   * later on, but <emphasis>the application must not attempt to perform
-   * any actions or interact with the user</emphasis> in response to
-   * this signal. Any actions required for a clean shutdown should take
-   * place in response to the #GtkApplication::quit signal.
-   *
-   * The application should limit its operations until either the
-   * #GApplication::quit or #GtkApplication::quit-cancelled signals is
-   * emitted.
-   *
-   * To receive this signal, you need to set the
-   * #GtkApplication::register-session property
-   * when creating the application object.
-   *
-   * Since: 3.4
-   */
-  gtk_application_signals[QUIT_REQUESTED] =
-    g_signal_new ("quit-requested", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkApplicationClass, quit_requested),
-                  NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-
-  /**
-   * GtkApplication::quit-cancelled:
-   * @application: the #GtkApplication
-   *
-   * Emitted when the session manager decides to cancel a logout after
-   * the application has already agreed to quit. After receiving this
-   * signal, the application can go back to what it was doing before
-   * receiving the #GtkApplication::quit-requested signal.
-   *
-   * To receive this signal, you need to set the
-   * #GtkApplication::register-session property
-   * when creating the application object.
-   *
-   * Since: 3.4
-   */
-  gtk_application_signals[QUIT_CANCELLED] =
-    g_signal_new ("quit-cancelled", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkApplicationClass, quit_cancelled),
-                  NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-
-  /**
    * GtkApplication::quit:
    * @application: the #GtkApplication
    *
@@ -691,9 +651,9 @@ gtk_application_class_init (GtkApplicationClass *class)
    * should exit as soon as possible after receiving this signal; if
    * it does not, the session manager may choose to forcibly kill it.
    *
-   * Normally, an application would only be sent a ::quit if it
-   * agreed to quit in response to a #GtkApplication::quit-requested
-   * signal. However, this is not guaranteed; in some situations the
+   * Normally, an application would only be sent a ::quit if there
+   * are no inhibitors (see gtk_application_inhibit()).
+   * However, this is not guaranteed; in some situations the
    * session manager may decide to end the session without giving
    * applications a chance to object.
    *
@@ -704,7 +664,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * Since: 3.4
    */
   gtk_application_signals[QUIT] =
-    g_signal_new ("quit", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_LAST,
+    g_signal_new ("quit", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkApplicationClass, quit),
                   NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 
@@ -1064,6 +1024,20 @@ unregister_client (GtkApplication *app)
 }
 
 static void
+gtk_application_quit_response (GtkApplication *application,
+                               gboolean        will_quit,
+                               const gchar    *reason)
+{
+  g_debug ("Calling EndSessionResponse %d '%s'", will_quit, reason);
+
+  g_dbus_proxy_call (application->priv->client_proxy,
+                     "EndSessionResponse",
+                     g_variant_new ("(bs)", will_quit, reason ? reason : ""),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     G_MAXINT,
+                     NULL, NULL, NULL);
+}
+static void
 client_proxy_signal (GDBusProxy     *proxy,
                      const gchar    *sender_name,
                      const gchar    *signal_name,
@@ -1073,21 +1047,18 @@ client_proxy_signal (GDBusProxy     *proxy,
   if (strcmp (signal_name, "QueryEndSession") == 0)
     {
       g_debug ("Received QueryEndSession");
-      app->priv->quit_requested = TRUE;
-      g_signal_emit (app, gtk_application_signals[QUIT_REQUESTED], 0);
-    }
-  else if (strcmp (signal_name, "EndSession") == 0)
-    {
-      g_debug ("Received EndSession");
-      app->priv->quit_requested = TRUE;
       gtk_application_quit_response (app, TRUE, NULL);
-      unregister_client (app);
-      g_signal_emit (app, gtk_application_signals[QUIT], 0);
     }
   else if (strcmp (signal_name, "CancelEndSession") == 0)
     {
       g_debug ("Received CancelEndSession");
-      g_signal_emit (app, gtk_application_signals[QUIT_CANCELLED], 0);
+    }
+  else if (strcmp (signal_name, "EndSession") == 0)
+    {
+      g_debug ("Received EndSession");
+      gtk_application_quit_response (app, TRUE, NULL);
+      unregister_client (app);
+      g_signal_emit (app, gtk_application_signals[QUIT], 0);
     }
   else if (strcmp (signal_name, "Stop") == 0)
     {
@@ -1186,52 +1157,7 @@ gtk_application_startup_session_dbus (GtkApplication *app)
   g_signal_connect (app->priv->client_proxy, "g-signal", G_CALLBACK (client_proxy_signal), app);
 }
 
-/**
- * gtk_application_quit_response:
- * @application: the #GtkApplication
- * @will_quit: whether the application agrees to quit
- * @reason: (allow-none): a short human-readable string that explains
- *     why quitting is not possible
- *
- * This function <emphasis>must</emphasis> be called in response to the
- * #GtkApplication::quit-requested signal, to indicate whether or
- * not the application is willing to quit. The application may call
- * it either directly from the signal handler, or at some later point.
- *
- * It should be stressed that <emphasis>applications should not assume
- * that they have the ability to block logout or shutdown</emphasis>,
- * even when %FALSE is passed for @will_quit.
- *
- * After calling this method, the application should wait to receive
- * either #GtkApplication::quit-cancelled or #GtkApplication::quit.
- *
- * If the application does not connect to #GtkApplication::quit-requested,
- * #GtkApplication will call this method on its behalf (passing %TRUE
- * for @will_quit).
- *
- * Since: 3.4
- */
-void
-gtk_application_quit_response (GtkApplication *application,
-                               gboolean        will_quit,
-                               const gchar    *reason)
-{
-  g_return_if_fail (GTK_IS_APPLICATION (application));
-  g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
-  g_return_if_fail (application->priv->client_proxy != NULL);
-  g_return_if_fail (application->priv->quit_requested);
 
-  application->priv->quit_requested = FALSE;
-
-  g_debug ("Calling EndSessionResponse %d '%s'", will_quit, reason);
-
-  g_dbus_proxy_call (application->priv->client_proxy,
-                     "EndSessionResponse",
-                     g_variant_new ("(bs)", will_quit, reason ? reason : ""),
-                     G_DBUS_CALL_FLAGS_NONE,
-                     G_MAXINT,
-                     NULL, NULL, NULL);
-}
 
 /**
  * GtkApplicationInhibitFlags:
@@ -1417,8 +1343,8 @@ gtk_application_is_inhibited (GtkApplication             *application,
  * Requests that the session manager end the current session.
  * @style indicates how the session should be ended, and
  * @request_confirmation indicates whether or not the user should be
- * given a chance to confirm the action. Both of these flags are merely
- * hints though; the session manager may choose to ignore them.
+ * given a chance to confirm the action. Both of these parameters are
+ * merely hints though; the session manager may choose to ignore them.
  *
  * Return value: %TRUE if the request was sent; %FALSE if it could not
  *     be sent (eg, because it could not connect to the session manager)
@@ -1462,46 +1388,6 @@ gtk_application_end_session (GtkApplication         *application,
 
 /* OS X implementation copied from EggSMClient */
 
-static gboolean
-idle_quit_requested (gpointer client)
-{
-  g_signal_emit (client, gtk_application_signals[QUIT_REQUESTED], 0);
-
-  return FALSE;
-}
-
-static pascal OSErr
-quit_requested (const AppleEvent *aevt,
-                AppleEvent       *reply,
-                long              refcon)
-{
-  GtkApplication *app = GSIZE_TO_POINTER ((gsize)refcon);
-
-  g_return_val_if_fail (!app->priv->quit_requested, userCanceledErr);
-
-  /* FIXME AEInteractWithUser? */
-  osx->quit_requested = TRUE;
-  AEDuplicateDesc (aevt, &app->priv->quit_event);
-  AEDuplicateDesc (reply, &app->priv->quit_reply);
-  AESuspendTheCurrentEvent (aevt);
-
-  /* Don't emit the "quit_requested" signal immediately, since we're
-   * called from a weird point in the guts of gdkeventloop-quartz.c
-   */
-  g_idle_add (idle_quit_requested, app);
-
-  return noErr;
-}
-
-static void
-gtk_application_startup_session_quartz (GtkApplication *app)
-{
-  if (app->priv->register_session)
-    AEInstallEventHandler (kCoreEventClass, kAEQuitApplication,
-                           NewAEEventHandlerUPP (quit_requested),
-                           (long)GPOINTER_TO_SIZE (app), false);
-}
-
 static pascal OSErr
 quit_requested_resumed (const AppleEvent *aevt,
                         AppleEvent       *reply,
@@ -1509,9 +1395,7 @@ quit_requested_resumed (const AppleEvent *aevt,
 {
   GtkApplication *app = GSIZE_TO_POINTER ((gsize)refcon);
 
-  app->priv->quit_requested = FALSE;
-
-  return app->priv->quitting ? noErr : userCanceledErr;
+  return app->priv->quit_inhibit == 0 ? noErr : userCanceledErr;
 }
 
 static gboolean
@@ -1529,29 +1413,41 @@ idle_will_quit (gpointer data)
   AEDisposeDesc (&app->quit->quit_event);
   AEDisposeDesc (&app->quit->quit_reply);
 
-  if (app->priv->quitting)
+  if (app->priv->quit_inhibit == 0)
     g_signal_emit (app, gtk_application_signals[QUIT], 0);
 
   return FALSE;
 }
 
-void
-gtk_application_quit_response (GtkApplication *application,
-                               gboolean        will_quit,
-                               const gchar    *reason)
+static pascal OSErr
+quit_requested (const AppleEvent *aevt,
+                AppleEvent       *reply,
+                long              refcon)
 {
-  g_return_if_fail (GTK_IS_APPLICATION (application));
-  g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
-  g_return_if_fail (application->priv->quit_requested);
+  GtkApplication *app = GSIZE_TO_POINTER ((gsize)refcon);
 
-  application->priv->quitting = will_quit;
+  /* FIXME AEInteractWithUser? */
+  AEDuplicateDesc (aevt, &app->priv->quit_event);
+  AEDuplicateDesc (reply, &app->priv->quit_reply);
+  AESuspendTheCurrentEvent (aevt);
 
-  /* Finish in an idle handler since the caller might have called
-   * gtk_application_quit_response() from inside the ::quit-requested
-   * signal handler, but may not expect the ::quit signal to arrive
-   * during the gtk_application_quit_response() call.
+  /* Don't emit the "quit" signal immediately, since we're
+   * called from a weird point in the guts of gdkeventloop-quartz.c
    */
-  g_idle_add (idle_will_quit, application);
+  g_idle_add (idle_will_quit, app);
+
+  return noErr;
+}
+
+static void
+gtk_application_startup_session_quartz (GtkApplication *app)
+{
+  if (app->priv->register_session)
+    AEInstallEventHandler (kCoreEventClass, kAEQuitApplication,
+                           NewAEEventHandlerUPP (quit_requested),
+                           (long)GPOINTER_TO_SIZE (app), false);
+
+  app->priv->inhibitors = g_hash_table_new (NULL, NULL);
 }
 
 guint
@@ -1560,19 +1456,51 @@ gtk_application_inhibit (GtkApplication             *application,
                          GtkApplicationInhibitFlags  flags,
                          const gchar                *reason)
 {
-  return 0;
+  guint cookie;
+
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), 0);
+  g_return_val_if_fail (flags != 0, 0);
+
+  application->priv->next_cookie++;
+  cookie = application->priv->next_cookie;
+
+  g_hash_table_insert (application->priv->inhibitors,
+                       GUINT_TO_POINTER (cookie),
+                       GUINT_TO_POINTER (flags));
+
+  if (flags & GTK_APPLICATION_INHIBIT_LOGOUT)
+    application->priv->quit_inhibit++;
+
+  return cookie;
 }
 
 void
 gtk_application_uninhibit (GtkApplication *application,
                            guint           cookie)
 {
+  GApplicationInhibitFlags flags;
+
+  flags = GPOINTER_TO_UINT (g_hash_table_lookup (application->priv->inhibitors, GUINT_TO_POINTER (cookie)));
+
+  if (flags == 0)
+    {
+      g_warning ("Invalid inhibitor cookie");
+      return;
+    }
+
+  g_hash_table_remove (application->priv->inhibitors, GUINT_TO_POINTER (cookie));
+
+  if (flags & GTK_APPLICATION_INHIBIT_LOGOUT)
+    application->priv->quit_inhibit--;
 }
 
 gboolean
 gtk_application_is_inhibited (GtkApplication             *application,
                               GtkApplicationInhibitFlags  flags)
 {
+  if (flags & GTK_APPLICATION_INHIBIT_LOGOUT)
+    return application->priv->quit_inhibit > 0;
+
   return FALSE;
 }
 
@@ -1635,13 +1563,6 @@ gtk_application_end_session (GtkApplication         *application,
  * For the inhibit API on Windows, see
  * http://msdn.microsoft.com/en-us/library/ms700677%28VS.85%29.aspx
  */
-
-void
-gtk_application_quit_response (GtkApplication *application,
-                               gboolean        will_quit,
-                               const gchar    *reason)
-{
-}
 
 guint
 gtk_application_inhibit (GtkApplication             *application,

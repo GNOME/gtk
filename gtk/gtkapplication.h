@@ -59,8 +59,6 @@ struct _GtkApplicationClass
   void (*window_removed) (GtkApplication *application,
                           GtkWindow      *window);
 
-  void (*quit_requested) (GtkApplication *application);
-  void (*quit_cancelled) (GtkApplication *application);
   void (*quit)           (GtkApplication *application);
 
   /*< private >*/
@@ -94,10 +92,6 @@ void             gtk_application_add_accelerator    (GtkApplication  *applicatio
 void             gtk_application_remove_accelerator (GtkApplication *application,
                                                      const gchar    *action_name,
                                                      GVariant       *parameter);
-
-void             gtk_application_quit_response      (GtkApplication *application,
-                                                     gboolean        will_quit,
-                                                     const gchar    *reason);
 
 typedef enum
 {

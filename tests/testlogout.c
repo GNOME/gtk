@@ -1,7 +1,5 @@
 #include <gtk/gtk.h>
 
-static gboolean will_quit = TRUE;
-static gchar *reason;
 static GtkWidget *inhibit_entry;
 static GtkWidget *inhibit_logout;
 static GtkWidget *inhibit_switch;
@@ -33,19 +31,6 @@ end_session (GtkButton *button, GtkApplication *app)
   g_print ("Calling gtk_application_end_session: %d, %d\n", style, confirm);
 
   gtk_application_end_session (app, style, confirm);
-}
-
-static void
-toggle_will_quit (GtkToggleButton *button, gpointer data)
-{
-  will_quit = gtk_toggle_button_get_active (button);
-}
-
-static void
-reason_changed (GtkEntry *entry, GParamSpec *pspec, GtkApplication *app)
-{
-  g_free (reason);
-  reason = g_strdup (gtk_entry_get_text (entry));
 }
 
 static void
@@ -118,7 +103,6 @@ activate (GtkApplication *app,
   GtkWidget *separator;
   GtkWidget *grid;
   GtkWidget *button;
-  GtkWidget *entry;
   GtkWidget *label;
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -168,26 +152,6 @@ activate (GtkApplication *app,
 
   gtk_container_add (GTK_CONTAINER (box), grid);
 
-  button = gtk_check_button_new_with_label ("Will quit");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), will_quit);
-  g_signal_connect (button, "toggled",
-                    G_CALLBACK (toggle_will_quit), NULL);
-  gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
-
-  entry = gtk_entry_new ();
-  g_signal_connect (entry, "notify::text",
-                    G_CALLBACK (reason_changed), app);
-  gtk_grid_attach (GTK_GRID (grid), entry, 1, 0, 1, 1);
-
-  separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_container_add (GTK_CONTAINER (box), separator);
-
-  grid = gtk_grid_new ();
-  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
-  gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
-
-  gtk_container_add (GTK_CONTAINER (box), grid);
-
   end_combo = gtk_combo_box_text_new ();
   gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (end_combo), "logout", "Logout");
   gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (end_combo), "reboot", "Reboot");
@@ -211,25 +175,10 @@ activate (GtkApplication *app,
 }
 
 static void
-quit_requested (GtkApplication *app,
-                gpointer        data)
-{
-  g_print ("Received quit-requested, reply: %d, '%s'\n", will_quit, reason);
-  gtk_application_quit_response (app, will_quit, reason);
-}
-
-static void
 quit (GtkApplication *app,
       gpointer        data)
 {
   g_print ("Received quit\n");
-}
-
-static void
-quit_cancelled (GtkApplication *app,
-                gpointer        data)
-{
-  g_print ("received quit-cancelled\n");
 }
 
 int
@@ -242,12 +191,8 @@ main (int argc, char *argv[])
 
   g_signal_connect (app, "activate",
                     G_CALLBACK (activate), NULL);
-  g_signal_connect (app, "quit-requested",
-                    G_CALLBACK (quit_requested), NULL);
   g_signal_connect (app, "quit",
                     G_CALLBACK (quit), NULL);
-  g_signal_connect (app, "quit-cancelled",
-                    G_CALLBACK (quit_cancelled), NULL);
 
   g_application_run (G_APPLICATION (app), argc, argv);
 
