@@ -512,28 +512,25 @@ parse_background (GtkCssShorthandProperty *shorthand,
 /*** PACKING ***/
 
 static GParameter *
-unpack_border (const GValue *value,
-               guint        *n_params,
-               const char   *top,
-               const char   *left,
-               const char   *bottom,
-               const char   *right)
+unpack_border (GtkCssShorthandProperty *shorthand,
+               const GValue            *value,
+               guint                   *n_params)
 {
   GParameter *parameter = g_new0 (GParameter, 4);
   GtkBorder *border = g_value_get_boxed (value);
 
-  parameter[0].name = top;
+  parameter[0].name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_shorthand_property_get_subproperty (shorthand, 0)));
   g_value_init (&parameter[0].value, G_TYPE_INT);
   g_value_set_int (&parameter[0].value, border->top);
-  parameter[1].name = left;
+  parameter[1].name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_shorthand_property_get_subproperty (shorthand, 1)));
   g_value_init (&parameter[1].value, G_TYPE_INT);
-  g_value_set_int (&parameter[1].value, border->left);
-  parameter[2].name = bottom;
+  g_value_set_int (&parameter[1].value, border->right);
+  parameter[2].name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_shorthand_property_get_subproperty (shorthand, 2)));
   g_value_init (&parameter[2].value, G_TYPE_INT);
   g_value_set_int (&parameter[2].value, border->bottom);
-  parameter[3].name = right;
+  parameter[3].name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_shorthand_property_get_subproperty (shorthand, 3)));
   g_value_init (&parameter[3].value, G_TYPE_INT);
-  g_value_set_int (&parameter[3].value, border->right);
+  g_value_set_int (&parameter[3].value, border->left);
 
   *n_params = 4;
   return parameter;
@@ -567,36 +564,6 @@ pack_border (GtkCssShorthandProperty *shorthand,
     border.left = g_value_get_int (v);
 
   g_value_set_boxed (value, &border);
-}
-
-static GParameter *
-unpack_border_width (GtkCssShorthandProperty *shorthand,
-                     const GValue            *value,
-                     guint                   *n_params)
-{
-  return unpack_border (value, n_params,
-                        "border-top-width", "border-left-width",
-                        "border-bottom-width", "border-right-width");
-}
-
-static GParameter *
-unpack_padding (GtkCssShorthandProperty *shorthand,
-                const GValue            *value,
-                guint                   *n_params)
-{
-  return unpack_border (value, n_params,
-                        "padding-top", "padding-left",
-                        "padding-bottom", "padding-right");
-}
-
-static GParameter *
-unpack_margin (GtkCssShorthandProperty *shorthand,
-               const GValue            *value,
-               guint                   *n_params)
-{
-  return unpack_border (value, n_params,
-                        "margin-top", "margin-left",
-                        "margin-bottom", "margin-right");
 }
 
 static GParameter *
@@ -873,19 +840,19 @@ _gtk_css_shorthand_property_init_properties (void)
                                           GTK_TYPE_BORDER,
                                           margin_subproperties,
                                           parse_border_width,
-                                          unpack_margin,
+                                          unpack_border,
                                           pack_border);
   _gtk_css_shorthand_property_register   ("padding",
                                           GTK_TYPE_BORDER,
                                           padding_subproperties,
                                           parse_border_width,
-                                          unpack_padding,
+                                          unpack_border,
                                           pack_border);
   _gtk_css_shorthand_property_register   ("border-width",
                                           GTK_TYPE_BORDER,
                                           border_width_subproperties,
                                           parse_border_width,
-                                          unpack_border_width,
+                                          unpack_border,
                                           pack_border);
   _gtk_css_shorthand_property_register   ("border-radius",
                                           G_TYPE_INT,
