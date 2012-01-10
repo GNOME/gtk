@@ -800,11 +800,10 @@ unpack_border_color (GtkCssShorthandProperty *shorthand,
                      guint                   *n_params)
 {
   GParameter *parameter = g_new0 (GParameter, 4);
+  gpointer p;
   GType type;
   
   type = G_VALUE_TYPE (value);
-  if (type == G_TYPE_PTR_ARRAY)
-    type = GTK_TYPE_SYMBOLIC_COLOR;
 
   parameter[0].name = "border-top-color";
   g_value_init (&parameter[0].value, type);
@@ -815,24 +814,13 @@ unpack_border_color (GtkCssShorthandProperty *shorthand,
   parameter[3].name = "border-left-color";
   g_value_init (&parameter[3].value, type);
 
-  if (G_VALUE_TYPE (value) == G_TYPE_PTR_ARRAY)
-    {
-      GPtrArray *array = g_value_get_boxed (value);
-      guint i;
+  /* can be RGBA or symbolic color */
+  p = g_value_get_boxed (value);
 
-      for (i = 0; i < 4; i++)
-        g_value_set_boxed (&parameter[i].value, g_ptr_array_index (array, i));
-    }
-  else
-    {
-      /* can be RGBA or symbolic color */
-      gpointer p = g_value_get_boxed (value);
-
-      g_value_set_boxed (&parameter[0].value, p);
-      g_value_set_boxed (&parameter[1].value, p);
-      g_value_set_boxed (&parameter[2].value, p);
-      g_value_set_boxed (&parameter[3].value, p);
-    }
+  g_value_set_boxed (&parameter[0].value, p);
+  g_value_set_boxed (&parameter[1].value, p);
+  g_value_set_boxed (&parameter[2].value, p);
+  g_value_set_boxed (&parameter[3].value, p);
 
   *n_params = 4;
   return parameter;
