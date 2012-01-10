@@ -20,7 +20,7 @@
 
   <example><title>A unique application</title>
   <para>Here is a simple application using libunique:
-  <programlisting>
+  <informalexample><programlisting>
 int
 main (int argc, char *argv[])
 {
@@ -53,9 +53,9 @@ main (int argc, char *argv[])
 
   return 0;
 }
-</programlisting>
+</programlisting></informalexample>
 The same application using GtkApplication:
-<programlisting>
+<informalexample><programlisting>
 static void
 activate (GtkApplication *app)
 {
@@ -85,13 +85,13 @@ main (int argc, char *argv[])
   app = gtk_application_new ("org.gtk.TestApplication", 0);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
-  status = g_application_run (app);
+  status = g_application_run (G_APPLICATION (app), argc, argv);
 
   g_object_unref (app);
 
   return status;
 }
-</programlisting>
+</programlisting></informalexample>
 </para>
 </example>
   <section><title>Uniqueness</title>
