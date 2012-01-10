@@ -27,10 +27,6 @@
 
 G_BEGIN_DECLS
 
-void           _gtk_style_properties_set_color_lookup_func    (GtkStyleProperties      *props,
-                                                               GtkSymbolicColorLookupFunc func,
-                                                               gpointer                 data);
-
 const GValue * _gtk_style_properties_peek_property            (GtkStyleProperties      *props,
                                                                GtkCssStyleProperty     *property,
                                                                GtkStateFlags            state);

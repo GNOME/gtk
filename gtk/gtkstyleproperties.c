@@ -79,8 +79,6 @@ struct _GtkStylePropertiesPrivate
 {
   GHashTable *color_map;
   GHashTable *properties;
-  GtkSymbolicColorLookupFunc color_lookup_func;
-  gpointer color_lookup_data;
 };
 
 static void gtk_style_properties_provider_init         (GtkStyleProviderIface            *iface);
@@ -367,23 +365,6 @@ gtk_style_properties_new (void)
   return g_object_new (GTK_TYPE_STYLE_PROPERTIES, NULL);
 }
 
-void
-_gtk_style_properties_set_color_lookup_func (GtkStyleProperties         *props,
-                                             GtkSymbolicColorLookupFunc  func,
-                                             gpointer                    data)
-{
-  GtkStylePropertiesPrivate *priv;
-
-  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
-  g_return_if_fail (func != NULL);
-
-  priv = props->priv;
-  g_return_if_fail (priv->color_map == NULL);
-
-  priv->color_lookup_func = func;
-  priv->color_lookup_data = data;
-}
-
 /**
  * gtk_style_properties_map_color:
  * @props: a #GtkStyleProperties
@@ -407,7 +388,6 @@ gtk_style_properties_map_color (GtkStyleProperties *props,
   g_return_if_fail (color != NULL);
 
   priv = props->priv;
-  g_return_if_fail (priv->color_lookup_func == NULL);
 
   if (G_UNLIKELY (!priv->color_map))
     priv->color_map = g_hash_table_new_full (g_str_hash,
@@ -442,9 +422,6 @@ gtk_style_properties_lookup_color (GtkStyleProperties *props,
   g_return_val_if_fail (name != NULL, NULL);
 
   priv = props->priv;
-
-  if (priv->color_lookup_func)
-    return priv->color_lookup_func (priv->color_lookup_data, name);
 
   if (!priv->color_map)
     return NULL;

@@ -988,9 +988,6 @@ build_properties (GtkStyleContext *context,
     }
 
   style_data->store = gtk_style_properties_new ();
-  _gtk_style_properties_set_color_lookup_func (style_data->store,
-                                               gtk_style_context_color_lookup_func,
-                                               context);
   _gtk_css_lookup_resolve (lookup, context, style_data->store);
   _gtk_css_lookup_free (lookup);
 }
