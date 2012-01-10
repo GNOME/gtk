@@ -1021,7 +1021,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         P_("GtkApplication"),
                                                         P_("The GtkApplication for the window"),
                                                         GTK_TYPE_APPLICATION,
-                                                        GTK_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
   window_signals[SET_FOCUS] =
     g_signal_new (I_("set-focus"),
