@@ -567,8 +567,9 @@ pack_border (GValue             *value,
 }
 
 static GParameter *
-unpack_border_width (const GValue *value,
-                     guint        *n_params)
+unpack_border_width (GtkCssShorthandProperty *shorthand,
+                     const GValue            *value,
+                     guint                   *n_params)
 {
   return unpack_border (value, n_params,
                         "border-top-width", "border-left-width",
@@ -576,9 +577,10 @@ unpack_border_width (const GValue *value,
 }
 
 static void
-pack_border_width (GValue             *value,
-                   GtkStyleProperties *props,
-                   GtkStateFlags       state)
+pack_border_width (GtkCssShorthandProperty *shorthand,
+                   GValue                  *value,
+                   GtkStyleProperties      *props,
+                   GtkStateFlags            state)
 {
   pack_border (value, props, state,
                "border-top-width", "border-left-width",
@@ -586,8 +588,9 @@ pack_border_width (GValue             *value,
 }
 
 static GParameter *
-unpack_padding (const GValue *value,
-                guint        *n_params)
+unpack_padding (GtkCssShorthandProperty *shorthand,
+                const GValue            *value,
+                guint                   *n_params)
 {
   return unpack_border (value, n_params,
                         "padding-top", "padding-left",
@@ -595,9 +598,10 @@ unpack_padding (const GValue *value,
 }
 
 static void
-pack_padding (GValue             *value,
-              GtkStyleProperties *props,
-              GtkStateFlags       state)
+pack_padding (GtkCssShorthandProperty *shorthand,
+              GValue                  *value,
+              GtkStyleProperties      *props,
+              GtkStateFlags            state)
 {
   pack_border (value, props, state,
                "padding-top", "padding-left",
@@ -605,8 +609,9 @@ pack_padding (GValue             *value,
 }
 
 static GParameter *
-unpack_margin (const GValue *value,
-               guint        *n_params)
+unpack_margin (GtkCssShorthandProperty *shorthand,
+               const GValue            *value,
+               guint                   *n_params)
 {
   return unpack_border (value, n_params,
                         "margin-top", "margin-left",
@@ -614,9 +619,10 @@ unpack_margin (const GValue *value,
 }
 
 static void
-pack_margin (GValue             *value,
-             GtkStyleProperties *props,
-             GtkStateFlags       state)
+pack_margin (GtkCssShorthandProperty *shorthand,
+             GValue                  *value,
+             GtkStyleProperties      *props,
+             GtkStateFlags            state)
 {
   pack_border (value, props, state,
                "margin-top", "margin-left",
@@ -624,8 +630,9 @@ pack_margin (GValue             *value,
 }
 
 static GParameter *
-unpack_border_radius (const GValue *value,
-                      guint        *n_params)
+unpack_border_radius (GtkCssShorthandProperty *shorthand,
+                      const GValue            *value,
+                      guint                   *n_params)
 {
   GParameter *parameter = g_new0 (GParameter, 4);
   GtkCssBorderCornerRadius border;
@@ -650,9 +657,10 @@ unpack_border_radius (const GValue *value,
 }
 
 static void
-pack_border_radius (GValue             *value,
-                    GtkStyleProperties *props,
-                    GtkStateFlags       state)
+pack_border_radius (GtkCssShorthandProperty *shorthand,
+                    GValue                  *value,
+                    GtkStyleProperties      *props,
+                    GtkStateFlags            state)
 {
   GtkCssBorderCornerRadius *top_left;
 
@@ -672,8 +680,9 @@ pack_border_radius (GValue             *value,
 }
 
 static GParameter *
-unpack_font_description (const GValue *value,
-                         guint        *n_params)
+unpack_font_description (GtkCssShorthandProperty *shorthand,
+                         const GValue            *value,
+                         guint                   *n_params)
 {
   GParameter *parameter = g_new0 (GParameter, 5);
   PangoFontDescription *description;
@@ -750,9 +759,10 @@ unpack_font_description (const GValue *value,
 }
 
 static void
-pack_font_description (GValue             *value,
-                       GtkStyleProperties *props,
-                       GtkStateFlags       state)
+pack_font_description (GtkCssShorthandProperty *shorthand,
+                       GValue                  *value,
+                       GtkStyleProperties      *props,
+                       GtkStateFlags            state)
 {
   PangoFontDescription *description;
   char **families;
@@ -785,8 +795,9 @@ pack_font_description (GValue             *value,
 }
 
 static GParameter *
-unpack_border_color (const GValue *value,
-                     guint        *n_params)
+unpack_border_color (GtkCssShorthandProperty *shorthand,
+                     const GValue            *value,
+                     guint                   *n_params)
 {
   GParameter *parameter = g_new0 (GParameter, 4);
   GType type;
@@ -828,9 +839,10 @@ unpack_border_color (const GValue *value,
 }
 
 static void
-pack_border_color (GValue             *value,
-                   GtkStyleProperties *props,
-                   GtkStateFlags       state)
+pack_border_color (GtkCssShorthandProperty *shorthand,
+                   GValue                  *value,
+                   GtkStyleProperties      *props,
+                   GtkStateFlags            state)
 {
   /* NB: We are a color property, so we have to resolve to a color here.
    * So we just resolve to a color. We pick one and stick to it.
@@ -841,8 +853,9 @@ pack_border_color (GValue             *value,
 }
 
 static GParameter *
-unpack_border_style (const GValue *value,
-                     guint        *n_params)
+unpack_border_style (GtkCssShorthandProperty *shorthand,
+                     const GValue            *value,
+                     guint                   *n_params)
 {
   GParameter *parameter = g_new0 (GParameter, 4);
   GtkBorderStyle style;
@@ -867,9 +880,10 @@ unpack_border_style (const GValue *value,
 }
 
 static void
-pack_border_style (GValue             *value,
-                   GtkStyleProperties *props,
-                   GtkStateFlags       state)
+pack_border_style (GtkCssShorthandProperty *shorthand,
+                   GValue                  *value,
+                   GtkStyleProperties      *props,
+                   GtkStateFlags            state)
 {
   /* NB: We can just resolve to a style. We pick one and stick to it.
    * Lesson learned: Don't query border-style shorthand, query the
@@ -883,10 +897,10 @@ _gtk_css_shorthand_property_register (const char                        *name,
                                       GType                              value_type,
                                       const char                       **subproperties,
                                       GtkCssShorthandPropertyParseFunc   parse_func,
-                                      GtkStyleUnpackFunc                 unpack_func,
-                                      GtkStylePackFunc                   pack_func)
+                                      GtkCssShorthandPropertyAssignFunc  assign_func,
+                                      GtkCssShorthandPropertyQueryFunc   query_func)
 {
-  GtkStyleProperty *node;
+  GtkCssShorthandProperty *node;
 
   node = g_object_new (GTK_TYPE_CSS_SHORTHAND_PROPERTY,
                        "name", name,
@@ -894,9 +908,9 @@ _gtk_css_shorthand_property_register (const char                        *name,
                        "subproperties", subproperties,
                        NULL);
 
-  GTK_CSS_SHORTHAND_PROPERTY (node)->parse = parse_func;
-  node->pack_func = pack_func;
-  node->unpack_func = unpack_func;
+  node->parse = parse_func;
+  node->assign = assign_func;
+  node->query = query_func;
 }
 
 void

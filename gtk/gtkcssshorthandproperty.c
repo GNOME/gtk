@@ -68,10 +68,11 @@ _gtk_css_shorthand_property_assign (GtkStyleProperty   *property,
                                     GtkStateFlags       state,
                                     const GValue       *value)
 {
+  GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
   GParameter *parameters;
   guint i, n_parameters;
 
-  parameters = property->unpack_func (value, &n_parameters);
+  parameters = shorthand->assign (shorthand, value, &n_parameters);
 
   for (i = 0; i < n_parameters; i++)
     {
@@ -90,7 +91,9 @@ _gtk_css_shorthand_property_query (GtkStyleProperty   *property,
                                    GtkStateFlags       state,
                                    GValue             *value)
 {
-  property->pack_func (value, props, state);
+  GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
+
+  shorthand->query (shorthand, value, props, state);
 }
 
 static gboolean

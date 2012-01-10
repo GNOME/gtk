@@ -39,21 +39,12 @@ typedef enum {
   GTK_STYLE_PROPERTY_INHERIT = (1 << 0)
 } GtkStylePropertyFlags;
 
-typedef GParameter *     (* GtkStyleUnpackFunc)            (const GValue           *value,
-                                                            guint                  *n_params);
-typedef void             (* GtkStylePackFunc)              (GValue                 *value,
-                                                            GtkStyleProperties     *props,
-                                                            GtkStateFlags           state);
-
 struct _GtkStyleProperty
 {
   GObject parent;
 
   char *name;
   GType value_type;
-
-  GtkStyleUnpackFunc        unpack_func;
-  GtkStylePackFunc          pack_func;
 };
 
 struct _GtkStylePropertyClass
