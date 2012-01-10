@@ -797,17 +797,30 @@ unpack_border_color (GtkCssShorthandProperty *shorthand,
 }
 
 static void
-pack_border_color (GtkCssShorthandProperty *shorthand,
-                   GValue                  *value,
-                   GtkStyleProperties      *props,
-                   GtkStateFlags            state)
+pack_first_element (GtkCssShorthandProperty *shorthand,
+                    GValue                  *value,
+                    GtkStyleProperties      *props,
+                    GtkStateFlags            state)
 {
-  /* NB: We are a color property, so we have to resolve to a color here.
-   * So we just resolve to a color. We pick one and stick to it.
-   * Lesson learned: Don't query border-color shorthand, query the 
+  GtkCssStyleProperty *prop;
+  const GValue *v;
+  guint i;
+
+  /* NB: This is a fallback for properties that originally were
+   * not used as shorthand. We just pick the first subproperty
+   * as a representative.
+   * Lesson learned: Don't query the shorthand, query the 
    * real properties instead. */
-  g_value_unset (value);
-  gtk_style_properties_get_property (props, "border-top-color", state, value);
+  for (i = 0; i < _gtk_css_shorthand_property_get_n_subproperties (shorthand); i++)
+    {
+      prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 0);
+      v = _gtk_style_properties_peek_property (props, prop, state);
+      if (v)
+        {
+          g_value_copy (v, value);
+          return;
+        }
+    }
 }
 
 static GParameter *
@@ -835,19 +848,6 @@ unpack_border_style (GtkCssShorthandProperty *shorthand,
 
   *n_params = 4;
   return parameter;
-}
-
-static void
-pack_border_style (GtkCssShorthandProperty *shorthand,
-                   GValue                  *value,
-                   GtkStyleProperties      *props,
-                   GtkStateFlags            state)
-{
-  /* NB: We can just resolve to a style. We pick one and stick to it.
-   * Lesson learned: Don't query border-style shorthand, query the
-   * real properties instead. */
-  g_value_unset (value);
-  gtk_style_properties_get_property (props, "border-top-style", state, value);
 }
 
 static void
@@ -931,13 +931,13 @@ _gtk_css_shorthand_property_init_properties (void)
                                           border_color_subproperties,
                                           parse_border_color,
                                           unpack_border_color,
-                                          pack_border_color);
+                                          pack_first_element);
   _gtk_css_shorthand_property_register   ("border-style",
                                           GTK_TYPE_BORDER_STYLE,
                                           border_style_subproperties,
                                           parse_border_style,
                                           unpack_border_style,
-                                          pack_border_style);
+                                          pack_first_element);
   _gtk_css_shorthand_property_register   ("border-image",
                                           G_TYPE_NONE,
                                           border_image_subproperties,
