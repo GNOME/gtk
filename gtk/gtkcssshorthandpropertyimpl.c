@@ -765,34 +765,28 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
 }
 
 static GParameter *
-unpack_border_color (GtkCssShorthandProperty *shorthand,
-                     const GValue            *value,
-                     guint                   *n_params)
+unpack_to_everything (GtkCssShorthandProperty *shorthand,
+                      const GValue            *value,
+                      guint                   *n_params)
 {
-  GParameter *parameter = g_new0 (GParameter, 4);
-  gpointer p;
+  GtkCssStyleProperty *prop;
+  GParameter *parameter;
+  guint i, n;
   GType type;
   
+  n = _gtk_css_shorthand_property_get_n_subproperties (shorthand);
+  parameter = g_new0 (GParameter, n);
   type = G_VALUE_TYPE (value);
 
-  parameter[0].name = "border-top-color";
-  g_value_init (&parameter[0].value, type);
-  parameter[1].name = "border-right-color";
-  g_value_init (&parameter[1].value, type);
-  parameter[2].name = "border-bottom-color";
-  g_value_init (&parameter[2].value, type);
-  parameter[3].name = "border-left-color";
-  g_value_init (&parameter[3].value, type);
+  for (i = 0; i < n; i++)
+    {
+      prop = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
+      parameter[i].name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
+      g_value_init (&parameter[i].value, type);
+      g_value_copy (value, &parameter[i].value);
+    }
 
-  /* can be RGBA or symbolic color */
-  p = g_value_get_boxed (value);
-
-  g_value_set_boxed (&parameter[0].value, p);
-  g_value_set_boxed (&parameter[1].value, p);
-  g_value_set_boxed (&parameter[2].value, p);
-  g_value_set_boxed (&parameter[3].value, p);
-
-  *n_params = 4;
+  *n_params = n;
   return parameter;
 }
 
@@ -821,33 +815,6 @@ pack_first_element (GtkCssShorthandProperty *shorthand,
           return;
         }
     }
-}
-
-static GParameter *
-unpack_border_style (GtkCssShorthandProperty *shorthand,
-                     const GValue            *value,
-                     guint                   *n_params)
-{
-  GParameter *parameter = g_new0 (GParameter, 4);
-  GtkBorderStyle style;
-
-  style = g_value_get_enum (value);
-
-  parameter[0].name = "border-top-style";
-  g_value_init (&parameter[0].value, GTK_TYPE_BORDER_STYLE);
-  g_value_set_enum (&parameter[0].value, style);
-  parameter[1].name = "border-right-style";
-  g_value_init (&parameter[1].value, GTK_TYPE_BORDER_STYLE);
-  g_value_set_enum (&parameter[1].value, style);
-  parameter[2].name = "border-bottom-style";
-  g_value_init (&parameter[2].value, GTK_TYPE_BORDER_STYLE);
-  g_value_set_enum (&parameter[2].value, style);
-  parameter[3].name = "border-left-style";
-  g_value_init (&parameter[3].value, GTK_TYPE_BORDER_STYLE);
-  g_value_set_enum (&parameter[3].value, style);
-
-  *n_params = 4;
-  return parameter;
 }
 
 static void
@@ -930,13 +897,13 @@ _gtk_css_shorthand_property_init_properties (void)
                                           GDK_TYPE_RGBA,
                                           border_color_subproperties,
                                           parse_border_color,
-                                          unpack_border_color,
+                                          unpack_to_everything,
                                           pack_first_element);
   _gtk_css_shorthand_property_register   ("border-style",
                                           GTK_TYPE_BORDER_STYLE,
                                           border_style_subproperties,
                                           parse_border_style,
-                                          unpack_border_style,
+                                          unpack_to_everything,
                                           pack_first_element);
   _gtk_css_shorthand_property_register   ("border-image",
                                           G_TYPE_NONE,
