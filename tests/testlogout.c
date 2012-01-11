@@ -13,7 +13,7 @@ static void
 end_session (GtkButton *button, GtkApplication *app)
 {
   const gchar *id;
-  GtkApplicationEndStyle style;
+  GtkApplicationEndSessionStyle style;
   gboolean confirm;
 
   id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (end_combo));

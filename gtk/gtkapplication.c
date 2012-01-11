@@ -1516,9 +1516,9 @@ gtk_application_is_inhibited (GtkApplication             *application,
 }
 
 gboolean
-gtk_application_end_session (GtkApplication         *application,
-                             GtkApplicationEndStyle *style,
-                             gboolean                request_confirmation)
+gtk_application_end_session (GtkApplication                *application,
+                             GtkApplicationEndSessionStyle *style,
+                             gboolean                       request_confirmation)
 {
   static const ProcessSerialNumber loginwindow_psn = { 0, kSystemProcess };
   AppleEvent event = { typeNull, NULL };
@@ -1598,9 +1598,9 @@ gtk_application_is_inhibited (GtkApplication             *application,
 }
 
 gboolean
-gtk_application_end_session (GtkApplication         *application,
-                             GtkApplicationEndStyle  style,
-                             gboolean                request_confirmation)
+gtk_application_end_session (GtkApplication                *application,
+                             GtkApplicationEndSessionStyle  style,
+                             gboolean                       request_confirmation)
 {
   return FALSE;
 }
