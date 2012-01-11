@@ -69,20 +69,8 @@ _gtk_css_shorthand_property_assign (GtkStyleProperty   *property,
                                     const GValue       *value)
 {
   GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
-  GParameter *parameters;
-  guint i, n_parameters;
 
-  parameters = shorthand->assign (shorthand, value, &n_parameters);
-
-  for (i = 0; i < n_parameters; i++)
-    {
-      _gtk_style_property_assign (_gtk_style_property_lookup (parameters[i].name),
-                                  props,
-                                  state,
-                                  &parameters[i].value);
-      g_value_unset (&parameters[i].value);
-    }
-  g_free (parameters);
+  shorthand->assign (shorthand, props, state, value);
 }
 
 static void

@@ -43,9 +43,10 @@ typedef gboolean              (* GtkCssShorthandPropertyParseFunc)      (GtkCssS
                                                                          GValue                  *values,
                                                                          GtkCssParser            *parser,
                                                                          GFile                   *base);
-typedef GParameter *          (* GtkCssShorthandPropertyAssignFunc)     (GtkCssShorthandProperty *shorthand,
-                                                                         const GValue            *value,
-                                                                         guint                   *n_params);
+typedef void                  (* GtkCssShorthandPropertyAssignFunc)     (GtkCssShorthandProperty *shorthand,
+                                                                         GtkStyleProperties      *props,
+                                                                         GtkStateFlags            state,
+                                                                         const GValue            *value);
 typedef void                  (* GtkCssShorthandPropertyQueryFunc)      (GtkCssShorthandProperty *shorthand,
                                                                          GValue                  *value,
                                                                          GtkStyleProperties      *props,
