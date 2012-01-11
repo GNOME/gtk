@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 
+static GtkWidget *win;
 static GtkWidget *inhibit_entry;
 static GtkWidget *inhibit_logout;
 static GtkWidget *inhibit_switch;
@@ -98,7 +99,6 @@ static void
 activate (GtkApplication *app,
           gpointer        data)
 {
-  GtkWidget *win;
   GtkWidget *box;
   GtkWidget *separator;
   GtkWidget *grid;
@@ -179,6 +179,7 @@ quit (GtkApplication *app,
       gpointer        data)
 {
   g_print ("Received quit\n");
+  gtk_widget_destroy (win);
 }
 
 int
