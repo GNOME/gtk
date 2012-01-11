@@ -104,6 +104,7 @@ new_window (GApplication *app,
   GtkWidget *window, *grid, *scrolled, *view;
   GtkWidget *toolbar;
   GtkToolItem *button;
+  GtkWidget *sw, *box, *label;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
@@ -124,6 +125,21 @@ new_window (GApplication *app,
 
   button = gtk_toggle_tool_button_new_from_stock (GTK_STOCK_JUSTIFY_RIGHT);
   gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::right");
+  gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (button));
+
+  button = gtk_separator_tool_item_new ();
+  gtk_separator_tool_item_set_draw (GTK_SEPARATOR_TOOL_ITEM (button), FALSE);
+  gtk_tool_item_set_expand (GTK_TOOL_ITEM (button), TRUE);
+  gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (button));
+
+  button = gtk_tool_item_new ();
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_container_add (GTK_CONTAINER (button), box);
+  label = gtk_label_new ("Fullscreen:");
+  gtk_container_add (GTK_CONTAINER (box), label);
+  sw = gtk_switch_new ();
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (sw), "win.fullscreen");
+  gtk_container_add (GTK_CONTAINER (box), sw);
   gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (button));
 
   gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 1, 1);
