@@ -3520,24 +3520,18 @@ gtk_style_context_get_border (GtkStyleContext *context,
                               GtkStateFlags    state,
                               GtkBorder       *border)
 {
-  GtkStyleContextPrivate *priv;
-  StyleData *data;
   int top, left, bottom, right;
 
   g_return_if_fail (border != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
-
-  data = style_data_lookup (context, state);
-  gtk_style_properties_get (data->store,
-                            0,
-                            "border-top-width", &top,
-                            "border-left-width", &left,
-                            "border-bottom-width", &bottom,
-                            "border-right-width", &right,
-                            NULL);
+  gtk_style_context_get (context,
+                         state,
+                         "border-top-width", &top,
+                         "border-left-width", &left,
+                         "border-bottom-width", &bottom,
+                         "border-right-width", &right,
+                         NULL);
 
   border->top = top;
   border->left = left;
@@ -3561,24 +3555,18 @@ gtk_style_context_get_padding (GtkStyleContext *context,
                                GtkStateFlags    state,
                                GtkBorder       *padding)
 {
-  GtkStyleContextPrivate *priv;
-  StyleData *data;
   int top, left, bottom, right;
 
   g_return_if_fail (padding != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
-
-  data = style_data_lookup (context, state);
-  gtk_style_properties_get (data->store,
-                            0,
-                            "padding-top", &top,
-                            "padding-left", &left,
-                            "padding-bottom", &bottom,
-                            "padding-right", &right,
-                            NULL);
+  gtk_style_context_get (context,
+                         state,
+                         "padding-top", &top,
+                         "padding-left", &left,
+                         "padding-bottom", &bottom,
+                         "padding-right", &right,
+                         NULL);
 
   padding->top = top;
   padding->left = left;
@@ -3602,24 +3590,18 @@ gtk_style_context_get_margin (GtkStyleContext *context,
                               GtkStateFlags    state,
                               GtkBorder       *margin)
 {
-  GtkStyleContextPrivate *priv;
-  StyleData *data;
   int top, left, bottom, right;
 
   g_return_if_fail (margin != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
-
-  data = style_data_lookup (context, state);
-  gtk_style_properties_get (data->store,
-                            0,
-                            "margin-top", &top,
-                            "margin-left", &left,
-                            "margin-bottom", &bottom,
-                            "margin-right", &right,
-                            NULL);
+  gtk_style_context_get (context,
+                         state,
+                         "margin-top", &top,
+                         "margin-left", &left,
+                         "margin-bottom", &bottom,
+                         "margin-right", &right,
+                         NULL);
 
   margin->top = top;
   margin->left = left;
