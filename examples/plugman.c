@@ -223,6 +223,7 @@ enable_plugin (const gchar *name)
   g_signal_connect (action, "activate", G_CALLBACK (plugin_action), (gpointer)name);
   g_action_map_add_action (G_ACTION_MAP (g_application_get_default ()), action);
   g_print ("Actions of '%s' plugin added\n", name);
+  g_object_unref (action);
 
   plugin_menu = find_plugin_menu ();
   if (plugin_menu)
@@ -230,14 +231,14 @@ enable_plugin (const gchar *name)
       GMenu *section;
       GMenuItem *item;
       gchar *label;
-      gchar *action;
+      gchar *action_name;
 
       section = g_menu_new ();
       label = g_strdup_printf ("Turn text %s", name);
-      action = g_strconcat ("app.", name, NULL);
-      g_menu_insert (section, 0, label, action);
+      action_name = g_strconcat ("app.", name, NULL);
+      g_menu_insert (section, 0, label, action_name);
       g_free (label);
-      g_free (action);
+      g_free (action_name);
       item = g_menu_item_new_section (NULL, (GMenuModel*)section);
       g_menu_item_set_attribute (item, "id", "s", name);
       g_menu_append_item (G_MENU (plugin_menu), item);
