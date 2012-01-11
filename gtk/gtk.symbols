@@ -2551,6 +2551,7 @@ gtk_style_context_get_parent
 gtk_style_context_get_path
 gtk_style_context_get_property
 gtk_style_context_get_screen
+gtk_style_context_get_section
 gtk_style_context_get_state
 gtk_style_context_get_style
 gtk_style_context_get_style_property

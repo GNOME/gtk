@@ -1399,6 +1399,48 @@ gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
     }
 }
 
+/**
+ * gtk_style_context_get_section:
+ * @context: a #GtkStyleContext
+ * @property: style property name
+ *
+ * Queries the location in the CSS where @property was defined for the
+ * current @context. Note that the state to be queried is taken from
+ * gtk_style_context_get_state().
+ *
+ * If the location is not available, %NULL will be returned. The
+ * location might not be available for various reasons, such as the
+ * property being overridden, @property not naming a supported CSS
+ * property or tracking of definitions being disabled for performance
+ * reasons.
+ *
+ * Shorthand CSS properties cannot be queried for a location and will
+ * always return %NULL.
+ *
+ * Returns: %NULL or the section where value was defined
+ **/
+GtkCssSection *
+gtk_style_context_get_section (GtkStyleContext *context,
+                               const gchar     *property)
+{
+  GtkStyleContextPrivate *priv;
+  GtkStyleProperty *prop;
+  StyleData *data;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+  g_return_val_if_fail (property != NULL, NULL);
+
+  priv = context->priv;
+  g_return_val_if_fail (priv->widget_path != NULL, NULL);
+
+  prop = _gtk_style_property_lookup (property);
+  if (!GTK_IS_CSS_STYLE_PROPERTY (prop))
+    return NULL;
+
+  data = style_data_lookup (context, gtk_style_context_get_state (context));
+  return _gtk_css_computed_values_get_section (data->store, _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)));
+}
+
 static const GValue *
 gtk_style_context_query_func (guint    id,
                               gpointer values)

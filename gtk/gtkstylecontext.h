@@ -25,6 +25,7 @@
 #define __GTK_STYLE_CONTEXT_H__
 
 #include <glib-object.h>
+#include <gtk/gtkcsssection.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkborder.h>
@@ -717,6 +718,8 @@ void gtk_style_context_remove_provider (GtkStyleContext  *context,
 void gtk_style_context_save    (GtkStyleContext *context);
 void gtk_style_context_restore (GtkStyleContext *context);
 
+GtkCssSection * gtk_style_context_get_section (GtkStyleContext *context,
+                                               const gchar     *property);
 void gtk_style_context_get_property (GtkStyleContext *context,
                                      const gchar     *property,
                                      GtkStateFlags    state,
