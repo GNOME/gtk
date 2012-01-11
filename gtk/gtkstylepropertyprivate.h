@@ -39,6 +39,9 @@ typedef enum {
   GTK_STYLE_PROPERTY_INHERIT = (1 << 0)
 } GtkStylePropertyFlags;
 
+typedef const GValue *   (* GtkStyleQueryFunc)             (guint                   id,
+                                                            gpointer                data);
+
 struct _GtkStyleProperty
 {
   GObject parent;
@@ -56,9 +59,9 @@ struct _GtkStylePropertyClass
                                                             GtkStateFlags           state,
                                                             const GValue           *value);
   void              (* query)                              (GtkStyleProperty       *property,
-                                                            GtkStyleProperties     *props,
-                                                            GtkStateFlags           state,
-                                                            GValue                 *value);
+                                                            GValue                 *value,
+                                                            GtkStyleQueryFunc       query_func,
+                                                            gpointer                query_data);
   gboolean          (* parse_value)                        (GtkStyleProperty *      property,
                                                             GValue                 *value,
                                                             GtkCssParser           *parser,
@@ -82,9 +85,9 @@ gboolean                 _gtk_style_property_parse_value   (GtkStyleProperty *  
 
 GType                    _gtk_style_property_get_value_type(GtkStyleProperty *      property);
 void                     _gtk_style_property_query         (GtkStyleProperty *      property,
-                                                            GtkStyleProperties     *props,
-                                                            GtkStateFlags           state,
-                                                            GValue                 *value);
+                                                            GValue                 *value,
+                                                            GtkStyleQueryFunc       query_func,
+                                                            gpointer                query_data);
 void                     _gtk_style_property_assign        (GtkStyleProperty       *property,
                                                             GtkStyleProperties     *props,
                                                             GtkStateFlags           state,

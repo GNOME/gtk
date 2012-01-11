@@ -537,27 +537,27 @@ unpack_border (GtkCssShorthandProperty *shorthand,
 static void
 pack_border (GtkCssShorthandProperty *shorthand,
              GValue                  *value,
-             GtkStyleProperties      *props,
-             GtkStateFlags            state)
+             GtkStyleQueryFunc        query_func,
+             gpointer                 query_data)
 {
   GtkCssStyleProperty *prop;
   GtkBorder border;
   const GValue *v;
 
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 0);
-  v = _gtk_style_properties_peek_property (props, prop, state);
+  v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
   if (v)
     border.top = g_value_get_int (v);
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 1);
-  v = _gtk_style_properties_peek_property (props, prop, state);
+  v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
   if (v)
     border.right = g_value_get_int (v);
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 2);
-  v = _gtk_style_properties_peek_property (props, prop, state);
+  v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
   if (v)
     border.bottom = g_value_get_int (v);
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 3);
-  v = _gtk_style_properties_peek_property (props, prop, state);
+  v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
   if (v)
     border.left = g_value_get_int (v);
 
@@ -587,24 +587,21 @@ unpack_border_radius (GtkCssShorthandProperty *shorthand,
 static void
 pack_border_radius (GtkCssShorthandProperty *shorthand,
                     GValue                  *value,
-                    GtkStyleProperties      *props,
-                    GtkStateFlags            state)
+                    GtkStyleQueryFunc        query_func,
+                    gpointer                 query_data)
 {
   GtkCssBorderCornerRadius *top_left;
+  GtkCssStyleProperty *prop;
+  const GValue *v;
 
-  /* NB: We are an int property, so we have to resolve to an int here.
-   * So we just resolve to an int. We pick one and stick to it.
-   * Lesson learned: Don't query border-radius shorthand, query the 
-   * real properties instead. */
-  gtk_style_properties_get (props,
-                            state,
-                            "border-top-left-radius", &top_left,
-                            NULL);
-
-  if (top_left)
-    g_value_set_int (value, top_left->horizontal);
-
-  g_free (top_left);
+  prop = GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("border-top-left-radius"));
+  v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
+  if (v)
+    {
+      top_left = g_value_get_boxed (v);
+      if (top_left)
+        g_value_set_int (value, top_left->horizontal);
+    }
 }
 
 static void
@@ -690,35 +687,38 @@ unpack_font_description (GtkCssShorthandProperty *shorthand,
 static void
 pack_font_description (GtkCssShorthandProperty *shorthand,
                        GValue                  *value,
-                       GtkStyleProperties      *props,
-                       GtkStateFlags            state)
+                       GtkStyleQueryFunc        query_func,
+                       gpointer                 query_data)
 {
   PangoFontDescription *description;
-  char **families;
-  PangoStyle style;
-  PangoVariant variant;
-  PangoWeight weight;
-  double size;
-
-  gtk_style_properties_get (props,
-                            state,
-                            "font-family", &families,
-                            "font-style", &style,
-                            "font-variant", &variant,
-                            "font-weight", &weight,
-                            "font-size", &size,
-                            NULL);
+  const GValue *v;
 
   description = pango_font_description_new ();
-  /* xxx: Can we set all the families here somehow? */
-  if (families)
-    pango_font_description_set_family (description, families[0]);
-  pango_font_description_set_size (description, round (size * PANGO_SCALE));
-  pango_font_description_set_style (description, style);
-  pango_font_description_set_variant (description, variant);
-  pango_font_description_set_weight (description, weight);
 
-  g_strfreev (families);
+  v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-family"))), query_data);
+  if (v)
+    {
+      const char **families = g_value_get_boxed (v);
+      /* xxx: Can we set all the families here somehow? */
+      if (families)
+        pango_font_description_set_family (description, families[0]);
+    }
+
+  v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-size"))), query_data);
+  if (v)
+    pango_font_description_set_size (description, round (g_value_get_double (v) * PANGO_SCALE));
+
+  v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-style"))), query_data);
+  if (v)
+    pango_font_description_set_style (description, g_value_get_enum (v));
+
+  v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-variant"))), query_data);
+  if (v)
+    pango_font_description_set_variant (description, g_value_get_enum (v));
+
+  v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-weight"))), query_data);
+  if (v)
+    pango_font_description_set_weight (description, g_value_get_enum (v));
 
   g_value_take_boxed (value, description);
 }
@@ -744,8 +744,8 @@ unpack_to_everything (GtkCssShorthandProperty *shorthand,
 static void
 pack_first_element (GtkCssShorthandProperty *shorthand,
                     GValue                  *value,
-                    GtkStyleProperties      *props,
-                    GtkStateFlags            state)
+                    GtkStyleQueryFunc        query_func,
+                    gpointer                 query_data)
 {
   GtkCssStyleProperty *prop;
   const GValue *v;
@@ -759,7 +759,7 @@ pack_first_element (GtkCssShorthandProperty *shorthand,
   for (i = 0; i < _gtk_css_shorthand_property_get_n_subproperties (shorthand); i++)
     {
       prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 0);
-      v = _gtk_style_properties_peek_property (props, prop, state);
+      v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
       if (v)
         {
           g_value_copy (v, value);

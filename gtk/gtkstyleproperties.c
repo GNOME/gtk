@@ -605,6 +605,22 @@ _gtk_style_properties_peek_property (GtkStyleProperties  *props,
   return property_data_match_state (prop, state);
 }
 
+typedef struct {
+  GtkStyleProperties *props;
+  GtkStateFlags       state;
+} StyleQueryData;
+
+static const GValue *
+style_query_func (guint    id,
+                  gpointer data)
+{
+  StyleQueryData *query = data;
+
+  return _gtk_style_properties_peek_property (query->props,
+                                              _gtk_css_style_property_lookup_by_id (id),
+                                              query->state);
+}
+
 /**
  * gtk_style_properties_get_property:
  * @props: a #GtkStyleProperties
@@ -625,6 +641,7 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
                                    GtkStateFlags       state,
                                    GValue             *value)
 {
+  StyleQueryData query = { props, state };
   GtkStyleProperty *node;
 
   g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
@@ -643,7 +660,10 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
       return FALSE;
     }
 
-  _gtk_style_property_query (node, props, state, value);
+  _gtk_style_property_query (node,
+                             value,
+                             style_query_func,
+                             &query);
   return TRUE;
 }
 

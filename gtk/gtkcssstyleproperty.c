@@ -117,13 +117,13 @@ _gtk_css_style_property_assign (GtkStyleProperty   *property,
 
 static void
 _gtk_css_style_property_query (GtkStyleProperty   *property,
-                               GtkStyleProperties *props,
-                               GtkStateFlags       state,
-                               GValue             *value)
+                               GValue             *value,
+                               GtkStyleQueryFunc   query_func,
+                               gpointer            query_data)
 {
   const GValue *val;
   
-  val = _gtk_style_properties_peek_property (props, GTK_CSS_STYLE_PROPERTY (property), state);
+  val = (* query_func) (GTK_CSS_STYLE_PROPERTY (property)->id, query_data);
   if (val)
     {
       /* Somebody make this a vfunc */

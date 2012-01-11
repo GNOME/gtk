@@ -198,32 +198,32 @@ _gtk_style_property_assign (GtkStyleProperty   *property,
 /**
  * _gtk_style_property_query:
  * @property: the property
- * @props: The properties to query
- * @state: The state to query
  * @value: (out): an uninitialized #GValue to be filled with the
  *   contents of the lookup
+ * @query_func: The function to use to query properties
+ * @query_data: The data to pass to @query_func
  *
  * This function is called by gtk_style_properties_get() and in
  * turn gtk_style_context_get() and similar functions to get the
  * value to return to code using old APIs.
  **/
 void
-_gtk_style_property_query (GtkStyleProperty        *property,
-                           GtkStyleProperties      *props,
-                           GtkStateFlags            state,
-                           GValue                  *value)
+_gtk_style_property_query (GtkStyleProperty  *property,
+                           GValue            *value,
+                           GtkStyleQueryFunc  query_func,
+                           gpointer           query_data)
 {
   GtkStylePropertyClass *klass;
 
-  g_return_if_fail (property != NULL);
-  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
+  g_return_if_fail (GTK_IS_STYLE_PROPERTY (property));
   g_return_if_fail (value != NULL);
+  g_return_if_fail (query_func != NULL);
 
   klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
 
   g_value_init (value, property->value_type);
 
-  klass->query (property, props, state, value);
+  klass->query (property, value, query_func, query_data);
 }
 
 void

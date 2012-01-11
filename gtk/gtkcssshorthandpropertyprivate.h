@@ -49,8 +49,8 @@ typedef void                  (* GtkCssShorthandPropertyAssignFunc)     (GtkCssS
                                                                          const GValue            *value);
 typedef void                  (* GtkCssShorthandPropertyQueryFunc)      (GtkCssShorthandProperty *shorthand,
                                                                          GValue                  *value,
-                                                                         GtkStyleProperties      *props,
-                                                                         GtkStateFlags            state);
+                                                                         GtkStyleQueryFunc        query_func,
+                                                                         gpointer                 query_data);
 
 struct _GtkCssShorthandProperty
 {
