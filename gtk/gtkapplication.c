@@ -40,6 +40,7 @@
 #include "gtkquartz-menu.h"
 #import <Cocoa/Cocoa.h>
 #include <Carbon/Carbon.h>
+#include "gtkmessagedialog.h"
 #endif
 
 #include <gdk/gdk.h>
@@ -159,7 +160,7 @@ struct _GtkApplicationPrivate
   GActionMuxer *muxer;
   GMenu *combined;
 
-  GHashTable *inhibitors;
+  GSList *inhibitors;
   gint quit_inhibit;
   guint next_cookie;
 #endif
@@ -255,6 +256,22 @@ gtk_application_shutdown_x11 (GtkApplication *application)
 #endif
 
 #ifdef GDK_WINDOWING_QUARTZ
+
+typedef struct {
+  guint cookie;
+  GtkApplicationInhibitFlags flags;
+  char *reason;
+  GtkWindow *window;
+} GtkApplicationQuartzInhibitor;
+
+static void
+gtk_application_quartz_inhibitor_free (GtkApplicationQuartzInhibitor *inhibitor)
+{
+  g_free (inhibitor->reason);
+  g_clear_object (&inhibitor->window);
+  g_slice_free (GtkApplicationQuartzInhibitor, inhibitor);
+}
+
 static void
 gtk_application_menu_changed_quartz (GObject    *object,
                                      GParamSpec *pspec,
@@ -295,7 +312,9 @@ gtk_application_shutdown_quartz (GtkApplication *application)
   g_object_unref (application->priv->muxer);
   application->priv->muxer = NULL;
 
-  g_hash_table_unref (application->priv->inhibitors);
+  g_slist_free_full (application->priv->inhibitors,
+		     (GDestroyNotify) gtk_application_quartz_inhibitor_free);
+  application->priv->inhibitors = NULL;
 }
 
 static void
@@ -1405,6 +1424,30 @@ idle_will_quit (gpointer data)
 
   if (app->priv->quit_inhibit == 0)
     g_signal_emit (app, gtk_application_signals[QUIT], 0);
+  else
+    {
+      GtkApplicationQuartzInhibitor *inhibitor;
+      GSList *iter;
+      GtkWidget *dialog;
+
+      for (iter = app->priv->inhibitors; iter; iter = iter->next)
+	{
+	  inhibitor = iter->data;
+	  if (inhibitor->flags & GTK_APPLICATION_INHIBIT_LOGOUT)
+	    break;
+        }
+      g_assert (inhibitor != NULL);
+
+      dialog = gtk_message_dialog_new (inhibitor->window,
+				       GTK_DIALOG_MODAL,
+				       GTK_MESSAGE_ERROR,
+				       GTK_BUTTONS_OK,
+				       _("%s cannot quit at this time:\n\n%s"),
+				       g_get_application_name (),
+				       inhibitor->reason);
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+    }
 
   return FALSE;
 }
@@ -1431,8 +1474,6 @@ gtk_application_startup_session_quartz (GtkApplication *app)
     AEInstallEventHandler (kCoreEventClass, kAEQuitApplication,
                            NewAEEventHandlerUPP (quit_requested),
                            (long)GPOINTER_TO_SIZE (app), false);
-
-  app->priv->inhibitors = g_hash_table_new (NULL, NULL);
 }
 
 guint
@@ -1441,42 +1482,46 @@ gtk_application_inhibit (GtkApplication             *application,
                          GtkApplicationInhibitFlags  flags,
                          const gchar                *reason)
 {
-  guint cookie;
+  GtkApplicationQuartzInhibitor *inhibitor;
 
   g_return_val_if_fail (GTK_IS_APPLICATION (application), 0);
   g_return_val_if_fail (flags != 0, 0);
 
-  application->priv->next_cookie++;
-  cookie = application->priv->next_cookie;
+  inhibitor = g_slice_new (GtkApplicationQuartzInhibitor);
+  inhibitor->cookie = ++application->priv->next_cookie;
+  inhibitor->flags = flags;
+  inhibitor->reason = g_strdup (reason);
+  inhibitor->window = window ? g_object_ref (window) : NULL;
 
-  g_hash_table_insert (application->priv->inhibitors,
-                       GUINT_TO_POINTER (cookie),
-                       GUINT_TO_POINTER (flags));
+  application->priv->inhibitors = g_slist_prepend (application->priv->inhibitors, inhibitor);
 
   if (flags & GTK_APPLICATION_INHIBIT_LOGOUT)
     application->priv->quit_inhibit++;
 
-  return cookie;
+  return inhibitor->cookie;
 }
 
 void
 gtk_application_uninhibit (GtkApplication *application,
                            guint           cookie)
 {
-  GtkApplicationInhibitFlags flags;
+  GSList *iter;
 
-  flags = GPOINTER_TO_UINT (g_hash_table_lookup (application->priv->inhibitors, GUINT_TO_POINTER (cookie)));
-
-  if (flags == 0)
+  for (iter = application->priv->inhibitors; iter; iter = iter->next)
     {
-      g_warning ("Invalid inhibitor cookie");
-      return;
+      GtkApplicationQuartzInhibitor *inhibitor = iter->data;
+
+      if (inhibitor->cookie == cookie)
+	{
+	  if (inhibitor->flags & GTK_APPLICATION_INHIBIT_LOGOUT)
+	    application->priv->quit_inhibit--;
+	  gtk_application_quartz_inhibitor_free (inhibitor);
+	  application->priv->inhibitors = g_slist_delete_link (application->priv->inhibitors, iter);
+	  return;
+	}
     }
 
-  g_hash_table_remove (application->priv->inhibitors, GUINT_TO_POINTER (cookie));
-
-  if (flags & GTK_APPLICATION_INHIBIT_LOGOUT)
-    application->priv->quit_inhibit--;
+  g_warning ("Invalid inhibitor cookie");
 }
 
 gboolean
