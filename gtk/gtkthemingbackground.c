@@ -83,6 +83,8 @@ _gtk_theming_background_apply_origin (GtkThemingBackground *bg)
     break;
   }
 
+  /* XXX: image_rect might have negative width/height here.
+   * Do we need to do something about it? */
   bg->image_rect = image_rect;
 }
 
@@ -123,7 +125,9 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
   gdk_cairo_set_source_rgba (cr, &bg->bg_color);
   cairo_paint (cr);
 
-  if (bg->image)
+  if (bg->image
+      && bg->image_rect.width > 0
+      && bg->image_rect.height > 0)
     {
       GtkCssBackgroundRepeat hrepeat, vrepeat;
       double image_width, image_height;
