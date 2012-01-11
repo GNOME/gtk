@@ -2391,7 +2391,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
                   else
                     g_value_init (&pcache->value, GDK_TYPE_COLOR);
 
-                  if (gtk_symbolic_color_resolve (color, data->store, &rgba))
+                  if (_gtk_style_context_resolve_color (context, color, &rgba))
                     {
                       if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
                         g_value_set_boxed (&pcache->value, &rgba);
