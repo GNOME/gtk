@@ -40,7 +40,6 @@
 #include "gtkquartz-menu.h"
 #import <Cocoa/Cocoa.h>
 #include <Carbon/Carbon.h>
-#include <CoreServices/CoreServices.h>
 #endif
 
 #include <gdk/gdk.h>
@@ -161,10 +160,8 @@ struct _GtkApplicationPrivate
   GMenu *combined;
 
   GHashTable *inhibitors;
-  gint quit_inhibited;
+  gint quit_inhibit;
   guint next_cookie;
-  AppleEvent quit_event, quit_reply;
-  gboolean quitting;
 #endif
 };
 
@@ -267,7 +264,7 @@ gtk_application_menu_changed_quartz (GObject    *object,
   GMenu *combined;
 
   combined = g_menu_new ();
-  g_menu_append_submenu (combined, "Application", g_application_get_app_menu (application));
+  g_menu_append_submenu (combined, "Application", gtk_application_get_app_menu (application));
   g_menu_append_section (combined, NULL, gtk_application_get_menubar (application));
 
   gtk_quartz_set_main_menu (G_MENU_MODEL (combined), G_ACTION_OBSERVABLE (application->priv->muxer));
@@ -1397,32 +1394,14 @@ gtk_application_end_session (GtkApplication                *application,
 
 #elif defined(GDK_WINDOWING_QUARTZ)
 
-/* OS X implementation copied from EggSMClient */
-
-static pascal OSErr
-quit_requested_resumed (const AppleEvent *aevt,
-                        AppleEvent       *reply,
-                        long              refcon)
-{
-  GtkApplication *app = GSIZE_TO_POINTER ((gsize)refcon);
-
-  return app->priv->quit_inhibit == 0 ? noErr : userCanceledErr;
-}
+/* OS X implementation copied from EggSMClient, but simplified since
+ * it doesn't need to interact with the user.
+ */
 
 static gboolean
 idle_will_quit (gpointer data)
 {
   GtkApplication *app = data;
-
-  /* Resume the event with a new handler that will return
-   * a value to the system
-   */
-  AEResumeTheCurrentEvent (&app->priv->quit_event, &app->priv->quit_reply,
-                           NewAEEventHandlerUPP (quit_requested_resumed),
-                           (long)GPOINTER_TO_SIZE (app));
-
-  AEDisposeDesc (&app->quit->quit_event);
-  AEDisposeDesc (&app->quit->quit_reply);
 
   if (app->priv->quit_inhibit == 0)
     g_signal_emit (app, gtk_application_signals[QUIT], 0);
@@ -1437,17 +1416,12 @@ quit_requested (const AppleEvent *aevt,
 {
   GtkApplication *app = GSIZE_TO_POINTER ((gsize)refcon);
 
-  /* FIXME AEInteractWithUser? */
-  AEDuplicateDesc (aevt, &app->priv->quit_event);
-  AEDuplicateDesc (reply, &app->priv->quit_reply);
-  AESuspendTheCurrentEvent (aevt);
-
   /* Don't emit the "quit" signal immediately, since we're
    * called from a weird point in the guts of gdkeventloop-quartz.c
    */
-  g_idle_add (idle_will_quit, app);
+  g_idle_add_full (G_PRIORITY_DEFAULT, idle_will_quit, app, NULL);
 
-  return noErr;
+  return app->priv->quit_inhibit == 0 ? noErr : userCanceledErr;
 }
 
 static void
@@ -1489,7 +1463,7 @@ void
 gtk_application_uninhibit (GtkApplication *application,
                            guint           cookie)
 {
-  GApplicationInhibitFlags flags;
+  GtkApplicationInhibitFlags flags;
 
   flags = GPOINTER_TO_UINT (g_hash_table_lookup (application->priv->inhibitors, GUINT_TO_POINTER (cookie)));
 
@@ -1517,7 +1491,7 @@ gtk_application_is_inhibited (GtkApplication             *application,
 
 gboolean
 gtk_application_end_session (GtkApplication                *application,
-                             GtkApplicationEndSessionStyle *style,
+                             GtkApplicationEndSessionStyle  style,
                              gboolean                       request_confirmation)
 {
   static const ProcessSerialNumber loginwindow_psn = { 0, kSystemProcess };
