@@ -55,8 +55,6 @@ typedef gboolean         (* GtkStyleParseFunc)             (GtkCssParser        
                                                             GValue                 *value);
 typedef void             (* GtkStylePrintFunc)             (const GValue           *value,
                                                             GString                *string);
-typedef void             (* GtkStylePrintFunc)             (const GValue           *value,
-                                                            GString                *string);
 typedef void             (* GtkStyleComputeFunc)           (GValue                 *computed,
                                                             GtkStyleContext        *context,
                                                             const GValue           *specified);
