@@ -107,7 +107,7 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
  * _gtk_css_lookup_resolve:
  * @lookup: the lookup
  * @context: the context the values are resolved for
- * @props: a new #GtkStyleProperties to be filled with the new properties
+ * @values: a new #GtkCssComputedValues to be filled with the new properties
  *
  * Resolves the current lookup into a styleproperties object. This is done
  * by converting from the "winning declaration" to the "computed value".
@@ -116,106 +116,24 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
  * an issue, go fix it.
  **/
 void
-_gtk_css_lookup_resolve (GtkCssLookup       *lookup,
-                         GtkStyleContext    *context,
-                         GtkStyleProperties *props)
+_gtk_css_lookup_resolve (GtkCssLookup         *lookup,
+                         GtkStyleContext      *context,
+                         GtkCssComputedValues *values)
 {
-  GtkStyleContext *parent;
   guint i, n;
 
   g_return_if_fail (lookup != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
+  g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
 
-  parent = gtk_style_context_get_parent (context);
   n = _gtk_css_style_property_get_n_properties ();
 
   for (i = 0; i < n; i++)
     {
-      GtkCssStyleProperty *prop = _gtk_css_style_property_lookup_by_id (i);
-      const GValue *result;
-      GValue value = { 0, };
-
-      /* http://www.w3.org/TR/css3-cascade/#cascade
-       * Then, for every element, the value for each property can be found
-       * by following this pseudo-algorithm:
-       * 1) Identify all declarations that apply to the element
-       */
-      if (lookup->values[i].value != NULL)
-        {
-          /* 2) If the cascading process (described below) yields a winning
-           * declaration and the value of the winning declaration is not
-           * ‘initial’ or ‘inherit’, the value of the winning declaration
-           * becomes the specified value.
-           */
-          if (!G_VALUE_HOLDS (lookup->values[i].value, GTK_TYPE_CSS_SPECIAL_VALUE))
-            {
-              result = lookup->values[i].value;
-            }
-          else
-            {
-              switch (g_value_get_enum (lookup->values[i].value))
-                {
-                case GTK_CSS_INHERIT:
-                  /* 3) if the value of the winning declaration is ‘inherit’,
-                   * the inherited value (see below) becomes the specified value.
-                   */
-                  result = NULL;
-                  break;
-                case GTK_CSS_INITIAL:
-                  /* if the value of the winning declaration is ‘initial’,
-                   * the initial value (see below) becomes the specified value.
-                   */
-                  result = _gtk_css_style_property_get_initial_value (prop);
-                  break;
-                default:
-                  /* This is part of (2) above */
-                  result = lookup->values[i].value;
-                  break;
-                }
-            }
-        }
-      else
-        {
-          if (_gtk_css_style_property_is_inherit (prop))
-            {
-              /* 4) if the property is inherited, the inherited value becomes
-               * the specified value.
-               */
-              result = NULL;
-            }
-          else
-            {
-              /* 5) Otherwise, the initial value becomes the specified value.
-               */
-              result = _gtk_css_style_property_get_initial_value (prop);
-            }
-        }
-
-      if (result == NULL && parent == NULL)
-        {
-          /* If the ‘inherit’ value is set on the root element, the property is
-           * assigned its initial value. */
-          result = _gtk_css_style_property_get_initial_value (prop);
-        }
-
-      if (result)
-        {
-          _gtk_css_style_property_compute_value (prop, &value, context, result);
-        }
-      else
-        {
-          /* Set NULL here and do the inheritance upon lookup? */
-          result = _gtk_style_context_peek_property (parent,
-                                                     _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop)));
-          g_value_init (&value, G_VALUE_TYPE (result));
-          g_value_copy (result, &value);
-        }
-
-      _gtk_style_properties_set_property_by_property (props,
-                                                      prop,
-                                                      0,
-                                                      &value);
-      g_value_unset (&value);
+      _gtk_css_computed_values_compute_value (values,
+                                              context,
+                                              i,
+                                              lookup->values[i].value,
+                                              lookup->values[i].section);
     }
 }

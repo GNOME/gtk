@@ -411,6 +411,7 @@ gtk_private_h_sources =		\
 	gtkbuttonprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
 	gtkcontainerprivate.h   \
+	gtkcsscomputedvaluesprivate.h \
 	gtkcsscustompropertyprivate.h \
 	gtkcssimagegradientprivate.h	\
 	gtkcssimageprivate.h	\
@@ -592,6 +593,7 @@ gtk_base_c_sources = 		\
 	gtkcombobox.c		\
 	gtkcomboboxtext.c	\
 	gtkcontainer.c		\
+	gtkcsscomputedvalues.c	\
 	gtkcsscustomproperty.c	\
 	gtkcssimage.c		\
 	gtkcssimagegradient.c	\

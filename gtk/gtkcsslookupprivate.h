@@ -22,9 +22,9 @@
 
 #include <glib-object.h>
 #include "gtk/gtkbitmaskprivate.h"
+#include "gtk/gtkcsscomputedvaluesprivate.h"
 #include "gtk/gtkcsssection.h"
 #include "gtk/gtkstylecontext.h"
-#include "gtk/gtkstyleproperties.h"
 
 
 G_BEGIN_DECLS
@@ -43,7 +43,7 @@ void                    _gtk_css_lookup_set                     (GtkCssLookup   
                                                                  const GValue       *value);
 void                    _gtk_css_lookup_resolve                 (GtkCssLookup       *lookup,
                                                                  GtkStyleContext    *context,
-                                                                 GtkStyleProperties *props);
+                                                                 GtkCssComputedValues *values);
 
 
 G_END_DECLS
