@@ -1477,19 +1477,12 @@ gtk_style_context_get (GtkStyleContext *context,
                        GtkStateFlags    state,
                        ...)
 {
-  GtkStyleContextPrivate *priv;
-  StyleData *data;
   va_list args;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
-
-  data = style_data_lookup (context, state);
-
   va_start (args, state);
-  gtk_style_properties_get_valist (data->store, 0, args);
+  gtk_style_context_get_valist (context, state, args);
   va_end (args);
 }
 
