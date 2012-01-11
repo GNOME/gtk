@@ -1783,7 +1783,7 @@ gtk_print_settings_load_key_file (GtkPrintSettings *settings,
       gchar *value;
 
       value = g_key_file_get_string (key_file,
-				     KEYFILE_GROUP_NAME,
+				     group_name,
 				     keys[i],
 				     NULL);
       if (!value)
