@@ -159,6 +159,8 @@ EXTRA_DIST += \
 	border.css \
 	border.errors \
 	border.ref.css \
+	border-color-currentcolor.css \
+	border-color-currentcolor.ref.css \
 	border-radius.css \
 	border-radius.errors \
 	border-radius.ref.css \
