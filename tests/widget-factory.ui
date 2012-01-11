@@ -531,6 +531,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="text" translatable="yes">comboboxentry</property>
                       </object>
                     </child>
+                    <items>
+                      <item>Donald Duck</item>
+                      <item>Mickey Mouse</item>
+                      <item>Jet McQuack</item>
+                    </items>
                   </object>
                   <packing>
                     <property name="expand">False</property>
