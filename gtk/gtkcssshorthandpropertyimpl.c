@@ -159,12 +159,20 @@ parse_border_color (GtkCssShorthandProperty *shorthand,
 
   for (i = 0; i < 4; i++)
     {
-      symbolic = _gtk_css_parser_read_symbolic_color (parser);
-      if (symbolic == NULL)
-        return FALSE;
+      if (_gtk_css_parser_try (parser, "currentcolor", TRUE))
+        {
+          g_value_init (&values[i], GTK_TYPE_CSS_SPECIAL_VALUE);
+          g_value_set_enum (&values[i], GTK_CSS_CURRENT_COLOR);
+        }
+      else
+        {
+          symbolic = _gtk_css_parser_read_symbolic_color (parser);
+          if (symbolic == NULL)
+            return FALSE;
 
-      g_value_init (&values[i], GTK_TYPE_SYMBOLIC_COLOR);
-      g_value_set_boxed (&values[i], symbolic);
+          g_value_init (&values[i], GTK_TYPE_SYMBOLIC_COLOR);
+          g_value_set_boxed (&values[i], symbolic);
+        }
 
       if (value_is_done_parsing (parser))
         break;
@@ -172,7 +180,7 @@ parse_border_color (GtkCssShorthandProperty *shorthand,
 
   for (i++; i < 4; i++)
     {
-      g_value_init (&values[i], GTK_TYPE_SYMBOLIC_COLOR);
+      g_value_init (&values[i], G_VALUE_TYPE (&values[(i - 1) >> 1]));
       g_value_copy (&values[(i - 1) >> 1], &values[i]);
     }
 
