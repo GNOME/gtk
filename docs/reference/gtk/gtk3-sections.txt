@@ -7013,7 +7013,7 @@ GtkApplicationInhibitFlags
 gtk_application_inhibit
 gtk_application_uninhibit
 gtk_application_is_inhibited
-GtkApplicationEndStyle
+GtkApplicationEndSessionStyle
 gtk_application_end_session
 
 <SUBSECTION>

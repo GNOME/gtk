@@ -668,6 +668,15 @@ gtk_application_class_init (GtkApplicationClass *class)
                   G_STRUCT_OFFSET (GtkApplicationClass, quit),
                   NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 
+  /**
+   * GtkApplication::register-session:
+   *
+   * Set this property to %TRUE to register with the session manager
+   * and receive the #GtkApplication::quit signal when the session
+   * is about to end.
+   *
+   * Since: 3.4
+   */
   g_object_class_install_property (object_class, PROP_REGISTER_SESSION,
     g_param_spec_boolean ("register-session",
                           P_("Register session"),
@@ -1161,8 +1170,8 @@ gtk_application_startup_session_dbus (GtkApplication *app)
 
 /**
  * GtkApplicationInhibitFlags:
- * @GTK_APPLICATION_INHIBIT_LOGOUT: Inhibit logging out (including shutdown
- *     of the computer)
+ * @GTK_APPLICATION_INHIBIT_LOGOUT: Inhibit ending the user session
+ *     by logging out or by shutting down the computer
  * @GTK_APPLICATION_INHIBIT_SWITCH: Inhibit user switching
  * @GTK_APPLICATION_INHIBIT_SUSPEND: Inhibit suspending the
  *     session or computer
@@ -1190,8 +1199,10 @@ gtk_application_startup_session_dbus (GtkApplication *app)
  * that should not be interrupted, such as creating a CD or DVD. The
  * types of actions that may be blocked are specified by the @flags
  * parameter. When the application completes the operation it should
- * call g_application_uninhibit() to remove the inhibitor.
- * Inhibitors are also cleared when the application exits.
+ * call g_application_uninhibit() to remove the inhibitor. Note that
+ * an application can have multiple inhibitors, and all of the must
+ * be individually removed. Inhibitors are also cleared when the
+ * application exits.
  *
  * Applications should not expect that they will always be able to block
  * the action. In most cases, users will be given the option to force
@@ -1199,7 +1210,7 @@ gtk_application_startup_session_dbus (GtkApplication *app)
  *
  * Reasons should be short and to the point.
  *
- * If a window is passed, the session manager may point the user to
+ * If @window is given, the session manager may point the user to
  * this window to find out more about why the action is inhibited.
  *
  * Returns: A non-zero cookie that is used to uniquely identify this
@@ -1242,7 +1253,7 @@ gtk_application_inhibit (GtkApplication             *application,
                                 &error);
  if (error)
     {
-      g_warning ("Calling Inhibit failed: %s\n", error->message);
+      g_warning ("Calling Inhibit failed: %s", error->message);
       g_error_free (error);
       return 0;
     }
@@ -1312,7 +1323,7 @@ gtk_application_is_inhibited (GtkApplication             *application,
                                 &error);
   if (error)
     {
-      g_warning ("Calling IsInhibited failed: %s\n", error->message);
+      g_warning ("Calling IsInhibited failed: %s", error->message);
       g_error_free (error);
       return FALSE;
     }
@@ -1324,10 +1335,10 @@ gtk_application_is_inhibited (GtkApplication             *application,
 }
 
 /**
- * GtkApplicationEndStyle:
- * @GTK_APPLICATION_LOGOUT: End the session by logging out.
- * @GTK_APPLICATION_REBOOT: Restart the computer.
- * @GTK_APPLICATION_SHUTDOWN: Shut the computer down.
+ * GtkApplicationEndSessionStyle:
+ * @GTK_APPLICATION_LOGOUT: End the session by logging out
+ * @GTK_APPLICATION_REBOOT: Restart the computer
+ * @GTK_APPLICATION_SHUTDOWN: Shut the computer down
  *
  * Different ways to end a user session, for use with
  * gtk_application_end_session().
@@ -1352,9 +1363,9 @@ gtk_application_is_inhibited (GtkApplication             *application,
  * Since: 3.4
  */
 gboolean
-gtk_application_end_session (GtkApplication         *application,
-                             GtkApplicationEndStyle  style,
-                             gboolean                request_confirmation)
+gtk_application_end_session (GtkApplication                *application,
+                             GtkApplicationEndSessionStyle  style,
+                             gboolean                       request_confirmation)
 {
   g_return_val_if_fail (GTK_IS_APPLICATION (application), FALSE);
   g_return_val_if_fail (!g_application_get_is_remote (G_APPLICATION (application)), FALSE);

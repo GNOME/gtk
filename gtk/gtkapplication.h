@@ -114,11 +114,11 @@ typedef enum {
   GTK_APPLICATION_LOGOUT,
   GTK_APPLICATION_REBOOT,
   GTK_APPLICATION_SHUTDOWN
-} GtkApplicationEndStyle;
+} GtkApplicationEndSessionStyle;
 
-gboolean         gtk_application_end_session        (GtkApplication             *application,
-                                                     GtkApplicationEndStyle      style,
-                                                     gboolean                    request_confirmation);
+gboolean         gtk_application_end_session        (GtkApplication                *application,
+                                                     GtkApplicationEndSessionStyle  style,
+                                                     gboolean                       request_confirmation);
 
 G_END_DECLS
 
