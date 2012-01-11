@@ -7058,6 +7058,32 @@ GtkApplicationWindowPrivate
 </SECTION>
 
 <SECTION>
+<FILE>gtkactionable</FILE>
+<TITLE>GtkActionable</TITLE>
+GtkActionable
+GtkActionableInterface
+
+<SUBSECTION>
+gtk_actionable_get_action_name
+gtk_actionable_set_action_name
+
+<SUBSECTION>
+gtk_actionable_get_action_target_value
+gtk_actionable_set_action_target_value
+gtk_actionable_set_action_target
+
+<SUBSECTION>
+gtk_actionable_set_detailed_action_name
+
+<SUBSECTION Standard>
+gtk_actionable_get_type
+GTK_ACTIONABLE
+GTK_ACTIONABLE_GET_IFACE
+GTK_IS_ACTIONABLE
+GTK_TYPE_ACTIONABLE
+</SECTION>
+
+<SECTION>
 <FILE>gtkgrid</FILE>
 <TITLE>GtkGrid</TITLE>
 GtkGrid
