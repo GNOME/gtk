@@ -191,13 +191,15 @@ new_activated (GSimpleAction *action,
                GVariant      *parameter,
                gpointer       user_data)
 {
-  g_application_activate (user_data);
+  GApplication *app = user_data;
+
+  g_application_activate (app);
 }
 
 static void
-show_about (GSimpleAction *action,
-            GVariant      *parameter,
-            gpointer       user_data)
+about_activated (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
 {
   gtk_show_about_dialog (NULL,
                          "program-name", "Bloatpad",
@@ -207,16 +209,14 @@ show_about (GSimpleAction *action,
 }
 
 static void
-quit_app (GSimpleAction *action,
-          GVariant      *parameter,
-          gpointer       user_data)
+quit_app (GtkApplication *app)
 {
   GList *list, *next;
   GtkWindow *win;
 
   g_print ("Going down...\n");
 
-  list = gtk_application_get_windows (GTK_APPLICATION (g_application_get_default ()));
+  list = gtk_application_get_windows (app);
   while (list)
     {
       win = list->data;
@@ -228,10 +228,20 @@ quit_app (GSimpleAction *action,
     }
 }
 
+static void
+quit_activated (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  GtkApplication *app = user_data;
+
+  quit_app (app);
+}
+
 static GActionEntry app_entries[] = {
   { "new", new_activated, NULL, NULL, NULL },
-  { "about", show_about, NULL, NULL, NULL },
-  { "quit", quit_app, NULL, NULL, NULL },
+  { "about", about_activated, NULL, NULL, NULL },
+  { "quit", quit_activated, NULL, NULL, NULL },
 };
 
 static void
@@ -296,15 +306,31 @@ bloat_pad_class_init (BloatPadClass *class)
 
 }
 
+static void
+quit_cb (GtkApplication *app)
+{
+  g_print ("Session manager to us to quit\n");
+
+  quit_app (app);
+}
+
 BloatPad *
 bloat_pad_new (void)
 {
+  GtkApplication *bloat_pad;
+
   g_type_init ();
 
-  return g_object_new (bloat_pad_get_type (),
-                       "application-id", "org.gtk.Test.bloatpad",
-                       "flags", G_APPLICATION_HANDLES_OPEN,
-                       NULL);
+  bloat_pad = g_object_new (bloat_pad_get_type (),
+                            "application-id", "org.gtk.Test.bloatpad",
+                            "flags", G_APPLICATION_HANDLES_OPEN,
+                            "inactivity-timeout", 30000,
+                            "register-session", TRUE,
+                            NULL);
+
+  g_signal_connect (bloat_pad, "quit", G_CALLBACK (quit_cb), NULL);
+
+  return bloat_pad;
 }
 
 int
