@@ -72,4 +72,6 @@ tests/reftests/rotated-layout.ui
 tests/reftests/toplevel-vs-popup.ref.ui
 tests/reftests/toplevel-vs-popup.ui
 tests/testfilechooser.c
+tests/visuals/inline-toolbar.ui
+tests/visuals/primary-toolbar.ui
 tests/widget-factory.ui
