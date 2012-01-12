@@ -880,7 +880,8 @@ void       gdk_window_set_support_multidevice (GdkWindow *window,
 gboolean   gdk_window_get_support_multidevice (GdkWindow *window);
 
 /* Multitouch support */
-GdkTouchCluster * gdk_window_create_touch_cluster (GdkWindow       *window);
+GdkTouchCluster * gdk_window_create_touch_cluster (GdkWindow       *window,
+                                                   GdkDevice       *device);
 void              gdk_window_remove_touch_cluster (GdkWindow       *window,
                                                    GdkTouchCluster *cluster);
 

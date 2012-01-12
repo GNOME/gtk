@@ -410,13 +410,14 @@ button_press_cb (GtkWidget *widget,
       shape_update_scales (shape);
 
       if (!shape->cluster)
-        shape->cluster = gdk_window_create_touch_cluster (gtk_widget_get_window (widget));
-
-      /* Only change cluster device if there were no touches or no device */
-      if (!gdk_touch_cluster_get_device (shape->cluster) ||
-          !gdk_touch_cluster_get_touches (shape->cluster))
-        gdk_touch_cluster_set_device (shape->cluster,
-                                      gdk_event_get_device (event));
+        shape->cluster = gdk_window_create_touch_cluster (gtk_widget_get_window (widget),
+                                                          gdk_event_get_device (event));
+      else if (!gdk_touch_cluster_get_touches (shape->cluster))
+        {
+          /* Only change cluster device if there were no touches */
+          gdk_touch_cluster_set_device (shape->cluster,
+                                        gdk_event_get_device (event));
+        }
 
       gdk_touch_cluster_add_touch (shape->cluster, touch_id);
       return TRUE;

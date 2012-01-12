@@ -11617,25 +11617,31 @@ touch_cluster_touch_removed (GdkTouchCluster *cluster,
 /**
  * gdk_window_create_touch_cluster:
  * @window: a #GdkWindow
+ * @device: device to be associated to the cluster
  *
- * Creates a #GdkTouchCluster associated to @window.
+ * Creates a #GdkTouchCluster associated to @window, with @device
+ * as its current device.
  *
  * Returns: (transfer none): a newly created @GdkTouchCluster. This
  *          object is owned by @window and must be freed through
  *          gdk_window_remove_touch_cluster().
  **/
 GdkTouchCluster *
-gdk_window_create_touch_cluster (GdkWindow *window)
+gdk_window_create_touch_cluster (GdkWindow *window,
+                                 GdkDevice *device)
 {
   GdkTouchCluster *cluster;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
   cluster = g_object_new (GDK_TYPE_TOUCH_CLUSTER, NULL);
   g_signal_connect (cluster, "touch-added",
                     G_CALLBACK (touch_cluster_touch_added), window);
   g_signal_connect (cluster, "touch-removed",
                     G_CALLBACK (touch_cluster_touch_removed), window);
+
+  gdk_touch_cluster_set_device (cluster, device);
 
   window->touch_clusters = g_list_prepend (window->touch_clusters, cluster);
 
