@@ -209,10 +209,7 @@ gdk_device_core_grab (GdkDevice    *device,
                       GdkCursor    *cursor,
                       guint32       time_)
 {
-  GdkDisplay *display;
   GdkWaylandDevice *wayland_device = GDK_DEVICE_CORE (device)->device;
-
-  display = gdk_device_get_display (device);
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
