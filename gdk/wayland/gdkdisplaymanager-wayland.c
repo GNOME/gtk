@@ -135,8 +135,8 @@ gdk_wayland_display_manager_get_atom_name (GdkDisplayManager *manager_in,
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      if (GDK_POINTER_TO_ATOM (key) == atom)
-        return g_strdup (value);
+      if (GDK_POINTER_TO_ATOM (value) == atom)
+        return g_strdup (key);
     }
 
   return NULL;
