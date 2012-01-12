@@ -2617,13 +2617,18 @@ gtk_window_get_transient_for (GtkWindow *window)
  * @window: a #GtkWindow
  * @attach_widget (allow-none): a #GtkWidget, or %NULL
  *
- * Attach the window to a widget. Indicates that @window belongs to @widget.
- * For example the window of a GtkMenu could belong to a GtkMenuBar or
- * a GtkEntry or a GtkComboBox, and so on...
+ * Marks @window as attached to @attach_widget. This creates a logical binding
+ * between the window and the widget it belongs to, which is used by GTK to
+ * propagate information such as styling or accessibility to @window as if it
+ * was a children of @attach_widget.
  *
- * GTK will use this information for styling the @window,
- * for presenting it as a child of @widget in the accessibility tree
- * and other things.
+ * Examples of places where specifying this relation is useful are for instance
+ * a #GtkMenu created by a #GtkComboBox, a completion popup window
+ * created by #GtkEntry or a typeahead search entry created by #GtkTreeView.
+ *
+ * Note that this function should not be confused with 
+ * #gtk_window_set_transient_for, which specifies a window manager relation
+ * between two toplevels instead.
  *
  * Passing %NULL for @attach_widget detaches the window.
  *
