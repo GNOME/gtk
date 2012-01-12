@@ -152,6 +152,9 @@ guint          gtk_ui_manager_add_ui_from_string  (GtkUIManager          *manage
 guint          gtk_ui_manager_add_ui_from_file    (GtkUIManager          *manager,
 						   const gchar           *filename,
 						   GError               **error);
+guint          gtk_ui_manager_add_ui_from_resource(GtkUIManager          *manager,
+						   const gchar           *resource_path,
+						   GError               **error);
 void           gtk_ui_manager_add_ui              (GtkUIManager          *manager,
 						   guint                  merge_id,
 						   const gchar           *path,

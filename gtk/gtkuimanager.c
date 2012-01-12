@@ -2002,6 +2002,41 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *manager,
 }
 
 /**
+ * gtk_ui_manager_add_ui_from_resource:
+ * @manager: a #GtkUIManager object
+ * @resource_path: the resource path of the file to parse
+ * @error: return location for an error
+ *
+ * Parses a resource file containing a <link linkend="XML-UI">UI definition</link> and
+ * merges it with the current contents of @manager.
+ *
+ * Return value: The merge id for the merged UI. The merge id can be used
+ *   to unmerge the UI with gtk_ui_manager_remove_ui(). If an error occurred,
+ *   the return value is 0.
+ *
+ * Since: 3.4
+ **/
+guint
+gtk_ui_manager_add_ui_from_resource (GtkUIManager *manager,
+				     const gchar  *resource_path,
+				     GError      **error)
+{
+  GBytes *data;
+  guint res;
+
+  g_return_val_if_fail (GTK_IS_UI_MANAGER (manager), 0);
+
+  data = g_resources_lookup_data (resource_path, 0, error);
+  if (data == NULL)
+    return 0;
+
+  res = add_ui_from_string (manager, g_bytes_get_data (data, NULL), g_bytes_get_size (data), FALSE, error);
+  g_bytes_unref (data);
+
+  return res;
+}
+
+/**
  * gtk_ui_manager_add_ui:
  * @manager: a #GtkUIManager
  * @merge_id: the merge id for the merged UI, see gtk_ui_manager_new_merge_id()
