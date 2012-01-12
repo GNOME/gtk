@@ -149,6 +149,8 @@ gboolean  _gtk_builder_flags_from_string (GType       type,
 gchar * _gtk_builder_parser_translate (const gchar *domain,
 				       const gchar *context,
 				       const gchar *text);
+gchar *   _gtk_builder_get_resource_path (GtkBuilder *builder,
+					  const gchar *string);
 gchar *   _gtk_builder_get_absolute_filename (GtkBuilder *builder,
 					      const gchar *string);
 

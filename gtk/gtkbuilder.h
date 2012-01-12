@@ -119,12 +119,19 @@ GtkBuilder*  gtk_builder_new                     (void);
 guint        gtk_builder_add_from_file           (GtkBuilder    *builder,
                                                   const gchar   *filename,
                                                   GError       **error);
+guint        gtk_builder_add_from_resource       (GtkBuilder    *builder,
+                                                  const gchar   *resource_path,
+                                                  GError       **error);
 guint        gtk_builder_add_from_string         (GtkBuilder    *builder,
                                                   const gchar   *buffer,
                                                   gsize          length,
                                                   GError       **error);
 guint        gtk_builder_add_objects_from_file   (GtkBuilder    *builder,
                                                   const gchar   *filename,
+                                                  gchar        **object_ids,
+                                                  GError       **error);
+guint        gtk_builder_add_objects_from_resource(GtkBuilder    *builder,
+                                                  const gchar   *resource_path,
                                                   gchar        **object_ids,
                                                   GError       **error);
 guint        gtk_builder_add_objects_from_string (GtkBuilder    *builder,
