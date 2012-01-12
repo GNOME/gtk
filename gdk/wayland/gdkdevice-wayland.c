@@ -863,7 +863,7 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 }
 
 static void
-free_device (void *data, void *user_data)
+free_device (gpointer data)
 {
   g_object_unref (data);
 }
