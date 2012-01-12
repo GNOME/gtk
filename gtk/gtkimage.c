@@ -513,6 +513,43 @@ gtk_image_new_from_file   (const gchar *filename)
 }
 
 /**
+ * gtk_image_new_from_resource:
+ * @resource_path: a resource path
+ *
+ * Creates a new #GtkImage displaying the resource file @resource_path. If the file
+ * isn't found or can't be loaded, the resulting #GtkImage will
+ * display a "broken image" icon. This function never returns %NULL,
+ * it always returns a valid #GtkImage widget.
+ *
+ * If the file contains an animation, the image will contain an
+ * animation.
+ *
+ * If you need to detect failures to load the file, use
+ * gdk_pixbuf_new_from_file() to load the file yourself, then create
+ * the #GtkImage from the pixbuf. (Or for animations, use
+ * gdk_pixbuf_animation_new_from_file()).
+ *
+ * The storage type (gtk_image_get_storage_type()) of the returned
+ * image is not defined, it will be whatever is appropriate for
+ * displaying the file.
+ *
+ * Return value: a new #GtkImage
+ *
+ * Since: 3.4
+ **/
+GtkWidget*
+gtk_image_new_from_resource (const gchar *resource_path)
+{
+  GtkImage *image;
+
+  image = g_object_new (GTK_TYPE_IMAGE, NULL);
+
+  gtk_image_set_from_resource (image, resource_path);
+
+  return GTK_WIDGET (image);
+}
+
+/**
  * gtk_image_new_from_pixbuf:
  * @pixbuf: (allow-none): a #GdkPixbuf, or %NULL
  *
@@ -739,6 +776,59 @@ gtk_image_set_from_file   (GtkImage    *image,
   
   g_object_thaw_notify (G_OBJECT (image));
 }
+
+/**
+ * gtk_image_set_from_resource:
+ * @image: a #GtkImage
+ * @resource_path: (allow-none): a resource path or %NULL
+ *
+ * See gtk_image_new_from_resource() for details.
+ **/
+void
+gtk_image_set_from_resource   (GtkImage    *image,
+			       const gchar *resource_path)
+{
+  GtkImagePrivate *priv;
+  GdkPixbuf *pixbuf;
+  GInputStream *stream;
+
+  g_return_if_fail (GTK_IS_IMAGE (image));
+
+  priv = image->priv;
+
+  g_object_freeze_notify (G_OBJECT (image));
+
+  gtk_image_clear (image);
+
+  if (resource_path == NULL)
+    {
+      g_object_thaw_notify (G_OBJECT (image));
+      return;
+    }
+
+  stream = g_resources_open_stream (resource_path, 0, NULL);
+  if (stream != NULL)
+    {
+      pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
+      g_object_unref (stream);
+    }
+
+  if (pixbuf == NULL)
+    {
+      gtk_image_set_from_stock (image,
+                                GTK_STOCK_MISSING_IMAGE,
+                                DEFAULT_ICON_SIZE);
+      g_object_thaw_notify (G_OBJECT (image));
+      return;
+    }
+
+  gtk_image_set_from_pixbuf (image, pixbuf);
+
+  g_object_unref (pixbuf);
+
+  g_object_thaw_notify (G_OBJECT (image));
+}
+
 
 /**
  * gtk_image_set_from_pixbuf:

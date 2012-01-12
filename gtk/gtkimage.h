@@ -111,6 +111,7 @@ GType      gtk_image_get_type (void) G_GNUC_CONST;
 
 GtkWidget* gtk_image_new                (void);
 GtkWidget* gtk_image_new_from_file      (const gchar     *filename);
+GtkWidget* gtk_image_new_from_resource  (const gchar     *resource_path);
 GtkWidget* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
 GtkWidget* gtk_image_new_from_stock     (const gchar     *stock_id,
                                          GtkIconSize      size);
@@ -125,6 +126,8 @@ GtkWidget* gtk_image_new_from_gicon     (GIcon           *icon,
 void gtk_image_clear              (GtkImage        *image);
 void gtk_image_set_from_file      (GtkImage        *image,
                                    const gchar     *filename);
+void gtk_image_set_from_resource  (GtkImage        *image,
+                                   const gchar     *resource_path);
 void gtk_image_set_from_pixbuf    (GtkImage        *image,
                                    GdkPixbuf       *pixbuf);
 void gtk_image_set_from_stock     (GtkImage        *image,
