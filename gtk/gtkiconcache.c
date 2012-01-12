@@ -448,6 +448,9 @@ _gtk_icon_cache_get_icon (GtkIconCache *cache,
 
   offset = find_image_offset (cache, icon_name, directory_index);
   
+  if (!offset)
+    return NULL;
+
   image_data_offset = GET_UINT32 (cache->buffer, offset + 4);
   
   if (!image_data_offset)
