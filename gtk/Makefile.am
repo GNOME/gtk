@@ -466,6 +466,7 @@ gtk_private_h_sources =		\
 	gtkrecentchooserdefault.h \
 	gtkrecentchooserprivate.h \
 	gtkrecentchooserutils.h	\
+	gtkresources.h		\
 	gtkroundedboxprivate.h	\
 	gtkscaleprivate.h	\
 	gtksearchengine.h	\
@@ -707,6 +708,7 @@ gtk_base_c_sources = 		\
 	gtkrecentchooser.c	\
 	gtkrecentfilter.c	\
 	gtkrecentmanager.c	\
+	gtkresources.c		\
 	gtkroundedbox.c		\
 	gtkscale.c		\
 	gtkscalebutton.c	\
@@ -897,12 +899,14 @@ gtk_built_public_sources =			\
 
 # built headers that don't get installed
 gtk_built_private_headers =			\
+	gtkresources.h				\
 	gtkmarshalers.h				\
 	gtkbuiltincache.h			\
 	gtkprivatetypebuiltins.h		\
 	gtkwin32css.h
 
 gtk_built_sources =				\
+	gtkresources.c				\
 	gtktypebuiltins.c			\
 	gtktypefuncs.c				\
 	gtkmarshalers.c				\
@@ -994,6 +998,12 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) $(deprecated_h_sources) gtk
 	&& cp xgen-gtbc gtktypebuiltins.c  \
 	&& rm -f xgen-gtbc
 
+gtkresources.h: gtk.gresource.xml
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) gtk.gresource.xml \
+		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-header --manual-register
+gtkresources.c: gtk.gresource.xml gtk-default.css
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) gtk.gresource.xml \
+		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-source --manual-register
 
 gtkprivatetypebuiltins.h: stamp-gtkprivatetypebuiltins.h
 	@true

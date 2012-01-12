@@ -1,0 +1,363 @@
+@define-color fg_color #000;
+@define-color bg_color #dcdad5;
+@define-color text_color #000;
+@define-color base_color #fff;
+@define-color selected_bg_color #4b6983;
+@define-color selected_fg_color #fff;
+@define-color tooltip_bg_color #eee1b3;
+@define-color tooltip_fg_color #000;
+@define-color placeholder_text_color #808080;
+
+@define-color info_fg_color rgb (181, 171, 156);
+@define-color info_bg_color rgb (252, 252, 189);
+@define-color warning_fg_color rgb (173, 120, 41);
+@define-color warning_bg_color rgb (250, 173, 61);
+@define-color question_fg_color rgb (97, 122, 214);
+@define-color question_bg_color rgb (138, 173, 212);
+@define-color error_fg_color rgb (166, 38, 38);
+@define-color error_bg_color rgb (237, 54, 54);
+
+* {
+  background-color: @bg_color;
+  color: @fg_color;
+  border-color: shade (@bg_color, 0.6);
+  padding: 2;
+  border-width: 0;
+}
+
+*:prelight {
+  background-color: shade (@bg_color, 1.05);
+  color: shade (@fg_color, 1.3);
+}
+
+*:selected {
+  background-color: @selected_bg_color;
+  color: @selected_fg_color;
+}
+
+.expander, GtkTreeView.view.expander {
+  color: #fff;
+}
+
+.expander:prelight,
+GtkTreeView.view.expander:selected:prelight {
+  color: @text_color;
+}
+
+.expander:active {
+  transition: 200ms linear;
+}
+
+*:insensitive {
+  border-color: shade (@bg_color, 0.7);
+  background-color: shade (@bg_color, 0.9);
+  color: shade (@bg_color, 0.7);
+}
+
+.view {
+  border-width: 0;
+  border-radius: 0;
+  background-color: @base_color;
+  color: @text_color;
+}
+.view:selected {
+  background-color: shade (@bg_color, 0.9);
+  color: @fg_color;
+}
+
+.view:selected:focused {
+  background-color: @selected_bg_color;
+  color: @selected_fg_color;
+}
+
+.view column:sorted row,
+.view column:sorted row:prelight {
+  background-color: shade (@bg_color, 0.85);
+}
+
+.view column:sorted row:nth-child(odd),
+.view column:sorted row:nth-child(odd):prelight {
+  background-color: shade (@bg_color, 0.8);
+}
+
+.view row,
+.view row:prelight {
+  background-color: @base_color;
+  color: @text_color;
+}
+
+.view row:nth-child(odd),
+.view row:nth-child(odd):prelight {
+  background-color: shade (@base_color, 0.93);
+}
+
+.view row:selected:focused {
+  background-color: @selected_bg_color;
+}
+
+.view row:selected {
+  background-color: darker (@bg_color);
+  color: @selected_fg_color;
+}
+
+.view.cell.trough,
+.view.cell.trough:hover,
+.view.cell.trough:selected,
+.view.cell.trough:selected:focused {
+  background-color: @bg_color;
+  color: @fg_color;
+}
+
+.view.cell.progressbar,
+.view.cell.progressbar:hover,
+.view.cell.progressbar:selected,
+.view.cell.progressbar:selected:focused {
+  background-color: @selected_bg_color;
+  color: @selected_fg_color;
+}
+
+.rubberband {
+  background-color: alpha (@fg_color, 0.25);
+  border-color: @fg_color;
+  border-style: solid;
+  border-width: 1;
+}
+
+.tooltip,
+.tooltip * {
+  background-color: @tooltip_bg_color;
+  color: @tooltip_fg_color;
+  border-color: @tooltip_fg_color;
+  border-width: 1;
+  border-style: solid;
+}
+
+.button,
+.slider {
+  border-style: outset;
+  border-width: 2;
+}
+
+.button:active {
+  background-color: shade (@bg_color, 0.7);
+  border-style: inset;
+}
+
+.button:prelight,
+.slider:prelight {
+  background-color: @selected_bg_color;
+  color: @selected_fg_color;
+  border-color: shade (@selected_bg_color, 0.7);
+}
+
+.trough {
+  background-color: darker (@bg_color);
+  border-style: inset;
+  border-width: 1;
+  padding: 0;
+}
+
+.entry {
+  border-style: inset;
+  border-width: 2;
+  background-color: @base_color;
+  color: @text_color;
+}
+
+.entry:insensitive {
+  background-color: shade (@base_color, 0.9);
+  color: shade (@base_color, 0.7);
+}
+.entry:active {
+  background-color: #c4c2bd;
+  color: #000;
+}
+
+.progressbar,
+.entry.progressbar,
+.cell.progressbar {
+  background-color: @selected_bg_color;
+  border-color: shade (@selected_bg_color, 0.7);
+  color: @selected_fg_color;
+  border-style: outset;
+  border-width: 1;
+}
+
+GtkCheckButton:hover,
+GtkCheckButton:selected,
+GtkRadioButton:hover,
+GtkRadioButton:selected {
+  background-color: shade (@bg_color, 1.05);
+}
+
+.check, .radio,
+.cell.check, .cell.radio,
+.cell.check:hover, .cell.radio:hover {
+  border-style: solid;
+  border-width: 1;
+  background-color: @base_color;
+  border-color: @fg_color;
+}
+
+.check:active, .radio:active,
+.check:hover, .radio:hover {
+  background-color: @base_color;
+  border-color: @fg_color;
+  color: @text_color;
+}
+
+.check:selected, .radio:selected {
+  background-color: darker (@bg_color);
+  color: @selected_fg_color;
+  border-color: @selected_fg_color;
+}
+
+.check:selected:focused, .radio:selected:focused {
+  background-color: @selected_bg_color;
+}
+
+.menuitem.check, .menuitem.radio {
+  color: @fg_color;
+  border-style: none;
+  border-width: 0;
+}
+
+.popup {
+  border-style: outset;
+  border-width: 1;
+}
+
+.viewport {
+  border-style: inset;
+  border-width: 2;
+}
+
+.notebook {
+  border-style: outset;
+  border-width: 1;
+}
+
+.frame {
+  border-style: inset;
+  border-width: 1;
+}
+
+GtkScrolledWindow.frame {
+  padding: 0;
+}
+
+.menu,
+.menubar,
+.toolbar {
+  border-style: outset;
+  border-width: 1;
+}
+
+.menu:hover,
+.menubar:hover,
+.menuitem:hover,
+.menuitem.check:hover,
+.menuitem.radio:hover {
+  background-color: @selected_bg_color;
+  color: @selected_fg_color;
+}
+
+GtkSpinButton.button {
+  border-width: 1;
+}
+
+.scale.slider:hover,
+GtkSpinButton.button:hover {
+  background-color: shade (@bg_color, 1.05);
+  border-color: shade (@bg_color, 0.8);
+}
+
+GtkSwitch.trough:active {
+  background-color: @selected_bg_color;
+  color: @selected_fg_color;
+}
+
+GtkToggleButton.button:inconsistent {
+  border-style: outset;
+  border-width: 1px;
+  background-color: shade (@bg_color, 0.9);
+  border-color: shade (@bg_color, 0.7);
+}
+
+GtkLabel:selected {
+  background-color: shade (@bg_color, 0.9);
+}
+
+GtkLabel:selected:focused {
+  background-color: @selected_bg_color;
+}
+
+.spinner:active {
+  transition: 750ms linear loop;
+}
+
+.info {
+  background-color: @info_bg_color;
+  color: @info_fg_color;
+}
+
+.warning {
+  background-color: @warning_bg_color;
+  color: @warning_fg_color;
+}
+
+.question {
+  background-color: @question_bg_color;
+  color: @question_fg_color;
+}
+
+.error {
+  background-color: @error_bg_color;
+  color: @error_fg_color;
+}
+
+.highlight {
+  background-color: @selected_bg_color;
+  color: @selected_fg_color;
+}
+
+.light-area-focus {
+  color: #000;
+}
+
+.dark-area-focus {
+  color: #fff;
+}
+GtkCalendar.view {
+  border-width: 1;
+  border-style: inset;
+  padding: 1;
+}
+
+GtkCalendar.view:inconsistent {
+  color: darker (@bg_color);
+}
+
+GtkCalendar.header {
+  background-color: @bg_color;
+  border-style: outset;
+  border-width: 2;
+}
+
+GtkCalendar.highlight {
+  border-width: 0;
+}
+
+GtkCalendar.button {
+  background-color: @bg_color;
+}
+
+GtkCalendar.button:hover {
+  background-color: lighter (@bg_color);
+  color: @fg_color;
+}
+
+.menu * {
+  border-width: 0;
+  padding: 2;
+}

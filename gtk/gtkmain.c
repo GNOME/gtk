@@ -122,6 +122,7 @@
 #include "gtkmodulesprivate.h"
 #include "gtkprivate.h"
 #include "gtkrecentmanager.h"
+#include "gtkresources.h"
 #include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtktooltip.h"
@@ -708,6 +709,8 @@ do_post_parse_initialization (int    *argc,
     else if (strcmp (e, "default:LTR"))
       g_warning ("Whoever translated default:LTR did so wrongly.\n");
   }
+
+  _gtk_register_resource ();
 
   /* do what the call to gtk_type_init() used to do */
   g_type_init ();
