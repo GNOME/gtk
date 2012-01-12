@@ -3992,12 +3992,10 @@ gtk_text_view_realize (GtkWidget *widget)
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   GSList *tmp_list;
-  GdkRGBA color;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4023,10 +4021,11 @@ gtk_text_view_realize (GtkWidget *widget)
   gdk_window_set_user_data (window, widget);
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
-  gtk_style_context_get_background_color (context, state, &color);
-  gdk_window_set_background_rgba (window, &color);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+  gtk_style_context_set_background (context, window);
+  gtk_style_context_restore (context);
 
   text_window_realize (priv->text_window, widget);
 
@@ -4126,15 +4125,13 @@ gtk_text_view_set_background (GtkTextView *text_view)
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
 
-  gtk_style_context_get_background_color (context, state, &color);
-  gdk_window_set_background_rgba (priv->text_window->bin_window, &color);
+  gtk_style_context_set_background (context, priv->text_window->bin_window);
+  gtk_style_context_set_background (context, gtk_widget_get_window (widget));
 
   gtk_style_context_restore (context);
 
   /* Set lateral panes background */
   gtk_style_context_get_background_color (context, state, &color);
-
-  gdk_window_set_background_rgba (gtk_widget_get_window (widget), &color);
 
   if (priv->left_window)
     gdk_window_set_background_rgba (priv->left_window->bin_window, &color);
