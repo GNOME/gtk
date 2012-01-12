@@ -3095,6 +3095,8 @@ gdk_x11_window_set_user_time (GdkWindow *window,
  * This function modifies or removes an arbitrary X11 window
  * property of type UTF8_STRING.  If the given @window is
  * not a toplevel window, it is ignored.
+ *
+ * Since: 3.4
  */
 void
 gdk_x11_window_set_utf8_property  (GdkWindow *window,
