@@ -568,7 +568,12 @@ gtk_gesture_stroke_get_vector (const GtkGestureStroke *stroke,
     *length = vector->length;
 
   if (relative_length)
-    *relative_length = (gdouble) vector->length / stroke->total_length;
+    {
+      if (vector->length != 0)
+        *relative_length = (gdouble) vector->length / stroke->total_length;
+      else
+        *relative_length = 0;
+    }
 
   return TRUE;
 }
@@ -1049,6 +1054,18 @@ compare_strokes (const GtkGestureStroke *stroke_gesture,
   if (!gtk_gesture_stroke_get_vector (stroke_stock, 0, &stock_angle,
                                       &stock_length, &stock_relative_length))
     return FALSE;
+
+  if (gesture_length == 0 && n_vectors_gesture == 1)
+    {
+      /* If both gestures have 0-length, they're good */
+      if (stock_length == 0 && n_vectors_stock == 1)
+        {
+          *confidence = 1;
+          return TRUE;
+        }
+
+      return FALSE;
+    }
 
   while (cur_stock < n_vectors_stock &&
          cur_gesture < n_vectors_gesture)
