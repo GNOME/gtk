@@ -8,6 +8,7 @@ static GHashTable *strokes;
 static guint shown_gesture = 0;
 static guint timeout_id = 0;
 static guint m_shaped_gesture_id = 0;
+static guint two_touches_upwards_gesture_id = 0;
 
 static void
 free_stroke (GArray *array)
@@ -103,12 +104,16 @@ draw_cb (GtkWidget *widget,
           cairo_stroke (cr);
           break;
         default:
-          if (shown_gesture == m_shaped_gesture_id)
+          if (shown_gesture == m_shaped_gesture_id ||
+              shown_gesture == two_touches_upwards_gesture_id)
             {
               PangoAttrList *attr_list;
               PangoLayout *layout;
 
-              layout = gtk_widget_create_pango_layout (widget, "M");
+              if (shown_gesture == two_touches_upwards_gesture_id)
+                layout = gtk_widget_create_pango_layout (widget, "II");
+              else
+                layout = gtk_widget_create_pango_layout (widget, "M");
 
               attr_list = pango_layout_get_attributes (layout);
 
@@ -306,6 +311,7 @@ static GtkGesture *
 create_m_shaped_gesture (void)
 {
   GtkGestureStroke *stroke;
+  GtkGesture *gesture;
 
   stroke = gtk_gesture_stroke_new ();
 
@@ -314,7 +320,27 @@ create_m_shaped_gesture (void)
   gtk_gesture_stroke_append_vector (stroke, G_PI_4, 50);
   gtk_gesture_stroke_append_vector (stroke, G_PI, 100);
 
-  return gtk_gesture_new (stroke, 0);
+  gesture = gtk_gesture_new (stroke, 0);
+  gtk_gesture_stroke_free (stroke);
+
+  return gesture;
+}
+
+static GtkGesture *
+create_two_touches_upwards_gesture (void)
+{
+  GtkGestureStroke *stroke;
+  GtkGesture *gesture;
+
+  stroke = gtk_gesture_stroke_new ();
+  gtk_gesture_stroke_append_vector (stroke, 0, 100);
+  gesture = gtk_gesture_new (stroke, 0); //GTK_GESTURE_FLAG_IGNORE_INITIAL_ORIENTATION);
+
+  /* Add again the same stroke, with an offset */
+  gtk_gesture_add_stroke (gesture, stroke, 50, 0);
+  gtk_gesture_stroke_free (stroke);
+
+  return gesture;
 }
 
 static GtkGesturesInterpreter *
@@ -335,6 +361,10 @@ create_interpreter (void)
   m_shaped_gesture_id = gtk_gesture_register_static (gesture);
   gtk_gestures_interpreter_add_gesture (interpreter, m_shaped_gesture_id);
 
+  gesture = create_two_touches_upwards_gesture ();
+  two_touches_upwards_gesture_id = gtk_gesture_register_static (gesture);
+  gtk_gestures_interpreter_add_gesture (interpreter,
+                                        two_touches_upwards_gesture_id);
   return interpreter;
 }
 

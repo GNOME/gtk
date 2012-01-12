@@ -53,6 +53,7 @@
 #define N_CIRCULAR_SIDES 12
 #define VECTORIZATION_ANGLE_THRESHOLD (G_PI_2 / 10)
 #define MINIMUM_CONFIDENCE_ALLOWED 0.78
+#define INITIAL_COORDINATE_THRESHOLD 0.3
 
 G_DEFINE_TYPE (GtkGesturesInterpreter, gtk_gestures_interpreter, G_TYPE_OBJECT)
 G_DEFINE_BOXED_TYPE (GtkGestureStroke, gtk_gesture_stroke,
@@ -618,8 +619,8 @@ gtk_gesture_new (const GtkGestureStroke *stroke,
  * @dy: Y offset with respect to the first stroke
  *
  * Adds a further stroke to @gesture, @dx and @dy represent
- * the offset with the stroke that was added through
- * gtk_gesture_new().
+ * the offset with the initial coordinates of the stroke
+ * that was added through gtk_gesture_new().
  **/
 void
 gtk_gesture_add_stroke (GtkGesture             *gesture,
@@ -1025,27 +1026,20 @@ get_angle_diff (gdouble angle1,
  * gesture.
  */
 static gboolean
-compare_gestures (const GtkGesture *gesture,
-                  const GtkGesture *stock,
-                  gdouble          *confidence)
+compare_strokes (const GtkGestureStroke *stroke_gesture,
+                 const GtkGestureStroke *stroke_stock,
+                 gdouble                 angle_skew,
+                 gdouble                *confidence)
 {
-  const GtkGestureStroke *stroke_gesture, *stroke_stock;
   gdouble gesture_relative_length, stock_relative_length;
   gdouble gesture_angle, stock_angle;
   guint n_vectors_gesture, n_vectors_stock;
   guint gesture_length, stock_length;
   guint cur_gesture, cur_stock;
-  gdouble weight = 0, angle_skew = 0;
-  gdouble max_weight = 0;
-  GtkGestureFlags flags;
+  gdouble weight = 0, max_weight = 0;
 
   cur_gesture = cur_stock = 0;
-
-  /* FIXME: Only the first stroke is compared */
-  stroke_gesture = gtk_gesture_get_stroke (gesture, 0, NULL, NULL);
   n_vectors_gesture = gtk_gesture_stroke_get_n_vectors (stroke_gesture);
-
-  stroke_stock = gtk_gesture_get_stroke (stock, 0, NULL, NULL);
   n_vectors_stock = gtk_gesture_stroke_get_n_vectors (stroke_stock);
 
   if (!gtk_gesture_stroke_get_vector (stroke_gesture, 0, &gesture_angle,
@@ -1055,16 +1049,6 @@ compare_gestures (const GtkGesture *gesture,
   if (!gtk_gesture_stroke_get_vector (stroke_stock, 0, &stock_angle,
                                       &stock_length, &stock_relative_length))
     return FALSE;
-
-  flags = gtk_gesture_get_flags (stock);
-
-  if ((flags & GTK_GESTURE_FLAG_IGNORE_INITIAL_ORIENTATION) != 0)
-    {
-      /* Find out the angle skew to apply to the whole stock gesture, so
-       * the initial orientation of both gestures is most similar.
-       */
-      angle_skew = gesture_angle - stock_angle;
-    }
 
   while (cur_stock < n_vectors_stock &&
          cur_gesture < n_vectors_gesture)
@@ -1120,6 +1104,265 @@ compare_gestures (const GtkGesture *gesture,
   return TRUE;
 }
 
+static gdouble
+gesture_get_angle_skew (const GtkGestureStroke *stroke_gesture,
+                        const GtkGestureStroke *stroke_stock,
+                        GtkGestureFlags         flags)
+{
+  gdouble gesture_angle, stock_angle;
+
+  if ((flags & GTK_GESTURE_FLAG_IGNORE_INITIAL_ORIENTATION) == 0)
+    return 0;
+
+  if (!gtk_gesture_stroke_get_vector (stroke_gesture, 0, &gesture_angle,
+                                      NULL, NULL))
+    return 0;
+
+  if (!gtk_gesture_stroke_get_vector (stroke_stock, 0, &stock_angle,
+                                      NULL, NULL))
+    return 0;
+
+  /* Find out the angle skew to apply to the whole stock gesture, so
+   * the initial orientation of both gestures is most similar.
+   */
+  return gesture_angle - stock_angle;
+}
+
+static GArray *
+map_gesture_strokes (const GtkGesture *gesture,
+                     const GtkGesture *stock,
+                     guint             matched_gesture_stroke,
+                     gint              match_dx,
+                     gint              match_dy,
+                     gdouble           angle_skew)
+{
+  GdkPoint stock_bounding_box[2] = {{ G_MAXINT, G_MAXINT }, { G_MININT, G_MININT }};
+  GdkPoint gesture_bounding_box[2] = {{ G_MAXINT, G_MAXINT }, { G_MININT, G_MININT }};
+  GdkPoint *stock_points, *gesture_points;
+  guint n_strokes, i, j;
+  GArray *map;
+
+  n_strokes = gtk_gesture_get_n_strokes (stock);
+  map = g_array_sized_new (FALSE, FALSE, sizeof (guint), n_strokes);
+  stock_points = g_new (GdkPoint, n_strokes);
+  gesture_points = g_new (GdkPoint, n_strokes);
+
+  /* Get initial coordinates for every stroke in the stock gesture */
+  for (i = 0; i < n_strokes; i++)
+    {
+      gtk_gesture_get_stroke (stock, i,
+                              &(stock_points[i].x),
+                              &(stock_points[i].y));
+
+      stock_bounding_box[0].x = MIN (stock_bounding_box[0].x,
+                                     stock_points[i].x);
+      stock_bounding_box[0].y = MIN (stock_bounding_box[0].y,
+                                     stock_points[i].y);
+      stock_bounding_box[1].x = MAX (stock_bounding_box[1].x,
+                                     stock_points[i].x);
+      stock_bounding_box[1].y = MAX (stock_bounding_box[1].y,
+                                     stock_points[i].y);
+    }
+
+  /* Get initial coordinates for every stroke in the
+   * user gesture and rotate by the angle skew
+   */
+  for (i = 0; i < n_strokes; i++)
+    {
+      gint dx, dy, x, y;
+
+      gtk_gesture_get_stroke (gesture, i, &dx, &dy);
+
+      x = dx - match_dx;
+      y = dy - match_dy;
+
+      /* rotate by the angle skew */
+      gesture_points[i].x = (int) ((x * cosf (angle_skew)) - (y * sinf (angle_skew)));
+      gesture_points[i].y = (int) ((x * sinf (angle_skew)) + (y * cosf (angle_skew)));
+
+      gesture_bounding_box[0].x = MIN (gesture_bounding_box[0].x,
+                                       gesture_points[i].x);
+      gesture_bounding_box[0].y = MIN (gesture_bounding_box[0].y,
+                                       gesture_points[i].y);
+      gesture_bounding_box[1].x = MAX (gesture_bounding_box[1].x,
+                                       gesture_points[i].x);
+      gesture_bounding_box[1].y = MAX (gesture_bounding_box[1].y,
+                                       gesture_points[i].y);
+
+      /* This is the first stroke in the stock gesture,
+       * it's already mapped and matched, so no need to
+       * go for it.
+       */
+      if (i == matched_gesture_stroke)
+        {
+          g_array_append_val (map, i);
+          continue;
+        }
+    }
+
+  /* Enforce a minimum non-zero size to the bounding box */
+  if (stock_bounding_box[0].x == stock_bounding_box[1].x)
+    stock_bounding_box[1].x++;
+  if (stock_bounding_box[0].y == stock_bounding_box[1].y)
+    stock_bounding_box[1].y++;
+  if (gesture_bounding_box[0].x == gesture_bounding_box[1].x)
+    gesture_bounding_box[1].x++;
+  if (gesture_bounding_box[0].y == gesture_bounding_box[1].y)
+    gesture_bounding_box[1].y++;
+
+  /* Now assign the closest matches,
+   * or bail out if there's none
+   */
+  for (i = 1; i < n_strokes; i++)
+    {
+      gdouble stock_x, stock_y, gesture_x, gesture_y;
+      gdouble diff_x, diff_y, min_x, min_y;
+      gint stock_side, gesture_side;
+      guint match = 0;
+
+      min_x = min_y = G_MAXDOUBLE;
+      stock_side = MAX ((stock_bounding_box[1].x - stock_bounding_box[0].x),
+                        (stock_bounding_box[1].y - stock_bounding_box[0].y));
+
+      stock_x = ((gdouble) stock_points[i].x) / stock_side;
+      stock_y = ((gdouble) stock_points[i].y) / stock_side;
+
+      for (j = 0; j < n_strokes; j++)
+        {
+          if (j == matched_gesture_stroke)
+            continue;
+
+          gesture_side = MAX ((gesture_bounding_box[1].x - gesture_bounding_box[0].x),
+                              (gesture_bounding_box[1].y - gesture_bounding_box[0].y));
+
+          /* Normalize coordinates */
+          gesture_x = ((gdouble) gesture_points[j].x) / gesture_side;
+          gesture_y = ((gdouble) gesture_points[j].y) / gesture_side;
+
+          diff_x = ABS (gesture_x - stock_x);
+          diff_y = ABS (gesture_y - stock_y);
+
+          /* Is this the closest match? */
+          if (diff_x < min_x && diff_y < min_y)
+            {
+              min_x = diff_x;
+              min_y = diff_y;
+              match = j;
+            }
+        }
+
+      /* The closest match is still way off
+       * from where it's supposed to be.
+       */
+      if (min_x > INITIAL_COORDINATE_THRESHOLD ||
+          min_y > INITIAL_COORDINATE_THRESHOLD)
+        {
+          g_array_free (map, TRUE);
+          map = NULL;
+          break;
+        }
+
+      g_array_append_val (map, match);
+    }
+
+  g_free (gesture_points);
+  g_free (stock_points);
+
+  return map;
+}
+
+static gboolean
+compare_gestures (const GtkGesture *gesture,
+                  const GtkGesture *stock,
+                  gdouble          *confidence)
+{
+  const GtkGestureStroke *stock_first_stroke, *gesture_stroke;
+  guint gesture_n_strokes, stock_n_strokes;
+  GtkGestureFlags flags;
+  gdouble angle_skew;
+
+  gesture_n_strokes = gtk_gesture_get_n_strokes (gesture);
+  stock_n_strokes = gtk_gesture_get_n_strokes (stock);
+
+  if (gesture_n_strokes != stock_n_strokes)
+    return FALSE;
+
+  flags = gtk_gesture_get_flags (stock);
+  stock_first_stroke = gtk_gesture_get_stroke (stock, 0, NULL, NULL);
+
+  if (gesture_n_strokes == 1)
+    {
+      /* Only 1 stroke to be compared */
+      gesture_stroke = gtk_gesture_get_stroke (gesture, 0, NULL, NULL);
+      angle_skew = gesture_get_angle_skew (gesture_stroke,
+                                           stock_first_stroke,
+                                           flags);
+
+      return compare_strokes (gesture_stroke, stock_first_stroke,
+                              angle_skew, confidence);
+    }
+  else
+    {
+      const GtkGestureStroke *stock_stroke;
+      gdouble intermediate_confidence, accum;
+      guint i, j, n;
+
+      /* Find the best candidate(s) to being the
+       * first stroke of the stock gesture.
+       */
+      for (i = 0; i < gesture_n_strokes; i++)
+        {
+          gint dx, dy;
+          GArray *map;
+
+          gesture_stroke = gtk_gesture_get_stroke (gesture, i, &dx, &dy);
+
+          angle_skew = gesture_get_angle_skew (gesture_stroke,
+                                               stock_first_stroke,
+                                               flags);
+
+          if (!compare_strokes (gesture_stroke, stock_first_stroke,
+                                angle_skew, &intermediate_confidence) ||
+              intermediate_confidence < MINIMUM_CONFIDENCE_ALLOWED)
+            continue;
+
+          accum = intermediate_confidence;
+          map = map_gesture_strokes (gesture, stock, i, dx, dy, angle_skew);
+
+          if (!map)
+            continue;
+
+          /* Now compare the remaining strokes as per the map */
+          for (j = 1; j < map->len; j++)
+            {
+              n = g_array_index (map, guint, j);
+              stock_stroke = gtk_gesture_get_stroke (stock, j, NULL, NULL);
+              gesture_stroke = gtk_gesture_get_stroke (gesture, n, NULL, NULL);
+
+              if (!compare_strokes (gesture_stroke, stock_stroke,
+                                    angle_skew, &intermediate_confidence))
+                break;
+
+              accum += intermediate_confidence;
+
+              if ((accum / j) < MINIMUM_CONFIDENCE_ALLOWED)
+                break;
+            }
+
+          g_array_free (map, TRUE);
+
+          if (j == stock_n_strokes &&
+              (accum / stock_n_strokes) >= MINIMUM_CONFIDENCE_ALLOWED)
+            {
+              *confidence = (accum / stock_n_strokes);
+              return TRUE;
+            }
+        }
+    }
+
+  return FALSE;
+}
+
 /**
  * gtk_gestures_interpreter_finish:
  * @interpreter: a #GtkGesturesInterpreter
@@ -1145,6 +1388,7 @@ gtk_gestures_interpreter_finish (GtkGesturesInterpreter *interpreter,
   GHashTableIter iter;
   gdouble confidence, max_confidence = -1;
   guint i, gesture_id_found = 0;
+  GdkPoint *point, base_point;
 
   g_return_val_if_fail (GTK_IS_GESTURES_INTERPRETER (interpreter), FALSE);
 
@@ -1162,11 +1406,17 @@ gtk_gestures_interpreter_finish (GtkGesturesInterpreter *interpreter,
       if (!stroke)
         continue;
 
+      point = &g_array_index (recorded->coordinates, GdkPoint, 0);
+
       if (!user_gesture)
-        user_gesture = gtk_gesture_new (stroke, 0);
+        {
+          user_gesture = gtk_gesture_new (stroke, 0);
+          base_point = *point;
+        }
       else
         gtk_gesture_add_stroke (user_gesture, stroke,
-                                0, 0); /* FIXME: Relative positions */
+                                  point->x - base_point.x,
+                                  point->y - base_point.y);
 
       gtk_gesture_stroke_free (stroke);
       g_hash_table_iter_remove (&iter);
@@ -1185,10 +1435,6 @@ gtk_gestures_interpreter_finish (GtkGesturesInterpreter *interpreter,
       handled_gesture_id = g_array_index (priv->handled_gestures, guint, i);
       handled_gesture = gtk_gesture_lookup (handled_gesture_id);
       g_assert (handled_gesture != NULL);
-
-      if (gtk_gesture_get_n_strokes (user_gesture) !=
-          gtk_gesture_get_n_strokes (handled_gesture))
-        continue;
 
       if (!compare_gestures (user_gesture, handled_gesture, &confidence))
         continue;
