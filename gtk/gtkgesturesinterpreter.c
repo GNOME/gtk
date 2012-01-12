@@ -97,6 +97,8 @@ struct _RecordedGesture
   gint max_x;
   gint min_y;
   gint max_y;
+
+  guint finished : 1;
 };
 
 enum {
@@ -907,6 +909,41 @@ gtk_gestures_interpreter_remove_gesture (GtkGesturesInterpreter *interpreter,
 }
 
 /**
+ * gtk_gestures_interpreter_get_n_active_strokes:
+ * @interpreter: a #GtkGesturesInterpreter
+ *
+ * Returns the number of devices/touch sequences currently interacting
+ * with @interpreter.
+ *
+ * Returns: the number of strokes being performed in the interpreter.
+ *
+ * Since: 3.4
+ **/
+guint
+gtk_gestures_interpreter_get_n_active_strokes (GtkGesturesInterpreter *interpreter)
+{
+  GtkGesturesInterpreterPrivate *priv;
+  GHashTableIter iter;
+  guint n_touches = 0;
+  gpointer data;
+
+  g_return_val_if_fail (GTK_IS_GESTURES_INTERPRETER (interpreter), 0);
+
+  priv = interpreter->priv;
+  g_hash_table_iter_init (&iter, priv->events);
+
+  while (g_hash_table_iter_next (&iter, NULL, &data))
+    {
+      RecordedGesture *recorded = data;
+
+      if (!recorded->finished)
+        n_touches++;
+    }
+
+  return n_touches;
+}
+
+/**
  * gtk_gestures_interpreter_feed_event:
  * @interpreter: a #GtkGesturesInterpreter
  * @event: a #GdkEvent containing coordinates
@@ -954,6 +991,10 @@ gtk_gestures_interpreter_feed_event (GtkGesturesInterpreter *interpreter,
     }
 
   recorded_gesture_append_coordinate (recorded, x, y);
+
+  if (event->type == GDK_BUTTON_RELEASE ||
+      event->type == GDK_TOUCH_RELEASE)
+    recorded->finished = TRUE;
 
   return TRUE;
 }

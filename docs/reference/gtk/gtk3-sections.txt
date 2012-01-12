@@ -1589,6 +1589,7 @@ gtk_gestures_interpreter_add_gesture
 gtk_gestures_interpreter_remove_gesture
 gtk_gestures_interpreter_feed_event
 gtk_gestures_interpreter_finish
+gtk_gestures_interpreter_get_n_active_strokes
 
 <SUBSECTION Gestures>
 GtkGestureStroke

@@ -109,6 +109,8 @@ gboolean gtk_gestures_interpreter_add_gesture    (GtkGesturesInterpreter *interp
 void     gtk_gestures_interpreter_remove_gesture (GtkGesturesInterpreter *interpreter,
                                                   guint                   gesture_id);
 
+guint    gtk_gestures_interpreter_get_n_active_strokes (GtkGesturesInterpreter *interpreter);
+
 gboolean gtk_gestures_interpreter_feed_event (GtkGesturesInterpreter *interpreter,
 					      GdkEvent               *event);
 gboolean gtk_gestures_interpreter_finish     (GtkGesturesInterpreter *interpreter,
