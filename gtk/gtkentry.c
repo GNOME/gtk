@@ -8856,6 +8856,31 @@ gtk_entry_press_and_hold (GtkWidget             *widget,
   if (action == GTK_PRESS_AND_HOLD_TRIGGER)
     gtk_entry_do_popup (GTK_ENTRY (widget),
                         device, GDK_CURRENT_TIME, 1);
+  else if (action == GTK_PRESS_AND_HOLD_QUERY)
+    {
+      GtkEntryPrivate *priv;
+      GdkDevice *source_device;
+      GdkEvent *event;
+
+      priv = GTK_ENTRY (widget)->priv;
+      event = gtk_get_current_event ();
+
+      if (!event)
+        return FALSE;
+
+      source_device = gdk_event_get_source_device (event);
+
+      if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCH ||
+          (event->type != GDK_BUTTON_PRESS &&
+           event->type != GDK_TOUCH_PRESS) ||
+          event->button.window != priv->text_area)
+        {
+          gdk_event_free (event);
+          return FALSE;
+        }
+
+      gdk_event_free (event);
+    }
 
   return TRUE;
 }
