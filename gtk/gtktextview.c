@@ -1479,6 +1479,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
                           GtkTextBuffer *buffer)
 {
   GtkTextViewPrivate *priv;
+  GtkTextBuffer *old_buffer;
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (buffer == NULL || GTK_IS_TEXT_BUFFER (buffer));
@@ -1488,6 +1489,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
   if (priv->buffer == buffer)
     return;
 
+  old_buffer = priv->buffer;
   if (priv->buffer != NULL)
     {
       /* Destroy all anchored children */
@@ -1531,7 +1533,6 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       if (priv->layout)
         gtk_text_layout_set_buffer (priv->layout, NULL);
 
-      g_object_unref (priv->buffer);
       priv->dnd_mark = NULL;
       priv->first_para_mark = NULL;
       cancel_pending_scroll (text_view);
@@ -1580,6 +1581,10 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 	  gtk_text_buffer_add_selection_clipboard (priv->buffer, clipboard);
 	}
     }
+
+  _gtk_text_view_accessible_set_buffer (text_view, old_buffer);
+  if (old_buffer)
+    g_object_unref (old_buffer);
 
   g_object_notify (G_OBJECT (text_view), "buffer");
   
