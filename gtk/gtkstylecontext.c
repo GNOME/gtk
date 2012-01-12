@@ -3063,10 +3063,7 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
     return;
 
   if (_gtk_animation_description_get_duration (desc) == 0)
-    {
-      _gtk_animation_description_unref (desc);
-      return;
-    }
+    return;
 
   info = animation_info_lookup (context, region_id, state);
 
@@ -3103,8 +3100,6 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
       priv->animations = g_slist_prepend (priv->animations, info);
       priv->animations_invalidated = TRUE;
     }
-
-  _gtk_animation_description_unref (desc);
 }
 
 /**
