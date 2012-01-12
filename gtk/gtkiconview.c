@@ -1302,6 +1302,7 @@ gtk_icon_view_realize (GtkWidget *widget)
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
   gtk_style_context_set_background (context, icon_view->priv->bin_window);
+  gtk_style_context_set_background (context, window);
   gtk_style_context_restore (context);
 
   gdk_window_show (icon_view->priv->bin_window);
