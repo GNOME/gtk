@@ -14664,6 +14664,9 @@ _gtk_widget_gesture_finish (GtkWidget *widget)
   interpreter = g_object_get_qdata (G_OBJECT (widget), quark_gestures_interpreter);
   g_assert (interpreter != NULL);
 
+  if (gtk_gestures_interpreter_get_n_active_strokes (interpreter) != 0)
+    return;
+
   if (gtk_gestures_interpreter_finish (interpreter, &gesture))
     g_signal_emit (widget, widget_signals[GESTURE], 0, gesture);
 }
