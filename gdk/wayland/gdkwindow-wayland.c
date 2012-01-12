@@ -1233,7 +1233,6 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
 				    gint       root_y,
 				    guint32    timestamp)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
   GdkWindowImplWayland *impl;
 
   if (GDK_WINDOW_DESTROYED (window) ||
