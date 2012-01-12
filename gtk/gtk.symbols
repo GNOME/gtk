@@ -3820,6 +3820,7 @@ gtk_window_get_skip_pager_hint
 gtk_window_get_skip_taskbar_hint
 gtk_window_get_title
 gtk_window_get_transient_for
+gtk_window_get_attached_to
 gtk_window_get_type
 gtk_window_get_type_hint
 gtk_window_get_urgency_hint
@@ -3891,6 +3892,7 @@ gtk_window_set_skip_taskbar_hint
 gtk_window_set_startup_id
 gtk_window_set_title
 gtk_window_set_transient_for
+gtk_window_set_attached_to
 gtk_window_set_type_hint
 gtk_window_set_urgency_hint
 gtk_window_set_wmclass

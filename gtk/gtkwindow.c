@@ -105,6 +105,7 @@ struct _GtkWindowPrivate
 {
   GtkMnemonicHash       *mnemonic_hash;
 
+  GtkWidget             *attach_widget;
   GtkWidget             *default_widget;
   GtkWidget             *focus_widget;
   GtkWindow             *transient_parent;
@@ -223,6 +224,7 @@ enum {
   PROP_DELETABLE,
   PROP_GRAVITY,
   PROP_TRANSIENT_FOR,
+  PROP_ATTACHED_TO,
   PROP_OPACITY,
   PROP_HAS_RESIZE_GRIP,
   PROP_RESIZE_GRIP_VISIBLE,
@@ -968,6 +970,21 @@ gtk_window_class_init (GtkWindowClass *klass)
 							GTK_PARAM_READWRITE| G_PARAM_CONSTRUCT));
 
   /**
+   * GtkWindow:attached-to:
+   *
+   * the widget attached to the window.
+   *
+   * Since: 3.4
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ATTACHED_TO,
+                                   g_param_spec_object ("attached-to",
+                                                        P_("Attached to Widget"),
+                                                        P_("The widget where the window is attached"),
+                                                        GTK_TYPE_WIDGET,
+                                                        GTK_PARAM_READWRITE| G_PARAM_CONSTRUCT));
+
+  /**
    * GtkWindow:opacity:
    *
    * The requested opacity of the window. See gtk_window_set_opacity() for
@@ -1277,6 +1294,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_TRANSIENT_FOR:
       gtk_window_set_transient_for (window, g_value_get_object (value));
       break;
+    case PROP_ATTACHED_TO:
+      gtk_window_set_attached_to (window, g_value_get_object (value));
+      break;
     case PROP_OPACITY:
       gtk_window_set_opacity (window, g_value_get_double (value));
       break;
@@ -1397,6 +1417,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_TRANSIENT_FOR:
       g_value_set_object (value, gtk_window_get_transient_for (window));
+      break;
+    case PROP_ATTACHED_TO:
+      g_value_set_object (value, gtk_window_get_attached_to (window));
       break;
     case PROP_OPACITY:
       g_value_set_double (value, gtk_window_get_opacity (window));
@@ -2376,12 +2399,28 @@ gtk_window_list_toplevels (void)
 }
 
 static void
+remove_attach_widget (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  if (priv->attach_widget)
+    {
+      _gtk_widget_remove_attached_window (priv->attach_widget, window);
+
+      g_object_unref (priv->attach_widget);
+      priv->attach_widget = NULL;
+    }
+}
+
+static void
 gtk_window_dispose (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
 
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default (window, NULL);
+
+  remove_attach_widget (GTK_WINDOW (object));
 
   G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
 }
@@ -2571,6 +2610,69 @@ gtk_window_get_transient_for (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
   return window->priv->transient_parent;
+}
+
+/**
+ * gtk_window_set_attached_to:
+ * @window: a #GtkWindow
+ * @attach_widget (allow-none): a #GtkWidget, or %NULL
+ *
+ * Attach the window to a widget. Indicates that @window belongs to @widget.
+ * For example the window of a GtkMenu could belong to a GtkMenuBar or
+ * a GtkEntry or a GtkComboBox, and so on...
+ *
+ * GTK will use this information for styling the @window,
+ * for presenting it as a child of @widget in the accessibility tree
+ * and other things.
+ *
+ * Passing %NULL for @attach_widget detaches the window.
+ *
+ * Since: 3.4
+ **/
+void
+gtk_window_set_attached_to (GtkWindow *window,
+                            GtkWidget *attach_widget)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GTK_WIDGET (window) != attach_widget);
+
+  priv = window->priv;
+
+  remove_attach_widget (window);
+
+  priv->attach_widget = attach_widget;
+
+  if (priv->attach_widget)
+    {
+      _gtk_widget_add_attached_window (priv->attach_widget, window);
+
+      g_object_ref_sink (priv->attach_widget);
+    }
+
+  /* Update the style, as the widget path might change. */
+  gtk_widget_reset_style (GTK_WIDGET (window)); 
+}
+
+/**
+ * gtk_window_get_attached_to:
+ * @window: a #GtkWindow
+ *
+ * Fetches the attach widget for this window. See
+ * gtk_window_set_attached_to().
+ *
+ * Return value: (transfer none): the widget where the window is attached,
+ *   or %NULL if the window is not attached to any widget.
+ * 
+ * Since: 3.4
+ **/
+GtkWidget *
+gtk_window_get_attached_to (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+
+  return window->priv->attach_widget;
 }
 
 /**
@@ -4602,6 +4704,8 @@ gtk_window_destroy (GtkWidget *widget)
 
   if (priv->transient_parent)
     gtk_window_set_transient_for (window, NULL);
+
+  remove_attach_widget (GTK_WINDOW (widget));
 
   /* frees the icons */
   gtk_window_set_icon_list (window, NULL);

@@ -5294,6 +5294,7 @@ gtk_window_set_gravity
 gtk_window_get_gravity
 gtk_window_set_position
 gtk_window_set_transient_for
+gtk_window_set_attached_to
 gtk_window_set_destroy_with_parent
 gtk_window_set_hide_titlebar_when_maximized
 gtk_window_set_screen
@@ -5352,6 +5353,7 @@ gtk_window_get_role
 gtk_window_get_size
 gtk_window_get_title
 gtk_window_get_transient_for
+gtk_window_get_attached_to
 gtk_window_get_type_hint
 gtk_window_get_skip_taskbar_hint
 gtk_window_get_skip_pager_hint

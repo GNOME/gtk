@@ -372,6 +372,11 @@ struct _GtkWidgetPrivate
    */
   gchar *name;
 
+  /* The list of attached windows to this widget.
+   * We keep a list in order to call reset_style to all of them,
+   * recursively. */
+  GList *attached_windows; 
+
   /* The style for the widget. The style contains the
    * colors the widget should be drawn in for each state
    * along with graphics contexts used to draw with and
@@ -8314,6 +8319,9 @@ gtk_widget_reset_style (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   reset_style_recurse (widget, NULL);
+
+  g_list_foreach (widget->priv->attached_windows,
+                  (GFunc) reset_style_recurse, NULL);
 }
 
 #ifdef G_ENABLE_DEBUG
@@ -13712,6 +13720,20 @@ _gtk_widget_get_sizegroups (GtkWidget    *widget)
   return NULL;
 }
 
+void
+_gtk_widget_add_attached_window (GtkWidget    *widget,
+                                 GtkWindow    *window)
+{
+  widget->priv->attached_windows = g_list_prepend (widget->priv->attached_windows, window);
+}
+
+void
+_gtk_widget_remove_attached_window (GtkWidget    *widget,
+                                    GtkWindow    *window)
+{
+  widget->priv->attached_windows = g_list_remove (widget->priv->attached_windows, window);
+}
+
 /**
  * gtk_widget_path_append_for_widget:
  * @path: a widget path
@@ -13800,7 +13822,15 @@ gtk_widget_get_path (GtkWidget *widget)
            * where style properties might be retrieved on that
            * situation.
            */
-          widget->priv->path = gtk_widget_path_new ();
+          GtkWidget *attach_widget = NULL;
+
+          if (GTK_IS_WINDOW (widget))
+            attach_widget = gtk_window_get_attached_to (GTK_WINDOW (widget));
+
+          if (attach_widget != NULL)
+            widget->priv->path = gtk_widget_path_copy (gtk_widget_get_path (attach_widget));
+          else
+            widget->priv->path = gtk_widget_path_new ();
     
           gtk_widget_path_append_for_widget (widget->priv->path, widget);
         }

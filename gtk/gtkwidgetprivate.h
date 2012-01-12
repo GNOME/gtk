@@ -100,6 +100,11 @@ void         _gtk_widget_remove_sizegroup      (GtkWidget    *widget,
 						gpointer      group);
 GSList      *_gtk_widget_get_sizegroups        (GtkWidget    *widget);
 
+void         _gtk_widget_add_attached_window    (GtkWidget    *widget,
+                                                 GtkWindow    *window);
+void         _gtk_widget_remove_attached_window (GtkWidget    *widget,
+                                                 GtkWindow    *window);
+
 void _gtk_widget_override_size_request (GtkWidget *widget,
                                         int        width,
                                         int        height,
