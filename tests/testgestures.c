@@ -172,6 +172,10 @@ append_event_coordinates (GdkEvent *event)
 
   coords = g_hash_table_lookup (strokes,
 				GUINT_TO_POINTER (touch_id));
+
+  if (!coords)
+    return FALSE;
+
   point.x = x;
   point.y = y;
   g_array_append_val (coords, point);
@@ -220,10 +224,13 @@ button_release_cb (GtkWidget *widget,
   append_event_coordinates (event);
   gtk_gestures_interpreter_feed_event (interpreter, event);
 
-  if (gtk_gestures_interpreter_finish (interpreter, &gesture_id))
-    shown_gesture = gesture_id;
+  if (gtk_gestures_interpreter_get_n_active_strokes (interpreter) == 0)
+    {
+      if (gtk_gestures_interpreter_finish (interpreter, &gesture_id))
+        shown_gesture = gesture_id;
 
-  gtk_widget_queue_draw (widget);
+      gtk_widget_queue_draw (widget);
+    }
 
   return FALSE;
 }
