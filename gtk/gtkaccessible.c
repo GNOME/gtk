@@ -198,7 +198,7 @@ gtk_accessible_set_widget (GtkAccessible *accessible,
 
   priv->widget = widget;
 
-  if (widget);
+  if (widget)
     klass->widget_set (accessible);
 
   g_object_notify (G_OBJECT (accessible), "widget");
