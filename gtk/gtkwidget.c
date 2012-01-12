@@ -555,6 +555,7 @@ typedef struct
   /* animation */
   GtkWidget *popup;
   guint delay_animation_id;
+  guint trigger_id;
   guint size;
 
   gint start_x;
@@ -6994,6 +6995,9 @@ press_and_hold_data_free (PressAndHoldData *data)
   if (data->delay_animation_id)
     g_source_remove (data->delay_animation_id);
 
+  if (data->trigger_id)
+    g_source_remove (data->trigger_id);
+
   g_slice_free (PressAndHoldData, data);
 }
 
@@ -7057,6 +7061,7 @@ _gtk_widget_press_and_hold_check_cancel (GtkWidget      *widget,
   data = gtk_widget_peek_press_and_hold_data (widget);
 
   if (data &&
+      data->trigger_id == 0 &&
       data->device == gdk_event_get_device ((GdkEvent *) event))
     {
       gtk_widget_press_and_hold_cancel (widget);
@@ -7154,8 +7159,9 @@ press_and_hold_animation_draw (GtkWidget *widget,
       /* The animation just finished, so hide the widget
        * and finish the press and hold operation.
        */
-      gdk_threads_add_idle (gtk_widget_press_and_hold_timeout,
-                            user_data);
+      data->trigger_id =
+        gdk_threads_add_idle (gtk_widget_press_and_hold_timeout,
+                              user_data);
       gtk_widget_hide (widget);
       return FALSE;
     }
@@ -7313,6 +7319,8 @@ _gtk_widget_press_and_hold_check_start (GtkWidget      *widget,
                                  gtk_widget_press_and_hold_begin_animation_timeout,
                                  widget);
     }
+  else
+    gtk_widget_set_press_and_hold_data (widget, NULL);
 
   return FALSE;
 }
