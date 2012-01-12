@@ -11462,19 +11462,11 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
           _gtk_tree_view_accessible_add (tree_view, tree_view->priv->tree, NULL);
 	}
 
-      if (search_first_focusable_path (tree_view, &path, TRUE, NULL, NULL))
-        {
-          gtk_tree_view_real_set_cursor (tree_view, path, CLEAR_AND_SELECT | CURSOR_INVALID);
-          gtk_tree_path_free (path);
-        }
-      else
-        gtk_tree_view_real_set_cursor (tree_view, NULL, CURSOR_INVALID);
-
       /*  FIXME: do I need to do this? gtk_tree_view_create_buttons (tree_view); */
       install_presize_handler (tree_view);
     }
-  else
-    gtk_tree_view_real_set_cursor (tree_view, NULL, CURSOR_INVALID);
+
+  gtk_tree_view_real_set_cursor (tree_view, NULL, CURSOR_INVALID);
 
   g_object_notify (G_OBJECT (tree_view), "model");
 
