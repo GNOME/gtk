@@ -1747,6 +1747,7 @@ tests/a11y/Makefile
 tests/css/Makefile
 tests/css/parser/Makefile
 tests/reftests/Makefile
+tests/visuals/Makefile
 docs/Makefile
 docs/reference/Makefile
 docs/reference/gdk/Makefile
