@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/org/gtk/libgtk">
     <file>gtk-default.css</file>
+    <file>gtk-win32.css</file>
   </gresource>
 </gresources>

@@ -2814,8 +2814,6 @@ _gtk_css_provider_get_theme_dir (void)
   return path;
 }
 
-#include "gtkwin32css.h"
-
 /**
  * gtk_css_provider_get_named:
  * @name: A theme name
@@ -2840,7 +2838,7 @@ gtk_css_provider_get_named (const gchar *name,
       themes = g_hash_table_new (g_str_hash, g_str_equal);
 
       provider = gtk_css_provider_new ();
-      if (!gtk_css_provider_load_from_data (provider, gtk_win32_default_css, -1, NULL))
+      if (!_gtk_css_provider_load_from_resource (provider, "/org/gtk/libgtk/gtk-win32.css"))
         {
           g_warning ("Failed to load the internal win32 default CSS.");
 	  g_object_unref (provider);

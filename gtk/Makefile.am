@@ -902,8 +902,7 @@ gtk_built_private_headers =			\
 	gtkresources.h				\
 	gtkmarshalers.h				\
 	gtkbuiltincache.h			\
-	gtkprivatetypebuiltins.h		\
-	gtkwin32css.h
+	gtkprivatetypebuiltins.h
 
 gtk_built_sources =				\
 	gtkresources.c				\
@@ -918,7 +917,6 @@ stamp_files =					\
 	stamp-gtkmarshalers.h			\
 	stamp-gtktypebuiltins.h			\
 	stamp-gtkprivatetypebuiltins.h		\
-	stamp-gtkwin32css.h			\
 	stamp-icons
 
 # non-header sources (headers should be specified in the above variables)
@@ -976,14 +974,6 @@ gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
 	&& cp xgen-gmlc gtkmarshalers.c \
 	&& rm -f xgen-gmlc
 
-gtkwin32css.h: stamp-gtkwin32css.h
-	@true
-stamp-gtkwin32css.h: @REBUILD@ gtk-win32.css
-	$(AWK) 'BEGIN { print "static const char *gtk_win32_default_css = " } { print "   \"" $$0 "\\n\""} END { print ";" }' < $(srcdir)/gtk-win32.css >> xgen-gw3c\
-	&& (cmp -s xgen-gw3c gtkwin32css.h || cp xgen-gw3c gtkwin32css.h) \
-	&& rm -f xgen-gw3c \
-	&& echo timestamp > $(@F)
-
 gtktypebuiltins.h: stamp-gtktypebuiltins.h
 	@true
 stamp-gtktypebuiltins.h: @REBUILD@ $(gtk_public_h_sources) $(deprecated_h_sources) gtktypebuiltins.h.template
@@ -1001,7 +991,7 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) $(deprecated_h_sources) gtk
 gtkresources.h: gtk.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) gtk.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-header --manual-register
-gtkresources.c: gtk.gresource.xml gtk-default.css
+gtkresources.c: gtk.gresource.xml gtk-default.css gtk-win32.css
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) gtk.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-source --manual-register
 
