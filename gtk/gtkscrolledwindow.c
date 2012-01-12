@@ -1417,14 +1417,32 @@ gtk_scrolled_window_draw (GtkWidget *widget,
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkAllocation relative_allocation;
+  cairo_pattern_t *pattern = NULL;
   GtkStyleContext *context;
+  GtkWidget *child;
 
   context = gtk_widget_get_style_context (widget);
   gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
 
-  gtk_render_background (context, cr,
-                         relative_allocation.x, relative_allocation.y,
-                         relative_allocation.width, relative_allocation.height);
+  /* Use child's background if possible */
+  child = gtk_bin_get_child (GTK_BIN (widget));
+
+  if (child && gtk_widget_get_has_window (child))
+    pattern = gdk_window_get_background_pattern (gtk_widget_get_window (child));
+
+  if (pattern &&
+      cairo_pattern_get_type (pattern) == CAIRO_PATTERN_TYPE_SOLID)
+    {
+      cairo_set_source (cr, pattern);
+
+      cairo_rectangle (cr, relative_allocation.x, relative_allocation.y,
+                       relative_allocation.width, relative_allocation.height);
+      cairo_fill (cr);
+    }
+  else
+    gtk_render_background (context, cr,
+                           relative_allocation.x, relative_allocation.y,
+                           relative_allocation.width, relative_allocation.height);
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
