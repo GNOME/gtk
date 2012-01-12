@@ -721,6 +721,8 @@ gtk_application_class_init (GtkApplicationClass *class)
  * The application id must be valid. See g_application_id_is_valid().
  *
  * Returns: a new #GtkApplication instance
+ *
+ * Since: 3.0
  */
 GtkApplication *
 gtk_application_new (const gchar       *application_id,
