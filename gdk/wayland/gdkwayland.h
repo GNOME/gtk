@@ -39,7 +39,7 @@ int
 gdk_wayland_device_get_selection_type_atoms (GdkDevice  *device,
                                              GdkAtom   **atoms_out);
 
-typedef void (*GdkDeviceWaylandRequestContentCallback) (GdkDevice *device, gchar *data, gsize len, gpointer userdata);
+typedef void (*GdkDeviceWaylandRequestContentCallback) (GdkDevice *device, const gchar *data, gsize len, gpointer userdata);
 
 #define gdk_wayland_device_request_selection_content gdk_wayland_device_request_selection_content_libgtk_only
 gboolean
@@ -48,7 +48,7 @@ gdk_wayland_device_request_selection_content (GdkDevice                         
                                               GdkDeviceWaylandRequestContentCallback  cb,
                                               gpointer                                userdata);
 
-typedef const gchar *(*GdkDeviceWaylandOfferContentCallback) (GdkDevice *device, const gchar *mime_type, gssize *len, gpointer userdata);
+typedef gchar *(*GdkDeviceWaylandOfferContentCallback) (GdkDevice *device, const gchar *mime_type, gssize *len, gpointer userdata);
 
 #define gdk_wayland_device_offer_selection_content gdk_wayland_device_offer_selection_content_libgtk_only
 gboolean

@@ -1007,6 +1007,7 @@ _request_content_io_func (GIOChannel *channel,
 
   closure->cb (closure->device->pointer, data, len, closure->userdata);
 
+  g_free (data);
   data_offer_unref (closure->offer);
   g_io_channel_unref (channel);
   g_free (closure);
@@ -1099,8 +1100,8 @@ data_source_send (void                  *data,
                   int32_t                fd)
 {
   GdkWaylandSelectionOffer *offer = (GdkWaylandSelectionOffer *)data;;
-  const gchar *buf;
-  gssize len, bytes_written;
+  gchar *buf;
+  gssize len, bytes_written = 0;
 
   g_debug (G_STRLOC ": %s source = %p, mime_type = %s fd = %d",
            G_STRFUNC, source, mime_type, fd);
@@ -1109,13 +1110,14 @@ data_source_send (void                  *data,
 
   while (len > 0)
     {
-      bytes_written = write (fd, buf, len);
+      bytes_written += write (fd, buf + bytes_written, len);
       if (bytes_written == -1)
         goto error;
       len -= bytes_written;
     }
 
   close (fd);
+  g_free (buf);
 
   return;
 error:
@@ -1124,6 +1126,7 @@ error:
              g_strerror (errno));
 
   close (fd);
+  g_free (buf);
 }
 
 static void
