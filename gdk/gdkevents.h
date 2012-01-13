@@ -263,9 +263,12 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  *   was added in 2.8.
  * @GDK_DAMAGE: the content of the window has been changed. This event type
  *   was added in 2.14.
- * @GDK_TOUCH_MOTION: A touch device has been updated.
- * @GDK_TOUCH_PRESS: A new touch stream has just started.
- * @GDK_TOUCH_RELEASE: A touch stream has finished.
+ * @GDK_TOUCH_MOTION: A touch device has been updated. This event type was
+ *   added in 3.4.
+ * @GDK_TOUCH_PRESS: A new touch stream has just started. This event type was
+ *   added in 3.4.
+ * @GDK_TOUCH_RELEASE: A touch stream has finished. This event type was
+ *   added in 3.4.
  * @GDK_EVENT_LAST: marks the end of the GdkEventType enumeration. Added in 2.18
  *
  * Specifies the type of the event.
@@ -573,6 +576,10 @@ struct _GdkEventVisibility
  * @touch_id: touch ID, only meaningful if event is of type %GDK_TOUCH_MOTION.
  *
  * Generated when the pointer/touch moves.
+ *
+ * If the event has a type of %GDK_TOUCH_MOTION, this event will
+ * pertain to a sequence identified by gdk_event_get_touch_id().
+ * With multitouch devices, there may be several ongoing sequences.
  */
 struct _GdkEventMotion
 {
@@ -593,7 +600,8 @@ struct _GdkEventMotion
 /**
  * GdkEventButton:
  * @type: the type of the event (%GDK_BUTTON_PRESS, %GDK_2BUTTON_PRESS,
- *   %GDK_3BUTTON_PRESS or %GDK_BUTTON_RELEASE).
+ *   %GDK_3BUTTON_PRESS, %GDK_BUTTON_RELEASE, %GDK_TOUCH_PRESS or
+ *   %GDK_TOUCH_RELEASE).
  * @window: the window which received the event.
  * @send_event: %TRUE if the event was sent explicitly (e.g. using
  *   <function>XSendEvent</function>).
@@ -619,7 +627,8 @@ struct _GdkEventMotion
  *
  * Used for button press and button release events. The
  * @type field will be one of %GDK_BUTTON_PRESS,
- * %GDK_2BUTTON_PRESS, %GDK_3BUTTON_PRESS, and %GDK_BUTTON_RELEASE.
+ * %GDK_2BUTTON_PRESS, %GDK_3BUTTON_PRESS, %GDK_BUTTON_RELEASE,
+ * %GDK_TOUCH_PRESS and %GDK_TOUCH_RELEASE.
  *
  * Double and triple-clicks result in a sequence of events being received.
  * For double-clicks the order of events will be:
@@ -651,6 +660,11 @@ struct _GdkEventMotion
  * For a double click to occur, the second button press must occur within
  * 1/4 of a second of the first. For a triple click to occur, the third
  * button press must also occur within 1/2 second of the first button press.
+ *
+ * If the event has a type of %GDK_TOUCH_PRESS or %GDK_TOUCH_RELEASE,
+ * this event will pertain to a sequence identified by
+ * gdk_event_get_touch_id(). With multitouch devices, there may be
+ * several ongoing sequences.
  */
 struct _GdkEventButton
 {

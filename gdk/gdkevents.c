@@ -1756,6 +1756,8 @@ gdk_event_get_screen (const GdkEvent *event)
  * else it returns %FALSE.
  *
  * Returns: %TRUE if the touch ID can be extracted from @event.
+ *
+ * Since: 3.4
  **/
 gboolean
 gdk_event_get_touch_id (const GdkEvent *event,
@@ -1802,6 +1804,8 @@ gdk_event_get_touch_id (const GdkEvent *event,
  * to react to touch events.</warning></note>
  *
  * Returns: (transfer full): the touch region, or %NULL if unavailable
+ *
+ * Since: 3.4
  **/
 cairo_region_t *
 gdk_event_get_touch_area (GdkEvent *event)

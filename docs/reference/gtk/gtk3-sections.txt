@@ -5031,6 +5031,7 @@ GtkAllocation
 GtkSelectionData
 GtkWidgetAuxInfo
 GtkWidgetHelpType
+GtkCapturedEventFlags
 gtk_widget_new
 gtk_widget_destroy
 gtk_widget_in_destruction
@@ -5216,6 +5217,7 @@ gtk_widget_get_mapped
 gtk_widget_get_requisition
 gtk_widget_device_is_shadowed
 gtk_widget_get_modifier_mask
+gtk_widget_release_captured_events
 
 <SUBSECTION>
 gtk_widget_get_path

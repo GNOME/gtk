@@ -1844,10 +1844,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @widget: the object which received the signal.
    * @event: the #GdkEvent which triggered this signal
    *
-   * The ::captured-event signal is emitted before the ::event signal to
-   * allow capturing an event before the specialized events are emitted.
-   * The event is propagated starting from the top-level container to
-   * the widget that received the event going down the hierarchy.
+   * The #GtkWidget::captured-event signal is emitted before the
+   * #GtkWidget::event signal to allow capturing an event before the
+   * specialized events are emitted. The event is propagated starting
+   * from the top-level container to the widget that received the event
+   * going down the hierarchy.
    *
    * Returns: %TRUE to stop other handlers from being invoked for the event
    * and to cancel the emission of the ::event signal.
