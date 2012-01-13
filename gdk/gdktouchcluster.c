@@ -29,9 +29,9 @@
  * @See_also: #GdkEventMultiTouch
  *
  * #GdkTouchCluster is an object that gathers touch IDs from a
- * touch-enabled slave #GdkDevice, in order to send
- * #GdkEventMultiTouch<!-- --> events whenever a contained touch ID
- * is updated.
+ * #GdkDevice, in order to send #GdkEventMultiTouch events
+ * whenever a touch ID that is contained in the cluster sends
+ * an event.
  *
  * #GdkTouchCluster<!-- -->s are always associated to a window,
  * you need to create them through gdk_window_create_touch_cluster(),
@@ -41,9 +41,34 @@
  * %GDK_TOUCH_MOTION or %GDK_TOUCH_RELEASE events through
  * gdk_event_get_touch_id(), and then be added via
  * gdk_touch_cluster_add_touch(). Note that touch IDs are
- * highly transitive, even be an incrementable number only
- * identifying the current touch event stream, so touch IDs
- * should always be gotten from these events.
+ * highly transitive, and they must be dealt with as such.
+ * touch IDs must not be stored after a GDK_TOUCH_RELEASE,
+ * and should always be retrieved from the events being
+ * currently received.
+ *
+ * <example>
+ * <title>Adding touch IDs to a cluster in a GTK+ widget</title>
+ * <programlisting>
+ * static gboolean
+ * widget_button_press (GtkWidget *widget,
+ *                      GdkEvent  *event)
+ * {
+ *   guint touch_id;
+ *
+ *   if (gdk_event_get_touch_id (event, &touch_id))
+ *     {
+ *       /<!-- -->* It is a touch event, delegate processing
+ *        * to the  multitouch event handler
+ *        *<!-- -->/
+ *       gdk_touch_cluster_add_touch (priv->touch_cluster, touch_id);
+ *       return TRUE;
+ *     }
+ *
+ *   /<!-- -->* Normal button processing *<!-- -->/
+ *   ...
+ * }
+ * </programlisting>
+ * </example>
  *
  * Anytime a touch ID is within a cluster, no %GDK_TOUCH_PRESS,
  * %GDK_TOUCH_MOTION or %GDK_TOUCH_RELEASE events will happen
@@ -53,6 +78,37 @@
  * called for it. Note that GTK+ will automatically take a
  * touch ID out of any cluster if %GDK_TOUCH_RELEASE is gotten
  * internally.
+ *
+ * <example>
+ * <title>Typical multitouch event handler</title>
+ * <programlisting>
+ * static gboolean
+ * widget_multitouch_event (GtkWidget *widget,
+ *                          GdkEvent  *event)
+ * {
+ *   if (event->type == GDK_MULTITOUCH_ADDED ||
+ *       event->type == GDK_MULTITOUCH_REMOVED)
+ *     {
+ *       /<!-- -->* Update control mode based
+ *        * on the current number of touches
+ *        *<!-- -->/
+ *       priv->control_mode = update_control_mode (event->multitouch.n_events);
+ *     }
+ *   else
+ *     {
+ *       /<!-- -->* A touch ID in the cluster has updated
+ *        * its coordinates, update widget based on the
+ *        * current control mode.
+ *        *<!-- -->/
+ *       update_view (widget, priv->control_mode,
+ *                    event->multitouch.events,
+ *                    event->multitouch.n_events);
+ *     }
+ *
+ *   return TRUE;
+ * }
+ * </programlisting>
+ * </example>
  */
 
 typedef struct GdkTouchClusterPrivate GdkTouchClusterPrivate;
@@ -197,6 +253,8 @@ gdk_touch_cluster_get_property (GObject      *object,
  * If @touch_id already pertained to another #GdkTouchCluster, it
  * will be removed from it, generating a %GDK_MULTITOUCH_REMOVED
  * for that another cluster.
+ *
+ * Since: 3.4
  **/
 void
 gdk_touch_cluster_add_touch (GdkTouchCluster *cluster,
@@ -228,6 +286,8 @@ gdk_touch_cluster_add_touch (GdkTouchCluster *cluster,
  * Note that GTK+ automatically removes a touch ID from any cluster
  * if a %GDK_TOUCH_RELEASE event is gotten internally.
  * </para></note>
+ *
+ * Since: 3.4
  **/
 void
 gdk_touch_cluster_remove_touch (GdkTouchCluster *cluster,
@@ -255,6 +315,8 @@ gdk_touch_cluster_remove_touch (GdkTouchCluster *cluster,
  * @cluster: a #GdkTouchCluster
  *
  * Removes all touch IDs from @cluster.
+ *
+ * Since: 3.4
  **/
 void
 gdk_touch_cluster_remove_all (GdkTouchCluster *cluster)
@@ -284,7 +346,9 @@ gdk_touch_cluster_remove_all (GdkTouchCluster *cluster)
  *
  * Returns a const list of touch IDs as #guint.
  *
- * Returns: (transfer none): A list of touch IDs.
+ * Returns: (transfer none) (element-type uint): A list of touch IDs.
+ *
+ * Since: 3.4
  **/
 GList *
 gdk_touch_cluster_get_touches (GdkTouchCluster *cluster)
@@ -306,6 +370,8 @@ gdk_touch_cluster_get_touches (GdkTouchCluster *cluster)
  * touch IDs must pertain to this device. As a consequence,
  * gdk_touch_cluster_remove_all() will be called on @cluster
  * if the current device changes.
+ *
+ * Since: 3.4
  **/
 void
 gdk_touch_cluster_set_device (GdkTouchCluster *cluster,
@@ -333,6 +399,8 @@ gdk_touch_cluster_set_device (GdkTouchCluster *cluster,
  * the #GdkDevice will typically have the %GDK_SOURCE_TOUCH input source.
  *
  * Returns: (transfer none): The #GdkDevice generating the contained touch IDs
+ *
+ * Since: 3.4
  **/
 GdkDevice *
 gdk_touch_cluster_get_device (GdkTouchCluster *cluster)

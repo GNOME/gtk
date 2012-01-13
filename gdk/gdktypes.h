@@ -366,6 +366,13 @@ typedef enum
  * some of which are marked as a hint (the is_hint member is %TRUE).
  * To receive more motion events after a motion hint event, the application
  * needs to asks for more, by calling gdk_event_request_motions().
+ *
+ * If %GDK_TOUCH_MASK is enabled, the window will receive (multi)touch events
+ * from touch-enabled devices. Those will come as sequences #GdkEventMotion
+ * with type %GDK_TOUCH_MOTION, enclosed by 2 #GdkEventButton events with
+ * type %GDK_TOUCH_PRESS / %GDK_TOUCH_RELEASE. gdk_event_get_touch_id() will
+ * return the touch ID on those events, so different sequences may be
+ * distinguished.
  */
 typedef enum
 {

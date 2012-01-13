@@ -11625,6 +11625,8 @@ touch_cluster_touch_removed (GdkTouchCluster *cluster,
  * Returns: (transfer none): a newly created @GdkTouchCluster. This
  *          object is owned by @window and must be freed through
  *          gdk_window_remove_touch_cluster().
+ *
+ * Since: 3.4
  **/
 GdkTouchCluster *
 gdk_window_create_touch_cluster (GdkWindow *window,
@@ -11656,6 +11658,8 @@ gdk_window_create_touch_cluster (GdkWindow *window,
  * Removes @cluster from @window. All contained touches will be
  * removed one by one, causing %GDK_MULTITOUCH_REMOVED events
  * for these before destroying @cluster.
+ *
+ * Since: 3.4
  **/
 void
 gdk_window_remove_touch_cluster (GdkWindow       *window,

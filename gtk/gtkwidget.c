@@ -1878,10 +1878,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @widget: the object which received the signal.
    * @event: the #GdkEvent which triggered this signal
    *
-   * The ::captured-event signal is emitted before the ::event signal to
-   * allow capturing an event before the specialized events are emitted.
-   * The event is propagated starting from the top-level container to
-   * the widget that received the event going down the hierarchy.
+   * The #GtkWidget::captured-event signal is emitted before the
+   * #GtkWidget::event signal to allow capturing an event before the
+   * specialized events are emitted. The event is propagated starting
+   * from the top-level container to the widget that received the event
+   * going down the hierarchy.
    *
    * This signal returns a #GtkCapturedEventFlags with the handling
    * status of the event, if %GTK_CAPTURED_EVENT_HANDLED is enabled,
@@ -3166,8 +3167,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @gesture_id: gesture recognized
    *
    * This signal is emitted whenever a device with source
-   * #GDK_SOURCE_TOUCHSCREEN finishes a gesture that resembles
+   * #GDK_SOURCE_TOUCH finishes a gesture that resembles
    * one of those added through gtk_widget_enable_gesture().
+   *
+   * Since: 3.4
    */
   widget_signals[GESTURE] =
     g_signal_new (I_("gesture"),

@@ -933,15 +933,14 @@ typedef enum {
 } GtkBorderStyle;
 
 /**
- * GtkGestureType:
- * @GTK_GESTURE_SWIPE_RIGHT: A swipe from left to right
- * @GTK_GESTURE_SWIPE_LEFT: A swipe from right to left
- * @GTK_GESTURE_SWIPE_UP: A swipe from bottom to top
- * @GTK_GESTURE_SWIPE_DOWN: A swipe from top to bottom
- * @GTK_GESTURE_CIRCULAR_CLOCKWISE: A circular clockwise movement
- * @GTK_GESTURE_CIRCULAR_COUNTERCLOCKWISE: A circular counterclockwise movement
+ * GtkCapturedEventFlags:
+ * @GTK_CAPTURED_EVENT_NONE: Event goes uncaptured
+ * @GTK_CAPTURED_EVENT_HANDLED: The event was handled
+ * @GTK_CAPTURED_EVENT_STORE: Store for later propagation, see
+ *   gtk_widget_release_captured_events()
  *
- * Describes the stock gestures handled by GTK+.
+ * Describes how an event in the #GtkWidget::captured-event handler
+ * is handled.
  */
 typedef enum {
   GTK_CAPTURED_EVENT_NONE    = 0,
@@ -970,6 +969,17 @@ typedef enum {
   GTK_KINETIC_SCROLLING_CAPTURE_BUTTON_PRESS = 1 << 1
 } GtkKineticScrollingFlags;
 
+/**
+ * GtkGestureType:
+ * @GTK_GESTURE_SWIPE_RIGHT: A swipe from left to right
+ * @GTK_GESTURE_SWIPE_LEFT: A swipe from right to left
+ * @GTK_GESTURE_SWIPE_UP: A swipe from bottom to top
+ * @GTK_GESTURE_SWIPE_DOWN: A swipe from top to bottom
+ * @GTK_GESTURE_CIRCULAR_CLOCKWISE: A circular clockwise movement
+ * @GTK_GESTURE_CIRCULAR_COUNTERCLOCKWISE: A circular counterclockwise movement
+ *
+ * Describes the stock gestures handled by GTK+.
+ */
 typedef enum {
   GTK_GESTURE_SWIPE_RIGHT = 1,
   GTK_GESTURE_SWIPE_LEFT,
