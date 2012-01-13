@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-01-11 18:01+0000\n"
-"PO-Revision-Date: 2012-01-12 10:25+0100\n"
+"PO-Revision-Date: 2012-01-13 14:42+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -739,7 +739,7 @@ msgstr "Aplicación"
 
 #: ../gtk/gtkassistant.c:1005
 msgid "C_ontinue"
-msgstr "C_onectar"
+msgstr "C_ontinuar"
 
 #: ../gtk/gtkassistant.c:1008
 msgid "Go _Back"
