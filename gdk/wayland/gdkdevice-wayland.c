@@ -787,6 +787,17 @@ data_device_selection (void                  *data,
   g_debug (G_STRLOC ": %s wl_data_device = %p wl_data_offer = %p",
            G_STRFUNC, wl_data_device, offer);
 
+  if (!offer)
+    {
+      if (device->selection_offer)
+        {
+          data_offer_unref (device->selection_offer);
+          device->selection_offer = NULL;
+        }
+
+      return;
+    }
+
   if (device->selection_offer)
     {
       data_offer_unref (device->selection_offer);
