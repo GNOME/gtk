@@ -52,6 +52,8 @@ typedef struct _GdkWaylandDevice GdkWaylandDevice;
 
 typedef struct _DataOffer DataOffer;
 
+typedef struct _GdkWaylandSelectionOffer GdkWaylandSelectionOffer;
+
 struct _GdkWaylandDevice
 {
   GdkDisplay *display;
@@ -69,6 +71,8 @@ struct _GdkWaylandDevice
 
   DataOffer *drag_offer;
   DataOffer *selection_offer;
+
+  GdkWaylandSelectionOffer *selection_offer_out;
 };
 
 struct _GdkDeviceCore
@@ -1070,4 +1074,145 @@ error:
   g_free (closure);
 
   return FALSE;
+}
+
+struct _GdkWaylandSelectionOffer {
+  GdkDeviceWaylandOfferContentCallback cb;
+  gpointer userdata;
+  struct wl_data_source *source;
+  GdkWaylandDevice *device;
+};
+
+static void
+data_source_target (void                  *data,
+                    struct wl_data_source *source,
+                    const char            *mime_type)
+{
+  g_debug (G_STRLOC ": %s source = %p, mime_type = %s",
+           G_STRFUNC, source, mime_type);
+}
+
+static void
+data_source_send (void                  *data,
+                  struct wl_data_source *source,
+                  const char            *mime_type,
+                  int32_t                fd)
+{
+  GdkWaylandSelectionOffer *offer = (GdkWaylandSelectionOffer *)data;;
+  const gchar *buf;
+  gssize len, bytes_written;
+
+  g_debug (G_STRLOC ": %s source = %p, mime_type = %s fd = %d",
+           G_STRFUNC, source, mime_type, fd);
+
+  buf = offer->cb (offer->device->pointer, mime_type, &len, offer->userdata);
+
+  while (len > 0)
+    {
+      bytes_written = write (fd, buf, len);
+      if (bytes_written == -1)
+        goto error;
+      len -= bytes_written;
+    }
+
+  close (fd);
+
+  return;
+error:
+
+  g_warning (G_STRLOC ": Error writing data to client: %s",
+             g_strerror (errno));
+
+  close (fd);
+}
+
+static void
+data_source_cancelled (void                  *data,
+                       struct wl_data_source *source)
+{
+  g_debug (G_STRLOC ": %s source = %p",
+           G_STRFUNC, source);
+}
+
+static const struct wl_data_source_listener data_source_listener = {
+    data_source_target,
+    data_source_send,
+    data_source_cancelled
+};
+
+static guint32
+_wl_time_now (void)
+{
+  struct timeval tv;
+
+  gettimeofday(&tv, NULL);
+
+  return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+}
+
+gboolean
+gdk_wayland_device_offer_selection_content (GdkDevice                             *gdk_device,
+                                            const gchar                          **mime_types,
+                                            gint                                   nr_mime_types,
+                                            GdkDeviceWaylandOfferContentCallback   cb,
+                                            gpointer                               userdata)
+{
+  GdkDisplay *display;
+  GdkDisplayWayland *display_wayland;
+  GdkWaylandSelectionOffer *offer;
+  GdkWaylandDevice *device;
+  gint i;
+
+  g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), 0);
+  device = GDK_DEVICE_CORE (gdk_device)->device;
+
+  display = device->display;
+  display_wayland = GDK_DISPLAY_WAYLAND (display);
+
+  offer = g_new0 (GdkWaylandSelectionOffer, 1);
+  offer->cb = cb;
+  offer->userdata = userdata;
+  offer->source =
+    wl_data_device_manager_create_data_source (display_wayland->data_device_manager);
+  offer->device = device;
+
+  for (i = 0; i < nr_mime_types; i++)
+    {
+      wl_data_source_offer (offer->source,
+                            mime_types[i]);
+    }
+
+  wl_data_source_add_listener (offer->source,
+                               &data_source_listener,
+                               offer);
+
+  wl_data_device_set_selection (device->data_device,
+                                offer->source,
+                                _wl_time_now ());
+
+  device->selection_offer_out = offer;
+
+  return TRUE;
+}
+
+gboolean
+gdk_wayland_device_clear_selection_content (GdkDevice *gdk_device)
+{
+  GdkWaylandDevice *device;
+
+  g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), 0);
+  device = GDK_DEVICE_CORE (gdk_device)->device;
+
+  if (!device->selection_offer_out)
+    return FALSE;
+
+  wl_data_device_set_selection (device->data_device,
+                                NULL,
+                                _wl_time_now ());
+
+  wl_data_source_destroy (device->selection_offer_out->source);
+  g_free (device->selection_offer_out);
+  device->selection_offer_out = NULL;
+
+  return TRUE;
 }
