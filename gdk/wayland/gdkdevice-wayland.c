@@ -772,10 +772,6 @@ data_device_selection (void                  *data,
                        struct wl_data_offer  *offer)
 {
   GdkWaylandDevice *device = (GdkWaylandDevice *)data;
-  GdkDeviceManager *device_manager =
-    gdk_display_get_device_manager (device->display);
-  GdkDeviceManagerCore *device_manager_core =
-    GDK_DEVICE_MANAGER_CORE (device_manager);
 
   g_debug (G_STRLOC ": %s wl_data_device = %p wl_data_offer = %p",
            G_STRFUNC, wl_data_device, offer);
