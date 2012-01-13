@@ -446,55 +446,6 @@ _gtk_css_parser_read_string (GtkCssParser *parser)
   return NULL;
 }
 
-char *
-_gtk_css_parser_read_uri (GtkCssParser *parser)
-{
-  char *result;
-
-  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), NULL);
-
-  if (!_gtk_css_parser_try (parser, "url(", TRUE))
-    {
-      _gtk_css_parser_error (parser, "expected 'url('");
-      return NULL;
-    }
-
-  _gtk_css_parser_skip_whitespace (parser);
-
-  if (_gtk_css_parser_is_string (parser))
-    {
-      result = _gtk_css_parser_read_string (parser);
-    }
-  else
-    {
-      GString *str = g_string_new (NULL);
-
-      while (_gtk_css_parser_read_char (parser, str, URLCHAR))
-        ;
-      result = g_string_free (str, FALSE);
-      if (result == NULL)
-        _gtk_css_parser_error (parser, "not a url");
-    }
-  
-  if (result == NULL)
-    return NULL;
-
-  _gtk_css_parser_skip_whitespace (parser);
-
-  if (*parser->data != ')')
-    {
-      _gtk_css_parser_error (parser, "missing ')' for url");
-      g_free (result);
-      return NULL;
-    }
-
-  parser->data++;
-
-  _gtk_css_parser_skip_whitespace (parser);
-
-  return result;
-}
-
 gboolean
 _gtk_css_parser_try_int (GtkCssParser *parser,
                          int          *value)
