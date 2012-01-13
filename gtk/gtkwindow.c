@@ -972,7 +972,13 @@ gtk_window_class_init (GtkWindowClass *klass)
   /**
    * GtkWindow:attached-to:
    *
-   * the widget attached to the window.
+   * The widget to which this window is attached.
+   * See gtk_window_set_attached_to().
+   *
+   * Examples of places where specifying this relation is useful are
+   * for instance a #GtkMenu created by a #GtkComboBox, a completion
+   * popup window created by #GtkEntry or a typeahead search entry
+   * created by #GtkTreeView.
    *
    * Since: 3.4
    */
@@ -982,7 +988,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         P_("Attached to Widget"),
                                                         P_("The widget where the window is attached"),
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE| G_PARAM_CONSTRUCT));
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   /**
    * GtkWindow:opacity:
@@ -2618,7 +2624,7 @@ gtk_window_get_transient_for (GtkWindow *window)
  * @attach_widget (allow-none): a #GtkWidget, or %NULL
  *
  * Marks @window as attached to @attach_widget. This creates a logical binding
- * between the window and the widget it belongs to, which is used by GTK to
+ * between the window and the widget it belongs to, which is used by GTK+ to
  * propagate information such as styling or accessibility to @window as if it
  * was a children of @attach_widget.
  *
@@ -2626,8 +2632,8 @@ gtk_window_get_transient_for (GtkWindow *window)
  * a #GtkMenu created by a #GtkComboBox, a completion popup window
  * created by #GtkEntry or a typeahead search entry created by #GtkTreeView.
  *
- * Note that this function should not be confused with 
- * #gtk_window_set_transient_for, which specifies a window manager relation
+ * Note that this function should not be confused with
+ * gtk_window_set_transient_for(), which specifies a window manager relation
  * between two toplevels instead.
  *
  * Passing %NULL for @attach_widget detaches the window.
@@ -2669,7 +2675,7 @@ gtk_window_set_attached_to (GtkWindow *window,
  *
  * Return value: (transfer none): the widget where the window is attached,
  *   or %NULL if the window is not attached to any widget.
- * 
+ *
  * Since: 3.4
  **/
 GtkWidget *
