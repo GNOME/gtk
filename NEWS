@@ -1,3 +1,81 @@
+Overview of Changes in GTK+ 3.3.8
+=================================
+
+* GtkApplication:
+ - Supports logout notification and inhibiting
+ - Buttons, toolbuttons and switches can now be connected
+   to GActions
+
+* GtkSpinButton no longer allows to change the value
+  when not editable
+
+* GtkLabel link support has been rewritten to be be
+  more robust
+
+* GtkBuilder:
+ - Supports the 'id' in GtkComboBoxText
+ - Can parse GVariant-valued properties
+
+* Accessibility:
+ - key snooping support has been removed
+
+* Wayland backend:
+ - Cursor handling updates
+ - Look for cursors in the 'weston' directory
+ - Make resize grips work
+ - Implement device grabs
+ - Implement window geometry hints
+
+* Theming:
+ - Improved CSS compliance for selector matching
+ - Improved CSS compliance for value resolution,
+   including full support for 'inherit', 'initial',
+   'currentColor', 'none'
+ - Support border-style properties
+ - 'window-unfocused' has been renamed to 'backdrop'
+
+* New deprecations:
+ - GdkColor
+ - GtkButton::inner-border
+
+* Bugs fixed:
+ 543520 Cups custom options are not sent properly
+ 612396 Consider changing default of entry-text-column for GtkComboBoxText
+ 613728 Rationalize GtkTreeView focus
+ 620240 GNOME Drag & Drop broken for remote X sessions
+ 629878 Missing "Back" and "Forward" icons for Firefox
+ 631414 Add symbolic constants for event emission control
+ 639875 crashes when unparenting a tab from a window...
+ 657367 GtkAction: Hold a reference to proxy widgets
+ 659516 gtk_css_provider_to_string lacks "since" tag
+ 660139 GtkGrid gives Gtk-Warnings about negative sizes when empty
+ 660309 check x11 backend when create xim module
+ 663479 "Finishing" ("Completion") and "Advanced" tabs are empty
+ 665015 "Widget (%s) has more than one label" unwanted warnings
+ 666103 Should be able to match the parent where a dropdown menu is child
+ 666600 allocate the CSS border and deprecate GtkButton-inner-border
+ 666685 SIGSEGV in _gtk_tree_selection_internal_select_node
+ 666710 Fix compose sequences disabling other sequences
+ 666842 [patch] "sticky" window state reported wrongly on X11
+ 667018 Fix compilation on Windows
+ 667229 gtkspinbutton: Respect value of inherited 'editable' property
+ 667394 Gtk(Tool)Button: add an 'action-name' property
+ 667473 gdk_rgba_free (NULL)
+ 667485 gdk_rgba_parse error checking
+ 667534 Non-XInput2 build fix
+ 667546 GApplication doc mentions g_application_set_app_menu
+ 667628 GtkWindow:application property should have G_PARAM_CONSTRUCT
+ 667695 GAction leaked in examples/plugman.c
+ 667705 fix up GtkApplication on OS X
+
+* Translation updates:
+ Arabic
+ Bulgarian
+ Finnish
+ Hebrew
+ Spanish
+
+
 Overview of Changes in GTK+ 3.3.6
 =================================
 
