@@ -529,6 +529,123 @@ _gtk_css_parser_try_double (GtkCssParser *parser,
   return TRUE;
 }
 
+gboolean
+_gtk_css_parser_has_number (GtkCssParser *parser)
+{
+  /* ahem */
+  return strchr ("+-0123456789.", parser->data[0]) != NULL;
+}
+
+gboolean
+_gtk_css_parser_read_number (GtkCssParser           *parser,
+                             GtkCssNumber           *number,
+                             GtkCssNumberParseFlags  flags)
+{
+  static const struct {
+    const char *name;
+    GtkCssUnit unit;
+    GtkCssNumberParseFlags required_flags;
+  } units[] = {
+    { "px", GTK_CSS_PX,      GTK_CSS_PARSE_LENGTH },
+    { "pt", GTK_CSS_PT,      GTK_CSS_PARSE_LENGTH },
+    { "em", GTK_CSS_EM,      GTK_CSS_PARSE_LENGTH },
+    { "ex", GTK_CSS_EX,      GTK_CSS_PARSE_LENGTH },
+    { "pc", GTK_CSS_PC,      GTK_CSS_PARSE_LENGTH },
+    { "in", GTK_CSS_IN,      GTK_CSS_PARSE_LENGTH },
+    { "cm", GTK_CSS_CM,      GTK_CSS_PARSE_LENGTH },
+    { "mm", GTK_CSS_MM,      GTK_CSS_PARSE_LENGTH }
+  };
+  char *end, *unit;
+
+  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
+  g_return_val_if_fail (number != NULL, FALSE);
+
+  errno = 0;
+  number->unit = GTK_CSS_NUMBER;
+  number->value = g_ascii_strtod (parser->data, &end);
+  if (errno)
+    {
+      _gtk_css_parser_error (parser, "not a number: %s", g_strerror (errno));
+      return FALSE;
+    }
+  if (parser->data == end)
+    {
+      _gtk_css_parser_error (parser, "not a number");
+      return FALSE;
+    }
+
+  parser->data = end;
+
+  if (flags & GTK_CSS_POSITIVE_ONLY &&
+      number->value < 0)
+    {
+      _gtk_css_parser_error (parser, "negative values are not allowed.");
+      return FALSE;
+    }
+
+  unit = _gtk_css_parser_try_ident (parser, FALSE);
+
+  if (unit)
+    {
+      guint i;
+
+      for (i = 0; i < G_N_ELEMENTS (units); i++)
+        {
+          if (flags & units[i].required_flags &&
+              g_ascii_strcasecmp (unit, units[i].name) == 0)
+            break;
+        }
+
+      if (i >= G_N_ELEMENTS (units))
+        {
+          _gtk_css_parser_error (parser, "`%s' is not a valid unit.", unit);
+          g_free (unit);
+          return FALSE;
+        }
+
+      number->unit = units[i].unit;
+      g_free (unit);
+    }
+  else
+    {
+      if ((flags & GTK_CSS_PARSE_PERCENT) &&
+          _gtk_css_parser_try (parser, "%", FALSE))
+        {
+          number->unit = GTK_CSS_PERCENT;
+        }
+      else if (number->value == 0.0)
+        {
+          if (flags & GTK_CSS_PARSE_NUMBER)
+            number->unit = GTK_CSS_NUMBER;
+          else if (flags & GTK_CSS_PARSE_LENGTH)
+            number->unit = GTK_CSS_PX;
+          else
+            number->unit = GTK_CSS_PERCENT;
+        }
+      else if (flags & GTK_CSS_NUMBER_AS_PIXELS)
+        {
+          GError *error = g_error_new_literal (GTK_CSS_PROVIDER_ERROR,
+                                               GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                                               "Not using units is deprecated. Assuming 'px'.");
+          _gtk_css_parser_take_error (parser, error);
+          number->unit = GTK_CSS_PX;
+        }
+      else if (flags & GTK_CSS_PARSE_NUMBER)
+        {
+          number->unit = GTK_CSS_NUMBER;
+        }
+      else
+        {
+          _gtk_css_parser_error (parser, "Unit is missing.");
+          return FALSE;
+        }
+    }
+
+  _gtk_css_parser_skip_whitespace (parser);
+
+  return TRUE;
+}
+
 /* XXX: we should introduce GtkCssLenght that deals with
  * different kind of units */
 gboolean

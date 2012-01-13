@@ -21,6 +21,7 @@
 #define __GTK_CSS_TYPES_PRIVATE_H__
 
 #include <glib-object.h>
+#include <gtk/gtkstylecontext.h>
 
 G_BEGIN_DECLS
 
@@ -77,8 +78,30 @@ typedef enum /*< skip >*/ {
   GTK_CSS_BOTTOM_LEFT
 } GtkCssCorner;
 
+typedef enum /*< skip >*/ {
+  /* CSS term: <number> */
+  GTK_CSS_NUMBER,
+  /* CSS term: <percentage> */
+  GTK_CSS_PERCENT,
+  /* CSS term: <length> */
+  GTK_CSS_PX,
+  GTK_CSS_PT,
+  GTK_CSS_EM,
+  GTK_CSS_EX,
+  GTK_CSS_PC,
+  GTK_CSS_IN,
+  GTK_CSS_CM,
+  GTK_CSS_MM
+} GtkCssUnit;
+
+typedef struct _GtkCssNumber GtkCssNumber;
 typedef struct _GtkCssBorderCornerRadius GtkCssBorderCornerRadius;
 typedef struct _GtkCssBorderImageRepeat GtkCssBorderImageRepeat;
+
+struct _GtkCssNumber {
+  gdouble        value;
+  GtkCssUnit     unit;
+};
 
 struct _GtkCssBorderCornerRadius {
   double horizontal;
@@ -92,9 +115,22 @@ struct _GtkCssBorderImageRepeat {
 
 #define GTK_TYPE_CSS_BORDER_CORNER_RADIUS _gtk_css_border_corner_radius_get_type ()
 #define GTK_TYPE_CSS_BORDER_IMAGE_REPEAT _gtk_css_border_image_repeat_get_type ()
+#define GTK_TYPE_CSS_NUMBER _gtk_css_number_get_type ()
 
 GType           _gtk_css_border_corner_radius_get_type          (void);
 GType           _gtk_css_border_image_repeat_get_type           (void);
+GType           _gtk_css_number_get_type                        (void);
+
+#define GTK_CSS_NUMBER_INIT(_value,_unit) { (_value), (_unit) }
+void            _gtk_css_number_init                            (GtkCssNumber       *number,
+                                                                 double              value,
+                                                                 GtkCssUnit          unit);
+void            _gtk_css_number_compute                         (GtkCssNumber       *dest,
+                                                                 const GtkCssNumber *src,
+                                                                 GtkStyleContext    *context);
+void            _gtk_css_number_print                           (const GtkCssNumber *number,
+                                                                 GString            *string);
+
 
 G_END_DECLS
 
