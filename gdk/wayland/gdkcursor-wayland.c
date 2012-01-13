@@ -227,7 +227,7 @@ create_cursor(GdkDisplayWayland *display, GdkPixbuf *pixbuf, int x, int y)
 					fd,
 					cursor->width,
 					cursor->height,
-					stride, WL_SHM_FORMAT_ARGB32);
+					stride, WL_SHM_FORMAT_ARGB8888);
 
   close(fd);
 
