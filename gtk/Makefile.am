@@ -875,7 +875,14 @@ gtk_clipboard_dnd_c_sources = 	\
 	gtkclipboard-quartz.c	\
 	gtkdnd-quartz.c
 else
+if USE_WAYLAND
+# No wayland gtkdnd-wayland.c yet
+gtk_clipboard_dnd_c_sources = 	\
+	gtkclipboard-wayland.c \
+	gtkdnd.c
+else
 gtk_clipboard_dnd_c_sources = gtkclipboard.c gtkdnd.c
+endif
 endif
 
 # we use our own built_sources variable rules to avoid automake's
