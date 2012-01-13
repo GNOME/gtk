@@ -85,7 +85,7 @@ struct _GtkScalePrivate
 {
   PangoLayout  *layout;
 
-  GSList       *marks;
+  GList       *marks;
 
   gint          digits;
 
@@ -930,7 +930,7 @@ gtk_scale_get_mark_label_size (GtkScale        *scale,
   GtkScalePrivate *priv = scale->priv;
   PangoLayout *layout;
   PangoRectangle logical_rect;
-  GSList *m;
+  GList *m;
   gint w, h;
 
   *count1 = *count2 = 0;
@@ -1053,14 +1053,14 @@ gtk_scale_get_preferred_height (GtkWidget *widget,
 }
 
 static gint
-find_next_pos (GtkWidget      *widget,
-               GSList          *list,
+find_next_pos (GtkWidget       *widget,
+               GList           *list,
                gint            *marks,
                GtkPositionType  pos,
                gint             match)
 {
   GtkAllocation allocation;
-  GSList *m;
+  GList *m;
   gint i;
 
   for (m = list->next, i = 1; m; m = m->next, i++)
@@ -1112,7 +1112,7 @@ gtk_scale_draw (GtkWidget *widget,
       gint x1, x2, x3, y1, y2, y3;
       PangoLayout *layout;
       PangoRectangle logical_rect;
-      GSList *m;
+      GList *m;
       gint min_pos_before, min_pos_after;
       gint min_pos, max_pos;
 
@@ -1509,8 +1509,8 @@ gtk_scale_clear_marks (GtkScale *scale)
 
   priv = scale->priv;
 
-  g_slist_foreach (priv->marks, (GFunc)gtk_scale_mark_free, NULL);
-  g_slist_free (priv->marks);
+  g_list_foreach (priv->marks, (GFunc)gtk_scale_mark_free, NULL);
+  g_list_free (priv->marks);
   priv->marks = NULL;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
@@ -1564,7 +1564,7 @@ gtk_scale_add_mark (GtkScale        *scale,
 {
   GtkScalePrivate *priv;
   GtkScaleMark *mark;
-  GSList *m;
+  GList *m;
   gdouble *values;
   gint n, i;
   GtkStyleContext *context;
@@ -1583,14 +1583,14 @@ gtk_scale_add_mark (GtkScale        *scale,
   else
     mark->position = GTK_POS_BOTTOM;
 
-  priv->marks = g_slist_insert_sorted (priv->marks, mark,
-                                       (GCompareFunc) compare_marks);
+  priv->marks = g_list_insert_sorted (priv->marks, mark,
+                                      (GCompareFunc) compare_marks);
 
 #define MARKS_ABOVE 1
 #define MARKS_BELOW 2
 
   all_pos = 0;
-  n = g_slist_length (priv->marks);
+  n = g_list_length (priv->marks);
   values = g_new (gdouble, n);
   for (m = priv->marks, i = 0; m; m = m->next, i++)
     {
@@ -1637,7 +1637,7 @@ typedef struct
 {
   GtkScale *scale;
   GtkBuilder *builder;
-  GSList *marks;
+  GList *marks;
 } MarksSubparserData;
 
 typedef struct
@@ -1753,7 +1753,7 @@ marks_start_element (GMarkupParseContext *context,
       mark->context = g_strdup (msg_context);
       mark->translatable = translatable;
 
-      parser_data->marks = g_slist_prepend (parser_data->marks, mark);
+      parser_data->marks = g_list_prepend (parser_data->marks, mark);
     }
   else
     {
@@ -1835,7 +1835,7 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
 
   if (strcmp (tagname, "marks") == 0)
     {
-      GSList *m;
+      GList *m;
       gchar *markup;
 
       marks_data = (MarksSubparserData *)user_data;
@@ -1856,7 +1856,7 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
           mark_data_free (mdata);
         }
 
-      g_slist_free (marks_data->marks);
+      g_list_free (marks_data->marks);
       g_slice_free (MarksSubparserData, marks_data);
     }
 }
