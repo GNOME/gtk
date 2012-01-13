@@ -921,3 +921,38 @@ _gdk_wayland_device_manager_new (GdkDisplay *display)
                        "display", display,
                        NULL);
 }
+
+gint
+gdk_wayland_device_get_selection_type_atoms (GdkDevice  *gdk_device,
+                                             GdkAtom   **atoms_out)
+{
+  gint i;
+  GdkAtom *atoms;
+  GdkWaylandDevice *device;
+
+  g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), 0);
+  g_return_val_if_fail (atoms_out != NULL, 0);
+
+  device = GDK_DEVICE_CORE (gdk_device)->device;
+
+  if (device->selection_offer->types->len == 0)
+    {
+      *atoms_out = NULL;
+      return 0;
+    }
+
+  atoms = g_new0 (GdkAtom, device->selection_offer->types->len);
+
+  /* Convert list of targets to atoms */
+  for (i = 0; i < device->selection_offer->types->len; i++)
+    {
+      atoms[i] = gdk_atom_intern (device->selection_offer->types->pdata[i],
+                                  FALSE);
+      GDK_NOTE (MISC,
+                g_message (G_STRLOC ": Adding atom for %s",
+                           (char *)device->selection_offer->types->pdata[i]));
+    }
+
+  *atoms_out = atoms;
+  return device->selection_offer->types->len;
+}

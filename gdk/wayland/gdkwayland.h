@@ -33,6 +33,12 @@ G_BEGIN_DECLS
 
 GType      gdk_wayland_display_manager_get_type   (void);
 
+#if defined (GTK_COMPILATION) || defined (GDK_COMPILATION)
+#define gdk_wayland_device_get_selection_type_atoms gdk_wayland_device_get_selection_type_atoms_libgtk_only
+int
+gdk_wayland_device_get_selection_type_atoms (GdkDevice  *device,
+                                                         GdkAtom   **atoms_out);
+#endif
 G_END_DECLS
 
 #endif /* __GDK_WAYLAND_H__ */
