@@ -102,6 +102,7 @@ struct _GdkWindowImplWayland
   struct wl_shell_surface *shell_surface;
   unsigned int mapped : 1;
   GdkWindow *transient_for;
+  GdkWindowTypeHint hint;
 
   cairo_surface_t *cairo_surface;
   cairo_surface_t *server_surface;
@@ -542,6 +543,8 @@ gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
   wl_shell_surface_add_listener(impl->shell_surface,
                                 &shell_surface_listener, window);
 
+  gdk_window_set_type_hint (window, impl->hint);  
+
   _gdk_make_event (window, GDK_MAP, NULL, FALSE);
   event = _gdk_make_event (window, GDK_VISIBILITY_NOTIFY, NULL, FALSE);
   event->visibility.state = GDK_VISIBILITY_UNOBSCURED;
@@ -852,16 +855,20 @@ static void
 gdk_wayland_window_set_type_hint (GdkWindow        *window,
 				  GdkWindowTypeHint hint)
 {
+  GdkWindowImplWayland *impl;
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  impl->hint = hint;
+
   switch (hint)
     {
-    case GDK_WINDOW_TYPE_HINT_DIALOG:
     case GDK_WINDOW_TYPE_HINT_MENU:
     case GDK_WINDOW_TYPE_HINT_TOOLBAR:
     case GDK_WINDOW_TYPE_HINT_UTILITY:
-    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
     case GDK_WINDOW_TYPE_HINT_DOCK:
     case GDK_WINDOW_TYPE_HINT_DESKTOP:
     case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU:
@@ -874,7 +881,11 @@ gdk_wayland_window_set_type_hint (GdkWindow        *window,
     default:
       g_warning ("Unknown hint %d passed to gdk_window_set_type_hint", hint);
       /* Fall thru */
+    case GDK_WINDOW_TYPE_HINT_DIALOG:
     case GDK_WINDOW_TYPE_HINT_NORMAL:
+    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+      if (impl->shell_surface)
+	wl_shell_surface_set_toplevel (impl->shell_surface);
       break;
     }
 }
