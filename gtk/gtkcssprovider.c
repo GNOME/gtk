@@ -1760,7 +1760,6 @@ static gboolean
 parse_import (GtkCssScanner *scanner)
 {
   GFile *file;
-  char *uri;
 
   gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_IMPORT);
 
@@ -1771,19 +1770,25 @@ parse_import (GtkCssScanner *scanner)
     }
 
   if (_gtk_css_parser_is_string (scanner->parser))
-    uri = _gtk_css_parser_read_string (scanner->parser);
-  else
-    uri = _gtk_css_parser_read_uri (scanner->parser);
+    {
+      char *uri;
 
-  if (uri == NULL)
+      uri = _gtk_css_parser_read_string (scanner->parser);
+      file = g_file_resolve_relative_path (gtk_css_scanner_get_base_url (scanner), uri);
+      g_free (uri);
+    }
+  else
+    {
+      file = _gtk_css_parser_read_url (scanner->parser,
+                                       gtk_css_scanner_get_base_url (scanner));
+    }
+
+  if (file == NULL)
     {
       _gtk_css_parser_resync (scanner->parser, TRUE, 0);
       gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_IMPORT);
       return TRUE;
     }
-
-  file = g_file_resolve_relative_path (gtk_css_scanner_get_base_url (scanner), uri);
-  g_free (uri);
 
   if (gtk_css_scanner_would_recurse (scanner, file))
     {
