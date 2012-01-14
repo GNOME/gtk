@@ -11461,6 +11461,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 	  gtk_tree_view_build_tree (tree_view, tree_view->priv->tree, &iter, 1, FALSE);
           _gtk_tree_view_accessible_add (tree_view, tree_view->priv->tree, NULL);
 	}
+      gtk_tree_path_free (path);
 
       /*  FIXME: do I need to do this? gtk_tree_view_create_buttons (tree_view); */
       install_presize_handler (tree_view);
