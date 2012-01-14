@@ -162,6 +162,7 @@ gtk_theming_engine_register_property (const gchar            *name_space,
   node = g_object_new (GTK_TYPE_CSS_CUSTOM_PROPERTY,
                        "initial-value", &initial,
                        "name", name,
+                       "computed-type", pspec->value_type,
                        "value-type", pspec->value_type,
                        NULL);
   node->pspec = pspec;
@@ -197,6 +198,7 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
   node = g_object_new (GTK_TYPE_CSS_CUSTOM_PROPERTY,
                        "initial-value", &initial,
                        "name", pspec->name,
+                       "computed-type", pspec->value_type,
                        "value-type", pspec->value_type,
                        NULL);
   node->pspec = pspec;

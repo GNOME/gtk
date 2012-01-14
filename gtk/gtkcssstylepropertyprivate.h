@@ -50,6 +50,7 @@ struct _GtkCssStyleProperty
 {
   GtkStyleProperty parent;
 
+  GType computed_type;
   GValue initial_value;
   guint id;
   guint inherit :1;
@@ -77,6 +78,8 @@ gboolean                _gtk_css_style_property_is_inherit      (GtkCssStyleProp
 guint                   _gtk_css_style_property_get_id          (GtkCssStyleProperty    *property);
 const GValue *          _gtk_css_style_property_get_initial_value
                                                                 (GtkCssStyleProperty    *property);
+GType                   _gtk_css_style_property_get_computed_type (GtkCssStyleProperty *property);
+GType                   _gtk_css_style_property_get_specified_type (GtkCssStyleProperty *property);
 
 void                    _gtk_css_style_property_compute_value   (GtkCssStyleProperty    *property,
                                                                  GValue                 *computed,
