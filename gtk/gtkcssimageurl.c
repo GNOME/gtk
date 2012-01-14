@@ -92,6 +92,7 @@ gtk_css_image_url_parse (GtkCssImage  *image,
   cr = cairo_create (url->surface);
   gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
   cairo_paint (cr);
+  cairo_destroy (cr);
   g_object_unref (pixbuf);
 
   return TRUE;
