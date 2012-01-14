@@ -187,6 +187,41 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
     }
 }
                                     
+void
+_gtk_css_computed_values_set_value (GtkCssComputedValues *values,
+                                    guint                 id,
+                                    const GValue         *value,
+                                    GtkCssSection        *section)
+{
+  GValue *set;
+
+  g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
+  g_return_if_fail (value == NULL || G_IS_VALUE (value));
+
+  if (values->values == NULL)
+    {
+      values->values = g_array_new (FALSE, TRUE, sizeof (GValue));
+      g_array_set_clear_func (values->values, (GDestroyNotify) g_value_unset);
+    }
+  if (id <= values->values->len)
+   g_array_set_size (values->values, id + 1);
+
+
+  set = &g_array_index (values->values, GValue, id);
+  g_value_init (set, G_VALUE_TYPE (value));
+  g_value_copy (value, set);
+
+  if (section)
+    {
+      if (values->sections == NULL)
+        values->sections = g_ptr_array_new_with_free_func (maybe_unref_section);
+      if (values->sections->len <= id)
+        g_ptr_array_set_size (values->sections, id + 1);
+
+      g_ptr_array_index (values->sections, id) = gtk_css_section_ref (section);
+    }
+}
+
 const GValue *
 _gtk_css_computed_values_get_value (GtkCssComputedValues *values,
                                     guint                 id)

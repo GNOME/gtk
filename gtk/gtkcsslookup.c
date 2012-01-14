@@ -29,6 +29,7 @@
 typedef struct {
   GtkCssSection     *section;
   const GValue      *value;
+  const GValue      *computed;
 } GtkCssLookupValue;
 
 struct _GtkCssLookup {
@@ -104,6 +105,40 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
 }
 
 /**
+ * _gtk_css_lookup_set_computed:
+ * @lookup: the lookup
+ * @id: id of the property to set, see _gtk_style_property_get_id()
+ * @section: (allow-none): The @section the value was defined in or %NULL
+ * @value: the "computed value" to use
+ *
+ * Sets the @value for a given @id. No value may have been set for @id
+ * before. See _gtk_css_lookup_is_missing(). This function is used to
+ * set the "winning declaration" of a lookup. Note that for performance
+ * reasons @value and @section are not copied. It is your responsibility
+ * to ensure they are kept alive until _gtk_css_lookup_free() is called.
+ *
+ * As opposed to _gtk_css_lookup_set(), this function forces a computed
+ * value and will not cause computation to happen. In particular, with this
+ * method relative lengths or symbolic colors can not be used. This is
+ * usually only useful for doing overrides. It should not be used for proper
+ * CSS.
+ **/
+void
+_gtk_css_lookup_set_computed (GtkCssLookup  *lookup,
+                              guint          id,
+                              GtkCssSection *section,
+                              const GValue  *value)
+{
+  g_return_if_fail (lookup != NULL);
+  g_return_if_fail (_gtk_bitmask_get (lookup->missing, id));
+  g_return_if_fail (value != NULL);
+
+  _gtk_bitmask_set (lookup->missing, id, FALSE);
+  lookup->values[id].computed = value;
+  lookup->values[id].section = section;
+}
+
+/**
  * _gtk_css_lookup_resolve:
  * @lookup: the lookup
  * @context: the context the values are resolved for
@@ -130,10 +165,16 @@ _gtk_css_lookup_resolve (GtkCssLookup         *lookup,
 
   for (i = 0; i < n; i++)
     {
-      _gtk_css_computed_values_compute_value (values,
-                                              context,
-                                              i,
-                                              lookup->values[i].value,
-                                              lookup->values[i].section);
+      if (lookup->values[i].computed)
+        _gtk_css_computed_values_set_value (values,
+                                            i,
+                                            lookup->values[i].computed,
+                                            lookup->values[i].section);
+      else
+        _gtk_css_computed_values_compute_value (values,
+                                                context,
+                                                i,
+                                                lookup->values[i].value,
+                                                lookup->values[i].section);
     }
 }
