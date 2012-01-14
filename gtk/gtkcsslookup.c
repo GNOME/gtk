@@ -72,7 +72,7 @@ _gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
 {
   g_return_val_if_fail (lookup != NULL, FALSE);
 
-  return lookup->values[id].value == NULL;
+  return _gtk_bitmask_get (lookup->missing, id);
 }
 
 /**
