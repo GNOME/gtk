@@ -603,15 +603,21 @@ gtk_application_window_real_get_preferred_width_for_height (GtkWidget *widget,
                                                             gint      *natural_width)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
+  gint menubar_height;
+
+  if (window->priv->menubar != NULL)
+    gtk_widget_get_preferred_height (window->priv->menubar, &menubar_height, NULL);
+  else
+    menubar_height = 0;
 
   GTK_WIDGET_CLASS (gtk_application_window_parent_class)
-    ->get_preferred_width_for_height (widget, height, minimum_width, natural_width);
+    ->get_preferred_width_for_height (widget, height - menubar_height, minimum_width, natural_width);
 
   if (window->priv->menubar != NULL)
     {
       gint menubar_min_width, menubar_nat_width;
 
-      gtk_widget_get_preferred_width_for_height (window->priv->menubar, height, &menubar_min_width, &menubar_nat_width);
+      gtk_widget_get_preferred_width_for_height (window->priv->menubar, menubar_height, &menubar_min_width, &menubar_nat_width);
       *minimum_width = MAX (*minimum_width, menubar_min_width);
       *natural_width = MAX (*natural_width, menubar_nat_width);
     }
