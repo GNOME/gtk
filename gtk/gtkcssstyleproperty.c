@@ -201,7 +201,7 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
       return TRUE;
     }
 
-  g_value_init (value, _gtk_style_property_get_value_type (property));
+  g_value_init (value, _gtk_css_style_property_get_specified_type (style_property));
   if (!(* style_property->parse_value) (style_property, value, parser, base))
     {
       g_value_unset (value);

@@ -418,8 +418,6 @@ css_image_value_parse (GtkCssStyleProperty *property,
         return FALSE;
     }
 
-  g_value_unset (value);
-  g_value_init (value, GTK_TYPE_CSS_IMAGE);
   g_value_take_object (value, image);
   return TRUE;
 }
