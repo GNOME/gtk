@@ -144,7 +144,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
     }
 
   g_value_init (value, G_TYPE_VALUE_ARRAY);
-  g_value_set_boxed (value, array);
+  g_value_take_boxed (value, array);
   return TRUE;
 }
 
