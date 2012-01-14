@@ -52,11 +52,6 @@ color_compute (GtkCssStyleProperty    *property,
                GtkStyleContext        *context,
                const GValue           *specified)
 {
-  g_value_init (computed, GDK_TYPE_RGBA);
-
-  /* for when resolvage fails */
-restart:
-
   if (G_VALUE_HOLDS (specified, GTK_TYPE_SYMBOLIC_COLOR))
     {
       GtkSymbolicColor *symbolic = g_value_get_boxed (specified);
@@ -92,8 +87,10 @@ restart:
         }
       else
         {
-          specified = _gtk_css_style_property_get_initial_value (property);
-          goto restart;
+          color_compute (property,
+                         computed,
+                         context,
+                         _gtk_css_style_property_get_initial_value (property));
         }
 
     }
@@ -446,7 +443,6 @@ css_image_value_compute (GtkCssStyleProperty    *property,
   if (image)
     image = _gtk_css_image_compute (image, context);
 
-  g_value_init (computed, GTK_TYPE_CSS_IMAGE);
   g_value_take_object (computed, image);
 }
 
@@ -465,7 +461,6 @@ compute_border_width (GtkCssStyleProperty    *property,
   style = _gtk_css_style_property_lookup_by_id (_gtk_css_style_property_get_id (property) - 1);
   border_style = g_value_get_enum (_gtk_style_context_peek_property (context, _gtk_style_property_get_name (GTK_STYLE_PROPERTY (style))));
 
-  g_value_init (computed, G_TYPE_INT);
   if (border_style == GTK_BORDER_STYLE_NONE ||
       border_style == GTK_BORDER_STYLE_HIDDEN)
     g_value_set_int (computed, 0);

@@ -287,7 +287,6 @@ gtk_css_style_property_real_compute_value (GtkCssStyleProperty *property,
                                            GtkStyleContext     *context,
                                            const GValue        *specified)
 {
-  g_value_init (computed, _gtk_style_property_get_value_type (GTK_STYLE_PROPERTY (property)));
   _gtk_css_style_compute_value (computed, context, specified);
 }
 
@@ -464,6 +463,8 @@ _gtk_css_style_property_compute_value (GtkCssStyleProperty *property,
   g_return_if_fail (computed != NULL && !G_IS_VALUE (computed));
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (G_IS_VALUE (specified));
+
+  g_value_init (computed, _gtk_css_style_property_get_computed_type (property));
 
   property->compute_value (property, computed, context, specified);
 }
