@@ -31,6 +31,8 @@ gboolean           _gtk_symbolic_color_resolve_full       (GtkSymbolicColor     
                                                            gpointer                    data,
                                                            GdkRGBA                    *resolved_color);
 
+GtkSymbolicColor * _gtk_symbolic_color_get_current_color  (void);
+
 G_END_DECLS
 
 #endif /* __GTK_SYMBOLIC_COLOR_PRIVATE_H__ */

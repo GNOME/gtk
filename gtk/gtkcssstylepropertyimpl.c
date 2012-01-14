@@ -39,6 +39,7 @@
 #include "gtkcssimageprivate.h"
 #include "gtkgradient.h"
 #include "gtkshadowprivate.h"
+#include "gtksymboliccolorprivate.h"
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
 #include "gtkwin32themeprivate.h"
@@ -56,43 +57,45 @@ color_compute (GtkCssStyleProperty    *property,
   /* for when resolvage fails */
 restart:
 
-  if (G_VALUE_HOLDS (specified, GTK_TYPE_CSS_SPECIAL_VALUE))
+  if (G_VALUE_HOLDS (specified, GTK_TYPE_SYMBOLIC_COLOR))
     {
-      g_assert (g_value_get_enum (specified) == GTK_CSS_CURRENT_COLOR);
-
-      /* The computed value of the ‘currentColor’ keyword is the computed
-       * value of the ‘color’ property. If the ‘currentColor’ keyword is
-       * set on the ‘color’ property itself, it is treated as ‘color: inherit’. 
-       */
-      if (g_str_equal (_gtk_style_property_get_name (GTK_STYLE_PROPERTY (property)), "color"))
-        {
-          GtkStyleContext *parent = gtk_style_context_get_parent (context);
-
-          if (parent)
-            g_value_copy (_gtk_style_context_peek_property (parent, "color"), computed);
-          else
-            _gtk_css_style_compute_value (computed,
-                                          context,
-                                          _gtk_css_style_property_get_initial_value (property));
-        }
-      else
-        {
-          g_value_copy (_gtk_style_context_peek_property (context, "color"), computed);
-        }
-    }
-  else if (G_VALUE_HOLDS (specified, GTK_TYPE_SYMBOLIC_COLOR))
-    {
+      GtkSymbolicColor *symbolic = g_value_get_boxed (specified);
       GdkRGBA rgba;
 
-      if (!_gtk_style_context_resolve_color (context,
-                                             g_value_get_boxed (specified),
-                                             &rgba))
+      if (symbolic == _gtk_symbolic_color_get_current_color ())
+        {
+          /* The computed value of the ‘currentColor’ keyword is the computed
+           * value of the ‘color’ property. If the ‘currentColor’ keyword is
+           * set on the ‘color’ property itself, it is treated as ‘color: inherit’. 
+           */
+          if (g_str_equal (_gtk_style_property_get_name (GTK_STYLE_PROPERTY (property)), "color"))
+            {
+              GtkStyleContext *parent = gtk_style_context_get_parent (context);
+
+              if (parent)
+                g_value_copy (_gtk_style_context_peek_property (parent, "color"), computed);
+              else
+                _gtk_css_style_compute_value (computed,
+                                              context,
+                                              _gtk_css_style_property_get_initial_value (property));
+            }
+          else
+            {
+              g_value_copy (_gtk_style_context_peek_property (context, "color"), computed);
+            }
+        }
+      else if (_gtk_style_context_resolve_color (context,
+                                                 symbolic,
+                                                 &rgba))
+        {
+          g_value_set_boxed (computed, &rgba);
+        }
+      else
         {
           specified = _gtk_css_style_property_get_initial_value (property);
           goto restart;
         }
 
-      g_value_set_boxed (computed, &rgba);
     }
   else
     g_value_copy (specified, computed);
@@ -819,8 +822,8 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           GTK_CSS_AREA_PADDING_BOX);
 
-  g_value_init (&value, GTK_TYPE_CSS_SPECIAL_VALUE);
-  g_value_set_enum (&value, GTK_CSS_CURRENT_COLOR);
+  g_value_init (&value, GTK_TYPE_SYMBOLIC_COLOR);
+  g_value_set_boxed (&value, _gtk_symbolic_color_get_current_color ());
   _gtk_style_property_register           ("border-top-color",
                                           GDK_TYPE_RGBA,
                                           0,

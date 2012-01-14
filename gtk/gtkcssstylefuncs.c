@@ -37,6 +37,7 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkshadowprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtksymboliccolorprivate.h"
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
 #include "gtkwin32themeprivate.h"
@@ -173,15 +174,14 @@ rgba_value_parse (GtkCssParser *parser,
 
   if (_gtk_css_parser_try (parser, "currentcolor", TRUE))
     {
-      g_value_unset (value);
-      g_value_init (value, GTK_TYPE_CSS_SPECIAL_VALUE);
-      g_value_set_enum (value, GTK_CSS_CURRENT_COLOR);
-      return TRUE;
+      symbolic = gtk_symbolic_color_ref (_gtk_symbolic_color_get_current_color ());
     }
-
-  symbolic = _gtk_css_parser_read_symbolic_color (parser);
-  if (symbolic == NULL)
-    return FALSE;
+  else
+    {
+      symbolic = _gtk_css_parser_read_symbolic_color (parser);
+      if (symbolic == NULL)
+        return FALSE;
+    }
 
   if (gtk_symbolic_color_resolve (symbolic, NULL, &rgba))
     {
@@ -223,14 +223,16 @@ rgba_value_compute (GValue          *computed,
 
   if (G_VALUE_HOLDS (specified, GTK_TYPE_CSS_SPECIAL_VALUE))
     {
-      g_assert (g_value_get_enum (specified) == GTK_CSS_CURRENT_COLOR);
-      g_value_copy (_gtk_style_context_peek_property (context, "color"), computed);
     }
   else if (G_VALUE_HOLDS (specified, GTK_TYPE_SYMBOLIC_COLOR))
     {
-      if (_gtk_style_context_resolve_color (context,
-                                            g_value_get_boxed (specified),
-                                            &rgba))
+      GtkSymbolicColor *symbolic = g_value_get_boxed (specified);
+      
+      if (symbolic == _gtk_symbolic_color_get_current_color ())
+        g_value_copy (_gtk_style_context_peek_property (context, "color"), computed);
+      else if (_gtk_style_context_resolve_color (context,
+                                                 symbolic,
+                                                 &rgba))
         g_value_set_boxed (computed, &rgba);
       else
         g_value_set_boxed (computed, &white);

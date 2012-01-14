@@ -30,6 +30,7 @@
 #include "gtkcsstypesprivate.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertiesprivate.h"
+#include "gtksymboliccolorprivate.h"
 #include "gtktypebuiltins.h"
 
 /* this is in case round() is not provided by the compiler, 
@@ -161,18 +162,17 @@ parse_border_color (GtkCssShorthandProperty *shorthand,
     {
       if (_gtk_css_parser_try (parser, "currentcolor", TRUE))
         {
-          g_value_init (&values[i], GTK_TYPE_CSS_SPECIAL_VALUE);
-          g_value_set_enum (&values[i], GTK_CSS_CURRENT_COLOR);
+          symbolic = gtk_symbolic_color_ref (_gtk_symbolic_color_get_current_color ());
         }
       else
         {
           symbolic = _gtk_css_parser_read_symbolic_color (parser);
           if (symbolic == NULL)
             return FALSE;
-
-          g_value_init (&values[i], GTK_TYPE_SYMBOLIC_COLOR);
-          g_value_set_boxed (&values[i], symbolic);
         }
+
+      g_value_init (&values[i], GTK_TYPE_SYMBOLIC_COLOR);
+      g_value_set_boxed (&values[i], symbolic);
 
       if (value_is_done_parsing (parser))
         break;

@@ -52,7 +52,8 @@ typedef enum {
   COLOR_TYPE_SHADE,
   COLOR_TYPE_ALPHA,
   COLOR_TYPE_MIX,
-  COLOR_TYPE_WIN32
+  COLOR_TYPE_WIN32,
+  COLOR_TYPE_CURRENT_COLOR
 } ColorType;
 
 struct _GtkSymbolicColor
@@ -265,6 +266,30 @@ gtk_symbolic_color_new_win32 (const gchar *theme_class,
   symbolic_color->ref_count = 1;
 
   return symbolic_color;
+}
+
+/**
+ * _gtk_symbolic_color_get_current_color:
+ *
+ * Gets the color representing the CSS 'currentColor' keyword.
+ * This color will resolve to the color set for the color property.
+ *
+ * Returns: (transfer none): The singleton representing the
+ *     'currentColor' keyword
+ **/
+GtkSymbolicColor *
+_gtk_symbolic_color_get_current_color (void)
+{
+  static GtkSymbolicColor *current_color = NULL;
+
+  if (G_UNLIKELY (current_color == NULL))
+    {
+      current_color = g_slice_new0 (GtkSymbolicColor);
+      current_color->type = COLOR_TYPE_CURRENT_COLOR;
+      current_color->ref_count = 1;
+    }
+
+  return current_color;
 }
 
 /**
@@ -629,6 +654,9 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
 					     resolved_color);
 
       break;
+    case COLOR_TYPE_CURRENT_COLOR:
+      return FALSE;
+      break;
     default:
       g_assert_not_reached ();
     }
@@ -700,6 +728,9 @@ gtk_symbolic_color_to_string (GtkSymbolicColor *color)
         s = g_strdup_printf (GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME"(%s, %d)", 
 			     color->win32.theme_class, color->win32.id);
       }
+      break;
+    case COLOR_TYPE_CURRENT_COLOR:
+      s = g_strdup ("currentColor");
       break;
     default:
       g_assert_not_reached ();
