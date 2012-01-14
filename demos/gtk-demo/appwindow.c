@@ -1,6 +1,8 @@
-/* Application main window
+/* Application window
  *
  * Demonstrates a typical application window with menubar, toolbar, statusbar.
+ *
+ * This example uses GtkUIManager and GtkActionGroup.
  */
 
 #include <gtk/gtk.h>

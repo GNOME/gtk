@@ -782,7 +782,7 @@ create_tree (void)
   GtkTreeIter iter;
   GtkWidget *box, *label, *scrolled_window;
 
-  Demo *d = testgtk_demos;
+  Demo *d = gtk_demos;
 
   model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_INT);
   tree_view = gtk_tree_view_new ();
@@ -936,10 +936,8 @@ main (int argc, char **argv)
    * these few lines, which are just a hack so gtk-demo will work
    * in the GTK tree without installing it.
    */
-  if (g_file_test ("../../gdk-pixbuf/libpixbufloader-pnm.la",
-                   G_FILE_TEST_EXISTS))
+  if (g_file_test ("../../modules/input/immodules.cache", G_FILE_TEST_EXISTS))
     {
-      g_setenv ("GDK_PIXBUF_MODULE_FILE", "../../gdk-pixbuf/loaders.cache", TRUE);
       g_setenv ("GTK_IM_MODULE_FILE", "../../modules/input/immodules.cache", TRUE);
     }
   /* -- End of hack -- */
@@ -1002,7 +1000,7 @@ main (int argc, char **argv)
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
   gtk_widget_show_all (window);
 
-  load_file (testgtk_demos[0].filename);
+  load_file (gtk_demos[0].filename);
 
   gtk_main ();
 

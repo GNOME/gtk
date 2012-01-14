@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/logos">
+    <file>gtk-logo-24.png</file>
+    <file>gtk-logo-48.png</file>
+  </gresource>
+  <gresource prefix="/ui">
+    <file>application.ui</file>
+  </gresource>
+</gresources>
