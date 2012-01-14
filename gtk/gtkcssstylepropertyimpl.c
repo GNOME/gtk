@@ -47,58 +47,6 @@
 /*** REGISTRATION ***/
 
 static void
-color_compute (GtkCssStyleProperty    *property,
-               GValue                 *computed,
-               GtkStyleContext        *context,
-               const GValue           *specified)
-{
-  if (G_VALUE_HOLDS (specified, GTK_TYPE_SYMBOLIC_COLOR))
-    {
-      GtkSymbolicColor *symbolic = g_value_get_boxed (specified);
-      GdkRGBA rgba;
-
-      if (symbolic == _gtk_symbolic_color_get_current_color ())
-        {
-          /* The computed value of the ‘currentColor’ keyword is the computed
-           * value of the ‘color’ property. If the ‘currentColor’ keyword is
-           * set on the ‘color’ property itself, it is treated as ‘color: inherit’. 
-           */
-          if (g_str_equal (_gtk_style_property_get_name (GTK_STYLE_PROPERTY (property)), "color"))
-            {
-              GtkStyleContext *parent = gtk_style_context_get_parent (context);
-
-              if (parent)
-                g_value_copy (_gtk_style_context_peek_property (parent, "color"), computed);
-              else
-                _gtk_css_style_compute_value (computed,
-                                              context,
-                                              _gtk_css_style_property_get_initial_value (property));
-            }
-          else
-            {
-              g_value_copy (_gtk_style_context_peek_property (context, "color"), computed);
-            }
-        }
-      else if (_gtk_style_context_resolve_color (context,
-                                                 symbolic,
-                                                 &rgba))
-        {
-          g_value_set_boxed (computed, &rgba);
-        }
-      else
-        {
-          color_compute (property,
-                         computed,
-                         context,
-                         _gtk_css_style_property_get_initial_value (property));
-        }
-
-    }
-  else
-    g_value_copy (specified, computed);
-}
-
-static void
 _gtk_style_property_register (const char *                   name,
                               GType                          computed_type,
                               GType                          value_type,
@@ -215,6 +163,52 @@ string_append_string (GString    *str,
 }
 
 /*** IMPLEMENTATIONS ***/
+
+static void
+color_compute (GtkCssStyleProperty    *property,
+               GValue                 *computed,
+               GtkStyleContext        *context,
+               const GValue           *specified)
+{
+  GtkSymbolicColor *symbolic = g_value_get_boxed (specified);
+  GdkRGBA rgba;
+
+  if (symbolic == _gtk_symbolic_color_get_current_color ())
+    {
+      /* The computed value of the ‘currentColor’ keyword is the computed
+       * value of the ‘color’ property. If the ‘currentColor’ keyword is
+       * set on the ‘color’ property itself, it is treated as ‘color: inherit’. 
+       */
+      if (g_str_equal (_gtk_style_property_get_name (GTK_STYLE_PROPERTY (property)), "color"))
+        {
+          GtkStyleContext *parent = gtk_style_context_get_parent (context);
+
+          if (parent)
+            g_value_copy (_gtk_style_context_peek_property (parent, "color"), computed);
+          else
+            _gtk_css_style_compute_value (computed,
+                                          context,
+                                          _gtk_css_style_property_get_initial_value (property));
+        }
+      else
+        {
+          g_value_copy (_gtk_style_context_peek_property (context, "color"), computed);
+        }
+    }
+  else if (_gtk_style_context_resolve_color (context,
+                                             symbolic,
+                                             &rgba))
+    {
+      g_value_set_boxed (computed, &rgba);
+    }
+  else
+    {
+      color_compute (property,
+                     computed,
+                     context,
+                     _gtk_css_style_property_get_initial_value (property));
+    }
+}
 
 static gboolean
 font_family_parse (GtkCssStyleProperty *property,
