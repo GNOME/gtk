@@ -91,11 +91,9 @@ struct _GtkCssBorderImageRepeat {
 };
 
 #define GTK_TYPE_CSS_BORDER_CORNER_RADIUS _gtk_css_border_corner_radius_get_type ()
-#define GTK_TYPE_CSS_BORDER_RADIUS _gtk_css_border_radius_get_type ()
 #define GTK_TYPE_CSS_BORDER_IMAGE_REPEAT _gtk_css_border_image_repeat_get_type ()
 
 GType           _gtk_css_border_corner_radius_get_type          (void);
-GType           _gtk_css_border_radius_get_type                 (void);
 GType           _gtk_css_border_image_repeat_get_type           (void);
 
 G_END_DECLS
