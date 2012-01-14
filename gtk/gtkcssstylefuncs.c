@@ -321,9 +321,16 @@ symbolic_color_value_parse (GtkCssParser *parser,
 {
   GtkSymbolicColor *symbolic;
 
-  symbolic = _gtk_css_parser_read_symbolic_color (parser);
-  if (symbolic == NULL)
-    return FALSE;
+  if (_gtk_css_parser_try (parser, "currentcolor", TRUE))
+    {
+      symbolic = gtk_symbolic_color_ref (_gtk_symbolic_color_get_current_color ());
+    }
+  else
+    {
+      symbolic = _gtk_css_parser_read_symbolic_color (parser);
+      if (symbolic == NULL)
+        return FALSE;
+    }
 
   g_value_take_boxed (value, symbolic);
   return TRUE;
