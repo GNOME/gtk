@@ -38,13 +38,13 @@ gtk_css_custom_property_parse_value (GtkStyleProperty *property,
   GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (property);
   gboolean success;
 
-  g_value_init (value, _gtk_style_property_get_value_type (property));
-
   if (custom->property_parse_func)
     {
       GError *error = NULL;
       char *value_str;
       
+      g_value_init (value, _gtk_style_property_get_value_type (property));
+
       value_str = _gtk_css_parser_read_value (parser);
       if (value_str != NULL)
         {
@@ -55,7 +55,12 @@ gtk_css_custom_property_parse_value (GtkStyleProperty *property,
         success = FALSE;
     }
   else
-    success = _gtk_css_style_parse_value (value, parser, base);
+    {
+      GtkCssStyleProperty *style = GTK_CSS_STYLE_PROPERTY (property);
+      g_value_init (value, _gtk_css_style_property_get_specified_type (style));
+
+      success = _gtk_css_style_parse_value (value, parser, base);
+    }
 
   if (!success)
     g_value_unset (value);
