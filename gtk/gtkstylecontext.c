@@ -2372,6 +2372,22 @@ _gtk_style_context_peek_property (GtkStyleContext *context,
   return _gtk_css_computed_values_get_value_by_name (data->store, property_name);
 }
 
+double
+_gtk_style_context_get_number (GtkStyleContext *context,
+                               const char      *property_name,
+                               double           one_hundred_percent)
+{
+  const GValue *value;
+  const GtkCssNumber *number;
+  
+  value = _gtk_style_context_peek_property (context, property_name);
+  number = g_value_get_boxed (value);
+  if (number->unit == GTK_CSS_PERCENT)
+    return number->value * one_hundred_percent * 0.01;
+  else
+    return number->value;
+}
+
 const GValue *
 _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                         GType            widget_type,

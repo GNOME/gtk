@@ -27,6 +27,9 @@ G_BEGIN_DECLS
 
 const GValue * _gtk_style_context_peek_property              (GtkStyleContext *context,
                                                               const char      *property_name);
+double         _gtk_style_context_get_number                 (GtkStyleContext *context,
+                                                              const char      *property_name,
+                                                              double           one_hundred_percent);
 const GValue * _gtk_style_context_peek_style_property        (GtkStyleContext *context,
                                                               GType            widget_type,
                                                               GtkStateFlags    state,
