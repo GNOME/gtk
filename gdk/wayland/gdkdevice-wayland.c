@@ -68,6 +68,9 @@ struct _GdkWaylandDevice
   uint32_t time;
   GdkWindow *pointer_grab_window;
   uint32_t pointer_grab_time;
+  guint32 repeat_timer;
+  guint32 repeat_key;
+  guint32 repeat_count;
 
   DataOffer *drag_offer;
   DataOffer *selection_offer;
@@ -468,11 +471,13 @@ translate_keyboard_string (GdkEventKey *event)
     }
 }
 
-static void
-input_handle_key(void *data, struct wl_input_device *input_device,
-		 uint32_t time, uint32_t key, uint32_t state)
+static gboolean
+keyboard_repeat (gpointer data);
+
+static gboolean
+deliver_key_event(GdkWaylandDevice *device,
+		  uint32_t time, uint32_t key, uint32_t state)
 {
-  GdkWaylandDevice *device = data;
   GdkEvent *event;
   uint32_t code, modifier, level;
   struct xkb_desc *xkb;
@@ -515,6 +520,60 @@ input_handle_key(void *data, struct wl_input_device *input_device,
 		       "string %s, mods 0x%x",
 		       code, event->key.keyval,
 		       event->key.string, event->key.state));
+
+  device->repeat_count++;
+  device->repeat_key = key;
+
+  if (state == 0)
+    {
+      if (device->repeat_timer)
+	{
+	  g_source_remove (device->repeat_timer);
+	  device->repeat_timer = 0;
+	}
+      return FALSE;
+    }
+  else if (modifier)
+    {
+      return FALSE;
+    }
+  else switch (device->repeat_count)
+    {
+    case 1:
+      if (device->repeat_timer)
+	{
+	  g_source_remove (device->repeat_timer);
+	  device->repeat_timer = 0;
+	}
+
+      device->repeat_timer =
+	gdk_threads_add_timeout (400, keyboard_repeat, device);
+      return TRUE;
+    case 2:
+      device->repeat_timer =
+	gdk_threads_add_timeout (80, keyboard_repeat, device);
+      return FALSE;
+    default:
+      return TRUE;
+    }
+}
+
+static gboolean
+keyboard_repeat (gpointer data)
+{
+  GdkWaylandDevice *device = data;
+
+  return deliver_key_event (device, device->time, device->repeat_key, 1);
+}
+
+static void
+input_handle_key(void *data, struct wl_input_device *input_device,
+		 uint32_t time, uint32_t key, uint32_t state)
+{
+  GdkWaylandDevice *device = data;
+
+  device->repeat_count = 0;
+  deliver_key_event (data, time, key, state);
 }
 
 static void
