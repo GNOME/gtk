@@ -1629,7 +1629,7 @@ modify_allocation_for_window_grip (GtkWidget     *widget,
     }
 
   /* If the stepper button intersects the window resize grip.. */
-  if (gdk_rectangle_intersect (&grip_rect, &translated_rect, NULL))
+  if (gdk_rectangle_intersect (&grip_rect, &translated_rect, &grip_rect))
     {
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
