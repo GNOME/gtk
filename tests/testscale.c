@@ -115,6 +115,7 @@ int main (int argc, char *argv[])
   scales = g_slist_prepend (scales, scale);
   gtk_scale_set_draw_value (GTK_SCALE (scale), FALSE);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[0], GTK_POS_BOTTOM, NULL);
+  gtk_scale_add_mark (GTK_SCALE (scale), 25.0, GTK_POS_BOTTOM, NULL);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[1], GTK_POS_BOTTOM, NULL);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[2], GTK_POS_BOTTOM, NULL);
   gtk_container_add (GTK_CONTAINER (frame), scale);
