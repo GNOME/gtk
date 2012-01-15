@@ -94,13 +94,33 @@ _gtk_rounded_box_apply_border_radius (GtkRoundedBox    *box,
                           NULL);
 
   if (corner[GTK_CSS_TOP_LEFT] && (junction & GTK_JUNCTION_CORNER_TOPLEFT) == 0)
-    box->corner[GTK_CSS_TOP_LEFT] = *corner[GTK_CSS_TOP_LEFT];
+    {
+      box->corner[GTK_CSS_TOP_LEFT].horizontal = _gtk_css_number_get (&corner[GTK_CSS_TOP_LEFT]->horizontal,
+                                                                      box->box.width);
+      box->corner[GTK_CSS_TOP_LEFT].vertical = _gtk_css_number_get (&corner[GTK_CSS_TOP_LEFT]->vertical,
+                                                                    box->box.height);
+    }
   if (corner[GTK_CSS_TOP_RIGHT] && (junction & GTK_JUNCTION_CORNER_TOPRIGHT) == 0)
-    box->corner[GTK_CSS_TOP_RIGHT] = *corner[GTK_CSS_TOP_RIGHT];
+    {
+      box->corner[GTK_CSS_TOP_RIGHT].horizontal = _gtk_css_number_get (&corner[GTK_CSS_TOP_RIGHT]->horizontal,
+                                                                       box->box.width);
+      box->corner[GTK_CSS_TOP_RIGHT].vertical = _gtk_css_number_get (&corner[GTK_CSS_TOP_RIGHT]->vertical,
+                                                                     box->box.height);
+    }
   if (corner[GTK_CSS_BOTTOM_RIGHT] && (junction & GTK_JUNCTION_CORNER_BOTTOMRIGHT) == 0)
-    box->corner[GTK_CSS_BOTTOM_RIGHT] = *corner[GTK_CSS_BOTTOM_RIGHT];
+    {
+      box->corner[GTK_CSS_BOTTOM_RIGHT].horizontal = _gtk_css_number_get (&corner[GTK_CSS_BOTTOM_RIGHT]->horizontal,
+                                                                          box->box.width);
+      box->corner[GTK_CSS_BOTTOM_RIGHT].vertical = _gtk_css_number_get (&corner[GTK_CSS_BOTTOM_RIGHT]->vertical,
+                                                                        box->box.height);
+    }
   if (corner[GTK_CSS_BOTTOM_LEFT] && (junction & GTK_JUNCTION_CORNER_BOTTOMLEFT) == 0)
-    box->corner[GTK_CSS_BOTTOM_LEFT] = *corner[GTK_CSS_BOTTOM_LEFT];
+    {
+      box->corner[GTK_CSS_BOTTOM_LEFT].horizontal = _gtk_css_number_get (&corner[GTK_CSS_BOTTOM_LEFT]->horizontal,
+                                                                         box->box.width);
+      box->corner[GTK_CSS_BOTTOM_LEFT].vertical = _gtk_css_number_get (&corner[GTK_CSS_BOTTOM_LEFT]->vertical,
+                                                                       box->box.height);
+    }
 
   gtk_rounded_box_clamp_border_radius (box);
 
@@ -109,9 +129,9 @@ _gtk_rounded_box_apply_border_radius (GtkRoundedBox    *box,
 }
 
 static void
-gtk_css_border_radius_grow (GtkCssBorderCornerRadius *corner,
-                            double                    horizontal,
-                            double                    vertical)
+gtk_css_border_radius_grow (GtkRoundedBoxCorner *corner,
+                            double               horizontal,
+                            double               vertical)
 {
   corner->horizontal += horizontal;
   corner->vertical += vertical;

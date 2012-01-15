@@ -45,6 +45,24 @@ _gtk_css_number_init (GtkCssNumber *number,
   number->unit = unit;
 }
 
+gboolean
+_gtk_css_number_equal (const GtkCssNumber *one,
+                       const GtkCssNumber *two)
+{
+  return one->unit == two->unit &&
+         one->value == two->value;
+}
+
+double
+_gtk_css_number_get (const GtkCssNumber *number,
+                     double              one_hundred_percent)
+{
+  if (number->unit == GTK_CSS_PERCENT)
+    return number->value * one_hundred_percent * 0.01;
+  else
+    return number->value;
+}
+
 void
 _gtk_css_number_compute (GtkCssNumber       *dest,
                          const GtkCssNumber *src,

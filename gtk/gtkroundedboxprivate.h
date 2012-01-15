@@ -30,11 +30,17 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkRoundedBox GtkRoundedBox;
+typedef struct _GtkRoundedBoxCorner GtkRoundedBoxCorner;
+
+struct _GtkRoundedBoxCorner {
+  double                   horizontal;
+  double                   vertical;
+};
 
 struct _GtkRoundedBox {
   /*< private >*/
   cairo_rectangle_t        box;
-  GtkCssBorderCornerRadius corner[4];
+  GtkRoundedBoxCorner      corner[4];
 };
 
 void            _gtk_rounded_box_init_rect                      (GtkRoundedBox       *box,

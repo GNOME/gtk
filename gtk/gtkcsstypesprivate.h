@@ -104,8 +104,8 @@ struct _GtkCssNumber {
 };
 
 struct _GtkCssBorderCornerRadius {
-  double horizontal;
-  double vertical;
+  GtkCssNumber horizontal;
+  GtkCssNumber vertical;
 };
 
 struct _GtkCssBorderImageRepeat {
@@ -125,6 +125,10 @@ GType           _gtk_css_number_get_type                        (void);
 void            _gtk_css_number_init                            (GtkCssNumber       *number,
                                                                  double              value,
                                                                  GtkCssUnit          unit);
+gboolean        _gtk_css_number_equal                           (const GtkCssNumber *one,
+                                                                 const GtkCssNumber *two);
+double          _gtk_css_number_get                             (const GtkCssNumber *number,
+                                                                 double              one_hundred_percent);
 void            _gtk_css_number_compute                         (GtkCssNumber       *dest,
                                                                  const GtkCssNumber *src,
                                                                  GtkStyleContext    *context);

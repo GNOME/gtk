@@ -2223,10 +2223,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       hc = border_width;
 
-      if (xy0_gap < top_left_radius->horizontal)
+      if (xy0_gap < _gtk_css_number_get (&top_left_radius->horizontal, width))
         junction |= GTK_JUNCTION_CORNER_TOPLEFT;
 
-      if (xy1_gap > width - top_right_radius->horizontal)
+      if (xy1_gap > width - _gtk_css_number_get (&top_right_radius->horizontal, width))
         junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
       break;
     case GTK_POS_BOTTOM:
@@ -2235,10 +2235,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       hc = border_width;
 
-      if (xy0_gap < bottom_left_radius->horizontal)
+      if (xy0_gap < _gtk_css_number_get (&bottom_left_radius->horizontal, width))
         junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
 
-      if (xy1_gap > width - bottom_right_radius->horizontal)
+      if (xy1_gap > width - _gtk_css_number_get (&bottom_right_radius->horizontal, width))
         junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
 
       break;
@@ -2248,10 +2248,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
 
-      if (xy0_gap < top_left_radius->vertical)
+      if (xy0_gap < _gtk_css_number_get (&top_left_radius->vertical, height))
         junction |= GTK_JUNCTION_CORNER_TOPLEFT;
 
-      if (xy1_gap > height - bottom_left_radius->vertical)
+      if (xy1_gap > height - _gtk_css_number_get (&bottom_left_radius->vertical, height))
         junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
 
       break;
@@ -2261,10 +2261,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
 
-      if (xy0_gap < top_right_radius->vertical)
+      if (xy0_gap < _gtk_css_number_get (&top_right_radius->vertical, height))
         junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
 
-      if (xy1_gap > height - bottom_right_radius->vertical)
+      if (xy1_gap > height - _gtk_css_number_get (&bottom_right_radius->vertical, height))
         junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
 
       break;

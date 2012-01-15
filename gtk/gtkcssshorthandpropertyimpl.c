@@ -133,13 +133,15 @@ parse_border_radius (GtkCssShorthandProperty *shorthand,
 
   for (i = 0; i < G_N_ELEMENTS (borders); i++)
     {
-      if (!_gtk_css_parser_try_double (parser, &borders[i].horizontal))
+      if (!_gtk_css_parser_has_number (parser))
         break;
-      if (borders[i].horizontal < 0)
-        {
-          _gtk_css_parser_error (parser, "Border radius values cannot be negative");
-          return FALSE;
-        }
+      if (!_gtk_css_parser_read_number (parser,
+                                        &borders[i].horizontal,
+                                        GTK_CSS_POSITIVE_ONLY
+                                        | GTK_CSS_PARSE_PERCENT
+                                        | GTK_CSS_NUMBER_AS_PIXELS
+                                        | GTK_CSS_PARSE_LENGTH))
+        return FALSE;
     }
 
   if (i == 0)
@@ -157,13 +159,15 @@ parse_border_radius (GtkCssShorthandProperty *shorthand,
     {
       for (i = 0; i < G_N_ELEMENTS (borders); i++)
         {
-          if (!_gtk_css_parser_try_double (parser, &borders[i].vertical))
+          if (!_gtk_css_parser_has_number (parser))
             break;
-          if (borders[i].vertical < 0)
-            {
-              _gtk_css_parser_error (parser, "Border radius values cannot be negative");
-              return FALSE;
-            }
+          if (!_gtk_css_parser_read_number (parser,
+                                            &borders[i].vertical,
+                                            GTK_CSS_POSITIVE_ONLY
+                                            | GTK_CSS_PARSE_PERCENT
+                                            | GTK_CSS_NUMBER_AS_PIXELS
+                                            | GTK_CSS_PARSE_LENGTH))
+            return FALSE;
         }
 
       if (i == 0)
@@ -638,7 +642,8 @@ unpack_border_radius (GtkCssShorthandProperty *shorthand,
   GValue v = G_VALUE_INIT;
   guint i;
   
-  border.horizontal = border.vertical = g_value_get_int (value);
+  _gtk_css_number_init (&border.horizontal, g_value_get_int (value), GTK_CSS_PX);
+  border.vertical = border.horizontal;
   g_value_init (&v, GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
   g_value_set_boxed (&v, &border);
 
@@ -664,7 +669,7 @@ pack_border_radius (GtkCssShorthandProperty *shorthand,
     {
       top_left = g_value_get_boxed (v);
       if (top_left)
-        g_value_set_int (value, top_left->horizontal);
+        g_value_set_int (value, top_left->horizontal.value);
     }
 }
 

@@ -101,16 +101,6 @@ gtk_css_style_property_register (const char *                   name,
 /*** HELPERS ***/
 
 static void
-string_append_double (GString *string,
-                      double   d)
-{
-  char buf[G_ASCII_DTOSTR_BUF_SIZE];
-
-  g_ascii_dtostr (buf, sizeof (buf), d);
-  g_string_append (string, buf);
-}
-
-static void
 string_append_string (GString    *str,
                       const char *string)
 {
@@ -333,25 +323,26 @@ border_corner_radius_value_parse (GtkCssStyleProperty *property,
 {
   GtkCssBorderCornerRadius corner;
 
-  if (!_gtk_css_parser_try_double (parser, &corner.horizontal))
-    {
-      _gtk_css_parser_error (parser, "Expected a number");
-      return FALSE;
-    }
-  else if (corner.horizontal < 0)
-    goto negative;
+  if (!_gtk_css_parser_read_number (parser,
+                                    &corner.horizontal,
+                                    GTK_CSS_POSITIVE_ONLY
+                                    | GTK_CSS_PARSE_PERCENT
+                                    | GTK_CSS_NUMBER_AS_PIXELS
+                                    | GTK_CSS_PARSE_LENGTH))
+    return FALSE;
 
-  if (!_gtk_css_parser_try_double (parser, &corner.vertical))
+  if (!_gtk_css_parser_has_number (parser))
     corner.vertical = corner.horizontal;
-  else if (corner.vertical < 0)
-    goto negative;
+  else if (!_gtk_css_parser_read_number (parser,
+                                         &corner.vertical,
+                                         GTK_CSS_POSITIVE_ONLY
+                                         | GTK_CSS_PARSE_PERCENT
+                                         | GTK_CSS_NUMBER_AS_PIXELS
+                                         | GTK_CSS_PARSE_LENGTH))
+    return FALSE;
 
   g_value_set_boxed (value, &corner);
   return TRUE;
-
-negative:
-  _gtk_css_parser_error (parser, "Border radius values cannot be negative");
-  return FALSE;
 }
 
 static void
@@ -363,17 +354,12 @@ border_corner_radius_value_print (GtkCssStyleProperty *property,
 
   corner = g_value_get_boxed (value);
 
-  if (corner == NULL)
-    {
-      g_string_append (string, "none");
-      return;
-    }
+  _gtk_css_number_print (&corner->horizontal, string);
 
-  string_append_double (string, corner->horizontal);
-  if (corner->horizontal != corner->vertical)
+  if (!_gtk_css_number_equal (&corner->horizontal, &corner->vertical))
     {
       g_string_append_c (string, ' ');
-      string_append_double (string, corner->vertical);
+      _gtk_css_number_print (&corner->vertical, string);
     }
 }
 
@@ -558,7 +544,7 @@ _gtk_css_style_property_init_properties (void)
   char *default_font_family[] = { "Sans", NULL };
   GtkCssNumber number;
   GtkSymbolicColor *symbolic;
-  GtkCssBorderCornerRadius no_corner_radius = { 0, };
+  GtkCssBorderCornerRadius no_corner_radius = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX) };
   GtkBorder border_of_ones = { 1, 1, 1, 1 };
   GtkCssBorderImageRepeat border_image_repeat = { GTK_CSS_REPEAT_STYLE_STRETCH, GTK_CSS_REPEAT_STYLE_STRETCH };
 

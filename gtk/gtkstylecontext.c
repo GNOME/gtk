@@ -2378,14 +2378,9 @@ _gtk_style_context_get_number (GtkStyleContext *context,
                                double           one_hundred_percent)
 {
   const GValue *value;
-  const GtkCssNumber *number;
   
   value = _gtk_style_context_peek_property (context, property_name);
-  number = g_value_get_boxed (value);
-  if (number->unit == GTK_CSS_PERCENT)
-    return number->value * one_hundred_percent * 0.01;
-  else
-    return number->value;
+  return _gtk_css_number_get (g_value_get_boxed (value), one_hundred_percent);
 }
 
 const GValue *
