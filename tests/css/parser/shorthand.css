@@ -1,5 +1,5 @@
 /* need to use an existing shorthand, the public API doesn't
  * allow custom ones */
 a {
-  border-width: 1 2 3;
+  border-width: 1pc 2pt 3em;
 }
