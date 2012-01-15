@@ -1790,7 +1790,12 @@ parse_import (GtkCssScanner *scanner)
       return TRUE;
     }
 
-  if (gtk_css_scanner_would_recurse (scanner, file))
+  if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
+    {
+      gtk_css_provider_invalid_token (scanner->provider, scanner, "semicolon");
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+    }
+  else if (gtk_css_scanner_would_recurse (scanner, file))
     {
        char *path = g_file_get_path (file);
        gtk_css_provider_error (scanner->provider,
@@ -1808,12 +1813,6 @@ parse_import (GtkCssScanner *scanner)
                                       file,
                                       NULL,
                                       NULL);
-    }
-
-  if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
-    {
-      gtk_css_provider_invalid_token (scanner->provider, scanner, "semicolon");
-      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
     }
 
   g_object_unref (file);
