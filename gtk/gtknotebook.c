@@ -4958,10 +4958,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   gtk_widget_unparent (page->child);
 
   tab_label = page->tab_label;
-  /* Do not unparent the tab label if it's already in another
-     hierarchy. It means we are in the middle of a DnD and it's
-     already taken care of. */
-  if (tab_label && NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page))
+  if (tab_label)
     {
       g_object_ref (tab_label);
       gtk_notebook_remove_tab_label (notebook, page);
