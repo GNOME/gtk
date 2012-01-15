@@ -1212,6 +1212,9 @@ gtk_css_ruleset_add (GtkCssRuleset    *ruleset,
     }
   else if (GTK_IS_CSS_STYLE_PROPERTY (prop))
     {
+      g_return_if_fail (_gtk_css_style_property_is_specified_type (GTK_CSS_STYLE_PROPERTY (prop),
+                                                                   G_VALUE_TYPE (&value->value)));
+
       _gtk_bitmask_set (ruleset->set_styles,
                         _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)),
                         TRUE);

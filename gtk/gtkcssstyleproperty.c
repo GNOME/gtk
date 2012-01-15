@@ -28,6 +28,7 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertiesprivate.h"
 
+#include <cairo-gobject.h>
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssimageprivate.h"
 
@@ -439,6 +440,28 @@ _gtk_css_style_property_get_specified_type (GtkCssStyleProperty *property)
   g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), G_TYPE_NONE);
 
   return G_VALUE_TYPE (&property->initial_value);
+}
+
+gboolean
+_gtk_css_style_property_is_specified_type (GtkCssStyleProperty *property,
+                                           GType                type)
+{
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
+
+  /* If it's our specified type, of course it's valid */
+  if (type == G_VALUE_TYPE (&property->initial_value))
+    return TRUE;
+
+  /* The special values 'inherit' and 'initial' are always valid */
+  if (type == GTK_TYPE_CSS_SPECIAL_VALUE)
+    return TRUE;
+
+  /* XXX: Someone needs to fix that legacy */
+  if (G_VALUE_TYPE (&property->initial_value) == CAIRO_GOBJECT_TYPE_PATTERN &&
+      type == GTK_TYPE_GRADIENT)
+    return TRUE;
+
+  return FALSE;
 }
 
 /**
