@@ -546,14 +546,18 @@ _gtk_css_parser_read_number (GtkCssParser           *parser,
     GtkCssUnit unit;
     GtkCssNumberParseFlags required_flags;
   } units[] = {
-    { "px", GTK_CSS_PX,      GTK_CSS_PARSE_LENGTH },
-    { "pt", GTK_CSS_PT,      GTK_CSS_PARSE_LENGTH },
-    { "em", GTK_CSS_EM,      GTK_CSS_PARSE_LENGTH },
-    { "ex", GTK_CSS_EX,      GTK_CSS_PARSE_LENGTH },
-    { "pc", GTK_CSS_PC,      GTK_CSS_PARSE_LENGTH },
-    { "in", GTK_CSS_IN,      GTK_CSS_PARSE_LENGTH },
-    { "cm", GTK_CSS_CM,      GTK_CSS_PARSE_LENGTH },
-    { "mm", GTK_CSS_MM,      GTK_CSS_PARSE_LENGTH }
+    { "px",   GTK_CSS_PX,      GTK_CSS_PARSE_LENGTH },
+    { "pt",   GTK_CSS_PT,      GTK_CSS_PARSE_LENGTH },
+    { "em",   GTK_CSS_EM,      GTK_CSS_PARSE_LENGTH },
+    { "ex",   GTK_CSS_EX,      GTK_CSS_PARSE_LENGTH },
+    { "pc",   GTK_CSS_PC,      GTK_CSS_PARSE_LENGTH },
+    { "in",   GTK_CSS_IN,      GTK_CSS_PARSE_LENGTH },
+    { "cm",   GTK_CSS_CM,      GTK_CSS_PARSE_LENGTH },
+    { "mm",   GTK_CSS_MM,      GTK_CSS_PARSE_LENGTH },
+    { "rad",  GTK_CSS_RAD,     GTK_CSS_PARSE_ANGLE  },
+    { "deg",  GTK_CSS_DEG,     GTK_CSS_PARSE_ANGLE  },
+    { "grad", GTK_CSS_GRAD,    GTK_CSS_PARSE_ANGLE  },
+    { "turn", GTK_CSS_TURN,    GTK_CSS_PARSE_ANGLE  }
   };
   char *end, *unit;
 

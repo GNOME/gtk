@@ -91,7 +91,12 @@ typedef enum /*< skip >*/ {
   GTK_CSS_PC,
   GTK_CSS_IN,
   GTK_CSS_CM,
-  GTK_CSS_MM
+  GTK_CSS_MM,
+  /* CSS term: <angle> */
+  GTK_CSS_RAD,
+  GTK_CSS_DEG,
+  GTK_CSS_GRAD,
+  GTK_CSS_TURN
 } GtkCssUnit;
 
 typedef struct _GtkCssNumber GtkCssNumber;

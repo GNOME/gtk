@@ -76,6 +76,7 @@ _gtk_css_number_compute (GtkCssNumber       *dest,
     case GTK_CSS_PERCENT:
     case GTK_CSS_NUMBER:
     case GTK_CSS_PX:
+    case GTK_CSS_DEG:
       dest->value = src->value;
       dest->unit = src->unit;
       break;
@@ -108,6 +109,18 @@ _gtk_css_number_compute (GtkCssNumber       *dest,
       dest->value = src->value * g_value_get_double (_gtk_style_context_peek_property (context, "font-size"));
       dest->unit = GTK_CSS_PX;
       break;
+    case GTK_CSS_RAD:
+      dest->value = 360 * src->value / (2 * G_PI);
+      dest->unit = GTK_CSS_DEG;
+      break;
+    case GTK_CSS_GRAD:
+      dest->value = 360 * src->value / 400.0;
+      dest->unit = GTK_CSS_DEG;
+      break;
+    case GTK_CSS_TURN:
+      dest->value = 360 * src->value;
+      dest->unit = GTK_CSS_DEG;
+      break;
     }
 }
 
@@ -130,7 +143,11 @@ _gtk_css_number_print (const GtkCssNumber *number,
     /* [GTK_CSS_PC] = */ "pc",
     /* [GTK_CSS_IN] = */ "in",
     /* [GTK_CSS_CM] = */ "cm",
-    /* [GTK_CSS_MM] = */ "mm"
+    /* [GTK_CSS_MM] = */ "mm",
+    /* [GTK_CSS_RAD] = */ "rad",
+    /* [GTK_CSS_DEG] = */ "deg",
+    /* [GTK_CSS_GRAD] = */ "grad",
+    /* [GTK_CSS_TURN] = */ "turn",
   };
 
   g_ascii_dtostr (buf, sizeof (buf), number->value);
