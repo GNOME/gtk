@@ -121,7 +121,7 @@ GtkTreeView.view.expander:selected:prelight {
   background-color: alpha (@fg_color, 0.25);
   border-color: @fg_color;
   border-style: solid;
-  border-width: 1;
+  border-width: 1px;
 }
 
 .tooltip,
@@ -129,14 +129,14 @@ GtkTreeView.view.expander:selected:prelight {
   background-color: @tooltip_bg_color;
   color: @tooltip_fg_color;
   border-color: @tooltip_fg_color;
-  border-width: 1;
+  border-width: 1px;
   border-style: solid;
 }
 
 .button,
 .slider {
   border-style: outset;
-  border-width: 2;
+  border-width: 2px;
 }
 
 .button:active {
@@ -154,13 +154,13 @@ GtkTreeView.view.expander:selected:prelight {
 .trough {
   background-color: darker (@bg_color);
   border-style: inset;
-  border-width: 1;
+  border-width: 1px;
   padding: 0;
 }
 
 .entry {
   border-style: inset;
-  border-width: 2;
+  border-width: 2px;
   background-color: @base_color;
   color: @text_color;
 }
@@ -181,7 +181,7 @@ GtkTreeView.view.expander:selected:prelight {
   border-color: shade (@selected_bg_color, 0.7);
   color: @selected_fg_color;
   border-style: outset;
-  border-width: 1;
+  border-width: 1px;
 }
 
 GtkCheckButton:hover,
@@ -195,7 +195,7 @@ GtkRadioButton:selected {
 .cell.check, .cell.radio,
 .cell.check:hover, .cell.radio:hover {
   border-style: solid;
-  border-width: 1;
+  border-width: 1px;
   background-color: @base_color;
   border-color: @fg_color;
 }
@@ -225,22 +225,22 @@ GtkRadioButton:selected {
 
 .popup {
   border-style: outset;
-  border-width: 1;
+  border-width: 1px;
 }
 
 .viewport {
   border-style: inset;
-  border-width: 2;
+  border-width: 2px;
 }
 
 .notebook {
   border-style: outset;
-  border-width: 1;
+  border-width: 1px;
 }
 
 .frame {
   border-style: inset;
-  border-width: 1;
+  border-width: 1px;
 }
 
 GtkScrolledWindow.frame {
@@ -251,7 +251,7 @@ GtkScrolledWindow.frame {
 .menubar,
 .toolbar {
   border-style: outset;
-  border-width: 1;
+  border-width: 1px;
 }
 
 .menu:hover,
@@ -264,7 +264,7 @@ GtkScrolledWindow.frame {
 }
 
 GtkSpinButton.button {
-  border-width: 1;
+  border-width: 1px;
 }
 
 .scale.slider:hover,
@@ -330,7 +330,7 @@ GtkLabel:selected:focused {
   color: #fff;
 }
 GtkCalendar.view {
-  border-width: 1;
+  border-width: 1px;
   border-style: inset;
   padding: 1;
 }
@@ -342,7 +342,7 @@ GtkCalendar.view:inconsistent {
 GtkCalendar.header {
   background-color: @bg_color;
   border-style: outset;
-  border-width: 2;
+  border-width: 2px;
 }
 
 GtkCalendar.highlight {

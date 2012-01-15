@@ -2792,7 +2792,6 @@ gtk_css_provider_get_default (void)
 
   if (G_UNLIKELY (!provider))
     {
-
       provider = gtk_css_provider_new ();
       if (!_gtk_css_provider_load_from_resource (provider, "/org/gtk/libgtk/gtk-default.css"))
         {

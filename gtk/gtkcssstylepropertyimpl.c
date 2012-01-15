@@ -24,6 +24,7 @@
 #include <gobject/gvaluecollector.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <cairo-gobject.h>
+#include <math.h>
 
 #include "gtkcssparserprivate.h"
 #include "gtkcssstylefuncsprivate.h"
@@ -32,6 +33,11 @@
 #include "gtkintl.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertiesprivate.h"
+
+/* this is in case round() is not provided by the compiler, 
+ * such as in the case of C89 compilers, like MSVC
+ */
+#include "fallback-c89.c"
 
 /* the actual parsers we have */
 #include "gtkanimationdescription.h"
@@ -419,6 +425,25 @@ css_image_value_compute (GtkCssStyleProperty    *property,
   g_value_take_object (computed, image);
 }
 
+static gboolean 
+parse_border_width (GtkCssStyleProperty *property,
+                    GValue              *value,
+                    GtkCssParser        *parser,
+                    GFile               *base)
+{
+  GtkCssNumber number;
+
+  if (!_gtk_css_parser_read_number (parser,
+                                    &number, 
+                                    GTK_CSS_POSITIVE_ONLY
+                                    | GTK_CSS_NUMBER_AS_PIXELS
+                                    | GTK_CSS_PARSE_LENGTH))
+    return FALSE;
+
+  g_value_set_boxed (value, &number);
+  return TRUE;
+}
+
 static void
 compute_border_width (GtkCssStyleProperty    *property,
                       GValue                 *computed,
@@ -427,6 +452,7 @@ compute_border_width (GtkCssStyleProperty    *property,
 {
   GtkCssStyleProperty *style;
   GtkBorderStyle border_style;
+  GtkCssNumber number;
   
   /* The -1 is magic that is only true because we register the style
    * properties directly after the width properties.
@@ -436,9 +462,15 @@ compute_border_width (GtkCssStyleProperty    *property,
 
   if (border_style == GTK_BORDER_STYLE_NONE ||
       border_style == GTK_BORDER_STYLE_HIDDEN)
-    g_value_set_int (computed, 0);
-  else
-    g_value_copy (specified, computed);
+    {
+      g_value_set_int (computed, 0);
+      return;
+    }
+
+  _gtk_css_number_compute (&number,
+                           g_value_get_boxed (specified),
+                           context);
+  g_value_set_int (computed, round (number.value));
 }
 
 static gboolean
@@ -524,6 +556,7 @@ void
 _gtk_css_style_property_init_properties (void)
 {
   char *default_font_family[] = { "Sans", NULL };
+  GtkCssNumber number;
   GtkSymbolicColor *symbolic;
   GtkCssBorderCornerRadius no_corner_radius = { 0, };
   GtkBorder border_of_ones = { 1, 1, 1, 1 };
@@ -708,6 +741,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           0);
+  _gtk_css_number_init (&number, 0, GTK_CSS_PX);
   /* IMPORTANT: compute_border_width() requires that the border-width
    * properties be immeditaly followed by the border-style properties
    */
@@ -721,14 +755,14 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           GTK_BORDER_STYLE_NONE);
   gtk_css_style_property_register        ("border-top-width",
-                                          G_TYPE_INT,
+                                          GTK_TYPE_CSS_NUMBER,
                                           G_TYPE_INT,
                                           G_TYPE_INT,
                                           0,
-                                          NULL,
+                                          parse_border_width,
                                           NULL,
                                           compute_border_width,
-                                          0);
+                                          &number);
   gtk_css_style_property_register        ("border-left-style",
                                           GTK_TYPE_BORDER_STYLE,
                                           GTK_TYPE_BORDER_STYLE,
@@ -739,14 +773,14 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           GTK_BORDER_STYLE_NONE);
   gtk_css_style_property_register        ("border-left-width",
-                                          G_TYPE_INT,
+                                          GTK_TYPE_CSS_NUMBER,
                                           G_TYPE_INT,
                                           G_TYPE_INT,
                                           0,
-                                          NULL,
+                                          parse_border_width,
                                           NULL,
                                           compute_border_width,
-                                          0);
+                                          &number);
   gtk_css_style_property_register        ("border-bottom-style",
                                           GTK_TYPE_BORDER_STYLE,
                                           GTK_TYPE_BORDER_STYLE,
@@ -757,14 +791,14 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           GTK_BORDER_STYLE_NONE);
   gtk_css_style_property_register        ("border-bottom-width",
-                                          G_TYPE_INT,
+                                          GTK_TYPE_CSS_NUMBER,
                                           G_TYPE_INT,
                                           G_TYPE_INT,
                                           0,
-                                          NULL,
+                                          parse_border_width,
                                           NULL,
                                           compute_border_width,
-                                          0);
+                                          &number);
   gtk_css_style_property_register        ("border-right-style",
                                           GTK_TYPE_BORDER_STYLE,
                                           GTK_TYPE_BORDER_STYLE,
@@ -775,14 +809,14 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           GTK_BORDER_STYLE_NONE);
   gtk_css_style_property_register        ("border-right-width",
-                                          G_TYPE_INT,
+                                          GTK_TYPE_CSS_NUMBER,
                                           G_TYPE_INT,
                                           G_TYPE_INT,
                                           0,
-                                          NULL,
+                                          parse_border_width,
                                           NULL,
                                           compute_border_width,
-                                          0);
+                                          &number);
 
   gtk_css_style_property_register        ("border-top-left-radius",
                                           GTK_TYPE_CSS_BORDER_CORNER_RADIUS,
@@ -831,14 +865,14 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           GTK_BORDER_STYLE_NONE);
   gtk_css_style_property_register        ("outline-width",
-                                          G_TYPE_INT,
+                                          GTK_TYPE_CSS_NUMBER,
                                           G_TYPE_INT,
                                           G_TYPE_INT,
                                           0,
-                                          NULL,
+                                          parse_border_width,
                                           NULL,
                                           compute_border_width,
-                                          0);
+                                          &number);
   gtk_css_style_property_register        ("outline-offset",
                                           G_TYPE_INT,
                                           G_TYPE_INT,

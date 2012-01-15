@@ -240,7 +240,7 @@
 .spinbutton.button,
 .spinbutton.button:focused {
     background-color: transparent;
-    border-width: 1 1 0 0;
+    border-width: 1px 1px 0 0;
     border-style: none;
     background-image: -gtk-win32-theme-part(spin, 1 1);
     color: rgba(0, 0, 0, 0);
@@ -265,7 +265,7 @@
 
 .spinbutton.button.bottom,
 .spinbutton.button.bottom:focused {
-    border-width: 0 1 1 0;
+    border-width: 0 1px 1px 0;
     background-image: -gtk-win32-theme-part(spin, 2 1);
     color: rgba(0, 0, 0, 0);
 }
@@ -589,7 +589,7 @@ GtkComboBox.combobox-entry .button:insensitive {
 
 .notebook {
     background-color: transparent;
-    border-width: 1 3 2 2;
+    border-width: 1px 3px 2px 2px;
     border-style: solid;
     background-origin: padding-box;
     background-clip: border-box;

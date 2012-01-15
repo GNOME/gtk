@@ -80,6 +80,48 @@ parse_border_width (GtkCssShorthandProperty *shorthand,
   return TRUE;
 }
 
+static gboolean
+parse_border_width_really (GtkCssShorthandProperty *shorthand,
+                           GValue                  *values,
+                           GtkCssParser            *parser,
+                           GFile                   *base)
+{
+  GtkCssNumber numbers[4];
+  guint i;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (!_gtk_css_parser_has_number (parser))
+        break;
+
+      if (!_gtk_css_parser_read_number (parser,
+                                        &numbers[i], 
+                                        GTK_CSS_POSITIVE_ONLY
+                                        | GTK_CSS_NUMBER_AS_PIXELS
+                                        | GTK_CSS_PARSE_LENGTH))
+        return FALSE;
+    }
+
+  if (i == 0)
+    {
+      _gtk_css_parser_error (parser, "Expected a length");
+      return FALSE;
+    }
+
+  for (; i < 4; i++)
+    {
+      numbers[i] = numbers[(i - 1) >> 1];
+    }
+
+  for (i = 0; i < 4; i++)
+    {
+      g_value_init (&values[i], GTK_TYPE_CSS_NUMBER);
+      g_value_set_boxed (&values[i], &numbers[i]);
+    }
+
+  return TRUE;
+}
+
 static gboolean 
 parse_border_radius (GtkCssShorthandProperty *shorthand,
                      GValue                  *values,
@@ -269,16 +311,23 @@ parse_border_side (GtkCssShorthandProperty *shorthand,
                    GtkCssParser            *parser,
                    GFile                   *base)
 {
-  int width;
   int style;
 
   do
   {
     if (!G_IS_VALUE (&values[0]) &&
-         _gtk_css_parser_try_length (parser, &width))
+         _gtk_css_parser_has_number (parser))
       {
-        g_value_init (&values[0], G_TYPE_INT);
-        g_value_set_int (&values[0], width);
+        GtkCssNumber number;
+        if (!_gtk_css_parser_read_number (parser,
+                                          &number,
+                                          GTK_CSS_POSITIVE_ONLY
+                                          | GTK_CSS_NUMBER_AS_PIXELS
+                                          | GTK_CSS_PARSE_LENGTH))
+          return FALSE;
+
+        g_value_init (&values[0], GTK_TYPE_CSS_NUMBER);
+        g_value_set_boxed (&values[0], &number);
       }
     else if (!G_IS_VALUE (&values[1]) &&
              _gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, &style))
@@ -316,22 +365,29 @@ parse_border (GtkCssShorthandProperty *shorthand,
               GtkCssParser            *parser,
               GFile                   *base)
 {
-  int width;
   int style;
 
   do
   {
     if (!G_IS_VALUE (&values[0]) &&
-         _gtk_css_parser_try_length (parser, &width))
+         _gtk_css_parser_has_number (parser))
       {
-        g_value_init (&values[0], G_TYPE_INT);
-        g_value_init (&values[1], G_TYPE_INT);
-        g_value_init (&values[2], G_TYPE_INT);
-        g_value_init (&values[3], G_TYPE_INT);
-        g_value_set_int (&values[0], width);
-        g_value_set_int (&values[1], width);
-        g_value_set_int (&values[2], width);
-        g_value_set_int (&values[3], width);
+        GtkCssNumber number;
+        if (!_gtk_css_parser_read_number (parser,
+                                          &number,
+                                          GTK_CSS_POSITIVE_ONLY
+                                          | GTK_CSS_NUMBER_AS_PIXELS
+                                          | GTK_CSS_PARSE_LENGTH))
+          return FALSE;
+
+        g_value_init (&values[0], GTK_TYPE_CSS_NUMBER);
+        g_value_init (&values[1], GTK_TYPE_CSS_NUMBER);
+        g_value_init (&values[2], GTK_TYPE_CSS_NUMBER);
+        g_value_init (&values[3], GTK_TYPE_CSS_NUMBER);
+        g_value_set_boxed (&values[0], &number);
+        g_value_set_boxed (&values[1], &number);
+        g_value_set_boxed (&values[2], &number);
+        g_value_set_boxed (&values[3], &number);
       }
     else if (!G_IS_VALUE (&values[4]) &&
              _gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, &style))
@@ -843,7 +899,7 @@ _gtk_css_shorthand_property_init_properties (void)
   _gtk_css_shorthand_property_register   ("border-width",
                                           GTK_TYPE_BORDER,
                                           border_width_subproperties,
-                                          parse_border_width,
+                                          parse_border_width_really,
                                           unpack_border,
                                           pack_border);
   _gtk_css_shorthand_property_register   ("border-radius",
