@@ -635,6 +635,8 @@ gtk_application_window_real_size_allocate (GtkWidget     *widget,
       gint menubar_height;
       GtkWidget *child;
 
+      gtk_widget_set_allocation (widget, allocation);
+
       gtk_widget_get_preferred_height_for_width (window->priv->menubar, allocation->width, &menubar_height, NULL);
 
       menubar_allocation.height = menubar_height;
@@ -654,8 +656,6 @@ gtk_application_window_real_size_allocate (GtkWidget     *widget,
 
           gtk_widget_size_allocate (child, &child_allocation);
         }
-
-      gtk_widget_set_allocation (widget, allocation);
     }
   else
     GTK_WIDGET_CLASS (gtk_application_window_parent_class)
