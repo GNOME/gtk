@@ -664,12 +664,7 @@ gtk_statusbar_size_allocate (GtkWidget     *widget,
       gtk_window_resize_grip_is_visible (GTK_WINDOW (window)))
     {
       gtk_window_get_resize_grip_area (GTK_WINDOW (window), &rect);
-      if (gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
-                                            window,
-                                            allocation->x,
-                                            allocation->y,
-                                            &x,
-                                            &y))
+      if (gtk_widget_translate_coordinates (widget, window, 0, 0, &x, &y))
         {
           translated_rect.x = x;
           translated_rect.y = y;
