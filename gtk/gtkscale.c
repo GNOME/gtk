@@ -1056,8 +1056,7 @@ static gint
 find_next_pos (GtkWidget       *widget,
                GList           *list,
                gint            *marks,
-               GtkPositionType  pos,
-               gint             match)
+               GtkPositionType  pos)
 {
   GtkAllocation allocation;
   GList *m;
@@ -1067,7 +1066,7 @@ find_next_pos (GtkWidget       *widget,
     {
       GtkScaleMark *mark = m->data;
 
-      if (match == (mark->position == pos))
+      if (mark->position == pos)
         return marks[i];
     }
 
@@ -1135,14 +1134,14 @@ gtk_scale_draw (GtkWidget *widget,
                   y1 = range_rect.y;
                   y2 = y1 - slider_width / 2;
                   min_pos = min_pos_before;
-                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP, 1) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
                   y1 = range_rect.y + range_rect.height;
                   y2 = y1 + slider_width / 2;
                   min_pos = min_pos_after;
-                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM, 1) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
                 }
 
               gtk_style_context_save (context);
@@ -1185,14 +1184,14 @@ gtk_scale_draw (GtkWidget *widget,
                   x1 = range_rect.x;
                   x2 = range_rect.x - slider_width / 2;
                   min_pos = min_pos_before;
-                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP, 1) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
                   x1 = range_rect.x + range_rect.width;
                   x2 = range_rect.x + range_rect.width + slider_width / 2;
                   min_pos = min_pos_after;
-                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM, 1) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
                 }
               y1 = marks[i];
 
@@ -1529,7 +1528,7 @@ compare_marks (gpointer a, gpointer b)
 
   ma = a; mb = b;
 
-  return (ma->value > mb->value) ? 1 : ((ma->value == mb->value) ? 0 : -1);
+  return (ma->value > mb->value) ? 1 : ((ma->value < mb->value) ? -1 : 0);
 }
 
 /**
