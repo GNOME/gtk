@@ -49,6 +49,8 @@ void  _gdk_wayland_window_update_size (GdkWindow *window,
 				       int32_t width,
 				       int32_t height,
 				       uint32_t edges);
+void _gdk_wayland_window_add_focus    (GdkWindow *window);
+void _gdk_wayland_window_remove_focus (GdkWindow *window);
 
 GdkKeymap *_gdk_wayland_keymap_new (GdkDisplay *display);
 struct xkb_desc *_gdk_wayland_keymap_get_xkb_desc (GdkKeymap *keymap);

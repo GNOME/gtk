@@ -675,6 +675,7 @@ input_handle_keyboard_focus(void *data,
   device->time = time;
   if (device->keyboard_focus)
     {
+      _gdk_wayland_window_remove_focus (device->keyboard_focus);
       event = gdk_event_new (GDK_FOCUS_CHANGE);
       event->focus_change.window = g_object_ref (device->keyboard_focus);
       event->focus_change.send_event = FALSE;
@@ -709,6 +710,8 @@ input_handle_keyboard_focus(void *data,
 			   device, device->keyboard_focus));
 
       _gdk_wayland_display_deliver_event (device->display, event);
+
+      _gdk_wayland_window_add_focus (device->keyboard_focus);
     }
 }
 

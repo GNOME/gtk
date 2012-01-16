@@ -109,36 +109,7 @@ struct _GdkWindowImplWayland
   GLuint texture;
   uint32_t resize_edges;
 
-  /* Set if the window, or any descendent of it, is the server's focus window
-   */
-  guint has_focus_window : 1;
-
-  /* Set if window->has_focus_window and the focus isn't grabbed elsewhere.
-   */
-  guint has_focus : 1;
-
-  /* Set if the pointer is inside this window. (This is needed for
-   * for focus tracking)
-   */
-  guint has_pointer : 1;
-  
-  /* Set if the window is a descendent of the focus window and the pointer is
-   * inside it. (This is the case where the window will receive keystroke
-   * events even window->has_focus_window is FALSE)
-   */
-  guint has_pointer_focus : 1;
-
-  /* Set if we are requesting these hints */
-  guint skip_taskbar_hint : 1;
-  guint skip_pager_hint : 1;
-  guint urgency_hint : 1;
-
-  guint on_all_desktops : 1;   /* _NET_WM_STICKY == 0xFFFFFFFF */
-
-  guint have_sticky : 1;	/* _NET_WM_STATE_STICKY */
-  guint have_maxvert : 1;       /* _NET_WM_STATE_MAXIMIZED_VERT */
-  guint have_maxhorz : 1;       /* _NET_WM_STATE_MAXIMIZED_HORZ */
-  guint have_fullscreen : 1;    /* _NET_WM_STATE_FULLSCREEN */
+  int focus_count;
 
   gulong map_serial;	/* Serial of last transition from unmapped */
 
@@ -163,6 +134,26 @@ static void
 _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
 {
   impl->toplevel_window_type = -1;
+}
+
+void
+_gdk_wayland_window_add_focus (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  impl->focus_count++;
+  if (impl->focus_count == 1)
+    gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
+}
+
+void
+_gdk_wayland_window_remove_focus (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  impl->focus_count--;
+  if (impl->focus_count == 0)
+    gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FOCUSED, 0);
 }
 
 /**
