@@ -15,6 +15,13 @@ Overview of Changes in GTK+ 3.3.8
 * GtkBuilder:
  - Supports the 'id' in GtkComboBoxText
  - Can parse GVariant-valued properties
+ - Support loading from a GResource
+
+* GtkImage:
+ - Support loading from a GResource
+
+* GtkUIManager:
+ - Support loading from a GResource
 
 * Accessibility:
  - key snooping support has been removed
@@ -25,6 +32,10 @@ Overview of Changes in GTK+ 3.3.8
  - Make resize grips work
  - Implement device grabs
  - Implement window geometry hints
+ - Set surface type based on window type hint
+ - Add basic clipboard and selection implementations
+ - Implement client-side keyboard repeat
+ - Update GdkWindow focus state to match reality
 
 * Theming:
  - Improved CSS compliance for selector matching
@@ -38,9 +49,13 @@ Overview of Changes in GTK+ 3.3.8
  - GdkColor
  - GtkButton::inner-border
 
+* Miscellaneous:
+ - Turn default theme css files and dnd cursors into
+   GResources
+
 * Bugs fixed:
  543520 Cups custom options are not sent properly
- 612396 Consider changing default of entry-text-column for GtkComboBoxText
+ 612396 ...default of entry-text-column for GtkComboBoxText
  613728 Rationalize GtkTreeView focus
  620240 GNOME Drag & Drop broken for remote X sessions
  629878 Missing "Back" and "Forward" icons for Firefox
@@ -52,7 +67,7 @@ Overview of Changes in GTK+ 3.3.8
  660309 check x11 backend when create xim module
  663479 "Finishing" ("Completion") and "Advanced" tabs are empty
  665015 "Widget (%s) has more than one label" unwanted warnings
- 666103 Should be able to match the parent where a dropdown menu is child
+ 666103 Should be able to match the parent where a dropdown menu...
  666600 allocate the CSS border and deprecate GtkButton-inner-border
  666685 SIGSEGV in _gtk_tree_selection_internal_select_node
  666710 Fix compose sequences disabling other sequences
@@ -67,12 +82,14 @@ Overview of Changes in GTK+ 3.3.8
  667628 GtkWindow:application property should have G_PARAM_CONSTRUCT
  667695 GAction leaked in examples/plugman.c
  667705 fix up GtkApplication on OS X
+ 666921 Fix the _NET_SUPPORTING_WM_CHECK window fetch to be spec...
 
 * Translation updates:
  Arabic
  Bulgarian
  Finnish
  Hebrew
+ Norwegian bokmål
  Spanish
 
 
