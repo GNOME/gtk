@@ -1529,6 +1529,13 @@ fi
 
 GLIB_GSETTINGS
 
+#############
+# Resources #
+#############
+
+GLIB_COMPILE_RESOURCES=`$PKG_CONFIG --variable glib_compile_resources gio-2.0`
+AC_SUBST(GLIB_COMPILE_RESOURCES)
+
 ##################################################
 # GObject introspection
 ##################################################
