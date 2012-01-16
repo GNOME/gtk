@@ -898,10 +898,10 @@ shadow_value_parse (GtkCssParser *parser,
   GtkShadow *shadow;
   guint i;
 
-  shadow = _gtk_shadow_new ();
-
   if (_gtk_css_parser_try (parser, "none", TRUE))
     return TRUE;
+
+  shadow = _gtk_shadow_new ();
 
   do
     {
