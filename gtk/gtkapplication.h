@@ -79,11 +79,11 @@ GList *          gtk_application_get_windows   (GtkApplication    *application);
 
 GMenuModel *     gtk_application_get_app_menu  (GtkApplication    *application);
 void             gtk_application_set_app_menu  (GtkApplication    *application,
-                                                GMenuModel        *model);
+                                                GMenuModel        *app_menu);
 
 GMenuModel *     gtk_application_get_menubar   (GtkApplication    *application);
 void             gtk_application_set_menubar   (GtkApplication    *application,
-                                                GMenuModel        *model);
+                                                GMenuModel        *menubar);
 
 void             gtk_application_add_accelerator    (GtkApplication  *application,
                                                      const gchar     *accelerator,

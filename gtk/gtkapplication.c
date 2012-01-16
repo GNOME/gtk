@@ -134,7 +134,9 @@ static guint gtk_application_signals[LAST_SIGNAL];
 
 enum {
   PROP_ZERO,
-  PROP_REGISTER_SESSION
+  PROP_REGISTER_SESSION,
+  PROP_APP_MENU,
+  PROP_MENUBAR
 };
 
 G_DEFINE_TYPE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
@@ -147,7 +149,17 @@ struct _GtkApplicationPrivate
 
 #ifdef GDK_WINDOWING_X11
   GDBusConnection *session_bus;
-  gchar *window_prefix;
+  const gchar     *application_id;
+  gchar           *object_path;
+
+  GMenuModel      *app_menu;
+  gchar           *app_menu_path;
+  guint            app_menu_id;
+
+  GMenuModel      *menubar;
+  gchar           *menubar_path;
+  guint            menubar_id;
+
   guint next_id;
 
   GDBusProxy *sm_proxy;
@@ -167,6 +179,59 @@ struct _GtkApplicationPrivate
 };
 
 #ifdef GDK_WINDOWING_X11
+static void
+gtk_application_x11_publish_menu (GtkApplication  *application,
+                                  const gchar     *type,
+                                  GMenuModel      *model,
+                                  guint           *id,
+                                  gchar          **path)
+{
+  gint i;
+
+  /* unexport any existing menu */
+  if (*id)
+    {
+      g_dbus_connection_unexport_menu_model (application->priv->session_bus, *id);
+      g_free (*path);
+      *path = NULL;
+      *id = 0;
+    }
+
+  /* export the new menu, if there is one */
+  if (model != NULL)
+    {
+      /* try getting the preferred name */
+      *path = g_strconcat (application->priv->object_path, "/menus/", type, NULL);
+      *id = g_dbus_connection_export_menu_model (application->priv->session_bus, *path, model, NULL);
+
+      /* keep trying until we get a working name... */
+      for (i = 0; *id == 0; i++)
+        {
+          g_free (*path);
+          *path = g_strdup_printf ("%s/menus/%s%d", application->priv->object_path, type, i);
+          *id = g_dbus_connection_export_menu_model (application->priv->session_bus, *path, model, NULL);
+        }
+    }
+}
+
+static void
+gtk_application_set_app_menu_x11 (GtkApplication *application,
+                                  GMenuModel     *app_menu)
+{
+  gtk_application_x11_publish_menu (application, "appmenu", app_menu,
+                                    &application->priv->app_menu_id,
+                                    &application->priv->app_menu_path);
+}
+
+static void
+gtk_application_set_menubar_x11 (GtkApplication *application,
+                                 GMenuModel     *menubar)
+{
+  gtk_application_x11_publish_menu (application, "menubar", menubar,
+                                    &application->priv->menubar_id,
+                                    &application->priv->menubar_path);
+}
+
 static void
 gtk_application_window_added_x11 (GtkApplication *application,
                                   GtkWindow      *window)
@@ -190,7 +255,7 @@ gtk_application_window_added_x11 (GtkApplication *application,
           guint window_id;
 
           window_id = application->priv->next_id++;
-          window_path = g_strdup_printf ("%s%d", application->priv->window_prefix, window_id);
+          window_path = g_strdup_printf ("%s/window/%d", application->priv->object_path, window_id);
           success = gtk_application_window_publish (app_window, application->priv->session_bus, window_path);
           g_free (window_path);
         }
@@ -210,11 +275,11 @@ gtk_application_window_removed_x11 (GtkApplication *application,
 }
 
 static gchar *
-window_prefix_from_appid (const gchar *appid)
+object_path_from_appid (const gchar *appid)
 {
   gchar *appid_path, *iter;
 
-  appid_path = g_strconcat ("/", appid, "/windows/", NULL);
+  appid_path = g_strconcat ("/", appid, NULL);
   for (iter = appid_path; *iter; iter++)
     {
       if (*iter == '.')
@@ -236,7 +301,7 @@ gtk_application_startup_x11 (GtkApplication *application)
 
   application_id = g_application_get_application_id (G_APPLICATION (application));
   application->priv->session_bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-  application->priv->window_prefix = window_prefix_from_appid (application_id);
+  application->priv->object_path = object_path_from_appid (application_id);
 
   gtk_application_startup_session_dbus (GTK_APPLICATION (application));
 }
@@ -244,8 +309,8 @@ gtk_application_startup_x11 (GtkApplication *application)
 static void
 gtk_application_shutdown_x11 (GtkApplication *application)
 {
-  g_free (application->priv->window_prefix);
-  application->priv->window_prefix = NULL;
+  g_free (application->priv->object_path);
+  application->priv->object_path = NULL;
   g_clear_object (&application->priv->session_bus);
 
   g_clear_object (&application->priv->sm_proxy);
@@ -253,6 +318,25 @@ gtk_application_shutdown_x11 (GtkApplication *application)
   g_free (application->priv->app_id);
   g_free (application->priv->client_path);
 }
+
+const gchar *
+gtk_application_get_dbus_object_path (GtkApplication *application)
+{
+  return application->priv->object_path;
+}
+
+const gchar *
+gtk_application_get_app_menu_object_path (GtkApplication *application)
+{
+  return application->priv->app_menu_path;
+}
+
+const gchar *
+gtk_application_get_menubar_object_path (GtkApplication *application)
+{
+  return application->priv->menubar_path;
+}
+
 #endif
 
 #ifdef GDK_WINDOWING_QUARTZ
@@ -535,26 +619,6 @@ extract_accels_from_menu (GMenuModel     *model,
 }
 
 static void
-gtk_application_notify (GObject    *object,
-                        GParamSpec *pspec)
-{
-  if (strcmp (pspec->name, "app-menu") == 0 ||
-      strcmp (pspec->name, "menubar") == 0)
-    {
-      GMenuModel *model;
-      g_object_get (object, pspec->name, &model, NULL);
-      if (model)
-        {
-          extract_accels_from_menu (model, GTK_APPLICATION (object));
-          g_object_unref (model);
-        }
-    }
-
-  if (G_OBJECT_CLASS (gtk_application_parent_class)->notify)
-    G_OBJECT_CLASS (gtk_application_parent_class)->notify (object, pspec);
-}
-
-static void
 gtk_application_get_property (GObject    *object,
                               guint       prop_id,
                               GValue     *value,
@@ -566,6 +630,14 @@ gtk_application_get_property (GObject    *object,
     {
     case PROP_REGISTER_SESSION:
       g_value_set_boolean (value, application->priv->register_session);
+      break;
+
+    case PROP_APP_MENU:
+      g_value_set_object (value, gtk_application_get_app_menu (application));
+      break;
+
+    case PROP_MENUBAR:
+      g_value_set_object (value, gtk_application_get_menubar (application));
       break;
 
     default:
@@ -588,6 +660,14 @@ gtk_application_set_property (GObject      *object,
       application->priv->register_session = g_value_get_boolean (value);
       break;
 
+    case PROP_APP_MENU:
+      gtk_application_set_app_menu (application, g_value_get_object (value));
+      break;
+
+    case PROP_MENUBAR:
+      gtk_application_set_menubar (application, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -602,6 +682,18 @@ gtk_application_quit (GtkApplication *app)
 }
 
 static void
+gtk_application_finalize (GObject *object)
+{
+  GtkApplication *application = GTK_APPLICATION (object);
+
+  g_clear_object (&application->priv->app_menu);
+  g_clear_object (&application->priv->menubar);
+
+  G_OBJECT_CLASS (gtk_application_parent_class)
+    ->finalize (object);
+}
+
+static void
 gtk_application_class_init (GtkApplicationClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -609,7 +701,7 @@ gtk_application_class_init (GtkApplicationClass *class)
 
   object_class->get_property = gtk_application_get_property;
   object_class->set_property = gtk_application_set_property;
-  object_class->notify = gtk_application_notify;
+  object_class->finalize = gtk_application_finalize;
 
   application_class->add_platform_data = gtk_application_add_platform_data;
   application_class->before_emit = gtk_application_before_emit;
@@ -698,6 +790,20 @@ gtk_application_class_init (GtkApplicationClass *class)
                           P_("Register session"),
                           P_("Register with the session manager"),
                           FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class, PROP_APP_MENU,
+    g_param_spec_object ("app-menu",
+                         P_("Application menu"),
+                         P_("The GMenuModel for the application menu"),
+                         G_TYPE_MENU_MODEL,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class, PROP_MENUBAR,
+    g_param_spec_object ("menubar",
+                         P_("Menubar"),
+                         P_("The GMenuModel for the menubar"),
+                         G_TYPE_MENU_MODEL,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -918,7 +1024,7 @@ gtk_application_remove_accelerator (GtkApplication *application,
 /**
  * gtk_application_set_app_menu:
  * @application: a #GtkApplication
- * @model: (allow-none): a #GMenuModel, or %NULL
+ * @app_menu: (allow-none): a #GMenuModel, or %NULL
  *
  * Sets or unsets the application menu for @application.
  *
@@ -935,9 +1041,28 @@ gtk_application_remove_accelerator (GtkApplication *application,
  */
 void
 gtk_application_set_app_menu (GtkApplication *application,
-                              GMenuModel     *model)
+                              GMenuModel     *app_menu)
 {
-  g_object_set (application, "app-menu", model, NULL);
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+
+  if (app_menu != application->priv->app_menu)
+    {
+      if (application->priv->app_menu != NULL)
+        g_object_unref (application->priv->app_menu);
+
+      application->priv->app_menu = app_menu;
+
+      if (application->priv->app_menu != NULL)
+        g_object_ref (application->priv->app_menu);
+
+      extract_accels_from_menu (app_menu, application);
+
+#ifdef GDK_WINDOWING_X11
+      gtk_application_set_app_menu_x11 (application, app_menu);
+#endif
+
+      g_object_notify (G_OBJECT (application), "app-menu");
+    }
 }
 
 /**
@@ -954,20 +1079,15 @@ gtk_application_set_app_menu (GtkApplication *application,
 GMenuModel *
 gtk_application_get_app_menu (GtkApplication *application)
 {
-  GMenuModel *app_menu = NULL;
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
-  g_object_get (application, "app-menu", &app_menu, NULL);
-
-  if (app_menu)
-    g_object_unref (app_menu);
-
-  return app_menu;
+  return application->priv->app_menu;
 }
 
 /**
  * gtk_application_set_menubar:
  * @application: a #GtkApplication
- * @model: (allow-none): a #GMenuModel, or %NULL
+ * @menubar: (allow-none): a #GMenuModel, or %NULL
  *
  * Sets or unsets the menubar for windows of @application.
  *
@@ -985,9 +1105,28 @@ gtk_application_get_app_menu (GtkApplication *application)
  */
 void
 gtk_application_set_menubar (GtkApplication *application,
-                             GMenuModel     *model)
+                             GMenuModel     *menubar)
 {
-  g_object_set (application, "menubar", model, NULL);
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+
+  if (menubar != application->priv->menubar)
+    {
+      if (application->priv->menubar != NULL)
+        g_object_unref (application->priv->menubar);
+
+      application->priv->menubar = menubar;
+
+      if (application->priv->menubar != NULL)
+        g_object_ref (application->priv->menubar);
+
+      extract_accels_from_menu (menubar, application);
+
+#ifdef GDK_WINDOWING_X11
+      gtk_application_set_menubar_x11 (application, menubar);
+#endif
+
+      g_object_notify (G_OBJECT (application), "menubar");
+    }
 }
 
 /**
@@ -1004,14 +1143,9 @@ gtk_application_set_menubar (GtkApplication *application,
 GMenuModel *
 gtk_application_get_menubar (GtkApplication *application)
 {
-  GMenuModel *menubar = NULL;
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
-  g_object_get (application, "menubar", &menubar, NULL);
-
-  if (menubar)
-    g_object_unref (menubar);
-
-  return menubar;
+  return application->priv->menubar;
 }
 
 #if defined(GDK_WINDOWING_X11)
