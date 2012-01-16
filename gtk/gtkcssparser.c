@@ -873,6 +873,7 @@ _gtk_css_parser_read_url (GtkCssParser *parser,
                           GFile        *base)
 {
   gchar *path;
+  char *scheme;
   GFile *file;
 
   if (_gtk_css_parser_try (parser, "url", FALSE))
@@ -907,6 +908,15 @@ _gtk_css_parser_read_url (GtkCssParser *parser,
           g_free (path);
           return NULL;
         }
+
+      scheme = g_uri_parse_scheme (path);
+      if (scheme != NULL)
+	{
+	  file = g_file_new_for_uri (path);
+	  g_free (path);
+	  g_free (scheme);
+	  return file;
+	}
     }
   else
     {

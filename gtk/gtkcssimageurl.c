@@ -67,19 +67,25 @@ gtk_css_image_url_parse (GtkCssImage  *image,
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
   GdkPixbuf *pixbuf;
   GFile *file;
-  char *path;
   cairo_t *cr;
   GError *error = NULL;
+  GFileInputStream *input;
 
   file = _gtk_css_parser_read_url (parser, base);
   if (file == NULL)
     return FALSE;
 
-  path = g_file_get_path (file);
+  input = g_file_read (file, NULL, &error);
+  if (input == NULL)
+    {
+      _gtk_css_parser_take_error (parser, error);
+      return FALSE;
+    }
   g_object_unref (file);
 
-  pixbuf = gdk_pixbuf_new_from_file (path, &error);
-  g_free (path);
+  pixbuf = gdk_pixbuf_new_from_stream (G_INPUT_STREAM (input), NULL, &error);
+  g_object_unref (input);
+
   if (pixbuf == NULL)
     {
       _gtk_css_parser_take_error (parser, error);
