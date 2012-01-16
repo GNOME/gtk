@@ -52,7 +52,6 @@
 #include "gtktooltip.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
-#include "gtkdndcursors.h"
 #include "gtkselectionprivate.h"
 
 
@@ -309,16 +308,15 @@ static void     set_icon_helper (GdkDragContext    *context,
 static struct {
   GdkDragAction action;
   const gchar  *name;
-  const guint8 *data;
   GdkPixbuf    *pixbuf;
   GdkCursor    *cursor;
 } drag_cursors[] = {
   { GDK_ACTION_DEFAULT, NULL },
-  { GDK_ACTION_ASK,   "dnd-ask",  dnd_cursor_ask,  NULL, NULL },
-  { GDK_ACTION_COPY,  "dnd-copy", dnd_cursor_copy, NULL, NULL },
-  { GDK_ACTION_MOVE,  "dnd-move", dnd_cursor_move, NULL, NULL },
-  { GDK_ACTION_LINK,  "dnd-link", dnd_cursor_link, NULL, NULL },
-  { 0              ,  "dnd-none", dnd_cursor_none, NULL, NULL },
+  { GDK_ACTION_ASK,   "dnd-ask",  NULL, NULL },
+  { GDK_ACTION_COPY,  "dnd-copy", NULL, NULL },
+  { GDK_ACTION_MOVE,  "dnd-move", NULL, NULL },
+  { GDK_ACTION_LINK,  "dnd-link", NULL, NULL },
+  { 0              ,  "dnd-none", NULL, NULL },
 };
 
 /*********************
@@ -820,6 +818,22 @@ gtk_drag_can_use_rgba_cursor (GdkDisplay *display,
   return TRUE;
 }
 
+static void
+ensure_drag_cursor_pixbuf (int i)
+{
+  if (drag_cursors[i].pixbuf == NULL)
+    {
+      char *path = g_strconcat ("/org/gtk/libgtk/cursor/",  drag_cursors[i].name, ".png", NULL);
+      GInputStream *stream = g_resources_open_stream (path, 0, NULL);
+      if (stream != NULL)
+	{
+	  drag_cursors[i].pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
+	  g_object_unref (stream);
+	}
+      g_free (path);
+    }
+}
+
 static GdkCursor *
 gtk_drag_get_cursor (GtkWidget         *widget,
                      GdkDisplay        *display,
@@ -845,10 +859,6 @@ gtk_drag_get_cursor (GtkWidget         *widget,
     if (drag_cursors[i].action == action)
       break;
 
-  if (drag_cursors[i].pixbuf == NULL)
-    drag_cursors[i].pixbuf = 
-      gdk_pixbuf_new_from_inline (-1, drag_cursors[i].data, FALSE, NULL);
-
   if (drag_cursors[i].cursor != NULL)
     {
       if (display != gdk_cursor_get_display (drag_cursors[i].cursor))
@@ -862,7 +872,10 @@ gtk_drag_get_cursor (GtkWidget         *widget,
     drag_cursors[i].cursor = gdk_cursor_new_from_name (display, drag_cursors[i].name);
   
   if (drag_cursors[i].cursor == NULL)
-    drag_cursors[i].cursor = gdk_cursor_new_from_pixbuf (display, drag_cursors[i].pixbuf, 0, 0);
+    {
+      ensure_drag_cursor_pixbuf (i);
+      drag_cursors[i].cursor = gdk_cursor_new_from_pixbuf (display, drag_cursors[i].pixbuf, 0, 0);
+    }
 
   if (info && info->icon_helper) 
     {
@@ -893,7 +906,10 @@ gtk_drag_get_cursor (GtkWidget         *widget,
       hot_x = hot_y = 0;
       cursor_pixbuf = gdk_cursor_get_image (drag_cursors[i].cursor);
       if (!cursor_pixbuf)
-	cursor_pixbuf = g_object_ref (drag_cursors[i].pixbuf);
+	{
+	  ensure_drag_cursor_pixbuf (i);
+	  cursor_pixbuf = g_object_ref (drag_cursors[i].pixbuf);
+	}
       else
 	{
 	  if (gdk_pixbuf_get_option (cursor_pixbuf, "x_hot"))

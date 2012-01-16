@@ -426,7 +426,6 @@ gtk_private_h_sources =		\
 	gtkcssstylefuncsprivate.h \
 	gtkcssstylepropertyprivate.h \
 	gtkcustompaperunixdialog.h \
-	gtkdndcursors.h		\
 	gtkentryprivate.h	\
 	gtkfilechooserdefault.h	\
 	gtkfilechooserembed.h	\
@@ -947,6 +946,13 @@ EXTRA_DIST += $(gtk_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)
 EXTRA_DIST += $(STOCK_ICONS)
 
+DND_CURSORS = \
+	cursor_dnd_ask.png				\
+	cursor_dnd_copy.png				\
+	cursor_dnd_link.png				\
+	cursor_dnd_move.png				\
+	cursor_dnd_none.png
+
 #
 # rules to generate built sources
 #
@@ -991,7 +997,7 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) $(deprecated_h_sources) gtk
 gtkresources.h: gtk.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) gtk.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-header --manual-register
-gtkresources.c: gtk.gresource.xml gtk-default.css gtk-win32.css
+gtkresources.c: gtk.gresource.xml gtk-default.css gtk-win32.css $(DND_CURSORS)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) gtk.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-source --manual-register
 
@@ -1525,6 +1531,7 @@ endif
 
 EXTRA_DIST +=                   \
 	$(STOCK_ICONS)		\
+	$(DND_CURSORS)		\
 	$(GENERATED_ICONS)	\
 	gtk.def			\
 	gtk-win32.rc		\
