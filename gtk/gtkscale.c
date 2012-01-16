@@ -200,7 +200,8 @@ gtk_scale_notify (GObject    *object,
                                                    compare_marks,
                                                    GINT_TO_POINTER (gtk_range_get_inverted (GTK_RANGE (scale))));
     }
-  else if (G_OBJECT_CLASS (gtk_scale_parent_class)->notify)
+
+  if (G_OBJECT_CLASS (gtk_scale_parent_class)->notify)
     G_OBJECT_CLASS (gtk_scale_parent_class)->notify (object, pspec);
 }
 
