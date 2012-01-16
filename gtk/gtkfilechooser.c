@@ -81,7 +81,7 @@
  * However, filenames are <emphasis>always</emphasis> returned in
  * the character set specified by the
  * <envar>G_FILENAME_ENCODING</envar> environment variable.
- * Please see the Glib documentation for more details about this
+ * Please see the GLib documentation for more details about this
  * variable.
  * <note>
  *    This means that while you can pass the result of
