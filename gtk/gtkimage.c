@@ -785,16 +785,13 @@ gtk_image_set_from_file   (GtkImage    *image,
  * See gtk_image_new_from_resource() for details.
  **/
 void
-gtk_image_set_from_resource   (GtkImage    *image,
-			       const gchar *resource_path)
+gtk_image_set_from_resource (GtkImage    *image,
+			     const gchar *resource_path)
 {
-  GtkImagePrivate *priv;
   GdkPixbuf *pixbuf;
   GInputStream *stream;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
-
-  priv = image->priv;
 
   g_object_freeze_notify (G_OBJECT (image));
 
