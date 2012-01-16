@@ -1790,7 +1790,7 @@ parse_import (GtkCssScanner *scanner)
       return TRUE;
     }
 
-  if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
+  if (!_gtk_css_parser_try (scanner->parser, ";", FALSE))
     {
       gtk_css_provider_invalid_token (scanner->provider, scanner, "semicolon");
       _gtk_css_parser_resync (scanner->parser, TRUE, 0);
@@ -1818,6 +1818,8 @@ parse_import (GtkCssScanner *scanner)
   g_object_unref (file);
 
   gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_IMPORT);
+  _gtk_css_parser_skip_whitespace (scanner->parser);
+
   return TRUE;
 }
 
