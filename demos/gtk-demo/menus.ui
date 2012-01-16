@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="appmenu">
+    <section>
+      <item label="_New" action="app.new" accel="&lt;Primary&gt;n"/>
+      <item label="_Open" action="app.open"/>
+      <item label="_Save" action="app.save" accel="&lt;Primary&gt;s"/>
+      <item label="Save _As..." action="app.save-as" accel="&lt;Primary&gt;s"/>
+    </section>
+    <section>
+      <item label="_Quit" action="app.quit" accel="&lt;Primary&gt;q"/>
+    </section>
+  </menu>
+  <menu id="menubar">
+    <submenu label="_Preferences">
+      <item label="_Prefer Dark Theme" action="app.dark"/>
+      <item label="_Hide Titlebar when maximized" action="win.titlebar"/>
+      <submenu label="_Color">
+        <item label="_Red" action="win.color" target="red" accel="&lt;Primary&gt;r"/>
+        <item label="_Green" action="win.color" target="green" accel="&lt;Primary&gt;g"/>
+        <item label="_Blue" action="win.color" target="blue" accel="&lt;Primary&gt;b"/>
+      </submenu>
+      <submenu label="_Shape">
+        <item label="_Square" action="win.shape" target="square" accel="&lt;Primary&gt;s"/>
+        <item label="_Rectangle" action="win.shape" target="rectangle" accel="&lt;Primary&gt;r"/>
+        <item label="_Oval" action="win.shape" target="oval" accel="&lt;Primary&gt;o"/>
+      </submenu>
+      <item label="_Bold" action="win.bold" accel="&lt;Primary&gt;b"/>
+    </submenu>
+    <submenu label="_Help">
+      <item label="_About" action="win.about" accel="&lt;Primary&gt;a"/>
+    </submenu>
+  </menu>
+</interface>

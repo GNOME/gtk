@@ -6,5 +6,6 @@
   </gresource>
   <gresource prefix="/ui">
     <file>application.ui</file>
+    <file>menus.ui</file>
   </gresource>
 </gresources>

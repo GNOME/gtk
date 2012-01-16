@@ -294,6 +294,25 @@ clicked_cb (GtkWidget *widget, GtkWidget *info)
 }
 
 static void
+startup (GApplication *app)
+{
+  GtkBuilder *builder;
+  GMenuModel *appmenu;
+  GMenuModel *menubar;
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_resource (builder, "/ui/menus.ui", NULL);
+
+  appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
+  menubar = (GMenuModel *)gtk_builder_get_object (builder, "menubar");
+
+  gtk_application_set_app_menu (GTK_APPLICATION (app), appmenu);
+  gtk_application_set_menubar (GTK_APPLICATION (app), menubar);
+
+  g_object_unref (builder);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -305,10 +324,6 @@ activate (GApplication *app)
   GtkWidget *button;
   GtkWidget *infobar;
   GtkTextBuffer *buffer;
-  GMenuModel *appmenu, *menubar;
-  GBytes *bytes;
-  const gchar *data;
-  gsize size;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_window_set_title (GTK_WINDOW (window), "Application Class");
@@ -320,15 +335,9 @@ activate (GApplication *app)
                                    window);
 
   builder = gtk_builder_new ();
-
-  bytes = g_resources_lookup_data ("/ui/application.ui", 0, NULL);
-  data = g_bytes_get_data (bytes, &size);
-  gtk_builder_add_from_string (builder, data, size, NULL);
-  g_bytes_unref (bytes);
+  gtk_builder_add_from_resource (builder, "/ui/application.ui", NULL);
 
   grid = (GtkWidget *)gtk_builder_get_object (builder, "grid");
-  appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
-  menubar = (GMenuModel *)gtk_builder_get_object (builder, "menubar");
   contents = (GtkWidget *)gtk_builder_get_object (builder, "contents");
   status = (GtkWidget *)gtk_builder_get_object (builder, "status");
   message = (GtkWidget *)gtk_builder_get_object (builder, "message");
@@ -339,8 +348,6 @@ activate (GApplication *app)
   g_object_set_data (G_OBJECT (window), "infobar", infobar);
 
   gtk_container_add (GTK_CONTAINER (window), grid);
-  gtk_application_set_app_menu (GTK_APPLICATION (app), appmenu);
-  gtk_application_set_menubar (GTK_APPLICATION (app), menubar);
 
   gtk_widget_grab_focus (contents);
   g_signal_connect (button, "clicked", G_CALLBACK (clicked_cb), infobar);
@@ -355,6 +362,8 @@ activate (GApplication *app)
   update_statusbar (buffer, GTK_STATUSBAR (status));
 
   gtk_widget_show_all (window);
+
+  g_object_unref (builder);
 }
 
 int
@@ -372,6 +381,7 @@ main (int argc, char *argv[])
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
 
+  g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
   g_application_run (G_APPLICATION (app), 0, NULL);
