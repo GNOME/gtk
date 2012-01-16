@@ -131,6 +131,59 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkScale, gtk_scale, GTK_TYPE_RANGE,
                                                          gtk_scale_buildable_interface_init))
 
 
+static gint
+compare_marks (gconstpointer a, gconstpointer b, gpointer data)
+{
+  gboolean inverted = GPOINTER_TO_INT (data);
+  const GtkScaleMark *ma, *mb;
+  gint val;
+
+  val = inverted ? -1 : 1;
+  ma = a; mb = b;
+
+  return (ma->value > mb->value) ? val : ((ma->value < mb->value) ? -val : 0);
+}
+
+static void
+gtk_scale_notify (GObject    *object,
+                  GParamSpec *pspec)
+{
+  if (strcmp (pspec->name, "orientation") == 0)
+    {
+      GtkRange *range = GTK_RANGE (object);
+
+      range->flippable = (range->orientation == GTK_ORIENTATION_HORIZONTAL);
+    }
+  else if (strcmp (pspec->name, "inverted") == 0)
+    {
+      GtkScalePrivate *priv = GTK_SCALE_GET_PRIVATE (object);
+      GtkScaleMark *mark;
+      GSList *m;
+      gint i, n;
+      gdouble *values;
+
+      priv->marks = g_slist_sort_with_data (priv->marks,
+                                            compare_marks,
+                                            GINT_TO_POINTER (gtk_range_get_inverted (GTK_RANGE (object))));
+
+      n = g_slist_length (priv->marks);
+      values = g_new (gdouble, n);
+      for (m = priv->marks, i = 0; m; m = m->next, i++)
+        {
+          mark = m->data;
+          values[i] = mark->value;
+        }
+
+      _gtk_range_set_stop_values (GTK_RANGE (object), values, n);
+
+      g_free (values);
+    }
+
+  if (G_OBJECT_CLASS (gtk_scale_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_scale_parent_class)->notify (object, pspec);
+}
+
+
 static gboolean
 single_string_accumulator (GSignalInvocationHint *ihint,
                            GValue                *return_accu,
@@ -167,6 +220,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   
   gobject_class->set_property = gtk_scale_set_property;
   gobject_class->get_property = gtk_scale_get_property;
+  gobject_class->notify = gtk_scale_notify;
   gobject_class->finalize = gtk_scale_finalize;
 
   widget_class->style_set = gtk_scale_style_set;
@@ -379,13 +433,6 @@ gtk_scale_class_init (GtkScaleClass *class)
 }
 
 static void
-gtk_scale_orientation_notify (GtkRange         *range,
-                              const GParamSpec *pspec)
-{
-  range->flippable = (range->orientation == GTK_ORIENTATION_HORIZONTAL);
-}
-
-static void
 gtk_scale_init (GtkScale *scale)
 {
   GtkRange *range = GTK_RANGE (scale);
@@ -403,10 +450,7 @@ gtk_scale_init (GtkScale *scale)
   scale->digits = 1;
   range->round_digits = scale->digits;
 
-  gtk_scale_orientation_notify (range, NULL);
-  g_signal_connect (scale, "notify::orientation",
-                    G_CALLBACK (gtk_scale_orientation_notify),
-                    NULL);
+  range->flippable = (range->orientation == GTK_ORIENTATION_HORIZONTAL);
 }
 
 static void
@@ -959,7 +1003,6 @@ gtk_scale_expose (GtkWidget      *widget,
   GtkScalePrivate *priv = GTK_SCALE_GET_PRIVATE (scale);
   GtkRange *range = GTK_RANGE (scale);
   GtkStateType state_type;
-  gint n_marks;
   gint *marks;
   gint focus_padding;
   gint slider_width;
@@ -991,7 +1034,8 @@ gtk_scale_expose (GtkWidget      *widget,
       gint min_pos_before, min_pos_after;
       gint min_pos, max_pos;
 
-      n_marks = _gtk_range_get_stop_positions (range, &marks);
+      _gtk_range_get_stop_positions (range, &marks);
+
       layout = gtk_widget_create_pango_layout (widget, NULL);
 
       if (range->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -1380,16 +1424,6 @@ gtk_scale_clear_marks (GtkScale *scale)
   gtk_widget_queue_resize (GTK_WIDGET (scale));
 }
 
-static gint
-compare_marks (gpointer a, gpointer b)
-{
-  GtkScaleMark *ma, *mb;
-
-  ma = a; mb = b;
-
-  return (ma->value > mb->value) ? 1 : ((ma->value == mb->value) ? 0 : -1);
-}
-
 /**
  * gtk_scale_add_mark:
  * @scale: a #GtkScale
@@ -1431,8 +1465,11 @@ gtk_scale_add_mark (GtkScale        *scale,
   mark->markup = g_strdup (markup);
   mark->position = position;
  
-  priv->marks = g_slist_insert_sorted (priv->marks, mark,
-                                       (GCompareFunc) compare_marks);
+  priv->marks = g_slist_insert_sorted_with_data (priv->marks, mark,
+                                                 (GCompareFunc) compare_marks,
+                                                 GINT_TO_POINTER (
+                                                   gtk_range_get_inverted (GTK_RANGE (scale)) 
+                                                   ));
 
   n = g_slist_length (priv->marks);
   values = g_new (gdouble, n);
