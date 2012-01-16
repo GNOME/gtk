@@ -324,8 +324,10 @@ gtk_buildable_parser_finished
 gtk_buildable_set_buildable_property
 gtk_buildable_set_name
 gtk_builder_add_from_file
+gtk_builder_add_from_resource
 gtk_builder_add_from_string
 gtk_builder_add_objects_from_file
+gtk_builder_add_objects_from_resource
 gtk_builder_add_objects_from_string
 gtk_builder_connect_signals
 gtk_builder_connect_signals_full
@@ -1366,6 +1368,7 @@ gtk_image_new_from_gicon
 gtk_image_new_from_icon_name
 gtk_image_new_from_icon_set
 gtk_image_new_from_pixbuf
+gtk_image_new_from_resource
 gtk_image_new_from_stock
 gtk_image_set_from_animation
 gtk_image_set_from_file
@@ -1373,6 +1376,7 @@ gtk_image_set_from_gicon
 gtk_image_set_from_icon_name
 gtk_image_set_from_icon_set
 gtk_image_set_from_pixbuf
+gtk_image_set_from_resource
 gtk_image_set_from_stock
 gtk_image_set_pixel_size
 gtk_image_type_get_type
@@ -3482,6 +3486,7 @@ gtk_tree_view_unset_rows_drag_source
 gtk_true
 gtk_ui_manager_add_ui
 gtk_ui_manager_add_ui_from_file
+gtk_ui_manager_add_ui_from_resource
 gtk_ui_manager_add_ui_from_string
 gtk_ui_manager_ensure_update
 gtk_ui_manager_get_accel_group
