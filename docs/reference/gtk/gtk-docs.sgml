@@ -68,8 +68,9 @@
     <xi:include href="xml/gtkstyle.xml" />
   </part>
 
-  <part id="multitouch">
-    <title>Multitouch</title>
+  <part id="multitouch-and-multidevice">
+    <title>Interacting with input devices</title>
+    <xi:include href="xml/device-interaction-patterns.xml" />
     <xi:include href="xml/gtkgesturesinterpreter.xml" />
   </part>
 

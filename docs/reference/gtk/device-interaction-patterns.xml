@@ -1,0 +1,578 @@
+<?xml version="1.0"?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<chapter id="gtk-device-interaction-patterns">
+  <title>Multitouch and other device interaction patterns</title>
+
+  <para>
+    Depending on the platform, GTK+ is able to handle a wide range of input
+    devices. Those are offered to applications in a 2-level hierarchy, with
+    virtual devices (or master devices) representing the visual cursors
+    displayed in the screen, which are each controlled by a number of physical
+    devices (or slave devices). Those devices can respectively be retrieved
+    from an input event with gdk_event_get_device() and
+    gdk_event_get_source_device().
+  </para>
+
+  <para>
+    In X11, GTK+ uses XInput2 for input events, which caters for a fully dynamic
+    device hierarchy, and support for multiple virtual pointer/keyboard pairs.
+  </para>
+
+  <example>
+    <title>Listing and modifying the device hierarchy</title>
+    <programlisting>
+      carlos@sacarino:~$ xinput list
+      ⎡ Virtual core pointer                          id=2    [master pointer  (3)]
+      ⎜   ↳ Virtual core XTEST pointer                id=4    [slave  pointer  (2)]
+      ⎜   ↳ Wacom ISDv4 E6 Pen stylus                 id=10   [slave  pointer  (2)]
+      ⎜   ↳ Wacom ISDv4 E6 Finger touch               id=11   [slave  pointer  (2)]
+      ⎜   ↳ SynPS/2 Synaptics TouchPad                id=13   [slave  pointer  (2)]
+      ⎜   ↳ TPPS/2 IBM TrackPoint                     id=14   [slave  pointer  (2)]
+      ⎜   ↳ Wacom ISDv4 E6 Pen eraser                 id=16   [slave  pointer  (2)]
+      ⎣ Virtual core keyboard                         id=3    [master keyboard (2)]
+          ↳ Virtual core XTEST keyboard               id=5    [slave  keyboard (3)]
+          ↳ Power Button                              id=6    [slave  keyboard (3)]
+          ↳ Video Bus                                 id=7    [slave  keyboard (3)]
+          ↳ Sleep Button                              id=8    [slave  keyboard (3)]
+          ↳ Integrated Camera                         id=9    [slave  keyboard (3)]
+          ↳ AT Translated Set 2 keyboard              id=12   [slave  keyboard (3)]
+          ↳ ThinkPad Extra Buttons                    id=15   [slave  keyboard (3)]
+
+      carlos@sacarino:~$ xinput create-master eek
+      carlos@sacarino:~$ xinput list
+      ...
+      ⎡ eek pointer                                   id=17   [master pointer  (18)]
+      ⎜   ↳ eek XTEST pointer                         id=19   [slave  pointer  (17)]
+      ⎣ eek keyboard                                  id=18   [master keyboard (17)]
+          ↳ eek XTEST keyboard                        id=20   [slave  keyboard (18)]
+
+      carlos@sacarino:~$ xinput reattach 10 17
+      carlos@sacarino:~$ xinput list
+      ...
+      ⎡ eek pointer                                   id=17   [master pointer  (18)]
+      ⎜   ↳ Wacom ISDv4 E6 Pen stylus                 id=10   [slave  pointer  (17)]
+      ⎜   ↳ eek XTEST pointer                         id=19   [slave  pointer  (17)]
+      ⎣ eek keyboard                                  id=18   [master keyboard (17)]
+          ↳ eek XTEST keyboard                        id=20   [slave  keyboard (18)]
+    </programlisting>
+  </example>
+
+  <para>
+    Anytime a virtual device is added or removed, or a physical device
+    is attached to another virtual device, or left floating (detached
+    from any virtual device), #GdkDeviceManager will emit the corresponding
+    #GdkDeviceManager::device-added, #GdkDeviceManager::device-removed, or
+    #GdkDeviceManager::device-changed signals.
+  </para>
+
+  <section id="gtk-device-patterns-client-pointer">
+    <title>The client pointer</title>
+
+    <para>
+      In X11, Under the presence of multiple virtual pointers, GDK and XInput2
+      use the "client pointer" principle to allow several legacy applications
+      to interact simultaneously with different virtual pointer/keyboard pairs,
+      it would be usually set by the window manager for a focused window, so
+      different application windows could operate on different client pointers.
+      gdk_device_manager_get_client_pointer() may be called to get the client
+      pointer #GdkDevice
+    </para>
+
+    <para>
+      Under the hood, X11 uses the client pointer (or its paired keyboard) to
+      satisfy core calls such as XGrabPointer/Keyboard, XQueryPointer and
+      others that have been superseded by XInput2.
+    </para>
+
+    <para>
+      In platforms without multidevice features, gdk_device_manager_get_client_pointer()
+      will return the only virtual pointer available.
+    </para>
+  </section>
+
+  <section id="gtk-device-patterns-simple">
+    <title>Simple device handling</title>
+
+    <para>
+      There are applications that could have little gain in knowing about
+      multiple devices, although there are situations where a device could
+      be needed (i.e. popping up a menu on the pointer coordinates).
+    </para>
+
+    <para>
+      For such applications, the client pointer may be a good enough
+      approximation for these operations. Under the presence of multiple
+      device pairs, this gives a behavior that is most similar to that
+      of legacy applications (i.e. gtk+2).
+    </para>
+
+    <example>
+      <title>Getting the client pointer and keyboard</title>
+      <programlisting>
+        GdkDisplay *display;
+        GdkDeviceManager *device_manager;
+        GdkDevice *client_pointer, client_keyboard;
+
+        display = gdk_display_get_default ();
+        device_manager = gdk_display_get_device_manager (display);
+        client_pointer = gdk_device_manager_get_client_pointer (device_manager);
+
+        /* Or if we need a keyboard too */
+        client_keyboard = gdk_device_get_associated_device (client_pointer);
+      </programlisting>
+    </example>
+  </section>
+
+  <section id="gtk-device-patterns-multiple-devices">
+    <title>Dealing with multiple devices</title>
+
+    <para>
+      There may be several usecases to deal with multiple devices, including,
+      but not limited to:
+    </para>
+
+    <orderedlist>
+      <listitem>
+        Retrieving advanced information from an input device: i.e. stylus pressure/tilt
+        in drawing applications.
+      </listitem>
+      <listitem>
+        Receiving events from a dedicated input device: i.e. joysticks in games.
+      </listitem>
+      <listitem>
+        Collaborative interfaces, handling simultaneous input from multiple users.
+      </listitem>
+    </orderedlist>
+
+    <para>
+      However, the patterns to make them work are very similar.
+    </para>
+
+    <section>
+      <title>Event handling</title>
+
+      <para>
+        Each device will emit its own event stream, this means
+        that you will need to check the GdkEvent you get in
+        your event handlers
+      </para>
+
+      <example>
+        <title>Reacting differently to devices</title>
+        <programlisting>
+          static gboolean
+          my_widget_motion_notify (GtkWidget      *widget,
+                                   GdkEventMotion *event)
+          {
+            GdkDevice *device, *source_device;
+
+            device = gdk_event_get_device ((GdkEvent *) event);
+            source_device = gdk_event_get_source_device ((GdkEvent *) event);
+
+            g_print ("Motion event by '%s', coming from HW device '%s'\n",
+                     gdk_device_get_name (device),
+                     gdk_device_get_name (source_device));
+
+            /* Handle touch devices differently */
+            if (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCH)
+              {
+                ...
+              }
+            else
+              {
+                ...
+              }
+            return TRUE;
+          }
+        </programlisting>
+      </example>
+
+      <para>
+        The mechanism above could also be used for fine grained event discarding
+        (i.e. so rubberband selection doesn't jump to another pointer entering
+        the widget for example)
+      </para>
+
+      <example>
+        <title>Reacting differently to devices</title>
+        <programlisting>
+          static gboolean
+          my_widget_button_press (Gtkwidget      *widget,
+                                  GdkEventButton *event)
+          {
+            GET_PRIV(widget)->current_pointer = gdk_event_get_device ((GdkEvent *) event);
+            ...
+          }
+
+          static gboolean
+          my_widget_button_release (Gtkwidget      *widget,
+                                    GdkEventButton *event)
+          {
+            GET_PRIV(widget)->current_pointer = NULL;
+            ...
+          }
+
+          static gboolean
+          my_widget_motion_notify (Gtkwidget      *widget,
+                                   GdkEventMotion *event)
+          {
+            if (gdk_event_get_device (event) !=
+                GET_PRIV(widget)->current_pointer)
+              return FALSE;
+
+            ...
+          }
+        </programlisting>
+      </example>
+    </section>
+
+    <section>
+      <title>Grabs</title>
+
+      <para>
+        Grabs are a mechanism to coerce a device into sending events to
+        a window, but with multidevice there's an other side of the coin,
+        how other devices are supposed to interact while the grab is in
+        effect.
+      </para>
+
+      <para>
+        The GdkGrabOwnership enum passed to gdk_device_grab() may be used
+        to block other devices' interaction. %GDK_OWNERSHIP_NONE applies
+        no restrictions, allowing other devices to interact, even with
+        the grab window. %GDK_OWNERSHIP_WINDOW blocks other devices from
+        interacting with the grab window, but they'll still be able to
+        interact with the rest of the application, whereas
+        %GDK_OWNERSHIP_APPLICATION will render the whole application
+        insensitive to input from other devices. Different devices may
+        have simultaneous grabs on the same or different windows.
+      </para>
+
+      <example>
+        <title>Grabbing as a result of an input event</title>
+        <programlisting>
+          gboolean
+          my_widget_button_press (GtkWidget      *widget,
+                                  GdkEventButton *event)
+          {
+            GdkDevice *pointer, *keyboard;
+
+            pointer = gdk_event_get_device ((GdkEvent *) event);
+            keyboard = gdk_device_get_associated_device (pointer);
+
+            /* Grab both keyboard/pointer, other devices will be
+             * unable to interact with the widget window meanwhile
+             */
+            gdk_device_grab (pointer,
+                             gtk_widget_get_window (widget),
+                             GDK_OWNERSHIP_WINDOW,
+                             ...);
+            gdk_device_grab (keyboard,
+                             gtk_widget_get_window (widget),
+                             GDK_OWNERSHIP_WINDOW,
+                             ...);
+
+            return FALSE;
+          }
+        </programlisting>
+      </example>
+
+      <para>
+        For GTK+ grabs, there's only a boolean value, equivalent to
+        %GDK_OWNERSHIP_NONE and %GDK_OWNERSHIP_WINDOW, but the mechanism
+        is quite similar.
+      </para>
+
+      <para>
+        Once the device is grabbed, there may be different situations
+        that could break the grabs, so the widget needs to listen to
+        #GdkGrabBrokenEvent and the #GtkWidget::grab-notify signal to
+        handle these situations.
+      </para>
+
+      <example>
+        <title>Handling broken grabs</title>
+        <programlisting>
+          static gboolean
+          my_widget_grab_broken (GtkWidget          *widget,
+                                 GdkEventGrabBroken *event)
+          {
+            MyWidgetPrivate *priv = GET_PRIV (widget);
+
+            if (gdk_event_get_device (event) == priv->grab_pointer)
+              {
+                /* Undo state */
+                ...
+                priv->grab_pointer = NULL;
+                return TRUE;
+              }
+
+            return FALSE;
+          }
+
+          static void
+          my_widget_grab_notify (GtkWidget *widget,
+                                 gboolean   was_grabbed)
+          {
+            MyWidgetPrivate *priv = GET_PRIV (widget);
+
+            if (gtk_widget_device_is_shadowed (widget, priv->grab_device))
+              {
+                /* Device was "shadowed" by another widget's grab,
+                 * release and undo state
+                 */
+                ...
+                priv->grab_pointer = NULL;
+              }
+          }
+        </programlisting>
+      </example>
+    </section>
+
+    <section>
+      <title>Handling multipointer</title>
+
+      <para>
+        Widgets do react by default to every virtual device, although
+        by default they are set in a compatibility mode that makes them
+        behave better with multiple pointers, without necessarily
+        being multipointer aware.
+      </para>
+
+      <para>
+        This compatibility mode most notably disables per-device
+        enter/leave events, so these are stacked, and the crossing
+        events are only emitted when the first pointer enters the
+        window, and after the last pointer leaves it. This behavior
+        is controlled through gtk_widget_set_support_multidevice()
+      </para>
+    </section>
+
+    <section>
+      <title>Reading device axis values</title>
+
+      <para>
+        Button and motion events provide further information about
+        the device axes' current state. Note the device axes are
+        hardware and driver dependent, therefore the set of axes
+        is not set in stone, although there are a few more common ones.
+      </para>
+
+      <example>
+        <title>Getting to know the axes provided by a device</title>
+        <programlisting>
+          carlos@sacarino:~$ xinput list "Wacom ISDv4 E6 Pen stylus"  |grep "Label"
+                          Label: Abs X
+                          Label: Abs Y
+                          Label: Abs Pressure
+                          Label: Abs Tilt X
+                          Label: Abs Tilt Y
+                          Label: Abs Wheel
+        </programlisting>
+      </example>
+
+      <example>
+        <title>Getting an axis value</title>
+        <programlisting>
+          gboolean
+          my_widget_motion_notify (GtkWidget      *widget,
+                                   GdkEventMotion *event)
+          {
+            GdkAtom *label_atom;
+            gdouble pressure;
+
+            label_atom = gdk_atom_intern_static_string ("Abs Pressure");
+            gdk_device_get_axis_value (gdk_event_get_device ((GdkEvent *) event),
+                                       event->axes, label_atom, &amp;pressure);
+
+            /* Do something with pressure */
+            ...
+
+            return TRUE;
+          }
+        </programlisting>
+      </example>
+
+      <para>
+        All pointer devices report axes information, master and slave. to
+        achieve this, master pointers modify their list of axes at runtime
+        to reflect those of the currently routed slave, emitting
+        #GdkDevice::changed as the routed slave device changes.
+      </para>
+    </section>
+
+    <section>
+      <title>Dealing with slave (or floating) devices</title>
+
+      <para>
+        By default, GTK+ listens to all master devices, and typically
+        all slave devices will be attached to a master device. so
+        gdk_event_get_source_device() is the recommended way to deal
+        with the physical device triggering the event.
+      </para>
+
+      <para>
+        In more specialized setups, some devices could be floating
+        (i.e. tablets that don't route events through any virtual
+        pointer, but are expected to interact with drawing applications).
+        In that case, such specialized applications could want to interact
+        directly with the device. To do so, the device must be enabled,
+        and the widget wanting its events needs to add the event mask.
+      </para>
+
+      <example>
+        <title>Enabling events for a slave device</title>
+        <programlisting>
+          GdkDevice *device;
+
+          /* Gets the first device found with the given GdkInputSource */
+          device = get_device (gtk_widget_get_display (widget),
+                               GDK_SOURCE_PEN);
+          gdk_device_set_mode (device, GDK_MODE_SCREEN);
+          gtk_widget_add_device_events (widget, device,
+                                        GDK_BUTTON_PRESS_MASK |
+                                        GDK_BUTTON_RELEASE_MASK |
+                                        GDK_POINTER_MOTION_MASK);
+        </programlisting>
+      </example>
+
+      <para>
+        After these calls, the widget would specifically receive events
+        from the physical device, regardless of it being floating or
+        connected to a master device. In this second case, and if you
+        want exclusive control of the device, you can temporarily detach
+        the stylus device from its master by doing a GDK grab on it.
+      </para>
+
+      <para>
+        For events coming directly from slave devices, both
+        gdk_event_get_device() and gdk_event_get_source_device() will
+        return the same device of type %GDK_DEVICE_TYPE_SLAVE or
+        %GDK_DEVICE_TYPE_FLOATING.
+      </para>
+
+      <note>
+        This is less useful than it used to be in GTK+2/XInput1, at least
+        for attached slaves, as there is gdk_event_get_source_device(),
+        and master devices' events provide axes information.
+      </note>
+    </section>
+  </section>
+
+  <section id="gtk-device-patterns-multitouch-widgets">
+    <title>Multitouch in GTK+ widgets</title>
+
+    <para>
+      Since version 3.4, GTK+ offers support for multitouch devices through a new
+      set of events and higher level tools like #GdkTouchCluster and
+      #GtkGesturesInterpreter.
+    </para>
+
+    <para>
+      If the widget does not have %GDK_TOUCH_MASK set in the event mask, it will
+      only be allowed to interact with the touch emulating pointer events, and will
+      only receive pointer events.
+    </para>
+
+    <para>
+      If the widget does have %GDK_TOUCH_MASK enabled, it will be able to receive
+      events of type %GDK_TOUCH_PRESS, %GDK_TOUCH_RELEASE and %GDK_TOUCH_MOTION,
+      which will be respectively emitted through the #GtkWidget::button-press-event,
+      #GtkWidget::button-release-event and #GtkWidget::motion-notify-event signals.
+      There may be multiple, simultaneous sequences of events, those will be
+      recognized and referenced by their touch ID. See gdk_event_get_touch_id().
+    </para>
+
+    <para>
+      #GtkWidget<!-- -->s may create GdkTouchCluster<!-- -->s via
+      gdk_window_create_touch_cluster(), those may be used to group
+      touch events together, which are notified through #GdkEventMultitouch,
+      this event will be emitted in #GtkWidget<!-- -->s through the
+      #GtkWidget::multitouch-event signal.
+    </para>
+
+    <para>
+      Widgets may also handle gestures being performed on them,
+      gtk_widget_enable_gesture() and gtk_widget_disable_gesture() are
+      provided as a simple API, although widgets may also create a
+      #GtkGesturesInterpreter and feed it events directly.
+    </para>
+  </section>
+
+  <section id="gtk-device-patterns-multitouch">
+    <title>Multitouch across a widget hierarchy</title>
+
+    <para>
+      Fully touch driven applications might not want to confine multitouch
+      operations within a single widget, but rather offer simultaneous
+      interaction with multiple widgets.
+    </para>
+    <para>
+      GTK+ is able to provide such experience, although it does not enable
+      %GDK_TOUCH_MASK by default on its stock widgets. If a widget meets the
+      following requirements, it is ready to be used in a multitouch UI:
+    </para>
+
+    <orderedlist>
+      <listitem>
+        The widget handles #GtkWidget::button-press-event, #GtkWidget::button-release-event
+        and #GtkWidget::motion-notify-event, and does something meaningful while the button 1
+        is pressed. If any explicit check on the event type being %GDK_BUTTON_PRESS,
+        %GDK_BUTTON_RELEASE or %GDK_MOTION_NOTIFY is performed, the event types
+        %GDK_TOUCH_PRESS, %GDK_TOUCH_RELEASE or %GDK_TOUCH_MOTION also need to be handled.
+      </listitem>
+      <listitem>
+        The widget relies on the implicit grab as long as the button press/touch is active,
+        GDK or GTK+ grabs would break the implicit grabs other touch sequences may have on
+        other widgets.
+      </listitem>
+      <listitem>
+        The widget does not require (or opts out) keyboard interaction while a touch is
+        active on it. Touch interaction does not necessarily bring the keyboard focus with it.
+      </listitem>
+      <listitem>
+        If the widget is only meant to interact with one touch sequence at a time (i.e.
+        buttons), it has to be able to discern and reject operations on any later touch
+        sequence as long as the touch it is interacting with remains active.
+      </listitem>
+    </orderedlist>
+
+    <para>
+      If a widget meets those requirements, enabling %GDK_TOUCH_MASK on it will suffice
+      to make it handle multitouch events in a way that doesn't disrupt other touch
+      operations.
+    </para>
+
+    <example>
+      <title>Enabling touch events on a widget</title>
+      <programlisting>
+        gtk_widget_add_events (widget, GDK_TOUCH_MASK);
+      </programlisting>
+    </example>
+
+    <note>
+      Not all GTK+ stock widgets are immediately suitable for handling touch
+      events, there could be even design reasons on some of those which render
+      them unsuitable.
+    </note>
+  </section>
+
+  <section id="gtk-device-patterns-recommendations">
+    <title>Recommendations</title>
+
+    <orderedlist>
+      <listitem>
+        Device operations often come up as a result of input events, favor
+        gdk_event_get_device() and gtk_get_current_event_device() before
+        gdk_device_manager_get_client_pointer().
+      </listitem>
+
+      <listitem>
+        Store the devices the widget is currently interacting with, handle
+        GdkEventGrabBroken and #GtkWidget::grab-notify to undo/nullify these.
+      </listitem>
+    </orderedlist>
+  </section>
+</chapter>

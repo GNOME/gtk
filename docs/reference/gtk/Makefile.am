@@ -119,6 +119,7 @@ content_files =					\
 	running.sgml				\
 	building.sgml				\
 	compiling.sgml				\
+	device-interaction-patterns.xml		\
 	drawing-model.xml			\
 	glossary.xml				\
 	migrating-2to3.xml			\
@@ -142,6 +143,7 @@ content_files =					\
 	overview.xml
 
 expand_content_files = 				\
+	device-interaction-patterns.xml		\
 	drawing-model.xml			\
 	getting_started.xml			\
 	glossary.xml				\
