@@ -52,7 +52,6 @@ EXTRA_DIST += \
 	buttons.ui buttons.txt \
 	colorchooser.ui colorchooser.txt \
 	about.ui about.txt \
-	appchooser.ui appchooser.txt \
 	messagedialog.ui messagedialog.txt \
 	expander.ui expander.txt \
 	assistant.ui assistant.txt \
