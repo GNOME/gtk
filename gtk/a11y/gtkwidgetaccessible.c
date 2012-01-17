@@ -204,7 +204,7 @@ find_label (GtkWidget *widget)
   ptr = labels;
   while (ptr)
     {
-      if (ptr->data && gtk_widget_get_visible (GTK_WIDGET (ptr->data)))
+      if (ptr->data)
         {
           label = ptr->data;
           break;
