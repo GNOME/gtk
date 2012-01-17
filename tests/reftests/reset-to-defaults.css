@@ -52,4 +52,7 @@
   engine: initial;
   transition: initial;
   gtk-key-bindings: initial;
+
+  -GtkWidget-focus-line-width: 0;
+  -GtkWidget-focus-padding: 0;
 }
