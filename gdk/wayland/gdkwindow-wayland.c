@@ -637,7 +637,11 @@ gdk_window_wayland_move_resize (GdkWindow *window,
   window->x = x;
   window->y = y;
 
-  _gdk_wayland_window_update_size (window, width, height, 0);
+  /* If this function is called with width and height = -1 then that means
+   * just move the window - don't update its size
+   */
+  if (width > 0 && height > 0)
+    _gdk_wayland_window_update_size (window, width, height, 0);
 }
 
 static void
