@@ -66,8 +66,9 @@ main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
 
-  if (argc > 1)
-    filename = argv[1];
+  if (argc < 2)
+    return 1;
+  filename = argv[1];
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_file (builder, filename, NULL);
