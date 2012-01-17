@@ -3345,7 +3345,18 @@ create_pickone_option (ppd_file_t   *ppd_file,
 	      option->choices_display[i] = get_choice_text (ppd_file, available[i]);
 	    }
 	}
-      gtk_printer_option_set (option, ppd_option->defchoice);
+
+      if (option->type != GTK_PRINTER_OPTION_TYPE_PICKONE)
+        {
+          if (g_str_has_prefix (ppd_option->defchoice, "Custom."))
+            gtk_printer_option_set (option, ppd_option->defchoice + 7);
+          else
+            gtk_printer_option_set (option, ppd_option->defchoice);
+        }
+      else
+        {
+          gtk_printer_option_set (option, ppd_option->defchoice);
+        }
     }
 #ifdef PRINT_IGNORED_OPTIONS
   else
