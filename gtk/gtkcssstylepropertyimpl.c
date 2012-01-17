@@ -525,6 +525,95 @@ background_repeat_value_print (GtkCssStyleProperty *property,
   g_type_class_unref (enum_class);
 }
 
+static gboolean
+background_size_parse (GtkCssStyleProperty *property,
+                       GValue              *value,
+                       GtkCssParser        *parser,
+                       GFile               *base)
+{
+  GtkCssBackgroundSize size = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), FALSE, FALSE};
+
+  if (_gtk_css_parser_try (parser, "cover", TRUE))
+    size.cover = TRUE;
+  else if (_gtk_css_parser_try (parser, "contain", TRUE))
+    size.contain = TRUE;
+  else
+    {
+      if (_gtk_css_parser_try (parser, "auto", TRUE))
+        _gtk_css_number_init (&size.width, 0, GTK_CSS_PX);
+      else if (!_gtk_css_parser_read_number (parser,
+                                             &size.width,
+                                             GTK_CSS_POSITIVE_ONLY
+                                             | GTK_CSS_PARSE_PERCENT
+                                             | GTK_CSS_PARSE_LENGTH))
+        return FALSE;
+
+      if (_gtk_css_parser_try (parser, "auto", TRUE))
+        _gtk_css_number_init (&size.height, 0, GTK_CSS_PX);
+      else if (_gtk_css_parser_has_number (parser))
+        {
+          if (!_gtk_css_parser_read_number (parser,
+                                            &size.height,
+                                            GTK_CSS_POSITIVE_ONLY
+                                            | GTK_CSS_PARSE_PERCENT
+                                            | GTK_CSS_PARSE_LENGTH))
+            return FALSE;
+        }
+      else
+        _gtk_css_number_init (&size.height, 0, GTK_CSS_PX);
+    }
+
+  g_value_set_boxed (value, &size);
+  return TRUE;
+}
+
+static void
+background_size_print (GtkCssStyleProperty *property,
+                       const GValue        *value,
+                       GString             *string)
+{
+  GtkCssBackgroundSize *size = g_value_get_boxed (value);
+
+  if (size->cover)
+    g_string_append (string, "cover");
+  else if (size->contain)
+    g_string_append (string, "contain");
+  else
+    {
+      if (size->width.value == 0)
+        g_string_append (string, "auto");
+      else
+        _gtk_css_number_print (&size->width, string);
+
+      if (size->height.value != 0)
+        {
+          g_string_append (string, " ");
+          _gtk_css_number_print (&size->height, string);
+        }
+    }
+}
+
+static void
+background_size_compute (GtkCssStyleProperty    *property,
+                         GValue                 *computed,
+                         GtkStyleContext        *context,
+                         const GValue           *specified)
+{
+  GtkCssBackgroundSize *ssize = g_value_get_boxed (specified);
+  GtkCssBackgroundSize csize;
+
+  csize.cover = ssize->cover;
+  csize.contain = ssize->contain;
+  _gtk_css_number_compute (&csize.width,
+                           &ssize->width,
+                           context);
+  _gtk_css_number_compute (&csize.height,
+                           &ssize->height,
+                           context);
+
+  g_value_set_boxed (computed, &csize);
+}
+
 /*** REGISTRATION ***/
 
 static GtkSymbolicColor *
@@ -544,6 +633,7 @@ _gtk_css_style_property_init_properties (void)
   char *default_font_family[] = { "Sans", NULL };
   GtkCssNumber number;
   GtkSymbolicColor *symbolic;
+  GtkCssBackgroundSize default_background_size = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), FALSE, FALSE };
   GtkCssBorderCornerRadius no_corner_radius = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX) };
   GtkBorder border_of_ones = { 1, 1, 1, 1 };
   GtkCssBorderImageRepeat border_image_repeat = { GTK_CSS_REPEAT_STYLE_STRETCH, GTK_CSS_REPEAT_STYLE_STRETCH };
@@ -878,7 +968,6 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           GTK_CSS_AREA_BORDER_BOX);
-                                        
   gtk_css_style_property_register        ("background-origin",
                                           GTK_TYPE_CSS_AREA,
                                           GTK_TYPE_CSS_AREA,
@@ -888,6 +977,15 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           GTK_CSS_AREA_PADDING_BOX);
+  gtk_css_style_property_register        ("background-size",
+                                          GTK_TYPE_CSS_BACKGROUND_SIZE,
+                                          GTK_TYPE_CSS_BACKGROUND_SIZE,
+                                          G_TYPE_NONE,
+                                          0,
+                                          background_size_parse,
+                                          background_size_print,
+                                          background_size_compute,
+                                          &default_background_size);
 
   gtk_css_style_property_register        ("border-top-color",
                                           GTK_TYPE_SYMBOLIC_COLOR,

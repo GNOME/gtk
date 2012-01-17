@@ -100,12 +100,20 @@ typedef enum /*< skip >*/ {
 } GtkCssUnit;
 
 typedef struct _GtkCssNumber GtkCssNumber;
+typedef struct _GtkCssBackgroundSize GtkCssBackgroundSize;
 typedef struct _GtkCssBorderCornerRadius GtkCssBorderCornerRadius;
 typedef struct _GtkCssBorderImageRepeat GtkCssBorderImageRepeat;
 
 struct _GtkCssNumber {
   gdouble        value;
   GtkCssUnit     unit;
+};
+
+struct _GtkCssBackgroundSize {
+  GtkCssNumber width;  /* 0 means auto here */
+  GtkCssNumber height; /* 0 means auto here */
+  guint cover :1;
+  guint contain :1;
 };
 
 struct _GtkCssBorderCornerRadius {
@@ -118,10 +126,12 @@ struct _GtkCssBorderImageRepeat {
   GtkCssBorderRepeatStyle hrepeat;
 };
 
+#define GTK_TYPE_CSS_BACKGROUND_SIZE _gtk_css_background_size_get_type ()
 #define GTK_TYPE_CSS_BORDER_CORNER_RADIUS _gtk_css_border_corner_radius_get_type ()
 #define GTK_TYPE_CSS_BORDER_IMAGE_REPEAT _gtk_css_border_image_repeat_get_type ()
 #define GTK_TYPE_CSS_NUMBER _gtk_css_number_get_type ()
 
+GType           _gtk_css_background_size_get_type               (void);
 GType           _gtk_css_border_corner_radius_get_type          (void);
 GType           _gtk_css_border_image_repeat_get_type           (void);
 GType           _gtk_css_number_get_type                        (void);
