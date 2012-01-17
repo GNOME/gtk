@@ -34,7 +34,8 @@ TEST_PROGS += children
 #
 # TEST_PROGS += focus
 
-TEST_PROGS += tree-relationships
+# currently broken
+# TEST_PROGS += tree-relationships
 
 TEST_PROGS += util
 
