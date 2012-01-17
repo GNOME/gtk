@@ -5330,8 +5330,6 @@ gtk_window_realize (GtkWidget *widget)
     }
 #endif
 
-  gtk_window_set_application (window, gtk_window_get_application (window));
-
   /* Icons */
   gtk_window_realize_icon (window);
   
