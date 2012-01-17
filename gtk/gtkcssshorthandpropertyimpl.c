@@ -81,10 +81,10 @@ parse_border_width (GtkCssShorthandProperty *shorthand,
 }
 
 static gboolean
-parse_border_width_really (GtkCssShorthandProperty *shorthand,
-                           GValue                  *values,
-                           GtkCssParser            *parser,
-                           GFile                   *base)
+parse_four_numbers (GtkCssShorthandProperty *shorthand,
+                    GValue                  *values,
+                    GtkCssParser            *parser,
+                    GtkCssNumberParseFlags   flags)
 {
   GtkCssNumber numbers[4];
   guint i;
@@ -96,9 +96,7 @@ parse_border_width_really (GtkCssShorthandProperty *shorthand,
 
       if (!_gtk_css_parser_read_number (parser,
                                         &numbers[i], 
-                                        GTK_CSS_POSITIVE_ONLY
-                                        | GTK_CSS_NUMBER_AS_PIXELS
-                                        | GTK_CSS_PARSE_LENGTH))
+                                        flags))
         return FALSE;
     }
 
@@ -120,6 +118,33 @@ parse_border_width_really (GtkCssShorthandProperty *shorthand,
     }
 
   return TRUE;
+}
+
+static gboolean
+parse_margin (GtkCssShorthandProperty *shorthand,
+              GValue                  *values,
+              GtkCssParser            *parser,
+              GFile                   *base)
+{
+  return parse_four_numbers (shorthand,
+                             values,
+                             parser,
+                             GTK_CSS_NUMBER_AS_PIXELS
+                             | GTK_CSS_PARSE_LENGTH);
+}
+
+static gboolean
+parse_border_width_really (GtkCssShorthandProperty *shorthand,
+                           GValue                  *values,
+                           GtkCssParser            *parser,
+                           GFile                   *base)
+{
+  return parse_four_numbers (shorthand,
+                             values,
+                             parser,
+                             GTK_CSS_POSITIVE_ONLY
+                             | GTK_CSS_NUMBER_AS_PIXELS
+                             | GTK_CSS_PARSE_LENGTH);
 }
 
 static gboolean 
@@ -892,7 +917,7 @@ _gtk_css_shorthand_property_init_properties (void)
   _gtk_css_shorthand_property_register   ("margin",
                                           GTK_TYPE_BORDER,
                                           margin_subproperties,
-                                          parse_border_width,
+                                          parse_margin,
                                           unpack_border,
                                           pack_border);
   _gtk_css_shorthand_property_register   ("padding",
