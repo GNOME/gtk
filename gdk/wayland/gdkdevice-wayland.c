@@ -378,6 +378,19 @@ input_handle_button(void *data, struct wl_input_device *input_device,
   GdkDisplayWayland *display = GDK_DISPLAY_WAYLAND (device->display);
   GdkEvent *event;
   uint32_t modifier;
+  int gdk_button;
+
+  switch (button) {
+  case 273:
+    gdk_button = 3;
+    break;
+  case 274:
+    gdk_button = 2;
+    break;
+  default:
+    gdk_button = button - 271;
+    break;
+  }
 
   device->time = time;
   event = gdk_event_new (state ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
@@ -390,10 +403,10 @@ input_handle_button(void *data, struct wl_input_device *input_device,
   event->button.y_root = (gdouble) device->y;
   event->button.axes = NULL;
   event->button.state = device->modifiers;
-  event->button.button = button - 271;
+  event->button.button = gdk_button;
   gdk_event_set_screen (event, display->screen);
 
-  modifier = 1 << (8 + button - 272);
+  modifier = 1 << (8 + gdk_button - 1);
   if (state)
     device->modifiers |= modifier;
   else
