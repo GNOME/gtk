@@ -2427,7 +2427,7 @@ gtk_button_update_state (GtkButton *button)
   if (priv->in_button)
     new_state |= GTK_STATE_FLAG_PRELIGHT;
 
-  if (priv->button_down || depressed)
+  if (depressed)
     new_state |= GTK_STATE_FLAG_ACTIVE;
 
   _gtk_button_set_depressed (button, depressed);
