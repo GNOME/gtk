@@ -37,6 +37,9 @@ EXTRA_DIST += \
 	background-origin.ui \
 	background-positioning-area-empty.ref.ui \
 	background-positioning-area-empty.ui \
+	background-size.css \
+	background-size.ref.ui \
+	background-size.ui \
 	reference-background-origin.png	\
 	border-color-default.css \
 	border-color-default.ref.ui \
