@@ -286,6 +286,8 @@ EXTRA_DIST += \
 	integer.css \
 	integer.errors \
 	integer.ref.css \
+	linear-gradient.css \
+	linear-gradient.ref.css \
 	no-semicolon.css \
 	no-semicolon.ref.css \
 	pseudo-classes-unknown.css \
