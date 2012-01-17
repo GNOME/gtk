@@ -324,7 +324,8 @@ gtk_css_image_get_parser_type (GtkCssParser *parser)
     { "url", _gtk_css_image_url_get_type },
     { "-gtk-gradient", _gtk_css_image_gradient_get_type },
     { "-gtk-win32-theme-part", _gtk_css_image_win32_get_type },
-    { "linear-gradient", _gtk_css_image_linear_get_type }
+    { "linear-gradient", _gtk_css_image_linear_get_type },
+    { "repeating-linear-gradient", _gtk_css_image_linear_get_type }
   };
   guint i;
 

@@ -51,6 +51,7 @@ struct _GtkCssImageLinear
   GtkCssNumber angle; /* warning: We use GTK_CSS_NUMBER as an enum for the corners */
   GArray *stops;
   guint is_computed :1;
+  guint repeating :1;
 };
 
 struct _GtkCssImageLinearClass

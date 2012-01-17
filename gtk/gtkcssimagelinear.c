@@ -168,7 +168,10 @@ gtk_css_image_linear_draw (GtkCssImage        *image,
   gtk_css_image_linear_get_start_end (linear, length, &start, &end);
   pattern = cairo_pattern_create_linear (x * (start - 0.5), y * (start - 0.5),
                                          x * (end - 0.5),   y * (end - 0.5));
-  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
+  if (linear->repeating)
+    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+  else
+    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
   offset = start;
   last = -1;
@@ -230,7 +233,11 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
   guint i;
 
-  if (!_gtk_css_parser_try (parser, "linear-gradient(", TRUE))
+  if (_gtk_css_parser_try (parser, "repeating-linear-gradient(", TRUE))
+    linear->repeating = TRUE;
+  else if (_gtk_css_parser_try (parser, "linear-gradient(", TRUE))
+    linear->repeating = FALSE;
+  else
     {
       _gtk_css_parser_error (parser, "Not a linear gradient");
       return FALSE;
@@ -356,7 +363,11 @@ gtk_css_image_linear_print (GtkCssImage *image,
   /* XXX: Do these need to be prinatable? */
   g_return_if_fail (!linear->is_computed);
 
-  g_string_append (string, "linear-gradient(");
+  if (linear->repeating)
+    g_string_append (string, "repeating-linear-gradient(");
+  else
+    g_string_append (string, "linear-gradient(");
+
   if (linear->angle.unit == GTK_CSS_NUMBER)
     {
       guint side = linear->angle.value;
@@ -421,6 +432,7 @@ gtk_css_image_linear_compute (GtkCssImage     *image,
 
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_LINEAR, NULL);
   copy->is_computed = TRUE;
+  copy->repeating = linear->repeating;
 
   _gtk_css_number_compute (&copy->angle, &linear->angle, context);
   
