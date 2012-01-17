@@ -1019,7 +1019,7 @@ gdk_wayland_device_get_selection_type_atoms (GdkDevice  *gdk_device,
 
   device = GDK_DEVICE_CORE (gdk_device)->device;
 
-  if (device->selection_offer->types->len == 0)
+  if (!device->selection_offer || device->selection_offer->types->len == 0)
     {
       *atoms_out = NULL;
       return 0;
