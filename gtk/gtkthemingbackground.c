@@ -114,6 +114,39 @@ _gtk_theming_background_apply_clip (GtkThemingBackground *bg)
 }
 
 static void
+_gtk_theming_background_get_cover_contain (GtkCssImage *image,
+                                           gboolean     cover,
+                                           double       width,
+                                           double       height,
+                                           double      *concrete_width,
+                                           double      *concrete_height)
+{
+  double aspect, image_aspect;
+  
+  image_aspect = _gtk_css_image_get_aspect_ratio (image);
+  if (image_aspect == 0.0)
+    {
+      *concrete_width = width;
+      *concrete_height = height;
+      return;
+    }
+
+  aspect = width / height;
+
+  if ((aspect >= image_aspect && cover) ||
+      (aspect < image_aspect && !cover))
+    {
+      *concrete_width = width;
+      *concrete_height = width / image_aspect;
+    }
+  else
+    {
+      *concrete_height = height;
+      *concrete_width = height * image_aspect;
+    }
+}
+
+static void
 _gtk_theming_background_paint (GtkThemingBackground *bg,
                                cairo_t              *cr)
 {
@@ -130,9 +163,11 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       && bg->image_rect.height > 0)
     {
       GtkCssBackgroundRepeat hrepeat, vrepeat;
+      GtkCssBackgroundSize *size;
       double image_width, image_height;
       double width, height;
 
+      size = g_value_get_boxed (_gtk_theming_engine_peek_property (bg->engine, "background-size"));
       gtk_theming_engine_get (bg->engine, bg->flags,
                               "background-repeat", &hrepeat,
                               NULL);
@@ -141,10 +176,20 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       width = bg->image_rect.width;
       height = bg->image_rect.height;
 
-      _gtk_css_image_get_concrete_size (bg->image,
-                                        0, 0, /* XXX: needs background-size support */
-                                        width, height,
-                                        &image_width, &image_height);
+      if (size->contain || size->cover)
+        _gtk_theming_background_get_cover_contain (bg->image,
+                                                   size->cover,
+                                                   width,
+                                                   height,
+                                                   &image_width,
+                                                   &image_height);
+      else
+        _gtk_css_image_get_concrete_size (bg->image,
+                                          /* note: 0 does the right thing here for 'auto' */
+                                          _gtk_css_number_get (&size->width, width),
+                                          _gtk_css_number_get (&size->height, height),
+                                          width, height,
+                                          &image_width, &image_height);
 
       /* optimization */
       if (image_width == width)
