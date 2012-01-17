@@ -53,10 +53,6 @@ EXTRA_DIST += \
 	border-image-gradient.css \
 	border-image-gradient.ref.ui \
 	border-image-gradient.ui \
-	border-image-repeat.css \
-	border-image-repeat.ref.ui \
-	border-image-repeat.sh \
-	border-image-repeat.ui \
 	border-image-url.css \
 	border-image-url.ref.ui \
 	border-image-url.ui \
