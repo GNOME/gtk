@@ -10,7 +10,7 @@ GtkButton {
 
 .row1, .row2, .row3 {
   /*border:5px solid blue;*/
-  border-width: 5;
+  border-width: 5px;
   border-style: solid;
   border-color: blue;
   background-color:orange;
@@ -40,7 +40,7 @@ GtkButton {
 }
 
 .reference-border {
-  border-width: 5;
+  border-width: 5px;
   border-style: solid;
   border-color: blue;
 }
@@ -55,14 +55,14 @@ GtkButton {
 
 /*
 .reference-padding-radius {
-  border-radius: 15
+  border-radius: 15px
 }
 
 .reference-radii1 {
-  border-radius: 15 0 10;
+  border-radius: 15px 0 10px;
 }
 
 .reference-radii2 {
-  border-radius: 5 0 10;
+  border-radius: 5px 0 10px;
 }
 */

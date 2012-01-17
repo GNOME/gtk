@@ -3,7 +3,7 @@
 GtkButton {
   background-color: red;
   border-color: green;
-  border-width: 1;
+  border-width: 1px;
 }
 
 .button-top-left {

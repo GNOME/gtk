@@ -12,7 +12,7 @@ GtkWindow {
 }
 
 GtkButton {
-  border-width: 5;
+  border-width: 5px;
   border-style: solid;
   border-color: rgba(255,0,0,0.6);
   padding: 10;
