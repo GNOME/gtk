@@ -153,6 +153,8 @@ EXTRA_DIST += \
 	background-repeat.ref.css \
 	background-shorthand.css \
 	background-shorthand.ref.css \
+        background-size.css \
+        background-size.ref.css \
 	boolean.css \
 	boolean.errors \
 	boolean.ref.css \
