@@ -195,10 +195,26 @@ gtk_scale_notify (GObject    *object,
   else if (strcmp (pspec->name, "inverted") == 0)
     {
       GtkScale *scale = GTK_SCALE (object);
+      GtkScaleMark *mark;
+      GSList *m;
+      gint i, n;
+      gdouble *values;
 
       scale->priv->marks = g_slist_sort_with_data (scale->priv->marks,
                                                    compare_marks,
                                                    GINT_TO_POINTER (gtk_range_get_inverted (GTK_RANGE (scale))));
+
+      n = g_slist_length (scale->priv->marks);
+      values = g_new (gdouble, n);
+      for (m = scale->priv->marks, i = 0; m; m = m->next, i++)
+        {
+          mark = m->data;
+          values[i] = mark->value;
+        }
+
+      _gtk_range_set_stop_values (GTK_RANGE (scale), values, n);
+
+      g_free (values);
     }
 
   if (G_OBJECT_CLASS (gtk_scale_parent_class)->notify)
@@ -1145,19 +1161,6 @@ gtk_scale_draw (GtkWidget *widget,
 
       orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (range));
       n_marks = _gtk_range_get_stop_positions (range, &marks);
-      /* We always draw the marks in increasing direction, so flip
-       * the stop positions to match the marks (which we flip in
-       * gtk_scale_notify)
-       */
-      if (gtk_range_get_inverted (range))
-        {
-          for (i = 0; i < n_marks / 2; i++)
-            {
-              x1 = marks[i];
-              marks[i] = marks[n_marks - 1 - i];
-              marks[n_marks - 1 - i] = x1;
-            }
-        }
 
       layout = gtk_widget_create_pango_layout (widget, NULL);
       gtk_range_get_range_rect (range, &range_rect);
@@ -1615,8 +1618,9 @@ gtk_scale_add_mark (GtkScale        *scale,
   else
     mark->position = GTK_POS_BOTTOM;
 
-  priv->marks = g_slist_insert_sorted (priv->marks, mark,
-                                       (GCompareFunc) compare_marks);
+  priv->marks = g_slist_insert_sorted_with_data (priv->marks, mark,
+                                                 compare_marks,
+                                                 GINT_TO_POINTER (gtk_range_get_inverted (GTK_RANGE (scale))));
 
 #define MARKS_ABOVE 1
 #define MARKS_BELOW 2
