@@ -1,0 +1,50 @@
+@import "reset-to-defaults.css";
+
+* {
+  background-size: 100% 100%;
+}
+
+GtkButton {
+  border-image-source: url("border-image-balls.png");
+  border-image-slice: 20;
+  border-image-repeat: stretch;
+  border-width: 5px;
+  border-style: solid;
+}
+
+.stretch-stretch { border-image-repeat: stretch stretch }
+.stretch-repeat { border-image-repeat: stretch repeat }
+.stretch-round { border-image-repeat: stretch round }
+.stretch-space { border-image-repeat: stretch space }
+.repeat-stretch { border-image-repeat: repeat stretch }
+.repeat-repeat { border-image-repeat: repeat repeat }
+.repeat-round { border-image-repeat: repeat round }
+.repeat-space { border-image-repeat: repeat space }
+.round-stretch { border-image-repeat: round stretch }
+.round-repeat { border-image-repeat: round repeat }
+.round-round { border-image-repeat: round round }
+.round-space { border-image-repeat: round space }
+.space-stretch { border-image-repeat: space stretch }
+.space-repeat { border-image-repeat: space repeat }
+.space-round { border-image-repeat: space round }
+.space-space { border-image-repeat: space space }
+
+#red {
+  background-image: url("border-image-ball-red.png");
+}
+
+#yellow {
+  background-image: url("border-image-ball-yellow.png");
+}
+
+#yellow-3 {
+  background-image: url("border-image-3-balls-yellow.png");
+}
+
+#green {
+  background-image: url("border-image-ball-green.png");
+}
+
+#green-3 {
+  background-image: url("border-image-3-balls-green.png");
+}
