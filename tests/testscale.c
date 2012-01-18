@@ -23,6 +23,7 @@
 
 GSList *scales;
 GtkWidget *flipbox;
+GtkWidget *extra_scale;
 
 static void
 invert (GtkButton *button)
@@ -65,6 +66,30 @@ trough (GtkToggleButton *button)
     }
 }
 
+gdouble marks[3] = { 0.0, 50.0, 100.0 };
+gdouble extra_marks[2] = { 20.0, 40.0 };
+
+static void
+extra (GtkToggleButton *button)
+{
+  gboolean value;
+
+  value = gtk_toggle_button_get_active (button);
+
+  if (value)
+    {
+      gtk_scale_add_mark (GTK_SCALE (extra_scale), extra_marks[0], GTK_POS_TOP, NULL);
+      gtk_scale_add_mark (GTK_SCALE (extra_scale), extra_marks[1], GTK_POS_TOP, NULL);
+    }
+  else
+    {
+      gtk_scale_clear_marks (GTK_SCALE (extra_scale));
+      gtk_scale_add_mark (GTK_SCALE (extra_scale), marks[0], GTK_POS_BOTTOM, NULL);
+      gtk_scale_add_mark (GTK_SCALE (extra_scale), marks[1], GTK_POS_BOTTOM, NULL);
+      gtk_scale_add_mark (GTK_SCALE (extra_scale), marks[2], GTK_POS_BOTTOM, NULL);
+    }
+}
+
 int main (int argc, char *argv[])
 {
   GtkWidget *window;
@@ -74,7 +99,6 @@ int main (int argc, char *argv[])
   GtkWidget *button;
   GtkWidget *frame;
   GtkWidget *scale;
-  gdouble marks[3] = { 0.0, 50.0, 100.0 };
   const gchar *labels[3] = {
     "<small>Left</small>",
     "<small>Middle</small>",
@@ -111,11 +135,10 @@ int main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (box), frame, FALSE, FALSE, 0);
 
   frame = gtk_frame_new ("Simple marks");
-  scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 100, 1);
+  extra_scale = scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 100, 1);
   scales = g_slist_prepend (scales, scale);
   gtk_scale_set_draw_value (GTK_SCALE (scale), FALSE);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[0], GTK_POS_BOTTOM, NULL);
-  gtk_scale_add_mark (GTK_SCALE (scale), 25.0, GTK_POS_BOTTOM, NULL);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[1], GTK_POS_BOTTOM, NULL);
   gtk_scale_add_mark (GTK_SCALE (scale), marks[2], GTK_POS_BOTTOM, NULL);
   gtk_container_add (GTK_CONTAINER (frame), scale);
@@ -178,6 +201,12 @@ int main (int argc, char *argv[])
   button = gtk_toggle_button_new_with_label ("Trough");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
   g_signal_connect (button, "toggled", G_CALLBACK (trough), NULL);
+  gtk_container_add (GTK_CONTAINER (box2), button);
+  gtk_widget_show_all (window);
+
+  button = gtk_toggle_button_new_with_label ("Extra");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+  g_signal_connect (button, "toggled", G_CALLBACK (extra), NULL);
   gtk_container_add (GTK_CONTAINER (box2), button);
   gtk_widget_show_all (window);
 
