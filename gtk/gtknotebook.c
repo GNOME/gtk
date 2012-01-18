@@ -6508,13 +6508,6 @@ gtk_notebook_update_tab_states (GtkNotebook *notebook)
         {
           GtkRegionFlags current_flags;
 
-          /*
-          if (page == priv->cur_page)
-            gtk_widget_set_state_flags (page->tab_label, GTK_STATE_FLAG_ACTIVE, FALSE);
-          else
-            gtk_widget_unset_state_flags (page->tab_label, GTK_STATE_FLAG_ACTIVE);
-          */
-
           /* FIXME: We should store these flags somewhere instead of poking
            * the widget's path */
           if (!gtk_widget_path_iter_has_region (gtk_widget_get_path (page->tab_label),
