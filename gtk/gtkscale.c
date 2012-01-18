@@ -1157,10 +1157,9 @@ gtk_scale_draw (GtkWidget *widget,
       GSList *m;
       gint min_pos_before, min_pos_after;
       gint min_pos, max_pos;
-      gint n_marks;
 
       orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (range));
-      n_marks = _gtk_range_get_stop_positions (range, &marks);
+      _gtk_range_get_stop_positions (range, &marks);
 
       layout = gtk_widget_create_pango_layout (widget, NULL);
       gtk_range_get_range_rect (range, &range_rect);
