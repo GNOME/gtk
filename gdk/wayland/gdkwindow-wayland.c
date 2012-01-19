@@ -935,21 +935,7 @@ gdk_wayland_window_translate (GdkWindow      *window,
 			      gint            dx,
 			      gint            dy)
 {
-  cairo_surface_t *surface;
-  cairo_t *cr;
-
-  surface = gdk_wayland_window_ref_cairo_surface (window->impl_window);
-  cr = cairo_create (surface);
-  cairo_surface_destroy (surface);
-
-  gdk_cairo_region (cr, area);
-  cairo_clip (cr);
-  cairo_set_source_surface (cr, cairo_get_target (cr), dx, dy);
-  cairo_push_group (cr);
-  cairo_paint (cr);
-  cairo_pop_group_to_source (cr);
-  cairo_paint (cr);
-  cairo_destroy (cr);
+  _gdk_window_invalidate_for_expose (window, area);
 }
 
 static void
