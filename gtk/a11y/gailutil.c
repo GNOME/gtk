@@ -30,7 +30,6 @@
 static GHashTable *listener_list = NULL;
 static gint listener_idx = 1;
 static GSList *key_listener_list = NULL;
-static guint key_snooper_id = 0;
 
 typedef struct _GailUtilListenerInfo GailUtilListenerInfo;
 typedef struct _GailKeyEventInfo GailKeyEventInfo;
@@ -368,10 +367,9 @@ typedef struct {
   guint           key;
 } KeyEventListener;
 
-static gint
-gail_key_snooper (GtkWidget   *the_widget,
-                  GdkEventKey *event,
-                  gpointer     data)
+gboolean
+_gail_util_key_snooper (GtkWidget   *the_widget,
+                        GdkEventKey *event)
 {
   GSList *l;
   AtkKeyEventStruct *atk_event;
@@ -398,9 +396,6 @@ gail_util_add_key_event_listener (AtkKeySnoopFunc  listener_func,
 {
   static guint key = 0;
   KeyEventListener *listener;
-
-  if (key_snooper_id == 0)
-    key_snooper_id = gtk_key_snooper_install (gail_key_snooper, NULL);
 
   key++;
 
@@ -430,12 +425,6 @@ gail_util_remove_key_event_listener (guint listener_key)
 
           break;
         }
-    }
-
-  if (key_listener_list == NULL)
-    {
-      gtk_key_snooper_remove (key_snooper_id);
-      key_snooper_id = 0;
     }
 }
 
