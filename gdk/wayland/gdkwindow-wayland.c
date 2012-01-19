@@ -810,6 +810,7 @@ gdk_wayland_window_destroy (GdkWindow *window,
     {
       if (GDK_WINDOW_IMPL_WAYLAND (window->impl)->surface)
 	wl_surface_destroy(GDK_WINDOW_IMPL_WAYLAND (window->impl)->surface);
+	wl_shell_surface_destroy(GDK_WINDOW_IMPL_WAYLAND (window->impl)->shell_surface);
     }
 }
 
