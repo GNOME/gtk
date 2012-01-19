@@ -959,6 +959,12 @@ fill_key_event (GdkWindow    *window,
 
   event->key.state |= _gdk_quartz_events_get_current_mouse_modifiers ();
 
+  /* The X11 backend adds the first virtual modifier MOD2..MOD5 are
+   * mapped to. Since we only have one virtual modifier in the quartz
+   * backend, calling the standard function will do.
+   */
+  gdk_keymap_add_virtual_modifiers (NULL, &event->key.state);
+
   event->key.string = NULL;
 
   /* Fill in ->string since apps depend on it, taken from the x11 backend. */
