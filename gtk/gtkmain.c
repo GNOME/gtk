@@ -2207,7 +2207,7 @@ gtk_invoke_key_snoopers (GtkWidget *grab_widget,
   GSList *slist;
   gint return_val = FALSE;
 
-  return_val = _gail_util_key_snooper (grab_widget, event);
+  return_val = _gail_util_key_snooper (grab_widget, (GdkEventKey *) event);
 
   slist = key_snoopers;
   while (slist && !return_val)
