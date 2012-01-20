@@ -770,7 +770,7 @@ gdk_window_update_visibility (GdkWindow *window)
       window->effective_visibility = new_visibility;
 
       if (new_visibility != GDK_VISIBILITY_NOT_VIEWABLE &&
-	  window->event_mask & GDK_VISIBILITY_NOTIFY)
+	  window->event_mask & GDK_VISIBILITY_NOTIFY_MASK)
 	{
 	  event = _gdk_make_event (window, GDK_VISIBILITY_NOTIFY,
 				   NULL, FALSE);
