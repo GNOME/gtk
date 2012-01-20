@@ -1,3 +1,28 @@
+Overview of Changes in GTK+ 3.3.10
+==================================
+
+* GtkApplication:
+ - Move application menu handling over from GIO
+ - Fix resize grip positioning in GtkApplicationWindow
+
+* Wayland:
+ - Make combo boxes work
+ - Make key modifiers work like on X11
+ - Make mouse buttons work correctly
+
+* Quartz:
+ - Make key modifiers work more like they do on X11
+
+* Printing:
+ - Fix handling of custom cups options
+
+* Accessibility:
+ - Bring key snooping support back for now
+
+* Translation updates:
+ Spanish
+
+
 Overview of Changes in GTK+ 3.3.8
 =================================
 
