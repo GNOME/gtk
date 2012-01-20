@@ -2621,7 +2621,7 @@ gtk_window_get_transient_for (GtkWindow *window)
 /**
  * gtk_window_set_attached_to:
  * @window: a #GtkWindow
- * @attach_widget (allow-none): a #GtkWidget, or %NULL
+ * @attach_widget: (allow-none): a #GtkWidget, or %NULL
  *
  * Marks @window as attached to @attach_widget. This creates a logical binding
  * between the window and the widget it belongs to, which is used by GTK+ to
