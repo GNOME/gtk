@@ -5530,34 +5530,55 @@ set_grip_position (GtkWindow *window)
                           rect.width, rect.height);
 }
 
+/* _gtk_window_set_allocation:
+ * @window: a #GtkWindow
+ * @allocation: the new allocation
+ *
+ * This function is like gtk_widget_set_allocation()
+ * but does the necessary extra work to update
+ * the resize grip positioning, etc.
+ *
+ * Call this instead of gtk_widget_set_allocation()
+ * when overriding ::size_allocate in a GtkWindow
+ * subclass without chaining up.
+ */
+void
+_gtk_window_set_allocation (GtkWindow     *window,
+                            GtkAllocation *allocation)
+{
+  GtkWidget *widget = (GtkWidget *)window;
+
+  gtk_widget_set_allocation (widget, allocation);
+
+  if (gtk_widget_get_realized (widget))
+    {
+      /* If it's not a toplevel we're embedded, we need to resize
+       * the window's window and skip the grip.
+       */
+      if (!gtk_widget_is_toplevel (widget))
+        {
+          gdk_window_move_resize (gtk_widget_get_window (widget),
+                                  allocation->x, allocation->y,
+                                  allocation->width, allocation->height);
+        }
+      else
+        {
+          update_grip_visibility (window);
+          set_grip_position (window);
+        }
+    }
+}
+
 static void
 gtk_window_size_allocate (GtkWidget     *widget,
-			  GtkAllocation *allocation)
+                          GtkAllocation *allocation)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkAllocation child_allocation;
   GtkWidget *child;
   guint border_width;
 
-  gtk_widget_set_allocation (widget, allocation);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      /* If it's not a toplevel we're embedded, we need to resize the window's 
-       * window and skip the grip.
-       */
-      if (!gtk_widget_is_toplevel (widget))
-	{
-	  gdk_window_move_resize (gtk_widget_get_window (widget),
-				  allocation->x, allocation->y,
-				  allocation->width, allocation->height);
-	}
-      else
-	{
-	  update_grip_visibility (window);
-	  set_grip_position (window);
-	}
-    }
+  _gtk_window_set_allocation (window, allocation);
 
   child = gtk_bin_get_child (&(window->bin));
   if (child && gtk_widget_get_visible (child))
@@ -5565,10 +5586,8 @@ gtk_window_size_allocate (GtkWidget     *widget,
       border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
       child_allocation.x = border_width;
       child_allocation.y = border_width;
-      child_allocation.width =
-	MAX (1, (gint)allocation->width - child_allocation.x * 2);
-      child_allocation.height =
-	MAX (1, (gint)allocation->height - child_allocation.y * 2);
+      child_allocation.width = MAX (1, allocation->width - border_width * 2);
+      child_allocation.height = MAX (1, allocation->height - border_width * 2);
 
       gtk_widget_size_allocate (child, &child_allocation);
     }
@@ -5904,7 +5923,7 @@ gtk_window_get_has_resize_grip (GtkWindow *window)
  * Since: 3.0
  */
 gboolean
-gtk_window_get_resize_grip_area (GtkWindow *window,
+gtk_window_get_resize_grip_area (GtkWindow    *window,
                                  GdkRectangle *rect)
 {
   GtkWidget *widget = GTK_WIDGET (window);

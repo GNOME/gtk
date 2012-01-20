@@ -24,6 +24,7 @@
 #include "gtkapplicationwindow.h"
 
 #include "gtkapplicationprivate.h"
+#include "gtkwindowprivate.h"
 #include "gtkmodelmenu.h"
 #include "gactionmuxer.h"
 #include "gtkaccelgroup.h"
@@ -635,7 +636,7 @@ gtk_application_window_real_size_allocate (GtkWidget     *widget,
       gint menubar_height;
       GtkWidget *child;
 
-      gtk_widget_set_allocation (widget, allocation);
+      _gtk_window_set_allocation (GTK_WINDOW (widget), allocation);
 
       gtk_widget_get_preferred_height_for_width (window->priv->menubar, allocation->width, &menubar_height, NULL);
 
