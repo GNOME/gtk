@@ -995,10 +995,10 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) $(deprecated_h_sources) gtk
 	&& rm -f xgen-gtbc
 
 gtkresources.h: gtk.gresource.xml
-	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) gtk.gresource.xml \
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/gtk.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-header --manual-register
 gtkresources.c: gtk.gresource.xml gtk-default.css gtk-win32.css $(DND_CURSORS)
-	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) gtk.gresource.xml \
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/gtk.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-source --manual-register
 
 gtkprivatetypebuiltins.h: stamp-gtkprivatetypebuiltins.h
