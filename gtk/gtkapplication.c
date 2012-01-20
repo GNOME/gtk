@@ -147,16 +147,17 @@ struct _GtkApplicationPrivate
 
   gboolean register_session;
 
+  GMenuModel      *app_menu;
+  GMenuModel      *menubar;
+
 #ifdef GDK_WINDOWING_X11
   GDBusConnection *session_bus;
   const gchar     *application_id;
   gchar           *object_path;
 
-  GMenuModel      *app_menu;
   gchar           *app_menu_path;
   guint            app_menu_id;
 
-  GMenuModel      *menubar;
   gchar           *menubar_path;
   guint            menubar_id;
 
