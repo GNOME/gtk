@@ -375,10 +375,10 @@ add_accel_closure (gpointer         data,
   if (accel_key == 0)
     return;
 
-  if (!g_str_has_prefix (accel_path, "<Actions>/"))
+  if (!g_str_has_prefix (accel_path, "<GAction>/"))
     return;
 
-  path = accel_path + strlen ("<Actions>/");
+  path = accel_path + strlen ("<GAction>/");
   p = strchr (path, '/');
   if (p)
     {

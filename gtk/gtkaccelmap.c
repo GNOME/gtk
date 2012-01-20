@@ -1073,7 +1073,7 @@ _gtk_accel_path_for_action (const gchar *action_name,
 {
   GString *s;
 
-  s = g_string_new ("<Actions>/");
+  s = g_string_new ("<GAction>/");
   g_string_append (s, action_name);
   if (parameter)
     {
