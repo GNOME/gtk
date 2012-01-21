@@ -363,6 +363,8 @@ load_module (GSList      *module_list,
 	{
 	  module_list = g_slist_prepend (module_list, info);
 	}
+      else
+        info->ref_count--;
     }
   else
    {
