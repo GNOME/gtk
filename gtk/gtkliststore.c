@@ -469,7 +469,7 @@ gtk_list_store_new (gint n_columns,
  *
  * Non-vararg creation function.  Used primarily by language bindings.
  *
- * Return value: (transfer none): a new #GtkListStore
+ * Return value: (transfer full): a new #GtkListStore
  * Rename to: gtk_list_store_new
  **/
 GtkListStore *
