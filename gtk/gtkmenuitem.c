@@ -870,7 +870,7 @@ gtk_menu_item_real_get_height (GtkWidget *widget,
   GtkPackDirection pack_dir;
   GtkPackDirection child_pack_dir;
   gint min_height, nat_height;
-  gint avail_size;
+  gint avail_size = 0;
 
   min_height = nat_height = 0;
 
