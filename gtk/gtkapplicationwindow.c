@@ -258,7 +258,14 @@ gtk_application_window_update_shell_shows_app_menu (GtkApplicationWindow *window
           app_menu = gtk_application_get_app_menu (gtk_window_get_application (GTK_WINDOW (window)));
 
           if (app_menu != NULL)
-            g_menu_append_submenu (window->priv->app_menu_section, _("Application"), app_menu);
+            {
+              const gchar *name;
+
+              name = g_get_application_name ();
+              if (name == g_get_prgname ())
+                name = _("Application");
+              g_menu_append_submenu (window->priv->app_menu_section, name, app_menu);
+            }
         }
     }
 }
