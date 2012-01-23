@@ -241,6 +241,22 @@ translate_device_classes (GdkDisplay      *display,
                                       valuator_info->resolution);
           }
           break;
+#ifdef XINPUT_2_2
+        case XIScrollClass:
+          {
+            XIScrollClassInfo *scroll_info = (XIScrollClassInfo *) class_info;
+            GdkScrollDirection direction;
+
+            if (scroll_info->scroll_type == XIScrollTypeVertical)
+              direction = GDK_SCROLL_DOWN;
+            else
+              direction = GDK_SCROLL_RIGHT;
+
+            _gdk_x11_device_xi2_add_scroll_valuator (GDK_X11_DEVICE_XI2 (device),
+                                                     scroll_info->number,
+                                                     direction);
+          }
+#endif /* XINPUT_2_2 */
         default:
           /* Ignore */
           break;
@@ -1037,6 +1053,47 @@ gdk_x11_device_manager_xi2_translate_core_event (GdkEventTranslator *translator,
 }
 
 static gboolean
+scroll_valuators_changed (GdkX11DeviceXI2 *device,
+                          XIValuatorState *valuators,
+                          gdouble         *dx,
+                          gdouble         *dy)
+{
+  gdouble has_scroll_valuators = FALSE;
+  GdkScrollDirection direction;
+  guint n_axes, i, n_val;
+  gdouble *vals;
+
+  n_axes = gdk_device_get_n_axes (GDK_DEVICE (device));
+  vals = valuators->values;
+  *dx = *dy = 0;
+  n_val = 0;
+
+  for (i = 0; i < MIN (valuators->mask_len * 8, n_axes); i++)
+    {
+      gdouble delta;
+
+      if (!XIMaskIsSet (valuators->mask, i))
+        continue;
+
+      if (_gdk_x11_device_xi2_get_scroll_delta (device, i, vals[n_val],
+                                                &direction, &delta))
+        {
+          has_scroll_valuators = TRUE;
+
+          if (direction == GDK_SCROLL_UP ||
+              direction == GDK_SCROLL_DOWN)
+            *dy = delta;
+          else
+            *dx = delta;
+        }
+
+      n_val++;
+    }
+
+  return has_scroll_valuators;
+}
+
+static gboolean
 gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                             GdkDisplay         *display,
                                             GdkEvent           *event,
@@ -1142,8 +1199,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkDevice *source_device;
 
-        if (ev->evtype == XI_ButtonPress &&
+        if (ev->evtype == XI_ButtonRelease &&
             (xev->detail >= 4 && xev->detail <= 7))
+          return FALSE;
+        else if (ev->evtype == XI_ButtonPress &&
+                 (xev->detail >= 4 && xev->detail <= 7))
           {
             /* Button presses of button 4-7 are scroll events */
             event->scroll.type = GDK_SCROLL;
@@ -1163,6 +1223,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->scroll.y = (gdouble) xev->event_y;
             event->scroll.x_root = (gdouble) xev->root_x;
             event->scroll.y_root = (gdouble) xev->root_y;
+            event->scroll.delta_x = 0;
+            event->scroll.delta_y = 0;
 
             event->scroll.device = g_hash_table_lookup (device_manager->id_table,
                                                         GUINT_TO_POINTER (xev->deviceid));
@@ -1172,6 +1234,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             gdk_event_set_source_device (event, source_device);
 
             event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+
+            if (xev->flags & XIPointerEmulated)
+              _gdk_event_set_pointer_emulated (event, TRUE);
           }
         else
           {
@@ -1233,6 +1298,36 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkDevice *source_device;
+        gdouble delta_x, delta_y;
+
+        source_device = g_hash_table_lookup (device_manager->id_table,
+                                             GUINT_TO_POINTER (xev->sourceid));
+
+        if (scroll_valuators_changed (GDK_X11_DEVICE_XI2 (source_device),
+                                      &xev->valuators, &delta_x, &delta_y))
+          {
+            event->scroll.type = GDK_SCROLL;
+            event->scroll.direction = GDK_SCROLL_SMOOTH;
+
+            event->scroll.window = window;
+            event->scroll.time = xev->time;
+            event->scroll.x = (gdouble) xev->event_x;
+            event->scroll.y = (gdouble) xev->event_y;
+            event->scroll.x_root = (gdouble) xev->root_x;
+            event->scroll.y_root = (gdouble) xev->root_y;
+            event->scroll.delta_x = delta_x;
+            event->scroll.delta_y = delta_y;
+
+            event->scroll.device = g_hash_table_lookup (device_manager->id_table,
+                                                        GUINT_TO_POINTER (xev->deviceid));
+
+            gdk_event_set_source_device (event, source_device);
+
+            event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+            break;
+          }
+	else
+          _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
 
         event->motion.type = GDK_MOTION_NOTIFY;
         event->motion.window = window;
@@ -1245,8 +1340,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->motion.device = g_hash_table_lookup (device_manager->id_table,
                                                     GINT_TO_POINTER (xev->deviceid));
 
-        source_device = g_hash_table_lookup (device_manager->id_table,
-                                             GUINT_TO_POINTER (xev->sourceid));
         gdk_event_set_source_device (event, source_device);
 
         event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
