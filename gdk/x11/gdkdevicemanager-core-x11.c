@@ -465,6 +465,9 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
           event->scroll.state = (GdkModifierType) xevent->xbutton.state;
           event->scroll.device = device_manager->core_pointer;
 
+          event->scroll.delta_x = 0;
+          event->scroll.delta_y = 0;
+
           if (!set_screen_from_root (display, event, xevent->xbutton.root))
             {
               return_val = FALSE;
