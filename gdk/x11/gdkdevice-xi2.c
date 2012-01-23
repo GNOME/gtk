@@ -35,11 +35,22 @@
 
 #endif
 
+typedef struct _ScrollValuator ScrollValuator;
+
+struct _ScrollValuator
+{
+  guint n_valuator       : 4;
+  guint direction        : 4;
+  guint last_value_valid : 1;
+  gdouble last_value;
+};
+
 struct _GdkX11DeviceXI2
 {
   GdkDevice parent_instance;
 
   gint device_id;
+  GArray *scroll_valuators;
 };
 
 struct _GdkX11DeviceXI2Class
@@ -51,6 +62,7 @@ G_DEFINE_TYPE (GdkX11DeviceXI2, gdk_x11_device_xi2, GDK_TYPE_DEVICE)
 
 #ifdef XINPUT_2
 
+static void gdk_x11_device_xi2_finalize     (GObject      *object);
 static void gdk_x11_device_xi2_get_property (GObject      *object,
                                              guint         prop_id,
                                              GValue       *value,
@@ -112,6 +124,7 @@ gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
+  object_class->finalize = gdk_x11_device_xi2_finalize;
   object_class->get_property = gdk_x11_device_xi2_get_property;
   object_class->set_property = gdk_x11_device_xi2_set_property;
 
@@ -136,6 +149,17 @@ gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
 static void
 gdk_x11_device_xi2_init (GdkX11DeviceXI2 *device)
 {
+  device->scroll_valuators = g_array_new (FALSE, FALSE, sizeof (ScrollValuator));
+}
+
+static void
+gdk_x11_device_xi2_finalize (GObject *object)
+{
+  GdkX11DeviceXI2 *device = GDK_X11_DEVICE_XI2 (object);
+
+  g_array_free (device->scroll_valuators, TRUE);
+
+  G_OBJECT_CLASS (gdk_x11_device_xi2_parent_class)->finalize (object);
 }
 
 static void
@@ -777,6 +801,83 @@ _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
     }
 
   return state;
+}
+
+void
+_gdk_x11_device_xi2_add_scroll_valuator (GdkX11DeviceXI2    *device,
+                                         guint               n_valuator,
+                                         GdkScrollDirection  direction)
+{
+  ScrollValuator scroll;
+
+  g_return_if_fail (GDK_IS_X11_DEVICE_XI2 (device));
+  g_return_if_fail (n_valuator < gdk_device_get_n_axes (GDK_DEVICE (device)));
+
+  scroll.n_valuator = n_valuator;
+  scroll.direction = direction;
+  scroll.last_value_valid = FALSE;
+
+  g_array_append_val (device->scroll_valuators, scroll);
+}
+
+gboolean
+_gdk_x11_device_xi2_get_scroll_delta (GdkX11DeviceXI2    *device,
+                                      guint               n_valuator,
+                                      gdouble             valuator_value,
+                                      GdkScrollDirection *direction_ret,
+                                      gdouble            *delta_ret)
+{
+  guint i;
+
+  g_return_val_if_fail (GDK_IS_X11_DEVICE_XI2 (device), FALSE);
+  g_return_val_if_fail (n_valuator < gdk_device_get_n_axes (GDK_DEVICE (device)), FALSE);
+
+  for (i = 0; i < device->scroll_valuators->len; i++)
+    {
+      ScrollValuator *scroll;
+
+      scroll = &g_array_index (device->scroll_valuators, ScrollValuator, i);
+
+      if (scroll->n_valuator == n_valuator)
+        {
+          if (direction_ret)
+            *direction_ret = scroll->direction;
+
+          if (delta_ret)
+            *delta_ret = 0;
+
+          if (scroll->last_value_valid)
+            {
+              if (delta_ret)
+                *delta_ret = valuator_value - scroll->last_value;
+
+              scroll->last_value = valuator_value;
+            }
+          else
+            {
+              scroll->last_value = valuator_value;
+              scroll->last_value_valid = TRUE;
+            }
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+void
+_gdk_device_xi2_reset_scroll_valuators (GdkX11DeviceXI2 *device)
+{
+  guint i;
+
+  for (i = 0; i < device->scroll_valuators->len; i++)
+    {
+      ScrollValuator *scroll;
+
+      scroll = &g_array_index (device->scroll_valuators, ScrollValuator, i);
+      scroll->last_value_valid = FALSE;
+    }
 }
 
 gint
