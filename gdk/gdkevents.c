@@ -1208,7 +1208,10 @@ gdk_event_get_scroll_direction (const GdkEvent *event,
   switch (event->type)
     {
     case GDK_SCROLL:
-      dir = event->scroll.direction;
+      if (event->scroll.direction == GDK_SCROLL_SMOOTH)
+        fetched = FALSE;
+      else
+        dir = event->scroll.direction;
       break;
     default:
       fetched = FALSE;
