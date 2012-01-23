@@ -165,6 +165,7 @@ gdk_event_get_keyval
 gdk_event_get_root_coords
 gdk_event_get_screen
 gdk_event_get_scroll_direction
+gdk_event_get_scroll_deltas
 gdk_event_get_source_device
 gdk_event_get_state
 gdk_event_get_time

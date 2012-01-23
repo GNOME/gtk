@@ -471,6 +471,8 @@ gdk_event_new (GdkEventType type)
       new_event->scroll.y = 0.;
       new_event->scroll.x_root = 0.;
       new_event->scroll.y_root = 0.;
+      new_event->scroll.delta_x = 0.;
+      new_event->scroll.delta_y = 0.;
       break;
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
@@ -1203,6 +1205,52 @@ gdk_event_get_scroll_direction (const GdkEvent *event,
 
   if (direction)
     *direction = dir;
+
+  return fetched;
+}
+
+/**
+ * gdk_event_get_scroll_deltas:
+ * @event: a #GdkEvent
+ * @delta_x: return location for X delta
+ * @delta_y: return location for Y delta
+ *
+ * Retrieves the scroll deltas from a #GdkEvent
+ *
+ * Returns: %TRUE if the event contains smooth scroll information
+ *
+ * Since: 3.4
+ **/
+gboolean
+gdk_event_get_scroll_deltas (const GdkEvent *event,
+                             gdouble        *delta_x,
+                             gdouble        *delta_y)
+{
+  gboolean fetched = TRUE;
+  gdouble dx = 0.0;
+  gdouble dy = 0.0;
+
+  switch (event->type)
+    {
+    case GDK_SCROLL:
+      if (event->scroll.direction == GDK_SCROLL_SMOOTH)
+        {
+          dx = event->scroll.delta_x;
+          dy = event->scroll.delta_y;
+        }
+      else
+        fetched = FALSE;
+      break;
+    default:
+      fetched = FALSE;
+      break;
+    }
+
+  if (delta_x)
+    *delta_x = dx;
+
+  if (delta_y)
+    *delta_y = dy;
 
   return fetched;
 }
