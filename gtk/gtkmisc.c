@@ -425,9 +425,10 @@ _gtk_misc_get_padding_and_border (GtkMisc   *misc,
   gtk_style_context_get_padding (context, state, border);
 
   gtk_misc_get_padding (misc, &xpad, &ypad);
-
-  border->right = border->left = xpad;
-  border->top = border->bottom = xpad;
+  border->top += ypad;
+  border->left += xpad;
+  border->bottom += ypad;
+  border->right += xpad;
 
   gtk_style_context_get_border (context, state, &tmp);
   border->top += tmp.top;
