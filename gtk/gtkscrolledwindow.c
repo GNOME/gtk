@@ -2656,7 +2656,6 @@ gtk_scrolled_window_captured_button_press (GtkWidget *widget,
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkWidget *child;
-  gint threshold;
   GtkWidget *event_widget;
   GdkEventButton *event;
   GdkDevice *source_device;
@@ -2722,19 +2721,7 @@ gtk_scrolled_window_captured_button_press (GtkWidget *widget,
                                (GSourceFunc) gtk_scrolled_window_release_captured_event,
                                scrolled_window);
 
-  /* If there's a zero drag threshold, start the drag immediately */
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-dnd-drag-threshold", &threshold,
-                NULL);
-  if (threshold == 0)
-    {
-      priv->in_drag = TRUE;
-
-      /* Swallow the press event */
-      return TRUE;
-    }
-  else
-    priv->in_drag = FALSE;
+  priv->in_drag = FALSE;
 
   if (priv->kinetic_scrolling_flags & GTK_KINETIC_SCROLLING_CAPTURE_BUTTON_PRESS)
     {
