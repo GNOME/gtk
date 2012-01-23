@@ -719,6 +719,8 @@ struct _GdkEventScroll
   GdkScrollDirection direction;
   GdkDevice *device;
   gdouble x_root, y_root;
+  gdouble delta_x;
+  gdouble delta_y;
 };
 
 /**
@@ -1157,6 +1159,10 @@ gboolean  gdk_event_get_keycode         (const GdkEvent *event,
                                          guint16        *keycode);
 gboolean gdk_event_get_scroll_direction (const GdkEvent *event,
                                          GdkScrollDirection *direction);
+gboolean  gdk_event_get_scroll_deltas   (const GdkEvent *event,
+                                         gdouble         *delta_x,
+                                         gdouble         *delta_y);
+
 gboolean  gdk_event_get_axis            (const GdkEvent  *event,
                                          GdkAxisUse       axis_use,
                                          gdouble         *value);
