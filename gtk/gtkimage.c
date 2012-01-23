@@ -1396,6 +1396,7 @@ gtk_image_draw (GtkWidget *widget,
   x = floor ((gtk_widget_get_allocated_width (widget) - width) * xalign);
   y = floor ((gtk_widget_get_allocated_height (widget) - height) * yalign);
 
+  gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
 
   x += border.left;
