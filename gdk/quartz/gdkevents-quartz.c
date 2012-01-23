@@ -868,6 +868,8 @@ fill_scroll_event (GdkWindow          *window,
                    gint                y,
                    gint                x_root,
                    gint                y_root,
+                   gdouble             delta_x,
+                   gdouble             delta_y,
                    GdkScrollDirection  direction)
 {
   NSPoint point;
@@ -884,6 +886,8 @@ fill_scroll_event (GdkWindow          *window,
   event->scroll.state = get_keyboard_modifiers_from_ns_event (nsevent);
   event->scroll.direction = direction;
   event->scroll.device = _gdk_display->core_pointer;
+  event->scroll.delta_x = delta_x;
+  event->scroll.delta_y = delta_y;
 }
 
 static void
@@ -1318,28 +1322,64 @@ gdk_event_translate (GdkEvent *event,
 
     case NSScrollWheel:
       {
-	float dx = [nsevent deltaX];
-	float dy = [nsevent deltaY];
-	GdkScrollDirection direction;
+        GdkScrollDirection direction;
+	float dx;
+	float dy;
 
-        if (dy != 0)
+	if (gdk_quartz_osx_version() >= GDK_OSX_LION &&
+	    [nsevent hasPreciseScrollingDeltas])
+	  {
+	    dx = [nsevent scrollingDeltaX];
+	    dy = [nsevent scrollingDeltaY];
+            direction = GDK_SCROLL_SMOOTH;
+
+            fill_scroll_event (window, event, nsevent, x, y, x_root, y_root,
+                               -dx, -dy, direction);
+
+            /* Fall through for scroll buttons emulation */
+	  }
+
+        dx = [nsevent deltaX];
+        dy = [nsevent deltaY];
+
+        if (dy != 0.0)
           {
             if (dy < 0.0)
               direction = GDK_SCROLL_DOWN;
             else
               direction = GDK_SCROLL_UP;
 
-            fill_scroll_event (window, event, nsevent, x, y, x_root, y_root, direction);
+            dy = fabs (dy);
+            dx = 0.0;
           }
-
-        if (dx != 0)
+        else if (dx != 0.0)
           {
             if (dx < 0.0)
               direction = GDK_SCROLL_RIGHT;
             else
               direction = GDK_SCROLL_LEFT;
 
-            fill_scroll_event (window, event, nsevent, x, y, x_root, y_root, direction);
+            dx = fabs (dx);
+            dy = 0.0;
+          }
+
+        if (dx != 0.0 || dy != 0.0)
+          {
+            if ([nsevent hasPreciseScrollingDeltas])
+              {
+                GdkEvent *emulated_event;
+
+                emulated_event = gdk_event_new (GDK_SCROLL);
+                _gdk_event_set_pointer_emulated (emulated_event, TRUE);
+                fill_scroll_event (window, emulated_event, nsevent,
+                                   x, y, x_root, y_root,
+                                   dx, dy, direction);
+                append_event (emulated_event, TRUE);
+              }
+            else
+              fill_scroll_event (window, event, nsevent,
+                                 x, y, x_root, y_root,
+                                 dx, dy, direction);
           }
       }
       break;
