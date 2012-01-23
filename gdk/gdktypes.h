@@ -349,6 +349,7 @@ typedef enum
  *   child windows
  * @GDK_SCROLL_MASK: receive scroll events
  * @GDK_TOUCH_MASK: receive touch events
+ * @GDK_SMOOTH_SCROLL_MASK: receive smooth scrolling events
  * @GDK_ALL_EVENTS_MASK: the combination of all the above event masks.
  *
  * A set of bit-flags to indicate which events a window is to receive.
@@ -396,7 +397,8 @@ typedef enum
   GDK_SUBSTRUCTURE_MASK         = 1 << 20,
   GDK_SCROLL_MASK               = 1 << 21,
   GDK_TOUCH_MASK                = 1 << 22,
-  GDK_ALL_EVENTS_MASK           = 0x7FFFFE
+  GDK_SMOOTH_SCROLL_MASK        = 1 << 23,
+  GDK_ALL_EVENTS_MASK           = 0xFFFFFE
 } GdkEventMask;
 
 /**
