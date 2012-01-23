@@ -343,6 +343,8 @@ typedef enum
  * @GDK_SCROLL_DOWN: the window is scrolled down.
  * @GDK_SCROLL_LEFT: the window is scrolled to the left.
  * @GDK_SCROLL_RIGHT: the window is scrolled to the right.
+ * @GDK_SCROLL_SMOOTH: the scrolling is determined by the delta values
+ *   in #GdkEventScroll. See gdk_event_get_scroll_deltas().
  *
  * Specifies the direction for #GdkEventScroll.
  */
@@ -351,7 +353,8 @@ typedef enum
   GDK_SCROLL_UP,
   GDK_SCROLL_DOWN,
   GDK_SCROLL_LEFT,
-  GDK_SCROLL_RIGHT
+  GDK_SCROLL_RIGHT,
+  GDK_SCROLL_SMOOTH
 } GdkScrollDirection;
 
 /**
