@@ -894,7 +894,8 @@ gtk_layout_realize (GtkWidget *widget)
   attributes.y = - gtk_adjustment_get_value (priv->vadjustment);
   attributes.width = MAX (priv->width, allocation.width);
   attributes.height = MAX (priv->height, allocation.height);
-  attributes.event_mask = GDK_EXPOSURE_MASK | GDK_SCROLL_MASK | 
+  attributes.event_mask = GDK_EXPOSURE_MASK | GDK_SCROLL_MASK |
+                          GDK_SMOOTH_SCROLL_MASK | 
                           gtk_widget_get_events (widget);
 
   priv->bin_window = gdk_window_new (window,
