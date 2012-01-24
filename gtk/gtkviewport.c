@@ -682,9 +682,7 @@ gtk_viewport_realize (GtkWidget *widget)
   attributes.visual = gtk_widget_get_visual (widget);
 
   event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
-  /* We select on button_press_mask so that button 4-5 scrolls are trapped.
-   */
-  attributes.event_mask = event_mask | GDK_BUTTON_PRESS_MASK;
+  attributes.event_mask = event_mask | GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK;
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
