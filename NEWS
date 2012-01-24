@@ -1,3 +1,30 @@
+Overview of Changes from GTK+ 2.24.8 to 2.24.9
+==============================================
+
+* Implement the editing-canceled property in GtkCellEditableEventBox
+* Backport GtkScale fixes
+
+* Several fixes in the MS-Windows theme
+
+* quartz: fix a race condition when waking up the CGRunLoop
+
+* Several build fixes:
+ - Add gmodule-2.0 dependency for gtk-query-immodules-2.0
+ - introspection: Fix srcdir != builddir builds
+
+* Bug fixed:
+  663856 - Make option-foo accelerators use the right symbol
+  664238 - GTK apps crash when dragging something
+  665011 - Fix gtk-demo drawingarea example
+  665013 - Fix 16bit pixmaps
+  662814 - Don't print a g_warning() when GtkRecentManager can't find a file
+  620240 - Fix problems with DND on some X servers
+  629878 - Use the right icon-name for missing images
+  543520 - Set cups Custom print options correctly
+  639455 - Implement the editing-canceled property in GtkCellEditableEventBox
+  667458 - introspection: Fix srcdir != builddir builds
+
+
 Overview of Changes from GTK+ 2.24.7 to 2.24.8
 ==============================================
 

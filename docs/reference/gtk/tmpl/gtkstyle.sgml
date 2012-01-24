@@ -251,7 +251,7 @@ Does the same as gtk_style_apply_default_background().
 @style: 
 @widget_type: 
 @first_property_name: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_draw_hline ##### -->

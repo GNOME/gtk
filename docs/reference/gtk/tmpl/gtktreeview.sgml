@@ -670,7 +670,7 @@ has some similarity to strcmp() returning 0 for equal strings.
 @position: 
 @title: 
 @cell: 
-@Varargs: 
+@...: 
 @Returns: 
 
 

@@ -286,7 +286,7 @@ key binding signal emission as stored in #GtkBindingSignal.
 @modifiers: 
 @signal_name: 
 @n_args: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_binding_entry_skip ##### -->

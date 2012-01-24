@@ -149,7 +149,7 @@ as appropriate.
 
 @cell_layout: 
 @cell: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_cell_layout_add_attribute ##### -->

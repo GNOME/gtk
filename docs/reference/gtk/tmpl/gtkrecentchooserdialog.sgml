@@ -77,7 +77,7 @@ Recently used files are supported since GTK+ 2.10.
 @title: 
 @parent: 
 @first_button_text: 
-@Varargs: 
+@...: 
 @Returns: 
 
 
@@ -90,7 +90,7 @@ Recently used files are supported since GTK+ 2.10.
 @parent: 
 @manager: 
 @first_button_text: 
-@Varargs: 
+@...: 
 @Returns: 
 
 

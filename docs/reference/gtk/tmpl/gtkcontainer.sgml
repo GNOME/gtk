@@ -249,7 +249,7 @@ Does the same as gtk_container_set_border_width().
 @container: 
 @widget: 
 @first_prop_name: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_container_get_resize_mode ##### -->
@@ -406,7 +406,7 @@ Does the same as gtk_container_get_children().
 @container: 
 @child: 
 @first_prop_name: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_container_child_set ##### -->
@@ -417,7 +417,7 @@ Does the same as gtk_container_get_children().
 @container: 
 @child: 
 @first_prop_name: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_container_child_get_property ##### -->

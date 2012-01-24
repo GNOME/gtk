@@ -536,7 +536,7 @@ Since: 2.2
 
 @display: 
 @message_type: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gdk_x11_display_get_startup_notification_id ##### -->

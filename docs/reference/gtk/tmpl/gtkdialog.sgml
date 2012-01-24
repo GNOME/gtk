@@ -272,7 +272,7 @@ directly, but into the @vbox and @action_area, as described above.
 @parent: 
 @flags: 
 @first_button_text: 
-@Varargs: 
+@...: 
 @Returns: 
 
 
@@ -312,7 +312,7 @@ directly, but into the @vbox and @action_area, as described above.
 
 @dialog: 
 @first_button_text: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_dialog_add_action_widget ##### -->
@@ -416,7 +416,7 @@ directly, but into the @vbox and @action_area, as described above.
 
 @dialog: 
 @first_response_id: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_dialog_set_alternative_button_order_from_array ##### -->

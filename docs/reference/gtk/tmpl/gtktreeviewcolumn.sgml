@@ -171,7 +171,7 @@ calling gtk_tree_view_column_set_cell_data_func()
 
 @title: 
 @cell: 
-@Varargs: 
+@...: 
 @Returns: 
 
 
@@ -230,7 +230,7 @@ calling gtk_tree_view_column_set_cell_data_func()
 
 @tree_column: 
 @cell_renderer: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_column_set_cell_data_func ##### -->

@@ -345,7 +345,7 @@ section.
 </para>
 
 @first_index: 
-@Varargs: 
+@...: 
 @Returns: 
 
 
@@ -807,7 +807,7 @@ versions of GTK+.
 
 @tree_model: 
 @iter: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_tree_model_get_valist ##### -->

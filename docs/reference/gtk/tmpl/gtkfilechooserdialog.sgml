@@ -168,7 +168,7 @@ dialog = gtk_file_chooser_dialog_new ("Open File",
 @parent: 
 @action: 
 @first_button_text: 
-@Varargs: 
+@...: 
 @Returns: 
 
 
@@ -182,7 +182,7 @@ dialog = gtk_file_chooser_dialog_new ("Open File",
 @action: 
 @backend: 
 @first_button_text: 
-@Varargs: 
+@...: 
 @Returns: 
 
 
