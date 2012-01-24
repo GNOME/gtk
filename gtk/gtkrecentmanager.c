@@ -753,7 +753,7 @@ gtk_recent_manager_add_item_query_info (GObject      *source_object,
       g_object_unref (file_info);
     }
   else
-    recent_data.mime_type = g_strdup (GTK_RECENT_DEFAULT_MIME); /* FIXME: maybe we should make up the MIME type from the filename's extension */
+    recent_data.mime_type = g_content_type_guess (g_file_get_basename (file), NULL, 0, NULL);
 
   recent_data.app_name = g_strdup (g_get_application_name ());
   recent_data.app_exec = g_strjoin (" ", g_get_prgname (), "%u", NULL);
