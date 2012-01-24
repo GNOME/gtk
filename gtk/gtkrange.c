@@ -1730,9 +1730,11 @@ gtk_range_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
-			    GDK_BUTTON_RELEASE_MASK |
-			    GDK_ENTER_NOTIFY_MASK |
-			    GDK_LEAVE_NOTIFY_MASK |
+                            GDK_BUTTON_RELEASE_MASK |
+                            GDK_SCROLL_MASK |
+                            GDK_SMOOTH_SCROLL_MASK |
+                            GDK_ENTER_NOTIFY_MASK |
+                            GDK_LEAVE_NOTIFY_MASK |
                             GDK_POINTER_MOTION_MASK |
                             GDK_POINTER_MOTION_HINT_MASK);
 
@@ -2786,7 +2788,7 @@ gtk_range_button_release (GtkWidget      *widget,
 /**
  * _gtk_range_get_wheel_delta:
  * @range: a #GtkRange
- * @direction: A #GdkScrollDirection
+ * @event: A #GdkEventScroll
  * 
  * Returns a good step value for the mouse wheel.
  * 
@@ -2795,28 +2797,58 @@ gtk_range_button_release (GtkWidget      *widget,
  * Since: 2.4
  **/
 gdouble
-_gtk_range_get_wheel_delta (GtkRange           *range,
-			    GdkScrollDirection  direction)
+_gtk_range_get_wheel_delta (GtkRange       *range,
+                            GdkEventScroll *event)
 {
   GtkRangePrivate *priv = range->priv;
   GtkAdjustment *adjustment = priv->adjustment;
+  gdouble dx, dy;
   gdouble delta;
+  gdouble page_size;
 
-  if (GTK_IS_SCROLLBAR (range))
-    delta = pow (gtk_adjustment_get_page_size (adjustment), 2.0 / 3.0);
+  page_size = gtk_adjustment_get_page_size (adjustment);
+
+  if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &dx, &dy))
+    {
+      GtkAllocation allocation;
+
+      gtk_widget_get_allocation (GTK_WIDGET (range), &allocation);
+
+      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
+        {
+          if (GTK_IS_SCROLLBAR (range) && page_size > 0)
+            delta = dx * page_size / allocation.width;
+          else
+            delta = dx * (gtk_adjustment_get_upper (adjustment) -
+                          gtk_adjustment_get_lower (adjustment)) / allocation.width;
+        }
+      else
+        {
+          if (GTK_IS_SCROLLBAR (range) && page_size > 0)
+            delta = dy * page_size / allocation.height;
+          else
+            delta = dy * (gtk_adjustment_get_upper (adjustment) -
+                          gtk_adjustment_get_lower (adjustment)) / allocation.height;
+        }
+    }
   else
-    delta = gtk_adjustment_get_step_increment (adjustment) * 2;
-  
-  if (direction == GDK_SCROLL_UP ||
-      direction == GDK_SCROLL_LEFT)
-    delta = - delta;
-  
+    {
+      if (GTK_IS_SCROLLBAR (range))
+        delta = pow (page_size, 2.0 / 3.0);
+      else
+        delta = gtk_adjustment_get_page_increment (adjustment) * 2;
+
+      if (event->direction == GDK_SCROLL_UP ||
+          event->direction == GDK_SCROLL_LEFT)
+        delta = - delta;
+    }
+
   if (priv->inverted)
     delta = - delta;
 
   return delta;
 }
-      
+
 static gboolean
 gtk_range_scroll_event (GtkWidget      *widget,
 			GdkEventScroll *event)
@@ -2829,7 +2861,7 @@ gtk_range_scroll_event (GtkWidget      *widget,
       gdouble delta;
       gboolean handled;
 
-      delta = _gtk_range_get_wheel_delta (range, event->direction);
+      delta = _gtk_range_get_wheel_delta (range, event);
 
       g_signal_emit (range, signals[CHANGE_VALUE], 0,
                      GTK_SCROLL_JUMP, gtk_adjustment_get_value (priv->adjustment) + delta,
