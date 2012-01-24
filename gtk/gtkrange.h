@@ -146,8 +146,8 @@ void               gtk_range_set_round_digits              (GtkRange      *range
 gint                gtk_range_get_round_digits              (GtkRange      *range);
 
 /* internal API */
-gdouble            _gtk_range_get_wheel_delta              (GtkRange      *range,
-                                                            GdkScrollDirection direction);
+gdouble            _gtk_range_get_wheel_delta              (GtkRange       *range,
+                                                            GdkEventScroll *event);
 void               _gtk_range_set_has_origin               (GtkRange      *range,
                                                             gboolean       has_origin);
 gboolean           _gtk_range_get_has_origin               (GtkRange      *range);
