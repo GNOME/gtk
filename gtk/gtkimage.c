@@ -788,7 +788,7 @@ void
 gtk_image_set_from_resource (GtkImage    *image,
 			     const gchar *resource_path)
 {
-  GdkPixbuf *pixbuf;
+  GdkPixbuf *pixbuf = NULL;
   GInputStream *stream;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
