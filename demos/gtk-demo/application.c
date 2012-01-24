@@ -280,7 +280,6 @@ static GActionEntry app_entries[] = {
 
 static GActionEntry win_entries[] = {
   { "titlebar", activate_toggle, NULL, "false", change_titlebar_state },
-  { "color", activate_radio, "s", "'red'", change_radio_state },
   { "shape", activate_radio, "s", "'oval'", change_radio_state },
   { "bold", activate_toggle, NULL, "false", NULL },
   { "about", activate_about, NULL, NULL, NULL },
@@ -370,16 +369,23 @@ int
 main (int argc, char *argv[])
 {
   GtkApplication *app;
+  GSettings *settings;
+  GAction *action;
 
   gtk_init (NULL, NULL);
 
   register_stock_icons ();
 
   app = gtk_application_new ("org.gtk.Demo", 0);
+  settings = g_settings_new ("org.gtk.Demo");
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
+
+  action = g_settings_create_action (settings, "color");
+
+  g_action_map_add_action (G_ACTION_MAP (app), action);
 
   g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);

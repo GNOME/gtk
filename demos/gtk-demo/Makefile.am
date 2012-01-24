@@ -77,7 +77,13 @@ EXTRA_DIST += 				\
 	application.ui			\
 	menus.ui			\
 	gtk-logo-24.png			\
-	gtk-logo-48.png
+	gtk-logo-48.png			\
+	org.gtk.Demo.gschema.xml
+
+gsettings_SCHEMAS = \
+	org.gtk.Demo.gschema.xml
+
+@GSETTINGS_RULES@
 
 demos.h: @REBUILD@ $(demos) geninclude.pl
 	$(AM_V_GEN) (here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos)) > demos.h

@@ -18,9 +18,9 @@
         <item label="_Hide Titlebar when maximized" action="win.titlebar"/>
         <submenu label="_Color">
           <section>
-            <item label="_Red" action="win.color" target="red" accel="&lt;Primary&gt;r"/>
-            <item label="_Green" action="win.color" target="green" accel="&lt;Primary&gt;g"/>
-            <item label="_Blue" action="win.color" target="blue" accel="&lt;Primary&gt;b"/>
+            <item label="_Red" action="app.color" target="red" accel="&lt;Primary&gt;r"/>
+            <item label="_Green" action="app.color" target="green" accel="&lt;Primary&gt;g"/>
+            <item label="_Blue" action="app.color" target="blue" accel="&lt;Primary&gt;b"/>
           </section>
         </submenu>
         <submenu label="_Shape">
