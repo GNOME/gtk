@@ -444,6 +444,39 @@ compute_margin (GtkCssStyleProperty *property,
 }
 
 static gboolean 
+parse_padding (GtkCssStyleProperty *property,
+               GValue              *value,
+               GtkCssParser        *parser,
+               GFile               *base)
+{
+  GtkCssNumber number;
+
+  if (!_gtk_css_parser_read_number (parser,
+                                    &number, 
+                                    GTK_CSS_POSITIVE_ONLY
+                                    | GTK_CSS_NUMBER_AS_PIXELS
+                                    | GTK_CSS_PARSE_LENGTH))
+    return FALSE;
+
+  g_value_set_boxed (value, &number);
+  return TRUE;
+}
+
+static void
+compute_padding (GtkCssStyleProperty *property,
+                 GValue              *computed,
+                 GtkStyleContext     *context,
+                 const GValue        *specified)
+{
+  GtkCssNumber number;
+  
+  _gtk_css_number_compute (&number,
+                           g_value_get_boxed (specified),
+                           context);
+  g_value_set_boxed (computed, &number);
+}
+
+static gboolean 
 parse_border_width (GtkCssStyleProperty *property,
                     GValue              *value,
                     GtkCssParser        *parser,
@@ -815,41 +848,41 @@ _gtk_css_style_property_init_properties (void)
                                           compute_margin,
                                           &number);
   gtk_css_style_property_register        ("padding-top",
-                                          G_TYPE_INT,
-                                          G_TYPE_INT,
+                                          GTK_TYPE_CSS_NUMBER,
+                                          GTK_TYPE_CSS_NUMBER,
                                           G_TYPE_INT,
                                           0,
+                                          parse_padding,
                                           NULL,
-                                          NULL,
-                                          NULL,
-                                          0);
+                                          compute_padding,
+                                          &number);
   gtk_css_style_property_register        ("padding-left",
-                                          G_TYPE_INT,
-                                          G_TYPE_INT,
+                                          GTK_TYPE_CSS_NUMBER,
+                                          GTK_TYPE_CSS_NUMBER,
                                           G_TYPE_INT,
                                           0,
+                                          parse_padding,
                                           NULL,
-                                          NULL,
-                                          NULL,
-                                          0);
+                                          compute_padding,
+                                          &number);
   gtk_css_style_property_register        ("padding-bottom",
-                                          G_TYPE_INT,
-                                          G_TYPE_INT,
+                                          GTK_TYPE_CSS_NUMBER,
+                                          GTK_TYPE_CSS_NUMBER,
                                           G_TYPE_INT,
                                           0,
+                                          parse_padding,
                                           NULL,
-                                          NULL,
-                                          NULL,
-                                          0);
+                                          compute_padding,
+                                          &number);
   gtk_css_style_property_register        ("padding-right",
-                                          G_TYPE_INT,
-                                          G_TYPE_INT,
+                                          GTK_TYPE_CSS_NUMBER,
+                                          GTK_TYPE_CSS_NUMBER,
                                           G_TYPE_INT,
                                           0,
+                                          parse_padding,
                                           NULL,
-                                          NULL,
-                                          NULL,
-                                          0);
+                                          compute_padding,
+                                          &number);
   /* IMPORTANT: compute_border_width() requires that the border-width
    * properties be immeditaly followed by the border-style properties
    */

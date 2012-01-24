@@ -49,38 +49,6 @@ value_is_done_parsing (GtkCssParser *parser)
 }
 
 static gboolean
-parse_border_width (GtkCssShorthandProperty *shorthand,
-                    GValue                  *values,
-                    GtkCssParser            *parser,
-                    GFile                   *base)
-{
-  GValue temp = G_VALUE_INIT;
-  GtkBorder *border;
-
-  g_value_init (&temp, GTK_TYPE_BORDER);
-  if (!_gtk_css_style_parse_value (&temp, parser, base))
-    {
-      g_value_unset (&temp);
-      return FALSE;
-    }
-
-  border = g_value_get_boxed (&temp);
-
-  g_value_init (&values[0], G_TYPE_INT);
-  g_value_init (&values[1], G_TYPE_INT);
-  g_value_init (&values[2], G_TYPE_INT);
-  g_value_init (&values[3], G_TYPE_INT);
-  g_value_set_int (&values[0], border->top);
-  g_value_set_int (&values[1], border->right);
-  g_value_set_int (&values[2], border->bottom);
-  g_value_set_int (&values[3], border->left);
-
-  g_value_unset (&temp);
-
-  return TRUE;
-}
-
-static gboolean
 parse_four_numbers (GtkCssShorthandProperty *shorthand,
                     GValue                  *values,
                     GtkCssParser            *parser,
@@ -134,10 +102,24 @@ parse_margin (GtkCssShorthandProperty *shorthand,
 }
 
 static gboolean
-parse_border_width_really (GtkCssShorthandProperty *shorthand,
-                           GValue                  *values,
-                           GtkCssParser            *parser,
-                           GFile                   *base)
+parse_padding (GtkCssShorthandProperty *shorthand,
+               GValue                  *values,
+               GtkCssParser            *parser,
+               GFile                   *base)
+{
+  return parse_four_numbers (shorthand,
+                             values,
+                             parser,
+                             GTK_CSS_POSITIVE_ONLY
+                             | GTK_CSS_NUMBER_AS_PIXELS
+                             | GTK_CSS_PARSE_LENGTH);
+}
+
+static gboolean
+parse_border_width (GtkCssShorthandProperty *shorthand,
+                    GValue                  *values,
+                    GtkCssParser            *parser,
+                    GFile                   *base)
 {
   return parse_four_numbers (shorthand,
                              values,
@@ -923,13 +905,13 @@ _gtk_css_shorthand_property_init_properties (void)
   _gtk_css_shorthand_property_register   ("padding",
                                           GTK_TYPE_BORDER,
                                           padding_subproperties,
-                                          parse_border_width,
+                                          parse_padding,
                                           unpack_border,
                                           pack_border);
   _gtk_css_shorthand_property_register   ("border-width",
                                           GTK_TYPE_BORDER,
                                           border_width_subproperties,
-                                          parse_border_width_really,
+                                          parse_border_width,
                                           unpack_border,
                                           pack_border);
   _gtk_css_shorthand_property_register   ("border-radius",

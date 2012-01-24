@@ -28,9 +28,15 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertiesprivate.h"
 
+#include <math.h>
 #include <cairo-gobject.h>
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssimageprivate.h"
+
+/* this is in case round() is not provided by the compiler, 
+ * such as in the case of C89 compilers, like MSVC
+ */
+#include "fallback-c89.c"
 
 enum {
   PROP_0,
@@ -164,6 +170,10 @@ _gtk_css_style_property_query (GtkStyleProperty   *property,
               cairo_surface_destroy (surface);
               g_value_take_boxed (value, pattern);
             }
+        }
+      else if (G_VALUE_TYPE (val) == GTK_TYPE_CSS_NUMBER)
+        {
+          g_value_set_int (value, round (_gtk_css_number_get (g_value_get_boxed (val), 100)));
         }
       else
         g_value_copy (val, value);

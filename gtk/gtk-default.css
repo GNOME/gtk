@@ -332,7 +332,7 @@ GtkLabel:selected:focused {
 GtkCalendar.view {
   border-width: 1px;
   border-style: inset;
-  padding: 1;
+  padding: 1px;
 }
 
 GtkCalendar.view:inconsistent {
@@ -360,5 +360,5 @@ GtkCalendar.button:hover {
 
 .menu * {
   border-width: 0;
-  padding: 2;
+  padding: 2px;
 }

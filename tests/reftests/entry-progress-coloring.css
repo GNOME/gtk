@@ -9,7 +9,7 @@
 
 GtkEntry #padded {
   -GtkWidget-interior-focus: true;
-  padding: 10;
+  padding: 10px;
 }
 
 .progressbar {
