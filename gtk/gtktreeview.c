@@ -9025,7 +9025,8 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
   /* If the cursor row got deleted, move the cursor to the next row */
   if (tree_view->priv->cursor_node &&
       (tree_view->priv->cursor_node == node ||
-       (node->children &&  _gtk_rbtree_contains (node->children, tree_view->priv->cursor_tree))))
+       (node->children && (tree_view->priv->cursor_tree == node->children ||
+                           _gtk_rbtree_contains (node->children, tree_view->priv->cursor_tree)))))
     {
       GtkTreePath *cursor_path;
 
