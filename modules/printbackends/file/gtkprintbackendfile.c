@@ -384,7 +384,10 @@ file_print_cb_locked (GtkPrintBackendFile *print_backend,
                       GError              *error,
                       gpointer            user_data)
 {
+  gchar *uri;
+
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
+  GtkRecentManager *recent_manager;
 
   if (ps->target_io_stream != NULL)
     g_output_stream_close (G_OUTPUT_STREAM (ps->target_io_stream), NULL, NULL);
@@ -397,6 +400,11 @@ file_print_cb_locked (GtkPrintBackendFile *print_backend,
 
   gtk_print_job_set_status (ps->job,
 			    (error != NULL)?GTK_PRINT_STATUS_FINISHED_ABORTED:GTK_PRINT_STATUS_FINISHED);
+
+  recent_manager = gtk_recent_manager_get_default ();
+  uri = output_file_from_settings (gtk_print_job_get_settings (ps->job), NULL);
+  gtk_recent_manager_add_item (recent_manager, uri);
+  g_free (uri);
 
   if (ps->job)
     g_object_unref (ps->job);
