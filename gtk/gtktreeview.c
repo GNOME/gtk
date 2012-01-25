@@ -2906,7 +2906,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
           tree_view->priv->arrow_prelit &&
 	  gtk_tree_view_draw_expanders (tree_view))
 	{
-	  if (event->button == 1)
+	  if (event->button == GDK_BUTTON_PRIMARY)
 	    {
 	      gtk_grab_add (widget);
 	      tree_view->priv->button_pressed_node = tree_view->priv->prelight_node;
@@ -3001,7 +3001,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       _gtk_tree_view_set_focus_column (tree_view, column);
 
       /* decide if we edit */
-      if (event->type == GDK_BUTTON_PRESS && event->button == 1 &&
+      if (event->type == GDK_BUTTON_PRESS && event->button == GDK_BUTTON_PRIMARY &&
 	  !(event->state & gtk_accelerator_get_default_mod_mask ()))
 	{
 	  GtkTreePath *anchor;
@@ -3138,7 +3138,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
         }
 
       /* Test if a double click happened on the same row. */
-      if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
+      if (event->button == GDK_BUTTON_PRIMARY && event->type == GDK_BUTTON_PRESS)
         {
           int double_click_time, double_click_distance;
 
@@ -3365,7 +3365,7 @@ gtk_tree_view_button_release (GtkWidget      *widget,
   if (tree_view->priv->button_pressed_node == NULL)
     return FALSE;
 
-  if (event->button == 1)
+  if (event->button == GDK_BUTTON_PRIMARY)
     {
       if (tree_view->priv->button_pressed_node == tree_view->priv->prelight_node &&
           tree_view->priv->arrow_prelit)
@@ -9853,7 +9853,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   send_event->button.y = -1;
   send_event->button.axes = NULL;
   send_event->button.state = 0;
-  send_event->button.button = 1;
+  send_event->button.button = GDK_BUTTON_PRIMARY;
   send_event->button.x_root = 0;
   send_event->button.y_root = 0;
   gdk_event_set_device (send_event, device);
