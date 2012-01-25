@@ -311,6 +311,9 @@ gtk_timeline_run_frame (GtkTimeline *timeline)
   gdouble delta_progress, progress;
   guint elapsed_time;
 
+  /* the user may unref us during the signals, so save ourselves */
+  g_object_ref (timeline);
+
   priv = timeline->priv;
 
   elapsed_time = (guint) (g_timer_elapsed (priv->timer, NULL) * 1000);
@@ -355,9 +358,12 @@ gtk_timeline_run_frame (GtkTimeline *timeline)
             }
           g_timer_stop (priv->timer);
           g_signal_emit (timeline, signals [FINISHED], 0);
+          g_object_unref (timeline);
           return FALSE;
         }
     }
+
+  g_object_unref (timeline);
 
   return TRUE;
 }
