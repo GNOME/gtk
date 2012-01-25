@@ -732,7 +732,7 @@ gtk_drag_get_event_actions (GdkEvent *event,
 	  break;
 	}
 
-      if ((button == 2 || button == 3) && (actions & GDK_ACTION_ASK))
+      if ((button == GDK_BUTTON_MIDDLE || button == GDK_BUTTON_SECONDARY) && (actions & GDK_ACTION_ASK))
 	{
 	  *suggested_action = GDK_ACTION_ASK;
 	  *possible_actions = actions;
