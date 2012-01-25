@@ -1879,7 +1879,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
-  if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
+  if (event->button == GDK_BUTTON_PRIMARY && event->type == GDK_BUTTON_PRESS)
     {
       GdkModifierType extend_mod_mask;
       GdkModifierType modify_mod_mask;
@@ -1992,7 +1992,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
       icon_view->priv->draw_focus = FALSE;
     }
 
-  if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+  if (event->button == GDK_BUTTON_PRIMARY && event->type == GDK_2BUTTON_PRESS)
     {
       item = _gtk_icon_view_get_item_at_coords (icon_view,
 					       event->x, event->y,
@@ -2015,7 +2015,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
   if (dirty)
     g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
 
-  return event->button == 1;
+  return event->button == GDK_BUTTON_PRIMARY;
 }
 
 static gboolean
