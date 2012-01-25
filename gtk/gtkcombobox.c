@@ -3222,7 +3222,7 @@ gtk_combo_box_menu_button_press (GtkWidget      *widget,
   GtkComboBoxPrivate *priv = combo_box->priv;
 
   if (GTK_IS_MENU (priv->popup_widget) &&
-      event->type == GDK_BUTTON_PRESS && event->button == 1)
+      event->type == GDK_BUTTON_PRESS && event->button == GDK_BUTTON_PRIMARY)
     {
       if (priv->focus_on_click &&
           !gtk_widget_has_focus (priv->button))
