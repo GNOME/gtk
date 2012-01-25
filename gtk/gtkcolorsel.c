@@ -1553,7 +1553,7 @@ palette_release (GtkWidget      *drawing_area,
 
   gtk_widget_grab_focus (drawing_area);
 
-  if (event->button == 1 &&
+  if (event->button == GDK_BUTTON_PRIMARY &&
       g_object_get_data (G_OBJECT (drawing_area),
                          "gtk-colorsel-have-pointer") != NULL)
     {
@@ -1816,7 +1816,7 @@ mouse_release (GtkWidget      *invisible,
 {
   /* GtkColorSelection *colorsel = data; */
 
-  if (event->button != 1)
+  if (event->button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   grab_color_at_pointer (gdk_event_get_screen ((GdkEvent *) event),
@@ -1912,7 +1912,7 @@ mouse_press (GtkWidget      *invisible,
              GdkEventButton *event,
              gpointer        data)
 {
-  if (event->type == GDK_BUTTON_PRESS && event->button == 1)
+  if (event->type == GDK_BUTTON_PRESS && event->button == GDK_BUTTON_PRIMARY)
     {
       g_signal_connect (invisible, "motion-notify-event",
                         G_CALLBACK (mouse_motion), data);
