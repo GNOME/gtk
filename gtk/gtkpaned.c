@@ -1634,7 +1634,7 @@ gtk_paned_button_press (GtkWidget      *widget,
   GtkPanedPrivate *priv = paned->priv;
 
   if (!priv->in_drag &&
-      (event->window == priv->handle) && (event->button == 1))
+      (event->window == priv->handle) && (event->button == GDK_BUTTON_PRIMARY))
     {
       /* We need a server grab here, not gtk_grab_add(), since
        * we don't want to pass events on to the widget's children */
@@ -1736,7 +1736,7 @@ gtk_paned_button_release (GtkWidget      *widget,
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
 
-  if (priv->in_drag && (event->button == 1))
+  if (priv->in_drag && (event->button == GDK_BUTTON_PRIMARY))
     {
       stop_drag (paned);
 
