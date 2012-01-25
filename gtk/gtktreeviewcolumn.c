@@ -1104,7 +1104,7 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
 
   if (event->type == GDK_BUTTON_PRESS &&
       priv->reorderable &&
-      ((GdkEventButton *)event)->button == 1)
+      ((GdkEventButton *)event)->button == GDK_BUTTON_PRIMARY)
     {
       priv->maybe_reordered = TRUE;
       gdk_window_get_device_position (gtk_button_get_event_window (GTK_BUTTON (widget)),
