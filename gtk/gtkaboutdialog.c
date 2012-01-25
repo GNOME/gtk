@@ -1965,7 +1965,7 @@ text_view_event_after (GtkWidget      *text_view,
 
   button_event = (GdkEventButton *)event;
 
-  if (button_event->button != 1)
+  if (button_event->button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
