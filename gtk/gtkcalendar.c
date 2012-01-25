@@ -2986,7 +2986,7 @@ calendar_main_button_press (GtkCalendar    *calendar,
       if (!gtk_widget_has_focus (widget))
         gtk_widget_grab_focus (widget);
 
-      if (event->button == 1)
+      if (event->button == GDK_BUTTON_PRIMARY)
         {
           priv->in_drag = 1;
           priv->drag_start_x = x;
@@ -3027,7 +3027,7 @@ gtk_calendar_button_press (GtkWidget      *widget,
           /* only call the action on single click, not double */
           if (event->type == GDK_BUTTON_PRESS)
             {
-              if (event->button == 1)
+              if (event->button == GDK_BUTTON_PRIMARY)
                 calendar_start_spinning (calendar, arrow);
 
               calendar_arrow_action (calendar, arrow);
@@ -3047,7 +3047,7 @@ gtk_calendar_button_release (GtkWidget    *widget,
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
 
-  if (event->button == 1)
+  if (event->button == GDK_BUTTON_PRIMARY)
     {
       calendar_stop_spinning (calendar);
 
