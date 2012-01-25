@@ -35,7 +35,7 @@ gtk_css_computed_values_dispose (GObject *object)
 
   if (values->values)
     {
-      g_value_array_free (values->values);
+      g_array_free (values->values, TRUE);
       values->values = NULL;
     }
   if (values->sections)
@@ -92,9 +92,12 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
   parent = gtk_style_context_get_parent (context);
 
   if (values->values == NULL)
-    values->values = g_value_array_new (id + 1);
-  while (values->values->n_values <= id)
-    g_value_array_append (values->values, NULL);
+    {
+      values->values = g_array_new (FALSE, TRUE, sizeof (GValue));
+      g_array_set_clear_func (values->values, (GDestroyNotify) g_value_unset);
+    }
+  if (id <= values->values->len)
+   g_array_set_size (values->values, id + 1);
 
   /* http://www.w3.org/TR/css3-cascade/#cascade
    * Then, for every element, the value for each property can be found
@@ -158,14 +161,14 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
   if (specified)
     {
       _gtk_css_style_property_compute_value (prop,
-                                             g_value_array_get_nth (values->values, id),
+                                             &g_array_index (values->values, GValue, id),
                                              context,
                                              specified);
     }
   else
     {
       const GValue *parent_value;
-      GValue *value = g_value_array_get_nth (values->values, id);
+      GValue *value = &g_array_index (values->values, GValue, id);
       /* Set NULL here and do the inheritance upon lookup? */
       parent_value = _gtk_style_context_peek_property (parent,
                                                        _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop)));
@@ -193,10 +196,10 @@ _gtk_css_computed_values_get_value (GtkCssComputedValues *values,
   g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
 
   if (values->values == NULL ||
-      id >= values->values->n_values)
+      id >= values->values->len)
     return NULL;
 
-  v = g_value_array_get_nth (values->values, id);
+  v = &g_array_index (values->values, GValue, id);
   if (!G_IS_VALUE (v))
     return NULL;
 
