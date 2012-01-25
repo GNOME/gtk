@@ -2807,14 +2807,14 @@ gtk_notebook_arrow_button_press (GtkNotebook      *notebook,
   priv->button = button;
   priv->click_child = arrow;
 
-  if (button == 1)
+  if (button == GDK_BUTTON_PRIMARY)
     {
       gtk_notebook_do_arrow (notebook, arrow);
       gtk_notebook_set_scroll_timer (notebook);
     }
-  else if (button == 2)
+  else if (button == GDK_BUTTON_MIDDLE)
     gtk_notebook_page_select (notebook, TRUE);
-  else if (button == 3)
+  else if (button == GDK_BUTTON_SECONDARY)
     gtk_notebook_switch_focus_tab (notebook,
                                    gtk_notebook_search_page (notebook,
                                                              NULL,
@@ -2914,7 +2914,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
       return TRUE;
     }
 
-  if (event->button != 1)
+  if (event->button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   priv->button = event->button;
