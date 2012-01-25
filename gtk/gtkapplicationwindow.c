@@ -55,6 +55,10 @@
  * prefix.  Actions must be addressed with the prefixed name when
  * referring to them from a #GMenuModel.
  *
+ * Note that widgets that are placed inside a GtkApplicationWindow
+ * can also activate these actions, if they implement the
+ * GtkActionable interface.
+ *
  * As with #GtkApplication, the GDK lock will be acquired when
  * processing actions arriving from other processes and should therefore
  * be held when activating actions locally (if GDK threads are enabled).
