@@ -824,7 +824,7 @@ gtk_application_class_init (GtkApplicationClass *class)
  * Note that commandline arguments are not passed to gtk_init().
  * All GTK+ functionality that is available via commandline arguments
  * can also be achieved by setting suitable environment variables
- * such as <envvar>G_DEBUG</envvar>, so this should not be a big
+ * such as <envar>G_DEBUG</envar>, so this should not be a big
  * problem. If you absolutely must support GTK+ commandline arguments,
  * you can explicitly call gtk_init() before creating the application
  * instance.
