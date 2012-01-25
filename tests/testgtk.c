@@ -4631,10 +4631,10 @@ cursor_event (GtkWidget          *widget,
 	      GtkSpinButton	 *spinner)
 {
   if ((event->type == GDK_BUTTON_PRESS) &&
-      ((event->button.button == 1) ||
-       (event->button.button == 3)))
+      ((event->button.button == GDK_BUTTON_PRIMARY) ||
+       (event->button.button == GDK_BUTTON_SECONDARY)))
     {
-      gtk_spin_button_spin (spinner, event->button.button == 1 ?
+      gtk_spin_button_spin (spinner, event->button.button == GDK_BUTTON_PRIMARY ?
 			    GTK_SPIN_STEP_FORWARD : GTK_SPIN_STEP_BACKWARD, 0);
       return TRUE;
     }
