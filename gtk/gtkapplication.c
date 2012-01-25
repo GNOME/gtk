@@ -30,8 +30,10 @@
 #include <string.h>
 
 #include "gtkapplicationprivate.h"
+#include "gtkclipboard.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
+#include "gtkrecentmanager.h"
 #include "gtkaccelmapprivate.h"
 #include "gactionmuxer.h"
 #include "gtkintl.h"
@@ -463,6 +465,12 @@ gtk_application_shutdown (GApplication *application)
 #ifdef GDK_WINDOWING_QUARTZ
   gtk_application_shutdown_quartz (GTK_APPLICATION (application));
 #endif
+
+  /* Try storing all clipboard data we have */
+  _gtk_clipboard_store_all ();
+
+  /* Synchronize the recent manager singleton */
+  _gtk_recent_manager_sync ();
 
   G_APPLICATION_CLASS (gtk_application_parent_class)
     ->shutdown (application);
