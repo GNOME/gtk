@@ -1821,7 +1821,7 @@ gtk_button_button_press (GtkWidget      *widget,
       if (priv->focus_on_click && !gtk_widget_has_focus (widget))
 	gtk_widget_grab_focus (widget);
 
-      if (event->button == 1)
+      if (event->button == GDK_BUTTON_PRIMARY)
         g_signal_emit (button, button_signals[PRESSED], 0);
     }
 
@@ -1834,7 +1834,7 @@ gtk_button_button_release (GtkWidget      *widget,
 {
   GtkButton *button;
 
-  if (event->button == 1)
+  if (event->button == GDK_BUTTON_PRIMARY)
     {
       button = GTK_BUTTON (widget);
       g_signal_emit (button, button_signals[RELEASED], 0);
