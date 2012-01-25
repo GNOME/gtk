@@ -97,7 +97,7 @@ scribble_button_press_event (GtkWidget      *widget,
   if (surface == NULL)
     return FALSE; /* paranoia check, in case we haven't gotten a configure event */
 
-  if (event->button == 1)
+  if (event->button == GDK_BUTTON_PRIMARY)
     draw_brush (widget, event->x, event->y);
 
   /* We've handled the event, stop processing */
