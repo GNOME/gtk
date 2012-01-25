@@ -86,11 +86,11 @@ button_press_event_cb (GtkWidget      *widget,
   if (surface == NULL)
     return FALSE;
 
-  if (event->button == 1)
+  if (event->button == GDK_BUTTON_PRIMARY)
     {
       draw_brush (widget, event->x, event->y);
     }
-  else if (event->button == 3)
+  else if (event->button == GDK_BUTTON_SECONDARY)
     {
       clear_surface ();
       gtk_widget_queue_draw (widget);
