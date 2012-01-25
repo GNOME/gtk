@@ -3788,7 +3788,7 @@ gtk_entry_button_press (GtkWidget      *widget,
 
       return TRUE;
     }
-  else if (event->button == 1)
+  else if (event->button == GDK_BUTTON_PRIMARY)
     {
       gboolean have_selection = gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end);
 
@@ -3898,7 +3898,7 @@ gtk_entry_button_press (GtkWidget      *widget,
 
       return TRUE;
     }
-  else if (event->button == 2 && event->type == GDK_BUTTON_PRESS)
+  else if (event->button == GDK_BUTTON_MIDDLE && event->type == GDK_BUTTON_PRESS)
     {
       if (priv->editable)
         {
@@ -4033,7 +4033,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
       priv->mouse_cursor_obscured = FALSE;
     }
 
-  if (event->window != priv->text_area || priv->button != 1)
+  if (event->window != priv->text_area || priv->button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   if (priv->select_lines)
@@ -6444,7 +6444,7 @@ paste_received (GtkClipboard *clipboard,
   GtkEditable *editable = GTK_EDITABLE (entry);
   GtkEntryPrivate *priv = entry->priv;
 
-  if (priv->button == 2)
+  if (priv->button == GDK_BUTTON_MIDDLE)
     {
       gint pos, start, end;
       pos = priv->insert_pos;
