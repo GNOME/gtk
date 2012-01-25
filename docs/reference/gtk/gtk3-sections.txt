@@ -37,6 +37,7 @@ gtk_about_dialog_get_logo
 gtk_about_dialog_set_logo
 gtk_about_dialog_get_logo_icon_name
 gtk_about_dialog_set_logo_icon_name
+gtk_about_dialog_add_credit_section
 gtk_show_about_dialog
 <SUBSECTION Standard>
 GTK_ABOUT_DIALOG

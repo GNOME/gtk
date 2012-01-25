@@ -159,6 +159,9 @@ void                   gtk_about_dialog_set_logo               (GtkAboutDialog  
 const gchar *          gtk_about_dialog_get_logo_icon_name     (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_logo_icon_name     (GtkAboutDialog  *about,
                                                                 const gchar     *icon_name);
+void                  gtk_about_dialog_add_credit_section      (GtkAboutDialog  *about,
+                                                                const gchar     *section_name,
+                                                                const gchar    **people);
 
 G_END_DECLS
 

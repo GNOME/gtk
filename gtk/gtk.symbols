@@ -1,6 +1,7 @@
 /* This list defines the GTK+ ABI. It is used to generate the gtk.def
  * file.
  */
+gtk_about_dialog_add_credit_section
 gtk_about_dialog_get_artists
 gtk_about_dialog_get_authors
 gtk_about_dialog_get_comments

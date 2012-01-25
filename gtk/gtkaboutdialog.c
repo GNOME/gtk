@@ -122,6 +122,12 @@ static const gchar *gtk_license_urls[] = {
   "http://opensource.org/licenses/artistic-license-2.0.php"
 };
 
+typedef struct
+{
+  gchar *heading;
+  gchar **people;
+} CreditSection;
+
 struct _GtkAboutDialogPrivate 
 {
   gchar *name;
@@ -136,6 +142,9 @@ struct _GtkAboutDialogPrivate
   gchar **authors;
   gchar **documenters;
   gchar **artists;
+
+
+  GSList *credit_sections;
 
   gint credits_page;
   gint license_page;
@@ -162,6 +171,8 @@ struct _GtkAboutDialogPrivate
   guint hovering_over_link : 1;
   guint wrap_license : 1;
 };
+
+
 
 #define GTK_ABOUT_DIALOG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ABOUT_DIALOG, GtkAboutDialogPrivate))
 
@@ -561,6 +572,7 @@ update_credits_button_visibility (GtkAboutDialog *about)
   show = (priv->authors != NULL ||
           priv->documenters != NULL ||
           priv->artists != NULL ||
+          priv->credit_sections != NULL ||
          (priv->translator_credits != NULL &&
           strcmp (priv->translator_credits, "translator_credits") &&
           strcmp (priv->translator_credits, "translator-credits")));
@@ -775,6 +787,15 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_about_dialog_set_logo (about, NULL);
 }
 
+
+void destroy_credit_section (gpointer data)
+{
+  CreditSection *cs = data;
+  g_free (cs->heading);
+  g_strfreev (cs->people);
+  g_slice_free (CreditSection, data);
+}
+
 static void
 gtk_about_dialog_finalize (GObject *object)
 {
@@ -793,6 +814,8 @@ gtk_about_dialog_finalize (GObject *object)
   g_strfreev (priv->authors);
   g_strfreev (priv->documenters);
   g_strfreev (priv->artists);
+
+  g_slist_free_full (priv->credit_sections, destroy_credit_section);
 
   g_slist_foreach (priv->visited_links, (GFunc)g_free, NULL);
   g_slist_free (priv->visited_links);
@@ -2393,6 +2416,16 @@ create_credits_page (GtkAboutDialog *about)
   if (priv->artists != NULL)
     add_credits_section (about, GTK_GRID (grid), &row, _("Artwork by"), priv->artists);
 
+  if (priv->credit_sections != NULL)
+    {
+      GSList *cs;
+      for (cs = priv->credit_sections; cs != NULL; cs = cs->next)
+	{
+	  CreditSection *section = cs->data;
+	  add_credits_section (about, GTK_GRID (grid), &row, section->heading, section->people);
+	}
+    }
+
   gtk_widget_show_all (sw);
 }
 
@@ -2626,4 +2659,36 @@ gtk_about_dialog_get_license_type (GtkAboutDialog *about)
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), GTK_LICENSE_UNKNOWN);
 
   return about->priv->license_type;
+}
+
+/**
+ * gtk_about_dialog_add_credit_section:
+ * @about: A #GtkAboutDialog
+ * @section_name: The name of the section
+ * @people: The people who belong to that section
+ *
+ * Creates a new section in the Credits page.
+ *
+ * Since: 3.4
+ */
+void
+gtk_about_dialog_add_credit_section (GtkAboutDialog  *about,
+                                     const gchar     *section_name,
+                                     const gchar    **people)
+{
+  GtkAboutDialogPrivate *priv;
+  CreditSection *new_entry;
+
+  g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
+  g_return_if_fail (section_name != NULL);
+  g_return_if_fail (people != NULL);
+
+  priv = about->priv;
+
+  new_entry = g_slice_new (CreditSection);
+  new_entry->heading = g_strdup ((gchar *)section_name);
+  new_entry->people = g_strdupv ((gchar **)people);
+
+  priv->credit_sections = g_slist_append (priv->credit_sections, new_entry);
+  update_credits_button_visibility (about);
 }
