@@ -1069,7 +1069,7 @@ gtk_cell_area_real_event (GtkCellArea          *area,
     {
       GdkEventButton *button_event = (GdkEventButton *)event;
 
-      if (button_event->button == 1)
+      if (button_event->button == GDK_BUTTON_PRIMARY)
         {
           GtkCellRenderer *renderer = NULL;
           GtkCellRenderer *focus_renderer;
