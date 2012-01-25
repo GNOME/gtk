@@ -7,18 +7,8 @@
         <property name="halign">fill</property>
         <property name="hexpand">True</property>
         <child>
-          <object class="GtkMenuToolButton" id="menu">
+          <object class="GtkMenuToolButton" id="menutool">
             <property name="stock-id">gtk-open</property>
-            <child type="menu">
-              <object class="GtkMenu" id="m">
-                <child>
-                  <object class="GtkMenuItem" id="file">
-                    <property name="visible">True</property>
-                    <property name="label">File1</property>
-                  </object>
-                </child>
-              </object>
-            </child>
           </object>
         </child>
         <child>
@@ -106,4 +96,7 @@
       </packing>
     </child>
   </object>
+  <menu id="toolmenu">
+    <item label='File1' action='win.file1'/>
+  </menu>
 </interface>

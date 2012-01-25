@@ -283,6 +283,7 @@ static GActionEntry win_entries[] = {
   { "shape", activate_radio, "s", "'oval'", change_radio_state },
   { "bold", activate_toggle, NULL, "false", NULL },
   { "about", activate_about, NULL, NULL, NULL },
+  { "file1", activate_action, NULL, NULL, NULL },
   { "logo", activate_action, NULL, NULL, NULL }
 };
 
@@ -322,6 +323,8 @@ activate (GApplication *app)
   GtkWidget *message;
   GtkWidget *button;
   GtkWidget *infobar;
+  GtkWidget *menutool;
+  GMenuModel *toolmenu;
   GtkTextBuffer *buffer;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
@@ -342,11 +345,16 @@ activate (GApplication *app)
   message = (GtkWidget *)gtk_builder_get_object (builder, "message");
   button = (GtkWidget *)gtk_builder_get_object (builder, "button");
   infobar = (GtkWidget *)gtk_builder_get_object (builder, "infobar");
+  menutool = (GtkWidget *)gtk_builder_get_object (builder, "menutool");
+  toolmenu = (GMenuModel *)gtk_builder_get_object (builder, "toolmenu");
 
   g_object_set_data (G_OBJECT (window), "message", message);
   g_object_set_data (G_OBJECT (window), "infobar", infobar);
 
   gtk_container_add (GTK_CONTAINER (window), grid);
+
+  gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (menutool),
+                                 gtk_menu_new_from_model (toolmenu));
 
   gtk_widget_grab_focus (contents);
   g_signal_connect (button, "clicked", G_CALLBACK (clicked_cb), infobar);
