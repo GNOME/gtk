@@ -417,7 +417,7 @@ arrow_button_button_press_event_cb (GtkWidget         *widget,
                                     GdkEventButton    *event,
                                     GtkMenuToolButton *button)
 {
-  if (event->button == 1)
+  if (event->button == GDK_BUTTON_PRIMARY)
     {
       popup_menu_under_arrow (button, event);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
