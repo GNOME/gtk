@@ -18,8 +18,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkSeparatorToolItem" id="sep">
-          </object>
+          <object class="GtkSeparatorToolItem" id="sep"/>
         </child>
         <child>
           <object class="GtkToolButton" id="logo">
@@ -97,6 +96,9 @@
     </child>
   </object>
   <menu id="toolmenu">
-    <item label='File1' action='win.file1'/>
+    <item>
+      <attribute name="label">File1</attribute>
+      <attribute name="action">win.file1</attribute>
+    </item>
   </menu>
 </interface>

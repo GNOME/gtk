@@ -567,6 +567,7 @@ gtk_base_c_sources = 		\
 	gtkbuildable.c		\
 	gtkbuilder.c		\
 	gtkbuilderparser.c	\
+	gtkbuilder-menus.c	\
 	gtkbutton.c		\
 	gtkcalendar.c		\
 	gtkcellarea.c		\

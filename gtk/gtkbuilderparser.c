@@ -832,34 +832,6 @@ parse_custom (GMarkupParseContext *context,
   return TRUE;
 }
 
-static gboolean
-parse_menu (GMarkupParseContext  *context,
-            const gchar          *element_name,
-            const gchar         **names,
-            const gchar         **values,
-            gpointer              user_data,
-            GError              **error)
-{
-  gchar *id;
-  ParserData *data = user_data;
-  MenuInfo *menu_info;
-
-  if (!g_markup_collect_attributes (element_name, names, values, error,
-                                    G_MARKUP_COLLECT_STRING, "id", &id,
-                                    G_MARKUP_COLLECT_INVALID))
-    return FALSE;
-
-  menu_info = g_slice_new0 (MenuInfo);
-  menu_info->tag.name = element_name;
-  menu_info->id = g_strdup (id);
-  menu_info->objects = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
-  state_push (data, menu_info);
-
-  g_menu_markup_parser_start_menu (context, data->domain, menu_info->objects);
-
-  return TRUE;
-}
-
 static void
 start_element (GMarkupParseContext *context,
                const gchar         *element_name,
@@ -921,7 +893,7 @@ start_element (GMarkupParseContext *context,
   else if (strcmp (element_name, "interface") == 0)
     parse_interface (data, element_name, names, values, error);
   else if (strcmp (element_name, "menu") == 0)
-    parse_menu (context, element_name, names, values, data, error);
+    _gtk_builder_menu_start (data, element_name, names, values, error);
   else if (strcmp (element_name, "placeholder") == 0)
     {
       /* placeholder has no special treatmeant, but it needs an
@@ -995,23 +967,7 @@ end_element (GMarkupParseContext *context,
     }
   else if (strcmp (element_name, "menu") == 0)
     {
-      MenuInfo *menu_info;
-      GObject *menu;
-      GHashTableIter iter;
-      const gchar *id;
-
-      menu_info = state_pop_info (data, MenuInfo);
-      menu = (GObject*)g_menu_markup_parser_end_menu (context);
-      _gtk_builder_add_object (data->builder, menu_info->id, menu);
-      g_object_unref (menu);
-
-      g_hash_table_iter_init (&iter, menu_info->objects);
-      while (g_hash_table_iter_next (&iter, (gpointer*)&id, (gpointer*)&menu))
-        {
-          _gtk_builder_add_object (data->builder, id, menu);
-        }
-
-      free_menu_info (menu_info);
+      _gtk_builder_menu_end (data);
     }
   else if (data->requested_objects && !data->inside_requested_object)
     {
