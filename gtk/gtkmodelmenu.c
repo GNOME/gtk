@@ -29,6 +29,7 @@
 #include "gtkmenubar.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkmodelmenuitem.h"
+#include "gtkapplicationprivate.h"
 
 typedef struct {
   GActionObservable *actions;
@@ -65,7 +66,8 @@ gtk_model_menu_binding_free (gpointer data)
       binding->connected = g_slist_delete_link (binding->connected, binding->connected);
     }
 
-  g_object_unref (binding->actions);
+  if (binding->actions)
+    g_object_unref (binding->actions);
   g_object_unref (binding->model);
 
   g_slice_free (GtkModelMenuBinding, binding);
@@ -224,25 +226,38 @@ gtk_model_menu_binding_items_changed (GMenuModel *model,
     }
 }
 
-void
+static void
 gtk_model_menu_bind (GtkMenuShell      *shell,
                      GMenuModel        *model,
-                     GActionObservable *actions,
-                     GtkAccelGroup     *accels,
                      gboolean           with_separators)
 {
   GtkModelMenuBinding *binding;
 
   binding = g_slice_new (GtkModelMenuBinding);
   binding->model = g_object_ref (model);
-  binding->actions = g_object_ref (actions);
-  binding->accels = accels;
+  binding->actions = NULL;
+  binding->accels = NULL;
   binding->shell = shell;
   binding->update_idle = 0;
   binding->connected = NULL;
   binding->with_separators = with_separators;
 
   g_object_set_data_full (G_OBJECT (shell), "gtk-model-menu-binding", binding, gtk_model_menu_binding_free);
+}
+
+
+static void
+gtk_model_menu_populate (GtkMenuShell      *shell,
+                         GActionObservable *actions,
+                         GtkAccelGroup     *accels)
+{
+  GtkModelMenuBinding *binding;
+
+  binding = (GtkModelMenuBinding*) g_object_get_data (G_OBJECT (shell), "gtk-model-menu-binding");
+
+  binding->actions = g_object_ref (actions);
+  binding->accels = accels;
+
   gtk_model_menu_binding_populate (binding);
 }
 
@@ -254,8 +269,59 @@ gtk_model_menu_create_menu (GMenuModel        *model,
   GtkWidget *menu;
 
   menu = gtk_menu_new ();
-  gtk_menu_set_accel_group (GTK_MENU (menu), accels);
-  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, actions, accels, TRUE);
+
+  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, FALSE);
+  gtk_model_menu_populate (GTK_MENU_SHELL (menu), actions, accels);
+
+  return menu;
+}
+
+static void
+notify_attach (GtkMenu    *menu,
+               GParamSpec *pspec,
+               gpointer    data)
+{
+  GtkWidget *widget;
+  GtkWidget *toplevel;
+  GActionObservable *actions;
+  GtkAccelGroup *accels;
+
+  widget = gtk_menu_get_attach_widget (menu);
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_APPLICATION_WINDOW (toplevel))
+    {
+      actions = gtk_application_window_get_observable (GTK_APPLICATION_WINDOW (toplevel));
+      accels = gtk_application_window_get_accel_group (GTK_APPLICATION_WINDOW (toplevel));
+
+      gtk_model_menu_populate (GTK_MENU_SHELL (menu), actions, accels);
+    }
+}
+
+/**
+ * gtk_menu_new_from_model:
+ * @model: a #GMenuModel
+ *
+ * Creates a #GtkMenu and populates it with menu items and
+ * submenus according to @model.
+ *
+ * The created menu items are connected to actions found in the
+ * #GtkApplicationWindow to which the menu belongs - typically
+ * by means of being attached to a widget (see gtk_menu_attach_to_widget())
+ * that is contained within the #GtkApplicationWindows widget hierarchy.
+ *
+ * Returns: a new #GtkMenu
+ *
+ * Since: 3.4
+ */
+GtkWidget *
+gtk_menu_new_from_model (GMenuModel *model)
+{
+  GtkWidget *menu;
+
+  menu = gtk_menu_new ();
+  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, TRUE);
+  g_signal_connect (menu, "notify::attach-widget",
+                    G_CALLBACK (notify_attach), NULL);
 
   return menu;
 }
@@ -268,8 +334,59 @@ gtk_model_menu_create_menu_bar (GMenuModel        *model,
   GtkWidget *menubar;
 
   menubar = gtk_menu_bar_new ();
-  gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, actions, accels, FALSE);
+
+  gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, FALSE);
+  gtk_model_menu_populate (GTK_MENU_SHELL (menubar), actions, accels);
 
   return menubar;
 }
 
+static void
+hierarchy_changed (GtkMenuShell *shell,
+                   GObject      *previous_toplevel,
+                   gpointer      data)
+{
+  GtkWidget *toplevel;
+  GActionObservable *actions;
+  GtkAccelGroup *accels;
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (shell));
+  if (GTK_IS_APPLICATION_WINDOW (toplevel))
+    {
+      actions = gtk_application_window_get_observable (GTK_APPLICATION_WINDOW (toplevel));
+      accels = gtk_application_window_get_accel_group (GTK_APPLICATION_WINDOW (toplevel));
+
+      gtk_model_menu_populate (shell, actions, accels);
+    }
+}
+
+/**
+ * gtk_menu_bar_new_from_model:
+ * @model: a #GMenuModel
+ *
+ * Creates a new #GtkMenuBar and populates it with menu items
+ * and submenus according to @model.
+ *
+ * The created menu items are connected to actions found in the
+ * #GtkApplicationWindow to which the menu bar belongs - typically
+ * by means of being contained within the #GtkApplicationWindows
+ * widget hierarchy.
+ *
+ * Returns: a new #GtkMenuBar
+ *
+ * Since: 3.4
+ */
+GtkWidget *
+gtk_menu_bar_new_from_model (GMenuModel *model)
+{
+  GtkWidget *menubar;
+
+  menubar = gtk_menu_bar_new ();
+
+  gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, FALSE);
+
+  g_signal_connect (menubar, "hierarchy-changed",
+                    G_CALLBACK (hierarchy_changed), NULL);
+
+  return menubar;
+}

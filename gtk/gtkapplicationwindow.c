@@ -1012,3 +1012,15 @@ gtk_application_window_create_observer (GtkApplicationWindow *window,
 
   return g_simple_action_observer_new (window->priv->muxer, action_name, target);
 }
+
+GActionObservable *
+gtk_application_window_get_observable (GtkApplicationWindow *window)
+{
+  return G_ACTION_OBSERVABLE (window->priv->muxer);
+}
+
+GtkAccelGroup *
+gtk_application_window_get_accel_group (GtkApplicationWindow *window)
+{
+  return window->priv->accels;
+}

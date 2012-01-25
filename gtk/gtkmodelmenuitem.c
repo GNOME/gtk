@@ -235,15 +235,19 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
       /* observer already causes us to hold a hard ref on the group */
       item->actions = G_ACTION_GROUP (actions);
 
-      g_action_observable_register_observer (actions, item->action_name, G_ACTION_OBSERVER (item));
-
-      if (g_action_group_query_action (G_ACTION_GROUP (actions), item->action_name, &enabled, &type, NULL, NULL, &state))
+      if (actions)
         {
-          gtk_model_menu_item_action_added (G_ACTION_OBSERVER (item), actions, item->action_name, type, enabled, state);
-          if (state != NULL)
-            g_variant_unref (state);
-        }
+          g_action_observable_register_observer (actions, item->action_name, G_ACTION_OBSERVER (item));
 
+          if (g_action_group_query_action (G_ACTION_GROUP (actions), item->action_name, &enabled, &type, NULL, NULL, &state))
+            {
+              gtk_model_menu_item_action_added (G_ACTION_OBSERVER (item), actions, item->action_name, type, enabled, state);
+              if (state != NULL)
+                g_variant_unref (state);
+            }
+          else
+            gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
+        }
       else
         gtk_widget_set_sensitive (GTK_WIDGET (item), FALSE);
 
