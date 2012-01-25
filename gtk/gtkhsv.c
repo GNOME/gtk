@@ -723,7 +723,7 @@ gtk_hsv_button_press (GtkWidget      *widget,
   GtkHSVPrivate *priv = hsv->priv;
   double x, y;
 
-  if (priv->mode != DRAG_NONE || event->button != 1)
+  if (priv->mode != DRAG_NONE || event->button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   x = event->x;
@@ -773,7 +773,7 @@ gtk_hsv_button_release (GtkWidget      *widget,
   DragMode mode;
   gdouble x, y;
 
-  if (priv->mode == DRAG_NONE || event->button != 1)
+  if (priv->mode == DRAG_NONE || event->button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   /* Set the drag mode to DRAG_NONE so that signal handlers for "catched"
