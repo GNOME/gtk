@@ -1130,7 +1130,7 @@ gtk_path_bar_slider_button_press (GtkWidget      *widget,
 				  GdkEventButton *event,
 				  GtkPathBar     *path_bar)
 {
-  if (event->type != GDK_BUTTON_PRESS || event->button != 1)
+  if (event->type != GDK_BUTTON_PRESS || event->button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   path_bar->ignore_click = FALSE;
