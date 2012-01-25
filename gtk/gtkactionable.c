@@ -29,15 +29,15 @@
 /**
  * SECTION:gtkactionable
  * @title: GtkActionable
- * @short_description: an interface for widgets that can be associated
- *                     with actions
+ * @short_description: An interface for widgets that can be associated
+ *     with actions
  *
  * This interface provides a convenient way of associating widgets with
  * actions on a #GtkApplicationWindow or #GtkApplication.
  *
- * It primarily consists of two properties: "action-name" and
- * "action-target".  There are also some convenience APIs for setting
- * these properties.
+ * It primarily consists of two properties: #GtkActionable:action-name
+ * and #GtkActionable:action-target. There are also some convenience APIs
+ * for setting these properties.
  *
  * This interface is presently only meaningful if used on a widget that
  * is (or will be) located inside of a #GtkApplicationWindow and can
@@ -55,9 +55,9 @@
 
 /**
  * GtkActionableInterface:
- * @get_action_name: virtual pointer for gtk_actionable_get_action_name
- * @set_action_name: virtual pointer for gtk_actionable_set_action_name
- * @get_action_target_value: virtual pointer for gtk_actionable_get_action_target_value
+ * @get_action_name: virtual pointer for gtk_actionable_get_action_name()
+ * @set_action_name: virtual pointer for gtk_actionable_set_action_name()
+ * @get_action_target_value: virtual pointer for gtk_actionable_get_action_target_value()
  * @set_action_target_value: virtual pointer for gtk_actionable_set_action_target_value
  *
  * The interface vtable for #GtkActionable.
@@ -161,8 +161,8 @@ gtk_actionable_get_action_target_value (GtkActionable *actionable)
  *
  * The target value has two purposes.  First, it is used as the
  * parameter to activation of the action associated with the
- * #GtkActionable widget.  Second, it is used to determine if the widget
- * should be rendered as "active" -- the widget is active if the state
+ * #GtkActionable widget. Second, it is used to determine if the widget
+ * should be rendered as "active" - the widget is active if the state
  * is equal to the given target.
  *
  * Consider the example of associating a set of buttons with a #GAction
