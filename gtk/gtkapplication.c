@@ -104,7 +104,7 @@
  * </example>
  *
  * GtkApplication optionally registers with a session manager
- * of the users session (if you set the #GtkApplication::register-session
+ * of the users session (if you set the #GtkApplication:register-session
  * property) and offers various functionality related to the session
  * life-cycle.
  *
@@ -767,7 +767,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * applications a chance to object.
    *
    * To receive this signal, you need to set the
-   * #GtkApplication::register-session property
+   * #GtkApplication:register-session property
    * when creating the application object.
    *
    * Since: 3.4
@@ -778,7 +778,7 @@ gtk_application_class_init (GtkApplicationClass *class)
                   NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 
   /**
-   * GtkApplication::register-session:
+   * GtkApplication:register-session:
    *
    * Set this property to %TRUE to register with the session manager
    * and receive the #GtkApplication::quit signal when the session
@@ -816,6 +816,10 @@ gtk_application_class_init (GtkApplicationClass *class)
  *
  * This function calls g_type_init() for you. gtk_init() is called
  * as soon as the application gets registered as the primary instance.
+ *
+ * Concretely, gtk_init() is called in the default handler for the
+ * startup() signal. Therefore, #GtkApplication subclasses should
+ * chain up in their startup() handler before using any GTK+ API.
  *
  * Note that commandline arguments are not passed to gtk_init().
  * All GTK+ functionality that is available via commandline arguments
