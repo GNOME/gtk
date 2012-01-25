@@ -1625,7 +1625,7 @@ gtk_status_icon_button_press (GtkStatusIcon  *status_icon,
       emit_popup_menu_signal (status_icon, event->button, event->time);
       return TRUE;
     }
-  else if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
+  else if (event->button == GDK_BUTTON_PRIMARY && event->type == GDK_BUTTON_PRESS)
     {
       emit_activate_signal (status_icon);
       return TRUE;
