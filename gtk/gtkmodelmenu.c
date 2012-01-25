@@ -67,6 +67,8 @@ gtk_model_menu_binding_free (gpointer data)
 
   g_object_unref (binding->actions);
   g_object_unref (binding->model);
+
+  g_slice_free (GtkModelMenuBinding, binding);
 }
 
 static void
