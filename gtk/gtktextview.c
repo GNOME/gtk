@@ -4540,9 +4540,9 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
 #if 0
   /* debug hack */
-  if (event->button == 3 && (event->state & GDK_CONTROL_MASK) != 0)
+  if (event->button == GDK_BUTTON_SECONDARY && (event->state & GDK_CONTROL_MASK) != 0)
     _gtk_text_buffer_spew (GTK_TEXT_VIEW (widget)->buffer);
-  else if (event->button == 3)
+  else if (event->button == GDK_BUTTON_SECONDARY)
     gtk_text_layout_spew (GTK_TEXT_VIEW (widget)->layout);
 #endif
 
@@ -4555,7 +4555,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 	  gtk_text_view_do_popup (text_view, event);
 	  return TRUE;
         }
-      else if (event->button == 1)
+      else if (event->button == GDK_BUTTON_PRIMARY)
         {
           /* If we're in the selection, start a drag copy/move of the
            * selection; otherwise, start creating a new selection.
@@ -4586,7 +4586,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
           return TRUE;
         }
-      else if (event->button == 2)
+      else if (event->button == GDK_BUTTON_MIDDLE)
         {
           GtkTextIter iter;
 
@@ -4608,7 +4608,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
     }
   else if ((event->type == GDK_2BUTTON_PRESS ||
 	    event->type == GDK_3BUTTON_PRESS) &&
-	   event->button == 1) 
+	   event->button == GDK_BUTTON_PRIMARY)
     {
       GtkTextIter iter;
 
@@ -4638,7 +4638,7 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
   if (event->window != priv->text_window->bin_window)
     return FALSE;
 
-  if (event->button == 1)
+  if (event->button == GDK_BUTTON_PRIMARY)
     {
       if (priv->drag_start_x >= 0)
         {
