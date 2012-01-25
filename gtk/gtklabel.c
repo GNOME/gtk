@@ -4641,7 +4641,7 @@ gtk_label_button_press (GtkWidget      *widget,
           gtk_label_do_popup (label, event);
           return TRUE;
         }
-      else if (event->button == 1)
+      else if (event->button == GDK_BUTTON_PRIMARY)
         {
           info->link_clicked = 1;
           gtk_widget_queue_draw (widget);
@@ -4660,7 +4660,7 @@ gtk_label_button_press (GtkWidget      *widget,
 
       return TRUE;
     }
-  else if (event->button == 1)
+  else if (event->button == GDK_BUTTON_PRIMARY)
     {
       if (!gtk_widget_has_focus (widget))
         {
@@ -4761,7 +4761,7 @@ gtk_label_button_release (GtkWidget      *widget,
       return FALSE;
     }
 
-  if (event->button != 1)
+  if (event->button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   if (info->active_link &&
