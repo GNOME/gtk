@@ -1460,7 +1460,7 @@ gdk_event_request_motions (const GdkEventMotion *event)
  * also trigger a context menu if this modifier is pressed.
  *
  * This function should always be used instead of simply checking for
- * event->button == 3.
+ * event->button == %GDK_BUTTON_SECONDARY.
  *
  * Returns: %TRUE if the event should trigger a context menu.
  *
@@ -1479,7 +1479,7 @@ gdk_event_triggers_context_menu (const GdkEvent *event)
 
       g_return_val_if_fail (GDK_IS_WINDOW (bevent->window), FALSE);
 
-      if (bevent->button == 3 &&
+      if (bevent->button == GDK_BUTTON_SECONDARY &&
           ! (bevent->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
         return TRUE;
 
@@ -1489,7 +1489,7 @@ gdk_event_triggers_context_menu (const GdkEvent *event)
                                                GDK_MODIFIER_INTENT_CONTEXT_MENU);
 
       if (modifier != 0 &&
-          bevent->button == 1 &&
+          bevent->button == GDK_BUTTON_PRIMARY &&
           ! (bevent->state & (GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) &&
           (bevent->state & modifier))
         return TRUE;
