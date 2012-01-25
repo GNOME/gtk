@@ -91,12 +91,12 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
                                         GFile            *base)
 {
   GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
-  GValueArray *array;
+  GArray *array;
   guint i;
 
-  array = g_value_array_new (shorthand->subproperties->len);
-  for (i = 0; i < shorthand->subproperties->len; i++)
-    g_value_array_append (array, NULL);
+  array = g_array_new (FALSE, TRUE, sizeof (GValue));
+  g_array_set_clear_func (array, (GDestroyNotify) g_value_unset);
+  g_array_set_size (array, shorthand->subproperties->len);
 
   if (_gtk_css_parser_try (parser, "initial", TRUE))
     {
@@ -105,7 +105,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
        */
       for (i = 0; i < shorthand->subproperties->len; i++)
         {
-          GValue *val = g_value_array_get_nth (array, i);
+          GValue *val = &g_array_index (array, GValue, i);
           g_value_init (val, GTK_TYPE_CSS_SPECIAL_VALUE);
           g_value_set_enum (val, GTK_CSS_INITIAL);
         }
@@ -120,14 +120,14 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
        */
       for (i = 0; i < shorthand->subproperties->len; i++)
         {
-          GValue *val = g_value_array_get_nth (array, i);
+          GValue *val = &g_array_index (array, GValue, i);
           g_value_init (val, GTK_TYPE_CSS_SPECIAL_VALUE);
           g_value_set_enum (val, GTK_CSS_INHERIT);
         }
     }
-  else if (!shorthand->parse (shorthand, array->values, parser, base))
+  else if (!shorthand->parse (shorthand, (GValue *) array->data, parser, base))
     {
-      g_value_array_free (array);
+      g_array_free (array, TRUE);
       return FALSE;
     }
 
@@ -136,14 +136,14 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
    * XXX: Is the default always initial or can it be inherit? */
   for (i = 0; i < shorthand->subproperties->len; i++)
     {
-      GValue *val = g_value_array_get_nth (array, i);
+      GValue *val = &g_array_index (array, GValue, i);
       if (G_IS_VALUE (val))
         continue;
       g_value_init (val, GTK_TYPE_CSS_SPECIAL_VALUE);
       g_value_set_enum (val, GTK_CSS_INITIAL);
     }
 
-  g_value_init (value, G_TYPE_VALUE_ARRAY);
+  g_value_init (value, G_TYPE_ARRAY);
   g_value_take_boxed (value, array);
   return TRUE;
 }
