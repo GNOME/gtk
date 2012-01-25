@@ -1355,9 +1355,9 @@ gtk_spin_button_button_press (GtkWidget      *widget,
           if (gtk_editable_get_editable (GTK_EDITABLE (widget))) {
             gtk_spin_button_update (spin);
 
-            if (event->button == 1)
+            if (event->button == GDK_BUTTON_PRIMARY)
               start_spinning (spin, event->window, gtk_adjustment_get_step_increment (priv->adjustment));
-            else if (event->button == 2)
+            else if (event->button == GDK_BUTTON_MIDDLE)
               start_spinning (spin, event->window, gtk_adjustment_get_page_increment (priv->adjustment));
             else
               priv->click_child = event->window;
@@ -1385,7 +1385,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
 
       gtk_spin_button_stop_spinning (spin);
 
-      if (event->button == 3)
+      if (event->button == GDK_BUTTON_SECONDARY)
         {
           gdouble diff;
 
