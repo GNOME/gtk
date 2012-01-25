@@ -362,7 +362,7 @@ parse_input (BroadwayInput *input)
 	  gsize len, payload_len;
 	  BroadwayWSOpCode code;
 	  gboolean is_mask, fin;
-	  guchar *buf, *data;
+	  guchar *buf, *data, *mask;
 
 	  buf = input->buffer->data;
 	  len = input->buffer->len;
@@ -391,6 +391,16 @@ parse_input (BroadwayInput *input)
 	      payload_len = GUINT64_FROM_BE( *(guint64 *) data );
 	      data += 8;
 	    }
+
+	  mask = NULL;
+	  if (is_mask)
+	    {
+	      if (data - buf + 4 > len)
+		return;
+	      mask = data;
+	      data += 4;
+	    }
+
 	  if (data - buf + payload_len > len)
 	    return; /* wait to accumulate more */
 
@@ -398,8 +408,7 @@ parse_input (BroadwayInput *input)
 	    {
 	      gsize i;
 	      for (i = 0; i < payload_len; i++)
-		data[i + 4] ^= data[i%4];
-	      data += 4;
+		data[i] ^= mask[i%4];
 	    }
 
 	  switch (code) {
