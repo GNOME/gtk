@@ -1687,7 +1687,18 @@ gdk_window_quartz_restack_toplevel (GdkWindow *window,
 				    GdkWindow *sibling,
 				    gboolean   above)
 {
-  /* FIXME: Implement this */
+  GdkWindowImplQuartz *impl;
+  gint sibling_num;
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *)sibling)->impl);
+  sibling_num = [impl->toplevel windowNumber];
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *)window)->impl);
+
+  if (above)
+    [impl->toplevel orderWindow:NSWindowAbove relativeTo:sibling_num];
+  else
+    [impl->toplevel orderWindow:NSWindowBelow relativeTo:sibling_num];
 }
 
 static void
