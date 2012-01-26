@@ -1,4 +1,5 @@
 demos/gtk-demo/demo.ui
+demos/gtk-demo/menus.ui
 gtk/paper_names.c
 tests/a11y/accessible-name.ui
 tests/a11y/assistant.ui
