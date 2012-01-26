@@ -346,6 +346,8 @@ gtk_printer_cups_update_settings (GtkPrinterCups *printer,
   /* cupsICCQualifier3 */
   option = gtk_printer_option_set_lookup (set, "cups-Resolution");
   if (option != NULL)
+    format[2] = option->value;
+  else
     format[2] = "*";
 
   /* get profile for the device given the qualifier */
