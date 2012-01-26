@@ -1444,6 +1444,7 @@ popup_grab_on_window (GdkWindow *window,
  * be used instead.
  *
  * Since: 3.0
+ * Rename to: gtk_menu_popup
  */
 void
 gtk_menu_popup_for_device (GtkMenu             *menu,
