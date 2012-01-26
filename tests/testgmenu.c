@@ -165,8 +165,6 @@ item_activated (GtkWidget *w,
   else
     parameter = NULL;
   g_action_group_activate_action (a->group, a->name, parameter);
-  if (parameter)
-    g_variant_unref (parameter);
 }
 
 /* GtkMenu construction {{{2 */
@@ -391,77 +389,79 @@ menu_holder_get_menu (MenuHolder *holder)
 /* The example menu {{{1 */
 
 static const gchar menu_markup[] =
+  "<interface>\n"
   "<menu id='edit-menu'>\n"
   "  <section>\n"
-  "    <item action='undo'>\n"
-  "      <attribute name='label' translatable='yes' context='Stock label'>'_Undo'</attribute>\n"
+  "    <item>\n"
+  "      <attribute name='action'>undo</attribute>\n"
+  "      <attribute name='label' translatable='yes' context='Stock label'>_Undo</attribute>\n"
   "    </item>\n"
-  "    <item label='Redo' action='redo'/>\n"
+  "    <item>\n"
+  "      <attribute name='label' translatable='yes'>Redo</attribute>\n"
+  "      <attribute name='action'>redo</attribute>\n"
+  "    </item>\n"
   "  </section>\n"
-  "  <section></section>\n"
-  "  <section label='Copy &amp; Paste'>\n"
-  "    <item label='Cut' action='cut'/>\n"
-  "    <item label='Copy' action='copy'/>\n"
-  "    <item label='Paste' action='paste'/>\n"
+  "  <section/>\n"
+  "  <section>\n"
+  "    <attribute name='label' translatable='yes'>Copy &amp; Paste</attribute>\n"
+  "    <item>\n"
+  "      <attribute name='label' translatable='yes'>Cut</attribute>\n"
+  "      <attribute name='action'>cut</attribute>\n"
+  "    </item>\n"
+  "    <item>\n"
+  "      <attribute name='label' translatable='yes'>Copy</attribute>\n"
+  "      <attribute name='action'>copy</attribute>\n"
+  "    </item>\n"
+  "    <item>\n"
+  "      <attribute name='label' translatable='yes'>Paste</attribute>\n"
+  "      <attribute name='action'>paste</attribute>\n"
+  "    </item>\n"
   "  </section>\n"
   "  <section>\n"
-  "    <item label='Bold' action='bold'/>\n"
-  "    <submenu label='Language'>\n"
-  "      <item label='Latin' action='lang' target='latin'/>\n"
-  "      <item label='Greek' action='lang' target='greek'/>\n"
-  "      <item label='Urdu'  action='lang' target='urdu'/>\n"
+  "    <item>\n"
+  "      <attribute name='label' translatable='yes'>Bold</attribute>\n"
+  "      <attribute name='action'>bold</attribute>\n"
+  "    </item>\n"
+  "    <submenu>\n"
+  "      <attribute name='label' translatable='yes'>Language</attribute>\n"
+  "      <item>\n"
+  "        <attribute name='label' translatable='yes'>Latin</attribute>\n"
+  "        <attribute name='action'>lang</attribute>\n"
+  "        <attribute name='target'>latin</attribute>\n"
+  "      </item>\n"
+  "      <item>\n"
+  "        <attribute name='label' translatable='yes'>Greek</attribute>\n"
+  "        <attribute name='action'>lang</attribute>\n"
+  "        <attribute name='target'>greek</attribute>\n"
+  "      </item>\n"
+  "      <item>\n"
+  "        <attribute name='label' translatable='yes'>Urdu</attribute>\n"
+  "        <attribute name='action'>lang</attribute>\n"
+  "        <attribute name='target'>urdu</attribute>\n"
+  "      </item>\n"
   "    </submenu>\n"
   "  </section>\n"
-  "</menu>\n";
-
-static void
-start_element (GMarkupParseContext *context,
-               const gchar         *element_name,
-               const gchar        **attribute_names,
-               const gchar        **attribute_values,
-               gpointer             user_data,
-               GError             **error)
-{
-  if (strcmp (element_name, "menu") == 0)
-    g_menu_markup_parser_start_menu (context, "gtk30", NULL);
-}
-
-static void
-end_element (GMarkupParseContext *context,
-             const gchar         *element_name,
-             gpointer             user_data,
-             GError             **error)
-{
-  GMenu **menu = user_data;
-
-  if (strcmp (element_name, "menu") == 0)
-    *menu = g_menu_markup_parser_end_menu (context);
-}
-
-static const GMarkupParser parser = {
-   start_element, end_element, NULL, NULL, NULL
-};
+  "</menu>\n"
+  "</interface>\n";
 
 static GMenuModel *
 get_model (void)
 {
-  GMarkupParseContext *context;
-  GMenu *menu = NULL;
   GError *error = NULL;
+  GtkBuilder *builder;
+  GMenuModel *menu;
 
-  context = g_markup_parse_context_new (&parser, 0, &menu, NULL);
-  if (!g_markup_parse_context_parse (context, menu_markup, -1, &error))
-    {
-       g_warning ("menu parsing failed: %s\n", error->message);
-       exit (1);
-    }
-  g_markup_parse_context_free (context);
-  g_assert (menu);
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, menu_markup, -1, &error);
+  g_assert_no_error (error);
 
-   return G_MENU_MODEL (menu);
+  menu = g_object_ref (gtk_builder_get_object (builder, "edit-menu"));
+  g_object_unref (builder);
+
+  return menu;
 }
 
- /* The example actions {{{1 */
+/* The example actions {{{1 */
 
 static void
 activate_action (GSimpleAction *action, GVariant *parameter, gpointer user_data)
