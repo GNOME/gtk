@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-13 09:36+0200\n"
-"PO-Revision-Date: 2012-01-13 09:37+0200\n"
+"POT-Creation-Date: 2012-01-28 12:46+0200\n"
+"PO-Revision-Date: 2012-01-28 12:46+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Gezer (Hebrew)\n"
 "Language: he\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Virtaal 0.7.0-beta5\n"
 "X-Project-Style: gnome\n"
 
-#: ../gdk/gdkapplaunchcontext.c:129
+#: ../gdk/gdkapplaunchcontext.c:131
 #: ../gdk/gdkcursor.c:136
 #: ../gdk/gdkdevicemanager.c:172
 msgid "Display"
@@ -355,115 +355,115 @@ msgstr "Vertical padding"
 msgid "Extra space to put between the child and its upper and lower neighbors, in pixels"
 msgstr "Extra space to put between the child and its upper and lower neighbors, in pixels"
 
-#: ../gtk/gtkaboutdialog.c:278
+#: ../gtk/gtkaboutdialog.c:289
 msgid "Program name"
 msgstr "Program name"
 
-#: ../gtk/gtkaboutdialog.c:279
+#: ../gtk/gtkaboutdialog.c:290
 msgid "The name of the program. If this is not set, it defaults to g_get_application_name()"
 msgstr "The name of the program. If this is not set, it defaults to g_get_application_name()"
 
-#: ../gtk/gtkaboutdialog.c:293
+#: ../gtk/gtkaboutdialog.c:304
 msgid "Program version"
 msgstr "Program version"
 
-#: ../gtk/gtkaboutdialog.c:294
+#: ../gtk/gtkaboutdialog.c:305
 msgid "The version of the program"
 msgstr "The version of the program"
 
-#: ../gtk/gtkaboutdialog.c:308
+#: ../gtk/gtkaboutdialog.c:319
 msgid "Copyright string"
 msgstr "Copyright string"
 
-#: ../gtk/gtkaboutdialog.c:309
+#: ../gtk/gtkaboutdialog.c:320
 msgid "Copyright information for the program"
 msgstr "Copyright information for the program"
 
-#: ../gtk/gtkaboutdialog.c:326
+#: ../gtk/gtkaboutdialog.c:337
 msgid "Comments string"
 msgstr "Comments string"
 
-#: ../gtk/gtkaboutdialog.c:327
+#: ../gtk/gtkaboutdialog.c:338
 msgid "Comments about the program"
 msgstr "Comments about the program"
 
-#: ../gtk/gtkaboutdialog.c:377
+#: ../gtk/gtkaboutdialog.c:388
 msgid "License Type"
 msgstr "License Type"
 
-#: ../gtk/gtkaboutdialog.c:378
+#: ../gtk/gtkaboutdialog.c:389
 msgid "The license type of the program"
 msgstr "The license type of the program"
 
-#: ../gtk/gtkaboutdialog.c:394
+#: ../gtk/gtkaboutdialog.c:405
 msgid "Website URL"
 msgstr "Website URL"
 
-#: ../gtk/gtkaboutdialog.c:395
+#: ../gtk/gtkaboutdialog.c:406
 msgid "The URL for the link to the website of the program"
 msgstr "The URL for the link to the website of the program"
 
-#: ../gtk/gtkaboutdialog.c:409
+#: ../gtk/gtkaboutdialog.c:420
 msgid "Website label"
 msgstr "Website label"
 
-#: ../gtk/gtkaboutdialog.c:410
+#: ../gtk/gtkaboutdialog.c:421
 msgid "The label for the link to the website of the program"
 msgstr "The label for the link to the website of the program"
 
-#: ../gtk/gtkaboutdialog.c:426
+#: ../gtk/gtkaboutdialog.c:437
 msgid "Authors"
 msgstr "Authors"
 
-#: ../gtk/gtkaboutdialog.c:427
+#: ../gtk/gtkaboutdialog.c:438
 msgid "List of authors of the program"
 msgstr "List of authors of the program"
 
-#: ../gtk/gtkaboutdialog.c:443
+#: ../gtk/gtkaboutdialog.c:454
 msgid "Documenters"
 msgstr "Documenters"
 
-#: ../gtk/gtkaboutdialog.c:444
+#: ../gtk/gtkaboutdialog.c:455
 msgid "List of people documenting the program"
 msgstr "List of people documenting the program"
 
-#: ../gtk/gtkaboutdialog.c:460
+#: ../gtk/gtkaboutdialog.c:471
 msgid "Artists"
 msgstr "Artists"
 
-#: ../gtk/gtkaboutdialog.c:461
+#: ../gtk/gtkaboutdialog.c:472
 msgid "List of people who have contributed artwork to the program"
 msgstr "List of people who have contributed artwork to the program"
 
-#: ../gtk/gtkaboutdialog.c:478
+#: ../gtk/gtkaboutdialog.c:489
 msgid "Translator credits"
 msgstr "Translator credits"
 
-#: ../gtk/gtkaboutdialog.c:479
+#: ../gtk/gtkaboutdialog.c:490
 msgid "Credits to the translators. This string should be marked as translatable"
 msgstr "Credits to the translators. This string should be marked as translatable"
 
-#: ../gtk/gtkaboutdialog.c:494
+#: ../gtk/gtkaboutdialog.c:505
 msgid "Logo"
 msgstr "Logo"
 
-#: ../gtk/gtkaboutdialog.c:495
+#: ../gtk/gtkaboutdialog.c:506
 msgid "A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"
 msgstr "A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"
 
-#: ../gtk/gtkaboutdialog.c:510
+#: ../gtk/gtkaboutdialog.c:521
 msgid "Logo Icon Name"
 msgstr "Logo Icon Name"
 
-#: ../gtk/gtkaboutdialog.c:511
+#: ../gtk/gtkaboutdialog.c:522
 msgid "A named icon to use as the logo for the about box."
 msgstr "A named icon to use as the logo for the about box."
 
-#: ../gtk/gtkaboutdialog.c:524
+#: ../gtk/gtkaboutdialog.c:535
 msgid "Wrap license"
 msgstr "Wrap license"
 
-#: ../gtk/gtkaboutdialog.c:525
+#: ../gtk/gtkaboutdialog.c:536
 msgid "Whether to wrap the license text."
 msgstr "Whether to wrap the license text."
 
@@ -908,19 +908,35 @@ msgstr "Widget's default text"
 msgid "The default text appearing when there are no applications"
 msgstr "The default text appearing when there are no applications"
 
-#: ../gtk/gtkapplication.c:698
+#: ../gtk/gtkapplication.c:799
 msgid "Register session"
 msgstr "Register session"
 
-#: ../gtk/gtkapplication.c:699
+#: ../gtk/gtkapplication.c:800
 msgid "Register with the session manager"
 msgstr "Register with the session manager"
 
-#: ../gtk/gtkapplicationwindow.c:913
+#: ../gtk/gtkapplication.c:805
+msgid "Application menu"
+msgstr "Application menu"
+
+#: ../gtk/gtkapplication.c:806
+msgid "The GMenuModel for the application menu"
+msgstr "The GMenuModel for the application menu"
+
+#: ../gtk/gtkapplication.c:812
+msgid "Menubar"
+msgstr "Menubar"
+
+#: ../gtk/gtkapplication.c:813
+msgid "The GMenuModel for the menubar"
+msgstr "The GMenuModel for the menubar"
+
+#: ../gtk/gtkapplicationwindow.c:953
 msgid "Show a menubar"
 msgstr "Show a menubar"
 
-#: ../gtk/gtkapplicationwindow.c:914
+#: ../gtk/gtkapplicationwindow.c:954
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr "TRUE if the window should show a menubar at the top of the window"
 
@@ -1164,11 +1180,11 @@ msgstr "Position"
 msgid "The index of the child in the parent"
 msgstr "The index of the child in the parent"
 
-#: ../gtk/gtkbuilder.c:329
+#: ../gtk/gtkbuilder.c:330
 msgid "Translation Domain"
 msgstr "Translation Domain"
 
-#: ../gtk/gtkbuilder.c:330
+#: ../gtk/gtkbuilder.c:331
 msgid "The translation domain used by gettext"
 msgstr "The translation domain used by gettext"
 
@@ -1824,7 +1840,7 @@ msgid "The acceleration rate when you hold down a button"
 msgstr "The acceleration rate when you hold down a button"
 
 #: ../gtk/gtkcellrendererspin.c:144
-#: ../gtk/gtkscale.c:238
+#: ../gtk/gtkscale.c:294
 #: ../gtk/gtkspinbutton.c:334
 msgid "Digits"
 msgstr "Digits"
@@ -5240,47 +5256,47 @@ msgstr "Icons"
 msgid "List of icon names"
 msgstr "List of icon names"
 
-#: ../gtk/gtkscale.c:239
+#: ../gtk/gtkscale.c:295
 msgid "The number of decimal places that are displayed in the value"
 msgstr "The number of decimal places that are displayed in the value"
 
-#: ../gtk/gtkscale.c:248
+#: ../gtk/gtkscale.c:304
 msgid "Draw Value"
 msgstr "Draw Value"
 
-#: ../gtk/gtkscale.c:249
+#: ../gtk/gtkscale.c:305
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Whether the current value is displayed as a string next to the slider"
 
-#: ../gtk/gtkscale.c:256
+#: ../gtk/gtkscale.c:312
 msgid "Has Origin"
 msgstr "Has Origin"
 
-#: ../gtk/gtkscale.c:257
+#: ../gtk/gtkscale.c:313
 msgid "Whether the scale has an origin"
 msgstr "Whether the scale has an origin"
 
-#: ../gtk/gtkscale.c:264
+#: ../gtk/gtkscale.c:320
 msgid "Value Position"
 msgstr "Value Position"
 
-#: ../gtk/gtkscale.c:265
+#: ../gtk/gtkscale.c:321
 msgid "The position in which the current value is displayed"
 msgstr "The position in which the current value is displayed"
 
-#: ../gtk/gtkscale.c:272
+#: ../gtk/gtkscale.c:328
 msgid "Slider Length"
 msgstr "Slider Length"
 
-#: ../gtk/gtkscale.c:273
+#: ../gtk/gtkscale.c:329
 msgid "Length of scale's slider"
 msgstr "Length of scale's slider"
 
-#: ../gtk/gtkscale.c:281
+#: ../gtk/gtkscale.c:337
 msgid "Value spacing"
 msgstr "Value spacing"
 
-#: ../gtk/gtkscale.c:282
+#: ../gtk/gtkscale.c:338
 msgid "Space between value text and the slider/trough area"
 msgstr "Space between value text and the slider/trough area"
 

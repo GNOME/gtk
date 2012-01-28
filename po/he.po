@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-13 09:35+0200\n"
-"PO-Revision-Date: 2012-01-13 09:35+0200\n"
+"POT-Creation-Date: 2012-01-28 12:45+0200\n"
+"PO-Revision-Date: 2012-01-28 12:46+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Gezer (Hebrew)\n"
 "Language: he\n"
@@ -73,8 +73,8 @@ msgstr "GDK debugging flags to set"
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:194
 #: ../gdk/gdk.c:197
-#: ../gtk/gtkmain.c:452
-#: ../gtk/gtkmain.c:455
+#: ../gtk/gtkmain.c:454
+#: ../gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -514,50 +514,50 @@ msgstr "בחירת גופן"
 msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href=\"%s\">%s</a>"
 msgstr "תכנית זו מופצת ללא שום אחריות; לפרטים נא לבקר בכתובת <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:348
+#: ../gtk/gtkaboutdialog.c:359
 msgid "License"
 msgstr "רישיון"
 
-#: ../gtk/gtkaboutdialog.c:349
+#: ../gtk/gtkaboutdialog.c:360
 msgid "The license of the program"
 msgstr "רישיון השימוש בתוכנה"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:741
+#: ../gtk/gtkaboutdialog.c:753
 msgid "C_redits"
 msgstr "_תודות"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:754
+#: ../gtk/gtkaboutdialog.c:766
 msgid "_License"
 msgstr "_רישיון"
 
-#: ../gtk/gtkaboutdialog.c:959
+#: ../gtk/gtkaboutdialog.c:982
 msgid "Could not show link"
 msgstr "לא ניתן להציג את הקישור"
 
-#: ../gtk/gtkaboutdialog.c:996
+#: ../gtk/gtkaboutdialog.c:1019
 msgid "Homepage"
 msgstr "דף הבית"
 
-#: ../gtk/gtkaboutdialog.c:1050
+#: ../gtk/gtkaboutdialog.c:1073
 #, c-format
 msgid "About %s"
 msgstr "על אודות %s"
 
-#: ../gtk/gtkaboutdialog.c:2376
+#: ../gtk/gtkaboutdialog.c:2399
 msgid "Created by"
 msgstr "נוצר על ידי"
 
-#: ../gtk/gtkaboutdialog.c:2379
+#: ../gtk/gtkaboutdialog.c:2402
 msgid "Documented by"
 msgstr "תועד על ידי"
 
-#: ../gtk/gtkaboutdialog.c:2389
+#: ../gtk/gtkaboutdialog.c:2412
 msgid "Translated by"
 msgstr "תורגם על ידי"
 
-#: ../gtk/gtkaboutdialog.c:2394
+#: ../gtk/gtkaboutdialog.c:2417
 msgid "Artwork by"
 msgstr "אומנות על ידי"
 
@@ -713,7 +713,7 @@ msgstr "יישומים קשורים"
 msgid "Other Applications"
 msgstr "יישומים אחרים"
 
-#: ../gtk/gtkapplication.c:1447
+#: ../gtk/gtkapplication.c:1594
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -724,7 +724,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:260
+#: ../gtk/gtkapplicationwindow.c:286
 #: ../gtk/gtkprintoperation-unix.c:477
 #: ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
@@ -742,6 +742,21 @@ msgstr "ח_זרה"
 msgid "_Finish"
 msgstr "_סיום"
 
+#: ../gtk/gtkbuilder-menus.c:218
+#, c-format
+msgid "Element <%s> not allowed inside <%s>"
+msgstr "Element <%s> not allowed inside <%s>"
+
+#: ../gtk/gtkbuilder-menus.c:223
+#, c-format
+msgid "Element <%s> not allowed at toplevel"
+msgstr "Element <%s> not allowed at toplevel"
+
+#: ../gtk/gtkbuilder-menus.c:312
+#, c-format
+msgid "text may not appear inside <%s>"
+msgstr "ייתכן שהטקסט לא יופיע בתוך <%s>"
+
 #: ../gtk/gtkbuilderparser.c:343
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
@@ -752,12 +767,12 @@ msgstr "סוג הפונקציה שבשורה %d אינו תקין: '%s'"
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "מזהה פריט כפול '%s' בשורה %d (לשעבר בשורה %d)"
 
-#: ../gtk/gtkbuilderparser.c:895
+#: ../gtk/gtkbuilderparser.c:867
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "רכיב שורש בלתי תקני: '%s'"
 
-#: ../gtk/gtkbuilderparser.c:936
+#: ../gtk/gtkbuilderparser.c:908
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "תגית בלתי מטופלת: '%s'"
@@ -1478,12 +1493,12 @@ msgid "System (%s)"
 msgstr "מערכת (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6217
+#: ../gtk/gtklabel.c:6215
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6229
+#: ../gtk/gtklabel.c:6227
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
 
@@ -1528,27 +1543,27 @@ msgstr ""
 "נא ליצור קשר עם מנהל המערכת."
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:445
+#: ../gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "Load additional GTK+ modules"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:446
+#: ../gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "Make all warnings fatal"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:451
+#: ../gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ debugging flags to set"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:454
+#: ../gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ debugging flags to unset"
 
@@ -1557,20 +1572,20 @@ msgstr "GTK+ debugging flags to unset"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:705
+#: ../gtk/gtkmain.c:707
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: ../gtk/gtkmain.c:771
+#: ../gtk/gtkmain.c:775
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Cannot open display: %s"
 
-#: ../gtk/gtkmain.c:837
+#: ../gtk/gtkmain.c:841
 msgid "GTK+ Options"
 msgstr "GTK+ Options"
 
-#: ../gtk/gtkmain.c:837
+#: ../gtk/gtkmain.c:841
 msgid "Show GTK+ Options"
 msgstr "Show GTK+ Options"
 
@@ -1654,8 +1669,8 @@ msgstr "מעטפת Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "לא ניתן לסיים את התהליך בעל המזהה %d: ‏%s"
 
-#: ../gtk/gtknotebook.c:5017
-#: ../gtk/gtknotebook.c:7676
+#: ../gtk/gtknotebook.c:5014
+#: ../gtk/gtknotebook.c:7668
 #, c-format
 msgid "Page %u"
 msgstr "עמוד %u"
@@ -1971,42 +1986,42 @@ msgstr "כללי"
 #. * multiple pages on a sheet when printing
 #.
 #: ../gtk/gtkprintunixdialog.c:3109
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3623
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3634
 msgid "Left to right, top to bottom"
 msgstr "שמאל לימין, מלמעלה למטה"
 
 #: ../gtk/gtkprintunixdialog.c:3109
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3623
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3634
 msgid "Left to right, bottom to top"
 msgstr "שמאל לימין, מלמטה למעלה"
 
 #: ../gtk/gtkprintunixdialog.c:3110
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3624
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3635
 msgid "Right to left, top to bottom"
 msgstr "ימין לשמאל, מלמעלה למטה"
 
 #: ../gtk/gtkprintunixdialog.c:3110
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3624
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3635
 msgid "Right to left, bottom to top"
 msgstr "ימין לשמאל, מלמטה למעלה"
 
 #: ../gtk/gtkprintunixdialog.c:3111
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3625
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3636
 msgid "Top to bottom, left to right"
 msgstr "מלמעלה למטה, משמאל לימין"
 
 #: ../gtk/gtkprintunixdialog.c:3111
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3625
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3636
 msgid "Top to bottom, right to left"
 msgstr "מלמעלה למטה, מימין לשמאל"
 
 #: ../gtk/gtkprintunixdialog.c:3112
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3637
 msgid "Bottom to top, left to right"
 msgstr "מלמטה למעלה, משמאל לימין"
 
 #: ../gtk/gtkprintunixdialog.c:3112
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3626
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3637
 msgid "Bottom to top, right to left"
 msgstr "מלמטה למעלה, מימין לשמאל"
 
@@ -2015,7 +2030,7 @@ msgstr "מלמטה למעלה, מימין לשמאל"
 #.
 #: ../gtk/gtkprintunixdialog.c:3116
 #: ../gtk/gtkprintunixdialog.c:3129
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3660
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Page Ordering"
 msgstr "סדר דפים"
 
@@ -2300,18 +2315,18 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:995
-#: ../gtk/gtkrecentmanager.c:1008
-#: ../gtk/gtkrecentmanager.c:1145
-#: ../gtk/gtkrecentmanager.c:1155
-#: ../gtk/gtkrecentmanager.c:1207
-#: ../gtk/gtkrecentmanager.c:1216
-#: ../gtk/gtkrecentmanager.c:1231
+#: ../gtk/gtkrecentmanager.c:999
+#: ../gtk/gtkrecentmanager.c:1012
+#: ../gtk/gtkrecentmanager.c:1149
+#: ../gtk/gtkrecentmanager.c:1159
+#: ../gtk/gtkrecentmanager.c:1211
+#: ../gtk/gtkrecentmanager.c:1220
+#: ../gtk/gtkrecentmanager.c:1235
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "לא ניתן למצוא פריט עם כתובת '%s'"
 
-#: ../gtk/gtkrecentmanager.c:2431
+#: ../gtk/gtkrecentmanager.c:2435
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "לא נמצא יישום הרשום בשם '%s' עבור הפריט בעל הכתובת '%s'"
@@ -3014,7 +3029,7 @@ msgstr "תג פתיחה בלתי צפוי '%s' בשורה %d תו %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "מידע תו לא צפוי בשורה %d תו %d"
 
-#: ../gtk/gtkuimanager.c:2697
+#: ../gtk/gtkuimanager.c:2732
 msgid "Empty"
 msgstr "ריק"
 
@@ -4282,19 +4297,19 @@ msgstr "שונות"
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3618
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3629
 msgid "Urgent"
 msgstr "דחוף"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3618
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3629
 msgid "High"
 msgstr "גבוה"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3618
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3629
 msgid "Medium"
 msgstr "בינוני"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3618
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3629
 msgid "Low"
 msgstr "נמוך"
 
@@ -4302,66 +4317,66 @@ msgstr "נמוך"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3644
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3655
 msgid "Pages per Sheet"
 msgstr "מספר העמודים בדף"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3692
 msgid "Job Priority"
 msgstr "עדיפות המשימה"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3692
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3703
 msgid "Billing Info"
 msgstr "נתוני חיוב"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3718
 msgid "None"
 msgstr "ללא"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3718
 msgid "Classified"
 msgstr "מסווג"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3718
 msgid "Confidential"
 msgstr "חסוי"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3718
 msgid "Secret"
 msgstr "סודי"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3718
 msgid "Standard"
 msgstr "רגיל"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3718
 msgid "Top Secret"
 msgstr "סודי ביותר"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3707
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3718
 msgid "Unclassified"
 msgstr "לא מסווג"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3742
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3753
 msgid "Before"
 msgstr "לפני"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3757
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3768
 msgid "After"
 msgstr "אחרי"
 
@@ -4369,14 +4384,14 @@ msgstr "אחרי"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3777
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3788
 msgid "Print at"
 msgstr "זמן הדפסה"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3788
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3799
 msgid "Print at time"
 msgstr "הדפסה בזמן"
 
@@ -4384,17 +4399,17 @@ msgstr "הדפסה בזמן"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3823
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3834
 #, c-format
 msgid "Custom %sx%s"
 msgstr "מותאם אישית %sx%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3904
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3915
 msgid "Printer Profile"
 msgstr "פרופיל מדפסת"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3911
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3922
 msgid "Unavailable"
 msgstr "לא זמין"
 
