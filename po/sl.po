@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-01-21 15:31+0000\n"
-"PO-Revision-Date: 2012-01-21 20:39+0100\n"
+"POT-Creation-Date: 2012-01-28 14:46+0000\n"
+"PO-Revision-Date: 2012-01-28 20:41+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: \n"
@@ -516,50 +516,50 @@ msgstr "Izbira pisave"
 msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href=\"%s\">%s</a>"
 msgstr "Ta program je objavljen BREZ VSAKRŠNE GARANCIJE; za več podrobnosti obiščite <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:348
+#: ../gtk/gtkaboutdialog.c:359
 msgid "License"
 msgstr "Dovoljenje"
 
-#: ../gtk/gtkaboutdialog.c:349
+#: ../gtk/gtkaboutdialog.c:360
 msgid "The license of the program"
 msgstr "Dovoljenje programa"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:741
+#: ../gtk/gtkaboutdialog.c:753
 msgid "C_redits"
 msgstr "_Zasluge"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:754
+#: ../gtk/gtkaboutdialog.c:766
 msgid "_License"
 msgstr "_Dovoljenje"
 
-#: ../gtk/gtkaboutdialog.c:959
+#: ../gtk/gtkaboutdialog.c:982
 msgid "Could not show link"
 msgstr "Povezave ni mogoče pokazati"
 
-#: ../gtk/gtkaboutdialog.c:996
+#: ../gtk/gtkaboutdialog.c:1019
 msgid "Homepage"
 msgstr "Domača stran"
 
-#: ../gtk/gtkaboutdialog.c:1050
+#: ../gtk/gtkaboutdialog.c:1073
 #, c-format
 msgid "About %s"
 msgstr "O programu %s"
 
-#: ../gtk/gtkaboutdialog.c:2376
+#: ../gtk/gtkaboutdialog.c:2399
 msgid "Created by"
 msgstr "Ustvarili:"
 
-#: ../gtk/gtkaboutdialog.c:2379
+#: ../gtk/gtkaboutdialog.c:2402
 msgid "Documented by"
 msgstr "Dokumentacija:"
 
-#: ../gtk/gtkaboutdialog.c:2389
+#: ../gtk/gtkaboutdialog.c:2412
 msgid "Translated by"
 msgstr "Prevod:"
 
-#: ../gtk/gtkaboutdialog.c:2394
+#: ../gtk/gtkaboutdialog.c:2417
 msgid "Artwork by"
 msgstr "Grafična podoba:"
 
@@ -715,7 +715,7 @@ msgstr "Sorodni programi"
 msgid "Other Applications"
 msgstr "Drugi programi"
 
-#: ../gtk/gtkapplication.c:1582
+#: ../gtk/gtkapplication.c:1594
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -726,7 +726,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:266
+#: ../gtk/gtkapplicationwindow.c:286
 #: ../gtk/gtkprintoperation-unix.c:477
 #: ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
@@ -744,6 +744,21 @@ msgstr "Vrni _nazaj"
 msgid "_Finish"
 msgstr "_Končaj"
 
+#: ../gtk/gtkbuilder-menus.c:218
+#, c-format
+msgid "Element <%s> not allowed inside <%s>"
+msgstr "Predmet <%s> ni dovoljen znotraj predmeta <%s>"
+
+#: ../gtk/gtkbuilder-menus.c:223
+#, c-format
+msgid "Element <%s> not allowed at toplevel"
+msgstr "Predmet <%s> ni dovoljen na vrhnji ravni"
+
+#: ../gtk/gtkbuilder-menus.c:312
+#, c-format
+msgid "text may not appear inside <%s>"
+msgstr "besedilo se ne sme pojaviti znotraj <%s>"
+
 #: ../gtk/gtkbuilderparser.c:343
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
@@ -754,12 +769,12 @@ msgstr "Neveljavna vrsta funkcije v vrstici %d: '%s'"
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "Podvojeni ID predmeta '%s' v vrstici %d (prvič vnesen v vrstici %d)"
 
-#: ../gtk/gtkbuilderparser.c:895
+#: ../gtk/gtkbuilderparser.c:867
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Neveljaven korenski predmet: '%s'"
 
-#: ../gtk/gtkbuilderparser.c:936
+#: ../gtk/gtkbuilderparser.c:908
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Neobravnavana oznaka: '%s'"
@@ -1474,12 +1489,12 @@ msgid "System (%s)"
 msgstr "Sistem (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6217
+#: ../gtk/gtklabel.c:6215
 msgid "_Open Link"
 msgstr "_Odpri povezavo"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6229
+#: ../gtk/gtklabel.c:6227
 msgid "Copy _Link Address"
 msgstr "Kopiraj _naslov povezave"
 
@@ -2294,18 +2309,18 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:995
-#: ../gtk/gtkrecentmanager.c:1008
-#: ../gtk/gtkrecentmanager.c:1145
-#: ../gtk/gtkrecentmanager.c:1155
-#: ../gtk/gtkrecentmanager.c:1207
-#: ../gtk/gtkrecentmanager.c:1216
-#: ../gtk/gtkrecentmanager.c:1231
+#: ../gtk/gtkrecentmanager.c:999
+#: ../gtk/gtkrecentmanager.c:1012
+#: ../gtk/gtkrecentmanager.c:1149
+#: ../gtk/gtkrecentmanager.c:1159
+#: ../gtk/gtkrecentmanager.c:1211
+#: ../gtk/gtkrecentmanager.c:1220
+#: ../gtk/gtkrecentmanager.c:1235
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Predmeta z URI-jem '%s' ni mogoče najti"
 
-#: ../gtk/gtkrecentmanager.c:2431
+#: ../gtk/gtkrecentmanager.c:2435
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "Program z imenom '%s' ni vpisan za odpiranje predmetov z URI-jem '%s'"
