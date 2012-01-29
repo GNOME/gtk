@@ -217,6 +217,9 @@ gtk_public_h_sources = 		\
 	gtkcolorbutton.h	\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
+	gtkcolorchooser.h	\
+	gtkcolorchooserwidget.h	\
+	gtkcolorchooserdialog.h	\
 	gtkcombobox.h		\
 	gtkcomboboxtext.h	\
 	gtkcontainer.h		\
@@ -410,6 +413,9 @@ gtk_private_h_sources =		\
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
+	gtkcolorswatch.h	\
+	gtkcoloreditor.h	\
+	gtkcolorchooserprivate.h	\
 	gtkcontainerprivate.h   \
 	gtkcsscomputedvaluesprivate.h \
 	gtkcsscustompropertyprivate.h \
@@ -592,6 +598,11 @@ gtk_base_c_sources = 		\
 	gtkcolorbutton.c	\
 	gtkcolorsel.c		\
 	gtkcolorseldialog.c	\
+	gtkcoloreditor.c	\
+	gtkcolorswatch.c	\
+	gtkcolorchooser.c	\
+	gtkcolorchooserwidget.c	\
+	gtkcolorchooserdialog.c	\
 	gtkcombobox.c		\
 	gtkcomboboxtext.c	\
 	gtkcontainer.c		\
@@ -1562,10 +1573,12 @@ EXTRA_DIST +=                   \
 	gtktypebuiltins.h.template \
 	gtkprivatetypebuiltins.c.template \
 	gtkprivatetypebuiltins.h.template \
-	org.gtk.Settings.FileChooser.gschema.xml
+	org.gtk.Settings.FileChooser.gschema.xml \
+	org.gtk.Settings.ColorChooser.gschema.xml
 
 gsettings_SCHEMAS = \
-	org.gtk.Settings.FileChooser.gschema.xml
+	org.gtk.Settings.FileChooser.gschema.xml \
+	org.gtk.Settings.ColorChooser.gschema.xml
 
 @GSETTINGS_RULES@
 
