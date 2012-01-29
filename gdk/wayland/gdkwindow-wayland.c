@@ -157,15 +157,15 @@ _gdk_wayland_window_remove_focus (GdkWindow *window)
 }
 
 /**
- * _gdk_wayland_window_update_size:
+ * gdk_wayland_window_update_size:
  * @drawable: a #GdkDrawableImplWayland.
  * 
  * Updates the state of the drawable (in particular the drawable's
  * cairo surface) when its size has changed.
  **/
-void
-_gdk_wayland_window_update_size (GdkWindow *window,
-				 int32_t width, int32_t height, uint32_t edges)
+static void
+gdk_wayland_window_update_size (GdkWindow *window,
+				int32_t width, int32_t height, uint32_t edges)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkRectangle area;
@@ -436,6 +436,33 @@ gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
   return impl->cairo_surface;
 }
 
+static cairo_surface_t *
+gdk_wayland_window_configure (GdkWindow *window,
+			      int width, int height, int edges)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkDisplay *display;
+  GdkEvent *event;
+
+  display = gdk_window_get_display (window);
+
+  /* TODO: Only generate a configure event if width or height have actually
+   * changed?
+   */
+  event = gdk_event_new (GDK_CONFIGURE);
+  event->configure.window = window;
+  event->configure.send_event = FALSE;
+  event->configure.width = width;
+  event->configure.height = height;
+
+  _gdk_window_update_size (window);
+  gdk_wayland_window_update_size (window, width, height, edges);
+
+  g_object_ref(window);
+
+  _gdk_wayland_display_deliver_event (display, event);
+}
+
 static void
 gdk_wayland_window_set_user_time (GdkWindow *window, guint32 user_time)
 {
@@ -477,10 +504,6 @@ shell_surface_handle_configure(void *data,
 {
   GdkWindow *window = GDK_WINDOW (data);
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkDisplay *display;
-  GdkEvent *event;
-
-  display = gdk_window_get_display (window);
 
   gdk_window_constrain_size (&impl->geometry_hints,
                              impl->geometry_mask,
@@ -489,21 +512,7 @@ shell_surface_handle_configure(void *data,
                              &width,
                              &height);
 
-  /* TODO: Only generate a configure event if width or height have actually
-   * changed?
-   */
-  event = gdk_event_new (GDK_CONFIGURE);
-  event->configure.window = window;
-  event->configure.send_event = FALSE;
-  event->configure.width = width;
-  event->configure.height = height;
-
-  _gdk_window_update_size (window);
-  _gdk_wayland_window_update_size (window, width, height, edges);
-
-  g_object_ref(window);
-
-  _gdk_wayland_display_deliver_event (display, event);
+  gdk_wayland_window_configure (window, width, height, edges);
 }
 
 static const struct wl_shell_surface_listener shell_surface_listener = {
@@ -641,7 +650,7 @@ gdk_window_wayland_move_resize (GdkWindow *window,
    * just move the window - don't update its size
    */
   if (width > 0 && height > 0)
-    _gdk_wayland_window_update_size (window, width, height, 0);
+    gdk_wayland_window_configure (window, width, height, 0);
 }
 
 static void
