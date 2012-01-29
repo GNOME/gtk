@@ -39,6 +39,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testcairo			\
 	testcalendar			\
 	testclipboard			\
+	testcolorchooser		\
 	testcombo			\
 	testcombochange			\
 	testcellrenderertext		\
@@ -158,6 +159,7 @@ testbuttons_DEPENDENCIES = $(TEST_DEPS)
 testcairo_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testclipboard_DEPENDENCIES = $(TEST_DEPS)
+testcolorchooser_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
 testcombochange_DEPENDENCIES = $(TEST_DEPS)
 testcellrenderertext_DEPENDENCIES = $(TEST_DEPS)
@@ -252,6 +254,7 @@ testbuttons_LDADD = $(LDADDS)
 testcairo_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
 testclipboard_LDADD = $(LDADDS)
+testcolorchooser_LDADD = $(LDADDS)
 testcombo_LDADD = $(LDADDS)
 testcombochange_LDADD = $(LDADDS)
 testcellrenderertext_LDADD = $(LDADDS)
@@ -519,6 +522,7 @@ testpixbuf_color_SOURCES = testpixbuf-color.c
 
 testpixbuf_save_SOURCES = testpixbuf-save.c
 
+testcolorchooser_SOURCES = testcolorchooser.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\
