@@ -3498,6 +3498,18 @@ gtk_entry_draw_frame (GtkWidget       *widget,
 }
 
 static void
+gtk_entry_prepare_context_for_progress (GtkEntry *entry,
+                                        GtkStyleContext *context)
+{
+  GtkEntryPrivate *private = entry->priv;
+
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
+  if (private->progress_pulse_mode)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_PULSE);
+}
+
+static void
 get_progress_area (GtkWidget *widget,
                    gint       *x,
                    gint       *y,
@@ -3506,9 +3518,12 @@ get_progress_area (GtkWidget *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *private = entry->priv;
-  GtkBorder *progress_border;
+  GtkStyleContext *context;
+  GtkBorder margin;
 
-  get_text_area_size (entry, x, y, width, height);
+  get_frame_size (GTK_ENTRY (widget), FALSE, NULL, NULL, width, height);
+  *x = 0;
+  *y = 0;
 
   if (!private->interior_focus)
     {
@@ -3518,17 +3533,16 @@ get_progress_area (GtkWidget *widget,
       *height += 2 * private->focus_width;
     }
 
-  gtk_widget_style_get (widget, "progress-border", &progress_border, NULL);
+  context = gtk_widget_get_style_context (widget);
+  gtk_entry_prepare_context_for_progress (entry, context);
+  gtk_style_context_get_margin (context, 0, &margin);
 
-  if (progress_border)
-    {
-      *x += progress_border->left;
-      *y += progress_border->top;
-      *width -= progress_border->left + progress_border->right;
-      *height -= progress_border->top + progress_border->bottom;
+  gtk_style_context_restore (context);
 
-      gtk_border_free (progress_border);
-    }
+  *x += margin.left;
+  *y += margin.top;
+  *width -= margin.left + margin.right;
+  *height -= margin.top + margin.bottom;
 
   if (private->progress_pulse_mode)
     {
@@ -3574,12 +3588,8 @@ gtk_entry_draw_progress (GtkWidget       *widget,
 
   if ((width <= 0) || (height <= 0))
     return;
-
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
-  if (private->progress_pulse_mode)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_PULSE);
-
+ 
+  gtk_entry_prepare_context_for_progress (entry, context);
   gtk_render_activity (context, cr,
                        x, y, width, height);
 
@@ -5779,8 +5789,7 @@ gtk_entry_draw_text (GtkEntry *entry,
   gtk_style_context_get_color (context, state, &text_color);
 
   /* Get foreground color for progressbars */
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
+  gtk_entry_prepare_context_for_progress (entry, context);
   gtk_style_context_get_color (context, state, &bar_text_color);
   gtk_style_context_restore (context);
 
