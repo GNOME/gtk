@@ -3033,13 +3033,14 @@ _gtk_entry_get_borders (GtkEntry *entry,
   if (priv->has_frame)
     {
       GtkStyleContext *context;
-      GtkBorder padding;
+      GtkBorder padding, border;
 
       context = gtk_widget_get_style_context (widget);
       gtk_style_context_get_padding (context, 0, &padding);
+      gtk_style_context_get_border (context, 0, &border);
 
-      *xborder = padding.left;
-      *yborder = padding.top;
+      *xborder = padding.left + border.left;
+      *yborder = padding.top + border.top;
     }
   else
     {
