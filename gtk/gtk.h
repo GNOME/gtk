@@ -78,6 +78,9 @@
 #include <gtk/gtkcheckmenuitem.h>
 #include <gtk/gtkclipboard.h>
 #include <gtk/gtkcolorbutton.h>
+#include <gtk/gtkcolorchooser.h>
+#include <gtk/gtkcolorchooserdialog.h>
+#include <gtk/gtkcolorchooserwidget.h>
 #include <gtk/gtkcolorsel.h>
 #include <gtk/gtkcolorseldialog.h>
 #include <gtk/gtkcombobox.h>

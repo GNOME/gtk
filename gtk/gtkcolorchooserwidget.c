@@ -101,7 +101,6 @@ swatch_customize (GtkColorSwatch        *swatch,
 
   gtk_widget_hide (cc->priv->palette);
   gtk_widget_show (cc->priv->editor);
-  g_print ("TODO: customize color\n");
 }
 
 static void
@@ -206,6 +205,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 {
   GtkWidget *grid;
   GtkWidget *p;
+  GtkWidget *button;
   GtkWidget *label;
   gint i;
   GdkRGBA color, color1, color2;
@@ -301,11 +301,11 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   gtk_grid_set_column_spacing (GTK_GRID (grid), 4);
   gtk_container_add (GTK_CONTAINER (cc->priv->palette), grid);
 
-  p = gtk_color_swatch_new ();
-  gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 10, 10, 10, 10);
-  connect_button_signals (p, cc);
-  gtk_color_swatch_set_icon (GTK_COLOR_SWATCH (p), "list-add-symbolic");
-  gtk_grid_attach (GTK_GRID (grid), p, 0, 0, 1, 1);
+  button = gtk_color_swatch_new ();
+  gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (button), 10, 10, 10, 10);
+  connect_button_signals (button, cc);
+  gtk_color_swatch_set_icon (GTK_COLOR_SWATCH (button), "list-add-symbolic");
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
 
   cc->priv->settings = g_settings_new_with_path ("org.gtk.Settings.ColorChooser",
                                                  "/org/gtk/settings/color-chooser/");
@@ -325,9 +325,13 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
       if (i == 8)
         break;
     }
-  if (i > 0)
-    gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 10, 10, 1);
   g_variant_unref (variant);
+
+  if (i > 0)
+    {
+      gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 10, 10, 1);
+      gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (button), 10, 1, 1, 10);
+    }
 
   cc->priv->editor = gtk_color_editor_new ();
   gtk_container_add (GTK_CONTAINER (cc), cc->priv->editor);
