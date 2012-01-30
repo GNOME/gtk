@@ -72,7 +72,7 @@ struct _GtkFontChooserIface
   void (* font_activated) (GtkFontChooser *chooser,
                            const gchar    *fontname);
 
-  /* Paddig */
+   /* Padding */
   gpointer padding[12];
 };
 
