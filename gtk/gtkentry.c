@@ -169,7 +169,6 @@ struct _GtkEntryPrivate
   gint          drag_start_x;
   gint          drag_start_y;
   gint          focus_width;
-  gint          icon_margin;
   gint          insert_pos;
   gint          selection_bound;
   gint          scroll_offset;
@@ -2508,6 +2507,21 @@ gtk_entry_prepare_context_for_icon (GtkEntry             *entry,
 
   gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
+
+  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL) 
+    {
+      if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+      else
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+    }
+  else
+    {
+      if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+      else
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+    }
 }
 
 static gint
@@ -2517,6 +2531,7 @@ get_icon_width (GtkEntry             *entry,
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = priv->icons[icon_pos];
   GtkStyleContext *context;
+  GtkBorder padding;
   gint width;
 
   if (!icon_info)
@@ -2524,9 +2539,14 @@ get_icon_width (GtkEntry             *entry,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
   gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
+  gtk_style_context_get_padding (context, 0, &padding);
+
   _gtk_icon_helper_get_size (icon_info->icon_helper, context,
                              &width, NULL);
   gtk_style_context_restore (context);
+
+  if (width > 0)
+    width += padding.left + padding.right;
 
   return width;
 }
@@ -2548,14 +2568,10 @@ get_icon_allocations (GtkEntry      *entry,
   primary->y = y;
   primary->height = height;
   primary->width = get_icon_width (entry, GTK_ENTRY_ICON_PRIMARY);
-  if (primary->width > 0)
-    primary->width += 2 * priv->icon_margin;
 
   secondary->y = y;
   secondary->height = height;
   secondary->width = get_icon_width (entry, GTK_ENTRY_ICON_SECONDARY);
-  if (secondary->width > 0)
-    secondary->width += 2 * priv->icon_margin;
 
   if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
     {
@@ -3133,7 +3149,7 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
     {
       icon_width = get_icon_width (entry, i);
       if (icon_width > 0)
-        icon_widths += icon_width + 2 * priv->icon_margin;
+        icon_widths += icon_width;
     }
 
   if (icon_widths > width)
@@ -3386,6 +3402,7 @@ draw_icon (GtkWidget            *widget,
   EntryIconInfo *icon_info = priv->icons[icon_pos];
   gint x, y, width, height, pix_width, pix_height;
   GtkStyleContext *context;
+  GtkBorder padding;
 
   if (!icon_info)
     return;
@@ -3403,9 +3420,11 @@ draw_icon (GtkWidget            *widget,
 
   context = gtk_widget_get_style_context (widget);
   gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
-  _gtk_icon_helper_get_size (icon_info->icon_helper, context, &pix_width, &pix_height);
+  _gtk_icon_helper_get_size (icon_info->icon_helper, context,
+                             &pix_width, &pix_height);
+  gtk_style_context_get_padding (context, 0, &padding);
 
-  x = MAX (0, (width  - pix_width) / 2);
+  x = MAX (0, padding.left);
   y = MAX (0, (height - pix_height) / 2);
 
   _gtk_icon_helper_draw (icon_info->icon_helper,
@@ -4523,17 +4542,6 @@ icon_theme_changed (GtkEntry *entry)
 }
 
 static void
-icon_margin_changed (GtkEntry *entry)
-{
-  GtkEntryPrivate *priv = entry->priv;
-  GtkBorder border;
-
-  _gtk_entry_get_borders (GTK_ENTRY (entry), &border);
-
-  priv->icon_margin = border.left;
-}
-
-static void
 gtk_entry_update_cached_style_values (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
@@ -4571,7 +4579,6 @@ gtk_entry_style_updated (GtkWidget *widget)
   gtk_entry_recompute (entry);
 
   icon_theme_changed (entry);
-  icon_margin_changed (entry);
 }
 
 /* GtkCellEditable method implementations
