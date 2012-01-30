@@ -1130,9 +1130,7 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
       width = MAX (width, w);
 
       _gtk_entry_get_borders (entry, &borders);
-      _gtk_entry_effective_inner_border (entry, &inner_border);
-
-      width += borders.left + borders.right + inner_border.left + inner_border.right;
+      width += borders.left + borders.right;
 
       *minimum = width;
       *natural = width;

@@ -3066,7 +3066,6 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
   GtkEntryPrivate *priv = entry->priv;
   PangoFontMetrics *metrics;
   GtkBorder borders;
-  GtkBorder inner_border;
   PangoContext *context;
   GtkStyleContext *style_context;
   GtkStateFlags state;
@@ -3084,17 +3083,16 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
                                        pango_context_get_language (context));
 
   _gtk_entry_get_borders (entry, &borders);
-  _gtk_entry_effective_inner_border (entry, &inner_border);
 
   if (priv->width_chars < 0)
-    width = MIN_ENTRY_WIDTH + borders.left + borders.right + inner_border.left + inner_border.right;
+    width = MIN_ENTRY_WIDTH + borders.left + borders.right;
   else
     {
       gint char_width = pango_font_metrics_get_approximate_char_width (metrics);
       gint digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
       gint char_pixels = (MAX (char_width, digit_width) + PANGO_SCALE - 1) / PANGO_SCALE;
 
-      width = char_pixels * priv->width_chars + borders.left + borders.right + inner_border.left + inner_border.right;
+      width = char_pixels * priv->width_chars + borders.left + borders.right;
     }
 
   for (i = 0; i < MAX_ICONS; i++)
@@ -3122,7 +3120,6 @@ gtk_entry_get_preferred_height (GtkWidget *widget,
   GtkEntryPrivate *priv = entry->priv;
   PangoFontMetrics *metrics;
   GtkBorder borders;
-  GtkBorder inner_border;
   GtkStyleContext *style_context;
   GtkStateFlags state;
   PangoContext *context;
@@ -3141,9 +3138,8 @@ gtk_entry_get_preferred_height (GtkWidget *widget,
   priv->descent = pango_font_metrics_get_descent (metrics);
 
   _gtk_entry_get_borders (entry, &borders);
-  _gtk_entry_effective_inner_border (entry, &inner_border);
 
-  height = PANGO_PIXELS (priv->ascent + priv->descent) + borders.top + borders.bottom + inner_border.top + inner_border.bottom;
+  height = PANGO_PIXELS (priv->ascent + priv->descent) + borders.top + borders.bottom;
 
   pango_font_metrics_unref (metrics);
 
@@ -3299,32 +3295,6 @@ get_frame_size (GtkEntry *entry,
       else
         *height = req_height;
     }
-}
-
-void
-_gtk_entry_effective_inner_border (GtkEntry  *entry,
-                                   GtkBorder *border)
-{
-  GtkBorder *tmp_border;
-
-  tmp_border = g_object_get_qdata (G_OBJECT (entry), quark_inner_border);
-
-  if (tmp_border)
-    {
-      *border = *tmp_border;
-      return;
-    }
-
-  gtk_widget_style_get (GTK_WIDGET (entry), "inner-border", &tmp_border, NULL);
-
-  if (tmp_border)
-    {
-      *border = *tmp_border;
-      gtk_border_free (tmp_border);
-      return;
-    }
-
-  *border = default_inner_border;
 }
 
 static void
@@ -4524,7 +4494,7 @@ icon_margin_changed (GtkEntry *entry)
   GtkEntryPrivate *priv = entry->priv;
   GtkBorder border;
 
-  _gtk_entry_effective_inner_border (GTK_ENTRY (entry), &border);
+  _gtk_entry_get_borders (GTK_ENTRY (entry), &border);
 
   priv->icon_margin = border.left;
 }
@@ -5652,16 +5622,13 @@ get_layout_position (GtkEntry *entry,
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gint area_width, area_height;
-  GtkBorder inner_border;
   gint y_pos;
   PangoLayoutLine *line;
   
   layout = gtk_entry_ensure_layout (entry, TRUE);
 
   gtk_entry_get_text_area_size (entry, NULL, NULL, &area_width, &area_height);
-  _gtk_entry_effective_inner_border (entry, &inner_border);
-
-  area_height = PANGO_SCALE * (area_height - inner_border.top - inner_border.bottom);
+  area_height = PANGO_SCALE * area_height;
 
   line = pango_layout_get_lines_readonly (layout)->data;
   pango_layout_line_get_extents (line, NULL, &logical_rect);
@@ -5678,10 +5645,10 @@ get_layout_position (GtkEntry *entry,
   else if (y_pos + logical_rect.height > area_height)
     y_pos = area_height - logical_rect.height;
   
-  y_pos = inner_border.top + y_pos / PANGO_SCALE;
+  y_pos = y_pos / PANGO_SCALE;
 
   if (x)
-    *x = inner_border.left - priv->scroll_offset;
+    *x = - priv->scroll_offset;
 
   if (y)
     *y = y_pos;
@@ -5714,7 +5681,6 @@ draw_text_with_color (GtkEntry *entry,
       gint n_ranges, i;
       PangoRectangle logical_rect;
       GdkRGBA selection_color, text_color;
-      GtkBorder inner_border;
       GtkStyleContext *context;
       GtkStateFlags state;
 
@@ -5728,11 +5694,9 @@ draw_text_with_color (GtkEntry *entry,
       gtk_style_context_get_background_color (context, state, &selection_color);
       gtk_style_context_get_color (context, state, &text_color);
 
-      _gtk_entry_effective_inner_border (entry, &inner_border);
-
       for (i = 0; i < n_ranges; ++i)
         cairo_rectangle (cr,
-                         inner_border.left - priv->scroll_offset + ranges[2 * i],
+                         - priv->scroll_offset + ranges[2 * i],
 			 y,
 			 ranges[2 * i + 1],
 			 logical_rect.height);
@@ -5867,12 +5831,8 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
   if (!block)
     {
-      GtkBorder inner_border;
-
-      _gtk_entry_effective_inner_border (entry, &inner_border);
-
       gtk_render_insertion_cursor (context, cr,
-                                   inner_border.left - priv->scroll_offset, inner_border.top,
+                                   - priv->scroll_offset, 0,
                                    layout, cursor_index, priv->resolved_dir);
     }
   else /* overwrite_mode */
@@ -6082,7 +6042,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   GtkEntryPrivate *priv = entry->priv;
   gint min_offset, max_offset;
   gint text_area_width, text_width;
-  GtkBorder inner_border;
+  GtkBorder borders;
   gint strong_x, weak_x;
   gint strong_xoffset, weak_xoffset;
   gfloat xalign;
@@ -6093,10 +6053,8 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
     return;
 
-  _gtk_entry_effective_inner_border (entry, &inner_border);
-
   text_area_width = gdk_window_get_width (priv->text_area);
-  text_area_width -= inner_border.left + inner_border.right;
+
   if (text_area_width < 0)
     text_area_width = 0;
 
@@ -8588,7 +8546,7 @@ popup_position_func (GtkMenu   *menu,
   GdkScreen *screen;
   GtkRequisition menu_req;
   GdkRectangle monitor;
-  GtkBorder inner_border;
+  GtkBorder borders;
   gint monitor_num, strong_x, height;
  
   g_return_if_fail (gtk_widget_get_realized (widget));
@@ -8606,9 +8564,9 @@ popup_position_func (GtkMenu   *menu,
                                  &menu_req, NULL);
   height = gdk_window_get_height (priv->text_area);
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
-  _gtk_entry_effective_inner_border (entry, &inner_border);
+  _gtk_entry_get_borders (entry, &borders);
 
-  *x += inner_border.left + strong_x - priv->scroll_offset;
+  *x += borders.left + strong_x - priv->scroll_offset;
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     *x -= menu_req.width;
 
