@@ -80,8 +80,7 @@ void     _gtk_entry_completion_popup        (GtkEntryCompletion *completion,
 void     _gtk_entry_completion_popdown      (GtkEntryCompletion *completion);
 
 void      _gtk_entry_get_borders            (GtkEntry  *entry,
-					     gint      *xborder,
-					     gint      *yborder);
+                                             GtkBorder *borders);
 void     _gtk_entry_effective_inner_border (GtkEntry  *entry,
 					    GtkBorder *border);
 void     _gtk_entry_reset_im_context       (GtkEntry  *entry);

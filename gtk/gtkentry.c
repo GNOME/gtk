@@ -3024,35 +3024,37 @@ gtk_entry_unrealize (GtkWidget *widget)
 
 void
 _gtk_entry_get_borders (GtkEntry *entry,
-			gint     *xborder,
-			gint     *yborder)
+                        GtkBorder *border_out)
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
+  GtkBorder tmp = { 0, 0, 0, 0 };
 
   if (priv->has_frame)
     {
       GtkStyleContext *context;
-      GtkBorder padding, border;
+      GtkBorder border;
 
       context = gtk_widget_get_style_context (widget);
-      gtk_style_context_get_padding (context, 0, &padding);
-      gtk_style_context_get_border (context, 0, &border);
+      gtk_style_context_get_padding (context, 0, &tmp);
 
-      *xborder = padding.left + border.left;
-      *yborder = padding.top + border.top;
-    }
-  else
-    {
-      *xborder = 0;
-      *yborder = 0;
+      gtk_style_context_get_border (context, 0, &border);
+      tmp.top += border.top;
+      tmp.right += border.right;
+      tmp.bottom += border.bottom;
+      tmp.left += border.left;
     }
 
   if (!priv->interior_focus)
     {
-      *xborder += priv->focus_width;
-      *yborder += priv->focus_width;
+      tmp.top += priv->focus_width;
+      tmp.right += priv->focus_width;
+      tmp.bottom += priv->focus_width;
+      tmp.left += priv->focus_width;
     }
+
+  if (border_out != NULL)
+    *border_out = tmp;
 }
 
 static void
@@ -3063,7 +3065,7 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   PangoFontMetrics *metrics;
-  gint xborder, yborder;
+  GtkBorder borders;
   GtkBorder inner_border;
   PangoContext *context;
   GtkStyleContext *style_context;
@@ -3081,18 +3083,18 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
                                        gtk_style_context_get_font (style_context, state),
                                        pango_context_get_language (context));
 
-  _gtk_entry_get_borders (entry, &xborder, &yborder);
+  _gtk_entry_get_borders (entry, &borders);
   _gtk_entry_effective_inner_border (entry, &inner_border);
 
   if (priv->width_chars < 0)
-    width = MIN_ENTRY_WIDTH + xborder * 2 + inner_border.left + inner_border.right;
+    width = MIN_ENTRY_WIDTH + borders.left + borders.right + inner_border.left + inner_border.right;
   else
     {
       gint char_width = pango_font_metrics_get_approximate_char_width (metrics);
       gint digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
       gint char_pixels = (MAX (char_width, digit_width) + PANGO_SCALE - 1) / PANGO_SCALE;
 
-      width = char_pixels * priv->width_chars + xborder * 2 + inner_border.left + inner_border.right;
+      width = char_pixels * priv->width_chars + borders.left + borders.right + inner_border.left + inner_border.right;
     }
 
   for (i = 0; i < MAX_ICONS; i++)
@@ -3119,7 +3121,7 @@ gtk_entry_get_preferred_height (GtkWidget *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   PangoFontMetrics *metrics;
-  gint xborder, yborder;
+  GtkBorder borders;
   GtkBorder inner_border;
   GtkStyleContext *style_context;
   GtkStateFlags state;
@@ -3138,10 +3140,10 @@ gtk_entry_get_preferred_height (GtkWidget *widget,
   priv->ascent = pango_font_metrics_get_ascent (metrics);
   priv->descent = pango_font_metrics_get_descent (metrics);
 
-  _gtk_entry_get_borders (entry, &xborder, &yborder);
+  _gtk_entry_get_borders (entry, &borders);
   _gtk_entry_effective_inner_border (entry, &inner_border);
 
-  height = PANGO_PIXELS (priv->ascent + priv->descent) + yborder * 2 + inner_border.top + inner_border.bottom;
+  height = PANGO_PIXELS (priv->ascent + priv->descent) + borders.top + borders.bottom + inner_border.top + inner_border.bottom;
 
   pango_font_metrics_unref (metrics);
 
@@ -3206,13 +3208,13 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
   GtkRequisition requisition;
   gint req_height;
   gint frame_height;
-  gint xborder, yborder;
+  GtkBorder borders;
 
   gtk_widget_get_preferred_size (widget, &requisition, NULL);
   req_height = requisition.height - gtk_widget_get_margin_top (widget) - gtk_widget_get_margin_bottom (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
-  _gtk_entry_get_borders (entry, &xborder, &yborder);
+  _gtk_entry_get_borders (entry, &borders);
 
   if (gtk_widget_get_realized (widget))
     get_frame_size (entry, TRUE, NULL, NULL, NULL, &frame_height);
@@ -3223,16 +3225,16 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
     frame_height -= 2 * priv->focus_width;
 
   if (x)
-    *x = xborder;
+    *x = borders.left;
 
   if (y)
-    *y = frame_height / 2 - (req_height - yborder * 2) / 2;
+    *y = frame_height / 2 - (req_height - borders.top - borders.bottom) / 2;
 
   if (width)
-    *width = allocation.width - xborder * 2;
+    *width = allocation.width - borders.left - borders.right;
 
   if (height)
-    *height = req_height - yborder * 2;
+    *height = req_height - borders.top - borders.bottom;
 }
 
 static void
@@ -3432,13 +3434,13 @@ gtk_entry_draw_frame (GtkWidget       *widget,
    * http://bugzilla.gnome.org/show_bug.cgi?id=466000 */
   if (GTK_IS_SPIN_BUTTON (widget))
     {
-      gint xborder, yborder;
+      GtkBorder borders;
 
       gtk_entry_get_text_area_size (GTK_ENTRY (widget), &x, NULL, &width, NULL);
-      _gtk_entry_get_borders (GTK_ENTRY (widget), &xborder, &yborder);
+      _gtk_entry_get_borders (GTK_ENTRY (widget), &borders);
 
-      x -= xborder;
-      width += xborder * 2;
+      x -= borders.left;
+      width += borders.left + borders.right;
     }
 
   if (gtk_widget_has_focus (widget) && !priv->interior_focus)
@@ -6179,7 +6181,8 @@ gtk_entry_move_adjustments (GtkEntry *entry)
   PangoFontMetrics *metrics;
   GtkStyleContext *style_context;
   GtkStateFlags state;
-  gint x, layout_x, border_x, border_y;
+  GtkBorder borders;
+  gint x, layout_x;
   gint char_width;
 
   adjustment = g_object_get_qdata (G_OBJECT (entry), quark_cursor_hadjustment);
@@ -6191,8 +6194,8 @@ gtk_entry_move_adjustments (GtkEntry *entry)
   /* Cursor position, layout offset, border width, and widget allocation */
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &x, NULL);
   get_layout_position (entry, &layout_x, NULL);
-  _gtk_entry_get_borders (entry, &border_x, &border_y);
-  x += allocation.x + layout_x + border_x;
+  _gtk_entry_get_borders (entry, &borders);
+  x += allocation.x + layout_x + borders.left;
 
   /* Approximate width of a char, so user can see what is ahead/behind */
   context = gtk_widget_get_pango_context (widget);

@@ -1097,7 +1097,7 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
       gint digit_width;
       gboolean interior_focus;
       gint focus_width;
-      gint xborder, yborder;
+      GtkBorder borders;
       GtkBorder inner_border;
 
       gtk_style_context_get_style (style_context,
@@ -1129,10 +1129,10 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
       w = PANGO_PIXELS (MIN (string_len, max_string_len) * digit_width);
       width = MAX (width, w);
 
-      _gtk_entry_get_borders (entry, &xborder, &yborder);
+      _gtk_entry_get_borders (entry, &borders);
       _gtk_entry_effective_inner_border (entry, &inner_border);
 
-      width += xborder * 2 + inner_border.left + inner_border.right;
+      width += borders.left + borders.right + inner_border.left + inner_border.right;
 
       *minimum = width;
       *natural = width;
