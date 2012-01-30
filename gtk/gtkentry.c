@@ -783,13 +783,22 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          TRUE,
 							 GTK_PARAM_READWRITE));
 
+  /**
+   * GtkEntry:inner-border:
+   *
+   * Sets the text area's border between the text and the frame.
+   *
+   * Deprecated: 3.4: Use the standard border and padding CSS properties;
+   *   the value of this style property is ignored.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_INNER_BORDER,
                                    g_param_spec_boxed ("inner-border",
                                                        P_("Inner Border"),
                                                        P_("Border between text and frame. Overrides the inner-border style property"),
                                                        GTK_TYPE_BORDER,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE |
+                                                       G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
                                    PROP_INVISIBLE_CHAR,
@@ -1859,13 +1868,17 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Sets the text area's border between the text and the frame.
    *
    * Since: 2.10
+   *
+   * Deprecated: 3.4: Use the standard border and padding CSS properties;
+   *   the value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("inner-border",
                                                                P_("Inner Border"),
                                                                P_("Border between text and frame."),
                                                                GTK_TYPE_BORDER,
-                                                               GTK_PARAM_READABLE)); 
+                                                               GTK_PARAM_READABLE |
+                                                               G_PARAM_DEPRECATED));
 
   g_type_class_add_private (gobject_class, sizeof (GtkEntryPrivate));
 
@@ -1890,6 +1903,27 @@ static void
 gtk_entry_cell_editable_init (GtkCellEditableIface *iface)
 {
   iface->start_editing = gtk_entry_start_editing;
+}
+
+/* for deprecated properties */
+static void
+gtk_entry_do_set_inner_border (GtkEntry *entry,
+                               const GtkBorder *border)
+{
+  if (border)
+    g_object_set_qdata_full (G_OBJECT (entry), quark_inner_border,
+                             gtk_border_copy (border),
+                             (GDestroyNotify) gtk_border_free);
+  else
+    g_object_set_qdata (G_OBJECT (entry), quark_inner_border, NULL);
+
+  g_object_notify (G_OBJECT (entry), "inner-border");
+}
+
+static const GtkBorder *
+gtk_entry_do_get_inner_border (GtkEntry *entry)
+{
+  return g_object_get_qdata (G_OBJECT (entry), quark_inner_border);
 }
 
 static void
@@ -1948,7 +1982,7 @@ gtk_entry_set_property (GObject         *object,
       break;
 
     case PROP_INNER_BORDER:
-      gtk_entry_set_inner_border (entry, g_value_get_boxed (value));
+      gtk_entry_do_set_inner_border (entry, g_value_get_boxed (value));
       break;
 
     case PROP_INVISIBLE_CHAR:
@@ -2165,7 +2199,7 @@ gtk_entry_get_property (GObject         *object,
       break;
 
     case PROP_INNER_BORDER:
-      g_value_set_boxed (value, gtk_entry_get_inner_border (entry));
+      g_value_set_boxed (value, gtk_entry_do_get_inner_border (entry));
       break;
 
     case PROP_INVISIBLE_CHAR:
@@ -7252,6 +7286,9 @@ gtk_entry_get_has_frame (GtkEntry *entry)
  * pixel-exact positioning of the entry is important.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.4: Use the standard border and padding CSS properties;
+ *   the value set with this function is ignored by #GtkEntry.
  **/
 void
 gtk_entry_set_inner_border (GtkEntry        *entry,
@@ -7259,16 +7296,7 @@ gtk_entry_set_inner_border (GtkEntry        *entry,
 {
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_widget_queue_resize (GTK_WIDGET (entry));
-
-  if (border)
-    g_object_set_qdata_full (G_OBJECT (entry), quark_inner_border,
-                             gtk_border_copy (border),
-                             (GDestroyNotify) gtk_border_free);
-  else
-    g_object_set_qdata (G_OBJECT (entry), quark_inner_border, NULL);
-
-  g_object_notify (G_OBJECT (entry), "inner-border");
+  gtk_entry_do_set_inner_border (entry, border);
 }
 
 /**
@@ -7281,13 +7309,16 @@ gtk_entry_set_inner_border (GtkEntry        *entry,
  * Return value: (transfer none): the entry's #GtkBorder, or %NULL if none was set.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.4: Use the standard border and padding CSS properties;
+ *   the value returned by this function is ignored by #GtkEntry.
  **/
 const GtkBorder *
 gtk_entry_get_inner_border (GtkEntry *entry)
 {
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
-  return g_object_get_qdata (G_OBJECT (entry), quark_inner_border);
+  return gtk_entry_do_get_inner_border (entry);
 }
 
 /**
