@@ -3029,14 +3029,14 @@ _gtk_entry_get_borders (GtkEntry *entry,
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
   GtkBorder tmp = { 0, 0, 0, 0 };
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_padding (context, 0, &tmp);
 
   if (priv->has_frame)
     {
-      GtkStyleContext *context;
       GtkBorder border;
-
-      context = gtk_widget_get_style_context (widget);
-      gtk_style_context_get_padding (context, 0, &tmp);
 
       gtk_style_context_get_border (context, 0, &border);
       tmp.top += border.top;
