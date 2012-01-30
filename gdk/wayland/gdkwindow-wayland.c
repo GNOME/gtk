@@ -436,7 +436,7 @@ gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
   return impl->cairo_surface;
 }
 
-static cairo_surface_t *
+static void
 gdk_wayland_window_configure (GdkWindow *window,
 			      int width, int height, int edges)
 {
