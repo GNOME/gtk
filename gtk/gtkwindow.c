@@ -2651,6 +2651,9 @@ gtk_window_set_attached_to (GtkWindow *window,
 
   priv = window->priv;
 
+  if (priv->attach_widget == attach_widget)
+    return;
+
   remove_attach_widget (window);
 
   priv->attach_widget = attach_widget;
