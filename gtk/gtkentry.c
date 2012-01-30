@@ -1375,13 +1375,17 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The border around the progress bar in the entry.
    *
    * Since: 2.16
+   *
+   * Deprecated: 3.4: Use the standard margin CSS property;
+   *   the value of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("progress-border",
                                                                P_("Progress Border"),
                                                                P_("Border around the progress bar"),
                                                                GTK_TYPE_BORDER,
-                                                               GTK_PARAM_READABLE));
+                                                               GTK_PARAM_READABLE |
+                                                               G_PARAM_DEPRECATED));
   
   /**
    * GtkEntry:invisible-char:
