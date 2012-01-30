@@ -3228,7 +3228,7 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
     *x = borders.left;
 
   if (y)
-    *y = frame_height / 2 - (req_height - borders.top - borders.bottom) / 2;
+    *y = floor ((frame_height - req_height) / 2) + borders.top;
 
   if (width)
     *width = allocation.width - borders.left - borders.right;
