@@ -18,8 +18,6 @@
  */
 
 /* TODO
- * - split out sv-plane
- * - focus indication
  * - custom sliders
  * - pop-up entries
  */
@@ -28,6 +26,7 @@
 
 #include "gtkcolorchooserprivate.h"
 #include "gtkcoloreditor.h"
+#include "gtkcolorplane.h"
 #include "gtkgrid.h"
 #include "gtkscale.h"
 #include "gtkaspectframe.h"
@@ -50,11 +49,8 @@ struct _GtkColorEditorPrivate
 
   GtkAdjustment *h_adj;
   GtkAdjustment *a_adj;
-  cairo_surface_t *surface;
   GdkRGBA color;
   gdouble h, s, v;
-  gint x, y;
-  gboolean in_drag;
   gboolean text_changed;
 };
 
@@ -69,163 +65,6 @@ static void gtk_color_editor_iface_init (GtkColorChooserInterface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkColorEditor, gtk_color_editor, GTK_TYPE_BOX,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_COLOR_CHOOSER,
                                                 gtk_color_editor_iface_init))
-
-static gboolean
-sv_draw (GtkWidget      *widget,
-         cairo_t        *cr,
-         GtkColorEditor *editor)
-{
-  gint x, y;
-  gint width, height;
-
-  cairo_set_source_surface (cr, editor->priv->surface, 0, 0);
-  cairo_paint (cr);
-
-  x = editor->priv->x;
-  y = editor->priv->y;
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
-
-  cairo_move_to (cr, 0,     y + 0.5);
-  cairo_line_to (cr, width, y + 0.5);
-
-  cairo_move_to (cr, x + 0.5, 0);
-  cairo_line_to (cr, x + 0.5, height);
-
-  cairo_set_line_width (cr, 3.0);
-  cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.6);
-  cairo_stroke_preserve (cr);
-
-  cairo_set_line_width (cr, 1.0);
-  cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 0.8);
-  cairo_stroke (cr);
-
-  return FALSE;
-}
-
-static void
-create_sv_surface (GtkColorEditor *editor)
-{
-  GtkWidget *sv_plane;
-  cairo_t *cr;
-  cairo_surface_t *surface;
-  gint width, height, stride;
-  cairo_surface_t *tmp;
-  guint red, green, blue;
-  guint32 *data, *p;
-  gdouble h, s, v;
-  gdouble r, g, b;
-  gdouble sf, vf;
-  gint x, y;
-
-  sv_plane = editor->priv->sv_plane;
-
-  if (!gtk_widget_get_realized (sv_plane))
-    return;
-
-  width = gtk_widget_get_allocated_width (sv_plane);
-  height = gtk_widget_get_allocated_height (sv_plane);
-
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (sv_plane),
-                                               CAIRO_CONTENT_COLOR,
-                                               width, height);
-
-  if (editor->priv->surface)
-    cairo_surface_destroy (editor->priv->surface);
-  editor->priv->surface = surface;
-
-  if (width == 1 || height == 1)
-    return;
-
-  stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
-
-  data = g_malloc (4 * height * stride);
-
-  h = editor->priv->h;
-  sf = 1.0 / (height - 1);
-  vf = 1.0 / (width - 1);
-  for (y = 0; y < height; y++)
-    {
-      s = CLAMP (1.0 - y * sf, 0.0, 1.0);
-      p = data + y * (stride / 4);
-      for (x = 0; x < width; x++)
-        {
-          v = x * vf;
-          gtk_hsv_to_rgb (h, s, v, &r, &g, &b);
-          red = CLAMP (r * 255, 0, 255);
-          green = CLAMP (g * 255, 0, 255);
-          blue = CLAMP (b * 255, 0, 255);
-          p[x] = (red << 16) | (green << 8) | blue;
-        }
-    }
-
-  tmp = cairo_image_surface_create_for_data ((guchar *)data, CAIRO_FORMAT_RGB24,
-                                             width, height, stride);
-  cr = cairo_create (surface);
-
-  cairo_set_source_surface (cr, tmp, 0, 0);
-  cairo_paint (cr);
-
-  cairo_destroy (cr);
-  cairo_surface_destroy (tmp);
-  g_free (data);
-}
-
-static void
-hsv_to_xy (GtkColorEditor *editor)
-{
-  GtkWidget *sv_plane;
-  gint width, height;
-
-  sv_plane = editor->priv->sv_plane;
-
-  width = gtk_widget_get_allocated_width (GTK_WIDGET (sv_plane));
-  height = gtk_widget_get_allocated_height (GTK_WIDGET (sv_plane));
-
-  editor->priv->x = CLAMP (width * editor->priv->v, 0, width - 1);
-  editor->priv->y = CLAMP (height * (1 - editor->priv->s), 0, height - 1);
-}
-
-static gboolean
-sv_configure (GtkWidget         *widget,
-              GdkEventConfigure *event,
-              GtkColorEditor    *editor)
-{
-  create_sv_surface (editor);
-  hsv_to_xy (editor);
-  return TRUE;
-}
-
-static void
-set_cross_grab (GtkWidget *widget,
-                GdkDevice *device,
-                guint32    time)
-{
-  GdkCursor *cursor;
-
-  cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (widget)),
-                                       GDK_CROSSHAIR);
-  gdk_device_grab (device,
-                   gtk_widget_get_window (widget),
-                   GDK_OWNERSHIP_NONE,
-                   FALSE,
-                   GDK_POINTER_MOTION_MASK
-                    | GDK_POINTER_MOTION_HINT_MASK
-                    | GDK_BUTTON_RELEASE_MASK,
-                   cursor,
-                   time);
-  g_object_unref (cursor);
-}
-
-static gboolean
-sv_grab_broken (GtkWidget          *widget,
-                GdkEventGrabBroken *event,
-                GtkColorEditor     *editor)
-{
-  editor->priv->in_drag = FALSE;
-
-  return TRUE;
-}
 
 static guint
 scale_round (gdouble value, gdouble scale)
@@ -251,167 +90,6 @@ update_entry (GtkColorEditor *editor)
 }
 
 static void
-sv_update_color (GtkColorEditor *editor,
-                 gint            x,
-                 gint            y)
-{
-  GtkWidget *sv_plane;
-
-  sv_plane = editor->priv->sv_plane;
-
-  editor->priv->x = x;
-  editor->priv->y = y;
-
-  editor->priv->s = CLAMP (1 - y * (1.0 / gtk_widget_get_allocated_height (sv_plane)), 0, 1);
-  editor->priv->v = CLAMP (x * (1.0 / gtk_widget_get_allocated_width (sv_plane)), 0, 1);
-  gtk_hsv_to_rgb (editor->priv->h, editor->priv->s, editor->priv->v,
-                  &editor->priv->color.red,
-                  &editor->priv->color.green,
-                  &editor->priv->color.blue);
-  update_entry (editor);
-  gtk_adjustment_set_value (editor->priv->h_adj, editor->priv->h);
-  gtk_widget_queue_draw (editor->priv->swatch);
-  gtk_widget_queue_draw (sv_plane);
-}
-
-static gboolean
-sv_button_press (GtkWidget      *widget,
-                 GdkEventButton *event,
-                 GtkColorEditor *editor)
-{
-  if (editor->priv->in_drag || event->button != GDK_BUTTON_PRIMARY)
-    return FALSE;
-
-  editor->priv->in_drag = TRUE;
-  set_cross_grab (widget, gdk_event_get_device ((GdkEvent*)event), event->time);
-  sv_update_color (editor, event->x, event->y);
-  gtk_widget_grab_focus (widget);
-
-  return TRUE;
-}
-
-static gboolean
-sv_button_release (GtkWidget      *widget,
-                   GdkEventButton *event,
-                   GtkColorEditor *editor)
-{
-  if (!editor->priv->in_drag || event->button != GDK_BUTTON_PRIMARY)
-    return FALSE;
-
-  editor->priv->in_drag = FALSE;
-
-  sv_update_color (editor, event->x, event->y);
-  gdk_device_ungrab (gdk_event_get_device ((GdkEvent *) event), event->time);
-
-  return TRUE;
-}
-
-static gboolean
-sv_motion (GtkWidget      *widget,
-           GdkEventMotion *event,
-           GtkColorEditor *editor)
-{
-  if (!editor->priv->in_drag)
-    return FALSE;
-
-  gdk_event_request_motions (event);
-  sv_update_color (editor, event->x, event->y);
-
-  return TRUE;
-}
-
-static void
-sv_move (GtkColorEditor *editor,
-         gdouble         ds,
-         gdouble         dv)
-{
-  if (editor->priv->s + ds > 1)
-    {
-      if (editor->priv->s < 1)
-        editor->priv->s = 1;
-      else
-        goto error;
-    }
-  else if (editor->priv->s + ds < 0)
-    {
-      if (editor->priv->s > 0)
-        editor->priv->s = 0;
-      else
-        goto error;
-    }
-  else
-    {
-      editor->priv->s += ds;
-    }
-
-  if (editor->priv->v + dv > 1)
-    {
-      if (editor->priv->v < 1)
-        editor->priv->v = 1;
-      else
-        goto error;
-    }
-  else if (editor->priv->v + dv < 0)
-    {
-      if (editor->priv->v > 0)
-        editor->priv->v = 0;
-      else
-        goto error;
-    }
-  else
-    {
-      editor->priv->v += dv;
-    }
-
-  gtk_hsv_to_rgb (editor->priv->h, editor->priv->s, editor->priv->v,
-                  &editor->priv->color.red,
-                  &editor->priv->color.green,
-                  &editor->priv->color.blue);
-
-  hsv_to_xy (editor);
-
-  update_entry (editor);
-  gtk_adjustment_set_value (editor->priv->h_adj, editor->priv->h);
-  gtk_widget_queue_draw (editor->priv->swatch);
-  gtk_widget_queue_draw (editor->priv->sv_plane);
-  return;
-
-error:
-  gtk_widget_error_bell (editor->priv->sv_plane);
-}
-
-static gboolean
-sv_key_press (GtkWidget      *widget,
-              GdkEventKey    *event,
-              GtkColorEditor *editor)
-{
-  gdouble step;
-
-  /* FIXME: turn into bindings */
-  if ((event->state & GDK_MOD1_MASK) != 0)
-    step = 0.1;
-  else
-    step = 0.01;
-
-  if (event->keyval == GDK_KEY_Up ||
-      event->keyval == GDK_KEY_KP_Up)
-    sv_move (editor, step, 0);
-  else if (event->keyval == GDK_KEY_Down ||
-           event->keyval == GDK_KEY_KP_Down)
-    sv_move (editor, -step, 0);
-  else if (event->keyval == GDK_KEY_Left ||
-           event->keyval == GDK_KEY_KP_Left)
-    sv_move (editor, 0, -step);
-  else if (event->keyval == GDK_KEY_Right ||
-           event->keyval == GDK_KEY_KP_Right)
-    sv_move (editor, 0, step);
-  else
-    return FALSE;
-
-  return TRUE;
-}
-
-static void
 entry_apply (GtkWidget      *entry,
              GtkColorEditor *editor)
 {
@@ -424,17 +102,8 @@ entry_apply (GtkWidget      *entry,
   text = gtk_editable_get_chars (GTK_EDITABLE (editor->priv->entry), 0, -1);
   if (gdk_rgba_parse (&color, text))
     {
-      editor->priv->color.red = color.red;
-      editor->priv->color.green = color.green;
-      editor->priv->color.blue = color.blue;
-      gtk_rgb_to_hsv (editor->priv->color.red,
-                      editor->priv->color.green,
-                      editor->priv->color.blue,
-                      &editor->priv->h, &editor->priv->s, &editor->priv->v);
-      hsv_to_xy (editor);
-      gtk_adjustment_set_value (editor->priv->h_adj, editor->priv->h);
-      gtk_widget_queue_draw (GTK_WIDGET (editor));
-      g_object_notify (G_OBJECT (editor), "color");
+      color.alpha = editor->priv->color.alpha;
+      gtk_color_chooser_set_color (GTK_COLOR_CHOOSER (editor), &color);
     }
 
   editor->priv->text_changed = FALSE;
@@ -464,16 +133,28 @@ h_changed (GtkAdjustment  *adj,
            GtkColorEditor *editor)
 {
   editor->priv->h = gtk_adjustment_get_value (adj);
-
   gtk_hsv_to_rgb (editor->priv->h, editor->priv->s, editor->priv->v,
                   &editor->priv->color.red,
                   &editor->priv->color.green,
                   &editor->priv->color.blue);
-  create_sv_surface (editor);
-  gtk_widget_queue_draw (editor->priv->sv_plane);
+  gtk_color_plane_set_h (GTK_COLOR_PLANE (editor->priv->sv_plane), editor->priv->h);
   gtk_widget_queue_draw (editor->priv->swatch);
   update_entry (editor);
   g_object_notify (G_OBJECT (editor), "color");
+}
+
+static void
+sv_changed (GtkColorPlane  *plane,
+            GtkColorEditor *editor)
+{
+  editor->priv->s = gtk_color_plane_get_s (plane);
+  editor->priv->v = gtk_color_plane_get_v (plane);
+  gtk_hsv_to_rgb (editor->priv->h, editor->priv->s, editor->priv->v,
+                  &editor->priv->color.red,
+                  &editor->priv->color.green,
+                  &editor->priv->color.blue);
+  update_entry (editor);
+  gtk_widget_queue_draw (editor->priv->swatch);
 }
 
 static void
@@ -560,30 +241,18 @@ gtk_color_editor_init (GtkColorEditor *editor)
   editor->priv->h_adj = adj;
 
   gtk_scale_set_draw_value (GTK_SCALE (editor->priv->h_slider), FALSE);
-  editor->priv->sv_plane = gtk_drawing_area_new ();
+  editor->priv->sv_plane = gtk_color_plane_new ();
   gtk_widget_set_size_request (editor->priv->sv_plane, 300, 300);
   gtk_widget_set_hexpand (editor->priv->sv_plane, TRUE);
   gtk_widget_set_vexpand (editor->priv->sv_plane, TRUE);
+
+  g_signal_connect (editor->priv->sv_plane, "changed", G_CALLBACK (sv_changed), editor);
 
   adj = gtk_adjustment_new (1, 0, 1, 0.01, 0.1, 0);
   editor->priv->a_slider = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adj);
   g_signal_connect (adj, "value-changed", G_CALLBACK (a_changed), editor);
   gtk_scale_set_draw_value (GTK_SCALE (editor->priv->a_slider), FALSE);
   editor->priv->a_adj = adj;
-
-  gtk_widget_set_can_focus (editor->priv->sv_plane, TRUE);
-  gtk_widget_set_events (editor->priv->sv_plane, GDK_KEY_PRESS_MASK
-                                                 | GDK_BUTTON_PRESS_MASK
-                                                 | GDK_BUTTON_RELEASE_MASK
-                                                 | GDK_POINTER_MOTION_MASK);
-
-  g_signal_connect (editor->priv->sv_plane, "draw", G_CALLBACK (sv_draw), editor);
-  g_signal_connect (editor->priv->sv_plane, "configure-event", G_CALLBACK (sv_configure), editor);
-  g_signal_connect (editor->priv->sv_plane, "button-press-event", G_CALLBACK (sv_button_press), editor);
-  g_signal_connect (editor->priv->sv_plane, "button-release-event", G_CALLBACK (sv_button_release), editor);
-  g_signal_connect (editor->priv->sv_plane, "motion-notify-event", G_CALLBACK (sv_motion), editor);
-  g_signal_connect (editor->priv->sv_plane, "grab-broken-event", G_CALLBACK (sv_grab_broken), editor);
-  g_signal_connect (editor->priv->sv_plane, "key-press-event", G_CALLBACK (sv_key_press), editor);
 
   gtk_grid_attach (GTK_GRID (grid), editor->priv->swatch,   1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), editor->priv->entry,    2, 0, 1, 1);
@@ -676,7 +345,9 @@ gtk_color_editor_set_color (GtkColorChooser *chooser,
                   editor->priv->color.green,
                   editor->priv->color.blue,
                   &editor->priv->h, &editor->priv->s, &editor->priv->v);
-  hsv_to_xy (editor);
+  gtk_color_plane_set_h (GTK_COLOR_PLANE (editor->priv->sv_plane), editor->priv->h);
+  gtk_color_plane_set_s (GTK_COLOR_PLANE (editor->priv->sv_plane), editor->priv->s);
+  gtk_color_plane_set_v (GTK_COLOR_PLANE (editor->priv->sv_plane), editor->priv->v);
   gtk_adjustment_set_value (editor->priv->h_adj, editor->priv->h);
   update_entry (editor);
 

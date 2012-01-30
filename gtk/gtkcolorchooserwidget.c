@@ -61,12 +61,18 @@ static void
 select_swatch (GtkColorChooserWidget *cc,
                GtkColorSwatch        *swatch)
 {
+  GdkRGBA color;
+
   if (cc->priv->current == swatch)
     return;
   if (cc->priv->current != NULL)
     gtk_color_swatch_set_selected (cc->priv->current, FALSE);
   gtk_color_swatch_set_selected (swatch, TRUE);
   cc->priv->current = swatch;
+  gtk_color_swatch_get_color (swatch, &color);
+  g_settings_set (cc->priv->settings, "selected-color", "(bdddd)",
+                  TRUE, color.red, color.green, color.blue, color.alpha);
+
   g_object_notify (G_OBJECT (cc), "color");
 }
 
