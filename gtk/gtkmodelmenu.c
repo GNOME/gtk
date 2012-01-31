@@ -270,7 +270,7 @@ gtk_model_menu_create_menu (GMenuModel        *model,
 
   menu = gtk_menu_new ();
 
-  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, FALSE);
+  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, TRUE);
   gtk_model_menu_populate (GTK_MENU_SHELL (menu), actions, accels);
 
   return menu;
