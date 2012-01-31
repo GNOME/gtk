@@ -122,6 +122,19 @@ gtk_color_chooser_dialog_init (GtkColorChooserDialog *cc)
 }
 
 static void
+gtk_color_chooser_dialog_response (GtkDialog *dialog,
+                                   gint       response_id)
+{
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      GdkRGBA color;
+
+      gtk_color_chooser_get_color (GTK_COLOR_CHOOSER (dialog), &color);
+      gtk_color_chooser_set_color (GTK_COLOR_CHOOSER (dialog), &color);
+    }
+}
+
+static void
 gtk_color_chooser_dialog_get_property (GObject    *object,
                                        guint       prop_id,
                                        GValue     *value,
@@ -168,9 +181,12 @@ static void
 gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GtkDialogClass *dialog_class = GTK_DIALOG_CLASS (class);
 
   object_class->get_property = gtk_color_chooser_dialog_get_property;
   object_class->set_property = gtk_color_chooser_dialog_set_property;
+
+  dialog_class->response = gtk_color_chooser_dialog_response;
 
   g_object_class_override_property (object_class, PROP_COLOR, "color");
 
