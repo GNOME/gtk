@@ -213,22 +213,21 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   GtkWidget *p;
   GtkWidget *button;
   GtkWidget *label;
-  gint i;
-  GdkRGBA color, color1, color2;
-  gdouble h, s, v;
+  gint i, j;
+  GdkRGBA color;
   GVariant *variant;
   GVariantIter iter;
   gboolean selected;
-  const gchar *default_palette[9] = {
-    "red",
-    "orange",
-    "yellow",
-    "green",
-    "blue",
-    "purple",
-    "brown",
-    "darkgray",
-    "gray"
+  const gchar *default_palette[9][3] = {
+    { "#ef2929", "#cc0000", "#a40000" }, /* Scarlet Red */
+    { "#fcaf3e", "#f57900", "#ce5c00" }, /* Orange */
+    { "#fce94f", "#edd400", "#c4a000" }, /* Butter */
+    { "#8ae234", "#73d216", "#4e9a06" }, /* Chameleon */
+    { "#729fcf", "#3465a4", "#204a87" }, /* Sky Blue */
+    { "#ad7fa8", "#75507b", "#5c3566" }, /* Plum */
+    { "#e9b96e", "#c17d11", "#8f5902" }, /* Chocolate */
+    { "#888a85", "#555753", "#2e3436" }, /* Aluminum 1 */
+    { "#eeeeec", "#d3d7cf", "#babdb6" }  /* Aluminum 2 */
   };
 
   cc->priv = G_TYPE_INSTANCE_GET_PRIVATE (cc, GTK_TYPE_COLOR_CHOOSER_WIDGET, GtkColorChooserWidgetPrivate);
@@ -246,32 +245,23 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 
   for (i = 0; i < 9; i++)
     {
-       gdk_rgba_parse (&color, default_palette[i]);
-       gtk_rgb_to_hsv (color.red, color.green, color.blue, &h, &s, &v);
-       gtk_hsv_to_rgb (h, s / 2, (v + 1) / 2, &color1.red, &color1.green, &color1.blue);
-       color1.alpha = color.alpha;
+      for (j = 0; j < 3; j++)
+        {
+          gdk_rgba_parse (&color, default_palette[i][j]);
 
-       gtk_hsv_to_rgb (h, s, v * 3 / 4, &color2.red, &color2.green, &color2.blue);
-       color2.alpha = color.alpha;
+          p = gtk_color_swatch_new ();
+          connect_swatch_signals (p, cc);
 
-       p = gtk_color_swatch_new ();
-       connect_swatch_signals (p, cc);
-       gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 10, 10, 1, 1);
-       gtk_color_swatch_set_color (GTK_COLOR_SWATCH (p), &color1);
+          if (j == 0)
+            gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 10, 10, 1, 1);
+          else if (j == 2)
+            gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 10, 10);
+          else
+            gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 1, 1);
 
-       gtk_grid_attach (GTK_GRID (grid), p, i, 0, 1, 1);
-
-       p = gtk_color_swatch_new ();
-       connect_swatch_signals (p, cc);
-       gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 1, 1);
-       gtk_color_swatch_set_color (GTK_COLOR_SWATCH (p), &color);
-       gtk_grid_attach (GTK_GRID (grid), p, i, 1, 1, 1);
-
-       p = gtk_color_swatch_new ();
-       connect_swatch_signals (p, cc);
-       gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 10, 10);
-       gtk_color_swatch_set_color (GTK_COLOR_SWATCH (p), &color2);
-       gtk_grid_attach (GTK_GRID (grid), p, i, 2, 1, 1);
+          gtk_color_swatch_set_color (GTK_COLOR_SWATCH (p), &color);
+          gtk_grid_attach (GTK_GRID (grid), p, i, j, 1, 1);
+        }
     }
 
   cc->priv->grays = grid = gtk_grid_new ();
