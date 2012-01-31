@@ -5462,21 +5462,19 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
       /* menu mode */
       if (priv->cell_view)
         {
-          gint sep_width, arrow_width;
+          gint box_width;
           gint border_width, xpad;
           GtkBorder button_padding;
 
           border_width = gtk_container_get_border_width (GTK_CONTAINER (combo_box));
           get_widget_padding_and_border (priv->button, &button_padding);
 
-          gtk_widget_get_preferred_width (priv->separator, &sep_width, NULL);
-          gtk_widget_get_preferred_width (priv->arrow, &arrow_width, NULL);
-
+          gtk_widget_get_preferred_width (priv->box, &box_width, NULL);
           xpad = 2 * border_width +
             button_padding.left + button_padding.right + padding.left + padding.right;
 
-          minimum_width  = child_min + sep_width + arrow_width + xpad;
-          natural_width  = child_nat + sep_width + arrow_width + xpad;
+          minimum_width  = child_min + box_width + xpad;
+          natural_width  = child_nat + box_width + xpad;
         }
       else
         {
@@ -5581,34 +5579,30 @@ gtk_combo_box_get_preferred_height_for_width (GtkWidget *widget,
       if (priv->cell_view)
         {
           /* calculate x/y padding and separator/arrow size */
-          gint sep_width, arrow_width, sep_height, arrow_height;
+          gint box_width, box_height;
           gint border_width, xpad, ypad;
           GtkBorder button_padding;
 
           border_width = gtk_container_get_border_width (GTK_CONTAINER (combo_box));
           get_widget_padding_and_border (priv->button, &button_padding);
 
-          gtk_widget_get_preferred_width (priv->separator, &sep_width, NULL);
-          gtk_widget_get_preferred_width (priv->arrow, &arrow_width, NULL);
-          gtk_widget_get_preferred_height_for_width (priv->separator,
-                                                     sep_width, &sep_height, NULL);
-          gtk_widget_get_preferred_height_for_width (priv->arrow,
-                                                     arrow_width, &arrow_height, NULL);
+          gtk_widget_get_preferred_width (priv->box, &box_width, NULL);
+          gtk_widget_get_preferred_height_for_width (priv->box,
+                                                     box_width, &box_height, NULL);
 
           xpad = 2 * border_width +
             button_padding.left + button_padding.right;
           ypad = 2 * border_width +
             button_padding.top + button_padding.bottom;
 
-          size -= sep_width + arrow_width + xpad;
+          size -= box_width + xpad;
 
           /* Get height-for-width of the child widget, usually a GtkCellArea calculating
            * and fitting the whole treemodel */
           gtk_widget_get_preferred_height_for_width (child, size, &min_height, &nat_height);
 
-          arrow_height = MAX (arrow_height, sep_height);
-          min_height = MAX (min_height, arrow_height);
-          nat_height = MAX (nat_height, arrow_height);
+          min_height = MAX (min_height, box_height);
+          nat_height = MAX (nat_height, box_height);
 
           min_height += ypad;
           nat_height += ypad;
