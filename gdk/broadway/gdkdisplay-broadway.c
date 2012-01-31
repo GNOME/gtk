@@ -422,7 +422,11 @@ parse_input (BroadwayInput *input)
 #endif
 	      }
 	    else
-	      parse_input_message (input, (char *)data);
+	      {
+		char *terminated = g_strndup((char *)data, payload_len);
+	        parse_input_message (input, terminated);
+		g_free (terminated);
+	      }
 	    break;
 	  case BROADWAY_WS_CNX_PING:
 	    broadway_output_pong (broadway_display->output);
@@ -1012,7 +1016,7 @@ got_http_request_line (GInputStream *stream,
       /* Protect against overflow in request length */
       if (request->request->len > 1024 * 5)
 	{
-	  send_error (request, 400, "Request to long");
+	  send_error (request, 400, "Request too long");
 	}
       else
 	{
