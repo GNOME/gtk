@@ -248,7 +248,6 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   gtk_container_add (GTK_CONTAINER (cc), cc->priv->palette);
 
   cc->priv->colors = grid = gtk_grid_new ();
-  g_object_set (grid, "margin", 12, NULL);
   gtk_widget_set_margin_bottom (grid, 12);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 2);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 4);
@@ -276,7 +275,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
     }
 
   cc->priv->grays = grid = gtk_grid_new ();
-  g_object_set (grid, "margin", 12, "margin-top", 0, NULL);
+  g_object_set (grid, "margin-bottom", 18, NULL);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 4);
   gtk_container_add (GTK_CONTAINER (cc->priv->palette), grid);
 
@@ -298,13 +297,12 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
        gtk_grid_attach (GTK_GRID (grid), p, i, 0, 1, 1);
     }
 
-  label = gtk_label_new (_("Custom color"));
+  label = gtk_label_new (_("Custom"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_container_add (GTK_CONTAINER (cc->priv->palette), label);
-  g_object_set (grid, "margin", 12, "margin-top", 0, NULL);
 
   cc->priv->custom = grid = gtk_grid_new ();
-  g_object_set (grid, "margin", 12, "margin-top", 0, NULL);
+  g_object_set (grid, "margin-top", 12, NULL);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 4);
   gtk_container_add (GTK_CONTAINER (cc->priv->palette), grid);
 
