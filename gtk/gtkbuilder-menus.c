@@ -106,8 +106,12 @@ gtk_builder_menu_start_element (GMarkupParseContext  *context,
         {
           GMenuItem *item;
 
-          item = g_menu_item_new (NULL, NULL);
-          gtk_builder_menu_push_frame (state, NULL, item);
+          if (COLLECT (G_MARKUP_COLLECT_INVALID, NULL))
+            {
+              item = g_menu_item_new (NULL, NULL);
+              gtk_builder_menu_push_frame (state, NULL, item);
+            }
+
           return;
         }
 
