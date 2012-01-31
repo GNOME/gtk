@@ -3585,7 +3585,6 @@ gtk_entry_draw_progress (GtkWidget       *widget,
                          cairo_t         *cr)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
-  GtkEntryPrivate *private = entry->priv;
   gint x, y, width, height;
 
   get_progress_area (widget, &x, &y, &width, &height);
@@ -6096,7 +6095,6 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   GtkEntryPrivate *priv = entry->priv;
   gint min_offset, max_offset;
   gint text_area_width, text_width;
-  GtkBorder borders;
   gint strong_x, weak_x;
   gint strong_xoffset, weak_xoffset;
   gfloat xalign;
