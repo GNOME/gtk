@@ -2560,7 +2560,6 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           gint width;
           guint border_width;
 
-          gtk_widget_size_allocate (priv->button, allocation);
 
           /* menu mode */
           allocation->x += padding.left;
@@ -2571,6 +2570,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           /* set some things ready */
           border_width = gtk_container_get_border_width (GTK_CONTAINER (priv->button));
           get_widget_padding_and_border (priv->button, &button_padding);
+          gtk_widget_size_allocate (priv->button, allocation);
 
           child.x = allocation->x;
           child.y = allocation->y;
