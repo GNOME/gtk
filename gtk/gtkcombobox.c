@@ -2560,16 +2560,17 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           gint width;
           guint border_width;
 
+          border_width = gtk_container_get_border_width (GTK_CONTAINER (priv->button));
+          get_widget_padding_and_border (priv->button, &button_padding);
 
-          /* menu mode */
+          /* menu mode; child_widget is priv->cell_view.
+           * Allocate the button to the full combobox allocation (minus the
+           * padding).
+           */
           allocation->x += padding.left;
           allocation->y += padding.top;
           allocation->width -= padding.left + padding.right;
           allocation->height -= padding.top + padding.bottom;
-
-          /* set some things ready */
-          border_width = gtk_container_get_border_width (GTK_CONTAINER (priv->button));
-          get_widget_padding_and_border (priv->button, &button_padding);
           gtk_widget_size_allocate (priv->button, allocation);
 
           child.x = allocation->x;
@@ -2579,6 +2580,9 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
 
           if (!priv->is_cell_renderer)
             {
+              /* restrict allocation of the child into the button box
+               * if we're not in cell renderer mode.
+               */
               child.x += border_width + button_padding.left;
               child.y += border_width + button_padding.top;
               width -= 2 * border_width +
@@ -2587,7 +2591,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
                 button_padding.top + button_padding.bottom;
             }
 
-          /* handle the children */
+          /* allocate the box containing the separator and the arrow */
           gtk_widget_get_preferred_size (priv->box, &req, NULL);
           child.width = req.width;
           if (!is_rtl)
@@ -2641,6 +2645,11 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
         }
       else
         {
+          /* menu mode; child_widget has been set with gtk_container_add().
+           * E.g. it might be a GtkEntry if priv->has_entry is TRUE.
+           * Allocate the button at the far end, according to the direction
+           * of the widget.
+           */
           GTK_COMBO_BOX_SIZE_ALLOCATE_BUTTON
 
             /* After the macro, button_allocation has the button allocation rect */
@@ -2649,6 +2658,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
             child.x = button_allocation.x + button_allocation.width;
           else
             child.x = allocation->x + padding.left;
+
           child.y = allocation->y + padding.top;
           child.width = allocation->width - button_allocation.width - (padding.left + padding.right);
           child.height = button_allocation.height;
@@ -2660,13 +2670,14 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
     }
   else
     {
-      /* list mode */
+      /* list mode; child_widget might be either priv->cell_view or a child
+       * added with gtk_container_add().
+       */
       guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
       /* After the macro, button_allocation has the button allocation rect */
       GTK_COMBO_BOX_SIZE_ALLOCATE_BUTTON
 
-      /* frame */
       if (is_rtl)
         child.x = button_allocation.x + button_allocation.width;
       else
@@ -2684,7 +2695,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           child.height = MAX (1, child.height - (2 * border_width) - (padding.top + padding.bottom));
           gtk_widget_size_allocate (priv->cell_view_frame, &child);
 
-          /* the sample */
+          /* restrict allocation of the child into the frame box if it's present */
           if (priv->has_frame)
             {
               GtkBorder frame_padding;
@@ -2714,6 +2725,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           gtk_widget_set_size_request (priv->popup_window, width, height);
         }
 
+      /* allocate the child */
       child.width = MAX (1, child.width);
       child.height = MAX (1, child.height);
       gtk_widget_size_allocate (child_widget, &child);
