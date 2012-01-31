@@ -451,7 +451,8 @@ swatch_button_press (GtkWidget      *widget,
 
   gtk_widget_grab_focus (GTK_WIDGET (swatch));
 
-  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event) &&
+      swatch->priv->has_color)
     {
       do_popup (widget, event);
       return TRUE;
