@@ -2681,18 +2681,14 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
       if (is_rtl)
         child.x = button_allocation.x + button_allocation.width;
       else
-        child.x = allocation->x;
+        child.x = allocation->x + padding.left + border_width;
 
-      child.y = allocation->y;
-      child.width = allocation->width - button_allocation.width - (padding.left + padding.right);
-      child.height = button_allocation.height;
+      child.y = allocation->y + padding.top + border_width;
+      child.width = allocation->width - button_allocation.width - (2 * border_width + padding.left + padding.right);
+      child.height = button_allocation.height - 2 * border_width;
 
       if (priv->cell_view_frame)
         {
-          child.x += padding.left + border_width;
-          child.y += padding.top + border_width;
-          child.width = MAX (1, child.width - (2 * border_width) - (padding.left + padding.right));
-          child.height = MAX (1, child.height - (2 * border_width) - (padding.top + padding.bottom));
           gtk_widget_size_allocate (priv->cell_view_frame, &child);
 
           /* restrict allocation of the child into the frame box if it's present */
@@ -2708,13 +2704,6 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
               child.width -= (2 * border_width) + frame_padding.left + frame_padding.right;
               child.height -= (2 * border_width) + frame_padding.top + frame_padding.bottom;
             }
-        }
-      else
-        {
-          child.x += padding.left + border_width;
-          child.y += padding.top + border_width;
-          child.width -= (2 * border_width) - (padding.left + padding.right);
-          child.height -= (2 * border_width) - (padding.top + padding.bottom);
         }
 
       if (gtk_widget_get_visible (priv->popup_window))
