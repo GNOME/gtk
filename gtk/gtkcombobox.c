@@ -2521,15 +2521,14 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
                                  &req, NULL);                   \
                                                                 \
   if (is_rtl)                                                   \
-    button_allocation.x = allocation->x + padding.left;         \
+    button_allocation.x = allocation->x;                        \
   else                                                          \
     button_allocation.x = allocation->x + allocation->width     \
-     - req.width - padding.right;                               \
+     - req.width;                                               \
                                                                 \
-  button_allocation.y = allocation->y + padding.top;            \
+  button_allocation.y = allocation->y;                          \
   button_allocation.width = MAX (1, req.width);                 \
-  button_allocation.height = allocation->height -               \
-      (padding.top + padding.bottom);                           \
+  button_allocation.height = allocation->height;                \
   button_allocation.height = MAX (1, button_allocation.height); \
                                                                 \
   gtk_widget_size_allocate (combo_box->priv->button,            \
@@ -2552,6 +2551,11 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
   child_widget = gtk_bin_get_child (GTK_BIN (widget));
   get_widget_padding_and_border (widget, &padding);
 
+  allocation->x += padding.left;
+  allocation->y += padding.top;
+  allocation->width -= padding.left + padding.right;
+  allocation->height -= padding.top + padding.bottom;
+
   if (!priv->tree_view)
     {
       if (priv->cell_view)
@@ -2567,10 +2571,6 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
            * Allocate the button to the full combobox allocation (minus the
            * padding).
            */
-          allocation->x += padding.left;
-          allocation->y += padding.top;
-          allocation->width -= padding.left + padding.right;
-          allocation->height -= padding.top + padding.bottom;
           gtk_widget_size_allocate (priv->button, allocation);
 
           child.x = allocation->x;
@@ -2657,10 +2657,10 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           if (is_rtl)
             child.x = button_allocation.x + button_allocation.width;
           else
-            child.x = allocation->x + padding.left;
+            child.x = allocation->x;
 
-          child.y = allocation->y + padding.top;
-          child.width = allocation->width - button_allocation.width - (padding.left + padding.right);
+          child.y = allocation->y;
+          child.width = allocation->width - button_allocation.width;
           child.height = button_allocation.height;
 
           child.width = MAX (1, child.width);
@@ -2681,10 +2681,10 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
       if (is_rtl)
         child.x = button_allocation.x + button_allocation.width;
       else
-        child.x = allocation->x + padding.left + border_width;
+        child.x = allocation->x + border_width;
 
-      child.y = allocation->y + padding.top + border_width;
-      child.width = allocation->width - button_allocation.width - (2 * border_width + padding.left + padding.right);
+      child.y = allocation->y + border_width;
+      child.width = allocation->width - button_allocation.width - (2 * border_width);
       child.height = button_allocation.height - 2 * border_width;
 
       if (priv->cell_view_frame)
