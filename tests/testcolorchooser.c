@@ -38,6 +38,11 @@ main (int argc, char *argv[])
   gtk_init (NULL, NULL);
 
   dialog = gtk_color_chooser_dialog_new ("Select a color", NULL);
+  if (argc > 1 && strcmp (argv[1], "--no-alpha") == 0)
+    {
+      g_print ("turning alpha off\n");
+      gtk_color_chooser_set_show_alpha (GTK_COLOR_CHOOSER (dialog), FALSE);
+    }
   g_signal_connect (dialog, "notify::color", G_CALLBACK (color_changed), NULL);
   g_signal_connect (dialog, "response", G_CALLBACK (dialog_response), NULL);
 

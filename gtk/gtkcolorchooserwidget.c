@@ -42,6 +42,7 @@ struct _GtkColorChooserWidgetPrivate
 
   GtkWidget *button;
   GtkColorSwatch *current;
+  gboolean show_alpha;
 
   GSettings *settings;
 };
@@ -49,7 +50,8 @@ struct _GtkColorChooserWidgetPrivate
 enum
 {
   PROP_ZERO,
-  PROP_COLOR
+  PROP_COLOR,
+  PROP_SHOW_ALPHA
 };
 
 static void gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface);
@@ -330,6 +332,7 @@ gtk_color_chooser_widget_get_property (GObject    *object,
                                        GValue     *value,
                                        GParamSpec *pspec)
 {
+  GtkColorChooserWidget *cw = GTK_COLOR_CHOOSER_WIDGET (object);
   GtkColorChooser *cc = GTK_COLOR_CHOOSER (object);
 
   switch (prop_id)
@@ -341,11 +344,44 @@ gtk_color_chooser_widget_get_property (GObject    *object,
         gtk_color_chooser_get_color (cc, &color);
         g_value_set_boxed (value, &color);
       }
-    break;
+      break;
+    case PROP_SHOW_ALPHA:
+      g_value_set_boolean (value, cw->priv->show_alpha);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+gtk_color_chooser_widget_set_show_alpha (GtkColorChooserWidget *cc,
+                                         gboolean               show_alpha)
+{
+  GtkWidget *grids[3];
+  gint i;
+  GList *children, *l;
+  GtkWidget *swatch;
+
+  cc->priv->show_alpha = show_alpha;
+  gtk_color_chooser_set_show_alpha (GTK_COLOR_CHOOSER (cc->priv->editor), show_alpha);
+
+  grids[0] = cc->priv->colors;
+  grids[1] = cc->priv->grays;
+  grids[2] = cc->priv->custom;
+
+  for (i = 0; i < 3; i++)
+    {
+      children = gtk_container_get_children (GTK_CONTAINER (grids[i]));
+      for (l = children; l; l = l->next)
+        {
+          swatch = l->data;
+          gtk_color_swatch_set_show_alpha (GTK_COLOR_SWATCH (swatch), show_alpha);
+        }
+      g_list_free (children);
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (cc));
 }
 
 static void
@@ -361,7 +397,11 @@ gtk_color_chooser_widget_set_property (GObject      *object,
     case PROP_COLOR:
       gtk_color_chooser_set_color (GTK_COLOR_CHOOSER (cc),
                                    g_value_get_boxed (value));
-    break;
+      break;
+    case PROP_SHOW_ALPHA:
+      gtk_color_chooser_widget_set_show_alpha (cc,
+                                               g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -388,6 +428,7 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
   object_class->finalize = gtk_color_chooser_widget_finalize;
 
   g_object_class_override_property (object_class, PROP_COLOR, "color");
+  g_object_class_override_property (object_class, PROP_SHOW_ALPHA, "show-alpha");
 
   g_type_class_add_private (object_class, sizeof (GtkColorChooserWidgetPrivate));
 }
@@ -409,6 +450,9 @@ gtk_color_chooser_widget_get_color (GtkColorChooser *chooser,
       color->blue = 1.0;
       color->alpha = 1.0;
     }
+
+  if (!cc->priv->show_alpha)
+    color->alpha = 1.0;
 }
 
 static void
@@ -464,6 +508,8 @@ gtk_color_chooser_widget_set_color (GtkColorChooser *chooser,
         {
           swatch = l->data;
           gtk_color_swatch_get_color (swatch, &c);
+          if (!cc->priv->show_alpha)
+            c.alpha = color->alpha;
           if (gdk_rgba_equal (color, &c))
             {
               select_swatch (cc, swatch);

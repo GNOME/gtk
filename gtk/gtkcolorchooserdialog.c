@@ -40,7 +40,8 @@ struct _GtkColorChooserDialogPrivate
 enum
 {
   PROP_ZERO,
-  PROP_COLOR
+  PROP_COLOR,
+  PROP_SHOW_ALPHA
 };
 
 static void gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface);
@@ -140,6 +141,7 @@ gtk_color_chooser_dialog_get_property (GObject    *object,
                                        GValue     *value,
                                        GParamSpec *pspec)
 {
+  GtkColorChooserDialog *cd = GTK_COLOR_CHOOSER_DIALOG (object);
   GtkColorChooser *cc = GTK_COLOR_CHOOSER (object);
 
   switch (prop_id)
@@ -152,6 +154,9 @@ gtk_color_chooser_dialog_get_property (GObject    *object,
         g_value_set_boxed (value, &color);
       }
     break;
+    case PROP_SHOW_ALPHA:
+      g_value_set_boolean (value, gtk_color_chooser_get_show_alpha (GTK_COLOR_CHOOSER (cd->priv->color_chooser)));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -164,12 +169,16 @@ gtk_color_chooser_dialog_set_property (GObject      *object,
                                        const GValue *value,
                                        GParamSpec   *pspec)
 {
+  GtkColorChooserDialog *cd = GTK_COLOR_CHOOSER_DIALOG (object);
   GtkColorChooser *cc = GTK_COLOR_CHOOSER (object);
 
   switch (prop_id)
     {
     case PROP_COLOR:
       gtk_color_chooser_set_color (cc, g_value_get_boxed (value));
+    break;
+    case PROP_SHOW_ALPHA:
+      gtk_color_chooser_set_show_alpha (GTK_COLOR_CHOOSER (cd->priv->color_chooser), g_value_get_boolean (value));
     break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -189,6 +198,7 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
   dialog_class->response = gtk_color_chooser_dialog_response;
 
   g_object_class_override_property (object_class, PROP_COLOR, "color");
+  g_object_class_override_property (object_class, PROP_SHOW_ALPHA, "show-alpha");
 
   g_type_class_add_private (class, sizeof (GtkColorChooserDialogPrivate));
 }

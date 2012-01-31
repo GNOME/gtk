@@ -51,13 +51,15 @@ struct _GtkColorEditorPrivate
   GtkAdjustment *a_adj;
   GdkRGBA color;
   gdouble h, s, v;
-  gboolean text_changed;
+  guint text_changed : 1;
+  guint show_alpha   : 1;
 };
 
 enum
 {
   PROP_ZERO,
-  PROP_COLOR
+  PROP_COLOR,
+  PROP_SHOW_ALPHA
 };
 
 static void gtk_color_editor_iface_init (GtkColorChooserInterface *iface);
@@ -188,21 +190,24 @@ get_checkered_pattern (void)
 }
 
 static gboolean
-swatch_draw (GtkWidget      *swatch,
+swatch_draw (GtkWidget      *widget,
              cairo_t        *cr,
              GtkColorEditor *editor)
 {
   cairo_pattern_t *checkered;
 
-  cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
-  cairo_paint (cr);
+  if (editor->priv->show_alpha)
+    {
+      cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
+      cairo_paint (cr);
 
-  cairo_set_source_rgb (cr, 0.66, 0.66, 0.66);
-  cairo_scale (cr, 8, 8);
+      cairo_set_source_rgb (cr, 0.66, 0.66, 0.66);
+      cairo_scale (cr, 8, 8);
 
-  checkered = get_checkered_pattern ();
-  cairo_mask (cr, checkered);
-  cairo_pattern_destroy (checkered);
+      checkered = get_checkered_pattern ();
+      cairo_mask (cr, checkered);
+      cairo_pattern_destroy (checkered);
+    }
 
   gdk_cairo_set_source_rgba (cr, &editor->priv->color);
   cairo_paint (cr);
@@ -219,6 +224,8 @@ gtk_color_editor_init (GtkColorEditor *editor)
   editor->priv = G_TYPE_INSTANCE_GET_PRIVATE (editor,
                                               GTK_TYPE_COLOR_EDITOR,
                                               GtkColorEditorPrivate);
+  editor->priv->show_alpha = TRUE;
+
   gtk_widget_push_composite_child ();
 
   editor->priv->grid = grid = gtk_grid_new ();
@@ -271,6 +278,7 @@ gtk_color_editor_get_property (GObject    *object,
                                GValue     *value,
                                GParamSpec *pspec)
 {
+  GtkColorEditor *ce = GTK_COLOR_EDITOR (object);
   GtkColorChooser *cc = GTK_COLOR_CHOOSER (object);
 
   switch (prop_id)
@@ -281,10 +289,28 @@ gtk_color_editor_get_property (GObject    *object,
         gtk_color_chooser_get_color (cc, &color);
         g_value_set_boxed (value, &color);
       }
-    break;
+      break;
+    case PROP_SHOW_ALPHA:
+      g_value_set_boolean (value, gtk_widget_get_visible (ce->priv->a_slider));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
+    }
+}
+
+static void
+gtk_color_editor_set_show_alpha (GtkColorEditor *editor,
+                                 gboolean        show_alpha)
+{
+  if (editor->priv->show_alpha != show_alpha)
+    {
+      editor->priv->show_alpha = show_alpha;
+
+      if (show_alpha)
+        gtk_widget_show (editor->priv->a_slider);
+      else
+        gtk_widget_hide (editor->priv->a_slider);
     }
 }
 
@@ -294,13 +320,17 @@ gtk_color_editor_set_property (GObject      *object,
                                const GValue *value,
                                GParamSpec   *pspec)
 {
+  GtkColorEditor *ce = GTK_COLOR_EDITOR (object);
   GtkColorChooser *cc = GTK_COLOR_CHOOSER (object);
 
   switch (prop_id)
     {
     case PROP_COLOR:
       gtk_color_chooser_set_color (cc, g_value_get_boxed (value));
-    break;
+      break;
+    case PROP_SHOW_ALPHA:
+      gtk_color_editor_set_show_alpha (ce, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -316,6 +346,7 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   object_class->set_property = gtk_color_editor_set_property;
 
   g_object_class_override_property (object_class, PROP_COLOR, "color");
+  g_object_class_override_property (object_class, PROP_SHOW_ALPHA, "show-alpha");
 
   g_type_class_add_private (class, sizeof (GtkColorEditorPrivate));
 }

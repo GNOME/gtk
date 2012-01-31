@@ -41,6 +41,7 @@ struct _GtkColorSwatchPrivate
   guint    has_color        : 1;
   guint    can_drop         : 1;
   guint    contains_pointer : 1;
+  guint    show_alpha       : 1;
 };
 
 enum
@@ -74,6 +75,7 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
                                               | GDK_EXPOSURE_MASK
                                               | GDK_ENTER_NOTIFY_MASK
                                               | GDK_LEAVE_NOTIFY_MASK);
+  swatch->priv->show_alpha = TRUE;
 }
 
 static void
@@ -137,24 +139,34 @@ swatch_draw (GtkWidget *widget,
 
   _gtk_rounded_box_path (&box, cr);
 
+  cairo_clip_preserve (cr);
+
   if (swatch->priv->has_color)
     {
       cairo_pattern_t *pattern;
       cairo_matrix_t matrix;
 
-      cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
-      cairo_fill_preserve (cr);
+      if (swatch->priv->show_alpha)
+        {
+          cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
+          cairo_fill_preserve (cr);
+          cairo_set_source_rgb (cr, 0.66, 0.66, 0.66);
 
-      cairo_set_source_rgb (cr, 0.66, 0.66, 0.66);
+          pattern = get_checkered_pattern ();
+          cairo_matrix_init_scale (&matrix, 0.125, 0.125);
+          cairo_pattern_set_matrix (pattern, &matrix);
+          cairo_mask (cr, pattern);
+          cairo_pattern_destroy (pattern);
 
-      pattern = get_checkered_pattern ();
-      cairo_matrix_init_scale (&matrix, 0.125, 0.125);
-      cairo_pattern_set_matrix (pattern, &matrix);
-      cairo_clip_preserve (cr);
-      cairo_mask (cr, pattern);
-      cairo_pattern_destroy (pattern);
-
-      gdk_cairo_set_source_rgba (cr, &swatch->priv->color);
+          gdk_cairo_set_source_rgba (cr, &swatch->priv->color);
+        }
+      else
+        {
+          cairo_set_source_rgb (cr,
+                                swatch->priv->color.red,
+                                swatch->priv->color.green,
+                                swatch->priv->color.blue);
+        }
       cairo_fill_preserve (cr);
     }
 
@@ -692,5 +704,14 @@ gtk_color_swatch_set_can_drop (GtkColorSwatch *swatch,
 
   swatch->priv->can_drop = can_drop;
 }
+
+void
+gtk_color_swatch_set_show_alpha (GtkColorSwatch *swatch,
+                                 gboolean        show_alpha)
+{
+  swatch->priv->show_alpha = show_alpha;
+  gtk_widget_queue_draw (GTK_WIDGET (swatch));
+}
+
 
 /* vim:set foldmethod=marker: */

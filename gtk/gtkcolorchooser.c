@@ -46,6 +46,12 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
                           GDK_TYPE_RGBA,
                           GTK_PARAM_READWRITE));
 
+  g_object_interface_install_property (iface,
+      g_param_spec_boolean ("show-alpha",
+                            P_("Show alpha"),
+                            P_("Whether alpha should be shown"),
+                            TRUE,
+                            GTK_PARAM_READWRITE));
   /**
    * GtkColorChooser::color-activated:
    * @self: the object which received the signal
@@ -107,4 +113,26 @@ _gtk_color_chooser_color_activated (GtkColorChooser *chooser,
   g_return_if_fail (GTK_IS_COLOR_CHOOSER (chooser));
 
   g_signal_emit (chooser, signals[COLOR_ACTIVATED], 0, color);
+}
+
+gboolean
+gtk_color_chooser_get_show_alpha (GtkColorChooser *chooser)
+{
+  gboolean show_alpha;
+
+  g_return_val_if_fail (GTK_IS_COLOR_CHOOSER (chooser), TRUE);
+
+  g_object_get (chooser, "show-alpha", &show_alpha, NULL);
+
+  return show_alpha;
+}
+
+void
+gtk_color_chooser_set_show_alpha (GtkColorChooser *chooser,
+                                  gboolean         show_alpha)
+{
+
+  g_return_if_fail (GTK_IS_COLOR_CHOOSER (chooser));
+
+  g_object_set (chooser, "show-alpha", show_alpha, NULL);
 }

@@ -81,6 +81,8 @@ void        gtk_color_swatch_set_can_drop     (GtkColorSwatch *swatch,
                                                gboolean        can_drop);
 void        gtk_color_swatch_set_icon         (GtkColorSwatch *swatch,
                                                const gchar    *icon);
+void        gtk_color_swatch_set_show_alpha   (GtkColorSwatch *swatch,
+                                               gboolean        show_alpha);
 
 
 G_END_DECLS
