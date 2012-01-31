@@ -76,14 +76,23 @@ select_swatch (GtkColorChooserWidget *cc,
   g_object_notify (G_OBJECT (cc), "color");
 }
 
-static void add_custom (GtkColorChooserWidget *cc, GtkColorSwatch *swatch);
 static void save_custom (GtkColorChooserWidget *cc);
 
 static void
 button_activate (GtkColorSwatch        *swatch,
                  GtkColorChooserWidget *cc)
 {
-  add_custom (cc, swatch);
+  GdkRGBA color;
+
+  color.red = 1.0;
+  color.green = 0;
+  color.blue = 0;
+  color.alpha = 1.0;
+
+  gtk_color_chooser_set_color (GTK_COLOR_CHOOSER (cc->priv->editor), &color);
+
+  gtk_widget_hide (cc->priv->palette);
+  gtk_widget_show (cc->priv->editor);
 }
 
 static void
@@ -162,48 +171,6 @@ save_custom (GtkColorChooserWidget *cc)
 
   variant = g_variant_builder_end (&builder);
   g_settings_set_value (cc->priv->settings, "custom-colors", variant);
-}
-
-static void
-add_custom (GtkColorChooserWidget *cc, GtkColorSwatch *swatch)
-{
-  GList *children;
-  gint n_children;
-  GdkRGBA color;
-  GtkWidget *p;
-
-  children = gtk_container_get_children (GTK_CONTAINER (cc->priv->custom));
-  n_children = g_list_length (children);
-  g_list_free (children);
-  if (n_children >= 9)
-    {
-      gtk_widget_error_bell (GTK_WIDGET (cc));
-      return;
-    }
-
-  gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (swatch), 10, 1, 1, 10);
-
-  color.red = g_random_double_range (0, 1);
-  color.green = g_random_double_range (0, 1);
-  color.blue = g_random_double_range (0, 1);
-  color.alpha = 1.0;
-
-  p = gtk_color_swatch_new ();
-  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (p), &color);
-  gtk_color_swatch_set_can_drop (GTK_COLOR_SWATCH (p), TRUE);
-  connect_custom_signals (p, cc);
-
-  if (n_children == 1)
-    gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 10, 10, 1);
-  else
-    gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 1, 1);
-
-  gtk_grid_insert_next_to (GTK_GRID (cc->priv->custom), GTK_WIDGET (swatch), GTK_POS_RIGHT);
-  gtk_grid_attach (GTK_GRID (cc->priv->custom), p, 1, 0, 1, 1);
-
-  gtk_widget_show (p);
-
-  save_custom (cc);
 }
 
 static void
