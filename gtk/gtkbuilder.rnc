@@ -1,0 +1,86 @@
+start = element interface {
+  attribute domain { text } ?,
+  ( requires | object | menu ) *
+}
+
+requires = element requires {
+  attribute lib { text },
+  attribute version { text }
+}
+
+object = element object {
+  attribute id { xsd:ID },
+  attribute class { text },
+  attribute type-func { text } ?,
+  attribute constructor { text } ?,
+  (property | signal | child | ANY) *
+}
+
+property = element property {
+  attribute name { text },
+  attribute translatable { "yes" | "no" } ?,
+  attribute comments { text } ?,
+  attribute context { text } ?,
+  text ?
+}
+
+signal = element signal {
+  attribute name { text },
+  attribute handler { text },
+  attribute after { text } ?,
+  attribute swapped { text } ?,
+  attribute object { text } ?,
+  attribute last_modification_time { text } ?,
+  empty
+}
+
+child = element child {
+  attribute type { text } ?,
+  attribute internal-child { text } ?,
+  (object | ANY)*
+}
+
+menu = element menu {
+  attribute id { xsd:ID },
+  attribute domain { text } ?,
+  (item | submenu | section) *
+}
+
+item = element item {
+  attribute id { xsd:ID } ?,
+  (attribute_ | link) *
+}
+
+attribute_ = element attribute {
+  attribute name { text },
+  attribute type { text } ?,
+  attribute translatable { "yes" | "no" } ?,
+  attribute context { text } ?,
+  attribute comments { text } ?,
+  text ?
+}
+
+link = element link {
+  attribute id { xsd:ID } ?,
+  attribute name { text },
+  item *
+}
+
+submenu = element submenu {
+  attribute id { xsd:ID } ?,
+  (attribute_ | item | submenu | section) *
+}
+
+section = element section {
+  attribute id { xsd:ID } ?,
+  (attribute_ | item | submenu | section) *
+}
+
+ANY = element * - (interface | requires | object | property | signal | child | menu | item | attribute | link | submenu | section) {
+  attribute * { text } *,
+  (ALL * & text ?)
+}
+ALL = element * {
+  attribute * { text } *,
+  (ALL * & text ?)
+}

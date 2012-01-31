@@ -947,6 +947,12 @@ EXTRA_DIST += $(gtk_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)
 EXTRA_DIST += $(STOCK_ICONS)
 
+
+pkgdatadir=$(datadir)/gtk-$(GTK_API_VERSION)
+pkgdata_DATA = gtkbuilder.rng
+
+EXTRA_DIST += gtkbuilder.rnc gtkbuilder.rng
+
 DND_CURSORS = \
 	cursor_dnd_ask.png				\
 	cursor_dnd_copy.png				\

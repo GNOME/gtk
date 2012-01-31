@@ -56,41 +56,18 @@
  * <title>GtkBuilder UI Definitions</title>
  * <para>
  * GtkBuilder parses textual descriptions of user interfaces which are specified
- * in an XML format which can be roughly described by the DTD below. We refer to
- * these descriptions as <firstterm>GtkBuilder UI definitions</firstterm> or
- * just <firstterm>UI definitions</firstterm> if the context is clear. Do not
+ * in an XML format which can be roughly described by the RELAX NG schema below.
+ * We refer to these descriptions as <firstterm>GtkBuilder UI definitions</firstterm>
+ * or just <firstterm>UI definitions</firstterm> if the context is clear. Do not
  * confuse GtkBuilder UI Definitions with
  * <link linkend="XML-UI">GtkUIManager UI Definitions</link>, which are more
  * limited in scope.
  * </para>
- * <programlisting><![CDATA[
- * <!ELEMENT interface (requires|object)* >
- * <!ELEMENT object    (property|signal|child|ANY)* >
- * <!ELEMENT property  PCDATA >
- * <!ELEMENT signal    EMPTY >
- * <!ELEMENT requires  EMPTY >
- * <!ELEMENT child     (object|ANY*) >
- *
- * <!ATTLIST interface  domain         	    #IMPLIED >
- * <!ATTLIST object     id             	    #REQUIRED
- *                      class          	    #REQUIRED
- *                      type-func      	    #IMPLIED
- *                      constructor    	    #IMPLIED >
- * <!ATTLIST requires   lib             	    #REQUIRED
- *                      version          	    #REQUIRED >
- * <!ATTLIST property   name           	    #REQUIRED
- *                      translatable   	    #IMPLIED
- *                      comments               #IMPLIED
- *                      context                #IMPLIED >
- * <!ATTLIST signal     name           	    #REQUIRED
- *                      handler        	    #REQUIRED
- *                      after          	    #IMPLIED
- *                      swapped        	    #IMPLIED
- *                      object         	    #IMPLIED
- *                      last_modification_time #IMPLIED >
- * <!ATTLIST child      type           	    #IMPLIED
- *                      internal-child 	    #IMPLIED >
- * ]]></programlisting>
+ * <programlisting>
+ * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gtk/gtkbuilder.rnc">
+ *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ * </xi:include>
+ * </programlisting>
  * <para>
  * The toplevel element is &lt;interface&gt;. It optionally takes a "domain"
  * attribute, which will make the builder look for translated strings using
