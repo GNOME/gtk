@@ -84,6 +84,13 @@ _gtk_css_shorthand_property_query (GtkStyleProperty   *property,
   shorthand->query (shorthand, value, query_func, query_data);
 }
 
+static void
+gtk_css_shorthand_property_unset_value (gpointer value)
+{
+  if (G_IS_VALUE (value))
+    g_value_unset (value);
+}
+
 static gboolean
 gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
                                         GValue           *value,
@@ -95,7 +102,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
   guint i;
 
   array = g_array_new (FALSE, TRUE, sizeof (GValue));
-  g_array_set_clear_func (array, (GDestroyNotify) g_value_unset);
+  g_array_set_clear_func (array, gtk_css_shorthand_property_unset_value);
   g_array_set_size (array, shorthand->subproperties->len);
 
   if (_gtk_css_parser_try (parser, "initial", TRUE))
