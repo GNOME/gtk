@@ -229,6 +229,17 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
     { "#888a85", "#555753", "#2e3436" }, /* Aluminum 1 */
     { "#eeeeec", "#d3d7cf", "#babdb6" }  /* Aluminum 2 */
   };
+  const gchar *default_grayscale[9] = {
+    "#000000",
+    "#2e3436",
+    "#555753",
+    "#888a85",
+    "#babdb6",
+    "#d3d7cf",
+    "#eeeeec",
+    "#f3f3f3",
+    "#ffffff"
+  };
 
   cc->priv = G_TYPE_INSTANCE_GET_PRIVATE (cc, GTK_TYPE_COLOR_CHOOSER_WIDGET, GtkColorChooserWidgetPrivate);
 
@@ -271,7 +282,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 
   for (i = 0; i < 9; i++)
     {
-       color.red = color.green = color.blue = i / 8.0;
+       gdk_rgba_parse (&color, default_grayscale[i]);
        color.alpha = 1.0;
 
        p = gtk_color_swatch_new ();
