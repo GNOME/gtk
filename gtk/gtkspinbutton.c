@@ -1098,7 +1098,6 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
       gboolean interior_focus;
       gint focus_width;
       GtkBorder borders;
-      GtkBorder inner_border;
 
       gtk_style_context_get_style (style_context,
                                    "interior-focus", &interior_focus,
