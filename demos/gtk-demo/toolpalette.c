@@ -350,7 +350,7 @@ interactive_canvas_real_drag_leave (gpointer data)
       gtk_widget_queue_draw (widget);
     }
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

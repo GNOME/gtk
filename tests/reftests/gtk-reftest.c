@@ -198,7 +198,7 @@ quit_when_idle (gpointer loop)
 {
   g_main_loop_quit (loop);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

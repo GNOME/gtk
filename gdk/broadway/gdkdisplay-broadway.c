@@ -483,7 +483,7 @@ process_input_idle_cb (GdkBroadwayDisplay *display)
 {
   display->process_input_idle = 0;
   process_input_messages (display);
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

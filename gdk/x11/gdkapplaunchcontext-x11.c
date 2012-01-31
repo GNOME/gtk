@@ -221,7 +221,7 @@ startup_timeout (void *data)
     std->timeout_id = g_timeout_add_seconds ((min_timeout + 500)/1000, startup_timeout, std);
 
   /* always remove this one, but we may have reinstalled another one. */
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 

@@ -843,7 +843,7 @@ request_password (gpointer data)
   gint                       i;
 
   if (dispatch->backend->authentication_lock)
-    return FALSE;
+    return G_SOURCE_REMOVE;
 
   httpGetHostname (dispatch->request->http, hostname, sizeof (hostname));
   if (is_address_local (hostname))
@@ -956,7 +956,7 @@ request_password (gpointer data)
   g_free (auth_info_visible);
   g_free (key);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -1040,10 +1040,10 @@ check_auth_info (gpointer user_data)
           dispatch->request->auth_info = NULL;
         }
 
-      return FALSE;
+      return G_SOURCE_REMOVE;
     }
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static gboolean
@@ -1612,7 +1612,7 @@ cups_job_info_poll_timeout (gpointer user_data)
   else
     cups_request_job_info (data);
   
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

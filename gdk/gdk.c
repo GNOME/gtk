@@ -895,7 +895,7 @@ gdk_threads_add_idle (GSourceFunc    function,
  *    
  *    self->timeout_id = 0;
  *    
- *    return FALSE;
+ *    return G_SOURCE_REMOVE;
  * }
  *  
  * static void some_widget_do_stuff_later (SomeWidget *self)

@@ -407,7 +407,7 @@ dance (gpointer treeview)
 
   check_sanity (treeview);
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void

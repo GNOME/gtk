@@ -682,7 +682,7 @@ button_callback (gpointer data)
   gdk_event_free ((GdkEvent *) bc->event);
   g_free (data);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static UINT taskbar_created_msg = 0;

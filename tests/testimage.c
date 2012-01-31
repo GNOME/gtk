@@ -74,7 +74,7 @@ idle_func (gpointer data)
 {
   g_print ("keep me busy\n");
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static gboolean

@@ -3656,7 +3656,7 @@ entry_progress_timeout (gpointer data)
       gtk_entry_set_progress_fraction (GTK_ENTRY (data), fraction);
     }
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -9047,7 +9047,7 @@ idle_test (GtkWidget *label)
   sprintf (buffer, "count: %d", ++count);
   gtk_label_set_text (GTK_LABEL (label), buffer);
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void

@@ -29,8 +29,7 @@ static gboolean
 search_progress (gpointer data)
 {
   gtk_entry_progress_pulse (GTK_ENTRY (data));
-
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void

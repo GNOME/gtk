@@ -63,9 +63,8 @@ scroll_layout (gpointer data)
   GtkAdjustment *adj;
 
   adj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (layout));
-  gtk_adjustment_set_value (adj,
-			    gtk_adjustment_get_value (adj) + 5.0);
-  return TRUE;
+  gtk_adjustment_set_value (adj, gtk_adjustment_get_value (adj) + 5.0);
+  return G_SOURCE_CONTINUE;
 }
 
 static guint layout_timeout;

@@ -1072,7 +1072,7 @@ gtk_drag_begin_idle (gpointer arg)
   [types release];
 
   if ((nswindow = get_toplevel_nswindow (info->source_widget)) == NULL)
-     return FALSE;
+     return G_SOURCE_REMOVE;
   
   /* Ref the context. It's unreffed when the drag has been aborted */
   g_object_ref (info->context);
@@ -1084,7 +1084,7 @@ gtk_drag_begin_idle (gpointer arg)
   if (drag_image == NULL)
     {
       g_object_unref (info->context);
-      return FALSE;
+      return G_SOURCE_REMOVE;
     }
 
   point.x -= info->hot_x;
@@ -1103,7 +1103,7 @@ gtk_drag_begin_idle (gpointer arg)
 
   [pool release];
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 /* Fake protocol to let us call GdkNSView gdkWindow without including
  * gdk/GdkNSView.h (which we can't because it pulls in the internal-only
@@ -1858,7 +1858,7 @@ static gboolean
 drag_drop_finished_idle_cb (gpointer data)
 {
   gtk_drag_source_info_destroy (data);
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

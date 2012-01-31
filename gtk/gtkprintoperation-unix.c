@@ -1068,7 +1068,7 @@ find_printer_idle (gpointer data)
   
   printer_finder_free (finder);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

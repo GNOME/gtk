@@ -180,7 +180,7 @@ timeout (gpointer data)
   GDK_THREADS_LEAVE ();
 
   frame_num++;
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static guint timeout_id;

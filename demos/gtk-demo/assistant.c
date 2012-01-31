@@ -23,14 +23,14 @@ apply_changes_gradually (gpointer data)
   if (fraction < 1.0)
     {
       gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress_bar), fraction);
-      return TRUE;
+      return G_SOURCE_CONTINUE;
     }
   else
     {
       /* Close automatically once changes are fully applied. */
       gtk_widget_destroy (assistant);
       assistant = NULL;
-      return FALSE;
+      return G_SOURCE_REMOVE;
     }
 }
 

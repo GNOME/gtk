@@ -1598,7 +1598,7 @@ idle_will_quit (gpointer data)
       gtk_widget_destroy (dialog);
     }
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static pascal OSErr

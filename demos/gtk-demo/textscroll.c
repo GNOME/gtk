@@ -49,7 +49,7 @@ scroll_to_end (GtkTextView *textview)
   if (count > 150)
     count = 0;
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 /* Scroll to the bottom of the buffer.
@@ -100,7 +100,7 @@ scroll_to_bottom (GtkTextView *textview)
   if (count > 40)
     count = 0;
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static guint

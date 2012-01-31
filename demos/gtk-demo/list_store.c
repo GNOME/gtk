@@ -60,7 +60,7 @@ spinner_timeout (gpointer data)
   guint pulse;
 
   if (model == NULL)
-    return FALSE;
+    return G_SOURCE_REMOVE;
 
   gtk_tree_model_get_iter_first (model, &iter);
   gtk_tree_model_get (model, &iter,
@@ -77,7 +77,7 @@ spinner_timeout (gpointer data)
                       COLUMN_ACTIVE, TRUE,
                       -1);
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static GtkTreeModel *

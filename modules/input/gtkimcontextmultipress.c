@@ -211,7 +211,7 @@ on_timeout (gpointer data)
 
   GDK_THREADS_LEAVE ();
 
-  return FALSE; /* don't call me again */
+  return G_SOURCE_REMOVE; /* don't call me again */
 }
 
 static gboolean

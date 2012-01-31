@@ -70,7 +70,7 @@ show_error (gpointer data)
                     G_CALLBACK (response_cb), NULL);
   gtk_widget_show (dialog);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 int
