@@ -787,8 +787,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_about_dialog_set_logo (about, NULL);
 }
 
-
-void destroy_credit_section (gpointer data)
+static void
+destroy_credit_section (gpointer data)
 {
   CreditSection *cs = data;
   g_free (cs->heading);
