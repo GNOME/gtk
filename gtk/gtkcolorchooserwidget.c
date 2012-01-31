@@ -84,9 +84,9 @@ button_activate (GtkColorSwatch        *swatch,
 {
   GdkRGBA color;
 
-  color.red = 1.0;
-  color.green = 0;
-  color.blue = 0;
+  color.red = 0.75;
+  color.green = 0.25;
+  color.blue = 0.25;
   color.alpha = 1.0;
 
   gtk_color_chooser_set_color (GTK_COLOR_CHOOSER (cc->priv->editor), &color);
