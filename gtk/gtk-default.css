@@ -18,11 +18,14 @@
 @define-color error_bg_color rgb (237, 54, 54);
 
 * {
-  background-color: @bg_color;
   color: @fg_color;
   border-color: shade (@bg_color, 0.6);
   padding: 2;
   border-width: 0;
+}
+
+GtkWindow, .button, .slider {
+  background-color: @bg_color;
 }
 
 *:prelight {
