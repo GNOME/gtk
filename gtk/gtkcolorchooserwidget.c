@@ -483,9 +483,13 @@ add_custom_color (GtkColorChooserWidget *cc,
   GtkWidget *last;
   GtkWidget *p;
 
-  last = gtk_grid_get_child_at (GTK_GRID (cc->priv->custom), 9, 0);
+  last = gtk_grid_get_child_at (GTK_GRID (cc->priv->custom), 8, 0);
   if (last)
-    gtk_container_remove (GTK_CONTAINER (cc->priv->custom), last);
+    {
+      gtk_container_remove (GTK_CONTAINER (cc->priv->custom), last);
+      last = gtk_grid_get_child_at (GTK_GRID (cc->priv->custom), 7, 0);
+      gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (last), 1, 10, 10, 1);
+    }
 
   gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (cc->priv->button), 10, 1, 1, 10);
 
