@@ -2610,7 +2610,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
             {
               child.x += req.width;
               child.width = allocation->x + allocation->width
-                - border_width - child.x;
+                - border_width - child.x - button_padding.right;
             }
           else
             {
