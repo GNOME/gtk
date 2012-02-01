@@ -1640,11 +1640,8 @@ gtk_main_do_event (GdkEvent *event)
 
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      if (key_snoopers)
-        {
-          if (gtk_invoke_key_snoopers (grab_widget, event))
-            break;
-        }
+      if (gtk_invoke_key_snoopers (grab_widget, event))
+        break;
 
       /* make focus visible in a window that receives a key event */
       {
