@@ -116,7 +116,7 @@ create_sv_surface (GtkColorPlane *plane)
 
   stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
 
-  data = g_malloc (4 * height * stride);
+  data = g_malloc (height * stride);
 
   h = plane->priv->h;
   sf = 1.0 / (height - 1);
