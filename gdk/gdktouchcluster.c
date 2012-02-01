@@ -41,7 +41,7 @@
  * %GDK_TOUCH_MOTION or %GDK_TOUCH_RELEASE events through
  * gdk_event_get_touch_id(), and then be added via
  * gdk_touch_cluster_add_touch(). Note that touch IDs are
- * highly transitive, and they must be dealt with as such.
+ * very transient, and they must be dealt with as such.
  * touch IDs must not be stored after a GDK_TOUCH_RELEASE,
  * and should always be retrieved from the events being
  * currently received.
