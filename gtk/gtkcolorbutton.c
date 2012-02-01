@@ -35,8 +35,8 @@
 #include "gtkbutton.h"
 #include "gtkmain.h"
 #include "gtkalignment.h"
-#include "gtkcolorsel.h"
-#include "gtkcolorseldialog.h"
+#include "gtkcolorchooser.h"
+#include "gtkcolorchooserdialog.h"
 #include "gtkdnd.h"
 #include "gtkdrawingarea.h"
 #include "gtkframe.h"
@@ -582,32 +582,6 @@ gtk_color_button_new_with_rgba (const GdkRGBA *rgba)
   return g_object_new (GTK_TYPE_COLOR_BUTTON, "rgba", rgba, NULL);
 }
 
-static void
-dialog_ok_clicked (GtkWidget *widget,
-                   gpointer   data)
-{
-  GtkColorButton *color_button = GTK_COLOR_BUTTON (data);
-  GtkColorSelection *color_selection;
-  GtkColorSelectionDialog *selection_dialog;
-
-  selection_dialog = GTK_COLOR_SELECTION_DIALOG (color_button->priv->cs_dialog);
-  color_selection = GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (selection_dialog));
-
-  gtk_color_selection_get_current_rgba (color_selection, &color_button->priv->rgba);
-
-  gtk_widget_hide (color_button->priv->cs_dialog);
-
-  gtk_widget_queue_draw (color_button->priv->draw_area);
-
-  g_signal_emit (color_button, color_button_signals[COLOR_SET], 0);
-
-  g_object_freeze_notify (G_OBJECT (color_button));
-  g_object_notify (G_OBJECT (color_button), "color");
-  g_object_notify (G_OBJECT (color_button), "alpha");
-  g_object_notify (G_OBJECT (color_button), "rgba");
-  g_object_thaw_notify (G_OBJECT (color_button));
-}
-
 static gboolean
 dialog_destroy (GtkWidget *widget,
                 gpointer   data)
@@ -620,69 +594,66 @@ dialog_destroy (GtkWidget *widget,
 }
 
 static void
-dialog_cancel_clicked (GtkWidget *widget,
-                       gpointer   data)
+dialog_response (GtkDialog *dialog,
+                 gint       response,
+                 gpointer   data)
 {
-  GtkColorButton *color_button = GTK_COLOR_BUTTON (data);
+  if (response == GTK_RESPONSE_CANCEL)
+    gtk_widget_hide (GTK_WIDGET (dialog));
+  else if (response == GTK_RESPONSE_OK)
+    {
+      GtkColorButton *color_button = GTK_COLOR_BUTTON (data);
 
-  gtk_widget_hide (color_button->priv->cs_dialog);
+      gtk_color_chooser_get_color (GTK_COLOR_CHOOSER (dialog),
+                                   &color_button->priv->rgba);
+
+      gtk_widget_hide (GTK_WIDGET (dialog));
+
+      gtk_widget_queue_draw (color_button->priv->draw_area);
+
+      g_signal_emit (color_button, color_button_signals[COLOR_SET], 0);
+
+      g_object_freeze_notify (G_OBJECT (color_button));
+      g_object_notify (G_OBJECT (color_button), "color");
+      g_object_notify (G_OBJECT (color_button), "alpha");
+      g_object_notify (G_OBJECT (color_button), "rgba");
+      g_object_thaw_notify (G_OBJECT (color_button));
+    }
 }
 
 static void
 gtk_color_button_clicked (GtkButton *button)
 {
   GtkColorButton *color_button = GTK_COLOR_BUTTON (button);
-  GtkColorSelection *color_selection;
-  GtkColorSelectionDialog *color_dialog;
+  GtkWidget *dialog;
 
   /* if dialog already exists, make sure it's shown and raised */
   if (!color_button->priv->cs_dialog)
     {
       /* Create the dialog and connects its buttons */
       GtkWidget *parent;
-      GtkWidget *ok_button, *cancel_button;
 
       parent = gtk_widget_get_toplevel (GTK_WIDGET (color_button));
 
-      color_button->priv->cs_dialog = gtk_color_selection_dialog_new (color_button->priv->title);
-
-      color_dialog = GTK_COLOR_SELECTION_DIALOG (color_button->priv->cs_dialog);
+      color_button->priv->cs_dialog = dialog = gtk_color_chooser_dialog_new (color_button->priv->title, NULL);
 
       if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
         {
-          if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (color_dialog)))
-            gtk_window_set_transient_for (GTK_WINDOW (color_dialog), GTK_WINDOW (parent));
+          if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (dialog)))
+            gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
-          gtk_window_set_modal (GTK_WINDOW (color_dialog),
+          gtk_window_set_modal (GTK_WINDOW (dialog),
                                 gtk_window_get_modal (GTK_WINDOW (parent)));
         }
 
-      g_object_get (color_dialog,
-                    "ok-button", &ok_button,
-                    "cancel-button", &cancel_button,
-                    NULL);
-
-      g_signal_connect (ok_button, "clicked",
-                        G_CALLBACK (dialog_ok_clicked), color_button);
-      g_signal_connect (cancel_button, "clicked",
-                        G_CALLBACK (dialog_cancel_clicked), color_button);
-      g_signal_connect (color_dialog, "destroy",
+      g_signal_connect (dialog, "response",
+                        G_CALLBACK (dialog_response), color_button);
+      g_signal_connect (dialog, "destroy",
                         G_CALLBACK (dialog_destroy), color_button);
-
-      g_object_unref (ok_button);
-      g_object_unref (cancel_button);
     }
 
-  color_dialog = GTK_COLOR_SELECTION_DIALOG (color_button->priv->cs_dialog);
-  color_selection = GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (color_dialog));
-
-  gtk_color_selection_set_has_opacity_control (color_selection,
-                                               color_button->priv->use_alpha);
-
-  gtk_color_selection_set_previous_rgba (color_selection,
-                                         &color_button->priv->rgba);
-  gtk_color_selection_set_current_rgba (color_selection,
-                                        &color_button->priv->rgba);
+  gtk_color_chooser_set_show_alpha (GTK_COLOR_CHOOSER (color_button->priv->cs_dialog),
+                                    color_button->priv->use_alpha);
 
   gtk_window_present (GTK_WINDOW (color_button->priv->cs_dialog));
 }
