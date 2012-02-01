@@ -118,6 +118,7 @@ install_mime_types_ready_cb (GObject      *source,
     }
 
   g_simple_async_result_complete (self->priv->result);
+  g_clear_object (&self->priv->result);
 }
 
 static void

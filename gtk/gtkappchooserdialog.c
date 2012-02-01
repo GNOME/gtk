@@ -146,6 +146,7 @@ search_for_mimetype_ready_cb (GObject      *source,
     }
 
  out:
+  g_clear_object (&self->priv->online_cancellable);
   g_clear_error (&error);
   g_object_unref (self);
 
@@ -297,6 +298,16 @@ add_or_find_application (GtkAppChooserDialog *self)
 }
 
 static void
+cancel_and_clear_cancellable (GtkAppChooserDialog *self)
+{                                                               
+  if (self->priv->online_cancellable != NULL)
+    {
+      g_cancellable_cancel (self->priv->online_cancellable);
+      g_clear_object (&self->priv->online_cancellable);
+    }
+}
+
+static void
 gtk_app_chooser_dialog_response (GtkDialog *dialog,
                                  gint       response_id,
                                  gpointer   user_data)
@@ -310,6 +321,7 @@ gtk_app_chooser_dialog_response (GtkDialog *dialog,
       break;
     case GTK_RESPONSE_CANCEL:
     case GTK_RESPONSE_DELETE_EVENT:
+      cancel_and_clear_cancellable (self);
       self->priv->dismissed = TRUE;
     default :
       break;
@@ -631,13 +643,8 @@ gtk_app_chooser_dialog_dispose (GObject *object)
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (object);
   
   g_clear_object (&self->priv->gfile);
+  cancel_and_clear_cancellable (self);
   g_clear_object (&self->priv->online);
-
-  if (self->priv->online_cancellable != NULL)
-    {
-      g_cancellable_cancel (self->priv->online_cancellable);
-      g_clear_object (&self->priv->online_cancellable);
-    }
 
   G_OBJECT_CLASS (gtk_app_chooser_dialog_parent_class)->dispose (object);
 }
