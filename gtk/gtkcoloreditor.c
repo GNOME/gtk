@@ -18,7 +18,7 @@
  */
 
 /* TODO
- * - custom sliders
+ * - move out custom sliders
  * - pop-up entries
  */
 
@@ -27,6 +27,7 @@
 #include "gtkcolorchooserprivate.h"
 #include "gtkcoloreditor.h"
 #include "gtkcolorplane.h"
+#include "gtkcolorswatch.h"
 #include "gtkgrid.h"
 #include "gtkscale.h"
 #include "gtkaspectframe.h"
@@ -144,7 +145,7 @@ h_changed (GtkAdjustment  *adj,
                   &editor->priv->color.blue);
   gtk_color_plane_set_h (GTK_COLOR_PLANE (editor->priv->sv_plane), editor->priv->h);
   update_entry (editor);
-  gtk_widget_queue_draw (editor->priv->swatch);
+  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (editor->priv->swatch), &editor->priv->color);
   gtk_widget_queue_draw (editor->priv->a_slider);
   if (editor->priv->a_surface)
     {
@@ -165,7 +166,7 @@ sv_changed (GtkColorPlane  *plane,
                   &editor->priv->color.green,
                   &editor->priv->color.blue);
   update_entry (editor);
-  gtk_widget_queue_draw (editor->priv->swatch);
+  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (editor->priv->swatch), &editor->priv->color);
   gtk_widget_queue_draw (editor->priv->a_slider);
   if (editor->priv->a_surface)
     {
@@ -180,7 +181,7 @@ a_changed (GtkAdjustment  *adj,
            GtkColorEditor *editor)
 {
   editor->priv->color.alpha = gtk_adjustment_get_value (adj);
-  gtk_widget_queue_draw (editor->priv->swatch);
+  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (editor->priv->swatch), &editor->priv->color);
   g_object_notify (G_OBJECT (editor), "color");
 }
 
@@ -203,32 +204,6 @@ get_checkered_pattern (void)
   cairo_pattern_set_filter (pattern, CAIRO_FILTER_NEAREST);
 
   return pattern;
-}
-
-static gboolean
-swatch_draw (GtkWidget      *widget,
-             cairo_t        *cr,
-             GtkColorEditor *editor)
-{
-  cairo_pattern_t *checkered;
-
-  if (editor->priv->show_alpha)
-    {
-      cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
-      cairo_paint (cr);
-
-      cairo_set_source_rgb (cr, 0.66, 0.66, 0.66);
-      cairo_scale (cr, 8, 8);
-
-      checkered = get_checkered_pattern ();
-      cairo_mask (cr, checkered);
-      cairo_pattern_destroy (checkered);
-    }
-
-  gdk_cairo_set_source_rgba (cr, &editor->priv->color);
-  cairo_paint (cr);
-
-  return TRUE;
 }
 
 static cairo_surface_t *
@@ -409,8 +384,10 @@ gtk_color_editor_init (GtkColorEditor *editor)
   gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
 
-  editor->priv->swatch = gtk_drawing_area_new ();
-  g_signal_connect (editor->priv->swatch, "draw", G_CALLBACK (swatch_draw), editor);
+  editor->priv->swatch = gtk_color_swatch_new ();
+  gtk_widget_set_sensitive (editor->priv->swatch, FALSE);
+  gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (editor->priv->swatch), 2, 2, 2, 2);
+
   editor->priv->entry = gtk_entry_new ();
   g_signal_connect (editor->priv->entry, "activate",
                     G_CALLBACK (entry_apply), editor);
@@ -486,10 +463,9 @@ gtk_color_editor_set_show_alpha (GtkColorEditor *editor,
     {
       editor->priv->show_alpha = show_alpha;
 
-      if (show_alpha)
-        gtk_widget_show (editor->priv->a_slider);
-      else
-        gtk_widget_hide (editor->priv->a_slider);
+      gtk_widget_set_visible (editor->priv->a_slider, show_alpha);
+
+      gtk_color_swatch_set_show_alpha (GTK_COLOR_SWATCH (editor->priv->swatch), show_alpha);
     }
 }
 
@@ -561,29 +537,31 @@ gtk_color_editor_set_color (GtkColorChooser *chooser,
                             const GdkRGBA   *color)
 {
   GtkColorEditor *editor = GTK_COLOR_EDITOR (chooser);
+  gdouble h, s, v;
 
   editor->priv->color.red = color->red;
   editor->priv->color.green = color->green;
   editor->priv->color.blue = color->blue;
-  gtk_rgb_to_hsv (editor->priv->color.red,
-                  editor->priv->color.green,
-                  editor->priv->color.blue,
-                  &editor->priv->h, &editor->priv->s, &editor->priv->v);
-  gtk_color_plane_set_h (GTK_COLOR_PLANE (editor->priv->sv_plane), editor->priv->h);
-  gtk_color_plane_set_s (GTK_COLOR_PLANE (editor->priv->sv_plane), editor->priv->s);
-  gtk_color_plane_set_v (GTK_COLOR_PLANE (editor->priv->sv_plane), editor->priv->v);
-  gtk_adjustment_set_value (editor->priv->h_adj, editor->priv->h);
+  editor->priv->color.alpha = color->alpha;
+  gtk_rgb_to_hsv (color->red, color->green, color->blue, &h, &s, &v);
+  editor->priv->h = h;
+  editor->priv->s = s;
+  editor->priv->v = v;
+  gtk_color_plane_set_h (GTK_COLOR_PLANE (editor->priv->sv_plane), h);
+  gtk_color_plane_set_s (GTK_COLOR_PLANE (editor->priv->sv_plane), s);
+  gtk_color_plane_set_v (GTK_COLOR_PLANE (editor->priv->sv_plane), v);
+  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (editor->priv->swatch), color);
+
+  gtk_adjustment_set_value (editor->priv->h_adj, h);
+  gtk_adjustment_set_value (editor->priv->a_adj, color->alpha);
   update_entry (editor);
 
-  editor->priv->color.alpha = color->alpha;
-  gtk_adjustment_set_value (editor->priv->a_adj, editor->priv->color.alpha);
-
-  gtk_widget_queue_draw (GTK_WIDGET (editor));
   if (editor->priv->a_surface)
     {
       cairo_surface_destroy (editor->priv->a_surface);
       editor->priv->a_surface = NULL;
     }
+  gtk_widget_queue_draw (GTK_WIDGET (editor));
 
   g_object_notify (G_OBJECT (editor), "color");
 }
