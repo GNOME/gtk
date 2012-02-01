@@ -1883,7 +1883,11 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
   gdk_window_get_root_coords (gtk_widget_get_window (child),
                               sx, sy, &sx, &sy);
   get_widget_padding_and_border (GTK_WIDGET (combo_box), &padding);
-  sx -= padding.left;
+
+  if (gtk_widget_get_direction (GTK_WIDGET (combo_box)) == GTK_TEXT_DIR_RTL)
+    sx += padding.left;
+  else
+    sx -= padding.left;
 
   if (combo_box->priv->popup_fixed_width)
     gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
