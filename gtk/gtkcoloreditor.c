@@ -49,6 +49,9 @@ struct _GtkColorEditorPrivate
 
   GtkAdjustment *h_adj;
   GtkAdjustment *a_adj;
+  cairo_surface_t *h_surface;
+  cairo_surface_t *a_surface;
+
   GdkRGBA color;
   gdouble h, s, v;
   guint text_changed : 1;
@@ -140,8 +143,14 @@ h_changed (GtkAdjustment  *adj,
                   &editor->priv->color.green,
                   &editor->priv->color.blue);
   gtk_color_plane_set_h (GTK_COLOR_PLANE (editor->priv->sv_plane), editor->priv->h);
-  gtk_widget_queue_draw (editor->priv->swatch);
   update_entry (editor);
+  gtk_widget_queue_draw (editor->priv->swatch);
+  gtk_widget_queue_draw (editor->priv->a_slider);
+  if (editor->priv->a_surface)
+    {
+      cairo_surface_destroy (editor->priv->a_surface);
+      editor->priv->a_surface = NULL;
+    }
   g_object_notify (G_OBJECT (editor), "color");
 }
 
@@ -157,6 +166,13 @@ sv_changed (GtkColorPlane  *plane,
                   &editor->priv->color.blue);
   update_entry (editor);
   gtk_widget_queue_draw (editor->priv->swatch);
+  gtk_widget_queue_draw (editor->priv->a_slider);
+  if (editor->priv->a_surface)
+    {
+      cairo_surface_destroy (editor->priv->a_surface);
+      editor->priv->a_surface = NULL;
+    }
+  g_object_notify (G_OBJECT (editor), "color");
 }
 
 static void
@@ -215,6 +231,167 @@ swatch_draw (GtkWidget      *widget,
   return TRUE;
 }
 
+static cairo_surface_t *
+create_h_surface (GtkWidget *widget)
+{
+  cairo_t *cr;
+  cairo_surface_t *surface;
+  gint width, height, stride;
+  cairo_surface_t *tmp;
+  guint red, green, blue;
+  guint32 *data, *p;
+  gdouble h;
+  gdouble r, g, b;
+  gdouble f;
+  gint x, y;
+
+  if (!gtk_widget_get_realized (widget))
+    return NULL;
+
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+
+  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+                                               CAIRO_CONTENT_COLOR,
+                                               width, height);
+
+  if (width == 1 || height == 1)
+    return surface;
+
+  stride = cairo_format_stride_for_width (CAIRO_FORMAT_RGB24, width);
+
+  data = g_malloc (height * stride);
+
+  f = 1.0 / (height - 1);
+  for (y = 0; y < height; y++)
+    {
+      h = CLAMP (y * f, 0.0, 1.0);
+      p = data + y * (stride / 4);
+      for (x = 0; x < width; x++)
+        {
+          gtk_hsv_to_rgb (h, 1, 1, &r, &g, &b);
+          red = CLAMP (r * 255, 0, 255);
+          green = CLAMP (g * 255, 0, 255);
+          blue = CLAMP (b * 255, 0, 255);
+          p[x] = (red << 16) | (green << 8) | blue;
+        }
+    }
+
+  tmp = cairo_image_surface_create_for_data ((guchar *)data, CAIRO_FORMAT_RGB24,
+                                             width, height, stride);
+  cr = cairo_create (surface);
+
+  cairo_set_source_surface (cr, tmp, 0, 0);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+  cairo_surface_destroy (tmp);
+  g_free (data);
+
+  return surface;
+}
+
+static gboolean
+h_draw (GtkWidget *widget,
+        cairo_t   *cr,
+        GtkColorEditor *editor)
+{
+  cairo_surface_t *surface;
+  gint width, height;
+
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+
+  if (!editor->priv->h_surface)
+    editor->priv->h_surface = create_h_surface (widget);
+  surface = editor->priv->h_surface;
+
+  cairo_save (cr);
+
+  cairo_rectangle (cr, 1, 1, width - 2, height - 2);
+  cairo_clip (cr);
+  cairo_set_source_surface (cr, surface, 0, 0);
+  cairo_paint (cr);
+
+  cairo_restore (cr);
+
+  return FALSE;
+}
+
+static cairo_surface_t *
+create_a_surface (GtkWidget *widget,
+                  GdkRGBA   *color)
+{
+  cairo_t *cr;
+  cairo_surface_t *surface;
+  cairo_pattern_t *pattern;
+  cairo_matrix_t matrix;
+  gint width, height;
+
+  if (!gtk_widget_get_realized (widget))
+    return NULL;
+
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+
+  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+                                               CAIRO_CONTENT_COLOR,
+                                               width, height);
+
+  if (width == 1 || height == 1)
+    return surface;
+
+  cr = cairo_create (surface);
+
+  cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
+  cairo_paint (cr);
+  cairo_set_source_rgb (cr, 0.66, 0.66, 0.66);
+
+  pattern = get_checkered_pattern ();
+  cairo_matrix_init_scale (&matrix, 0.125, 0.125);
+  cairo_pattern_set_matrix (pattern, &matrix);
+  cairo_mask (cr, pattern);
+  cairo_pattern_destroy (pattern);
+
+  pattern = cairo_pattern_create_linear (0, 0, width, 0);
+  cairo_pattern_add_color_stop_rgba (pattern, 0, color->red, color->green, color->blue, 0);
+  cairo_pattern_add_color_stop_rgba (pattern, width, color->red, color->green, color->blue, 1);
+  cairo_set_source (cr, pattern);
+  cairo_paint (cr);
+  cairo_pattern_destroy (pattern);
+
+  cairo_destroy (cr);
+
+  return surface;
+}
+
+static gboolean
+a_draw (GtkWidget *widget,
+        cairo_t   *cr,
+        GtkColorEditor *editor)
+{
+  cairo_surface_t *surface;
+  gint width, height;
+
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+
+  if (!editor->priv->a_surface)
+    editor->priv->a_surface = create_a_surface (widget, &editor->priv->color);
+  surface = editor->priv->a_surface;
+
+  cairo_save (cr);
+
+  cairo_rectangle (cr, 1, 1, width - 2, height - 2);
+  cairo_clip (cr);
+  cairo_set_source_surface (cr, surface, 0, 0);
+  cairo_paint (cr);
+
+  cairo_restore (cr);
+
+  return FALSE;
+}
+
 static void
 gtk_color_editor_init (GtkColorEditor *editor)
 {
@@ -246,6 +423,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
   g_signal_connect (adj, "value-changed", G_CALLBACK (h_changed), editor);
   editor->priv->h_slider = gtk_scale_new (GTK_ORIENTATION_VERTICAL, adj);
   editor->priv->h_adj = adj;
+  g_signal_connect (editor->priv->h_slider, "draw", G_CALLBACK (h_draw), editor);
 
   gtk_scale_set_draw_value (GTK_SCALE (editor->priv->h_slider), FALSE);
   editor->priv->sv_plane = gtk_color_plane_new ();
@@ -260,6 +438,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
   g_signal_connect (adj, "value-changed", G_CALLBACK (a_changed), editor);
   gtk_scale_set_draw_value (GTK_SCALE (editor->priv->a_slider), FALSE);
   editor->priv->a_adj = adj;
+  g_signal_connect (editor->priv->a_slider, "draw", G_CALLBACK (a_draw), editor);
 
   gtk_grid_attach (GTK_GRID (grid), editor->priv->swatch,   1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), editor->priv->entry,    2, 0, 1, 1);
@@ -338,10 +517,24 @@ gtk_color_editor_set_property (GObject      *object,
 }
 
 static void
+gtk_color_editor_finalize (GObject *object)
+{
+  GtkColorEditor *editor = GTK_COLOR_EDITOR (object);
+
+  if (editor->priv->h_surface)
+    cairo_surface_destroy (editor->priv->h_surface);
+  if (editor->priv->a_surface)
+    cairo_surface_destroy (editor->priv->a_surface);
+
+  G_OBJECT_CLASS (gtk_color_editor_parent_class)->finalize (object);
+}
+
+static void
 gtk_color_editor_class_init (GtkColorEditorClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  object_class->finalize = gtk_color_editor_finalize;
   object_class->get_property = gtk_color_editor_get_property;
   object_class->set_property = gtk_color_editor_set_property;
 
@@ -386,6 +579,11 @@ gtk_color_editor_set_color (GtkColorChooser *chooser,
   gtk_adjustment_set_value (editor->priv->a_adj, editor->priv->color.alpha);
 
   gtk_widget_queue_draw (GTK_WIDGET (editor));
+  if (editor->priv->a_surface)
+    {
+      cairo_surface_destroy (editor->priv->a_surface);
+      editor->priv->a_surface = NULL;
+    }
 
   g_object_notify (G_OBJECT (editor), "color");
 }
