@@ -52,6 +52,7 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
                             P_("Whether alpha should be shown"),
                             TRUE,
                             GTK_PARAM_READWRITE));
+
   /**
    * GtkColorChooser::color-activated:
    * @self: the object which received the signal

@@ -22,6 +22,7 @@
 #include "gtkdialog.h"
 #include "gtkstock.h"
 #include "gtkbox.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 
 #include "gtkcolorchooserprivate.h"
@@ -41,7 +42,8 @@ enum
 {
   PROP_ZERO,
   PROP_COLOR,
-  PROP_SHOW_ALPHA
+  PROP_SHOW_ALPHA,
+  PROP_SHOW_EDITOR
 };
 
 static void gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface);
@@ -133,6 +135,9 @@ gtk_color_chooser_dialog_response (GtkDialog *dialog,
       gtk_color_chooser_get_color (GTK_COLOR_CHOOSER (dialog), &color);
       gtk_color_chooser_set_color (GTK_COLOR_CHOOSER (dialog), &color);
     }
+
+  g_object_set (GTK_COLOR_CHOOSER_DIALOG (dialog)->priv->color_chooser,
+                "show-editor", FALSE, NULL);
 }
 
 static void
@@ -153,9 +158,16 @@ gtk_color_chooser_dialog_get_property (GObject    *object,
         gtk_color_chooser_get_color (cc, &color);
         g_value_set_boxed (value, &color);
       }
-    break;
+      break;
     case PROP_SHOW_ALPHA:
       g_value_set_boolean (value, gtk_color_chooser_get_show_alpha (GTK_COLOR_CHOOSER (cd->priv->color_chooser)));
+      break;
+    case PROP_SHOW_EDITOR:
+      {
+        gboolean show_editor;
+        g_object_get (cd->priv->color_chooser, "show-editor", &show_editor, NULL);
+        g_value_set_boolean (value, show_editor);
+      }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -176,10 +188,15 @@ gtk_color_chooser_dialog_set_property (GObject      *object,
     {
     case PROP_COLOR:
       gtk_color_chooser_set_color (cc, g_value_get_boxed (value));
-    break;
+      break;
     case PROP_SHOW_ALPHA:
       gtk_color_chooser_set_show_alpha (GTK_COLOR_CHOOSER (cd->priv->color_chooser), g_value_get_boolean (value));
-    break;
+      break;
+    case PROP_SHOW_EDITOR:
+      g_object_set (cd->priv->color_chooser,
+                    "show-editor", g_value_get_boolean (value),
+                    NULL);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -199,6 +216,10 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
 
   g_object_class_override_property (object_class, PROP_COLOR, "color");
   g_object_class_override_property (object_class, PROP_SHOW_ALPHA, "show-alpha");
+  g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
+      g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
+                            FALSE, GTK_PARAM_READWRITE));
+
 
   g_type_class_add_private (class, sizeof (GtkColorChooserDialogPrivate));
 }

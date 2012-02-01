@@ -29,6 +29,7 @@
 #include "gtkhsv.h"
 #include "gtklabel.h"
 #include "gtkorientable.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 
 struct _GtkColorChooserWidgetPrivate
@@ -51,7 +52,8 @@ enum
 {
   PROP_ZERO,
   PROP_COLOR,
-  PROP_SHOW_ALPHA
+  PROP_SHOW_ALPHA,
+  PROP_SHOW_EDITOR
 };
 
 static void gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface);
@@ -348,6 +350,9 @@ gtk_color_chooser_widget_get_property (GObject    *object,
     case PROP_SHOW_ALPHA:
       g_value_set_boolean (value, cw->priv->show_alpha);
       break;
+    case PROP_SHOW_EDITOR:
+      g_value_set_boolean (value, gtk_widget_get_visible (cw->priv->editor));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -385,6 +390,14 @@ gtk_color_chooser_widget_set_show_alpha (GtkColorChooserWidget *cc,
 }
 
 static void
+gtk_color_chooser_widget_set_show_editor (GtkColorChooserWidget *cc,
+                                          gboolean               show_editor)
+{
+  gtk_widget_set_visible (cc->priv->editor, show_editor);
+  gtk_widget_set_visible (cc->priv->palette, !show_editor);
+}
+
+static void
 gtk_color_chooser_widget_set_property (GObject      *object,
                                        guint         prop_id,
                                        const GValue *value,
@@ -401,6 +414,10 @@ gtk_color_chooser_widget_set_property (GObject      *object,
     case PROP_SHOW_ALPHA:
       gtk_color_chooser_widget_set_show_alpha (cc,
                                                g_value_get_boolean (value));
+      break;
+    case PROP_SHOW_EDITOR:
+      gtk_color_chooser_widget_set_show_editor (cc,
+                                                g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -429,6 +446,10 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
 
   g_object_class_override_property (object_class, PROP_COLOR, "color");
   g_object_class_override_property (object_class, PROP_SHOW_ALPHA, "show-alpha");
+
+  g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
+      g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
+                            FALSE, GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkColorChooserWidgetPrivate));
 }
