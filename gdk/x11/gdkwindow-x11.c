@@ -4020,6 +4020,85 @@ gdk_window_x11_set_static_gravities (GdkWindow *window,
   return TRUE;
 }
 
+/* From the WM spec */
+#define _NET_WM_MOVERESIZE_SIZE_TOPLEFT      0
+#define _NET_WM_MOVERESIZE_SIZE_TOP          1
+#define _NET_WM_MOVERESIZE_SIZE_TOPRIGHT     2
+#define _NET_WM_MOVERESIZE_SIZE_RIGHT        3
+#define _NET_WM_MOVERESIZE_SIZE_BOTTOMRIGHT  4
+#define _NET_WM_MOVERESIZE_SIZE_BOTTOM       5
+#define _NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT   6
+#define _NET_WM_MOVERESIZE_SIZE_LEFT         7
+#define _NET_WM_MOVERESIZE_MOVE              8   /* movement only */
+#define _NET_WM_MOVERESIZE_SIZE_KEYBOARD     9   /* size via keyboard */
+#define _NET_WM_MOVERESIZE_MOVE_KEYBOARD    10   /* move via keyboard */
+#define _NET_WM_MOVERESIZE_CANCEL           11   /* cancel operation */
+
+static void
+wmspec_send_message (GdkDisplay *display,
+                     GdkWindow  *window,
+                     gint        root_x,
+                     gint        root_y,
+                     gint        action,
+                     gint        button)
+{
+  XClientMessageEvent xclient;
+
+  memset (&xclient, 0, sizeof (xclient));
+  xclient.type = ClientMessage;
+  xclient.window = GDK_WINDOW_XID (window);
+  xclient.message_type =
+    gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_MOVERESIZE");
+  xclient.format = 32;
+  xclient.data.l[0] = root_x;
+  xclient.data.l[1] = root_y;
+  xclient.data.l[2] = action;
+  xclient.data.l[3] = button;
+  xclient.data.l[4] = 1;  /* source indication */
+
+  XSendEvent (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XROOTWIN (window), False,
+              SubstructureRedirectMask | SubstructureNotifyMask,
+              (XEvent *)&xclient);
+}
+
+static gboolean
+handle_wmspec_button_release (GdkDisplay *display,
+                              XEvent     *xevent)
+{
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  GdkWindow *window;
+
+#if defined (HAVE_XGENERICEVENTS) && defined (XINPUT_2)
+  XIEvent *xiev = (XIEvent *) xevent->xcookie.data;
+  XIDeviceEvent *xidev = (XIDeviceEvent *) xiev;
+
+  if (xevent->xany.type == GenericEvent)
+    window = gdk_x11_window_lookup_for_display (display, xidev->event);
+  else
+#endif
+    window = gdk_x11_window_lookup_for_display (display, xevent->xany.window);
+
+  if (display_x11->wm_moveresize_button != 0 && window != NULL)
+    {
+      if ((xevent->xany.type == ButtonRelease &&
+           xevent->xbutton.button == display_x11->wm_moveresize_button)
+#if defined (HAVE_XGENERICEVENTS) && defined (XINPUT_2)
+          ||
+          (xevent->xany.type == GenericEvent &&
+           xiev->evtype == XI_ButtonRelease &&
+           xidev->detail == display_x11->wm_moveresize_button)
+#endif
+          )
+        {
+          display_x11->wm_moveresize_button = 0;
+          wmspec_send_message (display, window, 0, 0, _NET_WM_MOVERESIZE_CANCEL, 0);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static void
 wmspec_moveresize (GdkWindow *window,
                    gint       direction,
@@ -4030,63 +4109,13 @@ wmspec_moveresize (GdkWindow *window,
                    guint32    timestamp)
 {
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
-  
-  XClientMessageEvent xclient;
 
   /* Release passive grab */
   gdk_device_ungrab (device, timestamp);
+  GDK_X11_DISPLAY (display)->wm_moveresize_button = button;
 
-  memset (&xclient, 0, sizeof (xclient));
-  xclient.type = ClientMessage;
-  xclient.window = GDK_WINDOW_XID (window);
-  xclient.message_type =
-    gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_MOVERESIZE");
-  xclient.format = 32;
-  xclient.data.l[0] = root_x;
-  xclient.data.l[1] = root_y;
-  xclient.data.l[2] = direction;
-  xclient.data.l[3] = button;
-  xclient.data.l[4] = 1;  /* source indication */
-
-  XSendEvent (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XROOTWIN (window), False,
-	      SubstructureRedirectMask | SubstructureNotifyMask,
-	      (XEvent *)&xclient);
+  wmspec_send_message (display, window, root_x, root_y, direction, button);
 }
-
-typedef struct _MoveResizeData MoveResizeData;
-
-struct _MoveResizeData
-{
-  GdkDisplay *display;
-  
-  GdkWindow *moveresize_window;
-  GdkWindow *moveresize_emulation_window;
-  gboolean is_resize;
-  GdkWindowEdge resize_edge;
-  GdkDevice *device;
-  gint moveresize_button;
-  gint moveresize_x;
-  gint moveresize_y;
-  gint moveresize_orig_x;
-  gint moveresize_orig_y;
-  gint moveresize_orig_width;
-  gint moveresize_orig_height;
-  GdkWindowHints moveresize_geom_mask;
-  GdkGeometry moveresize_geometry;
-  Time moveresize_process_time;
-  XEvent *moveresize_pending_event;
-};
-
-/* From the WM spec */
-#define _NET_WM_MOVERESIZE_SIZE_TOPLEFT      0
-#define _NET_WM_MOVERESIZE_SIZE_TOP          1
-#define _NET_WM_MOVERESIZE_SIZE_TOPRIGHT     2
-#define _NET_WM_MOVERESIZE_SIZE_RIGHT        3
-#define _NET_WM_MOVERESIZE_SIZE_BOTTOMRIGHT  4
-#define _NET_WM_MOVERESIZE_SIZE_BOTTOM       5
-#define _NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT   6
-#define _NET_WM_MOVERESIZE_SIZE_LEFT         7
-#define _NET_WM_MOVERESIZE_MOVE              8
 
 static void
 wmspec_resize_drag (GdkWindow     *window,
@@ -4144,6 +4173,30 @@ wmspec_resize_drag (GdkWindow     *window,
   
   wmspec_moveresize (window, direction, device, button, root_x, root_y, timestamp);
 }
+
+typedef struct _MoveResizeData MoveResizeData;
+
+struct _MoveResizeData
+{
+  GdkDisplay *display;
+
+  GdkWindow *moveresize_window;
+  GdkWindow *moveresize_emulation_window;
+  gboolean is_resize;
+  GdkWindowEdge resize_edge;
+  GdkDevice *device;
+  gint moveresize_button;
+  gint moveresize_x;
+  gint moveresize_y;
+  gint moveresize_orig_x;
+  gint moveresize_orig_y;
+  gint moveresize_orig_width;
+  gint moveresize_orig_height;
+  GdkWindowHints moveresize_geom_mask;
+  GdkGeometry moveresize_geometry;
+  Time moveresize_process_time;
+  XEvent *moveresize_pending_event;
+};
 
 static MoveResizeData *
 get_move_resize_data (GdkDisplay *display,
@@ -4324,6 +4377,9 @@ _gdk_x11_moveresize_handle_event (XEvent *event)
   GdkDisplay *display = gdk_x11_lookup_xdisplay (event->xany.display);
   MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
 
+  if (handle_wmspec_button_release (display, event))
+    return TRUE;
+
   if (!mv_resize || !mv_resize->moveresize_window)
     return FALSE;
 
@@ -4404,6 +4460,8 @@ _gdk_x11_moveresize_configure_done (GdkDisplay *display,
 {
   XEvent *tmp_event;
   MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
+
+  GDK_X11_DISPLAY (display)->wm_moveresize_button = 0;
 
   if (!mv_resize || window != mv_resize->moveresize_window)
     return FALSE;

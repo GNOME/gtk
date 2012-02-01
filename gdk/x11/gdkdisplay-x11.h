@@ -131,6 +131,8 @@ struct _GdkX11Display
   GdkWindow *active_offscreen_window;
 
   GSList *error_traps;
+
+  gint wm_moveresize_button;
 };
 
 struct _GdkX11DisplayClass
