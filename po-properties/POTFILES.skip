@@ -20,6 +20,10 @@ tests/reftests/background-area.ref.ui
 tests/reftests/background-area.ui
 tests/reftests/background-color-transparent.ref.ui
 tests/reftests/background-color-transparent.ui
+tests/reftests/background-size-keywords.ref.ui
+tests/reftests/background-size-keywords.ui
+tests/reftests/background-size.ref.ui
+tests/reftests/background-size.ui
 tests/reftests/border-image-gradient.ref.ui
 tests/reftests/border-image-gradient.ui
 tests/reftests/border-image-url.ref.ui
