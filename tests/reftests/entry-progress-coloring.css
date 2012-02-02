@@ -1,10 +1,9 @@
+@import "reset-to-defaults.css";
+
 * {  
   -GtkWidget-interior-focus: false;
   -GtkWidget-focus-line-width: 10;
-  padding: 0;
-  engine: none;
   font: Monospace;
-  border-image: none;
 }
 
 GtkEntry #padded {
