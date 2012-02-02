@@ -1,3 +1,9 @@
+@import "reset-to-defaults.css";
+
+* {
+  background-color: green;
+}
+
 GtkGrid {
-  background-color: purple;
+  background-color: red;
 }
