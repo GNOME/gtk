@@ -40,6 +40,9 @@ EXTRA_DIST += \
 	background-size.css \
 	background-size.ref.ui \
 	background-size.ui \
+	background-size-keywords.css \
+	background-size-keywords.ref.ui \
+	background-size-keywords.ui \
 	reference-background-origin.png	\
 	border-color-default.css \
 	border-color-default.ref.ui \
