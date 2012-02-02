@@ -35,6 +35,7 @@
 #include "gtkorientableprivate.h"
 #include "gtkrange.h"
 #include "gtkscale.h"
+#include "gtkcolorscale.h"
 #include "gtkscrollbar.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
@@ -2010,6 +2011,7 @@ gtk_range_draw (GtkWidget *widget,
   gint focus_padding = 0;
   gboolean touchscreen;
   gboolean draw_trough = TRUE;
+  gboolean draw_slider = TRUE;
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (widget);
@@ -2019,7 +2021,15 @@ gtk_range_draw (GtkWidget *widget,
 
   if (GTK_IS_SCALE (widget) &&
       gtk_adjustment_get_upper (priv->adjustment) == gtk_adjustment_get_lower (priv->adjustment))
-    draw_trough = FALSE;
+    {
+      draw_trough = TRUE;
+      draw_slider = FALSE;
+    }
+  if (GTK_IS_COLOR_SCALE (widget))
+    {
+      draw_trough = FALSE;
+      draw_slider = TRUE;
+    }
 
   if (gtk_widget_get_can_focus (GTK_WIDGET (range)))
     gtk_widget_style_get (GTK_WIDGET (range),
@@ -2188,13 +2198,6 @@ gtk_range_draw (GtkWidget *widget,
               gtk_style_context_restore (context);
             }
         }
-      else
-        {
-          gtk_render_background (context, cr,
-                                 x, y, width, height);
-          gtk_render_frame (context, cr,
-                            x, y, width, height);
-        }
 
       gtk_style_context_restore (context);
 
@@ -2270,7 +2273,7 @@ gtk_range_draw (GtkWidget *widget,
 
   cairo_restore (cr);
 
-  if (draw_trough)
+  if (draw_slider)
     {
       GtkStateFlags state = widget_state;
 
