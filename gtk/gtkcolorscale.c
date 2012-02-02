@@ -238,7 +238,6 @@ scale_draw (GtkWidget *widget,
     }
   else
     cairo_rectangle (cr, 1, 1, width - 2, height - 2);
-  g_free (theme);
 
   cairo_clip (cr);
   cairo_set_source_surface (cr, scale->priv->surface, 0, 0);
