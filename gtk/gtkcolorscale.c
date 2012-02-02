@@ -21,6 +21,7 @@
 
 #include "gtkcolorscale.h"
 #include "gtkhsv.h"
+#include "gtkorientable.h"
 #include "gtkstylecontext.h"
 #include "gtkintl.h"
 
@@ -200,6 +201,21 @@ create_surface (GtkColorScale *scale)
 }
 
 static gboolean
+scale_has_asymmetric_thumb (GtkWidget *widget)
+{
+  gchar *theme;
+  gboolean res;
+
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-theme-name", &theme,
+                NULL);
+  res = strcmp ("Adwaita", theme) == 0;
+  g_free (theme);
+
+  return res;
+}
+
+static gboolean
 scale_draw (GtkWidget *widget,
             cairo_t   *cr)
 {
@@ -213,7 +229,17 @@ scale_draw (GtkWidget *widget,
 
   cairo_save (cr);
 
-  cairo_rectangle (cr, 1, 1, width - 2, height - 2);
+  if (scale_has_asymmetric_thumb (widget))
+    {
+      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_VERTICAL)
+        cairo_rectangle (cr, width / 2, 1, width / 2 - 1, height - 2);
+      else
+        cairo_rectangle (cr, 1, 1, width - 2, height / 2);
+    }
+  else
+    cairo_rectangle (cr, 1, 1, width - 2, height - 2);
+  g_free (theme);
+
   cairo_clip (cr);
   cairo_set_source_surface (cr, scale->priv->surface, 0, 0);
   cairo_paint (cr);
