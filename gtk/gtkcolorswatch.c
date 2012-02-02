@@ -505,8 +505,8 @@ swatch_button_press (GtkWidget      *widget,
       do_popup (widget, event);
       return TRUE;
     }
-  else if (event->button == GDK_BUTTON_PRIMARY &&
-           swatch->priv->selected)
+  else if (event->type == GDK_2BUTTON_PRESS &&
+           event->button == GDK_BUTTON_PRIMARY)
     {
       g_signal_emit (swatch, signals[ACTIVATE], 0);
       return TRUE;
