@@ -1,6 +1,6 @@
+@import "reset-to-defaults.css";
+
 GtkWindow {
-  engine: none;
-  background-image: none;
   background-color: @doesntexist;
   box-shadow: @nonexistant 5 5;
   border-image: -gtk-gradient(linear,
