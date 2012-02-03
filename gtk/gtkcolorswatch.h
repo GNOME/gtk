@@ -75,10 +75,10 @@ void        gtk_color_swatch_set_corner_radii (GtkColorSwatch *swatch,
                                                gdouble         bottom_right,
                                                gdouble         bottom_left);
 G_GNUC_INTERNAL
-void        gtk_color_swatch_set_color        (GtkColorSwatch *swatch,
+void        gtk_color_swatch_set_rgba         (GtkColorSwatch *swatch,
                                                const GdkRGBA  *color);
 G_GNUC_INTERNAL
-gboolean    gtk_color_swatch_get_color        (GtkColorSwatch *swatch,
+gboolean    gtk_color_swatch_get_rgba         (GtkColorSwatch *swatch,
                                                GdkRGBA        *color);
 G_GNUC_INTERNAL
 void        gtk_color_swatch_set_selected     (GtkColorSwatch *swatch,
@@ -90,8 +90,8 @@ G_GNUC_INTERNAL
 void        gtk_color_swatch_set_icon         (GtkColorSwatch *swatch,
                                                const gchar    *icon);
 G_GNUC_INTERNAL
-void        gtk_color_swatch_set_show_alpha   (GtkColorSwatch *swatch,
-                                               gboolean        show_alpha);
+void        gtk_color_swatch_set_use_alpha    (GtkColorSwatch *swatch,
+                                               gboolean        use_alpha);
 
 
 G_END_DECLS

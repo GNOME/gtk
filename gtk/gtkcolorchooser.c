@@ -40,15 +40,15 @@ static void
 gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
 {
   g_object_interface_install_property (iface,
-      g_param_spec_boxed ("color",
+      g_param_spec_boxed ("rgba",
                           P_("Color"),
                           P_("Current color, as a GdkRGBA"),
                           GDK_TYPE_RGBA,
                           GTK_PARAM_READWRITE));
 
   g_object_interface_install_property (iface,
-      g_param_spec_boolean ("show-alpha",
-                            P_("Show alpha"),
+      g_param_spec_boolean ("use-alpha",
+                            P_("Use alpha"),
                             P_("Whether alpha should be shown"),
                             TRUE,
                             GTK_PARAM_READWRITE));
@@ -75,36 +75,36 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
 }
 
 /**
- * gtk_color_chooser_get_color:
+ * gtk_color_chooser_get_rgba:
  * @chooser: a #GtkColorChooser
  * @color: return location for the color
  *
  * Gets the currently-selected color.
  */
 void
-gtk_color_chooser_get_color (GtkColorChooser *chooser,
-                             GdkRGBA         *color)
+gtk_color_chooser_get_rgba (GtkColorChooser *chooser,
+                            GdkRGBA         *color)
 {
   g_return_if_fail (GTK_IS_COLOR_CHOOSER (chooser));
 
-  GTK_COLOR_CHOOSER_GET_IFACE (chooser)->get_color (chooser, color);
+  GTK_COLOR_CHOOSER_GET_IFACE (chooser)->get_rgba (chooser, color);
 }
 
 /**
- * gtk_color_chooser_set_color:
+ * gtk_color_chooser_set_rgba:
  * @chooser: a #GtkColorChooser
  * @color: the new color
  *
  * Sets the currently-selected color.
  */
 void
-gtk_color_chooser_set_color (GtkColorChooser *chooser,
-                             const GdkRGBA   *color)
+gtk_color_chooser_set_rgba (GtkColorChooser *chooser,
+                            const GdkRGBA   *color)
 {
   g_return_if_fail (GTK_IS_COLOR_CHOOSER (chooser));
   g_return_if_fail (color != NULL);
 
-  GTK_COLOR_CHOOSER_GET_IFACE (chooser)->set_color (chooser, color);
+  GTK_COLOR_CHOOSER_GET_IFACE (chooser)->set_rgba (chooser, color);
 }
 
 void
@@ -117,23 +117,23 @@ _gtk_color_chooser_color_activated (GtkColorChooser *chooser,
 }
 
 gboolean
-gtk_color_chooser_get_show_alpha (GtkColorChooser *chooser)
+gtk_color_chooser_get_use_alpha (GtkColorChooser *chooser)
 {
-  gboolean show_alpha;
+  gboolean use_alpha;
 
   g_return_val_if_fail (GTK_IS_COLOR_CHOOSER (chooser), TRUE);
 
-  g_object_get (chooser, "show-alpha", &show_alpha, NULL);
+  g_object_get (chooser, "use-alpha", &use_alpha, NULL);
 
-  return show_alpha;
+  return use_alpha;
 }
 
 void
-gtk_color_chooser_set_show_alpha (GtkColorChooser *chooser,
-                                  gboolean         show_alpha)
+gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
+                                 gboolean         use_alpha)
 {
 
   g_return_if_fail (GTK_IS_COLOR_CHOOSER (chooser));
 
-  g_object_set (chooser, "show-alpha", show_alpha, NULL);
+  g_object_set (chooser, "use-alpha", use_alpha, NULL);
 }

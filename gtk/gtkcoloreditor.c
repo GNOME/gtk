@@ -75,14 +75,14 @@ struct _GtkColorEditorPrivate
   GtkAdjustment *a_adj;
 
   guint text_changed : 1;
-  guint show_alpha   : 1;
+  guint use_alpha   : 1;
 };
 
 enum
 {
   PROP_ZERO,
-  PROP_COLOR,
-  PROP_SHOW_ALPHA
+  PROP_RGBA,
+  PROP_USE_ALPHA
 };
 
 static void gtk_color_editor_iface_init (GtkColorChooserInterface *iface);
@@ -135,7 +135,7 @@ entry_apply (GtkWidget      *entry,
   if (gdk_rgba_parse (&color, text))
     {
       color.alpha = gtk_adjustment_get_value (editor->priv->a_adj);
-      gtk_color_chooser_set_color (GTK_COLOR_CHOOSER (editor), &color);
+      gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (editor), &color);
     }
 
   editor->priv->text_changed = FALSE;
@@ -172,9 +172,9 @@ hsv_changed (GtkColorEditor *editor)
   gtk_hsv_to_rgb (h, s, v, &color.red, &color.green, &color.blue);
   color.alpha = gtk_adjustment_get_value (editor->priv->a_adj);
   update_entry (editor);
-  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (editor->priv->swatch), &color);
-  gtk_color_scale_set_color (GTK_COLOR_SCALE (editor->priv->a_slider), &color);
-  g_object_notify (G_OBJECT (editor), "color");
+  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (editor->priv->swatch), &color);
+  gtk_color_scale_set_rgba (GTK_COLOR_SCALE (editor->priv->a_slider), &color);
+  g_object_notify (G_OBJECT (editor), "rgba");
 }
 
 static void
@@ -357,7 +357,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
   editor->priv = G_TYPE_INSTANCE_GET_PRIVATE (editor,
                                               GTK_TYPE_COLOR_EDITOR,
                                               GtkColorEditorPrivate);
-  editor->priv->show_alpha = TRUE;
+  editor->priv->use_alpha = TRUE;
 
   editor->priv->h_adj = gtk_adjustment_new (0, 0, 1, 0.01, 0.1, 0);
   editor->priv->s_adj = gtk_adjustment_new (0, 0, 1, 0.01, 0.1, 0);
@@ -529,14 +529,14 @@ gtk_color_editor_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_COLOR:
+    case PROP_RGBA:
       {
         GdkRGBA color;
-        gtk_color_chooser_get_color (cc, &color);
+        gtk_color_chooser_get_rgba (cc, &color);
         g_value_set_boxed (value, &color);
       }
       break;
-    case PROP_SHOW_ALPHA:
+    case PROP_USE_ALPHA:
       g_value_set_boolean (value, gtk_widget_get_visible (ce->priv->a_slider));
       break;
     default:
@@ -546,16 +546,14 @@ gtk_color_editor_get_property (GObject    *object,
 }
 
 static void
-gtk_color_editor_set_show_alpha (GtkColorEditor *editor,
-                                 gboolean        show_alpha)
+gtk_color_editor_set_use_alpha (GtkColorEditor *editor,
+                                gboolean        use_alpha)
 {
-  if (editor->priv->show_alpha != show_alpha)
+  if (editor->priv->use_alpha != use_alpha)
     {
-      editor->priv->show_alpha = show_alpha;
-
-      gtk_widget_set_visible (editor->priv->a_slider, show_alpha);
-
-      gtk_color_swatch_set_show_alpha (GTK_COLOR_SWATCH (editor->priv->swatch), show_alpha);
+      editor->priv->use_alpha = use_alpha;
+      gtk_widget_set_visible (editor->priv->a_slider, use_alpha);
+      gtk_color_swatch_set_use_alpha (GTK_COLOR_SWATCH (editor->priv->swatch), use_alpha);
     }
 }
 
@@ -570,11 +568,11 @@ gtk_color_editor_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_COLOR:
-      gtk_color_chooser_set_color (cc, g_value_get_boxed (value));
+    case PROP_RGBA:
+      gtk_color_chooser_set_rgba (cc, g_value_get_boxed (value));
       break;
-    case PROP_SHOW_ALPHA:
-      gtk_color_editor_set_show_alpha (ce, g_value_get_boolean (value));
+    case PROP_USE_ALPHA:
+      gtk_color_editor_set_use_alpha (ce, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -604,15 +602,15 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   object_class->get_property = gtk_color_editor_get_property;
   object_class->set_property = gtk_color_editor_set_property;
 
-  g_object_class_override_property (object_class, PROP_COLOR, "color");
-  g_object_class_override_property (object_class, PROP_SHOW_ALPHA, "show-alpha");
+  g_object_class_override_property (object_class, PROP_RGBA, "rgba");
+  g_object_class_override_property (object_class, PROP_USE_ALPHA, "use-alpha");
 
   g_type_class_add_private (class, sizeof (GtkColorEditorPrivate));
 }
 
 static void
-gtk_color_editor_get_color (GtkColorChooser *chooser,
-                            GdkRGBA         *color)
+gtk_color_editor_get_rgba (GtkColorChooser *chooser,
+                           GdkRGBA         *color)
 {
   GtkColorEditor *editor = GTK_COLOR_EDITOR (chooser);
   gdouble h, s, v;
@@ -625,8 +623,8 @@ gtk_color_editor_get_color (GtkColorChooser *chooser,
 }
 
 static void
-gtk_color_editor_set_color (GtkColorChooser *chooser,
-                            const GdkRGBA   *color)
+gtk_color_editor_set_rgba (GtkColorChooser *chooser,
+                           const GdkRGBA   *color)
 {
   GtkColorEditor *editor = GTK_COLOR_EDITOR (chooser);
   gdouble h, s, v;
@@ -637,21 +635,21 @@ gtk_color_editor_set_color (GtkColorChooser *chooser,
   gtk_adjustment_set_value (editor->priv->s_adj, s);
   gtk_adjustment_set_value (editor->priv->v_adj, v);
   gtk_adjustment_set_value (editor->priv->a_adj, color->alpha);
-  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (editor->priv->swatch), color);
-  gtk_color_scale_set_color (GTK_COLOR_SCALE (editor->priv->a_slider), color);
+  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (editor->priv->swatch), color);
+  gtk_color_scale_set_rgba (GTK_COLOR_SCALE (editor->priv->a_slider), color);
 
   update_entry (editor);
 
   gtk_widget_queue_draw (GTK_WIDGET (editor));
 
-  g_object_notify (G_OBJECT (editor), "color");
+  g_object_notify (G_OBJECT (editor), "rgba");
 }
 
 static void
 gtk_color_editor_iface_init (GtkColorChooserInterface *iface)
 {
-  iface->get_color = gtk_color_editor_get_color;
-  iface->set_color = gtk_color_editor_set_color;
+  iface->get_rgba = gtk_color_editor_get_rgba;
+  iface->set_rgba = gtk_color_editor_set_rgba;
 }
 
 GtkWidget *

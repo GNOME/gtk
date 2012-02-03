@@ -5,7 +5,7 @@ color_changed (GObject *o, GParamSpec *pspect, gpointer data)
 {
   GdkRGBA color;
 
-  gtk_color_chooser_get_color (GTK_COLOR_CHOOSER (o), &color);
+  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (o), &color);
   g_print ("color changed: %g %g %g %g\n",
            color.red, color.green, color.blue, color.alpha);
 }
@@ -18,7 +18,7 @@ dialog_response (GtkDialog *dialog, gint response)
   switch (response)
     {
     case GTK_RESPONSE_OK:
-      gtk_color_chooser_get_color (GTK_COLOR_CHOOSER (dialog), &color);
+      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
       g_print ("color accepted: %g %g %g %g\n",
            color.red, color.green, color.blue, color.alpha);
       break;
@@ -38,10 +38,10 @@ main (int argc, char *argv[])
   gtk_init (NULL, NULL);
 
   dialog = gtk_color_chooser_dialog_new ("Select a color", NULL);
-  if (argc > 1 && strcmp (argv[1], "--no-alpha") == 0)
+  if (argc > 1 && g_strcmp0 (argv[1], "--no-alpha") == 0)
     {
       g_print ("turning alpha off\n");
-      gtk_color_chooser_set_show_alpha (GTK_COLOR_CHOOSER (dialog), FALSE);
+      gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (dialog), FALSE);
     }
   g_signal_connect (dialog, "notify::color", G_CALLBACK (color_changed), NULL);
   g_signal_connect (dialog, "response", G_CALLBACK (dialog_response), NULL);

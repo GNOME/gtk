@@ -42,10 +42,10 @@ struct _GtkColorChooserInterface
   GTypeInterface base_interface;
 
   /* Methods */
-  void (* get_color) (GtkColorChooser *chooser,
-                      GdkRGBA         *color);
-  void (* set_color) (GtkColorChooser *chooser,
-                      const GdkRGBA   *color);
+  void (* get_rgba) (GtkColorChooser *chooser,
+                     GdkRGBA         *color);
+  void (* set_rgba) (GtkColorChooser *chooser,
+                     const GdkRGBA   *color);
 
   /* Signals */
   void (* color_activated) (GtkColorChooser *chooser,
@@ -57,13 +57,13 @@ struct _GtkColorChooserInterface
 
 GType    gtk_color_chooser_get_type        (void) G_GNUC_CONST;
 
-void     gtk_color_chooser_get_color       (GtkColorChooser *chooser,
-                                            GdkRGBA         *color);
-void     gtk_color_chooser_set_color       (GtkColorChooser *chooser,
-                                            const GdkRGBA   *color);
-gboolean gtk_color_chooser_get_show_alpha  (GtkColorChooser *chooser);
-void     gtk_color_chooser_set_show_alpha  (GtkColorChooser *chooser,
-                                            gboolean         show_alpha);
+void     gtk_color_chooser_get_rgba       (GtkColorChooser *chooser,
+                                           GdkRGBA         *color);
+void     gtk_color_chooser_set_rgba       (GtkColorChooser *chooser,
+                                           const GdkRGBA   *color);
+gboolean gtk_color_chooser_get_use_alpha  (GtkColorChooser *chooser);
+void     gtk_color_chooser_set_use_alpha  (GtkColorChooser *chooser,
+                                           gboolean         show_alpha);
 
 G_END_DECLS
 

@@ -293,8 +293,8 @@ gtk_color_scale_class_init (GtkColorScaleClass *class)
 }
 
 void
-gtk_color_scale_set_color (GtkColorScale *scale,
-                           const GdkRGBA *color)
+gtk_color_scale_set_rgba (GtkColorScale *scale,
+                          const GdkRGBA *color)
 {
   scale->priv->color.red = color->red;
   scale->priv->color.green = color->green;

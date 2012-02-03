@@ -65,15 +65,15 @@ typedef enum
 } GtkColorScaleType;
 
 G_GNUC_INTERNAL
-GType       gtk_color_scale_get_type  (void) G_GNUC_CONST;
+GType       gtk_color_scale_get_type (void) G_GNUC_CONST;
 
 G_GNUC_INTERNAL
-GtkWidget * gtk_color_scale_new       (GtkAdjustment     *adjustment,
-                                       GtkColorScaleType  type);
+GtkWidget * gtk_color_scale_new      (GtkAdjustment     *adjustment,
+                                      GtkColorScaleType  type);
 
 G_GNUC_INTERNAL
-void        gtk_color_scale_set_color (GtkColorScale     *scale,
-                                       const GdkRGBA     *color);
+void        gtk_color_scale_set_rgba (GtkColorScale     *scale,
+                                      const GdkRGBA     *color);
 
 G_END_DECLS
 

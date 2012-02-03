@@ -41,13 +41,13 @@ struct _GtkColorSwatchPrivate
   guint    has_color        : 1;
   guint    can_drop         : 1;
   guint    contains_pointer : 1;
-  guint    show_alpha       : 1;
+  guint    use_alpha        : 1;
 };
 
 enum
 {
   PROP_ZERO,
-  PROP_COLOR,
+  PROP_RGBA,
   PROP_SELECTED
 };
 
@@ -75,7 +75,7 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
                                               | GDK_EXPOSURE_MASK
                                               | GDK_ENTER_NOTIFY_MASK
                                               | GDK_LEAVE_NOTIFY_MASK);
-  swatch->priv->show_alpha = TRUE;
+  swatch->priv->use_alpha = TRUE;
 }
 
 static void
@@ -146,7 +146,7 @@ swatch_draw (GtkWidget *widget,
       cairo_pattern_t *pattern;
       cairo_matrix_t matrix;
 
-      if (swatch->priv->show_alpha)
+      if (swatch->priv->use_alpha)
         {
           cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
           cairo_fill_preserve (cr);
@@ -251,7 +251,7 @@ swatch_drag_begin (GtkWidget      *widget,
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
   GdkRGBA color;
 
-  gtk_color_swatch_get_color (swatch, &color);
+  gtk_color_swatch_get_rgba (swatch, &color);
   drag_set_color_icon (context, &color);
 }
 
@@ -266,7 +266,7 @@ swatch_drag_data_get (GtkWidget        *widget,
   guint16 vals[4];
   GdkRGBA color;
 
-  gtk_color_swatch_get_color (swatch, &color);
+  gtk_color_swatch_get_rgba (swatch, &color);
 
   vals[0] = color.red * 0xffff;
   vals[1] = color.green * 0xffff;
@@ -312,7 +312,7 @@ swatch_drag_data_received (GtkWidget        *widget,
   color.blue  = (gdouble)vals[2] / 0xffff;
   color.alpha = (gdouble)vals[3] / 0xffff;
 
-  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (widget), &color);
+  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (widget), &color);
 }
 
 static void
@@ -326,8 +326,8 @@ swatch_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_COLOR:
-      gtk_color_swatch_get_color (swatch, &color);
+    case PROP_RGBA:
+      gtk_color_swatch_get_rgba (swatch, &color);
       g_value_set_boxed (value, &color);
       break;
     case PROP_SELECTED:
@@ -349,8 +349,8 @@ swatch_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_COLOR:
-      gtk_color_swatch_set_color (swatch, g_value_get_boxed (value));
+    case PROP_RGBA:
+      gtk_color_swatch_set_rgba (swatch, g_value_get_boxed (value));
       break;
     case PROP_SELECTED:
       gtk_color_swatch_set_selected (swatch, g_value_get_boolean (value));
@@ -585,8 +585,8 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
                   G_STRUCT_OFFSET (GtkColorSwatchClass, customize),
                   NULL, NULL, NULL, G_TYPE_NONE, 0);
 
-  g_object_class_install_property (object_class, PROP_COLOR,
-      g_param_spec_boxed ("color", P_("Color"), P_("Color"),
+  g_object_class_install_property (object_class, PROP_RGBA,
+      g_param_spec_boxed ("rgba", P_("RGBA Color"), P_("Color as RGBA"),
                           GDK_TYPE_RGBA, GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class, PROP_SELECTED,
@@ -606,8 +606,8 @@ gtk_color_swatch_new (void)
 }
 
 void
-gtk_color_swatch_set_color (GtkColorSwatch *swatch,
-                            const GdkRGBA  *color)
+gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
+                           const GdkRGBA  *color)
 {
   static const GtkTargetEntry targets[] = {
     { "application/x-color", 0 }
@@ -626,12 +626,12 @@ gtk_color_swatch_set_color (GtkColorSwatch *swatch,
   swatch->priv->color.alpha = color->alpha;
 
   gtk_widget_queue_draw (GTK_WIDGET (swatch));
-  g_object_notify (G_OBJECT (swatch), "color");
+  g_object_notify (G_OBJECT (swatch), "rgba");
 }
 
 gboolean
-gtk_color_swatch_get_color (GtkColorSwatch *swatch,
-                            GdkRGBA        *color)
+gtk_color_swatch_get_rgba (GtkColorSwatch *swatch,
+                           GdkRGBA        *color)
 {
   if (swatch->priv->has_color)
     {
@@ -706,10 +706,10 @@ gtk_color_swatch_set_can_drop (GtkColorSwatch *swatch,
 }
 
 void
-gtk_color_swatch_set_show_alpha (GtkColorSwatch *swatch,
-                                 gboolean        show_alpha)
+gtk_color_swatch_set_use_alpha (GtkColorSwatch *swatch,
+                                gboolean       use_alpha)
 {
-  swatch->priv->show_alpha = show_alpha;
+  swatch->priv->use_alpha = use_alpha;
   gtk_widget_queue_draw (GTK_WIDGET (swatch));
 }
 

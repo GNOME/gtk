@@ -45,7 +45,7 @@ struct _GtkColorChooserWidgetPrivate
 
   GtkWidget *button;
   GtkColorSwatch *current;
-  gboolean show_alpha;
+  gboolean use_alpha;
 
   GtkSizeGroup *size_group;
 
@@ -55,8 +55,8 @@ struct _GtkColorChooserWidgetPrivate
 enum
 {
   PROP_ZERO,
-  PROP_COLOR,
-  PROP_SHOW_ALPHA,
+  PROP_RGBA,
+  PROP_USE_ALPHA,
   PROP_SHOW_EDITOR
 };
 
@@ -78,11 +78,11 @@ select_swatch (GtkColorChooserWidget *cc,
     gtk_color_swatch_set_selected (cc->priv->current, FALSE);
   gtk_color_swatch_set_selected (swatch, TRUE);
   cc->priv->current = swatch;
-  gtk_color_swatch_get_color (swatch, &color);
+  gtk_color_swatch_get_rgba (swatch, &color);
   g_settings_set (cc->priv->settings, "selected-color", "(bdddd)",
                   TRUE, color.red, color.green, color.blue, color.alpha);
 
-  g_object_notify (G_OBJECT (cc), "color");
+  g_object_notify (G_OBJECT (cc), "rgba");
 }
 
 static void save_custom_colors (GtkColorChooserWidget *cc);
@@ -99,7 +99,7 @@ button_activate (GtkColorSwatch        *swatch,
   color.blue = 0.25;
   color.alpha = 1.0;
 
-  gtk_color_chooser_set_color (GTK_COLOR_CHOOSER (cc->priv->editor), &color);
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc->priv->editor), &color);
 
   gtk_widget_hide (cc->priv->palette);
   gtk_widget_show (cc->priv->editor);
@@ -111,7 +111,7 @@ swatch_activate (GtkColorSwatch        *swatch,
 {
   GdkRGBA color;
 
-  gtk_color_swatch_get_color (swatch, &color);
+  gtk_color_swatch_get_rgba (swatch, &color);
   _gtk_color_chooser_color_activated (GTK_COLOR_CHOOSER (cc), &color);
 }
 
@@ -121,8 +121,8 @@ swatch_customize (GtkColorSwatch        *swatch,
 {
   GdkRGBA color;
 
-  gtk_color_swatch_get_color (swatch, &color);
-  gtk_color_chooser_set_color (GTK_COLOR_CHOOSER (cc->priv->editor), &color);
+  gtk_color_swatch_get_rgba (swatch, &color);
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc->priv->editor), &color);
 
   gtk_widget_hide (cc->priv->palette);
   gtk_widget_show (cc->priv->editor);
@@ -173,7 +173,7 @@ save_custom_colors (GtkColorChooserWidget *cc)
   while ((child = gtk_grid_get_child_at (GTK_GRID (cc->priv->custom), i, 0)) != NULL)
     {
       i++;
-      if (gtk_color_swatch_get_color (GTK_COLOR_SWATCH (child), &color))
+      if (gtk_color_swatch_get_rgba (GTK_COLOR_SWATCH (child), &color))
         {
           g_variant_builder_add (&builder, "(dddd)",
                                  color.red, color.green, color.blue, color.alpha);
@@ -249,7 +249,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
           else
             gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 1, 1);
 
-          gtk_color_swatch_set_color (GTK_COLOR_SWATCH (p), &color);
+          gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &color);
           gtk_grid_attach (GTK_GRID (grid), p, i, j, 1, 1);
         }
     }
@@ -275,7 +275,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
        else
          gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 1, 1);
 
-       gtk_color_swatch_set_color (GTK_COLOR_SWATCH (p), &color);
+       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &color);
        gtk_grid_attach (GTK_GRID (grid), p, i, 0, 1, 1);
     }
 
@@ -305,7 +305,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
       i++;
       p = gtk_color_swatch_new ();
       gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 1, 1);
-      gtk_color_swatch_set_color (GTK_COLOR_SWATCH (p), &color);
+      gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &color);
       gtk_color_swatch_set_can_drop (GTK_COLOR_SWATCH (p), TRUE);
       connect_custom_signals (p, cc);
       gtk_grid_attach (GTK_GRID (grid), p, i, 0, 1, 1);
@@ -338,7 +338,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
                   &selected,
                   &color.red, &color.green, &color.blue, &color.alpha);
   if (selected)
-    gtk_color_chooser_set_color (GTK_COLOR_CHOOSER (cc), &color);
+    gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc), &color);
 
   gtk_widget_show_all (GTK_WIDGET (cc));
   gtk_widget_hide (GTK_WIDGET (cc->priv->editor));
@@ -363,16 +363,16 @@ gtk_color_chooser_widget_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_COLOR:
+    case PROP_RGBA:
       {
         GdkRGBA color;
 
-        gtk_color_chooser_get_color (cc, &color);
+        gtk_color_chooser_get_rgba (cc, &color);
         g_value_set_boxed (value, &color);
       }
       break;
-    case PROP_SHOW_ALPHA:
-      g_value_set_boolean (value, cw->priv->show_alpha);
+    case PROP_USE_ALPHA:
+      g_value_set_boolean (value, cw->priv->use_alpha);
       break;
     case PROP_SHOW_EDITOR:
       g_value_set_boolean (value, gtk_widget_get_visible (cw->priv->editor));
@@ -384,16 +384,16 @@ gtk_color_chooser_widget_get_property (GObject    *object,
 }
 
 static void
-gtk_color_chooser_widget_set_show_alpha (GtkColorChooserWidget *cc,
-                                         gboolean               show_alpha)
+gtk_color_chooser_widget_set_use_alpha (GtkColorChooserWidget *cc,
+                                        gboolean               use_alpha)
 {
   GtkWidget *grids[3];
   gint i;
   GList *children, *l;
   GtkWidget *swatch;
 
-  cc->priv->show_alpha = show_alpha;
-  gtk_color_chooser_set_show_alpha (GTK_COLOR_CHOOSER (cc->priv->editor), show_alpha);
+  cc->priv->use_alpha = use_alpha;
+  gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (cc->priv->editor), use_alpha);
 
   grids[0] = cc->priv->colors;
   grids[1] = cc->priv->grays;
@@ -405,7 +405,7 @@ gtk_color_chooser_widget_set_show_alpha (GtkColorChooserWidget *cc,
       for (l = children; l; l = l->next)
         {
           swatch = l->data;
-          gtk_color_swatch_set_show_alpha (GTK_COLOR_SWATCH (swatch), show_alpha);
+          gtk_color_swatch_set_use_alpha (GTK_COLOR_SWATCH (swatch), use_alpha);
         }
       g_list_free (children);
     }
@@ -431,13 +431,13 @@ gtk_color_chooser_widget_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_COLOR:
-      gtk_color_chooser_set_color (GTK_COLOR_CHOOSER (cc),
-                                   g_value_get_boxed (value));
+    case PROP_RGBA:
+      gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc),
+                                  g_value_get_boxed (value));
       break;
-    case PROP_SHOW_ALPHA:
-      gtk_color_chooser_widget_set_show_alpha (cc,
-                                               g_value_get_boolean (value));
+    case PROP_USE_ALPHA:
+      gtk_color_chooser_widget_set_use_alpha (cc,
+                                              g_value_get_boolean (value));
       break;
     case PROP_SHOW_EDITOR:
       gtk_color_chooser_widget_set_show_editor (cc,
@@ -469,8 +469,8 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
   object_class->set_property = gtk_color_chooser_widget_set_property;
   object_class->finalize = gtk_color_chooser_widget_finalize;
 
-  g_object_class_override_property (object_class, PROP_COLOR, "color");
-  g_object_class_override_property (object_class, PROP_SHOW_ALPHA, "show-alpha");
+  g_object_class_override_property (object_class, PROP_RGBA, "rgba");
+  g_object_class_override_property (object_class, PROP_USE_ALPHA, "use-alpha");
 
   g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
       g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
@@ -480,15 +480,15 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
 }
 
 static void
-gtk_color_chooser_widget_get_color (GtkColorChooser *chooser,
-                                    GdkRGBA         *color)
+gtk_color_chooser_widget_get_rgba (GtkColorChooser *chooser,
+                                   GdkRGBA         *color)
 {
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (chooser);
 
   if (gtk_widget_get_visible (cc->priv->editor))
-    gtk_color_chooser_get_color (GTK_COLOR_CHOOSER (cc->priv->editor), color);
+    gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (cc->priv->editor), color);
   else if (cc->priv->current)
-    gtk_color_swatch_get_color (cc->priv->current, color);
+    gtk_color_swatch_get_rgba (cc->priv->current, color);
   else
     {
       color->red = 1.0;
@@ -497,7 +497,7 @@ gtk_color_chooser_widget_get_color (GtkColorChooser *chooser,
       color->alpha = 1.0;
     }
 
-  if (!cc->priv->show_alpha)
+  if (!cc->priv->use_alpha)
     color->alpha = 1.0;
 }
 
@@ -519,7 +519,7 @@ add_custom_color (GtkColorChooserWidget *cc,
   gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (cc->priv->button), 10, 1, 1, 10);
 
   p = gtk_color_swatch_new ();
-  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (p), color);
+  gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), color);
   gtk_color_swatch_set_can_drop (GTK_COLOR_SWATCH (p), TRUE);
   connect_custom_signals (p, cc);
 
@@ -537,8 +537,8 @@ add_custom_color (GtkColorChooserWidget *cc,
 }
 
 static void
-gtk_color_chooser_widget_set_color (GtkColorChooser *chooser,
-                                    const GdkRGBA   *color)
+gtk_color_chooser_widget_set_rgba (GtkColorChooser *chooser,
+                                   const GdkRGBA   *color)
 {
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (chooser);
   GList *children, *l;
@@ -557,8 +557,8 @@ gtk_color_chooser_widget_set_color (GtkColorChooser *chooser,
       for (l = children; l; l = l->next)
         {
           swatch = l->data;
-          gtk_color_swatch_get_color (swatch, &c);
-          if (!cc->priv->show_alpha)
+          gtk_color_swatch_get_rgba (swatch, &c);
+          if (!cc->priv->use_alpha)
             c.alpha = color->alpha;
           if (gdk_rgba_equal (color, &c))
             {
@@ -576,8 +576,8 @@ gtk_color_chooser_widget_set_color (GtkColorChooser *chooser,
 static void
 gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface)
 {
-  iface->get_color = gtk_color_chooser_widget_get_color;
-  iface->set_color = gtk_color_chooser_widget_set_color;
+  iface->get_rgba = gtk_color_chooser_widget_get_rgba;
+  iface->set_rgba = gtk_color_chooser_widget_set_rgba;
 }
 
 GtkWidget *
