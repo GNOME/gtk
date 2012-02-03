@@ -21,22 +21,20 @@
 
 #include "gtkhsv.h"
 #include "gtkcolorplane.h"
+#include "gtkcontainer.h"
+#include "gtkwindow.h"
+#include "gtkbutton.h"
 
 struct _GtkColorPlanePrivate
 {
+  GtkAdjustment *h_adj;
+  GtkAdjustment *s_adj;
+  GtkAdjustment *v_adj;
+
   cairo_surface_t *surface;
-  gdouble h, s, v;
   gint x, y;
   gboolean in_drag;
 };
-
-enum
-{
-  CHANGED,
-  LAST_SIGNAL
-};
-
-guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (GtkColorPlane, gtk_color_plane, GTK_TYPE_DRAWING_AREA)
 
@@ -118,7 +116,7 @@ create_sv_surface (GtkColorPlane *plane)
 
   data = g_malloc (height * stride);
 
-  h = plane->priv->h;
+  h = gtk_adjustment_get_value (plane->priv->h_adj);
   sf = 1.0 / (height - 1);
   vf = 1.0 / (width - 1);
   for (y = 0; y < height; y++)
@@ -151,13 +149,16 @@ create_sv_surface (GtkColorPlane *plane)
 static void
 hsv_to_xy (GtkColorPlane *plane)
 {
+  gdouble s, v;
   gint width, height;
 
   width = gtk_widget_get_allocated_width (GTK_WIDGET (plane));
   height = gtk_widget_get_allocated_height (GTK_WIDGET (plane));
 
-  plane->priv->x = CLAMP (width * plane->priv->v, 0, width - 1);
-  plane->priv->y = CLAMP (height * (1 - plane->priv->s), 0, height - 1);
+  s = gtk_adjustment_get_value (plane->priv->s_adj);
+  v = gtk_adjustment_get_value (plane->priv->v_adj);
+  plane->priv->x = CLAMP (width * v, 0, width - 1);
+  plane->priv->y = CLAMP (height * (1 - s), 0, height - 1);
 }
 
 static gboolean
@@ -168,6 +169,7 @@ sv_configure (GtkWidget         *widget,
 
   create_sv_surface (plane);
   hsv_to_xy (plane);
+
   return TRUE;
 }
 
@@ -209,13 +211,15 @@ sv_update_color (GtkColorPlane *plane,
                  gint           y)
 {
   GtkWidget *widget = GTK_WIDGET (plane);
+  gdouble s, v;
 
   plane->priv->x = x;
   plane->priv->y = y;
 
-  plane->priv->s = CLAMP (1 - y * (1.0 / gtk_widget_get_allocated_height (widget)), 0, 1);
-  plane->priv->v = CLAMP (x * (1.0 / gtk_widget_get_allocated_width (widget)), 0, 1);
-  g_signal_emit (plane, signals[CHANGED], 0);
+  s = CLAMP (1 - y * (1.0 / gtk_widget_get_allocated_height (widget)), 0, 1);
+  v = CLAMP (x * (1.0 / gtk_widget_get_allocated_width (widget)), 0, 1);
+  gtk_adjustment_set_value (plane->priv->s_adj, s);
+  gtk_adjustment_set_value (plane->priv->v_adj, v);
   gtk_widget_queue_draw (widget);
 }
 
@@ -224,6 +228,15 @@ sv_button_press (GtkWidget      *widget,
                  GdkEventButton *event)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
+
+  if (event->button == GDK_BUTTON_SECONDARY)
+    {
+      gboolean handled;
+
+      g_signal_emit_by_name (widget, "popup-menu", &handled);
+
+      return TRUE;
+    }
 
   if (plane->priv->in_drag || event->button != GDK_BUTTON_PRIMARY)
     return FALSE;
@@ -269,52 +282,69 @@ sv_motion (GtkWidget      *widget,
 }
 
 static void
+h_changed (GtkColorPlane *plane)
+{
+  create_sv_surface (plane);
+  gtk_widget_queue_draw (GTK_WIDGET (plane));
+}
+
+static void
+sv_changed (GtkColorPlane *plane)
+{
+  hsv_to_xy (plane);
+  gtk_widget_queue_draw (GTK_WIDGET (plane));
+}
+
+static void
 sv_move (GtkColorPlane *plane,
          gdouble        ds,
          gdouble        dv)
 {
-  if (plane->priv->s + ds > 1)
+  gdouble s, v;
+
+  s = gtk_adjustment_get_value (plane->priv->s_adj);
+  v = gtk_adjustment_get_value (plane->priv->v_adj);
+
+  if (s + ds > 1)
     {
-      if (plane->priv->s < 1)
-        plane->priv->s = 1;
+      if (s < 1)
+        s = 1;
       else
         goto error;
     }
-  else if (plane->priv->s + ds < 0)
+  else if (s + ds < 0)
     {
-      if (plane->priv->s > 0)
-        plane->priv->s = 0;
+      if (s > 0)
+        s = 0;
       else
         goto error;
     }
   else
     {
-      plane->priv->s += ds;
+      s += ds;
     }
 
-  if (plane->priv->v + dv > 1)
+  if (v + dv > 1)
     {
-      if (plane->priv->v < 1)
-        plane->priv->v = 1;
+      if (v < 1)
+        v = 1;
       else
         goto error;
     }
-  else if (plane->priv->v + dv < 0)
+  else if (v + dv < 0)
     {
-      if (plane->priv->v > 0)
-        plane->priv->v = 0;
+      if (v > 0)
+        v = 0;
       else
         goto error;
     }
   else
     {
-      plane->priv->v += dv;
+      v += dv;
     }
 
-  hsv_to_xy (plane);
-  g_signal_emit (plane, signals[CHANGED], 0);
-
-  gtk_widget_queue_draw (GTK_WIDGET (plane));
+  gtk_adjustment_set_value (plane->priv->s_adj, s);
+  gtk_adjustment_set_value (plane->priv->v_adj, v);
   return;
 
 error:
@@ -347,7 +377,7 @@ sv_key_press (GtkWidget      *widget,
            event->keyval == GDK_KEY_KP_Right)
     sv_move (plane, 0, step);
   else
-    return FALSE;
+    return GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->key_press_event (widget, event);
 
   return TRUE;
 }
@@ -371,6 +401,9 @@ sv_finalize (GObject *object)
   GtkColorPlane *plane = GTK_COLOR_PLANE (object);
 
   cairo_surface_destroy (plane->priv->surface);
+  g_clear_object (&plane->priv->h_adj);
+  g_clear_object (&plane->priv->s_adj);
+  g_clear_object (&plane->priv->v_adj);
 
   G_OBJECT_CLASS (gtk_color_plane_parent_class)->finalize (object);
 }
@@ -391,65 +424,28 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
   widget_class->grab_broken_event = sv_grab_broken;
   widget_class->key_press_event = sv_key_press;
 
-  signals[CHANGED] =
-    g_signal_new ("changed",
-                  GTK_TYPE_COLOR_PLANE,
-                  G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkColorPlaneClass, changed),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
-
   g_type_class_add_private (class, sizeof (GtkColorPlanePrivate));
 }
 
-gdouble
-gtk_color_plane_get_h (GtkColorPlane *plane)
-{
-  return plane->priv->h;
-}
-
-gdouble
-gtk_color_plane_get_s (GtkColorPlane *plane)
-{
-  return plane->priv->s;
-}
-
-gdouble
-gtk_color_plane_get_v (GtkColorPlane *plane)
-{
-  return plane->priv->v;
-}
-
-void
-gtk_color_plane_set_h (GtkColorPlane *plane,
-                       gdouble        h)
-{
-  plane->priv->h = h;
-  create_sv_surface (plane);
-  gtk_widget_queue_draw (GTK_WIDGET (plane));
-}
-
-void
-gtk_color_plane_set_s (GtkColorPlane *plane,
-                       gdouble        s)
-{
-  plane->priv->s = s;
-  hsv_to_xy (plane);
-  gtk_widget_queue_draw (GTK_WIDGET (plane));
-}
-
-void
-gtk_color_plane_set_v (GtkColorPlane *plane,
-                       gdouble        v)
-{
-  plane->priv->v = v;
-  hsv_to_xy (plane);
-  gtk_widget_queue_draw (GTK_WIDGET (plane));
-}
-
 GtkWidget *
-gtk_color_plane_new (void)
+gtk_color_plane_new (GtkAdjustment *h_adj,
+                     GtkAdjustment *s_adj,
+                     GtkAdjustment *v_adj)
 {
-  return (GtkWidget *) g_object_new (GTK_TYPE_COLOR_PLANE, NULL);
+  GtkColorPlane *plane;
+
+  plane = (GtkColorPlane *) g_object_new (GTK_TYPE_COLOR_PLANE, NULL);
+
+
+  plane->priv->h_adj = g_object_ref_sink (h_adj);
+  plane->priv->s_adj = g_object_ref_sink (s_adj);
+  plane->priv->v_adj = g_object_ref_sink (v_adj);
+  g_signal_connect_swapped (plane->priv->h_adj, "value-changed",
+                            G_CALLBACK (h_changed), plane);
+  g_signal_connect_swapped (plane->priv->s_adj, "value-changed",
+                            G_CALLBACK (sv_changed), plane);
+  g_signal_connect_swapped (plane->priv->v_adj, "value-changed",
+                            G_CALLBACK (sv_changed), plane);
+
+  return (GtkWidget *)plane;
 }

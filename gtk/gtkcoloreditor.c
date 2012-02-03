@@ -17,10 +17,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/* TODO
- * - pop-up entries
- */
-
 #include "config.h"
 
 #include "gtkcolorchooserprivate.h"
@@ -33,26 +29,40 @@
 #include "gtkaspectframe.h"
 #include "gtkdrawingarea.h"
 #include "gtkentry.h"
+#include "gtkoverlay.h"
 #include "gtkhsv.h"
 #include "gtkadjustment.h"
+#include "gtklabel.h"
+#include "gtkspinbutton.h"
+#include "gtkalignment.h"
 #include "gtkintl.h"
 
 #include <math.h>
 
 struct _GtkColorEditorPrivate
 {
+  GtkWidget *overlay;
   GtkWidget *grid;
   GtkWidget *swatch;
   GtkWidget *entry;
   GtkWidget *h_slider;
-  GtkWidget *sv_plane;
+  GtkWidget *h_popup;
+  GtkWidget *h_entry;
   GtkWidget *a_slider;
+  GtkWidget *a_popup;
+  GtkWidget *a_entry;
+  GtkWidget *sv_plane;
+  GtkWidget *sv_popup;
+  GtkWidget *s_entry;
+  GtkWidget *v_entry;
+  GtkWidget *current_popup;
+  GtkWidget *popdown_focus;
 
   GtkAdjustment *h_adj;
+  GtkAdjustment *s_adj;
+  GtkAdjustment *v_adj;
   GtkAdjustment *a_adj;
 
-  GdkRGBA color;
-  gdouble h, s, v;
   guint text_changed : 1;
   guint show_alpha   : 1;
 };
@@ -83,11 +93,18 @@ static void
 update_entry (GtkColorEditor *editor)
 {
   gchar *text;
+  gdouble h, s, v;
+  gdouble r, g, b;
+
+  h = gtk_adjustment_get_value (editor->priv->h_adj);
+  s = gtk_adjustment_get_value (editor->priv->s_adj);
+  v = gtk_adjustment_get_value (editor->priv->v_adj);
+  gtk_hsv_to_rgb (h, s, v, &r, &g, &b);
 
   text = g_strdup_printf ("#%02X%02X%02X",
-                          scale_round (editor->priv->color.red, 255),
-                          scale_round (editor->priv->color.green, 255),
-                          scale_round (editor->priv->color.blue, 255));
+                          scale_round (r, 255),
+                          scale_round (g, 255),
+                          scale_round (b, 255));
   gtk_entry_set_text (GTK_ENTRY (editor->priv->entry), text);
   editor->priv->text_changed = FALSE;
   g_free (text);
@@ -106,7 +123,7 @@ entry_apply (GtkWidget      *entry,
   text = gtk_editable_get_chars (GTK_EDITABLE (editor->priv->entry), 0, -1);
   if (gdk_rgba_parse (&color, text))
     {
-      color.alpha = editor->priv->color.alpha;
+      color.alpha = gtk_adjustment_get_value (editor->priv->a_adj);
       gtk_color_chooser_set_color (GTK_COLOR_CHOOSER (editor), &color);
     }
 
@@ -133,59 +150,225 @@ entry_text_changed (GtkWidget      *entry,
 }
 
 static void
-h_changed (GtkAdjustment  *adj,
-           GtkColorEditor *editor)
+hsv_changed (GtkColorEditor *editor)
 {
-  editor->priv->h = gtk_adjustment_get_value (adj);
-  gtk_hsv_to_rgb (editor->priv->h, editor->priv->s, editor->priv->v,
-                  &editor->priv->color.red,
-                  &editor->priv->color.green,
-                  &editor->priv->color.blue);
-  gtk_color_plane_set_h (GTK_COLOR_PLANE (editor->priv->sv_plane), editor->priv->h);
+  GdkRGBA color;
+  gdouble h, s, v;
+
+  h = gtk_adjustment_get_value (editor->priv->h_adj);
+  s = gtk_adjustment_get_value (editor->priv->s_adj);
+  v = gtk_adjustment_get_value (editor->priv->v_adj);
+  gtk_hsv_to_rgb (h, s, v, &color.red, &color.green, &color.blue);
+  color.alpha = gtk_adjustment_get_value (editor->priv->a_adj);
   update_entry (editor);
-  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (editor->priv->swatch), &editor->priv->color);
-  gtk_color_scale_set_color (GTK_COLOR_SCALE (editor->priv->a_slider), &editor->priv->color);
+  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (editor->priv->swatch), &color);
+  gtk_color_scale_set_color (GTK_COLOR_SCALE (editor->priv->a_slider), &color);
   g_object_notify (G_OBJECT (editor), "color");
 }
 
 static void
-sv_changed (GtkColorPlane  *plane,
+dismiss_current_popup (GtkColorEditor *editor)
+{
+  if (editor->priv->current_popup)
+    {
+      gtk_widget_hide (editor->priv->current_popup);
+      editor->priv->current_popup = NULL;
+      if (editor->priv->popdown_focus)
+        {
+          gtk_widget_grab_focus (editor->priv->popdown_focus);
+          editor->priv->popdown_focus = NULL;
+        }
+    }
+}
+
+static void
+popup_edit (GtkWidget      *widget,
             GtkColorEditor *editor)
 {
-  editor->priv->s = gtk_color_plane_get_s (plane);
-  editor->priv->v = gtk_color_plane_get_v (plane);
-  gtk_hsv_to_rgb (editor->priv->h, editor->priv->s, editor->priv->v,
-                  &editor->priv->color.red,
-                  &editor->priv->color.green,
-                  &editor->priv->color.blue);
-  update_entry (editor);
-  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (editor->priv->swatch), &editor->priv->color);
-  gtk_color_scale_set_color (GTK_COLOR_SCALE (editor->priv->a_slider), &editor->priv->color);
-  g_object_notify (G_OBJECT (editor), "color");
+  GtkWidget *popup = NULL;
+  GtkWidget *toplevel;
+  GtkWidget *focus;
+
+  if (widget == editor->priv->sv_plane)
+    {
+      popup = editor->priv->sv_popup;
+      focus = editor->priv->s_entry;
+    }
+  else if (widget == editor->priv->h_slider)
+    {
+      popup = editor->priv->h_popup;
+      focus = editor->priv->h_entry;
+    }
+  else if (widget == editor->priv->a_slider)
+    {
+      popup = editor->priv->a_popup;
+      focus = editor->priv->a_entry;
+    }
+
+  if (popup)
+    {
+      dismiss_current_popup (editor);
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (editor));
+      editor->priv->popdown_focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+      editor->priv->current_popup = popup;
+      gtk_widget_show (popup);
+      gtk_widget_grab_focus (focus);
+    }
+}
+
+static gboolean
+popup_key_press (GtkWidget      *popup,
+                 GdkEventKey    *event,
+                 GtkColorEditor *editor)
+{
+  if (event->keyval == GDK_KEY_Escape)
+    {
+      dismiss_current_popup (editor);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+get_child_position (GtkOverlay     *overlay,
+                    GtkWidget      *widget,
+                    GtkAllocation  *allocation,
+                    GtkColorEditor *editor)
+{
+  GtkRequisition req;
+  GtkAllocation alloc;
+  gint s, e;
+
+  gtk_widget_get_preferred_size (widget, &req, NULL);
+
+  allocation->width = req.width;
+  allocation->height = req.height;
+
+  if (widget == editor->priv->sv_popup)
+    {
+      if (gtk_widget_get_direction (overlay) == GTK_TEXT_DIR_RTL)
+        allocation->x = 0;
+      else
+        allocation->x = gtk_widget_get_allocated_width (GTK_WIDGET (overlay)) - req.width;
+      allocation->y = req.height / 3;
+    }
+  else if (widget == editor->priv->h_popup)
+    {
+      gtk_widget_get_allocation (editor->priv->h_slider, &alloc);
+      gtk_range_get_slider_range (GTK_RANGE (editor->priv->h_slider), &s, &e);
+
+      if (gtk_widget_get_direction (overlay) == GTK_TEXT_DIR_RTL)
+        gtk_widget_translate_coordinates (editor->priv->h_slider,
+                                          gtk_widget_get_parent (editor->priv->grid),
+                                          - req.width, (s + e - req.height) / 2,
+                                          &allocation->x, &allocation->y);
+      else
+        gtk_widget_translate_coordinates (editor->priv->h_slider,
+                                          gtk_widget_get_parent (editor->priv->grid),
+                                          alloc.width, (s + e - req.height) / 2,
+                                          &allocation->x, &allocation->y);
+    }
+  else if (widget == editor->priv->a_popup)
+    {
+      gtk_widget_get_allocation (editor->priv->a_slider, &alloc);
+      gtk_range_get_slider_range (GTK_RANGE (editor->priv->a_slider), &s, &e);
+
+      gtk_widget_translate_coordinates (editor->priv->a_slider,
+                                        gtk_widget_get_parent (editor->priv->grid),
+                                        (s + e - req.width) / 2, - req.height,
+                                        &allocation->x, &allocation->y);
+    }
+  else
+    return FALSE;
+
+  allocation->x = CLAMP (allocation->x, 0, gtk_widget_get_allocated_width (GTK_WIDGET (overlay)) - req.width);
+  allocation->y = CLAMP (allocation->y, 0, gtk_widget_get_allocated_height (GTK_WIDGET (overlay)) - req.height);
+
+  return TRUE;
 }
 
 static void
-a_changed (GtkAdjustment  *adj,
-           GtkColorEditor *editor)
+value_changed (GtkAdjustment *a, GtkAdjustment *as)
 {
-  editor->priv->color.alpha = gtk_adjustment_get_value (adj);
-  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (editor->priv->swatch), &editor->priv->color);
-  g_object_notify (G_OBJECT (editor), "color");
+  gdouble scale;
+
+  scale = gtk_adjustment_get_upper (as) / gtk_adjustment_get_upper (a);
+  g_signal_handlers_block_by_func (as, value_changed, a);
+  gtk_adjustment_set_value (as, gtk_adjustment_get_value (a) * scale);
+  g_signal_handlers_unblock_by_func (as, value_changed, a);
+}
+
+static GtkAdjustment *
+scaled_adjustment (GtkAdjustment *a, gdouble scale)
+{
+  GtkAdjustment *as;
+
+  as = gtk_adjustment_new (gtk_adjustment_get_value (a) * scale,
+                           gtk_adjustment_get_lower (a) * scale,
+                           gtk_adjustment_get_upper (a) * scale,
+                           gtk_adjustment_get_step_increment (a) * scale,
+                           gtk_adjustment_get_page_increment (a) * scale,
+                           gtk_adjustment_get_page_size (a) * scale);
+
+  g_signal_connect (a, "value-changed", G_CALLBACK (value_changed), as);
+  g_signal_connect (as, "value-changed", G_CALLBACK (value_changed), a);
+
+  return as;
+}
+
+static gboolean
+popup_draw (GtkWidget *popup, cairo_t *cr, GtkColorEditor *editor)
+{
+  GtkStyleContext *context;
+  gint width, height;
+
+  context = gtk_widget_get_style_context (popup);
+  width = gtk_widget_get_allocated_width (popup);
+  height = gtk_widget_get_allocated_height (popup);
+
+  gtk_render_background (context, cr, 0, 0, width, height);
+  gtk_render_frame (context, cr, 0, 0, width, height);
+
+  return FALSE;
 }
 
 static void
 gtk_color_editor_init (GtkColorEditor *editor)
 {
   GtkWidget *grid;
+  GtkWidget *box;
   GtkWidget *slider;
+  GtkWidget *alignment;
+  GtkAdjustment *adj;
+  GdkRGBA transparent = { 0, 0, 0, 0 };
 
   editor->priv = G_TYPE_INSTANCE_GET_PRIVATE (editor,
                                               GTK_TYPE_COLOR_EDITOR,
                                               GtkColorEditorPrivate);
   editor->priv->show_alpha = TRUE;
 
+  editor->priv->h_adj = gtk_adjustment_new (0, 0, 1, 0.01, 0.1, 0);
+  editor->priv->s_adj = gtk_adjustment_new (0, 0, 1, 0.01, 0.1, 0);
+  editor->priv->v_adj = gtk_adjustment_new (0, 0, 1, 0.01, 0.1, 0);
+  editor->priv->a_adj = gtk_adjustment_new (0, 0, 1, 0.01, 0.1, 0);
+  g_object_ref_sink (editor->priv->h_adj);
+  g_object_ref_sink (editor->priv->s_adj);
+  g_object_ref_sink (editor->priv->v_adj);
+  g_object_ref_sink (editor->priv->a_adj);
+  g_signal_connect_swapped (editor->priv->h_adj, "value-changed",
+                            G_CALLBACK (hsv_changed), editor);
+  g_signal_connect_swapped (editor->priv->s_adj, "value-changed",
+                            G_CALLBACK (hsv_changed), editor);
+  g_signal_connect_swapped (editor->priv->a_adj, "value-changed",
+                            G_CALLBACK (hsv_changed), editor);
+  g_signal_connect_swapped (editor->priv->v_adj, "value-changed",
+                            G_CALLBACK (hsv_changed), editor);
+
   gtk_widget_push_composite_child ();
 
+  editor->priv->overlay = gtk_overlay_new ();
+  gtk_widget_override_background_color (editor->priv->overlay, 0, &transparent);
   editor->priv->grid = grid = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
@@ -202,35 +385,125 @@ gtk_color_editor_init (GtkColorEditor *editor)
   g_signal_connect (editor->priv->entry, "focus-out-event",
                     G_CALLBACK (entry_focus_out), editor);
 
-  editor->priv->h_slider = slider = gtk_color_scale_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (slider), GTK_ORIENTATION_VERTICAL);
+  editor->priv->h_slider = slider = g_object_new (GTK_TYPE_COLOR_SCALE,
+                                                  "adjustment", editor->priv->h_adj,
+                                                  "draw-value", FALSE,
+                                                  "orientation", GTK_ORIENTATION_VERTICAL,
+                                                  NULL);
   gtk_color_scale_set_type (GTK_COLOR_SCALE (slider), GTK_COLOR_SCALE_HUE);
-  gtk_style_context_add_class (gtk_widget_get_style_context (slider), GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
-  editor->priv->h_adj = gtk_range_get_adjustment (GTK_RANGE (slider));
-  g_signal_connect (editor->priv->h_adj, "value-changed", G_CALLBACK (h_changed), editor);
+  if (gtk_widget_get_direction (slider) == GTK_TEXT_DIR_RTL)
+    gtk_style_context_add_class (gtk_widget_get_style_context (slider), GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
+  else
+    gtk_style_context_add_class (gtk_widget_get_style_context (slider), GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
 
-  editor->priv->sv_plane = gtk_color_plane_new ();
-  gtk_widget_set_size_request (editor->priv->sv_plane, 300, 300);
-  gtk_widget_set_hexpand (editor->priv->sv_plane, TRUE);
-  gtk_widget_set_vexpand (editor->priv->sv_plane, TRUE);
-
-  g_signal_connect (editor->priv->sv_plane, "changed", G_CALLBACK (sv_changed), editor);
-
-  editor->priv->a_slider = slider = gtk_color_scale_new ();
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (slider), GTK_ORIENTATION_HORIZONTAL);
+  editor->priv->a_slider = slider = g_object_new (GTK_TYPE_COLOR_SCALE,
+                                                  "adjustment", editor->priv->a_adj,
+                                                  "draw-value", FALSE,
+                                                  "orientation", GTK_ORIENTATION_HORIZONTAL,
+                                                  NULL);
   gtk_color_scale_set_type (GTK_COLOR_SCALE (slider), GTK_COLOR_SCALE_ALPHA);
   gtk_style_context_add_class (gtk_widget_get_style_context (slider), GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
-  editor->priv->a_adj = gtk_range_get_adjustment (GTK_RANGE (slider));
-  g_signal_connect (editor->priv->a_adj, "value-changed", G_CALLBACK (a_changed), editor);
+
+  editor->priv->sv_plane = gtk_color_plane_new (editor->priv->h_adj,
+                                                editor->priv->s_adj,
+                                                editor->priv->v_adj);
+  gtk_widget_set_size_request (editor->priv->sv_plane, 300, 300);
 
   gtk_grid_attach (GTK_GRID (grid), editor->priv->swatch,   1, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), editor->priv->entry,    2, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), editor->priv->h_slider, 0, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), editor->priv->sv_plane, 1, 1, 2, 1);
   gtk_grid_attach (GTK_GRID (grid), editor->priv->a_slider, 1, 2, 2, 1);
-  gtk_widget_show_all (grid);
+  alignment = gtk_alignment_new (0.5, 0.5, 0, 0);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 30, 30);
+  gtk_container_add (GTK_CONTAINER (editor->priv->overlay), alignment);
+  gtk_container_add (GTK_CONTAINER (alignment), grid);
 
-  gtk_container_add (GTK_CONTAINER (editor), grid);
+  editor->priv->sv_popup = gtk_alignment_new (0.5, 0.5, 0, 0);
+  gtk_style_context_add_class (gtk_widget_get_style_context (editor->priv->sv_popup),
+                               GTK_STYLE_CLASS_TOOLTIP);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (editor->priv->sv_popup), 12, 12, 12, 12);
+  grid = gtk_grid_new ();
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
+  adj = scaled_adjustment (editor->priv->s_adj, 100);
+  editor->priv->s_entry = gtk_spin_button_new (adj, 1, 0);
+  g_signal_connect (editor->priv->s_entry, "key-press-event",
+                    G_CALLBACK (popup_key_press), editor);
+
+  adj = scaled_adjustment (editor->priv->v_adj, 100);
+  editor->priv->v_entry = gtk_spin_button_new (adj, 1, 0);
+  g_signal_connect (editor->priv->v_entry, "key-press-event",
+                    G_CALLBACK (popup_key_press), editor);
+
+  gtk_container_add (GTK_CONTAINER (editor->priv->sv_popup), grid);
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("S"), 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), editor->priv->s_entry, 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("V"), 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), editor->priv->v_entry, 1, 1, 1, 1);
+  gtk_widget_show_all (editor->priv->sv_popup);
+  gtk_widget_hide (editor->priv->sv_popup);
+  gtk_widget_set_no_show_all (editor->priv->sv_popup, TRUE);
+
+  gtk_overlay_add_overlay (GTK_OVERLAY (editor->priv->overlay), editor->priv->sv_popup);
+
+  g_signal_connect (editor->priv->sv_popup, "draw",
+                    G_CALLBACK (popup_draw), editor);
+  g_signal_connect (editor->priv->sv_plane, "popup-menu",
+                    G_CALLBACK (popup_edit), editor);
+
+  editor->priv->h_popup = gtk_alignment_new (0.5, 0.5, 0, 0);
+  gtk_style_context_add_class (gtk_widget_get_style_context (editor->priv->h_popup),
+                               GTK_STYLE_CLASS_TOOLTIP);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (editor->priv->h_popup), 12, 12, 12, 12);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  adj = scaled_adjustment (editor->priv->h_adj, 100);
+  editor->priv->h_entry = gtk_spin_button_new (adj, 1, 0);
+  g_signal_connect (editor->priv->h_entry, "key-press-event",
+                    G_CALLBACK (popup_key_press), editor);
+  gtk_container_add (GTK_CONTAINER (editor->priv->h_popup), box);
+  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("H"));
+  gtk_container_add (GTK_CONTAINER (box), editor->priv->h_entry);
+  gtk_widget_show_all (editor->priv->h_popup);
+  gtk_widget_hide (editor->priv->h_popup);
+  gtk_widget_set_no_show_all (editor->priv->h_popup, TRUE);
+
+  gtk_overlay_add_overlay (GTK_OVERLAY (editor->priv->overlay), editor->priv->h_popup);
+
+  g_signal_connect (editor->priv->h_popup, "draw",
+                    G_CALLBACK (popup_draw), editor);
+  g_signal_connect (editor->priv->h_slider, "popup-menu",
+                    G_CALLBACK (popup_edit), editor);
+
+  editor->priv->a_popup = gtk_alignment_new (0.5, 0.5, 0, 0);
+  gtk_style_context_add_class (gtk_widget_get_style_context (editor->priv->a_popup),
+                               GTK_STYLE_CLASS_TOOLTIP);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (editor->priv->a_popup), 12, 12, 12, 12);
+  grid = gtk_grid_new ();
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
+  adj = scaled_adjustment (editor->priv->a_adj, 100);
+  editor->priv->a_entry = gtk_spin_button_new (adj, 1, 0);
+  g_signal_connect (editor->priv->a_entry, "key-press-event",
+                    G_CALLBACK (popup_key_press), editor);
+  gtk_container_add (GTK_CONTAINER (editor->priv->a_popup), grid);
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("A"), 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), editor->priv->a_entry, 1, 0, 1, 1);
+  gtk_widget_show_all (editor->priv->a_popup);
+  gtk_widget_hide (editor->priv->a_popup);
+  gtk_widget_set_no_show_all (editor->priv->a_popup, TRUE);
+
+  gtk_overlay_add_overlay (GTK_OVERLAY (editor->priv->overlay), editor->priv->a_popup);
+
+  g_signal_connect (editor->priv->a_popup, "draw",
+                    G_CALLBACK (popup_draw), editor);
+  g_signal_connect (editor->priv->a_slider, "popup-menu",
+                    G_CALLBACK (popup_edit), editor);
+
+  g_signal_connect (editor->priv->overlay, "get-child-position",
+                    G_CALLBACK (get_child_position), editor);
+
+  gtk_widget_show_all (editor->priv->overlay);
+
+  gtk_container_add (GTK_CONTAINER (editor), editor->priv->overlay);
   gtk_widget_pop_composite_child ();
 }
 
@@ -301,6 +574,13 @@ gtk_color_editor_set_property (GObject      *object,
 static void
 gtk_color_editor_finalize (GObject *object)
 {
+  GtkColorEditor *editor = GTK_COLOR_EDITOR (object);
+
+  g_clear_object (&editor->priv->h_adj);
+  g_clear_object (&editor->priv->s_adj);
+  g_clear_object (&editor->priv->v_adj);
+  g_clear_object (&editor->priv->a_adj);
+
   G_OBJECT_CLASS (gtk_color_editor_parent_class)->finalize (object);
 }
 
@@ -324,11 +604,13 @@ gtk_color_editor_get_color (GtkColorChooser *chooser,
                             GdkRGBA         *color)
 {
   GtkColorEditor *editor = GTK_COLOR_EDITOR (chooser);
+  gdouble h, s, v;
 
-  color->red = editor->priv->color.red;
-  color->green = editor->priv->color.green;
-  color->blue = editor->priv->color.blue;
-  color->alpha = editor->priv->color.alpha;
+  h = gtk_adjustment_get_value (editor->priv->h_adj);
+  s = gtk_adjustment_get_value (editor->priv->s_adj);
+  v = gtk_adjustment_get_value (editor->priv->v_adj);
+  gtk_hsv_to_rgb (h, s, v, &color->red, &color->green, &color->blue);
+  color->alpha = gtk_adjustment_get_value (editor->priv->a_adj);
 }
 
 static void
@@ -338,22 +620,15 @@ gtk_color_editor_set_color (GtkColorChooser *chooser,
   GtkColorEditor *editor = GTK_COLOR_EDITOR (chooser);
   gdouble h, s, v;
 
-  editor->priv->color.red = color->red;
-  editor->priv->color.green = color->green;
-  editor->priv->color.blue = color->blue;
-  editor->priv->color.alpha = color->alpha;
   gtk_rgb_to_hsv (color->red, color->green, color->blue, &h, &s, &v);
-  editor->priv->h = h;
-  editor->priv->s = s;
-  editor->priv->v = v;
-  gtk_color_plane_set_h (GTK_COLOR_PLANE (editor->priv->sv_plane), h);
-  gtk_color_plane_set_s (GTK_COLOR_PLANE (editor->priv->sv_plane), s);
-  gtk_color_plane_set_v (GTK_COLOR_PLANE (editor->priv->sv_plane), v);
-  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (editor->priv->swatch), color);
 
   gtk_adjustment_set_value (editor->priv->h_adj, h);
+  gtk_adjustment_set_value (editor->priv->s_adj, s);
+  gtk_adjustment_set_value (editor->priv->v_adj, v);
   gtk_adjustment_set_value (editor->priv->a_adj, color->alpha);
-  gtk_color_scale_set_color (GTK_COLOR_SCALE (editor->priv->a_slider), &editor->priv->color);
+  gtk_color_swatch_set_color (GTK_COLOR_SWATCH (editor->priv->swatch), color);
+  gtk_color_scale_set_color (GTK_COLOR_SCALE (editor->priv->a_slider), color);
+
   update_entry (editor);
 
   gtk_widget_queue_draw (GTK_WIDGET (editor));

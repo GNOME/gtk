@@ -31,6 +31,8 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtksizegroup.h"
+#include "gtkalignment.h"
 
 struct _GtkColorChooserWidgetPrivate
 {
@@ -44,6 +46,8 @@ struct _GtkColorChooserWidgetPrivate
   GtkWidget *button;
   GtkColorSwatch *current;
   gboolean show_alpha;
+
+  GtkSizeGroup *size_group;
 
   GSettings *settings;
 };
@@ -184,9 +188,11 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 {
   GtkWidget *grid;
   GtkWidget *p;
+  GtkWidget *alignment;
   GtkWidget *button;
   GtkWidget *label;
   gint i, j;
+  gint left;
   GdkRGBA color;
   GVariant *variant;
   GVariantIter iter;
@@ -252,6 +258,8 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   gtk_grid_set_column_spacing (GTK_GRID (grid), 4);
   gtk_container_add (GTK_CONTAINER (cc->priv->palette), grid);
 
+  left = (gtk_widget_get_direction (GTK_WIDGET (cc)) == GTK_TEXT_DIR_LTR) ? 0 : 8;
+
   for (i = 0; i < 9; i++)
     {
        gdk_rgba_parse (&color, default_grayscale[i]);
@@ -259,9 +267,9 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 
        p = gtk_color_swatch_new ();
        connect_swatch_signals (p, cc);
-       if (i == 0)
+       if (i == left)
          gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 10, 1, 1, 10);
-       else if (i == 8)
+       else if (i == (8 - left))
          gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 10, 10, 1);
        else
          gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 1, 1);
@@ -307,12 +315,22 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 
   if (i > 0)
     {
-      gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 10, 10, 1);
-      gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (button), 10, 1, 1, 10);
+      if (gtk_widget_get_direction (GTK_WIDGET (cc)) == GTK_TEXT_DIR_LTR)
+        {
+          gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 10, 10, 1);
+          gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (button), 10, 1, 1, 10);
+        }
+      else
+        {
+          gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (button), 1, 10, 10, 1);
+          gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 10, 1, 1, 10);
+        }
     }
 
   cc->priv->editor = gtk_color_editor_new ();
-  gtk_container_add (GTK_CONTAINER (cc), cc->priv->editor);
+  alignment = gtk_alignment_new (0.5, 0.5, 0, 0);
+  gtk_container_add (GTK_CONTAINER (cc), alignment);
+  gtk_container_add (GTK_CONTAINER (alignment), cc->priv->editor);
 
   g_settings_get (cc->priv->settings, "selected-color", "(bdddd)",
                   &selected,
@@ -326,6 +344,10 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 
   gtk_widget_set_no_show_all (cc->priv->palette, TRUE);
   gtk_widget_set_no_show_all (cc->priv->editor, TRUE);
+
+  cc->priv->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  gtk_size_group_add_widget (cc->priv->size_group, cc->priv->palette);
+  gtk_size_group_add_widget (cc->priv->size_group, alignment);
 }
 
 static void
@@ -430,6 +452,7 @@ gtk_color_chooser_widget_finalize (GObject *object)
 {
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (object);
 
+  g_object_unref (cc->priv->size_group);
   g_object_unref (cc->priv->settings);
 
   G_OBJECT_CLASS (gtk_color_chooser_widget_parent_class)->finalize (object);

@@ -51,8 +51,6 @@ struct _GtkColorPlaneClass
 {
   GtkDrawingAreaClass parent_class;
 
-  void (* changed) (GtkColorPlane *plane);
-
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -63,17 +61,9 @@ struct _GtkColorPlaneClass
 
 GType       gtk_color_plane_get_type (void) G_GNUC_CONST;
 
-GtkWidget * gtk_color_plane_new      (void);
-
-gdouble     gtk_color_plane_get_h    (GtkColorPlane *plane);
-void        gtk_color_plane_set_h    (GtkColorPlane *plane,
-                                      gdouble        h);
-gdouble     gtk_color_plane_get_s    (GtkColorPlane *plane);
-void        gtk_color_plane_set_s    (GtkColorPlane *plane,
-                                      gdouble        s);
-gdouble     gtk_color_plane_get_v    (GtkColorPlane *plane);
-void        gtk_color_plane_set_v    (GtkColorPlane *plane,
-                                      gdouble        v);
+GtkWidget * gtk_color_plane_new      (GtkAdjustment *h_adj,
+                                      GtkAdjustment *s_adj,
+                                      GtkAdjustment *v_adj);
 
 G_END_DECLS
 

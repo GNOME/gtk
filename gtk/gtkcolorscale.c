@@ -232,9 +232,16 @@ scale_draw (GtkWidget *widget,
   if (scale_has_asymmetric_thumb (widget))
     {
       if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_VERTICAL)
-        cairo_rectangle (cr, width / 2, 1, width / 2 - 1, height - 2);
+        {
+          if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+            cairo_rectangle (cr, 1, 1, width / 2 - 1, height - 2);
+          else
+            cairo_rectangle (cr, width / 2, 1, width / 2 - 1, height - 2);
+        }
       else
-        cairo_rectangle (cr, 1, 1, width - 2, height / 2);
+        {
+          cairo_rectangle (cr, 1, 1, width - 2, height / 2);
+        }
     }
   else
     cairo_rectangle (cr, 1, 1, width - 2, height - 2);
