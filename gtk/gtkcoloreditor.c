@@ -17,6 +17,17 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/* TODO
+ * - touch
+ * - accessible color names
+ * - accessible relations for popups
+ * - api to replace palette
+ * - saving per-application (?)
+ * - better checkmark
+ * - use css for swatches
+ * - better popup theming
+ */
+
 #include "config.h"
 
 #include "gtkcolorchooserprivate.h"
