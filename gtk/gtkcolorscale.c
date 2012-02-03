@@ -23,6 +23,7 @@
 #include "gtkhsv.h"
 #include "gtkorientable.h"
 #include "gtkstylecontext.h"
+#include "gtkaccessible.h"
 #include "gtkintl.h"
 
 struct _GtkColorScalePrivate
@@ -312,11 +313,23 @@ void
 gtk_color_scale_set_type (GtkColorScale     *scale,
                           GtkColorScaleType  type)
 {
+  AtkObject *atk_obj;
+
   scale->priv->type = type;
   cairo_surface_destroy (scale->priv->surface);
   scale->priv->surface = NULL;
   create_surface (scale);
   gtk_widget_queue_draw (GTK_WIDGET (scale));
+
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (scale));
+  if (GTK_IS_ACCESSIBLE (atk_obj))
+    {
+      if (type == GTK_COLOR_SCALE_HUE)
+        atk_object_set_name (atk_obj, C_("Color channel", "Hue"));
+      else if (type == GTK_COLOR_SCALE_ALPHA)
+        atk_object_set_name (atk_obj, C_("Color channel", "Alpha"));
+      atk_object_set_role (gtk_widget_get_accessible (GTK_WIDGET (scale)), ATK_ROLE_COLOR_CHOOSER);
+    }
 }
 
 GtkWidget *

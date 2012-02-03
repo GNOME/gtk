@@ -22,8 +22,10 @@
 #include "gtkhsv.h"
 #include "gtkcolorplane.h"
 #include "gtkcontainer.h"
+#include "gtkaccessible.h"
 #include "gtkwindow.h"
 #include "gtkbutton.h"
+#include "gtkintl.h"
 
 struct _GtkColorPlanePrivate
 {
@@ -385,6 +387,8 @@ sv_key_press (GtkWidget      *widget,
 static void
 gtk_color_plane_init (GtkColorPlane *plane)
 {
+  AtkObject *atk_obj;
+
   plane->priv = G_TYPE_INSTANCE_GET_PRIVATE (plane,
                                              GTK_TYPE_COLOR_PLANE,
                                              GtkColorPlanePrivate);
@@ -393,6 +397,13 @@ gtk_color_plane_init (GtkColorPlane *plane)
                                              | GDK_BUTTON_PRESS_MASK
                                              | GDK_BUTTON_RELEASE_MASK
                                              | GDK_POINTER_MOTION_MASK);
+
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (plane));
+  if (GTK_IS_ACCESSIBLE (atk_obj))
+    {
+      atk_object_set_name (atk_obj, _("Color Plane"));
+      atk_object_set_role (atk_obj, ATK_ROLE_COLOR_CHOOSER);
+    }
 }
 
 static void
