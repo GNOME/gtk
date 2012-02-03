@@ -396,23 +396,17 @@ gtk_color_editor_init (GtkColorEditor *editor)
   g_signal_connect (editor->priv->entry, "focus-out-event",
                     G_CALLBACK (entry_focus_out), editor);
 
-  editor->priv->h_slider = slider = g_object_new (GTK_TYPE_COLOR_SCALE,
-                                                  "adjustment", editor->priv->h_adj,
-                                                  "draw-value", FALSE,
-                                                  "orientation", GTK_ORIENTATION_VERTICAL,
-                                                  NULL);
-  gtk_color_scale_set_type (GTK_COLOR_SCALE (slider), GTK_COLOR_SCALE_HUE);
+  editor->priv->h_slider = slider = gtk_color_scale_new (editor->priv->h_adj,
+                                                         GTK_COLOR_SCALE_HUE);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (slider), GTK_ORIENTATION_VERTICAL);
   if (gtk_widget_get_direction (slider) == GTK_TEXT_DIR_RTL)
     gtk_style_context_add_class (gtk_widget_get_style_context (slider), GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
   else
     gtk_style_context_add_class (gtk_widget_get_style_context (slider), GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
 
-  editor->priv->a_slider = slider = g_object_new (GTK_TYPE_COLOR_SCALE,
-                                                  "adjustment", editor->priv->a_adj,
-                                                  "draw-value", FALSE,
-                                                  "orientation", GTK_ORIENTATION_HORIZONTAL,
-                                                  NULL);
-  gtk_color_scale_set_type (GTK_COLOR_SCALE (slider), GTK_COLOR_SCALE_ALPHA);
+  editor->priv->a_slider = slider = gtk_color_scale_new (editor->priv->a_adj,
+                                                         GTK_COLOR_SCALE_ALPHA);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (slider), GTK_ORIENTATION_HORIZONTAL);
   gtk_style_context_add_class (gtk_widget_get_style_context (slider), GTK_STYLE_CLASS_SCALE_HAS_MARKS_ABOVE);
 
   editor->priv->sv_plane = gtk_color_plane_new (editor->priv->h_adj,

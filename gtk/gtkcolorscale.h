@@ -68,10 +68,9 @@ G_GNUC_INTERNAL
 GType       gtk_color_scale_get_type  (void) G_GNUC_CONST;
 
 G_GNUC_INTERNAL
-GtkWidget * gtk_color_scale_new       (void);
-G_GNUC_INTERNAL
-void        gtk_color_scale_set_type  (GtkColorScale     *scale,
+GtkWidget * gtk_color_scale_new       (GtkAdjustment     *adjustment,
                                        GtkColorScaleType  type);
+
 G_GNUC_INTERNAL
 void        gtk_color_scale_set_color (GtkColorScale     *scale,
                                        const GdkRGBA     *color);

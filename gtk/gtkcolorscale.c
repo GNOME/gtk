@@ -309,7 +309,7 @@ gtk_color_scale_set_color (GtkColorScale *scale,
   gtk_widget_queue_draw (GTK_WIDGET (scale));
 }
 
-void
+static void
 gtk_color_scale_set_type (GtkColorScale     *scale,
                           GtkColorScaleType  type)
 {
@@ -333,10 +333,16 @@ gtk_color_scale_set_type (GtkColorScale     *scale,
 }
 
 GtkWidget *
-gtk_color_scale_new (void)
+gtk_color_scale_new (GtkAdjustment     *adjustment,
+                     GtkColorScaleType  type)
 {
-  return (GtkWidget *) g_object_new (GTK_TYPE_COLOR_SCALE,
-                                     "adjustment", gtk_adjustment_new (0, 0, 1, 0.01, 0.1, 0),
-                                     "draw-value", FALSE,
-                                     NULL);
+  GtkWidget *scale;
+
+  scale = (GtkWidget *) g_object_new (GTK_TYPE_COLOR_SCALE,
+                                      "adjustment", adjustment,
+                                      "draw-value", FALSE,
+                                      NULL);
+  gtk_color_scale_set_type (GTK_COLOR_SCALE (scale), type);
+
+  return scale;
 }
