@@ -103,7 +103,7 @@ static GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
 /* Translators: this is the license preamble; the string at the end
  * contains the URL of the license.
  */
-static const gchar *gtk_license_preamble = N_("This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href=\"%s\">%s</a>");
+static const gchar *gtk_license_preamble = N_("This program comes with ABSOLUTELY NO WARRANTY;\nfor details, visit <a href=\"%s\">%s</a>");
 
 /* URLs for each GtkLicense type; keep in the same order as the enumeration */
 static const gchar *gtk_license_urls[] = {
