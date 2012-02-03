@@ -2548,6 +2548,16 @@ gtk_range_button_press (GtkWidget      *widget,
   if (gtk_range_update_mouse_location (range))
     gtk_widget_queue_draw (widget);
 
+  if (priv->mouse_location == MOUSE_SLIDER &&
+      gdk_event_triggers_context_menu ((GdkEvent *)event))
+    {
+      gboolean handled;
+
+      g_signal_emit_by_name (widget, "popup-menu", &handled);
+
+      return TRUE;
+    }
+
   if (priv->mouse_location == MOUSE_TROUGH  &&
       event->button == GDK_BUTTON_PRIMARY)
     {
