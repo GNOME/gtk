@@ -63,24 +63,33 @@ struct _GtkColorSwatchClass
 };
 
 
+G_GNUC_INTERNAL
 GType       gtk_color_swatch_get_type         (void) G_GNUC_CONST;
 
+G_GNUC_INTERNAL
 GtkWidget * gtk_color_swatch_new              (void);
+G_GNUC_INTERNAL
 void        gtk_color_swatch_set_corner_radii (GtkColorSwatch *swatch,
                                                gdouble         top_left,
                                                gdouble         top_right,
                                                gdouble         bottom_right,
                                                gdouble         bottom_left);
+G_GNUC_INTERNAL
 void        gtk_color_swatch_set_color        (GtkColorSwatch *swatch,
                                                const GdkRGBA  *color);
+G_GNUC_INTERNAL
 gboolean    gtk_color_swatch_get_color        (GtkColorSwatch *swatch,
                                                GdkRGBA        *color);
+G_GNUC_INTERNAL
 void        gtk_color_swatch_set_selected     (GtkColorSwatch *swatch,
                                                gboolean        selected);
+G_GNUC_INTERNAL
 void        gtk_color_swatch_set_can_drop     (GtkColorSwatch *swatch,
                                                gboolean        can_drop);
+G_GNUC_INTERNAL
 void        gtk_color_swatch_set_icon         (GtkColorSwatch *swatch,
                                                const gchar    *icon);
+G_GNUC_INTERNAL
 void        gtk_color_swatch_set_show_alpha   (GtkColorSwatch *swatch,
                                                gboolean        show_alpha);
 

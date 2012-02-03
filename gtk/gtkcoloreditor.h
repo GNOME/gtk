@@ -59,8 +59,10 @@ struct _GtkColorEditorClass
 };
 
 
+G_GNUC_INTERNAL
 GType       gtk_color_editor_get_type (void) G_GNUC_CONST;
 
+G_GNUC_INTERNAL
 GtkWidget * gtk_color_editor_new      (void);
 
 G_END_DECLS
