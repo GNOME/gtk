@@ -1192,6 +1192,52 @@ gtk_scrolled_window_screen_changed (GtkWidget *widget,
 		     GUINT_TO_POINTER (window_placement_connection));
 }
 
+static void
+gtk_scrolled_window_draw_scrollbars_junction (GtkScrolledWindow *scrolled_window,
+                                              cairo_t *cr)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GtkAllocation wid_allocation, hscr_allocation, vscr_allocation;
+  GtkStyleContext *context;
+  GdkRectangle junction_rect;
+  gboolean is_rtl;
+
+  is_rtl = gtk_widget_get_direction (GTK_WIDGET (scrolled_window)) == GTK_TEXT_DIR_RTL;
+  gtk_widget_get_allocation (GTK_WIDGET (scrolled_window), &wid_allocation);
+  gtk_widget_get_allocation (GTK_WIDGET (priv->hscrollbar), &hscr_allocation);
+  gtk_widget_get_allocation (GTK_WIDGET (priv->vscrollbar), &vscr_allocation);
+
+  junction_rect.x = 0;
+  junction_rect.y = 0;
+  junction_rect.width = vscr_allocation.width;
+  junction_rect.height = hscr_allocation.height;
+  
+  if ((is_rtl && 
+       (priv->real_window_placement == GTK_CORNER_TOP_RIGHT ||
+        priv->real_window_placement == GTK_CORNER_BOTTOM_RIGHT)) ||
+      (!is_rtl && 
+       (priv->real_window_placement == GTK_CORNER_TOP_LEFT ||
+        priv->real_window_placement == GTK_CORNER_BOTTOM_LEFT)))
+    junction_rect.x = hscr_allocation.width;
+
+  if (priv->real_window_placement == GTK_CORNER_TOP_LEFT ||
+      priv->real_window_placement == GTK_CORNER_TOP_RIGHT)
+    junction_rect.y = vscr_allocation.height;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (scrolled_window));
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCROLLBARS_JUNCTION);
+
+  gtk_render_background (context, cr,
+                         junction_rect.x, junction_rect.y,
+                         junction_rect.width, junction_rect.height);
+  gtk_render_frame (context, cr,
+                    junction_rect.x, junction_rect.y,
+                    junction_rect.width, junction_rect.height);
+
+  gtk_style_context_restore (context);
+}
+
 static gboolean
 gtk_scrolled_window_draw (GtkWidget *widget,
                           cairo_t   *cr)
@@ -1205,6 +1251,10 @@ gtk_scrolled_window_draw (GtkWidget *widget,
   gtk_render_background (context, cr, 0, 0,
                          gtk_widget_get_allocated_width (widget),
                          gtk_widget_get_allocated_height (widget));
+
+  if (priv->hscrollbar_visible && 
+      priv->vscrollbar_visible)
+    gtk_scrolled_window_draw_scrollbars_junction (scrolled_window, cr);
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
