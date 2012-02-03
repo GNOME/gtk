@@ -84,7 +84,6 @@ gtk_css_image_url_parse (GtkCssImage  *image,
     {
       char *uri = g_file_get_uri (file);
       char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
-      g_print ("uri: %s, resource_path: %s\n", uri, resource_path);
 
       pixbuf = gdk_pixbuf_new_from_resource (resource_path, &error);
       g_free (resource_path);
