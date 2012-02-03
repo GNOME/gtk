@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include "gtkcssimageurlprivate.h"
 
 #include "gtkcssprovider.h"
@@ -75,16 +77,32 @@ gtk_css_image_url_parse (GtkCssImage  *image,
   if (file == NULL)
     return FALSE;
 
-  input = g_file_read (file, NULL, &error);
-  if (input == NULL)
+  /* We special case resources here so we can use
+     gdk_pixbuf_new_from_resource, which in turn has some special casing
+     for GdkPixdata files to avoid duplicating the memory for the pixbufs */
+  if (g_file_has_uri_scheme (file, "resource"))
     {
-      _gtk_css_parser_take_error (parser, error);
-      return FALSE;
-    }
-  g_object_unref (file);
+      char *uri = g_file_get_uri (file);
+      char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
+      g_print ("uri: %s, resource_path: %s\n", uri, resource_path);
 
-  pixbuf = gdk_pixbuf_new_from_stream (G_INPUT_STREAM (input), NULL, &error);
-  g_object_unref (input);
+      pixbuf = gdk_pixbuf_new_from_resource (resource_path, &error);
+      g_free (resource_path);
+      g_free (uri);
+    }
+  else
+    {
+      input = g_file_read (file, NULL, &error);
+      if (input == NULL)
+	{
+	  _gtk_css_parser_take_error (parser, error);
+	  return FALSE;
+	}
+      g_object_unref (file);
+
+      pixbuf = gdk_pixbuf_new_from_stream (G_INPUT_STREAM (input), NULL, &error);
+      g_object_unref (input);
+    }
 
   if (pixbuf == NULL)
     {
