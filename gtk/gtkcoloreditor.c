@@ -511,6 +511,8 @@ gtk_color_editor_init (GtkColorEditor *editor)
 
   g_signal_connect (editor->priv->overlay, "get-child-position",
                     G_CALLBACK (get_child_position), editor);
+  g_signal_connect (editor, "notify::visible",
+                    G_CALLBACK (dismiss_current_popup), NULL);
 
   gtk_widget_show_all (editor->priv->overlay);
 
