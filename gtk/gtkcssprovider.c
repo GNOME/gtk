@@ -2925,18 +2925,24 @@ gtk_css_provider_get_named (const gchar *name,
 	  resource_file = g_build_filename (dir, "gtk.gresource", NULL);
 	  resource = g_resource_load (resource_file, NULL);
 	  if (resource != NULL)
-	    {
-	      provider->priv->resource = resource;
-	      g_resources_register (resource);
-	    }
+	    g_resources_register (resource);
 
           if (!gtk_css_provider_load_from_path (provider, path, NULL))
             {
+	      if (resource != NULL)
+		{
+		  g_resources_unregister (resource);
+		  g_resource_unref (resource);
+		}
               g_object_unref (provider);
               provider = NULL;
             }
           else
-            g_hash_table_insert (themes, g_strdup (key), provider);
+	    {
+	      /* Only set this after load success, as load_from_path will clear it */
+	      provider->priv->resource = resource;
+	      g_hash_table_insert (themes, g_strdup (key), provider);
+	    }
 
           g_free (path);
         }
