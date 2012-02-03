@@ -113,6 +113,21 @@ gtk_overlay_create_child_window (GtkOverlay *overlay,
   return window;
 }
 
+static GtkAlign
+effective_align (GtkAlign         align,
+                 GtkTextDirection direction)
+{
+  switch (align)
+    {
+    case GTK_ALIGN_START:
+      return direction == GTK_TEXT_DIR_RTL ? GTK_ALIGN_END : GTK_ALIGN_START;
+    case GTK_ALIGN_END:
+      return direction == GTK_TEXT_DIR_RTL ? GTK_ALIGN_START : GTK_ALIGN_END;
+    default:
+      return align;
+    }
+}
+
 static void
 gtk_overlay_get_main_widget_allocation (GtkOverlay *overlay,
                                         GtkAllocation *main_alloc_out)
@@ -156,6 +171,82 @@ gtk_overlay_get_main_widget_allocation (GtkOverlay *overlay,
 
   if (main_alloc_out)
     *main_alloc_out = main_alloc;
+}
+
+static void
+gtk_overlay_child_update_style_classes (GtkOverlay *overlay,
+                                        GtkWidget *child,
+                                        GtkAllocation *child_allocation)
+{
+  GtkAllocation overlay_allocation, main_allocation;
+  GtkAlign valign, halign;
+  gboolean is_left, is_right, is_top, is_bottom;
+  gboolean has_left, has_right, has_top, has_bottom;
+  GtkStyleContext *context;
+  gint changed;
+
+  context = gtk_widget_get_style_context (child);
+  has_left = gtk_style_context_has_class (context, GTK_STYLE_CLASS_LEFT);
+  has_right = gtk_style_context_has_class (context, GTK_STYLE_CLASS_RIGHT);
+  has_top = gtk_style_context_has_class (context, GTK_STYLE_CLASS_TOP);
+  has_bottom = gtk_style_context_has_class (context, GTK_STYLE_CLASS_BOTTOM);
+
+  is_left = is_right = is_top = is_bottom = FALSE;
+  changed = 4;
+
+  gtk_overlay_get_main_widget_allocation (overlay, &main_allocation);
+  gtk_widget_get_allocation (GTK_WIDGET (overlay), &overlay_allocation);
+
+  main_allocation.x += overlay_allocation.x;
+  main_allocation.y += overlay_allocation.y;
+
+  halign = effective_align (gtk_widget_get_halign (child),
+                            gtk_widget_get_direction (child));
+
+  if (halign == GTK_ALIGN_START)
+    is_left = (child_allocation->x == main_allocation.x);
+  else if (halign == GTK_ALIGN_END)
+    is_right = (child_allocation->x + child_allocation->width ==
+                main_allocation.x + main_allocation.width);
+
+  valign = gtk_widget_get_valign (child);
+
+  if (valign == GTK_ALIGN_START)
+    is_top = (child_allocation->y == main_allocation.y);
+  else if (valign == GTK_ALIGN_END)
+    is_bottom = (child_allocation->y + child_allocation->height ==
+                 main_allocation.y + main_allocation.height);
+
+  if (has_left && !is_left)
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_LEFT);
+  else if (!has_left && is_left)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+  else
+    changed--;
+
+  if (has_right && !is_right)
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_RIGHT);
+  else if (!has_right && is_right)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+  else
+    changed--;
+
+  if (has_top && !is_top)
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TOP);
+  else if (!has_top && is_top)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+  else
+    changed--;
+
+  if (has_bottom && !is_bottom)
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BOTTOM);
+  else if (!has_bottom && is_bottom)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+  else
+    changed--;
+
+  if (changed > 0)
+    gtk_widget_reset_style (child);
 }
 
 static void
@@ -208,6 +299,7 @@ gtk_overlay_child_allocate (GtkOverlay      *overlay,
                             allocation.x, allocation.y,
                             allocation.width, allocation.height);
 
+  gtk_overlay_child_update_style_classes (overlay, child->widget, &allocation);
   gtk_widget_size_allocate (child->widget, &child_allocation);
 }
 
@@ -269,21 +361,6 @@ gtk_overlay_size_allocate (GtkWidget     *widget,
   for (children = priv->children; children; children = children->next)
     {
       gtk_overlay_child_allocate (overlay, children->data);
-    }
-}
-
-static GtkAlign
-effective_align (GtkAlign         align,
-                 GtkTextDirection direction)
-{
-  switch (align)
-    {
-    case GTK_ALIGN_START:
-      return direction == GTK_TEXT_DIR_RTL ? GTK_ALIGN_END : GTK_ALIGN_START;
-    case GTK_ALIGN_END:
-      return direction == GTK_TEXT_DIR_RTL ? GTK_ALIGN_START : GTK_ALIGN_END;
-    default:
-      return align;
     }
 }
 
