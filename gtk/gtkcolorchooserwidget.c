@@ -93,6 +93,7 @@ button_activate (GtkColorSwatch        *swatch,
 {
   GdkRGBA color;
 
+  /* somewhat random, makes the hairline nicely visible */
   color.red = 0.75;
   color.green = 0.25;
   color.blue = 0.25;

@@ -425,6 +425,10 @@ gtk_color_editor_init (GtkColorEditor *editor)
   gtk_grid_attach (GTK_GRID (grid), editor->priv->h_slider, 0, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), editor->priv->sv_plane, 1, 1, 2, 1);
   gtk_grid_attach (GTK_GRID (grid), editor->priv->a_slider, 1, 2, 2, 1);
+
+  /* This extra alignment is necessary so we have room to the sides
+   * to place the popups as desired
+   */
   alignment = gtk_alignment_new (0.5, 0.5, 0, 0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 30, 30);
   gtk_container_add (GTK_CONTAINER (editor->priv->overlay), alignment);
