@@ -985,6 +985,7 @@ struct _GtkCssProviderPrivate
   GHashTable *symbolic_colors;
 
   GArray *rulesets;
+  GResource *resource;
 };
 
 enum {
@@ -1590,6 +1591,13 @@ gtk_css_provider_finalize (GObject *object)
 
   if (priv->symbolic_colors)
     g_hash_table_destroy (priv->symbolic_colors);
+
+  if (priv->resource)
+    {
+      g_resources_unregister (priv->resource);
+      g_resource_unref (priv->resource);
+      priv->resource = NULL;
+    }
 
   G_OBJECT_CLASS (gtk_css_provider_parent_class)->finalize (object);
 }
@@ -2901,7 +2909,19 @@ gtk_css_provider_get_named (const gchar *name,
 
       if (path)
         {
+	  char *dir, *resource_file;
+	  GResource *resource;
+
           provider = gtk_css_provider_new ();
+
+	  dir = g_path_get_dirname (path);
+	  resource_file = g_build_filename (dir, "gtk.gresource", NULL);
+	  resource = g_resource_load (resource_file, NULL);
+	  if (resource != NULL)
+	    {
+	      provider->priv->resource = resource;
+	      g_resources_register (resource);
+	    }
 
           if (!gtk_css_provider_load_from_path (provider, path, NULL))
             {
