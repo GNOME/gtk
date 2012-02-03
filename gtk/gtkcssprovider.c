@@ -1712,6 +1712,13 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
 
   priv = css_provider->priv;
 
+  if (priv->resource)
+    {
+      g_resources_unregister (priv->resource);
+      g_resource_unref (priv->resource);
+      priv->resource = NULL;
+    }
+
   g_hash_table_remove_all (priv->symbolic_colors);
 
   for (i = 0; i < priv->rulesets->len; i++)
