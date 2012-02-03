@@ -278,6 +278,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
        gtk_grid_attach (GTK_GRID (grid), p, i, 0, 1, 1);
     }
 
+  /* translators: label for the custom section in the color chooser */
   label = gtk_label_new (_("Custom"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_container_add (GTK_CONTAINER (cc->priv->palette), label);

@@ -247,7 +247,7 @@ get_child_position (GtkOverlay     *overlay,
 
   if (widget == editor->priv->sv_popup)
     {
-      if (gtk_widget_get_direction (overlay) == GTK_TEXT_DIR_RTL)
+      if (gtk_widget_get_direction (GTK_WIDGET (overlay)) == GTK_TEXT_DIR_RTL)
         allocation->x = 0;
       else
         allocation->x = gtk_widget_get_allocated_width (GTK_WIDGET (overlay)) - req.width;
@@ -258,7 +258,7 @@ get_child_position (GtkOverlay     *overlay,
       gtk_widget_get_allocation (editor->priv->h_slider, &alloc);
       gtk_range_get_slider_range (GTK_RANGE (editor->priv->h_slider), &s, &e);
 
-      if (gtk_widget_get_direction (overlay) == GTK_TEXT_DIR_RTL)
+      if (gtk_widget_get_direction (GTK_WIDGET (overlay)) == GTK_TEXT_DIR_RTL)
         gtk_widget_translate_coordinates (editor->priv->h_slider,
                                           gtk_widget_get_parent (editor->priv->grid),
                                           - req.width, (s + e - req.height) / 2,
@@ -436,9 +436,9 @@ gtk_color_editor_init (GtkColorEditor *editor)
                     G_CALLBACK (popup_key_press), editor);
 
   gtk_container_add (GTK_CONTAINER (editor->priv->sv_popup), grid);
-  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("S"), 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new (C_("Color channel", "S")), 0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), editor->priv->s_entry, 1, 0, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("V"), 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new (C_("Color channel", "V")), 0, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), editor->priv->v_entry, 1, 1, 1, 1);
   gtk_widget_show_all (editor->priv->sv_popup);
   gtk_widget_hide (editor->priv->sv_popup);
@@ -461,7 +461,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
   g_signal_connect (editor->priv->h_entry, "key-press-event",
                     G_CALLBACK (popup_key_press), editor);
   gtk_container_add (GTK_CONTAINER (editor->priv->h_popup), box);
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("H"));
+  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (C_("Color channel", "H")));
   gtk_container_add (GTK_CONTAINER (box), editor->priv->h_entry);
   gtk_widget_show_all (editor->priv->h_popup);
   gtk_widget_hide (editor->priv->h_popup);
@@ -485,7 +485,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
   g_signal_connect (editor->priv->a_entry, "key-press-event",
                     G_CALLBACK (popup_key_press), editor);
   gtk_container_add (GTK_CONTAINER (editor->priv->a_popup), grid);
-  gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("A"), 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), gtk_label_new (C_("Color channel", "A")), 0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), editor->priv->a_entry, 1, 0, 1, 1);
   gtk_widget_show_all (editor->priv->a_popup);
   gtk_widget_hide (editor->priv->a_popup);
