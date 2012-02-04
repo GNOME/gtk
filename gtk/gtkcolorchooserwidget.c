@@ -34,6 +34,32 @@
 #include "gtksizegroup.h"
 #include "gtkalignment.h"
 
+/**
+ * SECTION:gtkcolorchooserwidget
+ * @Short_description: A widget for choosing colors
+ * @Title: GtkColorChooserWidget
+ * @See_also: #GtkColorChooserDialog
+ *
+ * The #GtkColorChooserWidget widget lets the user select a
+ * color. By default, the chooser presents a prefined palette
+ * of colors, plus a small number of settable custom colors.
+ * It is also possible to select a different color with the
+ * single-color editor. To enter the single-color editing mode,
+ * use the context menu of any color of the palette, or use the
+ * '+' button to add a new custom color.
+ *
+ * The chooser automatically remembers the last selection, as well
+ * as custom colors.
+ *
+ * To change the initially selected color, use gtk_color_chooser_set_rgba().
+ * To get the selected font use gtk_color_chooser_get_rgba().
+ *
+ * The #GtkColorChooserWidget is used in the #GtkColorChooserDialog
+ * to provide a dialog for selecting colors.
+ *
+ * Since: 3.4
+ */
+
 struct _GtkColorChooserWidgetPrivate
 {
   GtkWidget *palette;
@@ -472,6 +498,15 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
   g_object_class_override_property (object_class, PROP_RGBA, "rgba");
   g_object_class_override_property (object_class, PROP_USE_ALPHA, "use-alpha");
 
+  /**
+   * GtkColorChooserWidget:show-editor:
+   *
+   * The ::show-editor property is %TRUE when the color chooser
+   * is showing the single-color editor. It can be set to switch
+   * the color chooser into single-color editing mode.
+   *
+   * Since: 3.4
+   */
   g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
       g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
                             FALSE, GTK_PARAM_READWRITE));
@@ -580,6 +615,15 @@ gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface)
   iface->set_rgba = gtk_color_chooser_widget_set_rgba;
 }
 
+/**
+ * gtk_color_chooser_widget_new:
+ *
+ * Creates a new #GtkColorChooserWidget.
+ *
+ * Returns: a new #GtkColorChooserWidget
+ *
+ * Since: 3.4
+ */
 GtkWidget *
 gtk_color_chooser_widget_new (void)
 {

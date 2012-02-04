@@ -164,9 +164,9 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   /**
    * GtkColorButton:use-alpha:
    *
-   * If this property is set to %TRUE, the color swatch on the button is rendered against a
-   * checkerboard background to show its opacity and the opacity slider is displayed in the
-   * color selection dialog.
+   * If this property is set to %TRUE, the color swatch on the button is
+   * rendered against a checkerboard background to show its opacity and
+   * the opacity slider is displayed in the color selection dialog.
    *
    * Since: 2.4
    */
@@ -489,7 +489,6 @@ gtk_color_button_init (GtkColorButton *button)
   button->priv->title = g_strdup (_("Pick a Color")); /* default title */
 
   /* Start with opaque black, alpha disabled */
-
   button->priv->rgba.red = 0;
   button->priv->rgba.green = 0;
   button->priv->rgba.blue = 0;
@@ -671,7 +670,7 @@ gtk_color_button_clicked (GtkButton *b)
  *
  * Since: 2.4
  *
- * Deprecated: Use gtk_color_button_set_rgba() instead.
+ * Deprecated: Use gtk_color_chooser_set_rgba() instead.
  */
 void
 gtk_color_button_set_color (GtkColorButton *button,
@@ -699,6 +698,8 @@ gtk_color_button_set_color (GtkColorButton *button,
  * Sets the current opacity to be @alpha.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.4: Use gtk_color_chooser_set_rgba() instead.
  */
 void
 gtk_color_button_set_alpha (GtkColorButton *button,
@@ -723,7 +724,7 @@ gtk_color_button_set_alpha (GtkColorButton *button,
  *
  * Since: 2.4
  *
- * Deprecated: 3.4: Use gtk_color_button_get_rgba() instead.
+ * Deprecated: 3.4: Use gtk_color_chooser_get_rgba() instead.
  */
 void
 gtk_color_button_get_color (GtkColorButton *button,
@@ -745,6 +746,8 @@ gtk_color_button_get_color (GtkColorButton *button,
  * Return value: an integer between 0 and 65535
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.4: Use gtk_color_chooser_get_rgba() instead.
  */
 guint16
 gtk_color_button_get_alpha (GtkColorButton *button)
@@ -762,6 +765,8 @@ gtk_color_button_get_alpha (GtkColorButton *button)
  * Sets the current color to be @rgba.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.4: Use gtk_color_chooser_set_rgba() instead.
  */
 void
 gtk_color_button_set_rgba (GtkColorButton *button,
@@ -786,6 +791,8 @@ gtk_color_button_set_rgba (GtkColorButton *button,
  * Sets @rgba to be the current color in the #GtkColorButton widget.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.4: Use gtk_color_chooser_get_rgba() instead.
  */
 void
 gtk_color_button_get_rgba (GtkColorButton *button,
@@ -805,6 +812,8 @@ gtk_color_button_get_rgba (GtkColorButton *button,
  * Sets whether or not the color button should use the alpha channel.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.4: Use gtk_color_chooser_set_use_alpha() instead.
  */
 void
 gtk_color_button_set_use_alpha (GtkColorButton *button,
@@ -833,6 +842,8 @@ gtk_color_button_set_use_alpha (GtkColorButton *button,
  * Returns: %TRUE if the color sample uses alpha channel, %FALSE if not
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.4: Use gtk_color_chooser_get_use_alpha() instead.
  */
 gboolean
 gtk_color_button_get_use_alpha (GtkColorButton *button)

@@ -63,7 +63,7 @@ void     gtk_color_chooser_set_rgba       (GtkColorChooser *chooser,
                                            const GdkRGBA   *color);
 gboolean gtk_color_chooser_get_use_alpha  (GtkColorChooser *chooser);
 void     gtk_color_chooser_set_use_alpha  (GtkColorChooser *chooser,
-                                           gboolean         show_alpha);
+                                           gboolean         use_alpha);
 
 G_END_DECLS
 
