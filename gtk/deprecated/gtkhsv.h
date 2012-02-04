@@ -80,36 +80,28 @@ struct _GtkHSVClass
 
 
 GType      gtk_hsv_get_type     (void) G_GNUC_CONST;
+GDK_DEPRECATED
 GtkWidget* gtk_hsv_new          (void);
+GDK_DEPRECATED
 void       gtk_hsv_set_color    (GtkHSV    *hsv,
 				 double     h,
 				 double     s,
 				 double     v);
+GDK_DEPRECATED
 void       gtk_hsv_get_color    (GtkHSV    *hsv,
 				 gdouble   *h,
 				 gdouble   *s,
 				 gdouble   *v);
+GDK_DEPRECATED
 void       gtk_hsv_set_metrics  (GtkHSV    *hsv,
 				 gint       size,
 				 gint       ring_width);
+GDK_DEPRECATED
 void       gtk_hsv_get_metrics  (GtkHSV    *hsv,
 				 gint      *size,
 				 gint      *ring_width);
+GDK_DEPRECATED
 gboolean   gtk_hsv_is_adjusting (GtkHSV    *hsv);
-
-/* Convert colors between the RGB and HSV color spaces */
-void       gtk_hsv_to_rgb       (gdouble    h,
-				 gdouble    s,
-				 gdouble    v,
-				 gdouble   *r,
-				 gdouble   *g,
-				 gdouble   *b);
-void       gtk_rgb_to_hsv       (gdouble    r,
-				 gdouble    g,
-				 gdouble    b,
-				 gdouble   *h,
-				 gdouble   *s,
-				 gdouble   *v);
 
 G_END_DECLS
 

@@ -81,8 +81,7 @@
 #include <gtk/gtkcolorchooser.h>
 #include <gtk/gtkcolorchooserdialog.h>
 #include <gtk/gtkcolorchooserwidget.h>
-#include <gtk/gtkcolorsel.h>
-#include <gtk/gtkcolorseldialog.h>
+#include <gtk/gtkcolorutils.h>
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkcomboboxtext.h>
 #include <gtk/gtkcontainer.h>
@@ -112,7 +111,6 @@
 #include <gtk/gtkframe.h>
 #include <gtk/gtkgradient.h>
 #include <gtk/gtkgrid.h>
-#include <gtk/gtkhsv.h>
 #include <gtk/gtkiconfactory.h>
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkiconview.h>
@@ -226,11 +224,14 @@
 #include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkwindow.h>
 
+#include <gtk/deprecated/gtkcolorsel.h>
+#include <gtk/deprecated/gtkcolorseldialog.h>
 #include <gtk/deprecated/gtkfontsel.h>
 #include <gtk/deprecated/gtkhandlebox.h>
 #include <gtk/deprecated/gtkhbbox.h>
 #include <gtk/deprecated/gtkhbox.h>
 #include <gtk/deprecated/gtkhpaned.h>
+#include <gtk/deprecated/gtkhsv.h>
 #include <gtk/deprecated/gtkhscale.h>
 #include <gtk/deprecated/gtkhscrollbar.h>
 #include <gtk/deprecated/gtkhseparator.h>

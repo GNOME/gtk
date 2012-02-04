@@ -145,6 +145,8 @@ endif
 # by configure)
 
 deprecated_h_sources = 			\
+	deprecated/gtkcolorsel.h	\
+	deprecated/gtkcolorseldialog.h	\
 	deprecated/gtkfontsel.h		\
 	deprecated/gtkhandlebox.h	\
 	deprecated/gtkhbbox.h		\
@@ -153,6 +155,7 @@ deprecated_h_sources = 			\
 	deprecated/gtkhscale.h		\
 	deprecated/gtkhscrollbar.h	\
 	deprecated/gtkhseparator.h	\
+	deprecated/gtkhsv.h		\
 	deprecated/gtkstyle.h		\
 	deprecated/gtkrc.h		\
 	deprecated/gtktable.h		\
@@ -215,11 +218,10 @@ gtk_public_h_sources = 		\
 	gtkcheckmenuitem.h	\
 	gtkclipboard.h		\
 	gtkcolorbutton.h	\
-	gtkcolorsel.h		\
-	gtkcolorseldialog.h	\
 	gtkcolorchooser.h	\
 	gtkcolorchooserwidget.h	\
 	gtkcolorchooserdialog.h	\
+	gtkcolorutils.h		\
 	gtkcombobox.h		\
 	gtkcomboboxtext.h	\
 	gtkcontainer.h		\
@@ -249,7 +251,6 @@ gtk_public_h_sources = 		\
 	gtkframe.h		\
 	gtkgradient.h		\
 	gtkgrid.h		\
-	gtkhsv.h		\
 	gtkiconfactory.h	\
 	gtkicontheme.h		\
 	gtkiconview.h		\
@@ -514,6 +515,8 @@ gtk_private_h_sources =		\
 
 # GTK+ C sources to build the library from
 deprecated_c_sources = 			\
+	deprecated/gtkcolorsel.c	\
+	deprecated/gtkcolorseldialog.c	\
 	deprecated/gtkfontsel.c		\
 	deprecated/gtkhandlebox.c	\
 	deprecated/gtkhbbox.c		\
@@ -522,6 +525,7 @@ deprecated_c_sources = 			\
 	deprecated/gtkhscale.c		\
 	deprecated/gtkhscrollbar.c	\
 	deprecated/gtkhseparator.c	\
+	deprecated/gtkhsv.c		\
 	deprecated/gtkrc.c		\
 	deprecated/gtkstyle.c		\
 	deprecated/gtktable.c		\
@@ -598,15 +602,14 @@ gtk_base_c_sources = 		\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
 	gtkcolorbutton.c	\
-	gtkcolorsel.c		\
-	gtkcolorseldialog.c	\
+	gtkcolorchooser.c	\
+	gtkcolorchooserwidget.c	\
+	gtkcolorchooserdialog.c	\
 	gtkcoloreditor.c	\
 	gtkcolorplane.c		\
 	gtkcolorscale.c		\
 	gtkcolorswatch.c	\
-	gtkcolorchooser.c	\
-	gtkcolorchooserwidget.c	\
-	gtkcolorchooserdialog.c	\
+	gtkcolorutils.c		\
 	gtkcombobox.c		\
 	gtkcomboboxtext.c	\
 	gtkcontainer.c		\
@@ -656,7 +659,6 @@ gtk_base_c_sources = 		\
 	gtkframe.c		\
 	gtkgradient.c		\
 	gtkgrid.c		\
-	gtkhsv.c		\
 	gtkiconcache.c		\
 	gtkiconcachevalidator.c	\
 	gtkiconfactory.c	\

@@ -20,7 +20,7 @@
 #include "config.h"
 
 #include "gtkcolorscale.h"
-#include "gtkhsv.h"
+#include "gtkcolorutils.h"
 #include "gtkorientable.h"
 #include "gtkstylecontext.h"
 #include "gtkaccessible.h"

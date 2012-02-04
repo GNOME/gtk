@@ -27,6 +27,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkcolorsel.h"
 
 #include <math.h>
@@ -62,7 +64,7 @@
 
 /**
  * SECTION:gtkcolorsel
- * @Short_description: A widget used to select a color
+ * @Short_description: Deprecated widget used to select a color
  * @Title: GtkColorSelection
  *
  * The #GtkColorSelection is a widget that is used to select

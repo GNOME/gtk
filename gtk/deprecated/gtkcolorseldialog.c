@@ -24,6 +24,10 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 #include "config.h"
+
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
+
 #include <string.h>
 #include <glib.h>
 #include "gtkcolorseldialog.h"
@@ -36,7 +40,7 @@
 
 /**
  * SECTION:gtkcolorseldlg
- * @Short_description: A standard dialog box for selecting a color
+ * @Short_description: Deprecated dialog box for selecting a color
  * @Title: GtkColorSelectionDialog
  *
  * The #GtkColorSelectionDialog provides a standard dialog which

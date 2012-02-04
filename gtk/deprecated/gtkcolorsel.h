@@ -89,51 +89,67 @@ struct _GtkColorSelectionClass
 /* ColorSelection */
 
 GType      gtk_color_selection_get_type                (void) G_GNUC_CONST;
+GDK_DEPRECATED_FOR(gtk_color_chooser_widget_new)
 GtkWidget *gtk_color_selection_new                     (void);
+GDK_DEPRECATED_FOR(gtk_color_chooser_get_use_alpha)
 gboolean   gtk_color_selection_get_has_opacity_control (GtkColorSelection *colorsel);
+GDK_DEPRECATED_FOR(gtk_color_chooser_set_use_alpha)
 void       gtk_color_selection_set_has_opacity_control (GtkColorSelection *colorsel,
 							gboolean           has_opacity);
+GDK_DEPRECATED
 gboolean   gtk_color_selection_get_has_palette         (GtkColorSelection *colorsel);
+GDK_DEPRECATED
 void       gtk_color_selection_set_has_palette         (GtkColorSelection *colorsel,
 							gboolean           has_palette);
 
 
+GDK_DEPRECATED_FOR(gtk_color_chooser_set_rgba)
 void     gtk_color_selection_set_current_alpha   (GtkColorSelection *colorsel,
 						  guint16            alpha);
+GDK_DEPRECATED_FOR(gtk_color_chooser_get_rgba)
 guint16  gtk_color_selection_get_current_alpha   (GtkColorSelection *colorsel);
+GDK_DEPRECATED
 void     gtk_color_selection_set_previous_alpha  (GtkColorSelection *colorsel,
 						  guint16            alpha);
+GDK_DEPRECATED
 guint16  gtk_color_selection_get_previous_alpha  (GtkColorSelection *colorsel);
 
+GDK_DEPRECATED_FOR(gtk_color_chooser_set_rgba)
 void     gtk_color_selection_set_current_rgba    (GtkColorSelection *colorsel,
                                                   const GdkRGBA     *rgba);
+GDK_DEPRECATED_FOR(gtk_color_chooser_get_rgba)
 void     gtk_color_selection_get_current_rgba    (GtkColorSelection *colorsel,
                                                   GdkRGBA           *rgba);
+GDK_DEPRECATED
 void     gtk_color_selection_set_previous_rgba   (GtkColorSelection *colorsel,
                                                   const GdkRGBA     *rgba);
+GDK_DEPRECATED
 void     gtk_color_selection_get_previous_rgba   (GtkColorSelection *colorsel,
                                                   GdkRGBA           *rgba);
 
+GDK_DEPRECATED
 gboolean gtk_color_selection_is_adjusting        (GtkColorSelection *colorsel);
 
+GDK_DEPRECATED
 gboolean gtk_color_selection_palette_from_string (const gchar       *str,
                                                   GdkColor         **colors,
                                                   gint              *n_colors);
+GDK_DEPRECATED
 gchar*   gtk_color_selection_palette_to_string   (const GdkColor    *colors,
                                                   gint               n_colors);
 
 GtkColorSelectionChangePaletteWithScreenFunc gtk_color_selection_set_change_palette_with_screen_hook (GtkColorSelectionChangePaletteWithScreenFunc func);
 
-GDK_DEPRECATED_FOR(gtk_color_selection_set_current_rgba)
+GDK_DEPRECATED_FOR(gtk_color_chooser_set_rgba)
 void     gtk_color_selection_set_current_color   (GtkColorSelection *colorsel,
                                                   const GdkColor    *color);
-GDK_DEPRECATED_FOR(gtk_color_selection_get_current_rgba)
+GDK_DEPRECATED_FOR(gtk_color_chooser_get_rgba)
 void     gtk_color_selection_get_current_color   (GtkColorSelection *colorsel,
                                                   GdkColor          *color);
-GDK_DEPRECATED_FOR(gtk_color_selection_set_previous_rgba)
+GDK_DEPRECATED
 void     gtk_color_selection_set_previous_color  (GtkColorSelection *colorsel,
                                                   const GdkColor    *color);
-GDK_DEPRECATED_FOR(gtk_color_selection_get_previous_rgba)
+GDK_DEPRECATED
 void     gtk_color_selection_get_previous_color  (GtkColorSelection *colorsel,
                                                   GdkColor          *color);
 

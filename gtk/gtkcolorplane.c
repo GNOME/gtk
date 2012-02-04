@@ -19,8 +19,8 @@
 
 #include "config.h"
 
-#include "gtkhsv.h"
 #include "gtkcolorplane.h"
+#include "gtkcolorutils.h"
 #include "gtkcontainer.h"
 #include "gtkaccessible.h"
 #include "gtkwindow.h"
