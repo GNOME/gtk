@@ -46,12 +46,12 @@ struct _GtkFontChooserDialogPrivate
 };
 
 /**
- * SECTION:gtkfontchooserdlg
- * @Short_description: A dialog box for selecting fonts
+ * SECTION:gtkfontchooserdialog
+ * @Short_description: A dialog for selecting fonts
  * @Title: GtkFontChooserDialog
  * @See_also: #GtkFontChooser, #GtkDialog
  *
- * The #GtkFontChooserDialog widget is a dialog box for selecting a font.
+ * The #GtkFontChooserDialog widget is a dialog for selecting a font.
  * It implements the #GtkFontChooser interface.
  *
  * <refsect2 id="GtkFontChooserDialog-BUILDER-UI">
