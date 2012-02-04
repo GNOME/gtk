@@ -21,10 +21,7 @@
 
 #include "gtkcolorplane.h"
 #include "gtkcolorutils.h"
-#include "gtkcontainer.h"
 #include "gtkaccessible.h"
-#include "gtkwindow.h"
-#include "gtkbutton.h"
 #include "gtkintl.h"
 
 struct _GtkColorPlanePrivate
@@ -34,15 +31,32 @@ struct _GtkColorPlanePrivate
   GtkAdjustment *v_adj;
 
   cairo_surface_t *surface;
-  gint x, y;
   gboolean in_drag;
 };
 
 G_DEFINE_TYPE (GtkColorPlane, gtk_color_plane, GTK_TYPE_DRAWING_AREA)
 
+static void
+sv_to_xy (GtkColorPlane *plane,
+          gint          *x,
+          gint          *y)
+{
+  gdouble s, v;
+  gint width, height;
+
+  width = gtk_widget_get_allocated_width (GTK_WIDGET (plane));
+  height = gtk_widget_get_allocated_height (GTK_WIDGET (plane));
+
+  s = gtk_adjustment_get_value (plane->priv->s_adj);
+  v = gtk_adjustment_get_value (plane->priv->v_adj);
+
+  *x = CLAMP (width * v, 0, width - 1);
+  *y = CLAMP (height * (1 - s), 0, height - 1);
+}
+
 static gboolean
-sv_draw (GtkWidget *widget,
-         cairo_t   *cr)
+plane_draw (GtkWidget *widget,
+            cairo_t   *cr)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
   gint x, y;
@@ -51,8 +65,7 @@ sv_draw (GtkWidget *widget,
   cairo_set_source_surface (cr, plane->priv->surface, 0, 0);
   cairo_paint (cr);
 
-  x = plane->priv->x;
-  y = plane->priv->y;
+  sv_to_xy (plane, &x, &y);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
 
@@ -83,7 +96,7 @@ sv_draw (GtkWidget *widget,
 }
 
 static void
-create_sv_surface (GtkColorPlane *plane)
+create_surface (GtkColorPlane *plane)
 {
   GtkWidget *widget = GTK_WIDGET (plane);
   cairo_t *cr;
@@ -148,30 +161,11 @@ create_sv_surface (GtkColorPlane *plane)
   g_free (data);
 }
 
-static void
-hsv_to_xy (GtkColorPlane *plane)
-{
-  gdouble s, v;
-  gint width, height;
-
-  width = gtk_widget_get_allocated_width (GTK_WIDGET (plane));
-  height = gtk_widget_get_allocated_height (GTK_WIDGET (plane));
-
-  s = gtk_adjustment_get_value (plane->priv->s_adj);
-  v = gtk_adjustment_get_value (plane->priv->v_adj);
-  plane->priv->x = CLAMP (width * v, 0, width - 1);
-  plane->priv->y = CLAMP (height * (1 - s), 0, height - 1);
-}
-
 static gboolean
-sv_configure (GtkWidget         *widget,
-              GdkEventConfigure *event)
+plane_configure (GtkWidget         *widget,
+                 GdkEventConfigure *event)
 {
-  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-
-  create_sv_surface (plane);
-  hsv_to_xy (plane);
-
+  create_surface (GTK_COLOR_PLANE (widget));
   return TRUE;
 }
 
@@ -197,37 +191,45 @@ set_cross_grab (GtkWidget *widget,
 }
 
 static gboolean
-sv_grab_broken (GtkWidget          *widget,
-                GdkEventGrabBroken *event)
+plane_grab_broken (GtkWidget          *widget,
+                   GdkEventGrabBroken *event)
 {
-  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-
-  plane->priv->in_drag = FALSE;
-
+  GTK_COLOR_PLANE (widget)->priv->in_drag = FALSE;
   return TRUE;
 }
 
 static void
-sv_update_color (GtkColorPlane *plane,
-                 gint           x,
-                 gint           y)
+h_changed (GtkColorPlane *plane)
+{
+  create_surface (plane);
+  gtk_widget_queue_draw (GTK_WIDGET (plane));
+}
+
+static void
+sv_changed (GtkColorPlane *plane)
+{
+  gtk_widget_queue_draw (GTK_WIDGET (plane));
+}
+
+static void
+update_color (GtkColorPlane *plane,
+              gint           x,
+              gint           y)
 {
   GtkWidget *widget = GTK_WIDGET (plane);
   gdouble s, v;
-
-  plane->priv->x = x;
-  plane->priv->y = y;
 
   s = CLAMP (1 - y * (1.0 / gtk_widget_get_allocated_height (widget)), 0, 1);
   v = CLAMP (x * (1.0 / gtk_widget_get_allocated_width (widget)), 0, 1);
   gtk_adjustment_set_value (plane->priv->s_adj, s);
   gtk_adjustment_set_value (plane->priv->v_adj, v);
+
   gtk_widget_queue_draw (widget);
 }
 
 static gboolean
-sv_button_press (GtkWidget      *widget,
-                 GdkEventButton *event)
+plane_button_press (GtkWidget      *widget,
+                    GdkEventButton *event)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
 
@@ -245,15 +247,15 @@ sv_button_press (GtkWidget      *widget,
 
   plane->priv->in_drag = TRUE;
   set_cross_grab (widget, gdk_event_get_device ((GdkEvent*)event), event->time);
-  sv_update_color (plane, event->x, event->y);
+  update_color (plane, event->x, event->y);
   gtk_widget_grab_focus (widget);
 
   return TRUE;
 }
 
 static gboolean
-sv_button_release (GtkWidget      *widget,
-                   GdkEventButton *event)
+plane_button_release (GtkWidget      *widget,
+                      GdkEventButton *event)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
 
@@ -262,15 +264,15 @@ sv_button_release (GtkWidget      *widget,
 
   plane->priv->in_drag = FALSE;
 
-  sv_update_color (plane, event->x, event->y);
+  update_color (plane, event->x, event->y);
   gdk_device_ungrab (gdk_event_get_device ((GdkEvent *) event), event->time);
 
   return TRUE;
 }
 
 static gboolean
-sv_motion (GtkWidget      *widget,
-           GdkEventMotion *event)
+plane_motion_notify (GtkWidget      *widget,
+                     GdkEventMotion *event)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
 
@@ -278,23 +280,9 @@ sv_motion (GtkWidget      *widget,
     return FALSE;
 
   gdk_event_request_motions (event);
-  sv_update_color (plane, event->x, event->y);
+  update_color (plane, event->x, event->y);
 
   return TRUE;
-}
-
-static void
-h_changed (GtkColorPlane *plane)
-{
-  create_sv_surface (plane);
-  gtk_widget_queue_draw (GTK_WIDGET (plane));
-}
-
-static void
-sv_changed (GtkColorPlane *plane)
-{
-  hsv_to_xy (plane);
-  gtk_widget_queue_draw (GTK_WIDGET (plane));
 }
 
 static void
@@ -354,13 +342,12 @@ error:
 }
 
 static gboolean
-sv_key_press (GtkWidget      *widget,
-              GdkEventKey    *event)
+plane_key_press (GtkWidget   *widget,
+                 GdkEventKey *event)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
   gdouble step;
 
-  /* FIXME: turn into bindings */
   if ((event->state & GDK_MOD1_MASK) != 0)
     step = 0.1;
   else
@@ -392,6 +379,7 @@ gtk_color_plane_init (GtkColorPlane *plane)
   plane->priv = G_TYPE_INSTANCE_GET_PRIVATE (plane,
                                              GTK_TYPE_COLOR_PLANE,
                                              GtkColorPlanePrivate);
+
   gtk_widget_set_can_focus (GTK_WIDGET (plane), TRUE);
   gtk_widget_set_events (GTK_WIDGET (plane), GDK_KEY_PRESS_MASK
                                              | GDK_BUTTON_PRESS_MASK
@@ -407,11 +395,13 @@ gtk_color_plane_init (GtkColorPlane *plane)
 }
 
 static void
-sv_finalize (GObject *object)
+plane_finalize (GObject *object)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (object);
 
-  cairo_surface_destroy (plane->priv->surface);
+  if (plane->priv->surface)
+    cairo_surface_destroy (plane->priv->surface);
+
   g_clear_object (&plane->priv->h_adj);
   g_clear_object (&plane->priv->s_adj);
   g_clear_object (&plane->priv->v_adj);
@@ -425,15 +415,15 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  object_class->finalize = sv_finalize;
+  object_class->finalize = plane_finalize;
 
-  widget_class->draw = sv_draw;
-  widget_class->configure_event = sv_configure;
-  widget_class->button_press_event = sv_button_press;
-  widget_class->button_release_event = sv_button_release;
-  widget_class->motion_notify_event = sv_motion;
-  widget_class->grab_broken_event = sv_grab_broken;
-  widget_class->key_press_event = sv_key_press;
+  widget_class->draw = plane_draw;
+  widget_class->configure_event = plane_configure;
+  widget_class->button_press_event = plane_button_press;
+  widget_class->button_release_event = plane_button_release;
+  widget_class->motion_notify_event = plane_motion_notify;
+  widget_class->grab_broken_event = plane_grab_broken;
+  widget_class->key_press_event = plane_key_press;
 
   g_type_class_add_private (class, sizeof (GtkColorPlanePrivate));
 }
@@ -447,16 +437,12 @@ gtk_color_plane_new (GtkAdjustment *h_adj,
 
   plane = (GtkColorPlane *) g_object_new (GTK_TYPE_COLOR_PLANE, NULL);
 
-
   plane->priv->h_adj = g_object_ref_sink (h_adj);
   plane->priv->s_adj = g_object_ref_sink (s_adj);
   plane->priv->v_adj = g_object_ref_sink (v_adj);
-  g_signal_connect_swapped (plane->priv->h_adj, "value-changed",
-                            G_CALLBACK (h_changed), plane);
-  g_signal_connect_swapped (plane->priv->s_adj, "value-changed",
-                            G_CALLBACK (sv_changed), plane);
-  g_signal_connect_swapped (plane->priv->v_adj, "value-changed",
-                            G_CALLBACK (sv_changed), plane);
+  g_signal_connect_swapped (h_adj, "value-changed", G_CALLBACK (h_changed), plane);
+  g_signal_connect_swapped (s_adj, "value-changed", G_CALLBACK (sv_changed), plane);
+  g_signal_connect_swapped (v_adj, "value-changed", G_CALLBACK (sv_changed), plane);
 
   return (GtkWidget *)plane;
 }

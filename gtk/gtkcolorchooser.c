@@ -114,6 +114,13 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
                   1, G_TYPE_STRING);
 }
 
+void
+_gtk_color_chooser_color_activated (GtkColorChooser *chooser,
+                                    const GdkRGBA   *color)
+{
+  g_signal_emit (chooser, signals[COLOR_ACTIVATED], 0, color);
+}
+
 /**
  * gtk_color_chooser_get_rgba:
  * @chooser: a #GtkColorChooser
@@ -147,13 +154,6 @@ gtk_color_chooser_set_rgba (GtkColorChooser *chooser,
   g_return_if_fail (color != NULL);
 
   GTK_COLOR_CHOOSER_GET_IFACE (chooser)->set_rgba (chooser, color);
-}
-
-void
-_gtk_color_chooser_color_activated (GtkColorChooser *chooser,
-                                    const GdkRGBA   *color)
-{
-  g_signal_emit (chooser, signals[COLOR_ACTIVATED], 0, color);
 }
 
 /**

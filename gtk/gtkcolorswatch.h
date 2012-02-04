@@ -81,6 +81,12 @@ G_GNUC_INTERNAL
 gboolean    gtk_color_swatch_get_rgba         (GtkColorSwatch *swatch,
                                                GdkRGBA        *color);
 G_GNUC_INTERNAL
+void        gtk_color_swatch_set_hsva         (GtkColorSwatch *swatch,
+                                               gdouble         h,
+                                               gdouble         s,
+                                               gdouble         v,
+                                               gdouble         a);
+G_GNUC_INTERNAL
 void        gtk_color_swatch_set_selected     (GtkColorSwatch *swatch,
                                                gboolean        selected);
 G_GNUC_INTERNAL
