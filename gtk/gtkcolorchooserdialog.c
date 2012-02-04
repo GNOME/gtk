@@ -254,10 +254,24 @@ gtk_color_chooser_dialog_set_rgba (GtkColorChooser *chooser,
 }
 
 static void
+gtk_color_chooser_dialog_add_palette (GtkColorChooser *chooser,
+                                      gboolean         horizontal,
+                                      gint             colors_per_line,
+                                      gint             n_colors,
+                                      GdkRGBA         *colors)
+{
+  GtkColorChooserDialog *cc = GTK_COLOR_CHOOSER_DIALOG (chooser);
+
+  gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (cc->priv->chooser),
+                                 horizontal, colors_per_line, n_colors, colors);
+}
+
+static void
 gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface)
 {
   iface->get_rgba = gtk_color_chooser_dialog_get_rgba;
   iface->set_rgba = gtk_color_chooser_dialog_set_rgba;
+  iface->add_palette = gtk_color_chooser_dialog_add_palette;
 }
 
 /**

@@ -990,6 +990,20 @@ gtk_color_button_get_property (GObject    *object,
     }
 }
 
+static void
+gtk_color_button_add_palette (GtkColorChooser *chooser,
+                              gboolean         horizontal,
+                              gint             colors_per_line,
+                              gint             n_colors,
+                              GdkRGBA         *colors)
+{
+  GtkColorButton *button = GTK_COLOR_BUTTON (chooser);
+
+  if (button->priv->cs_dialog)
+    gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (button->priv->cs_dialog),
+                                   horizontal, colors_per_line, n_colors, colors);
+}
+
 typedef void (* get_rgba) (GtkColorChooser *, GdkRGBA *);
 typedef void (* set_rgba) (GtkColorChooser *, const GdkRGBA *);
 
@@ -998,5 +1012,6 @@ gtk_color_button_iface_init (GtkColorChooserInterface *iface)
 {
   iface->get_rgba = (get_rgba)gtk_color_button_get_rgba;
   iface->set_rgba = (set_rgba)gtk_color_button_set_rgba;
+  iface->add_palette = gtk_color_button_add_palette;
 }
 

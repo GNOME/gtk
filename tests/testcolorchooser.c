@@ -52,6 +52,38 @@ main (int argc, char *argv[])
           g_print ("starting in edit mode\n");
           g_object_set (dialog, "show-editor", TRUE, NULL);
         }
+      else if (g_strcmp0 (argv[i], "--palette") == 0)
+        {
+          const gchar *c[4] = { "red", "maroon", "yellow", "green" };
+          GdkRGBA color;
+          GdkRGBA colors[36];
+          gint i,j;
+          gdouble f[5] = { 0.2, 0.35, 0.5, 0.65, 0.8 };
+
+          g_print ("setting custom palette\n");
+          for (i = 0; i < 4; i++)
+            {
+              gdk_rgba_parse (&color, c[i]);
+              for (j = 0; j < 5; j++)
+                {
+                  colors[i*9 + j].red   = f[j]*color.red;
+                  colors[i*9 + j].green = f[j]*color.green;
+                  colors[i*9 + j].blue  = f[j]*color.blue;
+                  colors[i*9 + j].alpha = 1;
+                }
+              for (j = 5; j < 9; j++)
+                {
+                  colors[i*9 + j].red   = f[9-j]*color.red + (1-f[9-j]);
+                  colors[i*9 + j].green = f[9-j]*color.green + (1-f[9-j]);
+                  colors[i*9 + j].blue  = f[9-j]*color.blue + (1-f[9-j]);
+                  colors[i*9 + j].alpha = 1;
+                }
+            }
+          gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (dialog),
+                                         FALSE,
+                                         9, 36,
+                                         colors);
+        }
     }
 
   g_signal_connect (dialog, "notify::color", G_CALLBACK (color_changed), NULL);

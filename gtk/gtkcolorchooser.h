@@ -42,10 +42,16 @@ struct _GtkColorChooserInterface
   GTypeInterface base_interface;
 
   /* Methods */
-  void (* get_rgba) (GtkColorChooser *chooser,
-                     GdkRGBA         *color);
-  void (* set_rgba) (GtkColorChooser *chooser,
-                     const GdkRGBA   *color);
+  void (* get_rgba)    (GtkColorChooser *chooser,
+                        GdkRGBA         *color);
+  void (* set_rgba)    (GtkColorChooser *chooser,
+                        const GdkRGBA   *color);
+
+  void (* add_palette) (GtkColorChooser *chooser,
+                        gboolean         horizontal,
+                        gint             colors_per_line,
+                        gint             n_colors,
+                        GdkRGBA         *colors);
 
   /* Signals */
   void (* color_activated) (GtkColorChooser *chooser,
@@ -64,6 +70,12 @@ void     gtk_color_chooser_set_rgba       (GtkColorChooser *chooser,
 gboolean gtk_color_chooser_get_use_alpha  (GtkColorChooser *chooser);
 void     gtk_color_chooser_set_use_alpha  (GtkColorChooser *chooser,
                                            gboolean         use_alpha);
+
+void     gtk_color_chooser_add_palette    (GtkColorChooser *chooser,
+                                           gboolean         horizontal,
+                                           gint             colors_per_line,
+                                           gint             n_colors,
+                                           GdkRGBA         *colors);
 
 G_END_DECLS
 
