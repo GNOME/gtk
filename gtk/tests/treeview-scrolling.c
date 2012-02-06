@@ -425,8 +425,7 @@ static void
 test_position (GtkTreeView *tree_view,
 	       GtkTreePath *path,
 	       gboolean     use_align,
-	       gdouble      row_align,
-	       gdouble      col_align)
+	       gdouble      row_align)
 {
 	gint pos;
 	gchar *path_str;
@@ -500,7 +499,7 @@ scroll (ScrollFixture *fixture,
 		gtk_main_iteration ();
 
 	test_position (GTK_TREE_VIEW (fixture->tree_view), path,
-		       use_align, row_align, 0.0);
+		       use_align, row_align);
 }
 
 static void
@@ -569,7 +568,7 @@ scroll_after_realize (ScrollFixture *fixture,
 		gtk_main_iteration ();
 
 	test_position (GTK_TREE_VIEW (fixture->tree_view), path,
-		       use_align, row_align, 0.0);
+		       use_align, row_align);
 }
 
 static void
@@ -651,7 +650,7 @@ scroll_both_realize (ScrollFixture *fixture,
 		gtk_main_iteration ();
 
 	test_position (GTK_TREE_VIEW (fixture->tree_view), path,
-		       use_align, row_align, 0.0);
+		       use_align, row_align);
 }
 
 static void
@@ -821,7 +820,7 @@ scroll_new_row (ScrollFixture *fixture,
 
 	/* Test position */
 	test_position (GTK_TREE_VIEW (fixture->tree_view), scroll_path,
-		       FALSE, 0.0, 0.0);
+		       FALSE, 0.0);
 	test_editable_position (fixture->tree_view, editable, scroll_path);
 
 	gtk_tree_path_free (scroll_path);
