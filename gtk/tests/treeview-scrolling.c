@@ -399,7 +399,6 @@ assert_position_with_align (GtkTreeView  *tree_view,
 			 */
 			g_assert (row_start >= gtk_adjustment_get_page_size (vadjustment)
 			          || row_start + row_height >= gtk_adjustment_get_page_size (vadjustment));
-			g_assert (gtk_adjustment_get_value (vadjustment) > 0);
 		        g_assert (row_y == gtk_adjustment_get_page_size (vadjustment) - row_height);
 		}
 		break;
