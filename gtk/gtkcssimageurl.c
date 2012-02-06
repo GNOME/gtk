@@ -97,11 +97,11 @@ gtk_css_image_url_parse (GtkCssImage  *image,
 	  _gtk_css_parser_take_error (parser, error);
 	  return FALSE;
 	}
-      g_object_unref (file);
 
       pixbuf = gdk_pixbuf_new_from_stream (G_INPUT_STREAM (input), NULL, &error);
       g_object_unref (input);
     }
+  g_object_unref (file);
 
   if (pixbuf == NULL)
     {
