@@ -1071,7 +1071,7 @@ test_bug111500 (ScrollFixture *fixture,
 
 	gtk_tree_path_down (path);
 
-	scroll (fixture, path, TRUE, 0.5);
+	scroll (fixture, path, FALSE, 0.5);
 	gtk_tree_path_free (path);
 }
 
@@ -1127,7 +1127,7 @@ test_bug111500_mixed (ScrollFixture *fixture,
 
 	gtk_tree_path_down (path);
 
-	scroll (fixture, path, TRUE, 0.5);
+	scroll (fixture, path, FALSE, 0.5);
 	gtk_tree_path_free (path);
 }
 
