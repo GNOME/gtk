@@ -155,6 +155,7 @@ struct _GtkScrolledWindowPrivate
   GdkDevice             *drag_device;
   guint                  kinetic_scrolling_flags   : 2;
   guint                  in_drag                   : 1;
+  guint                  last_button_event_valid   : 1;
   guint                  captured_event_id;
 
   guint                  release_timeout_id;
@@ -594,8 +595,6 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_scrolled_window_update_real_placement (scrolled_window);
   priv->min_content_width = -1;
   priv->min_content_height = -1;
-  priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
-  priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
 
   gtk_scrolled_window_set_kinetic_scrolling (scrolled_window,
                                              GTK_KINETIC_SCROLLING_ENABLED |
@@ -2508,13 +2507,13 @@ gtk_scrolled_window_captured_button_release (GtkWidget *widget,
     {
       gtk_scrolled_window_start_deceleration (scrolled_window);
       priv->x_velocity = priv->y_velocity = 0;
-      priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
-      priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
+      priv->last_button_event_valid = FALSE;
     }
   else
     {
       priv->last_button_event_x_root = event->x_root;
       priv->last_button_event_y_root = event->y_root;
+      priv->last_button_event_valid = TRUE;
     }
 
   if (priv->kinetic_scrolling_flags & GTK_KINETIC_SCROLLING_CAPTURE_BUTTON_PRESS)
@@ -2562,6 +2561,8 @@ gtk_scrolled_window_captured_motion_notify (GtkWidget *widget,
               g_source_remove (priv->release_timeout_id);
               priv->release_timeout_id = 0;
             }
+
+          priv->last_button_event_valid = FALSE;
           priv->in_drag = TRUE;
         }
       else
@@ -2575,9 +2576,6 @@ gtk_scrolled_window_captured_motion_notify (GtkWidget *widget,
                    GDK_BUTTON_RELEASE_MASK | GDK_BUTTON1_MOTION_MASK,
                    NULL,
                    event->time);
-
-  priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
-  priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
 
   gtk_widget_release_captured_events (widget, FALSE);
 
@@ -2662,17 +2660,18 @@ gtk_scrolled_window_captured_button_press (GtkWidget *widget,
   /* Check whether the button press is close to the previous one,
    * take that as a shortcut to get the child widget handle events
    */
-  if (ABS (event->x_root - priv->last_button_event_x_root) < TOUCH_BYPASS_CAPTURED_THRESHOLD &&
+  if (priv->last_button_event_valid &&
+      ABS (event->x_root - priv->last_button_event_x_root) < TOUCH_BYPASS_CAPTURED_THRESHOLD &&
       ABS (event->y_root - priv->last_button_event_y_root) < TOUCH_BYPASS_CAPTURED_THRESHOLD)
     {
-      priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
-      priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
+      priv->last_button_event_valid = FALSE;
       return GTK_CAPTURED_EVENT_NONE;
     }
 
   priv->last_button_event_x_root = priv->last_motion_event_x_root = event->x_root;
   priv->last_button_event_y_root = priv->last_motion_event_y_root = event->y_root;
   priv->last_motion_event_time = event->time;
+  priv->last_button_event_valid = TRUE;
 
   if (event->button != 1)
     return GTK_CAPTURED_EVENT_NONE;
@@ -2730,10 +2729,7 @@ gtk_scrolled_window_captured_event (GtkWidget *widget,
       if (priv->drag_device)
         flags = gtk_scrolled_window_captured_button_release (widget, event);
       else
-        {
-          priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
-          priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
-        }
+        priv->last_button_event_valid = FALSE;
       break;
     case GDK_MOTION_NOTIFY:
       if (priv->drag_device)
@@ -3285,8 +3281,7 @@ gtk_scrolled_window_grab_notify (GtkWidget *widget,
       else
         gtk_scrolled_window_cancel_deceleration (scrolled_window);
 
-      priv->last_button_event_x_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
-      priv->last_button_event_y_root = -TOUCH_BYPASS_CAPTURED_THRESHOLD;
+      priv->last_button_event_valid = FALSE;
     }
 }
 
