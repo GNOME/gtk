@@ -1,3 +1,26 @@
+Overview of Changes in GTK+ 3.3.14
+==================================
+
+* Theming
+ - Fixes for border handling in GtkEntry,
+   GtkCellRendererText, GtkComboBox
+ - Parse values more carefully, supporting
+   percentages, angles
+ - Implement CSS linear-gradient syntax
+ - Support background-size
+ - Support a gtk.gresource file in themes
+
+* Bugs fixed
+ 543520 Cups custom options are not sent properly
+ 649121 Crash in GtkAppChooserDialog packagekit button
+ 669176 Regression: atk-add-key-event-listener doesn't work
+
+* Updated translations
+ Galician
+ Norwegian bokmål
+ Spanish
+
+
 Overview of Changes in GTK+ 3.3.10
 ==================================
 
