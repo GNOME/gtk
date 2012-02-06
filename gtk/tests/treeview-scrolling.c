@@ -350,7 +350,7 @@ assert_position_with_align (GtkTreeView  *tree_view,
 	case 1:
 		/* 0.5 */
 		if (pos == POS_TOP
-		    && row_start < gtk_adjustment_get_page_size (vadjustment) / 2) {
+		    && row_start < (gtk_adjustment_get_page_size (vadjustment) - row_height) / 2) {
 			/* For the first half of the top view we can't
 			 * center the row in the view, instead we
 			 * show the first page.
@@ -358,7 +358,7 @@ assert_position_with_align (GtkTreeView  *tree_view,
 			 */
 			g_assert (gtk_adjustment_get_value (vadjustment) == 0);
 		} else if (pos == POS_BOTTOM
-			   && row_start >= gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment) / 2) {
+			   && row_start + row_height >= gtk_adjustment_get_upper (vadjustment) - (gtk_adjustment_get_page_size (vadjustment) - row_height) / 2) {
 			/* For the last half of the bottom view we
 			 * can't center the row in the view, instead
 			 * we show the last page.
@@ -375,7 +375,7 @@ assert_position_with_align (GtkTreeView  *tree_view,
 			 *      (ie. the row's center is at the
 			 *       center of the view).
 			 */
-			gdouble middle = gtk_adjustment_get_page_size (vadjustment) / 2 - row_height / 2;
+			gdouble middle = (gtk_adjustment_get_page_size (vadjustment) - row_height) / 2.0;
 			g_assert (row_y == ceil (middle) || row_y == floor (middle));
 		}
 		break;
