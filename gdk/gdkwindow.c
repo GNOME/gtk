@@ -8364,7 +8364,7 @@ gdk_make_multitouch_event (GdkWindow        *window,
   GdkEventMotion **subevents;
   TouchEventInfo *info;
   GHashTable *by_touch;
-  GList *touches;
+  guint *touches;
 
   if (!window->touch_event_tracker)
     return NULL;
@@ -8394,32 +8394,29 @@ gdk_make_multitouch_event (GdkWindow        *window,
   mt_event->multitouch.group = cluster;
 
   /* Fill in individual motion sub-events */
-  touches = gdk_touch_cluster_get_touches (cluster);
-  n_touches = g_list_length (touches);
-  i = 0;
-
+  touches = gdk_touch_cluster_get_touches (cluster, &n_touches);
   subevents = g_new0 (GdkEventMotion *, n_touches);
 
-  while (touches)
+  for (i = 0; i < n_touches; i++)
     {
       TouchEventInfo *subevent_info;
       GdkEvent *subevent;
 
-      subevent_info = g_hash_table_lookup (by_touch, touches->data);
+      subevent_info = g_hash_table_lookup (by_touch,
+                                           GUINT_TO_POINTER (touches[i]));
       subevent = gdk_event_copy (subevent_info->event);
       subevents[i] = (GdkEventMotion *) subevent;
 
       if (subevent->motion.touch_id == touch_id)
         n_updated = i;
-
-      touches = touches->next;
-      i++;
     }
 
   mt_event->multitouch.events = subevents;
   mt_event->multitouch.n_updated_event = n_updated;
   mt_event->multitouch.n_events = n_touches;
   mt_event->multitouch.updated_touch_id = touch_id;
+
+  g_free (touches);
 
   return mt_event;
 }

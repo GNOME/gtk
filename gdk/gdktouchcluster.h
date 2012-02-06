@@ -58,7 +58,9 @@ void        gdk_touch_cluster_remove_touch (GdkTouchCluster *cluster,
                                             guint            touch_id);
 void        gdk_touch_cluster_remove_all   (GdkTouchCluster *cluster);
 
-GList *     gdk_touch_cluster_get_touches  (GdkTouchCluster *cluster);
+guint *     gdk_touch_cluster_get_touches  (GdkTouchCluster *cluster,
+                                            gint            *length);
+gint        gdk_touch_cluster_get_n_touches (GdkTouchCluster *cluster);
 
 void        gdk_touch_cluster_set_device   (GdkTouchCluster *cluster,
                                             GdkDevice       *device);

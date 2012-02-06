@@ -116,7 +116,7 @@ typedef struct GdkTouchClusterPrivate GdkTouchClusterPrivate;
 struct GdkTouchClusterPrivate
 {
   GdkDevice *device;
-  GList *touches;
+  GArray *touches;
 };
 
 enum {
@@ -186,9 +186,12 @@ gdk_touch_cluster_class_init (GdkTouchClusterClass *klass)
 static void
 gdk_touch_cluster_init (GdkTouchCluster *cluster)
 {
-  cluster->priv = G_TYPE_INSTANCE_GET_PRIVATE (cluster,
-                                               GDK_TYPE_TOUCH_CLUSTER,
-                                               GdkTouchClusterPrivate);
+  GdkTouchClusterPrivate *priv;
+
+  priv = cluster->priv = G_TYPE_INSTANCE_GET_PRIVATE (cluster,
+                                                      GDK_TYPE_TOUCH_CLUSTER,
+                                                      GdkTouchClusterPrivate);
+  priv->touches = g_array_new (FALSE, FALSE, sizeof (guint));
 }
 
 static void
@@ -197,7 +200,7 @@ gdk_touch_cluster_finalize (GObject *object)
   GdkTouchClusterPrivate *priv;
 
   priv = GDK_TOUCH_CLUSTER (object)->priv;
-  g_list_free (priv->touches);
+  g_array_free (priv->touches, TRUE);
 
   G_OBJECT_CLASS (gdk_touch_cluster_parent_class)->finalize (object);
 }
@@ -261,16 +264,20 @@ gdk_touch_cluster_add_touch (GdkTouchCluster *cluster,
                              guint            touch_id)
 {
   GdkTouchClusterPrivate *priv;
+  gint i;
 
   g_return_if_fail (GDK_IS_TOUCH_CLUSTER (cluster));
 
   priv = cluster->priv;
 
-  if (!g_list_find (priv->touches, GUINT_TO_POINTER (touch_id)))
+  for (i = 0; i < priv->touches->len; i++)
     {
-      priv->touches = g_list_prepend (priv->touches, GUINT_TO_POINTER (touch_id));
-      g_signal_emit (cluster, signals [TOUCH_ADDED], 0, touch_id);
+      if (touch_id == g_array_index (priv->touches, guint, i))
+        return;
     }
+
+  g_array_append_val (priv->touches, touch_id);
+  g_signal_emit (cluster, signals [TOUCH_ADDED], 0, touch_id);
 }
 
 /**
@@ -294,19 +301,20 @@ gdk_touch_cluster_remove_touch (GdkTouchCluster *cluster,
                                 guint            touch_id)
 {
   GdkTouchClusterPrivate *priv;
-  GList *link;
+  gint i;
 
   g_return_if_fail (GDK_IS_TOUCH_CLUSTER (cluster));
 
   priv = cluster->priv;
 
-  link = g_list_find (priv->touches, GUINT_TO_POINTER (touch_id));
-
-  if (link)
+  for (i = 0; i < priv->touches->len; i++)
     {
-      priv->touches = g_list_remove_link (priv->touches, link);
-      g_signal_emit (cluster, signals [TOUCH_REMOVED], 0, touch_id);
-      g_list_free1 (link);
+      if (touch_id == g_array_index (priv->touches, guint, i))
+        {
+          g_array_remove_index_fast (priv->touches, i);
+          g_signal_emit (cluster, signals [TOUCH_REMOVED], 0, touch_id);
+          return;
+        }
     }
 }
 
@@ -322,43 +330,69 @@ void
 gdk_touch_cluster_remove_all (GdkTouchCluster *cluster)
 {
   GdkTouchClusterPrivate *priv;
-  GList *link;
+  guint touch_id;
+  gint i;
 
   g_return_if_fail (GDK_IS_TOUCH_CLUSTER (cluster));
 
   priv = cluster->priv;
-  link = priv->touches;
 
-  while (link)
+  for (i = priv->touches->len - 1; i >= 0; i--)
     {
-      priv->touches = g_list_remove_link (priv->touches, link);
-      g_signal_emit (cluster, signals [TOUCH_REMOVED], 0, link->data);
+      touch_id = g_array_index (priv->touches, guint, i);
+      g_signal_emit (cluster, signals [TOUCH_REMOVED], 0, touch_id);
+      g_array_remove_index_fast (priv->touches, i);
     }
-
-  g_list_free (priv->touches);
-  priv->touches = NULL;
 }
 
 
 /**
  * gdk_touch_cluster_get_touches:
  * @cluster: a #GdkTouchCluster
+ * @length: return location for the number of touches returned
  *
- * Returns a const list of touch IDs as #guint.
+ * Returns the list of touches as an array of @guint.
  *
- * Returns: (transfer none) (element-type uint): A list of touch IDs.
+ * Returns: (transfer full) (array zero-terminated=0 length=length) (element-type uint): A list of touch IDs.
  *
  * Since: 3.4
  **/
-GList *
-gdk_touch_cluster_get_touches (GdkTouchCluster *cluster)
+guint *
+gdk_touch_cluster_get_touches (GdkTouchCluster *cluster,
+                               gint            *len)
 {
   GdkTouchClusterPrivate *priv;
 
   g_return_val_if_fail (GDK_IS_TOUCH_CLUSTER (cluster), NULL);
 
   priv = cluster->priv;
-  return priv->touches;
+
+  if (len)
+    *len = (gint) priv->touches->len;
+
+  return g_memdup (priv->touches->data,
+                   sizeof (guint) * priv->touches->len);
+}
+
+/**
+ * gdk_touch_cluster_get_n_touches:
+ * @cluster: a #GdkTouchCluster
+ *
+ * Returns the number of touches contained in @cluster.
+ *
+ * Returns: The number of touches.
+ *
+ * Since: 3.4
+ **/
+gint
+gdk_touch_cluster_get_n_touches (GdkTouchCluster *cluster)
+{
+  GdkTouchClusterPrivate *priv;
+
+  g_return_val_if_fail (GDK_IS_TOUCH_CLUSTER (cluster), 0);
+
+  priv = cluster->priv;
+  return (gint) priv->touches->len;
 }
 
 /**

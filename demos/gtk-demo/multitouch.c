@@ -412,7 +412,7 @@ button_press_cb (GtkWidget *widget,
       if (!shape->cluster)
         shape->cluster = gdk_window_create_touch_cluster (gtk_widget_get_window (widget),
                                                           gdk_event_get_device (event));
-      else if (!gdk_touch_cluster_get_touches (shape->cluster))
+      else if (gdk_touch_cluster_get_n_touches (shape->cluster) == 0)
         {
           /* Only change cluster device if there were no touches */
           gdk_touch_cluster_set_device (shape->cluster,
