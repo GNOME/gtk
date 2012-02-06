@@ -1,3 +1,18 @@
+Overview of Changes from GTK+ 2.24.9 to 2.24.10
+===============================================
+
+* Win32: make gdk_window_raise work again
+
+* Quartz: implement gdk_window_restack
+
+* Printing: fix a crash with custom option handling
+  that was introduced in 2.24.9
+
+* Bugs fixed:
+ 665955 Trimmed arrow points drawn for GtkArrow
+ 667691 implement gdk_window_restack() for Quartz
+
+
 Overview of Changes from GTK+ 2.24.8 to 2.24.9
 ==============================================
 
