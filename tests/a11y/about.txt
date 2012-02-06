@@ -268,18 +268,21 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-            This program comes with ABSOLUTELY NO WARRANTY; for details, visit http://www.gnu.org/licenses/gpl.html
+            This program comes with ABSOLUTELY NO WARRANTY;
+for details, visit http://www.gnu.org/licenses/gpl.html
               "label"
               parent: unnamed-GtkBoxAccessible-5
               index: 4
-              name: This program comes with ABSOLUTELY NO WARRANTY; for details, visit http://www.gnu.org/licenses/gpl.html
+              name: This program comes with ABSOLUTELY NO WARRANTY;
+for details, visit http://www.gnu.org/licenses/gpl.html
               state: enabled focusable multi-line sensitive showing visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
               <AtkText>
-              text: This program comes with ABSOLUTELY NO WARRANTY; for details, visit http://www.gnu.org/licenses/gpl.html
+              text: This program comes with ABSOLUTELY NO WARRANTY;
+for details, visit http://www.gnu.org/licenses/gpl.html
               character count: 103
               caret offset: 0
               default attributes: bg-color: <omitted>
