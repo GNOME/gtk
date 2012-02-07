@@ -7911,6 +7911,7 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
   GtkNotebookPage *page;
   gint old_pos;
   gint max_pos;
+  gint i;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -7946,7 +7947,12 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 
   /* Move around the menu items if necessary */
   gtk_notebook_child_reordered (notebook, page);
-  gtk_widget_child_notify (child, "position");
+
+  for (list = priv->children, i = 0; list; list = list->next)
+    {
+      if (MIN (old_pos, position) <= i && i <= MAX (old_pos, position))
+	gtk_widget_child_notify (((GtkNotebookPage *) list->data)->child, "position");
+    }
 
   if (priv->show_tabs)
     gtk_notebook_pages_allocate (notebook);
