@@ -156,6 +156,61 @@ test_set (void)
 }
 
 static void
+test_set_uint (void)
+{
+  guint i, j, k;
+  guint index;
+  GtkBitmask *copy;
+  GtkBitmask *mask;
+  guint val;
+
+  for (i = 0; i < N_RUNS; i++)
+    {
+      mask = _gtk_bitmask_copy (masks[g_test_rand_int_range (0, G_N_ELEMENTS (tests))]);
+      val = g_test_rand_int ();
+      copy = _gtk_bitmask_copy (mask);
+
+      for (j = 0; j < N_TRIES; j++)
+        {
+	  index = g_test_rand_int_range (0, MAX_INDEX);
+
+	  _gtk_bitmask_set_uint (copy, index, val);
+
+	  for (k = 0; k < sizeof (guint) * 8; k++)
+	    _gtk_bitmask_set (mask, index + k, val & (1<<k));
+
+	  assert_cmpmasks (copy, mask);
+        }
+
+      _gtk_bitmask_free (copy);
+    }
+}
+
+static void
+test_get_uint (void)
+{
+  guint i, j, k;
+  guint index;
+  GtkBitmask *mask;
+  guint val;
+
+  for (i = 0; i < N_RUNS; i++)
+    {
+      mask = masks[g_test_rand_int_range (0, G_N_ELEMENTS (tests))];
+
+      for (j = 0; j < N_TRIES; j++)
+        {
+	  index = g_test_rand_int_range (0, 100);
+
+	  val = _gtk_bitmask_get_uint (mask, index);
+
+	  for (k = 0; k < sizeof (guint) * 8; k++)
+	    g_assert_cmpint (!!_gtk_bitmask_get (mask, index + k), ==, !!(val & (1<<k)));
+        }
+    }
+}
+
+static void
 test_union (void)
 {
   GtkBitmask *left, *right, *expected;
@@ -328,6 +383,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/bitmask/is_empty", test_is_empty);
   g_test_add_func ("/bitmask/equals", test_equals);
   g_test_add_func ("/bitmask/set", test_set);
+  g_test_add_func ("/bitmask/set_uint", test_set_uint);
+  g_test_add_func ("/bitmask/get_uint", test_get_uint);
   g_test_add_func ("/bitmask/union", test_union);
   g_test_add_func ("/bitmask/intersect", test_intersect);
   g_test_add_func ("/bitmask/invert_range", test_invert_range);

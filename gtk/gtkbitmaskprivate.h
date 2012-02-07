@@ -52,6 +52,12 @@ gboolean       _gtk_bitmask_get                  (const GtkBitmask  *mask,
 void           _gtk_bitmask_set                  (GtkBitmask        *mask,
                                                   guint              index_,
                                                   gboolean           value);
+void           _gtk_bitmask_clear                (GtkBitmask        *mask);
+guint          _gtk_bitmask_get_uint             (const GtkBitmask  *mask,
+                                                  guint              index_);
+void           _gtk_bitmask_set_uint             (GtkBitmask        *mask,
+                                                  guint              index_,
+						  guint              bits);
 
 void           _gtk_bitmask_invert_range         (GtkBitmask        *mask,
                                                   guint              start,
@@ -62,6 +68,9 @@ gboolean       _gtk_bitmask_equals               (const GtkBitmask  *mask,
                                                   const GtkBitmask  *other);
 gboolean       _gtk_bitmask_intersects           (const GtkBitmask  *mask,
                                                   const GtkBitmask  *other);
+guint          _gtk_bitmask_hash                 (const GtkBitmask  *mask);
+gboolean       _gtk_bitmask_find_next_set        (const GtkBitmask  *mask,
+						  guint             *pos);
 
 G_END_DECLS
 
