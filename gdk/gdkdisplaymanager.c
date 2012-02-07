@@ -244,14 +244,14 @@ gdk_display_manager_get (void)
         manager = g_object_new (gdk_win32_display_manager_get_type (), NULL);
       else
 #endif
-#ifdef GDK_WINDOWING_WAYLAND
-      if (backend == NULL || strcmp (backend, "wayland") == 0)
-        manager = g_object_new (gdk_wayland_display_manager_get_type (), NULL);
-      else
-#endif
 #ifdef GDK_WINDOWING_X11
       if (backend == NULL || strcmp (backend, "x11") == 0)
         manager = g_object_new (gdk_x11_display_manager_get_type (), NULL);
+      else
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+      if (backend == NULL || strcmp (backend, "wayland") == 0)
+        manager = g_object_new (gdk_wayland_display_manager_get_type (), NULL);
       else
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
