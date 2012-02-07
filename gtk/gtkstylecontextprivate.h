@@ -22,6 +22,7 @@
 
 #include "gtkstylecontext.h"
 #include "gtksymboliccolor.h"
+#include "gtkbitmaskprivate.h"
 
 G_BEGIN_DECLS
 
@@ -45,6 +46,22 @@ gboolean       _gtk_style_context_resolve_color              (GtkStyleContext  *
 void           _gtk_style_context_get_cursor_color           (GtkStyleContext *context,
                                                               GdkRGBA         *primary_color,
                                                               GdkRGBA         *secondary_color);
+
+guint          _gtk_style_class_get_mask                     (const gchar     *class_name);
+const gchar *  _gtk_style_class_get_name_from_mask           (guint            mask);
+guint          _gtk_style_region_get_mask                    (const gchar     *region_name);
+const gchar *  _gtk_style_region_get_name_from_mask          (guint            mask);
+
+void            _gtk_widget_path_iter_add_classes            (GtkWidgetPath   *path,
+							      gint             pos,
+							      GtkBitmask      *classes);
+void            _gtk_widget_path_iter_add_regions            (GtkWidgetPath   *path,
+							      gint             pos,
+							      GtkBitmask      *regions);
+
+#define GTK_REGION_FLAGS_MASK  ((1 << 6) - 1)
+#define GTK_REGION_FLAGS_NUM_BITS 7
+#define GTK_REGION_ADDED (1 << 6)
 
 G_END_DECLS
 

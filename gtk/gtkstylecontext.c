@@ -307,12 +307,6 @@ typedef struct PropertyValue PropertyValue;
 typedef struct AnimationInfo AnimationInfo;
 typedef struct StyleData StyleData;
 
-struct GtkRegion
-{
-  GQuark class_quark;
-  GtkRegionFlags flags;
-};
-
 struct GtkStyleProviderData
 {
   GtkStyleProvider *provider;
@@ -329,8 +323,8 @@ struct PropertyValue
 
 struct GtkStyleInfo
 {
-  GArray *style_classes;
-  GArray *regions;
+  GtkBitmask *style_classes;
+  GtkBitmask *regions;
   GtkJunctionSides junction_sides;
   GtkStateFlags state_flags;
 };
@@ -477,8 +471,8 @@ style_info_new (void)
   GtkStyleInfo *info;
 
   info = g_slice_new0 (GtkStyleInfo);
-  info->style_classes = g_array_new (FALSE, FALSE, sizeof (GQuark));
-  info->regions = g_array_new (FALSE, FALSE, sizeof (GtkRegion));
+  info->style_classes = _gtk_bitmask_new ();
+  info->regions = _gtk_bitmask_new ();
 
   return info;
 }
@@ -486,8 +480,8 @@ style_info_new (void)
 static void
 style_info_free (GtkStyleInfo *info)
 {
-  g_array_free (info->style_classes, TRUE);
-  g_array_free (info->regions, TRUE);
+  _gtk_bitmask_free (info->style_classes);
+  _gtk_bitmask_free (info->regions);
   g_slice_free (GtkStyleInfo, info);
 }
 
@@ -497,13 +491,10 @@ style_info_copy (const GtkStyleInfo *info)
   GtkStyleInfo *copy;
 
   copy = style_info_new ();
-  g_array_insert_vals (copy->style_classes, 0,
-                       info->style_classes->data,
-                       info->style_classes->len);
-
-  g_array_insert_vals (copy->regions, 0,
-                       info->regions->data,
-                       info->regions->len);
+  _gtk_bitmask_union (copy->style_classes,
+		      info->style_classes);
+  _gtk_bitmask_union (copy->regions,
+		      info->regions);
 
   copy->junction_sides = info->junction_sides;
   copy->state_flags = info->state_flags;
@@ -515,25 +506,12 @@ static guint
 style_info_hash (gconstpointer elem)
 {
   const GtkStyleInfo *info;
-  guint i, hash = 0;
+  guint hash = 0;
 
   info = elem;
 
-  for (i = 0; i < info->style_classes->len; i++)
-    {
-      hash += g_array_index (info->style_classes, GQuark, i);
-      hash <<= 5;
-    }
-
-  for (i = 0; i < info->regions->len; i++)
-    {
-      GtkRegion *region;
-
-      region = &g_array_index (info->regions, GtkRegion, i);
-      hash += region->class_quark;
-      hash += region->flags;
-      hash <<= 5;
-    }
+  hash = _gtk_bitmask_hash (info->style_classes);
+  hash ^= _gtk_bitmask_hash (info->regions);
 
   return hash ^ info->state_flags;
 }
@@ -553,20 +531,12 @@ style_info_equal (gconstpointer elem1,
   if (info1->junction_sides != info2->junction_sides)
     return FALSE;
 
-  if (info1->style_classes->len != info2->style_classes->len)
+  if (!_gtk_bitmask_equals (info1->style_classes,
+			    info2->style_classes))
     return FALSE;
 
-  if (memcmp (info1->style_classes->data,
-              info2->style_classes->data,
-              info1->style_classes->len * sizeof (GQuark)) != 0)
-    return FALSE;
-
-  if (info1->regions->len != info2->regions->len)
-    return FALSE;
-
-  if (memcmp (info1->regions->data,
-              info2->regions->data,
-              info1->regions->len * sizeof (GtkRegion)) != 0)
+  if (!_gtk_bitmask_equals (info1->regions,
+			    info2->regions))
     return FALSE;
 
   return TRUE;
@@ -1034,7 +1004,7 @@ create_query_path (GtkStyleContext *context)
   GtkStyleContextPrivate *priv;
   GtkWidgetPath *path;
   GtkStyleInfo *info;
-  guint i, pos;
+  guint pos;
 
   priv = context->priv;
   path = gtk_widget_path_copy (priv->widget_path);
@@ -1042,26 +1012,11 @@ create_query_path (GtkStyleContext *context)
 
   info = priv->info_stack->data;
 
-  /* Set widget regions */
-  for (i = 0; i < info->regions->len; i++)
-    {
-      GtkRegion *region;
-
-      region = &g_array_index (info->regions, GtkRegion, i);
-      gtk_widget_path_iter_add_region (path, pos,
-                                       g_quark_to_string (region->class_quark),
-                                       region->flags);
-    }
+  _gtk_widget_path_iter_add_regions (path, pos,
+				     info->regions);
 
   /* Set widget classes */
-  for (i = 0; i < info->style_classes->len; i++)
-    {
-      GQuark quark;
-
-      quark = g_array_index (info->style_classes, GQuark, i);
-      gtk_widget_path_iter_add_class (path, pos,
-                                      g_quark_to_string (quark));
-    }
+  _gtk_widget_path_iter_add_classes (path, pos, info->style_classes);
 
   return path;
 }
@@ -1861,96 +1816,79 @@ gtk_style_context_restore (GtkStyleContext *context)
   priv->current_data = NULL;
 }
 
-static gboolean
-style_class_find (GArray *array,
-                  GQuark  class_quark,
-                  guint  *position)
+static GHashTable *style_class_masks;
+static GPtrArray *style_class_masks_reverse;
+static guint style_class_masks_next;
+static GHashTable *style_region_masks;
+static GPtrArray *style_region_masks_reverse;
+static guint style_region_masks_next;
+
+guint
+_gtk_style_class_get_mask (const gchar *class_name)
 {
-  gint min, max, mid;
-  gboolean found = FALSE;
-  guint pos;
+  guint value;
+  gpointer ptr_value;
 
-  if (position)
-    *position = 0;
-
-  if (!array || array->len == 0)
-    return FALSE;
-
-  min = 0;
-  max = array->len - 1;
-
-  do
+  if (style_class_masks == NULL)
     {
-      GQuark item;
-
-      mid = (min + max) / 2;
-      item = g_array_index (array, GQuark, mid);
-
-      if (class_quark == item)
-        {
-          found = TRUE;
-          pos = mid;
-        }
-      else if (class_quark > item)
-        min = pos = mid + 1;
-      else
-        {
-          max = mid - 1;
-          pos = mid;
-        }
+      style_class_masks = g_hash_table_new (g_str_hash, g_str_equal);
+      style_class_masks_reverse = g_ptr_array_new ();
     }
-  while (!found && min <= max);
 
-  if (position)
-    *position = pos;
-
-  return found;
+  if (g_hash_table_lookup_extended (style_class_masks, class_name,
+				    NULL, &ptr_value))
+    value = GPOINTER_TO_INT (ptr_value);
+  else
+    {
+      const char *str = g_intern_string (class_name);
+      value = style_class_masks_next++;
+      ptr_value = GINT_TO_POINTER (value);
+      g_hash_table_insert (style_class_masks, str, ptr_value);
+      g_ptr_array_add (style_class_masks_reverse, str);
+    }
+  return value;
 }
 
-static gboolean
-region_find (GArray *array,
-             GQuark  class_quark,
-             guint  *position)
+const gchar *
+_gtk_style_class_get_name_from_mask (guint mask)
 {
-  gint min, max, mid;
-  gboolean found = FALSE;
-  guint pos;
+  if (mask < style_class_masks_next)
+    return g_ptr_array_index (style_class_masks_reverse, mask);
+  return NULL;
+}
 
-  if (position)
-    *position = 0;
+guint
+_gtk_style_region_get_mask (const gchar *region_name)
+{
+  guint value;
+  gpointer ptr_value;
 
-  if (!array || array->len == 0)
-    return FALSE;
-
-  min = 0;
-  max = array->len - 1;
-
-  do
+  if (style_region_masks == NULL)
     {
-      GtkRegion *region;
-
-      mid = (min + max) / 2;
-      region = &g_array_index (array, GtkRegion, mid);
-
-      if (region->class_quark == class_quark)
-        {
-          found = TRUE;
-          pos = mid;
-        }
-      else if (region->class_quark > class_quark)
-        min = pos = mid + 1;
-      else
-        {
-          max = mid - 1;
-          pos = mid;
-        }
+      style_region_masks = g_hash_table_new (g_str_hash, g_str_equal);
+      style_region_masks_reverse = g_ptr_array_new ();
     }
-  while (!found && min <= max);
 
-  if (position)
-    *position = pos;
+  if (g_hash_table_lookup_extended (style_region_masks, region_name,
+				    NULL, &ptr_value))
+    value = GPOINTER_TO_INT (ptr_value);
+  else
+    {
+      const char *str = g_intern_string (region_name);
+      value = style_region_masks_next++;
+      ptr_value = GINT_TO_POINTER (value);
+      g_hash_table_insert (style_region_masks, str, ptr_value);
+      g_ptr_array_add (style_region_masks_reverse, str);
+    }
+  return value;
+}
 
-  return found;
+const gchar *
+_gtk_style_region_get_name_from_mask (guint mask)
+{
+  if (mask < style_region_masks_next)
+    return g_ptr_array_index (style_region_masks_reverse, mask);
+  return NULL;
 }
 
 /**
@@ -1983,21 +1921,20 @@ gtk_style_context_add_class (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
-  GQuark class_quark;
-  guint position;
+  guint class_mask;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (class_name != NULL);
 
   priv = context->priv;
-  class_quark = g_quark_from_string (class_name);
+  class_mask = _gtk_style_class_get_mask (class_name);
 
   g_assert (priv->info_stack != NULL);
   info = priv->info_stack->data;
 
-  if (!style_class_find (info->style_classes, class_quark, &position))
+  if (!_gtk_bitmask_get (info->style_classes, class_mask))
     {
-      g_array_insert_val (info->style_classes, position, class_quark);
+      _gtk_bitmask_set (info->style_classes, class_mask, TRUE);
 
       /* Unset current data, as it likely changed due to the class change */
       priv->current_data = NULL;
@@ -2019,25 +1956,21 @@ gtk_style_context_remove_class (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
-  GQuark class_quark;
-  guint position;
+  guint class_mask;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (class_name != NULL);
 
-  class_quark = g_quark_try_string (class_name);
-
-  if (!class_quark)
-    return;
+  class_mask = _gtk_style_class_get_mask (class_name);
 
   priv = context->priv;
 
   g_assert (priv->info_stack != NULL);
   info = priv->info_stack->data;
 
-  if (style_class_find (info->style_classes, class_quark, &position))
+  if (_gtk_bitmask_get (info->style_classes, class_mask))
     {
-      g_array_remove_index (info->style_classes, position);
+      _gtk_bitmask_set (info->style_classes, class_mask, FALSE);
 
       /* Unset current data, as it likely changed due to the class change */
       priv->current_data = NULL;
@@ -2062,25 +1995,19 @@ gtk_style_context_has_class (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
-  GQuark class_quark;
+  guint class_mask;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
   g_return_val_if_fail (class_name != NULL, FALSE);
 
-  class_quark = g_quark_try_string (class_name);
-
-  if (!class_quark)
-    return FALSE;
+  class_mask = _gtk_style_class_get_mask (class_name);
 
   priv = context->priv;
 
   g_assert (priv->info_stack != NULL);
   info = priv->info_stack->data;
 
-  if (style_class_find (info->style_classes, class_quark, NULL))
-    return TRUE;
-
-  return FALSE;
+  return _gtk_bitmask_get (info->style_classes, class_mask);
 }
 
 /**
@@ -2111,12 +2038,12 @@ gtk_style_context_list_classes (GtkStyleContext *context)
   g_assert (priv->info_stack != NULL);
   info = priv->info_stack->data;
 
-  for (i = 0; i < info->style_classes->len; i++)
+  i = 0;
+  while (_gtk_bitmask_find_next_set (info->style_classes, &i))
     {
-      GQuark quark;
-
-      quark = g_array_index (info->style_classes, GQuark, i);
-      classes = g_list_prepend (classes, (gchar *) g_quark_to_string (quark));
+      classes = g_list_prepend (classes,
+				(gchar *) _gtk_style_class_get_name_from_mask (i));
+      i++;
     }
 
   return classes;
@@ -2150,15 +2077,16 @@ gtk_style_context_list_regions (GtkStyleContext *context)
   g_assert (priv->info_stack != NULL);
   info = priv->info_stack->data;
 
-  for (i = 0; i < info->regions->len; i++)
+  i = 0;
+  while (_gtk_bitmask_find_next_set (info->regions, &i))
     {
-      GtkRegion *region;
-      const gchar *class_name;
+      guint region = i / GTK_REGION_FLAGS_NUM_BITS;
+      i = region * GTK_REGION_FLAGS_NUM_BITS;
 
-      region = &g_array_index (info->regions, GtkRegion, i);
+      classes = g_list_prepend (classes,
+				(gchar *)_gtk_style_region_get_name_from_mask (region));
 
-      class_name = g_quark_to_string (region->class_quark);
-      classes = g_list_prepend (classes, (gchar *) class_name);
+      i += GTK_REGION_FLAGS_NUM_BITS;
     }
 
   return classes;
@@ -2222,27 +2150,29 @@ gtk_style_context_add_region (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
-  GQuark region_quark;
-  guint position;
+  guint region;
+  guint i;
+  guint old_flags;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (region_name != NULL);
   g_return_if_fail (_gtk_style_context_check_region_name (region_name));
 
   priv = context->priv;
-  region_quark = g_quark_from_string (region_name);
 
   g_assert (priv->info_stack != NULL);
   info = priv->info_stack->data;
 
-  if (!region_find (info->regions, region_quark, &position))
+  region = _gtk_style_region_get_mask (region_name);
+  i = region * GTK_REGION_FLAGS_NUM_BITS;
+
+  old_flags = _gtk_bitmask_get_uint (info->regions, i);
+  if ((old_flags & GTK_REGION_ADDED) == 0)
     {
-      GtkRegion region;
+      /* Ensure *some* flag is always set so we know this is added */
+      old_flags |= flags | GTK_REGION_ADDED;
 
-      region.class_quark = region_quark;
-      region.flags = flags;
-
-      g_array_insert_val (info->regions, position, region);
+      _gtk_bitmask_set_uint (info->regions, i, old_flags);
 
       /* Unset current data, as it likely changed due to the region change */
       priv->current_data = NULL;
@@ -2264,25 +2194,28 @@ gtk_style_context_remove_region (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
-  GQuark region_quark;
-  guint position;
+  guint region;
+  guint i, old_flags;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (region_name != NULL);
-
-  region_quark = g_quark_try_string (region_name);
-
-  if (!region_quark)
-    return;
 
   priv = context->priv;
 
   g_assert (priv->info_stack != NULL);
   info = priv->info_stack->data;
 
-  if (region_find (info->regions, region_quark, &position))
+  region = _gtk_style_region_get_mask (region_name);
+  i = region * GTK_REGION_FLAGS_NUM_BITS;
+
+  if (info->regions == NULL)
+    return;
+  
+  old_flags = _gtk_bitmask_get_uint (info->regions, i);
+  if ((old_flags & GTK_REGION_ADDED) != 0)
     {
-      g_array_remove_index (info->regions, position);
+      old_flags &= ~(GTK_REGION_FLAGS_MASK | GTK_REGION_ADDED);
+      _gtk_bitmask_set_uint (info->regions, i, old_flags);
 
       /* Unset current data, as it likely changed due to the region change */
       priv->current_data = NULL;
@@ -2310,8 +2243,8 @@ gtk_style_context_has_region (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
-  GQuark region_quark;
-  guint position;
+  guint region;
+  guint i, flags;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
   g_return_val_if_fail (region_name != NULL, FALSE);
@@ -2319,25 +2252,19 @@ gtk_style_context_has_region (GtkStyleContext *context,
   if (flags_return)
     *flags_return = 0;
 
-  region_quark = g_quark_try_string (region_name);
-
-  if (!region_quark)
-    return FALSE;
-
   priv = context->priv;
 
   g_assert (priv->info_stack != NULL);
   info = priv->info_stack->data;
 
-  if (region_find (info->regions, region_quark, &position))
+  region = _gtk_style_region_get_mask (region_name);
+  i = region * GTK_REGION_FLAGS_NUM_BITS;
+
+  flags = _gtk_bitmask_get_uint (info->regions, i);
+  if ((flags & GTK_REGION_ADDED) != 0)
     {
       if (flags_return)
-        {
-          GtkRegion *region;
-
-          region = &g_array_index (info->regions, GtkRegion, position);
-          *flags_return = region->flags;
-        }
+	*flags_return = flags & GTK_REGION_FLAGS_MASK;
       return TRUE;
     }
 

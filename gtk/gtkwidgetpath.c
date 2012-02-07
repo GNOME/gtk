@@ -91,8 +91,8 @@ struct GtkPathElement
 {
   GType type;
   GQuark name;
-  GHashTable *regions;
-  GArray *classes;
+  GtkBitmask *regions;
+  GtkBitmask *classes;
   GtkWidgetPath *siblings;
   guint sibling_index;
 };
@@ -139,20 +139,14 @@ gtk_path_element_copy (GtkPathElement       *dest,
 
   if (src->regions)
     {
-      GHashTableIter iter;
-      gpointer key, value;
-
-      g_hash_table_iter_init (&iter, src->regions);
-      dest->regions = g_hash_table_new (NULL, NULL);
-
-      while (g_hash_table_iter_next (&iter, &key, &value))
-        g_hash_table_insert (dest->regions, key, value);
+      dest->regions = _gtk_bitmask_new ();
+      _gtk_bitmask_union (dest->regions, src->regions);
     }
 
   if (src->classes)
     {
-      dest->classes = g_array_new (FALSE, FALSE, sizeof (GQuark));
-      g_array_append_vals (dest->classes, src->classes->data, src->classes->len);
+      dest->classes = _gtk_bitmask_new ();
+      _gtk_bitmask_union (dest->classes, src->classes);
     }
 }
 
@@ -236,10 +230,10 @@ gtk_widget_path_unref (GtkWidgetPath *path)
       elem = &g_array_index (path->elems, GtkPathElement, i);
 
       if (elem->regions)
-        g_hash_table_destroy (elem->regions);
+        _gtk_bitmask_free (elem->regions);
 
       if (elem->classes)
-        g_array_free (elem->classes, TRUE);
+        _gtk_bitmask_free (elem->classes);
 
       if (elem->siblings)
         gtk_widget_path_unref (elem->siblings);
@@ -304,7 +298,8 @@ char *
 gtk_widget_path_to_string (const GtkWidgetPath *path)
 {
   GString *string;
-  guint i, j;
+  guint i, j, k;
+  guint pos;
 
   g_return_val_if_fail (path != NULL, NULL);
 
@@ -336,22 +331,23 @@ gtk_widget_path_to_string (const GtkWidgetPath *path)
 
       if (elem->classes)
         {
-          for (j = 0; j < elem->classes->len; j++)
-            {
+	  pos = 0;
+	  while (_gtk_bitmask_find_next_set (elem->classes, &pos))
+	    {
               g_string_append_c (string, '.');
-              g_string_append (string, g_quark_to_string (g_array_index (elem->classes, GQuark, j)));
-            }
+              g_string_append (string, 
+			       _gtk_style_class_get_name_from_mask (pos));
+	      pos++;
+	    }
         }
 
       if (elem->regions)
         {
-          GHashTableIter iter;
-          gpointer key, value;
-
-          g_hash_table_iter_init (&iter, elem->regions);
-          while (g_hash_table_iter_next (&iter, &key, &value))
-            {
-              GtkRegionFlags flags = GPOINTER_TO_UINT (value);
+	  k = 0;
+	  while (_gtk_bitmask_find_next_set (elem->regions, &k))
+	    {
+	      guint region = k / GTK_REGION_FLAGS_NUM_BITS;
+	      guint flags;
               static const char *flag_names[] = {
                 "even",
                 "odd",
@@ -361,8 +357,12 @@ gtk_widget_path_to_string (const GtkWidgetPath *path)
                 "sorted"
               };
 
+	      k = region * GTK_REGION_FLAGS_NUM_BITS;
+
+	      flags = _gtk_bitmask_get_uint (elem->regions, k);
+
               g_string_append_c (string, ' ');
-              g_string_append (string, g_quark_to_string (GPOINTER_TO_UINT (key)));
+              g_string_append (string, _gtk_style_region_get_name_from_mask (region));
               for (j = 0; j < G_N_ELEMENTS(flag_names); j++)
                 {
                   if (flags & (1 << j))
@@ -371,7 +371,9 @@ gtk_widget_path_to_string (const GtkWidgetPath *path)
                       g_string_append (string, flag_names[j]);
                     }
                 }
-            }
+	      
+	      k += GTK_REGION_FLAGS_NUM_BITS;
+	    }
         }
     }
 
@@ -715,9 +717,6 @@ gtk_widget_path_iter_add_class (GtkWidgetPath *path,
                                 const gchar   *name)
 {
   GtkPathElement *elem;
-  gboolean added = FALSE;
-  GQuark qname;
-  guint i;
 
   g_return_if_fail (path != NULL);
   g_return_if_fail (path->elems->len != 0);
@@ -727,33 +726,33 @@ gtk_widget_path_iter_add_class (GtkWidgetPath *path,
     pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
-  qname = g_quark_from_string (name);
 
   if (!elem->classes)
-    elem->classes = g_array_new (FALSE, FALSE, sizeof (GQuark));
+    elem->classes = _gtk_bitmask_new ();
 
-  for (i = 0; i < elem->classes->len; i++)
-    {
-      GQuark quark;
+  _gtk_bitmask_set (elem->classes, _gtk_style_class_get_mask (name), TRUE);
+}
 
-      quark = g_array_index (elem->classes, GQuark, i);
+void
+_gtk_widget_path_iter_add_classes (GtkWidgetPath *path,
+				   gint           pos,
+				   GtkBitmask    *classes)
+{
+  GtkPathElement *elem;
 
-      if (qname == quark)
-        {
-          /* Already there */
-          added = TRUE;
-          break;
-        }
-      if (qname < quark)
-        {
-          g_array_insert_val (elem->classes, i, qname);
-          added = TRUE;
-          break;
-        }
-    }
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (path->elems->len != 0);
+  g_return_if_fail (classes != NULL);
 
-  if (!added)
-    g_array_append_val (elem->classes, qname);
+  if (pos < 0 || pos >= path->elems->len)
+    pos = path->elems->len - 1;
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (!elem->classes)
+    elem->classes = _gtk_bitmask_new ();
+
+  _gtk_bitmask_union (elem->classes, classes);
 }
 
 /**
@@ -773,8 +772,6 @@ gtk_widget_path_iter_remove_class (GtkWidgetPath *path,
                                    const gchar   *name)
 {
   GtkPathElement *elem;
-  GQuark qname;
-  guint i;
 
   g_return_if_fail (path != NULL);
   g_return_if_fail (path->elems->len != 0);
@@ -783,30 +780,12 @@ gtk_widget_path_iter_remove_class (GtkWidgetPath *path,
   if (pos < 0 || pos >= path->elems->len)
     pos = path->elems->len - 1;
 
-  qname = g_quark_try_string (name);
-
-  if (qname == 0)
-    return;
-
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
   if (!elem->classes)
-    return;
+    elem->classes = _gtk_bitmask_new ();
 
-  for (i = 0; i < elem->classes->len; i++)
-    {
-      GQuark quark;
-
-      quark = g_array_index (elem->classes, GQuark, i);
-
-      if (quark > qname)
-        break;
-      else if (quark == qname)
-        {
-          g_array_remove_index (elem->classes, i);
-          break;
-        }
-    }
+  _gtk_bitmask_set (elem->classes, _gtk_style_class_get_mask (name), FALSE);
 }
 
 /**
@@ -836,8 +815,7 @@ gtk_widget_path_iter_clear_classes (GtkWidgetPath *path,
   if (!elem->classes)
     return;
 
-  if (elem->classes->len > 0)
-    g_array_remove_range (elem->classes, 0, elem->classes->len);
+  _gtk_bitmask_clear (elem->classes);
 }
 
 /**
@@ -874,12 +852,11 @@ gtk_widget_path_iter_list_classes (const GtkWidgetPath *path,
   if (!elem->classes)
     return NULL;
 
-  for (i = 0; i < elem->classes->len; i++)
+  i = 0;
+  while (_gtk_bitmask_find_next_set (elem->classes, &i))
     {
-      GQuark quark;
-
-      quark = g_array_index (elem->classes, GQuark, i);
-      list = g_slist_prepend (list, (gchar *) g_quark_to_string (quark));
+      list = g_slist_prepend (list, (gchar *) _gtk_style_class_get_name_from_mask (i));
+      i++;
     }
 
   return g_slist_reverse (list);
@@ -903,34 +880,8 @@ gtk_widget_path_iter_has_qclass (const GtkWidgetPath *path,
                                  gint                 pos,
                                  GQuark               qname)
 {
-  GtkPathElement *elem;
-  guint i;
-
-  g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (path->elems->len != 0, FALSE);
-  g_return_val_if_fail (qname != 0, FALSE);
-
-  if (pos < 0 || pos >= path->elems->len)
-    pos = path->elems->len - 1;
-
-  elem = &g_array_index (path->elems, GtkPathElement, pos);
-
-  if (!elem->classes)
-    return FALSE;
-
-  for (i = 0; i < elem->classes->len; i++)
-    {
-      GQuark quark;
-
-      quark = g_array_index (elem->classes, GQuark, i);
-
-      if (quark == qname)
-        return TRUE;
-      else if (quark > qname)
-        break;
-    }
-
-  return FALSE;
+  return gtk_widget_path_iter_has_class (path, pos,
+					 g_quark_to_string (qname));
 }
 
 /**
@@ -951,7 +902,8 @@ gtk_widget_path_iter_has_class (const GtkWidgetPath *path,
                                 gint                 pos,
                                 const gchar         *name)
 {
-  GQuark qname;
+  GtkPathElement *elem;
+  guint mask;
 
   g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (path->elems->len != 0, FALSE);
@@ -960,12 +912,14 @@ gtk_widget_path_iter_has_class (const GtkWidgetPath *path,
   if (pos < 0 || pos >= path->elems->len)
     pos = path->elems->len - 1;
 
-  qname = g_quark_try_string (name);
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
 
-  if (qname == 0)
+  if (!elem->classes)
     return FALSE;
 
-  return gtk_widget_path_iter_has_qclass (path, pos, qname);
+  mask = _gtk_style_class_get_mask (name);
+
+  return _gtk_bitmask_get (elem->classes, mask);
 }
 
 /**
@@ -991,7 +945,9 @@ gtk_widget_path_iter_add_region (GtkWidgetPath  *path,
                                  GtkRegionFlags  flags)
 {
   GtkPathElement *elem;
-  GQuark qname;
+  guint region;
+  guint i;
+  guint old_flags;
 
   g_return_if_fail (path != NULL);
   g_return_if_fail (path->elems->len != 0);
@@ -1002,14 +958,40 @@ gtk_widget_path_iter_add_region (GtkWidgetPath  *path,
     pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
-  qname = g_quark_from_string (name);
 
   if (!elem->regions)
-    elem->regions = g_hash_table_new (NULL, NULL);
+    elem->regions = _gtk_bitmask_new ();
 
-  g_hash_table_insert (elem->regions,
-                       GUINT_TO_POINTER (qname),
-                       GUINT_TO_POINTER (flags));
+  region = _gtk_style_region_get_mask (name);
+  i = region * GTK_REGION_FLAGS_NUM_BITS;
+
+  old_flags = _gtk_bitmask_get_uint (elem->regions, i);
+  old_flags &= ~(GTK_REGION_FLAGS_MASK | GTK_REGION_ADDED);
+  /* Ensure *some* flag is always set so we know this is added */
+  old_flags |= flags | GTK_REGION_ADDED;
+  _gtk_bitmask_set_uint (elem->regions, i, old_flags);
+}
+
+void
+_gtk_widget_path_iter_add_regions (GtkWidgetPath  *path,
+				   gint            pos,
+				   GtkBitmask     *regions)
+{
+  GtkPathElement *elem;
+
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (path->elems->len != 0);
+  g_return_if_fail (regions != NULL);
+
+  if (pos < 0 || pos >= path->elems->len)
+    pos = path->elems->len - 1;
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (!elem->regions)
+    elem->regions = _gtk_bitmask_new ();
+
+  _gtk_bitmask_union (elem->regions, regions);
 }
 
 /**
@@ -1029,7 +1011,9 @@ gtk_widget_path_iter_remove_region (GtkWidgetPath *path,
                                     const gchar   *name)
 {
   GtkPathElement *elem;
-  GQuark qname;
+  guint region;
+  guint i;
+  guint old_flags;
 
   g_return_if_fail (path != NULL);
   g_return_if_fail (path->elems->len != 0);
@@ -1038,15 +1022,17 @@ gtk_widget_path_iter_remove_region (GtkWidgetPath *path,
   if (pos < 0 || pos >= path->elems->len)
     pos = path->elems->len - 1;
 
-  qname = g_quark_try_string (name);
-
-  if (qname == 0)
-    return;
-
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
-  if (elem->regions)
-    g_hash_table_remove (elem->regions, GUINT_TO_POINTER (qname));
+  if (elem->regions == NULL)
+    return;
+
+  region = _gtk_style_region_get_mask (name);
+  i = region * GTK_REGION_FLAGS_NUM_BITS;
+
+  old_flags = _gtk_bitmask_get_uint (elem->regions, i);
+  old_flags &= ~(GTK_REGION_FLAGS_MASK | GTK_REGION_ADDED);
+  _gtk_bitmask_set_uint (elem->regions, i, old_flags);
 }
 
 /**
@@ -1074,7 +1060,7 @@ gtk_widget_path_iter_clear_regions (GtkWidgetPath *path,
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
   if (elem->regions)
-    g_hash_table_remove_all (elem->regions);
+    _gtk_bitmask_clear (elem->regions);
 }
 
 /**
@@ -1097,9 +1083,8 @@ gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
                                    gint                 pos)
 {
   GtkPathElement *elem;
-  GHashTableIter iter;
   GSList *list = NULL;
-  gpointer key;
+  guint i;
 
   g_return_val_if_fail (path != NULL, NULL);
   g_return_val_if_fail (path->elems->len != 0, NULL);
@@ -1112,14 +1097,16 @@ gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
   if (!elem->regions)
     return NULL;
 
-  g_hash_table_iter_init (&iter, elem->regions);
-
-  while (g_hash_table_iter_next (&iter, &key, NULL))
+  i = 0;
+  while (_gtk_bitmask_find_next_set (elem->regions, &i))
     {
-      GQuark qname;
+      guint region = i / GTK_REGION_FLAGS_NUM_BITS;
+      i = region * GTK_REGION_FLAGS_NUM_BITS;
 
-      qname = GPOINTER_TO_UINT (key);
-      list = g_slist_prepend (list, (gchar *) g_quark_to_string (qname));
+      list = g_slist_prepend (list,
+			      (gchar *) _gtk_style_region_get_name_from_mask (region));
+
+      i += GTK_REGION_FLAGS_NUM_BITS;
     }
 
   return list;
@@ -1145,30 +1132,8 @@ gtk_widget_path_iter_has_qregion (const GtkWidgetPath *path,
                                   GQuark               qname,
                                   GtkRegionFlags      *flags)
 {
-  GtkPathElement *elem;
-  gpointer value;
-
-  g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (path->elems->len != 0, FALSE);
-  g_return_val_if_fail (qname != 0, FALSE);
-
-  if (pos < 0 || pos >= path->elems->len)
-    pos = path->elems->len - 1;
-
-  elem = &g_array_index (path->elems, GtkPathElement, pos);
-
-  if (!elem->regions)
-    return FALSE;
-
-  if (!g_hash_table_lookup_extended (elem->regions,
-                                     GUINT_TO_POINTER (qname),
-                                     NULL, &value))
-    return FALSE;
-
-  if (flags)
-    *flags = GPOINTER_TO_UINT (value);
-
-  return TRUE;
+  return gtk_widget_path_iter_has_region (path, pos,
+					  g_quark_to_string (qname), flags);
 }
 
 /**
@@ -1189,9 +1154,11 @@ gboolean
 gtk_widget_path_iter_has_region (const GtkWidgetPath *path,
                                  gint                 pos,
                                  const gchar         *name,
-                                 GtkRegionFlags      *flags)
+                                 GtkRegionFlags      *flags_return)
 {
-  GQuark qname;
+  GtkPathElement *elem;
+  guint region;
+  guint i, flags;
 
   g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (path->elems->len != 0, FALSE);
@@ -1200,12 +1167,23 @@ gtk_widget_path_iter_has_region (const GtkWidgetPath *path,
   if (pos < 0 || pos >= path->elems->len)
     pos = path->elems->len - 1;
 
-  qname = g_quark_try_string (name);
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
 
-  if (qname == 0)
+  if (!elem->regions)
     return FALSE;
 
-  return gtk_widget_path_iter_has_qregion (path, pos, qname, flags);
+  region = _gtk_style_region_get_mask (name);
+  i = region * GTK_REGION_FLAGS_NUM_BITS;
+
+  flags = _gtk_bitmask_get_uint (elem->regions, i);
+  if ((flags & GTK_REGION_ADDED) != 0)
+    {
+      if (flags_return)
+	*flags_return = flags & GTK_REGION_FLAGS_MASK;
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 /**
