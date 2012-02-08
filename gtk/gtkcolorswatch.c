@@ -184,7 +184,7 @@ swatch_draw (GtkWidget *widget,
 
   if (swatch->priv->icon)
     {
-      icon_info = gtk_icon_theme_lookup_icon (theme, "list-add-symbolic", 16,
+      icon_info = gtk_icon_theme_lookup_icon (theme, swatch->priv->icon, 16,
                                               GTK_ICON_LOOKUP_GENERIC_FALLBACK
                                               | GTK_ICON_LOOKUP_USE_BUILTIN);
     }
