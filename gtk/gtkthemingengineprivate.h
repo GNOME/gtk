@@ -35,5 +35,6 @@ double        _gtk_theming_engine_get_number    (GtkThemingEngine *engine,
                                                  double            one_hundred_percent);
 void          _gtk_theming_engine_set_context   (GtkThemingEngine *engine,
                                                  GtkStyleContext  *context);
+GtkStyleContext *_gtk_theming_engine_get_context   (GtkThemingEngine *engine);
 
 #endif /* __GTK_THEMING_ENGINE_PRIVATE_H__ */
