@@ -1328,7 +1328,6 @@ GENERATED_ICONS = \
 	stock-icons/16/folder-remote.png 		\
 	stock-icons/16/user-home.png 			\
 	stock-icons/16/user-desktop.png 		\
-	stock-icons/16/text-x-generic.png 		\
 	stock-icons/24/go-previous-rtl.png 		\
 	stock-icons/24/go-next-rtl.png 			\
 	stock-icons/24/go-first-rtl.png 		\
@@ -1340,8 +1339,7 @@ GENERATED_ICONS = \
 	stock-icons/24/document-save.png 		\
 	stock-icons/24/folder-remote.png 		\
 	stock-icons/24/user-home.png 			\
-	stock-icons/24/user-desktop.png 		\
-	stock-icons/24/text-x-generic.png
+	stock-icons/24/user-desktop.png
 
 # need to copy the icons so that we can replace the generated ones with
 # symlinks, even in the readonly srcdir case
