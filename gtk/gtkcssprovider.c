@@ -1253,9 +1253,9 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
   if (ruleset->set_styles == NULL)
     ruleset->set_styles = _gtk_bitmask_new ();
 
-  _gtk_bitmask_set (ruleset->set_styles,
-                    _gtk_css_style_property_get_id (property),
-                    TRUE);
+  ruleset->set_styles = _gtk_bitmask_set (ruleset->set_styles,
+                                          _gtk_css_style_property_get_id (property),
+                                          TRUE);
 
   ruleset->owns_styles = TRUE;
 

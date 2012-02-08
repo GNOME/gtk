@@ -41,9 +41,8 @@ _gtk_bitmask_copy (const GtkBitmask *mask)
   g_return_val_if_fail (mask != NULL, NULL);
 
   copy = _gtk_bitmask_new ();
-  _gtk_bitmask_union (copy, mask);
-
-  return copy;
+  
+  return _gtk_bitmask_union (copy, mask);
 }
 
 void
@@ -109,14 +108,14 @@ gtk_bitmask_shrink (GtkBitmask *mask)
   g_array_set_size (mask, i);
 }
 
-void
+GtkBitmask *
 _gtk_bitmask_intersect (GtkBitmask       *mask,
                         const GtkBitmask *other)
 {
   guint i;
 
-  g_return_if_fail (mask != NULL);
-  g_return_if_fail (other != NULL);
+  g_return_val_if_fail (mask != NULL, NULL);
+  g_return_val_if_fail (other != NULL, NULL);
 
   g_array_set_size (mask, MIN (mask->len, other->len));
   for (i = 0; i < mask->len; i++)
@@ -125,32 +124,36 @@ _gtk_bitmask_intersect (GtkBitmask       *mask,
     }
 
   gtk_bitmask_shrink (mask);
+
+  return mask;
 }
 
-void
+GtkBitmask *
 _gtk_bitmask_union (GtkBitmask       *mask,
                     const GtkBitmask *other)
 {
   guint i;
 
-  g_return_if_fail (mask != NULL);
-  g_return_if_fail (other != NULL);
+  g_return_val_if_fail (mask != NULL, NULL);
+  g_return_val_if_fail (other != NULL, NULL);
 
   g_array_set_size (mask, MAX (mask->len, other->len));
   for (i = 0; i < other->len; i++)
     {
       g_array_index (mask, VALUE_TYPE, i) |= g_array_index (other, VALUE_TYPE, i);
     }
+
+  return mask;
 }
 
-void
+GtkBitmask *
 _gtk_bitmask_subtract (GtkBitmask       *mask,
                        const GtkBitmask *other)
 {
   guint i;
 
-  g_return_if_fail (mask != NULL);
-  g_return_if_fail (other != NULL);
+  g_return_val_if_fail (mask != NULL, NULL);
+  g_return_val_if_fail (other != NULL, NULL);
 
   for (i = 0; i < other->len; i++)
     {
@@ -158,6 +161,8 @@ _gtk_bitmask_subtract (GtkBitmask       *mask,
     }
 
   gtk_bitmask_shrink (mask);
+
+  return mask;
 }
 
 static void
@@ -185,14 +190,14 @@ _gtk_bitmask_get (const GtkBitmask *mask,
   return (g_array_index (mask, VALUE_TYPE, array_index) & VALUE_BIT (bit_index)) ? TRUE : FALSE;
 }
 
-void
+GtkBitmask *
 _gtk_bitmask_set (GtkBitmask *mask,
                   guint       index_,
                   gboolean    value)
 {
   guint array_index, bit_index;
 
-  g_return_if_fail (mask != NULL);
+  g_return_val_if_fail (mask != NULL, NULL);
 
   gtk_bitmask_indexes (index_, &array_index, &bit_index);
 
@@ -211,22 +216,26 @@ _gtk_bitmask_set (GtkBitmask *mask,
           gtk_bitmask_shrink (mask);
         }
     }
+
+  return mask;
 }
 
-void
+GtkBitmask *
 _gtk_bitmask_invert_range (GtkBitmask *mask,
                            guint       start,
                            guint       end)
 {
   guint i;
 
-  g_return_if_fail (mask != NULL);
-  g_return_if_fail (start < end);
+  g_return_val_if_fail (mask != NULL, NULL);
+  g_return_val_if_fail (start < end, NULL);
 
   /* I CAN HAS SPEEDUP? */
 
   for (i = start; i < end; i++)
-    _gtk_bitmask_set (mask, i, !_gtk_bitmask_get (mask, i));
+    mask = _gtk_bitmask_set (mask, i, !_gtk_bitmask_get (mask, i));
+
+  return mask;
 }
 
 gboolean

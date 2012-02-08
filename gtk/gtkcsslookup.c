@@ -43,7 +43,7 @@ _gtk_css_lookup_new (void)
 
   lookup = g_malloc0 (sizeof (GtkCssLookup) + sizeof (GtkCssLookupValue) * n);
   lookup->missing = _gtk_bitmask_new ();
-  _gtk_bitmask_invert_range (lookup->missing, 0, n);
+  lookup->missing = _gtk_bitmask_invert_range (lookup->missing, 0, n);
 
   return lookup;
 }
@@ -97,7 +97,7 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
   g_return_if_fail (_gtk_bitmask_get (lookup->missing, id));
   g_return_if_fail (value != NULL);
 
-  _gtk_bitmask_set (lookup->missing, id, FALSE);
+  lookup->missing = _gtk_bitmask_set (lookup->missing, id, FALSE);
   lookup->values[id].value = value;
   lookup->values[id].section = section;
 }
@@ -131,7 +131,7 @@ _gtk_css_lookup_set_computed (GtkCssLookup  *lookup,
   g_return_if_fail (_gtk_bitmask_get (lookup->missing, id));
   g_return_if_fail (value != NULL);
 
-  _gtk_bitmask_set (lookup->missing, id, FALSE);
+  lookup->missing = _gtk_bitmask_set (lookup->missing, id, FALSE);
   lookup->values[id].computed = value;
   lookup->values[id].section = section;
 }

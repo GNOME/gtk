@@ -39,22 +39,22 @@ char *         _gtk_bitmask_to_string            (const GtkBitmask  *mask);
 void           _gtk_bitmask_print                (const GtkBitmask  *mask,
                                                   GString           *string);
 
-void           _gtk_bitmask_intersect            (GtkBitmask        *mask,
-                                                  const GtkBitmask  *other);
-void           _gtk_bitmask_union                (GtkBitmask        *mask,
-                                                  const GtkBitmask  *other);
-void           _gtk_bitmask_subtract             (GtkBitmask        *mask,
-                                                  const GtkBitmask  *other);
+GtkBitmask *   _gtk_bitmask_intersect            (GtkBitmask        *mask,
+                                                  const GtkBitmask  *other) G_GNUC_WARN_UNUSED_RESULT;
+GtkBitmask *   _gtk_bitmask_union                (GtkBitmask        *mask,
+                                                  const GtkBitmask  *other) G_GNUC_WARN_UNUSED_RESULT;
+GtkBitmask *   _gtk_bitmask_subtract             (GtkBitmask        *mask,
+                                                  const GtkBitmask  *other) G_GNUC_WARN_UNUSED_RESULT;
 
 gboolean       _gtk_bitmask_get                  (const GtkBitmask  *mask,
                                                   guint              index_);
-void           _gtk_bitmask_set                  (GtkBitmask        *mask,
+GtkBitmask *   _gtk_bitmask_set                  (GtkBitmask        *mask,
                                                   guint              index_,
-                                                  gboolean           value);
+                                                  gboolean           value) G_GNUC_WARN_UNUSED_RESULT;
 
-void           _gtk_bitmask_invert_range         (GtkBitmask        *mask,
+GtkBitmask *   _gtk_bitmask_invert_range         (GtkBitmask        *mask,
                                                   guint              start,
-                                                  guint              end);
+                                                  guint              end) G_GNUC_WARN_UNUSED_RESULT;
 
 gboolean       _gtk_bitmask_is_empty             (const GtkBitmask  *mask);
 gboolean       _gtk_bitmask_equals               (const GtkBitmask  *mask,
