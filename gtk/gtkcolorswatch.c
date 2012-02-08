@@ -692,21 +692,6 @@ gtk_color_swatch_get_rgba (GtkColorSwatch *swatch,
 }
 
 void
-gtk_color_swatch_set_corner_radii (GtkColorSwatch *swatch,
-                                   gdouble         top_left,
-                                   gdouble         top_right,
-                                   gdouble         bottom_right,
-                                   gdouble         bottom_left)
-{
-  swatch->priv->radius[0] = top_left;
-  swatch->priv->radius[1] = top_right;
-  swatch->priv->radius[2] = bottom_right;
-  swatch->priv->radius[3] = bottom_left;
-
-  gtk_widget_queue_draw (GTK_WIDGET (swatch));
-}
-
-void
 gtk_color_swatch_set_selected (GtkColorSwatch *swatch,
                                gboolean        selected)
 {

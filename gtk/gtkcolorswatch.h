@@ -68,12 +68,7 @@ GType       gtk_color_swatch_get_type         (void) G_GNUC_CONST;
 
 G_GNUC_INTERNAL
 GtkWidget * gtk_color_swatch_new              (void);
-G_GNUC_INTERNAL
-void        gtk_color_swatch_set_corner_radii (GtkColorSwatch *swatch,
-                                               gdouble         top_left,
-                                               gdouble         top_right,
-                                               gdouble         bottom_right,
-                                               gdouble         bottom_left);
+
 G_GNUC_INTERNAL
 void        gtk_color_swatch_set_rgba         (GtkColorSwatch *swatch,
                                                const GdkRGBA  *color);
