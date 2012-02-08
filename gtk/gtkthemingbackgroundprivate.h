@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 typedef struct _GtkThemingBackground GtkThemingBackground;
 
 struct _GtkThemingBackground {
-  GtkThemingEngine *engine;
+  GtkStyleContext *context;
 
   cairo_rectangle_t paint_area;
   cairo_rectangle_t image_rect;
@@ -59,6 +59,14 @@ void _gtk_theming_background_init (GtkThemingBackground *bg,
                                    gdouble               width,
                                    gdouble               height,
                                    GtkJunctionSides      junction);
+
+void _gtk_theming_background_init_from_context (GtkThemingBackground *bg,
+                                                GtkStyleContext      *context,
+                                                gdouble               x,
+                                                gdouble               y,
+                                                gdouble               width,
+                                                gdouble               height,
+                                                GtkJunctionSides      junction);
 
 void _gtk_theming_background_render (GtkThemingBackground *bg,
                                      cairo_t              *cr);
