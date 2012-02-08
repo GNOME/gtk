@@ -33,6 +33,12 @@ struct _GtkBitmask {
   VALUE_TYPE data[1];
 };
 
+typedef struct {
+  GtkBitmask bitmask;
+  VALUE_TYPE more_data[3];
+  const GtkBitmask *orig;
+} GtkBitmaskPrealloc;
+
 static GtkBitmask *
 _gtk_bitmask_allocate (guint size)
 {
@@ -73,12 +79,111 @@ _gtk_bitmask_resize (GtkBitmask **mask, guint len)
   (*mask)->len = len;
 }
 
+static gboolean
+gtk_bitmask_is_bit (const GtkBitmask *mask)
+{
+  return (((gsize)mask) & 1);
+}
 
+static GtkBitmask *
+gtk_bitmask_for_bit (guint bit)
+{
+  gsize mask;
+
+  mask = bit;
+  mask <<= 1;
+  mask |= 1;
+  return (GtkBitmask *)mask;
+}
+
+static guint
+gtk_bitmask_get_bit (const GtkBitmask *mask)
+{
+  return ((gsize)mask) >> 1;
+}
+
+static gboolean
+gtk_bitmask_is_inline (const GtkBitmask *mask)
+{
+  return mask == NULL || gtk_bitmask_is_bit (mask);
+}
+
+static void
+gtk_bitmask_realize_for_write (GtkBitmask **mask, guint size_hint)
+{
+  GtkBitmask *realized;
+
+  if (*mask == NULL)
+    {
+      realized = _gtk_bitmask_allocate (MAX (size_hint, 1));
+      realized->len = 0;
+      *mask = realized;
+    }
+  else if (gtk_bitmask_is_bit (*mask))
+    {
+      guint bit = gtk_bitmask_get_bit (*mask);
+      guint len = (bit / VALUE_SIZE_BITS) + 1;
+      int i;
+
+      realized = _gtk_bitmask_allocate (MAX (len, size_hint));
+      realized->len = len;
+      for (i = 0; i < len; i++)
+	realized->data[i] = 0;
+
+      _gtk_bitmask_set (&realized, bit, TRUE);
+
+      *mask = realized;
+    }
+}
+
+
+static void
+gtk_bitmask_realize (const GtkBitmask **mask, GtkBitmaskPrealloc *prealloc)
+{
+  prealloc->orig = *mask;
+  if (*mask == NULL)
+    {
+      prealloc->bitmask.len = 0;
+      prealloc->bitmask.alloc = 4;
+      *mask = &prealloc->bitmask;
+    }
+  else if (gtk_bitmask_is_bit (*mask))
+    {
+      GtkBitmask *realized;
+      int i;
+      guint bit = gtk_bitmask_get_bit (*mask);
+      guint len = (bit / VALUE_SIZE_BITS) + 1;
+
+      if (len <= 4)
+	{
+	  prealloc->bitmask.alloc = 4;
+	  realized = &prealloc->bitmask;
+	}
+      else
+	realized = _gtk_bitmask_allocate (len);
+
+      for (i = 0; i < len; i++)
+	realized->data[i] = 0;
+      realized->len = len;
+
+      _gtk_bitmask_set (&realized, bit, TRUE);
+
+      *mask = realized;
+    }
+}
+
+static void
+gtk_bitmask_unrealize (const GtkBitmask *mask, GtkBitmaskPrealloc *prealloc)
+{
+  if (mask != prealloc->orig &&
+      mask != &prealloc->bitmask)
+    g_free ((GtkBitmask *)mask);
+}
 
 GtkBitmask *
 _gtk_bitmask_new (void)
 {
-  return _gtk_bitmask_allocate (1);
+  return NULL;
 }
 
 GtkBitmask *
@@ -86,7 +191,8 @@ _gtk_bitmask_copy (const GtkBitmask *mask)
 {
   GtkBitmask *copy;
 
-  g_return_val_if_fail (mask != NULL, NULL);
+  if (gtk_bitmask_is_inline (mask))
+    return (GtkBitmask *)mask;
 
   copy = _gtk_bitmask_new ();
   _gtk_bitmask_union (&copy, mask);
@@ -97,18 +203,19 @@ _gtk_bitmask_copy (const GtkBitmask *mask)
 void
 _gtk_bitmask_free (GtkBitmask *mask)
 {
-  g_return_if_fail (mask != NULL);
-
-  g_free (mask);
+  if (!gtk_bitmask_is_inline (mask))
+    g_free (mask);
 }
 
 void
 _gtk_bitmask_print (const GtkBitmask *mask,
 		    GString          *string)
 {
+  GtkBitmaskPrealloc mask_prealloc;
   int i;
 
-  g_return_if_fail (mask != NULL);
+  gtk_bitmask_realize (&mask, &mask_prealloc);
+
   g_return_if_fail (string != NULL);
 
   for (i = mask->len * VALUE_SIZE_BITS - 1; i >= 0; i--)
@@ -120,6 +227,7 @@ _gtk_bitmask_print (const GtkBitmask *mask,
   if (i < 0)
     {
       g_string_append_c (string, '0');
+      gtk_bitmask_unrealize (mask, &mask_prealloc);
       return;
     }
 
@@ -127,6 +235,8 @@ _gtk_bitmask_print (const GtkBitmask *mask,
     {
       g_string_append_c (string, _gtk_bitmask_get (mask, i) ? '1' : '0');
     }
+
+  gtk_bitmask_unrealize (mask, &mask_prealloc);
 }
 
 char *
@@ -148,58 +258,129 @@ gtk_bitmask_shrink (GtkBitmask **mask)
 {
   guint i;
 
+  if (gtk_bitmask_is_inline (*mask))
+    return;
+
   for (i = (*mask)->len; i; i--)
     {
       if ((*mask)->data[i - 1])
 	break;
     }
 
-  (*mask)->len = i;
+  if (i == 0)
+    {
+      g_free (*mask);
+      *mask = NULL;
+    }
+  else
+    (*mask)->len = i;
 }
 
 void
 _gtk_bitmask_intersect (GtkBitmask      **mask,
 			const GtkBitmask *other)
 {
+  GtkBitmaskPrealloc other_prealloc;
   guint i;
 
   g_return_if_fail (mask != NULL);
-  g_return_if_fail (other != NULL);
+
+  if (gtk_bitmask_is_inline (*mask) &&
+      gtk_bitmask_is_inline (other))
+    {
+      if (mask == NULL || other == NULL)
+	*mask = NULL;
+      else
+	{
+	  /* Different bits, the intersection is empty */
+	  if (*mask != other)
+	    *mask = NULL;
+	  /* If same bit, the value is already right */
+	}
+
+      return;
+    }
+
+  gtk_bitmask_realize (&other, &other_prealloc);
+  gtk_bitmask_realize_for_write (mask, 0);
 
   _gtk_bitmask_resize (mask, MIN ((*mask)->len, other->len));
   for (i = 0; i < (*mask)->len; i++)
     (*mask)->data[i] &= other->data[i];
 
   gtk_bitmask_shrink (mask);
+
+  gtk_bitmask_unrealize (other, &other_prealloc);
 }
 
 void
 _gtk_bitmask_union (GtkBitmask      **mask,
 		    const GtkBitmask *other)
 {
+  GtkBitmaskPrealloc other_prealloc;
   guint i;
 
   g_return_if_fail (mask != NULL);
-  g_return_if_fail (other != NULL);
+
+  if (gtk_bitmask_is_inline (*mask) &&
+      gtk_bitmask_is_inline (other))
+    {
+      /* Union nothing with something is something  */
+      if (*mask == NULL)
+	{
+	  *mask = (GtkBitmask *)other;
+	  return;
+	}
+
+      /* Union with nothing or same is same */
+      if (other == NULL ||
+	  *mask == other)
+	return;
+    }
+
+  gtk_bitmask_realize (&other, &other_prealloc);
+  gtk_bitmask_realize_for_write (mask, other->len);
 
   _gtk_bitmask_resize (mask, MAX ((*mask)->len, other->len));
   for (i = 0; i < other->len; i++)
     (*mask)->data[i] |= other->data[i];
+
+  gtk_bitmask_unrealize (other, &other_prealloc);
 }
 
 void
 _gtk_bitmask_subtract (GtkBitmask      **mask,
 		       const GtkBitmask *other)
 {
+  GtkBitmaskPrealloc other_prealloc;
   guint i;
 
   g_return_if_fail (mask != NULL);
-  g_return_if_fail (other != NULL);
+
+  if (gtk_bitmask_is_inline (*mask) &&
+      gtk_bitmask_is_inline (other))
+    {
+      /* Subtract from nothing, or subtract nothing => no change */
+      if (*mask == NULL ||
+	  other == NULL)
+	return;
+
+      /* Subtract the same bit => nothing */
+      if (*mask == other)
+	*mask = NULL;
+      /* Subtract other bit => no change */
+      return;
+    }
+
+  gtk_bitmask_realize (&other, &other_prealloc);
+  gtk_bitmask_realize_for_write (mask, 0);
 
   for (i = 0; i < other->len; i++)
     (*mask)->data[i] &= ~(other->data[i]);
 
   gtk_bitmask_shrink (mask);
+
+  gtk_bitmask_unrealize (other, &other_prealloc);
 }
 
 static void
@@ -217,7 +398,17 @@ _gtk_bitmask_get (const GtkBitmask *mask,
 {
   guint array_index, bit_index;
 
-  g_return_val_if_fail (mask != NULL, FALSE);
+  if (mask == NULL)
+    return FALSE;
+
+  if (gtk_bitmask_is_bit (mask))
+    {
+      guint bit = gtk_bitmask_get_bit (mask);
+      if (bit == index_)
+	return TRUE;
+      else
+	return FALSE;
+    }
 
   gtk_bitmask_indexes (index_, &array_index, &bit_index);
 
@@ -235,6 +426,23 @@ _gtk_bitmask_set (GtkBitmask **mask,
   guint array_index, bit_index;
 
   g_return_if_fail (mask != NULL);
+
+  if (*mask == NULL)
+    {
+      if (value)
+	*mask = gtk_bitmask_for_bit (index_);
+      return;
+    }
+
+  if (gtk_bitmask_is_bit (*mask) &&
+      gtk_bitmask_get_bit (*mask) == index_)
+    {
+      if (!value)
+	*mask = NULL;
+      return;
+    }
+
+  gtk_bitmask_realize_for_write (mask, 0);
 
   gtk_bitmask_indexes (index_, &array_index, &bit_index);
 
@@ -274,19 +482,23 @@ _gtk_bitmask_invert_range (GtkBitmask **mask,
 gboolean
 _gtk_bitmask_is_empty (const GtkBitmask *mask)
 {
-  g_return_val_if_fail (mask != NULL, FALSE);
-
-  return mask->len == 0;
+  return mask == NULL;
 }
 
 gboolean
 _gtk_bitmask_equals (const GtkBitmask  *mask,
 		     const GtkBitmask  *other)
 {
+  GtkBitmaskPrealloc mask_prealloc;
+  GtkBitmaskPrealloc other_prealloc;
   guint i;
 
-  g_return_val_if_fail (mask != NULL, FALSE);
-  g_return_val_if_fail (other != NULL, FALSE);
+  if (gtk_bitmask_is_inline (mask) &&
+      gtk_bitmask_is_inline (other))
+    return mask == other;
+
+  gtk_bitmask_realize (&mask, &mask_prealloc);
+  gtk_bitmask_realize (&other, &other_prealloc);
 
   if (mask->len != other->len)
     return FALSE;
@@ -297,6 +509,9 @@ _gtk_bitmask_equals (const GtkBitmask  *mask,
 	return FALSE;
     }
 
+  gtk_bitmask_unrealize (mask, &mask_prealloc);
+  gtk_bitmask_unrealize (other, &other_prealloc);
+
   return TRUE;
 }
 
@@ -304,36 +519,58 @@ gboolean
 _gtk_bitmask_intersects (const GtkBitmask *mask,
 			 const GtkBitmask *other)
 {
+  GtkBitmaskPrealloc mask_prealloc;
+  GtkBitmaskPrealloc other_prealloc;
   int i;
+  gboolean res;
 
-  g_return_val_if_fail (mask != NULL, FALSE);
-  g_return_val_if_fail (other != NULL, FALSE);
+  if (gtk_bitmask_is_inline (mask) &&
+      gtk_bitmask_is_inline (other))
+    {
+      if (mask == NULL || other == NULL)
+	return FALSE;
 
+      if (mask == other)
+	return TRUE;
+
+      return FALSE;
+    }
+
+  gtk_bitmask_realize (&mask, &mask_prealloc);
+  gtk_bitmask_realize (&other, &other_prealloc);
+
+  res = FALSE;
   for (i = MIN (mask->len, other->len) - 1; i >= 0; i--)
     {
       if (mask->data[i] & other->data[i])
-	return TRUE;
+	{
+	  res = TRUE;
+	  break;
+	}
     }
 
-  return FALSE;
+  gtk_bitmask_unrealize (mask, &mask_prealloc);
+  gtk_bitmask_unrealize (other, &other_prealloc);
+
+  return res;
 }
 
 void
 _gtk_bitmask_clear (GtkBitmask **mask)
 {
-  g_return_if_fail (mask != NULL);
-
-  (*mask)->len = 0;
+  _gtk_bitmask_free (*mask);
+  *mask = NULL;
 }
 
 guint
 _gtk_bitmask_get_uint (const GtkBitmask  *mask,
 		       guint              index_)
 {
+  GtkBitmaskPrealloc mask_prealloc;
   guint array_index, bit_index;
   VALUE_TYPE value1, value2;
 
-  g_return_val_if_fail (mask != NULL, FALSE);
+  gtk_bitmask_realize (&mask, &mask_prealloc);
 
   gtk_bitmask_indexes (index_, &array_index, &bit_index);
 
@@ -349,6 +586,8 @@ _gtk_bitmask_get_uint (const GtkBitmask  *mask,
   else
     value2 = 0;
 
+  gtk_bitmask_unrealize (mask, &mask_prealloc);
+
   return (guint)(value1 | value2);
 }
 
@@ -362,6 +601,8 @@ _gtk_bitmask_set_uint (GtkBitmask  **mask,
   VALUE_TYPE new_value1, new_value2;
 
   g_return_if_fail (mask != NULL);
+
+  gtk_bitmask_realize_for_write (mask, 0);
 
   gtk_bitmask_indexes (index_, &array_index, &bit_index);
 
@@ -401,10 +642,14 @@ _gtk_bitmask_set_uint (GtkBitmask  **mask,
 guint
 _gtk_bitmask_hash (const GtkBitmask *mask)
 {
+  GtkBitmaskPrealloc mask_prealloc;
   int i;
   VALUE_TYPE value, hash;
 
-  g_return_val_if_fail (mask != NULL, FALSE);
+  if (mask == NULL)
+    return 0;
+
+  gtk_bitmask_realize (&mask, &mask_prealloc);
 
   hash = 0;
 
@@ -417,6 +662,8 @@ _gtk_bitmask_hash (const GtkBitmask *mask)
   if (sizeof (hash) > sizeof (guint))
     hash = hash ^ (hash >> 32);
 
+  gtk_bitmask_unrealize (mask, &mask_prealloc);
+
   return hash;
 }
 
@@ -424,8 +671,14 @@ gboolean
 _gtk_bitmask_find_next_set (const GtkBitmask  *mask,
 			    guint             *pos)
 {
+  GtkBitmaskPrealloc mask_prealloc;
   guint array_index, bit_index;
   VALUE_TYPE value;
+
+  if (mask == NULL)
+    return FALSE;
+
+  gtk_bitmask_realize (&mask, &mask_prealloc);
 
   gtk_bitmask_indexes (*pos, &array_index, &bit_index);
 
@@ -446,6 +699,8 @@ _gtk_bitmask_find_next_set (const GtkBitmask  *mask,
       array_index++;
       bit_index = 0;
     }
+
+  gtk_bitmask_unrealize (mask, &mask_prealloc);
 
   return FALSE;
 }

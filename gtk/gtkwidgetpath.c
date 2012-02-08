@@ -736,7 +736,6 @@ _gtk_widget_path_iter_add_classes (GtkWidgetPath *path,
 
   g_return_if_fail (path != NULL);
   g_return_if_fail (path->elems->len != 0);
-  g_return_if_fail (classes != NULL);
 
   if (pos < 0 || pos >= path->elems->len)
     pos = path->elems->len - 1;
@@ -975,7 +974,6 @@ _gtk_widget_path_iter_add_regions (GtkWidgetPath  *path,
 
   g_return_if_fail (path != NULL);
   g_return_if_fail (path->elems->len != 0);
-  g_return_if_fail (regions != NULL);
 
   if (pos < 0 || pos >= path->elems->len)
     pos = path->elems->len - 1;
