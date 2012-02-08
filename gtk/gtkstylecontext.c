@@ -491,9 +491,9 @@ style_info_copy (const GtkStyleInfo *info)
   GtkStyleInfo *copy;
 
   copy = style_info_new ();
-  _gtk_bitmask_union (copy->style_classes,
+  _gtk_bitmask_union (&copy->style_classes,
 		      info->style_classes);
-  _gtk_bitmask_union (copy->regions,
+  _gtk_bitmask_union (&copy->regions,
 		      info->regions);
 
   copy->junction_sides = info->junction_sides;
@@ -1840,7 +1840,7 @@ _gtk_style_class_get_mask (const gchar *class_name)
     value = GPOINTER_TO_INT (ptr_value);
   else
     {
-      const char *str = g_intern_string (class_name);
+      char *str = (char *)g_intern_string (class_name);
       value = style_class_masks_next++;
       ptr_value = GINT_TO_POINTER (value);
       g_hash_table_insert (style_class_masks, str, ptr_value);
@@ -1874,7 +1874,7 @@ _gtk_style_region_get_mask (const gchar *region_name)
     value = GPOINTER_TO_INT (ptr_value);
   else
     {
-      const char *str = g_intern_string (region_name);
+      char *str = (char *)g_intern_string (region_name);
       value = style_region_masks_next++;
       ptr_value = GINT_TO_POINTER (value);
       g_hash_table_insert (style_region_masks, str, ptr_value);
@@ -1934,7 +1934,7 @@ gtk_style_context_add_class (GtkStyleContext *context,
 
   if (!_gtk_bitmask_get (info->style_classes, class_mask))
     {
-      _gtk_bitmask_set (info->style_classes, class_mask, TRUE);
+      _gtk_bitmask_set (&info->style_classes, class_mask, TRUE);
 
       /* Unset current data, as it likely changed due to the class change */
       priv->current_data = NULL;
@@ -1970,7 +1970,7 @@ gtk_style_context_remove_class (GtkStyleContext *context,
 
   if (_gtk_bitmask_get (info->style_classes, class_mask))
     {
-      _gtk_bitmask_set (info->style_classes, class_mask, FALSE);
+      _gtk_bitmask_set (&info->style_classes, class_mask, FALSE);
 
       /* Unset current data, as it likely changed due to the class change */
       priv->current_data = NULL;
@@ -2172,7 +2172,7 @@ gtk_style_context_add_region (GtkStyleContext *context,
       /* Ensure *some* flag is always set so we know this is added */
       old_flags |= flags | GTK_REGION_ADDED;
 
-      _gtk_bitmask_set_uint (info->regions, i, old_flags);
+      _gtk_bitmask_set_uint (&info->regions, i, old_flags);
 
       /* Unset current data, as it likely changed due to the region change */
       priv->current_data = NULL;
@@ -2215,7 +2215,7 @@ gtk_style_context_remove_region (GtkStyleContext *context,
   if ((old_flags & GTK_REGION_ADDED) != 0)
     {
       old_flags &= ~(GTK_REGION_FLAGS_MASK | GTK_REGION_ADDED);
-      _gtk_bitmask_set_uint (info->regions, i, old_flags);
+      _gtk_bitmask_set_uint (&info->regions, i, old_flags);
 
       /* Unset current data, as it likely changed due to the region change */
       priv->current_data = NULL;

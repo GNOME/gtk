@@ -40,26 +40,26 @@ char *         _gtk_bitmask_to_string            (const GtkBitmask  *mask);
 void           _gtk_bitmask_print                (const GtkBitmask  *mask,
                                                   GString           *string);
 
-void           _gtk_bitmask_intersect            (GtkBitmask        *mask,
+void           _gtk_bitmask_intersect            (GtkBitmask       **mask,
                                                   const GtkBitmask  *other);
-void           _gtk_bitmask_union                (GtkBitmask        *mask,
+void           _gtk_bitmask_union                (GtkBitmask       **mask,
                                                   const GtkBitmask  *other);
-void           _gtk_bitmask_subtract             (GtkBitmask        *mask,
+void           _gtk_bitmask_subtract             (GtkBitmask       **mask,
                                                   const GtkBitmask  *other);
 
 gboolean       _gtk_bitmask_get                  (const GtkBitmask  *mask,
                                                   guint              index_);
-void           _gtk_bitmask_set                  (GtkBitmask        *mask,
+void           _gtk_bitmask_set                  (GtkBitmask       **mask,
                                                   guint              index_,
                                                   gboolean           value);
-void           _gtk_bitmask_clear                (GtkBitmask        *mask);
+void           _gtk_bitmask_clear                (GtkBitmask       **mask);
 guint          _gtk_bitmask_get_uint             (const GtkBitmask  *mask,
                                                   guint              index_);
-void           _gtk_bitmask_set_uint             (GtkBitmask        *mask,
+void           _gtk_bitmask_set_uint             (GtkBitmask       **mask,
                                                   guint              index_,
 						  guint              bits);
 
-void           _gtk_bitmask_invert_range         (GtkBitmask        *mask,
+void           _gtk_bitmask_invert_range         (GtkBitmask       **mask,
                                                   guint              start,
                                                   guint              end);
 

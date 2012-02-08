@@ -48,9 +48,9 @@ gtk_bitmask_new_parse (const char *string)
   for (i = 0; i < length; i++)
     {
       if (string[i] == '0')
-        _gtk_bitmask_set (mask, length - i - 1, FALSE);
+        _gtk_bitmask_set (&mask, length - i - 1, FALSE);
       else if (string[i] == '1')
-        _gtk_bitmask_set (mask, length - i - 1, TRUE);
+        _gtk_bitmask_set (&mask, length - i - 1, TRUE);
       else
         g_assert_not_reached ();
     }
@@ -142,12 +142,12 @@ test_set (void)
       for (j = 0; j < N_TRIES; j++)
         {
           indexes[j] = g_test_rand_int_range (0, MAX_INDEX);
-          _gtk_bitmask_set (copy, indexes[j], g_test_rand_bit ());
+          _gtk_bitmask_set (&copy, indexes[j], g_test_rand_bit ());
         }
 
       for (j = 0; j < N_TRIES; j++)
         {
-          _gtk_bitmask_set (copy, indexes[j], _gtk_bitmask_get (mask, indexes[j]));
+          _gtk_bitmask_set (&copy, indexes[j], _gtk_bitmask_get (mask, indexes[j]));
         }
 
       assert_cmpmasks (copy, mask);
@@ -174,10 +174,10 @@ test_set_uint (void)
         {
 	  index = g_test_rand_int_range (0, MAX_INDEX);
 
-	  _gtk_bitmask_set_uint (copy, index, val);
+	  _gtk_bitmask_set_uint (&copy, index, val);
 
 	  for (k = 0; k < sizeof (guint) * 8; k++)
-	    _gtk_bitmask_set (mask, index + k, val & (1<<k));
+	    _gtk_bitmask_set (&mask, index + k, val & (1<<k));
 
 	  assert_cmpmasks (copy, mask);
         }
@@ -228,15 +228,15 @@ test_union (void)
           guint id = g_test_rand_int_range (0, MAX_INDEX);
 
           if (g_test_rand_bit ())
-            _gtk_bitmask_set (left, id, TRUE);
+            _gtk_bitmask_set (&left, id, TRUE);
           else
-            _gtk_bitmask_set (right, id, TRUE);
+            _gtk_bitmask_set (&right, id, TRUE);
 
-          _gtk_bitmask_set (expected, id, TRUE);
+          _gtk_bitmask_set (&expected, id, TRUE);
         }
 
-      _gtk_bitmask_union (left, right);
-      _gtk_bitmask_union (right, left);
+      _gtk_bitmask_union (&left, right);
+      _gtk_bitmask_union (&right, left);
 
       assert_cmpmasks (left, expected);
       assert_cmpmasks (right, expected);
@@ -266,13 +266,13 @@ test_intersect (void)
 
           if (g_test_rand_bit ())
             {
-              _gtk_bitmask_set (left, id, set);
-              _gtk_bitmask_set (expected, id, set ? _gtk_bitmask_get (right, id) : 0);
+              _gtk_bitmask_set (&left, id, set);
+              _gtk_bitmask_set (&expected, id, set ? _gtk_bitmask_get (right, id) : 0);
             }
           else
             {
-              _gtk_bitmask_set (right, id, set);
-              _gtk_bitmask_set (expected, id, set ? _gtk_bitmask_get (left, id) : 0);
+              _gtk_bitmask_set (&right, id, set);
+              _gtk_bitmask_set (&expected, id, set ? _gtk_bitmask_get (left, id) : 0);
             }
         }
 
@@ -280,8 +280,8 @@ test_intersect (void)
       g_assert_cmpint (intersects, ==, _gtk_bitmask_intersects (right, left));
       g_assert_cmpint (intersects, !=, _gtk_bitmask_is_empty (expected));
 
-      _gtk_bitmask_intersect (left, right);
-      _gtk_bitmask_intersect (right, left);
+      _gtk_bitmask_intersect (&left, right);
+      _gtk_bitmask_intersect (&right, left);
 
       assert_cmpmasks (left, expected);
       assert_cmpmasks (right, expected);
@@ -322,19 +322,19 @@ test_invert_range (void)
       end = MIN (left_end, right_end);
 
       if (left_start != left_end)
-        _gtk_bitmask_invert_range (left, left_start, left_end);
+        _gtk_bitmask_invert_range (&left, left_start, left_end);
       if (right_start != right_end)
-        _gtk_bitmask_invert_range (right, right_start, right_end);
+        _gtk_bitmask_invert_range (&right, right_start, right_end);
       if (start < end)
-        _gtk_bitmask_invert_range (expected, start, end);
+        _gtk_bitmask_invert_range (&expected, start, end);
 
       intersection = _gtk_bitmask_copy (left);
-      _gtk_bitmask_intersect (intersection, right);
+      _gtk_bitmask_intersect (&intersection, right);
 
       assert_cmpmasks (intersection, expected);
 
       if (start < end)
-        _gtk_bitmask_invert_range (expected, start, end);
+        _gtk_bitmask_invert_range (&expected, start, end);
 
       g_assert_cmpint (_gtk_bitmask_is_empty (expected), ==, TRUE);
 
