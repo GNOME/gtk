@@ -22,6 +22,7 @@
 #include "gtkcolorswatch.h"
 
 #include "gtkroundedboxprivate.h"
+#include "gtkthemingbackgroundprivate.h"
 #include "gtkdnd.h"
 #include "gtkicontheme.h"
 #include "gtkmain.h"
@@ -106,6 +107,7 @@ swatch_draw (GtkWidget *widget,
              cairo_t   *cr)
 {
   GtkColorSwatch *swatch = (GtkColorSwatch*)widget;
+  GtkThemingBackground background;
   GtkRoundedBox box;
   gint i;
   gdouble width, height;
@@ -118,18 +120,14 @@ swatch_draw (GtkWidget *widget,
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
 
-  gtk_style_context_save (context);
   cairo_save (cr);
 
+  gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
 
-  _gtk_rounded_box_init_rect (&box, 0, 0, width, height);
-  for (i = 0; i < 4; i++)
-    box.corner[i].horizontal = box.corner[i].vertical = swatch->priv->radius[i];
-
-  _gtk_rounded_box_path (&box, cr);
-
-  cairo_clip_preserve (cr);
+  _gtk_theming_background_init_from_context (&background, context,
+                                             0, 0, width, height,
+                                             GTK_JUNCTION_NONE);
 
   if (swatch->priv->has_color)
     {
@@ -138,31 +136,37 @@ swatch_draw (GtkWidget *widget,
 
       if (swatch->priv->use_alpha)
         {
+          cairo_save (cr);
+
+          _gtk_rounded_box_path (&background.clip_box, cr);
+          cairo_clip_preserve (cr);
+
           cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
           cairo_fill_preserve (cr);
-          cairo_set_source_rgb (cr, 0.66, 0.66, 0.66);
 
           pattern = get_checkered_pattern ();
           cairo_matrix_init_scale (&matrix, 0.125, 0.125);
           cairo_pattern_set_matrix (pattern, &matrix);
+
+          cairo_set_source_rgb (cr, 0.66, 0.66, 0.66);
           cairo_mask (cr, pattern);
           cairo_pattern_destroy (pattern);
 
-          gdk_cairo_set_source_rgba (cr, &swatch->priv->color);
+          cairo_restore (cr);
+
+          background.bg_color = swatch->priv->color;
         }
       else
         {
-          cairo_set_source_rgb (cr,
-                                swatch->priv->color.red,
-                                swatch->priv->color.green,
-                                swatch->priv->color.blue);
+          background.bg_color = swatch->priv->color;
+          background.bg_color.alpha = 1.0;
         }
-      cairo_fill_preserve (cr);
+
+      _gtk_theming_background_render (&background, cr);
     }
 
-  cairo_set_source_rgb (cr, 0.4, 0.4, 0.4);
-  cairo_set_line_width (cr, 1);
-  cairo_stroke (cr);
+  gtk_render_frame (context, cr,
+                    0, 0, width, height);
 
   if (gtk_widget_has_visible_focus (widget))
     {
@@ -171,8 +175,8 @@ swatch_draw (GtkWidget *widget,
         cairo_set_source_rgba (cr, 1., 1., 1., 0.4);
       else
         cairo_set_source_rgba (cr, 0., 0., 0., 0.4);
-      _gtk_rounded_box_shrink (&box, 3, 3, 3, 3);
-      _gtk_rounded_box_path (&box, cr);
+      _gtk_rounded_box_shrink (&background.clip_box, 3, 3, 3, 3);
+      _gtk_rounded_box_path (&background.clip_box, cr);
       cairo_stroke (cr);
     }
 
