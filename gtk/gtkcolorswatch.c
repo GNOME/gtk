@@ -612,14 +612,30 @@ void
 gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
                            const GdkRGBA  *color)
 {
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (swatch));
+
   if (!swatch->priv->has_color)
-    gtk_drag_source_set (GTK_WIDGET (swatch),
-                         GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
-                         dnd_targets, G_N_ELEMENTS (dnd_targets),
-                         GDK_ACTION_COPY | GDK_ACTION_MOVE);
+    {
+      gtk_drag_source_set (GTK_WIDGET (swatch),
+                           GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
+                           dnd_targets, G_N_ELEMENTS (dnd_targets),
+                           GDK_ACTION_COPY | GDK_ACTION_MOVE);
+    }
+  else
+    {
+      gtk_style_context_remove_class (context, "color-light");
+      gtk_style_context_remove_class (context, "color-dark");
+    }
 
   swatch->priv->has_color = TRUE;
   swatch->priv->color = *color;
+
+  if (INTENSITY (swatch->priv->color.red, swatch->priv->color.green, swatch->priv->color.blue) > 0.5)
+    gtk_style_context_add_class (context, "color-light");
+  else
+    gtk_style_context_add_class (context, "color-dark");
 
   gtk_widget_queue_draw (GTK_WIDGET (swatch));
   g_object_notify (G_OBJECT (swatch), "rgba");
