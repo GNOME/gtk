@@ -1406,7 +1406,8 @@ dgettext_swapped (const gchar *msgid,
 /**
  * gtk_action_group_set_translation_domain:
  * @action_group: a #GtkActionGroup
- * @domain: the translation domain to use for g_dgettext() calls
+ * @domain: (allow-none): the translation domain to use for g_dgettext()
+ * calls, or %NULL to use the domain set with textdomain()
  * 
  * Sets the translation domain and uses g_dgettext() for translating the 
  * @label and @tooltip of #GtkActionEntry<!-- -->s added by 
