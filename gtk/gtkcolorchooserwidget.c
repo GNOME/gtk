@@ -178,15 +178,15 @@ save_custom_colors (GtkColorChooserWidget *cc)
   GVariantBuilder builder;
   GVariant *variant;
   GdkRGBA color;
+  GList *children, *l;
   GtkWidget *child;
-  gint i;
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(dddd)"));
 
-  i = 1;
-  while ((child = gtk_grid_get_child_at (GTK_GRID (cc->priv->custom), i, 0)) != NULL)
+  children = gtk_container_get_children (GTK_CONTAINER (cc->priv->custom));
+  for (l = g_list_nth (children, 1); l != NULL; l = l->next)
     {
-      i++;
+      child = l->data;
       if (gtk_color_swatch_get_rgba (GTK_COLOR_SWATCH (child), &color))
         g_variant_builder_add (&builder, "(dddd)",
                                color.red, color.green, color.blue, color.alpha);
@@ -194,6 +194,8 @@ save_custom_colors (GtkColorChooserWidget *cc)
 
   variant = g_variant_builder_end (&builder);
   g_settings_set_value (cc->priv->settings, "custom-colors", variant);
+
+  g_list_free (children);
 }
 
 static void
@@ -384,7 +386,7 @@ add_default_palette (GtkColorChooserWidget *cc)
 static void
 gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 {
-  GtkWidget *grid;
+  GtkWidget *box;
   GtkWidget *p;
   GtkWidget *alignment;
   GtkWidget *button;
@@ -403,10 +405,9 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 
   add_default_palette (cc);
 
-  cc->priv->custom = grid = gtk_grid_new ();
-  g_object_set (grid, "margin-top", 12, NULL);
-  gtk_grid_set_column_spacing (GTK_GRID (grid), 4);
-  gtk_box_pack_end (GTK_BOX (cc->priv->palette), grid, FALSE, TRUE, 0);
+  cc->priv->custom = box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+  g_object_set (box, "margin-top", 12, NULL);
+  gtk_box_pack_end (GTK_BOX (cc->priv->palette), box, FALSE, TRUE, 0);
 
   /* translators: label for the custom section in the color chooser */
   cc->priv->custom_label = label = gtk_label_new (_("Custom"));
@@ -414,10 +415,9 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   gtk_box_pack_end (GTK_BOX (cc->priv->palette), label, FALSE, TRUE, 0);
 
   cc->priv->button = button = gtk_color_swatch_new ();
-  gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (button), 10, 10, 10, 10);
   connect_button_signals (button, cc);
   gtk_color_swatch_set_icon (GTK_COLOR_SWATCH (button), "list-add-symbolic");
-  gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
+  gtk_container_add (GTK_CONTAINER (box), button);
 
   cc->priv->settings = g_settings_new_with_path ("org.gtk.Settings.ColorChooser",
                                                  "/org/gtk/settings/color-chooser/");
@@ -429,30 +429,15 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
     {
       i++;
       p = gtk_color_swatch_new ();
-      gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 1, 1);
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &color);
       gtk_color_swatch_set_can_drop (GTK_COLOR_SWATCH (p), TRUE);
       connect_custom_signals (p, cc);
-      gtk_grid_attach (GTK_GRID (grid), p, i, 0, 1, 1);
+      gtk_container_add (GTK_CONTAINER (box), p);
 
       if (i == 8)
         break;
     }
   g_variant_unref (variant);
-
-  if (i > 0)
-    {
-      if (gtk_widget_get_direction (GTK_WIDGET (cc)) == GTK_TEXT_DIR_LTR)
-        {
-          gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 10, 10, 1);
-          gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (button), 10, 1, 1, 10);
-        }
-      else
-        {
-          gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (button), 1, 10, 10, 1);
-          gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 10, 1, 1, 10);
-        }
-    }
 
   cc->priv->editor = gtk_color_editor_new ();
   alignment = gtk_alignment_new (0.5, 0.5, 0, 0);
@@ -607,29 +592,24 @@ add_custom_color (GtkColorChooserWidget *cc,
 {
   GtkWidget *last;
   GtkWidget *p;
+  GList *children;
 
-  last = gtk_grid_get_child_at (GTK_GRID (cc->priv->custom), 8, 0);
-  if (last)
+  children = gtk_container_get_children (GTK_CONTAINER (cc->priv->custom));
+  if (g_list_length (children) == 8)
     {
-      gtk_container_remove (GTK_CONTAINER (cc->priv->custom), last);
-      last = gtk_grid_get_child_at (GTK_GRID (cc->priv->custom), 7, 0);
-      gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (last), 1, 10, 10, 1);
+      last = g_list_last (children)->data;
+      gtk_widget_destroy (last);
     }
 
-  gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (cc->priv->button), 10, 1, 1, 10);
+  g_list_free (children);
 
   p = gtk_color_swatch_new ();
   gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), color);
   gtk_color_swatch_set_can_drop (GTK_COLOR_SWATCH (p), TRUE);
   connect_custom_signals (p, cc);
 
-  if (gtk_grid_get_child_at (GTK_GRID (cc->priv->custom), 1, 0) != NULL)
-    gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 1, 1);
-  else
-    gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 10, 10, 1);
-
-  gtk_grid_insert_next_to (GTK_GRID (cc->priv->custom), cc->priv->button, GTK_POS_RIGHT);
-  gtk_grid_attach (GTK_GRID (cc->priv->custom), p, 1, 0, 1, 1);
+  gtk_container_add (GTK_CONTAINER (cc->priv->custom), p);
+  gtk_box_reorder_child (GTK_BOX (cc->priv->custom), p, 1);
   gtk_widget_show (p);
 
   select_swatch (cc, GTK_COLOR_SWATCH (p));
@@ -644,17 +624,17 @@ gtk_color_chooser_widget_set_rgba (GtkColorChooser *chooser,
   GList *children, *l;
   GList *palettes, *p;
   GtkColorSwatch *swatch;
-  GtkWidget *grid;
+  GtkWidget *w;
   GdkRGBA c;
 
   palettes = gtk_container_get_children (GTK_CONTAINER (cc->priv->palette));
   for (p = palettes; p; p = p->next)
     {
-      grid = p->data;
-      if (!GTK_IS_GRID (grid))
+      w = p->data;
+      if (!GTK_IS_GRID (w) && !GTK_IS_BOX (w))
         continue;
 
-      children = gtk_container_get_children (GTK_CONTAINER (grid));
+      children = gtk_container_get_children (GTK_CONTAINER (w));
       for (l = children; l; l = l->next)
         {
           swatch = l->data;
