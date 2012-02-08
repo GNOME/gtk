@@ -406,7 +406,6 @@ gtk_color_editor_init (GtkColorEditor *editor)
   /* Construct the main UI */
   editor->priv->swatch = swatch = gtk_color_swatch_new ();
   gtk_widget_set_sensitive (swatch, FALSE);
-  gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (swatch), 2, 2, 2, 2);
 
   editor->priv->entry = entry = gtk_entry_new ();
   g_signal_connect (entry, "activate", G_CALLBACK (entry_apply), editor);
