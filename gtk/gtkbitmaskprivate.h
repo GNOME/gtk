@@ -25,11 +25,7 @@
 
 G_BEGIN_DECLS
 
-#ifdef GTK_INSIDE_BITMASK_C
-typedef GArray GtkBitmask;
-#else
 typedef struct _GtkBitmask           GtkBitmask;
-#endif
 
 
 GtkBitmask *   _gtk_bitmask_new                  (void);
