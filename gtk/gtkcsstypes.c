@@ -131,9 +131,6 @@ _gtk_css_number_print (const GtkCssNumber *number,
 {
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
-  g_return_if_fail (number != NULL);
-  g_return_if_fail (string != NULL);
-
   const char *names[] = {
     /* [GTK_CSS_NUMBER] = */ "",
     /* [GTK_CSS_PERCENT] = */ "%",
@@ -150,6 +147,9 @@ _gtk_css_number_print (const GtkCssNumber *number,
     /* [GTK_CSS_GRAD] = */ "grad",
     /* [GTK_CSS_TURN] = */ "turn",
   };
+
+  g_return_if_fail (number != NULL);
+  g_return_if_fail (string != NULL);
 
   g_ascii_dtostr (buf, sizeof (buf), number->value);
   g_string_append (string, buf);
