@@ -137,11 +137,8 @@ gtk_path_element_copy (GtkPathElement       *dest,
     dest->siblings = gtk_widget_path_ref (src->siblings);
   dest->sibling_index = src->sibling_index;
 
-  if (src->regions)
-    dest->regions = _gtk_bitmask_copy (src->regions);
-
-  if (src->classes)
-    dest->classes = _gtk_bitmask_copy (src->classes);
+  dest->regions = _gtk_bitmask_copy (src->regions);
+  dest->classes = _gtk_bitmask_copy (src->classes);
 }
 
 /**
@@ -223,11 +220,8 @@ gtk_widget_path_unref (GtkWidgetPath *path)
 
       elem = &g_array_index (path->elems, GtkPathElement, i);
 
-      if (elem->regions)
-        _gtk_bitmask_free (elem->regions);
-
-      if (elem->classes)
-        _gtk_bitmask_free (elem->classes);
+      _gtk_bitmask_free (elem->regions);
+      _gtk_bitmask_free (elem->classes);
 
       if (elem->siblings)
         gtk_widget_path_unref (elem->siblings);
@@ -721,9 +715,6 @@ gtk_widget_path_iter_add_class (GtkWidgetPath *path,
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
-  if (!elem->classes)
-    elem->classes = _gtk_bitmask_new ();
-
   _gtk_bitmask_set (&elem->classes, _gtk_style_class_get_mask (name), TRUE);
 }
 
@@ -741,9 +732,6 @@ _gtk_widget_path_iter_add_classes (GtkWidgetPath *path,
     pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
-
-  if (!elem->classes)
-    elem->classes = _gtk_bitmask_new ();
 
   _gtk_bitmask_union (&elem->classes, classes);
 }
@@ -774,9 +762,6 @@ gtk_widget_path_iter_remove_class (GtkWidgetPath *path,
     pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
-
-  if (!elem->classes)
-    elem->classes = _gtk_bitmask_new ();
 
   _gtk_bitmask_set (&elem->classes, _gtk_style_class_get_mask (name), FALSE);
 }
@@ -952,9 +937,6 @@ gtk_widget_path_iter_add_region (GtkWidgetPath  *path,
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
-  if (!elem->regions)
-    elem->regions = _gtk_bitmask_new ();
-
   region = _gtk_style_region_get_mask (name);
   i = region * GTK_REGION_FLAGS_NUM_BITS;
 
@@ -979,9 +961,6 @@ _gtk_widget_path_iter_add_regions (GtkWidgetPath  *path,
     pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
-
-  if (!elem->regions)
-    elem->regions = _gtk_bitmask_new ();
 
   _gtk_bitmask_union (&elem->regions, regions);
 }
