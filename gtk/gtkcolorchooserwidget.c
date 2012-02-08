@@ -296,24 +296,21 @@ add_palette (GtkColorChooserWidget *cc,
 
       if (horizontal)
         {
-            gtk_grid_attach (GTK_GRID (grid), p, pos, line, 1, 1);
             if (pos == left)
-              gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 10, 1, 1, 10);
+              gtk_style_context_add_class (gtk_widget_get_style_context (p), GTK_STYLE_CLASS_LEFT);
             else if (pos == right)
-              gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 10, 10, 1);
-            else
-              gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 1, 1);
+              gtk_style_context_add_class (gtk_widget_get_style_context (p), GTK_STYLE_CLASS_RIGHT);
+
+            gtk_grid_attach (GTK_GRID (grid), p, pos, line, 1, 1);
         }
       else
         {
-          gtk_grid_attach (GTK_GRID (grid), p, line, pos, 1, 1);
-
           if (pos == 0)
-            gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 10, 10, 1, 1);
+            gtk_style_context_add_class (gtk_widget_get_style_context (p), GTK_STYLE_CLASS_TOP);
           else if (pos == colors_per_line - 1)
-            gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 10, 10);
-          else
-            gtk_color_swatch_set_corner_radii (GTK_COLOR_SWATCH (p), 1, 1, 1, 1);
+            gtk_style_context_add_class (gtk_widget_get_style_context (p), GTK_STYLE_CLASS_BOTTOM);
+
+          gtk_grid_attach (GTK_GRID (grid), p, line, pos, 1, 1);
        }
     }
 
