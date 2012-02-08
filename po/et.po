@@ -9,22 +9,22 @@
 # Tõivo Leedjärv <toivo linux ee>, 2002–2004.
 # Priit Laes <amd tt ee>, 2004, 2005.
 # Ivar Smolin <okul linux ee>, 2005–2011.
-# Mattias Põldaru <mahfiaz gmail com>, 2009–2010.
+# Mattias Põldaru <mahfiaz@gmail.com>, 2009–2010, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&component=general\n"
-"POT-Creation-Date: 2011-01-21 22:53+0000\n"
-"PO-Revision-Date: 2011-01-22 11:38+0200\n"
-"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
-"Language-Team: Estonian <gnome-et@linux.ee>\n"
+"%2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-02-06 22:33+0000\n"
+"PO-Revision-Date: 2012-02-08 08:14+0200\n"
+"Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
+"Language-Team: Estonian <>\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Language: et\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: 8bits\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #, c-format
 msgid "Error parsing option --gdk-debug"
@@ -73,6 +73,17 @@ msgstr "LIPUD"
 msgid "GDK debugging flags to unset"
 msgstr "GDK silumislipud, mida maha võtta"
 
+#.
+#. * Translators, the strings in the 'keyboard label' context are
+#. * display names for keyboard keys. Some of them have prefixes like
+#. * XF86 or ISO_ - these should be removed in the translation. Similarly,
+#. * underscores should be replaced by spaces. The prefix 'KP_' stands
+#. * for 'key pad' and you may want to include that in your translation.
+#. * Here are some examples of English translations:
+#. * XF86AudioMute - Audio mute
+#. * Scroll_lock   - Scroll lock
+#. * KP_Space      - Space (keypad)
+#.
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "BackSpace"
@@ -91,11 +102,11 @@ msgstr "Pause"
 
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr "Scroll_Lock"
+msgstr "Scroll Lock"
 
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "Sys_Req"
+msgstr "Sys Req"
 
 msgctxt "keyboard label"
 msgid "Escape"
@@ -103,7 +114,7 @@ msgstr "Escape"
 
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Multi_key"
+msgstr "Multi-klahv"
 
 msgctxt "keyboard label"
 msgid "Home"
@@ -111,27 +122,27 @@ msgstr "Home"
 
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "Left"
+msgstr "Vasakule nool"
 
 msgctxt "keyboard label"
 msgid "Up"
-msgstr "Up"
+msgstr "Ülesnool"
 
 msgctxt "keyboard label"
 msgid "Right"
-msgstr "Right"
+msgstr "Paremale nool"
 
 msgctxt "keyboard label"
 msgid "Down"
-msgstr "Down"
+msgstr "Allanool"
 
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Page_Up"
+msgstr "Page Up"
 
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "Page_Down"
+msgstr "Page Down"
 
 msgctxt "keyboard label"
 msgid "End"
@@ -151,75 +162,181 @@ msgstr "Insert"
 
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr "Num_Lock"
+msgstr "Num Lock"
 
+#. Translators: KP_ means 'key pad' here
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "KP_Space"
+msgstr "Tühik (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr "KP_Tab"
+msgstr "Tabulaator (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "KP_Enter"
+msgstr "Enter (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "KP_Home"
+msgstr "Home (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "KP_Left"
+msgstr "Vasakule nool (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "KP_Up"
+msgstr "Ülesnool (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "KP_Right"
+msgstr "Paremale nool (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "KP_Down"
+msgstr "Allanool (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "KP_Page_Up"
+msgstr "Page Up (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr "KP_Prior"
+msgstr "Eelmine (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "KP_Page_Down"
+msgstr "Page Down (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr "KP_Next"
+msgstr "Järgmine (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "KP_End"
+msgstr "End (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr "KP_Begin"
+msgstr "Begin (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "KP_Insert"
+msgstr "Insert (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "KP_Delete"
+msgstr "Delete (numbriklahvistik)"
 
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
+
+#. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
+msgctxt "keyboard label"
+msgid "XF86MonBrightnessUp"
+msgstr "Kuvari heledust vähemaks"
+
+msgctxt "keyboard label"
+msgid "XF86MonBrightnessDown"
+msgstr "Kuvari heledust juurde"
+
+msgctxt "keyboard label"
+msgid "XF86AudioMute"
+msgstr "Heli tummaks"
+
+msgctxt "keyboard label"
+msgid "XF86AudioLowerVolume"
+msgstr "Heli vaiksemaks"
+
+msgctxt "keyboard label"
+msgid "XF86AudioRaiseVolume"
+msgstr "Heli valjemaks"
+
+msgctxt "keyboard label"
+msgid "XF86AudioPlay"
+msgstr "Heli - esitamine"
+
+msgctxt "keyboard label"
+msgid "XF86AudioStop"
+msgstr "Heli - stopp"
+
+msgctxt "keyboard label"
+msgid "XF86AudioNext"
+msgstr "Heli - järgmine"
+
+msgctxt "keyboard label"
+msgid "XF86AudioPrev"
+msgstr "Heli - eelmine"
+
+msgctxt "keyboard label"
+msgid "XF86AudioRecord"
+msgstr "Heli - lindistamine"
+
+msgctxt "keyboard label"
+msgid "XF86AudioPause"
+msgstr "Heli - paus"
+
+msgctxt "keyboard label"
+msgid "XF86AudioRewind"
+msgstr "Heli - tagasi kerimine"
+
+msgctxt "keyboard label"
+msgid "XF86AudioMedia"
+msgstr "Heli - meedianupp"
+
+msgctxt "keyboard label"
+msgid "XF86ScreenSaver"
+msgstr "Ekraanisäästja"
+
+msgctxt "keyboard label"
+msgid "XF86Battery"
+msgstr "Aku"
+
+msgctxt "keyboard label"
+msgid "XF86Launch1"
+msgstr "Käivitaja 1"
+
+msgctxt "keyboard label"
+msgid "XF86Forward"
+msgstr "Edasi"
+
+msgctxt "keyboard label"
+msgid "XF86Back"
+msgstr "Tagasi"
+
+msgctxt "keyboard label"
+msgid "XF86Sleep"
+msgstr "Uinak"
+
+msgctxt "keyboard label"
+msgid "XF86Hibernate"
+msgstr "Talveuni"
+
+msgctxt "keyboard label"
+msgid "XF86WLAN"
+msgstr "Juhtmeta võrk"
+
+msgctxt "keyboard label"
+msgid "XF86WebCam"
+msgstr "Veebikaamera"
+
+msgctxt "keyboard label"
+msgid "XF86Display"
+msgstr "Kuva"
+
+msgctxt "keyboard label"
+msgid "XF86TouchpadToggle"
+msgstr "Puuteplaadi lüliti"
+
+msgctxt "keyboard label"
+msgid "XF86WakeUp"
+msgstr "Üles äratamine"
+
+msgctxt "keyboard label"
+msgid "XF86Suspend"
+msgstr "Arvuti peatamine"
 
 #. Description of --sync in --help output
 msgid "Don't batch GDI requests"
@@ -259,16 +376,51 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Avamine: %d kirje"
 msgstr[1] "Avamine: %d kirjet"
 
+msgctxt "throbbing progress animation widget"
+msgid "Spinner"
+msgstr "Edenemisnäidik"
+
+msgid "Provides visual indication of progress"
+msgstr "Edenemise visuaalne kajastus"
+
+msgctxt "light switch widget"
+msgid "Switch"
+msgstr "Lüliti"
+
+msgid "Switches between on and off states"
+msgstr "Kahe olekuga (sees/väljas) lüliti"
+
+#. This is the default text shown in the preview entry, though the user
+#. can set it. Remember that some fonts only have capital letters.
+msgid "abcdefghijk ABCDEFGHIJK"
+msgstr "abcdefghijkõäöü ABCDEFGHIJKÕÄÖÜ"
+
+msgid "_Family:"
+msgstr "_Perekond:"
+
+msgid "_Style:"
+msgstr "Laa_d:"
+
+msgid "Si_ze:"
+msgstr "_Suurus:"
+
+#. create the text entry widget
+msgid "_Preview:"
+msgstr "_Näidis:"
+
+msgid "Font Selection"
+msgstr "Kirjatüübi valik"
+
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
 #, c-format
 msgid ""
-"This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
-"\"%s\">%s</a>"
+"This program comes with ABSOLUTELY NO WARRANTY;\n"
+"for details, visit <a href=\"%s\">%s</a>"
 msgstr ""
-"See programm on ILMA IGASUGUSE GARANTIITA. Üksikasjade kohta vaata <a href="
-"\"%s\">%s</a>"
+"See programm on ILMA IGASUGUSE GARANTIITA;\n"
+"üksikasjade kohta vaata <a href=\"%s\">%s</a>"
 
 msgid "License"
 msgstr "Litsents"
@@ -372,10 +524,10 @@ msgid "Other application..."
 msgstr "Muu rakendus..."
 
 msgid "Failed to look for applications online"
-msgstr ""
+msgstr "Rakenduste otsimine veebist nurjus"
 
 msgid "Find applications online"
-msgstr ""
+msgstr "Otsi rakendusi veebist"
 
 msgid "Could not run application"
 msgstr "Rakendust pole võimalik käivitada"
@@ -409,12 +561,14 @@ msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 msgstr ""
+"Klõpsa \"Näita ka teisi rakendusi\", et näha veel valikuid, või \"Otsi "
+"rakendusi veebist\", et paigaldada uus rakendus"
 
 msgid "Forget association"
 msgstr "Unusta seos"
 
 msgid "Show other applications"
-msgstr "Näita teisi rakendusi"
+msgstr "Näita ka teisi rakendusi"
 
 msgid "_Select"
 msgstr "_Vali"
@@ -430,6 +584,40 @@ msgstr "Seotud rakendused"
 
 msgid "Other Applications"
 msgstr "Muud rakendused"
+
+#, c-format
+msgid ""
+"%s cannot quit at this time:\n"
+"\n"
+"%s"
+msgstr ""
+"%s praegu pole võimalik lõpetada:\n"
+"\n"
+"%s"
+
+msgid "Application"
+msgstr "Rakendus"
+
+msgid "C_ontinue"
+msgstr "_Jätka"
+
+msgid "Go _Back"
+msgstr "Mine _tagasi"
+
+msgid "_Finish"
+msgstr "_Lõpeta"
+
+#, c-format
+msgid "Element <%s> not allowed inside <%s>"
+msgstr "Element <%s> pole <%s> sees lubatud"
+
+#, c-format
+msgid "Element <%s> not allowed at toplevel"
+msgstr "Element <%s> pole kõige ülemisena lubatud"
+
+#, c-format
+msgid "text may not appear inside <%s>"
+msgstr "tekst ei või esineda <%s> sees"
 
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
@@ -550,9 +738,6 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "Värvuse valimine"
 
-msgid "Received invalid color data\n"
-msgstr "Võeti vastu vigased värviandmed\n"
-
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -573,7 +758,7 @@ msgstr "_Toon:"
 msgid "Position on the color wheel."
 msgstr "Asukoht värviringil."
 
-msgid "_Saturation:"
+msgid "S_aturation:"
 msgstr "_Küllastus:"
 
 msgid "Intensity of the color."
@@ -728,6 +913,44 @@ msgstr "Num Lock on sisse lülitatud"
 msgid "Caps Lock is on"
 msgstr "Caps Lock on sisse lülitatud"
 
+#. *
+#. * SECTION:gtkfilechooserbutton
+#. * @Short_description: A button to launch a file selection dialog
+#. * @Title: GtkFileChooserButton
+#. * @See_also:#GtkFileChooserDialog
+#. *
+#. * The #GtkFileChooserButton is a widget that lets the user select a
+#. * file.  It implements the #GtkFileChooser interface.  Visually, it is a
+#. * file name with a button to bring up a #GtkFileChooserDialog.
+#. * The user can then use that dialog to change the file associated with
+#. * that button.  This widget does not support setting the
+#. * #GtkFileChooser:select-multiple property to %TRUE.
+#. *
+#. * <example>
+#. * <title>Create a button to let the user select a file in /etc</title>
+#. * <programlisting>
+#. * {
+#. *   GtkWidget *button;
+#. *
+#. *   button = gtk_file_chooser_button_new (_("Select a file"),
+#. *                                         GTK_FILE_CHOOSER_ACTION_OPEN);
+#. *   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button),
+#. *                                        "/etc");
+#. * }
+#. * </programlisting>
+#. * </example>
+#. *
+#. * The #GtkFileChooserButton supports the #GtkFileChooserAction<!-- -->s
+#. * %GTK_FILE_CHOOSER_ACTION_OPEN and %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
+#. *
+#. * <important>
+#. * The #GtkFileChooserButton will ellipsize the label,
+#. * and thus will thus request little horizontal space.  To give the button
+#. * more space, you should call gtk_widget_get_preferred_size(),
+#. * gtk_file_chooser_button_set_width_chars(), or pack the button in
+#. * such a way that other interface elements give space to the widget.
+#. * </important>
+#.
 #. **************** *
 #. *  Private Macros  *
 #. * ****************
@@ -840,19 +1063,17 @@ msgstr "Asukohad"
 msgid "_Places"
 msgstr "As_ukohad"
 
-# kas keegi teab, millise programmi pärast siin kiirklahv i-le on määratud?
-# seda kasutatakse ka networkmanager-appletis, kus oleks ka ilma väga sobiv
-msgid "_Add"
-msgstr "L_isa"
-
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Valitud kataloogi lisamine järjehoidjate hulka"
 
-msgid "_Remove"
-msgstr "_Eemalda"
-
 msgid "Could not select file"
 msgstr "Faili pole võimalik valida"
+
+msgid "_Visit this file"
+msgstr "_Külasta seda faili"
+
+msgid "_Copy file's location"
+msgstr "Kopeeri _asukoht"
 
 msgid "_Add to Bookmarks"
 msgstr "_Lisa järjehoidjatesse"
@@ -879,15 +1100,21 @@ msgstr "Muudetud"
 msgid "_Name:"
 msgstr "_Nimi:"
 
-msgid "_Browse for other folders"
-msgstr "Si_rvi teisi katalooge"
-
 msgid "Type a file name"
 msgstr "Faili nime sisestamine"
+
+msgid "Please select a folder below"
+msgstr "Palun vali alt kataloog"
+
+msgid "Please type a file name"
+msgstr "Palun sisesta faili nimi"
 
 #. Create Folder
 msgid "Create Fo_lder"
 msgstr "Loo _kataloog"
+
+msgid "Search:"
+msgstr "Otsing:"
 
 msgid "_Location:"
 msgstr "Asuk_oht:"
@@ -951,61 +1178,9 @@ msgstr ""
 msgid "Could not send the search request"
 msgstr "Otsingupäringut pole võimalik saata"
 
-msgid "Search:"
-msgstr "Otsing:"
-
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s pole võimalik ühendada"
-
-#. Translators: this is shown in the feedback for Tab-completion in a file
-#. * chooser's text entry, when the user enters an invalid path.
-msgid "Invalid path"
-msgstr "Vigane asukoht"
-
-#. translators: this text is shown when there are no completions
-#. * for something the user typed in a file chooser entry
-#.
-msgid "No match"
-msgstr "Vastavusi pole"
-
-#. translators: this text is shown when there is exactly one completion
-#. * for something the user typed in a file chooser entry
-#.
-msgid "Sole completion"
-msgstr "Lõplik"
-
-#. translators: this text is shown when the text in a file chooser
-#. * entry is a complete filename, but could be continued to find
-#. * a longer match
-#.
-msgid "Complete, but not unique"
-msgstr "Lõplik, kuid mitte unikaalne"
-
-#. Translators: this text is shown while the system is searching
-#. * for possible completions for filenames in a file chooser entry.
-msgid "Completing..."
-msgstr "Lõpetamine..."
-
-#. hostnames in a local_only file chooser?  user error
-#. Translators: this is shown in the feedback for Tab-completion in a
-#. * file chooser's text entry when the user enters something like
-#. * "sftp://blahblah" in an app that only supports local filenames.
-msgid "Only local files may be selected"
-msgstr "Valida saab ainult kohalikke faile"
-
-#. Another option is to complete the hostname based on the remote volumes that are mounted
-#. Translators: this is shown in the feedback for Tab-completion in a
-#. * file chooser's text entry when the user hasn't entered the first '/'
-#. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-msgid "Incomplete hostname; end it with '/'"
-msgstr "Lõpetamata hostinimi; lõpeta see kaldkriipsuga '/'"
-
-#. Translators: this is shown in the feedback for Tab-completion in a file
-#. * chooser's text entry when the user enters a path that does not exist
-#. * and then hits Tab
-msgid "Path does not exist"
-msgstr "Asukohta pole olemas"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -1015,55 +1190,25 @@ msgstr "Asukohta pole olemas"
 msgid "File System"
 msgstr "Failisüsteem"
 
-msgid "Pick a Font"
-msgstr "Kirjatüübi valimine"
-
-#. Initialize fields
 msgid "Sans 12"
 msgstr "Sans 12"
+
+msgid "Pick a Font"
+msgstr "Kirjatüübi valimine"
 
 msgid "Font"
 msgstr "Kirjatüüp"
 
-#. This is the default text shown in the preview entry, though the user
-#. can set it. Remember that some fonts only have capital letters.
-msgid "abcdefghijk ABCDEFGHIJK"
-msgstr "abcdefghijkõäöü ABCDEFGHIJKÕÄÖÜ"
-
-msgid "_Family:"
-msgstr "_Perekond:"
-
-msgid "_Style:"
-msgstr "Laa_d:"
-
-msgid "Si_ze:"
-msgstr "_Suurus:"
-
-#. create the text entry widget
-msgid "_Preview:"
-msgstr "_Näidis:"
-
-msgid "Font Selection"
-msgstr "Kirjatüübi valik"
-
-#. Remove this icon source so we don't keep trying to
-#. * load it.
-#.
-#, c-format
-msgid "Error loading icon: %s"
-msgstr "Viga ikooni laadimisel: %s"
-
-#, c-format
-msgid ""
-"Could not find the icon '%s'. The '%s' theme\n"
-"was not found either, perhaps you need to install it.\n"
-"You can get a copy from:\n"
-"\t%s"
+msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
-"Ikooni '%s' pole võimalik leida. Teemat '%s'\n"
-"ei leitud, seda pole võib-olla paigaldatudki.\n"
-"Sul on võimalik hankida koopia:\n"
-"\t%s"
+"Ükski kirjatüüp ei vastanud sinu otsingule. Sa võid otsingut kohendada ja "
+"uuesti otsida."
+
+msgid "Search font name"
+msgstr "Kirja nime otsimine"
+
+msgid "Font Family"
+msgstr "Kirjatüübi perekond"
 
 #, c-format
 msgid "Icon '%s' not present in theme"
@@ -1101,6 +1246,33 @@ msgstr "Kopeeri URL"
 
 msgid "Invalid URI"
 msgstr "Vigane URI"
+
+msgid "Lock"
+msgstr "Lukusta"
+
+msgid "Unlock"
+msgstr "Võta lukust lahti"
+
+msgid ""
+"Dialog is unlocked.\n"
+"Click to prevent further changes"
+msgstr ""
+"Dialoog on lukust lahti.\n"
+"Edasiste muudatuste vältimiseks klõpsa."
+
+msgid ""
+"Dialog is locked.\n"
+"Click to make changes"
+msgstr ""
+"Dialoog on lukustatud.\n"
+"Muudatuste tegemiseks klõpsa."
+
+msgid ""
+"System policy prevents changes.\n"
+"Contact your system administrator"
+msgstr ""
+"Süsteemireegel takistab muudatuste tegemist.\n"
+"Võta ühendust oma süsteemihalduriga."
 
 #. Description of --gtk-module=MODULES in --help output
 msgid "Load additional GTK+ modules"
@@ -1337,9 +1509,6 @@ msgstr ""
 
 msgid "Error launching preview"
 msgstr "Viga eelvaate näitamisel"
-
-msgid "Application"
-msgstr "Rakendus"
 
 msgid "Printer offline"
 msgstr "Printer on ühendamata"
@@ -1628,14 +1797,6 @@ msgstr "Selle dialoogi mõned sätted on omavahel vastuolus"
 msgid "Print"
 msgstr "Printimine"
 
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Pildifaili pole otsingurajalt 'pixmap_path' võimalik leida: \"%s\""
-
-#, c-format
-msgid "This function is not implemented for widgets of class '%s'"
-msgstr "See funktsioon pole vidinate klassis '%s' teostatud"
-
 msgid "Select which type of documents are shown"
 msgstr "Vali, milliseid dokumendiliike näidata"
 
@@ -1713,13 +1874,6 @@ msgstr "URI-ga '%s' pole võimalik leida ühtegi kirjet"
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "URI '%2$s' jaoks puudub registreeritud rakendust nimega '%1$s'"
-
-msgctxt "throbbing progress animation widget"
-msgid "Spinner"
-msgstr "Edenemisnäidik"
-
-msgid "Provides visual indication of progress"
-msgstr "Edenemise visuaalne kajastus"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 msgctxt "Stock label"
@@ -2039,7 +2193,7 @@ msgstr "_Lõpeta"
 
 msgctxt "Stock label"
 msgid "_Redo"
-msgstr "Uu_esti"
+msgstr "Tee uu_esti"
 
 msgctxt "Stock label"
 msgid "_Refresh"
@@ -2107,7 +2261,7 @@ msgstr "_Allajoonitud"
 
 msgctxt "Stock label"
 msgid "_Undo"
-msgstr "_Unusta"
+msgstr "_Võta tagasi"
 
 msgctxt "Stock label"
 msgid "_Yes"
@@ -2145,13 +2299,6 @@ msgstr "❙"
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
-
-msgctxt "light switch widget"
-msgid "Switch"
-msgstr "Lüliti"
-
-msgid "Switches between on and off states"
-msgstr "Kahe olekuga (sees/väljas) lüliti"
 
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
@@ -2982,10 +3129,6 @@ msgid "ROC 8k"
 msgstr "ROC 8k"
 
 #, c-format
-msgid "different idatas found for symlinked '%s' and '%s'\n"
-msgstr "erinevad idata andmed nimeviidaga seotud '%s' ja '%s' jaoks\n"
-
-#, c-format
 msgid "Failed to write header\n"
 msgstr "Tõrge päise kirjutamisel\n"
 
@@ -3382,6 +3525,26 @@ msgstr "Printimine kindlal kellaajal"
 msgid "Custom %sx%s"
 msgstr "Kohandatud %sx%s"
 
+msgid "Printer Profile"
+msgstr "Printeri profiil"
+
+#. TRANSLATORS: this is when color profile information is unavailable
+msgid "Unavailable"
+msgstr "Pole saadaval"
+
+#. TRANSLATORS: when we're running an old CUPS, and
+#. * it hasn't registered the device with colord
+msgid "Color management unavailable"
+msgstr "Värvihaldus pole saadaval"
+
+#. TRANSLATORS: when there is no color profile available
+msgid "No profile available"
+msgstr "Ükski profiil pole saadaval"
+
+#. TRANSLATORS: when the color profile has no title
+msgid "Unspecified profile"
+msgstr "Profiil pole määratud"
+
 #. default filename used for print-to-file
 #, c-format
 msgid "output.%s"
@@ -3444,39 +3607,3 @@ msgstr "testväljund.%s"
 
 msgid "Print to Test Printer"
 msgstr "Printimine testprinterisse"
-
-#, c-format
-msgid "Could not get information for file '%s': %s"
-msgstr "Faili '%s' kohta pole võimalik andmeid hankida: %s"
-
-#, c-format
-msgid "Failed to open file '%s': %s"
-msgstr "Tõrge faili '%s' avamisel: %s"
-
-#, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Tõrge pildifaili '%s' laadimisel: põhjus teadmata, arvatavasti on pildifail "
-"rikutud"
-
-#~ msgid "_Open"
-#~ msgstr "_Ava"
-
-#~ msgid "X screen to use"
-#~ msgstr "Kasutatav X'i ekraan"
-
-#~ msgid "SCREEN"
-#~ msgstr "EKRAAN"
-
-#~ msgid "Make X calls synchronous"
-#~ msgstr "X'i kutsungid sünkroonseks"
-
-#~ msgid "Credits"
-#~ msgstr "Autorid"
-
-#~ msgid "Written by"
-#~ msgstr "Programmeerimine"
-
-#~ msgid "Unable to find include file: \"%s\""
-#~ msgstr "Faili pole võimalik kaasata: \"%s\""
