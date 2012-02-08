@@ -27,7 +27,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkthemingengine.h"
+#include "gtkthemingengineprivate.h"
 #include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
