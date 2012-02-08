@@ -247,7 +247,7 @@ gtk_builder_menu_end_element (GMarkupParseContext  *context,
       state->string = NULL;
 
       /* do the translation if necessary */
-      if (state->translatable && state->parser_data->domain)
+      if (state->translatable)
         {
           const gchar *translated;
 
