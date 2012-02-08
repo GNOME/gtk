@@ -113,8 +113,10 @@ swatch_draw (GtkWidget *widget,
   gdouble width, height;
   GtkStyleContext *context;
   GtkStateFlags state;
-  GdkRGBA bg;
+  GtkIconTheme *theme;
+  GtkIconInfo *icon_info = NULL;
 
+  theme = gtk_icon_theme_get_default ();
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
   width = gtk_widget_get_allocated_width (widget);
@@ -182,35 +184,57 @@ swatch_draw (GtkWidget *widget,
 
   if (swatch->priv->icon)
     {
-      GdkPixbuf *pixbuf;
-      GtkIconTheme *theme;
-      theme = gtk_icon_theme_get_default ();
-      pixbuf = gtk_icon_theme_load_icon (theme, "list-add-symbolic", 16,
-                                         GTK_ICON_LOOKUP_GENERIC_FALLBACK
-                                         | GTK_ICON_LOOKUP_USE_BUILTIN,
-                                         NULL);
-
-      gtk_render_icon (context, cr, pixbuf,
-                       (width - gdk_pixbuf_get_width (pixbuf)) / 2,
-                       (height - gdk_pixbuf_get_height (pixbuf)) / 2);
-      g_object_unref (pixbuf);
+      icon_info = gtk_icon_theme_lookup_icon (theme, "list-add-symbolic", 16,
+                                              GTK_ICON_LOOKUP_GENERIC_FALLBACK
+                                              | GTK_ICON_LOOKUP_USE_BUILTIN);
     }
-  else  if (swatch->priv->selected)
+  else if (swatch->priv->selected)
     {
+      GdkRGBA bg, border;
+      GtkBorder border_width;
+      GIcon *gicon;
+
+      gtk_style_context_add_class (context, "color-active-badge");
       gtk_style_context_get_background_color (context, state, &bg);
+      gtk_style_context_get_border_color (context, state, &border);
+      gtk_style_context_get_border (context, state, &border_width);
+
       cairo_new_sub_path (cr);
       cairo_arc (cr, width / 2, height / 2, 10, 0, 2 * G_PI);
       cairo_close_path (cr);
       gdk_cairo_set_source_rgba (cr, &bg);
       cairo_fill_preserve (cr);
-      if (INTENSITY (swatch->priv->color.red, swatch->priv->color.green, swatch->priv->color.blue) > 0.5)
-        cairo_set_source_rgba (cr, 0., 0., 0., 0.4);
-      else
-        cairo_set_source_rgba (cr, 1., 1., 1., 0.4);
-      cairo_set_line_width (cr, 2);
+
+      gdk_cairo_set_source_rgba (cr, &border);
+      cairo_set_line_width (cr, border_width.left);
       cairo_stroke (cr);
-      gtk_style_context_set_state (context, state | GTK_STATE_FLAG_ACTIVE);
-      gtk_render_check (context, cr, width / 2 - 5, height / 2 - 5, 10, 10);
+
+      gicon = g_themed_icon_new ("object-select-symbolic");
+      /* fallback for themes that don't have object-select-symbolic */
+      g_themed_icon_append_name (G_THEMED_ICON (gicon), "gtk-apply");
+
+      icon_info = gtk_icon_theme_lookup_by_gicon (theme, gicon, 16,
+                                                  GTK_ICON_LOOKUP_GENERIC_FALLBACK
+                                                  | GTK_ICON_LOOKUP_USE_BUILTIN);
+      g_object_unref (gicon);
+    }
+
+  if (icon_info != NULL)
+    {
+      GdkPixbuf *pixbuf;
+
+      pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info, context,
+                                                        NULL, NULL);
+
+      if (pixbuf != NULL)
+        {
+          gtk_render_icon (context, cr, pixbuf,
+                           (width - gdk_pixbuf_get_width (pixbuf)) / 2,
+                           (height - gdk_pixbuf_get_height (pixbuf)) / 2);
+          g_object_unref (pixbuf);
+        }
+
+      gtk_icon_info_free (icon_info);
     }
 
   cairo_restore (cr);
