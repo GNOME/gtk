@@ -1815,7 +1815,7 @@ render_frame_internal (GtkThemingEngine *engine,
         }
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_apply_border_radius (&border_box, engine, state, junction);
+      _gtk_rounded_box_apply_border_radius_for_engine (&border_box, engine, state, junction);
 
       render_border (cr, &border_box, &border, hidden_side, colors, border_style);
     }
