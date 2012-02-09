@@ -31,7 +31,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtksizegroup.h"
-#include "gtkalignment.h"
 
 #include <math.h>
 
@@ -435,7 +434,6 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 {
   GtkWidget *box;
   GtkWidget *p;
-  GtkWidget *alignment;
   GtkWidget *button;
   GtkWidget *label;
   gint i;
@@ -502,9 +500,12 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   g_variant_unref (variant);
 
   cc->priv->editor = gtk_color_editor_new ();
-  alignment = gtk_alignment_new (0.5, 0.5, 0, 0);
-  gtk_container_add (GTK_CONTAINER (cc), alignment);
-  gtk_container_add (GTK_CONTAINER (alignment), cc->priv->editor);
+  gtk_widget_set_halign (cc->priv->editor, GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand (cc->priv->editor, TRUE);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_container_add (GTK_CONTAINER (cc), box);
+  gtk_container_add (GTK_CONTAINER (box), cc->priv->editor);
 
   g_settings_get (cc->priv->settings, "selected-color", "(bdddd)",
                   &selected,
@@ -521,7 +522,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 
   cc->priv->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   gtk_size_group_add_widget (cc->priv->size_group, cc->priv->palette);
-  gtk_size_group_add_widget (cc->priv->size_group, alignment);
+  gtk_size_group_add_widget (cc->priv->size_group, box);
 }
 
 /* GObject implementation {{{1 */
