@@ -1,5 +1,6 @@
 demos/gtk-demo/demo.ui
 demos/gtk-demo/menus.ui
+demos/widget-factory/widget-factory.ui
 examples/bloatpad.c
 gtk/paper_names.c
 tests/a11y/accessible-name.ui
@@ -81,4 +82,3 @@ tests/reftests/toplevel-vs-popup.ui
 tests/testfilechooser.c
 tests/visuals/inline-toolbar.ui
 tests/visuals/primary-toolbar.ui
-tests/widget-factory.ui
