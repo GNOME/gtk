@@ -133,6 +133,7 @@ swatch_customize (GtkColorSwatch        *swatch,
 
   gtk_widget_hide (cc->priv->palette);
   gtk_widget_show (cc->priv->editor);
+  g_object_notify (cc, "show-editor");
 }
 
 static void
@@ -163,6 +164,7 @@ button_activate (GtkColorSwatch        *swatch,
 
   gtk_widget_hide (cc->priv->palette);
   gtk_widget_show (cc->priv->editor);
+  g_object_notify (cc, "show-editor");
 }
 
 static void
