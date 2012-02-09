@@ -39,6 +39,7 @@
 #include "gtkhsv.h"
 #include "gtkwindow.h"
 #include "gtkselection.h"
+#include "gtkcolorutils.h"
 #include "gtkdnd.h"
 #include "gtkdrawingarea.h"
 #include "gtkframe.h"
