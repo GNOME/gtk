@@ -198,6 +198,31 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
   g_object_set (chooser, "use-alpha", use_alpha, NULL);
 }
 
+/**
+ * gtk_color_chooser_add_palette:
+ * @chooser: a #GtkColorChooser
+ * @horizontal: %TRUE if the palette should be displayed in rows,
+ *     %FALSE for columns
+ * @colors_per_line: the number of colors to show in each row/column
+ * @n_colors: the total number of elements in @colors
+ * @colors: (array length=n_colors): the colors of the palette
+ *
+ * Adds a palette to the color chooser. If @horizontal is %TRUE,
+ * the colors are grouped in rows, with @colors_per_line colors
+ * in each row. If @horizontal is %FALSE, the colors are grouped
+ * in columns instead.
+ *
+ * The default color palette of #GtkColorChooserWidget has
+ * 27 colors, organized in columns of 3 colors. The default gray
+ * palette has 9 grays in a single row.
+ *
+ * The layout of the color chooser widget works best when the
+ * palettes have 9-10 columns.
+ *
+ * Calling this function is called for the first time has the
+ * side effect of removing the default color and gray palettes
+ * from the color chooser.
+ */
 void
 gtk_color_chooser_add_palette (GtkColorChooser *chooser,
                                gboolean         horizontal,
@@ -207,5 +232,6 @@ gtk_color_chooser_add_palette (GtkColorChooser *chooser,
 {
   g_return_if_fail (GTK_IS_COLOR_CHOOSER (chooser));
 
-  GTK_COLOR_CHOOSER_GET_IFACE (chooser)->add_palette (chooser, horizontal, colors_per_line, n_colors, colors);
+  if (GTK_COLOR_CHOOSER_GET_IFACE (chooser)->add_palette)
+    GTK_COLOR_CHOOSER_GET_IFACE (chooser)->add_palette (chooser, horizontal, colors_per_line, n_colors, colors);
 }
