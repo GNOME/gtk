@@ -44,7 +44,6 @@
 #include "gtkadjustment.h"
 #include "gtklabel.h"
 #include "gtkspinbutton.h"
-#include "gtkalignment.h"
 #include "gtkintl.h"
 
 #include <math.h>
@@ -352,14 +351,13 @@ create_popup (GtkColorEditor *editor,
 {
   GtkWidget *popup;
 
-  popup = gtk_alignment_new (0.5, 0.5, 0, 0);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (popup), 12, 12, 12, 12);
-  gtk_style_context_add_class (gtk_widget_get_style_context (popup), GTK_STYLE_CLASS_TOOLTIP);
+  g_object_set (contents, "margin", 12, NULL);
 
+  popup = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_style_context_add_class (gtk_widget_get_style_context (popup), GTK_STYLE_CLASS_TOOLTIP);
   gtk_container_add (GTK_CONTAINER (popup), contents);
 
-  gtk_widget_show_all (popup);
-  gtk_widget_hide (popup);
+  gtk_widget_show_all (contents);
   gtk_widget_set_no_show_all (popup, TRUE);
 
   g_signal_connect (popup, "draw", G_CALLBACK (popup_draw), editor);
