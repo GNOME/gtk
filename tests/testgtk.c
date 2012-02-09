@@ -3298,35 +3298,17 @@ static void
 cmw_color (GtkWidget *widget, GtkWidget *parent)
 {
     GtkWidget *csd;
-    GtkWidget *colorsel;
     GtkWidget *ok_button, *cancel_button;
 
-    csd = gtk_color_selection_dialog_new ("This is a modal color selection dialog");
+    csd = gtk_color_chooser_dialog_new ("This is a modal color selection dialog", GTK_WINDOW (parent));
 
-    gtk_window_set_screen (GTK_WINDOW (csd), gtk_widget_get_screen (parent));
-
-    colorsel = gtk_color_selection_dialog_get_color_selection (GTK_COLOR_SELECTION_DIALOG (csd));
-    gtk_color_selection_set_has_palette (GTK_COLOR_SELECTION (colorsel),
-                                         TRUE);
-    
     /* Set as modal */
     gtk_window_set_modal (GTK_WINDOW(csd),TRUE);
 
-    /* And mark it as a transient dialog */
-    gtk_window_set_transient_for (GTK_WINDOW (csd), GTK_WINDOW (parent));
-    
     g_signal_connect (csd, "destroy",
 		      G_CALLBACK (cmw_destroy_cb), NULL);
-
-    g_object_get (csd,
-                  "ok-button", &ok_button,
-                  "cancel-button", &cancel_button,
-                  NULL);
-
-    g_signal_connect_swapped (ok_button,
-			     "clicked", G_CALLBACK (gtk_widget_destroy), csd);
-    g_signal_connect_swapped (cancel_button,
-			     "clicked", G_CALLBACK (gtk_widget_destroy), csd);
+    g_signal_connect (csd, "response",
+                      G_CALLBACK (gtk_widget_destroy), NULL);
     
     /* wait until destroy calls gtk_main_quit */
     gtk_widget_show (csd);    
@@ -4842,7 +4824,7 @@ create_color_selection (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (hbox), label);
 
       picker = gtk_color_button_new ();
-      gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (picker), TRUE);
+      gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (picker), TRUE);
       gtk_container_add (GTK_CONTAINER (hbox), picker);
 
       button = gtk_button_new_with_mnemonic ("_Props");
