@@ -2765,6 +2765,9 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
   paint->flushed = TRUE;
   region = cairo_region_copy (window->clip_region_with_children);
 
+  cairo_region_translate (region, window->abs_x, window->abs_y);
+  cairo_region_intersect (region, paint->region);
+
   /* Don't flush active double buffers, as that may show partially done
    * rendering */
   for (list = window->paint_stack; list != NULL; list = list->next)
@@ -2773,9 +2776,6 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
 
       cairo_region_subtract (region, tmp_paint->region);
     }
-
-  cairo_region_translate (region, -window->abs_x, -window->abs_y);
-  cairo_region_intersect (region, paint->region);
 
   if (!GDK_WINDOW_DESTROYED (window) && !cairo_region_is_empty (region))
     {
