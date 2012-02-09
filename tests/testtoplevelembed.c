@@ -77,7 +77,7 @@ main (gint argc, gchar **argv)
   toplevel_delete_event (widget, NULL, NULL);
   g_signal_connect (widget, "delete-event", G_CALLBACK (toplevel_delete_event), NULL);
 
-  widget = gtk_color_selection_dialog_new ("the colorsel");
+  widget = gtk_color_chooser_dialog_new ("the colorsel", NULL);
   toplevel_delete_event (widget, NULL, NULL);
   g_signal_connect (widget, "delete-event", G_CALLBACK (toplevel_delete_event), NULL);
 
