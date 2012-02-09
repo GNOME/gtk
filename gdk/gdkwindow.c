@@ -2971,9 +2971,14 @@ gdk_window_begin_paint_region (GdkWindow       *window,
        (implicit_paint && implicit_paint->flushed)))
     {
       cairo_t *cr = cairo_create (paint->surface);
-      gdk_cairo_set_source_window (cr, impl_window,
-                                   - (window->abs_x + clip_box.x),
-                                   - (window->abs_y + clip_box.y));
+      /* We can't use gdk_cairo_set_source_window here, as that might
+	 flush the implicit paint at an unfortunate time, since this
+	 would be detected as a draw during non-expose time */
+      cairo_surface_t *source_surface  = gdk_window_ref_impl_surface (impl_window);
+      cairo_set_source_surface (cr, source_surface,
+				- (window->abs_x + clip_box.x),
+				- (window->abs_y + clip_box.y));
+      cairo_surface_destroy (source_surface);
       cairo_paint (cr);
       cairo_destroy (cr);
     }
