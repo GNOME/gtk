@@ -39,10 +39,13 @@ dark_toggled (GtkCheckMenuItem *item, gpointer data)
 static void
 show_about (GtkMenuItem *item, GtkWidget *window)
 {
+  GdkPixbuf *pixbuf;
   const gchar *authors[] = {
     "Andrea Cimitan",
     "Cosimo Cecchi"
   };
+
+  pixbuf = gdk_pixbuf_new_from_resource ("/logos/gtk-logo-256.png", NULL);
 
   gtk_show_about_dialog (GTK_WINDOW (window),
                          "program-name", "GTK+ Widget Factory",
@@ -56,8 +59,11 @@ show_about (GtkMenuItem *item, GtkWidget *window)
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK+ themes and widgets",
                          "authors", authors,
+                         "logo", pixbuf,
                          "title", "About GTK+ Widget Factory",
                          NULL);
+
+  g_object_unref (pixbuf);
 }
 
 int
@@ -74,7 +80,7 @@ main (int argc, char *argv[])
     dark = TRUE;
 
   builder = gtk_builder_new ();
-  gtk_builder_add_from_file (builder, "./widget-factory.ui", NULL);
+  gtk_builder_add_from_resource (builder, "/ui/widget-factory.ui", NULL);
 
   window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
   gtk_builder_connect_signals (builder, NULL);

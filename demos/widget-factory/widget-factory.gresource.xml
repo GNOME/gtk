@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/logos">
+    <file>gtk-logo-256.png</file>
+  </gresource>
+  <gresource prefix="/ui">
+    <file preprocess="xml-stripblanks">widget-factory.ui</file>
+  </gresource>
+</gresources>
