@@ -6,6 +6,9 @@ gtk3_widget_factory_SOURCES = \
 	widget-factory.c	\
 	widget_factory_resources.c
 
+BUILT_SOURCES = \
+	widget_factory_resources.c
+
 gtk3_widget_factory_DEPENDENCIES = \
 	$(top_builddir)/gtk/libgtk-3.la
 
