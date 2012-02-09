@@ -1420,7 +1420,8 @@ gdk_window_new (GdkWindow     *parent,
       window->depth = window->visual->depth;
 
       /* XXX: Cache this somehow? */
-      window->background = cairo_pattern_create_rgb (0, 0, 0);
+      window->background = cairo_pattern_create_rgba (0, 0, 0, 0);
+      window->has_alpha_background = TRUE;
     }
   else
     {
