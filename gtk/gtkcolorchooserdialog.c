@@ -68,7 +68,7 @@ propagate_notify (GObject               *o,
                   GParamSpec            *pspec,
                   GtkColorChooserDialog *cc)
 {
-  g_object_notify (G_OBJECT (cc), "rgba");
+  g_object_notify (G_OBJECT (cc), pspec->name);
 }
 
 static void
@@ -111,6 +111,9 @@ gtk_color_chooser_dialog_init (GtkColorChooserDialog *cc)
                       priv->chooser, TRUE, TRUE, 0);
 
   g_signal_connect (priv->chooser, "notify::rgba",
+                    G_CALLBACK (propagate_notify), cc);
+
+  g_signal_connect (priv->chooser, "notify::show-editor",
                     G_CALLBACK (propagate_notify), cc);
 
   g_signal_connect (priv->chooser, "color-activated",
