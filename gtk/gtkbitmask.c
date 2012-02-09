@@ -19,7 +19,6 @@
 
 #include <config.h>
 
-#define GTK_INSIDE_BITMASK_C
 #include "gtk/gtkbitmaskprivate.h"
 
 #define VALUE_TYPE gsize
@@ -27,10 +26,34 @@
 #define VALUE_SIZE_BITS (sizeof (VALUE_TYPE) * 8)
 #define VALUE_BIT(idx) (((VALUE_TYPE) 1) << (idx))
 
+struct _GtkBitmask {
+  gsize len;
+  VALUE_TYPE data[1];
+};
+
+static GtkBitmask *
+gtk_bitmask_resize (GtkBitmask *mask,
+                    gsize       size) G_GNUC_WARN_UNUSED_RESULT;
+static GtkBitmask *
+gtk_bitmask_resize (GtkBitmask *mask,
+                    gsize       size)
+{
+  gsize i;
+
+  mask = g_realloc (mask, sizeof (GtkBitmask) + sizeof(VALUE_TYPE) * (MAX (size, 1) - 1));
+
+  for (i = mask->len; i < size; i++)
+    mask->data[i] = 0;
+
+  mask->len = size;
+
+  return mask;
+}
+
 GtkBitmask *
 _gtk_bitmask_new (void)
 {
-  return g_array_new (FALSE, TRUE, sizeof (VALUE_TYPE));
+  return g_malloc0 (sizeof (GtkBitmask));
 }
 
 GtkBitmask *
@@ -50,7 +73,7 @@ _gtk_bitmask_free (GtkBitmask *mask)
 {
   g_return_if_fail (mask != NULL);
 
-  g_array_free (mask, TRUE);
+  g_free (mask);
 }
 
 void
@@ -94,18 +117,20 @@ _gtk_bitmask_to_string (const GtkBitmask *mask)
  * array might have become too large.
  * _gtk_bitmask_is_empty() depends on this.
  */
-static void
+static GtkBitmask *
+gtk_bitmask_shrink (GtkBitmask *mask) G_GNUC_WARN_UNUSED_RESULT;
+static GtkBitmask *
 gtk_bitmask_shrink (GtkBitmask *mask)
 {
   guint i;
 
   for (i = mask->len; i; i--)
     {
-      if (g_array_index (mask, VALUE_TYPE, i - 1))
+      if (mask->data[i - 1])
         break;
     }
 
-  g_array_set_size (mask, i);
+  return gtk_bitmask_resize (mask, i);
 }
 
 GtkBitmask *
@@ -117,15 +142,13 @@ _gtk_bitmask_intersect (GtkBitmask       *mask,
   g_return_val_if_fail (mask != NULL, NULL);
   g_return_val_if_fail (other != NULL, NULL);
 
-  g_array_set_size (mask, MIN (mask->len, other->len));
+  mask = gtk_bitmask_resize (mask, MIN (mask->len, other->len));
   for (i = 0; i < mask->len; i++)
     {
-      g_array_index (mask, VALUE_TYPE, i) &= g_array_index (other, VALUE_TYPE, i);
+      mask->data[i] &= other->data[i];
     }
 
-  gtk_bitmask_shrink (mask);
-
-  return mask;
+  return gtk_bitmask_shrink (mask);
 }
 
 GtkBitmask *
@@ -137,10 +160,10 @@ _gtk_bitmask_union (GtkBitmask       *mask,
   g_return_val_if_fail (mask != NULL, NULL);
   g_return_val_if_fail (other != NULL, NULL);
 
-  g_array_set_size (mask, MAX (mask->len, other->len));
+  mask = gtk_bitmask_resize (mask, MAX (mask->len, other->len));
   for (i = 0; i < other->len; i++)
     {
-      g_array_index (mask, VALUE_TYPE, i) |= g_array_index (other, VALUE_TYPE, i);
+      mask->data[i] |= other->data[i];
     }
 
   return mask;
@@ -157,12 +180,10 @@ _gtk_bitmask_subtract (GtkBitmask       *mask,
 
   for (i = 0; i < other->len; i++)
     {
-      g_array_index (mask, VALUE_TYPE, i) &= ~g_array_index (other, VALUE_TYPE, i);
+      mask->data[i] |= ~other->data[i];
     }
 
-  gtk_bitmask_shrink (mask);
-
-  return mask;
+  return gtk_bitmask_shrink (mask);
 }
 
 static void
@@ -187,7 +208,7 @@ _gtk_bitmask_get (const GtkBitmask *mask,
   if (array_index >= mask->len)
     return FALSE;
 
-  return (g_array_index (mask, VALUE_TYPE, array_index) & VALUE_BIT (bit_index)) ? TRUE : FALSE;
+  return (mask->data[array_index] & VALUE_BIT (bit_index)) ? TRUE : FALSE;
 }
 
 GtkBitmask *
@@ -204,16 +225,16 @@ _gtk_bitmask_set (GtkBitmask *mask,
   if (value)
     {
       if (array_index >= mask->len)
-        g_array_set_size (mask, array_index + 1);
+        mask = gtk_bitmask_resize (mask, array_index + 1);
       
-      g_array_index (mask, VALUE_TYPE, array_index) |= VALUE_BIT (bit_index);
+      mask->data[array_index] |= VALUE_BIT (bit_index);
     }
   else
     {
       if (array_index < mask->len)
         {
-          g_array_index (mask, VALUE_TYPE, array_index) &= ~ VALUE_BIT (bit_index);
-          gtk_bitmask_shrink (mask);
+          mask->data[array_index] &= ~ VALUE_BIT (bit_index);
+          mask = gtk_bitmask_shrink (mask);
         }
     }
 
@@ -260,7 +281,7 @@ _gtk_bitmask_equals (const GtkBitmask  *mask,
 
   for (i = 0; i < mask->len; i++)
     {
-      if (g_array_index (mask, VALUE_TYPE, i) != g_array_index (other, VALUE_TYPE, i))
+      if (mask->data[i] != other->data[i])
         return FALSE;
     }
 
@@ -278,7 +299,7 @@ _gtk_bitmask_intersects (const GtkBitmask *mask,
 
   for (i = MIN (mask->len, other->len) - 1; i >= 0; i--)
     {
-      if (g_array_index (mask, VALUE_TYPE, i) & g_array_index (other, VALUE_TYPE, i))
+      if (mask->data[i] & other->data[i])
         return TRUE;
     }
 
