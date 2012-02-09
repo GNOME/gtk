@@ -96,7 +96,6 @@ activate_about (GSimpleAction *action,
 {
   GtkWidget *window = user_data;
   GdkPixbuf *pixbuf;
-  GInputStream *stream;
 
   const gchar *authors[] = {
     "Peter Mattis",
@@ -114,9 +113,7 @@ activate_about (GSimpleAction *action,
     NULL
   };
 
-  stream = g_resources_open_stream ("/logos/gtk-logo-48.png", 0, NULL);
-  pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
-  g_object_unref (stream);
+  pixbuf = gdk_pixbuf_new_from_resource ("/logos/gtk-logo-48.png", NULL);
 
   gtk_show_about_dialog (GTK_WINDOW (window),
                          "program-name", "GTK+ Code Demos",
@@ -168,7 +165,6 @@ register_stock_icons (void)
       GdkPixbuf *pixbuf;
       GtkIconFactory *factory;
       GtkIconSet *icon_set;
-      GInputStream *stream;
 
       static GtkStockItem items[] = {
         { "demo-gtk-logo", "_GTK!", 0, 0, NULL }
@@ -181,9 +177,7 @@ register_stock_icons (void)
       factory = gtk_icon_factory_new ();
       gtk_icon_factory_add_default (factory);
 
-      stream = g_resources_open_stream ("/logos/gtk-logo-24.png", 0, NULL);
-      pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
-      g_object_unref (stream);
+      pixbuf = gdk_pixbuf_new_from_resource ("/logos/gtk-logo-24.png", NULL);
 
       icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);
       gtk_icon_factory_add (factory, "demo-gtk-logo", icon_set);
