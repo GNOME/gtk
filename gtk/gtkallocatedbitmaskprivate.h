@@ -27,12 +27,21 @@ G_BEGIN_DECLS
 
 typedef struct _GtkBitmask GtkBitmask;
 
+#define _gtk_bitmask_to_bits(mask) \
+  (GPOINTER_TO_SIZE (mask) >> ((gsize) 1))
 
-GtkBitmask *   _gtk_allocated_bitmask_new               (void);
+#define _gtk_bitmask_from_bits(bits) \
+  GSIZE_TO_POINTER ((((gsize) (bits)) << 1) | 1)
+
+#define _gtk_bitmask_is_allocated(mask) \
+  (!(GPOINTER_TO_SIZE (mask) & 1))
+
+#define GTK_BITMASK_N_DIRECT_BITS (sizeof (gsize) * 8 - 1)
+
+
 GtkBitmask *   _gtk_allocated_bitmask_copy              (const GtkBitmask  *mask);
 void           _gtk_allocated_bitmask_free              (GtkBitmask        *mask);
 
-char *         _gtk_allocated_bitmask_to_string         (const GtkBitmask  *mask);
 void           _gtk_allocated_bitmask_print             (const GtkBitmask  *mask,
                                                          GString           *string);
 
@@ -53,7 +62,6 @@ GtkBitmask *   _gtk_allocated_bitmask_invert_range      (GtkBitmask        *mask
                                                          guint              start,
                                                          guint              end) G_GNUC_WARN_UNUSED_RESULT;
 
-gboolean       _gtk_allocated_bitmask_is_empty          (const GtkBitmask  *mask);
 gboolean       _gtk_allocated_bitmask_equals            (const GtkBitmask  *mask,
                                                          const GtkBitmask  *other);
 gboolean       _gtk_allocated_bitmask_intersects        (const GtkBitmask  *mask,
