@@ -35,7 +35,7 @@
 #include "gtkorientableprivate.h"
 #include "gtkrange.h"
 #include "gtkscale.h"
-#include "gtkcolorscale.h"
+#include "gtkcolorscaleprivate.h"
 #include "gtkscrollbar.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"

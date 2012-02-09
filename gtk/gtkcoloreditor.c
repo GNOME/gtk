@@ -30,12 +30,12 @@
 
 #include "config.h"
 
-#include "gtkcoloreditor.h"
+#include "gtkcoloreditorprivate.h"
 
 #include "gtkcolorchooserprivate.h"
-#include "gtkcolorplane.h"
-#include "gtkcolorscale.h"
-#include "gtkcolorswatch.h"
+#include "gtkcolorplaneprivate.h"
+#include "gtkcolorscaleprivate.h"
+#include "gtkcolorswatchprivate.h"
 #include "gtkcolorutils.h"
 #include "gtkgrid.h"
 #include "gtkorientable.h"

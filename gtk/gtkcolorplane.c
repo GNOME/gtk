@@ -19,7 +19,8 @@
 
 #include "config.h"
 
-#include "gtkcolorplane.h"
+#include "gtkcolorplaneprivate.h"
+
 #include "gtkcolorutils.h"
 #include "gtkaccessible.h"
 #include "gtkintl.h"

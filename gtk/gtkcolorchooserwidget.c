@@ -22,8 +22,8 @@
 
 #include "gtkcolorchooserprivate.h"
 #include "gtkcolorchooserwidget.h"
-#include "gtkcoloreditor.h"
-#include "gtkcolorswatch.h"
+#include "gtkcoloreditorprivate.h"
+#include "gtkcolorswatchprivate.h"
 #include "gtkbox.h"
 #include "gtkgrid.h"
 #include "gtklabel.h"

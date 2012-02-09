@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkcolorswatch.h"
+#include "gtkcolorswatchprivate.h"
 
 #include "gtkroundedboxprivate.h"
 #include "gtkthemingbackgroundprivate.h"

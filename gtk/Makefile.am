@@ -414,10 +414,10 @@ gtk_private_h_sources =		\
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
-	gtkcolorswatch.h	\
-	gtkcoloreditor.h	\
-	gtkcolorplane.h		\
-	gtkcolorscale.h		\
+	gtkcolorswatchprivate.h	\
+	gtkcoloreditorprivate.h	\
+	gtkcolorplaneprivate.h	\
+	gtkcolorscaleprivate.h	\
 	gtkcolorchooserprivate.h	\
 	gtkcontainerprivate.h   \
 	gtkcsscomputedvaluesprivate.h \
