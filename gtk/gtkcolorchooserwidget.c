@@ -133,7 +133,7 @@ swatch_customize (GtkColorSwatch        *swatch,
 
   gtk_widget_hide (cc->priv->palette);
   gtk_widget_show (cc->priv->editor);
-  g_object_notify (cc, "show-editor");
+  g_object_notify (G_OBJECT (cc), "show-editor");
 }
 
 static void
@@ -164,7 +164,7 @@ button_activate (GtkColorSwatch        *swatch,
 
   gtk_widget_hide (cc->priv->palette);
   gtk_widget_show (cc->priv->editor);
-  g_object_notify (cc, "show-editor");
+  g_object_notify (G_OBJECT (cc), "show-editor");
 }
 
 static void
@@ -599,7 +599,7 @@ add_custom_color (GtkColorChooserWidget *cc,
   GList *children;
 
   children = gtk_container_get_children (GTK_CONTAINER (cc->priv->custom));
-  if (g_list_length (children) == 8)
+  if (g_list_length (children) >= 8)
     {
       last = g_list_last (children)->data;
       gtk_widget_destroy (last);
