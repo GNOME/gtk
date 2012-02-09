@@ -40,7 +40,6 @@ struct _GtkColorSwatchPrivate
   gchar *icon;
   guint    selected         : 1;
   guint    has_color        : 1;
-  guint    can_drop         : 1;
   guint    contains_pointer : 1;
   guint    use_alpha        : 1;
 };
@@ -713,15 +712,19 @@ void
 gtk_color_swatch_set_can_drop (GtkColorSwatch *swatch,
                                gboolean        can_drop)
 {
-  if (!swatch->priv->can_drop)
-    gtk_drag_dest_set (GTK_WIDGET (swatch),
-                       GTK_DEST_DEFAULT_HIGHLIGHT |
-                       GTK_DEST_DEFAULT_MOTION |
-                       GTK_DEST_DEFAULT_DROP,
-                       dnd_targets, G_N_ELEMENTS (dnd_targets),
-                       GDK_ACTION_COPY);
-
-  swatch->priv->can_drop = can_drop;
+  if (can_drop)
+    {
+      gtk_drag_dest_set (GTK_WIDGET (swatch),
+                         GTK_DEST_DEFAULT_HIGHLIGHT |
+                         GTK_DEST_DEFAULT_MOTION |
+                         GTK_DEST_DEFAULT_DROP,
+                         dnd_targets, G_N_ELEMENTS (dnd_targets),
+                         GDK_ACTION_COPY);
+    }
+  else
+    {
+      gtk_drag_dest_unset (GTK_WIDGET (swatch));
+    }
 }
 
 void
