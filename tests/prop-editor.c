@@ -666,7 +666,7 @@ rgba_modified (GtkColorButton *cb, gpointer data)
   ObjectProperty *p = data;
   GdkRGBA color;
 
-  gtk_color_button_get_rgba (cb, &color);
+  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (cb), &color);
 
   if (is_child_property (p->spec))
     {
@@ -692,12 +692,12 @@ rgba_changed (GObject *object, GParamSpec *pspec, gpointer data)
   get_property_value (object, pspec, &val);
 
   color = g_value_get_boxed (&val);
-  gtk_color_button_get_rgba (cb, &cb_color);
+  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (cb), &cb_color);
 
   if (color != NULL && !gdk_rgba_equal (color, &cb_color))
     {
       block_controller (G_OBJECT (cb));
-      gtk_color_button_set_rgba (cb, color);
+      gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cb), color);
       unblock_controller (G_OBJECT (cb));
     }
 
@@ -1013,7 +1013,7 @@ property_widget (GObject    *object,
            G_PARAM_SPEC_VALUE_TYPE (spec) == GDK_TYPE_RGBA)
     {
       prop_edit = gtk_color_button_new ();
-      gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (prop_edit), TRUE);
+      gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (prop_edit), TRUE);
 
       g_object_connect_property (object, spec,
                                  G_CALLBACK (rgba_changed),
