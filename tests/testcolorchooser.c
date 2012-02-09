@@ -85,14 +85,14 @@ main (int argc, char *argv[])
         }
       else if (g_strcmp0 (argv[i], "--palette") == 0)
         {
-          const gchar *c[4] = { "red", "maroon", "yellow", "green" };
+          const gchar *c[9] = { "red", "maroon", "yellow", "green", "blue", "magenta", "DarkOliveGreen4", "khaki2", "thistle1" };
           GdkRGBA color;
-          GdkRGBA colors[36];
+          GdkRGBA colors[9*9];
           gint i,j;
           gdouble f[5] = { 0.2, 0.35, 0.5, 0.65, 0.8 };
 
           g_print ("setting custom palette\n");
-          for (i = 0; i < 4; i++)
+          for (i = 0; i < 9; i++)
             {
               gdk_rgba_parse (&color, c[i]);
               for (j = 0; j < 5; j++)
@@ -112,7 +112,7 @@ main (int argc, char *argv[])
             }
           gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (dialog),
                                          FALSE,
-                                         9, 36,
+                                         9, 9*9,
                                          colors);
         }
     }
