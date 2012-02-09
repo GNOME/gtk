@@ -224,7 +224,7 @@ gtk_color_chooser_widget_set_use_alpha (GtkColorChooserWidget *cc,
     {
       grid = p->data;
 
-      if (!GTK_IS_GRID (grid))
+      if (!GTK_IS_CONTAINER (grid))
         continue;
 
       children = gtk_container_get_children (GTK_CONTAINER (grid));
@@ -398,6 +398,8 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   gboolean selected;
 
   cc->priv = G_TYPE_INSTANCE_GET_PRIVATE (cc, GTK_TYPE_COLOR_CHOOSER_WIDGET, GtkColorChooserWidgetPrivate);
+
+  cc->priv->use_alpha = TRUE;
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (cc), GTK_ORIENTATION_VERTICAL);
   cc->priv->palette = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
