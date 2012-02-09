@@ -136,7 +136,10 @@ rbtree_LDADD			 = $(GTK_DEP_LIBS)
 
 TEST_PROGS			+= bitmask
 bitmask_CFLAGS			 = -DGTK_COMPILATION -UG_ENABLE_DEBUG
-bitmask_SOURCES			 = bitmask.c ../gtkbitmaskprivate.h ../gtkbitmask.c
+bitmask_SOURCES			 = bitmask.c \
+				   ../gtkbitmaskprivate.h \
+				   ../gtkallocatedbitmaskprivate.h \
+				   ../gtkallocatedbitmask.c
 bitmask_LDADD			 = $(GTK_DEP_LIBS)
 
 TEST_PROGS			+= regression-tests

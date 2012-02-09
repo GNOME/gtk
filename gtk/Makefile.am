@@ -403,12 +403,14 @@ gtk_private_h_sources =		\
 	gtkapplicationprivate.h	\
 	gtkaccelgroupprivate.h	\
 	gtkaccelmapprivate.h	\
+	gtkallocatedbitmaskprivate.h	\
 	gtkanimationdescription.h \
 	gtkappchooserprivate.h	\
 	gtkappchoosermodule.h	\
 	gtkappchooseronline.h	\
 	gtkbindingsprivate.h	\
 	gtkbitmaskprivate.h	\
+	gtkbitmaskprivateimpl.h	\
 	gtkborderimageprivate.h \
 	gtkboxprivate.h         \
 	gtkbuilderprivate.h	\
@@ -558,6 +560,7 @@ gtk_base_c_sources = 		\
 	gtkactivatable.c	\
 	gtkadjustment.c		\
 	gtkalignment.c		\
+	gtkallocatedbitmask.c	\
 	gtkappchooser.c		\
 	gtkappchooserwidget.c	\
 	gtkappchooserbutton.c	\
@@ -573,7 +576,6 @@ gtk_base_c_sources = 		\
 	gtkbbox.c		\
 	gtkbin.c		\
 	gtkbindings.c		\
-	gtkbitmask.c		\
 	gtkborder.c		\
 	gtkborderimage.c	\
 	gtkbox.c		\
