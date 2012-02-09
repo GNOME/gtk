@@ -1,0 +1,5 @@
+@import "reset-to-defaults.css";
+
+GtkWindow { background-color: green; }
+
+#reference * { background-color: green; }

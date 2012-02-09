@@ -43,6 +43,9 @@ EXTRA_DIST += \
 	background-size-keywords.css \
 	background-size-keywords.ref.ui \
 	background-size-keywords.ui \
+	background-window-transparent.css \
+	background-window-transparent.ref.ui \
+	background-window-transparent.ui \
 	reference-background-origin.png	\
 	border-color-default.css \
 	border-color-default.ref.ui \
