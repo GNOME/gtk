@@ -38,7 +38,6 @@ struct _GtkColorSwatchPrivate
   GdkRGBA color;
   gdouble radius[4];
   gchar *icon;
-  guint    selected         : 1;
   guint    has_color        : 1;
   guint    contains_pointer : 1;
   guint    use_alpha        : 1;
@@ -185,7 +184,7 @@ swatch_draw (GtkWidget *widget,
                                               GTK_ICON_LOOKUP_GENERIC_FALLBACK
                                               | GTK_ICON_LOOKUP_USE_BUILTIN);
     }
-  else if (swatch->priv->selected)
+  else if ((state & GTK_STATE_FLAG_SELECTED) != 0)
     {
       GdkRGBA bg, border;
       GtkBorder border_width;
@@ -358,8 +357,8 @@ swatch_key_press (GtkWidget   *widget,
       event->keyval == GDK_KEY_KP_Enter ||
       event->keyval == GDK_KEY_KP_Space)
     {
-      if (swatch->priv->has_color && !swatch->priv->selected)
-        gtk_color_swatch_set_selected (swatch, TRUE);
+      if (swatch->priv->has_color && (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_SELECTED) == 0)
+        gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_SELECTED, FALSE);
       else
         g_signal_emit (swatch, signals[ACTIVATE], 0);
       return TRUE;
@@ -489,18 +488,20 @@ swatch_button_release (GtkWidget      *widget,
                        GdkEventButton *event)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
+  GtkStateFlags flags;
 
   if (event->button == GDK_BUTTON_PRIMARY &&
       swatch->priv->contains_pointer)
     {
+      flags = gtk_widget_get_state_flags (widget);
       if (!swatch->priv->has_color)
         {
           g_signal_emit (swatch, signals[ACTIVATE], 0);
           return TRUE;
         }
-      else if (!swatch->priv->selected)
+      else if ((flags & GTK_STATE_FLAG_SELECTED) == 0)
         {
-          gtk_color_swatch_set_selected (swatch, TRUE);
+          gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_SELECTED, FALSE);
           return TRUE;
         }
     }
@@ -532,9 +533,6 @@ swatch_get_property (GObject    *object,
       gtk_color_swatch_get_rgba (swatch, &color);
       g_value_set_boxed (value, &color);
       break;
-    case PROP_SELECTED:
-      g_value_set_boolean (value, swatch->priv->selected);
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -553,9 +551,6 @@ swatch_set_property (GObject      *object,
     {
     case PROP_RGBA:
       gtk_color_swatch_set_rgba (swatch, g_value_get_boxed (value));
-      break;
-    case PROP_SELECTED:
-      gtk_color_swatch_set_selected (swatch, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -613,10 +608,6 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   g_object_class_install_property (object_class, PROP_RGBA,
       g_param_spec_boxed ("rgba", P_("RGBA Color"), P_("Color as RGBA"),
                           GDK_TYPE_RGBA, GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (object_class, PROP_SELECTED,
-      g_param_spec_boolean ("selected", P_("Selected"), P_("Selected"),
-                            FALSE, GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkColorSwatchPrivate));
 }
@@ -685,18 +676,6 @@ gtk_color_swatch_get_rgba (GtkColorSwatch *swatch,
       color->blue = 1.0;
       color->alpha = 1.0;
       return FALSE;
-    }
-}
-
-void
-gtk_color_swatch_set_selected (GtkColorSwatch *swatch,
-                               gboolean        selected)
-{
-  if (swatch->priv->selected != selected)
-    {
-      swatch->priv->selected = selected;
-      gtk_widget_queue_draw (GTK_WIDGET (swatch));
-      g_object_notify (G_OBJECT (swatch), "selected");
     }
 }
 

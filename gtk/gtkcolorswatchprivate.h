@@ -82,9 +82,6 @@ void        gtk_color_swatch_set_hsva         (GtkColorSwatch *swatch,
                                                gdouble         v,
                                                gdouble         a);
 G_GNUC_INTERNAL
-void        gtk_color_swatch_set_selected     (GtkColorSwatch *swatch,
-                                               gboolean        selected);
-G_GNUC_INTERNAL
 void        gtk_color_swatch_set_can_drop     (GtkColorSwatch *swatch,
                                                gboolean        can_drop);
 G_GNUC_INTERNAL

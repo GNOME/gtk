@@ -103,8 +103,8 @@ select_swatch (GtkColorChooserWidget *cc,
     return;
 
   if (cc->priv->current != NULL)
-    gtk_color_swatch_set_selected (cc->priv->current, FALSE);
-  gtk_color_swatch_set_selected (swatch, TRUE);
+    gtk_widget_unset_state_flags (GTK_WIDGET (cc->priv->current), GTK_STATE_FLAG_SELECTED);
+  gtk_widget_set_state_flags (GTK_WIDGET (swatch), GTK_STATE_FLAG_SELECTED, FALSE);
   cc->priv->current = swatch;
 
   gtk_color_swatch_get_rgba (swatch, &color);
@@ -140,10 +140,15 @@ swatch_customize (GtkColorSwatch        *swatch,
 
 static void
 swatch_selected (GtkColorSwatch        *swatch,
-                 GParamSpec            *pspec,
+                 GtkStateFlags          previous,
                  GtkColorChooserWidget *cc)
 {
-  select_swatch (cc, swatch);
+  GtkStateFlags flags;
+
+  flags = gtk_widget_get_state_flags (GTK_WIDGET (swatch));
+  if ((flags & GTK_STATE_FLAG_SELECTED) != (previous & GTK_STATE_FLAG_SELECTED) &&
+      (flags & GTK_STATE_FLAG_SELECTED) != 0)
+    select_swatch (cc, swatch);
 }
 
 static void
@@ -152,7 +157,7 @@ connect_swatch_signals (GtkWidget *p,
 {
   g_signal_connect (p, "activate", G_CALLBACK (swatch_activate), data);
   g_signal_connect (p, "customize", G_CALLBACK (swatch_customize), data);
-  g_signal_connect (p, "notify::selected", G_CALLBACK (swatch_selected), data);
+  g_signal_connect (p, "state-flags-changed", G_CALLBACK (swatch_selected), data);
 }
 
 static void
