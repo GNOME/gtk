@@ -1748,6 +1748,7 @@ demos/Makefile
 demos/gtk-demo/Makefile
 demos/gtk-demo/geninclude.pl
 demos/pixbuf-demo/Makefile
+demos/widget-factory/Makefile
 examples/Makefile
 tests/Makefile
 tests/a11y/Makefile

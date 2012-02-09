@@ -121,7 +121,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testpixbuf-save			\
 	testpixbuf-color		\
 	testpixbuf-scale		\
-	widget-factory 			\
 	testgmenu			\
 	testlogout
 
@@ -238,7 +237,6 @@ testanimation_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_save_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_color_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
-widget_factory_DEPENDENCIES = $(TEST_DEPS)
 testgmenu_DEPENDENCIES = $(TEST_DEPS)
 testlogout_DEPENDENCIES = $(TEST_DEPS)
 
@@ -339,7 +337,6 @@ testanimation_LDADD = $(LDADDS)
 testpixbuf_save_LDADD = $(LDADDS)
 testpixbuf_color_LDADD = $(LDADDS)
 testpixbuf_scale_LDADD = $(LDADDS)
-widget_factory_LDADD = $(LDADDS)
 testgmenu_LDADD = $(LDADDS)
 testlogout_LDADD = $(LDADDS)
 
@@ -522,8 +519,6 @@ testpixbuf_color_SOURCES = testpixbuf-color.c
 
 testpixbuf_save_SOURCES = testpixbuf-save.c
 
-widget_factory_SOURCES = widget-factory.c
-
 
 EXTRA_DIST += 			\
 	gradient1.png		\
@@ -545,8 +540,7 @@ EXTRA_DIST += 			\
 	merge-2.ui		\
 	merge-3.ui		\
 	gnome-textfile.png	\
-	makefile.msc		\
-	widget-factory.ui
+	makefile.msc
 
 
 -include $(top_srcdir)/git.mk
