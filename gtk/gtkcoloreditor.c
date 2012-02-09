@@ -406,7 +406,12 @@ gtk_color_editor_init (GtkColorEditor *editor)
 
   /* Construct the main UI */
   editor->priv->swatch = swatch = gtk_color_swatch_new ();
-  gtk_widget_set_sensitive (swatch, FALSE);
+  gtk_widget_set_events (swatch, gtk_widget_get_events (swatch)
+                                 & ~(GDK_BUTTON_PRESS_MASK
+                                     | GDK_BUTTON_RELEASE_MASK
+                                     | GDK_KEY_PRESS_MASK
+                                     | GDK_KEY_RELEASE_MASK));
+  gtk_widget_set_can_focus (swatch, FALSE);
 
   editor->priv->entry = entry = gtk_entry_new ();
   atk_obj = gtk_widget_get_accessible (entry);
