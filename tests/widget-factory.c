@@ -22,6 +22,7 @@
  *
  */
 
+#include "config.h"
 #include <gtk/gtk.h>
 
 static void
@@ -33,6 +34,30 @@ dark_toggled (GtkCheckMenuItem *item, gpointer data)
   g_object_set (gtk_settings_get_default (),
                 "gtk-application-prefer-dark-theme", dark,
                 NULL);
+}
+
+static void
+show_about (GtkMenuItem *item, GtkWidget *window)
+{
+  const gchar *authors[] = {
+    "Andrea Cimitan",
+    "Cosimo Cecchi"
+  };
+
+  gtk_show_about_dialog (GTK_WINDOW (window),
+                         "program-name", "GTK+ Widget Factory",
+                         "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
+                                                     PACKAGE_VERSION,
+                                                     gtk_get_major_version (),
+                                                     gtk_get_minor_version (),
+                                                     gtk_get_micro_version ()),
+                         "copyright", "(C) 1997-2009 The GTK+ Team",
+                         "license-type", GTK_LICENSE_LGPL_2_1,
+                         "website", "http://www.gtk.org",
+                         "comments", "Program to demonstrate GTK+ themes and widgets",
+                         "authors", authors,
+                         "title", "About GTK+ Widget Factory",
+                         NULL);
 }
 
 int
@@ -57,6 +82,9 @@ main (int argc, char *argv[])
   widget = (GtkWidget*) gtk_builder_get_object (builder, "darkmenuitem");
   g_signal_connect (widget, "toggled", G_CALLBACK (dark_toggled), NULL);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (widget), dark);
+
+  widget = (GtkWidget*) gtk_builder_get_object (builder, "aboutmenuitem");
+  g_signal_connect (widget, "activate", G_CALLBACK (show_about), window);
 
   g_object_unref (G_OBJECT (builder));
 
