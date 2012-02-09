@@ -35,12 +35,10 @@
 
 #include "gtkbutton.h"
 #include "gtkmain.h"
-#include "gtkalignment.h"
 #include "gtkcolorchooser.h"
 #include "gtkcolorchooserdialog.h"
 #include "gtkdnd.h"
 #include "gtkdrawingarea.h"
-#include "gtkframe.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -63,6 +61,7 @@
 #define CHECK_DARK  (1.0 / 3.0)
 #define CHECK_LIGHT (2.0 / 3.0)
 
+#define COLOR_SAMPLE_MARGIN 1
 
 struct _GtkColorButtonPrivate
 {
@@ -451,8 +450,6 @@ gtk_color_button_drag_data_get (GtkWidget        *widget,
 static void
 gtk_color_button_init (GtkColorButton *button)
 {
-  GtkWidget *alignment;
-  GtkWidget *frame;
   PangoLayout *layout;
   PangoRectangle rect;
 
@@ -463,27 +460,24 @@ gtk_color_button_init (GtkColorButton *button)
 
   gtk_widget_push_composite_child ();
 
-  alignment = gtk_alignment_new (0.5, 0.5, 0.5, 1.0);
-  gtk_container_set_border_width (GTK_CONTAINER (alignment), 1);
-  gtk_container_add (GTK_CONTAINER (button), alignment);
-  gtk_widget_show (alignment);
-
-  frame = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_ETCHED_OUT);
-  gtk_container_add (GTK_CONTAINER (alignment), frame);
-  gtk_widget_show (frame);
-
-  /* Just some widget we can hook to expose-event on */
-  button->priv->draw_area = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  button->priv->draw_area = gtk_drawing_area_new ();
+  g_object_set (button->priv->draw_area, 
+                "margin-top", COLOR_SAMPLE_MARGIN,
+                "margin-bottom", COLOR_SAMPLE_MARGIN,
+                "margin-left", 16,
+                "margin-right", 16,
+                NULL);
 
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (button), "Black");
   pango_layout_get_pixel_extents (layout, NULL, &rect);
   g_object_unref (layout);
 
-  gtk_widget_set_size_request (button->priv->draw_area, rect.width - 2, rect.height - 2);
+  gtk_widget_set_size_request (button->priv->draw_area, 
+                               rect.width, rect.height - 2 * COLOR_SAMPLE_MARGIN);
+
   g_signal_connect (button->priv->draw_area, "draw",
                     G_CALLBACK (gtk_color_button_draw_cb), button);
-  gtk_container_add (GTK_CONTAINER (frame), button->priv->draw_area);
+  gtk_container_add (GTK_CONTAINER (button), button->priv->draw_area);
   gtk_widget_show (button->priv->draw_area);
 
   button->priv->title = g_strdup (_("Pick a Color")); /* default title */
