@@ -38,6 +38,8 @@
 
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 void gtk_hsv_to_rgb (gdouble  h, gdouble  s, gdouble  v,
                      gdouble *r, gdouble *g, gdouble *b);
 void gtk_rgb_to_hsv (gdouble  r, gdouble  g, gdouble  b,
