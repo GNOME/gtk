@@ -108,8 +108,6 @@ swatch_draw (GtkWidget *widget,
 {
   GtkColorSwatch *swatch = (GtkColorSwatch*)widget;
   GtkThemingBackground background;
-  GtkRoundedBox box;
-  gint i;
   gdouble width, height;
   GtkStyleContext *context;
   GtkStateFlags state;
