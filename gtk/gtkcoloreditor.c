@@ -473,6 +473,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
   g_signal_connect (entry, "key-press-event", G_CALLBACK (popup_key_press), editor);
 
   grid = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
 
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new (C_("Color channel", "S")), 0, 0, 1, 1);
