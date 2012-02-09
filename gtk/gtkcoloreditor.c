@@ -375,7 +375,6 @@ gtk_color_editor_init (GtkColorEditor *editor)
 {
   GtkWidget *grid;
   GtkWidget *slider;
-  GtkWidget *alignment;
   GtkWidget *entry;
   GtkWidget *swatch;
   GtkAdjustment *h_adj, *s_adj, *v_adj, *a_adj;
@@ -448,16 +447,15 @@ gtk_color_editor_init (GtkColorEditor *editor)
   gtk_grid_attach (GTK_GRID (grid), editor->priv->sv_plane, 1, 1, 2, 1);
   gtk_grid_attach (GTK_GRID (grid), editor->priv->a_slider, 1, 2, 2, 1);
 
-  /* This extra alignment is necessary so we have room to the sides
+  /* This extra margin is necessary so we have room to the sides
    * to place the popups as desired
    */
-  alignment = gtk_alignment_new (0.5, 0.5, 0, 0);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 30, 30);
-  gtk_container_add (GTK_CONTAINER (alignment), grid);
+  gtk_widget_set_margin_left (grid, 30);
+  gtk_widget_set_margin_right (grid, 30);
 
   editor->priv->overlay = gtk_overlay_new ();
   gtk_widget_override_background_color (editor->priv->overlay, 0, &transparent);
-  gtk_container_add (GTK_CONTAINER (editor->priv->overlay), alignment);
+  gtk_container_add (GTK_CONTAINER (editor->priv->overlay), grid);
 
   /* Construct the sv popup */
   editor->priv->s_entry = entry = gtk_spin_button_new (scaled_adjustment (s_adj, 100), 1, 0);
