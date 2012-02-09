@@ -1108,8 +1108,6 @@ dist-hook: ../build/win32/vs9/gtk.vcproj ../build/win32/vs10/gtk.vcxproj ../buil
 
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme
-	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0
-	$(INSTALL_DATA) $(srcdir)/gtk.css.raleigh $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtk.css
 	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Default/gtk-3.0
 	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.default $(DESTDIR)$(datadir)/themes/Default/gtk-3.0/gtk-keys.css
 	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0

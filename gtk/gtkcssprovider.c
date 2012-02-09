@@ -2808,10 +2808,6 @@ gtk_css_provider_get_default (void)
   if (G_UNLIKELY (!provider))
     {
       provider = gtk_css_provider_new ();
-      if (!_gtk_css_provider_load_from_resource (provider, "/org/gtk/libgtk/gtk-default.css"))
-        {
-          g_error ("Failed to load the internal default CSS.");
-        }
     }
 
   return provider;
@@ -2852,26 +2848,36 @@ gtk_css_provider_get_named (const gchar *name,
   GtkCssProvider *provider;
   gchar *key;
 
-  if (G_UNLIKELY (!themes))
-    {
-      themes = g_hash_table_new (g_str_hash, g_str_equal);
-
-      provider = gtk_css_provider_new ();
-      if (!_gtk_css_provider_load_from_resource (provider, "/org/gtk/libgtk/gtk-win32.css"))
-        {
-          g_warning ("Failed to load the internal win32 default CSS.");
-	  g_object_unref (provider);
-        }
-      else
-	g_hash_table_insert (themes, "gtk-win32", provider);
-    }
-
   if (variant == NULL)
     key = (gchar *)name;
   else
     key = g_strconcat (name, "-", variant, NULL);
 
+  if (G_UNLIKELY (!themes))
+    themes = g_hash_table_new (g_str_hash, g_str_equal);
+
   provider = g_hash_table_lookup (themes, key);
+
+  if (!provider)
+    {
+      gchar *resource_path = NULL;
+
+      if (variant)
+        resource_path = g_strdup_printf ("/org/gtk/libgtk/%s-%s.css", name, variant);
+      else
+        resource_path = g_strdup_printf ("/org/gtk/libgtk/%s.css", name);
+
+      if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
+	{
+	  provider = gtk_css_provider_new ();
+	  if (!_gtk_css_provider_load_from_resource (provider, resource_path))
+	    {
+	      g_object_unref (provider);
+	      provider = NULL;
+	    }
+	}
+      g_free (resource_path);
+    }
 
   if (!provider)
     {

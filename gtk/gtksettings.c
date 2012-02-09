@@ -1521,7 +1521,6 @@ settings_init_style (GtkSettings *settings)
   static GtkCssProvider *css_provider = NULL;
 
   GdkScreen *screen = settings->priv->screen;
-  GtkCssProvider *default_provider;
 
   /* Add provider for user file */
   if (G_UNLIKELY (!css_provider))
@@ -1544,11 +1543,6 @@ settings_init_style (GtkSettings *settings)
   gtk_style_context_add_provider_for_screen (screen,
                                              GTK_STYLE_PROVIDER (css_provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-  default_provider = gtk_css_provider_get_default ();
-  gtk_style_context_add_provider_for_screen (screen,
-                                             GTK_STYLE_PROVIDER (default_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
 
   gtk_style_context_add_provider_for_screen (screen,
                                              GTK_STYLE_PROVIDER (settings),
@@ -2872,6 +2866,10 @@ settings_update_theme (GtkSettings *settings)
       if (!provider)
         provider = gtk_css_provider_get_named (theme_name, NULL);
     }
+
+  /* If we didn't find the named theme, fall back */
+  if (!provider)
+    provider = gtk_css_provider_get_named ("Raleigh", NULL);
 
   settings_update_provider (priv->screen, &priv->theme_provider, provider);
 
