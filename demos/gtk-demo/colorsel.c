@@ -36,26 +36,17 @@ change_color_callback (GtkWidget *button,
 {
   GtkWidget *dialog;
   GtkColorSelection *colorsel;
-  GtkColorSelectionDialog *selection_dialog;
+  GtkColorChooserDialog *selection_dialog;
   gint response;
 
-  dialog = gtk_color_selection_dialog_new ("Changing color");
-
-  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
-
-  selection_dialog = GTK_COLOR_SELECTION_DIALOG (dialog);
-  colorsel = GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (selection_dialog));
-
-  gtk_color_selection_set_previous_rgba (colorsel, &color);
-  gtk_color_selection_set_current_rgba (colorsel, &color);
-  gtk_color_selection_set_has_palette (colorsel, TRUE);
+  dialog = gtk_color_chooser_dialog_new ("Changing color", GTK_WINDOW (window));
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (dialog), &color);
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
   if (response == GTK_RESPONSE_OK)
     {
-      gtk_color_selection_get_current_rgba (colorsel, &color);
-
+      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
       gtk_widget_override_background_color (da, 0, &color);
     }
 
