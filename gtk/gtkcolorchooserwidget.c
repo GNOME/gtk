@@ -33,6 +33,8 @@
 #include "gtksizegroup.h"
 #include "gtkalignment.h"
 
+#include <math.h>
+
 /**
  * SECTION:gtkcolorchooserwidget
  * @Short_description: A widget for choosing colors
@@ -262,14 +264,16 @@ gtk_color_chooser_widget_set_show_editor (GtkColorChooserWidget *cc,
 /* UI construction {{{1 */
 
 static void
-add_palette (GtkColorChooserWidget *cc,
-             gboolean               horizontal,
-             gint                   colors_per_line,
-             gint                   n_colors,
-             GdkRGBA               *colors)
+add_palette (GtkColorChooserWidget  *cc,
+             gboolean                horizontal,
+             gint                    colors_per_line,
+             gint                    n_colors,
+             GdkRGBA                *colors,
+             const gchar           **names)
 {
   GtkWidget *grid;
   GtkWidget *p;
+  AtkObject *atk_obj;
   gint line, pos;
   gint i;
   gint left, right;
@@ -292,6 +296,11 @@ add_palette (GtkColorChooserWidget *cc,
   for (i = 0; i < n_colors; i++)
     {
       p = gtk_color_swatch_new ();
+      if (names)
+        {
+          atk_obj = gtk_widget_get_accessible (p);
+          atk_object_set_description (atk_obj, names[i]);
+        }
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &colors[i]);
       connect_swatch_signals (p, cc);
 
@@ -357,16 +366,38 @@ add_default_palette (GtkColorChooserWidget *cc)
     { "#888a85", "#555753", "#2e3436" }, /* Aluminum 1 */
     { "#eeeeec", "#d3d7cf", "#babdb6" }  /* Aluminum 2 */
   };
+  const gchar *color_names[] = {
+    "Light Scarlet Red", "Scarlet Red", "Dark Scarlet Red",
+    "Light Orange", "Orange", "Dark Orange",
+    "Light Butter", "Butter", "Dark Butter",
+    "Light Chameleon", "Chameleon", "Dark Chameleon",
+    "Light Sky Blue", "Sky Blue", "Dark Sky Blue",
+    "Light Plum", "Plum", "Dark Plum",
+    "Light Chocolate", "Chocolate", "Dark Chocolate",
+    "Light Aluminum 1", "Aluminum 1", "Dark Aluminum 1",
+    "Light Aluminum 2", "Aluminum 2", "Dark Aluminum 2"
+  };
   const gchar *default_grays[9] = {
-    "#000000",
-    "#2e3436",
-    "#555753",
-    "#888a85",
-    "#babdb6",
-    "#d3d7cf",
-    "#eeeeec",
-    "#f3f3f3",
-    "#ffffff"
+    "#000000", /* black */
+    "#2e3436", /* very dark gray */
+    "#555753", /* darker gray */
+    "#888a85", /* dark gray */
+    "#babdb6", /* medium gray */
+    "#d3d7cf", /* light gray */
+    "#eeeeec", /* lighter gray */
+    "#f3f3f3", /* very light gray */
+    "#ffffff"  /* white */
+  };
+  const gchar *gray_names[] = {
+    "Black",
+    "Very Dark Gray",
+    "Darker Gray",
+    "Dark Gray",
+    "Medium Gray",
+    "Light Gray",
+    "Lighter Gray",
+    "Very Light Gray",
+    "White"
   };
   GdkRGBA colors[9*3];
   gint i, j;
@@ -375,14 +406,23 @@ add_default_palette (GtkColorChooserWidget *cc)
     for (j = 0; j < 3; j++)
       gdk_rgba_parse (&colors[i*3 + j], default_colors[i][j]);
 
-  add_palette (cc, FALSE, 3, 9*3, colors);
+  add_palette (cc, FALSE, 3, 9*3, colors, color_names);
 
   for (i = 0; i < 9; i++)
     gdk_rgba_parse (&colors[i], default_grays[i]);
 
-  add_palette (cc, TRUE, 9, 9, colors);
+  add_palette (cc, TRUE, 9, 9, colors, gray_names);
 
   cc->priv->has_default_palette = TRUE;
+}
+
+static guint
+scale_round (gdouble value, gdouble scale)
+{
+  value = floor (value * scale + 0.5);
+  value = MAX (value, 0);
+  value = MIN (value, scale);
+  return (guint)value;
 }
 
 static void
@@ -398,6 +438,8 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   GVariant *variant;
   GVariantIter iter;
   gboolean selected;
+  AtkObject *atk_obj;
+  gchar *text;
 
   cc->priv = G_TYPE_INSTANCE_GET_PRIVATE (cc, GTK_TYPE_COLOR_CHOOSER_WIDGET, GtkColorChooserWidgetPrivate);
 
@@ -419,6 +461,9 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   gtk_box_pack_end (GTK_BOX (cc->priv->palette), label, FALSE, TRUE, 0);
 
   cc->priv->button = button = gtk_color_swatch_new ();
+  atk_obj = gtk_widget_get_accessible (button);
+  atk_object_set_role (atk_obj, ATK_ROLE_PUSH_BUTTON);
+  atk_object_set_description (atk_obj, _("Create custom color"));
   connect_button_signals (button, cc);
   gtk_color_swatch_set_icon (GTK_COLOR_SWATCH (button), "list-add-symbolic");
   gtk_container_add (GTK_CONTAINER (box), button);
@@ -435,6 +480,14 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
       p = gtk_color_swatch_new ();
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &color);
       gtk_color_swatch_set_can_drop (GTK_COLOR_SWATCH (p), TRUE);
+      atk_obj = gtk_widget_get_accessible (p);
+      text = g_strdup_printf (_("Custom color %d: Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"), i,
+                              scale_round (color.red, 100),
+                              scale_round (color.green, 100),
+                              scale_round (color.blue, 100),
+                              scale_round (color.alpha, 100));
+      atk_object_set_description (atk_obj, text);
+      g_free (text);
       connect_custom_signals (p, cc);
       gtk_container_add (GTK_CONTAINER (box), p);
 
@@ -669,7 +722,7 @@ gtk_color_chooser_widget_add_palette (GtkColorChooser *chooser,
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (chooser);
 
   remove_default_palette (cc);
-  add_palette (cc, horizontal, colors_per_line, n_colors, colors);
+  add_palette (cc, horizontal, colors_per_line, n_colors, colors, NULL);
 }
 
 static void

@@ -379,6 +379,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
   GtkWidget *entry;
   GtkWidget *swatch;
   GtkAdjustment *h_adj, *s_adj, *v_adj, *a_adj;
+  AtkObject *atk_obj;
   GdkRGBA transparent = { 0, 0, 0, 0 };
 
   editor->priv = G_TYPE_INSTANCE_GET_PRIVATE (editor,
@@ -408,6 +409,9 @@ gtk_color_editor_init (GtkColorEditor *editor)
   gtk_widget_set_sensitive (swatch, FALSE);
 
   editor->priv->entry = entry = gtk_entry_new ();
+  atk_obj = gtk_widget_get_accessible (entry);
+  atk_object_set_role (atk_obj, ATK_ROLE_ENTRY);
+  atk_object_set_name (atk_obj, _("Color Name"));
   g_signal_connect (entry, "activate", G_CALLBACK (entry_apply), editor);
   g_signal_connect (entry, "notify::text", G_CALLBACK (entry_text_changed), editor);
   g_signal_connect (entry, "focus-out-event", G_CALLBACK (entry_focus_out), editor);
@@ -452,9 +456,15 @@ gtk_color_editor_init (GtkColorEditor *editor)
 
   /* Construct the sv popup */
   editor->priv->s_entry = entry = gtk_spin_button_new (scaled_adjustment (s_adj, 100), 1, 0);
+  atk_obj = gtk_widget_get_accessible (entry);
+  atk_object_set_name (atk_obj, C_("Color channel", "Saturation"));
+  atk_object_set_role (atk_obj, ATK_ROLE_ENTRY);
   g_signal_connect (entry, "key-press-event", G_CALLBACK (popup_key_press), editor);
 
   editor->priv->v_entry = entry = gtk_spin_button_new (scaled_adjustment (v_adj, 100), 1, 0);
+  atk_obj = gtk_widget_get_accessible (entry);
+  atk_object_set_name (atk_obj, C_("Color channel", "Value"));
+  atk_object_set_role (atk_obj, ATK_ROLE_ENTRY);
   g_signal_connect (entry, "key-press-event", G_CALLBACK (popup_key_press), editor);
 
   grid = gtk_grid_new ();
@@ -469,6 +479,9 @@ gtk_color_editor_init (GtkColorEditor *editor)
 
   /* Construct the h popup */
   editor->priv->h_entry = entry = gtk_spin_button_new (scaled_adjustment (h_adj, 100), 1, 0);
+  atk_obj = gtk_widget_get_accessible (entry);
+  atk_object_set_name (atk_obj, C_("Color channel", "Hue"));
+  atk_object_set_role (atk_obj, ATK_ROLE_ENTRY);
   g_signal_connect (entry, "key-press-event", G_CALLBACK (popup_key_press), editor);
 
   grid = gtk_grid_new ();
@@ -481,6 +494,9 @@ gtk_color_editor_init (GtkColorEditor *editor)
 
   /* Construct the a popup */
   editor->priv->a_entry = entry = gtk_spin_button_new (scaled_adjustment (a_adj, 100), 1, 0);
+  atk_obj = gtk_widget_get_accessible (entry);
+  atk_object_set_name (atk_obj, C_("Color channel", "Alpha"));
+  atk_object_set_role (atk_obj, ATK_ROLE_ENTRY);
   g_signal_connect (entry, "key-press-event", G_CALLBACK (popup_key_press), editor);
 
   grid = gtk_grid_new ();
