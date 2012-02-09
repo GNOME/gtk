@@ -46,8 +46,7 @@ struct _GtkColorSwatchPrivate
 enum
 {
   PROP_ZERO,
-  PROP_RGBA,
-  PROP_SELECTED
+  PROP_RGBA
 };
 
 enum
