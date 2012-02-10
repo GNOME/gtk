@@ -433,6 +433,14 @@
  *         <entry>darker(@color)</entry>
  *         <entry>A darker variant of @color</entry>
  *       </row>
+ *       <row>
+ *         <entry>alpha(@color, @f)</entry>
+ *         <entry>Modifies passed color's alpha by a factor @f. @f is a
+ *                floating point number. @f < 1.0 results in a more transparent
+ *                color while @f > 1.0 results in a more opaque color.
+ *         </entry>
+ *         <entry>alhpa(blue, 0.5)</entry>
+ *       </row>
  *     </tbody>
  *   </tgroup>
  * </informaltable>
