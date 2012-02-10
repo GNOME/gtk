@@ -15760,7 +15760,7 @@ gtk_tree_view_get_hover_selection (GtkTreeView *tree_view)
  * @tree_view: a #GtkTreeView
  * @expand: %TRUE to enable hover selection mode
  *
- * Enables of disables the hover expansion mode of @tree_view.
+ * Enables or disables the hover expansion mode of @tree_view.
  * Hover expansion makes rows expand or collapse if the pointer 
  * moves over them.
  * 
