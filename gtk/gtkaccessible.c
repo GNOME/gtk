@@ -130,13 +130,13 @@ gtk_accessible_real_widget_unset (GtkAccessible *accessible)
 }
 
 static void
-gtk_accessible_finalize (GObject *object)
+gtk_accessible_dispose (GObject *object)
 {
   GtkAccessible *accessible = GTK_ACCESSIBLE (object);
   
   gtk_accessible_set_widget (accessible, NULL);
 
-  G_OBJECT_CLASS (gtk_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_accessible_parent_class)->dispose (object);
 }
 
 static void
@@ -152,7 +152,7 @@ gtk_accessible_class_init (GtkAccessibleClass *klass)
   atkobject_class->ref_state_set = gtk_accessible_ref_state_set;
   gobject_class->get_property = gtk_accessible_get_property;
   gobject_class->set_property = gtk_accessible_set_property;
-  gobject_class->finalize = gtk_accessible_finalize;
+  gobject_class->dispose = gtk_accessible_dispose;
 
   g_object_class_install_property (gobject_class,
 				   PROP_WIDGET,
