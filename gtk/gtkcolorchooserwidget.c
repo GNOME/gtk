@@ -303,7 +303,7 @@ add_palette (GtkColorChooserWidget  *cc,
       if (names)
         {
           atk_obj = gtk_widget_get_accessible (p);
-          atk_object_set_description (atk_obj, names[i]);
+          atk_object_set_description (atk_obj, C_("Color name", names[i]));
         }
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &colors[i]);
       connect_swatch_signals (p, cc);
@@ -371,15 +371,33 @@ add_default_palette (GtkColorChooserWidget *cc)
     { "#eeeeec", "#d3d7cf", "#babdb6" }  /* Aluminum 2 */
   };
   const gchar *color_names[] = {
-    "Light Scarlet Red", "Scarlet Red", "Dark Scarlet Red",
-    "Light Orange", "Orange", "Dark Orange",
-    "Light Butter", "Butter", "Dark Butter",
-    "Light Chameleon", "Chameleon", "Dark Chameleon",
-    "Light Sky Blue", "Sky Blue", "Dark Sky Blue",
-    "Light Plum", "Plum", "Dark Plum",
-    "Light Chocolate", "Chocolate", "Dark Chocolate",
-    "Light Aluminum 1", "Aluminum 1", "Dark Aluminum 1",
-    "Light Aluminum 2", "Aluminum 2", "Dark Aluminum 2"
+    NC_("Color name", "Light Scarlet Red"),
+    NC_("Color name", "Scarlet Red"),
+    NC_("Color name", "Dark Scarlet Red"),
+    NC_("Color name", "Light Orange"),
+    NC_("Color name", "Orange"),
+    NC_("Color name", "Dark Orange"),
+    NC_("Color name", "Light Butter"),
+    NC_("Color name", "Butter"),
+    NC_("Color name", "Dark Butter"),
+    NC_("Color name", "Light Chameleon"),
+    NC_("Color name", "Chameleon"),
+    NC_("Color name", "Dark Chameleon"),
+    NC_("Color name", "Light Sky Blue"),
+    NC_("Color name", "Sky Blue"),
+    NC_("Color name", "Dark Sky Blue"),
+    NC_("Color name", "Light Plum"),
+    NC_("Color name", "Plum"),
+    NC_("Color name", "Dark Plum"),
+    NC_("Color name", "Light Chocolate"),
+    NC_("Color name", "Chocolate"),
+    NC_("Color name", "Dark Chocolate"),
+    NC_("Color name", "Light Aluminum 1"),
+    NC_("Color name", "Aluminum 1"),
+    NC_("Color name", "Dark Aluminum 1"),
+    NC_("Color name", "Light Aluminum 2"),
+    NC_("Color name", "Aluminum 2"),
+    NC_("Color name", "Dark Aluminum 2")
   };
   const gchar *default_grays[9] = {
     "#000000", /* black */
@@ -393,15 +411,15 @@ add_default_palette (GtkColorChooserWidget *cc)
     "#ffffff"  /* white */
   };
   const gchar *gray_names[] = {
-    "Black",
-    "Very Dark Gray",
-    "Darker Gray",
-    "Dark Gray",
-    "Medium Gray",
-    "Light Gray",
-    "Lighter Gray",
-    "Very Light Gray",
-    "White"
+    NC_("Color name", "Black"),
+    NC_("Color name", "Very Dark Gray"),
+    NC_("Color name", "Darker Gray"),
+    NC_("Color name", "Dark Gray"),
+    NC_("Color name", "Medium Gray"),
+    NC_("Color name", "Light Gray"),
+    NC_("Color name", "Lighter Gray"),
+    NC_("Color name", "Very Light Gray"),
+    NC_("Color name", "White")
   };
   GdkRGBA colors[9*3];
   gint i, j;
