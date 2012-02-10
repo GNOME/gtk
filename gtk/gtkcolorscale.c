@@ -192,6 +192,7 @@ scale_draw (GtkWidget *widget,
 {
   GtkColorScale *scale = GTK_COLOR_SCALE (widget);
   gint width, height;
+  cairo_pattern_t *pattern;
 
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
@@ -218,8 +219,20 @@ scale_draw (GtkWidget *widget,
     cairo_rectangle (cr, 1, 1, width - 2, height - 2);
 
   cairo_clip (cr);
-  cairo_set_source_surface (cr, scale->priv->surface, 0, 0);
+  pattern = cairo_pattern_create_for_surface (scale->priv->surface);
+  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&
+      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    {
+      cairo_matrix_t matrix;
+
+      cairo_matrix_init_scale (&matrix, -1, 1);
+      cairo_matrix_translate (&matrix, -width, 0);
+      cairo_pattern_set_matrix (pattern, &matrix);
+    }
+  cairo_set_source (cr, pattern);
   cairo_paint (cr);
+
+  cairo_pattern_destroy (pattern);
 
   cairo_restore (cr);
 
