@@ -49,6 +49,9 @@ gboolean     _gtk_tree_view_find_node                 (GtkTreeView       *tree_v
 						       GtkTreePath       *path,
 						       GtkRBTree        **tree,
 						       GtkRBNode        **node);
+gboolean     _gtk_tree_view_get_cursor_node           (GtkTreeView       *tree_view,
+						       GtkRBTree        **tree,
+						       GtkRBNode        **node);
 GtkTreePath *_gtk_tree_path_new_from_rbtree           (GtkRBTree         *tree,
 						       GtkRBNode         *node);
 void         _gtk_tree_view_child_move_resize         (GtkTreeView       *tree_view,

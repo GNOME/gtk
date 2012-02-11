@@ -10009,6 +10009,24 @@ _gtk_tree_view_get_rbtree (GtkTreeView *tree_view)
   return tree_view->priv->tree;
 }
 
+gboolean
+_gtk_tree_view_get_cursor_node (GtkTreeView  *tree_view,
+                                GtkRBTree   **tree,
+                                GtkRBNode   **node)
+{
+  GtkTreeViewPrivate *priv;
+
+  priv = tree_view->priv;
+
+  if (priv->cursor_node == NULL)
+    return FALSE;
+
+  *tree = priv->cursor_tree;
+  *node = priv->cursor_node;
+
+  return TRUE;
+}
+
 GdkWindow *
 _gtk_tree_view_get_header_window (GtkTreeView *tree_view)
 {
