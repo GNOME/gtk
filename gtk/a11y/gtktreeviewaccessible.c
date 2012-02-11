@@ -2095,6 +2095,43 @@ _gtk_tree_view_accessible_update_focus_column (GtkTreeView       *treeview,
                                                GtkTreeViewColumn *old_focus,
                                                GtkTreeViewColumn *new_focus)
 {
+  GtkTreeViewAccessible *accessible;
+  AtkObject *obj;
+  GtkRBTree *cursor_tree;
+  GtkRBNode *cursor_node;
+  GtkCellAccessible *cell;
+
+  old_focus = get_effective_focus_column (treeview, old_focus);
+  new_focus = get_effective_focus_column (treeview, new_focus);
+  if (old_focus == new_focus)
+    return;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (treeview));
+  if (obj == NULL)
+    return;
+
+  accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
+
+  if (!_gtk_tree_view_get_cursor_node (treeview, &cursor_tree, &cursor_node))
+    return;
+
+  if (old_focus)
+    {
+      cell = peek_cell (accessible, cursor_tree, cursor_node, old_focus);
+      if (cell != NULL)
+        _gtk_cell_accessible_state_changed (cell, GTK_CELL_RENDERER_FOCUSED, 0);
+    }
+
+  if (new_focus)
+    {
+      /* XXX: force creation here */
+      cell = peek_cell (accessible, cursor_tree, cursor_node, new_focus);
+      if (cell != NULL)
+        {
+          _gtk_cell_accessible_state_changed (cell, 0, GTK_CELL_RENDERER_FOCUSED);
+          g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
+        }
+    }
 }
 
 void
