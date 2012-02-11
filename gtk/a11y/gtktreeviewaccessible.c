@@ -365,6 +365,94 @@ peek_cell (GtkTreeViewAccessible *accessible,
   return cell_info->cell;
 }
 
+static GtkCellAccessible *
+create_cell (GtkTreeView           *treeview,
+             GtkTreeViewAccessible *accessible,
+             GtkRBTree             *tree,
+             GtkRBNode             *node,
+             GtkTreeViewColumn     *column)
+{
+  GtkCellRenderer *renderer;
+  AtkObject *parent;
+  GList *renderer_list;
+  GList *l;
+  GtkContainerCellAccessible *container = NULL;
+  GtkCellAccessible *cell;
+
+  renderer_list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
+
+  /* If there is not exactly one renderer in the list,
+   * make a container
+   */
+  if (renderer_list == NULL || renderer_list->next)
+    {
+      GtkCellAccessible *container_cell;
+
+      container = _gtk_container_cell_accessible_new ();
+
+      container_cell = GTK_CELL_ACCESSIBLE (container);
+      _gtk_cell_accessible_initialise (container_cell, GTK_WIDGET (treeview), ATK_OBJECT (accessible));
+
+      /* The GtkTreeViewAccessibleCellInfo structure for the container will
+       * be before the ones for the cells so that the first one we find for
+       * a position will be for the container
+       */
+      cell_info_new (accessible, tree, node, column, container_cell);
+      parent = ATK_OBJECT (container);
+    }
+  else
+    parent = ATK_OBJECT (accessible);
+
+  cell = NULL;
+
+  for (l = renderer_list; l; l = l->next)
+    {
+      renderer = GTK_CELL_RENDERER (l->data);
+
+      cell = GTK_CELL_ACCESSIBLE (_gtk_renderer_cell_accessible_new (renderer));
+
+      /* Create the GtkTreeViewAccessibleCellInfo for this cell */
+      if (parent == ATK_OBJECT (accessible))
+        cell_info_new (accessible, tree, node, column, cell);
+
+      _gtk_cell_accessible_initialise (cell, GTK_WIDGET (treeview), parent);
+
+      if (container)
+        _gtk_container_cell_accessible_add_child (container, cell);
+    }
+  g_list_free (renderer_list);
+  if (container)
+    cell = GTK_CELL_ACCESSIBLE (container);
+
+  set_cell_data (treeview, accessible, cell);
+  _gtk_cell_accessible_update_cache (cell);
+
+  if (gtk_tree_view_get_expander_column (treeview) == column)
+    {
+      AtkRelationSet *relation_set;
+      AtkRelation* relation;
+      AtkObject *parent_node;
+
+      relation_set = atk_object_ref_relation_set (ATK_OBJECT (cell));
+
+      if (tree->parent_tree)
+        {
+          parent_node = ATK_OBJECT (peek_cell (accessible, tree->parent_tree, tree->parent_node, column));
+          if (parent_node == NULL)
+            parent_node = ATK_OBJECT (create_cell (treeview, accessible, tree->parent_tree, tree->parent_node, column));
+        }
+      else
+        parent_node = ATK_OBJECT (accessible);
+      relation = atk_relation_new (&parent_node, 1, ATK_RELATION_NODE_CHILD_OF);
+      atk_relation_set_add (relation_set, relation);
+      atk_object_add_relationship (parent_node, ATK_RELATION_NODE_PARENT_OF, ATK_OBJECT (cell));
+      g_object_unref (relation);
+      g_object_unref (relation_set);
+    }
+
+  return cell;
+}
+
 static AtkObject *
 gtk_tree_view_accessible_ref_child (AtkObject *obj,
                                     gint       i)
@@ -373,15 +461,10 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   GtkTreeViewAccessible *accessible;
   GtkCellAccessible *cell;
   GtkTreeView *tree_view;
-  GtkCellRenderer *renderer;
   GtkTreeViewColumn *tv_col;
   GtkRBTree *tree;
   GtkRBNode *node;
   AtkObject *child;
-  AtkObject *parent;
-  GList *renderer_list;
-  GList *l;
-  GtkContainerCellAccessible *container = NULL;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
@@ -406,82 +489,10 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
     return NULL;
 
   cell = peek_cell (accessible, tree, node, tv_col);
-  if (cell)
-    return g_object_ref (cell);
+  if (cell == NULL)
+    cell = create_cell (tree_view, accessible, tree, node, tv_col);
 
-  renderer_list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (tv_col));
-
-  /* If there is not exactly one renderer in the list,
-   * make a container
-   */
-  if (renderer_list == NULL || renderer_list->next)
-    {
-      GtkCellAccessible *container_cell;
-
-      container = _gtk_container_cell_accessible_new ();
-
-      container_cell = GTK_CELL_ACCESSIBLE (container);
-      _gtk_cell_accessible_initialise (container_cell, widget, ATK_OBJECT (accessible));
-
-      /* The GtkTreeViewAccessibleCellInfo structure for the container will
-       * be before the ones for the cells so that the first one we find for
-       * a position will be for the container
-       */
-      cell_info_new (accessible, tree, node, tv_col, container_cell);
-      parent = ATK_OBJECT (container);
-    }
-  else
-    parent = ATK_OBJECT (accessible);
-
-  child = NULL;
-
-  for (l = renderer_list; l; l = l->next)
-    {
-      renderer = GTK_CELL_RENDERER (l->data);
-
-      child = _gtk_renderer_cell_accessible_new (renderer);
-
-      cell = GTK_CELL_ACCESSIBLE (child);
-
-      /* Create the GtkTreeViewAccessibleCellInfo for this cell */
-      if (parent == ATK_OBJECT (accessible))
-        cell_info_new (accessible, tree, node, tv_col, cell);
-
-      _gtk_cell_accessible_initialise (cell, widget, parent);
-
-      if (container)
-        _gtk_container_cell_accessible_add_child (container, cell);
-    }
-  g_list_free (renderer_list);
-  if (container)
-    child = ATK_OBJECT (container);
-
-  set_cell_data (tree_view, accessible, GTK_CELL_ACCESSIBLE (child));
-  _gtk_cell_accessible_update_cache (GTK_CELL_ACCESSIBLE (child));
-
-  if (gtk_tree_view_get_expander_column (tree_view) == tv_col)
-    {
-      AtkRelationSet *relation_set;
-      AtkRelation* relation;
-      AtkObject *parent_node;
-
-      relation_set = atk_object_ref_relation_set (ATK_OBJECT (child));
-
-      if (tree->parent_tree)
-        {
-          /* XXX: force creation here */
-          parent_node = ATK_OBJECT (peek_cell (accessible, tree->parent_tree, tree->parent_node, tv_col));
-        }
-      else
-        parent_node = obj;
-      relation = atk_relation_new (&parent_node, 1, ATK_RELATION_NODE_CHILD_OF);
-      atk_relation_set_add (relation_set, relation);
-      atk_object_add_relationship (parent_node, ATK_RELATION_NODE_PARENT_OF, child);
-      g_object_unref (relation);
-      g_object_unref (relation_set);
-    }
-
-  return child;
+  return g_object_ref (cell);
 }
 
 static AtkStateSet*
