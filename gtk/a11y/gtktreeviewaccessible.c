@@ -2103,6 +2103,12 @@ _gtk_tree_view_accessible_add_state (GtkTreeView          *treeview,
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
 
+  if (state == GTK_CELL_RENDERER_FOCUSED)
+    {
+      /* will add later */
+      return;
+    }
+
   for (i = 0; i < gtk_tree_view_get_n_columns (treeview); i++)
     {
       GtkCellAccessible *cell = peek_cell (accessible,
@@ -2134,6 +2140,12 @@ _gtk_tree_view_accessible_remove_state (GtkTreeView          *treeview,
     return;
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
+
+  if (state == GTK_CELL_RENDERER_FOCUSED)
+    {
+      /* will add later */
+      return;
+    }
 
   for (i = 0; i < gtk_tree_view_get_n_columns (treeview); i++)
     {

@@ -13188,6 +13188,10 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
 {
   if (!(flags & CURSOR_INVALID) && tree_view->priv->cursor_node)
     {
+      _gtk_tree_view_accessible_remove_state (tree_view,
+                                              tree_view->priv->cursor_tree,
+                                              tree_view->priv->cursor_node,
+                                              GTK_CELL_RENDERER_FOCUSED);
       _gtk_tree_view_queue_draw_node (tree_view,
                                       tree_view->priv->cursor_tree,
                                       tree_view->priv->cursor_node,
@@ -13250,6 +13254,11 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
                                           tree_view->priv->cursor_node,
                                           NULL);
 	}
+
+      _gtk_tree_view_accessible_add_state (tree_view,
+                                           tree_view->priv->cursor_tree,
+                                           tree_view->priv->cursor_node,
+                                           GTK_CELL_RENDERER_FOCUSED);
     }
 
   g_signal_emit (tree_view, tree_view_signals[CURSOR_CHANGED], 0);
