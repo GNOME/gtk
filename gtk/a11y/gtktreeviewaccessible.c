@@ -2081,6 +2081,13 @@ _gtk_tree_view_accessible_toggle_visibility (GtkTreeView       *treeview,
 }
 
 void
+_gtk_tree_view_accessible_update_focus_column (GtkTreeView       *treeview,
+                                               GtkTreeViewColumn *old_focus,
+                                               GtkTreeViewColumn *new_focus)
+{
+}
+
+void
 _gtk_tree_view_accessible_add_state (GtkTreeView          *treeview,
                                      GtkRBTree            *tree,
                                      GtkRBNode            *node,

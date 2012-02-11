@@ -10019,7 +10019,16 @@ void
 _gtk_tree_view_set_focus_column (GtkTreeView       *tree_view,
 				 GtkTreeViewColumn *column)
 {
+  GtkTreeViewColumn *old_column = tree_view->priv->focus_column;
+
+  if (old_column == column)
+    return;
+
   tree_view->priv->focus_column = column;
+
+  _gtk_tree_view_accessible_update_focus_column (tree_view, 
+                                                 old_column,
+                                                 column);
 }
 
 
