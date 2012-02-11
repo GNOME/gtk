@@ -85,6 +85,7 @@ void         _gtk_tree_view_set_anchor_path           (GtkTreeView              
 						       GtkTreePath                 *anchor_path);
 GtkRBTree *  _gtk_tree_view_get_rbtree                (GtkTreeView                 *tree_view);
 
+GtkTreeViewColumn *_gtk_tree_view_get_focus_column    (GtkTreeView                 *tree_view);
 void               _gtk_tree_view_set_focus_column    (GtkTreeView                 *tree_view,
 						       GtkTreeViewColumn           *column);
 GdkWindow         *_gtk_tree_view_get_header_window   (GtkTreeView                 *tree_view);
