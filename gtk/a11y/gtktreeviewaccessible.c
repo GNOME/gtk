@@ -2080,6 +2080,16 @@ _gtk_tree_view_accessible_toggle_visibility (GtkTreeView       *treeview,
                                                 id);
 }
 
+GtkTreeViewColumn *
+get_effective_focus_column (GtkTreeView       *treeview,
+                            GtkTreeViewColumn *column)
+{
+  if (column == NULL)
+    column = get_visible_column (treeview, 0);
+
+  return column;
+}
+
 void
 _gtk_tree_view_accessible_update_focus_column (GtkTreeView       *treeview,
                                                GtkTreeViewColumn *old_focus,
@@ -2105,7 +2115,24 @@ _gtk_tree_view_accessible_add_state (GtkTreeView          *treeview,
 
   if (state == GTK_CELL_RENDERER_FOCUSED)
     {
-      /* will add later */
+      GtkTreeViewColumn *focus_column;
+      
+      focus_column = get_effective_focus_column (treeview, _gtk_tree_view_get_focus_column (treeview));
+
+      if (focus_column)
+        {
+          /* XXX: force creation here */
+          GtkCellAccessible *cell = peek_cell (accessible,
+                                               tree, node,
+                                               focus_column);
+
+          if (cell != NULL)
+            {
+              _gtk_cell_accessible_state_changed (cell, 0, state);
+              g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
+            }
+        }
+
       return;
     }
 
@@ -2143,7 +2170,20 @@ _gtk_tree_view_accessible_remove_state (GtkTreeView          *treeview,
 
   if (state == GTK_CELL_RENDERER_FOCUSED)
     {
-      /* will add later */
+      GtkTreeViewColumn *focus_column;
+      
+      focus_column = get_effective_focus_column (treeview, _gtk_tree_view_get_focus_column (treeview));
+
+      if (focus_column)
+        {
+          GtkCellAccessible *cell = peek_cell (accessible,
+                                               tree, node,
+                                               focus_column);
+
+          if (cell != NULL)
+            _gtk_cell_accessible_state_changed (cell, 0, state);
+        }
+
       return;
     }
 
