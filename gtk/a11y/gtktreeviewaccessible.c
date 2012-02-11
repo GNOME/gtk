@@ -375,7 +375,6 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   GtkTreeView *tree_view;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *tv_col;
-  GtkTreePath *path;
   GtkRBTree *tree;
   GtkRBNode *node;
   AtkObject *child;
@@ -409,8 +408,6 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   cell = peek_cell (accessible, tree, node, tv_col);
   if (cell)
     return g_object_ref (cell);
-
-  path = _gtk_tree_path_new_from_rbtree (tree, node);
 
   renderer_list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (tv_col));
 
@@ -465,31 +462,24 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   if (gtk_tree_view_get_expander_column (tree_view) == tv_col)
     {
       AtkRelationSet *relation_set;
-      AtkObject *accessible_array[1];
       AtkRelation* relation;
       AtkObject *parent_node;
 
       relation_set = atk_object_ref_relation_set (ATK_OBJECT (child));
 
-      gtk_tree_path_up (path);
-      if (gtk_tree_path_get_depth (path) == 0)
-        parent_node = obj;
-      else
+      if (tree->parent_tree)
         {
-          gint parent_index;
-
-          parent_index = get_index (tree_view, path, i % get_n_columns (tree_view));
-          parent_node = atk_object_ref_accessible_child (obj, parent_index);
+          /* XXX: force creation here */
+          parent_node = ATK_OBJECT (peek_cell (accessible, tree->parent_tree, tree->parent_node, tv_col));
         }
-      accessible_array[0] = parent_node;
-      relation = atk_relation_new (accessible_array, 1,
-                                   ATK_RELATION_NODE_CHILD_OF);
+      else
+        parent_node = obj;
+      relation = atk_relation_new (&parent_node, 1, ATK_RELATION_NODE_CHILD_OF);
       atk_relation_set_add (relation_set, relation);
       atk_object_add_relationship (parent_node, ATK_RELATION_NODE_PARENT_OF, child);
       g_object_unref (relation);
       g_object_unref (relation_set);
     }
-  gtk_tree_path_free (path);
 
   return child;
 }
