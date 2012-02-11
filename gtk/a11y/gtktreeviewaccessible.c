@@ -59,15 +59,6 @@ static void             cell_info_new                   (GtkTreeViewAccessible  
                                                          GtkCellAccessible      *cell);
 static gint             get_column_number               (GtkTreeView            *tree_view,
                                                          GtkTreeViewColumn      *column);
-static gint             get_index                       (GtkTreeView            *tree_view,
-                                                         GtkTreePath            *path,
-                                                         gint                   actual_column);
-static void             count_rows                      (GtkTreeModel           *model,
-                                                         GtkTreeIter            *iter,
-                                                         GtkTreePath            *end_path,
-                                                         gint                   *count,
-                                                         gint                   level,
-                                                         gint                   depth);
 
 static gboolean         get_rbtree_column_from_index    (GtkTreeView            *tree_view,
                                                          gint                   index,
@@ -151,7 +142,6 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
   ATK_OBJECT_CLASS (_gtk_tree_view_accessible_parent_class)->initialize (obj, data);
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
-  accessible->focus_cell = NULL;
 
   accessible->cell_infos = g_hash_table_new_full (cell_info_hash,
       cell_info_equal, NULL, (GDestroyNotify) cell_info_free);
@@ -226,11 +216,7 @@ gtk_tree_view_accessible_widget_unset (GtkAccessible *gtkaccessible)
 {
   GtkTreeViewAccessible *accessible = GTK_TREE_VIEW_ACCESSIBLE (gtkaccessible);
 
-  if (accessible->focus_cell)
-    {
-      g_object_unref (accessible->focus_cell);
-      accessible->focus_cell = NULL;
-    }
+  g_hash_table_remove_all (accessible->cell_infos);
 
   GTK_ACCESSIBLE_CLASS (_gtk_tree_view_accessible_parent_class)->widget_unset (gtkaccessible);
 }
@@ -554,10 +540,12 @@ gtk_tree_view_accessible_ref_accessible_at_point (AtkComponent *component,
   GtkWidget *widget;
   GtkTreeView *tree_view;
   GtkTreePath *path;
-  GtkTreeViewColumn *tv_column;
+  GtkTreeViewColumn *column;
   gint x_pos, y_pos;
   gint bx, by;
-  gboolean ret_val;
+  GtkCellAccessible *cell;
+  GtkRBTree *tree;
+  GtkRBNode *node;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   if (widget == NULL)
@@ -567,21 +555,22 @@ gtk_tree_view_accessible_ref_accessible_at_point (AtkComponent *component,
 
   atk_component_get_extents (component, &x_pos, &y_pos, NULL, NULL, coord_type);
   gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y, &bx, &by);
-  ret_val = gtk_tree_view_get_path_at_pos (tree_view,
-                                           bx - x_pos, by - y_pos,
-                                           &path, &tv_column, NULL, NULL);
-  if (ret_val)
+  if (!gtk_tree_view_get_path_at_pos (tree_view,
+                                      bx - x_pos, by - y_pos,
+                                      &path, &column, NULL, NULL))
+    return NULL;
+
+  if (_gtk_tree_view_find_node (tree_view, path, &tree, &node))
     {
-      gint index, column;
-
-      column = get_column_number (tree_view, tv_column);
-      index = get_index (tree_view, path, column);
       gtk_tree_path_free (path);
-
-      return gtk_tree_view_accessible_ref_child (ATK_OBJECT (component), index);
+      return NULL;
     }
 
-  return NULL;
+  cell = peek_cell (GTK_TREE_VIEW_ACCESSIBLE (component), tree, node, column);
+  if (cell == NULL)
+    cell = create_cell (tree_view, GTK_TREE_VIEW_ACCESSIBLE (component), tree, node, column);
+
+  return g_object_ref (cell);
 }
 
 static void
@@ -1472,93 +1461,6 @@ get_column_number (GtkTreeView       *treeview,
   g_return_val_if_fail (i < gtk_tree_view_get_n_columns (treeview), 0);
 
   return number;
-}
-
-static gint
-get_index (GtkTreeView *tree_view,
-           GtkTreePath *path,
-           gint         actual_column)
-{
-  gint depth = 0;
-  gint index = 1;
-  gint *indices = NULL;
-
-  if (path)
-    {
-      depth = gtk_tree_path_get_depth (path);
-      indices = gtk_tree_path_get_indices (path);
-    }
-
-  if (depth > 1)
-    {
-      GtkTreePath *copy_path;
-      GtkTreeModel *model;
-
-      model = gtk_tree_view_get_model (tree_view);
-      copy_path = gtk_tree_path_copy (path);
-      gtk_tree_path_up (copy_path);
-      count_rows (model, NULL, copy_path, &index, 0, depth);
-      gtk_tree_path_free (copy_path);
-    }
-
-  if (path)
-    index += indices[depth - 1];
-  index *= get_n_columns (tree_view);
-  index +=  actual_column;
-  return index;
-}
-
-/* The function count_rows counts the number of rows starting at iter
- * and ending at end_path. The value of level is the depth of iter and
- * the value of depth is the depth of end_path. Rows at depth before
- * end_path are counted. This functions counts rows which are not visible
- * because an ancestor is collapsed.
- */
-static void
-count_rows (GtkTreeModel *model,
-            GtkTreeIter  *iter,
-            GtkTreePath  *end_path,
-            gint         *count,
-            gint          level,
-            gint          depth)
-{
-  GtkTreeIter child_iter;
-
-  if (!model)
-    return;
-
-  level++;
-  *count += gtk_tree_model_iter_n_children (model, iter);
-
-  if (gtk_tree_model_get_flags (model) & GTK_TREE_MODEL_LIST_ONLY)
-    return;
-
-  if (level >= depth)
-    return;
-
-  if (gtk_tree_model_iter_children (model, &child_iter, iter))
-    {
-      gboolean ret_val = TRUE;
-
-      while (ret_val)
-        {
-          if (level == depth - 1)
-            {
-              GtkTreePath *iter_path;
-              gboolean finished = FALSE;
-
-              iter_path = gtk_tree_model_get_path (model, &child_iter);
-              if (end_path && gtk_tree_path_compare (iter_path, end_path) >= 0)
-                finished = TRUE;
-              gtk_tree_path_free (iter_path);
-              if (finished)
-                break;
-            }
-          if (gtk_tree_model_iter_has_child (model, &child_iter))
-            count_rows (model, &child_iter, end_path, count, level, depth);
-          ret_val = gtk_tree_model_iter_next (model, &child_iter);
-        }
-    }
 }
 
 static gboolean

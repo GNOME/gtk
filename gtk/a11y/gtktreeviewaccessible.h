@@ -40,7 +40,6 @@ struct _GtkTreeViewAccessible
   GtkContainerAccessible parent;
 
   GHashTable    *cell_infos;
-  AtkObject     *focus_cell;
 };
 
 struct _GtkTreeViewAccessibleClass
