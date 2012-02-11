@@ -52,8 +52,7 @@ static int              cell_info_get_index             (GtkTreeView            
 static gboolean         is_cell_showing                 (GtkTreeView            *tree_view,
                                                          GdkRectangle           *cell_rect);
 
-static void             cell_info_new                   (GtkTreeViewAccessible           *accessible,
-                                                         GtkTreeModel           *tree_model,
+static void             cell_info_new                   (GtkTreeViewAccessible  *accessible,
                                                          GtkRBTree              *tree,
                                                          GtkRBNode              *node,
                                                          GtkTreeViewColumn      *tv_col,
@@ -374,7 +373,6 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
   GtkTreeViewAccessible *accessible;
   GtkCellAccessible *cell;
   GtkTreeView *tree_view;
-  GtkTreeModel *tree_model;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *tv_col;
   GtkTreePath *path;
@@ -413,7 +411,6 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
     return g_object_ref (cell);
 
   path = _gtk_tree_path_new_from_rbtree (tree, node);
-  tree_model = gtk_tree_view_get_model (tree_view);
 
   renderer_list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (tv_col));
 
@@ -433,7 +430,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
        * be before the ones for the cells so that the first one we find for
        * a position will be for the container
        */
-      cell_info_new (accessible, tree_model, tree, node, tv_col, container_cell);
+      cell_info_new (accessible, tree, node, tv_col, container_cell);
       parent = ATK_OBJECT (container);
     }
   else
@@ -451,7 +448,7 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
 
       /* Create the GtkTreeViewAccessibleCellInfo for this cell */
       if (parent == ATK_OBJECT (accessible))
-        cell_info_new (accessible, tree_model, tree, node, tv_col, cell);
+        cell_info_new (accessible, tree, node, tv_col, cell);
 
       _gtk_cell_accessible_initialise (cell, widget, parent);
 
@@ -1424,7 +1421,6 @@ cell_info_get_index (GtkTreeView                     *tree_view,
 
 static void
 cell_info_new (GtkTreeViewAccessible *accessible,
-               GtkTreeModel          *tree_model,
                GtkRBTree             *tree,
                GtkRBNode             *node,
                GtkTreeViewColumn     *tv_col,
