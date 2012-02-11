@@ -1948,13 +1948,13 @@ _gtk_tree_view_accessible_update_focus_column (GtkTreeView       *treeview,
 
   if (new_focus)
     {
-      /* XXX: force creation here */
       cell = peek_cell (accessible, cursor_tree, cursor_node, new_focus);
       if (cell != NULL)
-        {
-          _gtk_cell_accessible_state_changed (cell, 0, GTK_CELL_RENDERER_FOCUSED);
-          g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
-        }
+        _gtk_cell_accessible_state_changed (cell, 0, GTK_CELL_RENDERER_FOCUSED);
+      else
+        cell = create_cell (treeview, accessible, cursor_tree, cursor_node, new_focus);
+      
+      g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
     }
 }
 
@@ -1982,16 +1982,15 @@ _gtk_tree_view_accessible_add_state (GtkTreeView          *treeview,
 
       if (focus_column)
         {
-          /* XXX: force creation here */
-          GtkCellAccessible *cell = peek_cell (accessible,
-                                               tree, node,
-                                               focus_column);
-
+          GtkCellAccessible *cell;
+          
+          cell = peek_cell (accessible, tree, node, focus_column);
           if (cell != NULL)
-            {
-              _gtk_cell_accessible_state_changed (cell, 0, state);
-              g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
-            }
+            _gtk_cell_accessible_state_changed (cell, 0, state);
+          else
+            cell = create_cell (treeview, accessible, tree, node, focus_column);
+          
+          g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
         }
 
       return;
