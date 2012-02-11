@@ -52,7 +52,6 @@ static int              cell_info_get_index             (GtkTreeView            
 static gboolean         is_cell_showing                 (GtkTreeView            *tree_view,
                                                          GdkRectangle           *cell_rect);
 
-static void             cell_destroyed                  (gpointer               data);
 static void             cell_info_new                   (GtkTreeViewAccessible           *accessible,
                                                          GtkTreeModel           *tree_model,
                                                          GtkRBTree              *tree,
@@ -108,12 +107,7 @@ gtk_tree_view_accessible_get_data_quark (void)
 static void
 cell_info_free (GtkTreeViewAccessibleCellInfo *cell_info)
 {
-  if (cell_info->cell)
-    {
-      g_object_steal_qdata (G_OBJECT (cell_info->cell),
-                            gtk_tree_view_accessible_get_data_quark ());
-      gtk_accessible_set_widget (GTK_ACCESSIBLE (cell_info->cell), NULL);
-    }
+  g_object_unref (cell_info->cell);
 
   g_free (cell_info);
 }
@@ -500,10 +494,6 @@ gtk_tree_view_accessible_ref_child (AtkObject *obj,
     }
   gtk_tree_path_free (path);
 
-  /* We do not increase the reference count here; when g_object_unref()
-   * is called for the cell then cell_destroyed() is called and this
-   * removes the cell from the cache.
-   */
   return child;
 }
 
@@ -1419,16 +1409,6 @@ is_cell_showing (GtkTreeView  *tree_view,
 
 /* Misc Private */
 
-static void
-cell_destroyed (gpointer data)
-{
-  GtkTreeViewAccessibleCellInfo *cell_info = data;
-
-  cell_info->cell = NULL;
-
-  g_hash_table_remove (cell_info->view->cell_infos, cell_info);
-}
-
 static int
 cell_info_get_index (GtkTreeView                     *tree_view,
                      GtkTreeViewAccessibleCellInfo   *info)
@@ -1457,13 +1437,12 @@ cell_info_new (GtkTreeViewAccessible *accessible,
   cell_info->tree = tree;
   cell_info->node = node;
   cell_info->cell_col_ref = tv_col;
-  cell_info->cell = cell;
+  cell_info->cell = g_object_ref (cell);
   cell_info->view = accessible;
 
-  g_object_set_qdata_full (G_OBJECT (cell), 
-                           gtk_tree_view_accessible_get_data_quark (),
-                           cell_info,
-                           cell_destroyed);
+  g_object_set_qdata (G_OBJECT (cell), 
+                      gtk_tree_view_accessible_get_data_quark (),
+                      cell_info);
 
   g_hash_table_replace (accessible->cell_infos, cell_info, cell_info);
 }
