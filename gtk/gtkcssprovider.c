@@ -2959,6 +2959,7 @@ gtk_css_provider_get_named (const gchar *name,
 	    }
 
           g_free (path);
+          g_free (dir);
         }
     }
 
