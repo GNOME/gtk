@@ -966,6 +966,10 @@ cb_proxy_post_activate (GtkActionGroup *group,
  * with @manager. Actions in earlier groups hide actions with the same 
  * name in later groups. 
  *
+ * If @pos is larger than the number of action groups in @manager, or
+ * negative, @action_group will be inserted at the end of the internal
+ * list.
+ *
  * Since: 2.4
  **/
 void
