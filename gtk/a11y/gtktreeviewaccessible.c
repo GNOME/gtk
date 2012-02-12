@@ -97,6 +97,7 @@ gtk_tree_view_accessible_get_data_quark (void)
 static void
 cell_info_free (GtkTreeViewAccessibleCellInfo *cell_info)
 {
+  gtk_accessible_set_widget (GTK_ACCESSIBLE (cell_info->cell), NULL);
   g_object_unref (cell_info->cell);
 
   g_free (cell_info);
