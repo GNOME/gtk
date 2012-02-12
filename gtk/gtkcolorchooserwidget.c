@@ -267,6 +267,32 @@ gtk_color_chooser_widget_set_show_editor (GtkColorChooserWidget *cc,
 
 /* UI construction {{{1 */
 
+static guint
+scale_round (gdouble value, gdouble scale)
+{
+  value = floor (value * scale + 0.5);
+  value = MAX (value, 0);
+  value = MIN (value, scale);
+  return (guint)value;
+}
+
+gchar *
+accessible_color_name (GdkRGBA *color)
+{
+  if (color->alpha < 1.0)
+    return g_strdup_printf (_("Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"),
+                            scale_round (color->red, 100),
+                            scale_round (color->green, 100),
+                            scale_round (color->blue, 100),
+                            scale_round (color->alpha, 100));
+  else
+    return g_strdup_printf (_("Red %d%%, Green %d%%, Blue %d%%"),
+                            scale_round (color->red, 100),
+                            scale_round (color->green, 100),
+                            scale_round (color->blue, 100));
+}
+
+
 static void
 add_palette (GtkColorChooserWidget  *cc,
              gboolean                horizontal,
@@ -300,10 +326,21 @@ add_palette (GtkColorChooserWidget  *cc,
   for (i = 0; i < n_colors; i++)
     {
       p = gtk_color_swatch_new ();
+      atk_obj = gtk_widget_get_accessible (p);
       if (names)
         {
-          atk_obj = gtk_widget_get_accessible (p);
-          atk_object_set_description (atk_obj, C_("Color name", names[i]));
+          atk_object_set_description (atk_obj,
+                                      g_dpgettext2 (GETTEXT_PACKAGE, "Color name", names[i]));
+        }
+      else
+        {
+          gchar *text, *name;
+
+          name = accessible_color_name (&colors[i]);
+          text = g_strdup_printf (_("Color: %s"), name);
+          atk_object_set_description (atk_obj, text);
+          g_free (text);
+          g_free (name);
         }
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &colors[i]);
       connect_swatch_signals (p, cc);
@@ -438,15 +475,6 @@ add_default_palette (GtkColorChooserWidget *cc)
   cc->priv->has_default_palette = TRUE;
 }
 
-static guint
-scale_round (gdouble value, gdouble scale)
-{
-  value = floor (value * scale + 0.5);
-  value = MAX (value, 0);
-  value = MIN (value, scale);
-  return (guint)value;
-}
-
 static void
 gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 {
@@ -460,7 +488,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   GVariantIter iter;
   gboolean selected;
   AtkObject *atk_obj;
-  gchar *text;
+  gchar *text, *name;
 
   cc->priv = G_TYPE_INSTANCE_GET_PRIVATE (cc, GTK_TYPE_COLOR_CHOOSER_WIDGET, GtkColorChooserWidgetPrivate);
 
@@ -502,13 +530,11 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (p), &color);
       gtk_color_swatch_set_can_drop (GTK_COLOR_SWATCH (p), TRUE);
       atk_obj = gtk_widget_get_accessible (p);
-      text = g_strdup_printf (_("Custom color %d: Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"), i,
-                              scale_round (color.red, 100),
-                              scale_round (color.green, 100),
-                              scale_round (color.blue, 100),
-                              scale_round (color.alpha, 100));
+      name = accessible_color_name (&color);
+      text = g_strdup_printf (_("Custom color %d: %s"), i, name);
       atk_object_set_description (atk_obj, text);
       g_free (text);
+      g_free (name);
       connect_custom_signals (p, cc);
       gtk_container_add (GTK_CONTAINER (box), p);
 
