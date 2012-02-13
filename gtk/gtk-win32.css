@@ -1,14 +1,122 @@
 @define-color bg_color -gtk-win32-color(button, 15);
+@define-color text_color -gtk-win32-color(button, 18);
+@define-color base_color #fff;
+@define-color selected_bg_color -gtk-win32-color(button, 13);
+@define-color selected_fg_color -gtk-win32-color(button, 14);
+@define-color info_fg_color rgb (181, 171, 156);
+@define-color info_bg_color rgb (252, 252, 189);
+@define-color warning_fg_color rgb (173, 120, 41);
+@define-color warning_bg_color rgb (250, 173, 61);
+@define-color question_fg_color rgb (97, 122, 214);
+@define-color question_bg_color rgb (138, 173, 212);
+@define-color error_fg_color rgb (166, 38, 38);
+@define-color error_bg_color rgb (237, 54, 54);
+
+GtkWindow {
+    background-color: @bg_color;
+}
+
+* {
+    color: -gtk-win32-color(button, 9);
+    -GtkWidget-link-color: -gtk-win32-color(button, 26);
+    -GtkWidget-visited-link-color: -gtk-win32-color(button, 26);
+    border-color: shade (@bg_color, 0.6);
+}
+
+GtkFrame {
+    border-width: 2px;
+    border-style: solid;
+    background-color: transparent;
+    border-image: -gtk-win32-theme-part(button, 4 1) 2 2 2 2 stretch;
+}
+
+*:insensitive {
+    color: -gtk-win32-color(button, 17);
+}
+
+*:selected,
+*:selected:focus {
+    background-color: @selected_bg_color;
+    color: @selected_fg_color;
+}
+
+.info {
+    background-color: @info_bg_color;
+    color: @info_fg_color;
+}
+
+.warning {
+    background-color: @warning_bg_color;
+    color: @warning_fg_color;
+}
+
+.question {
+    background-color: @question_bg_color;
+    color: @question_fg_color;
+}
+
+.error {
+    background-color: @error_bg_color;
+    color: @error_fg_color;
+}
+
+.highlight {
+    background-color: @selected_bg_color;
+    color: @selected_fg_color;
+}
+
+.light-area-focus {
+    color: #000;
+}
+
+.dark-area-focus {
+    color: #fff;
+}
+
+.view {
+  border-width: 0;
+  border-radius: 0;
+  background-color: @base_color;
+  color: @text_color;
+}
+
+.view:selected {
+  background-color: shade (@bg_color, 0.9);
+  color: @fg_color;
+}
+
+.view:selected:focused {
+  background-color: @selected_bg_color;
+  color: @selected_fg_color;
+}
+
+.tooltip {
+    background-color: -gtk-win32-color(button, 24);
+    color: -gtk-win32-color(button, 23);
+    border-width: 1px;
+    border-style: solid;
+}
+
+.tooltip * {
+    color: -gtk-win32-color(button, 23);
+}
+
+GtkAssistant .sidebar .highlight {
+    font: bold;
+    color:  -gtk-win32-color(button, 9);
+}
 
 /* Buttons */
 
 .button {
+    color: -gtk-win32-color(button, 18);
     background-color: transparent;
     background-image: -gtk-win32-theme-part(button, 1 1);
     border-width: 0;
     -GtkWidget-focus-line-width: 1;
     -GtkWidget-focus-padding: 3;
     -GtkButton-interior-focuse: true;
+    padding: 2px;
 }
 
 .button:insensitive {
@@ -227,6 +335,7 @@
     background-color: black;
     border-width: 0;
     background-image: -gtk-win32-theme-part(edit, 1 1);
+    padding: 2px;
 }
 .entry:insensitive {
     background-image: -gtk-win32-theme-part(edit, 1 4);
@@ -462,6 +571,7 @@ GtkEntry.progressbar {
 
 GtkProgressBar.progressbar.pulse,
 GtkEntry.progressbar.pulse {
+    background-color: transparent;
     background-image: -gtk-win32-theme-part(progress, 8 1);
 }
 
@@ -479,28 +589,43 @@ GtkProgressBar.trough.vertical {
 
 /* Menus */
 
+.menu {
+    background-color: -gtk-win32-color(button, 4);
+    border-color: shade (-gtk-win32-color(button, 4), 0.6);
+    border-style: solid;
+    border-width: 1px;
+    padding: 2px;
+}
+
+.menuitem {
+    color: -gtk-win32-color(button, 7);
+}
+
 .menubar {
     background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(menu, 7 1);
 }
 
-.menubar .menuitem {
+.menubar > .menuitem {
     background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(menu, 8 1);
+    padding: 3px 5px;
 }
 
-.menubar .menuitem:prelight {
+.menubar > .menuitem:prelight {
     background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(menu, 8 3);
 }
 
 .menuitem:prelight {
-    background-color: transparent;
     background-image: -gtk-win32-theme-part(menu, 14 2);
+}
 
+.menuitem:prelight:insensitive {
+    background-image: -gtk-win32-theme-part(menu, 14 4);
 }
 
 .menuitem.radio,
@@ -588,7 +713,7 @@ GtkComboBox.combobox-entry .button:insensitive {
 /* Notebook */
 
 .notebook {
-    background-color: transparent;
+    background-color: @base_color;
     border-width: 1px 3px 2px 2px;
     border-style: solid;
     background-origin: padding-box;
@@ -672,4 +797,28 @@ column-header .button:active:prelight,
 column-header .button:active:focus,
 column-header .button:active:prelight:focus {
     background-image: -gtk-win32-theme-part(header, 1 3);
+}
+
+GtkSwitch {
+    font: bold condensed 10;
+    color: -gtk-win32-color(button, 18);
+}
+
+GtkSwitch.slider {
+    padding: 4px;
+    background-color: transparent;
+    background-image: -gtk-win32-theme-part(scrollbar, 2 1, over (8 1));
+    border-width: 0;
+}
+
+GtkSwitch.trough:insensitive {
+    background-image: -gtk-win32-theme-part(button, 1 4);
+}
+
+GtkSwitch.trough {
+    background-image: -gtk-win32-theme-part(button, 1 1);
+}
+
+GtkSwitch.trough:active {
+    background-image: -gtk-win32-theme-part(button, 1 2);
 }
