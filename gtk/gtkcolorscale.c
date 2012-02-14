@@ -29,6 +29,8 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+#include <math.h>
+
 struct _GtkColorScalePrivate
 {
   cairo_surface_t *surface;
@@ -46,6 +48,57 @@ enum
 G_DEFINE_TYPE (GtkColorScale, gtk_color_scale, GTK_TYPE_SCALE)
 
 static void
+gtk_color_scale_get_trough_size (GtkColorScale *scale,
+                                 gint *x_offset_out,
+                                 gint *y_offset_out,
+                                 gint *width_out,
+                                 gint *height_out)
+{
+  GtkWidget *widget = GTK_WIDGET (scale);
+  gint width, height, focus_line_width, focus_padding;
+  gint x_offset, y_offset;
+  gint slider_width, slider_height;
+
+  gtk_widget_style_get (widget,
+                        "focus-line-width", &focus_line_width,
+                        "focus-padding", &focus_padding,
+                        "slider-width", &slider_width,
+                        "slider-length", &slider_height,
+                        NULL);
+
+  width = gtk_widget_get_allocated_width (widget) - 2 * (focus_line_width + focus_padding);
+  height = gtk_widget_get_allocated_height (widget) - 2 * (focus_line_width + focus_padding);
+
+  x_offset = focus_line_width + focus_padding;
+  y_offset = focus_line_width + focus_padding;
+
+  /* if the slider has a vertical shape, draw the trough asymmetric */
+  if (slider_width > slider_height)
+    {
+      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_VERTICAL)
+        {
+          if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+            x_offset += (gint) floor (slider_width / 2.0);
+
+          width = (gint) floor (slider_width / 2.0);
+        }
+      else
+        {
+          height = (gint) floor (slider_width / 2.0);
+        }
+    }
+
+  if (width_out)
+    *width_out = width;
+  if (height_out)
+    *height_out = height;
+  if (x_offset_out)
+    *x_offset_out = x_offset;
+  if (y_offset_out)
+    *y_offset_out = y_offset;
+}
+
+static void
 create_surface (GtkColorScale *scale)
 {
   GtkWidget *widget = GTK_WIDGET (scale);
@@ -55,8 +108,9 @@ create_surface (GtkColorScale *scale)
   if (!gtk_widget_get_realized (widget))
     return;
 
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
+  gtk_color_scale_get_trough_size (scale,
+                                   NULL, NULL,
+                                   &width, &height);
 
   if (!scale->priv->surface ||
       width != scale->priv->width ||
@@ -152,53 +206,22 @@ create_surface (GtkColorScale *scale)
 }
 
 static gboolean
-scale_has_asymmetric_thumb (GtkWidget *widget)
-{
-  gchar *theme;
-  gboolean res;
-
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-theme-name", &theme,
-                NULL);
-  res = strcmp ("Adwaita", theme) == 0;
-  g_free (theme);
-
-  return res;
-}
-
-static gboolean
 scale_draw (GtkWidget *widget,
             cairo_t   *cr)
 {
   GtkColorScale *scale = GTK_COLOR_SCALE (widget);
-  gint width, height;
+  gint width, height, x_offset, y_offset;
   cairo_pattern_t *pattern;
 
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
-
   create_surface (scale);
+  gtk_color_scale_get_trough_size (scale,
+                                   &x_offset, &y_offset,
+                                   &width, &height);
 
   cairo_save (cr);
+  cairo_translate (cr, x_offset, y_offset);
+  cairo_rectangle (cr, 0, 0, width, height);
 
-  if (scale_has_asymmetric_thumb (widget))
-    {
-      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_VERTICAL)
-        {
-          if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-            cairo_rectangle (cr, 1, 1, width / 2 - 1, height - 2);
-          else
-            cairo_rectangle (cr, width / 2, 1, width / 2 - 1, height - 2);
-        }
-      else
-        {
-          cairo_rectangle (cr, 1, 1, width - 2, height / 2);
-        }
-    }
-  else
-    cairo_rectangle (cr, 1, 1, width - 2, height - 2);
-
-  cairo_clip (cr);
   pattern = cairo_pattern_create_for_surface (scale->priv->surface);
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&
       gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
@@ -210,7 +233,7 @@ scale_draw (GtkWidget *widget,
       cairo_pattern_set_matrix (pattern, &matrix);
     }
   cairo_set_source (cr, pattern);
-  cairo_paint (cr);
+  cairo_fill (cr);
 
   cairo_pattern_destroy (pattern);
 
