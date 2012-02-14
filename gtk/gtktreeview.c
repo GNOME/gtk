@@ -4693,7 +4693,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
   GList *first_column, *last_column;
   gint vertical_separator;
   gint horizontal_separator;
-  gint focus_line_width;
   gboolean allow_rules;
   gboolean has_can_focus_cell;
   gboolean rtl;
@@ -4710,7 +4709,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 			"horizontal-separator", &horizontal_separator,
 			"vertical-separator", &vertical_separator,
 			"allow-rules", &allow_rules,
-			"focus-line-width", &focus_line_width,
 			NULL);
 
   if (tree_view->priv->tree == NULL)
@@ -5198,12 +5196,10 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	      if (tree == NULL)
 		break;
 
-              gtk_render_focus (context, cr,
-			        0, gtk_tree_view_get_row_y_offset (tree_view, tree, node)
-			           - focus_line_width / 2,
-			        gdk_window_get_width (tree_view->priv->bin_window),
-                                gtk_tree_view_get_row_height (tree_view, node)
-			           - focus_line_width + 1);
+              gtk_render_frame (context, cr,
+                                0, gtk_tree_view_get_row_y_offset (tree_view, tree, node),
+                                gdk_window_get_width (tree_view->priv->bin_window),
+                                gtk_tree_view_get_row_height (tree_view, node));
               break;
             }
 
