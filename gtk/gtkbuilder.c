@@ -63,46 +63,11 @@
  * <link linkend="XML-UI">GtkUIManager UI Definitions</link>, which are more
  * limited in scope.
  * </para>
-<<<<<<< HEAD
- * <programlisting><![CDATA[
- * <!ELEMENT interface (requires|object)* >
- * <!ELEMENT object    (property|signal|child|binding|ANY)* >
- * <!ELEMENT property  PCDATA >
- * <!ELEMENT signal    EMPTY >
- * <!ELEMENT binding   EMPTY >
- * <!ELEMENT requires  EMPTY >
- * <!ELEMENT child     (object|ANY*) >
- *
- * <!ATTLIST interface  domain         	    #IMPLIED >
- * <!ATTLIST object     id             	    #REQUIRED
- *                      class          	    #REQUIRED
- *                      type-func      	    #IMPLIED
- *                      constructor    	    #IMPLIED >
- * <!ATTLIST requires   lib             	    #REQUIRED
- *                      version          	    #REQUIRED >
- * <!ATTLIST property   name           	    #REQUIRED
- *                      translatable   	    #IMPLIED
- *                      comments               #IMPLIED
- *                      context                #IMPLIED >
- * <!ATTLIST signal     name           	    #REQUIRED
- *                      handler        	    #REQUIRED
- *                      after          	    #IMPLIED
- *                      swapped        	    #IMPLIED
- *                      object         	    #IMPLIED
- *                      last_modification_time #IMPLIED >
- * <!ATTLIST child      type           	    #IMPLIED
- *                      internal-child 	    #IMPLIED >
- * <!ATTLIST binding    to                  #REQUIRED
- *                      from                #REQUIRED
- *                      source              #REQUIRED>
- * ]]></programlisting>
-=======
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gtk/gtkbuilder.rnc">
  *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * </programlisting>
->>>>>>> master
  * <para>
  * The toplevel element is &lt;interface&gt;. It optionally takes a "domain"
  * attribute, which will make the builder look for translated strings using
