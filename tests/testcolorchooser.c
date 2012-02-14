@@ -30,46 +30,15 @@ dialog_response (GtkDialog *dialog, gint response)
   gtk_main_quit ();
 }
 
-static void
-show_editor_cb (GtkWidget *dialog, GParamSpec *pspec, GtkWidget *button)
-{
-  gboolean show_editor;
-
-  g_object_get (dialog, "show-editor", &show_editor, NULL);
-  gtk_widget_set_visible (button, show_editor);
-}
-
-static void
-go_to_palette (GtkWidget *button, GtkWidget *dialog)
-{
-  g_object_set (dialog, "show-editor", FALSE, NULL);
-}
-
 int
 main (int argc, char *argv[])
 {
   GtkWidget *dialog;
-  GtkWidget *button;
-  GtkWidget *aa;
-  GtkWidget *image;
   gint i;
 
   gtk_init (NULL, NULL);
 
   dialog = gtk_color_chooser_dialog_new ("Select a color", NULL);
-
-  button = gtk_button_new ();
-  image = gtk_image_new_from_icon_name ("view-grid-symbolic", GTK_ICON_SIZE_MENU);
-  gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (button), image);
-  aa = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
-  gtk_container_add (GTK_CONTAINER (aa), button);
-  gtk_widget_set_no_show_all (button, TRUE);
-  gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (aa), button, TRUE);
-  gtk_button_box_set_child_non_homogeneous (GTK_BUTTON_BOX (aa), button, TRUE);
-  gtk_widget_set_tooltip_text (button, "Show color palette");
-  g_signal_connect (dialog, "notify::show-editor", G_CALLBACK (show_editor_cb), button);
-  g_signal_connect (button, "clicked", G_CALLBACK (go_to_palette), dialog);
 
   for (i = 1; i < argc; i++)
     {
