@@ -21,6 +21,7 @@
 
 #include "gtkcolorscaleprivate.h"
 
+#include "gtkcolorchooserprivate.h"
 #include "gtkcolorutils.h"
 #include "gtkorientable.h"
 #include "gtkstylecontext.h"
@@ -43,27 +44,6 @@ enum
 };
 
 G_DEFINE_TYPE (GtkColorScale, gtk_color_scale, GTK_TYPE_SCALE)
-
-static cairo_pattern_t *
-get_checkered_pattern (void)
-{
-  /* need to respect pixman's stride being a multiple of 4 */
-  static unsigned char data[8] = { 0xFF, 0x00, 0x00, 0x00,
-                                   0x00, 0xFF, 0x00, 0x00 };
-  static cairo_surface_t *checkered = NULL;
-  cairo_pattern_t *pattern;
-
-  if (checkered == NULL)
-    checkered = cairo_image_surface_create_for_data (data,
-                                                     CAIRO_FORMAT_A8,
-                                                     2, 2, 4);
-
-  pattern = cairo_pattern_create_for_surface (checkered);
-  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-  cairo_pattern_set_filter (pattern, CAIRO_FILTER_NEAREST);
-
-  return pattern;
-}
 
 static void
 create_surface (GtkColorScale *scale)
@@ -152,7 +132,7 @@ create_surface (GtkColorScale *scale)
       cairo_paint (cr);
       cairo_set_source_rgb (cr, 0.66, 0.66, 0.66);
 
-      pattern = get_checkered_pattern ();
+      pattern = _gtk_color_chooser_get_checkered_pattern ();
       cairo_matrix_init_scale (&matrix, 0.125, 0.125);
       cairo_pattern_set_matrix (pattern, &matrix);
       cairo_mask (cr, pattern);

@@ -36,6 +36,7 @@
 #include "gtkbutton.h"
 #include "gtkmain.h"
 #include "gtkcolorchooser.h"
+#include "gtkcolorchooserprivate.h"
 #include "gtkcolorchooserdialog.h"
 #include "gtkdnd.h"
 #include "gtkdrawingarea.h"
@@ -271,29 +272,6 @@ gtk_color_button_has_alpha (GtkColorButton *button)
   return button->priv->use_alpha && button->priv->rgba.alpha < 1;
 }
 
-static cairo_pattern_t *
-gtk_color_button_get_checkered (void)
-{
-  /* need to respect pixman's stride being a multiple of 4 */
-  static unsigned char data[8] = { 0xFF, 0x00, 0x00, 0x00,
-                                   0x00, 0xFF, 0x00, 0x00 };
-  static cairo_surface_t *checkered = NULL;
-  cairo_pattern_t *pattern;
-
-  if (checkered == NULL)
-    {
-      checkered = cairo_image_surface_create_for_data (data,
-                                                       CAIRO_FORMAT_A8,
-                                                       2, 2, 4);
-    }
-
-  pattern = cairo_pattern_create_for_surface (checkered);
-  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-  cairo_pattern_set_filter (pattern, CAIRO_FILTER_NEAREST);
-
-  return pattern;
-}
-
 /* Handle exposure events for the color picker's drawing area */
 static gint
 gtk_color_button_draw_cb (GtkWidget *widget,
@@ -311,7 +289,7 @@ gtk_color_button_draw_cb (GtkWidget *widget,
       cairo_set_source_rgb (cr, CHECK_LIGHT, CHECK_LIGHT, CHECK_LIGHT);
       cairo_scale (cr, CHECK_SIZE, CHECK_SIZE);
 
-      checkered = gtk_color_button_get_checkered ();
+      checkered = _gtk_color_chooser_get_checkered_pattern ();
       cairo_mask (cr, checkered);
       cairo_pattern_destroy (checkered);
 
@@ -336,7 +314,7 @@ gtk_color_button_draw_cb (GtkWidget *widget,
       gtk_style_context_get_background_color (context, GTK_STATE_FLAG_INSENSITIVE, &color);
 
       gdk_cairo_set_source_rgba (cr, &color);
-      checkered = gtk_color_button_get_checkered ();
+      checkered = _gtk_color_chooser_get_checkered_pattern ();
       cairo_mask (cr, checkered);
       cairo_pattern_destroy (checkered);
     }

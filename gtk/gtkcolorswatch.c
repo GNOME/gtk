@@ -21,6 +21,7 @@
 
 #include "gtkcolorswatchprivate.h"
 
+#include "gtkcolorchooserprivate.h"
 #include "gtkroundedboxprivate.h"
 #include "gtkthemingbackgroundprivate.h"
 #include "gtkdnd.h"
@@ -78,27 +79,6 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
 
 #define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
 
-static cairo_pattern_t *
-get_checkered_pattern (void)
-{
-  /* need to respect pixman's stride being a multiple of 4 */
-  static unsigned char data[8] = { 0xFF, 0x00, 0x00, 0x00,
-                                   0x00, 0xFF, 0x00, 0x00 };
-  static cairo_surface_t *checkered = NULL;
-  cairo_pattern_t *pattern;
-
-  if (checkered == NULL)
-    checkered = cairo_image_surface_create_for_data (data,
-                                                     CAIRO_FORMAT_A8,
-                                                     2, 2, 4);
-
-  pattern = cairo_pattern_create_for_surface (checkered);
-  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-  cairo_pattern_set_filter (pattern, CAIRO_FILTER_NEAREST);
-
-  return pattern;
-}
-
 static gboolean
 swatch_draw (GtkWidget *widget,
              cairo_t   *cr)
@@ -141,7 +121,7 @@ swatch_draw (GtkWidget *widget,
           cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
           cairo_fill_preserve (cr);
 
-          pattern = get_checkered_pattern ();
+          pattern = _gtk_color_chooser_get_checkered_pattern ();
           cairo_matrix_init_scale (&matrix, 0.125, 0.125);
           cairo_pattern_set_matrix (pattern, &matrix);
 
