@@ -822,7 +822,7 @@ static void
 create_window (void)
 {
   GtkWidget *bar;
-  GtkWidget *table;
+  GtkWidget *box;
   GtkWidget *contents;
   GtkUIManager *ui;
   GtkWidget *sw;
@@ -858,17 +858,12 @@ create_window (void)
       g_error_free (error);
     }
 
-  table = gtk_table_new (1, 3, FALSE);
-  gtk_container_add (GTK_CONTAINER (main_window), table);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_add (GTK_CONTAINER (main_window), box);
 
   bar = gtk_ui_manager_get_widget (ui, "/MenuBar");
   gtk_widget_show (bar);
-  gtk_table_attach (GTK_TABLE (table),
-		    bar, 
-		    /* X direction */          /* Y direction */
-		    0, 1,                      0, 1,
-		    GTK_EXPAND | GTK_FILL,     0,
-		    0,                         0);
+  gtk_container_add (GTK_CONTAINER (box), bar);
 
   /* Create document  */
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -880,12 +875,8 @@ create_window (void)
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
 				       GTK_SHADOW_IN);
   
-  gtk_table_attach (GTK_TABLE (table),
-		    sw,
-		    /* X direction */       /* Y direction */
-		    0, 1,                   1, 2,
-		    GTK_EXPAND | GTK_FILL,  GTK_EXPAND | GTK_FILL,
-		    0,                      0);
+  gtk_widget_set_vexpand (sw, TRUE);
+  gtk_container_add (GTK_CONTAINER (box), sw);
   
   contents = gtk_text_view_new ();
   gtk_widget_grab_focus (contents);
@@ -896,12 +887,7 @@ create_window (void)
   /* Create statusbar */
   
   statusbar = gtk_statusbar_new ();
-  gtk_table_attach (GTK_TABLE (table),
-		    statusbar,
-		    /* X direction */       /* Y direction */
-		    0, 1,                   2, 3,
-		    GTK_EXPAND | GTK_FILL,  0,
-		    0,                      0);
+  gtk_container_add (GTK_CONTAINER (box), statusbar);
 
   /* Show text widget info in the statusbar */
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (contents));

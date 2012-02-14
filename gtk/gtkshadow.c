@@ -22,11 +22,10 @@
 #include "config.h"
 
 #include "gtkshadowprivate.h"
-#include "gtkstylecontext.h"
+
+#include "gtkstylecontextprivate.h"
 #include "gtkthemingengineprivate.h"
-#include "gtkthemingengine.h"
 #include "gtkpango.h"
-#include "gtkthemingengineprivate.h"
 
 typedef struct _GtkShadowElement GtkShadowElement;
 
@@ -186,8 +185,8 @@ _gtk_shadow_append (GtkShadow        *shadow,
 }
 
 GtkShadow *
-_gtk_shadow_resolve (GtkShadow          *shadow,
-                     GtkStyleProperties *props)
+_gtk_shadow_resolve (GtkShadow       *shadow,
+                     GtkStyleContext *context)
 {
   GtkShadow *resolved_shadow;
   GtkShadowElement *element, *resolved_element;
@@ -203,9 +202,9 @@ _gtk_shadow_resolve (GtkShadow          *shadow,
     {
       element = l->data;
 
-      if (!gtk_symbolic_color_resolve (element->symbolic_color,
-                                       props,
-                                       &color))
+      if (!_gtk_style_context_resolve_color (context,
+                                             element->symbolic_color,
+                                             &color))
         {
           _gtk_shadow_unref (resolved_shadow);
           return NULL;

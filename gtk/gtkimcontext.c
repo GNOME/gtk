@@ -20,7 +20,7 @@
 #include "config.h"
 #include <string.h>
 #include "gtkimcontext.h"
-#include "gtkmainprivate.h"
+#include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 

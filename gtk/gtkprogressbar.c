@@ -179,12 +179,12 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                         GTK_PARAM_READWRITE));
 
   /**
-   * GtkProgressBar:show_text:
+   * GtkProgressBar:show-text:
    *
-   * Sets whether the progressbar will show text superimposed
+   * Sets whether the progress bar will show text superimposed
    * over the bar. The shown text is either the value of
-   * the #GtkProgressBar::text property or, if that is %NULL,
-   * the #GtkProgressBar::fraction value, as a percentage.
+   * the #GtkProgressBar:text property or, if that is %NULL,
+   * the #GtkProgressBar:fraction value, as a percentage.
    *
    * To make a progress bar that is styled and sized suitably for containing
    * text (even if the actual text is blank), set #GtkProgressBar:show-text to
@@ -203,14 +203,14 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   /**
    * GtkProgressBar:ellipsize:
    *
-   * The preferred place to ellipsize the string, if the progressbar does
+   * The preferred place to ellipsize the string, if the progress bar does
    * not have enough room to display the entire string, specified as a
    * #PangoEllisizeMode.
    *
    * Note that setting this property to a value other than
-   * %PANGO_ELLIPSIZE_NONE has the side-effect that the progressbar requests
-   * only enough space to display the ellipsis "...". Another means to set a
-   * progressbar's width is gtk_widget_set_size_request().
+   * %PANGO_ELLIPSIZE_NONE has the side-effect that the progress bar requests
+   * only enough space to display the ellipsis ("..."). Another means to set a
+   * progress bar's width is gtk_widget_set_size_request().
    *
    * Since: 2.6
    */
@@ -760,6 +760,7 @@ gtk_progress_bar_paint_activity (GtkProgressBar *pbar,
 
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PULSE);
 
   gtk_render_activity (context, cr, area.x, area.y, area.width, area.height);
 
@@ -1059,8 +1060,7 @@ gtk_progress_bar_set_activity_mode (GtkProgressBar *pbar,
  * Causes the progress bar to "fill in" the given fraction
  * of the bar. The fraction should be between 0.0 and 1.0,
  * inclusive.
- *
- **/
+ */
 void
 gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
                                gdouble         fraction)
@@ -1071,7 +1071,7 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
 
   priv = pbar->priv;
 
-  priv->fraction = fraction;
+  priv->fraction = CLAMP(fraction, 0.0, 1.0);
   gtk_progress_bar_set_activity_mode (pbar, FALSE);
   gtk_progress_bar_real_update (pbar);
 
@@ -1082,12 +1082,12 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
  * gtk_progress_bar_pulse:
  * @pbar: a #GtkProgressBar
  *
- * Indicates that some progress is made, but you don't know how much.
+ * Indicates that some progress has been made, but you don't know how much.
  * Causes the progress bar to enter "activity mode," where a block
  * bounces back and forth. Each call to gtk_progress_bar_pulse()
  * causes the block to move by a little bit (the amount of movement
  * per pulse is determined by gtk_progress_bar_set_pulse_step()).
- **/
+ */
 void
 gtk_progress_bar_pulse (GtkProgressBar *pbar)
 {
@@ -1111,7 +1111,7 @@ gtk_progress_bar_pulse (GtkProgressBar *pbar)
  * be displayed. In this case, it will not display the progress percentage.
  * If @text is the empty string, the progress bar will still be styled and sized
  * suitably for containing text, as long as #GtkProgressBar:show-text is %TRUE.
- **/
+ */
 void
 gtk_progress_bar_set_text (GtkProgressBar *pbar,
                            const gchar    *text)
@@ -1139,10 +1139,10 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
  * @pbar: a #GtkProgressBar
  * @show_text: whether to show superimposed text
  *
- * Sets whether the progressbar will show text superimposed
+ * Sets whether the progress bar will show text superimposed
  * over the bar. The shown text is either the value of
- * the #GtkProgressBar::text property or, if that is %NULL,
- * the #GtkProgressBar::fraction value, as a percentage.
+ * the #GtkProgressBar:text property or, if that is %NULL,
+ * the #GtkProgressBar:fraction value, as a percentage.
  *
  * To make a progress bar that is styled and sized suitably for containing
  * text (even if the actual text is blank), set #GtkProgressBar:show-text to
@@ -1176,7 +1176,7 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
  * gtk_progress_bar_get_show_text:
  * @pbar: a #GtkProgressBar
  *
- * Gets the value of the #GtkProgressBar::show-text property.
+ * Gets the value of the #GtkProgressBar:show-text property.
  * See gtk_progress_bar_set_show_text().
  *
  * Returns: %TRUE if text is shown in the progress bar
@@ -1198,7 +1198,7 @@ gtk_progress_bar_get_show_text (GtkProgressBar *pbar)
  *
  * Sets the fraction of total progress bar length to move the
  * bouncing block for each call to gtk_progress_bar_pulse().
- **/
+ */
 void
 gtk_progress_bar_set_pulse_step (GtkProgressBar *pbar,
                                  gdouble         fraction)
@@ -1268,7 +1268,7 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
  *
  * Return value: text, or %NULL; this string is owned by the widget
  * and should not be modified or freed.
- **/
+ */
 const gchar*
 gtk_progress_bar_get_text (GtkProgressBar *pbar)
 {
@@ -1284,7 +1284,7 @@ gtk_progress_bar_get_text (GtkProgressBar *pbar)
  * Returns the current fraction of the task that's been completed.
  *
  * Return value: a fraction from 0.0 to 1.0
- **/
+ */
 gdouble
 gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
 {
@@ -1297,10 +1297,10 @@ gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
  * gtk_progress_bar_get_pulse_step:
  * @pbar: a #GtkProgressBar
  *
- * Retrieves the pulse step set with gtk_progress_bar_set_pulse_step()
+ * Retrieves the pulse step set with gtk_progress_bar_set_pulse_step().
  *
  * Return value: a fraction from 0.0 to 1.0
- **/
+ */
 gdouble
 gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar)
 {
@@ -1313,7 +1313,7 @@ gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar)
  * gtk_progress_bar_get_inverted:
  * @pbar: a #GtkProgressBar
  *
- * Gets the value set by gtk_progress_bar_set_inverted()
+ * Gets the value set by gtk_progress_bar_set_inverted().
  *
  * Return value: %TRUE if the progress bar is inverted
  */
@@ -1334,7 +1334,7 @@ gtk_progress_bar_get_inverted (GtkProgressBar *pbar)
  * if there is not enough space to render the entire string.
  *
  * Since: 2.6
- **/
+ */
 void
 gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
                                 PangoEllipsizeMode  mode)
@@ -1360,13 +1360,13 @@ gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
  * gtk_progress_bar_get_ellipsize:
  * @pbar: a #GtkProgressBar
  *
- * Returns the ellipsizing position of the progressbar.
+ * Returns the ellipsizing position of the progress bar.
  * See gtk_progress_bar_set_ellipsize().
  *
  * Return value: #PangoEllipsizeMode
  *
  * Since: 2.6
- **/
+ */
 PangoEllipsizeMode
 gtk_progress_bar_get_ellipsize (GtkProgressBar *pbar)
 {

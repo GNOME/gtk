@@ -28,6 +28,26 @@
  *
  * The #GtkAppChooserButton is a widget that lets the user select
  * an application. It implements the #GtkAppChooser interface.
+ *
+ * Initially, a #GtkAppChooserButton selects the first application
+ * in its list, which will either be the most-recently used application
+ * or, if #GtkAppChooserButton::show-default-item is %TRUE, the
+ * default application.
+ *
+ * The list of applications shown in a #GtkAppChooserButton includes
+ * the recommended applications for the given content type. When
+ * #GtkAppChooserButton::show-default-item is set, the default application
+ * is also included. To let the user chooser other applications,
+ * you can set the #GtkAppChooserButton::show-dialog-item property,
+ * which allows to open a full #GtkAppChooserDialog.
+ *
+ * It is possible to add custom items to the list, using
+ * gtk_app_chooser_button_append_custom_item(). These items cause
+ * the #GtkAppChooserButton::custom-item-activated signal to be
+ * emitted when they are selected.
+ *
+ * To track changes in the selected application, use the
+ * #GtkComboBox::changed signal.
  */
 #include "config.h"
 
@@ -47,6 +67,7 @@
 enum {
   PROP_CONTENT_TYPE = 1,
   PROP_SHOW_DIALOG_ITEM,
+  PROP_SHOW_DEFAULT_ITEM,
   PROP_HEADING
 };
 
@@ -93,6 +114,7 @@ struct _GtkAppChooserButtonPrivate {
   gchar *heading;
   gint last_active;
   gboolean show_dialog_item;
+  gboolean show_default_item;
 
   GHashTable *custom_item_names;
 };
@@ -272,12 +294,35 @@ gtk_app_chooser_button_ensure_dialog_item (GtkAppChooserButton *self,
 }
 
 static void
+insert_one_application (GtkAppChooserButton *self,
+                        GAppInfo            *app,
+                        GtkTreeIter         *iter)
+{
+  GIcon *icon;
+
+  icon = g_app_info_get_icon (app);
+
+  if (icon == NULL)
+    icon = g_themed_icon_new ("application-x-executable");
+  else
+    g_object_ref (icon);
+
+  gtk_list_store_set (self->priv->store, iter,
+                      COLUMN_APP_INFO, app,
+                      COLUMN_LABEL, g_app_info_get_name (app),
+                      COLUMN_ICON, icon,
+                      COLUMN_CUSTOM, FALSE,
+                      -1);
+
+  g_object_unref (icon);
+}
+
+static void
 gtk_app_chooser_button_populate (GtkAppChooserButton *self)
 {
   GList *recommended_apps = NULL, *l;
-  GAppInfo *app;
+  GAppInfo *app, *default_app = NULL;
   GtkTreeIter iter, iter2;
-  GIcon *icon;
   gboolean cycled_recommended;
 
 #ifndef G_OS_WIN32
@@ -286,16 +331,27 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
 #endif
   cycled_recommended = FALSE;
 
+  if (self->priv->show_default_item)
+    {
+      default_app = g_app_info_get_default_for_type (self->priv->content_type, FALSE);
+
+      if (default_app != NULL)
+        {
+          get_first_iter (self->priv->store, &iter);
+          cycled_recommended = TRUE;
+
+          insert_one_application (self, default_app, &iter);
+
+          g_object_unref (default_app);
+        }
+    }
+
   for (l = recommended_apps; l != NULL; l = l->next)
     {
       app = l->data;
 
-      icon = g_app_info_get_icon (app);
-
-      if (icon == NULL)
-        icon = g_themed_icon_new ("application-x-executable");
-      else
-        g_object_ref (icon);
+      if (default_app != NULL && g_app_info_equal (app, default_app))
+        continue;
 
       if (cycled_recommended)
         {
@@ -308,15 +364,11 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
           cycled_recommended = TRUE;
         }
 
-      gtk_list_store_set (self->priv->store, &iter,
-                          COLUMN_APP_INFO, app,
-                          COLUMN_LABEL, g_app_info_get_name (app),
-                          COLUMN_ICON, icon,
-                          COLUMN_CUSTOM, FALSE,
-                          -1);
-
-      g_object_unref (icon);
+      insert_one_application (self, app, &iter);
     }
+
+  if (recommended_apps != NULL)
+    g_list_free_full (recommended_apps, g_object_unref);
 
   if (!cycled_recommended)
     gtk_app_chooser_button_ensure_dialog_item (self, NULL);
@@ -475,6 +527,9 @@ gtk_app_chooser_button_set_property (GObject      *obj,
     case PROP_SHOW_DIALOG_ITEM:
       gtk_app_chooser_button_set_show_dialog_item (self, g_value_get_boolean (value));
       break;
+    case PROP_SHOW_DEFAULT_ITEM:
+      gtk_app_chooser_button_set_show_default_item (self, g_value_get_boolean (value));
+      break;
     case PROP_HEADING:
       gtk_app_chooser_button_set_heading (self, g_value_get_string (value));
       break;
@@ -499,6 +554,9 @@ gtk_app_chooser_button_get_property (GObject    *obj,
       break;
     case PROP_SHOW_DIALOG_ITEM:
       g_value_set_boolean (value, self->priv->show_dialog_item);
+      break;
+    case PROP_SHOW_DEFAULT_ITEM:
+      g_value_set_boolean (value, self->priv->show_default_item);
       break;
     case PROP_HEADING:
       g_value_set_string (value, self->priv->heading);
@@ -549,8 +607,9 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
   /**
    * GtkAppChooserButton:show-dialog-item:
    *
-   * The #GtkAppChooserButton:show-dialog-item property determines whether the dropdown menu
-   * should show an item that triggers a #GtkAppChooserDialog when clicked.
+   * The #GtkAppChooserButton:show-dialog-item property determines
+   * whether the dropdown menu should show an item that triggers
+   * a #GtkAppChooserDialog when clicked.
    */
   pspec =
     g_param_spec_boolean ("show-dialog-item",
@@ -559,6 +618,24 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (oclass, PROP_SHOW_DIALOG_ITEM, pspec);
+
+  /**
+   * GtkAppChooserButton:show-default-item:
+   *
+   * The #GtkAppChooserButton:show-default-item property determines
+   * whether the dropdown menu should show the default application
+   * on top for the provided content type.
+   *
+   * Since: 3.2
+   */
+  pspec =
+    g_param_spec_boolean ("show-default-item",
+                          P_("Show default item"),
+                          P_("Whether the combobox should show the default application on top"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (oclass, PROP_SHOW_DEFAULT_ITEM, pspec);
+
 
   /**
    * GtkAppChooserButton:heading:
@@ -616,8 +693,8 @@ gtk_app_chooser_button_init (GtkAppChooserButton *self)
 
 static gboolean
 app_chooser_button_iter_from_custom_name (GtkAppChooserButton *self,
-                                          const gchar *name,
-                                          GtkTreeIter *set_me)
+                                          const gchar         *name,
+                                          GtkTreeIter         *set_me)
 {
   GtkTreeIter iter;
   gchar *custom_name = NULL;
@@ -737,9 +814,9 @@ gtk_app_chooser_button_append_separator (GtkAppChooserButton *self)
  *
  * Appends a custom item to the list of applications that is shown
  * in the popup; the item name must be unique per-widget.
- * Clients can use the provided name as a detail for the ::custom-item-activated
- * signal, to add a callback for the activation of a particular
- * custom item in the list.
+ * Clients can use the provided name as a detail for the
+ * #GtkAppChooserButton::custom-item-activated signal, to add a
+ * callback for the activation of a particular custom item in the list.
  * See also gtk_app_chooser_button_append_separator().
  *
  * Since: 3.0
@@ -823,13 +900,56 @@ gtk_app_chooser_button_get_show_dialog_item (GtkAppChooserButton *self)
  */
 void
 gtk_app_chooser_button_set_show_dialog_item (GtkAppChooserButton *self,
-                                             gboolean setting)
+                                             gboolean             setting)
 {
   if (self->priv->show_dialog_item != setting)
     {
       self->priv->show_dialog_item = setting;
 
       g_object_notify (G_OBJECT (self), "show-dialog-item");
+
+      gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
+    }
+}
+
+/**
+ * gtk_app_chooser_button_get_show_default_item:
+ * @self: a #GtkAppChooserButton
+ *
+ * Returns the current value of the #GtkAppChooserButton:show-default-item
+ * property.
+ *
+ * Returns: the value of #GtkAppChooserButton:show-default-item
+ *
+ * Since: 3.2
+ */
+gboolean
+gtk_app_chooser_button_get_show_default_item (GtkAppChooserButton *self)
+{
+  g_return_val_if_fail (GTK_IS_APP_CHOOSER_BUTTON (self), FALSE);
+
+  return self->priv->show_default_item;
+}
+
+/**
+ * gtk_app_chooser_button_set_show_default_item:
+ * @self: a #GtkAppChooserButton
+ * @setting: the new value for #GtkAppChooserButton:show-default-item
+ *
+ * Sets whether the dropdown menu of this button should show the
+ * default application for the given content type at top.
+ *
+ * Since: 3.2
+ */
+void
+gtk_app_chooser_button_set_show_default_item (GtkAppChooserButton *self,
+                                              gboolean             setting)
+{
+  if (self->priv->show_default_item != setting)
+    {
+      self->priv->show_default_item = setting;
+
+      g_object_notify (G_OBJECT (self), "show-default-item");
 
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
     }
@@ -861,8 +981,8 @@ gtk_app_chooser_button_set_heading (GtkAppChooserButton *self,
  *
  * Returns the text to display at the top of the dialog.
  *
- * Returns: the text to display at the top of the dialog, or %NULL, in which
- *     case a default text is displayed
+ * Returns: the text to display at the top of the dialog,
+ *     or %NULL, in which case a default text is displayed
  */
 const gchar *
 gtk_app_chooser_button_get_heading (GtkAppChooserButton *self)

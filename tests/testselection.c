@@ -384,7 +384,7 @@ main (int argc, char *argv[])
   GtkWidget *action_area, *content_area;
   GtkWidget *dialog;
   GtkWidget *button;
-  GtkWidget *table;
+  GtkWidget *vbox;
   GtkWidget *label;
   GtkWidget *entry;
   GtkWidget *hbox;
@@ -413,19 +413,14 @@ main (int argc, char *argv[])
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
 
-  table = gtk_table_new (4, 2, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER(table), 10);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
 
-  gtk_table_set_row_spacing (GTK_TABLE (table), 0, 5);
-  gtk_table_set_row_spacing (GTK_TABLE (table), 1, 2);
-  gtk_table_set_row_spacing (GTK_TABLE (table), 2, 2);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 2);
-  gtk_box_pack_start (GTK_BOX (content_area), table, TRUE, TRUE, 0);
-  gtk_widget_show (table);
+  gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
+  gtk_widget_show (vbox);
   
   selection_button = gtk_toggle_button_new_with_label ("Claim Selection");
-  gtk_table_attach (GTK_TABLE (table), selection_button, 0, 2, 0, 1,
-		    GTK_EXPAND | GTK_FILL, 0, 0, 0);
+  gtk_container_add (GTK_CONTAINER (vbox), selection_button);
   gtk_widget_show (selection_button);
 
   g_signal_connect (selection_button, "toggled",
@@ -444,12 +439,11 @@ main (int argc, char *argv[])
   selection_text = gtk_text_view_new ();
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_add (GTK_CONTAINER (scrolled), selection_text);
-  gtk_table_attach_defaults (GTK_TABLE (table), scrolled, 0, 1, 1, 2);
+  gtk_container_add (GTK_CONTAINER (vbox), scrolled);
   gtk_widget_show (selection_text);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
-  gtk_table_attach (GTK_TABLE (table), hbox, 0, 2, 3, 4,
-		    GTK_EXPAND | GTK_FILL, 0, 0, 0);
+  gtk_container_add (GTK_CONTAINER (vbox), hbox);
   gtk_widget_show (hbox);
 
   label = gtk_label_new ("Target:");

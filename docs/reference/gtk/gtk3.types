@@ -6,6 +6,7 @@ gtk_accel_group_get_type
 gtk_accel_label_get_type
 gtk_accel_map_get_type
 gtk_accessible_get_type
+gtk_actionable_get_type
 gtk_action_get_type
 gtk_action_group_get_type
 gtk_activatable_get_type
@@ -16,6 +17,7 @@ gtk_app_chooser_button_get_type
 gtk_app_chooser_dialog_get_type
 gtk_app_chooser_widget_get_type
 gtk_application_get_type
+gtk_application_window_get_type
 gtk_arrow_get_type
 gtk_aspect_frame_get_type
 gtk_assistant_get_type
@@ -66,6 +68,9 @@ gtk_file_chooser_widget_get_type
 gtk_file_filter_get_type
 gtk_fixed_get_type
 gtk_font_button_get_type
+gtk_font_chooser_get_type
+gtk_font_chooser_dialog_get_type
+gtk_font_chooser_widget_get_type
 gtk_font_selection_dialog_get_type
 gtk_font_selection_get_type
 gtk_frame_get_type

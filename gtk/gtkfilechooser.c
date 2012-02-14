@@ -81,7 +81,7 @@
  * However, filenames are <emphasis>always</emphasis> returned in
  * the character set specified by the
  * <envar>G_FILENAME_ENCODING</envar> environment variable.
- * Please see the Glib documentation for more details about this
+ * Please see the GLib documentation for more details about this
  * variable.
  * <note>
  *    This means that while you can pass the result of
@@ -178,7 +178,7 @@
  * </example>
  * <note>
  *    If you want to set more than one extra widget in the file
- *    chooser, you can a container such as a #GtkVBox or a #GtkTable
+ *    chooser, you can a container such as a #GtkBox or a #GtkGrid
  *    and include your widgets in it.  Then, set the container as
  *    the whole extra widget.
  * </note>

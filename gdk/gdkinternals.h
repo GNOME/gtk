@@ -204,6 +204,7 @@ struct _GdkWindow
   guint input_only : 1;
   guint modal_hint : 1;
   guint composited : 1;
+  guint has_alpha_background : 1;
 
   guint destroyed : 2;
 
@@ -227,10 +228,18 @@ struct _GdkWindow
 
   gint abs_x, abs_y; /* Absolute offset in impl */
   gint width, height;
-  guint32 clip_tag;
 
-  cairo_region_t *clip_region; /* Clip region (wrt toplevel) in window coords */
-  cairo_region_t *clip_region_with_children; /* Clip region in window coords */
+  /* The clip region is the part of the window, in window coordinates
+     that is fully or partially (i.e. semi transparently) visible in
+     the window hierarchy from the toplevel and down */
+  cairo_region_t *clip_region;
+  /* This is the clip region, with additionally all the opaque
+     child windows removed */
+  cairo_region_t *clip_region_with_children;
+  /* The layered region is the subset of clip_region that
+     is covered by non-opaque sibling or ancestor sibling window. */
+  cairo_region_t *layered_region;
+
   GdkCursor *cursor;
   GHashTable *device_cursor;
 
@@ -391,11 +400,6 @@ void _gdk_display_set_window_under_pointer (GdkDisplay *display,
 
 void _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window);
 
-cairo_region_t *_gdk_window_calculate_full_clip_region    (GdkWindow     *window,
-                                                      GdkWindow     *base_window,
-                                                      gboolean       do_children,
-                                                      gint          *base_x_offset,
-                                                      gint          *base_y_offset);
 gboolean    _gdk_window_has_impl (GdkWindow *window);
 GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
 

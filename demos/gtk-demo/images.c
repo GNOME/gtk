@@ -25,7 +25,7 @@ static FILE* image_stream = NULL;
 
 static void
 progressive_prepared_callback (GdkPixbufLoader *loader,
-			       gpointer		data)
+                               gpointer         data)
 {
   GdkPixbuf *pixbuf;
   GtkWidget *image;
@@ -44,11 +44,11 @@ progressive_prepared_callback (GdkPixbufLoader *loader,
 
 static void
 progressive_updated_callback (GdkPixbufLoader *loader,
-                              gint		   x,
-                              gint		   y,
-                              gint		   width,
-                              gint		   height,
-                              gpointer	   data)
+                              gint                 x,
+                              gint                 y,
+                              gint                 width,
+                              gint                 height,
+                              gpointer     data)
 {
   GtkWidget *image;
 
@@ -86,97 +86,97 @@ progressive_timeout (gpointer data)
       bytes_read = fread (buf, 1, 256, image_stream);
 
       if (ferror (image_stream))
-	{
-	  GtkWidget *dialog;
+        {
+          GtkWidget *dialog;
 
-	  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-					   GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_ERROR,
-					   GTK_BUTTONS_CLOSE,
-					   "Failure reading image file 'alphatest.png': %s",
-					   g_strerror (errno));
+          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                           GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           "Failure reading image file 'alphatest.png': %s",
+                                           g_strerror (errno));
 
-	  g_signal_connect (dialog, "response",
-			    G_CALLBACK (gtk_widget_destroy), NULL);
+          g_signal_connect (dialog, "response",
+                            G_CALLBACK (gtk_widget_destroy), NULL);
 
-	  fclose (image_stream);
-	  image_stream = NULL;
+          fclose (image_stream);
+          image_stream = NULL;
 
-	  gtk_widget_show (dialog);
+          gtk_widget_show (dialog);
 
-	  load_timeout = 0;
+          load_timeout = 0;
 
-	  return FALSE; /* uninstall the timeout */
-	}
+          return FALSE; /* uninstall the timeout */
+        }
 
       if (!gdk_pixbuf_loader_write (pixbuf_loader,
-				    buf, bytes_read,
-				    &error))
-	{
-	  GtkWidget *dialog;
+                                    buf, bytes_read,
+                                    &error))
+        {
+          GtkWidget *dialog;
 
-	  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-					   GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_ERROR,
-					   GTK_BUTTONS_CLOSE,
-					   "Failed to load image: %s",
-					   error->message);
+          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                           GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           "Failed to load image: %s",
+                                           error->message);
 
-	  g_error_free (error);
+          g_error_free (error);
 
-	  g_signal_connect (dialog, "response",
-			    G_CALLBACK (gtk_widget_destroy), NULL);
+          g_signal_connect (dialog, "response",
+                            G_CALLBACK (gtk_widget_destroy), NULL);
 
-	  fclose (image_stream);
-	  image_stream = NULL;
+          fclose (image_stream);
+          image_stream = NULL;
 
-	  gtk_widget_show (dialog);
+          gtk_widget_show (dialog);
 
-	  load_timeout = 0;
+          load_timeout = 0;
 
-	  return FALSE; /* uninstall the timeout */
-	}
+          return FALSE; /* uninstall the timeout */
+        }
 
       if (feof (image_stream))
-	{
-	  fclose (image_stream);
-	  image_stream = NULL;
+        {
+          fclose (image_stream);
+          image_stream = NULL;
 
-	  /* Errors can happen on close, e.g. if the image
-	   * file was truncated we'll know on close that
-	   * it was incomplete.
-	   */
-	  error = NULL;
-	  if (!gdk_pixbuf_loader_close (pixbuf_loader,
-					&error))
-	    {
-	      GtkWidget *dialog;
+          /* Errors can happen on close, e.g. if the image
+           * file was truncated we'll know on close that
+           * it was incomplete.
+           */
+          error = NULL;
+          if (!gdk_pixbuf_loader_close (pixbuf_loader,
+                                        &error))
+            {
+              GtkWidget *dialog;
 
-	      dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-					       GTK_DIALOG_DESTROY_WITH_PARENT,
-					       GTK_MESSAGE_ERROR,
-					       GTK_BUTTONS_CLOSE,
-					       "Failed to load image: %s",
-					       error->message);
+              dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_MESSAGE_ERROR,
+                                               GTK_BUTTONS_CLOSE,
+                                               "Failed to load image: %s",
+                                               error->message);
 
-	      g_error_free (error);
+              g_error_free (error);
 
-	      g_signal_connect (dialog, "response",
-				G_CALLBACK (gtk_widget_destroy), NULL);
+              g_signal_connect (dialog, "response",
+                                G_CALLBACK (gtk_widget_destroy), NULL);
 
-	      gtk_widget_show (dialog);
+              gtk_widget_show (dialog);
 
-	      g_object_unref (pixbuf_loader);
-	      pixbuf_loader = NULL;
+              g_object_unref (pixbuf_loader);
+              pixbuf_loader = NULL;
 
-	      load_timeout = 0;
+              load_timeout = 0;
 
-	      return FALSE; /* uninstall the timeout */
-	    }
+              return FALSE; /* uninstall the timeout */
+            }
 
-	  g_object_unref (pixbuf_loader);
-	  pixbuf_loader = NULL;
-	}
+          g_object_unref (pixbuf_loader);
+          pixbuf_loader = NULL;
+        }
     }
   else
     {
@@ -190,55 +190,55 @@ progressive_timeout (gpointer data)
        */
       filename = demo_find_file ("alphatest.png", &error);
       if (error)
-	{
-	  error_message = g_strdup (error->message);
-	  g_error_free (error);
-	}
+        {
+          error_message = g_strdup (error->message);
+          g_error_free (error);
+        }
       else
-	{
-	  image_stream = g_fopen (filename, "rb");
-	  g_free (filename);
+        {
+          image_stream = g_fopen (filename, "rb");
+          g_free (filename);
 
-	  if (!image_stream)
-	    error_message = g_strdup_printf ("Unable to open image file 'alphatest.png': %s",
-					     g_strerror (errno));
-	}
+          if (!image_stream)
+            error_message = g_strdup_printf ("Unable to open image file 'alphatest.png': %s",
+                                             g_strerror (errno));
+        }
 
       if (image_stream == NULL)
-	{
-	  GtkWidget *dialog;
+        {
+          GtkWidget *dialog;
 
-	  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-					   GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_ERROR,
-					   GTK_BUTTONS_CLOSE,
-					   "%s", error_message);
-	  g_free (error_message);
+          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                           GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           "%s", error_message);
+          g_free (error_message);
 
-	  g_signal_connect (dialog, "response",
-			    G_CALLBACK (gtk_widget_destroy), NULL);
+          g_signal_connect (dialog, "response",
+                            G_CALLBACK (gtk_widget_destroy), NULL);
 
-	  gtk_widget_show (dialog);
+          gtk_widget_show (dialog);
 
-	  load_timeout = 0;
+          load_timeout = 0;
 
-	  return FALSE; /* uninstall the timeout */
-	}
+          return FALSE; /* uninstall the timeout */
+        }
 
       if (pixbuf_loader)
-	{
-	  gdk_pixbuf_loader_close (pixbuf_loader, NULL);
-	  g_object_unref (pixbuf_loader);
-	  pixbuf_loader = NULL;
-	}
+        {
+          gdk_pixbuf_loader_close (pixbuf_loader, NULL);
+          g_object_unref (pixbuf_loader);
+          pixbuf_loader = NULL;
+        }
 
       pixbuf_loader = gdk_pixbuf_loader_new ();
 
       g_signal_connect (pixbuf_loader, "area-prepared",
-			G_CALLBACK (progressive_prepared_callback), image);
+                        G_CALLBACK (progressive_prepared_callback), image);
 
       g_signal_connect (pixbuf_loader, "area-updated",
-			G_CALLBACK (progressive_updated_callback), image);
+                        G_CALLBACK (progressive_updated_callback), image);
     }
 
   /* leave timeout installed */
@@ -256,13 +256,13 @@ start_progressive_loading (GtkWidget *image)
    * pauses in the reading process.
    */
   load_timeout = gdk_threads_add_timeout (150,
-				progressive_timeout,
-				image);
+                                progressive_timeout,
+                                image);
 }
 
 static void
 cleanup_callback (GObject   *object,
-		  gpointer   data)
+                  gpointer   data)
 {
   if (load_timeout)
     {
@@ -314,7 +314,6 @@ do_images (GtkWidget *do_widget)
   GtkWidget *vbox;
   GtkWidget *image;
   GtkWidget *label;
-  GtkWidget *align;
   GtkWidget *button;
   GdkPixbuf *pixbuf;
   GIcon     *gicon;
@@ -325,13 +324,13 @@ do_images (GtkWidget *do_widget)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Images");
 
       g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+                        G_CALLBACK (gtk_widget_destroyed), &window);
       g_signal_connect (window, "destroy",
-			G_CALLBACK (cleanup_callback), NULL);
+                        G_CALLBACK (cleanup_callback), NULL);
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
@@ -341,17 +340,14 @@ do_images (GtkWidget *do_widget)
 
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
-			    "<u>Image loaded from a file</u>");
+                            "<u>Image loaded from a file</u>");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-      /* The alignment keeps the frame from growing when users resize
-       * the window
-       */
-      align = gtk_alignment_new (0.5, 0.5, 0, 0);
-      gtk_container_add (GTK_CONTAINER (align), frame);
-      gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+      gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       /* demo_find_file() looks in the current directory first,
        * so you can run gtk-demo without installing GTK, then looks
@@ -360,34 +356,34 @@ do_images (GtkWidget *do_widget)
       pixbuf = NULL;
       filename = demo_find_file ("gtk-logo-rgb.gif", &error);
       if (filename)
-	{
-	  pixbuf = gdk_pixbuf_new_from_file (filename, &error);
-	  g_free (filename);
-	}
+        {
+          pixbuf = gdk_pixbuf_new_from_file (filename, &error);
+          g_free (filename);
+        }
 
       if (error)
-	{
-	  /* This code shows off error handling. You can just use
-	   * gtk_image_new_from_file() instead if you don't want to report
-	   * errors to the user. If the file doesn't load when using
-	   * gtk_image_new_from_file(), a "missing image" icon will
-	   * be displayed instead.
-	   */
-	  GtkWidget *dialog;
+        {
+          /* This code shows off error handling. You can just use
+           * gtk_image_new_from_file() instead if you don't want to report
+           * errors to the user. If the file doesn't load when using
+           * gtk_image_new_from_file(), a "missing image" icon will
+           * be displayed instead.
+           */
+          GtkWidget *dialog;
 
-	  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-					   GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_ERROR,
-					   GTK_BUTTONS_CLOSE,
-					   "Unable to open image file 'gtk-logo-rgb.gif': %s",
-					   error->message);
-	  g_error_free (error);
+          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                           GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           "Unable to open image file 'gtk-logo-rgb.gif': %s",
+                                           error->message);
+          g_error_free (error);
 
-	  g_signal_connect (dialog, "response",
-			    G_CALLBACK (gtk_widget_destroy), NULL);
+          g_signal_connect (dialog, "response",
+                            G_CALLBACK (gtk_widget_destroy), NULL);
 
-	  gtk_widget_show (dialog);
-	}
+          gtk_widget_show (dialog);
+        }
 
       image = gtk_image_new_from_pixbuf (pixbuf);
 
@@ -398,17 +394,14 @@ do_images (GtkWidget *do_widget)
 
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
-			    "<u>Animation loaded from a file</u>");
+                            "<u>Animation loaded from a file</u>");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-      /* The alignment keeps the frame from growing when users resize
-       * the window
-       */
-      align = gtk_alignment_new (0.5, 0.5, 0, 0);
-      gtk_container_add (GTK_CONTAINER (align), frame);
-      gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+      gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       filename = demo_find_file ("floppybuddy.gif", NULL);
       image = gtk_image_new_from_file (filename);
@@ -420,17 +413,14 @@ do_images (GtkWidget *do_widget)
 
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
-			    "<u>Symbolic themed icon</u>");
+                            "<u>Symbolic themed icon</u>");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-      /* The alignment keeps the frame from growing when users resize
-       * the window
-       */
-      align = gtk_alignment_new (0.5, 0.5, 0, 0);
-      gtk_container_add (GTK_CONTAINER (align), frame);
-      gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+      gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       gicon = g_themed_icon_new_with_default_fallbacks ("battery-caution-charging-symbolic");
       image = gtk_image_new_from_gicon (gicon, GTK_ICON_SIZE_DIALOG);
@@ -442,17 +432,14 @@ do_images (GtkWidget *do_widget)
 
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
-			    "<u>Progressive image loading</u>");
+                            "<u>Progressive image loading</u>");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-      /* The alignment keeps the frame from growing when users resize
-       * the window
-       */
-      align = gtk_alignment_new (0.5, 0.5, 0, 0);
-      gtk_container_add (GTK_CONTAINER (align), frame);
-      gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+      gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       /* Create an empty image for now; the progressive loader
        * will create the pixbuf and fill it in.

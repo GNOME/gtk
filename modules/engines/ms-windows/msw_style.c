@@ -664,8 +664,9 @@ setup_msw_rc_style (void)
 	      btn_face.red, btn_face.green, btn_face.blue);
   gtk_rc_parse_string (buf);
 
-  /* enable coloring for text on buttons TODO: use GetThemeMetric for the
-     border and outside border */
+  /* enable coloring for text on buttons
+   * TODO: use GetThemeMetric for the border and outside border
+   * TODO: child-displacement-x & y should be 0 when XP theme is active */
   g_snprintf (buf, sizeof (buf),
 	      "style \"msw-button\" = \"msw-default\"\n"
 	      "{\n"
@@ -853,7 +854,7 @@ setup_system_styles (GtkStyle *style)
   sys_color_to_gtk_color (XP_THEME_CLASS_TEXT, COLOR_GRAYTEXT,
 			  &style->fg[GTK_STATE_INSENSITIVE]);
   sys_color_to_gtk_color (XP_THEME_CLASS_BUTTON, COLOR_BTNTEXT,
-        		  &style->bg[GTK_STATE_ACTIVE]);
+                          &style->fg[GTK_STATE_ACTIVE]);
   sys_color_to_gtk_color (XP_THEME_CLASS_WINDOW, COLOR_WINDOWTEXT,
 			  &style->fg[GTK_STATE_PRELIGHT]);
 
@@ -2568,21 +2569,25 @@ draw_extension (GtkStyle *style,
     {
       GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
-      /* Why this differs from gap_side, I have no idea.. */
-      int real_gap_side = gtk_notebook_get_tab_pos (notebook);
+      /* draw_themed_tab_button and draw_tab_button expect to work with tab
+       * position, instead of simply taking the "side of the gap" (gap_side)
+       * which simply said is the side of the tab that touches the notebook
+       * frame and is always the exact opposite of the gap side... */
+      int tab_pos = gtk_notebook_get_tab_pos (notebook);
 
       if (!draw_themed_tab_button (style, cr, state_type,
-				   GTK_NOTEBOOK (widget), x, y,
-				   width, height, real_gap_side))
+				   notebook, x, y,
+				   width, height, tab_pos))
 	{
 	  if (!draw_tab_button (style, cr, state_type,
 				shadow_type, widget,
-				detail, x, y, width, height, real_gap_side))
+				detail, x, y, width, height, tab_pos))
 	    {
+	      /* GtkStyle expects the usual gap_side */
 	      parent_class->draw_extension (style, cr, state_type,
 					    shadow_type, widget, detail,
 					    x, y, width, height,
-					    real_gap_side);
+					    gap_side);
 	    }
 	}
     }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkLabel" id="label1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="use-markup">True</property>
+        <property name="label" translatable="yes">H&lt;span color="#008000"&gt;ell&lt;/span&gt;o &lt;a href="http://example.com"&gt;l&lt;span color="#00FF00"&gt;in&lt;/span&gt;ky&lt;/a&gt; &lt;span color="#80FF80"&gt;Worl&lt;/span&gt;d</property>
+        <attributes>
+          <attribute name="foreground" value="#ffff00000000" start="3" end="8"/>
+          <attribute name="foreground" value="#ffff80008000" start="10" end="14"/>
+        </attributes>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -184,7 +184,7 @@ static void
 int_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkAdjustment *adj = GTK_ADJUSTMENT (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_INT);
 
@@ -221,7 +221,7 @@ static void
 uint_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkAdjustment *adj = GTK_ADJUSTMENT (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_UINT);
   get_property_value (object, pspec, &val);
@@ -257,7 +257,7 @@ static void
 float_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkAdjustment *adj = GTK_ADJUSTMENT (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_FLOAT);
   get_property_value (object, pspec, &val);
@@ -293,7 +293,7 @@ static void
 double_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkAdjustment *adj = GTK_ADJUSTMENT (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_DOUBLE);
   get_property_value (object, pspec, &val);
@@ -332,7 +332,7 @@ static void
 string_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkEntry *entry = GTK_ENTRY (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
   const gchar *str;
   const gchar *text;
 
@@ -377,7 +377,7 @@ bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkToggleButton *tb = GTK_TOGGLE_BUTTON (data);
   GtkWidget *child;
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_BOOLEAN);
   get_property_value (object, pspec, &val);
@@ -425,7 +425,7 @@ static void
 enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkComboBox *cb = GTK_COMBO_BOX (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
   GEnumClass *eclass;
   gint i;
 
@@ -499,7 +499,7 @@ static void
 flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GList *children, *c;
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
   GFlagsClass *fclass;
   guint flags;
   gint i;
@@ -559,7 +559,7 @@ unichar_changed (GObject *object, GParamSpec *pspec, gpointer data)
   GtkEntry *entry = GTK_ENTRY (data);
   gunichar new_val;
   gunichar old_val = unichar_get_value (entry);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
   gchar buf[7];
   gint len;
 
@@ -661,12 +661,12 @@ object_properties (GtkWidget *button,
 }
 
 static void
-color_modified (GtkColorButton *cb, gpointer data)
+rgba_modified (GtkColorButton *cb, gpointer data)
 {
   ObjectProperty *p = data;
-  GdkRGBA rgba;
+  GdkRGBA color;
 
-  gtk_color_button_get_rgba (cb, &rgba);
+  gtk_color_button_get_rgba (cb, &color);
 
   if (is_child_property (p->spec))
     {
@@ -674,17 +674,17 @@ color_modified (GtkColorButton *cb, gpointer data)
       GtkWidget *parent = gtk_widget_get_parent (widget);
 
       gtk_container_child_set (GTK_CONTAINER (parent),
-                               widget, p->spec->name, &rgba, NULL);
+                               widget, p->spec->name, &color, NULL);
     }
   else
-    g_object_set (p->obj, p->spec->name, &rgba, NULL);
+    g_object_set (p->obj, p->spec->name, &color, NULL);
 }
 
 static void
-color_changed (GObject *object, GParamSpec *pspec, gpointer data)
+rgba_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkColorButton *cb = GTK_COLOR_BUTTON (data);
-  GValue val = { 0, };
+  GValue val = G_VALUE_INIT;
   GdkRGBA *color;
   GdkRGBA cb_color;
 
@@ -703,6 +703,98 @@ color_changed (GObject *object, GParamSpec *pspec, gpointer data)
 
   g_value_unset (&val);
 }
+
+static void
+color_modified (GtkColorButton *cb, gpointer data)
+{
+  ObjectProperty *p = data;
+  GValue val = G_VALUE_INIT;
+
+  g_value_init (&val, GDK_TYPE_COLOR);
+  g_object_get_property (G_OBJECT (cb), "color", &val);
+
+  if (is_child_property (p->spec))
+    {
+      GtkWidget *widget = GTK_WIDGET (p->obj);
+      GtkWidget *parent = gtk_widget_get_parent (widget);
+
+      gtk_container_child_set_property (GTK_CONTAINER (parent),
+			                widget, p->spec->name, &val);
+    }
+  else
+    g_object_set_property (p->obj, p->spec->name, &val);
+
+  g_value_unset (&val);
+}
+
+static void
+color_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkColorButton *cb = GTK_COLOR_BUTTON (data);
+  GValue val = G_VALUE_INIT;
+
+  g_value_init (&val, GDK_TYPE_COLOR);
+  get_property_value (object, pspec, &val);
+
+  if (g_value_get_boxed (&val))
+    {
+      block_controller (G_OBJECT (cb));
+      g_object_set_property (G_OBJECT (cb), "color", &val);
+      unblock_controller (G_OBJECT (cb));
+    }
+
+  g_value_unset (&val);
+}
+
+static void
+font_modified (GtkFontChooser *fb, GParamSpec *pspec, gpointer data)
+{
+  ObjectProperty *p = data;
+  PangoFontDescription *font_desc;
+
+  font_desc = gtk_font_chooser_get_font_desc (fb);
+
+  if (is_child_property (p->spec))
+    {
+      GtkWidget *widget = GTK_WIDGET (p->obj);
+      GtkWidget *parent = gtk_widget_get_parent (widget);
+
+      gtk_container_child_set (GTK_CONTAINER (parent),
+                               widget, p->spec->name, font_desc, NULL);
+    }
+  else
+    g_object_set (p->obj, p->spec->name, font_desc, NULL);
+
+  pango_font_description_free (font_desc);
+}
+
+static void
+font_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkFontChooser *fb = GTK_FONT_CHOOSER (data);
+  GValue val = G_VALUE_INIT;
+  const PangoFontDescription *font_desc;
+  PangoFontDescription *fb_font_desc;
+
+  g_value_init (&val, PANGO_TYPE_FONT_DESCRIPTION);
+  get_property_value (object, pspec, &val);
+
+  font_desc = g_value_get_boxed (&val);
+  fb_font_desc = gtk_font_chooser_get_font_desc (fb);
+
+  if (font_desc == NULL ||
+      (fb_font_desc != NULL &&
+       !pango_font_description_equal (fb_font_desc, font_desc)))
+    {
+      block_controller (G_OBJECT (fb));
+      gtk_font_chooser_set_font_desc (fb, font_desc);
+      unblock_controller (G_OBJECT (fb));
+    }
+
+  g_value_unset (&val);
+  pango_font_description_free (fb_font_desc);
+}
+
 
 static GtkWidget *
 property_widget (GObject    *object,
@@ -918,6 +1010,20 @@ property_widget (GObject    *object,
       can_modify = TRUE;
     }
   else if (type == G_TYPE_PARAM_BOXED &&
+           G_PARAM_SPEC_VALUE_TYPE (spec) == GDK_TYPE_RGBA)
+    {
+      prop_edit = gtk_color_button_new ();
+      gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (prop_edit), TRUE);
+
+      g_object_connect_property (object, spec,
+                                 G_CALLBACK (rgba_changed),
+                                 prop_edit, G_OBJECT (prop_edit));
+
+      if (can_modify)
+        connect_controller (G_OBJECT (prop_edit), "color-set",
+                            object, spec, G_CALLBACK (rgba_modified));
+    }
+  else if (type == G_TYPE_PARAM_BOXED &&
            G_PARAM_SPEC_VALUE_TYPE (spec) == GDK_TYPE_COLOR)
     {
       prop_edit = gtk_color_button_new ();
@@ -929,6 +1035,19 @@ property_widget (GObject    *object,
       if (can_modify)
         connect_controller (G_OBJECT (prop_edit), "color-set",
                             object, spec, G_CALLBACK (color_modified));
+    }
+  else if (type == G_TYPE_PARAM_BOXED &&
+           G_PARAM_SPEC_VALUE_TYPE (spec) == PANGO_TYPE_FONT_DESCRIPTION)
+    {
+      prop_edit = gtk_font_button_new ();
+
+      g_object_connect_property (object, spec,
+                                 G_CALLBACK (font_changed),
+                                 prop_edit, G_OBJECT (prop_edit));
+
+      if (can_modify)
+        connect_controller (G_OBJECT (prop_edit), "notify::font-desc",
+                            object, spec, G_CALLBACK (font_modified));
     }
   else
     {
@@ -957,7 +1076,7 @@ properties_from_type (GObject *object,
   GtkWidget *label;
   GtkWidget *sw;
   GtkWidget *vbox;
-  GtkWidget *table;
+  GtkWidget *grid;
   GParamSpec **specs;
   guint n_specs;
   int i;
@@ -978,9 +1097,9 @@ properties_from_type (GObject *object,
     return NULL;
   }
 
-  table = gtk_table_new (n_specs, 2, FALSE);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 3);
+  grid = gtk_grid_new ();
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 3);
 
   i = 0;
   while (i < n_specs)
@@ -1010,10 +1129,10 @@ properties_from_type (GObject *object,
       label = gtk_label_new (g_param_spec_get_nick (spec));
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, i, 1, 1);
 
       prop_edit = property_widget (object, spec, can_modify);
-      gtk_table_attach_defaults (GTK_TABLE (table), prop_edit, 1, 2, i, i + 1);
+      gtk_grid_attach (GTK_GRID (grid), prop_edit, 1, i, 1, 1);
 
       /* set initial value */
       g_object_notify (object, spec->name);
@@ -1023,7 +1142,7 @@ properties_from_type (GObject *object,
 
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), grid, FALSE, FALSE, 0);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
@@ -1043,7 +1162,7 @@ child_properties_from_object (GObject *object)
   GtkWidget *label;
   GtkWidget *sw;
   GtkWidget *vbox;
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkWidget *parent;
   GParamSpec **specs;
   guint n_specs;
@@ -1059,9 +1178,9 @@ child_properties_from_object (GObject *object)
 
   specs = gtk_container_class_list_child_properties (G_OBJECT_GET_CLASS (parent), &n_specs);
 
-  table = gtk_table_new (n_specs, 2, FALSE);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 3);
+  grid = gtk_grid_new ();
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 3);
 
   i = 0;
   while (i < n_specs)
@@ -1084,11 +1203,11 @@ child_properties_from_object (GObject *object)
       label = gtk_label_new (g_param_spec_get_nick (spec));
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, i, 1, 1);
 
       mark_child_property (spec);
       prop_edit = property_widget (object, spec, can_modify);
-      gtk_table_attach_defaults (GTK_TABLE (table), prop_edit, 1, 2, i, i + 1);
+      gtk_grid_attach (GTK_GRID (grid), prop_edit, 1, i, 1, 1);
 
       /* set initial value */
       gtk_widget_child_notify (GTK_WIDGET (object), spec->name);
@@ -1097,7 +1216,7 @@ child_properties_from_object (GObject *object)
     }
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), grid, FALSE, FALSE, 0);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
@@ -1121,7 +1240,7 @@ static GtkWidget *
 children_from_object (GObject *object)
 {
   GList *children, *c;
-  GtkWidget *table, *label, *prop_edit, *button, *vbox, *sw;
+  GtkWidget *grid, *label, *prop_edit, *button, *vbox, *sw;
   gchar *str;
   gint i;
 
@@ -1130,9 +1249,9 @@ children_from_object (GObject *object)
 
   children = gtk_container_get_children (GTK_CONTAINER (object));
 
-  table = gtk_table_new (g_list_length (children), 2, FALSE);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 3);
+  grid = gtk_grid_new ();
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 3);
 
   for (c = children, i = 0; c; c = c->next, i++)
     {
@@ -1141,7 +1260,7 @@ children_from_object (GObject *object)
       label = gtk_label_new ("Child");
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, i, 1, 1);
 
       prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
 
@@ -1156,11 +1275,11 @@ children_from_object (GObject *object)
       gtk_container_add (GTK_CONTAINER (prop_edit), label);
       gtk_container_add (GTK_CONTAINER (prop_edit), button);
 
-      gtk_table_attach_defaults (GTK_TABLE (table), prop_edit, 1, 2, i, i + 1);
+      gtk_grid_attach (GTK_GRID (grid), prop_edit, 1, i, 1, 1);
     }
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), grid, FALSE, FALSE, 0);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
@@ -1177,7 +1296,7 @@ static GtkWidget *
 cells_from_object (GObject *object)
 {
   GList *cells, *c;
-  GtkWidget *table, *label, *prop_edit, *button, *vbox, *sw;
+  GtkWidget *grid, *label, *prop_edit, *button, *vbox, *sw;
   gchar *str;
   gint i;
 
@@ -1186,9 +1305,9 @@ cells_from_object (GObject *object)
 
   cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (object));
 
-  table = gtk_table_new (g_list_length (cells), 2, FALSE);
-  gtk_table_set_col_spacing (GTK_TABLE (table), 0, 10);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 3);
+  grid = gtk_grid_new ();
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 3);
 
   for (c = cells, i = 0; c; c = c->next, i++)
     {
@@ -1197,7 +1316,7 @@ cells_from_object (GObject *object)
       label = gtk_label_new ("Cell");
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, i, 1, 1);
 
       prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
 
@@ -1212,11 +1331,11 @@ cells_from_object (GObject *object)
       gtk_container_add (GTK_CONTAINER (prop_edit), label);
       gtk_container_add (GTK_CONTAINER (prop_edit), button);
 
-      gtk_table_attach_defaults (GTK_TABLE (table), prop_edit, 1, 2, i, i + 1);
+      gtk_grid_attach (GTK_GRID (grid), prop_edit, 1, i, 1, 1);
     }
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), grid, FALSE, FALSE, 0);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),

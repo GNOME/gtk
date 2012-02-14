@@ -91,38 +91,6 @@ gdk_input_init (GdkDisplay *display)
 }
 
 static void
-shell_handle_configure(void *data, struct wl_shell *shell,
-		       uint32_t time, uint32_t edges,
-		       struct wl_surface *surface,
-		       int32_t width, int32_t height)
-{
-  GdkWindow *window;
-  GdkDisplay *display;
-  GdkEvent *event;
-
-  window = wl_surface_get_user_data(surface);
-
-  display = gdk_window_get_display (window);
-
-  event = gdk_event_new (GDK_CONFIGURE);
-  event->configure.window = window;
-  event->configure.send_event = FALSE;
-  event->configure.width = width;
-  event->configure.height = height;
-
-  _gdk_window_update_size (window);
-  _gdk_wayland_window_update_size (window, width, height, edges);
-
-  g_object_ref(window);
-
-  _gdk_wayland_display_deliver_event (display, event);
-}
-
-static const struct wl_shell_listener shell_listener = {
-  shell_handle_configure,
-};
-
-static void
 output_handle_geometry(void *data,
 		       struct wl_output *wl_output,
 		       int x, int y, int physical_width, int physical_height,
@@ -143,31 +111,6 @@ display_handle_mode(void *data,
 {
 }
 
-static void
-compositor_handle_visual(void *data,
-			 struct wl_compositor *compositor,
-			 uint32_t id, uint32_t token)
-{
-	GdkDisplayWayland *d = data;
-
-	switch (token) {
-	case WL_COMPOSITOR_VISUAL_ARGB32:
-		d->argb_visual = wl_visual_create(d->wl_display, id, 1);
-		break;
-	case WL_COMPOSITOR_VISUAL_PREMULTIPLIED_ARGB32:
-		d->premultiplied_argb_visual =
-			wl_visual_create(d->wl_display, id, 1);
-		break;
-	case WL_COMPOSITOR_VISUAL_XRGB32:
-		d->rgb_visual = wl_visual_create(d->wl_display, id, 1);
-		break;
-	}
-}
-
-static const struct wl_compositor_listener compositor_listener = {
-	compositor_handle_visual,
-};
-
 static const struct wl_output_listener output_listener = {
 	output_handle_geometry,
 	display_handle_mode
@@ -182,23 +125,25 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
   struct wl_input_device *input;
 
   if (strcmp(interface, "wl_compositor") == 0) {
-    display_wayland->compositor = wl_compositor_create(display, id, 1);
-    wl_compositor_add_listener(display_wayland->compositor,
-					   &compositor_listener, display_wayland);
+    display_wayland->compositor =
+      wl_display_bind(display, id, &wl_compositor_interface);
   } else if (strcmp(interface, "wl_shm") == 0) {
-    display_wayland->shm = wl_shm_create(display, id, 1);
+    display_wayland->shm = wl_display_bind(display, id, &wl_shm_interface);
   } else if (strcmp(interface, "wl_shell") == 0) {
-    display_wayland->shell = wl_shell_create(display, id, 1);
-    wl_shell_add_listener(display_wayland->shell,
-			  &shell_listener, display_wayland);
+    display_wayland->shell = wl_display_bind(display, id, &wl_shell_interface);
   } else if (strcmp(interface, "wl_output") == 0) {
-    display_wayland->output = wl_output_create(display, id, 1);
+    display_wayland->output =
+      wl_display_bind(display, id, &wl_output_interface);
     wl_output_add_listener(display_wayland->output,
 			   &output_listener, display_wayland);
   } else if (strcmp(interface, "wl_input_device") == 0) {
-    input = wl_input_device_create(display, id, 1);
+    input = wl_display_bind(display, id, &wl_input_device_interface);
     _gdk_wayland_device_manager_add_device (gdk_display->device_manager,
 					    input);
+  } else if (strcmp(interface, "wl_data_device_manager") == 0) {
+      display_wayland->data_device_manager =
+        wl_display_bind(display, id,
+                        &wl_data_device_manager_interface);
   }
 }
 
@@ -329,8 +274,7 @@ gdk_wayland_display_finalize (GObject *object)
     g_object_unref (display_wayland->keymap);
 
   /* input GdkDevice list */
-  g_list_foreach (display_wayland->input_devices, (GFunc) g_object_unref, NULL);
-  g_list_free (display_wayland->input_devices);
+  g_list_free_full (display_wayland->input_devices, g_object_unref);
 
   g_object_unref (display_wayland->screen);
 
@@ -376,27 +320,15 @@ gdk_wayland_display_beep (GdkDisplay *display)
 }
 
 static void
-sync_callback(void *data)
-{
-  gboolean *done = data;
-
-  *done = TRUE;
-}
-
-static void
 gdk_wayland_display_sync (GdkDisplay *display)
 {
   GdkDisplayWayland *display_wayland;
-  gboolean done;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   display_wayland = GDK_DISPLAY_WAYLAND (display);
 
-  wl_display_sync_callback(display_wayland->wl_display, sync_callback, &done);
-  wl_display_iterate(display_wayland->wl_display, WL_DISPLAY_WRITABLE);
-  while (!done)
-    wl_display_iterate(display_wayland->wl_display, WL_DISPLAY_READABLE);
+  wl_display_roundtrip(display_wayland->wl_display);
 }
 
 static void
@@ -493,7 +425,8 @@ gdk_wayland_display_after_process_all_updates (GdkDisplay *display)
 static gulong
 gdk_wayland_display_get_next_serial (GdkDisplay *display)
 {
-  return 0;
+  static gulong serial = 0;
+  return ++serial;
 }
 
 void

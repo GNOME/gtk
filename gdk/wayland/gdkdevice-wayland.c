@@ -17,6 +17,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#define _GNU_SOURCE
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
+
 #include "config.h"
 
 #include <string.h>
@@ -32,6 +37,8 @@
 #include <X11/extensions/XKBcommon.h>
 #include <X11/keysym.h>
 
+#include <sys/time.h>
+
 #define GDK_TYPE_DEVICE_CORE         (gdk_device_core_get_type ())
 #define GDK_DEVICE_CORE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE_CORE, GdkDeviceCore))
 #define GDK_DEVICE_CORE_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_DEVICE_CORE, GdkDeviceCoreClass))
@@ -43,6 +50,10 @@ typedef struct _GdkDeviceCore GdkDeviceCore;
 typedef struct _GdkDeviceCoreClass GdkDeviceCoreClass;
 typedef struct _GdkWaylandDevice GdkWaylandDevice;
 
+typedef struct _DataOffer DataOffer;
+
+typedef struct _GdkWaylandSelectionOffer GdkWaylandSelectionOffer;
+
 struct _GdkWaylandDevice
 {
   GdkDisplay *display;
@@ -52,8 +63,19 @@ struct _GdkWaylandDevice
   GdkWindow *pointer_focus;
   GdkWindow *keyboard_focus;
   struct wl_input_device *device;
+  struct wl_data_device *data_device;
   int32_t x, y, surface_x, surface_y;
   uint32_t time;
+  GdkWindow *pointer_grab_window;
+  uint32_t pointer_grab_time;
+  guint32 repeat_timer;
+  guint32 repeat_key;
+  guint32 repeat_count;
+
+  DataOffer *drag_offer;
+  DataOffer *selection_offer;
+
+  GdkWaylandSelectionOffer *selection_offer_out;
 };
 
 struct _GdkDeviceCore
@@ -114,7 +136,7 @@ gdk_device_core_get_state (GdkDevice       *device,
 {
   gint x_int, y_int;
 
-  gdk_window_get_pointer (window, &x_int, &y_int, mask);
+  gdk_window_get_device_position (window, device, &x_int, &y_int, mask);
 
   if (axes)
     {
@@ -133,14 +155,20 @@ gdk_device_core_set_window_cursor (GdkDevice *device,
   int x, y;
 
   if (cursor)
+    g_object_ref (cursor);
+
+  /* Setting the cursor to NULL means that we should use the default cursor */
+  if (!cursor)
     {
-      buffer = _gdk_wayland_cursor_get_buffer(cursor, &x, &y);
-      wl_input_device_attach(wd->device, wd->time, buffer, x, y);
+      /* FIXME: Is this the best sensible default ? */
+      cursor = _gdk_wayland_display_get_cursor_for_type (device->display,
+                                                         GDK_LEFT_PTR);
     }
-  else
-    {
-      wl_input_device_attach(wd->device, wd->time, NULL, 0, 0);
-    }
+
+  buffer = _gdk_wayland_cursor_get_buffer(cursor, &x, &y);
+  wl_input_device_attach(wd->device, wd->time, buffer, x, y);
+
+  g_object_unref (cursor);
 }
 
 static void
@@ -195,6 +223,30 @@ gdk_device_core_grab (GdkDevice    *device,
                       GdkCursor    *cursor,
                       guint32       time_)
 {
+  GdkWaylandDevice *wayland_device = GDK_DEVICE_CORE (device)->device;
+
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    {
+      /* Device is a keyboard */
+      return GDK_GRAB_SUCCESS;
+    }
+  else
+    {
+      /* Device is a pointer */
+
+      if (wayland_device->pointer_grab_window != NULL &&
+          time_ != 0 && wayland_device->pointer_grab_time > time_)
+        {
+          return GDK_GRAB_ALREADY_GRABBED;
+        }
+
+      if (time_ == 0)
+        time_ = wayland_device->time;
+
+      wayland_device->pointer_grab_window = window;
+      wayland_device->pointer_grab_time = time_;
+    }
+
   return GDK_GRAB_SUCCESS;
 }
 
@@ -202,6 +254,23 @@ static void
 gdk_device_core_ungrab (GdkDevice *device,
                         guint32    time_)
 {
+  GdkDisplay *display;
+  GdkDeviceGrabInfo *grab;
+
+  display = gdk_device_get_display (device);
+
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    {
+      /* Device is a keyboard */
+    }
+  else
+    {
+      /* Device is a pointer */
+      grab = _gdk_display_get_last_device_grab (display, device);
+
+      if (grab)
+        grab->serial_end = grab->serial_start;
+    }
 }
 
 static GdkWindow *
@@ -309,6 +378,19 @@ input_handle_button(void *data, struct wl_input_device *input_device,
   GdkDisplayWayland *display = GDK_DISPLAY_WAYLAND (device->display);
   GdkEvent *event;
   uint32_t modifier;
+  int gdk_button;
+
+  switch (button) {
+  case 273:
+    gdk_button = 3;
+    break;
+  case 274:
+    gdk_button = 2;
+    break;
+  default:
+    gdk_button = button - 271;
+    break;
+  }
 
   device->time = time;
   event = gdk_event_new (state ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
@@ -321,10 +403,10 @@ input_handle_button(void *data, struct wl_input_device *input_device,
   event->button.y_root = (gdouble) device->y;
   event->button.axes = NULL;
   event->button.state = device->modifiers;
-  event->button.button = button - 271;
+  event->button.button = gdk_button;
   gdk_event_set_screen (event, display->screen);
 
-  modifier = 1 << (8 + button - 272);
+  modifier = 1 << (8 + gdk_button - 1);
   if (state)
     device->modifiers |= modifier;
   else
@@ -402,11 +484,13 @@ translate_keyboard_string (GdkEventKey *event)
     }
 }
 
-static void
-input_handle_key(void *data, struct wl_input_device *input_device,
-		 uint32_t time, uint32_t key, uint32_t state)
+static gboolean
+keyboard_repeat (gpointer data);
+
+static gboolean
+deliver_key_event(GdkWaylandDevice *device,
+		  uint32_t time, uint32_t key, uint32_t state)
 {
-  GdkWaylandDevice *device = data;
   GdkEvent *event;
   uint32_t code, modifier, level;
   struct xkb_desc *xkb;
@@ -449,6 +533,60 @@ input_handle_key(void *data, struct wl_input_device *input_device,
 		       "string %s, mods 0x%x",
 		       code, event->key.keyval,
 		       event->key.string, event->key.state));
+
+  device->repeat_count++;
+  device->repeat_key = key;
+
+  if (state == 0)
+    {
+      if (device->repeat_timer)
+	{
+	  g_source_remove (device->repeat_timer);
+	  device->repeat_timer = 0;
+	}
+      return FALSE;
+    }
+  else if (modifier)
+    {
+      return FALSE;
+    }
+  else switch (device->repeat_count)
+    {
+    case 1:
+      if (device->repeat_timer)
+	{
+	  g_source_remove (device->repeat_timer);
+	  device->repeat_timer = 0;
+	}
+
+      device->repeat_timer =
+	gdk_threads_add_timeout (400, keyboard_repeat, device);
+      return TRUE;
+    case 2:
+      device->repeat_timer =
+	gdk_threads_add_timeout (80, keyboard_repeat, device);
+      return FALSE;
+    default:
+      return TRUE;
+    }
+}
+
+static gboolean
+keyboard_repeat (gpointer data)
+{
+  GdkWaylandDevice *device = data;
+
+  return deliver_key_event (device, device->time, device->repeat_key, 1);
+}
+
+static void
+input_handle_key(void *data, struct wl_input_device *input_device,
+		 uint32_t time, uint32_t key, uint32_t state)
+{
+  GdkWaylandDevice *device = data;
+
+  device->repeat_count = 0;
+  deliver_key_event (data, time, key, state);
 }
 
 static void
@@ -550,6 +688,7 @@ input_handle_keyboard_focus(void *data,
   device->time = time;
   if (device->keyboard_focus)
     {
+      _gdk_wayland_window_remove_focus (device->keyboard_focus);
       event = gdk_event_new (GDK_FOCUS_CHANGE);
       event->focus_change.window = g_object_ref (device->keyboard_focus);
       event->focus_change.send_event = FALSE;
@@ -584,6 +723,8 @@ input_handle_keyboard_focus(void *data,
 			   device, device->keyboard_focus));
 
       _gdk_wayland_display_deliver_event (device->display, event);
+
+      _gdk_wayland_window_add_focus (device->keyboard_focus);
     }
 }
 
@@ -595,17 +736,178 @@ static const struct wl_input_device_listener input_device_listener = {
   input_handle_keyboard_focus,
 };
 
+struct _DataOffer {
+  struct wl_data_offer *offer;
+  gint ref_count;
+  GPtrArray *types;
+};
+
+static void
+data_offer_offer (void                 *data,
+                  struct wl_data_offer *wl_data_offer,
+                  const char           *type)
+{
+  DataOffer *offer = (DataOffer *)data;
+  g_debug (G_STRLOC ": %s wl_data_offer = %p type = %s",
+           G_STRFUNC, wl_data_offer, type);
+
+  g_ptr_array_add (offer->types, g_strdup (type));
+}
+
+static void
+data_offer_unref (DataOffer *offer)
+{
+  offer->ref_count--;
+
+  if (offer->ref_count == 0)
+    {
+      g_ptr_array_free (offer->types, TRUE);
+      g_free (offer);
+    }
+}
+
+static const struct wl_data_offer_listener data_offer_listener = {
+  data_offer_offer,
+};
+
+static void
+data_device_data_offer (void                  *data,
+                        struct wl_data_device *data_device,
+                        uint32_t               id)
+{
+  DataOffer *offer;
+
+  g_debug (G_STRLOC ": %s data_device = %p id = %lu",
+           G_STRFUNC, data_device, (long unsigned int)id);
+
+  /* This structure is reference counted to handle the case where you get a
+   * leave but are in the middle of transferring data
+   */
+  offer = g_new0 (DataOffer, 1);
+  offer->ref_count = 1;
+  offer->types = g_ptr_array_new_with_free_func (g_free);
+  offer->offer = (struct wl_data_offer *)
+    wl_proxy_create_for_id ((struct wl_proxy *) data_device,
+                            id,
+                            &wl_data_offer_interface);
+
+  /* The DataOffer structure is then retrieved later since this sets the user
+   * data.
+   */
+  wl_data_offer_add_listener (offer->offer,
+                              &data_offer_listener,
+                              offer);
+}
+
+static void
+data_device_enter (void                  *data,
+                   struct wl_data_device *data_device,
+                   uint32_t               time,
+                   struct wl_surface     *surface,
+                   int32_t                x,
+                   int32_t                y,
+                   struct wl_data_offer  *offer)
+{
+  GdkWaylandDevice *device = (GdkWaylandDevice *)data;
+
+  g_debug (G_STRLOC ": %s data_device = %p time = %d, surface = %p, x = %d y = %d, offer = %p",
+           G_STRFUNC, data_device, time, surface, x, y, offer);
+
+  /* Retrieve the DataOffer associated with with the wl_data_offer - this
+   * association is made when the listener is attached.
+   */
+  g_assert (device->drag_offer == NULL);
+  device->drag_offer = wl_data_offer_get_user_data (offer);
+}
+
+static void
+data_device_leave (void                  *data,
+                   struct wl_data_device *data_device)
+{
+  GdkWaylandDevice *device = (GdkWaylandDevice *)data;
+
+  g_debug (G_STRLOC ": %s data_device = %p",
+           G_STRFUNC, data_device);
+
+  data_offer_unref (device->drag_offer);
+  device->drag_offer = NULL;
+}
+
+static void
+data_device_motion (void                  *data,
+                    struct wl_data_device *data_device,
+                    uint32_t               time,
+                    int32_t                x,
+                    int32_t                y)
+{
+  g_debug (G_STRLOC ": %s data_device = %p, time = %d, x = %d, y = %d",
+           G_STRFUNC, data_device, time, x, y);
+}
+
+static void
+data_device_drop (void                  *data,
+                  struct wl_data_device *data_device)
+{
+  g_debug (G_STRLOC ": %s data_device = %p",
+           G_STRFUNC, data_device);
+}
+
+static void
+data_device_selection (void                  *data,
+                       struct wl_data_device *wl_data_device,
+                       struct wl_data_offer  *offer)
+{
+  GdkWaylandDevice *device = (GdkWaylandDevice *)data;
+
+  g_debug (G_STRLOC ": %s wl_data_device = %p wl_data_offer = %p",
+           G_STRFUNC, wl_data_device, offer);
+
+  if (!offer)
+    {
+      if (device->selection_offer)
+        {
+          data_offer_unref (device->selection_offer);
+          device->selection_offer = NULL;
+        }
+
+      return;
+    }
+
+  if (device->selection_offer)
+    {
+      data_offer_unref (device->selection_offer);
+      device->selection_offer = NULL;
+    }
+
+  /* Retrieve the DataOffer associated with with the wl_data_offer - this
+   * association is made when the listener is attached.
+   */
+  g_assert (device->selection_offer == NULL);
+  device->selection_offer = wl_data_offer_get_user_data (offer);
+}
+
+static const struct wl_data_device_listener data_device_listener = {
+  data_device_data_offer,
+  data_device_enter,
+  data_device_leave,
+  data_device_motion,
+  data_device_drop,
+  data_device_selection
+};
+
 void
 _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 					struct wl_input_device *wl_device)
 {
   GdkDisplay *display;
+  GdkDisplayWayland *display_wayland;
   GdkDeviceManagerCore *device_manager_core =
     GDK_DEVICE_MANAGER_CORE(device_manager);
   GdkWaylandDevice *device;
 
   device = g_new0 (GdkWaylandDevice, 1);
   display = gdk_device_manager_get_display (device_manager);
+  display_wayland = GDK_DISPLAY_WAYLAND (display);
 
   device->display = display;
   device->pointer = g_object_new (GDK_TYPE_DEVICE_CORE,
@@ -635,6 +937,12 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
   wl_input_device_add_listener(device->device,
 			       &input_device_listener, device);
 
+  device->data_device =
+    wl_data_device_manager_get_data_device (display_wayland->data_device_manager,
+                                            device->device);
+  wl_data_device_add_listener (device->data_device,
+                               &data_device_listener, device);
+
   device_manager_core->devices =
     g_list_prepend (device_manager_core->devices, device->keyboard);
   device_manager_core->devices =
@@ -645,7 +953,7 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 }
 
 static void
-free_device (void *data, void *user_data)
+free_device (gpointer data)
 {
   g_object_unref (data);
 }
@@ -657,8 +965,7 @@ gdk_device_manager_core_finalize (GObject *object)
 
   device_manager_core = GDK_DEVICE_MANAGER_CORE (object);
 
-  g_list_foreach (device_manager_core->devices, free_device, NULL);
-  g_list_free (device_manager_core->devices);
+  g_list_free_full (device_manager_core->devices, free_device);
 
   G_OBJECT_CLASS (gdk_device_manager_core_parent_class)->finalize (object);
 }
@@ -710,4 +1017,291 @@ _gdk_wayland_device_manager_new (GdkDisplay *display)
   return g_object_new (GDK_TYPE_DEVICE_MANAGER_CORE,
                        "display", display,
                        NULL);
+}
+
+gint
+gdk_wayland_device_get_selection_type_atoms (GdkDevice  *gdk_device,
+                                             GdkAtom   **atoms_out)
+{
+  gint i;
+  GdkAtom *atoms;
+  GdkWaylandDevice *device;
+
+  g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), 0);
+  g_return_val_if_fail (atoms_out != NULL, 0);
+
+  device = GDK_DEVICE_CORE (gdk_device)->device;
+
+  if (!device->selection_offer || device->selection_offer->types->len == 0)
+    {
+      *atoms_out = NULL;
+      return 0;
+    }
+
+  atoms = g_new0 (GdkAtom, device->selection_offer->types->len);
+
+  /* Convert list of targets to atoms */
+  for (i = 0; i < device->selection_offer->types->len; i++)
+    {
+      atoms[i] = gdk_atom_intern (device->selection_offer->types->pdata[i],
+                                  FALSE);
+      GDK_NOTE (MISC,
+                g_message (G_STRLOC ": Adding atom for %s",
+                           (char *)device->selection_offer->types->pdata[i]));
+    }
+
+  *atoms_out = atoms;
+  return device->selection_offer->types->len;
+}
+
+typedef struct
+{
+  GdkWaylandDevice *device;
+  DataOffer *offer;
+  GIOChannel *channel;
+  GdkDeviceWaylandRequestContentCallback cb;
+  gpointer userdata;
+} RequestContentClosure;
+
+static gboolean
+_request_content_io_func (GIOChannel *channel,
+                          GIOCondition condition,
+                          gpointer userdata)
+{
+  RequestContentClosure *closure = (RequestContentClosure *)userdata;
+  gchar *data = NULL;
+  gsize len = 0;
+  GError *error = NULL;
+
+  /* FIXME: We probably want to do something better than this to avoid
+   * blocking on the transfer of large pieces of data: call the callback
+   * multiple times I should think.
+   */
+  if (g_io_channel_read_to_end (channel,
+                                &data,
+                                &len,
+                                &error) != G_IO_STATUS_NORMAL)
+    {
+      g_warning (G_STRLOC ": Error reading content from pipe: %s", error->message);
+      g_clear_error (&error);
+    }
+
+  /* Since we use _read_to_end we've got a guaranteed EOF and thus can go
+   * ahead and close the fd
+   */
+  g_io_channel_shutdown (channel, TRUE, NULL);
+
+  closure->cb (closure->device->pointer, data, len, closure->userdata);
+
+  g_free (data);
+  data_offer_unref (closure->offer);
+  g_io_channel_unref (channel);
+  g_free (closure);
+
+  return FALSE;
+}
+
+gboolean
+gdk_wayland_device_request_selection_content (GdkDevice                              *gdk_device,
+                                              const gchar                            *requested_mime_type,
+                                              GdkDeviceWaylandRequestContentCallback  cb,
+                                              gpointer                                userdata)
+{
+  int pipe_fd[2];
+  RequestContentClosure *closure;
+  GdkWaylandDevice *device;
+  GError *error = NULL;
+
+  g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), FALSE);
+  g_return_val_if_fail (requested_mime_type != NULL, FALSE);
+  g_return_val_if_fail (cb != NULL, FALSE);
+
+  device = GDK_DEVICE_CORE (gdk_device)->device;
+
+  if (!device->selection_offer)
+      return FALSE;
+
+  /* TODO: Check mimetypes */
+
+  closure = g_new0 (RequestContentClosure, 1);
+
+  device->selection_offer->ref_count++;
+
+  pipe2 (pipe_fd, O_CLOEXEC);
+  wl_data_offer_receive (device->selection_offer->offer,
+                         requested_mime_type,
+                         pipe_fd[1]);
+  close (pipe_fd[1]);
+
+  closure->device = device;
+  closure->offer = device->selection_offer;
+  closure->channel = g_io_channel_unix_new (pipe_fd[0]);
+  closure->cb = cb;
+  closure->userdata = userdata;
+
+  if (!g_io_channel_set_encoding (closure->channel, NULL, &error))
+    {
+      g_warning (G_STRLOC ": Error setting encoding on channel: %s",
+                 error->message);
+      g_clear_error (&error);
+      goto error;
+    }
+
+  g_io_add_watch (closure->channel,
+                  G_IO_IN,
+                  _request_content_io_func,
+                  closure);
+
+  return TRUE;
+
+error:
+  data_offer_unref (closure->offer);
+  g_io_channel_unref (closure->channel);
+  close (pipe_fd[1]);
+  g_free (closure);
+
+  return FALSE;
+}
+
+struct _GdkWaylandSelectionOffer {
+  GdkDeviceWaylandOfferContentCallback cb;
+  gpointer userdata;
+  struct wl_data_source *source;
+  GdkWaylandDevice *device;
+};
+
+static void
+data_source_target (void                  *data,
+                    struct wl_data_source *source,
+                    const char            *mime_type)
+{
+  g_debug (G_STRLOC ": %s source = %p, mime_type = %s",
+           G_STRFUNC, source, mime_type);
+}
+
+static void
+data_source_send (void                  *data,
+                  struct wl_data_source *source,
+                  const char            *mime_type,
+                  int32_t                fd)
+{
+  GdkWaylandSelectionOffer *offer = (GdkWaylandSelectionOffer *)data;;
+  gchar *buf;
+  gssize len, bytes_written = 0;
+
+  g_debug (G_STRLOC ": %s source = %p, mime_type = %s fd = %d",
+           G_STRFUNC, source, mime_type, fd);
+
+  buf = offer->cb (offer->device->pointer, mime_type, &len, offer->userdata);
+
+  while (len > 0)
+    {
+      bytes_written += write (fd, buf + bytes_written, len);
+      if (bytes_written == -1)
+        goto error;
+      len -= bytes_written;
+    }
+
+  close (fd);
+  g_free (buf);
+
+  return;
+error:
+
+  g_warning (G_STRLOC ": Error writing data to client: %s",
+             g_strerror (errno));
+
+  close (fd);
+  g_free (buf);
+}
+
+static void
+data_source_cancelled (void                  *data,
+                       struct wl_data_source *source)
+{
+  g_debug (G_STRLOC ": %s source = %p",
+           G_STRFUNC, source);
+}
+
+static const struct wl_data_source_listener data_source_listener = {
+    data_source_target,
+    data_source_send,
+    data_source_cancelled
+};
+
+static guint32
+_wl_time_now (void)
+{
+  struct timeval tv;
+
+  gettimeofday(&tv, NULL);
+
+  return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+}
+
+gboolean
+gdk_wayland_device_offer_selection_content (GdkDevice                             *gdk_device,
+                                            const gchar                          **mime_types,
+                                            gint                                   nr_mime_types,
+                                            GdkDeviceWaylandOfferContentCallback   cb,
+                                            gpointer                               userdata)
+{
+  GdkDisplay *display;
+  GdkDisplayWayland *display_wayland;
+  GdkWaylandSelectionOffer *offer;
+  GdkWaylandDevice *device;
+  gint i;
+
+  g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), 0);
+  device = GDK_DEVICE_CORE (gdk_device)->device;
+
+  display = device->display;
+  display_wayland = GDK_DISPLAY_WAYLAND (display);
+
+  offer = g_new0 (GdkWaylandSelectionOffer, 1);
+  offer->cb = cb;
+  offer->userdata = userdata;
+  offer->source =
+    wl_data_device_manager_create_data_source (display_wayland->data_device_manager);
+  offer->device = device;
+
+  for (i = 0; i < nr_mime_types; i++)
+    {
+      wl_data_source_offer (offer->source,
+                            mime_types[i]);
+    }
+
+  wl_data_source_add_listener (offer->source,
+                               &data_source_listener,
+                               offer);
+
+  wl_data_device_set_selection (device->data_device,
+                                offer->source,
+                                _wl_time_now ());
+
+  device->selection_offer_out = offer;
+
+  return TRUE;
+}
+
+gboolean
+gdk_wayland_device_clear_selection_content (GdkDevice *gdk_device)
+{
+  GdkWaylandDevice *device;
+
+  g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), 0);
+  device = GDK_DEVICE_CORE (gdk_device)->device;
+
+  if (!device->selection_offer_out)
+    return FALSE;
+
+  wl_data_device_set_selection (device->data_device,
+                                NULL,
+                                _wl_time_now ());
+
+  wl_data_source_destroy (device->selection_offer_out->source);
+  g_free (device->selection_offer_out);
+  device->selection_offer_out = NULL;
+
+  return TRUE;
 }

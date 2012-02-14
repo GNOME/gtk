@@ -1,5 +1,8 @@
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtkunixprint.h>
 #include <gdk/gdkkeysyms.h>
 #include <X11/Xatom.h>

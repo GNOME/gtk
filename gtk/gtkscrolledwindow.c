@@ -34,9 +34,11 @@
 #include "gtkscrollbar.h"
 #include "gtkscrolledwindow.h"
 #include "gtkwindow.h"
+#include "gtkviewport.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
+#include "gtkviewport.h"
 #include "a11y/gtkscrolledwindowaccessible.h"
 
 /**
@@ -58,7 +60,7 @@
  * For widgets that lack native scrolling support, the #GtkViewport
  * widget acts as an adaptor class, implementing scrollability for child
  * widgets that lack their own scrolling capabilities. Use #GtkViewport
- * to scroll child widgets such as #GtkTable, #GtkBox, and so on.
+ * to scroll child widgets such as #GtkGrid, #GtkBox, and so on.
  *
  * If a widget has native scrolling abilities, it can be added to the
  * #GtkScrolledWindow with gtk_container_add(). If a widget does not, you
@@ -79,7 +81,7 @@
  *
  * If a #GtkScrolledWindow doesn't behave quite as you would like, or
  * doesn't have exactly the right layout, it's very possible to set up
- * your own scrolling with #GtkScrollbar and for example a #GtkTable.
+ * your own scrolling with #GtkScrollbar and for example a #GtkGrid.
  */
 
 
@@ -1198,14 +1200,18 @@ gtk_scrolled_window_draw (GtkWidget *widget,
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_render_background (context, cr, 0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
       GtkAllocation relative_allocation;
-      GtkStyleContext *context;
       gboolean scrollbars_within_bevel;
-
-      context = gtk_widget_get_style_context (widget);
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);

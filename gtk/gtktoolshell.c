@@ -47,10 +47,42 @@
 typedef GtkToolShellIface GtkToolShellInterface;
 G_DEFINE_INTERFACE (GtkToolShell, gtk_tool_shell, GTK_TYPE_WIDGET);
 
+static GtkReliefStyle gtk_tool_shell_real_get_relief_style (GtkToolShell *shell);
+static GtkOrientation gtk_tool_shell_real_get_text_orientation (GtkToolShell *shell);
+static gfloat gtk_tool_shell_real_get_text_alignment (GtkToolShell *shell);
+static PangoEllipsizeMode gtk_tool_shell_real_get_ellipsize_mode (GtkToolShell *shell);
 
 static void
 gtk_tool_shell_default_init (GtkToolShellInterface *iface)
 {
+  iface->get_relief_style = gtk_tool_shell_real_get_relief_style;
+  iface->get_text_orientation = gtk_tool_shell_real_get_text_orientation;
+  iface->get_text_alignment = gtk_tool_shell_real_get_text_alignment;
+  iface->get_ellipsize_mode = gtk_tool_shell_real_get_ellipsize_mode;
+}
+
+static GtkReliefStyle
+gtk_tool_shell_real_get_relief_style (GtkToolShell *shell)
+{
+  return GTK_RELIEF_NONE;
+}
+
+static GtkOrientation
+gtk_tool_shell_real_get_text_orientation (GtkToolShell *shell)
+{
+  return GTK_ORIENTATION_HORIZONTAL;
+}
+
+static gfloat
+gtk_tool_shell_real_get_text_alignment (GtkToolShell *shell)
+{
+  return 0.5f;
+}
+
+static PangoEllipsizeMode
+gtk_tool_shell_real_get_ellipsize_mode (GtkToolShell *shell)
+{
+  return PANGO_ELLIPSIZE_NONE;
 }
 
 
@@ -123,10 +155,7 @@ gtk_tool_shell_get_relief_style (GtkToolShell *shell)
 {
   GtkToolShellIface *iface = GTK_TOOL_SHELL_GET_IFACE (shell);
 
-  if (iface->get_relief_style)
-    return iface->get_relief_style (shell);
-
-  return GTK_RELIEF_NONE;
+  return iface->get_relief_style (shell);
 }
 
 /**
@@ -168,10 +197,7 @@ gtk_tool_shell_get_text_orientation (GtkToolShell *shell)
 {
   GtkToolShellIface *iface = GTK_TOOL_SHELL_GET_IFACE (shell);
 
-  if (iface->get_text_orientation)
-    return GTK_TOOL_SHELL_GET_IFACE (shell)->get_text_orientation (shell);
-
-  return GTK_ORIENTATION_HORIZONTAL;
+  return iface->get_text_orientation (shell);
 }
 
 /**
@@ -191,10 +217,7 @@ gtk_tool_shell_get_text_alignment (GtkToolShell *shell)
 {
   GtkToolShellIface *iface = GTK_TOOL_SHELL_GET_IFACE (shell);
 
-  if (iface->get_text_alignment)
-    return GTK_TOOL_SHELL_GET_IFACE (shell)->get_text_alignment (shell);
-
-  return 0.5f;
+  return iface->get_text_alignment (shell);
 }
 
 /**
@@ -214,10 +237,7 @@ gtk_tool_shell_get_ellipsize_mode (GtkToolShell *shell)
 {
   GtkToolShellIface *iface = GTK_TOOL_SHELL_GET_IFACE (shell);
 
-  if (iface->get_ellipsize_mode)
-    return GTK_TOOL_SHELL_GET_IFACE (shell)->get_ellipsize_mode (shell);
-
-  return PANGO_ELLIPSIZE_NONE;
+  return iface->get_ellipsize_mode (shell);
 }
 
 /**

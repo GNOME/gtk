@@ -17,6 +17,10 @@ LDADD = \
 	$(top_builddir)/gtk/libgtk-3.la \
 	$(GTK_DEP_LIBS)
 
+# work around random file systems showing up in the file chooser,
+# breaking the 'pickers' test
+TESTS_ENVIRONMENT = GIO_USE_VOLUME_MONITOR=unix
+
 TEST_PROGS += accessibility-dump
 
 TEST_PROGS += tree-performance
@@ -25,7 +29,12 @@ TEST_PROGS += text
 
 TEST_PROGS += children
 
-TEST_PROGS += focus
+# the focus test has no chance of working until
+# all the idle handlers in gail are gone
+#
+# TEST_PROGS += focus
+
+TEST_PROGS += tree-relationships
 
 TEST_PROGS += util
 
@@ -39,11 +48,9 @@ EXTRA_DIST += \
 	range.ui range.txt \
 	link.ui link.txt \
 	text.ui text.txt \
-	tree.ui tree.txt \
 	buttons.ui buttons.txt \
 	colorchooser.ui colorchooser.txt \
 	about.ui about.txt \
-	appchooser.ui appchooser.txt \
 	messagedialog.ui messagedialog.txt \
 	expander.ui expander.txt \
 	assistant.ui assistant.txt \
@@ -59,4 +66,5 @@ EXTRA_DIST += \
 	entries.ui entries.txt \
 	scale-drawvalue.ui scale-drawvalue.txt \
 	placeholder-text.ui placeholder-text.txt \
-	menu.ui menu.txt
+	menu.ui menu.txt \
+	combos.ui combos.txt

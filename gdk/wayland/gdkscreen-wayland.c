@@ -53,9 +53,7 @@ struct _GdkScreenWayland
   int width_mm, height_mm;
 
   /* Visual Part */
-  GdkVisual *argb_visual;
-  GdkVisual *premultiplied_argb_visual;
-  GdkVisual *rgb_visual;
+  GdkVisual *visual;
 
   /* Xinerama/RandR 1.2 */
   gint		     n_monitors;
@@ -155,10 +153,7 @@ gdk_wayland_screen_finalize (GObject *object)
   if (screen_wayland->root_window)
     g_object_unref (screen_wayland->root_window);
 
-  /* Visual Part */
-  g_object_unref (screen_wayland->argb_visual);
-  g_object_unref (screen_wayland->premultiplied_argb_visual);
-  g_object_unref (screen_wayland->rgb_visual);
+  g_object_unref (screen_wayland->visual);
 
   deinit_multihead (GDK_SCREEN (object));
 
@@ -294,13 +289,13 @@ gdk_wayland_screen_get_monitor_geometry (GdkScreen    *screen,
 static GdkVisual *
 gdk_wayland_screen_get_system_visual (GdkScreen * screen)
 {
-  return (GdkVisual *) GDK_SCREEN_WAYLAND (screen)->argb_visual;
+  return (GdkVisual *) GDK_SCREEN_WAYLAND (screen)->visual;
 }
 
 static GdkVisual *
 gdk_wayland_screen_get_rgba_visual (GdkScreen *screen)
 {
-  return (GdkVisual *) GDK_SCREEN_WAYLAND (screen)->argb_visual;
+  return (GdkVisual *) GDK_SCREEN_WAYLAND (screen)->visual;
 }
 
 static gboolean
@@ -349,7 +344,6 @@ typedef struct _GdkWaylandVisualClass	GdkWaylandVisualClass;
 struct _GdkWaylandVisual
 {
   GdkVisual visual;
-  struct wl_visual *wl_visual;
 };
 
 struct _GdkWaylandVisualClass
@@ -384,21 +378,21 @@ gdk_wayland_screen_visual_get_best_type (GdkScreen *screen)
 static GdkVisual*
 gdk_wayland_screen_visual_get_best (GdkScreen *screen)
 {
-  return GDK_SCREEN_WAYLAND (screen)->argb_visual;
+  return GDK_SCREEN_WAYLAND (screen)->visual;
 }
 
 static GdkVisual*
 gdk_wayland_screen_visual_get_best_with_depth (GdkScreen *screen,
 					       gint       depth)
 {
-  return GDK_SCREEN_WAYLAND (screen)->argb_visual;
+  return GDK_SCREEN_WAYLAND (screen)->visual;
 }
 
 static GdkVisual*
 gdk_wayland_screen_visual_get_best_with_type (GdkScreen     *screen,
 					      GdkVisualType  visual_type)
 {
-  return GDK_SCREEN_WAYLAND (screen)->argb_visual;
+  return GDK_SCREEN_WAYLAND (screen)->visual;
 }
 
 static GdkVisual*
@@ -406,7 +400,7 @@ gdk_wayland_screen_visual_get_best_with_both (GdkScreen     *screen,
 					      gint           depth,
 					      GdkVisualType  visual_type)
 {
-  return GDK_SCREEN_WAYLAND (screen)->argb_visual;
+  return GDK_SCREEN_WAYLAND (screen)->visual;
 }
 
 static void
@@ -440,9 +434,7 @@ gdk_wayland_screen_list_visuals (GdkScreen *screen)
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   screen_wayland = GDK_SCREEN_WAYLAND (screen);
 
-  list = g_list_append (NULL, screen_wayland->argb_visual);
-  list = g_list_append (NULL, screen_wayland->premultiplied_argb_visual);
-  list = g_list_append (NULL, screen_wayland->rgb_visual);
+  list = g_list_append (NULL, screen_wayland->visual);
 
   return list;
 }
@@ -451,7 +443,7 @@ gdk_wayland_screen_list_visuals (GdkScreen *screen)
 #define GDK_WAYLAND_VISUAL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_VISUAL, GdkWaylandVisual))
 
 static GdkVisual *
-gdk_wayland_visual_new (GdkScreen *screen, struct wl_visual *wl_visual)
+gdk_wayland_visual_new (GdkScreen *screen)
 {
   GdkVisual *visual;
 
@@ -459,8 +451,6 @@ gdk_wayland_visual_new (GdkScreen *screen, struct wl_visual *wl_visual)
   visual->screen = GDK_SCREEN (screen);
   visual->type = GDK_VISUAL_TRUE_COLOR;
   visual->depth = 32;
-
-  GDK_WAYLAND_VISUAL (visual)->wl_visual = wl_visual;
 
   return visual;
 }
@@ -470,10 +460,6 @@ _gdk_wayland_screen_new (GdkDisplay *display)
 {
   GdkScreen *screen;
   GdkScreenWayland *screen_wayland;
-  GdkDisplayWayland *display_wayland;
-  struct wl_visual *visual;
-
-  display_wayland = GDK_DISPLAY_WAYLAND (display);
 
   screen = g_object_new (GDK_TYPE_SCREEN_WAYLAND, NULL);
 
@@ -482,15 +468,7 @@ _gdk_wayland_screen_new (GdkDisplay *display)
   screen_wayland->width = 8192;
   screen_wayland->height = 8192;
 
-  visual = display_wayland->argb_visual;
-  screen_wayland->argb_visual = gdk_wayland_visual_new (screen, visual);
-
-  visual = display_wayland->premultiplied_argb_visual;
-  screen_wayland->premultiplied_argb_visual =
-    gdk_wayland_visual_new (screen, visual);
-
-  visual = display_wayland->rgb_visual;
-  screen_wayland->rgb_visual = gdk_wayland_visual_new (screen, visual);
+  screen_wayland->visual = gdk_wayland_visual_new (screen);
 
   screen_wayland->root_window =
     _gdk_wayland_screen_create_root_window (screen,
@@ -524,6 +502,7 @@ _gdk_screen_wayland_class_init (GdkScreenWaylandClass *klass)
   screen_class->get_monitor_height_mm = gdk_wayland_screen_get_monitor_height_mm;
   screen_class->get_monitor_plug_name = gdk_wayland_screen_get_monitor_plug_name;
   screen_class->get_monitor_geometry = gdk_wayland_screen_get_monitor_geometry;
+  screen_class->get_monitor_workarea = gdk_wayland_screen_get_monitor_geometry;
   screen_class->get_system_visual = gdk_wayland_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_wayland_screen_get_rgba_visual;
   screen_class->is_composited = gdk_wayland_screen_is_composited;

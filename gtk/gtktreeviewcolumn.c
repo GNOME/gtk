@@ -37,6 +37,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtktreeviewaccessible.h"
 
 
 /**
@@ -517,6 +518,12 @@ gtk_tree_view_column_dispose (GObject *object)
   GtkTreeViewColumn        *tree_column = (GtkTreeViewColumn *) object;
   GtkTreeViewColumnPrivate *priv        = tree_column->priv;
 
+  /* Remove this column from its treeview, 
+   * in case this column is destroyed before its treeview.
+   */ 
+  if (priv->tree_view)
+    gtk_tree_view_remove_column (GTK_TREE_VIEW (priv->tree_view), tree_column);
+    
   if (priv->cell_area_context)
     { 
       g_signal_handler_disconnect (priv->cell_area_context,
@@ -1097,13 +1104,14 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
 
   if (event->type == GDK_BUTTON_PRESS &&
       priv->reorderable &&
-      ((GdkEventButton *)event)->button == 1)
+      ((GdkEventButton *)event)->button == GDK_BUTTON_PRIMARY)
     {
       priv->maybe_reordered = TRUE;
-      gdk_window_get_pointer (gtk_button_get_event_window (GTK_BUTTON (widget)),
-			      &priv->drag_x,
-			      &priv->drag_y,
-			      NULL);
+      gdk_window_get_device_position (gtk_button_get_event_window (GTK_BUTTON (widget)),
+                                      gdk_event_get_device (event),
+                                      &priv->drag_x,
+                                      &priv->drag_y,
+                                      NULL);
       gtk_widget_grab_focus (widget);
     }
 
@@ -1643,12 +1651,12 @@ gtk_tree_view_column_new_with_area (GtkCellArea *area)
 
 /**
  * gtk_tree_view_column_new_with_attributes:
- * @title: The title to set the header to.
- * @cell: The #GtkCellRenderer.
- * @Varargs: A %NULL-terminated list of attributes.
- * 
- * Creates a new #GtkTreeViewColumn with a number of default values.  This is
- * equivalent to calling gtk_tree_view_column_set_title(),
+ * @title: The title to set the header to
+ * @cell: The #GtkCellRenderer
+ * @...: A %NULL-terminated list of attributes
+ *
+ * Creates a new #GtkTreeViewColumn with a number of default values.
+ * This is equivalent to calling gtk_tree_view_column_set_title(),
  * gtk_tree_view_column_pack_start(), and
  * gtk_tree_view_column_set_attributes() on the newly created #GtkTreeViewColumn.
  *
@@ -1787,15 +1795,15 @@ gtk_tree_view_column_set_attributesv (GtkTreeViewColumn *tree_column,
 
 /**
  * gtk_tree_view_column_set_attributes:
- * @tree_column: A #GtkTreeViewColumn.
+ * @tree_column: A #GtkTreeViewColumn
  * @cell_renderer: the #GtkCellRenderer we're setting the attributes of
- * @Varargs: A %NULL-terminated list of attributes.
- * 
+ * @...: A %NULL-terminated list of attributes
+ *
  * Sets the attributes in the list as the attributes of @tree_column.
  * The attributes should be in attribute/column order, as in
  * gtk_tree_view_column_add_attribute(). All existing attributes
  * are removed, and replaced with the new attributes.
- **/
+ */
 void
 gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
 				     GtkCellRenderer   *cell_renderer,
@@ -1930,7 +1938,11 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
     _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
 
   if (priv->tree_view)
-    _gtk_tree_view_reset_header_styles (GTK_TREE_VIEW (priv->tree_view));
+    {
+      _gtk_tree_view_reset_header_styles (GTK_TREE_VIEW (priv->tree_view));
+      _gtk_tree_view_accessible_toggle_visibility (GTK_TREE_VIEW (priv->tree_view),
+                                                   tree_column);
+    }
 
   gtk_tree_view_column_update_button (tree_column);
   g_object_notify (G_OBJECT (tree_column), "visible");
@@ -2138,8 +2150,8 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
 				int                width)
 {
   GtkTreeViewColumnPrivate *priv;
-  GtkAllocation             allocation;
   gboolean                  rtl;
+  GtkAllocation             allocation = { 0, 0, 0, 0 };
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
@@ -3095,6 +3107,9 @@ gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
 
   priv = tree_column->priv;
 
+  if (! gtk_cell_area_has_renderer (priv->cell_area, cell_renderer))
+    return FALSE;
+
   gtk_tree_view_get_background_area (GTK_TREE_VIEW (priv->tree_view),
                                      NULL, tree_column, &cell_area);
 
@@ -3106,13 +3121,8 @@ gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
                                      &allocation);
 
   if (x_offset)
-    {
-      GdkRectangle button_allocation;
+    *x_offset = allocation.x - cell_area.x;
 
-      /* Retrieve column offset */
-      gtk_widget_get_allocation (priv->button, &button_allocation);
-      *x_offset = allocation.x - button_allocation.x;
-    }
   if (width)
     *width = allocation.width;
 

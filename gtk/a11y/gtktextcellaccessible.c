@@ -80,51 +80,24 @@ static void             add_attr                        (PangoAttrList  *attr_li
 
 /* Misc */
 
-static gboolean gtk_text_cell_accessible_update_cache             (GtkRendererCellAccessible *cell,
-                                                         gboolean       emit_change_signal);
-
-static gchar *property_list[] = {
-  /* Set font_desc first since it resets other values if it is NULL */
-  "font-desc",
-  "attributes",
-  "background-gdk",
-  "editable",
-  "family",
-  "foreground-gdk",
-  "rise",
-  "scale",
-  "size",
-  "size-points",
-  "stretch",
-  "strikethrough",
-  "style",
-  "text",
-  "underline",
-  "variant",
-  "weight",
-
-  /* Also need the sets */
-  "background-set",
-  "editable-set",
-  "family-set",
-  "foreground-set",
-  "rise-set",
-  "scale-set",
-  "size-set",
-  "stretch-set",
-  "strikethrough-set",
-  "style-set",
-  "underline-set",
-  "variant-set",
-  "weight-set",
-  NULL
-};
+static void gtk_text_cell_accessible_update_cache       (GtkCellAccessible *cell);
 
 static void atk_text_interface_init (AtkTextIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkTextCellAccessible, _gtk_text_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
+static AtkStateSet *
+gtk_text_cell_accessible_ref_state_set (AtkObject *accessible)
+{
+  AtkStateSet *state_set;
+
+  state_set = ATK_OBJECT_CLASS (_gtk_text_cell_accessible_parent_class)->ref_state_set (accessible);
+
+  atk_state_set_add_state (state_set, ATK_STATE_SINGLE_LINE);
+
+  return state_set;
+}
 
 static void
 gtk_text_cell_accessible_finalize (GObject *object)
@@ -147,9 +120,8 @@ gtk_text_cell_accessible_get_name (AtkObject *atk_obj)
   return text_cell->cell_text;
 }
 
-static gboolean
-gtk_text_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
-                                       gboolean                   emit_change_signal)
+static void
+gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
 {
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (cell);
   AtkObject *obj = ATK_OBJECT (cell);
@@ -157,7 +129,9 @@ gtk_text_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
   gint temp_length;
   gchar *text;
 
-  g_object_get (G_OBJECT (cell->renderer), "text", &text, NULL);
+  g_object_get (G_OBJECT (GTK_RENDERER_CELL_ACCESSIBLE (cell)->renderer),
+                "text", &text,
+                NULL);
 
   if (text_cell->cell_text)
     {
@@ -167,12 +141,9 @@ gtk_text_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
           temp_length = text_cell->cell_length;
           text_cell->cell_text = NULL;
           text_cell->cell_length = 0;
-          if (emit_change_signal)
-            {
-              g_signal_emit_by_name (cell, "text-changed::delete", 0, temp_length);
-              if (obj->name == NULL)
-                g_object_notify (G_OBJECT (obj), "accessible-name");
-            }
+          g_signal_emit_by_name (cell, "text-changed::delete", 0, temp_length);
+          if (obj->name == NULL)
+            g_object_notify (G_OBJECT (obj), "accessible-name");
           if (text)
             rv = TRUE;
         }
@@ -198,16 +169,12 @@ gtk_text_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
 
   if (rv)
     {
-      if (emit_change_signal)
-        {
-          g_signal_emit_by_name (cell, "text-changed::insert",
-                                 0, text_cell->cell_length);
+      g_signal_emit_by_name (cell, "text-changed::insert",
+                             0, text_cell->cell_length);
 
-          if (obj->name == NULL)
-            g_object_notify (G_OBJECT (obj), "accessible-name");
-        }
+      if (obj->name == NULL)
+        g_object_notify (G_OBJECT (obj), "accessible-name");
     }
-  return rv;
 }
 
 static void
@@ -215,12 +182,12 @@ _gtk_text_cell_accessible_class_init (GtkTextCellAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
-  GtkRendererCellAccessibleClass *renderer_cell_class = GTK_RENDERER_CELL_ACCESSIBLE_CLASS (klass);
+  GtkCellAccessibleClass *cell_class = GTK_CELL_ACCESSIBLE_CLASS (klass);
 
-  renderer_cell_class->update_cache = gtk_text_cell_accessible_update_cache;
-  renderer_cell_class->property_list = property_list;
+  cell_class->update_cache = gtk_text_cell_accessible_update_cache;
 
   atk_object_class->get_name = gtk_text_cell_accessible_get_name;
+  atk_object_class->ref_state_set = gtk_text_cell_accessible_ref_state_set;
 
   gobject_class->finalize = gtk_text_cell_accessible_finalize;
 }
@@ -231,30 +198,6 @@ _gtk_text_cell_accessible_init (GtkTextCellAccessible *text_cell)
   text_cell->cell_text = NULL;
   text_cell->caret_pos = 0;
   text_cell->cell_length = 0;
-  atk_state_set_add_state (GTK_CELL_ACCESSIBLE (text_cell)->state_set,
-                           ATK_STATE_SINGLE_LINE);
-}
-
-AtkObject *
-_gtk_text_cell_accessible_new (void)
-{
-  GObject *object;
-  AtkObject *atk_object;
-  GtkRendererCellAccessible *cell;
-
-  object = g_object_new (GTK_TYPE_TEXT_CELL_ACCESSIBLE, NULL);
-
-  g_return_val_if_fail (object != NULL, NULL);
-
-  atk_object = ATK_OBJECT (object);
-  atk_object->role = ATK_ROLE_TABLE_CELL;
-
-  cell = GTK_RENDERER_CELL_ACCESSIBLE(object);
-
-  cell->renderer = gtk_cell_renderer_text_new ();
-  g_object_ref_sink (cell->renderer);
-
-  return atk_object;
 }
 
 static gchar *

@@ -9,7 +9,7 @@
 # set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
 
 m4_define([gtk_major_version], [3])
-m4_define([gtk_minor_version], [1])
+m4_define([gtk_minor_version], [3])
 m4_define([gtk_micro_version], [15])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
@@ -39,11 +39,11 @@ AC_CONFIG_AUX_DIR([build-aux])
 m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.29.14])
+m4_define([glib_required_version], [2.31.14])
 m4_define([pango_required_version], [1.29.0])
 m4_define([atk_required_version], [2.1.5])
 m4_define([cairo_required_version], [1.10.0])
-m4_define([gdk_pixbuf_required_version], [2.23.5])
+m4_define([gdk_pixbuf_required_version], [2.25.2])
 m4_define([introspection_required_version], [0.10.1])
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version
@@ -62,7 +62,7 @@ AC_SUBST(INTROSPECTION_REQUIRED_VERSION)
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
-AM_INIT_AUTOMAKE([1.11 no-define -Wno-portability tar-ustar no-dist-gzip dist-xz])
+AM_INIT_AUTOMAKE([1.11 -Wall no-define -Wno-portability tar-ustar no-dist-gzip dist-xz])
 AM_MAINTAINER_MODE([enable])
 
 # Support silent build rules. Disable
@@ -165,9 +165,6 @@ case $host in
   *-*-linux*)
     os_linux=yes
     ;;
-  *-*-openbsd*)
-    os_openbsd=yes
-    ;;
 esac
 
 dnl
@@ -266,27 +263,27 @@ AC_ARG_ENABLE(xkb,
               [enable_xkb="maybe"])
 AC_ARG_ENABLE(xinerama,
               [AS_HELP_STRING([--enable-xinerama],
-	                      [support Xinerama extension if available [default=maybe]])],,
+	                      [support Xinerama extension [default=maybe]])],,
               [enable_xinerama="maybe"])
 AC_ARG_ENABLE(xinput,
               [AS_HELP_STRING([--enable-xinput],
-                              [support XInput extension if available [default=yes]])],,
+                              [support XInput extension [default=yes]])],,
               [enable_xinput="maybe"])
 AC_ARG_ENABLE(xrandr,
               [AS_HELP_STRING([--enable-xrandr],
-                              [support XRandR extension if available [default=maybe]])],,
+                              [support XRandR extension [default=maybe]])],,
               [enable_xrandr="maybe"])
 AC_ARG_ENABLE(xfixes,
               [AS_HELP_STRING([--enable-xfixes],
-                              [support XFixes extension if available [default=maybe]])],,
+                              [support XFixes extension [default=maybe]])],,
               [enable_xfixes="maybe"])
 AC_ARG_ENABLE(xcomposite,
               [AS_HELP_STRING([--enable-xcomposite],
-                              [support X Composite extension if available [default=maybe]])],,
+                              [support X Composite extension [default=maybe]])],,
               [enable_xcomposite="maybe"])
 AC_ARG_ENABLE(xdamage,
               [AS_HELP_STRING([--enable-xdamage],
-                              [support X Damage extension if available [default=maybe]])],,
+                              [support X Damage extension [default=maybe]])],,
               [enable_xdamage="maybe"])
 
 AC_ARG_ENABLE(x11-backend,
@@ -318,6 +315,11 @@ if test -z "$backend_set"; then
   fi
 fi
 
+AC_ARG_ENABLE(quartz-relocation,
+              [AS_HELP_STRING([--enable-quartz-relocation],
+                              [enable bundle-based relocation functions])],
+                              [quartz_relocation=yes])
+
 cairo_backends=
 backend_immodules=
 GDK_BACKENDS=
@@ -327,7 +329,7 @@ GDK_WINDOWING=
 GIO_PACKAGE=gio-2.0
 PANGO_PACKAGES="pango pangocairo"
 
-if test "x$enable_x11_backend" = xyes; then
+if test "$enable_x11_backend" = "yes"; then
   # GDK calls the xlib backend "x11," cairo calls it "xlib." Other
   # backend names are identical.
   cairo_backends="$cairo_backends cairo-xlib"
@@ -340,7 +342,7 @@ if test "x$enable_x11_backend" = xyes; then
 #define GDK_WINDOWING_X11"
 fi
 
-if test "x$enable_win32_backend" = xyes; then
+if test "$enable_win32_backend" = "yes"; then
   cairo_backends="$cairo_backends cairo-win32"
   GDK_BACKENDS="$GDK_BACKENDS win32"
   backend_immodules="$backend_immodules,ime"
@@ -360,6 +362,10 @@ if test "x$enable_quartz_backend" = xyes; then
 #define GDK_WINDOWING_QUARTZ"
   GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -framework Cocoa"
   AM_CONDITIONAL(USE_QUARTZ, true)
+  if test "x$quartz_relocation" = xyes; then
+    AC_DEFINE([QUARTZ_RELOCATION], [1], [Use NSBundle functions to determine load paths for libraries, translations, etc.])
+  fi
+
 else
   AM_CONDITIONAL(USE_QUARTZ, false)
 fi
@@ -400,7 +406,7 @@ fi
 
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
-  GTK_DEBUG_FLAGS="-DG_ENABLE_DEBUG -DG_ERRORCHECK_MUTEXES"
+  GTK_DEBUG_FLAGS="-DG_ENABLE_DEBUG"
 else
   if test "x$enable_debug" = "xno"; then
     GTK_DEBUG_FLAGS="-DG_DISABLE_ASSERT -DG_DISABLE_CHECKS -DG_DISABLE_CAST_CHECKS"
@@ -437,8 +443,6 @@ if test "x$GCC" = "xyes"; then
   fi
 fi
 changequote([,])dnl
-
-CPPFLAGS="$CPPFLAGS -DG_DISABLE_SINGLE_INCLUDES -DATK_DISABLE_SINGLE_INCLUDES"
 
 # Ensure MSVC-compatible struct packing convention is used when
 # compiling for Win32 with gcc.
@@ -490,6 +494,8 @@ PKG_CHECK_MODULES(BASE_DEPENDENCIES,
    gdk-pixbuf-2.0 >= gdk_pixbuf_required_version])
 
 PKG_CHECK_MODULES(CAIRO_BACKEND, [$cairo_backends])
+
+PKG_CHECK_MODULES(GMODULE, [gmodule-2.0])
 
 if test "$os_win32" != yes; then
     # libtool option to control which symbols are exported
@@ -681,23 +687,11 @@ esac
 # Run AM_PATH_GLIB_2_0 to make sure that GLib is installed and working
 #
 
-GLIB_PACKAGES="gobject-2.0 gio-2.0 gmodule-no-export-2.0"
-
 AM_PATH_GLIB_2_0(glib_required_version, :,
   AC_MSG_ERROR([
 *** GLIB glib_required_version or better is required. The latest version of
 *** GLIB is always available from ftp://ftp.gtk.org/pub/gtk/.]),
-  gobject gmodule-no-export gthread)
-
-# See if it's safe to turn G_DISABLE_DEPRECATED on.
-GLIB_VERSION_MAJOR_MINOR=`$PKG_CONFIG --modversion glib-2.0 | sed "s/\.@<:@^.@:>@*\$//"`
-GLIB_REQUIRED_VERSION_MAJOR_MINOR=`echo glib_required_version | sed "s/\.@<:@^.@:>@*\$//"`
-if test "x$GLIB_VERSION_MAJOR_MINOR" = "x$GLIB_REQUIRED_VERSION_MAJOR_MINOR"; then
-  CFLAGS="-DG_DISABLE_DEPRECATED $CFLAGS"
-fi
-
-CFLAGS="-DGDK_PIXBUF_DISABLE_DEPRECATED $CFLAGS"
-
+  gobject gmodule-no-export)
 
 dnl
 dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
@@ -1124,6 +1118,7 @@ if test "x$enable_x11_backend" = xyes; then
               [Define to 1 if XFree XInput should be used])
 
     X_PACKAGES="$X_PACKAGES xi"
+    GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xi"
 
     AC_CHECK_HEADER(X11/extensions/XInput2.h,
                     have_xinput2=yes
@@ -1261,20 +1256,24 @@ fi
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
-GDK_PACKAGES="$PANGO_PACKAGES $GIO_PACKAGE $X_PACKAGES $WAYLAND_PACKAGES gdk-pixbuf-2.0 $cairo_backends cairo-gobject"
+GDK_PACKAGES="$PANGO_PACKAGES gdk-pixbuf-2.0 cairo cairo-gobject"
+GDK_PRIVATE_PACKAGES="$GIO_PACKAGE $X_PACKAGES $WAYLAND_PACKAGES $cairo_backends"
+if test "x$enable_x11_backend" = xyes; then
+  GDK_PRIVATE_PACKAGES="$GDK_PRIVATE_PACKAGES pangoft2"
+fi
 
-GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES` $MATH_LIB"
-GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES` $GDK_EXTRA_CFLAGS"
+GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES $GDK_PRIVATE_PACKAGES` $MATH_LIB"
+GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags $GDK_PACKAGES $GDK_PRIVATE_PACKAGES` $GDK_EXTRA_CFLAGS"
 #
 # If we aren't writing explicit dependencies, then don't put the extra libraries we need
 # into the pkg-config files
 #
 if test $enable_explicit_deps != yes ; then
-  GDK_PACKAGES="$PANGO_PACKAGES gdk-pixbuf-2.0 cairo-gobject"
   GDK_EXTRA_LIBS=
 fi
 
 AC_SUBST(GDK_PACKAGES)
+AC_SUBST(GDK_PRIVATE_PACKAGES)
 AC_SUBST(GDK_EXTRA_LIBS)
 AC_SUBST(GDK_EXTRA_CFLAGS)
 AC_SUBST(GDK_DEP_LIBS)
@@ -1311,17 +1310,15 @@ else
 fi
 
 GTK_PACKAGES="atk cairo cairo-gobject gdk-pixbuf-2.0 gio-2.0"
+GTK_PRIVATE_PACKAGES=""
 if test "x$enable_x11_backend" = xyes; then
-  GTK_PACKAGES="$GTK_PACKAGES pangoft2"
+  GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES pangoft2"
 fi
 GTK_EXTRA_LIBS=
-if test x"$os_openbsd" = xyes; then
-  GTK_EXTRA_LIBS="$GTK_EXTRA_LIBS -lkvm"
-fi
 
 GTK_EXTRA_CFLAGS=
-GTK_DEP_LIBS="$GDK_EXTRA_LIBS $GTK_DEP_LIBS_FOR_X `$PKG_CONFIG --libs $PANGO_PACKAGES $GTK_PACKAGES_FOR_X $GTK_PACKAGES` $GTK_EXTRA_LIBS $MATH_LIB"
-GTK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES $GTK_PACKAGES` $GDK_EXTRA_CFLAGS $GTK_EXTRA_CFLAGS"
+GTK_DEP_LIBS="$GDK_EXTRA_LIBS $GTK_DEP_LIBS_FOR_X `$PKG_CONFIG --libs $PANGO_PACKAGES $GTK_PACKAGES_FOR_X $GTK_PACKAGES $GTK_PRIVATE_PACKAGES` $GTK_EXTRA_LIBS $MATH_LIB"
+GTK_DEP_CFLAGS="`$PKG_CONFIG --cflags $GDK_PACKAGES $GTK_PACKAGES $GTK_PRIVATE_PACKAGES` $GDK_EXTRA_CFLAGS $GTK_EXTRA_CFLAGS"
 
 if test x"$os_win32" = xyes; then
   GTK_EXTRA_CFLAGS="$msnative_struct"
@@ -1333,6 +1330,7 @@ PANGO_PREFIX="`$PKG_CONFIG --variable=prefix pango`"
 CAIRO_PREFIX="`$PKG_CONFIG --variable=prefix cairo`"
 
 AC_SUBST(GTK_PACKAGES)
+AC_SUBST(GTK_PRIVATE_PACKAGES)
 AC_SUBST(GTK_EXTRA_LIBS)
 AC_SUBST(GTK_EXTRA_CFLAGS)
 AC_SUBST(GTK_DEP_LIBS)
@@ -1501,6 +1499,9 @@ if test "x$enable_test_print_backend" != "xno" ; then
 fi
 AM_CONDITIONAL(TEST_PRINT_BACKEND, test "x$enable_test_print_backend" != "xno")
 
+if test "$os_win32" = "yes"; then
+  AC_CHECK_TYPES([IPrintDialogCallback],[],[],[[#include <windows.h>]])
+fi
 
 ################################################################
 # Strip -export-dynamic from the link lines of various libraries
@@ -1528,6 +1529,13 @@ fi
 
 GLIB_GSETTINGS
 
+#############
+# Resources #
+#############
+
+GLIB_COMPILE_RESOURCES=`$PKG_CONFIG --variable glib_compile_resources gio-2.0`
+AC_SUBST(GLIB_COMPILE_RESOURCES)
+
 ##################################################
 # GObject introspection
 ##################################################
@@ -1540,7 +1548,7 @@ GOBJECT_INTROSPECTION_CHECK(introspection_required_version)
 
 AC_ARG_ENABLE(packagekit,
               [AS_HELP_STRING([--enable-packagekit=@<:@yes/no/auto@:>@],
-                              [build packagekit open-with module [default=auto]])],
+                              [build PackageKit open-with module [default=auto]])],
               [enable_packagekit="$enableval"],
               [enable_packagekit=auto])
 if test "$enable_packagekit" = "auto"; then
@@ -1551,7 +1559,7 @@ if test "$enable_packagekit" = "auto"; then
   fi
 fi
 
-AC_MSG_CHECKING([Whether to use PackageKit])
+AC_MSG_CHECKING([whether to use PackageKit])
 build_packagekit=no
 if test "x$enable_packagekit" != "xno"; then
   if test "$os_win32" != "yes"; then
@@ -1574,22 +1582,26 @@ AC_ARG_ENABLE(colord,
                               [build colord support code [default=auto]])],
               [enable_colord="$enableval"],
               [enable_colord=auto])
+
+AC_MSG_CHECKING([whether to use colord])
 if test "$enable_colord" = "auto"; then
   if test "$os_win32" = "yes"; then
     enable_colord=no
-  else
-    enable_colord=yes
   fi
 fi
+if test "$enable_colord" != "no"; then
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
+fi
 
-AC_MSG_CHECKING([Whether to use colord])
 have_colord=no
-if test "x$enable_colord" != "xno"; then
+if test "$enable_colord" != "no"; then
         if test "$os_win32" != "yes"; then
                 PKG_CHECK_MODULES(COLORD, colord >= 0.1.9,
                                   have_colord=yes, have_colord=no)
-                if test "enable_colord" = "yes"; then
-                        if test "have_colord" = "no"; then
+                if test "$enable_colord" = "yes"; then
+                        if test "$have_colord" = "no"; then
                                 AC_MSG_ERROR([--enable-colord specified, but not available])
                         fi
                 fi
@@ -1597,9 +1609,8 @@ if test "x$enable_colord" != "xno"; then
                 AC_MSG_ERROR([colord support is not available on win32])
         fi
 fi
-AC_MSG_RESULT([$have_colord])
 
-if test "have_colord" = "yes"; then
+if test "$have_colord" = "yes"; then
         AC_DEFINE(HAVE_COLORD, 1, [define if we have colord])
 fi
 AM_CONDITIONAL(HAVE_COLORD, test "x$have_colord" = "xyes")
@@ -1661,6 +1672,20 @@ AC_CONFIG_COMMANDS([gdk/gdkconfig.h], [
 
 G_BEGIN_DECLS
 
+/* These macros are used to mark deprecated functions in GDK and
+ * GTK+ headers, and thus have to be exposed in installed headers.
+ * But please do *not* use them in other projects. Instead, use
+ * G_DEPRECATED or define your own wrappers around it.
+ */
+
+#ifdef GDK_DISABLE_DEPRECATION_WARNINGS
+#define GDK_DEPRECATED
+#define GDK_DEPRECATED_FOR(f)
+#else
+#define GDK_DEPRECATED G_DEPRECATED
+#define GDK_DEPRECATED_FOR(f) G_DEPRECATED_FOR(f)
+#endif
+
 _______EOF
 
 	cat >>$outfile <<_______EOF
@@ -1716,8 +1741,6 @@ gdk-3.0.pc
 gtk+-3.0.pc
 gtk+-unix-print-3.0.pc
 gail-3.0.pc
-gtk+-3.0-uninstalled.pc
-gail-3.0-uninstalled.pc
 m4macros/Makefile
 po/Makefile.in
 po-properties/Makefile.in
@@ -1725,12 +1748,14 @@ demos/Makefile
 demos/gtk-demo/Makefile
 demos/gtk-demo/geninclude.pl
 demos/pixbuf-demo/Makefile
+demos/widget-factory/Makefile
 examples/Makefile
 tests/Makefile
 tests/a11y/Makefile
 tests/css/Makefile
 tests/css/parser/Makefile
 tests/reftests/Makefile
+tests/visuals/Makefile
 docs/Makefile
 docs/reference/Makefile
 docs/reference/gdk/Makefile
@@ -1787,7 +1812,7 @@ echo "        GTK+ $GTK_VERSION"
 echo "        ==========="
 echo ""
 echo "        GDK backends:         $GDK_BACKENDS"
-if test "x$enable_x11_backend" = "xyes"; then
+if test "$enable_x11_backend" = "yes"; then
 echo "        X11 extensions:       $X_EXTENSIONS"
 fi
 echo "        Print backends:       $PRINT_BACKENDS"

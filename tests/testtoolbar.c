@@ -26,27 +26,29 @@
 static void
 change_orientation (GtkWidget *button, GtkWidget *toolbar)
 {
-  GtkWidget *table;
+  GtkWidget *grid;
   GtkOrientation orientation;
 
-  table = gtk_widget_get_parent (toolbar);
+  grid = gtk_widget_get_parent (toolbar);
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     orientation = GTK_ORIENTATION_VERTICAL;
   else
     orientation = GTK_ORIENTATION_HORIZONTAL;
 
   g_object_ref (toolbar);
-  gtk_container_remove (GTK_CONTAINER (table), toolbar);
+  gtk_container_remove (GTK_CONTAINER (grid), toolbar);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (toolbar), orientation);
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gtk_table_attach (GTK_TABLE (table), toolbar,
-			0,2, 0,1, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
+      gtk_widget_set_hexpand (toolbar, TRUE);
+      gtk_widget_set_vexpand (toolbar, FALSE);
+      gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 2, 1);
     }
   else
     {
-      gtk_table_attach (GTK_TABLE (table), toolbar,
-			0,1, 0,4, GTK_FILL, GTK_FILL|GTK_EXPAND, 0, 0);
+      gtk_widget_set_hexpand (toolbar, FALSE);
+      gtk_widget_set_vexpand (toolbar, TRUE);
+      gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 1, 5);
     }
   g_object_unref (toolbar);
 }
@@ -485,7 +487,7 @@ timeout_cb1 (GtkWidget *widget)
 gint
 main (gint argc, gchar **argv)
 {
-  GtkWidget *window, *toolbar, *table, *treeview, *scrolled_window;
+  GtkWidget *window, *toolbar, *grid, *treeview, *scrolled_window;
   GtkWidget *hbox, *hbox1, *hbox2, *checkbox, *option_menu, *menu;
   gint i;
   static const gchar *toolbar_styles[] = { "icons", "text", "both (vertical)",
@@ -505,22 +507,22 @@ main (gint argc, gchar **argv)
 
   g_signal_connect (window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-  table = gtk_table_new (4, 2, FALSE);
-  gtk_container_add (GTK_CONTAINER (window), table);
+  grid = gtk_grid_new ();
+  gtk_container_add (GTK_CONTAINER (window), grid);
 
   toolbar = gtk_toolbar_new ();
-  gtk_table_attach (GTK_TABLE (table), toolbar,
-		    0,2, 0,1, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
+  gtk_widget_set_vexpand (toolbar, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 2, 1);
 
   hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
   gtk_container_set_border_width (GTK_CONTAINER (hbox1), 5);
-  gtk_table_attach (GTK_TABLE (table), hbox1,
-		    1,2, 1,2, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
+  gtk_widget_set_vexpand (hbox1, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), hbox1, 1, 1, 1, 1);
 
   hbox2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   gtk_container_set_border_width (GTK_CONTAINER (hbox2), 5);
-  gtk_table_attach (GTK_TABLE (table), hbox2,
-		    1,2, 2,3, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
+  gtk_widget_set_vexpand (hbox2, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), hbox2, 1, 2, 1, 1);
 
   checkbox = gtk_check_button_new_with_mnemonic("_Vertical");
   gtk_box_pack_start (GTK_BOX (hbox1), checkbox, FALSE, FALSE, 0);
@@ -566,8 +568,9 @@ main (gint argc, gchar **argv)
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_table_attach (GTK_TABLE (table), scrolled_window,
-		    1,2, 3,4, GTK_FILL|GTK_EXPAND, GTK_FILL|GTK_EXPAND, 0, 0);
+  gtk_widget_set_hexpand (scrolled_window, TRUE);
+  gtk_widget_set_vexpand (scrolled_window, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), scrolled_window, 1, 3, 1, 1);
 
   store = create_items_list (&treeview);
   gtk_container_add (GTK_CONTAINER (scrolled_window), treeview);
@@ -683,10 +686,16 @@ main (gint argc, gchar **argv)
   add_item_to_list (store, item, "Terminal");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
+  image = gtk_spinner_new ();
+  gtk_spinner_start (GTK_SPINNER (image));
+  item = gtk_tool_button_new (image, "Spinner");
+  add_item_to_list (store, item, "Spinner");
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-  gtk_table_attach (GTK_TABLE (table), hbox,
-		    1,2, 4,5, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
+  gtk_widget_set_hexpand (hbox, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), hbox, 1, 4, 1, 1);
 
   button = gtk_button_new_with_label ("Drag me to the toolbar");
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);

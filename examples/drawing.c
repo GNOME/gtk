@@ -86,11 +86,11 @@ button_press_event_cb (GtkWidget      *widget,
   if (surface == NULL)
     return FALSE;
 
-  if (event->button == 1)
+  if (event->button == GDK_BUTTON_PRIMARY)
     {
       draw_brush (widget, event->x, event->y);
     }
-  else if (event->button == 3)
+  else if (event->button == GDK_BUTTON_SECONDARY)
     {
       clear_surface ();
       gtk_widget_queue_draw (widget);
@@ -109,27 +109,12 @@ motion_notify_event_cb (GtkWidget      *widget,
                         GdkEventMotion *event,
                         gpointer        data)
 {
-  int x, y;
-  GdkModifierType state;
-
   /* paranoia check, in case we haven't gotten a configure event */
   if (surface == NULL)
     return FALSE;
 
-  /* This call is very important; it requests the next motion event.
-   * If you don't call gdk_window_get_pointer() you'll only get
-   * a single motion event. The reason is that we specified
-   * GDK_POINTER_MOTION_HINT_MASK to gtk_widget_set_events().
-   * If we hadn't specified that, we could just use event->x, event->y
-   * as the pointer location. But we'd also get deluged in events.
-   * By requesting the next event as we handle the current one,
-   * we avoid getting a huge number of events faster than we
-   * can cope.
-   */
-  gdk_window_get_pointer (event->window, &x, &y, &state);
-
-  if (state & GDK_BUTTON1_MASK)
-    draw_brush (widget, x, y);
+  if (event->state & GDK_BUTTON1_MASK)
+    draw_brush (widget, event->x, event->y);
 
   /* We've handled it, stop processing */
   return TRUE;
@@ -189,8 +174,7 @@ main (int   argc,
    */
   gtk_widget_set_events (da, gtk_widget_get_events (da)
                              | GDK_BUTTON_PRESS_MASK
-                             | GDK_POINTER_MOTION_MASK
-                             | GDK_POINTER_MOTION_HINT_MASK);
+                             | GDK_POINTER_MOTION_MASK);
 
   gtk_widget_show_all (window);
 

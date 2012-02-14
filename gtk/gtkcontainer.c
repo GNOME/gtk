@@ -73,7 +73,7 @@
  * The second type of container can have more than one child; its purpose is to
  * manage <emphasis>layout</emphasis>. This means that these containers assign
  * sizes and positions to their children. For example, a #GtkHBox arranges its
- * children in a horizontal row, and a #GtkTable arranges the widgets it contains
+ * children in a horizontal row, and a #GtkGrid arranges the widgets it contains
  * in a two-dimensional grid.
  *
  * <refsect2 id="container-geometry-management">
@@ -553,7 +553,7 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
                                             const gchar  *value)
 {
   GParamSpec *pspec;
-  GValue gvalue = { 0, };
+  GValue gvalue = G_VALUE_INIT;
   GError *error = NULL;
 
   pspec = gtk_container_class_find_child_property
@@ -847,7 +847,7 @@ container_set_child_property (GtkContainer       *container,
                               const GValue       *value,
                               GObjectNotifyQueue *nqueue)
 {
-  GValue tmp_value = { 0, };
+  GValue tmp_value = G_VALUE_INIT;
   GtkContainerClass *class = g_type_class_peek (pspec->owner_type);
 
   /* provide a copy to work from, convert (if necessary) and validate */
@@ -903,7 +903,7 @@ gtk_container_child_get_valist (GtkContainer *container,
   name = first_property_name;
   while (name)
     {
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
       GParamSpec *pspec;
       gchar *error;
 
@@ -983,7 +983,7 @@ gtk_container_child_get_property (GtkContainer *container,
                G_OBJECT_TYPE_NAME (container));
   else
     {
-      GValue *prop_value, tmp_value = { 0, };
+      GValue *prop_value, tmp_value = G_VALUE_INIT;
 
       /* auto-conversion of the callers value type
        */
@@ -1047,7 +1047,7 @@ gtk_container_child_set_valist (GtkContainer *container,
   name = first_property_name;
   while (name)
     {
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
       gchar *error = NULL;
       GParamSpec *pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool,
                                                     name,
@@ -1145,8 +1145,8 @@ gtk_container_child_set_property (GtkContainer *container,
  * @container: a #GtkContainer
  * @widget: a widget to be placed inside @container
  * @first_prop_name: the name of the first child property to set
- * @Varargs: a %NULL-terminated list of property names and values, starting
- *           with @first_prop_name
+ * @...: a %NULL-terminated list of property names and values, starting
+ *     with @first_prop_name
  *
  * Adds @widget to @container, setting child properties at the same time.
  * See gtk_container_add() and gtk_container_child_set() for more details.
@@ -1185,8 +1185,8 @@ gtk_container_add_with_properties (GtkContainer *container,
  * @container: a #GtkContainer
  * @child: a widget which is a child of @container
  * @first_prop_name: the name of the first property to set
- * @Varargs: a %NULL-terminated list of property names and values, starting
- *           with @first_prop_name
+ * @...: a %NULL-terminated list of property names and values, starting
+ *     with @first_prop_name
  *
  * Sets one or more child properties for @child and @container.
  */
@@ -1208,11 +1208,11 @@ gtk_container_child_set (GtkContainer      *container,
  * @container: a #GtkContainer
  * @child: a widget which is a child of @container
  * @first_prop_name: the name of the first property to get
- * @Varargs: return location for the first property, followed
+ * @...: return location for the first property, followed
  *     optionally by more name/return location pairs, followed by %NULL
  *
  * Gets the values of one or more child properties for @child and @container.
- **/
+ */
 void
 gtk_container_child_get (GtkContainer      *container,
                          GtkWidget         *child,
@@ -1267,10 +1267,11 @@ gtk_container_class_install_child_property (GtkContainerClass *cclass,
  * gtk_container_class_find_child_property:
  * @cclass: (type GtkContainerClass): a #GtkContainerClass
  * @property_name: the name of the child property to find
- * @returns: (transfer none): the #GParamSpec of the child property or
- *           %NULL if @class has no child property with that name.
  *
  * Finds a child property of a container class by name.
+ *
+ * Returns: (transfer none): the #GParamSpec of the child property
+ *     or %NULL if @class has no child property with that name.
  */
 GParamSpec*
 gtk_container_class_find_child_property (GObjectClass *cclass,
@@ -1289,11 +1290,12 @@ gtk_container_class_find_child_property (GObjectClass *cclass,
  * gtk_container_class_list_child_properties:
  * @cclass: (type GtkContainerClass): a #GtkContainerClass
  * @n_properties: location to return the number of child properties found
- * @returns: (array length=n_properties) (transfer container): a newly
- *           allocated %NULL-terminated array of #GParamSpec*.  The
- *           array must be freed with g_free().
  *
  * Returns all child properties of a container class.
+ *
+ * Returns: (array length=n_properties) (transfer container):
+ *     a newly allocated %NULL-terminated array of #GParamSpec*.
+ *     The array must be freed with g_free().
  */
 GParamSpec**
 gtk_container_class_list_child_properties (GObjectClass *cclass,
@@ -1479,10 +1481,10 @@ gtk_container_get_border_width (GtkContainer *container)
  *
  * Adds @widget to @container. Typically used for simple containers
  * such as #GtkWindow, #GtkFrame, or #GtkButton; for more complicated
- * layout containers such as #GtkBox or #GtkTable, this function will
+ * layout containers such as #GtkBox or #GtkGrid, this function will
  * pick default packing parameters that may not be correct.  So
  * consider functions such as gtk_box_pack_start() and
- * gtk_table_attach() as an alternative to gtk_container_add() in
+ * gtk_grid_attach() as an alternative to gtk_container_add() in
  * those cases. A widget may be added to only one container at a time;
  * you can't place the same widget inside two different containers.
  **/
@@ -2300,8 +2302,8 @@ get_focus_chain (GtkContainer *container)
 
 /* same as gtk_container_get_children, except it includes internals
  */
-static GList *
-gtk_container_get_all_children (GtkContainer *container)
+GList *
+_gtk_container_get_all_children (GtkContainer *container)
 {
   GList *children = NULL;
 
@@ -2375,7 +2377,7 @@ gtk_container_focus (GtkWidget        *widget,
       if (priv->has_focus_chain)
         children = g_list_copy (get_focus_chain (container));
       else
-        children = gtk_container_get_all_children (container);
+        children = _gtk_container_get_all_children (container);
 
       if (priv->has_focus_chain &&
           (direction == GTK_DIR_TAB_FORWARD ||
@@ -3375,9 +3377,21 @@ GtkWidgetPath *
 gtk_container_get_path_for_child (GtkContainer *container,
                                   GtkWidget    *child)
 {
+  GtkWidgetPath *path;
+
   g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
   g_return_val_if_fail (container == (GtkContainer *) gtk_widget_get_parent (child), NULL);
 
-  return GTK_CONTAINER_GET_CLASS (container)->get_path_for_child (container, child);
+  path = GTK_CONTAINER_GET_CLASS (container)->get_path_for_child (container, child);
+  if (gtk_widget_path_get_object_type (path) != G_OBJECT_TYPE (child))
+    {
+      g_critical ("%s %p returned a widget path for type %s, but child is %s",
+                  G_OBJECT_TYPE_NAME (container),
+                  container,
+                  g_type_name (gtk_widget_path_get_object_type (path)),
+                  G_OBJECT_TYPE_NAME (child));
+    }
+
+  return path;
 }

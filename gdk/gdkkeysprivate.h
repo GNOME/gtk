@@ -61,6 +61,8 @@ struct _GdkKeymapClass
                                          GdkModifierType *state);
   gboolean (* map_virtual_modifiers)    (GdkKeymap       *keymap,
                                          GdkModifierType *state);
+  GdkModifierType (*get_modifier_mask)  (GdkKeymap         *keymap,
+                                         GdkModifierIntent  intent);
 
 
   /* Signals */
@@ -74,6 +76,11 @@ struct _GdkKeymap
   GObject     parent_instance;
   GdkDisplay *display;
 };
+
+void _gdk_display_manager_real_keyval_convert_case (GdkDisplayManager *manager,
+                                                    guint              symbol,
+                                                    guint             *lower,
+                                                    guint             *upper);
 
 G_END_DECLS
 

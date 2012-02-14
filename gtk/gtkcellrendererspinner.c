@@ -35,6 +35,14 @@
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
 
+#undef GDK_DEPRECATED
+#undef GDK_DEPRECATED_FOR
+#define GDK_DEPRECATED
+#define GDK_DEPRECATED_FOR(f)
+#undef GTK_DISABLE_DEPRECATED
+
+#include "deprecated/gtkstyle.h"
+
 
 /**
  * SECTION:gtkcellrendererspinner

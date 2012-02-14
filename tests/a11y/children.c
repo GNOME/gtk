@@ -20,6 +20,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include <gtk/gtk.h>
 #include <string.h>
 

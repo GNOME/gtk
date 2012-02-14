@@ -90,16 +90,6 @@ GType        gtk_accel_map_get_type (void) G_GNUC_CONST;
 GtkAccelMap *gtk_accel_map_get      (void);
 
 
-/* --- internal API --- */
-void		_gtk_accel_map_init		(void);
-
-void            _gtk_accel_map_add_group	 (const gchar   *accel_path,
-						  GtkAccelGroup *accel_group);
-void            _gtk_accel_map_remove_group 	 (const gchar   *accel_path,
-						  GtkAccelGroup *accel_group);
-gboolean	_gtk_accel_path_is_valid	 (const gchar	*accel_path);
-
-
 G_END_DECLS
 
 #endif /* __GTK_ACCEL_MAP_H__ */

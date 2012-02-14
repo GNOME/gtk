@@ -49,7 +49,6 @@ struct _GtkImageCellAccessibleClass
 };
 
 GType      _gtk_image_cell_accessible_get_type (void);
-AtkObject *_gtk_image_cell_accessible_new      (void);
 
 G_END_DECLS
 

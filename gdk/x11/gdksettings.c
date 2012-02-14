@@ -81,7 +81,9 @@ static const char gdk_settings_names[] =
   "Net/EnableEventSounds\0"   "gtk-enable-event-sounds\0"
   "Gtk/CursorBlinkTimeout\0"  "gtk-cursor-blink-timeout\0"
   "Gtk/AutoMnemonics\0"       "gtk-auto-mnemonics\0"
-  "Gtk/VisibleFocus\0"        "gtk-visible-focus\0";
+  "Gtk/VisibleFocus\0"        "gtk-visible-focus\0"
+  "Gtk/ShellShowsAppMenu\0"   "gtk-shell-shows-app-menu\0"
+  "Gtk/ShellShowsMenubar\0"   "gtk-shell-shows-menubar\0";
 
 
 static const struct
@@ -135,5 +137,7 @@ static const struct
   { 1636, 1658 },
   { 1682, 1705 },
   { 1730, 1748 },
-  { 1767, 1784 }
+  { 1767, 1784 },
+  { 1802, 1824 },
+  { 1849, 1871 }
 };

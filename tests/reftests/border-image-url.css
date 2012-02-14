@@ -1,15 +1,15 @@
-.button-image {
-  engine: none;
+@import "reset-to-defaults.css";
 
+.button-image {
   border-image: url("green-20x20.png") 1 stretch;
 
-  border-width: 1 2 2 1;
-  border-radius: 0;
+  border-style: groove;
+  border-width: 1px 2px 2px 1px;
 }
 
 .button-not-image {
   border-color: green;
+
   border-style: solid;
-  border-width: 1 2 2 1;
-  border-radius: 0;
+  border-width: 1px 2px 2px 1px;
 }

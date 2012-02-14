@@ -89,6 +89,8 @@ gdk_cairo_get_clip_rectangle (cairo_t      *cr,
  * Sets the specified #GdkColor as the source color of @cr.
  *
  * Since: 2.8
+ *
+ * Deprecated: 3.4: Use gdk_cairo_set_source_rgba() instead
  */
 void
 gdk_cairo_set_source_color (cairo_t        *cr,
@@ -427,7 +429,11 @@ gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
           gint x0 = x;
           while (x < extents.width)
             {
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
               if (((data[x / 8] >> (x%8)) & 1) == 0)
+#else
+              if (((data[x / 8] >> (7-(x%8))) & 1) == 0)
+#endif
                 /* This pixel is "transparent"*/
                 break;
               x++;

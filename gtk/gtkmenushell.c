@@ -42,19 +42,23 @@
 #include "gtkbindings.h"
 #include "gtkkeyhash.h"
 #include "gtklabel.h"
-#include "gtkmainprivate.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenubar.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkmenushellprivate.h"
 #include "gtkmenuprivate.h"
 #include "gtkmnemonichash.h"
-#include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
+#include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+
+#include "deprecated/gtktearoffmenuitem.h"
+
 #include "a11y/gtkmenushellaccessible.h"
+
 
 #define MENU_SHELL_TIMEOUT   500
 

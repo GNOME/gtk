@@ -329,13 +329,21 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                                                          P_("Whether a palette should be used"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
+
+  /**
+   * GtkColorSelection:current-color
+   *
+   * The current GdkColor color.
+   *
+   * Deprecated: 3.4: Use #GtkColorSelection:current-rgba instead.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_CURRENT_COLOR,
                                    g_param_spec_boxed ("current-color",
                                                        P_("Current Color"),
                                                        P_("The current color"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
   g_object_class_install_property (gobject_class,
                                    PROP_CURRENT_ALPHA,
                                    g_param_spec_uint ("current-alpha",
@@ -599,7 +607,19 @@ gtk_color_selection_set_property (GObject         *object,
                                            g_value_get_boolean (value));
       break;
     case PROP_CURRENT_COLOR:
-      gtk_color_selection_set_current_color (colorsel, g_value_get_boxed (value));
+      {
+        GdkColor *color;
+        GdkRGBA rgba;
+
+        color = g_value_get_boxed (value);
+
+        rgba.red = SCALE (color->red);
+        rgba.green = SCALE (color->green);;
+        rgba.blue = SCALE (color->blue);
+        rgba.alpha = 1.0;
+
+        gtk_color_selection_set_current_rgba (colorsel, &rgba);
+      }
       break;
     case PROP_CURRENT_ALPHA:
       gtk_color_selection_set_current_alpha (colorsel, g_value_get_uint (value));
@@ -621,7 +641,6 @@ gtk_color_selection_get_property (GObject     *object,
                                   GParamSpec  *pspec)
 {
   GtkColorSelection *colorsel = GTK_COLOR_SELECTION (object);
-  GdkColor color;
 
   switch (prop_id)
     {
@@ -632,8 +651,18 @@ gtk_color_selection_get_property (GObject     *object,
       g_value_set_boolean (value, gtk_color_selection_get_has_palette (colorsel));
       break;
     case PROP_CURRENT_COLOR:
-      gtk_color_selection_get_current_color (colorsel, &color);
-      g_value_set_boxed (value, &color);
+      {
+        GdkColor color;
+        GdkRGBA rgba;
+
+        gtk_color_selection_get_current_rgba (colorsel, &rgba);
+
+        color.red = UNSCALE (rgba.red);
+        color.green = UNSCALE (rgba.green);
+        color.blue = UNSCALE (rgba.blue);
+
+        g_value_set_boxed (value, &color);
+      }
       break;
     case PROP_CURRENT_ALPHA:
       g_value_set_uint (value, gtk_color_selection_get_current_alpha (colorsel));
@@ -1352,13 +1381,14 @@ palette_set_color (GtkWidget         *drawing_area,
                    gdouble           *color)
 {
   gdouble *new_color = g_new (double, 4);
-  GdkColor gdk_color;
+  GdkRGBA rgba;
 
-  gdk_color.red = UNSCALE (color[0]);
-  gdk_color.green = UNSCALE (color[1]);
-  gdk_color.blue = UNSCALE (color[2]);
+  rgba.red = color[0];
+  rgba.green = color[1];
+  rgba.blue = color[2];
+  rgba.alpha = 1;
 
-  gtk_widget_modify_bg (drawing_area, GTK_STATE_NORMAL, &gdk_color);
+  gtk_widget_override_background_color (drawing_area, GTK_STATE_FLAG_NORMAL, &rgba);
 
   if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (drawing_area), "color_set")) == 0)
     {
@@ -1505,8 +1535,7 @@ palette_press (GtkWidget      *drawing_area,
 
   gtk_widget_grab_focus (drawing_area);
 
-  if (event->button == 3 &&
-      event->type == GDK_BUTTON_PRESS)
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
       do_popup (colorsel, drawing_area, event->time);
       return TRUE;
@@ -1524,7 +1553,7 @@ palette_release (GtkWidget      *drawing_area,
 
   gtk_widget_grab_focus (drawing_area);
 
-  if (event->button == 1 &&
+  if (event->button == GDK_BUTTON_PRIMARY &&
       g_object_get_data (G_OBJECT (drawing_area),
                          "gtk-colorsel-have-pointer") != NULL)
     {
@@ -1787,7 +1816,7 @@ mouse_release (GtkWidget      *invisible,
 {
   /* GtkColorSelection *colorsel = data; */
 
-  if (event->button != 1)
+  if (event->button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   grab_color_at_pointer (gdk_event_get_screen ((GdkEvent *) event),
@@ -1883,7 +1912,7 @@ mouse_press (GtkWidget      *invisible,
              GdkEventButton *event,
              gpointer        data)
 {
-  if (event->type == GDK_BUTTON_PRESS && event->button == 1)
+  if (event->type == GDK_BUTTON_PRESS && event->button == GDK_BUTTON_PRIMARY)
     {
       g_signal_connect (invisible, "motion-notify-event",
                         G_CALLBACK (mouse_motion), data);
@@ -1998,7 +2027,7 @@ hex_changed (GtkWidget *hex_entry,
 {
   GtkColorSelection *colorsel;
   GtkColorSelectionPrivate *priv;
-  GdkColor color;
+  GdkRGBA color;
   gchar *text;
 
   colorsel = GTK_COLOR_SELECTION (data);
@@ -2008,11 +2037,11 @@ hex_changed (GtkWidget *hex_entry,
     return;
 
   text = gtk_editable_get_chars (GTK_EDITABLE (priv->hex_entry), 0, -1);
-  if (gdk_color_parse (text, &color))
+  if (gdk_rgba_parse (&color, text))
     {
-      priv->color[COLORSEL_RED]   = CLAMP (color.red   / 65535.0, 0.0, 1.0);
-      priv->color[COLORSEL_GREEN] = CLAMP (color.green / 65535.0, 0.0, 1.0);
-      priv->color[COLORSEL_BLUE]  = CLAMP (color.blue  / 65535.0, 0.0, 1.0);
+      priv->color[COLORSEL_RED]   = color.red;
+      priv->color[COLORSEL_GREEN] = color.green;
+      priv->color[COLORSEL_BLUE]  = color.blue;
       gtk_rgb_to_hsv (priv->color[COLORSEL_RED],
                       priv->color[COLORSEL_GREEN],
                       priv->color[COLORSEL_BLUE],
@@ -2488,6 +2517,8 @@ gtk_color_selection_set_has_palette (GtkColorSelection *colorsel,
  *
  * The first time this is called, it will also set
  * the original color to be @color too.
+ *
+ * Deprecated: 3.4: Use gtk_color_selection_set_current_rgba() instead.
  */
 void
 gtk_color_selection_set_current_color (GtkColorSelection *colorsel,
@@ -2556,6 +2587,8 @@ gtk_color_selection_set_current_alpha (GtkColorSelection *colorsel,
  * @color: (out): a #GdkColor to fill in with the current color
  *
  * Sets @color to be the current color in the GtkColorSelection widget.
+ *
+ * Deprecated: 3.4: Use gtk_color_selection_get_current_rgba() instead.
  */
 void
 gtk_color_selection_get_current_color (GtkColorSelection *colorsel,
@@ -2602,6 +2635,8 @@ gtk_color_selection_get_current_alpha (GtkColorSelection *colorsel)
  * as it might seem confusing to have that color change.
  * Calling gtk_color_selection_set_current_color() will also
  * set this color the first time it is called.
+ *
+ * Deprecated: 3.4: Use gtk_color_selection_set_previous_rgba() instead.
  */
 void
 gtk_color_selection_set_previous_color (GtkColorSelection *colorsel,
@@ -2661,6 +2696,8 @@ gtk_color_selection_set_previous_alpha (GtkColorSelection *colorsel,
  * @color: (out): a #GdkColor to fill in with the original color value
  *
  * Fills @color in with the original color value.
+ *
+ * Deprecated: 3.4: Use gtk_color_selection_get_previous_rgba() instead.
  */
 void
 gtk_color_selection_get_previous_color (GtkColorSelection *colorsel,

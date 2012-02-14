@@ -37,6 +37,7 @@ gtk_about_dialog_get_logo
 gtk_about_dialog_set_logo
 gtk_about_dialog_get_logo_icon_name
 gtk_about_dialog_set_logo_icon_name
+gtk_about_dialog_add_credit_section
 gtk_show_about_dialog
 <SUBSECTION Standard>
 GTK_ABOUT_DIALOG
@@ -76,6 +77,9 @@ gtk_accelerator_valid
 gtk_accelerator_parse
 gtk_accelerator_name
 gtk_accelerator_get_label
+gtk_accelerator_parse_with_keycode
+gtk_accelerator_name_with_keycode
+gtk_accelerator_get_label_with_keycode
 gtk_accelerator_set_default_mod_mask
 gtk_accelerator_get_default_mod_mask
 
@@ -305,6 +309,7 @@ gtk_adjustment_get_lower
 gtk_adjustment_get_page_increment
 gtk_adjustment_get_page_size
 gtk_adjustment_get_step_increment
+gtk_adjustment_get_minimum_increment
 gtk_adjustment_get_upper
 gtk_adjustment_set_lower
 gtk_adjustment_set_page_increment
@@ -902,6 +907,7 @@ gtk_container_child_get_property
 gtk_container_child_set_property
 gtk_container_child_get_valist
 gtk_container_child_set_valist
+gtk_container_child_notify
 gtk_container_forall
 gtk_container_get_border_width
 gtk_container_set_border_width
@@ -1130,6 +1136,7 @@ gtk_entry_completion_get_model
 gtk_entry_completion_set_match_func
 gtk_entry_completion_set_minimum_key_length
 gtk_entry_completion_get_minimum_key_length
+gtk_entry_completion_compute_prefix
 gtk_entry_completion_complete
 gtk_entry_completion_get_completion_prefix
 gtk_entry_completion_insert_prefix
@@ -1480,12 +1487,13 @@ gtk_font_selection_dialog_get_type
 <FILE>gtkfontchooser</FILE>
 <TITLE>GtkFontChooser</TITLE>
 GtkFontChooser
-gtk_font_chooser_new
-gtk_font_chooser_get_family
-gtk_font_chooser_get_face
-gtk_font_chooser_get_size
-gtk_font_chooser_get_font_name
-gtk_font_chooser_set_font_name
+gtk_font_chooser_get_font_family
+gtk_font_chooser_get_font_face
+gtk_font_chooser_get_font_size
+gtk_font_chooser_get_font
+gtk_font_chooser_set_font
+gtk_font_chooser_get_font_desc
+gtk_font_chooser_set_font_desc
 gtk_font_chooser_get_preview_text
 gtk_font_chooser_set_preview_text
 gtk_font_chooser_get_show_preview_entry
@@ -1494,17 +1502,36 @@ GtkFontFilterFunc
 gtk_font_chooser_set_filter_func
 
 <SUBSECTION Standard>
-GtkFontChooserClass
+GtkFontChooserIface
 GTK_TYPE_FONT_CHOOSER
 GTK_FONT_CHOOSER
-GTK_FONT_CHOOSER_CLASS
+GTK_FONT_CHOOSER_IFACE
 GTK_IS_FONT_CHOOSER
-GTK_IS_FONT_CHOOSER_CLASS
-GTK_FONT_CHOOSER_GET_CLASS
+GTK_IS_FONT_CHOOSER_IFACE
+GTK_FONT_CHOOSER_GET_IFACE
 
 <SUBSECTION Private>
-GtkFontChooserPrivate
 gtk_font_chooser_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkfontchooserwidget</FILE>
+<TITLE>GtkFontChooserWidget</TITLE>
+GtkFontChooserWidget
+gtk_font_chooser_widget_new
+
+<SUBSECTION Standard>
+GtkFontChooserWidgetClass
+GTK_TYPE_FONT_CHOOSER_WIDGET
+GTK_FONT_CHOOSER_WIDGET
+GTK_FONT_CHOOSER_WIDGET_CLASS
+GTK_IS_FONT_CHOOSER_WIDGET
+GTK_IS_FONT_CHOOSER_WIDGET_CLASS
+GTK_FONT_CHOOSER_WIDGET_GET_CLASS
+
+<SUBSECTION Private>
+GtkFontChooserWidgetPrivate
+gtk_font_chooser_widget_get_type
 </SECTION>
 
 <SECTION>
@@ -1512,11 +1539,6 @@ gtk_font_chooser_get_type
 <TITLE>GtkFontChooserDialog</TITLE>
 GtkFontChooserDialog
 gtk_font_chooser_dialog_new
-gtk_font_chooser_dialog_get_font_chooser
-gtk_font_chooser_dialog_get_font_name
-gtk_font_chooser_dialog_set_font_name
-gtk_font_chooser_dialog_get_preview_text
-gtk_font_chooser_dialog_set_preview_text
 
 <SUBSECTION Standard>
 GtkFontChooserDialogClass
@@ -2038,6 +2060,7 @@ gtk_link_button_get_type
 <TITLE>GtkMenu</TITLE>
 GtkMenu
 gtk_menu_new
+gtk_menu_new_from_model
 gtk_menu_set_screen
 gtk_menu_reorder_child
 gtk_menu_attach
@@ -2082,6 +2105,7 @@ gtk_menu_get_type
 <TITLE>GtkMenuBar</TITLE>
 GtkMenuBar
 gtk_menu_bar_new
+gtk_menu_bar_new_from_model
 GtkPackDirection
 gtk_menu_bar_set_pack_direction
 gtk_menu_bar_get_pack_direction
@@ -2803,9 +2827,11 @@ gtk_scale_new
 gtk_scale_new_with_range
 gtk_scale_set_digits
 gtk_scale_set_draw_value
+gtk_scale_set_has_origin
 gtk_scale_set_value_pos
 gtk_scale_get_digits
 gtk_scale_get_draw_value
+gtk_scale_get_has_origin
 gtk_scale_get_value_pos
 gtk_scale_get_layout
 gtk_scale_get_layout_offsets
@@ -3325,6 +3351,7 @@ gtk_text_buffer_get_type
 GtkTextIter
 gtk_text_iter_get_buffer
 gtk_text_iter_copy
+gtk_text_iter_assign
 gtk_text_iter_free
 gtk_text_iter_get_offset
 gtk_text_iter_get_line
@@ -4285,6 +4312,7 @@ gtk_tree_view_column_cell_is_visible
 gtk_tree_view_column_focus_cell
 gtk_tree_view_column_queue_resize
 gtk_tree_view_column_get_tree_view
+gtk_tree_view_column_get_x_offset
 <SUBSECTION Standard>
 GTK_TREE_VIEW_COLUMN
 GTK_IS_TREE_VIEW_COLUMN
@@ -4330,6 +4358,7 @@ gtk_tree_view_remove_column
 gtk_tree_view_insert_column
 gtk_tree_view_insert_column_with_attributes
 gtk_tree_view_insert_column_with_data_func
+gtk_tree_view_get_n_columns
 gtk_tree_view_get_column
 gtk_tree_view_get_columns
 gtk_tree_view_move_column_after
@@ -5183,6 +5212,7 @@ gtk_widget_set_mapped
 gtk_widget_get_mapped
 gtk_widget_get_requisition
 gtk_widget_device_is_shadowed
+gtk_widget_get_modifier_mask
 
 <SUBSECTION>
 gtk_widget_get_path
@@ -5267,7 +5297,9 @@ gtk_window_set_gravity
 gtk_window_get_gravity
 gtk_window_set_position
 gtk_window_set_transient_for
+gtk_window_set_attached_to
 gtk_window_set_destroy_with_parent
+gtk_window_set_hide_titlebar_when_maximized
 gtk_window_set_screen
 gtk_window_get_screen
 gtk_window_is_active
@@ -5313,6 +5345,7 @@ gtk_window_get_default_icon_list
 gtk_window_get_default_icon_name
 gtk_window_get_default_size
 gtk_window_get_destroy_with_parent
+gtk_window_get_hide_titlebar_when_maximized
 gtk_window_get_icon
 gtk_window_get_icon_list
 gtk_window_get_icon_name
@@ -5323,6 +5356,7 @@ gtk_window_get_role
 gtk_window_get_size
 gtk_window_get_title
 gtk_window_get_transient_for
+gtk_window_get_attached_to
 gtk_window_get_type_hint
 gtk_window_get_skip_taskbar_hint
 gtk_window_get_skip_pager_hint
@@ -5479,6 +5513,7 @@ GTK_CHECK_VERSION
 GtkWidgetPath
 gtk_widget_path_append_type
 gtk_widget_path_append_with_siblings
+gtk_widget_path_append_for_widget
 gtk_widget_path_copy
 gtk_widget_path_ref
 gtk_widget_path_unref
@@ -5632,6 +5667,12 @@ GTK_STYLE_CLASS_VIEW
 GTK_STYLE_CLASS_WARNING
 GTK_STYLE_CLASS_HORIZONTAL
 GTK_STYLE_CLASS_VERTICAL
+GTK_STYLE_CLASS_TOP
+GTK_STYLE_CLASS_BOTTOM
+GTK_STYLE_CLASS_LEFT
+GTK_STYLE_CLASS_RIGHT
+GTK_STYLE_CLASS_LINKED
+GTK_STYLE_CLASS_ARROW
 GTK_STYLE_REGION_COLUMN
 GTK_STYLE_REGION_COLUMN_HEADER
 GTK_STYLE_REGION_ROW
@@ -5644,6 +5685,7 @@ gtk_style_context_add_provider_for_screen
 gtk_style_context_get
 gtk_style_context_get_direction
 gtk_style_context_get_junction_sides
+gtk_style_context_set_parent
 gtk_style_context_get_path
 gtk_style_context_get_property
 gtk_style_context_get_screen
@@ -5652,6 +5694,7 @@ gtk_style_context_get_style
 gtk_style_context_get_style_property
 gtk_style_context_get_style_valist
 gtk_style_context_get_valist
+gtk_style_context_get_section
 gtk_style_context_get_color
 gtk_style_context_get_background_color
 gtk_style_context_get_border_color
@@ -5676,6 +5719,7 @@ gtk_style_context_restore
 gtk_style_context_save
 gtk_style_context_set_direction
 gtk_style_context_set_junction_sides
+gtk_style_context_set_parent
 gtk_style_context_set_path
 gtk_style_context_add_class
 gtk_style_context_remove_class
@@ -5711,6 +5755,7 @@ gtk_render_slider
 gtk_render_activity
 gtk_render_icon_pixbuf
 gtk_render_icon
+gtk_render_insertion_cursor
 
 <SUBSECTION Standard>
 GTK_TYPE_STYLE_CONTEXT
@@ -5815,6 +5860,7 @@ gtk_symbolic_color_new_name
 gtk_symbolic_color_new_shade
 gtk_symbolic_color_new_alpha
 gtk_symbolic_color_new_mix
+gtk_symbolic_color_new_win32
 gtk_symbolic_color_ref
 gtk_symbolic_color_unref
 gtk_symbolic_color_resolve
@@ -6968,6 +7014,20 @@ gtk_application_add_window
 gtk_application_remove_window
 gtk_application_get_windows
 
+<SUBSECTION>
+GtkApplicationInhibitFlags
+gtk_application_inhibit
+gtk_application_uninhibit
+gtk_application_is_inhibited
+GtkApplicationEndSessionStyle
+gtk_application_end_session
+
+<SUBSECTION>
+gtk_application_get_app_menu
+gtk_application_set_app_menu
+gtk_application_get_menubar
+gtk_application_set_menubar
+
 <SUBSECTION Standard>
 GtkApplicationClass
 GTK_TYPE_APPLICATION
@@ -6979,6 +7039,54 @@ GTK_APPLICATION_GET_CLASS
 <SUBSECTION Private>
 gtk_application_get_type
 GtkApplicationPrivate
+</SECTION>
+
+<SECTION>
+<FILE>gtkapplicationwindow</FILE>
+<TITLE>GtkApplicationWindow</TITLE>
+GtkApplicationWindow
+gtk_application_window_new
+gtk_application_window_set_show_menubar
+gtk_application_window_get_show_menubar
+
+<SUBSECTION Standard>
+GtkApplicationWindowClass
+GTK_TYPE_APPLICATION_WINDOW
+GTK_APPLICATION_WINDOW
+GTK_APPLICATION_WINDOW_CLASS
+GTK_IS_APPLICATION_WINDOW
+GTK_IS_APPLICATION_WINDOW_CLASS
+GTK_APPLICATION_WINDOW_GET_CLASS
+
+<SUBSECTION Private>
+gtk_application_window_get_type
+GtkApplicationWindowPrivate
+</SECTION>
+
+<SECTION>
+<FILE>gtkactionable</FILE>
+<TITLE>GtkActionable</TITLE>
+GtkActionable
+GtkActionableInterface
+
+<SUBSECTION>
+gtk_actionable_get_action_name
+gtk_actionable_set_action_name
+
+<SUBSECTION>
+gtk_actionable_get_action_target_value
+gtk_actionable_set_action_target_value
+gtk_actionable_set_action_target
+
+<SUBSECTION>
+gtk_actionable_set_detailed_action_name
+
+<SUBSECTION Standard>
+gtk_actionable_get_type
+GTK_ACTIONABLE
+GTK_ACTIONABLE_GET_IFACE
+GTK_IS_ACTIONABLE
+GTK_TYPE_ACTIONABLE
 </SECTION>
 
 <SECTION>
@@ -7070,6 +7178,8 @@ gtk_app_chooser_button_new
 gtk_app_chooser_button_append_custom_item
 gtk_app_chooser_button_append_separator
 gtk_app_chooser_button_set_active_custom_item
+gtk_app_chooser_button_get_show_default_item
+gtk_app_chooser_button_set_show_default_item
 gtk_app_chooser_button_get_show_dialog_item
 gtk_app_chooser_button_set_show_dialog_item
 gtk_app_chooser_button_get_heading
@@ -7173,6 +7283,7 @@ GtkLockButtonPrivate
 GtkOverlay
 
 gtk_overlay_new
+gtk_overlay_add_overlay
 
 <SUBSECTION Standard>
 GTK_TYPE_OVERLAY

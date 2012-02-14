@@ -198,6 +198,7 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\textscroll.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\textview.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\toolpalette.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\transparent.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\tree_store.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\ui_manager.c" />
 		</Filter>

@@ -360,9 +360,10 @@ print_cursor (int index)
 }
 #endif
 
-static void
-_gdk_input_wintab_init_check (GdkDeviceManagerWin32 *device_manager)
+void
+_gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
 {
+  GdkDeviceManagerWin32 *device_manager = (GdkDeviceManagerWin32 *)_device_manager;
   static gboolean wintab_initialized = FALSE;
   GdkDeviceWintab *device;
   GdkWindowAttr wa;
@@ -577,8 +578,8 @@ _gdk_input_wintab_init_check (GdkDeviceManagerWin32 *device_manager)
           device = g_object_new (GDK_TYPE_DEVICE_WINTAB,
                                  "name", device_name,
                                  "type", GDK_DEVICE_TYPE_SLAVE,
-                                 "source", GDK_SOURCE_PEN,
-                                 "mode", GDK_MODE_SCREEN,
+                                 "input-source", GDK_SOURCE_PEN,
+                                 "input-mode", GDK_MODE_SCREEN,
                                  "has-cursor", FALSE,
                                  "display", _gdk_display,
                                  "device-manager", device_manager,
@@ -690,8 +691,6 @@ gdk_device_manager_win32_constructed (GObject *object)
 
   _gdk_device_set_associated_device (device_manager->core_pointer, device_manager->core_keyboard);
   _gdk_device_set_associated_device (device_manager->core_keyboard, device_manager->core_pointer);
-
-  _gdk_input_wintab_init_check (device_manager);
 }
 
 static GList *

@@ -56,13 +56,14 @@
  * <title>GtkBuilder UI Definitions</title>
  * <para>
  * GtkBuilder parses textual descriptions of user interfaces which are specified
- * in an XML format which can be roughly described by the DTD below. We refer to
- * these descriptions as <firstterm>GtkBuilder UI definitions</firstterm> or
- * just <firstterm>UI definitions</firstterm> if the context is clear. Do not
+ * in an XML format which can be roughly described by the RELAX NG schema below.
+ * We refer to these descriptions as <firstterm>GtkBuilder UI definitions</firstterm>
+ * or just <firstterm>UI definitions</firstterm> if the context is clear. Do not
  * confuse GtkBuilder UI Definitions with
  * <link linkend="XML-UI">GtkUIManager UI Definitions</link>, which are more
  * limited in scope.
  * </para>
+<<<<<<< HEAD
  * <programlisting><![CDATA[
  * <!ELEMENT interface (requires|object)* >
  * <!ELEMENT object    (property|signal|child|binding|ANY)* >
@@ -95,6 +96,13 @@
  *                      from                #REQUIRED
  *                      source              #REQUIRED>
  * ]]></programlisting>
+=======
+ * <programlisting>
+ * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gtk/gtkbuilder.rnc">
+ *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ * </xi:include>
+ * </programlisting>
+>>>>>>> master
  * <para>
  * The toplevel element is &lt;interface&gt;. It optionally takes a "domain"
  * attribute, which will make the builder look for translated strings using
@@ -251,6 +259,16 @@
  * <link linkend="GtkTextTagTable-BUILDER-UI">GtkTextTagTable</link>.
  * </para>
  * </refsect2>
+ * <refsect2>
+ * <title>Embedding other XML</title>
+ * <para>
+ * Apart from the language for UI descriptions that has been explained
+ * in the previous section, GtkBuilder can also parse XML fragments
+ * of <link linkend="gio-GMenu-Markup">GMenu markup</link>. The resulting
+ * #GMenu object and its named submenus are available via
+ * gtk_builder_get_object() like other constructed objects.
+ * </para>
+ * </refsect2>
  */
 
 #include "config.h"
@@ -298,6 +316,7 @@ struct _GtkBuilderPrivate
   GSList *signals;
   GSList *bindings;
   gchar *filename;
+  gchar *resource_prefix;
 };
 
 G_DEFINE_TYPE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
@@ -358,6 +377,7 @@ gtk_builder_finalize (GObject *object)
   
   g_free (priv->domain);
   g_free (priv->filename);
+  g_free (priv->resource_prefix);
   
   g_hash_table_destroy (priv->objects);
 
@@ -743,6 +763,13 @@ _gtk_builder_construct (GtkBuilder *builder,
   return obj;
 }
 
+void
+_gtk_builder_add_object (GtkBuilder  *builder,
+                         const gchar *id,
+                         GObject     *object)
+{
+  g_hash_table_insert (builder->priv->objects, g_strdup (id), g_object_ref (object));
+}
 
 void
 _gtk_builder_add (GtkBuilder *builder,
@@ -966,7 +993,9 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
     }
   
   g_free (builder->priv->filename);
+  g_free (builder->priv->resource_prefix);
   builder->priv->filename = g_strdup (filename);
+  builder->priv->resource_prefix = NULL;
 
   _gtk_builder_parser_parse_buffer (builder, filename,
                                     buffer, length,
@@ -1033,7 +1062,9 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
     }
   
   g_free (builder->priv->filename);
+  g_free (builder->priv->resource_prefix);
   builder->priv->filename = g_strdup (filename);
+  builder->priv->resource_prefix = NULL;
 
   _gtk_builder_parser_parse_buffer (builder, filename,
                                     buffer, length,
@@ -1041,6 +1072,157 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
                                     &tmp_error);
 
   g_free (buffer);
+
+  if (tmp_error != NULL)
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+
+  return 1;
+}
+
+/**
+ * gtk_builder_add_from_resource:
+ * @builder: a #GtkBuilder
+ * @resource_path: the path of the resource file to parse
+ * @error: (allow-none): return location for an error, or %NULL
+ *
+ * Parses a resource file containing a <link linkend="BUILDER-UI">GtkBuilder
+ * UI definition</link> and merges it with the current contents of @builder.
+ *
+ * Upon errors 0 will be returned and @error will be assigned a
+ * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_RESOURCE_ERROR
+ * domain.
+ *
+ * Returns: A positive value on success, 0 if an error occurred
+ *
+ * Since: 3.4
+ **/
+guint
+gtk_builder_add_from_resource (GtkBuilder   *builder,
+			       const gchar  *resource_path,
+			       GError      **error)
+{
+  GError *tmp_error;
+  GBytes *data;
+  char *filename_for_errors;
+  char *slash;
+
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
+  g_return_val_if_fail (resource_path != NULL, 0);
+  g_return_val_if_fail (error == NULL || *error == NULL, 0);
+
+  tmp_error = NULL;
+
+  data = g_resources_lookup_data (resource_path, 0, &tmp_error);
+  if (data == NULL)
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+
+  g_free (builder->priv->filename);
+  g_free (builder->priv->resource_prefix);
+  builder->priv->filename = g_strdup (".");
+
+  slash = strrchr (resource_path, '/');
+  if (slash != NULL)
+    builder->priv->resource_prefix =
+      g_strndup (resource_path, slash - resource_path + 1);
+  else
+    builder->priv->resource_prefix =
+      g_strdup ("/");
+
+  filename_for_errors = g_strconcat ("<resource>", resource_path, NULL);
+
+  _gtk_builder_parser_parse_buffer (builder, filename_for_errors,
+                                    g_bytes_get_data (data, NULL), g_bytes_get_size (data),
+                                    NULL,
+                                    &tmp_error);
+
+  g_free (filename_for_errors);
+  g_bytes_unref (data);
+
+  if (tmp_error != NULL)
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+
+  return 1;
+}
+
+/**
+ * gtk_builder_add_objects_from_resource:
+ * @builder: a #GtkBuilder
+ * @resource_path: the path of the resource file to parse
+ * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
+ * @error: (allow-none): return location for an error, or %NULL
+ *
+ * Parses a resource file containing a <link linkend="BUILDER-UI">GtkBuilder
+ * UI definition</link> building only the requested objects and merges
+ * them with the current contents of @builder.
+ *
+ * Upon errors 0 will be returned and @error will be assigned a
+ * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_RESOURCE_ERROR
+ * domain.
+ *
+ * <note><para>
+ * If you are adding an object that depends on an object that is not
+ * its child (for instance a #GtkTreeView that depends on its
+ * #GtkTreeModel), you have to explicitely list all of them in @object_ids.
+ * </para></note>
+ *
+ * Returns: A positive value on success, 0 if an error occurred
+ *
+ * Since: 3.4
+ **/
+guint
+gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
+				       const gchar  *resource_path,
+				       gchar       **object_ids,
+				       GError      **error)
+{
+  GError *tmp_error;
+  GBytes *data;
+  char *filename_for_errors;
+  char *slash;
+
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
+  g_return_val_if_fail (resource_path != NULL, 0);
+  g_return_val_if_fail (object_ids != NULL && object_ids[0] != NULL, 0);
+  g_return_val_if_fail (error == NULL || *error == NULL, 0);
+
+  tmp_error = NULL;
+
+  data = g_resources_lookup_data (resource_path, 0, &tmp_error);
+  if (data == NULL)
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+
+  g_free (builder->priv->filename);
+  g_free (builder->priv->resource_prefix);
+  builder->priv->filename = g_strdup (".");
+
+  slash = strrchr (resource_path, '/');
+  if (slash != NULL)
+    builder->priv->resource_prefix =
+      g_strndup (resource_path, slash - resource_path + 1);
+  else
+    builder->priv->resource_prefix =
+      g_strdup ("/");
+
+  filename_for_errors = g_strconcat ("<resource>", resource_path, NULL);
+
+  _gtk_builder_parser_parse_buffer (builder, filename_for_errors,
+                                    g_bytes_get_data (data, NULL), g_bytes_get_size (data),
+                                    object_ids,
+                                    &tmp_error);
+  g_free (filename_for_errors);
+  g_bytes_unref (data);
 
   if (tmp_error != NULL)
     {
@@ -1083,7 +1265,9 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
   tmp_error = NULL;
 
   g_free (builder->priv->filename);
+  g_free (builder->priv->resource_prefix);
   builder->priv->filename = g_strdup (".");
+  builder->priv->resource_prefix = NULL;
 
   _gtk_builder_parser_parse_buffer (builder, "<input>",
                                     buffer, length,
@@ -1140,7 +1324,9 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
   tmp_error = NULL;
 
   g_free (builder->priv->filename);
+  g_free (builder->priv->resource_prefix);
   builder->priv->filename = g_strdup (".");
+  builder->priv->resource_prefix = NULL;
 
   _gtk_builder_parser_parse_buffer (builder, "<input>",
                                     buffer, length,
@@ -1464,6 +1650,31 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
       return TRUE;
     }
 
+  /*
+   * GParamSpecVariant can specify a GVariantType which can help with
+   * parsing, so we need to take care of that here.
+   */
+  if (G_IS_PARAM_SPEC_VARIANT (pspec))
+    {
+      GParamSpecVariant *variant_pspec = G_PARAM_SPEC_VARIANT (pspec);
+      const GVariantType *type;
+      GVariant *variant;
+
+      g_value_init (value, G_TYPE_VARIANT);
+
+      /* The GVariant parser doesn't deal with indefinite types */
+      if (g_variant_type_is_definite (variant_pspec->type))
+        type = variant_pspec->type;
+      else
+        type = NULL;
+
+      variant = g_variant_parse (type, string, NULL, NULL, error);
+      if (variant == NULL)
+        return FALSE;
+      g_value_take_variant (value, variant);
+      return TRUE;
+    }
+
   return gtk_builder_value_from_string_type (builder,
 					     G_PARAM_SPEC_VALUE_TYPE (pspec),
                                              string, value, error);
@@ -1507,7 +1718,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
   switch (G_TYPE_FUNDAMENTAL (type))
     {
     case G_TYPE_CHAR:
-      g_value_set_char (value, string[0]);
+      g_value_set_schar (value, string[0]);
       break;
     case G_TYPE_UCHAR:
       g_value_set_uchar (value, (guchar)string[0]);
@@ -1619,6 +1830,17 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
     case G_TYPE_STRING:
       g_value_set_string (value, string);
       break;
+    case G_TYPE_VARIANT:
+      {
+        GVariant *variant;
+
+        variant = g_variant_parse (NULL, string, NULL, NULL, error);
+        if (value != NULL)
+          g_value_take_variant (value, variant);
+        else
+          ret = FALSE;
+      }
+      break;
     case G_TYPE_BOXED:
       if (G_VALUE_HOLDS (value, GDK_TYPE_COLOR))
         {
@@ -1672,7 +1894,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
         {
           gchar *filename;
           GError *tmp_error = NULL;
-          GdkPixbuf *pixbuf;
+          GdkPixbuf *pixbuf = NULL;
        
           if (gtk_builder_get_object (builder, string))
             {
@@ -1685,8 +1907,21 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               return FALSE;
             }
 
-	  filename = _gtk_builder_get_absolute_filename (builder, string);
-          pixbuf = gdk_pixbuf_new_from_file (filename, &tmp_error);
+	  filename = _gtk_builder_get_resource_path (builder, string);
+	  if (filename != NULL)
+	    {
+	      GInputStream *stream = g_resources_open_stream (filename, 0, &tmp_error);
+	      if (stream != NULL)
+		{
+		  pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, &tmp_error);
+		  g_object_unref (stream);
+		}
+	    }
+	  else
+	    {
+	      filename = _gtk_builder_get_absolute_filename (builder, string);
+	      pixbuf = gdk_pixbuf_new_from_file (filename, &tmp_error);
+	    }
 
           if (pixbuf == NULL)
             {
@@ -1913,6 +2148,19 @@ GQuark
 gtk_builder_error_quark (void)
 {
   return g_quark_from_static_string ("gtk-builder-error-quark");
+}
+
+gchar *
+_gtk_builder_get_resource_path (GtkBuilder *builder, const gchar *string)
+{
+  if (g_str_has_prefix (string, "resource:///"))
+    return g_uri_unescape_string (string + 11, "/");
+
+  if (g_path_is_absolute (string) ||
+      builder->priv->resource_prefix == NULL)
+    return NULL;
+
+  return g_build_path ("/", builder->priv->resource_prefix, string, NULL);
 }
 
 gchar *

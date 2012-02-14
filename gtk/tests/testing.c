@@ -44,10 +44,8 @@ test_button_clicks (void)
   g_assert (button != NULL);
   simsuccess = gtk_test_widget_click (button, 1, 0);
   g_assert (simsuccess == TRUE);
-  while (gtk_events_pending ()) {
-    g_print ("iterate main loop\n");
+  while (gtk_events_pending ())
     gtk_main_iteration ();
-  }
   g_assert (a == 0);
   g_assert (b > 0);
   g_assert (c == 0);

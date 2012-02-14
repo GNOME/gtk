@@ -12,7 +12,7 @@ DOC_MAIN_SGML_FILE=gtk-docs.sgml
 SCAN_OPTIONS=--deprecated-guards="GTK_ENABLE_BROKEN|GTK_DISABLE_DEPRECATED"
 
 # The directory containing the source code. Relative to $(srcdir)
-DOC_SOURCE_DIR=../../../gtk
+DOC_SOURCE_DIR=$(top_srcdir)/gtk
 
 # Used for dependencies
 HFILE_GLOB=$(top_srcdir)/gtk/*.h
@@ -123,7 +123,8 @@ content_files =					\
 	glossary.xml				\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
-	migrating-GtkApplication.xml		\
+	migrating-unique-GtkApplication.xml	\
+	migrating-smclient-GtkApplication.xml	\
 	migrating-GtkGrid.xml			\
 	migrating-GtkStyleContext.xml		\
 	objects_grouped.sgml			\
@@ -146,7 +147,8 @@ expand_content_files = 				\
 	glossary.xml				\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
-	migrating-GtkApplication.xml		\
+	migrating-unique-GtkApplication.xml	\
+	migrating-smclient-GtkApplication.xml	\
 	migrating-GtkGrid.xml			\
 	migrating-GtkStyleContext.xml		\
 	question_index.sgml			\
@@ -365,7 +367,10 @@ HTML_IMAGES = \
 	$(srcdir)/images/handles.png					\
 	$(srcdir)/images/extensions.png					\
 	$(srcdir)/images/numerableicon.png				\
-	$(srcdir)/images/numerableicon2.png
+	$(srcdir)/images/numerableicon2.png				\
+	$(srcdir)/images/bloatpad-osx.png				\
+	$(srcdir)/images/bloatpad-gnome.png				\
+	$(srcdir)/images/bloatpad-xfce.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \

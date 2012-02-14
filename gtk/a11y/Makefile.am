@@ -17,6 +17,7 @@ gail_c_sources =			\
 	gtkentryaccessible.c		\
 	gtkexpanderaccessible.c		\
 	gtkframeaccessible.c		\
+	gtkiconviewaccessible.c		\
 	gtkimageaccessible.c		\
 	gtkimagecellaccessible.c	\
 	gtklabelaccessible.c		\
@@ -64,6 +65,7 @@ gail_private_h_sources =		\
 	gtkentryaccessible.h		\
 	gtkexpanderaccessible.h		\
 	gtkframeaccessible.h		\
+	gtkiconviewaccessible.h		\
 	gtkimageaccessible.h		\
 	gtkimagecellaccessible.h	\
 	gtklabelaccessible.h		\
@@ -109,8 +111,6 @@ libgail_la_CPPFLAGS = \
 	-I$(top_builddir)/gtk		\
 	-DGTK_VERSION=\"$(GTK_VERSION)\"\
 	-DGTK_COMPILATION		\
-	-DGDK_DISABLE_DEPRECATED	\
-	-DGTK_DISABLE_DEPRECATED	\
 	$(AM_CPPFLAGS)
 
 libgail_la_CFLAGS = \

@@ -100,9 +100,6 @@ static void gtk_recent_chooser_dialog_get_property (GObject      *object,
 						    GValue       *value,
 						    GParamSpec   *pspec);
 
-static void gtk_recent_chooser_dialog_map       (GtkWidget *widget);
-static void gtk_recent_chooser_dialog_unmap     (GtkWidget *widget);
-
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserDialog,
 			 gtk_recent_chooser_dialog,
 			 GTK_TYPE_DIALOG,
@@ -113,15 +110,11 @@ static void
 gtk_recent_chooser_dialog_class_init (GtkRecentChooserDialogClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   
   gobject_class->set_property = gtk_recent_chooser_dialog_set_property;
   gobject_class->get_property = gtk_recent_chooser_dialog_get_property;
   gobject_class->constructor = gtk_recent_chooser_dialog_constructor;
   gobject_class->finalize = gtk_recent_chooser_dialog_finalize;
-  
-  widget_class->map = gtk_recent_chooser_dialog_map;
-  widget_class->unmap = gtk_recent_chooser_dialog_unmap;
   
   _gtk_recent_chooser_install_properties (gobject_class);
   
@@ -280,29 +273,6 @@ gtk_recent_chooser_dialog_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_recent_chooser_dialog_parent_class)->finalize (object);
 }
 
-static void
-gtk_recent_chooser_dialog_map (GtkWidget *widget)
-{
-  GtkRecentChooserDialog *dialog = GTK_RECENT_CHOOSER_DIALOG (widget);
-  GtkRecentChooserDialogPrivate *priv = dialog->priv;
-  
-  if (!gtk_widget_get_mapped (priv->chooser))
-    gtk_widget_map (priv->chooser);
-
-  GTK_WIDGET_CLASS (gtk_recent_chooser_dialog_parent_class)->map (widget);
-}
-
-static void
-gtk_recent_chooser_dialog_unmap (GtkWidget *widget)
-{
-  GtkRecentChooserDialog *dialog = GTK_RECENT_CHOOSER_DIALOG (widget);
-  GtkRecentChooserDialogPrivate *priv = dialog->priv;
-  
-  GTK_WIDGET_CLASS (gtk_recent_chooser_dialog_parent_class)->unmap (widget);
-  
-  gtk_widget_unmap (priv->chooser);
-}
-
 static GtkWidget *
 gtk_recent_chooser_dialog_new_valist (const gchar      *title,
 				      GtkWindow        *parent,
@@ -337,7 +307,7 @@ gtk_recent_chooser_dialog_new_valist (const gchar      *title,
  * @title: (allow-none): Title of the dialog, or %NULL
  * @parent: (allow-none): Transient parent of the dialog, or %NULL,
  * @first_button_text: (allow-none): stock ID or text to go in the first button, or %NULL
- * @Varargs: response ID for the first button, then additional (button, id)
+ * @...: response ID for the first button, then additional (button, id)
  *   pairs, ending with %NULL
  *
  * Creates a new #GtkRecentChooserDialog.  This function is analogous to
@@ -373,7 +343,7 @@ gtk_recent_chooser_dialog_new (const gchar *title,
  * @parent: (allow-none): Transient parent of the dialog, or %NULL,
  * @manager: a #GtkRecentManager
  * @first_button_text: (allow-none): stock ID or text to go in the first button, or %NULL
- * @Varargs: response ID for the first button, then additional (button, id)
+ * @...: response ID for the first button, then additional (button, id)
  *   pairs, ending with %NULL
  *
  * Creates a new #GtkRecentChooserDialog with a specified recent manager.

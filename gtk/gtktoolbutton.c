@@ -32,6 +32,7 @@
 #include "gtkintl.h"
 #include "gtktoolbar.h"
 #include "gtkactivatable.h"
+#include "gtkactionable.h"
 #include "gtkprivate.h"
 
 #include <string.h>
@@ -81,7 +82,9 @@ enum {
   PROP_LABEL_WIDGET,
   PROP_STOCK_ID,
   PROP_ICON_NAME,
-  PROP_ICON_WIDGET
+  PROP_ICON_WIDGET,
+  PROP_ACTION_NAME,
+  PROP_ACTION_TARGET
 };
 
 static void gtk_tool_button_init          (GtkToolButton      *button,
@@ -107,6 +110,7 @@ static void gtk_tool_button_style_updated  (GtkWidget          *widget);
 
 static void gtk_tool_button_construct_contents (GtkToolItem *tool_item);
 
+static void gtk_tool_button_actionable_iface_init      (GtkActionableInterface *iface);
 static void gtk_tool_button_activatable_interface_init (GtkActivatableIface  *iface);
 static void gtk_tool_button_update                     (GtkActivatable       *activatable,
 							GtkAction            *action,
@@ -135,7 +139,6 @@ static GObjectClass        *parent_class = NULL;
 static GtkActivatableIface *parent_activatable_iface;
 static guint                toolbutton_signals[LAST_SIGNAL] = { 0 };
 
-
 GType
 gtk_tool_button_get_type (void)
 {
@@ -143,6 +146,12 @@ gtk_tool_button_get_type (void)
   
   if (!type)
     {
+      const GInterfaceInfo actionable_info =
+      {
+        (GInterfaceInitFunc) gtk_tool_button_actionable_iface_init,
+        (GInterfaceFinalizeFunc) NULL,
+        NULL
+      };
       const GInterfaceInfo activatable_info =
       {
         (GInterfaceInitFunc) gtk_tool_button_activatable_interface_init,
@@ -158,6 +167,7 @@ gtk_tool_button_get_type (void)
 					    (GInstanceInitFunc) gtk_tool_button_init,
 					    0);
 
+      g_type_add_interface_static (type, GTK_TYPE_ACTIONABLE, &actionable_info);
       g_type_add_interface_static (type, GTK_TYPE_ACTIVATABLE,
                                    &activatable_info);
     }
@@ -277,6 +287,9 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 							P_("Icon widget to display in the item"),
 							GTK_TYPE_WIDGET,
 							GTK_PARAM_READWRITE));
+
+  g_object_class_override_property (object_class, PROP_ACTION_NAME, "action-name");
+  g_object_class_override_property (object_class, PROP_ACTION_TARGET, "action-target");
 
   /**
    * GtkButton:icon-spacing:
@@ -612,6 +625,12 @@ gtk_tool_button_set_property (GObject         *object,
     case PROP_ICON_WIDGET:
       gtk_tool_button_set_icon_widget (button, g_value_get_object (value));
       break;
+    case PROP_ACTION_NAME:
+      g_object_set_property (G_OBJECT (button->priv->button), "action-name", value);
+      break;
+    case PROP_ACTION_TARGET:
+      g_object_set_property (G_OBJECT (button->priv->button), "action-target", value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -660,10 +679,59 @@ gtk_tool_button_get_property (GObject         *object,
     case PROP_ICON_WIDGET:
       g_value_set_object (value, button->priv->icon_widget);
       break;
+    case PROP_ACTION_NAME:
+      g_object_get_property (G_OBJECT (button->priv->button), "action-name", value);
+      break;
+    case PROP_ACTION_TARGET:
+      g_object_get_property (G_OBJECT (button->priv->button), "action-target", value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static const gchar *
+gtk_tool_button_get_action_name (GtkActionable *actionable)
+{
+  GtkToolButton *button = GTK_TOOL_BUTTON (actionable);
+
+  return gtk_actionable_get_action_name (GTK_ACTIONABLE (button->priv->button));
+}
+
+static void
+gtk_tool_button_set_action_name (GtkActionable *actionable,
+                                 const gchar   *action_name)
+{
+  GtkToolButton *button = GTK_TOOL_BUTTON (actionable);
+
+  gtk_actionable_set_action_name (GTK_ACTIONABLE (button->priv->button), action_name);
+}
+
+static GVariant *
+gtk_tool_button_get_action_target_value (GtkActionable *actionable)
+{
+  GtkToolButton *button = GTK_TOOL_BUTTON (actionable);
+
+  return gtk_actionable_get_action_target_value (GTK_ACTIONABLE (button->priv->button));
+}
+
+static void
+gtk_tool_button_set_action_target_value (GtkActionable *actionable,
+                                         GVariant      *action_target)
+{
+  GtkToolButton *button = GTK_TOOL_BUTTON (actionable);
+
+  gtk_actionable_set_action_target_value (GTK_ACTIONABLE (button->priv->button), action_target);
+}
+
+static void
+gtk_tool_button_actionable_iface_init (GtkActionableInterface *iface)
+{
+  iface->get_action_name = gtk_tool_button_get_action_name;
+  iface->set_action_name = gtk_tool_button_set_action_name;
+  iface->get_action_target_value = gtk_tool_button_get_action_target_value;
+  iface->set_action_target_value = gtk_tool_button_set_action_target_value;
 }
 
 static void
@@ -972,9 +1040,9 @@ gtk_tool_button_new_from_stock (const gchar *stock_id)
 /**
  * gtk_tool_button_new:
  * @label: (allow-none): a string that will be used as label, or %NULL
- * @icon_widget: (allow-none): a #GtkMisc widget that will be used as icon widget, or %NULL
+ * @icon_widget: (allow-none): a widget that will be used as the button contents, or %NULL
  *
- * Creates a new %GtkToolButton using @icon_widget as icon and @label as
+ * Creates a new %GtkToolButton using @icon_widget as contents and @label as
  * label.
  *
  * Return value: A new #GtkToolButton
@@ -987,7 +1055,7 @@ gtk_tool_button_new (GtkWidget	 *icon_widget,
 {
   GtkToolButton *button;
 
-  g_return_val_if_fail (icon_widget == NULL || GTK_IS_MISC (icon_widget), NULL);
+  g_return_val_if_fail (icon_widget == NULL || GTK_IS_WIDGET (icon_widget), NULL);
 
   button = g_object_new (GTK_TYPE_TOOL_BUTTON,
                          "label", label,

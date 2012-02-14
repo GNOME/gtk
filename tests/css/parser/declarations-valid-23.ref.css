@@ -2,5 +2,5 @@
   border-image-repeat: repeat stretch;
   border-image-slice: 3 4;
   border-image-source: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAABmJLR0QA/wD/AP+gvaeTAAAAFUlEQVQImQXBAQEAAACAEP9PF1CpMCnkBftPnd1xAAAAAElFTkSuQmCC");
-  border-image-width: none;
+  border-image-width: initial;
 }

@@ -74,6 +74,56 @@ G_BEGIN_DECLS
  */
 #define GDK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
 
+/**
+ * GDK_EVENT_PROPAGATE:
+ *
+ * Use this macro as the return value for continuing the propagation of
+ * an event handler.
+ *
+ * Since: 3.4
+ */
+#define GDK_EVENT_PROPAGATE     (FALSE)
+
+/**
+ * GDK_EVENT_STOP:
+ *
+ * Use this macro as the return value for stopping the propagation of
+ * an event handler.
+ *
+ * Since: 3.4
+ */
+#define GDK_EVENT_STOP          (TRUE)
+
+/**
+ * GDK_BUTTON_PRIMARY:
+ *
+ * The primary button. This is typically the left mouse button, or the
+ * right button in a left-handed setup.
+ *
+ * Since: 3.4
+ */
+#define GDK_BUTTON_PRIMARY      (1)
+
+/**
+ * GDK_BUTTON_MIDDLE:
+ *
+ * The middle button.
+ *
+ * Since: 3.4
+ */
+#define GDK_BUTTON_MIDDLE       (2)
+
+/**
+ * GDK_BUTTON_SECONDARY:
+ *
+ * The secondary button. This is typically the right mouse button, or the
+ * left button in a left-handed setup.
+ *
+ * Since: 3.4
+ */
+#define GDK_BUTTON_SECONDARY    (3)
+
+
 
 typedef struct _GdkEventAny	    GdkEventAny;
 typedef struct _GdkEventExpose	    GdkEventExpose;
@@ -371,6 +421,7 @@ typedef enum
  *   decorations.
  * @GDK_WINDOW_STATE_ABOVE: the window is kept above other windows.
  * @GDK_WINDOW_STATE_BELOW: the window is kept below other windows.
+ * @GDK_WINDOW_STATE_FOCUSED: the window is presented as focused (with active decorations).
  *
  * Specifies the state of a toplevel window.
  */
@@ -382,7 +433,8 @@ typedef enum
   GDK_WINDOW_STATE_STICKY     = 1 << 3,
   GDK_WINDOW_STATE_FULLSCREEN = 1 << 4,
   GDK_WINDOW_STATE_ABOVE      = 1 << 5,
-  GDK_WINDOW_STATE_BELOW      = 1 << 6
+  GDK_WINDOW_STATE_BELOW      = 1 << 6,
+  GDK_WINDOW_STATE_FOCUSED    = 1 << 7
 } GdkWindowState;
 
 /**
@@ -1076,7 +1128,8 @@ GdkDevice* gdk_event_get_device         (const GdkEvent  *event);
 void       gdk_event_set_source_device  (GdkEvent        *event,
                                          GdkDevice       *device);
 GdkDevice* gdk_event_get_source_device  (const GdkEvent  *event);
-void      gdk_event_request_motions     (const GdkEventMotion *event);
+void       gdk_event_request_motions    (const GdkEventMotion *event);
+gboolean   gdk_event_triggers_context_menu (const GdkEvent *event);
 
 gboolean  gdk_events_get_distance       (GdkEvent        *event1,
                                          GdkEvent        *event2,

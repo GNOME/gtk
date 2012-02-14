@@ -1131,14 +1131,14 @@ gtk_plug_map (GtkWidget *widget)
       GtkBin *bin = GTK_BIN (widget);
       GtkPlug *plug = GTK_PLUG (widget);
       GtkWidget *child;
-      
+
       gtk_widget_set_mapped (widget, TRUE);
 
       child = gtk_bin_get_child (bin);
       if (child != NULL &&
           gtk_widget_get_visible (child) &&
-	  !gtk_widget_get_mapped (child))
-	gtk_widget_map (child);
+          !gtk_widget_get_mapped (child))
+        gtk_widget_map (child);
 
       xembed_set_info (gtk_widget_get_window (GTK_WIDGET (plug)), XEMBED_MAPPED);
 
@@ -1157,12 +1157,17 @@ gtk_plug_unmap (GtkWidget *widget)
     {
       GtkPlug *plug = GTK_PLUG (widget);
       GdkWindow *window;
+      GtkWidget *child;
 
       window = gtk_widget_get_window (widget);
 
       gtk_widget_set_mapped (widget, FALSE);
 
       gdk_window_hide (window);
+
+      child = gtk_bin_get_child (GTK_BIN (widget));
+      if (child != NULL)
+        gtk_widget_unmap (child);
 
       xembed_set_info (gtk_widget_get_window (GTK_WIDGET (plug)), 0);
 

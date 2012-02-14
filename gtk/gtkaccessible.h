@@ -54,9 +54,9 @@ struct _GtkAccessibleClass
 
   void (*connect_widget_destroyed) (GtkAccessible *accessible);
 
+  void (*widget_set)               (GtkAccessible *accessible);
+  void (*widget_unset)             (GtkAccessible *accessible);
   /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
 };
@@ -66,6 +66,8 @@ GType      gtk_accessible_get_type                 (void) G_GNUC_CONST;
 void       gtk_accessible_set_widget               (GtkAccessible *accessible,
                                                     GtkWidget     *widget);
 GtkWidget *gtk_accessible_get_widget               (GtkAccessible *accessible);
+
+GDK_DEPRECATED_FOR(gtk_accessible_set_widget)
 void       gtk_accessible_connect_widget_destroyed (GtkAccessible *accessible);
 
 G_END_DECLS

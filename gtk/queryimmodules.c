@@ -23,7 +23,6 @@
 
 #include <glib.h>
 #include <glib/gprintf.h>
-#include <gmodule.h>
 
 #include <errno.h>
 #include <string.h>
@@ -37,8 +36,13 @@
 #define SOEXT ("." G_MODULE_SUFFIX)
 #endif
 
-#include "gtk/gtkimmodule.h"
+#include "gtk/gtkimcontextinfo.h"
 #include "gtk/gtkversion.h"
+
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+#undef GTK_DISABLE_DEPRECATED
+
+#include "gtk/deprecated/gtkrc.h"
 
 static void
 escape_string (GString *contents, const char *str)

@@ -187,7 +187,7 @@ void    _gdk_dropfiles_store (gchar *data);
 void       _gdk_push_modal_window   (GdkWindow *window);
 void       _gdk_remove_modal_window (GdkWindow *window);
 GdkWindow *_gdk_modal_current       (void);
-
+gboolean   _gdk_modal_blocked       (GdkWindow *window);
 
 #ifdef G_ENABLE_DEBUG
 gchar *_gdk_win32_color_to_string      (const GdkColor *color);
@@ -343,6 +343,8 @@ extern gint		 _gdk_max_colors;
 /* TRUE while a modal sizing, moving, or dnd operation is in progress */
 extern gboolean		_modal_operation_in_progress;
 
+extern HWND		_modal_move_resize_window;
+
 /* TRUE when we are emptying the clipboard ourselves */
 extern gboolean		_ignore_destroy_clipboard;
 
@@ -353,6 +355,8 @@ extern GHashTable	*_format_atom_table;
 
 /* Hold the result of a delayed rendering */
 extern HGLOBAL		_delayed_rendering_data;
+
+extern HCURSOR _gdk_win32_grab_cursor;
 
 HGLOBAL _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
 					     GdkAtom  target);
@@ -386,7 +390,6 @@ gboolean _gdk_win32_display_supports_cursor_color (GdkDisplay    *display);
 
 GList *_gdk_win32_display_list_devices (GdkDisplay *dpy);
 
-void _gdk_win32_display_sync (GdkDisplay * display);
 gboolean _gdk_win32_display_has_pending (GdkDisplay *display);
 void _gdk_win32_display_queue_events (GdkDisplay *display);
 
@@ -403,7 +406,7 @@ gboolean   _gdk_win32_display_set_selection_owner   (GdkDisplay *display,
 						     guint32     time,
 						     gboolean    send_event);
 void       _gdk_win32_display_send_selection_notify (GdkDisplay      *display,
-						     HWND             requestor,
+						     GdkWindow       *requestor,
 						     GdkAtom   	      selection,
 						     GdkAtom          target,
 						     GdkAtom          property,
@@ -493,6 +496,8 @@ GdkAtom _gdk_win32_display_manager_atom_intern (GdkDisplayManager *manager,
 						gint         only_if_exists);
 gchar *_gdk_win32_display_manager_get_atom_name (GdkDisplayManager *manager, 
 					         GdkAtom            atom);
+void _gdk_win32_append_event (GdkEvent *event);
+void _gdk_win32_emit_configure_event (GdkWindow *window);
 
 /* Initialization */
 void _gdk_win32_windowing_init (void);
@@ -503,5 +508,6 @@ void _gdk_visual_init (void);
 void _gdk_dnd_init    (void);
 void _gdk_events_init (void);
 void _gdk_input_init  (GdkDisplay *display);
+void _gdk_input_wintab_init_check (GdkDeviceManager *device_manager);
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */

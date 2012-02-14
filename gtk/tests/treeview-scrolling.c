@@ -315,15 +315,14 @@ get_pos_from_path (GtkTreeView   *tree_view,
 	return POS_CENTER;
 }
 
-static gboolean
-test_position_with_align (GtkTreeView  *tree_view,
-			  enum Pos      pos,
-			  gint          row_y,
-			  gint          row_start,
-			  gdouble       row_height,
-			  gdouble       row_align)
+static void
+assert_position_with_align (GtkTreeView  *tree_view,
+                            enum Pos      pos,
+                            gint          row_y,
+                            gint          row_start,
+                            gdouble       row_height,
+                            gdouble       row_align)
 {
-	gboolean passed = TRUE;
 	GtkAdjustment *vadjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (tree_view));
 
 	/* Switch on row-align: 0.0, 0.5, 1.0 */
@@ -336,42 +335,37 @@ test_position_with_align (GtkTreeView  *tree_view,
 			 *    - dy should be equal to the top
 			 *      y coordinate of the row.
 			 */
-			if (row_y != 0)
-				passed = FALSE;
-			if (gtk_adjustment_get_value (vadjustment) != row_start)
-				passed = FALSE;
+			g_assert (row_y == 0);
+			g_assert (gtk_adjustment_get_value (vadjustment) == row_start);
 		} else {
 			/* The row can be anywhere at the last
 			 * page of the tree view.
 			 *   - dy is set to the start of the
 			 *     last page.
 			 */
-			if (gtk_adjustment_get_value (vadjustment) != gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment))
-				passed = FALSE;
+			g_assert (gtk_adjustment_get_value (vadjustment) == gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment));
 		}
 		break;
 
 	case 1:
 		/* 0.5 */
 		if (pos == POS_TOP
-		    && row_start < gtk_adjustment_get_page_size (vadjustment) / 2) {
+		    && row_start < (gtk_adjustment_get_page_size (vadjustment) - row_height) / 2) {
 			/* For the first half of the top view we can't
 			 * center the row in the view, instead we
 			 * show the first page.
 			 *   - dy should be zero
 			 */
-			if (gtk_adjustment_get_value (vadjustment) != 0)
-				passed = FALSE;
+			g_assert (gtk_adjustment_get_value (vadjustment) == 0);
 		} else if (pos == POS_BOTTOM
-			   && row_start >= gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment) / 2) {
+			   && row_start + row_height >= gtk_adjustment_get_upper (vadjustment) - (gtk_adjustment_get_page_size (vadjustment) - row_height) / 2) {
 			/* For the last half of the bottom view we
 			 * can't center the row in the view, instead
 			 * we show the last page.
 			 *   - dy should be the start of the 
 			 *     last page.
 			 */
-			if (gtk_adjustment_get_value (vadjustment) != gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment))
-				passed = FALSE;
+			g_assert (gtk_adjustment_get_value (vadjustment) == gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment));
 		} else {
 			/* The row is located in the middle of
 			 * the view.
@@ -381,9 +375,8 @@ test_position_with_align (GtkTreeView  *tree_view,
 			 *      (ie. the row's center is at the
 			 *       center of the view).
 			 */
-			gdouble middle = gtk_adjustment_get_page_size (vadjustment) / 2 - row_height / 2;
-			if (row_y != ceil (middle) && row_y != floor (middle))
-				passed = FALSE;
+			gdouble middle = (gtk_adjustment_get_page_size (vadjustment) - row_height) / 2.0;
+			g_assert (row_y == ceil (middle) || row_y == floor (middle));
 		}
 		break;
 
@@ -394,8 +387,7 @@ test_position_with_align (GtkTreeView  *tree_view,
 			 * first page of the tree view.
 			 *   - dy is zero.
 			 */
-			if (gtk_adjustment_get_value (vadjustment) != 0)
-				passed = FALSE;
+			g_assert (gtk_adjustment_get_value (vadjustment) == 0);
 		} else if (pos == POS_CENTER || pos == POS_BOTTOM) {
 			/* The row is the last row visible in the
 			 * view.
@@ -405,44 +397,34 @@ test_position_with_align (GtkTreeView  *tree_view,
 			 *     (ie we are not on the first page).
 			 *   - dy is greater than zero
 			 */
-			if (row_start < gtk_adjustment_get_page_size (vadjustment)
-			    && row_start + row_height < gtk_adjustment_get_page_size (vadjustment))
-				passed = FALSE;
-			if (gtk_adjustment_get_value (vadjustment) <= 0)
-				passed = FALSE;
-			if (row_y != gtk_adjustment_get_page_size (vadjustment) - row_height)
-				passed = FALSE;
+			g_assert (row_start >= gtk_adjustment_get_page_size (vadjustment)
+			          || row_start + row_height >= gtk_adjustment_get_page_size (vadjustment));
+		        g_assert (row_y == gtk_adjustment_get_page_size (vadjustment) - row_height);
 		}
 		break;
 	}
-
-	return passed;
 }
 
-static gboolean
-test_position_without_align (GtkTreeView *tree_view,
-			     gdouble      row_start,
-			     gdouble      row_height)
+static void
+assert_position_without_align (GtkTreeView *tree_view,
+                               gdouble      row_start,
+                               gdouble      row_height)
 {
   GtkAdjustment *vadjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (tree_view));
 
-	/* Without align the tree view does as less work as possible,
-	 * so basically we only have to check whether the row
-	 * is visible on the screen.
-	 */
-	if (gtk_adjustment_get_value (vadjustment) <= row_start
-	    && gtk_adjustment_get_value (vadjustment) + gtk_adjustment_get_page_size (vadjustment) >= row_start + row_height)
-		return TRUE;
-
-	return FALSE;
+  /* Without align the tree view does as less work as possible,
+   * so basically we only have to check whether the row
+   * is visible on the screen.
+   */
+  g_assert (gtk_adjustment_get_value (vadjustment) <= row_start);
+  g_assert (gtk_adjustment_get_value (vadjustment) + gtk_adjustment_get_page_size (vadjustment) >= row_start + row_height);
 }
 
 static void
 test_position (GtkTreeView *tree_view,
 	       GtkTreePath *path,
 	       gboolean     use_align,
-	       gdouble      row_align,
-	       gdouble      col_align)
+	       gdouble      row_align)
 {
 	gint pos;
 	gchar *path_str;
@@ -482,10 +464,10 @@ test_position (GtkTreeView *tree_view,
 
 	path_str = gtk_tree_path_to_string (path);
 	if (use_align) {
-		g_assert (test_position_with_align (tree_view, pos, rect.y,
-						    row_start, rect.height, row_align));
+		assert_position_with_align (tree_view, pos, rect.y,
+                                            row_start, rect.height, row_align);
 	} else {
-		g_assert (test_position_without_align (tree_view, row_start, rect.height));
+		assert_position_without_align (tree_view, row_start, rect.height);
 	}
 
 	g_free (path_str);
@@ -516,7 +498,7 @@ scroll (ScrollFixture *fixture,
 		gtk_main_iteration ();
 
 	test_position (GTK_TREE_VIEW (fixture->tree_view), path,
-		       use_align, row_align, 0.0);
+		       use_align, row_align);
 }
 
 static void
@@ -585,7 +567,7 @@ scroll_after_realize (ScrollFixture *fixture,
 		gtk_main_iteration ();
 
 	test_position (GTK_TREE_VIEW (fixture->tree_view), path,
-		       use_align, row_align, 0.0);
+		       use_align, row_align);
 }
 
 static void
@@ -667,7 +649,7 @@ scroll_both_realize (ScrollFixture *fixture,
 		gtk_main_iteration ();
 
 	test_position (GTK_TREE_VIEW (fixture->tree_view), path,
-		       use_align, row_align, 0.0);
+		       use_align, row_align);
 }
 
 static void
@@ -837,7 +819,7 @@ scroll_new_row (ScrollFixture *fixture,
 
 	/* Test position */
 	test_position (GTK_TREE_VIEW (fixture->tree_view), scroll_path,
-		       FALSE, 0.0, 0.0);
+		       FALSE, 0.0);
 	test_editable_position (fixture->tree_view, editable, scroll_path);
 
 	gtk_tree_path_free (scroll_path);
@@ -1088,7 +1070,7 @@ test_bug111500 (ScrollFixture *fixture,
 
 	gtk_tree_path_down (path);
 
-	scroll (fixture, path, TRUE, 0.5);
+	scroll (fixture, path, FALSE, 0.5);
 	gtk_tree_path_free (path);
 }
 
@@ -1144,7 +1126,7 @@ test_bug111500_mixed (ScrollFixture *fixture,
 
 	gtk_tree_path_down (path);
 
-	scroll (fixture, path, TRUE, 0.5);
+	scroll (fixture, path, FALSE, 0.5);
 	gtk_tree_path_free (path);
 }
 

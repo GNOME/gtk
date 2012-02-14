@@ -30,7 +30,6 @@
 static GHashTable *listener_list = NULL;
 static gint listener_idx = 1;
 static GSList *key_listener_list = NULL;
-static guint key_snooper_id = 0;
 
 typedef struct _GailUtilListenerInfo GailUtilListenerInfo;
 typedef struct _GailKeyEventInfo GailKeyEventInfo;
@@ -81,12 +80,12 @@ add_listener (GSignalEmissionHook  listener,
         }
       else
         {
-          g_warning("Invalid signal type %s\n", signal_name);
+          g_warning ("Invalid signal type %s\n", signal_name);
         }
     }
   else
     {
-      g_warning("Invalid object type %s\n", object_type);
+      g_warning ("Invalid object type %s\n", object_type);
     }
   return rc;
 }
@@ -271,7 +270,10 @@ gail_util_add_global_event_listener (GSignalEmissionHook  listener,
 
   split_string = g_strsplit (event_type, ":", 3);
 
-  rc = add_listener (listener, split_string[1], split_string[2], event_type);
+  if (g_strv_length (split_string) == 3)
+    rc = add_listener (listener, split_string[1], split_string[2], event_type);
+
+  g_strfreev (split_string);
 
   return rc;
 }
@@ -301,19 +303,19 @@ gail_util_remove_global_event_listener (guint remove_listener)
           }
         else
           {
-            g_warning("Invalid listener hook_id %ld or signal_id %d\n",
-              listener_info->hook_id, listener_info->signal_id);
+            g_warning ("Invalid listener hook_id %ld or signal_id %d\n",
+                       listener_info->hook_id, listener_info->signal_id);
           }
       }
     else
       {
-        g_warning("No listener with the specified listener id %d",
-          remove_listener);
+        g_warning ("No listener with the specified listener id %d",
+                   remove_listener);
       }
   }
   else
   {
-    g_warning("Invalid listener_id %d", remove_listener);
+    g_warning ("Invalid listener_id %d", remove_listener);
   }
 }
 
@@ -365,10 +367,9 @@ typedef struct {
   guint           key;
 } KeyEventListener;
 
-static gint
-gail_key_snooper (GtkWidget   *the_widget,
-                  GdkEventKey *event,
-                  gpointer     data)
+gboolean
+_gail_util_key_snooper (GtkWidget   *the_widget,
+                        GdkEventKey *event)
 {
   GSList *l;
   AtkKeyEventStruct *atk_event;
@@ -395,9 +396,6 @@ gail_util_add_key_event_listener (AtkKeySnoopFunc  listener_func,
 {
   static guint key = 0;
   KeyEventListener *listener;
-
-  if (key_snooper_id == 0)
-    key_snooper_id = gtk_key_snooper_install (gail_key_snooper, NULL);
 
   key++;
 
@@ -427,12 +425,6 @@ gail_util_remove_key_event_listener (guint listener_key)
 
           break;
         }
-    }
-
-  if (key_listener_list == NULL)
-    {
-      gtk_key_snooper_remove (key_snooper_id);
-      key_snooper_id = 0;
     }
 }
 

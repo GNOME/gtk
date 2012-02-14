@@ -265,6 +265,9 @@ gtk_cups_request_read_write (GtkCupsRequest *request, gboolean connect_only)
       else if (request->type == GTK_CUPS_GET)
         get_states[request->state] (request);
 
+      if (gtk_cups_result_is_error (request->result))
+        request->state = GTK_CUPS_REQUEST_DONE;
+
       if (request->attempts > _GTK_CUPS_MAX_ATTEMPTS &&
           request->state != GTK_CUPS_REQUEST_DONE)
         {
@@ -918,8 +921,8 @@ _get_auth (GtkCupsRequest *request)
  * The callback sets cups_password to NULL to signal that the 
  * password has been used.
  */
-static char *cups_password;
-static char *cups_username;
+static char *cups_password = NULL;
+static char *cups_username = NULL;
 
 static const char *
 passwordCB (const char *prompt)
@@ -955,6 +958,7 @@ _post_check (GtkCupsRequest *request)
 
       if (request->password_state == GTK_CUPS_PASSWORD_APPLIED)
         {
+          request->poll_state = GTK_CUPS_HTTP_IDLE;
           request->password_state = GTK_CUPS_PASSWORD_NOT_VALID;
           request->state = GTK_CUPS_POST_AUTH;
           request->need_password = TRUE;
@@ -972,7 +976,6 @@ _post_check (GtkCupsRequest *request)
         {
           if (request->password_state == GTK_CUPS_PASSWORD_NONE)
             {
-              cups_password = g_strdup ("");
               cups_username = request->username;
               cupsSetPasswordCB (passwordCB);
 
@@ -984,6 +987,7 @@ _post_check (GtkCupsRequest *request)
                   /* move to AUTH state to let the backend 
                    * ask for a password
                    */ 
+                  request->poll_state = GTK_CUPS_HTTP_IDLE;
                   request->state = GTK_CUPS_POST_AUTH;
                   request->need_password = TRUE;
 
@@ -1249,6 +1253,7 @@ _get_check (GtkCupsRequest *request)
 
       if (request->password_state == GTK_CUPS_PASSWORD_APPLIED)
         {
+          request->poll_state = GTK_CUPS_HTTP_IDLE;
           request->password_state = GTK_CUPS_PASSWORD_NOT_VALID;
           request->state = GTK_CUPS_GET_AUTH;
           request->need_password = TRUE;
@@ -1266,7 +1271,6 @@ _get_check (GtkCupsRequest *request)
         {
           if (request->password_state == GTK_CUPS_PASSWORD_NONE)
             {
-              cups_password = g_strdup ("");
               cups_username = request->username;
               cupsSetPasswordCB (passwordCB);
 
@@ -1278,6 +1282,7 @@ _get_check (GtkCupsRequest *request)
                   /* move to AUTH state to let the backend
                    * ask for a password
                    */
+                  request->poll_state = GTK_CUPS_HTTP_IDLE;
                   request->state = GTK_CUPS_GET_AUTH;
                   request->need_password = TRUE;
 
@@ -1324,7 +1329,7 @@ _get_check (GtkCupsRequest *request)
           return;
         }
 
-      request->state = GTK_CUPS_GET_SEND;
+      request->state = GTK_CUPS_GET_CONNECT;
       request->last_status = HTTP_CONTINUE;
 
      return;

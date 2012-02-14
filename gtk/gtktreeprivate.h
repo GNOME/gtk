@@ -49,8 +49,10 @@ gboolean     _gtk_tree_view_find_node                 (GtkTreeView       *tree_v
 						       GtkTreePath       *path,
 						       GtkRBTree        **tree,
 						       GtkRBNode        **node);
-GtkTreePath *_gtk_tree_view_find_path                 (GtkTreeView       *tree_view,
-						       GtkRBTree         *tree,
+gboolean     _gtk_tree_view_get_cursor_node           (GtkTreeView       *tree_view,
+						       GtkRBTree        **tree,
+						       GtkRBNode        **node);
+GtkTreePath *_gtk_tree_path_new_from_rbtree           (GtkRBTree         *tree,
 						       GtkRBNode         *node);
 void         _gtk_tree_view_child_move_resize         (GtkTreeView       *tree_view,
 						       GtkWidget         *widget,
@@ -86,6 +88,7 @@ void         _gtk_tree_view_set_anchor_path           (GtkTreeView              
 						       GtkTreePath                 *anchor_path);
 GtkRBTree *  _gtk_tree_view_get_rbtree                (GtkTreeView                 *tree_view);
 
+GtkTreeViewColumn *_gtk_tree_view_get_focus_column    (GtkTreeView                 *tree_view);
 void               _gtk_tree_view_set_focus_column    (GtkTreeView                 *tree_view,
 						       GtkTreeViewColumn           *column);
 GdkWindow         *_gtk_tree_view_get_header_window   (GtkTreeView                 *tree_view);

@@ -30,6 +30,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktreeprivate.h"
+#include "a11y/gtktextcellaccessible.h"
 
 
 /**
@@ -289,13 +290,20 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                         NULL,
                                                         GTK_PARAM_WRITABLE));
 
+  /**
+   * GtkCellRendererText:background-gdk:
+   *
+   * Background color as a #GdkColor
+   *
+   * Deprecated: 3.4: Use #GtkCellRendererText:background-rgba instead.
+   */
   g_object_class_install_property (object_class,
                                    PROP_BACKGROUND_GDK,
                                    g_param_spec_boxed ("background-gdk",
                                                        P_("Background color"),
                                                        P_("Background color as a GdkColor"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE));  
+                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkCellRendererText:background-rgba:
@@ -319,13 +327,20 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                         NULL,
                                                         GTK_PARAM_WRITABLE));
 
+  /**
+   * GtkCellRendererText:foreground-gdk:
+   *
+   * Foreground color as a #GdkColor
+   *
+   * Deprecated: 3.4: Use #GtkCellRendererText:foreground-rgba instead.
+   */
   g_object_class_install_property (object_class,
                                    PROP_FOREGROUND_GDK,
                                    g_param_spec_boxed ("foreground-gdk",
                                                        P_("Foreground color"),
                                                        P_("Foreground color as a GdkColor"),
                                                        GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkCellRendererText:foreground-rgba:
@@ -700,6 +715,8 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 		  G_TYPE_STRING);
 
   g_type_class_add_private (object_class, sizeof (GtkCellRendererTextPrivate));
+
+  _gtk_cell_renderer_class_set_accessible_type (cell_class, GTK_TYPE_TEXT_CELL_ACCESSIBLE);
 }
 
 static void
@@ -1964,7 +1981,6 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 				      const GdkRectangle   *cell_area,
 				      GtkCellRendererState  flags)
 {
-  GtkRequisition requisition;
   GtkCellRendererText *celltext;
   GtkCellRendererTextPrivate *priv;
   gfloat xalign, yalign;
@@ -1987,33 +2003,6 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   g_object_set_data_full (G_OBJECT (priv->entry), I_(GTK_CELL_RENDERER_TEXT_PATH), g_strdup (path), g_free);
   
   gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
-
-  gtk_widget_get_preferred_size (priv->entry, &requisition, NULL);
-  if (requisition.height < cell_area->height)
-    {
-      GtkBorder *style_border;
-      GtkBorder border;
-
-      gtk_widget_style_get (priv->entry,
-			    "inner-border", &style_border,
-			    NULL);
-
-      if (style_border)
-        {
-	  border = *style_border;
-	  g_boxed_free (GTK_TYPE_BORDER, style_border);
-	}
-      else
-        {
-	  /* Since boxed style properties can't have default values ... */
-	  border.left = 2;
-	  border.right = 2;
-	}
-
-      border.top = (cell_area->height - requisition.height) / 2;
-      border.bottom = (cell_area->height - requisition.height) / 2;
-      gtk_entry_set_inner_border (GTK_ENTRY (priv->entry), &border);
-    }
 
   priv->in_entry_menu = FALSE;
   if (priv->entry_menu_popdown_timeout)

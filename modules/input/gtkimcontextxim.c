@@ -650,6 +650,8 @@ gtk_im_context_xim_new (void)
   GtkIMContextXIM *result;
   const gchar *charset;
 
+  if (!GDK_IS_X11_DISPLAY(gdk_display_get_default()))
+    return NULL;
   result = g_object_new (GTK_TYPE_IM_CONTEXT_XIM, NULL);
 
   result->locale = g_strdup (setlocale (LC_CTYPE, NULL));

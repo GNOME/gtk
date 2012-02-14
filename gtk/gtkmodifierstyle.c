@@ -19,12 +19,12 @@
 
 #include "config.h"
 #include "gtkmodifierstyle.h"
+#include "gtkstyleproviderprivate.h"
 #include "gtkintl.h"
 
-typedef struct GtkModifierStylePrivate GtkModifierStylePrivate;
 typedef struct StylePropertyValue StylePropertyValue;
 
-struct GtkModifierStylePrivate
+struct _GtkModifierStylePrivate
 {
   GtkStyleProperties *style;
   GHashTable *color_properties;
@@ -37,12 +37,15 @@ enum {
 
 static guint signals [LAST_SIGNAL] = { 0 };
 
-static void gtk_modifier_style_provider_init (GtkStyleProviderIface *iface);
-static void gtk_modifier_style_finalize      (GObject      *object);
+static void gtk_modifier_style_provider_init         (GtkStyleProviderIface            *iface);
+static void gtk_modifier_style_provider_private_init (GtkStyleProviderPrivateInterface *iface);
+static void gtk_modifier_style_finalize              (GObject                          *object);
 
 G_DEFINE_TYPE_EXTENDED (GtkModifierStyle, _gtk_modifier_style, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
-                                               gtk_modifier_style_provider_init));
+                                               gtk_modifier_style_provider_init)
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER_PRIVATE,
+                                               gtk_modifier_style_provider_private_init));
 
 static void
 _gtk_modifier_style_class_init (GtkModifierStyleClass *klass)
@@ -132,6 +135,36 @@ gtk_modifier_style_provider_init (GtkStyleProviderIface *iface)
   iface->get_style_property = gtk_modifier_style_get_style_property;
 }
 
+static GtkSymbolicColor *
+gtk_modifier_style_provider_get_color (GtkStyleProviderPrivate *provider,
+                                       const char              *name)
+{
+  GtkModifierStyle *style = GTK_MODIFIER_STYLE (provider);
+
+  return _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (style->priv->style), name);
+}
+
+static void
+gtk_modifier_style_provider_lookup (GtkStyleProviderPrivate *provider,
+                                    GtkWidgetPath           *path,
+                                    GtkStateFlags            state,
+                                    GtkCssLookup            *lookup)
+{
+  GtkModifierStyle *style = GTK_MODIFIER_STYLE (provider);
+
+  _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (style->priv->style),
+                                      path,
+                                      state,
+                                      lookup);
+}
+
+static void
+gtk_modifier_style_provider_private_init (GtkStyleProviderPrivateInterface *iface)
+{
+  iface->get_color = gtk_modifier_style_provider_get_color;
+  iface->lookup = gtk_modifier_style_provider_lookup;
+}
+
 static void
 gtk_modifier_style_finalize (GObject *object)
 {
@@ -157,21 +190,10 @@ modifier_style_set_color (GtkModifierStyle *style,
                           const GdkRGBA    *color)
 {
   GtkModifierStylePrivate *priv;
-  GdkRGBA *old_color;
 
   g_return_if_fail (GTK_IS_MODIFIER_STYLE (style));
 
   priv = style->priv;
-  gtk_style_properties_get (priv->style, state,
-                            prop, &old_color,
-                            NULL);
-
-  if ((!color && !old_color) ||
-      (color && old_color && gdk_rgba_equal (color, old_color)))
-    {
-      gdk_rgba_free (old_color);
-      return;
-    }
 
   if (color)
     gtk_style_properties_set (priv->style, state,
@@ -181,7 +203,6 @@ modifier_style_set_color (GtkModifierStyle *style,
     gtk_style_properties_unset_property (priv->style, prop, state);
 
   g_signal_emit (style, signals[CHANGED], 0);
-  gdk_rgba_free (old_color);
 }
 
 void
@@ -209,24 +230,10 @@ _gtk_modifier_style_set_font (GtkModifierStyle           *style,
                               const PangoFontDescription *font_desc)
 {
   GtkModifierStylePrivate *priv;
-  PangoFontDescription *old_font;
 
   g_return_if_fail (GTK_IS_MODIFIER_STYLE (style));
 
   priv = style->priv;
-  gtk_style_properties_get (priv->style, 0,
-                            "font", &old_font,
-                            NULL);
-
-  if ((!old_font && !font_desc) ||
-      (old_font && font_desc &&
-       pango_font_description_equal (old_font, font_desc)))
-    {
-      if (old_font)
-        pango_font_description_free (old_font);
-
-      return;
-    }
 
   if (font_desc)
     gtk_style_properties_set (priv->style, 0,
@@ -234,9 +241,6 @@ _gtk_modifier_style_set_font (GtkModifierStyle           *style,
                               NULL);
   else
     gtk_style_properties_unset_property (priv->style, "font", 0);
-
-  if (old_font)
-    pango_font_description_free (old_font);
 
   g_signal_emit (style, signals[CHANGED], 0);
 }

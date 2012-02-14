@@ -29,6 +29,7 @@
 #include "gdkconfig.h"
 #include "gdkdisplaymanagerprivate.h"
 #include "gdkinternals.h"
+#include "gdkkeysprivate.h"
 #include "gdkmarshalers.h"
 #include "gdkintl.h"
 
@@ -135,6 +136,8 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
 
   object_class->set_property = gdk_display_manager_set_property;
   object_class->get_property = gdk_display_manager_get_property;
+
+  klass->keyval_convert_case = _gdk_display_manager_real_keyval_convert_case;
 
   /**
    * GdkDisplayManager::display-opened:

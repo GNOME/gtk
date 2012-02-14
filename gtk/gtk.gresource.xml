@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gtk/libgtk">
+    <file alias="Raleigh.css">gtk-default.css</file>
+    <file>gtk-win32.css</file>
+    <file alias="cursor/dnd-ask.png">cursor_dnd_ask.png</file>
+    <file alias="cursor/dnd-link.png">cursor_dnd_link.png</file>
+    <file alias="cursor/dnd-none.png">cursor_dnd_none.png</file>
+    <file alias="cursor/dnd-move.png">cursor_dnd_move.png</file>
+    <file alias="cursor/dnd-copy.png">cursor_dnd_copy.png</file>
+  </gresource>
+</gresources>

@@ -318,8 +318,37 @@ gdk_device_win32_grab (GdkDevice    *device,
                        GdkCursor    *cursor,
                        guint32       time_)
 {
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  HCURSOR hcursor;
+  GdkWin32Cursor *cursor_private;
+
+  cursor_private = (GdkWin32Cursor*) cursor;
+
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-    SetCapture (GDK_WINDOW_HWND (window));
+    {
+      if (!cursor)
+	hcursor = NULL;
+      else if ((hcursor = CopyCursor (cursor_private->hcursor)) == NULL)
+	WIN32_API_FAILED ("CopyCursor");
+
+      if (_gdk_win32_grab_cursor != NULL)
+	{
+	  if (GetCursor () == _gdk_win32_grab_cursor)
+	    SetCursor (NULL);
+	  DestroyCursor (_gdk_win32_grab_cursor);
+	}
+
+      _gdk_win32_grab_cursor = hcursor;
+
+      if (_gdk_win32_grab_cursor != NULL)
+	SetCursor (_gdk_win32_grab_cursor);
+      else if (impl->hcursor != NULL)
+	SetCursor (impl->hcursor);
+      else
+	SetCursor (LoadCursor (NULL, IDC_ARROW));
+
+      SetCapture (GDK_WINDOW_HWND (window));
+    }
 
   return GDK_GRAB_SUCCESS;
 }
@@ -338,9 +367,26 @@ gdk_device_win32_ungrab (GdkDevice *device,
     info->serial_end = 0;
 
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-    ReleaseCapture ();
+    {
+      if (_gdk_win32_grab_cursor != NULL)
+	{
+	  if (GetCursor () == _gdk_win32_grab_cursor)
+	    SetCursor (NULL);
+	  DestroyCursor (_gdk_win32_grab_cursor);
+	}
+      _gdk_win32_grab_cursor = NULL;
+
+      ReleaseCapture ();
+    }
 
   _gdk_display_device_grab_update (display, device, NULL, 0);
+}
+
+static void
+screen_to_client (HWND hwnd, POINT screen_pt, POINT *client_pt)
+{
+  *client_pt = screen_pt;
+  ScreenToClient (hwnd, client_pt);
 }
 
 static GdkWindow *
@@ -350,45 +396,75 @@ gdk_device_win32_window_at_position (GdkDevice       *device,
                                      GdkModifierType *mask,
                                      gboolean         get_toplevel)
 {
-  GdkWindow *window;
-  POINT point, pointc;
+  GdkWindow *window = NULL;
+  POINT screen_pt, client_pt;
   HWND hwnd, hwndc;
   RECT rect;
 
-  GetCursorPos (&pointc);
-  point = pointc;
-  hwnd = WindowFromPoint (point);
+  GetCursorPos (&screen_pt);
 
-  if (hwnd == NULL)
+  if (get_toplevel)
     {
-      window = _gdk_root;
-      *win_x = pointc.x + _gdk_offset_x;
-      *win_y = pointc.y + _gdk_offset_y;
-      return window;
+      /* Only consider visible children of the desktop to avoid the various
+       * non-visible windows you often find on a running Windows box. These
+       * might overlap our windows and cause our walk to fail. As we assume
+       * WindowFromPoint() can find our windows, we follow similar logic
+       * here, and ignore invisible and disabled windows.
+       */
+      hwnd = GetDesktopWindow ();
+      do {
+        window = gdk_win32_handle_table_lookup (hwnd);
+
+        if (window != NULL &&
+            GDK_WINDOW_TYPE (window) != GDK_WINDOW_ROOT &&
+            GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+          break;
+
+        screen_to_client (hwnd, screen_pt, &client_pt);
+        hwndc = ChildWindowFromPointEx (hwnd, client_pt, CWP_SKIPDISABLED  |
+                                                         CWP_SKIPINVISIBLE);
+
+	/* Verify that we're really inside the client area of the window */
+	if (hwndc != hwnd)
+	  {
+	    GetClientRect (hwndc, &rect);
+	    screen_to_client (hwndc, screen_pt, &client_pt);
+	    if (!PtInRect (&rect, client_pt))
+	      hwndc = hwnd;
+	  }
+
+      } while (hwndc != hwnd && (hwnd = hwndc, 1));
+
     }
-
-  ScreenToClient (hwnd, &point);
-
-  do
+  else
     {
-      if (get_toplevel &&
-          (window = gdk_win32_handle_table_lookup (hwnd)) != NULL &&
-          GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
-        break;
+      hwnd = WindowFromPoint (screen_pt);
 
-      hwndc = ChildWindowFromPoint (hwnd, point);
-      ClientToScreen (hwnd, &point);
-      ScreenToClient (hwndc, &point);
+      /* Verify that we're really inside the client area of the window */
+      GetClientRect (hwnd, &rect);
+      screen_to_client (hwnd, screen_pt, &client_pt);
+      if (!PtInRect (&rect, client_pt))
+	hwnd = NULL;
+
+      /* If we didn't hit any window at that point, return the desktop */
+      if (hwnd == NULL)
+        {
+          if (win_x)
+            *win_x = screen_pt.x + _gdk_offset_x;
+          if (win_y)
+            *win_y = screen_pt.y + _gdk_offset_y;
+          return _gdk_root;
+        }
+
+      window = gdk_win32_handle_table_lookup (hwnd);
     }
-  while (hwndc != hwnd && (hwnd = hwndc, 1));
-
-  window = gdk_win32_handle_table_lookup (hwnd);
 
   if (window && (win_x || win_y))
     {
-      GetClientRect (hwnd, &rect);
-      *win_x = point.x - rect.left;
-      *win_y = point.y - rect.top;
+      if (win_x)
+        *win_x = client_pt.x;
+      if (win_y)
+        *win_y = client_pt.y;
     }
 
   return window;

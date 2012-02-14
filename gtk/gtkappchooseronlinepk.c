@@ -118,12 +118,14 @@ install_mime_types_ready_cb (GObject      *source,
     }
 
   g_simple_async_result_complete (self->priv->result);
+  g_clear_object (&self->priv->result);
 }
 
 static void
 pk_search_mime_async (GtkAppChooserOnline *obj,
                       const gchar         *content_type,
                       GtkWindow           *parent,
+                      GCancellable        *cancellable,
                       GAsyncReadyCallback  callback,
                       gpointer             user_data)
 {
@@ -152,7 +154,7 @@ pk_search_mime_async (GtkAppChooserOnline *obj,
                                     "hide-confirm-search"),
                      G_DBUS_CALL_FLAGS_NONE,
                      G_MAXINT, /* no timeout */
-                     NULL,
+                     cancellable,
                      install_mime_types_ready_cb,
                      self);
 }

@@ -44,16 +44,11 @@ struct _GtkRendererCellAccessible
 struct _GtkRendererCellAccessibleClass
 {
   GtkCellAccessibleClass parent_class;
-  gchar **property_list;
-  gboolean (*update_cache) (GtkRendererCellAccessible *cell,
-                            gboolean                   emit_change_signal);
 };
 
 GType      _gtk_renderer_cell_accessible_get_type     (void);
 
-AtkObject *_gtk_renderer_cell_accessible_new          (void);
-gboolean   _gtk_renderer_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
-                                                       gboolean          emit_change_signal);
+AtkObject *_gtk_renderer_cell_accessible_new          (GtkCellRenderer * renderer);
 
 G_END_DECLS
 

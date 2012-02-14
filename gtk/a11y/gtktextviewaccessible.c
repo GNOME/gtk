@@ -31,9 +31,9 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtktextviewaccessible.h"
+#include "gtk/gtkwidgetprivate.h"
 
 
-static void setup_buffer (GtkTextView           *view,GtkTextViewAccessible *accessible);
 static void       insert_text_cb       (GtkTextBuffer    *buffer,
                                                         GtkTextIter      *arg1,
                                                         gchar            *arg2,
@@ -65,8 +65,6 @@ gtk_text_view_accessible_initialize (AtkObject *obj,
 {
   ATK_OBJECT_CLASS (_gtk_text_view_accessible_parent_class)->initialize (obj, data);
 
-  setup_buffer (GTK_TEXT_VIEW (data), GTK_TEXT_VIEW_ACCESSIBLE (obj));
-
   obj->role = ATK_ROLE_TEXT;
 }
 
@@ -84,10 +82,6 @@ gtk_text_view_accessible_notify_gtk (GObject    *obj,
 
       editable = gtk_text_view_get_editable (GTK_TEXT_VIEW (obj));
       atk_object_notify_state_change (atk_obj, ATK_STATE_EDITABLE, editable);
-    }
-  else if (!strcmp (pspec->name, "buffer"))
-    {
-      setup_buffer (GTK_TEXT_VIEW (obj), GTK_TEXT_VIEW_ACCESSIBLE (atk_obj));
     }
   else
     GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_text_view_accessible_parent_class)->notify_gtk (obj, pspec);
@@ -113,10 +107,48 @@ gtk_text_view_accessible_ref_state_set (AtkObject *accessible)
 }
 
 static void
+gtk_text_view_accessible_change_buffer (GtkTextViewAccessible *accessible,
+                                        GtkTextBuffer         *old_buffer,
+                                        GtkTextBuffer         *new_buffer)
+{
+  if (old_buffer)
+    {
+      g_signal_handlers_disconnect_matched (old_buffer, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, accessible);
+    }
+
+  if (new_buffer)
+    {
+      g_signal_connect_after (new_buffer, "insert-text", G_CALLBACK (insert_text_cb), accessible);
+      g_signal_connect (new_buffer, "delete-range", G_CALLBACK (delete_range_cb), accessible);
+      g_signal_connect_after (new_buffer, "mark-set", G_CALLBACK (mark_set_cb), accessible);
+    }
+}
+
+static void
+gtk_text_view_accessible_widget_set (GtkAccessible *accessible)
+{
+  gtk_text_view_accessible_change_buffer (GTK_TEXT_VIEW_ACCESSIBLE (accessible),
+                                          NULL,
+                                          gtk_text_view_get_buffer (GTK_TEXT_VIEW (gtk_accessible_get_widget (accessible))));
+}
+
+static void
+gtk_text_view_accessible_widget_unset (GtkAccessible *accessible)
+{
+  gtk_text_view_accessible_change_buffer (GTK_TEXT_VIEW_ACCESSIBLE (accessible),
+                                          gtk_text_view_get_buffer (GTK_TEXT_VIEW (gtk_accessible_get_widget (accessible))),
+                                          NULL);
+}
+
+static void
 _gtk_text_view_accessible_class_init (GtkTextViewAccessibleClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
+  GtkAccessibleClass *accessible_class = GTK_ACCESSIBLE_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
+
+  accessible_class->widget_set = gtk_text_view_accessible_widget_set;
+  accessible_class->widget_unset = gtk_text_view_accessible_widget_unset;
 
   class->ref_state_set = gtk_text_view_accessible_ref_state_set;
   class->initialize = gtk_text_view_accessible_initialize;
@@ -127,20 +159,6 @@ _gtk_text_view_accessible_class_init (GtkTextViewAccessibleClass *klass)
 static void
 _gtk_text_view_accessible_init (GtkTextViewAccessible *accessible)
 {
-}
-
-static void
-setup_buffer (GtkTextView           *view,
-              GtkTextViewAccessible *accessible)
-{
-  GtkTextBuffer *buffer;
-
-  buffer = gtk_text_view_get_buffer (view);
-
-  /* Set up signal callbacks */
-  g_signal_connect_after (buffer, "insert-text", G_CALLBACK (insert_text_cb), view);
-  g_signal_connect (buffer, "delete-range", G_CALLBACK (delete_range_cb), view);
-  g_signal_connect_after (buffer, "mark-set", G_CALLBACK (mark_set_cb), view);
 }
 
 static gchar *
@@ -173,6 +191,7 @@ gtk_text_view_accessible_get_text_after_offset (AtkText         *text,
                                                 gint            *end_offset)
 {
   GtkWidget *widget;
+  GtkTextView *view;
   GtkTextBuffer *buffer;
   GtkTextIter pos;
   GtkTextIter start, end;
@@ -181,12 +200,29 @@ gtk_text_view_accessible_get_text_after_offset (AtkText         *text,
   if (widget == NULL)
     return NULL;
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  view = GTK_TEXT_VIEW (widget);
+  buffer = gtk_text_view_get_buffer (view);
   gtk_text_buffer_get_iter_at_offset (buffer, &pos, offset);
-  _gtk_text_buffer_get_text_after (buffer, boundary_type,
-                                   &pos, &start, &end);
+  start = end = pos;
+  if (boundary_type == ATK_TEXT_BOUNDARY_LINE_START)
+    {
+      gtk_text_view_forward_display_line (view, &end);
+      start = end;
+      gtk_text_view_forward_display_line (view, &end);
+    }
+  else if (boundary_type == ATK_TEXT_BOUNDARY_LINE_END)
+    {
+      gtk_text_view_forward_display_line_end (view, &end);
+      start = end;
+      gtk_text_view_forward_display_line (view, &end);
+      gtk_text_view_forward_display_line_end (view, &end);
+    }
+  else
+    _gtk_text_buffer_get_text_after (buffer, boundary_type, &pos, &start, &end);
+
   *start_offset = gtk_text_iter_get_offset (&start);
   *end_offset = gtk_text_iter_get_offset (&end);
+
   return gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
 }
 
@@ -198,6 +234,7 @@ gtk_text_view_accessible_get_text_at_offset (AtkText         *text,
                                              gint            *end_offset)
 {
   GtkWidget *widget;
+  GtkTextView *view;
   GtkTextBuffer *buffer;
   GtkTextIter pos;
   GtkTextIter start, end;
@@ -206,12 +243,31 @@ gtk_text_view_accessible_get_text_at_offset (AtkText         *text,
   if (widget == NULL)
     return NULL;
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  view = GTK_TEXT_VIEW (widget);
+  buffer = gtk_text_view_get_buffer (view);
   gtk_text_buffer_get_iter_at_offset (buffer, &pos, offset);
-  _gtk_text_buffer_get_text_at (buffer, boundary_type,
-                                &pos, &start, &end);
+  start = end = pos;
+  if (boundary_type == ATK_TEXT_BOUNDARY_LINE_START)
+    {
+      gtk_text_view_backward_display_line_start (view, &start);
+      gtk_text_view_forward_display_line (view, &end);
+    }
+  else if (boundary_type == ATK_TEXT_BOUNDARY_LINE_END)
+    {
+      gtk_text_view_backward_display_line_start (view, &start);
+      if (!gtk_text_iter_is_start (&start))
+        {
+          gtk_text_view_backward_display_line (view, &start);
+          gtk_text_view_forward_display_line_end (view, &start);
+        }
+      gtk_text_view_forward_display_line_end (view, &end);
+    }
+  else
+    _gtk_text_buffer_get_text_at (buffer, boundary_type, &pos, &start, &end);
+
   *start_offset = gtk_text_iter_get_offset (&start);
   *end_offset = gtk_text_iter_get_offset (&end);
+
   return gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
 }
 
@@ -223,6 +279,7 @@ gtk_text_view_accessible_get_text_before_offset (AtkText         *text,
                                                  gint            *end_offset)
 {
   GtkWidget *widget;
+  GtkTextView *view;
   GtkTextBuffer *buffer;
   GtkTextIter pos;
   GtkTextIter start, end;
@@ -231,12 +288,43 @@ gtk_text_view_accessible_get_text_before_offset (AtkText         *text,
   if (widget == NULL)
     return NULL;
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  view = GTK_TEXT_VIEW (widget);
+  buffer = gtk_text_view_get_buffer (view);
   gtk_text_buffer_get_iter_at_offset (buffer, &pos, offset);
-  _gtk_text_buffer_get_text_before (buffer, boundary_type,
-                                    &pos, &start, &end);
+  start = end = pos;
+
+  if (boundary_type == ATK_TEXT_BOUNDARY_LINE_START)
+    {
+      gtk_text_view_backward_display_line_start (view, &start);
+      end = start;
+      gtk_text_view_backward_display_line (view, &start);
+      gtk_text_view_backward_display_line_start (view, &start);
+    }
+  else if (boundary_type == ATK_TEXT_BOUNDARY_LINE_END)
+    {
+      gtk_text_view_backward_display_line_start (view, &start);
+      if (!gtk_text_iter_is_start (&start))
+        {
+          gtk_text_view_backward_display_line (view, &start);
+          end = start;
+          gtk_text_view_forward_display_line_end (view, &end);
+          if (!gtk_text_iter_is_start (&start))
+            {
+              if (gtk_text_view_backward_display_line (view, &start))
+                gtk_text_view_forward_display_line_end (view, &start);
+              else
+                gtk_text_iter_set_offset (&start, 0);
+            }
+        }
+      else
+        end = start;
+    }
+  else
+    _gtk_text_buffer_get_text_before (buffer, boundary_type, &pos, &start, &end);
+
   *start_offset = gtk_text_iter_get_offset (&start);
   *end_offset = gtk_text_iter_get_offset (&end);
+
   return gtk_text_buffer_get_slice (buffer, &start, &end, FALSE);
 }
 
@@ -1657,12 +1745,9 @@ insert_text_cb (GtkTextBuffer *buffer,
                 gint           len,
                 gpointer       data)
 {
-  GtkTextView *view = data;
-  GtkTextViewAccessible *accessible;
+  GtkTextViewAccessible *accessible = data;
   gint position;
   gint length;
-
-  accessible = GTK_TEXT_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (view)));
 
   position = gtk_text_iter_get_offset (iter);
   length = g_utf8_strlen (text, len);
@@ -1678,11 +1763,8 @@ delete_range_cb (GtkTextBuffer *buffer,
                  GtkTextIter   *end,
                  gpointer       data)
 {
-  GtkTextView *view = data;
-  GtkTextViewAccessible *accessible;
+  GtkTextViewAccessible *accessible = data;
   gint offset, length;
-
-  accessible = GTK_TEXT_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (view)));
 
   offset = gtk_text_iter_get_offset (start);
   length = gtk_text_iter_get_offset (end) - offset;
@@ -1701,10 +1783,7 @@ mark_set_cb (GtkTextBuffer *buffer,
              GtkTextMark   *mark,
              gpointer       data)
 {
-  GtkTextView *text = data;
-  GtkTextViewAccessible *accessible;
-
-  accessible = GTK_TEXT_VIEW_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (text)));
+  GtkTextViewAccessible *accessible = data;
 
   /*
    * Only generate the signal for the "insert" mark, which
@@ -1859,3 +1938,22 @@ atk_streamable_content_interface_init (AtkStreamableContentIface *iface)
   iface->get_mime_type = gail_streamable_content_get_mime_type;
   iface->get_stream = gail_streamable_content_get_stream;
 }
+
+void
+_gtk_text_view_accessible_set_buffer (GtkTextView   *textview,
+                                      GtkTextBuffer *old_buffer)
+{
+  GtkTextViewAccessible *accessible;
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (textview));
+  g_return_if_fail (old_buffer == NULL || GTK_IS_TEXT_BUFFER (old_buffer));
+
+  accessible = GTK_TEXT_VIEW_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (textview)));
+  if (accessible == NULL)
+    return;
+
+  gtk_text_view_accessible_change_buffer (accessible,
+                                          old_buffer,
+                                          gtk_text_view_get_buffer (textview));
+}
+

@@ -20,6 +20,7 @@
 #ifndef __GTK_CONTAINER_ACCESSIBLE_H__
 #define __GTK_CONTAINER_ACCESSIBLE_H__
 
+#include "gtkcontainer.h"
 #include "gtkwidgetaccessible.h"
 
 G_BEGIN_DECLS

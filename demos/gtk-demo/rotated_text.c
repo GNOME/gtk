@@ -75,7 +75,7 @@ create_fancy_attr_list_for_layout (PangoLayout *layout)
   for (p = text; (p = strstr (p, HEART)); p += strlen (HEART))
     {
       PangoAttribute *attr;
-      
+
       attr = pango_attr_shape_new_with_data (&ink_rect,
                                              &logical_rect,
                                              GUINT_TO_POINTER (g_utf8_get_char (p)),
@@ -152,7 +152,7 @@ rotated_text_draw (GtkWidget *widget,
 
       /* Inform Pango to re-layout the text with the new transformation matrix */
       pango_cairo_update_layout (cr, layout);
-    
+
       pango_layout_get_pixel_size (layout, &width, &height);
       cairo_move_to (cr, - width / 2, - RADIUS * .9);
       pango_cairo_show_layout (cr, layout);
@@ -166,7 +166,7 @@ rotated_text_draw (GtkWidget *widget,
   g_object_unref (layout);
   g_object_unref (context);
   cairo_pattern_destroy (pattern);
-  
+
   return FALSE;
 }
 

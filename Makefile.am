@@ -63,10 +63,6 @@ gdk-x11-3.0.pc gdk-win32-3.0.pc gdk-quartz-3.0.pc gdk-broadway-3.0.pc gdk-waylan
 	rm -f $@ && \
 	cp gdk-3.0.pc $@
 
-gtk+-*-3.0-uninstalled.pc: gtk+-3.0-uninstalled.pc
-	rm -f $@ && \
-	cp gtk+-3.0-uninstalled.pc $@
-
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gdk-3.0.pc gtk+-3.0.pc gail-3.0.pc
 
@@ -84,8 +80,6 @@ DISTCLEANFILES = \
 	gdk-3.0.pc			\
 	gdk-x11-3.0.pc			\
 	gail-3.0.pc			\
-	gtk+-3.0-uninstalled.pc		\
-	gail-3.0-uninstalled.pc		\
 	config.lt
 
 distclean-local:

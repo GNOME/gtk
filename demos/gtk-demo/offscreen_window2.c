@@ -524,4 +524,3 @@ do_offscreen_window2 (GtkWidget *do_widget)
 
   return window;
 }
-

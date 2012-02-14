@@ -887,26 +887,28 @@ gtk_expander_paint (GtkExpander *expander,
 
   widget = GTK_WIDGET (expander);
   context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
   get_expander_bounds (expander, &clip);
   gtk_widget_get_allocation (widget, &allocation);
 
   gtk_style_context_save (context);
 
+  state &= ~(GTK_STATE_FLAG_PRELIGHT);
   if (expander->priv->prelight)
     {
-      state = GTK_STATE_FLAG_PRELIGHT;
+      state |= GTK_STATE_FLAG_PRELIGHT;
       gtk_style_context_set_state (context, state);
       gtk_expander_paint_prelight (expander, cr);
     }
 
   gtk_widget_style_get (widget, "expander-size", &size, NULL);
 
-  state = gtk_style_context_get_state (context);
-
   /* Set active flag as per the expanded state */
   if (priv->expanded)
     state |= GTK_STATE_FLAG_ACTIVE;
+  else
+    state &= ~(GTK_STATE_FLAG_ACTIVE);
 
   gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
@@ -1030,7 +1032,7 @@ gtk_expander_button_press (GtkWidget      *widget,
 {
   GtkExpander *expander = GTK_EXPANDER (widget);
 
-  if (event->button == 1 && event->window == expander->priv->event_window)
+  if (event->button == GDK_BUTTON_PRIMARY && event->window == expander->priv->event_window)
     {
       expander->priv->button_down = TRUE;
       return TRUE;
@@ -1045,7 +1047,7 @@ gtk_expander_button_release (GtkWidget      *widget,
 {
   GtkExpander *expander = GTK_EXPANDER (widget);
 
-  if (event->button == 1 && expander->priv->button_down)
+  if (event->button == GDK_BUTTON_PRIMARY && expander->priv->button_down)
     {
       gtk_widget_activate (widget);
       expander->priv->button_down = FALSE;

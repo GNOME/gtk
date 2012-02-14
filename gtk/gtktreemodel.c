@@ -652,7 +652,7 @@ gtk_tree_path_new_from_string (const gchar *path)
 /**
  * gtk_tree_path_new_from_indices:
  * @first_index: first integer
- * @varargs: list of integers terminated by -1
+ * @...: list of integers terminated by -1
  *
  * Creates a new path with @first_index and @varargs as indices.
  *
@@ -874,9 +874,9 @@ gtk_tree_path_get_indices_with_depth (GtkTreePath *path,
 
 /**
  * gtk_tree_path_free:
- * @path: a #GtkTreePath
+ * @path: (allow-none): a #GtkTreePath
  *
- * Frees @path.
+ * Frees @path. If @path is %NULL, it simply returns.
  */
 void
 gtk_tree_path_free (GtkTreePath *path)
@@ -1700,7 +1700,7 @@ gtk_tree_model_unref_node (GtkTreeModel *tree_model,
  * gtk_tree_model_get:
  * @tree_model: a #GtkTreeModel
  * @iter: a row in @tree_model
- * @Varargs: pairs of column number and value return locations,
+ * @...: pairs of column number and value return locations,
  *     terminated by -1
  *
  * Gets the value of one or more cells in the row referenced by @iter.
@@ -1754,7 +1754,7 @@ gtk_tree_model_get_valist (GtkTreeModel *tree_model,
 
   while (column != -1)
     {
-      GValue value = { 0, };
+      GValue value = G_VALUE_INIT;
       gchar *error = NULL;
 
       if (column >= gtk_tree_model_get_n_columns (tree_model))

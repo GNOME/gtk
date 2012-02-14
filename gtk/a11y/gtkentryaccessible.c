@@ -33,7 +33,6 @@ static void     insert_text_cb             (GtkEditable        *editable,
 static void     delete_text_cb             (GtkEditable        *editable,
                                             gint                start,
                                             gint                end);
-static void     changed_cb                 (GtkEditable        *editable);
 
 static gboolean check_for_selection_change (GtkEntryAccessible *entry,
                                             GtkEntry           *gtk_entry);
@@ -119,7 +118,6 @@ gtk_entry_accessible_initialize (AtkObject *obj,
   /* Set up signal callbacks */
   g_signal_connect (entry, "insert-text", G_CALLBACK (insert_text_cb), NULL);
   g_signal_connect (entry, "delete-text", G_CALLBACK (delete_text_cb), NULL);
-  g_signal_connect (entry, "changed", G_CALLBACK (changed_cb), NULL);
 
   if (gtk_entry_get_visibility (entry))
     obj->role = ATK_ROLE_TEXT;
@@ -207,8 +205,6 @@ _gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
 static void
 _gtk_entry_accessible_init (GtkEntryAccessible *entry)
 {
-  entry->length_insert = 0;
-  entry->length_delete = 0;
   entry->cursor_position = 0;
   entry->selection_bound = 0;
 }
@@ -853,11 +849,11 @@ insert_text_cb (GtkEditable *editable,
     return;
 
   accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (editable)));
-  if (accessible->length_insert == 0)
-    {
-      accessible->position_insert = *position;
-      accessible->length_insert = g_utf8_strlen (new_text, new_text_length);
-    }
+
+  g_signal_emit_by_name (accessible,
+                         "text-changed::insert",
+                         *position,
+                          g_utf8_strlen (new_text, new_text_length));
 }
 
 /* We connect to GtkEditable::delete-text, since it carries
@@ -872,6 +868,8 @@ delete_text_cb (GtkEditable *editable,
 {
   GtkEntryAccessible *accessible;
 
+  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (editable)));
+
   if (end < 0)
     {
       const gchar *text;
@@ -883,42 +881,10 @@ delete_text_cb (GtkEditable *editable,
   if (end == start)
     return;
 
-  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (editable)));
-  if (accessible->length_delete == 0)
-    {
-      accessible->position_delete = start;
-      accessible->length_delete = end - start;
-    }
-}
-
-/* Note the assumption here: A single ::changed emission
- * will only collect a single deletion/insertion, and there
- * won't be multiple insertions or deletions in a single
- * change.
- */
-static void
-changed_cb (GtkEditable *editable)
-{
-  GtkEntryAccessible *accessible;
-
-  accessible = GTK_ENTRY_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (editable)));
-
-  if (accessible->length_delete > 0)
-    {
-      g_signal_emit_by_name (accessible,
-                             "text-changed::delete",
-                             accessible->position_delete,
-                             accessible->length_delete);
-      accessible->length_delete = 0;
-    }
-  if (accessible->length_insert > 0)
-    {
-      g_signal_emit_by_name (accessible,
-                             "text-changed::insert",
-                             accessible->position_insert,
-                             accessible->length_insert);
-      accessible->length_insert = 0;
-    }
+  g_signal_emit_by_name (accessible,
+                         "text-changed::delete",
+                         start,
+                         end);
 }
 
 static gboolean

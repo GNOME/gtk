@@ -37,6 +37,8 @@ G_BEGIN_DECLS
  * @GTK_CELL_RENDERER_INSENSITIVE: The cell is drawn in an insensitive manner
  * @GTK_CELL_RENDERER_SORTED: The cell is in a sorted row
  * @GTK_CELL_RENDERER_FOCUSED: The cell is in the focus row.
+ * @GTK_CELL_RENDERER_EXPANDABLE: The cell is in a row that can be expanded. Since 3.4
+ * @GTK_CELL_RENDERER_EXPANDED: The cell is in a row that is expanded. Since 3.4
  *
  * Tells how a cell is to be rendererd.
  */
@@ -47,7 +49,9 @@ typedef enum
   GTK_CELL_RENDERER_INSENSITIVE = 1 << 2,
   /* this flag means the cell is in the sort column/row */
   GTK_CELL_RENDERER_SORTED      = 1 << 3,
-  GTK_CELL_RENDERER_FOCUSED     = 1 << 4
+  GTK_CELL_RENDERER_FOCUSED     = 1 << 4,
+  GTK_CELL_RENDERER_EXPANDABLE  = 1 << 5,
+  GTK_CELL_RENDERER_EXPANDED    = 1 << 6
 } GtkCellRendererState;
 
 /**
@@ -78,6 +82,7 @@ typedef enum
 typedef struct _GtkCellRenderer              GtkCellRenderer;
 typedef struct _GtkCellRendererPrivate       GtkCellRendererPrivate;
 typedef struct _GtkCellRendererClass         GtkCellRendererClass;
+typedef struct _GtkCellRendererClassPrivate  GtkCellRendererClassPrivate;
 
 struct _GtkCellRenderer
 {
@@ -150,8 +155,9 @@ struct _GtkCellRendererClass
 			     GtkCellEditable *editable,
 			     const gchar     *path);
 
+  GtkCellRendererClassPrivate *priv;
+
   /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
@@ -188,15 +194,14 @@ void               gtk_cell_renderer_get_aligned_area               (GtkCellRend
 								     const GdkRectangle *cell_area,
 								     GdkRectangle       *aligned_area);
 
-#ifndef GTK_DISABLE_DEPRECATED
+GDK_DEPRECATED_FOR(gtk_cell_renderer_get_preferred_size)
 void             gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
-						   GtkWidget            *widget,
-						   const GdkRectangle   *cell_area,
-						   gint                 *x_offset,
-						   gint                 *y_offset,
-						   gint                 *width,
-						   gint                 *height);
-#endif
+                                                   GtkWidget            *widget,
+                                                   const GdkRectangle   *cell_area,
+                                                   gint                 *x_offset,
+                                                   gint                 *y_offset,
+                                                   gint                 *width,
+                                                   gint                 *height);
 void             gtk_cell_renderer_render         (GtkCellRenderer      *cell,
                                                    cairo_t              *cr,
 						   GtkWidget            *widget,
@@ -265,6 +270,12 @@ void            _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
 GtkStateFlags   gtk_cell_renderer_get_state       (GtkCellRenderer      *cell,
                                                    GtkWidget            *widget,
                                                    GtkCellRendererState  cell_state);
+
+void            _gtk_cell_renderer_class_set_accessible_type 
+                                                  (GtkCellRendererClass *renderer_class,
+                                                   GType                 type);
+GType           _gtk_cell_renderer_get_accessible_type
+                                                  (GtkCellRenderer *     renderer);
 
 G_END_DECLS
 

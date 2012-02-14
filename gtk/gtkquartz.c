@@ -35,9 +35,11 @@ _gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf)
   int rowstride, pixbuf_width, pixbuf_height;
   gboolean has_alpha;
   NSImage *nsimage;
+  NSSize nsimage_size;
 
   pixbuf_width = gdk_pixbuf_get_width (pixbuf);
   pixbuf_height = gdk_pixbuf_get_height (pixbuf);
+  g_return_val_if_fail (pixbuf_width != 0 && pixbuf_height != 0, NULL);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
 
@@ -57,6 +59,13 @@ _gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf)
   CGColorSpaceRelease (colorspace);
 
   nsimage = [[NSImage alloc] initWithSize:NSMakeSize (pixbuf_width, pixbuf_height)];
+  nsimage_size = [nsimage size];
+  if (nsimage_size.width == 0.0 && nsimage_size.height == 0.0)
+    {
+      [nsimage release];
+      g_critical ("%s returned a zero-sized image", G_STRFUNC);
+      return NULL;
+    }
   [nsimage lockFocus];
 
   context = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
@@ -310,3 +319,88 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
                                        freeWhenDone:NO]
                                             forType:type];
 }
+
+#ifdef QUARTZ_RELOCATION
+
+/* Bundle-based functions for various directories. These almost work
+ * even when the application isn't in a bundle, becuase mainBundle
+ * paths point to the bin directory in that case. It's a simple matter
+ * to test for that and remove the last element.
+ */
+
+static const gchar *
+get_bundle_path (void)
+{
+  static gchar *path = NULL;
+
+  if (path == NULL)
+    {
+      NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+      gchar *resource_path = g_strdup ([[[NSBundle mainBundle] resourcePath] UTF8String]);
+      gchar *base;
+      [pool drain];
+
+      base = g_path_get_basename (resource_path);
+      if (strcmp (base, "bin") == 0)
+	path = g_path_get_dirname (resource_path);
+      else
+	path = strdup (resource_path);
+
+      g_free (resource_path);
+      g_free (base);
+    }
+
+  return path;
+}
+
+const gchar *
+_gtk_get_datadir (void)
+{
+  static gchar *path = NULL;
+
+  if (path == NULL)
+    path = g_build_filename (get_bundle_path (), "share", NULL);
+
+  return path;
+}
+
+const gchar *
+_gtk_get_libdir (void)
+{
+  static gchar *path = NULL;
+
+  if (path == NULL)
+    path = g_build_filename (get_bundle_path (), "lib", NULL);
+
+  return path;
+}
+
+const gchar *
+_gtk_get_localedir (void)
+{
+  static gchar *path = NULL;
+
+  if (path == NULL)
+    path = g_build_filename (get_bundle_path (), "share", "locale", NULL);
+
+  return path;
+}
+
+const gchar *
+_gtk_get_sysconfdir (void)
+{
+  static gchar *path = NULL;
+
+  if (path == NULL)
+    path = g_build_filename (get_bundle_path (), "etc", NULL);
+
+  return path;
+}
+
+const gchar *
+_gtk_get_data_prefix (void)
+{
+  return get_bundle_path ();
+}
+
+#endif /* QUARTZ_RELOCATION */

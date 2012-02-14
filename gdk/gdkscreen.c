@@ -287,12 +287,13 @@ gdk_screen_get_monitor_at_point (GdkScreen *screen,
  * gdk_screen_get_monitor_at_window:
  * @screen: a #GdkScreen.
  * @window: a #GdkWindow
- * @returns: the monitor number in which most of @window is located,
- *           or if @window does not intersect any monitors, a monitor,
- *           close to @window.
  *
- * Returns the number of the monitor in which the largest area of the 
+ * Returns the number of the monitor in which the largest area of the
  * bounding rectangle of @window resides.
+ *
+ * Returns: the monitor number in which most of @window is located,
+ *     or if @window does not intersect any monitors, a monitor,
+ *     close to @window.
  *
  * Since: 2.2
  **/
@@ -749,11 +750,15 @@ gdk_screen_get_monitor_plug_name (GdkScreen *screen,
 /**
  * gdk_screen_get_monitor_geometry:
  * @screen: a #GdkScreen
- * @monitor_num: the monitor number, between 0 and gdk_screen_get_n_monitors (screen)
- * @dest: (out) (allow-none): a #GdkRectangle to be filled with the monitor geometry
+ * @monitor_num: the monitor number
+ * @dest: (out) (allow-none): a #GdkRectangle to be filled with
+ *     the monitor geometry
  *
  * Retrieves the #GdkRectangle representing the size and position of
  * the individual monitor within the entire screen area.
+ *
+ * Monitor numbers start at 0. To obtain the number of monitors of
+ * @screen, use gdk_screen_get_n_monitors().
  *
  * Note that the size of the entire screen area can be retrieved via
  * gdk_screen_get_width() and gdk_screen_get_height().
@@ -766,6 +771,33 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
 				 GdkRectangle *dest)
 {
   GDK_SCREEN_GET_CLASS(screen)->get_monitor_geometry (screen, monitor_num, dest);
+}
+
+/**
+ * gdk_screen_get_monitor_workarea:
+ * @screen: a #GdkScreen
+ * @monitor_num: the monitor number
+ * @dest: (out) (allow-none): a #GdkRectangle to be filled with
+ *     the monitor workarea
+ *
+ * Retrieves the #GdkRectangle representing the size and position of
+ * the "work area" on a monitor within the entire screen area.
+ *
+ * The work area should be considered when positioning menus and
+ * similar popups, to avoid placing them below panels, docks or other
+ * desktop components.
+ *
+ * Monitor numbers start at 0. To obtain the number of monitors of
+ * @screen, use gdk_screen_get_n_monitors().
+ *
+ * Since: 3.4
+ */
+void
+gdk_screen_get_monitor_workarea (GdkScreen    *screen,
+                                 gint          monitor_num,
+                                 GdkRectangle *dest)
+{
+  GDK_SCREEN_GET_CLASS(screen)->get_monitor_workarea (screen, monitor_num, dest);
 }
 
 /**

@@ -104,6 +104,7 @@ enum {
   PROP_0,
   PROP_DIGITS,
   PROP_DRAW_VALUE,
+  PROP_HAS_ORIGIN,
   PROP_VALUE_POS
 };
 
@@ -165,21 +166,59 @@ G_DEFINE_TYPE_WITH_CODE (GtkScale, gtk_scale, GTK_TYPE_RANGE,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_scale_buildable_interface_init))
 
-
-static gboolean
-single_string_accumulator (GSignalInvocationHint *ihint,
-                           GValue                *return_accu,
-                           const GValue          *handler_return,
-                           gpointer               dummy)
+static gint
+compare_marks (gconstpointer a, gconstpointer b, gpointer data)
 {
-  gboolean continue_emission;
-  const gchar *str;
-  
-  str = g_value_get_string (handler_return);
-  g_value_set_string (return_accu, str);
-  continue_emission = str == NULL;
-  
-  return continue_emission;
+  gboolean inverted = GPOINTER_TO_INT (data);
+  gint val;
+  const GtkScaleMark *ma, *mb;
+
+  val = inverted ? -1 : 1;
+
+  ma = a; mb = b;
+
+  return (ma->value > mb->value) ? val : ((ma->value < mb->value) ? -val : 0);
+}
+
+static void
+gtk_scale_notify (GObject    *object,
+                  GParamSpec *pspec)
+{
+  if (strcmp (pspec->name, "orientation") == 0)
+    {
+      GtkOrientation orientation;
+
+      orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (object));
+      gtk_range_set_flippable (GTK_RANGE (object),
+                               orientation == GTK_ORIENTATION_HORIZONTAL);
+    }
+  else if (strcmp (pspec->name, "inverted") == 0)
+    {
+      GtkScale *scale = GTK_SCALE (object);
+      GtkScaleMark *mark;
+      GSList *m;
+      gint i, n;
+      gdouble *values;
+
+      scale->priv->marks = g_slist_sort_with_data (scale->priv->marks,
+                                                   compare_marks,
+                                                   GINT_TO_POINTER (gtk_range_get_inverted (GTK_RANGE (scale))));
+
+      n = g_slist_length (scale->priv->marks);
+      values = g_new (gdouble, n);
+      for (m = scale->priv->marks, i = 0; m; m = m->next, i++)
+        {
+          mark = m->data;
+          values[i] = mark->value;
+        }
+
+      _gtk_range_set_stop_values (GTK_RANGE (scale), values, n);
+
+      g_free (values);
+    }
+
+  if (G_OBJECT_CLASS (gtk_scale_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_scale_parent_class)->notify (object, pspec);
 }
 
 
@@ -202,6 +241,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   
   gobject_class->set_property = gtk_scale_set_property;
   gobject_class->get_property = gtk_scale_get_property;
+  gobject_class->notify = gtk_scale_notify;
   gobject_class->finalize = gtk_scale_finalize;
 
   widget_class->style_updated = gtk_scale_style_updated;
@@ -243,7 +283,7 @@ gtk_scale_class_init (GtkScaleClass *class)
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkScaleClass, format_value),
-                  single_string_accumulator, NULL,
+                  _gtk_single_string_accumulator, NULL,
                   _gtk_marshal_STRING__DOUBLE,
                   G_TYPE_STRING, 1,
                   G_TYPE_DOUBLE);
@@ -265,7 +305,15 @@ gtk_scale_class_init (GtkScaleClass *class)
 							 P_("Whether the current value is displayed as a string next to the slider"),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
-  
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_HAS_ORIGIN,
+                                   g_param_spec_boolean ("has-origin",
+                                                         P_("Has Origin"),
+                                                         P_("Whether the scale has an origin"),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE));
+
   g_object_class_install_property (gobject_class,
                                    PROP_VALUE_POS,
                                    g_param_spec_enum ("value-pos",
@@ -417,17 +465,6 @@ gtk_scale_class_init (GtkScaleClass *class)
 }
 
 static void
-gtk_scale_orientation_notify (GtkRange         *range,
-                              const GParamSpec *pspec)
-{
-  GtkOrientation orientation;
-
-  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (range));
-  gtk_range_set_flippable (range,
-                           orientation == GTK_ORIENTATION_HORIZONTAL);
-}
-
-static void
 gtk_scale_init (GtkScale *scale)
 {
   GtkScalePrivate *priv;
@@ -443,15 +480,15 @@ gtk_scale_init (GtkScale *scale)
 
   gtk_range_set_slider_size_fixed (range, TRUE);
 
+  _gtk_range_set_has_origin (range, TRUE);
+
   priv->draw_value = TRUE;
   priv->value_pos = GTK_POS_TOP;
   priv->digits = 1;
   gtk_range_set_round_digits (range, priv->digits);
 
-  gtk_scale_orientation_notify (range, NULL);
-  g_signal_connect (scale, "notify::orientation",
-                    G_CALLBACK (gtk_scale_orientation_notify),
-                    NULL);
+  gtk_range_set_flippable (range,
+                           gtk_orientable_get_orientation (GTK_ORIENTABLE (range))== GTK_ORIENTATION_HORIZONTAL);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE);
@@ -474,6 +511,9 @@ gtk_scale_set_property (GObject      *object,
       break;
     case PROP_DRAW_VALUE:
       gtk_scale_set_draw_value (scale, g_value_get_boolean (value));
+      break;
+    case PROP_HAS_ORIGIN:
+      gtk_scale_set_has_origin (scale, g_value_get_boolean (value));
       break;
     case PROP_VALUE_POS:
       gtk_scale_set_value_pos (scale, g_value_get_enum (value));
@@ -500,6 +540,9 @@ gtk_scale_get_property (GObject      *object,
       break;
     case PROP_DRAW_VALUE:
       g_value_set_boolean (value, priv->draw_value);
+      break;
+    case PROP_HAS_ORIGIN:
+      g_value_set_boolean (value, gtk_scale_get_has_origin (scale));
       break;
     case PROP_VALUE_POS:
       g_value_set_enum (value, priv->value_pos);
@@ -692,6 +735,54 @@ gtk_scale_get_draw_value (GtkScale *scale)
   g_return_val_if_fail (GTK_IS_SCALE (scale), FALSE);
 
   return scale->priv->draw_value;
+}
+
+/**
+ * gtk_scale_set_has_origin:
+ * @scale: a #GtkScale
+ * @has_origin: %TRUE if the scale has an origin
+ * 
+ * If @has_origin is set to %TRUE (the default),
+ * the scale will highlight the part of the scale
+ * between the origin (bottom or left side) of the scale
+ * and the current value.
+ *
+ * Since: 3.4
+ */
+void
+gtk_scale_set_has_origin (GtkScale *scale,
+                          gboolean  has_origin)
+{
+  g_return_if_fail (GTK_IS_SCALE (scale));
+
+  has_origin = has_origin != FALSE;
+
+  if (_gtk_range_get_has_origin (GTK_RANGE (scale)) != has_origin)
+    {
+      _gtk_range_set_has_origin (GTK_RANGE (scale), has_origin);
+
+      gtk_widget_queue_draw (GTK_WIDGET (scale));
+
+      g_object_notify (G_OBJECT (scale), "has-origin");
+    }
+}
+
+/**
+ * gtk_scale_get_has_origin:
+ * @scale: a #GtkScale
+ *
+ * Returns whether the scale has an origin.
+ *
+ * Returns: %TRUE if the scale has an origin.
+ * 
+ * Since: 3.4
+ */
+gboolean
+gtk_scale_get_has_origin (GtkScale *scale)
+{
+  g_return_val_if_fail (GTK_IS_SCALE (scale), FALSE);
+
+  return _gtk_range_get_has_origin (GTK_RANGE (scale));
 }
 
 /**
@@ -1005,11 +1096,10 @@ gtk_scale_get_preferred_height (GtkWidget *widget,
 }
 
 static gint
-find_next_pos (GtkWidget      *widget,
+find_next_pos (GtkWidget       *widget,
                GSList          *list,
                gint            *marks,
-               GtkPositionType  pos,
-               gint             match)
+               GtkPositionType  pos)
 {
   GtkAllocation allocation;
   GSList *m;
@@ -1019,7 +1109,7 @@ find_next_pos (GtkWidget      *widget,
     {
       GtkScaleMark *mark = m->data;
 
-      if (match == (mark->position == pos))
+      if (mark->position == pos)
         return marks[i];
     }
 
@@ -1037,7 +1127,6 @@ gtk_scale_draw (GtkWidget *widget,
   GtkScale *scale = GTK_SCALE (widget);
   GtkScalePrivate *priv = scale->priv;
   GtkRange *range = GTK_RANGE (scale);
-  GtkStateFlags state = 0;
   GtkStyleContext *context;
   gint *marks;
   gint focus_padding;
@@ -1057,9 +1146,6 @@ gtk_scale_draw (GtkWidget *widget,
    */
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->draw (widget, cr);
 
-  if (!gtk_widget_is_sensitive (widget))
-    state |= GTK_STATE_FLAG_INSENSITIVE;
-
   if (priv->marks)
     {
       GtkOrientation orientation;
@@ -1074,6 +1160,7 @@ gtk_scale_draw (GtkWidget *widget,
 
       orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (range));
       _gtk_range_get_stop_positions (range, &marks);
+
       layout = gtk_widget_create_pango_layout (widget, NULL);
       gtk_range_get_range_rect (range, &range_rect);
 
@@ -1091,19 +1178,18 @@ gtk_scale_draw (GtkWidget *widget,
                   y1 = range_rect.y;
                   y2 = y1 - slider_width / 2;
                   min_pos = min_pos_before;
-                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP, 1) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
                   y1 = range_rect.y + range_rect.height;
                   y2 = y1 + slider_width / 2;
                   min_pos = min_pos_after;
-                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM, 1) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
                 }
 
               gtk_style_context_save (context);
               gtk_style_context_add_class (context, GTK_STYLE_CLASS_MARK);
-              gtk_style_context_set_state (context, state);
 
               gtk_render_line (context, cr, x1, y1, x1, y2);
 
@@ -1142,20 +1228,19 @@ gtk_scale_draw (GtkWidget *widget,
                   x1 = range_rect.x;
                   x2 = range_rect.x - slider_width / 2;
                   min_pos = min_pos_before;
-                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP, 1) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
                   x1 = range_rect.x + range_rect.width;
                   x2 = range_rect.x + range_rect.width + slider_width / 2;
                   min_pos = min_pos_after;
-                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM, 1) - min_sep;
+                  max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
                 }
               y1 = marks[i];
 
               gtk_style_context_save (context);
               gtk_style_context_add_class (context, GTK_STYLE_CLASS_MARK);
-              gtk_style_context_set_state (context, state);
 
               gtk_render_line (context, cr, x1, y1, x2, y1);
 
@@ -1443,8 +1528,10 @@ _gtk_scale_clear_layout (GtkScale *scale)
 }
 
 static void
-gtk_scale_mark_free (GtkScaleMark *mark)
+gtk_scale_mark_free (gpointer data)
 {
+  GtkScaleMark *mark = data;
+
   g_free (mark->markup);
   g_free (mark);
 }
@@ -1467,8 +1554,7 @@ gtk_scale_clear_marks (GtkScale *scale)
 
   priv = scale->priv;
 
-  g_slist_foreach (priv->marks, (GFunc)gtk_scale_mark_free, NULL);
-  g_slist_free (priv->marks);
+  g_slist_free_full (priv->marks, gtk_scale_mark_free);
   priv->marks = NULL;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
@@ -1478,16 +1564,6 @@ gtk_scale_clear_marks (GtkScale *scale)
   _gtk_range_set_stop_values (GTK_RANGE (scale), NULL, 0);
 
   gtk_widget_queue_resize (GTK_WIDGET (scale));
-}
-
-static gint
-compare_marks (gpointer a, gpointer b)
-{
-  GtkScaleMark *ma, *mb;
-
-  ma = a; mb = b;
-
-  return (gint) (ma->value - mb->value);
 }
 
 /**
@@ -1541,8 +1617,9 @@ gtk_scale_add_mark (GtkScale        *scale,
   else
     mark->position = GTK_POS_BOTTOM;
 
-  priv->marks = g_slist_insert_sorted (priv->marks, mark,
-                                       (GCompareFunc) compare_marks);
+  priv->marks = g_slist_insert_sorted_with_data (priv->marks, mark,
+                                                 compare_marks,
+                                                 GINT_TO_POINTER (gtk_range_get_inverted (GTK_RANGE (scale))));
 
 #define MARKS_ABOVE 1
 #define MARKS_BELOW 2
@@ -1653,7 +1730,7 @@ marks_start_element (GMarkupParseContext *context,
             msg_context = values[i];
           else if (strcmp (names[i], "value") == 0)
             {
-              GValue gvalue = { 0, };
+              GValue gvalue = G_VALUE_INIT;
 
               if (!gtk_builder_value_from_string_type (parser_data->builder, G_TYPE_DOUBLE, values[i], &gvalue, error))
                 return;
@@ -1663,7 +1740,7 @@ marks_start_element (GMarkupParseContext *context,
             }
           else if (strcmp (names[i], "position") == 0)
             {
-              GValue gvalue = { 0, };
+              GValue gvalue = G_VALUE_INIT;
 
               if (!gtk_builder_value_from_string_type (parser_data->builder, GTK_TYPE_POSITION_TYPE, values[i], &gvalue, error))
                 return;

@@ -19,6 +19,7 @@
 
 #include "config.h"
 #include "gtkgradient.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkstyleproperties.h"
 #include "gtkintl.h"
 
@@ -279,6 +280,44 @@ gtk_gradient_resolve (GtkGradient         *gradient,
 
   *resolved_gradient = pattern;
   return TRUE;
+}
+
+cairo_pattern_t *
+gtk_gradient_resolve_for_context (GtkGradient     *gradient,
+                                  GtkStyleContext *context)
+{
+  cairo_pattern_t *pattern;
+  guint i;
+
+  g_return_val_if_fail (gradient != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
+
+  if (gradient->radius0 == 0 && gradient->radius1 == 0)
+    pattern = cairo_pattern_create_linear (gradient->x0, gradient->y0,
+                                           gradient->x1, gradient->y1);
+  else
+    pattern = cairo_pattern_create_radial (gradient->x0, gradient->y0,
+                                           gradient->radius0,
+                                           gradient->x1, gradient->y1,
+                                           gradient->radius1);
+
+  for (i = 0; i < gradient->stops->len; i++)
+    {
+      ColorStop *stop;
+      GdkRGBA rgba;
+
+      stop = &g_array_index (gradient->stops, ColorStop, i);
+
+      /* if color resolving fails, assume transparency */
+      if (!_gtk_style_context_resolve_color (context, stop->color, &rgba))
+        rgba.red = rgba.green = rgba.blue = rgba.alpha = 0.0;
+
+      cairo_pattern_add_color_stop_rgba (pattern, stop->offset,
+                                         rgba.red, rgba.green,
+                                         rgba.blue, rgba.alpha);
+    }
+
+  return pattern;
 }
 
 static void

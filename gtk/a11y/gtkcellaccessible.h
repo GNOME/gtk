@@ -21,6 +21,7 @@
 #define __GTK_CELL_ACCESSIBLE_H__
 
 #include <atk/atk.h>
+#include "gtk/gtkaccessible.h"
 
 G_BEGIN_DECLS
 
@@ -36,46 +37,33 @@ typedef struct _GtkCellAccessibleClass GtkCellAccessibleClass;
 
 struct _GtkCellAccessible
 {
-  AtkObject parent;
-
-  GtkWidget    *widget;
-  /* This cached value is used only by atk_object_get_index_in_parent()
-   * which updates the value when it is stale.
-   */
-  gint         index;
-  AtkStateSet *state_set;
-  GList       *action_list;
-  void (*refresh_index) (GtkCellAccessible *cell);
+  GtkAccessible parent;
 };
 
 struct _GtkCellAccessibleClass
 {
-  AtkObjectClass parent_class;
+  GtkAccessibleClass parent_class;
+  void (*update_cache) (GtkCellAccessible *cell);
 };
 
 GType    _gtk_cell_accessible_get_type      (void);
 
+GtkCellRendererState
+         _gtk_cell_accessible_get_state     (GtkCellAccessible *cell);
+void     _gtk_cell_accessible_state_changed (GtkCellAccessible *cell,
+                                             GtkCellRendererState added,
+                                             GtkCellRendererState removed);
+void     _gtk_cell_accessible_update_cache  (GtkCellAccessible *cell);
+
 void     _gtk_cell_accessible_initialise    (GtkCellAccessible *cell,
                                              GtkWidget         *widget,
-                                             AtkObject         *parent,
-                                             gint               index);
+                                             AtkObject         *parent);
 gboolean _gtk_cell_accessible_add_state     (GtkCellAccessible *cell,
                                              AtkStateType       state_type,
                                              gboolean           emit_signal);
 gboolean _gtk_cell_accessible_remove_state  (GtkCellAccessible *cell,
                                              AtkStateType       state_type,
                                              gboolean           emit_signal);
-gboolean _gtk_cell_accessible_add_action    (GtkCellAccessible *cell,
-                                             const gchar       *name,
-                                             const gchar       *description,
-                                             const gchar       *keybinding,
-                                             void (*func) (GtkCellAccessible *));
-
-gboolean _gtk_cell_accessible_remove_action (GtkCellAccessible *cell,
-                                             gint               index);
-gboolean _gtk_cell_accessible_remove_action_by_name
-                                            (GtkCellAccessible *cell,
-                                             const gchar       *name);
 
 G_END_DECLS
 

@@ -131,7 +131,7 @@ _gtk_tree_data_list_node_to_value (GtkTreeDataList *list,
       g_value_set_boolean (value, (gboolean) list->data.v_int);
       break;
     case G_TYPE_CHAR:
-      g_value_set_char (value, (gchar) list->data.v_char);
+      g_value_set_schar (value, (gchar) list->data.v_char);
       break;
     case G_TYPE_UCHAR:
       g_value_set_uchar (value, (guchar) list->data.v_uchar);
@@ -197,7 +197,7 @@ _gtk_tree_data_list_value_to_node (GtkTreeDataList *list,
       list->data.v_int = g_value_get_boolean (value);
       break;
     case G_TYPE_CHAR:
-      list->data.v_char = g_value_get_char (value);
+      list->data.v_char = g_value_get_schar (value);
       break;
     case G_TYPE_UCHAR:
       list->data.v_uchar = g_value_get_uchar (value);
@@ -326,8 +326,8 @@ _gtk_tree_data_list_compare_func (GtkTreeModel *model,
 {
   gint column = GPOINTER_TO_INT (user_data);
   GType type = gtk_tree_model_get_column_type (model, column);
-  GValue a_value = {0, };
-  GValue b_value = {0, };
+  GValue a_value = G_VALUE_INIT;
+  GValue b_value = G_VALUE_INIT;
   gint retval;
   const gchar *stra, *strb;
 
@@ -345,9 +345,9 @@ _gtk_tree_data_list_compare_func (GtkTreeModel *model,
 	retval = 1;
       break;
     case G_TYPE_CHAR:
-      if (g_value_get_char (&a_value) < g_value_get_char (&b_value))
+      if (g_value_get_schar (&a_value) < g_value_get_schar (&b_value))
 	retval = -1;
-      else if (g_value_get_char (&a_value) == g_value_get_char (&b_value))
+      else if (g_value_get_schar (&a_value) == g_value_get_schar (&b_value))
 	retval = 0;
       else
 	retval = 1;

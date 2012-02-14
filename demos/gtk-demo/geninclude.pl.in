@@ -116,7 +116,7 @@ if (defined @child_arrays) {
 }
 
 # toplevel
-print "\nDemo testgtk_demos[] = {\n";
+print "\nDemo gtk_demos[] = {\n";
 
 $first = 1;
 foreach $href (@demos) {

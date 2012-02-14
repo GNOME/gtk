@@ -9,7 +9,7 @@ DOC_MODULE=gail-libgail-util3
 DOC_MAIN_SGML_FILE=gail-libgail-util-docs.sgml
 
 # The directory containing the source code (if it contains documentation).
-DOC_SOURCE_DIR=../../../libgail-util
+DOC_SOURCE_DIR=$(top_srcdir)/libgail-util
 
 # Used for dependencies
 HFILE_GLOB = $(top_srcdir)/libgail-util/*.h

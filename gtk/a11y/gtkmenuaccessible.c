@@ -21,6 +21,7 @@
 
 #include "gtkmenuaccessible.h"
 
+#include <gtk/gtk.h>
 
 G_DEFINE_TYPE (GtkMenuAccessible, _gtk_menu_accessible, GTK_TYPE_MENU_SHELL_ACCESSIBLE)
 

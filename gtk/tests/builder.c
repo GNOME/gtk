@@ -1721,7 +1721,7 @@ test_window (void)
 static void
 test_value_from_string (void)
 {
-  GValue value = { 0 };
+  GValue value = G_VALUE_INIT;
   GError *error = NULL;
   GtkBuilder *builder;
 
@@ -2573,6 +2573,79 @@ test_message_area (void)
 }
 
 static void
+test_gmenu (void)
+{
+  GtkBuilder *builder;
+  GObject *obj, *obj1;
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window\">"
+    "  </object>"
+    "  <menu id='edit-menu'>"
+    "    <section>"
+    "      <item>"
+    "        <attribute name='label'>Undo</attribute>"
+    "        <attribute name='action'>undo</attribute>"
+    "      </item>"
+    "      <item>"
+    "        <attribute name='label'>Redo</attribute>"
+    "        <attribute name='action'>redo</attribute>"
+    "      </item>"
+    "    </section>"
+    "    <section></section>"
+    "    <section>"
+    "      <attribute name='label'>Copy &amp; Paste</attribute>"
+    "      <item>"
+    "        <attribute name='label'>Cut</attribute>"
+    "        <attribute name='action'>cut</attribute>"
+    "      </item>"
+    "      <item>"
+    "        <attribute name='label'>Copy</attribute>"
+    "        <attribute name='action'>copy</attribute>"
+    "      </item>"
+    "      <item>"
+    "        <attribute name='label'>Paste</attribute>"
+    "        <attribute name='action'>paste</attribute>"
+    "      </item>"
+    "    </section>"
+    "    <item><link name='section' id='blargh'>"
+    "      <item>"
+    "        <attribute name='label'>Bold</attribute>"
+    "        <attribute name='action'>bold</attribute>"
+    "      </item>"
+    "      <submenu>"
+    "        <attribute name='label'>Language</attribute>"
+    "        <item>"
+    "          <attribute name='label'>Latin</attribute>"
+    "          <attribute name='action'>lang</attribute>"
+    "          <attribute name='target'>'latin'</attribute>"
+    "        </item>"
+    "        <item>"
+    "          <attribute name='label'>Greek</attribute>"
+    "          <attribute name='action'>lang</attribute>"
+    "          <attribute name='target'>'greek'</attribute>"
+    "        </item>"
+    "        <item>"
+    "          <attribute name='label'>Urdu</attribute>"
+    "          <attribute name='action'>lang</attribute>"
+    "          <attribute name='target'>'urdu'</attribute>"
+    "        </item>"
+    "      </submenu>"
+    "    </link></item>"
+    "  </menu>"
+    "</interface>";
+
+  builder = builder_new_from_string (buffer, -1, NULL);
+  obj = gtk_builder_get_object (builder, "window");
+  g_assert (GTK_IS_WINDOW (obj));
+  obj1 = gtk_builder_get_object (builder, "edit-menu");
+  g_assert (G_IS_MENU_MODEL (obj1));
+  obj1 = gtk_builder_get_object (builder, "blargh");
+  g_assert (G_IS_MENU_MODEL (obj1));
+  g_object_unref (builder);
+}
+
+static void
 test_property_bindings (void)
 {
   const gchar *buffer =
@@ -2618,24 +2691,6 @@ test_property_bindings (void)
   window = gtk_builder_get_object (builder, "window");
   gtk_widget_destroy (GTK_WIDGET (window));
   g_object_unref (builder);
-}
-
-gboolean
-reverse_func (GBinding *binding,
-              const GValue *source_value,
-              GValue *target_value,
-              gpointer user_data)
-{
-  gchar *tmp;
-
-  g_assert_cmpstr ((const gchar *)user_data, ==, "user_data");
-  
-  tmp = g_strdup (g_value_get_string (source_value));
-  g_strreverse (tmp);
-  g_value_set_string (target_value, tmp);
-  g_free (tmp);
-
-  return TRUE;
 }
 
 int
@@ -2684,6 +2739,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Menus", test_menus);
   g_test_add_func ("/Builder/MessageArea", test_message_area);
   g_test_add_func ("/Builder/MessageDialog", test_message_dialog);
+  g_test_add_func ("/Builder/GMenu", test_gmenu);
   g_test_add_func ("/Builder/Property Bindings", test_property_bindings);
 
   return g_test_run();

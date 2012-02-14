@@ -279,13 +279,13 @@ gtk_css_section_get_end_line (const GtkCssSection *section)
 }
 
 /**
- * gtk_css_section_get_start_position:
+ * gtk_css_section_get_end_position:
  * @section: the section
  *
  * Returns the offset in bytes from the start of the current line
  * returned via gtk_css_section_get_end_line().
  * This value may change in future invocations of this function if
- * @section is not yet parsed completely. This will for example 
+ * @section is not yet parsed completely. This will for example
  * happen in the GtkCssProvider::parsing-error signal.
  * The end position and line may be identical to the start
  * position and line for sections which failed to parse anything

@@ -54,13 +54,14 @@ struct _GtkComboBoxClass
   GtkBinClass parent_class;
 
   /* signals */
-  void     (* changed)          (GtkComboBox *combo_box);
+  void     (* changed)           (GtkComboBox *combo_box);
+  gchar   *(* format_entry_text) (GtkComboBox *combo_box,
+				  const gchar *path);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 

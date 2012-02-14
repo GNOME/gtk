@@ -49,6 +49,9 @@
  * The entry itself can be accessed by calling gtk_bin_get_child() on the
  * combo box.
  *
+ * You should not call gtk_combo_box_set_model() or attempt to pack more cells
+ * into this combo box via its GtkCellLayout interface.
+ *
  * <refsect2 id="GtkComboBoxText-BUILDER-UI">
  * <title>GtkComboBoxText as GtkBuildable</title>
  * <para>
@@ -99,10 +102,14 @@ gtk_combo_box_text_constructor (GType                  type,
                                 guint                  n_construct_properties,
                                 GObjectConstructParam *construct_properties)
 {
-  GObject            *object;
+  GObject    *object;
+  const gint text_column = 0;
 
   object = G_OBJECT_CLASS (gtk_combo_box_text_parent_class)->constructor
     (type, n_construct_properties, construct_properties);
+
+  gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (object), text_column);
+  gtk_combo_box_set_id_column (GTK_COMBO_BOX (object), 1);
 
   if (!gtk_combo_box_get_has_entry (GTK_COMBO_BOX (object)))
     {
@@ -111,7 +118,7 @@ gtk_combo_box_text_constructor (GType                  type,
       cell = gtk_cell_renderer_text_new ();
       gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (object), cell, TRUE);
       gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (object), cell,
-                                      "text", 0,
+                                      "text", text_column,
                                       NULL);
     }
 
@@ -150,6 +157,7 @@ typedef struct {
   GtkBuilder    *builder;
   GObject       *object;
   const gchar   *domain;
+  gchar         *id;
 
   GString       *string;
 
@@ -192,6 +200,8 @@ item_start_element (GMarkupParseContext *context,
 	    }
 	  else if (strcmp (names[i], "context") == 0) 
 	    data->context = g_strdup (values[i]);
+	  else if (strcmp (names[i], "id") == 0)
+	    data->id = g_strdup (values[i]);
 	  else
 	    g_warning ("Unknown custom combo box item attribute: %s", names[i]);
 	}
@@ -237,13 +247,15 @@ item_end_element (GMarkupParseContext *context,
 	  g_string_append (data->string, translated);
 	}
 
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (data->object), data->string->str);
+      gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (data->object), data->id, data->string->str);
     }
 
   data->translatable = FALSE;
   g_string_set_size (data->string, 0);
   g_free (data->context);
   data->context = NULL;
+  g_free (data->id);
+  data->id = NULL;
   data->is_text = FALSE;
 }
 
@@ -309,7 +321,7 @@ gtk_combo_box_text_buildable_custom_finished (GtkBuildable *buildable,
  * gtk_combo_box_text_new:
  *
  * Creates a new #GtkComboBoxText, which is a #GtkComboBox just displaying
- * strings. See gtk_combo_box_entry_new_with_text().
+ * strings.
  *
  * Return value: A new #GtkComboBoxText
  *
@@ -319,8 +331,6 @@ GtkWidget *
 gtk_combo_box_text_new (void)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX_TEXT,
-                       "entry-text-column", 0,
-                       "id-column", 1,
                        NULL);
 }
 
@@ -339,8 +349,6 @@ gtk_combo_box_text_new_with_entry (void)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX_TEXT,
                        "has-entry", TRUE,
-                       "entry-text-column", 0,
-                       "id-column", 1,
                        NULL);
 }
 

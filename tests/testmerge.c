@@ -24,6 +24,9 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include <gtk/gtk.h>
 
 #ifndef STDOUT_FILENO
@@ -209,11 +212,11 @@ enum {
 static GtkRadioActionEntry radio_entries[] = {
   { "justify-left", GTK_STOCK_JUSTIFY_LEFT, NULL, "<control>L", 
     "Left justify the text", JUSTIFY_LEFT },
-  { "justify-center", GTK_STOCK_JUSTIFY_CENTER, NULL, "<control>E",
+  { "justify-center", GTK_STOCK_JUSTIFY_CENTER, NULL, "<super>E",
     "Center justify the text", JUSTIFY_CENTER },
-  { "justify-right", GTK_STOCK_JUSTIFY_RIGHT, NULL, "<control>R",
+  { "justify-right", GTK_STOCK_JUSTIFY_RIGHT, NULL, "<hyper>R",
     "Right justify the text", JUSTIFY_RIGHT },
-  { "justify-fill", GTK_STOCK_JUSTIFY_FILL, NULL, "<control>J",
+  { "justify-fill", GTK_STOCK_JUSTIFY_FILL, NULL, "<super><hyper>J",
     "Fill justify the text", JUSTIFY_FILL },
 };
 static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
@@ -223,20 +226,7 @@ add_widget (GtkUIManager *merge,
 	    GtkWidget    *widget, 
 	    GtkBox       *box)
 {
-  GtkWidget *handle_box;
-
-  if (GTK_IS_TOOLBAR (widget))
-    {
-      handle_box = gtk_handle_box_new ();
-      gtk_widget_show (handle_box);
-      gtk_container_add (GTK_CONTAINER (handle_box), widget);
-      gtk_box_pack_start (box, handle_box, FALSE, FALSE, 0);
-      g_signal_connect_swapped (widget, "destroy", 
-				G_CALLBACK (gtk_widget_destroy), handle_box);
-    }
-  else
-    gtk_box_pack_start (box, widget, FALSE, FALSE, 0);
-    
+  gtk_box_pack_start (box, widget, FALSE, FALSE, 0);
   gtk_widget_show (widget);
 }
 
@@ -374,7 +364,7 @@ iter_compare_func (GtkTreeModel *model,
 		   GtkTreeIter  *b,
 		   gpointer      user_data)
 {
-  GValue a_value = { 0, }, b_value = { 0, };
+  GValue a_value = G_VALUE_INIT, b_value = G_VALUE_INIT;
   GtkAction *a_action, *b_action;
   const gchar *a_name, *b_name;
   gint retval = 0;
@@ -590,7 +580,7 @@ main (int argc, char **argv)
   GtkActionGroup *action_group;
   GtkAction *action;
   GtkUIManager *merge;
-  GtkWidget *window, *table, *frame, *menu_box, *vbox, *view;
+  GtkWidget *window, *grid, *frame, *menu_box, *vbox, *view;
   GtkWidget *button, *area, *statusbar;
   GtkWidget *box;
   gint i;
@@ -617,15 +607,14 @@ main (int argc, char **argv)
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
-  table = gtk_table_new (2, 2, FALSE);
-  gtk_table_set_row_spacings (GTK_TABLE (table), 2);
-  gtk_table_set_col_spacings (GTK_TABLE (table), 2);
-  gtk_container_set_border_width (GTK_CONTAINER (table), 2);
-  gtk_container_add (GTK_CONTAINER (window), table);
+  grid = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 2);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 2);
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 2);
+  gtk_container_add (GTK_CONTAINER (window), grid);
 
   frame = gtk_frame_new ("Menus and Toolbars");
-  gtk_table_attach (GTK_TABLE (table), frame, 0,2, 1,2,
-		    GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
+  gtk_grid_attach (GTK_GRID (grid), frame, 0, 1, 2, 1);
   
   menu_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_set_border_width (GTK_CONTAINER (menu_box), 2);
@@ -674,8 +663,8 @@ main (int argc, char **argv)
 			      gtk_ui_manager_get_accel_group (merge));
   
   frame = gtk_frame_new ("UI Files");
-  gtk_table_attach (GTK_TABLE (table), frame, 0,1, 0,1,
-		    GTK_FILL, GTK_FILL|GTK_EXPAND, 0, 0);
+  gtk_widget_set_vexpand (frame, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), frame, 0, 0, 1, 1);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 2);
@@ -715,8 +704,9 @@ main (int argc, char **argv)
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
   view = create_tree_view (merge);
-  gtk_table_attach (GTK_TABLE (table), view, 1,2, 0,1,
-		    GTK_FILL|GTK_EXPAND, GTK_FILL|GTK_EXPAND, 0, 0);
+  gtk_widget_set_hexpand (view, TRUE);
+  gtk_widget_set_vexpand (view, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), view, 1, 0, 1, 1);
 
   gtk_widget_show_all (window);
   gtk_main ();

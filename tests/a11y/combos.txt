@@ -1,0 +1,227 @@
+window1
+  "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gtk
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  box1
+    "filler"
+    parent: window1
+    index: 0
+    state: enabled horizontal sensitive
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    label1
+      "label"
+      parent: box1
+      index: 0
+      name: Combo:
+      label-for: combo1
+      state: enabled multi-line sensitive visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: Combo:
+      character count: 6
+      caret offset: 0
+      default attributes: bg-color: <omitted>
+                          bg-full-height: 0
+                          direction: <omitted>
+                          editable: false
+                          family-name: <omitted>
+                          fg-color: <omitted>
+                          indent: 0
+                          invisible: false
+                          justification: left
+                          language: <omitted>
+                          left-margin: 0
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          right-margin: 0
+                          rise: 0
+                          scale: 1
+                          size: <omitted>
+                          stretch: <omitted>
+                          strikethrough: false
+                          style: <omitted>
+                          underline: none
+                          variant: <omitted>
+                          weight: <omitted>
+                          wrap-mode: word
+    combo1
+      "combo box"
+      parent: box1
+      index: 1
+      labelled-by: label1
+      state: enabled sensitive visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkAction>
+      action 0 name: press
+      action 0 keybinding: <Alt>c
+      <AtkSelection>
+      unnamed-GtkMenuAccessible-0
+        "menu"
+        parent: combo1
+        index: 0
+        state: enabled selectable sensitive
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkSelection>
+    combo2
+      "combo box"
+      parent: box1
+      index: 2
+      state: enabled sensitive visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkAction>
+      action 0 name: press
+      <AtkSelection>
+      unnamed-GtkMenuAccessible-1
+        "menu"
+        parent: combo2
+        index: 0
+        state: enabled selectable sensitive
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkSelection>
+      
+        "text"
+        parent: combo2
+        index: 1
+        state: editable enabled focusable selectable sensitive single-line visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: 
+        character count: 0
+        caret offset: 0
+        default attributes: bg-color: <omitted>
+                            bg-full-height: 0
+                            direction: <omitted>
+                            editable: false
+                            family-name: <omitted>
+                            fg-color: <omitted>
+                            indent: 0
+                            invisible: false
+                            justification: left
+                            language: <omitted>
+                            left-margin: 0
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            right-margin: 0
+                            rise: 0
+                            scale: 1
+                            size: <omitted>
+                            stretch: <omitted>
+                            strikethrough: false
+                            style: <omitted>
+                            underline: none
+                            variant: <omitted>
+                            weight: <omitted>
+                            wrap-mode: word
+        <AtkAction>
+        action 0 name: activate
+    combo3
+      "combo box"
+      parent: box1
+      index: 3
+      state: enabled sensitive visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkAction>
+      action 0 name: press
+      <AtkSelection>
+      unnamed-GtkMenuAccessible-2
+        "menu"
+        parent: combo3
+        index: 0
+        state: enabled selectable sensitive
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkSelection>
+    combo4
+      "combo box"
+      parent: box1
+      index: 4
+      state: enabled sensitive visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkAction>
+      action 0 name: press
+      <AtkSelection>
+      unnamed-GtkMenuAccessible-3
+        "menu"
+        parent: combo4
+        index: 0
+        state: enabled selectable sensitive
+        toolkit: gtk
+        <AtkComponent>
+        layer: popup
+        alpha: 1
+        <AtkSelection>
+      
+        "text"
+        parent: combo4
+        index: 1
+        state: editable enabled focusable selectable sensitive single-line visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: 
+        character count: 0
+        caret offset: 0
+        default attributes: bg-color: <omitted>
+                            bg-full-height: 0
+                            direction: <omitted>
+                            editable: false
+                            family-name: <omitted>
+                            fg-color: <omitted>
+                            indent: 0
+                            invisible: false
+                            justification: left
+                            language: <omitted>
+                            left-margin: 0
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            right-margin: 0
+                            rise: 0
+                            scale: 1
+                            size: <omitted>
+                            stretch: <omitted>
+                            strikethrough: false
+                            style: <omitted>
+                            underline: none
+                            variant: <omitted>
+                            weight: <omitted>
+                            wrap-mode: word
+        <AtkAction>
+        action 0 name: activate

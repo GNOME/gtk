@@ -1,6 +1,8 @@
-/* Application main window
+/* Application window
  *
  * Demonstrates a typical application window with menubar, toolbar, statusbar.
+ *
+ * This example uses GtkUIManager and GtkActionGroup.
  */
 
 #include <gtk/gtk.h>
@@ -25,10 +27,18 @@ activate_action (GtkAction *action)
       GtkSettings *settings = gtk_settings_get_default ();
 
       g_object_set (G_OBJECT (settings),
-		    "gtk-application-prefer-dark-theme", value,
-		    NULL);
+                    "gtk-application-prefer-dark-theme", value,
+                    NULL);
       return;
     }
+
+  if (g_str_equal (name, "HideTitlebar"))
+    {
+      gboolean value = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
+      gtk_window_set_hide_titlebar_when_maximized (GTK_WINDOW (window), value);
+      return;
+    }
+
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                    GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_INFO,
@@ -69,7 +79,7 @@ activate_radio_action (GtkAction *action, GtkRadioAction *current)
 
 static void
 about_cb (GtkAction *action,
-	  GtkWidget *window)
+          GtkWidget *window)
 {
   GdkPixbuf *pixbuf, *transparent;
   gchar *filename;
@@ -102,21 +112,21 @@ about_cb (GtkAction *action,
     }
 
   gtk_show_about_dialog (GTK_WINDOW (window),
-			 "program-name", "GTK+ Code Demos",
-			 "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
-						     PACKAGE_VERSION,
-						     gtk_get_major_version (),
-						     gtk_get_minor_version (),
-						     gtk_get_micro_version ()),
-			 "copyright", "(C) 1997-2009 The GTK+ Team",
-			 "license-type", GTK_LICENSE_LGPL_2_1,
-			 "website", "http://www.gtk.org",
-			 "comments", "Program to demonstrate GTK+ functions.",
-			 "authors", authors,
-			 "documenters", documentors,
-			 "logo", transparent,
+                         "program-name", "GTK+ Code Demos",
+                         "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
+                                                     PACKAGE_VERSION,
+                                                     gtk_get_major_version (),
+                                                     gtk_get_minor_version (),
+                                                     gtk_get_micro_version ()),
+                         "copyright", "(C) 1997-2009 The GTK+ Team",
+                         "license-type", GTK_LICENSE_LGPL_2_1,
+                         "website", "http://www.gtk.org",
+                         "comments", "Program to demonstrate GTK+ functions.",
+                         "authors", authors,
+                         "documenters", documentors,
+                         "logo", transparent,
                          "title", "About GTK+ Code Demos",
-			 NULL);
+                         NULL);
 
   g_object_unref (transparent);
 }
@@ -194,6 +204,11 @@ static GtkToggleActionEntry toggle_entries[] = {
     "Prefer Dark Theme",                       /* tooltip */
     G_CALLBACK (activate_action),
     FALSE },                                   /* is_active */
+  { "HideTitlebar", NULL,
+    "_Hide Titlebar when maximized", NULL,
+    "Hide Titlebar when maximized",
+    G_CALLBACK (activate_action),
+    FALSE }
 };
 static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
@@ -248,10 +263,11 @@ static const gchar *ui_info =
 "    </menu>"
 "    <menu action='PreferencesMenu'>"
 "      <menuitem action='DarkTheme'/>"
+"      <menuitem action='HideTitlebar'/>"
 "      <menu action='ColorMenu'>"
-"	<menuitem action='Red'/>"
-"	<menuitem action='Green'/>"
-"	<menuitem action='Blue'/>"
+"       <menuitem action='Red'/>"
+"       <menuitem action='Green'/>"
+"       <menuitem action='Blue'/>"
 "      </menu>"
 "      <menu action='ShapeMenu'>"
 "        <menuitem action='Square'/>"
@@ -317,10 +333,10 @@ register_stock_icons (void)
       pixbuf = NULL;
       filename = demo_find_file ("gtk-logo-rgb.gif", NULL);
       if (filename)
-	{
-	  pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
-	  g_free (filename);
-	}
+        {
+          pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+          g_free (filename);
+        }
 
       /* Register icon to accompany stock item */
       if (pixbuf != NULL)
@@ -355,8 +371,8 @@ update_statusbar (GtkTextBuffer *buffer,
   GtkTextIter iter;
 
   gtk_statusbar_pop (statusbar, 0); /* clear any previous message,
-				     * underflow is allowed
-				     */
+                                     * underflow is allowed
+                                     */
 
   count = gtk_text_buffer_get_char_count (buffer);
 
@@ -407,7 +423,7 @@ do_appwindow (GtkWidget *do_widget)
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Application Window");
       gtk_window_set_icon_name (GTK_WINDOW (window), "document-open");
 
@@ -416,7 +432,7 @@ do_appwindow (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed),
                         &window);
 
-      table = gtk_table_new (1, 5, FALSE);
+      table = gtk_grid_new ();
 
       gtk_container_add (GTK_CONTAINER (window), table);
 
@@ -425,60 +441,52 @@ do_appwindow (GtkWidget *do_widget)
 
       action_group = gtk_action_group_new ("AppWindowActions");
       open_action = g_object_new (tool_menu_action_get_type (),
-				  "name", "Open",
-				  "label", "_Open",
-				  "tooltip", "Open a file",
-				  "stock-id", GTK_STOCK_OPEN,
-				  NULL);
+                                  "name", "Open",
+                                  "label", "_Open",
+                                  "tooltip", "Open a file",
+                                  "stock-id", GTK_STOCK_OPEN,
+                                  NULL);
       gtk_action_group_add_action (action_group, open_action);
       g_object_unref (open_action);
       gtk_action_group_add_actions (action_group,
-				    entries, n_entries,
-				    window);
+                                    entries, n_entries,
+                                    window);
       gtk_action_group_add_toggle_actions (action_group,
-					   toggle_entries, n_toggle_entries,
-					   NULL);
+                                           toggle_entries, n_toggle_entries,
+                                           NULL);
       gtk_action_group_add_radio_actions (action_group,
-					  color_entries, n_color_entries,
-					  COLOR_RED,
-					  G_CALLBACK (activate_radio_action),
-					  NULL);
+                                          color_entries, n_color_entries,
+                                          COLOR_RED,
+                                          G_CALLBACK (activate_radio_action),
+                                          NULL);
       gtk_action_group_add_radio_actions (action_group,
-					  shape_entries, n_shape_entries,
-					  SHAPE_SQUARE,
-					  G_CALLBACK (activate_radio_action),
-					  NULL);
+                                          shape_entries, n_shape_entries,
+                                          SHAPE_SQUARE,
+                                          G_CALLBACK (activate_radio_action),
+                                          NULL);
 
       merge = gtk_ui_manager_new ();
       g_object_set_data_full (G_OBJECT (window), "ui-manager", merge,
-			      g_object_unref);
+                              g_object_unref);
       gtk_ui_manager_insert_action_group (merge, action_group, 0);
       gtk_window_add_accel_group (GTK_WINDOW (window),
-				  gtk_ui_manager_get_accel_group (merge));
+                                  gtk_ui_manager_get_accel_group (merge));
 
       if (!gtk_ui_manager_add_ui_from_string (merge, ui_info, -1, &error))
-	{
-	  g_message ("building menus failed: %s", error->message);
-	  g_error_free (error);
-	}
+        {
+          g_message ("building menus failed: %s", error->message);
+          g_error_free (error);
+        }
 
       bar = gtk_ui_manager_get_widget (merge, "/MenuBar");
       gtk_widget_show (bar);
-      gtk_table_attach (GTK_TABLE (table),
-			bar,
-                        /* X direction */          /* Y direction */
-                        0, 1,                      0, 1,
-                        GTK_EXPAND | GTK_FILL,     0,
-                        0,                         0);
+      gtk_widget_set_halign (bar, GTK_ALIGN_FILL);
+      gtk_grid_attach (GTK_GRID (table), bar, 0, 0, 1, 1);
 
       bar = gtk_ui_manager_get_widget (merge, "/ToolBar");
       gtk_widget_show (bar);
-      gtk_table_attach (GTK_TABLE (table),
-			bar,
-                        /* X direction */       /* Y direction */
-                        0, 1,                   1, 2,
-                        GTK_EXPAND | GTK_FILL,  0,
-                        0,                      0);
+      gtk_widget_set_halign (bar, GTK_ALIGN_FILL);
+      gtk_grid_attach (GTK_GRID (table), bar, 0, 1, 1, 1);
 
       /* Create document
        */
@@ -495,12 +503,8 @@ do_appwindow (GtkWidget *do_widget)
       g_signal_connect (infobar, "response",
                         G_CALLBACK (gtk_widget_hide), NULL);
 
-      gtk_table_attach (GTK_TABLE (table),
-                        infobar,
-                        /* X direction */       /* Y direction */
-                        0, 1,                   2, 3,
-                        GTK_EXPAND | GTK_FILL,  0,
-                        0,                      0);
+      gtk_widget_set_halign (infobar, GTK_ALIGN_FILL);
+      gtk_grid_attach (GTK_GRID (table), infobar, 0, 2, 1, 1);
 
       sw = gtk_scrolled_window_new (NULL, NULL);
 
@@ -511,12 +515,11 @@ do_appwindow (GtkWidget *do_widget)
       gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
                                            GTK_SHADOW_IN);
 
-      gtk_table_attach (GTK_TABLE (table),
-                        sw,
-                        /* X direction */       /* Y direction */
-                        0, 1,                   3, 4,
-                        GTK_EXPAND | GTK_FILL,  GTK_EXPAND | GTK_FILL,
-                        0,                      0);
+      gtk_widget_set_halign (sw, GTK_ALIGN_FILL);
+      gtk_widget_set_valign (sw, GTK_ALIGN_FILL);
+      gtk_widget_set_hexpand (sw, TRUE);
+      gtk_widget_set_vexpand (sw, TRUE);
+      gtk_grid_attach (GTK_GRID (table), sw, 0, 3, 1, 1);
 
       gtk_window_set_default_size (GTK_WINDOW (window),
                                    200, 200);
@@ -530,16 +533,12 @@ do_appwindow (GtkWidget *do_widget)
       /* Create statusbar */
 
       statusbar = gtk_statusbar_new ();
-      gtk_table_attach (GTK_TABLE (table),
-                        statusbar,
-                        /* X direction */       /* Y direction */
-                        0, 1,                   4, 5,
-                        GTK_EXPAND | GTK_FILL,  0,
-                        0,                      0);
+      gtk_widget_set_halign (sw, GTK_ALIGN_FILL);
+      gtk_grid_attach (GTK_GRID (table), statusbar, 0, 4, 1, 1);
 
       /* Show text widget info in the statusbar */
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (contents));
-      
+
       g_signal_connect_object (buffer,
                                "changed",
                                G_CALLBACK (update_statusbar),
@@ -569,4 +568,3 @@ do_appwindow (GtkWidget *do_widget)
 
   return window;
 }
-

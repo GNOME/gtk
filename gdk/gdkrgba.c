@@ -27,6 +27,8 @@
 #include "config.h"
 #include "gdkrgba.h"
 #include <string.h>
+#include <errno.h>
+#include <math.h>
 
 /**
  * SECTION:rgba_colors
@@ -71,15 +73,7 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
 GdkRGBA *
 gdk_rgba_copy (const GdkRGBA *rgba)
 {
-  GdkRGBA *copy;
-
-  copy = g_slice_new (GdkRGBA);
-  copy->red = rgba->red;
-  copy->green = rgba->green;
-  copy->blue = rgba->blue;
-  copy->alpha = rgba->alpha;
-
-  return copy;
+  return g_slice_dup (GdkRGBA, rgba);
 }
 
 /**
@@ -109,14 +103,17 @@ gdk_rgba_free (GdkRGBA *rgba)
  *  - We accept mixed percentages and non-percentages in a single
  *    rgb() or rgba() specification.
  */
-static double
-parse_rgb_value (const char  *str,
-                 char       **endp)
+static gboolean
+parse_rgb_value (const gchar  *str,
+                 gchar       **endp,
+                 gdouble      *number)
 {
-  double number;
   const char *p;
 
-  number = g_ascii_strtod (str, endp);
+  *number = g_ascii_strtod (str, endp);
+  if (errno == ERANGE || *endp == str ||
+      isinf (*number) || isnan (*number))
+    return FALSE;
 
   p = *endp;
 
@@ -125,12 +122,14 @@ parse_rgb_value (const char  *str,
   if (*p == '%')
     {
       *endp = (char *)(p + 1);
-      return CLAMP(number / 100., 0., 1.);
+      *number = CLAMP(*number / 100., 0., 1.);
     }
   else
     {
-      return CLAMP(number / 255., 0., 1.);
+      *number = CLAMP(*number / 255., 0., 1.);
     }
+
+  return TRUE;
 }
 
 /**
@@ -176,6 +175,7 @@ gdk_rgba_parse (GdkRGBA     *rgba,
   gboolean has_alpha;
   gdouble r, g, b, a;
   gchar *str = (gchar *) spec;
+  gchar *p;
 
   if (strncmp (str, "rgba", 4) == 0)
     {
@@ -220,7 +220,8 @@ gdk_rgba_parse (GdkRGBA     *rgba,
 
   /* Parse red */
   SKIP_WHITESPACES (str);
-  r = parse_rgb_value (str, &str);
+  if (!parse_rgb_value (str, &str, &r))
+    return FALSE;
   SKIP_WHITESPACES (str);
 
   if (*str != ',')
@@ -230,7 +231,8 @@ gdk_rgba_parse (GdkRGBA     *rgba,
 
   /* Parse green */
   SKIP_WHITESPACES (str);
-  g = parse_rgb_value (str, &str);
+  if (!parse_rgb_value (str, &str, &g))
+    return FALSE;
   SKIP_WHITESPACES (str);
 
   if (*str != ',')
@@ -240,7 +242,8 @@ gdk_rgba_parse (GdkRGBA     *rgba,
 
   /* Parse blue */
   SKIP_WHITESPACES (str);
-  b = parse_rgb_value (str, &str);
+  if (!parse_rgb_value (str, &str, &b))
+    return FALSE;
   SKIP_WHITESPACES (str);
 
   if (has_alpha)
@@ -251,11 +254,22 @@ gdk_rgba_parse (GdkRGBA     *rgba,
       str++;
 
       SKIP_WHITESPACES (str);
-      a = g_ascii_strtod (str, &str);
+      a = g_ascii_strtod (str, &p);
+      if (errno == ERANGE || p == str ||
+          isinf (a) || isnan (a))
+        return FALSE;
+      str = p;
       SKIP_WHITESPACES (str);
     }
 
   if (*str != ')')
+    return FALSE;
+
+  str++;
+
+  SKIP_WHITESPACES (str);
+
+  if (*str != '\0')
     return FALSE;
 
   if (rgba)

@@ -277,6 +277,7 @@ gtk_tool_item_group_header_draw_cb (GtkWidget *widget,
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
   context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
   if (!priv->collapsed)
     state |= GTK_STATE_FLAG_ACTIVE;

@@ -26,7 +26,7 @@ static GFile *file;
 static GtkWidget *grid, *file_l, *open;
 static GtkWidget *radio_file, *radio_content, *dialog;
 static GtkWidget *app_chooser_widget;
-static GtkWidget *recommended, *fallback, *other, *all;
+static GtkWidget *def, *recommended, *fallback, *other, *all;
 
 static void
 dialog_response (GtkDialog *d,
@@ -58,6 +58,9 @@ dialog_response (GtkDialog *d,
 static void
 bind_props (void)
 {
+  g_object_bind_property (def, "active",
+                          app_chooser_widget, "show-default",
+                          G_BINDING_SYNC_CREATE);
   g_object_bind_property (recommended, "active",
                           app_chooser_widget, "show-recommended",
                           G_BINDING_SYNC_CREATE);
@@ -208,6 +211,11 @@ main (int argc, char **argv)
   gtk_grid_attach_next_to (GTK_GRID (grid), all,
                            other, GTK_POS_RIGHT, 1, 1);
 
+  def = gtk_check_button_new_with_label ("Show default");
+  gtk_grid_attach_next_to (GTK_GRID (grid), def,
+                           all, GTK_POS_RIGHT, 1, 1);
+
+  g_object_set (recommended, "active", TRUE, NULL);
   prepare_dialog ();
   g_signal_connect (open, "clicked",
                     G_CALLBACK (display_dialog), NULL);

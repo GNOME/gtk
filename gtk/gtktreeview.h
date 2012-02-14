@@ -214,16 +214,17 @@ void                   gtk_tree_view_set_model                     (GtkTreeView 
 								    GtkTreeModel              *model);
 GtkTreeSelection      *gtk_tree_view_get_selection                 (GtkTreeView               *tree_view);
 
-#ifndef GTK_DISABLE_DEPRECATED
-
+GDK_DEPRECATED_FOR(gtk_scrollable_get_hadjustment)
 GtkAdjustment         *gtk_tree_view_get_hadjustment               (GtkTreeView               *tree_view);
+GDK_DEPRECATED_FOR(gtk_scrollable_set_hadjustment)
 void                   gtk_tree_view_set_hadjustment               (GtkTreeView               *tree_view,
 								    GtkAdjustment             *adjustment);
+GDK_DEPRECATED_FOR(gtk_scrollable_get_vadjustment)
 GtkAdjustment         *gtk_tree_view_get_vadjustment               (GtkTreeView               *tree_view);
+GDK_DEPRECATED_FOR(gtk_scrollable_set_vadjustment)
 void                   gtk_tree_view_set_vadjustment               (GtkTreeView               *tree_view,
 								    GtkAdjustment             *adjustment);
 
-#endif
 
 gboolean               gtk_tree_view_get_headers_visible           (GtkTreeView               *tree_view);
 void                   gtk_tree_view_set_headers_visible           (GtkTreeView               *tree_view,
@@ -256,6 +257,7 @@ gint                   gtk_tree_view_insert_column_with_data_func  (GtkTreeView 
                                                                     GtkTreeCellDataFunc        func,
                                                                     gpointer                   data,
                                                                     GDestroyNotify             dnotify);
+guint                  gtk_tree_view_get_n_columns                 (GtkTreeView               *tree_view);
 GtkTreeViewColumn     *gtk_tree_view_get_column                    (GtkTreeView               *tree_view,
 								    gint                       n);
 GList                 *gtk_tree_view_get_columns                   (GtkTreeView               *tree_view);
@@ -433,6 +435,7 @@ typedef void (* GtkTreeDestroyCountFunc)  (GtkTreeView             *tree_view,
 					   GtkTreePath             *path,
 					   gint                     children,
 					   gpointer                 user_data);
+GDK_DEPRECATED
 void gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
 					   GtkTreeDestroyCountFunc  func,
 					   gpointer                 data,

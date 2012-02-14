@@ -100,6 +100,11 @@ void         _gtk_widget_remove_sizegroup      (GtkWidget    *widget,
 						gpointer      group);
 GSList      *_gtk_widget_get_sizegroups        (GtkWidget    *widget);
 
+void         _gtk_widget_add_attached_window    (GtkWidget    *widget,
+                                                 GtkWindow    *window);
+void         _gtk_widget_remove_attached_window (GtkWidget    *widget,
+                                                 GtkWindow    *window);
+
 void _gtk_widget_override_size_request (GtkWidget *widget,
                                         int        width,
                                         int        height,
@@ -117,6 +122,8 @@ void     _gtk_widget_free_cached_sizes (GtkWidget *widget);
 
 const gchar*      _gtk_widget_get_accel_path               (GtkWidget *widget,
                                                             gboolean  *locked);
+
+AtkObject *       _gtk_widget_peek_accessible              (GtkWidget *widget);
 
 GdkEventExpose *  _gtk_cairo_get_event                     (cairo_t *cr);
 
@@ -156,6 +163,10 @@ gpointer          _gtk_widget_peek_request_cache           (GtkWidget *widget);
 void              _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
                                                             GtkWidget *toplevel,
                                                             gpointer   user_data);
+GtkStyle *        _gtk_widget_get_style                    (GtkWidget *widget);
+void              _gtk_widget_set_style                    (GtkWidget *widget,
+                                                            GtkStyle  *style);
+
 
 G_END_DECLS
 

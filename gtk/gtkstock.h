@@ -471,9 +471,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * GTK_STOCK_INDENT:
  *
  * The "Indent" item.
- * <inlinegraphic fileref="gtk-indent-ltr.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="format-indent-more-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
- * <inlinegraphic fileref="gtk-indent-rtl.png" format="PNG"></inlinegraphic>
+ * <inlinegraphic fileref="format-indent-more-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.4
  */

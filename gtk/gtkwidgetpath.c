@@ -331,7 +331,7 @@ gtk_widget_path_to_string (const GtkWidgetPath *path)
 
       if (elem->siblings)
         g_string_append_printf (string, "[%d/%d]",
-                                elem->sibling_index,
+                                elem->sibling_index + 1,
                                 gtk_widget_path_length (elem->siblings));
 
       if (elem->classes)
@@ -357,6 +357,7 @@ gtk_widget_path_to_string (const GtkWidgetPath *path)
                 "odd",
                 "first",
                 "last",
+                "only",
                 "sorted"
               };
 

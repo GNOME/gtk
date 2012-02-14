@@ -185,6 +185,7 @@ GType gtk_theming_engine_get_type (void) G_GNUC_CONST;
 void _gtk_theming_engine_set_context (GtkThemingEngine *engine,
                                       GtkStyleContext  *context);
 
+/* function implemented in gtkcsscustomproperty.c */
 void gtk_theming_engine_register_property (const gchar            *name_space,
                                            GtkStylePropertyParser  parse_func,
                                            GParamSpec             *pspec);

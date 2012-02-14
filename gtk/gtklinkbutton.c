@@ -55,7 +55,7 @@
 #include "gtkdnd.h"
 #include "gtkimagemenuitem.h"
 #include "gtklabel.h"
-#include "gtkmainprivate.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
@@ -63,6 +63,7 @@
 #include "gtkstock.h"
 #include "gtkshow.h"
 #include "gtktooltip.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 
 #include "a11y/gtklinkbuttonaccessible.h"
@@ -106,6 +107,7 @@ static gboolean gtk_link_button_button_press (GtkWidget        *widget,
 static void     gtk_link_button_clicked      (GtkButton        *button);
 static gboolean gtk_link_button_popup_menu   (GtkWidget        *widget);
 static void     gtk_link_button_style_updated (GtkWidget        *widget);
+static void     gtk_link_button_unrealize    (GtkWidget        *widget);
 static gboolean gtk_link_button_enter_cb     (GtkWidget        *widget,
 					      GdkEventCrossing *event,
 					      gpointer          user_data);
@@ -153,6 +155,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   widget_class->button_press_event = gtk_link_button_button_press;
   widget_class->popup_menu = gtk_link_button_popup_menu;
   widget_class->style_updated = gtk_link_button_style_updated;
+  widget_class->unrealize = gtk_link_button_unrealize;
   
   container_class->add = gtk_link_button_add;
 
@@ -304,6 +307,7 @@ set_link_color (GtkLinkButton *link_button)
 {
   GdkColor *link_color = NULL;
   GtkWidget *label;
+  GdkRGBA rgba;
 
   label = gtk_bin_get_child (GTK_BIN (link_button));
   if (!GTK_IS_LABEL (label))
@@ -324,10 +328,14 @@ set_link_color (GtkLinkButton *link_button)
 	link_color = (GdkColor *) &default_link_color;
     }
 
-  gtk_widget_modify_fg (label, GTK_STATE_NORMAL, link_color);
-  gtk_widget_modify_fg (label, GTK_STATE_ACTIVE, link_color);
-  gtk_widget_modify_fg (label, GTK_STATE_PRELIGHT, link_color);
-  gtk_widget_modify_fg (label, GTK_STATE_SELECTED, link_color);
+  rgba.red = link_color->red / 65535.;
+  rgba.green = link_color->green / 65535.;
+  rgba.blue = link_color->blue / 65535.;
+  rgba.alpha = 1;
+  gtk_widget_override_color (label, GTK_STATE_FLAG_NORMAL, &rgba);
+  gtk_widget_override_color (label, GTK_STATE_FLAG_ACTIVE, &rgba);
+  gtk_widget_override_color (label, GTK_STATE_FLAG_PRELIGHT, &rgba);
+  gtk_widget_override_color (label, GTK_STATE_FLAG_SELECTED, &rgba);
 
   if (link_color != &default_link_color &&
       link_color != &default_visited_link_color)
@@ -394,6 +402,14 @@ set_hand_cursor (GtkWidget *widget,
 }
 
 static void
+gtk_link_button_unrealize (GtkWidget *widget)
+{
+  set_hand_cursor (widget, FALSE);
+
+  GTK_WIDGET_CLASS (gtk_link_button_parent_class)->unrealize (widget);
+}
+
+static void
 popup_menu_detach (GtkWidget *attach_widget,
 		   GtkMenu   *menu)
 {
@@ -430,7 +446,7 @@ popup_position_func (GtkMenu  *menu,
 
   monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
   gtk_menu_set_monitor (menu, monitor_num);
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
   *x = CLAMP (*x, monitor.x, monitor.x + MAX (0, monitor.width - req.width));
   *y = CLAMP (*y, monitor.y, monitor.y + MAX (0, monitor.height - req.height));
@@ -511,10 +527,10 @@ gtk_link_button_button_press (GtkWidget      *widget,
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
-  if ((event->button == 3) && (event->type == GDK_BUTTON_PRESS))
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
       gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), event);
-      
+
       return TRUE;
     }
 

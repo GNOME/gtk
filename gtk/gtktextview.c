@@ -1479,6 +1479,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
                           GtkTextBuffer *buffer)
 {
   GtkTextViewPrivate *priv;
+  GtkTextBuffer *old_buffer;
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (buffer == NULL || GTK_IS_TEXT_BUFFER (buffer));
@@ -1488,6 +1489,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
   if (priv->buffer == buffer)
     return;
 
+  old_buffer = priv->buffer;
   if (priv->buffer != NULL)
     {
       /* Destroy all anchored children */
@@ -1531,7 +1533,6 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       if (priv->layout)
         gtk_text_layout_set_buffer (priv->layout, NULL);
 
-      g_object_unref (priv->buffer);
       priv->dnd_mark = NULL;
       priv->first_para_mark = NULL;
       cancel_pending_scroll (text_view);
@@ -1580,6 +1581,10 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 	  gtk_text_buffer_add_selection_clipboard (priv->buffer, clipboard);
 	}
     }
+
+  _gtk_text_view_accessible_set_buffer (text_view, old_buffer);
+  if (old_buffer)
+    g_object_unref (old_buffer);
 
   g_object_notify (G_OBJECT (text_view), "buffer");
   
@@ -4535,9 +4540,9 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
 #if 0
   /* debug hack */
-  if (event->button == 3 && (event->state & GDK_CONTROL_MASK) != 0)
+  if (event->button == GDK_BUTTON_SECONDARY && (event->state & GDK_CONTROL_MASK) != 0)
     _gtk_text_buffer_spew (GTK_TEXT_VIEW (widget)->buffer);
-  else if (event->button == 3)
+  else if (event->button == GDK_BUTTON_SECONDARY)
     gtk_text_layout_spew (GTK_TEXT_VIEW (widget)->layout);
 #endif
 
@@ -4545,7 +4550,12 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
     {
       gtk_text_view_reset_im_context (text_view);
 
-      if (event->button == 1)
+      if (gdk_event_triggers_context_menu ((GdkEvent *) event))
+        {
+	  gtk_text_view_do_popup (text_view, event);
+	  return TRUE;
+        }
+      else if (event->button == GDK_BUTTON_PRIMARY)
         {
           /* If we're in the selection, start a drag copy/move of the
            * selection; otherwise, start creating a new selection.
@@ -4561,7 +4571,9 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
           if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
                                                     &start, &end) &&
               gtk_text_iter_in_range (&iter, &start, &end) &&
-              !(event->state & GDK_SHIFT_MASK))
+              !(event->state &
+                gtk_widget_get_modifier_mask (widget,
+                                              GDK_MODIFIER_INTENT_EXTEND_SELECTION)))
             {
               priv->drag_start_x = event->x;
               priv->drag_start_y = event->y;
@@ -4574,7 +4586,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
           return TRUE;
         }
-      else if (event->button == 2)
+      else if (event->button == GDK_BUTTON_MIDDLE)
         {
           GtkTextIter iter;
 
@@ -4593,15 +4605,10 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 					   priv->editable);
           return TRUE;
         }
-      else if (event->button == 3)
-        {
-	  gtk_text_view_do_popup (text_view, event);
-	  return TRUE;
-        }
     }
   else if ((event->type == GDK_2BUTTON_PRESS ||
 	    event->type == GDK_3BUTTON_PRESS) &&
-	   event->button == 1) 
+	   event->button == GDK_BUTTON_PRIMARY)
     {
       GtkTextIter iter;
 
@@ -4631,7 +4638,7 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
   if (event->window != priv->text_window->bin_window)
     return FALSE;
 
-  if (event->button == 1)
+  if (event->button == GDK_BUTTON_PRIMARY)
     {
       if (priv->drag_start_x >= 0)
         {
@@ -5324,7 +5331,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       old_xpos = priv->xoffset;
       old_ypos = priv->yoffset;
       gtk_text_view_move_viewport (text_view, scroll_step, count);
-      if ((old_xpos != priv->xoffset || old_ypos != priv->yoffset) &&
+      if ((old_xpos == priv->xoffset && old_ypos == priv->yoffset) &&
           leave_direction != -1 &&
           !gtk_widget_keynav_failed (GTK_WIDGET (text_view),
                                      leave_direction))
@@ -6491,7 +6498,9 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
   orig_start = ins;
   orig_end = bound;
 
-  if (button->state & GDK_SHIFT_MASK)
+  if (button->state &
+      gtk_widget_get_modifier_mask (GTK_WIDGET (text_view),
+                                    GDK_MODIFIER_INTENT_EXTEND_SELECTION))
     {
       /* Extend selection */
       GtkTextIter old_ins, old_bound;
@@ -8140,7 +8149,7 @@ popup_position_func (GtkMenu   *menu,
 
   monitor_num = gdk_screen_get_monitor_at_point (screen, *x, *y);
   gtk_menu_set_monitor (menu, monitor_num);
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
   *x = CLAMP (*x, monitor.x, monitor.x + MAX (0, monitor.width - req.width));
   *y = CLAMP (*y, monitor.y, monitor.y + MAX (0, monitor.height - req.height));
@@ -8153,6 +8162,7 @@ typedef struct
   GtkTextView *text_view;
   gint button;
   guint time;
+  GdkDevice *device;
 } PopupInfo;
 
 static gboolean
@@ -8306,9 +8316,9 @@ popup_targets_received (GtkClipboard     *clipboard,
 		     0,
 		     priv->popup_menu);
       
-      if (info->button)
-	gtk_menu_popup (GTK_MENU (priv->popup_menu), NULL, NULL,
-			NULL, NULL,
+      if (info->device)
+	gtk_menu_popup_for_device (GTK_MENU (priv->popup_menu), 
+      info->device, NULL, NULL, NULL, NULL, NULL,
 			info->button, info->time);
       else
 	{
@@ -8339,11 +8349,13 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
     {
       info->button = event->button;
       info->time = event->time;
+      info->device = event->device;
     }
   else
     {
       info->button = 0;
       info->time = gtk_get_current_event_time ();
+      info->device = NULL;
     }
 
   gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (text_view),
@@ -8615,7 +8627,7 @@ text_window_invalidate_cursors (GtkTextWindow *win)
   gtk_text_layout_get_cursor_locations (priv->layout, &iter,
                                         &strong, &weak);
 
-  /* cursor width calculation as in gtkstyle.c:draw_insertion_cursor(),
+  /* cursor width calculation as in gtkstylecontext.c:draw_insertion_cursor(),
    * ignoring the text direction be exposing both sides of the cursor
    */
 

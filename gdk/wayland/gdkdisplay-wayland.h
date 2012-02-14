@@ -71,12 +71,12 @@ struct _GdkDisplayWayland
 
   /* Wayland fields below */
   struct wl_display *wl_display;
-  struct wl_visual *argb_visual, *premultiplied_argb_visual, *rgb_visual;
   struct wl_compositor *compositor;
   struct wl_shm *shm;
   struct wl_shell *shell;
   struct wl_output *output;
   struct wl_input_device *input_device;
+  struct wl_data_device_manager *data_device_manager;
   GSource *event_source;
   EGLDisplay egl_display;
   EGLContext egl_context;

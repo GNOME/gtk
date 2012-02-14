@@ -25,6 +25,7 @@
 #define __GTK_STYLE_CONTEXT_H__
 
 #include <glib-object.h>
+#include <gtk/gtkcsssection.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkborder.h>
@@ -147,7 +148,6 @@ struct _GtkStyleContextClass
  * A property holding the element's background as a #cairo_pattern_t.
  */
 #define GTK_STYLE_PROPERTY_BACKGROUND_IMAGE "background-image"
-
 
 /* Predefined set of CSS classes */
 
@@ -390,6 +390,14 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_RAISED "raised"
 
 /**
+ * GTK_STYLE_CLASS_LINKED:
+ *
+ * A CSS class to match a linked area, such as a box containing buttons
+ * belonging to the same control.
+ */
+#define GTK_STYLE_CLASS_LINKED "linked"
+
+/**
  * GTK_STYLE_CLASS_GRIP:
  *
  * A CSS class defining a resize grip.
@@ -600,6 +608,45 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_VERTICAL "vertical"
 
+/**
+ * GTK_STYLE_CLASS_TOP:
+ *
+ * A CSS class to indicate an area at the top of a widget.
+ *
+ * This is used by widgets that can render an area in different
+ * positions, such as tabs in a #GtkNotebook.
+ */
+#define GTK_STYLE_CLASS_TOP "top"
+
+/**
+ * GTK_STYLE_CLASS_BOTTOM:
+ *
+ * A CSS class to indicate an area at the bottom of a widget.
+ *
+ * This is used by widgets that can render an area in different
+ * positions, such as tabs in a #GtkNotebook.
+ */
+#define GTK_STYLE_CLASS_BOTTOM "bottom"
+
+/**
+ * GTK_STYLE_CLASS_LEFT:
+ *
+ * A CSS class to indicate an area at the left of a widget.
+ *
+ * This is used by widgets that can render an area in different
+ * positions, such as tabs in a #GtkNotebook.
+ */
+#define GTK_STYLE_CLASS_LEFT "left"
+
+/**
+ * GTK_STYLE_CLASS_RIGHT:
+ *
+ * A CSS class to indicate an area at the right of a widget.
+ *
+ * This is used by widgets that can render an area in different
+ * positions, such as tabs in a #GtkNotebook.
+ */
+#define GTK_STYLE_CLASS_RIGHT "right"
 
 /* Predefined set of widget regions */
 
@@ -631,6 +678,25 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_REGION_TAB "tab"
 
+/**
+ * GTK_STYLE_CLASS_PULSE:
+ *
+ * A CSS class to use when rendering a pulse in an indeterminate progress bar.
+ *
+ * This is used by #GtkProgressBar and #GtkEntry.
+ */
+#define GTK_STYLE_CLASS_PULSE "pulse"
+
+/**
+ * GTK_STYLE_CLASS_ARROW:
+ *
+ * A CSS class used when rendering an arrow element.
+ *
+ * Note that #gtk_render_arrow automatically adds this style class
+ * to the style context when rendering an arrow element.
+ */
+#define GTK_STYLE_CLASS_ARROW "arrow"
+
 
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
 
@@ -652,6 +718,8 @@ void gtk_style_context_remove_provider (GtkStyleContext  *context,
 void gtk_style_context_save    (GtkStyleContext *context);
 void gtk_style_context_restore (GtkStyleContext *context);
 
+GtkCssSection * gtk_style_context_get_section (GtkStyleContext *context,
+                                               const gchar     *property);
 void gtk_style_context_get_property (GtkStyleContext *context,
                                      const gchar     *property,
                                      GtkStateFlags    state,
@@ -674,6 +742,10 @@ gboolean      gtk_style_context_state_is_running (GtkStyleContext *context,
 void          gtk_style_context_set_path     (GtkStyleContext *context,
                                               GtkWidgetPath   *path);
 const GtkWidgetPath * gtk_style_context_get_path (GtkStyleContext *context);
+
+void          gtk_style_context_set_parent   (GtkStyleContext *context,
+                                              GtkStyleContext *parent);
+GtkStyleContext *gtk_style_context_get_parent (GtkStyleContext *context);
 
 GList *  gtk_style_context_list_classes (GtkStyleContext *context);
 
@@ -864,9 +936,24 @@ GdkPixbuf * gtk_render_icon_pixbuf (GtkStyleContext     *context,
                                     GtkIconSize          size);
 void        gtk_render_icon        (GtkStyleContext     *context,
                                     cairo_t             *cr,
-				    GdkPixbuf           *pixbuf,
+                                    GdkPixbuf           *pixbuf,
                                     gdouble              x,
                                     gdouble              y);
+void        gtk_render_insertion_cursor
+                                   (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    PangoLayout         *layout,
+                                    int                  index,
+                                    PangoDirection       direction);
+
+void   gtk_draw_insertion_cursor    (GtkWidget          *widget,
+                                     cairo_t            *cr,
+                                     const GdkRectangle *location,
+                                     gboolean            is_primary,
+                                     GtkTextDirection    direction,
+                                     gboolean            draw_arrow);
 
 /* Accessibility support */
 AtkAttributeSet *_gtk_style_context_get_attributes (AtkAttributeSet *attributes,

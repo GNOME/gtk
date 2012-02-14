@@ -26,8 +26,8 @@ typedef struct
 
 static void
 begin_print (GtkPrintOperation *operation,
-	     GtkPrintContext   *context,
-	     gpointer           user_data)
+             GtkPrintContext   *context,
+             gpointer           user_data)
 {
   PrintData *data = (PrintData *)user_data;
   char *contents;
@@ -55,9 +55,9 @@ begin_print (GtkPrintOperation *operation,
 
 static void
 draw_page (GtkPrintOperation *operation,
-	   GtkPrintContext   *context,
-	   gint               page_nr,
-	   gpointer           user_data)
+           GtkPrintContext   *context,
+           gint               page_nr,
+           gpointer           user_data)
 {
   PrintData *data = (PrintData *)user_data;
   cairo_t *cr;
@@ -132,8 +132,8 @@ draw_page (GtkPrintOperation *operation,
 
 static void
 end_print (GtkPrintOperation *operation,
-	   GtkPrintContext   *context,
-	   gpointer           user_data)
+           GtkPrintContext   *context,
+           gpointer           user_data)
 {
   PrintData *data = (PrintData *)user_data;
 
@@ -159,11 +159,11 @@ do_printing (GtkWidget *do_widget)
   data->font_size = 12.0;
 
   g_signal_connect (G_OBJECT (operation), "begin-print",
-		    G_CALLBACK (begin_print), data);
+                    G_CALLBACK (begin_print), data);
   g_signal_connect (G_OBJECT (operation), "draw-page",
-		    G_CALLBACK (draw_page), data);
+                    G_CALLBACK (draw_page), data);
   g_signal_connect (G_OBJECT (operation), "end-print",
-		    G_CALLBACK (end_print), data);
+                    G_CALLBACK (end_print), data);
 
   gtk_print_operation_set_use_full_page (operation, FALSE);
   gtk_print_operation_set_unit (operation, GTK_UNIT_POINTS);
@@ -195,14 +195,14 @@ do_printing (GtkWidget *do_widget)
       GtkWidget *dialog;
 
       dialog = gtk_message_dialog_new (GTK_WINDOW (do_widget),
-				       GTK_DIALOG_DESTROY_WITH_PARENT,
-				       GTK_MESSAGE_ERROR,
-				       GTK_BUTTONS_CLOSE,
-				       "%s", error->message);
+                                       GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       "%s", error->message);
       g_error_free (error);
 
       g_signal_connect (dialog, "response",
-			G_CALLBACK (gtk_widget_destroy), NULL);
+                        G_CALLBACK (gtk_widget_destroy), NULL);
 
       gtk_widget_show (dialog);
     }

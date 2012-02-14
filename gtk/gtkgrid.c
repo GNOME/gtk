@@ -163,11 +163,11 @@ gtk_grid_get_property (GObject    *object,
       break;
 
     case PROP_ROW_SPACING:
-      g_value_set_int (value, ROWS (priv)->spacing);
+      g_value_set_int (value, COLUMNS (priv)->spacing);
       break;
 
     case PROP_COLUMN_SPACING:
-      g_value_set_int (value, COLUMNS (priv)->spacing);
+      g_value_set_int (value, ROWS (priv)->spacing);
       break;
 
     case PROP_ROW_HOMOGENEOUS:
@@ -363,12 +363,82 @@ gtk_grid_init (GtkGrid *grid)
   priv->linedata[1].homogeneous = FALSE;
 }
 
-static void grid_attach (GtkGrid   *grid,
-                         GtkWidget *child,
-                         gint       left,
-                         gint       top,
-                         gint       width,
-                         gint       height);
+static void
+grid_attach (GtkGrid   *grid,
+             GtkWidget *widget,
+             gint       left,
+             gint       top,
+             gint       width,
+             gint       height)
+{
+  GtkGridPrivate *priv = grid->priv;
+  GtkGridChild *child;
+
+  child = g_slice_new (GtkGridChild);
+  child->widget = widget;
+  CHILD_LEFT (child) = left;
+  CHILD_TOP (child) = top;
+  CHILD_WIDTH (child) = width;
+  CHILD_HEIGHT (child) = height;
+
+  priv->children = g_list_prepend (priv->children, child);
+
+  gtk_widget_set_parent (widget, GTK_WIDGET (grid));
+}
+
+/* Find the position 'touching' existing
+ * children. @orientation and @max determine
+ * from which direction to approach (horizontal
+ * + max = right, vertical + !max = top, etc).
+ * @op_pos, @op_span determine the rows/columns
+ * in which the touching has to happen.
+ */
+static gint
+find_attach_position (GtkGrid         *grid,
+                      GtkOrientation   orientation,
+                      gint             op_pos,
+                      gint             op_span,
+                      gboolean         max)
+{
+  GtkGridPrivate *priv = grid->priv;
+  GtkGridChild *grid_child;
+  GtkGridChildAttach *attach;
+  GtkGridChildAttach *opposite;
+  GList *list;
+  gint pos;
+  gboolean hit;
+
+  if (max)
+    pos = -G_MAXINT;
+  else
+    pos = G_MAXINT;
+
+  hit = FALSE;
+
+  for (list = priv->children; list; list = list->next)
+    {
+      grid_child = list->data;
+
+      attach = &grid_child->attach[orientation];
+      opposite = &grid_child->attach[1 - orientation];
+
+      /* check if the ranges overlap */
+      if (opposite->pos <= op_pos + op_span && op_pos <= opposite->pos + opposite->span)
+        {
+          hit = TRUE;
+
+          if (max)
+            pos = MAX (pos, attach->pos + attach->span);
+          else
+            pos = MIN (pos, attach->pos);
+        }
+     }
+
+  if (!hit)
+    pos = 0;
+
+  return pos;
+}
 
 static void
 gtk_grid_add (GtkContainer *container,
@@ -376,28 +446,10 @@ gtk_grid_add (GtkContainer *container,
 {
   GtkGrid *grid = GTK_GRID (container);
   GtkGridPrivate *priv = grid->priv;
-  GtkGridChild *grid_child;
-  GtkGridChildAttach *attach;
-  GtkGridChildAttach *opposite;
-  GList *list;
-  gint pos;
+  gint pos[2] = { 0, 0 };
 
-  pos = 0;
-  for (list = priv->children; list; list = list->next)
-    {
-      grid_child = list->data;
-
-      attach = &grid_child->attach[priv->orientation];
-      opposite = &grid_child->attach[1 - priv->orientation];
-
-      if (opposite->pos <= 0 && opposite->pos + opposite->span > 0)
-        pos = MAX (pos, attach->pos + attach->span);
-     }
-
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    grid_attach (grid, child, pos, 0, 1, 1);
-  else
-    grid_attach (grid, child, 0, pos, 1, 1);
+  pos[priv->orientation] = find_attach_position (grid, priv->orientation, 0, 1, TRUE);
+  grid_attach (grid, child, pos[0], pos[1], 1, 1);
 }
 
 static void
@@ -875,8 +927,13 @@ gtk_grid_request_sum (GtkGridRequest *request,
   linedata = &priv->linedata[orientation];
   lines = &request->lines[orientation];
 
-  min = (nonempty - 1) * linedata->spacing;
-  nat = (nonempty - 1) * linedata->spacing;
+  min = 0;
+  nat = 0;
+  if (nonempty > 0)
+    {
+      min = (nonempty - 1) * linedata->spacing;
+      nat = (nonempty - 1) * linedata->spacing;
+    }
 
   for (i = 0; i < lines->max - lines->min; i++)
     {
@@ -1365,29 +1422,6 @@ gtk_grid_new (void)
   return g_object_new (GTK_TYPE_GRID, NULL);
 }
 
-static void
-grid_attach (GtkGrid   *grid,
-             GtkWidget *widget,
-             gint       left,
-             gint       top,
-             gint       width,
-             gint       height)
-{
-  GtkGridPrivate *priv = grid->priv;
-  GtkGridChild *child;
-
-  child = g_slice_new (GtkGridChild);
-  child->widget = widget;
-  CHILD_LEFT (child) = left;
-  CHILD_TOP (child) = top;
-  CHILD_WIDTH (child) = width;
-  CHILD_HEIGHT (child) = height;
-
-  priv->children = g_list_prepend (priv->children, child);
-
-  gtk_widget_set_parent (widget, GTK_WIDGET (grid));
-}
-
 /**
  * gtk_grid_attach:
  * @grid: a #GtkGrid
@@ -1424,7 +1458,8 @@ gtk_grid_attach (GtkGrid   *grid,
  * gtk_grid_attach_next_to:
  * @grid: a #GtkGrid
  * @child: the widget to add
- * @sibling: the child of @grid that @child will be placed next to
+ * @sibling: (allow-none): the child of @grid that @child will be placed
+ *     next to, or %NULL to place @child at the beginning or end
  * @side: the side of @sibling that @child is positioned next to
  * @width: the number of columns that @child will span
  * @height: the number of rows that @child will span
@@ -1432,7 +1467,12 @@ gtk_grid_attach (GtkGrid   *grid,
  * Adds a widget to the grid.
  *
  * The widget is placed next to @sibling, on the side determined by
- * @side.
+ * @side. When @sibling is %NULL, the widget is placed in row (for
+ * left or right placement) or column 0 (for top or bottom placement),
+ * at the end indicated by @side.
+ *
+ * Attaching widgets labeled [1], [2], [3] with @sibling == %NULL and
+ * @side == %GTK_POS_LEFT yields a layout of [3][2][1].
  */
 void
 gtk_grid_attach_next_to (GtkGrid         *grid,
@@ -1448,32 +1488,61 @@ gtk_grid_attach_next_to (GtkGrid         *grid,
   g_return_if_fail (GTK_IS_GRID (grid));
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (gtk_widget_get_parent (child) == NULL);
-  g_return_if_fail (gtk_widget_get_parent (sibling) == (GtkWidget*)grid);
+  g_return_if_fail (sibling == NULL || gtk_widget_get_parent (sibling) == (GtkWidget*)grid);
   g_return_if_fail (width > 0);
   g_return_if_fail (height > 0);
 
-  grid_sibling = find_grid_child (grid, sibling);
-
-  switch (side)
+  if (sibling)
     {
-    case GTK_POS_LEFT:
-      left = CHILD_LEFT (grid_sibling) - width;
-      top = CHILD_TOP (grid_sibling);
-      break;
-    case GTK_POS_RIGHT:
-      left = CHILD_LEFT (grid_sibling) + CHILD_WIDTH (grid_sibling);
-      top = CHILD_TOP (grid_sibling);
-      break;
-    case GTK_POS_TOP:
-      left = CHILD_LEFT (grid_sibling);
-      top = CHILD_TOP (grid_sibling) - height;
-      break;
-    case GTK_POS_BOTTOM:
-      left = CHILD_LEFT (grid_sibling);
-      top = CHILD_TOP (grid_sibling) + CHILD_HEIGHT (grid_sibling);
-      break;
-    default:
-      g_assert_not_reached ();
+      grid_sibling = find_grid_child (grid, sibling);
+
+      switch (side)
+        {
+        case GTK_POS_LEFT:
+          left = CHILD_LEFT (grid_sibling) - width;
+          top = CHILD_TOP (grid_sibling);
+          break;
+        case GTK_POS_RIGHT:
+          left = CHILD_LEFT (grid_sibling) + CHILD_WIDTH (grid_sibling);
+          top = CHILD_TOP (grid_sibling);
+          break;
+        case GTK_POS_TOP:
+          left = CHILD_LEFT (grid_sibling);
+          top = CHILD_TOP (grid_sibling) - height;
+          break;
+        case GTK_POS_BOTTOM:
+          left = CHILD_LEFT (grid_sibling);
+          top = CHILD_TOP (grid_sibling) + CHILD_HEIGHT (grid_sibling);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+  else
+    {
+      switch (side)
+        {
+        case GTK_POS_LEFT:
+          left = find_attach_position (grid, GTK_ORIENTATION_HORIZONTAL, 0, height, FALSE);
+          left -= width;
+          top = 0;
+          break;
+        case GTK_POS_RIGHT:
+          left = find_attach_position (grid, GTK_ORIENTATION_HORIZONTAL, 0, height, TRUE);
+          top = 0;
+          break;
+        case GTK_POS_TOP:
+          left = 0;
+          top = find_attach_position (grid, GTK_ORIENTATION_VERTICAL, 0, width, FALSE);
+          top -= height;
+          break;
+        case GTK_POS_BOTTOM:
+          left = 0;
+          top = find_attach_position (grid, GTK_ORIENTATION_VERTICAL, 0, width, TRUE);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
     }
 
   grid_attach (grid, child, left, top, width, height);
@@ -1762,9 +1831,9 @@ gtk_grid_set_row_spacing (GtkGrid *grid,
 
   priv = grid->priv;
 
-  if (ROWS (priv)->spacing != spacing)
+  if (COLUMNS (priv)->spacing != spacing)
     {
-      ROWS (priv)->spacing = spacing;
+      COLUMNS (priv)->spacing = spacing;
 
       if (gtk_widget_get_visible (GTK_WIDGET (grid)))
         gtk_widget_queue_resize (GTK_WIDGET (grid));
@@ -1789,7 +1858,7 @@ gtk_grid_get_row_spacing (GtkGrid *grid)
 
   priv = grid->priv;
 
-  return ROWS (priv)->spacing;
+  return COLUMNS (priv)->spacing;
 }
 
 /**
@@ -1809,9 +1878,9 @@ gtk_grid_set_column_spacing (GtkGrid *grid,
 
   priv = grid->priv;
 
-  if (COLUMNS (priv)->spacing != spacing)
+  if (ROWS (priv)->spacing != spacing)
     {
-      COLUMNS (priv)->spacing = spacing;
+      ROWS (priv)->spacing = spacing;
 
       if (gtk_widget_get_visible (GTK_WIDGET (grid)))
         gtk_widget_queue_resize (GTK_WIDGET (grid));
@@ -1837,5 +1906,5 @@ gtk_grid_get_column_spacing (GtkGrid *grid)
 
   priv = grid->priv;
 
-  return COLUMNS (priv)->spacing;
+  return ROWS (priv)->spacing;
 }

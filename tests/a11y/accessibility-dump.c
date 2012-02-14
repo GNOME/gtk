@@ -426,8 +426,8 @@ dump_atk_value (AtkValue *atk_value,
                 guint     depth,
                 GString  *string)
 {
-  GValue value = { 0, };
-  GValue svalue = { 0, };
+  GValue value = G_VALUE_INIT;
+  GValue svalue = G_VALUE_INIT;
 
   g_string_append_printf (string, "%*s<AtkValue>\n", depth, "");
 
@@ -513,10 +513,6 @@ dump_atk_streamable_content (AtkStreamableContent *content,
   g_string_append_c (string, '\n');
 }
 
-static void dump_accessible (AtkObject *accessible,
-                             guint      depth,
-                             GString   *string);
-
 static void
 dump_atk_table (AtkTable *table,
                 guint     depth,
@@ -524,7 +520,7 @@ dump_atk_table (AtkTable *table,
 {
   gint *selected;
   gint n_selected;
-  gint i;
+  gint i, j;
   AtkObject *obj;
   const gchar *desc;
 
@@ -532,17 +528,11 @@ dump_atk_table (AtkTable *table,
 
   obj = atk_table_get_summary (table);
   if (obj)
-    {
-      g_string_append_printf (string, "%*s<summary>\n", depth, "");
-      dump_accessible (obj, depth, string);
-    }
+    g_string_append_printf (string, "%*ssummary: %s\n", depth, "", get_name (obj));
 
   obj = atk_table_get_caption (table);
   if (obj)
-    {
-      g_string_append_printf (string, "%*s<caption>\n", depth, "");
-      dump_accessible (obj, depth, string);
-    }
+    g_string_append_printf (string, "%*scaption: %s\n", depth, "", get_name (obj));
 
   g_string_append_printf (string, "%*srows: %d\n", depth, "", atk_table_get_n_rows (table));
   g_string_append_printf (string, "%*scolumns: %d\n", depth, "", atk_table_get_n_columns (table));
@@ -577,10 +567,7 @@ dump_atk_table (AtkTable *table,
         g_string_append_printf (string, "%*scolumn %d description: %s\n", depth, "", i, desc);
       obj = atk_table_get_column_header (table, i);
       if (obj)
-        {
-          g_string_append_printf (string, "%*s<column %d header>\n", depth, "", i);
-          dump_accessible (obj, depth, string);
-        }
+        g_string_append_printf (string, "%*scolumn %d header: %s\n", depth, "", i, get_name (obj));
     }
 
   for (i = 0; i < atk_table_get_n_rows (table); i++)
@@ -590,10 +577,27 @@ dump_atk_table (AtkTable *table,
         g_string_append_printf (string, "%*srow %d description: %s\n", depth, "", i, desc);
       obj = atk_table_get_row_header (table, i);
       if (obj)
+        g_string_append_printf (string, "%*srow %d header: %s\n", depth, "", i, get_name (obj));
+    }
+
+  g_string_append_printf (string, "%*stable indexes:\n", depth, "");
+  for (i = 0; i < atk_table_get_n_rows (table); i++)
+    {
+      g_string_append_printf (string, "%*s", depth + DEPTH_INCREMENT, "");
+      for (j = 0; j < atk_table_get_n_columns (table); j++)
         {
-          g_string_append_printf (string, "%*s<row %d header>\n", depth, "", i);
-          dump_accessible (obj, depth, string);
+          int id = atk_table_get_index_at (table, i, j);
+
+          obj = atk_object_ref_accessible_child (ATK_OBJECT (table), id);
+          if (j > 0)
+            g_string_append (string, " ");
+
+          g_string_append_printf (string, "%s%s%s",
+                                  atk_table_get_row_at_index (table, id) == i ? "✓" : "⚠",
+                                  atk_table_get_column_at_index (table, id) == j ? "✓" : "⚠",
+                                  get_name (obj));
         }
+      g_string_append (string, "\n");
     }
 }
 

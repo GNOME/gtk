@@ -580,7 +580,7 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_SELECTION_REQUEST:
       new_event->selection.requestor = event->selection.requestor;
       if (new_event->selection.requestor)
-        g_object_unref (new_event->selection.requestor);
+        g_object_ref (new_event->selection.requestor);
       break;
 
     default:
@@ -1446,6 +1446,56 @@ gdk_event_request_motions (const GdkEventMotion *event)
       display = gdk_window_get_display (event->window);
       _gdk_display_enable_motion_hints (display, event->device);
     }
+}
+
+/**
+ * gdk_event_triggers_context_menu:
+ * @event: a #GdkEvent, currently only button events are meaningful values
+ *
+ * This function returns whether a #GdkEventButton should trigger a
+ * context menu, according to platform conventions. The right mouse
+ * button always triggers context menus. Additionally, if
+ * gdk_keymap_get_modifier_mask() returns a non-0 mask for
+ * %GDK_MODIFIER_INTENT_CONTEXT_MENU, then the left mouse button will
+ * also trigger a context menu if this modifier is pressed.
+ *
+ * This function should always be used instead of simply checking for
+ * event->button == %GDK_BUTTON_SECONDARY.
+ *
+ * Returns: %TRUE if the event should trigger a context menu.
+ *
+ * Since: 3.4
+ **/
+gboolean
+gdk_event_triggers_context_menu (const GdkEvent *event)
+{
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  if (event->type == GDK_BUTTON_PRESS)
+    {
+      const GdkEventButton *bevent = (const GdkEventButton *) event;
+      GdkDisplay *display;
+      GdkModifierType modifier;
+
+      g_return_val_if_fail (GDK_IS_WINDOW (bevent->window), FALSE);
+
+      if (bevent->button == GDK_BUTTON_SECONDARY &&
+          ! (bevent->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
+        return TRUE;
+
+      display = gdk_window_get_display (bevent->window);
+
+      modifier = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+                                               GDK_MODIFIER_INTENT_CONTEXT_MENU);
+
+      if (modifier != 0 &&
+          bevent->button == GDK_BUTTON_PRIMARY &&
+          ! (bevent->state & (GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) &&
+          (bevent->state & modifier))
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gboolean

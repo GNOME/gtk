@@ -23,6 +23,12 @@
 #include <string.h>
 
 #include <gtk/gtkx.h>
+#include <gtk/gtkeventbox.h>
+#include <gtk/gtkscrolledwindow.h>
+#include <gtk/gtkframe.h>
+#include <gtk/gtkmenu.h>
+#include <gtk/gtkmenuitem.h>
+#include <gtk/gtkbutton.h>
 
 #include "gtktoplevelaccessible.h"
 

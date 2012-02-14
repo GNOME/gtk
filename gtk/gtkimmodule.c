@@ -32,20 +32,19 @@
 
 #include <glib/gstdio.h>
 #include <gmodule.h>
-#include "gtkimmodule.h"
+#include "gtkimmoduleprivate.h"
 #include "gtkimcontextsimple.h"
 #include "gtksettings.h"
-#include "gtkmainprivate.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 
-/* Do *not* include "gtkprivate.h" in this file. If you do, the
- * correct_libdir_prefix() and correct_localedir_prefix() functions
- * below will have to move somewhere else.
- */
+#undef GDK_DEPRECATED
+#undef GDK_DEPRECATED_FOR
+#define GDK_DEPRECATED
+#define GDK_DEPRECATED_FOR(f)
+#undef GTK_DISABLE_DEPRECATED
 
-#ifdef __GTK_PRIVATE_H__
-#error gtkprivate.h should not be included in this file
-#endif
+#include "deprecated/gtkrc.h"
 
 #define SIMPLE_ID "gtk-im-context-simple"
 
@@ -239,10 +238,7 @@ add_module (GtkIMModule *module, GSList *infos)
 static void
 correct_libdir_prefix (gchar **path)
 {
-  /* GTK_LIBDIR here is supposed to still have the definition from
-   * Makefile.am, i.e. the build-time value. Do *not* include gtkprivate.h
-   * in this file.
-   */
+  /* GTK_LIBDIR is the build-time libdir */
   if (strncmp (*path, GTK_LIBDIR, strlen (GTK_LIBDIR)) == 0)
     {
       /* This is an entry put there by make install on the
@@ -253,7 +249,6 @@ correct_libdir_prefix (gchar **path)
        * builder's machine. Replace the path with the real
        * one on this machine.
        */
-      extern const gchar *_gtk_get_libdir ();
       gchar *tem = *path;
       *path = g_strconcat (_gtk_get_libdir (), tem + strlen (GTK_LIBDIR), NULL);
       g_free (tem);
@@ -263,12 +258,9 @@ correct_libdir_prefix (gchar **path)
 static void
 correct_localedir_prefix (gchar **path)
 {
-  /* As above, but for GTK_LOCALEDIR. Use separate function in case
-   * GTK_LOCALEDIR isn't a subfolder of GTK_LIBDIR.
-   */
+  /* See above */
   if (strncmp (*path, GTK_LOCALEDIR, strlen (GTK_LOCALEDIR)) == 0)
     {
-      extern const gchar *_gtk_get_localedir ();
       gchar *tem = *path;
       *path = g_strconcat (_gtk_get_localedir (), tem + strlen (GTK_LOCALEDIR), NULL);
       g_free (tem);
@@ -648,6 +640,26 @@ match_locale (const gchar *locale,
   return 0;
 }
 
+static const gchar *
+lookup_immodule (gchar **immodules_list)
+{
+  while (immodules_list && *immodules_list)
+    {
+      if (g_strcmp0 (*immodules_list, SIMPLE_ID) == 0)
+        return SIMPLE_ID;
+      else
+       {
+         GtkIMModule *module;
+         module = g_hash_table_lookup (contexts_hash, *immodules_list);
+         if (module)
+           return module->contexts[0]->context_id;
+       }
+      immodules_list++;
+    }
+
+  return NULL;
+}
+
 /**
  * _gtk_im_module_get_default_context_id:
  * @client_window: a window
@@ -664,7 +676,7 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
   const gchar *context_id = NULL;
   gint best_goodness = 0;
   gint i;
-  gchar *tmp_locale, *tmp;
+  gchar *tmp_locale, *tmp, **immodules;
   const gchar *envvar;
   GdkScreen *screen;
   GtkSettings *settings;
@@ -672,11 +684,16 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
   if (!contexts_hash)
     gtk_im_module_initialize ();
 
-  envvar = g_getenv ("GTK_IM_MODULE");
-  if (envvar &&
-      (strcmp (envvar, SIMPLE_ID) == 0 ||
-       g_hash_table_lookup (contexts_hash, envvar))) 
-    return envvar;
+  envvar = g_getenv("GTK_IM_MODULE");
+  if (envvar)
+    {
+        immodules = g_strsplit(envvar, ":", 0);
+        context_id = lookup_immodule(immodules);
+        g_strfreev(immodules);
+
+        if (context_id)
+          return context_id;
+    }
 
   /* Check if the certain immodule is set in XSETTINGS.
    */
@@ -687,15 +704,9 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
       g_object_get (G_OBJECT (settings), "gtk-im-module", &tmp, NULL);
       if (tmp)
         {
-          if (strcmp (tmp, SIMPLE_ID) == 0)
-            context_id = SIMPLE_ID;
-          else
-            {
-              GtkIMModule *module;
-              module = g_hash_table_lookup (contexts_hash, tmp);
-              if (module)
-                context_id = module->contexts[0]->context_id;
-            }
+          immodules = g_strsplit(tmp, ":", 0);
+          context_id = lookup_immodule(immodules);
+          g_strfreev(immodules);
           g_free (tmp);
 
        	  if (context_id)

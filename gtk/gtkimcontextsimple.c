@@ -68,14 +68,14 @@ struct _GtkComposeTableCompact
   gint n_index_stride;
 };
 
-/* This file contains the table of the compose sequences, 
+/* This file contains the table of the compose sequences,
  * static const guint16 gtk_compose_seqs_compact[] = {}
- * IT is generated from the compose-parse.py script.
+ * It is generated from the compose-parse.py script.
  */
 #include "gtkimcontextsimpleseqs.h"
 
-/* From the values below, the value 23 means the number of different first keysyms 
- * that exist in the Compose file (from Xorg). When running compose-parse.py without 
+/* From the values below, the value 24 means the number of different first keysyms
+ * that exist in the Compose file (from Xorg). When running compose-parse.py without
  * parameters, you get the count that you can put here. Needed when updating the
  * gtkimcontextsimpleseqs.h header file (contains the compose sequences).
  */
@@ -253,7 +253,7 @@ check_table (GtkIMContextSimple    *context_simple,
       guint16 *prev_seq;
 
       /* Back up to the first sequence that matches to make sure
-       * we find the exact match if their is one.
+       * we find the exact match if there is one.
        */
       while (seq > table->data)
 	{
@@ -270,7 +270,6 @@ check_table (GtkIMContextSimple    *context_simple,
 	  gunichar value = 
 	    0x10000 * seq[table->max_seq_len] + seq[table->max_seq_len + 1];
 
-	  
 	  /* We found a tentative match. See if there are any longer
 	   * sequences containing this subsequence
 	   */
@@ -281,7 +280,7 @@ check_table (GtkIMContextSimple    *context_simple,
 		{
 		  priv->tentative_match = value;
 		  priv->tentative_match_len = n_compose;
-		
+
 		  g_signal_emit_by_name (context_simple, "preedit-changed");
 
 		  return TRUE;
@@ -368,26 +367,30 @@ check_win32_special_case_after_compact_match (GtkIMContextSimple    *context_sim
 #endif
 
 static gboolean
-check_compact_table (GtkIMContextSimple    *context_simple,
-	     const GtkComposeTableCompact *table,
-	     gint                   n_compose)
+check_compact_table (GtkIMContextSimple           *context_simple,
+                     const GtkComposeTableCompact *table,
+                     gint                          n_compose)
 {
   GtkIMContextSimplePrivate *priv = context_simple->priv;
   gint row_stride;
   guint16 *seq_index;
-  guint16 *seq; 
+  guint16 *seq;
   gint i;
+  gboolean match;
+  gunichar value;
 
   /* Will never match, if the sequence in the compose buffer is longer
    * than the sequences in the table.  Further, compare_seq (key, val)
-   * will overrun val if key is longer than val. */
+   * will overrun val if key is longer than val.
+   */
   if (n_compose > table->max_seq_len)
     return FALSE;
 
   seq_index = bsearch (priv->compose_buffer,
-		 table->data, table->n_index_size,
-		 sizeof (guint16) *  table->n_index_stride, 
-		 compare_seq_index);
+                       table->data,
+                       table->n_index_size,
+                       sizeof (guint16) * table->n_index_stride,
+                       compare_seq_index);
 
   if (!seq_index)
     {
@@ -403,44 +406,47 @@ check_compact_table (GtkIMContextSimple    *context_simple,
 
   GTK_NOTE (MISC, g_print ("compact: %d ", *seq_index));
   seq = NULL;
+  match = FALSE;
 
-  for (i = n_compose-1; i < table->max_seq_len; i++)
+  for (i = n_compose - 1; i < table->max_seq_len; i++)
     {
       row_stride = i + 1;
 
-      if (seq_index[i+1] - seq_index[i] > 0)
+      if (seq_index[i + 1] - seq_index[i] > 0)
         {
-	  seq = bsearch (priv->compose_buffer + 1,
-		 table->data + seq_index[i], (seq_index[i+1] - seq_index[i]) / row_stride,
-		 sizeof (guint16) *  row_stride, 
-		 compare_seq);
+          seq = bsearch (priv->compose_buffer + 1,
+                         table->data + seq_index[i],
+                         (seq_index[i + 1] - seq_index[i]) / row_stride,
+                         sizeof (guint16) *  row_stride,
+                         compare_seq);
 
-	  if (seq)
+          if (seq)
             {
               if (i == n_compose - 1)
-                break;
+                {
+                  value = seq[row_stride - 1];
+                  match = TRUE;
+                }
               else
                 {
+                  if (match)
+                    {
+                      GTK_NOTE (MISC, g_print ("tentative match U+%04X ", value));
+                      priv->tentative_match = value;
+                      priv->tentative_match_len = n_compose;
+                    }
+
                   g_signal_emit_by_name (context_simple, "preedit-changed");
 
-		  GTK_NOTE (MISC, g_print ("yes\n"));
-      		  return TRUE;
+                  GTK_NOTE (MISC, g_print ("yes\n"));
+                  return TRUE;
                 }
              }
         }
     }
 
-  if (!seq)
+  if (match)
     {
-      GTK_NOTE (MISC, g_print ("no\n"));
-      return FALSE;
-    }
-  else
-    {
-      gunichar value;
-
-      value = seq[row_stride - 1];
-
       gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
 #ifdef G_OS_WIN32
       check_win32_special_case_after_compact_match (context_simple, n_compose, value);
@@ -480,7 +486,8 @@ check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
 
   /* Xorg reuses dead_tilde for the perispomeni diacritic mark.
    * We check if base character belongs to Greek Unicode block,
-   * and if so, we replace tilde with perispomeni. */
+   * and if so, we replace tilde with perispomeni.
+   */
   if (combination_buffer[0] >= 0x390 && combination_buffer[0] <= 0x3FF)
     {
       for (i = 1; i < n_compose; i++ )
@@ -494,7 +501,7 @@ check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
     {
       g_unicode_canonical_ordering (combination_buffer_temp, n_compose);
       combination_utf8_temp = g_ucs4_to_utf8 (combination_buffer_temp, -1, NULL, NULL, NULL);
-      nfc_temp = g_utf8_normalize (combination_utf8_temp, -1, G_NORMALIZE_NFC);	       	
+      nfc_temp = g_utf8_normalize (combination_utf8_temp, -1, G_NORMALIZE_NFC);
 
       if (g_utf8_strlen (nfc_temp, -1) == 1)
         {
@@ -589,9 +596,8 @@ check_algorithmically (GtkIMContextSimple *context_simple,
 	  i--;
 	}
       
-      /* If the buffer normalizes to a single character, 
-       * then modify the order of combination_buffer accordingly, if necessary,
-       * and return TRUE. 
+      /* If the buffer normalizes to a single character, then modify the order
+       * of combination_buffer accordingly, if necessary, and return TRUE.
        */
       if (check_normalize_nfc (combination_buffer, n_compose))
         {
@@ -616,8 +622,8 @@ check_algorithmically (GtkIMContextSimple *context_simple,
 /* In addition to the table-driven sequences, we allow Unicode hex
  * codes to be entered. The method chosen here is similar to the
  * one recommended in ISO 14755, but not exactly the same, since we
- * don't want to steal 16 valuable key combinations. 
- * 
+ * don't want to steal 16 valuable key combinations.
+ *
  * A hex Unicode sequence must be started with Ctrl-Shift-U, followed
  * by a sequence of hex digits entered with Ctrl-Shift still held.
  * Releasing one of the modifiers or pressing space while the modifiers
@@ -628,7 +634,6 @@ check_algorithmically (GtkIMContextSimple *context_simple,
  * with Ctrl-Shift-U, then release the modifiers before typing any
  * digits, and enter the digits without modifiers.
  */
-#define HEX_MOD_MASK (GTK_DEFAULT_ACCEL_MOD_MASK | GDK_SHIFT_MASK)
 
 static gboolean
 check_hex (GtkIMContextSimple *context_simple,
@@ -669,7 +674,7 @@ check_hex (GtkIMContextSimple *context_simple,
 
   n = strtoul (str->str, &nptr, 16);
 
-  /* if strtoul fails it probably means non-latin digits were used;
+  /* If strtoul fails it probably means non-latin digits were used;
    * we should in principle handle that, but we probably don't.
    */
   if (nptr - str->str < str->len)
@@ -814,8 +819,10 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
+  GdkDisplay *display = gdk_window_get_display (event->window);
   GSList *tmp_list;  
   int n_compose = 0;
+  GdkModifierType hex_mod_mask;
   gboolean have_hex_mods;
   gboolean is_hex_start;
   gboolean is_hex_end;
@@ -836,6 +843,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  if (priv->tentative_match &&
 	      g_unichar_validate (priv->tentative_match))
 	    {
+g_print ("committing tentative match on release\n");
 	      gtk_im_context_simple_commit_char (context, priv->tentative_match);
 	      priv->compose_buffer[0] = 0;
 
@@ -868,10 +876,14 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     if (event->keyval == gtk_compose_ignore[i])
       return FALSE;
 
+  hex_mod_mask = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+                                               GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+  hex_mod_mask |= GDK_SHIFT_MASK;
+
   if (priv->in_hex_sequence && priv->modifiers_dropped)
     have_hex_mods = TRUE;
   else
-    have_hex_mods = (event->state & (HEX_MOD_MASK)) == HEX_MOD_MASK;
+    have_hex_mods = (event->state & (hex_mod_mask)) == hex_mod_mask;
   is_hex_start = event->keyval == GDK_KEY_U;
   is_hex_end = (event->keyval == GDK_KEY_space ||
 		event->keyval == GDK_KEY_KP_Space ||
@@ -895,7 +907,16 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       (priv->in_hex_sequence && !hex_keyval &&
        !is_hex_start && !is_hex_end && !is_escape && !is_backspace))
     {
-      if (event->state & (GDK_MOD1_MASK | GDK_CONTROL_MASK) ||
+      GdkDisplay *display;
+      GdkModifierType no_text_input_mask;
+
+      display = gdk_window_get_display (event->window);
+
+      no_text_input_mask =
+        gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+                                      GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
+
+      if (event->state & no_text_input_mask ||
 	  (priv->in_hex_sequence && priv->modifiers_dropped &&
 	   (event->keyval == GDK_KEY_Return ||
 	    event->keyval == GDK_KEY_ISO_Enter ||

@@ -23,11 +23,13 @@
 #include <locale.h>
 
 #include "gtkimmulticontext.h"
-#include "gtkimmodule.h"
+#include "gtkimmoduleprivate.h"
+#include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkradiomenuitem.h"
+#include "gtkseparatormenuitem.h"
 #include "gtkintl.h"
-#include "gtkprivate.h" /* To get redefinition of GTK_LOCALE_DIR on Win32 */
+#include "gtkprivate.h"
 
 
 /**
@@ -348,24 +350,38 @@ gtk_im_multicontext_filter_keypress (GtkIMContext *context,
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
 
   if (slave)
-    return gtk_im_context_filter_keypress (slave, event);
-  else if (event->type == GDK_KEY_PRESS &&
-           (event->state & (GDK_MOD1_MASK | GDK_CONTROL_MASK)) == 0)
     {
-      gunichar ch;
+      return gtk_im_context_filter_keypress (slave, event);
+    }
+  else
+    {
+      GdkDisplay *display;
+      GdkModifierType no_text_input_mask;
 
-      ch = gdk_keyval_to_unicode (event->keyval);
-      if (ch != 0 && !g_unichar_iscntrl (ch))
+      display = gdk_window_get_display (event->window);
+
+      no_text_input_mask =
+        gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+                                      GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
+
+      if (event->type == GDK_KEY_PRESS &&
+          (event->state & no_text_input_mask) == 0)
         {
-          gint len;
-          gchar buf[10];
+          gunichar ch;
 
-          len = g_unichar_to_utf8 (ch, buf);
-          buf[len] = '\0';
+          ch = gdk_keyval_to_unicode (event->keyval);
+          if (ch != 0 && !g_unichar_iscntrl (ch))
+            {
+              gint len;
+              gchar buf[10];
 
-          g_signal_emit_by_name (multicontext, "commit", buf);
+              len = g_unichar_to_utf8 (ch, buf);
+              buf[len] = '\0';
 
-          return TRUE;
+              g_signal_emit_by_name (multicontext, "commit", buf);
+
+              return TRUE;
+            }
         }
     }
 
@@ -620,7 +636,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 	    {
 	      /* Same translation domain as GTK+ */
 	      if (!(contexts[i]->domain_dirname && contexts[i]->domain_dirname[0]) ||
-		  pathnamecmp (contexts[i]->domain_dirname, GTK_LOCALEDIR) == 0)
+		  pathnamecmp (contexts[i]->domain_dirname, _gtk_get_localedir ()) == 0)
 		{
 		  /* Empty or NULL, domain directory, or same as
 		   * GTK+. Input method may have a name in the GTK+

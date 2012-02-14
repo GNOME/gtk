@@ -19,14 +19,13 @@
  * Author: Ryan Lortie <desrt@desrt.ca>
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
 #ifndef __GTK_APPLICATION_H__
 #define __GTK_APPLICATION_H__
 
-#include <gtk/gtkactiongroup.h>
 #include <gtk/gtkwidget.h>
 #include <gio/gio.h>
 
@@ -60,22 +59,66 @@ struct _GtkApplicationClass
   void (*window_removed) (GtkApplication *application,
                           GtkWindow      *window);
 
+  void (*quit)           (GtkApplication *application);
+
   /*< private >*/
-  gpointer padding[14];
+  gpointer padding[11];
 };
 
-GType                   gtk_application_get_type                        (void) G_GNUC_CONST;
+GType            gtk_application_get_type      (void) G_GNUC_CONST;
 
-GtkApplication *        gtk_application_new                             (const gchar       *application_id,
-                                                                         GApplicationFlags  flags);
+GtkApplication * gtk_application_new           (const gchar       *application_id,
+                                                GApplicationFlags  flags);
 
-void                    gtk_application_add_window                      (GtkApplication    *application,
-                                                                         GtkWindow         *window);
+void             gtk_application_add_window    (GtkApplication    *application,
+                                                GtkWindow         *window);
 
-void                    gtk_application_remove_window                   (GtkApplication    *application,
-                                                                         GtkWindow         *window);
+void             gtk_application_remove_window (GtkApplication    *application,
+                                                GtkWindow         *window);
+GList *          gtk_application_get_windows   (GtkApplication    *application);
 
-GList *                 gtk_application_get_windows                     (GtkApplication    *application);
+GMenuModel *     gtk_application_get_app_menu  (GtkApplication    *application);
+void             gtk_application_set_app_menu  (GtkApplication    *application,
+                                                GMenuModel        *app_menu);
+
+GMenuModel *     gtk_application_get_menubar   (GtkApplication    *application);
+void             gtk_application_set_menubar   (GtkApplication    *application,
+                                                GMenuModel        *menubar);
+
+void             gtk_application_add_accelerator    (GtkApplication  *application,
+                                                     const gchar     *accelerator,
+                                                     const gchar     *action_name,
+                                                     GVariant        *parameter);
+void             gtk_application_remove_accelerator (GtkApplication *application,
+                                                     const gchar    *action_name,
+                                                     GVariant       *parameter);
+
+typedef enum
+{
+  GTK_APPLICATION_INHIBIT_LOGOUT  = (1 << 0),
+  GTK_APPLICATION_INHIBIT_SWITCH  = (1 << 1),
+  GTK_APPLICATION_INHIBIT_SUSPEND = (1 << 2),
+  GTK_APPLICATION_INHIBIT_IDLE    = (1 << 3)
+} GtkApplicationInhibitFlags;
+
+guint            gtk_application_inhibit            (GtkApplication             *application,
+                                                     GtkWindow                  *window,
+                                                     GtkApplicationInhibitFlags  flags,
+                                                     const gchar                *reason);
+void             gtk_application_uninhibit          (GtkApplication             *application,
+                                                     guint                       cookie);
+gboolean         gtk_application_is_inhibited       (GtkApplication             *application,
+                                                     GtkApplicationInhibitFlags  flags);
+
+typedef enum {
+  GTK_APPLICATION_LOGOUT,
+  GTK_APPLICATION_REBOOT,
+  GTK_APPLICATION_SHUTDOWN
+} GtkApplicationEndSessionStyle;
+
+gboolean         gtk_application_end_session        (GtkApplication                *application,
+                                                     GtkApplicationEndSessionStyle  style,
+                                                     gboolean                       request_confirmation);
 
 G_END_DECLS
 

@@ -155,7 +155,8 @@ static const char *const precache_atoms[] = {
   "_NET_WM_WINDOW_TYPE_NORMAL",
   "_NET_WM_USER_TIME",
   "_NET_VIRTUAL_ROOTS",
-  "GDK_SELECTION"
+  "GDK_SELECTION",
+  "_NET_WM_STATE_FOCUSED"
 };
 
 static char *gdk_sm_client_id;
@@ -202,7 +203,7 @@ do_net_wm_state_changes (GdkWindow *window)
     }
   else
     {
-      if (toplevel->have_sticky || toplevel->on_all_desktops)
+      if (toplevel->have_sticky && toplevel->on_all_desktops)
         gdk_synthesize_window_state (window,
                                      0,
                                      GDK_WINDOW_STATE_STICKY);
@@ -240,6 +241,21 @@ do_net_wm_state_changes (GdkWindow *window)
                                      0,
                                      GDK_WINDOW_STATE_MAXIMIZED);
     }
+
+  if (old_state & GDK_WINDOW_STATE_FOCUSED)
+    {
+      if (!toplevel->have_focused)
+        gdk_synthesize_window_state (window,
+                                     GDK_WINDOW_STATE_FOCUSED,
+                                     0);
+    }
+  else
+    {
+      if (toplevel->have_focused)
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_FOCUSED);
+    }
 }
 
 static void
@@ -268,7 +284,7 @@ gdk_check_wm_desktop_changed (GdkWindow *window)
   if (type != None)
     {
       desktop = (gulong *)data;
-      toplevel->on_all_desktops = (*desktop == 0xFFFFFFFF);
+      toplevel->on_all_desktops = ((*desktop & 0xFFFFFFFF) == 0xFFFFFFFF);
       XFree (desktop);
     }
   else
@@ -282,6 +298,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
 {
   GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+  GdkScreen *screen = GDK_WINDOW_SCREEN (window);
 
   Atom type;
   gint format;
@@ -297,6 +314,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
   toplevel->have_maxvert = FALSE;
   toplevel->have_maxhorz = FALSE;
   toplevel->have_fullscreen = FALSE;
+  toplevel->have_focused = FALSE;
 
   type = None;
   gdk_x11_display_error_trap_push (display);
@@ -312,6 +330,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
       Atom maxvert_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_VERT");
       Atom maxhorz_atom	= gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_HORZ");
       Atom fullscreen_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_FULLSCREEN");
+      Atom focused_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_FOCUSED");
 
       atoms = (Atom *)data;
 
@@ -326,12 +345,18 @@ gdk_check_wm_state_changed (GdkWindow *window)
             toplevel->have_maxhorz = TRUE;
           else if (atoms[i] == fullscreen_atom)
             toplevel->have_fullscreen = TRUE;
+          else if (atoms[i] == focused_atom)
+            toplevel->have_focused = TRUE;
 
           ++i;
         }
 
       XFree (atoms);
     }
+
+  if (!gdk_x11_screen_supports_net_wm_hint (screen,
+                                            gdk_atom_intern_static_string ("_NET_WM_STATE_FOCUSED")))
+    toplevel->have_focused = TRUE;
 
   /* When have_sticky is turned on, we have to check the DESKTOP property
    * as well.
@@ -385,7 +410,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   GdkToplevelX11 *toplevel = NULL;
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   gboolean return_val;
-  Window xwindow = None;
 
   /* Find the GdkWindow that this event relates to.
    * Basically this means substructure events
@@ -405,7 +429,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       x11_screen = GDK_X11_SCREEN (screen);
       toplevel = _gdk_x11_window_get_toplevel (window);
       window_impl = GDK_WINDOW_IMPL_X11 (window->impl);
-      xwindow = GDK_WINDOW_XID (window);
 
       g_object_ref (window);
     }
@@ -432,7 +455,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
           screen = gdk_display_get_screen (display, i);
           x11_screen = GDK_X11_SCREEN (screen);
 
-          if (x11_screen->wmspec_check_window == xwindow)
+          if (x11_screen->wmspec_check_window == xevent->xdestroywindow.window)
             {
               x11_screen->wmspec_check_window = None;
               x11_screen->last_wmspec_check_time = 0;
@@ -1744,12 +1767,10 @@ gdk_x11_display_finalize (GObject *object)
   g_slist_free (display_x11->event_types);
 
   /* input GdkDevice list */
-  g_list_foreach (display_x11->input_devices, (GFunc) g_object_unref, NULL);
-  g_list_free (display_x11->input_devices);
+  g_list_free_full (display_x11->input_devices, g_object_unref);
 
   /* input GdkWindow list */
-  g_list_foreach (display_x11->input_windows, (GFunc) g_free, NULL);
-  g_list_free (display_x11->input_windows);
+  g_list_free_full (display_x11->input_windows, g_free);
 
   /* Free all GdkScreens */
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
@@ -1845,9 +1866,10 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
 /**
  * gdk_x11_display_get_xdisplay:
  * @display: (type GdkX11Display): a #GdkDisplay
- * @returns: (transfer none): an X display.
  *
  * Returns the X display of a #GdkDisplay.
+ *
+ * Returns: (transfer none): an X display
  *
  * Since: 2.2
  */
@@ -2360,8 +2382,8 @@ _gdk_x11_display_error_event (GdkDisplay  *display,
                          "  (Details: serial %ld error_code %d request_code %d minor_code %d)\n"
                          "  (Note to programmers: normally, X errors are reported asynchronously;\n"
                          "   that is, you will receive the error a while after causing it.\n"
-                         "   To debug your program, run it with the --sync command line\n"
-                         "   option to change this behavior. You can then get a meaningful\n"
+                         "   To debug your program, run it with the GDK_SYNCHRONIZE environment\n"
+                         "   variable to change this behavior. You can then get a meaningful\n"
                          "   backtrace from your debugger if you break on the gdk_x_error() function.)",
                          g_get_prgname (),
                          buf,

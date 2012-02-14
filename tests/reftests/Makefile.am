@@ -29,6 +29,24 @@ EXTRA_DIST += \
 	background-area.css \
 	background-area.ref.ui \
 	background-area.ui \
+	background-color-transparent.css \
+	background-color-transparent.ref.ui \
+	background-color-transparent.ui \
+	background-origin.css \
+	background-origin.ref.ui \
+	background-origin.ui \
+	background-positioning-area-empty.ref.ui \
+	background-positioning-area-empty.ui \
+	background-size.css \
+	background-size.ref.ui \
+	background-size.ui \
+	background-size-keywords.css \
+	background-size-keywords.ref.ui \
+	background-size-keywords.ui \
+	background-window-transparent.css \
+	background-window-transparent.ref.ui \
+	background-window-transparent.ui \
+	reference-background-origin.png	\
 	border-color-default.css \
 	border-color-default.ref.ui \
 	border-color-default.ui \
@@ -54,6 +72,12 @@ EXTRA_DIST += \
 	border-radius-clamp.css\
 	border-radius-clamp.ref.ui \
 	border-radius-clamp.ui \
+	border-style.css \
+	border-style.ref.ui \
+	border-style.ui \
+	border-style-none.css \
+	border-style-none.ref.ui \
+	border-style-none.ui \
 	box-packing.css \
 	box-packing.ref.ui \
 	box-packing.ui \
@@ -75,6 +99,9 @@ EXTRA_DIST += \
 	css-match-inherit.css \
 	css-match-inherit.ref.ui \
 	css-match-inherit.ui \
+	css-match-inherit-different-state.css \
+	css-match-inherit-different-state.ref.ui \
+	css-match-inherit-different-state.ui \
 	css-match-name.css \
 	css-match-name.ref.ui \
 	css-match-name.ui \
@@ -93,10 +120,15 @@ EXTRA_DIST += \
 	css-match-type.css \
 	css-match-type.ref.ui \
 	css-match-type.ui \
+	css-multi-state.css \
+	css-multi-state.ref.ui \
+	css-multi-state.ui \
 	entry-progress-coloring.css \
 	entry-progress-coloring.ref.ui \
 	entry-progress-coloring.ui \
 	green-20x20.png \
+	grid-empty-with-spacing.ref.ui \
+	grid-empty-with-spacing.ui \
 	grid-expand.css \
 	grid-expand.ref.ui \
 	grid-expand.ui \
@@ -112,6 +144,12 @@ EXTRA_DIST += \
 	grid-spacing3.css \
 	grid-spacing3.ref.ui \
 	grid-spacing3.ui \
+	inherit-and-initial.css \
+	inherit-and-initial.ref.ui \
+	inherit-and-initial.ui \
+	label-attribute-preference.css \
+	label-attribute-preference.ref.ui \
+	label-attribute-preference.ui \
 	label-shadows.css \
 	label-shadows.ref.ui \
 	label-shadows.ui \
@@ -139,6 +177,7 @@ EXTRA_DIST += \
 	paned-undersized.ui \
 	quit-mnemonic.ref.ui \
 	quit-mnemonic.ui \
+	reset-to-defaults.css \
 	rotated-layout.ref.ui \
 	rotated-layout.ui \
 	shorthand-entry-border.css \
@@ -149,6 +188,9 @@ EXTRA_DIST += \
 	style-properties-nth-child.css \
 	style-properties-nth-child.ref.ui \
 	style-properties-nth-child.ui \
+	style-properties-only-child.css \
+	style-properties-only-child.ref.ui \
+	style-properties-only-child.ui \
 	toplevel-vs-popup.ref.ui \
 	toplevel-vs-popup.ui \
 	unresolvable.css \

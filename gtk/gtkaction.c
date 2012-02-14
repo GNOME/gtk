@@ -86,7 +86,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmenuitem.h"
 #include "gtkstock.h"
-#include "gtktearoffmenuitem.h"
+#include "deprecated/gtktearoffmenuitem.h"
 #include "gtktoolbutton.h"
 #include "gtktoolbar.h"
 #include "gtkprivate.h"
@@ -716,6 +716,7 @@ static void
 remove_proxy (GtkAction *action,
 	      GtkWidget *proxy)
 {
+  g_object_unref (proxy);
   action->private_data->proxies = g_slist_remove (action->private_data->proxies, proxy);
 }
 
@@ -724,6 +725,8 @@ connect_proxy (GtkAction *action,
 	       GtkWidget *proxy)
 {
   action->private_data->proxies = g_slist_prepend (action->private_data->proxies, proxy);
+
+  g_object_ref_sink (proxy);
 
   if (action->private_data->action_group)
     _gtk_action_group_emit_connect_proxy (action->private_data->action_group, action, proxy);

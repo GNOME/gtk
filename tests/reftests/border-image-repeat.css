@@ -1,23 +1,14 @@
-* {
-  engine: none;
-  background-image: none;
-  padding: 0;
-  border-radius: 0;
-  border-width: 0;
-  border-style: none;
-  background-color: rgba(0,0,0,0);
-}
+@import "reset-to-defaults.css";
 
-GtkWindow,
-GtkEventBox {
-  background-color: #000;
+* {
+  background-size: 100% 100%;
 }
 
 GtkButton {
   border-image-source: url("border-image-balls.png");
   border-image-slice: 20;
   border-image-repeat: stretch;
-  border-width: 5;
+  border-width: 5px;
   border-style: solid;
 }
 

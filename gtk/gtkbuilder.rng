@@ -1,0 +1,305 @@
+<?xml version="1.0"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="">
+  <start>
+    <element name="interface">
+      <optional>
+        <attribute name="domain">
+          <text/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="requires"/>
+          <ref name="object"/>
+          <ref name="menu"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </start>
+  <define name="requires">
+    <element name="requires">
+      <attribute name="lib">
+        <text/>
+      </attribute>
+      <attribute name="version">
+        <text/>
+      </attribute>
+    </element>
+  </define>
+  <define name="object">
+    <element name="object">
+      <attribute name="id">
+        <data type="ID" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"/>
+      </attribute>
+      <attribute name="class">
+        <text/>
+      </attribute>
+      <optional>
+        <attribute name="type-func">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="constructor">
+          <text/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="property"/>
+          <ref name="signal"/>
+          <ref name="child"/>
+          <ref name="ANY"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="property">
+    <element name="property">
+      <attribute name="name">
+        <text/>
+      </attribute>
+      <optional>
+        <attribute name="translatable">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="comments">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="context">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <text/>
+      </optional>
+    </element>
+  </define>
+  <define name="signal">
+    <element name="signal">
+      <attribute name="name">
+        <text/>
+      </attribute>
+      <attribute name="handler">
+        <text/>
+      </attribute>
+      <optional>
+        <attribute name="after">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="swapped">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="object">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="last_modification_time">
+          <text/>
+        </attribute>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="child">
+    <element name="child">
+      <optional>
+        <attribute name="type">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="internal-child">
+          <text/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="object"/>
+          <ref name="ANY"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="menu">
+    <element name="menu">
+      <attribute name="id">
+        <data type="ID" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"/>
+      </attribute>
+      <optional>
+        <attribute name="domain">
+          <text/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="item"/>
+          <ref name="submenu"/>
+          <ref name="section"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="item">
+    <element name="item">
+      <optional>
+        <attribute name="id">
+          <data type="ID" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="attribute_"/>
+          <ref name="link"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attribute_">
+    <element name="attribute">
+      <attribute name="name">
+        <text/>
+      </attribute>
+      <optional>
+        <attribute name="type">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="translatable">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="context">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="comments">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <text/>
+      </optional>
+    </element>
+  </define>
+  <define name="link">
+    <element name="link">
+      <optional>
+        <attribute name="id">
+          <data type="ID" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"/>
+        </attribute>
+      </optional>
+      <attribute name="name">
+        <text/>
+      </attribute>
+      <zeroOrMore>
+        <ref name="item"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="submenu">
+    <element name="submenu">
+      <optional>
+        <attribute name="id">
+          <data type="ID" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="attribute_"/>
+          <ref name="item"/>
+          <ref name="submenu"/>
+          <ref name="section"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="section">
+    <element name="section">
+      <optional>
+        <attribute name="id">
+          <data type="ID" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"/>
+        </attribute>
+      </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="attribute_"/>
+          <ref name="item"/>
+          <ref name="submenu"/>
+          <ref name="section"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="ANY">
+    <element>
+      <anyName>
+        <except>
+          <name>interface</name>
+          <name>requires</name>
+          <name>object</name>
+          <name>property</name>
+          <name>signal</name>
+          <name>child</name>
+          <name>menu</name>
+          <name>item</name>
+          <name>attribute</name>
+          <name>link</name>
+          <name>submenu</name>
+          <name>section</name>
+        </except>
+      </anyName>
+      <zeroOrMore>
+        <attribute>
+          <anyName/>
+          <text/>
+        </attribute>
+      </zeroOrMore>
+      <interleave>
+        <zeroOrMore>
+          <ref name="ALL"/>
+        </zeroOrMore>
+        <optional>
+          <text/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+  <define name="ALL">
+    <element>
+      <anyName/>
+      <zeroOrMore>
+        <attribute>
+          <anyName/>
+          <text/>
+        </attribute>
+      </zeroOrMore>
+      <interleave>
+        <zeroOrMore>
+          <ref name="ALL"/>
+        </zeroOrMore>
+        <optional>
+          <text/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+</grammar>

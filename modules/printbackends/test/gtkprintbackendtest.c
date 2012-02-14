@@ -549,7 +549,7 @@ test_printer_prepare_for_print (GtkPrinter       *printer,
 }
 
 static gboolean
-test_printer_details_aquired_cb (GtkPrinter *printer)
+test_printer_details_acquired_cb (GtkPrinter *printer)
 {
   gboolean success;
   gint weight;
@@ -565,7 +565,7 @@ test_printer_details_aquired_cb (GtkPrinter *printer)
   gtk_printer_set_has_details (printer, success);
   g_signal_emit_by_name (printer, "details-acquired", success);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -590,7 +590,7 @@ test_printer_request_details (GtkPrinter *printer)
   else
     time *= 1000;
 
-  g_timeout_add (time, (GSourceFunc) test_printer_details_aquired_cb, printer);
+  g_timeout_add (time, (GSourceFunc) test_printer_details_acquired_cb, printer);
 }
 
 

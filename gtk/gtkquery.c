@@ -121,8 +121,7 @@ _gtk_query_set_mime_types (GtkQuery *query,
   GList *l;
   gchar *mime_type;
 
-  g_list_foreach (query->priv->mime_types, (GFunc)g_free, NULL);
-  g_list_free (query->priv->mime_types);
+  g_list_free_full (query->priv->mime_types, g_free);
   query->priv->mime_types = NULL;
 
   for (l = mime_types; l; l = l->next)

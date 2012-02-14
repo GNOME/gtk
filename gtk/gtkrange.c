@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "gtkmainprivate.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientableprivate.h"
 #include "gtkrange.h"
@@ -39,6 +39,7 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkmain.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtkrangeaccessible.h"
 
@@ -135,6 +136,9 @@ struct _GtkRangePrivate
   /* Stepper sensitivity */
   guint lower_sensitive        : 1;
   guint upper_sensitive        : 1;
+
+  /* The range has an origin, should be drawn differently. Used by GtkScale */
+  guint has_origin             : 1;
 
   /* Fill level */
   guint show_fill_level        : 1;
@@ -376,8 +380,6 @@ gtk_range_class_init (GtkRangeClass *class)
    * @range: the #GtkRange that received the signal
    * @scroll: the type of scroll action that was performed
    * @value: the new value resulting from the scroll action
-   * @returns: %TRUE to prevent other handlers from being invoked for the
-   * signal, %FALSE to propagate the signal further
    *
    * The #GtkRange::change-value signal is emitted when a scroll action is
    * performed on a range.  It allows an application to determine the
@@ -394,6 +396,9 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * It is not possible to use delayed update policies in an overridden
    * #GtkRange::change-value handler.
+   *
+   * Returns: %TRUE to prevent other handlers from being invoked for
+   *     the signal, %FALSE to propagate the signal further
    *
    * Since: 2.6
    */
@@ -734,6 +739,7 @@ gtk_range_init (GtkRange *range)
   priv->upper_sensitivity = GTK_SENSITIVITY_AUTO;
   priv->lower_sensitive = TRUE;
   priv->upper_sensitive = TRUE;
+  priv->has_origin = FALSE;
   priv->show_fill_level = FALSE;
   priv->restrict_to_fill_level = TRUE;
   priv->fill_level = G_MAXDOUBLE;
@@ -1618,7 +1624,7 @@ modify_allocation_for_window_grip (GtkWidget     *widget,
     translated_rect = *allocation;
   else
     {
-      gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
+      gtk_widget_translate_coordinates (parent,
                                         window,
                                         allocation->x, allocation->y,
                                         &x, &y);
@@ -1629,7 +1635,7 @@ modify_allocation_for_window_grip (GtkWidget     *widget,
     }
 
   /* If the stepper button intersects the window resize grip.. */
-  if (gdk_rectangle_intersect (&grip_rect, &translated_rect, NULL))
+  if (gdk_rectangle_intersect (&grip_rect, &translated_rect, &grip_rect))
     {
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
@@ -1850,11 +1856,11 @@ draw_stepper (GtkRange     *range,
               cairo_t      *cr,
               GtkArrowType  arrow_type,
               gboolean      clicked,
-              gboolean      prelighted)
+              gboolean      prelighted,
+              GtkStateFlags state)
 {
   GtkRangePrivate *priv = range->priv;
   GtkAllocation allocation;
-  GtkStateFlags state = 0;
   GtkStyleContext *context;
   GtkWidget *widget = GTK_WIDGET (range);
   gfloat arrow_scaling;
@@ -1898,8 +1904,12 @@ draw_stepper (GtkRange     *range,
       arrow_sensitive = priv->lower_sensitive;
     }
 
-  if (!gtk_widget_is_sensitive (GTK_WIDGET (range)) || !arrow_sensitive)
-    state = GTK_STATE_FLAG_INSENSITIVE;
+  state &= ~(GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT);
+
+  if ((state & GTK_STATE_FLAG_INSENSITIVE) || !arrow_sensitive)
+    {
+      state |= GTK_STATE_FLAG_INSENSITIVE;
+    }
   else
     {
       if (clicked)
@@ -1920,6 +1930,23 @@ draw_stepper (GtkRange     *range,
 
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
   gtk_style_context_set_state (context, state);
+
+  switch (arrow_type)
+    {
+    case GTK_ARROW_RIGHT:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+      break;
+    case GTK_ARROW_DOWN:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+      break;
+    case GTK_ARROW_LEFT:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+      break;
+    case GTK_ARROW_UP:
+    default:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+      break;
+    }
 
   gtk_render_background (context, cr,
                          rect->x, rect->y,
@@ -1978,8 +2005,7 @@ gtk_range_draw (GtkWidget *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  gboolean sensitive;
-  GtkStateFlags state = 0;
+  GtkStateFlags widget_state;
   gint focus_line_width = 0;
   gint focus_padding = 0;
   gboolean touchscreen;
@@ -2009,7 +2035,7 @@ gtk_range_draw (GtkWidget *widget,
   gtk_range_calc_marks (range);
   gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
 
-  sensitive = gtk_widget_is_sensitive (widget);
+  widget_state = gtk_widget_get_state_flags (widget);
 
   /* Just to be confusing, we draw the trough for the whole
    * range rectangle, not the trough rectangle (the trough
@@ -2037,11 +2063,6 @@ gtk_range_draw (GtkWidget *widget,
                             "stepper-size",          &stepper_size,
                             "stepper-spacing",       &stepper_spacing,
                             NULL);
-
-      gtk_style_context_save (context);
-
-      if (!sensitive)
-        gtk_style_context_set_state (context, GTK_STATE_FLAG_INSENSITIVE);
 
       if (!trough_under_steppers)
         {
@@ -2090,37 +2111,82 @@ gtk_range_draw (GtkWidget *widget,
 
       if (draw_trough)
         {
-          gint trough_change_pos_x = width;
-          gint trough_change_pos_y = height;
+          if (!priv->has_origin)
+            {
+              gtk_render_background (context, cr,
+                                     x, y, width, height);
 
-          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-            trough_change_pos_x = (priv->slider.x +
-                                   priv->slider.width / 2 -
-                                   x);
+              gtk_render_frame (context, cr,
+                                x, y, width, height);
+            }
           else
-            trough_change_pos_y = (priv->slider.y +
-                                   priv->slider.height / 2 -
-                                   y);
+            {
+              gboolean is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
-          /* FIXME: was trough-upper and trough-lower really used,
-           * in that case, it should still be exposed somehow.
-           */
-          gtk_render_background (context, cr, x, y,
-                                 trough_change_pos_x,
-                                 trough_change_pos_y);
+              gint trough_change_pos_x = width;
+              gint trough_change_pos_y = height;
 
-          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-            trough_change_pos_y = 0;
-          else
-            trough_change_pos_x = 0;
+              if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+                trough_change_pos_x = (priv->slider.x +
+                                       priv->slider.width / 2 -
+                                       x);
+              else
+                trough_change_pos_y = (priv->slider.y +
+                                       priv->slider.height / 2 -
+                                       y);
 
-          gtk_render_background (context, cr,
-                                 x + trough_change_pos_x, y + trough_change_pos_y,
-                                 width - trough_change_pos_x,
-                                 height - trough_change_pos_y);
+              gtk_style_context_save (context);
+              if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+                {
+                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
 
-          gtk_render_frame (context, cr,
-                            x, y, width, height);
+                  if (!is_rtl)
+                    gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
+                }
+              else
+                gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+
+              gtk_render_background (context, cr, x, y,
+                                     trough_change_pos_x,
+                                     trough_change_pos_y);
+
+              gtk_render_frame (context, cr, x, y,
+                                trough_change_pos_x,
+                                trough_change_pos_y);
+
+              gtk_style_context_restore (context);
+
+              if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+                trough_change_pos_y = 0;
+              else
+                trough_change_pos_x = 0;
+
+              gtk_style_context_save (context);
+              if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+                {
+                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+
+                  if (is_rtl)
+                    gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
+                }
+              else
+                {
+                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
+                }
+
+              gtk_render_background (context, cr,
+                                     x + trough_change_pos_x, y + trough_change_pos_y,
+                                     width - trough_change_pos_x,
+                                     height - trough_change_pos_y);
+
+              gtk_render_frame (context, cr,
+                                x + trough_change_pos_x, y + trough_change_pos_y,
+                                width - trough_change_pos_x,
+                                height - trough_change_pos_y);
+
+              gtk_style_context_restore (context);
+            }
         }
       else
         {
@@ -2192,40 +2258,34 @@ gtk_range_draw (GtkWidget *widget,
           gtk_style_context_restore (context);
         }
 
-      gtk_style_context_restore (context);
-
-      if (sensitive && gtk_widget_has_visible_focus (widget))
+      if (!(widget_state & GTK_STATE_FLAG_INSENSITIVE) && gtk_widget_has_visible_focus (widget))
         {
-          gtk_style_context_save (context);
-          gtk_style_context_set_state (context,
-                                       gtk_widget_get_state_flags (widget));
-
           gtk_render_focus (context, cr,
                             priv->range_rect.x,
                             priv->range_rect.y,
                             priv->range_rect.width,
                             priv->range_rect.height);
-
-          gtk_style_context_restore (context);
         }
     }
 
   cairo_restore (cr);
 
-  if (!sensitive)
-    state = GTK_STATE_FLAG_INSENSITIVE;
-  else if (!touchscreen && priv->mouse_location == MOUSE_SLIDER)
-    state = GTK_STATE_FLAG_PRELIGHT;
-
-  if (priv->grab_location == MOUSE_SLIDER)
-    state |= GTK_STATE_FLAG_ACTIVE;
-
-  cairo_save (cr);
-  gdk_cairo_rectangle (cr, &priv->slider);
-  cairo_clip (cr);
-
   if (draw_trough)
     {
+      GtkStateFlags state = widget_state;
+
+      state &= ~(GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE);
+
+      if (!touchscreen && priv->mouse_location == MOUSE_SLIDER && !(state & GTK_STATE_FLAG_INSENSITIVE))
+        state |= GTK_STATE_FLAG_PRELIGHT;
+
+      if (priv->grab_location == MOUSE_SLIDER)
+        state |= GTK_STATE_FLAG_ACTIVE;
+
+      cairo_save (cr);
+      gdk_cairo_rectangle (cr, &priv->slider);
+      cairo_clip (cr);
+
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
       gtk_style_context_set_state (context, state);
@@ -2238,33 +2298,37 @@ gtk_range_draw (GtkWidget *widget,
                          priv->orientation);
 
       gtk_style_context_restore (context);
-    }
 
-  cairo_restore (cr);
+      cairo_restore (cr);
+    }
 
   if (priv->has_stepper_a)
     draw_stepper (range, STEPPER_A, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT,
                   priv->grab_location == MOUSE_STEPPER_A,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_A);
+                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_A,
+                  widget_state);
 
   if (priv->has_stepper_b)
     draw_stepper (range, STEPPER_B, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   priv->grab_location == MOUSE_STEPPER_B,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_B);
+                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_B,
+                  widget_state);
 
   if (priv->has_stepper_c)
     draw_stepper (range, STEPPER_C, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT,
                   priv->grab_location == MOUSE_STEPPER_C,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_C);
+                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_C,
+                  widget_state);
 
   if (priv->has_stepper_d)
     draw_stepper (range, STEPPER_D, cr,
                   priv->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   priv->grab_location == MOUSE_STEPPER_D,
-                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_D);
+                  !touchscreen && priv->mouse_location == MOUSE_STEPPER_D,
+                  widget_state);
 
   return FALSE;
 }
@@ -2333,13 +2397,13 @@ range_get_scroll_for_grab (GtkRange      *range)
     case MOUSE_STEPPER_C:
       switch (priv->grab_button)
         {
-        case 1:
+        case GDK_BUTTON_PRIMARY:
           return invert ? GTK_SCROLL_STEP_FORWARD : GTK_SCROLL_STEP_BACKWARD;
           break;
-        case 2:
+        case GDK_BUTTON_MIDDLE:
           return invert ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_PAGE_BACKWARD;
           break;
-        case 3:
+        case GDK_BUTTON_SECONDARY:
           return invert ? GTK_SCROLL_END : GTK_SCROLL_START;
           break;
         }
@@ -2350,13 +2414,13 @@ range_get_scroll_for_grab (GtkRange      *range)
     case MOUSE_STEPPER_D:
       switch (priv->grab_button)
         {
-        case 1:
+        case GDK_BUTTON_PRIMARY:
           return invert ? GTK_SCROLL_STEP_BACKWARD : GTK_SCROLL_STEP_FORWARD;
           break;
-        case 2:
+        case GDK_BUTTON_MIDDLE:
           return invert ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_PAGE_FORWARD;
           break;
-        case 3:
+        case GDK_BUTTON_SECONDARY:
           return invert ? GTK_SCROLL_START : GTK_SCROLL_END;
           break;
        }
@@ -2482,7 +2546,7 @@ gtk_range_button_press (GtkWidget      *widget,
     gtk_widget_queue_draw (widget);
 
   if (priv->mouse_location == MOUSE_TROUGH  &&
-      event->button == 1)
+      event->button == GDK_BUTTON_PRIMARY)
     {
       /* button 1 steps by page increment, as with button 2 on a stepper
        */
@@ -2506,7 +2570,9 @@ gtk_range_button_press (GtkWidget      *widget,
             priv->mouse_location == MOUSE_STEPPER_B ||
             priv->mouse_location == MOUSE_STEPPER_C ||
             priv->mouse_location == MOUSE_STEPPER_D) &&
-           (event->button == 1 || event->button == 2 || event->button == 3))
+           (event->button == GDK_BUTTON_PRIMARY ||
+            event->button == GDK_BUTTON_MIDDLE ||
+            event->button == GDK_BUTTON_SECONDARY))
     {
       GtkAllocation allocation;
       GdkRectangle *stepper_area;
@@ -2530,7 +2596,7 @@ gtk_range_button_press (GtkWidget      *widget,
       return TRUE;
     }
   else if ((priv->mouse_location == MOUSE_TROUGH &&
-            event->button == 2) ||
+            event->button == GDK_BUTTON_MIDDLE) ||
            priv->mouse_location == MOUSE_SLIDER)
     {
       gboolean need_value_update = FALSE;
@@ -2540,7 +2606,7 @@ gtk_range_button_press (GtkWidget      *widget,
        * On button 2 press, we warp the slider to mouse position,
        * then begin the slider drag.
        */
-      if (event->button == 2)
+      if (event->button == GDK_BUTTON_MIDDLE)
         {
           gdouble slider_low_value, slider_high_value, new_value;
           
@@ -4041,6 +4107,19 @@ gtk_range_remove_step_timer (GtkRange *range)
 
       priv->timer = NULL;
     }
+}
+
+void
+_gtk_range_set_has_origin (GtkRange *range,
+                           gboolean  has_origin)
+{
+  range->priv->has_origin = has_origin;
+}
+
+gboolean
+_gtk_range_get_has_origin (GtkRange *range)
+{
+  return range->priv->has_origin;
 }
 
 void

@@ -449,7 +449,7 @@ gtk_cell_layout_set_attributesv (GtkCellLayout   *cell_layout,
  * gtk_cell_layout_set_attributes:
  * @cell_layout: a #GtkCellLayout
  * @cell: a #GtkCellRenderer
- * @Varargs: a %NULL-terminated list of attributes
+ * @...: a %NULL-terminated list of attributes
  *
  * Sets the attributes in list as the attributes of @cell_layout.
  *
@@ -711,7 +711,7 @@ gtk_cell_layout_buildable_set_cell_property (GtkCellArea     *area,
 					     const gchar     *value)
 {
   GParamSpec *pspec;
-  GValue gvalue = { 0, };
+  GValue gvalue = G_VALUE_INIT;
   GError *error = NULL;
 
   pspec = gtk_cell_area_class_find_cell_property (GTK_CELL_AREA_GET_CLASS (area), name);

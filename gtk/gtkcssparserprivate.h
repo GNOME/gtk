@@ -20,9 +20,19 @@
 #ifndef __GTK_CSS_PARSER_PRIVATE_H__
 #define __GTK_CSS_PARSER_PRIVATE_H__
 
+#include "gtk/gtkcsstypesprivate.h"
 #include <gtk/gtksymboliccolor.h>
 
 G_BEGIN_DECLS
+
+typedef enum /*< skip >*/ {
+  GTK_CSS_POSITIVE_ONLY = (1 << 0),
+  GTK_CSS_PARSE_PERCENT = (1 << 1),
+  GTK_CSS_PARSE_NUMBER = (1 << 2),
+  GTK_CSS_NUMBER_AS_PIXELS = (1 << 3),
+  GTK_CSS_PARSE_LENGTH = (1 << 4),
+  GTK_CSS_PARSE_ANGLE = (1 << 5)
+} GtkCssNumberParseFlags;
 
 typedef struct _GtkCssParser GtkCssParser;
 
@@ -47,6 +57,8 @@ guint           _gtk_css_parser_get_position      (GtkCssParser          *parser
 gboolean        _gtk_css_parser_is_eof            (GtkCssParser          *parser);
 gboolean        _gtk_css_parser_begins_with       (GtkCssParser          *parser,
                                                    char                   c);
+gboolean        _gtk_css_parser_has_prefix        (GtkCssParser          *parser,
+                                                   const char            *prefix);
 gboolean        _gtk_css_parser_is_string         (GtkCssParser          *parser);
 
 /* IMPORTANT:
@@ -70,14 +82,24 @@ gboolean        _gtk_css_parser_try_uint          (GtkCssParser          *parser
                                                    guint                 *value);
 gboolean        _gtk_css_parser_try_double        (GtkCssParser          *parser,
                                                    gdouble               *value);
+gboolean        _gtk_css_parser_try_length        (GtkCssParser          *parser,
+                                                   int                   *value);
+gboolean        _gtk_css_parser_try_enum          (GtkCssParser          *parser,
+                                                   GType                  enum_type,
+                                                   int                   *value);
 
-void            _gtk_css_parser_skip_whitespace   (GtkCssParser          *parser);
+gboolean        _gtk_css_parser_has_number        (GtkCssParser          *parser);
+gboolean        _gtk_css_parser_read_number       (GtkCssParser          *parser,
+                                                   GtkCssNumber          *number,
+                                                   GtkCssNumberParseFlags flags);
 char *          _gtk_css_parser_read_string       (GtkCssParser          *parser);
-char *          _gtk_css_parser_read_uri          (GtkCssParser          *parser);
 char *          _gtk_css_parser_read_value        (GtkCssParser          *parser);
 GtkSymbolicColor *_gtk_css_parser_read_symbolic_color
                                                   (GtkCssParser          *parser);
+GFile *         _gtk_css_parser_read_url          (GtkCssParser          *parser,
+                                                   GFile                 *base);
 
+void            _gtk_css_parser_skip_whitespace   (GtkCssParser          *parser);
 void            _gtk_css_parser_resync            (GtkCssParser          *parser,
                                                    gboolean               sync_at_semicolon,
                                                    char                   terminator);

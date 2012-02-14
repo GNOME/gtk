@@ -82,7 +82,7 @@
 #include "gtkbox.h"
 #include "gtkwindow.h"
 #include "gtkentry.h"
-#include "gtkmainprivate.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
 
 #include "gtkprivate.h"
@@ -1464,7 +1464,8 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 {
   GtkAllocation allocation;
   gint x, y;
-  gint matches, actions, items, height, x_border, y_border;
+  gint matches, actions, items, height;
+  GtkBorder borders;
   GdkScreen *screen;
   gint monitor_num;
   gint vertical_separator;
@@ -1491,7 +1492,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   x += allocation.x;
   y += allocation.y + (allocation.height - entry_req.height) / 2;
 
-  _gtk_entry_get_borders (GTK_ENTRY (completion->priv->entry), &x_border, &y_border);
+  _gtk_entry_get_borders (GTK_ENTRY (completion->priv->entry), &borders);
 
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
   actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
@@ -1512,9 +1513,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 
   screen = gtk_widget_get_screen (GTK_WIDGET (completion->priv->entry));
   monitor_num = gdk_screen_get_monitor_at_window (screen, window);
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-
-
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
   if (y > monitor.height / 2)
     items = MIN (matches, (((monitor.y + y) - (actions * action_height)) / height) - 1);
@@ -1527,7 +1526,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
     gtk_widget_show (completion->priv->scrolled_window);
 
   if (completion->priv->popup_set_width)
-    width = MIN (allocation.width, monitor.width) - 2 * x_border;
+    width = MIN (allocation.width, monitor.width) - borders.left - borders.right;
   else
     width = -1;
 
@@ -1693,18 +1692,31 @@ gtk_entry_completion_cursor_on_match (GtkEntryCompletion *completion,
   return TRUE;
 }
 
-static gchar *
-gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion)
+/**
+ * gtk_entry_completion_compute_prefix:
+ * @completion: the entry completion
+ * @key: The text to complete for
+ *
+ * Computes the common prefix that is shared by all rows in @completion
+ * that start with @key. If no row matches @key, %NULL will be returned.
+ * Note that a text column must have been set for this function to work,
+ * see gtk_entry_completion_set_text_column() for details. 
+ *
+ * Returns: (transfer: full): The common prefix all rows starting with @key
+ *   or %NULL if no row matches @key.
+ *
+ * Since: 3.4
+ **/
+gchar *
+gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion,
+                                     const char         *key)
 {
   GtkTreeIter iter;
   gchar *prefix = NULL;
   gboolean valid;
-  const gchar *key;
 
   if (completion->priv->text_column < 0)
     return NULL;
-
-  key = gtk_entry_get_text (GTK_ENTRY (completion->priv->entry));
 
   valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (completion->priv->filter_model),
                                          &iter);
@@ -1874,7 +1886,9 @@ gtk_entry_completion_insert_prefix (GtkEntryCompletion *completion)
     g_signal_handler_block (completion->priv->entry,
                             completion->priv->insert_text_id);
 
-  prefix = gtk_entry_completion_compute_prefix (completion);
+  prefix = gtk_entry_completion_compute_prefix (completion,
+                                                gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)));
+
   if (prefix)
     {
       g_signal_emit (completion, entry_completion_signals[INSERT_PREFIX],

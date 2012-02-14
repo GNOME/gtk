@@ -152,7 +152,7 @@ _gdk_x11_cursor_display_finalize (GdkDisplay *display)
       if (gdk_cursor_get_display (GDK_CURSOR (cursor)) == display)
         {
           GSList* olditem;
-          gdk_cursor_unref ((GdkCursor*) cursor);
+          g_object_unref ((GdkCursor*) cursor);
           /* Remove this item from the list */
           *(itemp) = item->next;
           olditem = item;

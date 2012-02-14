@@ -198,7 +198,7 @@ quit_when_idle (gpointer loop)
 {
   g_main_loop_quit (loop);
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -568,6 +568,12 @@ add_tests_for_files_in_directory (GFile *dir)
 int
 main (int argc, char **argv)
 {
+  /* I don't want to fight fuzzy scaling algorithms in GPUs,
+   * so unles you explicitly set it to something else, we
+   * will use Cairo's image surface.
+   */
+  g_setenv ("GDK_RENDERING", "image", FALSE);
+
   if (!parse_command_line (&argc, &argv))
     return 1;
 

@@ -6,6 +6,7 @@ democodedir=$(datadir)/gtk-$(GTK_API_VERSION)/demo
 ## These should be in the order you want them to appear in the
 ## demo app, which means alphabetized by demo title, not filename
 demos =						\
+	application.c				\
 	appwindow.c				\
 	assistant.c				\
 	builder.c				\
@@ -43,6 +44,7 @@ demos =						\
 	textview.c				\
 	textscroll.c				\
 	toolpalette.c				\
+	transparent.c				\
 	tree_store.c				\
 	ui_manager.c
 
@@ -64,13 +66,24 @@ LDADDS = \
 	$(GTK_DEP_LIBS)				\
 	-lm
 
-bin_PROGRAMS = gtk3-demo
+bin_PROGRAMS = gtk3-demo gtk3-demo-application
 
-BUILT_SOURCES = demos.h
+BUILT_SOURCES = demos.h application_resources.c
 
-EXTRA_DIST += 		\
-	$(IMAGEFILES)	\
-	demo.ui
+EXTRA_DIST += 				\
+	$(IMAGEFILES)			\
+	demo.ui				\
+	application.gresource.xml	\
+	application.ui			\
+	menus.ui			\
+	gtk-logo-24.png			\
+	gtk-logo-48.png			\
+	org.gtk.Demo.gschema.xml
+
+gsettings_SCHEMAS = \
+	org.gtk.Demo.gschema.xml
+
+@GSETTINGS_RULES@
 
 demos.h: @REBUILD@ $(demos) geninclude.pl
 	$(AM_V_GEN) (here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos)) > demos.h
@@ -85,8 +98,17 @@ gtk3_demo_DEPENDENCIES = $(DEPS)
 gtk3_demo_LDADD = $(LDADDS)
 gtk3_demo_LDFLAGS = -export-dynamic
 
+gtk3_demo_application_SOURCES = \
+	application-standalone.c \
+	application_resources.c
+
+gtk3_demo_application_LDADD = $(LDADDS)
+
+application_resources.c: application.gresource.xml gtk-logo-24.png gtk-logo-48.png application.ui menus.ui
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $(srcdir)/application.gresource.xml
+
 IMAGEFILES=	alphatest.png		\
-	        apple-red.png		\
+		apple-red.png		\
 		background.jpg		\
 		floppybuddy.gif		\
 		gnome-applets.png	\

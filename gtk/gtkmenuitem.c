@@ -191,13 +191,6 @@ static void gtk_menu_item_set_related_action         (GtkMenuItem          *menu
 static void gtk_menu_item_set_use_action_appearance  (GtkMenuItem          *menu_item, 
                                                       gboolean              use_appearance);
 
-/* Declare deprecated function that need a declaration */
-#ifdef GTK_DISABLE_DEPRECATED
-void       gtk_menu_item_set_right_justified         (GtkMenuItem          *menu_item,
-                                                      gboolean              right_justified);
-gboolean   gtk_menu_item_get_right_justified         (GtkMenuItem          *menu_item);
-#endif  /* GTK_DISABLE_DEPRECATED */
-
 static guint menu_item_signals[LAST_SIGNAL] = { 0 };
 
 static GtkBuildableIface *parent_buildable_iface;
@@ -565,6 +558,21 @@ gtk_menu_item_dispose (GObject *object)
 }
 
 static void
+gtk_menu_item_do_set_right_justified (GtkMenuItem *menu_item,
+                                      gboolean     right_justified)
+{
+  GtkMenuItemPrivate *priv = menu_item->priv;
+
+  right_justified = right_justified != FALSE;
+
+  if (priv->right_justify != right_justified)
+    {
+      priv->right_justify = right_justified;
+      gtk_widget_queue_resize (GTK_WIDGET (menu_item));
+    }
+}
+
+static void
 gtk_menu_item_set_property (GObject      *object,
                             guint         prop_id,
                             const GValue *value,
@@ -575,7 +583,7 @@ gtk_menu_item_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_RIGHT_JUSTIFIED:
-      gtk_menu_item_set_right_justified (menu_item, g_value_get_boolean (value));
+      gtk_menu_item_do_set_right_justified (menu_item, g_value_get_boolean (value));
       break;
     case PROP_SUBMENU:
       gtk_menu_item_set_submenu (menu_item, g_value_get_object (value));
@@ -613,7 +621,7 @@ gtk_menu_item_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_RIGHT_JUSTIFIED:
-      g_value_set_boolean (value, gtk_menu_item_get_right_justified (menu_item));
+      g_value_set_boolean (value, menu_item->priv->right_justify);
       break;
     case PROP_SUBMENU:
       g_value_set_object (value, gtk_menu_item_get_submenu (menu_item));
@@ -666,19 +674,25 @@ gtk_menu_item_detacher (GtkWidget *widget,
 static void
 get_arrow_size (GtkWidget *widget,
                 GtkWidget *child,
-                gint      *size)
+                gint      *size,
+                gint      *spacing)
 {
   GtkStyleContext  *style_context;
   GtkStateFlags     state;
   PangoContext     *context;
   PangoFontMetrics *metrics;
   gfloat            arrow_scaling;
+  gint              arrow_spacing;
 
   g_assert (size);
 
   gtk_widget_style_get (widget,
                         "arrow-scaling", &arrow_scaling,
+                        "arrow-spacing", &arrow_spacing,
                         NULL);
+
+  if (spacing != NULL)
+    *spacing = arrow_spacing;
 
   context = gtk_widget_get_pango_context (child);
   style_context = gtk_widget_get_style_context (child);
@@ -808,20 +822,9 @@ gtk_menu_item_get_preferred_width (GtkWidget *widget,
 
       if ((menu_item->priv->submenu && !GTK_IS_MENU_BAR (parent)) || priv->reserve_indicator)
 	{
-	  guint arrow_spacing;
-	  gint  arrow_size;
-	  
-	  gtk_widget_style_get (widget,
-				"arrow-spacing", &arrow_spacing,
-				NULL);
+	  gint arrow_spacing, arrow_size;
 
-	  get_arrow_size (widget, child, &arrow_size);
-
-          gtk_widget_style_get (widget,
-                                "arrow-spacing", &arrow_spacing,
-                                NULL);
-
-          get_arrow_size (widget, child, &arrow_size);
+	  get_arrow_size (widget, child, &arrow_size, &arrow_spacing);
 
           min_width += arrow_size;
           min_width += arrow_spacing;
@@ -848,9 +851,10 @@ gtk_menu_item_get_preferred_width (GtkWidget *widget,
 }
 
 static void
-gtk_menu_item_get_preferred_height (GtkWidget *widget,
-                                    gint      *minimum_size,
-                                    gint      *natural_size)
+gtk_menu_item_real_get_height (GtkWidget *widget,
+                               gint       for_size,
+                               gint      *minimum_size,
+                               gint      *natural_size)
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   GtkMenuItemPrivate *priv = menu_item->priv;
@@ -865,114 +869,8 @@ gtk_menu_item_get_preferred_height (GtkWidget *widget,
   guint border_width;
   GtkPackDirection pack_dir;
   GtkPackDirection child_pack_dir;
-  gint  min_height, nat_height;
-
-  min_height = nat_height = 0;
-
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_padding (context, state, &padding);
-
-  gtk_widget_style_get (widget,
-                        "horizontal-padding", &horizontal_padding,
-                        NULL);
-
-  bin = GTK_BIN (widget);
-  parent = gtk_widget_get_parent (widget);
-
-  if (GTK_IS_MENU_BAR (parent))
-    {
-      pack_dir = gtk_menu_bar_get_pack_direction (GTK_MENU_BAR (parent));
-      child_pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (parent));
-    }
-  else
-    {
-      pack_dir = GTK_PACK_DIRECTION_LTR;
-      child_pack_dir = GTK_PACK_DIRECTION_LTR;
-    }
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  min_height = (border_width * 2) + padding.top + padding.bottom;
-
-  if ((pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT) &&
-      (child_pack_dir == GTK_PACK_DIRECTION_TTB || child_pack_dir == GTK_PACK_DIRECTION_BTT))
-    min_height += 2 * horizontal_padding;
-
-  nat_height = min_height;
-
-  child = gtk_bin_get_child (bin);
-
-  if (child != NULL && gtk_widget_get_visible (child))
-    {
-      GtkMenuItemPrivate *priv = menu_item->priv;
-      gint child_min, child_nat;
-
-      gtk_widget_get_preferred_height (child, &child_min, &child_nat);
-
-      min_height += child_min;
-      nat_height += child_nat;
-
-      if ((menu_item->priv->submenu && !GTK_IS_MENU_BAR (parent)) || priv->reserve_indicator)
-	{
-	  gint  arrow_size;
-
-          get_arrow_size (widget, child, &arrow_size);
-
-          min_height = MAX (min_height, arrow_size);
-          nat_height = MAX (nat_height, arrow_size);
-        }
-    }
-  else /* separator item */
-    {
-      gboolean wide_separators;
-      gint     separator_height;
-
-      gtk_widget_style_get (widget,
-                            "wide-separators",  &wide_separators,
-                            "separator-height", &separator_height,
-                            NULL);
-
-      if (wide_separators)
-        min_height += separator_height + padding.top;
-      else
-        min_height += padding.top + padding.bottom;
-
-      nat_height = min_height;
-    }
-
-  accel_width = 0;
-  gtk_container_foreach (GTK_CONTAINER (menu_item),
-                         gtk_menu_item_accel_width_foreach,
-                         &accel_width);
-  priv->accelerator_width = accel_width;
-
-  if (minimum_size)
-    *minimum_size = min_height;
-
-  if (natural_size)
-    *natural_size = nat_height;
-}
-
-static void
-gtk_menu_item_get_preferred_height_for_width (GtkWidget *widget,
-                                              gint       for_size,
-                                              gint      *minimum_size,
-                                              gint      *natural_size)
-{
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
-  GtkMenuItemPrivate *priv = menu_item->priv;
-  GtkBin *bin;
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder padding;
-  GtkWidget *child;
-  GtkWidget *parent;
-  guint horizontal_padding;
-  guint border_width;
-  GtkPackDirection pack_dir;
-  GtkPackDirection child_pack_dir;
-  gint  min_height, nat_height;
-  gint  avail_size;
+  gint min_height, nat_height;
+  gint avail_size = 0;
 
   min_height = nat_height = 0;
 
@@ -1001,16 +899,19 @@ gtk_menu_item_get_preferred_height_for_width (GtkWidget *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   min_height   = (border_width * 2) + padding.top + padding.bottom;
 
-  avail_size   = for_size;
-  avail_size  -= (border_width * 2) + padding.left + padding.right;
-
   if ((pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT) &&
       (child_pack_dir == GTK_PACK_DIRECTION_TTB || child_pack_dir == GTK_PACK_DIRECTION_BTT))
     min_height += 2 * horizontal_padding;
 
-  if ((pack_dir == GTK_PACK_DIRECTION_LTR || pack_dir == GTK_PACK_DIRECTION_RTL) &&
-      (child_pack_dir == GTK_PACK_DIRECTION_LTR || child_pack_dir == GTK_PACK_DIRECTION_RTL))
-    avail_size -= 2 * horizontal_padding;
+  if (for_size != -1)
+    {
+      avail_size = for_size;
+      avail_size -= (border_width * 2) + padding.left + padding.right;
+
+      if ((pack_dir == GTK_PACK_DIRECTION_LTR || pack_dir == GTK_PACK_DIRECTION_RTL) &&
+          (child_pack_dir == GTK_PACK_DIRECTION_LTR || child_pack_dir == GTK_PACK_DIRECTION_RTL))
+        avail_size -= 2 * horizontal_padding;
+    }
 
   nat_height = min_height;
 
@@ -1019,35 +920,29 @@ gtk_menu_item_get_preferred_height_for_width (GtkWidget *widget,
   if (child != NULL && gtk_widget_get_visible (child))
     {
       gint child_min, child_nat;
-      gint arrow_size = 0;
-      
+      gint arrow_size = 0, arrow_spacing = 0;
+
       if ((priv->submenu && !GTK_IS_MENU_BAR (parent)) || priv->reserve_indicator)
-	{
-          guint arrow_spacing;
+        get_arrow_size (widget, child, &arrow_size, &arrow_spacing);
 
-          gtk_widget_style_get (widget,
-                                "arrow-spacing", &arrow_spacing,
-                                NULL);
-
-          get_arrow_size (widget, child, &arrow_size);
-
-          avail_size -= arrow_size;
-          avail_size -= arrow_spacing;
+      if (for_size != -1)
+        {
+          avail_size -= (arrow_size + arrow_spacing);
+          gtk_widget_get_preferred_height_for_width (child,
+                                                     avail_size,
+                                                     &child_min,
+                                                     &child_nat);
         }
-
-      gtk_widget_get_preferred_height_for_width (child,
-                                                 avail_size,
-                                                 &child_min,
-                                                 &child_nat);
+      else
+        {
+          gtk_widget_get_preferred_height (child, &child_min, &child_nat);
+        }
 
       min_height += child_min;
       nat_height += child_nat;
 
-      if ((priv->submenu && !GTK_IS_MENU_BAR (parent)) || priv->reserve_indicator)
-	{
-	  min_height = MAX (min_height, arrow_size);
-	  nat_height = MAX (nat_height, arrow_size);
-	}
+      min_height = MAX (min_height, arrow_size);
+      nat_height = MAX (nat_height, arrow_size);
     }
   else /* separator item */
     {
@@ -1060,18 +955,50 @@ gtk_menu_item_get_preferred_height_for_width (GtkWidget *widget,
                             NULL);
 
       if (wide_separators)
-        min_height += separator_height + padding.top;
+        {
+          min_height += separator_height;
+          nat_height += separator_height;
+        }
       else
-        min_height += padding.top + padding.bottom;
-
-      nat_height = min_height;
+        {
+          /* force odd, so that we can have the same space above and
+           * below the line.
+           */
+          if (min_height % 2 == 0)
+            min_height += 1;
+          if (nat_height % 2 == 0)
+            nat_height += 1;
+        }
     }
+
+  accel_width = 0;
+  gtk_container_foreach (GTK_CONTAINER (menu_item),
+                         gtk_menu_item_accel_width_foreach,
+                         &accel_width);
+  priv->accelerator_width = accel_width;
 
   if (minimum_size)
     *minimum_size = min_height;
 
   if (natural_size)
     *natural_size = nat_height;
+}
+
+static void
+gtk_menu_item_get_preferred_height (GtkWidget *widget,
+                                    gint      *minimum_size,
+                                    gint      *natural_size)
+{
+  gtk_menu_item_real_get_height (widget, -1, minimum_size, natural_size);
+}
+
+static void
+gtk_menu_item_get_preferred_height_for_width (GtkWidget *widget,
+                                              gint       for_size,
+                                              gint      *minimum_size,
+                                              gint      *natural_size)
+{
+  gtk_menu_item_real_get_height (widget, for_size, minimum_size, natural_size);
 }
 
 static void
@@ -1535,14 +1462,9 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
 
       if ((priv->submenu && !GTK_IS_MENU_BAR (parent)) || priv->reserve_indicator)
 	{
-	  guint arrow_spacing;
-	  gint  arrow_size;
+	  gint arrow_spacing, arrow_size;
 
-	  gtk_widget_style_get (widget,
-				"arrow-spacing", &arrow_spacing,
-				NULL);
-
-	  get_arrow_size (widget, child, &arrow_size);
+	  get_arrow_size (widget, child, &arrow_size, &arrow_spacing);
 
 	  if (direction == GTK_TEXT_DIR_RTL)
 	    child_allocation.x += arrow_size + arrow_spacing;
@@ -1682,7 +1604,6 @@ gtk_menu_item_draw (GtkWidget *widget,
   parent = gtk_widget_get_parent (widget);
 
   gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
 
   gtk_style_context_get_padding (context, state, &padding);
 
@@ -1709,7 +1630,7 @@ gtk_menu_item_draw (GtkWidget *widget,
                             "horizontal-padding", &horizontal_padding,
                             NULL);
 
-      get_arrow_size (widget, child, &arrow_size);
+      get_arrow_size (widget, child, &arrow_size, NULL);
 
       if (direction == GTK_TEXT_DIR_LTR)
         {
@@ -1739,16 +1660,16 @@ gtk_menu_item_draw (GtkWidget *widget,
                             NULL);
       if (wide_separators)
         gtk_render_frame (context, cr,
-                          horizontal_padding + padding.left,
-                          (height - separator_height - padding.top) / 2,
-                          width - (2 * horizontal_padding) - padding.left - padding.right,
+                          x + horizontal_padding + padding.left,
+                          y + padding.top,
+                          w - (2 * horizontal_padding) - padding.left - padding.right,
                           separator_height);
       else
         gtk_render_line (context, cr,
-                         horizontal_padding + padding.left,
-                         (height - padding.top) / 2,
-                         width - horizontal_padding - padding.right - 1,
-                         (height - padding.top) / 2);
+                         x + horizontal_padding + padding.left,
+                         y + padding.top,
+                         x + w - horizontal_padding - padding.right - 1,
+                         y + padding.top);
     }
 
   GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->draw (widget, cr);
@@ -2156,7 +2077,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   monitor_num = gdk_screen_get_monitor_at_window (screen, priv->event_window);
   if (monitor_num < 0)
     monitor_num = 0;
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
   if (!gdk_window_get_origin (gtk_widget_get_window (widget), &tx, &ty))
     {
@@ -2175,21 +2096,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   available_right = monitor.x + monitor.width - (tx + allocation.width);
 
   parent = gtk_widget_get_parent (widget);
-  if (GTK_IS_MENU_BAR (parent))
-    {
-      priv->from_menubar = TRUE;
-    }
-  else if (GTK_IS_MENU (parent))
-    {
-      if (GTK_MENU (parent)->priv->parent_menu_item)
-        priv->from_menubar = GTK_MENU_ITEM (GTK_MENU (parent)->priv->parent_menu_item)->priv->from_menubar;
-      else
-        priv->from_menubar = FALSE;
-    }
-  else
-    {
-      priv->from_menubar = FALSE;
-    }
+  priv->from_menubar = GTK_IS_MENU_BAR (parent);
 
   switch (priv->submenu_placement)
     {
@@ -2299,17 +2206,9 @@ void
 gtk_menu_item_set_right_justified (GtkMenuItem *menu_item,
                                    gboolean     right_justified)
 {
-  GtkMenuItemPrivate *priv = menu_item->priv;
-
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
-  right_justified = right_justified != FALSE;
-
-  if (priv->right_justify != right_justified)
-    {
-      priv->right_justify = right_justified;
-      gtk_widget_queue_resize (GTK_WIDGET (menu_item));
-    }
+  gtk_menu_item_do_set_right_justified (menu_item, right_justified);
 }
 
 /**

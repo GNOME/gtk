@@ -6,7 +6,7 @@
  * GtkCellRenderer::editing-started signal to do custom setup of the
  * editable widget.
  *
- * The cell renderers used in this demo are GtkCellRendererText, 
+ * The cell renderers used in this demo are GtkCellRendererText,
  * GtkCellRendererCombo and GtkCellRendererProgress.
  */
 
@@ -48,27 +48,27 @@ add_items (void)
   g_return_if_fail (articles != NULL);
 
   foo.number = 3;
-  foo.product = "bottles of coke";
+  foo.product = g_strdup ("bottles of coke");
   foo.yummy = 20;
   g_array_append_vals (articles, &foo, 1);
 
   foo.number = 5;
-  foo.product = "packages of noodles";
+  foo.product = g_strdup ("packages of noodles");
   foo.yummy = 50;
   g_array_append_vals (articles, &foo, 1);
 
   foo.number = 2;
-  foo.product = "packages of chocolate chip cookies";
+  foo.product = g_strdup ("packages of chocolate chip cookies");
   foo.yummy = 90;
   g_array_append_vals (articles, &foo, 1);
 
   foo.number = 1;
-  foo.product = "can vanilla ice cream";
+  foo.product = g_strdup ("can vanilla ice cream");
   foo.yummy = 60;
   g_array_append_vals (articles, &foo, 1);
 
   foo.number = 6;
-  foo.product = "eggs";
+  foo.product = g_strdup ("eggs");
   foo.yummy = 10;
   g_array_append_vals (articles, &foo, 1);
 }
@@ -205,7 +205,7 @@ editing_started (GtkCellRenderer *cell,
                  const gchar     *path,
                  gpointer         data)
 {
-  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (editable), 
+  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (editable),
                                         separator_row, NULL, NULL);
 }
 
@@ -259,7 +259,7 @@ cell_edited (GtkCellRendererText *cell,
 }
 
 static void
-add_columns (GtkTreeView  *treeview, 
+add_columns (GtkTreeView  *treeview,
              GtkTreeModel *items_model,
              GtkTreeModel *numbers_model)
 {
@@ -306,8 +306,6 @@ add_columns (GtkTreeView  *treeview,
                                                -1, "Yummy", renderer,
                                                "value", COLUMN_ITEM_YUMMY,
                                                NULL);
-  
-
 }
 
 GtkWidget *

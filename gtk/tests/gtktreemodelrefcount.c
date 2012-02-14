@@ -239,7 +239,12 @@ check_iter (GtkTreeModelRefCount *ref_model,
     }
 
   if (may_assert)
-    g_assert_cmpint (expected_ref_count, ==, info->ref_count);
+    {
+      if (expected_ref_count == 0)
+        g_assert_cmpint (expected_ref_count, ==, info->ref_count);
+      else
+        g_assert_cmpint (expected_ref_count, <=, info->ref_count);
+    }
 
   return expected_ref_count == info->ref_count;
 }

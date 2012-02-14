@@ -149,8 +149,10 @@ void       gtk_entry_set_has_frame              (GtkEntry      *entry,
                                                  gboolean       setting);
 gboolean   gtk_entry_get_has_frame              (GtkEntry      *entry);
 
+GDK_DEPRECATED
 void             gtk_entry_set_inner_border     (GtkEntry        *entry,
                                                  const GtkBorder *border);
+GDK_DEPRECATED
 const GtkBorder* gtk_entry_get_inner_border     (GtkEntry        *entry);
 
 void       gtk_entry_set_overwrite_mode         (GtkEntry      *entry,

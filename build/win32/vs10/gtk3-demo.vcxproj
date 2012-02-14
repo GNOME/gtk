@@ -202,6 +202,7 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\textscroll.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\textview.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\toolpalette.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\transparent.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\tree_store.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\ui_manager.c" />
   </ItemGroup>

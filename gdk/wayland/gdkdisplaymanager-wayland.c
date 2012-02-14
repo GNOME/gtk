@@ -47,6 +47,9 @@ struct _GdkWaylandDisplayManager
 
   GdkDisplay *default_display;
   GSList *displays;
+
+  GHashTable *name_to_atoms;
+  guint next_atom;
 };
 
 struct _GdkWaylandDisplayManagerClass
@@ -92,18 +95,51 @@ gdk_wayland_display_manager_get_default_display (GdkDisplayManager *manager)
 }
 
 static GdkAtom
-gdk_wayland_display_manager_atom_intern (GdkDisplayManager *manager,
+gdk_wayland_display_manager_atom_intern (GdkDisplayManager *manager_in,
 					 const gchar       *atom_name,
 					 gboolean           dup)
 {
-  return 0;
+  GdkWaylandDisplayManager *manager = GDK_WAYLAND_DISPLAY_MANAGER (manager_in);
+  GdkAtom atom;
+  gpointer data;
+  const gchar *atom_name_intern;
+
+  atom_name_intern = g_intern_string (atom_name);
+  data = g_hash_table_lookup (manager->name_to_atoms, atom_name_intern);
+
+  if (data)
+    {
+      atom = GDK_POINTER_TO_ATOM (data);
+      return atom;
+    }
+
+  atom = _GDK_MAKE_ATOM (manager->next_atom);
+
+  g_hash_table_insert (manager->name_to_atoms,
+                       (gchar *)atom_name_intern,
+                       GDK_ATOM_TO_POINTER (atom));
+  manager->next_atom++;
+
+  return atom;
 }
 
 static gchar *
-gdk_wayland_display_manager_get_atom_name (GdkDisplayManager *manager,
+gdk_wayland_display_manager_get_atom_name (GdkDisplayManager *manager_in,
 					   GdkAtom            atom)
 {
-  return 0;
+  GdkWaylandDisplayManager *manager = GDK_WAYLAND_DISPLAY_MANAGER (manager_in);
+  GHashTableIter iter;
+  gpointer key, value;
+
+  g_hash_table_iter_init (&iter, manager->name_to_atoms);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      if (GDK_POINTER_TO_ATOM (value) == atom)
+        return g_strdup (key);
+    }
+
+  return NULL;
 }
 
 static guint
@@ -139,132 +175,6 @@ gdk_wayland_display_manager_get_keyval_name (GdkDisplayManager *manager,
 }
 
 static void
-gdk_wayland_display_manager_keyval_convert_case (GdkDisplayManager *manager,
-						 guint              symbol,
-						 guint             *lower,
-						 guint             *upper)
-{
-  guint xlower = symbol;
-  guint xupper = symbol;
-
-  /* Check for directly encoded 24-bit UCS characters: */
-  if ((symbol & 0xff000000) == 0x01000000)
-    {
-      if (lower)
-	*lower = gdk_unicode_to_keyval (g_unichar_tolower (symbol & 0x00ffffff));
-      if (upper)
-	*upper = gdk_unicode_to_keyval (g_unichar_toupper (symbol & 0x00ffffff));
-      return;
-    }
-
-  switch (symbol >> 8)
-    {
-    case 0: /* Latin 1 */
-      if ((symbol >= GDK_KEY_A) && (symbol <= GDK_KEY_Z))
-	xlower += (GDK_KEY_a - GDK_KEY_A);
-      else if ((symbol >= GDK_KEY_a) && (symbol <= GDK_KEY_z))
-	xupper -= (GDK_KEY_a - GDK_KEY_A);
-      else if ((symbol >= GDK_KEY_Agrave) && (symbol <= GDK_KEY_Odiaeresis))
-	xlower += (GDK_KEY_agrave - GDK_KEY_Agrave);
-      else if ((symbol >= GDK_KEY_agrave) && (symbol <= GDK_KEY_odiaeresis))
-	xupper -= (GDK_KEY_agrave - GDK_KEY_Agrave);
-      else if ((symbol >= GDK_KEY_Ooblique) && (symbol <= GDK_KEY_Thorn))
-	xlower += (GDK_KEY_oslash - GDK_KEY_Ooblique);
-      else if ((symbol >= GDK_KEY_oslash) && (symbol <= GDK_KEY_thorn))
-	xupper -= (GDK_KEY_oslash - GDK_KEY_Ooblique);
-      break;
-
-    case 1: /* Latin 2 */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol == GDK_KEY_Aogonek)
-	xlower = GDK_KEY_aogonek;
-      else if (symbol >= GDK_KEY_Lstroke && symbol <= GDK_KEY_Sacute)
-	xlower += (GDK_KEY_lstroke - GDK_KEY_Lstroke);
-      else if (symbol >= GDK_KEY_Scaron && symbol <= GDK_KEY_Zacute)
-	xlower += (GDK_KEY_scaron - GDK_KEY_Scaron);
-      else if (symbol >= GDK_KEY_Zcaron && symbol <= GDK_KEY_Zabovedot)
-	xlower += (GDK_KEY_zcaron - GDK_KEY_Zcaron);
-      else if (symbol == GDK_KEY_aogonek)
-	xupper = GDK_KEY_Aogonek;
-      else if (symbol >= GDK_KEY_lstroke && symbol <= GDK_KEY_sacute)
-	xupper -= (GDK_KEY_lstroke - GDK_KEY_Lstroke);
-      else if (symbol >= GDK_KEY_scaron && symbol <= GDK_KEY_zacute)
-	xupper -= (GDK_KEY_scaron - GDK_KEY_Scaron);
-      else if (symbol >= GDK_KEY_zcaron && symbol <= GDK_KEY_zabovedot)
-	xupper -= (GDK_KEY_zcaron - GDK_KEY_Zcaron);
-      else if (symbol >= GDK_KEY_Racute && symbol <= GDK_KEY_Tcedilla)
-	xlower += (GDK_KEY_racute - GDK_KEY_Racute);
-      else if (symbol >= GDK_KEY_racute && symbol <= GDK_KEY_tcedilla)
-	xupper -= (GDK_KEY_racute - GDK_KEY_Racute);
-      break;
-
-    case 2: /* Latin 3 */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol >= GDK_KEY_Hstroke && symbol <= GDK_KEY_Hcircumflex)
-	xlower += (GDK_KEY_hstroke - GDK_KEY_Hstroke);
-      else if (symbol >= GDK_KEY_Gbreve && symbol <= GDK_KEY_Jcircumflex)
-	xlower += (GDK_KEY_gbreve - GDK_KEY_Gbreve);
-      else if (symbol >= GDK_KEY_hstroke && symbol <= GDK_KEY_hcircumflex)
-	xupper -= (GDK_KEY_hstroke - GDK_KEY_Hstroke);
-      else if (symbol >= GDK_KEY_gbreve && symbol <= GDK_KEY_jcircumflex)
-	xupper -= (GDK_KEY_gbreve - GDK_KEY_Gbreve);
-      else if (symbol >= GDK_KEY_Cabovedot && symbol <= GDK_KEY_Scircumflex)
-	xlower += (GDK_KEY_cabovedot - GDK_KEY_Cabovedot);
-      else if (symbol >= GDK_KEY_cabovedot && symbol <= GDK_KEY_scircumflex)
-	xupper -= (GDK_KEY_cabovedot - GDK_KEY_Cabovedot);
-      break;
-
-    case 3: /* Latin 4 */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol >= GDK_KEY_Rcedilla && symbol <= GDK_KEY_Tslash)
-	xlower += (GDK_KEY_rcedilla - GDK_KEY_Rcedilla);
-      else if (symbol >= GDK_KEY_rcedilla && symbol <= GDK_KEY_tslash)
-	xupper -= (GDK_KEY_rcedilla - GDK_KEY_Rcedilla);
-      else if (symbol == GDK_KEY_ENG)
-	xlower = GDK_KEY_eng;
-      else if (symbol == GDK_KEY_eng)
-	xupper = GDK_KEY_ENG;
-      else if (symbol >= GDK_KEY_Amacron && symbol <= GDK_KEY_Umacron)
-	xlower += (GDK_KEY_amacron - GDK_KEY_Amacron);
-      else if (symbol >= GDK_KEY_amacron && symbol <= GDK_KEY_umacron)
-	xupper -= (GDK_KEY_amacron - GDK_KEY_Amacron);
-      break;
-
-    case 6: /* Cyrillic */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol >= GDK_KEY_Serbian_DJE && symbol <= GDK_KEY_Serbian_DZE)
-	xlower -= (GDK_KEY_Serbian_DJE - GDK_KEY_Serbian_dje);
-      else if (symbol >= GDK_KEY_Serbian_dje && symbol <= GDK_KEY_Serbian_dze)
-	xupper += (GDK_KEY_Serbian_DJE - GDK_KEY_Serbian_dje);
-      else if (symbol >= GDK_KEY_Cyrillic_YU && symbol <= GDK_KEY_Cyrillic_HARDSIGN)
-	xlower -= (GDK_KEY_Cyrillic_YU - GDK_KEY_Cyrillic_yu);
-      else if (symbol >= GDK_KEY_Cyrillic_yu && symbol <= GDK_KEY_Cyrillic_hardsign)
-	xupper += (GDK_KEY_Cyrillic_YU - GDK_KEY_Cyrillic_yu);
-      break;
-
-    case 7: /* Greek */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol >= GDK_KEY_Greek_ALPHAaccent && symbol <= GDK_KEY_Greek_OMEGAaccent)
-	xlower += (GDK_KEY_Greek_alphaaccent - GDK_KEY_Greek_ALPHAaccent);
-      else if (symbol >= GDK_KEY_Greek_alphaaccent && symbol <= GDK_KEY_Greek_omegaaccent &&
-	       symbol != GDK_KEY_Greek_iotaaccentdieresis &&
-	       symbol != GDK_KEY_Greek_upsilonaccentdieresis)
-	xupper -= (GDK_KEY_Greek_alphaaccent - GDK_KEY_Greek_ALPHAaccent);
-      else if (symbol >= GDK_KEY_Greek_ALPHA && symbol <= GDK_KEY_Greek_OMEGA)
-	xlower += (GDK_KEY_Greek_alpha - GDK_KEY_Greek_ALPHA);
-      else if (symbol >= GDK_KEY_Greek_alpha && symbol <= GDK_KEY_Greek_omega &&
-	       symbol != GDK_KEY_Greek_finalsmallsigma)
-	xupper -= (GDK_KEY_Greek_alpha - GDK_KEY_Greek_ALPHA);
-      break;
-    }
-
-  if (lower)
-    *lower = xlower;
-  if (upper)
-    *upper = xupper;
-}
-
-static void
 gdk_wayland_display_manager_class_init (GdkWaylandDisplayManagerClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -280,12 +190,46 @@ gdk_wayland_display_manager_class_init (GdkWaylandDisplayManagerClass *class)
   manager_class->get_atom_name = gdk_wayland_display_manager_get_atom_name;
   manager_class->lookup_keyval = gdk_wayland_display_manager_lookup_keyval;
   manager_class->get_keyval_name = gdk_wayland_display_manager_get_keyval_name;
-  manager_class->keyval_convert_case = gdk_wayland_display_manager_keyval_convert_case;
 }
+
+struct {
+  const gchar *name;
+  guint atom_id;
+} predefined_atoms[] = {
+      { "NONE", 0 },
+      { "PRIMARY", 1 },
+      { "SECONDARY", 2 },
+      { "ATOM", 4 },
+      { "BITMAP", 5 },
+      { "COLORMAP", 7 },
+      { "DRAWABLE", 17 },
+      { "INTEGER", 19 },
+      { "PIXMAP", 20 },
+      { "STRING", 31 },
+      { "WINDOW", 33 },
+      { "CLIPBOARD", 69 },
+};
 
 static void
 gdk_wayland_display_manager_init (GdkWaylandDisplayManager *manager)
 {
+  gint i;
+
+  manager->name_to_atoms = g_hash_table_new (NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (predefined_atoms); i++)
+    {
+      GdkAtom atom;
+      const gchar *atom_name = predefined_atoms[i].name;
+
+      atom = _GDK_MAKE_ATOM (predefined_atoms[i].atom_id);
+      g_hash_table_insert (manager->name_to_atoms,
+                           (gchar *)g_intern_static_string (atom_name),
+                           GDK_ATOM_TO_POINTER (atom));
+    }
+
+  manager->next_atom =
+    predefined_atoms[G_N_ELEMENTS (predefined_atoms) - 1].atom_id + 1;
 }
 
 void

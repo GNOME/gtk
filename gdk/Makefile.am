@@ -17,6 +17,7 @@ CLEANFILES =
 
 EXTRA_DIST += 			\
 	keynames.txt		\
+	keynames-translate.txt	\
 	keyname-table.h		\
 	gdkkeynames.c		\
 	gen-keyname-table.pl	\
@@ -112,6 +113,7 @@ gdk_c_sources = 				\
 	gdkcairo.c				\
 	gdkcolor.c				\
 	gdkcursor.c				\
+	gdkdeprecated.c				\
 	gdkdevice.c				\
 	gdkdevicemanager.c			\
 	gdkdisplay.c				\

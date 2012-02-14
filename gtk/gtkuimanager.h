@@ -126,9 +126,12 @@ typedef enum {
 
 GType          gtk_ui_manager_get_type            (void) G_GNUC_CONST;
 GtkUIManager  *gtk_ui_manager_new                 (void);
+GDK_DEPRECATED
 void           gtk_ui_manager_set_add_tearoffs    (GtkUIManager          *manager,
-						   gboolean               add_tearoffs);
+                                                   gboolean               add_tearoffs);
+GDK_DEPRECATED
 gboolean       gtk_ui_manager_get_add_tearoffs    (GtkUIManager          *manager);
+
 void           gtk_ui_manager_insert_action_group (GtkUIManager          *manager,
 						   GtkActionGroup        *action_group,
 						   gint                   pos);
@@ -148,6 +151,9 @@ guint          gtk_ui_manager_add_ui_from_string  (GtkUIManager          *manage
 						   GError               **error);
 guint          gtk_ui_manager_add_ui_from_file    (GtkUIManager          *manager,
 						   const gchar           *filename,
+						   GError               **error);
+guint          gtk_ui_manager_add_ui_from_resource(GtkUIManager          *manager,
+						   const gchar           *resource_path,
 						   GError               **error);
 void           gtk_ui_manager_add_ui              (GtkUIManager          *manager,
 						   guint                  merge_id,

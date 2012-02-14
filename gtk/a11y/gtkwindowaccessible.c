@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include <gtk/gtkx.h>
+#include <gtk/gtk.h>
 
 #include "gtkwindowaccessible.h"
 #include "gtktoplevelaccessible.h"
@@ -91,10 +91,6 @@ gtk_window_accessible_initialize (AtkObject *obj,
 {
   GtkWidget *widget = GTK_WIDGET (data);
   const gchar *name;
-
-  /* A GtkWindowAccessible can be created for a GtkHandleBox or a GtkWindow */
-  if (!GTK_IS_WINDOW (widget) && !GTK_IS_HANDLE_BOX (widget))
-    return;
 
   ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->initialize (obj, data);
 

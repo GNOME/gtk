@@ -188,10 +188,10 @@ void gtk_text_view_window_to_buffer_coords (GtkTextView       *text_view,
                                             gint              *buffer_x,
                                             gint              *buffer_y);
 
-#ifndef GTK_DISABLE_DEPRECATED
+GDK_DEPRECATED_FOR(gtk_scrollable_get_hadjustment)
 GtkAdjustment*   gtk_text_view_get_hadjustment (GtkTextView   *text_view);
+GDK_DEPRECATED_FOR(gtk_scrollable_get_vadjustment)
 GtkAdjustment*   gtk_text_view_get_vadjustment (GtkTextView   *text_view);
-#endif
 
 GdkWindow*        gtk_text_view_get_window      (GtkTextView       *text_view,
                                                  GtkTextWindowType  win);

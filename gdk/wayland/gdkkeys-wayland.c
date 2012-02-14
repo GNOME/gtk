@@ -515,12 +515,10 @@ gdk_wayland_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
 
   wayland_keymap = GDK_WAYLAND_KEYMAP (keymap);
 
-  for (i = 3; i < 8; i++)
+  for (i = 4; i < 8; i++)
     {
       if ((1 << i) & *state)
 	{
-	  if (wayland_keymap->modmap[i] & GDK_MOD1_MASK)
-	    *state |= GDK_MOD1_MASK;
 	  if (wayland_keymap->modmap[i] & GDK_SUPER_MASK)
 	    *state |= GDK_SUPER_MASK;
 	  if (wayland_keymap->modmap[i] & GDK_HYPER_MASK)
@@ -540,7 +538,7 @@ gdk_wayland_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
   };
   int i, j;
   GdkWaylandKeymap *wayland_keymap;
-  gboolean retval;
+  gboolean retval = TRUE;
 
   wayland_keymap = GDK_WAYLAND_KEYMAP (keymap);
 
@@ -548,7 +546,7 @@ gdk_wayland_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
     {
       if (*state & vmods[j])
 	{
-	  for (i = 3; i < 8; i++)
+	  for (i = 4; i < 8; i++)
 	    {
 	      if (wayland_keymap->modmap[i] & vmods[j])
 		{

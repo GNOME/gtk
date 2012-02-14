@@ -114,6 +114,8 @@ void                gtk_entry_completion_set_match_func         (GtkEntryComplet
 void                gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion          *completion,
                                                                  gint                         length);
 gint                gtk_entry_completion_get_minimum_key_length (GtkEntryCompletion          *completion);
+gchar *             gtk_entry_completion_compute_prefix         (GtkEntryCompletion          *completion,
+                                                                 const char                  *key);
 void                gtk_entry_completion_complete               (GtkEntryCompletion          *completion);
 void                gtk_entry_completion_insert_prefix          (GtkEntryCompletion          *completion);
 

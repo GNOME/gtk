@@ -4,18 +4,18 @@
 }
 
 GtkWidget {
-  border-right-width: 5;
+  border-right-width: 5px;
 }
 
 GtkEntry {
-  border-width: 10 20;
+  border-width: 10px 20px;
 }
 
 .entry {
-  border-left-width: 10;
-  border-right-width: 10;
+  border-left-width: 10px;
+  border-right-width: 10px;
 }
 
 #reference {
-  border-width: 10;
+  border-width: 10px;
 }

@@ -97,7 +97,7 @@ scribble_button_press_event (GtkWidget      *widget,
   if (surface == NULL)
     return FALSE; /* paranoia check, in case we haven't gotten a configure event */
 
-  if (event->button == 1)
+  if (event->button == GDK_BUTTON_PRIMARY)
     draw_brush (widget, event->x, event->y);
 
   /* We've handled the event, stop processing */
@@ -126,7 +126,7 @@ scribble_motion_notify_event (GtkWidget      *widget,
    * can cope.
    */
 
-  gdk_window_get_pointer (event->window, &x, &y, &state);
+  gdk_window_get_device_position (event->window, event->device, &x, &y, &state);
 
   if (state & GDK_BUTTON1_MASK)
     draw_brush (widget, x, y);

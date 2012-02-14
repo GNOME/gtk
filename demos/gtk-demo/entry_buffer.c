@@ -20,17 +20,17 @@ do_entry_buffer (GtkWidget *do_widget)
   if (!window)
   {
     window = gtk_dialog_new_with_buttons ("GtkEntryBuffer",
-					  GTK_WINDOW (do_widget),
-					  0,
-					  GTK_STOCK_CLOSE,
-					  GTK_RESPONSE_NONE,
-					  NULL);
+                                          GTK_WINDOW (do_widget),
+                                          0,
+                                          GTK_STOCK_CLOSE,
+                                          GTK_RESPONSE_NONE,
+                                          NULL);
     gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
     g_signal_connect (window, "response",
-		      G_CALLBACK (gtk_widget_destroy), NULL);
+                      G_CALLBACK (gtk_widget_destroy), NULL);
     g_signal_connect (window, "destroy",
-		      G_CALLBACK (gtk_widget_destroyed), &window);
+                      G_CALLBACK (gtk_widget_destroyed), &window);
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
@@ -64,5 +64,3 @@ do_entry_buffer (GtkWidget *do_widget)
 
   return window;
 }
-
-

@@ -271,7 +271,7 @@ struct _GtkCalendarPrivate
   guint day_name_h;
   guint main_h;
 
-  guint arrow_state[4];
+  guint arrow_prelight : 4;
   guint arrow_width;
   guint max_month_width;
   guint max_year_width;
@@ -1594,11 +1594,9 @@ calendar_realize_arrows (GtkCalendar *calendar)
                                                &attributes,
                                                attributes_mask);
 
-          if (!gtk_widget_is_sensitive (widget))
-            priv->arrow_state[i] = GTK_STATE_FLAG_INSENSITIVE;
-
           gdk_window_set_user_data (priv->arrow_win[i], widget);
         }
+      priv->arrow_prelight = 0x0;
     }
   else
     {
@@ -2590,6 +2588,7 @@ calendar_paint_day (GtkCalendar *calendar,
   g_return_if_fail (col < 7);
 
   context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
   day = priv->day[row][col];
   show_details = (priv->display_flags & GTK_CALENDAR_SHOW_DETAILS);
@@ -2598,30 +2597,24 @@ calendar_paint_day (GtkCalendar *calendar,
 
   gtk_style_context_save (context);
 
-  if (!gtk_widget_get_sensitive (widget))
-    state |= GTK_STATE_FLAG_INSENSITIVE;
+  state &= ~(GTK_STATE_FLAG_INCONSISTENT | GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_SELECTED);
+
+  if (priv->day_month[row][col] == MONTH_PREV ||
+      priv->day_month[row][col] == MONTH_NEXT)
+    state |= GTK_STATE_FLAG_INCONSISTENT;
   else
     {
-      if (gtk_widget_has_focus (widget))
-        state |= GTK_STATE_FLAG_FOCUSED;
+      if (priv->marked_date[day-1])
+        state |= GTK_STATE_FLAG_ACTIVE;
 
-      if (priv->day_month[row][col] == MONTH_PREV ||
-          priv->day_month[row][col] == MONTH_NEXT)
-        state |= GTK_STATE_FLAG_INCONSISTENT;
-      else
+      if (priv->selected_day == day)
         {
-          if (priv->marked_date[day-1])
-            state |= GTK_STATE_FLAG_ACTIVE;
+          state |= GTK_STATE_FLAG_SELECTED;
 
-          if (priv->selected_day == day)
-            {
-              state |= GTK_STATE_FLAG_SELECTED;
-
-              gtk_style_context_set_state (context, state);
-              gtk_render_background (context, cr,
-                                     day_rect.x, day_rect.y,
-                                     day_rect.width, day_rect.height);
-            }
+          gtk_style_context_set_state (context, state);
+          gtk_render_background (context, cr,
+                                 day_rect.x, day_rect.y,
+                                 day_rect.width, day_rect.height);
         }
     }
 
@@ -2782,7 +2775,12 @@ calendar_paint_arrow (GtkCalendar *calendar,
   cairo_save (cr);
 
   context = gtk_widget_get_style_context (widget);
-  state = priv->arrow_state[arrow];
+  state = gtk_widget_get_state_flags (widget);
+
+  if (priv->arrow_prelight & (1 << arrow))
+    state |= GTK_STATE_FLAG_PRELIGHT;
+  else
+    state &= ~(GTK_STATE_FLAG_PRELIGHT);
 
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
@@ -2988,7 +2986,7 @@ calendar_main_button_press (GtkCalendar    *calendar,
       if (!gtk_widget_has_focus (widget))
         gtk_widget_grab_focus (widget);
 
-      if (event->button == 1)
+      if (event->button == GDK_BUTTON_PRIMARY)
         {
           priv->in_drag = 1;
           priv->drag_start_x = x;
@@ -3029,7 +3027,7 @@ gtk_calendar_button_press (GtkWidget      *widget,
           /* only call the action on single click, not double */
           if (event->type == GDK_BUTTON_PRESS)
             {
-              if (event->button == 1)
+              if (event->button == GDK_BUTTON_PRIMARY)
                 calendar_start_spinning (calendar, arrow);
 
               calendar_arrow_action (calendar, arrow);
@@ -3049,7 +3047,7 @@ gtk_calendar_button_release (GtkWidget    *widget,
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
 
-  if (event->button == 1)
+  if (event->button == GDK_BUTTON_PRIMARY)
     {
       calendar_stop_spinning (calendar);
 
@@ -3096,25 +3094,25 @@ gtk_calendar_enter_notify (GtkWidget        *widget,
 
   if (event->window == priv->arrow_win[ARROW_MONTH_LEFT])
     {
-      priv->arrow_state[ARROW_MONTH_LEFT] |= GTK_STATE_FLAG_PRELIGHT;
+      priv->arrow_prelight |= (1 << ARROW_MONTH_LEFT);
       calendar_invalidate_arrow (calendar, ARROW_MONTH_LEFT);
     }
 
   if (event->window == priv->arrow_win[ARROW_MONTH_RIGHT])
     {
-      priv->arrow_state[ARROW_MONTH_RIGHT] |= GTK_STATE_FLAG_PRELIGHT;
+      priv->arrow_prelight |= (1 << ARROW_MONTH_RIGHT);
       calendar_invalidate_arrow (calendar, ARROW_MONTH_RIGHT);
     }
 
   if (event->window == priv->arrow_win[ARROW_YEAR_LEFT])
     {
-      priv->arrow_state[ARROW_YEAR_LEFT] |= GTK_STATE_FLAG_PRELIGHT;
+      priv->arrow_prelight |= (1 << ARROW_YEAR_LEFT);
       calendar_invalidate_arrow (calendar, ARROW_YEAR_LEFT);
     }
 
   if (event->window == priv->arrow_win[ARROW_YEAR_RIGHT])
     {
-      priv->arrow_state[ARROW_YEAR_RIGHT] |= GTK_STATE_FLAG_PRELIGHT;
+      priv->arrow_prelight |= (1 << ARROW_YEAR_RIGHT);
       calendar_invalidate_arrow (calendar, ARROW_YEAR_RIGHT);
     }
 
@@ -3130,25 +3128,25 @@ gtk_calendar_leave_notify (GtkWidget        *widget,
 
   if (event->window == priv->arrow_win[ARROW_MONTH_LEFT])
     {
-      priv->arrow_state[ARROW_MONTH_LEFT] &= ~(GTK_STATE_FLAG_PRELIGHT);
+      priv->arrow_prelight &= ~(1 << ARROW_MONTH_LEFT);
       calendar_invalidate_arrow (calendar, ARROW_MONTH_LEFT);
     }
 
   if (event->window == priv->arrow_win[ARROW_MONTH_RIGHT])
     {
-      priv->arrow_state[ARROW_MONTH_RIGHT] &= ~(GTK_STATE_FLAG_PRELIGHT);
+      priv->arrow_prelight &= ~(1 << ARROW_MONTH_RIGHT);
       calendar_invalidate_arrow (calendar, ARROW_MONTH_RIGHT);
     }
 
   if (event->window == priv->arrow_win[ARROW_YEAR_LEFT])
     {
-      priv->arrow_state[ARROW_YEAR_LEFT] &= ~(GTK_STATE_FLAG_PRELIGHT);
+      priv->arrow_prelight &= ~(1 << ARROW_YEAR_LEFT);
       calendar_invalidate_arrow (calendar, ARROW_YEAR_LEFT);
     }
 
   if (event->window == priv->arrow_win[ARROW_YEAR_RIGHT])
     {
-      priv->arrow_state[ARROW_YEAR_RIGHT] &= ~(GTK_STATE_FLAG_PRELIGHT);
+      priv->arrow_prelight &= ~(1 << ARROW_YEAR_RIGHT);
       calendar_invalidate_arrow (calendar, ARROW_YEAR_RIGHT);
     }
 
@@ -3335,19 +3333,12 @@ gtk_calendar_state_flags_changed (GtkWidget     *widget,
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
-  int i;
 
   if (!gtk_widget_is_sensitive (widget))
     {
       priv->in_drag = 0;
       calendar_stop_spinning (calendar);
     }
-
-  for (i = 0; i < 4; i++)
-    if (gtk_widget_is_sensitive (widget))
-      priv->arrow_state[i] &= ~(GTK_STATE_FLAG_INSENSITIVE);
-    else
-      priv->arrow_state[i] |= GTK_STATE_FLAG_INSENSITIVE;
 }
 
 static void

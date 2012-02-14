@@ -104,7 +104,7 @@ struct _GtkTextAppearance
 
   GdkRGBA *rgba[2];
 
-#if __SIZEOF_INT__ == __SIZEOF_POINTER__
+#if (defined(__SIZEOF_INT__) && defined(__SIZEOF_POINTER__)) && (__SIZEOF_INT__ == __SIZEOF_POINTER__)
   /* unusable, just for ABI compat */
   guint padding[2];
 #endif

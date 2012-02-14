@@ -23,14 +23,14 @@ apply_changes_gradually (gpointer data)
   if (fraction < 1.0)
     {
       gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress_bar), fraction);
-      return TRUE;
+      return G_SOURCE_CONTINUE;
     }
   else
     {
       /* Close automatically once changes are fully applied. */
       gtk_widget_destroy (assistant);
       assistant = NULL;
-      return FALSE;
+      return G_SOURCE_REMOVE;
     }
 }
 
@@ -101,6 +101,7 @@ create_page1 (GtkWidget *assistant)
   gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
 
   entry = gtk_entry_new ();
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   gtk_box_pack_start (GTK_BOX (box), entry, TRUE, TRUE, 0);
   g_signal_connect (G_OBJECT (entry), "changed",
                     G_CALLBACK (on_entry_changed), assistant);
@@ -146,22 +147,19 @@ create_page3 (GtkWidget *assistant)
 static void
 create_page4 (GtkWidget *assistant)
 {
-  GtkWidget *page;
-
-  page = gtk_alignment_new (0.5, 0.5, 0.5, 0.0);
-
   progress_bar = gtk_progress_bar_new ();
-  gtk_container_add (GTK_CONTAINER (page), progress_bar);
+  gtk_widget_set_halign (progress_bar, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (progress_bar, GTK_ALIGN_CENTER);
 
-  gtk_widget_show_all (page);
-  gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
-  gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_PROGRESS);
-  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Applying changes");
+  gtk_widget_show (progress_bar);
+  gtk_assistant_append_page (GTK_ASSISTANT (assistant), progress_bar);
+  gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), progress_bar, GTK_ASSISTANT_PAGE_PROGRESS);
+  gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), progress_bar, "Applying changes");
 
   /* This prevents the assistant window from being
    * closed while we're "busy" applying changes.
    */
-  gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, FALSE);
+  gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), progress_bar, FALSE);
 }
 
 GtkWidget*

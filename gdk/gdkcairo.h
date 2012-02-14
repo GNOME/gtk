@@ -35,8 +35,6 @@ cairo_t  * gdk_cairo_create             (GdkWindow          *window);
 gboolean   gdk_cairo_get_clip_rectangle (cairo_t            *cr,
                                          GdkRectangle       *rect);
 
-void       gdk_cairo_set_source_color   (cairo_t              *cr,
-                                         const GdkColor       *color);
 void       gdk_cairo_set_source_rgba    (cairo_t              *cr,
                                          const GdkRGBA        *rgba);
 void       gdk_cairo_set_source_pixbuf  (cairo_t              *cr,
@@ -56,6 +54,10 @@ void       gdk_cairo_region             (cairo_t              *cr,
 cairo_region_t *
            gdk_cairo_region_create_from_surface
                                         (cairo_surface_t      *surface);
+
+GDK_DEPRECATED_FOR(gdk_cairo_set_source_rgba)
+void       gdk_cairo_set_source_color   (cairo_t              *cr,
+                                         const GdkColor       *color);
 
 G_END_DECLS
 

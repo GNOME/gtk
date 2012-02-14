@@ -4720,7 +4720,7 @@ gtk_text_line_new (void)
 {
   GtkTextLine *line;
 
-  line = g_new0(GtkTextLine, 1);
+  line = g_slice_new0 (GtkTextLine);
   line->dir_strong = PANGO_DIRECTION_NEUTRAL;
   line->dir_propagated_forward = PANGO_DIRECTION_NEUTRAL;
   line->dir_propagated_back = PANGO_DIRECTION_NEUTRAL;
@@ -4751,7 +4751,7 @@ gtk_text_line_destroy (GtkTextBTree *tree, GtkTextLine *line)
       ld = next;
     }
 
-  g_free (line);
+  g_slice_free (GtkTextLine, line);
 }
 
 static void
@@ -4862,7 +4862,7 @@ gtk_text_btree_node_new (void)
 {
   GtkTextBTreeNode *node;
 
-  node = g_new (GtkTextBTreeNode, 1);
+  node = g_slice_new (GtkTextBTreeNode);
 
   node->node_data = NULL;
 
@@ -5513,7 +5513,7 @@ gtk_text_btree_node_free_empty (GtkTextBTree *tree,
 
   summary_list_destroy (node->summary);
   node_data_list_destroy (node->node_data);
-  g_free (node);
+  g_slice_free (GtkTextBTreeNode, node);
 }
 
 static NodeData*

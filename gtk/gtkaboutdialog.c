@@ -49,7 +49,7 @@
 #include "gtktextview.h"
 #include "gtkiconfactory.h"
 #include "gtkshow.h"
-#include "gtkmainprivate.h"
+#include "gtkmain.h"
 #include "gtkmessagedialog.h"
 #include "gtktogglebutton.h"
 #include "gtktypebuiltins.h"
@@ -91,6 +91,10 @@
  *                        "title" _("About ExampleCode"),
  *                        NULL);
  * </programlisting></informalexample>
+ *
+ * It is also possible to show a #GtkAboutDialog like any other #GtkDialog,
+ * e.g. using gtk_dialog_run(). In this case, you might need to know that
+ * the 'Close' button returns the #GTK_RESPONSE_CANCEL response id.
  */
 
 static GdkColor default_link_color = { 0, 0, 0, 0xeeee };
@@ -99,7 +103,7 @@ static GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
 /* Translators: this is the license preamble; the string at the end
  * contains the URL of the license.
  */
-static const gchar *gtk_license_preamble = N_("This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href=\"%s\">%s</a>");
+static const gchar *gtk_license_preamble = N_("This program comes with ABSOLUTELY NO WARRANTY;\nfor details, visit <a href=\"%s\">%s</a>");
 
 /* URLs for each GtkLicense type; keep in the same order as the enumeration */
 static const gchar *gtk_license_urls[] = {
@@ -118,6 +122,12 @@ static const gchar *gtk_license_urls[] = {
   "http://opensource.org/licenses/artistic-license-2.0.php"
 };
 
+typedef struct
+{
+  gchar *heading;
+  gchar **people;
+} CreditSection;
+
 struct _GtkAboutDialogPrivate 
 {
   gchar *name;
@@ -132,6 +142,9 @@ struct _GtkAboutDialogPrivate
   gchar **authors;
   gchar **documenters;
   gchar **artists;
+
+
+  GSList *credit_sections;
 
   gint credits_page;
   gint license_page;
@@ -158,6 +171,8 @@ struct _GtkAboutDialogPrivate
   guint hovering_over_link : 1;
   guint wrap_license : 1;
 };
+
+
 
 #define GTK_ABOUT_DIALOG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ABOUT_DIALOG, GtkAboutDialogPrivate))
 
@@ -557,6 +572,7 @@ update_credits_button_visibility (GtkAboutDialog *about)
   show = (priv->authors != NULL ||
           priv->documenters != NULL ||
           priv->artists != NULL ||
+          priv->credit_sections != NULL ||
          (priv->translator_credits != NULL &&
           strcmp (priv->translator_credits, "translator_credits") &&
           strcmp (priv->translator_credits, "translator-credits")));
@@ -772,6 +788,15 @@ gtk_about_dialog_init (GtkAboutDialog *about)
 }
 
 static void
+destroy_credit_section (gpointer data)
+{
+  CreditSection *cs = data;
+  g_free (cs->heading);
+  g_strfreev (cs->people);
+  g_slice_free (CreditSection, data);
+}
+
+static void
 gtk_about_dialog_finalize (GObject *object)
 {
   GtkAboutDialog *about = GTK_ABOUT_DIALOG (object);
@@ -789,6 +814,8 @@ gtk_about_dialog_finalize (GObject *object)
   g_strfreev (priv->authors);
   g_strfreev (priv->documenters);
   g_strfreev (priv->artists);
+
+  g_slist_free_full (priv->credit_sections, destroy_credit_section);
 
   g_slist_foreach (priv->visited_links, (GFunc)g_free, NULL);
   g_slist_free (priv->visited_links);
@@ -1938,7 +1965,7 @@ text_view_event_after (GtkWidget      *text_view,
 
   button_event = (GdkEventButton *)event;
 
-  if (button_event->button != 1)
+  if (button_event->button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
@@ -2109,7 +2136,7 @@ text_view_new (GtkAboutDialog  *about,
   size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
   font_desc = pango_font_description_new ();
   pango_font_description_set_size (font_desc, size * PANGO_SCALE_SMALL);
-  gtk_widget_modify_font (view, font_desc);
+  gtk_widget_override_font (view, font_desc);
   pango_font_description_free (font_desc);
 
   gtk_text_view_set_left_margin (text_view, 8);
@@ -2353,7 +2380,7 @@ create_credits_page (GtkAboutDialog *about)
   priv->credits_page = gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook), page_vbox, NULL);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_NONE);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
@@ -2362,7 +2389,7 @@ create_credits_page (GtkAboutDialog *about)
   grid = gtk_grid_new ();
   gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
-  gtk_grid_set_column_spacing (GTK_GRID (grid), 2);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 8);
   gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
   gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (grid, GTK_ALIGN_START);
@@ -2388,6 +2415,16 @@ create_credits_page (GtkAboutDialog *about)
 
   if (priv->artists != NULL)
     add_credits_section (about, GTK_GRID (grid), &row, _("Artwork by"), priv->artists);
+
+  if (priv->credit_sections != NULL)
+    {
+      GSList *cs;
+      for (cs = priv->credit_sections; cs != NULL; cs = cs->next)
+	{
+	  CreditSection *section = cs->data;
+	  add_credits_section (about, GTK_GRID (grid), &row, section->heading, section->people);
+	}
+    }
 
   gtk_widget_show_all (sw);
 }
@@ -2418,7 +2455,6 @@ create_license_page (GtkAboutDialog *about)
   priv->license_page = gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook), page_vbox, NULL);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_container_set_border_width (GTK_CONTAINER (sw), 5);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -2479,7 +2515,7 @@ close_cb (GtkAboutDialog *about)
  * gtk_show_about_dialog:
  * @parent: (allow-none): transient parent, or %NULL for none
  * @first_property_name: the name of the first property
- * @Varargs: value of first property, followed by more properties, %NULL-terminated
+ * @...: value of first property, followed by more properties, %NULL-terminated
  *
  * This is a convenience function for showing an application's about box.
  * The constructed dialog is associated with the parent window and
@@ -2622,4 +2658,36 @@ gtk_about_dialog_get_license_type (GtkAboutDialog *about)
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), GTK_LICENSE_UNKNOWN);
 
   return about->priv->license_type;
+}
+
+/**
+ * gtk_about_dialog_add_credit_section:
+ * @about: A #GtkAboutDialog
+ * @section_name: The name of the section
+ * @people: The people who belong to that section
+ *
+ * Creates a new section in the Credits page.
+ *
+ * Since: 3.4
+ */
+void
+gtk_about_dialog_add_credit_section (GtkAboutDialog  *about,
+                                     const gchar     *section_name,
+                                     const gchar    **people)
+{
+  GtkAboutDialogPrivate *priv;
+  CreditSection *new_entry;
+
+  g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
+  g_return_if_fail (section_name != NULL);
+  g_return_if_fail (people != NULL);
+
+  priv = about->priv;
+
+  new_entry = g_slice_new (CreditSection);
+  new_entry->heading = g_strdup ((gchar *)section_name);
+  new_entry->people = g_strdupv ((gchar **)people);
+
+  priv->credit_sections = g_slist_append (priv->credit_sections, new_entry);
+  update_credits_button_visibility (about);
 }

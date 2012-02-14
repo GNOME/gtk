@@ -20,8 +20,8 @@
 #ifndef __GTK_TREE_VIEW_ACCESSIBLE_H__
 #define __GTK_TREE_VIEW_ACCESSIBLE_H__
 
-#include <gtk/gtk.h>
 #include "gtkcontaineraccessible.h"
+#include "gtktreeprivate.h"
 
 G_BEGIN_DECLS
 
@@ -39,20 +39,7 @@ struct _GtkTreeViewAccessible
 {
   GtkContainerAccessible parent;
 
-  gint           n_children_deleted;
-  gint           n_rows;
-  gint           n_cols;
-  GArray*        col_data;
-  GHashTable    *cell_info_by_index;
-  GtkTreeModel  *tree_model;
-  AtkObject     *focus_cell;
-  GtkAdjustment *old_hadj;
-  GtkAdjustment *old_vadj;
-  guint          idle_expand_id;
-  guint          idle_garbage_collect_id;
-  guint          idle_cursor_changed_id;
-  GtkTreePath   *idle_expand_path;
-  gboolean       garbage_collection_pending;
+  GHashTable    *cell_infos;
 };
 
 struct _GtkTreeViewAccessibleClass
@@ -61,6 +48,44 @@ struct _GtkTreeViewAccessibleClass
 };
 
 GType _gtk_tree_view_accessible_get_type (void);
+
+/* called by treeview code */
+void            _gtk_tree_view_accessible_reorder       (GtkTreeView       *treeview);
+void            _gtk_tree_view_accessible_add           (GtkTreeView       *treeview,
+                                                         GtkRBTree         *tree,
+                                                         GtkRBNode         *node);
+void            _gtk_tree_view_accessible_remove        (GtkTreeView       *treeview,
+                                                         GtkRBTree         *tree,
+                                                         GtkRBNode         *node);
+void            _gtk_tree_view_accessible_changed       (GtkTreeView       *treeview,
+                                                         GtkRBTree         *tree,
+                                                         GtkRBNode         *node);
+
+
+void            _gtk_tree_view_accessible_add_column    (GtkTreeView       *treeview,
+                                                         GtkTreeViewColumn *column,
+                                                         guint              id);
+void            _gtk_tree_view_accessible_remove_column (GtkTreeView       *treeview,
+                                                         GtkTreeViewColumn *column,
+                                                         guint              id);
+void            _gtk_tree_view_accessible_reorder_column(GtkTreeView       *treeview,
+                                                         GtkTreeViewColumn *column);
+void            _gtk_tree_view_accessible_toggle_visibility
+                                                        (GtkTreeView       *treeview,
+                                                         GtkTreeViewColumn *column);
+void            _gtk_tree_view_accessible_update_focus_column
+                                                        (GtkTreeView       *treeview,
+                                                         GtkTreeViewColumn *old_focus,
+                                                         GtkTreeViewColumn *new_focus);
+
+void            _gtk_tree_view_accessible_add_state     (GtkTreeView       *treeview,
+                                                         GtkRBTree         *tree,
+                                                         GtkRBNode         *node,
+                                                         GtkCellRendererState state);
+void            _gtk_tree_view_accessible_remove_state  (GtkTreeView       *treeview,
+                                                         GtkRBTree         *tree,
+                                                         GtkRBNode         *node,
+                                                         GtkCellRendererState state);
 
 G_END_DECLS
 

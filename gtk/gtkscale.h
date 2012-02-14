@@ -90,6 +90,9 @@ gint              gtk_scale_get_digits         (GtkScale        *scale);
 void              gtk_scale_set_draw_value     (GtkScale        *scale,
                                                 gboolean         draw_value);
 gboolean          gtk_scale_get_draw_value     (GtkScale        *scale);
+void              gtk_scale_set_has_origin     (GtkScale        *scale,
+                                                gboolean         has_origin);
+gboolean          gtk_scale_get_has_origin     (GtkScale        *scale);
 void              gtk_scale_set_value_pos      (GtkScale        *scale,
                                                 GtkPositionType  pos);
 GtkPositionType   gtk_scale_get_value_pos      (GtkScale        *scale);

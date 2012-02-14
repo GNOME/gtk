@@ -83,6 +83,8 @@ void    gtk_misc_get_padding   (GtkMisc *misc,
 				gint    *xpad,
 				gint    *ypad);
 
+void   _gtk_misc_get_padding_and_border	(GtkMisc   *misc,
+					 GtkBorder *border);
 
 G_END_DECLS
 

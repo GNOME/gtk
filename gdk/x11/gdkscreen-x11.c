@@ -305,6 +305,113 @@ gdk_x11_screen_get_monitor_geometry (GdkScreen    *screen,
     *dest = x11_screen->monitors[monitor_num].geometry;
 }
 
+static int
+get_current_desktop (GdkScreen *screen)
+{
+  Display *display;
+  Window win;
+  Atom current_desktop, type;
+  int format;
+  unsigned long n_items, bytes_after;
+  unsigned char *data_return = NULL;
+  int workspace = 0;
+
+  display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
+  win = XRootWindow (display, GDK_SCREEN_XNUMBER (screen));
+
+  current_desktop = XInternAtom (display, "_NET_CURRENT_DESKTOP", True);
+
+  XGetWindowProperty (display,
+                      win,
+                      current_desktop,
+                      0, G_MAXLONG,
+                      False, XA_CARDINAL,
+                      &type, &format, &n_items, &bytes_after,
+                      &data_return);
+
+  if (type == XA_CARDINAL && format == 32 && n_items > 0)
+    workspace = (int) data_return[0];
+
+  if (data_return)
+    XFree (data_return);
+
+  return workspace;
+}
+
+static void
+get_work_area (GdkScreen    *screen,
+               GdkRectangle *area)
+{
+  Atom            workarea;
+  Atom            type;
+  Window          win;
+  int             format;
+  gulong          num;
+  gulong          leftovers;
+  gulong          max_len = 4 * 32;
+  guchar         *ret_workarea;
+  long           *workareas;
+  int             result;
+  int             disp_screen;
+  int             desktop;
+  Display        *display;
+
+  display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
+  disp_screen = GDK_SCREEN_XNUMBER (screen);
+  workarea = XInternAtom (display, "_NET_WORKAREA", True);
+
+  /* Defaults in case of error */
+  area->x = 0;
+  area->y = 0;
+  area->width = gdk_screen_get_width (screen);
+  area->height = gdk_screen_get_height (screen);
+
+  if (workarea == None)
+    return;
+
+  win = XRootWindow (display, disp_screen);
+  result = XGetWindowProperty (display,
+                               win,
+                               workarea,
+                               0,
+                               max_len,
+                               False,
+                               AnyPropertyType,
+                               &type,
+                               &format,
+                               &num,
+                               &leftovers,
+                               &ret_workarea);
+  if (result != Success ||
+      type == None ||
+      format == 0 ||
+      leftovers ||
+      num % 4 != 0)
+    return;
+
+  desktop = get_current_desktop (screen);
+
+  workareas = (long *) ret_workarea;
+  area->x = workareas[desktop * 4];
+  area->y = workareas[desktop * 4 + 1];
+  area->width = workareas[desktop * 4 + 2];
+  area->height = workareas[desktop * 4 + 3];
+
+  XFree (ret_workarea);
+}
+
+static void
+gdk_x11_screen_get_monitor_workarea (GdkScreen    *screen,
+                                     gint          monitor_num,
+                                     GdkRectangle *dest)
+{
+  GdkRectangle workarea;
+
+  gdk_x11_screen_get_monitor_geometry (screen, monitor_num, dest);
+  get_work_area (screen, &workarea);
+  gdk_rectangle_intersect (&workarea, dest, dest);
+}
+
 static GdkVisual *
 gdk_x11_screen_get_rgba_visual (GdkScreen *screen)
 {
@@ -319,10 +426,11 @@ gdk_x11_screen_get_rgba_visual (GdkScreen *screen)
 
 /**
  * gdk_x11_screen_get_xscreen:
- * @screen: (type GdkX11Screen): a #GdkScreen.
- * @returns: (transfer none): an Xlib <type>Screen*</type>
+ * @screen: (type GdkX11Screen): a #GdkScreen
  *
  * Returns the screen of a #GdkScreen.
+ *
+ * Returns: (transfer none): an Xlib <type>Screen*</type>
  *
  * Since: 2.2
  */
@@ -334,11 +442,12 @@ gdk_x11_screen_get_xscreen (GdkScreen *screen)
 
 /**
  * gdk_x11_screen_get_screen_number:
- * @screen: (type GdkX11Screen): a #GdkScreen.
- * @returns: the position of @screen among the screens of
- *   its display.
+ * @screen: (type GdkX11Screen): a #GdkScreen
  *
  * Returns the index of a #GdkScreen.
+ *
+ * Returns: the position of @screen among the screens
+ *     of its display
  *
  * Since: 2.2
  */
@@ -1117,7 +1226,7 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
   GdkX11Screen *x11_screen;
   gboolean success = FALSE;
   gint i;
-  GValue tmp_val = { 0, };
+  GValue tmp_val = G_VALUE_INIT;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
 
@@ -1161,18 +1270,18 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
 	}
       break;
     case XSETTINGS_TYPE_COLOR:
-      if (!check_transform (xsettings_name, GDK_TYPE_COLOR, G_VALUE_TYPE (value)))
+      if (!check_transform (xsettings_name, GDK_TYPE_RGBA, G_VALUE_TYPE (value)))
 	{
-	  GdkColor color;
+	  GdkRGBA rgba;
 
-	  g_value_init (&tmp_val, GDK_TYPE_COLOR);
+	  g_value_init (&tmp_val, GDK_TYPE_RGBA);
 
-	  color.pixel = 0;
-	  color.red = setting->data.v_color.red;
-	  color.green = setting->data.v_color.green;
-	  color.blue = setting->data.v_color.blue;
+	  rgba.red = setting->data.v_color.red / 65535.0;
+	  rgba.green = setting->data.v_color.green / 65535.0;
+	  rgba.blue = setting->data.v_color.blue / 65535.0;
+	  rgba.alpha = setting->data.v_color.alpha / 65535.0;
 
-	  g_value_set_boxed (&tmp_val, &color);
+	  g_value_set_boxed (&tmp_val, &rgba);
 
 	  g_value_transform (&tmp_val, value);
 
@@ -1202,17 +1311,45 @@ cleanup_atoms(gpointer data)
   g_free (supported_atoms);
 }
 
-static void
-fetch_net_wm_check_window (GdkScreen *screen)
+static Window
+get_net_supporting_wm_check (GdkX11Screen *screen,
+                             Window        window)
 {
-  GdkX11Screen *x11_screen;
   GdkDisplay *display;
   Atom type;
   gint format;
   gulong n_items;
   gulong bytes_after;
   guchar *data;
-  Window *xwindow;
+  Window value;
+
+  display = screen->display;
+  type = None;
+  data = NULL;
+  value = None;
+
+  gdk_x11_display_error_trap_push (display);
+  XGetWindowProperty (screen->xdisplay, window,
+		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTING_WM_CHECK"),
+		      0, G_MAXLONG, False, XA_WINDOW, &type, &format,
+		      &n_items, &bytes_after, &data);
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (type == XA_WINDOW)
+    value = *(Window *)data;
+
+  if (data)
+    XFree (data);
+
+  return value;
+}
+
+static void
+fetch_net_wm_check_window (GdkScreen *screen)
+{
+  GdkX11Screen *x11_screen;
+  GdkDisplay *display;
+  Window window;
   GTimeVal tv;
   gint error;
 
@@ -1220,57 +1357,46 @@ fetch_net_wm_check_window (GdkScreen *screen)
   display = x11_screen->display;
 
   g_return_if_fail (GDK_X11_DISPLAY (display)->trusted_client);
-  
+
+  if (x11_screen->wmspec_check_window != None)
+    return; /* already have it */
+
   g_get_current_time (&tv);
 
   if (ABS  (tv.tv_sec - x11_screen->last_wmspec_check_time) < 15)
     return; /* we've checked recently */
 
-  x11_screen->last_wmspec_check_time = tv.tv_sec;
+  window = get_net_supporting_wm_check (x11_screen, x11_screen->xroot_window);
+  if (window == None)
+    return;
 
-  data = NULL;
-  XGetWindowProperty (x11_screen->xdisplay, x11_screen->xroot_window,
-		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTING_WM_CHECK"),
-		      0, G_MAXLONG, False, XA_WINDOW, &type, &format,
-		      &n_items, &bytes_after, &data);
-  
-  if (type != XA_WINDOW)
-    {
-      if (data)
-        XFree (data);
-      return;
-    }
-
-  xwindow = (Window *)data;
-
-  if (x11_screen->wmspec_check_window == *xwindow)
-    {
-      XFree (xwindow);
-      return;
-    }
+  if (window != get_net_supporting_wm_check (x11_screen, window))
+    return;
 
   gdk_x11_display_error_trap_push (display);
 
   /* Find out if this WM goes away, so we can reset everything. */
-  XSelectInput (x11_screen->xdisplay, *xwindow, StructureNotifyMask);
+  XSelectInput (x11_screen->xdisplay, window, StructureNotifyMask);
 
   error = gdk_x11_display_error_trap_pop (display);
   if (!error)
     {
-      x11_screen->wmspec_check_window = *xwindow;
+      /* We check the window property again because after XGetWindowProperty()
+       * and before XSelectInput() the window may have been recycled in such a
+       * way that XSelectInput() doesn't fail but the window is no longer what
+       * we want.
+       */
+      if (window != get_net_supporting_wm_check (x11_screen, window))
+        return;
+
+      x11_screen->wmspec_check_window = window;
+      x11_screen->last_wmspec_check_time = tv.tv_sec;
       x11_screen->need_refetch_net_supported = TRUE;
       x11_screen->need_refetch_wm_name = TRUE;
 
       /* Careful, reentrancy */
-      _gdk_x11_screen_window_manager_changed (GDK_SCREEN (x11_screen));
+      _gdk_x11_screen_window_manager_changed (screen);
     }
-  else if (error == BadWindow)
-    {
-      /* Leftover property, try again immediately, new wm may be starting up */
-      x11_screen->last_wmspec_check_time = 0;
-    }
-
-  XFree (xwindow);
 }
 
 /**
@@ -1601,6 +1727,7 @@ gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
   screen_class->get_monitor_height_mm = gdk_x11_screen_get_monitor_height_mm;
   screen_class->get_monitor_plug_name = gdk_x11_screen_get_monitor_plug_name;
   screen_class->get_monitor_geometry = gdk_x11_screen_get_monitor_geometry;
+  screen_class->get_monitor_workarea = gdk_x11_screen_get_monitor_workarea;
   screen_class->get_system_visual = _gdk_x11_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_x11_screen_get_rgba_visual;
   screen_class->is_composited = gdk_x11_screen_is_composited;

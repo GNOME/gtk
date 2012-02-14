@@ -35,11 +35,12 @@ G_BEGIN_DECLS
 
 typedef struct _GtkModifierStyle GtkModifierStyle;
 typedef struct _GtkModifierStyleClass GtkModifierStyleClass;
+typedef struct _GtkModifierStylePrivate GtkModifierStylePrivate;
 
 struct _GtkModifierStyle
 {
   GObject parent_object;
-  gpointer priv;
+  GtkModifierStylePrivate *priv;
 };
 
 struct _GtkModifierStyleClass

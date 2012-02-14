@@ -34,7 +34,6 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkadjustment.h>
-#include <gtk/gtkstyle.h>
 #include <gtk/gtkborder.h>
 #include <gtk/gtksettings.h>
 #include <gtk/gtkstylecontext.h>
@@ -73,7 +72,6 @@ typedef struct _GtkWidgetAuxInfo       GtkWidgetAuxInfo;
 typedef struct _GtkClipboard	       GtkClipboard;
 typedef struct _GtkTooltip             GtkTooltip;
 typedef struct _GtkWindow              GtkWindow;
-
 
 /**
  * GtkAllocation:
@@ -485,10 +483,9 @@ void	   gtk_widget_queue_draw_region   (GtkWidget	       *widget,
                                            const cairo_region_t*region);
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
-#ifndef GTK_DISABLE_DEPRECATED
-void	   gtk_widget_size_request	  (GtkWidget	       *widget,
-					   GtkRequisition      *requisition);
-#endif
+GDK_DEPRECATED_FOR(gtk_widget_get_preferred_size)
+void       gtk_widget_size_request        (GtkWidget           *widget,
+                                           GtkRequisition      *requisition);
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
 					   GtkAllocation       *allocation);
 
@@ -511,10 +508,9 @@ void                gtk_widget_get_preferred_size             (GtkWidget      *w
                                                                GtkRequisition *minimum_size,
                                                                GtkRequisition *natural_size);
 
-#ifndef GTK_DISABLE_DEPRECATED
-void       gtk_widget_get_child_requisition (GtkWidget	       *widget,
-					     GtkRequisition    *requisition);
-#endif
+GDK_DEPRECATED_FOR(gtk_widget_get_preferred_size)
+void       gtk_widget_get_child_requisition (GtkWidget         *widget,
+                                             GtkRequisition    *requisition);
 void	   gtk_widget_add_accelerator	  (GtkWidget           *widget,
 					   const gchar         *accel_signal,
 					   GtkAccelGroup       *accel_group,
@@ -754,6 +750,7 @@ void     gtk_widget_set_margin_bottom (GtkWidget *widget,
 gint	     gtk_widget_get_events	(GtkWidget	*widget);
 GdkEventMask gtk_widget_get_device_events (GtkWidget	*widget,
                                            GdkDevice    *device);
+GDK_DEPRECATED_FOR(gdk_window_get_device_position)
 void	     gtk_widget_get_pointer	(GtkWidget	*widget,
 					 gint		*x,
 					 gint		*y);
@@ -791,63 +788,6 @@ void         gtk_widget_override_cursor           (GtkWidget       *widget,
                                                    const GdkRGBA   *secondary_cursor);
 
 void       gtk_widget_reset_style       (GtkWidget      *widget);
-
-#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
-
-void        gtk_widget_style_attach               (GtkWidget     *widget);
-
-/* Widget styles.
- */
-gboolean    gtk_widget_has_rc_style       (GtkWidget            *widget);
-void	    gtk_widget_set_style          (GtkWidget            *widget,
-                                           GtkStyle             *style);
-void        gtk_widget_ensure_style       (GtkWidget            *widget);
-GtkStyle *  gtk_widget_get_style          (GtkWidget            *widget);
-
-void        gtk_widget_modify_style       (GtkWidget            *widget,
-					   GtkRcStyle           *style);
-GtkRcStyle *gtk_widget_get_modifier_style (GtkWidget            *widget);
-void        gtk_widget_modify_fg          (GtkWidget            *widget,
-					   GtkStateType          state,
-					   const GdkColor       *color);
-void        gtk_widget_modify_bg          (GtkWidget            *widget,
-					   GtkStateType          state,
-					   const GdkColor       *color);
-void        gtk_widget_modify_text        (GtkWidget            *widget,
-					   GtkStateType          state,
-					   const GdkColor       *color);
-void        gtk_widget_modify_base        (GtkWidget            *widget,
-					   GtkStateType          state,
-					   const GdkColor       *color);
-void        gtk_widget_modify_cursor      (GtkWidget            *widget,
-					   const GdkColor       *primary,
-					   const GdkColor       *secondary);
-void        gtk_widget_modify_font        (GtkWidget            *widget,
-					   PangoFontDescription *font_desc);
-
-/* Descend recursively and set rc-style on all widgets without user styles */
-void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
-
-/* Set certain default values to be used at widget creation time  */
-GtkStyle*    gtk_widget_get_default_style    (void);
-
-/* Compute a widget's path in the form "GtkWindow.MyLabel", and
- * return newly alocated strings.
- */
-void	     gtk_widget_path		   (GtkWidget *widget,
-					    guint     *path_length,
-					    gchar    **path,
-					    gchar    **path_reversed);
-void	     gtk_widget_class_path	   (GtkWidget *widget,
-					    guint     *path_length,
-					    gchar    **path,
-					    gchar    **path_reversed);
-
-GdkPixbuf    *gtk_widget_render_icon          (GtkWidget   *widget,
-                                               const gchar *stock_id,
-                                               GtkIconSize  size,
-                                               const gchar *detail);
-#endif  /* GTK_DISABLE_DEPRECATED */
 
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
 PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
@@ -948,6 +888,9 @@ gboolean     gtk_widget_in_destruction (GtkWidget *widget);
 GtkStyleContext * gtk_widget_get_style_context (GtkWidget *widget);
 
 GtkWidgetPath *   gtk_widget_get_path (GtkWidget *widget);
+
+GdkModifierType   gtk_widget_get_modifier_mask (GtkWidget         *widget,
+                                                GdkModifierIntent  intent);
 
 
 G_END_DECLS

@@ -636,14 +636,10 @@ gtk_menu_bar_draw (GtkWidget *widget,
 		   cairo_t   *cr)
 {
   GtkStyleContext *context;
-  GtkStateFlags state;
   int border;
 
   border = gtk_container_get_border_width (GTK_CONTAINER (widget));
   context = gtk_widget_get_style_context (widget);
-
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_set_state (context, state);
 
   if (get_shadow_type (GTK_MENU_BAR (widget)) != GTK_SHADOW_NONE)
     gtk_render_background (context, cr,

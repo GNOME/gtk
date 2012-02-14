@@ -39,9 +39,10 @@
 
 #include "gtkarrow.h"
 #include "gtkbindings.h"
+#include "gtkcontainerprivate.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
-#include "gtkmainprivate.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkorientable.h"
@@ -119,8 +120,6 @@ struct _GtkToolbarPrivate
   GList           *content;
 
   GTimer          *timer;
-
-  GtkWidgetPath   *sibling_path;
 
   gulong           settings_connection;
 
@@ -217,6 +216,7 @@ static void       gtk_toolbar_get_child_property   (GtkContainer        *contain
 						    GValue              *value,
 						    GParamSpec          *pspec);
 static void       gtk_toolbar_finalize             (GObject             *object);
+static void       gtk_toolbar_dispose              (GObject             *object);
 static void       gtk_toolbar_show_all             (GtkWidget           *widget);
 static void       gtk_toolbar_add                  (GtkContainer        *container,
 						    GtkWidget           *widget);
@@ -232,6 +232,8 @@ static GtkWidgetPath * gtk_toolbar_get_path_for_child
                                                    GtkWidget           *child);
 static void       gtk_toolbar_invalidate_order    (GtkToolbar           *toolbar);
 
+static void       gtk_toolbar_direction_changed    (GtkWidget           *widget,
+                                                    GtkTextDirection     previous_direction);
 static void       gtk_toolbar_orientation_changed  (GtkToolbar          *toolbar,
 						    GtkOrientation       orientation);
 static void       gtk_toolbar_real_style_changed   (GtkToolbar          *toolbar,
@@ -371,6 +373,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   gobject_class->set_property = gtk_toolbar_set_property;
   gobject_class->get_property = gtk_toolbar_get_property;
   gobject_class->finalize = gtk_toolbar_finalize;
+  gobject_class->dispose = gtk_toolbar_dispose;
   
   widget_class->button_press_event = gtk_toolbar_button_press;
   widget_class->draw = gtk_toolbar_draw;
@@ -396,6 +399,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   widget_class->unmap = gtk_toolbar_unmap;
   widget_class->popup_menu = gtk_toolbar_popup_menu;
   widget_class->show_all = gtk_toolbar_show_all;
+  widget_class->direction_changed = gtk_toolbar_direction_changed;
   
   container_class->add    = gtk_toolbar_add;
   container_class->remove = gtk_toolbar_remove;
@@ -854,16 +858,11 @@ gtk_toolbar_draw (GtkWidget *widget,
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GList *list;
   guint border_width;
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
 
   gtk_render_background (context, cr, border_width, border_width,
                          gtk_widget_get_allocated_width (widget) - 2 * border_width,
@@ -882,8 +881,6 @@ gtk_toolbar_draw (GtkWidget *widget,
   gtk_container_propagate_draw (GTK_CONTAINER (widget),
 				priv->arrow_button,
 				cr);
-
-  gtk_style_context_restore (context);
 
   return FALSE;
 }
@@ -2535,34 +2532,34 @@ gtk_toolbar_remove (GtkContainer *container,
 
 static void
 gtk_toolbar_forall (GtkContainer *container,
-		    gboolean	  include_internals,
-		    GtkCallback   callback,
-		    gpointer      callback_data)
+                    gboolean      include_internals,
+                    GtkCallback   callback,
+                    gpointer      callback_data)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (container);
   GtkToolbarPrivate *priv = toolbar->priv;
   GList *list;
-  
+
   g_return_if_fail (callback != NULL);
-  
+
   list = priv->content;
   while (list)
     {
       ToolbarContent *content = list->data;
       GList *next = list->next;
-      
+
       if (include_internals || !toolbar_content_is_placeholder (content))
-	{
-	  GtkWidget *child = toolbar_content_get_widget (content);
-	  
-	  if (child)
-	    callback (child, callback_data);
-	}
-      
+        {
+          GtkWidget *child = toolbar_content_get_widget (content);
+
+          if (child)
+            callback (child, callback_data);
+        }
+
       list = next;
     }
-  
-  if (include_internals)
+
+  if (include_internals && priv->arrow_button)
     callback (priv->arrow_button, callback_data);
 }
 
@@ -2655,7 +2652,7 @@ menu_position_func (GtkMenu  *menu,
                                                   gtk_widget_get_window (priv->arrow_button));
   if (monitor_num < 0)
     monitor_num = 0;
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
   gtk_widget_get_allocation (priv->arrow_button, &allocation);
 
@@ -2742,7 +2739,7 @@ gtk_toolbar_button_press (GtkWidget      *toolbar,
 {
   GtkWidget *window;
 
-  if (event->button == 3)
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
       gboolean return_value;
 
@@ -3129,38 +3126,37 @@ gtk_toolbar_get_drop_index (GtkToolbar *toolbar,
 }
 
 static void
-gtk_toolbar_finalize (GObject *object)
+gtk_toolbar_dispose (GObject *object)
 {
-  GList *list;
   GtkToolbar *toolbar = GTK_TOOLBAR (object);
   GtkToolbarPrivate *priv = toolbar->priv;
 
   if (priv->arrow_button)
-    gtk_widget_unparent (priv->arrow_button);
-
-  if (priv->sibling_path != NULL)
     {
-      gtk_widget_path_unref (priv->sibling_path);
-      priv->sibling_path = NULL;
+      gtk_widget_unparent (priv->arrow_button);
+      priv->arrow_button = NULL;
     }
 
-  for (list = priv->content; list != NULL; list = list->next)
-    {
-      ToolbarContent *content = list->data;
-
-      toolbar_content_free (content);
-    }
-  
-  g_list_free (priv->content);
-  
-  g_timer_destroy (priv->timer);
-  
   if (priv->menu)
     {
       g_signal_handlers_disconnect_by_func (priv->menu,
                                             menu_deactivated, toolbar);
       gtk_widget_destroy (GTK_WIDGET (priv->menu));
+      priv->menu = NULL;
     }
+
+ G_OBJECT_CLASS (gtk_toolbar_parent_class)->dispose (object);
+}
+
+static void
+gtk_toolbar_finalize (GObject *object)
+{
+  GtkToolbar *toolbar = GTK_TOOLBAR (object);
+  GtkToolbarPrivate *priv = toolbar->priv;
+
+  g_list_free_full (priv->content, (GDestroyNotify)toolbar_content_free);
+
+  g_timer_destroy (priv->timer);
 
   if (priv->idle_id)
     g_source_remove (priv->idle_id);
@@ -3300,7 +3296,7 @@ toolbar_content_new_tool_item (GtkToolbar  *toolbar,
   content->is_placeholder = is_placeholder;
 
   priv->content = g_list_insert (priv->content, content, pos);
-  
+
   gtk_widget_set_parent (GTK_WIDGET (item), GTK_WIDGET (toolbar));
   gtk_toolbar_invalidate_order (toolbar);
 
@@ -3930,37 +3926,34 @@ gtk_toolbar_get_path_for_child (GtkContainer *container,
   GtkWidgetPath *path;
   GtkToolbar *toolbar;
   GtkToolbarPrivate *priv;
+  GtkWidgetPath *sibling_path;
   gint vis_index;
+  GList *children;
 
   toolbar = GTK_TOOLBAR (container);
   priv = toolbar->priv;
 
-  if (priv->sibling_path == NULL)
-    {
-      GList *children;
+  /* build a path for all the visible children;
+   * get_children works in visible order
+   */
+  sibling_path = gtk_widget_path_new ();
+  children = _gtk_container_get_all_children (container);
 
-      /* build a path for all the visible children;
-       * get_children works in visible order
-       */
-      priv->sibling_path = gtk_widget_path_new ();
-      children = gtk_container_get_children (container);
+  if (priv->orientation != GTK_ORIENTATION_HORIZONTAL ||
+      gtk_widget_get_direction (GTK_WIDGET (toolbar)) != GTK_TEXT_DIR_RTL)
+    children = g_list_reverse (children);
 
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-          gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL)
-        children = g_list_reverse (children);
-
-      g_list_foreach (children, add_widget_to_path, priv->sibling_path);
-      g_list_free (children);
-    }
+  g_list_foreach (children, add_widget_to_path, sibling_path);
+  g_list_free (children);
 
   path = gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (container)));
   if (gtk_widget_get_visible (child))
     {
       vis_index = gtk_toolbar_get_visible_position (toolbar, child);
 
-      if (vis_index < gtk_widget_path_length (priv->sibling_path))
+      if (vis_index < gtk_widget_path_length (sibling_path))
         gtk_widget_path_append_with_siblings (path,
-                                              priv->sibling_path,
+                                              sibling_path,
                                               vis_index);
       else
         gtk_widget_path_append_for_widget (path, child);
@@ -3968,22 +3961,24 @@ gtk_toolbar_get_path_for_child (GtkContainer *container,
   else
     gtk_widget_path_append_for_widget (path, child);
 
+  gtk_widget_path_unref (sibling_path);
   return path;
 }
 
 static void
 gtk_toolbar_invalidate_order (GtkToolbar *toolbar)
 {
-  GtkToolbarPrivate *priv = toolbar->priv;
+  gtk_container_forall (GTK_CONTAINER (toolbar),
+                        (GtkCallback) gtk_widget_reset_style,
+                        NULL);
+}
 
-  if (priv->sibling_path != NULL)
-    {
-      gtk_widget_path_unref (priv->sibling_path);
-      priv->sibling_path = NULL;
+static void
+gtk_toolbar_direction_changed (GtkWidget        *widget,
+                               GtkTextDirection  previous_direction)
+{
+  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->direction_changed (widget, previous_direction);
 
-      gtk_container_foreach (GTK_CONTAINER (toolbar),
-                             (GtkCallback) gtk_widget_reset_style,
-                             NULL);
-    }
+  gtk_toolbar_invalidate_order (GTK_TOOLBAR (widget));
 }
 

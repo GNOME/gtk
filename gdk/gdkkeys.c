@@ -26,6 +26,7 @@
 
 #include "config.h"
 
+#include "gdkkeysyms.h"
 #include "gdkkeysprivate.h"
 #include "gdkdisplay.h"
 #include "gdkdisplaymanagerprivate.h"
@@ -108,6 +109,11 @@ enum {
   LAST_SIGNAL
 };
 
+
+static GdkModifierType gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
+                                                          GdkModifierIntent  intent);
+
+
 static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GdkKeymap, gdk_keymap, G_TYPE_OBJECT)
@@ -116,6 +122,8 @@ static void
 gdk_keymap_class_init (GdkKeymapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  klass->get_modifier_mask = gdk_keymap_real_get_modifier_mask;
 
   /**
    * GdkKeymap::direction-changed:
@@ -399,6 +407,9 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                    gint          *n_keys)
 {
   g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+  g_return_val_if_fail (keys != NULL, FALSE);
+  g_return_val_if_fail (n_keys != NULL, FALSE);
+  g_return_val_if_fail (keyval != 0, FALSE);
 
   return GDK_KEYMAP_GET_CLASS (keymap)->get_entries_for_keyval (keymap, keyval,
                                                                 keys, n_keys);
@@ -431,6 +442,7 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
                                     gint          *n_entries)
 {
   g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+  g_return_val_if_fail (n_entries != NULL, FALSE);
 
   return GDK_KEYMAP_GET_CLASS (keymap)->get_entries_for_keycode (keymap, hardware_keycode,
                                                                  keys, keyvals, n_entries);
@@ -454,6 +466,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
                        const GdkKeymapKey *key)
 {
   g_return_val_if_fail (GDK_IS_KEYMAP (keymap), 0);
+  g_return_val_if_fail (key != NULL, 0);
 
   return GDK_KEYMAP_GET_CLASS (keymap)->lookup_key (keymap, key);
 }
@@ -605,6 +618,64 @@ gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
   return GDK_KEYMAP_GET_CLASS(keymap)->map_virtual_modifiers (keymap, state);
 }
 
+static GdkModifierType
+gdk_keymap_real_get_modifier_mask (GdkKeymap         *keymap,
+                                   GdkModifierIntent  intent)
+{
+  switch (intent)
+    {
+    case GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR:
+      return GDK_CONTROL_MASK;
+
+    case GDK_MODIFIER_INTENT_CONTEXT_MENU:
+      return 0;
+
+    case GDK_MODIFIER_INTENT_EXTEND_SELECTION:
+      return GDK_SHIFT_MASK;
+
+    case GDK_MODIFIER_INTENT_MODIFY_SELECTION:
+      return GDK_CONTROL_MASK;
+
+    case GDK_MODIFIER_INTENT_NO_TEXT_INPUT:
+      return GDK_MOD1_MASK | GDK_CONTROL_MASK;
+
+    case GDK_MODIFIER_INTENT_SHIFT_GROUP:
+      return 0;
+
+    default:
+      g_return_val_if_reached (0);
+    }
+}
+
+/**
+ * gdk_keymap_get_modifier_mask:
+ * @keymap: a #GdkKeymap
+ * @intent: the use case for the modifier mask
+ *
+ * Returns the modifier mask the @keymap's windowing system backend
+ * uses for a particular purpose.
+ *
+ * Note that this function always returns real hardware modifiers, not
+ * virtual ones (e.g. it will return #GDK_MOD1_MASK rather than
+ * #GDK_META_MASK if the backend maps MOD1 to META), so there are use
+ * cases where the return value of this function has to be transformed
+ * by gdk_keymap_add_virtual_modifiers() in order to contain the
+ * expected result.
+ *
+ * Returns: the modifier mask used for @intent.
+ *
+ * Since: 3.4
+ **/
+GdkModifierType
+gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,
+                              GdkModifierIntent  intent)
+{
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), 0);
+
+  return GDK_KEYMAP_GET_CLASS (keymap)->get_modifier_mask (keymap, intent);
+}
+
+
 /**
  * gdk_keyval_name:
  * @keyval: a key value
@@ -648,4 +719,130 @@ gdk_keyval_from_name (const gchar *keyval_name)
 
   return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->lookup_keyval (manager,
                                                                  keyval_name);
+}
+
+void
+_gdk_display_manager_real_keyval_convert_case (GdkDisplayManager *manager,
+                                               guint              symbol,
+                                               guint             *lower,
+                                               guint             *upper)
+{
+  guint xlower = symbol;
+  guint xupper = symbol;
+
+  /* Check for directly encoded 24-bit UCS characters: */
+  if ((symbol & 0xff000000) == 0x01000000)
+    {
+      if (lower)
+        *lower = gdk_unicode_to_keyval (g_unichar_tolower (symbol & 0x00ffffff));
+      if (upper)
+        *upper = gdk_unicode_to_keyval (g_unichar_toupper (symbol & 0x00ffffff));
+      return;
+    }
+
+  switch (symbol >> 8)
+    {
+    case 0: /* Latin 1 */
+      if ((symbol >= GDK_KEY_A) && (symbol <= GDK_KEY_Z))
+        xlower += (GDK_KEY_a - GDK_KEY_A);
+      else if ((symbol >= GDK_KEY_a) && (symbol <= GDK_KEY_z))
+        xupper -= (GDK_KEY_a - GDK_KEY_A);
+      else if ((symbol >= GDK_KEY_Agrave) && (symbol <= GDK_KEY_Odiaeresis))
+        xlower += (GDK_KEY_agrave - GDK_KEY_Agrave);
+      else if ((symbol >= GDK_KEY_agrave) && (symbol <= GDK_KEY_odiaeresis))
+        xupper -= (GDK_KEY_agrave - GDK_KEY_Agrave);
+      else if ((symbol >= GDK_KEY_Ooblique) && (symbol <= GDK_KEY_Thorn))
+        xlower += (GDK_KEY_oslash - GDK_KEY_Ooblique);
+      else if ((symbol >= GDK_KEY_oslash) && (symbol <= GDK_KEY_thorn))
+        xupper -= (GDK_KEY_oslash - GDK_KEY_Ooblique);
+      break;
+
+    case 1: /* Latin 2 */
+      /* Assume the KeySym is a legal value (ignore discontinuities) */
+      if (symbol == GDK_KEY_Aogonek)
+        xlower = GDK_KEY_aogonek;
+      else if (symbol >= GDK_KEY_Lstroke && symbol <= GDK_KEY_Sacute)
+        xlower += (GDK_KEY_lstroke - GDK_KEY_Lstroke);
+      else if (symbol >= GDK_KEY_Scaron && symbol <= GDK_KEY_Zacute)
+        xlower += (GDK_KEY_scaron - GDK_KEY_Scaron);
+      else if (symbol >= GDK_KEY_Zcaron && symbol <= GDK_KEY_Zabovedot)
+        xlower += (GDK_KEY_zcaron - GDK_KEY_Zcaron);
+      else if (symbol == GDK_KEY_aogonek)
+        xupper = GDK_KEY_Aogonek;
+      else if (symbol >= GDK_KEY_lstroke && symbol <= GDK_KEY_sacute)
+        xupper -= (GDK_KEY_lstroke - GDK_KEY_Lstroke);
+      else if (symbol >= GDK_KEY_scaron && symbol <= GDK_KEY_zacute)
+        xupper -= (GDK_KEY_scaron - GDK_KEY_Scaron);
+      else if (symbol >= GDK_KEY_zcaron && symbol <= GDK_KEY_zabovedot)
+        xupper -= (GDK_KEY_zcaron - GDK_KEY_Zcaron);
+      else if (symbol >= GDK_KEY_Racute && symbol <= GDK_KEY_Tcedilla)
+        xlower += (GDK_KEY_racute - GDK_KEY_Racute);
+      else if (symbol >= GDK_KEY_racute && symbol <= GDK_KEY_tcedilla)
+        xupper -= (GDK_KEY_racute - GDK_KEY_Racute);
+      break;
+
+    case 2: /* Latin 3 */
+      /* Assume the KeySym is a legal value (ignore discontinuities) */
+      if (symbol >= GDK_KEY_Hstroke && symbol <= GDK_KEY_Hcircumflex)
+        xlower += (GDK_KEY_hstroke - GDK_KEY_Hstroke);
+      else if (symbol >= GDK_KEY_Gbreve && symbol <= GDK_KEY_Jcircumflex)
+        xlower += (GDK_KEY_gbreve - GDK_KEY_Gbreve);
+      else if (symbol >= GDK_KEY_hstroke && symbol <= GDK_KEY_hcircumflex)
+        xupper -= (GDK_KEY_hstroke - GDK_KEY_Hstroke);
+      else if (symbol >= GDK_KEY_gbreve && symbol <= GDK_KEY_jcircumflex)
+        xupper -= (GDK_KEY_gbreve - GDK_KEY_Gbreve);
+      else if (symbol >= GDK_KEY_Cabovedot && symbol <= GDK_KEY_Scircumflex)
+        xlower += (GDK_KEY_cabovedot - GDK_KEY_Cabovedot);
+      else if (symbol >= GDK_KEY_cabovedot && symbol <= GDK_KEY_scircumflex)
+        xupper -= (GDK_KEY_cabovedot - GDK_KEY_Cabovedot);
+      break;
+
+    case 3: /* Latin 4 */
+      /* Assume the KeySym is a legal value (ignore discontinuities) */
+      if (symbol >= GDK_KEY_Rcedilla && symbol <= GDK_KEY_Tslash)
+        xlower += (GDK_KEY_rcedilla - GDK_KEY_Rcedilla);
+      else if (symbol >= GDK_KEY_rcedilla && symbol <= GDK_KEY_tslash)
+        xupper -= (GDK_KEY_rcedilla - GDK_KEY_Rcedilla);
+      else if (symbol == GDK_KEY_ENG)
+        xlower = GDK_KEY_eng;
+      else if (symbol == GDK_KEY_eng)
+        xupper = GDK_KEY_ENG;
+      else if (symbol >= GDK_KEY_Amacron && symbol <= GDK_KEY_Umacron)
+        xlower += (GDK_KEY_amacron - GDK_KEY_Amacron);
+      else if (symbol >= GDK_KEY_amacron && symbol <= GDK_KEY_umacron)
+        xupper -= (GDK_KEY_amacron - GDK_KEY_Amacron);
+      break;
+
+    case 6: /* Cyrillic */
+      /* Assume the KeySym is a legal value (ignore discontinuities) */
+      if (symbol >= GDK_KEY_Serbian_DJE && symbol <= GDK_KEY_Serbian_DZE)
+        xlower -= (GDK_KEY_Serbian_DJE - GDK_KEY_Serbian_dje);
+      else if (symbol >= GDK_KEY_Serbian_dje && symbol <= GDK_KEY_Serbian_dze)
+        xupper += (GDK_KEY_Serbian_DJE - GDK_KEY_Serbian_dje);
+      else if (symbol >= GDK_KEY_Cyrillic_YU && symbol <= GDK_KEY_Cyrillic_HARDSIGN)
+        xlower -= (GDK_KEY_Cyrillic_YU - GDK_KEY_Cyrillic_yu);
+      else if (symbol >= GDK_KEY_Cyrillic_yu && symbol <= GDK_KEY_Cyrillic_hardsign)
+        xupper += (GDK_KEY_Cyrillic_YU - GDK_KEY_Cyrillic_yu);
+      break;
+
+    case 7: /* Greek */
+      /* Assume the KeySym is a legal value (ignore discontinuities) */
+      if (symbol >= GDK_KEY_Greek_ALPHAaccent && symbol <= GDK_KEY_Greek_OMEGAaccent)
+        xlower += (GDK_KEY_Greek_alphaaccent - GDK_KEY_Greek_ALPHAaccent);
+      else if (symbol >= GDK_KEY_Greek_alphaaccent && symbol <= GDK_KEY_Greek_omegaaccent &&
+               symbol != GDK_KEY_Greek_iotaaccentdieresis &&
+               symbol != GDK_KEY_Greek_upsilonaccentdieresis)
+        xupper -= (GDK_KEY_Greek_alphaaccent - GDK_KEY_Greek_ALPHAaccent);
+      else if (symbol >= GDK_KEY_Greek_ALPHA && symbol <= GDK_KEY_Greek_OMEGA)
+        xlower += (GDK_KEY_Greek_alpha - GDK_KEY_Greek_ALPHA);
+      else if (symbol >= GDK_KEY_Greek_alpha && symbol <= GDK_KEY_Greek_omega &&
+               symbol != GDK_KEY_Greek_finalsmallsigma)
+        xupper -= (GDK_KEY_Greek_alpha - GDK_KEY_Greek_ALPHA);
+      break;
+    }
+
+  if (lower)
+    *lower = xlower;
+  if (upper)
+    *upper = xupper;
 }

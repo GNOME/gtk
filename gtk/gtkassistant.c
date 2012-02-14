@@ -167,6 +167,12 @@ static void       gtk_assistant_buildable_custom_finished    (GtkBuildable  *bui
 
 static GList*     find_page                                  (GtkAssistant  *assistant,
                                                               GtkWidget     *page);
+static void       gtk_assistant_do_set_page_header_image     (GtkAssistant  *assistant,
+                                                              GtkWidget     *page,
+                                                              GdkPixbuf     *pixbuf);
+static void       gtk_assistant_do_set_page_side_image       (GtkAssistant  *assistant,
+                                                              GtkWidget     *page,
+                                                              GdkPixbuf     *pixbuf);
 
 GType             _gtk_assistant_accessible_get_type         (void);
 
@@ -1018,6 +1024,13 @@ gtk_assistant_init (GtkAssistant *assistant)
   gtk_size_group_add_widget (priv->button_size_group, priv->cancel);
   gtk_size_group_add_widget (priv->button_size_group, priv->last);
 
+  gtk_widget_set_no_show_all (priv->close, TRUE);
+  gtk_widget_set_no_show_all (priv->apply, TRUE);
+  gtk_widget_set_no_show_all (priv->forward, TRUE);
+  gtk_widget_set_no_show_all (priv->back, TRUE);
+  gtk_widget_set_no_show_all (priv->cancel, TRUE);
+  gtk_widget_set_no_show_all (priv->last, TRUE);
+
   if (!alternative_button_order (assistant))
     {
       gtk_box_pack_end (GTK_BOX (priv->action_area), priv->apply, FALSE, FALSE, 0);
@@ -1086,12 +1099,12 @@ gtk_assistant_set_child_property (GtkContainer *container,
                                     g_value_get_string (value));
       break;
     case CHILD_PROP_PAGE_HEADER_IMAGE:
-      gtk_assistant_set_page_header_image (GTK_ASSISTANT (container), child,
-                                           g_value_get_object (value));
+      gtk_assistant_do_set_page_header_image (GTK_ASSISTANT (container), child,
+                                              g_value_get_object (value));
       break;
     case CHILD_PROP_PAGE_SIDEBAR_IMAGE:
-      gtk_assistant_set_page_side_image (GTK_ASSISTANT (container), child,
-                                         g_value_get_object (value));
+      gtk_assistant_do_set_page_side_image (GTK_ASSISTANT (container), child,
+                                            g_value_get_object (value));
       break;
     case CHILD_PROP_PAGE_COMPLETE:
       gtk_assistant_set_page_complete (GTK_ASSISTANT (container), child,
@@ -1110,27 +1123,29 @@ gtk_assistant_get_child_property (GtkContainer *container,
                                   GValue       *value,
                                   GParamSpec   *pspec)
 {
+  GtkAssistant *assistant = GTK_ASSISTANT (container);
+
   switch (property_id)
     {
     case CHILD_PROP_PAGE_TYPE:
       g_value_set_enum (value,
-                        gtk_assistant_get_page_type (GTK_ASSISTANT (container), child));
+                        gtk_assistant_get_page_type (assistant, child));
       break;
     case CHILD_PROP_PAGE_TITLE:
       g_value_set_string (value,
-                          gtk_assistant_get_page_title (GTK_ASSISTANT (container), child));
+                          gtk_assistant_get_page_title (assistant, child));
       break;
     case CHILD_PROP_PAGE_HEADER_IMAGE:
       g_value_set_object (value,
-                          gtk_assistant_get_page_header_image (GTK_ASSISTANT (container), child));
+                          ((GtkAssistantPage*) find_page (assistant, child))->header_image);
       break;
     case CHILD_PROP_PAGE_SIDEBAR_IMAGE:
       g_value_set_object (value,
-                          gtk_assistant_get_page_side_image (GTK_ASSISTANT (container), child));
+                          ((GtkAssistantPage*) find_page (assistant, child))->sidebar_image);
       break;
     case CHILD_PROP_PAGE_COMPLETE:
       g_value_set_boolean (value,
-                           gtk_assistant_get_page_complete (GTK_ASSISTANT (container), child));
+                           gtk_assistant_get_page_complete (assistant, child));
       break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
@@ -1608,14 +1623,19 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   page_info = g_slice_new0 (GtkAssistantPage);
   page_info->page  = page;
   page_info->regular_title = gtk_label_new (NULL);
+  gtk_widget_set_no_show_all (page_info->regular_title, TRUE);
   page_info->current_title = gtk_label_new (NULL);
+  gtk_widget_set_no_show_all (page_info->current_title, TRUE);
 
-  gtk_widget_set_halign (page_info->regular_title, GTK_ALIGN_START);
-  gtk_widget_set_valign (page_info->regular_title, GTK_ALIGN_CENTER);
+  /* Note: we need to use misc alignment here as long as GtkLabel
+   * pays attention to it. GtkWiget::halign is ineffective, since
+   * all the labels are getting the same size anyway, due to the
+   * size group.
+   */
+  gtk_misc_set_alignment (GTK_MISC (page_info->regular_title), 0, 0.5);
   gtk_widget_show (page_info->regular_title);
 
-  gtk_widget_set_halign (page_info->current_title, GTK_ALIGN_START);
-  gtk_widget_set_valign (page_info->current_title, GTK_ALIGN_CENTER);
+  gtk_misc_set_alignment (GTK_MISC (page_info->current_title), 0, 0.5);
   gtk_widget_hide (page_info->current_title);
 
   context = gtk_widget_get_style_context (page_info->current_title);
@@ -1654,7 +1674,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
  * gtk_assistant_remove_page:
  * @assistant: a #GtkAssistant
  * @page_num: the index of a page in the @assistant,
- *     or -1 to get the last page
+ *     or -1 to remove the last page
  *
  * Removes the @page_num's page from @assistant.
  *
@@ -1957,12 +1977,20 @@ gtk_assistant_set_page_header_image (GtkAssistant *assistant,
                                      GtkWidget    *page,
                                      GdkPixbuf    *pixbuf)
 {
-  GtkAssistantPage *page_info;
-  GList *child;
-
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
   g_return_if_fail (GTK_IS_WIDGET (page));
   g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
+
+  gtk_assistant_do_set_page_header_image (assistant, page, pixbuf);
+}
+
+static void
+gtk_assistant_do_set_page_header_image (GtkAssistant *assistant,
+                                        GtkWidget    *page,
+                                        GdkPixbuf    *pixbuf)
+{
+  GtkAssistantPage *page_info;
+  GList *child;
 
   child = find_page (assistant, page);
 
@@ -2040,12 +2068,20 @@ gtk_assistant_set_page_side_image (GtkAssistant *assistant,
                                    GtkWidget    *page,
                                    GdkPixbuf    *pixbuf)
 {
-  GtkAssistantPage *page_info;
-  GList *child;
-
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
   g_return_if_fail (GTK_IS_WIDGET (page));
   g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
+
+  gtk_assistant_do_set_page_side_image (assistant, page, pixbuf);
+}
+
+static void
+gtk_assistant_do_set_page_side_image (GtkAssistant *assistant,
+                                      GtkWidget    *page,
+                                      GdkPixbuf    *pixbuf)
+{
+  GtkAssistantPage *page_info;
+  GList *child;
 
   child = find_page (assistant, page);
 

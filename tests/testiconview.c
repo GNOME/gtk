@@ -351,8 +351,7 @@ do_popup_menu (GtkWidget      *icon_list,
       if (list)
         {
           path = (GtkTreePath*)list->data;
-          g_list_foreach (list->next, (GFunc) gtk_tree_path_free, NULL);
-          g_list_free (list);
+          g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
         }
     }
 

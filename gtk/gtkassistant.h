@@ -156,18 +156,20 @@ void                  gtk_assistant_set_page_title        (GtkAssistant         
 const gchar *         gtk_assistant_get_page_title        (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
 
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
+GDK_DEPRECATED
 void                  gtk_assistant_set_page_header_image (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
                                                            GdkPixbuf            *pixbuf);
+GDK_DEPRECATED
 GdkPixbuf            *gtk_assistant_get_page_header_image (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
+GDK_DEPRECATED
 void                  gtk_assistant_set_page_side_image   (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
                                                            GdkPixbuf            *pixbuf);
+GDK_DEPRECATED
 GdkPixbuf            *gtk_assistant_get_page_side_image   (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
-#endif
 
 void                  gtk_assistant_set_page_complete     (GtkAssistant         *assistant,
                                                            GtkWidget            *page,

@@ -87,11 +87,9 @@
  *                          GTK_STOCK_OK, GTK_RESPONSE_OK);
  * g_signal_connect (info_bar, "response",
  *                   G_CALLBACK (gtk_widget_hide), NULL);
- * gtk_table_attach (GTK_TABLE (table),
- *                   info_bar,
- *                   0, 1, 2, 3,
- *                   GTK_EXPAND | GTK_FILL,  0,
- *                   0,                      0);
+ * gtk_grid_attach (GTK_GRID (grid),
+ *                  info_bar,
+ *                  0, 2, 1, 1);
  *
  * /&ast; ... &ast;/
  *

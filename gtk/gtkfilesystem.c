@@ -71,7 +71,6 @@ enum {
 };
 
 static guint fs_signals [FS_LAST_SIGNAL] = { 0, };
-static guint folder_signals [FOLDER_LAST_SIGNAL] = { 0, };
 
 typedef struct AsyncFuncData AsyncFuncData;
 
@@ -90,23 +89,10 @@ struct GtkFileSystemPrivate
   GFileMonitor *bookmarks_monitor;
 };
 
-struct GtkFolderPrivate
-{
-  GFile *folder_file;
-  GHashTable *children;
-  GFileMonitor *directory_monitor;
-  GFileEnumerator *enumerator;
-  GCancellable *cancellable;
-  gchar *attributes;
-
-  guint finished_loading : 1;
-};
-
 struct AsyncFuncData
 {
   GtkFileSystem *file_system;
   GFile *file;
-  GtkFolder *folder;
   GCancellable *cancellable;
   gchar *attributes;
 
@@ -121,15 +107,6 @@ struct GtkFileSystemBookmark
 };
 
 G_DEFINE_TYPE (GtkFileSystem, _gtk_file_system, G_TYPE_OBJECT)
-
-G_DEFINE_TYPE (GtkFolder, _gtk_folder, G_TYPE_OBJECT)
-
-
-static void gtk_folder_set_finished_loading (GtkFolder *folder,
-					     gboolean   finished_loading);
-static void gtk_folder_add_file             (GtkFolder *folder,
-					     GFile     *file,
-					     GFileInfo *info);
 
 
 /* GtkFileSystemBookmark methods */
@@ -264,6 +241,9 @@ read_bookmarks (GFile *file)
       if (!*lines[i])
 	continue;
 
+      if (!g_utf8_validate (lines[i], -1, NULL))
+	continue;
+
       bookmark = g_slice_new0 (GtkFileSystemBookmark);
 
       if ((space = strchr (lines[i], ' ')) != NULL)
@@ -289,23 +269,25 @@ save_bookmarks (GFile  *bookmarks_file,
 {
   GError *error = NULL;
   GString *contents;
+  GSList *l;
 
   contents = g_string_new ("");
 
-  while (bookmarks)
+  for (l = bookmarks; l; l = l->next)
     {
-      GtkFileSystemBookmark *bookmark;
+      GtkFileSystemBookmark *bookmark = l->data;
       gchar *uri;
 
-      bookmark = bookmarks->data;
       uri = g_file_get_uri (bookmark->file);
+      if (!uri)
+	continue;
+
       g_string_append (contents, uri);
 
       if (bookmark->label)
 	g_string_append_printf (contents, " %s", bookmark->label);
 
       g_string_append_c (contents, '\n');
-      bookmarks = bookmarks->next;
       g_free (uri);
     }
 
@@ -631,146 +613,6 @@ _gtk_file_system_list_bookmarks (GtkFileSystem *file_system)
   return g_slist_reverse (files);
 }
 
-static gboolean
-is_valid_scheme_character (char c)
-{
-  return g_ascii_isalnum (c) || c == '+' || c == '-' || c == '.';
-}
-
-static gboolean
-has_uri_scheme (const char *str)
-{
-  const char *p;
-
-  p = str;
-
-  if (!is_valid_scheme_character (*p))
-    return FALSE;
-
-  do
-    p++;
-  while (is_valid_scheme_character (*p));
-
-  return (strncmp (p, "://", 3) == 0);
-}
-
-gboolean
-_gtk_file_system_parse (GtkFileSystem     *file_system,
-		        GFile             *base_file,
-		        const gchar       *str,
-		        GFile            **folder,
-		        gchar            **file_part,
-		        GError           **error)
-{
-  GFile *file;
-  gboolean result = FALSE;
-  gboolean is_dir = FALSE;
-  gchar *last_slash = NULL;
-  gboolean is_uri;
-
-  DEBUG ("parse");
-
-  if (str && *str)
-    is_dir = (str [strlen (str) - 1] == G_DIR_SEPARATOR);
-
-  last_slash = strrchr (str, G_DIR_SEPARATOR);
-
-  is_uri = has_uri_scheme (str);
-
-  if (is_uri)
-    {
-      const char *colon;
-      const char *slash_after_hostname;
-
-      colon = strchr (str, ':');
-      g_assert (colon != NULL);
-      g_assert (strncmp (colon, "://", 3) == 0);
-
-      slash_after_hostname = strchr (colon + 3, '/');
-
-      if (slash_after_hostname == NULL)
-	{
-	  /* We don't have a full hostname yet.  So, don't switch the folder
-	   * until we have seen a full hostname.  Otherwise, completion will
-	   * happen for every character the user types for the hostname.
-	   */
-
-	  *folder = NULL;
-	  *file_part = NULL;
-	  g_set_error (error,
-		       GTK_FILE_CHOOSER_ERROR,
-		       GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME,
-		       "Incomplete hostname");
-	  return FALSE;
-	}
-    }
-
-  if (str[0] == '~' || g_path_is_absolute (str) || is_uri)
-    file = g_file_parse_name (str);
-  else
-    {
-      if (base_file)
-	file = g_file_resolve_relative_path (base_file, str);
-      else
-	{
-	  *folder = NULL;
-	  *file_part = NULL;
-	  g_set_error (error,
-		       GTK_FILE_CHOOSER_ERROR,
-		       GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-		       _("Invalid path"));
-	  return FALSE;
-	}
-    }
-
-  if (base_file && g_file_equal (base_file, file))
-    {
-      /* this is when user types '.', could be the
-       * beginning of a hidden file, ./ or ../
-       */
-      *folder = g_object_ref (file);
-      *file_part = g_strdup (str);
-      result = TRUE;
-    }
-  else if (is_dir)
-    {
-      /* it's a dir, or at least it ends with the dir separator */
-      *folder = g_object_ref (file);
-      *file_part = g_strdup ("");
-      result = TRUE;
-    }
-  else
-    {
-      GFile *parent_file;
-
-      parent_file = g_file_get_parent (file);
-
-      if (!parent_file)
-	{
-	  g_set_error (error,
-		       GTK_FILE_CHOOSER_ERROR,
-		       GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-		       "Could not get parent file");
-	  *folder = NULL;
-	  *file_part = NULL;
-	}
-      else
-	{
-	  *folder = parent_file;
-	  result = TRUE;
-
-	  if (last_slash)
-	    *file_part = g_strdup (last_slash + 1);
-	  else
-	    *file_part = g_strdup (str);
-	}
-    }
-
-  g_object_unref (file);
-
-  return result;
-}
-
 static void
 free_async_data (AsyncFuncData *async_data)
 {
@@ -778,81 +620,8 @@ free_async_data (AsyncFuncData *async_data)
   g_object_unref (async_data->file);
   g_object_unref (async_data->cancellable);
 
-  if (async_data->folder)
-    g_object_unref (async_data->folder);
-
   g_free (async_data->attributes);
   g_free (async_data);
-}
-
-static void
-enumerate_children_callback (GObject      *source_object,
-			     GAsyncResult *result,
-			     gpointer      user_data)
-{
-  GFileEnumerator *enumerator;
-  AsyncFuncData *async_data;
-  GtkFolder *folder = NULL;
-  GFile *file;
-  GError *error = NULL;
-
-  file = G_FILE (source_object);
-  async_data = (AsyncFuncData *) user_data;
-  enumerator = g_file_enumerate_children_finish (file, result, &error);
-
-  if (enumerator)
-    {
-      folder = g_object_new (GTK_TYPE_FOLDER,
-			     "file", source_object,
-			     "enumerator", enumerator,
-			     "attributes", async_data->attributes,
-			     NULL);
-      g_object_unref (enumerator);
-    }
-
-  gdk_threads_enter ();
-  ((GtkFileSystemGetFolderCallback) async_data->callback) (async_data->cancellable,
-							   folder, error, async_data->data);
-  gdk_threads_leave ();
-
-  free_async_data (async_data);
-
-  if (error)
-    g_error_free (error);
-}
-
-GCancellable *
-_gtk_file_system_get_folder (GtkFileSystem                  *file_system,
-			     GFile                          *file,
-			     const gchar                    *attributes,
-			     GtkFileSystemGetFolderCallback  callback,
-			     gpointer                        data)
-{
-  GCancellable *cancellable;
-  AsyncFuncData *async_data;
-
-  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
-  g_return_val_if_fail (G_IS_FILE (file), NULL);
-
-  cancellable = g_cancellable_new ();
-
-  async_data = g_new0 (AsyncFuncData, 1);
-  async_data->file_system = g_object_ref (file_system);
-  async_data->file = g_object_ref (file);
-  async_data->cancellable = g_object_ref (cancellable);
-  async_data->attributes = g_strdup (attributes);
-
-  async_data->callback = callback;
-  async_data->data = data;
-
-  g_file_enumerate_children_async (file,
-				   attributes,
-				   G_FILE_QUERY_INFO_NONE,
-				   G_PRIORITY_DEFAULT,
-				   cancellable,
-				   enumerate_children_callback,
-				   async_data);
-  return cancellable;
 }
 
 static void
@@ -1263,399 +1032,6 @@ _gtk_file_system_get_volume_for_file (GtkFileSystem *file_system,
     return (GtkFileSystemVolume *) root_volume_token;
 
   return (GtkFileSystemVolume *) mount;
-}
-
-/* GtkFolder methods */
-static void
-gtk_folder_set_property (GObject      *object,
-			 guint         prop_id,
-			 const GValue *value,
-			 GParamSpec   *pspec)
-{
-  GtkFolder *folder = GTK_FOLDER (object);
-  GtkFolderPrivate *priv = folder->priv;
-
-  switch (prop_id)
-    {
-    case PROP_FILE:
-      priv->folder_file = g_value_dup_object (value);
-      break;
-    case PROP_ENUMERATOR:
-      priv->enumerator = g_value_dup_object (value);
-      break;
-    case PROP_ATTRIBUTES:
-      priv->attributes = g_value_dup_string (value);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_folder_get_property (GObject    *object,
-			 guint       prop_id,
-			 GValue     *value,
-			 GParamSpec *pspec)
-{
-  GtkFolder *folder = GTK_FOLDER (object);
-  GtkFolderPrivate *priv = folder->priv;
-
-  switch (prop_id)
-    {
-    case PROP_FILE:
-      g_value_set_object (value, priv->folder_file);
-      break;
-    case PROP_ENUMERATOR:
-      g_value_set_object (value, priv->enumerator);
-      break;
-    case PROP_ATTRIBUTES:
-      g_value_set_string (value, priv->attributes);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-query_created_file_info_callback (GObject      *source_object,
-				  GAsyncResult *result,
-				  gpointer      user_data)
-{
-  GFile *file = G_FILE (source_object);
-  GError *error = NULL;
-  GFileInfo *info;
-  GtkFolder *folder;
-  GSList *files;
-
-  info = g_file_query_info_finish (file, result, &error);
-
-  if (error)
-    {
-      g_error_free (error);
-      return;
-    }
-
-  gdk_threads_enter ();
-
-  folder = GTK_FOLDER (user_data);
-  gtk_folder_add_file (folder, file, info);
-
-  files = g_slist_prepend (NULL, file);
-  g_signal_emit (folder, folder_signals[FILES_ADDED], 0, files);
-  g_slist_free (files);
-
-  g_object_unref (info);
-  gdk_threads_leave ();
-}
-
-static void
-directory_monitor_changed (GFileMonitor      *monitor,
-			   GFile             *file,
-			   GFile             *other_file,
-			   GFileMonitorEvent  event,
-			   gpointer           data)
-{
-  GtkFolder *folder = GTK_FOLDER (data);
-  GtkFolderPrivate *priv = folder->priv;
-  GSList *files;
-
-  files = g_slist_prepend (NULL, file);
-
-  gdk_threads_enter ();
-
-  switch (event)
-    {
-    case G_FILE_MONITOR_EVENT_CREATED:
-      g_file_query_info_async (file,
-			       priv->attributes,
-			       G_FILE_QUERY_INFO_NONE,
-			       G_PRIORITY_DEFAULT,
-			       priv->cancellable,
-			       query_created_file_info_callback,
-			       folder);
-      break;
-    case G_FILE_MONITOR_EVENT_DELETED:
-      if (g_file_equal (file, priv->folder_file))
-	g_signal_emit (folder, folder_signals[DELETED], 0);
-      else
-	g_signal_emit (folder, folder_signals[FILES_REMOVED], 0, files);
-      break;
-    default:
-      break;
-    }
-
-  gdk_threads_leave ();
-
-  g_slist_free (files);
-}
-
-static void
-enumerator_files_callback (GObject      *source_object,
-			   GAsyncResult *result,
-			   gpointer      user_data)
-{
-  GtkFolder *folder = GTK_FOLDER (user_data);
-  GtkFolderPrivate *priv = folder->priv;
-  GFileEnumerator *enumerator;
-  GError *error = NULL;
-  GSList *files = NULL;
-  GList *file_infos, *f;
-
-  enumerator = G_FILE_ENUMERATOR (source_object);
-  file_infos = g_file_enumerator_next_files_finish (enumerator, result, &error);
-
-  if (error)
-    {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-        g_warning ("%s", error->message);
-
-      g_error_free (error);
-      return;
-    }
-
-  if (!file_infos)
-    {
-      g_file_enumerator_close_async (enumerator,
-				     G_PRIORITY_DEFAULT,
-				     NULL, NULL, NULL);
-
-      gtk_folder_set_finished_loading (folder, TRUE);
-      return;
-    }
-
-  g_file_enumerator_next_files_async (enumerator, FILES_PER_QUERY,
-				      G_PRIORITY_DEFAULT,
-				      priv->cancellable,
-				      enumerator_files_callback,
-				      folder);
-
-  for (f = file_infos; f; f = f->next)
-    {
-      GFileInfo *info;
-      GFile *child_file;
-
-      info = f->data;
-      child_file = g_file_get_child (priv->folder_file, g_file_info_get_name (info));
-      gtk_folder_add_file (folder, child_file, info);
-      files = g_slist_prepend (files, child_file);
-    }
-
-  gdk_threads_enter ();
-  g_signal_emit (folder, folder_signals[FILES_ADDED], 0, files);
-  gdk_threads_leave ();
-
-  g_list_foreach (file_infos, (GFunc) g_object_unref, NULL);
-  g_list_free (file_infos);
-
-  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
-  g_slist_free (files);
-}
-
-static void
-gtk_folder_constructed (GObject *object)
-{
-  GtkFolder *folder = GTK_FOLDER (object);
-  GtkFolderPrivate *priv = folder->priv;
-  GError *error = NULL;
-
-  priv->directory_monitor = g_file_monitor_directory (priv->folder_file, G_FILE_MONITOR_NONE, NULL, &error);
-
-  if (error)
-    {
-      g_warning ("%s", error->message);
-      g_error_free (error);
-    }
-  else
-    g_signal_connect (priv->directory_monitor, "changed",
-		      G_CALLBACK (directory_monitor_changed), object);
-
-  g_file_enumerator_next_files_async (priv->enumerator,
-				      FILES_PER_QUERY,
-				      G_PRIORITY_DEFAULT,
-				      priv->cancellable,
-				      enumerator_files_callback,
-				      object);
-  /* This isn't needed anymore */
-  g_object_unref (priv->enumerator);
-  priv->enumerator = NULL;
-}
-
-static void
-gtk_folder_finalize (GObject *object)
-{
-  GtkFolder *folder = GTK_FOLDER (object);
-  GtkFolderPrivate *priv = folder->priv;
-
-  g_hash_table_unref (priv->children);
-
-  if (priv->folder_file)
-    g_object_unref (priv->folder_file);
-
-  if (priv->directory_monitor)
-    g_object_unref (priv->directory_monitor);
-
-  g_cancellable_cancel (priv->cancellable);
-  g_object_unref (priv->cancellable);
-  g_free (priv->attributes);
-
-  G_OBJECT_CLASS (_gtk_folder_parent_class)->finalize (object);
-}
-
-static void
-_gtk_folder_class_init (GtkFolderClass *class)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
-
-  object_class->set_property = gtk_folder_set_property;
-  object_class->get_property = gtk_folder_get_property;
-  object_class->constructed = gtk_folder_constructed;
-  object_class->finalize = gtk_folder_finalize;
-
-  g_object_class_install_property (object_class,
-				   PROP_FILE,
-				   g_param_spec_object ("file",
-							"File",
-							"GFile for the folder",
-							G_TYPE_FILE,
-							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property (object_class,
-				   PROP_ENUMERATOR,
-				   g_param_spec_object ("enumerator",
-							"Enumerator",
-							"GFileEnumerator to list files",
-							G_TYPE_FILE_ENUMERATOR,
-							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property (object_class,
-				   PROP_ATTRIBUTES,
-				   g_param_spec_string ("attributes",
-							"Attributes",
-							"Attributes to query for",
-							NULL,
-							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-  folder_signals[FILES_ADDED] =
-    g_signal_new ("files-added",
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkFolderClass, files_added),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__POINTER,
-		  G_TYPE_NONE, 1, G_TYPE_POINTER);
-  folder_signals[FILES_REMOVED] =
-    g_signal_new ("files-removed",
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkFolderClass, files_removed),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__POINTER,
-		  G_TYPE_NONE, 1, G_TYPE_POINTER);
-  folder_signals[FILES_CHANGED] =
-    g_signal_new ("files-changed",
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkFolderClass, files_changed),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__POINTER,
-		  G_TYPE_NONE, 1, G_TYPE_POINTER);
-  folder_signals[FINISHED_LOADING] =
-    g_signal_new ("finished-loading",
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkFolderClass, finished_loading),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE, 0);
-  folder_signals[DELETED] =
-    g_signal_new ("deleted",
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkFolderClass, deleted),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE, 0);
-
-  g_type_class_add_private (object_class, sizeof (GtkFolderPrivate));
-}
-
-static void
-_gtk_folder_init (GtkFolder *folder)
-{
-  GtkFolderPrivate *priv;
-
-  folder->priv = G_TYPE_INSTANCE_GET_PRIVATE (folder,
-                                              GTK_TYPE_FOLDER,
-                                              GtkFolderPrivate);
-  priv = folder->priv;
-  priv->children = g_hash_table_new_full (g_file_hash,
-					  (GEqualFunc) g_file_equal,
-					  (GDestroyNotify) g_object_unref,
-					  (GDestroyNotify) g_object_unref);
-  priv->cancellable = g_cancellable_new ();
-}
-
-static void
-gtk_folder_set_finished_loading (GtkFolder *folder,
-				 gboolean   finished_loading)
-{
-  GtkFolderPrivate *priv = folder->priv;
-
-  priv->finished_loading = (finished_loading == TRUE);
-
-  gdk_threads_enter ();
-  g_signal_emit (folder, folder_signals[FINISHED_LOADING], 0);
-  gdk_threads_leave ();
-}
-
-static void
-gtk_folder_add_file (GtkFolder *folder,
-		     GFile     *file,
-		     GFileInfo *info)
-{
-  GtkFolderPrivate *priv = folder->priv;
-
-  g_hash_table_insert (priv->children,
-		       g_object_ref (file),
-		       g_object_ref (info));
-}
-
-GSList *
-_gtk_folder_list_children (GtkFolder *folder)
-{
-  GtkFolderPrivate *priv = folder->priv;
-  GList *files, *elem;
-  GSList *children = NULL;
-
-  files = g_hash_table_get_keys (priv->children);
-  children = NULL;
-
-  for (elem = files; elem; elem = elem->next)
-    children = g_slist_prepend (children, g_object_ref (elem->data));
-
-  g_list_free (files);
-
-  return children;
-}
-
-GFileInfo *
-_gtk_folder_get_info (GtkFolder  *folder,
-		      GFile      *file)
-{
-  GtkFolderPrivate *priv = folder->priv;
-  GFileInfo *info;
-
-  info = g_hash_table_lookup (priv->children, file);
-
-  if (!info)
-    return NULL;
-
-  return g_object_ref (info);
-}
-
-gboolean
-_gtk_folder_is_finished_loading (GtkFolder *folder)
-{
-  return folder->priv->finished_loading;
 }
 
 /* GtkFileSystemVolume public methods */

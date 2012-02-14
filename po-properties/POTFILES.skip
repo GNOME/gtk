@@ -1,4 +1,7 @@
 demos/gtk-demo/demo.ui
+demos/gtk-demo/menus.ui
+demos/widget-factory/widget-factory.ui
+examples/bloatpad.c
 tests/a11y/accessible-name.ui
 tests/a11y/assistant.ui
 tests/a11y/buttons.ui
@@ -17,6 +20,12 @@ tests/a11y/placeholder-text.ui
 tests/a11y/tree.ui
 tests/reftests/background-area.ref.ui
 tests/reftests/background-area.ui
+tests/reftests/background-color-transparent.ref.ui
+tests/reftests/background-color-transparent.ui
+tests/reftests/background-size-keywords.ref.ui
+tests/reftests/background-size-keywords.ui
+tests/reftests/background-size.ref.ui
+tests/reftests/background-size.ui
 tests/reftests/border-image-gradient.ref.ui
 tests/reftests/border-image-gradient.ui
 tests/reftests/border-image-url.ref.ui
@@ -24,6 +33,8 @@ tests/reftests/border-image-url.ui
 tests/reftests/box-packing.ui
 tests/reftests/box-pseudo-classes.ref.ui
 tests/reftests/box-pseudo-classes.ui
+tests/reftests/css-match-inherit-different-state.ref.ui
+tests/reftests/css-match-inherit-different-state.ui
 tests/reftests/css-match-inherit.ref.ui
 tests/reftests/css-match-inherit.ui
 tests/reftests/css-match-region-matches-star.ref.ui
@@ -32,10 +43,17 @@ tests/reftests/css-match-regions.ref.ui
 tests/reftests/css-match-regions.ui
 tests/reftests/css-match-style-property-order.ref.ui
 tests/reftests/css-match-style-property-order.ui
+tests/reftests/css-multi-state.ref.ui
+tests/reftests/css-multi-state.ui
 tests/reftests/entry-progress-coloring.ref.ui
 tests/reftests/entry-progress-coloring.ui
+tests/reftests/grid-empty-with-spacing.ui
 tests/reftests/grid-wfh.ref.ui
 tests/reftests/grid-wfh.ui
+tests/reftests/inherit-and-initial.ref.ui
+tests/reftests/inherit-and-initial.ui
+tests/reftests/label-attribute-preference.ref.ui
+tests/reftests/label-attribute-preference.ui
 tests/reftests/label-shadows.ref.ui
 tests/reftests/label-shadows.ui
 tests/reftests/label-sizing.ref.ui
@@ -61,4 +79,5 @@ tests/reftests/rotated-layout.ui
 tests/reftests/toplevel-vs-popup.ref.ui
 tests/reftests/toplevel-vs-popup.ui
 tests/testfilechooser.c
-tests/widget-factory.ui
+tests/visuals/inline-toolbar.ui
+tests/visuals/primary-toolbar.ui

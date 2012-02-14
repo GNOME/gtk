@@ -366,8 +366,8 @@ combo_box_set (GtkWidget   *combo,
   gtk_tree_model_foreach (model, set_cb, &set_data);
 }
 
-static char *
-combo_box_get (GtkWidget *combo)
+static gchar *
+combo_box_get (GtkWidget *combo, gboolean *custom)
 {
   GtkTreeModel *model;
   gchar *value;
@@ -377,7 +377,41 @@ combo_box_get (GtkWidget *combo)
 
   value = NULL;
   if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter))
-     gtk_tree_model_get (model, &iter, VALUE_COLUMN, &value, -1);
+    {
+      gtk_tree_model_get (model, &iter, VALUE_COLUMN, &value, -1);
+      *custom = FALSE;
+    }
+  else
+    {
+      if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (combo)))
+        {
+          value = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)))));
+          *custom = TRUE;
+        }
+
+      if (!value || !gtk_tree_model_get_iter_first (model, &iter))
+        return value;
+
+      /* If the user entered an item from the dropdown list manually, return
+       * the non-custom option instead. */
+      do
+        {
+          gchar *val, *name;
+          gtk_tree_model_get (model, &iter, VALUE_COLUMN, &val,
+                                            NAME_COLUMN, &name, -1);
+          if (g_str_equal (value, name))
+            {
+              *custom = FALSE;
+              g_free (name);
+              g_free (value);
+              return val;
+            }
+
+          g_free (val);
+          g_free (name);
+        }
+      while (gtk_tree_model_iter_next (model, &iter));
+    }
 
   return value;
 }
@@ -558,25 +592,29 @@ combo_changed_cb (GtkWidget              *combo,
   gchar *value;
   gchar *filtered_val = NULL;
   gboolean changed;
+  gboolean custom = TRUE;
 
   g_signal_handler_block (priv->source, priv->source_changed_handler);
   
-  value = combo_box_get (combo);
+  value = combo_box_get (combo, &custom);
 
-  /* handle some constraints */
-  switch (priv->source->type)
+  /* Handle constraints if the user entered a custom value. */
+  if (custom)
     {
-    case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSCODE:
-      filtered_val = filter_numeric (value, FALSE, FALSE, &changed);
-      break;   
-    case GTK_PRINTER_OPTION_TYPE_PICKONE_INT:
-      filtered_val = filter_numeric (value, TRUE, FALSE, &changed);
-      break;
-    case GTK_PRINTER_OPTION_TYPE_PICKONE_REAL:
-      filtered_val = filter_numeric (value, TRUE, TRUE, &changed);
-      break;
-    default:
-      break;
+      switch (priv->source->type)
+        {
+        case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSCODE:
+          filtered_val = filter_numeric (value, FALSE, FALSE, &changed);
+          break;
+        case GTK_PRINTER_OPTION_TYPE_PICKONE_INT:
+          filtered_val = filter_numeric (value, TRUE, FALSE, &changed);
+          break;
+        case GTK_PRINTER_OPTION_TYPE_PICKONE_REAL:
+          filtered_val = filter_numeric (value, TRUE, TRUE, &changed);
+          break;
+        default:
+          break;
+        }
     }
 
   if (filtered_val)
@@ -873,6 +911,22 @@ update_widgets (GtkPrinterOptionWidget *widget)
     case GTK_PRINTER_OPTION_TYPE_STRING:
       gtk_entry_set_text (GTK_ENTRY (priv->entry), source->value);
       break;
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSWORD:
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSCODE:
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_REAL:
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_INT:
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_STRING:
+      {
+        GtkEntry *entry;
+
+        entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->combo)));
+        if (gtk_printer_option_has_choice (source, source->value))
+          combo_box_set (priv->combo, source->value);
+        else
+          gtk_entry_set_text (entry, source->value);
+
+        break;
+      }
     case GTK_PRINTER_OPTION_TYPE_FILESAVE:
       {
         gchar *filename = g_filename_from_uri (source->value, NULL, NULL);
@@ -882,13 +936,22 @@ update_widgets (GtkPrinterOptionWidget *widget)
 
             basename = g_path_get_basename (filename);
             dirname = g_path_get_dirname (filename);
+
             text = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
+	    
+            /* need to update dirname and basename without triggering function to avoid loosing names */
+            g_signal_handlers_block_by_func (priv->entry, G_CALLBACK (filesave_changed_cb), widget);
+            g_signal_handlers_block_by_func (priv->combo, G_CALLBACK (filesave_changed_cb), widget);
 
             if (text != NULL)
               gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
             if (g_path_is_absolute (dirname))
-              gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (priv->combo),
+              gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (priv->combo),
                                                    dirname);
+
+            g_signal_handlers_unblock_by_func (priv->entry, G_CALLBACK (filesave_changed_cb), widget);
+            g_signal_handlers_unblock_by_func (priv->combo, G_CALLBACK (filesave_changed_cb), widget);
+            
             g_free (text);
             g_free (basename);
             g_free (dirname);

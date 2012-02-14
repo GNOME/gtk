@@ -390,20 +390,13 @@ gtk_tray_icon_draw (GtkWidget *widget,
   if (focus_child && gtk_widget_has_visible_focus (focus_child))
     {
       GtkStyleContext *context;
-      GtkStateFlags state;
 
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
       context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
-
-      gtk_style_context_save (context);
-      gtk_style_context_set_state (context, state);
 
       gtk_render_focus (context, cr, border_width, border_width,
                         gtk_widget_get_allocated_width (widget) - 2 * border_width,
                         gtk_widget_get_allocated_height (widget) - 2 * border_width);
-
-      gtk_style_context_restore (context);
     }
 
   return retval;
@@ -961,8 +954,8 @@ gtk_tray_icon_realize (GtkWidget *widget)
   if (icon->priv->manager_visual_rgba)
     {
       /* Set a transparent background */
-      GdkColor transparent = { 0, 0, 0, 0 }; /* Only pixel=0 matters */
-      gdk_window_set_background (window, &transparent);
+      GdkRGBA transparent = { 0.0, 0.0, 0.0, 0.0 };
+      gdk_window_set_background_rgba (window, &transparent);
     }
   else
     {

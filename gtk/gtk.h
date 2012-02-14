@@ -36,6 +36,7 @@
 #include <gtk/gtkaccelmap.h>
 #include <gtk/gtkaccessible.h>
 #include <gtk/gtkaction.h>
+#include <gtk/gtkactionable.h>
 #include <gtk/gtkactiongroup.h>
 #include <gtk/gtkactivatable.h>
 #include <gtk/gtkadjustment.h>
@@ -45,6 +46,7 @@
 #include <gtk/gtkappchooserwidget.h>
 #include <gtk/gtkappchooserbutton.h>
 #include <gtk/gtkapplication.h>
+#include <gtk/gtkapplicationwindow.h>
 #include <gtk/gtkarrow.h>
 #include <gtk/gtkaspectframe.h>
 #include <gtk/gtkassistant.h>
@@ -101,19 +103,12 @@
 #include <gtk/gtkfilechooserwidget.h>
 #include <gtk/gtkfilefilter.h>
 #include <gtk/gtkfontbutton.h>
-#include <gtk/gtkfontsel.h>
 #include <gtk/gtkfontchooser.h>
 #include <gtk/gtkfontchooserdialog.h>
+#include <gtk/gtkfontchooserwidget.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkgradient.h>
 #include <gtk/gtkgrid.h>
-#include <gtk/gtkhandlebox.h>
-#include <gtk/gtkhbbox.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkhpaned.h>
-#include <gtk/gtkhscale.h>
-#include <gtk/gtkhscrollbar.h>
-#include <gtk/gtkhseparator.h>
 #include <gtk/gtkhsv.h>
 #include <gtk/gtkiconfactory.h>
 #include <gtk/gtkicontheme.h>
@@ -121,6 +116,7 @@
 #include <gtk/gtkimage.h>
 #include <gtk/gtkimagemenuitem.h>
 #include <gtk/gtkimcontext.h>
+#include <gtk/gtkimcontextinfo.h>
 #include <gtk/gtkimcontextsimple.h>
 #include <gtk/gtkimmulticontext.h>
 #include <gtk/gtkinfobar.h>
@@ -158,7 +154,6 @@
 #include <gtk/gtkradiomenuitem.h>
 #include <gtk/gtkradiotoolbutton.h>
 #include <gtk/gtkrange.h>
-#include <gtk/gtkrc.h>
 #include <gtk/gtkrecentaction.h>
 #include <gtk/gtkrecentchooser.h>
 #include <gtk/gtkrecentchooserdialog.h>
@@ -187,11 +182,8 @@
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkstyleproperties.h>
 #include <gtk/gtkstyleprovider.h>
-#include <gtk/gtkstyle.h>
 #include <gtk/gtkswitch.h>
 #include <gtk/gtksymboliccolor.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtktearoffmenuitem.h>
 #include <gtk/gtktextattributes.h>
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextbufferrichtext.h>
@@ -224,18 +216,31 @@
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtktypebuiltins.h>
 #include <gtk/gtkuimanager.h>
-#include <gtk/gtkvbbox.h>
-#include <gtk/gtkvbox.h>
 #include <gtk/gtkversion.h>
 #include <gtk/gtkviewport.h>
 #include <gtk/gtkvolumebutton.h>
-#include <gtk/gtkvpaned.h>
-#include <gtk/gtkvscale.h>
-#include <gtk/gtkvscrollbar.h>
-#include <gtk/gtkvseparator.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkwindow.h>
+
+#include <gtk/deprecated/gtkfontsel.h>
+#include <gtk/deprecated/gtkhandlebox.h>
+#include <gtk/deprecated/gtkhbbox.h>
+#include <gtk/deprecated/gtkhbox.h>
+#include <gtk/deprecated/gtkhpaned.h>
+#include <gtk/deprecated/gtkhscale.h>
+#include <gtk/deprecated/gtkhscrollbar.h>
+#include <gtk/deprecated/gtkhseparator.h>
+#include <gtk/deprecated/gtkrc.h>
+#include <gtk/deprecated/gtkstyle.h>
+#include <gtk/deprecated/gtktable.h>
+#include <gtk/deprecated/gtktearoffmenuitem.h>
+#include <gtk/deprecated/gtkvbbox.h>
+#include <gtk/deprecated/gtkvbox.h>
+#include <gtk/deprecated/gtkvpaned.h>
+#include <gtk/deprecated/gtkvscale.h>
+#include <gtk/deprecated/gtkvscrollbar.h>
+#include <gtk/deprecated/gtkvseparator.h>
 
 #undef __GTK_H_INSIDE__
 

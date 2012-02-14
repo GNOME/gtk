@@ -38,6 +38,7 @@
  * screen or workspace.
  * <example>
  * <title>Launching an application</title>
+ * <informalexample>
  * <programlisting>
  * GdkAppLaunchContext *context;
  *
@@ -51,6 +52,7 @@
  *
  * g_object_unref (context);
  * </programlisting>
+ * </informalexample>
  * </example>
  */
 

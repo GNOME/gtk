@@ -15,10 +15,10 @@ on_bar_response (GtkInfoBar *info_bar,
   GtkWidget *dialog;
 
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-				   GTK_MESSAGE_INFO,
-				   GTK_BUTTONS_OK,
-				   "You clicked a button on an info bar");
+                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   GTK_MESSAGE_INFO,
+                                   GTK_BUTTONS_OK,
+                                   "You clicked a button on an info bar");
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                             "Your response has id %d", response_id);
   gtk_dialog_run (GTK_DIALOG (dialog));

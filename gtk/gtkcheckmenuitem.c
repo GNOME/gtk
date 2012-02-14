@@ -272,13 +272,14 @@ gtk_check_menu_item_new_with_label (const gchar *label)
 /**
  * gtk_check_menu_item_new_with_mnemonic:
  * @label: The text of the button, with an underscore in front of the
- *         mnemonic character
- * @returns: a new #GtkCheckMenuItem
+ *     character
  *
  * Creates a new #GtkCheckMenuItem containing a label. The label
  * will be created using gtk_label_new_with_mnemonic(), so underscores
  * in @label indicate the mnemonic for the menu item.
- **/
+ *
+ * Returns: a new #GtkCheckMenuItem
+ */
 GtkWidget*
 gtk_check_menu_item_new_with_mnemonic (const gchar *label)
 {
@@ -559,7 +560,7 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
       if (priv->active ||
           priv->always_show_toggle ||
-          (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_PRELIGHT))
+          (state & GTK_STATE_FLAG_PRELIGHT))
         {
           gtk_style_context_save (context);
 
@@ -567,9 +568,6 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
             state |= GTK_STATE_FLAG_INCONSISTENT;
           else if (priv->active)
             state |= GTK_STATE_FLAG_ACTIVE;
-
-          if (!gtk_widget_is_sensitive (widget))
-            state |= GTK_STATE_FLAG_INSENSITIVE;
 
           gtk_style_context_set_state (context, state);
 

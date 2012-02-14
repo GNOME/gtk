@@ -49,6 +49,14 @@
 #include "gtksettings.h"
 #include "gtkprivate.h"
 
+#undef GDK_DEPRECATED
+#undef GDK_DEPRECATED_FOR
+#define GDK_DEPRECATED
+#define GDK_DEPRECATED_FOR(f)
+#undef GTK_DISABLE_DEPRECATED
+
+#include "deprecated/gtkstyle.h"
+
 
 /**
  * SECTION:gtkicontheme
@@ -726,10 +734,8 @@ blow_themes (GtkIconTheme *icon_theme)
   if (priv->themes_valid)
     {
       g_hash_table_destroy (priv->all_icons);
-      g_list_foreach (priv->themes, (GFunc)theme_destroy, NULL);
-      g_list_free (priv->themes);
-      g_list_foreach (priv->dir_mtimes, (GFunc)free_dir_mtime, NULL);
-      g_list_free (priv->dir_mtimes);
+      g_list_free_full (priv->themes, (GDestroyNotify) theme_destroy);
+      g_list_free_full (priv->dir_mtimes, (GDestroyNotify) free_dir_mtime);
       g_hash_table_destroy (priv->unthemed_icons);
     }
   priv->themes = NULL;
@@ -979,7 +985,7 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
   GKeyFile *theme_file;
   GError *error = NULL;
   IconThemeDirMtime *dir_mtime;
-  struct stat stat_buf;
+  GStatBuf stat_buf;
   
   priv = icon_theme->priv;
 
@@ -1123,7 +1129,7 @@ load_themes (GtkIconTheme *icon_theme)
   IconSuffix old_suffix, new_suffix;
   GTimeVal tv;
   IconThemeDirMtime *dir_mtime;
-  struct stat stat_buf;
+  GStatBuf stat_buf;
   
   priv = icon_theme->priv;
 
@@ -1948,7 +1954,7 @@ rescan_themes (GtkIconTheme *icon_theme)
   IconThemeDirMtime *dir_mtime;
   GList *d;
   int stat_res;
-  struct stat stat_buf;
+  GStatBuf stat_buf;
   GTimeVal tv;
 
   priv = icon_theme->priv;
@@ -2013,8 +2019,7 @@ theme_destroy (IconTheme *theme)
   g_free (theme->name);
   g_free (theme->example);
 
-  g_list_foreach (theme->dirs, (GFunc)theme_dir_destroy, NULL);
-  g_list_free (theme->dirs);
+  g_list_free_full (theme->dirs, (GDestroyNotify) theme_dir_destroy);
   
   g_free (theme);
 }
@@ -2713,8 +2718,7 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
   g_free (icon_info->filename);
   if (icon_info->loadable)
     g_object_unref (icon_info->loadable);
-  g_slist_foreach (icon_info->emblem_infos, (GFunc)gtk_icon_info_free, NULL);
-  g_slist_free (icon_info->emblem_infos);
+  g_slist_free_full (icon_info->emblem_infos, (GDestroyNotify) gtk_icon_info_free);
   if (icon_info->pixbuf)
     g_object_unref (icon_info->pixbuf);
   if (icon_info->cache_pixbuf)

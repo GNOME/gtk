@@ -561,7 +561,6 @@ recursive_attach_view (int                 depth,
   GtkWidget *child_view;
   GtkWidget *event_box;
   GdkRGBA color;
-  GtkWidget *align;
 
   if (depth > 4)
     return;
@@ -573,11 +572,10 @@ recursive_attach_view (int                 depth,
   gdk_rgba_parse (&color, "black");
   gtk_widget_override_background_color (event_box, 0, &color);
 
-  align = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-  gtk_container_set_border_width (GTK_CONTAINER (align), 1);
+  gtk_widget_set_halign (child_view, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (child_view, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (event_box), align);
-  gtk_container_add (GTK_CONTAINER (align), child_view);
+  gtk_container_add (GTK_CONTAINER (event_box), child_view);
 
   gtk_text_view_add_child_at_anchor (view, event_box, anchor);
 
@@ -634,4 +632,3 @@ easter_egg_callback (GtkWidget *button,
 
   gtk_widget_show_all (window);
 }
-

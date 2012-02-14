@@ -172,7 +172,7 @@ button_press (GtkWidget      *widget,
   GtkWidget *menu;
   GtkWidget *item;
 
-  if (button->button != 3)
+  if (button->button != GDK_BUTTON_SECONDARY)
     return FALSE;
 
   menu = gtk_menu_new ();

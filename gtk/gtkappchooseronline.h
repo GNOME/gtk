@@ -46,6 +46,7 @@ struct _GtkAppChooserOnlineInterface {
   void (*search_for_mimetype_async)      (GtkAppChooserOnline  *self,
                                           const gchar          *content_type,
                                           GtkWindow            *parent,
+                                          GCancellable         *cancellable,
                                           GAsyncReadyCallback   callback,
                                           gpointer              user_data);
 
@@ -64,6 +65,7 @@ GtkAppChooserOnline * _gtk_app_chooser_online_get_default_finish         (GObjec
 void                  _gtk_app_chooser_online_search_for_mimetype_async  (GtkAppChooserOnline  *self,
                                                                           const gchar          *content_type,
                                                                           GtkWindow            *parent,
+                                                                          GCancellable         *cancellable,
                                                                           GAsyncReadyCallback   callback,
                                                                           gpointer              user_data);
 gboolean              _gtk_app_chooser_online_search_for_mimetype_finish (GtkAppChooserOnline  *self,

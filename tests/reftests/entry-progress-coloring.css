@@ -1,14 +1,14 @@
+@import "reset-to-defaults.css";
+
 * {  
   -GtkWidget-interior-focus: false;
   -GtkWidget-focus-line-width: 10;
-  padding: 0;
-  engine: none;
   font: Monospace;
 }
 
 GtkEntry #padded {
   -GtkWidget-interior-focus: true;
-  padding: 10;
+  padding: 10px;
 }
 
 .progressbar {

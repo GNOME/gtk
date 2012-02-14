@@ -50,7 +50,7 @@ compare_focus (gpointer data)
     g_print ("gtk focus: %s != atk focus: %s\n",
              get_name (gtk_focus), get_name (atk_focus));
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void

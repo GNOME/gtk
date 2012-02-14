@@ -35,6 +35,9 @@
  * of its own. Instead, you should get the embedded #GtkAppChooserWidget
  * using gtk_app_chooser_dialog_get_widget() and call its methods if
  * the generic #GtkAppChooser interface is not sufficient for your needs.
+ *
+ * To set the heading that is shown above the #GtkAppChooserWidget,
+ * use gtk_app_chooser_dialog_set_heading().
  */
 #include "config.h"
 
@@ -74,8 +77,10 @@ struct _GtkAppChooserDialogPrivate {
   GtkWidget *show_more_button;
 
   GtkAppChooserOnline *online;
+  GCancellable *online_cancellable;
 
   gboolean show_more_clicked;
+  gboolean dismissed;
 };
 
 enum {
@@ -125,16 +130,25 @@ search_for_mimetype_ready_cb (GObject      *source,
 
   _gtk_app_chooser_online_search_for_mimetype_finish (online, res, &error);
 
-  if (error != NULL)
+  if (self->priv->dismissed)
+    goto out;
+
+  if (error != NULL &&
+      !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
     {
       show_error_dialog (_("Failed to look for applications online"),
                          error->message, GTK_WINDOW (self));
-      g_error_free (error);
     }
   else
     {
+      gtk_widget_set_sensitive (self->priv->online_button, TRUE);
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self->priv->app_chooser_widget));
     }
+
+ out:
+  g_clear_object (&self->priv->online_cancellable);
+  g_clear_error (&error);
+  g_object_unref (self);
 
   gdk_threads_leave ();
 }
@@ -145,11 +159,15 @@ online_button_clicked_cb (GtkButton *b,
 {
   GtkAppChooserDialog *self = user_data;
 
+  self->priv->online_cancellable = g_cancellable_new ();
+  gtk_widget_set_sensitive (self->priv->online_button, FALSE);
+
   _gtk_app_chooser_online_search_for_mimetype_async (self->priv->online,
 						     self->priv->content_type,
 						     GTK_WINDOW (self),
+                                                     self->priv->online_cancellable,
 						     search_for_mimetype_ready_cb,
-						     self);
+						     g_object_ref (self));
 }
 
 static void
@@ -163,7 +181,8 @@ app_chooser_online_get_default_ready_cb (GObject *source,
 
   self->priv->online = _gtk_app_chooser_online_get_default_finish (source, res);
 
-  if (self->priv->online != NULL)
+  if (self->priv->online != NULL &&
+      !self->priv->dismissed)
     {
       GtkWidget *action_area;
 
@@ -183,13 +202,16 @@ app_chooser_online_get_default_ready_cb (GObject *source,
       gtk_widget_show (self->priv->online_button);
     }
 
+  g_object_unref (self);
+
   gdk_threads_leave ();
 }
 
 static void
 ensure_online_button (GtkAppChooserDialog *self)
 {
-  _gtk_app_chooser_online_get_default_async (app_chooser_online_get_default_ready_cb, self);
+  _gtk_app_chooser_online_get_default_async (app_chooser_online_get_default_ready_cb,
+                                             g_object_ref (self));
 }
 
 /* An application is valid if:
@@ -276,6 +298,16 @@ add_or_find_application (GtkAppChooserDialog *self)
 }
 
 static void
+cancel_and_clear_cancellable (GtkAppChooserDialog *self)
+{                                                               
+  if (self->priv->online_cancellable != NULL)
+    {
+      g_cancellable_cancel (self->priv->online_cancellable);
+      g_clear_object (&self->priv->online_cancellable);
+    }
+}
+
+static void
 gtk_app_chooser_dialog_response (GtkDialog *dialog,
                                  gint       response_id,
                                  gpointer   user_data)
@@ -287,6 +319,10 @@ gtk_app_chooser_dialog_response (GtkDialog *dialog,
     case GTK_RESPONSE_OK:
       add_or_find_application (self);
       break;
+    case GTK_RESPONSE_CANCEL:
+    case GTK_RESPONSE_DELETE_EVENT:
+      cancel_and_clear_cancellable (self);
+      self->priv->dismissed = TRUE;
     default :
       break;
     }
@@ -607,6 +643,7 @@ gtk_app_chooser_dialog_dispose (GObject *object)
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (object);
   
   g_clear_object (&self->priv->gfile);
+  cancel_and_clear_cancellable (self);
   g_clear_object (&self->priv->online);
 
   G_OBJECT_CLASS (gtk_app_chooser_dialog_parent_class)->dispose (object);

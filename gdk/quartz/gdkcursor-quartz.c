@@ -180,7 +180,7 @@ create_builtin_cursor (GdkCursorType cursor_type)
 
   cursor = gdk_quartz_cursor_new_from_nscursor (nscursor, GDK_CURSOR_IS_PIXMAP);
 
-  cached_xcursors[cursor_type] = gdk_cursor_ref (cursor);
+  cached_xcursors[cursor_type] = g_object_ref (cursor);
 
   GDK_QUARTZ_RELEASE_POOL;
 
@@ -243,7 +243,7 @@ _gdk_quartz_display_get_cursor_for_type (GdkDisplay    *display,
     case GDK_BLANK_CURSOR:
       return create_blank_cursor ();
     default:
-      return gdk_cursor_ref (create_builtin_cursor (cursor_type));
+      return g_object_ref (create_builtin_cursor (cursor_type));
     }
 
   [nscursor retain];

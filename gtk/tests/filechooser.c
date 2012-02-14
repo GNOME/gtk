@@ -86,7 +86,7 @@ wait_for_idle_idle (gpointer data)
 {
   wait_for_idle_id = 0;
 
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void

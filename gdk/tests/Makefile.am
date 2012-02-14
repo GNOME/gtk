@@ -19,9 +19,9 @@ progs_ldadd = \
 #check_gdk_cairo_SOURCES  = check-gdk-cairo.c
 #check_gdk_cairo_LDADD    = $(progs_ldadd)
 
-TEST_PROGS        += gdk-color
-gdk_color_SOURCES  = gdk-color.c
-gdk_color_LDADD    = $(progs_ldadd)
+TEST_PROGS   += rgba
+rgba_SOURCES  = rgba.c
+rgba_LDADD    = $(progs_ldadd)
 
 TEST_PROGS        += encoding
 encoding_SOURCES   = encoding.c

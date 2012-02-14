@@ -1055,8 +1055,7 @@ check_and_return:
 
   if (pdata->loaded_items == pdata->n_items)
     {
-      g_list_foreach (pdata->items, (GFunc) gtk_recent_info_unref, NULL);
-      g_list_free (pdata->items);
+      g_list_free_full (pdata->items, (GDestroyNotify) gtk_recent_info_unref);
 
       priv->populate_id = 0;
 

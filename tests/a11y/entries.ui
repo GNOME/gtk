@@ -15,6 +15,22 @@
     <child>
       <object class="GtkBox" id="box1">
         <child>
+          <object class="GtkLabel" id="label1">
+            <property name="label">_entry:</property>
+            <property name="visible">True</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">entry1</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label2">
+            <property name="label">_spinbutton:</property>
+            <property name="visible">True</property>
+            <property name="use-underline">True</property>
+            <property name="mnemonic-widget">spinbutton1</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkEntry" id="entry1">
             <property name="text" translatable="yes">text</property>
             <property name="visible">True</property>

@@ -47,7 +47,11 @@ struct _GtkTextViewAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType _gtk_text_view_accessible_get_type (void);
+GType           _gtk_text_view_accessible_get_type              (void);
+
+void            _gtk_text_view_accessible_set_buffer            (GtkTextView       *textview,
+                                                                 GtkTextBuffer     *old_buffer);
+
 
 G_END_DECLS
 

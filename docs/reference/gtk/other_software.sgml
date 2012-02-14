@@ -121,9 +121,9 @@ Here's a simple example:
     do_small_part_of_task ();
   
     if (task_complete)
-      return FALSE; /* removes the idle handler */
+      return G_SOURCE_REMOVE; /* removes the idle handler */
     else
-      return TRUE;  /* runs the idle handler again */
+      return G_SOURCE_CONTINUE;  /* runs the idle handler again */
   }
 
   g_idle_add (my_idle_handler, NULL);

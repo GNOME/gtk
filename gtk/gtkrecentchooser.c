@@ -895,10 +895,7 @@ gtk_recent_chooser_get_uris (GtkRecentChooser *chooser,
   if (length)
     *length = i;
   
-  g_list_foreach (items,
-  		  (GFunc) gtk_recent_info_unref,
-  		  NULL);
-  g_list_free (items);
+  g_list_free_full (items, (GDestroyNotify) gtk_recent_info_unref);
   
   return retval;
 }

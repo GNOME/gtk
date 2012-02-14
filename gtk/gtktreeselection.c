@@ -25,6 +25,7 @@
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtktreeviewaccessible.h"
 
 
 /**
@@ -554,8 +555,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  *
  * To free the return value, use:
  * |[
- * g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
- * g_list_free (list);
+ * g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
  * ]|
  *
  * Return value: (element-type GtkTreePath) (transfer full): A #GList containing a #GtkTreePath for each selected row.
@@ -605,10 +605,7 @@ gtk_tree_selection_get_selected_rows (GtkTreeSelection   *selection,
       return NULL;
     }
 
-  node = tree->root;
-
-  while (node->left != tree->nil)
-    node = node->left;
+  node = _gtk_rbtree_first (tree);
   path = gtk_tree_path_new_first ();
 
   do
@@ -619,10 +616,7 @@ gtk_tree_selection_get_selected_rows (GtkTreeSelection   *selection,
       if (node->children)
         {
 	  tree = node->children;
-	  node = tree->root;
-
-	  while (node->left != tree->nil)
-	    node = node->left;
+          node = _gtk_rbtree_first (tree);
 
 	  gtk_tree_path_append_index (path, 0);
 	}
@@ -786,10 +780,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
       return;
     }
 
-  node = tree->root;
-  
-  while (node->left != tree->nil)
-    node = node->left;
+  node = _gtk_rbtree_first (tree);
 
   g_object_ref (model);
 
@@ -824,10 +815,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
       if (node->children)
 	{
 	  tree = node->children;
-	  node = tree->root;
-
-	  while (node->left != tree->nil)
-	    node = node->left;
+          node = _gtk_rbtree_first (tree);
 
 	  gtk_tree_path_append_index (path, 0);
 	}
@@ -1377,9 +1365,7 @@ gtk_tree_selection_real_modify_range (GtkTreeSelection *selection,
       if (start_node->children)
 	{
 	  start_tree = start_node->children;
-	  start_node = start_tree->root;
-	  while (start_node->left != start_tree->nil)
-	    start_node = start_node->left;
+          start_node = _gtk_rbtree_first (start_tree);
 	}
       else
 	{
@@ -1644,14 +1630,23 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
 
   if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED) != select)
     {
-      path = _gtk_tree_view_find_path (priv->tree_view, tree, node);
+      path = _gtk_tree_path_new_from_rbtree (tree, node);
       toggle = _gtk_tree_selection_row_is_selectable (selection, node, path);
       gtk_tree_path_free (path);
     }
 
   if (toggle)
     {
-      node->flags ^= GTK_RBNODE_IS_SELECTED;
+      if (!GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+        {
+          GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SELECTED);
+          _gtk_tree_view_accessible_add_state (priv->tree_view, tree, node, GTK_CELL_RENDERER_SELECTED);
+        }
+      else
+        {
+          GTK_RBNODE_UNSET_FLAG (node, GTK_RBNODE_IS_SELECTED);
+          _gtk_tree_view_accessible_remove_state (priv->tree_view, tree, node, GTK_CELL_RENDERER_SELECTED);
+        }
 
       _gtk_tree_view_queue_draw_node (priv->tree_view, tree, node, NULL);
 

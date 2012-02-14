@@ -25,6 +25,7 @@
 
 #include "gtkintl.h"
 #include "gtkmodules.h"
+#include "gtkmodulesprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkprintbackend.h"

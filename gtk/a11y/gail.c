@@ -22,7 +22,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <gdk/gdk.h>
 #include <gtk/gtkx.h>
+#include <gtk/gtkentry.h>
+#include <gtk/gtknotebook.h>
+#include <gtk/gtkmenuitem.h>
+#include <gtk/gtkmenu.h>
+#include <gtk/gtkmenubar.h>
+#include <gtk/gtktogglebutton.h>
+#include <gtk/gtkcombobox.h>
+#include <gtk/gtkaccessible.h>
 #include "gailutil.h"
 #include "gailmisc.h"
 

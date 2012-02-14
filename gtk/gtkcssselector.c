@@ -130,6 +130,7 @@ _gtk_css_selector_print (const GtkCssSelector *selector,
         "nth-child(odd)",
         "first-child",
         "last-child",
+        "only-child",
         "sorted"
       };
       guint i;
@@ -152,7 +153,8 @@ _gtk_css_selector_print (const GtkCssSelector *selector,
         "selected",
         "insensitive",
         "inconsistent",
-        "focus"
+        "focus",
+        "backdrop"
       };
       guint i;
 
@@ -201,6 +203,8 @@ compute_region_flags_for_index (const GtkWidgetPath *path,
     flags |= GTK_REGION_FIRST;
   if (sibling_id + 1 == n_siblings)
     flags |= GTK_REGION_LAST;
+  if (n_siblings == 1)
+    flags |= GTK_REGION_ONLY;
 
   return flags;
 }
@@ -386,7 +390,7 @@ gtk_css_selector_matches_previous (const GtkCssSelector      *selector,
  * _gtk_css_selector_matches:
  * @selector: the selector
  * @path: the path to check
- * @length: How many elements of the path are to be used
+ * @state: The state to match
  *
  * Checks if the @selector matches the given @path. If @length is
  * smaller than the number of elements in @path, it is assumed that
@@ -399,15 +403,19 @@ gtk_css_selector_matches_previous (const GtkCssSelector      *selector,
 gboolean
 _gtk_css_selector_matches (const GtkCssSelector      *selector,
                            const GtkWidgetPath       *path,
-                           guint                      length)
+                           GtkStateFlags              state)
 {
   GSList *list;
   gboolean match;
+  guint length;
 
   g_return_val_if_fail (selector != NULL, FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (length <= gtk_widget_path_length (path), FALSE);
 
+  if ((selector->state & state) != selector->state)
+    return FALSE;
+
+  length = gtk_widget_path_length (path);
   if (length == 0)
     return FALSE;
 

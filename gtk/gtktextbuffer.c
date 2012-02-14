@@ -1489,10 +1489,10 @@ gtk_text_buffer_insert_range_interactive (GtkTextBuffer     *buffer,
  * @text: UTF-8 text
  * @len: length of @text, or -1
  * @first_tag: first tag to apply to @text
- * @Varargs: NULL-terminated list of tags to apply
+ * @...: %NULL-terminated list of tags to apply
  *
  * Inserts @text into @buffer at @iter, applying the list of tags to
- * the newly-inserted text. The last tag specified must be NULL to
+ * the newly-inserted text. The last tag specified must be %NULL to
  * terminate the list. Equivalent to calling gtk_text_buffer_insert(),
  * then gtk_text_buffer_apply_tag() on the inserted text;
  * gtk_text_buffer_insert_with_tags() is just a convenience function.
@@ -1543,7 +1543,7 @@ gtk_text_buffer_insert_with_tags (GtkTextBuffer *buffer,
  * @text: UTF-8 text
  * @len: length of @text, or -1
  * @first_tag_name: name of a tag to apply to @text
- * @Varargs: more tag names
+ * @...: more tag names
  *
  * Same as gtk_text_buffer_insert_with_tags(), but allows you
  * to pass in tag names instead of tag objects.
@@ -2466,7 +2466,7 @@ gtk_text_buffer_select_range (GtkTextBuffer     *buffer,
  * @buffer: a #GtkTextBuffer
  * @tag_name: (allow-none): name of the new tag, or %NULL
  * @first_property_name: (allow-none): name of first property to set, or %NULL
- * @Varargs: %NULL-terminated list of property names and values
+ * @...: %NULL-terminated list of property names and values
  *
  * Creates a tag and adds it to the tag table for @buffer.
  * Equivalent to calling gtk_text_tag_new() and then adding the

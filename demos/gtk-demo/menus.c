@@ -30,8 +30,7 @@
 #include <stdio.h>
 
 static GtkWidget *
-create_menu (gint     depth,
-	     gboolean tearoff)
+create_menu (gint     depth)
 {
   GtkWidget *menu;
   GtkWidget *menuitem;
@@ -45,13 +44,6 @@ create_menu (gint     depth,
   menu = gtk_menu_new ();
   group = NULL;
 
-  if (tearoff)
-    {
-      menuitem = gtk_tearoff_menu_item_new ();
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-      gtk_widget_show (menuitem);
-    }
-
   for (i = 0, j = 1; i < 5; i++, j++)
     {
       sprintf (buf, "item %2d - %d", depth, j);
@@ -61,9 +53,9 @@ create_menu (gint     depth,
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       if (i == 3)
-	gtk_widget_set_sensitive (menuitem, FALSE);
+        gtk_widget_set_sensitive (menuitem, FALSE);
 
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1, TRUE));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1));
     }
 
   return menu;
@@ -106,10 +98,10 @@ do_menus (GtkWidget *do_widget)
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Menus");
       g_signal_connect (window, "destroy",
-			G_CALLBACK(gtk_widget_destroyed), &window);
+                        G_CALLBACK(gtk_widget_destroyed), &window);
 
       accel_group = gtk_accel_group_new ();
       gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
@@ -128,7 +120,7 @@ do_menus (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE, 0);
       gtk_widget_show (menubar);
 
-      menu = create_menu (2, TRUE);
+      menu = create_menu (2);
 
       menuitem = gtk_menu_item_new_with_label ("test\nline2");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
@@ -136,12 +128,12 @@ do_menus (GtkWidget *do_widget)
       gtk_widget_show (menuitem);
 
       menuitem = gtk_menu_item_new_with_label ("foo");
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3, TRUE));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3));
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
 
       menuitem = gtk_menu_item_new_with_label ("bar");
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, TRUE));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4));
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
 
@@ -152,13 +144,13 @@ do_menus (GtkWidget *do_widget)
 
       button = gtk_button_new_with_label ("Flip");
       g_signal_connect (button, "clicked",
-			G_CALLBACK (change_orientation), menubar);
+                        G_CALLBACK (change_orientation), menubar);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
-				G_CALLBACK(gtk_widget_destroy), window);
+                                G_CALLBACK(gtk_widget_destroy), window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);

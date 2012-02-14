@@ -31,7 +31,6 @@
 
 #include <string.h>
 
-#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtksizerequest.h"
 #include "gtkplug.h"
@@ -39,6 +38,7 @@
 #include "gtkdnd.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
+#include "gtkmain.h"
 #include "gtkwidgetprivate.h"
 
 #include <gdk/gdkx.h>

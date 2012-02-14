@@ -75,7 +75,7 @@
  *   if (event->type == GDK_BUTTON_PRESS)
  *     {
  *       event_button = (GdkEventButton *) event;
- *       if (event_button->button == 3)
+ *       if (event_button->button == GDK_BUTTON_SECONDARY)
  *         {
  *           gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 
  *                           event_button->button, event_button->time);
@@ -104,7 +104,6 @@
 #include "gtkmenuprivate.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkmenushellprivate.h"
-#include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
 #include "gtkbox.h"
 #include "gtkscrollbar.h"
@@ -113,6 +112,10 @@
 #include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+
+#include "deprecated/gtktearoffmenuitem.h"
+
+
 #include "a11y/gtkmenuaccessible.h"
 
 #define NAVIGATION_REGION_OVERSHOOT 50  /* How much the navigation region
@@ -135,46 +138,6 @@ struct _GtkMenuAttachData
 {
   GtkWidget *attach_widget;
   GtkMenuDetachFunc detacher;
-};
-
-struct _OldGtkMenuPrivate
-{
-  gint x;
-  gint y;
-  gboolean initially_pushed_in;
-
-  GDestroyNotify position_func_data_destroy;
-
-  /* info used for the table */
-  guint *heights;
-  gint heights_length;
-  gint requested_height;
-
-  gint monitor_num;
-
-  /* Cached layout information */
-  gint n_rows;
-  gint n_columns;
-
-  guint accel_size;
-
-  gchar *title;
-
-  /* Arrow states */
-  GtkStateFlags lower_arrow_state;
-  GtkStateFlags upper_arrow_state;
-
-  /* navigation region */
-  int navigation_x;
-  int navigation_y;
-  int navigation_width;
-  int navigation_height;
-
-  guint have_layout           : 1;
-  guint seen_item_enter       : 1;
-  guint have_position         : 1;
-  guint ignore_button_release : 1;
-  guint no_toggle_size        : 1;
 };
 
 struct _GtkMenuPopdownData
@@ -1239,9 +1202,8 @@ gtk_menu_attach_to_widget (GtkMenu           *menu,
   if (gtk_widget_get_state_flags (GTK_WIDGET (menu)) != 0)
     gtk_widget_set_state_flags (GTK_WIDGET (menu), 0, TRUE);
 
-  /* we don't need to set the style here, since
-   * we are a toplevel widget.
-   */
+  /* Attach the widget to the toplevel window. */
+  gtk_window_set_attached_to (GTK_WINDOW (menu->priv->toplevel), attach_widget);
 
   /* Fallback title for menu comes from attach widget */
   gtk_menu_update_title (menu);
@@ -1294,6 +1256,9 @@ gtk_menu_detach (GtkMenu *menu)
       return;
     }
   g_object_set_data (G_OBJECT (menu), I_(attach_data_key), NULL);
+
+  /* Detach the toplevel window. */
+  gtk_window_set_attached_to (GTK_WINDOW (menu->priv->toplevel), NULL);
 
   g_signal_handlers_disconnect_by_func (data->attach_widget,
                                         (gpointer) attach_widget_screen_changed,
@@ -1479,6 +1444,7 @@ popup_grab_on_window (GdkWindow *window,
  * be used instead.
  *
  * Since: 3.0
+ * Rename to: gtk_menu_popup
  */
 void
 gtk_menu_popup_for_device (GtkMenu             *menu,
@@ -3325,7 +3291,7 @@ gtk_menu_get_preferred_height_for_width (GtkWidget *widget,
       GdkScreen *screen = gtk_widget_get_screen (priv->toplevel);
       GdkRectangle monitor;
 
-      gdk_screen_get_monitor_geometry (screen, priv->monitor_num, &monitor);
+      gdk_screen_get_monitor_workarea (screen, priv->monitor_num, &monitor);
 
       if (priv->position_y + min_height > monitor.y + monitor.height)
         min_height = monitor.y + monitor.height - priv->position_y;
@@ -3581,17 +3547,19 @@ gtk_menu_key_press (GtkWidget   *widget,
     }
 
   /* Figure out what modifiers went into determining the key symbol */
-  gdk_keymap_translate_keyboard_state (gdk_keymap_get_for_display (display),
+  _gtk_translate_keyboard_accel_state (gdk_keymap_get_for_display (display),
                                        event->hardware_keycode,
-                                       event->state, event->group,
-                                       NULL, NULL, NULL, &consumed_modifiers);
+                                       event->state,
+                                       gtk_accelerator_get_default_mod_mask (),
+                                       event->group,
+                                       &accel_key, NULL, NULL, &consumed_modifiers);
 
-  accel_key = gdk_keyval_to_lower (event->keyval);
+  accel_key = gdk_keyval_to_lower (accel_key);
   accel_mods = event->state & gtk_accelerator_get_default_mod_mask () & ~consumed_modifiers;
 
   /* If lowercasing affects the keysym, then we need to include SHIFT
-   * in the modifiers, we re-uppercase when we match against the keyval,
-   * but display and save in caseless form.
+   * in the modifiers, We re-upper case when we match against the
+   * keyval, but display and save in caseless form.
    */
   if (accel_key != event->keyval)
     accel_mods |= GDK_SHIFT_MASK;
@@ -4648,7 +4616,6 @@ gtk_menu_position (GtkMenu  *menu,
   GtkRequisition requisition;
   gint x, y;
   gint scroll_offset;
-  gint menu_height;
   GdkScreen *screen;
   GdkScreen *pointer_screen;
   GdkRectangle monitor;
@@ -4695,7 +4662,7 @@ gtk_menu_position (GtkMenu  *menu,
       if (priv->monitor_num < 0)
         priv->monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
 
-      gdk_screen_get_monitor_geometry (screen, priv->monitor_num, &monitor);
+      gdk_screen_get_monitor_workarea (screen, priv->monitor_num, &monitor);
     }
   else
     {
@@ -4725,7 +4692,7 @@ gtk_menu_position (GtkMenu  *menu,
        * Positioning in the vertical direction is similar: first try below
        * mouse cursor, then above.
        */
-      gdk_screen_get_monitor_geometry (screen, priv->monitor_num, &monitor);
+      gdk_screen_get_monitor_workarea (screen, priv->monitor_num, &monitor);
 
       space_left = x - monitor.x;
       space_right = monitor.x + monitor.width - x - 1;
@@ -4819,24 +4786,20 @@ gtk_menu_position (GtkMenu  *menu,
 
   scroll_offset = 0;
 
-  if (priv->initially_pushed_in)
+  if (y + requisition.height > monitor.y + monitor.height)
     {
-      menu_height = requisition.height;
-
-      if (y + menu_height > monitor.y + monitor.height)
-        {
-          scroll_offset -= y + menu_height - (monitor.y + monitor.height);
-          y = (monitor.y + monitor.height) - menu_height;
-        }
-
-      if (y < monitor.y)
-        {
-          scroll_offset += monitor.y - y;
-          y = monitor.y;
-        }
+      if (priv->initially_pushed_in)
+        scroll_offset += (monitor.y + monitor.height) - requisition.height - y;
+      y = (monitor.y + monitor.height) - requisition.height;
     }
 
-  /* FIXME: should this be done in the various position_funcs ? */
+  if (y < monitor.y)
+    {
+      if (priv->initially_pushed_in)
+        scroll_offset += monitor.y - y;
+      y = monitor.y;
+    }
+
   x = CLAMP (x, monitor.x, MAX (monitor.x, monitor.x + monitor.width - requisition.width));
 
   if (GTK_MENU_SHELL (menu)->priv->active)
@@ -4846,17 +4809,7 @@ gtk_menu_position (GtkMenu  *menu,
       priv->position_y = y;
     }
 
-  if (y + requisition.height > monitor.y + monitor.height)
-    requisition.height = (monitor.y + monitor.height) - y;
-
-  if (y < monitor.y)
-    {
-      scroll_offset += monitor.y - y;
-      requisition.height -= monitor.y - y;
-      y = monitor.y;
-    }
-
-  if (scroll_offset > 0)
+  if (scroll_offset != 0)
     {
       GtkBorder arrow_border;
 
@@ -4913,7 +4866,6 @@ gtk_menu_scroll_to (GtkMenu *menu,
                     gint    offset)
 {
   GtkMenuPrivate *priv = menu->priv;
-  GtkAllocation allocation;
   GtkBorder arrow_border, padding;
   GtkWidget *widget;
   gint x, y;
@@ -4930,9 +4882,8 @@ gtk_menu_scroll_to (GtkMenu *menu,
     gtk_adjustment_set_value (priv->tearoff_adjustment, offset);
 
   /* Move/resize the viewport according to arrows: */
-  gtk_widget_get_allocation (widget, &allocation);
-  view_width = allocation.width;
-  view_height = allocation.height;
+  view_width = gtk_widget_get_allocated_width (widget);
+  view_height = gtk_widget_get_allocated_height (widget);
 
   gtk_widget_style_get (GTK_WIDGET (menu),
                         "vertical-padding", &vertical_padding,

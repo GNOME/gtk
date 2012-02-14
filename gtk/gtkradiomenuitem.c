@@ -270,12 +270,13 @@ gtk_radio_menu_item_new_with_label (GSList *group,
  * @group: group the radio menu item is inside
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
- * @returns: a new #GtkRadioMenuItem
  *
  * Creates a new #GtkRadioMenuItem containing a label. The label
  * will be created using gtk_label_new_with_mnemonic(), so underscores
  * in @label indicate the mnemonic for the menu item.
- **/
+ *
+ * Returns: a new #GtkRadioMenuItem
+ */
 GtkWidget*
 gtk_radio_menu_item_new_with_mnemonic (GSList *group,
 				       const gchar *label)
@@ -297,7 +298,7 @@ gtk_radio_menu_item_new_with_mnemonic (GSList *group,
 }
 
 /**
- * gtk_radio_menu_item_new_from_widget:
+ * gtk_radio_menu_item_new_from_widget: (constructor)
  * @group: An existing #GtkRadioMenuItem
  *
  * Creates a new #GtkRadioMenuItem adding it to the same group as @group.
@@ -320,7 +321,7 @@ gtk_radio_menu_item_new_from_widget (GtkRadioMenuItem *group)
 }
 
 /**
- * gtk_radio_menu_item_new_with_mnemonic_from_widget:
+ * gtk_radio_menu_item_new_with_mnemonic_from_widget: (constructor)
  * @group: An existing #GtkRadioMenuItem
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
@@ -350,7 +351,7 @@ gtk_radio_menu_item_new_with_mnemonic_from_widget (GtkRadioMenuItem *group,
 }
 
 /**
- * gtk_radio_menu_item_new_with_label_from_widget:
+ * gtk_radio_menu_item_new_with_label_from_widget: (constructor)
  * @group: an existing #GtkRadioMenuItem
  * @label: the text for the label
  *

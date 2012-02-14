@@ -33,6 +33,36 @@ G_BEGIN_DECLS
 
 GType      gdk_wayland_display_manager_get_type   (void);
 
+#if defined (GTK_COMPILATION) || defined (GDK_COMPILATION)
+#define gdk_wayland_device_get_selection_type_atoms gdk_wayland_device_get_selection_type_atoms_libgtk_only
+int
+gdk_wayland_device_get_selection_type_atoms (GdkDevice  *device,
+                                             GdkAtom   **atoms_out);
+
+typedef void (*GdkDeviceWaylandRequestContentCallback) (GdkDevice *device, const gchar *data, gsize len, gpointer userdata);
+
+#define gdk_wayland_device_request_selection_content gdk_wayland_device_request_selection_content_libgtk_only
+gboolean
+gdk_wayland_device_request_selection_content (GdkDevice                              *device,
+                                              const gchar                            *requested_mime_type,
+                                              GdkDeviceWaylandRequestContentCallback  cb,
+                                              gpointer                                userdata);
+
+typedef gchar *(*GdkDeviceWaylandOfferContentCallback) (GdkDevice *device, const gchar *mime_type, gssize *len, gpointer userdata);
+
+#define gdk_wayland_device_offer_selection_content gdk_wayland_device_offer_selection_content_libgtk_only
+gboolean
+gdk_wayland_device_offer_selection_content (GdkDevice                             *gdk_device,
+                                            const gchar                          **mime_types,
+                                            gint                                   nr_mime_types,
+                                            GdkDeviceWaylandOfferContentCallback   cb,
+                                            gpointer                               userdata);
+
+#define gdk_wayland_device_clear_selection_content gdk_wayland_device_clear_selection_content_libgtk_only
+gboolean
+gdk_wayland_device_clear_selection_content (GdkDevice *gdk_device);
+
+#endif
 G_END_DECLS
 
 #endif /* __GDK_WAYLAND_H__ */

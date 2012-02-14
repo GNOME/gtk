@@ -1630,7 +1630,18 @@ gdk_window_quartz_restack_toplevel (GdkWindow *window,
 				    GdkWindow *sibling,
 				    gboolean   above)
 {
-  /* FIXME: Implement this */
+  GdkWindowImplQuartz *impl;
+  gint sibling_num;
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (sibling->impl);
+  sibling_num = [impl->toplevel windowNumber];
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+
+  if (above)
+    [impl->toplevel orderWindow:NSWindowAbove relativeTo:sibling_num];
+  else
+    [impl->toplevel orderWindow:NSWindowBelow relativeTo:sibling_num];
 }
 
 static void
@@ -2441,6 +2452,7 @@ gdk_quartz_window_set_skip_pager_hint (GdkWindow *window,
 static void
 gdk_quartz_window_begin_resize_drag (GdkWindow     *window,
                                      GdkWindowEdge  edge,
+                                     GdkDevice     *device,
                                      gint           button,
                                      gint           root_x,
                                      gint           root_y,
@@ -2472,6 +2484,7 @@ gdk_quartz_window_begin_resize_drag (GdkWindow     *window,
 
 static void
 gdk_quartz_window_begin_move_drag (GdkWindow *window,
+                                   GdkDevice *device,
                                    gint       button,
                                    gint       root_x,
                                    gint       root_y,
@@ -2530,9 +2543,17 @@ gdk_quartz_window_get_frame_extents (GdkWindow    *window,
   rect->height = ns_rect.size.height;
 }
 
+/* Fake protocol to make gcc think that it's OK to call setStyleMask
+   even if it isn't. We check to make sure before actually calling
+   it. */
+
+@protocol CanSetStyleMask
+- (void)setStyleMask:(int)mask;
+@end
+
 static void
 gdk_quartz_window_set_decorations (GdkWindow       *window,
-                                   GdkWMDecoration  decorations)
+			    GdkWMDecoration  decorations)
 {
   GdkWindowImplQuartz *impl;
   NSUInteger old_mask, new_mask;
@@ -2589,7 +2610,7 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
        */
       if ([impl->toplevel respondsToSelector:@selector(setStyleMask:)])
         {
-          [impl->toplevel setStyleMask:new_mask];
+          [(id<CanSetStyleMask>)impl->toplevel setStyleMask:new_mask];
         }
       else
         {

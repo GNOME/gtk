@@ -38,7 +38,6 @@
 #include "gtktreemenu.h"
 #include "gtkmarshalers.h"
 #include "gtkmenuitem.h"
-#include "gtktearoffmenuitem.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkcellareabox.h"
 #include "gtkcellareacontext.h"
@@ -47,6 +46,7 @@
 #include "gtkmenushellprivate.h"
 #include "gtkprivate.h"
 
+#include "deprecated/gtktearoffmenuitem.h"
 
 /* GObjectClass */
 static GObject  *gtk_tree_menu_constructor                    (GType                  type,

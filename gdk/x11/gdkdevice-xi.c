@@ -292,7 +292,7 @@ gdk_x11_device_xi_get_state (GdkDevice       *device,
   gint i;
 
   if (mask)
-    gdk_window_get_pointer (window, NULL, NULL, mask);
+    gdk_window_get_device_position (window, device, NULL, NULL, mask);
 
   device_xi = GDK_X11_DEVICE_XI (device);
   state = XQueryDeviceState (GDK_WINDOW_XDISPLAY (window),

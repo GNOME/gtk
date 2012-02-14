@@ -23,62 +23,64 @@
 #include "gtkbooleancellaccessible.h"
 
 
-static gchar *property_list[] = {
-  "active",
-  "radio",
-  "sensitive",
-  NULL
-};
-
 G_DEFINE_TYPE (GtkBooleanCellAccessible, _gtk_boolean_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE)
 
 
-static gboolean
-gtk_boolean_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
-                                          gboolean                   emit_change_signal)
+static AtkStateSet *
+gtk_boolean_cell_accessible_ref_state_set (AtkObject *accessible)
+{
+  GtkBooleanCellAccessible *cell = GTK_BOOLEAN_CELL_ACCESSIBLE (accessible);
+  AtkStateSet *state_set;
+
+  state_set = ATK_OBJECT_CLASS (_gtk_boolean_cell_accessible_parent_class)->ref_state_set (accessible);
+
+  if (cell->cell_value)
+    atk_state_set_add_state (state_set, ATK_STATE_CHECKED);
+
+  if (cell->cell_sensitive)
+    atk_state_set_add_state (state_set, ATK_STATE_SENSITIVE);
+  else
+    atk_state_set_remove_state (state_set, ATK_STATE_SENSITIVE);
+
+  return state_set;
+}
+
+static void
+gtk_boolean_cell_accessible_update_cache (GtkCellAccessible *cell)
 {
   GtkBooleanCellAccessible *boolean_cell = GTK_BOOLEAN_CELL_ACCESSIBLE (cell);
-  gboolean rv = FALSE;
   gboolean active;
   gboolean sensitive;
 
-  g_object_get (G_OBJECT (cell->renderer),
+  g_object_get (G_OBJECT (GTK_RENDERER_CELL_ACCESSIBLE (cell)->renderer),
                 "active", &active,
                 "sensitive", &sensitive,
                 NULL);
 
   if (boolean_cell->cell_value != active)
     {
-      rv = TRUE;
       boolean_cell->cell_value = !boolean_cell->cell_value;
 
-      if (active)
-        _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_CHECKED, emit_change_signal);
-      else
-        _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_CHECKED, emit_change_signal);
+      atk_object_notify_state_change (ATK_OBJECT (cell), ATK_STATE_CHECKED, active);
     }
 
   if (boolean_cell->cell_sensitive != sensitive)
     {
-      rv = TRUE;
       boolean_cell->cell_sensitive = !boolean_cell->cell_sensitive;
 
-      if (sensitive)
-        _gtk_cell_accessible_add_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_SENSITIVE, emit_change_signal);
-      else
-        _gtk_cell_accessible_remove_state (GTK_CELL_ACCESSIBLE (cell), ATK_STATE_SENSITIVE, emit_change_signal);
+      atk_object_notify_state_change (ATK_OBJECT (cell), ATK_STATE_CHECKED, sensitive);
     }
-
-  return rv;
 }
 
 static void
 _gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
 {
-  GtkRendererCellAccessibleClass *renderer_cell_class = GTK_RENDERER_CELL_ACCESSIBLE_CLASS (klass);
+  GtkCellAccessibleClass *cell_class = GTK_CELL_ACCESSIBLE_CLASS (klass);
+  AtkObjectClass *atkobject_class = ATK_OBJECT_CLASS (klass);
 
-  renderer_cell_class->update_cache = gtk_boolean_cell_accessible_update_cache;
-  renderer_cell_class->property_list = property_list;
+  atkobject_class->ref_state_set = gtk_boolean_cell_accessible_ref_state_set;
+
+  cell_class->update_cache = gtk_boolean_cell_accessible_update_cache;
 }
 
 static void
@@ -86,26 +88,3 @@ _gtk_boolean_cell_accessible_init (GtkBooleanCellAccessible *cell)
 {
 }
 
-AtkObject *
-_gtk_boolean_cell_accessible_new (void)
-{
-  GObject *object;
-  AtkObject *atk_object;
-  GtkRendererCellAccessible *cell;
-  GtkBooleanCellAccessible *boolean_cell;
-
-  object = g_object_new (GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE, NULL);
-
-  atk_object = ATK_OBJECT (object);
-  atk_object->role = ATK_ROLE_TABLE_CELL;
-
-  cell = GTK_RENDERER_CELL_ACCESSIBLE (object);
-  cell->renderer = gtk_cell_renderer_toggle_new ();
-  g_object_ref_sink (cell->renderer);
-
-  boolean_cell = GTK_BOOLEAN_CELL_ACCESSIBLE (object);
-  boolean_cell->cell_value = FALSE;
-  boolean_cell->cell_sensitive = TRUE;
-
-  return atk_object;
-}

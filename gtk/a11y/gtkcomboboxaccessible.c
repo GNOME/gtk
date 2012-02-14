@@ -117,7 +117,7 @@ gtk_combo_box_accessible_get_name (AtkObject *obj)
       n_columns = gtk_tree_model_get_n_columns (model);
       for (i = 0; i < n_columns; i++)
         {
-          GValue value = { 0, };
+          GValue value = G_VALUE_INIT;
 
           gtk_tree_model_get_value (model, &iter, i, &value);
           if (G_VALUE_HOLDS_STRING (&value))
@@ -273,7 +273,7 @@ gtk_combo_box_accessible_get_keybinding (AtkAction *action,
     {
       target = atk_relation_get_target (relation);
       target_object = g_ptr_array_index (target, 0);
-      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (target_object));
+      label = gtk_accessible_get_widget (GTK_ACCESSIBLE (target_object));
     }
   g_object_unref (set);
   if (GTK_IS_LABEL (label))

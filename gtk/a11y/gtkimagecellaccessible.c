@@ -22,11 +22,6 @@
 #include <gtk/gtk.h>
 #include "gtkimagecellaccessible.h"
 
-static gchar *property_list[] = {
-  "pixbuf",
-  NULL
-};
-
 static void atk_image_interface_init (AtkImageIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkImageCellAccessible, _gtk_image_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
@@ -41,45 +36,12 @@ gtk_image_cell_accessible_finalize (GObject *object)
   G_OBJECT_CLASS (_gtk_image_cell_accessible_parent_class)->finalize (object);
 }
 
-static gboolean
-gtk_image_cell_accessible_update_cache (GtkRendererCellAccessible *cell,
-                                        gboolean                   emit_change_signal)
-{
-  return FALSE;
-}
-
 static void
 _gtk_image_cell_accessible_class_init (GtkImageCellAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkRendererCellAccessibleClass *renderer_cell_class = GTK_RENDERER_CELL_ACCESSIBLE_CLASS (klass);
 
   gobject_class->finalize = gtk_image_cell_accessible_finalize;
-
-  renderer_cell_class->update_cache = gtk_image_cell_accessible_update_cache;
-  renderer_cell_class->property_list = property_list;
-}
-
-AtkObject *
-_gtk_image_cell_accessible_new (void)
-{
-  GObject *object;
-  AtkObject *atk_object;
-  GtkRendererCellAccessible *cell;
-
-  object = g_object_new (GTK_TYPE_IMAGE_CELL_ACCESSIBLE, NULL);
-
-  g_return_val_if_fail (object != NULL, NULL);
-
-  atk_object = ATK_OBJECT (object);
-  atk_object->role = ATK_ROLE_TABLE_CELL;
-
-  cell = GTK_RENDERER_CELL_ACCESSIBLE (object);
-
-  cell->renderer = gtk_cell_renderer_pixbuf_new ();
-  g_object_ref_sink (cell->renderer);
-
-  return atk_object;
 }
 
 static void

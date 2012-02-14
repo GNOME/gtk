@@ -525,8 +525,7 @@ _gtk_recent_chooser_get_items (GtkRecentChooser  *chooser,
       l = clamp->next;
       clamp->next = NULL;
     
-      g_list_foreach (l, (GFunc) gtk_recent_info_unref, NULL);
-      g_list_free (l);
+      g_list_free_full (l, (GDestroyNotify) gtk_recent_info_unref);
     }
 
   return items;

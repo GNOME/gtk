@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<chapter id="gtk-migrating-unique-GtkApplication">
+
+  <title>Migrating from libunique to GApplication or GtkApplication</title>
+
+  <para>
+    libunique offers 'unique application' support as well as ways to
+    communicate with a running application instance. This is implemented
+    in various ways, either using D-Bus, or socket-based communication.
+  </para>
+
+  <para>
+    Starting with GLib 2.26, D-Bus support has been integrated into GIO
+    in the form of GDBus, and #GApplication has been added to provide
+    the same level of application support as libunique.
+  </para>
+
+  <example><title>A unique application</title>
+  <para>Here is a simple application using libunique:
+  <informalexample><programlisting>
+int
+main (int argc, char *argv[])
+{
+  UniqueApp *app;
+  GtkWidget *window;
+
+  gtk_init (&amp;argc, &amp;argv);
+
+  app = unique_app_new ("org.gtk.TestApplication", NULL);
+
+  if (unique_app_is_running (app))
+    {
+      UniqueResponse response;
+
+      response = unique_app_send_message (app, UNIQUE_ACTIVATE, NULL);
+      g_object_unref (app);
+
+      return response == UNIQUE_RESPONSE_OK ? 0 : 1;
+    }
+
+  window = create_my_window ();
+
+  unique_app_watch_window (app, GTK_WINDOW (window));
+
+  gtk_widget_show (window);
+
+  gtk_main ();
+
+  g_object_unref (app);
+
+  return 0;
+}
+</programlisting></informalexample>
+The same application using GtkApplication:
+<informalexample><programlisting>
+static void
+activate (GtkApplication *app)
+{
+  GList *list;
+  GtkWidget *window;
+
+  list = gtk_application_get_windows (app);
+
+  if (list)
+    {
+      gtk_window_present (GTK_WINDOW (list->data));
+    }
+  else
+    {
+      window = create_my_window ();
+      gtk_window_set_application (GTK_WINDOW (window), app);
+      gtk_widget_show (window);
+    }
+}
+
+int
+main (int argc, char *argv[])
+{
+  GtkApplication *app;
+  gint status;
+
+  app = gtk_application_new ("org.gtk.TestApplication", 0);
+  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+
+  status = g_application_run (G_APPLICATION (app), argc, argv);
+
+  g_object_unref (app);
+
+  return status;
+}
+</programlisting></informalexample>
+</para>
+</example>
+  <section><title>Uniqueness</title>
+    <para>
+      Instead of creating a #UniqueApp with unique_app_new(), create
+      a #GApplication with g_application_new() or a #GtkApplication
+      with gtk_application_new(). The @name that was used with
+      unique_app_new() is very likely usable as the @application_id for
+      g_application_new() without any changes, and GtkApplication passes
+      the <envar>DESKTOP_STARTUP_ID</envar> environment variable
+      automatically.
+    </para>
+    <para>
+      While libunique expects you to check for an already running instance
+      yourself and activate it manually, GApplication handles all this on
+      its own in g_application_run(). If you still need to find out if there
+      is a running instance of your application, use
+      g_application_get_is_remote() instead of unique_app_is_running().
+    </para>
+  </section>
+
+  <section><title>Commands and Messages</title>
+    <para>
+      libunique lets you send messages with commands to a running
+      instance using unique_app_send_message(). The commands can be either
+      predefined or custom. Some of the predefined libunique commands have
+      equivalents in GApplication. Instead of sending the %UNIQUE_ACTIVATE
+      command, call g_application_activate(), instead of sending the
+      %UNIQUE_OPEN command, call g_application_open(). The
+      %UNIQUE_NEW and %UNIQUE_CLOSE and user-defined commands don't
+      have direct replacement at this time.
+    </para>
+
+    <para>
+      As a replacement for custom commands, GApplication implements the
+      #GActionGroup interface and lets you add a group of actions with
+      g_application_set_action_group(). The actions can then be invoked,
+      either by using the D-Bus interface for #GAction directly, or by
+      calling g_action_group_activate_action() from another instance of
+      the GApplication. The #GApplication documentation contains an
+      example for using GApplication with actions.
+    </para>
+
+    <para>
+      For more complex needs, GApplication supports passing entire
+      commandlines to the running instance.
+    </para>
+  </section>
+</chapter>

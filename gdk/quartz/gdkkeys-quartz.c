@@ -205,7 +205,60 @@ const static struct {
   { 0x001d, GDK_KEY_Right },
   { 0x001e, GDK_KEY_Up },
   { 0x001f, GDK_KEY_Down },
-  { 0x007f, GDK_KEY_Delete }
+  { 0x007f, GDK_KEY_Delete },
+  { 0xf027, GDK_KEY_dead_acute },
+  { 0xf060, GDK_KEY_dead_grave },
+  { 0xf300, GDK_KEY_dead_grave },
+  { 0xf0b4, GDK_KEY_dead_acute },
+  { 0xf301, GDK_KEY_dead_acute },
+  { 0xf385, GDK_KEY_dead_acute },
+  { 0xf05e, GDK_KEY_dead_circumflex },
+  { 0xf2c6, GDK_KEY_dead_circumflex },
+  { 0xf302, GDK_KEY_dead_circumflex },
+  { 0xf07e, GDK_KEY_dead_tilde },
+  { 0xf303, GDK_KEY_dead_tilde },
+  { 0xf342, GDK_KEY_dead_perispomeni },
+  { 0xf0af, GDK_KEY_dead_macron },
+  { 0xf304, GDK_KEY_dead_macron },
+  { 0xf2d8, GDK_KEY_dead_breve },
+  { 0xf306, GDK_KEY_dead_breve },
+  { 0xf2d9, GDK_KEY_dead_abovedot },
+  { 0xf307, GDK_KEY_dead_abovedot },
+  { 0xf0a8, GDK_KEY_dead_diaeresis },
+  { 0xf308, GDK_KEY_dead_diaeresis },
+  { 0xf2da, GDK_KEY_dead_abovering },
+  { 0xf30A, GDK_KEY_dead_abovering },
+  { 0xf022, GDK_KEY_dead_doubleacute },
+  { 0xf2dd, GDK_KEY_dead_doubleacute },
+  { 0xf30B, GDK_KEY_dead_doubleacute },
+  { 0xf2c7, GDK_KEY_dead_caron },
+  { 0xf30C, GDK_KEY_dead_caron },
+  { 0xf0be, GDK_KEY_dead_cedilla },
+  { 0xf327, GDK_KEY_dead_cedilla },
+  { 0xf2db, GDK_KEY_dead_ogonek },
+  { 0xf328, GDK_KEY_dead_ogonek },
+  { 0xfe5d, GDK_KEY_dead_iota },
+  { 0xf323, GDK_KEY_dead_belowdot },
+  { 0xf309, GDK_KEY_dead_hook },
+  { 0xf31B, GDK_KEY_dead_horn },
+  { 0xf02d, GDK_KEY_dead_stroke },
+  { 0xf335, GDK_KEY_dead_stroke },
+  { 0xf336, GDK_KEY_dead_stroke },
+  { 0xf313, GDK_KEY_dead_abovecomma },
+  /*  { 0xf313, GDK_KEY_dead_psili }, */
+  { 0xf314, GDK_KEY_dead_abovereversedcomma },
+  /*  { 0xf314, GDK_KEY_dead_dasia }, */
+  { 0xf30F, GDK_KEY_dead_doublegrave },
+  { 0xf325, GDK_KEY_dead_belowring },
+  { 0xf2cd, GDK_KEY_dead_belowmacron },
+  { 0xf331, GDK_KEY_dead_belowmacron },
+  { 0xf32D, GDK_KEY_dead_belowcircumflex },
+  { 0xf330, GDK_KEY_dead_belowtilde },
+  { 0xf32E, GDK_KEY_dead_belowbreve },
+  { 0xf324, GDK_KEY_dead_belowdiaeresis },
+  { 0xf311, GDK_KEY_dead_invertedbreve },
+  { 0xf02c, GDK_KEY_dead_belowcomma },
+  { 0xf326, GDK_KEY_dead_belowcomma }
 };
 
 static void
@@ -306,18 +359,10 @@ maybe_update_keymap (void)
 			p[j] = GDK_KEY_ISO_Left_Tab;
 
 		      if (!found)
-                        {
-                          guint tmp;
-                          
-                          tmp = gdk_unicode_to_keyval (uc);
-                          if (tmp != (uc | 0x01000000))
-                            p[j] = tmp;
-                          else
-                            p[j] = 0;
-                        }
+                        p[j] = gdk_unicode_to_keyval (uc);
 		    }
 		}
-	      
+
 	      if (p[3] == p[2])
 		p[3] = 0;
 	      if (p[2] == p[1])
@@ -353,10 +398,10 @@ maybe_update_keymap (void)
 		  UniChar uc;
 		  
 		  key_code = modifiers[j] | i;
-		  err = UCKeyTranslate (chr_data, i, kUCKeyActionDown,
+		  err = UCKeyTranslate (chr_data, i, kUCKeyActionDisplay,
 		                        (modifiers[j] >> 8) & 0xFF,
 		                        LMGetKbdType(),
-		                        kUCKeyTranslateNoDeadKeysMask,
+		                        0,
 		                        &state, 4, &nChars, chars);
 
 
@@ -368,8 +413,22 @@ maybe_update_keymap (void)
 		    {
 		      int k;
 		      gboolean found = FALSE;
-		      
-		      uc = chars[0];
+
+		      /* A few <Shift><Option>keys return two
+		       * characters, the first of which is U+00a0,
+		       * which isn't interesting; so we return the
+		       * second. More sophisticated handling is the
+		       * job of a GtkIMContext.
+		       *
+		       * If state isn't zero, it means that it's a
+		       * dead key of some sort. Some of those are
+		       * enumerated in the special_ucs_table with the
+		       * high nibble set to f to push it into the
+		       * private use range. Here we do the same.
+		       */
+		      if (state != 0)
+			chars[nChars - 1] |= 0xf000;
+		      uc = chars[nChars - 1];
 
 		      for (k = 0; k < G_N_ELEMENTS (special_ucs_table); k++) 
 			{
@@ -386,20 +445,12 @@ maybe_update_keymap (void)
 		       */
 		      if (found && p[j] == GDK_KEY_Tab && modifiers[j] == shiftKey)
 			p[j] = GDK_KEY_ISO_Left_Tab;
-		      
+
 		      if (!found)
-                        {
-                          guint tmp;
-                          
-                          tmp = gdk_unicode_to_keyval (uc);
-                          if (tmp != (uc | 0x01000000))
-                            p[j] = tmp;
-                          else
-                            p[j] = 0;
-                        }
+                        p[j] = gdk_unicode_to_keyval (uc);
 		    }
 		}
-	      
+
 	      if (p[3] == p[2])
 		p[3] = 0;
 	      if (p[2] == p[1])
@@ -494,8 +545,8 @@ gdk_quartz_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
       (*n_keys)++;
 
       key.keycode = i / KEYVALS_PER_KEYCODE;
-      key.group = 0;
-      key.level = i % KEYVALS_PER_KEYCODE;
+      key.group = (i % KEYVALS_PER_KEYCODE) >= 2;
+      key.level = i % 2;
 
       g_array_append_val (keys_array, key);
     }
@@ -550,7 +601,7 @@ gdk_quartz_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
 	  GdkKeymapKey key;
 
 	  key.keycode = hardware_keycode;
-	  key.group = i / 2;
+	  key.group = i >= 2;
 	  key.level = i % 2;
 
 	  g_array_append_val (keys_array, key);
@@ -606,6 +657,11 @@ translate_keysym (guint           hardware_keycode,
         tmp_keyval = upper;
     }
 
+  if (effective_group)
+    *effective_group = group;
+  if (effective_level)
+    *effective_level = level;
+
   return tmp_keyval;
 }
 
@@ -636,12 +692,18 @@ gdk_quartz_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
   if (hardware_keycode < 0 || hardware_keycode >= NUM_KEYCODES)
     return FALSE;
-  
-  /* Check if shift or capslock modify the keyval */
-  for (bit = GDK_SHIFT_MASK; bit < GDK_CONTROL_MASK; bit <<= 1)
+
+  /* Check if modifiers modify the keyval */
+  for (bit = GDK_SHIFT_MASK; bit < GDK_BUTTON1_MASK; bit <<= 1)
     {
-      if (translate_keysym (hardware_keycode, group, state & ~bit, NULL, NULL) !=
-	  translate_keysym (hardware_keycode, group, state | bit, NULL, NULL))
+      if (translate_keysym (hardware_keycode,
+                            (bit == GDK_MOD1_MASK) ? 0 : group,
+                            state & ~bit,
+                            NULL, NULL) !=
+	  translate_keysym (hardware_keycode,
+                            (bit == GDK_MOD1_MASK) ? 1 : group,
+                            state | bit,
+                            NULL, NULL))
 	tmp_modifiers |= bit;
     }
 
@@ -660,15 +722,47 @@ static void
 gdk_quartz_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
                                          GdkModifierType *state)
 {
-  /* FIXME: For now, we've mimiced the Windows backend. */
+  if (*state & GDK_MOD2_MASK)
+    *state |= GDK_META_MASK;
 }
 
 static gboolean
 gdk_quartz_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
                                          GdkModifierType *state)
 {
-  /* FIXME: For now, we've mimiced the Windows backend. */
+  if (*state & GDK_META_MASK)
+    *state |= GDK_MOD2_MASK;
+
   return TRUE;
+}
+
+static GdkModifierType
+gdk_quartz_keymap_get_modifier_mask (GdkKeymap         *keymap,
+                                     GdkModifierIntent  intent)
+{
+  switch (intent)
+    {
+    case GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR:
+      return GDK_MOD2_MASK;
+
+    case GDK_MODIFIER_INTENT_CONTEXT_MENU:
+      return GDK_CONTROL_MASK;
+
+    case GDK_MODIFIER_INTENT_EXTEND_SELECTION:
+      return GDK_SHIFT_MASK;
+
+    case GDK_MODIFIER_INTENT_MODIFY_SELECTION:
+      return GDK_MOD2_MASK;
+
+    case GDK_MODIFIER_INTENT_NO_TEXT_INPUT:
+      return GDK_MOD2_MASK | GDK_CONTROL_MASK;
+
+    case GDK_MODIFIER_INTENT_SHIFT_GROUP:
+      return GDK_MOD1_MASK;
+
+    default:
+      g_return_val_if_reached (0);
+    }
 }
 
 /* What sort of key event is this? Returns one of
@@ -760,4 +854,5 @@ gdk_quartz_keymap_class_init (GdkQuartzKeymapClass *klass)
   keymap_class->translate_keyboard_state = gdk_quartz_keymap_translate_keyboard_state;
   keymap_class->add_virtual_modifiers = gdk_quartz_keymap_add_virtual_modifiers;
   keymap_class->map_virtual_modifiers = gdk_quartz_keymap_map_virtual_modifiers;
+  keymap_class->get_modifier_mask = gdk_quartz_keymap_get_modifier_mask;
 }

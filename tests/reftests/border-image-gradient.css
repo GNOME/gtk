@@ -1,20 +1,24 @@
-.button-image {
+* {
   engine: none;
+  border-image: none;
+  border-radius: 0;
+  border-style: solid;
+  border-color: transparent;
+  border-width: 0;
+}
 
+.button-image {
   border-image-source: -gtk-gradient(linear,
                                      left top, left bottom,
                                      from(green),
                                      to(green));
   border-image-slice: 1;
   border-image-repeat: stretch;
-
-  border-width: 1 2 2 1;
-  border-radius: 0;
+  border-width: 1px 2px 2px 1px;
 }
 
 .button-not-image {
   border-color: green;
   border-style: solid;
-  border-width: 1 2 2 1;
-  border-radius: 0;
+  border-width: 1px 2px 2px 1px;
 }

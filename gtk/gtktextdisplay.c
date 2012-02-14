@@ -584,10 +584,9 @@ render_para (GtkTextRenderer    *text_renderer,
   screen_width = line_display->total_width;
 
   context = gtk_widget_get_style_context (text_renderer->widget);
+  state = gtk_widget_get_state_flags (text_renderer->widget);
 
-  state = GTK_STATE_FLAG_SELECTED;
-  if (gtk_widget_has_focus (text_renderer->widget))
-    state |= GTK_STATE_FLAG_FOCUSED;
+  state |= GTK_STATE_FLAG_SELECTED;
 
   gtk_style_context_get_background_color (context, state, &selection);
 
@@ -821,11 +820,11 @@ gtk_text_layout_draw (GtkTextLayout *layout,
                       cairo_t *cr,
                       GList **widgets)
 {
+  GtkStyleContext *context;
   gint offset_y;
-  GSList *cursor_list;
   GtkTextRenderer *text_renderer;
   GtkTextIter selection_start, selection_end;
-  gboolean have_selection = FALSE;
+  gboolean have_selection;
   GSList *line_list;
   GSList *tmp_list;
   GList *tmp_widgets;
@@ -838,6 +837,8 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 
   if (!gdk_cairo_get_clip_rectangle (cr, &clip))
     return;
+
+  context = gtk_widget_get_style_context (widget);
 
   line_list = gtk_text_layout_get_lines (layout, clip.y, clip.y + clip.height, &offset_y);
 
@@ -852,10 +853,9 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 
   gtk_text_layout_wrap_loop_start (layout);
 
-  if (gtk_text_buffer_get_selection_bounds (layout->buffer,
-                                            &selection_start,
-                                            &selection_end))
-    have_selection = TRUE;
+  have_selection = gtk_text_buffer_get_selection_bounds (layout->buffer,
+                                                         &selection_start,
+                                                         &selection_end);
 
   tmp_list = line_list;
   while (tmp_list != NULL)
@@ -863,8 +863,6 @@ gtk_text_layout_draw (GtkTextLayout *layout,
       GtkTextLineDisplay *line_display;
       gint selection_start_index = -1;
       gint selection_end_index = -1;
-      gboolean have_strong;
-      gboolean have_weak;
 
       GtkTextLine *line = tmp_list->data;
 
@@ -906,50 +904,26 @@ gtk_text_layout_draw (GtkTextLayout *layout,
                        selection_start_index, selection_end_index);
 
           /* We paint the cursors last, because they overlap another chunk
-         and need to appear on top. */
-
- 	  have_strong = FALSE;
- 	  have_weak = FALSE;
-	  
-	  cursor_list = line_display->cursors;
-	  while (cursor_list)
-	    {
-	      GtkTextCursorDisplay *cursor = cursor_list->data;
- 	      if (cursor->is_strong)
- 		have_strong = TRUE;
- 	      else
- 		have_weak = TRUE;
-	      
-	      cursor_list = cursor_list->next;
- 	    }
-	  
-          cursor_list = line_display->cursors;
-          while (cursor_list)
+           * and need to appear on top.
+           */
+          if (line_display->cursors != NULL)
             {
-              GtkTextCursorDisplay *cursor = cursor_list->data;
-	      GtkTextDirection dir;
- 	      GdkRectangle cursor_location;
+              int i;
 
-              dir = line_display->direction;
- 	      if (have_strong && have_weak)
- 		{
- 		  if (!cursor->is_strong)
- 		    dir = (dir == GTK_TEXT_DIR_RTL) ? GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
- 		}
- 
- 	      cursor_location.x = line_display->x_offset + cursor->x;
- 	      cursor_location.y = line_display->top_margin + cursor->y;
- 	      cursor_location.width = 0;
- 	      cursor_location.height = cursor->height;
+              for (i = 0; i < line_display->cursors->len; i++)
+                {
+                  int index;
+                  PangoDirection dir;
 
-	      gtk_draw_insertion_cursor (widget, cr, &cursor_location,
-                                         cursor->is_strong,
-                                         dir, have_strong && have_weak);
-
-              cursor_list = cursor_list->next;
+                  index = g_array_index(line_display->cursors, int, i);
+                  dir = (line_display->direction == GTK_TEXT_DIR_RTL) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
+                  gtk_render_insertion_cursor (context, cr,
+                                               line_display->x_offset, line_display->top_margin,
+                                               line_display->layout, index, dir);
+                }
             }
         } /* line_display->height > 0 */
-          
+
       cairo_translate (cr, 0, line_display->height);
       gtk_text_layout_free_line_display (layout, line_display);
       
@@ -962,10 +936,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   if (widgets)
     *widgets = tmp_widgets;
   else
-    {
-      g_list_foreach (tmp_widgets, (GFunc)g_object_unref, NULL);
-      g_list_free (tmp_widgets);
-    }
+    g_list_free_full (tmp_widgets, g_object_unref);
 
   g_slist_free (line_list);
 }

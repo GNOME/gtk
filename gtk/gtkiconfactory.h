@@ -32,7 +32,9 @@
 #define __GTK_ICON_FACTORY_H__
 
 #include <gdk/gdk.h>
-#include <gtk/gtkrc.h>
+#include <gtk/gtksettings.h>
+#include <gtk/gtkenums.h>
+#include <gtk/gtkwidgetpath.h>
 
 G_BEGIN_DECLS
 
@@ -46,8 +48,15 @@ G_BEGIN_DECLS
 #define GTK_TYPE_ICON_SET                  (gtk_icon_set_get_type ())
 #define GTK_TYPE_ICON_SOURCE               (gtk_icon_source_get_type ())
 
+typedef struct _GtkIconFactory              GtkIconFactory;
 typedef struct _GtkIconFactoryPrivate       GtkIconFactoryPrivate;
 typedef struct _GtkIconFactoryClass         GtkIconFactoryClass;
+
+typedef struct _GtkIconSet     GtkIconSet;
+typedef struct _GtkIconSource  GtkIconSource;
+
+typedef struct _GtkStyle               GtkStyle;
+typedef struct _GtkRcStyle             GtkRcStyle;
 
 struct _GtkIconFactory
 {
@@ -121,10 +130,7 @@ GtkIconSet* gtk_icon_set_ref             (GtkIconSet      *icon_set);
 void        gtk_icon_set_unref           (GtkIconSet      *icon_set);
 GtkIconSet* gtk_icon_set_copy            (GtkIconSet      *icon_set);
 
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-/* Get one of the icon variants in the set, creating the variant if
- * necessary.
- */
+GDK_DEPRECATED_FOR(gtk_icon_set_render_icon_pixbuf)
 GdkPixbuf*  gtk_icon_set_render_icon     (GtkIconSet      *icon_set,
                                           GtkStyle        *style,
                                           GtkTextDirection direction,
@@ -132,7 +138,6 @@ GdkPixbuf*  gtk_icon_set_render_icon     (GtkIconSet      *icon_set,
                                           GtkIconSize      size,
                                           GtkWidget       *widget,
                                           const gchar     *detail);
-#endif
 
 void           gtk_icon_set_add_source   (GtkIconSet          *icon_set,
                                           const GtkIconSource *source);

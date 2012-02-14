@@ -308,8 +308,7 @@ gdk_quartz_display_finalize (GObject *object)
 {
   GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (object);
 
-  g_list_foreach (display_quartz->input_devices, (GFunc) g_object_unref, NULL);
-  g_list_free (display_quartz->input_devices);
+  g_list_free_full (display_quartz->input_devices, g_object_unref);
 
   G_OBJECT_CLASS (gdk_quartz_display_parent_class)->finalize (object);
 }

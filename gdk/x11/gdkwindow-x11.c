@@ -273,7 +273,7 @@ gdk_window_impl_x11_finalize (GObject *object)
   g_free (impl->toplevel);
 
   if (impl->cursor)
-    gdk_cursor_unref (impl->cursor);
+    g_object_unref (impl->cursor);
 
   g_hash_table_destroy (impl->device_cursor);
 
@@ -1765,7 +1765,7 @@ move_to_current_desktop (GdkWindow *window)
           xclient.format = 32;
 
           xclient.data.l[0] = *current_desktop;
-          xclient.data.l[1] = 0;
+          xclient.data.l[1] = 1; /* source indication */
           xclient.data.l[2] = 0;
           xclient.data.l[3] = 0;
           xclient.data.l[4] = 0;
@@ -1804,7 +1804,7 @@ gdk_x11_window_focus (GdkWindow *window,
       xclient.type = ClientMessage;
       xclient.window = GDK_WINDOW_XID (window);
       xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display,
-									"_NET_ACTIVE_WINDOW");
+                                                                    "_NET_ACTIVE_WINDOW");
       xclient.format = 32;
       xclient.data.l[0] = 1; /* requestor type; we're an app */
       xclient.data.l[1] = timestamp;
@@ -1988,7 +1988,7 @@ gdk_wmspec_change_state (gboolean   add,
   xclient.data.l[0] = add ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
   xclient.data.l[1] = gdk_x11_atom_to_xatom_for_display (display, state1);
   xclient.data.l[2] = gdk_x11_atom_to_xatom_for_display (display, state2);
-  xclient.data.l[3] = 0;
+  xclient.data.l[3] = 1; /* source indication */
   xclient.data.l[4] = 0;
   
   XSendEvent (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XROOTWIN (window), False,
@@ -3087,6 +3087,89 @@ gdk_x11_window_set_user_time (GdkWindow *window,
 }
 
 /**
+ * gdk_x11_window_set_utf8_property:
+ * @window: (type GdkX11Window): a #GdkWindow
+ * @name: Property name, will be interned as an X atom
+ * @value: (allow-none): Property value, or %NULL to delete
+ *
+ * This function modifies or removes an arbitrary X11 window
+ * property of type UTF8_STRING.  If the given @window is
+ * not a toplevel window, it is ignored.
+ *
+ * Since: 3.4
+ */
+void
+gdk_x11_window_set_utf8_property  (GdkWindow *window,
+				   const gchar *name,
+				   const gchar *value)
+{
+  GdkDisplay *display;
+
+  if (!WINDOW_IS_TOPLEVEL (window))
+    return;
+
+  display = gdk_window_get_display (window);
+
+  if (value != NULL)
+    {
+      XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
+                       GDK_WINDOW_XID (window),
+                       gdk_x11_get_xatom_by_name_for_display (display, name),
+                       gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
+                       PropModeReplace, (guchar *)value, strlen (value));
+    }
+  else
+    {
+      XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
+                       GDK_WINDOW_XID (window),
+                       gdk_x11_get_xatom_by_name_for_display (display, name));
+    }
+}
+
+/**
+ * gdk_x11_window_set_hide_titlebar_when_maximized:
+ * @window: (type GdkX11Window): a #GdkWindow
+ * @hide_titlebar_when_maximized: whether to hide the titlebar when
+ *                                maximized
+ *
+ * Set a hint for the window manager, requesting that the titlebar
+ * should be hidden when the window is maximized.
+ *
+ * Note that this property is automatically updated by GTK+, so this
+ * function should only be used by applications which do not use GTK+
+ * to create toplevel windows.
+ *
+ * Since: 3.4
+ */
+void
+gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
+                                                 gboolean   hide_titlebar_when_maximized)
+{
+  GdkDisplay *display;
+
+  if (!WINDOW_IS_TOPLEVEL (window))
+    return;
+
+  display = gdk_window_get_display (window);
+
+  if (hide_titlebar_when_maximized)
+    {
+      guint32 hide = 1;
+      XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
+                       GDK_WINDOW_XID (window),
+                       gdk_x11_get_xatom_by_name_for_display (display, "_GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED"),
+                       XA_CARDINAL, 32,
+                       PropModeReplace, (guchar *)&hide, 1);
+    }
+  else
+    {
+      XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
+                       GDK_WINDOW_XID (window),
+                       gdk_x11_get_xatom_by_name_for_display (display, "_GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED"));
+    }
+}
+
+/**
  * gdk_x11_window_set_theme_variant:
  * @window: (type GdkX11Window): a #GdkWindow
  * @variant: the theme variant to export
@@ -3107,27 +3190,7 @@ void
 gdk_x11_window_set_theme_variant (GdkWindow *window,
                                   char      *variant)
 {
-  GdkDisplay *display;
-
-  if (!WINDOW_IS_TOPLEVEL (window))
-    return;
-
-  display = gdk_window_get_display (window);
-
-  if (variant != NULL)
-    {
-      XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
-                       GDK_WINDOW_XID (window),
-                       gdk_x11_get_xatom_by_name_for_display (display, "_GTK_THEME_VARIANT"),
-                       gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-                       PropModeReplace, (guchar *)variant, strlen (variant));
-    }
-  else
-    {
-      XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
-                       GDK_WINDOW_XID (window),
-                       gdk_x11_get_xatom_by_name_for_display (display, "_GTK_THEME_VARIANT"));
-    }
+  return gdk_x11_window_set_utf8_property (window, "_GTK_THEME_VARIANT", variant);
 }
 
 #define GDK_SELECTION_MAX_SIZE(display)                                 \
@@ -3829,17 +3892,24 @@ _gdk_x11_xwindow_get_shape (Display *xdisplay,
   shape = NULL;
   rn = 0;
 
-  xrl = XShapeGetRectangles (xdisplay,
-			     window,
-			     shape_type, &rn, &ord);
+  /* Note that XShapeGetRectangles returns NULL in two situations:
+   * - the server doesn't support the SHAPE extension
+   * - the shape is empty
+   *
+   * Since we can't discriminate these here, we always return
+   * an empty shape. It is the callers responsibility to check
+   * whether the server supports the SHAPE extensions beforehand.
+   */
+  xrl = XShapeGetRectangles (xdisplay, window, shape_type, &rn, &ord);
 
-  if (xrl == NULL || rn == 0)
+  if (rn == 0)
     return cairo_region_create (); /* Empty */
 
   if (ord != YXBanded)
     {
       /* This really shouldn't happen with any xserver, as they
-	 generally convert regions to YXBanded internally */
+       * generally convert regions to YXBanded internally
+       */
       g_warning ("non YXBanded shape masks not supported");
       XFree (xrl);
       return NULL;
@@ -3854,10 +3924,10 @@ _gdk_x11_xwindow_get_shape (Display *xdisplay,
       rl[i].height = xrl[i].height;
     }
   XFree (xrl);
-  
+
   shape = cairo_region_create_rectangles (rl, rn);
   g_free (rl);
-  
+
   return shape;
 }
 
@@ -3879,7 +3949,7 @@ gdk_x11_window_get_input_shape (GdkWindow *window)
 {
 #if defined(ShapeInput)
   if (!GDK_WINDOW_DESTROYED (window) &&
-      gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
+      gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
     return _gdk_x11_xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
                                        GDK_WINDOW_XID (window),
                                        ShapeInput);
@@ -3950,60 +4020,6 @@ gdk_window_x11_set_static_gravities (GdkWindow *window,
   return TRUE;
 }
 
-static void
-wmspec_moveresize (GdkWindow *window,
-                   gint       direction,
-                   gint       root_x,
-                   gint       root_y,
-                   guint32    timestamp)     
-{
-  GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
-  
-  XClientMessageEvent xclient;
-
-  /* Release passive grab */
-  gdk_display_pointer_ungrab (display, timestamp);
-
-  memset (&xclient, 0, sizeof (xclient));
-  xclient.type = ClientMessage;
-  xclient.window = GDK_WINDOW_XID (window);
-  xclient.message_type =
-    gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_MOVERESIZE");
-  xclient.format = 32;
-  xclient.data.l[0] = root_x;
-  xclient.data.l[1] = root_y;
-  xclient.data.l[2] = direction;
-  xclient.data.l[3] = 0;
-  xclient.data.l[4] = 0;
-  
-  XSendEvent (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XROOTWIN (window), False,
-	      SubstructureRedirectMask | SubstructureNotifyMask,
-	      (XEvent *)&xclient);
-}
-
-typedef struct _MoveResizeData MoveResizeData;
-
-struct _MoveResizeData
-{
-  GdkDisplay *display;
-  
-  GdkWindow *moveresize_window;
-  GdkWindow *moveresize_emulation_window;
-  gboolean is_resize;
-  GdkWindowEdge resize_edge;
-  gint moveresize_button;
-  gint moveresize_x;
-  gint moveresize_y;
-  gint moveresize_orig_x;
-  gint moveresize_orig_y;
-  gint moveresize_orig_width;
-  gint moveresize_orig_height;
-  GdkWindowHints moveresize_geom_mask;
-  GdkGeometry moveresize_geometry;
-  Time moveresize_process_time;
-  XEvent *moveresize_pending_event;
-};
-
 /* From the WM spec */
 #define _NET_WM_MOVERESIZE_SIZE_TOPLEFT      0
 #define _NET_WM_MOVERESIZE_SIZE_TOP          1
@@ -4013,11 +4029,98 @@ struct _MoveResizeData
 #define _NET_WM_MOVERESIZE_SIZE_BOTTOM       5
 #define _NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT   6
 #define _NET_WM_MOVERESIZE_SIZE_LEFT         7
-#define _NET_WM_MOVERESIZE_MOVE              8
+#define _NET_WM_MOVERESIZE_MOVE              8   /* movement only */
+#define _NET_WM_MOVERESIZE_SIZE_KEYBOARD     9   /* size via keyboard */
+#define _NET_WM_MOVERESIZE_MOVE_KEYBOARD    10   /* move via keyboard */
+#define _NET_WM_MOVERESIZE_CANCEL           11   /* cancel operation */
+
+static void
+wmspec_send_message (GdkDisplay *display,
+                     GdkWindow  *window,
+                     gint        root_x,
+                     gint        root_y,
+                     gint        action,
+                     gint        button)
+{
+  XClientMessageEvent xclient;
+
+  memset (&xclient, 0, sizeof (xclient));
+  xclient.type = ClientMessage;
+  xclient.window = GDK_WINDOW_XID (window);
+  xclient.message_type =
+    gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_MOVERESIZE");
+  xclient.format = 32;
+  xclient.data.l[0] = root_x;
+  xclient.data.l[1] = root_y;
+  xclient.data.l[2] = action;
+  xclient.data.l[3] = button;
+  xclient.data.l[4] = 1;  /* source indication */
+
+  XSendEvent (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XROOTWIN (window), False,
+              SubstructureRedirectMask | SubstructureNotifyMask,
+              (XEvent *)&xclient);
+}
+
+static gboolean
+handle_wmspec_button_release (GdkDisplay *display,
+                              XEvent     *xevent)
+{
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  GdkWindow *window;
+
+#if defined (HAVE_XGENERICEVENTS) && defined (XINPUT_2)
+  XIEvent *xiev = (XIEvent *) xevent->xcookie.data;
+  XIDeviceEvent *xidev = (XIDeviceEvent *) xiev;
+
+  if (xevent->xany.type == GenericEvent)
+    window = gdk_x11_window_lookup_for_display (display, xidev->event);
+  else
+#endif
+    window = gdk_x11_window_lookup_for_display (display, xevent->xany.window);
+
+  if (display_x11->wm_moveresize_button != 0 && window != NULL)
+    {
+      if ((xevent->xany.type == ButtonRelease &&
+           xevent->xbutton.button == display_x11->wm_moveresize_button)
+#if defined (HAVE_XGENERICEVENTS) && defined (XINPUT_2)
+          ||
+          (xevent->xany.type == GenericEvent &&
+           xiev->evtype == XI_ButtonRelease &&
+           xidev->detail == display_x11->wm_moveresize_button)
+#endif
+          )
+        {
+          display_x11->wm_moveresize_button = 0;
+          wmspec_send_message (display, window, 0, 0, _NET_WM_MOVERESIZE_CANCEL, 0);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+wmspec_moveresize (GdkWindow *window,
+                   gint       direction,
+                   GdkDevice *device,
+                   gint       button,
+                   gint       root_x,
+                   gint       root_y,
+                   guint32    timestamp)
+{
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+
+  /* Release passive grab */
+  gdk_device_ungrab (device, timestamp);
+  GDK_X11_DISPLAY (display)->wm_moveresize_button = button;
+
+  wmspec_send_message (display, window, root_x, root_y, direction, button);
+}
 
 static void
 wmspec_resize_drag (GdkWindow     *window,
                     GdkWindowEdge  edge,
+                    GdkDevice     *device,
                     gint           button,
                     gint           root_x,
                     gint           root_y,
@@ -4068,8 +4171,32 @@ wmspec_resize_drag (GdkWindow     *window,
       return;
     }
   
-  wmspec_moveresize (window, direction, root_x, root_y, timestamp);
+  wmspec_moveresize (window, direction, device, button, root_x, root_y, timestamp);
 }
+
+typedef struct _MoveResizeData MoveResizeData;
+
+struct _MoveResizeData
+{
+  GdkDisplay *display;
+
+  GdkWindow *moveresize_window;
+  GdkWindow *moveresize_emulation_window;
+  gboolean is_resize;
+  GdkWindowEdge resize_edge;
+  GdkDevice *device;
+  gint moveresize_button;
+  gint moveresize_x;
+  gint moveresize_y;
+  gint moveresize_orig_x;
+  gint moveresize_orig_y;
+  gint moveresize_orig_width;
+  gint moveresize_orig_height;
+  GdkWindowHints moveresize_geom_mask;
+  GdkGeometry moveresize_geometry;
+  Time moveresize_process_time;
+  XEvent *moveresize_pending_event;
+};
 
 static MoveResizeData *
 get_move_resize_data (GdkDisplay *display,
@@ -4250,6 +4377,9 @@ _gdk_x11_moveresize_handle_event (XEvent *event)
   GdkDisplay *display = gdk_x11_lookup_xdisplay (event->xany.display);
   MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
 
+  if (handle_wmspec_button_release (display, event))
+    return TRUE;
+
   if (!mv_resize || !mv_resize->moveresize_window)
     return FALSE;
 
@@ -4293,6 +4423,33 @@ _gdk_x11_moveresize_handle_event (XEvent *event)
       if (event->xbutton.button == mv_resize->moveresize_button)
         finish_drag (mv_resize);
       break;
+
+#if defined (HAVE_XGENERICEVENTS) && defined (XINPUT_2)
+    case GenericEvent:
+      {
+        /* we just assume this is an XI2 event */
+        XIEvent *ev = (XIEvent *) event->xcookie.data;
+        XIDeviceEvent *xev = (XIDeviceEvent *)ev;
+        gint state;
+        switch (ev->evtype)
+          {
+          case XI_Motion:
+            update_pos (mv_resize, xev->root_x, xev->root_y);
+            state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+            if ((state & button_mask) == 0)
+            finish_drag (mv_resize);
+            break;
+
+          case XI_ButtonRelease:
+            update_pos (mv_resize, xev->root_x, xev->root_y);
+            if (xev->detail == mv_resize->moveresize_button)
+              finish_drag (mv_resize);
+            break;
+          }
+      }
+      break;
+#endif
+
     }
   return TRUE;
 }
@@ -4303,6 +4460,8 @@ _gdk_x11_moveresize_configure_done (GdkDisplay *display,
 {
   XEvent *tmp_event;
   MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
+
+  GDK_X11_DISPLAY (display)->wm_moveresize_button = 0;
 
   if (!mv_resize || window != mv_resize->moveresize_window)
     return FALSE;
@@ -4346,13 +4505,13 @@ create_moveresize_window (MoveResizeData *mv_resize,
 
   gdk_window_show (mv_resize->moveresize_emulation_window);
 
-  status = gdk_pointer_grab (mv_resize->moveresize_emulation_window,
-                             FALSE,
-                             GDK_BUTTON_RELEASE_MASK |
-                             GDK_POINTER_MOTION_MASK,
-                             NULL,
-                             NULL,
-                             timestamp);
+  status = gdk_device_grab (mv_resize->device,
+                            mv_resize->moveresize_emulation_window,
+                            GDK_OWNERSHIP_NONE,
+                            FALSE,
+                            GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK,
+                            NULL,
+                            timestamp);
 
   if (status != GDK_GRAB_SUCCESS)
     {
@@ -4440,6 +4599,7 @@ calculate_unmoving_origin (MoveResizeData *mv_resize)
 static void
 emulate_resize_drag (GdkWindow     *window,
                      GdkWindowEdge  edge,
+                     GdkDevice     *device,
                      gint           button,
                      gint           root_x,
                      gint           root_y,
@@ -4450,6 +4610,7 @@ emulate_resize_drag (GdkWindow     *window,
   mv_resize->is_resize = TRUE;
   mv_resize->moveresize_button = button;
   mv_resize->resize_edge = edge;
+  mv_resize->device = device;
   mv_resize->moveresize_x = root_x;
   mv_resize->moveresize_y = root_y;
   mv_resize->moveresize_window = g_object_ref (window);
@@ -4469,6 +4630,7 @@ emulate_resize_drag (GdkWindow     *window,
 
 static void
 emulate_move_drag (GdkWindow     *window,
+                   GdkDevice     *device,
                    gint           button,
                    gint           root_x,
                    gint           root_y,
@@ -4477,6 +4639,7 @@ emulate_move_drag (GdkWindow     *window,
   MoveResizeData *mv_resize = get_move_resize_data (GDK_WINDOW_DISPLAY (window), TRUE);
   
   mv_resize->is_resize = FALSE;
+  mv_resize->device = device;
   mv_resize->moveresize_button = button;
   mv_resize->moveresize_x = root_x;
   mv_resize->moveresize_y = root_y;
@@ -4490,11 +4653,12 @@ emulate_move_drag (GdkWindow     *window,
 
 static void
 gdk_x11_window_begin_resize_drag (GdkWindow     *window,
-				  GdkWindowEdge  edge,
-				  gint           button,
-				  gint           root_x,
-				  gint           root_y,
-				  guint32        timestamp)
+                                  GdkWindowEdge  edge,
+                                  GdkDevice     *device,
+                                  gint           button,
+                                  gint           root_x,
+                                  gint           root_y,
+                                  guint32        timestamp)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -4502,13 +4666,14 @@ gdk_x11_window_begin_resize_drag (GdkWindow     *window,
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
 					   gdk_atom_intern_static_string ("_NET_WM_MOVERESIZE")))
-    wmspec_resize_drag (window, edge, button, root_x, root_y, timestamp);
+    wmspec_resize_drag (window, edge, device, button, root_x, root_y, timestamp);
   else
-    emulate_resize_drag (window, edge, button, root_x, root_y, timestamp);
+    emulate_resize_drag (window, edge, device, button, root_x, root_y, timestamp);
 }
 
 static void
 gdk_x11_window_begin_move_drag (GdkWindow *window,
+                                GdkDevice *device,
 				gint       button,
 				gint       root_x,
 				gint       root_y,
@@ -4520,10 +4685,10 @@ gdk_x11_window_begin_move_drag (GdkWindow *window,
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
 					   gdk_atom_intern_static_string ("_NET_WM_MOVERESIZE")))
-    wmspec_moveresize (window, _NET_WM_MOVERESIZE_MOVE, root_x, root_y,
-		       timestamp);
+    wmspec_moveresize (window, _NET_WM_MOVERESIZE_MOVE,
+                       device, button, root_x, root_y, timestamp);
   else
-    emulate_move_drag (window, button, root_x, root_y, timestamp);
+    emulate_move_drag (window, device, button, root_x, root_y, timestamp);
 }
 
 static void

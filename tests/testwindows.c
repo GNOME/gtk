@@ -15,12 +15,12 @@ static GtkWidget *main_window;
 GdkWindow *
 create_window (GdkWindow *parent,
 	       int x, int y, int w, int h,
-	       GdkColor *color)
+	       GdkRGBA *color)
 {
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkWindow *window;
-  GdkColor *bg;
+  GdkRGBA *bg;
 
   attributes.x = x;
   attributes.y = y;
@@ -41,17 +41,18 @@ create_window (GdkWindow *parent,
   window = gdk_window_new (parent, &attributes, attributes_mask);
   gdk_window_set_user_data (window, darea);
 
-  bg = g_new (GdkColor, 1);
+  bg = g_new (GdkRGBA, 1);
   if (color)
     *bg = *color;
   else
     {
-      bg->red = g_random_int_range (0, 0xffff);
-      bg->blue = g_random_int_range (0, 0xffff);
-      bg->green = g_random_int_range (0, 0xffff);;
+      bg->red = g_random_double ();
+      bg->blue = g_random_double ();
+      bg->green = g_random_double ();
+      bg->alpha = 1.0;
     }
   
-  gdk_window_set_background (window, bg);
+  gdk_window_set_background_rgba (window, bg);
   g_object_set_data_full (G_OBJECT (window), "color", bg, g_free);
   
   gdk_window_show (window);
@@ -238,16 +239,16 @@ save_window (GString *s,
 	     GdkWindow *window)
 {
   gint x, y;
-  GdkColor *color;
+  GdkRGBA *color;
 
   gdk_window_get_position (window, &x, &y);
   color = g_object_get_data (G_OBJECT (window), "color");
   
-  g_string_append_printf (s, "%d,%d %dx%d (%d,%d,%d) %d %d\n",
+  g_string_append_printf (s, "%d,%d %dx%d (%f,%f,%f,%f) %d %d\n",
 			  x, y,
                           gdk_window_get_width (window),
                           gdk_window_get_height (window),
-			  color->red, color->green, color->blue,
+			  color->red, color->green, color->blue, color->alpha,
 			  gdk_window_has_native (window),
 			  g_list_length (gdk_window_peek_children (window)));
 
@@ -272,6 +273,13 @@ save_children (GString *s,
     }
 }
 
+
+static void
+refresh_clicked (GtkWidget *button, 
+		 gpointer data)
+{
+  gtk_widget_queue_draw (darea);
+}
 
 static void
 save_clicked (GtkWidget *button, 
@@ -330,21 +338,23 @@ destroy_children (GdkWindow *window)
 static char **
 parse_window (GdkWindow *parent, char **lines)
 {
-  int x, y, w, h, r, g, b, native, n_children;
+  int x, y, w, h, native, n_children;
+  double r, g, b, a;
   GdkWindow *window;
-  GdkColor color;
+  GdkRGBA color;
   int i;
 
   if (*lines == NULL)
     return lines;
   
-  if (sscanf(*lines, "%d,%d %dx%d (%d,%d,%d) %d %d",
-	     &x, &y, &w, &h, &r, &g, &b, &native, &n_children) == 9)
+  if (sscanf(*lines, "%d,%d %dx%d (%lf,%lf,%lf,%lf) %d %d",
+	     &x, &y, &w, &h, &r, &g, &b, &a, &native, &n_children) == 10)
     {
       lines++;
       color.red = r;
       color.green = g;
       color.blue = b;
+      color.alpha = a;
       window = create_window (parent, x, y, w, h, &color);
       if (native)
 	gdk_window_ensure_native (window);
@@ -430,7 +440,7 @@ manual_clicked (GtkWidget *button,
   GdkWindow *window;
   GList *selected, *l;
   int x, y, w, h;
-  GtkWidget *dialog, *table, *label, *xspin, *yspin, *wspin, *hspin;
+  GtkWidget *dialog, *grid, *label, *xspin, *yspin, *wspin, *hspin;
   
 
   selected = get_selected_windows ();
@@ -449,58 +459,42 @@ manual_clicked (GtkWidget *button,
 					NULL);
   
 
-  table = gtk_table_new (2, 4, TRUE);
+  grid = gtk_grid_new ();
   gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
-		      table,
+		      grid,
 		      FALSE, FALSE,
 		      2);
 
   
   label = gtk_label_new ("x:");
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     label,
-			     0, 1,
-			     0, 1);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
   label = gtk_label_new ("y:");
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     label,
-			     0, 1,
-			     1, 2);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
   label = gtk_label_new ("width:");
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     label,
-			     0, 1,
-			     2, 3);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
   label = gtk_label_new ("height:");
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     label,
-			     0, 1,
-			     3, 4);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
 
   xspin = gtk_spin_button_new_with_range (G_MININT, G_MAXINT, 1);
+  gtk_widget_set_hexpand (xspin, TRUE);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (xspin), x);
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     xspin,
-			     1, 2,
-			     0, 1);
+  gtk_grid_attach (GTK_GRID (grid), xspin, 1, 0, 1, 1);
   yspin = gtk_spin_button_new_with_range (G_MININT, G_MAXINT, 1);
+  gtk_widget_set_hexpand (yspin, TRUE);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (yspin), y);
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     yspin,
-			     1, 2,
-			     1, 2);
+  gtk_grid_attach (GTK_GRID (grid), yspin, 1, 1, 1, 1);
   wspin = gtk_spin_button_new_with_range (G_MININT, G_MAXINT, 1);
+  gtk_widget_set_hexpand (wspin, TRUE);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (wspin), w);
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     wspin,
-			     1, 2,
-			     2, 3);
+  gtk_grid_attach (GTK_GRID (grid), wspin, 1, 2, 1, 1);
   hspin = gtk_spin_button_new_with_range (G_MININT, G_MAXINT, 1);
+  gtk_widget_set_hexpand (hspin, TRUE);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (hspin), h);
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     hspin,
-			     1, 2,
-			     3, 4);
+  gtk_grid_attach (GTK_GRID (grid), hspin, 1, 3, 1, 1);
   
   gtk_widget_show_all (dialog);
   
@@ -701,6 +695,39 @@ native_window_clicked (GtkWidget *button,
   update_store ();
 }
 
+static void
+alpha_clicked (GtkWidget *button, 
+	       gpointer data)
+{
+  GList *selected, *l;
+  GdkWindow *window;
+  GdkRGBA *color;
+
+  selected = get_selected_windows ();
+
+  for (l = selected; l != NULL; l = l->next)
+    {
+      window = l->data;
+
+      color = g_object_get_data (G_OBJECT (window), "color");
+      if (GPOINTER_TO_INT(data) > 0)
+	color->alpha += 0.2;
+      else
+	color->alpha -= 0.2;
+
+      if (color->alpha < 0)
+	color->alpha = 0;
+      if (color->alpha > 1)
+	color->alpha = 1;
+
+      gdk_window_set_background_rgba (window, color);
+    }
+  
+  g_list_free (selected);
+  
+  update_store ();
+}
+
 static gboolean
 darea_button_release_event (GtkWidget *widget,
 			    GdkEventButton *event)
@@ -785,7 +812,7 @@ int
 main (int argc, char **argv)
 {
   GtkWidget *window, *vbox, *hbox, *frame;
-  GtkWidget *button, *scrolled, *table;
+  GtkWidget *button, *scrolled, *grid;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
   GdkRGBA black = {0,0,0,1};
@@ -858,12 +885,14 @@ main (int argc, char **argv)
   gtk_widget_show (scrolled);
   gtk_widget_show (treeview);
   
-  table = gtk_table_new (5, 4, TRUE);
+  grid = gtk_grid_new ();
+  gtk_grid_set_row_homogeneous (GTK_GRID (grid), TRUE);
+  gtk_grid_set_column_homogeneous (GTK_GRID (grid), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox),
-		      table,
+		      grid,
 		      FALSE, FALSE,
 		      2);
-  gtk_widget_show (table);
+  gtk_widget_show (grid);
 
   button = gtk_button_new ();
   gtk_button_set_image (GTK_BUTTON (button),
@@ -872,10 +901,7 @@ main (int argc, char **argv)
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (move_window_clicked), 
 		    GINT_TO_POINTER (GTK_DIR_LEFT));
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     0, 1,
-			     1, 2);
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 1, 1, 1);
   gtk_widget_show (button);
 
   button = gtk_button_new ();
@@ -885,10 +911,7 @@ main (int argc, char **argv)
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (move_window_clicked), 
 		    GINT_TO_POINTER (GTK_DIR_UP));
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     1, 2,
-			     0, 1);
+  gtk_grid_attach (GTK_GRID (grid), button, 1, 0, 1, 1);
   gtk_widget_show (button);
 
   button = gtk_button_new ();
@@ -898,10 +921,7 @@ main (int argc, char **argv)
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (move_window_clicked), 
 		    GINT_TO_POINTER (GTK_DIR_RIGHT));
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     2, 3,
-			     1, 2);
+  gtk_grid_attach (GTK_GRID (grid), button, 2, 1, 1, 1);
   gtk_widget_show (button);
 
   button = gtk_button_new ();
@@ -911,10 +931,7 @@ main (int argc, char **argv)
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (move_window_clicked), 
 		    GINT_TO_POINTER (GTK_DIR_DOWN));
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     1, 2,
-			     2, 3);
+  gtk_grid_attach (GTK_GRID (grid), button, 1, 2, 1, 1);
   gtk_widget_show (button);
 
 
@@ -922,20 +939,14 @@ main (int argc, char **argv)
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (raise_window_clicked), 
 		    NULL);
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     0, 1,
-			     0, 1);
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 0, 1, 1);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Lower");
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (lower_window_clicked), 
 		    NULL);
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     0, 1,
-			     2, 3);
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 2, 1, 1);
   gtk_widget_show (button);
 
 
@@ -943,30 +954,21 @@ main (int argc, char **argv)
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (smaller_window_clicked), 
 		    NULL);
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     2, 3,
-			     0, 1);
+  gtk_grid_attach (GTK_GRID (grid), button, 2, 0, 1, 1);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Larger");
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (larger_window_clicked), 
 		    NULL);
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     2, 3,
-			     2, 3);
+  gtk_grid_attach (GTK_GRID (grid), button, 2, 2, 1, 1);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Native");
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (native_window_clicked), 
 		    NULL);
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     1, 2,
-			     1, 2);
+  gtk_grid_attach (GTK_GRID (grid), button, 1, 1, 1, 1);
   gtk_widget_show (button);
 
 
@@ -977,10 +979,7 @@ main (int argc, char **argv)
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (scroll_window_clicked), 
 		    GINT_TO_POINTER (GTK_DIR_UP));
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     3, 4,
-			     0, 1);
+  gtk_grid_attach (GTK_GRID (grid), button, 3, 0, 1, 1);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("scroll");
@@ -990,40 +989,42 @@ main (int argc, char **argv)
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (scroll_window_clicked), 
 		    GINT_TO_POINTER (GTK_DIR_DOWN));
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     3, 4,
-			     1, 2);
+  gtk_grid_attach (GTK_GRID (grid), button, 3, 1, 1, 1);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Manual");
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (manual_clicked),
 		    NULL);
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     3, 4,
-			     2, 3);
+  gtk_grid_attach (GTK_GRID (grid), button, 3, 2, 1, 1);
+  gtk_widget_show (button);
+
+  button = gtk_button_new_with_label ("More transparent");
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (alpha_clicked),
+		    GINT_TO_POINTER (-1));
+  gtk_grid_attach (GTK_GRID (grid), button, 0, 3, 1, 1);
+  gtk_widget_show (button);
+
+  button = gtk_button_new_with_label ("Less transparent");
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (alpha_clicked),
+		    GINT_TO_POINTER (1));
+  gtk_grid_attach (GTK_GRID (grid), button, 1, 3, 1, 1);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Restack above");
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (restack_clicked),
 		    GINT_TO_POINTER (1));
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     2, 3,
-			     3, 4);
+  gtk_grid_attach (GTK_GRID (grid), button, 2, 3, 1, 1);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Restack below");
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (restack_clicked),
 		    0);
-  gtk_table_attach_defaults (GTK_TABLE (table),
-			     button,
-			     3, 4,
-			     3, 4);
+  gtk_grid_attach (GTK_GRID (grid), button, 3, 3, 1, 1);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Add window");
@@ -1056,6 +1057,17 @@ main (int argc, char **argv)
 		    G_CALLBACK (save_clicked), 
 		    NULL);
 
+  button = gtk_button_new_with_label ("Refresh");
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      button,
+		      FALSE, FALSE,
+		      2);
+  gtk_widget_show (button);
+  g_signal_connect (button, "clicked", 
+		    G_CALLBACK (refresh_clicked), 
+		    NULL);
+
+  
   gtk_widget_show (window);
 
   if (argc == 2)

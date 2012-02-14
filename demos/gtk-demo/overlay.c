@@ -23,7 +23,7 @@ do_overlay (GtkWidget *do_widget)
                              gtk_widget_get_screen (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window),
                                    450, 450);
-      
+
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 

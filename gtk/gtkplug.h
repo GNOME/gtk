@@ -30,7 +30,7 @@
 #ifndef __GTK_PLUG_H__
 #define __GTK_PLUG_H__
 
-#include <gtk/gtk.h>
+#include <gdk/gdk.h>
 
 #ifdef GDK_WINDOWING_X11
 

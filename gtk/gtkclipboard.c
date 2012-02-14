@@ -2017,7 +2017,7 @@ gtk_clipboard_store_timeout (GtkClipboard *clipboard)
 {
   g_main_loop_quit (clipboard->store_loop);
   
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 /**

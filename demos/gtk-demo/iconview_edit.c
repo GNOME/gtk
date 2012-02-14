@@ -47,10 +47,10 @@ create_store (void)
 
 static void
 set_cell_color (GtkCellLayout   *cell_layout,
-		GtkCellRenderer *cell,
-		GtkTreeModel    *tree_model,
-		GtkTreeIter     *iter,
-		gpointer         data)
+                GtkCellRenderer *cell,
+                GtkTreeModel    *tree_model,
+                GtkTreeIter     *iter,
+                gpointer         data)
 {
   gchar *text;
   GdkColor color;
@@ -76,9 +76,9 @@ set_cell_color (GtkCellLayout   *cell_layout,
 
 static void
 edited (GtkCellRendererText *cell,
-	gchar               *path_string,
-	gchar               *text,
-	gpointer             data)
+        gchar               *path_string,
+        gchar               *text,
+        gpointer             data)
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
@@ -89,7 +89,7 @@ edited (GtkCellRendererText *cell,
 
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-		      COL_TEXT, text, -1);
+                      COL_TEXT, text, -1);
 
   gtk_tree_path_free (path);
 }
@@ -106,11 +106,11 @@ do_iconview_edit (GtkWidget *do_widget)
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Editing and Drag-and-Drop");
 
       g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
+                        G_CALLBACK (gtk_widget_destroyed), &window);
 
       store = create_store ();
       fill_store (store);
@@ -119,29 +119,29 @@ do_iconview_edit (GtkWidget *do_widget)
       g_object_unref (store);
 
       gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (icon_view),
-					GTK_SELECTION_SINGLE);
+                                        GTK_SELECTION_SINGLE);
       gtk_icon_view_set_item_orientation (GTK_ICON_VIEW (icon_view),
-				          GTK_ORIENTATION_HORIZONTAL);
+                                          GTK_ORIENTATION_HORIZONTAL);
       gtk_icon_view_set_columns (GTK_ICON_VIEW (icon_view), 2);
       gtk_icon_view_set_reorderable (GTK_ICON_VIEW (icon_view), TRUE);
 
       renderer = gtk_cell_renderer_pixbuf_new ();
       gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (icon_view),
-				  renderer, TRUE);
+                                  renderer, TRUE);
       gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (icon_view),
-					  renderer,
-					  set_cell_color,
-					  NULL, NULL);
+                                          renderer,
+                                          set_cell_color,
+                                          NULL, NULL);
 
       renderer = gtk_cell_renderer_text_new ();
       gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (icon_view),
-				  renderer, TRUE);
+                                  renderer, TRUE);
       g_object_set (renderer, "editable", TRUE, NULL);
       g_signal_connect (renderer, "edited", G_CALLBACK (edited), icon_view);
       gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (icon_view),
-				      renderer,
-				      "text", COL_TEXT,
-				      NULL);
+                                      renderer,
+                                      "text", COL_TEXT,
+                                      NULL);
 
       gtk_container_add (GTK_CONTAINER (window), icon_view);
     }
@@ -156,4 +156,3 @@ do_iconview_edit (GtkWidget *do_widget)
 
   return window;
 }
-

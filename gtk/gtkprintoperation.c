@@ -31,7 +31,6 @@
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkmainprivate.h"
 #include "gtkmessagedialog.h"
 #include "gtktypebuiltins.h"
 
@@ -551,11 +550,19 @@ preview_print_idle_done (gpointer data)
   op = GTK_PRINT_OPERATION (pop->preview);
 
   cairo_surface_finish (pop->surface);
-  /* Surface is destroyed in launch_preview */
-  _gtk_print_operation_platform_backend_launch_preview (op,
-							pop->surface,
-							pop->parent,
-							pop->filename);
+
+  if (op->priv->status == GTK_PRINT_STATUS_FINISHED_ABORTED)
+    {
+      cairo_surface_destroy (pop->surface);
+    }
+  else
+    {
+      /* Surface is destroyed in launch_preview */
+      _gtk_print_operation_platform_backend_launch_preview (op,
+							    pop->surface,
+							    pop->parent,
+							    pop->filename);
+    }
 
   g_free (pop->filename);
 
@@ -581,10 +588,14 @@ preview_print_idle (gpointer data)
   op = GTK_PRINT_OPERATION (pop->preview);
   priv = op->priv;
 
-
   if (priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_READY)
     {
-      if (!pop->pages_data->initialized)
+      if (priv->cancelled)
+	{
+	  done = TRUE;
+          _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
+	}
+      else if (!pop->pages_data->initialized)
         {
           pop->pages_data->initialized = TRUE;
           prepare_data (pop->pages_data);

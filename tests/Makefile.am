@@ -1,14 +1,12 @@
 ## Makefile.am for gtk+/tests
 include $(top_srcdir)/Makefile.decl
 
-SUBDIRS = css reftests a11y
+SUBDIRS = css reftests a11y visuals
 
-INCLUDES =				\
+AM_CPPFLAGS =				\
 	-I$(top_srcdir)			\
 	-I$(top_builddir)/gdk		\
 	-I$(top_srcdir)/gdk		\
-	-DGDK_DISABLE_DEPRECATED	\
-	-DGTK_DISABLE_DEPRECATED	\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GTK_DEP_CFLAGS)		\
 	$(GDK_DEP_CFLAGS)
@@ -88,6 +86,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	teststatusicon			\
 	testtoolbar			\
 	stresstest-toolbar		\
+	testtreechanging                \
 	testtreeedit			\
 	testtreemodel			\
 	testtreeview			\
@@ -122,13 +121,17 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testpixbuf-save			\
 	testpixbuf-color		\
 	testpixbuf-scale		\
-	widget-factory
+	testgmenu			\
+	testlogout
 
 if USE_X11
 noinst_PROGRAMS += testerrors
 endif
 
 if HAVE_CXX
+
+AM_CXXFLAGS = $(AM_CPPFLAGS)
+
 noinst_PROGRAMS += autotestkeywords
 TESTS = autotestkeywords
 
@@ -200,6 +203,7 @@ testsocket_DEPENDENCIES = $(DEPS)
 testsocket_child_DEPENDENCIES = $(DEPS)
 testspinbutton_DEPENDENCIES = $(TEST_DEPS)
 teststatusicon_DEPENDENCIES = $(TEST_DEPS)
+testtreechanging_DEPENDENCIES =	$(DEPS)
 testtreeedit_DEPENDENCIES = $(DEPS)
 testtreemodel_DEPENDENCIES = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
@@ -233,7 +237,8 @@ testanimation_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_save_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_color_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
-widget_factory_DEPENDENCIES = $(TEST_DEPS)
+testgmenu_DEPENDENCIES = $(TEST_DEPS)
+testlogout_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -299,6 +304,7 @@ teststatusicon_LDADD = $(LDADDS)
 testtoolbar_LDADD = $(LDADDS)
 stresstest_toolbar_LDADD = $(LDADDS)
 testtreeedit_LDADD = $(LDADDS)
+testtreechanging_LDADD = $(LDADDS)
 testtreemodel_LDADD = $(LDADDS)
 testtreeview_LDADD = $(LDADDS)
 testtreefocus_LDADD = $(LDADDS)
@@ -331,7 +337,8 @@ testanimation_LDADD = $(LDADDS)
 testpixbuf_save_LDADD = $(LDADDS)
 testpixbuf_color_LDADD = $(LDADDS)
 testpixbuf_scale_LDADD = $(LDADDS)
-widget_factory_LDADD = $(LDADDS)
+testgmenu_LDADD = $(LDADDS)
+testlogout_LDADD = $(LDADDS)
 
 
 testboxcss_SOURCES =	\
@@ -361,9 +368,11 @@ testfontselectiondialog_SOURCES = \
 	testfontselectiondialog.c
 
 testfontchooser_SOURCES = \
+	prop-editor.c		\
 	testfontchooser.c
 
 testfontchooserdialog_SOURCES = \
+	prop-editor.c		\
 	testfontchooserdialog.c
 
 testgrid_SOURCES =	\
@@ -372,6 +381,10 @@ testgrid_SOURCES =	\
 testgtk_SOURCES =	\
 	prop-editor.c   \
 	testgtk.c
+
+testtreechanging_SOURCES =	\
+	prop-editor.c		\
+	testtreechanging.c
 
 testtreeedit_SOURCES = 	\
 	testtreeedit.c
@@ -506,8 +519,6 @@ testpixbuf_color_SOURCES = testpixbuf-color.c
 
 testpixbuf_save_SOURCES = testpixbuf-save.c
 
-widget_factory_SOURCES = widget-factory.c
-
 
 EXTRA_DIST += 			\
 	gradient1.png		\
@@ -529,8 +540,7 @@ EXTRA_DIST += 			\
 	merge-2.ui		\
 	merge-3.ui		\
 	gnome-textfile.png	\
-	makefile.msc		\
-	widget-factory.ui
+	makefile.msc
 
 
 -include $(top_srcdir)/git.mk
