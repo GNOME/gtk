@@ -12,7 +12,8 @@
 @define-color error_fg_color rgb (166, 38, 38);
 @define-color error_bg_color rgb (237, 54, 54);
 
-GtkWindow {
+GtkWindow,
+GtkViewport {
     background-color: @bg_color;
 }
 
