@@ -5176,6 +5176,9 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	  GtkRBTree *tree = NULL;
 	  GtkRBNode *node = NULL;
 
+          gtk_style_context_save (context);
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_DND);
+
           switch (tree_view->priv->drag_dest_pos)
             {
             case GTK_TREE_VIEW_DROP_BEFORE:
@@ -5213,6 +5216,8 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
                                        rtl ? 0 : bin_window_width,
                                        highlight_y);
             }
+
+          gtk_style_context_restore (context);
         }
 
       /* draw the big row-spanning focus rectangle, if needed */
