@@ -3146,7 +3146,7 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
     {
       if (priv->during_reorder)
         {
-          gint old_page_num, page_num;
+          gint old_page_num, page_num, i;
           GList *element;
 
           element = get_drop_position (notebook);
@@ -3155,9 +3155,16 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
           gtk_notebook_child_reordered (notebook, page);
 
           if (priv->has_scrolled || old_page_num != page_num)
-            g_signal_emit (notebook,
-                           notebook_signals[PAGE_REORDERED], 0,
-                           page->child, page_num);
+	    {
+	      for (element = priv->children, i = 0; element; element = element->next)
+		{
+		  if (MIN (old_page_num, page_num) <= i && i <= MAX (old_page_num, page_num))
+		    gtk_widget_child_notify (((GtkNotebookPage *) element->data)->child, "position");
+		}
+	      g_signal_emit (notebook,
+			     notebook_signals[PAGE_REORDERED], 0,
+			     page->child, page_num);
+	    }
 
           priv->has_scrolled = FALSE;
           priv->during_reorder = FALSE;
