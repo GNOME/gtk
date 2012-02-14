@@ -11237,6 +11237,8 @@ gdk_window_create_similar_surface (GdkWindow *     window,
  * Gets the #GdkScreen associated with a #GdkWindow.
  *
  * Return value: the #GdkScreen associated with @window
+ *
+ * Since: 2.24
  */
 GdkScreen*
 gdk_window_get_screen (GdkWindow *window)
