@@ -54,6 +54,15 @@ _gtk_css_number_equal (const GtkCssNumber *one,
          one->value == two->value;
 }
 
+guint
+_gtk_css_number_hash (const GtkCssNumber *number)
+{
+  guint hash;
+
+  hash = (guint)number->value;
+  hash ^= (guint)number->unit;
+}
+
 double
 _gtk_css_number_get (const GtkCssNumber *number,
                      double              one_hundred_percent)
