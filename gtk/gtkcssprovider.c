@@ -1005,6 +1005,8 @@ enum {
   LAST_SIGNAL
 };
 
+static gboolean gtk_keep_css_sections = FALSE;
+
 static guint css_provider_signals[LAST_SIGNAL] = { 0 };
 
 static void gtk_css_provider_finalize (GObject *object);
@@ -1084,6 +1086,9 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  if (g_getenv ("GTK_CSS_DEBUG"))
+    gtk_keep_css_sections = TRUE;
+
   /**
    * GtkCssProvider::parsing-error:
    * @provider: the provider that had a parsing error
@@ -1154,7 +1159,11 @@ struct _PropertyValue {
   GtkStyleProperty *property;
   PropertyValue *next;
   GValue         value;
+};
 
+typedef struct _PropertyValueWithSection PropertyValueWithSection;
+struct _PropertyValueWithSection {
+  PropertyValue base;
   GtkCssSection *section;
 };
 
@@ -1163,21 +1172,38 @@ property_value_new (GtkStyleProperty *property, GtkCssSection *section)
 {
   PropertyValue *value;
 
-  value = g_slice_new0 (PropertyValue);
+  if (gtk_keep_css_sections)
+    value = (PropertyValue *)g_slice_new0 (PropertyValueWithSection);
+  else
+    value = g_slice_new0 (PropertyValue);
 
   value->property = property;
-  value->section = gtk_css_section_ref (section);
+
+  if (gtk_keep_css_sections)
+    ((PropertyValueWithSection *)value)->section = gtk_css_section_ref (section);
 
   return value;
+}
+
+static GtkCssSection *
+property_value_get_section (PropertyValue *value)
+{
+  if (gtk_keep_css_sections)
+    return ((PropertyValueWithSection *)value)->section;
+  return NULL;
 }
 
 static void
 property_value_free (PropertyValue *value)
 {
+  GtkCssSection *section;
+
   if (G_IS_VALUE (&value->value))
     g_value_unset (&value->value);
 
-  gtk_css_section_unref (value->section);
+  section = property_value_get_section (value);
+  if (section != NULL)
+    gtk_css_section_unref (section);
 
   g_slice_free (PropertyValue, value);
 }
@@ -1219,31 +1245,53 @@ struct _WidgetPropertyValue {
   char *name;
   WidgetPropertyValue *next;
   GValue         value;
+};
 
+typedef struct _WidgetPropertyValueWithSection WidgetPropertyValueWithSection;
+struct _WidgetPropertyValueWithSection {
+  WidgetPropertyValue base;
   GtkCssSection *section;
 };
+
 
 static WidgetPropertyValue *
 widget_property_value_new (char *name, GtkCssSection *section)
 {
   WidgetPropertyValue *value;
 
-  value = g_slice_new0 (WidgetPropertyValue);
+  if (gtk_keep_css_sections)
+    value = (WidgetPropertyValue *)g_slice_new0 (WidgetPropertyValueWithSection);
+  else
+    value = g_slice_new0 (WidgetPropertyValue);
 
   value->name = name;
-  value->section = gtk_css_section_ref (section);
+  if (gtk_keep_css_sections)
+    ((WidgetPropertyValueWithSection *)value)->section = gtk_css_section_ref (section);
 
   return value;
+}
+
+static GtkCssSection *
+widget_property_value_get_section (WidgetPropertyValue *value)
+{
+  if (gtk_keep_css_sections)
+    return ((WidgetPropertyValueWithSection *)value)->section;
+  return NULL;
 }
 
 static void
 widget_property_value_free (WidgetPropertyValue *value)
 {
+  GtkCssSection *section;
+
   if (G_IS_VALUE (&value->value))
     g_value_unset (&value->value);
 
   g_free (value->name);
-  gtk_css_section_unref (value->section);
+
+  section = widget_property_value_get_section (value);
+  if (section != NULL)
+    gtk_css_section_unref (section);
 
   g_slice_free (WidgetPropertyValue, value);
 }
@@ -1311,7 +1359,8 @@ gtk_css_ruleset_add (GtkCssRuleset    *ruleset,
           const GValue *sub = &g_array_index (array, GValue, i);
           PropertyValue *val;
           
-          val = property_value_new (child, value->section);
+          val = property_value_new (GTK_STYLE_PROPERTY (child),
+				    property_value_get_section (value));
           g_value_init (&val->value, G_VALUE_TYPE (sub));
           g_value_copy (sub, &val->value);
           gtk_css_ruleset_add (ruleset, GTK_STYLE_PROPERTY (child), val);
@@ -1583,11 +1632,13 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
 	  if (strcmp (val->name, prop_name) == 0)
 	    {
 	      GtkCssScanner *scanner;
+	      GtkCssSection *section;
 
+	      section = widget_property_value_get_section (val);
 	      scanner = gtk_css_scanner_new (css_provider,
 					     NULL,
-					     val->section,
-					     gtk_css_section_get_file (val->section),
+					     section,
+					     section ? gtk_css_section_get_file (section) : NULL,
 					     g_value_get_string (&val->value));
 
 	      found = _gtk_css_style_parse_value (value,
@@ -1663,7 +1714,9 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
           if (!_gtk_css_lookup_is_missing (lookup, id))
             continue;
 
-          _gtk_css_lookup_set (lookup, id, value->section, &value->value);
+          _gtk_css_lookup_set (lookup, id,
+			       property_value_get_section (value),
+			       &value->value);
         }
     }
 }
