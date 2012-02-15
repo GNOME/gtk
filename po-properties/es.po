@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-02-02 02:18+0000\n"
-"PO-Revision-Date: 2012-02-02 11:58+0100\n"
+"POT-Creation-Date: 2012-02-14 22:20+0000\n"
+"PO-Revision-Date: 2012-02-15 13:00+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1867,7 +1867,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "La alineación vertical del texto, desde 0 (superior) a 1 (inferior)."
 
 #: ../gtk/gtkcellrendererprogress.c:226 ../gtk/gtkprogressbar.c:152
-#: ../gtk/gtkrange.c:431
+#: ../gtk/gtkrange.c:432
 msgid "Inverted"
 msgstr "Invertido"
 
@@ -1875,7 +1875,7 @@ msgstr "Invertido"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Invertir la dirección en la que aumentan las barras de progreso"
 
-#: ../gtk/gtkcellrendererspin.c:114 ../gtk/gtkrange.c:423
+#: ../gtk/gtkcellrendererspin.c:114 ../gtk/gtkrange.c:424
 #: ../gtk/gtkscalebutton.c:237 ../gtk/gtkspinbutton.c:316
 msgid "Adjustment"
 msgstr "Ajuste"
@@ -2435,114 +2435,149 @@ msgstr ""
 "Indica si la apariencia del elemento de menú es como un elemento de menú de "
 "radio"
 
-#: ../gtk/gtkcolorbutton.c:170
+#: ../gtk/gtkcolorbutton.c:175 ../gtk/gtkcolorchooser.c:89
 msgid "Use alpha"
 msgstr "Usar alfa"
 
-#: ../gtk/gtkcolorbutton.c:171
+#: ../gtk/gtkcolorbutton.c:176
 msgid "Whether to give the color an alpha value"
 msgstr "Indica si se debe dar un valor alfa al color"
 
 # components/music/nautilus-music-view.c:198
-#: ../gtk/gtkcolorbutton.c:185 ../gtk/gtkfilechooserbutton.c:440
+#: ../gtk/gtkcolorbutton.c:190 ../gtk/gtkfilechooserbutton.c:440
 #: ../gtk/gtkfontbutton.c:435 ../gtk/gtkprintjob.c:141
 #: ../gtk/gtkstatusicon.c:427 ../gtk/gtktreeviewcolumn.c:332
 msgid "Title"
 msgstr "Título"
 
-#: ../gtk/gtkcolorbutton.c:186
+#: ../gtk/gtkcolorbutton.c:191
 msgid "The title of the color selection dialog"
 msgstr "El título del diálogo de selección del color"
 
-#: ../gtk/gtkcolorbutton.c:202 ../gtk/gtkcolorsel.c:343
+#: ../gtk/gtkcolorbutton.c:207 ../gtk/deprecated/gtkcolorsel.c:346
 msgid "Current Color"
 msgstr "Color actual"
 
-#: ../gtk/gtkcolorbutton.c:203
+#: ../gtk/gtkcolorbutton.c:208
 msgid "The selected color"
 msgstr "El color seleccionado"
 
-#: ../gtk/gtkcolorbutton.c:217 ../gtk/gtkcolorsel.c:350
+#: ../gtk/gtkcolorbutton.c:222 ../gtk/deprecated/gtkcolorsel.c:353
 msgid "Current Alpha"
 msgstr "Alfa actual"
 
-#: ../gtk/gtkcolorbutton.c:218
+#: ../gtk/gtkcolorbutton.c:223
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "El valor de opacidad actual (0 es completamente transparente, 65535 es "
 "completamente opaco)"
 
-#: ../gtk/gtkcolorbutton.c:232
+#: ../gtk/gtkcolorbutton.c:237
 msgid "Current RGBA Color"
 msgstr "Color RGBA actual"
 
-#: ../gtk/gtkcolorbutton.c:233
+#: ../gtk/gtkcolorbutton.c:238
 msgid "The selected RGBA color"
 msgstr "El color RGBA seleccionado"
 
-#: ../gtk/gtkcolorsel.c:321
+#: ../gtk/gtkcolorchooser.c:69
+#| msgid "Color Hash"
+msgid "Color"
+msgstr "Color"
+
+#: ../gtk/gtkcolorchooser.c:70
+#| msgid "Foreground color as a GdkRGBA"
+msgid "Current color, as a GdkRGBA"
+msgstr "Color actual como GdkRGBA"
+
+#: ../gtk/gtkcolorchooser.c:90
+#| msgid "Whether tabs should be shown"
+msgid "Whether alpha should be shown"
+msgstr "Indica si se debe mostrar el alfa"
+
+#: ../gtk/gtkcolorchooserdialog.c:234 ../gtk/gtkcolorchooserwidget.c:666
+#| msgid "Show text"
+msgid "Show editor"
+msgstr "Mostrar editor"
+
+#: ../gtk/gtkcolorscale.c:336
+#| msgid "Value type"
+msgid "Scale type"
+msgstr "Tipo de escala"
+
+#: ../gtk/gtkcolorswatch.c:588
+#| msgid "Current RGBA Color"
+msgid "RGBA Color"
+msgstr "Color RGBA"
+
+#: ../gtk/gtkcolorswatch.c:588
+#| msgid "Color Hash"
+msgid "Color as RGBA"
+msgstr "Color como RGBA"
+
+#: ../gtk/deprecated/gtkcolorsel.c:324
 msgid "Has Opacity Control"
 msgstr "Tiene control de opacidad"
 
-#: ../gtk/gtkcolorsel.c:322
+#: ../gtk/deprecated/gtkcolorsel.c:325
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Indica si el selector de color permite seleccionar la opacidad"
 
-#: ../gtk/gtkcolorsel.c:328
+#: ../gtk/deprecated/gtkcolorsel.c:331
 msgid "Has palette"
 msgstr "Tiene paleta"
 
-#: ../gtk/gtkcolorsel.c:329
+#: ../gtk/deprecated/gtkcolorsel.c:332
 msgid "Whether a palette should be used"
 msgstr "Indica si se debe usar una paleta"
 
-#: ../gtk/gtkcolorsel.c:344
+#: ../gtk/deprecated/gtkcolorsel.c:347
 msgid "The current color"
 msgstr "El color actual"
 
-#: ../gtk/gtkcolorsel.c:351
+#: ../gtk/deprecated/gtkcolorsel.c:354
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "El valor de opacidad actual (0 es completamente transparente, 65535 es "
 "completamente opaco)"
 
-#: ../gtk/gtkcolorsel.c:365
+#: ../gtk/deprecated/gtkcolorsel.c:368
 msgid "Current RGBA"
 msgstr "RGBA actual"
 
-#: ../gtk/gtkcolorsel.c:366
+#: ../gtk/deprecated/gtkcolorsel.c:369
 msgid "The current RGBA color"
 msgstr "El color RGBA actual"
 
-#: ../gtk/gtkcolorseldialog.c:136
+#: ../gtk/deprecated/gtkcolorseldialog.c:140
 msgid "Color Selection"
 msgstr "Selección de color"
 
-#: ../gtk/gtkcolorseldialog.c:137
+#: ../gtk/deprecated/gtkcolorseldialog.c:141
 msgid "The color selection embedded in the dialog."
 msgstr "La selección de color empotrada en el diálogo."
 
-#: ../gtk/gtkcolorseldialog.c:143
+#: ../gtk/deprecated/gtkcolorseldialog.c:147
 msgid "OK Button"
 msgstr "Botón Aceptar"
 
-#: ../gtk/gtkcolorseldialog.c:144
+#: ../gtk/deprecated/gtkcolorseldialog.c:148
 msgid "The OK button of the dialog."
 msgstr "El botón Aceptar del diálogo."
 
-#: ../gtk/gtkcolorseldialog.c:150
+#: ../gtk/deprecated/gtkcolorseldialog.c:154
 msgid "Cancel Button"
 msgstr "Botón Cancelar"
 
-#: ../gtk/gtkcolorseldialog.c:151
+#: ../gtk/deprecated/gtkcolorseldialog.c:155
 msgid "The cancel button of the dialog."
 msgstr "El botón Cancelar del diálogo."
 
-#: ../gtk/gtkcolorseldialog.c:157
+#: ../gtk/deprecated/gtkcolorseldialog.c:161
 msgid "Help Button"
 msgstr "Botón Ayuda"
 
-#: ../gtk/gtkcolorseldialog.c:158
+#: ../gtk/deprecated/gtkcolorseldialog.c:162
 msgid "The help button of the dialog."
 msgstr "El botón Ayuda del diálogo."
 
@@ -2742,22 +2777,18 @@ msgid "The numeric id for quick access"
 msgstr "El ID numérico para acceso rápido"
 
 #: ../gtk/gtkcssstyleproperty.c:245
-#| msgid "Device type"
 msgid "Specified type"
 msgstr "Tipo especificado"
 
 #: ../gtk/gtkcssstyleproperty.c:246
-#| msgid "The type of accelerators"
 msgid "The type of values after parsing"
 msgstr "El tipo de valores después de analizarlos"
 
 #: ../gtk/gtkcssstyleproperty.c:252
-#| msgid "Content type"
 msgid "Computed type"
 msgstr "Tipo calculado"
 
 #: ../gtk/gtkcssstyleproperty.c:253
-#| msgid "The type of accelerators"
 msgid "The type of values after style lookup"
 msgstr "El tipo de después de buscar el estilo"
 
@@ -5138,21 +5169,21 @@ msgstr "El elemento del menú de radio a cuyo grupo pertenece este widget."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "La herramienta de botón de radio a cuyo grupo pertenece este widget."
 
-#: ../gtk/gtkrange.c:424
+#: ../gtk/gtkrange.c:425
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "El GtkAdjustment que contiene el valor actual de este objeto de rango"
 
-#: ../gtk/gtkrange.c:432
+#: ../gtk/gtkrange.c:433
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Invierte la dirección en que se mueve el deslizador para incrementar el "
 "valor del rango"
 
-#: ../gtk/gtkrange.c:439
+#: ../gtk/gtkrange.c:440
 msgid "Lower stepper sensitivity"
 msgstr "Sensibilidad de la flecha inferior"
 
-#: ../gtk/gtkrange.c:440
+#: ../gtk/gtkrange.c:441
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
@@ -5160,11 +5191,11 @@ msgstr ""
 "La directiva de sensibilidad del botón de desplazamiento que apunta al lado "
 "más bajo del ajuste"
 
-#: ../gtk/gtkrange.c:448
+#: ../gtk/gtkrange.c:449
 msgid "Upper stepper sensitivity"
 msgstr "Sensibilidad de la flecha superior"
 
-#: ../gtk/gtkrange.c:449
+#: ../gtk/gtkrange.c:450
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
@@ -5172,99 +5203,99 @@ msgstr ""
 "La directiva de sensibilidad del botón de flecha que apunta al lado más alto "
 "del ajuste"
 
-#: ../gtk/gtkrange.c:466
+#: ../gtk/gtkrange.c:467
 msgid "Show Fill Level"
 msgstr "Mostrar nivel de relleno"
 
-#: ../gtk/gtkrange.c:467
+#: ../gtk/gtkrange.c:468
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr ""
 "Indica si se debe mostrar el indicador de nivel de llenado en los gráficos "
 "mientras se llena."
 
-#: ../gtk/gtkrange.c:483
+#: ../gtk/gtkrange.c:484
 msgid "Restrict to Fill Level"
 msgstr "Restringir al nivel de llenado"
 
-#: ../gtk/gtkrange.c:484
+#: ../gtk/gtkrange.c:485
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Indica si se debe restringir el borde superior al nivel de llenado."
 
-#: ../gtk/gtkrange.c:499
+#: ../gtk/gtkrange.c:500
 msgid "Fill Level"
 msgstr "Nivel de llenado"
 
-#: ../gtk/gtkrange.c:500
+#: ../gtk/gtkrange.c:501
 msgid "The fill level."
 msgstr "El nivel de llenado."
 
-#: ../gtk/gtkrange.c:517
+#: ../gtk/gtkrange.c:518
 msgid "Round Digits"
 msgstr "Redondear dígitos"
 
-#: ../gtk/gtkrange.c:518
+#: ../gtk/gtkrange.c:519
 msgid "The number of digits to round the value to."
 msgstr "El número de dígitos al que redondear el valor."
 
-#: ../gtk/gtkrange.c:526 ../gtk/gtkswitch.c:970
+#: ../gtk/gtkrange.c:527 ../gtk/gtkswitch.c:970
 msgid "Slider Width"
 msgstr "Anchura del deslizador"
 
-#: ../gtk/gtkrange.c:527
+#: ../gtk/gtkrange.c:528
 msgid "Width of scrollbar or scale thumb"
 msgstr "Anchura de la barra de desplazamiento o escala de miniatura"
 
-#: ../gtk/gtkrange.c:534
+#: ../gtk/gtkrange.c:535
 msgid "Trough Border"
 msgstr "Borde del carril"
 
-#: ../gtk/gtkrange.c:535
+#: ../gtk/gtkrange.c:536
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 "Espaciado entre la marcador/flechas de desplazamiento y el bisel exterior "
 "del carril"
 
-#: ../gtk/gtkrange.c:542
+#: ../gtk/gtkrange.c:543
 msgid "Stepper Size"
 msgstr "Tamaño del botón de flecha de desplazamiento"
 
-#: ../gtk/gtkrange.c:543
+#: ../gtk/gtkrange.c:544
 msgid "Length of step buttons at ends"
 msgstr "Longitud de los botones de flecha en los extremos"
 
-#: ../gtk/gtkrange.c:556
+#: ../gtk/gtkrange.c:557
 msgid "Stepper Spacing"
 msgstr "Espaciado de los botones de flecha de desplazamiento"
 
-#: ../gtk/gtkrange.c:557
+#: ../gtk/gtkrange.c:558
 msgid "Spacing between step buttons and thumb"
 msgstr "Espaciado entre los botones de flecha de desplazamiento y el marcador"
 
-#: ../gtk/gtkrange.c:564
+#: ../gtk/gtkrange.c:565
 msgid "Arrow X Displacement"
 msgstr "Desplazamiento de la flecha X"
 
-#: ../gtk/gtkrange.c:565
+#: ../gtk/gtkrange.c:566
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Distancia en la dirección «X» para mover la flecha cuando se suelta el botón "
 
-#: ../gtk/gtkrange.c:572
+#: ../gtk/gtkrange.c:573
 msgid "Arrow Y Displacement"
 msgstr "Desplazamiento de la flecha Y"
 
-#: ../gtk/gtkrange.c:573
+#: ../gtk/gtkrange.c:574
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Distancia en la dirección «Y» para mover la flecha cuando se suelta el botón "
 
-#: ../gtk/gtkrange.c:589
+#: ../gtk/gtkrange.c:590
 msgid "Trough Under Steppers"
 msgstr "Carril bajo las flechas de deslizamiento"
 
-#: ../gtk/gtkrange.c:590
+#: ../gtk/gtkrange.c:591
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -5272,11 +5303,11 @@ msgstr ""
 "Indica si se debe dibujar para la longitud completa del rango o excluir las "
 "flechas de desplazamiento y el espaciado"
 
-#: ../gtk/gtkrange.c:603
+#: ../gtk/gtkrange.c:604
 msgid "Arrow scaling"
 msgstr "Escalado de flechas"
 
-#: ../gtk/gtkrange.c:604
+#: ../gtk/gtkrange.c:605
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 "Escalado de flechas en consideración con el tamaño del botón de "
