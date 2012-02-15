@@ -19,7 +19,13 @@
 
 #include "gtkcssselectorprivate.h"
 
+#include "gtkcssprovider.h"
 #include "gtkstylecontextprivate.h"
+
+typedef enum {
+  GTK_CSS_COMBINE_DESCANDANT,
+  GTK_CSS_COMBINE_CHILD
+} GtkCssCombinator;
 
 struct _GtkCssSelector
 {
@@ -33,14 +39,14 @@ struct _GtkCssSelector
   GtkStateFlags     state;           /* required state flags (currently not checked when matching) */
 };
 
-GtkCssSelector *
-_gtk_css_selector_new (GtkCssSelector         *previous,
-                       GtkCssCombinator        combine,
-                       const char *            name,
-                       GQuark *                ids,
-                       GQuark *                classes,
-                       GtkRegionFlags          pseudo_classes,
-                       GtkStateFlags           state)
+static GtkCssSelector *
+gtk_css_selector_new (GtkCssSelector         *previous,
+                      GtkCssCombinator        combine,
+                      const char *            name,
+                      GQuark *                ids,
+                      GQuark *                classes,
+                      GtkRegionFlags          pseudo_classes,
+                      GtkStateFlags           state)
 {
   GtkCssSelector *selector;
 
@@ -53,6 +59,253 @@ _gtk_css_selector_new (GtkCssSelector         *previous,
   selector->classes = classes;
   selector->pseudo_classes = pseudo_classes;
   selector->state = state;
+
+  return selector;
+}
+
+static gboolean
+parse_selector_class (GtkCssParser *parser, GArray *classes)
+{
+  GQuark qname;
+  char *name;
+    
+  name = _gtk_css_parser_try_name (parser, FALSE);
+
+  if (name == NULL)
+    {
+      _gtk_css_parser_error (parser, "Expected a valid name for class");
+      return FALSE;
+    }
+
+  qname = g_quark_from_string (name);
+  g_array_append_val (classes, qname);
+  g_free (name);
+  return TRUE;
+}
+
+static gboolean
+parse_selector_name (GtkCssParser *parser, GArray *names)
+{
+  GQuark qname;
+  char *name;
+    
+  name = _gtk_css_parser_try_name (parser, FALSE);
+
+  if (name == NULL)
+    {
+      _gtk_css_parser_error (parser, "Expected a valid name for id");
+      return FALSE;
+    }
+
+  qname = g_quark_from_string (name);
+  g_array_append_val (names, qname);
+  g_free (name);
+  return TRUE;
+}
+
+static gboolean
+parse_selector_pseudo_class (GtkCssParser   *parser,
+                             GtkRegionFlags *region_to_modify,
+                             GtkStateFlags  *state_to_modify)
+{
+  struct {
+    const char *name;
+    GtkRegionFlags region_flag;
+    GtkStateFlags state_flag;
+  } pseudo_classes[] = {
+    { "first-child",  GTK_REGION_FIRST, 0 },
+    { "last-child",   GTK_REGION_LAST, 0 },
+    { "only-child",   GTK_REGION_ONLY, 0 },
+    { "sorted",       GTK_REGION_SORTED, 0 },
+    { "active",       0, GTK_STATE_FLAG_ACTIVE },
+    { "prelight",     0, GTK_STATE_FLAG_PRELIGHT },
+    { "hover",        0, GTK_STATE_FLAG_PRELIGHT },
+    { "selected",     0, GTK_STATE_FLAG_SELECTED },
+    { "insensitive",  0, GTK_STATE_FLAG_INSENSITIVE },
+    { "inconsistent", 0, GTK_STATE_FLAG_INCONSISTENT },
+    { "focused",      0, GTK_STATE_FLAG_FOCUSED },
+    { "focus",        0, GTK_STATE_FLAG_FOCUSED },
+    { "backdrop",     0, GTK_STATE_FLAG_BACKDROP },
+    { NULL, }
+  }, nth_child_classes[] = {
+    { "first",        GTK_REGION_FIRST, 0 },
+    { "last",         GTK_REGION_LAST, 0 },
+    { "even",         GTK_REGION_EVEN, 0 },
+    { "odd",          GTK_REGION_ODD, 0 },
+    { NULL, }
+  }, *classes;
+  guint i;
+  char *name;
+  GError *error;
+
+  name = _gtk_css_parser_try_ident (parser, FALSE);
+  if (name == NULL)
+    {
+      _gtk_css_parser_error (parser, "Missing name of pseudo-class");
+      return FALSE;
+    }
+
+  if (_gtk_css_parser_try (parser, "(", TRUE))
+    {
+      char *function = name;
+
+      name = _gtk_css_parser_try_ident (parser, TRUE);
+      if (!_gtk_css_parser_try (parser, ")", FALSE))
+        {
+          _gtk_css_parser_error (parser, "Missing closing bracket for pseudo-class");
+          return FALSE;
+        }
+
+      if (g_ascii_strcasecmp (function, "nth-child") != 0)
+        {
+          error = g_error_new (GTK_CSS_PROVIDER_ERROR,
+                               GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE,
+                               "Unknown pseudo-class '%s(%s)'", function, name ? name : "");
+          _gtk_css_parser_take_error (parser, error);
+          g_free (function);
+          g_free (name);
+          return FALSE;
+        }
+      
+      g_free (function);
+    
+      if (name == NULL)
+        {
+          error = g_error_new (GTK_CSS_PROVIDER_ERROR,
+                               GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE,
+                               "Unknown pseudo-class 'nth-child(%s)'", name);
+          _gtk_css_parser_take_error (parser, error);
+          return FALSE;
+        }
+
+      classes = nth_child_classes;
+    }
+  else
+    classes = pseudo_classes;
+
+  for (i = 0; classes[i].name != NULL; i++)
+    {
+      if (g_ascii_strcasecmp (name, classes[i].name) == 0)
+        {
+          if ((*region_to_modify & classes[i].region_flag) ||
+              (*state_to_modify & classes[i].state_flag))
+            {
+              if (classes == nth_child_classes)
+                _gtk_css_parser_error (parser, "Duplicate pseudo-class 'nth-child(%s)'", name);
+              else
+                _gtk_css_parser_error (parser, "Duplicate pseudo-class '%s'", name);
+            }
+          *region_to_modify |= classes[i].region_flag;
+          *state_to_modify |= classes[i].state_flag;
+
+          g_free (name);
+          return TRUE;
+        }
+    }
+
+  if (classes == nth_child_classes)
+    error = g_error_new (GTK_CSS_PROVIDER_ERROR,
+                         GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE,
+                         "Unknown pseudo-class 'nth-child(%s)'", name);
+  else
+    error = g_error_new (GTK_CSS_PROVIDER_ERROR,
+                         GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE,
+                         "Unknown pseudo-class '%s'", name);
+
+  g_free (name);
+  _gtk_css_parser_take_error (parser, error);
+
+  return FALSE;
+}
+
+static gboolean
+parse_simple_selector (GtkCssParser *parser,
+                       char **name,
+                       GArray *ids,
+                       GArray *classes,
+                       GtkRegionFlags *pseudo_classes,
+                       GtkStateFlags *state)
+{
+  gboolean parsed_something;
+  
+  *name = _gtk_css_parser_try_ident (parser, FALSE);
+  if (*name)
+    parsed_something = TRUE;
+  else
+    parsed_something = _gtk_css_parser_try (parser, "*", FALSE);
+
+  do {
+      if (_gtk_css_parser_try (parser, "#", FALSE))
+        {
+          if (!parse_selector_name (parser, ids))
+            return FALSE;
+        }
+      else if (_gtk_css_parser_try (parser, ".", FALSE))
+        {
+          if (!parse_selector_class (parser, classes))
+            return FALSE;
+        }
+      else if (_gtk_css_parser_try (parser, ":", FALSE))
+        {
+          if (!parse_selector_pseudo_class (parser, pseudo_classes, state))
+            return FALSE;
+        }
+      else if (!parsed_something)
+        {
+          _gtk_css_parser_error (parser, "Expected a valid selector");
+          return FALSE;
+        }
+      else
+        break;
+
+      parsed_something = TRUE;
+    }
+  while (!_gtk_css_parser_is_eof (parser));
+
+  _gtk_css_parser_skip_whitespace (parser);
+  return TRUE;
+}
+
+GtkCssSelector *
+_gtk_css_selector_parse (GtkCssParser *parser)
+{
+  GtkCssSelector *selector = NULL;
+
+  do {
+      char *name = NULL;
+      GArray *ids = g_array_new (TRUE, FALSE, sizeof (GQuark));
+      GArray *classes = g_array_new (TRUE, FALSE, sizeof (GQuark));
+      GtkRegionFlags pseudo_classes = 0;
+      GtkStateFlags state = 0;
+      GtkCssCombinator combine = GTK_CSS_COMBINE_DESCANDANT;
+
+      if (selector)
+        {
+          if (_gtk_css_parser_try (parser, ">", TRUE))
+            combine = GTK_CSS_COMBINE_CHILD;
+        }
+
+      if (!parse_simple_selector (parser, &name, ids, classes, &pseudo_classes, &state))
+        {
+          g_array_free (ids, TRUE);
+          g_array_free (classes, TRUE);
+          if (selector)
+            _gtk_css_selector_free (selector);
+          return NULL;
+        }
+
+      selector = gtk_css_selector_new (selector,
+                                       combine,
+                                       name,
+                                       (GQuark *) g_array_free (ids, ids->len == 0),
+                                       (GQuark *) g_array_free (classes, classes->len == 0),
+                                       pseudo_classes,
+                                       state);
+      g_free (name);
+    }
+  while (!_gtk_css_parser_is_eof (parser) &&
+         !_gtk_css_parser_begins_with (parser, ',') &&
+         !_gtk_css_parser_begins_with (parser, '{'));
 
   return selector;
 }
