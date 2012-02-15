@@ -48,6 +48,7 @@
         <choice>
           <ref name="property"/>
           <ref name="signal"/>
+          <ref name="binding"/>
           <ref name="child"/>
           <ref name="ANY"/>
         </choice>
@@ -110,6 +111,20 @@
           <text/>
         </attribute>
       </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="binding">
+    <element name="binding">
+      <attribute name="to">
+        <text/>
+      </attribute>
+      <attribute name="from">
+        <text/>
+      </attribute>
+      <attribute name="source">
+        <text/>
+      </attribute>
       <empty/>
     </element>
   </define>

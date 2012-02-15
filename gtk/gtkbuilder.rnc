@@ -13,7 +13,7 @@ object = element object {
   attribute class { text },
   attribute type-func { text } ?,
   attribute constructor { text } ?,
-  (property | signal | child | ANY) *
+  (property | signal | binding | child | ANY) *
 }
 
 property = element property {
@@ -32,6 +32,12 @@ signal = element signal {
   attribute object { text } ?,
   attribute last_modification_time { text } ?,
   empty
+}
+
+binding = element binding {
+  attribute to { text },
+  attribute from { text },
+  attribute source { text }
 }
 
 child = element child {
