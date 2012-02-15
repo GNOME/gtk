@@ -187,14 +187,6 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
     {
       if (g_ascii_strcasecmp (name, classes[i].name) == 0)
         {
-          if ((*region_to_modify & classes[i].region_flag) ||
-              (*state_to_modify & classes[i].state_flag))
-            {
-              if (classes == nth_child_classes)
-                _gtk_css_parser_error (parser, "Duplicate pseudo-class 'nth-child(%s)'", name);
-              else
-                _gtk_css_parser_error (parser, "Duplicate pseudo-class '%s'", name);
-            }
           *region_to_modify |= classes[i].region_flag;
           *state_to_modify |= classes[i].state_flag;
 

@@ -86,10 +86,6 @@ a > b {
   int-property: 42;
 }
 
-:hover {
-  int-property: 42;
-}
-
 a.b {
   int-property: 42;
 }
@@ -163,6 +159,10 @@ a > :hover {
 }
 
 :hover > .b {
+  int-property: 42;
+}
+
+:hover:hover {
   int-property: 42;
 }
 
