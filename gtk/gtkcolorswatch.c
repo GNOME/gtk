@@ -32,6 +32,7 @@
 #include "gtkmenushell.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "a11y/gtkcolorswatchaccessible.h"
 
 
 struct _GtkColorSwatchPrivate
@@ -589,6 +590,8 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
                           GDK_TYPE_RGBA, GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkColorSwatchPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COLOR_SWATCH_ACCESSIBLE);
 }
 
 /* Public API {{{1 */
