@@ -42,7 +42,7 @@ struct _GtkCssComputedValues
 {
   GObject parent;
 
-  GArray                *values;
+  GPtrArray             *values;
   GPtrArray             *sections;
 };
 
