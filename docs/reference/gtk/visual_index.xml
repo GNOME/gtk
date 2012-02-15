@@ -135,4 +135,10 @@
   <link linkend="GtkSwitch">
     <inlinegraphic fileref="switch.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkColorChooserDialog">
+    <inlinegraphic fileref="colorchooser.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkFontChooserDialog">
+    <inlinegraphic fileref="fontchooser.png" format="PNG"></inlinegraphic>
+  </link>
 </para>
