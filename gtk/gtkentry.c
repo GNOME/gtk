@@ -1392,7 +1392,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * The invisible character is used when masking entry contents (in
    * \"password mode\")"). When it is not explicitly set with the
-   * #GtkEntry::invisible-char property, GTK+ determines the character
+   * #GtkEntry:invisible-char property, GTK+ determines the character
    * to use from a list of possible candidates, depending on availability
    * in the current font.
    *

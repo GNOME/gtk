@@ -1494,7 +1494,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * The ::state-changed signal is emitted when the widget state changes.
    * See gtk_widget_get_state().
    *
-   * Deprecated: 3.0. Use #GtkWidget::state-flags-changed instead.
+   * Deprecated: 3.0. Use #GtkWidget:state-flags-changed instead.
    */
   widget_signals[STATE_CHANGED] =
     g_signal_new (I_("state-changed"),

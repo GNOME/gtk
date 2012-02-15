@@ -49,7 +49,7 @@
  * GtkVBox has been deprecated. You can use #GtkBox instead, which is a
  * very quick and easy change. If you have derived your own classes from
  * GtkVBox, you can simply change the inheritance to derive directly
- * from #GtkBox, and set the #GtkOrientable::orientation property to
+ * from #GtkBox, and set the #GtkOrientable:orientation property to
  * %GTK_ORIENTATION_VERTICAL in your instance init function, with a
  * call like:
  * |[

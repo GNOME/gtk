@@ -788,7 +788,7 @@ gtk_tool_item_get_orientation (GtkToolItem *tool_item)
  * show text</listitem>
  * <listitem> GTK_TOOLBAR_BOTH_HORIZ, meaning the tool item should show
  * both an icon and a label, arranged horizontally (however, note the 
- * #GtkToolButton::has_text_horizontally that makes tool buttons not
+ * #GtkToolButton:has_text_horizontally property that makes tool buttons not
  * show labels when the toolbar style is GTK_TOOLBAR_BOTH_HORIZ.
  * </listitem>
  * </itemizedlist>

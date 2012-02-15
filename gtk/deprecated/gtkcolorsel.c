@@ -3071,7 +3071,7 @@ gtk_color_selection_palette_to_string (const GdkColor *colors,
  * tries to modify the palette in a color selection.
  *
  * This function should save the new palette contents, and update
- * the #GtkSettings::gtk-color-palette GtkSettings property so all
+ * the #GtkSettings:gtk-color-palette GtkSettings property so all
  * GtkColorSelection widgets will be modified.
  *
  * Return value: the previous change palette hook (that was replaced)

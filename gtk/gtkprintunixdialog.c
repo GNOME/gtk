@@ -4272,7 +4272,7 @@ gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
  * gtk_print_unix_dialog_get_manual_capabilities:
  * @dialog: a #GtkPrintUnixDialog
  *
- * Gets the value of #GtkPrintUnixDialog::manual-capabilities property.
+ * Gets the value of #GtkPrintUnixDialog:manual-capabilities property.
  *
  * Returns: the printing capabilities
  *
@@ -4332,7 +4332,7 @@ gtk_print_unix_dialog_set_support_selection (GtkPrintUnixDialog *dialog,
  * gtk_print_unix_dialog_get_support_selection:
  * @dialog: a #GtkPrintUnixDialog
  *
- * Gets the value of #GtkPrintUnixDialog::support-selection property.
+ * Gets the value of #GtkPrintUnixDialog:support-selection property.
  *
  * Returns: whether the application supports print of selection
  *
@@ -4386,7 +4386,7 @@ gtk_print_unix_dialog_set_has_selection (GtkPrintUnixDialog *dialog,
  * gtk_print_unix_dialog_get_has_selection:
  * @dialog: a #GtkPrintUnixDialog
  *
- * Gets the value of #GtkPrintUnixDialog::has-selection property.
+ * Gets the value of #GtkPrintUnixDialog:has-selection property.
  *
  * Returns: whether there is a selection
  *
@@ -4454,7 +4454,7 @@ gtk_print_unix_dialog_set_embed_page_setup (GtkPrintUnixDialog *dialog,
  * gtk_print_unix_dialog_get_embed_page_setup:
  * @dialog: a #GtkPrintUnixDialog
  *
- * Gets the value of #GtkPrintUnixDialog::embed-page-setup property.
+ * Gets the value of #GtkPrintUnixDialog:embed-page-setup property.
  *
  * Returns: whether there is a selection
  *
