@@ -37,8 +37,8 @@
  *
  * GtkOverlay is a container which contains a single main child, on top
  * of which it can place <firstterm>overlay</firstterm> widgets. The
- * position of each overlay widget is determined by its #GtkWidget::halign
- * and #GtkWidget::valign properties. E.g. a widget with both alignments
+ * position of each overlay widget is determined by its #GtkWidget:halign
+ * and #GtkWidget:valign properties. E.g. a widget with both alignments
  * set to %GTK_ALIGN_START will be placed at the top left corner of the
  * main widget, whereas an overlay with halign set to %GTK_ALIGN_CENTER
  * and valign set to %GTK_ALIGN_END will be placed a the bottom edge of
@@ -605,7 +605,7 @@ gtk_overlay_new (void)
  * added with gtk_container_add().
  *
  * The position at which @widget is placed is determined
- * from its #GtkWidget::halign and #GtkWidget::valign properties.
+ * from its #GtkWidget:halign and #GtkWidget:valign properties.
  *
  * Since: 3.2
  */

@@ -1535,7 +1535,7 @@ gtk_font_chooser_widget_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkfontchooserdlg</FILE>
+<FILE>gtkfontchooserdialog</FILE>
 <TITLE>GtkFontChooserDialog</TITLE>
 GtkFontChooserDialog
 gtk_font_chooser_dialog_new
@@ -7297,4 +7297,62 @@ GtkOverlayClass
 <SUBSECTION Private>
 gtk_overlay_get_type
 GtkOverlayPrivate
+</SECTION>
+
+<SECTION>
+<FILE>gtkcolorchooser</FILE>
+<TITLE>GtkColorChooser</TITLE>
+GtkColorChooser
+gtk_color_chooser_get_rgba
+gtk_color_chooser_set_rgba
+gtk_color_chooser_get_use_alpha
+gtk_color_chooser_set_use_alpha
+gtk_color_chooser_add_palette
+
+<SUBSECTION Standard>
+GTK_TYPE_COLOR_CHOOSER
+GTK_COLOR_CHOOSER
+GTK_IS_COLOR_CHOOSER
+GTK_COLOR_CHOOSER_GET_IFACE
+
+<SUBSECTION Private>
+gtk_color_chooser_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkcolorchooserwidget</FILE>
+<TITLE>GtkColorChooserWidget</TITLE>
+GtkColorChooserWidget
+gtk_color_chooser_widget_new
+
+<SUBSECTION Standard>
+GTK_TYPE_COLOR_CHOOSER_WIDGET
+GTK_COLOR_CHOOSER_WIDGET
+GTK_COLOR_CHOOSER_WIDGET_CLASS
+GTK_IS_COLOR_CHOOSER_WIDGET
+GTK_IS_COLOR_CHOOSER_WIDGET_CLASS
+GTK_COLOR_CHOOSER_WIDGET_GET_CLASS
+
+<SUBSECTION Private>
+gtk_color_chooser_widget_get_type
+GtkColorChooserWidgetPrivate
+</SECTION>
+
+<SECTION>
+<FILE>gtkcolorchooserdialog</FILE>
+<TITLE>GtkColorChooserDialog</TITLE>
+GtkColorChooserDialog
+gtk_color_chooser_dialog_new
+
+<SUBSECTION Standard>
+GTK_TYPE_COLOR_CHOOSER_DIALOG
+GTK_COLOR_CHOOSER_DIALOG
+GTK_COLOR_CHOOSER_DIALOG_CLASS
+GTK_IS_COLOR_CHOOSER_DIALOG
+GTK_IS_COLOR_CHOOSER_DIALOG_CLASS
+GTK_COLOR_CHOOSER_DIALOG_GET_CLASS
+
+<SUBSECTION Private>
+GtkColorChooserDialogPrivate
+gtk_color_chooser_dialog_get_type
 </SECTION>

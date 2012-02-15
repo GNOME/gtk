@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkroundedboxprivate.h"
+#include "gtkthemingengineprivate.h"
 
 #include <string.h>
 
@@ -76,23 +77,10 @@ gtk_rounded_box_clamp_border_radius (GtkRoundedBox *box)
 }
 
 void
-_gtk_rounded_box_apply_border_radius (GtkRoundedBox    *box,
-                                      GtkThemingEngine *engine,
-                                      GtkStateFlags     state,
-                                      GtkJunctionSides  junction)
+_gtk_rounded_box_apply_border_radius (GtkRoundedBox *box,
+                                      GtkCssBorderCornerRadius **corner,
+                                      GtkJunctionSides junction)
 {
-  GtkCssBorderCornerRadius *corner[4];
-  guint i;
-
-  gtk_theming_engine_get (engine, state,
-                          /* Can't use border-radius as it's an int for
-                           * backwards compat */
-                          "border-top-left-radius", &corner[GTK_CSS_TOP_LEFT],
-                          "border-top-right-radius", &corner[GTK_CSS_TOP_RIGHT],
-                          "border-bottom-right-radius", &corner[GTK_CSS_BOTTOM_RIGHT],
-                          "border-bottom-left-radius", &corner[GTK_CSS_BOTTOM_LEFT],
-                          NULL);
-
   if (corner[GTK_CSS_TOP_LEFT] && (junction & GTK_JUNCTION_CORNER_TOPLEFT) == 0)
     {
       box->corner[GTK_CSS_TOP_LEFT].horizontal = _gtk_css_number_get (&corner[GTK_CSS_TOP_LEFT]->horizontal,
@@ -123,9 +111,40 @@ _gtk_rounded_box_apply_border_radius (GtkRoundedBox    *box,
     }
 
   gtk_rounded_box_clamp_border_radius (box);
+}
+
+void
+_gtk_rounded_box_apply_border_radius_for_context (GtkRoundedBox    *box,
+                                                  GtkStyleContext  *context,
+                                                  GtkStateFlags     state,
+                                                  GtkJunctionSides  junction)
+{
+  GtkCssBorderCornerRadius *corner[4];
+  guint i;
+
+  gtk_style_context_get (context, state,
+                         /* Can't use border-radius as it's an int for
+                          * backwards compat */
+                         "border-top-left-radius", &corner[GTK_CSS_TOP_LEFT],
+                         "border-top-right-radius", &corner[GTK_CSS_TOP_RIGHT],
+                         "border-bottom-right-radius", &corner[GTK_CSS_BOTTOM_RIGHT],
+                         "border-bottom-left-radius", &corner[GTK_CSS_BOTTOM_LEFT],
+                         NULL);
+
+  _gtk_rounded_box_apply_border_radius (box, corner, junction);
 
   for (i = 0; i < 4; i++)
     g_free (corner[i]);
+}
+
+void
+_gtk_rounded_box_apply_border_radius_for_engine (GtkRoundedBox    *box,
+                                                 GtkThemingEngine *engine,
+                                                 GtkStateFlags     state,
+                                                 GtkJunctionSides  junction)
+{
+  _gtk_rounded_box_apply_border_radius_for_context (box, _gtk_theming_engine_get_context (engine),
+                                                    state, junction);
 }
 
 static void

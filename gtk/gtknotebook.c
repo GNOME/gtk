@@ -3185,7 +3185,7 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
     {
       if (priv->during_reorder)
         {
-          gint old_page_num, page_num;
+          gint old_page_num, page_num, i;
           GList *element;
 
           element = get_drop_position (notebook);
@@ -3194,9 +3194,16 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
           gtk_notebook_child_reordered (notebook, page);
 
           if (priv->has_scrolled || old_page_num != page_num)
-            g_signal_emit (notebook,
-                           notebook_signals[PAGE_REORDERED], 0,
-                           page->child, page_num);
+	    {
+	      for (element = priv->children, i = 0; element; element = element->next)
+		{
+		  if (MIN (old_page_num, page_num) <= i && i <= MAX (old_page_num, page_num))
+		    gtk_widget_child_notify (((GtkNotebookPage *) element->data)->child, "position");
+		}
+	      g_signal_emit (notebook,
+			     notebook_signals[PAGE_REORDERED], 0,
+			     page->child, page_num);
+	    }
 
           priv->has_scrolled = FALSE;
           priv->during_reorder = FALSE;
@@ -4097,7 +4104,7 @@ gtk_notebook_remove (GtkContainer *container,
   GtkNotebook *notebook = GTK_NOTEBOOK (container);
   GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
-  GList *children;
+  GList *children, *list;
   gint page_num = 0;
 
   children = priv->children;
@@ -4117,7 +4124,14 @@ gtk_notebook_remove (GtkContainer *container,
 
   g_object_ref (widget);
 
+  list = children->next;
   gtk_notebook_real_remove (notebook, children);
+
+  while (list)
+    {
+      gtk_widget_child_notify (((GtkNotebookPage *)list->data)->child, "position");
+      list = list->next;
+    }
 
   g_signal_emit (notebook,
                  notebook_signals[PAGE_REMOVED],
@@ -4566,6 +4580,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
   gint nchildren;
+  GList *list;
 
   gtk_widget_freeze_child_notify (child);
 
@@ -4648,7 +4663,14 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   gtk_widget_child_notify (child, "tab-fill");
   gtk_widget_child_notify (child, "tab-label");
   gtk_widget_child_notify (child, "menu-label");
-  gtk_widget_child_notify (child, "position");
+
+  list = g_list_nth (priv->children, position);
+  while (list)
+    {
+      gtk_widget_child_notify (((GtkNotebookPage *)list->data)->child, "position");
+      list = list->next;
+    }
+
   gtk_widget_thaw_child_notify (child);
 
   /* The page-added handler might have reordered the pages, re-get the position */

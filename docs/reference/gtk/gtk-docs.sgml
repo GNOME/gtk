@@ -209,18 +209,22 @@
 
     <chapter id="SelectorWidgets">
       <title>Selectors (Color/File/Font)</title>
+      <xi:include href="xml/gtkcolorchooser.xml" />
       <xi:include href="xml/gtkcolorbutton.xml" />
-      <xi:include href="xml/gtkcolorseldlg.xml" />
+      <xi:include href="xml/gtkcolorchooserwidget.xml" />
+      <xi:include href="xml/gtkcolorchooserdialog.xml" />
       <xi:include href="xml/gtkcolorsel.xml" />
+      <xi:include href="xml/gtkcolorseldlg.xml" />
       <xi:include href="xml/gtkhsv.xml" />
       <xi:include href="xml/gtkfilechooser.xml" />
       <xi:include href="xml/gtkfilechooserbutton.xml" />
       <xi:include href="xml/gtkfilechooserdialog.xml" />
       <xi:include href="xml/gtkfilechooserwidget.xml" />
       <xi:include href="xml/gtkfilefilter.xml" />
-      <xi:include href="xml/gtkfontbutton.xml" />
       <xi:include href="xml/gtkfontchooser.xml" />
-      <xi:include href="xml/gtkfontchooserdlg.xml" />
+      <xi:include href="xml/gtkfontbutton.xml" />
+      <xi:include href="xml/gtkfontchooserwidget.xml" />
+      <xi:include href="xml/gtkfontchooserdialog.xml" />
       <xi:include href="xml/gtkfontsel.xml" />
       <xi:include href="xml/gtkfontseldlg.xml" />
     </chapter>

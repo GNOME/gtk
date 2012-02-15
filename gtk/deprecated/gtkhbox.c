@@ -49,7 +49,7 @@
  * very quick and easy change. If you have derived your own classes from
  * GtkHBox, you can simply change the inheritance to derive directly
  * from #GtkBox. No further changes are needed, since the default
- * value of the #GtkOrientable::orientation property is
+ * value of the #GtkOrientable:orientation property is
  * %GTK_ORIENTATION_HORIZONTAL.
  * If you want your code to be future-proof, the recommendation is to
  * switch to #GtkGrid, since #GtkBox is going to be deprecated in favor

@@ -40,7 +40,7 @@ static void
 _gtk_theming_background_apply_window_background (GtkThemingBackground *bg,
                                                  cairo_t              *cr)
 {
-  if (gtk_theming_engine_has_class (bg->engine, "background"))
+  if (gtk_style_context_has_class (bg->context, "background"))
     {
       cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.0); /* transparent */
       cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
@@ -54,9 +54,9 @@ _gtk_theming_background_apply_origin (GtkThemingBackground *bg)
   GtkCssArea origin;
   cairo_rectangle_t image_rect;
 
-  gtk_theming_engine_get (bg->engine, bg->flags,
-			  "background-origin", &origin,
-			  NULL);
+  gtk_style_context_get (bg->context, bg->flags,
+                         "background-origin", &origin,
+                         NULL);
 
   /* The default size of the background image depends on the
      background-origin value as this affects the top left
@@ -93,9 +93,9 @@ _gtk_theming_background_apply_clip (GtkThemingBackground *bg)
 {
   GtkCssArea clip;
 
-  gtk_theming_engine_get (bg->engine, bg->flags,
-			  "background-clip", &clip,
-			  NULL);
+  gtk_style_context_get (bg->context, bg->flags,
+                         "background-clip", &clip,
+                         NULL);
 
   if (clip == GTK_CSS_AREA_PADDING_BOX)
     {
@@ -167,10 +167,10 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       double image_width, image_height;
       double width, height;
 
-      size = g_value_get_boxed (_gtk_theming_engine_peek_property (bg->engine, "background-size"));
-      gtk_theming_engine_get (bg->engine, bg->flags,
-                              "background-repeat", &hrepeat,
-                              NULL);
+      size = g_value_get_boxed (_gtk_style_context_peek_property (bg->context, "background-size"));
+      gtk_style_context_get (bg->context, bg->flags,
+                             "background-repeat", &hrepeat,
+                             NULL);
       vrepeat = GTK_CSS_BACKGROUND_VERTICAL (hrepeat);
       hrepeat = GTK_CSS_BACKGROUND_HORIZONTAL (hrepeat);
       width = bg->image_rect.width;
@@ -300,9 +300,9 @@ _gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
 {
   GtkShadow *box_shadow;
 
-  gtk_theming_engine_get (bg->engine, bg->flags,
-			  "box-shadow", &box_shadow,
-			  NULL);
+  gtk_style_context_get (bg->context, bg->flags,
+                         "box-shadow", &box_shadow,
+                         NULL);
 
   if (box_shadow != NULL)
     {
@@ -312,13 +312,13 @@ _gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
 }
 
 static void
-_gtk_theming_background_init_engine (GtkThemingBackground *bg)
+_gtk_theming_background_init_context (GtkThemingBackground *bg)
 {
-  bg->flags = gtk_theming_engine_get_state (bg->engine);
+  bg->flags = gtk_style_context_get_state (bg->context);
 
-  gtk_theming_engine_get_border (bg->engine, bg->flags, &bg->border);
-  gtk_theming_engine_get_padding (bg->engine, bg->flags, &bg->padding);
-  gtk_theming_engine_get_background_color (bg->engine, bg->flags, &bg->bg_color);
+  gtk_style_context_get_border (bg->context, bg->flags, &bg->border);
+  gtk_style_context_get_padding (bg->context, bg->flags, &bg->padding);
+  gtk_style_context_get_background_color (bg->context, bg->flags, &bg->bg_color);
 
   /* In the CSS box model, by default the background positioning area is
    * the padding-box, i.e. all the border-box minus the borders themselves,
@@ -329,7 +329,8 @@ _gtk_theming_background_init_engine (GtkThemingBackground *bg)
    * right now we just shrink to the default.
    */
   _gtk_rounded_box_init_rect (&bg->padding_box, 0, 0, bg->paint_area.width, bg->paint_area.height);
-  _gtk_rounded_box_apply_border_radius (&bg->padding_box, bg->engine, bg->flags, bg->junction);
+
+  _gtk_rounded_box_apply_border_radius_for_context (&bg->padding_box, bg->context, bg->flags, bg->junction);
 
   bg->clip_box = bg->padding_box;
   _gtk_rounded_box_shrink (&bg->padding_box,
@@ -339,7 +340,7 @@ _gtk_theming_background_init_engine (GtkThemingBackground *bg)
   _gtk_theming_background_apply_clip (bg);
   _gtk_theming_background_apply_origin (bg);
 
-  bg->image = g_value_get_object (_gtk_theming_engine_peek_property (bg->engine, "background-image"));
+  bg->image = g_value_get_object (_gtk_style_context_peek_property (bg->context, "background-image"));
 }
 
 void
@@ -351,9 +352,28 @@ _gtk_theming_background_init (GtkThemingBackground *bg,
                               gdouble               height,
                               GtkJunctionSides      junction)
 {
+  GtkStyleContext *context;
+
   g_assert (bg != NULL);
 
-  bg->engine = engine;
+  context = _gtk_theming_engine_get_context (engine);
+  _gtk_theming_background_init_from_context (bg, context,
+                                             x, y, width, height,
+                                             junction);
+}
+
+void
+_gtk_theming_background_init_from_context (GtkThemingBackground *bg,
+                                           GtkStyleContext      *context,
+                                           gdouble               x,
+                                           gdouble               y,
+                                           gdouble               width,
+                                           gdouble               height,
+                                           GtkJunctionSides      junction)
+{
+  g_assert (bg != NULL);
+
+  bg->context = context;
 
   bg->paint_area.x = x;
   bg->paint_area.y = y;
@@ -363,7 +383,7 @@ _gtk_theming_background_init (GtkThemingBackground *bg,
   bg->image = NULL;
   bg->junction = junction;
 
-  _gtk_theming_background_init_engine (bg);
+  _gtk_theming_background_init_context (bg);
 }
 
 void

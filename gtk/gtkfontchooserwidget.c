@@ -51,7 +51,7 @@
 #include "gtkgrid.h"
 
 /**
- * SECTION:gtkfontchooser
+ * SECTION:gtkfontchooserwidget
  * @Short_description: A widget for selecting fonts
  * @Title: GtkFontChooserWidget
  * @See_also: #GtkFontChooserDialog

@@ -340,9 +340,9 @@ gtk_activatable_update (GtkActivatable *activatable,
  * @action: (allow-none): the related #GtkAction or %NULL
  *
  * This is called to update the activatable completely, this is called
- * internally when the #GtkActivatable::related-action property is set
+ * internally when the #GtkActivatable:related-action property is set
  * or unset and by the implementing class when
- * #GtkActivatable::use-action-appearance changes.
+ * #GtkActivatable:use-action-appearance changes.
  *
  * Since: 2.16
  **/

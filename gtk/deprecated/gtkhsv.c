@@ -31,6 +31,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include <math.h>
 #include <string.h>
 
@@ -52,6 +54,9 @@
  * intuitive way. Moving the selection around the outer ring changes the hue,
  * and moving the selection point inside the inner triangle changes value and
  * saturation.
+ *
+ * #GtkHSV has been deprecated together with #GtkColorSelection, where
+ * it was used.
  */
 
 
@@ -1452,84 +1457,6 @@ gtk_hsv_is_adjusting (GtkHSV *hsv)
   priv = hsv->priv;
 
   return priv->mode != DRAG_NONE;
-}
-
-/**
- * gtk_hsv_to_rgb:
- * @h: Hue
- * @s: Saturation
- * @v: Value
- * @r: (out): Return value for the red component
- * @g: (out): Return value for the green component
- * @b: (out): Return value for the blue component
- *
- * Converts a color from HSV space to RGB.
- * Input values must be in the [0.0, 1.0] range; 
- * output values will be in the same range.
- *
- * Since: 2.14
- */
-void
-gtk_hsv_to_rgb (gdouble  h,
-                gdouble  s,
-                gdouble  v,
-                gdouble *r,
-                gdouble *g,
-                gdouble *b)
-{
-  g_return_if_fail (h >= 0.0 && h <= 1.0);
-  g_return_if_fail (s >= 0.0 && s <= 1.0);
-  g_return_if_fail (v >= 0.0 && v <= 1.0);
-  
-  hsv_to_rgb (&h, &s, &v);
-  
-  if (r)
-    *r = h;
-  
-  if (g)
-    *g = s;
-  
-  if (b)
-    *b = v;
-}
-
-/**
- * gtk_rgb_to_hsv:
- * @r: Red
- * @g: Green
- * @b: Blue
- * @h: (out): Return value for the hue component
- * @s: (out): Return value for the saturation component
- * @v: (out): Return value for the value component
- *
- * Converts a color from RGB space to HSV.
- * Input values must be in the [0.0, 1.0] range;
- * output values will be in the same range.
- *
- * Since: 2.14
- */
-void
-gtk_rgb_to_hsv (gdouble  r,
-                gdouble  g,
-                gdouble  b,
-                gdouble *h,
-                gdouble *s,
-                gdouble *v)
-{
-  g_return_if_fail (r >= 0.0 && r <= 1.0);
-  g_return_if_fail (g >= 0.0 && g <= 1.0);
-  g_return_if_fail (b >= 0.0 && b <= 1.0);
-  
-  rgb_to_hsv (&r, &g, &b);
-  
-  if (h)
-    *h = r;
-  
-  if (s)
-    *s = g;
-  
-  if (v)
-    *v = b;
 }
 
 static void

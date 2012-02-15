@@ -2420,7 +2420,7 @@ gtk_print_operation_set_embed_page_setup (GtkPrintOperation  *op,
  * gtk_print_operation_get_embed_page_setup:
  * @op: a #GtkPrintOperation
  *
- * Gets the value of #GtkPrintOperation::embed-page-setup property.
+ * Gets the value of #GtkPrintOperation:embed-page-setup property.
  * 
  * Returns: whether page setup selection combos are embedded
  *
@@ -3305,7 +3305,7 @@ gtk_print_operation_set_support_selection (GtkPrintOperation  *op,
  * gtk_print_operation_get_support_selection:
  * @op: a #GtkPrintOperation
  *
- * Gets the value of #GtkPrintOperation::support-selection property.
+ * Gets the value of #GtkPrintOperation:support-selection property.
  * 
  * Returns: whether the application supports print of selection
  *
@@ -3354,7 +3354,7 @@ gtk_print_operation_set_has_selection (GtkPrintOperation  *op,
  * gtk_print_operation_get_has_selection:
  * @op: a #GtkPrintOperation
  *
- * Gets the value of #GtkPrintOperation::has-selection property.
+ * Gets the value of #GtkPrintOperation:has-selection property.
  * 
  * Returns: whether there is a selection
  *

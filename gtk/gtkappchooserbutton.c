@@ -31,14 +31,14 @@
  *
  * Initially, a #GtkAppChooserButton selects the first application
  * in its list, which will either be the most-recently used application
- * or, if #GtkAppChooserButton::show-default-item is %TRUE, the
+ * or, if #GtkAppChooserButton:show-default-item is %TRUE, the
  * default application.
  *
  * The list of applications shown in a #GtkAppChooserButton includes
  * the recommended applications for the given content type. When
- * #GtkAppChooserButton::show-default-item is set, the default application
+ * #GtkAppChooserButton:show-default-item is set, the default application
  * is also included. To let the user chooser other applications,
- * you can set the #GtkAppChooserButton::show-dialog-item property,
+ * you can set the #GtkAppChooserButton:show-dialog-item property,
  * which allows to open a full #GtkAppChooserDialog.
  *
  * It is possible to add custom items to the list, using

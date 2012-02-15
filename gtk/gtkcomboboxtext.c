@@ -467,7 +467,7 @@ gtk_combo_box_text_prepend (GtkComboBoxText *combo_box,
  *
  * Inserts @text at @position in the list of strings stored in @combo_box.
  * If @id is non-%NULL then it is used as the ID of the row.  See
- * #GtkComboBox::id-column.
+ * #GtkComboBox:id-column.
  *
  * If @position is negative then @text is appended.
  *

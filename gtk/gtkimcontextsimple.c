@@ -843,7 +843,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  if (priv->tentative_match &&
 	      g_unichar_validate (priv->tentative_match))
 	    {
-g_print ("committing tentative match on release\n");
 	      gtk_im_context_simple_commit_char (context, priv->tentative_match);
 	      priv->compose_buffer[0] = 0;
 

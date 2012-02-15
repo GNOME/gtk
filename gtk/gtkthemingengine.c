@@ -330,6 +330,14 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
   priv->context = context;
 }
 
+GtkStyleContext *
+_gtk_theming_engine_get_context (GtkThemingEngine *engine)
+{
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), NULL);
+
+  return engine->priv->context;
+}
+
 const GValue *
 _gtk_theming_engine_peek_property (GtkThemingEngine *engine,
                                    const char       *property_name)
@@ -1807,7 +1815,7 @@ render_frame_internal (GtkThemingEngine *engine,
         }
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_apply_border_radius (&border_box, engine, state, junction);
+      _gtk_rounded_box_apply_border_radius_for_engine (&border_box, engine, state, junction);
 
       render_border (cr, &border_box, &border, hidden_side, colors, border_style);
     }

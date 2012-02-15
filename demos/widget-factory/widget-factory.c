@@ -42,7 +42,8 @@ show_about (GtkMenuItem *item, GtkWidget *window)
   GdkPixbuf *pixbuf;
   const gchar *authors[] = {
     "Andrea Cimitan",
-    "Cosimo Cecchi"
+    "Cosimo Cecchi",
+    NULL
   };
 
   pixbuf = gdk_pixbuf_new_from_resource ("/logos/gtk-logo-256.png", NULL);

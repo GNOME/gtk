@@ -33,5 +33,8 @@ const GValue *_gtk_theming_engine_peek_property (GtkThemingEngine *engine,
 double        _gtk_theming_engine_get_number    (GtkThemingEngine *engine,
                                                  const char       *property_name,
                                                  double            one_hundred_percent);
+void          _gtk_theming_engine_set_context   (GtkThemingEngine *engine,
+                                                 GtkStyleContext  *context);
+GtkStyleContext *_gtk_theming_engine_get_context   (GtkThemingEngine *engine);
 
 #endif /* __GTK_THEMING_ENGINE_PRIVATE_H__ */

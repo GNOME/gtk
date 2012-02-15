@@ -1635,7 +1635,7 @@ gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
 
 /**
  * SECTION:gtkfontseldlg
- * @Short_description: A dialog box for selecting fonts
+ * @Short_description: Deprecated dialog box for selecting fonts
  * @Title: GtkFontSelectionDialog
  * @See_also: #GtkFontSelection, #GtkDialog, #GtkFontChooserDialog
  *

@@ -1154,6 +1154,33 @@ create_appchooserdialog (void)
   return info;
 }
 
+static WidgetInfo *
+create_fontchooserdialog (void)
+{
+  WidgetInfo *info;
+  GtkWidget *widget;
+
+  widget = gtk_font_chooser_dialog_new ("Font Chooser Dialog", NULL);
+  gtk_window_set_default_size (GTK_WINDOW (widget), 200, 300);
+  info = new_widget_info ("fontchooser", widget, ASIS);
+  info->include_decorations = TRUE;
+
+  return info;
+}
+
+static WidgetInfo *
+create_colorchooserdialog (void)
+{
+  WidgetInfo *info;
+  GtkWidget *widget;
+
+  widget = gtk_color_chooser_dialog_new ("Color Chooser Dialog", NULL);
+  info = new_widget_info ("colorchooser", widget, ASIS);
+  info->include_decorations = TRUE;
+
+  return info;
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -1204,6 +1231,8 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_appchooserbutton ());
   retval = g_list_prepend (retval, create_appchooserdialog ());
   retval = g_list_prepend (retval, create_lockbutton ());
+  retval = g_list_prepend (retval, create_fontchooserdialog ());
+  retval = g_list_prepend (retval, create_colorchooserdialog ());
 
   return retval;
 }

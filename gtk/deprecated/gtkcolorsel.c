@@ -27,6 +27,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkcolorsel.h"
 
 #include <math.h>
@@ -37,6 +39,7 @@
 #include "gtkhsv.h"
 #include "gtkwindow.h"
 #include "gtkselection.h"
+#include "gtkcolorutils.h"
 #include "gtkdnd.h"
 #include "gtkdrawingarea.h"
 #include "gtkframe.h"
@@ -62,7 +65,7 @@
 
 /**
  * SECTION:gtkcolorsel
- * @Short_description: A widget used to select a color
+ * @Short_description: Deprecated widget used to select a color
  * @Title: GtkColorSelection
  *
  * The #GtkColorSelection is a widget that is used to select
@@ -3068,7 +3071,7 @@ gtk_color_selection_palette_to_string (const GdkColor *colors,
  * tries to modify the palette in a color selection.
  *
  * This function should save the new palette contents, and update
- * the #GtkSettings::gtk-color-palette GtkSettings property so all
+ * the #GtkSettings:gtk-color-palette GtkSettings property so all
  * GtkColorSelection widgets will be modified.
  *
  * Return value: the previous change palette hook (that was replaced)

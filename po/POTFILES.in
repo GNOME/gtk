@@ -76,8 +76,15 @@ gtk/gtkclipboard.c
 gtk/gtkclipboard-quartz.c
 gtk/gtkclipboard-wayland.c
 gtk/gtkcolorbutton.c
-gtk/gtkcolorsel.c
-gtk/gtkcolorseldialog.c
+gtk/gtkcolorchooser.c
+gtk/gtkcolorchooserdialog.c
+gtk/gtkcolorchooserwidget.c
+gtk/gtkcoloreditor.c
+gtk/gtkcolorplane.c
+gtk/gtkcolorscale.c
+gtk/gtkcolorswatch.c
+gtk/deprecated/gtkcolorsel.c
+gtk/deprecated/gtkcolorseldialog.c
 gtk/gtkcombobox.c
 gtk/gtkcontainer.c
 gtk/gtkcssprovider.c
@@ -113,7 +120,7 @@ gtk/gtkfontchooserdialog.c
 gtk/gtkfontchooserwidget.c
 gtk/gtkframe.c
 gtk/gtkgrid.c
-gtk/gtkhsv.c
+gtk/deprecated/gtkhsv.c
 gtk/gtkiconfactory.c
 gtk/gtkicontheme.c
 gtk/gtkiconview.c

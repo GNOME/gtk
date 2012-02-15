@@ -32,7 +32,7 @@
 #define __GTK_COLOR_SELECTION_DIALOG_H__
 
 #include <gtk/gtkdialog.h>
-#include <gtk/gtkcolorsel.h>
+#include <gtk/deprecated/gtkcolorsel.h>
 
 G_BEGIN_DECLS
 
@@ -71,7 +71,9 @@ struct _GtkColorSelectionDialogClass
 
 /* ColorSelectionDialog */
 GType      gtk_color_selection_dialog_get_type            (void) G_GNUC_CONST;
+GDK_DEPRECATED_FOR(gtk_color_chooser_dialog_new)
 GtkWidget* gtk_color_selection_dialog_new                 (const gchar *title);
+GDK_DEPRECATED_FOR(GtkColorChooser)
 GtkWidget* gtk_color_selection_dialog_get_color_selection (GtkColorSelectionDialog *colorsel);
 
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+
+  <schema id='org.gtk.Settings.ColorChooser'>
+    <key name='custom-colors' type='a(dddd)'>
+      <default>[]</default>
+    </key>
+    <key name='selected-color' type='(bdddd)'>
+      <default>(false,1.0,1.0,1.0,1.0)</default>
+    </key>
+  </schema>
+
+</schemalist>
