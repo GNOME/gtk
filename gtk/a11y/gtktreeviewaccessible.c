@@ -3307,6 +3307,7 @@ disconnect_model_signals (GtkTreeViewAccessible *accessible)
   GtkWidget *widget;
 
   obj = G_OBJECT (accessible->tree_model);
+  g_object_remove_weak_pointer (obj, (gpointer *) &accessible->tree_model);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   g_signal_handlers_disconnect_by_func (obj, model_row_changed, widget);
   g_signal_handlers_disconnect_by_func (obj, model_row_inserted, widget);
