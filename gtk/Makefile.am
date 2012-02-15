@@ -1566,7 +1566,6 @@ EXTRA_DIST +=                   \
 	gtkprint-win32.h	\
 	gtkprint-win32.c	\
 	gtksearchenginequartz.h \
-	gtk.css.raleigh		\
 	gtk.gresource.xml	\
 	gtk-default.css		\
 	gtk-keys.css.default	\
