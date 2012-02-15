@@ -1052,6 +1052,49 @@ end_element (GMarkupParseContext *context,
     {
       ObjectInfo *object_info = state_pop_info (data, ObjectInfo);
       ChildInfo* child_info = state_peek_info (data, ChildInfo);
+      GSList *l;
+
+      /* Check for conflicting property binding definitions and
+       * conflicts between property binding and value definitions.
+       */
+      for (l = object_info->bindings; l; l = l->next)
+        {
+          BindingInfo *b = (BindingInfo*)l->data;
+          GSList *l2;
+
+          for (l2 = object_info->bindings; l2; l2 = l2->next)
+            {
+              BindingInfo *b2 = (BindingInfo*)l2->data;
+              if (b != b2 && !strcmp (b->to, b2->to))
+                {
+                  g_set_error (error,
+                               GTK_BUILDER_ERROR,
+                               GTK_BUILDER_ERROR_INVALID_VALUE,
+                               "Duplicate binding for property: `%s'",
+                               b->to);
+                  break;
+                }
+            }
+
+          /* If we broke out of the last loop, we already found an error */
+          if (l2)
+            break;
+
+          for (l2 = object_info->properties; l2; l2 = l2->next)
+            {
+              PropertyInfo *p = (PropertyInfo*)l2->data;
+              if (!strcmp (b->to, p->name))
+                {
+                  g_set_error (error,
+                               GTK_BUILDER_ERROR,
+                               GTK_BUILDER_ERROR_INVALID_VALUE,
+                               "Value supplied for property defined as "
+                               "bound: `%s'",
+                               b->to);
+                  break;
+                }
+            }
+        }
 
       if (data->requested_objects && data->inside_requested_object &&
           (data->cur_object_level == data->requested_object_level))
@@ -1132,21 +1175,7 @@ end_element (GMarkupParseContext *context,
     {
       BindingInfo *binding_info = state_pop_info (data, BindingInfo);
       ObjectInfo *object_info = (ObjectInfo*)state_peek_info (data, CommonInfo);
-      GSList *l;
-      
-      for (l = object_info->bindings; l; l = l->next)
-        {
-          BindingInfo *b = (BindingInfo*)l->data;
-          if (!strcmp (b->to, binding_info->to))
-            {
-              g_set_error (error,
-                           GTK_BUILDER_ERROR,
-                           GTK_BUILDER_ERROR_INVALID_VALUE,
-                           "Duplicate binding for property: `%s'",
-                           b->to);
-            }
-        }
-      
+
       binding_info->object_name = g_strdup (object_info->id);
       object_info->bindings =
         g_slist_prepend (object_info->bindings, binding_info);
