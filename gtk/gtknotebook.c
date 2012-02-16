@@ -7970,7 +7970,7 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
   /* Move around the menu items if necessary */
   gtk_notebook_child_reordered (notebook, page);
 
-  for (list = priv->children, i = 0; list; list = list->next)
+  for (list = priv->children, i = 0; list; list = list->next, i++)
     {
       if (MIN (old_pos, position) <= i && i <= MAX (old_pos, position))
 	gtk_widget_child_notify (((GtkNotebookPage *) list->data)->child, "position");
