@@ -3156,7 +3156,7 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
 
           if (priv->has_scrolled || old_page_num != page_num)
 	    {
-	      for (element = priv->children, i = 0; element; element = element->next)
+	      for (element = priv->children, i = 0; element; element = element->next, i++)
 		{
 		  if (MIN (old_page_num, page_num) <= i && i <= MAX (old_page_num, page_num))
 		    gtk_widget_child_notify (((GtkNotebookPage *) element->data)->child, "position");
