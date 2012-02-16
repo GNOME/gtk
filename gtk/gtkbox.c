@@ -1807,12 +1807,12 @@ gtk_box_remove (GtkContainer *container,
 	{
 	  gboolean was_visible;
 
-	  was_visible = gtk_widget_get_visible (widget);
-	  gtk_widget_unparent (widget);
-
           g_signal_handlers_disconnect_by_func (widget,
                                                 box_child_visibility_notify_cb,
                                                 box);
+
+	  was_visible = gtk_widget_get_visible (widget);
+	  gtk_widget_unparent (widget);
 
 	  priv->children = g_list_remove_link (priv->children, children);
 	  g_list_free (children);
