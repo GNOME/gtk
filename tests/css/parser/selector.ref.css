@@ -38,7 +38,7 @@ a > b {
   int-property: 42;
 }
 
-.b {
+*.b {
   int-property: 42;
 }
 
@@ -50,7 +50,7 @@ a > b {
   int-property: 42;
 }
 
-:hover {
+*:hover {
   int-property: 42;
 }
 
@@ -150,7 +150,7 @@ a > :hover {
   int-property: 42;
 }
 
-.b:hover {
+:hover.b {
   int-property: 42;
 }
 
@@ -174,7 +174,7 @@ a > :hover {
   int-property: 42;
 }
 
-#b {
+*#b {
   int-property: 42;
 }
 
@@ -218,7 +218,7 @@ a > #b {
   int-property: 42;
 }
 
-#b.a {
+.a#b {
   int-property: 42;
 }
 
@@ -230,7 +230,7 @@ a > #b {
   int-property: 42;
 }
 
-#b:hover {
+:hover#b {
   int-property: 42;
 }
 
