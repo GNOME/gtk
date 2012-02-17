@@ -42,7 +42,7 @@ typedef struct _GtkColorSwatchPrivate GtkColorSwatchPrivate;
 
 struct _GtkColorSwatch
 {
-  GtkDrawingArea parent;
+  GtkWidget parent;
 
   /*< private >*/
   GtkColorSwatchPrivate *priv;
@@ -50,7 +50,7 @@ struct _GtkColorSwatch
 
 struct _GtkColorSwatchClass
 {
-  GtkDrawingAreaClass parent_class;
+  GtkWidgetClass parent_class;
 
   void ( * activate)  (GtkColorSwatch *swatch);
   void ( * customize) (GtkColorSwatch *swatch);

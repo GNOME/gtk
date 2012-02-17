@@ -62,7 +62,7 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (GtkColorSwatch, gtk_color_swatch, GTK_TYPE_DRAWING_AREA)
+G_DEFINE_TYPE (GtkColorSwatch, gtk_color_swatch, GTK_TYPE_WIDGET)
 
 static void
 gtk_color_swatch_init (GtkColorSwatch *swatch)
@@ -495,6 +495,34 @@ swatch_button_release (GtkWidget      *widget,
   return FALSE;
 }
 
+static void
+swatch_realize (GtkWidget *widget)
+{
+  GtkAllocation allocation;
+  GdkWindow *window;
+  GdkWindowAttr attributes;
+  gint attributes_mask;
+
+  gtk_widget_set_realized (widget, TRUE);
+  gtk_widget_get_allocation (widget, &allocation);
+
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
+  attributes.wclass = GDK_INPUT_OUTPUT;
+  attributes.visual = gtk_widget_get_visual (widget);
+  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gdk_window_set_user_data (window, widget);
+  gtk_widget_set_window (widget, window);
+}
+
 static gboolean
 swatch_popup_menu (GtkWidget *swatch)
 {
@@ -582,6 +610,7 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->button_release_event = swatch_button_release;
   widget_class->enter_notify_event = swatch_enter_notify;
   widget_class->leave_notify_event = swatch_leave_notify;
+  widget_class->realize = swatch_realize;
 
   signals[ACTIVATE] =
     g_signal_new ("activate",
