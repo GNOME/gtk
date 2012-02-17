@@ -145,6 +145,8 @@ swatch_draw (GtkWidget *widget,
 
       _gtk_theming_background_render (&background, cr);
     }
+  else
+    _gtk_theming_background_render (&background, cr);
 
   gtk_render_frame (context, cr,
                     0, 0, width, height);
