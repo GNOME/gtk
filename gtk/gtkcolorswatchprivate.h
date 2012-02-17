@@ -90,7 +90,11 @@ void        gtk_color_swatch_set_icon         (GtkColorSwatch *swatch,
 G_GNUC_INTERNAL
 void        gtk_color_swatch_set_use_alpha    (GtkColorSwatch *swatch,
                                                gboolean        use_alpha);
-
+G_GNUC_INTERNAL
+void        gtk_color_swatch_set_selectable   (GtkColorSwatch *swatch,
+                                               gboolean        selectable);
+G_GNUC_INTERNAL
+gboolean    gtk_color_swatch_get_selectable   (GtkColorSwatch *swatch);
 
 G_END_DECLS
 

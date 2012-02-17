@@ -43,12 +43,14 @@ struct _GtkColorSwatchPrivate
   guint    has_color        : 1;
   guint    contains_pointer : 1;
   guint    use_alpha        : 1;
+  guint    selectable       : 1;
 };
 
 enum
 {
   PROP_ZERO,
-  PROP_RGBA
+  PROP_RGBA,
+  PROP_SELECTABLE
 };
 
 enum
@@ -76,6 +78,7 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
                                               | GDK_ENTER_NOTIFY_MASK
                                               | GDK_LEAVE_NOTIFY_MASK);
   swatch->priv->use_alpha = TRUE;
+  swatch->priv->selectable = TRUE;
 }
 
 #define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
@@ -337,7 +340,9 @@ swatch_key_press (GtkWidget   *widget,
       event->keyval == GDK_KEY_KP_Enter ||
       event->keyval == GDK_KEY_KP_Space)
     {
-      if (swatch->priv->has_color && (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_SELECTED) == 0)
+      if (swatch->priv->has_color && 
+          swatch->priv->selectable &&
+          (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_SELECTED) == 0)
         gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_SELECTED, FALSE);
       else
         g_signal_emit (swatch, signals[ACTIVATE], 0);
@@ -479,7 +484,8 @@ swatch_button_release (GtkWidget      *widget,
           g_signal_emit (swatch, signals[ACTIVATE], 0);
           return TRUE;
         }
-      else if ((flags & GTK_STATE_FLAG_SELECTED) == 0)
+      else if (swatch->priv->selectable &&
+               (flags & GTK_STATE_FLAG_SELECTED) == 0)
         {
           gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_SELECTED, FALSE);
           return TRUE;
@@ -513,6 +519,9 @@ swatch_get_property (GObject    *object,
       gtk_color_swatch_get_rgba (swatch, &color);
       g_value_set_boxed (value, &color);
       break;
+    case PROP_SELECTABLE:
+      g_value_set_boolean (value, gtk_color_swatch_get_selectable (swatch));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -531,6 +540,9 @@ swatch_set_property (GObject      *object,
     {
     case PROP_RGBA:
       gtk_color_swatch_set_rgba (swatch, g_value_get_boxed (value));
+      break;
+    case PROP_SELECTABLE:
+      gtk_color_swatch_set_selectable (swatch, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -588,6 +600,9 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   g_object_class_install_property (object_class, PROP_RGBA,
       g_param_spec_boxed ("rgba", P_("RGBA Color"), P_("Color as RGBA"),
                           GDK_TYPE_RGBA, GTK_PARAM_READWRITE));
+  g_object_class_install_property (object_class, PROP_SELECTABLE,
+      g_param_spec_boolean ("selectable", P_("Selectable"), P_("Whether the swatch is selectable"),
+                            TRUE, GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkColorSwatchPrivate));
 
@@ -694,6 +709,23 @@ gtk_color_swatch_set_use_alpha (GtkColorSwatch *swatch,
 {
   swatch->priv->use_alpha = use_alpha;
   gtk_widget_queue_draw (GTK_WIDGET (swatch));
+}
+
+void
+gtk_color_swatch_set_selectable (GtkColorSwatch *swatch,
+                                 gboolean selectable)
+{
+  if (selectable == swatch->priv->selectable)
+    return;
+
+  swatch->priv->selectable = selectable;
+  g_object_notify (G_OBJECT (swatch), "selectable");
+}
+
+gboolean
+gtk_color_swatch_get_selectable (GtkColorSwatch *swatch)
+{
+  return swatch->priv->selectable;
 }
 
 /* vim:set foldmethod=marker: */
