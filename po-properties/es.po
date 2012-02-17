@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-02-17 16:04+0000\n"
-"PO-Revision-Date: 2012-02-17 17:39+0100\n"
+"PO-Revision-Date: 2012-02-17 18:02+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -415,7 +415,7 @@ msgstr "URL del sitio web"
 
 #: ../gtk/gtkaboutdialog.c:406
 msgid "The URL for the link to the website of the program"
-msgstr "La URL para el enlace al sitio web del programa"
+msgstr "El URL para el enlace al sitio web del programa"
 
 #: ../gtk/gtkaboutdialog.c:420
 msgid "Website label"
