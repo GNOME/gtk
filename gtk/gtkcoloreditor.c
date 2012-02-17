@@ -399,6 +399,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
 
   /* Construct the main UI */
   editor->priv->swatch = swatch = gtk_color_swatch_new ();
+  gtk_color_swatch_set_selectable (GTK_COLOR_SWATCH (editor->priv->swatch), FALSE);
   gtk_widget_set_events (swatch, gtk_widget_get_events (swatch)
                                  & ~(GDK_BUTTON_PRESS_MASK
                                      | GDK_BUTTON_RELEASE_MASK
