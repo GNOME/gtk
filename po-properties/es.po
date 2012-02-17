@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-02-14 22:20+0000\n"
-"PO-Revision-Date: 2012-02-15 13:00+0100\n"
+"POT-Creation-Date: 2012-02-17 16:04+0000\n"
+"PO-Revision-Date: 2012-02-17 17:39+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2481,39 +2481,41 @@ msgid "The selected RGBA color"
 msgstr "El color RGBA seleccionado"
 
 #: ../gtk/gtkcolorchooser.c:69
-#| msgid "Color Hash"
 msgid "Color"
 msgstr "Color"
 
 #: ../gtk/gtkcolorchooser.c:70
-#| msgid "Foreground color as a GdkRGBA"
 msgid "Current color, as a GdkRGBA"
 msgstr "Color actual como GdkRGBA"
 
 #: ../gtk/gtkcolorchooser.c:90
-#| msgid "Whether tabs should be shown"
 msgid "Whether alpha should be shown"
 msgstr "Indica si se debe mostrar el alfa"
 
 #: ../gtk/gtkcolorchooserdialog.c:234 ../gtk/gtkcolorchooserwidget.c:666
-#| msgid "Show text"
 msgid "Show editor"
 msgstr "Mostrar editor"
 
 #: ../gtk/gtkcolorscale.c:336
-#| msgid "Value type"
 msgid "Scale type"
 msgstr "Tipo de escala"
 
-#: ../gtk/gtkcolorswatch.c:588
-#| msgid "Current RGBA Color"
+#: ../gtk/gtkcolorswatch.c:601
 msgid "RGBA Color"
 msgstr "Color RGBA"
 
-#: ../gtk/gtkcolorswatch.c:588
-#| msgid "Color Hash"
+#: ../gtk/gtkcolorswatch.c:601
 msgid "Color as RGBA"
 msgstr "Color como RGBA"
+
+#: ../gtk/gtkcolorswatch.c:604 ../gtk/gtklabel.c:797
+msgid "Selectable"
+msgstr "Seleccionable"
+
+#: ../gtk/gtkcolorswatch.c:604
+#| msgid "Whether the tab is detachable"
+msgid "Whether the swatch is selectable"
+msgstr "Indica si la muestra es seleccionable"
 
 #: ../gtk/deprecated/gtkcolorsel.c:324
 msgid "Has Opacity Control"
@@ -3941,10 +3943,6 @@ msgstr "Modo de ajuste de línea"
 #: ../gtk/gtklabel.c:790
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr "Si se establece el ajuste, controla cómo se hace el ajuste de línea"
-
-#: ../gtk/gtklabel.c:797
-msgid "Selectable"
-msgstr "Seleccionable"
 
 #: ../gtk/gtklabel.c:798
 msgid "Whether the label text can be selected with the mouse"
