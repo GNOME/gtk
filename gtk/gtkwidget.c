@@ -14574,8 +14574,9 @@ _gtk_widget_set_style (GtkWidget *widget,
  *
  * Releases the events that a widget has captured and stored
  * in the #GtkWidget::captured-event signal. if @emit is #TRUE,
- * the events will be emitted on the target widget (the widget
- * that would receive the event if no signal capturing happened)
+ * event emission will continue as if uncaptured (i.e. the
+ * capturing phase will continue down the hierarchy to the event
+ * widget, followed by the event being propagated up again).
  *
  * Since: 3.4
  **/
@@ -14598,8 +14599,43 @@ gtk_widget_release_captured_events (GtkWidget *widget,
         {
           GtkWidget *event_widget;
           GdkEvent *event = l->data;
+          gboolean propagated = FALSE;
 
           event_widget = gtk_get_event_widget (event);
+
+          /* Find out the next widget handling the captured event,
+           * if event_widget == widget, the capturing phase for
+           * this event has finished, so the next thing is bubbling
+           * it up.
+           */
+          if (event_widget != widget &&
+              gtk_widget_is_ancestor (event_widget, widget))
+            {
+              GtkWidget *parent, *intermediate;
+
+              intermediate = event_widget;
+
+              while (intermediate)
+                {
+                  parent = gtk_widget_get_parent (intermediate);
+
+                  /* Found the next intermediate that should handle
+                   * the captured event.
+                   */
+                  if (parent == widget)
+                    break;
+
+                  intermediate = parent;
+                }
+
+              if (intermediate)
+                propagated = _gtk_propagate_captured_event (event_widget,
+                                                            event,
+                                                            intermediate);
+            }
+
+          if (propagated)
+            continue;
 
           switch (event->type)
             {

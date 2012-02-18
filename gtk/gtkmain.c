@@ -132,10 +132,6 @@
 
 #include "a11y/gailutil.h"
 
-static gboolean gtk_propagate_captured_event (GtkWidget *widget,
-                                              GdkEvent  *event,
-                                              GtkWidget *topmost);
-
 /* Private type definitions
  */
 typedef struct _GtkKeySnooperData        GtkKeySnooperData;
@@ -1667,7 +1663,7 @@ gtk_main_do_event (GdkEvent *event)
           _gtk_widget_press_and_hold_check_start (grab_widget, &event->button);
         }
 
-      if (!gtk_propagate_captured_event (grab_widget, event, topmost_widget))
+      if (!_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_propagate_event (grab_widget, event);
       break;
 
@@ -1731,7 +1727,7 @@ gtk_main_do_event (GdkEvent *event)
         _gtk_widget_press_and_hold_check_threshold (grab_widget,
                                                     &event->motion);
 
-      if (!gtk_propagate_captured_event (grab_widget, event, topmost_widget))
+      if (!_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_propagate_event (grab_widget, event);
       break;
 
@@ -1742,7 +1738,7 @@ gtk_main_do_event (GdkEvent *event)
                                        gdk_event_get_device (event),
                                        event->any.window);
       if (gtk_widget_is_sensitive (grab_widget) &&
-	  !gtk_propagate_captured_event (grab_widget, event, topmost_widget))
+	  !_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_widget_event (grab_widget, event);
       break;
 
@@ -1753,7 +1749,7 @@ gtk_main_do_event (GdkEvent *event)
                                        gdk_event_get_device (event),
                                        NULL);
       if (gtk_widget_is_sensitive (grab_widget) &&
-          !gtk_propagate_captured_event (grab_widget, event, topmost_widget))
+          !_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_widget_event (grab_widget, event);
       break;
 
@@ -2557,10 +2553,10 @@ gtk_propagate_event (GtkWidget *widget,
   propagate_event (widget, event, FALSE, NULL);
 }
 
-static gboolean
-gtk_propagate_captured_event (GtkWidget *widget,
-                              GdkEvent  *event,
-                              GtkWidget *topmost)
+gboolean
+_gtk_propagate_captured_event (GtkWidget *widget,
+                               GdkEvent  *event,
+                               GtkWidget *topmost)
 {
   return propagate_event (widget, event, TRUE, topmost);
 }
