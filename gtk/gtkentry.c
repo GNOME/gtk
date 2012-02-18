@@ -5869,12 +5869,14 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
   gboolean block_at_line_end;
   PangoLayout *layout;
   const char *text;
+  gint x, y;
 
   context = gtk_widget_get_style_context (widget);
 
   layout = gtk_entry_ensure_layout (entry, TRUE);
   text = pango_layout_get_text (layout);
   cursor_index = g_utf8_offset_to_pointer (text, priv->current_pos + priv->preedit_cursor) - text;
+  get_layout_position (entry, &x, &y);
 
   if (!priv->overwrite_mode)
     block = FALSE;
@@ -5885,18 +5887,15 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
   if (!block)
     {
       gtk_render_insertion_cursor (context, cr,
-                                   - priv->scroll_offset, 0,
+                                   x, y,
                                    layout, cursor_index, priv->resolved_dir);
     }
   else /* overwrite_mode */
     {
       GdkRGBA cursor_color;
       GdkRectangle rect;
-      gint x, y;
 
       cairo_save (cr);
-
-      get_layout_position (entry, &x, &y);
 
       rect.x = PANGO_PIXELS (cursor_rect.x) + x;
       rect.y = PANGO_PIXELS (cursor_rect.y) + y;
