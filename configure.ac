@@ -1394,6 +1394,12 @@ else
             $CUPS_API_MAJOR -eq 1 -a $CUPS_API_MINOR -lt 2; then
       AC_MSG_ERROR([CUPS >= 1.2 not found])
     fi
+    if test $CUPS_API_MAJOR -gt 1 -o \
+	    $CUPS_API_MAJOR -eq 1 -a $CUPS_API_MINOR -ge 6; then
+      AC_DEFINE(HAVE_CUPS_API_1_6, 1,
+                [Define to 1 if CUPS 1.6 API is available])
+
+    fi
 
     AC_SUBST(CUPS_API_MAJOR)
     AC_SUBST(CUPS_API_MINOR)
