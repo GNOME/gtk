@@ -1300,7 +1300,8 @@ sync_native_window_stack_position (GdkWindow *window)
  * @parent: (allow-none): a #GdkWindow, or %NULL to create the window as a child of
  *   the default root window for the default display.
  * @attributes: attributes of the new window
- * @attributes_mask: mask indicating which fields in @attributes are valid
+ * @attributes_mask: (type GdkWindowAttributesType): mask indicating which
+ *   fields in @attributes are valid
  *
  * Creates a new #GdkWindow using the attributes from
  * @attributes. See #GdkWindowAttr and #GdkWindowAttributesType for
