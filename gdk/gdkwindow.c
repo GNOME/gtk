@@ -3602,17 +3602,6 @@ gdk_window_clear_backing_region_direct (GdkWindow *window,
   cairo_surface_destroy (paint.surface);
 }
 
-
-static void
-gdk_window_clear_region_internal (GdkWindow *window,
-				  cairo_region_t *region)
-{
-  if (window->paint_stack)
-    gdk_window_clear_backing_region (window, region);
-  else
-    gdk_window_clear_backing_region_direct (window, region);
-}
-
 static void
 gdk_window_drop_cairo_surface (GdkWindow *window)
 {
@@ -3933,7 +3922,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 	   * piggyback on the implicit paint */
 
 	  gdk_window_begin_paint_region (window, clipped_expose_region);
-	  gdk_window_clear_region_internal (window, clipped_expose_region);
+	  /* The actual clear happens in begin_paint_region */
 	  gdk_window_end_paint (window);
 	}
     }
