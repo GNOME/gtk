@@ -203,8 +203,8 @@ struct _GdkWindowPaint
 {
   cairo_region_t *region;
   cairo_surface_t *surface;
+  cairo_region_t *flushed;
   guint uses_implicit : 1;
-  guint flushed : 1;
 };
 
 typedef struct {
@@ -2714,7 +2714,7 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
   paint = g_new (GdkWindowPaint, 1);
   paint->region = cairo_region_create (); /* Empty */
   paint->uses_implicit = FALSE;
-  paint->flushed = FALSE;
+  paint->flushed = NULL;
   paint->surface = gdk_window_create_similar_surface (window,
                                                       gdk_window_get_content (window),
 		                                      MAX (rect->width, 1),
@@ -2762,7 +2762,6 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
     return;
 
   paint = impl_window->implicit_paint;
-  paint->flushed = TRUE;
   region = cairo_region_copy (window->clip_region_with_children);
 
   cairo_region_translate (region, window->abs_x, window->abs_y);
@@ -2792,9 +2791,11 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
       cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
       cairo_paint (cr);
       cairo_destroy (cr);
+
+      paint->flushed = region;
     }
-  
-  cairo_region_destroy (region);
+  else
+    cairo_region_destroy (region);
 }
 
 /* Ends an implicit paint, paired with gdk_window_begin_implicit_paint returning TRUE */
@@ -2826,7 +2827,8 @@ gdk_window_end_implicit_paint (GdkWindow *window)
     }
   
   cairo_region_destroy (paint->region);
-
+  if (paint->flushed)
+    cairo_region_destroy (paint->flushed);
   cairo_surface_destroy (paint->surface);
   g_free (paint);
 }
@@ -2968,7 +2970,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   if (!gdk_window_has_impl (window) &&
       window->has_alpha_background &&
       (!implicit_paint ||
-       (implicit_paint && implicit_paint->flushed)))
+       (implicit_paint && implicit_paint->flushed != NULL && !cairo_region_is_empty (implicit_paint->flushed))))
     {
       cairo_t *cr = cairo_create (paint->surface);
       /* We can't use gdk_cairo_set_source_window here, as that might
@@ -2979,6 +2981,22 @@ gdk_window_begin_paint_region (GdkWindow       *window,
 				- (window->abs_x + clip_box.x),
 				- (window->abs_y + clip_box.y));
       cairo_surface_destroy (source_surface);
+
+      /* Only read back the flushed area if any */
+      if (implicit_paint)
+	{
+	  cairo_region_t *flushed = cairo_region_copy (implicit_paint->flushed);
+	  cairo_region_intersect (flushed, region);
+	  /* Convert from impl coords */
+	  cairo_region_translate (flushed, -window->abs_x, -window->abs_y);
+	  gdk_cairo_region (cr, flushed);
+	  cairo_clip (cr);
+
+	  /* Convert to impl coords */
+	  cairo_region_translate (flushed, window->abs_x, window->abs_y);
+	  cairo_region_subtract (implicit_paint->flushed, flushed);
+	  cairo_region_destroy (flushed);
+	}
       cairo_paint (cr);
       cairo_destroy (cr);
     }
