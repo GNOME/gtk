@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-02-06 22:33+0000\n"
-"PO-Revision-Date: 2012-02-08 08:14+0200\n"
+"PO-Revision-Date: 2012-02-17 23:50+0200\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <>\n"
 "Language: et\n"
@@ -3317,16 +3317,16 @@ msgstr "Selle dokumendi printimiseks on vaja eelnevalt autentida"
 
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr "Printeris '%s' on vähe toonerit."
+msgstr "Printeris '%s' on tooner otsakorral."
 
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr "Printeris '%s' pole toonerit."
+msgstr "Printeris '%s' on tooner otsas."
 
 #. Translators: "Developer" like on photo development context
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr "Printeris '%s' on ilmuti lõppemas."
+msgstr "Printeris '%s' on ilmuti otsakorral."
 
 #. Translators: "Developer" like on photo development context
 #, c-format
@@ -3336,12 +3336,12 @@ msgstr "Printeris '%s' on ilmuti otsas."
 #. Translators: "marker" is one color bin of the printer
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr "Printeris '%s' on vähemalt ühe tindi varu lõppemas."
+msgstr "Printeris '%s' on vähemalt ühe värvi varu otsakorral."
 
 #. Translators: "marker" is one color bin of the printer
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr "Printeris '%s' on vähemalt ühe tindi varu otsas."
+msgstr "Printeris '%s' on vähemalt ühe värvi varu otsas."
 
 #, c-format
 msgid "The cover is open on printer '%s'."
@@ -3353,7 +3353,7 @@ msgstr "Printeril '%s' on luuk lahti."
 
 #, c-format
 msgid "Printer '%s' is low on paper."
-msgstr "Printeris '%s' on vähe paberit."
+msgstr "Printeris '%s' on paber otsakorral."
 
 #, c-format
 msgid "Printer '%s' is out of paper."
