@@ -73,8 +73,8 @@ _gdk_quartz_display_has_pending (GdkDisplay *display)
          (_gdk_quartz_event_loop_check_pending ()));
 }
 
-static void
-break_all_grabs (guint32 time)
+void
+_gdk_quartz_events_break_all_grabs (guint32 time)
 {
   GList *list, *l;
   GdkDeviceManager *device_manager;
@@ -1178,7 +1178,7 @@ gdk_event_translate (GdkEvent *event,
   if (event_type == NSAppKitDefined)
     {
       if ([nsevent subtype] == NSApplicationDeactivatedEventType)
-        break_all_grabs (get_time_from_ns_event (nsevent));
+        _gdk_quartz_events_break_all_grabs (get_time_from_ns_event (nsevent));
 
       /* This could potentially be used to break grabs when clicking
        * on the title. The subtype 20 is undocumented so it's probably
@@ -1237,7 +1237,7 @@ gdk_event_translate (GdkEvent *event,
    */
   if ([(GdkQuartzNSWindow *)nswindow isInMove])
     {
-      break_all_grabs (get_time_from_ns_event (nsevent));
+      _gdk_quartz_events_break_all_grabs (get_time_from_ns_event (nsevent));
       return FALSE;
     }
 
