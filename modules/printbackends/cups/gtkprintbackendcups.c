@@ -1696,6 +1696,28 @@ typedef enum
     GTK_PRINTER_STATE_LEVEL_WARNING = 2,
     GTK_PRINTER_STATE_LEVEL_ERROR = 3
   } PrinterStateLevel;
+
+typedef struct
+{
+  const gchar *printer_name;
+  const gchar *printer_uri;
+  const gchar *member_uris;
+  const gchar *location;
+  const gchar *description;
+  const gchar *state_msg;
+  const gchar *reason_msg;
+  PrinterStateLevel reason_level;
+  gint state;
+  gint job_count;
+  gboolean is_paused;
+  gboolean is_accepting_jobs;
+  const gchar *default_cover_before;
+  const gchar *default_cover_after;
+  gboolean default_printer;
+  gboolean got_printer_type;
+  gboolean remote_printer;
+  gchar  **auth_info_required;
+} PrinterSetupInfo;
 static void
 cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
                               GtkCupsResult       *result,
@@ -1748,33 +1770,15 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
   for (attr = response->attrs; attr != NULL; attr = attr->next)
     {
       GtkPrinter *printer;
-      const gchar *printer_name = NULL;
-      const gchar *printer_uri = NULL;
-      const gchar *member_uris = NULL;
-      const gchar *location = NULL;
-      const gchar *description = NULL;
-      const gchar *state_msg = NULL;
-      gint state = 0;
-      gint job_count = 0;
       gboolean status_changed = FALSE;
       GList *node;
       gint i,j;
-      const gchar *reason_msg = NULL;
       gchar *reason_msg_desc = NULL;
       gchar *tmp_msg = NULL;
       gchar *tmp_msg2 = NULL;
-      gint printer_state_reason_level = 0; /* 0 - none, 1 - report, 2 - warning, 3 - error */
-      gboolean interested_in = FALSE;
       gboolean found = FALSE;
-      gboolean is_paused = FALSE;
-      gboolean is_accepting_jobs = TRUE;
-      gboolean default_printer = FALSE;
-      gboolean got_printer_type = FALSE;
-      const gchar   *default_cover_before = NULL;
-      const gchar   *default_cover_after = NULL;
-      gboolean remote_printer = FALSE;
-      gchar  **auth_info_required = NULL;
-      
+      PrinterSetupInfo *info = g_slice_new0 (PrinterSetupInfo);
+
       /* Skip leading attributes until we hit a printer...
        */
       while (attr != NULL && ippGetGroupTag (attr) != IPP_TAG_PRINTER)
@@ -1910,8 +1914,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
         attr = attr->next;
       }
 
-      if (printer_name == NULL ||
-	  (printer_uri == NULL && member_uris == NULL))
+      if (info->printer_name == NULL ||
+	  (info->printer_uri == NULL && info->member_uris == NULL))
       {
         if (attr == NULL)
 	  break;
@@ -1919,19 +1923,19 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
           continue;
       }
 
-      if (got_printer_type)
+      if (info->got_printer_type)
         {
-          if (default_printer && !cups_backend->got_default_printer)
+          if (info->default_printer && !cups_backend->got_default_printer)
             {
-              if (!remote_printer)
+              if (!info->remote_printer)
                 {
                   cups_backend->got_default_printer = TRUE;
-                  cups_backend->default_printer = g_strdup (printer_name);
+                  cups_backend->default_printer = g_strdup (info->printer_name);
                 }
               else
                 {
                   if (remote_default_printer == NULL)
-                    remote_default_printer = g_strdup (printer_name);
+                    remote_default_printer = g_strdup (info->printer_name);
                 }
             }
         }
@@ -1942,10 +1946,13 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
         }
 
       /* remove name from checklist if it was found */
-      node = g_list_find_custom (removed_printer_checklist, printer_name, (GCompareFunc) find_printer);
-      removed_printer_checklist = g_list_delete_link (removed_printer_checklist, node);
+      node = g_list_find_custom (removed_printer_checklist,
+				 info->printer_name,
+				 (GCompareFunc) find_printer);
+      removed_printer_checklist = g_list_delete_link (removed_printer_checklist,
+						      node);
  
-      printer = gtk_print_backend_find_printer (backend, printer_name);
+      printer = gtk_print_backend_find_printer (backend, info->printer_name);
       if (!printer)
         {
 	  GtkPrinterCups *cups_printer;
@@ -2043,10 +2050,10 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       else
 	g_object_ref (printer);
 
-      GTK_PRINTER_CUPS (printer)->remote = remote_printer;
+      GTK_PRINTER_CUPS (printer)->remote = info->remote_printer;
 
-      gtk_printer_set_is_paused (printer, is_paused);
-      gtk_printer_set_is_accepting_jobs (printer, is_accepting_jobs);
+      gtk_printer_set_is_paused (printer, info->is_paused);
+      gtk_printer_set_is_accepting_jobs (printer, info->is_accepting_jobs);
 
       if (!gtk_printer_is_active (printer))
         {
@@ -2069,57 +2076,60 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       cups_request_printer_info (cups_backend, gtk_printer_get_name (printer));
 #endif
 
-      GTK_PRINTER_CUPS (printer)->state = state;
-      status_changed = gtk_printer_set_job_count (printer, job_count);
-      status_changed |= gtk_printer_set_location (printer, location);
-      status_changed |= gtk_printer_set_description (printer, description);
+      GTK_PRINTER_CUPS (printer)->state = info->state;
+      status_changed = gtk_printer_set_job_count (printer, info->job_count);
+      status_changed |= gtk_printer_set_location (printer, info->location);
+      status_changed |= gtk_printer_set_description (printer,
+						     info->description);
 
-      if (state_msg != NULL && strlen (state_msg) == 0)
+      if (info->state_msg != NULL && strlen (info->state_msg) == 0)
         {
-          if (is_paused && !is_accepting_jobs)
+          if (info->is_paused && !info->is_accepting_jobs)
 		  /* Translators: this is a printer status. */
             tmp_msg2 = g_strdup ( N_("Paused ; Rejecting Jobs"));
-          if (is_paused && is_accepting_jobs)
+          if (info->is_paused && info->is_accepting_jobs)
 		  /* Translators: this is a printer status. */
             tmp_msg2 = g_strdup ( N_("Paused"));
-          if (!is_paused && !is_accepting_jobs)
+          if (!info->is_paused && !info->is_accepting_jobs)
 		  /* Translators: this is a printer status. */
             tmp_msg2 = g_strdup ( N_("Rejecting Jobs"));
 
           if (tmp_msg2 != NULL)
-            state_msg = tmp_msg2;
+            info->state_msg = tmp_msg2;
         }
 
       /* Set description of the reason and combine it with printer-state-message. */
-      if ( (reason_msg != NULL))
+      if ( (info->reason_msg != NULL))
         {
-          for (i = 0; i < G_N_ELEMENTS (reasons); i++)
+          for (i = 0; i < G_N_ELEMENTS (printer_messages); i++)
             {
-              if (strncmp (reason_msg, reasons[i], strlen (reasons[i])) == 0)
+              if (strncmp (info->reason_msg, printer_messages[i],
+			   strlen (printer_messages[i])) == 0)
                 {
-                  reason_msg_desc = g_strdup_printf (reasons_descs[i], printer_name);
+                  reason_msg_desc = g_strdup_printf (printer_strings[i],
+						     info->printer_name);
                   found = TRUE;
                   break;
                 }
             }
 
           if (!found)
-            printer_state_reason_level = 0;
+            info->reason_level = GTK_PRINTER_STATE_LEVEL_NONE;
 
-          if (printer_state_reason_level >= 2)
+          if (info->reason_level >= GTK_PRINTER_STATE_LEVEL_WARNING)
             {
-              if (strlen (state_msg) == 0)
-                state_msg = reason_msg_desc;
+              if (strlen (info->state_msg) == 0)
+                info->state_msg = reason_msg_desc;
               else
                 {
-                  tmp_msg = g_strjoin (" ; ", state_msg, reason_msg_desc, NULL);
-                  state_msg = tmp_msg;
+                  tmp_msg = g_strjoin (" ; ", info->state_msg, reason_msg_desc, NULL);
+                  info->state_msg = tmp_msg;
                 }
             }
         }
 
-      status_changed |= gtk_printer_set_state_message (printer, state_msg);
-      status_changed |= gtk_printer_set_is_accepting_jobs (printer, is_accepting_jobs);
+      status_changed |= gtk_printer_set_state_message (printer, info->state_msg);
+      status_changed |= gtk_printer_set_is_accepting_jobs (printer, info->is_accepting_jobs);
 
       if (tmp_msg != NULL)
         g_free (tmp_msg);
@@ -2132,9 +2142,9 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
       /* Set printer icon according to importance
          (none, report, warning, error - report is omitted). */
-      if (printer_state_reason_level == 3)
+      if (info->reason_level == GTK_PRINTER_STATE_LEVEL_ERROR)
         gtk_printer_set_icon_name (printer, "printer-error");
-      else if (printer_state_reason_level == 2)
+      else if (info->reason_level == GTK_PRINTER_STATE_LEVEL_WARNING)
         gtk_printer_set_icon_name (printer, "printer-warning");
       else if (gtk_printer_is_paused (printer))
         gtk_printer_set_icon_name (printer, "printer-paused");
@@ -2147,7 +2157,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
       /* The ref is held by GtkPrintBackend, in add_printer() */
       g_object_unref (printer);
-      
+      g_slice_free (PrinterSetupInfo, info);
+
       if (attr == NULL)
         break;
     }
