@@ -1490,6 +1490,7 @@ _gdk_x11_keymap_key_is_modifier (GdkKeymap *keymap,
   GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
   gint i;
 
+  update_keyrange (keymap_x11);
   if (keycode < keymap_x11->min_keycode ||
       keycode > keymap_x11->max_keycode)
     return FALSE;
