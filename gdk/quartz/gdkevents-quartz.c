@@ -1241,6 +1241,12 @@ gdk_event_translate (GdkEvent *event,
       return FALSE;
     }
 
+  /* Also when in a manual resize, we ignore events so that these are
+   * pushed to GdkQuartzWindow's sendEvent handler.
+   */
+  if ([(GdkQuartzWindow *)nswindow isInManualResize])
+    return FALSE;
+
   /* Find the right GDK window to send the event to, taking grabs and
    * event masks into consideration.
    */
