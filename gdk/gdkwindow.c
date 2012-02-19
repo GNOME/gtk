@@ -3576,33 +3576,6 @@ gdk_window_clear_backing_region (GdkWindow *window,
 }
 
 static void
-gdk_window_clear_backing_region_direct (GdkWindow *window,
-					cairo_region_t *region)
-{
-  GdkWindowPaint paint;
-  cairo_region_t *clip;
-  cairo_t *cr;
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  paint.surface = _gdk_window_ref_cairo_surface (window);
-
-  cr = setup_backing_rect (window, &paint);
-
-  clip = cairo_region_copy (window->clip_region_with_children);
-  cairo_region_intersect (clip, region);
-
-  gdk_cairo_region (cr, clip);
-  cairo_fill (cr);
-
-  cairo_destroy (cr);
-
-  cairo_region_destroy (clip);
-  cairo_surface_destroy (paint.surface);
-}
-
-static void
 gdk_window_drop_cairo_surface (GdkWindow *window)
 {
   if (window->cairo_surface)
