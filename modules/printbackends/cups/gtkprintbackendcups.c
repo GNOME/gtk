@@ -2007,7 +2007,29 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
   removed_printer_checklist = gtk_print_backend_get_printer_list (backend);
 
   response = gtk_cups_result_get_response (result);
+#ifdef HAVE_CUPS_API_1_6
+  for (attr = ippFirstAttribute (response); attr != NULL;
+       attr = ippNextAttribute (response))
+    {
+      GtkPrinter *printer;
+      gboolean status_changed = FALSE;
+      GList *node;
+      gint i;
+      PrinterSetupInfo *info = g_slice_new0 (PrinterSetupInfo);
 
+      /* Skip leading attributes until we hit a printer...
+       */
+      while (attr != NULL && ippGetGroupTag (attr) != IPP_TAG_PRINTER)
+        attr = ippNextAttribute (response);
+
+      if (attr == NULL)
+        break;
+      while (attr != NULL && ippGetGroupTag (attr) == IPP_TAG_PRINTER)
+      {
+	cups_printer_handle_attribute (cups_backend, attr, info);
+        attr = ippNextAttribute (response);
+      }
+#else
   for (attr = response->attrs; attr != NULL; attr = attr->next)
     {
       GtkPrinter *printer;
@@ -2024,12 +2046,12 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
       if (attr == NULL)
         break;
-
       while (attr != NULL && ippGetGroupTag (attr) == IPP_TAG_PRINTER)
       {
 	cups_printer_handle_attribute (cups_backend, attr, info);
         attr = attr->next;
       }
+#endif
 
       if (info->printer_name == NULL ||
 	  (info->printer_uri == NULL && info->member_uris == NULL))
