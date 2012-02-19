@@ -154,8 +154,8 @@ _gdk_windowing_pointer_grab (GdkWindow    *window,
   return GDK_GRAB_SUCCESS;
 }
 
-static void
-break_all_grabs (guint32 time)
+void
+_gdk_quartz_events_break_all_grabs (guint32 time)
 {
   GdkPointerGrabInfo *grab;
 
@@ -1183,7 +1183,7 @@ gdk_event_translate (GdkEvent *event,
   if (event_type == NSAppKitDefined)
     {
       if ([nsevent subtype] == NSApplicationDeactivatedEventType)
-        break_all_grabs (get_time_from_ns_event (nsevent));
+        _gdk_quartz_events_break_all_grabs (get_time_from_ns_event (nsevent));
 
       /* This could potentially be used to break grabs when clicking
        * on the title. The subtype 20 is undocumented so it's probably
@@ -1242,7 +1242,7 @@ gdk_event_translate (GdkEvent *event,
    */
   if ([(GdkQuartzWindow *)nswindow isInMove])
     {
-      break_all_grabs (get_time_from_ns_event (nsevent));
+      _gdk_quartz_events_break_all_grabs (get_time_from_ns_event (nsevent));
       return FALSE;
     }
 

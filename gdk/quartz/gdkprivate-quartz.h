@@ -177,6 +177,7 @@ GdkModifierType _gdk_quartz_events_get_current_keyboard_modifiers (void);
 GdkModifierType _gdk_quartz_events_get_current_mouse_modifiers    (void);
 
 void         _gdk_quartz_events_send_enter_notify_event (GdkWindow *window);
+void         _gdk_quartz_events_break_all_grabs         (guint32    time);
 
 /* Event loop */
 gboolean   _gdk_quartz_event_loop_check_pending (void);
