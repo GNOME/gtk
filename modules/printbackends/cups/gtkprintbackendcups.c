@@ -1718,6 +1718,137 @@ typedef struct
   gboolean remote_printer;
   gchar  **auth_info_required;
 } PrinterSetupInfo;
+
+static void
+cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
+			       ipp_attribute_t *attr,
+			       PrinterSetupInfo *info)
+{
+  gint i, j;
+  if (strcmp (ippGetName (attr), "printer-name") == 0 &&
+      ippGetValueTag (attr) == IPP_TAG_NAME)
+    info->printer_name = ippGetString (attr, 0, NULL);
+  else if (strcmp (ippGetName (attr), "printer-uri-supported") == 0 &&
+	   ippGetValueTag (attr) == IPP_TAG_URI)
+    info->printer_uri = ippGetString (attr, 0, NULL);
+  else if (strcmp (ippGetName (attr), "member-uris") == 0 &&
+	   ippGetValueTag (attr) == IPP_TAG_URI)
+    info->member_uris = ippGetString (attr, 0, NULL);
+  else if (strcmp (ippGetName (attr), "printer-location") == 0)
+    info->location = ippGetString (attr, 0, NULL);
+  else if (strcmp (ippGetName (attr), "printer-info") == 0)
+    info->description = ippGetString (attr, 0, NULL);
+  else if (strcmp (ippGetName (attr), "printer-state-message") == 0)
+    info->state_msg = ippGetString (attr, 0, NULL);
+  else if (strcmp (ippGetName (attr), "printer-state-reasons") == 0)
+    /* Store most important reason to reason_msg and set
+       its importance at printer_state_reason_level */
+    {
+      for (i = 0; i < ippGetCount (attr); i++)
+	{
+	  if (strcmp (ippGetString (attr, i, NULL), "none") != 0)
+	    {
+	      gboolean interested_in = FALSE;
+	      /* Sets is_paused flag for paused printer. */
+	      if (strcmp (ippGetString (attr, i, NULL), "paused") == 0)
+		{
+		  info->is_paused = TRUE;
+		}
+
+	      for (j = 0; j < G_N_ELEMENTS (printer_messages); j++)
+		if (strncmp (ippGetString (attr, i, NULL), printer_messages[j],
+			     strlen (printer_messages[j])) == 0)
+		  {
+		    interested_in = TRUE;
+		    break;
+		  }
+
+	      if (interested_in)
+		{
+		  if (g_str_has_suffix (ippGetString (attr, i, NULL), "-report"))
+		    {
+		      if (info->reason_level <= GTK_PRINTER_STATE_LEVEL_INFO)
+			{
+			  info->reason_msg = ippGetString (attr, i, NULL);
+			  info->reason_level = GTK_PRINTER_STATE_LEVEL_INFO;
+			}
+		    }
+		  else if (g_str_has_suffix (ippGetString (attr, i, NULL), "-warning"))
+		    {
+		      if (info->reason_level <= GTK_PRINTER_STATE_LEVEL_WARNING)
+			{
+			  info->reason_msg = ippGetString (attr, i, NULL);
+			  info->reason_level = GTK_PRINTER_STATE_LEVEL_WARNING;
+			}
+		    }
+		  else  /* It is error in the case of no suffix. */
+		    {
+		      info->reason_msg = ippGetString (attr, i, NULL);
+		      info->reason_level = GTK_PRINTER_STATE_LEVEL_ERROR;
+		    }
+		}
+	    }
+	}
+    }
+  else if (strcmp (ippGetName (attr), "printer-state") == 0)
+    info->state = ippGetInteger (attr, 0);
+  else if (strcmp (ippGetName (attr), "queued-job-count") == 0)
+    info->job_count = ippGetInteger (attr, 0);
+  else if (strcmp (ippGetName (attr), "printer-is-accepting-jobs") == 0)
+    {
+      if (ippGetBoolean (attr, 0) == 1)
+	info->is_accepting_jobs = TRUE;
+      else
+	info->is_accepting_jobs = FALSE;
+    }
+  else if (strcmp (ippGetName (attr), "job-sheets-supported") == 0)
+    {
+      if (cups_backend->covers == NULL)
+	{
+	  cups_backend->number_of_covers = ippGetCount (attr);
+	  cups_backend->covers = g_new (char *, cups_backend->number_of_covers + 1);
+	  for (i = 0; i < cups_backend->number_of_covers; i++)
+	    cups_backend->covers[i] = g_strdup (ippGetString (attr, i, NULL));
+	  cups_backend->covers[cups_backend->number_of_covers] = NULL;
+	}
+    }
+  else if (strcmp (ippGetName (attr), "job-sheets-default") == 0)
+    {
+      if (ippGetCount (attr) == 2)
+	{
+	  info->default_cover_before = ippGetString (attr, 0, NULL);
+	  info->default_cover_after = ippGetString (attr, 1, NULL);
+	}
+    }
+  else if (strcmp (ippGetName (attr), "printer-type") == 0)
+    {
+      info->got_printer_type = TRUE;
+      if (ippGetInteger (attr, 0) & 0x00020000)
+	info->default_printer = TRUE;
+      else
+	info->default_printer = FALSE;
+
+      if (ippGetInteger (attr, 0) & 0x00000002)
+	info->remote_printer = TRUE;
+      else
+	info->remote_printer = FALSE;
+    }
+  else if (strcmp (ippGetName (attr), "auth-info-required") == 0)
+    {
+      if (strcmp (ippGetString (attr, 0, NULL), "none") != 0)
+	{
+	  info->auth_info_required = g_new0 (gchar *, ippGetCount (attr) + 1);
+	  for (i = 0; i < ippGetCount (attr); i++)
+	    info->auth_info_required[i] = g_strdup (ippGetString (attr, i, NULL));
+	}
+    }
+  else
+    {
+      GTK_NOTE (PRINTING,
+		g_print ("CUPS Backend: Attribute %s ignored", ippGetName (attr)));
+    }
+}
+
 static void
 cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
                               GtkCupsResult       *result,
@@ -1778,6 +1909,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       gchar *tmp_msg2 = NULL;
       gboolean found = FALSE;
       PrinterSetupInfo *info = g_slice_new0 (PrinterSetupInfo);
+      info->default_number_up = 1;
 
       /* Skip leading attributes until we hit a printer...
        */
@@ -1789,128 +1921,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
       while (attr != NULL && ippGetGroupTag (attr) == IPP_TAG_PRINTER)
       {
-        if (strcmp (ippGetName (attr), "printer-name") == 0 &&
-	    ippGetValueTag (attr) == IPP_TAG_NAME)
-	    printer_name = ippGetString (attr, 0, NULL);
-	else if (strcmp (ippGetName (attr), "printer-uri-supported") == 0 &&
-		 ippGetValueTag (attr) == IPP_TAG_URI)
-	    printer_uri = ippGetString (attr, 0, NULL);
-	else if (strcmp (ippGetName (attr), "member-uris") == 0 &&
-		 ippGetValueTag (attr) == IPP_TAG_URI)
-	    member_uris = ippGetString (attr, 0, NULL);
-        else if (strcmp (ippGetName (attr), "printer-location") == 0)
-	    location = ippGetString (attr, 0, NULL);
-        else if (strcmp (ippGetName (attr), "printer-info") == 0)
-	    description = ippGetString (attr, 0, NULL);
-        else if (strcmp (ippGetName (attr), "printer-state-message") == 0)
-	    state_msg = ippGetString (attr, 0, NULL);
-        else if (strcmp (ippGetName (attr), "printer-state-reasons") == 0)
-          /* Store most important reason to reason_msg and set
-             its importance at printer_state_reason_level */
-          {
-            for (i = 0; i < ippGetCount (attr); i++)
-              {
-		  if (strcmp (ippGetString (attr, i, NULL), "none") != 0)
-                  {
-                    /* Sets is_paused flag for paused printer. */
-		      if (strcmp (ippGetString (attr, i, NULL), "paused") == 0)
-                      {
-                        is_paused = TRUE;
-                      }
-
-                    interested_in = FALSE;
-                    for (j = 0; j < G_N_ELEMENTS (reasons); j++)
-                        if (strncmp (ippGetString (attr, i, NULL), reasons[j], strlen (reasons[j])) == 0)
-                          {
-                            interested_in = TRUE;
-                            break;
-                          }
-
-                    if (interested_in)
-                      {
-			  if (g_str_has_suffix (ippGetString (attr, i, NULL), "-report"))
-                          {
-                            if (printer_state_reason_level <= 1)
-                              {
-				  reason_msg = ippGetString (attr, i, NULL);
-                                printer_state_reason_level = 1;
-                              }
-                          }
-			  else if (g_str_has_suffix (ippGetString (attr, i, NULL), "-warning"))
-                          {
-                            if (printer_state_reason_level <= 2)
-                              {
-				  reason_msg = ippGetString (attr, i, NULL);
-                                printer_state_reason_level = 2;
-                             }
-                          }
-                        else  /* It is error in the case of no suffix. */
-                          {
-			      reason_msg = ippGetString (attr, i, NULL);
-                            printer_state_reason_level = 3;
-                          }
-                      }
-                  }
-              }
-          }
-        else if (strcmp (ippGetName (attr), "printer-state") == 0)
-          state = ippGetInteger (attr, 0);
-        else if (strcmp (ippGetName (attr), "queued-job-count") == 0)
-          job_count = ippGetInteger (attr, 0);
-        else if (strcmp (ippGetName (attr), "printer-is-accepting-jobs") == 0)
-          {
-            if (ippGetBoolean (attr, 0) == 1)
-              is_accepting_jobs = TRUE;
-            else
-              is_accepting_jobs = FALSE;
-          }
-        else if (strcmp (ippGetName (attr), "job-sheets-supported") == 0)
-          {
-            if (cups_backend->covers == NULL)
-              {
-                cups_backend->number_of_covers = ippGetCount (attr);
-                cups_backend->covers = g_new (char *, cups_backend->number_of_covers + 1);
-                for (i = 0; i < cups_backend->number_of_covers; i++)
-		    cups_backend->covers[i] = g_strdup (ippGetString (attr, i, NULL));
-                cups_backend->covers[cups_backend->number_of_covers] = NULL;
-              }
-          }
-        else if (strcmp (ippGetName (attr), "job-sheets-default") == 0)
-          {
-            if (ippGetCount (attr) == 2)
-              {
-		  default_cover_before = ippGetString (attr, 0, NULL);
-		  default_cover_after = ippGetString (attr, 1, NULL);
-              }
-          }
-        else if (strcmp (ippGetName (attr), "printer-type") == 0)
-          {
-            got_printer_type = TRUE;
-            if (ippGetInteger (attr, 0) & 0x00020000)
-              default_printer = TRUE;
-            else
-              default_printer = FALSE;
-
-            if (ippGetInteger (attr, 0) & 0x00000002)
-              remote_printer = TRUE;
-            else
-              remote_printer = FALSE;
-          }
-        else if (strcmp (ippGetName (attr), "auth-info-required") == 0)
-          {
-	      if (strcmp (ippGetString (attr, 0, NULL), "none") != 0)
-              {
-                auth_info_required = g_new0 (gchar *, ippGetCount (attr) + 1);
-                for (i = 0; i < ippGetCount (attr); i++)
-		    auth_info_required[i] = g_strdup (ippGetString (attr, i, NULL));
-              }
-          }
-        else
-	  {
-	    GTK_NOTE (PRINTING,
-                      g_print ("CUPS Backend: Attribute %s ignored", ippGetName (attr)));
-	  }
-
+	cups_printer_handle_attribute (cups_backend, attr, info);
         attr = attr->next;
       }
 
