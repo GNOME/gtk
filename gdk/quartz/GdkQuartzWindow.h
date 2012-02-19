@@ -38,6 +38,7 @@
 -(BOOL)isInMove;
 -(void)beginManualMove;
 -(BOOL)trackManualMove;
+-(BOOL)isInManualResize;
 -(void)beginManualResize;
 -(BOOL)trackManualResize;
 -(void)showAndMakeKey:(BOOL)makeKey;

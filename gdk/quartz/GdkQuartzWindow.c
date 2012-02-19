@@ -115,10 +115,15 @@
   switch ([event type])
     {
     case NSLeftMouseUp:
+    {
+      double time = ((double)[event timestamp]) * 1000.0;
+
+      _gdk_quartz_events_break_all_grabs (time);
       inManualMove = NO;
       inManualResize = NO;
       inMove = NO;
       break;
+    }
 
     case NSLeftMouseDragged:
       if ([self trackManualMove] || [self trackManualResize])
@@ -381,6 +386,11 @@
   inTrackManualResize = NO;
 
   return YES;
+}
+
+-(BOOL)isInManualResize
+{
+  return inManualResize;
 }
 
 -(void)beginManualResize
