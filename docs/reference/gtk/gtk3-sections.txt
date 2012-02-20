@@ -5030,7 +5030,6 @@ GtkWidgetClass
 GtkCallback
 GtkRequisition
 GtkAllocation
-GtkSelectionData
 GtkWidgetAuxInfo
 GtkWidgetHelpType
 gtk_widget_new
@@ -6000,6 +5999,7 @@ GtkRcContext
 <SECTION>
 <FILE>gtkselection</FILE>
 <TITLE>Selections</TITLE>
+GtkSelectionData
 GtkTargetEntry
 GtkTargetList
 GtkTargetPair
