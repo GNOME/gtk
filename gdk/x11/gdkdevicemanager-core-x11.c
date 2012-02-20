@@ -29,10 +29,6 @@
 #include "gdkprivate-x11.h"
 #include "gdkkeysyms.h"
 
-#ifdef HAVE_XKB
-#include <X11/XKBlib.h>
-#endif
-
 
 #define HAS_FOCUS(toplevel)                           \
   ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
