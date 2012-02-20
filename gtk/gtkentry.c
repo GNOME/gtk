@@ -3523,21 +3523,47 @@ get_progress_area (GtkWidget *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *private = entry->priv;
   GtkStyleContext *context;
-  GtkBorder margin;
+  GtkBorder margin, border, entry_borders;
+  gint frame_width, text_area_width, text_area_height;
 
-  get_frame_size (GTK_ENTRY (widget), FALSE, NULL, NULL, width, height);
+  context = gtk_widget_get_style_context (widget);
+  _gtk_entry_get_borders (entry, &entry_borders);
+  get_text_area_size (entry,
+                      NULL, NULL,
+                      &text_area_width, &text_area_height);
+  get_frame_size (entry, FALSE,
+                  NULL, NULL,
+                  &frame_width, NULL);
+
   *x = 0;
   *y = 0;
+  *width = text_area_width + entry_borders.left + entry_borders.right;
+  *height = text_area_height + entry_borders.top + entry_borders.bottom;
 
   if (!private->interior_focus)
     {
       *x -= private->focus_width;
       *y -= private->focus_width;
-      *width += 2 * private->focus_width;
-      *height += 2 * private->focus_width;
     }
 
-  context = gtk_widget_get_style_context (widget);
+  /* if the text area got resized by a subclass, subtract the left/right
+   * border width, so that the progress bar won't extend over the resized
+   * text area.
+   */
+  if (frame_width > *width)
+    {
+      gtk_style_context_get_border (context, 0, &border);
+      if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+        {
+          *x = (frame_width - *width) + border.left;
+          *width -= border.left;
+        }
+      else
+        {
+          *width -= border.right;
+        }
+    }
+
   gtk_entry_prepare_context_for_progress (entry, context);
   gtk_style_context_get_margin (context, 0, &margin);
 
