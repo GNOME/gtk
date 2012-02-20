@@ -1403,7 +1403,7 @@ _gdk_x11_display_open (const gchar *display_name)
 	    XkbSelectEventDetails (display_x11->xdisplay,
 				   XkbUseCoreKbd, XkbStateNotify,
 				   XkbAllStateComponentsMask,
-                                   XkbGroupLockMask|XkbModifierLockMask);
+                                   XkbModifierStateMask|XkbGroupStateMask);
 
 	    XkbSetDetectableAutoRepeat (display_x11->xdisplay,
 					True,

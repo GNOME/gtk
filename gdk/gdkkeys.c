@@ -379,6 +379,27 @@ gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
 }
 
 /**
+ * gdk_keymap_get_modifier_state:
+ * @keymap: a #GdkKeymap
+ *
+ * Returns the current modifier state.
+ *
+ * Returns: the current modifier state.
+ *
+ * Since: 3.2
+ */
+guint
+gdk_keymap_get_modifier_state (GdkKeymap *keymap)
+{
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+
+  if (GDK_KEYMAP_GET_CLASS (keymap)->get_modifier_state)
+    return GDK_KEYMAP_GET_CLASS (keymap)->get_modifier_state (keymap);
+
+  return 0;
+}
+
+/**
  * gdk_keymap_get_entries_for_keyval:
  * @keymap: a #GdkKeymap
  * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.

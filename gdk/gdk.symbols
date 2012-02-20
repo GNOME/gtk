@@ -209,6 +209,7 @@ gdk_keymap_get_entries_for_keycode
 gdk_keymap_get_entries_for_keyval
 gdk_keymap_get_for_display
 gdk_keymap_get_modifier_mask
+gdk_keymap_get_modifier_state
 gdk_keymap_get_num_lock_state
 gdk_keymap_get_type
 gdk_keymap_have_bidi_layouts

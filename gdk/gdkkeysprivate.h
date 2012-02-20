@@ -63,6 +63,7 @@ struct _GdkKeymapClass
                                          GdkModifierType *state);
   GdkModifierType (*get_modifier_mask)  (GdkKeymap         *keymap,
                                          GdkModifierIntent  intent);
+  guint (* get_modifier_state)          (GdkKeymap *keymap);
 
 
   /* Signals */
