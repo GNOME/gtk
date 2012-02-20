@@ -44,6 +44,8 @@ struct _GtkColorSwatchPrivate
   guint    contains_pointer : 1;
   guint    use_alpha        : 1;
   guint    selectable       : 1;
+
+  GdkWindow *event_window;
 };
 
 enum
@@ -72,11 +74,8 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
                                               GtkColorSwatchPrivate);
 
   gtk_widget_set_can_focus (GTK_WIDGET (swatch), TRUE);
-  gtk_widget_set_events (GTK_WIDGET (swatch), GDK_BUTTON_PRESS_MASK
-                                              | GDK_BUTTON_RELEASE_MASK
-                                              | GDK_EXPOSURE_MASK
-                                              | GDK_ENTER_NOTIFY_MASK
-                                              | GDK_LEAVE_NOTIFY_MASK);
+  gtk_widget_set_has_window (GTK_WIDGET (swatch), FALSE);
+
   swatch->priv->use_alpha = TRUE;
   swatch->priv->selectable = TRUE;
 }
@@ -511,31 +510,92 @@ swatch_button_release (GtkWidget      *widget,
 }
 
 static void
+swatch_map (GtkWidget *widget)
+{
+  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
+
+  GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->map (widget);
+
+  if (swatch->priv->event_window)
+    gdk_window_show (swatch->priv->event_window);
+}
+
+static void
+swatch_unmap (GtkWidget *widget)
+{
+  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
+
+  if (swatch->priv->event_window)
+    gdk_window_hide (swatch->priv->event_window);
+
+  GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->unmap (widget);
+}
+
+static void
 swatch_realize (GtkWidget *widget)
 {
+  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
   GtkAllocation allocation;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  gtk_widget_set_realized (widget, TRUE);
   gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_set_realized (widget, TRUE);
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = allocation.x;
   attributes.y = allocation.y;
   attributes.width = allocation.width;
   attributes.height = allocation.height;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
-  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+  attributes.wclass = GDK_INPUT_ONLY;
+  attributes.event_mask = gtk_widget_get_events (widget);
+  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
+			    GDK_BUTTON_RELEASE_MASK |
+			    GDK_ENTER_NOTIFY_MASK |
+			    GDK_LEAVE_NOTIFY_MASK);
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
-  window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                           &attributes, attributes_mask);
-  gdk_window_set_user_data (window, widget);
+  window = gtk_widget_get_parent_window (widget);
   gtk_widget_set_window (widget, window);
+  g_object_ref (window);
+
+  swatch->priv->event_window = 
+    gdk_window_new (window,
+                    &attributes, attributes_mask);
+  gdk_window_set_user_data (swatch->priv->event_window, widget);
+}
+
+static void
+swatch_unrealize (GtkWidget *widget)
+{
+  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
+
+  if (swatch->priv->event_window)
+    {
+      gdk_window_set_user_data (swatch->priv->event_window, NULL);
+      gdk_window_destroy (swatch->priv->event_window);
+      swatch->priv->event_window = NULL;
+    }
+
+  GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->unrealize (widget);
+}
+
+static void
+swatch_size_allocate (GtkWidget *widget,
+                      GtkAllocation *allocation)
+{
+  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
+
+  gtk_widget_set_allocation (widget, allocation);
+
+  if (gtk_widget_get_realized (widget))
+    gdk_window_move_resize (swatch->priv->event_window,
+                            allocation->x,
+                            allocation->y,
+                            allocation->width,
+                            allocation->height);
 }
 
 static gboolean
@@ -626,6 +686,10 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->enter_notify_event = swatch_enter_notify;
   widget_class->leave_notify_event = swatch_leave_notify;
   widget_class->realize = swatch_realize;
+  widget_class->unrealize = swatch_unrealize;
+  widget_class->map = swatch_map;
+  widget_class->unmap = swatch_unmap;
+  widget_class->size_allocate = swatch_size_allocate;
 
   signals[ACTIVATE] =
     g_signal_new ("activate",
