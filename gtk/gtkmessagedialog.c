@@ -50,6 +50,10 @@
  * convenience widget; you could construct the equivalent of #GtkMessageDialog
  * from #GtkDialog without too much effort, but #GtkMessageDialog saves typing.
  *
+ * One difference from #GtkDialog is that #GtkMessageDialog sets the
+ * #GtkWindow:skip-taskbar-hint property to %TRUE, so that the dialog is hidden
+ * from the taskbar by default.
+ *
  * The easiest way to do a modal message dialog is to use gtk_dialog_run(), though
  * you can also pass in the %GTK_DIALOG_MODAL flag, gtk_dialog_run() automatically
  * makes the dialog modal and waits for the user to respond to it. gtk_dialog_run()
