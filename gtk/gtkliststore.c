@@ -2171,12 +2171,13 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  * gtk_list_store_insert_with_values:
  * @list_store: A #GtkListStore
  * @iter: (out) (allow-none): An unset #GtkTreeIter to set to the new row, or %NULL
- * @position: position to insert the new row
+ * @position: position to insert the new row, or -1 to append after existing
+ *     rows
  * @...: pairs of column number and value, terminated with -1
  *
  * Creates a new row at @position. @iter will be changed to point to this new
- * row. If @position is larger than the number of rows on the list, then the
- * new row will be appended to the list. The row will be filled with the
+ * row. If @position is -1, or larger than the number of rows in the list, then
+ * the new row will be appended to the list. The row will be filled with the
  * values given to this function.
  *
  * Calling
