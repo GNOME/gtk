@@ -510,6 +510,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   gtk_box_pack_end (GTK_BOX (cc->priv->palette), label, FALSE, TRUE, 0);
 
   cc->priv->button = button = gtk_color_swatch_new ();
+  gtk_widget_set_name (button, "add-color-button");
   atk_obj = gtk_widget_get_accessible (button);
   atk_object_set_role (atk_obj, ATK_ROLE_PUSH_BUTTON);
   atk_object_set_description (atk_obj, _("Create custom color"));
