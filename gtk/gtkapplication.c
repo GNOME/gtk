@@ -125,7 +125,6 @@
 enum {
   WINDOW_ADDED,
   WINDOW_REMOVED,
-  QUIT,
   LAST_SIGNAL
 };
 
@@ -681,13 +680,6 @@ gtk_application_set_property (GObject      *object,
 }
 
 static void
-gtk_application_quit (GtkApplication *app)
-{
-  /* we are asked to quit, so don't linger */
-  g_application_set_inactivity_timeout (G_APPLICATION (app), 0);
-}
-
-static void
 gtk_application_finalize (GObject *object)
 {
   GtkApplication *application = GTK_APPLICATION (object);
@@ -717,7 +709,6 @@ gtk_application_class_init (GtkApplicationClass *class)
 
   class->window_added = gtk_application_window_added;
   class->window_removed = gtk_application_window_removed;
-  class->quit = gtk_application_quit;
 
   g_type_class_add_private (class, sizeof (GtkApplicationPrivate));
 
@@ -755,32 +746,6 @@ gtk_application_class_init (GtkApplicationClass *class)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1, GTK_TYPE_WINDOW);
-
-  /**
-   * GtkApplication::quit:
-   * @application: the #GtkApplication
-   *
-   * Emitted when the session manager wants the application to quit
-   * (generally because the user is logging out). The application
-   * should exit as soon as possible after receiving this signal; if
-   * it does not, the session manager may choose to forcibly kill it.
-   *
-   * Normally, an application would only be sent a ::quit if there
-   * are no inhibitors (see gtk_application_inhibit()).
-   * However, this is not guaranteed; in some situations the
-   * session manager may decide to end the session without giving
-   * applications a chance to object.
-   *
-   * To receive this signal, you need to set the
-   * #GtkApplication:register-session property
-   * when creating the application object.
-   *
-   * Since: 3.4
-   */
-  gtk_application_signals[QUIT] =
-    g_signal_new ("quit", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkApplicationClass, quit),
-                  NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 
   /**
    * GtkApplication:register-session:
@@ -1229,13 +1194,13 @@ client_proxy_signal (GDBusProxy     *proxy,
       g_debug ("Received EndSession");
       gtk_application_quit_response (app, TRUE, NULL);
       unregister_client (app);
-      g_signal_emit (app, gtk_application_signals[QUIT], 0);
+      g_application_quit (G_APPLICATION (app));
     }
   else if (strcmp (signal_name, "Stop") == 0)
     {
       g_debug ("Received Stop");
       unregister_client (app);
-      g_signal_emit (app, gtk_application_signals[QUIT], 0);
+      g_application_quit (G_APPLICATION (app));
     }
 }
 
@@ -1508,7 +1473,7 @@ idle_will_quit (gpointer data)
   GtkApplication *app = data;
 
   if (app->priv->quit_inhibit == 0)
-    g_signal_emit (app, gtk_application_signals[QUIT], 0);
+    g_application_quit (G_APPLICATION (app));
   else
     {
       GtkApplicationQuartzInhibitor *inhibitor;

@@ -59,10 +59,8 @@ struct _GtkApplicationClass
   void (*window_removed) (GtkApplication *application,
                           GtkWindow      *window);
 
-  void (*quit)           (GtkApplication *application);
-
   /*< private >*/
-  gpointer padding[11];
+  gpointer padding[12];
 };
 
 GType            gtk_application_get_type      (void) G_GNUC_CONST;
