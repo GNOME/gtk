@@ -248,7 +248,7 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->page_drawing_state = GTK_PAGE_DRAWING_STATE_READY;
 
   priv->rloop = NULL;
-  priv->unit = GTK_UNIT_PIXEL;
+  priv->unit = GTK_UNIT_NONE;
 
   appname = g_get_application_name ();
   if (appname == NULL)
@@ -1233,7 +1233,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 						      P_("Unit"),
 						      P_("The unit in which distances can be measured in the context"),
 						      GTK_TYPE_UNIT,
-						      GTK_UNIT_PIXEL,
+						      GTK_UNIT_NONE,
 						      GTK_PARAM_READWRITE));
   
   

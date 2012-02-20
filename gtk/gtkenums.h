@@ -753,11 +753,13 @@ typedef enum
 
 typedef enum
 {
-  GTK_UNIT_PIXEL,
+  GTK_UNIT_NONE,
   GTK_UNIT_POINTS,
   GTK_UNIT_INCH,
   GTK_UNIT_MM
 } GtkUnit;
+
+#define GTK_UNIT_PIXEL GTK_UNIT_NONE
 
 /**
  * GtkTreeViewGridLines:

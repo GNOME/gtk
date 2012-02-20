@@ -214,7 +214,7 @@ gtk_print_context_set_cairo_context (GtkPrintContext *context,
   switch (context->op->priv->unit)
     {
     default:
-    case GTK_UNIT_PIXEL:
+    case GTK_UNIT_NONE:
       /* Do nothing, this is the cairo default unit */
       context->pixels_per_unit_x = 1.0;
       context->pixels_per_unit_y = 1.0;
@@ -292,7 +292,7 @@ _gtk_print_context_translate_into_margin (GtkPrintContext *context)
 
   g_return_if_fail (GTK_IS_PRINT_CONTEXT (context));
 
-  /* We do it this way to also handle GTK_UNIT_PIXELS */
+  /* We do it this way to also handle GTK_UNIT_NONE */
   left = gtk_page_setup_get_left_margin (context->page_setup, GTK_UNIT_INCH);
   top = gtk_page_setup_get_top_margin (context->page_setup, GTK_UNIT_INCH);
 
