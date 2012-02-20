@@ -11849,7 +11849,7 @@ _gtk_tree_view_reset_header_styles (GtkTreeView *tree_view)
       GtkTreeViewColumn *column = columns->data;
       GtkWidget *header_widget;
 
-      if (gtk_tree_view_column_get_visible (column))
+      if (!gtk_tree_view_column_get_visible (column))
         continue;
 
       header_widget = gtk_tree_view_column_get_widget (column);
