@@ -110,16 +110,6 @@ void             gtk_application_uninhibit          (GtkApplication             
 gboolean         gtk_application_is_inhibited       (GtkApplication             *application,
                                                      GtkApplicationInhibitFlags  flags);
 
-typedef enum {
-  GTK_APPLICATION_LOGOUT,
-  GTK_APPLICATION_REBOOT,
-  GTK_APPLICATION_SHUTDOWN
-} GtkApplicationEndSessionStyle;
-
-gboolean         gtk_application_end_session        (GtkApplication                *application,
-                                                     GtkApplicationEndSessionStyle  style,
-                                                     gboolean                       request_confirmation);
-
 G_END_DECLS
 
 #endif /* __GTK_APPLICATION_H__ */

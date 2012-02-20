@@ -7,32 +7,6 @@ static GtkWidget *inhibit_switch;
 static GtkWidget *inhibit_suspend;
 static GtkWidget *inhibit_idle;
 static GtkWidget *inhibit_label;
-static GtkWidget *end_combo;
-static GtkWidget *end_confirm;
-
-static void
-end_session (GtkButton *button, GtkApplication *app)
-{
-  const gchar *id;
-  GtkApplicationEndSessionStyle style;
-  gboolean confirm;
-
-  id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (end_combo));
-  if (g_strcmp0 (id, "logout") == 0)
-    style = GTK_APPLICATION_LOGOUT;
-  else if (g_strcmp0 (id, "reboot") == 0)
-    style = GTK_APPLICATION_REBOOT;
-  else if (g_strcmp0 (id, "shutdown") == 0)
-    style = GTK_APPLICATION_SHUTDOWN;
-  else
-    style = GTK_APPLICATION_LOGOUT;
-
-  confirm = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (end_confirm));
-
-  g_print ("Calling gtk_application_end_session: %d, %d\n", style, confirm);
-
-  gtk_application_end_session (app, style, confirm);
-}
 
 static void
 inhibitor_toggled (GtkToggleButton *button, GtkApplication *app)
@@ -149,25 +123,6 @@ activate (GtkApplication *app,
   grid = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (grid), 6);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 6);
-
-  gtk_container_add (GTK_CONTAINER (box), grid);
-
-  end_combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (end_combo), "logout", "Logout");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (end_combo), "reboot", "Reboot");
-  gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (end_combo), "shutdown", "Shutdown");
-  gtk_combo_box_set_active_id (GTK_COMBO_BOX (end_combo), "logout");
-  gtk_grid_attach (GTK_GRID (grid), end_combo, 0, 0, 1, 1);
-
-  end_confirm = gtk_check_button_new_with_label ("Confirm");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (end_confirm), TRUE);
-  gtk_grid_attach (GTK_GRID (grid), end_confirm, 1, 0, 1, 1);
-
-  button = gtk_button_new_with_label ("Go");
-  g_signal_connect (button, "clicked",
-                    G_CALLBACK (end_session), app);
-
-  gtk_grid_attach (GTK_GRID (grid), button, 2, 0, 1, 1);
 
   gtk_widget_show_all (win);
 
