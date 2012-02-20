@@ -343,7 +343,7 @@ viewport_get_view_allocation (GtkViewport   *viewport,
     }
 
   view_allocation->x += padding.left;
-  view_allocation->y += padding.right;
+  view_allocation->y += padding.top;
   view_allocation->width = MAX (1, allocation.width - padding.left - padding.right - border_width * 2);
   view_allocation->height = MAX (1, allocation.height - padding.top - padding.bottom - border_width * 2);
 
