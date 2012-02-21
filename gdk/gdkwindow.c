@@ -9476,6 +9476,7 @@ proxy_button_event (GdkEvent *source_event,
   GdkWindow *parent;
   GdkEvent *event;
   GdkPointerWindowInfo *pointer_info;
+  GdkDeviceGrabInfo *pointer_grab;
   guint state;
   guint32 time_;
   GdkEventType type;
@@ -9502,11 +9503,14 @@ proxy_button_event (GdkEvent *source_event,
     touch_id = 0;
 
   pointer_info = _gdk_display_get_pointer_info (display, device);
+  pointer_grab = _gdk_display_has_device_grab (display, device, serial);
 
   if ((type == GDK_BUTTON_PRESS ||
        type == GDK_TOUCH_PRESS) &&
       !source_event->any.send_event &&
-      _gdk_display_has_device_grab (display, device, serial) == NULL)
+      (!pointer_grab ||
+       (type == GDK_TOUCH_PRESS && pointer_grab->implicit &&
+        !_gdk_event_get_pointer_emulated (source_event))))
     {
       pointer_window =
 	_gdk_window_find_descendant_at (toplevel_window,
