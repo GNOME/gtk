@@ -254,6 +254,21 @@ do_net_wm_state_changes (GdkWindow *window)
                                      0,
                                      GDK_WINDOW_STATE_FOCUSED);
     }
+
+  if (old_state & GDK_WINDOW_STATE_ICONIFIED)
+    {
+      if (!toplevel->have_hidden)
+        gdk_synthesize_window_state (window,
+                                     GDK_WINDOW_STATE_ICONIFIED,
+                                     0);
+    }
+  else
+    {
+      if (toplevel->have_hidden)
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_ICONIFIED);
+    }
 }
 
 static void
@@ -313,6 +328,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
   toplevel->have_maxhorz = FALSE;
   toplevel->have_fullscreen = FALSE;
   toplevel->have_focused = FALSE;
+  toplevel->have_hidden = FALSE;
 
   type = None;
   gdk_x11_display_error_trap_push (display);
@@ -329,6 +345,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
       Atom maxhorz_atom	= gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_MAXIMIZED_HORZ");
       Atom fullscreen_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_FULLSCREEN");
       Atom focused_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_FOCUSED");
+      Atom hidden_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_HIDDEN");
 
       atoms = (Atom *)data;
 
@@ -345,6 +362,8 @@ gdk_check_wm_state_changed (GdkWindow *window)
             toplevel->have_fullscreen = TRUE;
           else if (atoms[i] == focused_atom)
             toplevel->have_focused = TRUE;
+          else if (atoms[i] == hidden_atom)
+            toplevel->have_hidden = TRUE;
 
           ++i;
         }
@@ -629,19 +648,27 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       event->any.type = GDK_UNMAP;
       event->any.window = window;
 
-      /* If we are shown (not withdrawn) and get an unmap, it means we
-       * were iconified in the X sense. If we are withdrawn, and get
-       * an unmap, it means we hid the window ourselves, so we
-       * will have already flipped the iconified bit off.
+      /* If the WM supports the _NET_WM_STATE_HIDDEN hint, we do not want to
+       * interpret UnmapNotify events as implying iconic state.
+       * http://bugzilla.gnome.org/show_bug.cgi?id=590726.
        */
-      if (window)
+      if (screen &&
+          !gdk_x11_screen_supports_net_wm_hint (screen,
+                                                gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN")))
         {
-          if (GDK_WINDOW_IS_MAPPED (window))
-            gdk_synthesize_window_state (window,
-                                         0,
-                                         GDK_WINDOW_STATE_ICONIFIED);
-
-          _gdk_x11_window_grab_check_unmap (window, xevent->xany.serial);
+          /* If we are shown (not withdrawn) and get an unmap, it means we were
+           * iconified in the X sense. If we are withdrawn, and get an unmap, it
+           * means we hid the window ourselves, so we will have already flipped
+           * the iconified bit off.
+           */
+          if (window)
+            {
+              if (GDK_WINDOW_IS_MAPPED (window))
+                gdk_synthesize_window_state (window,
+                                             0,
+                                             GDK_WINDOW_STATE_ICONIFIED);
+              _gdk_x11_window_grab_check_unmap (window, xevent->xany.serial);
+            }
         }
 
       break;
