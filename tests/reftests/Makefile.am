@@ -123,6 +123,9 @@ EXTRA_DIST += \
 	css-multi-state.css \
 	css-multi-state.ref.ui \
 	css-multi-state.ui \
+	entry-progress-coloring.css \
+	entry-progress-coloring.ref.ui \
+	entry-progress-coloring.ui \
 	green-20x20.png \
 	grid-empty-with-spacing.ref.ui \
 	grid-empty-with-spacing.ui \
