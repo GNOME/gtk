@@ -36,6 +36,8 @@
 #include "gtkroundedboxprivate.h"
 #include "gtkthemingbackgroundprivate.h"
 
+#include "fallback-c89.c"
+
 /**
  * SECTION:gtkthemingengine
  * @Short_description: Theming renderers
