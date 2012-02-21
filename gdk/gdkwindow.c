@@ -9252,9 +9252,9 @@ proxy_pointer_event (GdkDisplay                 *display,
 
   if (pointer_info->need_touch_press_enter &&
       gdk_device_get_source (pointer_info->last_slave) != GDK_SOURCE_TOUCHSCREEN &&
-      gdk_device_get_source (pointer_info->last_slave) != GDK_SOURCE_TOUCHPAD) &&
+      gdk_device_get_source (pointer_info->last_slave) != GDK_SOURCE_TOUCHPAD &&
       (source_event->type != GDK_TOUCH_UPDATE ||
-       _gdk_event_get_pointer_emulated (source_event))
+       _gdk_event_get_pointer_emulated (source_event)))
     {
       pointer_info->need_touch_press_enter = FALSE;
       need_synthetic_enter = TRUE;
@@ -9687,7 +9687,8 @@ proxy_button_event (GdkEvent *source_event,
       if ((type == GDK_TOUCH_END &&
            _gdk_event_get_pointer_emulated (source_event)) &&
            pointer_window == pointer_info->window_under_pointer &&
-           gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN)
+           (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN ||
+            gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHPAD))
         {
           /* Synthesize a leave notify event
            * whenever a touch device is released
