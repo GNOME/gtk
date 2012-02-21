@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-16 13:25+0100\n"
+"POT-Creation-Date: 2012-02-21 12:08+0100\n"
 "PO-Revision-Date: 2012-02-16 14:30+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
@@ -725,7 +725,7 @@ msgstr "Aplicativos relacionados"
 msgid "Other Applications"
 msgstr "Outros aplicativos"
 
-#: ../gtk/gtkapplication.c:1594
+#: ../gtk/gtkapplication.c:1495
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -1106,55 +1106,55 @@ msgstr "Branco"
 msgid "Custom"
 msgstr "Personalizado"
 
-#: ../gtk/gtkcolorchooserwidget.c:515
+#: ../gtk/gtkcolorchooserwidget.c:516
 msgid "Create custom color"
 msgstr "Crear cor personalizado"
 
-#: ../gtk/gtkcolorchooserwidget.c:534
+#: ../gtk/gtkcolorchooserwidget.c:535
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Cor personalizado %d: %s"
 
-#: ../gtk/gtkcoloreditor.c:412
+#: ../gtk/gtkcoloreditor.c:413
 msgid "Color Name"
 msgstr "Nome da cor"
 
-#: ../gtk/gtkcoloreditor.c:457
+#: ../gtk/gtkcoloreditor.c:458
 msgctxt "Color channel"
 msgid "Saturation"
 msgstr "Saturación"
 
-#: ../gtk/gtkcoloreditor.c:463
+#: ../gtk/gtkcoloreditor.c:464
 msgctxt "Color channel"
 msgid "Value"
 msgstr "Valor"
 
-#: ../gtk/gtkcoloreditor.c:471
+#: ../gtk/gtkcoloreditor.c:472
 msgctxt "Color channel"
 msgid "S"
 msgstr "S"
 
-#: ../gtk/gtkcoloreditor.c:473
+#: ../gtk/gtkcoloreditor.c:474
 msgctxt "Color channel"
 msgid "V"
 msgstr "V"
 
-#: ../gtk/gtkcoloreditor.c:481 ../gtk/gtkcolorscale.c:297
+#: ../gtk/gtkcoloreditor.c:482 ../gtk/gtkcolorscale.c:297
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "Ton"
 
-#: ../gtk/gtkcoloreditor.c:488
+#: ../gtk/gtkcoloreditor.c:489
 msgctxt "Color channel"
 msgid "H"
 msgstr "H"
 
-#: ../gtk/gtkcoloreditor.c:496 ../gtk/gtkcolorscale.c:299
+#: ../gtk/gtkcoloreditor.c:497 ../gtk/gtkcolorscale.c:299
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
 
-#: ../gtk/gtkcoloreditor.c:503
+#: ../gtk/gtkcoloreditor.c:504
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
@@ -1163,7 +1163,7 @@ msgstr "A"
 msgid "Color Plane"
 msgstr "Plano de cor"
 
-#: ../gtk/gtkcolorswatch.c:423
+#: ../gtk/gtkcolorswatch.c:442
 msgid "_Customize"
 msgstr "_Personalizar"
 
@@ -1371,23 +1371,23 @@ msgstr "_Dereito:"
 msgid "Paper Margins"
 msgstr "Marxes do papel"
 
-#: ../gtk/gtkentry.c:8725 ../gtk/gtktextview.c:8287
+#: ../gtk/gtkentry.c:8750 ../gtk/gtktextview.c:8287
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:8739 ../gtk/gtktextview.c:8301
+#: ../gtk/gtkentry.c:8764 ../gtk/gtktextview.c:8301
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserir un carácter de control Unicode"
 
-#: ../gtk/gtkentry.c:10201
+#: ../gtk/gtkentry.c:10226
 msgid "Caps Lock and Num Lock are on"
 msgstr "Bloq Maiús e Bloq Num estás activados"
 
-#: ../gtk/gtkentry.c:10203
+#: ../gtk/gtkentry.c:10228
 msgid "Num Lock is on"
 msgstr "Bloq Num está activado"
 
-#: ../gtk/gtkentry.c:10205
+#: ../gtk/gtkentry.c:10230
 msgid "Caps Lock is on"
 msgstr "Bloq Maiús está activado"
 
@@ -3294,17 +3294,17 @@ msgstr "En_samblaxe de largura cero [ZWJ]"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "_Desensamblaxe de largura cero [ZWNJ]"
 
-#: ../gtk/gtkuimanager.c:1775
+#: ../gtk/gtkuimanager.c:1779
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Etiqueta de inicio inesperada «%s» na liña %d carácter %d"
 
-#: ../gtk/gtkuimanager.c:1865
+#: ../gtk/gtkuimanager.c:1869
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Datos de carácter inesperados na liña %d carácter %d"
 
-#: ../gtk/gtkuimanager.c:2732
+#: ../gtk/gtkuimanager.c:2736
 msgid "Empty"
 msgstr "Baleiro"
 

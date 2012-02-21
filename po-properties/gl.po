@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-16 14:57+0100\n"
-"PO-Revision-Date: 2012-02-16 14:58+0100\n"
+"POT-Creation-Date: 2012-02-21 12:07+0100\n"
+"PO-Revision-Date: 2012-02-21 12:07+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -946,27 +946,27 @@ msgstr "Texto predeterminado do widget"
 msgid "The default text appearing when there are no applications"
 msgstr "O texto predeterminado que aparece cando non hai aplicativos"
 
-#: ../gtk/gtkapplication.c:799
+#: ../gtk/gtkapplication.c:761
 msgid "Register session"
 msgstr "Rexistrar sesión"
 
-#: ../gtk/gtkapplication.c:800
+#: ../gtk/gtkapplication.c:762
 msgid "Register with the session manager"
 msgstr "Rexistrar co xestor de sesións"
 
-#: ../gtk/gtkapplication.c:805
+#: ../gtk/gtkapplication.c:767
 msgid "Application menu"
 msgstr "Menú de aplicativo"
 
-#: ../gtk/gtkapplication.c:806
+#: ../gtk/gtkapplication.c:768
 msgid "The GMenuModel for the application menu"
 msgstr "O GMenModel para o menú de aplicativos"
 
-#: ../gtk/gtkapplication.c:812
+#: ../gtk/gtkapplication.c:774
 msgid "Menubar"
 msgstr "Barra de menú"
 
-#: ../gtk/gtkapplication.c:813
+#: ../gtk/gtkapplication.c:775
 msgid "The GMenuModel for the menubar"
 msgstr "O GMenuModel para a barra de menú"
 
@@ -2486,7 +2486,7 @@ msgstr "Cor actual, como un GdkRGBA"
 msgid "Whether alpha should be shown"
 msgstr "Indica se se debe mostrar o alfa"
 
-#: ../gtk/gtkcolorchooserdialog.c:234 ../gtk/gtkcolorchooserwidget.c:666
+#: ../gtk/gtkcolorchooserdialog.c:234 ../gtk/gtkcolorchooserwidget.c:667
 msgid "Show editor"
 msgstr "Mostrar editor"
 
@@ -2494,13 +2494,21 @@ msgstr "Mostrar editor"
 msgid "Scale type"
 msgstr "Tipo de escala"
 
-#: ../gtk/gtkcolorswatch.c:589
+#: ../gtk/gtkcolorswatch.c:709
 msgid "RGBA Color"
 msgstr "Cor RGBA"
 
-#: ../gtk/gtkcolorswatch.c:589
+#: ../gtk/gtkcolorswatch.c:709
 msgid "Color as RGBA"
 msgstr "Core como RGBA"
+
+#: ../gtk/gtkcolorswatch.c:712 ../gtk/gtklabel.c:797
+msgid "Selectable"
+msgstr "Seleccionábel"
+
+#: ../gtk/gtkcolorswatch.c:712
+msgid "Whether the swatch is selectable"
+msgstr "Indica se a mostra é seleccionábel"
 
 #: ../gtk/deprecated/gtkcolorsel.c:324
 msgid "Has Opacity Control"
@@ -3919,10 +3927,6 @@ msgstr "Modo de axuste de liña"
 #: ../gtk/gtklabel.c:790
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr "Se se estabelece o axuste, controla como se fai o axuste de liña"
-
-#: ../gtk/gtklabel.c:797
-msgid "Selectable"
-msgstr "Seleccionábel"
 
 #: ../gtk/gtklabel.c:798
 msgid "Whether the label text can be selected with the mouse"
