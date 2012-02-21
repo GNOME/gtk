@@ -164,6 +164,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\demos\gtk-demo\application.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\appwindow.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\assistant.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\builder.c" />
