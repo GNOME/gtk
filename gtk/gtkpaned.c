@@ -36,6 +36,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkdnd.h"
 #include "a11y/gtkpanedaccessible.h"
 
 /**
@@ -98,6 +99,17 @@ enum {
   CHILD2
 };
 
+typedef struct
+{
+  GdkWindow *pane_window;
+  GdkDevice *device;
+  guint touch_id;
+  gdouble x;
+  gdouble y;
+  GdkEvent *button_press_event;
+  guint press_consumed : 1;
+} TouchInfo;
+
 struct _GtkPanedPrivate
 {
   GtkPaned       *first_paned;
@@ -123,6 +135,8 @@ struct _GtkPanedPrivate
   gint          original_position;
 
   guint32       grab_time;
+
+  GArray       *touches;
 
   guint         handle_prelit : 1;
   guint         in_drag       : 1;
@@ -255,6 +269,8 @@ static gboolean gtk_paned_toggle_handle_focus   (GtkPaned         *paned);
 static GType    gtk_paned_child_type            (GtkContainer     *container);
 static void     gtk_paned_grab_notify           (GtkWidget        *widget,
 		                                 gboolean          was_grabbed);
+static gboolean gtk_paned_captured_event        (GtkWidget        *widget,
+                                                 GdkEvent         *event);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkPaned, gtk_paned, GTK_TYPE_CONTAINER,
@@ -322,6 +338,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->grab_broken_event = gtk_paned_grab_broken;
   widget_class->grab_notify = gtk_paned_grab_notify;
   widget_class->state_flags_changed = gtk_paned_state_flags_changed;
+  widget_class->captured_event = gtk_paned_captured_event;
 
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
@@ -708,6 +725,9 @@ gtk_paned_init (GtkPaned *paned)
   priv->handle_pos.y = -1;
 
   priv->drag_pos = -1;
+
+  priv->touches = g_array_sized_new (FALSE, FALSE,
+                                     sizeof (TouchInfo), 2);
 }
 
 static void
@@ -863,9 +883,11 @@ static void
 gtk_paned_finalize (GObject *object)
 {
   GtkPaned *paned = GTK_PANED (object);
-  
+  GtkPanedPrivate *priv = paned->priv;
+
   gtk_paned_set_saved_focus (paned, NULL);
   gtk_paned_set_first_paned (paned, NULL);
+  g_array_free (priv->touches, TRUE);
 
   G_OBJECT_CLASS (gtk_paned_parent_class)->finalize (object);
 }
@@ -1281,7 +1303,9 @@ gtk_paned_create_child_window (GtkPaned  *paned,
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+  attributes.event_mask = gtk_widget_get_events (widget) |
+    GDK_EXPOSURE_MASK | GDK_TOUCH_MASK;
+
   if (child)
     {
       GtkAllocation allocation;
@@ -1571,7 +1595,8 @@ gtk_paned_enter (GtkWidget        *widget,
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
 
-  if (priv->in_drag)
+  if (priv->in_drag &&
+      priv->touches->len == 0)
     update_drag (paned, event->x, event->y);
   else
     {
@@ -1593,7 +1618,8 @@ gtk_paned_leave (GtkWidget        *widget,
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
 
-  if (priv->in_drag)
+  if (priv->in_drag &&
+      priv->touches->len == 0)
     update_drag (paned, event->x, event->y);
   else
     {
@@ -1627,6 +1653,38 @@ gtk_paned_focus (GtkWidget        *widget,
 }
 
 static gboolean
+start_drag (GtkPaned  *paned,
+            GdkDevice *device,
+            int        xpos,
+            int        ypos,
+            guint      time)
+{
+  GtkPanedPrivate *priv = paned->priv;
+
+  if (gdk_device_grab (device,
+                       priv->handle,
+                       GDK_OWNERSHIP_WINDOW, FALSE,
+                       GDK_BUTTON1_MOTION_MASK
+                       | GDK_BUTTON_RELEASE_MASK
+                       | GDK_ENTER_NOTIFY_MASK
+                       | GDK_LEAVE_NOTIFY_MASK
+                       | GDK_TOUCH_MASK,
+                       NULL, time) != GDK_GRAB_SUCCESS)
+    return FALSE;
+
+  priv->in_drag = TRUE;
+  priv->grab_time = time;
+  priv->grab_device = device;
+
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    priv->drag_pos = xpos;
+  else
+    priv->drag_pos = ypos;
+
+  return TRUE;
+}
+
+static gboolean
 gtk_paned_button_press (GtkWidget      *widget,
 			GdkEventButton *event)
 {
@@ -1636,26 +1694,9 @@ gtk_paned_button_press (GtkWidget      *widget,
   if (!priv->in_drag &&
       (event->window == priv->handle) && (event->button == GDK_BUTTON_PRIMARY))
     {
-      /* We need a server grab here, not gtk_grab_add(), since
-       * we don't want to pass events on to the widget's children */
-      if (gdk_device_grab (event->device,
-                           priv->handle,
-                           GDK_OWNERSHIP_WINDOW, FALSE,
-                           GDK_BUTTON1_MOTION_MASK
-                           | GDK_BUTTON_RELEASE_MASK
-                           | GDK_ENTER_NOTIFY_MASK
-                           | GDK_LEAVE_NOTIFY_MASK,
-                           NULL, event->time) != GDK_GRAB_SUCCESS)
+      if (!start_drag (paned, event->device,
+                       event->x, event->y, event->time))
 	return FALSE;
-
-      priv->in_drag = TRUE;
-      priv->grab_time = event->time;
-      priv->grab_device = event->device;
-
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	priv->drag_pos = event->x;
-      else
-	priv->drag_pos = event->y;
 
       return TRUE;
     }
@@ -1670,9 +1711,13 @@ gtk_paned_grab_broken (GtkWidget          *widget,
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
 
-  priv->in_drag = FALSE;
-  priv->drag_pos = -1;
-  priv->position_set = TRUE;
+  if (event->grab_window != priv->handle &&
+      gdk_event_get_device ((GdkEvent *) event) == priv->grab_device)
+    {
+      priv->in_drag = FALSE;
+      priv->drag_pos = -1;
+      priv->position_set = TRUE;
+    }
 
   return TRUE;
 }
@@ -1687,7 +1732,7 @@ stop_drag (GtkPaned *paned)
   priv->position_set = TRUE;
 
   gdk_device_ungrab (priv->grab_device,
-                     priv->grab_time);
+                     gtk_get_current_event_time ());
   priv->grab_device = NULL;
 }
 
@@ -1759,6 +1804,267 @@ gtk_paned_motion (GtkWidget      *widget,
       return TRUE;
     }
   
+  return FALSE;
+}
+
+static GdkWindow *
+_gtk_paned_find_pane_window (GtkWidget *widget,
+                             GdkEvent  *event)
+{
+  GtkPanedPrivate *priv = GTK_PANED (widget)->priv;
+  GtkWidget *event_widget;
+
+  event_widget = gtk_get_event_widget (event);
+
+  if (event_widget == widget)
+    {
+      if (event->any.window == priv->child1_window)
+        return priv->child1_window;
+      else if (event->any.window == priv->child2_window)
+        return priv->child2_window;
+
+      return NULL;
+    }
+  else if (event_widget == priv->child1 ||
+           gtk_widget_is_ancestor (event_widget, priv->child1))
+    return priv->child1_window;
+  else if (event_widget == priv->child2 ||
+           gtk_widget_is_ancestor (event_widget, priv->child2))
+    return priv->child2_window;
+
+  return NULL;
+}
+
+static TouchInfo *
+_gtk_paned_find_touch (GtkPaned  *paned,
+                       GdkDevice *device,
+                       guint      touch_id,
+                       guint     *index)
+{
+  GtkPanedPrivate *priv = paned->priv;
+  TouchInfo *info;
+  guint i;
+
+  for (i = 0; i < priv->touches->len; i++)
+    {
+      info = &g_array_index (priv->touches, TouchInfo, i);
+
+      if (info->device == device &&
+          info->touch_id == touch_id)
+        {
+          if (index)
+            *index = i;
+
+          return info;
+        }
+    }
+
+  return NULL;
+}
+
+static void
+gtk_paned_release_captured_event (GtkPaned  *paned,
+                                  TouchInfo *touch,
+                                  gboolean   emit)
+{
+  GtkPanedPrivate *priv = paned->priv;
+  GtkWidget *event_widget, *child;
+
+  if (!touch->button_press_event)
+    return;
+
+  event_widget = gtk_get_event_widget (touch->button_press_event);
+
+  if (touch->pane_window == priv->child1_window)
+    child = priv->child1;
+  else if (touch->pane_window == priv->child2_window)
+    child = priv->child2;
+  else
+    return;
+
+  if (emit &&
+      !_gtk_propagate_captured_event (event_widget,
+                                      touch->button_press_event,
+                                      child))
+    gtk_propagate_event (event_widget, touch->button_press_event);
+
+  gdk_event_free (touch->button_press_event);
+  touch->button_press_event = NULL;
+}
+
+static gboolean
+gtk_paned_captured_event (GtkWidget *widget,
+			  GdkEvent  *event)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+  GtkPanedPrivate *priv = paned->priv;
+  GdkDevice *device, *source_device;
+  GdkWindow *pane_window;
+  TouchInfo new = { 0 }, *info;
+  guint touch_id, index;
+  gint x, y;
+
+  device = gdk_event_get_device (event);
+  source_device = gdk_event_get_source_device (event);
+
+  /* We possibly deal with both pointer and touch events,
+   * depending on the target window event mask, so assume
+   * touch ID = 0 for pointer events to ease handling.
+   */
+  if (!gdk_event_get_touch_id (event, &touch_id))
+    touch_id = 0;
+
+  if (!source_device ||
+      gdk_device_get_source (source_device) != GDK_SOURCE_TOUCH)
+    return FALSE;
+
+  switch (event->type)
+    {
+    case GDK_BUTTON_PRESS:
+    case GDK_TOUCH_PRESS:
+      if (priv->touches->len == 2)
+        return FALSE;
+
+      pane_window = _gtk_paned_find_pane_window (widget, event);
+      gtk_widget_translate_coordinates (gtk_get_event_widget (event),
+                                        widget,
+                                        event->button.x, event->button.y,
+                                        &x, &y);
+
+      for (index = 0; index < priv->touches->len; index++)
+        {
+          info = &g_array_index (priv->touches, TouchInfo, index);
+
+          /* There was already a touch in this pane */
+          if (info->pane_window == pane_window)
+            return FALSE;
+        }
+
+      new.device = device;
+      new.touch_id = touch_id;
+      new.pane_window = pane_window;
+      new.x = x;
+      new.y = y;
+      g_array_append_val (priv->touches, new);
+
+      if (priv->touches->len == 1)
+        {
+          /* It's the first touch, store the event and set
+           * a timeout in order to release the event if no
+           * second touch happens timely.
+           */
+          info = &g_array_index (priv->touches, TouchInfo, 0);
+          info->button_press_event = gdk_event_copy (event);
+          return TRUE;
+        }
+      else if (priv->touches->len == 2)
+        {
+          GtkWidget *event_widget;
+          gint x, y;
+
+          /* It's the second touch, release (don't emit) the
+           * held button/touch presses.
+           */
+          for (index = 0; index < priv->touches->len; index++)
+            {
+              info = &g_array_index (priv->touches, TouchInfo, index);
+              gtk_paned_release_captured_event (paned, info, FALSE);
+              info->press_consumed = TRUE;
+            }
+
+          event_widget = gtk_get_event_widget (event);
+
+          if (event_widget == widget)
+            {
+              x = event->button.x;
+              y = event->button.y;
+
+              if (pane_window == priv->child2_window)
+                {
+                  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+                    x += priv->handle_pos.x + priv->handle_pos.width;
+                  else
+                    y += priv->handle_pos.y + priv->handle_pos.height;
+                }
+            }
+          else
+            gtk_widget_translate_coordinates (event_widget, widget,
+                                              event->button.x, event->button.y,
+                                              &x, &y);
+
+          start_drag (paned, device, x, y,
+                      event->button.time);
+
+          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+            priv->drag_pos = x - priv->handle_pos.x;
+          else
+            priv->drag_pos = y - priv->handle_pos.y;
+
+          return TRUE;
+        }
+
+      break;
+    case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_RELEASE:
+      info = _gtk_paned_find_touch (GTK_PANED (widget), device, touch_id, &index);
+
+      if (info)
+        {
+          gboolean press_consumed;
+
+          if (priv->touches->len == 2)
+            stop_drag (paned);
+
+          press_consumed = info->press_consumed;
+
+          /* Release the held button/touch press, if still queued */
+          gtk_paned_release_captured_event (paned, info, TRUE);
+          g_array_remove_index_fast (priv->touches, index);
+
+          if (press_consumed)
+            return TRUE;
+        }
+      break;
+    case GDK_MOTION_NOTIFY:
+    case GDK_TOUCH_MOTION:
+      info = _gtk_paned_find_touch (GTK_PANED (widget), device, touch_id, &index);
+
+      if (info)
+        {
+          gint x, y;
+
+          gtk_widget_translate_coordinates (gtk_get_event_widget (event),
+                                            widget,
+                                            event->motion.x, event->motion.y,
+                                            &x, &y);
+
+          /* If there is a single touch and this isn't a continuation
+           * from a previous successful 2-touch operation, check
+           * the threshold to let the child handle events.
+           */
+          if (priv->touches->len == 1 &&
+              gtk_drag_check_threshold (widget, info->x, info->y, x, y))
+            {
+              gtk_paned_release_captured_event (paned, info, TRUE);
+              g_array_remove_index_fast (priv->touches, index);
+              return FALSE;
+            }
+          else if (priv->touches->len == 2 && index == 1)
+            {
+              /* The device grab on priv->handle is in effect now,
+               * so the event coordinates are already relative to
+               * that window.
+               */
+              update_drag (paned, event->motion.x, event->motion.y);
+            }
+
+          return TRUE;
+        }
+      break;
+    default:
+      break;
+    }
+
   return FALSE;
 }
 
