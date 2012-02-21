@@ -375,6 +375,8 @@ swatch_enter_notify (GtkWidget        *widget,
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
   swatch->priv->contains_pointer = TRUE;
+  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
+
   return FALSE;
 }
 
@@ -384,6 +386,8 @@ swatch_leave_notify (GtkWidget        *widget,
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
   swatch->priv->contains_pointer = FALSE;
+  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
+
   return FALSE;
 }
 
