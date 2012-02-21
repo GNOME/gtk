@@ -8257,7 +8257,6 @@ _gdk_make_event (GdkWindow    *window,
       event->touch.state = the_state;
       break;
 
-
     case GDK_SCROLL:
       event->scroll.time = the_time;
       event->scroll.state = the_state;
@@ -9385,8 +9384,20 @@ proxy_pointer_event (GdkDisplay                 *display,
           source_event->type == GDK_TOUCH_UPDATE)
         {
           if (_gdk_event_get_pointer_emulated (source_event))
-            source_event->type = GDK_MOTION_NOTIFY;
-          else
+            {
+              /* Touch events emulating pointer events are transformed back
+               * to pointer events if:
+               * 1 - The event window doesn't select for touch events
+               * 2 - There's no touch grab for this sequence, which means
+               *     it was started as a pointer sequence, but a device
+               *     grab added touch events afterwards, the sequence must
+               *     not mutate in this case.
+               */
+              if ((evmask & GDK_TOUCH_MASK) == 0 ||
+                  !_gdk_display_has_touch_grab (display, device, sequence, serial))
+                source_event->type = GDK_MOTION_NOTIFY;
+            }
+          else if ((evmask & GDK_TOUCH_MASK) == 0)
             return TRUE;
         }
 
@@ -9579,6 +9590,23 @@ proxy_button_event (GdkEvent *source_event,
                                 pointer_window,
                                 type, state,
                                 &evmask, serial);
+
+  if (type == GDK_TOUCH_BEGIN || type == GDK_TOUCH_END)
+    {
+      if (_gdk_event_get_pointer_emulated (source_event))
+        {
+          if ((evmask & GDK_TOUCH_MASK) == 0 ||
+              !_gdk_display_has_touch_grab (display, device, sequence, serial))
+            {
+              if (type == GDK_TOUCH_BEGIN)
+                source_event->type = type = GDK_BUTTON_PRESS;
+              else if (type == GDK_TOUCH_END)
+                source_event->type = type = GDK_BUTTON_RELEASE;
+            }
+        }
+      else if ((evmask & GDK_TOUCH_MASK) == 0)
+        return TRUE;
+    }
 
   if ((evmask & GDK_TOUCH_MASK) == 0 &&
       (type == GDK_TOUCH_BEGIN || type == GDK_TOUCH_END))
