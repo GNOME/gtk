@@ -12,21 +12,9 @@ Overview of Changes in GTK+ 3.3.16
   favor of a new color chooser widget named
   GtkColorChooserDialog
 
-* Bug fixes:
-669116
-669636
-669638
-669511
-669208
-669794
-669116
-668114
-670077
-670078
-670400
-669947
-612283
+* The GtkApplication session support has been simplified
 
+* Bug fixes:
  612283 Clarification for GtkListStore::gtk_list_store_insert_with_values
  668114 odd spacing in about dialog credits
  669116 GtkNotebook's child-notify::position not always emitted...
