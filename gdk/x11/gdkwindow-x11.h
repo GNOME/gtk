@@ -109,6 +109,7 @@ struct _GdkToplevelX11
   guint have_maxvert : 1;       /* _NET_WM_STATE_MAXIMIZED_VERT */
   guint have_maxhorz : 1;       /* _NET_WM_STATE_MAXIMIZED_HORZ */
   guint have_fullscreen : 1;    /* _NET_WM_STATE_FULLSCREEN */
+  guint have_hidden : 1;	/* _NET_WM_STATE_HIDDEN */
 
   guint is_leader : 1;
   

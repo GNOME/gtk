@@ -1321,6 +1321,14 @@ set_initial_hints (GdkWindow *window)
       ++i;
     }
 
+  if (private->state & GDK_WINDOW_STATE_ICONIFIED)
+    {
+      atoms[i] = gdk_x11_get_xatom_by_name_for_display (display,
+							"_NET_WM_STATE_HIDDEN");
+      ++i;
+      toplevel->have_hidden = TRUE;
+    }
+
   if (i > 0)
     {
       XChangeProperty (xdisplay,
@@ -4023,6 +4031,9 @@ gdk_window_iconify (GdkWindow *window)
       gdk_synthesize_window_state (window,
                                    0,
                                    GDK_WINDOW_STATE_ICONIFIED);
+      gdk_wmspec_change_state (TRUE, window,
+                               gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN"),
+                               GDK_NONE);
     }
 }
 
@@ -4047,6 +4058,9 @@ gdk_window_deiconify (GdkWindow *window)
   if (GDK_WINDOW_IS_MAPPED (window))
     {  
       gdk_window_show (window);
+      gdk_wmspec_change_state (FALSE, window,
+                               gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN"),
+                               GDK_NONE);
     }
   else
     {
@@ -4054,6 +4068,9 @@ gdk_window_deiconify (GdkWindow *window)
       gdk_synthesize_window_state (window,
                                    GDK_WINDOW_STATE_ICONIFIED,
                                    0);
+      gdk_wmspec_change_state (FALSE, window,
+                               gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN"),
+                               GDK_NONE);
     }
 }
 
