@@ -225,33 +225,13 @@ about_activated (GSimpleAction *action,
 }
 
 static void
-quit_app (GtkApplication *app)
-{
-  GList *list, *next;
-  GtkWindow *win;
-
-  g_print ("Going down...\n");
-
-  list = gtk_application_get_windows (app);
-  while (list)
-    {
-      win = list->data;
-      next = list->next;
-
-      gtk_widget_destroy (GTK_WIDGET (win));
-
-      list = next;
-    }
-}
-
-static void
 quit_activated (GSimpleAction *action,
                 GVariant      *parameter,
                 gpointer       user_data)
 {
-  GtkApplication *app = user_data;
+  GApplication *app = user_data;
 
-  quit_app (app);
+  g_application_quit (app);
 }
 
 static GActionEntry app_entries[] = {
@@ -347,14 +327,6 @@ bloat_pad_class_init (BloatPadClass *class)
 
 }
 
-static void
-quit_cb (GtkApplication *app)
-{
-  g_print ("Session manager to us to quit\n");
-
-  quit_app (app);
-}
-
 BloatPad *
 bloat_pad_new (void)
 {
@@ -370,8 +342,6 @@ bloat_pad_new (void)
                             "inactivity-timeout", 30000,
                             "register-session", TRUE,
                             NULL);
-
-  g_signal_connect (bloat_pad, "quit", G_CALLBACK (quit_cb), NULL);
 
   return bloat_pad;
 }
