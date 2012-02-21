@@ -1697,7 +1697,7 @@ gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
   screen_class->list_visuals = _gdk_x11_screen_list_visuals;
 
   signals[WINDOW_MANAGER_CHANGED] =
-    g_signal_new (g_intern_static_string ("window_manager_changed"),
+    g_signal_new (g_intern_static_string ("window-manager-changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkX11ScreenClass, window_manager_changed),
