@@ -8368,7 +8368,8 @@ send_crossing_event (GdkDisplay                 *display,
   else
     window_event_mask = window->event_mask;
 
-  if (pointer_info->need_touch_press_enter &&
+  if (type == GDK_ENTER_NOTIFY &&
+      pointer_info->need_touch_press_enter &&
       mode != GDK_CROSSING_TOUCH_PRESS &&
       mode != GDK_CROSSING_TOUCH_RELEASE)
     {
