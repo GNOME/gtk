@@ -2662,7 +2662,7 @@ gtk_window_set_attached_to (GtkWindow *window,
     {
       _gtk_widget_add_attached_window (priv->attach_widget, window);
 
-      g_object_ref_sink (priv->attach_widget);
+      g_object_ref (priv->attach_widget);
     }
 
   /* Update the style, as the widget path might change. */
