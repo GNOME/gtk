@@ -1,0 +1,23 @@
+@import "reset-to-defaults.css";
+
+* {  
+  -GtkWidget-interior-focus: false;
+  -GtkWidget-focus-line-width: 10;
+  font: Monospace;
+}
+
+GtkEntry #padded {
+  -GtkWidget-interior-focus: true;
+  padding: 10px;
+}
+
+.progressbar {
+  background-color: rgba(0,0,0,0);
+  background-image: none;
+  border-color: rgba(0,0,0,0);
+  color: red;
+}
+
+#reference {
+  color: red;
+}
