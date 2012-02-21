@@ -1807,7 +1807,7 @@ _gtk_tree_view_accessible_toggle_visibility (GtkTreeView       *treeview,
                                                 id);
 }
 
-GtkTreeViewColumn *
+static GtkTreeViewColumn *
 get_effective_focus_column (GtkTreeView       *treeview,
                             GtkTreeViewColumn *column)
 {

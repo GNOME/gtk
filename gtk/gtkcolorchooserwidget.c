@@ -276,7 +276,7 @@ scale_round (gdouble value, gdouble scale)
   return (guint)value;
 }
 
-gchar *
+static gchar *
 accessible_color_name (GdkRGBA *color)
 {
   if (color->alpha < 1.0)
