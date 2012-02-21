@@ -3540,12 +3540,6 @@ get_progress_area (GtkWidget *widget,
   *width = text_area_width + entry_borders.left + entry_borders.right;
   *height = text_area_height + entry_borders.top + entry_borders.bottom;
 
-  if (!private->interior_focus)
-    {
-      *x -= private->focus_width;
-      *y -= private->focus_width;
-    }
-
   /* if the text area got resized by a subclass, subtract the left/right
    * border width, so that the progress bar won't extend over the resized
    * text area.
