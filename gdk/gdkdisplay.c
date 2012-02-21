@@ -702,9 +702,9 @@ _gdk_display_break_touch_grabs (GdkDisplay *display,
                                 GdkDevice  *device,
                                 GdkWindow  *new_grab_window)
 {
-  guint i = 0;
+  guint i;
 
-  while (i < display->touch_implicit_grabs->len)
+  for (i = 0; i < display->touch_implicit_grabs->len; i++)
     {
       GdkTouchGrabInfo *info;
 
@@ -713,14 +713,8 @@ _gdk_display_break_touch_grabs (GdkDisplay *display,
 
       if (info->device == device &&
           info->window != new_grab_window)
-        {
-          generate_grab_broken_event (GDK_WINDOW (info->window),
-                                      device, TRUE, new_grab_window);
-          _gdk_window_finish_touch_id (info->window, device, info->touch_id);
-          g_array_remove_index_fast (display->touch_implicit_grabs, i);
-        }
-      else
-        i++;
+        generate_grab_broken_event (GDK_WINDOW (info->window),
+                                    device, TRUE, new_grab_window);
     }
 }
 
