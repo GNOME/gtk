@@ -5,8 +5,8 @@
 /* always defined to indicate that i18n is enabled */
 #define ENABLE_NLS 1
 
-/* Define if gio can sniff image data */
-/* #undef GDK_PIXBUF_USE_GIO_MIME */
+/* define to enable packagekit */
+/* #undef ENABLE_PACKAGEKIT */
 
 /* The prefix for our gettext translation domains. */
 #define GETTEXT_PACKAGE "@GETTEXT_PACKAGE@"
@@ -20,8 +20,8 @@
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 #define HAVE_BIND_TEXTDOMAIN_CODESET 1
 
-/* Is the wctype implementation broken */
-/* #undef HAVE_BROKEN_WCTYPE */
+/* define if we have colord */
+/* #undef HAVE_COLORD */
 
 /* Define to 1 if you have the <crt_externs.h> header file. */
 /* #undef HAVE_CRT_EXTERNS_H */
@@ -73,8 +73,8 @@
 /* #undef HAVE_INTTYPES_H */
 #endif
 
-/* Define to 1 if ipc.h is available */
-/* #undef HAVE_IPC_H */
+/* Define to 1 if the system has the type `IPrintDialogCallback'. */
+#define HAVE_IPRINTDIALOGCALLBACK 1
 
 /* Define if your <locale.h> file defines LC_MESSAGES. */
 /* #undef HAVE_LC_MESSAGES */
@@ -100,11 +100,13 @@
 /* Define to 1 if you have a working `mmap' system call. */
 /* #undef HAVE_MMAP */
 
+/* Define to 1 if nearbyint() is available */
+#ifndef _MSC_VER
+#define HAVE_NEARBYINT 1
+#endif
+
 /* Define to 1 if libpapi available */
 /* #undef HAVE_PAPI */
-
-/* Define to 1 is libjpeg supports progressive JPEG */
-/* #undef HAVE_PROGRESSIVE_JPEG */
 
 /* Define to 1 if you have the <pwd.h> header file. */
 /* #undef HAVE_PWD_H */
@@ -149,8 +151,8 @@
 /* Define to 1 if you have the <string.h> header file. */
 #define HAVE_STRING_H 1
 
-/* Define to 1 if sys/select.h is available */
-/* #undef HAVE_SYS_SELECT_H */
+/* Define to 1 if you have the <sys/param.h> header file. */
+/* #undef HAVE_SYS_PARAM_H */
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #define HAVE_SYS_STAT_H 1
@@ -171,9 +173,6 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #define HAVE_SYS_TYPES_H 1
 
-/* Define to 1 if you have <sys/wait.h> that is POSIX.1 compatible. */
-/* #undef HAVE_SYS_WAIT_H */
-
 /* Define to 1 if you have the <unistd.h> header file. */
 #ifndef _MSC_VER
 #define HAVE_UNISTD_H 1
@@ -183,12 +182,6 @@
 
 /* Have uxtheme.h include file */
 #define HAVE_UXTHEME_H 1
-
-/* Have wchar.h include file */
-#define HAVE_WCHAR_H 1
-
-/* Have wctype.h include file */
-#define HAVE_WCTYPE_H 1
 
 /* Define if we have X11R6 */
 /* #undef HAVE_X11R6 */
@@ -211,6 +204,9 @@
 /* Define to 1 if XFree Xinerama is available */
 /* #undef HAVE_XFREE_XINERAMA */
 
+/* Have XGenericEvent */
+/* #undef HAVE_XGENERICEVENTS */
+
 /* Define to 1 if xinerama is available */
 /* #undef HAVE_XINERAMA */
 
@@ -219,9 +215,6 @@
 
 /* Define to use XKB extension */
 /* #undef HAVE_XKB */
-
-/* Define to 1 if xshm.h is available */
-/* #undef HAVE_XSHM_H */
 
 /* Have the SYNC extension library */
 /* #undef HAVE_XSYNC */
@@ -248,9 +241,6 @@
 /* Define if <X11/extensions/XIproto.h> needed for xReply */
 /* #undef NEED_XIPROTO_H_FOR_XREPLY */
 
-/* Define to 1 if fd_set is not available */
-#define NO_FD_SET 1
-
 /* Define to 1 if your C compiler doesn't accept -c and -o together. */
 #ifndef _MSC_VER
 /* #undef NO_MINUS_C_MINUS_O */
@@ -270,11 +260,15 @@
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "gtk+"
 
+/* Define to the home page for this package. */
+#define PACKAGE_URL ""
+
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.@GTK_MICRO_VERSION@"
 
-/* Define as the return type of signal handlers (`int' or `void'). */
-#define RETSIGTYPE void
+/* Use NSBundle functions to determine load paths for libraries, translations,
+   etc. */
+/* #undef QUARTZ_RELOCATION */
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
@@ -282,15 +276,8 @@
 /* Define to 1 if gmodule works and should be used */
 #define USE_GMODULE 1
 
-/* Whether to load modules via .la files rather than directly */
-/* #undef USE_LA_MODULES */
-
-/* Define to 1 if XXM is available and should be used */
-#ifndef _MSC_VER
-#  define USE_MMX 1
-#else
-#  undef USE_MMX
-#endif
+/* Define to 1 if XInput 2.0 is available */
+/* #undef XINPUT_2 */
 
 /* Define to 1 if no XInput should be used */
 /* #undef XINPUT_NONE */
@@ -306,9 +293,6 @@
 
 /* Define for large files, on AIX-style hosts. */
 /* #undef _LARGE_FILES */
-
-/* Define to empty if `const' does not conform to ANSI C. */
-/* #undef const */
 
 /* Define to `int' if <sys/types.h> doesn't define. */
 #define gid_t int
