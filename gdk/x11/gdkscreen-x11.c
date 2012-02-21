@@ -93,56 +93,42 @@ gdk_x11_screen_init (GdkX11Screen *screen)
 static GdkDisplay *
 gdk_x11_screen_get_display (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   return GDK_X11_SCREEN (screen)->display;
 }
 
 static gint
 gdk_x11_screen_get_width (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return WidthOfScreen (GDK_X11_SCREEN (screen)->xscreen);
 }
 
 static gint
 gdk_x11_screen_get_height (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return HeightOfScreen (GDK_X11_SCREEN (screen)->xscreen);
 }
 
 static gint
 gdk_x11_screen_get_width_mm (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);  
-
   return WidthMMOfScreen (GDK_X11_SCREEN (screen)->xscreen);
 }
 
 static gint
 gdk_x11_screen_get_height_mm (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return HeightMMOfScreen (GDK_X11_SCREEN (screen)->xscreen);
 }
 
 static gint
 gdk_x11_screen_get_number (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-  
   return GDK_X11_SCREEN (screen)->screen_num;
 }
 
 static GdkWindow *
 gdk_x11_screen_get_root_window (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   return GDK_X11_SCREEN (screen)->root_window;
 }
 
@@ -212,27 +198,21 @@ gdk_x11_screen_finalize (GObject *object)
 static gint
 gdk_x11_screen_get_n_monitors (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return GDK_X11_SCREEN (screen)->n_monitors;
 }
 
 static gint
 gdk_x11_screen_get_primary_monitor (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return GDK_X11_SCREEN (screen)->primary_monitor;
 }
 
 static gint
-gdk_x11_screen_get_monitor_width_mm	(GdkScreen *screen,
-					 gint       monitor_num)
+gdk_x11_screen_get_monitor_width_mm (GdkScreen *screen,
+                                     gint       monitor_num)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
-  g_return_val_if_fail (monitor_num >= 0, -1);
   g_return_val_if_fail (monitor_num < x11_screen->n_monitors, -1);
 
   return x11_screen->monitors[monitor_num].width_mm;
@@ -244,8 +224,6 @@ gdk_x11_screen_get_monitor_height_mm (GdkScreen *screen,
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
-  g_return_val_if_fail (monitor_num >= 0, -1);
   g_return_val_if_fail (monitor_num < x11_screen->n_monitors, -1);
 
   return x11_screen->monitors[monitor_num].height_mm;
@@ -257,8 +235,6 @@ gdk_x11_screen_get_monitor_plug_name (GdkScreen *screen,
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  g_return_val_if_fail (monitor_num >= 0, NULL);
   g_return_val_if_fail (monitor_num < x11_screen->n_monitors, NULL);
 
   return g_strdup (x11_screen->monitors[monitor_num].output_name);
@@ -297,8 +273,6 @@ gdk_x11_screen_get_monitor_geometry (GdkScreen    *screen,
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail (monitor_num >= 0);
   g_return_if_fail (monitor_num < x11_screen->n_monitors);
 
   if (dest)
@@ -415,11 +389,7 @@ gdk_x11_screen_get_monitor_workarea (GdkScreen    *screen,
 static GdkVisual *
 gdk_x11_screen_get_rgba_visual (GdkScreen *screen)
 {
-  GdkX11Screen *x11_screen;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  x11_screen = GDK_X11_SCREEN (screen);
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
   return x11_screen->rgba_visual;
 }
@@ -941,11 +911,7 @@ _gdk_x11_screen_setup (GdkScreen *screen)
 static gboolean
 gdk_x11_screen_is_composited (GdkScreen *screen)
 {
-  GdkX11Screen *x11_screen;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
-
-  x11_screen = GDK_X11_SCREEN (screen);
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
   return x11_screen->is_composited;
 }
@@ -1093,8 +1059,6 @@ gdk_x11_screen_make_display_name (GdkScreen *screen)
 {
   const gchar *old_display;
 
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   old_display = gdk_display_get_name (gdk_screen_get_display (screen));
 
   return substitute_screen_number (old_display,
@@ -1104,7 +1068,7 @@ gdk_x11_screen_make_display_name (GdkScreen *screen)
 static GdkWindow *
 gdk_x11_screen_get_active_window (GdkScreen *screen)
 {
-  GdkX11Screen *x11_screen;
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   GdkWindow *ret = NULL;
   Atom type_return;
   gint format_return;
@@ -1112,13 +1076,9 @@ gdk_x11_screen_get_active_window (GdkScreen *screen)
   gulong bytes_after_return;
   guchar *data = NULL;
 
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   if (!gdk_x11_screen_supports_net_wm_hint (screen,
                                             gdk_atom_intern_static_string ("_NET_ACTIVE_WINDOW")))
     return NULL;
-
-  x11_screen = GDK_X11_SCREEN (screen);
 
   if (XGetWindowProperty (x11_screen->xdisplay, x11_screen->xroot_window,
 	                  gdk_x11_get_xatom_by_name_for_display (x11_screen->display,
@@ -1149,7 +1109,7 @@ gdk_x11_screen_get_active_window (GdkScreen *screen)
 static GList *
 gdk_x11_screen_get_window_stack (GdkScreen *screen)
 {
-  GdkX11Screen *x11_screen;
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   GList *ret = NULL;
   Atom type_return;
   gint format_return;
@@ -1157,13 +1117,9 @@ gdk_x11_screen_get_window_stack (GdkScreen *screen)
   gulong bytes_after_return;
   guchar *data = NULL;
 
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   if (!gdk_x11_screen_supports_net_wm_hint (screen,
                                             gdk_atom_intern_static_string ("_NET_CLIENT_LIST_STACKING")))
     return NULL;
-
-  x11_screen = GDK_X11_SCREEN (screen);
 
   if (XGetWindowProperty (x11_screen->xdisplay, x11_screen->xroot_window,
 	                  gdk_x11_get_xatom_by_name_for_display (x11_screen->display,
@@ -1219,18 +1175,13 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
 			    const gchar *name,
 			    GValue      *value)
 {
-
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   const char *xsettings_name = NULL;
   XSettingsResult result;
   XSettingsSetting *setting = NULL;
-  GdkX11Screen *x11_screen;
   gboolean success = FALSE;
   gint i;
   GValue tmp_val = G_VALUE_INIT;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
-
-  x11_screen = GDK_X11_SCREEN (screen);
 
   for (i = 0; i < GDK_SETTINGS_N_ELEMENTS(); i++)
     if (strcmp (GDK_SETTINGS_GDK_NAME (i), name) == 0)

@@ -291,7 +291,6 @@ gdk_quartz_screen_get_display (GdkScreen *screen)
   return _gdk_display;
 }
 
-
 static GdkWindow *
 gdk_quartz_screen_get_root_window (GdkScreen *screen)
 {
@@ -304,7 +303,7 @@ gdk_quartz_screen_get_number (GdkScreen *screen)
   return 0;
 }
 
-gchar * 
+gchar *
 _gdk_windowing_substitute_screen_number (const gchar *display_name,
 					 int          screen_number)
 {

@@ -548,7 +548,9 @@ gdk_screen_set_property (GObject      *object,
 GdkDisplay *
 gdk_screen_get_display (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_display (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_display (screen);
 }
 
 
@@ -565,7 +567,9 @@ gdk_screen_get_display (GdkScreen *screen)
 gint
 gdk_screen_get_width (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_width (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_width (screen);
 }
 
 /**
@@ -581,7 +585,9 @@ gdk_screen_get_width (GdkScreen *screen)
 gint
 gdk_screen_get_height (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_height (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_height (screen);
 }
 
 /**
@@ -598,7 +604,9 @@ gdk_screen_get_height (GdkScreen *screen)
 gint
 gdk_screen_get_width_mm (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_width_mm (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_width_mm (screen);
 }
 
 /**
@@ -615,7 +623,9 @@ gdk_screen_get_width_mm (GdkScreen *screen)
 gint
 gdk_screen_get_height_mm (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_height_mm (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_height_mm (screen);
 }
 
 /**
@@ -632,7 +642,9 @@ gdk_screen_get_height_mm (GdkScreen *screen)
 gint
 gdk_screen_get_number (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_number (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_number (screen);
 }
 
 /**
@@ -648,7 +660,9 @@ gdk_screen_get_number (GdkScreen *screen)
 GdkWindow *
 gdk_screen_get_root_window (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_root_window (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_root_window (screen);
 }
 
 /**
@@ -664,7 +678,9 @@ gdk_screen_get_root_window (GdkScreen *screen)
 gint
 gdk_screen_get_n_monitors (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_n_monitors (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_n_monitors (screen);
 }
 
 /**
@@ -687,7 +703,9 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
 gint
 gdk_screen_get_primary_monitor (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_primary_monitor (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_primary_monitor (screen);
 }
 
 /**
@@ -705,7 +723,10 @@ gint
 gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
 				 gint       monitor_num)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_monitor_width_mm (screen, monitor_num);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
+  g_return_val_if_fail (monitor_num >= 0, -1);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_monitor_width_mm (screen, monitor_num);
 }
 
 /**
@@ -723,7 +744,10 @@ gint
 gdk_screen_get_monitor_height_mm (GdkScreen *screen,
                                   gint       monitor_num)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_monitor_height_mm (screen, monitor_num);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
+  g_return_val_if_fail (monitor_num >= 0, -1);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_monitor_height_mm (screen, monitor_num);
 }
 
 /**
@@ -744,7 +768,10 @@ gchar *
 gdk_screen_get_monitor_plug_name (GdkScreen *screen,
 				  gint       monitor_num)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_monitor_plug_name (screen, monitor_num);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  g_return_val_if_fail (monitor_num >= 0, NULL);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_monitor_plug_name (screen, monitor_num);
 }
 
 /**
@@ -770,6 +797,9 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
 				 gint          monitor_num,
 				 GdkRectangle *dest)
 {
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (monitor_num >= 0);
+
   GDK_SCREEN_GET_CLASS(screen)->get_monitor_geometry (screen, monitor_num, dest);
 }
 
@@ -797,7 +827,10 @@ gdk_screen_get_monitor_workarea (GdkScreen    *screen,
                                  gint          monitor_num,
                                  GdkRectangle *dest)
 {
-  GDK_SCREEN_GET_CLASS(screen)->get_monitor_workarea (screen, monitor_num, dest);
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (monitor_num >= 0);
+
+  GDK_SCREEN_GET_CLASS (screen)->get_monitor_workarea (screen, monitor_num, dest);
 }
 
 /**
@@ -819,7 +852,9 @@ gdk_screen_get_monitor_workarea (GdkScreen    *screen,
 GList *
 gdk_screen_list_visuals (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->list_visuals (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return GDK_SCREEN_GET_CLASS (screen)->list_visuals (screen);
 }
 
 /**
@@ -837,7 +872,9 @@ gdk_screen_list_visuals (GdkScreen *screen)
 GdkVisual *
 gdk_screen_get_system_visual (GdkScreen * screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_system_visual (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_system_visual (screen);
 }
 
 /**
@@ -866,7 +903,9 @@ gdk_screen_get_system_visual (GdkScreen * screen)
 GdkVisual *
 gdk_screen_get_rgba_visual (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_rgba_visual (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_rgba_visual (screen);
 }
 
 /**
@@ -888,7 +927,9 @@ gdk_screen_get_rgba_visual (GdkScreen *screen)
 gboolean
 gdk_screen_is_composited (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->is_composited (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+
+  return GDK_SCREEN_GET_CLASS (screen)->is_composited (screen);
 }
 
 /**
@@ -905,7 +946,9 @@ gdk_screen_is_composited (GdkScreen *screen)
 gchar *
 gdk_screen_make_display_name (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->make_display_name (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return GDK_SCREEN_GET_CLASS (screen)->make_display_name (screen);
 }
 
 /**
@@ -934,7 +977,9 @@ gdk_screen_make_display_name (GdkScreen *screen)
 GdkWindow *
 gdk_screen_get_active_window (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_active_window (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_active_window (screen);
 }
 
 /**
@@ -966,7 +1011,9 @@ gdk_screen_get_active_window (GdkScreen *screen)
 GList *
 gdk_screen_get_window_stack (GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_window_stack (screen);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_window_stack (screen);
 }
 
 /**
@@ -991,5 +1038,9 @@ gdk_screen_get_setting (GdkScreen   *screen,
 			const gchar *name,
 			GValue      *value)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_setting (screen, name, value);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+  g_return_val_if_fail (name != NULL, FALSE);
+  g_return_val_if_fail (value != NULL, FALSE);
+
+  return GDK_SCREEN_GET_CLASS (screen)->get_setting (screen, name, value);
 }

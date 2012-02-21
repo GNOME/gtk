@@ -34,8 +34,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void         gdk_broadway_screen_dispose     (GObject		  *object);
-static void         gdk_broadway_screen_finalize    (GObject		  *object);
+static void   gdk_broadway_screen_dispose     (GObject *object);
+static void   gdk_broadway_screen_finalize    (GObject *object);
 
 G_DEFINE_TYPE (GdkBroadwayScreen, gdk_broadway_screen, GDK_TYPE_SCREEN)
 
@@ -49,61 +49,48 @@ gdk_broadway_screen_init (GdkBroadwayScreen *screen)
 static GdkDisplay *
 gdk_broadway_screen_get_display (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   return GDK_BROADWAY_SCREEN (screen)->display;
 }
 
 static gint
 gdk_broadway_screen_get_width (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return GDK_BROADWAY_SCREEN (screen)->width;
 }
 
 static gint
 gdk_broadway_screen_get_height (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return GDK_BROADWAY_SCREEN (screen)->height;
 }
 
 static gint
 gdk_broadway_screen_get_width_mm (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return gdk_screen_get_width (screen) * 25.4 / 96;
 }
 
 static gint
 gdk_broadway_screen_get_height_mm (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return gdk_screen_get_height (screen) * 25.4 / 96;
 }
 
 static gint
 gdk_broadway_screen_get_number (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return 0;
 }
 
 static GdkWindow *
 gdk_broadway_screen_get_root_window (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   return GDK_BROADWAY_SCREEN (screen)->root_window;
 }
 
 void
-_gdk_broadway_screen_size_changed (GdkScreen *screen, BroadwayInputScreenResizeNotify *msg)
+_gdk_broadway_screen_size_changed (GdkScreen                       *screen,
+                                   BroadwayInputScreenResizeNotify *msg)
 {
   GdkBroadwayScreen *broadway_screen = GDK_BROADWAY_SCREEN (screen);
   gint width, height;
@@ -150,16 +137,12 @@ gdk_broadway_screen_finalize (GObject *object)
 static gint
 gdk_broadway_screen_get_n_monitors (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return 1;
 }
 
 static gint
 gdk_broadway_screen_get_primary_monitor (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return 0;
 }
 
@@ -167,7 +150,6 @@ static gint
 gdk_broadway_screen_get_monitor_width_mm (GdkScreen *screen,
 					  gint       monitor_num)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
   g_return_val_if_fail (monitor_num == 0, -1);
 
   return gdk_screen_get_width_mm (screen);
@@ -177,7 +159,6 @@ static gint
 gdk_broadway_screen_get_monitor_height_mm (GdkScreen *screen,
 					   gint       monitor_num)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
   g_return_val_if_fail (monitor_num == 0, -1);
 
   return gdk_screen_get_height_mm (screen);
@@ -187,7 +168,6 @@ static gchar *
 gdk_broadway_screen_get_monitor_plug_name (GdkScreen *screen,
 					   gint       monitor_num)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   g_return_val_if_fail (monitor_num == 0, NULL);
 
   return g_strdup ("browser");
@@ -200,7 +180,6 @@ gdk_broadway_screen_get_monitor_geometry (GdkScreen    *screen,
 {
   GdkBroadwayScreen *broadway_screen = GDK_BROADWAY_SCREEN (screen);
 
-  g_return_if_fail (GDK_IS_SCREEN (screen));
   g_return_if_fail (monitor_num == 0);
 
   if (dest)
@@ -215,11 +194,7 @@ gdk_broadway_screen_get_monitor_geometry (GdkScreen    *screen,
 static GdkVisual *
 gdk_broadway_screen_get_rgba_visual (GdkScreen *screen)
 {
-  GdkBroadwayScreen *broadway_screen;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  broadway_screen = GDK_BROADWAY_SCREEN (screen);
+  GdkBroadwayScreen *broadway_screen = GDK_BROADWAY_SCREEN (screen);
 
   return broadway_screen->rgba_visual;
 }
@@ -254,8 +229,6 @@ _gdk_broadway_screen_setup (GdkScreen *screen)
 static gboolean
 gdk_broadway_screen_is_composited (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
-
   return FALSE;
 }
 
@@ -263,8 +236,6 @@ gdk_broadway_screen_is_composited (GdkScreen *screen)
 static gchar *
 gdk_broadway_screen_make_display_name (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   return g_strdup ("browser");
 }
 
