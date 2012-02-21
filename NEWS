@@ -1,3 +1,61 @@
+Overview of Changes in GTK+ 3.3.16
+==================================
+
+* The widget-factory theme test is now installed
+  as a demo named gtk3-widget-factory
+
+* The Raleigh theme is now a pure fallback theme
+  that doesn't share any CSS with other themes
+  anymore
+
+* GtkColorSelectionDialog has been deprecated in
+  favor of a new color chooser widget named
+  GtkColorChooserDialog
+
+* Bug fixes:
+669116
+669636
+669638
+669511
+669208
+669794
+669116
+668114
+670077
+670078
+670400
+669947
+612283
+
+ 612283 Clarification for GtkListStore::gtk_list_store_insert_with_values
+ 668114 odd spacing in about dialog credits
+ 669116 GtkNotebook's child-notify::position not always emitted...
+ 669208 x11: Cancel _NET_WM_MOVERESIZE if we get a matching ButtonRelease
+ 669511 gtkcsstypes.c: variable is declared at middle of block
+ 669636 gtkactiongroup: clarify set_translation_domain docs
+ 669638 gtkbuilder-menus: translation-domain can be NULL
+ 669794 Orca + Trees/Tables == incorrect cells presented, crashes...
+ 669947 gtkuimanager: clarify @pos of insert_action_group
+ 670077 license text has poor alignment with close button
+ 670078 no stroke around credits scrollable area
+ 670400 First shortcut capture is broken
+
+* Translation updates:
+ Belarusian
+ Bulgarian
+ Danish
+ Estonian
+ Galician
+ Hebrew
+ Italian
+ Japanese
+ Kazakh
+ Lithuanian
+ Norwegian bokmål
+ Spanish
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.3.14
 ==================================
 
