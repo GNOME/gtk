@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkGrid" id="grid1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkInfoBar" id="infobar1">
+            <property name="visible">True</property>
+            <property name="app_paintable">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">horizontal</property>
+            <property name="message_type">info</property>
+            <child internal-child="content_area">
+              <object class="GtkBox" id="infobar-content_area1">
+                <property name="can_focus">False</property>
+                <property name="border_width">8</property>
+                <property name="spacing">16</property>
+                <child>
+                  <object class="GtkLabel" id="label1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Info</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child internal-child="action_area">
+              <object class="GtkButtonBox" id="infobar-action_area1">
+                <property name="can_focus">False</property>
+                <property name="border_width">0</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <property name="layout_style">end</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkInfoBar" id="infobar2">
+            <property name="visible">True</property>
+            <property name="app_paintable">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">horizontal</property>
+            <property name="message_type">warning</property>
+            <child internal-child="content_area">
+              <object class="GtkBox" id="infobar-content_area2">
+                <property name="can_focus">False</property>
+                <property name="border_width">8</property>
+                <property name="spacing">16</property>
+                <child>
+                  <object class="GtkLabel" id="label2">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Warning</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child internal-child="action_area">
+              <object class="GtkButtonBox" id="infobar-action_area2">
+                <property name="can_focus">False</property>
+                <property name="border_width">0</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <property name="layout_style">end</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkInfoBar" id="infobar3">
+            <property name="visible">True</property>
+            <property name="app_paintable">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">horizontal</property>
+            <property name="message_type">question</property>
+            <child internal-child="content_area">
+              <object class="GtkBox" id="infobar-content_area3">
+                <property name="can_focus">False</property>
+                <property name="border_width">8</property>
+                <property name="spacing">16</property>
+                <child>
+                  <object class="GtkLabel" id="label3">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Question</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child internal-child="action_area">
+              <object class="GtkButtonBox" id="infobar-action_area3">
+                <property name="can_focus">False</property>
+                <property name="border_width">0</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <property name="layout_style">end</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkInfoBar" id="infobar4">
+            <property name="visible">True</property>
+            <property name="app_paintable">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">horizontal</property>
+            <property name="message_type">error</property>
+            <child internal-child="content_area">
+              <object class="GtkBox" id="infobar-content_area4">
+                <property name="can_focus">False</property>
+                <property name="border_width">8</property>
+                <property name="spacing">16</property>
+                <child>
+                  <object class="GtkLabel" id="label4">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Error</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child internal-child="action_area">
+              <object class="GtkButtonBox" id="infobar-action_area4">
+                <property name="can_focus">False</property>
+                <property name="border_width">0</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <property name="layout_style">end</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkInfoBar" id="infobar5">
+            <property name="visible">True</property>
+            <property name="app_paintable">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">horizontal</property>
+            <property name="message_type">other</property>
+            <child internal-child="content_area">
+              <object class="GtkBox" id="infobar-content_area5">
+                <property name="can_focus">False</property>
+                <property name="border_width">8</property>
+                <property name="spacing">16</property>
+                <child>
+                  <object class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Other</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child internal-child="action_area">
+              <object class="GtkButtonBox" id="infobar-action_area5">
+                <property name="can_focus">False</property>
+                <property name="border_width">0</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <property name="layout_style">end</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -290,13 +290,6 @@ gtk_info_bar_draw (GtkWidget      *widget,
                    cairo_t        *cr)
 {
   GtkInfoBarPrivate *priv = GTK_INFO_BAR (widget)->priv;
-  const char* type_class[] = {
-    GTK_STYLE_CLASS_INFO,
-    GTK_STYLE_CLASS_WARNING,
-    GTK_STYLE_CLASS_QUESTION,
-    GTK_STYLE_CLASS_ERROR,
-    NULL
-  };
 
   if (priv->message_type != GTK_MESSAGE_OTHER)
     {
@@ -304,20 +297,12 @@ gtk_info_bar_draw (GtkWidget      *widget,
 
       context = gtk_widget_get_style_context (widget);
 
-      gtk_style_context_save (context);
-
-      if (type_class[priv->message_type])
-        gtk_style_context_add_class (context,
-                                     type_class[priv->message_type]);
-
       gtk_render_background (context, cr, 0, 0,
                              gtk_widget_get_allocated_width (widget),
                              gtk_widget_get_allocated_height (widget));
       gtk_render_frame (context, cr, 0, 0,
                         gtk_widget_get_allocated_width (widget),
                         gtk_widget_get_allocated_height (widget));
-
-      gtk_style_context_restore (context);
     }
 
   if (GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->draw)
@@ -1091,7 +1076,6 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
                                GtkMessageType  message_type)
 {
   GtkInfoBarPrivate *priv;
-  AtkObject *atk_obj;
 
   g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
 
@@ -1099,6 +1083,21 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
 
   if (priv->message_type != message_type)
     {
+      GtkStyleContext *context;
+      AtkObject *atk_obj;
+      const char *type_class[] = {
+        GTK_STYLE_CLASS_INFO,
+        GTK_STYLE_CLASS_WARNING,
+        GTK_STYLE_CLASS_QUESTION,
+        GTK_STYLE_CLASS_ERROR,
+        NULL
+      };
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (info_bar));
+
+      if (type_class[priv->message_type])
+        gtk_style_context_remove_class (context, type_class[priv->message_type]);
+
       priv->message_type = message_type;
 
       gtk_widget_queue_draw (GTK_WIDGET (info_bar));
@@ -1143,6 +1142,9 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
               atk_object_set_name (atk_obj, item.label);
             }
         }
+
+      if (type_class[priv->message_type])
+        gtk_style_context_add_class (context, type_class[priv->message_type]);
 
       g_object_notify (G_OBJECT (info_bar), "message-type");
     }

@@ -144,6 +144,9 @@ EXTRA_DIST += \
 	grid-spacing3.css \
 	grid-spacing3.ref.ui \
 	grid-spacing3.ui \
+	info-bar-message-types.css \
+	info-bar-message-types.ref.ui \
+	info-bar-message-types.ui \
 	inherit-and-initial.css \
 	inherit-and-initial.ref.ui \
 	inherit-and-initial.ui \
