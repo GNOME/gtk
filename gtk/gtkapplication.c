@@ -110,9 +110,6 @@
  * property) and offers various functionality related to the session
  * life-cycle.
  *
- * An application can be informed when the session is about to end
- * by connecting to the #GtkApplication::quit signal.
- *
  * An application can block various ways to end the session with
  * the gtk_application_inhibit() function. Typical use cases for
  * this kind of inhibiting are long-running, uninterruptible operations,
@@ -750,9 +747,7 @@ gtk_application_class_init (GtkApplicationClass *class)
   /**
    * GtkApplication:register-session:
    *
-   * Set this property to %TRUE to register with the session manager
-   * and receive the #GtkApplication::quit signal when the session
-   * is about to end.
+   * Set this property to %TRUE to register with the session manager.
    *
    * Since: 3.4
    */
