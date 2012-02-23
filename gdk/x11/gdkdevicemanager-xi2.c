@@ -729,11 +729,13 @@ handle_device_changed (GdkX11DeviceManagerXI2 *device_manager,
                        XIDeviceChangedEvent   *ev)
 {
   GdkDisplay *display;
-  GdkDevice *device;
+  GdkDevice *device, *source_device;
 
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
   device = g_hash_table_lookup (device_manager->id_table,
                                 GUINT_TO_POINTER (ev->deviceid));
+  source_device = g_hash_table_lookup (device_manager->id_table,
+                                       GUINT_TO_POINTER (ev->sourceid));
 
   if (device)
     {
@@ -742,6 +744,9 @@ handle_device_changed (GdkX11DeviceManagerXI2 *device_manager,
 
       g_signal_emit_by_name (G_OBJECT (device), "changed");
     }
+
+  if (source_device)
+    _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
 }
 
 static GdkCrossingMode
@@ -1404,6 +1409,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
         gdk_event_set_source_device (event, source_device);
+        _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
 
         event->crossing.mode = translate_crossing_mode (xev->mode);
         event->crossing.detail = translate_notify_type (xev->detail);
