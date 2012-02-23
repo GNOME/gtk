@@ -541,6 +541,11 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   info_bar->priv->content_area = content_area;
   info_bar->priv->action_area = action_area;
 
+  /* message-type is a CONSTRUCT property, so we init to a value
+   * different from its default to trigger its property setter
+   * during construction */
+  info_bar->priv->message_type = GTK_MESSAGE_OTHER;
+
   gtk_widget_pop_composite_child ();
 
   gtk_info_bar_style_updated (widget);
