@@ -415,6 +415,30 @@ gdk_quartz_screen_get_monitor_geometry (GdkScreen    *screen,
   *dest = GDK_QUARTZ_SCREEN (screen)->screen_rects[monitor_num];
 }
 
+static void
+gdk_quartz_screen_get_monitor_workarea (GdkScreen    *screen,
+                                        gint          monitor_num,
+                                        GdkRectangle *dest)
+{
+  GdkQuartzScreen *quartz_screen = GDK_QUARTZ_SCREEN (screen);
+  NSArray *array;
+  NSScreen *nsscreen;
+  NSRect rect;
+
+  GDK_QUARTZ_ALLOC_POOL;
+
+  array = [NSScreen screens];
+  nsscreen = [array objectAtIndex:monitor_num];
+  rect = [nsscreen visibleFrame];
+
+  dest->x = rect.origin.x - quartz_screen->min_x;
+  dest->y = quartz_screen->height - (rect.origin.y + rect.size.height) + quartz_screen->min_y;
+  dest->width = rect.size.width;
+  dest->height = rect.size.height;
+
+  GDK_QUARTZ_RELEASE_POOL;
+}
+
 static gchar *
 gdk_quartz_screen_make_display_name (GdkScreen *screen)
 {
@@ -461,7 +485,7 @@ gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
   screen_class->get_monitor_height_mm = gdk_quartz_screen_get_monitor_height_mm;
   screen_class->get_monitor_plug_name = gdk_quartz_screen_get_monitor_plug_name;
   screen_class->get_monitor_geometry = gdk_quartz_screen_get_monitor_geometry;
-  screen_class->get_monitor_workarea = gdk_quartz_screen_get_monitor_geometry;
+  screen_class->get_monitor_workarea = gdk_quartz_screen_get_monitor_workarea;
   screen_class->is_composited = gdk_quartz_screen_is_composited;
   screen_class->make_display_name = gdk_quartz_screen_make_display_name;
   screen_class->get_active_window = gdk_quartz_screen_get_active_window;
