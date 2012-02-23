@@ -415,6 +415,8 @@ gtk_scale_button_init (GtkScaleButton *button)
   /* the scale */
   priv->scale = gtk_scale_button_scale_new (button);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->scale);
+
+  gtk_widget_add_events (GTK_WIDGET (button), GDK_SCROLL_MASK);
 }
 
 static GObject *
