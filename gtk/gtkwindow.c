@@ -4520,7 +4520,7 @@ gtk_window_move (GtkWindow *window,
 /**
  * gtk_window_get_position:
  * @window: a #GtkWindow
- * @root_x: (out) (allow-none): eturn location for X coordinate of
+ * @root_x: (out) (allow-none): return location for X coordinate of
  *     gravity-determined reference point, or %NULL
  * @root_y: (out) (allow-none): return location for Y coordinate of
  *     gravity-determined reference point, or %NULL
