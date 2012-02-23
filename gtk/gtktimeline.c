@@ -368,14 +368,14 @@ gtk_timeline_run_frame (GtkTimeline *timeline)
   return TRUE;
 }
 
-/**
- * gtk_timeline_new:
+/*
+ * _gtk_timeline_new:
  * @duration: duration in milliseconds for the timeline
  *
  * Creates a new #GtkTimeline with the specified number of frames.
  *
  * Return Value: the newly created #GtkTimeline
- **/
+ */
 GtkTimeline *
 _gtk_timeline_new (guint duration)
 {
@@ -394,12 +394,12 @@ _gtk_timeline_new_for_screen (guint      duration,
                        NULL);
 }
 
-/**
- * gtk_timeline_start:
+/*
+ * _gtk_timeline_start:
  * @timeline: A #GtkTimeline
  *
  * Runs the timeline from the current frame.
- **/
+ */
 void
 _gtk_timeline_start (GtkTimeline *timeline)
 {
@@ -441,12 +441,12 @@ _gtk_timeline_start (GtkTimeline *timeline)
     }
 }
 
-/**
- * gtk_timeline_pause:
+/*
+ * _gtk_timeline_pause:
  * @timeline: A #GtkTimeline
  *
  * Pauses the timeline.
- **/
+ */
 void
 _gtk_timeline_pause (GtkTimeline *timeline)
 {
@@ -465,12 +465,12 @@ _gtk_timeline_pause (GtkTimeline *timeline)
     }
 }
 
-/**
- * gtk_timeline_rewind:
+/*
+ * _gtk_timeline_rewind:
  * @timeline: A #GtkTimeline
  *
  * Rewinds the timeline.
- **/
+ */
 void
 _gtk_timeline_rewind (GtkTimeline *timeline)
 {
@@ -495,14 +495,14 @@ _gtk_timeline_rewind (GtkTimeline *timeline)
     }
 }
 
-/**
- * gtk_timeline_is_running:
+/*
+ * _gtk_timeline_is_running:
  * @timeline: A #GtkTimeline
  *
  * Returns whether the timeline is running or not.
  *
  * Return Value: %TRUE if the timeline is running
- **/
+ */
 gboolean
 _gtk_timeline_is_running (GtkTimeline *timeline)
 {
@@ -515,14 +515,14 @@ _gtk_timeline_is_running (GtkTimeline *timeline)
   return (priv->source_id != 0);
 }
 
-/**
- * gtk_timeline_get_elapsed_time:
+/*
+ * _gtk_timeline_get_elapsed_time:
  * @timeline: A #GtkTimeline
  *
  * Returns the elapsed time since the last GtkTimeline::frame signal
  *
  * Return Value: elapsed time in milliseconds since the last frame
- **/
+ */
 guint
 _gtk_timeline_get_elapsed_time (GtkTimeline *timeline)
 {
@@ -534,14 +534,14 @@ _gtk_timeline_get_elapsed_time (GtkTimeline *timeline)
   return priv->elapsed_time;
 }
 
-/**
- * gtk_timeline_get_fps:
+/*
+ * _gtk_timeline_get_fps:
  * @timeline: A #GtkTimeline
  *
  * Returns the number of frames per second.
  *
  * Return Value: frames per second
- **/
+ */
 guint
 _gtk_timeline_get_fps (GtkTimeline *timeline)
 {
@@ -553,14 +553,14 @@ _gtk_timeline_get_fps (GtkTimeline *timeline)
   return priv->fps;
 }
 
-/**
- * gtk_timeline_set_fps:
+/*
+ * _gtk_timeline_set_fps:
  * @timeline: A #GtkTimeline
  * @fps: frames per second
  *
  * Sets the number of frames per second that
  * the timeline will play.
- **/
+ */
 void
 _gtk_timeline_set_fps (GtkTimeline *timeline,
                       guint        fps)
@@ -585,15 +585,15 @@ _gtk_timeline_set_fps (GtkTimeline *timeline,
   g_object_notify (G_OBJECT (timeline), "fps");
 }
 
-/**
- * gtk_timeline_get_loop:
+/*
+ * _gtk_timeline_get_loop:
  * @timeline: A #GtkTimeline
  *
  * Returns whether the timeline loops to the
  * beginning when it has reached the end.
  *
  * Return Value: %TRUE if the timeline loops
- **/
+ */
 gboolean
 _gtk_timeline_get_loop (GtkTimeline *timeline)
 {
@@ -605,14 +605,14 @@ _gtk_timeline_get_loop (GtkTimeline *timeline)
   return priv->loop;
 }
 
-/**
- * gtk_timeline_set_loop:
+/*
+ * _gtk_timeline_set_loop:
  * @timeline: A #GtkTimeline
  * @loop: %TRUE to make the timeline loop
  *
  * Sets whether the timeline loops to the beginning
  * when it has reached the end.
- **/
+ */
 void
 _gtk_timeline_set_loop (GtkTimeline *timeline,
                         gboolean     loop)
@@ -659,13 +659,13 @@ _gtk_timeline_get_duration (GtkTimeline *timeline)
   return priv->duration;
 }
 
-/**
- * gtk_timeline_set_direction:
+/*
+ * _gtk_timeline_set_direction:
  * @timeline: A #GtkTimeline
  * @direction: direction
  *
  * Sets the direction of the timeline.
- **/
+ */
 void
 _gtk_timeline_set_direction (GtkTimeline          *timeline,
                              GtkTimelineDirection  direction)
@@ -678,14 +678,14 @@ _gtk_timeline_set_direction (GtkTimeline          *timeline,
   priv->direction = direction;
 }
 
-/**
- * gtk_timeline_get_direction:
+/*
+ * _gtk_timeline_get_direction:
  * @timeline: A #GtkTimeline
  *
  * Returns the direction of the timeline.
  *
  * Return Value: direction
- **/
+ */
 GtkTimelineDirection
 _gtk_timeline_get_direction (GtkTimeline *timeline)
 {
