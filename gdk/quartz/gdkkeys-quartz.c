@@ -113,7 +113,7 @@ const static struct {
   guint keycode;
   guint keyval;
   unsigned int modmask; /* So we can tell when a mod key is pressed/released */
-} known_keys[] = {
+} modifier_keys[] = {
   {  54, GDK_Meta_R,    NSCommandKeyMask },
   {  55, GDK_Meta_L,    NSCommandKeyMask },
   {  56, GDK_Shift_L,   NSShiftKeyMask },
@@ -122,7 +122,13 @@ const static struct {
   {  59, GDK_Control_L, NSControlKeyMask },
   {  60, GDK_Shift_R,   NSShiftKeyMask },
   {  61, GDK_Alt_R,     NSAlternateKeyMask },
-  {  62, GDK_Control_R, NSControlKeyMask },
+  {  62, GDK_Control_R, NSControlKeyMask }
+};
+
+const static struct {
+  guint keycode;
+  guint keyval;
+} function_keys[] = {
   { 122, GDK_F1, 0 },
   { 120, GDK_F2, 0 },
   {  99, GDK_F3, 0 },
@@ -381,7 +387,6 @@ maybe_update_keymap (void)
 		                        0,
 		                        &state, 4, &nChars, chars);
 
-
                   /* FIXME: Theoretically, we can get multiple UTF-16 values;
 		   * we should convert them to proper unicode and figure
 		   * out whether there are really keyboard layouts that
@@ -447,13 +452,21 @@ maybe_update_keymap (void)
 	}
 #endif
 
-      for (i = 0; i < G_N_ELEMENTS (known_keys); i++)
+      for (i = 0; i < G_N_ELEMENTS (modifier_keys); i++)
 	{
-	  p = keyval_array + known_keys[i].keycode * KEYVALS_PER_KEYCODE;
+	  p = keyval_array + modifier_keys[i].keycode * KEYVALS_PER_KEYCODE;
 
 	  if (p[0] == 0 && p[1] == 0 && 
 	      p[2] == 0 && p[3] == 0)
-	    p[0] = known_keys[i].keyval;
+	    p[0] = modifier_keys[i].keyval;
+	}
+
+      for (i = 0; i < G_N_ELEMENTS (function_keys); i++)
+	{
+	  p = keyval_array + function_keys[i].keycode * KEYVALS_PER_KEYCODE;
+
+          p[0] = function_keys[i].keyval;
+          p[1] = p[2] = p[3] = 0;
 	}
 
       for (i = 0; i < G_N_ELEMENTS (known_numeric_keys); i++)
@@ -759,11 +772,11 @@ _gdk_quartz_keys_event_type (NSEvent *event)
   keycode = [event keyCode];
   flags = [event modifierFlags];
   
-  for (i = 0; i < G_N_ELEMENTS (known_keys); i++)
+  for (i = 0; i < G_N_ELEMENTS (modifier_keys); i++)
     {
-      if (known_keys[i].keycode == keycode)
+      if (modifier_keys[i].keycode == keycode)
 	{
-	  if (flags & known_keys[i].modmask)
+	  if (flags & modifier_keys[i].modmask)
 	    return GDK_KEY_PRESS;
 	  else
 	    return GDK_KEY_RELEASE;
@@ -780,12 +793,12 @@ _gdk_quartz_keys_is_modifier (guint keycode)
 {
   gint i;
   
-  for (i = 0; i < G_N_ELEMENTS (known_keys); i++)
+  for (i = 0; i < G_N_ELEMENTS (modifier_keys); i++)
     {
-      if (known_keys[i].modmask == 0)
+      if (modifier_keys[i].modmask == 0)
 	break;
 
-      if (known_keys[i].keycode == keycode)
+      if (modifier_keys[i].keycode == keycode)
 	return TRUE;
     }
 
