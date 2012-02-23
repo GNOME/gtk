@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-02-17 16:04+0000\n"
-"PO-Revision-Date: 2012-02-17 18:02+0100\n"
+"POT-Creation-Date: 2012-02-20 14:18+0000\n"
+"PO-Revision-Date: 2012-02-23 12:39+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -439,7 +439,7 @@ msgstr "Documentadores"
 
 #: ../gtk/gtkaboutdialog.c:455
 msgid "List of people documenting the program"
-msgstr "Lista de gente documentando el programa"
+msgstr "Lista de personas documentando el programa"
 
 #: ../gtk/gtkaboutdialog.c:471
 msgid "Artists"
@@ -2492,7 +2492,7 @@ msgstr "Color actual como GdkRGBA"
 msgid "Whether alpha should be shown"
 msgstr "Indica si se debe mostrar el alfa"
 
-#: ../gtk/gtkcolorchooserdialog.c:234 ../gtk/gtkcolorchooserwidget.c:666
+#: ../gtk/gtkcolorchooserdialog.c:234 ../gtk/gtkcolorchooserwidget.c:667
 msgid "Show editor"
 msgstr "Mostrar editor"
 
@@ -2500,20 +2500,19 @@ msgstr "Mostrar editor"
 msgid "Scale type"
 msgstr "Tipo de escala"
 
-#: ../gtk/gtkcolorswatch.c:601
+#: ../gtk/gtkcolorswatch.c:709
 msgid "RGBA Color"
 msgstr "Color RGBA"
 
-#: ../gtk/gtkcolorswatch.c:601
+#: ../gtk/gtkcolorswatch.c:709
 msgid "Color as RGBA"
 msgstr "Color como RGBA"
 
-#: ../gtk/gtkcolorswatch.c:604 ../gtk/gtklabel.c:797
+#: ../gtk/gtkcolorswatch.c:712 ../gtk/gtklabel.c:797
 msgid "Selectable"
 msgstr "Seleccionable"
 
-#: ../gtk/gtkcolorswatch.c:604
-#| msgid "Whether the tab is detachable"
+#: ../gtk/gtkcolorswatch.c:712
 msgid "Whether the swatch is selectable"
 msgstr "Indica si la muestra es seleccionable"
 
