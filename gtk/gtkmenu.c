@@ -1407,6 +1407,7 @@ popup_grab_on_window (GdkWindow *window,
   if (pointer &&
       gdk_device_grab (pointer, window,
                        GDK_OWNERSHIP_WINDOW, TRUE,
+                       GDK_SMOOTH_SCROLL_MASK |
                        GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
                        GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
                        GDK_POINTER_MOTION_MASK,
@@ -3844,6 +3845,9 @@ gtk_menu_scroll (GtkWidget      *widget,
     case GDK_SCROLL_LEFT:
     case GDK_SCROLL_UP:
       gtk_menu_scroll_by (menu, - MENU_SCROLL_STEP2);
+      break;
+    case GDK_SCROLL_SMOOTH:
+      gtk_menu_scroll_by (menu, event->delta_y);
       break;
     }
 
