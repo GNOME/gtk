@@ -129,22 +129,22 @@ const static struct {
   guint keycode;
   guint keyval;
 } function_keys[] = {
-  { 122, GDK_F1, 0 },
-  { 120, GDK_F2, 0 },
-  {  99, GDK_F3, 0 },
-  { 118, GDK_F4, 0 },
-  {  96, GDK_F5, 0 },
-  {  97, GDK_F6, 0 },
-  {  98, GDK_F7, 0 },
-  { 100, GDK_F8, 0 },
-  { 101, GDK_F9, 0 },
-  { 109, GDK_F10, 0 },
-  { 103, GDK_F11, 0 },
-  { 111, GDK_F12, 0 },
-  { 105, GDK_F13, 0 },
-  { 107, GDK_F14, 0 },
-  { 113, GDK_F15, 0 },
-  { 106, GDK_F16, 0 }
+  { 122, GDK_F1 },
+  { 120, GDK_F2 },
+  {  99, GDK_F3 },
+  { 118, GDK_F4 },
+  {  96, GDK_F5 },
+  {  97, GDK_F6 },
+  {  98, GDK_F7 },
+  { 100, GDK_F8 },
+  { 101, GDK_F9 },
+  { 109, GDK_F10 },
+  { 103, GDK_F11 },
+  { 111, GDK_F12 },
+  { 105, GDK_F13 },
+  { 107, GDK_F14 },
+  { 113, GDK_F15 },
+  { 106, GDK_F16 }
 };
 
 const static struct {
