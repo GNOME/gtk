@@ -27,11 +27,6 @@ GtkWindow, .button, .slider {
   background-color: @bg_color;
 }
 
-*:selected {
-  background-color: @selected_bg_color;
-  color: @selected_fg_color;
-}
-
 .expander, GtkTreeView.view.expander {
   color: #fff;
 }
@@ -49,6 +44,16 @@ GtkTreeView.view.expander:selected:hover {
   border-color: shade (@bg_color, 0.7);
   background-color: shade (@bg_color, 0.9);
   color: shade (@bg_color, 0.7);
+}
+
+.entry:selected {
+  background-color: shade (@bg_color, 0.9);
+  color: @fg_color;
+}
+
+.entry:selected:focused {
+  background-color: @selected_bg_color;
+  color: @selected_fg_color;
 }
 
 .view {
