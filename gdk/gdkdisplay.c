@@ -719,19 +719,19 @@ _gdk_display_break_touch_grabs (GdkDisplay *display,
 }
 
 void
-_gdk_display_add_touch_grab (GdkDisplay    *display,
-                             GdkDevice     *device,
-                             guint          touch_id,
-                             GdkWindow     *window,
-                             GdkWindow     *native_window,
-                             GdkEventMask   event_mask,
-                             unsigned long  serial,
-                             guint32        time)
+_gdk_display_add_touch_grab (GdkDisplay       *display,
+                             GdkDevice        *device,
+                             GdkTouchSequence *sequence,
+                             GdkWindow        *window,
+                             GdkWindow        *native_window,
+                             GdkEventMask      event_mask,
+                             unsigned long     serial,
+                             guint32           time)
 {
   GdkTouchGrabInfo info;
 
   info.device = device;
-  info.touch_id = touch_id;
+  info.sequence = sequence;
   info.window = g_object_ref (window);
   info.native_window = g_object_ref (native_window);
   info.serial = serial;
@@ -742,9 +742,9 @@ _gdk_display_add_touch_grab (GdkDisplay    *display,
 }
 
 gboolean
-_gdk_display_end_touch_grab (GdkDisplay *display,
-                             GdkDevice  *device,
-                             guint       touch_id)
+_gdk_display_end_touch_grab (GdkDisplay       *display,
+                             GdkDevice        *device,
+                             GdkTouchSequence *sequence)
 {
   guint i;
 
@@ -756,7 +756,7 @@ _gdk_display_end_touch_grab (GdkDisplay *display,
                              GdkTouchGrabInfo, i);
 
       if (info->device == device &&
-          info->touch_id == touch_id)
+          info->sequence == sequence)
         {
           g_array_remove_index_fast (display->touch_implicit_grabs, i);
           return TRUE;
@@ -1114,10 +1114,10 @@ _gdk_display_has_device_grab (GdkDisplay *display,
 }
 
 GdkTouchGrabInfo *
-_gdk_display_has_touch_grab (GdkDisplay *display,
-                             GdkDevice  *device,
-                             guint       touch_id,
-                             gulong      serial)
+_gdk_display_has_touch_grab (GdkDisplay       *display,
+                             GdkDevice        *device,
+                             GdkTouchSequence *sequence,
+                             gulong            serial)
 {
   guint i;
 
@@ -1129,7 +1129,7 @@ _gdk_display_has_touch_grab (GdkDisplay *display,
                              GdkTouchGrabInfo, i);
 
       if (info->device == device &&
-          info->touch_id == touch_id)
+          info->sequence == sequence)
         {
           if (serial >= info->serial)
             return info;

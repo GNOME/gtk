@@ -64,7 +64,7 @@ typedef struct
 typedef struct
 {
   GdkDevice *device;
-  guint touch_id;
+  GdkTouchSequence *sequence;
 
   GdkWindow *window;
   GdkWindow *native_window;
@@ -278,7 +278,7 @@ gboolean            _gdk_display_check_grab_ownership (GdkDisplay       *display
                                                        gulong            serial);
 void                _gdk_display_add_touch_grab       (GdkDisplay       *display,
                                                        GdkDevice        *device,
-                                                       guint             touch_id,
+                                                       GdkTouchSequence *sequence,
                                                        GdkWindow        *window,
                                                        GdkWindow        *native_window,
                                                        GdkEventMask      event_mask,
@@ -286,11 +286,11 @@ void                _gdk_display_add_touch_grab       (GdkDisplay       *display
                                                        guint32           time);
 GdkTouchGrabInfo *  _gdk_display_has_touch_grab       (GdkDisplay       *display,
                                                        GdkDevice        *device,
-                                                       guint             touch_id,
+                                                       GdkTouchSequence *sequence,
                                                        gulong            serial);
 gboolean            _gdk_display_end_touch_grab       (GdkDisplay       *display,
                                                        GdkDevice        *device,
-                                                       guint             touch_id);
+                                                       GdkTouchSequence *sequence);
 void                _gdk_display_enable_motion_hints  (GdkDisplay       *display,
                                                        GdkDevice        *device);
 GdkPointerWindowInfo * _gdk_display_get_pointer_info  (GdkDisplay       *display,
