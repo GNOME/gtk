@@ -1791,40 +1791,30 @@ gdk_event_get_screen (const GdkEvent *event)
 }
 
 /**
- * gdk_event_get_touch_id:
+ * gdk_event_get_touch_sequence:
  * @event: a #GdkEvent
- * @touch_id: return location of the touch ID of a touch event
  *
  * If @event if of type %GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE,
- * %GDK_TOUCH_END or %GDK_TOUCH_CANCEL, fills in @touch_id and
- * returns %TRUE, else it returns %FALSE.
+ * %GDK_TOUCH_END or %GDK_TOUCH_CANCEL, returns the #GdkTouchSequence
+ * to which the event belongs. Otherwise, return %NULL.
  *
- * Returns: %TRUE if the touch ID can be extracted from @event.
+ * Returns: the touch sequence that the event belongs to
  *
  * Since: 3.4
  */
-gboolean
-gdk_event_get_touch_id (const GdkEvent *event,
-                        guint          *touch_id)
+GdkTouchSequence *
+gdk_event_get_touch_sequence (const GdkEvent *event)
 {
   if (!event)
-    return FALSE;
+    return NULL;
 
   if (event->type == GDK_TOUCH_BEGIN ||
       event->type == GDK_TOUCH_UPDATE ||
       event->type == GDK_TOUCH_END ||
       event->type == GDK_TOUCH_CANCEL)
-    {
-      if (touch_id)
-        *touch_id = event->touch.touch_id;
-      return TRUE;
-    }
+    return event->touch.sequence;
   else
-    {
-      if (touch_id)
-        *touch_id = 0;
-      return FALSE;
-    }
+    return NULL;
 }
 
 /**

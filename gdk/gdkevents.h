@@ -145,6 +145,8 @@ typedef struct _GdkEventWindowState GdkEventWindowState;
 typedef struct _GdkEventSetting     GdkEventSetting;
 typedef struct _GdkEventGrabBroken  GdkEventGrabBroken;
 
+typedef struct _GdkTouchSequence    GdkTouchSequence;
+
 typedef union  _GdkEvent	    GdkEvent;
 
 /**
@@ -656,7 +658,7 @@ struct _GdkEventMotion
  *
  * If the event has a type of %GDK_TOUCH_PRESS or %GDK_TOUCH_RELEASE,
  * this event will pertain to a sequence identified by
- * gdk_event_get_touch_id(). With multitouch devices, there may be
+ * gdk_event_get_touch_sequence(). With multitouch devices, there may be
  * several ongoing sequences.
  */
 struct _GdkEventButton
@@ -689,7 +691,7 @@ struct _GdkEventButton
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
- * @touch_id: touch ID
+ * @sequence: the touch sequence that the event belongs to
  * @device: the device where the event originated.
  * @x_root: the x coordinate of the pointer relative to the root of the
  *   screen.
@@ -710,7 +712,7 @@ struct _GdkEventTouch
   gdouble y;
   gdouble *axes;
   guint state;
-  guint touch_id;
+  GdkTouchSequence *sequence;
   GdkDevice *device;
   gdouble x_root, y_root;
 };
@@ -1221,8 +1223,7 @@ void       gdk_event_set_screen         (GdkEvent        *event,
                                          GdkScreen       *screen);
 GdkScreen *gdk_event_get_screen         (const GdkEvent  *event);
 
-gboolean   gdk_event_get_touch_id       (const GdkEvent  *event,
-                                         guint           *touch_id);
+GdkTouchSequence *gdk_event_get_touch_sequence (const GdkEvent *event);
 cairo_region_t * gdk_event_get_touch_area (GdkEvent      *event);
 
 void	  gdk_set_show_events		(gboolean	 show_events);
