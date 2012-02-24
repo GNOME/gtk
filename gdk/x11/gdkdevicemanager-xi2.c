@@ -1339,9 +1339,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         if (xev->flags & (XIPointerEmulated | XITouchEmulatingPointer))
           _gdk_event_set_pointer_emulated (event, TRUE);
 
-        /* There doesn't seem to be motion hints in XI */
-        event->touch.is_hint = FALSE;
-
         event->touch.axes = translate_axes (event->touch.device,
                                             event->touch.x,
                                             event->touch.y,
