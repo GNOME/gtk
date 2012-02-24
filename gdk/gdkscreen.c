@@ -725,6 +725,7 @@ gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
   g_return_val_if_fail (monitor_num >= 0, -1);
+  g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), -1);
 
   return GDK_SCREEN_GET_CLASS (screen)->get_monitor_width_mm (screen, monitor_num);
 }
@@ -746,6 +747,7 @@ gdk_screen_get_monitor_height_mm (GdkScreen *screen,
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
   g_return_val_if_fail (monitor_num >= 0, -1);
+  g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), -1);
 
   return GDK_SCREEN_GET_CLASS (screen)->get_monitor_height_mm (screen, monitor_num);
 }
@@ -770,6 +772,7 @@ gdk_screen_get_monitor_plug_name (GdkScreen *screen,
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   g_return_val_if_fail (monitor_num >= 0, NULL);
+  g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), NULL);
 
   return GDK_SCREEN_GET_CLASS (screen)->get_monitor_plug_name (screen, monitor_num);
 }
@@ -799,6 +802,7 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
 {
   g_return_if_fail (GDK_IS_SCREEN (screen));
   g_return_if_fail (monitor_num >= 0);
+  g_return_if_fail (monitor_num < gdk_screen_get_n_monitors (screen));
 
   GDK_SCREEN_GET_CLASS(screen)->get_monitor_geometry (screen, monitor_num, dest);
 }
@@ -829,6 +833,7 @@ gdk_screen_get_monitor_workarea (GdkScreen    *screen,
 {
   g_return_if_fail (GDK_IS_SCREEN (screen));
   g_return_if_fail (monitor_num >= 0);
+  g_return_if_fail (monitor_num < gdk_screen_get_n_monitors (screen));
 
   GDK_SCREEN_GET_CLASS (screen)->get_monitor_workarea (screen, monitor_num, dest);
 }

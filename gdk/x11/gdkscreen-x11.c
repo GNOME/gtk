@@ -213,8 +213,6 @@ gdk_x11_screen_get_monitor_width_mm (GdkScreen *screen,
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
-  g_return_val_if_fail (monitor_num < x11_screen->n_monitors, -1);
-
   return x11_screen->monitors[monitor_num].width_mm;
 }
 
@@ -224,8 +222,6 @@ gdk_x11_screen_get_monitor_height_mm (GdkScreen *screen,
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
-  g_return_val_if_fail (monitor_num < x11_screen->n_monitors, -1);
-
   return x11_screen->monitors[monitor_num].height_mm;
 }
 
@@ -234,8 +230,6 @@ gdk_x11_screen_get_monitor_plug_name (GdkScreen *screen,
 				      gint       monitor_num)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-
-  g_return_val_if_fail (monitor_num < x11_screen->n_monitors, NULL);
 
   return g_strdup (x11_screen->monitors[monitor_num].output_name);
 }
@@ -272,8 +266,6 @@ gdk_x11_screen_get_monitor_geometry (GdkScreen    *screen,
 				     GdkRectangle *dest)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-
-  g_return_if_fail (monitor_num < x11_screen->n_monitors);
 
   if (dest)
     *dest = x11_screen->monitors[monitor_num].geometry;

@@ -150,8 +150,6 @@ static gint
 gdk_broadway_screen_get_monitor_width_mm (GdkScreen *screen,
 					  gint       monitor_num)
 {
-  g_return_val_if_fail (monitor_num == 0, -1);
-
   return gdk_screen_get_width_mm (screen);
 }
 
@@ -159,8 +157,6 @@ static gint
 gdk_broadway_screen_get_monitor_height_mm (GdkScreen *screen,
 					   gint       monitor_num)
 {
-  g_return_val_if_fail (monitor_num == 0, -1);
-
   return gdk_screen_get_height_mm (screen);
 }
 
@@ -168,8 +164,6 @@ static gchar *
 gdk_broadway_screen_get_monitor_plug_name (GdkScreen *screen,
 					   gint       monitor_num)
 {
-  g_return_val_if_fail (monitor_num == 0, NULL);
-
   return g_strdup ("browser");
 }
 
@@ -179,8 +173,6 @@ gdk_broadway_screen_get_monitor_geometry (GdkScreen    *screen,
 					  GdkRectangle *dest)
 {
   GdkBroadwayScreen *broadway_screen = GDK_BROADWAY_SCREEN (screen);
-
-  g_return_if_fail (monitor_num == 0);
 
   if (dest)
     {

@@ -220,8 +220,6 @@ gdk_wayland_screen_get_monitor_width_mm	(GdkScreen *screen,
 {
   GdkScreenWayland *screen_wayland = GDK_SCREEN_WAYLAND (screen);
 
-  g_return_val_if_fail (monitor_num < screen_wayland->n_monitors, -1);
-
   return screen_wayland->monitors[monitor_num].width_mm;
 }
 
@@ -230,8 +228,6 @@ gdk_wayland_screen_get_monitor_height_mm (GdkScreen *screen,
 					  gint       monitor_num)
 {
   GdkScreenWayland *screen_wayland = GDK_SCREEN_WAYLAND (screen);
-
-  g_return_val_if_fail (monitor_num < screen_wayland->n_monitors, -1);
 
   return screen_wayland->monitors[monitor_num].height_mm;
 }
@@ -242,8 +238,6 @@ gdk_wayland_screen_get_monitor_plug_name (GdkScreen *screen,
 {
   GdkScreenWayland *screen_wayland = GDK_SCREEN_WAYLAND (screen);
 
-  g_return_val_if_fail (monitor_num < screen_wayland->n_monitors, NULL);
-
   return g_strdup (screen_wayland->monitors[monitor_num].output_name);
 }
 
@@ -253,8 +247,6 @@ gdk_wayland_screen_get_monitor_geometry (GdkScreen    *screen,
 					 GdkRectangle *dest)
 {
   GdkScreenWayland *screen_wayland = GDK_SCREEN_WAYLAND (screen);
-
-  g_return_if_fail (monitor_num < screen_wayland->n_monitors);
 
   if (dest)
     *dest = screen_wayland->monitors[monitor_num].geometry;
