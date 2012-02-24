@@ -482,6 +482,7 @@ enum {
   QUERY_TOOLTIP,
   DRAG_FAILED,
   STYLE_UPDATED,
+  TOUCH_EVENT,
   LAST_SIGNAL
 };
 
@@ -1886,6 +1887,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
+  widget_signals[TOUCH_EVENT] =
+    g_signal_new (I_("touch-event"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkWidgetClass, touch_event),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__BOXED,
+                  G_TYPE_BOOLEAN, 1,
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   /**
    * GtkWidget::scroll-event:
    * @widget: the object which received the signal.
@@ -6068,6 +6078,12 @@ gtk_widget_event_internal (GtkWidget *widget,
 	case GDK_2BUTTON_PRESS:
 	case GDK_3BUTTON_PRESS:
 	  signal_num = BUTTON_PRESS_EVENT;
+          break;
+        case GDK_TOUCH_BEGIN:
+        case GDK_TOUCH_UPDATE:
+        case GDK_TOUCH_END:
+        case GDK_TOUCH_CANCEL:
+	  signal_num = TOUCH_EVENT;
 	  break;
 	case GDK_SCROLL:
 	  signal_num = SCROLL_EVENT;
