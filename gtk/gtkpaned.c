@@ -1902,6 +1902,7 @@ gtk_paned_captured_event (GtkWidget *widget,
   GdkWindow *pane_window;
   TouchInfo new = { 0 }, *info;
   guint touch_id, index;
+  gdouble event_x, event_y;
   gint x, y;
 
   device = gdk_event_get_device (event);
@@ -1914,6 +1915,8 @@ gtk_paned_captured_event (GtkWidget *widget,
   if (!gdk_event_get_touch_id (event, &touch_id))
     touch_id = 0;
 
+  gdk_event_get_coords (event, &event_x, &event_y);
+
   if (!source_device ||
       gdk_device_get_source (source_device) != GDK_SOURCE_TOUCH)
     return FALSE;
@@ -1921,14 +1924,14 @@ gtk_paned_captured_event (GtkWidget *widget,
   switch (event->type)
     {
     case GDK_BUTTON_PRESS:
-    case GDK_TOUCH_PRESS:
+    case GDK_TOUCH_BEGIN:
       if (priv->touches->len == 2)
         return FALSE;
 
       pane_window = _gtk_paned_find_pane_window (widget, event);
       gtk_widget_translate_coordinates (gtk_get_event_widget (event),
                                         widget,
-                                        event->button.x, event->button.y,
+                                        (gint)event_x, (gint)event_y,
                                         &x, &y);
 
       for (index = 0; index < priv->touches->len; index++)
@@ -1960,7 +1963,6 @@ gtk_paned_captured_event (GtkWidget *widget,
       else if (priv->touches->len == 2)
         {
           GtkWidget *event_widget;
-          gint x, y;
 
           /* It's the second touch, release (don't emit) the
            * held button/touch presses.
@@ -1976,20 +1978,17 @@ gtk_paned_captured_event (GtkWidget *widget,
 
           if (event_widget == widget)
             {
-              x = event->button.x;
-              y = event->button.y;
-
               if (pane_window == priv->child2_window)
                 {
                   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-                    x += priv->handle_pos.x + priv->handle_pos.width;
+                    event_x += priv->handle_pos.x + priv->handle_pos.width;
                   else
-                    y += priv->handle_pos.y + priv->handle_pos.height;
+                    event_y += priv->handle_pos.y + priv->handle_pos.height;
                 }
             }
           else
             gtk_widget_translate_coordinates (event_widget, widget,
-                                              event->button.x, event->button.y,
+                                              (gint)event_x, (gint)event_y,
                                               &x, &y);
 
           start_drag (paned, device, x, y,
@@ -2005,7 +2004,7 @@ gtk_paned_captured_event (GtkWidget *widget,
 
       break;
     case GDK_BUTTON_RELEASE:
-    case GDK_TOUCH_RELEASE:
+    case GDK_TOUCH_END:
       info = _gtk_paned_find_touch (GTK_PANED (widget), device, touch_id, &index);
 
       if (info)
@@ -2026,16 +2025,14 @@ gtk_paned_captured_event (GtkWidget *widget,
         }
       break;
     case GDK_MOTION_NOTIFY:
-    case GDK_TOUCH_MOTION:
+    case GDK_TOUCH_UPDATE:
       info = _gtk_paned_find_touch (GTK_PANED (widget), device, touch_id, &index);
 
       if (info)
         {
-          gint x, y;
-
           gtk_widget_translate_coordinates (gtk_get_event_widget (event),
                                             widget,
-                                            event->motion.x, event->motion.y,
+                                            event_x, event_y,
                                             &x, &y);
 
           /* If there is a single touch and this isn't a continuation
@@ -2055,7 +2052,7 @@ gtk_paned_captured_event (GtkWidget *widget,
                * so the event coordinates are already relative to
                * that window.
                */
-              update_drag (paned, event->motion.x, event->motion.y);
+              update_drag (paned, event_x, event_y);
             }
 
           return TRUE;
