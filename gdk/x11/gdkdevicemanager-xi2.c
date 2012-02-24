@@ -1110,10 +1110,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       break;
     case XI_ButtonPress:
     case XI_ButtonRelease:
-#ifdef XINPUT_2_2
-    case XI_TouchBegin:
-    case XI_TouchEnd:
-#endif /* XINPUT_2_2 */
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkDevice *source_device;
@@ -1151,14 +1147,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           }
         else
           {
-#ifdef XINPUT_2_2
-            if (ev->evtype == XI_TouchBegin)
-              event->button.type = GDK_TOUCH_PRESS;
-	    else if (ev->evtype == XI_TouchEnd)
-              event->button.type = GDK_TOUCH_RELEASE;
-            else
-#endif /* XINPUT_2_2 */
-              event->button.type = (ev->evtype == XI_ButtonPress) ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
+            event->button.type = (ev->evtype == XI_ButtonPress) ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
 
             event->button.window = window;
             event->button.time = xev->time;
@@ -1191,19 +1180,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
             event->button.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
-            if (ev->evtype == XI_TouchBegin)
-              event->button.state |= GDK_BUTTON1_MASK;
-
-#ifdef XINPUT_2_2
-            if (ev->evtype == XI_TouchBegin ||
-                ev->evtype == XI_TouchEnd)
-              {
-                event->button.button = 1;
-                event->button.touch_id = xev->detail;
-              }
-            else
-#endif /* XINPUT_2_2 */
-              event->button.button = xev->detail;
+            event->button.button = xev->detail;
           }
 
         if (xev->flags & (XIPointerEmulated | XITouchEmulatingPointer))
@@ -1223,29 +1200,14 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         break;
       }
+
     case XI_Motion:
-#ifdef XINPUT_2_2
-    case XI_TouchUpdate:
-#endif /* XINPUT_2_2 */
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkDevice *source_device;
 
-        if (ev->evtype == XI_Motion)
-          {
-            event->motion.touch_id = 0;
-            event->motion.type = GDK_MOTION_NOTIFY;
-          }
-#ifdef XINPUT_2_2
-        else
-          {
-            event->motion.touch_id = xev->detail;
-            event->motion.type = GDK_TOUCH_MOTION;
-          }
-#endif
-
+        event->motion.type = GDK_MOTION_NOTIFY;
         event->motion.window = window;
-
         event->motion.time = xev->time;
         event->motion.x = (gdouble) xev->event_x;
         event->motion.y = (gdouble) xev->event_y;
@@ -1260,9 +1222,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         gdk_event_set_source_device (event, source_device);
 
         event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
-
-	if (ev->evtype == XI_TouchUpdate)
-          event->motion.state |= GDK_BUTTON1_MASK;
 
         if (xev->flags & (XIPointerEmulated | XITouchEmulatingPointer))
           _gdk_event_set_pointer_emulated (event, TRUE);
@@ -1286,6 +1245,121 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           }
       }
       break;
+
+#ifdef XINPUT_2_2
+    case XI_TouchBegin:
+    case XI_TouchEnd:
+      {
+        XIDeviceEvent *xev = (XIDeviceEvent *) ev;
+        GdkDevice *source_device;
+
+        if (ev->evtype == XI_TouchBegin)
+          event->touch.type = GDK_TOUCH_BEGIN;
+        else if (ev->evtype == XI_TouchEnd)
+          event->touch.type = GDK_TOUCH_END;
+
+        event->touch.window = window;
+        event->touch.time = xev->time;
+        event->touch.x = (gdouble) xev->event_x;
+        event->touch.y = (gdouble) xev->event_y;
+        event->touch.x_root = (gdouble) xev->root_x;
+        event->touch.y_root = (gdouble) xev->root_y;
+
+        event->touch.device = g_hash_table_lookup (device_manager->id_table,
+                                                   GUINT_TO_POINTER (xev->deviceid));
+
+        source_device = g_hash_table_lookup (device_manager->id_table,
+                                             GUINT_TO_POINTER (xev->sourceid));
+        gdk_event_set_source_device (event, source_device);
+
+        event->touch.axes = translate_axes (event->touch.device,
+                                            event->touch.x,
+                                            event->touch.y,
+                                            event->touch.window,
+                                            &xev->valuators);
+
+        if (gdk_device_get_mode (event->touch.device) == GDK_MODE_WINDOW)
+          {
+            GdkDevice *device = event->touch.device;
+
+            /* Update event coordinates from axes */
+            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &event->touch.x);
+            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &event->touch.y);
+          }
+
+        event->touch.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+
+        if (ev->evtype == XI_TouchBegin)
+          event->touch.state |= GDK_BUTTON1_MASK;
+
+        event->touch.button = 1;
+        event->touch.touch_id = xev->detail;
+
+        if (xev->flags & (XIPointerEmulated | XITouchEmulatingPointer))
+          _gdk_event_set_pointer_emulated (event, TRUE);
+
+        if (return_val == FALSE)
+          break;
+
+        if (!set_screen_from_root (display, event, xev->root))
+          {
+            return_val = FALSE;
+            break;
+          }
+
+        if (ev->evtype == XI_TouchBegin)
+          set_user_time (event);
+      }
+      break;
+
+    case XI_TouchUpdate:
+      {
+        XIDeviceEvent *xev = (XIDeviceEvent *) ev;
+        GdkDevice *source_device;
+
+        event->touch.touch_id = xev->detail;
+        event->touch.type = GDK_TOUCH_UPDATE;
+        event->touch.time = xev->time;
+        event->touch.x = (gdouble) xev->event_x;
+        event->touch.y = (gdouble) xev->event_y;
+        event->touch.x_root = (gdouble) xev->root_x;
+        event->touch.y_root = (gdouble) xev->root_y;
+
+        event->touch.device = g_hash_table_lookup (device_manager->id_table,
+                                                   GINT_TO_POINTER (xev->deviceid));
+
+        source_device = g_hash_table_lookup (device_manager->id_table,
+                                             GUINT_TO_POINTER (xev->sourceid));
+        gdk_event_set_source_device (event, source_device);
+
+        event->touch.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+
+        event->touch.state |= GDK_BUTTON1_MASK;
+
+        if (xev->flags & (XIPointerEmulated | XITouchEmulatingPointer))
+          _gdk_event_set_pointer_emulated (event, TRUE);
+
+        /* There doesn't seem to be motion hints in XI */
+        event->touch.is_hint = FALSE;
+
+        event->touch.axes = translate_axes (event->touch.device,
+                                            event->touch.x,
+                                            event->touch.y,
+                                            event->touch.window,
+                                            &xev->valuators);
+
+        if (gdk_device_get_mode (event->touch.device) == GDK_MODE_WINDOW)
+          {
+            GdkDevice *device = event->touch.device;
+
+            /* Update event coordinates from axes */
+            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &event->touch.x);
+            gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &event->touch.y);
+          }
+      }
+      break;
+#endif
+
     case XI_Enter:
     case XI_Leave:
       {
