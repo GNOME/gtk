@@ -51,6 +51,8 @@ tests/reftests/entry-progress-coloring.ui
 tests/reftests/grid-empty-with-spacing.ui
 tests/reftests/grid-wfh.ref.ui
 tests/reftests/grid-wfh.ui
+tests/reftests/info-bar-message-types.ref.ui
+tests/reftests/info-bar-message-types.ui
 tests/reftests/inherit-and-initial.ref.ui
 tests/reftests/inherit-and-initial.ui
 tests/reftests/label-attribute-preference.ref.ui
