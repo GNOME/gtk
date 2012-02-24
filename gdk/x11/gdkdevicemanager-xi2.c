@@ -1292,7 +1292,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         if (ev->evtype == XI_TouchBegin)
           event->touch.state |= GDK_BUTTON1_MASK;
 
-        event->touch.button = 1;
         event->touch.touch_id = xev->detail;
 
         if (xev->flags & (XIPointerEmulated | XITouchEmulatingPointer))

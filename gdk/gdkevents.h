@@ -691,10 +691,6 @@ struct _GdkEventButton
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
- * @button: the button which was pressed or released, numbered from 1 to 5.
- *   Normally button 1 is the left mouse button, 2 is the middle button,
- *   and 3 is the right button. On 2-button mice, the middle button can
- *   often be simulated by pressing both mouse buttons together.
  * @device: the device where the event originated.
  * @x_root: the x coordinate of the pointer relative to the root of the
  *   screen.
@@ -716,10 +712,9 @@ struct _GdkEventTouch
   gdouble y;
   gdouble *axes;
   guint state;
-  guint button;
+  guint touch_id;
   GdkDevice *device;
   gdouble x_root, y_root;
-  guint touch_id;
 };
 
 /**
