@@ -130,6 +130,7 @@ typedef struct _GdkEventExpose	    GdkEventExpose;
 typedef struct _GdkEventVisibility  GdkEventVisibility;
 typedef struct _GdkEventMotion	    GdkEventMotion;
 typedef struct _GdkEventButton	    GdkEventButton;
+typedef struct _GdkEventTouch       GdkEventTouch;
 typedef struct _GdkEventScroll      GdkEventScroll;  
 typedef struct _GdkEventKey	    GdkEventKey;
 typedef struct _GdkEventFocus	    GdkEventFocus;
@@ -263,11 +264,13 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  *   was added in 2.8.
  * @GDK_DAMAGE: the content of the window has been changed. This event type
  *   was added in 2.14.
- * @GDK_TOUCH_MOTION: A touch device has been updated. This event type
+ * @GDK_TOUCH_UPDATE: A touch device has been updated. This event type
  *   was added in 3.4.
- * @GDK_TOUCH_PRESS: A new touch stream has just started. This event type
+ * @GDK_TOUCH_BEGIN: A new touch stream has just started. This event type
  *   was added in 3.4.
- * @GDK_TOUCH_RELEASE: A touch stream has finished. This event type
+ * @GDK_TOUCH_END: A touch stream has finished. This event type
+ *   was added in 3.4.
+ * @GDK_TOUCH_CANCEL: A touch stream has been canceled. This event type
  *   was added in 3.4.
  * @GDK_EVENT_LAST: marks the end of the GdkEventType enumeration. Added in 2.18
  *
@@ -316,9 +319,10 @@ typedef enum
   GDK_OWNER_CHANGE      = 34,
   GDK_GRAB_BROKEN       = 35,
   GDK_DAMAGE            = 36,
-  GDK_TOUCH_MOTION      = 37,
-  GDK_TOUCH_PRESS       = 38,
-  GDK_TOUCH_RELEASE     = 39,
+  GDK_TOUCH_BEGIN       = 37,
+  GDK_TOUCH_UPDATE      = 38,
+  GDK_TOUCH_END         = 39,
+  GDK_TOUCH_CANCEL      = 40,
   GDK_EVENT_LAST        /* helper variable for decls */
 } GdkEventType;
 
@@ -571,13 +575,8 @@ struct _GdkEventVisibility
  *   screen.
  * @y_root: the y coordinate of the pointer relative to the root of the
  *   screen.
- * @touch_id: touch ID, only meaningful if event is of type %GDK_TOUCH_MOTION.
  *
- * Generated when the pointer/touch moves.
- *
- * If the event has a type of %GDK_TOUCH_MOTION, this event will
- * pertain to a sequence identified by gdk_event_get_touch_id().
- * With multitouch devices, there may be several ongoing sequences.
+ * Generated when the pointer moves.
  */
 struct _GdkEventMotion
 {
@@ -592,14 +591,12 @@ struct _GdkEventMotion
   gint16 is_hint;
   GdkDevice *device;
   gdouble x_root, y_root;
-  guint touch_id;
 };
 
 /**
  * GdkEventButton:
  * @type: the type of the event (%GDK_BUTTON_PRESS, %GDK_2BUTTON_PRESS,
- *   %GDK_3BUTTON_PRESS, %GDK_BUTTON_RELEASE, %GDK_TOUCH_PRESS or
- *   %GDK_TOUCH_RELEASE).
+ *   %GDK_3BUTTON_PRESS, %GDK_BUTTON_RELEASE).
  * @window: the window which received the event.
  * @send_event: %TRUE if the event was sent explicitly (e.g. using
  *   <function>XSendEvent</function>).
@@ -665,6 +662,51 @@ struct _GdkEventMotion
  * several ongoing sequences.
  */
 struct _GdkEventButton
+{
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  guint32 time;
+  gdouble x;
+  gdouble y;
+  gdouble *axes;
+  guint state;
+  guint button;
+  GdkDevice *device;
+  gdouble x_root, y_root;
+};
+
+/**
+ * GdkEventTouch:
+ * @type: the type of the event (%GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE,
+ *   %GDK_TOUCH_END, %GDK_TOUCH_CANCEL).
+ * @window: the window which received the event.
+ * @send_event: %TRUE if the event was sent explicitly (e.g. using
+ *   <function>XSendEvent</function>).
+ * @time: the time of the event in milliseconds.
+ * @x: the x coordinate of the pointer relative to the window.
+ * @y: the y coordinate of the pointer relative to the window.
+ * @axes: @x, @y translated to the axes of @device, or %NULL if @device is
+ *   the mouse.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
+ * @button: the button which was pressed or released, numbered from 1 to 5.
+ *   Normally button 1 is the left mouse button, 2 is the middle button,
+ *   and 3 is the right button. On 2-button mice, the middle button can
+ *   often be simulated by pressing both mouse buttons together.
+ * @device: the device where the event originated.
+ * @x_root: the x coordinate of the pointer relative to the root of the
+ *   screen.
+ * @y_root: the y coordinate of the pointer relative to the root of the
+ *   screen.
+ * @touch_id: touch ID
+ *
+ * Used for touch event.
+ * @type field will be one of %GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE,
+ * %GDK_TOUCH_END or %GDK_TOUCH_CANCEL.
+ */
+struct _GdkEventTouch
 {
   GdkEventType type;
   GdkWindow *window;
@@ -1108,6 +1150,7 @@ union _GdkEvent
   GdkEventVisibility	    visibility;
   GdkEventMotion	    motion;
   GdkEventButton	    button;
+  GdkEventTouch             touch;
   GdkEventScroll            scroll;
   GdkEventKey		    key;
   GdkEventCrossing	    crossing;
