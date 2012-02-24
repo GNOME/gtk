@@ -4035,12 +4035,19 @@ gtk_label_draw (GtkWidget *widget,
 
   gtk_label_ensure_layout (label);
 
+  context = gtk_widget_get_style_context (widget);
+  gtk_widget_get_allocation (widget, &allocation);
+
+  gtk_render_background (context, cr,
+                         0, 0,
+                         allocation.width, allocation.height);
+  gtk_render_frame (context, cr,
+                    0, 0,
+                    allocation.width, allocation.height);
+
   if (priv->text && (*priv->text != '\0'))
     {
       get_layout_location (label, &x, &y);
-
-      context = gtk_widget_get_style_context (widget);
-      gtk_widget_get_allocation (widget, &allocation);
 
       cairo_translate (cr, -allocation.x, -allocation.y);
 
