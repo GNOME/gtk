@@ -252,25 +252,36 @@ translate_device_classes (GdkDisplay      *display,
   g_object_thaw_notify (G_OBJECT (device));
 }
 
-static gint
-count_device_touches (XIAnyClassInfo **classes,
-                      guint            n_classes)
+static gboolean
+is_touch_device (XIAnyClassInfo **classes,
+                 guint            n_classes,
+                 GdkInputSource  *device_type)
 {
 #ifdef XINPUT_2_2
   guint i;
 
   for (i = 0; i < n_classes; i++)
     {
-      XITouchClassInfo *valuator_info = (XITouchClassInfo *) classes[i];
+      XITouchClassInfo *class = (XITouchClassInfo *) classes[i];
 
-      if (valuator_info->type != XITouchClass)
+      if (class->type != XITouchClass)
         continue;
 
-      return valuator_info->num_touches;
+      if (class->num_touches > 0)
+        {
+          if (class->mode == XIDirectTouch)
+            *device_type = GDK_SOURCE_DIRECT_TOUCH;
+          else if (class->mode == XIDependentTouch)
+            *device_type = GDK_SOURCE_INDIRECT_TOUCH;
+          else
+            continue;
+
+          return TRUE;
+        }
     }
 #endif
 
-  return 0;
+  return FALSE;
 }
 
 static GdkDevice *
@@ -279,6 +290,7 @@ create_device (GdkDeviceManager *device_manager,
                XIDeviceInfo     *dev)
 {
   GdkInputSource input_source;
+  GdkInputSource touch_source;
   GdkDeviceType type;
   GdkDevice *device;
   GdkInputMode mode;
@@ -286,8 +298,8 @@ create_device (GdkDeviceManager *device_manager,
   if (dev->use == XIMasterKeyboard || dev->use == XISlaveKeyboard)
     input_source = GDK_SOURCE_KEYBOARD;
   else if (dev->use == XISlavePointer &&
-           count_device_touches (dev->classes, dev->num_classes) > 0)
-    input_source = GDK_SOURCE_TOUCH;
+           is_touch_device (dev->classes, dev->num_classes, &touch_source))
+    input_source = touch_source;
   else
     {
       gchar *tmp_name;
@@ -301,7 +313,7 @@ create_device (GdkDeviceManager *device_manager,
       else if (strstr (tmp_name, "finger") ||
                (strstr (tmp_name, "touch") &&
                 !strstr (tmp_name, "touchpad")))
-        input_source = GDK_SOURCE_TOUCH;
+        input_source = GDK_SOURCE_DIRECT_TOUCH;
       else if (strstr (tmp_name, "wacom") ||
                strstr (tmp_name, "pen"))
         input_source = GDK_SOURCE_PEN;
