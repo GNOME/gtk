@@ -932,27 +932,6 @@ typedef enum {
   GTK_BORDER_STYLE_RIDGE
 } GtkBorderStyle;
 
-/**
- * GtkKineticScrollingFlags:
- * @GTK_KINETIC_SCROLLING_NONE: No kinetic scrolling.
- * @GTK_KINETIC_SCROLLING_ENABLED: Kinetic scrolling is enabled.
- * @GTK_KINETIC_SCROLLING_CAPTURE_BUTTON_PRESS: The first button
- *   press is captured by the scrolled window, and then replayed
- *   if the button press is meant to go to the child widget. This
- *   flag should be enabled if the child widget(s) perform
- *   non-reversible actions on #GtkWidget::button-press-event.
- *   If the widget does not do so, and handles
- *   #GtkWidget::grab-broken-event, it might be better off without
- *   this flag.
- *
- * Describes the kinetic scrolling behavior of a #GtkScrolledWindow
- */
-typedef enum {
-  GTK_KINETIC_SCROLLING_NONE                 = 0,
-  GTK_KINETIC_SCROLLING_ENABLED              = 1 << 0,
-  GTK_KINETIC_SCROLLING_CAPTURE_BUTTON_PRESS = 1 << 1
-} GtkKineticScrollingFlags;
-
 G_END_DECLS
 
 

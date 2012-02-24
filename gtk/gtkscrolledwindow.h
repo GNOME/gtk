@@ -117,9 +117,13 @@ void           gtk_scrolled_window_set_min_content_width  (GtkScrolledWindow *sc
 gint           gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *scrolled_window);
 void           gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
                                                            gint               height);
-void                     gtk_scrolled_window_set_kinetic_scrolling  (GtkScrolledWindow        *scrolled_window,
-                                                                     GtkKineticScrollingFlags  flags);
-GtkKineticScrollingFlags gtk_scrolled_window_get_kinetic_scrolling  (GtkScrolledWindow        *scrolled_window);
+void           gtk_scrolled_window_set_kinetic_scrolling  (GtkScrolledWindow        *scrolled_window,
+                                                           gboolean                  kinetic_scrolling);
+gboolean       gtk_scrolled_window_get_kinetic_scrolling  (GtkScrolledWindow        *scrolled_window);
+
+void           gtk_scrolled_window_set_capture_button_press (GtkScrolledWindow      *scrolled_window,
+                                                             gboolean                capture_button_press);
+gboolean       gtk_scrolled_window_get_capture_button_press (GtkScrolledWindow      *scrolled_window);
 
 gint _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window);
 
