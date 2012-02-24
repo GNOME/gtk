@@ -427,6 +427,10 @@ struct _GtkWidgetClass
 
   gboolean     (* captured_event)         (GtkWidget *widget,
                                            GdkEvent  *event);
+
+  gboolean     (* touch_event)            (GtkWidget     *widget,
+                                           GdkEventTouch *event);
+
   /*< private >*/
 
   GtkWidgetClassPrivate *priv;
