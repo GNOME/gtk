@@ -617,8 +617,6 @@ struct _GdkEventMotion
  *   screen.
  * @y_root: the y coordinate of the pointer relative to the root of the
  *   screen.
- * @touch_id: touch ID, only meaningful if event is of type %GDK_TOUCH_PRESS
- *   or %GDK_TOUCH_RELEASE.
  *
  * Used for button press and button release events. The
  * @type field will be one of %GDK_BUTTON_PRESS,
@@ -691,12 +689,12 @@ struct _GdkEventButton
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
+ * @touch_id: touch ID
  * @device: the device where the event originated.
  * @x_root: the x coordinate of the pointer relative to the root of the
  *   screen.
  * @y_root: the y coordinate of the pointer relative to the root of the
  *   screen.
- * @touch_id: touch ID
  *
  * Used for touch event.
  * @type field will be one of %GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE,
