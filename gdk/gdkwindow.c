@@ -9557,7 +9557,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
   gboolean unlink_event;
   guint old_state, old_button;
   GdkDeviceGrabInfo *button_release_grab;
-  GdkPointerWindowInfo *pointer_info;
+  GdkPointerWindowInfo *pointer_info = NULL;
   GdkDevice *device, *source_device;
   gboolean is_toplevel;
 
