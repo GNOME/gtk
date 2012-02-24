@@ -2554,7 +2554,7 @@ gtk_range_button_press (GtkWidget      *widget,
       return TRUE;
     }
 
-  if (source != GDK_SOURCE_TOUCH &&
+  if (source != GDK_SOURCE_DIRECT_TOUCH &&
       priv->mouse_location == MOUSE_TROUGH &&
       event->button == GDK_BUTTON_PRIMARY)
     {
@@ -2562,16 +2562,16 @@ gtk_range_button_press (GtkWidget      *widget,
        */
       GtkScrollType scroll;
       gdouble click_value;
-      
+
       click_value = coord_to_value (range,
                                     priv->orientation == GTK_ORIENTATION_VERTICAL ?
                                     event->y : event->x);
 
       priv->trough_click_forward = click_value > gtk_adjustment_get_value (priv->adjustment);
       range_grab_add (range, device, MOUSE_TROUGH, event->button);
-      
+
       scroll = range_get_scroll_for_grab (range);
-      
+
       gtk_range_add_step_timer (range, scroll);
 
       return TRUE;
@@ -2606,7 +2606,7 @@ gtk_range_button_press (GtkWidget      *widget,
       return TRUE;
     }
   else if ((priv->mouse_location == MOUSE_TROUGH &&
-            (source == GDK_SOURCE_TOUCH || event->button == GDK_BUTTON_MIDDLE)) ||
+            (source == GDK_SOURCE_DIRECT_TOUCH || event->button == GDK_BUTTON_MIDDLE)) ||
            priv->mouse_location == MOUSE_SLIDER)
     {
       gboolean need_value_update = FALSE;
@@ -2616,7 +2616,7 @@ gtk_range_button_press (GtkWidget      *widget,
        * On button 2 press and touch devices, we warp the slider to
        * mouse position, then begin the slider drag.
        */
-      if (event->button == GDK_BUTTON_MIDDLE || source == GDK_SOURCE_TOUCH)
+      if (event->button == GDK_BUTTON_MIDDLE || source == GDK_SOURCE_DIRECT_TOUCH)
         {
           gdouble slider_low_value, slider_high_value, new_value;
           
