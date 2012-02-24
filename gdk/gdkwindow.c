@@ -9548,14 +9548,13 @@ gdk_window_print_tree (GdkWindow *window,
 
 void
 _gdk_windowing_got_event (GdkDisplay *display,
-			  GList      *event_link,
-			  GdkEvent   *event,
-			  gulong      serial)
+                          GList      *event_link,
+                          GdkEvent   *event,
+                          gulong      serial)
 {
   GdkWindow *event_window;
   gdouble x, y;
   gboolean unlink_event;
-  guint old_state, old_button;
   GdkDeviceGrabInfo *button_release_grab;
   GdkPointerWindowInfo *pointer_info = NULL;
   GdkDevice *device, *source_device;
@@ -9605,21 +9604,19 @@ _gdk_windowing_got_event (GdkDisplay *display,
       (event->key.keyval == 0xa7 ||
        event->key.keyval == 0xbd))
     {
-      gdk_window_print_tree (event_window, 0,
-			     event->key.keyval == 0xbd);
+      gdk_window_print_tree (event_window, 0, event->key.keyval == 0xbd);
     }
 #endif
 
   if (event->type == GDK_VISIBILITY_NOTIFY)
     {
       event_window->native_visibility = event->visibility.state;
-      gdk_window_update_visibility_recursively (event_window,
-						event_window);
+      gdk_window_update_visibility_recursively (event_window, event_window);
       return;
     }
 
   if (!(is_button_type (event->type) ||
-	is_motion_type (event->type)) ||
+        is_motion_type (event->type)) ||
       event_window->window_type == GDK_WINDOW_ROOT)
     return;
 
@@ -9650,15 +9647,16 @@ _gdk_windowing_got_event (GdkDisplay *display,
        */
 
       /* We ended up in this window after some (perhaps other clients)
-	 grab, so update the toplevel_under_window state */
+       * grab, so update the toplevel_under_window state
+       */
       if (is_toplevel &&
-	  event->type == GDK_ENTER_NOTIFY &&
-	  event->crossing.mode == GDK_CROSSING_UNGRAB)
-	{
-	  if (pointer_info->toplevel_under_pointer)
-	    g_object_unref (pointer_info->toplevel_under_pointer);
-	  pointer_info->toplevel_under_pointer = g_object_ref (event_window);
-	}
+          event->type == GDK_ENTER_NOTIFY &&
+          event->crossing.mode == GDK_CROSSING_UNGRAB)
+        {
+          if (pointer_info->toplevel_under_pointer)
+            g_object_unref (pointer_info->toplevel_under_pointer);
+          pointer_info->toplevel_under_pointer = g_object_ref (event_window);
+        }
 
       unlink_event = TRUE;
       goto out;
@@ -9668,24 +9666,26 @@ _gdk_windowing_got_event (GdkDisplay *display,
   if (is_toplevel)
     {
       if (event->type == GDK_ENTER_NOTIFY &&
-	  event->crossing.detail != GDK_NOTIFY_INFERIOR)
-	{
-	  if (pointer_info->toplevel_under_pointer)
-	    g_object_unref (pointer_info->toplevel_under_pointer);
-	  pointer_info->toplevel_under_pointer = g_object_ref (event_window);
-	}
+          event->crossing.detail != GDK_NOTIFY_INFERIOR)
+        {
+          if (pointer_info->toplevel_under_pointer)
+            g_object_unref (pointer_info->toplevel_under_pointer);
+          pointer_info->toplevel_under_pointer = g_object_ref (event_window);
+        }
       else if (event->type == GDK_LEAVE_NOTIFY &&
-	       event->crossing.detail != GDK_NOTIFY_INFERIOR &&
-	       pointer_info->toplevel_under_pointer == event_window)
-	{
-	  if (pointer_info->toplevel_under_pointer)
-	    g_object_unref (pointer_info->toplevel_under_pointer);
-	  pointer_info->toplevel_under_pointer = NULL;
-	}
+               event->crossing.detail != GDK_NOTIFY_INFERIOR &&
+               pointer_info->toplevel_under_pointer == event_window)
+        {
+          if (pointer_info->toplevel_under_pointer)
+            g_object_unref (pointer_info->toplevel_under_pointer);
+          pointer_info->toplevel_under_pointer = NULL;
+        }
     }
 
   if (pointer_info)
     {
+      guint old_state, old_button;
+
       /* Store last pointer window and position/state */
       old_state = pointer_info->state;
       old_button = pointer_info->button;
@@ -9695,39 +9695,34 @@ _gdk_windowing_got_event (GdkDisplay *display,
       pointer_info->toplevel_x = x;
       pointer_info->toplevel_y = y;
       gdk_event_get_state (event, &pointer_info->state);
+
+      if (event->type == GDK_BUTTON_PRESS ||
+          event->type == GDK_BUTTON_RELEASE)
+        pointer_info->button = event->button.button;
+
+      if (device &&
+          (pointer_info->state != old_state ||
+           pointer_info->button != old_button))
+        _gdk_display_enable_motion_hints (display, device);
     }
-
-  if (event->type == GDK_BUTTON_PRESS ||
-      event->type == GDK_BUTTON_RELEASE)
-    pointer_info->button = event->button.button;
-
-  if (device &&
-      (pointer_info->state != old_state ||
-       pointer_info->button != old_button))
-    _gdk_display_enable_motion_hints (display, device);
 
   unlink_event = FALSE;
   if (is_motion_type (event->type))
-    unlink_event = proxy_pointer_event (display,
-					event,
-					serial);
+    unlink_event = proxy_pointer_event (display, event, serial);
   else if (is_button_type (event->type))
-    unlink_event = proxy_button_event (event,
-				       serial);
+    unlink_event = proxy_button_event (event, serial);
 
-  if (event->type == GDK_BUTTON_RELEASE &&
-      !event->any.send_event)
+  if (event->type == GDK_BUTTON_RELEASE && !event->any.send_event)
     {
-      button_release_grab =
-	_gdk_display_has_device_grab (display, device, serial);
+      button_release_grab = _gdk_display_has_device_grab (display, device, serial);
       if (button_release_grab &&
-	  button_release_grab->implicit &&
-	  (event->button.state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (event->button.button - 1))) == 0)
-	{
-	  button_release_grab->serial_end = serial;
-	  button_release_grab->implicit_ungrab = FALSE;
-	  _gdk_display_device_grab_update (display, device, source_device, serial);
-	}
+          button_release_grab->implicit &&
+          (event->button.state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (event->button.button - 1))) == 0)
+        {
+          button_release_grab->serial_end = serial;
+          button_release_grab->implicit_ungrab = FALSE;
+          _gdk_display_device_grab_update (display, device, source_device, serial);
+        }
     }
 
  out:
