@@ -103,7 +103,7 @@ typedef struct
 {
   GdkWindow *pane_window;
   GdkDevice *device;
-  guint touch_id;
+  GdkTouchSequence *sequence;
   gdouble x;
   gdouble y;
   GdkEvent *button_press_event;
@@ -1836,10 +1836,10 @@ _gtk_paned_find_pane_window (GtkWidget *widget,
 }
 
 static TouchInfo *
-_gtk_paned_find_touch (GtkPaned  *paned,
-                       GdkDevice *device,
-                       guint      touch_id,
-                       guint     *index)
+_gtk_paned_find_touch (GtkPaned         *paned,
+                       GdkDevice        *device,
+                       GdkTouchSequence *sequence,
+                       guint            *index)
 {
   GtkPanedPrivate *priv = paned->priv;
   TouchInfo *info;
@@ -1850,7 +1850,7 @@ _gtk_paned_find_touch (GtkPaned  *paned,
       info = &g_array_index (priv->touches, TouchInfo, i);
 
       if (info->device == device &&
-          info->touch_id == touch_id)
+          info->sequence == sequence)
         {
           if (index)
             *index = i;
@@ -1901,7 +1901,8 @@ gtk_paned_captured_event (GtkWidget *widget,
   GdkDevice *device, *source_device;
   GdkWindow *pane_window;
   TouchInfo new = { 0 }, *info;
-  guint touch_id, index;
+  GdkTouchSequence *sequence;
+  guint index;
   gdouble event_x, event_y;
   gint x, y;
 
@@ -1912,8 +1913,7 @@ gtk_paned_captured_event (GtkWidget *widget,
    * depending on the target window event mask, so assume
    * touch ID = 0 for pointer events to ease handling.
    */
-  if (!gdk_event_get_touch_id (event, &touch_id))
-    touch_id = 0;
+  sequence = gdk_event_get_touch_sequence (event);
 
   gdk_event_get_coords (event, &event_x, &event_y);
 
@@ -1944,7 +1944,7 @@ gtk_paned_captured_event (GtkWidget *widget,
         }
 
       new.device = device;
-      new.touch_id = touch_id;
+      new.sequence = sequence;
       new.pane_window = pane_window;
       new.x = x;
       new.y = y;
@@ -2005,7 +2005,7 @@ gtk_paned_captured_event (GtkWidget *widget,
       break;
     case GDK_BUTTON_RELEASE:
     case GDK_TOUCH_END:
-      info = _gtk_paned_find_touch (GTK_PANED (widget), device, touch_id, &index);
+      info = _gtk_paned_find_touch (GTK_PANED (widget), device, sequence, &index);
 
       if (info)
         {
@@ -2026,7 +2026,7 @@ gtk_paned_captured_event (GtkWidget *widget,
       break;
     case GDK_MOTION_NOTIFY:
     case GDK_TOUCH_UPDATE:
-      info = _gtk_paned_find_touch (GTK_PANED (widget), device, touch_id, &index);
+      info = _gtk_paned_find_touch (GTK_PANED (widget), device, sequence, &index);
 
       if (info)
         {
