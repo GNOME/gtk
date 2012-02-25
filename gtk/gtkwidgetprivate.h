@@ -167,6 +167,10 @@ GtkStyle *        _gtk_widget_get_style                    (GtkWidget *widget);
 void              _gtk_widget_set_style                    (GtkWidget *widget,
                                                             GtkStyle  *style);
 
+typedef gboolean (*GtkCapturedEventHandler) (GtkWidget *widget, GdkEvent *event);
+
+void              _gtk_widget_set_captured_event_handler (GtkWidget               *widget,
+                                                          GtkCapturedEventHandler  handler);
 
 gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
                                                             GdkEvent  *event);

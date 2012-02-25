@@ -484,7 +484,6 @@ enum {
   QUERY_TOOLTIP,
   DRAG_FAILED,
   STYLE_UPDATED,
-  CAPTURED_EVENT,
   TOUCH_EVENT,
   LAST_SIGNAL
 };
@@ -1801,9 +1800,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * #GtkWidget::key-press-event) and finally a generic
    * #GtkWidget::event-after signal.
    *
-   * An event can be captured before ::event signal is emitted by connecting to
-   * ::captured-event event signal.
-   *
    * Returns: %TRUE to stop other handlers from being invoked for the event
    * and to cancel the emission of the second specific ::event signal.
    *   %FALSE to propagate the event further and to allow the emission of
@@ -1838,34 +1834,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__BOXED,
 		  G_TYPE_NONE, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-
-  /**
-   * GtkWidget::captured-event:
-   * @widget: the object which received the signal.
-   * @event: the #GdkEvent which triggered this signal
-   *
-   * The #GtkWidget::captured-event signal is emitted before the
-   * #GtkWidget::event signal to allow capturing an event before the
-   * specialized events are emitted. The event is propagated starting
-   * from the top-level container to the widget that received the event
-   * going down the hierarchy.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event
-   * and to cancel the emission of the ::event signal.
-   *   %FALSE to propagate the event further and to allow the emission of
-   *   the ::event signal.
-   *
-   * Since: 3.2
-   */
-  widget_signals[CAPTURED_EVENT] =
-    g_signal_new (I_("captured-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, captured_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
@@ -5913,11 +5881,19 @@ gtk_widget_event (GtkWidget *widget,
   return gtk_widget_event_internal (widget, event);
 }
 
+void
+_gtk_widget_set_captured_event_handler (GtkWidget               *widget,
+                                        GtkCapturedEventHandler  callback)
+{
+  g_object_set_data (G_OBJECT (widget), "captured-event-handler", callback);
+}
+
 gboolean
 _gtk_widget_captured_event (GtkWidget *widget,
                             GdkEvent  *event)
 {
   gboolean return_val = FALSE;
+  GtkCapturedEventHandler handler;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
@@ -5933,9 +5909,13 @@ _gtk_widget_captured_event (GtkWidget *widget,
   if (!event_window_is_still_viewable (event))
     return TRUE;
 
+  handler = g_object_get_data (G_OBJECT (widget), "captured-event-handler");
+  if (!handler)
+    return FALSE;
+
   g_object_ref (widget);
 
-  g_signal_emit (widget, widget_signals[CAPTURED_EVENT], 0, event, &return_val);
+  return_val = handler (widget, event);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
 
   /* The widget that was originally to receive the event

@@ -425,9 +425,6 @@ struct _GtkWidgetClass
 
   void         (* style_updated)          (GtkWidget *widget);
 
-  gboolean     (* captured_event)         (GtkWidget *widget,
-                                           GdkEvent  *event);
-
   gboolean     (* touch_event)            (GtkWidget     *widget,
                                            GdkEventTouch *event);
 

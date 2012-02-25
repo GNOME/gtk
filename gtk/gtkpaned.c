@@ -37,6 +37,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkdnd.h"
+#include "gtkwidgetprivate.h"
 #include "a11y/gtkpanedaccessible.h"
 
 /**
@@ -338,7 +339,6 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->grab_broken_event = gtk_paned_grab_broken;
   widget_class->grab_notify = gtk_paned_grab_notify;
   widget_class->state_flags_changed = gtk_paned_state_flags_changed;
-  widget_class->captured_event = gtk_paned_captured_event;
 
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
@@ -728,6 +728,8 @@ gtk_paned_init (GtkPaned *paned)
 
   priv->touches = g_array_sized_new (FALSE, FALSE,
                                      sizeof (TouchInfo), 2);
+
+  _gtk_widget_set_captured_event_handler (GTK_WIDGET (paned), gtk_paned_captured_event);
 }
 
 static void
@@ -1894,7 +1896,7 @@ gtk_paned_release_captured_event (GtkPaned  *paned,
 
 static gboolean
 gtk_paned_captured_event (GtkWidget *widget,
-			  GdkEvent  *event)
+                          GdkEvent  *event)
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;

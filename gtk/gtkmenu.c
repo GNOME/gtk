@@ -113,6 +113,7 @@
 #include "gtkdnd.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
 
 #include "deprecated/gtktearoffmenuitem.h"
 
@@ -512,7 +513,6 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->get_preferred_width = gtk_menu_get_preferred_width;
   widget_class->get_preferred_height = gtk_menu_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_menu_get_preferred_height_for_width;
-  widget_class->captured_event = gtk_menu_captured_event;
 
   container_class->remove = gtk_menu_remove;
   container_class->get_child_property = gtk_menu_get_child_property;
@@ -1064,6 +1064,8 @@ gtk_menu_init (GtkMenu *menu)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (menu));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENU);
+
+  _gtk_widget_set_captured_event_handler (GTK_WIDGET (menu), gtk_menu_captured_event);
 }
 
 static void
