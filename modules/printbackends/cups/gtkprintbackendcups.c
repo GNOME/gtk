@@ -2025,12 +2025,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       gboolean status_changed = FALSE;
       GList *node;
       gint i;
-      gchar *reason_msg_desc = NULL;
-      gchar *tmp_msg = NULL;
-      gchar *tmp_msg2 = NULL;
-      gboolean found = FALSE;
       PrinterSetupInfo *info = g_slice_new0 (PrinterSetupInfo);
-      
+
       /* Skip leading attributes until we hit a printer...
        */
       while (attr != NULL && ippGetGroupTag (attr) != IPP_TAG_PRINTER)
@@ -2126,23 +2122,30 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
       if (info->state_msg != NULL && strlen (info->state_msg) == 0)
         {
-          if (info->is_paused && !info->is_accepting_jobs)
-		  /* Translators: this is a printer status. */
+	  gchar *tmp_msg2 = NULL;
+	  if (info->is_paused && !info->is_accepting_jobs)
+	    /* Translators: this is a printer status. */
             tmp_msg2 = g_strdup ( N_("Paused ; Rejecting Jobs"));
           if (info->is_paused && info->is_accepting_jobs)
-		  /* Translators: this is a printer status. */
+	    /* Translators: this is a printer status. */
             tmp_msg2 = g_strdup ( N_("Paused"));
           if (!info->is_paused && !info->is_accepting_jobs)
-		  /* Translators: this is a printer status. */
+	    /* Translators: this is a printer status. */
             tmp_msg2 = g_strdup ( N_("Rejecting Jobs"));
 
           if (tmp_msg2 != NULL)
-            info->state_msg = tmp_msg2;
-        }
+	    {
+	      info->state_msg = tmp_msg2;
+	      g_free (tmp_msg2);
+	    }
+	}
 
       /* Set description of the reason and combine it with printer-state-message. */
       if ( (info->reason_msg != NULL))
         {
+	  gchar *reason_msg_desc = NULL;
+	  gboolean found = FALSE;
+
           for (i = 0; i < G_N_ELEMENTS (printer_messages); i++)
             {
               if (strncmp (info->reason_msg, printer_messages[i],
@@ -2164,23 +2167,21 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
                 info->state_msg = reason_msg_desc;
               else
                 {
-                  tmp_msg = g_strjoin (" ; ", info->state_msg, reason_msg_desc, NULL);
+		  gchar *tmp_msg = NULL;
+		  tmp_msg = g_strjoin (" ; ", info->state_msg,
+				       reason_msg_desc, NULL);
                   info->state_msg = tmp_msg;
+		  g_free (tmp_msg);
                 }
             }
+	  if (reason_msg_desc != NULL)
+	    g_free (reason_msg_desc);
         }
 
       status_changed |= gtk_printer_set_state_message (printer, info->state_msg);
       status_changed |= gtk_printer_set_is_accepting_jobs (printer, info->is_accepting_jobs);
 
-      if (tmp_msg != NULL)
-        g_free (tmp_msg);
 
-      if (tmp_msg2 != NULL)
-        g_free (tmp_msg2);
-
-      if (reason_msg_desc != NULL)
-        g_free (reason_msg_desc);
 
       /* Set printer icon according to importance
          (none, report, warning, error - report is omitted). */
