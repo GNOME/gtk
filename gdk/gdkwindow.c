@@ -9977,10 +9977,11 @@ _gdk_windowing_got_event (GdkDisplay *display,
       gdk_event_get_state (event, &pointer_info->state);
 
       if (event->type == GDK_BUTTON_PRESS ||
-          event->type == GDK_BUTTON_RELEASE ||
-          event->type == GDK_TOUCH_BEGIN ||
-          event->type == GDK_TOUCH_END)
+          event->type == GDK_BUTTON_RELEASE)
         pointer_info->button = event->button.button;
+      else if (event->type == GDK_TOUCH_BEGIN ||
+               event->type == GDK_TOUCH_END)
+        pointer_info->button = 1;
 
       if (device &&
           (pointer_info->state != old_state ||
