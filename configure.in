@@ -1473,6 +1473,12 @@ else
       AC_DEFINE(HAVE_CUPS_API_1_2, 1, 
                 [Define to 1 if CUPS 1.2 API is available])
     fi
+    if test $CUPS_API_MAJOR -gt 1 -o \
+	    $CUPS_API_MAJOR -eq 1 -a $CUPS_API_MINOR -ge 6; then
+      AC_DEFINE(HAVE_CUPS_API_1_6, 1,
+                [Define to 1 if CUPS 1.6 API is available])
+
+    fi
 
     AC_SUBST(CUPS_API_MAJOR)
     AC_SUBST(CUPS_API_MINOR)
