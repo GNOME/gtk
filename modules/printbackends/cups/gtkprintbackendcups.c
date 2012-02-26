@@ -1874,6 +1874,102 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
     }
 
 }
+
+static GtkPrinter*
+cups_create_printer (GtkPrintBackendCups *cups_backend,
+		     PrinterSetupInfo *info)
+{
+  GtkPrinterCups *cups_printer;
+  GtkPrinter *printer;
+  char uri[HTTP_MAX_URI];	/* Printer URI */
+  char method[HTTP_MAX_URI];	/* Method/scheme name */
+  char username[HTTP_MAX_URI];	/* Username:password */
+  char hostname[HTTP_MAX_URI];	/* Hostname */
+  char resource[HTTP_MAX_URI];	/* Resource name */
+  int  port;			/* Port number */
+  char *cups_server;            /* CUPS server */
+  GtkPrintBackend *backend = GTK_PRINT_BACKEND (cups_backend);
+
+  cups_printer = gtk_printer_cups_new (info->printer_name, backend);
+
+  cups_printer->device_uri = g_strdup_printf ("/printers/%s",
+					      info->printer_name);
+
+  /* Check to see if we are looking at a class */
+  if (info->member_uris)
+    {
+      cups_printer->printer_uri = g_strdup (info->member_uris);
+      /* TODO if member_uris is a class we need to recursivly find a printer */
+      GTK_NOTE (PRINTING,
+		g_print ("CUPS Backend: Found class with printer %s\n",
+			 info->member_uris));
+    }
+  else
+    {
+      cups_printer->printer_uri = g_strdup (info->printer_uri);
+      GTK_NOTE (PRINTING,
+		g_print ("CUPS Backend: Found printer %s\n", info->printer_uri));
+    }
+
+#ifdef HAVE_CUPS_API_1_2
+  httpSeparateURI (HTTP_URI_CODING_ALL, cups_printer->printer_uri, 
+		   method, sizeof (method), 
+		   username, sizeof (username),
+		   hostname, sizeof (hostname),
+		   &port, 
+		   resource, sizeof (resource));
+
+#else
+  httpSeparate (cups_printer->printer_uri, 
+		method, 
+		username, 
+		hostname,
+		&port, 
+		resource);
+#endif
+
+  if (strncmp (resource, "/printers/", 10) == 0)
+    {
+      cups_printer->ppd_name = g_strdup (resource + 10);
+      GTK_NOTE (PRINTING,
+		g_print ("CUPS Backend: Setting ppd name '%s' for printer/class '%s'\n", cups_printer->ppd_name, info->printer_name));
+    }
+
+  gethostname (uri, sizeof (uri));
+  cups_server = g_strdup (cupsServer());
+
+  if (strcasecmp (uri, hostname) == 0)
+    strcpy (hostname, "localhost");
+
+  /* if the cups server is local and listening at a unix domain socket 
+   * then use the socket connection
+   */
+  if ((strstr (hostname, "localhost") != NULL) &&
+      (cups_server[0] == '/'))
+    strcpy (hostname, cups_server);
+
+  g_free (cups_server);
+
+  cups_printer->default_cover_before = g_strdup (info->default_cover_before);
+  cups_printer->default_cover_after = g_strdup (info->default_cover_after);
+
+  cups_printer->hostname = g_strdup (hostname);
+  cups_printer->port = port;
+	  
+  cups_printer->auth_info_required = g_strdupv (info->auth_info_required);
+  g_strfreev (info->auth_info_required);
+
+  printer = GTK_PRINTER (cups_printer);
+	  
+  if (cups_backend->default_printer != NULL &&
+      strcmp (cups_backend->default_printer, gtk_printer_get_name (printer)) == 0)
+    gtk_printer_set_is_default (printer, TRUE);
+
+	  
+  gtk_print_backend_add_printer (backend, printer);
+  return printer;
+}
+
 static void
 cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
                               GtkCupsResult       *result,
@@ -1928,7 +2024,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       GtkPrinter *printer;
       gboolean status_changed = FALSE;
       GList *node;
-      gint i,j;
+      gint i;
       gchar *reason_msg_desc = NULL;
       gchar *tmp_msg = NULL;
       gchar *tmp_msg2 = NULL;
@@ -1990,91 +2086,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       printer = gtk_print_backend_find_printer (backend, info->printer_name);
       if (!printer)
         {
-	  GtkPrinterCups *cups_printer;
-	  char uri[HTTP_MAX_URI];	/* Printer URI */
-	  char method[HTTP_MAX_URI];	/* Method/scheme name */
-	  char username[HTTP_MAX_URI];	/* Username:password */
-	  char hostname[HTTP_MAX_URI];	/* Hostname */
-	  char resource[HTTP_MAX_URI];	/* Resource name */
-	  int  port;			/* Port number */
-	  char *cups_server;            /* CUPS server */
-	  
-          list_has_changed = TRUE;
-	  cups_printer = gtk_printer_cups_new (printer_name, backend);
-
-	  cups_printer->device_uri = g_strdup_printf ("/printers/%s", printer_name);
-
-          /* Check to see if we are looking at a class */
-	  if (member_uris)
-	    {
-	      cups_printer->printer_uri = g_strdup (member_uris);
-	      /* TODO if member_uris is a class we need to recursivly find a printer */
-	      GTK_NOTE (PRINTING,
-                        g_print ("CUPS Backend: Found class with printer %s\n", member_uris));
-	    }
-	  else
-	    {
-	      cups_printer->printer_uri = g_strdup (printer_uri);
-              GTK_NOTE (PRINTING,
-                        g_print ("CUPS Backend: Found printer %s\n", printer_uri));
-            }
-
-#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2) || CUPS_VERSION_MAJOR > 1
-	  httpSeparateURI (HTTP_URI_CODING_ALL, cups_printer->printer_uri, 
-			   method, sizeof (method), 
-			   username, sizeof (username),
-			   hostname, sizeof (hostname),
-			   &port, 
-			   resource, sizeof (resource));
-
-#else
-	  httpSeparate (cups_printer->printer_uri, 
-			method, 
-			username, 
-			hostname,
-			&port, 
-			resource);
-#endif
-
-          if (strncmp (resource, "/printers/", 10) == 0)
-	    {
-	      cups_printer->ppd_name = g_strdup (resource + 10);
-              GTK_NOTE (PRINTING,
-                        g_print ("CUPS Backend: Setting ppd name '%s' for printer/class '%s'\n", cups_printer->ppd_name, printer_name));
-            }
-
-	  gethostname (uri, sizeof (uri));
-	  cups_server = g_strdup (cupsServer());
-
-	  if (strcasecmp (uri, hostname) == 0)
-	    strcpy (hostname, "localhost");
-
-          /* if the cups server is local and listening at a unix domain socket 
-           * then use the socket connection
-           */
-	  if ((strstr (hostname, "localhost") != NULL) &&
-	      (cups_server[0] == '/'))
-	    strcpy (hostname, cups_server);
-
-	  g_free (cups_server);
-
-          cups_printer->default_cover_before = g_strdup (default_cover_before);
-          cups_printer->default_cover_after = g_strdup (default_cover_after);
-
-	  cups_printer->hostname = g_strdup (hostname);
-	  cups_printer->port = port;
-	  
-          cups_printer->auth_info_required = g_strdupv (auth_info_required);
-          g_strfreev (auth_info_required);
-
-	  printer = GTK_PRINTER (cups_printer);
-	  
-	  if (cups_backend->default_printer != NULL &&
-	      strcmp (cups_backend->default_printer, gtk_printer_get_name (printer)) == 0)
-	    gtk_printer_set_is_default (printer, TRUE);
-
-	  
-	  gtk_print_backend_add_printer (backend, printer);
+	  printer = cups_create_printer (cups_backend, info);
+ 	  list_has_changed = TRUE;
         }
       else
 	g_object_ref (printer);
