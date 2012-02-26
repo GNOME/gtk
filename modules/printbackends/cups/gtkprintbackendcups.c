@@ -1716,6 +1716,13 @@ static const char * printer_strings[] =
     N_("There is a problem on printer '%s'.")
   };
 
+typedef enum
+  {
+    GTK_PRINTER_STATE_LEVEL_NONE = 0,
+    GTK_PRINTER_STATE_LEVEL_INFO = 1,
+    GTK_PRINTER_STATE_LEVEL_WARNING = 2,
+    GTK_PRINTER_STATE_LEVEL_ERROR = 3
+  } PrinterStateLevel;
 static void
 cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
                               GtkCupsResult       *result,
