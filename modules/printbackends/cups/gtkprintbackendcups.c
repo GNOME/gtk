@@ -1679,6 +1679,42 @@ find_printer (GtkPrinter  *printer,
   printer_name = gtk_printer_get_name (printer);
   return g_ascii_strcasecmp (printer_name, find_name);
 }
+/* Printer messages we're interested in */
+static const char * const printer_messages[] =
+  {
+    "toner-low",
+    "toner-empty",
+    "developer-low",
+    "developer-empty",
+    "marker-supply-low",
+    "marker-supply-empty",
+    "cover-open",
+    "door-open",
+    "media-low",
+    "media-empty",
+    "offline",
+    "other"
+  };
+/* Our translatable versions of the printer messages */
+static const char * printer_strings[] =
+  {
+    N_("Printer '%s' is low on toner."),
+    N_("Printer '%s' has no toner left."),
+    /* Translators: "Developer" like on photo development context */
+    N_("Printer '%s' is low on developer."),
+    /* Translators: "Developer" like on photo development context */
+    N_("Printer '%s' is out of developer."),
+    /* Translators: "marker" is one color bin of the printer */
+    N_("Printer '%s' is low on at least one marker supply."),
+    /* Translators: "marker" is one color bin of the printer */
+    N_("Printer '%s' is out of at least one marker supply."),
+    N_("The cover is open on printer '%s'."),
+    N_("The door is open on printer '%s'."),
+    N_("Printer '%s' is low on paper."),
+    N_("Printer '%s' is out of paper."),
+    N_("Printer '%s' is currently offline."),
+    N_("There is a problem on printer '%s'.")
+  };
 
 static void
 cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
@@ -1750,40 +1786,6 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       gint printer_state_reason_level = 0; /* 0 - none, 1 - report, 2 - warning, 3 - error */
       gboolean interested_in = FALSE;
       gboolean found = FALSE;
-      static const char * const reasons[] =	/* Reasons we're interested in */
-        {
-          "toner-low",
-          "toner-empty",
-          "developer-low",
-          "developer-empty",
-          "marker-supply-low",
-          "marker-supply-empty",
-          "cover-open",
-          "door-open",
-          "media-low",
-          "media-empty",
-          "offline",
-          "other"
-        };
-      static const char * reasons_descs[] =
-        {
-          N_("Printer '%s' is low on toner."),
-          N_("Printer '%s' has no toner left."),
-          /* Translators: "Developer" like on photo development context */
-          N_("Printer '%s' is low on developer."),
-          /* Translators: "Developer" like on photo development context */
-          N_("Printer '%s' is out of developer."),
-          /* Translators: "marker" is one color bin of the printer */
-          N_("Printer '%s' is low on at least one marker supply."),
-          /* Translators: "marker" is one color bin of the printer */
-          N_("Printer '%s' is out of at least one marker supply."),
-          N_("The cover is open on printer '%s'."),
-          N_("The door is open on printer '%s'."),
-          N_("Printer '%s' is low on paper."),
-          N_("Printer '%s' is out of paper."),
-          N_("Printer '%s' is currently offline."),
-          N_("There is a problem on printer '%s'.")
-        };
       gboolean is_paused = FALSE;
       gboolean is_accepting_jobs = TRUE;
       gboolean default_printer = FALSE;
