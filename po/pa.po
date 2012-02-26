@@ -908,7 +908,7 @@ msgstr "ਲਾਲ %d%%, ਹਰਾ %d%%, ਨੀਲਾ %d%%, ਐਲਫ਼ਾ %d%%"
 #: ../gtk/gtkcolorchooserwidget.c:289
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
-msgstr "ਲਾਲ %d, ਹਰਾ d%%, ਨੀਲਾ %d%%"
+msgstr "ਲਾਲ %d%%, ਹਰਾ %d%%, ਨੀਲਾ %d%%"
 
 #: ../gtk/gtkcolorchooserwidget.c:340
 #, c-format
