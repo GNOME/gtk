@@ -1,18 +1,22 @@
+# Ihar Hrachyshka <ihar.hrachyshka@gmail.com>, 2011.
+# Kasia Bondarava <kasia.bondarava@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-14 21:55+0300\n"
-"PO-Revision-Date: 2012-02-14 21:55+0300\n"
-"Last-Translator: Ігар Грачышка <ihar.hrachyshka@gmail.com>\n"
+"Project-Id-Version: gtk+ master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-02-24 03:29+0000\n"
+"PO-Revision-Date: 2012-02-26 12:51+0300\n"
+"Last-Translator: Kasia Bondarava <kasia.bondarava@gmail.com>\n"
 "Language-Team: Belarusian <i18n-bel-gnome@googlegroups.com>\n"
-"Language: be\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Pootle 2.1.6\n"
+"Language: be\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Virtaal 0.7.0\n"
+"X-Project-Style: gnome\n"
 
 #: ../gdk/gdk.c:135
 #, c-format
@@ -451,11 +455,11 @@ msgstr[2] "Адкрыццё %d элементаў"
 #: ../gtk/a11y/gtkspinneraccessible.c:42
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr ""
+msgstr "Круцёлка"
 
 #: ../gtk/a11y/gtkspinneraccessible.c:43
 msgid "Provides visual indication of progress"
-msgstr ""
+msgstr "Выяўляе працэс выканання пэўнай працы"
 
 #: ../gtk/a11y/gtkswitchaccessible.c:65
 msgctxt "light switch widget"
@@ -632,7 +636,7 @@ msgstr "Не ўдалося здзейсніць пошук праграм у с
 
 #: ../gtk/gtkappchooserdialog.c:190
 msgid "Find applications online"
-msgstr "Шукаць праграмы ў сеціве"
+msgstr "Знайсці праграмы ў сеціве"
 
 #: ../gtk/gtkappchooserdialog.c:249
 msgid "Could not run application"
@@ -675,7 +679,7 @@ msgid ""
 "online\" to install a new application"
 msgstr ""
 "Пстрыкніце \"Паказаць іншыя праграмы\", каб убачыць болей магчымасцяў, або "
-"\"Шукаць праграмы ў сеціве\", каб усталяваць новую праграму"
+"\"Знайсці праграмы ў сеціве\", каб усталяваць новую праграму"
 
 #: ../gtk/gtkappchooserdialog.c:494
 msgid "Forget association"
@@ -685,8 +689,8 @@ msgstr "Забудзь повязь з праграмай"
 msgid "Show other applications"
 msgstr "Паказаць іншыя праграмы"
 
-#: ../gtk/gtkappchooserdialog.c:576 ../gtk/gtkcolorseldialog.c:199
-#: ../gtk/gtkfontchooserdialog.c:176
+#: ../gtk/gtkappchooserdialog.c:576 ../gtk/gtkcolorchooserdialog.c:127
+#: ../gtk/deprecated/gtkcolorseldialog.c:203 ../gtk/gtkfontchooserdialog.c:176
 msgid "_Select"
 msgstr "_Выбраць"
 
@@ -706,14 +710,14 @@ msgstr "Адпаведныя праграмы"
 msgid "Other Applications"
 msgstr "Іншыя праграмы"
 
-#: ../gtk/gtkapplication.c:1594
+#: ../gtk/gtkapplication.c:1490
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
 "\n"
 "%s"
 msgstr ""
-"%s не можа скончыць працу ў гэты момант:\n"
+"%s не можа зараз скончыць працу:\n"
 "\n"
 "%s"
 
@@ -737,7 +741,7 @@ msgstr "_Скончыць"
 #: ../gtk/gtkbuilder-menus.c:222
 #, c-format
 msgid "Element <%s> not allowed inside <%s>"
-msgstr "Элемент <%s> забаронены ўнутры <%s>"
+msgstr "Элемент <%s> унутры <%s> забаронены"
 
 #: ../gtk/gtkbuilder-menus.c:227
 #, c-format
@@ -747,7 +751,7 @@ msgstr "Элемент <%s> забаронены на верхнім узроў�
 #: ../gtk/gtkbuilder-menus.c:316
 #, c-format
 msgid "text may not appear inside <%s>"
-msgstr "тэкст забаронены ўнутры <%s>"
+msgstr "тэкст не можа быць унутры <%s>"
 
 #: ../gtk/gtkbuilderparser.c:343
 #, c-format
@@ -879,11 +883,276 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkcolorbutton.c:485
+#: ../gtk/gtkcolorbutton.c:192 ../gtk/gtkcolorbutton.c:461
 msgid "Pick a Color"
 msgstr "Выбар колеру"
 
-#: ../gtk/gtkcolorsel.c:423
+#: ../gtk/gtkcolorchooserdialog.c:136
+msgid "Select a Color"
+msgstr "Абраць колер"
+
+#: ../gtk/gtkcolorchooserwidget.c:283
+#, c-format
+msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
+msgstr "Чырвоны %d%%, зялёны %d%%, сіні %d%%, асноўны %d%%"
+
+#: ../gtk/gtkcolorchooserwidget.c:289
+#, c-format
+msgid "Red %d%%, Green %d%%, Blue %d%%"
+msgstr "Чырвоны %d%%, зялёны %d%%, сіні %d%%"
+
+#: ../gtk/gtkcolorchooserwidget.c:340
+#, c-format
+msgid "Color: %s"
+msgstr "Колер: %s"
+
+#: ../gtk/gtkcolorchooserwidget.c:411
+msgctxt "Color name"
+msgid "Light Scarlet Red"
+msgstr "Светлы пунсовы чырвоны"
+
+#: ../gtk/gtkcolorchooserwidget.c:412
+msgctxt "Color name"
+msgid "Scarlet Red"
+msgstr "Пунсовы чырвоны"
+
+#: ../gtk/gtkcolorchooserwidget.c:413
+msgctxt "Color name"
+msgid "Dark Scarlet Red"
+msgstr "Цёмны пунсовы чырвоны"
+
+#: ../gtk/gtkcolorchooserwidget.c:414
+msgctxt "Color name"
+msgid "Light Orange"
+msgstr "Светлы аранжавы"
+
+#: ../gtk/gtkcolorchooserwidget.c:415
+msgctxt "Color name"
+msgid "Orange"
+msgstr "Аранжавы"
+
+#: ../gtk/gtkcolorchooserwidget.c:416
+msgctxt "Color name"
+msgid "Dark Orange"
+msgstr "Цёмны аранжавы"
+
+#: ../gtk/gtkcolorchooserwidget.c:417
+msgctxt "Color name"
+msgid "Light Butter"
+msgstr "Светлы крэмавы"
+
+#: ../gtk/gtkcolorchooserwidget.c:418
+msgctxt "Color name"
+msgid "Butter"
+msgstr "Крэмавы"
+
+#: ../gtk/gtkcolorchooserwidget.c:419
+msgctxt "Color name"
+msgid "Dark Butter"
+msgstr "Цёмны крэмавы"
+
+#: ../gtk/gtkcolorchooserwidget.c:420
+msgctxt "Color name"
+msgid "Light Chameleon"
+msgstr "Светлы хамелеон"
+
+#: ../gtk/gtkcolorchooserwidget.c:421
+msgctxt "Color name"
+msgid "Chameleon"
+msgstr "Хамелеон"
+
+#: ../gtk/gtkcolorchooserwidget.c:422
+msgctxt "Color name"
+msgid "Dark Chameleon"
+msgstr "Цёмны хамелеон"
+
+#: ../gtk/gtkcolorchooserwidget.c:423
+msgctxt "Color name"
+msgid "Light Sky Blue"
+msgstr "Светлы нябесна-сіні"
+
+#: ../gtk/gtkcolorchooserwidget.c:424
+msgctxt "Color name"
+msgid "Sky Blue"
+msgstr "Нябесна-сіні"
+
+#: ../gtk/gtkcolorchooserwidget.c:425
+msgctxt "Color name"
+msgid "Dark Sky Blue"
+msgstr "Цёмны нябесна-сіні"
+
+#: ../gtk/gtkcolorchooserwidget.c:426
+msgctxt "Color name"
+msgid "Light Plum"
+msgstr "Светлы слівовы"
+
+#: ../gtk/gtkcolorchooserwidget.c:427
+msgctxt "Color name"
+msgid "Plum"
+msgstr "Слівовы"
+
+#: ../gtk/gtkcolorchooserwidget.c:428
+msgctxt "Color name"
+msgid "Dark Plum"
+msgstr "Цёмны слівовы"
+
+#: ../gtk/gtkcolorchooserwidget.c:429
+msgctxt "Color name"
+msgid "Light Chocolate"
+msgstr "Светлы шакаладны"
+
+#: ../gtk/gtkcolorchooserwidget.c:430
+msgctxt "Color name"
+msgid "Chocolate"
+msgstr "Шакаладны"
+
+#: ../gtk/gtkcolorchooserwidget.c:431
+msgctxt "Color name"
+msgid "Dark Chocolate"
+msgstr "Цёмны шакаладны"
+
+#: ../gtk/gtkcolorchooserwidget.c:432
+msgctxt "Color name"
+msgid "Light Aluminum 1"
+msgstr "Светлы алюмініевы 1"
+
+#: ../gtk/gtkcolorchooserwidget.c:433
+msgctxt "Color name"
+msgid "Aluminum 1"
+msgstr "Алюмініевы 1"
+
+#: ../gtk/gtkcolorchooserwidget.c:434
+msgctxt "Color name"
+msgid "Dark Aluminum 1"
+msgstr "Цёмны алюмініевы 1"
+
+#: ../gtk/gtkcolorchooserwidget.c:435
+msgctxt "Color name"
+msgid "Light Aluminum 2"
+msgstr "Светлы алюмініевы 2"
+
+#: ../gtk/gtkcolorchooserwidget.c:436
+msgctxt "Color name"
+msgid "Aluminum 2"
+msgstr "Алюмініевы 2"
+
+#: ../gtk/gtkcolorchooserwidget.c:437
+msgctxt "Color name"
+msgid "Dark Aluminum 2"
+msgstr "Цёмны алюмініевы 2"
+
+#: ../gtk/gtkcolorchooserwidget.c:451
+msgctxt "Color name"
+msgid "Black"
+msgstr "Чорны"
+
+#: ../gtk/gtkcolorchooserwidget.c:452
+msgctxt "Color name"
+msgid "Very Dark Gray"
+msgstr "Вельмі цёмны шэры"
+
+#: ../gtk/gtkcolorchooserwidget.c:453
+msgctxt "Color name"
+msgid "Darker Gray"
+msgstr "Цямнейшы шэры"
+
+#: ../gtk/gtkcolorchooserwidget.c:454
+msgctxt "Color name"
+msgid "Dark Gray"
+msgstr "Цёмны шэры"
+
+#: ../gtk/gtkcolorchooserwidget.c:455
+msgctxt "Color name"
+msgid "Medium Gray"
+msgstr "Сярэдне шэры"
+
+#: ../gtk/gtkcolorchooserwidget.c:456
+msgctxt "Color name"
+msgid "Light Gray"
+msgstr "Светлы шэры"
+
+#: ../gtk/gtkcolorchooserwidget.c:457
+msgctxt "Color name"
+msgid "Lighter Gray"
+msgstr "Святлейшы шэры"
+
+#: ../gtk/gtkcolorchooserwidget.c:458
+msgctxt "Color name"
+msgid "Very Light Gray"
+msgstr "Вельмі светлы шэры"
+
+#: ../gtk/gtkcolorchooserwidget.c:459
+msgctxt "Color name"
+msgid "White"
+msgstr "Белы"
+
+#. translators: label for the custom section in the color chooser
+#: ../gtk/gtkcolorchooserwidget.c:508
+msgid "Custom"
+msgstr "Уласны"
+
+#: ../gtk/gtkcolorchooserwidget.c:516
+msgid "Create custom color"
+msgstr "Стварыць уласны колер"
+
+#: ../gtk/gtkcolorchooserwidget.c:535
+#, c-format
+msgid "Custom color %d: %s"
+msgstr "Уласны колер %d: %s"
+
+#: ../gtk/gtkcoloreditor.c:413
+msgid "Color Name"
+msgstr "Назва колеру"
+
+#: ../gtk/gtkcoloreditor.c:458
+msgctxt "Color channel"
+msgid "Saturation"
+msgstr "Насычанасць"
+
+#: ../gtk/gtkcoloreditor.c:464
+msgctxt "Color channel"
+msgid "Value"
+msgstr "Значэнне"
+
+#: ../gtk/gtkcoloreditor.c:472
+msgctxt "Color channel"
+msgid "S"
+msgstr "S"
+
+#: ../gtk/gtkcoloreditor.c:474
+msgctxt "Color channel"
+msgid "V"
+msgstr "V"
+
+#: ../gtk/gtkcoloreditor.c:482 ../gtk/gtkcolorscale.c:297
+msgctxt "Color channel"
+msgid "Hue"
+msgstr "Адценне"
+
+#: ../gtk/gtkcoloreditor.c:489
+msgctxt "Color channel"
+msgid "H"
+msgstr "H"
+
+#: ../gtk/gtkcoloreditor.c:497 ../gtk/gtkcolorscale.c:299
+msgctxt "Color channel"
+msgid "Alpha"
+msgstr "Асноўны"
+
+#: ../gtk/gtkcoloreditor.c:504
+msgctxt "Color channel"
+msgid "A"
+msgstr "A"
+
+#: ../gtk/gtkcolorplane.c:393
+msgid "Color Plane"
+msgstr "Каляровая паверхня"
+
+#: ../gtk/gtkcolorswatch.c:446
+msgid "_Customize"
+msgstr "_Падагнаць"
+
+#: ../gtk/deprecated/gtkcolorsel.c:426
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -891,7 +1160,7 @@ msgstr ""
 "У знадворным коле выберыце патрэбны колер. Пасля з дапамогай унутранага "
 "трохвугольніка вызначце цёмнасць колеру."
 
-#: ../gtk/gtkcolorsel.c:449
+#: ../gtk/deprecated/gtkcolorsel.c:452
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -899,67 +1168,67 @@ msgstr ""
 "Пстрыкніце ў піпетку, а пасля ў любое месца экрана, каб выбраць адпаведны "
 "колер."
 
-#: ../gtk/gtkcolorsel.c:459
+#: ../gtk/deprecated/gtkcolorsel.c:462
 msgid "_Hue:"
 msgstr "_Тон:"
 
-#: ../gtk/gtkcolorsel.c:460
+#: ../gtk/deprecated/gtkcolorsel.c:463
 msgid "Position on the color wheel."
 msgstr "Размяшчэнне на коле колераў."
 
-#: ../gtk/gtkcolorsel.c:462
+#: ../gtk/deprecated/gtkcolorsel.c:465
 msgid "S_aturation:"
 msgstr "_Насычанасць:"
 
-#: ../gtk/gtkcolorsel.c:463
+#: ../gtk/deprecated/gtkcolorsel.c:466
 msgid "Intensity of the color."
 msgstr "Насычанасць колеру."
 
-#: ../gtk/gtkcolorsel.c:464
+#: ../gtk/deprecated/gtkcolorsel.c:467
 msgid "_Value:"
 msgstr "_Значэнне:"
 
-#: ../gtk/gtkcolorsel.c:465
+#: ../gtk/deprecated/gtkcolorsel.c:468
 msgid "Brightness of the color."
 msgstr "Яркасць колеру."
 
-#: ../gtk/gtkcolorsel.c:466
+#: ../gtk/deprecated/gtkcolorsel.c:469
 msgid "_Red:"
 msgstr "_Чырвоны:"
 
-#: ../gtk/gtkcolorsel.c:467
+#: ../gtk/deprecated/gtkcolorsel.c:470
 msgid "Amount of red light in the color."
 msgstr "Чырвоны складнік колеру."
 
-#: ../gtk/gtkcolorsel.c:468
+#: ../gtk/deprecated/gtkcolorsel.c:471
 msgid "_Green:"
 msgstr "_Зялёны:"
 
-#: ../gtk/gtkcolorsel.c:469
+#: ../gtk/deprecated/gtkcolorsel.c:472
 msgid "Amount of green light in the color."
 msgstr "Зялёны складнік колеру."
 
-#: ../gtk/gtkcolorsel.c:470
+#: ../gtk/deprecated/gtkcolorsel.c:473
 msgid "_Blue:"
 msgstr "_Сіні:"
 
-#: ../gtk/gtkcolorsel.c:471
+#: ../gtk/deprecated/gtkcolorsel.c:474
 msgid "Amount of blue light in the color."
 msgstr "Сіні складнік колеру."
 
-#: ../gtk/gtkcolorsel.c:474
+#: ../gtk/deprecated/gtkcolorsel.c:477
 msgid "Op_acity:"
 msgstr "_Празрыстасць:"
 
-#: ../gtk/gtkcolorsel.c:482 ../gtk/gtkcolorsel.c:492
+#: ../gtk/deprecated/gtkcolorsel.c:485 ../gtk/deprecated/gtkcolorsel.c:495
 msgid "Transparency of the color."
 msgstr "Празрыстасць колеру."
 
-#: ../gtk/gtkcolorsel.c:499
+#: ../gtk/deprecated/gtkcolorsel.c:502
 msgid "Color _name:"
 msgstr "_Назва колеру:"
 
-#: ../gtk/gtkcolorsel.c:514
+#: ../gtk/deprecated/gtkcolorsel.c:517
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -967,22 +1236,25 @@ msgstr ""
 "У гэтую графу вы можаце ўвесці як шаснаццатковае значэнне HTML-колеру, так і "
 "простую яго назву (напр., \"orange\" для аранжавага)."
 
-#: ../gtk/gtkcolorsel.c:546
+#: ../gtk/deprecated/gtkcolorsel.c:549
 msgid "_Palette:"
 msgstr "П_алітра:"
 
-#: ../gtk/gtkcolorsel.c:576
+#: ../gtk/deprecated/gtkcolorsel.c:579
 msgid "Color Wheel"
 msgstr "Кола колераў"
 
-#: ../gtk/gtkcolorsel.c:1070
+#: ../gtk/deprecated/gtkcolorsel.c:1073
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
+"Абраны раней колер для параўнання з колерам, абраным цяпер. Можна "
+"перацягнуць гэты колер у палітру ці зрабіць яго бягучым, перацягнуўшы "
+"яго на суседні колер."
 
-#: ../gtk/gtkcolorsel.c:1076
+#: ../gtk/deprecated/gtkcolorsel.c:1079
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -990,21 +1262,21 @@ msgstr ""
 "Выбраны колер. Каб захаваць яго на будучыню, трэба перацягнуць яго на "
 "палітру."
 
-#: ../gtk/gtkcolorsel.c:1082
+#: ../gtk/deprecated/gtkcolorsel.c:1085
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr "Папярэдні выбраны колер, дзеля параўнання з новым колерам."
 
-#: ../gtk/gtkcolorsel.c:1086
+#: ../gtk/deprecated/gtkcolorsel.c:1089
 msgid "The color you've chosen."
 msgstr "Выбраны колер."
 
-#: ../gtk/gtkcolorsel.c:1489
+#: ../gtk/deprecated/gtkcolorsel.c:1492
 msgid "_Save color here"
 msgstr "_Захаваць колер"
 
-#: ../gtk/gtkcolorsel.c:1693
+#: ../gtk/deprecated/gtkcolorsel.c:1696
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1013,7 +1285,7 @@ msgstr ""
 "яго, перацягніце сюды ўзор або пстрыкніце правай кнопкай мышы і выберыце "
 "\"Захаваць колер\"."
 
-#: ../gtk/gtkcolorseldialog.c:217
+#: ../gtk/deprecated/gtkcolorseldialog.c:221
 msgid "Color Selection"
 msgstr "Выбар колеру"
 
@@ -1081,23 +1353,23 @@ msgstr "С_права:"
 msgid "Paper Margins"
 msgstr "Палі аркуша"
 
-#: ../gtk/gtkentry.c:8725 ../gtk/gtktextview.c:8287
+#: ../gtk/gtkentry.c:8773 ../gtk/gtktextview.c:8292
 msgid "Input _Methods"
 msgstr "_Спосабы ўводу"
 
-#: ../gtk/gtkentry.c:8739 ../gtk/gtktextview.c:8301
+#: ../gtk/gtkentry.c:8787 ../gtk/gtktextview.c:8306
 msgid "_Insert Unicode Control Character"
 msgstr "_Уставіць кіроўны знак Унікоду"
 
-#: ../gtk/gtkentry.c:10201
+#: ../gtk/gtkentry.c:10249
 msgid "Caps Lock and Num Lock are on"
 msgstr "Caps Lock і Num Lock уключаныя"
 
-#: ../gtk/gtkentry.c:10203
+#: ../gtk/gtkentry.c:10251
 msgid "Num Lock is on"
 msgstr "Num Lock уключаны"
 
-#: ../gtk/gtkentry.c:10205
+#: ../gtk/gtkentry.c:10253
 msgid "Caps Lock is on"
 msgstr "Caps Lock уключаны"
 
@@ -1672,7 +1944,7 @@ msgstr "Абалонка zsh"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Не ўдалося скончыць працэс (PID %d): %s"
 
-#: ../gtk/gtknotebook.c:5014 ../gtk/gtknotebook.c:7668
+#: ../gtk/gtknotebook.c:5036 ../gtk/gtknotebook.c:7690
 #, c-format
 msgid "Page %u"
 msgstr "Старонка %u"
@@ -2438,12 +2710,12 @@ msgstr "_Файл"
 #: ../gtk/gtkstock.c:352
 msgctxt "Stock label"
 msgid "_Find"
-msgstr "_Шукаць"
+msgstr "З_найсці"
 
 #: ../gtk/gtkstock.c:353
 msgctxt "Stock label"
 msgid "Find and _Replace"
-msgstr "Пошук і _замена"
+msgstr "Знайсці і за_мяніць"
 
 #: ../gtk/gtkstock.c:354
 msgctxt "Stock label"
@@ -2999,17 +3271,17 @@ msgstr "ZWJ: злу_чальнік нулявой даўжыні"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ: н_езлучальнік нулявой даўжыні"
 
-#: ../gtk/gtkuimanager.c:1775
+#: ../gtk/gtkuimanager.c:1779
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Напатканы нечаканы тэг \"%s\" у радку %d, знак %d"
 
-#: ../gtk/gtkuimanager.c:1865
+#: ../gtk/gtkuimanager.c:1869
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Напатканыя нечаканыя знакавыя даныя ў радку %d, знак %d"
 
-#: ../gtk/gtkuimanager.c:2732
+#: ../gtk/gtkuimanager.c:2736
 msgid "Empty"
 msgstr "Пуста"
 
