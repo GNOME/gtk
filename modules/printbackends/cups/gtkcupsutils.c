@@ -83,6 +83,14 @@ static GtkCupsRequestStateFunc get_states[] = {
   _get_read_data
 };
 
+#ifndef HAVE_CUPS_API_1_6
+#define ippSetOperation(ipp_request, ipp_op_id) ipp_request->request.op.operation_id = ipp_op_id
+#define ippSetRequestId(ipp_request, ipp_rq_id) ipp_request->request.op.request_id = ipp_rq_id
+#define ippSetState(ipp_request, ipp_state) ipp_request->state = ipp_state
+#define ippGetString(attr, index, foo) attr->values[index].string.text
+#define ippGetCount(attr) attr->num_values
+#endif
+
 static void
 gtk_cups_result_set_error (GtkCupsResult    *result,
                            GtkCupsErrorType  error_type,
@@ -165,8 +173,8 @@ gtk_cups_request_new_with_username (http_t             *connection,
   request->data_io = data_io;
 
   request->ipp_request = ippNew ();
-  request->ipp_request->request.op.operation_id = operation_id;
-  request->ipp_request->request.op.request_id = 1;
+  ippSetOperation (request->ipp_request, operation_id);
+  ippSetRequestId (request->ipp_request, 1);
 
   language = cupsLangDefault ();
 
@@ -352,8 +360,8 @@ gtk_cups_request_ipp_get_string (GtkCupsRequest *request,
                                   name,
                                   tag);
 
-  if (attribute != NULL && attribute->values != NULL)
-    return attribute->values[0].string.text;
+  if (attribute != NULL && ippGetCount (attribute) > 0)
+      return ippGetString (attribute, 0, NULL);
   else
     return NULL;
 }
@@ -731,7 +739,7 @@ _post_send (GtkCupsRequest *request)
     request->attempts = 0;
 
     request->state = GTK_CUPS_POST_WRITE_REQUEST;
-    request->ipp_request->state = IPP_IDLE;
+    ippSetState (request->ipp_request, IPP_IDLE);
 }
 
 static void 
@@ -1223,7 +1231,7 @@ _get_send (GtkCupsRequest *request)
   request->state = GTK_CUPS_GET_CHECK;
   request->poll_state = GTK_CUPS_HTTP_READ;
   
-  request->ipp_request->state = IPP_IDLE;
+  ippSetState (request->ipp_request, IPP_IDLE);
 }
 
 static void 
