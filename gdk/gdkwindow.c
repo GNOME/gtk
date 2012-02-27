@@ -9635,20 +9635,6 @@ proxy_button_event (GdkEvent *source_event,
         return TRUE;
     }
 
-  if ((evmask & GDK_TOUCH_MASK) == 0 &&
-      (type == GDK_TOUCH_BEGIN || type == GDK_TOUCH_END))
-    {
-      if (_gdk_event_get_pointer_emulated (source_event))
-        {
-          if (type == GDK_TOUCH_BEGIN)
-            type = GDK_BUTTON_PRESS;
-          else if (type == GDK_TOUCH_END)
-            type = GDK_BUTTON_RELEASE;
-        }
-      else
-        return TRUE;
-    }
-
   if (event_win == NULL || display->ignore_core_events)
     return TRUE;
 
