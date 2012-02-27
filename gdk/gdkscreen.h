@@ -29,6 +29,7 @@
 #define __GDK_SCREEN_H__
 
 #include <cairo.h>
+#include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdisplay.h>
 
@@ -62,6 +63,7 @@ gint         gdk_screen_get_primary_monitor   (GdkScreen    *screen);
 void         gdk_screen_get_monitor_geometry  (GdkScreen    *screen,
                                                gint          monitor_num,
                                                GdkRectangle *dest);
+GDK_AVAILABLE_IN_3_4
 void         gdk_screen_get_monitor_workarea  (GdkScreen    *screen,
                                                gint          monitor_num,
                                                GdkRectangle *dest);

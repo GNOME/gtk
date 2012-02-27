@@ -31,6 +31,7 @@
 #ifndef __GDK_WINDOW_H__
 #define __GDK_WINDOW_H__
 
+#include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkevents.h>
 
@@ -503,7 +504,7 @@ GdkVisual *   gdk_window_get_visual            (GdkWindow     *window);
 GdkScreen *   gdk_window_get_screen            (GdkWindow     *window);
 GdkDisplay *  gdk_window_get_display           (GdkWindow     *window);
 #ifndef GDK_MULTIDEVICE_SAFE
-GDK_DEPRECATED_FOR(gdk_device_get_window_at_position)
+GDK_DEPRECATED_IN_3_0_FOR(gdk_device_get_window_at_position)
 GdkWindow*    gdk_window_at_pointer            (gint          *win_x,
                                                 gint          *win_y);
 #endif /* GDK_MULTIDEVICE_SAFE */
@@ -657,7 +658,7 @@ void          gdk_window_set_startup_id    (GdkWindow     *window,
 					    const gchar   *startup_id);
 void          gdk_window_set_transient_for (GdkWindow     *window,
 					    GdkWindow     *parent);
-GDK_DEPRECATED_FOR(gdk_window_set_background_rgba)
+GDK_DEPRECATED_IN_3_4_FOR(gdk_window_set_background_rgba)
 void	      gdk_window_set_background	 (GdkWindow	  *window,
 					  const GdkColor  *color);
 void          gdk_window_set_background_rgba (GdkWindow *window,
@@ -712,7 +713,7 @@ void          gdk_window_get_frame_extents (GdkWindow     *window,
                                             GdkRectangle  *rect);
 
 #ifndef GDK_MULTIDEVICE_SAFE
-GDK_DEPRECATED_FOR(gdk_window_get_device_position)
+GDK_DEPRECATED_IN_3_0_FOR(gdk_window_get_device_position)
 GdkWindow *   gdk_window_get_pointer     (GdkWindow       *window,
                                           gint            *x,
                                           gint            *y,
@@ -793,6 +794,7 @@ void gdk_window_begin_resize_drag            (GdkWindow     *window,
                                               gint           root_x,
                                               gint           root_y,
                                               guint32        timestamp);
+GDK_AVAILABLE_IN_3_4
 void gdk_window_begin_resize_drag_for_device (GdkWindow     *window,
                                               GdkWindowEdge  edge,
                                               GdkDevice     *device,
@@ -805,6 +807,7 @@ void gdk_window_begin_move_drag              (GdkWindow     *window,
                                               gint           root_x,
                                               gint           root_y,
                                               guint32        timestamp);
+GDK_AVAILABLE_IN_3_4
 void gdk_window_begin_move_drag_for_device   (GdkWindow     *window,
                                               GdkDevice     *device,
                                               gint           button,

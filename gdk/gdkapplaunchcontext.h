@@ -28,6 +28,7 @@
 #define __GDK_APP_LAUNCH_CONTEXT_H__
 
 #include <gio/gio.h>
+#include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkscreen.h>
 
@@ -40,9 +41,9 @@ G_BEGIN_DECLS
 
 GType                gdk_app_launch_context_get_type      (void);
 
-GDK_DEPRECATED_FOR(gdk_display_get_app_launch_context)
+GDK_DEPRECATED_IN_3_0_FOR(gdk_display_get_app_launch_context)
 GdkAppLaunchContext *gdk_app_launch_context_new           (void);
-GDK_DEPRECATED_FOR(gdk_display_get_app_launch_context)
+GDK_DEPRECATED_IN_3_0_FOR(gdk_display_get_app_launch_context)
 void                 gdk_app_launch_context_set_display   (GdkAppLaunchContext *context,
                                                            GdkDisplay          *display);
 void                 gdk_app_launch_context_set_screen    (GdkAppLaunchContext *context,

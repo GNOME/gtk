@@ -24,6 +24,7 @@
 #ifndef __GDK_CAIRO_H__
 #define __GDK_CAIRO_H__
 
+#include <gdk/gdkversionmacros.h>
 #include <gdk/gdkcolor.h>
 #include <gdk/gdkrgba.h>
 #include <gdk/gdkpixbuf.h>
@@ -55,7 +56,7 @@ cairo_region_t *
            gdk_cairo_region_create_from_surface
                                         (cairo_surface_t      *surface);
 
-GDK_DEPRECATED_FOR(gdk_cairo_set_source_rgba)
+GDK_DEPRECATED_IN_3_4_FOR(gdk_cairo_set_source_rgba)
 void       gdk_cairo_set_source_color   (cairo_t              *cr,
                                          const GdkColor       *color);
 

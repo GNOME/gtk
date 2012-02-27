@@ -31,6 +31,7 @@
 #ifndef __GDK_CURSOR_H__
 #define __GDK_CURSOR_H__
 
+#include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -228,9 +229,9 @@ GdkCursor* gdk_cursor_new_from_pixbuf	 (GdkDisplay      *display,
 GdkCursor*  gdk_cursor_new_from_name	 (GdkDisplay      *display,
 					  const gchar     *name);
 GdkDisplay* gdk_cursor_get_display	 (GdkCursor	  *cursor);
-GDK_DEPRECATED_FOR(g_object_ref)
+GDK_DEPRECATED_IN_3_0_FOR(g_object_ref)
 GdkCursor * gdk_cursor_ref               (GdkCursor       *cursor);
-GDK_DEPRECATED_FOR(g_object_unref)
+GDK_DEPRECATED_IN_3_0_FOR(g_object_unref)
 void        gdk_cursor_unref             (GdkCursor       *cursor);
 GdkPixbuf*  gdk_cursor_get_image         (GdkCursor       *cursor);
 GdkCursorType gdk_cursor_get_cursor_type (GdkCursor       *cursor);

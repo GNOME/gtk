@@ -31,6 +31,7 @@
 #ifndef __GDK_EVENTS_H__
 #define __GDK_EVENTS_H__
 
+#include <gdk/gdkversionmacros.h>
 #include <gdk/gdkcolor.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdnd.h>
@@ -1109,14 +1110,19 @@ gboolean  gdk_event_get_coords		(const GdkEvent  *event,
 gboolean  gdk_event_get_root_coords	(const GdkEvent *event,
 					 gdouble	*x_root,
 					 gdouble	*y_root);
+GDK_AVAILABLE_IN_3_2
 gboolean  gdk_event_get_button          (const GdkEvent *event,
                                          guint          *button);
+GDK_AVAILABLE_IN_3_2
 gboolean  gdk_event_get_click_count     (const GdkEvent *event,
                                          guint          *click_count);
+GDK_AVAILABLE_IN_3_2
 gboolean  gdk_event_get_keyval          (const GdkEvent *event,
                                          guint          *keyval);
+GDK_AVAILABLE_IN_3_2
 gboolean  gdk_event_get_keycode         (const GdkEvent *event,
                                          guint16        *keycode);
+GDK_AVAILABLE_IN_3_2
 gboolean gdk_event_get_scroll_direction (const GdkEvent *event,
                                          GdkScrollDirection *direction);
 gboolean  gdk_event_get_axis            (const GdkEvent  *event,
@@ -1129,6 +1135,7 @@ void       gdk_event_set_source_device  (GdkEvent        *event,
                                          GdkDevice       *device);
 GdkDevice* gdk_event_get_source_device  (const GdkEvent  *event);
 void       gdk_event_request_motions    (const GdkEventMotion *event);
+GDK_AVAILABLE_IN_3_4
 gboolean   gdk_event_triggers_context_menu (const GdkEvent *event);
 
 gboolean  gdk_events_get_distance       (GdkEvent        *event1,

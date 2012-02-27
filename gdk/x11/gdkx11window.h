@@ -60,8 +60,10 @@ void     gdk_x11_window_set_user_time     (GdkWindow   *window,
 void     gdk_x11_window_set_utf8_property    (GdkWindow *window,
 					      const gchar *name,
 					      const gchar *value);
+GDK_AVAILABLE_IN_3_2
 void     gdk_x11_window_set_theme_variant (GdkWindow   *window,
                                            char        *variant);
+GDK_AVAILABLE_IN_3_4
 void     gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
                                                           gboolean   hide_titlebar_when_maximized);
 void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);

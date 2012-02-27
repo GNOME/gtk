@@ -31,6 +31,7 @@
 
 G_BEGIN_DECLS
 
+GDK_AVAILABLE_IN_3_2
 GdkDevice * gdk_x11_device_manager_lookup (GdkDeviceManager *device_manager,
                                            gint              device_id);
 
