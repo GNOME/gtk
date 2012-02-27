@@ -210,7 +210,7 @@ GdkPixbuf *           gtk_icon_info_load_symbolic_for_context (GtkIconInfo      
                                                                GtkStyleContext  *context,
                                                                gboolean         *was_symbolic,
                                                                GError          **error);
-GDK_DEPRECATED_FOR(gtk_icon_info_load_symbol_for_context)
+GDK_DEPRECATED_IN_3_0_FOR(gtk_icon_info_load_symbol_for_context)
 GdkPixbuf *           gtk_icon_info_load_symbolic_for_style  (GtkIconInfo   *icon_info,
                                                               GtkStyle      *style,
                                                               GtkStateType   state,

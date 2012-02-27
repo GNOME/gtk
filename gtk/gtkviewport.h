@@ -75,14 +75,14 @@ GType          gtk_viewport_get_type        (void) G_GNUC_CONST;
 GtkWidget*     gtk_viewport_new             (GtkAdjustment *hadjustment,
 					     GtkAdjustment *vadjustment);
 
-GDK_DEPRECATED_FOR(gtk_scrollable_get_hadjustment)
+GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_get_hadjustment)
 GtkAdjustment* gtk_viewport_get_hadjustment (GtkViewport   *viewport);
-GDK_DEPRECATED_FOR(gtk_scrollable_get_vadjustment)
+GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_get_vadjustment)
 GtkAdjustment* gtk_viewport_get_vadjustment (GtkViewport   *viewport);
-GDK_DEPRECATED_FOR(gtk_scrollable_set_hadjustment)
+GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_set_hadjustment)
 void           gtk_viewport_set_hadjustment (GtkViewport   *viewport,
                                              GtkAdjustment *adjustment);
-GDK_DEPRECATED_FOR(gtk_scrollable_set_vadjustment)
+GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_set_vadjustment)
 void           gtk_viewport_set_vadjustment (GtkViewport   *viewport,
                                              GtkAdjustment *adjustment);
 

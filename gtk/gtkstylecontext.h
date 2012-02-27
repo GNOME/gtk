@@ -742,7 +742,7 @@ gboolean      gtk_style_context_state_is_running (GtkStyleContext *context,
 void          gtk_style_context_set_path     (GtkStyleContext *context,
                                               GtkWidgetPath   *path);
 const GtkWidgetPath * gtk_style_context_get_path (GtkStyleContext *context);
-
+GDK_AVAILABLE_IN_3_4
 void          gtk_style_context_set_parent   (GtkStyleContext *context,
                                               GtkStyleContext *parent);
 GtkStyleContext *gtk_style_context_get_parent (GtkStyleContext *context);
@@ -934,11 +934,13 @@ void        gtk_render_activity    (GtkStyleContext     *context,
 GdkPixbuf * gtk_render_icon_pixbuf (GtkStyleContext     *context,
                                     const GtkIconSource *source,
                                     GtkIconSize          size);
+GDK_AVAILABLE_IN_3_2
 void        gtk_render_icon        (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     GdkPixbuf           *pixbuf,
                                     gdouble              x,
                                     gdouble              y);
+GDK_AVAILABLE_IN_3_4
 void        gtk_render_insertion_cursor
                                    (GtkStyleContext     *context,
                                     cairo_t             *cr,

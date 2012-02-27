@@ -152,10 +152,10 @@ void       gtk_device_grab_add     (GtkWidget          *widget,
 void       gtk_device_grab_remove  (GtkWidget          *widget,
                                     GdkDevice          *device);
 
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_4
 guint      gtk_key_snooper_install (GtkKeySnoopFunc snooper,
                                     gpointer        func_data);
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_4
 void       gtk_key_snooper_remove  (guint           snooper_handler_id);
 
 GdkEvent * gtk_get_current_event        (void);

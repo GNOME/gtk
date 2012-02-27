@@ -88,6 +88,7 @@ GtkTextBuffer *gtk_text_iter_get_buffer (const GtkTextIter *iter);
 
 GtkTextIter *gtk_text_iter_copy     (const GtkTextIter *iter);
 void         gtk_text_iter_free     (GtkTextIter       *iter);
+GDK_AVAILABLE_IN_3_2
 void         gtk_text_iter_assign   (GtkTextIter       *iter,
                                      const GtkTextIter *other);
 

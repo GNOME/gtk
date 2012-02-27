@@ -79,13 +79,17 @@ void       gtk_grid_attach_next_to         (GtkGrid         *grid,
                                             GtkPositionType  side,
                                             gint             width,
                                             gint             height);
+GDK_AVAILABLE_IN_3_2
 GtkWidget *gtk_grid_get_child_at           (GtkGrid         *grid,
                                             gint             left,
                                             gint             top);
+GDK_AVAILABLE_IN_3_2
 void       gtk_grid_insert_row             (GtkGrid         *grid,
                                             gint             position);
+GDK_AVAILABLE_IN_3_2
 void       gtk_grid_insert_column          (GtkGrid         *grid,
                                             gint             position);
+GDK_AVAILABLE_IN_3_2
 void       gtk_grid_insert_next_to         (GtkGrid         *grid,
                                             GtkWidget       *sibling,
                                             GtkPositionType  side);

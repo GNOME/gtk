@@ -62,8 +62,10 @@ struct _GtkColorChooserWidgetClass
   void (*_gtk_reserved8) (void);
 };
 
+GDK_AVAILABLE_IN_3_4
 GType       gtk_color_chooser_widget_get_type (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_3_4
 GtkWidget * gtk_color_chooser_widget_new      (void);
 
 G_END_DECLS

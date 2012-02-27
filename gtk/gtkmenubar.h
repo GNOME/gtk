@@ -71,6 +71,7 @@ struct _GtkMenuBarClass
 
 GType      gtk_menu_bar_get_type        (void) G_GNUC_CONST;
 GtkWidget* gtk_menu_bar_new             (void);
+GDK_AVAILABLE_IN_3_4
 GtkWidget* gtk_menu_bar_new_from_model  (GMenuModel *model);
 
 GtkPackDirection gtk_menu_bar_get_pack_direction (GtkMenuBar       *menubar);

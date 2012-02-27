@@ -76,27 +76,40 @@ struct _GtkFontChooserIface
   gpointer padding[12];
 };
 
+GDK_AVAILABLE_IN_3_2
 GType            gtk_font_chooser_get_type                 (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_3_2
 PangoFontFamily *gtk_font_chooser_get_font_family          (GtkFontChooser   *fontchooser);
+GDK_AVAILABLE_IN_3_2
 PangoFontFace   *gtk_font_chooser_get_font_face            (GtkFontChooser   *fontchooser);
+GDK_AVAILABLE_IN_3_2
 gint             gtk_font_chooser_get_font_size            (GtkFontChooser   *fontchooser);
 
+GDK_AVAILABLE_IN_3_2
 PangoFontDescription *
                  gtk_font_chooser_get_font_desc            (GtkFontChooser             *fontchooser);
+GDK_AVAILABLE_IN_3_2
 void             gtk_font_chooser_set_font_desc            (GtkFontChooser             *fontchooser,
                                                             const PangoFontDescription *font_desc);
 
+GDK_AVAILABLE_IN_3_2
 gchar*           gtk_font_chooser_get_font                 (GtkFontChooser   *fontchooser);
 
+GDK_AVAILABLE_IN_3_2
 void             gtk_font_chooser_set_font                 (GtkFontChooser   *fontchooser,
                                                             const gchar      *fontname);
+GDK_AVAILABLE_IN_3_2
 gchar*           gtk_font_chooser_get_preview_text         (GtkFontChooser   *fontchooser);
+GDK_AVAILABLE_IN_3_2
 void             gtk_font_chooser_set_preview_text         (GtkFontChooser   *fontchooser,
                                                             const gchar      *text);
+GDK_AVAILABLE_IN_3_2
 gboolean         gtk_font_chooser_get_show_preview_entry   (GtkFontChooser   *fontchooser);
+GDK_AVAILABLE_IN_3_2
 void             gtk_font_chooser_set_show_preview_entry   (GtkFontChooser   *fontchooser,
                                                             gboolean          show_preview_entry);
+GDK_AVAILABLE_IN_3_2
 void             gtk_font_chooser_set_filter_func          (GtkFontChooser   *fontchooser,
                                                             GtkFontFilterFunc filter,
                                                             gpointer          user_data,

@@ -58,8 +58,10 @@ struct _GtkColorChooserDialogClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_3_4
 GType       gtk_color_chooser_dialog_get_type (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_3_4
 GtkWidget * gtk_color_chooser_dialog_new      (const gchar *title,
                                                GtkWindow   *parent);
 

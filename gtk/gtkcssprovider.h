@@ -74,6 +74,7 @@ GType gtk_css_provider_get_type (void) G_GNUC_CONST;
 
 GtkCssProvider * gtk_css_provider_new (void);
 
+GDK_AVAILABLE_IN_3_2
 char *           gtk_css_provider_to_string      (GtkCssProvider  *provider);
 
 gboolean         gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,

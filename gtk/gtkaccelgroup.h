@@ -163,18 +163,21 @@ gboolean gtk_accelerator_valid		      (guint	        keyval,
 void	 gtk_accelerator_parse		      (const gchar     *accelerator,
 					       guint	       *accelerator_key,
 					       GdkModifierType *accelerator_mods);
+GDK_AVAILABLE_IN_3_4
 void gtk_accelerator_parse_with_keycode       (const gchar     *accelerator,
                                                guint           *accelerator_key,
                                                guint          **accelerator_codes,
                                                GdkModifierType *accelerator_mods);
 gchar*	 gtk_accelerator_name		      (guint	        accelerator_key,
 					       GdkModifierType  accelerator_mods);
+GDK_AVAILABLE_IN_3_4
 gchar*	 gtk_accelerator_name_with_keycode    (GdkDisplay      *display,
                                                guint            accelerator_key,
                                                guint            keycode,
                                                GdkModifierType  accelerator_mods);
 gchar*   gtk_accelerator_get_label            (guint           accelerator_key,
                                                GdkModifierType accelerator_mods);
+GDK_AVAILABLE_IN_3_4
 gchar*   gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
                                                  guint            accelerator_key,
                                                  guint            keycode,

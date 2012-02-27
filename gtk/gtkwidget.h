@@ -483,7 +483,7 @@ void	   gtk_widget_queue_draw_region   (GtkWidget	       *widget,
                                            const cairo_region_t*region);
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
-GDK_DEPRECATED_FOR(gtk_widget_get_preferred_size)
+GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_size)
 void       gtk_widget_size_request        (GtkWidget           *widget,
                                            GtkRequisition      *requisition);
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
@@ -508,7 +508,7 @@ void                gtk_widget_get_preferred_size             (GtkWidget      *w
                                                                GtkRequisition *minimum_size,
                                                                GtkRequisition *natural_size);
 
-GDK_DEPRECATED_FOR(gtk_widget_get_preferred_size)
+GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_size)
 void       gtk_widget_get_child_requisition (GtkWidget         *widget,
                                              GtkRequisition    *requisition);
 void	   gtk_widget_add_accelerator	  (GtkWidget           *widget,
@@ -556,6 +556,7 @@ void       gtk_widget_set_can_focus       (GtkWidget           *widget,
 gboolean   gtk_widget_get_can_focus       (GtkWidget           *widget);
 gboolean   gtk_widget_has_focus           (GtkWidget           *widget);
 gboolean   gtk_widget_is_focus            (GtkWidget           *widget);
+GDK_AVAILABLE_IN_3_2
 gboolean   gtk_widget_has_visible_focus   (GtkWidget           *widget);
 void       gtk_widget_grab_focus          (GtkWidget           *widget);
 
@@ -719,8 +720,10 @@ void             gtk_widget_set_support_multidevice (GtkWidget      *widget,
                                                      gboolean        support_multidevice);
 
 /* Accessibility support */
+GDK_AVAILABLE_IN_3_2
 void             gtk_widget_class_set_accessible_type    (GtkWidgetClass     *widget_class,
                                                           GType               type);
+GDK_AVAILABLE_IN_3_2
 void             gtk_widget_class_set_accessible_role    (GtkWidgetClass     *widget_class,
                                                           AtkRole             role);
 AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);
@@ -750,7 +753,7 @@ void     gtk_widget_set_margin_bottom (GtkWidget *widget,
 gint	     gtk_widget_get_events	(GtkWidget	*widget);
 GdkEventMask gtk_widget_get_device_events (GtkWidget	*widget,
                                            GdkDevice    *device);
-GDK_DEPRECATED_FOR(gdk_window_get_device_position)
+GDK_DEPRECATED_IN_3_0_FOR(gdk_window_get_device_position)
 void	     gtk_widget_get_pointer	(GtkWidget	*widget,
 					 gint		*x,
 					 gint		*y);
@@ -889,6 +892,7 @@ GtkStyleContext * gtk_widget_get_style_context (GtkWidget *widget);
 
 GtkWidgetPath *   gtk_widget_get_path (GtkWidget *widget);
 
+GDK_AVAILABLE_IN_3_4
 GdkModifierType   gtk_widget_get_modifier_mask (GtkWidget         *widget,
                                                 GdkModifierIntent  intent);
 

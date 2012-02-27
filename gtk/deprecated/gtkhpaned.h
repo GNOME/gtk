@@ -58,7 +58,7 @@ struct _GtkHPanedClass
 
 
 GType       gtk_hpaned_get_type (void) G_GNUC_CONST;
-GDK_DEPRECATED_FOR(gtk_paned_new)
+GDK_DEPRECATED_IN_3_2_FOR(gtk_paned_new)
 GtkWidget * gtk_hpaned_new      (void);
 
 G_END_DECLS

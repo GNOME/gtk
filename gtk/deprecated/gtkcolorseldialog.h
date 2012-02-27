@@ -71,9 +71,9 @@ struct _GtkColorSelectionDialogClass
 
 /* ColorSelectionDialog */
 GType      gtk_color_selection_dialog_get_type            (void) G_GNUC_CONST;
-GDK_DEPRECATED_FOR(gtk_color_chooser_dialog_new)
+GDK_DEPRECATED_IN_3_4_FOR(gtk_color_chooser_dialog_new)
 GtkWidget* gtk_color_selection_dialog_new                 (const gchar *title);
-GDK_DEPRECATED_FOR(GtkColorChooser)
+GDK_DEPRECATED_IN_3_4_FOR(GtkColorChooser)
 GtkWidget* gtk_color_selection_dialog_get_color_selection (GtkColorSelectionDialog *colorsel);
 
 

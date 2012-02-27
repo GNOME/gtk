@@ -21,6 +21,7 @@
 #define __GTK_CSS_SECTION_H__
 
 #include <gio/gio.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -66,17 +67,27 @@ typedef enum
 
 typedef struct _GtkCssSection GtkCssSection;
 
+GDK_AVAILABLE_IN_3_2
 GType              gtk_css_section_get_type            (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_3_2
 GtkCssSection *    gtk_css_section_ref                 (GtkCssSection        *section);
+GDK_AVAILABLE_IN_3_2
 void               gtk_css_section_unref               (GtkCssSection        *section);
 
+GDK_AVAILABLE_IN_3_2
 GtkCssSectionType  gtk_css_section_get_section_type    (const GtkCssSection  *section);
+GDK_AVAILABLE_IN_3_2
 GtkCssSection *    gtk_css_section_get_parent          (const GtkCssSection  *section);
+GDK_AVAILABLE_IN_3_2
 GFile *            gtk_css_section_get_file            (const GtkCssSection  *section);
+GDK_AVAILABLE_IN_3_2
 guint              gtk_css_section_get_start_line      (const GtkCssSection  *section);
+GDK_AVAILABLE_IN_3_2
 guint              gtk_css_section_get_start_position  (const GtkCssSection  *section);
+GDK_AVAILABLE_IN_3_2
 guint              gtk_css_section_get_end_line        (const GtkCssSection  *section);
+GDK_AVAILABLE_IN_3_2
 guint              gtk_css_section_get_end_position    (const GtkCssSection  *section);
 
 G_END_DECLS

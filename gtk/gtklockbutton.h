@@ -58,9 +58,13 @@ struct _GtkLockButtonClass
   void (*reserved7) (void);
 };
 
+GDK_AVAILABLE_IN_3_2
 GType        gtk_lock_button_get_type       (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_3_2
 GtkWidget   *gtk_lock_button_new            (GPermission   *permission);
+GDK_AVAILABLE_IN_3_2
 GPermission *gtk_lock_button_get_permission (GtkLockButton *button);
+GDK_AVAILABLE_IN_3_2
 void         gtk_lock_button_set_permission (GtkLockButton *button,
                                              GPermission   *permission);
 

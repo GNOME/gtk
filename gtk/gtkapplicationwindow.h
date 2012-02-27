@@ -58,11 +58,15 @@ struct _GtkApplicationWindowClass
   gpointer padding[14];
 };
 
+GDK_AVAILABLE_IN_3_4
 GType       gtk_application_window_get_type          (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_3_4
 GtkWidget * gtk_application_window_new               (GtkApplication      *application);
 
+GDK_AVAILABLE_IN_3_4
 void        gtk_application_window_set_show_menubar (GtkApplicationWindow *window,
                                                      gboolean              show_menubar);
+GDK_AVAILABLE_IN_3_4
 gboolean    gtk_application_window_get_show_menubar (GtkApplicationWindow *window);
 
 G_END_DECLS

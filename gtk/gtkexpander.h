@@ -98,9 +98,10 @@ GtkWidget            *gtk_expander_get_label_widget    (GtkExpander *expander);
 void                  gtk_expander_set_label_fill      (GtkExpander *expander,
 						        gboolean     label_fill);
 gboolean              gtk_expander_get_label_fill      (GtkExpander *expander);
-
+GDK_AVAILABLE_IN_3_2
 void                  gtk_expander_set_resize_toplevel (GtkExpander *expander,
                                                         gboolean     resize_toplevel);
+GDK_AVAILABLE_IN_3_2
 gboolean              gtk_expander_get_resize_toplevel (GtkExpander *expander);
 
 G_END_DECLS

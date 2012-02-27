@@ -78,10 +78,10 @@ gboolean          gtk_button_box_get_child_secondary (GtkButtonBox      *widget,
 void              gtk_button_box_set_child_secondary (GtkButtonBox      *widget,
                                                       GtkWidget         *child,
                                                       gboolean           is_secondary);
-
+GDK_AVAILABLE_IN_3_2
 gboolean          gtk_button_box_get_child_non_homogeneous (GtkButtonBox *widget,
                                                             GtkWidget    *child);
-
+GDK_AVAILABLE_IN_3_2
 void              gtk_button_box_set_child_non_homogeneous (GtkButtonBox *widget,
                                                             GtkWidget    *child,
                                                             gboolean      non_homogeneous);

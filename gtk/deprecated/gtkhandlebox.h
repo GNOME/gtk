@@ -77,24 +77,24 @@ struct _GtkHandleBoxClass
 
 
 GType         gtk_handle_box_get_type             (void) G_GNUC_CONST;
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_4
 GtkWidget*    gtk_handle_box_new                  (void);
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_4
 void          gtk_handle_box_set_shadow_type      (GtkHandleBox    *handle_box,
                                                    GtkShadowType    type);
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_4
 GtkShadowType gtk_handle_box_get_shadow_type      (GtkHandleBox    *handle_box);
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_4
 void          gtk_handle_box_set_handle_position  (GtkHandleBox    *handle_box,
 					           GtkPositionType  position);
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_4
 GtkPositionType gtk_handle_box_get_handle_position(GtkHandleBox    *handle_box);
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_4
 void          gtk_handle_box_set_snap_edge        (GtkHandleBox    *handle_box,
 						   GtkPositionType  edge);
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_4
 GtkPositionType gtk_handle_box_get_snap_edge      (GtkHandleBox    *handle_box);
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_4
 gboolean      gtk_handle_box_get_child_detached   (GtkHandleBox    *handle_box);
 
 G_END_DECLS

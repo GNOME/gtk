@@ -115,7 +115,7 @@ void       gtk_adjustment_configure             (GtkAdjustment   *adjustment,
                                                  gdouble          step_increment,
                                                  gdouble          page_increment,
                                                  gdouble          page_size);
-
+GDK_AVAILABLE_IN_3_2
 gdouble    gtk_adjustment_get_minimum_increment (GtkAdjustment   *adjustment);
 
 G_END_DECLS

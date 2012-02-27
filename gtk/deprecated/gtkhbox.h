@@ -60,7 +60,7 @@ struct _GtkHBoxClass
 
 
 GType       gtk_hbox_get_type (void) G_GNUC_CONST;
-GDK_DEPRECATED_FOR(gtk_box_new)
+GDK_DEPRECATED_IN_3_2_FOR(gtk_box_new)
 GtkWidget * gtk_hbox_new      (gboolean homogeneous,
                                gint     spacing);
 

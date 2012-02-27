@@ -180,7 +180,7 @@ void           gtk_binding_entry_remove      (GtkBindingSet       *binding_set,
                                               guint                keyval,
                                               GdkModifierType      modifiers);
 
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_0
 void           gtk_binding_set_add_path      (GtkBindingSet       *binding_set,
                                               GtkPathType          path_type,
                                               const gchar         *path_pattern,

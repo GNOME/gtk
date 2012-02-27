@@ -117,6 +117,7 @@ struct _GtkMenuClass
 
 GType	   gtk_menu_get_type		  (void) G_GNUC_CONST;
 GtkWidget* gtk_menu_new			  (void);
+GDK_AVAILABLE_IN_3_4
 GtkWidget* gtk_menu_new_from_model        (GMenuModel *model);
 
 /* Display the menu onscreen */

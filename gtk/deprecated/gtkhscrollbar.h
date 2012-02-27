@@ -58,7 +58,7 @@ struct _GtkHScrollbarClass
 
 
 GType      gtk_hscrollbar_get_type (void) G_GNUC_CONST;
-GDK_DEPRECATED_FOR(gtk_scrollbar_new)
+GDK_DEPRECATED_IN_3_2_FOR(gtk_scrollbar_new)
 GtkWidget* gtk_hscrollbar_new      (GtkAdjustment *adjustment);
 
 G_END_DECLS

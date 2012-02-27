@@ -139,6 +139,7 @@ gint                  gtk_assistant_append_page           (GtkAssistant         
 gint                  gtk_assistant_insert_page           (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
                                                            gint                  position);
+GDK_AVAILABLE_IN_3_2
 void                  gtk_assistant_remove_page           (GtkAssistant         *assistant,
                                                            gint                  page_num);
 void                  gtk_assistant_set_forward_page_func (GtkAssistant         *assistant,
@@ -156,18 +157,18 @@ void                  gtk_assistant_set_page_title        (GtkAssistant         
 const gchar *         gtk_assistant_get_page_title        (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
 
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_2
 void                  gtk_assistant_set_page_header_image (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
                                                            GdkPixbuf            *pixbuf);
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_2
 GdkPixbuf            *gtk_assistant_get_page_header_image (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_2
 void                  gtk_assistant_set_page_side_image   (GtkAssistant         *assistant,
                                                            GtkWidget            *page,
                                                            GdkPixbuf            *pixbuf);
-GDK_DEPRECATED
+GDK_DEPRECATED_IN_3_2
 GdkPixbuf            *gtk_assistant_get_page_side_image   (GtkAssistant         *assistant,
                                                            GtkWidget            *page);
 

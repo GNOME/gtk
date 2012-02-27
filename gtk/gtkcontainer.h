@@ -197,6 +197,7 @@ void	     gtk_container_child_get_property		(GtkContainer	   *container,
 							 const gchar	   *property_name,
 	                                                 GValue		   *value);
 
+GDK_AVAILABLE_IN_3_2
 void gtk_container_child_notify (GtkContainer *container,
                                  GtkWidget    *child,
                                  const gchar  *child_property);

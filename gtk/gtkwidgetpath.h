@@ -25,6 +25,7 @@
 #define __GTK_WIDGET_PATH_H__
 
 #include <glib-object.h>
+#include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
@@ -41,10 +42,13 @@ GType           gtk_widget_path_get_type            (void) G_GNUC_CONST;
 GtkWidgetPath * gtk_widget_path_new                 (void);
 
 GtkWidgetPath * gtk_widget_path_copy                (const GtkWidgetPath *path);
+GDK_AVAILABLE_IN_3_2
 GtkWidgetPath * gtk_widget_path_ref                 (GtkWidgetPath       *path);
+GDK_AVAILABLE_IN_3_2
 void            gtk_widget_path_unref               (GtkWidgetPath       *path);
 void            gtk_widget_path_free                (GtkWidgetPath       *path);
 
+GDK_AVAILABLE_IN_3_2
 char *          gtk_widget_path_to_string           (const GtkWidgetPath *path);
 gint            gtk_widget_path_length              (const GtkWidgetPath *path);
 
@@ -52,10 +56,12 @@ gint            gtk_widget_path_append_type         (GtkWidgetPath       *path,
                                                      GType                type);
 void            gtk_widget_path_prepend_type        (GtkWidgetPath       *path,
                                                      GType                type);
+GDK_AVAILABLE_IN_3_2
 gint            gtk_widget_path_append_with_siblings(GtkWidgetPath       *path,
                                                      GtkWidgetPath       *siblings,
                                                      guint                sibling_index);
 /* gtk_widget_path_append_for_widget() is declared in gtkwidget.c */
+GDK_AVAILABLE_IN_3_2
 gint            gtk_widget_path_append_for_widget   (GtkWidgetPath       *path,
                                                      GtkWidget           *widget);
 
