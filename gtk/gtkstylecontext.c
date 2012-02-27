@@ -4738,6 +4738,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
  * but merely a convenience function for drawing the standard cursor shape.
  *
  * Since: 3.0
+ * Deprecated: 3.4: Use gtk_render_insertion_cursor() instead.
  */
 void
 gtk_draw_insertion_cursor (GtkWidget          *widget,
