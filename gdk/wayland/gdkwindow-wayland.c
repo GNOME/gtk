@@ -1313,10 +1313,10 @@ gdk_wayland_window_process_updates_recurse (GdkWindow *window,
   cairo_rectangle_int_t rect;
   int i, n;
 
+  gdk_wayland_window_map (window);
+
   if (impl->cairo_surface)
     gdk_wayland_window_attach_image (window);
-
-  gdk_wayland_window_map (window);
 
   n = cairo_region_num_rectangles(region);
   for (i = 0; i < n; i++)
