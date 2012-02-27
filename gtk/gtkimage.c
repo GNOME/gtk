@@ -12,9 +12,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
@@ -126,7 +124,7 @@
  *
  * Sometimes an application will want to avoid depending on external data
  * files, such as image files. GTK+ comes with a program to avoid this,
- * called <application>gdk-pixbuf-csource</application>. This program
+ * called <application>gdk-pixbuf-csource</application>. This library
  * allows you to convert an image into a C variable declaration, which
  * can then be loaded into a #GdkPixbuf using
  * gdk_pixbuf_new_from_inline().
