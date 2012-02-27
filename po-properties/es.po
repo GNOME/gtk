@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-02-20 14:18+0000\n"
-"PO-Revision-Date: 2012-02-23 12:39+0100\n"
+"POT-Creation-Date: 2012-02-23 13:57+0000\n"
+"PO-Revision-Date: 2012-02-27 17:09+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -529,7 +529,7 @@ msgid "The parameter for action invocations"
 msgstr "El parámetro para acciones de invocación"
 
 #: ../gtk/gtkaction.c:222 ../gtk/gtkactiongroup.c:228 ../gtk/gtkprinter.c:125
-#: ../gtk/gtktextmark.c:126 ../gtk/gtkthemingengine.c:250
+#: ../gtk/gtktextmark.c:126 ../gtk/gtkthemingengine.c:252
 msgid "Name"
 msgstr "Nombre"
 
@@ -948,27 +948,27 @@ msgstr "Texto predeterminado del widget"
 msgid "The default text appearing when there are no applications"
 msgstr "El texto predeterminado que aparece cuando no hay aplicaciones"
 
-#: ../gtk/gtkapplication.c:799
+#: ../gtk/gtkapplication.c:756
 msgid "Register session"
 msgstr "Registrar sesión"
 
-#: ../gtk/gtkapplication.c:800
+#: ../gtk/gtkapplication.c:757
 msgid "Register with the session manager"
 msgstr "Registrar con el gestor de sesiones"
 
-#: ../gtk/gtkapplication.c:805
+#: ../gtk/gtkapplication.c:762
 msgid "Application menu"
 msgstr "Menú Aplicaciones"
 
-#: ../gtk/gtkapplication.c:806
+#: ../gtk/gtkapplication.c:763
 msgid "The GMenuModel for the application menu"
 msgstr "El GMenuModel para el menú de aplicaciones"
 
-#: ../gtk/gtkapplication.c:812
+#: ../gtk/gtkapplication.c:769
 msgid "Menubar"
 msgstr "Barra de menú"
 
-#: ../gtk/gtkapplication.c:813
+#: ../gtk/gtkapplication.c:770
 msgid "The GMenuModel for the menubar"
 msgstr "El GMenuModel para la barra de menú"
 
@@ -2500,19 +2500,19 @@ msgstr "Mostrar editor"
 msgid "Scale type"
 msgstr "Tipo de escala"
 
-#: ../gtk/gtkcolorswatch.c:709
+#: ../gtk/gtkcolorswatch.c:713
 msgid "RGBA Color"
 msgstr "Color RGBA"
 
-#: ../gtk/gtkcolorswatch.c:709
+#: ../gtk/gtkcolorswatch.c:713
 msgid "Color as RGBA"
 msgstr "Color como RGBA"
 
-#: ../gtk/gtkcolorswatch.c:712 ../gtk/gtklabel.c:797
+#: ../gtk/gtkcolorswatch.c:716 ../gtk/gtklabel.c:797
 msgid "Selectable"
 msgstr "Seleccionable"
 
-#: ../gtk/gtkcolorswatch.c:712
+#: ../gtk/gtkcolorswatch.c:716
 msgid "Whether the swatch is selectable"
 msgstr "Indica si la muestra es seleccionable"
 
@@ -5764,7 +5764,7 @@ msgstr "Tamaños de los iconos"
 
 #: ../gtk/gtksettings.c:491
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
-msgstr "Lista de tamaños de los iconos (gtk-menu=16,16:gtk-button=20,20..."
+msgstr "Lista de tamaños de los iconos (gtk-menu=16,16:gtk-button=20,20…"
 
 #: ../gtk/gtksettings.c:499
 msgid "GTK Modules"
@@ -6900,7 +6900,7 @@ msgstr "Color de subrayado de errores"
 msgid "Color with which to draw error-indication underlines"
 msgstr "Color con el que dibujar el subrayado de indicación de errores"
 
-#: ../gtk/gtkthemingengine.c:251
+#: ../gtk/gtkthemingengine.c:253
 msgid "Theming engine name"
 msgstr "Nombre del motor de temas"
 
