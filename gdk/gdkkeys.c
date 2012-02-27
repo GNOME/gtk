@@ -386,7 +386,7 @@ gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
  *
  * Returns: the current modifier state.
  *
- * Since: 3.2
+ * Since: 3.4
  */
 guint
 gdk_keymap_get_modifier_state (GdkKeymap *keymap)
