@@ -9135,9 +9135,10 @@ get_event_window (GdkDisplay                 *display,
                   GdkEventType                type,
                   GdkModifierType             mask,
                   guint                      *evmask_out,
+                  gboolean                    pointer_emulated,
                   gulong                      serial)
 {
-  guint evmask;
+  guint evmask, emulated_mask = 0;
   GdkWindow *grab_window;
   GdkDeviceGrabInfo *grab;
   GdkTouchGrabInfo *touch_grab;
@@ -9145,13 +9146,30 @@ get_event_window (GdkDisplay                 *display,
   touch_grab = _gdk_display_has_touch_grab (display, device, sequence, serial);
   grab = _gdk_display_get_last_device_grab (display, device);
 
+  if (is_touch_type (type) && pointer_emulated)
+    {
+      switch (type)
+        {
+        case GDK_TOUCH_BEGIN:
+          emulated_mask |= GDK_BUTTON_PRESS_MASK;
+          break;
+        case GDK_TOUCH_UPDATE:
+          emulated_mask |= GDK_BUTTON_MOTION_MASK;
+          break;
+        case GDK_TOUCH_END:
+          emulated_mask |= GDK_BUTTON_RELEASE_MASK;
+        default:
+          break;
+        }
+    }
+
   if (touch_grab != NULL &&
       (!grab || grab->implicit || touch_grab->serial >= grab->serial_start))
     {
       evmask = touch_grab->event_mask;
       evmask = update_evmask_for_button_motion (evmask, mask);
 
-      if (evmask & type_masks[type])
+      if (evmask & (type_masks[type] | emulated_mask))
         {
           if (evmask_out)
             *evmask_out = evmask;
@@ -9168,7 +9186,7 @@ get_event_window (GdkDisplay                 *display,
 
       grab_window = grab->window;
 
-      if (evmask & type_masks[type])
+      if (evmask & (type_masks[type] | emulated_mask))
 	{
 	  if (evmask_out)
 	    *evmask_out = evmask;
@@ -9183,7 +9201,7 @@ get_event_window (GdkDisplay                 *display,
       evmask = pointer_window->event_mask;
       evmask = update_evmask_for_button_motion (evmask, mask);
 
-      if (evmask & type_masks[type])
+      if (evmask & (type_masks[type] | emulated_mask))
 	{
 	  if (evmask_out)
 	    *evmask_out = evmask;
@@ -9199,7 +9217,7 @@ get_event_window (GdkDisplay                 *display,
       evmask = grab->event_mask;
       evmask = update_evmask_for_button_motion (evmask, mask);
 
-      if (evmask & type_masks[type])
+      if (evmask & (type_masks[type] | emulated_mask))
 	{
 	  if (evmask_out)
 	    *evmask_out = evmask;
@@ -9380,6 +9398,7 @@ proxy_pointer_event (GdkDisplay                 *display,
                                     source_event->type,
                                     state,
                                     &evmask,
+                                    _gdk_event_get_pointer_emulated (source_event),
                                     serial);
 
       if (event_type == GDK_TOUCH_UPDATE)
@@ -9616,7 +9635,9 @@ proxy_button_event (GdkEvent *source_event,
                                 sequence,
                                 pointer_window,
                                 type, state,
-                                &evmask, serial);
+                                &evmask,
+                                _gdk_event_get_pointer_emulated (source_event),
+                                serial);
 
   if (type == GDK_TOUCH_BEGIN || type == GDK_TOUCH_END)
     {
