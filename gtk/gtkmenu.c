@@ -1018,6 +1018,15 @@ gtk_menu_window_event (GtkWidget *window,
     case GDK_KEY_RELEASE:
       handled = gtk_widget_event (menu, event);
       break;
+    case GDK_WINDOW_STATE:
+      /* Window for the menu has been closed by the display server or by GDK.
+       * Update the internal state as if the user had clicked outside the
+       * menu
+       */
+      if (event->window_state.new_window_state & GDK_WINDOW_STATE_WITHDRAWN &&
+          event->window_state.changed_mask & GDK_WINDOW_STATE_WITHDRAWN)
+        gtk_menu_shell_deactivate (GTK_MENU_SHELL(menu));
+      break;
     default:
       break;
     }

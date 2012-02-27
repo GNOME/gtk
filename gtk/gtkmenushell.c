@@ -612,7 +612,8 @@ gtk_menu_shell_deactivate (GtkMenuShell *menu_shell)
 {
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
 
-  g_signal_emit (menu_shell, menu_shell_signals[DEACTIVATE], 0);
+  if (menu_shell->priv->active)
+    g_signal_emit (menu_shell, menu_shell_signals[DEACTIVATE], 0);
 }
 
 static void
