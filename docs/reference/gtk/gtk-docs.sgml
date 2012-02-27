@@ -23,7 +23,7 @@
     <xi:include href="overview.xml"/>
     <xi:include href="xml/getting_started.xml"/>
     <xi:include href="building.sgml" />
-    <xi:include href="compiling.sgml" />
+    <xi:include href="xml/compiling.sgml" />
     <xi:include href="running.sgml" />
     <xi:include href="x11.sgml" />
     <xi:include href="windows.sgml" />

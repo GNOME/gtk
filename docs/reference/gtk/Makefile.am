@@ -142,6 +142,7 @@ content_files =					\
 	overview.xml
 
 expand_content_files = 				\
+	compiling.sgml				\
 	drawing-model.xml			\
 	getting_started.xml			\
 	glossary.xml				\

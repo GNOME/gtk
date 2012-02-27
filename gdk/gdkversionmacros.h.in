@@ -30,6 +30,14 @@
 #define GDK_MINOR_VERSION (@GTK_MINOR_VERSION@)
 #define GDK_MICRO_VERSION (@GTK_MICRO_VERSION@)
 
+/**
+ * GDK_DISABLE_DEPRECATION_WARNINGS:
+ *
+ * A macro that should be defined before including the gdk.h header.
+ * If it is defined, no compiler warnings will be produced for uses
+ * of deprecated GDK and GTK+ APIs.
+ */
+
 #ifdef GDK_DISABLE_DEPRECATION_WARNINGS
 #define GDK_DEPRECATED
 #define GDK_DEPRECATED_FOR(f)

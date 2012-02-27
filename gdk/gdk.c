@@ -45,7 +45,19 @@
  * @Title: General
  *
  * This section describes the GDK initialization functions and miscellaneous
- * utility functions.
+ * utility functions, as well as deprecation facilities.
+ *
+ * The GDK and GTK+ headers annotate deprecated APIs in a way that produces
+ * compiler warnings if these deprecated APIs are used. The warnings
+ * can be turned off by defining the macro %GDK_DISABLE_DEPRECATION_WARNINGS
+ * before including the glib.h header.
+ *
+ * GDK and GTK+ also provide support for building applications against
+ * defined subsets of deprecated or new APIs. Define the macro
+ * %GDK_VERSION_MIN_REQUIRED to specify up to what version
+ * you want to receive warnings about deprecated APIs. Define the
+ * macro %GDK_VERSION_MAX_ALLOWED to specify the newest version
+ * whose API you want to use.
  */
 
 /**
@@ -73,6 +85,14 @@
  * is supported.
  *
  * Use this macro to guard code that is specific to the Quartz backend.
+ */
+
+/**
+ * GDK_DISABLE_DEPRECATION_WARNINGS:
+ *
+ * A macro that should be defined before including the gdk.h header.
+ * If it is defined, no compiler warnings will be produced for uses
+ * of deprecated GDK APIs.
  */
 
 typedef struct _GdkPredicate  GdkPredicate;
