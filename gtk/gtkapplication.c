@@ -1490,8 +1490,11 @@ idle_will_quit (gpointer data)
 				       _("%s cannot quit at this time:\n\n%s"),
 				       g_get_application_name (),
 				       inhibitor->reason);
-      gtk_dialog_run (GTK_DIALOG (dialog));
-      gtk_widget_destroy (dialog);
+      g_signal_connect_swapped (dialog,
+                                "response",
+                                G_CALLBACK (gtk_widget_destroy),
+                                dialog);
+      gtk_widget_show_all (dialog);
     }
 
   return G_SOURCE_REMOVE;
