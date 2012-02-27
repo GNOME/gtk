@@ -1328,6 +1328,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkDevice *source_device;
 
+        event->touch.window = window;
         event->touch.sequence = GUINT_TO_POINTER (xev->detail);
         event->touch.type = GDK_TOUCH_UPDATE;
         event->touch.time = xev->time;
