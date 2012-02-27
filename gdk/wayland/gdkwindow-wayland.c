@@ -478,19 +478,30 @@ gdk_wayland_window_map (GdkWindow *window)
   if (!impl->mapped)
     {
       if (impl->transient_for)
-	{
-	  fprintf(stderr, "parent surface: %d, %d, transient surface %d, %d\n",
-		  impl->transient_for->x,
-		  impl->transient_for->y,
-		  window->x,
-		  window->y);
+        {
+          parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
 
-	  parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
-          wl_shell_surface_set_transient (impl->shell_surface, parent->shell_surface,
+          if (impl->hint & GDK_WINDOW_TYPE_HINT_POPUP_MENU ||
+              impl->hint & GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU ||
+              impl->hint & GDK_WINDOW_TYPE_HINT_COMBO)
+            {
+              /* Use the device that was used for the grab as the device for
+               * the popup window setup - so this relies on GTK+ taking the
+               * grab before showing the popup window.
+               */
+              wl_shell_surface_set_popup (impl->shell_surface,
+                                          parent->grab_input_device, parent->grab_time,
+                                          parent->shell_surface,
                                           window->x, window->y, 0);
-	}
+            } else {
+                wl_shell_surface_set_transient (impl->shell_surface, parent->shell_surface,
+                                                window->x, window->y, 0);
+            }
+        }
       else
-        wl_shell_surface_set_toplevel (impl->shell_surface);
+        {
+          wl_shell_surface_set_toplevel (impl->shell_surface);
+        }
       impl->mapped = TRUE;
     }
 }
@@ -516,8 +527,22 @@ shell_surface_handle_configure(void *data,
   gdk_wayland_window_configure (window, width, height, edges);
 }
 
+static void
+shell_surface_popup_done (void                    *data,
+                          struct wl_shell_surface *shell_surface)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+
+  /* When the popup is complete hide the window - this really relies on the
+   * fix in https://bugzilla.gnome.org/show_bug.cgi?id=670881 to work
+   * effectively.
+   */
+  gdk_window_hide (window);
+}
+
 static const struct wl_shell_surface_listener shell_surface_listener = {
   shell_surface_handle_configure,
+  shell_surface_popup_done
 };
 
 static void
