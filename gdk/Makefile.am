@@ -30,6 +30,7 @@ EXTRA_DIST += 			\
 	gdk.symbols		\
 	gdkenumtypes.c.template	\
 	gdkenumtypes.h.template	\
+	gdkversionmacros.h.in	\
 	abicheck.sh
 
 AM_CPPFLAGS = 				\
@@ -89,6 +90,7 @@ gdk_public_h_sources = 				\
 	gdktestutils.h				\
 	gdkthreads.h				\
 	gdktypes.h				\
+	gdkversionmacros.h			\
 	gdkvisual.h				\
 	gdkwindow.h
 
@@ -145,7 +147,7 @@ gdk_built_sources = 				\
 #
 
 gdkincludedir = $(includedir)/gtk-3.0/gdk
-gdkinclude_HEADERS = $(gdk_public_h_sources) gdkenumtypes.h
+gdkinclude_HEADERS = $(gdk_public_h_sources) gdkenumtypes.h gdkversionmacros.h
 nodist_gdkinclude_HEADERS = gdkconfig.h
 
 common_sources = 		\

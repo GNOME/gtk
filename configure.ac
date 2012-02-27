@@ -1672,20 +1672,6 @@ AC_CONFIG_COMMANDS([gdk/gdkconfig.h], [
 
 G_BEGIN_DECLS
 
-/* These macros are used to mark deprecated functions in GDK and
- * GTK+ headers, and thus have to be exposed in installed headers.
- * But please do *not* use them in other projects. Instead, use
- * G_DEPRECATED or define your own wrappers around it.
- */
-
-#ifdef GDK_DISABLE_DEPRECATION_WARNINGS
-#define GDK_DEPRECATED
-#define GDK_DEPRECATED_FOR(f)
-#else
-#define GDK_DEPRECATED G_DEPRECATED
-#define GDK_DEPRECATED_FOR(f) G_DEPRECATED_FOR(f)
-#endif
-
 _______EOF
 
 	cat >>$outfile <<_______EOF
@@ -1778,6 +1764,7 @@ gdk/win32/rc/gdk.rc
 gdk/quartz/Makefile
 gdk/wayland/Makefile
 gdk/tests/Makefile
+gdk/gdkversionmacros.h
 gtk/Makefile
 gtk/makefile.msc
 gtk/gtkversion.h
