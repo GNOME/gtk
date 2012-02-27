@@ -90,7 +90,6 @@ gdk_public_h_sources = 				\
 	gdktestutils.h				\
 	gdkthreads.h				\
 	gdktypes.h				\
-	gdkversionmacros.h			\
 	gdkvisual.h				\
 	gdkwindow.h
 
@@ -140,6 +139,7 @@ gdk_built_sources = 				\
 	gdkenumtypes.c				\
 	gdkmarshalers.h 			\
 	gdkmarshalers.c				\
+	gdkversionmacros.h			\
 	gdkenumtypes.h
 
 #
