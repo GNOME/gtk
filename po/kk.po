@@ -1,14 +1,14 @@
-# Kazakh translation for gtk20
-# Copyright (C) 2010 HZ
-# This file is distributed under the same license as the PACKAGE package.
+# Kazakh translation for GTK.
+# Copyright (C) 2012 The GTK authors.
+# This file is distributed under the same license as the GTK package.
 # Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010-2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-02-08 09:11+0000\n"
-"PO-Revision-Date: 2012-02-09 14:52+0600\n"
+"POT-Creation-Date: 2012-02-23 13:54+0000\n"
+"PO-Revision-Date: 2012-02-27 13:53+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -505,9 +505,6 @@ msgstr "Қаріпті таңдау"
 #.
 #: ../gtk/gtkaboutdialog.c:106
 #, c-format
-#| msgid ""
-#| "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a "
-#| "href=\"%s\">%s</a>"
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
 "for details, visit <a href=\"%s\">%s</a>"
@@ -693,7 +690,8 @@ msgid "Show other applications"
 msgstr "Басқа қолданбаларды көрсету"
 
 #: ../gtk/gtkappchooserdialog.c:576
-#: ../gtk/gtkcolorseldialog.c:199
+#: ../gtk/gtkcolorchooserdialog.c:127
+#: ../gtk/deprecated/gtkcolorseldialog.c:203
 #: ../gtk/gtkfontchooserdialog.c:176
 msgid "_Select"
 msgstr "_Таңдау"
@@ -714,7 +712,7 @@ msgstr "Туыс қолданбалар"
 msgid "Other Applications"
 msgstr "Басқа қолданбалар"
 
-#: ../gtk/gtkapplication.c:1594
+#: ../gtk/gtkapplication.c:1490
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -745,13 +743,11 @@ msgstr "А_яқтау"
 
 #: ../gtk/gtkbuilder-menus.c:222
 #, c-format
-#| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed inside <%s>"
 msgstr "<%s> элементін <%s> ішінде орналастыру рұқсат етілмеген"
 
 #: ../gtk/gtkbuilder-menus.c:227
 #, c-format
-#| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed at toplevel"
 msgstr "<%s> элементі жоғары деңгейде орналасуы рұқсат етілмеген"
 
@@ -894,117 +890,403 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:187
-#: ../gtk/gtkcolorbutton.c:485
+#: ../gtk/gtkcolorbutton.c:192
+#: ../gtk/gtkcolorbutton.c:461
 msgid "Pick a Color"
 msgstr "Түсті таңдаңыз"
 
-#: ../gtk/gtkcolorsel.c:423
+#: ../gtk/gtkcolorchooserdialog.c:136
+#| msgid "Select a folder"
+msgid "Select a Color"
+msgstr "Түсті тандаңыз"
+
+#: ../gtk/gtkcolorchooserwidget.c:283
+#, c-format
+msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
+msgstr "Қызыл %d%%, Жасыл %d%%, Көк %d%%, Мөлдір %d%%"
+
+#: ../gtk/gtkcolorchooserwidget.c:289
+#, c-format
+msgid "Red %d%%, Green %d%%, Blue %d%%"
+msgstr "Қызыл %d%%, Жасыл %d%%, Көк %d%%"
+
+#: ../gtk/gtkcolorchooserwidget.c:340
+#, c-format
+#| msgid "Color"
+msgid "Color: %s"
+msgstr "Түс: %s"
+
+#: ../gtk/gtkcolorchooserwidget.c:411
+msgctxt "Color name"
+msgid "Light Scarlet Red"
+msgstr "Ашық алқызыл"
+
+#: ../gtk/gtkcolorchooserwidget.c:412
+msgctxt "Color name"
+msgid "Scarlet Red"
+msgstr "Алқызыл"
+
+#: ../gtk/gtkcolorchooserwidget.c:413
+msgctxt "Color name"
+msgid "Dark Scarlet Red"
+msgstr "Күңгірт алқызыл"
+
+#: ../gtk/gtkcolorchooserwidget.c:414
+msgctxt "Color name"
+msgid "Light Orange"
+msgstr "Ашық қызғылт сары"
+
+#: ../gtk/gtkcolorchooserwidget.c:415
+#| msgid "Range"
+msgctxt "Color name"
+msgid "Orange"
+msgstr "Қызғылт сары"
+
+#: ../gtk/gtkcolorchooserwidget.c:416
+msgctxt "Color name"
+msgid "Dark Orange"
+msgstr "Күңгірт қызғылт сары"
+
+#: ../gtk/gtkcolorchooserwidget.c:417
+msgctxt "Color name"
+msgid "Light Butter"
+msgstr "Ашық сарғылт"
+
+#: ../gtk/gtkcolorchooserwidget.c:418
+msgctxt "Color name"
+msgid "Butter"
+msgstr "Сарғылт"
+
+#: ../gtk/gtkcolorchooserwidget.c:419
+msgctxt "Color name"
+msgid "Dark Butter"
+msgstr "Күңгірт сарғылт"
+
+#: ../gtk/gtkcolorchooserwidget.c:420
+msgctxt "Color name"
+msgid "Light Chameleon"
+msgstr "Ашық хамелеон"
+
+#: ../gtk/gtkcolorchooserwidget.c:421
+msgctxt "Color name"
+msgid "Chameleon"
+msgstr "Хамелеон"
+
+#: ../gtk/gtkcolorchooserwidget.c:422
+msgctxt "Color name"
+msgid "Dark Chameleon"
+msgstr "Күңгірт хамелеон"
+
+#: ../gtk/gtkcolorchooserwidget.c:423
+msgctxt "Color name"
+msgid "Light Sky Blue"
+msgstr "Ашық көгілдір"
+
+#: ../gtk/gtkcolorchooserwidget.c:424
+msgctxt "Color name"
+msgid "Sky Blue"
+msgstr "Көгілдір"
+
+#: ../gtk/gtkcolorchooserwidget.c:425
+msgctxt "Color name"
+msgid "Dark Sky Blue"
+msgstr "Күңгірт көгілдір"
+
+#: ../gtk/gtkcolorchooserwidget.c:426
+msgctxt "Color name"
+msgid "Light Plum"
+msgstr "Ашық алхоры"
+
+#: ../gtk/gtkcolorchooserwidget.c:427
+#| msgid "Volume"
+msgctxt "Color name"
+msgid "Plum"
+msgstr "Алхоры"
+
+#: ../gtk/gtkcolorchooserwidget.c:428
+msgctxt "Color name"
+msgid "Dark Plum"
+msgstr "Күңгірт алхоры"
+
+#: ../gtk/gtkcolorchooserwidget.c:429
+msgctxt "Color name"
+msgid "Light Chocolate"
+msgstr "Ашық шоколад"
+
+#: ../gtk/gtkcolorchooserwidget.c:430
+#| msgid "C_ollate"
+msgctxt "Color name"
+msgid "Chocolate"
+msgstr "Шоколад"
+
+#: ../gtk/gtkcolorchooserwidget.c:431
+msgctxt "Color name"
+msgid "Dark Chocolate"
+msgstr "Күңгірт шоколад"
+
+#: ../gtk/gtkcolorchooserwidget.c:432
+msgctxt "Color name"
+msgid "Light Aluminum 1"
+msgstr "Ашық алюминий 1"
+
+#: ../gtk/gtkcolorchooserwidget.c:433
+msgctxt "Color name"
+msgid "Aluminum 1"
+msgstr "Алюминий 1"
+
+#: ../gtk/gtkcolorchooserwidget.c:434
+msgctxt "Color name"
+msgid "Dark Aluminum 1"
+msgstr "Күңгірт алюминий 1"
+
+#: ../gtk/gtkcolorchooserwidget.c:435
+msgctxt "Color name"
+msgid "Light Aluminum 2"
+msgstr "Ашық алюминий 2"
+
+#: ../gtk/gtkcolorchooserwidget.c:436
+msgctxt "Color name"
+msgid "Aluminum 2"
+msgstr "Алюминий 2"
+
+#: ../gtk/gtkcolorchooserwidget.c:437
+msgctxt "Color name"
+msgid "Dark Aluminum 2"
+msgstr "Күңгірт алюминий 2"
+
+#: ../gtk/gtkcolorchooserwidget.c:451
+#| msgctxt "Stock label, navigation"
+#| msgid "_Back"
+msgctxt "Color name"
+msgid "Black"
+msgstr "Қара"
+
+#: ../gtk/gtkcolorchooserwidget.c:452
+msgctxt "Color name"
+msgid "Very Dark Gray"
+msgstr "Өте күңгірт сұр"
+
+#: ../gtk/gtkcolorchooserwidget.c:453
+msgctxt "Color name"
+msgid "Darker Gray"
+msgstr "Қүңгірттеу сұр"
+
+#: ../gtk/gtkcolorchooserwidget.c:454
+msgctxt "Color name"
+msgid "Dark Gray"
+msgstr "Қүңгірт сұр"
+
+#: ../gtk/gtkcolorchooserwidget.c:455
+#| msgid "Medium"
+msgctxt "Color name"
+msgid "Medium Gray"
+msgstr "Орташа сұр"
+
+#: ../gtk/gtkcolorchooserwidget.c:456
+msgctxt "Color name"
+msgid "Light Gray"
+msgstr "Ашық сұр"
+
+#: ../gtk/gtkcolorchooserwidget.c:457
+msgctxt "Color name"
+msgid "Lighter Gray"
+msgstr "Ашықтау сұр"
+
+#: ../gtk/gtkcolorchooserwidget.c:458
+msgctxt "Color name"
+msgid "Very Light Gray"
+msgstr "Өте ашық сұр"
+
+#: ../gtk/gtkcolorchooserwidget.c:459
+msgctxt "Color name"
+msgid "White"
+msgstr "Ақ"
+
+#. translators: label for the custom section in the color chooser
+#: ../gtk/gtkcolorchooserwidget.c:508
+#| msgid "Custom size"
+msgid "Custom"
+msgstr "Таңдауыңызша"
+
+#: ../gtk/gtkcolorchooserwidget.c:516
+#| msgid "Create Fo_lder"
+msgid "Create custom color"
+msgstr "Таңдауыңызша түсті жасау"
+
+#: ../gtk/gtkcolorchooserwidget.c:535
+#, c-format
+#| msgid "Custom %sx%s"
+msgid "Custom color %d: %s"
+msgstr "Таңдауыңызша түс %d: %s"
+
+#: ../gtk/gtkcoloreditor.c:413
+#| msgid "Color _name:"
+msgid "Color Name"
+msgstr "Түс аты"
+
+#: ../gtk/gtkcoloreditor.c:458
+#| msgid "S_aturation:"
+msgctxt "Color channel"
+msgid "Saturation"
+msgstr "Қаңықтылығы"
+
+#: ../gtk/gtkcoloreditor.c:464
+#| msgid "_Value:"
+msgctxt "Color channel"
+msgid "Value"
+msgstr "Мәні"
+
+#: ../gtk/gtkcoloreditor.c:472
+msgctxt "Color channel"
+msgid "S"
+msgstr "Қ"
+
+#: ../gtk/gtkcoloreditor.c:474
+msgctxt "Color channel"
+msgid "V"
+msgstr "М"
+
+#: ../gtk/gtkcoloreditor.c:482
+#: ../gtk/gtkcolorscale.c:297
+#| msgid "_Hue:"
+msgctxt "Color channel"
+msgid "Hue"
+msgstr "Реңі"
+
+#: ../gtk/gtkcoloreditor.c:489
+msgctxt "Color channel"
+msgid "H"
+msgstr "Р"
+
+#: ../gtk/gtkcoloreditor.c:497
+#: ../gtk/gtkcolorscale.c:299
+msgctxt "Color channel"
+msgid "Alpha"
+msgstr "Мөлдір"
+
+#: ../gtk/gtkcoloreditor.c:504
+#| msgctxt "paper size"
+#| msgid "A0"
+msgctxt "Color channel"
+msgid "A"
+msgstr "A"
+
+#: ../gtk/gtkcolorplane.c:393
+#| msgid "Color _name:"
+msgid "Color Plane"
+msgstr "Түстер кеңістігі"
+
+#: ../gtk/gtkcolorswatch.c:446
+#| msgid "Custom size"
+msgid "_Customize"
+msgstr "_Баптау"
+
+#: ../gtk/deprecated/gtkcolorsel.c:426
 msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
 msgstr "Өіңізге керек түсті сыртқы шеңберден таңдаңыз. Ол түстің күңгірттігін не ашықтығын ішіндегі үшбұрыштан көрсетіңіз."
 
-#: ../gtk/gtkcolorsel.c:449
+#: ../gtk/deprecated/gtkcolorsel.c:452
 msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
 msgstr "Түс алушыны шертіп, экранның кез-келген аймағының түсін таңдау үшін жай ғана ол түске шертіңіз."
 
-#: ../gtk/gtkcolorsel.c:459
+#: ../gtk/deprecated/gtkcolorsel.c:462
 msgid "_Hue:"
 msgstr "Р_еңі:"
 
-#: ../gtk/gtkcolorsel.c:460
+#: ../gtk/deprecated/gtkcolorsel.c:463
 msgid "Position on the color wheel."
 msgstr "Түс шеңберіндегі орны."
 
-#: ../gtk/gtkcolorsel.c:462
+#: ../gtk/deprecated/gtkcolorsel.c:465
 msgid "S_aturation:"
 msgstr "Қ_аңықтылығы:"
 
-#: ../gtk/gtkcolorsel.c:463
+#: ../gtk/deprecated/gtkcolorsel.c:466
 msgid "Intensity of the color."
 msgstr "Түс мөлдірлілігі."
 
-#: ../gtk/gtkcolorsel.c:464
+#: ../gtk/deprecated/gtkcolorsel.c:467
 msgid "_Value:"
 msgstr "Мә_ні:"
 
-#: ../gtk/gtkcolorsel.c:465
+#: ../gtk/deprecated/gtkcolorsel.c:468
 msgid "Brightness of the color."
 msgstr "Түс жарықтылығы."
 
-#: ../gtk/gtkcolorsel.c:466
+#: ../gtk/deprecated/gtkcolorsel.c:469
 msgid "_Red:"
 msgstr "Қ_ызыл:"
 
-#: ../gtk/gtkcolorsel.c:467
+#: ../gtk/deprecated/gtkcolorsel.c:470
 msgid "Amount of red light in the color."
 msgstr "Түстегі қызыл мәннің шамасы."
 
-#: ../gtk/gtkcolorsel.c:468
+#: ../gtk/deprecated/gtkcolorsel.c:471
 msgid "_Green:"
 msgstr "Ж_асыл:"
 
-#: ../gtk/gtkcolorsel.c:469
+#: ../gtk/deprecated/gtkcolorsel.c:472
 msgid "Amount of green light in the color."
 msgstr "Түстегі жасыл мәннің шамасы."
 
-#: ../gtk/gtkcolorsel.c:470
+#: ../gtk/deprecated/gtkcolorsel.c:473
 msgid "_Blue:"
 msgstr "_Көк:"
 
-#: ../gtk/gtkcolorsel.c:471
+#: ../gtk/deprecated/gtkcolorsel.c:474
 msgid "Amount of blue light in the color."
 msgstr "Түстегі көк мәннің шамасы."
 
-#: ../gtk/gtkcolorsel.c:474
+#: ../gtk/deprecated/gtkcolorsel.c:477
 msgid "Op_acity:"
 msgstr "Мө_лдірсіздігі:"
 
-#: ../gtk/gtkcolorsel.c:482
-#: ../gtk/gtkcolorsel.c:492
+#: ../gtk/deprecated/gtkcolorsel.c:485
+#: ../gtk/deprecated/gtkcolorsel.c:495
 msgid "Transparency of the color."
 msgstr "Түс мөлдірлілігі."
 
-#: ../gtk/gtkcolorsel.c:499
+#: ../gtk/deprecated/gtkcolorsel.c:502
 msgid "Color _name:"
 msgstr "Тү_с аты:"
 
-#: ../gtk/gtkcolorsel.c:514
+#: ../gtk/deprecated/gtkcolorsel.c:517
 msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
 msgstr "Сіз осында HTML-дей он алтылық түрде түс мәнін не жай ғана түс атын енгізе аласыз, мысалға, 'orange'."
 
-#: ../gtk/gtkcolorsel.c:546
+#: ../gtk/deprecated/gtkcolorsel.c:549
 msgid "_Palette:"
 msgstr "_Палитра:"
 
-#: ../gtk/gtkcolorsel.c:576
+#: ../gtk/deprecated/gtkcolorsel.c:579
 msgid "Color Wheel"
 msgstr "Түстер шеңбері."
 
-#: ../gtk/gtkcolorsel.c:1070
+#: ../gtk/deprecated/gtkcolorsel.c:1073
 msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
 msgstr "Алдында таңдалған түс, қазіргі таңдаумен салыстыру үшін көрсетілген. Осы түсті палитраға тартып апаруға, не оны ағымдағы түс қылу үшін осы түстер ауыстырғыштың екінші жағына тартып апарыңыз."
 
-#: ../gtk/gtkcolorsel.c:1076
+#: ../gtk/deprecated/gtkcolorsel.c:1079
 msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
 msgstr "Сіз таңдаған түс. Оны сақтау үшін палитраға тартып апарсаңыз болады."
 
-#: ../gtk/gtkcolorsel.c:1082
+#: ../gtk/deprecated/gtkcolorsel.c:1085
 msgid "The previously-selected color, for comparison to the color you're selecting now."
 msgstr "Алдында таңдалған түс, қазіргі таңдаумен салыстыру үшін көрсетілген."
 
-#: ../gtk/gtkcolorsel.c:1086
+#: ../gtk/deprecated/gtkcolorsel.c:1089
 msgid "The color you've chosen."
 msgstr "Сіз таңдаған түс."
 
-#: ../gtk/gtkcolorsel.c:1489
+#: ../gtk/deprecated/gtkcolorsel.c:1492
 msgid "_Save color here"
 msgstr "_Түсті осында сақтау"
 
-#: ../gtk/gtkcolorsel.c:1693
+#: ../gtk/deprecated/gtkcolorsel.c:1696
 msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr "Ағымдағы түс ретінде орнату үшін палитраның осы мүшесін шертіңіз. Осы мүшені өзгерту үшін, түс таңдаушыны осында тартып әкеліңіз, не оң жақпен шертіп, \"Түсті осында сақтау\"-ды таңдаңыз."
 
-#: ../gtk/gtkcolorseldialog.c:217
+#: ../gtk/deprecated/gtkcolorseldialog.c:221
 msgid "Color Selection"
 msgstr "Түсті таңдау"
 
@@ -1075,25 +1357,25 @@ msgstr "Оң ж_ақ:"
 msgid "Paper Margins"
 msgstr "Қағаздың шет өрістері"
 
-#: ../gtk/gtkentry.c:8725
+#: ../gtk/gtkentry.c:8744
 #: ../gtk/gtktextview.c:8287
 msgid "Input _Methods"
 msgstr "Ен_гізу тәсілдері"
 
-#: ../gtk/gtkentry.c:8739
+#: ../gtk/gtkentry.c:8758
 #: ../gtk/gtktextview.c:8301
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode б_асқару таңбасын кірістіру"
 
-#: ../gtk/gtkentry.c:10201
+#: ../gtk/gtkentry.c:10220
 msgid "Caps Lock and Num Lock are on"
 msgstr "Caps Lock пен Num Lock қосулы тұр"
 
-#: ../gtk/gtkentry.c:10203
+#: ../gtk/gtkentry.c:10222
 msgid "Num Lock is on"
 msgstr "Num Lock is қосулы тұр"
 
-#: ../gtk/gtkentry.c:10205
+#: ../gtk/gtkentry.c:10224
 msgid "Caps Lock is on"
 msgstr "Caps Lock қосулы тұр"
 
@@ -1666,8 +1948,8 @@ msgstr "Z қоршамы"
 msgid "Cannot end process with PID %d: %s"
 msgstr "PID %d бар үрдісті аяқтау мүмкін емес: %s"
 
-#: ../gtk/gtknotebook.c:5014
-#: ../gtk/gtknotebook.c:7668
+#: ../gtk/gtknotebook.c:5036
+#: ../gtk/gtknotebook.c:7690
 #, c-format
 msgid "Page %u"
 msgstr "Парақ %u"
@@ -3009,17 +3291,17 @@ msgstr "ZWJ Нөлдік бі_рігуші"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Нөлдік аж_ыратушы"
 
-#: ../gtk/gtkuimanager.c:1775
+#: ../gtk/gtkuimanager.c:1779
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Күтілмеген бастау '%s' тегі (%d жол, %d таңба)"
 
-#: ../gtk/gtkuimanager.c:1865
+#: ../gtk/gtkuimanager.c:1869
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Күтілмеген таңба ақпараты кездесті (%d жол, %d таңба)"
 
-#: ../gtk/gtkuimanager.c:2732
+#: ../gtk/gtkuimanager.c:2736
 msgid "Empty"
 msgstr "Бос"
 
