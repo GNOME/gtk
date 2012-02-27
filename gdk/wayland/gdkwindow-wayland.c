@@ -119,6 +119,9 @@ struct _GdkWindowImplWayland
 
   GdkGeometry geometry_hints;
   GdkWindowHints geometry_mask;
+
+  struct wl_input_device *grab_input_device;
+  guint32 grab_time;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -1476,4 +1479,16 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->get_property = gdk_wayland_window_get_property;
   impl_class->change_property = gdk_wayland_window_change_property;
   impl_class->delete_property = gdk_wayland_window_delete_property;
+}
+
+
+void
+_gdk_wayland_window_set_device_grabbed (GdkWindow              *window,
+                                        struct wl_input_device *input_device,
+                                        guint32                 time_)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  impl->grab_input_device = input_device;
+  impl->grab_time = time_;
 }

@@ -146,4 +146,8 @@ void _gdk_wayland_display_manager_add_display (GdkDisplayManager *manager,
 void _gdk_wayland_display_manager_remove_display (GdkDisplayManager *manager,
 						  GdkDisplay        *display);
 
+void _gdk_wayland_window_set_device_grabbed (GdkWindow *window,
+                                             struct wl_input_device *input_device,
+                                             guint32 time_);
+
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */
