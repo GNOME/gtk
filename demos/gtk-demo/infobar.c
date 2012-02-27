@@ -21,8 +21,13 @@ on_bar_response (GtkInfoBar *info_bar,
                                    "You clicked a button on an info bar");
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                             "Your response has id %d", response_id);
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+
+  g_signal_connect_swapped (dialog,
+                            "response",
+                            G_CALLBACK (gtk_widget_destroy),
+                            dialog);
+
+  gtk_widget_show_all (dialog);
 }
 
 GtkWidget *
