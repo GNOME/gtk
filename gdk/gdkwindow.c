@@ -9402,6 +9402,9 @@ proxy_pointer_event (GdkDisplay                 *display,
             return TRUE;
         }
 
+      if (is_touch_type (source_event->type) && !is_touch_type (event_type))
+        state |= GDK_BUTTON1_MASK;
+
       if (event_win &&
           gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER &&
           gdk_window_get_device_events (event_win, device) == 0)
@@ -9631,6 +9634,9 @@ proxy_button_event (GdkEvent *source_event,
       else if ((evmask & GDK_TOUCH_MASK) == 0)
         return TRUE;
     }
+
+  if (source_event->type == GDK_TOUCH_END && !is_touch_type (type))
+    state |= GDK_BUTTON1_MASK;
 
   if (event_win == NULL || display->ignore_core_events)
     return TRUE;
