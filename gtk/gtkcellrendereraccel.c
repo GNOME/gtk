@@ -726,7 +726,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
   gtk_style_context_get_background_color (context, GTK_STATE_FLAG_SELECTED, &color);
-  gtk_widget_override_background_color (label, 0, &color);
+  gtk_widget_override_background_color (eventbox, 0, &color);
 
   gtk_style_context_get_color (context, GTK_STATE_FLAG_SELECTED, &color);
   gtk_widget_override_color (label, 0, &color);
