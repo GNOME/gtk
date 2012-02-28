@@ -452,12 +452,24 @@ grab_key_callback (GtkWidget            *widget,
 
   accel_mods = event->state;
 
-  _gtk_translate_keyboard_accel_state (gdk_keymap_get_for_display (display),
-                                       event->hardware_keycode,
-                                       event->state,
-                                       gtk_accelerator_get_default_mod_mask (),
-                                       event->group,
-                                       &keyval, NULL, NULL, &consumed_modifiers);
+  if (event->keyval == GDK_KEY_Sys_Req && 
+      (accel_mods & GDK_MOD1_MASK) != 0)
+    {
+      /* HACK: we don't want to use SysRq as a keybinding (but we do
+       * want Alt+Print), so we avoid translation from Alt+Print to SysRq
+       */
+      keyval = GDK_KEY_Print;
+      consumed_modifiers = 0;
+    }
+  else
+    {
+      _gtk_translate_keyboard_accel_state (gdk_keymap_get_for_display (display),
+                                           event->hardware_keycode,
+                                           event->state,
+                                           gtk_accelerator_get_default_mod_mask (),
+                                           event->group,
+                                           &keyval, NULL, NULL, &consumed_modifiers);
+    }
 
   accel_key = gdk_keyval_to_lower (keyval);
   if (accel_key == GDK_KEY_ISO_Left_Tab) 
