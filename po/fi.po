@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-10-01 15:41-0400\n"
-"PO-Revision-Date: 2010-03-20 11:26+0200\n"
+"PO-Revision-Date: 2012-02-28 07:32+0200\n"
 "Last-Translator: Tommi Vainikainen <thv@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "Language: fi\n"
@@ -1313,7 +1313,7 @@ msgstr "default:LTR"
 #: gtk/gtkmain.c:863
 #, c-format
 msgid "Cannot open display: %s"
-msgstr "Näyttlö ei voi avata: %s"
+msgstr "Näyttöä ei voi avata: %s"
 
 #: gtk/gtkmain.c:922
 msgid "GTK+ Options"
