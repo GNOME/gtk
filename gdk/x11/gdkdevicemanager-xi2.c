@@ -253,7 +253,8 @@ translate_device_classes (GdkDisplay      *display,
 static gboolean
 is_touch_device (XIAnyClassInfo **classes,
                  guint            n_classes,
-                 GdkInputSource  *device_type)
+                 GdkInputSource  *device_type,
+                 gint            *num_touches)
 {
 #ifdef XINPUT_2_2
   guint i;
@@ -274,6 +275,8 @@ is_touch_device (XIAnyClassInfo **classes,
           else
             continue;
 
+          *num_touches = class->num_touches;
+
           return TRUE;
         }
     }
@@ -292,11 +295,12 @@ create_device (GdkDeviceManager *device_manager,
   GdkDeviceType type;
   GdkDevice *device;
   GdkInputMode mode;
+  gint num_touches = 0;
 
   if (dev->use == XIMasterKeyboard || dev->use == XISlaveKeyboard)
     input_source = GDK_SOURCE_KEYBOARD;
   else if (dev->use == XISlavePointer &&
-           is_touch_device (dev->classes, dev->num_classes, &touch_source))
+           is_touch_device (dev->classes, dev->num_classes, &touch_source, &num_touches))
     input_source = touch_source;
   else
     {
@@ -339,6 +343,20 @@ create_device (GdkDeviceManager *device_manager,
       mode = GDK_MODE_DISABLED;
       break;
     }
+
+  GDK_NOTE (INPUT,
+            ({
+              const gchar *type_names[] = { "master", "slave", "floating" };
+              const gchar *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch" };
+              const gchar *mode_names[] = { "disabled", "screen", "window" };
+              g_message ("input device:\n\tname: %s\n\ttype: %s\n\tsource: %s\n\tmode: %s\n\thas cursor: %d\n\ttouches: %d",
+                         dev->name,
+                         type_names[type],
+                         source_names[input_source],
+                         mode_names[mode],
+                         dev->use == XIMasterPointer,
+                         num_touches);
+            }));
 
   device = g_object_new (GDK_TYPE_X11_DEVICE_XI2,
                          "name", dev->name,
@@ -1193,7 +1211,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->button.button = xev->detail;
           }
 
-        if (xev->flags & (XIPointerEmulated | XITouchEmulatingPointer))
+        if (xev->flags & XIPointerEmulated)
           _gdk_event_set_pointer_emulated (event, TRUE);
 
         if (return_val == FALSE)
@@ -1233,7 +1251,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
-        if (xev->flags & (XIPointerEmulated | XITouchEmulatingPointer))
+        if (xev->flags & XIPointerEmulated)
           _gdk_event_set_pointer_emulated (event, TRUE);
 
         /* There doesn't seem to be motion hints in XI */
@@ -1262,6 +1280,13 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkDevice *source_device;
+
+        GDK_NOTE(EVENTS,
+                 g_message ("touch %s:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %d",
+                            ev->evtype == XI_TouchBegin ? "begin" : "end",
+                            xev->event,
+                            xev->detail,
+                            xev->flags & XITouchEmulatingPointer));
 
         if (ev->evtype == XI_TouchBegin)
           event->touch.type = GDK_TOUCH_BEGIN;
@@ -1328,6 +1353,12 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkDevice *source_device;
+
+        GDK_NOTE(EVENTS,
+                 g_message ("touch update:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %d",
+                            xev->event,
+                            xev->detail,
+                            xev->flags & XITouchEmulatingPointer));
 
         event->touch.window = window;
         event->touch.sequence = GUINT_TO_POINTER (xev->detail);
