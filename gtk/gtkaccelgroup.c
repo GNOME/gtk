@@ -1378,14 +1378,24 @@ gtk_accelerator_parse_with_keycode (const gchar     *accelerator,
                 {
                   *accelerator_codes = g_new0 (guint, n_keys + 1);
 
-                  /* Prefer level-0 keys to modified keys */
+                  /* Prefer level-0 group-0 keys to modified keys */
                   for (i = 0, j = 0; i < n_keys; ++i)
                     {
-                      if (keys[i].level == 0)
+                      if (keys[i].level == 0 && keys[i].group == 0)
                         (*accelerator_codes)[j++] = keys[i].keycode;
                     }
 
-                  /* No level-0 keys? Find in the whole keymap */
+                  /* No level-0 group-0 keys? Find in the whole group-0 */
+                  if (j == 0)
+                    {
+                      for (i = 0, j = 0; i < n_keys; ++i)
+                        {
+                          if (keys[i].group == 0)
+                            (*accelerator_codes)[j++] = keys[i].keycode;
+                        }
+                    }
+
+                  /* Still nothing? Try in other groups */
                   if (j == 0)
                     {
                       for (i = 0, j = 0; i < n_keys; ++i)
