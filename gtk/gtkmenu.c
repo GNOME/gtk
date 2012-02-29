@@ -4261,6 +4261,9 @@ gtk_menu_captured_event (GtkWidget *widget,
   gboolean retval = FALSE;
   GtkMenuPrivate *priv;
   GtkMenu *menu;
+  gdouble x_root, y_root;
+  guint button;
+  GdkModifierType state;
 
   menu = GTK_MENU (widget);
   priv = menu->priv;
@@ -4269,13 +4272,15 @@ gtk_menu_captured_event (GtkWidget *widget,
     return retval;
 
   source_device = gdk_event_get_source_device (event);
+  gdk_event_get_root_coords (event, &x_root, &y_root);
 
   switch (event->type)
     {
+    case GDK_TOUCH_BEGIN:
     case GDK_BUTTON_PRESS:
-      if (event->button.button == 1 &&
+      if ((!gdk_event_get_button (event, &button) || button == 1) &&
           gdk_device_get_source (source_device) == GDK_SOURCE_DIRECT_TOUCH &&
-          pointer_on_menu_widget (menu, event->button.x_root, event->button.y_root))
+          pointer_on_menu_widget (menu, x_root, y_root))
         {
           priv->drag_start_y = event->button.y_root;
           priv->initial_drag_offset = priv->scroll_offset;
@@ -4286,6 +4291,7 @@ gtk_menu_captured_event (GtkWidget *widget,
 
       priv->drag_already_pressed = TRUE;
       break;
+    case GDK_TOUCH_END:
     case GDK_BUTTON_RELEASE:
       if (priv->drag_scroll_started)
         {
@@ -4295,17 +4301,17 @@ gtk_menu_captured_event (GtkWidget *widget,
           retval = TRUE;
         }
       break;
+    case GDK_TOUCH_UPDATE:
     case GDK_MOTION_NOTIFY:
-      if (event->motion.state & GDK_BUTTON1_MASK &&
+      if ((!gdk_event_get_state (event, &state) || (state & GDK_BUTTON1_MASK) 
+!= 0) &&
           gdk_device_get_source (source_device) == GDK_SOURCE_DIRECT_TOUCH)
         {
           if (!priv->drag_already_pressed)
             {
-              if (pointer_on_menu_widget (menu,
-                                          event->motion.x_root,
-                                          event->motion.y_root))
+              if (pointer_on_menu_widget (menu, x_root, y_root))
                 {
-                  priv->drag_start_y = event->motion.y_root;
+                  priv->drag_start_y = y_root;
                   priv->initial_drag_offset = priv->scroll_offset;
                   priv->drag_scroll_started = FALSE;
                 }
@@ -4315,8 +4321,7 @@ gtk_menu_captured_event (GtkWidget *widget,
               priv->drag_already_pressed = TRUE;
             }
 
-          if (priv->drag_start_y < 0 &&
-              !priv->drag_scroll_started)
+          if (priv->drag_start_y < 0 && !priv->drag_scroll_started)
             break;
 
           if (priv->drag_scroll_started)
@@ -4325,7 +4330,7 @@ gtk_menu_captured_event (GtkWidget *widget,
               GtkBorder arrow_border;
               gdouble y_diff;
 
-              y_diff = event->motion.y_root - priv->drag_start_y;
+              y_diff = y_root - priv->drag_start_y;
               offset = priv->initial_drag_offset - y_diff;
 
               view_height = gdk_window_get_height (gtk_widget_get_window (widget));
@@ -4344,7 +4349,7 @@ gtk_menu_captured_event (GtkWidget *widget,
             }
           else if (gtk_drag_check_threshold (widget,
                                              0, priv->drag_start_y,
-                                             0, event->motion.y_root))
+                                             0, y_root))
             {
               priv->drag_scroll_started = TRUE;
               gtk_menu_shell_deselect (GTK_MENU_SHELL (menu));
