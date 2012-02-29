@@ -369,10 +369,10 @@ typedef enum
  *
  * If %GDK_TOUCH_MASK is enabled, the window will receive touch events
  * from touch-enabled devices. Those will come as sequences of #GdkEventTouch
- * with type %GDK_TOUCH_UPDATE, enclosed by 2 #GdkEventTouch events with
- * type %GDK_TOUCH_BEGIN / %GDK_TOUCH_END. gdk_event_get_touch_id() will
- * return the touch ID on those events, so different sequences may be
- * distinguished.
+ * with type %GDK_TOUCH_UPDATE, enclosed by two events with
+ * type %GDK_TOUCH_BEGIN and %GDK_TOUCH_END (or %GDK_TOUCH_CANCEL).
+ * gdk_event_get_event_sequence() returns the event sequence for these
+ * events, so different sequences may be distinguished.
  */
 typedef enum
 {

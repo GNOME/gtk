@@ -266,13 +266,13 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  *   was added in 2.8.
  * @GDK_DAMAGE: the content of the window has been changed. This event type
  *   was added in 2.14.
- * @GDK_TOUCH_UPDATE: A touch device has been updated. This event type
+ * @GDK_TOUCH_BEGIN: A new touch event sequence has just started. This event
+ *   type was added in 3.4.
+ * @GDK_TOUCH_UPDATE: A touch event sequence has been updated. This event type
  *   was added in 3.4.
- * @GDK_TOUCH_BEGIN: A new touch stream has just started. This event type
+ * @GDK_TOUCH_END: A touch event sequence has finished. This event type
  *   was added in 3.4.
- * @GDK_TOUCH_END: A touch stream has finished. This event type
- *   was added in 3.4.
- * @GDK_TOUCH_CANCEL: A touch stream has been canceled. This event type
+ * @GDK_TOUCH_CANCEL: A touch event sequence has been canceled. This event type
  *   was added in 3.4.
  * @GDK_EVENT_LAST: marks the end of the GdkEventType enumeration. Added in 2.18
  *
@@ -622,8 +622,7 @@ struct _GdkEventMotion
  *
  * Used for button press and button release events. The
  * @type field will be one of %GDK_BUTTON_PRESS,
- * %GDK_2BUTTON_PRESS, %GDK_3BUTTON_PRESS, %GDK_BUTTON_RELEASE,
- * %GDK_TOUCH_PRESS and %GDK_TOUCH_RELEASE.
+ * %GDK_2BUTTON_PRESS, %GDK_3BUTTON_PRESS or %GDK_BUTTON_RELEASE,
  *
  * Double and triple-clicks result in a sequence of events being received.
  * For double-clicks the order of events will be:
@@ -655,11 +654,6 @@ struct _GdkEventMotion
  * For a double click to occur, the second button press must occur within
  * 1/4 of a second of the first. For a triple click to occur, the third
  * button press must also occur within 1/2 second of the first button press.
- *
- * If the event has a type of %GDK_TOUCH_PRESS or %GDK_TOUCH_RELEASE,
- * this event will pertain to a sequence identified by
- * gdk_event_get_touch_sequence(). With multitouch devices, there may be
- * several ongoing sequences.
  */
 struct _GdkEventButton
 {
@@ -679,30 +673,37 @@ struct _GdkEventButton
 /**
  * GdkEventTouch:
  * @type: the type of the event (%GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE,
- *   %GDK_TOUCH_END, %GDK_TOUCH_CANCEL).
- * @window: the window which received the event.
+ *   %GDK_TOUCH_END, %GDK_TOUCH_CANCEL)
+ * @window: the window which received the event
  * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
+ *   <function>XSendEvent</function>)
  * @time: the time of the event in milliseconds.
- * @x: the x coordinate of the pointer relative to the window.
- * @y: the y coordinate of the pointer relative to the window.
+ * @x: the x coordinate of the pointer relative to the window
+ * @y: the y coordinate of the pointer relative to the window
  * @axes: @x, @y translated to the axes of @device, or %NULL if @device is
- *   the mouse.
+ *   the mouse
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
- *   buttons. See #GdkModifierType.
- * @sequence: the touch sequence that the event belongs to
+ *   buttons. See #GdkModifierType
+ * @sequence: the event sequence that the event belongs to
  * @emulating_pointer: whether the event should be used for emulating
- *   pointer events
- * @device: the device where the event originated.
+ *   pointer event
+ * @device: the device where the event originated
  * @x_root: the x coordinate of the pointer relative to the root of the
- *   screen.
+ *   screen
  * @y_root: the y coordinate of the pointer relative to the root of the
- *   screen.
+ *   screen
  *
- * Used for touch event.
+ * Used for touch events.
  * @type field will be one of %GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE,
  * %GDK_TOUCH_END or %GDK_TOUCH_CANCEL.
+ *
+ * Touch events are grouped into sequences by means of the @sequence
+ * field, which can also be obtained with gdk_event_get_event_sequence().
+ * Each sequence begins with a %GDK_TOUCH_BEGIN event, followed by
+ * any number of %GDK_TOUCH_UPDATE events, and ends with a %GDK_TOUCH_END
+ * (or %GDK_TOUCH_CANCEL) event. With multitouch devices, there may be
+ * several active sequences at the same time.
  */
 struct _GdkEventTouch
 {
