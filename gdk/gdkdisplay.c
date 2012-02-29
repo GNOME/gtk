@@ -721,7 +721,7 @@ _gdk_display_break_touch_grabs (GdkDisplay *display,
 void
 _gdk_display_add_touch_grab (GdkDisplay       *display,
                              GdkDevice        *device,
-                             GdkTouchSequence *sequence,
+                             GdkEventSequence *sequence,
                              GdkWindow        *window,
                              GdkWindow        *native_window,
                              GdkEventMask      event_mask,
@@ -744,7 +744,7 @@ _gdk_display_add_touch_grab (GdkDisplay       *display,
 gboolean
 _gdk_display_end_touch_grab (GdkDisplay       *display,
                              GdkDevice        *device,
-                             GdkTouchSequence *sequence)
+                             GdkEventSequence *sequence)
 {
   guint i;
 
@@ -1117,7 +1117,7 @@ _gdk_display_has_device_grab (GdkDisplay *display,
 GdkTouchGrabInfo *
 _gdk_display_has_touch_grab (GdkDisplay       *display,
                              GdkDevice        *device,
-                             GdkTouchSequence *sequence,
+                             GdkEventSequence *sequence,
                              gulong            serial)
 {
   guint i;

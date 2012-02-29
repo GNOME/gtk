@@ -104,7 +104,7 @@ typedef struct
 {
   GdkWindow *pane_window;
   GdkDevice *device;
-  GdkTouchSequence *sequence;
+  GdkEventSequence *sequence;
   gdouble x;
   gdouble y;
   GdkEvent *button_press_event;
@@ -1840,7 +1840,7 @@ _gtk_paned_find_pane_window (GtkWidget *widget,
 static TouchInfo *
 _gtk_paned_find_touch (GtkPaned         *paned,
                        GdkDevice        *device,
-                       GdkTouchSequence *sequence,
+                       GdkEventSequence *sequence,
                        guint            *index)
 {
   GtkPanedPrivate *priv = paned->priv;
@@ -1851,8 +1851,7 @@ _gtk_paned_find_touch (GtkPaned         *paned,
     {
       info = &g_array_index (priv->touches, TouchInfo, i);
 
-      if (info->device == device &&
-          info->sequence == sequence)
+      if (info->device == device && info->sequence == sequence)
         {
           if (index)
             *index = i;
@@ -1903,7 +1902,7 @@ gtk_paned_captured_event (GtkWidget *widget,
   GdkDevice *device, *source_device;
   GdkWindow *pane_window;
   TouchInfo new = { 0 }, *info;
-  GdkTouchSequence *sequence;
+  GdkEventSequence *sequence;
   guint index;
   gdouble event_x, event_y;
   gint x, y;
@@ -1915,7 +1914,7 @@ gtk_paned_captured_event (GtkWidget *widget,
    * depending on the target window event mask, so assume
    * touch ID = 0 for pointer events to ease handling.
    */
-  sequence = gdk_event_get_touch_sequence (event);
+  sequence = gdk_event_get_event_sequence (event);
 
   gdk_event_get_coords (event, &event_x, &event_y);
 

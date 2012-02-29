@@ -145,7 +145,7 @@ typedef struct _GdkEventWindowState GdkEventWindowState;
 typedef struct _GdkEventSetting     GdkEventSetting;
 typedef struct _GdkEventGrabBroken  GdkEventGrabBroken;
 
-typedef struct _GdkTouchSequence    GdkTouchSequence;
+typedef struct _GdkEventSequence    GdkEventSequence;
 
 typedef union  _GdkEvent	    GdkEvent;
 
@@ -714,7 +714,7 @@ struct _GdkEventTouch
   gdouble y;
   gdouble *axes;
   guint state;
-  GdkTouchSequence *sequence;
+  GdkEventSequence *sequence;
   gboolean emulating_pointer;
   GdkDevice *device;
   gdouble x_root, y_root;
@@ -1226,7 +1226,7 @@ void       gdk_event_set_screen         (GdkEvent        *event,
                                          GdkScreen       *screen);
 GdkScreen *gdk_event_get_screen         (const GdkEvent  *event);
 
-GdkTouchSequence *gdk_event_get_touch_sequence (const GdkEvent *event);
+GdkEventSequence *gdk_event_get_event_sequence (const GdkEvent *event);
 
 void	  gdk_set_show_events		(gboolean	 show_events);
 gboolean  gdk_get_show_events		(void);

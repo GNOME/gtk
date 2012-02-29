@@ -1791,19 +1791,21 @@ gdk_event_get_screen (const GdkEvent *event)
 }
 
 /**
- * gdk_event_get_touch_sequence:
+ * gdk_event_get_event_sequence:
  * @event: a #GdkEvent
  *
- * If @event if of type %GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE,
- * %GDK_TOUCH_END or %GDK_TOUCH_CANCEL, returns the #GdkTouchSequence
- * to which the event belongs. Otherwise, return %NULL.
+ * Returns the #GdkEventSequence to which @event belongs.
+ * Currently, only touch events (i.e. those with type %GDK_TOUCH_BEGIN,
+ * %GDK_TOUCH_UPDATE, %GDK_TOUCH_END or %GDK_TOUCH_CANCEL) are
+ * connected in sequences. If the event does not belong to an
+ * event sequence, %NULL is returned.
  *
- * Returns: the touch sequence that the event belongs to
+ * Returns: the event sequence that the event belongs to, or %NULL
  *
  * Since: 3.4
  */
-GdkTouchSequence *
-gdk_event_get_touch_sequence (const GdkEvent *event)
+GdkEventSequence *
+gdk_event_get_event_sequence (const GdkEvent *event)
 {
   if (!event)
     return NULL;

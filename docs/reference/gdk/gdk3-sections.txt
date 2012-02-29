@@ -782,7 +782,8 @@ gdk_event_get_root_coords
 gdk_event_get_scroll_direction
 gdk_event_get_state
 gdk_event_get_time
-gdk_event_get_touch_sequence
+GdkEventSequence
+gdk_event_get_event_sequence
 gdk_event_request_motions
 gdk_events_get_angle
 gdk_events_get_center
@@ -820,6 +821,7 @@ GdkEvent
 GdkEventAny
 GdkEventKey
 GdkEventButton
+GdkEventTouch
 GdkEventScroll
 GdkEventMotion
 GdkEventExpose

@@ -8350,15 +8350,14 @@ send_crossing_event (GdkDisplay                 *display,
   GdkTouchGrabInfo *touch_grab = NULL;
   GdkPointerWindowInfo *pointer_info;
   gboolean block_event = FALSE;
-  GdkTouchSequence *touch_sequence;
+  GdkEventSequence *sequence;
 
   grab = _gdk_display_has_device_grab (display, device, serial);
   pointer_info = _gdk_display_get_pointer_info (display, device);
 
-  touch_sequence = gdk_event_get_touch_sequence (event_in_queue);
-  if (touch_sequence)
-    touch_grab = _gdk_display_has_touch_grab (display, device,
-                                              touch_sequence, serial);
+  sequence = gdk_event_get_event_sequence (event_in_queue);
+  if (sequence)
+    touch_grab = _gdk_display_has_touch_grab (display, device, sequence, serial);
 
   if (touch_grab)
     {
@@ -9133,7 +9132,7 @@ _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
 static GdkWindow *
 get_event_window (GdkDisplay                 *display,
                   GdkDevice                  *device,
-                  GdkTouchSequence           *touch_sequence,
+                  GdkEventSequence           *sequence,
                   GdkWindow                  *pointer_window,
                   GdkEventType                type,
                   GdkModifierType             mask,
@@ -9146,7 +9145,7 @@ get_event_window (GdkDisplay                 *display,
   GdkDeviceGrabInfo *grab;
   GdkTouchGrabInfo *touch_grab;
 
-  touch_grab = _gdk_display_has_touch_grab (display, device, touch_sequence, serial);
+  touch_grab = _gdk_display_has_touch_grab (display, device, sequence, serial);
   grab = _gdk_display_get_last_device_grab (display, device);
 
   if (is_touch_type (type) && pointer_emulated)
@@ -9388,15 +9387,15 @@ proxy_pointer_event (GdkDisplay                 *display,
       GdkWindow *event_win;
       guint evmask;
       gboolean is_hint;
-      GdkTouchSequence *touch_sequence;
+      GdkEventSequence *sequence;
       GdkEventType event_type;
 
-      touch_sequence = gdk_event_get_touch_sequence (source_event);
+      sequence = gdk_event_get_event_sequence (source_event);
       event_type = source_event->type;
 
       event_win = get_event_window (display,
                                     device,
-                                    touch_sequence,
+                                    sequence,
                                     pointer_window,
                                     source_event->type,
                                     state,
@@ -9417,7 +9416,7 @@ proxy_pointer_event (GdkDisplay                 *display,
                *     not mutate in this case.
                */
               if ((evmask & GDK_TOUCH_MASK) == 0 ||
-                  !_gdk_display_has_touch_grab (display, device, touch_sequence, serial))
+                  !_gdk_display_has_touch_grab (display, device, sequence, serial))
                 event_type = GDK_MOTION_NOTIFY;
             }
           else if ((evmask & GDK_TOUCH_MASK) == 0)
@@ -9550,7 +9549,7 @@ proxy_button_event (GdkEvent *source_event,
   GdkWindow *w;
   GdkDevice *device, *source_device;
   GdkEventMask evmask;
-  GdkTouchSequence *touch_sequence;
+  GdkEventSequence *sequence;
 
   type = source_event->any.type;
   event_window = source_event->any.window;
@@ -9567,7 +9566,7 @@ proxy_button_event (GdkEvent *source_event,
   pointer_info = _gdk_display_get_pointer_info (display, device);
   pointer_grab = _gdk_display_has_device_grab (display, device, serial);
 
-  touch_sequence = gdk_event_get_touch_sequence (source_event);
+  sequence = gdk_event_get_event_sequence (source_event);
 
   if ((type == GDK_BUTTON_PRESS ||
        type == GDK_TOUCH_BEGIN) &&
@@ -9605,7 +9604,7 @@ proxy_button_event (GdkEvent *source_event,
           if (type == GDK_TOUCH_BEGIN &&
               pointer_window->event_mask & GDK_TOUCH_MASK)
             {
-              _gdk_display_add_touch_grab (display, device, touch_sequence,
+              _gdk_display_add_touch_grab (display, device, sequence,
                                            pointer_window, event_window,
                                            gdk_window_get_events (pointer_window),
                                            serial, time_);
@@ -9635,7 +9634,7 @@ proxy_button_event (GdkEvent *source_event,
 
   event_win = get_event_window (display,
                                 device,
-                                touch_sequence,
+                                sequence,
                                 pointer_window,
                                 type, state,
                                 &evmask,
@@ -9647,7 +9646,7 @@ proxy_button_event (GdkEvent *source_event,
       if (_gdk_event_get_pointer_emulated (source_event))
         {
           if ((evmask & GDK_TOUCH_MASK) == 0 ||
-              !_gdk_display_has_touch_grab (display, device, touch_sequence, serial))
+              !_gdk_display_has_touch_grab (display, device, sequence, serial))
             {
               if (type == GDK_TOUCH_BEGIN)
                 type = GDK_BUTTON_PRESS;
@@ -10053,12 +10052,12 @@ _gdk_windowing_got_event (GdkDisplay *display,
        event->type == GDK_TOUCH_END) &&
       !event->any.send_event)
     {
-      GdkTouchSequence *touch_sequence;
+      GdkEventSequence *sequence;
 
-      touch_sequence = gdk_event_get_touch_sequence (event);
-      if (event->type == GDK_TOUCH_END && touch_sequence)
+      sequence = gdk_event_get_event_sequence (event);
+      if (event->type == GDK_TOUCH_END && sequence)
         {
-          _gdk_display_end_touch_grab (display, device, touch_sequence);
+          _gdk_display_end_touch_grab (display, device, sequence);
         }
 
       if (event->type == GDK_BUTTON_RELEASE ||
