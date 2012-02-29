@@ -6576,7 +6576,7 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
 				 info->resize_height > 0 ? height : NULL);
     }
 
-  /* Don't ever request zero width or height, its not supported by
+  /* Don't ever request zero width or height, it's not supported by
      gdk. The size allocation code will round it to 1 anyway but if
      we do it then the value returned from this function will is
      not comparable to the size allocation read from the GtkWindow. */

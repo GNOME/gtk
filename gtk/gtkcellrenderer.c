@@ -46,7 +46,7 @@
  * is rendered in the correct location using gtk_cell_renderer_render().
  *
  * There are a number of rules that must be followed when writing a new
- * #GtkCellRenderer.  First and foremost, its important that a certain set
+ * #GtkCellRenderer.  First and foremost, it's important that a certain set
  * of properties will always yield a cell renderer of the same size,
  * barring a #GtkStyle change.  The #GtkCellRenderer also has a number of
  * generic properties that are expected to be honored by all children.

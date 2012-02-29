@@ -596,7 +596,7 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
   /* The first cell view in context is responsible for allocating the context at allocate time 
    * (or the cellview has its own context and is not grouped with any other cell views) 
    *
-   * If the cellview is in "fit model" mode, we assume its not in context and needs to
+   * If the cellview is in "fit model" mode, we assume it's not in context and needs to
    * allocate every time.
    */
   if (priv->fit_model)
@@ -993,7 +993,7 @@ gtk_cell_view_new_with_context (GtkCellArea        *area,
  * @text: the text to display in the cell view
  *
  * Creates a new #GtkCellView widget, adds a #GtkCellRendererText 
- * to it, and makes its show @text.
+ * to it, and makes it show @text.
  *
  * Return value: A newly created #GtkCellView widget.
  *
@@ -1058,8 +1058,8 @@ gtk_cell_view_new_with_markup (const gchar *markup)
  * gtk_cell_view_new_with_pixbuf:
  * @pixbuf: the image to display in the cell view
  *
- * Creates a new #GtkCellView widget, adds a #GtkCellRendererPixbuf 
- * to it, and makes its show @pixbuf. 
+ * Creates a new #GtkCellView widget, adds a #GtkCellRendererPixbuf
+ * to it, and makes it show @pixbuf.
  *
  * Return value: A newly created #GtkCellView widget.
  *

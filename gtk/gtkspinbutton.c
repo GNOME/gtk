@@ -2407,7 +2407,7 @@ gtk_spin_button_set_value (GtkSpinButton *spin_button,
  * @policy: a #GtkSpinButtonUpdatePolicy value
  *
  * Sets the update behavior of a spin button.
- * This determines wether the spin button is always updated
+ * This determines whether the spin button is always updated
  * or only when a valid value is set.
  */
 void

@@ -2075,8 +2075,8 @@ gtk_cell_area_get_request_mode (GtkCellArea *area)
  *
  * Retrieves a cell area's initial minimum and natural width.
  *
- * @area will store some geometrical information in @context along the way,
- * when requesting sizes over an arbitrary number of rows, its not important
+ * @area will store some geometrical information in @context along the way;
+ * when requesting sizes over an arbitrary number of rows, it's not important
  * to check the @minimum_width and @natural_width of this call but rather to
  * consult gtk_cell_area_context_get_preferred_width() after a series of
  * requests.
@@ -2151,8 +2151,8 @@ gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
  *
  * Retrieves a cell area's initial minimum and natural height.
  *
- * @area will store some geometrical information in @context along the way,
- * when requesting sizes over an arbitrary number of rows, its not important
+ * @area will store some geometrical information in @context along the way;
+ * when requesting sizes over an arbitrary number of rows, it's not important
  * to check the @minimum_height and @natural_height of this call but rather to
  * consult gtk_cell_area_context_get_preferred_height() after a series of
  * requests.

@@ -955,7 +955,7 @@ _gtk_accel_map_remove_group (const gchar   *accel_path,
  *
  * Note that locking of individual accelerator paths is independent from 
  * locking the #GtkAccelGroup containing them. For runtime accelerator
- * changes to be possible both the accelerator path and its #GtkAccelGroup
+ * changes to be possible, both the accelerator path and its #GtkAccelGroup
  * have to be unlocked. 
  *
  * Since: 2.4

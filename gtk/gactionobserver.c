@@ -118,7 +118,7 @@ g_action_observer_action_enabled_changed (GActionObserver   *observer,
  * @state: the new state of the action
  *
  * This function is called when an action that the observer is
- * registered to receive events for changes its state.
+ * registered to receive events for changes to its state.
  *
  * This function should only be called by objects with which the
  * observer has explicitly registered itself to receive events.

@@ -1409,7 +1409,7 @@ gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
   /* The slightely inaccurate name "gtk_tool_item_toolbar_reconfigured" was
    * choosen over "gtk_tool_item_tool_shell_reconfigured", since the function
    * emits the "toolbar-reconfigured" signal, not "tool-shell-reconfigured".
-   * Its not possible to rename the signal, and emitting another name than
+   * It's not possible to rename the signal, and emitting another name than
    * indicated by the function name would be quite confusing. That's the
    * price of providing stable APIs.
    */

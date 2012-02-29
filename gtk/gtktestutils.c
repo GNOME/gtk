@@ -130,7 +130,7 @@ test_find_widget_input_windows (GtkWidget *widget,
  * particular because the mouse pointer is warped to the key press
  * location, see gdk_test_simulate_key() for details.
  *
- * Returns: wether all actions neccessary for the key event simulation were carried out successfully.
+ * Returns: whether all actions neccessary for the key event simulation were carried out successfully.
  *
  * Since: 2.14
  **/
@@ -166,7 +166,7 @@ gtk_test_widget_send_key (GtkWidget      *widget,
  * particular because the mouse pointer is warped to the button click
  * location, see gdk_test_simulate_button() for details.
  *
- * Returns: wether all actions neccessary for the button click simulation were carried out successfully.
+ * Returns: whether all actions neccessary for the button click simulation were carried out successfully.
  *
  * Since: 2.14
  **/
@@ -197,7 +197,7 @@ gtk_test_widget_click (GtkWidget      *widget,
  * spin button arrow areas, usually leading to an increase or decrease of
  * spin button's value.
  *
- * Returns: wether all actions neccessary for the button click simulation were carried out successfully.
+ * Returns: whether all actions neccessary for the button click simulation were carried out successfully.
  *
  * Since: 2.14
  **/

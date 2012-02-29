@@ -7503,13 +7503,13 @@ gtk_widget_set_receives_default (GtkWidget *widget,
  * gtk_widget_get_receives_default:
  * @widget: a #GtkWidget
  *
- * Determines whether @widget is alyways treated as default widget
- * withing its toplevel when it has the focus, even if another widget
+ * Determines whether @widget is always treated as the default widget
+ * within its toplevel when it has the focus, even if another widget
  * is the default.
  *
  * See gtk_widget_set_receives_default().
  *
- * Return value: %TRUE if @widget acts as default widget when focussed,
+ * Return value: %TRUE if @widget acts as the default widget when focussed,
  *               %FALSE otherwise
  *
  * Since: 2.18

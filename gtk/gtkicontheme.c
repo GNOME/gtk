@@ -109,7 +109,7 @@
  * or stock items, rather than directly, but looking up icons
  * directly is also simple. The #GtkIconTheme object acts
  * as a database of all the icons in the current theme. You
- * can create new #GtkIconTheme objects, but its much more
+ * can create new #GtkIconTheme objects, but it's much more
  * efficient to use the standard icon theme for the #GdkScreen
  * so that the icon information is shared with other people
  * looking up icons. In the case where the default screen is
