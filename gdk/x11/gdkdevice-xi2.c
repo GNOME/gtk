@@ -701,7 +701,7 @@ _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
   guint state = 0;
 
   if (mods_state)
-    state = (guint) mods_state->base | mods_state->latched | mods_state->locked;
+    state = mods_state->effective;
 
   if (buttons_state)
     {
