@@ -692,6 +692,8 @@ struct _GdkEventButton
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
  * @sequence: the touch sequence that the event belongs to
+ * @emulating_pointer: whether the event should be used for emulating
+ *   pointer events
  * @device: the device where the event originated.
  * @x_root: the x coordinate of the pointer relative to the root of the
  *   screen.
@@ -713,6 +715,7 @@ struct _GdkEventTouch
   gdouble *axes;
   guint state;
   GdkTouchSequence *sequence;
+  gboolean emulating_pointer;
   GdkDevice *device;
   gdouble x_root, y_root;
 };

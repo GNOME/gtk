@@ -1332,7 +1332,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->touch.sequence = GUINT_TO_POINTER (xev->detail);
 
         if (xev->flags & XITouchEmulatingPointer)
-          _gdk_event_set_pointer_emulated (event, TRUE);
+          {
+            event->touch.emulating_pointer = TRUE;
+            _gdk_event_set_pointer_emulated (event, TRUE);
+          }
 
         if (return_val == FALSE)
           break;
@@ -1380,7 +1383,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->touch.state |= GDK_BUTTON1_MASK;
 
         if (xev->flags & XITouchEmulatingPointer)
-          _gdk_event_set_pointer_emulated (event, TRUE);
+          {
+            event->touch.emulating_pointer = TRUE;
+            _gdk_event_set_pointer_emulated (event, TRUE);
+          }
 
         event->touch.axes = translate_axes (event->touch.device,
                                             event->touch.x,
