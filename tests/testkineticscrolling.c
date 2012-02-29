@@ -68,7 +68,7 @@ kinetic_scrolling (void)
 
   swindow = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_kinetic_scrolling (GTK_SCROLLED_WINDOW (swindow), TRUE);
-  gtk_scrolled_window_set_capture_button_press (GTK_SCROLLED_WINDOW (swindow), FALSE);
+  gtk_scrolled_window_set_capture_button_press (GTK_SCROLLED_WINDOW (swindow), TRUE);
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (swindow), button_grid);
   gtk_widget_show (button_grid);
 
