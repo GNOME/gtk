@@ -783,16 +783,7 @@ _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
     }
 
   if (group_state)
-    {
-      gint group;
-
-      group = group_state->base | group_state->latched | group_state->locked;
-
-      /* FIXME: do we need the XKB complications for this ? */
-      group = CLAMP(group, 0, 3);
-
-      state |= group << 13;
-    }
+    state |= (group_state->effective) << 13;
 
   return state;
 }
