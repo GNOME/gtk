@@ -127,12 +127,22 @@ gtk_overlay_get_main_widget_allocation (GtkOverlay *overlay,
     {
       GtkWidget *grandchild;
       gint x, y;
+      gboolean res;
 
       grandchild = gtk_bin_get_child (GTK_BIN (main_widget));
       res = gtk_widget_translate_coordinates (grandchild, main_widget, 0, 0, &x, &y);
 
-      main_alloc.x = x;
-      main_alloc.y = y;
+      if (res)
+        {
+          main_alloc.x = x;
+          main_alloc.y = y;
+        }
+      else
+        {
+          main_alloc.x = 0;
+          main_alloc.y = 0;
+        }
+
       main_alloc.width = gtk_widget_get_allocated_width (grandchild);
       main_alloc.height = gtk_widget_get_allocated_height (grandchild);
     }
