@@ -1169,6 +1169,25 @@ gtk_scrolled_window_get_kinetic_scrolling (GtkScrolledWindow *scrolled_window)
   return scrolled_window->priv->kinetic_scrolling;
 }
 
+/**
+ * gtk_scrolled_window_set_capture_button_press:
+ * @scrolled_window: a #GtkScrolledWindow
+ * @capture_button_press: %TRUE to capture button presses
+ *
+ * Changes the behaviour of @scrolled_window wrt. to the initial
+ * event that possibly starts kinetic scrolling. When @capture_button_press
+ * is set to %TRUE, the event is captured by the scrolled window, and
+ * then later replayed if it is meant to go to the child widget.
+ *
+ * This should be enabled if any child widgets perform non-reversible
+ * actions on #GtkWidget::button-press-event. If they don't, and handle
+ * additionally handle #GtkWidget::grab-broken-event, it might be better
+ * to set @capture_button_press to %FALSE.
+ *
+ * This setting only has an effect if kinetic scrolling is enabled.
+ *
+ * Since: 3.4
+ */
 void
 gtk_scrolled_window_set_capture_button_press (GtkScrolledWindow *scrolled_window,
                                               gboolean           capture_button_press)
@@ -1178,6 +1197,17 @@ gtk_scrolled_window_set_capture_button_press (GtkScrolledWindow *scrolled_window
   scrolled_window->priv->capture_button_press = capture_button_press;
 }
 
+/**
+ * gtk_scrolled_window_get_capture_button_press:
+ * @scrolled_window: a #GtkScrolledWindow
+ *
+ * Return whether button presses are captured during kinetic
+ * scrolling. See gtk_scrolled_window_set_capture_button_press().
+ *
+ * Returns: %TRUE if button presses are captured during kinetic scrolling
+ *
+ * Since: 3.4
+ */
 gboolean
 gtk_scrolled_window_get_capture_button_press (GtkScrolledWindow *scrolled_window)
 {
