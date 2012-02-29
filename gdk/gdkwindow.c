@@ -10434,7 +10434,7 @@ gdk_window_get_root_origin (GdkWindow *window,
 /**
  * gdk_window_get_frame_extents:
  * @window: a toplevel #GdkWindow
- * @rect: rectangle to fill with bounding box of the window frame
+ * @rect: (out): rectangle to fill with bounding box of the window frame
  *
  * Obtains the bounding box of the window, including window manager
  * titlebar/borders if any. The frame position is given in root window
