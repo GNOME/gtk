@@ -9267,8 +9267,8 @@ proxy_pointer_event (GdkDisplay                 *display,
     non_linear = TRUE;
 
   if (pointer_info->need_touch_press_enter &&
-      gdk_device_get_source (pointer_info->last_slave) != GDK_SOURCE_DIRECT_TOUCH &&
-      gdk_device_get_source (pointer_info->last_slave) != GDK_SOURCE_INDIRECT_TOUCH &&
+      gdk_device_get_source (pointer_info->last_slave) != GDK_SOURCE_TOUCHSCREEN &&
+      gdk_device_get_source (pointer_info->last_slave) != GDK_SOURCE_TOUCHPAD &&
       (source_event->type != GDK_TOUCH_UPDATE ||
        _gdk_event_get_pointer_emulated (source_event)))
     {
@@ -9680,8 +9680,8 @@ proxy_button_event (GdkEvent *source_event,
        * which synthesized a leave notify event, so synthesize another enter
        * notify to tell the pointer is on the window.
        */
-      if (gdk_device_get_source (source_device) == GDK_SOURCE_DIRECT_TOUCH ||
-          gdk_device_get_source (source_device) == GDK_SOURCE_INDIRECT_TOUCH)
+      if (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN ||
+          gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHPAD)
         mode = GDK_CROSSING_TOUCH_PRESS;
       else
         mode = GDK_CROSSING_DEVICE_SWITCH;
@@ -9734,8 +9734,8 @@ proxy_button_event (GdkEvent *source_event,
         _gdk_event_button_generate (display, event);
       else if (type == GDK_BUTTON_RELEASE &&
                pointer_window == pointer_info->window_under_pointer &&
-               (gdk_device_get_source (source_device) == GDK_SOURCE_DIRECT_TOUCH ||
-                gdk_device_get_source (source_device) == GDK_SOURCE_INDIRECT_TOUCH))
+               (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN ||
+                gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHPAD))
         {
           /* Synthesize a leave notify event
            * whenever a touch device is released
@@ -9770,8 +9770,8 @@ proxy_button_event (GdkEvent *source_event,
       if ((type == GDK_TOUCH_END &&
            _gdk_event_get_pointer_emulated (source_event)) &&
            pointer_window == pointer_info->window_under_pointer &&
-           (gdk_device_get_source (source_device) == GDK_SOURCE_DIRECT_TOUCH ||
-            gdk_device_get_source (source_device) == GDK_SOURCE_INDIRECT_TOUCH))
+           (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN ||
+            gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHPAD))
         {
           /* Synthesize a leave notify event
            * whenever a touch device is released

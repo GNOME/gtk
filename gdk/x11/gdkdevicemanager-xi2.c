@@ -271,9 +271,9 @@ is_touch_device (XIAnyClassInfo **classes,
       if (class->num_touches > 0)
         {
           if (class->mode == XIDirectTouch)
-            *device_type = GDK_SOURCE_DIRECT_TOUCH;
+            *device_type = GDK_SOURCE_TOUCHSCREEN;
           else if (class->mode == XIDependentTouch)
-            *device_type = GDK_SOURCE_INDIRECT_TOUCH;
+            *device_type = GDK_SOURCE_TOUCHPAD;
           else
             continue;
 
@@ -317,7 +317,7 @@ create_device (GdkDeviceManager *device_manager,
       else if (strstr (tmp_name, "finger") ||
                (strstr (tmp_name, "touch") &&
                 !strstr (tmp_name, "touchpad")))
-        input_source = GDK_SOURCE_DIRECT_TOUCH;
+        input_source = GDK_SOURCE_TOUCHSCREEN;
       else if (strstr (tmp_name, "wacom") ||
                strstr (tmp_name, "pen"))
         input_source = GDK_SOURCE_PEN;

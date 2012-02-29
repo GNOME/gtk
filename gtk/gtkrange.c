@@ -2554,7 +2554,7 @@ gtk_range_button_press (GtkWidget      *widget,
       return TRUE;
     }
 
-  if (source != GDK_SOURCE_DIRECT_TOUCH &&
+  if (source != GDK_SOURCE_TOUCHSCREEN &&
       priv->mouse_location == MOUSE_TROUGH &&
       event->button == GDK_BUTTON_PRIMARY)
     {
@@ -2606,7 +2606,7 @@ gtk_range_button_press (GtkWidget      *widget,
       return TRUE;
     }
   else if ((priv->mouse_location == MOUSE_TROUGH &&
-            (source == GDK_SOURCE_DIRECT_TOUCH || event->button == GDK_BUTTON_MIDDLE)) ||
+            (source == GDK_SOURCE_TOUCHSCREEN || event->button == GDK_BUTTON_MIDDLE)) ||
            priv->mouse_location == MOUSE_SLIDER)
     {
       gboolean need_value_update = FALSE;
@@ -2616,7 +2616,7 @@ gtk_range_button_press (GtkWidget      *widget,
        * On button 2 press and touch devices, we warp the slider to
        * mouse position, then begin the slider drag.
        */
-      if (event->button == GDK_BUTTON_MIDDLE || source == GDK_SOURCE_DIRECT_TOUCH)
+      if (event->button == GDK_BUTTON_MIDDLE || source == GDK_SOURCE_TOUCHSCREEN)
         {
           gdouble slider_low_value, slider_high_value, new_value;
           

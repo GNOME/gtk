@@ -1088,7 +1088,7 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 
                       source_device = gdk_event_get_source_device ((GdkEvent *) event);
 
-                      if (gdk_device_get_source (source_device) == GDK_SOURCE_DIRECT_TOUCH)
+                      if (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN)
                         _gtk_menu_item_popup_submenu (menu_item, TRUE);
                     }
                 }

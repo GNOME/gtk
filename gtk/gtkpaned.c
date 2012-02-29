@@ -1920,7 +1920,7 @@ gtk_paned_captured_event (GtkWidget *widget,
   gdk_event_get_coords (event, &event_x, &event_y);
 
   if (!source_device ||
-      gdk_device_get_source (source_device) != GDK_SOURCE_DIRECT_TOUCH)
+      gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
     return FALSE;
 
   switch (event->type)

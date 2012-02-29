@@ -1679,7 +1679,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
 
   /* if no item is selected, select the first one */
   if (!menu_shell->priv->active_menu_item &&
-      source_device && gdk_device_get_source (source_device) == GDK_SOURCE_DIRECT_TOUCH)
+      source_device && gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN)
     gtk_menu_shell_select_first (menu_shell, TRUE);
 
   /* Once everything is set up correctly, map the toplevel */
@@ -3374,7 +3374,7 @@ gtk_menu_button_press (GtkWidget      *widget,
     return TRUE;
 
   if (GTK_IS_MENU_ITEM (event_widget) &&
-      gdk_device_get_source (source_device) == GDK_SOURCE_DIRECT_TOUCH &&
+      gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN &&
       GTK_MENU_ITEM (event_widget)->priv->submenu != NULL &&
       !gtk_widget_is_drawable (GTK_MENU_ITEM (event_widget)->priv->submenu))
     menu->priv->ignore_button_release = TRUE;
@@ -3647,7 +3647,7 @@ gtk_menu_motion_notify (GtkWidget      *widget,
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
 
   if (GTK_IS_MENU (widget) &&
-      gdk_device_get_source (source_device) != GDK_SOURCE_DIRECT_TOUCH)
+      gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
     {
       GtkMenuPrivate *priv = GTK_MENU(widget)->priv;
 
@@ -4115,7 +4115,7 @@ gtk_menu_enter_notify (GtkWidget        *widget,
   menu_item = gtk_get_event_widget ((GdkEvent*) event);
 
   if (GTK_IS_MENU (widget) &&
-      gdk_device_get_source (source_device) != GDK_SOURCE_DIRECT_TOUCH)
+      gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
     {
       GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
 
@@ -4124,7 +4124,7 @@ gtk_menu_enter_notify (GtkWidget        *widget,
                                    event->x_root, event->y_root, TRUE, TRUE);
     }
 
-  if (gdk_device_get_source (source_device) != GDK_SOURCE_DIRECT_TOUCH &&
+  if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN &&
       GTK_IS_MENU_ITEM (menu_item))
     {
       GtkWidget *menu = gtk_widget_get_parent (menu_item);
@@ -4197,7 +4197,7 @@ gtk_menu_leave_notify (GtkWidget        *widget,
 
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
 
-  if (gdk_device_get_source (source_device) != GDK_SOURCE_DIRECT_TOUCH)
+  if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
     gtk_menu_handle_scrolling (menu, event->x_root, event->y_root, FALSE, TRUE);
 
   event_widget = gtk_get_event_widget ((GdkEvent*) event);
@@ -4279,7 +4279,7 @@ gtk_menu_captured_event (GtkWidget *widget,
     case GDK_TOUCH_BEGIN:
     case GDK_BUTTON_PRESS:
       if ((!gdk_event_get_button (event, &button) || button == 1) &&
-          gdk_device_get_source (source_device) == GDK_SOURCE_DIRECT_TOUCH &&
+          gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN &&
           pointer_on_menu_widget (menu, x_root, y_root))
         {
           priv->drag_start_y = event->button.y_root;
@@ -4305,7 +4305,7 @@ gtk_menu_captured_event (GtkWidget *widget,
     case GDK_MOTION_NOTIFY:
       if ((!gdk_event_get_state (event, &state) || (state & GDK_BUTTON1_MASK) 
 != 0) &&
-          gdk_device_get_source (source_device) == GDK_SOURCE_DIRECT_TOUCH)
+          gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN)
         {
           if (!priv->drag_already_pressed)
             {

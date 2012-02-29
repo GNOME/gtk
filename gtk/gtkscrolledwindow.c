@@ -483,7 +483,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * GtkScrolledWindow:kinetic-scrolling:
    *
    * The kinetic scrolling behavior flags. Kinetic scrolling
-   * only applies to devices with source %GDK_SOURCE_DIRECT_TOUCH
+   * only applies to devices with source %GDK_SOURCE_TOUCHSCREEN
    *
    * Since: 3.4
    */
@@ -1112,7 +1112,7 @@ gtk_scrolled_window_get_shadow_type (GtkScrolledWindow *scrolled_window)
  *
  * Turns kinetic scrolling on or off.
  * Kinetic scrolling only applies to devices with source
- * %GDK_SOURCE_DIRECT_TOUCH.
+ * %GDK_SOURCE_TOUCHSCREEN.
  *
  * Since: 3.4
  **/
@@ -2673,7 +2673,7 @@ gtk_scrolled_window_captured_button_press (GtkWidget *widget,
   source_device = gdk_event_get_source_device (event);
   source = gdk_device_get_source (source_device);
 
-  if (source != GDK_SOURCE_DIRECT_TOUCH)
+  if (source != GDK_SOURCE_TOUCHSCREEN)
     return FALSE;
 
   event_widget = gtk_get_event_widget (event);

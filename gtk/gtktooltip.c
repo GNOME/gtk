@@ -1560,7 +1560,7 @@ tooltips_enabled (GdkEvent *event)
 		"gtk-enable-tooltips", &enabled,
 		NULL);
 
-  if (enabled && source != GDK_SOURCE_DIRECT_TOUCH)
+  if (enabled && source != GDK_SOURCE_TOUCHSCREEN)
     return TRUE;
 
   return FALSE;
