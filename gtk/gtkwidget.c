@@ -5854,9 +5854,9 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
   gboolean return_val;
   gint signum;
 
-  /* FIXME: we may need to remember the touch sequence and
-   * ignore other touches until the first sequence ends
-   */
+  if (!event->emulating_pointer)
+    return FALSE;
+
   if (event->type == GDK_TOUCH_BEGIN ||
       event->type == GDK_TOUCH_END)
     {
