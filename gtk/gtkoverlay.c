@@ -114,6 +114,41 @@ gtk_overlay_create_child_window (GtkOverlay *overlay,
 }
 
 static void
+gtk_overlay_get_main_widget_allocation (GtkOverlay *overlay,
+                                        GtkAllocation *main_alloc_out)
+{
+  GtkWidget *main_widget;
+  GtkAllocation main_alloc;
+
+  main_widget = gtk_bin_get_child (GTK_BIN (overlay));
+
+  /* special-case scrolled windows */
+  if (GTK_IS_SCROLLED_WINDOW (main_widget))
+    {
+      GtkWidget *grandchild;
+      gint x, y;
+
+      grandchild = gtk_bin_get_child (GTK_BIN (main_widget));
+      res = gtk_widget_translate_coordinates (grandchild, main_widget, 0, 0, &x, &y);
+
+      main_alloc.x = x;
+      main_alloc.y = y;
+      main_alloc.width = gtk_widget_get_allocated_width (grandchild);
+      main_alloc.height = gtk_widget_get_allocated_height (grandchild);
+    }
+  else
+    {
+      main_alloc.x = 0;
+      main_alloc.y = 0;
+      main_alloc.width = gtk_widget_get_allocated_width (main_widget);
+      main_alloc.height = gtk_widget_get_allocated_height (main_widget);
+    }
+
+  if (main_alloc_out)
+    *main_alloc_out = main_alloc;
+}
+
+static void
 gtk_overlay_child_allocate (GtkOverlay      *overlay,
                             GtkOverlayChild *child)
 {
@@ -247,36 +282,12 @@ gtk_overlay_get_child_position (GtkOverlay    *overlay,
                                 GtkWidget     *widget,
                                 GtkAllocation *alloc)
 {
-  GtkWidget *main_widget;
   GtkAllocation main_alloc;
   GtkRequisition req;
   GtkAlign halign;
   GtkTextDirection direction;
 
-  main_widget = gtk_bin_get_child (GTK_BIN (overlay));
-
-  /* special-case scrolled windows */
-  if (GTK_IS_SCROLLED_WINDOW (main_widget))
-    {
-      GtkWidget *grandchild;
-      gint x, y;
-
-      grandchild = gtk_bin_get_child (GTK_BIN (main_widget));
-      gtk_widget_translate_coordinates (grandchild, main_widget, 0, 0, &x, &y);
-
-      main_alloc.x = x;
-      main_alloc.y = y;
-      main_alloc.width = gtk_widget_get_allocated_width (grandchild);
-      main_alloc.height = gtk_widget_get_allocated_height (grandchild);
-    }
-  else
-    {
-      main_alloc.x = 0;
-      main_alloc.y = 0;
-      main_alloc.width = gtk_widget_get_allocated_width (main_widget);
-      main_alloc.height = gtk_widget_get_allocated_height (main_widget);
-    }
-
+  gtk_overlay_get_main_widget_allocation (overlay, &main_alloc);
   gtk_widget_get_preferred_size (widget, NULL, &req);
 
   alloc->x = main_alloc.x;
