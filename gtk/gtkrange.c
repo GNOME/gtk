@@ -2803,6 +2803,7 @@ _gtk_range_get_wheel_delta (GtkRange       *range,
   gdouble dx, dy;
   gdouble delta;
   gdouble page_size;
+  gdouble size;
 
   page_size = gtk_adjustment_get_page_size (adjustment);
 
@@ -2812,22 +2813,27 @@ _gtk_range_get_wheel_delta (GtkRange       *range,
 
       gtk_widget_get_allocation (GTK_WIDGET (range), &allocation);
 
+      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
+        size = allocation.width;
+      else
+        size = allocation.height;
+
       if (dx != 0 &&
           gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
         {
           if (GTK_IS_SCROLLBAR (range) && page_size > 0)
-            delta = dx * page_size / allocation.width;
+            delta = dx * page_size / size;
           else
             delta = dx * (gtk_adjustment_get_upper (adjustment) -
-                          gtk_adjustment_get_lower (adjustment)) / allocation.width;
+                          gtk_adjustment_get_lower (adjustment)) / size;
         }
       else
         {
           if (GTK_IS_SCROLLBAR (range) && page_size > 0)
-            delta = dy * page_size / allocation.height;
+            delta = dy * page_size / size;
           else
             delta = dy * (gtk_adjustment_get_upper (adjustment) -
-                          gtk_adjustment_get_lower (adjustment)) / allocation.height;
+                          gtk_adjustment_get_lower (adjustment)) / size;
         }
     }
   else
