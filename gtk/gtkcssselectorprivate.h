@@ -33,7 +33,7 @@ char *            _gtk_css_selector_to_string       (const GtkCssSelector   *sel
 void              _gtk_css_selector_print           (const GtkCssSelector   *selector,
                                                      GString                *str);
 
-GtkStateFlags     _gtk_css_selector_get_state_flags (GtkCssSelector         *selector);
+GtkStateFlags     _gtk_css_selector_get_state_flags (const GtkCssSelector   *selector);
 
 gboolean          _gtk_css_selector_matches         (const GtkCssSelector   *selector,
                                                      const GtkWidgetPath    *path,

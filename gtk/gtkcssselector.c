@@ -60,6 +60,12 @@ gtk_css_selector_match (const GtkCssSelector *selector,
   return selector->class->match (selector, state, path, id);
 }
 
+static const GtkCssSelector *
+gtk_css_selector_previous (const GtkCssSelector *selector)
+{
+  return selector->previous;
+}
+
 /* ANY */
 
 static void
@@ -75,7 +81,7 @@ gtk_css_selector_any_match (const GtkCssSelector *selector,
                             const GtkWidgetPath  *path,
                             guint                 id)
 {
-  return gtk_css_selector_match (selector->previous, state, path, id);
+  return gtk_css_selector_match (gtk_css_selector_previous (selector), state, path, id);
 }
 
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_ANY = {
@@ -102,7 +108,7 @@ gtk_css_selector_descendant_match (const GtkCssSelector *selector,
 {
   while (id-- > 0)
     {
-      if (gtk_css_selector_match (selector->previous, 0, path, id))
+      if (gtk_css_selector_match (gtk_css_selector_previous (selector), 0, path, id))
         return TRUE;
     }
 
@@ -134,7 +140,7 @@ gtk_css_selector_child_match (const GtkCssSelector *selector,
   if (id == 0)
     return FALSE;
 
-  return gtk_css_selector_match (selector->previous, 0, path, id - 1);
+  return gtk_css_selector_match (gtk_css_selector_previous (selector), 0, path, id - 1);
 }
 
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_CHILD = {
@@ -164,7 +170,7 @@ gtk_css_selector_name_match (const GtkCssSelector *selector,
   if (!g_type_is_a (gtk_widget_path_iter_get_object_type (path, id), type))
     return FALSE;
 
-  return gtk_css_selector_match (selector->previous, state, path, id);
+  return gtk_css_selector_match (gtk_css_selector_previous (selector), state, path, id);
 }
 
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_NAME = {
@@ -189,15 +195,17 @@ gtk_css_selector_region_match (const GtkCssSelector *selector,
                                const GtkWidgetPath  *path,
                                guint                 id)
 {
+  const GtkCssSelector *previous;
+
   if (!gtk_widget_path_iter_has_region (path, id, selector->data, NULL))
     return FALSE;
 
-  if (selector->previous &&
-      selector->previous->class == &GTK_CSS_SELECTOR_DESCENDANT &&
-      gtk_css_selector_match (selector->previous->previous, state, path, id))
+  previous = gtk_css_selector_previous (selector);
+  if (previous && previous->class == &GTK_CSS_SELECTOR_DESCENDANT &&
+      gtk_css_selector_match (gtk_css_selector_previous (previous), state, path, id))
     return TRUE;
 
-  return gtk_css_selector_match (selector->previous, state, path, id);
+  return gtk_css_selector_match (previous, state, path, id);
 }
 
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_REGION = {
@@ -226,7 +234,7 @@ gtk_css_selector_class_match (const GtkCssSelector *selector,
   if (!gtk_widget_path_iter_has_class (path, id, selector->data))
     return FALSE;
 
-  return gtk_css_selector_match (selector->previous, state, path, id);
+  return gtk_css_selector_match (gtk_css_selector_previous (selector), state, path, id);
 }
 
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_CLASS = {
@@ -255,7 +263,7 @@ gtk_css_selector_id_match (const GtkCssSelector *selector,
   if (!gtk_widget_path_iter_has_name (path, id, selector->data))
     return FALSE;
 
-  return gtk_css_selector_match (selector->previous, state, path, id);
+  return gtk_css_selector_match (gtk_css_selector_previous (selector), state, path, id);
 }
 
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_ID = {
@@ -306,7 +314,7 @@ gtk_css_selector_pseudoclass_state_match (const GtkCssSelector *selector,
   if (!(GPOINTER_TO_UINT (selector->data) & state))
     return FALSE;
 
-  return gtk_css_selector_match (selector->previous, state, path, id);
+  return gtk_css_selector_match (gtk_css_selector_previous (selector), state, path, id);
 }
 
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_STATE = {
@@ -354,9 +362,10 @@ gtk_css_selector_pseudoclass_region_match_for_region (const GtkCssSelector *sele
                                                       guint                 id)
 {
   GtkRegionFlags selector_flags, path_flags;
+  const GtkCssSelector *previous;
   
   selector_flags = GPOINTER_TO_UINT (selector->data);
-  selector = selector->previous;
+  selector = gtk_css_selector_previous (selector);
 
   if (!gtk_widget_path_iter_has_region (path, id, selector->data, &path_flags))
     return FALSE;
@@ -364,12 +373,12 @@ gtk_css_selector_pseudoclass_region_match_for_region (const GtkCssSelector *sele
   if ((selector_flags & path_flags) != selector_flags)
     return FALSE;
 
-  if (selector->previous &&
-      selector->previous->class == &GTK_CSS_SELECTOR_DESCENDANT &&
-      gtk_css_selector_match (selector->previous->previous, state, path, id))
+  previous = gtk_css_selector_previous (selector);
+  if (previous && previous->class == &GTK_CSS_SELECTOR_DESCENDANT &&
+      gtk_css_selector_match (gtk_css_selector_previous (previous), state, path, id))
     return TRUE;
 
-  return gtk_css_selector_match (selector->previous, state, path, id);
+  return gtk_css_selector_match (previous, state, path, id);
 }
 
 static gboolean
@@ -381,9 +390,10 @@ gtk_css_selector_pseudoclass_region_match (const GtkCssSelector *selector,
   GtkRegionFlags region;
   const GtkWidgetPath *siblings;
   guint sibling_id, n_siblings;
+  const GtkCssSelector *previous;
 
-  if (selector->previous &&
-      selector->previous->class == &GTK_CSS_SELECTOR_REGION)
+  previous = gtk_css_selector_previous (selector);
+  if (previous && previous->class == &GTK_CSS_SELECTOR_REGION)
     return gtk_css_selector_pseudoclass_region_match_for_region (selector, state, path, id);
 
   siblings = gtk_widget_path_iter_get_siblings (path, id);
@@ -423,7 +433,7 @@ gtk_css_selector_pseudoclass_region_match (const GtkCssSelector *selector,
       return FALSE;
     }
 
-  return gtk_css_selector_match (selector->previous, state, path, id);
+  return gtk_css_selector_match (previous, state, path, id);
 }
 
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_REGION = {
@@ -709,10 +719,13 @@ void
 _gtk_css_selector_print (const GtkCssSelector *selector,
                          GString *             str)
 {
+  const GtkCssSelector *previous;
+
   g_return_if_fail (selector != NULL);
 
-  if (selector->previous)
-    _gtk_css_selector_print (selector->previous, str);
+  previous = gtk_css_selector_previous (selector);
+  if (previous)
+    _gtk_css_selector_print (previous, str);
 
   selector->class->print (selector, str);
 }
@@ -773,7 +786,7 @@ _gtk_css_selector_get_specificity (const GtkCssSelector *selector,
                                    guint                *classes,
                                    guint                *elements)
 {
-  for (; selector; selector = selector->previous)
+  for (; selector; selector = gtk_css_selector_previous (selector))
     {
       const GtkCssSelectorClass *klass = selector->class;
 
@@ -809,13 +822,13 @@ _gtk_css_selector_compare (const GtkCssSelector *a,
 }
 
 GtkStateFlags
-_gtk_css_selector_get_state_flags (GtkCssSelector *selector)
+_gtk_css_selector_get_state_flags (const GtkCssSelector *selector)
 {
   GtkStateFlags state = 0;
 
   g_return_val_if_fail (selector != NULL, 0);
 
-  for (; selector && selector->class == &GTK_CSS_SELECTOR_NAME; selector = selector->previous)
+  for (; selector && selector->class == &GTK_CSS_SELECTOR_NAME; selector = gtk_css_selector_previous (selector))
     state |= GPOINTER_TO_UINT (selector->data);
 
   return state;
