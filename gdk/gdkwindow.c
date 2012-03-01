@@ -9147,7 +9147,7 @@ get_event_window (GdkDisplay                 *display,
   GdkTouchGrabInfo *touch_grab;
 
   touch_grab = _gdk_display_has_touch_grab (display, device, sequence, serial);
-  grab = _gdk_display_has_device_grab (display, device, serial);
+  grab = _gdk_display_get_last_device_grab (display, device);
 
   if (touch_grab != NULL &&
       (!grab || grab->implicit || touch_grab->serial >= grab->serial_start))
