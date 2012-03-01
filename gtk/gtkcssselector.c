@@ -19,6 +19,8 @@
 
 #include "gtkcssselectorprivate.h"
 
+#include <string.h>
+
 #include "gtkcssprovider.h"
 #include "gtkstylecontextprivate.h"
 
@@ -42,7 +44,6 @@ struct _GtkCssSelectorClass {
 struct _GtkCssSelector
 {
   const GtkCssSelectorClass *class;       /* type of check this selector does */
-  GtkCssSelector            *previous;    /* link to next element in selector or NULL if last */
   gconstpointer              data;        /* data for matching:
                                              - interned string for CLASS, NAME and ID
                                              - GUINT_TO_POINTER() for PSEUDOCLASS_REGION/STATE */
@@ -63,7 +64,9 @@ gtk_css_selector_match (const GtkCssSelector *selector,
 static const GtkCssSelector *
 gtk_css_selector_previous (const GtkCssSelector *selector)
 {
-  return selector->previous;
+  selector = selector + 1;
+
+  return selector->class ? selector : NULL;
 }
 
 /* ANY */
@@ -445,16 +448,35 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_REGION = {
 
 /* API */
 
+static guint
+gtk_css_selector_size (const GtkCssSelector *selector)
+{
+  guint size = 0;
+
+  while (selector)
+    {
+      selector = gtk_css_selector_previous (selector);
+      size++;
+    }
+
+  return size;
+}
+
 static GtkCssSelector *
 gtk_css_selector_new (const GtkCssSelectorClass *class,
-                      GtkCssSelector            *previous,
+                      GtkCssSelector            *selector,
                       gconstpointer              data)
 {
-  GtkCssSelector *selector;
+  guint size;
 
-  selector = g_slice_new0 (GtkCssSelector);
+  size = gtk_css_selector_size (selector);
+  selector = g_realloc (selector, sizeof (GtkCssSelector) * (size + 1) + sizeof (gpointer));
+  if (size == 0)
+    selector[1].class = NULL;
+  else
+    memmove (selector + 1, selector, sizeof (GtkCssSelector) * size + sizeof (gpointer));
+
   selector->class = class;
-  selector->previous = previous;
   selector->data = data;
 
   return selector;
@@ -655,9 +677,9 @@ try_parse_name (GtkCssParser   *parser,
 
 static GtkCssSelector *
 parse_simple_selector (GtkCssParser   *parser,
-                       GtkCssSelector *previous)
+                       GtkCssSelector *selector)
 {
-  GtkCssSelector *selector = previous;
+  guint size = gtk_css_selector_size (selector);
   
   selector = try_parse_name (parser, selector);
 
@@ -668,12 +690,12 @@ parse_simple_selector (GtkCssParser   *parser,
         selector = parse_selector_class (parser, selector);
       else if (_gtk_css_parser_try (parser, ":", FALSE))
         selector = parse_selector_pseudo_class (parser, selector);
-      else if (selector == previous)
+      else if (gtk_css_selector_size (selector) == size)
         {
           _gtk_css_parser_error (parser, "Expected a valid selector");
           if (selector)
             _gtk_css_selector_free (selector);
-          selector = NULL;
+          return NULL;
         }
       else
         break;
@@ -709,10 +731,7 @@ _gtk_css_selector_free (GtkCssSelector *selector)
 {
   g_return_if_fail (selector != NULL);
 
-  if (selector->previous)
-    _gtk_css_selector_free (selector->previous);
-
-  g_slice_free (GtkCssSelector, selector);
+  g_free (selector);
 }
 
 void
