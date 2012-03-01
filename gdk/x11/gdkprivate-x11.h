@@ -245,8 +245,9 @@ void _gdk_x11_device_xi_translate_axes     (GdkDevice *device,
 #endif
 
 #ifdef XINPUT_2
-guchar * _gdk_x11_device_xi2_translate_event_mask (GdkEventMask     event_mask,
-                                                   gint            *len);
+guchar * _gdk_x11_device_xi2_translate_event_mask (GdkX11DeviceManagerXI2 *device_manager_xi2,
+                                                   GdkEventMask            event_mask,
+                                                   gint                   *len);
 guint    _gdk_x11_device_xi2_translate_state      (XIModifierState *mods_state,
                                                    XIButtonState   *buttons_state,
                                                    XIGroupState    *group_state);
