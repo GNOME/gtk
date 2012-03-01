@@ -3296,7 +3296,6 @@ static void
 cmw_color (GtkWidget *widget, GtkWidget *parent)
 {
     GtkWidget *csd;
-    GtkWidget *ok_button, *cancel_button;
 
     csd = gtk_color_chooser_dialog_new ("This is a modal color selection dialog", GTK_WINDOW (parent));
 
