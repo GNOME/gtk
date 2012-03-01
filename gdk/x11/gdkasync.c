@@ -276,7 +276,7 @@ _gdk_x11_send_client_message_async (GdkDisplay           *display,
    * XSync (dpy, 0)
    */
   {
-    xReq *req;
+    G_GNUC_UNUSED xReq *req;
     
     GetEmptyReq(GetInputFocus, req);
     state->get_input_focus_req = dpy->request;
@@ -739,7 +739,7 @@ _gdk_x11_roundtrip_async (GdkDisplay           *display,
    * XSync (dpy, 0)
    */
   {
-    xReq *req;
+    G_GNUC_UNUSED xReq *req;
     
     GetEmptyReq(GetInputFocus, req);
     state->get_input_focus_req = dpy->request;
