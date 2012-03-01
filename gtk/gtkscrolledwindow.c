@@ -2693,9 +2693,6 @@ gtk_scrolled_window_captured_button_press (GtkWidget *widget,
   gdouble x_root, y_root;
   guint button;
 
-  if (event->type != GDK_BUTTON_PRESS)
-    return FALSE;
-
   /* If scrollbars are not visible, we don't do kinetic scrolling */
   if (!priv->vscrollbar_visible && !priv->hscrollbar_visible)
     return FALSE;
