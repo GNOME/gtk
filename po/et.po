@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-02-06 22:33+0000\n"
-"PO-Revision-Date: 2012-02-17 23:50+0200\n"
+"POT-Creation-Date: 2012-03-01 14:11+0000\n"
+"PO-Revision-Date: 2012-03-01 18:38+0200\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <>\n"
 "Language: et\n"
@@ -737,6 +737,217 @@ msgstr "%d %%"
 
 msgid "Pick a Color"
 msgstr "Värvuse valimine"
+
+msgid "Select a Color"
+msgstr "Värvuse valimine"
+
+#, c-format
+msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
+msgstr "Punane %d%%, roheline %d%%, sinine %d%%, läbipaistmatus %d%%"
+
+#, c-format
+msgid "Red %d%%, Green %d%%, Blue %d%%"
+msgstr "Punane %d%%, roheline %d%%, sinine %d%%"
+
+#, c-format
+msgid "Color: %s"
+msgstr "Värvus: %s"
+
+msgctxt "Color name"
+msgid "Light Scarlet Red"
+msgstr "Hele tulipunane"
+
+msgctxt "Color name"
+msgid "Scarlet Red"
+msgstr "Tulipunane"
+
+msgctxt "Color name"
+msgid "Dark Scarlet Red"
+msgstr "Tume tulipunane"
+
+msgctxt "Color name"
+msgid "Light Orange"
+msgstr "Heleoranž"
+
+msgctxt "Color name"
+msgid "Orange"
+msgstr "Oranž"
+
+msgctxt "Color name"
+msgid "Dark Orange"
+msgstr "Tumeoranž"
+
+msgctxt "Color name"
+msgid "Light Butter"
+msgstr "Hele võikollane"
+
+msgctxt "Color name"
+msgid "Butter"
+msgstr "Võikollane"
+
+msgctxt "Color name"
+msgid "Dark Butter"
+msgstr "Tume võikollane"
+
+msgctxt "Color name"
+msgid "Light Chameleon"
+msgstr "Hele kameeleoniroheline"
+
+msgctxt "Color name"
+msgid "Chameleon"
+msgstr "Kameeleoniroheline"
+
+msgctxt "Color name"
+msgid "Dark Chameleon"
+msgstr "Tume kameeleoniroheline"
+
+msgctxt "Color name"
+msgid "Light Sky Blue"
+msgstr "Hele taevasinine"
+
+msgctxt "Color name"
+msgid "Sky Blue"
+msgstr "Taevasisinine"
+
+msgctxt "Color name"
+msgid "Dark Sky Blue"
+msgstr "Tume taevasinine"
+
+msgctxt "Color name"
+msgid "Light Plum"
+msgstr "Hele ploomililla"
+
+msgctxt "Color name"
+msgid "Plum"
+msgstr "Ploomililla"
+
+msgctxt "Color name"
+msgid "Dark Plum"
+msgstr "Tume ploomililla"
+
+msgctxt "Color name"
+msgid "Light Chocolate"
+msgstr "Hele šokolaadipruun"
+
+msgctxt "Color name"
+msgid "Chocolate"
+msgstr "Šokolaadipruun"
+
+msgctxt "Color name"
+msgid "Dark Chocolate"
+msgstr "Tume šokolaadipruun"
+
+msgctxt "Color name"
+msgid "Light Aluminum 1"
+msgstr "Hele alumiiniumihall 1"
+
+msgctxt "Color name"
+msgid "Aluminum 1"
+msgstr "Alumiiniumihall 1"
+
+msgctxt "Color name"
+msgid "Dark Aluminum 1"
+msgstr "Tume alumiiniumihall 1"
+
+msgctxt "Color name"
+msgid "Light Aluminum 2"
+msgstr "Hele alumiiniumihall 2"
+
+msgctxt "Color name"
+msgid "Aluminum 2"
+msgstr "Alumiiniumihall 2"
+
+msgctxt "Color name"
+msgid "Dark Aluminum 2"
+msgstr "Tume alumiiniumihall 2"
+
+msgctxt "Color name"
+msgid "Black"
+msgstr "Must"
+
+msgctxt "Color name"
+msgid "Very Dark Gray"
+msgstr "Väga tume hall"
+
+msgctxt "Color name"
+msgid "Darker Gray"
+msgstr "Tumedam hall"
+
+msgctxt "Color name"
+msgid "Dark Gray"
+msgstr "Tumehall"
+
+msgctxt "Color name"
+msgid "Medium Gray"
+msgstr "Keskmine hall"
+
+msgctxt "Color name"
+msgid "Light Gray"
+msgstr "Helehall"
+
+msgctxt "Color name"
+msgid "Lighter Gray"
+msgstr "Heledam hall"
+
+msgctxt "Color name"
+msgid "Very Light Gray"
+msgstr "Väga hele hall"
+
+msgctxt "Color name"
+msgid "White"
+msgstr "Valge"
+
+#. translators: label for the custom section in the color chooser
+msgid "Custom"
+msgstr "Kohandatud"
+
+msgid "Create custom color"
+msgstr "Kohandatud värvuse loomine"
+
+#, c-format
+msgid "Custom color %d: %s"
+msgstr "Kohandatud värvus %d: %s"
+
+msgid "Color Name"
+msgstr "Värvuse nimi"
+
+msgctxt "Color channel"
+msgid "Saturation"
+msgstr "Küllastus"
+
+msgctxt "Color channel"
+msgid "Value"
+msgstr "Heledus"
+
+msgctxt "Color channel"
+msgid "S"
+msgstr "S"
+
+msgctxt "Color channel"
+msgid "V"
+msgstr "V"
+
+msgctxt "Color channel"
+msgid "Hue"
+msgstr "Toon"
+
+msgctxt "Color channel"
+msgid "H"
+msgstr "H"
+
+msgctxt "Color channel"
+msgid "Alpha"
+msgstr "Alfa"
+
+msgctxt "Color channel"
+msgid "A"
+msgstr "A"
+
+msgid "Color Plane"
+msgstr "Värvipaan"
+
+msgid "_Customize"
+msgstr "_Kohanda"
 
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
