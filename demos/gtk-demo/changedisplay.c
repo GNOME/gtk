@@ -128,7 +128,7 @@ query_for_toplevel (GdkScreen  *screen,
   gtk_widget_show_all (popup);
   cursor = gdk_cursor_new_for_display (display, GDK_CROSSHAIR);
 
-  if (gdk_pointer_grab (popup->window, FALSE,
+  if (gdk_pointer_grab (gtk_widget_get_window (popup), FALSE,
 			GDK_BUTTON_RELEASE_MASK,
 			NULL,
 			cursor,
@@ -232,6 +232,7 @@ open_display_cb (GtkWidget         *button,
   GtkWidget *dialog;
   GtkWidget *display_entry;
   GtkWidget *dialog_label;
+  GtkWidget *content_area;
   gchar *new_screen_name = NULL;
   GdkDisplay *result = NULL;
 
@@ -247,12 +248,14 @@ open_display_cb (GtkWidget         *button,
   gtk_entry_set_activates_default (GTK_ENTRY (display_entry), TRUE);
   dialog_label =
     gtk_label_new ("Please enter the name of\nthe new display\n");
-
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), dialog_label);
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), display_entry);
+  
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  
+  gtk_container_add (GTK_CONTAINER (content_area), dialog_label);
+  gtk_container_add (GTK_CONTAINER (content_area), display_entry);
 
   gtk_widget_grab_focus (display_entry);
-  gtk_widget_show_all (GTK_BIN (dialog)->child);
+  gtk_widget_show_all (gtk_bin_get_child (GTK_BIN (dialog)));
 
   while (!result)
     {
@@ -621,7 +624,7 @@ do_changedisplay (GtkWidget *do_widget)
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
 
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (info->window)->vbox), vbox,
+      gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (info->window))), vbox,
 			  TRUE, TRUE, 0);
 
       frame = create_display_frame (info);

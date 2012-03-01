@@ -107,9 +107,12 @@ rotated_text_expose_event (GtkWidget      *widget,
   cairo_pattern_t *pattern;
 
   PangoAttrList *attrs;
+  GtkAllocation allocation;
+  
+  gtk_widget_get_allocation (widget, &allocation);
 
-  int width = widget->allocation.width;
-  int height = widget->allocation.height;
+  int width = allocation.width;
+  int height = allocation.height;
   double device_radius;
   int i;
 
@@ -117,7 +120,7 @@ rotated_text_expose_event (GtkWidget      *widget,
    * space coordinates for the centered square where we draw are [-RADIUS, RADIUS],
    * [-RADIUS, RADIUS].
    * We first center, then change the scale. */
-  cr = gdk_cairo_create (widget->window);
+  cr = gdk_cairo_create (gtk_widget_get_window (widget));
   device_radius = MIN (width, height) / 2.;
   cairo_translate (cr,
 		   device_radius + (width - 2 * device_radius) / 2,

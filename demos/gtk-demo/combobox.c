@@ -435,7 +435,7 @@ do_combobox (GtkWidget *do_widget)
     entry = g_object_new (TYPE_MASK_ENTRY, NULL);
     MASK_ENTRY (entry)->mask = "^([0-9]*|One|Two|2\302\275|Three)$";
      
-    gtk_container_remove (GTK_CONTAINER (combo), GTK_BIN (combo)->child);
+    gtk_container_remove (GTK_CONTAINER (combo), gtk_bin_get_child (GTK_BIN (combo)));
     gtk_container_add (GTK_CONTAINER (combo), entry);
   
   }
