@@ -386,6 +386,7 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
                          guint32       time_)
 {
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
+  GdkX11DeviceManagerXI2 *device_manager_xi2;
   GdkDisplay *display;
   XIEventMask mask;
   Window xwindow;
@@ -393,6 +394,7 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
   gint status;
 
   display = gdk_device_get_display (device);
+  device_manager_xi2 = GDK_X11_DEVICE_MANAGER_XI2 (gdk_display_get_device_manager (display));
 
   /* FIXME: confine_to is actually unused */
 
@@ -407,7 +409,9 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
     }
 
   mask.deviceid = device_xi2->device_id;
-  mask.mask = _gdk_x11_device_xi2_translate_event_mask (event_mask, &mask.mask_len);
+  mask.mask = _gdk_x11_device_xi2_translate_event_mask (device_manager_xi2,
+                                                        event_mask,
+                                                        &mask.mask_len);
 
 #ifdef G_ENABLE_DEBUG
   if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
@@ -623,10 +627,17 @@ gdk_x11_device_xi2_select_window_events (GdkDevice    *device,
                                          GdkEventMask  event_mask)
 {
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
+  GdkX11DeviceManagerXI2 *device_manager_xi2;
+  GdkDisplay *display;
   XIEventMask evmask;
 
+  display = gdk_device_get_display (device);
+  device_manager_xi2 = GDK_X11_DEVICE_MANAGER_XI2 (gdk_display_get_device_manager (display));
+
   evmask.deviceid = device_xi2->device_id;
-  evmask.mask = _gdk_x11_device_xi2_translate_event_mask (event_mask, &evmask.mask_len);
+  evmask.mask = _gdk_x11_device_xi2_translate_event_mask (device_manager_xi2,
+                                                          event_mask,
+                                                          &evmask.mask_len);
 
   XISelectEvents (GDK_WINDOW_XDISPLAY (window),
                   GDK_WINDOW_XID (window),
@@ -636,10 +647,14 @@ gdk_x11_device_xi2_select_window_events (GdkDevice    *device,
 }
 
 guchar *
-_gdk_x11_device_xi2_translate_event_mask (GdkEventMask  event_mask,
-                                          gint         *len)
+_gdk_x11_device_xi2_translate_event_mask (GdkX11DeviceManagerXI2 *device_manager_xi2,
+                                          GdkEventMask            event_mask,
+                                          gint                   *len)
 {
   guchar *mask;
+  gint minor;
+
+  g_object_get (device_manager_xi2, "minor", &minor, NULL);
 
   *len = XIMaskLen (XI_LASTEVENT);
   mask = g_new0 (guchar, *len);
@@ -687,6 +702,17 @@ _gdk_x11_device_xi2_translate_event_mask (GdkEventMask  event_mask,
       XISetMask (mask, XI_FocusIn);
       XISetMask (mask, XI_FocusOut);
     }
+
+#ifdef XINPUT_2_2
+  /* XInput 2.2 includes multitouch support */
+  if (minor >= 2 &&
+      event_mask & GDK_TOUCH_MASK)
+    {
+      XISetMask (mask, XI_TouchBegin);
+      XISetMask (mask, XI_TouchUpdate);
+      XISetMask (mask, XI_TouchEnd);
+    }
+#endif /* XINPUT_2_2 */
 
   return mask;
 }
