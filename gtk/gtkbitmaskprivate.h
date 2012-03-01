@@ -21,11 +21,9 @@
 #define __GTK_BITMASK_PRIVATE_H__
 
 #include <glib.h>
+#include "gtkallocatedbitmaskprivate.h"
 
 G_BEGIN_DECLS
-
-typedef struct _GtkBitmask           GtkBitmask;
-
 
 static inline GtkBitmask *      _gtk_bitmask_new                  (void);
 static inline GtkBitmask *      _gtk_bitmask_copy                 (const GtkBitmask  *mask);

@@ -18,7 +18,6 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#include "gtkallocatedbitmaskprivate.h"
 
 static inline GtkBitmask *
 _gtk_bitmask_new (void)
