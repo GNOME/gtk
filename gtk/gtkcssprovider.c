@@ -1600,7 +1600,7 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
 
       for (j = 0; j < ruleset->n_styles; j++)
         {
-          GtkCssStyleProperty *prop = ruleset->styles[i].property;
+          GtkCssStyleProperty *prop = ruleset->styles[j].property;
           guint id = _gtk_css_style_property_get_id (prop);
 
           if (!_gtk_css_lookup_is_missing (lookup, id))
@@ -1608,8 +1608,8 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
 
           _gtk_css_lookup_set (lookup,
                                id,
-                               ruleset->styles[i].section,
-                               &ruleset->styles[i].value);
+                               ruleset->styles[j].section,
+                               &ruleset->styles[j].value);
         }
     }
 }
