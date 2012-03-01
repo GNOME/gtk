@@ -248,18 +248,54 @@ translate_device_classes (GdkDisplay      *display,
   g_object_thaw_notify (G_OBJECT (device));
 }
 
+static gboolean
+is_touch_device (XIAnyClassInfo **classes,
+                 guint            n_classes,
+                 GdkInputSource  *device_type)
+{
+#ifdef XINPUT_2_2
+  guint i;
+
+  for (i = 0; i < n_classes; i++)
+    {
+      XITouchClassInfo *class = (XITouchClassInfo *) classes[i];
+
+      if (class->type != XITouchClass)
+        continue;
+
+      if (class->num_touches > 0)
+        {
+          if (class->mode == XIDirectTouch)
+            *device_type = GDK_SOURCE_TOUCHSCREEN;
+          else if (class->mode == XIDependentTouch)
+            *device_type = GDK_SOURCE_TOUCHPAD;
+          else
+            continue;
+
+          return TRUE;
+        }
+    }
+#endif
+
+  return FALSE;
+}
+
 static GdkDevice *
 create_device (GdkDeviceManager *device_manager,
                GdkDisplay       *display,
                XIDeviceInfo     *dev)
 {
   GdkInputSource input_source;
+  GdkInputSource touch_source;
   GdkDeviceType type;
   GdkDevice *device;
   GdkInputMode mode;
 
   if (dev->use == XIMasterKeyboard || dev->use == XISlaveKeyboard)
     input_source = GDK_SOURCE_KEYBOARD;
+  else if (dev->use == XISlavePointer &&
+           is_touch_device (dev->classes, dev->num_classes, &touch_source))
+    input_source = touch_source;
   else
     {
       gchar *tmp_name;
@@ -270,6 +306,10 @@ create_device (GdkDeviceManager *device_manager,
         input_source = GDK_SOURCE_ERASER;
       else if (strstr (tmp_name, "cursor"))
         input_source = GDK_SOURCE_CURSOR;
+      else if (strstr (tmp_name, "finger") ||
+               (strstr (tmp_name, "touch") &&
+                !strstr (tmp_name, "touchpad")))
+        input_source = GDK_SOURCE_TOUCHSCREEN;
       else if (strstr (tmp_name, "wacom") ||
                strstr (tmp_name, "pen"))
         input_source = GDK_SOURCE_PEN;
