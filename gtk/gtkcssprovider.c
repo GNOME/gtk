@@ -1149,15 +1149,14 @@ gtk_css_ruleset_clear (GtkCssRuleset *ruleset)
 }
 
 struct _PropertyValue {
-  GtkStyleProperty *property;
-  PropertyValue *next;
-  GValue         value;
-
-  GtkCssSection *section;
+  GtkCssStyleProperty *property;
+  PropertyValue       *next;
+  GValue               value;
+  GtkCssSection       *section;
 };
 
 static PropertyValue *
-property_value_new (GtkStyleProperty *property, GtkCssSection *section)
+property_value_new (GtkCssStyleProperty *property, GtkCssSection *section)
 {
   PropertyValue *value;
 
@@ -1192,7 +1191,8 @@ property_value_list_free (PropertyValue *head)
 }
 
 static PropertyValue *
-property_value_list_remove_property (PropertyValue *head, GtkStyleProperty *property)
+property_value_list_remove_property (PropertyValue       *head,
+                                     GtkCssStyleProperty *property)
 {
   PropertyValue *l, **last;
 
@@ -1290,49 +1290,23 @@ gtk_css_ruleset_add_style (GtkCssRuleset *ruleset,
 }
 
 static void
-gtk_css_ruleset_add (GtkCssRuleset    *ruleset,
-                     GtkStyleProperty *prop,
-                     PropertyValue    *value)
+gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
+                     GtkCssStyleProperty *prop,
+                     PropertyValue       *value)
 {
+  g_return_if_fail (_gtk_css_style_property_is_specified_type (GTK_CSS_STYLE_PROPERTY (prop),
+                                                               G_VALUE_TYPE (&value->value)));
+
   if (ruleset->set_styles == NULL)
     ruleset->set_styles = _gtk_bitmask_new ();
 
-  if (GTK_IS_CSS_SHORTHAND_PROPERTY (prop))
-    {
-      GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (prop);
-      GArray *array = g_value_get_boxed (&value->value);
-      guint i;
+  _gtk_bitmask_set (ruleset->set_styles,
+                    _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)),
+                    TRUE);
 
-      for (i = 0; i < _gtk_css_shorthand_property_get_n_subproperties (shorthand); i++)
-        {
-          GtkCssStyleProperty *child = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
-          const GValue *sub = &g_array_index (array, GValue, i);
-          PropertyValue *val;
-          
-          val = property_value_new (child, value->section);
-          g_value_init (&val->value, G_VALUE_TYPE (sub));
-          g_value_copy (sub, &val->value);
-          gtk_css_ruleset_add (ruleset, GTK_STYLE_PROPERTY (child), val);
-        }
-      property_value_free (value);
-    }
-  else if (GTK_IS_CSS_STYLE_PROPERTY (prop))
-    {
-      g_return_if_fail (_gtk_css_style_property_is_specified_type (GTK_CSS_STYLE_PROPERTY (prop),
-                                                                   G_VALUE_TYPE (&value->value)));
-
-      _gtk_bitmask_set (ruleset->set_styles,
-                        _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)),
-                        TRUE);
-
-      value->next = property_value_list_remove_property (ruleset->style, prop);
-      ruleset->style = value;
-      ruleset->owns_style = TRUE;
-    }
-  else
-    {
-      g_assert_not_reached ();
-    }
+  value->next = property_value_list_remove_property (ruleset->style, prop);
+  ruleset->style = value;
+  ruleset->owns_style = TRUE;
 }
 
 static gboolean
@@ -2470,16 +2444,14 @@ parse_declaration (GtkCssScanner *scanner,
 
   if (property)
     {
-      PropertyValue *val;
+      GValue value = { 0, };
 
       g_free (name);
 
       gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_VALUE);
 
-      val = property_value_new (property, scanner->section);
-
       if (_gtk_style_property_parse_value (property,
-                                           &val->value,
+                                           &value,
                                            scanner->parser,
                                            gtk_css_scanner_get_base_url (scanner)))
         {
@@ -2487,7 +2459,38 @@ parse_declaration (GtkCssScanner *scanner,
               _gtk_css_parser_begins_with (scanner->parser, '}') ||
               _gtk_css_parser_is_eof (scanner->parser))
             {
-              gtk_css_ruleset_add (ruleset, property, val);
+              if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
+                {
+                  GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
+                  GArray *array = g_value_get_boxed (&value);
+                  guint i;
+
+                  for (i = 0; i < _gtk_css_shorthand_property_get_n_subproperties (shorthand); i++)
+                    {
+                      GtkCssStyleProperty *child = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
+                      const GValue *sub = &g_array_index (array, GValue, i);
+                      PropertyValue *val;
+                      
+                      val = property_value_new (child, scanner->section);
+                      g_value_init (&val->value, G_VALUE_TYPE (sub));
+                      g_value_copy (sub, &val->value);
+                      gtk_css_ruleset_add (ruleset, child, val);
+                    }
+                }
+              else if (GTK_IS_CSS_STYLE_PROPERTY (property))
+                {
+                  PropertyValue *val = property_value_new (GTK_CSS_STYLE_PROPERTY (property), scanner->section);
+
+                  g_value_init (&val->value, G_VALUE_TYPE (&value));
+                  g_value_copy (&value, &val->value);
+                  gtk_css_ruleset_add (ruleset, GTK_CSS_STYLE_PROPERTY (property), val);
+                }
+              else
+                {
+                  g_assert_not_reached ();
+                }
+
+              g_value_unset (&value);
             }
           else
             {
@@ -2497,7 +2500,6 @@ parse_declaration (GtkCssScanner *scanner,
                                               GTK_CSS_PROVIDER_ERROR_SYNTAX,
                                               "Junk at end of value");
               _gtk_css_parser_resync (scanner->parser, TRUE, '}');
-              property_value_free (val);
               gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
               gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
               return;
@@ -2505,7 +2507,6 @@ parse_declaration (GtkCssScanner *scanner,
         }
       else
         {
-          property_value_free (val);
           _gtk_css_parser_resync (scanner->parser, TRUE, '}');
           gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
           gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
