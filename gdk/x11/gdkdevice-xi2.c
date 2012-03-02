@@ -24,14 +24,11 @@
 #include "gdkasync.h"
 #include "gdkprivate-x11.h"
 
-#ifdef XINPUT_2
-
 #include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/XInput2.h>
 
-#endif
 
 typedef struct _ScrollValuator ScrollValuator;
 
@@ -58,7 +55,6 @@ struct _GdkX11DeviceXI2Class
 
 G_DEFINE_TYPE (GdkX11DeviceXI2, gdk_x11_device_xi2, GDK_TYPE_DEVICE)
 
-#ifdef XINPUT_2
 
 static void gdk_x11_device_xi2_finalize     (GObject      *object);
 static void gdk_x11_device_xi2_get_property (GObject      *object,
@@ -885,17 +881,3 @@ _gdk_x11_device_xi2_get_id (GdkX11DeviceXI2 *device)
 
   return device->device_id;
 }
-
-#else /* XINPUT_2 */
-
-static void
-gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
-{
-}
-
-static void
-gdk_x11_device_xi2_init (GdkX11DeviceXI2 *device)
-{
-}
-
-#endif /* XINPUT_2 */

@@ -19,11 +19,8 @@
 
 #include "gdkx11devicemanager-core.h"
 #include "gdkdevicemanagerprivate-core.h"
-#ifdef XINPUT_XFREE
-#include "gdkx11devicemanager-xi.h"
 #ifdef XINPUT_2
 #include "gdkx11devicemanager-xi2.h"
-#endif
 #endif
 #include "gdkinternals.h"
 #include "gdkprivate-x11.h"
@@ -39,7 +36,7 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
 {
   if (!g_getenv ("GDK_CORE_DEVICE_EVENTS"))
     {
-#if defined (XINPUT_2) || defined (XINPUT_XFREE)
+#ifdef XINPUT_2
       int opcode, firstevent, firsterror;
       Display *xdisplay;
 
@@ -48,7 +45,6 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
       if (XQueryExtension (xdisplay, "XInputExtension",
                            &opcode, &firstevent, &firsterror))
         {
-#ifdef XINPUT_2
           int major, minor;
 
           major = 2;
@@ -74,18 +70,8 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
 
               return GDK_DEVICE_MANAGER (device_manager_xi2);
             }
-          else
-#endif /* XINPUT_2 */
-            {
-              GDK_NOTE (INPUT, g_print ("Creating XI device manager\n"));
-
-              return g_object_new (GDK_TYPE_X11_DEVICE_MANAGER_XI,
-                                   "display", display,
-                                   "event-base", firstevent,
-                                   NULL);
-            }
         }
-#endif /* XINPUT_2 || XINPUT_XFREE */
+#endif /* XINPUT_2 */
     }
 
   GDK_NOTE (INPUT, g_print ("Creating core device manager\n"));

@@ -26,12 +26,9 @@ libgdk_x11_la_SOURCES = 	\
 	gdkasync.h		\
 	gdkcursor-x11.c		\
 	gdkdevice-core-x11.c	\
-	gdkdevice-xi.c		\
 	gdkdevice-xi2.c		\
-	gdkdeviceprivate-xi.h	\
 	gdkdevicemanager-core-x11.c \
 	gdkdevicemanager-x11.c	\
-	gdkdevicemanager-xi.c	\
 	gdkdevicemanager-xi2.c	\
 	gdkdevicemanagerprivate-core.h \
 	gdkdisplaymanager-x11.c	\
@@ -70,11 +67,9 @@ libgdkx11include_HEADERS = 	\
 	gdkx11cursor.h		\
 	gdkx11device.h		\
 	gdkx11device-core.h	\
-	gdkx11device-xi.h	\
 	gdkx11device-xi2.h	\
 	gdkx11devicemanager.h   \
 	gdkx11devicemanager-core.h \
-	gdkx11devicemanager-xi.h \
 	gdkx11devicemanager-xi2.h \
 	gdkx11display.h		\
 	gdkx11displaymanager.h	\

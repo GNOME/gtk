@@ -265,10 +265,6 @@ AC_ARG_ENABLE(xinerama,
               [AS_HELP_STRING([--enable-xinerama],
 	                      [support Xinerama extension [default=maybe]])],,
               [enable_xinerama="maybe"])
-AC_ARG_ENABLE(xinput,
-              [AS_HELP_STRING([--enable-xinput],
-                              [support XInput extension [default=yes]])],,
-              [enable_xinput="maybe"])
 AC_ARG_ENABLE(xrandr,
               [AS_HELP_STRING([--enable-xrandr],
                               [support XRandR extension [default=maybe]])],,
@@ -1111,11 +1107,7 @@ if test "x$enable_x11_backend" = xyes; then
                 AC_DEFINE(HAVE_XGENERICEVENTS, 1, [Have XGenericEvent]))
 
   # set up things for XInput
-  if test "x$enable_xinput" != "xno" && $PKG_CONFIG --exists "xi" ; then
-    have_xinput=yes
-
-    AC_DEFINE(XINPUT_XFREE, 1,
-              [Define to 1 if XFree XInput should be used])
+  if $PKG_CONFIG --exists "xi" ; then
 
     X_PACKAGES="$X_PACKAGES xi"
     GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xi"
@@ -1123,26 +1115,18 @@ if test "x$enable_x11_backend" = xyes; then
     AC_CHECK_HEADER(X11/extensions/XInput2.h,
                     have_xinput2=yes
                     X_EXTENSIONS="$X_EXTENSIONS XI2"
-                    AC_DEFINE(XINPUT_2, 1, [Define to 1 if XInput 2.0 is available]),
-                    X_EXTENSIONS="$X_EXTENSIONS XInput")
+                    AC_DEFINE(XINPUT_2, 1, [Define to 1 if XInput 2.0 is available]))
 
     gtk_save_LIBS="$LIBS"
     LIBS="$LIBS -lXi"
     AC_CHECK_FUNC(XIAllowTouchEvents, AC_DEFINE(XINPUT_2_2, 1, [Define to 1 if XInput 2.2 is available]))
     LIBS="$gtk_save_LIBS"
-  else
-    AC_DEFINE(XINPUT_NONE, 1,
-              [Define to 1 if no XInput should be used])
   fi
 
-  AM_CONDITIONAL(XINPUT_XFREE, test "x$have_xinput" = "xyes")
   AM_CONDITIONAL(XINPUT_2,     test "x$have_xinput2" = "xyes")
 
-  if test "x$enable_xinput" = "xyes" ; then
-    if test "x$have_xinput" != "xyes" -a "x$have_xinput2" != "xyes" ; then
-      AC_MSG_ERROR([*** XInput extension not found. Check 'config.log' for more details.])
-    fi
-  fi
+  AS_IF([test "x$have_xinput2" != "xyes"],
+        [AC_MSG_ERROR([*** XInput2 extension not found. Check 'config.log' for more details.])])
 
   # Check for the RANDR extension
   if test x"$enable_xrandr" != xno; then
@@ -1223,7 +1207,6 @@ if test "x$enable_x11_backend" = xyes; then
 else
   XPACKAGES=
 
-  AM_CONDITIONAL(XINPUT_XFREE, false)
   AM_CONDITIONAL(XINPUT_2, false)
   AM_CONDITIONAL(USE_X11, false)
   AM_CONDITIONAL(HAVE_X11R6, false)

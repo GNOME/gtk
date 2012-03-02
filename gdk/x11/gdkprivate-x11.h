@@ -39,9 +39,6 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#ifdef XINPUT_XFREE
-#include <X11/extensions/XInput.h>
-#endif
 #ifdef XINPUT_2
 #include <X11/extensions/XInput2.h>
 #endif
@@ -228,21 +225,6 @@ gchar *     _gdk_x11_display_utf8_to_string_target      (GdkDisplay     *display
 void _gdk_x11_device_check_extension_events   (GdkDevice  *device);
 
 GdkDeviceManager *_gdk_x11_device_manager_new (GdkDisplay *display);
-
-#ifdef XINPUT_XFREE
-void _gdk_x11_device_xi_update_window_info (GdkWindow *window);
-
-void _gdk_x11_device_xi_update_axes        (GdkDevice *device,
-                                            gint       axes_count,
-                                            gint       first_axis,
-                                            gint      *axis_data);
-void _gdk_x11_device_xi_translate_axes     (GdkDevice *device,
-                                            GdkWindow *window,
-                                            gint      *axis_data,
-                                            gdouble   *axes,
-                                            gdouble   *x,
-                                            gdouble   *y);
-#endif
 
 #ifdef XINPUT_2
 guchar * _gdk_x11_device_xi2_translate_event_mask (GdkX11DeviceManagerXI2 *device_manager_xi2,
