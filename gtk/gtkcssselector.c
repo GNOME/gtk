@@ -166,6 +166,75 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_CHILD = {
   FALSE, FALSE, FALSE
 };
 
+/* SIBLING */
+
+static void
+gtk_css_selector_sibling_print (const GtkCssSelector *selector,
+                                GString              *string)
+{
+  g_string_append (string, " ~ ");
+}
+
+static gboolean
+gtk_css_selector_sibling_match (const GtkCssSelector *selector,
+                                GtkStateFlags         state,
+                                const GtkWidgetPath  *path,
+                                guint                 id,
+                                guint                 sibling)
+{
+  while (sibling-- > 0)
+    {
+      if (gtk_css_selector_match (gtk_css_selector_previous (selector),
+                                  0,
+                                  path,
+                                  id,
+                                  sibling))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static const GtkCssSelectorClass GTK_CSS_SELECTOR_SIBLING = {
+  "sibling",
+  gtk_css_selector_sibling_print,
+  gtk_css_selector_sibling_match,
+  FALSE, FALSE, FALSE
+};
+
+/* ADJACENT */
+
+static void
+gtk_css_selector_adjacent_print (const GtkCssSelector *selector,
+                                 GString              *string)
+{
+  g_string_append (string, " + ");
+}
+
+static gboolean
+gtk_css_selector_adjacent_match (const GtkCssSelector *selector,
+                                 GtkStateFlags         state,
+                                 const GtkWidgetPath  *path,
+                                 guint                 id,
+                                 guint                 sibling)
+{
+  if (sibling == 0)
+    return FALSE;
+
+  return gtk_css_selector_match (gtk_css_selector_previous (selector),
+                                 0,
+                                 path,
+                                 id,
+                                 sibling - 1);
+}
+
+static const GtkCssSelectorClass GTK_CSS_SELECTOR_ADJACENT = {
+  "adjacent",
+  gtk_css_selector_adjacent_print,
+  gtk_css_selector_adjacent_match,
+  FALSE, FALSE, FALSE
+};
+
 /* NAME */
 
 static void
@@ -736,7 +805,11 @@ _gtk_css_selector_parse (GtkCssParser *parser)
          !_gtk_css_parser_begins_with (parser, ',') &&
          !_gtk_css_parser_begins_with (parser, '{'))
     {
-      if (_gtk_css_parser_try (parser, ">", TRUE))
+      if (_gtk_css_parser_try (parser, "+", TRUE))
+        selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_ADJACENT, selector, NULL);
+      else if (_gtk_css_parser_try (parser, "~", TRUE))
+        selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_SIBLING, selector, NULL);
+      else if (_gtk_css_parser_try (parser, ">", TRUE))
         selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_CHILD, selector, NULL);
       else
         selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_DESCENDANT, selector, NULL);
