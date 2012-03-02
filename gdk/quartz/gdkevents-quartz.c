@@ -1325,7 +1325,7 @@ gdk_event_translate (GdkEvent *event,
         GdkScrollDirection direction;
 	float dx;
 	float dy;
-
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
 	if (gdk_quartz_osx_version() >= GDK_OSX_LION &&
 	    [nsevent hasPreciseScrollingDeltas])
 	  {
@@ -1338,7 +1338,7 @@ gdk_event_translate (GdkEvent *event,
 
             /* Fall through for scroll buttons emulation */
 	  }
-
+#endif
         dx = [nsevent deltaX];
         dy = [nsevent deltaY];
 
