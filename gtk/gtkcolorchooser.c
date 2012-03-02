@@ -109,7 +109,7 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE,
-                  1, G_TYPE_STRING);
+                  1, GDK_TYPE_RGBA);
 }
 
 void
