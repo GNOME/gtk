@@ -40,6 +40,8 @@ response_cb (GtkDialog *dialog,
       gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
       gtk_widget_override_background_color (da, 0, &color);
     }
+
+  gtk_widget_hide (GTK_WIDGET (dialog));
 }
 
 static void
