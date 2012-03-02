@@ -468,6 +468,9 @@ gtk_image_get_property (GObject     *object,
     case PROP_USE_FALLBACK:
       g_value_set_boolean (value, _gtk_icon_helper_get_use_fallback (priv->icon_helper));
       break;
+    case PROP_STORAGE_TYPE:
+      g_value_set_enum (value, _gtk_icon_helper_get_storage_type (priv->icon_helper));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
