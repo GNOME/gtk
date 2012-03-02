@@ -41,6 +41,8 @@ tests/reftests/css-match-region-matches-star.ref.ui
 tests/reftests/css-match-region-matches-star.ui
 tests/reftests/css-match-regions.ref.ui
 tests/reftests/css-match-regions.ui
+tests/reftests/css-match-siblings.ref.ui
+tests/reftests/css-match-siblings.ui
 tests/reftests/css-match-style-property-order.ref.ui
 tests/reftests/css-match-style-property-order.ui
 tests/reftests/css-multi-state.ref.ui
