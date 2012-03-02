@@ -111,6 +111,9 @@ EXTRA_DIST += \
 	css-match-regions.css \
 	css-match-regions.ref.ui \
 	css-match-regions.ui \
+	css-match-siblings.css \
+	css-match-siblings.ref.ui \
+	css-match-siblings.ui \
 	css-match-style-property-order.css \
 	css-match-style-property-order.ref.ui \
 	css-match-style-property-order.ui \

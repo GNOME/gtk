@@ -1,0 +1,19 @@
+* + *,
+#red {
+  color: red
+}
+
+* ~ * ~ GtkLabel,
+#green {
+  color: green;
+}
+
+* ~ * + GtkLabel ~ *,
+#blue {
+  color: blue;
+}
+
+* + GtkLabel ~ * ~ GtkLabel + *,
+#purple {
+  color: purple;
+}
