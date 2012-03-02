@@ -1312,6 +1312,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->scroll.type = GDK_SCROLL;
             event->scroll.direction = GDK_SCROLL_SMOOTH;
 
+            GDK_NOTE(EVENTS,
+                     g_message ("smooth scroll:\twindow %ld\n\tdeltas: %f %f",
+                                xev->event, delta_x, delta_y));
+
+
             event->scroll.window = window;
             event->scroll.time = xev->time;
             event->scroll.x = (gdouble) xev->event_x;
@@ -1500,7 +1505,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           }
       }
       break;
-#endif
+#endif  /* XINPUT_2_2 */
 
     case XI_Enter:
     case XI_Leave:
