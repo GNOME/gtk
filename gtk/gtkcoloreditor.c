@@ -39,6 +39,7 @@
 #include "gtklabel.h"
 #include "gtkspinbutton.h"
 #include "gtkintl.h"
+#include "gtkstylecontext.h"
 
 #include <math.h>
 

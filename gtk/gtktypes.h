@@ -29,17 +29,26 @@
 #ifndef __GTK_TYPES_H__
 #define __GTK_TYPES_H__
 
-#include <gdk/gdk.h>
-
 G_BEGIN_DECLS
 
 typedef struct _GtkClipboard	       GtkClipboard;
+typedef struct _GtkIconSet             GtkIconSet;
+typedef struct _GtkIconSource          GtkIconSource;
+typedef struct _GtkRcStyle             GtkRcStyle;
 typedef struct _GtkRequisition	       GtkRequisition;
 typedef struct _GtkSelectionData       GtkSelectionData;
+typedef struct _GtkSettings            GtkSettings;
+typedef struct _GtkStyle               GtkStyle;
+typedef struct _GtkStyleContext        GtkStyleContext;
 typedef struct _GtkTooltip             GtkTooltip;
 typedef struct _GtkWidget              GtkWidget;
 typedef struct _GtkWidgetPath          GtkWidgetPath;
 typedef struct _GtkWindow              GtkWindow;
+
+
+typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
+                                         const GString    *rc_string,
+                                         GValue           *property_value);
 
 G_END_DECLS
 

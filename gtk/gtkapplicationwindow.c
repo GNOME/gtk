@@ -28,6 +28,7 @@
 #include "gtkaccelgroup.h"
 #include "gtkaccelmap.h"
 #include "gtkintl.h"
+#include "gtksettings.h"
 
 #include <gdk/gdk.h>
 #ifdef GDK_WINDOWING_X11

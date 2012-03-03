@@ -23,7 +23,10 @@
  */
 
 #include "config.h"
+
 #include "gtkseparatormenuitem.h"
+
+#include "gtkstylecontext.h"
 
 /**
  * SECTION:gtkseparatormenuitem

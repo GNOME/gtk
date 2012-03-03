@@ -22,17 +22,18 @@
 
 #include <string.h>
 
-#include "gtktogglebutton.h"
 #include "gtkarrow.h"
+#include "gtkbox.h"
 #include "gtkdnd.h"
+#include "gtkiconfactory.h"
+#include "gtkicontheme.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
-#include "gtkicontheme.h"
-#include "gtkiconfactory.h"
 #include "gtklabel.h"
-#include "gtkbox.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtksettings.h"
+#include "gtktogglebutton.h"
 
 
 enum {

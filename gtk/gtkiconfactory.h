@@ -30,9 +30,8 @@
 #define __GTK_ICON_FACTORY_H__
 
 #include <gdk/gdk.h>
-#include <gtk/gtksettings.h>
 #include <gtk/gtkenums.h>
-#include <gtk/gtkwidgetpath.h>
+#include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
 
@@ -49,12 +48,6 @@ G_BEGIN_DECLS
 typedef struct _GtkIconFactory              GtkIconFactory;
 typedef struct _GtkIconFactoryPrivate       GtkIconFactoryPrivate;
 typedef struct _GtkIconFactoryClass         GtkIconFactoryClass;
-
-typedef struct _GtkIconSet     GtkIconSet;
-typedef struct _GtkIconSource  GtkIconSource;
-
-typedef struct _GtkStyle               GtkStyle;
-typedef struct _GtkRcStyle             GtkRcStyle;
 
 struct _GtkIconFactory
 {

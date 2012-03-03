@@ -22,11 +22,10 @@
 #ifndef __GTK_STYLE_CONTEXT_H__
 #define __GTK_STYLE_CONTEXT_H__
 
-#include <glib-object.h>
+#include <gtk/gtkborder.h>
 #include <gtk/gtkcsssection.h>
 #include <gtk/gtkstyleprovider.h>
-#include <gtk/gtkwidgetpath.h>
-#include <gtk/gtkborder.h>
+#include <gtk/gtktypes.h>
 #include <atk/atk.h>
 
 G_BEGIN_DECLS
@@ -38,7 +37,6 @@ G_BEGIN_DECLS
 #define GTK_IS_STYLE_CONTEXT_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_STYLE_CONTEXT))
 #define GTK_STYLE_CONTEXT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_STYLE_CONTEXT, GtkStyleContextClass))
 
-typedef struct _GtkStyleContext GtkStyleContext;
 typedef struct _GtkStyleContextClass GtkStyleContextClass;
 typedef struct _GtkStyleContextPrivate GtkStyleContextPrivate;
 

@@ -30,7 +30,9 @@
 #include "gtklabel.h"
 #include "gtkimage.h"
 #include "gtkbox.h"
+#include "gtksettings.h"
 #include "gtksizerequest.h"
+#include "gtkstylecontext.h"
 #include "gtkwindowprivate.h"
 
 

@@ -31,6 +31,7 @@
 
 #include "gtkbindingsprivate.h"
 #include "gtkkeyhash.h"
+#include "gtkstylecontext.h"
 #include "gtkwidget.h"
 #include "gtkintl.h"
 

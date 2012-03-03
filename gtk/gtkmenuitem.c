@@ -40,6 +40,7 @@
 #include "gtkactivatable.h"
 #include "gtkwidgetprivate.h"
 #include "gtkintl.h"
+#include "gtksettings.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtkmenuitemaccessible.h"
 

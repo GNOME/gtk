@@ -30,8 +30,9 @@
 #include "gtkcellrendererspinner.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
-#include "gtktypebuiltins.h"
 #include "gtkintl.h"
+#include "gtksettings.h"
+#include "gtktypebuiltins.h"
 
 #undef GDK_DEPRECATED
 #undef GDK_DEPRECATED_FOR

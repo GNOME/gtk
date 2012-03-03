@@ -29,10 +29,11 @@
 
 #include "config.h"
 
-#include "gtkintl.h"
-#include "gtkaccessible.h"
-#include "gtkimage.h"
 #include "gtkspinner.h"
+
+#include "gtkimage.h"
+#include "gtkintl.h"
+#include "gtkstylecontext.h"
 #include "a11y/gtkspinneraccessible.h"
 
 

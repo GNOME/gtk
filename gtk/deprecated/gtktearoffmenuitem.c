@@ -26,6 +26,7 @@
 
 #include "gtkmenuprivate.h"
 #include "gtkmenuitemprivate.h"
+#include "gtkstylecontext.h"
 #include "gtktearoffmenuitem.h"
 #include "gtkintl.h"
 

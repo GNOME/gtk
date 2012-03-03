@@ -31,10 +31,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkaccelgroup.h>
-#include <gtk/gtkadjustment.h>
 #include <gtk/gtkborder.h>
-#include <gtk/gtksettings.h>
-#include <gtk/gtkstylecontext.h>
 #include <gtk/gtktypes.h>
 #include <atk/atk.h>
 

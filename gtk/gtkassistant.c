@@ -66,6 +66,7 @@
 #include "gtknotebook.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
+#include "gtksettings.h"
 #include "gtksizegroup.h"
 #include "gtksizerequest.h"
 #include "gtkstock.h"

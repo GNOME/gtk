@@ -22,12 +22,13 @@
 
 #include "gtkimmulticontext.h"
 #include "gtkimmoduleprivate.h"
+#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtkradiomenuitem.h"
 #include "gtkseparatormenuitem.h"
-#include "gtkintl.h"
-#include "gtkprivate.h"
+#include "gtksettings.h"
 
 
 /**

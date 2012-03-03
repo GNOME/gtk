@@ -39,6 +39,7 @@
 #include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
+#include "gtksettings.h"
 
 /**
  * SECTION:gtkdialog

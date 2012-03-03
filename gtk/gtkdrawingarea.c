@@ -25,6 +25,7 @@
 #include "config.h"
 #include "gtkdrawingarea.h"
 #include "gtkintl.h"
+#include "gtkstylecontext.h"
 
 
 /**

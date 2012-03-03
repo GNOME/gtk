@@ -36,6 +36,7 @@
 #include "gtkiconfactory.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstyleproviderprivate.h"
+#include "gtksettings.h"
 
 /**
  * SECTION:gtkstylecontext
