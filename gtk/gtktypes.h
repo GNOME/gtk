@@ -33,6 +33,13 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GtkClipboard	       GtkClipboard;
+typedef struct _GtkRequisition	       GtkRequisition;
+typedef struct _GtkSelectionData       GtkSelectionData;
+typedef struct _GtkTooltip             GtkTooltip;
+typedef struct _GtkWidget              GtkWidget;
+typedef struct _GtkWidgetPath          GtkWidgetPath;
+typedef struct _GtkWindow              GtkWindow;
 
 G_END_DECLS
 

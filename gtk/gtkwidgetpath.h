@@ -25,14 +25,9 @@
 #include <glib-object.h>
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
+#include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
-
-typedef struct _GtkWidgetPath GtkWidgetPath;
-
-/* We make this forward declaration here, since gtkwidget.h includes us.
- */
-typedef struct _GtkWidget      GtkWidget;
 
 #define GTK_TYPE_WIDGET_PATH (gtk_widget_path_get_type ())
 

@@ -35,7 +35,7 @@
 #include <gtk/gtkborder.h>
 #include <gtk/gtksettings.h>
 #include <gtk/gtkstylecontext.h>
-#include <gtk/gtkwidgetpath.h>
+#include <gtk/gtktypes.h>
 #include <atk/atk.h>
 
 G_BEGIN_DECLS
@@ -59,17 +59,10 @@ typedef enum
 
 #define GTK_TYPE_REQUISITION              (gtk_requisition_get_type ())
 
-/* forward declaration to avoid excessive includes (and concurrent includes)
- */
-typedef struct _GtkRequisition	       GtkRequisition;
-typedef struct _GtkSelectionData       GtkSelectionData;
 typedef struct _GtkWidgetPrivate       GtkWidgetPrivate;
 typedef struct _GtkWidgetClass	       GtkWidgetClass;
 typedef struct _GtkWidgetClassPrivate  GtkWidgetClassPrivate;
 typedef struct _GtkWidgetAuxInfo       GtkWidgetAuxInfo;
-typedef struct _GtkClipboard	       GtkClipboard;
-typedef struct _GtkTooltip             GtkTooltip;
-typedef struct _GtkWindow              GtkWindow;
 
 /**
  * GtkAllocation:
