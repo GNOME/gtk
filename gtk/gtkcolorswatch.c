@@ -33,6 +33,15 @@
 #include "a11y/gtkcolorswatchaccessible.h"
 
 
+typedef struct {
+  GtkWidget *widget;
+
+  GdkEventSequence *sequence;
+  guint press_and_hold_id;
+  gint start_x;
+  gint start_y;
+} GtkPressAndHoldData;
+
 struct _GtkColorSwatchPrivate
 {
   GdkRGBA color;
@@ -44,6 +53,8 @@ struct _GtkColorSwatchPrivate
   guint    selectable       : 1;
 
   GdkWindow *event_window;
+
+  GtkPressAndHoldData *press_and_hold;
 };
 
 enum
@@ -485,30 +496,116 @@ swatch_button_press (GtkWidget      *widget,
 }
 
 static gboolean
+swatch_primary_action (GtkColorSwatch *swatch)
+{
+  GtkWidget *widget = (GtkWidget *)swatch;
+  GtkStateFlags flags;
+
+  flags = gtk_widget_get_state_flags (widget);
+  if (!swatch->priv->has_color)
+    {
+      g_signal_emit (swatch, signals[ACTIVATE], 0);
+      return TRUE;
+    }
+  else if (swatch->priv->selectable &&
+           (flags & GTK_STATE_FLAG_SELECTED) == 0)
+    {
+      gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_SELECTED, FALSE);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 swatch_button_release (GtkWidget      *widget,
                        GdkEventButton *event)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-  GtkStateFlags flags;
 
   if (event->button == GDK_BUTTON_PRIMARY &&
       swatch->priv->contains_pointer)
-    {
-      flags = gtk_widget_get_state_flags (widget);
-      if (!swatch->priv->has_color)
-        {
-          g_signal_emit (swatch, signals[ACTIVATE], 0);
-          return TRUE;
-        }
-      else if (swatch->priv->selectable &&
-               (flags & GTK_STATE_FLAG_SELECTED) == 0)
-        {
-          gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_SELECTED, FALSE);
-          return TRUE;
-        }
-    }
+    return swatch_primary_action (swatch);
 
   return FALSE;
+}
+
+static void
+swatch_press_and_hold_cancel (GtkWidget           *widget,
+                              GtkPressAndHoldData *data)
+{
+  if (data->press_and_hold_id)
+    {
+      g_source_remove (data->press_and_hold_id);
+      data->press_and_hold_id = 0;
+    }
+  
+  data->sequence = NULL;
+}
+
+static void
+swatch_press_and_hold_free (GtkPressAndHoldData *data)
+{
+  swatch_press_and_hold_cancel (data->widget, data);
+  g_slice_free (GtkPressAndHoldData, data);
+}
+
+static gboolean
+swatch_press_and_hold_action (gpointer data)
+{
+  GtkPressAndHoldData *pah = data;
+
+  emit_customize (GTK_COLOR_SWATCH (pah->widget));
+  swatch_press_and_hold_cancel (pah->widget, pah);
+
+  return G_SOURCE_REMOVE;
+}
+
+
+static gboolean
+swatch_touch (GtkWidget     *widget,
+              GdkEventTouch *event)
+{
+  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
+  GtkPressAndHoldData *data;
+
+  if (!swatch->priv->press_and_hold)
+    swatch->priv->press_and_hold = g_slice_new0 (GtkPressAndHoldData);
+
+  data = swatch->priv->press_and_hold;
+
+  /* We're already tracking a different touch, ignore */
+  if (data->sequence != NULL && data->sequence != event->sequence)
+    return TRUE;
+
+  if (event->type == GDK_TOUCH_BEGIN)
+    {
+      data->widget = widget;
+      data->sequence = event->sequence;
+      data->start_x = event->x;
+      data->start_y = event->y;
+
+      data->press_and_hold_id =
+          gdk_threads_add_timeout (1000, swatch_press_and_hold_action, data);
+    }
+  else if (event->type == GDK_TOUCH_UPDATE)
+    {
+      if (gtk_drag_check_threshold (widget,
+                                    data->start_x, data->start_y,
+                                    event->x, event->y))
+        swatch_press_and_hold_cancel (widget, data);
+    }
+  else if (event->type == GDK_TOUCH_END)
+    {
+      swatch_press_and_hold_cancel (widget, data);
+      swatch_primary_action (swatch);
+    }
+  else if (event->type == GDK_TOUCH_CANCEL)
+    {
+      swatch_press_and_hold_cancel (widget, data);
+    }
+
+  return TRUE;
 }
 
 static void
@@ -552,10 +649,11 @@ swatch_realize (GtkWidget *widget)
   attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
-			    GDK_BUTTON_RELEASE_MASK |
-			    GDK_ENTER_NOTIFY_MASK |
-			    GDK_LEAVE_NOTIFY_MASK);
+  attributes.event_mask |= GDK_BUTTON_PRESS_MASK
+                           | GDK_BUTTON_RELEASE_MASK
+                           | GDK_ENTER_NOTIFY_MASK
+                           | GDK_LEAVE_NOTIFY_MASK
+                           | GDK_TOUCH_MASK;
 
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
@@ -661,6 +759,8 @@ swatch_finalize (GObject *object)
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (object);
 
   g_free (swatch->priv->icon);
+  if (swatch->priv->press_and_hold)
+    swatch_press_and_hold_free (swatch->priv->press_and_hold);
 
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->finalize (object);
 }
@@ -692,6 +792,7 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->map = swatch_map;
   widget_class->unmap = swatch_unmap;
   widget_class->size_allocate = swatch_size_allocate;
+  widget_class->touch_event = swatch_touch;
 
   signals[ACTIVATE] =
     g_signal_new ("activate",
