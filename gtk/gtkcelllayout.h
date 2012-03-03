@@ -24,7 +24,6 @@
 
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkcellarea.h>
-#include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkbuildable.h>
 #include <gtk/gtkbuilder.h>
 
