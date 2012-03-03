@@ -2,7 +2,7 @@
 # Copyright © 2010 GNOME i18n Project for Vietnamese.
 # Hoang Ngoc Tu <hntu@gmx.de>, 2000-2002.
 # Joern v. Kattchee <kattchee@cs.tu-berlin.de>, 2000-2002.
-# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2002-2004,2007-2009,2011.
+# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2002-2004,2007-2009,2011-2012.
 # Clytie Siddall <clytie@riverland.net.au>, 2005-2010.
 #
 msgid ""
@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-03-02 19:49+0000\n"
-"PO-Revision-Date: 2012-03-03 22:12+0700\n"
-"Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
+"PO-Revision-Date: 2012-03-03 22:28+0700\n"
+"Last-Translator: Nguyễn Thái Ngọc Duy <pclouds@gmail.com>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -502,7 +502,7 @@ msgstr "Chọn phông"
 #. * contains the URL of the license.
 #.
 #: ../gtk/gtkaboutdialog.c:104
-#, fuzzy, c-format
+#, c-format
 #| msgid ""
 #| "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a "
 #| "href=\"%s\">%s</a>"
@@ -510,8 +510,8 @@ msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
 "for details, visit <a href=\"%s\">%s</a>"
 msgstr ""
-"Chương trình này HOÀN TOÀN KHÔNG CÓ BẢO HÀNH; xem <a href=\"%s\">%s</a> để "
-"biết chi tiết"
+"Chương trình này HOÀN TOÀN KHÔNG CÓ BẢO HÀNH;\n"
+"xem <a href=\"%s\">%s</a> để biết chi tiết"
 
 #: ../gtk/gtkaboutdialog.c:357
 msgid "License"
@@ -721,6 +721,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"%s không thể thoát lúc này:\n"
+"\n"
+"%s"
 
 #: ../gtk/gtkapplicationwindow.c:284 ../gtk/gtkprintoperation-unix.c:475
 #: ../gtk/gtkprintoperation-win32.c:1445
@@ -740,21 +743,21 @@ msgid "_Finish"
 msgstr "_Hoàn tất"
 
 #: ../gtk/gtkbuilder-menus.c:220
-#, fuzzy, c-format
+#, c-format
 #| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed inside <%s>"
-msgstr "Không cho phép yếu tố <%s> nằm dưới <%s>"
+msgstr "Phần tử <%s> không được phép nằm trong <%s>"
 
 #: ../gtk/gtkbuilder-menus.c:225
-#, fuzzy, c-format
+#, c-format
 #| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed at toplevel"
-msgstr "Không cho phép yếu tố <%s> nằm dưới <%s>"
+msgstr "Phần tử <%s> không được phép nằm ở cấp cao nhất"
 
 #: ../gtk/gtkbuilder-menus.c:314
 #, c-format
 msgid "text may not appear inside <%s>"
-msgstr ""
+msgstr "chữ không thể xuất hiện trong <%s>"
 
 #: ../gtk/gtkbuilderparser.c:341
 #, c-format
@@ -891,303 +894,288 @@ msgid "Pick a Color"
 msgstr "Chọn màu"
 
 #: ../gtk/gtkcolorchooserdialog.c:134
-#, fuzzy
 #| msgid "Select a folder"
 msgid "Select a Color"
-msgstr "Chọn thư mục"
+msgstr "Chọn màu"
 
 #: ../gtk/gtkcolorchooserwidget.c:281
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
-msgstr ""
+msgstr "Đỏ %d%%, Xanh %d%%, Lục %d%%, Alpha %d%%"
 
 #: ../gtk/gtkcolorchooserwidget.c:287
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
-msgstr ""
+msgstr "Đỏ %d%%, Xanh %d%%, Lục %d%%"
 
 #: ../gtk/gtkcolorchooserwidget.c:338
-#, fuzzy, c-format
+#, c-format
 #| msgid "Color"
 msgid "Color: %s"
-msgstr "Màu"
+msgstr "Màu: %s"
 
 #: ../gtk/gtkcolorchooserwidget.c:409
 msgctxt "Color name"
 msgid "Light Scarlet Red"
-msgstr ""
+msgstr "Đỏ tươi nhạt"
 
 #: ../gtk/gtkcolorchooserwidget.c:410
 msgctxt "Color name"
 msgid "Scarlet Red"
-msgstr ""
+msgstr "Đỏ tươi"
 
 #: ../gtk/gtkcolorchooserwidget.c:411
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
-msgstr ""
+msgstr "Đỏ tươi đậm"
 
 #: ../gtk/gtkcolorchooserwidget.c:412
 msgctxt "Color name"
 msgid "Light Orange"
-msgstr ""
+msgstr "Cam nhạt"
 
 #: ../gtk/gtkcolorchooserwidget.c:413
-#, fuzzy
 #| msgid "Range"
 msgctxt "Color name"
 msgid "Orange"
-msgstr "Phạm vi"
+msgstr "Cam"
 
 #: ../gtk/gtkcolorchooserwidget.c:414
 msgctxt "Color name"
 msgid "Dark Orange"
-msgstr ""
+msgstr "Cam đậm"
 
 #: ../gtk/gtkcolorchooserwidget.c:415
 msgctxt "Color name"
 msgid "Light Butter"
-msgstr ""
+msgstr "Bơ nhạt"
 
 #: ../gtk/gtkcolorchooserwidget.c:416
 msgctxt "Color name"
 msgid "Butter"
-msgstr ""
+msgstr "Bơ"
 
 #: ../gtk/gtkcolorchooserwidget.c:417
 msgctxt "Color name"
 msgid "Dark Butter"
-msgstr ""
+msgstr "Bơ đậm"
 
 #: ../gtk/gtkcolorchooserwidget.c:418
 msgctxt "Color name"
 msgid "Light Chameleon"
-msgstr ""
+msgstr "Tắc kè hoa nhạt"
 
 #: ../gtk/gtkcolorchooserwidget.c:419
 msgctxt "Color name"
 msgid "Chameleon"
-msgstr ""
+msgstr "Tắc kè hoa"
 
 #: ../gtk/gtkcolorchooserwidget.c:420
 msgctxt "Color name"
 msgid "Dark Chameleon"
-msgstr ""
+msgstr "Tắc kè hoa đậm"
 
 #: ../gtk/gtkcolorchooserwidget.c:421
 msgctxt "Color name"
 msgid "Light Sky Blue"
-msgstr ""
+msgstr "Xanh da trời nhạt"
 
 #: ../gtk/gtkcolorchooserwidget.c:422
 msgctxt "Color name"
 msgid "Sky Blue"
-msgstr ""
+msgstr "Xanh da trời"
 
 #: ../gtk/gtkcolorchooserwidget.c:423
 msgctxt "Color name"
 msgid "Dark Sky Blue"
-msgstr ""
+msgstr "Xanh da trời đậm"
 
 #: ../gtk/gtkcolorchooserwidget.c:424
 msgctxt "Color name"
 msgid "Light Plum"
-msgstr ""
+msgstr "Mận nhạt"
 
 #: ../gtk/gtkcolorchooserwidget.c:425
-#, fuzzy
 #| msgid "Volume"
 msgctxt "Color name"
 msgid "Plum"
-msgstr "Âm lượng"
+msgstr "Mận"
 
 #: ../gtk/gtkcolorchooserwidget.c:426
 msgctxt "Color name"
 msgid "Dark Plum"
-msgstr ""
+msgstr "Mận đậm"
 
 #: ../gtk/gtkcolorchooserwidget.c:427
 msgctxt "Color name"
 msgid "Light Chocolate"
-msgstr ""
+msgstr "Sô cô la nhạt"
 
 #: ../gtk/gtkcolorchooserwidget.c:428
-#, fuzzy
 #| msgid "C_ollate"
 msgctxt "Color name"
 msgid "Chocolate"
-msgstr "Đố_i chiếu"
+msgstr "Sô cô la"
 
 #: ../gtk/gtkcolorchooserwidget.c:429
 msgctxt "Color name"
 msgid "Dark Chocolate"
-msgstr ""
+msgstr "Sô cô la đậm"
 
 #: ../gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Light Aluminum 1"
-msgstr ""
+msgstr "Nhôm nhạt 1"
 
 #: ../gtk/gtkcolorchooserwidget.c:431
 msgctxt "Color name"
 msgid "Aluminum 1"
-msgstr ""
+msgstr "Nhôm 1"
 
 #: ../gtk/gtkcolorchooserwidget.c:432
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
-msgstr ""
+msgstr "Nhôm đậm 1"
 
 #: ../gtk/gtkcolorchooserwidget.c:433
 msgctxt "Color name"
 msgid "Light Aluminum 2"
-msgstr ""
+msgstr "Nhôm nhạt 2"
 
 #: ../gtk/gtkcolorchooserwidget.c:434
 msgctxt "Color name"
 msgid "Aluminum 2"
-msgstr ""
+msgstr "Nhôm 2"
 
 #: ../gtk/gtkcolorchooserwidget.c:435
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
-msgstr ""
+msgstr "Nhôm đậm 2"
 
 #: ../gtk/gtkcolorchooserwidget.c:449
-#, fuzzy
 #| msgctxt "Stock label, navigation"
 #| msgid "_Back"
 msgctxt "Color name"
 msgid "Black"
-msgstr "Lù_i"
+msgstr "Đen"
 
 #: ../gtk/gtkcolorchooserwidget.c:450
 msgctxt "Color name"
 msgid "Very Dark Gray"
-msgstr ""
+msgstr "Xám rất đậm"
 
 #: ../gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
 msgid "Darker Gray"
-msgstr ""
+msgstr "Xám đậm hơn"
 
 #: ../gtk/gtkcolorchooserwidget.c:452
 msgctxt "Color name"
 msgid "Dark Gray"
-msgstr ""
+msgstr "Xám đậm"
 
 #: ../gtk/gtkcolorchooserwidget.c:453
-#, fuzzy
 #| msgid "Medium"
 msgctxt "Color name"
 msgid "Medium Gray"
-msgstr "Vừa"
+msgstr "Xám trung"
 
 #: ../gtk/gtkcolorchooserwidget.c:454
 msgctxt "Color name"
 msgid "Light Gray"
-msgstr ""
+msgstr "Xám nhạt"
 
 #: ../gtk/gtkcolorchooserwidget.c:455
 msgctxt "Color name"
 msgid "Lighter Gray"
-msgstr ""
+msgstr "Xám nhạt hơn"
 
 #: ../gtk/gtkcolorchooserwidget.c:456
 msgctxt "Color name"
 msgid "Very Light Gray"
-msgstr ""
+msgstr "Xám rất nhạt"
 
 #: ../gtk/gtkcolorchooserwidget.c:457
 msgctxt "Color name"
 msgid "White"
-msgstr ""
+msgstr "Trắng"
 
 #. translators: label for the custom section in the color chooser
 #: ../gtk/gtkcolorchooserwidget.c:506
-#, fuzzy
 #| msgid "Custom size"
 msgid "Custom"
-msgstr "Cỡ riêng"
+msgstr "Tự chọn"
 
 #: ../gtk/gtkcolorchooserwidget.c:514
-#, fuzzy
 #| msgid "Create Fo_lder"
 msgid "Create custom color"
-msgstr "Tạo thư _mục"
+msgstr "Tạo màu tự chọn"
 
 #: ../gtk/gtkcolorchooserwidget.c:533
-#, fuzzy, c-format
+#, c-format
 #| msgid "Custom %sx%s"
 msgid "Custom color %d: %s"
-msgstr "Tự chọn  %sx%s"
+msgstr "Màu tự chọn %d: %s"
 
 #: ../gtk/gtkcoloreditor.c:411
-#, fuzzy
 #| msgid "Color _name:"
 msgid "Color Name"
-msgstr "Tê_n màu :"
+msgstr "Tên màu"
 
 #: ../gtk/gtkcoloreditor.c:456
-#, fuzzy
 #| msgid "S_aturation:"
 msgctxt "Color channel"
 msgid "Saturation"
-msgstr "Độ _bão hòa:"
+msgstr "Độ bão hòa"
 
 #: ../gtk/gtkcoloreditor.c:462
-#, fuzzy
 #| msgid "_Value:"
 msgctxt "Color channel"
 msgid "Value"
-msgstr "_Giá trị:"
+msgstr "Giá trị"
 
 #: ../gtk/gtkcoloreditor.c:470
 msgctxt "Color channel"
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: ../gtk/gtkcoloreditor.c:472
 msgctxt "Color channel"
 msgid "V"
-msgstr ""
+msgstr "V"
 
 #: ../gtk/gtkcoloreditor.c:480 ../gtk/gtkcolorscale.c:295
-#, fuzzy
 #| msgid "_Hue:"
 msgctxt "Color channel"
 msgid "Hue"
-msgstr "_Sắc độ:"
+msgstr "Sắc độ"
 
 #: ../gtk/gtkcoloreditor.c:487
 msgctxt "Color channel"
 msgid "H"
-msgstr ""
+msgstr "H"
 
 #: ../gtk/gtkcoloreditor.c:495 ../gtk/gtkcolorscale.c:297
 msgctxt "Color channel"
 msgid "Alpha"
-msgstr ""
+msgstr "Alpha"
 
 #: ../gtk/gtkcoloreditor.c:502
-#, fuzzy
 #| msgctxt "paper size"
 #| msgid "A0"
 msgctxt "Color channel"
 msgid "A"
-msgstr "A0"
+msgstr "A"
 
 #: ../gtk/gtkcolorplane.c:391
-#, fuzzy
 #| msgid "Color _name:"
 msgid "Color Plane"
-msgstr "Tê_n màu :"
+msgstr "Mặt màu"
 
 #: ../gtk/gtkcolorswatch.c:444
-#, fuzzy
 #| msgid "Custom size"
 msgid "_Customize"
-msgstr "Cỡ riêng"
+msgstr "_Tuỳ biến"
 
 #: ../gtk/deprecated/gtkcolorsel.c:424
 msgid ""
