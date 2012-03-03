@@ -29,10 +29,14 @@
 #ifndef __GTK_TYPES_H__
 #define __GTK_TYPES_H__
 
+#include <glib-object.h>
+
 G_BEGIN_DECLS
 
 typedef struct _GtkAdjustment          GtkAdjustment;
 typedef struct _GtkClipboard	       GtkClipboard;
+typedef struct _GtkEventRecognizer     GtkEventRecognizer;
+typedef struct _GtkEventTracker        GtkEventTracker;
 typedef struct _GtkIconSet             GtkIconSet;
 typedef struct _GtkIconSource          GtkIconSource;
 typedef struct _GtkRcStyle             GtkRcStyle;
