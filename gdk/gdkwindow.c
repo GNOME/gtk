@@ -9158,7 +9158,7 @@ get_event_window (GdkDisplay                 *display,
           emulated_mask |= GDK_BUTTON_PRESS_MASK;
           break;
         case GDK_TOUCH_UPDATE:
-          emulated_mask |= GDK_BUTTON_MOTION_MASK;
+          emulated_mask |= GDK_POINTER_MOTION_MASK;
           break;
         case GDK_TOUCH_END:
           emulated_mask |= GDK_BUTTON_RELEASE_MASK;
