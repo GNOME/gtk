@@ -359,6 +359,7 @@ gtk_public_h_sources = 		\
 	gtktreestore.h		\
 	gtktreeview.h		\
 	gtktreeviewcolumn.h	\
+	gtktypes.h		\
 	gtkuimanager.h		\
 	gtkviewport.h		\
 	gtkvolumebutton.h	\
