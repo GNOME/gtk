@@ -6631,21 +6631,21 @@ remove_scroll_timeout (GtkIconView *icon_view)
 static void
 gtk_icon_view_autoscroll (GtkIconView *icon_view)
 {
-  gint px, py, x, y, width, height;
+  gint px, py, width, height;
   gint hoffset, voffset;
   gfloat value;
 
   gdk_window_get_pointer (GTK_WIDGET (icon_view)->window, &px, &py, NULL);
-  gdk_window_get_geometry (GTK_WIDGET (icon_view)->window, &x, &y, &width, &height, NULL);
+  gdk_window_get_geometry (GTK_WIDGET (icon_view)->window, NULL, NULL, &width, &height, NULL);
 
   /* see if we are near the edge. */
-  voffset = py - (y + 2 * SCROLL_EDGE_SIZE);
+  voffset = py - 2 * SCROLL_EDGE_SIZE;
   if (voffset > 0)
-    voffset = MAX (py - (y + height - 2 * SCROLL_EDGE_SIZE), 0);
+    voffset = MAX (py - (height - 2 * SCROLL_EDGE_SIZE), 0);
 
-  hoffset = px - (x + 2 * SCROLL_EDGE_SIZE);
+  hoffset = px - 2 * SCROLL_EDGE_SIZE;
   if (hoffset > 0)
-    hoffset = MAX (px - (x + width - 2 * SCROLL_EDGE_SIZE), 0);
+    hoffset = MAX (px - (width - 2 * SCROLL_EDGE_SIZE), 0);
 
   if (voffset != 0)
     {
