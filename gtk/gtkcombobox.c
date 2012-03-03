@@ -16,7 +16,10 @@
  */
 
 #include "config.h"
+
 #include "gtkcombobox.h"
+
+#include "gtkadjustment.h"
 #include "gtkcellareabox.h"
 #include "gtktreemenu.h"
 #include "gtkarrow.h"

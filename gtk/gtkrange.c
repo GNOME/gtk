@@ -28,18 +28,19 @@
 #include <stdio.h>
 #include <math.h>
 
+#include "gtkrange.h"
+
+#include "gtkadjustment.h"
+#include "gtkcolorscaleprivate.h"
+#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientableprivate.h"
-#include "gtkrange.h"
-#include "gtkscale.h"
-#include "gtkcolorscaleprivate.h"
-#include "gtkscrollbar.h"
-#include "gtkwindow.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
-#include "gtkmain.h"
+#include "gtkscale.h"
+#include "gtkscrollbar.h"
 #include "gtktypebuiltins.h"
+#include "gtkwindow.h"
 #include "a11y/gtkrangeaccessible.h"
 
 /**

@@ -34,7 +34,6 @@
 
 
 #include <gtk/gtkentry.h>
-#include <gtk/gtkadjustment.h>
 
 
 G_BEGIN_DECLS

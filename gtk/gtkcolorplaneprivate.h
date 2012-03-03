@@ -22,8 +22,8 @@
 #ifndef __GTK_COLOR_PLANE_H__
 #define __GTK_COLOR_PLANE_H__
 
-#include <gtk/gtkadjustment.h>
 #include <gtk/gtkdrawingarea.h>
+#include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
 

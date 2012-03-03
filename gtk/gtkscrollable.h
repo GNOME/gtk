@@ -22,8 +22,8 @@
 #ifndef __GTK_SCROLLABLE_H__
 #define __GTK_SCROLLABLE_H__
 
-#include <gtk/gtkadjustment.h>
 #include <gtk/gtkenums.h>
+#include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
 

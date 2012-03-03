@@ -22,6 +22,8 @@
 #include <string.h>
 
 #include "gtktreeview.h"
+
+#include "gtkadjustment.h"
 #include "gtkrbtree.h"
 #include "gtktreednd.h"
 #include "gtktreeprivate.h"

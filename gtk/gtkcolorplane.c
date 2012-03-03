@@ -19,8 +19,9 @@
 
 #include "gtkcolorplaneprivate.h"
 
-#include "gtkcolorutils.h"
 #include "gtkaccessible.h"
+#include "gtkadjustment.h"
+#include "gtkcolorutils.h"
 #include "gtkintl.h"
 
 struct _GtkColorPlanePrivate

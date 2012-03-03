@@ -29,16 +29,18 @@
 #include <stdlib.h>
 
 #include "gtkscaleprivate.h"
-#include "gtkiconfactory.h"
-#include "gtkicontheme.h"
-#include "gtkmarshalers.h"
+
+#include "gtkadjustment.h"
 #include "gtkbindings.h"
-#include "gtkorientable.h"
-#include "gtktypebuiltins.h"
-#include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtkiconfactory.h"
+#include "gtkicontheme.h"
+#include "gtkintl.h"
+#include "gtkmarshalers.h"
+#include "gtkorientable.h"
+#include "gtkprivate.h"
+#include "gtktypebuiltins.h"
 
 #include "a11y/gtkscaleaccessible.h"
 

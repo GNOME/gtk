@@ -28,6 +28,8 @@
 #include <stdlib.h>
 
 #include "gtkvscale.h"
+
+#include "gtkadjustment.h"
 #include "gtkorientable.h"
 
 

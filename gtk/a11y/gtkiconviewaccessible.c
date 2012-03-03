@@ -21,6 +21,7 @@
 
 #include <string.h>
 
+#include "gtk/gtkadjustment.h"
 #include "gtk/gtkiconviewprivate.h"
 #include "gtk/gtkcellrendererpixbuf.h"
 #include "gtk/gtkcellrenderertext.h"

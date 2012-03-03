@@ -33,6 +33,8 @@
 
 #include "config.h"
 
+#include "gtkscalebutton.h"
+
 #ifndef _WIN32
 #define _GNU_SOURCE
 #endif
@@ -40,6 +42,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "gtkadjustment.h"
 #include "gtkbindings.h"
 #include "gtkframe.h"
 #include "gtkmain.h"
@@ -47,7 +50,6 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkscale.h"
-#include "gtkscalebutton.h"
 #include "gtkstock.h"
 #include "gtkbox.h"
 #include "gtkwindow.h"

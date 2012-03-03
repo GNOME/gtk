@@ -25,11 +25,12 @@
 
 #include "config.h"
 
-#include "gtkscrollbar.h"
-
 #include "gtkhscrollbar.h"
-#include "gtkorientable.h"
+
+#include "gtkadjustment.h"
 #include "gtkintl.h"
+#include "gtkorientable.h"
+#include "gtkscrollbar.h"
 
 
 /**

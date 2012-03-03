@@ -22,6 +22,7 @@
 #include "gtkiconview.h"
 #include "gtkiconviewprivate.h"
 
+#include "gtkadjustment.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderer.h"
 #include "gtkcellareabox.h"

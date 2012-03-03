@@ -95,6 +95,7 @@
 
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
+#include "gtkadjustment.h"
 #include "gtkbindings.h"
 #include "gtkcheckmenuitem.h"
 #include "gtkmain.h"

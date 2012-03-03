@@ -24,23 +24,24 @@
 
 #include "config.h"
 
-#include <math.h>
+#include "gtkscrolledwindow.h"
 
+#include "gtkadjustment.h"
 #include "gtkbindings.h"
+#include "gtkdnd.h"
+#include "gtkintl.h"
+#include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtkscrollbar.h"
-#include "gtkscrolledwindow.h"
-#include "gtkwindow.h"
-#include "gtkviewport.h"
-#include "gtkdnd.h"
-#include "gtkmain.h"
-#include "gtkprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkintl.h"
 #include "gtkviewport.h"
 #include "gtkwidgetprivate.h"
+#include "gtkwindow.h"
 #include "a11y/gtkscrolledwindowaccessible.h"
+
+#include <math.h>
 
 /**
  * SECTION:gtkscrolledwindow

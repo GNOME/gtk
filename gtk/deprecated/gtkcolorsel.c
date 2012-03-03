@@ -33,6 +33,7 @@
 #include <string.h>
 
 #include "gdk/gdk.h"
+#include "gtkadjustment.h"
 #include "gtkorientable.h"
 #include "gtkhsv.h"
 #include "gtkwindow.h"

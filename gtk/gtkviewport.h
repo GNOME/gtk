@@ -30,7 +30,6 @@
 #define __GTK_VIEWPORT_H__
 
 
-#include <gtk/gtkadjustment.h>
 #include <gtk/gtkbin.h>
 
 

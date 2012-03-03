@@ -26,11 +26,12 @@
 
 #include "gtkviewport.h"
 
+#include "gtkadjustment.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtktypebuiltins.h"
-#include "gtkprivate.h"
 
 
 /**

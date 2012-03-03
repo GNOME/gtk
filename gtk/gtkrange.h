@@ -30,7 +30,6 @@
 #define __GTK_RANGE_H__
 
 
-#include <gtk/gtkadjustment.h>
 #include <gtk/gtkwidget.h>
 
 

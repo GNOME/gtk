@@ -30,6 +30,7 @@
 #define __GTK_ADJUSTMENT_H__
 
 #include <gdk/gdk.h>
+#include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
 
@@ -41,7 +42,6 @@ G_BEGIN_DECLS
 #define GTK_ADJUSTMENT_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ADJUSTMENT, GtkAdjustmentClass))
 
 
-typedef struct _GtkAdjustment         GtkAdjustment;
 typedef struct _GtkAdjustmentPrivate  GtkAdjustmentPrivate;
 typedef struct _GtkAdjustmentClass    GtkAdjustmentClass;
 

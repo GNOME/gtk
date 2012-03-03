@@ -28,9 +28,10 @@
 #include "config.h"
 
 #include "gtkvolumebutton.h"
-#include "gtkstock.h"
-#include "gtktooltip.h"
+
+#include "gtkadjustment.h"
 #include "gtkintl.h"
+#include "gtktooltip.h"
 
 
 /**

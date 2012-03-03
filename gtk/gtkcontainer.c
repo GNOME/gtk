@@ -34,6 +34,7 @@
 #include <gobject/gobjectnotifyqueue.c>
 #include <gobject/gvaluecollector.h>
 
+#include "gtkadjustment.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtktypebuiltins.h"

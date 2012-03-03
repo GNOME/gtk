@@ -31,7 +31,6 @@
 
 
 #include <gtk/gtkwidget.h>
-#include <gtk/gtkadjustment.h>
 
 
 G_BEGIN_DECLS

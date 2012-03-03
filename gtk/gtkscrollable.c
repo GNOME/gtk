@@ -69,6 +69,8 @@
 #include "config.h"
 
 #include "gtkscrollable.h"
+
+#include "gtkadjustment.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"

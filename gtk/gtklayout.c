@@ -32,9 +32,10 @@
 
 #include "gdk/gdk.h"
 
-#include "gtkprivate.h"
+#include "gtkadjustment.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtkscrollable.h"
 
 
