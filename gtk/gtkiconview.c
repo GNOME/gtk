@@ -5946,22 +5946,22 @@ gtk_icon_view_autoscroll (GtkIconView *icon_view,
                           GdkDevice   *device)
 {
   GdkWindow *window;
-  gint px, py, x, y, width, height;
+  gint px, py, width, height;
   gint hoffset, voffset;
 
   window = gtk_widget_get_window (GTK_WIDGET (icon_view));
 
   gdk_window_get_device_position (window, device, &px, &py, NULL);
-  gdk_window_get_geometry (window, &x, &y, &width, &height);
+  gdk_window_get_geometry (window, NULL, NULL, &width, &height);
 
   /* see if we are near the edge. */
-  voffset = py - (y + 2 * SCROLL_EDGE_SIZE);
+  voffset = py - 2 * SCROLL_EDGE_SIZE;
   if (voffset > 0)
-    voffset = MAX (py - (y + height - 2 * SCROLL_EDGE_SIZE), 0);
+    voffset = MAX (py - (height - 2 * SCROLL_EDGE_SIZE), 0);
 
-  hoffset = px - (x + 2 * SCROLL_EDGE_SIZE);
+  hoffset = px - 2 * SCROLL_EDGE_SIZE;
   if (hoffset > 0)
-    hoffset = MAX (px - (x + width - 2 * SCROLL_EDGE_SIZE), 0);
+    hoffset = MAX (px - (width - 2 * SCROLL_EDGE_SIZE), 0);
 
   if (voffset != 0)
     gtk_adjustment_set_value (icon_view->priv->vadjustment,
