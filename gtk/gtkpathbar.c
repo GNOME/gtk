@@ -770,6 +770,8 @@ gtk_path_bar_scroll (GtkWidget      *widget,
     case GDK_SCROLL_UP:
       gtk_path_bar_scroll_up (GTK_PATH_BAR (widget));
       break;
+    case GDK_SCROLL_SMOOTH:
+      break;
     }
 
   return TRUE;
