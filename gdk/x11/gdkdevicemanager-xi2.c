@@ -246,6 +246,13 @@ translate_device_classes (GdkDisplay      *display,
             else
               direction = GDK_SCROLL_RIGHT;
 
+            GDK_NOTE (INPUT,
+                      g_message ("\n\tscroll valuator %d: %s",
+                                 scroll_info->number,
+                                 scroll_info->scroll_type == XIScrollTypeVertical
+                                                ? "vertical"
+                                                : "horizontal"));
+
             _gdk_x11_device_xi2_add_scroll_valuator (GDK_X11_DEVICE_XI2 (device),
                                                      scroll_info->number,
                                                      direction);
