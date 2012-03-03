@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+]>
+<chapter id="event-handling">
+  <title>Event handling in GTK+ 3</title>
+
+  <para>
+    In version 3.6, GTK+ has overhauled the way widgets handle input events
+    considerably. The main motivation for this has been the more complex
+    interaction models used by modern toolkitts. In particular, enabling
+    all the behaviors people expect from multitouch support was guiding the
+    design.
+  </para>
+
+  <para>
+    The principles outlined in this chapter are only relevant for people
+    that want to implement their own #GtkWidgets. It is not necessary that
+    you understand the concepts here when all you want to do is use existing
+    widgets to create your own application.
+  </para>
+
+  <section>
+    <title>The high-level view</title>
+
+    <para>
+      FIXME
+    </para>
+
+    <para>
+      The GTK event system is a cooperative event handling system. This means
+      that event recognizers need not know on their own if they should
+      recognize an event, but they communicate with other recognizers about
+      the process.
+    </para>
+  </section>
+
+
+  <section>
+  <title>Setting up your widget</title>
+
+  <section>
+    <title>Using GtkBuilder</title>
+    <para>
+      FIXME (with examples!)
+    </para>
+  </section>
+
+  <section>
+    <title>Manual addition of event recognizers</title>
+    <para>
+      FIXME (with examples!)
+    </para>
+  </section>
+
+  </section>
+
+
+  <section>
+  <title>Event flow</title>
+
+  <section>
+    <title>Lifetime of a #GtkEventTracker</title>
+    <para>
+      FIXME
+    </para>
+  <section>
+
+  <section>
+    <title>Flow of a #GdkEvent through the event machinery</title>
+    <para>
+      FIXME (make sure to not be too specific, so we can still change stuff later)
+    </para>
+  <section>
+
+  </section>
+
+
+  <section>
+  <title>Writing your own event recognizers</title>
+
+  <para>
+    The GTK developers generally discourage the writing of new event recognizers.
+    We are trying to provide a consistent feel to GTK applications and with all
+    the included event recognizers we think almost all the functionality needed
+    for event handling should be there for you to use.
+
+    Of course, every rule has its exceptions or you might just feel adventurous.
+    so should you see yourself in a situation where you need to write your own
+    event recognizers, here are some hints on how to do it.
+  </para>
+
+  <section>
+    <title>FIXME</title>
+    <para>
+      FIXME
+    </para>
+  <section>
+
+  </section>
+
+</chapter>

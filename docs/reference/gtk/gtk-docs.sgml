@@ -271,6 +271,13 @@
       <xi:include href="xml/gtkscrollable.xml" />
     </chapter>
 
+    <chapter id="Events">
+      <title>Event handling</title>
+      <xi:include href="xml/event-handling.xml" />
+      <xi:include href="xml/gtkeventrecognizer.xml" />
+      <xi:include href="xml/gtkeventtracker.xml" />
+    </chapter>
+
     <chapter id="Printing">
       <title>Printing</title>
       <xi:include href="xml/gtkprintoperation.xml" />
