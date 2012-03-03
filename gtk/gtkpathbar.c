@@ -158,6 +158,7 @@ get_slider_button (GtkPathBar  *path_bar,
     atk_object_set_name (atk_obj, _("Down Path"));
 
   gtk_button_set_focus_on_click (GTK_BUTTON (button), FALSE);
+  gtk_widget_add_events (button, GDK_SCROLL_MASK);
   gtk_container_add (GTK_CONTAINER (button),
                      gtk_arrow_new (arrow_type, GTK_SHADOW_OUT));
   gtk_container_add (GTK_CONTAINER (path_bar), button);
@@ -1611,6 +1612,7 @@ make_directory_button (GtkPathBar  *path_bar,
   button_data->button = gtk_toggle_button_new ();
   atk_obj = gtk_widget_get_accessible (button_data->button);
   gtk_button_set_focus_on_click (GTK_BUTTON (button_data->button), FALSE);
+  gtk_widget_add_events (button_data->button, GDK_SCROLL_MASK);
 
   switch (button_data->type)
     {
