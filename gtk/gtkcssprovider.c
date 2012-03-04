@@ -2711,16 +2711,18 @@ gtk_css_provider_get_named (const gchar *name,
 
       if (path)
         {
-	  char *dir, *resource_file;
-	  GResource *resource;
+          char *dir, *resource_file;
+          GResource *resource;
 
           provider = gtk_css_provider_new ();
 
-	  dir = g_path_get_dirname (path);
-	  resource_file = g_build_filename (dir, "gtk.gresource", NULL);
-	  resource = g_resource_load (resource_file, NULL);
-	  if (resource != NULL)
-	    g_resources_register (resource);
+          dir = g_path_get_dirname (path);
+          resource_file = g_build_filename (dir, "gtk.gresource", NULL);
+          resource = g_resource_load (resource_file, NULL);
+          g_free (resource_file);
+
+          if (resource != NULL)
+            g_resources_register (resource);
 
           if (!gtk_css_provider_load_from_path (provider, path, NULL))
             {
