@@ -22,6 +22,7 @@
 #include "gtkaccessible.h"
 #include "gtkadjustment.h"
 #include "gtkcolorutils.h"
+#include "gtkpressandholdprivate.h"
 #include "gtkintl.h"
 
 struct _GtkColorPlanePrivate
@@ -32,6 +33,8 @@ struct _GtkColorPlanePrivate
 
   cairo_surface_t *surface;
   gboolean in_drag;
+
+  GtkPressAndHold *press_and_hold;
 };
 
 G_DEFINE_TYPE (GtkColorPlane, gtk_color_plane, GTK_TYPE_DRAWING_AREA)
@@ -286,6 +289,58 @@ plane_motion_notify (GtkWidget      *widget,
 }
 
 static void
+hold_action (GtkPressAndHold *pah,
+             gint             x,
+             gint             y,
+             GtkColorPlane   *plane)
+{
+  gboolean handled;
+
+  g_signal_emit_by_name (plane, "popup-menu", &handled);
+}
+
+static void
+tap_action (GtkPressAndHold *pah,
+            gint             x,
+            gint             y,
+            GtkColorPlane   *plane)
+{
+  update_color (plane, x, y);
+}
+
+static gboolean
+plane_touch (GtkWidget     *widget,
+             GdkEventTouch *event)
+{
+  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
+
+  if (!plane->priv->press_and_hold)
+    {
+      gint drag_threshold;
+
+      g_object_get (gtk_widget_get_settings (widget),
+                    "gtk-dnd-drag-threshold", &drag_threshold,
+                    NULL);
+
+      plane->priv->press_and_hold = gtk_press_and_hold_new ();
+
+      g_object_set (plane->priv->press_and_hold,
+                    "drag-threshold", drag_threshold,
+                    "hold-time", 1000,
+                    NULL);
+
+      g_signal_connect (plane->priv->press_and_hold, "hold",
+                        G_CALLBACK (hold_action), plane);
+      g_signal_connect (plane->priv->press_and_hold, "tap",
+                        G_CALLBACK (tap_action), plane);
+    }
+
+  gtk_press_and_hold_process_event (plane->priv->press_and_hold, (GdkEvent *)event);
+
+  return TRUE;
+}
+
+static void
 sv_move (GtkColorPlane *plane,
          gdouble        ds,
          gdouble        dv)
@@ -406,6 +461,8 @@ plane_finalize (GObject *object)
   g_clear_object (&plane->priv->s_adj);
   g_clear_object (&plane->priv->v_adj);
 
+  g_clear_object (&plane->priv->press_and_hold);
+
   G_OBJECT_CLASS (gtk_color_plane_parent_class)->finalize (object);
 }
 
@@ -424,6 +481,7 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
   widget_class->motion_notify_event = plane_motion_notify;
   widget_class->grab_broken_event = plane_grab_broken;
   widget_class->key_press_event = plane_key_press;
+  widget_class->touch_event= plane_touch;
 
   g_type_class_add_private (class, sizeof (GtkColorPlanePrivate));
 }

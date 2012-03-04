@@ -470,6 +470,7 @@ gtk_private_h_sources =		\
 	gtkorientableprivate.h	\
 	gtkpango.h		\
 	gtkpathbar.h		\
+	gtkpressandholdprivate.h \
 	gtkprintoperation-private.h \
 	gtkprintutils.h		\
 	gtkprivate.h		\
@@ -707,6 +708,7 @@ gtk_base_c_sources = 		\
 	gtkpango.c		\
 	gtkpapersize.c		\
 	gtkpathbar.c		\
+	gtkpressandhold.c	\
 	gtkprintcontext.c	\
 	gtkprintoperation.c	\
 	gtkprintoperationpreview.c \

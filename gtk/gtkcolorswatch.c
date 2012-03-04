@@ -28,19 +28,11 @@
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtkmenushell.h"
+#include "gtkpressandholdprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "a11y/gtkcolorswatchaccessible.h"
 
-
-typedef struct {
-  GtkWidget *widget;
-
-  GdkEventSequence *sequence;
-  guint press_and_hold_id;
-  gint start_x;
-  gint start_y;
-} GtkPressAndHoldData;
 
 struct _GtkColorSwatchPrivate
 {
@@ -54,7 +46,7 @@ struct _GtkColorSwatchPrivate
 
   GdkWindow *event_window;
 
-  GtkPressAndHoldData *press_and_hold;
+  GtkPressAndHold *press_and_hold;
 };
 
 enum
@@ -531,79 +523,51 @@ swatch_button_release (GtkWidget      *widget,
 }
 
 static void
-swatch_press_and_hold_cancel (GtkWidget           *widget,
-                              GtkPressAndHoldData *data)
+hold_action (GtkPressAndHold *pah,
+             gint             x,
+             gint             y,
+             GtkColorSwatch  *swatch)
 {
-  if (data->press_and_hold_id)
-    {
-      g_source_remove (data->press_and_hold_id);
-      data->press_and_hold_id = 0;
-    }
-  
-  data->sequence = NULL;
+  emit_customize (swatch);
 }
 
 static void
-swatch_press_and_hold_free (GtkPressAndHoldData *data)
+tap_action (GtkPressAndHold *pah,
+            gint             x,
+            gint             y,
+            GtkColorSwatch  *swatch)
 {
-  swatch_press_and_hold_cancel (data->widget, data);
-  g_slice_free (GtkPressAndHoldData, data);
+  swatch_primary_action (swatch);
 }
-
-static gboolean
-swatch_press_and_hold_action (gpointer data)
-{
-  GtkPressAndHoldData *pah = data;
-
-  emit_customize (GTK_COLOR_SWATCH (pah->widget));
-  swatch_press_and_hold_cancel (pah->widget, pah);
-
-  return G_SOURCE_REMOVE;
-}
-
 
 static gboolean
 swatch_touch (GtkWidget     *widget,
               GdkEventTouch *event)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-  GtkPressAndHoldData *data;
 
   if (!swatch->priv->press_and_hold)
-    swatch->priv->press_and_hold = g_slice_new0 (GtkPressAndHoldData);
-
-  data = swatch->priv->press_and_hold;
-
-  /* We're already tracking a different touch, ignore */
-  if (data->sequence != NULL && data->sequence != event->sequence)
-    return TRUE;
-
-  if (event->type == GDK_TOUCH_BEGIN)
     {
-      data->widget = widget;
-      data->sequence = event->sequence;
-      data->start_x = event->x;
-      data->start_y = event->y;
+      gint drag_threshold;
 
-      data->press_and_hold_id =
-          gdk_threads_add_timeout (1000, swatch_press_and_hold_action, data);
+      g_object_get (gtk_widget_get_settings (widget),
+                    "gtk-dnd-drag-threshold", &drag_threshold,
+                    NULL);
+
+      swatch->priv->press_and_hold = gtk_press_and_hold_new ();
+
+      g_object_set (swatch->priv->press_and_hold,
+                    "drag-threshold", drag_threshold,
+                    "hold-time", 1000,
+                    NULL);
+
+      g_signal_connect (swatch->priv->press_and_hold, "hold",
+                        G_CALLBACK (hold_action), swatch);
+      g_signal_connect (swatch->priv->press_and_hold, "tap",
+                        G_CALLBACK (tap_action), swatch);
     }
-  else if (event->type == GDK_TOUCH_UPDATE)
-    {
-      if (gtk_drag_check_threshold (widget,
-                                    data->start_x, data->start_y,
-                                    event->x, event->y))
-        swatch_press_and_hold_cancel (widget, data);
-    }
-  else if (event->type == GDK_TOUCH_END)
-    {
-      swatch_press_and_hold_cancel (widget, data);
-      swatch_primary_action (swatch);
-    }
-  else if (event->type == GDK_TOUCH_CANCEL)
-    {
-      swatch_press_and_hold_cancel (widget, data);
-    }
+
+  gtk_press_and_hold_process_event (swatch->priv->press_and_hold, (GdkEvent *)event);
 
   return TRUE;
 }
@@ -759,8 +723,7 @@ swatch_finalize (GObject *object)
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (object);
 
   g_free (swatch->priv->icon);
-  if (swatch->priv->press_and_hold)
-    swatch_press_and_hold_free (swatch->priv->press_and_hold);
+  g_clear_object (&swatch->priv->press_and_hold);
 
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->finalize (object);
 }
