@@ -290,6 +290,22 @@ accessible_color_name (GdkRGBA *color)
                             scale_round (color->blue, 100));
 }
 
+static void
+remove_palette (GtkColorChooserWidget *cc)
+{
+  GList *children, *l;
+  GtkWidget *widget;
+
+  children = gtk_container_get_children (GTK_CONTAINER (cc->priv->palette));
+  for (l = children; l; l = l->next)
+    {
+      widget = l->data;
+      if (widget == cc->priv->custom_label || widget == cc->priv->custom)
+        continue;
+      gtk_container_remove (GTK_CONTAINER (cc->priv->palette), widget);
+    }
+  g_list_free (children);
+}
 
 static void
 add_palette (GtkColorChooserWidget  *cc,
@@ -305,6 +321,12 @@ add_palette (GtkColorChooserWidget  *cc,
   gint line, pos;
   gint i;
   gint left, right;
+
+  if (colors == NULL)
+    {
+      remove_palette (cc);
+      return;
+    }
 
   grid = gtk_grid_new ();
   gtk_widget_set_margin_bottom (grid, 12);
@@ -372,22 +394,10 @@ add_palette (GtkColorChooserWidget  *cc,
 static void
 remove_default_palette (GtkColorChooserWidget *cc)
 {
-  GList *children, *l;
-  GtkWidget *widget;
-
   if (!cc->priv->has_default_palette)
     return;
 
-  children = gtk_container_get_children (GTK_CONTAINER (cc->priv->palette));
-  for (l = children; l; l = l->next)
-    {
-      widget = l->data;
-      if (widget == cc->priv->custom_label || widget == cc->priv->custom)
-        continue;
-      gtk_container_remove (GTK_CONTAINER (cc->priv->palette), widget);
-    }
-  g_list_free (children);
-
+  remove_palette (cc);
   cc->priv->has_default_palette = FALSE;
 }
 

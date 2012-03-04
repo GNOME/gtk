@@ -143,6 +143,8 @@ gtk_color_chooser_get_rgba (GtkColorChooser *chooser,
  * @color: the new color
  *
  * Sets the color.
+ *
+ * Since: 3.4
  */
 void
 gtk_color_chooser_set_rgba (GtkColorChooser *chooser,
@@ -203,7 +205,7 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
  *     %FALSE for columns
  * @colors_per_line: the number of colors to show in each row/column
  * @n_colors: the total number of elements in @colors
- * @colors: (array length=n_colors): the colors of the palette
+ * @colors: (allow-none) (array length=n_colors): the colors of the palette, or %NULL
  *
  * Adds a palette to the color chooser. If @horizontal is %TRUE,
  * the colors are grouped in rows, with @colors_per_line colors
@@ -220,6 +222,10 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
  * Calling this function is called for the first time has the
  * side effect of removing the default color and gray palettes
  * from the color chooser.
+ *
+ * If @colors is %NULL, removes all previously added palettes.
+ *
+ * Since: 3.4
  */
 void
 gtk_color_chooser_add_palette (GtkColorChooser *chooser,
