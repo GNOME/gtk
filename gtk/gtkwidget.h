@@ -526,6 +526,16 @@ gint       gtk_widget_send_expose         (GtkWidget           *widget,
 gboolean   gtk_widget_send_focus_change   (GtkWidget           *widget,
                                            GdkEvent            *event);
 
+void       gtk_widget_class_add_recognizer(GtkWidgetClass      *widget_class,
+                                           GtkEventRecognizer  *recognizer);
+void       gtk_widget_class_remove_recognizer
+                                          (GtkWidgetClass      *widget_class,
+                                           guint                id);
+GtkEventRecognizer *
+           gtk_widget_class_get_recognizer(GtkWidgetClass      *widget_class,
+                                           guint                id);
+guint      gtk_widget_class_get_n_recognizers (GtkWidgetClass  *widget_class);
+
 gboolean   gtk_widget_activate		     (GtkWidget	       *widget);
      
 void	   gtk_widget_reparent		  (GtkWidget	       *widget,

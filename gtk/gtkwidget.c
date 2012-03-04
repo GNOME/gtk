@@ -35,6 +35,7 @@
 #include "gtkcontainer.h"
 #include "gtkaccelmapprivate.h"
 #include "gtkclipboard.h"
+#include "gtkeventrecognizerprivate.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -411,6 +412,7 @@ struct _GtkWidgetClassPrivate
 {
   GType accessible_type;
   AtkRole accessible_role;
+  GPtrArray *recognizers;
 };
 
 enum {
@@ -792,8 +794,23 @@ static void
 gtk_widget_base_class_init (gpointer g_class)
 {
   GtkWidgetClass *klass = g_class;
+  GtkWidgetClassPrivate *priv;
 
-  klass->priv = G_TYPE_CLASS_GET_PRIVATE (g_class, GTK_TYPE_WIDGET, GtkWidgetClassPrivate);
+  priv = klass->priv = G_TYPE_CLASS_GET_PRIVATE (g_class, GTK_TYPE_WIDGET, GtkWidgetClassPrivate);
+
+  if (priv->recognizers)
+    {
+      GPtrArray *copy;
+      guint i;
+      
+      copy = g_ptr_array_new_full (priv->recognizers->len, g_object_unref);
+      for (i = 0; i < priv->recognizers->len; i++)
+        {
+          g_ptr_array_add (copy, g_object_ref (g_ptr_array_index (priv->recognizers, i)));
+        }
+
+      priv->recognizers = copy;
+    }
 }
 
 static void
@@ -3288,7 +3305,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 static void
 gtk_widget_base_class_finalize (GtkWidgetClass *klass)
 {
+  GtkWidgetClassPrivate *priv = klass->priv;
   GList *list, *node;
+
+  if (priv->recognizers)
+    {
+      g_ptr_array_free (priv->recognizers, TRUE);
+      priv->recognizers = NULL;
+    }
 
   list = g_param_spec_pool_list_owned (style_property_spec_pool, G_OBJECT_CLASS_TYPE (klass));
   for (node = list; node; node = node->next)
@@ -9551,6 +9575,27 @@ _gtk_widget_restore_size_request (GtkWidget *widget,
 				 GTK_QUEUE_RESIZE_INVALIDATE_ONLY);
 }
 
+static gint
+gtk_widget_class_get_recognizer_event_mask (GtkWidgetClass *klass)
+{
+  GtkWidgetClassPrivate *priv = klass->priv;
+  gint event_mask;
+  guint i;
+
+  if (priv->recognizers == NULL)
+    return 0;
+
+  event_mask = 0;
+  for (i = 0; i < priv->recognizers->len; i++)
+    {
+      event_mask |= gtk_event_recognizer_class_get_event_mask (
+          GTK_EVENT_RECOGNIZER_GET_CLASS (
+            g_ptr_array_index (priv->recognizers, i)));
+    }
+
+  return event_mask;
+}
+
 /**
  * gtk_widget_set_events:
  * @widget: a #GtkWidget
@@ -9978,9 +10023,14 @@ gtk_widget_get_settings (GtkWidget *widget)
 gint
 gtk_widget_get_events (GtkWidget *widget)
 {
+  gint event_mask;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_event_mask));
+  event_mask = GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_event_mask));
+  event_mask |= gtk_widget_class_get_recognizer_event_mask (GTK_WIDGET_GET_CLASS (widget));
+
+  return event_mask;
 }
 
 /**
@@ -13776,6 +13826,111 @@ gtk_widget_send_focus_change (GtkWidget *widget,
   g_object_unref (widget);
 
   return res;
+}
+
+/**
+ * gtk_widget_class_add_recognizer:
+ * @widget_class: The widget class
+ * @recognizer: The recognizer to add
+ *
+ * Adds @recognizer to @widget_class. The @recognizer will be
+ * added at the end of the list of recognizers.
+ *
+ * After calling this function, the properties of @recognizer
+ * should not be modified anymore.
+ *
+ * This function should only be called in the class_init function
+ * of @widget_class.
+ **/
+void
+gtk_widget_class_add_recognizer (GtkWidgetClass     *widget_class,
+                                 GtkEventRecognizer *recognizer)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (GTK_IS_EVENT_RECOGNIZER (recognizer));
+
+  priv = widget_class->priv;
+
+  if (priv->recognizers == NULL)
+    priv->recognizers = g_ptr_array_new_with_free_func (g_object_unref);
+
+  g_object_ref (recognizer);
+  g_ptr_array_add (priv->recognizers, recognizer);
+}
+
+/**
+ * gtk_widget_class_remove_recognizer:
+ * @widget_class: The widget class to remove the recognizer from 
+ * @id: The index
+ *
+ * Removes the recognizer at @id from @idget_class.
+ *
+ * This function should only be called in the class_init function
+ * of @widget_class.
+ **/
+void
+gtk_widget_class_remove_recognizer (GtkWidgetClass     *widget_class,
+                                    guint               id)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+
+  priv = widget_class->priv;
+  g_return_if_fail (priv->recognizers != NULL);
+  g_return_if_fail (id < priv->recognizers->len);
+
+  g_ptr_array_remove_index (priv->recognizers, id);
+}
+
+/**
+ * gtk_widget_class_get_recognizer:
+ * @widget_class: The widget class
+ * @id: the index of the recognizer. Must be less then the number of
+ *   recognizers of @widget_class.
+ *
+ * Gets the recognizer @id in use by @widget class
+ *
+ * Returns: The recognizer
+ **/
+GtkEventRecognizer *
+gtk_widget_class_get_recognizer (GtkWidgetClass *widget_class,
+                                 guint           id)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WIDGET_CLASS (widget_class), NULL);
+
+  priv = widget_class->priv;
+  g_return_val_if_fail (priv->recognizers != NULL, NULL);
+  g_return_val_if_fail (id < priv->recognizers->len, NULL);
+
+  return g_ptr_array_index (priv->recognizers, id);
+}
+
+/**
+ * gtk_widget_class_get_n_recognizers:
+ * @widget_class: the widget class
+ *
+ * Gets the number of recognizers in use by @widget_class.
+ *
+ * Returns: The number of recognizers currently in use by @widget_class
+ **/
+guint
+gtk_widget_class_get_n_recognizers (GtkWidgetClass *widget_class)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WIDGET_CLASS (widget_class), 0);
+
+  priv = widget_class->priv;
+
+  if (priv->recognizers == NULL)
+    return 0;
+
+  return priv->recognizers->len;
 }
 
 /**
