@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-03 23:29+0100\n"
-"PO-Revision-Date: 2012-03-03 23:30+0100\n"
+"POT-Creation-Date: 2012-03-04 22:35+0100\n"
+"PO-Revision-Date: 2012-03-04 22:39+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -473,6 +473,148 @@ msgstr "Przełącznik"
 msgid "Switches between on and off states"
 msgstr "Przełącza między stanami \"włączone\" i \"wyłączone\""
 
+#: ../gtk/deprecated/gtkcolorsel.c:425
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Proszę wybrać żądany kolor z zewnętrznego pierścienia, a przy użyciu "
+"trójkąta wewnątrz wybrać jasność tego koloru."
+
+#: ../gtk/deprecated/gtkcolorsel.c:451
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Proszę nacisnąć zakraplacz, a następnie dowolny punkt obrazu, aby pobrać z "
+"niego kolor."
+
+#: ../gtk/deprecated/gtkcolorsel.c:461
+msgid "_Hue:"
+msgstr "O_dcień:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:462
+msgid "Position on the color wheel."
+msgstr "Położenie na kole kolorów."
+
+#: ../gtk/deprecated/gtkcolorsel.c:464
+msgid "S_aturation:"
+msgstr "N_asycenie:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:465
+msgid "Intensity of the color."
+msgstr "Intensywność koloru."
+
+#: ../gtk/deprecated/gtkcolorsel.c:466
+msgid "_Value:"
+msgstr "_Wartość:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:467
+msgid "Brightness of the color."
+msgstr "Jasność koloru."
+
+#: ../gtk/deprecated/gtkcolorsel.c:468
+msgid "_Red:"
+msgstr "_Czerwony:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:469
+msgid "Amount of red light in the color."
+msgstr "Ilość czerwonego światła w kolorze."
+
+#: ../gtk/deprecated/gtkcolorsel.c:470
+msgid "_Green:"
+msgstr "_Zielony:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:471
+msgid "Amount of green light in the color."
+msgstr "Ilość zielonego światła w kolorze."
+
+#: ../gtk/deprecated/gtkcolorsel.c:472
+msgid "_Blue:"
+msgstr "_Niebieski:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:473
+msgid "Amount of blue light in the color."
+msgstr "Ilość niebieskiego światła w kolorze."
+
+#: ../gtk/deprecated/gtkcolorsel.c:476
+msgid "Op_acity:"
+msgstr "_Nieprzezroczystość:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:484 ../gtk/deprecated/gtkcolorsel.c:494
+msgid "Transparency of the color."
+msgstr "Przezroczystość koloru."
+
+#: ../gtk/deprecated/gtkcolorsel.c:501
+msgid "Color _name:"
+msgstr "Nazwa _koloru:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:516
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Tutaj można wprowadzić szesnastkową wartość koloru (jak w HTML-u) lub po "
+"prostu nazwę koloru w języku angielskim, np. \"orange\"."
+
+#: ../gtk/deprecated/gtkcolorsel.c:548
+msgid "_Palette:"
+msgstr "Pal_eta:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:578
+msgid "Color Wheel"
+msgstr "Koło kolorów"
+
+#: ../gtk/deprecated/gtkcolorsel.c:1072
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+"Poprzednio wybrany kolor, dla porównania z obecnie wybieranym kolorem. Można "
+"przeciągnąć ten kolor na jedną z pozycji palety lub wybrać go bezpośrednio "
+"poprzez przeciągnięcie go nad kolor sąsiedni."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1078
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"Aktualnie wybrany kolor. Kolor ten można przeciągnąć na jedną z pozycji "
+"palety, aby zachować go na przyszłość."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1084
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now."
+msgstr "Poprzednio wybrany kolor, do porównania z kolorem wybranym obecnie."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1088
+msgid "The color you've chosen."
+msgstr "Wybrany kolor."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1491
+msgid "_Save color here"
+msgstr "_Zapisz kolor w tym miejscu"
+
+#: ../gtk/deprecated/gtkcolorsel.c:1695
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+"Proszę nacisnąć ten element palety, aby wybrać go jako bieżący kolor. Aby "
+"zmienić ten element należy przeciągnąć tutaj próbkę koloru lub nacisnąć "
+"prawym przyciskiem i wybrać \"Zapisz kolor w tym miejscu\"."
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:574
+#: ../gtk/gtkcolorchooserdialog.c:125 ../gtk/gtkfontchooserdialog.c:174
+msgid "_Select"
+msgstr "_Wybierz"
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:219
+msgid "Color Selection"
+msgstr "Wybór koloru"
+
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
 #: ../gtk/deprecated/gtkfontsel.c:124
@@ -692,11 +834,6 @@ msgstr "Usuń powiązanie"
 msgid "Show other applications"
 msgstr "Wyświetl inne programy"
 
-#: ../gtk/gtkappchooserdialog.c:574 ../gtk/gtkcolorchooserdialog.c:125
-#: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkfontchooserdialog.c:174
-msgid "_Select"
-msgstr "_Wybierz"
-
 #: ../gtk/gtkappchooserwidget.c:603
 msgid "Default Application"
 msgstr "Domyślny program"
@@ -905,201 +1042,201 @@ msgstr "Czerwony %d%%, zielony %d%%, niebieski %d%%, alfa %d%%"
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Czerwony %d%%, zielony %d%%, niebieski %d%%"
 
-#: ../gtk/gtkcolorchooserwidget.c:338
+#: ../gtk/gtkcolorchooserwidget.c:360
 #, c-format
 msgid "Color: %s"
 msgstr "Kolor: %s"
 
-#: ../gtk/gtkcolorchooserwidget.c:409
+#: ../gtk/gtkcolorchooserwidget.c:419
 msgctxt "Color name"
 msgid "Light Scarlet Red"
 msgstr "Jasna szkarłatna czerwień"
 
-#: ../gtk/gtkcolorchooserwidget.c:410
+#: ../gtk/gtkcolorchooserwidget.c:420
 msgctxt "Color name"
 msgid "Scarlet Red"
 msgstr "Szkarłatna czerwień"
 
-#: ../gtk/gtkcolorchooserwidget.c:411
+#: ../gtk/gtkcolorchooserwidget.c:421
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
 msgstr "Ciemna szkarłatna czerwień"
 
-#: ../gtk/gtkcolorchooserwidget.c:412
+#: ../gtk/gtkcolorchooserwidget.c:422
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "Jasny pomarańczowy"
 
-#: ../gtk/gtkcolorchooserwidget.c:413
+#: ../gtk/gtkcolorchooserwidget.c:423
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Pomarańczowy"
 
-#: ../gtk/gtkcolorchooserwidget.c:414
+#: ../gtk/gtkcolorchooserwidget.c:424
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "Ciemny pomarańczowy"
 
-#: ../gtk/gtkcolorchooserwidget.c:415
+#: ../gtk/gtkcolorchooserwidget.c:425
 msgctxt "Color name"
 msgid "Light Butter"
 msgstr "Jasny maślany"
 
-#: ../gtk/gtkcolorchooserwidget.c:416
+#: ../gtk/gtkcolorchooserwidget.c:426
 msgctxt "Color name"
 msgid "Butter"
 msgstr "Maślany"
 
-#: ../gtk/gtkcolorchooserwidget.c:417
+#: ../gtk/gtkcolorchooserwidget.c:427
 msgctxt "Color name"
 msgid "Dark Butter"
 msgstr "Ciemny maślany"
 
-#: ../gtk/gtkcolorchooserwidget.c:418
+#: ../gtk/gtkcolorchooserwidget.c:428
 msgctxt "Color name"
 msgid "Light Chameleon"
 msgstr "Jasny zielony"
 
-#: ../gtk/gtkcolorchooserwidget.c:419
+#: ../gtk/gtkcolorchooserwidget.c:429
 msgctxt "Color name"
 msgid "Chameleon"
 msgstr "Zielony"
 
-#: ../gtk/gtkcolorchooserwidget.c:420
+#: ../gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Dark Chameleon"
 msgstr "Ciemny zielony"
 
-#: ../gtk/gtkcolorchooserwidget.c:421
+#: ../gtk/gtkcolorchooserwidget.c:431
 msgctxt "Color name"
 msgid "Light Sky Blue"
 msgstr "Jasny błękitny"
 
-#: ../gtk/gtkcolorchooserwidget.c:422
+#: ../gtk/gtkcolorchooserwidget.c:432
 msgctxt "Color name"
 msgid "Sky Blue"
 msgstr "Błękitny"
 
-#: ../gtk/gtkcolorchooserwidget.c:423
+#: ../gtk/gtkcolorchooserwidget.c:433
 msgctxt "Color name"
 msgid "Dark Sky Blue"
 msgstr "Ciemny błękitny"
 
-#: ../gtk/gtkcolorchooserwidget.c:424
+#: ../gtk/gtkcolorchooserwidget.c:434
 msgctxt "Color name"
 msgid "Light Plum"
 msgstr "Jasny śliwkowy"
 
-#: ../gtk/gtkcolorchooserwidget.c:425
+#: ../gtk/gtkcolorchooserwidget.c:435
 msgctxt "Color name"
 msgid "Plum"
 msgstr "Śliwkowy"
 
-#: ../gtk/gtkcolorchooserwidget.c:426
+#: ../gtk/gtkcolorchooserwidget.c:436
 msgctxt "Color name"
 msgid "Dark Plum"
 msgstr "Ciemny śliwkowy"
 
-#: ../gtk/gtkcolorchooserwidget.c:427
+#: ../gtk/gtkcolorchooserwidget.c:437
 msgctxt "Color name"
 msgid "Light Chocolate"
 msgstr "Jasny czekoladowy"
 
-#: ../gtk/gtkcolorchooserwidget.c:428
+#: ../gtk/gtkcolorchooserwidget.c:438
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "Czekoladowy"
 
-#: ../gtk/gtkcolorchooserwidget.c:429
+#: ../gtk/gtkcolorchooserwidget.c:439
 msgctxt "Color name"
 msgid "Dark Chocolate"
 msgstr "Ciemny czekoladowy"
 
-#: ../gtk/gtkcolorchooserwidget.c:430
+#: ../gtk/gtkcolorchooserwidget.c:440
 msgctxt "Color name"
 msgid "Light Aluminum 1"
 msgstr "Jasny aluminiowy 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:431
+#: ../gtk/gtkcolorchooserwidget.c:441
 msgctxt "Color name"
 msgid "Aluminum 1"
 msgstr "Aluminiowy 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:432
+#: ../gtk/gtkcolorchooserwidget.c:442
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
 msgstr "Ciemny aluminiowy 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:433
+#: ../gtk/gtkcolorchooserwidget.c:443
 msgctxt "Color name"
 msgid "Light Aluminum 2"
 msgstr "Jasny aluminiowy 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:434
+#: ../gtk/gtkcolorchooserwidget.c:444
 msgctxt "Color name"
 msgid "Aluminum 2"
 msgstr "Aluminiowy 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:435
+#: ../gtk/gtkcolorchooserwidget.c:445
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
 msgstr "Ciemny aluminiowy 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:449
+#: ../gtk/gtkcolorchooserwidget.c:459
 msgctxt "Color name"
 msgid "Black"
 msgstr "Czarny"
 
-#: ../gtk/gtkcolorchooserwidget.c:450
+#: ../gtk/gtkcolorchooserwidget.c:460
 msgctxt "Color name"
 msgid "Very Dark Gray"
 msgstr "Bardzo ciemny szary"
 
-#: ../gtk/gtkcolorchooserwidget.c:451
+#: ../gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
 msgid "Darker Gray"
 msgstr "Ciemniejszy szary"
 
-#: ../gtk/gtkcolorchooserwidget.c:452
+#: ../gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Dark Gray"
 msgstr "Ciemny szary"
 
-#: ../gtk/gtkcolorchooserwidget.c:453
+#: ../gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Medium Gray"
 msgstr "Średni szary"
 
-#: ../gtk/gtkcolorchooserwidget.c:454
+#: ../gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Light Gray"
 msgstr "Jasny szary"
 
-#: ../gtk/gtkcolorchooserwidget.c:455
+#: ../gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Lighter Gray"
 msgstr "Jaśniejszy szary"
 
-#: ../gtk/gtkcolorchooserwidget.c:456
+#: ../gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Very Light Gray"
 msgstr "Bardzo jasny szary"
 
-#: ../gtk/gtkcolorchooserwidget.c:457
+#: ../gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "White"
 msgstr "Biały"
 
 #. translators: label for the custom section in the color chooser
-#: ../gtk/gtkcolorchooserwidget.c:506
+#: ../gtk/gtkcolorchooserwidget.c:516
 msgid "Custom"
 msgstr "Własny"
 
-#: ../gtk/gtkcolorchooserwidget.c:514
+#: ../gtk/gtkcolorchooserwidget.c:524
 msgid "Create custom color"
 msgstr "Tworzy własny kolor"
 
-#: ../gtk/gtkcolorchooserwidget.c:533
+#: ../gtk/gtkcolorchooserwidget.c:543
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Własny kolor %d: %s"
@@ -1128,7 +1265,7 @@ msgctxt "Color channel"
 msgid "V"
 msgstr "W"
 
-#: ../gtk/gtkcoloreditor.c:481 ../gtk/gtkcolorscale.c:295
+#: ../gtk/gtkcoloreditor.c:481 ../gtk/gtkcolorscale.c:301
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "Odcień"
@@ -1138,7 +1275,7 @@ msgctxt "Color channel"
 msgid "H"
 msgstr "O"
 
-#: ../gtk/gtkcoloreditor.c:496 ../gtk/gtkcolorscale.c:297
+#: ../gtk/gtkcoloreditor.c:496 ../gtk/gtkcolorscale.c:303
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
@@ -1148,150 +1285,13 @@ msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
-#: ../gtk/gtkcolorplane.c:392
+#: ../gtk/gtkcolorplane.c:438
 msgid "Color Plane"
 msgstr "Składowa koloru"
 
-#: ../gtk/gtkcolorswatch.c:455
+#: ../gtk/gtkcolorswatch.c:447
 msgid "_Customize"
 msgstr "_Dostosuj"
-
-#: ../gtk/deprecated/gtkcolorsel.c:425
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"Proszę wybrać żądany kolor z zewnętrznego pierścienia, a przy użyciu "
-"trójkąta wewnątrz wybrać jasność tego koloru."
-
-#: ../gtk/deprecated/gtkcolorsel.c:451
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr ""
-"Proszę nacisnąć zakraplacz, a następnie dowolny punkt obrazu, aby pobrać z "
-"niego kolor."
-
-#: ../gtk/deprecated/gtkcolorsel.c:461
-msgid "_Hue:"
-msgstr "O_dcień:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:462
-msgid "Position on the color wheel."
-msgstr "Położenie na kole kolorów."
-
-#: ../gtk/deprecated/gtkcolorsel.c:464
-msgid "S_aturation:"
-msgstr "N_asycenie:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:465
-msgid "Intensity of the color."
-msgstr "Intensywność koloru."
-
-#: ../gtk/deprecated/gtkcolorsel.c:466
-msgid "_Value:"
-msgstr "_Wartość:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:467
-msgid "Brightness of the color."
-msgstr "Jasność koloru."
-
-#: ../gtk/deprecated/gtkcolorsel.c:468
-msgid "_Red:"
-msgstr "_Czerwony:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:469
-msgid "Amount of red light in the color."
-msgstr "Ilość czerwonego światła w kolorze."
-
-#: ../gtk/deprecated/gtkcolorsel.c:470
-msgid "_Green:"
-msgstr "_Zielony:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:471
-msgid "Amount of green light in the color."
-msgstr "Ilość zielonego światła w kolorze."
-
-#: ../gtk/deprecated/gtkcolorsel.c:472
-msgid "_Blue:"
-msgstr "_Niebieski:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:473
-msgid "Amount of blue light in the color."
-msgstr "Ilość niebieskiego światła w kolorze."
-
-#: ../gtk/deprecated/gtkcolorsel.c:476
-msgid "Op_acity:"
-msgstr "_Nieprzezroczystość:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:484 ../gtk/deprecated/gtkcolorsel.c:494
-msgid "Transparency of the color."
-msgstr "Przezroczystość koloru."
-
-#: ../gtk/deprecated/gtkcolorsel.c:501
-msgid "Color _name:"
-msgstr "Nazwa _koloru:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:516
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"Tutaj można wprowadzić szesnastkową wartość koloru (jak w HTML-u) lub po "
-"prostu nazwę koloru w języku angielskim, np. \"orange\"."
-
-#: ../gtk/deprecated/gtkcolorsel.c:548
-msgid "_Palette:"
-msgstr "Pal_eta:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:578
-msgid "Color Wheel"
-msgstr "Koło kolorów"
-
-#: ../gtk/deprecated/gtkcolorsel.c:1072
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now. You can drag this color to a palette entry, or select this color as "
-"current by dragging it to the other color swatch alongside."
-msgstr ""
-"Poprzednio wybrany kolor, dla porównania z obecnie wybieranym kolorem. Można "
-"przeciągnąć ten kolor na jedną z pozycji palety lub wybrać go bezpośrednio "
-"poprzez przeciągnięcie go nad kolor sąsiedni."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1078
-msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
-"it for use in the future."
-msgstr ""
-"Aktualnie wybrany kolor. Kolor ten można przeciągnąć na jedną z pozycji "
-"palety, aby zachować go na przyszłość."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1084
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now."
-msgstr "Poprzednio wybrany kolor, do porównania z kolorem wybranym obecnie."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1088
-msgid "The color you've chosen."
-msgstr "Wybrany kolor."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1491
-msgid "_Save color here"
-msgstr "_Zapisz kolor w tym miejscu"
-
-#: ../gtk/deprecated/gtkcolorsel.c:1695
-msgid ""
-"Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
-"Proszę nacisnąć ten element palety, aby wybrać go jako bieżący kolor. Aby "
-"zmienić ten element należy przeciągnąć tutaj próbkę koloru lub nacisnąć "
-"prawym przyciskiem i wybrać \"Zapisz kolor w tym miejscu\"."
-
-#: ../gtk/deprecated/gtkcolorseldialog.c:219
-msgid "Color Selection"
-msgstr "Wybór koloru"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you

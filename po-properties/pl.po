@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-03 23:29+0100\n"
-"PO-Revision-Date: 2012-03-03 23:30+0100\n"
+"POT-Creation-Date: 2012-03-04 22:38+0100\n"
+"PO-Revision-Date: 2012-03-04 22:39+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -169,6 +169,82 @@ msgstr "Obiekt rysujący komórkę"
 #: ../gtk/a11y/gtkrenderercellaccessible.c:94
 msgid "The cell renderer represented by this accessible"
 msgstr "Obiekt rysujący komórkę przedstawiany przez ten obiekt dostępności"
+
+#: ../gtk/deprecated/gtkcolorsel.c:323
+msgid "Has Opacity Control"
+msgstr "Ustawienie nieprzezroczystości"
+
+#: ../gtk/deprecated/gtkcolorsel.c:324
+msgid "Whether the color selector should allow setting opacity"
+msgstr ""
+"Określa, czy przy wyborze koloru powinna być możliwość określenia jego "
+"nieprzezroczystości"
+
+#: ../gtk/deprecated/gtkcolorsel.c:330
+msgid "Has palette"
+msgstr "Paleta"
+
+#: ../gtk/deprecated/gtkcolorsel.c:331
+msgid "Whether a palette should be used"
+msgstr "Określa, czy powinna być użyta paleta"
+
+#: ../gtk/deprecated/gtkcolorsel.c:345 ../gtk/gtkcolorbutton.c:205
+msgid "Current Color"
+msgstr "Bieżący kolor"
+
+#: ../gtk/deprecated/gtkcolorsel.c:346
+msgid "The current color"
+msgstr "Bieżący kolor"
+
+#: ../gtk/deprecated/gtkcolorsel.c:352 ../gtk/gtkcolorbutton.c:220
+msgid "Current Alpha"
+msgstr "Bieżąca wartość alfa"
+
+#: ../gtk/deprecated/gtkcolorsel.c:353
+msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
+msgstr ""
+"Bieżąca wartość nieprzepuszczalności (0 - w pełni przezroczysty, 65535 - w "
+"pełni nieprzepuszczalny)"
+
+#: ../gtk/deprecated/gtkcolorsel.c:367
+msgid "Current RGBA"
+msgstr "Bieżąca wartość RGBA"
+
+#: ../gtk/deprecated/gtkcolorsel.c:368
+msgid "The current RGBA color"
+msgstr "Bieżący kolor RGBA"
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:138
+msgid "Color Selection"
+msgstr "Wybór koloru"
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:139
+msgid "The color selection embedded in the dialog."
+msgstr "Wybór kolorów osadzony w oknie dialogowym."
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:145
+msgid "OK Button"
+msgstr "Przycisk OK"
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:146
+msgid "The OK button of the dialog."
+msgstr "Przycisk OK w oknie dialogowym."
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:152
+msgid "Cancel Button"
+msgstr "Przycisk Anuluj"
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:153
+msgid "The cancel button of the dialog."
+msgstr "Przycisk anuluj w oknie dialogowym."
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:159
+msgid "Help Button"
+msgstr "Przycisk Pomoc"
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:160
+msgid "The help button of the dialog."
+msgstr "Przycisk pomoc w oknie dialogowym."
 
 #: ../gtk/deprecated/gtkfontsel.c:243 ../gtk/gtkfontbutton.c:450
 msgid "Font name"
@@ -2451,17 +2527,9 @@ msgstr "Tytuł"
 msgid "The title of the color selection dialog"
 msgstr "Tytuł okna dialogowego wyboru kolorów"
 
-#: ../gtk/gtkcolorbutton.c:205 ../gtk/deprecated/gtkcolorsel.c:345
-msgid "Current Color"
-msgstr "Bieżący kolor"
-
 #: ../gtk/gtkcolorbutton.c:206
 msgid "The selected color"
 msgstr "Wybrany kolor"
-
-#: ../gtk/gtkcolorbutton.c:220 ../gtk/deprecated/gtkcolorsel.c:352
-msgid "Current Alpha"
-msgstr "Bieżąca wartość alfa"
 
 #: ../gtk/gtkcolorbutton.c:221
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
@@ -2489,97 +2557,29 @@ msgstr "Bieżący kolor, jako GdkRGBA"
 msgid "Whether alpha should be shown"
 msgstr "Określa, czy alfa powinna być wyświetlana"
 
-#: ../gtk/gtkcolorchooserdialog.c:232 ../gtk/gtkcolorchooserwidget.c:665
+#: ../gtk/gtkcolorchooserdialog.c:232 ../gtk/gtkcolorchooserwidget.c:675
 msgid "Show editor"
 msgstr "Wyświetlanie edytora"
 
-#: ../gtk/gtkcolorscale.c:334
+#: ../gtk/gtkcolorscale.c:383
 msgid "Scale type"
 msgstr "Typ skalowania"
 
-#: ../gtk/gtkcolorswatch.c:812
+#: ../gtk/gtkcolorswatch.c:775
 msgid "RGBA Color"
 msgstr "Kolor RGBA"
 
-#: ../gtk/gtkcolorswatch.c:812
+#: ../gtk/gtkcolorswatch.c:775
 msgid "Color as RGBA"
 msgstr "Kolor jako RGBA"
 
-#: ../gtk/gtkcolorswatch.c:815 ../gtk/gtklabel.c:796
+#: ../gtk/gtkcolorswatch.c:778 ../gtk/gtklabel.c:796
 msgid "Selectable"
 msgstr "Zaznaczalny"
 
-#: ../gtk/gtkcolorswatch.c:815
+#: ../gtk/gtkcolorswatch.c:778
 msgid "Whether the swatch is selectable"
 msgstr "Określa, czy próbka jest zaznaczalna"
-
-#: ../gtk/deprecated/gtkcolorsel.c:323
-msgid "Has Opacity Control"
-msgstr "Ustawienie nieprzezroczystości"
-
-#: ../gtk/deprecated/gtkcolorsel.c:324
-msgid "Whether the color selector should allow setting opacity"
-msgstr ""
-"Określa, czy przy wyborze koloru powinna być możliwość określenia jego "
-"nieprzezroczystości"
-
-#: ../gtk/deprecated/gtkcolorsel.c:330
-msgid "Has palette"
-msgstr "Paleta"
-
-#: ../gtk/deprecated/gtkcolorsel.c:331
-msgid "Whether a palette should be used"
-msgstr "Określa, czy powinna być użyta paleta"
-
-#: ../gtk/deprecated/gtkcolorsel.c:346
-msgid "The current color"
-msgstr "Bieżący kolor"
-
-#: ../gtk/deprecated/gtkcolorsel.c:353
-msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr ""
-"Bieżąca wartość nieprzepuszczalności (0 - w pełni przezroczysty, 65535 - w "
-"pełni nieprzepuszczalny)"
-
-#: ../gtk/deprecated/gtkcolorsel.c:367
-msgid "Current RGBA"
-msgstr "Bieżąca wartość RGBA"
-
-#: ../gtk/deprecated/gtkcolorsel.c:368
-msgid "The current RGBA color"
-msgstr "Bieżący kolor RGBA"
-
-#: ../gtk/deprecated/gtkcolorseldialog.c:138
-msgid "Color Selection"
-msgstr "Wybór koloru"
-
-#: ../gtk/deprecated/gtkcolorseldialog.c:139
-msgid "The color selection embedded in the dialog."
-msgstr "Wybór kolorów osadzony w oknie dialogowym."
-
-#: ../gtk/deprecated/gtkcolorseldialog.c:145
-msgid "OK Button"
-msgstr "Przycisk OK"
-
-#: ../gtk/deprecated/gtkcolorseldialog.c:146
-msgid "The OK button of the dialog."
-msgstr "Przycisk OK w oknie dialogowym."
-
-#: ../gtk/deprecated/gtkcolorseldialog.c:152
-msgid "Cancel Button"
-msgstr "Przycisk Anuluj"
-
-#: ../gtk/deprecated/gtkcolorseldialog.c:153
-msgid "The cancel button of the dialog."
-msgstr "Przycisk anuluj w oknie dialogowym."
-
-#: ../gtk/deprecated/gtkcolorseldialog.c:159
-msgid "Help Button"
-msgstr "Przycisk Pomoc"
-
-#: ../gtk/deprecated/gtkcolorseldialog.c:160
-msgid "The help button of the dialog."
-msgstr "Przycisk pomoc w oknie dialogowym."
 
 #: ../gtk/gtkcombobox.c:727
 msgid "ComboBox model"
@@ -4705,6 +4705,22 @@ msgstr "Okno gniazda"
 #: ../gtk/gtkplug.c:218
 msgid "The window of the socket the plug is embedded in"
 msgstr "Okno gniazda, w którym osadzona jest wtyczka"
+
+#: ../gtk/gtkpressandhold.c:148
+msgid "Hold Time"
+msgstr "Czas przytrzymania"
+
+#: ../gtk/gtkpressandhold.c:148
+msgid "Hold Time (in milliseconds)"
+msgstr "Czas przytrzymania (w milisekundach)"
+
+#: ../gtk/gtkpressandhold.c:152
+msgid "Drag Threshold"
+msgstr "Próg przeciągania"
+
+#: ../gtk/gtkpressandhold.c:152
+msgid "Drag Threshold (in pixels)"
+msgstr "Próg przeciągania (w pikselach)"
 
 #: ../gtk/gtkprinter.c:124
 msgid "Name of the printer"
