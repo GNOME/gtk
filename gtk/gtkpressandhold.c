@@ -187,7 +187,8 @@ gtk_press_and_hold_process_event (GtkPressAndHold *pah,
   GtkPressAndHoldPrivate *priv = pah->priv;
 
   /* We're already tracking a different touch, ignore */
-  if (priv->sequence != NULL && priv->sequence != event->touch.sequence)
+  if ((event->type == GDK_TOUCH_BEGIN && priv->sequence != NULL) ||
+      (event->type != GDK_TOUCH_BEGIN && priv->sequence != event->touch.sequence))
     return;
 
   priv->x = event->touch.x;
@@ -198,7 +199,6 @@ gtk_press_and_hold_process_event (GtkPressAndHold *pah,
       priv->sequence = event->touch.sequence;
       priv->start_x = priv->x;
       priv->start_y = priv->y;
-
       priv->timeout =
           gdk_threads_add_timeout (priv->hold_time, hold_action, pah);
     }
