@@ -770,37 +770,72 @@ gtk_grid_request_spanning (GtkGridRequest *request,
       /* If we need to request more space for this child to fill
        * its requisition, then divide up the needed space amongst the
        * lines it spans, favoring expandable lines if any.
+       *
+       * When doing homogeneous allocation though, try to keep the
+       * line allocations even, since we're going to force them to
+       * be the same anyway, and we don't want to introduce unnecessary
+       * extra space.
        */
       if (span_minimum < minimum)
         {
-          extra = minimum - span_minimum;
-          expand = span_expand;
-          for (i = 0; i < attach->span; i++)
+          if (linedata->homogeneous)
             {
-              line = &lines->lines[attach->pos - lines->min + i];
-              if (force_expand || line->expand)
+              gint total, m;
+
+              total = minimum - (attach->span - 1) * linedata->spacing;
+              m = total / attach->span + (total % attach->span ? 1 : 0);
+              for (i = 0; i < attach->span; i++)
                 {
-                  line_extra = extra / expand;
-                  line->minimum += line_extra;
-                  extra -= line_extra;
-                  expand -= 1;
+                  line = &lines->lines[attach->pos - lines->min + i];
+                  line->minimum = MAX(line->minimum, m);
+                }
+            }
+          else
+            {
+              extra = minimum - span_minimum;
+              expand = span_expand;
+              for (i = 0; i < attach->span; i++)
+                {
+                  line = &lines->lines[attach->pos - lines->min + i];
+                  if (force_expand || line->expand)
+                    {
+                      line_extra = extra / expand;
+                      line->minimum += line_extra;
+                      extra -= line_extra;
+                      expand -= 1;
+                    }
                 }
             }
         }
 
       if (span_natural < natural)
         {
-          extra = natural - span_natural;
-          expand = span_expand;
-          for (i = 0; i < attach->span; i++)
+          if (linedata->homogeneous)
             {
-              line = &lines->lines[attach->pos - lines->min + i];
-              if (force_expand || line->expand)
+              gint total, n;
+
+              total = natural - (attach->span - 1) * linedata->spacing;
+              n = total / attach->span + (total % attach->span ? 1 : 0);
+              for (i = 0; i < attach->span; i++)
                 {
-                  line_extra = extra / expand;
-                  line->natural += line_extra;
-                  extra -= line_extra;
-                  expand -= 1;
+                  line = &lines->lines[attach->pos - lines->min + i];
+                  line->natural = MAX(line->natural, n);
+                }
+            }
+          else
+            {
+              extra = natural - span_natural;
+              expand = span_expand;
+              for (i = 0; i < attach->span; i++)
+                {
+                  line = &lines->lines[attach->pos - lines->min + i];
+                  if (force_expand || line->expand)
+                    {
+                      line_extra = extra / expand;
+                      line->natural += line_extra;
+                      extra -= line_extra;
+                      expand -= 1;
+                    }
                 }
             }
         }
