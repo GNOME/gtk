@@ -299,15 +299,6 @@ hold_action (GtkPressAndHold *pah,
   g_signal_emit_by_name (plane, "popup-menu", &handled);
 }
 
-static void
-tap_action (GtkPressAndHold *pah,
-            gint             x,
-            gint             y,
-            GtkColorPlane   *plane)
-{
-  update_color (plane, x, y);
-}
-
 static gboolean
 plane_touch (GtkWidget     *widget,
              GdkEventTouch *event)
@@ -331,11 +322,10 @@ plane_touch (GtkWidget     *widget,
 
       g_signal_connect (plane->priv->press_and_hold, "hold",
                         G_CALLBACK (hold_action), plane);
-      g_signal_connect (plane->priv->press_and_hold, "tap",
-                        G_CALLBACK (tap_action), plane);
     }
 
   gtk_press_and_hold_process_event (plane->priv->press_and_hold, (GdkEvent *)event);
+  update_color (plane, event->x, event->y);
 
   return TRUE;
 }
@@ -437,6 +427,7 @@ gtk_color_plane_init (GtkColorPlane *plane)
 
   gtk_widget_set_can_focus (GTK_WIDGET (plane), TRUE);
   gtk_widget_set_events (GTK_WIDGET (plane), GDK_KEY_PRESS_MASK
+                                             | GDK_TOUCH_MASK
                                              | GDK_BUTTON_PRESS_MASK
                                              | GDK_BUTTON_RELEASE_MASK
                                              | GDK_POINTER_MOTION_MASK);
@@ -481,7 +472,7 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
   widget_class->motion_notify_event = plane_motion_notify;
   widget_class->grab_broken_event = plane_grab_broken;
   widget_class->key_press_event = plane_key_press;
-  widget_class->touch_event= plane_touch;
+  widget_class->touch_event = plane_touch;
 
   g_type_class_add_private (class, sizeof (GtkColorPlanePrivate));
 }
