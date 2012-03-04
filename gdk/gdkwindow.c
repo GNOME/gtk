@@ -9484,6 +9484,7 @@ proxy_pointer_event (GdkDisplay                 *display,
               event->touch.time = time_;
               event->touch.state = state | GDK_BUTTON1_MASK;
               event->touch.sequence = source_event->touch.sequence;
+              event->touch.emulating_pointer = source_event->touch.emulating_pointer;
               convert_toplevel_coords_to_window (event_win,
                                                  toplevel_x, toplevel_y,
                                                  &event->touch.x, &event->touch.y);
@@ -9772,6 +9773,7 @@ proxy_button_event (GdkEvent *source_event,
       event->touch.axes = g_memdup (source_event->touch.axes,
                                      sizeof (gdouble) * gdk_device_get_n_axes (source_event->touch.device));
       event->touch.sequence = source_event->touch.sequence;
+      event->touch.emulating_pointer = source_event->touch.emulating_pointer;
 
       gdk_event_set_source_device (event, source_device);
 
