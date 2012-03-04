@@ -18,8 +18,11 @@ gdk/x11/gdkmain-x11.c
 gtk/a11y/gtkrenderercellaccessible.c
 gtk/a11y/gtkspinneraccessible.c
 gtk/a11y/gtkswitchaccessible.c
+gtk/deprecated/gtkcolorsel.c
+gtk/deprecated/gtkcolorseldialog.c
 gtk/deprecated/gtkfontsel.c
 gtk/deprecated/gtkhandlebox.c
+gtk/deprecated/gtkhsv.c
 gtk/deprecated/gtkstyle.c
 gtk/deprecated/gtktable.c
 gtk/gtkaboutdialog.c
@@ -81,8 +84,6 @@ gtk/gtkcoloreditor.c
 gtk/gtkcolorplane.c
 gtk/gtkcolorscale.c
 gtk/gtkcolorswatch.c
-gtk/deprecated/gtkcolorsel.c
-gtk/deprecated/gtkcolorseldialog.c
 gtk/gtkcombobox.c
 gtk/gtkcontainer.c
 gtk/gtkcssprovider.c
@@ -117,7 +118,6 @@ gtk/gtkfontchooserdialog.c
 gtk/gtkfontchooserwidget.c
 gtk/gtkframe.c
 gtk/gtkgrid.c
-gtk/deprecated/gtkhsv.c
 gtk/gtkiconfactory.c
 gtk/gtkicontheme.c
 gtk/gtkiconview.c
@@ -157,6 +157,7 @@ gtk/gtkpaned.c
 gtk/gtkpapersize.c
 gtk/gtkpathbar.c
 gtk/gtkplug.c
+gtk/gtkpressandhold.c
 gtk/gtkprintbackend.c
 gtk/gtkprinter.c
 gtk/gtkprinteroption.c
