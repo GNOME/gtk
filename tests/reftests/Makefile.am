@@ -169,6 +169,9 @@ EXTRA_DIST += \
 	paned-undersized.css \
 	paned-undersized.ref.ui \
 	paned-undersized.ui \
+	quit-mnemonic.css \
+	quit-mnemonic.ref.ui \
+	quit-mnemonic.ui \
 	reset-to-defaults.css \
 	rotated-layout.ref.ui \
 	rotated-layout.ui \
