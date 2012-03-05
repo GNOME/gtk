@@ -2788,11 +2788,11 @@ gtk_range_button_release (GtkWidget      *widget,
  * _gtk_range_get_wheel_delta:
  * @range: a #GtkRange
  * @event: A #GdkEventScroll
- * 
+ *
  * Returns a good step value for the mouse wheel.
- * 
- * Return value: A good step value for the mouse wheel. 
- * 
+ *
+ * Return value: A good step value for the mouse wheel.
+ *
  * Since: 2.4
  **/
 gdouble
@@ -2804,49 +2804,32 @@ _gtk_range_get_wheel_delta (GtkRange       *range,
   gdouble dx, dy;
   gdouble delta;
   gdouble page_size;
-  gdouble size;
+  gdouble page_increment;
+  gdouble scroll_unit;
 
   page_size = gtk_adjustment_get_page_size (adjustment);
+  page_increment = gtk_adjustment_get_page_increment (adjustment);
+
+  if (GTK_IS_SCROLLBAR (range))
+    scroll_unit = pow (page_size, 2.0 / 3.0);
+  else
+    scroll_unit = page_increment;
 
   if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &dx, &dy))
     {
-      GtkAllocation allocation;
-
-      gtk_widget_get_allocation (GTK_WIDGET (range), &allocation);
-
-      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
-        size = allocation.width;
-      else
-        size = allocation.height;
-
       if (dx != 0 &&
           gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
-        {
-          if (GTK_IS_SCROLLBAR (range) && page_size > 0)
-            delta = dx * page_size / size;
-          else
-            delta = dx * (gtk_adjustment_get_upper (adjustment) -
-                          gtk_adjustment_get_lower (adjustment)) / size;
-        }
+        delta = dx * scroll_unit;
       else
-        {
-          if (GTK_IS_SCROLLBAR (range) && page_size > 0)
-            delta = dy * page_size / size;
-          else
-            delta = dy * (gtk_adjustment_get_upper (adjustment) -
-                          gtk_adjustment_get_lower (adjustment)) / size;
-        }
+        delta = dy * scroll_unit;
     }
   else
     {
-      if (GTK_IS_SCROLLBAR (range))
-        delta = pow (page_size, 2.0 / 3.0);
-      else
-        delta = gtk_adjustment_get_page_increment (adjustment) * 2;
-
       if (event->direction == GDK_SCROLL_UP ||
           event->direction == GDK_SCROLL_LEFT)
-        delta = - delta;
+        delta = - scroll_unit;
+      else
+        delta = scroll_unit;
     }
 
   if (priv->inverted)
