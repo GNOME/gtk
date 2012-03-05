@@ -1,7 +1,0 @@
-* {
-  font: Monospace 12
-}
-
-GtkPaned GtkEventBox {
-  background-color: pink
-}

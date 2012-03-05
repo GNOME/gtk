@@ -105,12 +105,6 @@ EXTRA_DIST += \
 	css-match-name.css \
 	css-match-name.ref.ui \
 	css-match-name.ui \
-	css-match-region-matches-star.css \
-	css-match-region-matches-star.ref.ui \
-	css-match-region-matches-star.ui \
-	css-match-regions.css \
-	css-match-regions.ref.ui \
-	css-match-regions.ui \
 	css-match-siblings.css \
 	css-match-siblings.ref.ui \
 	css-match-siblings.ui \
@@ -159,18 +153,12 @@ EXTRA_DIST += \
 	label-shadows.css \
 	label-shadows.ref.ui \
 	label-shadows.ui \
-	label-sizing.css \
-	label-sizing.ref.ui \
-	label-sizing.ui \
 	label-small-ellipsized.ref.ui \
 	label-small-ellipsized.ui \
 	label-wrap-justify.ref.ui \
 	label-wrap-justify.ui \
 	messagedialog-secondarytext.ui \
 	messagedialog-secondarytext.ref.ui \
-	misc-alignment.css \
-	misc-alignment.ui \
-	misc-alignment.ref.ui \
 	no-colors.css \
 	no-colors.ref.ui \
 	no-colors.ui \
@@ -181,8 +169,6 @@ EXTRA_DIST += \
 	paned-undersized.css \
 	paned-undersized.ref.ui \
 	paned-undersized.ui \
-	quit-mnemonic.ref.ui \
-	quit-mnemonic.ui \
 	reset-to-defaults.css \
 	rotated-layout.ref.ui \
 	rotated-layout.ui \
