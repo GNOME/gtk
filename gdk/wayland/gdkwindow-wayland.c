@@ -1512,7 +1512,11 @@ _gdk_wayland_window_set_device_grabbed (GdkWindow              *window,
                                         struct wl_input_device *input_device,
                                         guint32                 time_)
 {
-  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWindowImplWayland *impl;
+
+  g_return_if_fail (window != NULL);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   impl->grab_input_device = input_device;
   impl->grab_time = time_;
