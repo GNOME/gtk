@@ -88,6 +88,10 @@ typedef enum
  * @GDK_AXIS_XTILT: the axis is used for x tilt information.
  * @GDK_AXIS_YTILT: the axis is used for y tilt information.
  * @GDK_AXIS_WHEEL: the axis is used for wheel information.
+ * @GDK_AXIS_X_RELATIVE: the axis used to describe relative movement along
+ *   the x axis. Useful for tracking movement on %GDK_SOURCE_TOUCHPAD devices.
+ * @GDK_AXIS_Y_RELATIVE: the axis used to describe relative movement along
+ *   the y axis. Useful for tracking movement on %GDK_SOURCE_TOUCHPAD devices.
  * @GDK_AXIS_LAST: a constant equal to the numerically highest axis value.
  *
  * An enumeration describing the way in which a device
@@ -103,6 +107,8 @@ typedef enum
   GDK_AXIS_XTILT,
   GDK_AXIS_YTILT,
   GDK_AXIS_WHEEL,
+  GDK_AXIS_X_RELATIVE,
+  GDK_AXIS_Y_RELATIVE,
   GDK_AXIS_LAST
 } GdkAxisUse;
 

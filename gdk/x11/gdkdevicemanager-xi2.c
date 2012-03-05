@@ -180,6 +180,8 @@ translate_valuator_class (GdkDisplay          *display,
       label_atoms [GDK_AXIS_XTILT] = gdk_x11_get_xatom_by_name_for_display (display, "Abs Tilt X");
       label_atoms [GDK_AXIS_YTILT] = gdk_x11_get_xatom_by_name_for_display (display, "Abs Tilt Y");
       label_atoms [GDK_AXIS_WHEEL] = gdk_x11_get_xatom_by_name_for_display (display, "Abs Wheel");
+      label_atoms [GDK_AXIS_X_RELATIVE] = gdk_x11_get_xatom_by_name_for_display (display, "Rel X");
+      label_atoms [GDK_AXIS_Y_RELATIVE] = gdk_x11_get_xatom_by_name_for_display (display, "Rel Y");
       initialized = TRUE;
     }
 
