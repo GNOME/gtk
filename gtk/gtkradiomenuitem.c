@@ -208,6 +208,8 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
 
 	  tmp_item->priv->group = priv->group;
 	}
+
+      _gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (radio_menu_item), FALSE);
     }
   else
     {
