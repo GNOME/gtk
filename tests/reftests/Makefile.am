@@ -162,6 +162,9 @@ EXTRA_DIST += \
 	label-wrap-justify.ui \
 	messagedialog-secondarytext.ui \
 	messagedialog-secondarytext.ref.ui \
+	misc-alignment.css \
+	misc-alignment.ref.ui \
+	misc-alignment.ui \
 	no-colors.css \
 	no-colors.ref.ui \
 	no-colors.ui \
