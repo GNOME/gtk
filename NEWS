@@ -1,3 +1,69 @@
+Overview of Changes in GTK+ 3.3.18
+==================================
+
+* Add support for touch devices
+ - New device types GDK_SOURCE_TOUCHSCREEN and
+   GDK_SOURCE_TOUCHPAD for direct and indirect
+   touch devices
+ - New event GdkEventTouch and GDK_TOUCH_MASK
+ - New signal GtkWidget::touch-event
+
+* Add support for smooth scrolling
+ - Scroll events can contain scroll deltas,
+   obtainable via gdk_event_get_scroll_deltas()
+ - Scroll direction for such events is GDK_SCROLL_SMOOTH
+ - To receive scroll events, widgets must now
+   set either GDK_SCROLL_MASK or GDK_SMOOTH_SCROLL_MASK
+
+* GtkScrolledWindow will do kinetic scrolling
+  with touch devices
+
+* XInput2 is now required for building the X11
+  backend, support for XInput1 has been removed
+
+* Deprecations are now versioned, and new API is
+  marked with the version it was introduced.
+  Use these with GDK_VERSION_{MIN,MAX}_REQUIRED
+
+* Theming:
+ - Memory consumption of the CSS parser has been reduced
+ - CSS selectors of the form "a + b" and "a ~ b" work now
+
+* Bug fixes:
+ 650693 Drawing errors in column headers when adding...
+ 655065 Build failure on OS X 10.7 Lion
+ 668141 button: don't be active when holding the mouse...
+ 669335 Render a background in the scrollbars junction area
+ 669342 overlay: add left/right/top/bottom style classes...
+ 670555 I can't change GtkInfoBar text color via the theme
+ 670881 Deactivate the menu if the window is withdrawn
+ 671057 colorchooser can't remove palette
+ 671070 Correct GroupSwitch mask
+ 671170 GtkTable and GtkGrid alignment problem
+
+* Translation updates:
+ Basque
+ Belarusian
+ Brazilian Portuguese
+ Bulgarian
+ Estonian
+ Finnish
+ Galician
+ Hungarian
+ Kazakh
+ Korean
+ Polish
+ Persian
+ Punjabi
+ Serbian
+ Slovenian
+ Swedish
+ Telugu
+ Spanish
+ Ukranian
+ Vietnamese
+
+
 Overview of Changes in GTK+ 3.3.16
 ==================================
 
