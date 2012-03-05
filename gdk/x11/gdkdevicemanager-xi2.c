@@ -863,6 +863,7 @@ set_user_time (GdkEvent *event)
 
 static gdouble *
 translate_axes (GdkDevice       *device,
+                gdouble         *saved_values,
                 gdouble          x,
                 gdouble          y,
                 GdkWindow       *window,
@@ -874,16 +875,22 @@ translate_axes (GdkDevice       *device,
 
   g_object_get (device, "n-axes", &n_axes, NULL);
 
-  axes = g_new0 (gdouble, n_axes);
+  axes = g_new (gdouble, n_axes);
   vals = valuators->values;
 
-  for (i = 0; i < valuators->mask_len * 8; i++)
+  for (i = 0; i < MIN (valuators->mask_len * 8, n_axes); i++)
     {
       GdkAxisUse use;
       gdouble val;
 
       if (!XIMaskIsSet (valuators->mask, i))
-        continue;
+        {
+          if (saved_values)
+            axes[i] = saved_values[i];
+          else
+            axes[i] = 0.0;
+          continue;
+        }
 
       use = gdk_device_get_axis_use (device, i);
       val = *vals++;
@@ -906,6 +913,9 @@ translate_axes (GdkDevice       *device,
           _gdk_device_translate_axis (device, i, val, &axes[i]);
           break;
         }
+
+      if (saved_values)
+        saved_values[i] = axes[i];
     }
 
   return axes;
@@ -1275,6 +1285,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             gdk_event_set_source_device (event, source_device);
 
             event->button.axes = translate_axes (event->button.device,
+                                                 NULL,
                                                  event->button.x,
                                                  event->button.y,
                                                  event->button.window,
@@ -1376,6 +1387,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->motion.is_hint = FALSE;
 
         event->motion.axes = translate_axes (event->motion.device,
+                                             NULL,
                                              event->motion.x,
                                              event->motion.y,
                                              event->motion.window,
@@ -1440,6 +1452,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           }
 
         event->touch.axes = translate_axes (event->touch.device,
+                                            event->touch.sequence->axes,
                                             event->touch.x,
                                             event->touch.y,
                                             event->touch.window,
@@ -1514,6 +1527,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           }
 
         event->touch.axes = translate_axes (event->touch.device,
+                                            event->touch.sequence->axes,
                                             event->touch.x,
                                             event->touch.y,
                                             event->touch.window,
