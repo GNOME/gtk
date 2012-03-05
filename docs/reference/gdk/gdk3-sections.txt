@@ -691,6 +691,7 @@ gdk_device_set_key
 gdk_device_get_key
 gdk_device_set_axis_use
 gdk_device_get_axis_use
+gdk_device_get_axis_label
 gdk_device_get_associated_device
 gdk_device_list_slave_devices
 gdk_device_get_device_type

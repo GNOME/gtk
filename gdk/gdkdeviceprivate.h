@@ -117,6 +117,7 @@ void  _gdk_device_set_associated_device (GdkDevice *device,
 void  _gdk_device_reset_axes (GdkDevice   *device);
 guint _gdk_device_add_axis   (GdkDevice   *device,
                               GdkAtom      label_atom,
+                              const char  *label_string,
                               GdkAxisUse   use,
                               gdouble      min_value,
                               gdouble      max_value,

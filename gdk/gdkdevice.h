@@ -163,6 +163,8 @@ void           gdk_device_set_key       (GdkDevice      *device,
                                          guint           keyval,
                                          GdkModifierType modifiers);
 
+const char *   gdk_device_get_axis_label(GdkDevice         *device,
+                                         guint              index_);
 GdkAxisUse     gdk_device_get_axis_use  (GdkDevice         *device,
                                          guint              index_);
 void           gdk_device_set_axis_use  (GdkDevice         *device,

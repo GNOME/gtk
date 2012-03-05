@@ -43,6 +43,7 @@ typedef struct _GdkAxisInfo GdkAxisInfo;
 struct _GdkAxisInfo
 {
   GdkAtom label;
+  gchar *label_string;
   GdkAxisUse use;
 
   gdouble min_axis;
@@ -256,9 +257,18 @@ gdk_device_class_init (GdkDeviceClass *klass)
 }
 
 static void
+gdk_axis_info_clear (gpointer data)
+{
+  GdkAxisInfo *info = data;
+
+  g_free (info->label_string);
+}
+
+static void
 gdk_device_init (GdkDevice *device)
 {
   device->axes = g_array_new (FALSE, TRUE, sizeof (GdkAxisInfo));
+  g_array_set_clear_func (device->axes, gdk_axis_info_clear);
 }
 
 static void
@@ -768,6 +778,39 @@ gdk_device_set_key (GdkDevice      *device,
 
   device->keys[index_].keyval = keyval;
   device->keys[index_].modifiers = modifiers;
+}
+
+/**
+ * gdk_device_get_axis_label:
+ * @device: a pointer #GdkDevice.
+ * @index_: the index of the axis.
+ *
+ * Returns the label for the axis. If it exists, the label of
+ * an axis is a string identifying the axis. Labels for the same
+ * types of axes may differ between devices and platforms. Try to use
+ * gdk_device_get_axis_use() if possible.
+ *
+ * This function is useful as a debugging help. It should never
+ * be presented to users.
+ *
+ * Returns: a string describing the label of the axis or %NULL
+ *   if the axis has no label.
+ *
+ * Since: 3.6
+ **/
+const char *
+gdk_device_get_axis_label (GdkDevice *device,
+                           guint      index_)
+{
+  GdkAxisInfo *info;
+
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+  g_return_val_if_fail (index_ < device->axes->len, NULL);
+
+  info = &g_array_index (device->axes, GdkAxisInfo, index_);
+
+  return info->label_string;
 }
 
 /**
@@ -1329,6 +1372,7 @@ _gdk_device_reset_axes (GdkDevice *device)
 guint
 _gdk_device_add_axis (GdkDevice   *device,
                       GdkAtom      label_atom,
+                      const char  *label_string,
                       GdkAxisUse   use,
                       gdouble      min_value,
                       gdouble      max_value,
@@ -1339,6 +1383,7 @@ _gdk_device_add_axis (GdkDevice   *device,
 
   axis_info.use = use;
   axis_info.label = label_atom;
+  axis_info.label_string = g_strdup (label_string);
   axis_info.min_value = min_value;
   axis_info.max_value = max_value;
   axis_info.resolution = resolution;

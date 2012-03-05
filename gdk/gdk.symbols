@@ -47,6 +47,7 @@ gdk_cursor_unref
 gdk_device_free_history
 gdk_device_get_associated_device
 gdk_device_get_axis
+gdk_device_get_axis_label
 gdk_device_get_axis_use
 gdk_device_get_axis_value
 gdk_device_get_device_type

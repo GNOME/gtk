@@ -167,7 +167,8 @@ translate_valuator_class (GdkDisplay          *display,
   static gboolean initialized = FALSE;
   static Atom label_atoms [GDK_AXIS_LAST] = { 0 };
   GdkAxisUse use = GDK_AXIS_IGNORE;
-  GdkAtom label;
+  GdkAtom atom;
+  const char *label;
   gint i;
 
   if (!initialized)
@@ -191,11 +192,17 @@ translate_valuator_class (GdkDisplay          *display,
     }
 
   if (valuator_label != None)
-    label = gdk_x11_xatom_to_atom_for_display (display, valuator_label);
+    {
+      atom = gdk_x11_xatom_to_atom_for_display (display, valuator_label);
+      label = gdk_x11_get_xatom_name_for_display (display, valuator_label);
+    }
   else
-    label = GDK_NONE;
+    {
+      atom = GDK_NONE;
+      label = NULL;
+    }
 
-  _gdk_device_add_axis (device, label, use, min, max, resolution);
+  _gdk_device_add_axis (device, atom, label, use, min, max, resolution);
 }
 
 static void

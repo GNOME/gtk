@@ -593,6 +593,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
             {
               _gdk_device_add_axis (GDK_DEVICE (device),
                                     GDK_NONE,
+                                    NULL,
                                     GDK_AXIS_X,
                                     axis_x.axMin,
                                     axis_x.axMax,
@@ -604,6 +605,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
             {
               _gdk_device_add_axis (GDK_DEVICE (device),
                                     GDK_NONE,
+                                    NULL,
                                     GDK_AXIS_Y,
                                     axis_y.axMin,
                                     axis_y.axMax,
@@ -616,6 +618,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
             {
               _gdk_device_add_axis (GDK_DEVICE (device),
                                     GDK_NONE,
+                                    NULL,
                                     GDK_AXIS_PRESSURE,
                                     axis_npressure.axMin,
                                     axis_npressure.axMax,
@@ -638,6 +641,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
                */
               _gdk_device_add_axis (GDK_DEVICE (device),
                                     GDK_NONE,
+                                    NULL,
                                     GDK_AXIS_XTILT,
                                     -1000,
                                     1000,
@@ -645,6 +649,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
 
               _gdk_device_add_axis (GDK_DEVICE (device),
                                     GDK_NONE,
+                                    NULL,
                                     GDK_AXIS_YTILT,
                                     -1000,
                                     1000,
