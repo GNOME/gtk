@@ -256,6 +256,8 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_TYPE_INT,
                   G_TYPE_INT,
                   G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[CHANGED], G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__INT_INT_INTv);
 
   signals[ALLOCATE_CHILD] =
     g_signal_new (I_("allocate-child"),

@@ -707,6 +707,8 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
                   GTK_TYPE_TREE_ITER,
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (cell_area_signals[SIGNAL_APPLY_ATTRIBUTES], G_TYPE_FROM_CLASS (class),
+                              _gtk_marshal_VOID__OBJECT_BOXED_BOOLEAN_BOOLEANv);
 
   /**
    * GtkCellArea::add-editable:
