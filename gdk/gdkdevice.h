@@ -34,23 +34,6 @@ G_BEGIN_DECLS
 typedef struct _GdkTimeCoord GdkTimeCoord;
 
 /**
- * GdkExtensionMode:
- * @GDK_EXTENSION_EVENTS_NONE: no extension events are desired.
- * @GDK_EXTENSION_EVENTS_ALL: all extension events are desired.
- * @GDK_EXTENSION_EVENTS_CURSOR: extension events are desired only if a cursor
- *                               will be displayed for the device.
- *
- * An enumeration used to specify which extension events
- * are desired for a particular widget.
- */
-typedef enum
-{
-  GDK_EXTENSION_EVENTS_NONE,
-  GDK_EXTENSION_EVENTS_ALL,
-  GDK_EXTENSION_EVENTS_CURSOR
-} GdkExtensionMode;
-
-/**
  * GdkInputSource:
  * @GDK_SOURCE_MOUSE: the device is a mouse. (This will be reported for the core
  *                    pointer, even if it is something else, such as a trackball.)
