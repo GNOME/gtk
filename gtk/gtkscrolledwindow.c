@@ -2252,9 +2252,10 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
   gboolean handled = FALSE;
   gdouble delta_x;
   gdouble delta_y;
+  gdouble delta;
 
   g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);  
+  g_return_val_if_fail (event != NULL, FALSE);
 
   scrolled_window = GTK_SCROLLED_WINDOW (widget);
   priv = scrolled_window->priv;
@@ -2266,10 +2267,14 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
         {
           GtkAdjustment *adj;
           gdouble new_value;
+          gdouble page_size;
+          gdouble scroll_unit;
 
           adj = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
+          page_size = gtk_adjustment_get_page_size (adj);
+          scroll_unit = pow (page_size, 2.0 / 3.0);
 
-          new_value = CLAMP (gtk_adjustment_get_value (adj) + delta_x,
+          new_value = CLAMP (gtk_adjustment_get_value (adj) + delta_x * scroll_unit,
                              gtk_adjustment_get_lower (adj),
                              gtk_adjustment_get_upper (adj) -
                              gtk_adjustment_get_page_size (adj));
@@ -2284,10 +2289,14 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
         {
           GtkAdjustment *adj;
           gdouble new_value;
+          gdouble page_size;
+          gdouble scroll_unit;
 
           adj = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
+          page_size = gtk_adjustment_get_page_size (adj);
+          scroll_unit = pow (page_size, 2.0 / 3.0);
 
-          new_value = CLAMP (gtk_adjustment_get_value (adj) + delta_y,
+          new_value = CLAMP (gtk_adjustment_get_value (adj) + delta_y * scroll_unit,
                              gtk_adjustment_get_lower (adj),
                              gtk_adjustment_get_upper (adj) -
                              gtk_adjustment_get_page_size (adj));
@@ -2309,7 +2318,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
       if (range && gtk_widget_get_visible (range))
         {
           GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (range));
-          gdouble delta, new_value;
+          gdouble new_value;
 
           delta = _gtk_range_get_wheel_delta (GTK_RANGE (range), event);
 
