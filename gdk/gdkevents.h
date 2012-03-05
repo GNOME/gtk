@@ -144,8 +144,6 @@ typedef struct _GdkEventWindowState GdkEventWindowState;
 typedef struct _GdkEventSetting     GdkEventSetting;
 typedef struct _GdkEventGrabBroken  GdkEventGrabBroken;
 
-typedef struct _GdkEventSequence    GdkEventSequence;
-
 typedef union  _GdkEvent	    GdkEvent;
 
 /**
