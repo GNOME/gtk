@@ -279,9 +279,10 @@ gdk_device_core_ungrab (GdkDevice *device,
       if (grab)
         grab->serial_end = grab->serial_start;
 
-      _gdk_wayland_window_set_device_grabbed (wayland_device->pointer_grab_window,
-                                              NULL,
-                                              0);
+      if (wayland_device->pointer_grab_window)
+        _gdk_wayland_window_set_device_grabbed (wayland_device->pointer_grab_window,
+                                                NULL,
+                                                0);
     }
 }
 
