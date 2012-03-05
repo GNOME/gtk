@@ -38,6 +38,7 @@ struct _ScrollValuator
   guint direction        : 4;
   guint last_value_valid : 1;
   gdouble last_value;
+  gdouble increment;
 };
 
 struct _GdkX11DeviceXI2
@@ -791,7 +792,8 @@ _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
 void
 _gdk_x11_device_xi2_add_scroll_valuator (GdkX11DeviceXI2    *device,
                                          guint               n_valuator,
-                                         GdkScrollDirection  direction)
+                                         GdkScrollDirection  direction,
+                                         gdouble             increment)
 {
   ScrollValuator scroll;
 
@@ -801,6 +803,7 @@ _gdk_x11_device_xi2_add_scroll_valuator (GdkX11DeviceXI2    *device,
   scroll.n_valuator = n_valuator;
   scroll.direction = direction;
   scroll.last_value_valid = FALSE;
+  scroll.increment = increment;
 
   g_array_append_val (device->scroll_valuators, scroll);
 }
@@ -834,7 +837,7 @@ _gdk_x11_device_xi2_get_scroll_delta (GdkX11DeviceXI2    *device,
           if (scroll->last_value_valid)
             {
               if (delta_ret)
-                *delta_ret = valuator_value - scroll->last_value;
+                *delta_ret = (valuator_value - scroll->last_value) / scroll->increment;
 
               scroll->last_value = valuator_value;
             }

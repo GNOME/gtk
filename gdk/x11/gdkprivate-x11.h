@@ -239,7 +239,8 @@ GdkDevice * _gdk_x11_device_manager_xi2_lookup    (GdkX11DeviceManagerXI2 *devic
                                                    gint                    device_id);
 void     _gdk_x11_device_xi2_add_scroll_valuator  (GdkX11DeviceXI2    *device,
                                                    guint               n_valuator,
-                                                   GdkScrollDirection  direction);
+                                                   GdkScrollDirection  direction,
+                                                   gdouble             increment);
 gboolean  _gdk_x11_device_xi2_get_scroll_delta    (GdkX11DeviceXI2    *device,
                                                    guint               n_valuator,
                                                    gdouble             valuator_value,
