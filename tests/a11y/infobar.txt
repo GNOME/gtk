@@ -7,9 +7,10 @@ window1
   layer: window
   alpha: 1
   bar1
-    "filler"
+    "alert"
     parent: window1
     index: 0
+    name: Information
     state: enabled horizontal sensitive showing visible
     toolkit: gtk
     <AtkComponent>
