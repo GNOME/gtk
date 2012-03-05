@@ -186,7 +186,6 @@ gdk_events_get_center
 gdk_events_get_distance
 gdk_events_pending
 gdk_event_type_get_type
-gdk_extension_mode_get_type
 gdk_filter_return_get_type
 gdk_flush
 gdk_get_default_root_window
@@ -532,9 +531,7 @@ gdk_x11_device_get_id
 gdk_x11_device_manager_core_get_type
 gdk_x11_device_manager_lookup
 gdk_x11_device_manager_xi2_get_type
-gdk_x11_device_manager_xi_get_type
 gdk_x11_device_xi2_get_type
-gdk_x11_device_xi_get_type
 gdk_x11_display_broadcast_startup_message
 gdk_x11_display_error_trap_pop
 gdk_x11_display_error_trap_pop_ignored
