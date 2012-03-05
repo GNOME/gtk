@@ -21,6 +21,7 @@
 
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
+#include "gdkeventsequenceprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
@@ -275,6 +276,7 @@ static void
 gdk_device_dispose (GObject *object)
 {
   GdkDevice *device = GDK_DEVICE (object);
+  GSList *list;
 
   if (device->type == GDK_DEVICE_TYPE_SLAVE)
     _gdk_device_remove_slave (device->associated, device);
@@ -287,6 +289,18 @@ gdk_device_dispose (GObject *object)
       g_object_unref (device->associated);
       device->associated = NULL;
     }
+
+  for (list = device->sequences; list; list = list->next)
+    {
+      GdkEventSequence *sequence = list->data;
+
+      /* Set device to NULL in advance so that the unreffing doesn't
+       * modify the list we iterate over */
+      sequence->device = NULL;
+      gdk_event_sequence_unref (sequence);
+    }
+  g_slist_free (device->sequences);
+  device->sequences = NULL;
 
   if (device->axes)
     {

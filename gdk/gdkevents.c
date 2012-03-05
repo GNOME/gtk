@@ -26,6 +26,7 @@
 
 #include "gdkinternals.h"
 #include "gdkdisplayprivate.h"
+#include "gdkeventsequenceprivate.h"
 
 #include <string.h>
 #include <math.h>
@@ -600,6 +601,7 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
+      new_event->touch.sequence = gdk_event_sequence_ref (event->touch.sequence);
       if (event->touch.axes)
         new_event->touch.axes = g_memdup (event->touch.axes,
                                            sizeof (gdouble) * gdk_device_get_n_axes (event->touch.device));
@@ -689,6 +691,7 @@ gdk_event_free (GdkEvent *event)
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
       g_free (event->touch.axes);
+      gdk_event_sequence_unref (event->touch.sequence);
       break;
 
     case GDK_EXPOSE:

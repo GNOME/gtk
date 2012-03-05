@@ -101,6 +101,7 @@ gdk_private_headers = 				\
 	gdkdisplaymanagerprivate.h		\
 	gdkdisplayprivate.h			\
 	gdkdndprivate.h				\
+	gdkeventsequenceprivate.h		\
 	gdkscreenprivate.h			\
 	gdkinternals.h				\
 	gdkintl.h				\
@@ -121,6 +122,7 @@ gdk_c_sources = 				\
 	gdkdisplaymanager.c			\
 	gdkdnd.c				\
 	gdkevents.c     			\
+	gdkeventsequence.c			\
 	gdkglobals.c				\
 	gdkkeys.c				\
 	gdkkeyuni.c				\

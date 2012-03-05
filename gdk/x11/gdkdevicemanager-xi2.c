@@ -23,6 +23,7 @@
 #include "gdkdevicemanagerprivate-core.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
+#include "gdkeventsequenceprivate.h"
 #include "gdkeventtranslator.h"
 #include "gdkprivate-x11.h"
 #include "gdkintl.h"
@@ -1424,6 +1425,20 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                              GUINT_TO_POINTER (xev->sourceid));
         gdk_event_set_source_device (event, source_device);
 
+        event->touch.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
+
+        if (ev->evtype == XI_TouchBegin)
+          {
+            event->touch.state |= GDK_BUTTON1_MASK;
+            event->touch.sequence = gdk_event_sequence_new (event->touch.device, xev->detail);
+            gdk_event_sequence_ref (event->touch.sequence);
+          }
+        else
+          {
+            /* no ref here, we want the sequence to go away with the event */
+            event->touch.sequence = gdk_event_sequence_lookup (event->touch.device, xev->detail);
+          }
+
         event->touch.axes = translate_axes (event->touch.device,
                                             event->touch.x,
                                             event->touch.y,
@@ -1438,13 +1453,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &event->touch.x);
             gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &event->touch.y);
           }
-
-        event->touch.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
-
-        if (ev->evtype == XI_TouchBegin)
-          event->touch.state |= GDK_BUTTON1_MASK;
-
-        event->touch.sequence = GUINT_TO_POINTER (xev->detail);
 
         if (xev->flags & XITouchEmulatingPointer)
           {
@@ -1478,7 +1486,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                             xev->flags & XITouchEmulatingPointer));
 
         event->touch.window = window;
-        event->touch.sequence = GUINT_TO_POINTER (xev->detail);
         event->touch.type = GDK_TOUCH_UPDATE;
         event->touch.time = xev->time;
         event->touch.x = (gdouble) xev->event_x;
@@ -1492,6 +1499,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
         gdk_event_set_source_device (event, source_device);
+
+        event->touch.sequence = gdk_event_sequence_lookup (event->touch.device, xev->detail);
+        gdk_event_sequence_ref (event->touch.sequence);
 
         event->touch.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
