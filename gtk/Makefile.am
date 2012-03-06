@@ -488,6 +488,7 @@ gtk_private_h_sources =		\
 	gtksearchengine.h	\
 	gtksearchenginesimple.h	\
 	gtkselectionprivate.h	\
+	gtksequencetrackerprivate.h \
 	gtksettingsprivate.h	\
 	gtkshadowprivate.h      \
 	gtksizegroup-private.h	\
@@ -749,6 +750,7 @@ gtk_base_c_sources = 		\
 	gtkseparator.c		\
 	gtkseparatormenuitem.c	\
 	gtkseparatortoolitem.c	\
+	gtksequencetracker.c	\
 	gtksettings.c		\
 	gtksizegroup.c		\
 	gtksizerequest.c	\
