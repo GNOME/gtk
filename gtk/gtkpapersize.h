@@ -38,7 +38,7 @@ typedef struct _GtkPaperSize GtkPaperSize;
 /**
  * GTK_PAPER_NAME_A3:
  *
- * Name for the A4 paper size.
+ * Name for the A3 paper size.
  */
 #define GTK_PAPER_NAME_A3 "iso_a3"
 
