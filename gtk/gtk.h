@@ -183,6 +183,8 @@
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkstyleproperties.h>
 #include <gtk/gtkstyleprovider.h>
+#include <gtk/gtkswipegesture.h>
+#include <gtk/gtkswiperecognizer.h>
 #include <gtk/gtkswitch.h>
 #include <gtk/gtksymboliccolor.h>
 #include <gtk/gtktextattributes.h>

@@ -328,6 +328,8 @@ gtk_public_h_sources = 		\
 	gtkstylecontext.h	\
 	gtkstyleproperties.h	\
 	gtkstyleprovider.h	\
+	gtkswipegesture.h	\
+	gtkswiperecognizer.h	\
 	gtkswitch.h		\
 	gtksymboliccolor.h	\
 	gtktestutils.h		\
@@ -766,6 +768,8 @@ gtk_base_c_sources = 		\
 	gtkstyleproperty.c	\
 	gtkstyleprovider.c	\
 	gtkstyleproviderprivate.c	\
+	gtkswipegesture.c	\
+	gtkswiperecognizer.c	\
 	gtkswitch.c		\
 	gtksymboliccolor.c	\
 	gtktestutils.c		\
