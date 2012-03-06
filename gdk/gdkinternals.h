@@ -184,7 +184,6 @@ struct _GdkWindow
   gint y;
 
   GdkEventMask event_mask;
-  gint extension_events;
 
   GList *filters;
   GList *children;

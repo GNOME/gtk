@@ -59,6 +59,7 @@ struct _GdkDeviceWintabClass
 
 GType gdk_device_wintab_get_type (void) G_GNUC_CONST;
 
+gboolean     _gdk_device_wintab_wants_events (GdkWindow *window);
 GdkEventMask _gdk_device_wintab_get_events (GdkDeviceWintab *device,
                                             GdkWindow       *window);
 gboolean     _gdk_device_wintab_get_window_coords (GdkWindow *window,

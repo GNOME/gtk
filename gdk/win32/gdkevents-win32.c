@@ -1135,7 +1135,7 @@ send_crossing_event (GdkDisplay                 *display,
   _gdk_win32_append_event (event);
 
   if (type == GDK_ENTER_NOTIFY &&
-      window->extension_events != 0)
+      _gdk_device_wintab_wants_events (window))
     _gdk_device_wintab_update_window_coords (window);
 }
 
@@ -1320,23 +1320,12 @@ propagate (GdkWindow  **window,
 	   gboolean     grab_owner_events,
 	   gint	        grab_mask,
 	   gboolean   (*doesnt_want_it) (gint mask,
-					 MSG *msg),
-	   gboolean    	check_extended)
+					 MSG *msg))
 {
   if (grab_window != NULL && !grab_owner_events)
     {
       /* Event source is grabbed with owner_events FALSE */
 
-      /* See if the event should be ignored because an extended input
-       * device is used
-       */
-      if (check_extended &&
-	  grab_window->extension_events != 0 &&
-	  _gdk_input_ignore_core)
-	{
-	  GDK_NOTE (EVENTS, g_print (" (ignored for grabber)"));
-	  return FALSE;
-	}
       if ((*doesnt_want_it) (grab_mask, msg))
 	{
 	  GDK_NOTE (EVENTS, g_print (" (grabber doesn't want it)"));
@@ -1355,13 +1344,6 @@ propagate (GdkWindow  **window,
    */
   while (TRUE)
     {
-      if (check_extended &&
-	  (*window)->extension_events != 0 &&
-	  _gdk_input_ignore_core)
-	{
-	  GDK_NOTE (EVENTS, g_print (" (ignored)"));
-	  return FALSE;
-	}
       if ((*doesnt_want_it) ((*window)->event_mask, msg))
 	{
 	  /* Owner doesn't want it, propagate to parent. */
@@ -1373,13 +1355,6 @@ propagate (GdkWindow  **window,
 		{
 		  /* Event source is grabbed with owner_events TRUE */
 
-		  if (check_extended &&
-		      grab_window->extension_events != 0 &&
-		      _gdk_input_ignore_core)
-		    {
-		      GDK_NOTE (EVENTS, g_print (" (ignored for grabber)"));
-		      return FALSE;
-		    }
 		  if ((*doesnt_want_it) (grab_mask, msg))
 		    {
 		      /* Grabber doesn't want it either */
@@ -2061,7 +2036,7 @@ gdk_event_translate (MSG  *msg,
 		      keyboard_grab->window,
 		      keyboard_grab->owner_events,
 		      GDK_ALL_EVENTS_MASK,
-		      doesnt_want_key, FALSE))
+		      doesnt_want_key))
 	break;
 
       if (GDK_WINDOW_DESTROYED (window))
@@ -2171,7 +2146,7 @@ gdk_event_translate (MSG  *msg,
 		      keyboard_grab->window,
 		      keyboard_grab->owner_events,
 		      GDK_ALL_EVENTS_MASK,
-		      doesnt_want_char, FALSE))
+		      doesnt_want_char))
 	break;
 
       if (GDK_WINDOW_DESTROYED (window))
@@ -2276,14 +2251,6 @@ gdk_event_translate (MSG  *msg,
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
       assign_object (&window, find_window_for_mouse_event (window, msg));
-#if 0
-      if (window->extension_events != 0 &&
-	  _gdk_input_ignore_core)
-	{
-	  GDK_NOTE (EVENTS, g_print (" (ignored)"));
-	  break;
-	}
-#endif
 
       if (pointer_grab != NULL && pointer_grab->implicit)
 	{
@@ -2797,7 +2764,7 @@ gdk_event_translate (MSG  *msg,
 	      !GDK_WINDOW_DESTROYED (window))
 	    _gdk_win32_emit_configure_event (window);
 
-	  if (window->extension_events != 0)
+	  if (_gdk_device_wintab_wants_events (window))
 	    _gdk_device_wintab_update_window_coords (window);
 	}
 

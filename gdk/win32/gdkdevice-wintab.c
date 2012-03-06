@@ -250,6 +250,17 @@ gdk_device_wintab_select_window_events (GdkDevice    *device,
     }
 }
 
+gboolean
+_gdk_device_wintab_wants_events (GdkWindow       *window)
+{
+  GdkWindowInputInfo *info;
+
+  info = g_object_get_qdata (G_OBJECT (window),
+                             quark_window_input_info);
+
+  return info != NULL;
+}
+
 GdkEventMask
 _gdk_device_wintab_get_events (GdkDeviceWintab *device,
                                GdkWindow       *window)
@@ -358,27 +369,4 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
 
   if (y)
     *y = temp_y;
-}
-
-void
-_gdk_input_check_extension_events (GdkDevice *device)
-{
-  GSList *l;
-
-  if (!GDK_IS_DEVICE_WINTAB (device))
-    return;
-
-  for (l = input_windows; l; l = l->next)
-    {
-      GdkWindow *window_private;
-      GdkEventMask event_mask = 0;
-
-      window_private = l->data;
-
-      if (gdk_device_get_mode (device) != GDK_MODE_DISABLED)
-        event_mask = window_private->extension_events;
-
-      gdk_window_set_device_events (GDK_WINDOW (window_private),
-                                    device, event_mask);
-    }
 }

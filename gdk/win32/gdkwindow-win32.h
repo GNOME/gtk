@@ -67,8 +67,6 @@ struct _GdkWindowImplWin32
 
   GdkWindowTypeHint type_hint;
 
-  gboolean extension_events_selected;
-
   GdkWindow *transient_owner;
   GSList    *transient_children;
   gint       num_transients;
