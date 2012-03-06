@@ -8449,6 +8449,7 @@ text_window_realize (GtkTextWindow *win,
   attributes.height = win->allocation.height;
   attributes.event_mask = (GDK_EXPOSURE_MASK            |
                            GDK_SCROLL_MASK              |
+                           GDK_SMOOTH_SCROLL_MASK       |
                            GDK_KEY_PRESS_MASK           |
                            GDK_BUTTON_PRESS_MASK        |
                            GDK_BUTTON_RELEASE_MASK      |
