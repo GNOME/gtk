@@ -39,12 +39,12 @@ _gtk_border_image_init (GtkBorderImage   *image,
 {
   GtkBorder *width;
 
-  image->source = g_value_get_object (_gtk_theming_engine_peek_property (engine, "border-image-source"));
+  image->source = _gtk_css_value_get_object (_gtk_theming_engine_peek_property (engine, "border-image-source"));
   if (image->source == NULL)
     return FALSE;
 
-  image->slice = *(GtkBorder *) g_value_get_boxed (_gtk_theming_engine_peek_property (engine, "border-image-slice"));
-  width = g_value_get_boxed (_gtk_theming_engine_peek_property (engine, "border-image-width"));
+  image->slice = *(GtkBorder *) _gtk_css_value_get_boxed (_gtk_theming_engine_peek_property (engine, "border-image-slice"));
+  width = _gtk_css_value_get_boxed (_gtk_theming_engine_peek_property (engine, "border-image-width"));
   if (width)
     {
       image->width = *width;
@@ -53,8 +53,7 @@ _gtk_border_image_init (GtkBorderImage   *image,
   else
     image->has_width = FALSE;
 
-  image->repeat = *(GtkCssBorderImageRepeat *) g_value_get_boxed (
-      _gtk_theming_engine_peek_property (engine, "border-image-repeat"));
+  image->repeat = *_gtk_css_value_get_border_image_repeat (_gtk_theming_engine_peek_property (engine, "border-image-repeat"));
 
   return TRUE;
 }

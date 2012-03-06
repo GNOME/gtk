@@ -72,15 +72,14 @@ _gtk_css_shorthand_property_assign (GtkStyleProperty   *property,
   shorthand->assign (shorthand, props, state, value);
 }
 
-static void
+static GtkCssValue *
 _gtk_css_shorthand_property_query (GtkStyleProperty   *property,
-                                   GValue             *value,
                                    GtkStyleQueryFunc   query_func,
                                    gpointer            query_data)
 {
   GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
 
-  shorthand->query (shorthand, value, query_func, query_data);
+  return shorthand->query (shorthand, query_func, query_data);
 }
 
 static void

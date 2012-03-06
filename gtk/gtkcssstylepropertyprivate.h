@@ -41,16 +41,15 @@ typedef gboolean         (* GtkCssStylePropertyParseFunc)  (GtkCssStyleProperty 
 typedef void             (* GtkCssStylePropertyPrintFunc)  (GtkCssStyleProperty    *property,
                                                             const GValue           *value,
                                                             GString                *string);
-typedef void             (* GtkCssStylePropertyComputeFunc)(GtkCssStyleProperty    *property,
-                                                            GValue                 *computed,
+typedef GtkCssValue  *   (* GtkCssStylePropertyComputeFunc)(GtkCssStyleProperty    *property,
                                                             GtkStyleContext        *context,
-                                                            const GValue           *specified);
+                                                            GtkCssValue            *specified);
 struct _GtkCssStyleProperty
 {
   GtkStyleProperty parent;
 
   GType computed_type;
-  GValue initial_value;
+  GtkCssValue *initial_value;
   guint id;
   guint inherit :1;
 
@@ -75,20 +74,19 @@ GtkCssStyleProperty *   _gtk_css_style_property_lookup_by_id    (guint          
 
 gboolean                _gtk_css_style_property_is_inherit      (GtkCssStyleProperty    *property);
 guint                   _gtk_css_style_property_get_id          (GtkCssStyleProperty    *property);
-const GValue *          _gtk_css_style_property_get_initial_value
+GtkCssValue  *          _gtk_css_style_property_get_initial_value
                                                                 (GtkCssStyleProperty    *property);
 GType                   _gtk_css_style_property_get_computed_type (GtkCssStyleProperty *property);
 GType                   _gtk_css_style_property_get_specified_type (GtkCssStyleProperty *property);
 gboolean                _gtk_css_style_property_is_specified_type (GtkCssStyleProperty  *property,
                                                                  GType                   type);
 
-void                    _gtk_css_style_property_compute_value   (GtkCssStyleProperty    *property,
-                                                                 GValue                 *computed,
+GtkCssValue *           _gtk_css_style_property_compute_value   (GtkCssStyleProperty    *property,
                                                                  GtkStyleContext        *context,
-                                                                 const GValue           *specified);
+                                                                 GtkCssValue            *specified);
 
 void                    _gtk_css_style_property_print_value     (GtkCssStyleProperty    *property,
-                                                                 const GValue           *value,
+                                                                 GtkCssValue            *value,
                                                                  GString                *string);
                                                                  
 

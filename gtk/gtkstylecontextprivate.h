@@ -20,10 +20,11 @@
 
 #include "gtkstylecontext.h"
 #include "gtksymboliccolor.h"
+#include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
 
-const GValue * _gtk_style_context_peek_property              (GtkStyleContext *context,
+GtkCssValue   * _gtk_style_context_peek_property              (GtkStyleContext *context,
                                                               const char      *property_name);
 double         _gtk_style_context_get_number                 (GtkStyleContext *context,
                                                               const char      *property_name,

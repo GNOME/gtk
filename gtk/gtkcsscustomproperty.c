@@ -91,29 +91,32 @@ gtk_css_custom_property_get_specified_type (GParamSpec *pspec)
     return pspec->value_type;
 }
 
-static void
-gtk_css_custom_property_create_initial_value (GParamSpec *pspec,
-                                              GValue     *value)
+static GtkCssValue *
+gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
 {
-  g_value_init (value, gtk_css_custom_property_get_specified_type (pspec));
+  GValue value = G_VALUE_INIT;
+
+  g_value_init (&value, gtk_css_custom_property_get_specified_type (pspec));
 
   if (pspec->value_type == GTK_TYPE_THEMING_ENGINE)
-    g_value_set_object (value, gtk_theming_engine_load (NULL));
+    g_value_set_object (&value, gtk_theming_engine_load (NULL));
   else if (pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
-    g_value_take_boxed (value, pango_font_description_from_string ("Sans 10"));
+    g_value_take_boxed (&value, pango_font_description_from_string ("Sans 10"));
   else if (pspec->value_type == GDK_TYPE_RGBA ||
            pspec->value_type == GDK_TYPE_COLOR)
     {
       GdkRGBA color;
       gdk_rgba_parse (&color, "pink");
-      g_value_take_boxed (value, gtk_symbolic_color_new_literal (&color));
+      g_value_take_boxed (&value, gtk_symbolic_color_new_literal (&color));
     }
   else if (pspec->value_type == GTK_TYPE_BORDER)
     {
-      g_value_take_boxed (value, gtk_border_new ());
+      g_value_take_boxed (&value, gtk_border_new ());
     }
   else
-    g_param_value_set_default (pspec, value);
+    g_param_value_set_default (pspec, &value);
+
+  return _gtk_css_value_new_take_gvalue (&value);
 }
 
 /* Property registration functions */
@@ -164,7 +167,7 @@ gtk_theming_engine_register_property (const gchar            *name_space,
                                       GParamSpec             *pspec)
 {
   GtkCssCustomProperty *node;
-  GValue initial = { 0, };
+  GtkCssValue *initial;
   gchar *name;
 
   g_return_if_fail (name_space != NULL);
@@ -172,10 +175,10 @@ gtk_theming_engine_register_property (const gchar            *name_space,
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
   name = g_strdup_printf ("-%s-%s", name_space, pspec->name);
-  gtk_css_custom_property_create_initial_value (pspec, &initial);
+  initial = gtk_css_custom_property_create_initial_value (pspec);
 
   node = g_object_new (GTK_TYPE_CSS_CUSTOM_PROPERTY,
-                       "initial-value", &initial,
+                       "initial-value", initial,
                        "name", name,
                        "computed-type", pspec->value_type,
                        "value-type", pspec->value_type,
@@ -183,7 +186,7 @@ gtk_theming_engine_register_property (const gchar            *name_space,
   node->pspec = pspec;
   node->property_parse_func = parse_func;
 
-  g_value_unset (&initial);
+  _gtk_css_value_unref (initial);
   g_free (name);
 }
 
@@ -204,14 +207,14 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
                                         GParamSpec             *pspec)
 {
   GtkCssCustomProperty *node;
-  GValue initial = { 0, };
+  GtkCssValue *initial;
 
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
-  gtk_css_custom_property_create_initial_value (pspec, &initial);
+  initial = gtk_css_custom_property_create_initial_value (pspec);
 
   node = g_object_new (GTK_TYPE_CSS_CUSTOM_PROPERTY,
-                       "initial-value", &initial,
+                       "initial-value", initial,
                        "name", pspec->name,
                        "computed-type", pspec->value_type,
                        "value-type", pspec->value_type,
@@ -219,7 +222,7 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
   node->pspec = pspec;
   node->property_parse_func = parse_func;
 
-  g_value_unset (&initial);
+  _gtk_css_value_unref (initial);
 }
 
 /**

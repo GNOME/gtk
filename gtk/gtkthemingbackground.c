@@ -165,7 +165,7 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       double image_width, image_height;
       double width, height;
 
-      size = g_value_get_boxed (_gtk_style_context_peek_property (bg->context, "background-size"));
+      size = _gtk_css_value_get_background_size (_gtk_style_context_peek_property (bg->context, "background-size"));
       gtk_style_context_get (bg->context, bg->flags,
                              "background-repeat", &hrepeat,
                              NULL);
@@ -338,7 +338,7 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
   _gtk_theming_background_apply_clip (bg);
   _gtk_theming_background_apply_origin (bg);
 
-  bg->image = g_value_get_object (_gtk_style_context_peek_property (bg->context, "background-image"));
+  bg->image = _gtk_css_value_get_image (_gtk_style_context_peek_property (bg->context, "background-image"));
 }
 
 void

@@ -969,14 +969,14 @@ typedef enum ParserSymbol ParserSymbol;
 
 struct _PropertyValue {
   GtkCssStyleProperty *property;
-  GValue               value;
+  GtkCssValue         *value;
   GtkCssSection       *section;
 };
 
 struct _WidgetPropertyValue {
   char *name;
   WidgetPropertyValue *next;
-  GValue         value;
+  GtkCssValue         *value;
 
   GtkCssSection *section;
 };
@@ -1156,7 +1156,8 @@ gtk_css_ruleset_clear (GtkCssRuleset *ruleset)
 
       for (i = 0; i < ruleset->n_styles; i++)
         {
-          g_value_unset (&ruleset->styles[i].value);
+          _gtk_css_value_unref (ruleset->styles[i].value);
+	  ruleset->styles[i].value = NULL;
           gtk_css_section_unref (ruleset->styles[i].section);
         }
       g_free (ruleset->styles);
@@ -1187,9 +1188,7 @@ widget_property_value_new (char *name, GtkCssSection *section)
 static void
 widget_property_value_free (WidgetPropertyValue *value)
 {
-  if (G_IS_VALUE (&value->value))
-    g_value_unset (&value->value);
-
+  _gtk_css_value_unref (value->value);
   g_free (value->name);
   gtk_css_section_unref (value->section);
 
@@ -1263,7 +1262,8 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
     {
       if (ruleset->styles[i].property == property)
         {
-          g_value_unset (&ruleset->styles[i].value);
+          _gtk_css_value_unref (ruleset->styles[i].value);
+	  ruleset->styles[i].value = NULL;
           gtk_css_section_unref (ruleset->styles[i].section);
           break;
         }
@@ -1272,12 +1272,11 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
     {
       ruleset->n_styles++;
       ruleset->styles = g_realloc (ruleset->styles, ruleset->n_styles * sizeof (PropertyValue));
-      memset (&ruleset->styles[i].value, 0, sizeof (GValue));
+      ruleset->styles[i].value = NULL;
       ruleset->styles[i].property = property;
     }
 
-  g_value_init (&ruleset->styles[i].value, G_VALUE_TYPE (value));
-  g_value_copy (value, &ruleset->styles[i].value);
+  ruleset->styles[i].value = _gtk_css_value_new_from_gvalue (value);
   ruleset->styles[i].section = gtk_css_section_ref (section);
 }
 
@@ -1485,7 +1484,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
 	_gtk_style_properties_set_property_by_property (props,
 							GTK_CSS_STYLE_PROPERTY (ruleset->styles[i].property),
 							_gtk_css_selector_get_state_flags (ruleset->selector),
-							&ruleset->styles[i].value);
+							ruleset->styles[i].value);
     }
 
   return props;
@@ -1531,7 +1530,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
 					     NULL,
 					     val->section,
 					     gtk_css_section_get_file (val->section),
-					     g_value_get_string (&val->value));
+					     _gtk_css_value_get_string (val->value));
 
 	      found = _gtk_css_style_parse_value (value,
 						  scanner->parser,
@@ -1609,7 +1608,7 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
           _gtk_css_lookup_set (lookup,
                                id,
                                ruleset->styles[j].section,
-                               &ruleset->styles[j].value);
+                               ruleset->styles[j].value);
         }
     }
 }
@@ -2215,8 +2214,7 @@ parse_declaration (GtkCssScanner *scanner,
           WidgetPropertyValue *val;
 
           val = widget_property_value_new (name, scanner->section);
-          g_value_init (&val->value, G_TYPE_STRING);
-          g_value_take_string (&val->value, value_str);
+	  val->value = _gtk_css_value_new_take_string (value_str);
 
           gtk_css_ruleset_add_style (ruleset, name, val);
         }
@@ -2799,7 +2797,7 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
           g_string_append (str, "  ");
           g_string_append (str, _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop->property)));
           g_string_append (str, ": ");
-          _gtk_css_style_property_print_value (prop->property, &prop->value, str);
+          _gtk_css_style_property_print_value (prop->property, prop->value, str);
           g_string_append (str, ";\n");
         }
 
@@ -2822,7 +2820,7 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
           g_string_append (str, "  ");
           g_string_append (str, widget_value->name);
           g_string_append (str, ": ");
-          g_string_append (str, g_value_get_string (&widget_value->value));
+          g_string_append (str, _gtk_css_value_get_string (widget_value->value));
           g_string_append (str, ";\n");
         }
 

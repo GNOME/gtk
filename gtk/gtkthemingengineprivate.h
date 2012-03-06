@@ -20,13 +20,14 @@
 
 #include <gdk/gdk.h>
 #include "gtk/gtkthemingengine.h"
+#include "gtk/gtkcssvalueprivate.h"
 
 void _gtk_theming_engine_paint_spinner (cairo_t *cr,
                                         gdouble  radius,
                                         gdouble  progress,
                                         GdkRGBA *color);
 
-const GValue *_gtk_theming_engine_peek_property (GtkThemingEngine *engine,
+GtkCssValue  *_gtk_theming_engine_peek_property (GtkThemingEngine *engine,
                                                  const char       *property_name);
 double        _gtk_theming_engine_get_number    (GtkThemingEngine *engine,
                                                  const char       *property_name,

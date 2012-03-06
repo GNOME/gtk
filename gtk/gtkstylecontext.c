@@ -1072,7 +1072,7 @@ style_data_lookup (GtkStyleContext *context,
   GtkStyleContextPrivate *priv;
   StyleData *data;
   gboolean state_mismatch;
-  const GValue *v;
+  GtkCssValue *v;
 
   priv = context->priv;
   state_mismatch = ((GtkStyleInfo *) priv->info_stack->data)->state_flags != state;
@@ -1116,7 +1116,7 @@ style_data_lookup (GtkStyleContext *context,
 
   v = _gtk_css_computed_values_get_value_by_name (priv->current_data->store, "engine");
   if (v)
-    priv->theming_engine = g_value_dup_object (v);
+    priv->theming_engine = _gtk_css_value_dup_object (v);
   else
     priv->theming_engine = g_object_ref (gtk_theming_engine_load (NULL));
 
@@ -1440,7 +1440,7 @@ gtk_style_context_get_section (GtkStyleContext *context,
   return _gtk_css_computed_values_get_section (data->store, _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)));
 }
 
-static const GValue *
+static GtkCssValue *
 gtk_style_context_query_func (guint    id,
                               gpointer values)
 {
@@ -1470,6 +1470,7 @@ gtk_style_context_get_property (GtkStyleContext *context,
   GtkStyleContextPrivate *priv;
   GtkStyleProperty *prop;
   StyleData *data;
+  GtkCssValue *v;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (property != NULL);
@@ -1491,7 +1492,9 @@ gtk_style_context_get_property (GtkStyleContext *context,
     }
 
   data = style_data_lookup (context, state);
-  _gtk_style_property_query (prop, value, gtk_style_context_query_func, data->store);
+  v = _gtk_style_property_query (prop, gtk_style_context_query_func, data->store);
+  _gtk_css_value_init_gvalue (v, value);
+  _gtk_css_value_unref (v);
 }
 
 /**
@@ -2362,7 +2365,7 @@ style_property_values_cmp (gconstpointer bsearch_node1,
   return 0;
 }
 
-const GValue *
+GtkCssValue *
 _gtk_style_context_peek_property (GtkStyleContext *context,
                                   const char      *property_name)
 {
@@ -2376,10 +2379,10 @@ _gtk_style_context_get_number (GtkStyleContext *context,
                                const char      *property_name,
                                double           one_hundred_percent)
 {
-  const GValue *value;
+  GtkCssValue *value;
   
   value = _gtk_style_context_peek_property (context, property_name);
-  return _gtk_css_number_get (g_value_get_boxed (value), one_hundred_percent);
+  return _gtk_css_number_get (_gtk_css_value_get_number (value), one_hundred_percent);
 }
 
 const GValue *
@@ -3023,7 +3026,7 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
   GtkAnimationDescription *desc;
   AnimationInfo *info;
   GtkStateFlags flags;
-  const GValue *v;
+  GtkCssValue *v;
   StyleData *data;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
@@ -3068,7 +3071,7 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
   v = _gtk_css_computed_values_get_value_by_name (data->store, "transition");
   if (!v)
     return;
-  desc = g_value_get_boxed (v);
+  desc = _gtk_css_value_get_boxed (v);
   if (!desc)
     return;
 
