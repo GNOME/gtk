@@ -134,6 +134,8 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
 #define GTK_PRINT_SETTINGS_RESOLUTION_X     "resolution-x"
 #define GTK_PRINT_SETTINGS_RESOLUTION_Y     "resolution-y"
 #define GTK_PRINT_SETTINGS_PRINTER_LPI      "printer-lpi"
+#define GTK_PRINT_SETTINGS_OUTPUT_DIR       "output-dir"
+#define GTK_PRINT_SETTINGS_OUTPUT_BASENAME  "output-basename"
 
 /**
  * GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT:

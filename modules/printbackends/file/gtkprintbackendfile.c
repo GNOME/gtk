@@ -213,13 +213,13 @@ output_file_from_settings (GtkPrintSettings *settings,
 			   const gchar      *default_format)
 {
   gchar *uri = NULL;
-  
+
   if (settings)
     uri = g_strdup (gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_URI));
 
   if (uri == NULL)
     { 
-      const gchar *extension;
+      const gchar *extension, *basename, *output_dir;
       gchar *name, *locale_name, *path;
 
       if (default_format)
@@ -243,30 +243,43 @@ output_file_from_settings (GtkPrintSettings *settings,
                 break;
             }
         }
- 
-      /* default filename used for print-to-file */ 
-      name = g_strdup_printf (_("output.%s"), extension);
+
+      basename = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_BASENAME);
+      if (basename == NULL)
+        basename = _("output");
+
+      name = g_strconcat (basename, ".", extension, NULL);
+
       locale_name = g_filename_from_utf8 (name, -1, NULL, NULL, NULL);
       g_free (name);
 
       if (locale_name != NULL)
-        {
-          const gchar *document_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
-          
-          if (document_dir == NULL)
+        {      
+          output_dir = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_DIR);
+          if (output_dir == NULL)
             {
-              gchar *current_dir = g_get_current_dir ();
-              path = g_build_filename (current_dir, locale_name, NULL);
-              g_free (current_dir);
-            }
+              const gchar *document_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
+
+              if (document_dir == NULL)
+                {
+                  gchar *current_dir = g_get_current_dir ();
+                  path = g_build_filename (current_dir, locale_name, NULL);
+                  g_free (current_dir);
+                }
+              else
+                path = g_build_filename (document_dir, locale_name, NULL);
+
+              uri = g_filename_to_uri (path, NULL, NULL); 
+	    }
           else
-            path = g_build_filename (document_dir, locale_name, NULL);
+            {
+              path = g_build_filename (output_dir, locale_name, NULL);
+              uri = g_filename_to_uri (path, NULL, NULL);
+            }
 
-          uri = g_filename_to_uri (path, NULL, NULL);
-
+          g_free (path); 
           g_free (locale_name);
-          g_free (path);
-	}
+        }
     }
 
   return uri;
