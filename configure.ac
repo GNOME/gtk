@@ -1114,13 +1114,26 @@ if test "x$enable_x11_backend" = xyes; then
 
     AC_CHECK_HEADER(X11/extensions/XInput2.h,
                     have_xinput2=yes
-                    X_EXTENSIONS="$X_EXTENSIONS XI2"
                     AC_DEFINE(XINPUT_2, 1, [Define to 1 if XInput 2.0 is available]))
 
     gtk_save_LIBS="$LIBS"
     LIBS="$LIBS -lXi"
-    AC_CHECK_FUNC(XIAllowTouchEvents, AC_DEFINE(XINPUT_2_2, 1, [Define to 1 if XInput 2.2 is available]))
+
+    # Note that we also check that the XIScrollClassInfo struct is defined,
+    # because at least Ubuntu Oneiric seems to have XIAllowTouchEvents(), but not the XIScrollClassInfo struct.
+    AC_CHECK_FUNC([XIAllowTouchEvents],
+      [AC_CHECK_MEMBER([XIScrollClassInfo.number],
+                       have_xinput2_2=yes
+                       AC_DEFINE(XINPUT_2_2, 1, [Define to 1 if XInput 2.2 is available]),
+                       have_xinput2_2=no,
+                       [[#include <X11/extensions/XInput2.h>]])])
     LIBS="$gtk_save_LIBS"
+
+    if test "x$have_xinput2_2" = "xyes"; then
+      X_EXTENSIONS="$X_EXTENSIONS XI2.2"
+    else
+      X_EXTENSIONS="$X_EXTENSIONS XI2"
+    fi
   fi
 
   AM_CONDITIONAL(XINPUT_2,     test "x$have_xinput2" = "xyes")
