@@ -102,8 +102,17 @@ struct _GdkWindowImplWayland
   GdkWindow *transient_for;
   GdkWindowTypeHint hint;
 
+  /* The surface which is being "drawn to" to */
   cairo_surface_t *cairo_surface;
+
+  /* The surface that was the last surface the Wayland buffer from which was attached
+   * to the Wayland surface. It will be the same as cairo_surface after a call
+   * to gdk_wayland_window_attach_image. But after a call to
+   * gdk_wayland_window_update_size and then
+   * gdk_wayland_window_ref_cairo_surface the above pointer will be different.
+   */
   cairo_surface_t *server_surface;
+
   GLuint texture;
   uint32_t resize_edges;
 
@@ -310,15 +319,25 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  /* The "drawn to" Cairo surface is the same as the Cairo surface from which
+   * we are driving the buffer for the Wayland surface. Therefore we don't
+   * need to do anything here
+   */
   if (impl->server_surface == impl->cairo_surface)
     return;
 
+  /* The wayland surface is attached to a buffer that is from the old "drawn
+   * to" surface. Unref the surface and restore the state.
+   */
   if (impl->server_surface)
     {
       data = cairo_surface_get_user_data (impl->server_surface,
 					  &gdk_wayland_cairo_key);
+
+      /* Save the old dimensions used for the surface */
       server_width = data->width;
       server_height = data->height;
+
       cairo_surface_destroy (impl->server_surface);
     }
   else
@@ -327,7 +346,10 @@ gdk_wayland_window_attach_image (GdkWindow *window)
       server_height = 0;
     }
 
+  /* Save the current "drawn to" surface for future calls into here */
   impl->server_surface = cairo_surface_reference (impl->cairo_surface);
+
+  /* Get a Wayland buffer from this new surface */
   data = cairo_surface_get_user_data (impl->cairo_surface,
 				      &gdk_wayland_cairo_key);
   if (!data->buffer)
@@ -344,6 +366,7 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   else
     dy = 0;
 
+  /* Attach this new buffer to the surface */
   wl_surface_attach (impl->surface, data->buffer, dx, dy);
 }
 
@@ -414,6 +437,11 @@ gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
   return surface;
 }
 
+/* On this first call this creates a double reference - the first reference
+ * is held by the GdkWindowImplWayland struct - since unlike other backends
+ * the Cairo surface is not just a cheap wrapper around some other backing.
+ * It is the buffer itself.
+ */
 static cairo_surface_t *
 gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
 {
