@@ -87,7 +87,7 @@ main (int argc, char *argv[])
       else if (g_strcmp0 (argv[i], "--no-palette") == 0)
         {
           gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (dialog), 
-                                         FALSE, 0, NULL, 0);
+                                         FALSE, 0, 0, NULL);
         }
     }
 
