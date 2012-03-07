@@ -71,32 +71,6 @@ gtk_css_selector_previous (const GtkCssSelector *selector)
   return selector->class ? selector : NULL;
 }
 
-/* ANY */
-
-static void
-gtk_css_selector_any_print (const GtkCssSelector *selector,
-                            GString              *string)
-{
-  g_string_append_c (string, '*');
-}
-
-static gboolean
-gtk_css_selector_any_match (const GtkCssSelector *selector,
-                            GtkStateFlags         state,
-                            const GtkWidgetPath  *path,
-                            guint                 id,
-                            guint                 sibling)
-{
-  return gtk_css_selector_match (gtk_css_selector_previous (selector), state, path, id, sibling);
-}
-
-static const GtkCssSelectorClass GTK_CSS_SELECTOR_ANY = {
-  "any",
-  gtk_css_selector_any_print,
-  gtk_css_selector_any_match,
-  FALSE, FALSE, FALSE
-};
-
 /* DESCENDANT */
 
 static void
@@ -232,6 +206,44 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ADJACENT = {
   "adjacent",
   gtk_css_selector_adjacent_print,
   gtk_css_selector_adjacent_match,
+  FALSE, FALSE, FALSE
+};
+
+/* ANY */
+
+static void
+gtk_css_selector_any_print (const GtkCssSelector *selector,
+                            GString              *string)
+{
+  g_string_append_c (string, '*');
+}
+
+static gboolean
+gtk_css_selector_any_match (const GtkCssSelector *selector,
+                            GtkStateFlags         state,
+                            const GtkWidgetPath  *path,
+                            guint                 id,
+                            guint                 sibling)
+{
+  const GtkCssSelector *previous = gtk_css_selector_previous (selector);
+  GSList *regions;
+  
+  if (previous &&
+      previous->class == &GTK_CSS_SELECTOR_DESCENDANT &&
+      (regions = gtk_widget_path_iter_list_regions (path, id)) != NULL)
+    {
+      g_slist_free (regions);
+      if (gtk_css_selector_match (gtk_css_selector_previous (previous), state, path, id, sibling))
+        return TRUE;
+    }
+  
+  return gtk_css_selector_match (previous, state, path, id, sibling);
+}
+
+static const GtkCssSelectorClass GTK_CSS_SELECTOR_ANY = {
+  "any",
+  gtk_css_selector_any_print,
+  gtk_css_selector_any_match,
   FALSE, FALSE, FALSE
 };
 
