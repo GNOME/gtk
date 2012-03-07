@@ -19,7 +19,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Blue</property>
+            <property name="label" translatable="yes">Red</property>
           </object>
           <packing>
             <property name="tab_fill">False</property>
@@ -43,7 +43,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Blue</property>
+                <property name="label" translatable="yes">Red</property>
               </object>
             </child>
             <child type="tab">
