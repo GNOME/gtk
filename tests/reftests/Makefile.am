@@ -105,8 +105,10 @@ EXTRA_DIST += \
 	css-match-name.css \
 	css-match-name.ref.ui \
 	css-match-name.ui \
+	css-match-region-matches-star.css \
 	css-match-region-matches-star.ui \
 	css-match-region-matches-star.ref.ui \
+	css-match-regions.css \
 	css-match-regions.ref.ui \
 	css-match-regions.ui \
 	css-match-siblings.css \

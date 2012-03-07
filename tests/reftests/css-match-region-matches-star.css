@@ -1,0 +1,10 @@
+@import "reset-to-defaults.css";
+
+GtkNotebook * GtkLabel {
+  color: blue
+}
+
+/* for reference */
+#blue {
+  color: blue
+}
