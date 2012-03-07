@@ -962,7 +962,7 @@ gtk_color_button_get_property (GObject    *object,
 
 static void
 gtk_color_button_add_palette (GtkColorChooser *chooser,
-                              gboolean         horizontal,
+                              GtkOrientation   orientation,
                               gint             colors_per_line,
                               gint             n_colors,
                               GdkRGBA         *colors)
@@ -971,7 +971,7 @@ gtk_color_button_add_palette (GtkColorChooser *chooser,
 
   if (button->priv->cs_dialog)
     gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (button->priv->cs_dialog),
-                                   horizontal, colors_per_line, n_colors, colors);
+                                   orientation, colors_per_line, n_colors, colors);
 }
 
 typedef void (* get_rgba) (GtkColorChooser *, GdkRGBA *);

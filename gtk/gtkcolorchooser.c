@@ -201,8 +201,8 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
 /**
  * gtk_color_chooser_add_palette:
  * @chooser: a #GtkColorChooser
- * @horizontal: %TRUE if the palette should be displayed in rows,
- *     %FALSE for columns
+ * @orientation: %GTK_ORIENTATION_HORIZONTAL if the palette should
+ *     be displayed in rows, %GTK_ORIENTATION_VERTICAL for columns
  * @colors_per_line: the number of colors to show in each row/column
  * @n_colors: the total number of elements in @colors
  * @colors: (allow-none) (array length=n_colors): the colors of the palette, or %NULL
@@ -229,7 +229,7 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
  */
 void
 gtk_color_chooser_add_palette (GtkColorChooser *chooser,
-                               gboolean         horizontal,
+                               GtkOrientation   orientation,
                                gint             colors_per_line,
                                gint             n_colors,
                                GdkRGBA         *colors)
@@ -237,7 +237,7 @@ gtk_color_chooser_add_palette (GtkColorChooser *chooser,
   g_return_if_fail (GTK_IS_COLOR_CHOOSER (chooser));
 
   if (GTK_COLOR_CHOOSER_GET_IFACE (chooser)->add_palette)
-    GTK_COLOR_CHOOSER_GET_IFACE (chooser)->add_palette (chooser, horizontal, colors_per_line, n_colors, colors);
+    GTK_COLOR_CHOOSER_GET_IFACE (chooser)->add_palette (chooser, orientation, colors_per_line, n_colors, colors);
 }
 
 cairo_pattern_t *

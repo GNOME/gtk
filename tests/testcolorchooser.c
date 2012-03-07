@@ -80,14 +80,14 @@ main (int argc, char *argv[])
                 }
             }
           gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (dialog),
-                                         FALSE,
+                                         GTK_ORIENTATION_VERTICAL,
                                          9, 9*9,
                                          colors);
         }
       else if (g_strcmp0 (argv[i], "--no-palette") == 0)
         {
           gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (dialog), 
-                                         FALSE, 0, 0, NULL);
+                                         GTK_ORIENTATION_VERTICAL, 0, 0, NULL);
         }
     }
 

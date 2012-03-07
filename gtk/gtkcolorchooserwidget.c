@@ -309,7 +309,7 @@ remove_palette (GtkColorChooserWidget *cc)
 
 static void
 add_palette (GtkColorChooserWidget  *cc,
-             gboolean                horizontal,
+             GtkOrientation          orientation,
              gint                    colors_per_line,
              gint                    n_colors,
              GdkRGBA                *colors,
@@ -368,7 +368,7 @@ add_palette (GtkColorChooserWidget  *cc,
       line = i / colors_per_line;
       pos = i % colors_per_line;
 
-      if (horizontal)
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
             if (pos == left)
               gtk_style_context_add_class (gtk_widget_get_style_context (p), GTK_STYLE_CLASS_LEFT);
@@ -773,7 +773,7 @@ gtk_color_chooser_widget_set_rgba (GtkColorChooser *chooser,
 
 static void
 gtk_color_chooser_widget_add_palette (GtkColorChooser *chooser,
-                                      gboolean         horizontal,
+                                      GtkOrientation   orientation,
                                       gint             colors_per_line,
                                       gint             n_colors,
                                       GdkRGBA         *colors)
@@ -781,7 +781,7 @@ gtk_color_chooser_widget_add_palette (GtkColorChooser *chooser,
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (chooser);
 
   remove_default_palette (cc);
-  add_palette (cc, horizontal, colors_per_line, n_colors, colors, NULL);
+  add_palette (cc, orientation, colors_per_line, n_colors, colors, NULL);
 }
 
 static void

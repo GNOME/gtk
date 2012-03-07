@@ -46,7 +46,7 @@ struct _GtkColorChooserInterface
                         const GdkRGBA   *color);
 
   void (* add_palette) (GtkColorChooser *chooser,
-                        gboolean         horizontal,
+                        GtkOrientation   orientation,
                         gint             colors_per_line,
                         gint             n_colors,
                         GdkRGBA         *colors);
@@ -77,7 +77,7 @@ void     gtk_color_chooser_set_use_alpha  (GtkColorChooser *chooser,
 
 GDK_AVAILABLE_IN_3_4
 void     gtk_color_chooser_add_palette    (GtkColorChooser *chooser,
-                                           gboolean         horizontal,
+                                           GtkOrientation   orientation,
                                            gint             colors_per_line,
                                            gint             n_colors,
                                            GdkRGBA         *colors);
