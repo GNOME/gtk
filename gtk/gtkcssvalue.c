@@ -23,6 +23,8 @@
 #include <cairo-gobject.h>
 #include "gtkprivatetypebuiltins.h"
 
+#include "fallback-c89.c"
+
 struct _GtkCssValue
 {
   volatile gint ref_count;
@@ -47,13 +49,23 @@ GtkCssValue *
 _gtk_css_value_new_from_gvalue (const GValue *g_value)
 {
   GtkCssValue *value;
+  GType type;
 
   g_return_val_if_fail (g_value != NULL, NULL);
 
-  value = _gtk_css_value_new ();
+  type = G_VALUE_TYPE (g_value);
 
-  g_value_init (&value->g_value, G_VALUE_TYPE (g_value));
-  g_value_copy (g_value, &value->g_value);
+  /* Make sure we reuse the int/number singletons */
+  if (type == G_TYPE_INT)
+    value = _gtk_css_value_new_from_int (g_value_get_int (g_value));
+  else if (type == GTK_TYPE_CSS_NUMBER)
+    value = _gtk_css_value_new_from_number (g_value_get_boxed (g_value));
+  else
+    {
+      value = _gtk_css_value_new ();
+      g_value_init (&value->g_value, type);
+      g_value_copy (g_value, &value->g_value);
+    }
 
   return value;
 }
@@ -62,11 +74,28 @@ GtkCssValue *
 _gtk_css_value_new_take_gvalue (GValue *g_value)
 {
   GtkCssValue *value;
+  GType type;
 
   g_return_val_if_fail (g_value != NULL, NULL);
 
-  value = _gtk_css_value_new ();
-  value->g_value = *g_value;
+  type = G_VALUE_TYPE (g_value);
+
+  /* Make sure we reuse the int/number singletons */
+  if (type == G_TYPE_INT)
+    {
+      value = _gtk_css_value_new_from_int (g_value_get_int (g_value));
+      g_value_unset (g_value);
+    }
+  else if (type == GTK_TYPE_CSS_NUMBER)
+    {
+      value = _gtk_css_value_new_from_number (g_value_get_boxed (g_value));
+      g_value_unset (g_value);
+    }
+  else
+    {
+      value = _gtk_css_value_new ();
+      value->g_value = *g_value;
+    }
 
   return value;
 }
@@ -75,6 +104,19 @@ GtkCssValue *
 _gtk_css_value_new_from_int (gint val)
 {
   GtkCssValue *value;
+  static GtkCssValue *singletons[4] = {NULL};
+
+  if (val >= 0 && val < G_N_ELEMENTS (singletons))
+    {
+      if (singletons[val] == NULL)
+	{
+	  value = _gtk_css_value_new ();
+	  g_value_init (&value->g_value, G_TYPE_INT);
+	  g_value_set_int (&value->g_value, val);
+	  singletons[val] = value;
+	}
+      return _gtk_css_value_ref (singletons[val]);
+    }
 
   value = _gtk_css_value_new ();
   g_value_init (&value->g_value, G_TYPE_INT);
@@ -183,6 +225,40 @@ GtkCssValue *
 _gtk_css_value_new_from_number (const GtkCssNumber *v)
 {
   GtkCssValue *value;
+  static GtkCssValue *zero_singleton = NULL;
+  static GtkCssValue *px_singletons[5] = {NULL};
+
+  if (v->unit == GTK_CSS_NUMBER &&
+      v->value == 0)
+    {
+      if (zero_singleton == NULL)
+	{
+	  value = _gtk_css_value_new ();
+	  g_value_init (&value->g_value, GTK_TYPE_CSS_NUMBER);
+	  g_value_set_boxed (&value->g_value, v);
+	  zero_singleton = value;
+	}
+      return _gtk_css_value_ref (zero_singleton);
+    }
+
+  if (v->unit == GTK_CSS_PX &&
+      (v->value == 0 ||
+       v->value == 1 ||
+       v->value == 2 ||
+       v->value == 3 ||
+       v->value == 4))
+    {
+      int i = round (v->value);
+      if (px_singletons[i] == NULL)
+	{
+	  value = _gtk_css_value_new ();
+	  g_value_init (&value->g_value, GTK_TYPE_CSS_NUMBER);
+	  g_value_set_boxed (&value->g_value, v);
+	  px_singletons[i] = value;
+	}
+
+      return _gtk_css_value_ref (px_singletons[i]);
+    }
 
   value = _gtk_css_value_new ();
   g_value_init (&value->g_value, GTK_TYPE_CSS_NUMBER);
