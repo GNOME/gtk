@@ -101,6 +101,7 @@ copy ..\..\..\gdk\gdkselection.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D
 copy ..\..\..\gdk\gdktestutils.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkthreads.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdktypes.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
+copy ..\..\..\gdk\gdkversionmacros.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkvisual.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\win32\gdkwin32.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkwindow.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
@@ -310,6 +311,7 @@ copy ..\..\..\gtk\gtktreestore.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D
 copy ..\..\..\gtk\gtktreeview.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktreeviewcolumn.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktypebuiltins.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtktypes.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkuimanager.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkversion.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkviewport.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
