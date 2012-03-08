@@ -215,7 +215,8 @@ static GtkCssValue *
 rgba_value_compute (GtkStyleContext *context,
                     GtkCssValue    *specified)
 {
-  GdkRGBA rgba, white = { 1, 1, 1, 1 };
+  GdkRGBA white = { 1, 1, 1, 1 };
+  GtkCssValue *res;
   
   if (_gtk_css_value_holds (specified, GTK_TYPE_CSS_SPECIAL_VALUE))
     {
@@ -227,12 +228,13 @@ rgba_value_compute (GtkStyleContext *context,
 
       if (symbolic == _gtk_symbolic_color_get_current_color ())
         return _gtk_css_value_ref (_gtk_style_context_peek_property (context, "color"));
-      else if (_gtk_style_context_resolve_color (context,
-                                                 symbolic,
-                                                 &rgba))
-	return _gtk_css_value_new_from_rgba (&rgba);
-      else
+      else {
+	res = _gtk_style_context_resolve_color_value (context, symbolic);
+	if (res != NULL)
+	  return res;
+
 	return _gtk_css_value_new_from_rgba (&white);
+      }
     }
   else
     return _gtk_css_value_ref (specified);

@@ -146,7 +146,7 @@ color_compute (GtkCssStyleProperty    *property,
                GtkCssValue            *specified)
 {
   GtkSymbolicColor *symbolic = _gtk_css_value_get_symbolic_color (specified);
-  GdkRGBA rgba;
+  GtkCssValue *resolved;
 
   if (symbolic == _gtk_symbolic_color_get_current_color ())
     {
@@ -170,11 +170,10 @@ color_compute (GtkCssStyleProperty    *property,
           return _gtk_css_value_ref (_gtk_style_context_peek_property (context, "color"));
         }
     }
-  else if (_gtk_style_context_resolve_color (context,
-                                             symbolic,
-                                             &rgba))
+  else if ((resolved = _gtk_style_context_resolve_color_value (context,
+							       symbolic)) != NULL)
     {
-      return _gtk_css_value_new_from_rgba (&rgba);
+      return resolved;
     }
   else
     {

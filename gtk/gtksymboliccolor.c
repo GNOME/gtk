@@ -58,10 +58,10 @@ struct _GtkSymbolicColor
 {
   ColorType type;
   guint ref_count;
+  GtkCssValue *last_value;
 
   union
   {
-    GdkRGBA color;
     gchar *name;
 
     struct
@@ -104,7 +104,7 @@ gtk_symbolic_color_new_literal (const GdkRGBA *color)
 
   symbolic_color = g_slice_new0 (GtkSymbolicColor);
   symbolic_color->type = COLOR_TYPE_LITERAL;
-  symbolic_color->color = *color;
+  symbolic_color->last_value = _gtk_css_value_new_from_rgba (color);
   symbolic_color->ref_count = 1;
 
   return symbolic_color;
@@ -328,27 +328,28 @@ gtk_symbolic_color_unref (GtkSymbolicColor *color)
 
   if (color->ref_count == 0)
     {
+      _gtk_css_value_unref (color->last_value);
       switch (color->type)
-        {
-        case COLOR_TYPE_NAME:
-          g_free (color->name);
-          break;
-        case COLOR_TYPE_SHADE:
-          gtk_symbolic_color_unref (color->shade.color);
-          break;
-        case COLOR_TYPE_ALPHA:
-          gtk_symbolic_color_unref (color->alpha.color);
-          break;
-        case COLOR_TYPE_MIX:
-          gtk_symbolic_color_unref (color->mix.color1);
-          gtk_symbolic_color_unref (color->mix.color2);
-          break;
-        case COLOR_TYPE_WIN32:
-          g_free (color->win32.theme_class);
-          break;
-        default:
-          break;
-        }
+	{
+	case COLOR_TYPE_NAME:
+	  g_free (color->name);
+	  break;
+	case COLOR_TYPE_SHADE:
+	  gtk_symbolic_color_unref (color->shade.color);
+	  break;
+	case COLOR_TYPE_ALPHA:
+	  gtk_symbolic_color_unref (color->alpha.color);
+	  break;
+	case COLOR_TYPE_MIX:
+	  gtk_symbolic_color_unref (color->mix.color1);
+	  gtk_symbolic_color_unref (color->mix.color2);
+	  break;
+	case COLOR_TYPE_WIN32:
+	  g_free (color->win32.theme_class);
+	  break;
+	default:
+	  break;
+	}
 
       g_slice_free (GtkSymbolicColor, color);
     }
@@ -560,106 +561,155 @@ resolve_lookup_color (gpointer data, const char *name)
  **/
 gboolean
 gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
-                            GtkStyleProperties *props,
-                            GdkRGBA            *resolved_color)
+			    GtkStyleProperties *props,
+			    GdkRGBA            *resolved_color)
 {
+  GtkCssValue *v;
+
   g_return_val_if_fail (color != NULL, FALSE);
   g_return_val_if_fail (resolved_color != NULL, FALSE);
   g_return_val_if_fail (props == NULL || GTK_IS_STYLE_PROPERTIES (props), FALSE);
 
-  return _gtk_symbolic_color_resolve_full (color,
-                                           resolve_lookup_color,
-                                           props,
-                                           resolved_color);
+  v =_gtk_symbolic_color_resolve_full (color,
+				       resolve_lookup_color,
+				       props);
+  if (v == NULL)
+    return FALSE;
+
+  *resolved_color = *_gtk_css_value_get_rgba (v);
+  _gtk_css_value_unref (v);
+  return TRUE;
 }
 
-gboolean
+GtkCssValue *
 _gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
-                                  GtkSymbolicColorLookupFunc  func,
-                                  gpointer                    data,
-                                  GdkRGBA                    *resolved_color)
+				  GtkSymbolicColorLookupFunc  func,
+				  gpointer                    data)
 {
+  GtkCssValue *value;
+
   g_return_val_if_fail (color != NULL, FALSE);
-  g_return_val_if_fail (resolved_color != NULL, FALSE);
   g_return_val_if_fail (func != NULL, FALSE);
 
+  value = NULL;
   switch (color->type)
     {
     case COLOR_TYPE_LITERAL:
-      *resolved_color = color->color;
-      return TRUE;
+      return _gtk_css_value_ref (color->last_value);
     case COLOR_TYPE_NAME:
       {
-        GtkSymbolicColor *named_color;
+	GtkSymbolicColor *named_color;
 
-        named_color = func (data, color->name);
+	named_color = func (data, color->name);
 
-        if (!named_color)
-          return FALSE;
+	if (!named_color)
+	  return NULL;
 
-        return _gtk_symbolic_color_resolve_full (named_color, func, data, resolved_color);
+	return _gtk_symbolic_color_resolve_full (named_color, func, data);
       }
 
       break;
     case COLOR_TYPE_SHADE:
       {
-        GdkRGBA shade;
+	GtkCssValue *val;
+	GdkRGBA shade;
 
-        if (!_gtk_symbolic_color_resolve_full (color->shade.color, func, data, &shade))
-          return FALSE;
+	val = _gtk_symbolic_color_resolve_full (color->shade.color, func, data);
+	if (val == NULL)
+	  return NULL;
 
-        _shade_color (&shade, color->shade.factor);
-        *resolved_color = shade;
+	shade = *_gtk_css_value_get_rgba (val);
+	_shade_color (&shade, color->shade.factor);
 
-        return TRUE;
+	_gtk_css_value_unref (val);
+
+	value = _gtk_css_value_new_from_rgba (&shade);
       }
 
       break;
     case COLOR_TYPE_ALPHA:
       {
-        GdkRGBA alpha;
+	GtkCssValue *val;
+	GdkRGBA alpha;
 
-        if (!_gtk_symbolic_color_resolve_full (color->alpha.color, func, data, &alpha))
-          return FALSE;
+	val = _gtk_symbolic_color_resolve_full (color->alpha.color, func, data);
+	if (val == NULL)
+	  return NULL;
 
-        *resolved_color = alpha;
-        resolved_color->alpha = CLAMP (alpha.alpha * color->alpha.factor, 0, 1);
+	alpha = *_gtk_css_value_get_rgba (val);
+	alpha.alpha = CLAMP (alpha.alpha * color->alpha.factor, 0, 1);
 
-        return TRUE;
+	_gtk_css_value_unref (val);
+
+	value = _gtk_css_value_new_from_rgba (&alpha);
       }
+      break;
+
     case COLOR_TYPE_MIX:
       {
-        GdkRGBA color1, color2;
+	GtkCssValue *val;
+	GdkRGBA color1, color2, res;
 
-        if (!_gtk_symbolic_color_resolve_full (color->mix.color1, func, data, &color1))
-          return FALSE;
+	val = _gtk_symbolic_color_resolve_full (color->mix.color1, func, data);
+	if (val == NULL)
+	  return NULL;
+	color1 = *_gtk_css_value_get_rgba (val);
+	_gtk_css_value_unref (val);
 
-        if (!_gtk_symbolic_color_resolve_full (color->mix.color2, func, data, &color2))
-          return FALSE;
+	val = _gtk_symbolic_color_resolve_full (color->mix.color2, func, data);
+	if (val == NULL)
+	  return NULL;
+	color2 = *_gtk_css_value_get_rgba (val);
+	_gtk_css_value_unref (val);
 
-        resolved_color->red = CLAMP (color1.red + ((color2.red - color1.red) * color->mix.factor), 0, 1);
-        resolved_color->green = CLAMP (color1.green + ((color2.green - color1.green) * color->mix.factor), 0, 1);
-        resolved_color->blue = CLAMP (color1.blue + ((color2.blue - color1.blue) * color->mix.factor), 0, 1);
-        resolved_color->alpha = CLAMP (color1.alpha + ((color2.alpha - color1.alpha) * color->mix.factor), 0, 1);
 
-        return TRUE;
+	res.red = CLAMP (color1.red + ((color2.red - color1.red) * color->mix.factor), 0, 1);
+	res.green = CLAMP (color1.green + ((color2.green - color1.green) * color->mix.factor), 0, 1);
+	res.blue = CLAMP (color1.blue + ((color2.blue - color1.blue) * color->mix.factor), 0, 1);
+	res.alpha = CLAMP (color1.alpha + ((color2.alpha - color1.alpha) * color->mix.factor), 0, 1);
+
+	value =_gtk_css_value_new_from_rgba (&res);
       }
 
       break;
     case COLOR_TYPE_WIN32:
-      return _gtk_win32_theme_color_resolve (color->win32.theme_class,
+      {
+	GdkRGBA res;
+
+	if (!_gtk_win32_theme_color_resolve (color->win32.theme_class,
 					     color->win32.id,
-					     resolved_color);
+					     &res))
+	  return NULL;
+
+	value = _gtk_css_value_new_from_rgba (&res);
+      }
 
       break;
     case COLOR_TYPE_CURRENT_COLOR:
-      return FALSE;
+      return NULL;
       break;
     default:
       g_assert_not_reached ();
     }
 
-  return FALSE;
+  if (value != NULL)
+    {
+      if (color->last_value != NULL &&
+	  gdk_rgba_equal (_gtk_css_value_get_rgba (color->last_value),
+			  _gtk_css_value_get_rgba (value)))
+	{
+	  _gtk_css_value_unref (value);
+	  value = _gtk_css_value_ref (color->last_value);
+	}
+      else
+	{
+	  if (color->last_value != NULL)
+	    _gtk_css_value_unref (color->last_value);
+	  color->last_value = _gtk_css_value_ref (value);
+	}
+    }
+
+  return value;
 }
 
 /**
@@ -684,7 +734,7 @@ gtk_symbolic_color_to_string (GtkSymbolicColor *color)
   switch (color->type)
     {
     case COLOR_TYPE_LITERAL:
-      s = gdk_rgba_to_string (&color->color);
+      s = gdk_rgba_to_string (_gtk_css_value_get_rgba (color->last_value));
       break;
     case COLOR_TYPE_NAME:
       s = g_strconcat ("@", color->name, NULL);
