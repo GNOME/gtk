@@ -19,6 +19,7 @@
 
 #include "gtkdialog.h"
 #include "gtkstock.h"
+#include "gtkbutton.h"
 #include "gtkbox.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -70,10 +71,31 @@ propagate_notify (GObject               *o,
 }
 
 static void
+save_color (GtkColorChooserDialog *dialog)
+{
+  GdkRGBA color;
+
+  /* This causes the color chooser widget to save the
+   * selected and custom colors to GSettings.
+   */
+  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (dialog), &color);
+}
+
+static void
 color_activated_cb (GtkColorChooser *chooser,
                     GdkRGBA         *color,
                     GtkDialog       *dialog)
 {
+  save_color (GTK_COLOR_CHOOSER_DIALOG (dialog));
+  gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+}
+
+static void
+selected_cb (GtkButton *button,
+             GtkDialog *dialog)
+{
+  save_color (GTK_COLOR_CHOOSER_DIALOG (dialog));
   gtk_dialog_response (dialog, GTK_RESPONSE_OK);
 }
 
@@ -121,9 +143,17 @@ gtk_color_chooser_dialog_init (GtkColorChooserDialog *cc)
   priv->cancel_button = gtk_dialog_add_button (dialog,
                                                GTK_STOCK_CANCEL,
                                                GTK_RESPONSE_CANCEL);
-  priv->select_button = gtk_dialog_add_button (dialog,
-                                               _("_Select"),
-                                               GTK_RESPONSE_OK);
+
+  /* We emit the response for the Select button manually,
+   * since we want to save the color first
+   */
+  priv->select_button = gtk_button_new_from_stock (_("_Select"));
+  g_signal_connect (priv->select_button, "clicked",
+                    G_CALLBACK (selected_cb), dialog);
+  gtk_widget_set_can_default (priv->select_button, TRUE);
+  gtk_widget_show (priv->select_button);
+  gtk_box_pack_end (GTK_BOX (gtk_dialog_get_action_area (dialog)),
+                    priv->select_button, FALSE, TRUE, 0);
   gtk_widget_grab_default (priv->select_button);
 
   gtk_dialog_set_alternative_button_order (dialog,
@@ -134,19 +164,6 @@ gtk_color_chooser_dialog_init (GtkColorChooserDialog *cc)
   gtk_window_set_title (GTK_WINDOW (cc), _("Select a Color"));
 
   gtk_widget_pop_composite_child ();
-}
-
-static void
-gtk_color_chooser_dialog_response (GtkDialog *dialog,
-                                   gint       response_id)
-{
-  if (response_id == GTK_RESPONSE_OK)
-    {
-      GdkRGBA color;
-
-      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
-      gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (dialog), &color);
-    }
 }
 
 static void
@@ -229,14 +246,11 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkDialogClass *dialog_class = GTK_DIALOG_CLASS (class);
 
   object_class->get_property = gtk_color_chooser_dialog_get_property;
   object_class->set_property = gtk_color_chooser_dialog_set_property;
 
   widget_class->map = gtk_color_chooser_dialog_map;
-
-  dialog_class->response = gtk_color_chooser_dialog_response;
 
   g_object_class_override_property (object_class, PROP_RGBA, "rgba");
   g_object_class_override_property (object_class, PROP_USE_ALPHA, "use-alpha");
