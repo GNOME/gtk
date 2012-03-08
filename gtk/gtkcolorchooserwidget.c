@@ -473,12 +473,12 @@ add_default_palette (GtkColorChooserWidget *cc)
     for (j = 0; j < 3; j++)
       gdk_rgba_parse (&colors[i*3 + j], default_colors[i][j]);
 
-  add_palette (cc, FALSE, 3, 9*3, colors, color_names);
+  add_palette (cc, GTK_ORIENTATION_VERTICAL, 3, 9*3, colors, color_names);
 
   for (i = 0; i < 9; i++)
     gdk_rgba_parse (&colors[i], default_grays[i]);
 
-  add_palette (cc, TRUE, 9, 9, colors, gray_names);
+  add_palette (cc, GTK_ORIENTATION_HORIZONTAL, 9, 9, colors, gray_names);
 
   cc->priv->has_default_palette = TRUE;
 }
