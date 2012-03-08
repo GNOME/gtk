@@ -26,8 +26,8 @@
 
 typedef struct {
   GtkCssSection     *section;
-  const GValue      *value;
-  const GValue      *computed;
+  GtkCssValue       *value;
+  GtkCssValue       *computed;
 } GtkCssLookupValue;
 
 struct _GtkCssLookup {
@@ -91,7 +91,7 @@ void
 _gtk_css_lookup_set (GtkCssLookup  *lookup,
                      guint          id,
                      GtkCssSection *section,
-                     const GValue  *value)
+                     GtkCssValue   *value)
 {
   g_return_if_fail (lookup != NULL);
   g_return_if_fail (_gtk_bitmask_get (lookup->missing, id));
@@ -125,7 +125,7 @@ void
 _gtk_css_lookup_set_computed (GtkCssLookup  *lookup,
                               guint          id,
                               GtkCssSection *section,
-                              const GValue  *value)
+                              GtkCssValue  *value)
 {
   g_return_if_fail (lookup != NULL);
   g_return_if_fail (_gtk_bitmask_get (lookup->missing, id));

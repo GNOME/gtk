@@ -67,7 +67,6 @@ gtk_css_style_property_set_property (GObject      *object,
                                      GParamSpec   *pspec)
 {
   GtkCssStyleProperty *property = GTK_CSS_STYLE_PROPERTY (object);
-  const GValue *initial;
 
   switch (prop_id)
     {
@@ -75,10 +74,8 @@ gtk_css_style_property_set_property (GObject      *object,
       property->inherit = g_value_get_boolean (value);
       break;
     case PROP_INITIAL:
-      initial = g_value_get_boxed (value);
-      g_assert (initial);
-      g_value_init (&property->initial_value, G_VALUE_TYPE (initial));
-      g_value_copy (initial, &property->initial_value);
+      property->initial_value = g_value_dup_boxed (value);
+      g_assert (property->initial_value != NULL);
       break;
     case PROP_COMPUTED_TYPE:
       property->computed_type = g_value_get_gtype (value);
@@ -113,7 +110,7 @@ gtk_css_style_property_get_property (GObject    *object,
       g_value_set_boolean (value, property->inherit);
       break;
     case PROP_INITIAL:
-      g_value_set_boxed (value, &property->initial_value);
+      g_value_set_boxed (value, property->initial_value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -127,35 +124,36 @@ _gtk_css_style_property_assign (GtkStyleProperty   *property,
                                 GtkStateFlags       state,
                                 const GValue       *value)
 {
+  GtkCssValue *css_value = _gtk_css_value_new_from_gvalue (value);
   _gtk_style_properties_set_property_by_property (props,
                                                   GTK_CSS_STYLE_PROPERTY (property),
                                                   state,
-                                                  value);
+                                                  css_value);
+  _gtk_css_value_unref (css_value);
 }
 
-static void
+static GtkCssValue *
 _gtk_css_style_property_query (GtkStyleProperty   *property,
-                               GValue             *value,
                                GtkStyleQueryFunc   query_func,
                                gpointer            query_data)
 {
-  const GValue *val;
+  GtkCssValue *css_value;
   
-  val = (* query_func) (GTK_CSS_STYLE_PROPERTY (property)->id, query_data);
-  if (val)
+  css_value = (* query_func) (GTK_CSS_STYLE_PROPERTY (property)->id, query_data);
+  if (css_value)
     {
       /* Somebody make this a vfunc */
-      if (G_VALUE_TYPE (val) == GTK_TYPE_CSS_IMAGE)
+      if (_gtk_css_value_holds (css_value, GTK_TYPE_CSS_IMAGE))
         {
-          GtkCssImage *image = g_value_get_object (val);
+          GtkCssImage *image = _gtk_css_value_get_image (css_value);
           cairo_pattern_t *pattern;
           cairo_surface_t *surface;
           cairo_matrix_t matrix;
           
           if (image == NULL)
-            g_value_set_boxed (value, NULL);
+	    return _gtk_css_value_new_from_pattern (NULL);
           else if (GTK_IS_CSS_IMAGE_GRADIENT (image))
-            g_value_set_boxed (value, GTK_CSS_IMAGE_GRADIENT (image)->pattern);
+	    return _gtk_css_value_new_from_pattern (GTK_CSS_IMAGE_GRADIENT (image)->pattern);
           else
             {
               double width, height;
@@ -167,18 +165,19 @@ _gtk_css_style_property_query (GtkStyleProperty   *property,
               cairo_matrix_init_scale (&matrix, width, height);
               cairo_pattern_set_matrix (pattern, &matrix);
               cairo_surface_destroy (surface);
-              g_value_take_boxed (value, pattern);
+	      return _gtk_css_value_new_take_pattern (pattern);
             }
         }
-      else if (G_VALUE_TYPE (val) == GTK_TYPE_CSS_NUMBER)
+      else if (_gtk_css_value_holds (css_value, GTK_TYPE_CSS_NUMBER))
         {
-          g_value_set_int (value, round (_gtk_css_number_get (g_value_get_boxed (val), 100)));
+	  int v = round (_gtk_css_number_get (_gtk_css_value_get_number (css_value), 100));
+	  return _gtk_css_value_new_from_int (v);
         }
       else
-        g_value_copy (val, value);
+	return _gtk_css_value_ref (css_value);
     }
   else
-    g_value_copy (_gtk_css_style_property_get_initial_value (GTK_CSS_STYLE_PROPERTY (property)), value);
+    return _gtk_css_value_ref (_gtk_css_style_property_get_initial_value (GTK_CSS_STYLE_PROPERTY (property)));
 }
 
 static gboolean
@@ -264,7 +263,7 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
                                    g_param_spec_boxed ("initial-value",
                                                        P_("Initial value"),
                                                        P_("The initial specified value used for this property"),
-                                                       G_TYPE_VALUE,
+                                                       GTK_TYPE_CSS_VALUE,
                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   property_class->assign = _gtk_css_style_property_assign;
@@ -291,13 +290,12 @@ gtk_css_style_property_real_print_value (GtkCssStyleProperty *property,
   _gtk_css_style_print_value (value, string);
 }
 
-static void
+static GtkCssValue *
 gtk_css_style_property_real_compute_value (GtkCssStyleProperty *property,
-                                           GValue              *computed,
                                            GtkStyleContext     *context,
-                                           const GValue        *specified)
+                                           GtkCssValue         *specified)
 {
-  _gtk_css_style_compute_value (computed, context, specified);
+  return _gtk_css_style_compute_value (context, _gtk_css_style_property_get_computed_type (property), specified);
 }
 
 static void
@@ -404,12 +402,12 @@ _gtk_css_style_property_get_id (GtkCssStyleProperty *property)
  *
  * Returns: a reference to the initial value. The value will never change.
  **/
-const GValue *
+GtkCssValue *
 _gtk_css_style_property_get_initial_value (GtkCssStyleProperty *property)
 {
   g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), NULL);
 
-  return &property->initial_value;
+  return property->initial_value;
 }
 
 /**
@@ -448,7 +446,7 @@ _gtk_css_style_property_get_specified_type (GtkCssStyleProperty *property)
 {
   g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), G_TYPE_NONE);
 
-  return G_VALUE_TYPE (&property->initial_value);
+  return _gtk_css_value_get_content_type (property->initial_value);
 }
 
 gboolean
@@ -458,7 +456,7 @@ _gtk_css_style_property_is_specified_type (GtkCssStyleProperty *property,
   g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
 
   /* If it's our specified type, of course it's valid */
-  if (type == G_VALUE_TYPE (&property->initial_value))
+  if (type == _gtk_css_value_get_content_type (property->initial_value))
     return TRUE;
 
   /* The special values 'inherit' and 'initial' are always valid */
@@ -466,7 +464,7 @@ _gtk_css_style_property_is_specified_type (GtkCssStyleProperty *property,
     return TRUE;
 
   /* XXX: Someone needs to fix that legacy */
-  if (G_VALUE_TYPE (&property->initial_value) == CAIRO_GOBJECT_TYPE_PATTERN &&
+  if (_gtk_css_value_holds (property->initial_value, CAIRO_GOBJECT_TYPE_PATTERN) &&
       type == GTK_TYPE_GRADIENT)
     return TRUE;
 
@@ -485,20 +483,15 @@ _gtk_css_style_property_is_specified_type (GtkCssStyleProperty *property,
  * <ulink url="http://www.w3.org/TR/css3-cascade/#computed>
  * the CSS documentation</ulink>.
  **/
-void
+GtkCssValue *
 _gtk_css_style_property_compute_value (GtkCssStyleProperty *property,
-                                       GValue              *computed,
                                        GtkStyleContext     *context,
-                                       const GValue        *specified)
+                                       GtkCssValue         *specified)
 {
-  g_return_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property));
-  g_return_if_fail (computed != NULL && !G_IS_VALUE (computed));
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (G_IS_VALUE (specified));
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), NULL);
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
-  g_value_init (computed, _gtk_css_style_property_get_computed_type (property));
-
-  property->compute_value (property, computed, context, specified);
+  return property->compute_value (property, context, specified);
 }
 
 /**
@@ -513,26 +506,31 @@ _gtk_css_style_property_compute_value (GtkCssStyleProperty *property,
  **/
 void
 _gtk_css_style_property_print_value (GtkCssStyleProperty    *property,
-                                     const GValue           *value,
+                                     GtkCssValue            *css_value,
                                      GString                *string)
 {
   g_return_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property));
-  g_return_if_fail (value != NULL);
+  g_return_if_fail (css_value != NULL);
   g_return_if_fail (string != NULL);
 
-  if (G_VALUE_HOLDS (value, GTK_TYPE_CSS_SPECIAL_VALUE))
+  if (_gtk_css_value_is_special (css_value))
     {
       GEnumClass *enum_class;
       GEnumValue *enum_value;
 
       enum_class = g_type_class_ref (GTK_TYPE_CSS_SPECIAL_VALUE);
-      enum_value = g_enum_get_value (enum_class, g_value_get_enum (value));
+      enum_value = g_enum_get_value (enum_class, _gtk_css_value_get_special_kind (css_value));
 
       g_string_append (string, enum_value->value_nick);
 
       g_type_class_unref (enum_class);
     }
   else
-    property->print_value (property, value, string);
+    {
+      GValue value = G_VALUE_INIT;
+      _gtk_css_value_init_gvalue (css_value, &value);
+      property->print_value (property, &value, string);
+      g_value_unset (&value);
+    }
 }
 

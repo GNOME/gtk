@@ -438,6 +438,7 @@ gtk_private_h_sources =		\
 	gtkcssshorthandpropertyprivate.h \
 	gtkcssstylefuncsprivate.h \
 	gtkcssstylepropertyprivate.h \
+	gtkcssvalueprivate.h	\
 	gtkcustompaperunixdialog.h \
 	gtkentryprivate.h	\
 	gtkfilechooserdefault.h	\
@@ -634,6 +635,7 @@ gtk_base_c_sources = 		\
 	gtkcssstylefuncs.c	\
 	gtkcssstyleproperty.c	\
 	gtkcssstylepropertyimpl.c \
+	gtkcssvalue.c		\
 	gtkcsstypes.c		\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\

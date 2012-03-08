@@ -54,9 +54,8 @@ typedef gboolean         (* GtkStyleParseFunc)             (GtkCssParser        
                                                             GValue                 *value);
 typedef void             (* GtkStylePrintFunc)             (const GValue           *value,
                                                             GString                *string);
-typedef void             (* GtkStyleComputeFunc)           (GValue                 *computed,
-                                                            GtkStyleContext        *context,
-                                                            const GValue           *specified);
+typedef GtkCssValue *    (* GtkStyleComputeFunc)           (GtkStyleContext        *context,
+                                                            GtkCssValue            *specified);
 
 static void
 register_conversion_function (GType               type,
@@ -212,31 +211,33 @@ rgba_value_print (const GValue *value,
     }
 }
 
-static void
-rgba_value_compute (GValue          *computed,
-                    GtkStyleContext *context,
-                    const GValue    *specified)
+static GtkCssValue *
+rgba_value_compute (GtkStyleContext *context,
+                    GtkCssValue    *specified)
 {
-  GdkRGBA rgba, white = { 1, 1, 1, 1 };
-
-  if (G_VALUE_HOLDS (specified, GTK_TYPE_CSS_SPECIAL_VALUE))
+  GdkRGBA white = { 1, 1, 1, 1 };
+  GtkCssValue *res;
+  
+  if (_gtk_css_value_holds (specified, GTK_TYPE_CSS_SPECIAL_VALUE))
     {
+      return _gtk_css_value_new_from_rgba (NULL);
     }
-  else if (G_VALUE_HOLDS (specified, GTK_TYPE_SYMBOLIC_COLOR))
+  else if (_gtk_css_value_holds (specified, GTK_TYPE_SYMBOLIC_COLOR))
     {
-      GtkSymbolicColor *symbolic = g_value_get_boxed (specified);
-      
+      GtkSymbolicColor *symbolic = _gtk_css_value_get_symbolic_color (specified);
+
       if (symbolic == _gtk_symbolic_color_get_current_color ())
-        g_value_copy (_gtk_style_context_peek_property (context, "color"), computed);
-      else if (_gtk_style_context_resolve_color (context,
-                                                 symbolic,
-                                                 &rgba))
-        g_value_set_boxed (computed, &rgba);
-      else
-        g_value_set_boxed (computed, &white);
+        return _gtk_css_value_ref (_gtk_style_context_peek_property (context, "color"));
+      else {
+	res = _gtk_style_context_resolve_color_value (context, symbolic);
+	if (res != NULL)
+	  return res;
+
+	return _gtk_css_value_new_from_rgba (&white);
+      }
     }
   else
-    g_value_copy (specified, computed);
+    return _gtk_css_value_ref (specified);
 }
 
 static gboolean 
@@ -287,18 +288,17 @@ color_value_print (const GValue *value,
     }
 }
 
-static void
-color_value_compute (GValue          *computed,
-                     GtkStyleContext *context,
-                     const GValue    *specified)
+static GtkCssValue *
+color_value_compute (GtkStyleContext *context,
+                     GtkCssValue    *specified)
 {
   GdkRGBA rgba;
   GdkColor color = { 0, 65535, 65535, 65535 };
 
-  if (G_VALUE_HOLDS (specified, GTK_TYPE_SYMBOLIC_COLOR))
+  if (_gtk_css_value_holds (specified, GTK_TYPE_SYMBOLIC_COLOR))
     {
       if (_gtk_style_context_resolve_color (context,
-                                            g_value_get_boxed (specified),
+                                            _gtk_css_value_get_symbolic_color (specified),
                                             &rgba))
         {
           color.red = rgba.red * 65535. + 0.5;
@@ -306,10 +306,10 @@ color_value_compute (GValue          *computed,
           color.blue = rgba.blue * 65535. + 0.5;
         }
       
-      g_value_set_boxed (computed, &color);
+      return _gtk_css_value_new_from_color (&color);
     }
   else
-    g_value_copy (specified, computed);
+    return _gtk_css_value_ref (specified);
 }
 
 static gboolean
@@ -877,21 +877,20 @@ pattern_value_print (const GValue *value,
     }
 }
 
-static void
-pattern_value_compute (GValue          *computed,
-                       GtkStyleContext *context,
-                       const GValue    *specified)
+static GtkCssValue *
+pattern_value_compute (GtkStyleContext *context,
+                       GtkCssValue     *specified)
 {
-  if (G_VALUE_HOLDS (specified, GTK_TYPE_GRADIENT))
+  if (_gtk_css_value_holds (specified, GTK_TYPE_GRADIENT))
     {
       cairo_pattern_t *gradient;
       
-      gradient = gtk_gradient_resolve_for_context (g_value_get_boxed (specified), context);
+      gradient = gtk_gradient_resolve_for_context (_gtk_css_value_get_gradient (specified), context);
 
-      g_value_take_boxed (computed, gradient);
+      return _gtk_css_value_new_take_pattern (gradient);
     }
   else
-    g_value_copy (specified, computed);
+    return _gtk_css_value_ref (specified);
 }
 
 static gboolean
@@ -996,18 +995,17 @@ shadow_value_print (const GValue *value,
     _gtk_shadow_print (shadow, string);
 }
 
-static void
-shadow_value_compute (GValue          *computed,
-                      GtkStyleContext *context,
-                      const GValue    *specified)
+static GtkCssValue *
+shadow_value_compute (GtkStyleContext *context,
+                      GtkCssValue     *specified)
 {
   GtkShadow *shadow;
-
-  shadow = g_value_get_boxed (specified);
+  
+  shadow = _gtk_css_value_get_shadow (specified);
   if (shadow)
     shadow = _gtk_shadow_resolve (shadow, context);
 
-  g_value_take_boxed (computed, shadow);
+  return _gtk_css_value_new_take_shadow (shadow);
 }
 
 static gboolean
@@ -1337,28 +1335,26 @@ _gtk_css_style_print_value (const GValue *value,
  * @specified must be a result of a call to
  * _gtk_css_style_parse_value() with the same type as @computed.
  **/
-void
-_gtk_css_style_compute_value (GValue          *computed,
-                              GtkStyleContext *context,
-                              const GValue    *specified)
+GtkCssValue *
+_gtk_css_style_compute_value (GtkStyleContext *context,
+			      GType           target_type,
+                              GtkCssValue    *specified)
 {
   GtkStyleComputeFunc func;
 
-  g_return_if_fail (G_IS_VALUE (computed));
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (G_IS_VALUE (specified));
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
   gtk_css_style_funcs_init ();
 
   func = g_hash_table_lookup (compute_funcs,
-                              GSIZE_TO_POINTER (G_VALUE_TYPE (computed)));
+                              GSIZE_TO_POINTER (target_type));
   if (func == NULL)
     func = g_hash_table_lookup (compute_funcs,
-                                GSIZE_TO_POINTER (g_type_fundamental (G_VALUE_TYPE (computed))));
+                                GSIZE_TO_POINTER (g_type_fundamental (target_type)));
 
   if (func)
-    func (computed, context, specified);
+    return func (context, specified);
   else
-    g_value_copy (specified, computed);
+    return _gtk_css_value_ref (specified);
 }
 

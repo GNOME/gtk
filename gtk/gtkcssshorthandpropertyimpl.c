@@ -31,6 +31,7 @@
 #include "gtkstylepropertiesprivate.h"
 #include "gtksymboliccolorprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkcssvalueprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -608,34 +609,33 @@ unpack_border (GtkCssShorthandProperty *shorthand,
   g_value_unset (&v);
 }
 
-static void
+static GtkCssValue *
 pack_border (GtkCssShorthandProperty *shorthand,
-             GValue                  *value,
              GtkStyleQueryFunc        query_func,
              gpointer                 query_data)
 {
   GtkCssStyleProperty *prop;
   GtkBorder border;
-  const GValue *v;
+  GtkCssValue *v;
 
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 0);
   v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
   if (v)
-    border.top = g_value_get_int (v);
+    border.top = _gtk_css_value_get_int (v);
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 1);
   v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
   if (v)
-    border.right = g_value_get_int (v);
+    border.right = _gtk_css_value_get_int (v);
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 2);
   v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
   if (v)
-    border.bottom = g_value_get_int (v);
+    border.bottom = _gtk_css_value_get_int (v);
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 3);
   v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
   if (v)
-    border.left = g_value_get_int (v);
+    border.left = _gtk_css_value_get_int (v);
 
-  g_value_set_boxed (value, &border);
+  return _gtk_css_value_new_from_border (&border);
 }
 
 static void
@@ -659,24 +659,26 @@ unpack_border_radius (GtkCssShorthandProperty *shorthand,
   g_value_unset (&v);
 }
 
-static void
+static GtkCssValue *
 pack_border_radius (GtkCssShorthandProperty *shorthand,
-                    GValue                  *value,
                     GtkStyleQueryFunc        query_func,
                     gpointer                 query_data)
 {
   GtkCssBorderCornerRadius *top_left;
   GtkCssStyleProperty *prop;
-  const GValue *v;
+  GtkCssValue *v;
+  int value = 0;
 
   prop = GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("border-top-left-radius"));
   v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
   if (v)
     {
-      top_left = g_value_get_boxed (v);
+      top_left = _gtk_css_value_get_border_corner_radius (v);
       if (top_left)
-        g_value_set_int (value, top_left->horizontal.value);
+        value = top_left->horizontal.value;
     }
+
+  return _gtk_css_value_new_from_int (value);
 }
 
 static void
@@ -759,21 +761,20 @@ unpack_font_description (GtkCssShorthandProperty *shorthand,
     }
 }
 
-static void
+static GtkCssValue *
 pack_font_description (GtkCssShorthandProperty *shorthand,
-                       GValue                  *value,
                        GtkStyleQueryFunc        query_func,
                        gpointer                 query_data)
 {
   PangoFontDescription *description;
-  const GValue *v;
+  GtkCssValue *v;
 
   description = pango_font_description_new ();
 
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-family"))), query_data);
   if (v)
     {
-      const char **families = g_value_get_boxed (v);
+      const char **families = _gtk_css_value_get_strv (v);
       /* xxx: Can we set all the families here somehow? */
       if (families)
         pango_font_description_set_family (description, families[0]);
@@ -781,21 +782,21 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
 
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-size"))), query_data);
   if (v)
-    pango_font_description_set_size (description, round (g_value_get_double (v) * PANGO_SCALE));
+    pango_font_description_set_size (description, round (_gtk_css_value_get_double (v) * PANGO_SCALE));
 
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-style"))), query_data);
   if (v)
-    pango_font_description_set_style (description, g_value_get_enum (v));
+    pango_font_description_set_style (description, _gtk_css_value_get_pango_style (v));
 
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-variant"))), query_data);
   if (v)
-    pango_font_description_set_variant (description, g_value_get_enum (v));
+    pango_font_description_set_variant (description, _gtk_css_value_get_pango_variant (v));
 
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-weight"))), query_data);
   if (v)
-    pango_font_description_set_weight (description, g_value_get_enum (v));
+    pango_font_description_set_weight (description, _gtk_css_value_get_pango_weight (v));
 
-  g_value_take_boxed (value, description);
+  return _gtk_css_value_new_take_font_description (description);
 }
 
 static void
@@ -816,14 +817,13 @@ unpack_to_everything (GtkCssShorthandProperty *shorthand,
     }
 }
 
-static void
+static GtkCssValue *
 pack_first_element (GtkCssShorthandProperty *shorthand,
-                    GValue                  *value,
                     GtkStyleQueryFunc        query_func,
                     gpointer                 query_data)
 {
   GtkCssStyleProperty *prop;
-  const GValue *v;
+  GtkCssValue *v;
   guint i;
 
   /* NB: This is a fallback for properties that originally were
@@ -837,10 +837,10 @@ pack_first_element (GtkCssShorthandProperty *shorthand,
       v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
       if (v)
         {
-          g_value_copy (v, value);
-          return;
+          return _gtk_css_value_ref (v);
         }
     }
+  return NULL;
 }
 
 static void

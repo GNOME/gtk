@@ -65,7 +65,7 @@ typedef struct ValueData ValueData;
 struct ValueData
 {
   GtkStateFlags state;
-  GValue value;
+  GtkCssValue *value;
 };
 
 struct PropertyData
@@ -122,8 +122,8 @@ property_data_remove_values (PropertyData *data)
 
       value_data = &g_array_index (data->values, ValueData, i);
 
-      if (G_IS_VALUE (&value_data->value))
-        g_value_unset (&value_data->value);
+      _gtk_css_value_unref (value_data->value);
+      value_data->value = NULL;
     }
 
   if (data->values->len > 0)
@@ -188,11 +188,10 @@ property_data_find_position (PropertyData  *data,
   return found;
 }
 
-static GValue *
+static ValueData *
 property_data_get_value (PropertyData  *data,
                          GtkStateFlags  state)
 {
-  ValueData *val_data;
   guint pos;
 
   if (!property_data_find_position (data, state, &pos))
@@ -203,12 +202,10 @@ property_data_get_value (PropertyData  *data,
       g_array_insert_val (data->values, pos, new);
     }
 
-  val_data = &g_array_index (data->values, ValueData, pos);
-
-  return &val_data->value;
+  return &g_array_index (data->values, ValueData, pos);
 }
 
-static GValue *
+static GtkCssValue *
 property_data_match_state (PropertyData  *data,
                            GtkStateFlags  state)
 {
@@ -221,7 +218,7 @@ property_data_match_state (PropertyData  *data,
 
       /* Exact match */
       val_data = &g_array_index (data->values, ValueData, pos);
-      return &val_data->value;
+      return val_data->value;
     }
 
   if (pos >= data->values->len)
@@ -248,7 +245,7 @@ property_data_match_state (PropertyData  *data,
       if (val_data->state == 0 ||
           ((val_data->state & state) != 0 &&
            (val_data->state & ~state) == 0))
-        return &val_data->value;
+        return val_data->value;
     }
 
   return NULL;
@@ -325,7 +322,7 @@ gtk_style_properties_provider_lookup (GtkStyleProviderPrivate *provider,
     {
       GtkCssStyleProperty *prop = key;
       PropertyData *data = value;
-      const GValue *value;
+      GtkCssValue *value;
       guint id;
 
       id = _gtk_css_style_property_get_id (prop);
@@ -431,13 +428,13 @@ void
 _gtk_style_properties_set_property_by_property (GtkStyleProperties  *props,
                                                 GtkCssStyleProperty *style_prop,
                                                 GtkStateFlags        state,
-                                                const GValue        *value)
+                                                GtkCssValue         *value)
 {
   GtkStylePropertiesPrivate *priv;
   PropertyData *prop;
-  GValue *val;
+  ValueData *val;
 
-  g_return_if_fail (G_VALUE_TYPE (value) == _gtk_css_style_property_get_computed_type (style_prop));
+  g_return_if_fail (_gtk_css_value_holds (value, _gtk_css_style_property_get_computed_type (style_prop)));
 
   priv = props->priv;
   prop = g_hash_table_lookup (priv->properties, style_prop);
@@ -450,17 +447,8 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties  *props,
 
   val = property_data_get_value (prop, state);
 
-  if (G_VALUE_TYPE (val) == G_VALUE_TYPE (value))
-    g_value_reset (val);
-  else
-    {
-      if (G_IS_VALUE (val))
-        g_value_unset (val);
-
-      g_value_init (val, G_VALUE_TYPE (value));
-    }
-
-  g_value_copy (value, val);
+  _gtk_css_value_unref (val->value);
+  val->value = _gtk_css_value_ref (value);
 }
 
 /**
@@ -586,7 +574,7 @@ gtk_style_properties_set (GtkStyleProperties *props,
   va_end (args);
 }
 
-const GValue *
+GtkCssValue *
 _gtk_style_properties_peek_property (GtkStyleProperties  *props,
                                      GtkCssStyleProperty *property,
                                      GtkStateFlags        state)
@@ -610,7 +598,7 @@ typedef struct {
   GtkStateFlags       state;
 } StyleQueryData;
 
-static const GValue *
+static GtkCssValue *
 style_query_func (guint    id,
                   gpointer data)
 {
@@ -643,6 +631,7 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
 {
   StyleQueryData query = { props, state };
   GtkStyleProperty *node;
+  GtkCssValue *v;
 
   g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
   g_return_val_if_fail (property != NULL, FALSE);
@@ -660,10 +649,12 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
       return FALSE;
     }
 
-  _gtk_style_property_query (node,
-                             value,
-                             style_query_func,
-                             &query);
+  v = _gtk_style_property_query (node,
+				 style_query_func,
+				 &query);
+  _gtk_css_value_init_gvalue (v, value);
+  _gtk_css_value_unref (v);
+
   return TRUE;
 }
 
@@ -800,8 +791,8 @@ gtk_style_properties_unset_property (GtkStyleProperties *props,
 
       data = &g_array_index (prop->values, ValueData, pos);
 
-      if (G_IS_VALUE (&data->value))
-        g_value_unset (&data->value);
+      _gtk_css_value_unref (data->value);
+      data->value = NULL;
 
       g_array_remove_index (prop->values, pos);
     }
@@ -893,12 +884,12 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
       for (i = 0; i < prop_to_merge->values->len; i++)
         {
           ValueData *data;
-          GValue *value;
+          ValueData *value;
 
           data = &g_array_index (prop_to_merge->values, ValueData, i);
 
           if (replace && data->state == GTK_STATE_FLAG_NORMAL &&
-              G_VALUE_TYPE (&data->value) != PANGO_TYPE_FONT_DESCRIPTION)
+              _gtk_css_value_holds (data->value, PANGO_TYPE_FONT_DESCRIPTION))
             {
               /* Let normal state override all states
                * previously set in the original set
@@ -908,20 +899,20 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
 
           value = property_data_get_value (prop, data->state);
 
-          if (G_VALUE_TYPE (&data->value) == PANGO_TYPE_FONT_DESCRIPTION &&
-              G_IS_VALUE (value))
+          if (_gtk_css_value_holds (data->value, PANGO_TYPE_FONT_DESCRIPTION) &&
+              value->value != NULL)
             {
               PangoFontDescription *font_desc;
               PangoFontDescription *font_desc_to_merge;
 
               /* Handle merging of font descriptions */
-              font_desc = g_value_get_boxed (value);
-              font_desc_to_merge = g_value_get_boxed (&data->value);
+              font_desc = _gtk_css_value_get_font_description (value->value);
+              font_desc_to_merge = _gtk_css_value_get_font_description (data->value);
 
               pango_font_description_merge (font_desc, font_desc_to_merge, replace);
             }
-          else if (G_VALUE_TYPE (&data->value) == G_TYPE_PTR_ARRAY &&
-                   G_IS_VALUE (value))
+          else if (_gtk_css_value_holds (data->value, G_TYPE_PTR_ARRAY) &&
+                   value->value != NULL)
             {
               GPtrArray *array, *array_to_merge;
               gint i;
@@ -929,23 +920,16 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
               /* Append the array, mainly thought
                * for the gtk-key-bindings property
                */
-              array = g_value_get_boxed (value);
-              array_to_merge = g_value_get_boxed (&data->value);
+              array = _gtk_css_value_get_boxed (value->value);
+              array_to_merge = _gtk_css_value_get_boxed (data->value);
 
               for (i = 0; i < array_to_merge->len; i++)
                 g_ptr_array_add (array, g_ptr_array_index (array_to_merge, i));
             }
-          else if (replace || !G_IS_VALUE (value))
+          else if (replace || value->value == NULL)
             {
-              if (!G_IS_VALUE (value))
-                g_value_init (value, G_VALUE_TYPE (&data->value));
-              else if (G_VALUE_TYPE (value) != G_VALUE_TYPE (&data->value))
-                {
-                  g_value_unset (value);
-                  g_value_init (value, G_VALUE_TYPE (&data->value));
-                }
-
-              g_value_copy (&data->value, value);
+	      _gtk_css_value_unref (value->value);
+	      value->value = _gtk_css_value_ref (data->value);
             }
         }
     }

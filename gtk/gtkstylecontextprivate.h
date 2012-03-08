@@ -20,10 +20,11 @@
 
 #include "gtkstylecontext.h"
 #include "gtksymboliccolor.h"
+#include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
 
-const GValue * _gtk_style_context_peek_property              (GtkStyleContext *context,
+GtkCssValue   * _gtk_style_context_peek_property              (GtkStyleContext *context,
                                                               const char      *property_name);
 double         _gtk_style_context_get_number                 (GtkStyleContext *context,
                                                               const char      *property_name,
@@ -40,6 +41,8 @@ gboolean       _gtk_style_context_check_region_name          (const gchar     *s
 gboolean       _gtk_style_context_resolve_color              (GtkStyleContext  *context,
                                                               GtkSymbolicColor *color,
                                                               GdkRGBA          *result);
+GtkCssValue *  _gtk_style_context_resolve_color_value        (GtkStyleContext  *context,
+                                                              GtkSymbolicColor *color);
 void           _gtk_style_context_get_cursor_color           (GtkStyleContext *context,
                                                               GdkRGBA         *primary_color,
                                                               GdkRGBA         *secondary_color);

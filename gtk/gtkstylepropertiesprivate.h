@@ -25,13 +25,13 @@
 
 G_BEGIN_DECLS
 
-const GValue * _gtk_style_properties_peek_property            (GtkStyleProperties      *props,
+GtkCssValue  * _gtk_style_properties_peek_property            (GtkStyleProperties      *props,
                                                                GtkCssStyleProperty     *property,
                                                                GtkStateFlags            state);
 void           _gtk_style_properties_set_property_by_property (GtkStyleProperties      *props,
                                                                GtkCssStyleProperty     *property,
                                                                GtkStateFlags            state,
-                                                               const GValue            *value);
+                                                               GtkCssValue             *value);
 
 G_END_DECLS
 

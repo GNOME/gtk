@@ -142,7 +142,7 @@ gboolean        _gtk_css_number_equal                           (const GtkCssNum
                                                                  const GtkCssNumber *two);
 double          _gtk_css_number_get                             (const GtkCssNumber *number,
                                                                  double              one_hundred_percent);
-void            _gtk_css_number_compute                         (GtkCssNumber       *dest,
+gboolean        _gtk_css_number_compute                         (GtkCssNumber       *dest,
                                                                  const GtkCssNumber *src,
                                                                  GtkStyleContext    *context);
 void            _gtk_css_number_print                           (const GtkCssNumber *number,

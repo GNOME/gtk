@@ -24,6 +24,7 @@
 
 #include "gtk/gtkcsssection.h"
 #include "gtk/gtkstylecontext.h"
+#include "gtk/gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
 
@@ -41,7 +42,7 @@ struct _GtkCssComputedValues
 {
   GObject parent;
 
-  GArray                *values;
+  GPtrArray              *values;
   GPtrArray             *sections;
 };
 
@@ -57,16 +58,16 @@ GtkCssComputedValues *  _gtk_css_computed_values_new                  (void);
 void                    _gtk_css_computed_values_compute_value        (GtkCssComputedValues     *values,
                                                                        GtkStyleContext          *context,
                                                                        guint                     id,
-                                                                       const GValue             *specified,
+                                                                       GtkCssValue              *specified,
                                                                        GtkCssSection            *section);
 void                    _gtk_css_computed_values_set_value            (GtkCssComputedValues     *values,
                                                                        guint                     id,
-                                                                       const GValue             *value,
+                                                                       GtkCssValue              *value,
                                                                        GtkCssSection            *section);
                                                                         
-const GValue *          _gtk_css_computed_values_get_value            (GtkCssComputedValues     *values,
+GtkCssValue *           _gtk_css_computed_values_get_value            (GtkCssComputedValues     *values,
                                                                        guint                     id);
-const GValue *          _gtk_css_computed_values_get_value_by_name    (GtkCssComputedValues     *values,
+GtkCssValue *           _gtk_css_computed_values_get_value_by_name    (GtkCssComputedValues     *values,
                                                                        const char               *name);
 GtkCssSection *         _gtk_css_computed_values_get_section          (GtkCssComputedValues     *values,
                                                                        guint                     id);

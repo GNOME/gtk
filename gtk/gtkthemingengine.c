@@ -338,7 +338,7 @@ _gtk_theming_engine_get_context (GtkThemingEngine *engine)
   return engine->priv->context;
 }
 
-const GValue *
+GtkCssValue *
 _gtk_theming_engine_peek_property (GtkThemingEngine *engine,
                                    const char       *property_name)
 {
@@ -1820,17 +1820,17 @@ render_frame_internal (GtkThemingEngine *engine,
       render_border (cr, &border_box, &border, hidden_side, colors, border_style);
     }
 
-  border_style[0] = g_value_get_enum (_gtk_theming_engine_peek_property (engine, "outline-style"));
+  border_style[0] = _gtk_css_value_get_border_style (_gtk_theming_engine_peek_property (engine, "outline-style"));
   if (border_style[0] != GTK_BORDER_STYLE_NONE)
     {
       int offset;
 
       border_style[1] = border_style[2] = border_style[3] = border_style[0];
-      border.top = g_value_get_int (_gtk_theming_engine_peek_property (engine, "outline-width"));
+      border.top = _gtk_css_value_get_int (_gtk_theming_engine_peek_property (engine, "outline-width"));
       border.left = border.right = border.bottom = border.top;
-      colors[0] = *(GdkRGBA *) g_value_get_boxed (_gtk_theming_engine_peek_property (engine, "outline-color"));
+      colors[0] = *_gtk_css_value_get_rgba (_gtk_theming_engine_peek_property (engine, "outline-color"));
       colors[3] = colors[2] = colors[1] = colors[0];
-      offset = g_value_get_int (_gtk_theming_engine_peek_property (engine, "outline-offset"));
+      offset = _gtk_css_value_get_int (_gtk_theming_engine_peek_property (engine, "outline-offset"));
       
       /* reinit box here - outlines don't have a border radius */
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);

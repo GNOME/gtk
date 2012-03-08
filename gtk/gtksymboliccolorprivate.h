@@ -19,15 +19,15 @@
 #define __GTK_SYMBOLIC_COLOR_PRIVATE_H__
 
 #include "gtk/gtksymboliccolor.h"
+#include "gtk/gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
 
 typedef GtkSymbolicColor * (* GtkSymbolicColorLookupFunc) (gpointer data, const char *name);
 
-gboolean           _gtk_symbolic_color_resolve_full       (GtkSymbolicColor           *color,
+GtkCssValue *      _gtk_symbolic_color_resolve_full       (GtkSymbolicColor           *color,
                                                            GtkSymbolicColorLookupFunc  func,
-                                                           gpointer                    data,
-                                                           GdkRGBA                    *resolved_color);
+                                                           gpointer                    data);
 
 GtkSymbolicColor * _gtk_symbolic_color_get_current_color  (void);
 

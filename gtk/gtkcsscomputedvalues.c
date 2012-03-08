@@ -34,7 +34,7 @@ gtk_css_computed_values_dispose (GObject *object)
 
   if (values->values)
     {
-      g_array_free (values->values, TRUE);
+      g_ptr_array_unref (values->values);
       values->values = NULL;
     }
   if (values->sections)
@@ -77,7 +77,7 @@ void
 _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
                                         GtkStyleContext      *context,
                                         guint                 id,
-                                        const GValue         *specified,
+                                        GtkCssValue          *specified,
                                         GtkCssSection        *section)
 {
   GtkCssStyleProperty *prop;
@@ -85,18 +85,14 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
 
   g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (specified == NULL || G_IS_VALUE (specified));
 
   prop = _gtk_css_style_property_lookup_by_id (id);
   parent = gtk_style_context_get_parent (context);
 
   if (values->values == NULL)
-    {
-      values->values = g_array_new (FALSE, TRUE, sizeof (GValue));
-      g_array_set_clear_func (values->values, (GDestroyNotify) g_value_unset);
-    }
+    values->values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
   if (id <= values->values->len)
-   g_array_set_size (values->values, id + 1);
+   g_ptr_array_set_size (values->values, id + 1);
 
   /* http://www.w3.org/TR/css3-cascade/#cascade
    * Then, for every element, the value for each property can be found
@@ -105,9 +101,9 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
    */
   if (specified != NULL)
     {
-      if (G_VALUE_HOLDS (specified, GTK_TYPE_CSS_SPECIAL_VALUE))
+      if (_gtk_css_value_is_special (specified))
         {
-          switch (g_value_get_enum (specified))
+          switch (_gtk_css_value_get_special_kind (specified))
             {
             case GTK_CSS_INHERIT:
               /* 3) if the value of the winning declaration is ‘inherit’,
@@ -159,20 +155,19 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
 
   if (specified)
     {
-      _gtk_css_style_property_compute_value (prop,
-                                             &g_array_index (values->values, GValue, id),
-                                             context,
-                                             specified);
+      g_ptr_array_index (values->values, id) =
+	_gtk_css_style_property_compute_value (prop,
+					       context,
+					       specified);
     }
   else
     {
-      const GValue *parent_value;
-      GValue *value = &g_array_index (values->values, GValue, id);
+      GtkCssValue *parent_value;
       /* Set NULL here and do the inheritance upon lookup? */
       parent_value = _gtk_style_context_peek_property (parent,
                                                        _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop)));
-      g_value_init (value, G_VALUE_TYPE (parent_value));
-      g_value_copy (parent_value, value);
+
+      g_ptr_array_index (values->values, id) = _gtk_css_value_ref (parent_value);
     }
 
   if (section)
@@ -189,26 +184,17 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
 void
 _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
                                     guint                 id,
-                                    const GValue         *value,
+                                    GtkCssValue          *value,
                                     GtkCssSection        *section)
 {
-  GValue *set;
-
   g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
-  g_return_if_fail (value == NULL || G_IS_VALUE (value));
 
   if (values->values == NULL)
-    {
-      values->values = g_array_new (FALSE, TRUE, sizeof (GValue));
-      g_array_set_clear_func (values->values, (GDestroyNotify) g_value_unset);
-    }
+    values->values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
   if (id <= values->values->len)
-   g_array_set_size (values->values, id + 1);
+   g_ptr_array_set_size (values->values, id + 1);
 
-
-  set = &g_array_index (values->values, GValue, id);
-  g_value_init (set, G_VALUE_TYPE (value));
-  g_value_copy (value, set);
+  g_ptr_array_index (values->values, id) = _gtk_css_value_ref (value);
 
   if (section)
     {
@@ -221,26 +207,20 @@ _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
     }
 }
 
-const GValue *
+GtkCssValue *
 _gtk_css_computed_values_get_value (GtkCssComputedValues *values,
                                     guint                 id)
 {
-  const GValue *v;
-
   g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
 
   if (values->values == NULL ||
       id >= values->values->len)
     return NULL;
 
-  v = &g_array_index (values->values, GValue, id);
-  if (!G_IS_VALUE (v))
-    return NULL;
-
-  return v;
+  return g_ptr_array_index (values->values, id);
 }
 
-const GValue *
+GtkCssValue *
 _gtk_css_computed_values_get_value_by_name (GtkCssComputedValues *values,
                                             const char           *name)
 {
