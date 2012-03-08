@@ -147,9 +147,18 @@ gtk_color_chooser_dialog_response (GtkDialog *dialog,
       gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
       gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (dialog), &color);
     }
+}
 
-  g_object_set (GTK_COLOR_CHOOSER_DIALOG (dialog)->priv->chooser,
+static void
+gtk_color_chooser_dialog_map (GtkWidget *widget)
+{
+  /* We never want the dialog to come up with the editor,
+   * even if it was showing the editor the last time it was used.
+   */
+  g_object_set (GTK_COLOR_CHOOSER_DIALOG (widget)->priv->chooser,
                 "show-editor", FALSE, NULL);
+
+  GTK_WIDGET_CLASS (gtk_color_chooser_dialog_parent_class)->map (widget);
 }
 
 static void
@@ -219,10 +228,13 @@ static void
 gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkDialogClass *dialog_class = GTK_DIALOG_CLASS (class);
 
   object_class->get_property = gtk_color_chooser_dialog_get_property;
   object_class->set_property = gtk_color_chooser_dialog_set_property;
+
+  widget_class->map = gtk_color_chooser_dialog_map;
 
   dialog_class->response = gtk_color_chooser_dialog_response;
 
