@@ -32,7 +32,9 @@ struct _GtkCssValue
   union {
     gpointer ptr;
     gint gint;
+    guint guint;
     double dbl;
+    float flt;
   } u;
 };
 
@@ -76,14 +78,20 @@ _gtk_css_value_new_from_gvalue (const GValue *g_value)
 	value->u.ptr = g_value_dup_boxed (g_value);
       else if (g_type_is_a (type, G_TYPE_INT))
 	value->u.gint = g_value_get_int (g_value);
+      else if (g_type_is_a (type, G_TYPE_UINT))
+	value->u.guint = g_value_get_uint (g_value);
       else if (g_type_is_a (type, G_TYPE_BOOLEAN))
 	value->u.gint = g_value_get_boolean (g_value);
       else if (g_type_is_a (type, G_TYPE_ENUM))
 	value->u.gint = g_value_get_enum (g_value);
+      else if (g_type_is_a (type, G_TYPE_FLAGS))
+	value->u.guint = g_value_get_flags (g_value);
       else if (g_type_is_a (type, G_TYPE_STRING))
 	value->u.ptr = g_value_dup_string (g_value);
       else if (g_type_is_a (type, G_TYPE_DOUBLE))
 	value->u.dbl = g_value_get_double (g_value);
+      else if (g_type_is_a (type, G_TYPE_FLOAT))
+	value->u.flt = g_value_get_float (g_value);
       else
 	g_assert_not_reached ();
     }
@@ -122,14 +130,20 @@ _gtk_css_value_new_take_gvalue (GValue *g_value)
 	value->u.ptr = g_value_get_boxed (g_value);
       else if (g_type_is_a (type, G_TYPE_INT))
 	value->u.gint = g_value_get_int (g_value);
+      else if (g_type_is_a (type, G_TYPE_UINT))
+	value->u.guint = g_value_get_uint (g_value);
       else if (g_type_is_a (type, G_TYPE_BOOLEAN))
 	value->u.gint = g_value_get_boolean (g_value);
       else if (g_type_is_a (type, G_TYPE_ENUM))
 	value->u.gint = g_value_get_enum (g_value);
+      else if (g_type_is_a (type, G_TYPE_FLAGS))
+	value->u.guint = g_value_get_flags (g_value);
       else if (g_type_is_a (type, G_TYPE_STRING))
 	value->u.ptr = g_value_dup_string (g_value);
       else if (g_type_is_a (type, G_TYPE_DOUBLE))
 	value->u.dbl = g_value_get_double (g_value);
+      else if (g_type_is_a (type, G_TYPE_FLOAT))
+	value->u.flt = g_value_get_float (g_value);
       else
 	g_assert_not_reached ();
     }
@@ -403,14 +417,20 @@ fill_gvalue (GtkCssValue *value,
     g_value_set_boxed (g_value, value->u.ptr);
   else if (g_type_is_a (type, G_TYPE_INT))
     g_value_set_int (g_value, value->u.gint);
+  else if (g_type_is_a (type, G_TYPE_UINT))
+    g_value_set_uint (g_value, value->u.guint);
   else if (g_type_is_a (type, G_TYPE_BOOLEAN))
     g_value_set_boolean (g_value, value->u.gint);
   else if (g_type_is_a (type, G_TYPE_ENUM))
     g_value_set_enum (g_value, value->u.gint);
+  else if (g_type_is_a (type, G_TYPE_FLAGS))
+    g_value_set_flags (g_value, value->u.guint);
   else if (g_type_is_a (type, G_TYPE_STRING))
     g_value_set_string (g_value, value->u.ptr);
   else if (g_type_is_a (type, G_TYPE_DOUBLE))
     g_value_set_double (g_value, value->u.dbl);
+  else if (g_type_is_a (type, G_TYPE_FLOAT))
+    g_value_set_float (g_value, value->u.flt);
   else
     g_assert_not_reached ();
 }
