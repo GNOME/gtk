@@ -842,7 +842,7 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
   cairo_t *cr;
   va_list args_copy;
 
-  va_copy (args_copy, args);
+  G_VA_COPY (args_copy, args);
   cr = va_arg (args_copy, gpointer);
 
   cairo_save (cr);
