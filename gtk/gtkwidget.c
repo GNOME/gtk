@@ -14119,9 +14119,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
                                     "direction", gtk_widget_get_direction (widget),
                                     NULL);
 
-      g_signal_connect (widget->priv->context, "changed",
-                        G_CALLBACK (style_context_changed), widget);
-
       screen = gtk_widget_get_screen (widget);
 
       if (screen)
@@ -14131,6 +14128,9 @@ gtk_widget_get_style_context (GtkWidget *widget)
       if (priv->parent)
         gtk_style_context_set_parent (priv->context,
                                       gtk_widget_get_style_context (priv->parent));
+
+      g_signal_connect (widget->priv->context, "changed",
+                        G_CALLBACK (style_context_changed), widget);
     }
 
   return widget->priv->context;
