@@ -1343,8 +1343,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
             break;
           }
-	else
-          _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
 
         event->motion.type = GDK_MOTION_NOTIFY;
         event->motion.window = window;
