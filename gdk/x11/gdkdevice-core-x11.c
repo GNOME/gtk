@@ -255,16 +255,14 @@ gdk_x11_device_core_query_state (GdkDevice        *device,
   display = gdk_window_get_display (window);
   default_screen = gdk_display_get_default_screen (display);
 
-  if (GDK_X11_DISPLAY (display)->trusted_client &&
-      XQueryPointer (GDK_WINDOW_XDISPLAY (window),
-                     GDK_WINDOW_XID (window),
-                     &xroot_window,
-                     &xchild_window,
-                     &xroot_x, &xroot_y,
-                     &xwin_x, &xwin_y,
-                     &xmask))
-    return;
-  else
+  if (!GDK_X11_DISPLAY (display)->trusted_client ||
+      !XQueryPointer (GDK_WINDOW_XDISPLAY (window),
+                      GDK_WINDOW_XID (window),
+                      &xroot_window,
+                      &xchild_window,
+                      &xroot_x, &xroot_y,
+                      &xwin_x, &xwin_y,
+                      &xmask))
     {
       XSetWindowAttributes attributes;
       Display *xdisplay;

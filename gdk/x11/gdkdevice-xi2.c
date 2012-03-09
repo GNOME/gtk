@@ -329,19 +329,17 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   display = gdk_window_get_display (window);
   default_screen = gdk_display_get_default_screen (display);
 
-  if (GDK_X11_DISPLAY (display)->trusted_client &&
-      XIQueryPointer (GDK_WINDOW_XDISPLAY (window),
-                      device_xi2->device_id,
-                      GDK_WINDOW_XID (window),
-                      &xroot_window,
-                      &xchild_window,
-                      &xroot_x, &xroot_y,
-                      &xwin_x, &xwin_y,
-                      &button_state,
-                      &mod_state,
-                      &group_state))
-    return;
-  else
+  if (!GDK_X11_DISPLAY (display)->trusted_client ||
+      !XIQueryPointer (GDK_WINDOW_XDISPLAY (window),
+                       device_xi2->device_id,
+                       GDK_WINDOW_XID (window),
+                       &xroot_window,
+                       &xchild_window,
+                       &xroot_x, &xroot_y,
+                       &xwin_x, &xwin_y,
+                       &button_state,
+                       &mod_state,
+                       &group_state))
     {
       XSetWindowAttributes attributes;
       Display *xdisplay;
