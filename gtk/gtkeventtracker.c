@@ -53,6 +53,9 @@ struct _GtkEventTrackerPrivate {
   GtkEventRecognizer *recognizer;
   GtkWidget *widget;
 
+  GtkEventTracker *prev;
+  GtkEventTracker *next;
+
   guint started :1;
   guint finished :1;
   guint cancelled :1;
@@ -60,7 +63,8 @@ struct _GtkEventTrackerPrivate {
 
 G_DEFINE_ABSTRACT_TYPE (GtkEventTracker, gtk_event_tracker, G_TYPE_OBJECT)
 
-static GQueue trackers = G_QUEUE_INIT;
+static GtkEventTracker *first_tracker = NULL;
+static GtkEventTracker *last_tracker = NULL;
 
 static void
 gtk_event_tracker_set_property (GObject      *object,
@@ -116,7 +120,14 @@ gtk_event_tracker_dispose (GObject *object)
   GtkEventTracker *tracker = GTK_EVENT_TRACKER (object);
   GtkEventTrackerPrivate *priv = tracker->priv;
 
-  g_queue_remove (&trackers, tracker);
+  if (priv->prev)
+    priv->prev->priv->next = priv->next;
+  else
+    first_tracker = priv->next;
+  if (priv->next)
+    priv->next->priv->prev = priv->prev;
+  else
+    last_tracker = priv->prev;
 
   g_clear_object (&priv->recognizer);
   g_clear_object (&priv->widget);
@@ -390,29 +401,39 @@ gtk_event_tracker_finish (GtkEventTracker *tracker)
 void
 _gtk_event_tracker_add (GtkEventTracker *tracker)
 {
-  g_queue_push_tail (&trackers, tracker);
+  GtkEventTrackerPrivate *priv = tracker->priv;
+  
+  g_assert (priv->prev == NULL);
+  g_assert (priv->next == NULL);
+
+  priv->prev = last_tracker;
+
+  if (priv->prev)
+    priv->prev->priv->next = tracker;
+  else
+    first_tracker = tracker;
+
+  last_tracker = tracker;
 }
 
 gboolean
 _gtk_event_trackers_invoke (GdkEvent *event)
 {
-  GList *list;
+  GtkEventTracker *tracker, *next;
   gboolean eat_event = FALSE;
 
   g_return_val_if_fail (event != NULL, FALSE);
 
-  list = g_queue_peek_head_link (&trackers); 
-  while (list)
+  for (tracker = first_tracker; tracker; tracker = next)
     {
-      GtkEventTracker *tracker = list->data;
-
       g_object_ref (tracker);
 
       eat_event |= _gtk_event_recognizer_track (tracker->priv->recognizer,
                                                 tracker,
                                                 event);
 
-      list = list->next;
+      next = tracker->priv->next;
+
       g_object_unref (tracker);
     }
 
