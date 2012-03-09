@@ -44,7 +44,9 @@ cairo_surface_t *  _gtk_win32_theme_part_create_surface  (HTHEME       theme,
                                                           int          state,
                                                           int          margins[4],
                                                           int          width,
-                                                          int          height);
+                                                          int          height,
+							  int         *x_offs_out,
+							  int         *y_offs_out);
 
 int                _gtk_win32_theme_int_parse     (GtkCssParser      *parser,
 						   GFile             *base,

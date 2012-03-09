@@ -184,27 +184,65 @@ _gtk_win32_theme_part_create_surface (HTHEME theme,
 				      int    state,
 				      int    margins[4],
 				      int    width,
-                                      int    height)
+                                      int    height,
+				      int   *x_offs_out,
+				      int   *y_offs_out)
 {
   cairo_surface_t *surface;
   GdkRGBA color;
   cairo_t *cr;
+  int x_offs;
+  int y_offs;
 #ifdef G_OS_WIN32
   HDC hdc;
   RECT rect;
+  SIZE size;
   HRESULT res;
+#endif
 
-  surface = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_ARGB32, width, height);
-  hdc = cairo_win32_surface_get_dc (surface);
+  x_offs = margins[3];
+  y_offs = margins[0];
+
+  width -= margins[3] + margins[1];
+  height -= margins[0] + margins[2];
+
+#ifdef G_OS_WIN32
+  rect.left = 0;
+  rect.top = 0;
+  rect.right = width;
+  rect.bottom = height;
+
+  hdc = GetDC (NULL);
+  res = get_theme_part_size (theme, hdc, xp_part, state, &rect, 2, &size);
+  ReleaseDC (NULL, hdc);
+
+  if (res == S_OK)
+    {
+      x_offs += (width - size.cx) / 2;
+      y_offs += (height - size.cy) / 2;
   
-  rect.left = margins[3];
-  rect.top = margins[0];
-  rect.right = width - margins[1];
-  rect.bottom = height - margins[2];
+      width = size.cx;
+      height = size.cy;
+
+      rect.right = width;
+      rect.bottom = height;
+    }
+
+  if (is_theme_partially_transparent (theme, xp_part, state))
+    surface = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_ARGB32, width, height);
+  else
+    surface = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_RGB24, width, height);
+
+  hdc = cairo_win32_surface_get_dc (surface);
 
   res = draw_theme_background (theme, hdc, xp_part, state, &rect, &rect);
+
+  *x_offs_out = x_offs;
+  *y_offs_out = y_offs;
+
   if (res == S_OK)
     return surface;
+
 #else /* !G_OS_WIN32 */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
 #endif /* G_OS_WIN32 */
@@ -218,6 +256,9 @@ _gtk_win32_theme_part_create_surface (HTHEME theme,
 
   cairo_destroy (cr);
   
+  *x_offs_out = x_offs;
+  *y_offs_out = y_offs;
+
   return surface;
 }
 

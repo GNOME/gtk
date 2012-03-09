@@ -33,21 +33,23 @@ gtk_css_image_win32_draw (GtkCssImage        *image,
 {
   GtkCssImageWin32 *wimage = GTK_CSS_IMAGE_WIN32 (image);
   cairo_surface_t *surface;
+  int dx, dy;
 
   surface = _gtk_win32_theme_part_create_surface (wimage->theme, wimage->part, wimage->state, wimage->margins,
-						  width, height);
+						  width, height, &dx, &dy);
   
   if (wimage->state2 >= 0)
     {
       cairo_surface_t *surface2;
       cairo_t *cr;
+      int dx2, dy2;
 
       surface2 = _gtk_win32_theme_part_create_surface (wimage->theme, wimage->part2, wimage->state2, wimage->margins,
-						       width, height);
+						       width, height, &dx2, &dy2);
 
       cr = cairo_create (surface);
 
-      cairo_set_source_surface (cr, surface2, 0, 0);
+      cairo_set_source_surface (cr, surface2, dx2 - dx, dy2-dy);
       cairo_paint_with_alpha (cr, wimage->over_alpha);
       
       cairo_destroy (cr);
@@ -55,8 +57,8 @@ gtk_css_image_win32_draw (GtkCssImage        *image,
       cairo_surface_destroy (surface2);
     }
 
-  cairo_set_source_surface (cr, surface, 0, 0);
-  cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_PAD);
+  cairo_set_source_surface (cr, surface, dx, dy);
+  cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_NONE);
   cairo_rectangle (cr, 0, 0, width, height);
   cairo_fill (cr);
 
