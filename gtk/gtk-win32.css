@@ -18,7 +18,7 @@ GtkViewport {
 }
 
 * {
-    color: -gtk-win32-color(button, 9);
+    color: -gtk-win32-color(button, 18);
     -GtkWidget-link-color: -gtk-win32-color(button, 26);
     -GtkWidget-visited-link-color: -gtk-win32-color(button, 26);
     border-color: shade (@bg_color, 0.6);
