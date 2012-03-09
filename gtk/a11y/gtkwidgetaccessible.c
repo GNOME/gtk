@@ -465,7 +465,8 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
       state = ATK_STATE_SENSITIVE;
       value = gtk_widget_get_sensitive (widget);
     }
-  else if (g_strcmp0 (pspec->name, "orientation") == 0)
+  else if (g_strcmp0 (pspec->name, "orientation") == 0 &&
+           GTK_IS_ORIENTABLE (widget))
     {
       GtkOrientable *orientable;
 
