@@ -52,15 +52,15 @@ static void gdk_device_wintab_warp (GdkDevice *device,
                                     GdkScreen *screen,
                                     gint       x,
                                     gint       y);
-static gboolean gdk_device_wintab_query_state (GdkDevice        *device,
-                                               GdkWindow        *window,
-                                               GdkWindow       **root_window,
-                                               GdkWindow       **child_window,
-                                               gint             *root_x,
-                                               gint             *root_y,
-                                               gint             *win_x,
-                                               gint             *win_y,
-                                               GdkModifierType  *mask);
+static void gdk_device_wintab_query_state (GdkDevice        *device,
+                                           GdkWindow        *window,
+                                           GdkWindow       **root_window,
+                                           GdkWindow       **child_window,
+                                           gint             *root_x,
+                                           gint             *root_y,
+                                           gint             *win_x,
+                                           gint             *win_y,
+                                           GdkModifierType  *mask);
 static GdkGrabStatus gdk_device_wintab_grab   (GdkDevice     *device,
                                                GdkWindow     *window,
                                                gboolean       owner_events,
@@ -161,7 +161,7 @@ gdk_device_wintab_warp (GdkDevice *device,
 {
 }
 
-static gboolean
+static void
 gdk_device_wintab_query_state (GdkDevice        *device,
                                GdkWindow        *window,
                                GdkWindow       **root_window,
@@ -172,7 +172,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
                                gint             *win_y,
                                GdkModifierType  *mask)
 {
-  return FALSE;
+  g_warning ("query_state unimplemented for wintab devices. Expect bad things.");
 }
 
 static GdkGrabStatus

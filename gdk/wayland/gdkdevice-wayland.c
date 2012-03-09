@@ -177,7 +177,7 @@ gdk_device_core_warp (GdkDevice *device,
 {
 }
 
-static gboolean
+static void
 gdk_device_core_query_state (GdkDevice        *device,
                              GdkWindow        *window,
                              GdkWindow       **root_window,
@@ -208,8 +208,6 @@ gdk_device_core_query_state (GdkDevice        *device,
     *win_y = wd->surface_y;
   if (mask)
     *mask = wd->modifiers;
-
-  return TRUE;
 }
 
 static GdkGrabStatus

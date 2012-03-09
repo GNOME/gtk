@@ -78,15 +78,15 @@ static void gdk_x11_device_xi2_warp (GdkDevice *device,
                                      GdkScreen *screen,
                                      gint       x,
                                      gint       y);
-static gboolean gdk_x11_device_xi2_query_state (GdkDevice        *device,
-                                                GdkWindow        *window,
-                                                GdkWindow       **root_window,
-                                                GdkWindow       **child_window,
-                                                gint             *root_x,
-                                                gint             *root_y,
-                                                gint             *win_x,
-                                                gint             *win_y,
-                                                GdkModifierType  *mask);
+static void gdk_x11_device_xi2_query_state (GdkDevice        *device,
+                                            GdkWindow        *window,
+                                            GdkWindow       **root_window,
+                                            GdkWindow       **child_window,
+                                            gint             *root_x,
+                                            gint             *root_y,
+                                            gint             *win_x,
+                                            gint             *win_y,
+                                            GdkModifierType  *mask);
 
 static GdkGrabStatus gdk_x11_device_xi2_grab   (GdkDevice     *device,
                                                 GdkWindow     *window,
@@ -306,7 +306,7 @@ gdk_x11_device_xi2_warp (GdkDevice *device,
                  0, 0, 0, 0, x, y);
 }
 
-static gboolean
+static void
 gdk_x11_device_xi2_query_state (GdkDevice        *device,
                                 GdkWindow        *window,
                                 GdkWindow       **root_window,
@@ -326,26 +326,21 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   XIModifierState mod_state;
   XIGroupState group_state;
 
-  if (!window || GDK_WINDOW_DESTROYED (window))
-    return FALSE;
-
   display = gdk_window_get_display (window);
   default_screen = gdk_display_get_default_screen (display);
 
-  if (G_LIKELY (GDK_X11_DISPLAY (display)->trusted_client))
-    {
-      if (!XIQueryPointer (GDK_WINDOW_XDISPLAY (window),
-                           device_xi2->device_id,
-                           GDK_WINDOW_XID (window),
-                           &xroot_window,
-                           &xchild_window,
-                           &xroot_x, &xroot_y,
-                           &xwin_x, &xwin_y,
-                           &button_state,
-                           &mod_state,
-                           &group_state))
-        return FALSE;
-    }
+  if (GDK_X11_DISPLAY (display)->trusted_client &&
+      XIQueryPointer (GDK_WINDOW_XDISPLAY (window),
+                      device_xi2->device_id,
+                      GDK_WINDOW_XID (window),
+                      &xroot_window,
+                      &xchild_window,
+                      &xroot_x, &xroot_y,
+                      &xwin_x, &xwin_y,
+                      &button_state,
+                      &mod_state,
+                      &group_state))
+    return;
   else
     {
       XSetWindowAttributes attributes;
@@ -393,8 +388,6 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
     *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state, &group_state);
 
   free (button_state.mask);
-
-  return TRUE;
 }
 
 static GdkGrabStatus

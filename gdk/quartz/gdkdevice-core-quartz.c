@@ -54,15 +54,15 @@ static void gdk_quartz_device_core_warp (GdkDevice *device,
                                          GdkScreen *screen,
                                          gint       x,
                                          gint       y);
-static gboolean gdk_quartz_device_core_query_state (GdkDevice        *device,
-                                                    GdkWindow        *window,
-                                                    GdkWindow       **root_window,
-                                                    GdkWindow       **child_window,
-                                                    gint             *root_x,
-                                                    gint             *root_y,
-                                                    gint             *win_x,
-                                                    gint             *win_y,
-                                                    GdkModifierType  *mask);
+static void gdk_quartz_device_core_query_state (GdkDevice        *device,
+                                                GdkWindow        *window,
+                                                GdkWindow       **root_window,
+                                                GdkWindow       **child_window,
+                                                gint             *root_x,
+                                                gint             *root_y,
+                                                gint             *win_x,
+                                                gint             *win_y,
+                                                GdkModifierType  *mask);
 static GdkGrabStatus gdk_quartz_device_core_grab   (GdkDevice     *device,
                                                     GdkWindow     *window,
                                                     gboolean       owner_events,
@@ -255,7 +255,7 @@ gdk_quartz_device_core_query_state_helper (GdkWindow       *window,
   return found_window;
 }
 
-static gboolean
+static void
 gdk_quartz_device_core_query_state (GdkDevice        *device,
                                     GdkWindow        *window,
                                     GdkWindow       **root_window,
@@ -288,8 +288,6 @@ gdk_quartz_device_core_query_state (GdkDevice        *device,
 
   if (root_y)
     *root_y = y_tmp;
-
-  return TRUE;
 }
 
 static GdkGrabStatus

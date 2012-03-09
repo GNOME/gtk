@@ -82,7 +82,7 @@ struct _GdkDeviceClass
                               GdkScreen  *screen,
                               gint        x,
                               gint        y);
-  gboolean (* query_state)   (GdkDevice       *device,
+  void (* query_state)       (GdkDevice       *device,
                               GdkWindow       *window,
                               GdkWindow      **root_window,
                               GdkWindow      **child_window,
@@ -151,7 +151,7 @@ void _gdk_device_add_slave (GdkDevice *device,
                             GdkDevice *slave);
 void _gdk_device_remove_slave (GdkDevice *device,
                                GdkDevice *slave);
-gboolean   _gdk_device_query_state            (GdkDevice        *device,
+void _gdk_device_query_state                  (GdkDevice        *device,
                                                GdkWindow        *window,
                                                GdkWindow       **root_window,
                                                GdkWindow       **child_window,

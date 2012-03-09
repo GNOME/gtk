@@ -238,7 +238,7 @@ get_current_mask (void)
   return mask;
 }
 
-static gboolean
+static void
 gdk_device_win32_query_state (GdkDevice        *device,
                               GdkWindow        *window,
                               GdkWindow       **root_window,
@@ -303,8 +303,6 @@ gdk_device_win32_query_state (GdkDevice        *device,
 
   if (mask)
     *mask = get_current_mask ();
-
-  return TRUE;
 }
 
 static GdkGrabStatus
