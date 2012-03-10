@@ -1,0 +1,95 @@
+/*
+ * Copyright © 2012 Red Hat Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * Authors: Benjamin Otte <otte@gnome.org>
+ */
+
+#include "config.h"
+
+#include "gtkpinchpanrecognizer.h"
+
+#include "gtkpinchpangesture.h"
+
+/**
+ * SECTION:gtkpinch_panrecognizer
+ * @Short_description: Recognizes vertical and horizontal pinch_pan gestures
+ * @Title: GtkPinchPanRecognizer
+ * @See_also: #GtkPinchPanGesture
+ *
+ * #GtkPinchPanRecoginzer recognizes vertical and horizontal pinch_pan gestures.
+ *
+ * #GtkPinchPanRecognizer was added in GTK 3.6.
+ */
+
+G_DEFINE_TYPE (GtkPinchPanRecognizer, gtk_pinch_pan_recognizer, GTK_TYPE_EVENT_RECOGNIZER)
+
+static void
+gtk_pinch_pan_recognizer_recognize (GtkEventRecognizer *recognizer,
+                                GtkWidget          *widget,
+                                GdkEvent           *event)
+{
+  if (event->type == GDK_TOUCH_BEGIN)
+    gtk_event_recognizer_create_tracker (recognizer, widget, event);
+}
+
+static gboolean
+gtk_pinch_pan_recognizer_track (GtkEventRecognizer *recognizer,
+                            GtkEventTracker    *tracker,
+                            GdkEvent           *event)
+{
+  GtkPinchPanGesture *gesture = GTK_PINCH_PAN_GESTURE (tracker);
+
+  switch (event->type)
+    {
+    case GDK_TOUCH_BEGIN:
+      return _gtk_pinch_pan_gesture_begin (gesture, event);
+    case GDK_TOUCH_END:
+      return _gtk_pinch_pan_gesture_end (gesture, event);
+    case GDK_TOUCH_UPDATE:
+      return _gtk_pinch_pan_gesture_update (gesture, event);
+    case GDK_TOUCH_CANCEL:
+      return _gtk_pinch_pan_gesture_cancel (gesture, event);
+    default:
+      return FALSE;
+    }
+}
+
+static void
+gtk_pinch_pan_recognizer_class_init (GtkPinchPanRecognizerClass *klass)
+{
+  GtkEventRecognizerClass *recognizer_class = GTK_EVENT_RECOGNIZER_CLASS (klass);
+
+  recognizer_class->recognize = gtk_pinch_pan_recognizer_recognize;
+  recognizer_class->track = gtk_pinch_pan_recognizer_track;
+
+  gtk_event_recognizer_class_set_event_mask (recognizer_class,
+                                             GDK_TOUCH_MASK);
+  gtk_event_recognizer_class_set_tracker_type (recognizer_class,
+                                               GTK_TYPE_PINCH_PAN_GESTURE);
+}
+
+static void
+gtk_pinch_pan_recognizer_init (GtkPinchPanRecognizer *recognizer)
+{
+}
+
+GtkEventRecognizer *
+gtk_pinch_pan_recognizer_new (void)
+{
+  return g_object_new (GTK_TYPE_PINCH_PAN_RECOGNIZER, NULL);
+}
+

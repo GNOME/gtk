@@ -288,6 +288,8 @@ gtk_public_h_sources = 		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
+	gtkpinchpangesture.h	\
+	gtkpinchpanrecognizer.h	\
 	gtkplug.h		\
 	gtkprintcontext.h	\
 	gtkprintoperation.h	\
@@ -717,6 +719,8 @@ gtk_base_c_sources = 		\
 	gtkpango.c		\
 	gtkpapersize.c		\
 	gtkpathbar.c		\
+	gtkpinchpangesture.c	\
+	gtkpinchpanrecognizer.c	\
 	gtkpressandhold.c	\
 	gtkprintcontext.c	\
 	gtkprintoperation.c	\

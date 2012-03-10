@@ -145,6 +145,8 @@
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkpapersize.h>
 #include <gtk/gtkpaned.h>
+#include <gtk/gtkpinchpangesture.h>
+#include <gtk/gtkpinchpanrecognizer.h>
 #include <gtk/gtkprintcontext.h>
 #include <gtk/gtkprintoperation.h>
 #include <gtk/gtkprintoperationpreview.h>
