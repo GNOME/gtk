@@ -29,6 +29,13 @@ struct _SwipeData {
   guint color;
 };
 
+typedef struct _PinchPanData PinchPanData;
+struct _PinchPanData {
+  cairo_matrix_t matrix;
+  cairo_matrix_t pending;
+  GdkPixbuf *pixbuf;
+};
+
 static void
 update_swipe (GtkEventRecognizer *recognizer,
               GtkEventTracker    *tracker,
@@ -84,7 +91,6 @@ cancel_swipe (GtkEventRecognizer *recognizer,
   gtk_widget_queue_draw (widget);
 }
 
-
 static gboolean
 draw_swipe (GtkWidget *widget,
             cairo_t   *cr,
@@ -118,6 +124,81 @@ draw_swipe (GtkWidget *widget,
   return FALSE;
 }
 
+static void
+pinch_pan_get_matrix (cairo_matrix_t     *matrix,
+                      GtkPinchPanGesture *pinch)
+{
+  double scale;
+
+  cairo_matrix_init_identity (matrix);
+  scale = gtk_pinch_pan_gesture_get_zoom (pinch);
+  cairo_matrix_translate (matrix,
+                          gtk_pinch_pan_gesture_get_x_offset (pinch),
+                          gtk_pinch_pan_gesture_get_y_offset (pinch));
+  cairo_matrix_scale (matrix, scale, scale);
+  cairo_matrix_rotate (matrix, gtk_pinch_pan_gesture_get_rotation (pinch) * G_PI / 180);
+}
+
+static void
+update_pinch_pan (GtkEventRecognizer *recognizer,
+                  GtkEventTracker    *tracker,
+                  PinchPanData       *data)
+{
+  GtkPinchPanGesture *pinch = GTK_PINCH_PAN_GESTURE (tracker);
+  GtkWidget *widget = gtk_event_tracker_get_widget (tracker);
+
+  pinch_pan_get_matrix (&data->pending, pinch);
+
+  gtk_widget_queue_draw (widget);
+}
+
+static void
+finish_pinch_pan (GtkEventRecognizer *recognizer,
+                  GtkEventTracker    *tracker,
+                  PinchPanData       *data)
+{
+  GtkPinchPanGesture *pinch = GTK_PINCH_PAN_GESTURE (tracker);
+  GtkWidget *widget = gtk_event_tracker_get_widget (tracker);
+
+  pinch_pan_get_matrix (&data->pending, pinch);
+  cairo_matrix_multiply (&data->matrix, &data->matrix, &data->pending);
+  cairo_matrix_init_identity (&data->pending);
+
+  gtk_widget_queue_draw (widget);
+}
+
+static void
+cancel_pinch_pan (GtkEventRecognizer *recognizer,
+                  GtkEventTracker    *tracker,
+                  PinchPanData       *data)
+{
+  GtkWidget *widget = gtk_event_tracker_get_widget (tracker);
+
+  cairo_matrix_init_identity (&data->pending);
+
+  gtk_widget_queue_draw (widget);
+}
+
+static gboolean
+draw_pinch_pan (GtkWidget    *widget,
+                cairo_t      *cr,
+                PinchPanData *data)
+{
+  cairo_translate (cr,
+                   gtk_widget_get_allocated_width (widget) / 2.0,
+                   gtk_widget_get_allocated_height (widget) / 2.0);
+  cairo_transform (cr, &data->pending);
+  cairo_transform (cr, &data->matrix);
+
+  gdk_cairo_set_source_pixbuf (cr,
+                               data->pixbuf,
+                               - gdk_pixbuf_get_width (data->pixbuf) / 2.0,
+                               - gdk_pixbuf_get_height (data->pixbuf) / 2.0);
+  cairo_paint (cr);
+
+  return FALSE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -125,20 +206,37 @@ main (int argc, char *argv[])
   GtkWidgetClass *area_class;
   GtkWidget *window, *area;
   SwipeData swipe_data = { 0, };
+  PinchPanData pinch_pan_data = { { 0 }, };
 
   gtk_init (&argc, &argv);
 
   area_class = g_type_class_ref (GTK_TYPE_DRAWING_AREA);
+
+  cairo_matrix_init_identity (&pinch_pan_data.matrix);
+  cairo_matrix_init_identity (&pinch_pan_data.pending);
+  pinch_pan_data.pixbuf = gdk_pixbuf_new_from_file ("gnome-textfile.png", NULL);
+  g_assert (pinch_pan_data.pixbuf);
 
   recognizer = gtk_swipe_recognizer_new ();
   g_signal_connect (recognizer, "started", G_CALLBACK (update_swipe), &swipe_data);
   g_signal_connect (recognizer, "updated", G_CALLBACK (update_swipe), &swipe_data);
   g_signal_connect (recognizer, "finished", G_CALLBACK (finish_swipe), &swipe_data);
   g_signal_connect (recognizer, "cancelled", G_CALLBACK (cancel_swipe), &swipe_data);
-
   /* This next line is a hack and you should never do it in real life.
    * Instead, do a subclass. Or get me to add gtk_widget_add_recognizer(). */
+#if 0
   gtk_widget_class_add_recognizer (area_class, recognizer);
+#endif
+  recognizer = gtk_pinch_pan_recognizer_new ();
+  g_signal_connect (recognizer, "started", G_CALLBACK (update_pinch_pan), &pinch_pan_data);
+  g_signal_connect (recognizer, "updated", G_CALLBACK (update_pinch_pan), &pinch_pan_data);
+  g_signal_connect (recognizer, "finished", G_CALLBACK (finish_pinch_pan), &pinch_pan_data);
+  g_signal_connect (recognizer, "cancelled", G_CALLBACK (cancel_pinch_pan), &pinch_pan_data);
+  /* This next line is a hack and you should never do it in real life.
+   * Instead, do a subclass. Or get me to add gtk_widget_add_recognizer(). */
+#if 1
+  gtk_widget_class_add_recognizer (area_class, recognizer);
+#endif
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
@@ -147,6 +245,7 @@ main (int argc, char *argv[])
   gtk_widget_set_has_window (area, TRUE);
   gtk_widget_set_size_request (area, 400, 300);
   g_signal_connect_after (area, "draw", G_CALLBACK (draw_swipe), &swipe_data);
+  g_signal_connect_after (area, "draw", G_CALLBACK (draw_pinch_pan), &pinch_pan_data);
   gtk_container_add (GTK_CONTAINER (window), area);
 
   gtk_widget_show_all (window);
