@@ -1433,18 +1433,45 @@ gtk_scrolled_window_draw_scrollbars_junction (GtkScrolledWindow *scrolled_window
                                               cairo_t *cr)
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GtkWidget *widget = GTK_WIDGET (scrolled_window);
   GtkAllocation wid_allocation, hscr_allocation, vscr_allocation;
   GtkStyleContext *context;
   GdkRectangle junction_rect;
-  gboolean is_rtl;
+  gboolean is_rtl, scrollbars_within_bevel;
 
-  is_rtl = gtk_widget_get_direction (GTK_WIDGET (scrolled_window)) == GTK_TEXT_DIR_RTL;
-  gtk_widget_get_allocation (GTK_WIDGET (scrolled_window), &wid_allocation);
+  is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  gtk_widget_get_allocation (widget, &wid_allocation);
   gtk_widget_get_allocation (GTK_WIDGET (priv->hscrollbar), &hscr_allocation);
   gtk_widget_get_allocation (GTK_WIDGET (priv->vscrollbar), &vscr_allocation);
 
-  junction_rect.x = 0;
-  junction_rect.y = 0;
+  gtk_widget_style_get (widget,
+                        "scrollbars-within-bevel", &scrollbars_within_bevel,
+                        NULL);
+  context = gtk_widget_get_style_context (widget);
+
+  if (scrollbars_within_bevel &&
+      priv->shadow_type != GTK_SHADOW_NONE)
+    {
+      GtkStateFlags state;
+      GtkBorder padding, border;
+
+      state = gtk_widget_get_state_flags (widget);
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
+      gtk_style_context_get_padding (context, state, &padding);
+      gtk_style_context_get_border (context, state, &border);
+      gtk_style_context_restore (context);
+
+      junction_rect.x = padding.left + border.left;
+      junction_rect.y = padding.top + border.top;
+    }
+  else
+    {
+      junction_rect.x = 0;
+      junction_rect.y = 0;
+    }
+
   junction_rect.width = vscr_allocation.width;
   junction_rect.height = hscr_allocation.height;
   
@@ -1454,13 +1481,12 @@ gtk_scrolled_window_draw_scrollbars_junction (GtkScrolledWindow *scrolled_window
       (!is_rtl && 
        (priv->real_window_placement == GTK_CORNER_TOP_LEFT ||
         priv->real_window_placement == GTK_CORNER_BOTTOM_LEFT)))
-    junction_rect.x = hscr_allocation.width;
+    junction_rect.x += hscr_allocation.width;
 
   if (priv->real_window_placement == GTK_CORNER_TOP_LEFT ||
       priv->real_window_placement == GTK_CORNER_TOP_RIGHT)
-    junction_rect.y = vscr_allocation.height;
+    junction_rect.y += vscr_allocation.height;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (scrolled_window));
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCROLLBARS_JUNCTION);
 
