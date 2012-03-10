@@ -43,15 +43,15 @@ static void gdk_device_win32_warp (GdkDevice *device,
                                    GdkScreen *screen,
                                    gint       x,
                                    gint       y);
-static gboolean gdk_device_win32_query_state (GdkDevice        *device,
-                                              GdkWindow        *window,
-                                              GdkWindow       **root_window,
-                                              GdkWindow       **child_window,
-                                              gint             *root_x,
-                                              gint             *root_y,
-                                              gint             *win_x,
-                                              gint             *win_y,
-                                              GdkModifierType  *mask);
+static void gdk_device_win32_query_state (GdkDevice        *device,
+                                          GdkWindow        *window,
+                                          GdkWindow       **root_window,
+                                          GdkWindow       **child_window,
+                                          gint             *root_x,
+                                          gint             *root_y,
+                                          gint             *win_x,
+                                          gint             *win_y,
+                                          GdkModifierType  *mask);
 static GdkGrabStatus gdk_device_win32_grab   (GdkDevice     *device,
                                               GdkWindow     *window,
                                               gboolean       owner_events,
@@ -249,13 +249,8 @@ gdk_device_win32_query_state (GdkDevice        *device,
                               gint             *win_y,
                               GdkModifierType  *mask)
 {
-  gboolean return_val;
   POINT point;
   HWND hwnd, hwndc;
-
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), FALSE);
-  
-  return_val = TRUE;
 
   hwnd = GDK_WINDOW_HWND (window);
   GetCursorPos (&point);
