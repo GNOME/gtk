@@ -1136,8 +1136,6 @@ if test "x$enable_x11_backend" = xyes; then
     fi
   fi
 
-  AM_CONDITIONAL(XINPUT_2,     test "x$have_xinput2" = "xyes")
-
   AS_IF([test "x$have_xinput2" != "xyes"],
         [AC_MSG_ERROR([*** XInput2 extension not found. Check 'config.log' for more details.])])
 
@@ -1220,7 +1218,6 @@ if test "x$enable_x11_backend" = xyes; then
 else
   XPACKAGES=
 
-  AM_CONDITIONAL(XINPUT_2, false)
   AM_CONDITIONAL(USE_X11, false)
   AM_CONDITIONAL(HAVE_X11R6, false)
 fi
