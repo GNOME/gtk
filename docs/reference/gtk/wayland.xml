@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="gtk-osx">
+<refmeta>
+<refentrytitle>Using GTK+ with Wayland</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Using GTK+ with Wayland</refname>
+<refpurpose>
+Wayland-specific aspects of using GTK+
+</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>Using GTK+ with Wayland</title>
+
+<para>
+The GDK Wayland backend provides support for running GTK+ applications
+under the Wayland display server. To run your application in this way,
+select the Wayland backend by setting <literal>GDK_BACKEND=wayland</literal>.
+</para>
+
+<para>
+Currently, the Wayland backend does not use any additional commandline
+options or environment variables.
+</para>
+
+<para>
+For up-to-date information about the current status of this backend, see
+the <ulink url="http://wayland.freedesktop.org/gtk.html">project page</ulink>.
+</para>
+
+</refsect1>
+
+</refentry>

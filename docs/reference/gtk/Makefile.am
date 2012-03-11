@@ -130,6 +130,7 @@ content_files =					\
 	objects_grouped.sgml			\
 	osx.sgml				\
 	broadway.xml				\
+	wayland.xml				\
 	question_index.sgml			\
 	resources.sgml				\
 	text_widget.sgml			\

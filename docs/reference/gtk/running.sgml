@@ -422,8 +422,9 @@ nevertheless.
   <title><envar>GDK_BACKEND</envar></title>
 
   <para>
-    If set, selects the GDK backend to use. Selecting a backend requires that GTK is compiled
-    with support for that backend. The following backends can be selected:
+    If set, selects the GDK backend to use. Selecting a backend requires that
+    GTK+ is compiled with support for that backend. The following backends can
+    be selected:
     <variablelist>
 
       <varlistentry>
@@ -439,6 +440,16 @@ nevertheless.
       <varlistentry>
         <term>x11</term>
         <listitem><para>Selects the native backend for connecting to X11 servers.</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>broadway</term>
+        <listitem><para>Selects the HTML5 backend.</para></listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>wayland</term>
+        <listitem><para>Selects the Wayland backend for connecting to Wayland display servers.</para></listitem>
       </varlistentry>
 
     </variablelist>

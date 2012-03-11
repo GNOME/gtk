@@ -20,13 +20,13 @@ OS X-specific aspects of using GTK+
 <title>Using GTK+ on Mac OS X</title>
 
 <para>
-The Mac OS X port of GTK+ is an implementation of GDK (and therefore GTK+) 
+The Mac OS X port of GTK+ is an implementation of GDK (and therefore GTK+)
 on top of the Quarz API.
 </para>
 
 <para>
 Currently, the Mac OS X port does not use any additional commandline options
-or environment variables. 
+or environment variables.
 </para>
 
 <para>
