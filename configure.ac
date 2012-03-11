@@ -931,7 +931,7 @@ if test "x$enable_x11_backend" = xyes; then
     have_base_x_pc=true
     X_PACKAGES="$X_PACKAGES x11 xext"
     x_libs="`$PKG_CONFIG --libs x11 xext`"
-    X_CFLAGS="`$PKG_CONFIG --cflags x11 xext` -DXINPUT2_1_USE_UNSTABLE_PROTOCOL -DXINPUT2_2_USE_UNSTABLE_PROTOCOL"
+    X_CFLAGS="`$PKG_CONFIG --cflags x11 xext`"
 
     # Strip out any .la files that pkg-config might give us (this happens
     # with -uninstalled.pc files)

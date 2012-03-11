@@ -7,8 +7,6 @@ libgdkx11includedir = $(includedir)/gtk-3.0/gdk/x11
 AM_CPPFLAGS = 			\
 	-DG_LOG_DOMAIN=\"Gdk\"	\
 	-DGDK_COMPILATION	\
-	-DXINPUT2_2_USE_UNSTABLE_PROTOCOL \
-	-DXINPUT2_1_USE_UNSTABLE_PROTOCOL \
 	-I$(top_srcdir)		\
 	-I$(top_srcdir)/gdk	\
 	-I$(top_builddir)/gdk	\
