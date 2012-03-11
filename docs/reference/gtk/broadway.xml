@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="gtk-broadway">
+<refmeta>
+<refentrytitle>Using GTK+ with HTML5</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Using GTK+ with HTML5</refname>
+<refpurpose>
+HTML-specific aspects of using GTK+
+</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>Using GTK+ with HTML5</title>
+
+<para>
+The GDK Broadway backend provides support for displaying GTK+
+applications using HTML5 and Web sockets. To run your application
+in this way, select the Broadway backend by setting
+<literal>GDK_BACKEND=broadway</literal>. Then you can make
+your application appear in a web browser by pointing it at
+<literal>http://127.0.0.1:8080</literal>. Note that you need
+to enable web sockets in your web browser.
+</para>
+
+<para>
+You can choose a different port from the default 8080 by setting
+the <envar>BROADWAY_DISPLAY</envar> environment variable to the
+port that you want to use.
+</para>
+
+</refsect1>
+
+</refentry>

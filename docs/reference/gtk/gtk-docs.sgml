@@ -28,6 +28,7 @@
     <xi:include href="x11.sgml" />
     <xi:include href="windows.sgml" />
     <xi:include href="osx.sgml" />
+    <xi:include href="broadway.xml" />
     <xi:include href="resources.sgml" />
     <xi:include href="xml/question_index.sgml" />
     <xi:include href="drawing-model.xml" />

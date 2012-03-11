@@ -129,6 +129,7 @@ content_files =					\
 	migrating-GtkStyleContext.xml		\
 	objects_grouped.sgml			\
 	osx.sgml				\
+	broadway.xml				\
 	question_index.sgml			\
 	resources.sgml				\
 	text_widget.sgml			\
