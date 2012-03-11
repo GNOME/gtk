@@ -12,7 +12,7 @@
 <refnamediv>
 <refname>Using GTK+ on the X Window System</refname>
 <refpurpose>
-X11 aspects of using GTK+
+X11-specific aspects of using GTK+
 </refpurpose>
 </refnamediv>
 
