@@ -989,24 +989,6 @@ if test "x$enable_x11_backend" = xyes; then
                                        [AC_MSG_RESULT([unknown])
                                         AC_MSG_ERROR([xReply type unavailable. X11 is too old])])])
 
-  # Check for XConvertCase, XInternAtoms (X11R6 specific)
-
-  AC_CHECK_FUNCS(XConvertCase XInternAtoms)
-
-  # Generic X11R6 check needed for XIM support; we could
-  # probably use this to replace the above, but we'll
-  # leave the separate checks for XConvertCase and XInternAtoms
-  # for clarity
-
-  have_x11r6=false
-  AC_CHECK_FUNC(XAddConnectionWatch,
-      have_x11r6=true)
-
-  if $have_x11r6; then
-    AC_DEFINE(HAVE_X11R6, 1, [Define if we have X11R6])
-  fi
-  AM_CONDITIONAL(HAVE_X11R6, $have_x11r6)
-
   # Check for XKB support.
 
   if test "x$enable_xkb" = "xyes"; then
@@ -1219,7 +1201,6 @@ else
   XPACKAGES=
 
   AM_CONDITIONAL(USE_X11, false)
-  AM_CONDITIONAL(HAVE_X11R6, false)
 fi
 
 # Check for Pango flags

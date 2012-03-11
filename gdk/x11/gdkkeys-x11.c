@@ -1401,7 +1401,6 @@ _gdk_x11_display_manager_lookup_keyval (GdkDisplayManager *manager,
   return XStringToKeysym (keyval_name);
 }
 
-#ifdef HAVE_XCONVERTCASE
 void
 _gdk_x11_display_manager_keyval_convert_case (GdkDisplayManager *manager,
                                               guint              symbol,
@@ -1429,7 +1428,6 @@ _gdk_x11_display_manager_keyval_convert_case (GdkDisplayManager *manager,
   if (upper)
     *upper = xupper;
 }
-#endif /* HAVE_XCONVERTCASE */
 
 gint
 _gdk_x11_get_group_for_state (GdkDisplay      *display,

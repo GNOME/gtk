@@ -96,13 +96,11 @@ static gboolean gdk_x11_display_translate_event (GdkEventTranslator *translator,
                                                  GdkEvent           *event,
                                                  XEvent             *xevent);
 
-#ifdef HAVE_X11R6
 static void gdk_internal_connection_watch (Display  *display,
 					   XPointer  arg,
 					   gint      fd,
 					   gboolean  opening,
 					   XPointer *watch_data);
-#endif /* HAVE_X11R6 */
 
 typedef struct _GdkEventTypeX11 GdkEventTypeX11;
 
@@ -1225,17 +1223,15 @@ _gdk_x11_display_open (const gchar *display_name)
   xdisplay = XOpenDisplay (display_name);
   if (!xdisplay)
     return NULL;
-  
+
   display = g_object_new (GDK_TYPE_X11_DISPLAY, NULL);
   display_x11 = GDK_X11_DISPLAY (display);
 
   display_x11->xdisplay = xdisplay;
 
-#ifdef HAVE_X11R6  
   /* Set up handlers for Xlib internal connections */
   XAddConnectionWatch (xdisplay, gdk_internal_connection_watch, NULL);
-#endif /* HAVE_X11R6 */
-  
+
   _gdk_x11_precache_atoms (display, precache_atoms, G_N_ELEMENTS (precache_atoms));
 
   /* RandR must be initialized before we initialize the screens */
@@ -1469,7 +1465,6 @@ _gdk_x11_display_open (const gchar *display_name)
   return display;
 }
 
-#ifdef HAVE_X11R6
 /*
  * XLib internal connection handling
  */
@@ -1548,7 +1543,6 @@ gdk_internal_connection_watch (Display  *display,
   else
     gdk_remove_connection_handler ((GdkInternalConnection *)*watch_data);
 }
-#endif /* HAVE_X11R6 */
 
 static const gchar *
 gdk_x11_display_get_name (GdkDisplay *display)

@@ -98,13 +98,6 @@ static int _gdk_error_handler_push_count = 0;
  * Private function declarations
  */
 
-#ifndef HAVE_XCONVERTCASE
-static void	 gdkx_XConvertCase	(KeySym	       symbol,
-					 KeySym	      *lower,
-					 KeySym	      *upper);
-#define XConvertCase gdkx_XConvertCase
-#endif
-
 static int	    gdk_x_error			 (Display     *display, 
 						  XErrorEvent *error);
 static int	    gdk_x_io_error		 (Display     *display);
