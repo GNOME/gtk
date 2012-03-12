@@ -181,7 +181,8 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
   current_device = event->device;
   cursor_proximity = TRUE;
 
-  if (event->button == 1 && surface != NULL)
+  if (event->button == GDK_BUTTON_PRIMARY &&
+      surface != NULL)
     {
       gdouble pressure = 0.5;
 

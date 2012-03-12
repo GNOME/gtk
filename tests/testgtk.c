@@ -2119,11 +2119,11 @@ grippy_button_press (GtkWidget *area, GdkEventButton *event, GdkWindowEdge edge)
 {
   if (event->type == GDK_BUTTON_PRESS) 
     {
-      if (event->button == 1)
+      if (event->button == GDK_BUTTON_PRIMARY)
 	gtk_window_begin_resize_drag (GTK_WINDOW (gtk_widget_get_toplevel (area)), edge,
 				      event->button, event->x_root, event->y_root,
 				      event->time);
-      else if (event->button == 2)
+      else if (event->button == GDK_BUTTON_MIDDLE)
 	gtk_window_begin_move_drag (GTK_WINDOW (gtk_widget_get_toplevel (area)), 
 				    event->button, event->x_root, event->y_root,
 				    event->time);

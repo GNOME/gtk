@@ -1221,7 +1221,7 @@ gtk_handle_box_button_press (GtkWidget      *widget,
   handle_position = effective_handle_position (hb);
 
   event_handled = FALSE;
-  if ((event->button == 1) && 
+  if ((event->button == GDK_BUTTON_PRIMARY) &&
       (event->type == GDK_BUTTON_PRESS || event->type == GDK_2BUTTON_PRESS))
     {
       GtkWidget *child;
