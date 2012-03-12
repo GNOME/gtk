@@ -1395,6 +1395,9 @@ _gdk_device_add_axis (GdkDevice   *device,
   GdkAxisInfo axis_info;
   guint pos;
 
+  GDK_NOTE (INPUT, g_print ("Adding axis '%s' with use %d for range [%g, %g] with %gunits/m\n",
+                            label_string, use, min_value, max_value, resolution));
+
   axis_info.use = use;
   axis_info.label = label_atom;
   axis_info.label_string = g_strdup (label_string);
