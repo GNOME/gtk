@@ -1,3 +1,32 @@
+Overview of Changes in GTK+ 3.2.4
+=================================
+
+* Bugs fixed:
+ 455900 invalid write on gtkfilechooserdefault finalise
+ 620240 GNOME Drag & Drop broken for remote X sessions
+ 629878 Missing "Back" and "Forward" icons for Firefox
+ 650693 Drawing errors in column headers when adding new...
+ 655065 Build failure on OS X 10.7 Lion
+ 660139 GtkGrid gives Gtk-Warnings about negative sizes when empty
+ 663479 "Finishing" ("Completion") and "Advanced" tabs are empty
+ 666921 x11: Fix the _NET_SUPPORTING_WM_CHECK window fetch...
+ 667691 implement gdk_window_restack() for Quartz (should work...
+ 667745 icon cache can be unsafe when accessing missing icons
+ 668114 odd spacing in about dialog credits
+ 669116 GtkNotebook's child-notify::position not always emitted...
+ 669636 gtkactiongroup: clarify set_translation_domain docs
+ 670077 license text has poor alignment with close button
+ 670078 no stroke around credits scrollable area
+ 670400 First shortcut capture is broken
+ 670832 Wrong "Since" for GtkSettings property gtk-application-pr...
+ 671070 x11: Correct GroupSwitch mask
+ 671170 GtkTable and GtkGrid alignment problem
+
+* Translation updates:
+ Belarusian
+ Telugu
+
+
 Overview of Changes in GTK+ 3.2.3
 =================================
 
