@@ -459,7 +459,7 @@ area_press (GtkWidget      *drawing_area,
 {
   gtk_widget_grab_focus (drawing_area);
 
-  if (event->button == 3 &&
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event) &&
       event->type == GDK_BUTTON_PRESS)
     {
       GtkWidget *menu = gtk_ui_manager_get_widget (merge, "/FileMenu");

@@ -389,7 +389,8 @@ button_press_event_handler (GtkWidget      *widget,
 			    GdkEventButton *event)
 {
   /* Ignore double-clicks and triple-clicks */
-  if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event) &&
+      event->type == GDK_BUTTON_PRESS)
     {
       do_popup_menu (widget, event);
       return TRUE;
