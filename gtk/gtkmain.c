@@ -114,6 +114,7 @@
 #include "gtkclipboard.h"
 #include "gtkdebug.h"
 #include "gtkdnd.h"
+#include "gtkeventtrackerprivate.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
 #include "gtkmodules.h"
@@ -1647,6 +1648,9 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_WINDOW_STATE:
     case GDK_GRAB_BROKEN:
     case GDK_DAMAGE:
+      if (_gtk_event_trackers_invoke (event))
+        break;
+
       if (!_gtk_widget_captured_event (event_widget, event))
         gtk_widget_event (event_widget, event);
       break;
@@ -1656,6 +1660,9 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
     case GDK_TOUCH_BEGIN:
+      if (_gtk_event_trackers_invoke (event))
+        break;
+
       if (!_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_propagate_event (grab_widget, event);
       break;
@@ -1709,11 +1716,17 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
+      if (_gtk_event_trackers_invoke (event))
+        break;
+
       if (!_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_propagate_event (grab_widget, event);
       break;
 
     case GDK_ENTER_NOTIFY:
+      if (_gtk_event_trackers_invoke (event))
+        break;
+
       if (event->crossing.detail != GDK_NOTIFY_VIRTUAL &&
           event->crossing.detail != GDK_NOTIFY_NONLINEAR_VIRTUAL)
         _gtk_widget_set_device_window (event_widget,
@@ -1725,6 +1738,9 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_LEAVE_NOTIFY:
+      if (_gtk_event_trackers_invoke (event))
+        break;
+
       if (event->crossing.detail != GDK_NOTIFY_VIRTUAL &&
           event->crossing.detail != GDK_NOTIFY_NONLINEAR_VIRTUAL)
         _gtk_widget_set_device_window (event_widget,

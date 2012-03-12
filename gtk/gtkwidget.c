@@ -6282,6 +6282,31 @@ event_window_is_still_viewable (GdkEvent *event)
     }
 }
 
+static gboolean
+gtk_widget_invoke_recognizers (GtkWidget *widget,
+                               GdkEvent  *event)
+{
+  GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
+  GtkWidgetClassPrivate *priv = klass->priv;
+  guint i;
+  gboolean eat_event = FALSE;
+
+  if (priv->recognizers == NULL)
+    return FALSE;
+
+  g_object_ref (widget);
+
+  for (i = 0; i < priv->recognizers->len; i++)
+    {
+      GtkEventRecognizer *recognizer = g_ptr_array_index (priv->recognizers, i);
+      _gtk_event_recognizer_recognize (recognizer, widget, event);
+    }
+
+  g_object_unref (widget);
+
+  return eat_event;
+}
+
 static gint
 gtk_widget_event_internal (GtkWidget *widget,
 			   GdkEvent  *event)
@@ -6295,6 +6320,8 @@ gtk_widget_event_internal (GtkWidget *widget,
    */
   if (!event_window_is_still_viewable (event))
     return TRUE;
+
+  gtk_widget_invoke_recognizers (widget, event);
 
   g_object_ref (widget);
 
