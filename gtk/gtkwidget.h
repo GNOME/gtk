@@ -528,13 +528,14 @@ gboolean   gtk_widget_send_focus_change   (GtkWidget           *widget,
 
 void       gtk_widget_class_add_recognizer(GtkWidgetClass      *widget_class,
                                            GtkEventRecognizer  *recognizer);
-void       gtk_widget_class_remove_recognizer
-                                          (GtkWidgetClass      *widget_class,
+void       gtk_widget_add_recognizer      (GtkWidget           *widget,
+                                           GtkEventRecognizer  *recognizer);
+void       gtk_widget_remove_recognizer   (GtkWidget           *widget,
                                            guint                id);
 GtkEventRecognizer *
-           gtk_widget_class_get_recognizer(GtkWidgetClass      *widget_class,
+           gtk_widget_get_recognizer      (GtkWidget           *widget,
                                            guint                id);
-guint      gtk_widget_class_get_n_recognizers (GtkWidgetClass  *widget_class);
+guint      gtk_widget_get_n_recognizers   (GtkWidget           *widget);
 
 gboolean   gtk_widget_activate		     (GtkWidget	       *widget);
      
