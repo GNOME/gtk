@@ -203,40 +203,11 @@ int
 main (int argc, char *argv[])
 {
   GtkEventRecognizer *recognizer;
-  GtkWidgetClass *area_class;
   GtkWidget *window, *area;
   SwipeData swipe_data = { 0, };
   PinchPanData pinch_pan_data = { { 0 }, };
 
   gtk_init (&argc, &argv);
-
-  area_class = g_type_class_ref (GTK_TYPE_DRAWING_AREA);
-
-  cairo_matrix_init_identity (&pinch_pan_data.matrix);
-  cairo_matrix_init_identity (&pinch_pan_data.pending);
-  pinch_pan_data.pixbuf = gdk_pixbuf_new_from_file ("gnome-textfile.png", NULL);
-  g_assert (pinch_pan_data.pixbuf);
-
-  recognizer = gtk_swipe_recognizer_new ();
-  g_signal_connect (recognizer, "started", G_CALLBACK (update_swipe), &swipe_data);
-  g_signal_connect (recognizer, "updated", G_CALLBACK (update_swipe), &swipe_data);
-  g_signal_connect (recognizer, "finished", G_CALLBACK (finish_swipe), &swipe_data);
-  g_signal_connect (recognizer, "cancelled", G_CALLBACK (cancel_swipe), &swipe_data);
-  /* This next line is a hack and you should never do it in real life.
-   * Instead, do a subclass. Or get me to add gtk_widget_add_recognizer(). */
-#if 0
-  gtk_widget_class_add_recognizer (area_class, recognizer);
-#endif
-  recognizer = gtk_pinch_pan_recognizer_new ();
-  g_signal_connect (recognizer, "started", G_CALLBACK (update_pinch_pan), &pinch_pan_data);
-  g_signal_connect (recognizer, "updated", G_CALLBACK (update_pinch_pan), &pinch_pan_data);
-  g_signal_connect (recognizer, "finished", G_CALLBACK (finish_pinch_pan), &pinch_pan_data);
-  g_signal_connect (recognizer, "cancelled", G_CALLBACK (cancel_pinch_pan), &pinch_pan_data);
-  /* This next line is a hack and you should never do it in real life.
-   * Instead, do a subclass. Or get me to add gtk_widget_add_recognizer(). */
-#if 1
-  gtk_widget_class_add_recognizer (area_class, recognizer);
-#endif
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
@@ -244,6 +215,30 @@ main (int argc, char *argv[])
   area = gtk_drawing_area_new ();
   gtk_widget_set_has_window (area, TRUE);
   gtk_widget_set_size_request (area, 400, 300);
+
+  recognizer = gtk_swipe_recognizer_new ();
+  g_signal_connect (recognizer, "started", G_CALLBACK (update_swipe), &swipe_data);
+  g_signal_connect (recognizer, "updated", G_CALLBACK (update_swipe), &swipe_data);
+  g_signal_connect (recognizer, "finished", G_CALLBACK (finish_swipe), &swipe_data);
+  g_signal_connect (recognizer, "cancelled", G_CALLBACK (cancel_swipe), &swipe_data);
+#if 0
+  gtk_widget_add_recognizer (area, recognizer);
+#endif
+
+  cairo_matrix_init_identity (&pinch_pan_data.matrix);
+  cairo_matrix_init_identity (&pinch_pan_data.pending);
+  pinch_pan_data.pixbuf = gdk_pixbuf_new_from_file ("gnome-textfile.png", NULL);
+  g_assert (pinch_pan_data.pixbuf);
+
+  recognizer = gtk_pinch_pan_recognizer_new ();
+  g_signal_connect (recognizer, "started", G_CALLBACK (update_pinch_pan), &pinch_pan_data);
+  g_signal_connect (recognizer, "updated", G_CALLBACK (update_pinch_pan), &pinch_pan_data);
+  g_signal_connect (recognizer, "finished", G_CALLBACK (finish_pinch_pan), &pinch_pan_data);
+  g_signal_connect (recognizer, "cancelled", G_CALLBACK (cancel_pinch_pan), &pinch_pan_data);
+#if 1
+  gtk_widget_add_recognizer (area, recognizer);
+#endif
+
   g_signal_connect_after (area, "draw", G_CALLBACK (draw_swipe), &swipe_data);
   g_signal_connect_after (area, "draw", G_CALLBACK (draw_pinch_pan), &pinch_pan_data);
   gtk_container_add (GTK_CONTAINER (window), area);
