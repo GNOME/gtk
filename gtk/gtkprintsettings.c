@@ -816,8 +816,9 @@ gtk_print_settings_set_use_color (GtkPrintSettings *settings,
 gboolean
 gtk_print_settings_get_collate (GtkPrintSettings *settings)
 {
-  return gtk_print_settings_get_bool (settings, 
-				      GTK_PRINT_SETTINGS_COLLATE);
+  return gtk_print_settings_get_bool_with_default (settings,
+                                                   GTK_PRINT_SETTINGS_COLLATE,
+                                                   TRUE);
 }
 
 /**
