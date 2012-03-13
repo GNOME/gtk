@@ -31,6 +31,7 @@
 
 static HINSTANCE uxtheme_dll = NULL;
 static gboolean use_xp_theme = FALSE;
+static HTHEME needs_alpha_fixup = NULL;
 
 typedef HRESULT (FAR PASCAL *GetThemeSysFontFunc)           (HTHEME hTheme, int iFontID, OUT LOGFONTW *plf);
 typedef int (FAR PASCAL *GetThemeSysSizeFunc)               (HTHEME hTheme, int iSizeId);
@@ -77,6 +78,7 @@ static GHashTable *hthemes_by_class = NULL;
 static void
 _gtk_win32_theme_init (void)
 {
+  OSVERSIONINFO version;
   char *buf;
   char dummy;
   int n, k;
@@ -132,6 +134,11 @@ _gtk_win32_theme_init (void)
     }
 
   hthemes_by_class = g_hash_table_new (g_str_hash, g_str_equal);
+
+  memset (&version, 0, sizeof (version));
+  version.dwOSVersionInfoSize = sizeof (version);
+  if (GetVersionEx (&version) && version.dwMajorVersion == 5)
+    needs_alpha_fixup = _gtk_win32_lookup_htheme_by_classname ("toolbar");
 }
 
 HTHEME
@@ -193,6 +200,7 @@ _gtk_win32_theme_part_create_surface (HTHEME theme,
   cairo_t *cr;
   int x_offs;
   int y_offs;
+  gboolean has_alpha;
 #ifdef G_OS_WIN32
   HDC hdc;
   RECT rect;
@@ -228,7 +236,8 @@ _gtk_win32_theme_part_create_surface (HTHEME theme,
       rect.bottom = height;
     }
 
-  if (is_theme_partially_transparent (theme, xp_part, state))
+  has_alpha = is_theme_partially_transparent (theme, xp_part, state);
+  if (has_alpha)
     surface = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_ARGB32, width, height);
   else
     surface = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_RGB24, width, height);
@@ -236,6 +245,22 @@ _gtk_win32_theme_part_create_surface (HTHEME theme,
   hdc = cairo_win32_surface_get_dc (surface);
 
   res = draw_theme_background (theme, hdc, xp_part, state, &rect, &rect);
+
+  /* XP Can't handle rendering some parts on an alpha target */
+  if (theme == needs_alpha_fixup && has_alpha) {
+    cairo_surface_t *img = cairo_win32_surface_get_image (surface);
+    guint32 *data = (guint32 *)cairo_image_surface_get_data (img);
+    GdiFlush ();
+
+    for (int i = 0; i < width; i++)
+      {
+	for (int j = 0; j < height; j++)
+	  {
+	    if (data[i+j*width] != 0)
+	      data[i+j*width] |= 0xff000000;
+	  }
+      }
+  }
 
   *x_offs_out = x_offs;
   *y_offs_out = y_offs;
