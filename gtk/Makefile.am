@@ -954,7 +954,9 @@ gtk_extra_sources =				\
 	gen-paper-names.c			\
 	gtkstatusicon-quartz.c			\
 	gtk.symbols				\
+	gtk-win32-base.css			\
 	gtk-win32.css				\
+	gtk-win32-xp.css			\
 	gtkversion.h.in				\
 	gtkmarshalers.list			\
 	fallback-c89.c
