@@ -109,6 +109,8 @@
 #include <gtk/gtkfontchooserdialog.h>
 #include <gtk/gtkfontchooserwidget.h>
 #include <gtk/gtkframe.h>
+#include <gtk/gtkgesture.h>
+#include <gtk/gtkgesturerecognizer.h>
 #include <gtk/gtkgradient.h>
 #include <gtk/gtkgrid.h>
 #include <gtk/gtkiconfactory.h>
@@ -173,6 +175,7 @@
 #include <gtk/gtkseparator.h>
 #include <gtk/gtkseparatormenuitem.h>
 #include <gtk/gtkseparatortoolitem.h>
+#include <gtk/gtksequence.h>
 #include <gtk/gtksettings.h>
 #include <gtk/gtkshow.h>
 #include <gtk/gtksizegroup.h>

@@ -251,6 +251,8 @@ gtk_public_h_sources = 		\
 	gtkfontchooserdialog.h  \
 	gtkfontchooserwidget.h	\
 	gtkframe.h		\
+	gtkgesture.h		\
+	gtkgesturerecognizer.h	\
 	gtkgradient.h		\
 	gtkgrid.h		\
 	gtkiconfactory.h	\
@@ -317,6 +319,7 @@ gtk_public_h_sources = 		\
 	gtkseparator.h		\
 	gtkseparatormenuitem.h	\
 	gtkseparatortoolitem.h	\
+	gtksequence.h		\
 	gtksettings.h		\
 	gtkshow.h		\
 	gtksizegroup.h		\
@@ -672,6 +675,8 @@ gtk_base_c_sources = 		\
 	gtkfontchooserutils.c	\
 	gtkfontchooserwidget.c	\
 	gtkframe.c		\
+	gtkgesture.c		\
+	gtkgesturerecognizer.c	\
 	gtkgradient.c		\
 	gtkgrid.c		\
 	gtkiconcache.c		\
@@ -756,6 +761,7 @@ gtk_base_c_sources = 		\
 	gtkseparator.c		\
 	gtkseparatormenuitem.c	\
 	gtkseparatortoolitem.c	\
+	gtksequence.c		\
 	gtksequencetracker.c	\
 	gtksettings.c		\
 	gtksizegroup.c		\
