@@ -52,7 +52,7 @@ struct _GtkSwipeGesturePrivate {
   GtkMovementDirection direction;
 };
 
-G_DEFINE_TYPE (GtkSwipeGesture, gtk_swipe_gesture, GTK_TYPE_EVENT_TRACKER)
+G_DEFINE_TYPE (GtkSwipeGesture, gtk_swipe_gesture, GTK_TYPE_GESTURE)
 
 static void
 gtk_swipe_gesture_set_property (GObject      *object,
@@ -130,9 +130,15 @@ _gtk_swipe_gesture_begin (GtkSwipeGesture *gesture,
     return FALSE;
 
   if (priv->sequence[0] == NULL)
-    priv->sequence[0] = _gtk_sequence_tracker_new (event);
+    {
+      priv->sequence[0] = _gtk_sequence_tracker_new (event);
+      gtk_gesture_add_sequence (GTK_GESTURE (gesture), event->touch.sequence);
+    }
   else
-    priv->sequence[1] = _gtk_sequence_tracker_new (event);
+    {
+      priv->sequence[1] = _gtk_sequence_tracker_new (event);
+      gtk_gesture_add_sequence (GTK_GESTURE (gesture), event->touch.sequence);
+    }
 
   if (priv->sequence[1])
     gtk_event_tracker_start (GTK_EVENT_TRACKER (gesture));

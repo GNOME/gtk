@@ -35,7 +35,7 @@
  * #GtkSwipeRecognizer was added in GTK 3.6.
  */
 
-G_DEFINE_TYPE (GtkSwipeRecognizer, gtk_swipe_recognizer, GTK_TYPE_EVENT_RECOGNIZER)
+G_DEFINE_TYPE (GtkSwipeRecognizer, gtk_swipe_recognizer, GTK_TYPE_GESTURE_RECOGNIZER)
 
 static void
 gtk_swipe_recognizer_recognize (GtkEventRecognizer *recognizer,

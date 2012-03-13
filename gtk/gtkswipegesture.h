@@ -25,7 +25,7 @@
 #ifndef __GTK_SWIPE_GESTURE_H__
 #define __GTK_SWIPE_GESTURE_H__
 
-#include <gtk/gtkeventtracker.h>
+#include <gtk/gtkgesture.h>
 
 G_BEGIN_DECLS
 
@@ -42,14 +42,14 @@ typedef struct _GtkSwipeGesturePrivate    GtkSwipeGesturePrivate;
 
 struct _GtkSwipeGesture
 {
-  GtkEventTracker parent;
+  GtkGesture parent;
 
   GtkSwipeGesturePrivate *priv;
 };
 
 struct _GtkSwipeGestureClass
 {
-  GtkEventTrackerClass parent_class;
+  GtkGestureClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved0) (void);
