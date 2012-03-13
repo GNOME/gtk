@@ -29,5 +29,8 @@ void                _gtk_event_tracker_add                (GtkEventTracker *trac
 
 gboolean            _gtk_event_trackers_invoke            (GdkEvent        *event);
 
+GtkEventTracker *   _gtk_event_tracker_get_first          (void);
+GtkEventTracker *   _gtk_event_tracker_get_next           (GtkEventTracker *tracker);
+
 
 #endif /* __GTK_EVENT_TRACKER_PRIVATE_H__ */

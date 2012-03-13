@@ -439,3 +439,18 @@ _gtk_event_trackers_invoke (GdkEvent *event)
 
   return eat_event;
 }
+
+GtkEventTracker *
+_gtk_event_tracker_get_first (void)
+{
+  return first_tracker;
+}
+
+GtkEventTracker *
+_gtk_event_tracker_get_next (GtkEventTracker *tracker)
+{
+  g_return_val_if_fail (GTK_IS_EVENT_TRACKER (tracker), NULL);
+
+  return tracker->priv->next;
+}
+
