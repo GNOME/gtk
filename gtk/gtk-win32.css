@@ -117,7 +117,7 @@ GtkAssistant .sidebar .highlight {
     -GtkWidget-focus-line-width: 1;
     -GtkWidget-focus-padding: 3;
     -GtkButton-interior-focuse: true;
-    padding: 2px;
+    padding: 3px;
 }
 
 .button:insensitive {
@@ -336,7 +336,7 @@ GtkAssistant .sidebar .highlight {
     background-color: black;
     border-width: 0;
     background-image: -gtk-win32-theme-part(edit, 1 1);
-    padding: 2px;
+    padding: 3px;
 }
 .entry:insensitive {
     background-image: -gtk-win32-theme-part(edit, 1 4);
