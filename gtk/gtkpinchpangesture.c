@@ -51,7 +51,7 @@ struct _GtkPinchPanGesturePrivate {
   double              initial_angle;
 };
 
-G_DEFINE_TYPE (GtkPinchPanGesture, gtk_pinch_pan_gesture, GTK_TYPE_EVENT_TRACKER)
+G_DEFINE_TYPE (GtkPinchPanGesture, gtk_pinch_pan_gesture, GTK_TYPE_GESTURE)
 
 static void
 gtk_pinch_pan_gesture_set_property (GObject      *object,
@@ -125,9 +125,15 @@ _gtk_pinch_pan_gesture_begin (GtkPinchPanGesture *gesture,
     return FALSE;
 
   if (priv->sequence[0] == NULL)
-    priv->sequence[0] = _gtk_sequence_tracker_new (event);
+    {
+      priv->sequence[0] = _gtk_sequence_tracker_new (event);
+      gtk_gesture_add_sequence (GTK_GESTURE (gesture), event->touch.sequence);
+    }
   else
-    priv->sequence[1] = _gtk_sequence_tracker_new (event);
+    {
+      priv->sequence[1] = _gtk_sequence_tracker_new (event);
+      gtk_gesture_add_sequence (GTK_GESTURE (gesture), event->touch.sequence);
+    }
 
   if (priv->sequence[1])
     {

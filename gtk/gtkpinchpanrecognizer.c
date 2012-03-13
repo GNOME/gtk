@@ -35,7 +35,7 @@
  * #GtkPinchPanRecognizer was added in GTK 3.6.
  */
 
-G_DEFINE_TYPE (GtkPinchPanRecognizer, gtk_pinch_pan_recognizer, GTK_TYPE_EVENT_RECOGNIZER)
+G_DEFINE_TYPE (GtkPinchPanRecognizer, gtk_pinch_pan_recognizer, GTK_TYPE_GESTURE_RECOGNIZER)
 
 static void
 gtk_pinch_pan_recognizer_recognize (GtkEventRecognizer *recognizer,

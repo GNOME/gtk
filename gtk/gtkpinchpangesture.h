@@ -25,7 +25,7 @@
 #ifndef __GTK_PINCH_PAN_GESTURE_H__
 #define __GTK_PINCH_PAN_GESTURE_H__
 
-#include <gtk/gtkeventtracker.h>
+#include <gtk/gtkgesture.h>
 
 G_BEGIN_DECLS
 
@@ -42,14 +42,14 @@ typedef struct _GtkPinchPanGesturePrivate    GtkPinchPanGesturePrivate;
 
 struct _GtkPinchPanGesture
 {
-  GtkEventTracker parent;
+  GtkGesture parent;
 
   GtkPinchPanGesturePrivate *priv;
 };
 
 struct _GtkPinchPanGestureClass
 {
-  GtkEventTrackerClass parent_class;
+  GtkGestureClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved0) (void);

@@ -25,7 +25,7 @@
 #ifndef __GTK_PINCH_PAN_RECOGNIZER_H__
 #define __GTK_PINCH_PAN_RECOGNIZER_H__
 
-#include <gtk/gtkeventrecognizer.h>
+#include <gtk/gtkgesturerecognizer.h>
 
 G_BEGIN_DECLS
 
@@ -42,14 +42,14 @@ typedef struct _GtkPinchPanRecognizerPrivate    GtkPinchPanRecognizerPrivate;
 
 struct _GtkPinchPanRecognizer
 {
-  GtkEventRecognizer parent;
+  GtkGestureRecognizer parent;
 
   GtkPinchPanRecognizerPrivate *priv;
 };
 
 struct _GtkPinchPanRecognizerClass
 {
-  GtkEventRecognizerClass parent_class;
+  GtkGestureRecognizerClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved0) (void);
