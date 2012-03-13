@@ -641,19 +641,19 @@ GtkComboBox.combobox-entry .button:insensitive {
     background-image: -gtk-win32-theme-part(tab, 1 3, margins(0 0 -1 0));
 }
 .notebook tab:active.top {
-    padding: 0px 4px 2px 4px;
+    padding: 2px 4px 1px 4px;
 }
 
 .notebook tab:active.bottom {
-    padding: 0px 4px 2px 4px;
+    padding: 1px 4px 2px 4px;
 }
 
 .notebook tab:active.right {
-    padding: 4px 0px 4px 2px;
+    padding: 4px 4px 4px 1px;
 }
 
 .notebook tab:active.left {
-    padding: 4px 2px 4px 0px;
+    padding: 4px 1px 4px 4px;
 }
 
 /* Toolbar */
