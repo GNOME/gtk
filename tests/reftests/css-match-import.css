@@ -1,0 +1,9 @@
+@import url("css-match-import-import.css");
+
+GtkLabel {
+  color: purple;
+}
+
+#reference {
+  color: purple;
+}
