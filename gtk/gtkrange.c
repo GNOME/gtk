@@ -2365,9 +2365,10 @@ range_grab_remove (GtkRange *range)
 
   if (priv->grab_device)
     {
-      gtk_device_grab_remove (GTK_WIDGET (range),
-                              priv->grab_device);
+      GdkDevice *grab_device = priv->grab_device;
+
       priv->grab_device = NULL;
+      gtk_device_grab_remove (GTK_WIDGET (range), grab_device);
     }
 
   location = priv->grab_location;
