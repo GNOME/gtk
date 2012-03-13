@@ -714,38 +714,44 @@ GtkComboBox.combobox-entry .button:insensitive {
 /* Notebook */
 
 .notebook {
-    background-color: @base_color;
-    border-width: 1px 3px 2px 2px;
+    background-color: #ffffff;
+    border-width: 1px 1px 1px 1px;
     border-style: solid;
     background-origin: padding-box;
     background-clip: border-box;
-    /*background-image: -gtk-win32-theme-part(tab, 9 1, margins(-2)); */
-    border-image: -gtk-win32-theme-part(tab, 9 1) 1 3 2 2 stretch;
+    background-image: -gtk-win32-theme-part(tab, 9 1, margins(-1 -3 -2 -1));
+    border-image: -gtk-win32-theme-part(tab, 9 1, margins(0 -2 -1 0)) 1 1 1 1 repeat;
     -GtkNotebook-tab-overlap: 1;
     -GtkNotebook-tab-curvature: 0;
 }
 
 .notebook tab {
-    background-color: transparent;
     border-width: 0;
     background-image: -gtk-win32-theme-part(tab, 1 1);
+    padding: 0px 4px 0px 4px;
+}
+
+.notebook tab.left, .notebook tab.right {
+    padding: 4px 0px 4px 0px;
 }
 
 .notebook tab:active {
     background-image: -gtk-win32-theme-part(tab, 1 3, margins(0 0 -1 0));
-    padding: 4px;
+}
+.notebook tab:active.top {
+    padding: 0px 4px 2px 4px;
 }
 
-.notebook tab:last-child {
-    background-image: -gtk-win32-theme-part(tab, 3 1);
+.notebook tab:active.bottom {
+    padding: 0px 4px 2px 4px;
 }
 
-.notebook tab:active:last-child {
-    background-image: -gtk-win32-theme-part(tab, 3 3, margins(0 0 -1 0));
+.notebook tab:active.right {
+    padding: 4px 0px 4px 2px;
 }
 
-.notebook {
-    background-color: #ffffff;
+.notebook tab:active.left {
+    padding: 4px 2px 4px 0px;
 }
 
 /* Toolbar */
