@@ -200,8 +200,8 @@ _gtk_win32_theme_part_create_surface (HTHEME theme,
   cairo_t *cr;
   int x_offs;
   int y_offs;
-  gboolean has_alpha;
 #ifdef G_OS_WIN32
+  gboolean has_alpha;
   HDC hdc;
   RECT rect;
   SIZE size;
