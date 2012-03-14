@@ -36,3 +36,13 @@ GtkNotebook.notebook {
     background-image: none;
     border-width: 0;
 }
+
+.spinbutton .button {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #7b9ebd;
+}
+
+.spinbutton .button:last-child {
+    border-width: 1px 1px 1px 0px;
+}

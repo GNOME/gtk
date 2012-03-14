@@ -347,54 +347,54 @@ GtkAssistant .sidebar .highlight {
 
 /* Spinbuttons */
 
-.spinbutton.button,
-.spinbutton.button:focused {
+.spinbutton .button,
+.spinbutton .button:focused {
     background-color: transparent;
-    border-width: 1px 1px 0 0;
-    border-style: none;
-    background-image: -gtk-win32-theme-part(spin, 1 1);
+    background-image: -gtk-win32-theme-part(spin, 1 1, margins(-1 -1 0 -1));
     color: rgba(0, 0, 0, 0);
 }
 
-.spinbutton.button:prelight,
-.spinbutton.button:prelight:focused {
-    background-image: -gtk-win32-theme-part(spin, 1 2);
-    color: rgba(0, 0, 0, 0);
+.spinbutton .button:last-child {
+    background-image: -gtk-win32-theme-part(spin, 1 1, margins(-1 -1 0 -2));
 }
 
-.spinbutton.button:active,
-.spinbutton.button:active:prelight {
-    background-image: -gtk-win32-theme-part(spin, 1 3);
-    color: rgba(0, 0, 0, 0);
+.spinbutton .button:prelight,
+.spinbutton .button:prelight:focused {
+    background-image: -gtk-win32-theme-part(spin, 1 2, margins(-1 -1 0 -1));
 }
 
-.spinbutton.button:insensitive {
-    background-image: -gtk-win32-theme-part(spin, 1 4);
-    color: rgba(0, 0, 0, 0);
+.spinbutton .button:active,
+.spinbutton .button:active:prelight,
+.spinbutton .button:active:focused,
+.spinbutton .button:active:prelight:focused {
+    background-image: -gtk-win32-theme-part(spin, 1 3, margins(-1 -1 0 -1));
 }
 
-.spinbutton.button.bottom,
-.spinbutton.button.bottom:focused {
-    border-width: 0 1px 1px 0;
+.spinbutton .button:insensitive {
+    background-image: -gtk-win32-theme-part(spin, 1 4, margins(-1 -1 0 -1));
+}
+
+.spinbutton .button:insensitive:last-child {
+    background-image: -gtk-win32-theme-part(spin, 1 4, margins(-1 -1 0 -2));
+}
+
+.spinbutton .button.bottom,
+.spinbutton .button.bottom:focused {
     background-image: -gtk-win32-theme-part(spin, 2 1);
-    color: rgba(0, 0, 0, 0);
 }
 
-.spinbutton.button.bottom:prelight,
-.spinbutton.button.bottom:prelight:focused {
+.spinbutton .button.bottom:prelight,
+.spinbutton .button.bottom:prelight:focused {
     background-image: -gtk-win32-theme-part(spin, 2 2);
-    color: rgba(0, 0, 0, 0);
 }
 
-.spinbutton.button.bottom:active,
-.spinbutton.button.bottom:active:prelight {
+.spinbutton .button.bottom:active,
+.spinbutton .button.bottom:active:prelight {
     background-image: -gtk-win32-theme-part(spin, 2 3);
-    color: rgba(0, 0, 0, 0);
 }
 
-.spinbutton.button.bottom:insensitive {
+.spinbutton .button.bottom:insensitive {
     background-image: -gtk-win32-theme-part(spin, 2 4);
-    color: rgba(0, 0, 0, 0);
 }
 
 /* Ranges */
