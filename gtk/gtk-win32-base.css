@@ -78,7 +78,7 @@ GtkFrame {
 }
 
 .spinner:active {
-  transition: 750ms linear lop;
+  transition: 750ms linear loop;
 }
 
 .notebook > GtkScrolledWindow.frame {
