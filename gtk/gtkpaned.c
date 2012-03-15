@@ -688,7 +688,6 @@ gtk_paned_init (GtkPaned *paned)
   priv->child1 = NULL;
   priv->child2 = NULL;
   priv->handle = NULL;
-  priv->cursor_type = GDK_CROSS;
 
   priv->handle_pos.width = 5;
   priv->handle_pos.height = 5;
