@@ -162,7 +162,11 @@ GtkAssistant .sidebar .highlight {
     background-image: -gtk-win32-theme-part(button, 3 4);
 }
 
-.check:prelight {
+/* The GtkButton here is to avoid problems with checkboxes
+   in a listview where all checkboxes in a row gets prelighted
+   whenever the row is prelighted */
+
+GtkButton.check:prelight {
     background-image: -gtk-win32-theme-part(button, 3 2);
 }
 
@@ -174,7 +178,7 @@ GtkAssistant .sidebar .highlight {
     background-image: -gtk-win32-theme-part(button, 3 8);
 }
 
-.check:active:prelight {
+GtkButton.check:active:prelight {
     background-image: -gtk-win32-theme-part(button, 3 6);
 }
 
