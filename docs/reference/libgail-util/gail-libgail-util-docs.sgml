@@ -10,7 +10,7 @@
     <releaseinfo>
       Version &version;
       The latest version of this documentation can be found on-line at
-      <ulink role="online-location" url="http://library.gnome.org/devel/gail-libgail-util/unstable/">http://library.gnome.org/devel/gail-libgail-util/unstable/</ulink>.
+      <ulink role="online-location" url="http://developer.gnome.org/devel/gail-libgail-util/unstable/">http://developer.gnome.org/devel/gail-libgail-util/unstable/</ulink>.
     </releaseinfo>
   </bookinfo>
   <chapter id="libgail-util-main">

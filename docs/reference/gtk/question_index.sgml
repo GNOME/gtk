@@ -39,7 +39,7 @@ The GTK+ <ulink url="http://www.gtk.org">website</ulink> offers some
 <ulink url="http://www.gtk.org/documentation">tutorials</ulink> and other
 documentation (most of it about GTK+ 2.x, but mostly still applicable).
 More documentation ranging from whitepapers to online books can be found at
-the <ulink url="http://library.gnome.org/devel/">GNOME developer's site</ulink>.
+the <ulink url="http://developer.gnome.org">GNOME developer's site</ulink>.
 After studying these materials you should be well prepared to come back to
 this reference manual for details.
 </para></answer>
@@ -473,8 +473,8 @@ To draw a piece of text, use a Pango layout and pango_cairo_show_layout().
 
 <para>
 See also the
-<ulink url="http://library.gnome.org/devel/pango/stable/pango-Cairo-Rendering.html">Cairo Rendering</ulink>
-section of <ulink url="http://library.gnome.org/devel/pango/stable/">Pango manual</ulink>.
+<ulink url="http://developer.gnome.org/pango/stable/pango-Cairo-Rendering.html">Cairo Rendering</ulink>
+section of <ulink url="http://developer.gnome.org/pango/stable/">Pango manual</ulink>.
 </para>
 </answer>
 
@@ -505,8 +505,8 @@ pango_layout_get_pixel_size(), using code like the following:
 
 <para>
 See also the
-<ulink url="http://library.gnome.org/devel/pango/stable/pango-Layout-Objects.html">Layout Objects</ulink>
-section of <ulink url="http://library.gnome.org/devel/pango/stable/">Pango manual</ulink>.
+<ulink url="http://developer.gnome.org/pango/stable/pango-Layout-Objects.html">Layout Objects</ulink>
+section of <ulink url="http://developer.gnome.org/pango/stable/">Pango manual</ulink>.
 </para>
 </answer>
 </qandaentry>

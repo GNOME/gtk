@@ -10,9 +10,9 @@
     <releaseinfo>
       This document is for the GDK 3 library, version &version;
       The latest versions can be found online at
-      <ulink role="online-location" url="http://library.gnome.org/devel/gdk3/">http://library.gnome.org/devel/gdk3/</ulink>.
+      <ulink role="online-location" url="http://developer.gnome.org/devel/gdk3/">http://developer.gnome.org/devel/gdk3/</ulink>.
       If you are looking for the older GDK 2 series of libraries,
-      see <ulink role="online-location" url="http://library.gnome.org/devel/gdk/">http://library.gnome.org/devel/gdk/</ulink>.
+      see <ulink role="online-location" url="http://developer.gnome.org/devel/gdk/">http://developer.gnome.org/devel/gdk/</ulink>.
     </releaseinfo>
   </bookinfo>
 
