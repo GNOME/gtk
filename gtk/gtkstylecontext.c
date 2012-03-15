@@ -908,8 +908,7 @@ gtk_style_context_impl_get_property (GObject    *object,
 
 static GList *
 find_next_candidate (GList    *local,
-                     GList    *global,
-                     gboolean  ascending)
+                     GList    *global)
 {
   if (local && global)
     {
@@ -919,9 +918,9 @@ find_next_candidate (GList    *local,
       global_data = global->data;
 
       if (local_data->priority < global_data->priority)
-        return (ascending) ? local : global;
+        return global;
       else
-        return (ascending) ? global : local;
+        return local;
     }
   else if (local)
     return local;
@@ -952,7 +951,7 @@ build_properties (GtkStyleContext *context,
 
   lookup = _gtk_css_lookup_new ();
 
-  while ((elem = find_next_candidate (list, global_list, FALSE)) != NULL)
+  while ((elem = find_next_candidate (list, global_list)) != NULL)
     {
       GtkStyleProviderData *data;
       GtkStyleProperties *provider_style;
@@ -1008,7 +1007,7 @@ build_icon_factories (GtkStyleContext *context,
       global_list = g_list_last (global_list);
     }
 
-  while ((elem = find_next_candidate (list, global_list, FALSE)) != NULL)
+  while ((elem = find_next_candidate (list, global_list)) != NULL)
     {
       GtkIconFactory *factory;
       GtkStyleProviderData *data;
@@ -2441,7 +2440,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
       list = priv->providers_last;
       global = global_list;
 
-      while ((elem = find_next_candidate (list, global, FALSE)) != NULL)
+      while ((elem = find_next_candidate (list, global)) != NULL)
         {
           GtkStyleProviderData *provider_data;
 
@@ -2893,7 +2892,7 @@ gtk_style_context_color_lookup_func (gpointer    contextp,
   sym_color = NULL;
   
   while (sym_color == NULL &&
-         (elem = find_next_candidate (list, global_list, FALSE)) != NULL)
+         (elem = find_next_candidate (list, global_list)) != NULL)
     {
       GtkStyleProviderData *data;
 
