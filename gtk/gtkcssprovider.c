@@ -2351,13 +2351,6 @@ gtk_css_provider_compare_rule (gconstpointer a_,
   if (compare != 0)
     return compare;
 
-  /* compare pointers in array to ensure a stable sort */
-  if (a_ < b_)
-    return -1;
-
-  if (a_ > b_)
-    return 1;
-
   return 0;
 }
 
