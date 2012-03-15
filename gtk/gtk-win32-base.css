@@ -22,6 +22,9 @@ GtkViewport {
     -GtkWidget-link-color: -gtk-win32-color(button, 26);
     -GtkWidget-visited-link-color: -gtk-win32-color(button, 26);
     border-color: shade (@bg_color, 0.6);
+
+    -GtkScrolledWindow-scrollbars-within-bevel: 1;
+    -GtkScrolledWindow-scrollbars-spacing: 0;
 }
 
 GtkFrame {
@@ -72,6 +75,12 @@ GtkFrame {
 
 .dark-area-focus {
     color: #fff;
+}
+
+GtkScrolledWindow.frame {
+  border-style: solid;
+  border-width: 2px;
+  border-image: -gtk-win32-theme-part(listview, 5 1) 2 2 2 2 stretch;
 }
 
 .view {
