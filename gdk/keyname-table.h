@@ -3947,6 +3947,7 @@ static const gdk_key gdk_keys_by_name[] = {
  * XF86AudioMute - Audio mute
  * Scroll_lock   - Scroll lock
  * KP_Space      - Space (keypad)
+ * Page_Up       - Page up
  */
 NC_("keyboard label", "BackSpace")
 NC_("keyboard label", "Tab")
