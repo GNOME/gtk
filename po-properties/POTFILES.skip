@@ -33,6 +33,8 @@ tests/reftests/border-image-url.ui
 tests/reftests/box-packing.ui
 tests/reftests/box-pseudo-classes.ref.ui
 tests/reftests/box-pseudo-classes.ui
+tests/reftests/css-match-import.ref.ui
+tests/reftests/css-match-import.ui
 tests/reftests/css-match-inherit-different-state.ref.ui
 tests/reftests/css-match-inherit-different-state.ui
 tests/reftests/css-match-inherit.ref.ui
