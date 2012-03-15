@@ -330,19 +330,23 @@ GtkAssistant .sidebar .highlight {
 
 /* Entry */
 
-/* TODO: For entries with set_has_frame FALSE we should use 'edit, 3 1', not 
-   sure how to select for this though */
+/* We apply the border as a border combined with the background so that
+   gtk_entry_set_has_frame works */
+
 .entry {
-    background-color: black;
-    border-width: 0;
-    background-image: -gtk-win32-theme-part(edit, 1 1);
-    padding: 3px;
+    border-width: 1px;
+    border-style: solid;
+    border-image: -gtk-win32-theme-part(edit, 1 1)  1 1 1 1 stretch;
+    background-image: -gtk-win32-theme-part(edit, 1 1, margins(-1 -1 -1 -1));
+    padding: 2px;
 }
 .entry:insensitive {
-    background-image: -gtk-win32-theme-part(edit, 1 4);
+    border-image: -gtk-win32-theme-part(edit, 1 4)  1 1 1 1 stretch;
+    background-image: -gtk-win32-theme-part(edit, 1 4, margins(-1 -1 -1 -1));
 }
 .entry:prelight {
-    background-image: -gtk-win32-theme-part(edit, 1 4);
+    border-image: -gtk-win32-theme-part(edit, 1 2)  1 1 1 1 stretch;
+    background-image: -gtk-win32-theme-part(edit, 1 2, margins(-1 -1 -1 -1));
 }
 
 /* Spinbuttons */
