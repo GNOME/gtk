@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-02-23 13:54+0000\n"
-"PO-Revision-Date: 2012-03-03 00:35+0100\n"
+"PO-Revision-Date: 2012-03-15 19:33+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "MIME-Version: 1.0\n"
@@ -93,7 +93,7 @@ msgstr "Kikapcsolandó GDK jelzőbitek"
 #: ../gdk/keyname-table.h:3951
 msgctxt "keyboard label"
 msgid "BackSpace"
-msgstr "BackSpace"
+msgstr "Backspace"
 
 #: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
@@ -113,12 +113,12 @@ msgstr "Pause"
 #: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr "Scroll_Lock"
+msgstr "Scroll Lock"
 
 #: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "Sys_Req"
+msgstr "Sys Req"
 
 #: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
@@ -128,7 +128,7 @@ msgstr "Escape"
 #: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Multi_billentyű"
+msgstr "Multi billentyű"
 
 #: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
@@ -158,12 +158,12 @@ msgstr "Le"
 #: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Page_Up"
+msgstr "Page Up"
 
 #: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "Page_Down"
+msgstr "Page Down"
 
 #: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
@@ -188,88 +188,88 @@ msgstr "Insert"
 #: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr "Num_Lock"
+msgstr "Num Lock"
 
 #. Translators: KP_ means 'key pad' here
 #: ../gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "KP_Szóköz"
+msgstr "Szóköz (Num)"
 
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr "KP_Tab"
+msgstr "Tab (Num)"
 
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "KP_Enter"
+msgstr "Enter (Num)"
 
 #: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "KP_Home"
+msgstr "Home (Num)"
 
 #: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "KP_Balra"
+msgstr "Balra (Num)"
 
 #: ../gdk/keyname-table.h:3977
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "KP_Fel"
+msgstr "Fel (Num)"
 
 #: ../gdk/keyname-table.h:3978
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "KP_Jobbra"
+msgstr "Jobbra (Num)"
 
 #: ../gdk/keyname-table.h:3979
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "KP_Le"
+msgstr "Le (Num)"
 
 #: ../gdk/keyname-table.h:3980
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "KP_Page_Up"
+msgstr "Page Up (Num)"
 
 #: ../gdk/keyname-table.h:3981
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr "KP_Prior"
+msgstr "Prior (Num)"
 
 #: ../gdk/keyname-table.h:3982
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "KP_Page_Down"
+msgstr "Page Down (Num)"
 
 #: ../gdk/keyname-table.h:3983
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr "KP_Next"
+msgstr "Next (Num)"
 
 #: ../gdk/keyname-table.h:3984
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "KP_End"
+msgstr "End (Num)"
 
 #: ../gdk/keyname-table.h:3985
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr "KP_Begin"
+msgstr "Begin (Num)"
 
 #: ../gdk/keyname-table.h:3986
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "KP_Insert"
+msgstr "Insert (Num)"
 
 #: ../gdk/keyname-table.h:3987
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "KP_Delete"
+msgstr "Delete (Num)"
 
 #: ../gdk/keyname-table.h:3988
 msgctxt "keyboard label"
