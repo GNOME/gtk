@@ -1137,20 +1137,26 @@ backend_status_changed (GObject    *object,
 }
 
 static void
-list_done_cb (GtkPrintBackend *backend, 
-	      PrinterList     *printer_list)
+list_printers_remove_backend (PrinterList     *printer_list,
+                              GtkPrintBackend *backend)
 {
   printer_list->backends = g_list_remove (printer_list->backends, backend);
-  
-  g_signal_handlers_disconnect_by_func (backend, list_added_cb, printer_list);
-  g_signal_handlers_disconnect_by_func (backend, list_done_cb, printer_list);
-  g_signal_handlers_disconnect_by_func (backend, backend_status_changed, printer_list);
-  
   gtk_print_backend_destroy (backend);
   g_object_unref (backend);
 
   if (printer_list->backends == NULL)
     free_printer_list (printer_list);
+}
+
+static void
+list_done_cb (GtkPrintBackend *backend,
+	      PrinterList     *printer_list)
+{
+  g_signal_handlers_disconnect_by_func (backend, list_added_cb, printer_list);
+  g_signal_handlers_disconnect_by_func (backend, list_done_cb, printer_list);
+  g_signal_handlers_disconnect_by_func (backend, backend_status_changed, printer_list);
+
+  list_printers_remove_backend(printer_list, backend);
 }
 
 static gboolean
@@ -1177,11 +1183,7 @@ list_printers_init (PrinterList     *printer_list,
   
   if (status == GTK_PRINT_BACKEND_STATUS_UNAVAILABLE || 
       gtk_print_backend_printer_list_is_done (backend))
-    {
-      printer_list->backends = g_list_remove (printer_list->backends, backend);
-      gtk_print_backend_destroy (backend);
-      g_object_unref (backend);
-    }
+    list_printers_remove_backend(printer_list, backend);
   else
     {
       g_signal_connect (backend, "printer-added", 
