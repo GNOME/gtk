@@ -731,3 +731,21 @@ GtkSwitch.trough {
 GtkSwitch.trough:active {
     background-image: -gtk-win32-theme-part(button, 1 2);
 }
+
+/* Menus */
+
+.menu {
+    background-color: -gtk-win32-color(button, 4);
+    border-color: shade (-gtk-win32-color(button, 4), 0.6);
+    border-style: solid;
+    border-width: 1px;
+    padding: 2px;
+}
+
+.menuitem {
+    color: -gtk-win32-color(button, 7);
+}
+
+.menubar > .menuitem {
+    padding: 3px 5px;
+}
