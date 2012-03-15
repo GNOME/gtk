@@ -336,17 +336,22 @@ GtkAssistant .sidebar .highlight {
 .entry {
     border-width: 1px;
     border-style: solid;
-    border-image: -gtk-win32-theme-part(edit, 1 1)  1 1 1 1 stretch;
-    background-image: -gtk-win32-theme-part(edit, 1 1, margins(-1 -1 -1 -1));
+    border-image: -gtk-win32-theme-part(edit, 6 1)  1 1 1 1 stretch;
+    background-image: -gtk-win32-theme-part(edit, 6 1, margins(-1 -1 -1 -1));
     padding: 2px;
 }
 .entry:insensitive {
-    border-image: -gtk-win32-theme-part(edit, 1 4)  1 1 1 1 stretch;
-    background-image: -gtk-win32-theme-part(edit, 1 4, margins(-1 -1 -1 -1));
+    border-image: -gtk-win32-theme-part(edit, 6 4)  1 1 1 1 stretch;
+    background-image: -gtk-win32-theme-part(edit, 6 4, margins(-1 -1 -1 -1));
+    color: #a7aba7;
 }
 .entry:prelight {
-    border-image: -gtk-win32-theme-part(edit, 1 2)  1 1 1 1 stretch;
-    background-image: -gtk-win32-theme-part(edit, 1 2, margins(-1 -1 -1 -1));
+    border-image: -gtk-win32-theme-part(edit, 6 2)  1 1 1 1 stretch;
+    background-image: -gtk-win32-theme-part(edit, 6 2, margins(-1 -1 -1 -1));
+}
+.entry:focused {
+    border-image: -gtk-win32-theme-part(edit, 6 3)  1 1 1 1 stretch;
+    background-image: -gtk-win32-theme-part(edit, 6 3, margins(-1 -1 -1 -1));
 }
 
 /* Spinbuttons */
@@ -569,13 +574,15 @@ GtkProgressBar.trough {
 }
 
 GtkProgressBar.progressbar,
-GtkEntry.progressbar {
+GtkEntry.progressbar,
+GtkEntry.progressbar:focused {
     border-width: 0;
     background-image: -gtk-win32-theme-part(progress, 5 1);
 }
 
 GtkProgressBar.progressbar.pulse,
-GtkEntry.progressbar.pulse {
+GtkEntry.progressbar.pulse,
+GtkEntry.progressbar.pulse:focused {
     background-color: transparent;
     background-image: -gtk-win32-theme-part(progress, 8 1);
 }
