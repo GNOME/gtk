@@ -46,3 +46,9 @@ GtkNotebook.notebook {
 .spinbutton .button:last-child {
     border-width: 1px 1px 1px 0px;
 }
+
+GtkProgressBar.progressbar {
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+}
