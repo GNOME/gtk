@@ -31,7 +31,11 @@
 
 static HINSTANCE uxtheme_dll = NULL;
 static gboolean use_xp_theme = FALSE;
-static HTHEME needs_alpha_fixup = NULL;
+static HTHEME needs_alpha_fixup1 = NULL;
+static HTHEME needs_alpha_fixup2 = NULL;
+static HTHEME needs_alpha_fixup3 = NULL;
+static HTHEME needs_alpha_fixup4 = NULL;
+static HTHEME needs_alpha_fixup5 = NULL;
 
 typedef HRESULT (FAR PASCAL *GetThemeSysFontFunc)           (HTHEME hTheme, int iFontID, OUT LOGFONTW *plf);
 typedef int (FAR PASCAL *GetThemeSysSizeFunc)               (HTHEME hTheme, int iSizeId);
@@ -138,7 +142,13 @@ _gtk_win32_theme_init (void)
   memset (&version, 0, sizeof (version));
   version.dwOSVersionInfoSize = sizeof (version);
   if (GetVersionEx (&version) && version.dwMajorVersion == 5)
-    needs_alpha_fixup = _gtk_win32_lookup_htheme_by_classname ("toolbar");
+    {
+      needs_alpha_fixup1 = _gtk_win32_lookup_htheme_by_classname ("scrollbar");
+      needs_alpha_fixup2 = _gtk_win32_lookup_htheme_by_classname ("toolbar");
+      needs_alpha_fixup3 = _gtk_win32_lookup_htheme_by_classname ("button");
+      needs_alpha_fixup4 = _gtk_win32_lookup_htheme_by_classname ("header");
+      needs_alpha_fixup5 = _gtk_win32_lookup_htheme_by_classname ("trackbar");
+    }
 }
 
 HTHEME
@@ -247,20 +257,26 @@ _gtk_win32_theme_part_create_surface (HTHEME theme,
   res = draw_theme_background (theme, hdc, xp_part, state, &rect, &rect);
 
   /* XP Can't handle rendering some parts on an alpha target */
-  if (theme == needs_alpha_fixup && has_alpha) {
-    cairo_surface_t *img = cairo_win32_surface_get_image (surface);
-    guint32 *data = (guint32 *)cairo_image_surface_get_data (img);
-    GdiFlush ();
+  if (has_alpha && 
+      (theme == needs_alpha_fixup1 ||
+       theme == needs_alpha_fixup2 ||
+       (theme == needs_alpha_fixup3 && xp_part == 4) ||
+       theme == needs_alpha_fixup4 ||
+       theme == needs_alpha_fixup5))
+    {
+      cairo_surface_t *img = cairo_win32_surface_get_image (surface);
+      guint32 *data = (guint32 *)cairo_image_surface_get_data (img);
+      GdiFlush ();
 
-    for (int i = 0; i < width; i++)
-      {
-	for (int j = 0; j < height; j++)
-	  {
-	    if (data[i+j*width] != 0)
-	      data[i+j*width] |= 0xff000000;
-	  }
-      }
-  }
+      for (int i = 0; i < width; i++)
+	{
+	  for (int j = 0; j < height; j++)
+	    {
+	      if (data[i+j*width] != 0)
+		data[i+j*width] |= 0xff000000;
+	    }
+	}
+    }
 
   *x_offs_out = x_offs;
   *y_offs_out = y_offs;
