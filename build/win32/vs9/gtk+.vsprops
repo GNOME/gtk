@@ -397,6 +397,6 @@ $(OutDir)\bin\glib-compile-schemas.exe $(OutDir)\share\glib-2.0\schemas&#x0D;&#x
 	/>
 	<UserMacro
 		Name="GlibEtcInstallRoot"
-		Value="..\..\..\..\..\vs9\$(PlatformName)"
+		Value="..\..\..\..\vs9\$(PlatformName)"
 	/>
 </VisualStudioPropertySheet>
