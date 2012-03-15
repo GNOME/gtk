@@ -781,3 +781,20 @@ GtkSwitch.trough:active {
 .menubar > .menuitem {
     padding: 3px 5px;
 }
+
+/* Assistant */
+
+GtkAssistant .sidebar .highlight {
+    background-color: blue;
+    font: bold;
+}
+
+GtkAssistant .sidebar {
+    padding: 12px;
+
+    background-color: white;
+
+    border-image: none;
+    border-width: 0 1px 0 0;
+    border-style: solid;
+}
