@@ -93,6 +93,8 @@ gtk_style_provider_get_style (GtkStyleProvider *provider,
  * the widget represented by @path.
  *
  * Returns: %TRUE if the property was found and has a value, %FALSE otherwise
+ *
+ * Since: 3.0
  **/
 gboolean
 gtk_style_provider_get_style_property (GtkStyleProvider *provider,
