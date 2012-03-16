@@ -1408,8 +1408,6 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
 			 MAX (icon_view->priv->height, allocation->height));
     }
 
-  gtk_icon_view_layout (icon_view);
-  
   gtk_icon_view_allocate_children (icon_view);
 
   /* Delay signal emission */
