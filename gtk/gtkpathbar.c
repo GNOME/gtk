@@ -34,6 +34,7 @@
 #include "gtkmarshalers.h"
 #include "gtksettings.h"
 #include "gtktogglebutton.h"
+#include "gtkwidgetpath.h"
 
 
 enum {

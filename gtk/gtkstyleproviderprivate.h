@@ -22,7 +22,7 @@
 #include "gtk/gtkcsslookupprivate.h"
 #include <gtk/gtkenums.h>
 #include <gtk/gtksymboliccolor.h>
-#include <gtk/gtkwidgetpath.h>
+#include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
 

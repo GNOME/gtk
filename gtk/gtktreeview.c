@@ -51,6 +51,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkmain.h"
 #include "gtksettings.h"
+#include "gtkwidgetpath.h"
 #include "a11y/gtktreeviewaccessible.h"
 
 

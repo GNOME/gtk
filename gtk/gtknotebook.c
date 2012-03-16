@@ -41,6 +41,7 @@
 #include "gtkdnd.h"
 #include "gtkbuildable.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetpath.h"
 #include "a11y/gtknotebookaccessible.h"
 
 

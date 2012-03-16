@@ -25,9 +25,10 @@
 #include <glib-object.h>
 #include <cairo.h>
 
-#include <gtk/gtkstylecontext.h>
-#include <gtk/gtkwidgetpath.h>
+#include <gtk/gtkborder.h>
 #include <gtk/gtkenums.h>
+#include <gtk/gtkstyleproperties.h>
+#include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
 

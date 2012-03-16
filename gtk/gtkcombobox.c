@@ -40,6 +40,7 @@
 #include "gtktogglebutton.h"
 #include "gtktreeselection.h"
 #include "gtkseparator.h"
+#include "gtkwidgetpath.h"
 #include "gtkwindow.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"

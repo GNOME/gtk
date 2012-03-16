@@ -46,6 +46,7 @@
 #include "gtkwindow.h"
 #include "gtkassistant.h"
 #include "gtkintl.h"
+#include "gtkwidgetpath.h"
 #include "a11y/gtkcontaineraccessible.h"
 
 /**

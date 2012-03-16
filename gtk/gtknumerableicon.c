@@ -45,6 +45,7 @@
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkwidget.h"
+#include "gtkwidgetpath.h"
 #include "gtkwindow.h"
 
 #include <gdk/gdk.h>

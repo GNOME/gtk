@@ -23,6 +23,7 @@
 
 #include "gtkcssprovider.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkwidgetpath.h"
 
 typedef struct _GtkCssSelectorClass GtkCssSelectorClass;
 

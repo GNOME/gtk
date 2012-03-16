@@ -32,7 +32,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
-#include <gtk/gtkwidgetpath.h>
+#include <gtk/gtktypes.h>
 
 
 G_BEGIN_DECLS

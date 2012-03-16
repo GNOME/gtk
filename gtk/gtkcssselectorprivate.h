@@ -19,7 +19,7 @@
 #define __GTK_CSS_SELECTOR_PRIVATE_H__
 
 #include <gtk/gtkenums.h>
-#include <gtk/gtkwidgetpath.h>
+#include <gtk/gtktypes.h>
 #include "gtk/gtkcssparserprivate.h"
 
 G_BEGIN_DECLS

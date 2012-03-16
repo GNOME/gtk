@@ -17,9 +17,11 @@
 
 #include "config.h"
 
-#include "gtkprivate.h"
 #include "gtkstyleprovider.h"
+
 #include "gtkintl.h"
+#include "gtkprivate.h"
+#include "gtkwidgetpath.h"
 
 /**
  * SECTION:gtkstyleprovider

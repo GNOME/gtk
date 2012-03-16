@@ -54,6 +54,7 @@
 #include "gtkmodulesprivate.h"
 #include "gtkprivate.h"
 #include "gtksettingsprivate.h"
+#include "gtkwidgetpath.h"
 #include "gtkwindow.h"
 
 #ifdef G_OS_WIN32

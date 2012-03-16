@@ -30,6 +30,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
 #include "gtkbuildable.h"
+#include "gtkwidgetpath.h"
 
 #include "a11y/gtkframeaccessible.h"
 

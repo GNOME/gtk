@@ -39,12 +39,13 @@
 #include "gtkbindings.h"
 #include "gtkentryprivate.h"
 #include "gtkicontheme.h"
+#include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtkstock.h"
-#include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetpath.h"
 
 #include "a11y/gtkspinbuttonaccessible.h"
 

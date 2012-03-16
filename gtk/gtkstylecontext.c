@@ -34,6 +34,7 @@
 #include "gtkanimationdescription.h"
 #include "gtktimeline.h"
 #include "gtkiconfactory.h"
+#include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtksettings.h"

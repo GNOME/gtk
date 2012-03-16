@@ -79,11 +79,12 @@
 
 #include "gtkbox.h"
 #include "gtkboxprivate.h"
-#include "gtkorientable.h"
-#include "gtksizerequest.h"
-#include "gtktypebuiltins.h"
-#include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkorientable.h"
+#include "gtkprivate.h"
+#include "gtktypebuiltins.h"
+#include "gtksizerequest.h"
+#include "gtkwidgetpath.h"
 #include "a11y/gtkboxaccessible.h"
 
 

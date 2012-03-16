@@ -23,10 +23,10 @@
 #define __GTK_STYLE_PROVIDER_H__
 
 #include <glib-object.h>
-#include <gtk/gtkwidgetpath.h>
+#include <gtk/gtkenums.h>
 #include <gtk/gtkiconfactory.h>
 #include <gtk/gtkstyleproperties.h>
-#include <gtk/gtkenums.h>
+#include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
 

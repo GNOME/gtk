@@ -43,6 +43,7 @@
 #include "gtkdebug.h"
 #include "gtkspinner.h"
 #include "gtkborder.h"
+#include "gtkwidgetpath.h"
 
 /**
  * SECTION:gtkstyle

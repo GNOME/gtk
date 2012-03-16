@@ -54,6 +54,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetpath.h"
 
 
 /**

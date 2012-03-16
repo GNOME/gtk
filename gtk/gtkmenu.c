@@ -108,6 +108,7 @@
 #include "gtkscrollbar.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
+#include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkdnd.h"
 #include "gtkintl.h"
