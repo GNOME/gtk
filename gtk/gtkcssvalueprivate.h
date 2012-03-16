@@ -61,6 +61,7 @@ GtkCssValue *_gtk_css_value_new_take_shadow           (GtkShadow                
 GtkCssValue *_gtk_css_value_new_take_image            (GtkCssImage                *v);
 GtkCssValue *_gtk_css_value_new_from_number           (const GtkCssNumber         *v);
 GtkCssValue *_gtk_css_value_new_from_background_size  (const GtkCssBackgroundSize *v);
+GtkCssValue *_gtk_css_value_new_from_background_position (const GtkCssBackgroundPosition *v);
 void         _gtk_css_value_to_gvalue                 (GtkCssValue                *value,
 						       GValue                     *g_value);
 void         _gtk_css_value_init_gvalue               (GtkCssValue                *value,
@@ -80,6 +81,7 @@ GtkSymbolicColor         *_gtk_css_value_get_symbolic_color         (GtkCssValue
 GtkCssImage              *_gtk_css_value_get_image                  (GtkCssValue *value);
 GtkBorderStyle            _gtk_css_value_get_border_style           (GtkCssValue *value);
 GtkCssBackgroundSize     *_gtk_css_value_get_background_size        (GtkCssValue *value);
+GtkCssBackgroundPosition *_gtk_css_value_get_background_position    (GtkCssValue *value);
 GtkCssBorderCornerRadius *_gtk_css_value_get_border_corner_radius   (GtkCssValue *value);
 GtkCssBorderImageRepeat  *_gtk_css_value_get_border_image_repeat    (GtkCssValue *value);
 PangoFontDescription *    _gtk_css_value_get_font_description       (GtkCssValue *value);

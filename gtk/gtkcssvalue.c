@@ -348,6 +348,17 @@ _gtk_css_value_new_from_background_size (const GtkCssBackgroundSize *v)
 }
 
 GtkCssValue *
+_gtk_css_value_new_from_background_position (const GtkCssBackgroundPosition *v)
+{
+  GtkCssValue *value;
+
+  value = _gtk_css_value_new (GTK_TYPE_CSS_BACKGROUND_POSITION);
+  value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_BACKGROUND_POSITION, v);
+
+  return value;
+}
+
+GtkCssValue *
 _gtk_css_value_new_take_symbolic_color (GtkSymbolicColor *v)
 {
   GtkCssValue *value;
@@ -561,6 +572,13 @@ GtkCssBackgroundSize *
 _gtk_css_value_get_background_size (GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BACKGROUND_SIZE), NULL);
+  return value->u.ptr;
+}
+
+GtkCssBackgroundPosition *
+_gtk_css_value_get_background_position (GtkCssValue *value)
+{
+  g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BACKGROUND_POSITION), NULL);
   return value->u.ptr;
 }
 
