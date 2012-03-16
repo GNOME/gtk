@@ -822,3 +822,12 @@ GtkColorSwatch:prelight {
 .separator:prelight {
     color: shade (@bg_color, 0.6);
 }
+
+.pane-separator {
+    background-image: -gtk-win32-theme-part(rebar, 1 1);
+/* Use this when background-position is supported
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+*/
+}
