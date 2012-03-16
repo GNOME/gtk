@@ -733,40 +733,6 @@ is_address_local (const gchar *address)
     return FALSE;
 }
 
-#ifndef HAVE_CUPS_API_1_2
-/* Included from CUPS library because of backward compatibility */
-const char *
-httpGetHostname(http_t *http,
-                char   *s,
-                int    slen)
-{
-  struct hostent *host;
-
-  if (!s || slen <= 1)
-    return (NULL);
-
-  if (http)
-    {
-      if (http->hostname[0] == '/')
-        g_strlcpy (s, "localhost", slen);
-      else
-        g_strlcpy (s, http->hostname, slen);
-    }
-  else
-    {
-      if (gethostname (s, slen) < 0)
-        g_strlcpy (s, "localhost", slen);
-
-      if (!strchr (s, '.'))
-        {
-          if ((host = gethostbyname (s)) != NULL && host->h_name)
-            g_strlcpy (s, host->h_name, slen);
-        }
-    }
-  return (s);
-}
-#endif
-
 static void
 gtk_print_backend_cups_set_password (GtkPrintBackend  *backend,
                                      gchar           **auth_info_required,
@@ -1002,11 +968,7 @@ cups_dispatch_add_poll (GSource *source)
 	  else
 	    dispatch->data_poll->events = 0;
 
-#ifdef HAVE_CUPS_API_1_2
           dispatch->data_poll->fd = httpGetFd (dispatch->request->http);
-#else
-          dispatch->data_poll->fd = dispatch->request->http->fd;
-#endif
           g_source_add_poll (source, dispatch->data_poll);
         }
     }
@@ -3300,9 +3262,7 @@ create_pickone_option (ppd_file_t   *ppd_file,
   char *label;
   int n_choices;
   int i;
-#ifdef HAVE_CUPS_API_1_2
   ppd_coption_t *coption;
-#endif
 
   g_assert (ppd_option->ui == PPD_UI_PICKONE);
   
@@ -3318,7 +3278,6 @@ create_pickone_option (ppd_file_t   *ppd_file,
 
       label = get_option_text (ppd_file, ppd_option);
 
-#ifdef HAVE_CUPS_API_1_2
       coption = ppdFindCustomOption (ppd_file, ppd_option->keyword);
 
       if (coption)
@@ -3371,7 +3330,6 @@ create_pickone_option (ppd_file_t   *ppd_file,
 	    g_warning ("CUPS Backend: Multi-parameter PPD Custom Option not supported");
 #endif
 	}
-#endif /* HAVE_CUPS_API_1_2 */
 
       if (!option)
         option = gtk_printer_option_new (gtk_name, label,

@@ -106,13 +106,11 @@ struct _GtkCupsRequest
 
 struct _GtkCupsConnectionTest
 {
-#ifdef HAVE_CUPS_API_1_2
   GtkCupsConnectionState at_init;
   http_addrlist_t       *addrlist;
   http_addrlist_t       *current_addr;
   http_addrlist_t       *last_wrong_addr;
   gint                   socket;
-#endif
 };
 
 #define GTK_CUPS_REQUEST_START 0
