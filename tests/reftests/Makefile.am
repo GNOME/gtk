@@ -37,6 +37,9 @@ EXTRA_DIST += \
 	background-origin.ui \
 	background-positioning-area-empty.ref.ui \
 	background-positioning-area-empty.ui \
+	background-position.css \
+	background-position.ref.ui \
+	background-position.ui \
 	background-size.css \
 	background-size.ref.ui \
 	background-size.ui \
