@@ -825,9 +825,26 @@ GtkColorSwatch:prelight {
 
 .pane-separator {
     background-image: -gtk-win32-theme-part(rebar, 1 1);
+
 /* Use this when background-position is supported
     background-size: 20px 20px;
     background-repeat: no-repeat;
     background-position: center;
 */
 }
+
+GtkStatusbar > GtkFrame {
+    border-width: 1px 1px 1px 1px;
+    border-style: solid;
+    border-image:  -gtk-win32-theme-part(status, 0 0, margins (-1 0 0 0))  2 1 1 1 stretch;
+    background-image: none;
+}
+
+/*
+ This doesn't quite look right with no background (i.e. when not on a statusbar
+
+.grip {
+    background-color: transparent;
+    background-image:  -gtk-win32-theme-part(status, 3 1);
+}
+*/
