@@ -813,3 +813,8 @@ GtkColorSwatch {
 GtkColorSwatch:prelight {
     border-color: shade (@bg_color, 0.2);
 }
+
+.separator,
+.separator:prelight {
+    color: shade (@bg_color, 0.6);
+}
