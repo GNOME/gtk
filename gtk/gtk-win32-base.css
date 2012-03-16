@@ -784,6 +784,10 @@ GtkSwitch.trough:active {
     color: -gtk-win32-color(button, 7);
 }
 
+.menubar .menuitem *:backdrop {
+    color: mix (-gtk-win32-color(button, 7), white, 0.5);
+}
+
 .menubar > .menuitem {
     padding: 3px 5px;
 }
