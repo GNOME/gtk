@@ -622,7 +622,6 @@ GtkProgressBar.trough.vertical {
 
 /* Combobox */
 
-
 GtkComboBox.combobox-entry .button {
     background-color: transparent;
     border-width: 0;
@@ -643,6 +642,13 @@ GtkComboBox.combobox-entry .button:active:focused:prelight {
 }
 GtkComboBox.combobox-entry .button:insensitive {
     background-image: -gtk-win32-theme-part(combobox, 1 4);
+}
+
+GtkComboBox .separator {
+    /* always disable separators */
+    -GtkWidget-wide-separators: true;
+    -GtkWidget-horizontal-separator: 0;
+    -GtkWidget-vertical-separator: 0;
 }
 
 /* Notebook */
