@@ -338,7 +338,6 @@ struct GtkStyleInfo
 struct StyleData
 {
   GtkCssComputedValues *store;
-  GSList *icon_factories;
   GArray *property_cache;
 };
 
@@ -607,8 +606,6 @@ style_data_free (StyleData *data)
 {
   g_object_unref (data->store);
   clear_property_cache (data);
-
-  g_slist_free_full (data->icon_factories, g_object_unref);
 
   g_slice_free (StyleData, data);
 }
@@ -991,42 +988,6 @@ build_properties (GtkStyleContext *context,
   _gtk_css_lookup_free (lookup);
 }
 
-static void
-build_icon_factories (GtkStyleContext *context,
-                      StyleData       *style_data,
-                      GtkWidgetPath   *path)
-{
-  GtkStyleContextPrivate *priv;
-  GList *elem, *list, *global_list = NULL;
-
-  priv = context->priv;
-  list = priv->providers_last;
-
-  if (priv->screen)
-    {
-      global_list = g_object_get_qdata (G_OBJECT (priv->screen), provider_list_quark);
-      global_list = g_list_last (global_list);
-    }
-
-  while ((elem = find_next_candidate (list, global_list)) != NULL)
-    {
-      GtkIconFactory *factory;
-      GtkStyleProviderData *data;
-
-      data = elem->data;
-
-      if (elem == list)
-        list = list->prev;
-      else
-        global_list = global_list->prev;
-
-      factory = gtk_style_provider_get_icon_factory (data->provider, path);
-
-      if (factory)
-        style_data->icon_factories = g_slist_prepend (style_data->icon_factories, factory);
-    }
-}
-
 static GtkWidgetPath *
 create_query_path (GtkStyleContext *context)
 {
@@ -1104,7 +1065,6 @@ style_data_lookup (GtkStyleContext *context,
       path = create_query_path (context);
 
       build_properties (context, priv->current_data, path, state);
-      build_icon_factories (context, priv->current_data, path);
 
       gtk_widget_path_free (path);
     }
@@ -2690,28 +2650,12 @@ gtk_style_context_lookup_icon_set (GtkStyleContext *context,
                                    const gchar     *stock_id)
 {
   GtkStyleContextPrivate *priv;
-  StyleData *data;
-  GSList *list;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
   g_return_val_if_fail (stock_id != NULL, NULL);
 
   priv = context->priv;
   g_return_val_if_fail (priv->widget_path != NULL, NULL);
-
-  data = style_data_lookup (context, 0);
-
-  for (list = data->icon_factories; list; list = list->next)
-    {
-      GtkIconFactory *factory;
-      GtkIconSet *icon_set;
-
-      factory = list->data;
-      icon_set = gtk_icon_factory_lookup (factory, stock_id);
-
-      if (icon_set)
-        return icon_set;
-    }
 
   return gtk_icon_factory_lookup_default (stock_id);
 }
