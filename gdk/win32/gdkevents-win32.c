@@ -3217,6 +3217,11 @@ gdk_event_translate (MSG  *msg,
 	  break;
 	}
 
+      if (LOWORD (msg->wParam) == WA_INACTIVE)
+	gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FOCUSED, 0);
+      else
+	gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FOCUSED);
+
       /* Bring any tablet contexts to the top of the overlap order when
        * one of our windows is activated.
        * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
