@@ -798,3 +798,12 @@ GtkAssistant .sidebar {
     border-width: 0 1px 0 0;
     border-style: solid;
 }
+
+GtkColorSwatch {
+    border-style: solid;
+    border-width: 1px;
+}
+
+GtkColorSwatch:prelight {
+    border-color: shade (@bg_color, 0.2);
+}
