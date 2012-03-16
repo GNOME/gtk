@@ -190,7 +190,7 @@ gdk_wayland_display_manager_class_init (GdkWaylandDisplayManagerClass *class)
   manager_class->get_keyval_name = gdk_wayland_display_manager_get_keyval_name;
 }
 
-struct {
+static struct {
   const gchar *name;
   guint atom_id;
 } predefined_atoms[] = {
