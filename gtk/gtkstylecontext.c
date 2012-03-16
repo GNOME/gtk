@@ -36,6 +36,7 @@
 #include "gtkiconfactory.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
+#include "gtkstylecascadeprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtksettings.h"
 
@@ -300,7 +301,6 @@
  * </refsect2>
  */
 
-typedef struct GtkStyleProviderData GtkStyleProviderData;
 typedef struct GtkStyleInfo GtkStyleInfo;
 typedef struct GtkRegion GtkRegion;
 typedef struct PropertyValue PropertyValue;
@@ -311,12 +311,6 @@ struct GtkRegion
 {
   GQuark class_quark;
   GtkRegionFlags flags;
-};
-
-struct GtkStyleProviderData
-{
-  GtkStyleProvider *provider;
-  guint priority;
 };
 
 struct PropertyValue
@@ -364,8 +358,7 @@ struct _GtkStyleContextPrivate
 {
   GdkScreen *screen;
 
-  GList *providers;
-  GList *providers_last;
+  GtkStyleCascade *cascade;
 
   GtkStyleContext *parent;
   GtkWidgetPath *widget_path;
@@ -398,8 +391,6 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
-
-static GQuark provider_list_quark = 0;
 
 static void gtk_style_context_finalize (GObject *object);
 
@@ -629,30 +620,12 @@ gtk_style_context_init (GtkStyleContext *style_context)
   priv->direction = GTK_TEXT_DIR_LTR;
 
   priv->screen = gdk_screen_get_default ();
+  priv->cascade = _gtk_style_cascade_get_for_screen (priv->screen);
+  g_object_ref (priv->cascade);
 
   /* Create default info store */
   info = style_info_new ();
   priv->info_stack = g_slist_prepend (priv->info_stack, info);
-}
-
-static GtkStyleProviderData *
-style_provider_data_new (GtkStyleProvider *provider,
-                         guint             priority)
-{
-  GtkStyleProviderData *data;
-
-  data = g_slice_new (GtkStyleProviderData);
-  data->provider = g_object_ref (provider);
-  data->priority = priority;
-
-  return data;
-}
-
-static void
-style_provider_data_free (GtkStyleProviderData *data)
-{
-  g_object_unref (data->provider);
-  g_slice_free (GtkStyleProviderData, data);
 }
 
 static void
@@ -828,7 +801,7 @@ gtk_style_context_finalize (GObject *object)
 
   g_hash_table_destroy (priv->style_data);
 
-  g_list_free_full (priv->providers, (GDestroyNotify) style_provider_data_free);
+  g_object_unref (priv->cascade);
 
   g_slist_free_full (priv->info_stack, (GDestroyNotify) style_info_free);
 
@@ -904,30 +877,6 @@ gtk_style_context_impl_get_property (GObject    *object,
     }
 }
 
-static GList *
-find_next_candidate (GList    *local,
-                     GList    *global)
-{
-  if (local && global)
-    {
-      GtkStyleProviderData *local_data, *global_data;
-
-      local_data = local->data;
-      global_data = global->data;
-
-      if (local_data->priority < global_data->priority)
-        return global;
-      else
-        return local;
-    }
-  else if (local)
-    return local;
-  else if (global)
-    return global;
-
-  return NULL;
-}
-
 static void
 build_properties (GtkStyleContext *context,
                   StyleData       *style_data,
@@ -935,53 +884,16 @@ build_properties (GtkStyleContext *context,
                   GtkStateFlags    state)
 {
   GtkStyleContextPrivate *priv;
-  GList *elem, *list, *global_list = NULL;
   GtkCssLookup *lookup;
 
   priv = context->priv;
-  list = priv->providers_last;
-
-  if (priv->screen)
-    {
-      global_list = g_object_get_qdata (G_OBJECT (priv->screen), provider_list_quark);
-      global_list = g_list_last (global_list);
-    }
 
   lookup = _gtk_css_lookup_new ();
 
-  while ((elem = find_next_candidate (list, global_list)) != NULL)
-    {
-      GtkStyleProviderData *data;
-      GtkStyleProperties *provider_style;
-
-      data = elem->data;
-
-      if (elem == list)
-        list = list->prev;
-      else
-        global_list = global_list->prev;
-
-      if (GTK_IS_STYLE_PROVIDER_PRIVATE (data->provider))
-        {
-          _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (data->provider),
-                                              path,
-                                              state,
-                                              lookup);
-        }
-      else
-        {
-          provider_style = gtk_style_provider_get_style (data->provider, path);
-
-          if (provider_style)
-            {
-              _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (provider_style),
-                                                  path,
-                                                  state,
-                                                  lookup);
-              g_object_unref (provider_style);
-            }
-        }
-    }
+  _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                      path,
+                                      state,
+                                      lookup);
 
   style_data->store = _gtk_css_computed_values_new ();
   _gtk_css_lookup_resolve (lookup, context, style_data->store);
@@ -1086,82 +998,6 @@ style_data_lookup (GtkStyleContext *context,
   return data;
 }
 
-static void
-style_provider_add (GList            **list,
-                    GtkStyleProvider  *provider,
-                    guint              priority)
-{
-  GtkStyleProviderData *new_data;
-  gboolean added = FALSE;
-  GList *l = *list;
-
-  new_data = style_provider_data_new (provider, priority);
-
-  while (l)
-    {
-      GtkStyleProviderData *data;
-
-      data = l->data;
-
-      /* Provider was already attached to the style
-       * context, remove in order to add the new data
-       */
-      if (data->provider == provider)
-        {
-          GList *link;
-
-          link = l;
-          l = l->next;
-
-          /* Remove and free link */
-          *list = g_list_remove_link (*list, link);
-          style_provider_data_free (link->data);
-          g_list_free_1 (link);
-
-          continue;
-        }
-
-      if (!added &&
-          data->priority > priority)
-        {
-          *list = g_list_insert_before (*list, l, new_data);
-          added = TRUE;
-        }
-
-      l = l->next;
-    }
-
-  if (!added)
-    *list = g_list_append (*list, new_data);
-}
-
-static gboolean
-style_provider_remove (GList            **list,
-                       GtkStyleProvider  *provider)
-{
-  GList *l = *list;
-
-  while (l)
-    {
-      GtkStyleProviderData *data;
-
-      data = l->data;
-
-      if (data->provider == provider)
-        {
-          *list = g_list_remove_link (*list, l);
-          style_provider_data_free (l->data);
-          g_list_free_1 (l);
-
-          return TRUE;
-        }
-
-      l = l->next;
-    }
-
-  return FALSE;
-}
-
 /**
  * gtk_style_context_new:
  *
@@ -1213,8 +1049,18 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
   g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
 
   priv = context->priv;
-  style_provider_add (&priv->providers, provider, priority);
-  priv->providers_last = g_list_last (priv->providers);
+
+  if (priv->cascade == _gtk_style_cascade_get_for_screen (priv->screen))
+    {
+      GtkStyleCascade *new_cascade;
+      
+      new_cascade = _gtk_style_cascade_new ();
+      _gtk_style_cascade_set_parent (new_cascade, priv->cascade);
+      g_object_unref (priv->cascade);
+      priv->cascade = new_cascade;
+    }
+
+  _gtk_style_cascade_add_provider (priv->cascade, provider, priority);
 
   gtk_style_context_invalidate (context);
 }
@@ -1239,12 +1085,10 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
 
   priv = context->priv;
 
-  if (style_provider_remove (&priv->providers, provider))
-    {
-      priv->providers_last = g_list_last (priv->providers);
+  if (priv->cascade == _gtk_style_cascade_get_for_screen (priv->screen))
+    return;
 
-      gtk_style_context_invalidate (context);
-    }
+  _gtk_style_cascade_remove_provider (priv->cascade, provider);
 }
 
 /**
@@ -1309,21 +1153,13 @@ gtk_style_context_add_provider_for_screen (GdkScreen        *screen,
                                            GtkStyleProvider *provider,
                                            guint             priority)
 {
-  GList *providers, *list;
+  GtkStyleCascade *cascade;
 
   g_return_if_fail (GDK_IS_SCREEN (screen));
   g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
 
-  if (G_UNLIKELY (!provider_list_quark))
-    provider_list_quark = g_quark_from_static_string ("gtk-provider-list-quark");
-
-  list = providers = g_object_get_qdata (G_OBJECT (screen), provider_list_quark);
-  style_provider_add (&list, provider, priority);
-
-  if (list != providers)
-    g_object_set_qdata (G_OBJECT (screen), provider_list_quark, list);
-
-  gtk_style_context_reset_widgets (screen);
+  cascade = _gtk_style_cascade_get_for_screen (screen);
+  _gtk_style_cascade_add_provider (cascade, provider, priority);
 }
 
 /**
@@ -1339,23 +1175,13 @@ void
 gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
                                               GtkStyleProvider *provider)
 {
-  GList *providers, *list;
+  GtkStyleCascade *cascade;
 
   g_return_if_fail (GDK_IS_SCREEN (screen));
   g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
 
-  if (G_UNLIKELY (!provider_list_quark))
-    return;
-
-  list = providers = g_object_get_qdata (G_OBJECT (screen), provider_list_quark);
-
-  if (style_provider_remove (&list, provider))
-    {
-      if (list != providers)
-        g_object_set_qdata (G_OBJECT (screen), provider_list_quark, list);
-
-      gtk_style_context_reset_widgets (screen);
-    }
+  cascade = _gtk_style_cascade_get_for_screen (screen);
+  _gtk_style_cascade_remove_provider (cascade, provider);
 }
 
 /**
@@ -2353,7 +2179,6 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   PropertyValue *pcache, key = { 0 };
-  GList *global_list = NULL;
   StyleData *data;
   guint i;
 
@@ -2388,72 +2213,49 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
   g_param_spec_ref (pcache->pspec);
   g_value_init (&pcache->value, G_PARAM_SPEC_VALUE_TYPE (pspec));
 
-  if (priv->screen)
-    {
-      global_list = g_object_get_qdata (G_OBJECT (priv->screen), provider_list_quark);
-      global_list = g_list_last (global_list);
-    }
-
   if (priv->widget_path)
     {
-      GList *list, *global, *elem;
-
-      list = priv->providers_last;
-      global = global_list;
-
-      while ((elem = find_next_candidate (list, global)) != NULL)
+      if (gtk_style_provider_get_style_property (GTK_STYLE_PROVIDER (priv->cascade),
+                                                 priv->widget_path, state,
+                                                 pspec, &pcache->value))
         {
-          GtkStyleProviderData *provider_data;
-
-          provider_data = elem->data;
-
-          if (elem == list)
-            list = list->prev;
-          else
-            global = global->prev;
-
-          if (gtk_style_provider_get_style_property (provider_data->provider,
-                                                     priv->widget_path, state,
-                                                     pspec, &pcache->value))
+          /* Resolve symbolic colors to GdkColor/GdkRGBA */
+          if (G_VALUE_TYPE (&pcache->value) == GTK_TYPE_SYMBOLIC_COLOR)
             {
-              /* Resolve symbolic colors to GdkColor/GdkRGBA */
-              if (G_VALUE_TYPE (&pcache->value) == GTK_TYPE_SYMBOLIC_COLOR)
+              GtkSymbolicColor *color;
+              GdkRGBA rgba;
+
+              color = g_value_dup_boxed (&pcache->value);
+
+              g_value_unset (&pcache->value);
+
+              if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
+                g_value_init (&pcache->value, GDK_TYPE_RGBA);
+              else
+                g_value_init (&pcache->value, GDK_TYPE_COLOR);
+
+              if (_gtk_style_context_resolve_color (context, color, &rgba))
                 {
-                  GtkSymbolicColor *color;
-                  GdkRGBA rgba;
-
-                  color = g_value_dup_boxed (&pcache->value);
-
-                  g_value_unset (&pcache->value);
-
                   if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
-                    g_value_init (&pcache->value, GDK_TYPE_RGBA);
+                    g_value_set_boxed (&pcache->value, &rgba);
                   else
-                    g_value_init (&pcache->value, GDK_TYPE_COLOR);
-
-                  if (_gtk_style_context_resolve_color (context, color, &rgba))
                     {
-                      if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
-                        g_value_set_boxed (&pcache->value, &rgba);
-                      else
-                        {
-                          GdkColor rgb;
+                      GdkColor rgb;
 
-                          rgb.red = rgba.red * 65535. + 0.5;
-                          rgb.green = rgba.green * 65535. + 0.5;
-                          rgb.blue = rgba.blue * 65535. + 0.5;
+                      rgb.red = rgba.red * 65535. + 0.5;
+                      rgb.green = rgba.green * 65535. + 0.5;
+                      rgb.blue = rgba.blue * 65535. + 0.5;
 
-                          g_value_set_boxed (&pcache->value, &rgb);
-                        }
+                      g_value_set_boxed (&pcache->value, &rgb);
                     }
-                  else
-                    g_param_value_set_default (pspec, &pcache->value);
-
-                  gtk_symbolic_color_unref (color);
                 }
+              else
+                g_param_value_set_default (pspec, &pcache->value);
 
-              return &pcache->value;
+              gtk_symbolic_color_unref (color);
             }
+
+          return &pcache->value;
         }
     }
 
@@ -2689,6 +2491,17 @@ gtk_style_context_set_screen (GtkStyleContext *context,
   if (priv->screen == screen)
     return;
 
+  if (priv->cascade == _gtk_style_cascade_get_for_screen (priv->screen))
+    {
+      g_object_unref (priv->cascade);
+      priv->cascade = _gtk_style_cascade_get_for_screen (screen);
+      g_object_ref (priv->cascade);
+    }
+  else
+    {
+      _gtk_style_cascade_set_parent (priv->cascade, _gtk_style_cascade_get_for_screen (screen));
+    }
+
   priv->screen = screen;
 
   g_object_notify (G_OBJECT (context), "screen");
@@ -2822,45 +2635,9 @@ static GtkSymbolicColor *
 gtk_style_context_color_lookup_func (gpointer    contextp,
                                      const char *name)
 {
-  GtkSymbolicColor *sym_color;
   GtkStyleContext *context = contextp;
-  GtkStyleContextPrivate *priv = context->priv;
-  GList *elem, *list, *global_list = NULL;
 
-  list = priv->providers_last;
-  if (priv->screen)
-    {
-      global_list = g_object_get_qdata (G_OBJECT (priv->screen), provider_list_quark);
-      global_list = g_list_last (global_list);
-    }
-
-  sym_color = NULL;
-  
-  while (sym_color == NULL &&
-         (elem = find_next_candidate (list, global_list)) != NULL)
-    {
-      GtkStyleProviderData *data;
-
-      data = elem->data;
-
-      if (elem == list)
-        list = list->prev;
-      else
-        global_list = global_list->prev;
-
-      if (GTK_IS_STYLE_PROVIDER_PRIVATE (data->provider))
-        {
-          sym_color = _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (data->provider),
-                                                             name);
-        }
-      else
-        {
-          /* If somebody hits this code path, shout at them */
-          sym_color = NULL;
-        }
-    }
-
-  return sym_color;
+  return _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade), name);
 }
 
 GtkCssValue *
