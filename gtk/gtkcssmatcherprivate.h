@@ -23,7 +23,8 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkCssMatcher GtkCssMatcher;
+typedef union _GtkCssMatcher GtkCssMatcher;
+typedef struct _GtkCssMatcherWidgetPath GtkCssMatcherWidgetPath;
 typedef struct _GtkCssMatcherClass GtkCssMatcherClass;
 
 struct _GtkCssMatcherClass {
@@ -47,12 +48,17 @@ struct _GtkCssMatcherClass {
   guint           (* get_n_siblings)              (const GtkCssMatcher   *matcher);
 };
 
-struct _GtkCssMatcher {
+struct _GtkCssMatcherWidgetPath {
   const GtkCssMatcherClass *klass;
   const GtkWidgetPath      *path;
   GtkStateFlags             state_flags;
   guint                     index;
   guint                     sibling_index;
+};
+
+union _GtkCssMatcher {
+  const GtkCssMatcherClass *klass;
+  GtkCssMatcherWidgetPath   path;
 };
 
 void              _gtk_css_matcher_init           (GtkCssMatcher          *matcher,
