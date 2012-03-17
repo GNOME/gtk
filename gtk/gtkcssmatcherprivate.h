@@ -24,36 +24,109 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkCssMatcher GtkCssMatcher;
+typedef struct _GtkCssMatcherClass GtkCssMatcherClass;
+
+struct _GtkCssMatcherClass {
+  gboolean        (* get_parent)                  (GtkCssMatcher          *matcher,
+                                                   const GtkCssMatcher    *child);
+  gboolean        (* get_previous)                (GtkCssMatcher          *matcher,
+                                                   const GtkCssMatcher    *next);
+
+  GtkStateFlags   (* get_state)                   (const GtkCssMatcher   *matcher);
+  gboolean        (* has_name)                    (const GtkCssMatcher   *matcher,
+                                                   const char            *name);
+  gboolean        (* has_class)                   (const GtkCssMatcher   *matcher,
+                                                   const char            *class_name);
+  gboolean        (* has_id)                      (const GtkCssMatcher   *matcher,
+                                                   const char            *id);
+  gboolean        (* has_regions)                 (const GtkCssMatcher   *matcher);
+  gboolean        (* has_region)                  (const GtkCssMatcher   *matcher,
+                                                   const char            *region,
+                                                   GtkRegionFlags         flags);
+  guint           (* get_sibling_index)           (const GtkCssMatcher   *matcher);
+  guint           (* get_n_siblings)              (const GtkCssMatcher   *matcher);
+};
 
 struct _GtkCssMatcher {
-  const GtkWidgetPath *path;
-  GtkStateFlags        state_flags;
-  guint                index;
-  guint                sibling_index;
+  const GtkCssMatcherClass *klass;
+  const GtkWidgetPath      *path;
+  GtkStateFlags             state_flags;
+  guint                     index;
+  guint                     sibling_index;
 };
 
 void              _gtk_css_matcher_init           (GtkCssMatcher          *matcher,
                                                    const GtkWidgetPath    *path,
                                                    GtkStateFlags           state);
-gboolean          _gtk_css_matcher_get_parent     (GtkCssMatcher          *matcher,
-                                                   const GtkCssMatcher    *child);
-gboolean          _gtk_css_matcher_get_previous   (GtkCssMatcher          *matcher,
-                                                   const GtkCssMatcher    *next);
 
-GtkStateFlags     _gtk_css_matcher_get_state      (const GtkCssMatcher   *matcher);
-gboolean          _gtk_css_matcher_has_name       (const GtkCssMatcher   *matcher,
-                                                   const char            *name);
-gboolean          _gtk_css_matcher_has_class      (const GtkCssMatcher   *matcher,
-                                                   const char            *class_name);
-gboolean          _gtk_css_matcher_has_id         (const GtkCssMatcher   *matcher,
-                                                   const char            *id);
-gboolean          _gtk_css_matcher_has_regions    (const GtkCssMatcher   *matcher);
-gboolean          _gtk_css_matcher_has_region     (const GtkCssMatcher   *matcher,
-                                                   const char            *region,
-                                                   GtkRegionFlags         flags);
-guint             _gtk_css_matcher_get_sibling_index
-                                                  (const GtkCssMatcher   *matcher);
-guint             _gtk_css_matcher_get_n_siblings (const GtkCssMatcher   *matcher);
+static inline gboolean
+_gtk_css_matcher_get_parent (GtkCssMatcher       *matcher,
+                             const GtkCssMatcher *child)
+{
+  return child->klass->get_parent (matcher, child);
+}
+
+static inline gboolean
+_gtk_css_matcher_get_previous (GtkCssMatcher       *matcher,
+                               const GtkCssMatcher *next)
+{
+  return next->klass->get_previous (matcher, next);
+}
+
+static inline GtkStateFlags
+_gtk_css_matcher_get_state (const GtkCssMatcher *matcher)
+{
+  return matcher->klass->get_state (matcher);
+}
+
+static inline gboolean
+_gtk_css_matcher_has_name (const GtkCssMatcher *matcher,
+                           const char          *name)
+{
+  return matcher->klass->has_name (matcher, name);
+}
+
+static inline gboolean
+_gtk_css_matcher_has_class (const GtkCssMatcher *matcher,
+                            const char          *class_name)
+{
+  return matcher->klass->has_class (matcher, class_name);
+}
+
+static inline gboolean
+_gtk_css_matcher_has_id (const GtkCssMatcher *matcher,
+                         const char          *id)
+{
+  return matcher->klass->has_id (matcher, id);
+}
+
+
+static inline gboolean
+_gtk_css_matcher_has_regions (const GtkCssMatcher *matcher)
+{
+  return matcher->klass->has_regions (matcher);
+}
+
+static inline gboolean
+_gtk_css_matcher_has_region (const GtkCssMatcher *matcher,
+                             const char          *region,
+                             GtkRegionFlags       flags)
+{
+  return matcher->klass->has_region (matcher, region, flags);
+}
+
+static inline guint
+_gtk_css_matcher_get_sibling_index (const GtkCssMatcher *matcher)
+{
+  return matcher->klass->get_sibling_index (matcher);
+}
+
+static inline guint
+_gtk_css_matcher_get_n_siblings (const GtkCssMatcher *matcher)
+{
+  return matcher->klass->get_n_siblings (matcher);
+}
+
 
 G_END_DECLS
 

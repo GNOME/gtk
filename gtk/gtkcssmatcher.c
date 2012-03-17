@@ -21,24 +21,14 @@
 
 #include "gtkwidgetpath.h"
 
-void
-_gtk_css_matcher_init (GtkCssMatcher       *matcher,
-                       const GtkWidgetPath *path,
-                       GtkStateFlags        state)
-{
-  matcher->path = path;
-  matcher->state_flags = state;
-  matcher->index = gtk_widget_path_length (path) - 1;
-  matcher->sibling_index = gtk_widget_path_iter_get_sibling_index (path, matcher->index);
-}
-
-gboolean
-_gtk_css_matcher_get_parent (GtkCssMatcher       *matcher,
-                             const GtkCssMatcher *child)
+static gboolean
+gtk_css_matcher_widget_path_get_parent (GtkCssMatcher       *matcher,
+                                        const GtkCssMatcher *child)
 {
   if (child->index == 0)
     return FALSE;
 
+  matcher->klass = child->klass;
   matcher->path = child->path;
   matcher->state_flags = 0;
   matcher->index = child->index - 1;
@@ -47,13 +37,14 @@ _gtk_css_matcher_get_parent (GtkCssMatcher       *matcher,
   return TRUE;
 }
 
-gboolean
-_gtk_css_matcher_get_previous (GtkCssMatcher       *matcher,
-                               const GtkCssMatcher *next)
+static gboolean
+gtk_css_matcher_widget_path_get_previous (GtkCssMatcher       *matcher,
+                                          const GtkCssMatcher *next)
 {
   if (next->sibling_index == 0)
     return FALSE;
 
+  matcher->klass = next->klass;
   matcher->path = next->path;
   matcher->state_flags = 0;
   matcher->index = next->index;
@@ -62,15 +53,15 @@ _gtk_css_matcher_get_previous (GtkCssMatcher       *matcher,
   return TRUE;
 }
 
-GtkStateFlags
-_gtk_css_matcher_get_state (const GtkCssMatcher *matcher)
+static GtkStateFlags
+gtk_css_matcher_widget_path_get_state (const GtkCssMatcher *matcher)
 {
   return matcher->state_flags;
 }
 
-gboolean
-_gtk_css_matcher_has_name (const GtkCssMatcher *matcher,
-                           const char          *name)
+static gboolean
+gtk_css_matcher_widget_path_has_name (const GtkCssMatcher *matcher,
+                                      const char          *name)
 {
   const GtkWidgetPath *siblings;
   GType type;
@@ -83,9 +74,9 @@ _gtk_css_matcher_has_name (const GtkCssMatcher *matcher,
     return g_type_is_a (gtk_widget_path_iter_get_object_type (matcher->path, matcher->index), type);
 }
 
-gboolean
-_gtk_css_matcher_has_class (const GtkCssMatcher *matcher,
-                            const char          *class_name)
+static gboolean
+gtk_css_matcher_widget_path_has_class (const GtkCssMatcher *matcher,
+                                       const char          *class_name)
 {
   const GtkWidgetPath *siblings;
   
@@ -96,9 +87,9 @@ _gtk_css_matcher_has_class (const GtkCssMatcher *matcher,
     return gtk_widget_path_iter_has_class (matcher->path, matcher->index, class_name);
 }
 
-gboolean
-_gtk_css_matcher_has_id (const GtkCssMatcher *matcher,
-                         const char          *id)
+static gboolean
+gtk_css_matcher_widget_path_has_id (const GtkCssMatcher *matcher,
+                                    const char          *id)
 {
   const GtkWidgetPath *siblings;
   
@@ -109,8 +100,8 @@ _gtk_css_matcher_has_id (const GtkCssMatcher *matcher,
     return gtk_widget_path_iter_has_name (matcher->path, matcher->index, id);
 }
 
-gboolean
-_gtk_css_matcher_has_regions (const GtkCssMatcher *matcher)
+static gboolean
+gtk_css_matcher_widget_path_has_regions (const GtkCssMatcher *matcher)
 {
   const GtkWidgetPath *siblings;
   GSList *regions;
@@ -127,10 +118,10 @@ _gtk_css_matcher_has_regions (const GtkCssMatcher *matcher)
   return result;
 }
 
-gboolean
-_gtk_css_matcher_has_region (const GtkCssMatcher *matcher,
-                             const char          *region,
-                             GtkRegionFlags       flags)
+static gboolean
+gtk_css_matcher_widget_path_has_region (const GtkCssMatcher *matcher,
+                                        const char          *region,
+                                        GtkRegionFlags       flags)
 {
   const GtkWidgetPath *siblings;
   GtkRegionFlags region_flags;
@@ -153,14 +144,14 @@ _gtk_css_matcher_has_region (const GtkCssMatcher *matcher,
   return TRUE;
 }
 
-guint
-_gtk_css_matcher_get_sibling_index (const GtkCssMatcher *matcher)
+static guint
+gtk_css_matcher_widget_path_get_sibling_index (const GtkCssMatcher *matcher)
 {
   return matcher->sibling_index;
 }
 
-guint
-_gtk_css_matcher_get_n_siblings (const GtkCssMatcher *matcher)
+static guint
+gtk_css_matcher_widget_path_get_n_siblings (const GtkCssMatcher *matcher)
 {
   const GtkWidgetPath *siblings;
 
@@ -169,5 +160,30 @@ _gtk_css_matcher_get_n_siblings (const GtkCssMatcher *matcher)
     return 0;
 
   return gtk_widget_path_length (siblings);
+}
+
+static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
+  gtk_css_matcher_widget_path_get_parent,
+  gtk_css_matcher_widget_path_get_previous,
+  gtk_css_matcher_widget_path_get_state,
+  gtk_css_matcher_widget_path_has_name,
+  gtk_css_matcher_widget_path_has_class,
+  gtk_css_matcher_widget_path_has_id,
+  gtk_css_matcher_widget_path_has_regions,
+  gtk_css_matcher_widget_path_has_region,
+  gtk_css_matcher_widget_path_get_sibling_index,
+  gtk_css_matcher_widget_path_get_n_siblings
+};
+
+void
+_gtk_css_matcher_init (GtkCssMatcher       *matcher,
+                       const GtkWidgetPath *path,
+                       GtkStateFlags        state)
+{
+  matcher->klass = &GTK_CSS_MATCHER_WIDGET_PATH;
+  matcher->path = path;
+  matcher->state_flags = state;
+  matcher->index = gtk_widget_path_length (path) - 1;
+  matcher->sibling_index = gtk_widget_path_iter_get_sibling_index (path, matcher->index);
 }
 
