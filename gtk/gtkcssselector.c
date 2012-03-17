@@ -470,11 +470,11 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_STATE = {
   FALSE, TRUE, FALSE
 };
 
-/* PSEUDOCLASS FOR REGION */
+/* PSEUDOCLASS FOR POSITION */
 
 static void
-gtk_css_selector_pseudoclass_region_print (const GtkCssSelector *selector,
-                                           GString              *string)
+gtk_css_selector_pseudoclass_position_print (const GtkCssSelector *selector,
+                                             GString              *string)
 {
   static const char * flag_names[] = {
     "nth-child(even)",
@@ -502,8 +502,8 @@ gtk_css_selector_pseudoclass_region_print (const GtkCssSelector *selector,
 }
 
 static gboolean
-gtk_css_selector_pseudoclass_region_match_for_region (const GtkCssSelector *selector,
-                                                      const GtkCssMatcher  *matcher)
+gtk_css_selector_pseudoclass_position_match_for_region (const GtkCssSelector *selector,
+                                                        const GtkCssMatcher  *matcher)
 {
   GtkRegionFlags selector_flags;
   const GtkCssSelector *previous;
@@ -523,8 +523,8 @@ gtk_css_selector_pseudoclass_region_match_for_region (const GtkCssSelector *sele
 }
 
 static gboolean
-gtk_css_selector_pseudoclass_region_match (const GtkCssSelector *selector,
-                                           const GtkCssMatcher  *matcher)
+gtk_css_selector_pseudoclass_position_match (const GtkCssSelector *selector,
+                                             const GtkCssMatcher  *matcher)
 {
   GtkRegionFlags region;
   guint sibling, n_siblings;
@@ -532,7 +532,7 @@ gtk_css_selector_pseudoclass_region_match (const GtkCssSelector *selector,
 
   previous = gtk_css_selector_previous (selector);
   if (previous && previous->class == &GTK_CSS_SELECTOR_REGION)
-    return gtk_css_selector_pseudoclass_region_match_for_region (selector, matcher);
+    return gtk_css_selector_pseudoclass_position_match_for_region (selector, matcher);
 
   n_siblings = _gtk_css_matcher_get_n_siblings (matcher);
   if (n_siblings == 0)
@@ -574,16 +574,16 @@ gtk_css_selector_pseudoclass_region_match (const GtkCssSelector *selector,
 }
 
 static GtkCssChange
-gtk_css_selector_pseudoclass_region_get_change (const GtkCssSelector *selector)
+gtk_css_selector_pseudoclass_position_get_change (const GtkCssSelector *selector)
 {
   return gtk_css_selector_get_change (gtk_css_selector_previous (selector)) | GTK_CSS_CHANGE_POSITION;
 }
 
-static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_REGION = {
-  "pseudoclass-region",
-  gtk_css_selector_pseudoclass_region_print,
-  gtk_css_selector_pseudoclass_region_match,
-  gtk_css_selector_pseudoclass_region_get_change,
+static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION = {
+  "pseudoclass-position",
+  gtk_css_selector_pseudoclass_position_print,
+  gtk_css_selector_pseudoclass_position_match,
+  gtk_css_selector_pseudoclass_position_get_change,
   FALSE, TRUE, FALSE
 };
 
@@ -765,7 +765,7 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
           g_free (name);
 
           if (classes[i].region_flag)
-            selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_PSEUDOCLASS_REGION,
+            selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
                                              selector,
                                              GUINT_TO_POINTER (classes[i].region_flag));
           else
