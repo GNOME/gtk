@@ -23,6 +23,37 @@
 
 G_BEGIN_DECLS
 
+typedef enum { /*< skip >*/
+  GTK_CSS_CHANGE_CLASS                    = (1 <<  0),
+  GTK_CSS_CHANGE_NAME                     = (1 <<  1),
+  GTK_CSS_CHANGE_ID                       = GTK_CSS_CHANGE_NAME,
+  GTK_CSS_CHANGE_REGION                   = GTK_CSS_CHANGE_NAME,
+  GTK_CSS_CHANGE_POSITION                 = (1 <<  2),
+  GTK_CSS_CHANGE_STATE                    = (1 <<  3),
+  GTK_CSS_CHANGE_SIBLING_CLASS            = (1 <<  4),
+  GTK_CSS_CHANGE_SIBLING_NAME             = (1 <<  5),
+  GTK_CSS_CHANGE_SIBLING_POSITION         = (1 <<  6),
+  GTK_CSS_CHANGE_SIBLING_STATE            = (1 <<  7),
+  GTK_CSS_CHANGE_PARENT_CLASS             = (1 <<  8),
+  GTK_CSS_CHANGE_PARENT_NAME              = (1 <<  9),
+  GTK_CSS_CHANGE_PARENT_POSITION          = (1 << 10),
+  GTK_CSS_CHANGE_PARENT_STATE             = (1 << 11),
+  GTK_CSS_CHANGE_PARENT_SIBLING_CLASS     = (1 << 12),
+  GTK_CSS_CHANGE_PARENT_SIBLING_NAME      = (1 << 13),
+  GTK_CSS_CHANGE_PARENT_SIBLING_POSITION  = (1 << 14),
+  GTK_CSS_CHANGE_PARENT_SIBLING_STATE     = (1 << 15),
+  /* add more */
+} GtkCssChange;
+
+#define GTK_CSS_CHANGE_ANY ((1 << 16) - 1)
+#define GTK_CSS_CHANGE_ANY_SELF (GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_STATE)
+#define GTK_CSS_CHANGE_ANY_SIBLING (GTK_CSS_CHANGE_SIBLING_CLASS | GTK_CSS_CHANGE_SIBLING_NAME | \
+                                    GTK_CSS_CHANGE_SIBLING_POSITION | GTK_CSS_CHANGE_SIBLING_STATE)
+#define GTK_CSS_CHANGE_ANY_PARENT (GTK_CSS_CHANGE_PARENT_CLASS | GTK_CSS_CHANGE_PARENT_SIBLING_CLASS | \
+                                   GTK_CSS_CHANGE_PARENT_NAME | GTK_CSS_CHANGE_PARENT_SIBLING_NAME | \
+                                   GTK_CSS_CHANGE_PARENT_POSITION | GTK_CSS_CHANGE_PARENT_SIBLING_POSITION | \
+                                   GTK_CSS_CHANGE_PARENT_STATE | GTK_CSS_CHANGE_PARENT_SIBLING_STATE)
+
 typedef enum {
   GTK_CSS_INHERIT,
   GTK_CSS_INITIAL
@@ -141,6 +172,9 @@ GType           _gtk_css_background_position_get_type           (void);
 GType           _gtk_css_border_corner_radius_get_type          (void);
 GType           _gtk_css_border_image_repeat_get_type           (void);
 GType           _gtk_css_number_get_type                        (void);
+
+GtkCssChange    _gtk_css_change_for_sibling                      (GtkCssChange       match);
+GtkCssChange    _gtk_css_change_for_child                        (GtkCssChange       match);
 
 #define GTK_CSS_NUMBER_INIT(_value,_unit) { (_value), (_unit) }
 void            _gtk_css_number_init                            (GtkCssNumber       *number,

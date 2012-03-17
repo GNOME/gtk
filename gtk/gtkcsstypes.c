@@ -36,6 +36,62 @@ DEFINE_BOXED_TYPE_WITH_COPY_FUNC (GtkCssBorderCornerRadius, _gtk_css_border_corn
 DEFINE_BOXED_TYPE_WITH_COPY_FUNC (GtkCssBorderImageRepeat, _gtk_css_border_image_repeat)
 DEFINE_BOXED_TYPE_WITH_COPY_FUNC (GtkCssNumber, _gtk_css_number)
 
+typedef struct _GtkCssChangeTranslation GtkCssChangeTranslation;
+struct _GtkCssChangeTranslation {
+  GtkCssChange from;
+  GtkCssChange to;
+};
+
+static GtkCssChange
+gtk_css_change_translate (GtkCssChange                   match,
+                         const GtkCssChangeTranslation *translations,
+                         guint                         n_translations)
+{
+  GtkCssChange result = match;
+  guint i;
+
+  for (i = 0; i < n_translations; i++)
+    {
+      if (match & translations[i].from)
+        {
+          result &= ~translations[i].from;
+          result |= translations[i].to;
+        }
+    }
+
+  return result;
+}
+
+GtkCssChange
+_gtk_css_change_for_sibling (GtkCssChange match)
+{
+  static const GtkCssChangeTranslation table[] = {
+    { GTK_CSS_CHANGE_CLASS, GTK_CSS_CHANGE_SIBLING_CLASS },
+    { GTK_CSS_CHANGE_NAME, GTK_CSS_CHANGE_SIBLING_NAME },
+    { GTK_CSS_CHANGE_POSITION, GTK_CSS_CHANGE_SIBLING_POSITION },
+    { GTK_CSS_CHANGE_STATE, GTK_CSS_CHANGE_SIBLING_STATE },
+  };
+
+  return gtk_css_change_translate (match, table, G_N_ELEMENTS (table)); 
+}
+
+GtkCssChange
+_gtk_css_change_for_child (GtkCssChange match)
+{
+  static const GtkCssChangeTranslation table[] = {
+    { GTK_CSS_CHANGE_CLASS, GTK_CSS_CHANGE_PARENT_CLASS },
+    { GTK_CSS_CHANGE_NAME, GTK_CSS_CHANGE_PARENT_NAME },
+    { GTK_CSS_CHANGE_POSITION, GTK_CSS_CHANGE_PARENT_POSITION },
+    { GTK_CSS_CHANGE_STATE, GTK_CSS_CHANGE_PARENT_STATE },
+    { GTK_CSS_CHANGE_SIBLING_CLASS, GTK_CSS_CHANGE_PARENT_SIBLING_CLASS },
+    { GTK_CSS_CHANGE_SIBLING_NAME, GTK_CSS_CHANGE_PARENT_SIBLING_NAME },
+    { GTK_CSS_CHANGE_SIBLING_POSITION, GTK_CSS_CHANGE_PARENT_SIBLING_POSITION },
+    { GTK_CSS_CHANGE_SIBLING_STATE, GTK_CSS_CHANGE_PARENT_SIBLING_STATE }
+  };
+
+  return gtk_css_change_translate (match, table, G_N_ELEMENTS (table)); 
+}
+
 void
 _gtk_css_number_init (GtkCssNumber *number,
                       double        value,
