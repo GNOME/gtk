@@ -45,14 +45,13 @@ _gtk_style_provider_private_get_color (GtkStyleProviderPrivate *provider,
 
 void
 _gtk_style_provider_private_lookup (GtkStyleProviderPrivate *provider,
-                                    GtkWidgetPath           *path,
-                                    GtkStateFlags            state,
+                                    const GtkCssMatcher     *matcher,
                                     GtkCssLookup            *lookup)
 {
   GtkStyleProviderPrivateInterface *iface;
 
   g_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
-  g_return_if_fail (path != NULL);
+  g_return_if_fail (matcher != NULL);
   g_return_if_fail (lookup != NULL);
 
   iface = GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE (provider);
@@ -60,5 +59,5 @@ _gtk_style_provider_private_lookup (GtkStyleProviderPrivate *provider,
   if (!iface->lookup)
     return;
 
-  iface->lookup (provider, path, state, lookup);
+  iface->lookup (provider, matcher, lookup);
 }

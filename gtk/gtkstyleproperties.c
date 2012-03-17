@@ -303,8 +303,7 @@ gtk_style_properties_provider_get_color (GtkStyleProviderPrivate *provider,
 
 static void
 gtk_style_properties_provider_lookup (GtkStyleProviderPrivate *provider,
-                                      GtkWidgetPath           *path,
-                                      GtkStateFlags            state,
+                                      const GtkCssMatcher     *matcher,
                                       GtkCssLookup            *lookup)
 {
   GtkStyleProperties *props;
@@ -330,7 +329,7 @@ gtk_style_properties_provider_lookup (GtkStyleProviderPrivate *provider,
       if (!_gtk_css_lookup_is_missing (lookup, id))
           continue;
 
-      value = property_data_match_state (data, state);
+      value = property_data_match_state (data, _gtk_css_matcher_get_state (matcher));
       if (value == NULL)
         continue;
 

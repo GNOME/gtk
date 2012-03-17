@@ -173,8 +173,7 @@ gtk_style_cascade_get_color (GtkStyleProviderPrivate *provider,
 
 static void
 gtk_style_cascade_lookup (GtkStyleProviderPrivate *provider,
-                          GtkWidgetPath           *path,
-                          GtkStateFlags            state,
+                          const GtkCssMatcher     *matcher,
                           GtkCssLookup            *lookup)
 {
   GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
@@ -188,22 +187,13 @@ gtk_style_cascade_lookup (GtkStyleProviderPrivate *provider,
       if (GTK_IS_STYLE_PROVIDER_PRIVATE (item))
         {
           _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (item),
-                                              path,
-                                              state,
+                                              matcher,
                                               lookup);
         }
       else
         {
-          GtkStyleProperties *provider_style = gtk_style_provider_get_style (item, path);
-
-          if (provider_style)
-            {
-              _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (provider_style),
-                                                  path,
-                                                  state,
-                                                  lookup);
-              g_object_unref (provider_style);
-            }
+          /* you lose */
+          g_warn_if_reached ();
         }
     }
 }

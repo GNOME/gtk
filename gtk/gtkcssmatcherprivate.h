@@ -40,8 +40,7 @@ gboolean          _gtk_css_matcher_get_parent     (GtkCssMatcher          *match
 gboolean          _gtk_css_matcher_get_previous   (GtkCssMatcher          *matcher,
                                                    const GtkCssMatcher    *next);
 
-gboolean          _gtk_css_matcher_has_state      (const GtkCssMatcher   *matcher,
-                                                   GtkStateFlags          state_flags);
+GtkStateFlags     _gtk_css_matcher_get_state      (const GtkCssMatcher   *matcher);
 gboolean          _gtk_css_matcher_has_name       (const GtkCssMatcher   *matcher,
                                                    const char            *name);
 gboolean          _gtk_css_matcher_has_class      (const GtkCssMatcher   *matcher,

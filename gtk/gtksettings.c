@@ -1469,8 +1469,7 @@ gtk_settings_style_provider_get_color (GtkStyleProviderPrivate *provider,
 
 static void
 gtk_settings_style_provider_lookup (GtkStyleProviderPrivate *provider,
-                                    GtkWidgetPath           *path,
-                                    GtkStateFlags            state,
+                                    const GtkCssMatcher     *matcher,
                                     GtkCssLookup            *lookup)
 {
   GtkSettings *settings = GTK_SETTINGS (provider);
@@ -1478,8 +1477,7 @@ gtk_settings_style_provider_lookup (GtkStyleProviderPrivate *provider,
   settings_ensure_style (settings);
 
   _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (settings->priv->style),
-                                      path,
-                                      state,
+                                      matcher,
                                       lookup);
 }
 

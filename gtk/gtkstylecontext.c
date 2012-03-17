@@ -884,15 +884,16 @@ build_properties (GtkStyleContext *context,
                   GtkStateFlags    state)
 {
   GtkStyleContextPrivate *priv;
+  GtkCssMatcher matcher;
   GtkCssLookup *lookup;
 
   priv = context->priv;
 
+  _gtk_css_matcher_init (&matcher, path, state);
   lookup = _gtk_css_lookup_new ();
 
   _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                      path,
-                                      state,
+                                      &matcher,
                                       lookup);
 
   style_data->store = _gtk_css_computed_values_new ();

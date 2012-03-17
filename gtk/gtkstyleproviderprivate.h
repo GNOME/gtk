@@ -20,6 +20,7 @@
 
 #include <glib-object.h>
 #include "gtk/gtkcsslookupprivate.h"
+#include "gtk/gtkcssmatcherprivate.h"
 #include <gtk/gtkenums.h>
 #include <gtk/gtksymboliccolor.h>
 #include <gtk/gtktypes.h>
@@ -41,8 +42,7 @@ struct _GtkStyleProviderPrivateInterface
   GtkSymbolicColor *    (* get_color)           (GtkStyleProviderPrivate *provider,
                                                  const char              *name);
   void                  (* lookup)              (GtkStyleProviderPrivate *provider,
-                                                 GtkWidgetPath           *path,
-                                                 GtkStateFlags            state,
+                                                 const GtkCssMatcher     *matcher,
                                                  GtkCssLookup            *lookup);
 };
 
@@ -51,8 +51,7 @@ GType                   _gtk_style_provider_private_get_type     (void) G_GNUC_C
 GtkSymbolicColor *      _gtk_style_provider_private_get_color    (GtkStyleProviderPrivate *provider,
                                                                   const char              *name);
 void                    _gtk_style_provider_private_lookup       (GtkStyleProviderPrivate *provider,
-                                                                  GtkWidgetPath           *path,
-                                                                  GtkStateFlags            state,
+                                                                  const GtkCssMatcher     *matcher,
                                                                   GtkCssLookup            *lookup);
 
 G_END_DECLS

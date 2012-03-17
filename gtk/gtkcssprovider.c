@@ -1293,11 +1293,10 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
 }
 
 static gboolean
-gtk_css_ruleset_matches (GtkCssRuleset *ruleset,
-                         GtkWidgetPath *path,
-                         GtkStateFlags  state)
+gtk_css_ruleset_matches (GtkCssRuleset       *ruleset,
+                         const GtkCssMatcher *matcher)
 {
-  return _gtk_css_selector_matches (ruleset->selector, path, state);
+  return _gtk_css_selector_matches (ruleset->selector, matcher);
 }
 
 static void
@@ -1469,6 +1468,7 @@ static GtkStyleProperties *
 gtk_css_provider_get_style (GtkStyleProvider *provider,
                             GtkWidgetPath    *path)
 {
+  GtkCssMatcher matcher;
   GtkCssProvider *css_provider;
   GtkCssProviderPrivate *priv;
   GtkStyleProperties *props;
@@ -1479,6 +1479,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
   props = gtk_style_properties_new ();
 
   css_provider_dump_symbolic_colors (css_provider, props);
+  _gtk_css_matcher_init (&matcher, path, 0);
 
   for (i = 0; i < priv->rulesets->len; i++)
     {
@@ -1489,7 +1490,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
       if (ruleset->styles == NULL)
         continue;
 
-      if (!gtk_css_ruleset_matches (ruleset, path, 0))
+      if (!gtk_css_ruleset_matches (ruleset, &matcher))
         continue;
 
       for (j = 0; j < ruleset->n_styles; j++)
@@ -1512,6 +1513,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
   GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
   GtkCssProviderPrivate *priv = css_provider->priv;
   WidgetPropertyValue *val;
+  GtkCssMatcher matcher;
   gboolean found = FALSE;
   gchar *prop_name;
   gint i;
@@ -1519,6 +1521,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
   prop_name = g_strdup_printf ("-%s-%s",
                                g_type_name (pspec->owner_type),
                                pspec->name);
+  _gtk_css_matcher_init (&matcher, path, 0);
 
   for (i = priv->rulesets->len - 1; i >= 0; i--)
     {
@@ -1529,7 +1532,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
       if (ruleset->widget_style == NULL)
         continue;
 
-      if (!gtk_css_ruleset_matches (ruleset, path, state))
+      if (!gtk_css_ruleset_matches (ruleset, &matcher))
         continue;
 
       for (val = ruleset->widget_style; val != NULL; val = val->next)
@@ -1581,8 +1584,7 @@ gtk_css_style_provider_get_color (GtkStyleProviderPrivate *provider,
 
 static void
 gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
-                               GtkWidgetPath           *path,
-                               GtkStateFlags            state,
+                               const GtkCssMatcher     *matcher,
                                GtkCssLookup            *lookup)
 {
   GtkCssProvider *css_provider;
@@ -1606,7 +1608,7 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
                                     ruleset->set_styles))
         continue;
 
-      if (!gtk_css_ruleset_matches (ruleset, path, state))
+      if (!gtk_css_ruleset_matches (ruleset, matcher))
         continue;
 
       for (j = 0; j < ruleset->n_styles; j++)

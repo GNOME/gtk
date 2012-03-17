@@ -144,15 +144,13 @@ gtk_modifier_style_provider_get_color (GtkStyleProviderPrivate *provider,
 
 static void
 gtk_modifier_style_provider_lookup (GtkStyleProviderPrivate *provider,
-                                    GtkWidgetPath           *path,
-                                    GtkStateFlags            state,
+                                    const GtkCssMatcher     *matcher,
                                     GtkCssLookup            *lookup)
 {
   GtkModifierStyle *style = GTK_MODIFIER_STYLE (provider);
 
   _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (style->priv->style),
-                                      path,
-                                      state,
+                                      matcher,
                                       lookup);
 }
 

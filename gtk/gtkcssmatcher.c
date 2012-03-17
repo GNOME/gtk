@@ -62,11 +62,10 @@ _gtk_css_matcher_get_previous (GtkCssMatcher       *matcher,
   return TRUE;
 }
 
-gboolean
-_gtk_css_matcher_has_state (const GtkCssMatcher *matcher,
-                            GtkStateFlags        state_flags)
+GtkStateFlags
+_gtk_css_matcher_get_state (const GtkCssMatcher *matcher)
 {
-  return (matcher->state_flags & state_flags) == state_flags;
+  return matcher->state_flags;
 }
 
 gboolean

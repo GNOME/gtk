@@ -21,7 +21,6 @@
 
 #include <string.h>
 
-#include "gtkcssmatcherprivate.h"
 #include "gtkcssprovider.h"
 #include "gtkstylecontextprivate.h"
 
@@ -370,7 +369,9 @@ static gboolean
 gtk_css_selector_pseudoclass_state_match (const GtkCssSelector *selector,
                                           const GtkCssMatcher  *matcher)
 {
-  if (!_gtk_css_matcher_has_state (matcher, GPOINTER_TO_UINT (selector->data)))
+  GtkStateFlags state = GPOINTER_TO_UINT (selector->data);
+
+  if ((_gtk_css_matcher_get_state (matcher) & state) != state)
     return FALSE;
 
   return gtk_css_selector_match (gtk_css_selector_previous (selector), matcher);
@@ -829,18 +830,14 @@ _gtk_css_selector_to_string (const GtkCssSelector *selector)
  * Returns: %TRUE if the selector matches @path
  **/
 gboolean
-_gtk_css_selector_matches (const GtkCssSelector      *selector,
-                           const GtkWidgetPath       *path,
-                           GtkStateFlags              state)
+_gtk_css_selector_matches (const GtkCssSelector *selector,
+                           const GtkCssMatcher  *matcher)
 {
-  GtkCssMatcher matcher;
 
   g_return_val_if_fail (selector != NULL, FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (matcher != NULL, FALSE);
 
-  _gtk_css_matcher_init (&matcher, path, state);
-
-  return gtk_css_selector_match (selector, &matcher);
+  return gtk_css_selector_match (selector, matcher);
 }
 
 /* Computes specificity according to CSS 2.1.
