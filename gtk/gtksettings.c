@@ -1481,11 +1481,24 @@ gtk_settings_style_provider_lookup (GtkStyleProviderPrivate *provider,
                                       lookup);
 }
 
+static GtkCssChange
+gtk_settings_style_provider_get_change (GtkStyleProviderPrivate *provider,
+                                        const GtkCssMatcher     *matcher)
+{
+  GtkSettings *settings = GTK_SETTINGS (provider);
+
+  settings_ensure_style (settings);
+
+  return _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (settings->priv->style),
+                                                 matcher);
+}
+
 static void
 gtk_settings_provider_private_init (GtkStyleProviderPrivateInterface *iface)
 {
   iface->get_color = gtk_settings_style_provider_get_color;
   iface->lookup = gtk_settings_style_provider_lookup;
+  iface->get_change = gtk_settings_style_provider_get_change;
 }
 
 static void

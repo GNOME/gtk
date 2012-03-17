@@ -337,11 +337,19 @@ gtk_style_properties_provider_lookup (GtkStyleProviderPrivate *provider,
     }
 }
 
+static GtkCssChange
+gtk_style_properties_provider_get_change (GtkStyleProviderPrivate *provider,
+                                          const GtkCssMatcher     *matcher)
+{
+  return GTK_CSS_CHANGE_STATE;
+}
+
 static void
 gtk_style_properties_provider_private_init (GtkStyleProviderPrivateInterface *iface)
 {
   iface->get_color = gtk_style_properties_provider_get_color;
   iface->lookup = gtk_style_properties_provider_lookup;
+  iface->get_change = gtk_style_properties_provider_get_change;
 }
 
 /* GtkStyleProperties methods */

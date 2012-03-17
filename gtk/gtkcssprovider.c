@@ -1299,6 +1299,12 @@ gtk_css_ruleset_matches (GtkCssRuleset       *ruleset,
   return _gtk_css_selector_matches (ruleset->selector, matcher);
 }
 
+static GtkCssChange
+gtk_css_ruleset_get_change (GtkCssRuleset *ruleset)
+{
+  return _gtk_css_selector_get_change (ruleset->selector);
+}
+
 static void
 gtk_css_scanner_destroy (GtkCssScanner *scanner)
 {
@@ -1627,11 +1633,42 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
     }
 }
 
+static GtkCssChange
+gtk_css_style_provider_get_change (GtkStyleProviderPrivate *provider,
+                                   const GtkCssMatcher     *matcher)
+{
+  GtkCssProvider *css_provider;
+  GtkCssProviderPrivate *priv;
+  GtkCssChange change = 0;
+  int i;
+
+  css_provider = GTK_CSS_PROVIDER (provider);
+  priv = css_provider->priv;
+
+  for (i = priv->rulesets->len - 1; i >= 0; i--)
+    {
+      GtkCssRuleset *ruleset;
+
+      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+
+      if (ruleset->styles == NULL)
+        continue;
+
+      if (!gtk_css_ruleset_matches (ruleset, matcher))
+        continue;
+
+      change |= gtk_css_ruleset_get_change (ruleset);
+    }
+
+  return change;
+}
+
 static void
 gtk_css_style_provider_private_iface_init (GtkStyleProviderPrivateInterface *iface)
 {
   iface->get_color = gtk_css_style_provider_get_color;
   iface->lookup = gtk_css_style_provider_lookup;
+  iface->get_change = gtk_css_style_provider_get_change;
 }
 
 static void

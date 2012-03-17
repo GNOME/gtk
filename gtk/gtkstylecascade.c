@@ -198,11 +198,39 @@ gtk_style_cascade_lookup (GtkStyleProviderPrivate *provider,
     }
 }
 
+static GtkCssChange
+gtk_style_cascade_get_change (GtkStyleProviderPrivate *provider,
+                              const GtkCssMatcher     *matcher)
+{
+  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
+  GtkStyleCascadeIter iter;
+  GtkStyleProvider *item;
+  GtkCssChange change = 0;
+
+  for (item = gtk_style_cascade_iter_init (cascade, &iter);
+       item;
+       item = gtk_style_cascade_iter_next (cascade, &iter))
+    {
+      if (GTK_IS_STYLE_PROVIDER_PRIVATE (item))
+        {
+          change |= _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (item),
+                                                            matcher);
+        }
+      else
+        {
+          g_return_val_if_reached (GTK_CSS_CHANGE_ANY);
+        }
+    }
+
+  return change;
+}
+
 static void
 gtk_style_cascade_provider_private_iface_init (GtkStyleProviderPrivateInterface *iface)
 {
   iface->get_color = gtk_style_cascade_get_color;
   iface->lookup = gtk_style_cascade_lookup;
+  iface->get_change = gtk_style_cascade_get_change;
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkStyleCascade, _gtk_style_cascade, G_TYPE_OBJECT, 0,

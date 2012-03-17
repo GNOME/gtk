@@ -44,6 +44,8 @@ struct _GtkStyleProviderPrivateInterface
   void                  (* lookup)              (GtkStyleProviderPrivate *provider,
                                                  const GtkCssMatcher     *matcher,
                                                  GtkCssLookup            *lookup);
+  GtkCssChange          (* get_change)          (GtkStyleProviderPrivate *provider,
+                                                 const GtkCssMatcher     *matcher);
 };
 
 GType                   _gtk_style_provider_private_get_type     (void) G_GNUC_CONST;
@@ -53,6 +55,8 @@ GtkSymbolicColor *      _gtk_style_provider_private_get_color    (GtkStyleProvid
 void                    _gtk_style_provider_private_lookup       (GtkStyleProviderPrivate *provider,
                                                                   const GtkCssMatcher     *matcher,
                                                                   GtkCssLookup            *lookup);
+GtkCssChange            _gtk_style_provider_private_get_change   (GtkStyleProviderPrivate *provider,
+                                                                  const GtkCssMatcher     *matcher);
 
 G_END_DECLS
 
