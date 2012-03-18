@@ -146,22 +146,33 @@ gtk_css_matcher_widget_path_has_region (const GtkCssMatcher *matcher,
   return TRUE;
 }
 
-static guint
-gtk_css_matcher_widget_path_get_sibling_index (const GtkCssMatcher *matcher)
-{
-  return matcher->path.sibling_index;
-}
-
-static guint
-gtk_css_matcher_widget_path_get_n_siblings (const GtkCssMatcher *matcher)
+static gboolean
+gtk_css_matcher_widget_path_has_position (const GtkCssMatcher *matcher,
+                                          gboolean             forward,
+                                          int                  a,
+                                          int                  b)
 {
   const GtkWidgetPath *siblings;
+  int x;
 
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (!siblings)
-    return 0;
+    return FALSE;
 
-  return gtk_widget_path_length (siblings);
+  if (forward)
+    x = matcher->path.sibling_index + 1;
+  else
+    x = gtk_widget_path_length (siblings) - matcher->path.sibling_index;
+
+  x -= b;
+
+  if (a == 0)
+    return x == 0;
+
+  if (x % a)
+    return FALSE;
+
+  return x / a > 0;
 }
 
 static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
@@ -173,8 +184,7 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
   gtk_css_matcher_widget_path_has_id,
   gtk_css_matcher_widget_path_has_regions,
   gtk_css_matcher_widget_path_has_region,
-  gtk_css_matcher_widget_path_get_sibling_index,
-  gtk_css_matcher_widget_path_get_n_siblings
+  gtk_css_matcher_widget_path_has_position,
 };
 
 void

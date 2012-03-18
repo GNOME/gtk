@@ -472,33 +472,140 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_STATE = {
 
 /* PSEUDOCLASS FOR POSITION */
 
+typedef enum {
+  POSITION_FORWARD,
+  POSITION_BACKWARD,
+  POSITION_ONLY,
+  POSITION_SORTED
+} PositionType;
+#define POSITION_TYPE_BITS 2
+#define POSITION_NUMBER_BITS ((sizeof (gpointer) * 8 - POSITION_TYPE_BITS) / 2)
+
+static gconstpointer
+encode_position (PositionType type,
+                 int          a,
+                 int          b)
+{
+  union {
+    gconstpointer p;
+    struct {
+      gssize type :POSITION_TYPE_BITS;
+      gssize a :POSITION_NUMBER_BITS;
+      gssize b :POSITION_NUMBER_BITS;
+    } data;
+  } result;
+  G_STATIC_ASSERT (sizeof (gconstpointer) == sizeof (result));
+
+  g_assert (type < (1 << POSITION_TYPE_BITS));
+
+  result.data.type = type;
+  result.data.a = a;
+  result.data.b = b;
+
+  return result.p;
+}
+
+static void
+decode_position (const GtkCssSelector *selector,
+                 PositionType         *type,
+                 int                  *a,
+                 int                  *b)
+{
+  union {
+    gconstpointer p;
+    struct {
+      gssize type :POSITION_TYPE_BITS;
+      gssize a :POSITION_NUMBER_BITS;
+      gssize b :POSITION_NUMBER_BITS;
+    } data;
+  } result;
+  G_STATIC_ASSERT (sizeof (gconstpointer) == sizeof (result));
+
+  result.p = selector->data;
+
+  *type = result.data.type & ((1 << POSITION_TYPE_BITS) - 1);
+  *a = result.data.a;
+  *b = result.data.b;
+}
+
 static void
 gtk_css_selector_pseudoclass_position_print (const GtkCssSelector *selector,
                                              GString              *string)
 {
-  static const char * flag_names[] = {
-    "nth-child(even)",
-    "nth-child(odd)",
-    "first-child",
-    "last-child",
-    "only-child",
-    "sorted"
-  };
-  guint i, state;
+  PositionType type;
+  int a, b;
 
-  state = GPOINTER_TO_UINT (selector->data);
-  g_string_append_c (string, ':');
-
-  for (i = 0; i < G_N_ELEMENTS (flag_names); i++)
+  decode_position (selector, &type, &a, &b);
+  switch (type)
     {
-      if (state == (1 << i))
+    case POSITION_FORWARD:
+      if (a == 0)
         {
-          g_string_append (string, flag_names[i]);
-          return;
+          if (b == 1)
+            g_string_append (string, ":first-child");
+          else
+            g_string_append_printf (string, ":nth-child(%d)", b);
         }
+      else if (a == 2 && b == 0)
+        g_string_append (string, ":nth-child(even)");
+      else if (a == 2 && b == 1)
+        g_string_append (string, ":nth-child(odd)");
+      else
+        {
+          g_string_append (string, ":nth-child(");
+          if (a == 1)
+            g_string_append (string, "n");
+          else if (a == -1)
+            g_string_append (string, "-n");
+          else
+            g_string_append_printf (string, "%dn", a);
+          if (b > 0)
+            g_string_append_printf (string, "+%d)", b);
+          else if (b < 0)
+            g_string_append_printf (string, "%d)", b);
+          else
+            g_string_append (string, ")");
+        }
+      break;
+    case POSITION_BACKWARD:
+      if (a == 0)
+        {
+          if (b == 1)
+            g_string_append (string, ":last-child");
+          else
+            g_string_append_printf (string, ":nth-last-child(%d)", b);
+        }
+      else if (a == 2 && b == 0)
+        g_string_append (string, ":nth-last-child(even)");
+      else if (a == 2 && b == 1)
+        g_string_append (string, ":nth-last-child(odd)");
+      else
+        {
+          g_string_append (string, ":nth-last-child(");
+          if (a == 1)
+            g_string_append (string, "n");
+          else if (a == -1)
+            g_string_append (string, "-n");
+          else
+            g_string_append_printf (string, "%dn", a);
+          if (b > 0)
+            g_string_append_printf (string, "+%d)", b);
+          else if (b < 0)
+            g_string_append_printf (string, "%d)", b);
+          else
+            g_string_append (string, ")");
+        }
+      break;
+    case POSITION_ONLY:
+      g_string_append (string, ":only-child");
+      break;
+    case POSITION_SORTED:
+      g_string_append (string, ":sorted");
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
     }
-
-  g_assert_not_reached ();
 }
 
 static gboolean
@@ -507,8 +614,38 @@ gtk_css_selector_pseudoclass_position_match_for_region (const GtkCssSelector *se
 {
   GtkRegionFlags selector_flags;
   const GtkCssSelector *previous;
-  
-  selector_flags = GPOINTER_TO_UINT (selector->data);
+  PositionType type;
+  int a, b;
+
+  decode_position (selector, &type, &a, &b);
+  switch (type)
+    {
+    case POSITION_FORWARD:
+      if (a == 0 && b == 1)
+        selector_flags = GTK_REGION_FIRST;
+      else if (a == 2 && b == 0)
+        selector_flags = GTK_REGION_EVEN;
+      else if (a == 2 && b == 1)
+        selector_flags = GTK_REGION_ODD;
+      else
+        return FALSE;
+      break;
+    case POSITION_BACKWARD:
+      if (a == 0 && b == 1)
+        selector_flags = GTK_REGION_LAST;
+      else
+        return FALSE;
+      break;
+    case POSITION_ONLY:
+      selector_flags = GTK_REGION_ONLY;
+      break;
+    case POSITION_SORTED:
+      selector_flags = GTK_REGION_SORTED;
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
   selector = gtk_css_selector_previous (selector);
 
   if (!_gtk_css_matcher_has_region (matcher, selector->data, selector_flags))
@@ -526,44 +663,31 @@ static gboolean
 gtk_css_selector_pseudoclass_position_match (const GtkCssSelector *selector,
                                              const GtkCssMatcher  *matcher)
 {
-  GtkRegionFlags region;
-  guint sibling, n_siblings;
   const GtkCssSelector *previous;
+  PositionType type;
+  int a, b;
 
   previous = gtk_css_selector_previous (selector);
   if (previous && previous->class == &GTK_CSS_SELECTOR_REGION)
     return gtk_css_selector_pseudoclass_position_match_for_region (selector, matcher);
 
-  n_siblings = _gtk_css_matcher_get_n_siblings (matcher);
-  if (n_siblings == 0)
-    return FALSE;
-  sibling = _gtk_css_matcher_get_sibling_index (matcher);
-
-  region = GPOINTER_TO_UINT (selector->data);
-
-  switch (region)
+  decode_position (selector, &type, &a, &b);
+  switch (type)
     {
-    case GTK_REGION_EVEN:
-      if (!(sibling % 2))
+    case POSITION_FORWARD:
+      if (!_gtk_css_matcher_has_position (matcher, TRUE, a, b))
         return FALSE;
       break;
-    case GTK_REGION_ODD:
-      if (sibling % 2)
+    case POSITION_BACKWARD:
+      if (!_gtk_css_matcher_has_position (matcher, FALSE, a, b))
         return FALSE;
       break;
-    case GTK_REGION_FIRST:
-      if (sibling != 0)
+    case POSITION_ONLY:
+      if (!_gtk_css_matcher_has_position (matcher, TRUE, 0, 1) ||
+          !_gtk_css_matcher_has_position (matcher, FALSE, 0, 1))
         return FALSE;
       break;
-    case GTK_REGION_LAST:
-      if (sibling + 1 != n_siblings)
-        return FALSE;
-      break;
-    case GTK_REGION_ONLY:
-      if (n_siblings != 1)
-        return FALSE;
-      break;
-    case GTK_REGION_SORTED:
+    case POSITION_SORTED:
       return FALSE;
     default:
       g_assert_not_reached ();
@@ -672,125 +796,176 @@ parse_selector_id (GtkCssParser *parser, GtkCssSelector *selector)
 }
 
 static GtkCssSelector *
-parse_selector_pseudo_class (GtkCssParser   *parser,
-                             GtkCssSelector *selector)
+parse_selector_pseudo_class_nth_child (GtkCssParser   *parser,
+                                       GtkCssSelector *selector,
+                                       PositionType    type)
 {
-  struct {
-    const char *name;
-    GtkRegionFlags region_flag;
-    GtkStateFlags state_flag;
-  } pseudo_classes[] = {
-    { "first-child",  GTK_REGION_FIRST, 0 },
-    { "last-child",   GTK_REGION_LAST, 0 },
-    { "only-child",   GTK_REGION_ONLY, 0 },
-    { "sorted",       GTK_REGION_SORTED, 0 },
-    { "active",       0, GTK_STATE_FLAG_ACTIVE },
-    { "prelight",     0, GTK_STATE_FLAG_PRELIGHT },
-    { "hover",        0, GTK_STATE_FLAG_PRELIGHT },
-    { "selected",     0, GTK_STATE_FLAG_SELECTED },
-    { "insensitive",  0, GTK_STATE_FLAG_INSENSITIVE },
-    { "inconsistent", 0, GTK_STATE_FLAG_INCONSISTENT },
-    { "focused",      0, GTK_STATE_FLAG_FOCUSED },
-    { "focus",        0, GTK_STATE_FLAG_FOCUSED },
-    { "backdrop",     0, GTK_STATE_FLAG_BACKDROP },
-    { NULL, }
-  }, nth_child_classes[] = {
-    { "first",        GTK_REGION_FIRST, 0 },
-    { "last",         GTK_REGION_LAST, 0 },
-    { "even",         GTK_REGION_EVEN, 0 },
-    { "odd",          GTK_REGION_ODD, 0 },
-    { NULL, }
-  }, *classes;
-  guint i;
-  char *name;
-  GError *error;
+  int a, b;
 
-  name = _gtk_css_parser_try_ident (parser, FALSE);
-  if (name == NULL)
+  if (!_gtk_css_parser_try (parser, "(", TRUE))
     {
-      _gtk_css_parser_error (parser, "Missing name of pseudo-class");
+      _gtk_css_parser_error (parser, "Missing opening bracket for pseudo-class");
       if (selector)
         _gtk_css_selector_free (selector);
       return NULL;
     }
 
-  if (_gtk_css_parser_try (parser, "(", TRUE))
+  if (_gtk_css_parser_try (parser, "even", TRUE))
     {
-      char *function = name;
-
-      name = _gtk_css_parser_try_ident (parser, TRUE);
-      if (!_gtk_css_parser_try (parser, ")", FALSE))
-        {
-          _gtk_css_parser_error (parser, "Missing closing bracket for pseudo-class");
-          if (selector)
-            _gtk_css_selector_free (selector);
-          return NULL;
-        }
-
-      if (g_ascii_strcasecmp (function, "nth-child") != 0)
-        {
-          error = g_error_new (GTK_CSS_PROVIDER_ERROR,
-                               GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE,
-                               "Unknown pseudo-class '%s(%s)'", function, name ? name : "");
-          _gtk_css_parser_take_error (parser, error);
-          g_free (function);
-          g_free (name);
-          if (selector)
-            _gtk_css_selector_free (selector);
-          return NULL;
-        }
-      
-      g_free (function);
-    
-      if (name == NULL)
-        {
-          error = g_error_new (GTK_CSS_PROVIDER_ERROR,
-                               GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE,
-                               "Unknown pseudo-class 'nth-child(%s)'", name);
-          _gtk_css_parser_take_error (parser, error);
-          if (selector)
-            _gtk_css_selector_free (selector);
-          return NULL;
-        }
-
-      classes = nth_child_classes;
+      a = 2;
+      b = 0;
+    }
+  else if (_gtk_css_parser_try (parser, "odd", TRUE))
+    {
+      a = 2;
+      b = 1;
+    }
+  else if (type == POSITION_FORWARD &&
+           _gtk_css_parser_try (parser, "first", TRUE))
+    {
+      a = 0;
+      b = 1;
+    }
+  else if (type == POSITION_FORWARD &&
+           _gtk_css_parser_try (parser, "last", TRUE))
+    {
+      a = 0;
+      b = 1;
+      type = POSITION_BACKWARD;
     }
   else
-    classes = pseudo_classes;
-
-  for (i = 0; classes[i].name != NULL; i++)
     {
-      if (g_ascii_strcasecmp (name, classes[i].name) == 0)
-        {
-          g_free (name);
+      int multiplier;
 
-          if (classes[i].region_flag)
-            selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
-                                             selector,
-                                             GUINT_TO_POINTER (classes[i].region_flag));
+      if (_gtk_css_parser_try (parser, "+", TRUE))
+        multiplier = 1;
+      else if (_gtk_css_parser_try (parser, "-", TRUE))
+        multiplier = -1;
+      else
+        multiplier = 1;
+
+      if (_gtk_css_parser_try_int (parser, &a))
+        {
+          if (a < 0)
+            {
+              _gtk_css_parser_error (parser, "Expected an integer");
+              if (selector)
+                _gtk_css_selector_free (selector);
+              return NULL;
+            }
+          a *= multiplier;
+        }
+      else if (_gtk_css_parser_has_prefix (parser, "n"))
+        {
+          a = multiplier;
+        }
+      else
+        {
+          _gtk_css_parser_error (parser, "Expected an integer");
+          if (selector)
+            _gtk_css_selector_free (selector);
+          return NULL;
+        }
+
+      if (_gtk_css_parser_try (parser, "n", TRUE))
+        {
+          if (_gtk_css_parser_try (parser, "+", TRUE))
+            multiplier = 1;
+          else if (_gtk_css_parser_try (parser, "-", TRUE))
+            multiplier = -1;
           else
+            multiplier = 1;
+
+          if (_gtk_css_parser_try_int (parser, &b))
+            {
+              if (b < 0)
+                {
+                  _gtk_css_parser_error (parser, "Expected an integer");
+                  if (selector)
+                    _gtk_css_selector_free (selector);
+                  return NULL;
+                }
+            }
+          else
+            b = 0;
+
+          b *= multiplier;
+        }
+      else
+        {
+          b = a;
+          a = 0;
+        }
+    }
+
+  if (!_gtk_css_parser_try (parser, ")", FALSE))
+    {
+      _gtk_css_parser_error (parser, "Missing closing bracket for pseudo-class");
+      if (selector)
+        _gtk_css_selector_free (selector);
+      return NULL;
+    }
+
+  selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
+                                   selector,
+                                   encode_position (type, a, b));
+
+  return selector;
+}
+
+static GtkCssSelector *
+parse_selector_pseudo_class (GtkCssParser   *parser,
+                             GtkCssSelector *selector)
+{
+  static const struct {
+    const char    *name;
+    GtkStateFlags  state_flag;
+    PositionType   position_type;
+    int            position_a;
+    int            position_b;
+  } pseudo_classes[] = {
+    { "first-child",  0,                           POSITION_FORWARD,  0, 1 },
+    { "last-child",   0,                           POSITION_BACKWARD, 0, 1 },
+    { "only-child",   0,                           POSITION_ONLY,     0, 0 },
+    { "sorted",       0,                           POSITION_SORTED,   0, 0 },
+    { "active",       GTK_STATE_FLAG_ACTIVE, },
+    { "prelight",     GTK_STATE_FLAG_PRELIGHT, },
+    { "hover",        GTK_STATE_FLAG_PRELIGHT, },
+    { "selected",     GTK_STATE_FLAG_SELECTED, },
+    { "insensitive",  GTK_STATE_FLAG_INSENSITIVE, },
+    { "inconsistent", GTK_STATE_FLAG_INCONSISTENT, },
+    { "focused",      GTK_STATE_FLAG_FOCUSED, },
+    { "focus",        GTK_STATE_FLAG_FOCUSED, },
+    { "backdrop",     GTK_STATE_FLAG_BACKDROP, }
+  };
+  guint i;
+
+  if (_gtk_css_parser_try (parser, "nth-child", FALSE))
+    return parse_selector_pseudo_class_nth_child (parser, selector, POSITION_FORWARD);
+  else if (_gtk_css_parser_try (parser, "nth-last-child", FALSE))
+    return parse_selector_pseudo_class_nth_child (parser, selector, POSITION_BACKWARD);
+
+  for (i = 0; i < G_N_ELEMENTS (pseudo_classes); i++)
+    {
+      if (_gtk_css_parser_try (parser, pseudo_classes[i].name, FALSE))
+        {
+          if (pseudo_classes[i].state_flag)
             selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
                                              selector,
-                                             GUINT_TO_POINTER (classes[i].state_flag));
-
+                                             GUINT_TO_POINTER (pseudo_classes[i].state_flag));
+          else
+            selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
+                                             selector,
+                                             encode_position (pseudo_classes[i].position_type,
+                                                              pseudo_classes[i].position_a,
+                                                              pseudo_classes[i].position_b));
           return selector;
         }
     }
-
-  if (classes == nth_child_classes)
-    error = g_error_new (GTK_CSS_PROVIDER_ERROR,
-                         GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE,
-                         "Unknown pseudo-class 'nth-child(%s)'", name);
-  else
-    error = g_error_new (GTK_CSS_PROVIDER_ERROR,
-                         GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE,
-                         "Unknown pseudo-class '%s'", name);
-
-  _gtk_css_parser_take_error (parser, error);
-  g_free (name);
+      
+  _gtk_css_parser_error (parser, "Missing name of pseudo-class");
   if (selector)
     _gtk_css_selector_free (selector);
-
   return NULL;
 }
 

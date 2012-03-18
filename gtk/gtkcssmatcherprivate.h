@@ -44,8 +44,10 @@ struct _GtkCssMatcherClass {
   gboolean        (* has_region)                  (const GtkCssMatcher   *matcher,
                                                    const char            *region,
                                                    GtkRegionFlags         flags);
-  guint           (* get_sibling_index)           (const GtkCssMatcher   *matcher);
-  guint           (* get_n_siblings)              (const GtkCssMatcher   *matcher);
+  gboolean        (* has_position)                (const GtkCssMatcher   *matcher,
+                                                   gboolean               forward,
+                                                   int                    a,
+                                                   int                    b);
 };
 
 struct _GtkCssMatcherWidgetPath {
@@ -122,15 +124,12 @@ _gtk_css_matcher_has_region (const GtkCssMatcher *matcher,
 }
 
 static inline guint
-_gtk_css_matcher_get_sibling_index (const GtkCssMatcher *matcher)
+_gtk_css_matcher_has_position (const GtkCssMatcher *matcher,
+                               gboolean             forward,
+                               int                  a,
+                               int                  b)
 {
-  return matcher->klass->get_sibling_index (matcher);
-}
-
-static inline guint
-_gtk_css_matcher_get_n_siblings (const GtkCssMatcher *matcher)
-{
-  return matcher->klass->get_n_siblings (matcher);
+  return matcher->klass->has_position (matcher, forward, a, b);
 }
 
 
