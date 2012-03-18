@@ -14115,12 +14115,11 @@ gtk_widget_get_style_context (GtkWidget *widget)
     {
       GdkScreen *screen;
 
-      priv->context = g_object_new (GTK_TYPE_STYLE_CONTEXT,
-                                    "direction", gtk_widget_get_direction (widget),
-                                    NULL);
+      priv->context = gtk_style_context_new ();
+
+      gtk_style_context_set_direction (priv->context, gtk_widget_get_direction (widget));
 
       screen = gtk_widget_get_screen (widget);
-
       if (screen)
         gtk_style_context_set_screen (priv->context, screen);
 
