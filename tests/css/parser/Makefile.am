@@ -297,6 +297,8 @@ EXTRA_DIST += \
 	linear-gradient.ref.css \
 	no-semicolon.css \
 	no-semicolon.ref.css \
+	nth-child.css \
+	nth-child.ref.css \
 	pseudo-classes-unknown.css \
 	pseudo-classes-unknown.errors \
 	pseudo-classes-unknown.ref.css \
