@@ -185,6 +185,9 @@ EXTRA_DIST += \
 	nonresizable-size.ui \
 	notebook-childproperties.ui \
 	notebook-childproperties.ref.ui \
+	nth-child.css \
+	nth-child.ref.ui \
+	nth-child.ui \
 	paned-undersized.css \
 	paned-undersized.ref.ui \
 	paned-undersized.ui \
