@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-04 20:11+0100\n"
-"PO-Revision-Date: 2012-02-27 00:01+0100\n"
+"POT-Creation-Date: 2012-03-18 03:09+0100\n"
+"PO-Revision-Date: 2012-03-18 03:09+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -100,320 +100,321 @@ msgstr "Opcións de depuración GDK que quitar"
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
 #. * KP_Space      - Space (keypad)
+#. * Page_Up       - Page up
 #.
-#: ../gdk/keyname-table.h:3951
+#: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "Retroceso"
 
-#: ../gdk/keyname-table.h:3952
+#: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Tab"
 msgstr "Tab"
 
-#: ../gdk/keyname-table.h:3953
+#: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Return"
 msgstr "Intro"
 
-#: ../gdk/keyname-table.h:3954
+#: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "Pause"
 msgstr "Pausa"
 
-#: ../gdk/keyname-table.h:3955
+#: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
 msgstr "Bloq Despr"
 
-#: ../gdk/keyname-table.h:3956
+#: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Sys_Req"
 msgstr "PetSis"
 
-#: ../gdk/keyname-table.h:3957
+#: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Escape"
 msgstr "Escape"
 
-#: ../gdk/keyname-table.h:3958
+#: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Multi_key"
 msgstr "MultiKey"
 
-#: ../gdk/keyname-table.h:3959
+#: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "Inicio"
 
-#: ../gdk/keyname-table.h:3960
+#: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "Left"
 msgstr "Esquerda"
 
-#: ../gdk/keyname-table.h:3961
+#: ../gdk/keyname-table.h:3962
 msgctxt "keyboard label"
 msgid "Up"
 msgstr "Arriba"
 
-#: ../gdk/keyname-table.h:3962
+#: ../gdk/keyname-table.h:3963
 msgctxt "keyboard label"
 msgid "Right"
 msgstr "Dereita"
 
-#: ../gdk/keyname-table.h:3963
+#: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "Down"
 msgstr "Abaixo"
 
-#: ../gdk/keyname-table.h:3964
+#: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Re Páx"
 
-#: ../gdk/keyname-table.h:3965
+#: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Av Páx"
 
-#: ../gdk/keyname-table.h:3966
+#: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "End"
 msgstr "Fin"
 
-#: ../gdk/keyname-table.h:3967
+#: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "Begin"
 msgstr "Inicio"
 
-#: ../gdk/keyname-table.h:3968
+#: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../gdk/keyname-table.h:3969
+#: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "Insert"
 msgstr "Inserir"
 
-#: ../gdk/keyname-table.h:3970
+#: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "Num_Lock"
 msgstr "Bloq Núm"
 
 #. Translators: KP_ means 'key pad' here
-#: ../gdk/keyname-table.h:3972
+#: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Space"
 msgstr "TN Espazo"
 
-#: ../gdk/keyname-table.h:3973
+#: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Tab"
 msgstr "TN Tabulador"
 
-#: ../gdk/keyname-table.h:3974
+#: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Enter"
 msgstr "TN Intro"
 
-#: ../gdk/keyname-table.h:3975
+#: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "KP_Home"
 msgstr "TN Inicio"
 
-#: ../gdk/keyname-table.h:3976
+#: ../gdk/keyname-table.h:3977
 msgctxt "keyboard label"
 msgid "KP_Left"
 msgstr "TN ←"
 
-#: ../gdk/keyname-table.h:3977
+#: ../gdk/keyname-table.h:3978
 msgctxt "keyboard label"
 msgid "KP_Up"
 msgstr "TN ↑"
 
-#: ../gdk/keyname-table.h:3978
+#: ../gdk/keyname-table.h:3979
 msgctxt "keyboard label"
 msgid "KP_Right"
 msgstr "TN →"
 
-#: ../gdk/keyname-table.h:3979
+#: ../gdk/keyname-table.h:3980
 msgctxt "keyboard label"
 msgid "KP_Down"
 msgstr "TN ↓"
 
-#: ../gdk/keyname-table.h:3980
+#: ../gdk/keyname-table.h:3981
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "TN_Re Páx"
+msgstr "TN Re Páx"
 
-#: ../gdk/keyname-table.h:3981
+#: ../gdk/keyname-table.h:3982
 msgctxt "keyboard label"
 msgid "KP_Prior"
 msgstr "TN Anterior"
 
-#: ../gdk/keyname-table.h:3982
+#: ../gdk/keyname-table.h:3983
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
 msgstr "TN Av Páx"
 
-#: ../gdk/keyname-table.h:3983
+#: ../gdk/keyname-table.h:3984
 msgctxt "keyboard label"
 msgid "KP_Next"
 msgstr "TN Seguinte"
 
-#: ../gdk/keyname-table.h:3984
+#: ../gdk/keyname-table.h:3985
 msgctxt "keyboard label"
 msgid "KP_End"
 msgstr "TN Fin"
 
-#: ../gdk/keyname-table.h:3985
+#: ../gdk/keyname-table.h:3986
 msgctxt "keyboard label"
 msgid "KP_Begin"
 msgstr "TN Inicio"
 
-#: ../gdk/keyname-table.h:3986
+#: ../gdk/keyname-table.h:3987
 msgctxt "keyboard label"
 msgid "KP_Insert"
 msgstr "TN Inserir"
 
-#: ../gdk/keyname-table.h:3987
+#: ../gdk/keyname-table.h:3988
 msgctxt "keyboard label"
 msgid "KP_Delete"
 msgstr "TN Supr"
 
-#: ../gdk/keyname-table.h:3988
+#: ../gdk/keyname-table.h:3989
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Supr"
 
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
-#: ../gdk/keyname-table.h:3990
+#: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessUp"
 msgstr "Monitor: subir brillo"
 
-#: ../gdk/keyname-table.h:3991
+#: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessDown"
 msgstr "Monitor: baixar brillo"
 
-#: ../gdk/keyname-table.h:3992
+#: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
 msgid "XF86AudioMute"
 msgstr "Enmudecer"
 
-#: ../gdk/keyname-table.h:3993
+#: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
 msgid "XF86AudioLowerVolume"
 msgstr "Son: baixar volume"
 
-#: ../gdk/keyname-table.h:3994
+#: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
 msgid "XF86AudioRaiseVolume"
 msgstr "Son: subir volume"
 
-#: ../gdk/keyname-table.h:3995
+#: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
 msgid "XF86AudioPlay"
 msgstr "Son: reproducir"
 
-#: ../gdk/keyname-table.h:3996
+#: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
 msgid "XF86AudioStop"
 msgstr "Son: parar"
 
-#: ../gdk/keyname-table.h:3997
+#: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
 msgid "XF86AudioNext"
 msgstr "Son: seguinte"
 
-#: ../gdk/keyname-table.h:3998
+#: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
 msgid "XF86AudioPrev"
 msgstr "Son: anterior"
 
-#: ../gdk/keyname-table.h:3999
+#: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
 msgid "XF86AudioRecord"
 msgstr "Son: gravar"
 
-#: ../gdk/keyname-table.h:4000
+#: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
 msgid "XF86AudioPause"
 msgstr "Son: pausar"
 
-#: ../gdk/keyname-table.h:4001
+#: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
 msgid "XF86AudioRewind"
 msgstr "Son: rebobinar"
 
-#: ../gdk/keyname-table.h:4002
+#: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
 msgid "XF86AudioMedia"
 msgstr "Son: medio"
 
-#: ../gdk/keyname-table.h:4003
+#: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
 msgid "XF86ScreenSaver"
 msgstr "Salvapantallas"
 
-#: ../gdk/keyname-table.h:4004
+#: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
 msgid "XF86Battery"
 msgstr "Batería"
 
-#: ../gdk/keyname-table.h:4005
+#: ../gdk/keyname-table.h:4006
 msgctxt "keyboard label"
 msgid "XF86Launch1"
 msgstr "Executar1"
 
-#: ../gdk/keyname-table.h:4006
+#: ../gdk/keyname-table.h:4007
 msgctxt "keyboard label"
 msgid "XF86Forward"
 msgstr "Adiante"
 
-#: ../gdk/keyname-table.h:4007
+#: ../gdk/keyname-table.h:4008
 msgctxt "keyboard label"
 msgid "XF86Back"
 msgstr "Atrás"
 
-#: ../gdk/keyname-table.h:4008
+#: ../gdk/keyname-table.h:4009
 msgctxt "keyboard label"
 msgid "XF86Sleep"
 msgstr "Durmir"
 
-#: ../gdk/keyname-table.h:4009
+#: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
 msgid "XF86Hibernate"
 msgstr "Hibernar"
 
-#: ../gdk/keyname-table.h:4010
+#: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
 msgid "XF86WLAN"
 msgstr "Rede sen fíos"
 
-#: ../gdk/keyname-table.h:4011
+#: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
 msgid "XF86WebCam"
 msgstr "Cámara web"
 
-#: ../gdk/keyname-table.h:4012
+#: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
 msgid "XF86Display"
 msgstr "Pantalla"
 
-#: ../gdk/keyname-table.h:4013
+#: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
 msgid "XF86TouchpadToggle"
 msgstr "Activar/desactivar área táctil"
 
-#: ../gdk/keyname-table.h:4014
+#: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
 msgid "XF86WakeUp"
 msgstr "Espertar"
 
-#: ../gdk/keyname-table.h:4015
+#: ../gdk/keyname-table.h:4016
 msgctxt "keyboard label"
 msgid "XF86Suspend"
 msgstr "Suspender"
@@ -482,6 +483,154 @@ msgstr "Interruptor"
 #: ../gtk/a11y/gtkswitchaccessible.c:64
 msgid "Switches between on and off states"
 msgstr "Cambia entre os estados acendido e apagado"
+
+#: ../gtk/deprecated/gtkcolorsel.c:425
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Seleccione a cor que desexa desde o anel exterior. Seleccione a escuridade "
+"ou luminosidade usando o triángulo interior."
+
+#: ../gtk/deprecated/gtkcolorsel.c:451
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Prema no contagotas, logo prema sobre calquera cor que haxa na súa pantalla "
+"para seleccionala."
+
+#: ../gtk/deprecated/gtkcolorsel.c:461
+msgid "_Hue:"
+msgstr "_Matiz:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:462
+msgid "Position on the color wheel."
+msgstr "Posición na roda de cores."
+
+#: ../gtk/deprecated/gtkcolorsel.c:464
+msgid "S_aturation:"
+msgstr "_Saturación:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:465
+msgid "Intensity of the color."
+msgstr "Intensidade da cor."
+
+#: ../gtk/deprecated/gtkcolorsel.c:466
+msgid "_Value:"
+msgstr "_Valor:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:467
+msgid "Brightness of the color."
+msgstr "Brillo da cor."
+
+#: ../gtk/deprecated/gtkcolorsel.c:468
+msgid "_Red:"
+msgstr "_Vermello:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:469
+msgid "Amount of red light in the color."
+msgstr "Cantidade de luz vermella na cor."
+
+#: ../gtk/deprecated/gtkcolorsel.c:470
+msgid "_Green:"
+msgstr "_Verde:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:471
+msgid "Amount of green light in the color."
+msgstr "Cantidade de luz verde na cor."
+
+#: ../gtk/deprecated/gtkcolorsel.c:472
+msgid "_Blue:"
+msgstr "_Azul:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:473
+msgid "Amount of blue light in the color."
+msgstr "Cantidade de luz azul na cor."
+
+#: ../gtk/deprecated/gtkcolorsel.c:476
+msgid "Op_acity:"
+msgstr "Op_acidade:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:484 ../gtk/deprecated/gtkcolorsel.c:494
+msgid "Transparency of the color."
+msgstr "Transparencia da cor."
+
+#: ../gtk/deprecated/gtkcolorsel.c:501
+msgid "Color _name:"
+msgstr "_Nome da cor:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:516
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Nesta entrada pode escribir un valor de cor en estilo HTML hexadecimal, ou "
+"simplemente un nome de cor como «orange»."
+
+#: ../gtk/deprecated/gtkcolorsel.c:548
+msgid "_Palette:"
+msgstr "_Paleta:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:578
+msgid "Color Wheel"
+msgstr "Roda de cor"
+
+#: ../gtk/deprecated/gtkcolorsel.c:1072
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+"A cor seleccionada anteriormente, para a comparación coa cor que está a "
+"seleccionar agora. Pode arrastrar esta cor cara a unha entrada de paleta ou "
+"seleccionar esta cor como actual arrastrándoa até a outra cor ao longo da "
+"mostra."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1078
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"A cor que escolleu. Pode arrastrar esta cor a unha entrada da paleta e "
+"gardala para usala no futuro."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1084
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now."
+msgstr ""
+"A cor seleccionada anteriormente, para comparar coa cor que seleccionou "
+"agora."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1088
+msgid "The color you've chosen."
+msgstr "A cor que seleccionou."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1491
+msgid "_Save color here"
+msgstr "_Gardar cor aquí"
+
+#: ../gtk/deprecated/gtkcolorsel.c:1695
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+"Prema sobre esta entrada da paleta para convertela na cor actual. Para "
+"modificar esta entrada, arrastre unha cor de mostra aquí ou prema co botón "
+"dereito sobre a cor e seleccione \"Gardar cor aquí.\""
+
+#. We emit the response for the Select button manually,
+#. * since we want to save the color first
+#.
+#: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:574
+#: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
+msgid "_Select"
+msgstr "_Seleccionar"
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:219
+msgid "Color Selection"
+msgstr "Selección de cor"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -704,11 +853,6 @@ msgstr "Esquecer asociación"
 msgid "Show other applications"
 msgstr "Mostrar outros aplicativos"
 
-#: ../gtk/gtkappchooserdialog.c:574 ../gtk/gtkcolorchooserdialog.c:125
-#: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkfontchooserdialog.c:174
-msgid "_Select"
-msgstr "_Seleccionar"
-
 #: ../gtk/gtkappchooserwidget.c:603
 msgid "Default Application"
 msgstr "Aplicativo predeterminado"
@@ -902,7 +1046,7 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "Escolla unha cor"
 
-#: ../gtk/gtkcolorchooserdialog.c:134
+#: ../gtk/gtkcolorchooserdialog.c:164
 msgid "Select a Color"
 msgstr "Seleccionar unha cor"
 
@@ -1166,146 +1310,6 @@ msgstr "Plano de cor"
 #: ../gtk/gtkcolorswatch.c:447
 msgid "_Customize"
 msgstr "_Personalizar"
-
-#: ../gtk/deprecated/gtkcolorsel.c:425
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"Seleccione a cor que desexa desde o anel exterior. Seleccione a escuridade "
-"ou luminosidade usando o triángulo interior."
-
-#: ../gtk/deprecated/gtkcolorsel.c:451
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr ""
-"Prema no contagotas, logo prema sobre calquera cor que haxa na súa pantalla "
-"para seleccionala."
-
-#: ../gtk/deprecated/gtkcolorsel.c:461
-msgid "_Hue:"
-msgstr "_Matiz:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:462
-msgid "Position on the color wheel."
-msgstr "Posición na roda de cores."
-
-#: ../gtk/deprecated/gtkcolorsel.c:464
-msgid "S_aturation:"
-msgstr "_Saturación:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:465
-msgid "Intensity of the color."
-msgstr "Intensidade da cor."
-
-#: ../gtk/deprecated/gtkcolorsel.c:466
-msgid "_Value:"
-msgstr "_Valor:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:467
-msgid "Brightness of the color."
-msgstr "Brillo da cor."
-
-#: ../gtk/deprecated/gtkcolorsel.c:468
-msgid "_Red:"
-msgstr "_Vermello:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:469
-msgid "Amount of red light in the color."
-msgstr "Cantidade de luz vermella na cor."
-
-#: ../gtk/deprecated/gtkcolorsel.c:470
-msgid "_Green:"
-msgstr "_Verde:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:471
-msgid "Amount of green light in the color."
-msgstr "Cantidade de luz verde na cor."
-
-#: ../gtk/deprecated/gtkcolorsel.c:472
-msgid "_Blue:"
-msgstr "_Azul:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:473
-msgid "Amount of blue light in the color."
-msgstr "Cantidade de luz azul na cor."
-
-#: ../gtk/deprecated/gtkcolorsel.c:476
-msgid "Op_acity:"
-msgstr "Op_acidade:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:484 ../gtk/deprecated/gtkcolorsel.c:494
-msgid "Transparency of the color."
-msgstr "Transparencia da cor."
-
-#: ../gtk/deprecated/gtkcolorsel.c:501
-msgid "Color _name:"
-msgstr "_Nome da cor:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:516
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"Nesta entrada pode escribir un valor de cor en estilo HTML hexadecimal, ou "
-"simplemente un nome de cor como «orange»."
-
-#: ../gtk/deprecated/gtkcolorsel.c:548
-msgid "_Palette:"
-msgstr "_Paleta:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:578
-msgid "Color Wheel"
-msgstr "Roda de cor"
-
-#: ../gtk/deprecated/gtkcolorsel.c:1072
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now. You can drag this color to a palette entry, or select this color as "
-"current by dragging it to the other color swatch alongside."
-msgstr ""
-"A cor seleccionada anteriormente, para a comparación coa cor que está a "
-"seleccionar agora. Pode arrastrar esta cor cara a unha entrada de paleta ou "
-"seleccionar esta cor como actual arrastrándoa até a outra cor ao longo da "
-"mostra."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1078
-msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
-"it for use in the future."
-msgstr ""
-"A cor que escolleu. Pode arrastrar esta cor a unha entrada da paleta e "
-"gardala para usala no futuro."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1084
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now."
-msgstr ""
-"A cor seleccionada anteriormente, para comparar coa cor que seleccionou "
-"agora."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1088
-msgid "The color you've chosen."
-msgstr "A cor que seleccionou."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1491
-msgid "_Save color here"
-msgstr "_Gardar cor aquí"
-
-#: ../gtk/deprecated/gtkcolorsel.c:1695
-msgid ""
-"Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
-"Prema sobre esta entrada da paleta para convertela na cor actual. Para "
-"modificar esta entrada, arrastre unha cor de mostra aquí ou prema co botón "
-"dereito sobre a cor e seleccione \"Gardar cor aquí.\""
-
-#: ../gtk/deprecated/gtkcolorseldialog.c:219
-msgid "Color Selection"
-msgstr "Selección de cor"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
