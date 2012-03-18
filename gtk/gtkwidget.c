@@ -14072,12 +14072,9 @@ gtk_widget_get_path (GtkWidget *widget)
   return widget->priv->path;
 }
 
-static void
-style_context_changed (GtkStyleContext *context,
-                       gpointer         user_data)
+void
+_gtk_widget_style_context_invalidated (GtkWidget *widget)
 {
-  GtkWidget *widget = user_data;
-
   if (gtk_widget_get_realized (widget))
     g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
   else
@@ -14132,8 +14129,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
                                       gtk_widget_get_style_context (priv->parent));
 
       _gtk_style_context_set_widget (priv->context, widget);
-      g_signal_connect (widget->priv->context, "changed",
-                        G_CALLBACK (style_context_changed), widget);
     }
 
   return widget->priv->context;

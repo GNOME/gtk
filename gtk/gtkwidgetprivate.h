@@ -173,6 +173,8 @@ void              _gtk_widget_set_captured_event_handler (GtkWidget             
 gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
                                                             GdkEvent  *event);
 
+void              _gtk_widget_style_context_invalidated    (GtkWidget *widget);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */

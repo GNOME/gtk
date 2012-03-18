@@ -411,6 +411,15 @@ static GtkSymbolicColor *
 G_DEFINE_TYPE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT)
 
 static void
+gtk_style_context_real_changed (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  if (priv->widget)
+    _gtk_widget_style_context_invalidated (priv->widget);
+}
+
+static void
 gtk_style_context_class_init (GtkStyleContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -418,6 +427,8 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
   object_class->finalize = gtk_style_context_finalize;
   object_class->set_property = gtk_style_context_impl_set_property;
   object_class->get_property = gtk_style_context_impl_get_property;
+
+  klass->changed = gtk_style_context_real_changed;
 
   signals[CHANGED] =
     g_signal_new (I_("changed"),
