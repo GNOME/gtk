@@ -551,6 +551,7 @@ static void	gtk_widget_get_property		 (GObject           *object,
 						  guint              prop_id,
 						  GValue            *value,
 						  GParamSpec        *pspec);
+static void	gtk_widget_constructed           (GObject	    *object);
 static void	gtk_widget_dispose		 (GObject	    *object);
 static void	gtk_widget_real_destroy		 (GtkWidget	    *object);
 static void	gtk_widget_finalize		 (GObject	    *object);
@@ -894,6 +895,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   cpn_context.dispatcher = child_property_notify_dispatcher;
   _gtk_widget_child_property_notify_context = &cpn_context;
 
+  gobject_class->constructed = gtk_widget_constructed;
   gobject_class->dispose = gtk_widget_dispose;
   gobject_class->finalize = gtk_widget_finalize;
   gobject_class->set_property = gtk_widget_set_property;
@@ -10318,6 +10320,27 @@ gtk_widget_get_default_direction (void)
 }
 
 static void
+gtk_widget_constructed (GObject *object)
+{
+  GtkWidget *widget = GTK_WIDGET (object);
+  GtkWidgetPrivate *priv = widget->priv;
+
+  /* As strange as it may seem, this may happen on object construction.
+   * init() implementations of parent types may eventually call this function,
+   * each with its corresponding GType, which could leave a child
+   * implementation with a wrong widget type in the widget path
+   */
+  if (priv->path &&
+      G_OBJECT_TYPE (widget) != gtk_widget_path_get_object_type (priv->path))
+    {
+      gtk_widget_path_free (priv->path);
+      priv->path = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_widget_parent_class)->constructed (object);
+}
+
+static void
 gtk_widget_dispose (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
@@ -14023,18 +14046,6 @@ GtkWidgetPath *
 gtk_widget_get_path (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  /* As strange as it may seem, this may happen on object construction.
-   * init() implementations of parent types may eventually call this function,
-   * each with its corresponding GType, which could leave a child
-   * implementation with a wrong widget type in the widget path
-   */
-  if (widget->priv->path &&
-      G_OBJECT_TYPE (widget) != gtk_widget_path_get_object_type (widget->priv->path))
-    {
-      gtk_widget_path_free (widget->priv->path);
-      widget->priv->path = NULL;
-    }
 
   if (!widget->priv->path)
     {
