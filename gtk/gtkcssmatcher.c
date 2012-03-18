@@ -291,3 +291,128 @@ _gtk_css_matcher_any_init (GtkCssMatcher *matcher)
   matcher->klass = &GTK_CSS_MATCHER_ANY;
 }
 
+/* GTK_CSS_MATCHER_WIDGET_SUPERSET */
+
+static gboolean
+gtk_css_matcher_superset_get_parent (GtkCssMatcher       *matcher,
+                                     const GtkCssMatcher *child)
+{
+  _gtk_css_matcher_any_init (matcher);
+
+  return TRUE;
+}
+
+static gboolean
+gtk_css_matcher_superset_get_previous (GtkCssMatcher       *matcher,
+                                       const GtkCssMatcher *next)
+{
+  _gtk_css_matcher_any_init (matcher);
+
+  return TRUE;
+}
+
+static GtkStateFlags
+gtk_css_matcher_superset_get_state (const GtkCssMatcher *matcher)
+{
+  /* XXX: This gets tricky when we implement :not() */
+
+  if (matcher->superset.relevant & GTK_CSS_CHANGE_STATE)
+    return _gtk_css_matcher_get_state (matcher->superset.subset);
+  else
+    return GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED
+      | GTK_STATE_FLAG_INSENSITIVE | GTK_STATE_FLAG_INCONSISTENT
+      | GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_BACKDROP;
+}
+
+static gboolean
+gtk_css_matcher_superset_has_name (const GtkCssMatcher *matcher,
+                                   const char          *name)
+{
+  if (matcher->superset.relevant & GTK_CSS_CHANGE_NAME)
+    return _gtk_css_matcher_has_name (matcher->superset.subset, name);
+  else
+    return TRUE;
+}
+
+static gboolean
+gtk_css_matcher_superset_has_class (const GtkCssMatcher *matcher,
+                                    const char          *class_name)
+{
+  if (matcher->superset.relevant & GTK_CSS_CHANGE_CLASS)
+    return _gtk_css_matcher_has_class (matcher->superset.subset, class_name);
+  else
+    return TRUE;
+}
+
+static gboolean
+gtk_css_matcher_superset_has_id (const GtkCssMatcher *matcher,
+                                 const char          *id)
+{
+  if (matcher->superset.relevant & GTK_CSS_CHANGE_NAME)
+    return _gtk_css_matcher_has_id (matcher->superset.subset, id);
+  else
+    return TRUE;
+}
+
+static gboolean
+gtk_css_matcher_superset_has_regions (const GtkCssMatcher *matcher)
+{
+  if (matcher->superset.relevant & GTK_CSS_CHANGE_NAME)
+    return _gtk_css_matcher_has_regions (matcher->superset.subset);
+  else
+    return TRUE;
+}
+
+static gboolean
+gtk_css_matcher_superset_has_region (const GtkCssMatcher *matcher,
+                                     const char          *region,
+                                     GtkRegionFlags       flags)
+{
+  if (matcher->superset.relevant & GTK_CSS_CHANGE_NAME)
+    {
+      if (matcher->superset.relevant & GTK_CSS_CHANGE_POSITION)
+        return _gtk_css_matcher_has_region (matcher->superset.subset, region, flags);
+      else
+        return _gtk_css_matcher_has_region (matcher->superset.subset, region, 0);
+    }
+  else
+    return TRUE;
+}
+
+static gboolean
+gtk_css_matcher_superset_has_position (const GtkCssMatcher *matcher,
+                                       gboolean             forward,
+                                       int                  a,
+                                       int                  b)
+{
+  if (matcher->superset.relevant & GTK_CSS_CHANGE_POSITION)
+    return _gtk_css_matcher_has_position (matcher->superset.subset, forward, a, b);
+  else
+    return TRUE;
+}
+
+static const GtkCssMatcherClass GTK_CSS_MATCHER_SUPERSET = {
+  gtk_css_matcher_superset_get_parent,
+  gtk_css_matcher_superset_get_previous,
+  gtk_css_matcher_superset_get_state,
+  gtk_css_matcher_superset_has_name,
+  gtk_css_matcher_superset_has_class,
+  gtk_css_matcher_superset_has_id,
+  gtk_css_matcher_superset_has_regions,
+  gtk_css_matcher_superset_has_region,
+  gtk_css_matcher_superset_has_position,
+};
+
+void
+_gtk_css_matcher_superset_init (GtkCssMatcher       *matcher,
+                                const GtkCssMatcher *subset,
+                                GtkCssChange         relevant)
+{
+  g_return_if_fail (subset != NULL);
+  g_return_if_fail ((relevant & ~(GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_STATE)) == 0);
+
+  matcher->superset.klass = &GTK_CSS_MATCHER_SUPERSET;
+  matcher->superset.subset = subset;
+  matcher->superset.relevant = relevant;
+}
+

@@ -20,10 +20,12 @@
 
 #include <gtk/gtkenums.h>
 #include <gtk/gtktypes.h>
+#include "gtk/gtkcsstypesprivate.h"
 
 G_BEGIN_DECLS
 
 typedef union _GtkCssMatcher GtkCssMatcher;
+typedef struct _GtkCssMatcherSuperset GtkCssMatcherSuperset;
 typedef struct _GtkCssMatcherWidgetPath GtkCssMatcherWidgetPath;
 typedef struct _GtkCssMatcherClass GtkCssMatcherClass;
 
@@ -58,15 +60,26 @@ struct _GtkCssMatcherWidgetPath {
   guint                     sibling_index;
 };
 
+struct _GtkCssMatcherSuperset {
+  const GtkCssMatcherClass *klass;
+  const GtkCssMatcher      *subset;
+  GtkCssChange              relevant;
+};
+
 union _GtkCssMatcher {
   const GtkCssMatcherClass *klass;
   GtkCssMatcherWidgetPath   path;
+  GtkCssMatcherSuperset     superset;
 };
 
 void              _gtk_css_matcher_init           (GtkCssMatcher          *matcher,
                                                    const GtkWidgetPath    *path,
                                                    GtkStateFlags           state);
 void              _gtk_css_matcher_any_init       (GtkCssMatcher          *matcher);
+void              _gtk_css_matcher_superset_init  (GtkCssMatcher          *matcher,
+                                                   const GtkCssMatcher    *subset,
+                                                   GtkCssChange            relevant);
+
 
 static inline gboolean
 _gtk_css_matcher_get_parent (GtkCssMatcher       *matcher,
