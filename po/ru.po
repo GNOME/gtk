@@ -14,15 +14,15 @@
 # Vasiliy Faronov <qvvx@yandex.ru>, 2007.
 # Anton Shestakov <engored@ya.ru>, 2008.
 # Lebedev Roman <roman@lebedev.com>, 2009.
-# Yuri Kozlov <yuray@komyakino.ru>, 2010.
+# Yuri Kozlov <yuray@komyakino.ru>, 2010, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-03-12 09:06+0000\n"
-"PO-Revision-Date: 2012-03-12 17:03+0300\n"
+"POT-Creation-Date: 2012-03-17 08:43+0000\n"
+"PO-Revision-Date: 2012-03-18 19:44+0300\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
-"Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
+"Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -100,320 +100,321 @@ msgstr "Сбросить указанные отладочные флаги GDK"
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
 #. * KP_Space      - Space (keypad)
+#. * Page_Up       - Page up
 #.
-#: ../gdk/keyname-table.h:3951
+#: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "BackSpace"
 
-#: ../gdk/keyname-table.h:3952
+#: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Tab"
 msgstr "Tab"
 
-#: ../gdk/keyname-table.h:3953
+#: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Return"
 msgstr "Return"
 
-#: ../gdk/keyname-table.h:3954
+#: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "Pause"
 msgstr "Pause"
 
-#: ../gdk/keyname-table.h:3955
+#: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
 msgstr "Scroll_Lock"
 
-#: ../gdk/keyname-table.h:3956
+#: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Sys_Req"
 msgstr "Sys_Req"
 
-#: ../gdk/keyname-table.h:3957
+#: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Escape"
 msgstr "Escape"
 
-#: ../gdk/keyname-table.h:3958
+#: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Multi_key"
 msgstr "Multi_key"
 
-#: ../gdk/keyname-table.h:3959
+#: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "Home"
 
-#: ../gdk/keyname-table.h:3960
+#: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "Left"
 msgstr "Влево"
 
-#: ../gdk/keyname-table.h:3961
+#: ../gdk/keyname-table.h:3962
 msgctxt "keyboard label"
 msgid "Up"
 msgstr "Вверх"
 
-#: ../gdk/keyname-table.h:3962
+#: ../gdk/keyname-table.h:3963
 msgctxt "keyboard label"
 msgid "Right"
 msgstr "Вправо"
 
-#: ../gdk/keyname-table.h:3963
+#: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "Down"
 msgstr "Вниз"
 
-#: ../gdk/keyname-table.h:3964
+#: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page_Up"
 
-#: ../gdk/keyname-table.h:3965
+#: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page_Down"
 
-#: ../gdk/keyname-table.h:3966
+#: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "End"
 msgstr "End"
 
-#: ../gdk/keyname-table.h:3967
+#: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "Begin"
 msgstr "Begin"
 
-#: ../gdk/keyname-table.h:3968
+#: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Print"
 
-#: ../gdk/keyname-table.h:3969
+#: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "Insert"
 msgstr "Insert"
 
-#: ../gdk/keyname-table.h:3970
+#: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "Num_Lock"
 msgstr "Num_Lock"
 
 #. Translators: KP_ means 'key pad' here
-#: ../gdk/keyname-table.h:3972
+#: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Space"
 msgstr "KP_Space"
 
-#: ../gdk/keyname-table.h:3973
+#: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Tab"
 msgstr "KP_Tab"
 
-#: ../gdk/keyname-table.h:3974
+#: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Enter"
 msgstr "KP_Enter"
 
-#: ../gdk/keyname-table.h:3975
+#: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "KP_Home"
 msgstr "KP_Home"
 
-#: ../gdk/keyname-table.h:3976
+#: ../gdk/keyname-table.h:3977
 msgctxt "keyboard label"
 msgid "KP_Left"
 msgstr "KP_Left"
 
-#: ../gdk/keyname-table.h:3977
+#: ../gdk/keyname-table.h:3978
 msgctxt "keyboard label"
 msgid "KP_Up"
 msgstr "KP_Up"
 
-#: ../gdk/keyname-table.h:3978
+#: ../gdk/keyname-table.h:3979
 msgctxt "keyboard label"
 msgid "KP_Right"
 msgstr "KP_Right"
 
-#: ../gdk/keyname-table.h:3979
+#: ../gdk/keyname-table.h:3980
 msgctxt "keyboard label"
 msgid "KP_Down"
 msgstr "KP_Down"
 
-#: ../gdk/keyname-table.h:3980
+#: ../gdk/keyname-table.h:3981
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
 msgstr "KP_Page_Up"
 
-#: ../gdk/keyname-table.h:3981
+#: ../gdk/keyname-table.h:3982
 msgctxt "keyboard label"
 msgid "KP_Prior"
 msgstr "KP_Prior"
 
-#: ../gdk/keyname-table.h:3982
+#: ../gdk/keyname-table.h:3983
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
 msgstr "KP_Page_Down"
 
-#: ../gdk/keyname-table.h:3983
+#: ../gdk/keyname-table.h:3984
 msgctxt "keyboard label"
 msgid "KP_Next"
 msgstr "KP_Next"
 
-#: ../gdk/keyname-table.h:3984
+#: ../gdk/keyname-table.h:3985
 msgctxt "keyboard label"
 msgid "KP_End"
 msgstr "KP_End"
 
-#: ../gdk/keyname-table.h:3985
+#: ../gdk/keyname-table.h:3986
 msgctxt "keyboard label"
 msgid "KP_Begin"
 msgstr "KP_Begin"
 
-#: ../gdk/keyname-table.h:3986
+#: ../gdk/keyname-table.h:3987
 msgctxt "keyboard label"
 msgid "KP_Insert"
 msgstr "KP_Insert"
 
-#: ../gdk/keyname-table.h:3987
+#: ../gdk/keyname-table.h:3988
 msgctxt "keyboard label"
 msgid "KP_Delete"
 msgstr "KP_Delete"
 
-#: ../gdk/keyname-table.h:3988
+#: ../gdk/keyname-table.h:3989
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
 
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
-#: ../gdk/keyname-table.h:3990
+#: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessUp"
 msgstr "Увеличить яркость"
 
-#: ../gdk/keyname-table.h:3991
+#: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessDown"
 msgstr "Уменьшить яркость"
 
-#: ../gdk/keyname-table.h:3992
+#: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
 msgid "XF86AudioMute"
 msgstr "Приглушить звук"
 
-#: ../gdk/keyname-table.h:3993
+#: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
 msgid "XF86AudioLowerVolume"
 msgstr "Уменьшить громкость"
 
-#: ../gdk/keyname-table.h:3994
+#: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
 msgid "XF86AudioRaiseVolume"
 msgstr "Увеличить громкость"
 
-#: ../gdk/keyname-table.h:3995
+#: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
 msgid "XF86AudioPlay"
 msgstr "Воспроизвести аудиозапись"
 
-#: ../gdk/keyname-table.h:3996
+#: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
 msgid "XF86AudioStop"
 msgstr "Остановить аудиозапись"
 
-#: ../gdk/keyname-table.h:3997
+#: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
 msgid "XF86AudioNext"
 msgstr "Следующая аудиозапись"
 
-#: ../gdk/keyname-table.h:3998
+#: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
 msgid "XF86AudioPrev"
 msgstr "Предыдущая аудиозапись"
 
-#: ../gdk/keyname-table.h:3999
+#: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
 msgid "XF86AudioRecord"
 msgstr "Запись звука"
 
-#: ../gdk/keyname-table.h:4000
+#: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
 msgid "XF86AudioPause"
 msgstr "Приостановить аудиозапись"
 
-#: ../gdk/keyname-table.h:4001
+#: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
 msgid "XF86AudioRewind"
 msgstr "Перемотка аудиозаписи"
 
-#: ../gdk/keyname-table.h:4002
+#: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
 msgid "XF86AudioMedia"
 msgstr "Мультимедиа"
 
-#: ../gdk/keyname-table.h:4003
+#: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
 msgid "XF86ScreenSaver"
 msgstr "Хранитель экрана"
 
-#: ../gdk/keyname-table.h:4004
+#: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
 msgid "XF86Battery"
 msgstr "Аккумулятор"
 
-#: ../gdk/keyname-table.h:4005
+#: ../gdk/keyname-table.h:4006
 msgctxt "keyboard label"
 msgid "XF86Launch1"
 msgstr "Запустить приложение"
 
-#: ../gdk/keyname-table.h:4006
+#: ../gdk/keyname-table.h:4007
 msgctxt "keyboard label"
 msgid "XF86Forward"
 msgstr "Вперёд"
 
-#: ../gdk/keyname-table.h:4007
+#: ../gdk/keyname-table.h:4008
 msgctxt "keyboard label"
 msgid "XF86Back"
 msgstr "Назад"
 
-#: ../gdk/keyname-table.h:4008
+#: ../gdk/keyname-table.h:4009
 msgctxt "keyboard label"
 msgid "XF86Sleep"
 msgstr "Сон"
 
-#: ../gdk/keyname-table.h:4009
+#: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
 msgid "XF86Hibernate"
 msgstr "Спящий режим"
 
-#: ../gdk/keyname-table.h:4010
+#: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
 msgid "XF86WLAN"
 msgstr "Беспроводная сеть"
 
-#: ../gdk/keyname-table.h:4011
+#: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
 msgid "XF86WebCam"
 msgstr "Веб-камера"
 
-#: ../gdk/keyname-table.h:4012
+#: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
 msgid "XF86Display"
 msgstr "Монитор"
 
-#: ../gdk/keyname-table.h:4013
+#: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
 msgid "XF86TouchpadToggle"
 msgstr "Cенсорная панель/тензометрический джойстик"
 
-#: ../gdk/keyname-table.h:4014
+#: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
 msgid "XF86WakeUp"
 msgstr "Разбудить"
 
-#: ../gdk/keyname-table.h:4015
+#: ../gdk/keyname-table.h:4016
 msgctxt "keyboard label"
 msgid "XF86Suspend"
 msgstr "Ждущий режим"
@@ -636,9 +637,6 @@ msgstr "Выбор шрифта"
 #.
 #: ../gtk/gtkaboutdialog.c:104
 #, c-format
-#| msgid ""
-#| "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a "
-#| "href=\"%s\">%s</a>"
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
 "for details, visit <a href=\"%s\">%s</a>"
@@ -870,13 +868,11 @@ msgstr "З_акончить"
 
 #: ../gtk/gtkbuilder-menus.c:220
 #, c-format
-#| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed inside <%s>"
 msgstr "Элемент <%s> не может находиться внутри <%s>"
 
 #: ../gtk/gtkbuilder-menus.c:225
 #, c-format
-#| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed at toplevel"
 msgstr "Элемент <%s> не может использоваться для верхнего уровня"
 
@@ -1025,7 +1021,6 @@ msgid "Pick a Color"
 msgstr "Выберите цвет"
 
 #: ../gtk/gtkcolorchooserdialog.c:164
-#| msgid "Select a folder"
 msgid "Select a Color"
 msgstr "Выберите цвет"
 
@@ -1041,27 +1036,23 @@ msgstr "Красный %d%%, зелёный %d%%, синий %d%%"
 
 #: ../gtk/gtkcolorchooserwidget.c:360
 #, c-format
-#| msgid "Color"
 msgid "Color: %s"
 msgstr "Цвет: %s"
 
 #: ../gtk/gtkcolorchooserwidget.c:419
-#, fuzzy
 msgctxt "Color name"
 msgid "Light Scarlet Red"
-msgstr "Светло-красный"
+msgstr "Светло-алый"
 
 #: ../gtk/gtkcolorchooserwidget.c:420
-#, fuzzy
 msgctxt "Color name"
 msgid "Scarlet Red"
-msgstr "Красный"
+msgstr "Алый"
 
 #: ../gtk/gtkcolorchooserwidget.c:421
-#, fuzzy
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
-msgstr "Тёмно-красный"
+msgstr "Тёмно-алый"
 
 #: ../gtk/gtkcolorchooserwidget.c:422
 msgctxt "Color name"
@@ -1069,7 +1060,6 @@ msgid "Light Orange"
 msgstr "Светло-оранжевый"
 
 #: ../gtk/gtkcolorchooserwidget.c:423
-#| msgid "Range"
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Оранжевый"
@@ -1082,171 +1072,144 @@ msgstr "Тёмно-оранжевый"
 #: ../gtk/gtkcolorchooserwidget.c:425
 msgctxt "Color name"
 msgid "Light Butter"
-msgstr ""
+msgstr "Светлое масло"
 
 #: ../gtk/gtkcolorchooserwidget.c:426
 msgctxt "Color name"
 msgid "Butter"
-msgstr ""
+msgstr "Масло"
 
 #: ../gtk/gtkcolorchooserwidget.c:427
 msgctxt "Color name"
 msgid "Dark Butter"
-msgstr ""
+msgstr "Тёмное масло"
 
 #: ../gtk/gtkcolorchooserwidget.c:428
 msgctxt "Color name"
 msgid "Light Chameleon"
-msgstr ""
+msgstr "Светлый хамелеон"
 
 #: ../gtk/gtkcolorchooserwidget.c:429
 msgctxt "Color name"
 msgid "Chameleon"
-msgstr ""
+msgstr "Хамелеон"
 
 #: ../gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Dark Chameleon"
-msgstr ""
+msgstr "Тёмный хамелеон"
 
 #: ../gtk/gtkcolorchooserwidget.c:431
-#, fuzzy
 msgctxt "Color name"
 msgid "Light Sky Blue"
-msgstr "Светло-голубой"
+msgstr "Светлый небесно-голубой"
 
 #: ../gtk/gtkcolorchooserwidget.c:432
-#, fuzzy
 msgctxt "Color name"
 msgid "Sky Blue"
-msgstr "Голубой"
+msgstr "Небесно-голубой"
 
 #: ../gtk/gtkcolorchooserwidget.c:433
-#, fuzzy
 msgctxt "Color name"
 msgid "Dark Sky Blue"
-msgstr "Тёмно-голубой"
+msgstr "Тёмный небесно-голубой"
 
 #: ../gtk/gtkcolorchooserwidget.c:434
-#, fuzzy
 msgctxt "Color name"
 msgid "Light Plum"
-msgstr "Светло-фиолетовый"
+msgstr "Светлая слива"
 
 #: ../gtk/gtkcolorchooserwidget.c:435
-#, fuzzy
-#| msgid "Volume"
 msgctxt "Color name"
 msgid "Plum"
-msgstr "Фиолетовый"
+msgstr "Сливовый"
 
 #: ../gtk/gtkcolorchooserwidget.c:436
-#, fuzzy
 msgctxt "Color name"
 msgid "Dark Plum"
-msgstr "Тёмно-фиолетовый"
+msgstr "Тёмная слива"
 
 #: ../gtk/gtkcolorchooserwidget.c:437
-#, fuzzy
 msgctxt "Color name"
 msgid "Light Chocolate"
 msgstr "Светлый шоколад"
 
 #: ../gtk/gtkcolorchooserwidget.c:438
-#, fuzzy
-#| msgid "C_ollate"
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "Шоколадный"
 
 #: ../gtk/gtkcolorchooserwidget.c:439
-#, fuzzy
 msgctxt "Color name"
 msgid "Dark Chocolate"
 msgstr "Тёмный шоколад"
 
 #: ../gtk/gtkcolorchooserwidget.c:440
-#, fuzzy
 msgctxt "Color name"
 msgid "Light Aluminum 1"
 msgstr "Светлый алюминий 1"
 
 #: ../gtk/gtkcolorchooserwidget.c:441
-#, fuzzy
 msgctxt "Color name"
 msgid "Aluminum 1"
 msgstr "Алюминий 1"
 
 #: ../gtk/gtkcolorchooserwidget.c:442
-#, fuzzy
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
 msgstr "Тёмный алюминий 1"
 
 #: ../gtk/gtkcolorchooserwidget.c:443
-#, fuzzy
 msgctxt "Color name"
 msgid "Light Aluminum 2"
 msgstr "Светлый алюминий 2"
 
 #: ../gtk/gtkcolorchooserwidget.c:444
-#, fuzzy
 msgctxt "Color name"
 msgid "Aluminum 2"
 msgstr "Алюминий 2"
 
 #: ../gtk/gtkcolorchooserwidget.c:445
-#, fuzzy
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
 msgstr "Тёмный алюминий 2"
 
 #: ../gtk/gtkcolorchooserwidget.c:459
-#| msgctxt "Stock label, navigation"
-#| msgid "_Back"
 msgctxt "Color name"
 msgid "Black"
 msgstr "Чёрный"
 
 #: ../gtk/gtkcolorchooserwidget.c:460
-#, fuzzy
 msgctxt "Color name"
 msgid "Very Dark Gray"
 msgstr "Очень тёмный серый"
 
 #: ../gtk/gtkcolorchooserwidget.c:461
-#, fuzzy
 msgctxt "Color name"
 msgid "Darker Gray"
 msgstr "Более тёмный серый"
 
 #: ../gtk/gtkcolorchooserwidget.c:462
-#, fuzzy
 msgctxt "Color name"
 msgid "Dark Gray"
 msgstr "Тёмно-серый"
 
 #: ../gtk/gtkcolorchooserwidget.c:463
-#, fuzzy
-#| msgid "Medium"
 msgctxt "Color name"
 msgid "Medium Gray"
-msgstr "Средний серый"
+msgstr "Серый"
 
 #: ../gtk/gtkcolorchooserwidget.c:464
-#, fuzzy
 msgctxt "Color name"
 msgid "Light Gray"
-msgstr "Свтело-серый"
+msgstr "Светло-серый"
 
 #: ../gtk/gtkcolorchooserwidget.c:465
-#, fuzzy
 msgctxt "Color name"
 msgid "Lighter Gray"
 msgstr "Более светлый серый"
 
 #: ../gtk/gtkcolorchooserwidget.c:466
-#, fuzzy
 msgctxt "Color name"
 msgid "Very Light Gray"
 msgstr "Очень светлый серый"
@@ -1258,34 +1221,28 @@ msgstr "Белый"
 
 #. translators: label for the custom section in the color chooser
 #: ../gtk/gtkcolorchooserwidget.c:516
-#| msgid "Custom size"
 msgid "Custom"
 msgstr "Другой"
 
 #: ../gtk/gtkcolorchooserwidget.c:524
-#| msgid "Create Fo_lder"
 msgid "Create custom color"
 msgstr "Создать другой цвет"
 
 #: ../gtk/gtkcolorchooserwidget.c:543
 #, c-format
-#| msgid "Custom %sx%s"
 msgid "Custom color %d: %s"
 msgstr "Другой цвет %d: %s"
 
 #: ../gtk/gtkcoloreditor.c:412
-#| msgid "Color _name:"
 msgid "Color Name"
 msgstr "Наименование цвета"
 
 #: ../gtk/gtkcoloreditor.c:457
-#| msgid "S_aturation:"
 msgctxt "Color channel"
 msgid "Saturation"
 msgstr "Насыщенность"
 
 #: ../gtk/gtkcoloreditor.c:463
-#| msgid "_Value:"
 msgctxt "Color channel"
 msgid "Value"
 msgstr "Значение"
@@ -1302,7 +1259,6 @@ msgstr "V"
 
 #: ../gtk/gtkcoloreditor.c:481
 #: ../gtk/gtkcolorscale.c:301
-#| msgid "_Hue:"
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "Тон"
@@ -1319,19 +1275,15 @@ msgid "Alpha"
 msgstr "Альфа"
 
 #: ../gtk/gtkcoloreditor.c:503
-#| msgctxt "paper size"
-#| msgid "A0"
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
 #: ../gtk/gtkcolorplane.c:438
-#| msgid "Color _name:"
 msgid "Color Plane"
 msgstr "Цветовая плоскость"
 
 #: ../gtk/gtkcolorswatch.c:447
-#| msgid "Custom size"
 msgid "_Customize"
 msgstr "_Изменить"
 
