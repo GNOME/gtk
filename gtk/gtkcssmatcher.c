@@ -199,3 +199,95 @@ _gtk_css_matcher_init (GtkCssMatcher       *matcher,
   matcher->path.sibling_index = gtk_widget_path_iter_get_sibling_index (path, matcher->path.index);
 }
 
+/* GTK_CSS_MATCHER_WIDGET_ANY */
+
+static gboolean
+gtk_css_matcher_any_get_parent (GtkCssMatcher       *matcher,
+                                const GtkCssMatcher *child)
+{
+  _gtk_css_matcher_any_init (matcher);
+
+  return TRUE;
+}
+
+static gboolean
+gtk_css_matcher_any_get_previous (GtkCssMatcher       *matcher,
+                                  const GtkCssMatcher *next)
+{
+  _gtk_css_matcher_any_init (matcher);
+
+  return TRUE;
+}
+
+static GtkStateFlags
+gtk_css_matcher_any_get_state (const GtkCssMatcher *matcher)
+{
+  /* XXX: This gets tricky when we implement :not() */
+
+  return GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED
+    | GTK_STATE_FLAG_INSENSITIVE | GTK_STATE_FLAG_INCONSISTENT
+    | GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_BACKDROP;
+}
+
+static gboolean
+gtk_css_matcher_any_has_name (const GtkCssMatcher *matcher,
+                              const char          *name)
+{
+  return TRUE;
+}
+
+static gboolean
+gtk_css_matcher_any_has_class (const GtkCssMatcher *matcher,
+                               const char          *class_name)
+{
+  return TRUE;
+}
+
+static gboolean
+gtk_css_matcher_any_has_id (const GtkCssMatcher *matcher,
+                                    const char          *id)
+{
+  return TRUE;
+}
+
+static gboolean
+gtk_css_matcher_any_has_regions (const GtkCssMatcher *matcher)
+{
+  return TRUE;
+}
+
+static gboolean
+gtk_css_matcher_any_has_region (const GtkCssMatcher *matcher,
+                                const char          *region,
+                                GtkRegionFlags       flags)
+{
+  return TRUE;
+}
+
+static gboolean
+gtk_css_matcher_any_has_position (const GtkCssMatcher *matcher,
+                                  gboolean             forward,
+                                  int                  a,
+                                  int                  b)
+{
+  return TRUE;
+}
+
+static const GtkCssMatcherClass GTK_CSS_MATCHER_ANY = {
+  gtk_css_matcher_any_get_parent,
+  gtk_css_matcher_any_get_previous,
+  gtk_css_matcher_any_get_state,
+  gtk_css_matcher_any_has_name,
+  gtk_css_matcher_any_has_class,
+  gtk_css_matcher_any_has_id,
+  gtk_css_matcher_any_has_regions,
+  gtk_css_matcher_any_has_region,
+  gtk_css_matcher_any_has_position,
+};
+
+void
+_gtk_css_matcher_any_init (GtkCssMatcher *matcher)
+{
+  matcher->klass = &GTK_CSS_MATCHER_ANY;
+}
+

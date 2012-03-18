@@ -66,6 +66,7 @@ union _GtkCssMatcher {
 void              _gtk_css_matcher_init           (GtkCssMatcher          *matcher,
                                                    const GtkWidgetPath    *path,
                                                    GtkStateFlags           state);
+void              _gtk_css_matcher_any_init       (GtkCssMatcher          *matcher);
 
 static inline gboolean
 _gtk_css_matcher_get_parent (GtkCssMatcher       *matcher,
