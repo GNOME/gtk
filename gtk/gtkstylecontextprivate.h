@@ -24,7 +24,9 @@
 
 G_BEGIN_DECLS
 
-GtkCssValue   * _gtk_style_context_peek_property              (GtkStyleContext *context,
+void            _gtk_style_context_set_widget                (GtkStyleContext *context,
+                                                              GtkWidget       *widget);
+GtkCssValue   * _gtk_style_context_peek_property             (GtkStyleContext *context,
                                                               const char      *property_name);
 double         _gtk_style_context_get_number                 (GtkStyleContext *context,
                                                               const char      *property_name,

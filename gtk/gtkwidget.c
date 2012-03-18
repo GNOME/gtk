@@ -10402,7 +10402,10 @@ gtk_widget_finalize (GObject *object)
     gtk_widget_path_free (priv->path);
 
   if (priv->context)
-    g_object_unref (priv->context);
+    {
+      _gtk_style_context_set_widget (priv->context, NULL);
+      g_object_unref (priv->context);
+    }
 
   _gtk_widget_free_cached_sizes (widget);
 
@@ -14128,6 +14131,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
         gtk_style_context_set_parent (priv->context,
                                       gtk_widget_get_style_context (priv->parent));
 
+      _gtk_style_context_set_widget (priv->context, widget);
       g_signal_connect (widget->priv->context, "changed",
                         G_CALLBACK (style_context_changed), widget);
     }

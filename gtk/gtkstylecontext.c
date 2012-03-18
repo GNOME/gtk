@@ -361,6 +361,7 @@ struct _GtkStyleContextPrivate
   GtkStyleCascade *cascade;
 
   GtkStyleContext *parent;
+  GtkWidget *widget;            
   GtkWidgetPath *widget_path;
   GHashTable *style_data;
   GSList *info_stack;
@@ -1021,6 +1022,16 @@ gtk_style_context_new (void)
   return g_object_new (GTK_TYPE_STYLE_CONTEXT, NULL);
 }
 
+void
+_gtk_style_context_set_widget (GtkStyleContext *context,
+                               GtkWidget       *widget)
+{
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
+
+  context->priv->widget = widget;
+}
+
 /**
  * gtk_style_context_add_provider:
  * @context: a #GtkStyleContext
@@ -1492,6 +1503,7 @@ gtk_style_context_set_path (GtkStyleContext *context,
   g_return_if_fail (path != NULL);
 
   priv = context->priv;
+  g_return_if_fail (priv->widget == NULL);
 
   if (priv->widget_path)
     {
@@ -2214,7 +2226,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
   g_param_spec_ref (pcache->pspec);
   g_value_init (&pcache->value, G_PARAM_SPEC_VALUE_TYPE (pspec));
 
-  if (priv->widget_path)
+  if (priv->widget || priv->widget_path)
     {
       if (gtk_style_provider_get_style_property (GTK_STYLE_PROVIDER (priv->cascade),
                                                  priv->widget_path, state,
