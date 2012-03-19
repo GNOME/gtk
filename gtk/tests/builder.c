@@ -1226,14 +1226,6 @@ test_icon_view (void)
   g_assert (iconview);
   g_assert (GTK_IS_ICON_VIEW (iconview));
 
-  gtk_widget_realize (GTK_WIDGET (iconview));
-
-  renderer = gtk_builder_get_object (builder, "renderer1");
-  g_object_get (renderer, "text", &text, NULL);
-  g_assert (text);
-  g_assert (strcmp (text, "test") == 0);
-  g_free (text);
-    
   window = gtk_builder_get_object (builder, "window1");
   gtk_widget_destroy (GTK_WIDGET (window));
   g_object_unref (builder);
