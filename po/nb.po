@@ -109,12 +109,12 @@ msgstr "Pause"
 #: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr "Scroll_lock"
+msgstr "Scroll Lock"
 
 #: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "Sys_Req"
+msgstr "Sys Req"
 
 #: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
@@ -154,12 +154,12 @@ msgstr "Ned"
 #: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Page_Up"
+msgstr "Page Up"
 
 #: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "Page_Down"
+msgstr "Page Down"
 
 #: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
@@ -184,88 +184,88 @@ msgstr "Sett inn"
 #: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr "Num_Lock"
+msgstr "Num Lock"
 
 #. Translators: KP_ means 'key pad' here
 #: ../gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "KP_Space"
+msgstr "Mellomrom"
 
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr "KP_Tab"
+msgstr "Tabulator"
 
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "KP_Linjeskift"
+msgstr "Linjeskift"
 
 #: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "KP_Home"
+msgstr "Home"
 
 #: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "KP_Venstre"
+msgstr "Venstre"
 
 #: ../gdk/keyname-table.h:3977
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "KP_Opp"
+msgstr "Opp"
 
 #: ../gdk/keyname-table.h:3978
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "KP_Høyre"
+msgstr "Høyre"
 
 #: ../gdk/keyname-table.h:3979
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "KP_Ned"
+msgstr "Ned"
 
 #: ../gdk/keyname-table.h:3980
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "KP_Page_Up"
+msgstr "Page Up"
 
 #: ../gdk/keyname-table.h:3981
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr "KP_Prior"
+msgstr "Forrige"
 
 #: ../gdk/keyname-table.h:3982
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "KP_Page_Down"
+msgstr "Page Down"
 
 #: ../gdk/keyname-table.h:3983
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr "KP_Next"
+msgstr "Neste"
 
 #: ../gdk/keyname-table.h:3984
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "KP_End"
+msgstr "End"
 
 #: ../gdk/keyname-table.h:3985
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr "KP_Begin"
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3986
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "KP_Sett_Inn"
+msgstr "Sett inn"
 
 #: ../gdk/keyname-table.h:3987
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "KP_Slett"
+msgstr "Slett"
 
 #: ../gdk/keyname-table.h:3988
 msgctxt "keyboard label"
