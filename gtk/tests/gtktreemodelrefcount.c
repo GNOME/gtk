@@ -59,6 +59,28 @@ G_DEFINE_TYPE_WITH_CODE (GtkTreeModelRefCount, gtk_tree_model_ref_count, GTK_TYP
                                                 gtk_tree_model_ref_count_tree_model_init))
 
 static void
+row_removed (GtkTreeModelRefCount *ref_model,
+             GtkTreePath *path)
+{
+  GHashTableIter iter;
+  GtkTreeIter tree_iter;
+
+  if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (ref_model), &tree_iter))
+    {
+      g_hash_table_remove_all (ref_model->priv->node_hash);
+      return;
+    }
+
+  g_hash_table_iter_init (&iter, ref_model->priv->node_hash);
+
+  while (g_hash_table_iter_next (&iter, &tree_iter.user_data, NULL))
+    {
+      if (!gtk_tree_store_iter_is_valid (GTK_TREE_STORE (ref_model), &tree_iter))
+        g_hash_table_iter_remove (&iter);
+    }
+}
+
+static void
 gtk_tree_model_ref_count_init (GtkTreeModelRefCount *ref_model)
 {
   ref_model->priv = G_TYPE_INSTANCE_GET_PRIVATE (ref_model,
@@ -69,6 +91,8 @@ gtk_tree_model_ref_count_init (GtkTreeModelRefCount *ref_model)
                                                       g_direct_equal,
                                                       NULL,
                                                       (GDestroyNotify)node_info_free);
+
+  g_signal_connect (ref_model, "row-deleted", G_CALLBACK (row_removed), NULL);
 }
 
 static void
