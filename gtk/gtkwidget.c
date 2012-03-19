@@ -14065,8 +14065,7 @@ gtk_widget_get_path (GtkWidget *widget)
         }
 
       if (widget->priv->context)
-        gtk_style_context_set_path (widget->priv->context,
-                                    widget->priv->path);
+        gtk_style_context_invalidate (widget->priv->context);
     }
 
   return widget->priv->path;
@@ -14102,15 +14101,11 @@ GtkStyleContext *
 gtk_widget_get_style_context (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv;
-  GtkWidgetPath *path;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   priv = widget->priv;
   
-  /* updates style context if it exists already */
-  path = gtk_widget_get_path (widget);
-
   if (G_UNLIKELY (priv->context == NULL))
     {
       GdkScreen *screen;
@@ -14123,7 +14118,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
       if (screen)
         gtk_style_context_set_screen (priv->context, screen);
 
-      gtk_style_context_set_path (priv->context, path);
       if (priv->parent)
         gtk_style_context_set_parent (priv->context,
                                       gtk_widget_get_style_context (priv->parent));

@@ -922,7 +922,7 @@ create_query_path (GtkStyleContext *context)
   guint i, pos;
 
   priv = context->priv;
-  path = gtk_widget_path_copy (priv->widget_path);
+  path = gtk_widget_path_copy (priv->widget ? gtk_widget_get_path (priv->widget) : priv->widget_path);
   pos = gtk_widget_path_length (path) - 1;
 
   info = priv->info_stack->data;
@@ -967,7 +967,7 @@ style_data_lookup (GtkStyleContext *context,
   if (priv->current_data && priv->current_state == state)
     return priv->current_data;
 
-  g_assert (priv->widget_path != NULL);
+  g_assert (priv->widget != NULL || priv->widget_path != NULL);
 
   if (G_UNLIKELY (state_mismatch))
     {
@@ -982,12 +982,12 @@ style_data_lookup (GtkStyleContext *context,
     {
       GtkWidgetPath *path;
 
+      path = create_query_path (context);
+
       priv->current_data = style_data_new ();
       g_hash_table_insert (priv->style_data,
                            style_info_copy (priv->info_stack->data),
                            priv->current_data);
-
-      path = create_query_path (context);
 
       build_properties (context, priv->current_data, path, state);
 
@@ -1239,7 +1239,7 @@ gtk_style_context_get_section (GtkStyleContext *context,
   g_return_val_if_fail (property != NULL, NULL);
 
   priv = context->priv;
-  g_return_val_if_fail (priv->widget_path != NULL, NULL);
+  g_return_val_if_fail (priv->widget != NULL || priv->widget_path != NULL, NULL);
 
   prop = _gtk_style_property_lookup (property);
   if (!GTK_IS_CSS_STYLE_PROPERTY (prop))
@@ -1286,7 +1286,7 @@ gtk_style_context_get_property (GtkStyleContext *context,
   g_return_if_fail (value != NULL);
 
   priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
+  g_return_if_fail (priv->widget != NULL || priv->widget_path != NULL);
 
   prop = _gtk_style_property_lookup (property);
   if (prop == NULL)
@@ -1544,7 +1544,10 @@ gtk_style_context_get_path (GtkStyleContext *context)
   GtkStyleContextPrivate *priv;
 
   priv = context->priv;
-  return priv->widget_path;
+  if (priv->widget)
+    return gtk_widget_get_path (priv->widget);
+  else
+    return priv->widget_path;
 }
 
 /**
@@ -2240,8 +2243,9 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
   if (priv->widget || priv->widget_path)
     {
       if (gtk_style_provider_get_style_property (GTK_STYLE_PROVIDER (priv->cascade),
-                                                 priv->widget_path, state,
-                                                 pspec, &pcache->value))
+                                                 priv->widget ? gtk_widget_get_path (priv->widget)
+                                                              : priv->widget_path,
+                                                 state, pspec, &pcache->value))
         {
           /* Resolve symbolic colors to GdkColor/GdkRGBA */
           if (G_VALUE_TYPE (&pcache->value) == GTK_TYPE_SYMBOLIC_COLOR)
@@ -2318,17 +2322,24 @@ gtk_style_context_get_style_property (GtkStyleContext *context,
 
   priv = context->priv;
 
-  if (!priv->widget_path)
-    return;
-
-  widget_type = gtk_widget_path_get_object_type (priv->widget_path);
-
-  if (!g_type_is_a (widget_type, GTK_TYPE_WIDGET))
+  if (priv->widget)
     {
-      g_warning ("%s: can't get style properties for non-widget class `%s'",
-                 G_STRLOC,
-                 g_type_name (widget_type));
-      return;
+      widget_type = G_OBJECT_TYPE (priv->widget);
+    }
+  else
+    {
+      if (!priv->widget_path)
+        return;
+
+      widget_type = gtk_widget_path_get_object_type (priv->widget_path);
+
+      if (!g_type_is_a (widget_type, GTK_TYPE_WIDGET))
+        {
+          g_warning ("%s: can't get style properties for non-widget class `%s'",
+                     G_STRLOC,
+                     g_type_name (widget_type));
+          return;
+        }
     }
 
   widget_class = g_type_class_ref (widget_type);
@@ -2383,17 +2394,24 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
   prop_name = va_arg (args, const gchar *);
   priv = context->priv;
 
-  if (!priv->widget_path)
-    return;
-
-  widget_type = gtk_widget_path_get_object_type (priv->widget_path);
-
-  if (!g_type_is_a (widget_type, GTK_TYPE_WIDGET))
+  if (priv->widget)
     {
-      g_warning ("%s: can't get style properties for non-widget class `%s'",
-                 G_STRLOC,
-                 g_type_name (widget_type));
-      return;
+      widget_type = G_OBJECT_TYPE (priv->widget);
+    }
+  else
+    {
+      if (!priv->widget_path)
+        return;
+
+      widget_type = gtk_widget_path_get_object_type (priv->widget_path);
+
+      if (!g_type_is_a (widget_type, GTK_TYPE_WIDGET))
+        {
+          g_warning ("%s: can't get style properties for non-widget class `%s'",
+                     G_STRLOC,
+                     g_type_name (widget_type));
+          return;
+        }
     }
 
   state = gtk_style_context_get_state (context);
@@ -2481,7 +2499,7 @@ gtk_style_context_lookup_icon_set (GtkStyleContext *context,
   g_return_val_if_fail (stock_id != NULL, NULL);
 
   priv = context->priv;
-  g_return_val_if_fail (priv->widget_path != NULL, NULL);
+  g_return_val_if_fail (priv->widget != NULL || priv->widget_path != NULL, NULL);
 
   return gtk_icon_factory_lookup_default (stock_id);
 }
@@ -2799,7 +2817,7 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
   g_return_if_fail (state > GTK_STATE_NORMAL && state <= GTK_STATE_FOCUSED);
 
   priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
+  g_return_if_fail (priv->widget != NULL || priv->widget_path != NULL);
 
   state_value = (state_value == TRUE);
 
@@ -3476,7 +3494,7 @@ gtk_style_context_get_font (GtkStyleContext *context,
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
   priv = context->priv;
-  g_return_val_if_fail (priv->widget_path != NULL, NULL);
+  g_return_val_if_fail (priv->widget != NULL || priv->widget_path != NULL, NULL);
 
   data = style_data_lookup (context, state);
 
