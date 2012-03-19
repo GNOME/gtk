@@ -2640,7 +2640,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
 
       if (elt->children)
         gtk_tree_model_filter_free_level (filter, elt->children,
-                                          FALSE, TRUE, FALSE);
+                                          FALSE, FALSE, FALSE);
 
       /* remove the row */
       if (elt->visible_siter)
