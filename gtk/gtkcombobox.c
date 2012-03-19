@@ -3133,6 +3133,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
 
       priv->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
       gtk_container_add (GTK_CONTAINER (priv->box), priv->arrow);
+      gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
 
       gtk_widget_show_all (priv->button);
     }
@@ -3149,6 +3150,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
 
       priv->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
       gtk_container_add (GTK_CONTAINER (priv->button), priv->arrow);
+      gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
       gtk_widget_show_all (priv->button);
     }
 
