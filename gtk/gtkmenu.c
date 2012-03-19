@@ -1460,7 +1460,6 @@ popup_grab_on_window (GdkWindow *window,
  * be used instead.
  *
  * Since: 3.0
- * Rename to: gtk_menu_popup
  */
 void
 gtk_menu_popup_for_device (GtkMenu             *menu,
@@ -1714,7 +1713,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
 }
 
 /**
- * gtk_menu_popup: (skip)
+ * gtk_menu_popup:
  * @menu: a #GtkMenu
  * @parent_menu_shell: (allow-none): the menu shell containing the
  *     triggering menu item, or %NULL
