@@ -56,7 +56,7 @@ window1
       "icon"
       parent: iv1
       index: 2
-      state: enabled focusable selectable sensitive visible
+      state: enabled focusable selectable sensitive showing visible
       <AtkComponent>
       layer: widget
       alpha: 1
@@ -74,7 +74,7 @@ window1
       "icon"
       parent: iv1
       index: 3
-      state: enabled focusable selectable sensitive visible
+      state: enabled focusable selectable sensitive showing visible
       <AtkComponent>
       layer: widget
       alpha: 1
