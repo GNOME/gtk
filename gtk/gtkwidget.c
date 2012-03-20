@@ -7982,18 +7982,6 @@ gtk_widget_is_sensitive (GtkWidget *widget)
   return !(widget->priv->state_flags & GTK_STATE_FLAG_INSENSITIVE);
 }
 
-static void
-_gtk_widget_update_path (GtkWidget *widget)
-{
-  if (widget->priv->path)
-    {
-      gtk_widget_path_free (widget->priv->path);
-      widget->priv->path = NULL;
-    }
-
-  gtk_widget_get_path (widget);
-}
-
 /**
  * gtk_widget_set_parent:
  * @widget: a #GtkWidget
@@ -8522,7 +8510,13 @@ _gtk_widget_propagate_screen_changed (GtkWidget    *widget,
 static void
 reset_style_recurse (GtkWidget *widget, gpointer data)
 {
-  _gtk_widget_update_path (widget);
+  if (widget->priv->path)
+    {
+      gtk_widget_path_free (widget->priv->path);
+      widget->priv->path = NULL;
+    }
+
+  gtk_widget_get_path (widget);
 
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget),
