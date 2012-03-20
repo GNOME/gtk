@@ -823,22 +823,6 @@ GtkColorSwatch:prelight {
     color: shade (@bg_color, 0.6);
 }
 
-.pane-separator.horizontal {
-    background-image: -gtk-win32-theme-part(rebar, 1 1);
-
-    background-size: 6px 21px;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.pane-separator.vertical {
-    background-image: -gtk-win32-theme-part(rebar, 2 1);
-
-    background-size: 21px 6px;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
 GtkStatusbar > GtkFrame {
     border-width: 1px 1px 1px 1px;
     border-style: solid;
