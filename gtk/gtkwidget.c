@@ -8507,13 +8507,7 @@ _gtk_widget_propagate_screen_changed (GtkWidget    *widget,
 static void
 reset_style_recurse (GtkWidget *widget, gpointer data)
 {
-  if (widget->priv->path)
-    {
-      gtk_widget_path_free (widget->priv->path);
-      widget->priv->path = NULL;
-    }
-
-  gtk_widget_get_path (widget);
+  _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_ANY);
 
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget),
@@ -14065,8 +14059,6 @@ gtk_widget_get_path (GtkWidget *widget)
     
           gtk_widget_path_append_for_widget (widget->priv->path, widget);
         }
-
-      _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_ANY);
     }
 
   return widget->priv->path;
@@ -14075,6 +14067,12 @@ gtk_widget_get_path (GtkWidget *widget)
 void
 _gtk_widget_style_context_invalidated (GtkWidget *widget)
 {
+  if (widget->priv->path)
+    {
+      gtk_widget_path_free (widget->priv->path);
+      widget->priv->path = NULL;
+    }
+
   if (gtk_widget_get_realized (widget))
     g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
   else
