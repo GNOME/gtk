@@ -1,6 +1,7 @@
 @import "reset-to-defaults.css";
 
 * {
+  -GtkNotebook-tab-overlap: 0; /* work around a notebook tab rendering bug */
   color: blue;
 }
 
