@@ -361,6 +361,7 @@ struct _GtkStyleContextPrivate
   GtkStyleCascade *cascade;
 
   GtkStyleContext *parent;
+  GSList *children;
   GtkWidget *widget;            
   GtkWidgetPath *widget_path;
   GHashTable *style_data;
@@ -805,6 +806,9 @@ gtk_style_context_finalize (GObject *object)
 
   style_context = GTK_STYLE_CONTEXT (object);
   priv = style_context->priv;
+
+  /* children hold a reference to us */
+  g_assert (priv->children == NULL);
 
   gtk_style_context_set_parent (style_context, NULL);
 
@@ -1580,10 +1584,16 @@ gtk_style_context_set_parent (GtkStyleContext *context,
     return;
 
   if (parent)
-    g_object_ref (parent);
+    {
+      parent->priv->children = g_slist_prepend (parent->priv->children, context);
+      g_object_ref (parent);
+    }
 
   if (priv->parent)
-    g_object_unref (priv->parent);
+    {
+      priv->parent->priv->children = g_slist_remove (priv->parent->priv->children, context);
+      g_object_unref (priv->parent);
+    }
 
   priv->parent = parent;
 
