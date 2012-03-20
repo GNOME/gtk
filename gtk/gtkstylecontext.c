@@ -1045,6 +1045,8 @@ _gtk_style_context_set_widget (GtkStyleContext *context,
   g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
 
   context->priv->widget = widget;
+
+  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANY_SELF);
 }
 
 /**
@@ -1529,7 +1531,7 @@ gtk_style_context_set_path (GtkStyleContext *context,
   if (path)
     priv->widget_path = gtk_widget_path_copy (path);
 
-  gtk_style_context_invalidate (context);
+  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANY);
 }
 
 /**
@@ -1598,7 +1600,7 @@ gtk_style_context_set_parent (GtkStyleContext *context,
   priv->parent = parent;
 
   g_object_notify (G_OBJECT (context), "parent");
-  gtk_style_context_invalidate (context);
+  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_ANY_SIBLING);
 }
 
 /**
