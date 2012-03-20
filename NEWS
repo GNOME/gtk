@@ -1,3 +1,61 @@
+Overview of Changes in GTK+ 3.3.20
+==================================
+
+* Theming:
+ - Reduced memory consumption in the css parser
+ - Fixed Windows theme rendering under XP
+ - Support for background-position
+
+* Build requirements:
+ - cups 1.2 is now required for the cups print backend
+ - X11 pre-R6 is no longer supported
+ - XI2 is a build requirement
+
+* Bug fixes
+ 657385 gtk_menu_popup() not introspected
+ 662023 gnome-panel crashes with multiple screens
+ 670176 Warning when removing a child from a box if the child has...
+ 671065 gtk: Prefer group-0 keycodes
+ 671453 Improve the configure check for XInput 2.2
+ 671488 smooth-scroll support for textview
+ 671659 generates too many scroll events with a delta of 0
+ 671819 Crash (stack overflow) in gtk_range_grab_notify
+ 671898 Collate should be enabled by default
+ 672009 gtk 3.3.18, missing "enter" events with pads devices, le...
+ 672117 Link from stable gtk reference to unstable broken
+ 672125 gtk_enumerate_printers() doesn't call the destroy notify...
+ 672173 shell window: category view broken with gtk+ 3.3.19+
+ 672182 Commit 66c99016 breaks building if cups 1.2 is not available
+ 672367 Toggle-able table cells lack the 'toggle' action
+        x11: Avoid spurious focus events on grabs
+
+* Translation updates
+ Arabic
+ Assamese
+ Basque
+ Brazilian Portuguese
+ British English
+ Bulgarian
+ Catalan
+ Catalan (Valencian)
+ Danish
+ Esperanto
+ French
+ Galician
+ German
+ Gujarati
+ Hungarian
+ Latvian
+ Lithuanian
+ Norwegian bokmål
+ Portuguese
+ Punjabi
+ Russian
+ Serbian
+ Spanish
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.3.18
 ==================================
 
