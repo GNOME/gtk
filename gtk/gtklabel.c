@@ -1979,15 +1979,18 @@ gtk_label_get_mnemonic_keyval (GtkLabel *label)
 
 static void
 gtk_label_set_text_internal (GtkLabel *label,
-			     gchar    *str)
+                             gchar    *str)
 {
   GtkLabelPrivate *priv = label->priv;
+  gboolean text_changed;
+
+  text_changed = g_strcmp0 (priv->text, str) != 0;
 
   g_free (priv->text);
-
   priv->text = str;
 
-  gtk_label_select_region_index (label, 0, 0);
+  if (text_changed)
+    gtk_label_select_region_index (label, 0, 0);
 }
 
 static void
