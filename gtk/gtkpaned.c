@@ -32,6 +32,7 @@
 #include "gtkorientable.h"
 #include "gtkwindow.h"
 #include "gtktypebuiltins.h"
+#include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "a11y/gtkpanedaccessible.h"
@@ -720,6 +721,7 @@ gtk_paned_set_property (GObject        *object,
     {
     case PROP_ORIENTATION:
       priv->orientation = g_value_get_enum (value);
+      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         priv->cursor_type = GDK_SB_H_DOUBLE_ARROW;
