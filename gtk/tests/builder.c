@@ -1218,8 +1218,7 @@ test_icon_view (void)
     "    </child>"
     "  </object>"
     "</interface>";
-  GObject *window, *iconview, *renderer;
-  gchar *text;
+  GObject *window, *iconview;
   
   builder = builder_new_from_string (buffer, -1, NULL);
   iconview = gtk_builder_get_object (builder, "iconview1");
