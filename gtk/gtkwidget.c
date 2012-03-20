@@ -7281,7 +7281,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
   g_free (priv->name);
   priv->name = new_name;
 
-  gtk_widget_reset_style (widget);
+  _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_NAME);
 
   g_object_notify (G_OBJECT (widget), "name");
 }
@@ -8041,7 +8041,6 @@ gtk_widget_set_parent (GtkWidget *widget,
   if (priv->context)
     gtk_style_context_set_parent (priv->context,
                                   gtk_widget_get_style_context (parent));
-  gtk_widget_reset_style (widget);
 
   g_signal_emit (widget, widget_signals[PARENT_SET], 0, NULL);
   if (priv->parent->priv->anchored)
