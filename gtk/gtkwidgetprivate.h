@@ -25,6 +25,9 @@
 #ifndef __GTK_WIDGET_PRIVATE_H__
 #define __GTK_WIDGET_PRIVATE_H__
 
+#include "gtkcsstypesprivate.h"
+#include "gtkwidget.h"
+
 G_BEGIN_DECLS
 
 /* Cache as many ranges of height-for-width
@@ -173,7 +176,9 @@ void              _gtk_widget_set_captured_event_handler (GtkWidget             
 gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
                                                             GdkEvent  *event);
 
-void              _gtk_widget_style_context_invalidated    (GtkWidget *widget);
+void              _gtk_widget_invalidate_style_context     (GtkWidget    *widget,
+                                                            GtkCssChange  change);
+void              _gtk_widget_style_context_invalidated    (GtkWidget    *widget);
 
 G_END_DECLS
 

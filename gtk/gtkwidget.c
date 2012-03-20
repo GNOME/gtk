@@ -8104,10 +8104,7 @@ static void
 modifier_style_changed (GtkModifierStyle *style,
                         GtkWidget        *widget)
 {
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_invalidate (context);
+  _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_ANY);
 }
 
 static GtkModifierStyle *
@@ -14069,8 +14066,7 @@ gtk_widget_get_path (GtkWidget *widget)
           gtk_widget_path_append_for_widget (widget->priv->path, widget);
         }
 
-      if (widget->priv->context)
-        gtk_style_context_invalidate (widget->priv->context);
+      _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_ANY);
     }
 
   return widget->priv->path;
@@ -14131,6 +14127,20 @@ gtk_widget_get_style_context (GtkWidget *widget)
     }
 
   return widget->priv->context;
+}
+
+void
+_gtk_widget_invalidate_style_context (GtkWidget    *widget,
+                                      GtkCssChange  change)
+{
+  GtkWidgetPrivate *priv;
+
+  priv = widget->priv;
+
+  if (priv->context == NULL)
+    return;
+
+  _gtk_style_context_queue_invalidate (priv->context, change);
 }
 
 /**
