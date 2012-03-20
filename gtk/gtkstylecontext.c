@@ -3208,6 +3208,16 @@ store_animation_region (GtkStyleContext *context,
     }
 }
 
+void
+_gtk_style_context_queue_invalidate (GtkStyleContext *context,
+                                     GtkCssChange     change)
+{
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (change != 0);
+
+  gtk_style_context_invalidate (context);
+}
+
 /**
  * gtk_style_context_invalidate:
  * @context: a #GtkStyleContext.
