@@ -214,6 +214,7 @@ _gtk_win32_theme_part_create_surface (HTHEME theme,
   cairo_t *cr;
   int x_offs;
   int y_offs;
+  int i, j;
 #ifdef G_OS_WIN32
   gboolean has_alpha;
   HDC hdc;
@@ -274,9 +275,9 @@ _gtk_win32_theme_part_create_surface (HTHEME theme,
       guint32 *data = (guint32 *)cairo_image_surface_get_data (img);
       GdiFlush ();
 
-      for (int i = 0; i < width; i++)
+      for (i = 0; i < width; i++)
 	{
-	  for (int j = 0; j < height; j++)
+	  for (j = 0; j < height; j++)
 	    {
 	      if (data[i+j*width] != 0)
 		data[i+j*width] |= 0xff000000;
