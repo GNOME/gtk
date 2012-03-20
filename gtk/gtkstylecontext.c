@@ -1015,6 +1015,32 @@ style_data_lookup (GtkStyleContext *context,
   return data;
 }
 
+/* returns TRUE if someone called gtk_style_context_save() but hasn't
+ * called gtk_style_context_restore() yet.
+ * In those situations we don't invalidate the context when somebody
+ * changes state/regions/classes.
+ */
+static gboolean
+gtk_style_context_is_saved (GtkStyleContext *context)
+{
+  return context->priv->info_stack->next != NULL;
+}
+
+static void
+gtk_style_context_queue_invalidate_internal (GtkStyleContext *context,
+                                             GtkCssChange     change)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  priv->current_data = NULL;
+  
+  if (!gtk_style_context_is_saved (context))
+    {
+      _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_STATE);
+      /* XXX: We need to invalidate siblings here somehow */
+    }
+}
+
 /**
  * gtk_style_context_new:
  *
@@ -1404,6 +1430,8 @@ gtk_style_context_set_state (GtkStyleContext *context,
   priv = context->priv;
   info = priv->info_stack->data;
   info->state_flags = flags;
+  
+  gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_STATE);
 }
 
 /**
@@ -1826,8 +1854,7 @@ gtk_style_context_add_class (GtkStyleContext *context,
     {
       g_array_insert_val (info->style_classes, position, class_quark);
 
-      /* Unset current data, as it likely changed due to the class change */
-      priv->current_data = NULL;
+      gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_CLASS);
     }
 }
 
@@ -1866,8 +1893,7 @@ gtk_style_context_remove_class (GtkStyleContext *context,
     {
       g_array_remove_index (info->style_classes, position);
 
-      /* Unset current data, as it likely changed due to the class change */
-      priv->current_data = NULL;
+      gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_CLASS);
     }
 }
 
@@ -2071,8 +2097,7 @@ gtk_style_context_add_region (GtkStyleContext *context,
 
       g_array_insert_val (info->regions, position, region);
 
-      /* Unset current data, as it likely changed due to the region change */
-      priv->current_data = NULL;
+      gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_REGION);
     }
 }
 
@@ -2111,8 +2136,7 @@ gtk_style_context_remove_region (GtkStyleContext *context,
     {
       g_array_remove_index (info->regions, position);
 
-      /* Unset current data, as it likely changed due to the region change */
-      priv->current_data = NULL;
+      gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_REGION);
     }
 }
 
