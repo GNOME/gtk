@@ -3191,19 +3191,19 @@ gtk_menu_get_preferred_width (GtkWidget *widget,
       !priv->no_toggle_size)
     {
       GtkStyleContext *context;
-      GtkWidgetPath *menu_path, *check_path;
+      GtkWidgetPath *check_path;
       guint toggle_spacing;
       guint indicator_size;
 
-      context = gtk_widget_get_style_context (widget);
-      menu_path = gtk_widget_path_copy (gtk_style_context_get_path (context));
+      context = gtk_style_context_new ();
 
       /* Create a GtkCheckMenuItem path, only to query indicator spacing */
-      check_path = gtk_widget_path_copy (menu_path);
+      check_path = gtk_widget_path_copy (gtk_widget_get_path (widget));
       gtk_widget_path_append_type (check_path, GTK_TYPE_CHECK_MENU_ITEM);
 
       gtk_style_context_set_path (context, check_path);
       gtk_widget_path_free (check_path);
+      gtk_style_context_set_screen (context, gtk_widget_get_screen (widget));
 
       gtk_style_context_get_style (context,
                                    "toggle-spacing", &toggle_spacing,
@@ -3212,9 +3212,7 @@ gtk_menu_get_preferred_width (GtkWidget *widget,
 
       max_toggle_size = indicator_size + toggle_spacing;
 
-      /* Restore real widget path */
-      gtk_style_context_set_path (context, menu_path);
-      gtk_widget_path_free (menu_path);
+      g_object_unref (context);
     }
 
   min_width += 2 * max_toggle_size + max_accel_width;
