@@ -37,6 +37,7 @@ static HTHEME needs_alpha_fixup3 = NULL;
 static HTHEME needs_alpha_fixup4 = NULL;
 static HTHEME needs_alpha_fixup5 = NULL;
 static HTHEME needs_alpha_fixup6 = NULL;
+static HTHEME needs_alpha_fixup7 = NULL;
 
 typedef HRESULT (FAR PASCAL *GetThemeSysFontFunc)           (HTHEME hTheme, int iFontID, OUT LOGFONTW *plf);
 typedef int (FAR PASCAL *GetThemeSysSizeFunc)               (HTHEME hTheme, int iSizeId);
@@ -150,6 +151,7 @@ _gtk_win32_theme_init (void)
       needs_alpha_fixup4 = _gtk_win32_lookup_htheme_by_classname ("header");
       needs_alpha_fixup5 = _gtk_win32_lookup_htheme_by_classname ("trackbar");
       needs_alpha_fixup6 = _gtk_win32_lookup_htheme_by_classname ("status");
+      needs_alpha_fixup7 = _gtk_win32_lookup_htheme_by_classname ("rebar");
     }
 }
 
@@ -265,7 +267,8 @@ _gtk_win32_theme_part_create_surface (HTHEME theme,
        (theme == needs_alpha_fixup3 && xp_part == 4) ||
        theme == needs_alpha_fixup4 ||
        theme == needs_alpha_fixup5 ||
-       theme == needs_alpha_fixup6))
+       theme == needs_alpha_fixup6 ||
+       theme == needs_alpha_fixup7))
     {
       cairo_surface_t *img = cairo_win32_surface_get_image (surface);
       guint32 *data = (guint32 *)cairo_image_surface_get_data (img);
