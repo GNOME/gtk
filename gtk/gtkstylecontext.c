@@ -2469,7 +2469,7 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
                      G_STRLOC,
                      g_type_name (widget_type),
                      prop_name);
-          continue;
+          break;
         }
 
       peek_value = _gtk_style_context_peek_style_property (context, widget_type,
@@ -2484,6 +2484,7 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
                      G_VALUE_TYPE_NAME (peek_value),
                      error);
           g_free (error);
+          break;
         }
 
       prop_name = va_arg (args, const gchar *);
