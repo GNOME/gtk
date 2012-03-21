@@ -2388,7 +2388,7 @@ create_credits_page (GtkAboutDialog *about)
   gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
   gtk_grid_set_column_spacing (GTK_GRID (grid), 8);
-  gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 2);
   gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (grid, GTK_ALIGN_START);
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), grid);
