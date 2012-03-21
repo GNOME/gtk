@@ -2361,6 +2361,8 @@ add_credits_section (GtkAboutDialog *about,
     }
 
   /* skip one at the end */
+  label = gtk_label_new ("");
+  gtk_grid_attach (grid, label, 1, *row, 1, 1);
   (*row)++;
 }
 
