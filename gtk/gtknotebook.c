@@ -42,6 +42,7 @@
 #include "gtkbuildable.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetpath.h"
+#include "gtkwidgetprivate.h"
 #include "a11y/gtknotebookaccessible.h"
 
 
@@ -6536,7 +6537,7 @@ gtk_notebook_update_tab_states (GtkNotebook *notebook)
                                                 GTK_STYLE_REGION_TAB,
                                                 &current_flags)
               || current_flags != _gtk_notebook_get_tab_flags (notebook, page))
-            gtk_widget_reset_style (page->tab_label);
+            _gtk_widget_invalidate_style_context (page->tab_label, GTK_CSS_CHANGE_PARENT_STATE);
         }
     }
 }

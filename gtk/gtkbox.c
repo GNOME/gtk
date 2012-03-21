@@ -85,6 +85,7 @@
 #include "gtktypebuiltins.h"
 #include "gtksizerequest.h"
 #include "gtkwidgetpath.h"
+#include "gtkwidgetprivate.h"
 #include "a11y/gtkboxaccessible.h"
 
 
@@ -938,10 +939,16 @@ gtk_box_get_path_for_child (GtkContainer *container,
 }
 
 static void
+gtk_box_invalidate_order_foreach (GtkWidget *widget)
+{
+  _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_SIBLING_POSITION);
+}
+
+static void
 gtk_box_invalidate_order (GtkBox *box)
 {
   gtk_container_foreach (GTK_CONTAINER (box),
-                         (GtkCallback) gtk_widget_reset_style,
+                         (GtkCallback) gtk_box_invalidate_order_foreach,
                          NULL);
 }
 

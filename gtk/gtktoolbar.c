@@ -55,6 +55,7 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetpath.h"
+#include "gtkwidgetprivate.h"
 
 
 /**
@@ -3965,10 +3966,16 @@ gtk_toolbar_get_path_for_child (GtkContainer *container,
 }
 
 static void
+gtk_toolbar_invalidate_order_foreach (GtkWidget *widget)
+{
+  _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_SIBLING_POSITION);
+}
+
+static void
 gtk_toolbar_invalidate_order (GtkToolbar *toolbar)
 {
   gtk_container_forall (GTK_CONTAINER (toolbar),
-                        (GtkCallback) gtk_widget_reset_style,
+                        (GtkCallback) gtk_toolbar_invalidate_order_foreach,
                         NULL);
 }
 

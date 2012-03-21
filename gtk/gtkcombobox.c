@@ -41,6 +41,7 @@
 #include "gtktreeselection.h"
 #include "gtkseparator.h"
 #include "gtkwidgetpath.h"
+#include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
@@ -1382,10 +1383,16 @@ gtk_combo_box_button_state_flags_changed (GtkWidget     *widget,
 }
 
 static void
+gtk_combo_box_invalidate_order_foreach (GtkWidget *widget)
+{
+  _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_SIBLING_POSITION);
+}
+
+static void
 gtk_combo_box_invalidate_order (GtkComboBox *combo_box)
 {
   gtk_container_forall (GTK_CONTAINER (combo_box),
-                        (GtkCallback) gtk_widget_reset_style,
+                        (GtkCallback) gtk_combo_box_invalidate_order_foreach,
                         NULL);
 }
 
