@@ -5999,6 +5999,31 @@ create_notebook (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
+void
+create_settings (GtkWidget *widget)
+{
+  static GtkWidget *window = NULL;
+
+  if (!window)
+    {
+      window = create_prop_editor (G_OBJECT (gtk_settings_get_default ()), 0);
+      gtk_window_set_screen (GTK_WINDOW (window),
+                             gtk_widget_get_screen (widget));
+
+      gtk_widget_hide (window);
+      gtk_window_set_title (GTK_WINDOW (window), "GTK+ Settings");
+
+      g_signal_connect (window, "destroy",
+                        G_CALLBACK (gtk_widget_destroyed),
+                        &window);
+    }
+
+  if (!gtk_widget_get_visible (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
 /*
  * GtkPanes
  */
@@ -9644,6 +9669,7 @@ struct {
   { "rotated text", create_rotated_text },
   { "saved position", create_saved_position },
   { "scrolled windows", create_scrolled_windows },
+  { "settings", create_settings },
   { "shapes", create_shapes },
   { "size groups", create_size_groups },
   { "snapshot", create_snapshot },
