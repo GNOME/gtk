@@ -75,12 +75,15 @@
  * associated with #GtkApplicationWindow and to the 'activate' and
  * 'open' #GApplication methods.
  *
- * To set an application menu on a GtkApplication, use
+ * To set an application menu for a GtkApplication, use
  * gtk_application_set_app_menu(). The #GMenuModel that this function
  * expects is usually constructed using #GtkBuilder, as seen in the
- * following example. To set a menubar that will be automatically picked
- * up by #GApplicationWindows, use gtk_application_set_menubar(). GTK+
- * makes these menus appear as expected, depending on the platform
+ * following example. To specify a menubar that will be shown by
+ * #GApplicationWindows, use gtk_application_set_menubar(). Use the base
+ * #GActionMap interface to add actions, to respond to the user
+ * selecting these menu items.
+ *
+ * GTK+ displays these menus as expected, depending on the platform
  * the application is running on.
  *
  * <figure label="Menu integration in OS X">
@@ -1005,6 +1008,9 @@ gtk_application_remove_accelerator (GtkApplication *application,
  * If supported, the application menu will be rendered by the desktop
  * environment.
  *
+ * Use the base #GActionMap interface to add actions, to respond to the user
+ * selecting these menu items.
+ *
  * Since: 3.4
  */
 void
@@ -1068,6 +1074,9 @@ gtk_application_get_app_menu (GtkApplication *application)
  * Other environments treat the two as completely separate -- for
  * example, the application menu may be rendered by the desktop shell
  * while the menubar (if set) remains in each individual window.
+ *
+ * Use the base #GActionMap interface to add actions, to respond to the user
+ * selecting these menu items.
  *
  * Since: 3.4
  */
