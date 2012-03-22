@@ -904,10 +904,14 @@ gtk_clipboard_dnd_c_sources = 	\
 	gtkdnd-quartz.c
 else
 if USE_WAYLAND
+if !USE_X11
 # No wayland gtkdnd-wayland.c yet
 gtk_clipboard_dnd_c_sources = 	\
 	gtkclipboard-wayland.c \
 	gtkdnd.c
+else
+gtk_clipboard_dnd_c_sources = gtkclipboard.c gtkdnd.c
+endif
 else
 gtk_clipboard_dnd_c_sources = gtkclipboard.c gtkdnd.c
 endif
