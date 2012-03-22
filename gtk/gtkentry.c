@@ -10242,12 +10242,7 @@ keymap_state_changed (GdkKeymap *keymap,
 
   if (gtk_entry_get_display_mode (entry) != DISPLAY_NORMAL && priv->caps_lock_warning)
     { 
-      if (gdk_keymap_get_num_lock_state (keymap)
-          && gdk_keymap_get_caps_lock_state (keymap))
-        text = _("Caps Lock and Num Lock are on");
-      else if (gdk_keymap_get_num_lock_state (keymap))
-        text = _("Num Lock is on");
-      else if (gdk_keymap_get_caps_lock_state (keymap))
+      if (gdk_keymap_get_caps_lock_state (keymap))
         text = _("Caps Lock is on");
     }
 
