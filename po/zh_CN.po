@@ -20,7 +20,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-03-15 15:05+0000\n"
-"PO-Revision-Date: 2012-03-20 16:36+0000\n"
+"PO-Revision-Date: 2012-03-22 14:04+0000\n"
 "Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -107,7 +107,7 @@ msgstr "退格"
 #: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Tab"
-msgstr "制表"
+msgstr "Tab"
 
 #: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
@@ -137,7 +137,7 @@ msgstr "Esc"
 #: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Multi_key"
+msgstr "多键"
 
 #: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
@@ -203,82 +203,82 @@ msgstr "数字锁"
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "KP_Space"
+msgstr "空格键"
 
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr "KP_Tab"
+msgstr "Tab 键"
 
 #: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "KP_Enter"
+msgstr "回车键"
 
 #: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "KP_Home"
+msgstr "Home 键"
 
 #: ../gdk/keyname-table.h:3977
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "KP_Left"
+msgstr "左方向键"
 
 #: ../gdk/keyname-table.h:3978
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "KP_Left"
+msgstr "上方向键"
 
 #: ../gdk/keyname-table.h:3979
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "KP_Right"
+msgstr "右方向键"
 
 #: ../gdk/keyname-table.h:3980
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "KP_Down"
+msgstr "下方向键"
 
 #: ../gdk/keyname-table.h:3981
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "KP_PageUp"
+msgstr "向上翻页键"
 
 #: ../gdk/keyname-table.h:3982
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr "KP_Prior"
+msgstr "Prior 键"
 
 #: ../gdk/keyname-table.h:3983
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "KP_PageDown"
+msgstr "向下翻页键"
 
 #: ../gdk/keyname-table.h:3984
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr "KP_Next"
+msgstr "下一个键"
 
 #: ../gdk/keyname-table.h:3985
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "KP_End"
+msgstr "End 键"
 
 #: ../gdk/keyname-table.h:3986
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr "KP_Begin"
+msgstr "Begin 键"
 
 #: ../gdk/keyname-table.h:3987
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "KP_Insert"
+msgstr "插入键"
 
 #: ../gdk/keyname-table.h:3988
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "KP_Delete"
+msgstr "删除键"
 
 #: ../gdk/keyname-table.h:3989
 msgctxt "keyboard label"
@@ -289,132 +289,132 @@ msgstr "删除"
 #: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessUp"
-msgstr "XF86亮度增加"
+msgstr "提高亮度"
 
 #: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessDown"
-msgstr "XF86亮度减小"
+msgstr "降低亮度"
 
 #: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
 msgid "XF86AudioMute"
-msgstr "XF86音频静音"
+msgstr "静音"
 
 #: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
 msgid "XF86AudioLowerVolume"
-msgstr "XF86音量减小"
+msgstr "减小音量"
 
 #: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
 msgid "XF86AudioRaiseVolume"
-msgstr "XF86音量增加"
+msgstr "增大音量"
 
 #: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
 msgid "XF86AudioPlay"
-msgstr "XF86音频播放"
+msgstr "音频播放"
 
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
 msgid "XF86AudioStop"
-msgstr "XF86音频停止"
+msgstr "音频停止"
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
 msgid "XF86AudioNext"
-msgstr "XF86音频下一首"
+msgstr "音频下一个"
 
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
 msgid "XF86AudioPrev"
-msgstr "XF86音频上一首"
+msgstr "音频上一个"
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
 msgid "XF86AudioRecord"
-msgstr "XF86音频录制"
+msgstr "录音"
 
 #: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
 msgid "XF86AudioPause"
-msgstr "XF86音频暂停"
+msgstr "音频暂停"
 
 #: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
 msgid "XF86AudioRewind"
-msgstr "XF86音频重新定位"
+msgstr "音频重定位"
 
 #: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
 msgid "XF86AudioMedia"
-msgstr "XF86音频媒体"
+msgstr "音频媒体"
 
 #: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
 msgid "XF86ScreenSaver"
-msgstr "XF86屏保"
+msgstr "屏保"
 
 #: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
 msgid "XF86Battery"
-msgstr "XF86电池"
+msgstr "电池"
 
 #: ../gdk/keyname-table.h:4006
 msgctxt "keyboard label"
 msgid "XF86Launch1"
-msgstr "XF86开始1"
+msgstr "启动1"
 
 #: ../gdk/keyname-table.h:4007
 msgctxt "keyboard label"
 msgid "XF86Forward"
-msgstr "XF86前进"
+msgstr "前进"
 
 #: ../gdk/keyname-table.h:4008
 msgctxt "keyboard label"
 msgid "XF86Back"
-msgstr "XF86后退"
+msgstr "后退"
 
 #: ../gdk/keyname-table.h:4009
 msgctxt "keyboard label"
 msgid "XF86Sleep"
-msgstr "XF86睡眠"
+msgstr "睡眠"
 
 #: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
 msgid "XF86Hibernate"
-msgstr "XF86休眠"
+msgstr "休眠"
 
 #: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
 msgid "XF86WLAN"
-msgstr "XF86无线局域网"
+msgstr "无线局域网"
 
 #: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
 msgid "XF86WebCam"
-msgstr "XF86网络摄像机"
+msgstr "网络摄像头"
 
 #: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
 msgid "XF86Display"
-msgstr "XF86显示"
+msgstr "显示"
 
 #: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
 msgid "XF86TouchpadToggle"
-msgstr "XF86触摸板开关"
+msgstr "触摸板开关"
 
 #: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
 msgid "XF86WakeUp"
-msgstr "X86唤醒"
+msgstr "唤醒"
 
 #: ../gdk/keyname-table.h:4016
 msgctxt "keyboard label"
 msgid "XF86Suspend"
-msgstr "X86暂停"
+msgstr "挂起"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -739,7 +739,7 @@ msgstr "Alt"
 #: ../gtk/gtkaccellabel.c:802
 msgctxt "keyboard label"
 msgid "Super"
-msgstr "Super 键"
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -749,7 +749,7 @@ msgstr "Super 键"
 #: ../gtk/gtkaccellabel.c:815
 msgctxt "keyboard label"
 msgid "Hyper"
-msgstr "Hyper 键"
+msgstr "Hyper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -759,7 +759,7 @@ msgstr "Hyper 键"
 #: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Meta"
-msgstr "Meta 键"
+msgstr "Meta"
 
 #: ../gtk/gtkaccellabel.c:845
 msgctxt "keyboard label"
@@ -773,7 +773,7 @@ msgstr "反斜杠(\\)"
 
 #: ../gtk/gtkappchooserbutton.c:290
 msgid "Other application..."
-msgstr "其他应用程序"
+msgstr "其他应用程序..."
 
 #: ../gtk/gtkappchooserdialog.c:137
 msgid "Failed to look for applications online"
