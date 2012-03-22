@@ -372,8 +372,19 @@ gdk_x11_screen_get_monitor_workarea (GdkScreen    *screen,
   GdkRectangle workarea;
 
   gdk_x11_screen_get_monitor_geometry (screen, monitor_num, dest);
-  get_work_area (screen, &workarea);
-  gdk_rectangle_intersect (&workarea, dest, dest);
+
+  /* The EWMH constrains workarea to be a rectangle, so it
+   * can't adequately deal with L-shaped monitor arrangements.
+   * As a workaround, we ignore the workarea for anything
+   * but the primary monitor. Since that is where the 'desktop
+   * chrome' usually lives, this works ok in practice.
+   */
+  if (monitor_num == GDK_X11_SCREEN (screen)->primary_monitor)
+    {
+      get_work_area (screen, &workarea);
+      if (gdk_rectangle_intersect (dest, &workarea, &workarea))
+        *dest = workarea;
+    }
 }
 
 static GdkVisual *
