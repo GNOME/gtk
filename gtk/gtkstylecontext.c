@@ -381,9 +381,11 @@ struct _GtkStyleContextPrivate
   GtkTextDirection direction;
 
   GtkCssChange relevant_changes;
+  GtkCssChange pending_changes;
 
   guint animations_invalidated : 1;
   guint invalidating_context : 1;
+  guint invalid : 1;
 };
 
 enum {
@@ -1022,6 +1024,28 @@ style_data_lookup (GtkStyleContext *context,
   return data;
 }
 
+static void
+gtk_style_context_set_invalid (GtkStyleContext *context,
+                               gboolean         invalid)
+{
+  GtkStyleContextPrivate *priv;
+  
+  priv = context->priv;
+
+  if (priv->invalid == invalid)
+    return;
+
+  priv->invalid = invalid;
+
+  if (invalid)
+    {
+      if (priv->widget)
+        gtk_widget_queue_resize (priv->widget);
+      if (priv->parent)
+        gtk_style_context_set_invalid (priv->parent, TRUE);
+    }
+}
+
 /* returns TRUE if someone called gtk_style_context_save() but hasn't
  * called gtk_style_context_restore() yet.
  * In those situations we don't invalidate the context when somebody
@@ -1624,6 +1648,8 @@ gtk_style_context_set_parent (GtkStyleContext *context,
     {
       parent->priv->children = g_slist_prepend (parent->priv->children, context);
       g_object_ref (parent);
+      if (priv->invalid)
+        gtk_style_context_set_invalid (parent, TRUE);
     }
 
   if (priv->parent)
@@ -3243,18 +3269,23 @@ store_animation_region (GtkStyleContext *context,
 }
 
 void
-_gtk_style_context_queue_invalidate (GtkStyleContext *context,
-                                     GtkCssChange     change)
+_gtk_style_context_validate (GtkStyleContext *context,
+                             GtkCssChange     change)
 {
   GtkStyleContextPrivate *priv;
+  GSList *list;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (change != 0);
 
   priv = context->priv;
 
-  if (priv->widget == NULL && priv->widget_path == NULL)
+  change |= priv->pending_changes;
+
+  if (!priv->invalid && change == 0)
     return;
+
+  priv->pending_changes = 0;
+  gtk_style_context_set_invalid (context, FALSE);
 
   /* Try to avoid invalidating if we can */
   if (change & GTK_STYLE_CONTEXT_RADICAL_CHANGE)
@@ -3277,12 +3308,36 @@ _gtk_style_context_queue_invalidate (GtkStyleContext *context,
 
           gtk_widget_path_unref (path);
         }
-
-      if ((priv->relevant_changes & change) == 0)
-        return;
     }
 
-  gtk_style_context_invalidate (context);
+  if (priv->relevant_changes & change)
+    {
+      gtk_style_context_invalidate (context);
+    }
+
+  change = _gtk_css_change_for_child (change);
+  for (list = priv->children; list; list = list->next)
+    {
+      _gtk_style_context_validate (list->data, change);
+    }
+}
+
+void
+_gtk_style_context_queue_invalidate (GtkStyleContext *context,
+                                     GtkCssChange     change)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (change != 0);
+
+  priv = context->priv;
+
+  if (priv->widget == NULL && priv->widget_path == NULL)
+    return;
+
+  priv->pending_changes |= change;
+  gtk_style_context_set_invalid (context, TRUE);
 }
 
 /**

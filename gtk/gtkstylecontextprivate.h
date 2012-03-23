@@ -35,6 +35,8 @@ const GValue * _gtk_style_context_peek_style_property        (GtkStyleContext *c
                                                               GType            widget_type,
                                                               GtkStateFlags    state,
                                                               GParamSpec      *pspec);
+void           _gtk_style_context_validate                   (GtkStyleContext *context,
+                                                              GtkCssChange     change);
 void           _gtk_style_context_queue_invalidate           (GtkStyleContext *context,
                                                               GtkCssChange     change);
 void           _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context);

@@ -46,6 +46,7 @@
 #include "gtkwindow.h"
 #include "gtkassistant.h"
 #include "gtkintl.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkwidgetpath.h"
 #include "a11y/gtkcontaineraccessible.h"
 
@@ -1641,15 +1642,28 @@ gtk_container_get_resize_container (GtkContainer *container)
 static gboolean
 gtk_container_idle_sizer (gpointer data)
 {
+  GSList *slist;
+
   /* we may be invoked with a container_resize_queue of NULL, because
    * queue_resize could have been adding an extra idle function while
    * the queue still got processed. we better just ignore such case
    * than trying to explicitely work around them with some extra flags,
    * since it doesn't cause any actual harm.
    */
+
+  /* We validate the style contexts in a single loop before even trying
+   * to handle resizes instead of doing validations inline.
+   * This is mostly necessary for compatibility reasons with old code,
+   * because size_allocate functions often change styles and so could
+   * cause infinite loops in this function.
+   */
+  for (slist = container_resize_queue; slist; slist = slist->next)
+    {
+      _gtk_style_context_validate (gtk_widget_get_style_context (slist->data), 0);
+    }
+
   while (container_resize_queue)
     {
-      GSList *slist;
       GtkWidget *widget;
 
       slist = container_resize_queue;
@@ -1714,6 +1728,7 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
               break;
 
             case GTK_RESIZE_IMMEDIATE:
+              _gtk_style_context_validate (gtk_widget_get_style_context (GTK_WIDGET (resize_container)), 0);
               gtk_container_check_resize (resize_container);
               break;
 
