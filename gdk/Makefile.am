@@ -36,9 +36,9 @@ EXTRA_DIST += 			\
 AM_CPPFLAGS = 				\
 	-DG_LOG_DOMAIN=\"Gdk\"		\
 	-DGDK_COMPILATION		\
-	-I$(top_srcdir)			\
 	-I$(top_builddir)		\
 	-I$(top_builddir)/gdk		\
+	-I$(top_srcdir)			\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GDK_DEP_CFLAGS)
 
