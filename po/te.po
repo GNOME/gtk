@@ -7,66 +7,67 @@
 # Sunil Mohan Adapa <sunilmohan@gnu.org.in>, 2007.
 # Krishna Babu K <kkrothap@redhat.com>, 2008, 2009.
 # Praveen Illa <mail2ipn@gmail.com>, 2011.
-#
+# Sasi Bhushan Boddepalli <sasi@swecha.net>, 2012. 
+# Naveen Kandimalla <naveen@swecha.net>, 2012. 
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.te\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-09-21 16:00+0000\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-03-22 04:18+0000\n"
 "PO-Revision-Date: 2011-09-25 08:54+0530\n"
-"Last-Translator: Praveen Illa <mail2ipn@gmail.com>\n"
+"Last-Translator: Naveen Kandimalla <naveen@swecha.net>\n"
 "Language-Team: Telugu <indlinux-telugu@lists.sourceforge.net>\n"
-"Language: te\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: te\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-10-15 12:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../gdk/gdk.c:135
+#: ../gdk/gdk.c:153
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "పార్శింగ్ ఐచ్చికదోషము --gdk-debug"
 
-#: ../gdk/gdk.c:155
+#: ../gdk/gdk.c:173
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "పార్శింగ్ ఐచ్చికదోషము --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:183
+#: ../gdk/gdk.c:201
 msgid "Program class as used by the window manager"
 msgstr "విండో నిర్వాహకం కార్యక్రమతరగతి."
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:184
+#: ../gdk/gdk.c:202
 msgid "CLASS"
 msgstr "తరగతి"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:186
+#: ../gdk/gdk.c:204
 msgid "Program name as used by the window manager"
 msgstr "విండో నిర్వాహకముచే వాడబడే కార్యక్రమం పేరు"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:187
+#: ../gdk/gdk.c:205
 msgid "NAME"
 msgstr "పేరు"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:189
+#: ../gdk/gdk.c:207
 msgid "X display to use"
 msgstr "వాడుటకు X display"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:190
+#: ../gdk/gdk.c:208
 msgid "DISPLAY"
 msgstr "ప్రదర్శకం"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:193
+#: ../gdk/gdk.c:211
 msgid "GDK debugging flags to set"
 msgstr "GDK దోషనిర్మూలన గుర్తులు చేతనం"
 
@@ -74,12 +75,12 @@ msgstr "GDK దోషనిర్మూలన గుర్తులు చేత
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:194 ../gdk/gdk.c:197 ../gtk/gtkmain.c:569 ../gtk/gtkmain.c:572
+#: ../gdk/gdk.c:212 ../gdk/gdk.c:215 ../gtk/gtkmain.c:452 ../gtk/gtkmain.c:455
 msgid "FLAGS"
 msgstr "గుర్తులు"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:196
+#: ../gdk/gdk.c:214
 msgid "GDK debugging flags to unset"
 msgstr "GDK దోషనిర్మూలన గుర్తులు అచేతనం"
 
@@ -93,445 +94,615 @@ msgstr "GDK దోషనిర్మూలన గుర్తులు అచే
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
 #. * KP_Space      - Space (keypad)
+#. * Page_Up       - Page up
 #.
-#: ../gdk/keyname-table.h:3951
+#: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "BackSpace"
 
-#: ../gdk/keyname-table.h:3952
+#: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Tab"
 msgstr "Tab"
 
-#: ../gdk/keyname-table.h:3953
+#: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Return"
 msgstr "Return"
 
-#: ../gdk/keyname-table.h:3954
+#: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "Pause"
 msgstr "Pause"
 
-#: ../gdk/keyname-table.h:3955
+#: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
 msgstr "Scroll_Lock"
 
-#: ../gdk/keyname-table.h:3956
+#: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Sys_Req"
 msgstr "Sys_Req"
 
-#: ../gdk/keyname-table.h:3957
+#: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Escape"
 msgstr "Escape"
 
-#: ../gdk/keyname-table.h:3958
+#: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Multi_key"
 msgstr "Multi_key"
 
-#: ../gdk/keyname-table.h:3959
+#: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "Home"
 
-#: ../gdk/keyname-table.h:3960
+#: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "Left"
 msgstr "Left"
 
-#: ../gdk/keyname-table.h:3961
+#: ../gdk/keyname-table.h:3962
 msgctxt "keyboard label"
 msgid "Up"
 msgstr "Up"
 
-#: ../gdk/keyname-table.h:3962
+#: ../gdk/keyname-table.h:3963
 msgctxt "keyboard label"
 msgid "Right"
 msgstr "Right"
 
-#: ../gdk/keyname-table.h:3963
+#: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "Down"
 msgstr "Down"
 
-#: ../gdk/keyname-table.h:3964
+#: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page_Up"
 
-#: ../gdk/keyname-table.h:3965
+#: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page_Down"
 
-#: ../gdk/keyname-table.h:3966
+#: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "End"
 msgstr "End"
 
-#: ../gdk/keyname-table.h:3967
+#: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "Begin"
 msgstr "Begin"
 
-#: ../gdk/keyname-table.h:3968
+#: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Print"
 
-#: ../gdk/keyname-table.h:3969
+#: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "Insert"
 msgstr "Insert"
 
-#: ../gdk/keyname-table.h:3970
+#: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "Num_Lock"
 msgstr "Num_Lock"
 
 #. Translators: KP_ means 'key pad' here
-#: ../gdk/keyname-table.h:3972
+#: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Space"
 msgstr "KP_Space"
 
-#: ../gdk/keyname-table.h:3973
+#: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Tab"
 msgstr "KP_Tab"
 
-#: ../gdk/keyname-table.h:3974
+#: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Enter"
 msgstr "KP_Enter"
 
-#: ../gdk/keyname-table.h:3975
+#: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "KP_Home"
 msgstr "KP_Home"
 
-#: ../gdk/keyname-table.h:3976
+#: ../gdk/keyname-table.h:3977
 msgctxt "keyboard label"
 msgid "KP_Left"
 msgstr "KP_Left"
 
-#: ../gdk/keyname-table.h:3977
+#: ../gdk/keyname-table.h:3978
 msgctxt "keyboard label"
 msgid "KP_Up"
 msgstr "KP_Up"
 
-#: ../gdk/keyname-table.h:3978
+#: ../gdk/keyname-table.h:3979
 msgctxt "keyboard label"
 msgid "KP_Right"
 msgstr "KP_Right"
 
-#: ../gdk/keyname-table.h:3979
+#: ../gdk/keyname-table.h:3980
 msgctxt "keyboard label"
 msgid "KP_Down"
 msgstr "KP_Down"
 
-#: ../gdk/keyname-table.h:3980
+#: ../gdk/keyname-table.h:3981
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
 msgstr "KP_Page_Up"
 
-#: ../gdk/keyname-table.h:3981
+#: ../gdk/keyname-table.h:3982
 msgctxt "keyboard label"
 msgid "KP_Prior"
 msgstr "KP_Prior"
 
-#: ../gdk/keyname-table.h:3982
+#: ../gdk/keyname-table.h:3983
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
 msgstr "KP_Page_Down"
 
-#: ../gdk/keyname-table.h:3983
+#: ../gdk/keyname-table.h:3984
 msgctxt "keyboard label"
 msgid "KP_Next"
 msgstr "KP_Next"
 
-#: ../gdk/keyname-table.h:3984
+#: ../gdk/keyname-table.h:3985
 msgctxt "keyboard label"
 msgid "KP_End"
 msgstr "KP_End"
 
-#: ../gdk/keyname-table.h:3985
+#: ../gdk/keyname-table.h:3986
 msgctxt "keyboard label"
 msgid "KP_Begin"
 msgstr "KP_Begin"
 
-#: ../gdk/keyname-table.h:3986
+#: ../gdk/keyname-table.h:3987
 msgctxt "keyboard label"
 msgid "KP_Insert"
 msgstr "KP_Insert"
 
-#: ../gdk/keyname-table.h:3987
+#: ../gdk/keyname-table.h:3988
 msgctxt "keyboard label"
 msgid "KP_Delete"
 msgstr "KP_Delete"
 
-#: ../gdk/keyname-table.h:3988
+#: ../gdk/keyname-table.h:3989
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
 
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
-#: ../gdk/keyname-table.h:3990
+#: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessUp"
 msgstr "XF86MonBrightnessUp"
 
-#: ../gdk/keyname-table.h:3991
+#: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessDown"
 msgstr "XF86MonBrightnessDown"
 
-#: ../gdk/keyname-table.h:3992
+#: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
 msgid "XF86AudioMute"
 msgstr "XF86AudioMute"
 
-#: ../gdk/keyname-table.h:3993
+#: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
 msgid "XF86AudioLowerVolume"
 msgstr "XF86AudioMute"
 
-#: ../gdk/keyname-table.h:3994
+#: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
 msgid "XF86AudioRaiseVolume"
 msgstr "XF86AudioRaiseVolume"
 
-#: ../gdk/keyname-table.h:3995
+#: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
 msgid "XF86AudioPlay"
 msgstr "XF86AudioRaiseVolume"
 
-#: ../gdk/keyname-table.h:3996
+#: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
 msgid "XF86AudioStop"
 msgstr "XF86AudioStop"
 
-#: ../gdk/keyname-table.h:3997
+#: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
 msgid "XF86AudioNext"
 msgstr "XF86AudioNext"
 
-#: ../gdk/keyname-table.h:3998
+#: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
 msgid "XF86AudioPrev"
 msgstr "XF86AudioPrev"
 
-#: ../gdk/keyname-table.h:3999
+#: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
 msgid "XF86AudioRecord"
 msgstr "XF86AudioRecord"
 
-#: ../gdk/keyname-table.h:4000
+#: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
 msgid "XF86AudioPause"
 msgstr "XF86AudioPause"
 
-#: ../gdk/keyname-table.h:4001
+#: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
 msgid "XF86AudioRewind"
 msgstr "XF86AudioRewind"
 
-#: ../gdk/keyname-table.h:4002
+#: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
 msgid "XF86AudioMedia"
 msgstr "XF86AudioMedia"
 
-#: ../gdk/keyname-table.h:4003
+#: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
 msgid "XF86ScreenSaver"
 msgstr "XF86ScreenSaver"
 
-#: ../gdk/keyname-table.h:4004
+#: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
 msgid "XF86Battery"
 msgstr "XF86Battery"
 
-#: ../gdk/keyname-table.h:4005
+#: ../gdk/keyname-table.h:4006
 msgctxt "keyboard label"
 msgid "XF86Launch1"
 msgstr "XF86Launch1"
 
-#: ../gdk/keyname-table.h:4006
+#: ../gdk/keyname-table.h:4007
 msgctxt "keyboard label"
 msgid "XF86Forward"
 msgstr "XF86Forward"
 
-#: ../gdk/keyname-table.h:4007
+#: ../gdk/keyname-table.h:4008
 msgctxt "keyboard label"
 msgid "XF86Back"
 msgstr "XF86Back"
 
-#: ../gdk/keyname-table.h:4008
+#: ../gdk/keyname-table.h:4009
 msgctxt "keyboard label"
 msgid "XF86Sleep"
 msgstr "XF86Sleep"
 
-#: ../gdk/keyname-table.h:4009
+#: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
 msgid "XF86Hibernate"
 msgstr "XF86Hibernate"
 
-#: ../gdk/keyname-table.h:4010
+#: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
 msgid "XF86WLAN"
 msgstr "XF86WLAN"
 
-#: ../gdk/keyname-table.h:4011
+#: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
 msgid "XF86WebCam"
 msgstr "XF86WebCam"
 
-#: ../gdk/keyname-table.h:4012
+#: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
 msgid "XF86Display"
 msgstr "XF86Display"
 
-#: ../gdk/keyname-table.h:4013
+#: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
 msgid "XF86TouchpadToggle"
 msgstr "XF86TouchpadToggle"
 
-#: ../gdk/keyname-table.h:4014
+#: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
 msgid "XF86WakeUp"
 msgstr "XF86WakeUp"
 
-#: ../gdk/keyname-table.h:4015
+#: ../gdk/keyname-table.h:4016
 msgctxt "keyboard label"
 msgid "XF86Suspend"
 msgstr "XF86Suspend"
 
 #. Description of --sync in --help output
-#: ../gdk/win32/gdkmain-win32.c:55
+#: ../gdk/win32/gdkmain-win32.c:53
 msgid "Don't batch GDI requests"
 msgstr "GDI వినతులను   జట్టుచేయవద్దు"
 
 #. Description of --no-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:57
+#: ../gdk/win32/gdkmain-win32.c:55
 msgid "Don't use the Wintab API for tablet support"
 msgstr "టాబ్లెట్ సహకారం కొరకు Wintab API ను వాడవద్దు"
 
 #. Description of --ignore-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:59
+#: ../gdk/win32/gdkmain-win32.c:57
 msgid "Same as --no-wintab"
 msgstr "--no-wintab లాగే"
 
 #. Description of --use-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:61
+#: ../gdk/win32/gdkmain-win32.c:59
 msgid "Do use the Wintab API [default]"
 msgstr "Wintab API [అప్రమయం]ను వాడు"
 
 #. Description of --max-colors=COLORS in --help output
-#: ../gdk/win32/gdkmain-win32.c:63
+#: ../gdk/win32/gdkmain-win32.c:61
 msgid "Size of the palette in 8 bit mode"
 msgstr "8 bit విధములో ఫలకం పరిమాణం"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: ../gdk/win32/gdkmain-win32.c:64
+#: ../gdk/win32/gdkmain-win32.c:62
 msgid "COLORS"
 msgstr "వర్ణాలు"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:294
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:292
 #, c-format
 msgid "Starting %s"
 msgstr "%s ప్రారంభిస్తోంది"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:307
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:305
 #, c-format
 msgid "Opening %s"
 msgstr "%s తెరుస్తోంది"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:312
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:310
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "%d అంశమును తెరుస్తోంది"
 msgstr[1] "%d అంశములను తెరుస్తోంది"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:42
+#: ../gtk/a11y/gtkspinneraccessible.c:40
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "స్పిన్నర్"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:43
+#: ../gtk/a11y/gtkspinneraccessible.c:41
 msgid "Provides visual indication of progress"
 msgstr "పురోగతిని దృశ్య రూపంలో చూపుతుంది."
 
-#: ../gtk/a11y/gtkswitchaccessible.c:65
+#: ../gtk/a11y/gtkswitchaccessible.c:63
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "స్విచ్"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:66
+#: ../gtk/a11y/gtkswitchaccessible.c:64
 msgid "Switches between on and off states"
 msgstr "ఆన్‌చేయుట మరియు ఆపుట స్థితులను మార్చును"
+
+#: ../gtk/deprecated/gtkcolorsel.c:425
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"బాహ్యవృత్తం నుండి మీకు కావాల్సిన వర్ణమును ఎన్నుకొనుము. అంతఃత్రిభుజాన్ని ఉపయోగించి, దానిని చీకటి "
+"చేయుటకుగాని, ప్రకాశింపచేయుటకుగాని ఎన్నుకొనుము."
+
+#: ../gtk/deprecated/gtkcolorsel.c:451
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr "ఐడ్రాపర్ను నొక్కి తెరపై ఎక్కడైనా ఒక వర్ణంపై ఆ వర్ణమును ఎంచుకొనుటకు నొక్కుము"
+
+#: ../gtk/deprecated/gtkcolorsel.c:461
+msgid "_Hue:"
+msgstr "లేతఛాయ (_H):"
+
+#: ../gtk/deprecated/gtkcolorsel.c:462
+msgid "Position on the color wheel."
+msgstr "వర్ణచక్రముపై స్థానము."
+
+#: ../gtk/deprecated/gtkcolorsel.c:464
+msgid "S_aturation:"
+msgstr "సాచురేషన్ (_S):"
+
+#: ../gtk/deprecated/gtkcolorsel.c:465
+msgid "Intensity of the color."
+msgstr "వర్ణము యొక్క సాంద్రత."
+
+#: ../gtk/deprecated/gtkcolorsel.c:466
+msgid "_Value:"
+msgstr "విలువ (_V):"
+
+#: ../gtk/deprecated/gtkcolorsel.c:467
+msgid "Brightness of the color."
+msgstr "వర్ణం యొక్క కాంతి."
+
+#: ../gtk/deprecated/gtkcolorsel.c:468
+msgid "_Red:"
+msgstr "ఎరుపు (_R):"
+
+#: ../gtk/deprecated/gtkcolorsel.c:469
+msgid "Amount of red light in the color."
+msgstr "వర్ణంలోని  ఎరుపు కాంతి ."
+
+#: ../gtk/deprecated/gtkcolorsel.c:470
+msgid "_Green:"
+msgstr "పచ్చ (_G):"
+
+#: ../gtk/deprecated/gtkcolorsel.c:471
+msgid "Amount of green light in the color."
+msgstr "వర్ణములోని పచ్చని కాంతి."
+
+#: ../gtk/deprecated/gtkcolorsel.c:472
+msgid "_Blue:"
+msgstr "నీలం(_B):"
+
+#: ../gtk/deprecated/gtkcolorsel.c:473
+msgid "Amount of blue light in the color."
+msgstr "వర్ణములోని నీలి కాంతి."
+
+#: ../gtk/deprecated/gtkcolorsel.c:476
+msgid "Op_acity:"
+msgstr "అపారదర్శకత (_a):"
+
+#: ../gtk/deprecated/gtkcolorsel.c:484 ../gtk/deprecated/gtkcolorsel.c:494
+msgid "Transparency of the color."
+msgstr "వర్ణము యొక్క పారదర్శకత."
+
+#: ../gtk/deprecated/gtkcolorsel.c:501
+msgid "Color _name:"
+msgstr "వర్ణం పేరు (_n):"
+
+#: ../gtk/deprecated/gtkcolorsel.c:516
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"మీరు   HTMLశైలి ద్విసంఖ్యామాన వర్ణ విలువను కాని లేదా సాధారణంగా నారింజ వర్ణములాంటి వర్ణనామమునుకాని నమోదు "
+"చేయుము"
+
+#: ../gtk/deprecated/gtkcolorsel.c:548
+msgid "_Palette:"
+msgstr "వర్ణపలకం (_P):"
+
+#: ../gtk/deprecated/gtkcolorsel.c:578
+msgid "Color Wheel"
+msgstr "వర్ణచక్రం"
+
+#: ../gtk/deprecated/gtkcolorsel.c:1072
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+"ఇప్పుడు ఎన్నుకుంటున్న వర్ణంతో సరిపోల్చుటకొరకు మునుపు ఎన్నుకున్న వర్ణము. ఈ వర్ణమును ఒక  "
+"వర్ణపలకం నమోదుగా  లాగగలరు. లేదా ఈ వర్ణమును పక్కన వున్న వర్ణ నమూనాపైకి లాగుట ద్వారా ఎన్నుకోగలరు."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1078
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"మీరు ఎన్నుకున్న వర్ణము. దీనిని మీరు పలకం నమోదు మీదకు లాగుట ద్వారా భవిష్యత్లో వాడుటకు దాచుకోగలరు."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1084
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now."
+msgstr "క్రితము   ఎంపిక రంగు, ఇప్పటి ఎంపిక రంగుతో పోల్చటానికి"
+
+#: ../gtk/deprecated/gtkcolorsel.c:1088
+msgid "The color you've chosen."
+msgstr "మీరు ఎంపిక చేసిన రంగు"
+
+#: ../gtk/deprecated/gtkcolorsel.c:1491
+msgid "_Save color here"
+msgstr "వర్ణమును ఇక్కడ భద్రపరుచు (_S)"
+
+#: ../gtk/deprecated/gtkcolorsel.c:1695
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+"వర్ణపలక నమోదును ప్రస్తుత వర్ణముగా చేయుట కొరకు నొక్కుము. ఈ నమోదును మార్చుటకు వర్ణ నమూనాను "
+"ఇచ్చటకు లాగుము. లేదా కుడిమీట నొక్కి \"వర్ణమును ఇక్కడ భద్రపరుచు\"ను ఎన్నుకొనుము."
+
+#. We emit the response for the Select button manually,
+#. * since we want to save the color first
+#.
+#: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:574
+#: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
+msgid "_Select"
+msgstr "ఎంచుకొను (_S)"
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:219
+msgid "Color Selection"
+msgstr "వర్ణ ఎంపిక"
+
+#. This is the default text shown in the preview entry, though the user
+#. can set it. Remember that some fonts only have capital letters.
+#: ../gtk/deprecated/gtkfontsel.c:124
+msgid "abcdefghijk ABCDEFGHIJK"
+msgstr "abcdefghijk ABCDEFGHIJK"
+
+#: ../gtk/deprecated/gtkfontsel.c:393
+msgid "_Family:"
+msgstr "కుటుంబం (_F):"
+
+#: ../gtk/deprecated/gtkfontsel.c:400
+msgid "_Style:"
+msgstr "శైలి (_S):"
+
+#: ../gtk/deprecated/gtkfontsel.c:407
+msgid "Si_ze:"
+msgstr "పరిమాణం (_z):"
+
+#. create the text entry widget
+#: ../gtk/deprecated/gtkfontsel.c:584
+msgid "_Preview:"
+msgstr "మునుజూపు (_P):"
+
+#: ../gtk/deprecated/gtkfontsel.c:1737 ../gtk/gtkfontchooserdialog.c:183
+msgid "Font Selection"
+msgstr "ఫాంటు ఎంపిక"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:106
-#, c-format
+#: ../gtk/gtkaboutdialog.c:104
+#| msgid ""
+#| "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a "
+#| "href=\"%s\">%s</a>"
 msgid ""
-"This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
-"\"%s\">%s</a>"
+"This program comes with ABSOLUTELY NO WARRANTY;\n"
+"for details, visit <a href=\"%s\">%s</a>"
 msgstr ""
-"ఈ కార్యక్రమం ఏవిధమైన హామీలు లేకుండా ఇవ్వబడుతుంది; వివరాలకు, <a href=\"%s\">%s</a> "
-"సందర్శించండి"
+"ఈ కార్యక్రమం ఏవిధమైన హామీలు లేకుండా ఇవ్వబడుతుంది;\n"
+" వివరాలకు, <a href=\"%s\">%s</a> సందర్శించండి"
 
-#: ../gtk/gtkaboutdialog.c:348
+#: ../gtk/gtkaboutdialog.c:357
 msgid "License"
 msgstr "లైసెన్స్"
 
-#: ../gtk/gtkaboutdialog.c:349
+#: ../gtk/gtkaboutdialog.c:358
 msgid "The license of the program"
 msgstr "కార్యక్రమం యొక్క లైసెన్స్"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:741
+#: ../gtk/gtkaboutdialog.c:751
 msgid "C_redits"
 msgstr "పరపతులు (_r)"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:754
+#: ../gtk/gtkaboutdialog.c:764
 msgid "_License"
 msgstr "లైసెన్స్ (_L)"
 
-#: ../gtk/gtkaboutdialog.c:959
+#: ../gtk/gtkaboutdialog.c:980
 msgid "Could not show link"
 msgstr "లింకును చూపలేకపోతుంది"
 
-#: ../gtk/gtkaboutdialog.c:996
+#: ../gtk/gtkaboutdialog.c:1017
 msgid "Homepage"
 msgstr "నివాసపేజీ"
 
-#: ../gtk/gtkaboutdialog.c:1050
+#: ../gtk/gtkaboutdialog.c:1071
 #, c-format
 msgid "About %s"
 msgstr "%s గురించి"
 
-#: ../gtk/gtkaboutdialog.c:2376
+#: ../gtk/gtkaboutdialog.c:2397
 msgid "Created by"
 msgstr "సృష్టించినవారు"
 
-#: ../gtk/gtkaboutdialog.c:2379
+#: ../gtk/gtkaboutdialog.c:2400
 msgid "Documented by"
 msgstr "పత్రరచనచేసినవారు"
 
-#: ../gtk/gtkaboutdialog.c:2389
+#: ../gtk/gtkaboutdialog.c:2410
 msgid "Translated by"
 msgstr "అనువదించినవారు"
 
-#: ../gtk/gtkaboutdialog.c:2394
+#: ../gtk/gtkaboutdialog.c:2415
 msgid "Artwork by"
 msgstr "కళ"
 
@@ -540,7 +711,7 @@ msgstr "కళ"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:158
+#: ../gtk/gtkaccellabel.c:156
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -550,7 +721,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:164
+#: ../gtk/gtkaccellabel.c:162
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -560,7 +731,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:170
+#: ../gtk/gtkaccellabel.c:168
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -570,7 +741,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:805
+#: ../gtk/gtkaccellabel.c:802
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -580,7 +751,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:818
+#: ../gtk/gtkaccellabel.c:815
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -590,69 +761,69 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:832
+#: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:848
+#: ../gtk/gtkaccellabel.c:845
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: ../gtk/gtkaccellabel.c:851
+#: ../gtk/gtkaccellabel.c:848
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: ../gtk/gtkappchooserbutton.c:292
+#: ../gtk/gtkappchooserbutton.c:290
 msgid "Other application..."
 msgstr "ఇతర అనువర్తనం..."
 
-#: ../gtk/gtkappchooserdialog.c:133
+#: ../gtk/gtkappchooserdialog.c:137
 msgid "Failed to look for applications online"
 msgstr "ఇతర అనువర్తనాల కోసం ఆన్‌లైను నందు చూచుటలో విఫలమైంది"
 
-#: ../gtk/gtkappchooserdialog.c:174
+#: ../gtk/gtkappchooserdialog.c:188
 msgid "Find applications online"
 msgstr "అన్‌లైనులో అనువర్తనాలను కనుగొను"
 
-#: ../gtk/gtkappchooserdialog.c:230
+#: ../gtk/gtkappchooserdialog.c:247
 msgid "Could not run application"
 msgstr "అనువర్తనాన్ని నడుపలేకపోతుంది"
 
-#: ../gtk/gtkappchooserdialog.c:243
+#: ../gtk/gtkappchooserdialog.c:260
 #, c-format
 msgid "Could not find '%s'"
 msgstr "%s ను కనుగొనలేకపోయింది"
 
-#: ../gtk/gtkappchooserdialog.c:246
+#: ../gtk/gtkappchooserdialog.c:263
 msgid "Could not find application"
 msgstr "అనువర్తనాన్ని కనుగొనలేకపోయింది"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:366
+#: ../gtk/gtkappchooserdialog.c:397
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "\"%s\"ను తెరుచుటకు ఒక అనువర్తనాన్ని ఎంచుకోండి"
 
-#: ../gtk/gtkappchooserdialog.c:367 ../gtk/gtkappchooserwidget.c:656
+#: ../gtk/gtkappchooserdialog.c:398 ../gtk/gtkappchooserwidget.c:654
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "\"%s\"ను తెరుచుటకు ఎటువంటి అనువర్తనాలు అందుబాటులోలేవు"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:373
+#: ../gtk/gtkappchooserdialog.c:404
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "\"%s\" ఫైళ్ళ కొరకు ఒక అనువర్తనాన్ని ఎంచుకోండి"
 
-#: ../gtk/gtkappchooserdialog.c:375
+#: ../gtk/gtkappchooserdialog.c:406
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "\"%s\" ఫైళ్ళను తెరుచుటకు ఎటువంటి అనువర్తనాలు అందుబాటులోలేవు"
 
-#: ../gtk/gtkappchooserdialog.c:391
+#: ../gtk/gtkappchooserdialog.c:422
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -660,63 +831,87 @@ msgstr ""
 "మరిన్ని ఐచ్ఛికాలకు \"ఇతర అనువర్తనాలను చూపించు\"పై నొక్కండి, లేదా ఒక కొత్త అనువర్తనాన్ని "
 "స్థాపించుటకు  \"ఆన్‌లైనులో అనువర్తనాలను కనుగొను\" నొక్కండి"
 
-#: ../gtk/gtkappchooserdialog.c:461
+#: ../gtk/gtkappchooserdialog.c:492
 msgid "Forget association"
 msgstr "సహచర్యాన్ని మర్చిపోమ్ము"
 
-#: ../gtk/gtkappchooserdialog.c:527
+#: ../gtk/gtkappchooserdialog.c:558
 msgid "Show other applications"
 msgstr "ఇతర అనువర్తనాలను చూపించు"
 
-#: ../gtk/gtkappchooserdialog.c:543 ../gtk/gtkcolorseldialog.c:199
-#: ../gtk/gtkfontchooserdialog.c:176
-msgid "_Select"
-msgstr "ఎంచుకొను (_S)"
-
-#: ../gtk/gtkappchooserwidget.c:605
+#: ../gtk/gtkappchooserwidget.c:603
 msgid "Default Application"
 msgstr "అప్రమేయ అనువర్తనం"
 
-#: ../gtk/gtkappchooserwidget.c:743
+#: ../gtk/gtkappchooserwidget.c:741
 msgid "Recommended Applications"
 msgstr "సిఫారసుచేయబడిన అనువర్తనాలు"
 
-#: ../gtk/gtkappchooserwidget.c:758
+#: ../gtk/gtkappchooserwidget.c:756
 msgid "Related Applications"
 msgstr "సంబంధిత అనువర్తనాలు"
 
-#: ../gtk/gtkappchooserwidget.c:772
+#: ../gtk/gtkappchooserwidget.c:770
 msgid "Other Applications"
 msgstr "ఇతర అనువర్తనాలు"
 
-#: ../gtk/gtkassistant.c:999
+#: ../gtk/gtkapplication.c:1488
+#, c-format
+msgid ""
+"%s cannot quit at this time:\n"
+"\n"
+"%s"
+msgstr "%s ఈ సమయంలో వదిలిపెట్టలేము"
+"\n"
+"%s"
+#: ../gtk/gtkapplicationwindow.c:285 ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkprintoperation-win32.c:1445
+msgid "Application"
+msgstr "అనువర్తనం"
+
+#: ../gtk/gtkassistant.c:1004
 msgid "C_ontinue"
 msgstr "కొనసాగు (_o)"
 
-#: ../gtk/gtkassistant.c:1002
+#: ../gtk/gtkassistant.c:1007
 msgid "Go _Back"
 msgstr "వెనుకకు వెళ్ళు (_B)"
 
-#: ../gtk/gtkassistant.c:1006
+#: ../gtk/gtkassistant.c:1011
 msgid "_Finish"
 msgstr "పూర్తిచేయి (_F)"
 
-#: ../gtk/gtkbuilderparser.c:342
+#: ../gtk/gtkbuilder-menus.c:220
+#| msgid "Element <%s> is not allowed below <%s>"
+msgid "Element <%s> not allowed inside <%s>"
+msgstr "<%s> మూలకం <%s> అంతర్లీనంగా అనుమతించబడదు"
+
+#: ../gtk/gtkbuilder-menus.c:225
+#| msgid "Element <%s> is not allowed below <%s>"
+msgid "Element <%s> not allowed at toplevel"
+msgstr "<%s> మూలకం <%s> పై స్థాయికి అనుమతించబడదు"
+
+#: ../gtk/gtkbuilder-menus.c:314
+#, c-format
+msgid "text may not appear inside <%s>"
+msgstr "<%s> లో‌అంతర్లీనంగా పాఠము కనిపించకపోవచ్చు"
+
+#: ../gtk/gtkbuilderparser.c:341
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
 msgstr "లైను %d పైన చెల్లని రకపు ప్రమేయం: '%s'"
 
-#: ../gtk/gtkbuilderparser.c:406
+#: ../gtk/gtkbuilderparser.c:405
 #, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "నకలు ఆబ్జక్ట్  ID '%s'  లైనులో %d (ఇంతకు ముందటి లైను %d)"
 
-#: ../gtk/gtkbuilderparser.c:858
+#: ../gtk/gtkbuilderparser.c:865
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "సరికాని రూట్ మూలకం: '%s'"
 
-#: ../gtk/gtkbuilderparser.c:897
+#: ../gtk/gtkbuilderparser.c:906
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "సంభాలించలేని ట్యాగ్: '%s'"
@@ -731,7 +926,7 @@ msgstr "సంభాలించలేని ట్యాగ్: '%s'"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:873
+#: ../gtk/gtkcalendar.c:872
 msgid "calendar:MY"
 msgstr "calender:MY"
 
@@ -739,7 +934,7 @@ msgstr "calender:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:911
+#: ../gtk/gtkcalendar.c:910
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -748,7 +943,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1912
+#: ../gtk/gtkcalendar.c:1910
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -763,7 +958,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1943 ../gtk/gtkcalendar.c:2640
+#: ../gtk/gtkcalendar.c:1941 ../gtk/gtkcalendar.c:2633
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -779,7 +974,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1975 ../gtk/gtkcalendar.c:2501
+#: ../gtk/gtkcalendar.c:1973 ../gtk/gtkcalendar.c:2499
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -795,7 +990,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2270
+#: ../gtk/gtkcalendar.c:2268
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -803,7 +998,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: ../gtk/gtkcellrendereraccel.c:286
+#: ../gtk/gtkcellrendereraccel.c:282
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "అచేతనపరచివుంది"
@@ -812,7 +1007,7 @@ msgstr "అచేతనపరచివుంది"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: ../gtk/gtkcellrendereraccel.c:296
+#: ../gtk/gtkcellrendereraccel.c:292
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "చెల్లదు"
@@ -821,151 +1016,301 @@ msgstr "చెల్లదు"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:432 ../gtk/gtkcellrendereraccel.c:745
+#: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:733
 msgid "New accelerator..."
 msgstr "కొత్త ఎగ్జలరేటర్..."
 
-#: ../gtk/gtkcellrendererprogress.c:374 ../gtk/gtkcellrendererprogress.c:464
+#: ../gtk/gtkcellrendererprogress.c:372 ../gtk/gtkcellrendererprogress.c:462
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkcolorbutton.c:483
+#: ../gtk/gtkcolorbutton.c:190 ../gtk/gtkcolorbutton.c:459
 msgid "Pick a Color"
 msgstr "ఒక వర్ణమును ఎంచుకోండి"
 
-#: ../gtk/gtkcolorsel.c:415
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"బాహ్యవృత్తం నుండి మీకు కావాల్సిన వర్ణమును ఎన్నుకొనుము. అంతఃత్రిభుజాన్ని ఉపయోగించి, దానిని చీకటి "
-"చేయుటకుగాని, ప్రకాశింపచేయుటకుగాని ఎన్నుకొనుము."
+#: ../gtk/gtkcolorchooserdialog.c:164
+#| msgid "Select a folder"
+msgid "Select a Color"
+msgstr "వర్ణమును ఎంచుకొను"
 
-#: ../gtk/gtkcolorsel.c:441
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr "ఐడ్రాపర్ను నొక్కి తెరపై ఎక్కడైనా ఒక వర్ణంపై ఆ వర్ణమును ఎంచుకొనుటకు నొక్కుము"
+#: ../gtk/gtkcolorchooserwidget.c:281
+#, c-format
+msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
+msgstr "ఎరుపు %d%%, ఆకుపచ్చ %d%%, నీలం %d%%, ఆల్ఫా %d%%"
 
-#: ../gtk/gtkcolorsel.c:451
-msgid "_Hue:"
-msgstr "లేతఛాయ (_H):"
+#: ../gtk/gtkcolorchooserwidget.c:287
+#, c-format
+msgid "Red %d%%, Green %d%%, Blue %d%%"
+msgstr "ఎరుపు %d%%, ఆకుపచ్చ %d%%, నీలం %d%%"
 
-#: ../gtk/gtkcolorsel.c:452
-msgid "Position on the color wheel."
-msgstr "వర్ణచక్రముపై స్థానము."
+#: ../gtk/gtkcolorchooserwidget.c:360
+#| msgid "Color"
+msgid "Color: %s"
+msgstr "వర్ణం: %s" 
 
-#: ../gtk/gtkcolorsel.c:454
-msgid "S_aturation:"
-msgstr "సాచురేషన్ (_S):"
+#: ../gtk/gtkcolorchooserwidget.c:419
+msgctxt "Color name"
+msgid "Light Scarlet Red"
+msgstr "లేత సింధూర ఎరుపు"
 
-#: ../gtk/gtkcolorsel.c:455
-msgid "Intensity of the color."
-msgstr "వర్ణము యొక్క సాంద్రత."
+#: ../gtk/gtkcolorchooserwidget.c:420
+msgctxt "Color name"
+msgid "Scarlet Red"
+msgstr "సింధూర ఎరుపు"
 
-#: ../gtk/gtkcolorsel.c:456
-msgid "_Value:"
-msgstr "విలువ (_V):"
+#: ../gtk/gtkcolorchooserwidget.c:421
+msgctxt "Color name"
+msgid "Dark Scarlet Red"
+msgstr "ముదురు సింధూర ఎరుపు" 
 
-#: ../gtk/gtkcolorsel.c:457
-msgid "Brightness of the color."
-msgstr "వర్ణం యొక్క కాంతి."
+#: ../gtk/gtkcolorchooserwidget.c:422
+msgctxt "Color name"
+msgid "Light Orange"
+msgstr "లేత కాషాయం" 
 
-#: ../gtk/gtkcolorsel.c:458
-msgid "_Red:"
-msgstr "ఎరుపు (_R):"
+#: ../gtk/gtkcolorchooserwidget.c:423
+#| msgid "Range"
+msgctxt "Color name"
+msgid "Orange"
+msgstr "కాషాయం" 
 
-#: ../gtk/gtkcolorsel.c:459
-msgid "Amount of red light in the color."
-msgstr "వర్ణంలోని  ఎరుపు కాంతి ."
+#: ../gtk/gtkcolorchooserwidget.c:424
+msgctxt "Color name"
+msgid "Dark Orange"
+msgstr "ముదురు కాషాయం" 
 
-#: ../gtk/gtkcolorsel.c:460
-msgid "_Green:"
-msgstr "పచ్చ (_G):"
+#: ../gtk/gtkcolorchooserwidget.c:425
+msgctxt "Color name"
+msgid "Light Butter"
+msgstr "లేత బట్టర్" 
 
-#: ../gtk/gtkcolorsel.c:461
-msgid "Amount of green light in the color."
-msgstr "వర్ణములోని పచ్చని కాంతి."
+#: ../gtk/gtkcolorchooserwidget.c:426
+msgctxt "Color name"
+msgid "Butter"
+msgstr "బట్టర్" 
 
-#: ../gtk/gtkcolorsel.c:462
-msgid "_Blue:"
-msgstr "నీలం(_B):"
+#: ../gtk/gtkcolorchooserwidget.c:427
+msgctxt "Color name"
+msgid "Dark Butter"
+msgstr "ముదురు బట్టర్" 
 
-#: ../gtk/gtkcolorsel.c:463
-msgid "Amount of blue light in the color."
-msgstr "వర్ణములోని నీలి కాంతి."
+#: ../gtk/gtkcolorchooserwidget.c:428
+msgctxt "Color name"
+msgid "Light Chameleon"
+msgstr "లేత చామెలోన్"
 
-#: ../gtk/gtkcolorsel.c:466
-msgid "Op_acity:"
-msgstr "అపారదర్శకత (_a):"
+#: ../gtk/gtkcolorchooserwidget.c:429
+msgctxt "Color name"
+msgid "Chameleon"
+msgstr "చామెలోన్" 
 
-#: ../gtk/gtkcolorsel.c:474 ../gtk/gtkcolorsel.c:484
-msgid "Transparency of the color."
-msgstr "వర్ణము యొక్క పారదర్శకత."
+#: ../gtk/gtkcolorchooserwidget.c:430
+msgctxt "Color name"
+msgid "Dark Chameleon"
+msgstr "ముదురు చామెలోన్" 
 
-#: ../gtk/gtkcolorsel.c:491
-msgid "Color _name:"
-msgstr "వర్ణం పేరు (_n):"
+#: ../gtk/gtkcolorchooserwidget.c:431
+msgctxt "Color name"
+msgid "Light Sky Blue"
+msgstr "లేత నీలపు రంగు" 
 
-#: ../gtk/gtkcolorsel.c:506
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"మీరు   HTMLశైలి ద్విసంఖ్యామాన వర్ణ విలువను కాని లేదా సాధారణంగా నారింజ వర్ణములాంటి వర్ణనామమునుకాని నమోదు "
-"చేయుము"
+#: ../gtk/gtkcolorchooserwidget.c:432
+msgctxt "Color name"
+msgid "Sky Blue"
+msgstr "నీలపు రంగు" 
 
-#: ../gtk/gtkcolorsel.c:538
-msgid "_Palette:"
-msgstr "వర్ణపలకం (_P):"
+#: ../gtk/gtkcolorchooserwidget.c:433
+msgctxt "Color name"
+msgid "Dark Sky Blue"
+msgstr "ముదురు మీలపు రంగు" 
 
-#: ../gtk/gtkcolorsel.c:568
-msgid "Color Wheel"
-msgstr "వర్ణచక్రం"
+#: ../gtk/gtkcolorchooserwidget.c:434
+msgctxt "Color name"
+msgid "Light Plum"
+msgstr "లేత ప్లమ్" 
 
-#: ../gtk/gtkcolorsel.c:1041
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now. You can drag this color to a palette entry, or select this color as "
-"current by dragging it to the other color swatch alongside."
-msgstr ""
-"ఇప్పుడు ఎన్నుకుంటున్న వర్ణంతో సరిపోల్చుటకొరకు మునుపు ఎన్నుకున్న వర్ణము. ఈ వర్ణమును ఒక  "
-"వర్ణపలకం నమోదుగా  లాగగలరు. లేదా ఈ వర్ణమును పక్కన వున్న వర్ణ నమూనాపైకి లాగుట ద్వారా ఎన్నుకోగలరు."
+#: ../gtk/gtkcolorchooserwidget.c:435
+#| msgid "Volume"
+msgctxt "Color name"
+msgid "Plum"
+msgstr "ప్లమ్" 
 
-#: ../gtk/gtkcolorsel.c:1047
-msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
-"it for use in the future."
-msgstr ""
-"మీరు ఎన్నుకున్న వర్ణము. దీనిని మీరు పలకం నమోదు మీదకు లాగుట ద్వారా భవిష్యత్లో వాడుటకు దాచుకోగలరు."
+#: ../gtk/gtkcolorchooserwidget.c:436
+msgctxt "Color name"
+msgid "Dark Plum"
+msgstr "ముదురు ప్లమ్" 
 
-#: ../gtk/gtkcolorsel.c:1053
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now."
-msgstr "క్రితము   ఎంపిక రంగు, ఇప్పటి ఎంపిక రంగుతో పోల్చటానికి"
+#: ../gtk/gtkcolorchooserwidget.c:437
+msgctxt "Color name"
+msgid "Light Chocolate"
+msgstr "లేత చాక్లేట్ రంగు"
 
-#: ../gtk/gtkcolorsel.c:1057
-msgid "The color you've chosen."
-msgstr "మీరు ఎంపిక చేసిన రంగు"
+#: ../gtk/gtkcolorchooserwidget.c:438
+#| msgid "C_ollate"
+msgctxt "Color name"
+msgid "Chocolate"
+msgstr "చాక్లేట్ రంగు" 
 
-#: ../gtk/gtkcolorsel.c:1459
-msgid "_Save color here"
-msgstr "వర్ణమును ఇక్కడ భద్రపరుచు (_S)"
+#: ../gtk/gtkcolorchooserwidget.c:439
+msgctxt "Color name"
+msgid "Dark Chocolate"
+msgstr "ముదురు చాక్లేట్ రంగు"
+ 
+#: ../gtk/gtkcolorchooserwidget.c:440
+msgctxt "Color name"
+msgid "Light Aluminum 1"
+msgstr "లేత అల్యూమినియం 1" 
 
-#: ../gtk/gtkcolorsel.c:1664
-msgid ""
-"Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
-"వర్ణపలక నమోదును ప్రస్తుత వర్ణముగా చేయుట కొరకు నొక్కుము. ఈ నమోదును మార్చుటకు వర్ణ నమూనాను "
-"ఇచ్చటకు లాగుము. లేదా కుడిమీట నొక్కి \"వర్ణమును ఇక్కడ భద్రపరుచు\"ను ఎన్నుకొనుము."
+#: ../gtk/gtkcolorchooserwidget.c:441
+msgctxt "Color name"
+msgid "Aluminum 1"
+msgstr "అల్యూమీనియం 1" 
 
-#: ../gtk/gtkcolorseldialog.c:217
-msgid "Color Selection"
-msgstr "వర్ణ ఎంపిక"
+#: ../gtk/gtkcolorchooserwidget.c:442
+msgctxt "Color name"
+msgid "Dark Aluminum 1"
+msgstr "ముదురు అల్యూమీనియం 1" 
+
+#: ../gtk/gtkcolorchooserwidget.c:443
+msgctxt "Color name"
+msgid "Light Aluminum 2"
+msgstr "లేత అల్యూమీనియం 2" 
+
+#: ../gtk/gtkcolorchooserwidget.c:444
+msgctxt "Color name"
+msgid "Aluminum 2"
+msgstr "అల్యూమీనియం 2" 
+
+#: ../gtk/gtkcolorchooserwidget.c:445
+msgctxt "Color name"
+msgid "Dark Aluminum 2"
+msgstr "ముదురు అల్యూమీనియం 2" 
+
+#: ../gtk/gtkcolorchooserwidget.c:459
+#| msgctxt "Stock label, navigation"
+#| msgid "_Back"
+msgctxt "Color name"
+msgid "Black"
+msgstr "నలుపు" 
+
+#: ../gtk/gtkcolorchooserwidget.c:460
+msgctxt "Color name"
+msgid "Very Dark Gray"
+msgstr "ముదురు బూడిద రంగు" 
+
+#: ../gtk/gtkcolorchooserwidget.c:461
+msgctxt "Color name"
+msgid "Darker Gray"
+msgstr "ముదురు బూడిద రంగు"
+
+#: ../gtk/gtkcolorchooserwidget.c:462
+msgctxt "Color name"
+msgid "Dark Gray"
+msgstr "ముదురు బూడిద రంగు" 
+
+#: ../gtk/gtkcolorchooserwidget.c:463
+#| msgid "Medium"
+msgctxt "Color name"
+msgid "Medium Gray"
+msgstr "మధ్య బూడిద రంగు" 
+
+#: ../gtk/gtkcolorchooserwidget.c:464
+msgctxt "Color name"
+msgid "Light Gray"
+msgstr "లేత బూడిద రంగు" 
+
+#: ../gtk/gtkcolorchooserwidget.c:465
+msgctxt "Color name"
+msgid "Lighter Gray"
+msgstr "లేత బూడుద రంగు" 
+
+#: ../gtk/gtkcolorchooserwidget.c:466
+msgctxt "Color name"
+msgid "Very Light Gray"
+msgstr "లేత బూడిద రంగు" 
+
+#: ../gtk/gtkcolorchooserwidget.c:467
+msgctxt "Color name"
+msgid "White"
+msgstr "తెలుపు" 
+
+#. translators: label for the custom section in the color chooser
+#: ../gtk/gtkcolorchooserwidget.c:516
+#| msgid "Custom size"
+msgid "Custom"
+msgstr "అనురూపిత "
+
+#: ../gtk/gtkcolorchooserwidget.c:524
+#| msgid "Create Fo_lder"
+msgid "Create custom color"
+msgstr "అనురూపిత వర్ణమును సృష్టించు"
+
+#: ../gtk/gtkcolorchooserwidget.c:543
+#| msgid "Custom %sx%s"
+msgid "Custom color %d: %s"
+msgstr "అనురూపిత రంగు %d: %s"
+
+#: ../gtk/gtkcoloreditor.c:412
+#| msgid "Color _name:"
+msgid "Color Name"
+msgstr "వర్ణం పేరు "
+
+#: ../gtk/gtkcoloreditor.c:457
+#| msgid "S_aturation:"
+msgctxt "Color channel"
+msgid "Saturation"
+msgstr "సాచురేషన్ "
+
+#: ../gtk/gtkcoloreditor.c:463
+#| msgid "_Value:"
+msgctxt "Color channel"
+msgid "Value"
+msgstr "విలువ "
+
+#: ../gtk/gtkcoloreditor.c:471
+msgctxt "Color channel"
+msgid "S"
+msgstr "S"
+
+#: ../gtk/gtkcoloreditor.c:473
+msgctxt "Color channel"
+msgid "V"
+msgstr "V"
+
+#: ../gtk/gtkcoloreditor.c:481 ../gtk/gtkcolorscale.c:301
+#| msgid "_Hue:"
+msgctxt "Color channel"
+msgid "Hue"
+msgstr "లేతఛాయ "
+
+#: ../gtk/gtkcoloreditor.c:488
+msgctxt "Color channel"
+msgid "H"
+msgstr "H"
+
+#: ../gtk/gtkcoloreditor.c:496 ../gtk/gtkcolorscale.c:303
+msgctxt "Color channel"
+msgid "Alpha"
+msgstr "ఆల్ఫా" 
+
+#: ../gtk/gtkcoloreditor.c:503
+#| msgctxt "paper size"
+#| msgid "A0"
+msgctxt "Color channel"
+msgid "A"
+msgstr "A"
+
+#: ../gtk/gtkcolorplane.c:438
+#| msgid "Color _name:"
+msgid "Color Plane"
+msgstr " సమతల వర్ణం "
+
+#: ../gtk/gtkcolorswatch.c:447
+#| msgid "Custom size"
+msgid "_Customize"
+msgstr "అనురూపితము_C"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -973,81 +1318,73 @@ msgstr "వర్ణ ఎంపిక"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: ../gtk/gtkcustompaperunixdialog.c:116
+#: ../gtk/gtkcustompaperunixdialog.c:114
 msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:372 ../gtk/gtkprintunixdialog.c:3324
+#: ../gtk/gtkcustompaperunixdialog.c:370 ../gtk/gtkprintunixdialog.c:3323
 msgid "Manage Custom Sizes"
 msgstr "అనురూపిత పరిమాణాలను నిర్వహించు"
 
-#: ../gtk/gtkcustompaperunixdialog.c:533 ../gtk/gtkpagesetupunixdialog.c:780
+#: ../gtk/gtkcustompaperunixdialog.c:531 ../gtk/gtkpagesetupunixdialog.c:778
 msgid "inch"
 msgstr "అంగుళం"
 
-#: ../gtk/gtkcustompaperunixdialog.c:535 ../gtk/gtkpagesetupunixdialog.c:778
+#: ../gtk/gtkcustompaperunixdialog.c:533 ../gtk/gtkpagesetupunixdialog.c:776
 msgid "mm"
 msgstr "మిమీ"
 
-#: ../gtk/gtkcustompaperunixdialog.c:580
+#: ../gtk/gtkcustompaperunixdialog.c:578
 msgid "Margins from Printer..."
 msgstr "ముద్రకం నుండి అంచులు..."
 
-#: ../gtk/gtkcustompaperunixdialog.c:746
+#: ../gtk/gtkcustompaperunixdialog.c:744
 #, c-format
 msgid "Custom Size %d"
 msgstr "అనురూపిత పరిమాణం %d"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1084
+#: ../gtk/gtkcustompaperunixdialog.c:1082
 msgid "_Width:"
 msgstr "వెడల్పు (_W):"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1097
+#: ../gtk/gtkcustompaperunixdialog.c:1093
 msgid "_Height:"
 msgstr "ఎత్తు (_H):"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1110
+#: ../gtk/gtkcustompaperunixdialog.c:1104
 msgid "Paper Size"
 msgstr "కాగిత పరిమాణం"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1119
+#: ../gtk/gtkcustompaperunixdialog.c:1113
 msgid "_Top:"
 msgstr "పైన (_T):"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1132
+#: ../gtk/gtkcustompaperunixdialog.c:1124
 msgid "_Bottom:"
 msgstr "క్రింద (_B):"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1145
+#: ../gtk/gtkcustompaperunixdialog.c:1135
 msgid "_Left:"
 msgstr "ఎడమ (_L):"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1158
+#: ../gtk/gtkcustompaperunixdialog.c:1146
 msgid "_Right:"
 msgstr "కుడి (_R):"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1200
+#: ../gtk/gtkcustompaperunixdialog.c:1185
 msgid "Paper Margins"
 msgstr "కాగితపు అంచులు"
 
-#: ../gtk/gtkentry.c:8957 ../gtk/gtktextview.c:8277
+#: ../gtk/gtkentry.c:8771 ../gtk/gtktextview.c:8290
 msgid "Input _Methods"
 msgstr "ఇన్‌పుట్ పద్ధతులు (_M)"
 
-#: ../gtk/gtkentry.c:8971 ../gtk/gtktextview.c:8291
+#: ../gtk/gtkentry.c:8785 ../gtk/gtktextview.c:8304
 msgid "_Insert Unicode Control Character"
 msgstr "యునికోడ్ నియంత్రణ అక్షరాన్ని చొప్పించు (_I)"
 
-#: ../gtk/gtkentry.c:10448
-msgid "Caps Lock and Num Lock are on"
-msgstr "Caps Lock మరియు Num Lock అనైవున్నాయి"
-
-#: ../gtk/gtkentry.c:10450
-msgid "Num Lock is on"
-msgstr "Num Lock ఆనైవుంది"
-
-#: ../gtk/gtkentry.c:10452
+#: ../gtk/gtkentry.c:10246
 msgid "Caps Lock is on"
 msgstr "Caps Lock ఆనైవుంది"
 
@@ -1092,43 +1429,43 @@ msgstr "Caps Lock ఆనైవుంది"
 #. **************** *
 #. *  Private Macros  *
 #. * ****************
-#: ../gtk/gtkfilechooserbutton.c:105
+#: ../gtk/gtkfilechooserbutton.c:104
 msgid "Select a File"
 msgstr "ఒక ఫైలును ఎంచుకొను"
 
-#: ../gtk/gtkfilechooserbutton.c:106 ../gtk/gtkfilechooserdefault.c:1817
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1815
 msgid "Desktop"
 msgstr "డెస్క్‍టాప్"
 
-#: ../gtk/gtkfilechooserbutton.c:107
+#: ../gtk/gtkfilechooserbutton.c:106
 msgid "(None)"
 msgstr "(ఏమీలేదు)"
 
-#: ../gtk/gtkfilechooserbutton.c:2047
+#: ../gtk/gtkfilechooserbutton.c:2046
 msgid "Other..."
 msgstr "ఇతర..."
 
-#: ../gtk/gtkfilechooserdefault.c:153
+#: ../gtk/gtkfilechooserdefault.c:152
 msgid "Type name of new folder"
 msgstr "కొత్త సంచయం పేరును టైపు చేయండి"
 
-#: ../gtk/gtkfilechooserdefault.c:968
+#: ../gtk/gtkfilechooserdefault.c:966
 msgid "Could not retrieve information about the file"
 msgstr "ఫైల్ గురించి సమాచారాన్ని సేకరించలేకపోయాము"
 
-#: ../gtk/gtkfilechooserdefault.c:979
+#: ../gtk/gtkfilechooserdefault.c:977
 msgid "Could not add a bookmark"
 msgstr "ఇష్టాంశాన్ని కలుపలేకపోయింది"
 
-#: ../gtk/gtkfilechooserdefault.c:990
+#: ../gtk/gtkfilechooserdefault.c:988
 msgid "Could not remove bookmark"
 msgstr "ఇష్టాంశాన్ని తీసివేయలేకపోయింది"
 
-#: ../gtk/gtkfilechooserdefault.c:1001
+#: ../gtk/gtkfilechooserdefault.c:999
 msgid "The folder could not be created"
 msgstr "సంచయం సృష్టించుట వీలుకాదు"
 
-#: ../gtk/gtkfilechooserdefault.c:1014
+#: ../gtk/gtkfilechooserdefault.c:1012
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1136,16 +1473,16 @@ msgstr ""
 "సంచయం సృష్టించబడలేదు, ఒక ఫైల్ ఇప్పటికే అదే పేరుతో ఉంది.  సంచయానికి కొత్త పేరుతో ప్రయత్నించండి, లేదా "
 "ముందుగా ఫైలు పేరు మార్చండి."
 
-#: ../gtk/gtkfilechooserdefault.c:1028
+#: ../gtk/gtkfilechooserdefault.c:1026
 msgid "You need to choose a valid filename."
 msgstr "మీరు సరైన ఫైల్ పేరును ఎంచుకోవలసివుంటుంది."
 
-#: ../gtk/gtkfilechooserdefault.c:1031
+#: ../gtk/gtkfilechooserdefault.c:1029
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "%s సంచయం కాకపోవడం వలన ఇందులో ఫైలును సృష్టించుట వీలుకాదు"
 
-#: ../gtk/gtkfilechooserdefault.c:1043
+#: ../gtk/gtkfilechooserdefault.c:1041
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
@@ -1153,11 +1490,11 @@ msgstr ""
 "మీరు సంచయాలను మాత్రమే ఎంచుకొనవచ్చును.  మీరు ఎంచుకున్న అంశం సంచయం కాదు; వేరొక అంశాన్ని "
 "ప్రయత్నించండి."
 
-#: ../gtk/gtkfilechooserdefault.c:1053
+#: ../gtk/gtkfilechooserdefault.c:1051
 msgid "Invalid file name"
 msgstr "ఫైల్ పేరు సరైనది కాదు"
 
-#: ../gtk/gtkfilechooserdefault.c:1063
+#: ../gtk/gtkfilechooserdefault.c:1061
 msgid "The folder contents could not be displayed"
 msgstr "సంచయం విషయాలు ప్రదర్శించుట వీలుకాదు"
 
@@ -1165,71 +1502,71 @@ msgstr "సంచయం విషయాలు ప్రదర్శించు�
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1589
+#: ../gtk/gtkfilechooserdefault.c:1587
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%2$s పై %1$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1738
+#: ../gtk/gtkfilechooserdefault.c:1736
 msgid "Search"
 msgstr "శోధించు"
 
-#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4991
+#: ../gtk/gtkfilechooserdefault.c:1760 ../gtk/gtkfilechooserdefault.c:4986
 msgid "Recently Used"
 msgstr "ఇటీవల వాడినవి"
 
-#: ../gtk/gtkfilechooserdefault.c:2361
+#: ../gtk/gtkfilechooserdefault.c:2359
 msgid "Select which types of files are shown"
 msgstr "ఏ రకపు ఫైళ్ళను చూపించాలో ఎన్నుకొనుము"
 
-#: ../gtk/gtkfilechooserdefault.c:2720
+#: ../gtk/gtkfilechooserdefault.c:2718
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' సంచయాన్ని ఇష్టాంశాలకు జతచేయి"
 
-#: ../gtk/gtkfilechooserdefault.c:2764
+#: ../gtk/gtkfilechooserdefault.c:2762
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "ప్రస్తుత సంచయాన్ని ఇష్టాంశాలకు జతచేయి"
 
-#: ../gtk/gtkfilechooserdefault.c:2766
+#: ../gtk/gtkfilechooserdefault.c:2764
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "ఎంచుకున్న సంచయాలను ఇష్టాంశాలకు జతచేయి"
 
-#: ../gtk/gtkfilechooserdefault.c:2804
+#: ../gtk/gtkfilechooserdefault.c:2802
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' ఇష్టాంశాన్ని తీసివేయి"
 
-#: ../gtk/gtkfilechooserdefault.c:2806
+#: ../gtk/gtkfilechooserdefault.c:2804
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "ఇష్టాంశం '%s' తొలగించువీలుకాదు"
 
-#: ../gtk/gtkfilechooserdefault.c:2813 ../gtk/gtkfilechooserdefault.c:3698
+#: ../gtk/gtkfilechooserdefault.c:2811 ../gtk/gtkfilechooserdefault.c:3697
 msgid "Remove the selected bookmark"
 msgstr "ఎంచుకున్న ఇష్టాంశాలను తీసివేయి"
 
-#: ../gtk/gtkfilechooserdefault.c:3377
+#: ../gtk/gtkfilechooserdefault.c:3375
 msgid "Remove"
 msgstr "తీసివేయి"
 
-#: ../gtk/gtkfilechooserdefault.c:3386
+#: ../gtk/gtkfilechooserdefault.c:3384
 msgid "Rename..."
 msgstr "పేరుమార్చు..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3550
+#: ../gtk/gtkfilechooserdefault.c:3548
 msgid "Places"
 msgstr "స్థలములు"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3607
+#: ../gtk/gtkfilechooserdefault.c:3605
 msgid "_Places"
 msgstr "స్థలములు (_P)"
 
-#: ../gtk/gtkfilechooserdefault.c:3686
+#: ../gtk/gtkfilechooserdefault.c:3685
 msgid "Add the selected folder to the Bookmarks"
 msgstr "ఎంచుకున్న సంచయమును ఇష్టాంశాలకు జతచేయి"
 
@@ -1274,288 +1611,202 @@ msgid "Modified"
 msgstr "మార్చబడినది"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4595 ../gtk/gtkprinteroptionwidget.c:799
+#: ../gtk/gtkfilechooserdefault.c:4593 ../gtk/gtkprinteroptionwidget.c:835
 msgid "_Name:"
 msgstr "పేరు (_N):"
 
-#: ../gtk/gtkfilechooserdefault.c:4829
+#: ../gtk/gtkfilechooserdefault.c:4824
 msgid "Type a file name"
 msgstr "ఒక ఫైల్ పేరును టైపుచేయండి"
 
-#: ../gtk/gtkfilechooserdefault.c:4876 ../gtk/gtkfilechooserdefault.c:4887
+#: ../gtk/gtkfilechooserdefault.c:4871 ../gtk/gtkfilechooserdefault.c:4882
 msgid "Please select a folder below"
 msgstr "దయచేసి క్రింది నుండి ఒక సంచయాన్ని ఎంచుకొను"
 
-#: ../gtk/gtkfilechooserdefault.c:4882
+#: ../gtk/gtkfilechooserdefault.c:4877
 msgid "Please type a file name"
 msgstr "దయచేసి ఫైల్ పేరును టైపుచేయండి"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4953
+#: ../gtk/gtkfilechooserdefault.c:4948
 msgid "Create Fo_lder"
 msgstr "సంచయాన్ని సృష్టించు (_l)"
 
-#: ../gtk/gtkfilechooserdefault.c:5001
+#: ../gtk/gtkfilechooserdefault.c:4996
 msgid "Search:"
 msgstr "శోధించు:"
 
-#: ../gtk/gtkfilechooserdefault.c:5052
+#: ../gtk/gtkfilechooserdefault.c:5047
 msgid "_Location:"
 msgstr "స్థానము (_L):"
 
-#: ../gtk/gtkfilechooserdefault.c:5503
+#: ../gtk/gtkfilechooserdefault.c:5498
 msgid "Save in _folder:"
 msgstr "సంచయంలో భద్రపరుచు (_f):"
 
-#: ../gtk/gtkfilechooserdefault.c:5505
+#: ../gtk/gtkfilechooserdefault.c:5500
 msgid "Create in _folder:"
 msgstr "సంచయంలో సృష్టించు (_f):"
 
-#: ../gtk/gtkfilechooserdefault.c:6599
+#: ../gtk/gtkfilechooserdefault.c:6594
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s లోపలి విషయాలను చదవలేకపోయింది"
 
-#: ../gtk/gtkfilechooserdefault.c:6603
+#: ../gtk/gtkfilechooserdefault.c:6598
 msgid "Could not read the contents of the folder"
 msgstr "సంచయము లోపలి విషయాలను చదవలేకపోయింది"
 
-#: ../gtk/gtkfilechooserdefault.c:6696 ../gtk/gtkfilechooserdefault.c:6764
-#: ../gtk/gtkfilechooserdefault.c:6916
+#: ../gtk/gtkfilechooserdefault.c:6691 ../gtk/gtkfilechooserdefault.c:6759
+#: ../gtk/gtkfilechooserdefault.c:6911
 msgid "Unknown"
 msgstr "తెలియదు"
 
-#: ../gtk/gtkfilechooserdefault.c:6711
+#: ../gtk/gtkfilechooserdefault.c:6706
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6713
+#: ../gtk/gtkfilechooserdefault.c:6708
 msgid "Yesterday at %H:%M"
 msgstr "నిన్న %H:%M వద్ద"
 
-#: ../gtk/gtkfilechooserdefault.c:7388
+#: ../gtk/gtkfilechooserdefault.c:7382
 msgid "Cannot change to folder because it is not local"
 msgstr "సంచయానికి మార్చలేము ఎందుకంటే ఇది స్థానికం కాదు"
 
-#: ../gtk/gtkfilechooserdefault.c:7988 ../gtk/gtkfilechooserdefault.c:8009
+#: ../gtk/gtkfilechooserdefault.c:7983 ../gtk/gtkfilechooserdefault.c:8004
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "లఘువు %s ఇప్పటికే ఉంది"
 
-#: ../gtk/gtkfilechooserdefault.c:8099
+#: ../gtk/gtkfilechooserdefault.c:8094
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "లఘువు %s లేదు"
 
-#: ../gtk/gtkfilechooserdefault.c:8345 ../gtk/gtkprintunixdialog.c:550
+#: ../gtk/gtkfilechooserdefault.c:8340 ../gtk/gtkprintunixdialog.c:548
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" పేరుతో ఒక ఫైల్ ఇప్పటికే ఉంది. మీరు దానిని ప్రతిస్థాపించదలచుకున్నారా?"
 
-#: ../gtk/gtkfilechooserdefault.c:8348 ../gtk/gtkprintunixdialog.c:554
+#: ../gtk/gtkfilechooserdefault.c:8343 ../gtk/gtkprintunixdialog.c:552
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "ఫైల్ ఇదివరకే \"%s\"లో ఉంది. దానిని ప్రతిస్థాపిస్తే అందులోని అంశాలన్నీ దిద్దివ్రాయబడతాయి."
 
-#: ../gtk/gtkfilechooserdefault.c:8353 ../gtk/gtkprintunixdialog.c:561
+#: ../gtk/gtkfilechooserdefault.c:8348 ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
 msgstr "ప్రతిస్థాపించు (_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:9160
+#: ../gtk/gtkfilechooserdefault.c:9155
 msgid "Could not start the search process"
 msgstr "శోధన ప్రోసెస్ ను ప్రారంభించలేకపోయింది"
 
-#: ../gtk/gtkfilechooserdefault.c:9161
+#: ../gtk/gtkfilechooserdefault.c:9156
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "ఇండెక్సర్ డెమోన్‌కు ప్రోగ్రాము అనుసంధానమును సృష్టించలేకపోయింది.  దయచేసి అది నడిచేట్టు చూడండి."
 
-#: ../gtk/gtkfilechooserdefault.c:9175
+#: ../gtk/gtkfilechooserdefault.c:9170
 msgid "Could not send the search request"
 msgstr "శోధన అభ్యర్ధనను పంపలేకపోయింది"
 
-#: ../gtk/gtkfilechooserdefault.c:9776
+#: ../gtk/gtkfilechooserdefault.c:9771
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s ను మౌంట్ చేయలేకపోయింది"
-
-#. Translators: this is shown in the feedback for Tab-completion in a file
-#. * chooser's text entry, when the user enters an invalid path.
-#: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1174
-#: ../gtk/gtkfilesystem.c:726
-#, c-format
-msgid "Invalid path"
-msgstr "చెల్లని పథం"
-
-#. translators: this text is shown when there are no completions
-#. * for something the user typed in a file chooser entry
-#.
-#: ../gtk/gtkfilechooserentry.c:1106
-msgid "No match"
-msgstr "ఏదీ సరిపోలిలేదు"
-
-#. translators: this text is shown when there is exactly one completion
-#. * for something the user typed in a file chooser entry
-#.
-#: ../gtk/gtkfilechooserentry.c:1117
-msgid "Sole completion"
-msgstr "సోల్ ముగింపు"
-
-#. translators: this text is shown when the text in a file chooser
-#. * entry is a complete filename, but could be continued to find
-#. * a longer match
-#.
-#: ../gtk/gtkfilechooserentry.c:1133
-msgid "Complete, but not unique"
-msgstr "పూర్తి, అయితే ఏకైకం(యునిక్) కానవసరంలేదు"
-
-#. Translators: this text is shown while the system is searching
-#. * for possible completions for filenames in a file chooser entry.
-#: ../gtk/gtkfilechooserentry.c:1165
-msgid "Completing..."
-msgstr "పూర్తిచేస్తున్నది..."
-
-#. hostnames in a local_only file chooser?  user error
-#. Translators: this is shown in the feedback for Tab-completion in a
-#. * file chooser's text entry when the user enters something like
-#. * "sftp://blahblah" in an app that only supports local filenames.
-#: ../gtk/gtkfilechooserentry.c:1187 ../gtk/gtkfilechooserentry.c:1212
-msgid "Only local files may be selected"
-msgstr "స్థానిక ఫైళ్ళు మాత్రమే ఎన్నుకొనబడవచ్చును"
-
-#. Another option is to complete the hostname based on the remote volumes that are mounted
-#. Translators: this is shown in the feedback for Tab-completion in a
-#. * file chooser's text entry when the user hasn't entered the first '/'
-#. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: ../gtk/gtkfilechooserentry.c:1196
-msgid "Incomplete hostname; end it with '/'"
-msgstr "అసంపూర్ణ అతిధేయనామము; దీనిని '/'తో ముగించు"
-
-#. Translators: this is shown in the feedback for Tab-completion in a file
-#. * chooser's text entry when the user enters a path that does not exist
-#. * and then hits Tab
-#: ../gtk/gtkfilechooserentry.c:1207
-msgid "Path does not exist"
-msgstr "పథం అసలు ఉనికిలో లేదు"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: ../gtk/gtkfilesystem.c:48
+#: ../gtk/gtkfilesystem.c:47
 msgid "File System"
 msgstr "ఫైల్ వ్యవస్థ"
 
-#: ../gtk/gtkfontbutton.c:355
+#: ../gtk/gtkfontbutton.c:354
 msgid "Sans 12"
 msgstr "సాన్స్  12"
 
-#: ../gtk/gtkfontbutton.c:437 ../gtk/gtkfontbutton.c:564
+#: ../gtk/gtkfontbutton.c:436 ../gtk/gtkfontbutton.c:563
 msgid "Pick a Font"
 msgstr "ఫాంటును ఎన్నుకొను"
 
-#: ../gtk/gtkfontbutton.c:1126
+#: ../gtk/gtkfontbutton.c:1121
 msgid "Font"
 msgstr "ఫాంటు"
 
-#: ../gtk/gtkfontchooserdialog.c:185 ../gtk/gtkfontsel.c:1738
-msgid "Font Selection"
-msgstr "ఫాంటు ఎంపిక"
-
-#: ../gtk/gtkfontchooserwidget.c:115
+#: ../gtk/gtkfontchooserwidget.c:109
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr "మీ శోధనకు సరిపోలిన ఫాంట్లు లేవు. మీ శోధనను మరొకసారి చూసుకుని మరలా ప్రయత్నించండి."
 
-#: ../gtk/gtkfontchooserwidget.c:595
+#: ../gtk/gtkfontchooserwidget.c:608
 msgid "Search font name"
 msgstr "ఫాంటు పేరును శోధించు"
 
-#: ../gtk/gtkfontchooserwidget.c:868
+#: ../gtk/gtkfontchooserwidget.c:944
 msgid "Font Family"
 msgstr "ఫాంటు కుటుంబం"
 
-#. This is the default text shown in the preview entry, though the user
-#. can set it. Remember that some fonts only have capital letters.
-#: ../gtk/gtkfontsel.c:125
-msgid "abcdefghijk ABCDEFGHIJK"
-msgstr "abcdefghijk ABCDEFGHIJK"
-
-#: ../gtk/gtkfontsel.c:394
-msgid "_Family:"
-msgstr "కుటుంబం (_F):"
-
-#: ../gtk/gtkfontsel.c:401
-msgid "_Style:"
-msgstr "శైలి (_S):"
-
-#: ../gtk/gtkfontsel.c:408
-msgid "Si_ze:"
-msgstr "పరిమాణం (_z):"
-
-#. create the text entry widget
-#: ../gtk/gtkfontsel.c:585
-msgid "_Preview:"
-msgstr "మునుజూపు (_P):"
-
-#: ../gtk/gtkicontheme.c:1605
+#: ../gtk/gtkicontheme.c:1609
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "ప్రతీక '%s' థీములో లేదు"
 
-#: ../gtk/gtkicontheme.c:3115
+#: ../gtk/gtkicontheme.c:3117
 msgid "Failed to load icon"
 msgstr "ప్రతీకను నింపుటలో విఫలమైంది"
 
-#: ../gtk/gtkimmodule.c:525
+#: ../gtk/gtkimmodule.c:516
 msgid "Simple"
 msgstr "సాధారణ"
 
-#: ../gtk/gtkimmulticontext.c:588
+#: ../gtk/gtkimmulticontext.c:603
 msgctxt "input method menu"
 msgid "System"
 msgstr "వ్యవస్థ"
 
-#: ../gtk/gtkimmulticontext.c:598
+#: ../gtk/gtkimmulticontext.c:613
 msgctxt "input method menu"
 msgid "None"
 msgstr "ఏదీకాదు"
 
-#: ../gtk/gtkimmulticontext.c:681
+#: ../gtk/gtkimmulticontext.c:696
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "వ్యవస్థ (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6294
+#: ../gtk/gtklabel.c:6217
 msgid "_Open Link"
 msgstr "లింకును తెరువు (_O)"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6306
+#: ../gtk/gtklabel.c:6229
 msgid "Copy _Link Address"
 msgstr "లింకు చిరునామాను నకలుతీయి (_L)"
 
-#: ../gtk/gtklinkbutton.c:494
+#: ../gtk/gtklinkbutton.c:499
 msgid "Copy URL"
 msgstr "URI నకలుతీయి"
 
-#: ../gtk/gtklinkbutton.c:657
+#: ../gtk/gtklinkbutton.c:662
 msgid "Invalid URI"
 msgstr "చెల్లని URI"
 
-#: ../gtk/gtklockbutton.c:288
+#: ../gtk/gtklockbutton.c:286
 msgid "Lock"
 msgstr "తాళంవేయి"
 
-#: ../gtk/gtklockbutton.c:297
+#: ../gtk/gtklockbutton.c:295
 msgid "Unlock"
 msgstr "తాళంతీయి"
 
-#: ../gtk/gtklockbutton.c:306
+#: ../gtk/gtklockbutton.c:304
 msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
@@ -1563,7 +1814,7 @@ msgstr ""
 "డైలాగు అన్‌లాక్‌చేయబడింది.\n"
 "మునుముందు మార్పులను నివారించుటకు నొక్కండి"
 
-#: ../gtk/gtklockbutton.c:315
+#: ../gtk/gtklockbutton.c:313
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
@@ -1571,7 +1822,7 @@ msgstr ""
 "డైలాగు లాక్‌చేయబడింది.\n"
 "మార్పులు చేయుటకు నొక్కండి"
 
-#: ../gtk/gtklockbutton.c:324
+#: ../gtk/gtklockbutton.c:322
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
@@ -1580,27 +1831,27 @@ msgstr ""
 "మీ వ్యవస్థ నిర్వాహకుడిని సంప్రదించండి"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:562
+#: ../gtk/gtkmain.c:445
 msgid "Load additional GTK+ modules"
 msgstr "అదనపు  GTK+ పర్వికాలను నింపు"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:563
+#: ../gtk/gtkmain.c:446
 msgid "MODULES"
 msgstr "పర్వికాలు"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:565
+#: ../gtk/gtkmain.c:448
 msgid "Make all warnings fatal"
 msgstr "అన్ని హెచ్చరికలను అనివార్యం చేయండి"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:568
+#: ../gtk/gtkmain.c:451
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ దోషనిర్మూలన  గుర్తులను అమర్చు"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:571
+#: ../gtk/gtkmain.c:454
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ దోషనిర్మూలనా గుర్తులను అమర్చువద్దు"
 
@@ -1609,104 +1860,104 @@ msgstr "GTK+ దోషనిర్మూలనా గుర్తులను �
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:848
+#: ../gtk/gtkmain.c:705
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:914
+#: ../gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ప్రదర్శనను తెరువలేదు: %s"
 
-#: ../gtk/gtkmain.c:980
+#: ../gtk/gtkmain.c:839
 msgid "GTK+ Options"
 msgstr "GTK+ ఐచ్ఛికాలు"
 
-#: ../gtk/gtkmain.c:980
+#: ../gtk/gtkmain.c:839
 msgid "Show GTK+ Options"
 msgstr "GTK+ ఐచ్ఛికాలను చూపించు"
 
-#: ../gtk/gtkmountoperation.c:486
+#: ../gtk/gtkmountoperation.c:484
 msgid "Co_nnect"
 msgstr "అనుసంధానించు (_n)"
 
-#: ../gtk/gtkmountoperation.c:556
+#: ../gtk/gtkmountoperation.c:554
 msgid "Connect _anonymously"
 msgstr "అజ్ఙాతంగా అనుసంధానించు (_a)"
 
-#: ../gtk/gtkmountoperation.c:565
+#: ../gtk/gtkmountoperation.c:563
 msgid "Connect as u_ser:"
 msgstr "వాడుకరిలా అనుసంధానించు (_s):"
 
-#: ../gtk/gtkmountoperation.c:599
+#: ../gtk/gtkmountoperation.c:597
 msgid "_Username:"
 msgstr "వాడుకరిపేరు (_U):"
 
-#: ../gtk/gtkmountoperation.c:604
+#: ../gtk/gtkmountoperation.c:602
 msgid "_Domain:"
 msgstr "డొమైన్ (_D):"
 
-#: ../gtk/gtkmountoperation.c:610
+#: ../gtk/gtkmountoperation.c:608
 msgid "_Password:"
 msgstr "సంకేతపదము (_P):"
 
-#: ../gtk/gtkmountoperation.c:628
+#: ../gtk/gtkmountoperation.c:626
 msgid "Forget password _immediately"
 msgstr "సంకేతపదమును తక్షణమే మర్చిపో (_i)"
 
-#: ../gtk/gtkmountoperation.c:638
+#: ../gtk/gtkmountoperation.c:636
 msgid "Remember password until you _logout"
 msgstr "మీరు నిష్క్రమించేంతవరకు సంకేతపదమును గుర్తుంచుకొను (_l)"
 
-#: ../gtk/gtkmountoperation.c:648
+#: ../gtk/gtkmountoperation.c:646
 msgid "Remember _forever"
 msgstr "ఎప్పటికి గుర్తుంచుకొను (_f)"
 
-#: ../gtk/gtkmountoperation.c:877
+#: ../gtk/gtkmountoperation.c:875
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "తెలియని అనువర్తనము  (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1060
+#: ../gtk/gtkmountoperation.c:1058
 msgid "Unable to end process"
 msgstr "ప్రక్రియను అంతం చేయుట వీలుకావడంలేదు"
 
-#: ../gtk/gtkmountoperation.c:1097
+#: ../gtk/gtkmountoperation.c:1095
 msgid "_End Process"
 msgstr "ప్రక్రియను ముగించు (_E)"
 
-#: ../gtk/gtkmountoperation-stub.c:64
+#: ../gtk/gtkmountoperation-stub.c:62
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "ప్రక్రియను PID %d తో అంతముచేయుట వీలుకాదు. కార్యము అమలుపరుచబడలేదు."
 
 #. translators: this string is a name for the 'less' command
-#: ../gtk/gtkmountoperation-x11.c:960
+#: ../gtk/gtkmountoperation-x11.c:954
 msgid "Terminal Pager"
 msgstr "టెర్మినల్ పేజర్"
 
-#: ../gtk/gtkmountoperation-x11.c:961
+#: ../gtk/gtkmountoperation-x11.c:955
 msgid "Top Command"
 msgstr "ఉత్తమ ఆదేశము"
 
-#: ../gtk/gtkmountoperation-x11.c:962
+#: ../gtk/gtkmountoperation-x11.c:956
 msgid "Bourne Again Shell"
 msgstr "Bourne Again Shell"
 
-#: ../gtk/gtkmountoperation-x11.c:963
+#: ../gtk/gtkmountoperation-x11.c:957
 msgid "Bourne Shell"
 msgstr "Bourne Shell"
 
-#: ../gtk/gtkmountoperation-x11.c:964
+#: ../gtk/gtkmountoperation-x11.c:958
 msgid "Z Shell"
 msgstr "Z Shell"
 
-#: ../gtk/gtkmountoperation-x11.c:1061
+#: ../gtk/gtkmountoperation-x11.c:1055
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "ప్రక్రియను PID %d తో ముగించుట కుదరదు: %s"
 
-#: ../gtk/gtknotebook.c:4902 ../gtk/gtknotebook.c:7587
+#: ../gtk/gtknotebook.c:5035 ../gtk/gtknotebook.c:7689
 #, c-format
 msgid "Page %u"
 msgstr "పేజీ %u"
@@ -1714,26 +1965,26 @@ msgstr "పేజీ %u"
 #. Translators: the format here is used to build the string that will be rendered
 #. * in the number emblem.
 #.
-#: ../gtk/gtknumerableicon.c:482
+#: ../gtk/gtknumerableicon.c:481
 #, c-format
 msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
 
-#: ../gtk/gtkpagesetup.c:648 ../gtk/gtkpapersize.c:849
-#: ../gtk/gtkpapersize.c:889
+#: ../gtk/gtkpagesetup.c:646 ../gtk/gtkpapersize.c:846
+#: ../gtk/gtkpapersize.c:886
 msgid "Not a valid page setup file"
 msgstr "పేజీ అమరిక సరిగా లేదు"
 
-#: ../gtk/gtkpagesetupunixdialog.c:169
+#: ../gtk/gtkpagesetupunixdialog.c:167
 msgid "Any Printer"
 msgstr "ఏదైనా ముద్రకం"
 
-#: ../gtk/gtkpagesetupunixdialog.c:169
+#: ../gtk/gtkpagesetupunixdialog.c:167
 msgid "For portable documents"
 msgstr "చిన్న పత్రముల కొరకు"
 
-#: ../gtk/gtkpagesetupunixdialog.c:798
+#: ../gtk/gtkpagesetupunixdialog.c:796
 #, c-format
 msgid ""
 "Margins:\n"
@@ -1748,23 +1999,23 @@ msgstr ""
 " పైన: %s %s\n"
 " క్రింద: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:847 ../gtk/gtkprintunixdialog.c:3375
+#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3374
 msgid "Manage Custom Sizes..."
 msgstr "అనురూపిత పరిమాణాలను నిర్వహించు..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:898
+#: ../gtk/gtkpagesetupunixdialog.c:896
 msgid "_Format for:"
 msgstr "దీనికొరకు ఫార్మేట్ (_F):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:919 ../gtk/gtkprintunixdialog.c:3523
+#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3522
 msgid "_Paper size:"
 msgstr "కాగితపు పరిమాణం (_P):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:948
+#: ../gtk/gtkpagesetupunixdialog.c:946
 msgid "_Orientation:"
 msgstr "నేపథ్య దృష్టి (_O):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1008 ../gtk/gtkprintunixdialog.c:3578
+#: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3577
 msgid "Page Setup"
 msgstr "పేజీ అమరిక"
 
@@ -1776,23 +2027,23 @@ msgstr "పైన పథం"
 msgid "Down Path"
 msgstr "క్రింది పథం"
 
-#: ../gtk/gtkpathbar.c:1616
+#: ../gtk/gtkpathbar.c:1625
 msgid "File System Root"
 msgstr "ఫైల్ వ్యవస్థ రూట్"
 
-#: ../gtk/gtkprintbackend.c:749
+#: ../gtk/gtkprintbackend.c:748
 msgid "Authentication"
 msgstr "ధృవీకరణ"
 
-#: ../gtk/gtkprinteroptionwidget.c:692
+#: ../gtk/gtkprinteroptionwidget.c:728
 msgid "Not available"
 msgstr "అందుబాటులో లేదు"
 
-#: ../gtk/gtkprinteroptionwidget.c:792
+#: ../gtk/gtkprinteroptionwidget.c:828
 msgid "Select a folder"
 msgstr "ఒక సంచయాన్ని ఎంచుకొను"
 
-#: ../gtk/gtkprinteroptionwidget.c:807
+#: ../gtk/gtkprinteroptionwidget.c:843
 msgid "_Save in folder:"
 msgstr "సంచయములో భద్రపరుచు (_S):"
 
@@ -1800,184 +2051,180 @@ msgstr "సంచయములో భద్రపరుచు (_S):"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: ../gtk/gtkprintoperation.c:263
+#: ../gtk/gtkprintoperation.c:260
 #, c-format
 msgid "%s job #%d"
 msgstr "%s కార్యము #%d"
 
-#: ../gtk/gtkprintoperation.c:1768
+#: ../gtk/gtkprintoperation.c:1777
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "ప్రారంభ స్థితి"
 
-#: ../gtk/gtkprintoperation.c:1769
+#: ../gtk/gtkprintoperation.c:1778
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "ముద్రించుటకు సిద్దమౌతోంది"
 
-#: ../gtk/gtkprintoperation.c:1770
+#: ../gtk/gtkprintoperation.c:1779
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "డాటాను ఉద్భవింపజేస్తోంది"
 
-#: ../gtk/gtkprintoperation.c:1771
+#: ../gtk/gtkprintoperation.c:1780
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "డాటాను పంపుతోంది"
 
-#: ../gtk/gtkprintoperation.c:1772
+#: ../gtk/gtkprintoperation.c:1781
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "వేచివుంది"
 
-#: ../gtk/gtkprintoperation.c:1773
+#: ../gtk/gtkprintoperation.c:1782
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "సమస్యపై బ్లాక్‌చేస్తోంది"
 
-#: ../gtk/gtkprintoperation.c:1774
+#: ../gtk/gtkprintoperation.c:1783
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "ముద్రించుచున్నది"
 
-#: ../gtk/gtkprintoperation.c:1775
+#: ../gtk/gtkprintoperation.c:1784
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "ముగిసినది"
 
-#: ../gtk/gtkprintoperation.c:1776
+#: ../gtk/gtkprintoperation.c:1785
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "దోషముతో ముగిసినది"
 
-#: ../gtk/gtkprintoperation.c:2343
+#: ../gtk/gtkprintoperation.c:2352
 #, c-format
 msgid "Preparing %d"
 msgstr "%dని సిద్ధంచేస్తున్నది"
 
-#: ../gtk/gtkprintoperation.c:2345 ../gtk/gtkprintoperation.c:2975
+#: ../gtk/gtkprintoperation.c:2354 ../gtk/gtkprintoperation.c:2984
 msgid "Preparing"
 msgstr "సిద్దమౌతోంది"
 
-#: ../gtk/gtkprintoperation.c:2348
+#: ../gtk/gtkprintoperation.c:2357
 #, c-format
 msgid "Printing %d"
 msgstr "%dని ముద్రిస్తున్నది"
 
-#: ../gtk/gtkprintoperation.c:3005
+#: ../gtk/gtkprintoperation.c:3014
 msgid "Error creating print preview"
 msgstr "ముద్రణా మునుజూపును సృష్టించుటలో దోషం"
 
-#: ../gtk/gtkprintoperation.c:3008
+#: ../gtk/gtkprintoperation.c:3017
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "తాత్కాలిక ఫైల్ సృష్టించబడదు అనేది ఎక్కువ సంభవమున్న కారణం."
 
-#: ../gtk/gtkprintoperation-unix.c:304
+#: ../gtk/gtkprintoperation-unix.c:302
 msgid "Error launching preview"
 msgstr "మునుజూపును ప్రారంభించుటలో దోషం"
 
-#: ../gtk/gtkprintoperation-unix.c:477 ../gtk/gtkprintoperation-win32.c:1447
-msgid "Application"
-msgstr "అనువర్తనం"
-
-#: ../gtk/gtkprintoperation-win32.c:611
+#: ../gtk/gtkprintoperation-win32.c:609
 msgid "Printer offline"
 msgstr "ముద్రకం ఆఫ్‌లైన్"
 
-#: ../gtk/gtkprintoperation-win32.c:613
+#: ../gtk/gtkprintoperation-win32.c:611
 msgid "Out of paper"
 msgstr "కాగితం అయిపోయింది"
 
 #. Translators: this is a printer status.
-#: ../gtk/gtkprintoperation-win32.c:615
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2036
+#: ../gtk/gtkprintoperation-win32.c:613
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2047
 msgid "Paused"
 msgstr "నిలుపబడింది"
 
-#: ../gtk/gtkprintoperation-win32.c:617
+#: ../gtk/gtkprintoperation-win32.c:615
 msgid "Need user intervention"
 msgstr "వాడుకరి పరిశీలన అవసరం"
 
-#: ../gtk/gtkprintoperation-win32.c:717
+#: ../gtk/gtkprintoperation-win32.c:715
 msgid "Custom size"
 msgstr "అనురూపిత పరిమాణం"
 
-#: ../gtk/gtkprintoperation-win32.c:1539
+#: ../gtk/gtkprintoperation-win32.c:1537
 msgid "No printer found"
 msgstr "ఏ ముద్రకం కనుగొనబడలేదు"
 
-#: ../gtk/gtkprintoperation-win32.c:1566
+#: ../gtk/gtkprintoperation-win32.c:1564
 msgid "Invalid argument to CreateDC"
 msgstr "CreateDCకు చెల్లని వాదన"
 
-#: ../gtk/gtkprintoperation-win32.c:1602 ../gtk/gtkprintoperation-win32.c:1829
+#: ../gtk/gtkprintoperation-win32.c:1600 ../gtk/gtkprintoperation-win32.c:1827
 msgid "Error from StartDoc"
 msgstr "StartDoc నుండి దోషం"
 
-#: ../gtk/gtkprintoperation-win32.c:1684 ../gtk/gtkprintoperation-win32.c:1707
-#: ../gtk/gtkprintoperation-win32.c:1755
+#: ../gtk/gtkprintoperation-win32.c:1682 ../gtk/gtkprintoperation-win32.c:1705
+#: ../gtk/gtkprintoperation-win32.c:1753
 msgid "Not enough free memory"
 msgstr "సరిపడ ఖాళీ మెమోరీ లేదు"
 
-#: ../gtk/gtkprintoperation-win32.c:1760
+#: ../gtk/gtkprintoperation-win32.c:1758
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgex కు చెల్లని వాదన"
 
-#: ../gtk/gtkprintoperation-win32.c:1765
+#: ../gtk/gtkprintoperation-win32.c:1763
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgex కు చెల్లని సూచిక"
 
-#: ../gtk/gtkprintoperation-win32.c:1770
+#: ../gtk/gtkprintoperation-win32.c:1768
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgex కు చెల్లని సంభాలన"
 
-#: ../gtk/gtkprintoperation-win32.c:1775
+#: ../gtk/gtkprintoperation-win32.c:1773
 msgid "Unspecified error"
 msgstr "తెలుపబడని దోషం"
 
-#: ../gtk/gtkprintunixdialog.c:688
+#: ../gtk/gtkprintunixdialog.c:686
 msgid "Getting printer information failed"
 msgstr "ముద్రకము సమాచారం పొందుటలో విఫలమైంది."
 
-#: ../gtk/gtkprintunixdialog.c:1962
+#: ../gtk/gtkprintunixdialog.c:1959
 msgid "Getting printer information..."
 msgstr "ముద్రకం సమాచారాన్ని పొందుచున్నది..."
 
-#: ../gtk/gtkprintunixdialog.c:2236
+#: ../gtk/gtkprintunixdialog.c:2233
 msgid "Printer"
 msgstr "ముద్రకం"
 
 #. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2246
+#: ../gtk/gtkprintunixdialog.c:2243
 msgid "Location"
 msgstr "స్థానము"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2257
+#: ../gtk/gtkprintunixdialog.c:2254
 msgid "Status"
 msgstr "స్థితి"
 
-#: ../gtk/gtkprintunixdialog.c:2283
+#: ../gtk/gtkprintunixdialog.c:2280
 msgid "Range"
 msgstr "పరిధి"
 
-#: ../gtk/gtkprintunixdialog.c:2287
+#: ../gtk/gtkprintunixdialog.c:2284
 msgid "_All Pages"
 msgstr "అన్ని పేజీలు (_A)"
 
-#: ../gtk/gtkprintunixdialog.c:2292
+#: ../gtk/gtkprintunixdialog.c:2289
 msgid "C_urrent Page"
 msgstr "ప్రస్తుత పేజీ (_u)"
 
-#: ../gtk/gtkprintunixdialog.c:2300
+#: ../gtk/gtkprintunixdialog.c:2297
 msgid "Se_lection"
 msgstr "ఎంపిక (_l)"
 
-#: ../gtk/gtkprintunixdialog.c:2306
+#: ../gtk/gtkprintunixdialog.c:2303
 msgid "Pag_es:"
 msgstr "పేజీలు (_e):"
 
-#: ../gtk/gtkprintunixdialog.c:2307
+#: ../gtk/gtkprintunixdialog.c:2304
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -1985,28 +2232,28 @@ msgstr ""
 "ఒకటి లేదా ఎక్కువ పేజీ పరిధులను తెలియజేయి,\n"
 " ఉ.దా. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:2315
+#: ../gtk/gtkprintunixdialog.c:2313
 msgid "Pages"
 msgstr "పేజీలు"
 
-#: ../gtk/gtkprintunixdialog.c:2326
+#: ../gtk/gtkprintunixdialog.c:2324
 msgid "Copies"
 msgstr "నకళ్ళు"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2331
+#: ../gtk/gtkprintunixdialog.c:2329
 msgid "Copie_s:"
 msgstr "నకళ్ళు (_s):"
 
-#: ../gtk/gtkprintunixdialog.c:2346
+#: ../gtk/gtkprintunixdialog.c:2345
 msgid "C_ollate"
 msgstr "పోగుచేయి (_o)"
 
-#: ../gtk/gtkprintunixdialog.c:2352
+#: ../gtk/gtkprintunixdialog.c:2351
 msgid "_Reverse"
 msgstr "అపసవ్యం (_R)"
 
-#: ../gtk/gtkprintunixdialog.c:2368
+#: ../gtk/gtkprintunixdialog.c:2367
 msgid "General"
 msgstr "సాధారణ"
 
@@ -2016,168 +2263,168 @@ msgstr "సాధారణ"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3108
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3586
+#: ../gtk/gtkprintunixdialog.c:3107
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3603
 msgid "Left to right, top to bottom"
 msgstr "ఎడమ నుండి కుడికి, పై నుండి క్రిందికి"
 
-#: ../gtk/gtkprintunixdialog.c:3108
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3586
+#: ../gtk/gtkprintunixdialog.c:3107
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3603
 msgid "Left to right, bottom to top"
 msgstr "ఎడమ నుండి కుడికి, క్రింది నుండి పైకి"
 
-#: ../gtk/gtkprintunixdialog.c:3109
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: ../gtk/gtkprintunixdialog.c:3108
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3604
 msgid "Right to left, top to bottom"
 msgstr "కుడి నుండి ఎడమకి, పై నుండి క్రిందికి"
 
-#: ../gtk/gtkprintunixdialog.c:3109
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: ../gtk/gtkprintunixdialog.c:3108
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3604
 msgid "Right to left, bottom to top"
 msgstr "కుడి నుండి ఎడమకు, క్రింది నుండి పైకి"
 
-#: ../gtk/gtkprintunixdialog.c:3110
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3588
+#: ../gtk/gtkprintunixdialog.c:3109
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3605
 msgid "Top to bottom, left to right"
 msgstr "పై నుండి క్రిందికి, ఎడమ నుండి కుడికి"
 
-#: ../gtk/gtkprintunixdialog.c:3110
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3588
+#: ../gtk/gtkprintunixdialog.c:3109
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3605
 msgid "Top to bottom, right to left"
 msgstr "పై నుండి క్రిందికి, కుడి నుండి ఎడముకు"
 
-#: ../gtk/gtkprintunixdialog.c:3111
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3589
+#: ../gtk/gtkprintunixdialog.c:3110
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3606
 msgid "Bottom to top, left to right"
 msgstr "క్రింది నుండి పైకి, ఎడమ నుండి కుడికి"
 
-#: ../gtk/gtkprintunixdialog.c:3111
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3589
+#: ../gtk/gtkprintunixdialog.c:3110
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3606
 msgid "Bottom to top, right to left"
 msgstr "క్రింది నుండి పైకి, కుడి నుండి ఎడమకు"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3115 ../gtk/gtkprintunixdialog.c:3128
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3623
+#: ../gtk/gtkprintunixdialog.c:3114 ../gtk/gtkprintunixdialog.c:3127
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "Page Ordering"
 msgstr "పేజీ క్రమం"
 
-#: ../gtk/gtkprintunixdialog.c:3144
+#: ../gtk/gtkprintunixdialog.c:3143
 msgid "Left to right"
 msgstr "ఎడమ నుండి కుడికి"
 
-#: ../gtk/gtkprintunixdialog.c:3145
+#: ../gtk/gtkprintunixdialog.c:3144
 msgid "Right to left"
 msgstr "కుడి నుండి ఎడమకు"
 
-#: ../gtk/gtkprintunixdialog.c:3157
+#: ../gtk/gtkprintunixdialog.c:3156
 msgid "Top to bottom"
 msgstr "పై నుండి క్రిందికి"
 
-#: ../gtk/gtkprintunixdialog.c:3158
+#: ../gtk/gtkprintunixdialog.c:3157
 msgid "Bottom to top"
 msgstr "క్రింది నుండి పైకి"
 
-#: ../gtk/gtkprintunixdialog.c:3398
+#: ../gtk/gtkprintunixdialog.c:3397
 msgid "Layout"
 msgstr "నమూనా"
 
-#: ../gtk/gtkprintunixdialog.c:3402
+#: ../gtk/gtkprintunixdialog.c:3401
 msgid "T_wo-sided:"
 msgstr "రెండు-వైపులా (_w):"
 
-#: ../gtk/gtkprintunixdialog.c:3414
+#: ../gtk/gtkprintunixdialog.c:3413
 msgid "Pages per _side:"
 msgstr "ఒక ప్రక్కకి పేజీలు (_s):"
 
-#: ../gtk/gtkprintunixdialog.c:3428
+#: ../gtk/gtkprintunixdialog.c:3427
 msgid "Page or_dering:"
 msgstr "పేజీ క్రమపరచుట (_d):"
 
-#: ../gtk/gtkprintunixdialog.c:3441
+#: ../gtk/gtkprintunixdialog.c:3440
 msgid "_Only print:"
 msgstr "ముద్రణ మాత్రమే (_O):"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3453
+#: ../gtk/gtkprintunixdialog.c:3452
 msgid "All sheets"
 msgstr "అన్ని పేజీలు"
 
-#: ../gtk/gtkprintunixdialog.c:3454
+#: ../gtk/gtkprintunixdialog.c:3453
 msgid "Even sheets"
 msgstr "సరి పేజీలు"
 
-#: ../gtk/gtkprintunixdialog.c:3455
+#: ../gtk/gtkprintunixdialog.c:3454
 msgid "Odd sheets"
 msgstr "బేసి పేజీలు"
 
-#: ../gtk/gtkprintunixdialog.c:3458
+#: ../gtk/gtkprintunixdialog.c:3457
 msgid "Sc_ale:"
 msgstr "కొలత (_a):"
 
-#: ../gtk/gtkprintunixdialog.c:3482
+#: ../gtk/gtkprintunixdialog.c:3481
 msgid "Paper"
 msgstr "కాగితము"
 
-#: ../gtk/gtkprintunixdialog.c:3486
+#: ../gtk/gtkprintunixdialog.c:3485
 msgid "Paper _type:"
 msgstr "కాగిత రకం(_t):"
 
-#: ../gtk/gtkprintunixdialog.c:3498
+#: ../gtk/gtkprintunixdialog.c:3497
 msgid "Paper _source:"
 msgstr "కాగితం మూలం(_s):"
 
-#: ../gtk/gtkprintunixdialog.c:3510
+#: ../gtk/gtkprintunixdialog.c:3509
 msgid "Output t_ray:"
 msgstr "అవుట్‌పుట్ పళ్ళెం (_r):"
 
-#: ../gtk/gtkprintunixdialog.c:3543
+#: ../gtk/gtkprintunixdialog.c:3542
 msgid "Or_ientation:"
 msgstr "నేపథ్యదృష్టి (_i):"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3555
+#: ../gtk/gtkprintunixdialog.c:3554
 msgid "Portrait"
 msgstr "నిలువుచిత్రం"
 
-#: ../gtk/gtkprintunixdialog.c:3556
+#: ../gtk/gtkprintunixdialog.c:3555
 msgid "Landscape"
 msgstr "అడ్డచిత్రం"
 
-#: ../gtk/gtkprintunixdialog.c:3557
+#: ../gtk/gtkprintunixdialog.c:3556
 msgid "Reverse portrait"
 msgstr "అపసవ్య నిలువుచిత్రం"
 
-#: ../gtk/gtkprintunixdialog.c:3558
+#: ../gtk/gtkprintunixdialog.c:3557
 msgid "Reverse landscape"
 msgstr "అపసవ్య అడ్డచిత్రం"
 
-#: ../gtk/gtkprintunixdialog.c:3603
+#: ../gtk/gtkprintunixdialog.c:3602
 msgid "Job Details"
 msgstr "పని వివరాలు"
 
-#: ../gtk/gtkprintunixdialog.c:3607
+#: ../gtk/gtkprintunixdialog.c:3606
 msgid "Pri_ority:"
 msgstr "ప్రాముఖ్యత (_o):"
 
-#: ../gtk/gtkprintunixdialog.c:3619
+#: ../gtk/gtkprintunixdialog.c:3618
 msgid "_Billing info:"
 msgstr "బిల్లింగ్ సామాచారం(_B):"
 
-#: ../gtk/gtkprintunixdialog.c:3634
+#: ../gtk/gtkprintunixdialog.c:3633
 msgid "Print Document"
 msgstr "పత్రాన్ని ముద్రించు"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3641
+#: ../gtk/gtkprintunixdialog.c:3640
 msgid "_Now"
 msgstr "ఇప్పడు (_N)"
 
-#: ../gtk/gtkprintunixdialog.c:3650
+#: ../gtk/gtkprintunixdialog.c:3649
 msgid "A_t:"
 msgstr "వద్ద (_t):"
 
@@ -2185,7 +2432,7 @@ msgstr "వద్ద (_t):"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: ../gtk/gtkprintunixdialog.c:3656
+#: ../gtk/gtkprintunixdialog.c:3655
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2193,105 +2440,105 @@ msgstr ""
 "ముద్రణ యొక్క సమయాన్ని తెలుపుము.\n"
 " ఉదా. 15:30, 2:35 సా, 14:15:20, 11:46:30 ఉ, 4 సా"
 
-#: ../gtk/gtkprintunixdialog.c:3664
+#: ../gtk/gtkprintunixdialog.c:3663
 msgid "Time of print"
 msgstr "ముద్రించిన సమయం"
 
-#: ../gtk/gtkprintunixdialog.c:3678
+#: ../gtk/gtkprintunixdialog.c:3677
 msgid "On _hold"
 msgstr "నిలుపుదలలో ఉంది (_h)"
 
-#: ../gtk/gtkprintunixdialog.c:3679
+#: ../gtk/gtkprintunixdialog.c:3678
 msgid "Hold the job until it is explicitly released"
 msgstr "కార్యము బహిరంగముగా విడుదల అగునంతవరకు దానిని నిలిపివుంచు"
 
-#: ../gtk/gtkprintunixdialog.c:3697
+#: ../gtk/gtkprintunixdialog.c:3696
 msgid "Add Cover Page"
 msgstr "ముఖ పేజీని జతచేయి"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3704
+#: ../gtk/gtkprintunixdialog.c:3703
 msgid "Be_fore:"
 msgstr "ముందు (_f):"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3719
+#: ../gtk/gtkprintunixdialog.c:3718
 msgid "_After:"
 msgstr "తరువాత (_A):"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3734
+#: ../gtk/gtkprintunixdialog.c:3733
 msgid "Job"
 msgstr "పని"
 
-#: ../gtk/gtkprintunixdialog.c:3800
+#: ../gtk/gtkprintunixdialog.c:3799
 msgid "Advanced"
 msgstr "ఉన్నతం"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3838
+#: ../gtk/gtkprintunixdialog.c:3837
 msgid "Image Quality"
 msgstr "బొమ్మ నాణ్యత"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3842
+#: ../gtk/gtkprintunixdialog.c:3841
 msgid "Color"
 msgstr "వర్ణం"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3847
+#: ../gtk/gtkprintunixdialog.c:3846
 msgid "Finishing"
 msgstr "పూర్తిచేస్తున్నది"
 
-#: ../gtk/gtkprintunixdialog.c:3857
+#: ../gtk/gtkprintunixdialog.c:3856
 msgid "Some of the settings in the dialog conflict"
 msgstr "డైలాగ్ లోని కొన్ని అమర్పులు విభేదిస్తున్నాయి"
 
-#: ../gtk/gtkprintunixdialog.c:3880
+#: ../gtk/gtkprintunixdialog.c:3879
 msgid "Print"
 msgstr "ముద్రించు"
 
-#: ../gtk/gtkrecentchooserdefault.c:484
+#: ../gtk/gtkrecentchooserdefault.c:480
 msgid "Select which type of documents are shown"
 msgstr "ఏ రకపు పత్రాలు చూపించాలో ఎంచుకోండి"
 
-#: ../gtk/gtkrecentchooserdefault.c:1141 ../gtk/gtkrecentchooserdefault.c:1178
+#: ../gtk/gtkrecentchooserdefault.c:1130 ../gtk/gtkrecentchooserdefault.c:1167
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "URI '%s' కొరకు ఏ అంశము లేదు"
 
-#: ../gtk/gtkrecentchooserdefault.c:1305
+#: ../gtk/gtkrecentchooserdefault.c:1294
 msgid "Untitled filter"
 msgstr "శీర్షికలేని వడపోతకం"
 
-#: ../gtk/gtkrecentchooserdefault.c:1658
+#: ../gtk/gtkrecentchooserdefault.c:1647
 msgid "Could not remove item"
 msgstr "అంశమును తీసివేయలేము"
 
-#: ../gtk/gtkrecentchooserdefault.c:1702
+#: ../gtk/gtkrecentchooserdefault.c:1691
 msgid "Could not clear list"
 msgstr "జాబితాను శుభ్రం చేయలేము"
 
-#: ../gtk/gtkrecentchooserdefault.c:1786
+#: ../gtk/gtkrecentchooserdefault.c:1775
 msgid "Copy _Location"
 msgstr "స్థానమును నకలుతీయు (_L)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1799
+#: ../gtk/gtkrecentchooserdefault.c:1788
 msgid "_Remove From List"
 msgstr "జాబితా నుండి తీసివేయి (_R)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1808
+#: ../gtk/gtkrecentchooserdefault.c:1797
 msgid "_Clear List"
 msgstr "జాబితాను శుభ్రంచేయి (_C)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1822
+#: ../gtk/gtkrecentchooserdefault.c:1811
 msgid "Show _Private Resources"
 msgstr "వ్యక్తిగత మూలాలను చూపించు (_P)"
 
@@ -2305,21 +2552,21 @@ msgstr "వ్యక్తిగత మూలాలను చూపించు 
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:362
+#: ../gtk/gtkrecentchoosermenu.c:360
 msgid "No items found"
 msgstr "ఏ అంశములు కనుగొనబడలేదు"
 
-#: ../gtk/gtkrecentchoosermenu.c:528 ../gtk/gtkrecentchoosermenu.c:584
+#: ../gtk/gtkrecentchoosermenu.c:526 ../gtk/gtkrecentchoosermenu.c:582
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "URI `%s' తో ఇటీవల ఉపయోగించిన ఏ మూలం కనబడలేదు"
 
-#: ../gtk/gtkrecentchoosermenu.c:794
+#: ../gtk/gtkrecentchoosermenu.c:792
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s'ను తెరువు"
 
-#: ../gtk/gtkrecentchoosermenu.c:824
+#: ../gtk/gtkrecentchoosermenu.c:822
 msgid "Unknown item"
 msgstr "తెలియని అంశము"
 
@@ -2328,7 +2575,7 @@ msgstr "తెలియని అంశము"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:835
+#: ../gtk/gtkrecentchoosermenu.c:833
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2337,42 +2584,42 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:840
+#: ../gtk/gtkrecentchoosermenu.c:838
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1006 ../gtk/gtkrecentmanager.c:1019
-#: ../gtk/gtkrecentmanager.c:1156 ../gtk/gtkrecentmanager.c:1166
-#: ../gtk/gtkrecentmanager.c:1218 ../gtk/gtkrecentmanager.c:1227
-#: ../gtk/gtkrecentmanager.c:1242
+#: ../gtk/gtkrecentmanager.c:998 ../gtk/gtkrecentmanager.c:1011
+#: ../gtk/gtkrecentmanager.c:1148 ../gtk/gtkrecentmanager.c:1158
+#: ../gtk/gtkrecentmanager.c:1210 ../gtk/gtkrecentmanager.c:1219
+#: ../gtk/gtkrecentmanager.c:1234
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' తో ఒక అంశమును కనుగొనలేకపోయింది"
 
-#: ../gtk/gtkrecentmanager.c:2442
+#: ../gtk/gtkrecentmanager.c:2434
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "%s పేరుతో ఏ అనవవర్తనము అంశం కొరకు '%s' URI తో నమోదయినట్లు కనపడలేదు"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/gtkstock.c:313
+#: ../gtk/gtkstock.c:324
 msgctxt "Stock label"
 msgid "Information"
 msgstr "సమాచారం"
 
-#: ../gtk/gtkstock.c:314
+#: ../gtk/gtkstock.c:325
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "హెచ్చరిక"
 
-#: ../gtk/gtkstock.c:315
+#: ../gtk/gtkstock.c:326
 msgctxt "Stock label"
 msgid "Error"
 msgstr "దోషము"
 
-#: ../gtk/gtkstock.c:316
+#: ../gtk/gtkstock.c:327
 msgctxt "Stock label"
 msgid "Question"
 msgstr "ప్రశ్న"
@@ -2380,482 +2627,482 @@ msgstr "ప్రశ్న"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: ../gtk/gtkstock.c:321
+#: ../gtk/gtkstock.c:332
 msgctxt "Stock label"
 msgid "_About"
 msgstr "గురించి (_A)"
 
-#: ../gtk/gtkstock.c:322
+#: ../gtk/gtkstock.c:333
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "జతచేయి (_A)"
 
-#: ../gtk/gtkstock.c:323
+#: ../gtk/gtkstock.c:334
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "అనువర్తించు (_A)"
 
-#: ../gtk/gtkstock.c:324
+#: ../gtk/gtkstock.c:335
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "మందం (_B)"
 
-#: ../gtk/gtkstock.c:325
+#: ../gtk/gtkstock.c:336
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "రద్దుచేయి (_C)"
 
-#: ../gtk/gtkstock.c:326
+#: ../gtk/gtkstock.c:337
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "CD-Rom (_C)"
 
-#: ../gtk/gtkstock.c:327
+#: ../gtk/gtkstock.c:338
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "శుభ్రంచేయి (_C)"
 
-#: ../gtk/gtkstock.c:328
+#: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "మూసివేయి (_C)"
 
-#: ../gtk/gtkstock.c:329
+#: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "అనుసంధానించు (_o)"
 
-#: ../gtk/gtkstock.c:330
+#: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "పరివర్తించు (_C)"
 
-#: ../gtk/gtkstock.c:331
+#: ../gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "నకలుచేయి (_C)"
 
-#: ../gtk/gtkstock.c:332
+#: ../gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "కత్తిరించు (_t)"
 
-#: ../gtk/gtkstock.c:333
+#: ../gtk/gtkstock.c:344
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "తొలగించు (_D)"
 
-#: ../gtk/gtkstock.c:334
+#: ../gtk/gtkstock.c:345
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "వదిలివేయి (_D)"
 
-#: ../gtk/gtkstock.c:335
+#: ../gtk/gtkstock.c:346
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "అననుసంధానించు (_D)"
 
-#: ../gtk/gtkstock.c:336
+#: ../gtk/gtkstock.c:347
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "నిర్వర్తించు (_E)"
 
-#: ../gtk/gtkstock.c:337
+#: ../gtk/gtkstock.c:348
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "సవరణ (_E)"
 
-#: ../gtk/gtkstock.c:338
+#: ../gtk/gtkstock.c:349
 msgctxt "Stock label"
 msgid "_File"
 msgstr "ఫైల్ (_F)"
 
-#: ../gtk/gtkstock.c:339
+#: ../gtk/gtkstock.c:350
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "కనుగొను (_F)"
 
-#: ../gtk/gtkstock.c:340
+#: ../gtk/gtkstock.c:351
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "వెతుకు మరియు ప్రతిస్థాపించు (_R)"
 
-#: ../gtk/gtkstock.c:341
+#: ../gtk/gtkstock.c:352
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "ఫ్లాపీ (_F)"
 
-#: ../gtk/gtkstock.c:342
+#: ../gtk/gtkstock.c:353
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "నిండుతెర (_F)"
 
-#: ../gtk/gtkstock.c:343
+#: ../gtk/gtkstock.c:354
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "నిండుతెర వదిలిపెట్టు (_L)"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: ../gtk/gtkstock.c:345
+#: ../gtk/gtkstock.c:356
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "క్రింద (_B)"
 
 #. This is a navigation label as in "go to the first page"
-#: ../gtk/gtkstock.c:347
+#: ../gtk/gtkstock.c:358
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "మొదలు (_F)"
 
 #. This is a navigation label as in "go to the last page"
-#: ../gtk/gtkstock.c:349
+#: ../gtk/gtkstock.c:360
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "చివర (_P)"
 
 #. This is a navigation label as in "go to the top of the page"
-#: ../gtk/gtkstock.c:351
+#: ../gtk/gtkstock.c:362
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "పైన (_T)"
 
 #. This is a navigation label as in "go back"
-#: ../gtk/gtkstock.c:353
+#: ../gtk/gtkstock.c:364
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "వెనుక (_B)"
 
 #. This is a navigation label as in "go down"
-#: ../gtk/gtkstock.c:355
+#: ../gtk/gtkstock.c:366
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "క్రింద (_D)"
 
 #. This is a navigation label as in "go forward"
-#: ../gtk/gtkstock.c:357
+#: ../gtk/gtkstock.c:368
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "ముందు (_F)"
 
 #. This is a navigation label as in "go up"
-#: ../gtk/gtkstock.c:359
+#: ../gtk/gtkstock.c:370
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "పైన (_U)"
 
-#: ../gtk/gtkstock.c:360
+#: ../gtk/gtkstock.c:371
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "హార్డ్‍డిస్కు (_H)"
 
-#: ../gtk/gtkstock.c:361
+#: ../gtk/gtkstock.c:372
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "సహాయం (_H)"
 
-#: ../gtk/gtkstock.c:362
+#: ../gtk/gtkstock.c:373
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "నివాసం (_H)"
 
-#: ../gtk/gtkstock.c:363
+#: ../gtk/gtkstock.c:374
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "గంటును పెంచు"
 
-#: ../gtk/gtkstock.c:364
+#: ../gtk/gtkstock.c:375
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "గంటును తగ్గించు"
 
-#: ../gtk/gtkstock.c:365
+#: ../gtk/gtkstock.c:376
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "విషయసూచిక (_I)"
 
-#: ../gtk/gtkstock.c:366
+#: ../gtk/gtkstock.c:377
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "సమాచారం (_I)"
 
-#: ../gtk/gtkstock.c:367
+#: ../gtk/gtkstock.c:378
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "ఇటాలిక్ (_I)"
 
-#: ../gtk/gtkstock.c:368
+#: ../gtk/gtkstock.c:379
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "ఇచటకు గెంతు (_J)"
 
 #. This is about text justification, "centered text"
-#: ../gtk/gtkstock.c:370
+#: ../gtk/gtkstock.c:381
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "మధ్య (_C)"
 
 #. This is about text justification
-#: ../gtk/gtkstock.c:372
+#: ../gtk/gtkstock.c:383
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "నింపు (_F)"
 
 #. This is about text justification, "left-justified text"
-#: ../gtk/gtkstock.c:374
+#: ../gtk/gtkstock.c:385
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "ఎడమ (_L)"
 
 #. This is about text justification, "right-justified text"
-#: ../gtk/gtkstock.c:376
+#: ../gtk/gtkstock.c:387
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "కుడి (_R)"
 
 #. Media label, as in "fast forward"
-#: ../gtk/gtkstock.c:379
+#: ../gtk/gtkstock.c:390
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "ముందు (_F)"
 
 #. Media label, as in "next song"
-#: ../gtk/gtkstock.c:381
+#: ../gtk/gtkstock.c:392
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "తరువాత (_N)"
 
 #. Media label, as in "pause music"
-#: ../gtk/gtkstock.c:383
+#: ../gtk/gtkstock.c:394
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "నిలిపివేయి (_a)"
 
 #. Media label, as in "play music"
-#: ../gtk/gtkstock.c:385
+#: ../gtk/gtkstock.c:396
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "ఆడించు (_P)"
 
 #. Media label, as in  "previous song"
-#: ../gtk/gtkstock.c:387
+#: ../gtk/gtkstock.c:398
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "మునుపటి (_v)"
 
 #. Media label
-#: ../gtk/gtkstock.c:389
+#: ../gtk/gtkstock.c:400
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "రికార్డుచేయి (_R)"
 
 #. Media label
-#: ../gtk/gtkstock.c:391
+#: ../gtk/gtkstock.c:402
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "రివైండ్‌చేయి (_e)"
 
 #. Media label
-#: ../gtk/gtkstock.c:393
+#: ../gtk/gtkstock.c:404
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "ఆపివేయి (_S)"
 
-#: ../gtk/gtkstock.c:394
+#: ../gtk/gtkstock.c:405
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "నెట్‌వర్క్ (_N)"
 
-#: ../gtk/gtkstock.c:395
+#: ../gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "_New"
 msgstr "కొత్త (_N)"
 
-#: ../gtk/gtkstock.c:396
+#: ../gtk/gtkstock.c:407
 msgctxt "Stock label"
 msgid "_No"
 msgstr "వద్దు (_N)"
 
-#: ../gtk/gtkstock.c:397
+#: ../gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "సరే (_O)"
 
-#: ../gtk/gtkstock.c:398
+#: ../gtk/gtkstock.c:409
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "తెరవు (_O)"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:400
+#: ../gtk/gtkstock.c:411
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "అడ్డచిత్రం"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:402
+#: ../gtk/gtkstock.c:413
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "నిలువుచిత్రం"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:404
+#: ../gtk/gtkstock.c:415
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "అపసవ్య అడ్డచిత్రం"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:406
+#: ../gtk/gtkstock.c:417
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "అపసవ్య నిలువుచిత్రం"
 
-#: ../gtk/gtkstock.c:407
+#: ../gtk/gtkstock.c:418
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "పేజీ అమరిక (_u)"
 
-#: ../gtk/gtkstock.c:408
+#: ../gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "అతికించు (_P)"
 
-#: ../gtk/gtkstock.c:409
+#: ../gtk/gtkstock.c:420
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "ప్రాధాన్యతలు (_P)"
 
-#: ../gtk/gtkstock.c:410
+#: ../gtk/gtkstock.c:421
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "ముద్రించు (_P)"
 
-#: ../gtk/gtkstock.c:411
+#: ../gtk/gtkstock.c:422
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "ముద్రణా మునుజూపు (_v)"
 
-#: ../gtk/gtkstock.c:412
+#: ../gtk/gtkstock.c:423
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "లక్షణాలు (_P)"
 
-#: ../gtk/gtkstock.c:413
+#: ../gtk/gtkstock.c:424
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "నిష్క్రమించు (_Q)"
 
-#: ../gtk/gtkstock.c:414
+#: ../gtk/gtkstock.c:425
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "మళ్ళీచేయు (_R)"
 
-#: ../gtk/gtkstock.c:415
+#: ../gtk/gtkstock.c:426
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "తాజాపరుచు (_R)"
 
-#: ../gtk/gtkstock.c:416
+#: ../gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "తీసివేయి (_R)"
 
-#: ../gtk/gtkstock.c:417
+#: ../gtk/gtkstock.c:428
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "యథాస్థితికి తెచ్చు (_R)"
 
-#: ../gtk/gtkstock.c:418
+#: ../gtk/gtkstock.c:429
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "భద్రపరుచు (_S)"
 
-#: ../gtk/gtkstock.c:419
+#: ../gtk/gtkstock.c:430
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "ఇలా భద్రపరుచు (_A)"
 
-#: ../gtk/gtkstock.c:420
+#: ../gtk/gtkstock.c:431
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "అన్నిటినీ ఎంచుకొను (_A)"
 
-#: ../gtk/gtkstock.c:421
+#: ../gtk/gtkstock.c:432
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "వర్ణము (_C)"
 
-#: ../gtk/gtkstock.c:422
+#: ../gtk/gtkstock.c:433
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "ఫాంటు (_F)"
 
 #. Sorting direction
-#: ../gtk/gtkstock.c:424
+#: ../gtk/gtkstock.c:435
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "ఆరోహణ (_A)"
 
 #. Sorting direction
-#: ../gtk/gtkstock.c:426
+#: ../gtk/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "అవరోహణ (_D)"
 
-#: ../gtk/gtkstock.c:427
+#: ../gtk/gtkstock.c:438
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "అక్షరక్రమ  తనిఖీ (_S)"
 
-#: ../gtk/gtkstock.c:428
+#: ../gtk/gtkstock.c:439
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "ఆపివేయి (_S)"
 
 #. Font variant
-#: ../gtk/gtkstock.c:430
+#: ../gtk/gtkstock.c:441
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "కొట్టివేత (_S)"
 
-#: ../gtk/gtkstock.c:431
+#: ../gtk/gtkstock.c:442
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "తొలగించనిది (_U)"
 
 #. Font variant
-#: ../gtk/gtkstock.c:433
+#: ../gtk/gtkstock.c:444
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "కిందగీత (_U)"
 
-#: ../gtk/gtkstock.c:434
+#: ../gtk/gtkstock.c:445
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "రద్దుచేయి (_U)"
 
-#: ../gtk/gtkstock.c:435
+#: ../gtk/gtkstock.c:446
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "అవును (_Y)"
 
 #. Zoom
-#: ../gtk/gtkstock.c:437
+#: ../gtk/gtkstock.c:448
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "సాధారణ పరిమాణం (_N)"
 
 #. Zoom
-#: ../gtk/gtkstock.c:439
+#: ../gtk/gtkstock.c:450
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "ఉత్తమ అమరిక (_F)"
 
-#: ../gtk/gtkstock.c:440
+#: ../gtk/gtkstock.c:451
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "జూమ్‌పెంచు (_I)"
 
-#: ../gtk/gtkstock.c:441
+#: ../gtk/gtkstock.c:452
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "జూమ్‌తగ్గించు (_O)"
@@ -2864,7 +3111,7 @@ msgstr "జూమ్‌తగ్గించు (_O)"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:335 ../gtk/gtkswitch.c:395 ../gtk/gtkswitch.c:602
+#: ../gtk/gtkswitch.c:347 ../gtk/gtkswitch.c:407 ../gtk/gtkswitch.c:614
 msgctxt "switch"
 msgid "ON"
 msgstr "ఆన్‌చేయి"
@@ -2872,212 +3119,212 @@ msgstr "ఆన్‌చేయి"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:343 ../gtk/gtkswitch.c:396 ../gtk/gtkswitch.c:631
+#: ../gtk/gtkswitch.c:355 ../gtk/gtkswitch.c:408 ../gtk/gtkswitch.c:643
 msgctxt "switch"
 msgid "OFF"
 msgstr "ఆఫ్‌చేయి"
 
-#: ../gtk/gtktextbufferrichtext.c:651
+#: ../gtk/gtktextbufferrichtext.c:649
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "%s ను అపక్రమపరుస్తున్నప్పుడు తెలియని దోషం"
 
-#: ../gtk/gtktextbufferrichtext.c:710
+#: ../gtk/gtktextbufferrichtext.c:708
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "%s ఫార్మేటుకు ఏ అపక్రమ ప్రమేయం కనపడలేదు"
 
-#: ../gtk/gtktextbufferserialize.c:800 ../gtk/gtktextbufferserialize.c:826
+#: ../gtk/gtktextbufferserialize.c:798 ../gtk/gtktextbufferserialize.c:824
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "<%s> మూలకం పై \"id\" మరియు \"name\" రెండూ కనుగొనబడినవి"
 
-#: ../gtk/gtktextbufferserialize.c:810 ../gtk/gtktextbufferserialize.c:836
+#: ../gtk/gtktextbufferserialize.c:808 ../gtk/gtktextbufferserialize.c:834
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "యాట్రిబ్యూట్ \"%s\" అనునది <%s> మూలకం పై రెండు సార్లు కనబడింది"
 
-#: ../gtk/gtktextbufferserialize.c:852
+#: ../gtk/gtktextbufferserialize.c:850
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
 msgstr "<%s> మూలకం సరికాని  ID \"%s\" కలిగివుంది"
 
-#: ../gtk/gtktextbufferserialize.c:862
+#: ../gtk/gtktextbufferserialize.c:860
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> మూలకం \"name\" మరియు \"id\" యాట్రిబ్యూట్‌ను కలిగిలేదు"
 
-#: ../gtk/gtktextbufferserialize.c:949
+#: ../gtk/gtktextbufferserialize.c:947
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "యాట్రిబ్యూట్ \"%s\" అదేమూలకం <%s> పైన రెండసార్లు పునరావృతమైంది"
 
-#: ../gtk/gtktextbufferserialize.c:967 ../gtk/gtktextbufferserialize.c:992
+#: ../gtk/gtktextbufferserialize.c:965 ../gtk/gtktextbufferserialize.c:990
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "యాట్రిబ్యూట్ \"%s\" అనునది ఈ సందర్భంలో <%s> మూలకంపై చెల్లనిది"
 
-#: ../gtk/gtktextbufferserialize.c:1031
+#: ../gtk/gtktextbufferserialize.c:1029
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "\"%s\" అనే ట్యాగు నిర్వచించబడలేదు"
 
-#: ../gtk/gtktextbufferserialize.c:1043
+#: ../gtk/gtktextbufferserialize.c:1041
 msgid "Anonymous tag found and tags can not be created."
 msgstr "అనామక ట్యాగు కనుగొనబడింది మరియు టాగులు సృష్టించడలేదు"
 
-#: ../gtk/gtktextbufferserialize.c:1054
+#: ../gtk/gtktextbufferserialize.c:1052
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "ట్యాగ్ \"%s\" బఫర్ నందు లేదు మరియు టాగ్స్  సృష్టించబడలేవు."
 
-#: ../gtk/gtktextbufferserialize.c:1153 ../gtk/gtktextbufferserialize.c:1228
-#: ../gtk/gtktextbufferserialize.c:1333 ../gtk/gtktextbufferserialize.c:1407
+#: ../gtk/gtktextbufferserialize.c:1151 ../gtk/gtktextbufferserialize.c:1226
+#: ../gtk/gtktextbufferserialize.c:1331 ../gtk/gtktextbufferserialize.c:1405
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "<%s> మూలకం <%s> క్రింద అనుమతించబడదు"
 
-#: ../gtk/gtktextbufferserialize.c:1184
+#: ../gtk/gtktextbufferserialize.c:1182
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "\"%s\" చెల్లునటువంటి యాట్రిబ్యూట్ కాదు"
 
-#: ../gtk/gtktextbufferserialize.c:1192
+#: ../gtk/gtktextbufferserialize.c:1190
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "\"%s\" అనునది చెల్లునటువంటి యాట్రిబ్యూట్ పేరు కాదు"
 
-#: ../gtk/gtktextbufferserialize.c:1202
+#: ../gtk/gtktextbufferserialize.c:1200
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" అనునది \"%s\" రకమైన విలువకు \"%s\" యాట్రిబ్యూట్ కొరకు మార్చబడలేదు"
 
-#: ../gtk/gtktextbufferserialize.c:1211
+#: ../gtk/gtktextbufferserialize.c:1209
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "\"%s\" అనునది యాట్రిబ్యూట్ \"%s\" కు తగిన విలువకాదు"
 
-#: ../gtk/gtktextbufferserialize.c:1296
+#: ../gtk/gtktextbufferserialize.c:1294
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "\"%s\" ట్యాగు ఇప్పటికే నిర్వచించబడింది"
 
-#: ../gtk/gtktextbufferserialize.c:1309
+#: ../gtk/gtktextbufferserialize.c:1307
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "ట్యాగ్ \"%s\" అనునది చెల్లని ప్రాముఖ్యత \"%s\" ను కలిగివుంది"
 
-#: ../gtk/gtktextbufferserialize.c:1362
+#: ../gtk/gtktextbufferserialize.c:1360
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "దాదాపుబయటఉండు మూలకం పఠ్యములో తప్పక <text_view_markup> కావాలి <%s> కాదు"
 
-#: ../gtk/gtktextbufferserialize.c:1371 ../gtk/gtktextbufferserialize.c:1387
+#: ../gtk/gtktextbufferserialize.c:1369 ../gtk/gtktextbufferserialize.c:1385
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "<%s> అను మూలకం ఇప్పటికే తెలుపబడివుంది"
 
-#: ../gtk/gtktextbufferserialize.c:1393
+#: ../gtk/gtktextbufferserialize.c:1391
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "<tags> మూలకం కంటే ముందు <text>మూలకం రాకూడదు"
 
-#: ../gtk/gtktextbufferserialize.c:1793
+#: ../gtk/gtktextbufferserialize.c:1790
 msgid "Serialized data is malformed"
 msgstr "క్రమపరిచిన డాటా తప్పైనది"
 
-#: ../gtk/gtktextbufferserialize.c:1871
+#: ../gtk/gtktextbufferserialize.c:1868
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "క్రమపరిచిన డాటా తప్పైనది. మొదటి విభాగం GTKTEXTBUFFERCONTENTS-0001 కాదు"
 
-#: ../gtk/gtktextutil.c:60
+#: ../gtk/gtktextutil.c:58
 msgid "LRM _Left-to-right mark"
 msgstr "LRM ఎడమ-నుండి-కుడి గుర్తు (_L)"
 
-#: ../gtk/gtktextutil.c:61
+#: ../gtk/gtktextutil.c:59
 msgid "RLM _Right-to-left mark"
 msgstr "RLM కుడి-నుండి-ఎడమ గుర్తు (_R)"
 
-#: ../gtk/gtktextutil.c:62
+#: ../gtk/gtktextutil.c:60
 msgid "LRE Left-to-right _embedding"
 msgstr "LRE ఎడమ-నుండి-కుడి ఎంబెడింగ్ (_e)"
 
-#: ../gtk/gtktextutil.c:63
+#: ../gtk/gtktextutil.c:61
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE కుడి-నుండి-ఎడమ ఎంబెడింగ్ (_m)"
 
-#: ../gtk/gtktextutil.c:64
+#: ../gtk/gtktextutil.c:62
 msgid "LRO Left-to-right _override"
 msgstr "LRO ఎడమ-నుండి-కుడి ఒవర్‌రైడ్(_o)"
 
-#: ../gtk/gtktextutil.c:65
+#: ../gtk/gtktextutil.c:63
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO కుడి-నుండి-ఎడమ ఒవర్‌రైడ్(_v)"
 
-#: ../gtk/gtktextutil.c:66
+#: ../gtk/gtktextutil.c:64
 msgid "PDF _Pop directional formatting"
 msgstr "PDF నిర్దేశపూరిత రూపీకరణ (_P)"
 
-#: ../gtk/gtktextutil.c:67
+#: ../gtk/gtktextutil.c:65
 msgid "ZWS _Zero width space"
 msgstr "ZWS సున్నా వెడల్పు ఖాళీ (_Z)"
 
-#: ../gtk/gtktextutil.c:68
+#: ../gtk/gtktextutil.c:66
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ సున్నా వెడల్పు కలుపునది (_j)"
 
-#: ../gtk/gtktextutil.c:69
+#: ../gtk/gtktextutil.c:67
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ సున్నా వెడల్పు కలుపనిది (_n)"
 
-#: ../gtk/gtkuimanager.c:1760
+#: ../gtk/gtkuimanager.c:1777
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "అనుకోని ప్రారంభ ట్యాగ్ '%s' వరుస %d అక్షరం %d పైన"
 
-#: ../gtk/gtkuimanager.c:1850
+#: ../gtk/gtkuimanager.c:1867
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "అనుకోని అక్షర డాటా వరుస %d అక్షరం %d పైన"
 
-#: ../gtk/gtkuimanager.c:2682
+#: ../gtk/gtkuimanager.c:2734
 msgid "Empty"
 msgstr "ఖాళీ"
 
-#: ../gtk/gtkvolumebutton.c:170
+#: ../gtk/gtkvolumebutton.c:169
 msgid "Volume"
 msgstr "శబ్దస్థాయి"
 
-#: ../gtk/gtkvolumebutton.c:172
+#: ../gtk/gtkvolumebutton.c:171
 msgid "Turns volume down or up"
 msgstr "శబ్దస్థాయి తగ్గించు లేదా పెంచుము"
 
-#: ../gtk/gtkvolumebutton.c:175
+#: ../gtk/gtkvolumebutton.c:174
 msgid "Adjusts the volume"
 msgstr "శబ్దస్థాయిని సరిదిద్దు"
 
-#: ../gtk/gtkvolumebutton.c:181 ../gtk/gtkvolumebutton.c:184
+#: ../gtk/gtkvolumebutton.c:180 ../gtk/gtkvolumebutton.c:183
 msgid "Volume Down"
 msgstr "శబ్దము తగ్గించు"
 
-#: ../gtk/gtkvolumebutton.c:183
+#: ../gtk/gtkvolumebutton.c:182
 msgid "Decreases the volume"
 msgstr "శబ్దమును తగ్గిస్తుంది"
 
-#: ../gtk/gtkvolumebutton.c:187 ../gtk/gtkvolumebutton.c:190
+#: ../gtk/gtkvolumebutton.c:186 ../gtk/gtkvolumebutton.c:189
 msgid "Volume Up"
 msgstr "శబ్దము పెంచు"
 
-#: ../gtk/gtkvolumebutton.c:189
+#: ../gtk/gtkvolumebutton.c:188
 msgid "Increases the volume"
 msgstr "శబ్దమును పెంచుతుంది"
 
-#: ../gtk/gtkvolumebutton.c:247
+#: ../gtk/gtkvolumebutton.c:246
 msgid "Muted"
 msgstr "నిశబ్దం"
 
-#: ../gtk/gtkvolumebutton.c:251
+#: ../gtk/gtkvolumebutton.c:250
 msgid "Full Volume"
 msgstr "పూర్తి శబ్దము"
 
@@ -3086,7 +3333,7 @@ msgstr "పూర్తి శబ్దము"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: ../gtk/gtkvolumebutton.c:264
+#: ../gtk/gtkvolumebutton.c:263
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -3912,101 +4159,101 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: ../gtk/updateiconcache.c:1370
+#: ../gtk/updateiconcache.c:1368
 #, c-format
 msgid "Failed to write header\n"
 msgstr "పీఠిక కు వ్రాయుటలో విఫైలమైంది\n"
 
-#: ../gtk/updateiconcache.c:1376
+#: ../gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "హాష్ పట్టికకు వ్రాయుటలో విఫలమైంది\n"
 
-#: ../gtk/updateiconcache.c:1382
+#: ../gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "సంచయపు ఇండెక్స్ కు వ్రాయుటలో విఫలమైంది\n"
 
-#: ../gtk/updateiconcache.c:1390
+#: ../gtk/updateiconcache.c:1388
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "పీఠికకు తిరిగివ్రాయుటలో విఫలమైంది\n"
 
-#: ../gtk/updateiconcache.c:1484
+#: ../gtk/updateiconcache.c:1482
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "%s ఫైలును తెరుచుటలో విఫలమైంది : %s\n"
 
-#: ../gtk/updateiconcache.c:1492 ../gtk/updateiconcache.c:1522
+#: ../gtk/updateiconcache.c:1490 ../gtk/updateiconcache.c:1520
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "క్యాచి ఫైలుకు వ్రాయుటలో విఫలమైంది: %s\n"
 
-#: ../gtk/updateiconcache.c:1533
+#: ../gtk/updateiconcache.c:1530
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "ఉద్భవించిన క్యాచి చెల్లనిది.\n"
 
-#: ../gtk/updateiconcache.c:1547
+#: ../gtk/updateiconcache.c:1544
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s ను %s కు పేరుమార్చలేము: %s, అలాగైతే %s ను తీసివేయండి.\n"
 
-#: ../gtk/updateiconcache.c:1561
+#: ../gtk/updateiconcache.c:1558
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s ను %s కు పేరుమార్చలేము: %s\n"
 
-#: ../gtk/updateiconcache.c:1571
+#: ../gtk/updateiconcache.c:1568
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s ను మరలా వెనుకకు %s కు పేరుమార్చలేము: %s.\n"
 
-#: ../gtk/updateiconcache.c:1598
+#: ../gtk/updateiconcache.c:1595
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "క్యాచి ఫైల్ విజయవంతంగా సృష్టించబడింది.\n"
 
-#: ../gtk/updateiconcache.c:1637
+#: ../gtk/updateiconcache.c:1634
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "ఉన్న క్యాచిని దిద్దివ్రాయి, ఇప్పటివరకు ఖచ్చితంగా ఉన్నా కూడా"
 
-#: ../gtk/updateiconcache.c:1638
+#: ../gtk/updateiconcache.c:1635
 msgid "Don't check for the existence of index.theme"
 msgstr "index.theme ఉందేమోనని పరిశీలించవద్దు"
 
-#: ../gtk/updateiconcache.c:1639
+#: ../gtk/updateiconcache.c:1636
 msgid "Don't include image data in the cache"
 msgstr "బొమ్మ డాటాను క్యాచినందు చేర్చవద్దు"
 
-#: ../gtk/updateiconcache.c:1640
+#: ../gtk/updateiconcache.c:1637
 msgid "Output a C header file"
 msgstr "C పీఠిక ఫైలుని అవుట్‌పుట్‌గా ఉంచు"
 
-#: ../gtk/updateiconcache.c:1641
+#: ../gtk/updateiconcache.c:1638
 msgid "Turn off verbose output"
 msgstr "వెర్బోస్ అవట్‌పుట్‌ను ఆపివేయి"
 
-#: ../gtk/updateiconcache.c:1642
+#: ../gtk/updateiconcache.c:1639
 msgid "Validate existing icon cache"
 msgstr "ఉన్న ప్రతీక క్యాచీని సరిచూడు"
 
-#: ../gtk/updateiconcache.c:1709
+#: ../gtk/updateiconcache.c:1706
 #, c-format
 msgid "File not found: %s\n"
 msgstr "ఫైల్ కనబడలేదు: %s\n"
 
-#: ../gtk/updateiconcache.c:1715
+#: ../gtk/updateiconcache.c:1712
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "చెల్లునటువంటి ప్రతీక క్యాచీ కాదు: %s\n"
 
-#: ../gtk/updateiconcache.c:1728
+#: ../gtk/updateiconcache.c:1725
 #, c-format
 msgid "No theme index file.\n"
 msgstr "ఏ థీమ్ విషయసూచిక ఫైల్ లేదు.\n"
 
-#: ../gtk/updateiconcache.c:1732
+#: ../gtk/updateiconcache.c:1729
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4016,308 +4263,308 @@ msgstr ""
 "మీరు ఇక్కడ ఖచ్చితంగా ప్రతీక క్యాచీని సృష్టిద్దామనుకుంటే, --ignore-theme-index.\n"
 
 #. ID
-#: ../modules/input/imam-et.c:454
+#: ../modules/input/imam-et.c:452
 msgid "Amharic (EZ+)"
 msgstr "అమహరిక్ (EZ+)"
 
 #. ID
-#: ../modules/input/imcedilla.c:92
+#: ../modules/input/imcedilla.c:90
 msgid "Cedilla"
 msgstr "సెడిల్లా"
 
 #. ID
-#: ../modules/input/imcyrillic-translit.c:217
+#: ../modules/input/imcyrillic-translit.c:215
 msgid "Cyrillic (Transliterated)"
 msgstr "Cyrillic (సిరిల్లిక్)"
 
 #. ID
-#: ../modules/input/iminuktitut.c:127
+#: ../modules/input/iminuktitut.c:125
 msgid "Inuktitut (Transliterated)"
 msgstr "Inuktitut(ఇనుక్తిత్)"
 
 #. ID
-#: ../modules/input/imipa.c:145
+#: ../modules/input/imipa.c:143
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: ../modules/input/immultipress.c:31
+#: ../modules/input/immultipress.c:29
 msgid "Multipress"
 msgstr "మల్టిప్రెస్"
 
 #. ID
-#: ../modules/input/imthai.c:35
+#: ../modules/input/imthai.c:33
 msgid "Thai-Lao"
 msgstr "థాయ్-లో"
 
 #. ID
-#: ../modules/input/imti-er.c:453
+#: ../modules/input/imti-er.c:451
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "టైగ్రిగ్నా-ఎరిట్రియన్ (EZ+)"
 
 #. ID
-#: ../modules/input/imti-et.c:453
+#: ../modules/input/imti-et.c:451
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "ట్రైగ్రిగ్నా-ఇథియోపియన్ (EZ+)"
 
 #. ID
-#: ../modules/input/imviqr.c:244
+#: ../modules/input/imviqr.c:242
 msgid "Vietnamese (VIQR)"
 msgstr "వియత్నామీస్ (VIQR)"
 
 #. ID
-#: ../modules/input/imxim.c:28
+#: ../modules/input/imxim.c:26
 msgid "X Input Method"
 msgstr "X ఇన్‌పుట్ పద్ధతి"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:829
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1048
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:844
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1059
 msgid "Username:"
 msgstr "వాడుకరిపేరు:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:830
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1057
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:845
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1068
 msgid "Password:"
 msgstr "సంకేతపదము:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:869
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1070
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:884
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1081
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "ముద్రకం %2$s పైన పత్రము '%1$s'ను ముద్రించుటకు ధృవీకరణ అవసరమైంది"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:871
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:886
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "%s పైన పత్రమును ముద్రించుటకు ధృవీకరణ అవసరమైంది"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:875
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:890
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "కార్యము '%s' యొక్క యాట్రిబ్యూట్లను పొందుటకు ధృవీకరణ అవసరమైంది"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:877
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:892
 msgid "Authentication is required to get attributes of a job"
 msgstr "ఒక కార్యము యొక్క యాట్రిబ్యూట్లను పొందుటకు ధృవీకరణ అవసరమైంది"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:881
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:896
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "ముద్రకం %s యొక్క యాట్రిబ్యూట్లను పొందుటకు ధృవీకరణ అవసరమైంది"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:883
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:898
 msgid "Authentication is required to get attributes of a printer"
 msgstr "ముద్రకం యొక్క యాట్రిబ్యూట్లను పొందుటకు ధృవీకరణ అవసరమైంది"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:886
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:901
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "%s యొక్క అప్రమేయ ముద్రకమును పొందుటకు ధృవీకరణ అవసరమైంది"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:889
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:904
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "%s నుండి ముద్రకాలను పొందుటకు ధృవీకరణ అవసరమైంది"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:894
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:909
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%s నుండి ఫైలును పొందుటకు ధృవీకరణ అవసరమైంది"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:896
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:911
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s పైన ధృవీకరణ అవసరమైంది"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1053
 msgid "Domain:"
 msgstr "డొమైన్:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1072
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1083
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "'%s' పత్రం ముద్రించుటకు ధృవీకరణ అవసరం."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1077
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1088
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "'%s'  ముద్రకము పై  ఈ పత్రాన్ని ముద్రించుటకు ధృవీకరణ అవసరం."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1079
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1090
 msgid "Authentication is required to print this document"
 msgstr "ఈ పత్ర ముద్రణకు ధృవీకరణ అవసరం."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1704
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1715
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "టోనర్‌నందు ముద్రకం '%s' తక్కువగావుంది."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1705
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1716
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "ముద్రకం '%s' లో ఎటువంటి టోనర్ మిగిలిలేదు."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1707
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1718
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "అభివృద్ధియందు ముద్రకం '%s' తక్కువగావుంది"
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1709
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1720
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "ముద్రకం '%s' అభివృద్దికి బయటవుంది."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1711
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1722
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "కనీసం ఏక వర్ణపు పంపిణీయందు కూడా ముద్రకం '%s' తక్కువగావుంది."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1713
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1724
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "కనీస ఏక వర్ణపు పంపిణీయందు ముద్రకం '%s' లేదు."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1714
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1725
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "ముద్రకం '%s' పైతొడుగు తెరిచివుంది."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1715
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1726
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "ముద్రకం '%s' పై తలుపు తెరిచివుంది."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1716
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1727
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "ముద్రకం '%s' తక్కువ కాగితాలతోవుంది."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1717
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1728
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "ముద్రకం '%s'నందు కాగితాలులేవు."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1718
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1729
 #, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "ముద్రకం '%s'  ఆఫ్‌లైనులో వుంది."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1719
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1730
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "ముద్రకం '%s' నందు ఒక సమస్యవుంది."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2033
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2044
 msgid "Paused ; Rejecting Jobs"
 msgstr "నిలిపివేయబడింది ; కార్యములను తిరస్కరిస్తోంది"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2039
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2050
 msgid "Rejecting Jobs"
 msgstr "కార్యములను తిరస్కరిస్తోంది"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2822
 msgid "Two Sided"
 msgstr "రెండు వైపుల"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2813
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2823
 msgid "Paper Type"
 msgstr "కాగితం రకం"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2824
 msgid "Paper Source"
 msgstr "కాగితం మూలం"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2815
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2825
 msgid "Output Tray"
 msgstr "అవుట్‌పుట్ పళ్ళెం"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Resolution"
 msgstr "విభాజకత"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2817
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2827
 msgid "GhostScript pre-filtering"
 msgstr "గోస్టుస్క్రిప్టు ప్రి-ఫిల్టరింగ్"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2826
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2836
 msgid "One Sided"
 msgstr "ఒక వైపునే"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2828
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2838
 msgid "Long Edge (Standard)"
 msgstr "పొడవు అంచు (ప్రామాణికమైన)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2830
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2840
 msgid "Short Edge (Flip)"
 msgstr "పొట్టి అంచు (మడుచు)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2832
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2834
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2842
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2844
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2852
 msgid "Auto Select"
 msgstr "స్వయంచాలకంగా ఎంచుకొను"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2836
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2838
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2840
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2844
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3340
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2846
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2848
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2850
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2854
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3346
 msgid "Printer Default"
 msgstr "ముద్రకం అప్రమేయం"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2846
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2856
 msgid "Embed GhostScript fonts only"
 msgstr "కూర్చిన గోస్టుస్క్రిప్టు ఫాంట్లు మాత్రమే"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2848
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2858
 msgid "Convert to PS level 1"
 msgstr "PS స్థాయి 1కు మార్చుము"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2850
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2860
 msgid "Convert to PS level 2"
 msgstr "PS స్థాయి 2కు మార్చుము"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2852
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2862
 msgid "No pre-filtering"
 msgstr "ముందస్తు-వడపోత లేదు"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2861
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Miscellaneous"
 msgstr "కలగలిసిన"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3581
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3598
 msgid "Urgent"
 msgstr "అత్యవసరం"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3581
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3598
 msgid "High"
 msgstr "ఎక్కువ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3581
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3598
 msgid "Medium"
 msgstr "మాధ్యమం"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3581
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3598
 msgid "Low"
 msgstr "తక్కువ"
 
@@ -4325,66 +4572,66 @@ msgstr "తక్కువ"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3607
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3624
 msgid "Pages per Sheet"
 msgstr "ఒక్కో షీట్‌కు పేజీలు"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3644
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3661
 msgid "Job Priority"
 msgstr "పని ప్రాముఖ్యత"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3655
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3672
 msgid "Billing Info"
 msgstr "బిల్లింగ్ సామాచారం"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "None"
 msgstr "ఏదీకాదు"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Classified"
 msgstr "విభజించిన"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Confidential"
 msgstr "గుట్టుగా"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Secret"
 msgstr "రహస్యం"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Standard"
 msgstr "ప్రమాణికం"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Top Secret"
 msgstr "అతిరహస్యం"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3670
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Unclassified"
 msgstr "విభంజించని"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3705
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3722
 msgid "Before"
 msgstr "ముందు"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3720
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
 msgid "After"
 msgstr "తరువాత"
 
@@ -4392,14 +4639,14 @@ msgstr "తరువాత"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3740
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3757
 msgid "Print at"
 msgstr "దీనివద్ద ముద్రించు"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3751
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3768
 msgid "Print at time"
 msgstr "ఈ సమయమువద్ద ముద్రించు"
 
@@ -4407,114 +4654,144 @@ msgstr "ఈ సమయమువద్ద ముద్రించు"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3786
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3803
 #, c-format
 msgid "Custom %sx%s"
 msgstr "అనురూపిత %sx%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3867
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3884
 msgid "Printer Profile"
 msgstr "ముద్రకం ప్రొఫైల్"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3874
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3891
 msgid "Unavailable"
 msgstr "అందుబాటులో లేదు"
 
 #. TRANSLATORS: when we're running an old CUPS, and
 #. * it hasn't registered the device with colord
-#: ../modules/printbackends/cups/gtkprintercups.c:222
+#: ../modules/printbackends/cups/gtkprintercups.c:220
 msgid "Color management unavailable"
 msgstr "వర్ణ నిర్వాహణ అందుబాటులోలేదు"
 
 #. TRANSLATORS: when there is no color profile available
-#: ../modules/printbackends/cups/gtkprintercups.c:234
+#: ../modules/printbackends/cups/gtkprintercups.c:232
 msgid "No profile available"
 msgstr "ఏ ప్రొఫైల్ అందుబాటులో లేదు"
 
 #. TRANSLATORS: when the color profile has no title
-#: ../modules/printbackends/cups/gtkprintercups.c:245
+#: ../modules/printbackends/cups/gtkprintercups.c:243
 msgid "Unspecified profile"
 msgstr "అనిర్దిష్ట ప్రొఫైల్"
 
 #. default filename used for print-to-file
-#: ../modules/printbackends/file/gtkprintbackendfile.c:250
+#: ../modules/printbackends/file/gtkprintbackendfile.c:248
 #, c-format
 msgid "output.%s"
 msgstr "అవుట్‌పుట్. %s"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:501
+#: ../modules/printbackends/file/gtkprintbackendfile.c:499
 msgid "Print to File"
 msgstr "ఫైలుకు ముద్రించు"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:627
+#: ../modules/printbackends/file/gtkprintbackendfile.c:625
 msgid "PDF"
 msgstr "పిడియఫ్"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:627
+#: ../modules/printbackends/file/gtkprintbackendfile.c:625
 msgid "Postscript"
 msgstr "పోస్ట్ స్క్రిప్ట్"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:627
+#: ../modules/printbackends/file/gtkprintbackendfile.c:625
 msgid "SVG"
 msgstr "SVG"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:640
-#: ../modules/printbackends/test/gtkprintbackendtest.c:503
+#: ../modules/printbackends/file/gtkprintbackendfile.c:638
+#: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "ఒక్కో షీట్ కు పేజీలు (_s):"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:699
+#: ../modules/printbackends/file/gtkprintbackendfile.c:697
 msgid "File"
 msgstr "ఫైల్"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:709
+#: ../modules/printbackends/file/gtkprintbackendfile.c:707
 msgid "_Output format"
 msgstr "అవుట్‌పుట్ ఫార్మేట్ (_O)"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:395
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:393
 msgid "Print to LPR"
 msgstr "LPR కు ముద్రించు"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:421
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:419
 msgid "Pages Per Sheet"
 msgstr "ఒక్కో షీట్ కు పేజీలు"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:428
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:426
 msgid "Command Line"
 msgstr "ఆదేశ వరుస"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:811
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:809
 msgid "printer offline"
 msgstr "ముద్రకం ఆఫ్‌లైన్"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:829
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:827
 msgid "ready to print"
 msgstr "ముద్రించుటకు సిద్దం"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:832
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:830
 msgid "processing job"
 msgstr "కార్యమును నిర్వహిస్తోంది"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:836
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:834
 msgid "paused"
 msgstr "నిలుపబడింది"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:839
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:837
 msgid "unknown"
 msgstr "తెలియదు"
 
 #. default filename used for print-to-test
-#: ../modules/printbackends/test/gtkprintbackendtest.c:234
+#: ../modules/printbackends/test/gtkprintbackendtest.c:232
 #, c-format
 msgid "test-output.%s"
 msgstr "పరిశీలించిన-అవుట్‌పుట్.%s"
 
-#: ../modules/printbackends/test/gtkprintbackendtest.c:467
+#: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "ముద్రకాన్ని పరీక్షించుటకు ముద్రించండి"
+
+#~ msgid "Caps Lock and Num Lock are on"
+#~ msgstr "Caps Lock మరియు Num Lock అనైవున్నాయి"
+
+#~ msgid "Num Lock is on"
+#~ msgstr "Num Lock ఆనైవుంది"
+
+#~ msgid "Invalid path"
+#~ msgstr "చెల్లని పథం"
+
+#~ msgid "No match"
+#~ msgstr "ఏదీ సరిపోలిలేదు"
+
+#~ msgid "Sole completion"
+#~ msgstr "సోల్ ముగింపు"
+
+#~ msgid "Complete, but not unique"
+#~ msgstr "పూర్తి, అయితే ఏకైకం(యునిక్) కానవసరంలేదు"
+
+#~ msgid "Completing..."
+#~ msgstr "పూర్తిచేస్తున్నది..."
+
+#~ msgid "Only local files may be selected"
+#~ msgstr "స్థానిక ఫైళ్ళు మాత్రమే ఎన్నుకొనబడవచ్చును"
+
+#~ msgid "Incomplete hostname; end it with '/'"
+#~ msgstr "అసంపూర్ణ అతిధేయనామము; దీనిని '/'తో ముగించు"
+
+#~ msgid "Path does not exist"
+#~ msgstr "పథం అసలు ఉనికిలో లేదు"
