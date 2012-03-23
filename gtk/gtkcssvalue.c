@@ -194,17 +194,6 @@ _gtk_css_value_new_take_string (char *string)
   return value;
 }
 
-GtkCssValue *
-_gtk_css_value_new_from_string (const char *string)
-{
-  GtkCssValue *value;
-
-  value = _gtk_css_value_new (G_TYPE_STRING);
-  value->u.ptr = g_strdup (string);
-
-  return value;
-}
-
 static gpointer
 g_boxed_copy0 (GType         boxed_type,
 	       gconstpointer src_boxed)
@@ -489,25 +478,6 @@ _gtk_css_value_init_gvalue (GtkCssValue *value,
       g_value_init (g_value, value->type);
       fill_gvalue (value, g_value);
     }
-}
-
-void
-_gtk_css_value_to_gvalue (GtkCssValue *value,
-			  GValue      *g_value)
-{
-  if (value->type == G_VALUE_TYPE (g_value))
-    fill_gvalue (value, g_value);
-  else if (g_value_type_transformable (value->type, G_VALUE_TYPE (g_value)))
-    {
-      GValue v = G_VALUE_INIT;
-      _gtk_css_value_init_gvalue (value, &v);
-      g_value_transform (&v, g_value);
-      g_value_unset (&v);
-    }
-  else
-    g_warning ("can't convert css value of type `%s' as value of type `%s'",
-	       g_type_name (value->type),
-	       G_VALUE_TYPE_NAME (g_value));
 }
 
 gboolean

@@ -48,7 +48,6 @@ gboolean     _gtk_css_value_holds                     (GtkCssValue              
 GtkCssValue *_gtk_css_value_new_from_gvalue           (const GValue               *g_value);
 GtkCssValue *_gtk_css_value_new_take_gvalue           (GValue                     *g_value);
 GtkCssValue *_gtk_css_value_new_from_int              (gint                        val);
-GtkCssValue *_gtk_css_value_new_from_string           (const char                 *string);
 GtkCssValue *_gtk_css_value_new_take_string           (char                       *string);
 GtkCssValue *_gtk_css_value_new_take_font_description (PangoFontDescription       *v);
 GtkCssValue *_gtk_css_value_new_from_rgba             (const GdkRGBA              *v);
@@ -62,8 +61,6 @@ GtkCssValue *_gtk_css_value_new_take_image            (GtkCssImage              
 GtkCssValue *_gtk_css_value_new_from_number           (const GtkCssNumber         *v);
 GtkCssValue *_gtk_css_value_new_from_background_size  (const GtkCssBackgroundSize *v);
 GtkCssValue *_gtk_css_value_new_from_background_position (const GtkCssBackgroundPosition *v);
-void         _gtk_css_value_to_gvalue                 (GtkCssValue                *value,
-						       GValue                     *g_value);
 void         _gtk_css_value_init_gvalue               (GtkCssValue                *value,
 						       GValue                     *g_value);
 
