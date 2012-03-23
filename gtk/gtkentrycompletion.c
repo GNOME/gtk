@@ -651,27 +651,33 @@ gtk_entry_completion_set_property (GObject      *object,
         break;
 
       case PROP_TEXT_COLUMN:
-        priv->text_column = g_value_get_int (value);
+	gtk_entry_completion_set_text_column (completion,
+					      g_value_get_int (value));
         break;
 
       case PROP_INLINE_COMPLETION:
-        priv->inline_completion = g_value_get_boolean (value);
+	gtk_entry_completion_set_inline_completion (completion,
+						    g_value_get_boolean (value));
         break;
 
       case PROP_POPUP_COMPLETION:
-        priv->popup_completion = g_value_get_boolean (value);
+	gtk_entry_completion_set_popup_completion (completion,
+						   g_value_get_boolean (value));
         break;
 
       case PROP_POPUP_SET_WIDTH:
-        priv->popup_set_width = g_value_get_boolean (value);
+	gtk_entry_completion_set_popup_set_width (completion,
+						  g_value_get_boolean (value));
         break;
 
       case PROP_POPUP_SINGLE_MATCH:
-        priv->popup_single_match = g_value_get_boolean (value);
+	gtk_entry_completion_set_popup_single_match (completion,
+						     g_value_get_boolean (value));
         break;
 
       case PROP_INLINE_SELECTION:
-        priv->inline_selection = g_value_get_boolean (value);
+	gtk_entry_completion_set_inline_selection (completion,
+						   g_value_get_boolean (value));
         break;
 
       case PROP_CELL_AREA:
