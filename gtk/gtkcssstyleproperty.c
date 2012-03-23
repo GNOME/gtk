@@ -298,12 +298,21 @@ gtk_css_style_property_real_compute_value (GtkCssStyleProperty *property,
   return _gtk_css_style_compute_value (context, _gtk_css_style_property_get_computed_type (property), specified);
 }
 
+static gboolean
+gtk_css_style_property_real_equal (GtkCssStyleProperty *property,
+                                   GtkCssValue         *value1,
+                                   GtkCssValue         *value2)
+{
+  return FALSE;
+}
+
 static void
 _gtk_css_style_property_init (GtkCssStyleProperty *property)
 {
   property->parse_value = gtk_css_style_property_real_parse_value;
   property->print_value = gtk_css_style_property_real_print_value;
   property->compute_value = gtk_css_style_property_real_compute_value;
+  property->equal_func = gtk_css_style_property_real_equal;
 }
 
 /**
@@ -538,3 +547,25 @@ _gtk_css_style_property_print_value (GtkCssStyleProperty    *property,
     }
 }
 
+/**
+ * _gtk_css_style_property_is_equal:
+ * @property: the property
+ * @value1: the first value to compare
+ * @value2: the second value to compare
+ *
+ * Compares @value1 and @value2 for equality. Both values must be the
+ * result of a call _gtk_css_style_property_compute_value().
+ *
+ * Returns: %TRUE if @value1 and @value2 are equal
+ **/
+gboolean
+_gtk_css_style_property_is_equal (GtkCssStyleProperty *property,
+                                  GtkCssValue         *value1,
+                                  GtkCssValue         *value2)
+{
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
+  g_return_val_if_fail (value1 != NULL, FALSE);
+  g_return_val_if_fail (value2 != NULL, FALSE);
+
+  return property->equal_func (property, value1, value2);
+}
