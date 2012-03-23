@@ -882,14 +882,14 @@ msgid "_Finish"
 msgstr "పూర్తిచేయి (_F)"
 
 #: ../gtk/gtkbuilder-menus.c:220
-#| msgid "Element <%s> is not allowed below <%s>"
+#| msgid "Element <%s> is below <%s>"
 msgid "Element <%s> not allowed inside <%s>"
 msgstr "<%s> మూలకం <%s> అంతర్లీనంగా అనుమతించబడదు"
 
 #: ../gtk/gtkbuilder-menus.c:225
 #| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed at toplevel"
-msgstr "<%s> మూలకం <%s> పై స్థాయికి అనుమతించబడదు"
+msgstr "<%s> మూలకం పై స్థాయికి అనుమతించబడదు"
 
 #: ../gtk/gtkbuilder-menus.c:314
 #, c-format
