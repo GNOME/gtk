@@ -301,6 +301,10 @@
  * </refsect2>
  */
 
+/* When these change we do a full restyling. Otherwise we try to figure out
+ * if we need to change things. */
+#define GTK_STYLE_CONTEXT_RADICAL_CHANGE (GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS)
+
 typedef struct GtkStyleInfo GtkStyleInfo;
 typedef struct GtkRegion GtkRegion;
 typedef struct PropertyValue PropertyValue;
@@ -375,6 +379,8 @@ struct _GtkStyleContextPrivate
   GtkThemingEngine *theming_engine;
 
   GtkTextDirection direction;
+
+  GtkCssChange relevant_changes;
 
   guint animations_invalidated : 1;
   guint invalidating_context : 1;
@@ -635,6 +641,7 @@ gtk_style_context_init (GtkStyleContext *style_context)
   priv->screen = gdk_screen_get_default ();
   priv->cascade = _gtk_style_cascade_get_for_screen (priv->screen);
   g_object_ref (priv->cascade);
+  priv->relevant_changes = GTK_CSS_CHANGE_ANY;
 
   /* Create default info store */
   info = style_info_new ();
@@ -3239,8 +3246,41 @@ void
 _gtk_style_context_queue_invalidate (GtkStyleContext *context,
                                      GtkCssChange     change)
 {
+  GtkStyleContextPrivate *priv;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (change != 0);
+
+  priv = context->priv;
+
+  if (priv->widget == NULL && priv->widget_path == NULL)
+    return;
+
+  /* Try to avoid invalidating if we can */
+  if (change & GTK_STYLE_CONTEXT_RADICAL_CHANGE)
+    {
+      priv->relevant_changes = GTK_CSS_CHANGE_ANY;
+    }
+  else
+    {
+      if (priv->relevant_changes == GTK_CSS_CHANGE_ANY)
+        {
+          GtkWidgetPath *path;
+          GtkCssMatcher matcher;
+
+          path = create_query_path (context);
+          _gtk_css_matcher_init (&matcher, path, priv->current_state);
+
+          priv->relevant_changes = _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                                                           &matcher);
+          priv->relevant_changes &= ~GTK_STYLE_CONTEXT_RADICAL_CHANGE;
+
+          gtk_widget_path_unref (path);
+        }
+
+      if ((priv->relevant_changes & change) == 0)
+        return;
+    }
 
   gtk_style_context_invalidate (context);
 }
@@ -3275,6 +3315,8 @@ gtk_style_context_invalidate (GtkStyleContext *context)
 
   g_hash_table_remove_all (priv->style_data);
   priv->current_data = NULL;
+
+  priv->relevant_changes = GTK_CSS_CHANGE_ANY;
 
   g_signal_emit (context, signals[CHANGED], 0);
 
