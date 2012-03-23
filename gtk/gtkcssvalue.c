@@ -493,7 +493,7 @@ _gtk_css_value_get_special_kind  (GtkCssValue *value)
   return value->u.gint;
 }
 
-GtkCssNumber *
+const GtkCssNumber *
 _gtk_css_value_get_number  (GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_NUMBER), NULL);
@@ -572,28 +572,28 @@ _gtk_css_value_get_border_style (GtkCssValue *value)
   return value->u.gint;
 }
 
-GtkCssBackgroundSize *
+const GtkCssBackgroundSize *
 _gtk_css_value_get_background_size (GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BACKGROUND_SIZE), NULL);
   return value->u.ptr;
 }
 
-GtkCssBackgroundPosition *
+const GtkCssBackgroundPosition *
 _gtk_css_value_get_background_position (GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BACKGROUND_POSITION), NULL);
   return value->u.ptr;
 }
 
-GtkCssBorderImageRepeat *
+const GtkCssBorderImageRepeat *
 _gtk_css_value_get_border_image_repeat (GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT), NULL);
   return value->u.ptr;
 }
 
-GtkCssBorderCornerRadius *
+const GtkCssBorderCornerRadius *
 _gtk_css_value_get_border_corner_radius (GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BORDER_CORNER_RADIUS), NULL);
@@ -628,7 +628,7 @@ _gtk_css_value_get_pango_weight (GtkCssValue *value)
   return value->u.gint;
 }
 
-GdkRGBA *
+const GdkRGBA *
 _gtk_css_value_get_rgba (GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GDK_TYPE_RGBA), NULL);

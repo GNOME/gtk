@@ -675,7 +675,7 @@ background_size_compute (GtkCssStyleProperty    *property,
                          GtkStyleContext        *context,
                          GtkCssValue            *specified)
 {
-  GtkCssBackgroundSize *ssize = _gtk_css_value_get_background_size (specified);
+  const GtkCssBackgroundSize *ssize = _gtk_css_value_get_background_size (specified);
   GtkCssBackgroundSize csize;
   gboolean changed;
 
@@ -852,7 +852,7 @@ background_position_compute (GtkCssStyleProperty    *property,
 			     GtkStyleContext        *context,
 			     GtkCssValue            *specified)
 {
-  GtkCssBackgroundPosition *spos = _gtk_css_value_get_background_position (specified);
+  const GtkCssBackgroundPosition *spos = _gtk_css_value_get_background_position (specified);
   GtkCssBackgroundPosition cpos;
   gboolean changed;
 

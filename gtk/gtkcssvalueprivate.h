@@ -64,31 +64,31 @@ GtkCssValue *_gtk_css_value_new_from_background_position (const GtkCssBackground
 void         _gtk_css_value_init_gvalue               (GtkCssValue                *value,
 						       GValue                     *g_value);
 
-gboolean                  _gtk_css_value_is_special                 (GtkCssValue *value);
-GtkCssSpecialValue        _gtk_css_value_get_special_kind           (GtkCssValue *value);
-int                       _gtk_css_value_get_int                    (GtkCssValue *value);
-double                    _gtk_css_value_get_double                 (GtkCssValue *value);
-const char *              _gtk_css_value_get_string                 (GtkCssValue *value);
-gpointer                  _gtk_css_value_dup_object                 (GtkCssValue *value);
-gpointer                  _gtk_css_value_get_object                 (GtkCssValue *value);
-gpointer                  _gtk_css_value_get_boxed                  (GtkCssValue *value);
-const char **             _gtk_css_value_get_strv                   (GtkCssValue *value);
-GtkCssNumber             *_gtk_css_value_get_number                 (GtkCssValue *value);
-GtkSymbolicColor         *_gtk_css_value_get_symbolic_color         (GtkCssValue *value);
-GtkCssImage              *_gtk_css_value_get_image                  (GtkCssValue *value);
-GtkBorderStyle            _gtk_css_value_get_border_style           (GtkCssValue *value);
-GtkCssBackgroundSize     *_gtk_css_value_get_background_size        (GtkCssValue *value);
-GtkCssBackgroundPosition *_gtk_css_value_get_background_position    (GtkCssValue *value);
-GtkCssBorderCornerRadius *_gtk_css_value_get_border_corner_radius   (GtkCssValue *value);
-GtkCssBorderImageRepeat  *_gtk_css_value_get_border_image_repeat    (GtkCssValue *value);
-PangoFontDescription *    _gtk_css_value_get_font_description       (GtkCssValue *value);
-PangoStyle                _gtk_css_value_get_pango_style            (GtkCssValue *value);
-PangoVariant              _gtk_css_value_get_pango_variant          (GtkCssValue *value);
-PangoWeight               _gtk_css_value_get_pango_weight           (GtkCssValue *value);
-GdkRGBA                  *_gtk_css_value_get_rgba                   (GtkCssValue *value);
-cairo_pattern_t          *_gtk_css_value_get_pattern                (GtkCssValue *value);
-GtkGradient              *_gtk_css_value_get_gradient               (GtkCssValue *value);
-GtkShadow                *_gtk_css_value_get_shadow                 (GtkCssValue *value);
+gboolean                        _gtk_css_value_is_special                 (GtkCssValue *value);
+GtkCssSpecialValue              _gtk_css_value_get_special_kind           (GtkCssValue *value);
+int                             _gtk_css_value_get_int                    (GtkCssValue *value);
+double                          _gtk_css_value_get_double                 (GtkCssValue *value);
+const char *                    _gtk_css_value_get_string                 (GtkCssValue *value);
+gpointer                        _gtk_css_value_dup_object                 (GtkCssValue *value);
+gpointer                        _gtk_css_value_get_object                 (GtkCssValue *value);
+gpointer                        _gtk_css_value_get_boxed                  (GtkCssValue *value);
+const char **                   _gtk_css_value_get_strv                   (GtkCssValue *value);
+const GtkCssNumber             *_gtk_css_value_get_number                 (GtkCssValue *value);
+GtkSymbolicColor               *_gtk_css_value_get_symbolic_color         (GtkCssValue *value);
+GtkCssImage                    *_gtk_css_value_get_image                  (GtkCssValue *value);
+GtkBorderStyle                  _gtk_css_value_get_border_style           (GtkCssValue *value);
+const GtkCssBackgroundSize     *_gtk_css_value_get_background_size        (GtkCssValue *value);
+const GtkCssBackgroundPosition *_gtk_css_value_get_background_position    (GtkCssValue *value);
+const GtkCssBorderCornerRadius *_gtk_css_value_get_border_corner_radius   (GtkCssValue *value);
+const GtkCssBorderImageRepeat  *_gtk_css_value_get_border_image_repeat    (GtkCssValue *value);
+PangoFontDescription *          _gtk_css_value_get_font_description       (GtkCssValue *value);
+PangoStyle                      _gtk_css_value_get_pango_style            (GtkCssValue *value);
+PangoVariant                    _gtk_css_value_get_pango_variant          (GtkCssValue *value);
+PangoWeight                     _gtk_css_value_get_pango_weight           (GtkCssValue *value);
+const GdkRGBA                  *_gtk_css_value_get_rgba                   (GtkCssValue *value);
+cairo_pattern_t                *_gtk_css_value_get_pattern                (GtkCssValue *value);
+GtkGradient                    *_gtk_css_value_get_gradient               (GtkCssValue *value);
+GtkShadow                      *_gtk_css_value_get_shadow                 (GtkCssValue *value);
 
 G_END_DECLS
 

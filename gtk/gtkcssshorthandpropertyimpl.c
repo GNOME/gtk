@@ -664,7 +664,7 @@ pack_border_radius (GtkCssShorthandProperty *shorthand,
                     GtkStyleQueryFunc        query_func,
                     gpointer                 query_data)
 {
-  GtkCssBorderCornerRadius *top_left;
+  const GtkCssBorderCornerRadius *top_left;
   GtkCssStyleProperty *prop;
   GtkCssValue *v;
   int value = 0;

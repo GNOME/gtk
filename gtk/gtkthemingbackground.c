@@ -161,8 +161,8 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       && bg->image_rect.height > 0)
     {
       GtkCssBackgroundRepeat hrepeat, vrepeat;
-      GtkCssBackgroundSize *size;
-      GtkCssBackgroundPosition *pos;
+      const GtkCssBackgroundSize *size;
+      const GtkCssBackgroundPosition *pos;
       double image_width, image_height;
       double width, height;
 
