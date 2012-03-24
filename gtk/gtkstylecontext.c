@@ -304,6 +304,9 @@
 /* When these change we do a full restyling. Otherwise we try to figure out
  * if we need to change things. */
 #define GTK_STYLE_CONTEXT_RADICAL_CHANGE (GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS)
+/* When these change we don't clear the cache. This takes more memory but makes
+ * things go faster. */
+#define GTK_STYLE_CONTEXT_CACHED_CHANGE (GTK_CSS_CHANGE_STATE)
 
 typedef struct GtkStyleInfo GtkStyleInfo;
 typedef struct GtkRegion GtkRegion;
@@ -3268,6 +3271,31 @@ store_animation_region (GtkStyleContext *context,
     }
 }
 
+static void
+gtk_style_context_do_invalidate (GtkStyleContext *context,
+                                 gboolean         clear_caches)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+
+  /* Avoid reentrancy */
+  if (priv->invalidating_context)
+    return;
+
+  priv->invalidating_context = TRUE;
+
+  if (clear_caches)
+    g_hash_table_remove_all (priv->style_data);
+  priv->current_data = NULL;
+
+  g_signal_emit (context, signals[CHANGED], 0);
+
+  priv->invalidating_context = FALSE;
+}
+
 void
 _gtk_style_context_validate (GtkStyleContext *context,
                              GtkCssChange     change)
@@ -3312,7 +3340,9 @@ _gtk_style_context_validate (GtkStyleContext *context,
 
   if (priv->relevant_changes & change)
     {
-      gtk_style_context_invalidate (context);
+      gboolean clear_cache = ((priv->relevant_changes & change) & ~GTK_STYLE_CONTEXT_CACHED_CHANGE) != 0;
+
+      gtk_style_context_do_invalidate (context, clear_cache);
     }
 
   change = _gtk_css_change_for_child (change);
@@ -3356,26 +3386,9 @@ _gtk_style_context_queue_invalidate (GtkStyleContext *context,
 void
 gtk_style_context_invalidate (GtkStyleContext *context)
 {
-  GtkStyleContextPrivate *priv;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-
-  /* Avoid reentrancy */
-  if (priv->invalidating_context)
-    return;
-
-  priv->invalidating_context = TRUE;
-
-  g_hash_table_remove_all (priv->style_data);
-  priv->current_data = NULL;
-
-  priv->relevant_changes = GTK_CSS_CHANGE_ANY;
-
-  g_signal_emit (context, signals[CHANGED], 0);
-
-  priv->invalidating_context = FALSE;
+  gtk_style_context_do_invalidate (context, TRUE);
 }
 
 /**
