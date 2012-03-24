@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-03-15 15:08+0000\n"
-"PO-Revision-Date: 2012-03-24 16:48+0530\n"
+"PO-Revision-Date: 2012-03-24 20:14+0530\n"
 "Last-Translator: s\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -4161,52 +4161,50 @@ msgstr ""
 #: ../gtk/gtklockbutton.c:284
 #| msgid "Text"
 msgid "Lock Text"
-msgstr "ಪಠ್ಯವನ್ನು ಬಂಧಿಸು"
+msgstr "ಬಂಧಿಸುವ ಪಠ್ಯ"
 
 #: ../gtk/gtklockbutton.c:285
-#, fuzzy
 #| msgid "The text to display in order to demonstrate the selected font"
 msgid "The text to display when prompting the user to lock"
-msgstr "ಆಯ್ದ ಅಕ್ಷರಶೈಲಿಯನ್ನು ತೋರಿಸಲು ಬಳಸಬೇಕಿರುವ ಪಠ್ಯ"
+msgstr "ಬಂಧಿಸುವಂತೆ ಬಳಕೆದಾರರಿಗೆ ತಿಳಿಸುವಾಗ ತೋರಿಸಬೇಕಿರುವ ಪಠ್ಯ"
 
 #: ../gtk/gtklockbutton.c:293
 msgid "Unlock Text"
-msgstr "ಪಠ್ಯವನ್ನು ಮುಕ್ತಗೊಳಿಸು"
+msgstr "ಮುಕ್ತಗೊಳಿಸುವ ಪಠ್ಯ"
 
 #: ../gtk/gtklockbutton.c:294
-#, fuzzy
 #| msgid "The text to display in order to demonstrate the selected font"
 msgid "The text to display when prompting the user to unlock"
-msgstr "ಆಯ್ದ ಅಕ್ಷರಶೈಲಿಯನ್ನು ತೋರಿಸಲು ಬಳಸಬೇಕಿರುವ ಪಠ್ಯ"
+msgstr "ಮುಕ್ತಗೊಳಿಸುವಂತೆ ಬಳಕೆದಾರರಿಗೆ ತಿಳಿಸುವಾಗ ತೋರಿಸಬೇಕಿರುವ ಪಠ್ಯ"
 
 #: ../gtk/gtklockbutton.c:302
-#, fuzzy
 #| msgid "Tooltip"
 msgid "Lock Tooltip"
-msgstr "ಸಲಕರಣೆ ಸುಳಿವು (Tooltip)"
+msgstr "ಬಂಧಿಸುವ ಸಲಕರಣೆ ಸುಳಿವು"
 
 #: ../gtk/gtklockbutton.c:303
 msgid "The tooltip to display when prompting the user to lock"
-msgstr ""
+msgstr "ಬಂಧಿಸುವಂತೆ ಬಳಕೆದಾರರಿಗೆ ತಿಳಿಸುವಾಗ ತೋರಿಸಬೇಕಿರುವ ಸಲಕರಣೆ ಸುಳಿವು"
 
 #: ../gtk/gtklockbutton.c:311
-#, fuzzy
 #| msgid "Enable Tooltips"
 msgid "Unlock Tooltip"
-msgstr "ಸಲಕರಣೆ ಸುಳಿವುಗಳನ್ನು ಶಕ್ತಗೊಳಿಸು"
+msgstr "ಮುಕ್ತಗೊಳಿಸುವ ಸಲಕರಣೆ ಸುಳಿವು"
 
 #: ../gtk/gtklockbutton.c:312
 msgid "The tooltip to display when prompting the user to unlock"
-msgstr ""
+msgstr "ಮುಕ್ತಗೊಳಿಸುವಂತೆ ಬಳಕೆದಾರರಿಗೆ ತಿಳಿಸುವಾಗ ತೋರಿಸಬೇಕಿರುವ ಸಲಕರಣೆ ಸುಳಿವು"
 
 #: ../gtk/gtklockbutton.c:320
 msgid "Not Authorized Tooltip"
-msgstr ""
+msgstr "ದೃಢೀಕರಣ ಸಾಧ್ಯವಿಲ್ಲ ಎಂಬ ಸಲಕರಣೆ ಸುಳಿವು"
 
 #: ../gtk/gtklockbutton.c:321
 msgid ""
 "The tooltip to display when prompting the user cannot obtain authorization"
 msgstr ""
+"ದೃಢೀಕರಣವನ್ನು ಪಡೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ ಎಂದು ಬಳಕೆದಾರರಿಗೆ ತಿಳಿಸುವಾಗ ತೋರಿಸಬೇಕಿರುವ ಸಲಕರಣೆ "
+"ಸುಳಿವು"
 
 #: ../gtk/gtkmenubar.c:190
 msgid "Pack direction"
@@ -4492,9 +4490,8 @@ msgid "The image"
 msgstr "ಬಿಂಬ"
 
 #: ../gtk/gtkmessagedialog.c:305
-#, fuzzy
 msgid "Message area"
-msgstr "ಸಂದೇಶದ ಬಗೆ"
+msgstr "ಸಂದೇಶದ ಪ್ರದೇಶ"
 
 #: ../gtk/gtkmessagedialog.c:306
 msgid "GtkVBox that holds the dialog's primary and secondary labels"
@@ -4568,7 +4565,6 @@ msgid "Show Tabs"
 msgstr "ಟ್ಯಾಬ್‌ಗಳನ್ನು ತೋರಿಸು"
 
 #: ../gtk/gtknotebook.c:708
-#, fuzzy
 msgid "Whether tabs should be shown"
 msgstr "ಟ್ಯಾಬ್‌ಗಳನ್ನು ತೋರಿಸಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
@@ -4577,7 +4573,6 @@ msgid "Show Border"
 msgstr "ಅಂಚನ್ನು ತೋರಿಸು"
 
 #: ../gtk/gtknotebook.c:715
-#, fuzzy
 msgid "Whether the border should be shown"
 msgstr "ಅಂಚನ್ನು ತೋರಿಸಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
@@ -4605,12 +4600,10 @@ msgstr ""
 "ಪುಟವನ್ನು ಅದು ಪುಟಿಸುತ್ತದೆ"
 
 #: ../gtk/gtknotebook.c:743
-#, fuzzy
 msgid "Group Name"
-msgstr "ಸಮೂಹ ID"
+msgstr "ಸಮೂಹದ ಹೆಸರು"
 
 #: ../gtk/gtknotebook.c:744
-#, fuzzy
 msgid "Group name for tab drag and drop"
 msgstr "ಟ್ಯಾಬ್‌ಗಳನ್ನು ಎಳೆದು ಸೇರಿಸಲು ಬೇಕಿರುವ ಸಮೂಹ"
 
@@ -4635,7 +4628,6 @@ msgid "Tab expand"
 msgstr "ಟ್ಯಾಬಿನ ವಿಸ್ತರಿಸುವಿಕೆ"
 
 #: ../gtk/gtknotebook.c:773
-#, fuzzy
 msgid "Whether to expand the child's tab"
 msgstr "ಚೈಲ್ಡಿನ ಟ್ಯಾಬನ್ನು ವಿಸ್ತರಿಸಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
@@ -4644,7 +4636,6 @@ msgid "Tab fill"
 msgstr "ಟ್ಯಾಬನ್ನು ತುಂಬಿಸುವಿಕೆ"
 
 #: ../gtk/gtknotebook.c:780
-#, fuzzy
 msgid "Whether the child's tab should fill the allocated area"
 msgstr "ನಿಯೋಜಿಸಲಾದ ಜಾಗವನ್ನು ಚೈಲ್ಡಿನ ಟ್ಯಾಬ್‌ ತುಂಬಿಸಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
@@ -4653,7 +4644,6 @@ msgid "Tab reorderable"
 msgstr "ಕ್ರಮವನ್ನು ಬದಲಾಯಿಸಬಹುದಾದ ಟ್ಯಾಬ್"
 
 #: ../gtk/gtknotebook.c:788
-#, fuzzy
 msgid "Whether the tab is reorderable by user action"
 msgstr "ಬಳಕೆದಾರನ ಕ್ರಿಯೆಯಿಂದ ಟ್ಯಾಬಿನ ಕ್ರಮವನ್ನು ಬದಲಾಯಿಸಬಹುದೆ ಅಥವ ಇಲ್ಲವೆ"
 
@@ -4729,61 +4719,54 @@ msgstr "ಬಾಣದ ಅಂತರದ ಚಲನೆ(ಸ್ಕ್ರಾಲ್)"
 
 #: ../gtk/gtknotebook.c:921
 msgid "Initial gap"
-msgstr ""
+msgstr "ಆರಂಭಿಕ ಅಂತರ"
 
 #: ../gtk/gtknotebook.c:922
 msgid "Initial gap before the first tab"
-msgstr ""
+msgstr "ಮೊದಲ ಟ್ಯಾಬಿಗೂ ಮೊದಲು ಆರಂಭಿಕ ಅಂತರ"
 
 #: ../gtk/gtknumerableicon.c:651
-#, fuzzy
 #| msgid "Icon set"
 msgid "Icon's count"
-msgstr "ಚಿಹ್ನೆಯ ಸೆಟ್"
+msgstr "ಚಿಹ್ನೆಯ ಎಣಿಕೆ"
 
 #: ../gtk/gtknumerableicon.c:652
-#, fuzzy
 #| msgid "The index of the current page"
 msgid "The count of the emblem currently displayed"
-msgstr "ಪ್ರಸಕ್ತ ಪುಟದ ಸೂಚಿ"
+msgstr "ಪ್ರಸಕ್ತ ತೋರಿಸಲಾಗುತ್ತಿರುವ ಲಾಂಛನದ ಎಣಿಕೆ"
 
 #: ../gtk/gtknumerableicon.c:658
-#, fuzzy
 #| msgid "Icon Name"
 msgid "Icon's label"
-msgstr "ಚಿಹ್ನೆಯ ಹೆಸರು"
+msgstr "ಚಿಹ್ನೆಯ ಲೇಬಲ್"
 
 #: ../gtk/gtknumerableicon.c:659
-#, fuzzy
 #| msgid "The stock icon displayed on the item"
 msgid "The label to be displayed over the icon"
-msgstr "ಅಂಶದ ಮೇಲೆ ತೋರಿಸಲಾದ ಶೇಖರಣಾ ಚಿಹ್ನೆ"
+msgstr "ಚಿಹ್ನೆಯ ಮೇಲೆ ತೋರಿಸಬೇಕಿರುವ ಲೇಬಲ್"
 
 #: ../gtk/gtknumerableicon.c:665
-#, fuzzy
 #| msgid "Font style set"
 msgid "Icon's style context"
-msgstr "ಅಕ್ಷರದ ಶೈಲಿಯ ಸಿದ್ಧತೆ"
+msgstr "ಚಿಹ್ನೆಯ ಶೈಲಿಯ ಸನ್ನಿವೇಶ"
 
 #: ../gtk/gtknumerableicon.c:666
 msgid "The style context to theme the icon appearance"
 msgstr ""
 
 #: ../gtk/gtknumerableicon.c:672
-#, fuzzy
 #| msgid "Background color"
 msgid "Background icon"
-msgstr "ಹಿನ್ನೆಲೆ ಬಣ್ಣ"
+msgstr "ಹಿನ್ನೆಲೆ ಚಿಹ್ನೆ"
 
 #: ../gtk/gtknumerableicon.c:673
 msgid "The icon for the number emblem background"
 msgstr ""
 
 #: ../gtk/gtknumerableicon.c:679
-#, fuzzy
 #| msgid "Background color name"
 msgid "Background icon name"
-msgstr "ಹಿನ್ನೆಲೆ ಬಣ್ಣದ ಹೆಸರು"
+msgstr "ಹಿನ್ನೆಲೆ ಚಿಹ್ನೆಯ ಹೆಸರು"
 
 #: ../gtk/gtknumerableicon.c:680
 #, fuzzy
@@ -4860,7 +4843,6 @@ msgid "Embedded"
 msgstr "ಹುದುಗಿಸಲ್ಪಟ್ಟ (ಎಂಬೆಡೆಡ್)"
 
 #: ../gtk/gtkplug.c:203
-#, fuzzy
 msgid "Whether the plug is embedded"
 msgstr "ಪ್ಲಗ್ ಅನ್ನು ಅಡಕಗೊಳಿಸಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
@@ -4874,23 +4856,21 @@ msgstr "ಪ್ಲಗ್ ಅನ್ನು ಅಡಕಗೊಳಿಸಲಾದಂತ�
 
 #: ../gtk/gtkpressandhold.c:148
 msgid "Hold Time"
-msgstr ""
+msgstr "ಹಿಡಿಯಬೇಕಿರುವ ಸಮಯ"
 
 #: ../gtk/gtkpressandhold.c:148
 msgid "Hold Time (in milliseconds)"
-msgstr ""
+msgstr "ಹಿಡಿಯಬೇಕಿರುವ ಸಮಯ (ಮಿಲಿಸೆಕೆಂಡುಗಳಲ್ಲಿ)"
 
 #: ../gtk/gtkpressandhold.c:152
-#, fuzzy
 #| msgid "Drag threshold"
 msgid "Drag Threshold"
 msgstr "ಎಳೆಯುವ ಮಿತಿ"
 
 #: ../gtk/gtkpressandhold.c:152
-#, fuzzy
 #| msgid "Drag threshold"
 msgid "Drag Threshold (in pixels)"
-msgstr "ಎಳೆಯುವ ಮಿತಿ"
+msgstr "ಎಳೆಯುವ ಮಿತಿ (ಪಿಕ್ಸೆಲ್‌ಗಳಲ್ಲಿ)"
 
 #: ../gtk/gtkprinter.c:124
 msgid "Name of the printer"
@@ -4974,16 +4954,14 @@ msgid "TRUE if this printer is accepting new jobs"
 msgstr "ಮುದ್ರಕವು ಹೊಸ ಕೆಲಸಗಳನ್ನು ಸ್ವೀಕರಿಸುತ್ತಿದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ"
 
 #: ../gtk/gtkprinteroption.c:103
-#, fuzzy
 #| msgid "Minimum Value"
 msgid "Option Value"
-msgstr "ಕನಿಷ್ಟ ಮೌಲ್ಯ"
+msgstr "ಆಯ್ಕೆ ಮೌಲ್ಯ"
 
 #: ../gtk/gtkprinteroption.c:104
-#, fuzzy
 #| msgid "Name of the printer"
 msgid "Value of the option"
-msgstr "ಮುದ್ರಕದ ಹೆಸರು"
+msgstr "ಆಯ್ಕೆಯ ಮೌಲ್ಯ"
 
 #: ../gtk/gtkprinteroptionwidget.c:120
 msgid "Source option"
@@ -5162,7 +5140,6 @@ msgid "Has Selection"
 msgstr "ಆಯ್ಕೆಯನ್ನು ಹೊಂದಿದೆ"
 
 #: ../gtk/gtkprintoperation.c:1387
-#, fuzzy
 msgid "TRUE if a selection exists."
 msgstr "ಆಯ್ಕೆಯು ಇದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ."
 
@@ -5197,7 +5174,6 @@ msgid "The GtkPrinter which is selected"
 msgstr "ಆರಿಸಲ್ಪಟ್ಟ GtkPrinter"
 
 #: ../gtk/gtkprintunixdialog.c:400
-#, fuzzy
 msgid "Manual Capabilities"
 msgstr "ಮ್ಯಾನುವಲ್ ಸಾಮರ್ಥ್ಯಗಳು"
 
@@ -5258,54 +5234,48 @@ msgstr ""
 "ದೀರ್ಘವೃತ್ತವಾಗಿಸಲು ಇಚ್ಛೆಯ ಜಾಗ."
 
 #: ../gtk/gtkprogressbar.c:226
-#, fuzzy
 msgid "X spacing"
-msgstr "Xಅಂತರ"
+msgstr "X ಅಂತರ"
 
 #: ../gtk/gtkprogressbar.c:227
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "ಪ್ರಗತಿ ಪಟ್ಟಿಗೆ ಅನ್ವಯಿಸಲಾದ ಹೆಚ್ಚುವರಿ ಅಗಲ."
 
 #: ../gtk/gtkprogressbar.c:232
-#, fuzzy
 msgid "Y spacing"
-msgstr "Yಅಂತರ"
+msgstr "Y ಅಂತರ"
 
 #: ../gtk/gtkprogressbar.c:233
 msgid "Extra spacing applied to the height of a progress bar."
 msgstr "ಪ್ರಗತಿ ಪಟ್ಟಿಗೆ ಅನ್ವಯಿಸಲಾದ ಹೆಚ್ಚುವರಿ ಎತ್ತರ."
 
 #: ../gtk/gtkprogressbar.c:246
-#, fuzzy
 msgid "Minimum horizontal bar width"
-msgstr "ಕನಿಷ್ಠ ಅಡ್ಡ ಪಟ್ಟಿಕೆಯ ಅಗಲ"
+msgstr "ಅಡ್ಡ ಪಟ್ಟಿಕೆಯ ಕನಿಷ್ಠ ಅಗಲ"
 
 #: ../gtk/gtkprogressbar.c:247
 msgid "The minimum horizontal width of the progress bar"
 msgstr "ಪ್ರಗತಿ ಪಟ್ಟಿಯ ಕನಿಷ್ಟ ಅಡ್ಡ ಅಗಲ"
 
 #: ../gtk/gtkprogressbar.c:259
-#, fuzzy
 msgid "Minimum horizontal bar height"
-msgstr "ಕನಿಷ್ಠ ಅಡ್ಡ ಪಟ್ಟಿಕೆಯ ಎತ್ತರ"
+msgstr "ಅಡ್ಡ ಪಟ್ಟಿಕೆಯ ಕನಿಷ್ಠ ಎತ್ತರ"
 
 #: ../gtk/gtkprogressbar.c:260
 msgid "Minimum horizontal height of the progress bar"
 msgstr "ಪ್ರಗತಿ ಪಟ್ಟಿಯ ಕನಿಷ್ಟ ಅಡ್ಡ ಎತ್ತರ"
 
 #: ../gtk/gtkprogressbar.c:272
-#, fuzzy
 msgid "Minimum vertical bar width"
-msgstr "ಕನಿಷ್ಠ ಅಡ್ಡ ಪಟ್ಟಿಕೆಯ ಅಗಲ"
+msgstr "ಕನಿಷ್ಠ ಲಂಬ ಪಟ್ಟಿಕೆಯ ಅಗಲ"
 
 #: ../gtk/gtkprogressbar.c:273
 msgid "The minimum vertical width of the progress bar"
-msgstr "ಪ್ರಗತಿ ಪಟ್ಟಿಯ ಕನಿಷ್ಟ ಅಡ್ಡ ಅಗಲ"
+msgstr "ಪ್ರಗತಿ ಪಟ್ಟಿಯ ಕನಿಷ್ಟ ಲಂಬ ಅಗಲ"
 
 #: ../gtk/gtkprogressbar.c:285
-#, fuzzy
 msgid "Minimum vertical bar height"
-msgstr "ಕನಿಷ್ಠ ಲಂಬ ಪಟ್ಟಿಕೆಯ ಎತ್ತರ"
+msgstr "ಲಂಬ ಪಟ್ಟಿಕೆಯ ಕನಿಷ್ಠ ಎತ್ತರ"
 
 #: ../gtk/gtkprogressbar.c:286
 msgid "The minimum vertical height of the progress bar"
@@ -5410,16 +5380,14 @@ msgid "The fill level."
 msgstr "ತುಂಬಿಸಲಾದ ಮಟ್ಟ."
 
 #: ../gtk/gtkrange.c:517
-#, fuzzy
 #| msgid "Digits"
 msgid "Round Digits"
-msgstr "ಅಂಕಿಗಳು"
+msgstr "ಪೂರ್ಣ ಅಂಕಿಗಳು"
 
 #: ../gtk/gtkrange.c:518
-#, fuzzy
 #| msgid "The number of pages in the document."
 msgid "The number of digits to round the value to."
-msgstr "ದಸ್ತಾವೇಜಿನಲ್ಲಿರುವ ಪುಟಗಳ ಸಂಖ್ಯೆ."
+msgstr "ಮೌಲ್ಯವನ್ನು ಪೂರ್ಣಗೊಳಿಸಬೇಕಿರುವ ಅಂಕಿಗಳ ಸಂಖ್ಯೆ."
 
 #: ../gtk/gtkrange.c:526 ../gtk/gtkswitch.c:968
 msgid "Slider Width"
@@ -5614,15 +5582,13 @@ msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "ಪ್ರಸಕ್ತ ಮೌಲ್ಯವನ್ನು ಸ್ಲೈಡರಿನ ಎದುರಿನ ಒಂದು ವಾಕ್ಯವಾಗಿ ತೋರಿಸಬೇಕೆ"
 
 #: ../gtk/gtkscale.c:312
-#, fuzzy
 #| msgid "Margin"
 msgid "Has Origin"
-msgstr "ಅಂಚು"
+msgstr "ಮೂಲವನ್ನು ಹೊಂದಿದೆ"
 
 #: ../gtk/gtkscale.c:313
-#, fuzzy
 msgid "Whether the scale has an origin"
-msgstr "ವಿಜೆಟ್‌ ಇನ್‌ಪುಟ್‌ ಗಮನವನ್ನು ಹೊಂದಿದೆಯೆ"
+msgstr "ಗೆರೆಪಟ್ಟಿಯು ಮೂಲವನ್ನು ಹೊಂದಿದೆಯೆ"
 
 #: ../gtk/gtkscale.c:320
 msgid "Value Position"
@@ -5669,20 +5635,18 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtkscrollable.c:128
-#, fuzzy
 #| msgid "Horizontal Scrollbar Policy"
 msgid "Horizontal Scrollable Policy"
-msgstr "ಅಡ್ಡ ಚಲನಪಟ್ಟಿಕೆ ನಿಯಮ"
+msgstr "ಅಡ್ಡ ಚಲನೆಯ ನಿಯಮ"
 
 #: ../gtk/gtkscrollable.c:129 ../gtk/gtkscrollable.c:145
 msgid "How the size of the content should be determined"
-msgstr ""
+msgstr "ವಿಷಯದ ಗಾತ್ರವನ್ನು ಹೇಗೆ ನಿರ್ಧರಿಸಬೇಕು"
 
 #: ../gtk/gtkscrollable.c:144
-#, fuzzy
 #| msgid "Vertical Scrollbar Policy"
 msgid "Vertical Scrollable Policy"
-msgstr "ಲಂಬ ಚಲನಪಟ್ಟಿಕೆ ನಿಯಮ"
+msgstr "ಲಂಬ ಚಲನೆಯ ನಿಯಮ"
 
 #: ../gtk/gtkscrollbar.c:72
 msgid "Minimum Slider Length"
@@ -5793,20 +5757,18 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "ಚಲನಾಪಟ್ಟಿಕೆ ಹಾಗು ಚಲಿಸಲಾದ ವಿಂಡೋವಿನ ನಡುವಿನ ಪಿಕ್ಸೆಲ್‌ಗಳ ಸಂಖ್ಯೆ"
 
 #: ../gtk/gtkscrolledwindow.c:461
-#, fuzzy
 #| msgid "Minimum Width"
 msgid "Minimum Content Width"
-msgstr "ಕನಿಷ್ಟ ಅಗಲ"
+msgstr "ವಿಷಯದ ಕನಿಷ್ಟ ಅಗಲ"
 
 #: ../gtk/gtkscrolledwindow.c:462
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr ""
 
 #: ../gtk/gtkscrolledwindow.c:476
-#, fuzzy
 #| msgid "Minimum child height"
 msgid "Minimum Content Height"
-msgstr "ಚೈಲ್ಡಿನ ಕನಿಷ್ಠ ಎತ್ತರ"
+msgstr "ವಿಷಯದ ಕನಿಷ್ಠ ಎತ್ತರ"
 
 #: ../gtk/gtkscrolledwindow.c:477
 msgid ""
@@ -5898,10 +5860,9 @@ msgid "Theme Name"
 msgstr "ಥೀಮಿನ ಹೆಸರು"
 
 #: ../gtk/gtksettings.c:421
-#, fuzzy
 #| msgid "Name of theme RC file to load"
 msgid "Name of theme to load"
-msgstr "ಲೋಡ್ ಮಾಡಲು ಪರಿಸರವಿನ್ಯಾಸದ RC ಕಡತದ ಹೆಸರು"
+msgstr "ಲೋಡ್ ಮಾಡಬೇಕಿರುವ ಪರಿಸರವಿನ್ಯಾಸದ ಹೆಸರು"
 
 #: ../gtk/gtksettings.c:435
 msgid "Icon Theme Name"
@@ -5924,10 +5885,9 @@ msgid "Key Theme Name"
 msgstr "ಕೀಲಿ ಪರಿಸರವಿನ್ಯಾಸದ ಹೆಸರು"
 
 #: ../gtk/gtksettings.c:454
-#, fuzzy
 #| msgid "Name of key theme RC file to load"
 msgid "Name of key theme to load"
-msgstr "ಲೋಡ್ ಮಾಡಲು ಕೀಲಿ ಪರಿಸರವಿನ್ಯಾಸದ RC ಕಡತದ ಹೆಸರು"
+msgstr "ಲೋಡ್ ಮಾಡಲು ಕೀಲಿ ಪರಿಸರವಿನ್ಯಾಸದ ಹೆಸರು"
 
 #: ../gtk/gtksettings.c:462
 msgid "Menu bar accelerator"
@@ -6310,14 +6270,12 @@ msgid "Toolbar Icon Size"
 msgstr "ಉಪಕರಣಪಟ್ಟಿಯ ಚಿಹ್ನೆಯ ಗಾತ್ರ"
 
 #: ../gtk/gtksettings.c:1133
-#, fuzzy
 msgid "The size of icons in default toolbars."
-msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಉಪಕರಣಪಟ್ಟಿಕೆಯಲ್ಲಿನ ಚಿಹ್ನೆಗಳ ಗಾತ್ರ"
+msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಉಪಕರಣಪಟ್ಟಿಕೆಯಲ್ಲಿನ ಚಿಹ್ನೆಗಳ ಗಾತ್ರ."
 
 #: ../gtk/gtksettings.c:1150
-#, fuzzy
 msgid "Auto Mnemonics"
-msgstr "ನಿಮೋನಿಕ್‌ಗಳನ್ನು ಶಕ್ತಗೊಳಿಸು"
+msgstr "ಸ್ವಯಂ ನಿಮೋನಿಕ್‌ಗಳು"
 
 #: ../gtk/gtksettings.c:1151
 msgid ""
@@ -6326,10 +6284,9 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtksettings.c:1167
-#, fuzzy
 #| msgid "Visible"
 msgid "Visible Focus"
-msgstr "ಗೋಚರ"
+msgstr "ಗಮನದ ಗೋಚರಿಕೆ"
 
 #: ../gtk/gtksettings.c:1168
 msgid ""
@@ -6338,14 +6295,12 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtksettings.c:1194
-#, fuzzy
 msgid "Application prefers a dark theme"
-msgstr "ಅನ್ವಯಕ್ಕೆ ಬಣ್ಣಹಚ್ಚಬಹುದು"
+msgstr "ಅನ್ವಯವು ಗಾಢ ಪರಿಸರವಿನ್ಯಾಸಕ್ಕೆ ಆದ್ಯತೆ ನೀಡುತ್ತದೆ"
 
 #: ../gtk/gtksettings.c:1195
-#, fuzzy
 msgid "Whether the application prefers to have a dark theme."
-msgstr "ಅನ್ವಯವು ಆಯ್ಕೆಯನ್ನು ಹೊಂದಿದೆಯೆ"
+msgstr "ಅನ್ವಯವು ಗಾಢ ಪರಿಸರವಿನ್ಯಾಸವನ್ನು ಹೊಂದಲು ಬಯಸುತ್ತದೆಯೆ."
 
 #: ../gtk/gtksettings.c:1210
 msgid "Show button images"
@@ -6459,7 +6414,7 @@ msgstr "ಪ್ರದಾನ(input) ಕ್ರಮ ಸ್ಥಿತಿ ಪಟ್ಟ�
 
 #: ../gtk/gtksettings.c:1351
 msgid "Desktop shell shows app menu"
-msgstr ""
+msgstr "ಗಣಕತೆರೆ ಶೆಲ್ ಅನ್ವಯವು ಪುಟಿಕೆಯನ್ನು ತೋರಿಸುತ್ತದೆ"
 
 #: ../gtk/gtksettings.c:1352
 msgid ""
@@ -6469,7 +6424,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:1361
 msgid "Desktop shell shows the menubar"
-msgstr ""
+msgstr "ಗಣಕತೆರೆ ಶೆಲ್ ಪರಿವಿಡಿಪಟ್ಟಿಯನ್ನು ತೋರಿಸುತ್ತದೆ"
 
 #: ../gtk/gtksettings.c:1362
 msgid ""
@@ -6554,9 +6509,8 @@ msgid "Style of bevel around the spin button"
 msgstr "ಸುತ್ತುಗುಂಡಿಯ ಸುತ್ತಲಿನ ಇಳಿಜಾರಿನ ಶೈಲಿ"
 
 #: ../gtk/gtkspinner.c:115
-#, fuzzy
 msgid "Whether the spinner is active"
-msgstr "ಪ್ರಾಥಮಿಕ ಚಿಹ್ನೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಬಹುದೆ"
+msgstr "ತಿರುಗಣೆಯು ಸಕ್ರಿಯವಾಗಿದೆಯೆ"
 
 #: ../gtk/gtkstatusbar.c:183
 msgid "Style of bevel around the statusbar text"
@@ -6571,12 +6525,10 @@ msgid "The screen where this status icon will be displayed"
 msgstr "ಸ್ಥಿತಿ ಚಿಹ್ನೆಯನ್ನು ತೋರಿಸಲಾಗುವ ತೆರೆ"
 
 #: ../gtk/gtkstatusicon.c:298
-#, fuzzy
 msgid "Whether the status icon is visible"
 msgstr "ಸ್ಥಿತಿ ಚಿಹ್ನೆಯು ಕಾಣಿಸಿಕೊಳ್ಳಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
 #: ../gtk/gtkstatusicon.c:314
-#, fuzzy
 msgid "Whether the status icon is embedded"
 msgstr "ಸ್ಥಿತಿ ಚಿಹ್ನೆಯನ್ನು ಹುದುಗಿಸಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
@@ -6614,13 +6566,12 @@ msgstr "ಈ ಟ್ರೇ ಚಿಹ್ನೆಯ ಶೀರ್ಷಿಕೆ"
 
 #: ../gtk/gtkstylecontext.c:443
 msgid "The associated GdkScreen"
-msgstr ""
+msgstr "ಸಂಬಂಧಿಸಿದ GdkScreen"
 
 #: ../gtk/gtkstylecontext.c:449
-#, fuzzy
 #| msgid "Fraction"
 msgid "Direction"
-msgstr "ಭಿನ್ನರಾಶಿ"
+msgstr "ದಿಕ್ಕು"
 
 #: ../gtk/gtkstylecontext.c:450 ../gtk/gtktexttag.c:282
 msgid "Text direction"
@@ -6628,40 +6579,35 @@ msgstr "ಪಠ್ಯದ ದಿಕ್ಕು"
 
 #: ../gtk/gtkstylecontext.c:466
 msgid "The parent style context"
-msgstr ""
+msgstr "ಮೂಲ ಶೈಲಿ ಸನ್ನಿವೇಶ"
 
 #: ../gtk/gtkstyleproperty.c:110
-#, fuzzy
 #| msgid "Program name"
 msgid "Property name"
-msgstr "ಪ್ರೋಗ್ರಾಂ ಹೆಸರು"
+msgstr "ಗುಣದ ಹೆಸರು"
 
 #: ../gtk/gtkstyleproperty.c:111
-#, fuzzy
 #| msgid "The name of the widget"
 msgid "The name of the property"
-msgstr "ಸಂಪರ್ಕ ತಟದ ಹೆಸರು"
+msgstr "ಗುಣದ ಹೆಸರು"
 
 #: ../gtk/gtkstyleproperty.c:117
-#, fuzzy
 #| msgid "Page type"
 msgid "Value type"
-msgstr "ಪುಟದ ಬಗೆ"
+msgstr "ಮೌಲ್ಯದ ಬಗೆ"
 
 #: ../gtk/gtkstyleproperty.c:118
 msgid "The value type returned by GtkStyleContext"
-msgstr ""
+msgstr "GtkStyleContext ಇಂದ ಮರಳಿಸಲಾಗುವ ಮೌಲ್ಯದ ಬಗೆ"
 
 #: ../gtk/gtkswitch.c:934
-#, fuzzy
 msgid "Whether the switch is on or off"
-msgstr "ವಿಡ್ಗೆಟ್ ಅನ್ನು ಎರಡು ಬಾರಿ ಬಫರ್ ಮಾಡಬೇಕೆ ಅಥವ ಬೇಡವೆ"
+msgstr "ಸ್ವಿಚ್ ಚಾಲನೆಯಲ್ಲಿರಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
 #: ../gtk/gtkswitch.c:969
-#, fuzzy
 #| msgid "The minimum value of the adjustment"
 msgid "The minimum width of the handle"
-msgstr "ಹೊಂದಿಕೆಯ ಕನಿಷ್ಟ ಮೌಲ್ಯ"
+msgstr "ಹಿಡಿಕೆಯ ಕನಿಷ್ಟ ಅಗಲ"
 
 #: ../gtk/gtktextbuffer.c:201
 msgid "Tag Table"
@@ -6736,10 +6682,9 @@ msgstr ""
 "ಪಠ್ಯದ ಟ್ಯಾಗನ್ನು ಸೂಚಿಸಲು ಬಳಸಲಾಗುವ ಹೆಸರು. ಅನಾಮಧೇಯ ಟ್ಯಾಗಿಗೆ NULL ಆಗಿರುತ್ತದೆ"
 
 #: ../gtk/gtktexttag.c:228
-#, fuzzy
 #| msgid "Background set"
 msgid "Background RGBA"
-msgstr "ಹಿನ್ನೆಲೆ ಸಿದ್ಧತೆ"
+msgstr "ಹಿನ್ನೆಲೆ RGBA"
 
 #: ../gtk/gtktexttag.c:236
 msgid "Background full height"
@@ -6755,10 +6700,9 @@ msgstr ""
 "ಎತ್ತರಕ್ಕೆ ಮಾತ್ರವೆ ತುಂಬಿಸಲಾಗುತ್ತದೆಯೆ"
 
 #: ../gtk/gtktexttag.c:274
-#, fuzzy
 #| msgid "Foreground set"
 msgid "Foreground RGBA"
-msgstr "ಮುನ್ನೆಲೆ ಸಿದ್ಧತೆ"
+msgstr "ಮುನ್ನೆಲೆ RGBA "
 
 #: ../gtk/gtktexttag.c:283
 msgid "Text direction, e.g. right-to-left or left-to-right"
@@ -6908,22 +6852,19 @@ msgid "Paragraph background color"
 msgstr "ಪ್ಯಾರಾಗ್ರಾಫಿನ ಹಿನ್ನೆಲೆ ಬಣ್ಣ"
 
 #: ../gtk/gtktexttag.c:577
-#, fuzzy
 #| msgid "Paragraph background color as a string"
 msgid "Paragraph background color as a GdkColor"
-msgstr "ಪ್ಯಾರಾಗ್ರಾಫಿನ ಹಿನ್ನಲೆ ಬಣ್ಣ ಒಂದು ವಾಕ್ಯವಾಗಿ"
+msgstr "GdkColor ಆಗಿ ಪ್ಯಾರಾಗ್ರಾಫಿನ ಹಿನ್ನಲೆ ಬಣ್ಣ"
 
 #: ../gtk/gtktexttag.c:591
-#, fuzzy
 #| msgid "Paragraph background set"
 msgid "Paragraph background RGBA"
-msgstr "ಪುಟದ ಹಿನ್ನಲೆ ಸೆಟ್‌"
+msgstr "ಪ್ಯಾರಾಗ್ರಾಫಿನ ಹಿನ್ನಲೆಯ RGBA"
 
 #: ../gtk/gtktexttag.c:592
-#, fuzzy
 #| msgid "Paragraph background color as a string"
 msgid "Paragraph background RGBA as a GdkRGBA"
-msgstr "ಪ್ಯಾರಾಗ್ರಾಫಿನ ಹಿನ್ನಲೆ ಬಣ್ಣ ಒಂದು ವಾಕ್ಯವಾಗಿ"
+msgstr "GdkRGBA ಆಗಿ ಪ್ಯಾರಾಗ್ರಾಫಿನ ಹಿನ್ನಲೆಯ RGBA"
 
 #: ../gtk/gtktexttag.c:610
 msgid "Margin Accumulates"
@@ -7086,10 +7027,9 @@ msgid "Color with which to draw error-indication underlines"
 msgstr "ಎಳೆಯಬೇಕಿರುವ ದೋಷ ಸೂಚನೆಯ ಅಡಿಗೆರೆಗಳ ಬಣ್ಣ"
 
 #: ../gtk/gtkthemingengine.c:251
-#, fuzzy
 #| msgid "Theme Name"
 msgid "Theming engine name"
-msgstr "ಥೀಮಿನ ಹೆಸರು"
+msgstr "ಪರಿಸರವಿನ್ಯಾಸ ಎಂಜಿನ್‌ನ ಹೆಸರು"
 
 #: ../gtk/gtktoggleaction.c:116
 msgid "Create the same proxies as a radio action"
@@ -7100,14 +7040,12 @@ msgid "Whether the proxies for this action look like radio action proxies"
 msgstr "ಈ ಕ್ರಿಯೆಗಾಗಿನ ಪ್ರಾಕ್ಸಿಗಳು ರೇಡಿಯೋ ಕ್ರಿಯೆಯ ಪ್ರಾಕ್ಸಿಗಳೆಂದು ಕಾಣಿಸಕೊಳ್ಳಬೇಕೆ"
 
 #: ../gtk/gtktoggleaction.c:132
-#, fuzzy
 msgid "Whether the toggle action should be active"
 msgstr "ಟಾಗಲ್ ಕ್ರಿಯೆಯು ಸಕ್ರಿಯವಾಗಿರಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
 #: ../gtk/gtktogglebutton.c:177 ../gtk/gtktoggletoolbutton.c:126
-#, fuzzy
 msgid "If the toggle button should be pressed in"
-msgstr "ಟಾಗಲ್ ಗುಂಡಿಯನ್ನು ಒತ್ತಬೇಕೆ ಅಥವ ಬೇಡವೆ"
+msgstr "ಟಾಗಲ್ ಗುಂಡಿಯನ್ನು ಇಲ್ಲಿ ಒತ್ತಬೇಕೆ"
 
 #: ../gtk/gtktogglebutton.c:185
 msgid "If the toggle button is in an \"in between\" state"
@@ -7255,18 +7193,16 @@ msgstr ""
 "ಗುಂಡಿಗಳುGTK_TOOLBAR_BOTH_HORIZ ಕ್ರಮದಲ್ಲಿ ಪಠ್ಯವನ್ನು ತೋರಿಸುತ್ತದೆ"
 
 #: ../gtk/gtktoolitemgroup.c:1593
-#, fuzzy
 msgid "The human-readable title of this item group"
-msgstr "ಮಾನವ ಓದಬಹುದಾದ ಸ್ಥಿತಿಗತಿಯ ವಿವರಣೆ"
+msgstr "ಈ ಅಂಶದ ಗುಂಪಿನ ಮಾನವ ಓದಬಹುದಾದ ಶೀರ್ಷಿಕೆ"
 
 #: ../gtk/gtktoolitemgroup.c:1600
-#, fuzzy
 msgid "A widget to display in place of the usual label"
-msgstr "ಸಾಮಾನ್ಯವಾದ ವಿಜೆಟ್‌ನ ಸ್ಥಳದಲ್ಲಿ ತೋರಿಸಬೇಕಿರುವ ಚೌಕಟ್ಟಿನ ಲೇಬಲ್"
+msgstr "ಸಾಮಾನ್ಯವಾದ ಲೇಬಲ್‌ನ ಸ್ಥಳದಲ್ಲಿ ತೋರಿಸಬೇಕಿರುವ ವಿಜೆಟ್"
 
 #: ../gtk/gtktoolitemgroup.c:1606
 msgid "Collapsed"
-msgstr ""
+msgstr "ಬೀಳಸಲಾದ"
 
 #: ../gtk/gtktoolitemgroup.c:1607
 #, fuzzy
@@ -7279,12 +7215,11 @@ msgstr "ದೀರ್ಘವೃತ್ತ"
 
 #: ../gtk/gtktoolitemgroup.c:1614
 msgid "Ellipsize for item group headers"
-msgstr ""
+msgstr "ಅಂಶದ ಗುಂಪಿನ ತಲೆಬರಹಗಳಿಗಾಗಿನ ದೀರ್ಘವೃತ್ತ"
 
 #: ../gtk/gtktoolitemgroup.c:1620
-#, fuzzy
 msgid "Header Relief"
-msgstr "ಶೀರ್ಷಿಕಾ ಚಿತ್ರ"
+msgstr "ತಲೆಬರಹದ ರಿಲೀಫ್"
 
 #: ../gtk/gtktoolitemgroup.c:1621
 #, fuzzy
@@ -7292,24 +7227,20 @@ msgid "Relief of the group header button"
 msgstr "ಲಂಬಸಾಲಿನ ಹೆಡರ್ ಗುಂಡಿಗಳನ್ನು ತೋರಿಸು"
 
 #: ../gtk/gtktoolitemgroup.c:1636
-#, fuzzy
 msgid "Header Spacing"
-msgstr "ಹೆಡರ್ ಪ್ಯಾಡಿಂಗ್"
+msgstr "ತಲೆಬರಹದ ಅಂತರ"
 
 #: ../gtk/gtktoolitemgroup.c:1637
-#, fuzzy
 msgid "Spacing between expander arrow and caption"
-msgstr "ವಿಸ್ತಾರಕ ಬಾಣದ ಸುತ್ತಲಿನ ಜಾಗ"
+msgstr "ವಿಸ್ತಾರಕ ಬಾಣ ಮತ್ತು ಶೀರ್ಷಿಕೆಯ ನಡುವಿನ ಜಾಗ"
 
 #: ../gtk/gtktoolitemgroup.c:1653
-#, fuzzy
 msgid "Whether the item should receive extra space when the group grows"
-msgstr "ಉಪಕರಣಪಟ್ಟಿಯು ಬೆಳದಂತೆಲ್ಲಾ ಅಂಶವು ಹೆಚ್ಚಿನ ಸ್ಥಳವನ್ನು ಪಡೆದುಕೊಳ್ಳಬೇಕೆ"
+msgstr "ಗುಂಪು ಬೆಳದಂತೆಲ್ಲಾ ಅಂಶವು ಹೆಚ್ಚಿನ ಸ್ಥಳವನ್ನು ಪಡೆದುಕೊಳ್ಳಬೇಕೆ"
 
 #: ../gtk/gtktoolitemgroup.c:1660
-#, fuzzy
 msgid "Whether the item should fill the available space"
-msgstr "ಎಲ್ಲಾ ಚಿಲ್ಡ್ರನ್ ಒಂದೇ ಬಗೆಯ ಗಾತ್ರವನ್ನು ಹೊಂದಿರಬೇಕೆ"
+msgstr "ಅಂಶವು ಲಭ್ಯವಿರುವ ಸ್ಥಳವನ್ನು ತುಂಬಿಸಬೇಕೆ"
 
 #: ../gtk/gtktoolitemgroup.c:1666
 msgid "New Row"
