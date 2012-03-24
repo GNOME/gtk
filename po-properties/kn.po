@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-03-15 15:08+0000\n"
-"PO-Revision-Date: 2012-03-24 20:14+0530\n"
+"PO-Revision-Date: 2012-03-25 00:13+0530\n"
 "Last-Translator: s\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -4761,7 +4761,7 @@ msgstr "ಹಿನ್ನೆಲೆ ಚಿಹ್ನೆ"
 
 #: ../gtk/gtknumerableicon.c:673
 msgid "The icon for the number emblem background"
-msgstr ""
+msgstr "ಲಾಂಛನದ ಹಿನ್ನಲೆಯ ಸಂಖ್ಯೆಗಾಗಿನ ಚಿಹ್ನೆ"
 
 #: ../gtk/gtknumerableicon.c:679
 #| msgid "Background color name"
@@ -4769,10 +4769,9 @@ msgid "Background icon name"
 msgstr "ಹಿನ್ನೆಲೆ ಚಿಹ್ನೆಯ ಹೆಸರು"
 
 #: ../gtk/gtknumerableicon.c:680
-#, fuzzy
 #| msgid "The icon name to use for the printer"
 msgid "The icon name for the number emblem background"
-msgstr "ಮುದ್ರಕಕ್ಕಾಗಿ ಬಳಸಬೇಕಿರುವ ಚಿಹ್ನೆ"
+msgstr "ಲಾಂಛನದ ಹಿನ್ನಲೆಯ ಸಂಖ್ಯೆಗಾಗಿನ ಹೆಸರು"
 
 #: ../gtk/gtkorientable.c:61 ../gtk/gtkstatusicon.c:329
 #: ../gtk/gtktrayicon-x11.c:126
@@ -7244,27 +7243,23 @@ msgstr "ಅಂಶವು ಲಭ್ಯವಿರುವ ಸ್ಥಳವನ್ನು 
 
 #: ../gtk/gtktoolitemgroup.c:1666
 msgid "New Row"
-msgstr ""
+msgstr "ಹೊಸ ಅಡ್ಡಸಾಲು"
 
 #: ../gtk/gtktoolitemgroup.c:1667
-#, fuzzy
 msgid "Whether the item should start a new row"
-msgstr "ಅಂಶಗಳನ್ನು ಒಂದು ಸಂಖ್ಯೆಯೊಂದಿಗೆ ತೋರಿಸಬೇಕೆ"
+msgstr "ಅಂಶವು ಒಂದು ಹೊಸ ಅಡ್ಡಸಾಲನ್ನು ಆರಂಭಿಸಬೇಕೆ"
 
 #: ../gtk/gtktoolitemgroup.c:1674
-#, fuzzy
 msgid "Position of the item within this group"
-msgstr "ರೂಲರಿನಲ್ಲಿನ ಗುರುತಿನ ಸ್ಥಳ"
+msgstr "ಈ ಗುಂಪಿನ ಒಳಗಿನ ಅಂಶದ ಸ್ಥಾನ"
 
 #: ../gtk/gtktoolpalette.c:1008
-#, fuzzy
 msgid "Size of icons in this tool palette"
-msgstr "ಈ ಉಪಕರಣ ಪಟ್ಟಿಕೆಯಲ್ಲ್ಲಿನ ಚಿಹ್ನೆಗಳ ಗಾತ್ರ"
+msgstr "ಈ ಉಪಕರಣ ಪಟ್ಟಿಕೆಯಲ್ಲಿನ ಚಿಹ್ನೆಗಳ ಗಾತ್ರ"
 
 #: ../gtk/gtktoolpalette.c:1038
-#, fuzzy
 msgid "Style of items in the tool palette"
-msgstr "ಉಪಕರಣಪಟ್ಟಿಯ ಸುತ್ತಲಿನ ಇಳಿಜಾರಿನ ಶೈಲಿ"
+msgstr "ಈ ಉಪಕರಣ ಪಟ್ಟಿಕೆಯಲ್ಲಿನ ಅಂಶಗಳ ಗಾತ್ರ ಶೈಲಿ"
 
 #: ../gtk/gtktoolpalette.c:1054
 msgid "Exclusive"
@@ -7276,91 +7271,80 @@ msgid "Whether the item group should be the only expanded at a given time"
 msgstr "ಅಂಶಗಳನ್ನು ಒಂದು ಸಂಖ್ಯೆಯೊಂದಿಗೆ ತೋರಿಸಬೇಕೆ"
 
 #: ../gtk/gtktoolpalette.c:1070
-#, fuzzy
 msgid ""
 "Whether the item group should receive extra space when the palette grows"
-msgstr "ಮೂಲವು ಬೆಳೆದಾಗ ಚೈಲ್ಡ್‌ ಹೆಚ್ಚಿನ ಜಾಗವನ್ನು ಪಡೆದುಕೊಳ್ಳಬೇಕೆ"
+msgstr "ಫಲಕವು ಬೆಳದಂತೆಲ್ಲಾ ಅಂಶದ ಗುಂಪು ಹೆಚ್ಚಿನ ಸ್ಥಳವನ್ನು ಪಡೆದುಕೊಳ್ಳಬೇಕೆ"
 
 #: ../gtk/gtktrayicon-x11.c:136
-#, fuzzy
 msgid "Foreground color for symbolic icons"
-msgstr "ಮುನ್ನೆಲೆ ಬಣ್ಣ ಒಂದು ವಾಕ್ಯವಾಗಿ"
+msgstr "ಸಾಂಕೇತಿಕ ಚಿಹ್ನೆಗಳಿಗಾಗಿ ಮುನ್ನೆಲೆ ಬಣ್ಣ"
 
 #: ../gtk/gtktrayicon-x11.c:143
-#, fuzzy
 msgid "Error color"
-msgstr "ತೆರೆಸೂಚಕದ ಬಣ್ಣ"
+msgstr "ದೋಷದ ಬಣ್ಣ"
 
 #: ../gtk/gtktrayicon-x11.c:144
 msgid "Error color for symbolic icons"
-msgstr ""
+msgstr "ಸಾಂಕೇತಿಕ ಚಿಹ್ನೆಗಳಿಗಾಗಿ ದೋಷದ ಬಣ್ಣ"
 
 #: ../gtk/gtktrayicon-x11.c:151
-#, fuzzy
 msgid "Warning color"
-msgstr "ಹಿನ್ನೆಲೆ ಬಣ್ಣ"
+msgstr "ಎಚ್ಚರಿಕೆ ಬಣ್ಣ"
 
 #: ../gtk/gtktrayicon-x11.c:152
 msgid "Warning color for symbolic icons"
-msgstr ""
+msgstr "ಸಾಂಕೇತಿಕ ಚಿಹ್ನೆಗಳಿಗಾಗಿ ಎಚ್ಚರಿಕೆ ಬಣ್ಣ"
 
 #: ../gtk/gtktrayicon-x11.c:159
-#, fuzzy
 msgid "Success color"
-msgstr "ತೆರೆಸೂಚಕದ ಬಣ್ಣ"
+msgstr "ಯಶಸ್ಸಿನ ಬಣ್ಣ"
 
 #: ../gtk/gtktrayicon-x11.c:160
 msgid "Success color for symbolic icons"
-msgstr ""
+msgstr "ಸಾಂಕೇತಿಕ ಚಿಹ್ನೆಗಳಿಗಾಗಿ ಯಶಸ್ಸಿನ ಬಣ್ಣ"
 
 #: ../gtk/gtktrayicon-x11.c:168
 msgid "Padding that should be put around icons in the tray"
 msgstr "ಟ್ರೇಯಲ್ಲಿನ ಚಿಹ್ನೆಗಳ ಸುತ್ತ ಹಾಕಬೇಕಿರುವ ಪ್ಯಾಡಿಂಗ್"
 
 #: ../gtk/gtktrayicon-x11.c:177
-#, fuzzy
 #| msgid "Icon Sizes"
 msgid "Icon Size"
-msgstr "ಚಿಹ್ನೆಯ ಗಾತ್ರಗಳು"
+msgstr "ಚಿಹ್ನೆಯ ಗಾತ್ರ"
 
 #: ../gtk/gtktrayicon-x11.c:178
 msgid "The pixel size that icons should be forced to, or zero"
 msgstr ""
 
 #: ../gtk/gtktreemenu.c:285
-#, fuzzy
 #| msgid "TreeView Model"
 msgid "TreeMenu model"
 msgstr "ವೃಕ್ಷನೋಟ ಮಾದರಿ"
 
 #: ../gtk/gtktreemenu.c:286
-#, fuzzy
 #| msgid "The model for the tree view"
 msgid "The model for the tree menu"
 msgstr "ವೃಕ್ಷ ನೋಟಕ್ಕಾಗಿನ ಮಾದರಿ"
 
 #: ../gtk/gtktreemenu.c:308
 msgid "TreeMenu root row"
-msgstr ""
+msgstr "ವೃಕ್ಷನೋಟ ಮೂಲದ ಅಡ್ಡಸಾಲು"
 
 #: ../gtk/gtktreemenu.c:309
 msgid "The TreeMenu will display children of the specified root"
 msgstr ""
 
 #: ../gtk/gtktreemenu.c:342
-#, fuzzy
 #| msgid "Tearoff Title"
 msgid "Tearoff"
-msgstr "ಹರಿದುಹಾಕುವ ಶೀರ್ಷಿಕೆ"
+msgstr "ಹರಿದುಹಾಕು"
 
 #: ../gtk/gtktreemenu.c:343
-#, fuzzy
 #| msgid "Whether the mark has left gravity"
 msgid "Whether the menu has a tearoff item"
-msgstr "ಗುರುತು ಎಡ ಗುರುತ್ವಾಕರ್ಷಣೆಯನ್ನು ಹೊಂದಿದೆಯೆ"
+msgstr "ಪರಿವಿಡಿಯು ಹರಿದುಹಾಕಲಾದ ಅಂಶವನ್ನು ಹೊಂದಿದೆಯೆ"
 
 #: ../gtk/gtktreemenu.c:359
-#, fuzzy
 #| msgid "Wrap width"
 msgid "Wrap Width"
 msgstr "ಆವರಿಕೆಯ ಅಗಲ"
@@ -7603,10 +7587,9 @@ msgid "Column is user-resizable"
 msgstr "ಲಂಬಸಾಲಿನ ಗಾತ್ರವನ್ನು ಬಳಕೆದಾರರಿಗೆ ಸೂಕ್ತವಾಗುವಂತೆ ಬದಲಾಯಿಸಬಹುದಾಗಿದೆ"
 
 #: ../gtk/gtktreeviewcolumn.c:264
-#, fuzzy
 #| msgid "Current width of the column"
 msgid "Current X position of the column"
-msgstr "ಲಂಬಸಾಲಿನ ಈಗಿನ ಅಗಲ"
+msgstr "ಲಂಬಸಾಲಿನ ಈಗಿನ X ಸ್ಥಾನ"
 
 #: ../gtk/gtktreeviewcolumn.c:274
 msgid "Current width of the column"
@@ -7711,15 +7694,13 @@ msgstr ""
 "ನಿರ್ಧರಿಸುತ್ತದೆ"
 
 #: ../gtk/gtkvolumebutton.c:155
-#, fuzzy
 msgid "Use symbolic icons"
-msgstr "ಮುನ್ನೆಲೆ ಬಣ್ಣ ಒಂದು ವಾಕ್ಯವಾಗಿ"
+msgstr "ಸಾಂಕೇತಿಕ ಚಿಹ್ನೆಗಳನ್ನು ಬಳಸು"
 
 #: ../gtk/gtkvolumebutton.c:156
-#, fuzzy
 #| msgid "Whether the cursor should blink"
 msgid "Whether to use symbolic icons"
-msgstr "ತೆರೆಸೂಚಕವು ಮಿಣಕಬೇಕೆ"
+msgstr "ಸಾಂಕೇತಿಕ ಚಿಹ್ನೆಗಳನ್ನು ಬಳಸಬೇಕೆ"
 
 #: ../gtk/gtkwidget.c:983
 msgid "Widget name"
@@ -7882,121 +7863,105 @@ msgid "Double Buffered"
 msgstr "ಎರಡು ಬಾರಿ ಬಫರ್ ಮಾಡಲಾದ"
 
 #: ../gtk/gtkwidget.c:1197
-#, fuzzy
 msgid "Whether the widget is double buffered"
 msgstr "ವಿಡ್ಗೆಟ್ ಅನ್ನು ಎರಡು ಬಾರಿ ಬಫರ್ ಮಾಡಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
 #: ../gtk/gtkwidget.c:1212
 msgid "How to position in extra horizontal space"
-msgstr ""
+msgstr "ಹೆಚ್ಚಿನ ಅಡ್ಡ ಜಾಗದಲ್ಲಿ ಹೇಗೆ ಇರಿಸಬೇಕು"
 
 #: ../gtk/gtkwidget.c:1228
 msgid "How to position in extra vertical space"
-msgstr ""
+msgstr "ಹೆಚ್ಚಿನ ಲಂಬ ಜಾಗದಲ್ಲಿ ಹೇಗೆ ಇರಿಸಬೇಕು"
 
 #: ../gtk/gtkwidget.c:1247
-#, fuzzy
 msgid "Margin on Left"
-msgstr "ಅಂಚು"
+msgstr "ಎಡಭಾಗದಲ್ಲಿನ ಅಂಚು"
 
 #: ../gtk/gtkwidget.c:1248
 msgid "Pixels of extra space on the left side"
-msgstr ""
+msgstr "ಎಡಭಾಗದಲ್ಲಿ ಖಾಲಿ ಜಾಗದ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtkwidget.c:1268
 msgid "Margin on Right"
-msgstr ""
+msgstr "ಬಲಭಾಗದಲ್ಲಿನ ಅಂಚು"
 
 #: ../gtk/gtkwidget.c:1269
-#, fuzzy
 msgid "Pixels of extra space on the right side"
-msgstr "ಪ್ಯಾರಾಗ್ರಾಫಿನ ಮೇಲಿನ ಖಾಲಿ ಜಾಗದ ಪಿಕ್ಸೆಲ್‌ಗಳು"
+msgstr "ಬಲಭಾಗದಲ್ಲಿ ಖಾಲಿ ಜಾಗದ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtkwidget.c:1289
-#, fuzzy
 msgid "Margin on Top"
-msgstr "ಅಂಚು"
+msgstr "ಮೇಲ್ಭಾಗದಲ್ಲಿನ ಅಂಚು"
 
 #: ../gtk/gtkwidget.c:1290
-#, fuzzy
 msgid "Pixels of extra space on the top side"
-msgstr "ಪ್ಯಾರಾಗ್ರಾಫಿನ ಮೇಲಿನ ಖಾಲಿ ಜಾಗದ ಪಿಕ್ಸೆಲ್‌ಗಳು"
+msgstr "ಮೇಲ್ಭಾಗದಲ್ಲಿ ಖಾಲಿ ಜಾಗದ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtkwidget.c:1310
 msgid "Margin on Bottom"
-msgstr ""
+msgstr "ಕೆಳಭಾಗದಲ್ಲಿನ ಅಂಚು"
 
 #: ../gtk/gtkwidget.c:1311
 msgid "Pixels of extra space on the bottom side"
-msgstr ""
+msgstr "ಕೆಳಭಾಗದಲ್ಲಿ ಖಾಲಿ ಜಾಗದ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtkwidget.c:1328
-#, fuzzy
 msgid "All Margins"
-msgstr "ಅಂಚು"
+msgstr "ಎಲ್ಲಾ ಅಂಚುಗಳು"
 
 #: ../gtk/gtkwidget.c:1329
 msgid "Pixels of extra space on all four sides"
-msgstr ""
+msgstr "ಎಲ್ಲಾ ನಾಲ್ಕು ಬದಿಗಳಲ್ಲಿನ ಖಾಲಿ ಜಾಗದ ಪಿಕ್ಸೆಲ್‌ಗಳು"
 
 #: ../gtk/gtkwidget.c:1362
-#, fuzzy
 #| msgid "Horizontal padding"
 msgid "Horizontal Expand"
-msgstr "ಅಡ್ಡಲಾದ ಪ್ಯಾಡಿಂಗ್‌"
+msgstr "ಅಡ್ಡ ಹಿಗ್ಗಿಸುವಿಕೆ"
 
 #: ../gtk/gtkwidget.c:1363
-#, fuzzy
 msgid "Whether widget wants more horizontal space"
-msgstr "ಎಲ್ಲಾ ಚಿಲ್ಡ್ರನ್ ಒಂದೇ ಬಗೆಯ ಗಾತ್ರವನ್ನು ಹೊಂದಿರಬೇಕೆ"
+msgstr "ವಿಜೆಟ್‌ಗಾಗಿ ಹೆಚ್ಚಿನ ಅಡ್ಡ ಅಂತರದ ಅಗತ್ಯವಿರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtkwidget.c:1377
-#, fuzzy
 #| msgid "Horizontal alignment"
 msgid "Horizontal Expand Set"
-msgstr "ಸಮತಲ ಸರಿಹೊಂದಿಕೆ (alignment)"
+msgstr "ಅಡ್ಡ ಹಿಗ್ಗಿಸುವಿಕೆಯ ಸೆಟ್"
 
 #: ../gtk/gtkwidget.c:1378
-#, fuzzy
 #| msgid "Whether to use the related actions appearance properties"
 msgid "Whether to use the hexpand property"
-msgstr "ಸಂಬಂಧಿತ ಕ್ರಿಯೆಗಳ ಗೋಚರಿಕೆ ಗುಣಗಳನ್ನು ಬಳಸಬೇಕೆ"
+msgstr "hexpand ಗುಣಗಳನ್ನು ಬಳಸಬೇಕೆ"
 
 #: ../gtk/gtkwidget.c:1392
-#, fuzzy
 #| msgid "Vertical padding"
 msgid "Vertical Expand"
-msgstr "ಲಂಬ ಪ್ಯಾಡಿಂಗ್"
+msgstr "ಲಂಬ ಹಿಗ್ಗಿಸುವಿಕೆ"
 
 #: ../gtk/gtkwidget.c:1393
-#, fuzzy
 #| msgid "Whether the widget is visible"
 msgid "Whether widget wants more vertical space"
-msgstr "ಸಂಪರ್ಕತಟವು ಗೋಚರಿಸುತ್ತದೆಯೆ"
+msgstr "ವಿಜೆಟ್‌ಗಾಗಿ ಹೆಚ್ಚಿನ ಲಂಬ ಅಂತರದ ಅಗತ್ಯವಿರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtkwidget.c:1407
-#, fuzzy
 #| msgid "Vertical alignment"
 msgid "Vertical Expand Set"
-msgstr "ಲಂಬ ಸರಿಹೊಂದಿಕೆ"
+msgstr "ಲಂಬ ಹಿಗ್ಗಿಸುವಿಕೆಯ ಸೆಟ್"
 
 #: ../gtk/gtkwidget.c:1408
-#, fuzzy
 #| msgid "Whether to use the related actions appearance properties"
 msgid "Whether to use the vexpand property"
-msgstr "ಸಂಬಂಧಿತ ಕ್ರಿಯೆಗಳ ಗೋಚರಿಕೆ ಗುಣಗಳನ್ನು ಬಳಸಬೇಕೆ"
+msgstr "vexpand ಗುಣಗಳನ್ನು ಬಳಸಬೇಕೆ"
 
 #: ../gtk/gtkwidget.c:1422
-#, fuzzy
 #| msgid "Expand timeout"
 msgid "Expand Both"
-msgstr "ಸಮಯ ಮೀರುವಿಕೆಯ ವಿಸ್ತರಣೆ"
+msgstr "ಎರಡನ್ನೂ ಹಿಗ್ಗಿಸು"
 
 #: ../gtk/gtkwidget.c:1423
-#, fuzzy
 #| msgid "Whether the widget has the input focus"
 msgid "Whether widget wants to expand in both directions"
-msgstr "ವಿಜೆಟ್‌ ಇನ್‌ಪುಟ್‌ ಗಮನವನ್ನು ಹೊಂದಿದೆಯೆ"
+msgstr "ವಿಜೆಟ್‌ ಅನ್ನು ಎರಡೂ ದಿಕ್ಕಿನಲ್ಲಿ ಹಿಗ್ಗಿಸುವ ಅಗತ್ಯವಿರುತ್ತದೆಯೆ"
 
 #: ../gtk/gtkwidget.c:3130
 msgid "Interior Focus"
@@ -8059,9 +8024,8 @@ msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "ತೂರಿಸುವ ತೆರೆಸೂಚಕವನ್ನು ಚಿತ್ರಿಸಲು ಬಳಸುವ ಆಕಾರ ಅನುಪಾತ"
 
 #: ../gtk/gtkwidget.c:3175
-#, fuzzy
 msgid "Window dragging"
-msgstr "ವಿಂಡೋನ ಜಾಗ"
+msgstr "ಕಿಟಕಿಯನ್ನು ಎಳೆಯುವಿಕೆ"
 
 #: ../gtk/gtkwidget.c:3176
 msgid "Whether windows can be dragged by clicking on empty areas"
@@ -8225,25 +8189,21 @@ msgid "Icon for this window"
 msgstr "ಈ ವಿಂಡೋಗಾಗಿನ ಚಿಹ್ನೆ"
 
 #: ../gtk/gtkwindow.c:743
-#, fuzzy
 msgid "Mnemonics Visible"
-msgstr "ನಿಮೋನಿಕ್ ಕೀಲಿ"
+msgstr "ನಿಮೋನಿಕ್ ಗೋಚರಿಕೆ"
 
 #: ../gtk/gtkwindow.c:744
-#, fuzzy
 msgid "Whether mnemonics are currently visible in this window"
-msgstr "ಮೇಲ್ಮಟ್ಟವು(toplevel) ಪ್ರಸಕ್ತ ಸಕ್ರಿಯ ವಿಂಡೋ ಆಗಿದೆಯೆ"
+msgstr "ನಿಮೋನಿಕ್ ಪ್ರಸ್ತುತ ಈ ಕಿಟಕಿಯಲ್ಲಿ ಗೋಚರಿಸುತ್ತಿದೆಯೆ"
 
 #: ../gtk/gtkwindow.c:762
-#, fuzzy
 #| msgid "Cursor Visible"
 msgid "Focus Visible"
-msgstr "ತೆರೆಸೂಚಕದ ಗೋಚರಿಕೆ"
+msgstr "ಗಮನದ ಗೋಚರಿಕೆ"
 
 #: ../gtk/gtkwindow.c:763
-#, fuzzy
 msgid "Whether focus rectangles are currently visible in this window"
-msgstr "ಮೇಲ್ಮಟ್ಟವು(toplevel) ಪ್ರಸಕ್ತ ಸಕ್ರಿಯ ವಿಂಡೋ ಆಗಿದೆಯೆ"
+msgstr "ಗಮನದ ಆಯತವು ಪ್ರಸ್ತುತ ಈ ಕಿಟಕಿಯಲ್ಲಿ ಗೋಚರಿಸುತ್ತಿದೆಯೆ"
 
 #: ../gtk/gtkwindow.c:779
 msgid "Name of the themed icon for this window"
@@ -8335,26 +8295,23 @@ msgid "Whether the window frame should have a close button"
 msgstr "ವಿಂಡೋ ಚೌಕಟ್ಟು ಒಂದು 'ಮುಚ್ಚು' ಗುಂಡಿಯನ್ನು ಹೊಂದಿರಬೇಕೆ"
 
 #: ../gtk/gtkwindow.c:915
-#, fuzzy
 #| msgid "Has Resize Grip"
 msgid "Resize grip"
-msgstr "ಗಾತ್ರಬದಲಾವಣೆ ಹಿಡಿತವನ್ನು ಹೊಂದಿದೆ"
+msgstr "ಗಾತ್ರಬದಲಾವಣೆ ಹಿಡಿತ"
 
 #: ../gtk/gtkwindow.c:916
-#, fuzzy
 #| msgid "Whether the window frame should have a close button"
 msgid "Specifies whether the window should have a resize grip"
-msgstr "ವಿಂಡೋ ಚೌಕಟ್ಟು ಒಂದು 'ಮುಚ್ಚು' ಗುಂಡಿಯನ್ನು ಹೊಂದಿರಬೇಕೆ"
+msgstr "ಕಿಟಕಿಯ ಗಾತ್ರಬದಲಾವಣೆ ಹಿಡಿತವನ್ನು ಹೊಂದಿದೆಯೆ ಎಂದು ಸೂಚಿಸುತ್ತದೆ"
 
 #: ../gtk/gtkwindow.c:930
 msgid "Resize grip is visible"
-msgstr ""
+msgstr "ಗಾತ್ರಬದಲಾವಣೆ ಹಿಡಿತ ಗೋಚರಿಸುತ್ತಿದೆ"
 
 #: ../gtk/gtkwindow.c:931
-#, fuzzy
 #| msgid "Whether the action group is visible."
 msgid "Specifies whether the window's resize grip is visible."
-msgstr "ಈ ಕ್ರಿಯಾ ಸಮೂಹವು ಗೋಚರಿಸುತ್ತದೆಯೆ."
+msgstr "ಕಿಟಕಿಯ ಗಾತ್ರಬದಲಾವಣೆ ಹಿಡಿತ ಗೋಚರಿಸುತ್ತಿದೆಯೆ."
 
 #: ../gtk/gtkwindow.c:947
 msgid "Gravity"
@@ -8373,16 +8330,14 @@ msgid "The transient parent of the dialog"
 msgstr "ಸಂವಾದದ ಅಶಾಶ್ವತ ಮೂಲ"
 
 #: ../gtk/gtkwindow.c:986
-#, fuzzy
 #| msgid "Attach Widget"
 msgid "Attached to Widget"
-msgstr "ವಿಜೆಟ್ ಅನ್ನು ಲಗತ್ತಿಸು"
+msgstr "ವಿಜೆಟ್‌ಗೆ ಲಗತ್ತಿಸಲಾಗಿದೆ"
 
 #: ../gtk/gtkwindow.c:987
-#, fuzzy
 #| msgid "The widget the menu is attached to"
 msgid "The widget where the window is attached"
-msgstr "ಮೆನವನ್ನು ಲಗತ್ತಿಸಲಾದ ವಿಜೆಟ್"
+msgstr "ಕಿಟಕಿಯನ್ನು ಲಗತ್ತಿಸಲಾದ ವಿಜೆಟ್‌ನ ಸ್ಥಳ"
 
 #: ../gtk/gtkwindow.c:1002
 msgid "Opacity for Window"
@@ -8394,35 +8349,31 @@ msgstr "ವಿಂಡೋನ ಅಪಾರದರ್ಶಕತೆ, ೦ಯಿಂದ �
 
 #: ../gtk/gtkwindow.c:1013 ../gtk/gtkwindow.c:1014
 msgid "Width of resize grip"
-msgstr ""
+msgstr "ಗಾತ್ರಬದಲಾವಣೆ ಹಿಡಿತದ ಅಗಲ"
 
 #: ../gtk/gtkwindow.c:1019 ../gtk/gtkwindow.c:1020
-#, fuzzy
 #| msgid "Has Resize Grip"
 msgid "Height of resize grip"
-msgstr "ಗಾತ್ರಬದಲಾವಣೆ ಹಿಡಿತವನ್ನು ಹೊಂದಿದೆ"
+msgstr "ಗಾತ್ರಬದಲಾವಣೆ ಹಿಡಿತದ ಎತ್ತರ"
 
 #: ../gtk/gtkwindow.c:1042
-#, fuzzy
 #| msgid "Application paintable"
 msgid "GtkApplication"
-msgstr "ಅನ್ವಯಕ್ಕೆ ಬಣ್ಣಹಚ್ಚಬಹುದು"
+msgstr "GtkApplication"
 
 #: ../gtk/gtkwindow.c:1043
-#, fuzzy
 #| msgid "The initial position of the window"
 msgid "The GtkApplication for the window"
-msgstr "ವಿಂಡೋನ ಆರಂಭಿಕ ಜಾಗ"
+msgstr "ಕಿಟಕಿಗಾಗಿನ GtkApplication"
 
 #: ../modules/printbackends/cups/gtkprintercups.c:93
 msgid "Color Profile Title"
-msgstr ""
+msgstr "ಬಣ್ಣದ ಪ್ರೊಫೈಲ್ ಶೀರ್ಷಿಕೆ"
 
 #: ../modules/printbackends/cups/gtkprintercups.c:94
-#, fuzzy
 #| msgid "The title of the color selection dialog"
 msgid "The title of the color profile to use"
-msgstr "ಬಣ್ಣ ಆಯ್ಕೆಯ ಸಂವಾದದ ಶೀರ್ಷಿಕೆ"
+msgstr "ಬಳಸಬೇಕಿರುವ ಬಣ್ಣ ಪ್ರೊಫೈಲಿನ ಶೀರ್ಷಿಕೆ"
 
 #, fuzzy
 #~ msgid "Event base"
