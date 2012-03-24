@@ -351,14 +351,14 @@ gtk_css_selector_class_print (const GtkCssSelector *selector,
                               GString              *string)
 {
   g_string_append_c (string, '.');
-  g_string_append (string, selector->data);
+  g_string_append (string, g_quark_to_string (GPOINTER_TO_UINT (selector->data)));
 }
 
 static gboolean
 gtk_css_selector_class_match (const GtkCssSelector *selector,
                               const GtkCssMatcher  *matcher)
 {
-  if (!_gtk_css_matcher_has_class (matcher, selector->data))
+  if (!_gtk_css_matcher_has_class (matcher, GPOINTER_TO_UINT (selector->data)))
     return FALSE;
 
   return gtk_css_selector_match (gtk_css_selector_previous (selector), matcher);
@@ -764,7 +764,7 @@ parse_selector_class (GtkCssParser *parser, GtkCssSelector *selector)
 
   selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_CLASS,
                                    selector,
-                                   g_intern_string (name));
+                                   GUINT_TO_POINTER (g_quark_from_string (name)));
 
   g_free (name);
 

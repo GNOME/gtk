@@ -39,7 +39,7 @@ struct _GtkCssMatcherClass {
   gboolean        (* has_name)                    (const GtkCssMatcher   *matcher,
                                                    const char            *name);
   gboolean        (* has_class)                   (const GtkCssMatcher   *matcher,
-                                                   const char            *class_name);
+                                                   GQuark                 class_name);
   gboolean        (* has_id)                      (const GtkCssMatcher   *matcher,
                                                    const char            *id);
   gboolean        (* has_regions)                 (const GtkCssMatcher   *matcher);
@@ -110,7 +110,7 @@ _gtk_css_matcher_has_name (const GtkCssMatcher *matcher,
 
 static inline gboolean
 _gtk_css_matcher_has_class (const GtkCssMatcher *matcher,
-                            const char          *class_name)
+                            GQuark               class_name)
 {
   return matcher->klass->has_class (matcher, class_name);
 }

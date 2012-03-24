@@ -78,15 +78,15 @@ gtk_css_matcher_widget_path_has_name (const GtkCssMatcher *matcher,
 
 static gboolean
 gtk_css_matcher_widget_path_has_class (const GtkCssMatcher *matcher,
-                                       const char          *class_name)
+                                       GQuark               class_name)
 {
   const GtkWidgetPath *siblings;
   
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
-    return gtk_widget_path_iter_has_class (siblings, matcher->path.sibling_index, class_name);
+    return gtk_widget_path_iter_has_qclass (siblings, matcher->path.sibling_index, class_name);
   else
-    return gtk_widget_path_iter_has_class (matcher->path.path, matcher->path.index, class_name);
+    return gtk_widget_path_iter_has_qclass (matcher->path.path, matcher->path.index, class_name);
 }
 
 static gboolean
@@ -238,7 +238,7 @@ gtk_css_matcher_any_has_name (const GtkCssMatcher *matcher,
 
 static gboolean
 gtk_css_matcher_any_has_class (const GtkCssMatcher *matcher,
-                               const char          *class_name)
+                               GQuark               class_name)
 {
   return TRUE;
 }
@@ -336,7 +336,7 @@ gtk_css_matcher_superset_has_name (const GtkCssMatcher *matcher,
 
 static gboolean
 gtk_css_matcher_superset_has_class (const GtkCssMatcher *matcher,
-                                    const char          *class_name)
+                                    GQuark               class_name)
 {
   if (matcher->superset.relevant & GTK_CSS_CHANGE_CLASS)
     return _gtk_css_matcher_has_class (matcher->superset.subset, class_name);
