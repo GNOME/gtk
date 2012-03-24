@@ -1020,6 +1020,9 @@ gtk_grid_request_allocate (GtkGridRequest *request,
 
   gtk_grid_request_compute_expand (request, orientation, &nonempty, &expand);
 
+  if (nonempty == 0)
+    return;
+
   linedata = &priv->linedata[orientation];
   lines = &request->lines[orientation];
 
