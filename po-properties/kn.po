@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-03-15 15:08+0000\n"
-"PO-Revision-Date: 2012-03-23 21:22+0530\n"
+"PO-Revision-Date: 2012-03-24 16:48+0530\n"
 "Last-Translator: s\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -4159,10 +4159,9 @@ msgid "The GPermission object controlling this button"
 msgstr ""
 
 #: ../gtk/gtklockbutton.c:284
-#, fuzzy
 #| msgid "Text"
 msgid "Lock Text"
-msgstr "ಪಠ್ಯ"
+msgstr "ಪಠ್ಯವನ್ನು ಬಂಧಿಸು"
 
 #: ../gtk/gtklockbutton.c:285
 #, fuzzy
@@ -4172,7 +4171,7 @@ msgstr "ಆಯ್ದ ಅಕ್ಷರಶೈಲಿಯನ್ನು ತೋರಿಸ�
 
 #: ../gtk/gtklockbutton.c:293
 msgid "Unlock Text"
-msgstr ""
+msgstr "ಪಠ್ಯವನ್ನು ಮುಕ್ತಗೊಳಿಸು"
 
 #: ../gtk/gtklockbutton.c:294
 #, fuzzy
