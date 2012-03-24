@@ -211,6 +211,31 @@ empty_line (void)
 }
 
 static void
+empty_grid (void)
+{
+  GtkWidget *window;
+  GtkWidget *grid;
+  GtkWidget *child;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "Empty grid");
+  grid = gtk_grid_new ();
+  gtk_container_add (GTK_CONTAINER (window), grid);
+
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_row_homogeneous (GTK_GRID (grid), TRUE);
+
+  child = test_widget ("(0, 0)", "red");
+  gtk_grid_attach (GTK_GRID (grid), child, 0, 0, 1, 1);
+  gtk_widget_set_hexpand (child, TRUE);
+  gtk_widget_set_vexpand (child, TRUE);
+
+  gtk_widget_show_all (window);
+  gtk_widget_hide (child);
+}
+
+static void
 scrolling (void)
 {
   GtkWidget *window;
@@ -345,6 +370,7 @@ main (int argc, char *argv[])
   empty_line ();
   scrolling ();
   insert ();
+  empty_grid ();
 
   gtk_main ();
 
