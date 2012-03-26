@@ -21,10 +21,11 @@
 
 #include "gtkcssshorthandpropertyprivate.h"
 
+#include "gtkcssarrayvalueprivate.h"
+#include "gtkcssinheritvalueprivate.h"
+#include "gtkcssinitialvalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
-#include "gtkcsstypesprivate.h"
 #include "gtkintl.h"
-#include "gtkprivatetypebuiltins.h"
 
 enum {
   PROP_0,
@@ -83,26 +84,17 @@ _gtk_css_shorthand_property_query (GtkStyleProperty   *property,
   return shorthand->query (shorthand, value, query_func, query_data);
 }
 
-static void
-gtk_css_shorthand_property_unset_value (gpointer value)
-{
-  if (G_IS_VALUE (value))
-    g_value_unset (value);
-}
-
-static gboolean
+static GtkCssValue *
 gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
-                                        GValue           *value,
                                         GtkCssParser     *parser,
                                         GFile            *base)
 {
   GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
-  GArray *array;
+  GtkCssValue **data;
+  GtkCssValue *result;
   guint i;
 
-  array = g_array_new (FALSE, TRUE, sizeof (GValue));
-  g_array_set_clear_func (array, gtk_css_shorthand_property_unset_value);
-  g_array_set_size (array, shorthand->subproperties->len);
+  data = g_new0 (GtkCssValue *, shorthand->subproperties->len);
 
   if (_gtk_css_parser_try (parser, "initial", TRUE))
     {
@@ -111,9 +103,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
        */
       for (i = 0; i < shorthand->subproperties->len; i++)
         {
-          GValue *val = &g_array_index (array, GValue, i);
-          g_value_init (val, GTK_TYPE_CSS_SPECIAL_VALUE);
-          g_value_set_enum (val, GTK_CSS_INITIAL);
+          data[i] = _gtk_css_initial_value_new ();
         }
     }
   else if (_gtk_css_parser_try (parser, "inherit", TRUE))
@@ -126,15 +116,18 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
        */
       for (i = 0; i < shorthand->subproperties->len; i++)
         {
-          GValue *val = &g_array_index (array, GValue, i);
-          g_value_init (val, GTK_TYPE_CSS_SPECIAL_VALUE);
-          g_value_set_enum (val, GTK_CSS_INHERIT);
+          data[i] = _gtk_css_inherit_value_new ();
         }
     }
-  else if (!shorthand->parse (shorthand, (GValue *) array->data, parser, base))
+  else if (!shorthand->parse (shorthand, data, parser, base))
     {
-      g_array_free (array, TRUE);
-      return FALSE;
+      for (i = 0; i < shorthand->subproperties->len; i++)
+        {
+          if (data[i] != NULL)
+            _gtk_css_value_unref (data[i]);
+        }
+      g_free (data);
+      return NULL;
     }
 
   /* All values that aren't set by the parse func are set to their
@@ -142,16 +135,14 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
    * XXX: Is the default always initial or can it be inherit? */
   for (i = 0; i < shorthand->subproperties->len; i++)
     {
-      GValue *val = &g_array_index (array, GValue, i);
-      if (G_IS_VALUE (val))
-        continue;
-      g_value_init (val, GTK_TYPE_CSS_SPECIAL_VALUE);
-      g_value_set_enum (val, GTK_CSS_INITIAL);
+      if (data[i] == NULL)
+        data[i] = _gtk_css_initial_value_new ();
     }
 
-  g_value_init (value, G_TYPE_ARRAY);
-  g_value_take_boxed (value, array);
-  return TRUE;
+  result = _gtk_css_array_value_new (data, shorthand->subproperties->len);
+  g_free (data);
+  
+  return result;
 }
 
 static void

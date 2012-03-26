@@ -183,12 +183,48 @@ _gtk_css_value_new_from_int (gint val)
 }
 
 GtkCssValue *
+_gtk_css_value_new_from_enum (GType type,
+                              gint  val)
+{
+  GtkCssValue *value;
+
+  g_return_val_if_fail (g_type_is_a (type, G_TYPE_ENUM), NULL);
+
+  value = gtk_css_value_new (type);
+  value->u.gint = val;
+
+  return value;
+}
+
+GtkCssValue *
+_gtk_css_value_new_from_double (double d)
+{
+  GtkCssValue *value;
+
+  value = gtk_css_value_new (G_TYPE_DOUBLE);
+  value->u.dbl = d;
+
+  return value;
+}
+
+GtkCssValue *
 _gtk_css_value_new_take_string (char *string)
 {
   GtkCssValue *value;
 
   value = gtk_css_value_new (G_TYPE_STRING);
   value->u.ptr = string;
+
+  return value;
+}
+
+GtkCssValue *
+_gtk_css_value_new_take_strv (char **strv)
+{
+  GtkCssValue *value;
+
+  value = gtk_css_value_new (G_TYPE_STRV);
+  value->u.ptr = strv;
 
   return value;
 }
@@ -231,6 +267,17 @@ _gtk_css_value_new_take_image (GtkCssImage *v)
 
   value = gtk_css_value_new (GTK_TYPE_CSS_IMAGE);
   value->u.ptr = v;
+
+  return value;
+}
+
+GtkCssValue *
+_gtk_css_value_new_take_binding_sets (GPtrArray *array)
+{
+  GtkCssValue *value;
+
+  value = gtk_css_value_new (G_TYPE_PTR_ARRAY);
+  value->u.ptr = array;
 
   return value;
 }
@@ -318,6 +365,28 @@ _gtk_css_value_new_from_background_position (const GtkCssBackgroundPosition *v)
 
   value = gtk_css_value_new (GTK_TYPE_CSS_BACKGROUND_POSITION);
   value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_BACKGROUND_POSITION, v);
+
+  return value;
+}
+
+GtkCssValue *
+_gtk_css_value_new_from_border_corner_radius (const GtkCssBorderCornerRadius *v)
+{
+  GtkCssValue *value;
+
+  value = gtk_css_value_new (GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
+  value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_BORDER_CORNER_RADIUS, v);
+
+  return value;
+}
+
+GtkCssValue *
+_gtk_css_value_new_from_border_style (GtkBorderStyle style)
+{
+  GtkCssValue *value;
+
+  value = gtk_css_value_new (GTK_TYPE_BORDER_STYLE);
+  value->u.gint = style;
 
   return value;
 }
@@ -432,19 +501,6 @@ _gtk_css_value_init_gvalue (const GtkCssValue *value,
       g_value_init (g_value, value->type);
       fill_gvalue (value, g_value);
     }
-}
-
-gboolean
-_gtk_css_value_is_special (const GtkCssValue *value)
-{
-  return _gtk_css_value_holds (value, GTK_TYPE_CSS_SPECIAL_VALUE);
-}
-
-GtkCssSpecialValue
-_gtk_css_value_get_special_kind (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_SPECIAL_VALUE), 0);
-  return value->u.gint;
 }
 
 const GtkCssNumber *

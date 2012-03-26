@@ -49,10 +49,10 @@ value_is_done_parsing (GtkCssParser *parser)
 }
 
 static gboolean
-parse_four_numbers (GtkCssShorthandProperty *shorthand,
-                    GValue                  *values,
-                    GtkCssParser            *parser,
-                    GtkCssNumberParseFlags   flags)
+parse_four_numbers (GtkCssShorthandProperty  *shorthand,
+                    GtkCssValue             **values,
+                    GtkCssParser             *parser,
+                    GtkCssNumberParseFlags    flags)
 {
   GtkCssNumber numbers[4];
   guint i;
@@ -81,18 +81,17 @@ parse_four_numbers (GtkCssShorthandProperty *shorthand,
 
   for (i = 0; i < 4; i++)
     {
-      g_value_init (&values[i], GTK_TYPE_CSS_NUMBER);
-      g_value_set_boxed (&values[i], &numbers[i]);
+      values[i] = _gtk_css_value_new_from_number (&numbers[i]);
     }
 
   return TRUE;
 }
 
 static gboolean
-parse_margin (GtkCssShorthandProperty *shorthand,
-              GValue                  *values,
-              GtkCssParser            *parser,
-              GFile                   *base)
+parse_margin (GtkCssShorthandProperty  *shorthand,
+              GtkCssValue             **values,
+              GtkCssParser             *parser,
+              GFile                    *base)
 {
   return parse_four_numbers (shorthand,
                              values,
@@ -102,10 +101,10 @@ parse_margin (GtkCssShorthandProperty *shorthand,
 }
 
 static gboolean
-parse_padding (GtkCssShorthandProperty *shorthand,
-               GValue                  *values,
-               GtkCssParser            *parser,
-               GFile                   *base)
+parse_padding (GtkCssShorthandProperty  *shorthand,
+               GtkCssValue             **values,
+               GtkCssParser             *parser,
+               GFile                    *base)
 {
   return parse_four_numbers (shorthand,
                              values,
@@ -116,10 +115,10 @@ parse_padding (GtkCssShorthandProperty *shorthand,
 }
 
 static gboolean
-parse_border_width (GtkCssShorthandProperty *shorthand,
-                    GValue                  *values,
-                    GtkCssParser            *parser,
-                    GFile                   *base)
+parse_border_width (GtkCssShorthandProperty  *shorthand,
+                    GtkCssValue             **values,
+                    GtkCssParser             *parser,
+                    GFile                    *base)
 {
   return parse_four_numbers (shorthand,
                              values,
@@ -130,10 +129,10 @@ parse_border_width (GtkCssShorthandProperty *shorthand,
 }
 
 static gboolean 
-parse_border_radius (GtkCssShorthandProperty *shorthand,
-                     GValue                  *values,
-                     GtkCssParser            *parser,
-                     GFile                   *base)
+parse_border_radius (GtkCssShorthandProperty  *shorthand,
+                     GtkCssValue             **values,
+                     GtkCssParser             *parser,
+                     GFile                    *base)
 {
   GtkCssBorderCornerRadius borders[4];
   guint i;
@@ -195,18 +194,17 @@ parse_border_radius (GtkCssShorthandProperty *shorthand,
 
   for (i = 0; i < G_N_ELEMENTS (borders); i++)
     {
-      g_value_init (&values[i], GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
-      g_value_set_boxed (&values[i], &borders[i]);
+      values[i] = _gtk_css_value_new_from_border_corner_radius (&borders[i]);
     }
 
   return TRUE;
 }
 
 static gboolean 
-parse_border_color (GtkCssShorthandProperty *shorthand,
-                    GValue                  *values,
-                    GtkCssParser            *parser,
-                    GFile                   *base)
+parse_border_color (GtkCssShorthandProperty  *shorthand,
+                    GtkCssValue             **values,
+                    GtkCssParser             *parser,
+                    GFile                    *base)
 {
   GtkSymbolicColor *symbolic;
   guint i;
@@ -224,8 +222,7 @@ parse_border_color (GtkCssShorthandProperty *shorthand,
             return FALSE;
         }
 
-      g_value_init (&values[i], GTK_TYPE_SYMBOLIC_COLOR);
-      g_value_set_boxed (&values[i], symbolic);
+      values[i] = _gtk_css_value_new_take_symbolic_color (symbolic);
 
       if (value_is_done_parsing (parser))
         break;
@@ -233,18 +230,17 @@ parse_border_color (GtkCssShorthandProperty *shorthand,
 
   for (i++; i < 4; i++)
     {
-      g_value_init (&values[i], G_VALUE_TYPE (&values[(i - 1) >> 1]));
-      g_value_copy (&values[(i - 1) >> 1], &values[i]);
+      values[i] = _gtk_css_value_ref (values[(i - 1) >> 1]);
     }
 
   return TRUE;
 }
 
 static gboolean
-parse_border_style (GtkCssShorthandProperty *shorthand,
-                    GValue                  *values,
-                    GtkCssParser            *parser,
-                    GFile                   *base)
+parse_border_style (GtkCssShorthandProperty  *shorthand,
+                    GtkCssValue             **values,
+                    GtkCssParser             *parser,
+                    GFile                    *base)
 {
   GtkBorderStyle styles[4];
   guint i;
@@ -266,19 +262,19 @@ parse_border_style (GtkCssShorthandProperty *shorthand,
 
   for (i = 0; i < G_N_ELEMENTS (styles); i++)
     {
-      g_value_init (&values[i], GTK_TYPE_BORDER_STYLE);
-      g_value_set_enum (&values[i], styles[i]);
+      values[i] = _gtk_css_value_new_from_enum (GTK_TYPE_BORDER_STYLE, styles[i]);
     }
 
   return TRUE;
 }
 
 static gboolean
-parse_border_image (GtkCssShorthandProperty *shorthand,
-                    GValue                  *values,
-                    GtkCssParser            *parser,
-                    GFile                   *base)
+parse_border_image (GtkCssShorthandProperty  *shorthand,
+                    GtkCssValue             **values,
+                    GtkCssParser             *parser,
+                    GFile                    *base)
 {
+  GValue value = G_VALUE_INIT;
   GtkCssImage *image;
   
   if (_gtk_css_parser_try (parser, "none", TRUE))
@@ -289,44 +285,49 @@ parse_border_image (GtkCssShorthandProperty *shorthand,
       if (!image)
         return FALSE;
     }
-  g_value_init (&values[0], GTK_TYPE_CSS_IMAGE);
-  g_value_set_object (&values[0], image);
+  values[0] = _gtk_css_value_new_take_image (image);
 
   if (value_is_done_parsing (parser))
     return TRUE;
 
-  g_value_init (&values[1], GTK_TYPE_BORDER);
-  if (!_gtk_css_style_parse_value (&values[1], parser, base))
+  g_value_init (&value, GTK_TYPE_BORDER);
+  if (!_gtk_css_style_parse_value (&value, parser, base))
     return FALSE;
+  values[1] = _gtk_css_value_new_from_gvalue (&value);
+  g_value_unset (&value);
 
   if (_gtk_css_parser_try (parser, "/", TRUE))
     {
-      g_value_init (&values[2], GTK_TYPE_BORDER);
-      if (!_gtk_css_style_parse_value (&values[2], parser, base))
+      g_value_init (&value, GTK_TYPE_BORDER);
+      if (!_gtk_css_style_parse_value (&value, parser, base))
         return FALSE;
+      values[2] = _gtk_css_value_new_from_gvalue (&value);
+      g_value_unset (&value);
     }
 
   if (value_is_done_parsing (parser))
     return TRUE;
 
-  g_value_init (&values[3], GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
-  if (!_gtk_css_style_parse_value (&values[3], parser, base))
+  g_value_init (&value, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
+  if (!_gtk_css_style_parse_value (&value, parser, base))
     return FALSE;
+  values[3] = _gtk_css_value_new_from_gvalue (&value);
+  g_value_unset (&value);
 
   return TRUE;
 }
 
 static gboolean
-parse_border_side (GtkCssShorthandProperty *shorthand,
-                   GValue                  *values,
-                   GtkCssParser            *parser,
-                   GFile                   *base)
+parse_border_side (GtkCssShorthandProperty  *shorthand,
+                   GtkCssValue             **values,
+                   GtkCssParser             *parser,
+                   GFile                    *base)
 {
   int style;
 
   do
   {
-    if (!G_IS_VALUE (&values[0]) &&
+    if (values[0] == NULL &&
          _gtk_css_parser_has_number (parser))
       {
         GtkCssNumber number;
@@ -337,16 +338,14 @@ parse_border_side (GtkCssShorthandProperty *shorthand,
                                           | GTK_CSS_PARSE_LENGTH))
           return FALSE;
 
-        g_value_init (&values[0], GTK_TYPE_CSS_NUMBER);
-        g_value_set_boxed (&values[0], &number);
+        values[0] = _gtk_css_value_new_from_number (&number);
       }
-    else if (!G_IS_VALUE (&values[1]) &&
+    else if (values[1] == NULL &&
              _gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, &style))
       {
-        g_value_init (&values[1], GTK_TYPE_BORDER_STYLE);
-        g_value_set_enum (&values[1], style);
+        values[1] = _gtk_css_value_new_from_enum (GTK_TYPE_BORDER_STYLE, style);
       }
-    else if (!G_IS_VALUE (&values[2]))
+    else if (values[2] == NULL)
       {
         GtkSymbolicColor *symbolic;
 
@@ -354,8 +353,7 @@ parse_border_side (GtkCssShorthandProperty *shorthand,
         if (symbolic == NULL)
           return FALSE;
 
-        g_value_init (&values[2], GTK_TYPE_SYMBOLIC_COLOR);
-        g_value_take_boxed (&values[2], symbolic);
+        values[2] = _gtk_css_value_new_take_symbolic_color (symbolic);
       }
     else
       {
@@ -371,16 +369,16 @@ parse_border_side (GtkCssShorthandProperty *shorthand,
 }
 
 static gboolean
-parse_border (GtkCssShorthandProperty *shorthand,
-              GValue                  *values,
-              GtkCssParser            *parser,
-              GFile                   *base)
+parse_border (GtkCssShorthandProperty  *shorthand,
+              GtkCssValue             **values,
+              GtkCssParser             *parser,
+              GFile                    *base)
 {
   int style;
 
   do
   {
-    if (!G_IS_VALUE (&values[0]) &&
+    if (values[0] == NULL &&
          _gtk_css_parser_has_number (parser))
       {
         GtkCssNumber number;
@@ -391,26 +389,18 @@ parse_border (GtkCssShorthandProperty *shorthand,
                                           | GTK_CSS_PARSE_LENGTH))
           return FALSE;
 
-        g_value_init (&values[0], GTK_TYPE_CSS_NUMBER);
-        g_value_init (&values[1], GTK_TYPE_CSS_NUMBER);
-        g_value_init (&values[2], GTK_TYPE_CSS_NUMBER);
-        g_value_init (&values[3], GTK_TYPE_CSS_NUMBER);
-        g_value_set_boxed (&values[0], &number);
-        g_value_set_boxed (&values[1], &number);
-        g_value_set_boxed (&values[2], &number);
-        g_value_set_boxed (&values[3], &number);
+        values[0] = _gtk_css_value_new_from_number (&number);
+        values[1] = _gtk_css_value_ref (values[0]);
+        values[2] = _gtk_css_value_ref (values[0]);
+        values[3] = _gtk_css_value_ref (values[0]);
       }
-    else if (!G_IS_VALUE (&values[4]) &&
+    else if (values[4] == NULL &&
              _gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, &style))
       {
-        g_value_init (&values[4], GTK_TYPE_BORDER_STYLE);
-        g_value_init (&values[5], GTK_TYPE_BORDER_STYLE);
-        g_value_init (&values[6], GTK_TYPE_BORDER_STYLE);
-        g_value_init (&values[7], GTK_TYPE_BORDER_STYLE);
-        g_value_set_enum (&values[4], style);
-        g_value_set_enum (&values[5], style);
-        g_value_set_enum (&values[6], style);
-        g_value_set_enum (&values[7], style);
+        values[4] = _gtk_css_value_new_from_enum (GTK_TYPE_BORDER_STYLE, style);
+        values[5] = _gtk_css_value_ref (values[4]);
+        values[6] = _gtk_css_value_ref (values[4]);
+        values[7] = _gtk_css_value_ref (values[4]);
       }
     else if (!G_IS_VALUE (&values[8]))
       {
@@ -420,14 +410,10 @@ parse_border (GtkCssShorthandProperty *shorthand,
         if (symbolic == NULL)
           return FALSE;
 
-        g_value_init (&values[8], GTK_TYPE_SYMBOLIC_COLOR);
-        g_value_init (&values[9], GTK_TYPE_SYMBOLIC_COLOR);
-        g_value_init (&values[10], GTK_TYPE_SYMBOLIC_COLOR);
-        g_value_init (&values[11], GTK_TYPE_SYMBOLIC_COLOR);
-        g_value_set_boxed (&values[8], symbolic);
-        g_value_set_boxed (&values[9], symbolic);
-        g_value_set_boxed (&values[10], symbolic);
-        g_value_take_boxed (&values[11], symbolic);
+        values[8] = _gtk_css_value_new_take_symbolic_color (symbolic);
+        values[9] = _gtk_css_value_ref (values[8]);
+        values[10] = _gtk_css_value_ref (values[8]);
+        values[11] = _gtk_css_value_ref (values[8]);
       }
     else
       {
@@ -446,10 +432,10 @@ parse_border (GtkCssShorthandProperty *shorthand,
 }
 
 static gboolean
-parse_font (GtkCssShorthandProperty *shorthand,
-            GValue                  *values,
-            GtkCssParser            *parser,
-            GFile                   *base)
+parse_font (GtkCssShorthandProperty  *shorthand,
+            GtkCssValue             **values,
+            GtkCssParser             *parser,
+            GFile                    *base)
 {
   PangoFontDescription *desc;
   guint mask;
@@ -466,33 +452,29 @@ parse_font (GtkCssShorthandProperty *shorthand,
 
   if (mask & PANGO_FONT_MASK_FAMILY)
     {
-      GPtrArray *strv = g_ptr_array_new ();
+      char **strv = g_new0 (char *, 2);
 
-      g_ptr_array_add (strv, g_strdup (pango_font_description_get_family (desc)));
-      g_ptr_array_add (strv, NULL);
-      g_value_init (&values[0], G_TYPE_STRV);
-      g_value_take_boxed (&values[0], g_ptr_array_free (strv, FALSE));
+      strv[0] = g_strdup (pango_font_description_get_family (desc));
+      values[0] = _gtk_css_value_new_take_strv (strv);
     }
   if (mask & PANGO_FONT_MASK_STYLE)
     {
-      g_value_init (&values[1], PANGO_TYPE_STYLE);
-      g_value_set_enum (&values[1], pango_font_description_get_style (desc));
+      values[1] = _gtk_css_value_new_from_enum (PANGO_TYPE_STYLE,
+                                                pango_font_description_get_style (desc));
     }
   if (mask & PANGO_FONT_MASK_VARIANT)
     {
-      g_value_init (&values[2], PANGO_TYPE_VARIANT);
-      g_value_set_enum (&values[2], pango_font_description_get_variant (desc));
+      values[2] = _gtk_css_value_new_from_enum (PANGO_TYPE_VARIANT,
+                                                pango_font_description_get_variant (desc));
     }
   if (mask & PANGO_FONT_MASK_WEIGHT)
     {
-      g_value_init (&values[3], PANGO_TYPE_WEIGHT);
-      g_value_set_enum (&values[3], pango_font_description_get_weight (desc));
+      values[3] = _gtk_css_value_new_from_enum (PANGO_TYPE_WEIGHT,
+                                                pango_font_description_get_weight (desc));
     }
   if (mask & PANGO_FONT_MASK_SIZE)
     {
-      g_value_init (&values[4], G_TYPE_DOUBLE);
-      g_value_set_double (&values[4],
-                          (double) pango_font_description_get_size (desc) / PANGO_SCALE);
+      values[4] = _gtk_css_value_new_from_double ((double) pango_font_description_get_size (desc) / PANGO_SCALE);
     }
 
   pango_font_description_free (desc);
@@ -501,17 +483,17 @@ parse_font (GtkCssShorthandProperty *shorthand,
 }
 
 static gboolean
-parse_background (GtkCssShorthandProperty *shorthand,
-                  GValue                  *values,
-                  GtkCssParser            *parser,
-                  GFile                   *base)
+parse_background (GtkCssShorthandProperty  *shorthand,
+                  GtkCssValue             **values,
+                  GtkCssParser             *parser,
+                  GFile                    *base)
 {
   int enum_value;
 
   do
     {
       /* the image part */
-      if (!G_IS_VALUE (&values[0]) &&
+      if (values[0] == NULL &&
           (_gtk_css_parser_has_prefix (parser, "none") ||
            _gtk_css_image_can_parse (parser)))
         {
@@ -526,10 +508,9 @@ parse_background (GtkCssShorthandProperty *shorthand,
                 return FALSE;
             }
 
-          g_value_init (&values[0], GTK_TYPE_CSS_IMAGE);
-          g_value_take_object (&values[0], image);
+          values[0] = _gtk_css_value_new_take_image (image);
         }
-      else if (!G_IS_VALUE (&values[1]) &&
+      else if (values[1] == NULL &&
                _gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT, &enum_value))
         {
           if (enum_value <= GTK_CSS_BACKGROUND_REPEAT_MASK)
@@ -550,17 +531,15 @@ parse_background (GtkCssShorthandProperty *shorthand,
                 enum_value |= enum_value << GTK_CSS_BACKGROUND_REPEAT_SHIFT;
             }
 
-          g_value_init (&values[1], GTK_TYPE_CSS_BACKGROUND_REPEAT);
-          g_value_set_enum (&values[1], enum_value);
+          values[1] = _gtk_css_value_new_from_enum (GTK_TYPE_CSS_BACKGROUND_REPEAT, enum_value);
         }
-      else if ((!G_IS_VALUE (&values[2]) || !G_IS_VALUE (&values[3])) &&
+      else if ((values[2] == NULL || values[3] == NULL) &&
                _gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_AREA, &enum_value))
         {
-          guint idx = !G_IS_VALUE (&values[2]) ? 2 : 3;
-          g_value_init (&values[idx], GTK_TYPE_CSS_AREA);
-          g_value_set_enum (&values[idx], enum_value);
+          guint idx = values[2] == NULL ? 2 : 3;
+          values[idx] = _gtk_css_value_new_from_enum (GTK_TYPE_CSS_AREA, enum_value);
         }
-      else if (!G_IS_VALUE (&values[4]))
+      else if (values[4] == NULL)
         {
           GtkSymbolicColor *symbolic;
           
@@ -568,8 +547,7 @@ parse_background (GtkCssShorthandProperty *shorthand,
           if (symbolic == NULL)
             return FALSE;
 
-          g_value_init (&values[4], GTK_TYPE_SYMBOLIC_COLOR);
-          g_value_take_boxed (&values[4], symbolic);
+          values[4] = _gtk_css_value_new_take_symbolic_color (symbolic);
         }
       else
         {

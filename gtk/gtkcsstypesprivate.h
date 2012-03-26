@@ -54,11 +54,6 @@ typedef enum { /*< skip >*/
                                    GTK_CSS_CHANGE_PARENT_POSITION | GTK_CSS_CHANGE_PARENT_SIBLING_POSITION | \
                                    GTK_CSS_CHANGE_PARENT_STATE | GTK_CSS_CHANGE_PARENT_SIBLING_STATE)
 
-typedef enum {
-  GTK_CSS_INHERIT,
-  GTK_CSS_INITIAL
-} GtkCssSpecialValue;
-
 /* We encode horizontal and vertical repeat in one enum value.
  * This eases parsing and storage, but you need to be aware that
  * you have to "unpack" this value.

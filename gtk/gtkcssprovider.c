@@ -26,6 +26,7 @@
 #include "gtkcssproviderprivate.h"
 
 #include "gtkbitmaskprivate.h"
+#include "gtkcssarrayvalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcssparserprivate.h"
 #include "gtkcsssectionprivate.h"
@@ -1249,7 +1250,7 @@ gtk_css_ruleset_add_style (GtkCssRuleset *ruleset,
 static void
 gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
                      GtkCssStyleProperty *property,
-                     const GValue        *value,
+                     GtkCssValue         *value,
                      GtkCssSection       *section)
 {
   guint i;
@@ -1284,7 +1285,7 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
       ruleset->styles[i].property = property;
     }
 
-  ruleset->styles[i].value = _gtk_css_value_new_from_gvalue (value);
+  ruleset->styles[i].value = value;
   if (gtk_keep_css_sections)
     ruleset->styles[i].section = gtk_css_section_ref (section);
   else
@@ -2190,66 +2191,65 @@ parse_declaration (GtkCssScanner *scanner,
 
   if (property)
     {
-      GValue value = { 0, };
+      GtkCssValue *value;
 
       g_free (name);
 
       gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_VALUE);
 
-      if (_gtk_style_property_parse_value (property,
-                                           &value,
-                                           scanner->parser,
-                                           gtk_css_scanner_get_base_url (scanner)))
-        {
-          if (_gtk_css_parser_begins_with (scanner->parser, ';') ||
-              _gtk_css_parser_begins_with (scanner->parser, '}') ||
-              _gtk_css_parser_is_eof (scanner->parser))
-            {
-              if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
-                {
-                  GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
-                  GArray *array = g_value_get_boxed (&value);
-                  guint i;
+      value = _gtk_style_property_parse_value (property,
+                                               scanner->parser,
+                                               gtk_css_scanner_get_base_url (scanner));
 
-                  for (i = 0; i < _gtk_css_shorthand_property_get_n_subproperties (shorthand); i++)
-                    {
-                      GtkCssStyleProperty *child = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
-                      const GValue *sub = &g_array_index (array, GValue, i);
-                      
-                      gtk_css_ruleset_add (ruleset, child, sub, scanner->section);
-                    }
-                }
-              else if (GTK_IS_CSS_STYLE_PROPERTY (property))
-                {
-                  gtk_css_ruleset_add (ruleset, GTK_CSS_STYLE_PROPERTY (property), &value, scanner->section);
-                }
-              else
-                {
-                  g_assert_not_reached ();
-                }
-
-              g_value_unset (&value);
-            }
-          else
-            {
-              gtk_css_provider_error_literal (scanner->provider,
-                                              scanner,
-                                              GTK_CSS_PROVIDER_ERROR,
-                                              GTK_CSS_PROVIDER_ERROR_SYNTAX,
-                                              "Junk at end of value");
-              _gtk_css_parser_resync (scanner->parser, TRUE, '}');
-              gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
-              gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
-              return;
-            }
-        }
-      else
+      if (value == NULL)
         {
           _gtk_css_parser_resync (scanner->parser, TRUE, '}');
           gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
           gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
           return;
         }
+
+      if (!_gtk_css_parser_begins_with (scanner->parser, ';') &&
+          !_gtk_css_parser_begins_with (scanner->parser, '}') &&
+          !_gtk_css_parser_is_eof (scanner->parser))
+        {
+          gtk_css_provider_error_literal (scanner->provider,
+                                          scanner,
+                                          GTK_CSS_PROVIDER_ERROR,
+                                          GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                          "Junk at end of value");
+          _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+          gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
+          gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
+          return;
+        }
+
+      if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
+        {
+          GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
+          guint i;
+
+          for (i = 0; i < _gtk_css_shorthand_property_get_n_subproperties (shorthand); i++)
+            {
+              GtkCssStyleProperty *child = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
+              GtkCssValue *sub = _gtk_css_array_value_get_nth (value, i);
+              
+              gtk_css_ruleset_add (ruleset, child, _gtk_css_value_ref (sub), scanner->section);
+            }
+          
+            _gtk_css_value_unref (value);
+        }
+      else if (GTK_IS_CSS_STYLE_PROPERTY (property))
+        {
+          gtk_css_ruleset_add (ruleset, GTK_CSS_STYLE_PROPERTY (property), value, scanner->section);
+        }
+      else
+        {
+          g_assert_not_reached ();
+          _gtk_css_value_unref (value);
+        }
+
+
       gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
     }
   else if (name[0] == '-')

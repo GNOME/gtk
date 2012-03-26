@@ -21,9 +21,9 @@
 
 #include "gtkcsscomputedvaluesprivate.h"
 
+#include "gtkcssinheritvalueprivate.h"
+#include "gtkcssinitialvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkcsstypesprivate.h"
-#include "gtkprivatetypebuiltins.h"
 
 G_DEFINE_TYPE (GtkCssComputedValues, _gtk_css_computed_values, G_TYPE_OBJECT)
 
@@ -101,26 +101,19 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
    */
   if (specified != NULL)
     {
-      if (_gtk_css_value_is_special (specified))
+      if (_gtk_css_value_is_inherit (specified))
         {
-          switch (_gtk_css_value_get_special_kind (specified))
-            {
-            case GTK_CSS_INHERIT:
-              /* 3) if the value of the winning declaration is ‘inherit’,
-               * the inherited value (see below) becomes the specified value.
-               */
-              specified = NULL;
-              break;
-            case GTK_CSS_INITIAL:
-              /* if the value of the winning declaration is ‘initial’,
-               * the initial value (see below) becomes the specified value.
-               */
-              specified = _gtk_css_style_property_get_initial_value (prop);
-              break;
-            default:
-              /* This is part of (2) above */
-              break;
-            }
+          /* 3) if the value of the winning declaration is ‘inherit’,
+           * the inherited value (see below) becomes the specified value.
+           */
+          specified = NULL;
+        }
+      else if (_gtk_css_value_is_initial (specified))
+        {
+          /* if the value of the winning declaration is ‘initial’,
+           * the initial value (see below) becomes the specified value.
+           */
+          specified = _gtk_css_style_property_get_initial_value (prop);
         }
 
       /* 2) If the cascading process (described below) yields a winning

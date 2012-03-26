@@ -28,13 +28,14 @@
 
 G_DEFINE_TYPE (GtkCssCustomProperty, _gtk_css_custom_property, GTK_TYPE_CSS_STYLE_PROPERTY)
 
-static gboolean
+static GtkCssValue *
 gtk_css_custom_property_parse_value (GtkStyleProperty *property,
-                                     GValue           *value,
                                      GtkCssParser     *parser,
                                      GFile            *base)
 {
   GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (property);
+  GValue value = G_VALUE_INIT;
+  GtkCssValue *result;
   gboolean success;
 
   if (custom->property_parse_func)
@@ -42,12 +43,12 @@ gtk_css_custom_property_parse_value (GtkStyleProperty *property,
       GError *error = NULL;
       char *value_str;
       
-      g_value_init (value, _gtk_style_property_get_value_type (property));
+      g_value_init (&value, _gtk_style_property_get_value_type (property));
 
       value_str = _gtk_css_parser_read_value (parser);
       if (value_str != NULL)
         {
-          success = (* custom->property_parse_func) (value_str, value, &error);
+          success = (* custom->property_parse_func) (value_str, &value, &error);
           g_free (value_str);
         }
       else
@@ -56,15 +57,21 @@ gtk_css_custom_property_parse_value (GtkStyleProperty *property,
   else
     {
       GtkCssStyleProperty *style = GTK_CSS_STYLE_PROPERTY (property);
-      g_value_init (value, _gtk_css_style_property_get_specified_type (style));
+      g_value_init (&value, _gtk_css_style_property_get_specified_type (style));
 
-      success = _gtk_css_style_parse_value (value, parser, base);
+      success = _gtk_css_style_parse_value (&value, parser, base);
     }
 
   if (!success)
-    g_value_unset (value);
+    {
+      g_value_unset (&value);
+      return NULL;
+    }
 
-  return success;
+  result = _gtk_css_value_new_from_gvalue (&value);
+  g_value_unset (&value);
+
+  return result;
 }
 
 static void

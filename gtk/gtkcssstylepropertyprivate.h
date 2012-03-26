@@ -34,8 +34,7 @@ G_BEGIN_DECLS
 typedef struct _GtkCssStyleProperty           GtkCssStyleProperty;
 typedef struct _GtkCssStylePropertyClass      GtkCssStylePropertyClass;
 
-typedef gboolean         (* GtkCssStylePropertyParseFunc)  (GtkCssStyleProperty    *property,
-                                                            GValue                 *value,
+typedef GtkCssValue *    (* GtkCssStylePropertyParseFunc)  (GtkCssStyleProperty    *property,
                                                             GtkCssParser           *parser,
                                                             GFile                  *base);
 typedef void             (* GtkCssStylePropertyPrintFunc)  (GtkCssStyleProperty    *property,

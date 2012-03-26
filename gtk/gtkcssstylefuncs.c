@@ -218,11 +218,7 @@ rgba_value_compute (GtkStyleContext *context,
   GdkRGBA white = { 1, 1, 1, 1 };
   GtkCssValue *res;
   
-  if (_gtk_css_value_holds (specified, GTK_TYPE_CSS_SPECIAL_VALUE))
-    {
-      return _gtk_css_value_new_from_rgba (NULL);
-    }
-  else if (_gtk_css_value_holds (specified, GTK_TYPE_SYMBOLIC_COLOR))
+  if (_gtk_css_value_holds (specified, GTK_TYPE_SYMBOLIC_COLOR))
     {
       GtkSymbolicColor *symbolic = _gtk_css_value_get_symbolic_color (specified);
 

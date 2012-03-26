@@ -61,8 +61,7 @@ struct _GtkStylePropertyClass
                                                             GValue                 *value,
                                                             GtkStyleQueryFunc       query_func,
                                                             gpointer                query_data);
-  gboolean          (* parse_value)                        (GtkStyleProperty *      property,
-                                                            GValue                 *value,
+  GtkCssValue *     (* parse_value)                        (GtkStyleProperty *      property,
                                                             GtkCssParser           *parser,
                                                             GFile                  *base);
 
@@ -77,8 +76,7 @@ GtkStyleProperty *       _gtk_style_property_lookup        (const char          
 
 const char *             _gtk_style_property_get_name      (GtkStyleProperty       *property);
 
-gboolean                 _gtk_style_property_parse_value   (GtkStyleProperty *      property,
-                                                            GValue                 *value,
+GtkCssValue *            _gtk_style_property_parse_value   (GtkStyleProperty *      property,
                                                             GtkCssParser           *parser,
                                                             GFile                  *base);
 

@@ -21,6 +21,8 @@
 
 #include "gtkcssstylepropertyprivate.h"
 
+#include "gtkcssinheritvalueprivate.h"
+#include "gtkcssinitialvalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkintl.h"
@@ -186,9 +188,8 @@ _gtk_css_style_property_query (GtkStyleProperty   *property,
     }
 }
 
-static gboolean
+static GtkCssValue *
 gtk_css_style_property_parse_value (GtkStyleProperty *property,
-                                    GValue           *value,
                                     GtkCssParser     *parser,
                                     GFile            *base)
 {
@@ -199,9 +200,7 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
       /* the initial value can be explicitly specified with the
        * ‘initial’ keyword which all properties accept.
        */
-      g_value_init (value, GTK_TYPE_CSS_SPECIAL_VALUE);
-      g_value_set_enum (value, GTK_CSS_INITIAL);
-      return TRUE;
+      return _gtk_css_initial_value_new ();
     }
   else if (_gtk_css_parser_try (parser, "inherit", TRUE))
     {
@@ -211,19 +210,10 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
        * strengthen inherited values in the cascade, and it can
        * also be used on properties that are not normally inherited.
        */
-      g_value_init (value, GTK_TYPE_CSS_SPECIAL_VALUE);
-      g_value_set_enum (value, GTK_CSS_INHERIT);
-      return TRUE;
+      return _gtk_css_inherit_value_new ();
     }
 
-  g_value_init (value, _gtk_css_style_property_get_specified_type (style_property));
-  if (!(* style_property->parse_value) (style_property, value, parser, base))
-    {
-      g_value_unset (value);
-      return FALSE;
-    }
-
-  return TRUE;
+  return (* style_property->parse_value) (style_property, parser, base);
 }
 
 static void
@@ -279,13 +269,25 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
   klass->style_properties = g_ptr_array_new ();
 }
 
-static gboolean
+static GtkCssValue *
 gtk_css_style_property_real_parse_value (GtkCssStyleProperty *property,
-                                         GValue              *value,
                                          GtkCssParser        *parser,
                                          GFile               *base)
 {
-  return _gtk_css_style_parse_value (value, parser, base);
+  GValue value = G_VALUE_INIT;
+  GtkCssValue *result;
+
+  g_value_init (&value, _gtk_css_style_property_get_specified_type (property));
+  if (!_gtk_css_style_parse_value (&value, parser, base))
+    {
+      g_value_unset (&value);
+      return NULL;
+    }
+
+  result = _gtk_css_value_new_from_gvalue (&value);
+  g_value_unset (&value);
+
+  return result;
 }
 
 static void
@@ -499,29 +501,18 @@ _gtk_css_style_property_compute_value (GtkCssStyleProperty *property,
  **/
 void
 _gtk_css_style_property_print_value (GtkCssStyleProperty    *property,
-                                     GtkCssValue            *css_value,
+                                     GtkCssValue            *value,
                                      GString                *string)
 {
   g_return_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property));
-  g_return_if_fail (css_value != NULL);
+  g_return_if_fail (value != NULL);
   g_return_if_fail (string != NULL);
 
-  if (_gtk_css_value_is_special (css_value))
-    {
-      GEnumClass *enum_class;
-      GEnumValue *enum_value;
-
-      enum_class = g_type_class_ref (GTK_TYPE_CSS_SPECIAL_VALUE);
-      enum_value = g_enum_get_value (enum_class, _gtk_css_value_get_special_kind (css_value));
-
-      g_string_append (string, enum_value->value_nick);
-
-      g_type_class_unref (enum_class);
-    }
+  if (_gtk_css_value_is_inherit (value) ||
+      _gtk_css_value_is_initial (value))
+    _gtk_css_value_print (value, string);
   else
-    {
-      property->print_value (property, css_value, string);
-    }
+    property->print_value (property, value, string);
 }
 
 /**
