@@ -85,6 +85,7 @@ static GtkCssValue *
 gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
 {
   GValue value = G_VALUE_INIT;
+  GtkCssValue *result;
 
   g_value_init (&value, pspec->value_type);
 
@@ -111,7 +112,10 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
   else
     g_param_value_set_default (pspec, &value);
 
-  return _gtk_css_value_new_take_gvalue (&value);
+  result = _gtk_css_value_new_from_gvalue (&value);
+  g_value_unset (&value);
+
+  return result;
 }
 
 /* Property registration functions */

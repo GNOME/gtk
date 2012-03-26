@@ -80,7 +80,8 @@ gtk_css_style_property_register (const char *                   name,
 
   va_end (args);
 
-  initial_value = _gtk_css_value_new_take_gvalue (&initial_gvalue);
+  initial_value = _gtk_css_value_new_from_gvalue (&initial_gvalue);
+  g_value_unset (&initial_gvalue);
 
   node = g_object_new (GTK_TYPE_CSS_STYLE_PROPERTY,
                        "value-type", value_type,

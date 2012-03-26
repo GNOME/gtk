@@ -68,7 +68,6 @@ GType        _gtk_css_value_get_content_type          (const GtkCssValue        
 gboolean     _gtk_css_value_holds                     (const GtkCssValue          *value,
 						       GType                       type);
 GtkCssValue *_gtk_css_value_new_from_gvalue           (const GValue               *g_value);
-GtkCssValue *_gtk_css_value_new_take_gvalue           (GValue                     *g_value);
 GtkCssValue *_gtk_css_value_new_from_int              (gint                        val);
 GtkCssValue *_gtk_css_value_new_take_string           (char                       *string);
 GtkCssValue *_gtk_css_value_new_from_rgba             (const GdkRGBA              *v);
