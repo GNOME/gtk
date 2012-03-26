@@ -464,32 +464,6 @@ _gtk_css_style_property_get_specified_type (GtkCssStyleProperty *property)
   return _gtk_css_value_get_content_type (property->initial_value);
 }
 
-gboolean
-_gtk_css_style_property_is_specified_type (GtkCssStyleProperty *property,
-                                           GType                type)
-{
-  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
-
-  /* If it's our specified type, of course it's valid */
-  if (type == _gtk_css_value_get_content_type (property->initial_value))
-    return TRUE;
-
-  /* The special values 'inherit' and 'initial' are always valid */
-  if (type == GTK_TYPE_CSS_SPECIAL_VALUE)
-    return TRUE;
-
-  /* XXX: Someone needs to fix that legacy */
-  if ((_gtk_css_value_holds (property->initial_value, GDK_TYPE_RGBA) ||
-       _gtk_css_value_holds (property->initial_value, GDK_TYPE_COLOR)) &&
-      type == GTK_TYPE_SYMBOLIC_COLOR)
-    return TRUE;
-  if (_gtk_css_value_holds (property->initial_value, CAIRO_GOBJECT_TYPE_PATTERN) &&
-      type == GTK_TYPE_GRADIENT)
-    return TRUE;
-
-  return FALSE;
-}
-
 /**
  * _gtk_css_style_property_compute_value:
  * @property: the property

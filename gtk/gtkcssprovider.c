@@ -1254,7 +1254,6 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
 {
   guint i;
 
-  g_return_if_fail (_gtk_css_style_property_is_specified_type (property, G_VALUE_TYPE (value)));
   g_return_if_fail (ruleset->owns_styles || ruleset->n_styles == 0);
 
   if (ruleset->set_styles == NULL)

@@ -82,8 +82,6 @@ GtkCssValue  *          _gtk_css_style_property_get_initial_value
                                                                 (GtkCssStyleProperty    *property);
 GType                   _gtk_css_style_property_get_computed_type (GtkCssStyleProperty *property);
 GType                   _gtk_css_style_property_get_specified_type (GtkCssStyleProperty *property);
-gboolean                _gtk_css_style_property_is_specified_type (GtkCssStyleProperty  *property,
-                                                                 GType                   type);
 
 GtkCssValue *           _gtk_css_style_property_compute_value   (GtkCssStyleProperty    *property,
                                                                  GtkStyleContext        *context,
