@@ -1345,7 +1345,6 @@ gtk_style_context_get_property (GtkStyleContext *context,
   GtkStyleContextPrivate *priv;
   GtkStyleProperty *prop;
   StyleData *data;
-  GtkCssValue *v;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (property != NULL);
@@ -1367,9 +1366,7 @@ gtk_style_context_get_property (GtkStyleContext *context,
     }
 
   data = style_data_lookup (context, state);
-  v = _gtk_style_property_query (prop, gtk_style_context_query_func, data->store);
-  _gtk_css_value_init_gvalue (v, value);
-  _gtk_css_value_unref (v);
+  _gtk_style_property_query (prop, value, gtk_style_context_query_func, data->store);
 }
 
 /**

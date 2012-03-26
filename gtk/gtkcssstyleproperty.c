@@ -132,8 +132,9 @@ _gtk_css_style_property_assign (GtkStyleProperty   *property,
   _gtk_css_value_unref (css_value);
 }
 
-static GtkCssValue *
+static void
 _gtk_css_style_property_query (GtkStyleProperty   *property,
+                               GValue             *value,
                                GtkStyleQueryFunc   query_func,
                                gpointer            query_data)
 {
@@ -150,11 +151,11 @@ _gtk_css_style_property_query (GtkStyleProperty   *property,
           cairo_surface_t *surface;
           cairo_matrix_t matrix;
           
-          if (image == NULL)
-	    return _gtk_css_value_new_from_pattern (NULL);
-          else if (GTK_IS_CSS_IMAGE_GRADIENT (image))
-	    return _gtk_css_value_new_from_pattern (GTK_CSS_IMAGE_GRADIENT (image)->pattern);
-          else
+          g_value_init (value, CAIRO_GOBJECT_TYPE_PATTERN);
+
+          if (GTK_IS_CSS_IMAGE_GRADIENT (image))
+	    g_value_set_boxed (value, GTK_CSS_IMAGE_GRADIENT (image)->pattern);
+          else if (image != NULL)
             {
               double width, height;
 
@@ -165,19 +166,24 @@ _gtk_css_style_property_query (GtkStyleProperty   *property,
               cairo_matrix_init_scale (&matrix, width, height);
               cairo_pattern_set_matrix (pattern, &matrix);
               cairo_surface_destroy (surface);
-	      return _gtk_css_value_new_take_pattern (pattern);
+	      g_value_take_boxed (value, pattern);
             }
         }
       else if (_gtk_css_value_holds (css_value, GTK_TYPE_CSS_NUMBER))
         {
-	  int v = round (_gtk_css_number_get (_gtk_css_value_get_number (css_value), 100));
-	  return _gtk_css_value_new_from_int (v);
+          g_value_init (value, G_TYPE_INT);
+	  g_value_set_int (value, round (_gtk_css_number_get (_gtk_css_value_get_number (css_value), 100)));
         }
       else
-	return _gtk_css_value_ref (css_value);
+        {
+          _gtk_css_value_init_gvalue (css_value, value);
+        }
     }
   else
-    return _gtk_css_value_ref (_gtk_css_style_property_get_initial_value (GTK_CSS_STYLE_PROPERTY (property)));
+    {
+      _gtk_css_value_init_gvalue (_gtk_css_style_property_get_initial_value (GTK_CSS_STYLE_PROPERTY (property)),
+                                  value);
+    }
 }
 
 static gboolean

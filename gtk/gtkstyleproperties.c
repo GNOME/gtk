@@ -638,7 +638,6 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
 {
   StyleQueryData query = { props, state };
   GtkStyleProperty *node;
-  GtkCssValue *v;
 
   g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
   g_return_val_if_fail (property != NULL, FALSE);
@@ -656,11 +655,10 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
       return FALSE;
     }
 
-  v = _gtk_style_property_query (node,
-				 style_query_func,
-				 &query);
-  _gtk_css_value_init_gvalue (v, value);
-  _gtk_css_value_unref (v);
+  _gtk_style_property_query (node,
+                             value,
+                             style_query_func,
+                             &query);
 
   return TRUE;
 }

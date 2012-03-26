@@ -205,19 +205,21 @@ _gtk_style_property_assign (GtkStyleProperty   *property,
  * turn gtk_style_context_get() and similar functions to get the
  * value to return to code using old APIs.
  **/
-GtkCssValue *
+void
 _gtk_style_property_query (GtkStyleProperty  *property,
+                           GValue            *value,
                            GtkStyleQueryFunc  query_func,
                            gpointer           query_data)
 {
   GtkStylePropertyClass *klass;
 
-  g_return_val_if_fail (GTK_IS_STYLE_PROPERTY (property), NULL);
-  g_return_val_if_fail (query_func != NULL, NULL);
+  g_return_if_fail (value != NULL);
+  g_return_if_fail (GTK_IS_STYLE_PROPERTY (property));
+  g_return_if_fail (query_func != NULL);
 
   klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
 
-  return klass->query (property, query_func, query_data);
+  return klass->query (property, value, query_func, query_data);
 }
 
 void

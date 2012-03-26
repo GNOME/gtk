@@ -57,7 +57,8 @@ struct _GtkStylePropertyClass
                                                             GtkStyleProperties     *props,
                                                             GtkStateFlags           state,
                                                             const GValue           *value);
-  GtkCssValue *     (* query)                              (GtkStyleProperty       *property,
+  void              (* query)                              (GtkStyleProperty       *property,
+                                                            GValue                 *value,
                                                             GtkStyleQueryFunc       query_func,
                                                             gpointer                query_data);
   gboolean          (* parse_value)                        (GtkStyleProperty *      property,
@@ -82,7 +83,8 @@ gboolean                 _gtk_style_property_parse_value   (GtkStyleProperty *  
                                                             GFile                  *base);
 
 GType                    _gtk_style_property_get_value_type(GtkStyleProperty *      property);
-GtkCssValue *            _gtk_style_property_query         (GtkStyleProperty *      property,
+void                     _gtk_style_property_query         (GtkStyleProperty *      property,
+                                                            GValue                 *value,
                                                             GtkStyleQueryFunc       query_func,
                                                             gpointer                query_data);
 void                     _gtk_style_property_assign        (GtkStyleProperty       *property,
