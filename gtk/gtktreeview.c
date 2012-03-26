@@ -8509,21 +8509,27 @@ gtk_tree_view_get_path_for_child (GtkContainer *container,
   GtkTreeView *tree_view = GTK_TREE_VIEW (container);
   GtkWidgetPath *path;
   gboolean rtl;
-  GList *list;
+  GList *list, *visible_columns = NULL;
   gint n_col = 0;
 
   path = GTK_CONTAINER_CLASS (gtk_tree_view_parent_class)->get_path_for_child (container, child);
   rtl = (gtk_widget_get_direction (GTK_WIDGET (container)) == GTK_TEXT_DIR_RTL);
 
-  for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
-       list;
-       list = (rtl ? list->prev : list->next))
+  for (list = tree_view->priv->columns; list; list = list->next)
+    {
+      GtkTreeViewColumn *column = list->data;
+
+      if (gtk_tree_view_column_get_visible (column))
+        visible_columns = g_list_prepend (visible_columns, column);
+    }
+
+  if (!rtl)
+    visible_columns = g_list_reverse (visible_columns);
+
+  for (list = visible_columns; list != NULL; list = list->next)
     {
       GtkTreeViewColumn *column = list->data;
       GtkRegionFlags flags = 0;
-
-      if (!gtk_tree_view_column_get_visible (column))
-        continue;
 
       n_col++;
 
@@ -8539,13 +8545,13 @@ gtk_tree_view_get_path_for_child (GtkContainer *container,
       if (n_col == 1)
         flags |= GTK_REGION_FIRST;
 
-      if ((rtl && !list->prev) ||
-          (!rtl && !list->next))
+      if (!list->next)
         flags |= GTK_REGION_LAST;
 
       gtk_widget_path_iter_add_region (path, -1, GTK_STYLE_REGION_COLUMN_HEADER, flags);
       break;
     }
+  g_list_free (visible_columns);
 
   gtk_widget_path_append_for_widget (path, child);
 
