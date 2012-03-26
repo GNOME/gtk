@@ -1,3 +1,25 @@
+Overview of Changes in GTK+ 3.4.0
+=================================
+
+* Bugs fixed:
+ 658875 Should limit Num Lock warning to notebooks
+ 671006 keygrab: don't translate Alt+Print to SysRq
+ 672163 GtkWindows (comboboxes, menus, etc.) do not show up...
+ 672587 regression in about dialog credits spacing
+ 672763 Floating point exception in Gtk.Grid() if grid emptied
+
+* Translation updates:
+ Arabic
+ Czech
+ Hebrew
+ Hindi
+ Japanese
+ Kannada
+ Latvian
+ Simplified Chinese
+ Telugu
+
+
 Overview of Changes in GTK+ 3.3.20
 ==================================
 
