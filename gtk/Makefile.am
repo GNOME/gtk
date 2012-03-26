@@ -423,6 +423,7 @@ gtk_private_h_sources =		\
 	gtkcolorscaleprivate.h	\
 	gtkcolorchooserprivate.h	\
 	gtkcontainerprivate.h   \
+	gtkcssarrayvalueprivate.h	\
 	gtkcsscomputedvaluesprivate.h \
 	gtkcsscustompropertyprivate.h \
 	gtkcssimagegradientprivate.h	\
@@ -620,6 +621,7 @@ gtk_base_c_sources = 		\
 	gtkcombobox.c		\
 	gtkcomboboxtext.c	\
 	gtkcontainer.c		\
+	gtkcssarrayvalue.c	\
 	gtkcsscomputedvalues.c	\
 	gtkcsscustomproperty.c	\
 	gtkcssimage.c		\

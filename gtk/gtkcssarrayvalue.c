@@ -1,0 +1,102 @@
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 2011 Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "config.h"
+
+#include "gtkcssarrayvalueprivate.h"
+
+#include <string.h>
+
+struct _GtkCssValue {
+  GTK_CSS_VALUE_BASE
+  guint         n_values;
+  GtkCssValue  *values[1];
+};
+
+static void
+gtk_css_value_array_free (GtkCssValue *value)
+{
+  guint i;
+
+  for (i = 0; i < value->n_values; i++)
+    {
+      _gtk_css_value_unref (value->values[i]);
+    }
+
+  g_slice_free1 (sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (value->n_values - 1), value);
+}
+
+static void
+gtk_css_value_array_print (const GtkCssValue *value,
+                           GString           *string)
+{
+  guint i;
+
+  if (value->n_values == 0)
+    {
+      g_string_append (string, "none");
+      return;
+    }
+
+  for (i = 0; i < value->n_values; i++)
+    {
+      if (i > 0)
+        g_string_append (string, ", ");
+      _gtk_css_value_print (value->values[i], string);
+    }
+}
+
+static const GtkCssValueClass GTK_CSS_VALUE_ARRAY = {
+  gtk_css_value_array_free,
+  gtk_css_value_array_print
+};
+
+GtkCssValue *
+_gtk_css_array_value_new (GtkCssValue **values,
+                          guint         n_values)
+{
+  GtkCssValue *result;
+  
+  g_return_val_if_fail (values != NULL || n_values == 0, NULL);
+
+  result = _gtk_css_value_alloc (&GTK_CSS_VALUE_ARRAY, sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (MAX (1, n_values) - 1));
+  result->n_values = n_values;
+  memcpy (&result->values[0], values, sizeof (GtkCssValue *) * n_values);
+
+  return result;
+}
+
+GtkCssValue *
+_gtk_css_array_value_get_nth (const GtkCssValue *value,
+                              guint              i)
+{
+  g_return_val_if_fail (value != NULL, NULL);
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_ARRAY, NULL);
+  g_return_val_if_fail (value->n_values > 0, NULL);
+
+  return value->values[i % value->n_values];
+}
+
+guint
+_gtk_css_array_value_get_n_values (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value != NULL, 0);
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_ARRAY, 0);
+
+  return value->n_values;
+}
+
