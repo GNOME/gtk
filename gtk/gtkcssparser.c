@@ -643,10 +643,9 @@ _gtk_css_parser_read_number (GtkCssParser           *parser,
         }
       else if (flags & GTK_CSS_NUMBER_AS_PIXELS)
         {
-          GError *error = g_error_new_literal (GTK_CSS_PROVIDER_ERROR,
-                                               GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                               "Not using units is deprecated. Assuming 'px'.");
-          _gtk_css_parser_take_error (parser, error);
+          _gtk_css_parser_error_full (parser,
+                                      GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                                      "Not using units is deprecated. Assuming 'px'.");
           number->unit = GTK_CSS_PX;
         }
       else if (flags & GTK_CSS_PARSE_NUMBER)
@@ -1019,13 +1018,9 @@ _gtk_css_parser_read_url (GtkCssParser *parser,
           _gtk_css_parser_skip_whitespace (parser);
           if (_gtk_css_parser_try (parser, "(", TRUE))
             {
-              GError *error;
-              
-              error = g_error_new_literal (GTK_CSS_PROVIDER_ERROR,
-                                           GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                           "Whitespace between 'url' and '(' is deprecated");
-                             
-              _gtk_css_parser_take_error (parser, error);
+              _gtk_css_parser_error_full (parser,
+                                          GTK_CSS_PROVIDER_ERROR_DEPRECATED,
+                                          "Whitespace between 'url' and '(' is deprecated");
             }
           else
             {
