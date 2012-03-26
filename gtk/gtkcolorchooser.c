@@ -207,7 +207,7 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
  * @n_colors: the total number of elements in @colors
  * @colors: (allow-none) (array length=n_colors): the colors of the palette, or %NULL
  *
- * Adds a palette to the color chooser. If @horizontal is %TRUE,
+ * Adds a palette to the color chooser. If @orientation is horizontal,
  * the colors are grouped in rows, with @colors_per_line colors
  * in each row. If @horizontal is %FALSE, the colors are grouped
  * in columns instead.
@@ -219,7 +219,7 @@ gtk_color_chooser_set_use_alpha (GtkColorChooser *chooser,
  * The layout of the color chooser widget works best when the
  * palettes have 9-10 columns.
  *
- * Calling this function is called for the first time has the
+ * Calling this function for the first time has the
  * side effect of removing the default color and gray palettes
  * from the color chooser.
  *
