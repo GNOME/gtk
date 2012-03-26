@@ -79,6 +79,13 @@ gtk_css_value_default_free (GtkCssValue *value)
   g_slice_free (GtkCssValue, value);
 }
 
+static gboolean
+gtk_css_value_default_equal (const GtkCssValue *value1,
+                             const GtkCssValue *value2)
+{
+  return FALSE;
+}
+
 static void
 gtk_css_value_default_print (const GtkCssValue *value,
                              GString           *string)
@@ -92,6 +99,7 @@ gtk_css_value_default_print (const GtkCssValue *value,
 
 static const GtkCssValueClass GTK_CSS_VALUE_DEFAULT = {
   gtk_css_value_default_free,
+  gtk_css_value_default_equal,
   gtk_css_value_default_print
 };
 
@@ -436,6 +444,19 @@ _gtk_css_value_unref (GtkCssValue *value)
     return;
 
   value->class->free (value);
+}
+
+gboolean
+_gtk_css_value_equal (const GtkCssValue *value1,
+                      const GtkCssValue *value2)
+{
+  g_return_val_if_fail (value1 != NULL, FALSE);
+  g_return_val_if_fail (value2 != NULL, FALSE);
+
+  if (value1->class != value2->class)
+    return FALSE;
+
+  return value1->class->equal (value1, value2);
 }
 
 void

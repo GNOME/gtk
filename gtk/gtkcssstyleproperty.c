@@ -311,7 +311,7 @@ gtk_css_style_property_real_equal (GtkCssStyleProperty *property,
                                    GtkCssValue         *value1,
                                    GtkCssValue         *value2)
 {
-  return FALSE;
+  return _gtk_css_value_equal (value1, value2);
 }
 
 static void

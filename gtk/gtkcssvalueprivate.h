@@ -48,6 +48,8 @@ typedef struct _GtkCssValueClass      GtkCssValueClass;
 struct _GtkCssValueClass {
   void          (* free)                              (GtkCssValue                *value);
 
+  gboolean      (* equal)                             (const GtkCssValue          *value1,
+                                                       const GtkCssValue          *value2);
   void          (* print)                             (const GtkCssValue          *value,
                                                        GString                    *string);
 };
@@ -60,6 +62,9 @@ GtkCssValue *_gtk_css_value_alloc                     (const GtkCssValueClass   
 
 GtkCssValue *_gtk_css_value_ref                       (GtkCssValue                *value);
 void         _gtk_css_value_unref                     (GtkCssValue                *value);
+
+gboolean     _gtk_css_value_equal                     (const GtkCssValue          *value1,
+                                                       const GtkCssValue          *value2);
 
 void         _gtk_css_value_print                     (const GtkCssValue          *value,
                                                        GString                    *string);
