@@ -35,13 +35,30 @@ G_BEGIN_DECLS
 #define GTK_IS_CSS_VALUE_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_VALUE))
 #define GTK_CSS_VALUE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_VALUE, GtkCssValueClass))
 
-typedef struct _GtkCssValue           GtkCssValue;
-
 /* A GtkCssValue is a refcounted immutable value type */
 
+typedef struct _GtkCssValue           GtkCssValue;
+typedef struct _GtkCssValueBase       GtkCssValueBase;
+typedef struct _GtkCssValueClass      GtkCssValueClass;
+
+/* using define instead of struct here so compilers get the packing right */
+#define GTK_CSS_VALUE_BASE \
+  const GtkCssValueClass *class; \
+  volatile gint ref_count;
+
+struct _GtkCssValueClass {
+  void          (* free)                              (GtkCssValue                *value);
+};
+
 GType        _gtk_css_value_get_type                  (void) G_GNUC_CONST;
+
+GtkCssValue *_gtk_css_value_alloc                     (const GtkCssValueClass     *klass,
+                                                       gsize                       size);
+#define _gtk_css_value_new(_name, _klass) ((_name *) _gtk_css_value_alloc ((_klass), sizeof (_name)))
+
 GtkCssValue *_gtk_css_value_ref                       (GtkCssValue                *value);
 void         _gtk_css_value_unref                     (GtkCssValue                *value);
+
 GType        _gtk_css_value_get_content_type          (GtkCssValue                *value);
 gboolean     _gtk_css_value_holds                     (GtkCssValue                *value,
 						       GType                       type);

@@ -25,9 +25,10 @@
 
 #include "fallback-c89.c"
 
+typedef struct _GtkCssValue GtkCssValue;
 struct _GtkCssValue
 {
-  volatile gint ref_count;
+  GTK_CSS_VALUE_BASE
   GType type;
   union {
     gpointer ptr;
@@ -38,16 +39,59 @@ struct _GtkCssValue
   } u;
 };
 
+static void
+gtk_css_value_default_free (GtkCssValue *value)
+{
+  GType type = value->type;
+
+  if (g_type_is_a (type, G_TYPE_OBJECT))
+    {
+      if (value->u.ptr != NULL)
+        g_object_unref (value->u.ptr);
+    }
+  else if (g_type_is_a (type, G_TYPE_BOXED))
+    {
+      if (value->u.ptr != NULL)
+        g_boxed_free (type, value->u.ptr);
+    }
+  else if (g_type_is_a (type, G_TYPE_STRING))
+    g_free (value->u.ptr);
+  else if (g_type_is_a (type, G_TYPE_INT))
+    {}
+  else if (g_type_is_a (type, G_TYPE_UINT))
+    {}
+  else if (g_type_is_a (type, G_TYPE_BOOLEAN))
+    {}
+  else if (g_type_is_a (type, G_TYPE_ENUM))
+    {}
+  else if (g_type_is_a (type, G_TYPE_FLAGS))
+    {}
+  else if (g_type_is_a (type, G_TYPE_DOUBLE))
+    {}
+  else if (g_type_is_a (type, G_TYPE_FLOAT))
+    {}
+  else
+    {
+      g_value_unset (value->u.ptr);
+      g_slice_free (GValue, value->u.ptr);
+    }
+
+  g_slice_free (GtkCssValue, value);
+}
+
+static const GtkCssValueClass GTK_CSS_VALUE_DEFAULT = {
+  gtk_css_value_default_free
+};
+
 G_DEFINE_BOXED_TYPE (GtkCssValue, _gtk_css_value, _gtk_css_value_ref, _gtk_css_value_unref)
 
 static GtkCssValue *
-_gtk_css_value_new (GType type)
+gtk_css_value_new (GType type)
 {
   GtkCssValue *value;
 
-  value = g_slice_new0 (GtkCssValue);
+  value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_DEFAULT);
 
-  value->ref_count = 1;
   value->type = type;
 
   return value;
@@ -70,7 +114,7 @@ _gtk_css_value_new_from_gvalue (const GValue *g_value)
     value = _gtk_css_value_new_from_number (g_value_get_boxed (g_value));
   else
     {
-      value = _gtk_css_value_new (type);
+      value = gtk_css_value_new (type);
 
       if (g_type_is_a (type, G_TYPE_OBJECT))
 	value->u.ptr = g_value_dup_object (g_value);
@@ -126,7 +170,7 @@ _gtk_css_value_new_take_gvalue (GValue *g_value)
     }
   else
     {
-      value = _gtk_css_value_new (type);
+      value = gtk_css_value_new (type);
 
       if (g_type_is_a (type, G_TYPE_OBJECT))
 	value->u.ptr = g_value_get_object (g_value);
@@ -170,14 +214,14 @@ _gtk_css_value_new_from_int (gint val)
     {
       if (singletons[val] == NULL)
 	{
-	  value = _gtk_css_value_new (G_TYPE_INT);
+	  value = gtk_css_value_new (G_TYPE_INT);
 	  value->u.gint = val;
 	  singletons[val] = value;
 	}
       return _gtk_css_value_ref (singletons[val]);
     }
 
-  value = _gtk_css_value_new (G_TYPE_INT);
+  value = gtk_css_value_new (G_TYPE_INT);
   value->u.gint = val;
 
   return value;
@@ -188,7 +232,7 @@ _gtk_css_value_new_take_string (char *string)
 {
   GtkCssValue *value;
 
-  value = _gtk_css_value_new (G_TYPE_STRING);
+  value = gtk_css_value_new (G_TYPE_STRING);
   value->u.ptr = string;
 
   return value;
@@ -208,7 +252,7 @@ _gtk_css_value_new_from_border (const GtkBorder *border)
 {
   GtkCssValue *value;
 
-  value = _gtk_css_value_new (GTK_TYPE_BORDER);
+  value = gtk_css_value_new (GTK_TYPE_BORDER);
   value->u.ptr = g_boxed_copy0 (GTK_TYPE_BORDER, border);
 
   return value;
@@ -219,7 +263,7 @@ _gtk_css_value_new_take_pattern (cairo_pattern_t *v)
 {
   GtkCssValue *value;
 
-  value = _gtk_css_value_new (CAIRO_GOBJECT_TYPE_PATTERN);
+  value = gtk_css_value_new (CAIRO_GOBJECT_TYPE_PATTERN);
   value->u.ptr = v;
 
   return value;
@@ -230,7 +274,7 @@ _gtk_css_value_new_from_pattern (const cairo_pattern_t *v)
 {
   GtkCssValue *value;
 
-  value = _gtk_css_value_new (CAIRO_GOBJECT_TYPE_PATTERN);
+  value = gtk_css_value_new (CAIRO_GOBJECT_TYPE_PATTERN);
   value->u.ptr = g_boxed_copy0 (CAIRO_GOBJECT_TYPE_PATTERN, v);
 
   return value;
@@ -241,7 +285,7 @@ _gtk_css_value_new_take_shadow (GtkShadow *v)
 {
   GtkCssValue *value;
 
-  value = _gtk_css_value_new (GTK_TYPE_SHADOW);
+  value = gtk_css_value_new (GTK_TYPE_SHADOW);
   value->u.ptr = v;
 
   return value;
@@ -252,7 +296,7 @@ _gtk_css_value_new_take_font_description (PangoFontDescription *v)
 {
   GtkCssValue *value;
 
-  value = _gtk_css_value_new (PANGO_TYPE_FONT_DESCRIPTION);
+  value = gtk_css_value_new (PANGO_TYPE_FONT_DESCRIPTION);
   value->u.ptr = v;
 
   return value;
@@ -263,7 +307,7 @@ _gtk_css_value_new_take_image (GtkCssImage *v)
 {
   GtkCssValue *value;
 
-  value = _gtk_css_value_new (GTK_TYPE_CSS_IMAGE);
+  value = gtk_css_value_new (GTK_TYPE_CSS_IMAGE);
   value->u.ptr = v;
 
   return value;
@@ -281,7 +325,7 @@ _gtk_css_value_new_from_number (const GtkCssNumber *v)
     {
       if (zero_singleton == NULL)
 	{
-	  value = _gtk_css_value_new (GTK_TYPE_CSS_NUMBER);
+	  value = gtk_css_value_new (GTK_TYPE_CSS_NUMBER);
 	  value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_NUMBER, v);
 	  zero_singleton = value;
 	}
@@ -298,7 +342,7 @@ _gtk_css_value_new_from_number (const GtkCssNumber *v)
       int i = round (v->value);
       if (px_singletons[i] == NULL)
 	{
-	  value = _gtk_css_value_new (GTK_TYPE_CSS_NUMBER);
+	  value = gtk_css_value_new (GTK_TYPE_CSS_NUMBER);
 	  value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_NUMBER, v);
 	  px_singletons[i] = value;
 	}
@@ -306,7 +350,7 @@ _gtk_css_value_new_from_number (const GtkCssNumber *v)
       return _gtk_css_value_ref (px_singletons[i]);
     }
 
-  value = _gtk_css_value_new (GTK_TYPE_CSS_NUMBER);
+  value = gtk_css_value_new (GTK_TYPE_CSS_NUMBER);
   value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_NUMBER, v);
 
   return value;
@@ -317,7 +361,7 @@ _gtk_css_value_new_from_rgba (const GdkRGBA *v)
 {
   GtkCssValue *value;
 
-  value = _gtk_css_value_new (GDK_TYPE_RGBA);
+  value = gtk_css_value_new (GDK_TYPE_RGBA);
   value->u.ptr = g_boxed_copy0 (GDK_TYPE_RGBA, v);
 
   return value;
@@ -328,7 +372,7 @@ _gtk_css_value_new_from_color (const GdkColor *v)
 {
   GtkCssValue *value;
 
-  value = _gtk_css_value_new (GDK_TYPE_COLOR);
+  value = gtk_css_value_new (GDK_TYPE_COLOR);
   value->u.ptr = g_boxed_copy0 (GDK_TYPE_COLOR, v);
 
   return value;
@@ -339,7 +383,7 @@ _gtk_css_value_new_from_background_size (const GtkCssBackgroundSize *v)
 {
   GtkCssValue *value;
 
-  value = _gtk_css_value_new (GTK_TYPE_CSS_BACKGROUND_SIZE);
+  value = gtk_css_value_new (GTK_TYPE_CSS_BACKGROUND_SIZE);
   value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_BACKGROUND_SIZE, v);
 
   return value;
@@ -350,7 +394,7 @@ _gtk_css_value_new_from_background_position (const GtkCssBackgroundPosition *v)
 {
   GtkCssValue *value;
 
-  value = _gtk_css_value_new (GTK_TYPE_CSS_BACKGROUND_POSITION);
+  value = gtk_css_value_new (GTK_TYPE_CSS_BACKGROUND_POSITION);
   value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_BACKGROUND_POSITION, v);
 
   return value;
@@ -361,8 +405,22 @@ _gtk_css_value_new_take_symbolic_color (GtkSymbolicColor *v)
 {
   GtkCssValue *value;
 
-  value = _gtk_css_value_new (GTK_TYPE_SYMBOLIC_COLOR);
+  value = gtk_css_value_new (GTK_TYPE_SYMBOLIC_COLOR);
   value->u.ptr = v;
+
+  return value;
+}
+
+GtkCssValue *
+_gtk_css_value_alloc (const GtkCssValueClass *klass,
+                      gsize                   size)
+{
+  GtkCssValue *value;
+
+  value = g_slice_alloc0 (size);
+
+  value->class = klass;
+  value->ref_count = 1;
 
   return value;
 }
@@ -380,49 +438,13 @@ _gtk_css_value_ref (GtkCssValue *value)
 void
 _gtk_css_value_unref (GtkCssValue *value)
 {
-  GType type;
-
   if (value == NULL)
     return;
 
   if (!g_atomic_int_dec_and_test (&value->ref_count))
     return;
 
-  type = value->type;
-
-  if (g_type_is_a (type, G_TYPE_OBJECT))
-    {
-      if (value->u.ptr != NULL)
-        g_object_unref (value->u.ptr);
-    }
-  else if (g_type_is_a (type, G_TYPE_BOXED))
-    {
-      if (value->u.ptr != NULL)
-        g_boxed_free (type, value->u.ptr);
-    }
-  else if (g_type_is_a (type, G_TYPE_STRING))
-    g_free (value->u.ptr);
-  else if (g_type_is_a (type, G_TYPE_INT))
-    {}
-  else if (g_type_is_a (type, G_TYPE_UINT))
-    {}
-  else if (g_type_is_a (type, G_TYPE_BOOLEAN))
-    {}
-  else if (g_type_is_a (type, G_TYPE_ENUM))
-    {}
-  else if (g_type_is_a (type, G_TYPE_FLAGS))
-    {}
-  else if (g_type_is_a (type, G_TYPE_DOUBLE))
-    {}
-  else if (g_type_is_a (type, G_TYPE_FLOAT))
-    {}
-  else
-    {
-      g_value_unset (value->u.ptr);
-      g_slice_free (GValue, value->u.ptr);
-    }
-
-  g_slice_free (GtkCssValue, value);
+  value->class->free (value);
 }
 
 GType
