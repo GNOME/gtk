@@ -296,6 +296,9 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                   G_TYPE_NONE, 1,
                   G_TYPE_INT);
 
+  /**
+   * Since: 3.2
+   */
   menu_item_signals[SELECT] =
     g_signal_new (I_("select"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
@@ -305,6 +308,9 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
+  /**
+   * Since: 3.2
+   */
   menu_item_signals[DESELECT] =
     g_signal_new (I_("deselect"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
