@@ -260,17 +260,6 @@ g_boxed_copy0 (GType         boxed_type,
 }
 
 GtkCssValue *
-_gtk_css_value_new_from_border (const GtkBorder *border)
-{
-  GtkCssValue *value;
-
-  value = gtk_css_value_new (GTK_TYPE_BORDER);
-  value->u.ptr = g_boxed_copy0 (GTK_TYPE_BORDER, border);
-
-  return value;
-}
-
-GtkCssValue *
 _gtk_css_value_new_take_pattern (cairo_pattern_t *v)
 {
   GtkCssValue *value;
@@ -282,33 +271,11 @@ _gtk_css_value_new_take_pattern (cairo_pattern_t *v)
 }
 
 GtkCssValue *
-_gtk_css_value_new_from_pattern (const cairo_pattern_t *v)
-{
-  GtkCssValue *value;
-
-  value = gtk_css_value_new (CAIRO_GOBJECT_TYPE_PATTERN);
-  value->u.ptr = g_boxed_copy0 (CAIRO_GOBJECT_TYPE_PATTERN, v);
-
-  return value;
-}
-
-GtkCssValue *
 _gtk_css_value_new_take_shadow (GtkShadow *v)
 {
   GtkCssValue *value;
 
   value = gtk_css_value_new (GTK_TYPE_SHADOW);
-  value->u.ptr = v;
-
-  return value;
-}
-
-GtkCssValue *
-_gtk_css_value_new_take_font_description (PangoFontDescription *v)
-{
-  GtkCssValue *value;
-
-  value = gtk_css_value_new (PANGO_TYPE_FONT_DESCRIPTION);
   value->u.ptr = v;
 
   return value;
@@ -648,13 +615,6 @@ const GtkCssBorderCornerRadius *
 _gtk_css_value_get_border_corner_radius (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BORDER_CORNER_RADIUS), NULL);
-  return value->u.ptr;
-}
-
-PangoFontDescription *
-_gtk_css_value_get_font_description (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, PANGO_TYPE_FONT_DESCRIPTION), 0);
   return value->u.ptr;
 }
 

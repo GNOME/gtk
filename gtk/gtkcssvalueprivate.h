@@ -71,13 +71,10 @@ GtkCssValue *_gtk_css_value_new_from_gvalue           (const GValue             
 GtkCssValue *_gtk_css_value_new_take_gvalue           (GValue                     *g_value);
 GtkCssValue *_gtk_css_value_new_from_int              (gint                        val);
 GtkCssValue *_gtk_css_value_new_take_string           (char                       *string);
-GtkCssValue *_gtk_css_value_new_take_font_description (PangoFontDescription       *v);
 GtkCssValue *_gtk_css_value_new_from_rgba             (const GdkRGBA              *v);
 GtkCssValue *_gtk_css_value_new_from_color            (const GdkColor             *v);
 GtkCssValue *_gtk_css_value_new_take_symbolic_color   (GtkSymbolicColor           *v);
-GtkCssValue *_gtk_css_value_new_from_border           (const GtkBorder            *border);
 GtkCssValue *_gtk_css_value_new_take_pattern          (cairo_pattern_t            *v);
-GtkCssValue *_gtk_css_value_new_from_pattern          (const cairo_pattern_t      *v);
 GtkCssValue *_gtk_css_value_new_take_shadow           (GtkShadow                  *v);
 GtkCssValue *_gtk_css_value_new_take_image            (GtkCssImage                *v);
 GtkCssValue *_gtk_css_value_new_from_number           (const GtkCssNumber         *v);
@@ -104,7 +101,6 @@ const GtkCssBackgroundSize     *_gtk_css_value_get_background_size        (const
 const GtkCssBackgroundPosition *_gtk_css_value_get_background_position    (const GtkCssValue *value);
 const GtkCssBorderCornerRadius *_gtk_css_value_get_border_corner_radius   (const GtkCssValue *value);
 const GtkCssBorderImageRepeat  *_gtk_css_value_get_border_image_repeat    (const GtkCssValue *value);
-PangoFontDescription *          _gtk_css_value_get_font_description       (const GtkCssValue *value);
 PangoStyle                      _gtk_css_value_get_pango_style            (const GtkCssValue *value);
 PangoVariant                    _gtk_css_value_get_pango_variant          (const GtkCssValue *value);
 PangoWeight                     _gtk_css_value_get_pango_weight           (const GtkCssValue *value);
