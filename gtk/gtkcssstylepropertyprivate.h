@@ -39,7 +39,7 @@ typedef gboolean         (* GtkCssStylePropertyParseFunc)  (GtkCssStyleProperty 
                                                             GtkCssParser           *parser,
                                                             GFile                  *base);
 typedef void             (* GtkCssStylePropertyPrintFunc)  (GtkCssStyleProperty    *property,
-                                                            const GValue           *value,
+                                                            const GtkCssValue      *value,
                                                             GString                *string);
 typedef GtkCssValue  *   (* GtkCssStylePropertyComputeFunc)(GtkCssStyleProperty    *property,
                                                             GtkStyleContext        *context,

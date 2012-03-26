@@ -235,10 +235,10 @@ font_family_parse (GtkCssStyleProperty *property,
 
 static void
 font_family_value_print (GtkCssStyleProperty *property,
-                         const GValue        *value,
+                         const GtkCssValue   *value,
                          GString             *string)
 {
-  const char **names = g_value_get_boxed (value);
+  const char **names = _gtk_css_value_get_strv (value);
 
   if (names == NULL || *names == NULL)
     {
@@ -298,13 +298,13 @@ bindings_value_parse (GtkCssStyleProperty *property,
 
 static void
 bindings_value_print (GtkCssStyleProperty *property,
-                      const GValue        *value,
+                      const GtkCssValue   *value,
                       GString             *string)
 {
   GPtrArray *array;
   guint i;
 
-  array = g_value_get_boxed (value);
+  array = _gtk_css_value_get_boxed (value);
 
   for (i = 0; i < array->len; i++)
     {
@@ -348,12 +348,12 @@ border_corner_radius_value_parse (GtkCssStyleProperty *property,
 
 static void
 border_corner_radius_value_print (GtkCssStyleProperty *property,
-                                  const GValue        *value,
+                                  const GtkCssValue   *value,
                                   GString             *string)
 {
-  GtkCssBorderCornerRadius *corner;
+  const GtkCssBorderCornerRadius *corner;
 
-  corner = g_value_get_boxed (value);
+  corner = _gtk_css_value_get_border_corner_radius (value);
 
   _gtk_css_number_print (&corner->horizontal, string);
 
@@ -387,10 +387,10 @@ css_image_value_parse (GtkCssStyleProperty *property,
 
 static void
 css_image_value_print (GtkCssStyleProperty *property,
-                       const GValue        *value,
+                       const GtkCssValue   *value,
                        GString             *string)
 {
-  GtkCssImage *image = g_value_get_object (value);
+  GtkCssImage *image = _gtk_css_value_get_image (value);
 
   if (image)
     _gtk_css_image_print (image, string);
@@ -575,14 +575,14 @@ background_repeat_value_parse (GtkCssStyleProperty *property,
 
 static void
 background_repeat_value_print (GtkCssStyleProperty *property,
-                               const GValue        *value,
+                               const GtkCssValue   *value,
                                GString             *string)
 {
   GEnumClass *enum_class;
   GEnumValue *enum_value;
   GtkCssBackgroundRepeat repeat;
 
-  repeat = g_value_get_enum (value);
+  repeat = _gtk_css_value_get_enum (value);
   enum_class = g_type_class_ref (GTK_TYPE_CSS_BACKGROUND_REPEAT);
   enum_value = g_enum_get_value (enum_class, repeat);
 
@@ -649,10 +649,10 @@ background_size_parse (GtkCssStyleProperty *property,
 
 static void
 background_size_print (GtkCssStyleProperty *property,
-                       const GValue        *value,
+                       const GtkCssValue   *value,
                        GString             *string)
 {
-  GtkCssBackgroundSize *size = g_value_get_boxed (value);
+  const GtkCssBackgroundSize *size = _gtk_css_value_get_background_size (value);
 
   if (size->cover)
     g_string_append (string, "cover");
@@ -792,10 +792,10 @@ background_position_parse (GtkCssStyleProperty *property,
 
 static void
 background_position_print (GtkCssStyleProperty *property,
-			   const GValue        *value,
+			   const GtkCssValue   *value,
 			   GString             *string)
 {
-  GtkCssBackgroundPosition *pos = g_value_get_boxed (value);
+  const GtkCssBackgroundPosition *pos = _gtk_css_value_get_background_position (value);
   static const GtkCssNumber center = GTK_CSS_NUMBER_INIT (50, GTK_CSS_PERCENT);
   static const struct {
     const char *x_name;

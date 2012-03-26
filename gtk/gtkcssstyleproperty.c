@@ -284,10 +284,10 @@ gtk_css_style_property_real_parse_value (GtkCssStyleProperty *property,
 
 static void
 gtk_css_style_property_real_print_value (GtkCssStyleProperty *property,
-                                         const GValue        *value,
+                                         const GtkCssValue   *value,
                                          GString             *string)
 {
-  _gtk_css_style_print_value (value, string);
+  _gtk_css_value_print (value, string);
 }
 
 static GtkCssValue *
@@ -540,10 +540,7 @@ _gtk_css_style_property_print_value (GtkCssStyleProperty    *property,
     }
   else
     {
-      GValue value = G_VALUE_INIT;
-      _gtk_css_value_init_gvalue (css_value, &value);
-      property->print_value (property, &value, string);
-      g_value_unset (&value);
+      property->print_value (property, css_value, string);
     }
 }
 

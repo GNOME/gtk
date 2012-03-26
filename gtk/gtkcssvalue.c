@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gtkcssvalueprivate.h"
+#include "gtkcssstylefuncsprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkgradient.h"
 #include <cairo-gobject.h>
@@ -25,7 +26,6 @@
 
 #include "fallback-c89.c"
 
-typedef struct _GtkCssValue GtkCssValue;
 struct _GtkCssValue
 {
   GTK_CSS_VALUE_BASE
@@ -79,8 +79,20 @@ gtk_css_value_default_free (GtkCssValue *value)
   g_slice_free (GtkCssValue, value);
 }
 
+static void
+gtk_css_value_default_print (const GtkCssValue *value,
+                             GString           *string)
+{
+  GValue g_value = G_VALUE_INIT;
+
+  _gtk_css_value_init_gvalue (value, &g_value);
+  _gtk_css_style_print_value (&g_value, string);
+  g_value_unset (&g_value);
+}
+
 static const GtkCssValueClass GTK_CSS_VALUE_DEFAULT = {
-  gtk_css_value_default_free
+  gtk_css_value_default_free,
+  gtk_css_value_default_print
 };
 
 G_DEFINE_BOXED_TYPE (GtkCssValue, _gtk_css_value, _gtk_css_value_ref, _gtk_css_value_unref)
@@ -447,21 +459,31 @@ _gtk_css_value_unref (GtkCssValue *value)
   value->class->free (value);
 }
 
+void
+_gtk_css_value_print (const GtkCssValue *value,
+                      GString           *string)
+{
+  g_return_if_fail (value != NULL);
+  g_return_if_fail (string != NULL);
+
+  value->class->print (value, string);
+}
+
 GType
-_gtk_css_value_get_content_type (GtkCssValue *value)
+_gtk_css_value_get_content_type (const GtkCssValue *value)
 {
   return value->type;
 }
 
 gboolean
-_gtk_css_value_holds (GtkCssValue *value, GType type)
+_gtk_css_value_holds (const GtkCssValue *value, GType type)
 {
   return g_type_is_a (value->type, type);
 }
 
 static void
-fill_gvalue (GtkCssValue *value,
-	     GValue      *g_value)
+fill_gvalue (const GtkCssValue *value,
+	     GValue            *g_value)
 {
   GType type;
 
@@ -492,8 +514,8 @@ fill_gvalue (GtkCssValue *value,
 }
 
 void
-_gtk_css_value_init_gvalue (GtkCssValue *value,
-			    GValue      *g_value)
+_gtk_css_value_init_gvalue (const GtkCssValue *value,
+			    GValue            *g_value)
 {
   if (value != NULL)
     {
@@ -503,55 +525,62 @@ _gtk_css_value_init_gvalue (GtkCssValue *value,
 }
 
 gboolean
-_gtk_css_value_is_special  (GtkCssValue *value)
+_gtk_css_value_is_special (const GtkCssValue *value)
 {
   return _gtk_css_value_holds (value, GTK_TYPE_CSS_SPECIAL_VALUE);
 }
 
 GtkCssSpecialValue
-_gtk_css_value_get_special_kind  (GtkCssValue *value)
+_gtk_css_value_get_special_kind (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_SPECIAL_VALUE), 0);
   return value->u.gint;
 }
 
 const GtkCssNumber *
-_gtk_css_value_get_number  (GtkCssValue *value)
+_gtk_css_value_get_number (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_NUMBER), NULL);
   return value->u.ptr;
 }
 
 GtkSymbolicColor *
-_gtk_css_value_get_symbolic_color  (GtkCssValue *value)
+_gtk_css_value_get_symbolic_color (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_SYMBOLIC_COLOR), NULL);
   return value->u.ptr;
 }
 
 int
-_gtk_css_value_get_int (GtkCssValue *value)
+_gtk_css_value_get_int (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, G_TYPE_INT), 0);
   return value->u.gint;
 }
 
+int
+_gtk_css_value_get_enum (const GtkCssValue *value)
+{
+  g_return_val_if_fail (_gtk_css_value_holds (value, G_TYPE_ENUM), 0);
+  return value->u.gint;
+}
+
 double
-_gtk_css_value_get_double (GtkCssValue *value)
+_gtk_css_value_get_double (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, G_TYPE_DOUBLE), 0);
   return value->u.dbl;
 }
 
 const char *
-_gtk_css_value_get_string (GtkCssValue *value)
+_gtk_css_value_get_string (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, G_TYPE_STRING), 0);
   return value->u.ptr;
 }
 
 gpointer
-_gtk_css_value_dup_object (GtkCssValue *value)
+_gtk_css_value_dup_object (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, G_TYPE_OBJECT), NULL);
   if (value->u.ptr)
@@ -560,119 +589,119 @@ _gtk_css_value_dup_object (GtkCssValue *value)
 }
 
 gpointer
-_gtk_css_value_get_object (GtkCssValue *value)
+_gtk_css_value_get_object (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, G_TYPE_OBJECT), NULL);
   return value->u.ptr;
 }
 
 gpointer
-_gtk_css_value_get_boxed (GtkCssValue *value)
+_gtk_css_value_get_boxed (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, G_TYPE_BOXED), NULL);
   return value->u.ptr;
 }
 
 const char **
-_gtk_css_value_get_strv (GtkCssValue *value)
+_gtk_css_value_get_strv (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, G_TYPE_STRV), NULL);
   return value->u.ptr;
 }
 
 GtkCssImage *
-_gtk_css_value_get_image (GtkCssValue *value)
+_gtk_css_value_get_image (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_IMAGE), NULL);
   return value->u.ptr;
 }
 
 GtkBorderStyle
-_gtk_css_value_get_border_style (GtkCssValue *value)
+_gtk_css_value_get_border_style (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_BORDER_STYLE), 0);
   return value->u.gint;
 }
 
 const GtkCssBackgroundSize *
-_gtk_css_value_get_background_size (GtkCssValue *value)
+_gtk_css_value_get_background_size (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BACKGROUND_SIZE), NULL);
   return value->u.ptr;
 }
 
 const GtkCssBackgroundPosition *
-_gtk_css_value_get_background_position (GtkCssValue *value)
+_gtk_css_value_get_background_position (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BACKGROUND_POSITION), NULL);
   return value->u.ptr;
 }
 
 const GtkCssBorderImageRepeat *
-_gtk_css_value_get_border_image_repeat (GtkCssValue *value)
+_gtk_css_value_get_border_image_repeat (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT), NULL);
   return value->u.ptr;
 }
 
 const GtkCssBorderCornerRadius *
-_gtk_css_value_get_border_corner_radius (GtkCssValue *value)
+_gtk_css_value_get_border_corner_radius (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BORDER_CORNER_RADIUS), NULL);
   return value->u.ptr;
 }
 
 PangoFontDescription *
-_gtk_css_value_get_font_description (GtkCssValue *value)
+_gtk_css_value_get_font_description (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, PANGO_TYPE_FONT_DESCRIPTION), 0);
   return value->u.ptr;
 }
 
 PangoStyle
-_gtk_css_value_get_pango_style (GtkCssValue *value)
+_gtk_css_value_get_pango_style (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, PANGO_TYPE_STYLE), 0);
   return value->u.gint;
 }
 
 PangoVariant
-_gtk_css_value_get_pango_variant (GtkCssValue *value)
+_gtk_css_value_get_pango_variant (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, PANGO_TYPE_VARIANT), 0);
   return value->u.gint;
 }
 
 PangoWeight
-_gtk_css_value_get_pango_weight (GtkCssValue *value)
+_gtk_css_value_get_pango_weight (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, PANGO_TYPE_WEIGHT), 0);
   return value->u.gint;
 }
 
 const GdkRGBA *
-_gtk_css_value_get_rgba (GtkCssValue *value)
+_gtk_css_value_get_rgba (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GDK_TYPE_RGBA), NULL);
   return value->u.ptr;
 }
 
 cairo_pattern_t *
-_gtk_css_value_get_pattern (GtkCssValue *value)
+_gtk_css_value_get_pattern (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, CAIRO_GOBJECT_TYPE_PATTERN), NULL);
   return value->u.ptr;
 }
 
 GtkGradient *
-_gtk_css_value_get_gradient (GtkCssValue *value)
+_gtk_css_value_get_gradient (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_GRADIENT), NULL);
   return value->u.ptr;
 }
 
 GtkShadow *
-_gtk_css_value_get_shadow (GtkCssValue *value)
+_gtk_css_value_get_shadow (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_SHADOW), NULL);
   return value->u.ptr;
