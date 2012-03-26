@@ -142,6 +142,23 @@ _gtk_css_parser_error (GtkCssParser *parser,
   _gtk_css_parser_take_error (parser, error);
 }
 
+void
+_gtk_css_parser_error_full (GtkCssParser        *parser,
+                            GtkCssProviderError  code,
+                            const char          *format,
+                            ...)
+{
+  GError *error;
+
+  va_list args;
+
+  va_start (args, format);
+  error = g_error_new_valist (GTK_CSS_PROVIDER_ERROR,
+                              code, format, args);
+  va_end (args);
+
+  _gtk_css_parser_take_error (parser, error);
+}
 static gboolean
 gtk_css_parser_new_line (GtkCssParser *parser)
 {

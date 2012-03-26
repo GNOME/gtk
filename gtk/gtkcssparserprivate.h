@@ -19,6 +19,7 @@
 #define __GTK_CSS_PARSER_PRIVATE_H__
 
 #include "gtk/gtkcsstypesprivate.h"
+#include <gtk/gtkcssprovider.h>
 #include <gtk/gtksymboliccolor.h>
 
 G_BEGIN_DECLS
@@ -48,6 +49,10 @@ void            _gtk_css_parser_take_error        (GtkCssParser          *parser
 void            _gtk_css_parser_error             (GtkCssParser          *parser,
                                                    const char            *format,
                                                     ...) G_GNUC_PRINTF (2, 3);
+void            _gtk_css_parser_error_full        (GtkCssParser          *parser,
+                                                   GtkCssProviderError    code,
+                                                   const char            *format,
+                                                    ...) G_GNUC_PRINTF (3, 4);
 
 guint           _gtk_css_parser_get_line          (GtkCssParser          *parser);
 guint           _gtk_css_parser_get_position      (GtkCssParser          *parser);
