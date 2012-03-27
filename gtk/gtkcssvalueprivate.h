@@ -79,17 +79,21 @@ GtkCssValue *_gtk_css_value_new_from_enum             (GType                    
 GtkCssValue *_gtk_css_value_new_from_double           (double                      d);
 GtkCssValue *_gtk_css_value_new_take_string           (char                       *string);
 GtkCssValue *_gtk_css_value_new_take_strv             (char                      **strv);
+GtkCssValue *_gtk_css_value_new_from_boxed            (GType                       type,
+                                                       gpointer                    boxed);
 GtkCssValue *_gtk_css_value_new_from_rgba             (const GdkRGBA              *v);
 GtkCssValue *_gtk_css_value_new_from_color            (const GdkColor             *v);
 GtkCssValue *_gtk_css_value_new_take_symbolic_color   (GtkSymbolicColor           *v);
 GtkCssValue *_gtk_css_value_new_take_pattern          (cairo_pattern_t            *v);
 GtkCssValue *_gtk_css_value_new_take_shadow           (GtkShadow                  *v);
 GtkCssValue *_gtk_css_value_new_take_image            (GtkCssImage                *v);
+GtkCssValue *_gtk_css_value_new_from_theming_engine   (GtkThemingEngine           *v);
 GtkCssValue *_gtk_css_value_new_from_number           (const GtkCssNumber         *v);
 GtkCssValue *_gtk_css_value_new_take_binding_sets     (GPtrArray                  *array);
 GtkCssValue *_gtk_css_value_new_from_background_size  (const GtkCssBackgroundSize *v);
 GtkCssValue *_gtk_css_value_new_from_background_position (const GtkCssBackgroundPosition *v);
 GtkCssValue *_gtk_css_value_new_from_border_corner_radius (const GtkCssBorderCornerRadius *v);
+GtkCssValue *_gtk_css_value_new_from_border_image_repeat (const GtkCssBorderImageRepeat *v);
 GtkCssValue *_gtk_css_value_new_from_border_style     (GtkBorderStyle              style);
 void         _gtk_css_value_init_gvalue               (const GtkCssValue          *value,
 						       GValue                     *g_value);

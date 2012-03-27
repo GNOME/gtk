@@ -247,6 +247,20 @@ g_boxed_copy0 (GType         boxed_type,
 }
 
 GtkCssValue *
+_gtk_css_value_new_from_boxed (GType    type,
+                               gpointer boxed)
+{
+  GtkCssValue *value;
+
+  g_return_val_if_fail (g_type_is_a (type, G_TYPE_BOXED), NULL);
+
+  value = gtk_css_value_new (type);
+  value->u.ptr = g_boxed_copy0 (type, boxed);
+
+  return value;
+}
+
+GtkCssValue *
 _gtk_css_value_new_take_pattern (cairo_pattern_t *v)
 {
   GtkCssValue *value;
@@ -275,6 +289,17 @@ _gtk_css_value_new_take_image (GtkCssImage *v)
 
   value = gtk_css_value_new (GTK_TYPE_CSS_IMAGE);
   value->u.ptr = v;
+
+  return value;
+}
+
+GtkCssValue *
+_gtk_css_value_new_from_theming_engine (GtkThemingEngine *v)
+{
+  GtkCssValue *value;
+
+  value = gtk_css_value_new (GTK_TYPE_THEMING_ENGINE);
+  value->u.ptr = g_object_ref (v);
 
   return value;
 }
@@ -384,6 +409,17 @@ _gtk_css_value_new_from_border_corner_radius (const GtkCssBorderCornerRadius *v)
 
   value = gtk_css_value_new (GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
   value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_BORDER_CORNER_RADIUS, v);
+
+  return value;
+}
+
+GtkCssValue *
+_gtk_css_value_new_from_border_image_repeat (const GtkCssBorderImageRepeat *v)
+{
+  GtkCssValue *value;
+
+  value = gtk_css_value_new (GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
+  value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_BORDER_IMAGE_REPEAT, v);
 
   return value;
 }
