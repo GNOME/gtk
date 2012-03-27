@@ -112,7 +112,7 @@
  * be it a toplevel window or a child window. In this setup the
  * GdkWindow (and other GdkDrawables) were platform independent classes,
  * and the actual platform specific implementation was in a delegate
- * object availible as "impl" in the window object.
+ * object available as "impl" in the window object.
  *
  * With the addition of client side windows and offscreen windows this
  * changes a bit. The application-visible GdkWindow object behaves as
