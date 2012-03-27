@@ -84,11 +84,29 @@ gtk_css_custom_property_parse_value (GtkStyleProperty *property,
 }
 
 static void
+gtk_css_custom_property_query (GtkStyleProperty   *property,
+                               GValue             *value,
+                               GtkStyleQueryFunc   query_func,
+                               gpointer            query_data)
+{
+  GtkCssStyleProperty *style = GTK_CSS_STYLE_PROPERTY (property);
+  GtkCssValue *css_value;
+  
+  css_value = (* query_func) (_gtk_css_style_property_get_id (style), query_data);
+  if (css_value == NULL)
+    css_value =_gtk_css_style_property_get_initial_value (style);
+
+  _gtk_css_value_init_gvalue (css_value, value);
+  g_assert (GTK_CSS_CUSTOM_PROPERTY (property)->pspec->value_type == G_VALUE_TYPE (value));
+}
+
+static void
 _gtk_css_custom_property_class_init (GtkCssCustomPropertyClass *klass)
 {
   GtkStylePropertyClass *property_class = GTK_STYLE_PROPERTY_CLASS (klass);
 
   property_class->parse_value = gtk_css_custom_property_parse_value;
+  property_class->query = gtk_css_custom_property_query;
 }
 
 static GtkCssValue *
