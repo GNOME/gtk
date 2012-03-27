@@ -260,6 +260,86 @@ font_family_value_print (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_pango_style (GtkCssStyleProperty *property,
+                   GtkCssParser        *parser,
+                   GFile               *base)
+{
+  int value;
+
+  if (!_gtk_css_parser_try_enum (parser, PANGO_TYPE_STYLE, &value))
+    {
+      _gtk_css_parser_error (parser, "unknown value for property");
+      return NULL;
+    }
+
+  return _gtk_css_value_new_from_enum (PANGO_TYPE_STYLE, value);
+}
+
+static GtkCssValue *
+parse_pango_weight (GtkCssStyleProperty *property,
+                    GtkCssParser        *parser,
+                    GFile               *base)
+{
+  int value;
+
+  if (!_gtk_css_parser_try_enum (parser, PANGO_TYPE_WEIGHT, &value))
+    {
+      _gtk_css_parser_error (parser, "unknown value for property");
+      return NULL;
+    }
+
+  return _gtk_css_value_new_from_enum (PANGO_TYPE_WEIGHT, value);
+}
+
+static GtkCssValue *
+parse_pango_variant (GtkCssStyleProperty *property,
+                     GtkCssParser        *parser,
+                     GFile               *base)
+{
+  int value;
+
+  if (!_gtk_css_parser_try_enum (parser, PANGO_TYPE_VARIANT, &value))
+    {
+      _gtk_css_parser_error (parser, "unknown value for property");
+      return NULL;
+    }
+
+  return _gtk_css_value_new_from_enum (PANGO_TYPE_VARIANT, value);
+}
+
+static GtkCssValue *
+parse_border_style (GtkCssStyleProperty *property,
+                    GtkCssParser        *parser,
+                    GFile               *base)
+{
+  int value;
+
+  if (!_gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, &value))
+    {
+      _gtk_css_parser_error (parser, "unknown value for property");
+      return NULL;
+    }
+
+  return _gtk_css_value_new_from_enum (GTK_TYPE_BORDER_STYLE, value);
+}
+
+static GtkCssValue *
+parse_css_area (GtkCssStyleProperty *property,
+                GtkCssParser        *parser,
+                GFile               *base)
+{
+  int value;
+
+  if (!_gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_AREA, &value))
+    {
+      _gtk_css_parser_error (parser, "unknown value for property");
+      return NULL;
+    }
+
+  return _gtk_css_value_new_from_enum (GTK_TYPE_CSS_AREA, value);
+}
+
+static GtkCssValue *
 bindings_value_parse (GtkCssStyleProperty *property,
                       GtkCssParser        *parser,
                       GFile               *base)
@@ -933,7 +1013,7 @@ _gtk_css_style_property_init_properties (void)
                                           PANGO_TYPE_STYLE,
                                           PANGO_TYPE_STYLE,
                                           GTK_STYLE_PROPERTY_INHERIT,
-                                          NULL,
+                                          parse_pango_style,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -944,7 +1024,7 @@ _gtk_css_style_property_init_properties (void)
                                           PANGO_TYPE_VARIANT,
                                           PANGO_TYPE_VARIANT,
                                           GTK_STYLE_PROPERTY_INHERIT,
-                                          NULL,
+                                          parse_pango_variant,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -956,7 +1036,7 @@ _gtk_css_style_property_init_properties (void)
                                           PANGO_TYPE_WEIGHT,
                                           PANGO_TYPE_WEIGHT,
                                           GTK_STYLE_PROPERTY_INHERIT,
-                                          NULL,
+                                          parse_pango_weight,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1085,7 +1165,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_TYPE_BORDER_STYLE,
                                           GTK_TYPE_BORDER_STYLE,
                                           0,
-                                          NULL,
+                                          parse_border_style,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1105,7 +1185,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_TYPE_BORDER_STYLE,
                                           GTK_TYPE_BORDER_STYLE,
                                           0,
-                                          NULL,
+                                          parse_border_style,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1125,7 +1205,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_TYPE_BORDER_STYLE,
                                           GTK_TYPE_BORDER_STYLE,
                                           0,
-                                          NULL,
+                                          parse_border_style,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1145,7 +1225,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_TYPE_BORDER_STYLE,
                                           GTK_TYPE_BORDER_STYLE,
                                           0,
-                                          NULL,
+                                          parse_border_style,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1207,7 +1287,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_TYPE_BORDER_STYLE,
                                           GTK_TYPE_BORDER_STYLE,
                                           0,
-                                          NULL,
+                                          parse_border_style,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1238,7 +1318,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_TYPE_CSS_AREA,
                                           GTK_TYPE_CSS_AREA,
                                           0,
-                                          NULL,
+                                          parse_css_area,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1248,7 +1328,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_TYPE_CSS_AREA,
                                           GTK_TYPE_CSS_AREA,
                                           0,
-                                          NULL,
+                                          parse_css_area,
                                           NULL,
                                           NULL,
                                           NULL,
