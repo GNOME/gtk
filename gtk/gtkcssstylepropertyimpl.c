@@ -614,6 +614,154 @@ css_image_value_compute (GtkCssStyleProperty    *property,
 }
 
 static GtkCssValue *
+font_size_parse (GtkCssStyleProperty *property,
+                 GtkCssParser        *parser,
+                 GFile               *base)
+{
+  gdouble d;
+
+  if (!_gtk_css_parser_try_double (parser, &d))
+    {
+      _gtk_css_parser_error (parser, "Expected a number");
+      return NULL;
+    }
+
+  return _gtk_css_value_new_from_double (d);
+}
+
+static GtkCssValue *
+outline_parse (GtkCssStyleProperty *property,
+               GtkCssParser        *parser,
+               GFile               *base)
+{
+  int i;
+
+  if (!_gtk_css_parser_try_int (parser, &i))
+    {
+      _gtk_css_parser_error (parser, "Expected an integer");
+      return NULL;
+    }
+
+  return _gtk_css_value_new_from_int (i);
+}
+
+static GtkCssValue *
+border_image_repeat_parse (GtkCssStyleProperty *property,
+                           GtkCssParser        *parser,
+                           GFile               *base)
+{
+  GValue value = G_VALUE_INIT;
+  GtkCssValue *result;
+
+  g_value_init (&value, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
+  if (!_gtk_css_style_parse_value (&value, parser, base))
+    {
+      g_value_unset (&value);
+      return NULL;
+    }
+
+  result = _gtk_css_value_new_from_gvalue (&value);
+  g_value_unset (&value);
+
+  return result;
+}
+
+static GtkCssValue *
+border_image_slice_parse (GtkCssStyleProperty *property,
+                          GtkCssParser        *parser,
+                          GFile               *base)
+{
+  GValue value = G_VALUE_INIT;
+  GtkCssValue *result;
+
+  g_value_init (&value, GTK_TYPE_BORDER);
+  if (!_gtk_css_style_parse_value (&value, parser, base))
+    {
+      g_value_unset (&value);
+      return NULL;
+    }
+
+  result = _gtk_css_value_new_from_gvalue (&value);
+  g_value_unset (&value);
+
+  return result;
+}
+
+static GtkCssValue *
+border_image_width_parse (GtkCssStyleProperty *property,
+                          GtkCssParser        *parser,
+                          GFile               *base)
+{
+  GValue value = G_VALUE_INIT;
+  GtkCssValue *result;
+
+  g_value_init (&value, GTK_TYPE_BORDER);
+  if (!_gtk_css_style_parse_value (&value, parser, base))
+    {
+      g_value_unset (&value);
+      return NULL;
+    }
+
+  result = _gtk_css_value_new_from_gvalue (&value);
+  g_value_unset (&value);
+
+  return result;
+}
+
+static GtkCssValue *
+engine_parse (GtkCssStyleProperty *property,
+              GtkCssParser        *parser,
+              GFile               *base)
+{
+  GtkThemingEngine *engine;
+  char *str;
+
+  if (_gtk_css_parser_try (parser, "none", TRUE))
+    return _gtk_css_value_new_from_theming_engine (gtk_theming_engine_load (NULL));
+
+  str = _gtk_css_parser_try_ident (parser, TRUE);
+  if (str == NULL)
+    {
+      _gtk_css_parser_error (parser, "Expected a valid theme name");
+      return NULL;
+    }
+
+  engine = gtk_theming_engine_load (str);
+
+  if (engine == NULL)
+    {
+      _gtk_css_parser_error (parser, "Theming engine '%s' not found", str);
+      g_free (str);
+      return NULL;
+    }
+
+  g_free (str);
+
+  return _gtk_css_value_new_from_theming_engine (engine);
+}
+
+static GtkCssValue *
+transition_parse (GtkCssStyleProperty *property,
+                  GtkCssParser        *parser,
+                  GFile               *base)
+{
+  GValue value = G_VALUE_INIT;
+  GtkCssValue *result;
+
+  g_value_init (&value, GTK_TYPE_ANIMATION_DESCRIPTION);
+  if (!_gtk_css_style_parse_value (&value, parser, base))
+    {
+      g_value_unset (&value);
+      return NULL;
+    }
+
+  result = _gtk_css_value_new_from_gvalue (&value);
+  g_value_unset (&value);
+
+  return result;
+}
+
+static GtkCssValue *
 parse_margin (GtkCssStyleProperty *property,
               GtkCssParser        *parser,
               GFile               *base)
@@ -1094,7 +1242,7 @@ _gtk_css_style_property_init_properties (void)
                                           G_TYPE_DOUBLE,
                                           G_TYPE_DOUBLE,
                                           GTK_STYLE_PROPERTY_INHERIT,
-                                          NULL,
+                                          font_size_parse,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1423,7 +1571,7 @@ _gtk_css_style_property_init_properties (void)
                                           G_TYPE_INT,
                                           G_TYPE_INT,
                                           0,
-                                          NULL,
+                                          outline_parse,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1569,7 +1717,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_TYPE_CSS_BORDER_IMAGE_REPEAT,
                                           GTK_TYPE_CSS_BORDER_IMAGE_REPEAT,
                                           0,
-                                          NULL,
+                                          border_image_repeat_parse,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1581,7 +1729,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_TYPE_BORDER,
                                           GTK_TYPE_BORDER,
                                           0,
-                                          NULL,
+                                          border_image_slice_parse,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1591,7 +1739,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_TYPE_BORDER,
                                           GTK_TYPE_BORDER,
                                           0,
-                                          NULL,
+                                          border_image_width_parse,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1601,7 +1749,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_TYPE_THEMING_ENGINE,
                                           GTK_TYPE_THEMING_ENGINE,
                                           0,
-                                          NULL,
+                                          engine_parse,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -1611,7 +1759,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_TYPE_ANIMATION_DESCRIPTION,
                                           GTK_TYPE_ANIMATION_DESCRIPTION,
                                           0,
-                                          NULL,
+                                          transition_parse,
                                           NULL,
                                           NULL,
                                           NULL,
