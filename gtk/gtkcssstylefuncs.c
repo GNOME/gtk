@@ -935,13 +935,6 @@ border_image_repeat_value_print (const GValue *value,
     }
 }
 
-static void
-css_number_print (const GValue *value,
-                  GString      *string)
-{
-  _gtk_css_number_print (g_value_get_boxed (value), string);
-}
-
 static gboolean 
 enum_value_parse (GtkCssParser *parser,
                   GFile        *base,
@@ -1112,10 +1105,6 @@ gtk_css_style_funcs_init (void)
   register_conversion_function (GTK_TYPE_CSS_BORDER_IMAGE_REPEAT,
                                 border_image_repeat_value_parse,
                                 border_image_repeat_value_print,
-                                NULL);
-  register_conversion_function (GTK_TYPE_CSS_NUMBER,
-                                NULL,
-                                css_number_print,
                                 NULL);
   register_conversion_function (G_TYPE_ENUM,
                                 enum_value_parse,

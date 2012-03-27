@@ -34,7 +34,6 @@ DEFINE_BOXED_TYPE_WITH_COPY_FUNC (GtkCssBackgroundSize, _gtk_css_background_size
 DEFINE_BOXED_TYPE_WITH_COPY_FUNC (GtkCssBackgroundPosition, _gtk_css_background_position)
 DEFINE_BOXED_TYPE_WITH_COPY_FUNC (GtkCssBorderCornerRadius, _gtk_css_border_corner_radius)
 DEFINE_BOXED_TYPE_WITH_COPY_FUNC (GtkCssBorderImageRepeat, _gtk_css_border_image_repeat)
-DEFINE_BOXED_TYPE_WITH_COPY_FUNC (GtkCssNumber, _gtk_css_number)
 
 typedef struct _GtkCssChangeTranslation GtkCssChangeTranslation;
 struct _GtkCssChangeTranslation {

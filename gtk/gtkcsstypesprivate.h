@@ -160,13 +160,11 @@ struct _GtkCssBorderImageRepeat {
 #define GTK_TYPE_CSS_BACKGROUND_POSITION _gtk_css_background_position_get_type ()
 #define GTK_TYPE_CSS_BORDER_CORNER_RADIUS _gtk_css_border_corner_radius_get_type ()
 #define GTK_TYPE_CSS_BORDER_IMAGE_REPEAT _gtk_css_border_image_repeat_get_type ()
-#define GTK_TYPE_CSS_NUMBER _gtk_css_number_get_type ()
 
 GType           _gtk_css_background_size_get_type               (void);
 GType           _gtk_css_background_position_get_type           (void);
 GType           _gtk_css_border_corner_radius_get_type          (void);
 GType           _gtk_css_border_image_repeat_get_type           (void);
-GType           _gtk_css_number_get_type                        (void);
 
 GtkCssChange    _gtk_css_change_for_sibling                      (GtkCssChange       match);
 GtkCssChange    _gtk_css_change_for_child                        (GtkCssChange       match);

@@ -43,6 +43,7 @@
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimageprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkgradient.h"
 #include "gtkshadowprivate.h"
 #include "gtksymboliccolorprivate.h"
@@ -143,7 +144,7 @@ query_length_as_int (GtkCssStyleProperty *property,
                      GValue              *value)
 {
   g_value_init (value, G_TYPE_INT);
-  g_value_set_int (value, round (_gtk_css_number_get (_gtk_css_value_get_number (css_value), 100)));
+  g_value_set_int (value, round (_gtk_css_number_value_get (css_value, 100)));
 }
 
 static GtkCssValue *
@@ -814,15 +815,9 @@ parse_margin (GtkCssStyleProperty *property,
               GtkCssParser        *parser,
               GFile               *base)
 {
-  GtkCssNumber number;
-
-  if (!_gtk_css_parser_read_number (parser,
-                                    &number, 
-                                    GTK_CSS_NUMBER_AS_PIXELS
-                                    | GTK_CSS_PARSE_LENGTH))
-    return NULL;
-
-  return _gtk_css_value_new_from_number (&number);
+  return _gtk_css_number_value_parse (parser,
+                                      GTK_CSS_NUMBER_AS_PIXELS
+                                      | GTK_CSS_PARSE_LENGTH);
 }
 
 static GtkCssValue *
@@ -830,15 +825,7 @@ compute_margin (GtkCssStyleProperty *property,
                 GtkStyleContext     *context,
                 GtkCssValue         *specified)
 {
-  GtkCssNumber number;
-  
-  if (_gtk_css_number_compute (&number,
-			       _gtk_css_value_get_number (specified),
-			       context))
-    {
-      return _gtk_css_value_new_from_number (&number);
-    }
-  return  _gtk_css_value_ref (specified);
+  return _gtk_css_number_value_compute (specified, context);
 }
 
 static GtkCssValue *
@@ -846,16 +833,10 @@ parse_padding (GtkCssStyleProperty *property,
                GtkCssParser        *parser,
                GFile               *base)
 {
-  GtkCssNumber number;
-
-  if (!_gtk_css_parser_read_number (parser,
-                                    &number, 
-                                    GTK_CSS_POSITIVE_ONLY
-                                    | GTK_CSS_NUMBER_AS_PIXELS
-                                    | GTK_CSS_PARSE_LENGTH))
-    return NULL;
-
-  return _gtk_css_value_new_from_number (&number);
+  return _gtk_css_number_value_parse (parser,
+                                      GTK_CSS_POSITIVE_ONLY
+                                      | GTK_CSS_NUMBER_AS_PIXELS
+                                      | GTK_CSS_PARSE_LENGTH);
 }
 
 static GtkCssValue *
@@ -863,13 +844,7 @@ compute_padding (GtkCssStyleProperty *property,
                  GtkStyleContext     *context,
                  GtkCssValue         *specified)
 {
-  GtkCssNumber number;
-
-  if (_gtk_css_number_compute (&number,
-			       _gtk_css_value_get_number (specified),
-			       context))
-    return _gtk_css_value_new_from_number (&number);
-  return _gtk_css_value_ref (specified);
+  return _gtk_css_number_value_compute (specified, context);
 }
 
 static GtkCssValue *
@@ -877,16 +852,10 @@ parse_border_width (GtkCssStyleProperty *property,
                     GtkCssParser        *parser,
                     GFile               *base)
 {
-  GtkCssNumber number;
-
-  if (!_gtk_css_parser_read_number (parser,
-                                    &number, 
-                                    GTK_CSS_POSITIVE_ONLY
-                                    | GTK_CSS_NUMBER_AS_PIXELS
-                                    | GTK_CSS_PARSE_LENGTH))
-    return FALSE;
-
-  return _gtk_css_value_new_from_number (&number);
+  return _gtk_css_number_value_parse (parser,
+                                      GTK_CSS_POSITIVE_ONLY
+                                      | GTK_CSS_NUMBER_AS_PIXELS
+                                      | GTK_CSS_PARSE_LENGTH);
 }
 
 static GtkCssValue *
@@ -896,7 +865,6 @@ compute_border_width (GtkCssStyleProperty    *property,
 {
   GtkCssStyleProperty *style;
   GtkBorderStyle border_style;
-  GtkCssNumber number;
   
   /* The -1 is magic that is only true because we register the style
    * properties directly after the width properties.
@@ -907,16 +875,9 @@ compute_border_width (GtkCssStyleProperty    *property,
 
   if (border_style == GTK_BORDER_STYLE_NONE ||
       border_style == GTK_BORDER_STYLE_HIDDEN)
-    {
-      _gtk_css_number_init (&number, 0, GTK_CSS_PX);
-    }
+    return _gtk_css_number_value_new (0, GTK_CSS_PX);
   else
-    {
-      _gtk_css_number_compute (&number,
-			       _gtk_css_value_get_number (specified),
-			       context);
-    }
-  return _gtk_css_value_new_from_number (&number);
+    return _gtk_css_number_value_compute (specified, context);
 }
 
 static GtkCssValue *
@@ -1261,7 +1222,6 @@ void
 _gtk_css_style_property_init_properties (void)
 {
   char *default_font_family[] = { "Sans", NULL };
-  GtkCssNumber number;
   GtkCssBackgroundSize default_background_size = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), FALSE, FALSE };
   GtkCssBackgroundPosition default_background_position = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PERCENT), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PERCENT)};
   GtkCssBorderCornerRadius no_corner_radius = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX) };
@@ -1376,7 +1336,6 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           _gtk_css_value_new_take_shadow (NULL));
 
-  _gtk_css_number_init (&number, 0, GTK_CSS_PX);
   gtk_css_style_property_register        ("margin-top",
                                           G_TYPE_INT,
                                           0,
@@ -1385,7 +1344,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_margin,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
   gtk_css_style_property_register        ("margin-left",
                                           G_TYPE_INT,
                                           0,
@@ -1394,7 +1353,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_margin,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
   gtk_css_style_property_register        ("margin-bottom",
                                           G_TYPE_INT,
                                           0,
@@ -1403,7 +1362,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_margin,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
   gtk_css_style_property_register        ("margin-right",
                                           G_TYPE_INT,
                                           0,
@@ -1412,7 +1371,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_margin,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
   gtk_css_style_property_register        ("padding-top",
                                           G_TYPE_INT,
                                           0,
@@ -1421,7 +1380,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_padding,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
   gtk_css_style_property_register        ("padding-left",
                                           G_TYPE_INT,
                                           0,
@@ -1430,7 +1389,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_padding,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
   gtk_css_style_property_register        ("padding-bottom",
                                           G_TYPE_INT,
                                           0,
@@ -1439,7 +1398,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_padding,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
   gtk_css_style_property_register        ("padding-right",
                                           G_TYPE_INT,
                                           0,
@@ -1448,7 +1407,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_padding,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
   /* IMPORTANT: compute_border_width() requires that the border-width
    * properties be immeditaly followed by the border-style properties
    */
@@ -1469,7 +1428,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_border_width,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
   gtk_css_style_property_register        ("border-left-style",
                                           GTK_TYPE_BORDER_STYLE,
                                           0,
@@ -1487,7 +1446,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_border_width,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
   gtk_css_style_property_register        ("border-bottom-style",
                                           GTK_TYPE_BORDER_STYLE,
                                           0,
@@ -1505,7 +1464,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_border_width,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
   gtk_css_style_property_register        ("border-right-style",
                                           GTK_TYPE_BORDER_STYLE,
                                           0,
@@ -1523,7 +1482,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_border_width,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
 
   gtk_css_style_property_register        ("border-top-left-radius",
                                           GTK_TYPE_CSS_BORDER_CORNER_RADIUS,
@@ -1579,7 +1538,7 @@ _gtk_css_style_property_init_properties (void)
                                           compute_border_width,
                                           query_length_as_int,
                                           NULL,
-                                          _gtk_css_value_new_from_number (&number));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
   gtk_css_style_property_register        ("outline-offset",
                                           G_TYPE_INT,
                                           0,

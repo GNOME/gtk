@@ -32,6 +32,7 @@
 #include "gtkprivate.h"
 #include "gtksymboliccolorprivate.h"
 #include "gtkanimationdescription.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtktimeline.h"
 #include "gtkiconfactory.h"
 #include "gtkwidgetpath.h"
@@ -2264,7 +2265,7 @@ _gtk_style_context_get_number (GtkStyleContext *context,
   GtkCssValue *value;
   
   value = _gtk_style_context_peek_property (context, property_name);
-  return _gtk_css_number_get (_gtk_css_value_get_number (value), one_hundred_percent);
+  return _gtk_css_number_value_get (value, one_hundred_percent);
 }
 
 const GValue *

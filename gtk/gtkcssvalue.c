@@ -130,8 +130,6 @@ _gtk_css_value_new_from_gvalue (const GValue *g_value)
   /* Make sure we reuse the int/number singletons */
   if (type == G_TYPE_INT)
     value = _gtk_css_value_new_from_int (g_value_get_int (g_value));
-  else if (type == GTK_TYPE_CSS_NUMBER)
-    value = _gtk_css_value_new_from_number (g_value_get_boxed (g_value));
   else
     {
       value = gtk_css_value_new (type);
@@ -311,49 +309,6 @@ _gtk_css_value_new_take_binding_sets (GPtrArray *array)
 
   value = gtk_css_value_new (G_TYPE_PTR_ARRAY);
   value->u.ptr = array;
-
-  return value;
-}
-
-GtkCssValue *
-_gtk_css_value_new_from_number (const GtkCssNumber *v)
-{
-  GtkCssValue *value;
-  static GtkCssValue *zero_singleton = NULL;
-  static GtkCssValue *px_singletons[5] = {NULL};
-
-  if (v->unit == GTK_CSS_NUMBER &&
-      v->value == 0)
-    {
-      if (zero_singleton == NULL)
-	{
-	  value = gtk_css_value_new (GTK_TYPE_CSS_NUMBER);
-	  value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_NUMBER, v);
-	  zero_singleton = value;
-	}
-      return _gtk_css_value_ref (zero_singleton);
-    }
-
-  if (v->unit == GTK_CSS_PX &&
-      (v->value == 0 ||
-       v->value == 1 ||
-       v->value == 2 ||
-       v->value == 3 ||
-       v->value == 4))
-    {
-      int i = round (v->value);
-      if (px_singletons[i] == NULL)
-	{
-	  value = gtk_css_value_new (GTK_TYPE_CSS_NUMBER);
-	  value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_NUMBER, v);
-	  px_singletons[i] = value;
-	}
-
-      return _gtk_css_value_ref (px_singletons[i]);
-    }
-
-  value = gtk_css_value_new (GTK_TYPE_CSS_NUMBER);
-  value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_NUMBER, v);
 
   return value;
 }
@@ -558,13 +513,6 @@ _gtk_css_value_init_gvalue (const GtkCssValue *value,
       g_value_init (g_value, value->type);
       fill_gvalue (value, g_value);
     }
-}
-
-const GtkCssNumber *
-_gtk_css_value_get_number (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_NUMBER), NULL);
-  return value->u.ptr;
 }
 
 GtkSymbolicColor *

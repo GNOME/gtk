@@ -25,13 +25,14 @@
 #include <math.h>
 
 #include "gtkcssimageprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gtkcssvalueprivate.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtksymboliccolorprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkcssvalueprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -54,7 +55,6 @@ parse_four_numbers (GtkCssShorthandProperty  *shorthand,
                     GtkCssParser             *parser,
                     GtkCssNumberParseFlags    flags)
 {
-  GtkCssNumber numbers[4];
   guint i;
 
   for (i = 0; i < 4; i++)
@@ -62,9 +62,8 @@ parse_four_numbers (GtkCssShorthandProperty  *shorthand,
       if (!_gtk_css_parser_has_number (parser))
         break;
 
-      if (!_gtk_css_parser_read_number (parser,
-                                        &numbers[i], 
-                                        flags))
+      values[i] = _gtk_css_number_value_parse (parser, flags);
+      if (values[i] == NULL)
         return FALSE;
     }
 
@@ -76,12 +75,7 @@ parse_four_numbers (GtkCssShorthandProperty  *shorthand,
 
   for (; i < 4; i++)
     {
-      numbers[i] = numbers[(i - 1) >> 1];
-    }
-
-  for (i = 0; i < 4; i++)
-    {
-      values[i] = _gtk_css_value_new_from_number (&numbers[i]);
+      values[i] = _gtk_css_value_ref (values[(i - 1) >> 1]);
     }
 
   return TRUE;
@@ -330,15 +324,12 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
     if (values[0] == NULL &&
          _gtk_css_parser_has_number (parser))
       {
-        GtkCssNumber number;
-        if (!_gtk_css_parser_read_number (parser,
-                                          &number,
-                                          GTK_CSS_POSITIVE_ONLY
-                                          | GTK_CSS_NUMBER_AS_PIXELS
-                                          | GTK_CSS_PARSE_LENGTH))
+        values[0] = _gtk_css_number_value_parse (parser,
+                                                 GTK_CSS_POSITIVE_ONLY
+                                                 | GTK_CSS_NUMBER_AS_PIXELS
+                                                 | GTK_CSS_PARSE_LENGTH);
+        if (values[0] == NULL)
           return FALSE;
-
-        values[0] = _gtk_css_value_new_from_number (&number);
       }
     else if (values[1] == NULL &&
              _gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, &style))
@@ -381,15 +372,12 @@ parse_border (GtkCssShorthandProperty  *shorthand,
     if (values[0] == NULL &&
          _gtk_css_parser_has_number (parser))
       {
-        GtkCssNumber number;
-        if (!_gtk_css_parser_read_number (parser,
-                                          &number,
-                                          GTK_CSS_POSITIVE_ONLY
-                                          | GTK_CSS_NUMBER_AS_PIXELS
-                                          | GTK_CSS_PARSE_LENGTH))
+        values[0] = _gtk_css_number_value_parse (parser,
+                                                 GTK_CSS_POSITIVE_ONLY
+                                                 | GTK_CSS_NUMBER_AS_PIXELS
+                                                 | GTK_CSS_PARSE_LENGTH);
+        if (values[0] == NULL)
           return FALSE;
-
-        values[0] = _gtk_css_value_new_from_number (&number);
         values[1] = _gtk_css_value_ref (values[0]);
         values[2] = _gtk_css_value_ref (values[0]);
         values[3] = _gtk_css_value_ref (values[0]);
