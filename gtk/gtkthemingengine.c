@@ -2132,16 +2132,13 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
       fg_color.alpha = CLAMP (fg_color.alpha + ((other_fg.alpha - fg_color.alpha) * progress), 0, 1);
     }
 
-  gtk_theming_engine_get (engine, flags,
-                          "text-shadow", &text_shadow,
-                          NULL);
+  text_shadow = _gtk_css_value_get_shadow (_gtk_theming_engine_peek_property (engine, "text-shadow"));
 
   prepare_context_for_layout (cr, x, y, layout);
 
   if (text_shadow != NULL)
     {
       _gtk_text_shadow_paint_layout (text_shadow, cr, layout);
-      _gtk_shadow_unref (text_shadow);
     }
 
   gdk_cairo_set_source_rgba (cr, &fg_color);
@@ -2769,9 +2766,7 @@ render_spinner (GtkThemingEngine *engine,
   radius = MIN (width / 2, height / 2);
 
   gtk_theming_engine_get_color (engine, state, &color);
-  gtk_theming_engine_get (engine, state,
-                          "icon-shadow", &shadow,
-                          NULL);
+  shadow = _gtk_css_value_get_shadow (_gtk_theming_engine_peek_property (engine, "icon-shadow"));
 
   cairo_save (cr);
   cairo_translate (cr, x + width / 2, y + height / 2);
@@ -2781,7 +2776,6 @@ render_spinner (GtkThemingEngine *engine,
       _gtk_icon_shadow_paint_spinner (shadow, cr,
                                       radius,
                                       progress);
-      _gtk_shadow_unref (shadow);
     }
 
   _gtk_theming_engine_paint_spinner (cr,
@@ -2949,23 +2943,17 @@ gtk_theming_engine_render_icon (GtkThemingEngine *engine,
                                 gdouble x,
                                 gdouble y)
 {
-  GtkStateFlags state;
   GtkShadow *icon_shadow;
-
-  state = gtk_theming_engine_get_state (engine);
 
   cairo_save (cr);
 
   gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
 
-  gtk_theming_engine_get (engine, state,
-                          "icon-shadow", &icon_shadow,
-                          NULL);
+  icon_shadow = _gtk_css_value_get_shadow (_gtk_theming_engine_peek_property (engine, "icon-shadow"));
 
   if (icon_shadow != NULL)
     {
       _gtk_icon_shadow_paint (icon_shadow, cr);
-      _gtk_shadow_unref (icon_shadow);
     }
 
   cairo_paint (cr);

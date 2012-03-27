@@ -303,14 +303,11 @@ _gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
 {
   GtkShadow *box_shadow;
 
-  gtk_style_context_get (bg->context, bg->flags,
-                         "box-shadow", &box_shadow,
-                         NULL);
+  box_shadow = _gtk_css_value_get_shadow (_gtk_style_context_peek_property (bg->context, "box-shadow"));
 
   if (box_shadow != NULL)
     {
       _gtk_box_shadow_render (box_shadow, cr, &bg->padding_box);
-      _gtk_shadow_unref (box_shadow);
     }
 }
 
