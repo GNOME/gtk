@@ -890,121 +890,6 @@ pattern_value_compute (GtkStyleContext *context,
 }
 
 static gboolean
-shadow_value_parse (GtkCssParser *parser,
-                    GFile *base,
-                    GValue *value)
-{
-  gboolean have_inset, have_color, have_lengths;
-  gdouble hoffset, voffset, blur, spread;
-  GtkSymbolicColor *color;
-  GtkShadow *shadow;
-  guint i;
-
-  if (_gtk_css_parser_try (parser, "none", TRUE))
-    return TRUE;
-
-  shadow = _gtk_shadow_new ();
-
-  do
-    {
-      have_inset = have_lengths = have_color = FALSE;
-
-      for (i = 0; i < 3; i++)
-        {
-          if (!have_inset && 
-              _gtk_css_parser_try (parser, "inset", TRUE))
-            {
-              have_inset = TRUE;
-              continue;
-            }
-            
-          if (!have_lengths &&
-              _gtk_css_parser_try_double (parser, &hoffset))
-            {
-              have_lengths = TRUE;
-
-              if (!_gtk_css_parser_try_double (parser, &voffset))
-                {
-                  _gtk_css_parser_error (parser, "Horizontal and vertical offsets are required");
-                  _gtk_shadow_unref (shadow);
-                  return FALSE;
-                }
-
-              if (!_gtk_css_parser_try_double (parser, &blur))
-                blur = 0;
-
-              if (!_gtk_css_parser_try_double (parser, &spread))
-                spread = 0;
-
-              continue;
-            }
-
-          if (!have_color)
-            {
-              have_color = TRUE;
-
-              /* XXX: the color is optional and UA-defined if it's missing,
-               * but it doesn't really make sense for us...
-               */
-              color = _gtk_css_parser_read_symbolic_color (parser);
-
-              if (color == NULL)
-                {
-                  _gtk_shadow_unref (shadow);
-                  return FALSE;
-                }
-            }
-        }
-
-      if (!have_color || !have_lengths)
-        {
-          _gtk_css_parser_error (parser, "Must specify at least color and offsets");
-          _gtk_shadow_unref (shadow);
-          return FALSE;
-        }
-
-      _gtk_shadow_append (shadow,
-                          hoffset, voffset,
-                          blur, spread,
-                          have_inset, color);
-
-      gtk_symbolic_color_unref (color);
-
-    }
-  while (_gtk_css_parser_try (parser, ",", TRUE));
-
-  g_value_take_boxed (value, shadow);
-  return TRUE;
-}
-
-static void
-shadow_value_print (const GValue *value,
-                    GString      *string)
-{
-  GtkShadow *shadow;
-
-  shadow = g_value_get_boxed (value);
-
-  if (shadow == NULL)
-    g_string_append (string, "none");
-  else
-    _gtk_shadow_print (shadow, string);
-}
-
-static GtkCssValue *
-shadow_value_compute (GtkStyleContext *context,
-                      GtkCssValue     *specified)
-{
-  GtkShadow *shadow;
-  
-  shadow = _gtk_css_value_get_shadow (specified);
-  if (shadow)
-    shadow = _gtk_shadow_resolve (shadow, context);
-
-  return _gtk_css_value_new_take_shadow (shadow);
-}
-
-static gboolean
 border_image_repeat_value_parse (GtkCssParser *parser,
                                  GFile *file,
                                  GValue *value)
@@ -1228,10 +1113,6 @@ gtk_css_style_funcs_init (void)
                                 border_image_repeat_value_parse,
                                 border_image_repeat_value_print,
                                 NULL);
-  register_conversion_function (GTK_TYPE_SHADOW,
-                                shadow_value_parse,
-                                shadow_value_print,
-                                shadow_value_compute);
   register_conversion_function (GTK_TYPE_CSS_NUMBER,
                                 NULL,
                                 css_number_print,
