@@ -53,7 +53,6 @@ void       _gtk_shadow_print          (GtkShadow          *shadow,
 
 GtkShadow *_gtk_shadow_resolve        (GtkShadow          *shadow,
                                        GtkStyleContext    *context);
-gboolean   _gtk_shadow_get_resolved   (GtkShadow          *shadow);
 
 void       _gtk_text_shadow_paint_layout (GtkShadow       *shadow,
                                           cairo_t         *cr,

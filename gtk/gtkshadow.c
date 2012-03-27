@@ -115,7 +115,6 @@ struct _GtkShadow {
   GList *elements;
 
   guint ref_count;
-  gboolean resolved;
 };
 
 GtkShadow *
@@ -125,7 +124,6 @@ _gtk_shadow_new (void)
 
   retval = g_slice_new0 (GtkShadow);
   retval->ref_count = 1;
-  retval->resolved = FALSE;
 
   return retval;
 }
@@ -138,12 +136,6 @@ _gtk_shadow_ref (GtkShadow *shadow)
   shadow->ref_count++;
 
   return shadow;
-}
-
-gboolean
-_gtk_shadow_get_resolved (GtkShadow *shadow)
-{
-  return shadow->resolved;
 }
 
 void
@@ -191,9 +183,6 @@ _gtk_shadow_resolve (GtkShadow       *shadow,
   GdkRGBA color;
   GList *l;
 
-  if (shadow->resolved)
-    return _gtk_shadow_ref (shadow);
-
   resolved_shadow = _gtk_shadow_new ();
 
   for (l = shadow->elements; l != NULL; l = l->next)
@@ -216,8 +205,6 @@ _gtk_shadow_resolve (GtkShadow       *shadow,
       resolved_shadow->elements =
         g_list_append (resolved_shadow->elements, resolved_element);
     }
-
-  resolved_shadow->resolved = TRUE;
 
   return resolved_shadow;
 }
