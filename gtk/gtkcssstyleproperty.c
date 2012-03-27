@@ -274,20 +274,8 @@ gtk_css_style_property_real_parse_value (GtkCssStyleProperty *property,
                                          GtkCssParser        *parser,
                                          GFile               *base)
 {
-  GValue value = G_VALUE_INIT;
-  GtkCssValue *result;
-
-  g_value_init (&value, _gtk_css_style_property_get_specified_type (property));
-  if (!_gtk_css_style_parse_value (&value, parser, base))
-    {
-      g_value_unset (&value);
-      return NULL;
-    }
-
-  result = _gtk_css_value_new_from_gvalue (&value);
-  g_value_unset (&value);
-
-  return result;
+  g_assert_not_reached ();
+  return NULL;
 }
 
 static void

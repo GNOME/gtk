@@ -65,6 +65,7 @@ gtk_css_style_property_register (const char *                   name,
   GtkCssStyleProperty *node;
 
   g_assert (initial_value != NULL);
+  g_assert (parse_value != NULL);
 
   node = g_object_new (GTK_TYPE_CSS_STYLE_PROPERTY,
                        "value-type", value_type,
@@ -74,8 +75,7 @@ gtk_css_style_property_register (const char *                   name,
                        "name", name,
                        NULL);
   
-  if (parse_value)
-    node->parse_value = parse_value;
+  node->parse_value = parse_value;
   if (print_value)
     node->print_value = print_value;
   if (compute_value)
