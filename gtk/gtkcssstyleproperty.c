@@ -29,11 +29,6 @@
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertiesprivate.h"
 
-#include <math.h>
-#include <cairo-gobject.h>
-#include "gtkcssimagegradientprivate.h"
-#include "gtkcssimageprivate.h"
-
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
  */
@@ -128,52 +123,14 @@ _gtk_css_style_property_query (GtkStyleProperty   *property,
                                GtkStyleQueryFunc   query_func,
                                gpointer            query_data)
 {
+  GtkCssStyleProperty *style_property = GTK_CSS_STYLE_PROPERTY (property);
   GtkCssValue *css_value;
   
   css_value = (* query_func) (GTK_CSS_STYLE_PROPERTY (property)->id, query_data);
-  if (css_value)
-    {
-      /* Somebody make this a vfunc */
-      if (_gtk_css_value_holds (css_value, GTK_TYPE_CSS_IMAGE))
-        {
-          GtkCssImage *image = _gtk_css_value_get_image (css_value);
-          cairo_pattern_t *pattern;
-          cairo_surface_t *surface;
-          cairo_matrix_t matrix;
-          
-          g_value_init (value, CAIRO_GOBJECT_TYPE_PATTERN);
+  if (css_value == NULL)
+    css_value =_gtk_css_style_property_get_initial_value (style_property);
 
-          if (GTK_IS_CSS_IMAGE_GRADIENT (image))
-	    g_value_set_boxed (value, GTK_CSS_IMAGE_GRADIENT (image)->pattern);
-          else if (image != NULL)
-            {
-              double width, height;
-
-              /* the 100, 100 is rather random */
-              _gtk_css_image_get_concrete_size (image, 0, 0, 100, 100, &width, &height);
-              surface = _gtk_css_image_get_surface (image, NULL, width, height);
-              pattern = cairo_pattern_create_for_surface (surface);
-              cairo_matrix_init_scale (&matrix, width, height);
-              cairo_pattern_set_matrix (pattern, &matrix);
-              cairo_surface_destroy (surface);
-	      g_value_take_boxed (value, pattern);
-            }
-        }
-      else if (_gtk_css_value_holds (css_value, GTK_TYPE_CSS_NUMBER))
-        {
-          g_value_init (value, G_TYPE_INT);
-	  g_value_set_int (value, round (_gtk_css_number_get (_gtk_css_value_get_number (css_value), 100)));
-        }
-      else
-        {
-          _gtk_css_value_init_gvalue (css_value, value);
-        }
-    }
-  else
-    {
-      _gtk_css_value_init_gvalue (_gtk_css_style_property_get_initial_value (GTK_CSS_STYLE_PROPERTY (property)),
-                                  value);
-    }
+  style_property->query_value (style_property, css_value, value);
 }
 
 static GtkCssValue *
