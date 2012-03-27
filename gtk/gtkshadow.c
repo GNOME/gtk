@@ -108,49 +108,74 @@ shadow_element_new (gdouble hoffset,
  * GtkShadow *
  ****************/
 
-G_DEFINE_BOXED_TYPE (GtkShadow, _gtk_shadow,
-                     _gtk_shadow_ref, _gtk_shadow_unref)
-
-struct _GtkShadow {
+struct _GtkCssValue {
+  GTK_CSS_VALUE_BASE
   GList *elements;
 
-  guint ref_count;
+  gboolean resolved;
 };
+
+static void
+gtk_css_value_shadow_free (GtkCssValue *shadow)
+{
+  g_list_free_full (shadow->elements,
+                    (GDestroyNotify) shadow_element_free);
+  g_slice_free (GtkShadow, shadow);
+}
+
+static gboolean
+gtk_css_value_shadow_equal (const GtkCssValue *shadow1,
+                            const GtkCssValue *shadow2)
+{
+  /* FIXME */
+  return shadow1 == shadow2;
+}
+
+static void
+gtk_css_value_shadow_print (const GtkCssValue *shadow,
+                            GString           *string)
+{
+  gint length;
+  GList *l;
+
+  length = g_list_length (shadow->elements);
+
+  if (length == 0)
+    {
+      g_string_append (string, "none");
+      return;
+    }
+
+  shadow_element_print (shadow->elements->data, string);
+
+  if (length == 1)
+    return;
+
+  for (l = g_list_next (shadow->elements); l != NULL; l = l->next)
+    {
+      g_string_append (string, ", ");
+      shadow_element_print (l->data, string);
+    }
+}
+
+static const GtkCssValueClass GTK_CSS_VALUE_SHADOW = {
+  gtk_css_value_shadow_free,
+  gtk_css_value_shadow_equal,
+  gtk_css_value_shadow_print
+};
+
+static GtkCssValue none_singleton = { &GTK_CSS_VALUE_SHADOW, 1, NULL, FALSE };
 
 GtkShadow *
 _gtk_shadow_new (void)
 {
-  GtkShadow *retval;
-
-  retval = g_slice_new0 (GtkShadow);
-  retval->ref_count = 1;
-
-  return retval;
+  return _gtk_css_value_new (GtkShadow, &GTK_CSS_VALUE_SHADOW);
 }
 
 GtkShadow *
-_gtk_shadow_ref (GtkShadow *shadow)
+_gtk_shadow_new_none (void)
 {
-  g_return_val_if_fail (shadow != NULL, NULL);
-
-  shadow->ref_count++;
-
-  return shadow;
-}
-
-void
-_gtk_shadow_unref (GtkShadow *shadow)
-{
-  g_return_if_fail (shadow != NULL);
-
-  shadow->ref_count--;
-
-  if (shadow->ref_count == 0)
-    {
-      g_list_free_full (shadow->elements,
-                        (GDestroyNotify) shadow_element_free);
-      g_slice_free (GtkShadow, shadow);
-    }
+  return _gtk_css_value_ref (&none_singleton);
 }
 
 void
@@ -193,7 +218,7 @@ _gtk_shadow_resolve (GtkShadow       *shadow,
                                              element->symbolic_color,
                                              &color))
         {
-          _gtk_shadow_unref (resolved_shadow);
+          _gtk_css_value_unref (resolved_shadow);
           return NULL;
         }
 
@@ -206,31 +231,9 @@ _gtk_shadow_resolve (GtkShadow       *shadow,
         g_list_append (resolved_shadow->elements, resolved_element);
     }
 
+  resolved_shadow->resolved = TRUE;
+
   return resolved_shadow;
-}
-
-void
-_gtk_shadow_print (GtkShadow *shadow,
-                   GString   *str)
-{
-  gint length;
-  GList *l;
-
-  length = g_list_length (shadow->elements);
-
-  if (length == 0)
-    return;
-
-  shadow_element_print (shadow->elements->data, str);
-
-  if (length == 1)
-    return;
-
-  for (l = g_list_next (shadow->elements); l != NULL; l = l->next)
-    {
-      g_string_append (str, ", ");
-      shadow_element_print (l->data, str);
-    }
 }
 
 void

@@ -2132,14 +2132,11 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
       fg_color.alpha = CLAMP (fg_color.alpha + ((other_fg.alpha - fg_color.alpha) * progress), 0, 1);
     }
 
-  text_shadow = _gtk_css_value_get_shadow (_gtk_theming_engine_peek_property (engine, "text-shadow"));
+  text_shadow = _gtk_theming_engine_peek_property (engine, "text-shadow");
 
   prepare_context_for_layout (cr, x, y, layout);
 
-  if (text_shadow != NULL)
-    {
-      _gtk_text_shadow_paint_layout (text_shadow, cr, layout);
-    }
+  _gtk_text_shadow_paint_layout (text_shadow, cr, layout);
 
   gdk_cairo_set_source_rgba (cr, &fg_color);
   pango_cairo_show_layout (cr, layout);
@@ -2766,17 +2763,14 @@ render_spinner (GtkThemingEngine *engine,
   radius = MIN (width / 2, height / 2);
 
   gtk_theming_engine_get_color (engine, state, &color);
-  shadow = _gtk_css_value_get_shadow (_gtk_theming_engine_peek_property (engine, "icon-shadow"));
+  shadow = _gtk_theming_engine_peek_property (engine, "icon-shadow");
 
   cairo_save (cr);
   cairo_translate (cr, x + width / 2, y + height / 2);
 
-  if (shadow != NULL)
-    {
-      _gtk_icon_shadow_paint_spinner (shadow, cr,
-                                      radius,
-                                      progress);
-    }
+  _gtk_icon_shadow_paint_spinner (shadow, cr,
+                                  radius,
+                                  progress);
 
   _gtk_theming_engine_paint_spinner (cr,
                                      radius,
@@ -2943,18 +2937,11 @@ gtk_theming_engine_render_icon (GtkThemingEngine *engine,
                                 gdouble x,
                                 gdouble y)
 {
-  GtkShadow *icon_shadow;
-
   cairo_save (cr);
 
   gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
 
-  icon_shadow = _gtk_css_value_get_shadow (_gtk_theming_engine_peek_property (engine, "icon-shadow"));
-
-  if (icon_shadow != NULL)
-    {
-      _gtk_icon_shadow_paint (icon_shadow, cr);
-    }
+  _gtk_icon_shadow_paint (_gtk_theming_engine_peek_property (engine, "icon-shadow"), cr);
 
   cairo_paint (cr);
 

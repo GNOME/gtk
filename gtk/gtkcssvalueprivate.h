@@ -24,7 +24,7 @@
 #include "gtkcsstypesprivate.h"
 #include "gtksymboliccolor.h"
 #include "gtkcssimageprivate.h"
-#include "gtkshadowprivate.h"
+#include "gtkthemingengine.h"
 
 G_BEGIN_DECLS
 
@@ -85,7 +85,6 @@ GtkCssValue *_gtk_css_value_new_from_rgba             (const GdkRGBA            
 GtkCssValue *_gtk_css_value_new_from_color            (const GdkColor             *v);
 GtkCssValue *_gtk_css_value_new_take_symbolic_color   (GtkSymbolicColor           *v);
 GtkCssValue *_gtk_css_value_new_take_pattern          (cairo_pattern_t            *v);
-GtkCssValue *_gtk_css_value_new_take_shadow           (GtkShadow                  *v);
 GtkCssValue *_gtk_css_value_new_take_image            (GtkCssImage                *v);
 GtkCssValue *_gtk_css_value_new_from_theming_engine   (GtkThemingEngine           *v);
 GtkCssValue *_gtk_css_value_new_take_binding_sets     (GPtrArray                  *array);
@@ -118,7 +117,6 @@ PangoWeight                     _gtk_css_value_get_pango_weight           (const
 const GdkRGBA                  *_gtk_css_value_get_rgba                   (const GtkCssValue *value);
 cairo_pattern_t                *_gtk_css_value_get_pattern                (const GtkCssValue *value);
 GtkGradient                    *_gtk_css_value_get_gradient               (const GtkCssValue *value);
-GtkShadow                      *_gtk_css_value_get_shadow                 (const GtkCssValue *value);
 
 G_END_DECLS
 

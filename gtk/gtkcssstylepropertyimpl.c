@@ -428,7 +428,7 @@ shadow_value_parse (GtkCssStyleProperty *property,
   guint i;
 
   if (_gtk_css_parser_try (parser, "none", TRUE))
-    return _gtk_css_value_new_take_shadow (NULL);
+    return _gtk_shadow_new_none ();
 
   shadow = _gtk_shadow_new ();
 
@@ -453,7 +453,7 @@ shadow_value_parse (GtkCssStyleProperty *property,
               if (!_gtk_css_parser_try_double (parser, &voffset))
                 {
                   _gtk_css_parser_error (parser, "Horizontal and vertical offsets are required");
-                  _gtk_shadow_unref (shadow);
+                  _gtk_css_value_unref (shadow);
                   return NULL;
                 }
 
@@ -477,7 +477,7 @@ shadow_value_parse (GtkCssStyleProperty *property,
 
               if (color == NULL)
                 {
-                  _gtk_shadow_unref (shadow);
+                  _gtk_css_value_unref (shadow);
                   return NULL;
                 }
             }
@@ -486,7 +486,7 @@ shadow_value_parse (GtkCssStyleProperty *property,
       if (!have_color || !have_lengths)
         {
           _gtk_css_parser_error (parser, "Must specify at least color and offsets");
-          _gtk_shadow_unref (shadow);
+          _gtk_css_value_unref (shadow);
           return NULL;
         }
 
@@ -500,22 +500,7 @@ shadow_value_parse (GtkCssStyleProperty *property,
     }
   while (_gtk_css_parser_try (parser, ",", TRUE));
 
-  return _gtk_css_value_new_take_shadow (shadow);
-}
-
-static void
-shadow_value_print (GtkCssStyleProperty *property,
-                    const GtkCssValue   *value,
-                    GString             *string)
-{
-  GtkShadow *shadow;
-
-  shadow = _gtk_css_value_get_shadow (value);
-
-  if (shadow == NULL)
-    g_string_append (string, "none");
-  else
-    _gtk_shadow_print (shadow, string);
+  return shadow;
 }
 
 static GtkCssValue *
@@ -523,13 +508,7 @@ shadow_value_compute (GtkCssStyleProperty *property,
                       GtkStyleContext     *context,
                       GtkCssValue         *specified)
 {
-  GtkShadow *shadow;
-  
-  shadow = _gtk_css_value_get_shadow (specified);
-  if (shadow)
-    shadow = _gtk_shadow_resolve (shadow, context);
-
-  return _gtk_css_value_new_take_shadow (shadow);
+  return _gtk_shadow_resolve (specified, context);
 }
 
 static GtkCssValue *
@@ -1310,31 +1289,31 @@ _gtk_css_style_property_init_properties (void)
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           shadow_value_parse,
-                                          shadow_value_print,
+                                          NULL,
                                           shadow_value_compute,
                                           NULL,
                                           NULL,
-                                          _gtk_css_value_new_take_shadow (NULL));
+                                          _gtk_shadow_new_none ());
 
   gtk_css_style_property_register        ("icon-shadow",
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           shadow_value_parse,
-                                          shadow_value_print,
+                                          NULL,
                                           shadow_value_compute,
                                           NULL,
                                           NULL,
-                                          _gtk_css_value_new_take_shadow (NULL));
+                                          _gtk_shadow_new_none ());
 
   gtk_css_style_property_register        ("box-shadow",
                                           G_TYPE_NONE,
                                           0,
                                           shadow_value_parse,
-                                          shadow_value_print,
+                                          NULL,
                                           shadow_value_compute,
                                           NULL,
                                           NULL,
-                                          _gtk_css_value_new_take_shadow (NULL));
+                                          _gtk_shadow_new_none ());
 
   gtk_css_style_property_register        ("margin-top",
                                           G_TYPE_INT,

@@ -270,17 +270,6 @@ _gtk_css_value_new_take_pattern (cairo_pattern_t *v)
 }
 
 GtkCssValue *
-_gtk_css_value_new_take_shadow (GtkShadow *v)
-{
-  GtkCssValue *value;
-
-  value = gtk_css_value_new (GTK_TYPE_SHADOW);
-  value->u.ptr = v;
-
-  return value;
-}
-
-GtkCssValue *
 _gtk_css_value_new_take_image (GtkCssImage *v)
 {
   GtkCssValue *value;
@@ -664,9 +653,3 @@ _gtk_css_value_get_gradient (const GtkCssValue *value)
   return value->u.ptr;
 }
 
-GtkShadow *
-_gtk_css_value_get_shadow (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_SHADOW), NULL);
-  return value->u.ptr;
-}
