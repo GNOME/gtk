@@ -1307,32 +1307,32 @@ _gtk_css_style_property_init_properties (void)
                                                                         PANGO_WEIGHT_NORMAL));
 
   gtk_css_style_property_register        ("text-shadow",
-                                          GTK_TYPE_SHADOW,
+                                          G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           shadow_value_parse,
                                           shadow_value_print,
                                           shadow_value_compute,
-                                          query_simple,
+                                          NULL,
                                           NULL,
                                           _gtk_css_value_new_take_shadow (NULL));
 
   gtk_css_style_property_register        ("icon-shadow",
-                                          GTK_TYPE_SHADOW,
+                                          G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           shadow_value_parse,
                                           shadow_value_print,
                                           shadow_value_compute,
-                                          query_simple,
+                                          NULL,
                                           NULL,
                                           _gtk_css_value_new_take_shadow (NULL));
 
   gtk_css_style_property_register        ("box-shadow",
-                                          GTK_TYPE_SHADOW,
+                                          G_TYPE_NONE,
                                           0,
                                           shadow_value_parse,
                                           shadow_value_print,
                                           shadow_value_compute,
-                                          query_simple,
+                                          NULL,
                                           NULL,
                                           _gtk_css_value_new_take_shadow (NULL));
 
