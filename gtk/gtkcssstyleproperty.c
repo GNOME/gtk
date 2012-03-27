@@ -303,7 +303,7 @@ gtk_css_style_property_real_compute_value (GtkCssStyleProperty *property,
                                            GtkStyleContext     *context,
                                            GtkCssValue         *specified)
 {
-  return _gtk_css_style_compute_value (context, _gtk_css_style_property_get_computed_type (property), specified);
+  return _gtk_css_value_ref (specified);
 }
 
 static gboolean
