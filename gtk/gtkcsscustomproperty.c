@@ -28,6 +28,16 @@
 
 G_DEFINE_TYPE (GtkCssCustomProperty, _gtk_css_custom_property, GTK_TYPE_CSS_STYLE_PROPERTY)
 
+static GType
+gtk_css_custom_property_get_specified_type (GParamSpec *pspec)
+{
+  if (pspec->value_type == GDK_TYPE_RGBA ||
+      pspec->value_type == GDK_TYPE_COLOR)
+    return GTK_TYPE_SYMBOLIC_COLOR;
+  else
+    return pspec->value_type;
+}
+
 static GtkCssValue *
 gtk_css_custom_property_parse_value (GtkStyleProperty *property,
                                      GtkCssParser     *parser,
@@ -56,8 +66,7 @@ gtk_css_custom_property_parse_value (GtkStyleProperty *property,
     }
   else
     {
-      GtkCssStyleProperty *style = GTK_CSS_STYLE_PROPERTY (property);
-      g_value_init (&value, _gtk_css_style_property_get_specified_type (style));
+      g_value_init (&value, gtk_css_custom_property_get_specified_type (custom->pspec));
 
       success = _gtk_css_style_parse_value (&value, parser, base);
     }
