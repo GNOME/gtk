@@ -1469,7 +1469,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GtkAllocation allocation;
   gint x, y;
   gint matches, actions, items, height;
-  GtkBorder borders;
   GdkScreen *screen;
   gint monitor_num;
   gint vertical_separator;
@@ -1495,8 +1494,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gdk_window_get_origin (window, &x, &y);
   x += allocation.x;
   y += allocation.y + (allocation.height - entry_req.height) / 2;
-
-  _gtk_entry_get_borders (GTK_ENTRY (completion->priv->entry), &borders);
 
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
   actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
@@ -1532,7 +1529,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
     gtk_widget_show (completion->priv->scrolled_window);
 
   if (completion->priv->popup_set_width)
-    width = MIN (allocation.width, monitor.width) - borders.left - borders.right;
+    width = MIN (allocation.width, monitor.width);
   else
     width = -1;
 
