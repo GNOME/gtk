@@ -639,13 +639,6 @@ _gtk_css_value_get_rgba (const GtkCssValue *value)
   return value->u.ptr;
 }
 
-cairo_pattern_t *
-_gtk_css_value_get_pattern (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, CAIRO_GOBJECT_TYPE_PATTERN), NULL);
-  return value->u.ptr;
-}
-
 GtkGradient *
 _gtk_css_value_get_gradient (const GtkCssValue *value)
 {

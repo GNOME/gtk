@@ -115,7 +115,6 @@ PangoStyle                      _gtk_css_value_get_pango_style            (const
 PangoVariant                    _gtk_css_value_get_pango_variant          (const GtkCssValue *value);
 PangoWeight                     _gtk_css_value_get_pango_weight           (const GtkCssValue *value);
 const GdkRGBA                  *_gtk_css_value_get_rgba                   (const GtkCssValue *value);
-cairo_pattern_t                *_gtk_css_value_get_pattern                (const GtkCssValue *value);
 GtkGradient                    *_gtk_css_value_get_gradient               (const GtkCssValue *value);
 
 G_END_DECLS
