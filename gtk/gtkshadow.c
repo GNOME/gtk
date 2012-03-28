@@ -111,8 +111,6 @@ shadow_element_new (gdouble hoffset,
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
   GList *elements;
-
-  gboolean resolved;
 };
 
 static void
@@ -164,13 +162,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_SHADOW = {
   gtk_css_value_shadow_print
 };
 
-static GtkCssValue none_singleton = { &GTK_CSS_VALUE_SHADOW, 1, NULL, FALSE };
-
-GtkShadow *
-_gtk_shadow_new (void)
-{
-  return _gtk_css_value_new (GtkShadow, &GTK_CSS_VALUE_SHADOW);
-}
+static GtkCssValue none_singleton = { &GTK_CSS_VALUE_SHADOW, 1, NULL };
 
 GtkShadow *
 _gtk_shadow_new_none (void)
@@ -178,25 +170,91 @@ _gtk_shadow_new_none (void)
   return _gtk_css_value_ref (&none_singleton);
 }
 
-void
-_gtk_shadow_append (GtkShadow        *shadow,
-                    gdouble           hoffset,
-                    gdouble           voffset,
-                    gdouble           radius,
-                    gdouble           spread,
-                    gboolean          inset,
-                    GtkSymbolicColor *color)
+GtkShadow *
+_gtk_shadow_parse (GtkCssParser *parser)
 {
+  gboolean have_inset, have_color, have_lengths;
+  gdouble hoffset, voffset, blur, spread;
+  GtkSymbolicColor *color;
   GtkShadowElement *element;
+  GtkShadow *shadow;
+  guint i;
 
-  g_return_if_fail (shadow != NULL);
-  g_return_if_fail (color != NULL);
+  if (_gtk_css_parser_try (parser, "none", TRUE))
+    return _gtk_shadow_new_none ();
 
-  element = shadow_element_new (hoffset, voffset,
-                                radius, spread, inset,
-                                NULL, color);
+  shadow = _gtk_css_value_new (GtkShadow, &GTK_CSS_VALUE_SHADOW);
 
-  shadow->elements = g_list_append (shadow->elements, element);
+  do
+    {
+      have_inset = have_lengths = have_color = FALSE;
+
+      for (i = 0; i < 3; i++)
+        {
+          if (!have_inset && 
+              _gtk_css_parser_try (parser, "inset", TRUE))
+            {
+              have_inset = TRUE;
+              continue;
+            }
+            
+          if (!have_lengths &&
+              _gtk_css_parser_try_double (parser, &hoffset))
+            {
+              have_lengths = TRUE;
+
+              if (!_gtk_css_parser_try_double (parser, &voffset))
+                {
+                  _gtk_css_parser_error (parser, "Horizontal and vertical offsets are required");
+                  _gtk_css_value_unref (shadow);
+                  return NULL;
+                }
+
+              if (!_gtk_css_parser_try_double (parser, &blur))
+                blur = 0;
+
+              if (!_gtk_css_parser_try_double (parser, &spread))
+                spread = 0;
+
+              continue;
+            }
+
+          if (!have_color)
+            {
+              have_color = TRUE;
+
+              /* XXX: the color is optional and UA-defined if it's missing,
+               * but it doesn't really make sense for us...
+               */
+              color = _gtk_css_parser_read_symbolic_color (parser);
+
+              if (color == NULL)
+                {
+                  _gtk_css_value_unref (shadow);
+                  return NULL;
+                }
+            }
+        }
+
+      if (!have_color || !have_lengths)
+        {
+          _gtk_css_parser_error (parser, "Must specify at least color and offsets");
+          _gtk_css_value_unref (shadow);
+          return NULL;
+        }
+
+      element = shadow_element_new (hoffset, voffset,
+                                    blur, spread, have_inset,
+                                    NULL, color);
+
+      shadow->elements = g_list_append (shadow->elements, element);
+
+      gtk_symbolic_color_unref (color);
+
+    }
+  while (_gtk_css_parser_try (parser, ",", TRUE));
+
+  return shadow;
 }
 
 GtkShadow *
@@ -208,7 +266,7 @@ _gtk_shadow_resolve (GtkShadow       *shadow,
   GdkRGBA color;
   GList *l;
 
-  resolved_shadow = _gtk_shadow_new ();
+  resolved_shadow = _gtk_css_value_new (GtkShadow, &GTK_CSS_VALUE_SHADOW);
 
   for (l = shadow->elements; l != NULL; l = l->next)
     {
@@ -230,8 +288,6 @@ _gtk_shadow_resolve (GtkShadow       *shadow,
       resolved_shadow->elements =
         g_list_append (resolved_shadow->elements, resolved_element);
     }
-
-  resolved_shadow->resolved = TRUE;
 
   return resolved_shadow;
 }

@@ -25,6 +25,7 @@
 #include "gtkstylecontext.h"
 #include "gtksymboliccolor.h"
 #include "gtkicontheme.h"
+#include "gtkcssparserprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtkroundedboxprivate.h"
@@ -33,16 +34,8 @@ G_BEGIN_DECLS
 
 typedef GtkCssValue GtkShadow;
 
-GtkShadow *_gtk_shadow_new            (void);
 GtkShadow *_gtk_shadow_new_none       (void);
-
-void       _gtk_shadow_append         (GtkShadow          *shadow,
-                                       gdouble             hoffset,
-                                       gdouble             voffset,
-                                       gdouble             radius,
-                                       gdouble             spread,
-                                       gboolean            inset,
-                                       GtkSymbolicColor   *color);
+GtkShadow *_gtk_shadow_parse          (GtkCssParser       *parser);
 
 GtkShadow *_gtk_shadow_resolve        (GtkShadow          *shadow,
                                        GtkStyleContext    *context);
