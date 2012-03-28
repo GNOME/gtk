@@ -91,7 +91,6 @@ GtkCssValue *_gtk_css_value_new_from_background_size  (const GtkCssBackgroundSiz
 GtkCssValue *_gtk_css_value_new_from_background_position (const GtkCssBackgroundPosition *v);
 GtkCssValue *_gtk_css_value_new_from_border_corner_radius (const GtkCssBorderCornerRadius *v);
 GtkCssValue *_gtk_css_value_new_from_border_image_repeat (const GtkCssBorderImageRepeat *v);
-GtkCssValue *_gtk_css_value_new_from_border_style     (GtkBorderStyle              style);
 void         _gtk_css_value_init_gvalue               (const GtkCssValue          *value,
 						       GValue                     *g_value);
 
@@ -105,7 +104,6 @@ gpointer                        _gtk_css_value_get_boxed                  (const
 const char **                   _gtk_css_value_get_strv                   (const GtkCssValue *value);
 GtkSymbolicColor               *_gtk_css_value_get_symbolic_color         (const GtkCssValue *value);
 GtkCssImage                    *_gtk_css_value_get_image                  (const GtkCssValue *value);
-GtkBorderStyle                  _gtk_css_value_get_border_style           (const GtkCssValue *value);
 const GtkCssBackgroundSize     *_gtk_css_value_get_background_size        (const GtkCssValue *value);
 const GtkCssBackgroundPosition *_gtk_css_value_get_background_position    (const GtkCssValue *value);
 const GtkCssBorderCornerRadius *_gtk_css_value_get_border_corner_radius   (const GtkCssValue *value);

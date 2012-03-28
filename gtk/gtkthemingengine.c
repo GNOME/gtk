@@ -28,6 +28,7 @@
 #include "gtkmodulesprivate.h"
 #include "gtkborderimageprivate.h"
 #include "gtkpango.h"
+#include "gtkcssenumvalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkcsstypesprivate.h"
@@ -1821,7 +1822,7 @@ render_frame_internal (GtkThemingEngine *engine,
       render_border (cr, &border_box, &border, hidden_side, colors, border_style);
     }
 
-  border_style[0] = _gtk_css_value_get_border_style (_gtk_theming_engine_peek_property (engine, "outline-style"));
+  border_style[0] = _gtk_css_border_style_value_get (_gtk_theming_engine_peek_property (engine, "outline-style"));
   if (border_style[0] != GTK_BORDER_STYLE_NONE)
     {
       int offset;

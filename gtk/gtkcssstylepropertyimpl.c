@@ -43,6 +43,7 @@
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimageprivate.h"
+#include "gtkcssenumvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
@@ -348,15 +349,28 @@ parse_border_style (GtkCssStyleProperty *property,
                     GtkCssParser        *parser,
                     GFile               *base)
 {
-  int value;
+  GtkCssValue *value = _gtk_css_border_style_value_try_parse (parser);
+  
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
 
-  if (!_gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, &value))
-    {
-      _gtk_css_parser_error (parser, "unknown value for property");
-      return NULL;
-    }
+  return value;
+}
 
-  return _gtk_css_value_new_from_enum (GTK_TYPE_BORDER_STYLE, value);
+static void
+query_border_style (GtkCssStyleProperty *property,
+                    const GtkCssValue   *css_value,
+                    GValue              *value)
+{
+  g_value_init (value, GTK_TYPE_BORDER_STYLE);
+  g_value_set_enum (value, _gtk_css_border_style_value_get (css_value));
+}
+
+static GtkCssValue *
+assign_border_style (GtkCssStyleProperty *property,
+                     const GValue        *value)
+{
+  return _gtk_css_border_style_value_new (g_value_get_enum (value));
 }
 
 static GtkCssValue *
@@ -795,7 +809,7 @@ compute_border_width (GtkCssStyleProperty    *property,
    */
   style = _gtk_css_style_property_lookup_by_id (_gtk_css_style_property_get_id (property) - 1);
   
-  border_style = _gtk_css_value_get_border_style (_gtk_style_context_peek_property (context, _gtk_style_property_get_name (GTK_STYLE_PROPERTY (style))));
+  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, _gtk_style_property_get_name (GTK_STYLE_PROPERTY (style))));
 
   if (border_style == GTK_BORDER_STYLE_NONE ||
       border_style == GTK_BORDER_STYLE_HIDDEN)
@@ -1359,10 +1373,10 @@ _gtk_css_style_property_init_properties (void)
                                           parse_border_style,
                                           NULL,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          query_border_style,
+                                          assign_border_style,
                                           NULL,
-                                          _gtk_css_value_new_from_border_style (GTK_BORDER_STYLE_NONE));
+                                          _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
   gtk_css_style_property_register        ("border-top-width",
                                           G_TYPE_INT,
                                           0,
@@ -1379,10 +1393,10 @@ _gtk_css_style_property_init_properties (void)
                                           parse_border_style,
                                           NULL,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          query_border_style,
+                                          assign_border_style,
                                           NULL,
-                                          _gtk_css_value_new_from_border_style (GTK_BORDER_STYLE_NONE));
+                                          _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
   gtk_css_style_property_register        ("border-left-width",
                                           G_TYPE_INT,
                                           0,
@@ -1399,10 +1413,10 @@ _gtk_css_style_property_init_properties (void)
                                           parse_border_style,
                                           NULL,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          query_border_style,
+                                          assign_border_style,
                                           NULL,
-                                          _gtk_css_value_new_from_border_style (GTK_BORDER_STYLE_NONE));
+                                          _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
   gtk_css_style_property_register        ("border-bottom-width",
                                           G_TYPE_INT,
                                           0,
@@ -1419,10 +1433,10 @@ _gtk_css_style_property_init_properties (void)
                                           parse_border_style,
                                           NULL,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          query_border_style,
+                                          assign_border_style,
                                           NULL,
-                                          _gtk_css_value_new_from_border_style (GTK_BORDER_STYLE_NONE));
+                                          _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
   gtk_css_style_property_register        ("border-right-width",
                                           G_TYPE_INT,
                                           0,
@@ -1481,10 +1495,10 @@ _gtk_css_style_property_init_properties (void)
                                           parse_border_style,
                                           NULL,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          query_border_style,
+                                          assign_border_style,
                                           NULL,
-                                          _gtk_css_value_new_from_border_style (GTK_BORDER_STYLE_NONE));
+                                          _gtk_css_border_style_value_new (GTK_BORDER_STYLE_NONE));
   gtk_css_style_property_register        ("outline-width",
                                           G_TYPE_INT,
                                           0,

@@ -24,6 +24,7 @@
 #include <cairo-gobject.h>
 #include <math.h>
 
+#include "gtkcssenumvalueprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
@@ -236,12 +237,12 @@ parse_border_style (GtkCssShorthandProperty  *shorthand,
                     GtkCssParser             *parser,
                     GFile                    *base)
 {
-  GtkBorderStyle styles[4];
   guint i;
 
   for (i = 0; i < 4; i++)
     {
-      if (!_gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, (int *)&styles[i]))
+      values[i] = _gtk_css_border_style_value_try_parse (parser);
+      if (values[i] == NULL)
         break;
     }
 
@@ -251,13 +252,8 @@ parse_border_style (GtkCssShorthandProperty  *shorthand,
       return FALSE;
     }
 
-  for (; i < G_N_ELEMENTS (styles); i++)
-    styles[i] = styles[(i - 1) >> 1];
-
-  for (i = 0; i < G_N_ELEMENTS (styles); i++)
-    {
-      values[i] = _gtk_css_value_new_from_enum (GTK_TYPE_BORDER_STYLE, styles[i]);
-    }
+  for (; i < 4; i++)
+    values[i] = _gtk_css_value_ref (values[(i - 1) >> 1]);
 
   return TRUE;
 }
@@ -317,8 +313,6 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
                    GtkCssParser             *parser,
                    GFile                    *base)
 {
-  int style;
-
   do
   {
     if (values[0] == NULL &&
@@ -332,9 +326,9 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
           return FALSE;
       }
     else if (values[1] == NULL &&
-             _gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, &style))
+             (values[1] = _gtk_css_border_style_value_try_parse (parser)))
       {
-        values[1] = _gtk_css_value_new_from_enum (GTK_TYPE_BORDER_STYLE, style);
+        /* Nothing to do */
       }
     else if (values[2] == NULL)
       {
@@ -365,8 +359,6 @@ parse_border (GtkCssShorthandProperty  *shorthand,
               GtkCssParser             *parser,
               GFile                    *base)
 {
-  int style;
-
   do
   {
     if (values[0] == NULL &&
@@ -383,9 +375,8 @@ parse_border (GtkCssShorthandProperty  *shorthand,
         values[3] = _gtk_css_value_ref (values[0]);
       }
     else if (values[4] == NULL &&
-             _gtk_css_parser_try_enum (parser, GTK_TYPE_BORDER_STYLE, &style))
+             (values[4] = _gtk_css_border_style_value_try_parse (parser)))
       {
-        values[4] = _gtk_css_value_new_from_enum (GTK_TYPE_BORDER_STYLE, style);
         values[5] = _gtk_css_value_ref (values[4]);
         values[6] = _gtk_css_value_ref (values[4]);
         values[7] = _gtk_css_value_ref (values[4]);
