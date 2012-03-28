@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include "gtkcssstylefuncsprivate.h"
+#include "gtkstylepropertiesprivate.h"
 #include "gtkthemingengine.h"
 
 G_DEFINE_TYPE (GtkCssCustomProperty, _gtk_css_custom_property, GTK_TYPE_CSS_STYLE_PROPERTY)
@@ -101,12 +102,27 @@ gtk_css_custom_property_query (GtkStyleProperty   *property,
 }
 
 static void
+gtk_css_custom_property_assign (GtkStyleProperty   *property,
+                                GtkStyleProperties *props,
+                                GtkStateFlags       state,
+                                const GValue       *value)
+{
+  GtkCssValue *css_value = _gtk_css_value_new_from_gvalue (value);
+  _gtk_style_properties_set_property_by_property (props,
+                                                  GTK_CSS_STYLE_PROPERTY (property),
+                                                  state,
+                                                  css_value);
+  _gtk_css_value_unref (css_value);
+}
+
+static void
 _gtk_css_custom_property_class_init (GtkCssCustomPropertyClass *klass)
 {
   GtkStylePropertyClass *property_class = GTK_STYLE_PROPERTY_CLASS (klass);
 
   property_class->parse_value = gtk_css_custom_property_parse_value;
   property_class->query = gtk_css_custom_property_query;
+  property_class->assign = gtk_css_custom_property_assign;
 }
 
 static GtkCssValue *
