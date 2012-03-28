@@ -1513,7 +1513,9 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   monitor_num = gdk_screen_get_monitor_at_window (screen, window);
   gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
 
-  if (y > monitor.height / 2)
+  if (height == 0)
+    items = 0;
+  else if (y > monitor.height / 2)
     items = MIN (matches, (((monitor.y + y) - (actions * action_height)) / height) - 1);
   else
     items = MIN (matches, (((monitor.height - y) - (actions * action_height)) / height) - 1);
