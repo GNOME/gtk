@@ -44,7 +44,7 @@
 #include "gtkcssimageprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkgradient.h"
+#include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
 #include "gtksymboliccolorprivate.h"
 #include "gtkthemingengine.h"
@@ -190,42 +190,41 @@ color_compute (GtkCssStyleProperty    *property,
                GtkStyleContext        *context,
                GtkCssValue            *specified)
 {
-  GtkSymbolicColor *symbolic = _gtk_css_value_get_symbolic_color (specified);
-  GtkCssValue *resolved;
+  return _gtk_css_rgba_value_compute_from_symbolic (specified,
+                                                    _gtk_css_style_property_get_initial_value (property),
+                                                    context,
+                                                    FALSE);
+}
 
-  if (symbolic == _gtk_symbolic_color_get_current_color ())
-    {
-      /* The computed value of the ‘currentColor’ keyword is the computed
-       * value of the ‘color’ property. If the ‘currentColor’ keyword is
-       * set on the ‘color’ property itself, it is treated as ‘color: inherit’. 
-       */
-      if (g_str_equal (_gtk_style_property_get_name (GTK_STYLE_PROPERTY (property)), "color"))
-        {
-          GtkStyleContext *parent = gtk_style_context_get_parent (context);
+static GtkCssValue *
+color_property_compute (GtkCssStyleProperty    *property,
+                        GtkStyleContext        *context,
+                        GtkCssValue            *specified)
+{
+  GtkCssValue *value;
 
-          if (parent)
-            return _gtk_css_value_ref (_gtk_style_context_peek_property (parent, "color"));
-          else
-            return _gtk_css_style_compute_value (context,
-						 GDK_TYPE_RGBA,
-						 _gtk_css_style_property_get_initial_value (property));
-        }
-      else
-        {
-          return _gtk_css_value_ref (_gtk_style_context_peek_property (context, "color"));
-        }
-    }
-  else if ((resolved = _gtk_style_context_resolve_color_value (context,
-							       symbolic)) != NULL)
-    {
-      return resolved;
-    }
-  else
-    {
-      return color_compute (property,
-			    context,
-			    _gtk_css_style_property_get_initial_value (property));
-    }
+  value = _gtk_css_rgba_value_compute_from_symbolic (specified,
+                                                    _gtk_css_style_property_get_initial_value (property),
+                                                    context,
+                                                    TRUE);
+  _gtk_css_rgba_value_get_rgba (value);
+  return value;
+}
+
+static void
+color_query (GtkCssStyleProperty *property,
+             const GtkCssValue   *css_value,
+             GValue              *value)
+{
+  g_value_init (value, GDK_TYPE_RGBA);
+  g_value_set_boxed (value, _gtk_css_rgba_value_get_rgba (css_value));
+}
+
+static GtkCssValue *
+color_assign (GtkCssStyleProperty *property,
+              const GValue        *value)
+{
+  return _gtk_css_rgba_value_new_from_rgba (g_value_get_boxed (value));
 }
 
 static GtkCssValue *
@@ -1162,9 +1161,9 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           color_parse,
                                           NULL,
-                                          color_compute,
-                                          query_simple,
-                                          assign_simple,
+                                          color_property_compute,
+                                          color_query,
+                                          color_assign,
                                           NULL,
                                           _gtk_css_value_new_take_symbolic_color (
                                             gtk_symbolic_color_new_rgba (1, 1, 1, 1)));
@@ -1187,8 +1186,8 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           NULL,
                                           color_compute,
-                                          query_simple,
-                                          assign_simple,
+                                          color_query,
+                                          color_assign,
                                           NULL,
                                           _gtk_css_value_new_take_symbolic_color (
                                             gtk_symbolic_color_new_rgba (0, 0, 0, 0)));
@@ -1554,8 +1553,8 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           NULL,
                                           color_compute,
-                                          query_simple,
-                                          assign_simple,
+                                          color_query,
+                                          color_assign,
                                           NULL,
                                           _gtk_css_value_new_take_symbolic_color (
                                             gtk_symbolic_color_ref (
@@ -1566,8 +1565,8 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           NULL,
                                           color_compute,
-                                          query_simple,
-                                          assign_simple,
+                                          color_query,
+                                          color_assign,
                                           NULL,
                                           _gtk_css_value_new_take_symbolic_color (
                                             gtk_symbolic_color_ref (
@@ -1578,8 +1577,8 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           NULL,
                                           color_compute,
-                                          query_simple,
-                                          assign_simple,
+                                          color_query,
+                                          color_assign,
                                           NULL,
                                           _gtk_css_value_new_take_symbolic_color (
                                             gtk_symbolic_color_ref (
@@ -1590,8 +1589,8 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           NULL,
                                           color_compute,
-                                          query_simple,
-                                          assign_simple,
+                                          color_query,
+                                          color_assign,
                                           NULL,
                                           _gtk_css_value_new_take_symbolic_color (
                                             gtk_symbolic_color_ref (
@@ -1602,8 +1601,8 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           NULL,
                                           color_compute,
-                                          query_simple,
-                                          assign_simple,
+                                          color_query,
+                                          color_assign,
                                           NULL,
                                           _gtk_css_value_new_take_symbolic_color (
                                             gtk_symbolic_color_ref (

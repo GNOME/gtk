@@ -28,6 +28,7 @@
 #include "gtkmodulesprivate.h"
 #include "gtkborderimageprivate.h"
 #include "gtkpango.h"
+#include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkthemingengineprivate.h"
@@ -1828,7 +1829,7 @@ render_frame_internal (GtkThemingEngine *engine,
       border_style[1] = border_style[2] = border_style[3] = border_style[0];
       border.top = _gtk_css_value_get_int (_gtk_theming_engine_peek_property (engine, "outline-width"));
       border.left = border.right = border.bottom = border.top;
-      colors[0] = *_gtk_css_value_get_rgba (_gtk_theming_engine_peek_property (engine, "outline-color"));
+      colors[0] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, "outline-color"));
       colors[3] = colors[2] = colors[1] = colors[0];
       offset = _gtk_css_value_get_int (_gtk_theming_engine_peek_property (engine, "outline-offset"));
       

@@ -23,6 +23,7 @@
 #include <gobject/gvaluecollector.h>
 
 #include "gtkstylecontextprivate.h"
+#include "gtkcssrgbavalueprivate.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkthemingengineprivate.h"
@@ -2783,7 +2784,7 @@ _gtk_style_context_resolve_color (GtkStyleContext  *context,
   if (val == NULL)
     return FALSE;
 
-  *result = *_gtk_css_value_get_rgba (val);
+  *result = *_gtk_css_rgba_value_get_rgba (val);
   _gtk_css_value_unref (val);
   return TRUE;
 }

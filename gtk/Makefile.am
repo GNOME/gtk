@@ -438,6 +438,7 @@ gtk_private_h_sources =		\
 	gtkcssnumbervalueprivate.h	\
 	gtkcssparserprivate.h	\
 	gtkcssproviderprivate.h	\
+	gtkcssrgbavalueprivate.h	\
 	gtkcsssectionprivate.h 	\
 	gtkcssselectorprivate.h	\
 	gtkcssshadowvalueprivate.h      \
@@ -639,6 +640,7 @@ gtk_base_c_sources = 		\
 	gtkcssnumbervalue.c	\
 	gtkcssparser.c		\
 	gtkcssprovider.c	\
+	gtkcssrgbavalue.c	\
 	gtkcsssection.c 	\
 	gtkcssselector.c	\
 	gtkcssshadowvalue.c	\

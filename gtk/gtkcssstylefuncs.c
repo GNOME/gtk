@@ -30,6 +30,7 @@
 #include "gtkanimationdescription.h"
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssprovider.h"
+#include "gtkcssrgbavalueprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkgradient.h"
 #include "gtkprivatetypebuiltins.h"
@@ -213,24 +214,21 @@ rgba_value_print (const GValue *value,
 
 static GtkCssValue *
 rgba_value_compute (GtkStyleContext *context,
-                    GtkCssValue    *specified)
+                    GtkCssValue     *specified)
 {
   GdkRGBA white = { 1, 1, 1, 1 };
-  GtkCssValue *res;
   
   if (_gtk_css_value_holds (specified, GTK_TYPE_SYMBOLIC_COLOR))
     {
       GtkSymbolicColor *symbolic = _gtk_css_value_get_symbolic_color (specified);
+      GdkRGBA rgba;
 
       if (symbolic == _gtk_symbolic_color_get_current_color ())
-        return _gtk_css_value_ref (_gtk_style_context_peek_property (context, "color"));
-      else {
-	res = _gtk_style_context_resolve_color_value (context, symbolic);
-	if (res != NULL)
-	  return res;
+        rgba = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, "color"));
+      else if (!gtk_symbolic_color_resolve (symbolic, NULL, &rgba))
+        rgba = white;
 
-	return _gtk_css_value_new_from_rgba (&white);
-      }
+      return _gtk_css_value_new_from_boxed (GDK_TYPE_RGBA, &rgba);
     }
   else
     return _gtk_css_value_ref (specified);

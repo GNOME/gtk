@@ -303,17 +303,6 @@ _gtk_css_value_new_take_binding_sets (GPtrArray *array)
 }
 
 GtkCssValue *
-_gtk_css_value_new_from_rgba (const GdkRGBA *v)
-{
-  GtkCssValue *value;
-
-  value = gtk_css_value_new (GDK_TYPE_RGBA);
-  value->u.ptr = g_boxed_copy0 (GDK_TYPE_RGBA, v);
-
-  return value;
-}
-
-GtkCssValue *
 _gtk_css_value_new_from_color (const GdkColor *v)
 {
   GtkCssValue *value;
@@ -452,12 +441,16 @@ _gtk_css_value_print (const GtkCssValue *value,
 GType
 _gtk_css_value_get_content_type (const GtkCssValue *value)
 {
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_DEFAULT, G_TYPE_NONE);
+
   return value->type;
 }
 
 gboolean
 _gtk_css_value_holds (const GtkCssValue *value, GType type)
 {
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_DEFAULT, FALSE);
+
   return g_type_is_a (value->type, type);
 }
 
@@ -499,6 +492,7 @@ _gtk_css_value_init_gvalue (const GtkCssValue *value,
 {
   if (value != NULL)
     {
+      g_return_if_fail (value->class == &GTK_CSS_VALUE_DEFAULT);
       g_value_init (g_value, value->type);
       fill_gvalue (value, g_value);
     }
@@ -630,13 +624,6 @@ _gtk_css_value_get_pango_weight (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, PANGO_TYPE_WEIGHT), 0);
   return value->u.gint;
-}
-
-const GdkRGBA *
-_gtk_css_value_get_rgba (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, GDK_TYPE_RGBA), NULL);
-  return value->u.ptr;
 }
 
 GtkGradient *

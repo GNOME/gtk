@@ -81,7 +81,6 @@ GtkCssValue *_gtk_css_value_new_take_string           (char                     
 GtkCssValue *_gtk_css_value_new_take_strv             (char                      **strv);
 GtkCssValue *_gtk_css_value_new_from_boxed            (GType                       type,
                                                        gpointer                    boxed);
-GtkCssValue *_gtk_css_value_new_from_rgba             (const GdkRGBA              *v);
 GtkCssValue *_gtk_css_value_new_from_color            (const GdkColor             *v);
 GtkCssValue *_gtk_css_value_new_take_symbolic_color   (GtkSymbolicColor           *v);
 GtkCssValue *_gtk_css_value_new_take_pattern          (cairo_pattern_t            *v);
@@ -114,7 +113,6 @@ const GtkCssBorderImageRepeat  *_gtk_css_value_get_border_image_repeat    (const
 PangoStyle                      _gtk_css_value_get_pango_style            (const GtkCssValue *value);
 PangoVariant                    _gtk_css_value_get_pango_variant          (const GtkCssValue *value);
 PangoWeight                     _gtk_css_value_get_pango_weight           (const GtkCssValue *value);
-const GdkRGBA                  *_gtk_css_value_get_rgba                   (const GtkCssValue *value);
 GtkGradient                    *_gtk_css_value_get_gradient               (const GtkCssValue *value);
 
 G_END_DECLS
