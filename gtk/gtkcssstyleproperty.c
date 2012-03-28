@@ -109,9 +109,14 @@ _gtk_css_style_property_assign (GtkStyleProperty   *property,
                                 GtkStateFlags       state,
                                 const GValue       *value)
 {
-  GtkCssValue *css_value = _gtk_css_value_new_from_gvalue (value);
+  GtkCssStyleProperty *style;
+  GtkCssValue *css_value;
+  
+  style = GTK_CSS_STYLE_PROPERTY (property);
+  css_value = style->assign_value (style, value);
+
   _gtk_style_properties_set_property_by_property (props,
-                                                  GTK_CSS_STYLE_PROPERTY (property),
+                                                  style,
                                                   state,
                                                   css_value);
   _gtk_css_value_unref (css_value);

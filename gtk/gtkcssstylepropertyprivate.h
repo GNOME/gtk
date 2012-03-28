@@ -46,6 +46,8 @@ typedef GtkCssValue  *   (* GtkCssStylePropertyComputeFunc)(GtkCssStyleProperty 
 typedef void             (* GtkCssStylePropertyQueryFunc)  (GtkCssStyleProperty    *property,
                                                             const GtkCssValue      *cssvalue,
                                                             GValue                 *value);
+typedef GtkCssValue *    (* GtkCssStylePropertyAssignFunc) (GtkCssStyleProperty    *property,
+                                                            const GValue           *value);
 typedef gboolean         (* GtkCssStylePropertyEqualFunc)  (GtkCssStyleProperty    *property,
                                                             GtkCssValue            *value1,
                                                             GtkCssValue            *value2);
@@ -61,6 +63,7 @@ struct _GtkCssStyleProperty
   GtkCssStylePropertyPrintFunc print_value;
   GtkCssStylePropertyComputeFunc compute_value;
   GtkCssStylePropertyQueryFunc query_value;
+  GtkCssStylePropertyAssignFunc assign_value;
   GtkCssStylePropertyEqualFunc equal_func;
 };
 
