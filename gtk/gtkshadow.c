@@ -105,7 +105,7 @@ shadow_element_new (gdouble hoffset,
 }                  
 
 /****************
- * GtkShadow *
+ * GtkCssValue *
  ****************/
 
 struct _GtkCssValue {
@@ -118,7 +118,7 @@ gtk_css_value_shadow_free (GtkCssValue *shadow)
 {
   g_list_free_full (shadow->elements,
                     (GDestroyNotify) shadow_element_free);
-  g_slice_free (GtkShadow, shadow);
+  g_slice_free (GtkCssValue, shadow);
 }
 
 static gboolean
@@ -164,26 +164,26 @@ static const GtkCssValueClass GTK_CSS_VALUE_SHADOW = {
 
 static GtkCssValue none_singleton = { &GTK_CSS_VALUE_SHADOW, 1, NULL };
 
-GtkShadow *
-_gtk_shadow_new_none (void)
+GtkCssValue *
+_gtk_css_shadow_value_new_none (void)
 {
   return _gtk_css_value_ref (&none_singleton);
 }
 
-GtkShadow *
-_gtk_shadow_parse (GtkCssParser *parser)
+GtkCssValue *
+_gtk_css_shadow_value_parse (GtkCssParser *parser)
 {
   gboolean have_inset, have_color, have_lengths;
   gdouble hoffset, voffset, blur, spread;
   GtkSymbolicColor *color;
   GtkShadowElement *element;
-  GtkShadow *shadow;
+  GtkCssValue *shadow;
   guint i;
 
   if (_gtk_css_parser_try (parser, "none", TRUE))
-    return _gtk_shadow_new_none ();
+    return _gtk_css_shadow_value_new_none ();
 
-  shadow = _gtk_css_value_new (GtkShadow, &GTK_CSS_VALUE_SHADOW);
+  shadow = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_SHADOW);
 
   do
     {
@@ -257,16 +257,16 @@ _gtk_shadow_parse (GtkCssParser *parser)
   return shadow;
 }
 
-GtkShadow *
-_gtk_shadow_resolve (GtkShadow       *shadow,
-                     GtkStyleContext *context)
+GtkCssValue *
+_gtk_css_shadow_value_compute (GtkCssValue     *shadow,
+                               GtkStyleContext *context)
 {
-  GtkShadow *resolved_shadow;
+  GtkCssValue *resolved_shadow;
   GtkShadowElement *element, *resolved_element;
   GdkRGBA color;
   GList *l;
 
-  resolved_shadow = _gtk_css_value_new (GtkShadow, &GTK_CSS_VALUE_SHADOW);
+  resolved_shadow = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_SHADOW);
 
   for (l = shadow->elements; l != NULL; l = l->next)
     {
@@ -293,9 +293,9 @@ _gtk_shadow_resolve (GtkShadow       *shadow,
 }
 
 void
-_gtk_text_shadow_paint_layout (GtkShadow       *shadow,
-                               cairo_t         *cr,
-                               PangoLayout     *layout)
+_gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
+                                    cairo_t           *cr,
+                                    PangoLayout       *layout)
 {
   GList *l;
   GtkShadowElement *element;
@@ -322,8 +322,8 @@ _gtk_text_shadow_paint_layout (GtkShadow       *shadow,
 }
 
 void
-_gtk_icon_shadow_paint (GtkShadow *shadow,
-			cairo_t *cr)
+_gtk_css_shadow_value_paint_icon (const GtkCssValue *shadow,
+			          cairo_t           *cr)
 {
   GList *l;
   GtkShadowElement *element;
@@ -346,10 +346,10 @@ _gtk_icon_shadow_paint (GtkShadow *shadow,
 }
 
 void
-_gtk_icon_shadow_paint_spinner (GtkShadow *shadow,
-                                cairo_t   *cr,
-                                gdouble    radius,
-                                gdouble    progress)
+_gtk_css_shadow_value_paint_spinner (const GtkCssValue *shadow,
+                                     cairo_t           *cr,
+                                     gdouble            radius,
+                                     gdouble            progress)
 {
   GtkShadowElement *element;
   GList *l;
@@ -370,9 +370,9 @@ _gtk_icon_shadow_paint_spinner (GtkShadow *shadow,
 }
 
 void
-_gtk_box_shadow_render (GtkShadow           *shadow,
-                        cairo_t             *cr,
-                        const GtkRoundedBox *padding_box)
+_gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
+                                 cairo_t             *cr,
+                                 const GtkRoundedBox *padding_box)
 {
   GtkShadowElement *element;
   GtkRoundedBox box;

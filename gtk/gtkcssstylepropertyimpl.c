@@ -421,7 +421,7 @@ shadow_value_parse (GtkCssStyleProperty *property,
                     GtkCssParser        *parser,
                     GFile               *base)
 {
-  return _gtk_shadow_parse (parser);
+  return _gtk_css_shadow_value_parse (parser);
 }
 
 static GtkCssValue *
@@ -429,7 +429,7 @@ shadow_value_compute (GtkCssStyleProperty *property,
                       GtkStyleContext     *context,
                       GtkCssValue         *specified)
 {
-  return _gtk_shadow_resolve (specified, context);
+  return _gtk_css_shadow_value_compute (specified, context);
 }
 
 static GtkCssValue *
@@ -1214,7 +1214,7 @@ _gtk_css_style_property_init_properties (void)
                                           shadow_value_compute,
                                           NULL,
                                           NULL,
-                                          _gtk_shadow_new_none ());
+                                          _gtk_css_shadow_value_new_none ());
 
   gtk_css_style_property_register        ("icon-shadow",
                                           G_TYPE_NONE,
@@ -1224,7 +1224,7 @@ _gtk_css_style_property_init_properties (void)
                                           shadow_value_compute,
                                           NULL,
                                           NULL,
-                                          _gtk_shadow_new_none ());
+                                          _gtk_css_shadow_value_new_none ());
 
   gtk_css_style_property_register        ("box-shadow",
                                           G_TYPE_NONE,
@@ -1234,7 +1234,7 @@ _gtk_css_style_property_init_properties (void)
                                           shadow_value_compute,
                                           NULL,
                                           NULL,
-                                          _gtk_shadow_new_none ());
+                                          _gtk_css_shadow_value_new_none ());
 
   gtk_css_style_property_register        ("margin-top",
                                           G_TYPE_INT,

@@ -20,40 +20,36 @@
 #ifndef __GTK_SHADOW_H__
 #define __GTK_SHADOW_H__
 
-#include <glib-object.h>
+#include <cairo.h>
+#include <pango/pango.h>
 
-#include "gtkstylecontext.h"
-#include "gtksymboliccolor.h"
-#include "gtkicontheme.h"
+#include "gtktypes.h"
 #include "gtkcssparserprivate.h"
-#include "gtkcsstypesprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtkroundedboxprivate.h"
 
 G_BEGIN_DECLS
 
-typedef GtkCssValue GtkShadow;
+GtkCssValue *   _gtk_css_shadow_value_new_none        (void);
+GtkCssValue *   _gtk_css_shadow_value_parse           (GtkCssParser             *parser);
 
-GtkShadow *_gtk_shadow_new_none       (void);
-GtkShadow *_gtk_shadow_parse          (GtkCssParser       *parser);
+GtkCssValue *   _gtk_css_shadow_value_compute         (GtkCssValue              *shadow,
+                                                       GtkStyleContext          *context);
 
-GtkShadow *_gtk_shadow_resolve        (GtkShadow          *shadow,
-                                       GtkStyleContext    *context);
+void            _gtk_css_shadow_value_paint_layout    (const GtkCssValue        *shadow,
+                                                       cairo_t                  *cr,
+                                                       PangoLayout              *layout);
 
-void       _gtk_text_shadow_paint_layout (GtkShadow       *shadow,
-                                          cairo_t         *cr,
-                                          PangoLayout     *layout);
+void            _gtk_css_shadow_value_paint_icon      (const GtkCssValue        *shadow,
+					               cairo_t                  *cr);
 
-void       _gtk_icon_shadow_paint        (GtkShadow *shadow,
-					  cairo_t *cr);
-
-void       _gtk_icon_shadow_paint_spinner (GtkShadow *shadow,
-                                           cairo_t   *cr,
-                                           gdouble    radius,
-                                           gdouble    progress);
-void       _gtk_box_shadow_render         (GtkShadow           *shadow,
-                                           cairo_t             *cr,
-                                           const GtkRoundedBox *padding_box);
+void            _gtk_css_shadow_value_paint_spinner   (const GtkCssValue        *shadow,
+                                                       cairo_t                  *cr,
+                                                       gdouble                   radius,
+                                                       gdouble                   progress);
+void            _gtk_css_shadow_value_paint_box       (const GtkCssValue        *shadow,
+                                                       cairo_t                  *cr,
+                                                       const GtkRoundedBox      *padding_box);
 
 G_END_DECLS
 

@@ -2100,7 +2100,7 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
                                   PangoLayout      *layout)
 {
   GdkRGBA fg_color;
-  GtkShadow *text_shadow = NULL;
+  GtkCssValue *text_shadow = NULL;
   GtkStateFlags flags;
   gdouble progress;
   gboolean running;
@@ -2136,7 +2136,7 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
 
   prepare_context_for_layout (cr, x, y, layout);
 
-  _gtk_text_shadow_paint_layout (text_shadow, cr, layout);
+  _gtk_css_shadow_value_paint_layout (text_shadow, cr, layout);
 
   gdk_cairo_set_source_rgba (cr, &fg_color);
   pango_cairo_show_layout (cr, layout);
@@ -2750,7 +2750,7 @@ render_spinner (GtkThemingEngine *engine,
                 gdouble           height)
 {
   GtkStateFlags state;
-  GtkShadow *shadow;
+  GtkCssValue *shadow;
   GdkRGBA color;
   gdouble progress;
   gdouble radius;
@@ -2768,9 +2768,9 @@ render_spinner (GtkThemingEngine *engine,
   cairo_save (cr);
   cairo_translate (cr, x + width / 2, y + height / 2);
 
-  _gtk_icon_shadow_paint_spinner (shadow, cr,
-                                  radius,
-                                  progress);
+  _gtk_css_shadow_value_paint_spinner (shadow, cr,
+                                       radius,
+                                       progress);
 
   _gtk_theming_engine_paint_spinner (cr,
                                      radius,
@@ -2941,7 +2941,7 @@ gtk_theming_engine_render_icon (GtkThemingEngine *engine,
 
   gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
 
-  _gtk_icon_shadow_paint (_gtk_theming_engine_peek_property (engine, "icon-shadow"), cr);
+  _gtk_css_shadow_value_paint_icon (_gtk_theming_engine_peek_property (engine, "icon-shadow"), cr);
 
   cairo_paint (cr);
 

@@ -301,9 +301,9 @@ static void
 _gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
                                       cairo_t              *cr)
 {
-  _gtk_box_shadow_render (_gtk_style_context_peek_property (bg->context, "box-shadow"),
-                          cr,
-                          &bg->padding_box);
+  _gtk_css_shadow_value_paint_box (_gtk_style_context_peek_property (bg->context, "box-shadow"),
+                                   cr,
+                                   &bg->padding_box);
 }
 
 static void
