@@ -102,3 +102,157 @@ _gtk_css_border_style_value_get (const GtkCssValue *value)
   return value->value;
 }
 
+/* PangoStyle */
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_STYLE = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue font_style_values[] = {
+  { &GTK_CSS_VALUE_FONT_STYLE, 1, PANGO_STYLE_NORMAL, "normal" },
+  { &GTK_CSS_VALUE_FONT_STYLE, 1, PANGO_STYLE_OBLIQUE, "oblique" },
+  { &GTK_CSS_VALUE_FONT_STYLE, 1, PANGO_STYLE_ITALIC, "italic" }
+};
+
+GtkCssValue *
+_gtk_css_font_style_value_new (PangoStyle font_style)
+{
+  g_return_val_if_fail (font_style < G_N_ELEMENTS (font_style_values), NULL);
+
+  return _gtk_css_value_ref (&font_style_values[font_style]);
+}
+
+GtkCssValue *
+_gtk_css_font_style_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (font_style_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, font_style_values[i].name, TRUE))
+        return _gtk_css_value_ref (&font_style_values[i]);
+    }
+
+  return NULL;
+}
+
+PangoStyle
+_gtk_css_font_style_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_STYLE, PANGO_STYLE_NORMAL);
+
+  return value->value;
+}
+
+/* PangoVariant */
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue font_variant_values[] = {
+  { &GTK_CSS_VALUE_FONT_VARIANT, 1, PANGO_VARIANT_NORMAL, "normal" },
+  { &GTK_CSS_VALUE_FONT_VARIANT, 1, PANGO_VARIANT_SMALL_CAPS, "small-caps" }
+};
+
+GtkCssValue *
+_gtk_css_font_variant_value_new (PangoVariant font_variant)
+{
+  g_return_val_if_fail (font_variant < G_N_ELEMENTS (font_variant_values), NULL);
+
+  return _gtk_css_value_ref (&font_variant_values[font_variant]);
+}
+
+GtkCssValue *
+_gtk_css_font_variant_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (font_variant_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, font_variant_values[i].name, TRUE))
+        return _gtk_css_value_ref (&font_variant_values[i]);
+    }
+
+  return NULL;
+}
+
+PangoVariant
+_gtk_css_font_variant_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_VARIANT, PANGO_VARIANT_NORMAL);
+
+  return value->value;
+}
+
+/* PangoWeight */
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_WEIGHT = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue font_weight_values[] = {
+  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_THIN, "100" },
+  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_ULTRALIGHT, "200" },
+  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_LIGHT, "300" },
+  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_NORMAL, "normal" },
+  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_MEDIUM, "500" },
+  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_SEMIBOLD, "600" },
+  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_BOLD, "bold" },
+  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_ULTRABOLD, "800" },
+  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_HEAVY, "900" }
+};
+
+GtkCssValue *
+_gtk_css_font_weight_value_new (PangoWeight font_weight)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (font_weight_values); i++)
+    {
+      if (font_weight_values[i].value == font_weight)
+        return _gtk_css_value_ref (&font_weight_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_font_weight_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (font_weight_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, font_weight_values[i].name, TRUE))
+        return _gtk_css_value_ref (&font_weight_values[i]);
+    }
+  /* special cases go here */
+  if (_gtk_css_parser_try (parser, "400", TRUE))
+    return _gtk_css_value_ref (&font_weight_values[3]);
+  if (_gtk_css_parser_try (parser, "700", TRUE))
+    return _gtk_css_value_ref (&font_weight_values[6]);
+
+  return NULL;
+}
+
+PangoWeight
+_gtk_css_font_weight_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_WEIGHT, PANGO_WEIGHT_NORMAL);
+
+  return value->value;
+}
+

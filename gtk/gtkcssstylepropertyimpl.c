@@ -301,15 +301,28 @@ parse_pango_style (GtkCssStyleProperty *property,
                    GtkCssParser        *parser,
                    GFile               *base)
 {
-  int value;
+  GtkCssValue *value = _gtk_css_font_style_value_try_parse (parser);
+  
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
 
-  if (!_gtk_css_parser_try_enum (parser, PANGO_TYPE_STYLE, &value))
-    {
-      _gtk_css_parser_error (parser, "unknown value for property");
-      return NULL;
-    }
+  return value;
+}
 
-  return _gtk_css_value_new_from_enum (PANGO_TYPE_STYLE, value);
+static void
+query_pango_style (GtkCssStyleProperty *property,
+                    const GtkCssValue   *css_value,
+                    GValue              *value)
+{
+  g_value_init (value, PANGO_TYPE_STYLE);
+  g_value_set_enum (value, _gtk_css_font_style_value_get (css_value));
+}
+
+static GtkCssValue *
+assign_pango_style (GtkCssStyleProperty *property,
+                    const GValue        *value)
+{
+  return _gtk_css_font_style_value_new (g_value_get_enum (value));
 }
 
 static GtkCssValue *
@@ -317,15 +330,28 @@ parse_pango_weight (GtkCssStyleProperty *property,
                     GtkCssParser        *parser,
                     GFile               *base)
 {
-  int value;
+  GtkCssValue *value = _gtk_css_font_weight_value_try_parse (parser);
+  
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
 
-  if (!_gtk_css_parser_try_enum (parser, PANGO_TYPE_WEIGHT, &value))
-    {
-      _gtk_css_parser_error (parser, "unknown value for property");
-      return NULL;
-    }
+  return value;
+}
 
-  return _gtk_css_value_new_from_enum (PANGO_TYPE_WEIGHT, value);
+static void
+query_pango_weight (GtkCssStyleProperty *property,
+                    const GtkCssValue   *css_value,
+                    GValue              *value)
+{
+  g_value_init (value, PANGO_TYPE_WEIGHT);
+  g_value_set_enum (value, _gtk_css_font_weight_value_get (css_value));
+}
+
+static GtkCssValue *
+assign_pango_weight (GtkCssStyleProperty *property,
+                     const GValue        *value)
+{
+  return _gtk_css_font_weight_value_new (g_value_get_enum (value));
 }
 
 static GtkCssValue *
@@ -333,15 +359,28 @@ parse_pango_variant (GtkCssStyleProperty *property,
                      GtkCssParser        *parser,
                      GFile               *base)
 {
-  int value;
+  GtkCssValue *value = _gtk_css_font_variant_value_try_parse (parser);
+  
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
 
-  if (!_gtk_css_parser_try_enum (parser, PANGO_TYPE_VARIANT, &value))
-    {
-      _gtk_css_parser_error (parser, "unknown value for property");
-      return NULL;
-    }
+  return value;
+}
 
-  return _gtk_css_value_new_from_enum (PANGO_TYPE_VARIANT, value);
+static void
+query_pango_variant (GtkCssStyleProperty *property,
+                     const GtkCssValue   *css_value,
+                     GValue              *value)
+{
+  g_value_init (value, PANGO_TYPE_VARIANT);
+  g_value_set_enum (value, _gtk_css_font_variant_value_get (css_value));
+}
+
+static GtkCssValue *
+assign_pango_variant (GtkCssStyleProperty *property,
+                      const GValue        *value)
+{
+  return _gtk_css_font_variant_value_new (g_value_get_enum (value));
 }
 
 static GtkCssValue *
@@ -1222,34 +1261,30 @@ _gtk_css_style_property_init_properties (void)
                                           parse_pango_style,
                                           NULL,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          query_pango_style,
+                                          assign_pango_style,
                                           NULL,
-                                          _gtk_css_value_new_from_enum (PANGO_TYPE_STYLE,
-                                                                        PANGO_STYLE_NORMAL));
+                                          _gtk_css_font_style_value_new (PANGO_STYLE_NORMAL));
   gtk_css_style_property_register        ("font-variant",
                                           PANGO_TYPE_VARIANT,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           parse_pango_variant,
                                           NULL,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          query_pango_variant,
+                                          assign_pango_variant,
                                           NULL,
-                                          _gtk_css_value_new_from_enum (PANGO_TYPE_VARIANT,
-                                                                        PANGO_VARIANT_NORMAL));
-  /* xxx: need to parse this properly, ie parse the numbers */
+                                          _gtk_css_font_variant_value_new (PANGO_VARIANT_NORMAL));
   gtk_css_style_property_register        ("font-weight",
                                           PANGO_TYPE_WEIGHT,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           parse_pango_weight,
                                           NULL,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          query_pango_weight,
+                                          assign_pango_weight,
                                           NULL,
-                                          _gtk_css_value_new_from_enum (PANGO_TYPE_WEIGHT,
-                                                                        PANGO_WEIGHT_NORMAL));
+                                          _gtk_css_font_weight_value_new (PANGO_WEIGHT_NORMAL));
 
   gtk_css_style_property_register        ("text-shadow",
                                           G_TYPE_NONE,

@@ -605,27 +605,6 @@ _gtk_css_value_get_border_corner_radius (const GtkCssValue *value)
   return value->u.ptr;
 }
 
-PangoStyle
-_gtk_css_value_get_pango_style (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, PANGO_TYPE_STYLE), 0);
-  return value->u.gint;
-}
-
-PangoVariant
-_gtk_css_value_get_pango_variant (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, PANGO_TYPE_VARIANT), 0);
-  return value->u.gint;
-}
-
-PangoWeight
-_gtk_css_value_get_pango_weight (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, PANGO_TYPE_WEIGHT), 0);
-  return value->u.gint;
-}
-
 GtkGradient *
 _gtk_css_value_get_gradient (const GtkCssValue *value)
 {

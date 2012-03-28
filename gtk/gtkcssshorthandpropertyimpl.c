@@ -438,18 +438,15 @@ parse_font (GtkCssShorthandProperty  *shorthand,
     }
   if (mask & PANGO_FONT_MASK_STYLE)
     {
-      values[1] = _gtk_css_value_new_from_enum (PANGO_TYPE_STYLE,
-                                                pango_font_description_get_style (desc));
+      values[1] = _gtk_css_font_style_value_new (pango_font_description_get_style (desc));
     }
   if (mask & PANGO_FONT_MASK_VARIANT)
     {
-      values[2] = _gtk_css_value_new_from_enum (PANGO_TYPE_VARIANT,
-                                                pango_font_description_get_variant (desc));
+      values[2] = _gtk_css_font_variant_value_new (pango_font_description_get_variant (desc));
     }
   if (mask & PANGO_FONT_MASK_WEIGHT)
     {
-      values[3] = _gtk_css_value_new_from_enum (PANGO_TYPE_WEIGHT,
-                                                pango_font_description_get_weight (desc));
+      values[3] = _gtk_css_font_weight_value_new (pango_font_description_get_weight (desc));
     }
   if (mask & PANGO_FONT_MASK_SIZE)
     {
@@ -748,15 +745,15 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
 
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-style"))), query_data);
   if (v)
-    pango_font_description_set_style (description, _gtk_css_value_get_pango_style (v));
+    pango_font_description_set_style (description, _gtk_css_font_style_value_get (v));
 
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-variant"))), query_data);
   if (v)
-    pango_font_description_set_variant (description, _gtk_css_value_get_pango_variant (v));
+    pango_font_description_set_variant (description, _gtk_css_font_variant_value_get (v));
 
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-weight"))), query_data);
   if (v)
-    pango_font_description_set_weight (description, _gtk_css_value_get_pango_weight (v));
+    pango_font_description_set_weight (description, _gtk_css_font_weight_value_get (v));
 
   g_value_init (value, PANGO_TYPE_FONT_DESCRIPTION);
   g_value_take_boxed (value, description);
