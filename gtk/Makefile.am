@@ -440,6 +440,7 @@ gtk_private_h_sources =		\
 	gtkcssproviderprivate.h	\
 	gtkcsssectionprivate.h 	\
 	gtkcssselectorprivate.h	\
+	gtkcssshadowvalueprivate.h      \
 	gtkcssshorthandpropertyprivate.h \
 	gtkcssstylefuncsprivate.h \
 	gtkcssstylepropertyprivate.h \
@@ -492,7 +493,6 @@ gtk_private_h_sources =		\
 	gtksearchenginesimple.h	\
 	gtkselectionprivate.h	\
 	gtksettingsprivate.h	\
-	gtkshadowprivate.h      \
 	gtksizegroup-private.h	\
 	gtksocketprivate.h	\
 	gtkstylecascadeprivate.h \
@@ -641,6 +641,7 @@ gtk_base_c_sources = 		\
 	gtkcssprovider.c	\
 	gtkcsssection.c 	\
 	gtkcssselector.c	\
+	gtkcssshadowvalue.c	\
 	gtkcssshorthandproperty.c \
 	gtkcssshorthandpropertyimpl.c \
 	gtkcssstylefuncs.c	\
@@ -759,7 +760,6 @@ gtk_base_c_sources = 		\
 	gtksettings.c		\
 	gtksizegroup.c		\
 	gtksizerequest.c	\
-	gtkshadow.c             \
 	gtkshow.c		\
 	gtkspinbutton.c		\
 	gtkspinner.c		\

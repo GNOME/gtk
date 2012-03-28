@@ -28,7 +28,7 @@
 #include "gtkthemingengine.h"
 #include "gtkanimationdescription.h"
 #include "gtkgradient.h"
-#include "gtkshadowprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkborderimageprivate.h"

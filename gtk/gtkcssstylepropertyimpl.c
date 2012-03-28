@@ -45,7 +45,7 @@
 #include "gtkcssimageprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkgradient.h"
-#include "gtkshadowprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 #include "gtksymboliccolorprivate.h"
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"

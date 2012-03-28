@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkshadowprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 
 #include "gtkstylecontextprivate.h"
 #include "gtkthemingengineprivate.h"

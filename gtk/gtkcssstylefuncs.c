@@ -33,7 +33,7 @@
 #include "gtkcsstypesprivate.h"
 #include "gtkgradient.h"
 #include "gtkprivatetypebuiltins.h"
-#include "gtkshadowprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtksymboliccolorprivate.h"
 #include "gtkthemingengine.h"

@@ -28,7 +28,7 @@
 #include "gtkmodulesprivate.h"
 #include "gtkborderimageprivate.h"
 #include "gtkpango.h"
-#include "gtkshadowprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkthemingengineprivate.h"
 #include "gtkroundedboxprivate.h"
