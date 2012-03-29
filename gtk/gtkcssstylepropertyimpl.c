@@ -42,7 +42,7 @@
 #include "gtkbindings.h"
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssimageprivate.h"
-#include "gtkcssimageprivate.h"
+#include "gtkcssimagevalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
@@ -563,20 +563,7 @@ css_image_value_parse (GtkCssStyleProperty *property,
         return FALSE;
     }
 
-  return _gtk_css_value_new_take_image (image);
-}
-
-static void
-css_image_value_print (GtkCssStyleProperty *property,
-                       const GtkCssValue   *value,
-                       GString             *string)
-{
-  GtkCssImage *image = _gtk_css_value_get_image (value);
-
-  if (image)
-    _gtk_css_image_print (image, string);
-  else
-    g_string_append (string, "none");
+  return _gtk_css_image_value_new (image);
 }
 
 static GtkCssValue *
@@ -586,7 +573,7 @@ css_image_value_compute (GtkCssStyleProperty    *property,
 {
   GtkCssImage *image, *computed;
   
-  image = _gtk_css_value_get_image (specified);
+  image = _gtk_css_image_value_get_image (specified);
 
   if (image == NULL)
     return _gtk_css_value_ref (specified);
@@ -599,7 +586,7 @@ css_image_value_compute (GtkCssStyleProperty    *property,
       return _gtk_css_value_ref (specified);
     }
 
-  return _gtk_css_value_new_take_image (computed);
+  return _gtk_css_image_value_new (computed);
 }
 
 static void
@@ -607,7 +594,7 @@ css_image_value_query (GtkCssStyleProperty *property,
                        const GtkCssValue   *css_value,
                        GValue              *value)
 {
-  GtkCssImage *image = _gtk_css_value_get_image (css_value);
+  GtkCssImage *image = _gtk_css_image_value_get_image (css_value);
   cairo_pattern_t *pattern;
   cairo_surface_t *surface;
   cairo_matrix_t matrix;
@@ -636,7 +623,7 @@ css_image_value_assign (GtkCssStyleProperty *property,
                         const GValue        *value)
 {
   g_warning ("FIXME: assigning images is not implemented");
-  return _gtk_css_value_new_take_image (NULL);
+  return _gtk_css_image_value_new (NULL);
 }
 
 static GtkCssValue *
@@ -1673,23 +1660,23 @@ _gtk_css_style_property_init_properties (void)
                                           CAIRO_GOBJECT_TYPE_PATTERN,
                                           0,
                                           css_image_value_parse,
-                                          css_image_value_print,
+                                          NULL,
                                           css_image_value_compute,
                                           css_image_value_query,
                                           css_image_value_assign,
                                           NULL,
-                                          _gtk_css_value_new_take_image (NULL));
+                                          _gtk_css_image_value_new (NULL));
 
   gtk_css_style_property_register        ("border-image-source",
                                           CAIRO_GOBJECT_TYPE_PATTERN,
                                           0,
                                           css_image_value_parse,
-                                          css_image_value_print,
+                                          NULL,
                                           css_image_value_compute,
                                           css_image_value_query,
                                           css_image_value_assign,
                                           NULL,
-                                          _gtk_css_value_new_take_image (NULL));
+                                          _gtk_css_image_value_new (NULL));
   gtk_css_style_property_register        ("border-image-repeat",
                                           GTK_TYPE_CSS_BORDER_IMAGE_REPEAT,
                                           0,

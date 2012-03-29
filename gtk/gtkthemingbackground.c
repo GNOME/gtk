@@ -21,8 +21,10 @@
 
 #include "config.h"
 
-#include "gtkcsstypesprivate.h"
 #include "gtkthemingbackgroundprivate.h"
+
+#include "gtkcssimagevalueprivate.h"
+#include "gtkcsstypesprivate.h"
 #include "gtkthemingengineprivate.h"
 
 #include <math.h>
@@ -335,7 +337,7 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
   _gtk_theming_background_apply_clip (bg);
   _gtk_theming_background_apply_origin (bg);
 
-  bg->image = _gtk_css_value_get_image (_gtk_style_context_peek_property (bg->context, "background-image"));
+  bg->image = _gtk_css_image_value_get_image (_gtk_style_context_peek_property (bg->context, "background-image"));
 }
 
 void

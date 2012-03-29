@@ -23,7 +23,6 @@
 #include <glib-object.h>
 #include "gtkcsstypesprivate.h"
 #include "gtksymboliccolor.h"
-#include "gtkcssimageprivate.h"
 #include "gtkthemingengine.h"
 
 G_BEGIN_DECLS
@@ -84,7 +83,6 @@ GtkCssValue *_gtk_css_value_new_from_boxed            (GType                    
 GtkCssValue *_gtk_css_value_new_from_color            (const GdkColor             *v);
 GtkCssValue *_gtk_css_value_new_take_symbolic_color   (GtkSymbolicColor           *v);
 GtkCssValue *_gtk_css_value_new_take_pattern          (cairo_pattern_t            *v);
-GtkCssValue *_gtk_css_value_new_take_image            (GtkCssImage                *v);
 GtkCssValue *_gtk_css_value_new_from_theming_engine   (GtkThemingEngine           *v);
 GtkCssValue *_gtk_css_value_new_take_binding_sets     (GPtrArray                  *array);
 GtkCssValue *_gtk_css_value_new_from_background_size  (const GtkCssBackgroundSize *v);
@@ -103,7 +101,6 @@ gpointer                        _gtk_css_value_get_object                 (const
 gpointer                        _gtk_css_value_get_boxed                  (const GtkCssValue *value);
 const char **                   _gtk_css_value_get_strv                   (const GtkCssValue *value);
 GtkSymbolicColor               *_gtk_css_value_get_symbolic_color         (const GtkCssValue *value);
-GtkCssImage                    *_gtk_css_value_get_image                  (const GtkCssValue *value);
 const GtkCssBackgroundSize     *_gtk_css_value_get_background_size        (const GtkCssValue *value);
 const GtkCssBackgroundPosition *_gtk_css_value_get_background_position    (const GtkCssValue *value);
 const GtkCssBorderCornerRadius *_gtk_css_value_get_border_corner_radius   (const GtkCssValue *value);

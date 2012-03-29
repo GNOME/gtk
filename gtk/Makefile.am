@@ -431,6 +431,7 @@ gtk_private_h_sources =		\
 	gtkcssimagelinearprivate.h	\
 	gtkcssimageprivate.h	\
 	gtkcssimageurlprivate.h	\
+	gtkcssimagevalueprivate.h	\
 	gtkcssimagewin32private.h	\
 	gtkcssinheritvalueprivate.h	\
 	gtkcssinitialvalueprivate.h	\
@@ -634,6 +635,7 @@ gtk_base_c_sources = 		\
 	gtkcssimagegradient.c	\
 	gtkcssimagelinear.c	\
 	gtkcssimageurl.c	\
+	gtkcssimagevalue.c	\
 	gtkcssimagewin32.c	\
 	gtkcssinheritvalue.c	\
 	gtkcssinitialvalue.c	\

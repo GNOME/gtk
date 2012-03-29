@@ -26,6 +26,7 @@
 
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimageprivate.h"
+#include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypesprivate.h"
@@ -275,7 +276,7 @@ parse_border_image (GtkCssShorthandProperty  *shorthand,
       if (!image)
         return FALSE;
     }
-  values[0] = _gtk_css_value_new_take_image (image);
+  values[0] = _gtk_css_image_value_new (image);
 
   if (value_is_done_parsing (parser))
     return TRUE;
@@ -484,7 +485,7 @@ parse_background (GtkCssShorthandProperty  *shorthand,
                 return FALSE;
             }
 
-          values[0] = _gtk_css_value_new_take_image (image);
+          values[0] = _gtk_css_image_value_new (image);
         }
       else if (values[1] == NULL &&
                _gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT, &enum_value))

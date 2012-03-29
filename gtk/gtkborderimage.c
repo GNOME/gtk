@@ -25,6 +25,7 @@
 #include <math.h>
 
 #include "gtkborderimageprivate.h"
+#include "gtkcssimagevalueprivate.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtkthemingengineprivate.h"
 
@@ -39,7 +40,7 @@ _gtk_border_image_init (GtkBorderImage   *image,
 {
   GtkBorder *width;
 
-  image->source = _gtk_css_value_get_object (_gtk_theming_engine_peek_property (engine, "border-image-source"));
+  image->source = _gtk_css_image_value_get_image (_gtk_theming_engine_peek_property (engine, "border-image-source"));
   if (image->source == NULL)
     return FALSE;
 

@@ -270,17 +270,6 @@ _gtk_css_value_new_take_pattern (cairo_pattern_t *v)
 }
 
 GtkCssValue *
-_gtk_css_value_new_take_image (GtkCssImage *v)
-{
-  GtkCssValue *value;
-
-  value = gtk_css_value_new (GTK_TYPE_CSS_IMAGE);
-  value->u.ptr = v;
-
-  return value;
-}
-
-GtkCssValue *
 _gtk_css_value_new_from_theming_engine (GtkThemingEngine *v)
 {
   GtkCssValue *value;
@@ -560,13 +549,6 @@ const char **
 _gtk_css_value_get_strv (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, G_TYPE_STRV), NULL);
-  return value->u.ptr;
-}
-
-GtkCssImage *
-_gtk_css_value_get_image (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_IMAGE), NULL);
   return value->u.ptr;
 }
 
