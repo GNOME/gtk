@@ -1055,9 +1055,11 @@ gtk_style_context_queue_invalidate_internal (GtkStyleContext *context,
   GtkStyleContextPrivate *priv = context->priv;
   GtkStyleInfo *info = priv->info_stack->data;
 
-  info->data = NULL;
-  
-  if (!gtk_style_context_is_saved (context))
+  if (gtk_style_context_is_saved (context))
+    {
+      info->data = NULL;
+    }
+  else
     {
       _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_STATE);
       /* XXX: We need to invalidate siblings here somehow */
@@ -3342,8 +3344,10 @@ _gtk_style_context_validate (GtkStyleContext *context,
 
   if (priv->relevant_changes & change)
     {
+      GtkStyleInfo *info = priv->info_stack->data;
       gboolean clear_cache = ((priv->relevant_changes & change) & ~GTK_STYLE_CONTEXT_CACHED_CHANGE) != 0;
 
+      info->data = NULL;
       gtk_style_context_do_invalidate (context, clear_cache);
     }
 
