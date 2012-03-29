@@ -336,6 +336,7 @@ struct GtkStyleInfo
   GArray *regions;
   GtkJunctionSides junction_sides;
   GtkStateFlags state_flags;
+  StyleData *data;
 };
 
 struct StyleData
@@ -375,7 +376,6 @@ struct _GtkStyleContextPrivate
   GtkWidgetPath *widget_path;
   GHashTable *style_data;
   GSList *info_stack;
-  StyleData *current_data;
 
   GSList *animation_regions;
   GSList *animations;
@@ -522,6 +522,7 @@ style_info_copy (const GtkStyleInfo *info)
 
   copy->junction_sides = info->junction_sides;
   copy->state_flags = info->state_flags;
+  copy->data = info->data;
 
   return copy;
 }
@@ -972,47 +973,46 @@ static StyleData *
 style_data_lookup (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  StyleData *data;
+  GtkStyleInfo *info;
   GtkCssValue *v;
 
   priv = context->priv;
+  info = priv->info_stack->data;
 
   /* Current data in use is cached, just return it */
-  if (priv->current_data)
-    return priv->current_data;
+  if (info->data)
+    return info->data;
 
   g_assert (priv->widget != NULL || priv->widget_path != NULL);
 
-  priv->current_data = g_hash_table_lookup (priv->style_data, priv->info_stack->data);
+  info->data = g_hash_table_lookup (priv->style_data, info);
 
-  if (!priv->current_data)
+  if (!info->data)
     {
       GtkWidgetPath *path;
 
       path = create_query_path (context);
 
-      priv->current_data = style_data_new ();
+      info->data = style_data_new ();
       g_hash_table_insert (priv->style_data,
-                           style_info_copy (priv->info_stack->data),
-                           priv->current_data);
+                           style_info_copy (info),
+                           info->data);
 
-      build_properties (context, priv->current_data, path, ((GtkStyleInfo *) priv->info_stack->data)->state_flags);
+      build_properties (context, info->data, path, info->state_flags);
 
       gtk_widget_path_free (path);
     }
 
-  data = priv->current_data;
-
   if (priv->theming_engine)
     g_object_unref (priv->theming_engine);
 
-  v = _gtk_css_computed_values_get_value_by_name (priv->current_data->store, "engine");
+  v = _gtk_css_computed_values_get_value_by_name (info->data->store, "engine");
   if (v)
     priv->theming_engine = _gtk_css_value_dup_object (v);
   else
     priv->theming_engine = g_object_ref (gtk_theming_engine_load (NULL));
 
-  return data;
+  return info->data;
 }
 
 static void
@@ -1053,8 +1053,9 @@ gtk_style_context_queue_invalidate_internal (GtkStyleContext *context,
                                              GtkCssChange     change)
 {
   GtkStyleContextPrivate *priv = context->priv;
+  GtkStyleInfo *info = priv->info_stack->data;
 
-  priv->current_data = NULL;
+  info->data = NULL;
   
   if (!gtk_style_context_is_saved (context))
     {
@@ -1736,8 +1737,6 @@ gtk_style_context_restore (GtkStyleContext *context)
       info = style_info_new ();
       priv->info_stack = g_slist_prepend (priv->info_stack, info);
     }
-
-  priv->current_data = NULL;
 }
 
 static gboolean
@@ -3283,8 +3282,16 @@ gtk_style_context_do_invalidate (GtkStyleContext *context,
   priv->invalidating_context = TRUE;
 
   if (clear_caches)
-    g_hash_table_remove_all (priv->style_data);
-  priv->current_data = NULL;
+    {
+      GSList *list;
+
+      for (list = priv->info_stack; list; list = list->next)
+        {
+          GtkStyleInfo *info = list->data;
+          info->data = NULL;
+        }
+      g_hash_table_remove_all (priv->style_data);
+    }
 
   g_signal_emit (context, signals[CHANGED], 0);
 
