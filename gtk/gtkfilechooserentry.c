@@ -238,23 +238,25 @@ gtk_file_chooser_entry_dispose (GObject *object)
 /* Match functions for the GtkEntryCompletion */
 static gboolean
 match_selected_callback (GtkEntryCompletion  *completion,
-			 GtkTreeModel        *model,
-			 GtkTreeIter         *iter,
-			 GtkFileChooserEntry *chooser_entry)
+                         GtkTreeModel        *model,
+                         GtkTreeIter         *iter,
+                         GtkFileChooserEntry *chooser_entry)
 {
   char *path;
-  
+  gint pos;
+
   gtk_tree_model_get (model, iter,
-		      FULL_PATH_COLUMN, &path,
+                      FULL_PATH_COLUMN, &path,
                       -1);
 
   gtk_editable_delete_text (GTK_EDITABLE (chooser_entry),
-			    0,
-                            gtk_editable_get_position (GTK_EDITABLE (chooser_entry)));
-  gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
-			    path,
                             0,
-                            NULL); 
+                            gtk_editable_get_position (GTK_EDITABLE (chooser_entry)));
+  pos = 0;
+  gtk_editable_insert_text (GTK_EDITABLE (chooser_entry),
+                            path,
+                            -1,
+                            &pos);
 
   g_free (path);
 
