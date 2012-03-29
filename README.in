@@ -80,7 +80,31 @@ Release notes for 3.4
   need to have either GDK_SCROLL_MASK or GDK_SMOOTH_SCROLL_MASK in
   their event mask to receive scroll events.
 
+* GTK+ now uses <Primary> instead of <Control> in keyboard accelerators,
+  for improved cross-platform handling. This should not affect
+  applications, unless they parse or create these accelerator
+  manually.
+
+* The tacit assumption that the Alt key corresponds to the MOD1
+  modifier under X11 is now a hard requirement.
+
+* The beagle search backend for the file chooser has been dropped.
+  Tracker is the only supported search backend on Linux now.
+
+* GtkNotebook has been changed to destroy its action widgets when
+  it gets destroyed itself. If your application is using action
+  widgets in notebooks, you may have to adjust your code to take
+  this into account.
+
+* GtkApplication no longer uses the gtk mainloop wrappers, so
+  it is no longer possible to use gtk_main_quit() to stop it.
+
 * The -uninstalled variants of the pkg-config files have been dropped.
+
+* Excessive dependencies have been culled from Requires: lines
+  in .pc files. Dependent modules may have to declare dependencies
+  that there were getting 'for free' in the past.
+
 
 Release notes for 3.2
 =====================
