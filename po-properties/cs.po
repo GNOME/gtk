@@ -360,7 +360,7 @@ msgstr "Homogenní"
 
 #: ../gtk/deprecated/gtktable.c:228
 msgid "If TRUE, the table cells are all the same width/height"
-msgstr "Je-li \"true\", budou mít všechny buňky tabulky stejnou šířku/výšku"
+msgstr "Je-li ZAPNUTO, budou mít všechny buňky tabulky stejnou šířku/výšku"
 
 #: ../gtk/deprecated/gtktable.c:235 ../gtk/gtkgrid.c:1419
 msgid "Left attachment"
@@ -585,7 +585,7 @@ msgstr "název akce"
 
 #: ../gtk/gtkactionable.c:71
 msgid "The name of the associated action, like 'app.quit'"
-msgstr "Název asociované akce, např. \"app.quit\""
+msgstr "Název asociované akce, např. „app.quit“"
 
 #: ../gtk/gtkactionable.c:75
 msgid "action target value"
@@ -912,7 +912,7 @@ msgstr "Doplnění, které vložit vpravo od widgetu."
 
 #: ../gtk/gtkappchooserbutton.c:614
 msgid "Include an 'Other...' item"
-msgstr "Zahrnout položku \"Další...\""
+msgstr "Zahrnout položku „Další…“"
 
 #: ../gtk/gtkappchooserbutton.c:615
 msgid ""
@@ -1454,7 +1454,7 @@ msgstr "Zobrazovat hlavičku"
 
 #: ../gtk/gtkcalendar.c:514
 msgid "If TRUE, a heading is displayed"
-msgstr "Je-li \"true\", je zobrazována hlavička"
+msgstr "Je-li ZAPNUTO, je zobrazována hlavička"
 
 #: ../gtk/gtkcalendar.c:528
 msgid "Show Day Names"
@@ -1502,7 +1502,7 @@ msgstr "Zobrazit podrobnosti"
 
 #: ../gtk/gtkcalendar.c:607
 msgid "If TRUE, details are shown"
-msgstr "Je-li \"true\", jsou zobrazovány podrobnosti"
+msgstr "Je-li ZAPNUTO, jsou zobrazovány podrobnosti"
 
 #: ../gtk/gtkcalendar.c:619
 msgid "Inner border"
@@ -2065,7 +2065,7 @@ msgstr "Písmo"
 #: ../gtk/gtkcellrenderertext.c:371 ../gtk/gtkfontchooser.c:66
 #: ../gtk/gtktexttag.c:308
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "Popis písma jako řetězec, např. \"Sans Italic 12\""
+msgstr "Popis písma jako řetězec, např. „Sans Italic 12“"
 
 #: ../gtk/gtkcellrenderertext.c:379 ../gtk/gtkfontchooser.c:79
 #: ../gtk/gtktexttag.c:316
@@ -2460,7 +2460,7 @@ msgstr "Nekonzistentní"
 
 #: ../gtk/gtkcheckmenuitem.c:129
 msgid "Whether to display an \"inconsistent\" state"
-msgstr "Jestli zobrazovat stav \"nekonzistentní\""
+msgstr "Jestli zobrazovat stav „nekonzistentní“"
 
 #: ../gtk/gtkcheckmenuitem.c:136
 msgid "Draw as radio menu item"
@@ -2860,11 +2860,11 @@ msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
-"FALSE zobrazí místo zadaného textu \"neviditelný znak\" (režim pro hesla)"
+"Při VYPNUTO se zobrazí místo zadaného textu „neviditelný znak“ (režim pro hesla)"
 
 #: ../gtk/gtkentry.c:784
 msgid "FALSE removes outside bevel from entry"
-msgstr "FALSE odstraní vnější rám okolo položky"
+msgstr "Při VYPNUTO se odstraní vnější rám okolo položky"
 
 #: ../gtk/gtkentry.c:800
 msgid ""
@@ -2877,7 +2877,7 @@ msgstr "Neviditelný znak"
 
 #: ../gtk/gtkentry.c:809 ../gtk/gtkentry.c:1410
 msgid "The character to use when masking entry contents (in \"password mode\")"
-msgstr "Znak používaný pro skrytí obsahu pole (v \"režimu pro hesla\")"
+msgstr "Znak používaný pro skrytí obsahu pole (v „režimu pro hesla“)"
 
 #: ../gtk/gtkentry.c:816
 msgid "Activates default"
@@ -3544,7 +3544,7 @@ msgstr "Homogenní řádky"
 
 #: ../gtk/gtkgrid.c:1406
 msgid "If TRUE, the rows are all the same height"
-msgstr "Je-li \"true\", budou mít všechny řádky stejnou šířku/výšku"
+msgstr "Je-li ZAPNUTO, budou mít všechny řádky stejnou šířku/výšku"
 
 #: ../gtk/gtkgrid.c:1412
 msgid "Column Homogeneous"
@@ -3552,7 +3552,7 @@ msgstr "Homogenní sloupce"
 
 #: ../gtk/gtkgrid.c:1413
 msgid "If TRUE, the columns are all the same width"
-msgstr "Je-li \"true\", budou mít všechny sloupce stejnou šířku/výšku"
+msgstr "Je-li ZAPNUTO, budou mít všechny sloupce stejnou šířku/výšku"
 
 #: ../gtk/gtkgrid.c:1427
 msgid "The row number to attach the top side of a child widget to"
@@ -4591,7 +4591,7 @@ msgstr "Minimální pozice"
 
 #: ../gtk/gtkpaned.c:383
 msgid "Smallest possible value for the \"position\" property"
-msgstr "Nejmenší možná hodnota vlastnosti \"position\""
+msgstr "Nejmenší možná hodnota vlastnosti „position“"
 
 #: ../gtk/gtkpaned.c:400
 msgid "Maximal Position"
@@ -4599,7 +4599,7 @@ msgstr "Maximální pozice"
 
 #: ../gtk/gtkpaned.c:401
 msgid "Largest possible value for the \"position\" property"
-msgstr "Největší možná hodnota vlastnosti \"position\""
+msgstr "Největší možná hodnota vlastnosti „position“"
 
 #: ../gtk/gtkpaned.c:418
 msgid "Resize"
@@ -4667,7 +4667,7 @@ msgstr "Je virtuální"
 
 #: ../gtk/gtkprinter.c:138
 msgid "FALSE if this represents a real hardware printer"
-msgstr "\"False\", představuje-li skutečnou hardwarovou tiskárnu"
+msgstr "ZAPNUTO, představuje-li skutečnou hardwarovou tiskárnu"
 
 #: ../gtk/gtkprinter.c:144
 msgid "Accepts PDF"
@@ -4675,7 +4675,7 @@ msgstr "Přijímá PDF"
 
 #: ../gtk/gtkprinter.c:145
 msgid "TRUE if this printer can accept PDF"
-msgstr "\"True\", přijímá-li tato tiskárna PDF"
+msgstr "ZAPNUTO, přijímá-li tato tiskárna PDF"
 
 #: ../gtk/gtkprinter.c:151
 msgid "Accepts PostScript"
@@ -4683,7 +4683,7 @@ msgstr "Přijímá PostScript"
 
 #: ../gtk/gtkprinter.c:152
 msgid "TRUE if this printer can accept PostScript"
-msgstr "\"True\", může-li tato tiskárna přijmout PostScript"
+msgstr "ZAPNUTO, může-li tato tiskárna přijmout PostScript"
 
 #: ../gtk/gtkprinter.c:158
 msgid "State Message"
@@ -4719,7 +4719,7 @@ msgstr "Pozastavená tiskárna"
 
 #: ../gtk/gtkprinter.c:199
 msgid "TRUE if this printer is paused"
-msgstr "\"True\", je-li tato tiskárna pozastavena"
+msgstr "ZAPNUTO, je-li tato tiskárna pozastavena"
 
 #: ../gtk/gtkprinter.c:212
 msgid "Accepting Jobs"
@@ -4727,7 +4727,7 @@ msgstr "Přijímá úlohy"
 
 #: ../gtk/gtkprinter.c:213
 msgid "TRUE if this printer is accepting new jobs"
-msgstr "\"True\", přijímá-li tato tiskárna nové úlohy"
+msgstr "ZAPNUTO, přijímá-li tato tiskárna nové úlohy"
 
 #: ../gtk/gtkprinteroption.c:103
 msgid "Option Value"
@@ -4779,7 +4779,7 @@ msgid ""
 "TRUE if the print job will continue to emit status-changed signals after the "
 "print data has been sent to the printer or print server."
 msgstr ""
-"\"True\", bude-li tisková úloha pokračovat ve vysílání signálů o změně stavu "
+"ZAPNUTO, bude-li tisková úloha pokračovat ve vysílání signálů o změně stavu "
 "poté, co byla tisková data odeslána na tiskárnu nebo tiskový server."
 
 #: ../gtk/gtkprintoperation.c:1087
@@ -4831,7 +4831,7 @@ msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr ""
-"\"True\", má-li být počátek kontextu v rohu stránku a nikoliv v rohu "
+"ZAPNUTO, má-li být počátek kontextu v rohu stránku a nikoliv v rohu "
 "zobrazitelné oblasti"
 
 #: ../gtk/gtkprintoperation.c:1216
@@ -4839,7 +4839,7 @@ msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
-"\"True\", bude-li tisková operace pokračovat v oznamování stavu tiskové "
+"ZAPNUTO, bude-li tisková operace pokračovat v oznamování stavu tiskové "
 "úlohy poté, co byla tisková data odeslána na tiskárnu nebo tiskový server."
 
 #: ../gtk/gtkprintoperation.c:1233
@@ -4856,7 +4856,7 @@ msgstr "Zobrazit dialogové okno"
 
 #: ../gtk/gtkprintoperation.c:1252
 msgid "TRUE if a progress dialog is shown while printing."
-msgstr "\"True\", je-li dialog průběhu ukázán při tisku."
+msgstr "ZAPNUTO, je-li dialog průběhu ukázán při tisku."
 
 #: ../gtk/gtkprintoperation.c:1275
 msgid "Allow Async"
@@ -4864,7 +4864,7 @@ msgstr "Povolit asynchronně"
 
 #: ../gtk/gtkprintoperation.c:1276
 msgid "TRUE if print process may run asynchronous."
-msgstr "\"True\", může-li tiskový proces běžet asynchronně."
+msgstr "ZAPNUTO, může-li tiskový proces běžet asynchronně."
 
 #: ../gtk/gtkprintoperation.c:1298 ../gtk/gtkprintoperation.c:1299
 msgid "Export filename"
@@ -5470,7 +5470,7 @@ msgid ""
 "only takes effect if \"window-placement-set\" is TRUE."
 msgstr ""
 "Kde jsou umístěny obsahy s přihlédnutím k posuvníkům. Tato vlastnost je "
-"platná jen pokud má \"window-placement-set\" hodnotu \"true\"."
+"platná jen pokud má „window-placement-set“ hodnotu ZAPNUTO."
 
 #: ../gtk/gtkscrolledwindow.c:415
 msgid "Window Placement Set"
@@ -5481,7 +5481,7 @@ msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
 msgstr ""
-"Zda by mělo být použito \"window-placement\" k určení umístění obsahů s "
+"Zda by mělo být použito „window-placement“ k určení umístění obsahů s "
 "přihlédnutím k posuvníkům."
 
 #: ../gtk/gtkscrolledwindow.c:422
@@ -5664,7 +5664,7 @@ msgstr "Velikosti ikon"
 # FIXME: s/$/)/
 #: ../gtk/gtksettings.c:504
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
-msgstr "Seznam velikostí ikon (gtk-menu=16,16;gtk-button=20,20..."
+msgstr "Seznam velikostí ikon (gtk-menu=16,16;gtk-button=20,20…"
 
 #: ../gtk/gtksettings.c:512
 msgid "GTK Modules"
@@ -5759,7 +5759,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:617
 msgid "Show the 'Input Methods' menu"
-msgstr "Zobrazit nabídku \"Vstupní metody\""
+msgstr "Zobrazit nabídku „Vstupní metody“"
 
 #: ../gtk/gtksettings.c:618
 msgid ""
@@ -5828,7 +5828,7 @@ msgstr "Povolit režim dotykové obrazovky"
 #: ../gtk/gtksettings.c:724
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
-"Je-li \"true\", nejsou na tuto obrazovku dodány žádné události upozornění na "
+"Je-li ZAPNUTO, nejsou na tuto obrazovku dodány žádné události upozornění na "
 "pohyb"
 
 #: ../gtk/gtksettings.c:741
@@ -5864,7 +5864,7 @@ msgstr "Pouze kurzor klávesové navigace"
 #: ../gtk/gtksettings.c:810
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr ""
-"Je-li \"true\", k navigaci widgetů jsou dostupné pouze kurzorové klávesy"
+"Je-li ZAPNUTO, k navigaci widgetů jsou dostupné pouze kurzorové klávesy"
 
 #: ../gtk/gtksettings.c:827
 msgid "Keynav Wrap Around"
@@ -5880,7 +5880,7 @@ msgstr "Chybový zvonek"
 
 #: ../gtk/gtksettings.c:849
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
-msgstr "Je-li \"true\", klávesnicová navigace a další chyby způsobí pípnutí"
+msgstr "Je-li ZAPNUTO, klávesnicová navigace a další chyby způsobí pípnutí"
 
 #: ../gtk/gtksettings.c:866
 msgid "Color Hash"
@@ -5888,7 +5888,7 @@ msgstr "Hash barvy"
 
 #: ../gtk/gtksettings.c:867
 msgid "A hash table representation of the color scheme."
-msgstr "Zastoupení tabulky \"hash\" barevného schématu."
+msgstr "Zastoupení tabulky heš barevného schématu."
 
 #: ../gtk/gtksettings.c:875
 msgid "Default file chooser backend"
@@ -6037,7 +6037,7 @@ msgid ""
 "Whether 'focus rectangles' should be hidden until the user starts to use the "
 "keyboard."
 msgstr ""
-"Jestli by měly být \"obdélníky zaměření\" skryté, dokud uživatel nezačne "
+"Jestli by měly být „obdélníky zaměření“ skryté, dokud uživatel nezačne "
 "používat klávesnici."
 
 #: ../gtk/gtksettings.c:1194
@@ -6168,8 +6168,8 @@ msgid ""
 "Set to TRUE if the desktop environment is displaying the app menu, FALSE if "
 "the app should display it itself."
 msgstr ""
-"Nastavte na \"true\", zobrazuje-li pracovní prostředí nabídku aplikace, nebo "
-"na \"false\", má-li nabídku zobrazit samotná aplikace."
+"Nastavte na ZAPNUTO, zobrazuje-li pracovní prostředí nabídku aplikace, nebo "
+"na VYPNUTO, má-li nabídku zobrazit samotná aplikace."
 
 #: ../gtk/gtksettings.c:1361
 msgid "Desktop shell shows the menubar"
@@ -6180,8 +6180,8 @@ msgid ""
 "Set to TRUE if the desktop environment is displaying the menubar, FALSE if "
 "the app should display it itself."
 msgstr ""
-"Nastavte na \"true\", zobrazuje-li pracovní prostředí lištu nabídky, nebo na "
-"\"false\", má-li lištu zobrazit samotná aplikace."
+"Nastavte na ZAPNUTO, zobrazuje-li pracovní prostředí lištu nabídky, nebo na "
+"VYPNUTO, má-li lištu zobrazit samotná aplikace."
 
 #: ../gtk/gtksizegroup.c:380 ../gtk/gtktreeselection.c:129
 msgid "Mode"
@@ -6203,7 +6203,7 @@ msgstr "Ignorovat skryté"
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
-"Je-li \"true\", nepřiřazené widgety jsou ignorovány při určování velikosti "
+"Je-li ZAPNUTO, nepřiřazené widgety jsou ignorovány při určování velikosti "
 "skupiny"
 
 #: ../gtk/gtkspinbutton.c:325
@@ -6777,7 +6777,7 @@ msgstr "Jestli má být přepínací tlačítko stisknuto"
 
 #: ../gtk/gtktogglebutton.c:185
 msgid "If the toggle button is in an \"in between\" state"
-msgstr "Jestli je přepínací tlačítko ve stavu \"mezi\""
+msgstr "Jestli je přepínací tlačítko ve stavu „mezi“"
 
 #: ../gtk/gtktogglebutton.c:192
 msgid "Draw Indicator"
@@ -7766,7 +7766,7 @@ msgstr "Šířka oddělovačů"
 
 #: ../gtk/gtkwidget.c:3234
 msgid "The width of separators if wide-separators is TRUE"
-msgstr "Šířka oddělovačů, je-li wide-separators \"true\""
+msgstr "Šířka oddělovačů, je-li wide-separators ZAPNUTO"
 
 #: ../gtk/gtkwidget.c:3248
 msgid "Separator Height"
@@ -7774,7 +7774,7 @@ msgstr "Výška oddělovače"
 
 #: ../gtk/gtkwidget.c:3249
 msgid "The height of separators if \"wide-separators\" is TRUE"
-msgstr "Výška oddělovačů, je-li \"wide-separators\" \"true\""
+msgstr "Výška oddělovačů, je-li „wide-separators“ ZAPNUTO"
 
 #: ../gtk/gtkwidget.c:3263
 msgid "Horizontal Scroll Arrow Length"
@@ -7837,7 +7837,7 @@ msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
-"Je-li \"true\", je okno modální (ostatní okna není možné používat, dokud je "
+"Je-li ZAPNUTO, je okno modální (ostatní okna není možné používat, dokud je "
 "toto okno zobrazeno)"
 
 #: ../gtk/gtkwindow.c:672
