@@ -376,7 +376,6 @@ struct _GtkStyleContextPrivate
   GHashTable *style_data;
   GSList *info_stack;
   StyleData *current_data;
-  GtkStateFlags current_state;
 
   GSList *animation_regions;
   GSList *animations;
@@ -970,31 +969,21 @@ create_query_path (GtkStyleContext *context)
 }
 
 static StyleData *
-style_data_lookup (GtkStyleContext *context,
-                   GtkStateFlags    state)
+style_data_lookup (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
   StyleData *data;
-  gboolean state_mismatch;
   GtkCssValue *v;
 
   priv = context->priv;
-  state_mismatch = ((GtkStyleInfo *) priv->info_stack->data)->state_flags != state;
 
   /* Current data in use is cached, just return it */
-  if (priv->current_data && priv->current_state == state)
+  if (priv->current_data)
     return priv->current_data;
 
   g_assert (priv->widget != NULL || priv->widget_path != NULL);
 
-  if (G_UNLIKELY (state_mismatch))
-    {
-      gtk_style_context_save (context);
-      gtk_style_context_set_state (context, state);
-    }
-
   priv->current_data = g_hash_table_lookup (priv->style_data, priv->info_stack->data);
-  priv->current_state = state;
 
   if (!priv->current_data)
     {
@@ -1007,7 +996,7 @@ style_data_lookup (GtkStyleContext *context,
                            style_info_copy (priv->info_stack->data),
                            priv->current_data);
 
-      build_properties (context, priv->current_data, path, state);
+      build_properties (context, priv->current_data, path, ((GtkStyleInfo *) priv->info_stack->data)->state_flags);
 
       gtk_widget_path_free (path);
     }
@@ -1022,9 +1011,6 @@ style_data_lookup (GtkStyleContext *context,
     priv->theming_engine = _gtk_css_value_dup_object (v);
   else
     priv->theming_engine = g_object_ref (gtk_theming_engine_load (NULL));
-
-  if (G_UNLIKELY (state_mismatch))
-    gtk_style_context_restore (context);
 
   return data;
 }
@@ -1313,7 +1299,7 @@ gtk_style_context_get_section (GtkStyleContext *context,
   if (!GTK_IS_CSS_STYLE_PROPERTY (prop))
     return NULL;
 
-  data = style_data_lookup (context, gtk_style_context_get_state (context));
+  data = style_data_lookup (context);
   return _gtk_css_computed_values_get_section (data->store, _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)));
 }
 
@@ -1367,8 +1353,11 @@ gtk_style_context_get_property (GtkStyleContext *context,
       return;
     }
 
-  data = style_data_lookup (context, state);
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
+  data = style_data_lookup (context);
   _gtk_style_property_query (prop, value, gtk_style_context_query_func, data->store);
+  gtk_style_context_restore (context);
 }
 
 /**
@@ -2253,7 +2242,7 @@ GtkCssValue *
 _gtk_style_context_peek_property (GtkStyleContext *context,
                                   const char      *property_name)
 {
-  StyleData *data = style_data_lookup (context, gtk_style_context_get_state (context));
+  StyleData *data = style_data_lookup (context);
 
   return _gtk_css_computed_values_get_value_by_name (data->store, property_name);
 }
@@ -2281,7 +2270,11 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
   guint i;
 
   priv = context->priv;
-  data = style_data_lookup (context, state);
+
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
+  data = style_data_lookup (context);
+  gtk_style_context_restore (context);
 
   key.widget_type = widget_type;
   key.state = state;
@@ -2922,7 +2915,10 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
   /* Find out if there is any animation description for the given
    * state, it will fallback to the normal state as well if necessary.
    */
-  data = style_data_lookup (context, flags);
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, flags);
+  data = style_data_lookup (context);
+  gtk_style_context_restore (context);
   v = _gtk_css_computed_values_get_value_by_name (data->store, "transition");
   if (!v)
     return;
@@ -3327,7 +3323,7 @@ _gtk_style_context_validate (GtkStyleContext *context,
           GtkCssMatcher matcher;
 
           path = create_query_path (context);
-          _gtk_css_matcher_init (&matcher, path, priv->current_state);
+          _gtk_css_matcher_init (&matcher, path, ((GtkStyleInfo *) priv->info_stack->data)->state_flags);
 
           priv->relevant_changes = _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                                                            &matcher);
@@ -3652,7 +3648,10 @@ gtk_style_context_get_font (GtkStyleContext *context,
   priv = context->priv;
   g_return_val_if_fail (priv->widget != NULL || priv->widget_path != NULL, NULL);
 
-  data = style_data_lookup (context, state);
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
+  data = style_data_lookup (context);
+  gtk_style_context_restore (context);
 
   /* Yuck, fonts are created on-demand but we don't return a ref.
    * Do bad things to achieve this requirement */
