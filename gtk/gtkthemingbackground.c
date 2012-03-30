@@ -23,6 +23,7 @@
 
 #include "gtkthemingbackgroundprivate.h"
 
+#include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkthemingengineprivate.h"
@@ -54,9 +55,7 @@ _gtk_theming_background_apply_origin (GtkThemingBackground *bg)
   GtkCssArea origin;
   cairo_rectangle_t image_rect;
 
-  gtk_style_context_get (bg->context, bg->flags,
-                         "background-origin", &origin,
-                         NULL);
+  origin = _gtk_css_area_value_get (_gtk_style_context_peek_property (bg->context, "background-clip"));
 
   /* The default size of the background image depends on the
      background-origin value as this affects the top left
@@ -91,11 +90,7 @@ _gtk_theming_background_apply_origin (GtkThemingBackground *bg)
 static void
 _gtk_theming_background_apply_clip (GtkThemingBackground *bg)
 {
-  GtkCssArea clip;
-
-  gtk_style_context_get (bg->context, bg->flags,
-                         "background-clip", &clip,
-                         NULL);
+  GtkCssArea clip = _gtk_css_area_value_get (_gtk_style_context_peek_property (bg->context, "background-clip"));
 
   if (clip == GTK_CSS_AREA_PADDING_BOX)
     {

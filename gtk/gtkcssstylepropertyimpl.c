@@ -417,15 +417,12 @@ parse_css_area (GtkCssStyleProperty *property,
                 GtkCssParser        *parser,
                 GFile               *base)
 {
-  int value;
+  GtkCssValue *value = _gtk_css_area_value_try_parse (parser);
+  
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
 
-  if (!_gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_AREA, &value))
-    {
-      _gtk_css_parser_error (parser, "unknown value for property");
-      return NULL;
-    }
-
-  return _gtk_css_value_new_from_enum (GTK_TYPE_CSS_AREA, value);
+  return value;
 }
 
 static GtkCssValue *
@@ -1543,25 +1540,25 @@ _gtk_css_style_property_init_properties (void)
                                           _gtk_css_value_new_from_int (0));
 
   gtk_css_style_property_register        ("background-clip",
-                                          GTK_TYPE_CSS_AREA,
+                                          G_TYPE_NONE,
                                           0,
                                           parse_css_area,
                                           NULL,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
                                           NULL,
-                                          _gtk_css_value_new_from_enum (GTK_TYPE_CSS_AREA, GTK_CSS_AREA_BORDER_BOX));
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_area_value_new (GTK_CSS_AREA_BORDER_BOX));
   gtk_css_style_property_register        ("background-origin",
-                                          GTK_TYPE_CSS_AREA,
+                                          G_TYPE_NONE,
                                           0,
                                           parse_css_area,
                                           NULL,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
                                           NULL,
-                                          _gtk_css_value_new_from_enum (GTK_TYPE_CSS_AREA, GTK_CSS_AREA_PADDING_BOX));
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_area_value_new (GTK_CSS_AREA_PADDING_BOX));
   gtk_css_style_property_register        ("background-size",
                                           G_TYPE_NONE,
                                           0,

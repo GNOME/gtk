@@ -256,3 +256,55 @@ _gtk_css_font_weight_value_get (const GtkCssValue *value)
   return value->value;
 }
 
+/* GtkCssArea */
+
+static const GtkCssValueClass GTK_CSS_VALUE_AREA = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue area_values[] = {
+  { &GTK_CSS_VALUE_AREA, 1, GTK_CSS_AREA_BORDER_BOX, "border-box" },
+  { &GTK_CSS_VALUE_AREA, 1, GTK_CSS_AREA_PADDING_BOX, "padding-box" },
+  { &GTK_CSS_VALUE_AREA, 1, GTK_CSS_AREA_CONTENT_BOX, "content-box" }
+};
+
+GtkCssValue *
+_gtk_css_area_value_new (GtkCssArea area)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (area_values); i++)
+    {
+      if (area_values[i].value == area)
+        return _gtk_css_value_ref (&area_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_area_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (area_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, area_values[i].name, TRUE))
+        return _gtk_css_value_ref (&area_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssArea
+_gtk_css_area_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_AREA, GTK_CSS_AREA_BORDER_BOX);
+
+  return value->value;
+}
+

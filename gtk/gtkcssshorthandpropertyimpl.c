@@ -511,10 +511,13 @@ parse_background (GtkCssShorthandProperty  *shorthand,
           values[1] = _gtk_css_value_new_from_enum (GTK_TYPE_CSS_BACKGROUND_REPEAT, enum_value);
         }
       else if ((values[2] == NULL || values[3] == NULL) &&
-               _gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_AREA, &enum_value))
+               (values[3] = _gtk_css_area_value_try_parse (parser)))
         {
-          guint idx = values[2] == NULL ? 2 : 3;
-          values[idx] = _gtk_css_value_new_from_enum (GTK_TYPE_CSS_AREA, enum_value);
+          if (values[2] == NULL)
+            {
+              values[2] = values[3];
+              values[3] = NULL;
+            }
         }
       else if (values[4] == NULL)
         {

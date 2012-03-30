@@ -81,7 +81,7 @@ typedef enum {
   GTK_CSS_REPEAT_STYLE_SPACE
 } GtkCssBorderRepeatStyle;
 
-typedef enum {
+typedef enum /*< skip >*/ {
   GTK_CSS_AREA_BORDER_BOX,
   GTK_CSS_AREA_PADDING_BOX,
   GTK_CSS_AREA_CONTENT_BOX

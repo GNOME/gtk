@@ -22,6 +22,7 @@
 
 #include "gtkenums.h"
 #include "gtkcssparserprivate.h"
+#include "gtkcsstypesprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
@@ -42,6 +43,9 @@ GtkCssValue *   _gtk_css_font_weight_value_new        (PangoWeight        weight
 GtkCssValue *   _gtk_css_font_weight_value_try_parse  (GtkCssParser      *parser);
 PangoWeight     _gtk_css_font_weight_value_get        (const GtkCssValue *value);
 
+GtkCssValue *   _gtk_css_area_value_new               (GtkCssArea         area);
+GtkCssValue *   _gtk_css_area_value_try_parse         (GtkCssParser      *parser);
+GtkCssArea      _gtk_css_area_value_get               (const GtkCssValue *value);
 
 G_END_DECLS
 
