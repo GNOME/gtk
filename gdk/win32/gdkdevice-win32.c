@@ -133,74 +133,6 @@ gdk_device_win32_set_window_cursor (GdkDevice *device,
                                     GdkWindow *window,
                                     GdkCursor *cursor)
 {
-  GdkWin32Cursor *cursor_private;
-  GdkWindow *parent_window;
-  GdkWindowImplWin32 *impl;
-  HCURSOR hcursor;
-  HCURSOR hprevcursor;
-
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-  cursor_private = (GdkWin32Cursor*) cursor;
-
-  hprevcursor = impl->hcursor;
-
-  if (!cursor)
-    hcursor = NULL;
-  else
-    hcursor = cursor_private->hcursor;
-
-  if (hcursor != NULL)
-    {
-      /* If the pointer is over our window, set new cursor */
-      GdkWindow *curr_window = gdk_window_get_pointer (window, NULL, NULL, NULL);
-
-      if (curr_window == window ||
-          (curr_window && window == gdk_window_get_toplevel (curr_window)))
-        SetCursor (hcursor);
-      else
-        {
-          /* Climb up the tree and find whether our window is the
-           * first ancestor that has cursor defined, and if so, set
-           * new cursor.
-           */
-          while (curr_window && curr_window->impl &&
-                 !GDK_WINDOW_IMPL_WIN32 (curr_window->impl)->hcursor)
-            {
-              curr_window = curr_window->parent;
-              if (curr_window == GDK_WINDOW (window))
-                {
-                  SetCursor (hcursor);
-                  break;
-                }
-            }
-        }
-    }
-
-  /* Unset the previous cursor: Need to make sure it's no longer in
-   * use before we destroy it, in case we're not over our window but
-   * the cursor is still set to our old one.
-   */
-  if (hprevcursor != NULL &&
-      GetCursor () == hprevcursor)
-    {
-      /* Look for a suitable cursor to use instead */
-      hcursor = NULL;
-      parent_window = GDK_WINDOW (window)->parent;
-
-      while (hcursor == NULL)
-        {
-          if (parent_window)
-            {
-              impl = GDK_WINDOW_IMPL_WIN32 (parent_window->impl);
-              hcursor = impl->hcursor;
-              parent_window = parent_window->parent;
-            }
-          else
-            hcursor = LoadCursor (NULL, IDC_ARROW);
-        }
-
-      SetCursor (hcursor);
-    }
 }
 
 static void
@@ -209,7 +141,6 @@ gdk_device_win32_warp (GdkDevice *device,
                        gint       x,
                        gint       y)
 {
-  SetCursorPos (x - _gdk_offset_x, y - _gdk_offset_y);
 }
 
 static GdkModifierType
@@ -309,68 +240,14 @@ gdk_device_win32_grab (GdkDevice    *device,
                        GdkCursor    *cursor,
                        guint32       time_)
 {
-  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-  HCURSOR hcursor;
-  GdkWin32Cursor *cursor_private;
-
-  cursor_private = (GdkWin32Cursor*) cursor;
-
-  if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-    {
-      if (!cursor)
-	hcursor = NULL;
-      else if ((hcursor = CopyCursor (cursor_private->hcursor)) == NULL)
-	WIN32_API_FAILED ("CopyCursor");
-
-      if (_gdk_win32_grab_cursor != NULL)
-	{
-	  if (GetCursor () == _gdk_win32_grab_cursor)
-	    SetCursor (NULL);
-	  DestroyCursor (_gdk_win32_grab_cursor);
-	}
-
-      _gdk_win32_grab_cursor = hcursor;
-
-      if (_gdk_win32_grab_cursor != NULL)
-	SetCursor (_gdk_win32_grab_cursor);
-      else if (impl->hcursor != NULL)
-	SetCursor (impl->hcursor);
-      else
-	SetCursor (LoadCursor (NULL, IDC_ARROW));
-
-      SetCapture (GDK_WINDOW_HWND (window));
-    }
-
-  return GDK_GRAB_SUCCESS;
+  /* No support for grabbing the slave atm */
+  return GDK_GRAB_NOT_VIEWABLE;
 }
 
 static void
 gdk_device_win32_ungrab (GdkDevice *device,
                          guint32    time_)
 {
-  GdkDeviceGrabInfo *info;
-  GdkDisplay *display;
-
-  display = gdk_device_get_display (device);
-  info = _gdk_display_get_last_device_grab (display, device);
-
-  if (info)
-    info->serial_end = 0;
-
-  if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
-    {
-      if (_gdk_win32_grab_cursor != NULL)
-	{
-	  if (GetCursor () == _gdk_win32_grab_cursor)
-	    SetCursor (NULL);
-	  DestroyCursor (_gdk_win32_grab_cursor);
-	}
-      _gdk_win32_grab_cursor = NULL;
-
-      ReleaseCapture ();
-    }
-
-  _gdk_display_device_grab_update (display, device, NULL, 0);
 }
 
 static void

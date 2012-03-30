@@ -75,6 +75,6 @@ _gdk_input_init (GdkDisplay *display)
   _gdk_input_devices = g_list_concat (_gdk_input_devices,
                                       g_list_copy (device_manager->wintab_devices));
 
-  _gdk_input_wintab_init_check (device_manager);
+  _gdk_input_wintab_init_check (GDK_DEVICE_MANAGER (device_manager));
 
 }

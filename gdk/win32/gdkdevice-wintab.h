@@ -39,6 +39,7 @@ struct _GdkDeviceWintab
 {
   GdkDevice parent_instance;
 
+  gboolean sends_core;
   gint *last_axis_data;
   gint button_state;
 
@@ -58,14 +59,6 @@ struct _GdkDeviceWintabClass
 };
 
 GType gdk_device_wintab_get_type (void) G_GNUC_CONST;
-
-gboolean     _gdk_device_wintab_wants_events (GdkWindow *window);
-GdkEventMask _gdk_device_wintab_get_events (GdkDeviceWintab *device,
-                                            GdkWindow       *window);
-gboolean     _gdk_device_wintab_get_window_coords (GdkWindow *window,
-                                                   gdouble   *root_x,
-                                                   gdouble   *root_y);
-void         _gdk_device_wintab_update_window_coords (GdkWindow *window);
 
 void         _gdk_device_wintab_translate_axes (GdkDeviceWintab *device,
                                                 GdkWindow       *window,

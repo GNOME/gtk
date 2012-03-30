@@ -25,16 +25,6 @@
 #include "gdkwin32.h"
 #include "gdkdevice-wintab.h"
 
-static GQuark quark_window_input_info = 0;
-static GSList *input_windows = NULL;
-
-typedef struct
-{
-  gdouble root_x;
-  gdouble root_y;
-  GHashTable *device_events;
-} GdkWindowInputInfo;
-
 static gboolean gdk_device_wintab_get_history (GdkDevice      *device,
                                                GdkWindow      *window,
                                                guint32         start,
@@ -96,8 +86,6 @@ gdk_device_wintab_class_init (GdkDeviceWintabClass *klass)
   device_class->ungrab = gdk_device_wintab_ungrab;
   device_class->window_at_position = gdk_device_wintab_window_at_position;
   device_class->select_window_events = gdk_device_wintab_select_window_events;
-
-  quark_window_input_info = g_quark_from_static_string ("gdk-window-input-info");
 }
 
 static void
@@ -119,6 +107,32 @@ gdk_device_wintab_get_history (GdkDevice      *device,
   return FALSE;
 }
 
+static GdkModifierType
+get_current_mask (void)
+{
+  GdkModifierType mask;
+  BYTE kbd[256];
+
+  GetKeyboardState (kbd);
+  mask = 0;
+  if (kbd[VK_SHIFT] & 0x80)
+    mask |= GDK_SHIFT_MASK;
+  if (kbd[VK_CAPITAL] & 0x80)
+    mask |= GDK_LOCK_MASK;
+  if (kbd[VK_CONTROL] & 0x80)
+    mask |= GDK_CONTROL_MASK;
+  if (kbd[VK_MENU] & 0x80)
+    mask |= GDK_MOD1_MASK;
+  if (kbd[VK_LBUTTON] & 0x80)
+    mask |= GDK_BUTTON1_MASK;
+  if (kbd[VK_MBUTTON] & 0x80)
+    mask |= GDK_BUTTON2_MASK;
+  if (kbd[VK_RBUTTON] & 0x80)
+    mask |= GDK_BUTTON3_MASK;
+
+  return mask;
+}
+
 static void
 gdk_device_wintab_get_state (GdkDevice       *device,
                              GdkWindow       *window,
@@ -134,7 +148,7 @@ gdk_device_wintab_get_state (GdkDevice       *device,
    * second, the info should be fairly up to date */
   if (mask)
     {
-      gdk_window_get_pointer (window, NULL, NULL, mask);
+      *mask = get_current_mask ();
       *mask &= 0xFF; /* Mask away core pointer buttons */
       *mask |= ((device_wintab->button_state << 8)
                 & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
@@ -142,7 +156,7 @@ gdk_device_wintab_get_state (GdkDevice       *device,
                    | GDK_BUTTON5_MASK));
     }
 
-  if (device_wintab->last_axis_data)
+  if (axes && device_wintab->last_axis_data)
     _gdk_device_wintab_translate_axes (device_wintab, window, axes, NULL, NULL);
 }
 
@@ -172,7 +186,66 @@ gdk_device_wintab_query_state (GdkDevice        *device,
                                gint             *win_y,
                                GdkModifierType  *mask)
 {
-  g_warning ("query_state unimplemented for wintab devices. Expect bad things.");
+  GdkDeviceWintab *device_wintab;
+  POINT point;
+  HWND hwnd, hwndc;
+
+  device_wintab = GDK_DEVICE_WINTAB (device);
+
+  hwnd = GDK_WINDOW_HWND (window);
+  GetCursorPos (&point);
+
+  if (root_x)
+    *root_x = point.x;
+
+  if (root_y)
+    *root_y = point.y;
+
+  ScreenToClient (hwnd, &point);
+
+  if (win_x)
+    *win_x = point.x;
+
+  if (win_y)
+    *win_y = point.y;
+
+  if (window == _gdk_root)
+    {
+      if (win_x)
+        *win_x += _gdk_offset_x;
+
+      if (win_y)
+        *win_y += _gdk_offset_y;
+    }
+
+  if (child_window)
+    {
+      hwndc = ChildWindowFromPoint (hwnd, point);
+
+      if (hwndc && hwndc != hwnd)
+        *child_window = gdk_win32_handle_table_lookup (hwndc);
+      else
+        *child_window = NULL; /* Direct child unknown to gdk */
+    }
+
+  if (root_window)
+    {
+      GdkScreen *screen;
+
+      screen = gdk_window_get_screen (window);
+      *root_window = gdk_screen_get_root_window (screen);
+    }
+
+  if (mask)
+    {
+      *mask = get_current_mask ();
+      *mask &= 0xFF; /* Mask away core pointer buttons */
+      *mask |= ((device_wintab->button_state << 8)
+                & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
+                   | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
+                   | GDK_BUTTON5_MASK));
+
+    }
 }
 
 static GdkGrabStatus
@@ -204,111 +277,10 @@ gdk_device_wintab_window_at_position (GdkDevice       *device,
 }
 
 static void
-input_info_free (GdkWindowInputInfo *info)
-{
-  g_hash_table_destroy (info->device_events);
-  g_free (info);
-}
-
-static void
 gdk_device_wintab_select_window_events (GdkDevice    *device,
                                         GdkWindow    *window,
                                         GdkEventMask  event_mask)
 {
-  GdkWindowInputInfo *info;
-
-  info = g_object_get_qdata (G_OBJECT (window),
-                             quark_window_input_info);
-  if (event_mask)
-    {
-      if (!info)
-        {
-          info = g_new0 (GdkWindowInputInfo, 1);
-          info->device_events = g_hash_table_new (NULL, NULL);
-
-          g_object_set_qdata_full (G_OBJECT (window),
-                                   quark_window_input_info,
-                                   info,
-                                   (GDestroyNotify) input_info_free);
-          input_windows = g_slist_prepend (input_windows, window);
-        }
-
-      g_hash_table_insert (info->device_events, device,
-                           GUINT_TO_POINTER (event_mask));
-    }
-  else if (info)
-    {
-      g_hash_table_remove (info->device_events, device);
-
-      if (g_hash_table_size (info->device_events) == 0)
-        {
-          g_object_set_qdata (G_OBJECT (window),
-                              quark_window_input_info,
-                              NULL);
-          input_windows = g_slist_remove (input_windows, window);
-        }
-    }
-}
-
-gboolean
-_gdk_device_wintab_wants_events (GdkWindow       *window)
-{
-  GdkWindowInputInfo *info;
-
-  info = g_object_get_qdata (G_OBJECT (window),
-                             quark_window_input_info);
-
-  return info != NULL;
-}
-
-GdkEventMask
-_gdk_device_wintab_get_events (GdkDeviceWintab *device,
-                               GdkWindow       *window)
-{
-  GdkWindowInputInfo *info;
-
-  info = g_object_get_qdata (G_OBJECT (window),
-                             quark_window_input_info);
-
-  if (!info)
-    return 0;
-
-  return GPOINTER_TO_UINT (g_hash_table_lookup (info->device_events, device));
-}
-
-gboolean
-_gdk_device_wintab_get_window_coords (GdkWindow *window,
-                                      gdouble   *root_x,
-                                      gdouble   *root_y)
-{
-  GdkWindowInputInfo *info;
-
-  info = g_object_get_qdata (G_OBJECT (window),
-                             quark_window_input_info);
-
-  if (!info)
-    return FALSE;
-
-  *root_x = info->root_x;
-  *root_y = info->root_y;
-
-  return TRUE;
-}
-
-void
-_gdk_device_wintab_update_window_coords (GdkWindow *window)
-{
-  GdkWindowInputInfo *info;
-  gint root_x, root_y;
-
-  info = g_object_get_qdata (G_OBJECT (window),
-                             quark_window_input_info);
-
-  g_return_if_fail (info != NULL);
-
-  gdk_window_get_origin (window, &root_x, &root_y);
-  info->root_x = (gdouble) root_x;
-  info->root_y = (gdouble) root_y;
 }
 
 void
@@ -320,7 +292,7 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
 {
   GdkDevice *device;
   GdkWindow *impl_window;
-  gdouble root_x, root_y;
+  gint root_x, root_y;
   gdouble temp_x, temp_y;
   gint i;
 
@@ -328,8 +300,7 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
   impl_window = _gdk_window_get_impl_window (window);
   temp_x = temp_y = 0;
 
-  if (!_gdk_device_wintab_get_window_coords (impl_window, &root_x, &root_y))
-    return;
+  gdk_window_get_origin (impl_window, &root_x, &root_y);
 
   for (i = 0; i < gdk_device_get_n_axes (device); i++)
     {

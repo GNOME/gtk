@@ -29,6 +29,8 @@ libgdk_win32_la_SOURCES = \
 	gdkcursor-win32.c \
 	gdkdevicemanager-win32.c \
 	gdkdevicemanager-win32.h \
+	gdkdevice-virtual.c \
+	gdkdevice-virtual.h \
 	gdkdevice-win32.c \
 	gdkdevice-win32.h \
 	gdkdevice-wintab.c \
