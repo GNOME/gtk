@@ -24,10 +24,12 @@
 #include <cairo-gobject.h>
 #include <math.h>
 
+#include "gtkcssarrayvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkcssvalueprivate.h"
@@ -432,10 +434,8 @@ parse_font (GtkCssShorthandProperty  *shorthand,
 
   if (mask & PANGO_FONT_MASK_FAMILY)
     {
-      char **strv = g_new0 (char *, 2);
-
-      strv[0] = g_strdup (pango_font_description_get_family (desc));
-      values[0] = _gtk_css_value_new_take_strv (strv);
+      GtkCssValue *value = _gtk_css_string_value_new (pango_font_description_get_family (desc));
+      values[0] = _gtk_css_array_value_new (&value, 1);
     }
   if (mask & PANGO_FONT_MASK_STYLE)
     {
@@ -737,10 +737,8 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-family"))), query_data);
   if (v)
     {
-      const char **families = _gtk_css_value_get_strv (v);
       /* xxx: Can we set all the families here somehow? */
-      if (families)
-        pango_font_description_set_family (description, families[0]);
+      pango_font_description_set_family (description, _gtk_css_string_value_get (_gtk_css_array_value_get_nth (v, 0)));
     }
 
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-size"))), query_data);

@@ -40,6 +40,7 @@
 /* the actual parsers we have */
 #include "gtkanimationdescription.h"
 #include "gtkbindings.h"
+#include "gtkcssarrayvalueprivate.h"
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagevalueprivate.h"
@@ -47,6 +48,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
+#include "gtkcssstringvalueprivate.h"
 #include "gtksymboliccolorprivate.h"
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
@@ -91,45 +93,6 @@ gtk_css_style_property_register (const char *                   name,
     node->equal_func = equal_func;
 
   _gtk_css_value_unref (initial_value);
-}
-
-/*** HELPERS ***/
-
-static void
-string_append_string (GString    *str,
-                      const char *string)
-{
-  gsize len;
-
-  g_string_append_c (str, '"');
-
-  do {
-    len = strcspn (string, "\"\n\r\f");
-    g_string_append (str, string);
-    string += len;
-    switch (*string)
-      {
-      case '\0':
-        break;
-      case '\n':
-        g_string_append (str, "\\A ");
-        break;
-      case '\r':
-        g_string_append (str, "\\D ");
-        break;
-      case '\f':
-        g_string_append (str, "\\C ");
-        break;
-      case '\"':
-        g_string_append (str, "\\\"");
-        break;
-      default:
-        g_assert_not_reached ();
-        break;
-      }
-  } while (*string);
-
-  g_string_append_c (str, '"');
 }
 
 /*** IMPLEMENTATIONS ***/
@@ -234,6 +197,7 @@ font_family_parse (GtkCssStyleProperty *property,
                    GFile               *base)
 {
   GPtrArray *names;
+  GtkCssValue *result;
   char *name;
 
   /* We don't special case generic families. Pango should do
@@ -265,35 +229,54 @@ font_family_parse (GtkCssStyleProperty *property,
           }
       }
 
-    g_ptr_array_add (names, name);
+    g_ptr_array_add (names, _gtk_css_string_value_new_take (name));
   } while (_gtk_css_parser_try (parser, ",", TRUE));
 
-  /* NULL-terminate array */
-  g_ptr_array_add (names, NULL);
-  return _gtk_css_value_new_take_strv ((char **) g_ptr_array_free (names, FALSE));
+  result = _gtk_css_array_value_new ((GtkCssValue **) names->pdata, names->len);
+  g_ptr_array_free (names, TRUE);
+  return result;
 }
 
 static void
-font_family_value_print (GtkCssStyleProperty *property,
-                         const GtkCssValue   *value,
-                         GString             *string)
+font_family_query (GtkCssStyleProperty *property,
+                   const GtkCssValue   *css_value,
+                   GValue              *value)
 {
-  const char **names = _gtk_css_value_get_strv (value);
+  GPtrArray *array;
+  guint i;
 
-  if (names == NULL || *names == NULL)
+  array = g_ptr_array_new ();
+
+  for (i = 0; i < _gtk_css_array_value_get_n_values (css_value); i++)
     {
-      g_string_append (string, "none");
-      return;
+      g_ptr_array_add (array, g_strdup (_gtk_css_string_value_get (_gtk_css_array_value_get_nth (css_value, i))));
     }
 
-  string_append_string (string, *names);
-  names++;
-  while (*names)
+  /* NULL-terminate */
+  g_ptr_array_add (array, NULL);
+
+  g_value_init (value, G_TYPE_STRV);
+  g_value_set_boxed (value, g_ptr_array_free (array, FALSE));
+}
+
+static GtkCssValue *
+font_family_assign (GtkCssStyleProperty *property,
+                    const GValue        *value)
+{
+  const char **names = g_value_get_boxed (value);
+  GtkCssValue *result;
+  GPtrArray *array;
+
+  array = g_ptr_array_new ();
+
+  for (names = g_value_get_boxed (value); *names; names++)
     {
-      g_string_append (string, ", ");
-      string_append_string (string, *names);
-      names++;
+      g_ptr_array_add (array, _gtk_css_string_value_new (*names));
     }
+
+  result = _gtk_css_array_value_new ((GtkCssValue **) array->pdata, array->len);
+  g_ptr_array_free (array, TRUE);
+  return result;
 }
 
 static GtkCssValue *
@@ -1182,7 +1165,7 @@ gtk_symbolic_color_new_rgba (double red,
 void
 _gtk_css_style_property_init_properties (void)
 {
-  char *default_font_family[] = { "Sans", NULL };
+  GtkCssValue *value;
   GtkCssBackgroundSize default_background_size = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), FALSE, FALSE };
   GtkCssBackgroundPosition default_background_position = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PERCENT), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PERCENT)};
   GtkCssBorderCornerRadius no_corner_radius = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX) };
@@ -1229,16 +1212,17 @@ _gtk_css_style_property_init_properties (void)
                                           _gtk_css_value_new_take_symbolic_color (
                                             gtk_symbolic_color_new_rgba (0, 0, 0, 0)));
 
+  value = _gtk_css_string_value_new ("Sans");
   gtk_css_style_property_register        ("font-family",
                                           G_TYPE_STRV,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           font_family_parse,
-                                          font_family_value_print,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
                                           NULL,
-                                          _gtk_css_value_new_take_strv (g_strdupv (default_font_family)));
+                                          font_family_query,
+                                          font_family_assign,
+                                          NULL,
+                                          _gtk_css_array_value_new (&value, 1));
   gtk_css_style_property_register        ("font-style",
                                           PANGO_TYPE_STYLE,
                                           GTK_STYLE_PROPERTY_INHERIT,
