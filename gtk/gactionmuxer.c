@@ -90,8 +90,20 @@ static gchar **
 g_action_muxer_list_actions (GActionGroup *action_group)
 {
   GActionMuxer *muxer = G_ACTION_MUXER (action_group);
+  GHashTableIter iter;
+  gchar *key;
+  gchar **keys;
+  gsize i;
 
-  return (gchar **) muxer->groups;
+  keys = g_new (gchar *, g_hash_table_size (muxer->actions) + 1);
+
+  i = 0;
+  g_hash_table_iter_init (&iter, muxer->actions);
+  while (g_hash_table_iter_next (&iter, (gpointer *) &key, NULL))
+    keys[i++] = g_strdup (key);
+  keys[i] = NULL;
+
+  return keys;
 }
 
 static Group *
