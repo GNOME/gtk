@@ -18,6 +18,8 @@
 #include "config.h"
 
 #include "gtkcsstypesprivate.h"
+
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkstylecontextprivate.h"
 
 #define DEFINE_BOXED_TYPE_WITH_COPY_FUNC(TypeName, type_name) \
@@ -156,12 +158,12 @@ _gtk_css_number_compute (GtkCssNumber       *dest,
       dest->unit = GTK_CSS_PX;
       break;
     case GTK_CSS_EM:
-      dest->value = src->value * _gtk_css_value_get_double (_gtk_style_context_peek_property (context, "font-size"));
+      dest->value = src->value * _gtk_css_number_value_get (_gtk_style_context_peek_property (context, "font-size"), 100);
       dest->unit = GTK_CSS_PX;
       break;
     case GTK_CSS_EX:
       /* for now we pretend ex is half of em */
-      dest->value = src->value * _gtk_css_value_get_double (_gtk_style_context_peek_property (context, "font-size"));
+      dest->value = src->value * _gtk_css_number_value_get (_gtk_style_context_peek_property (context, "font-size"), 100);
       dest->unit = GTK_CSS_PX;
       break;
     case GTK_CSS_RAD:

@@ -451,7 +451,7 @@ parse_font (GtkCssShorthandProperty  *shorthand,
     }
   if (mask & PANGO_FONT_MASK_SIZE)
     {
-      values[4] = _gtk_css_value_new_from_double ((double) pango_font_description_get_size (desc) / PANGO_SCALE);
+      values[4] = _gtk_css_number_value_new ((double) pango_font_description_get_size (desc) / PANGO_SCALE, GTK_CSS_PX);
     }
 
   pango_font_description_free (desc);
@@ -743,7 +743,7 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
 
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-size"))), query_data);
   if (v)
-    pango_font_description_set_size (description, round (_gtk_css_value_get_double (v) * PANGO_SCALE));
+    pango_font_description_set_size (description, round (_gtk_css_number_value_get (v, 100) * PANGO_SCALE));
 
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-style"))), query_data);
   if (v)

@@ -128,6 +128,22 @@ assign_length_from_int (GtkCssStyleProperty *property,
   return _gtk_css_number_value_new (g_value_get_int (value), GTK_CSS_PX);
 }
 
+static void
+query_length_as_double (GtkCssStyleProperty *property,
+                        const GtkCssValue   *css_value,
+                        GValue              *value)
+{
+  g_value_init (value, G_TYPE_DOUBLE);
+  g_value_set_double (value, _gtk_css_number_value_get (css_value, 100));
+}
+
+static GtkCssValue *
+assign_length_from_double (GtkCssStyleProperty *property,
+                           const GValue        *value)
+{
+  return _gtk_css_number_value_new (g_value_get_double (value), GTK_CSS_PX);
+}
+
 static GtkCssValue *
 color_parse (GtkCssStyleProperty *property,
              GtkCssParser        *parser,
@@ -619,7 +635,15 @@ font_size_parse (GtkCssStyleProperty *property,
       return NULL;
     }
 
-  return _gtk_css_value_new_from_double (d);
+  return _gtk_css_number_value_new (d, GTK_CSS_PX);
+}
+
+static GtkCssValue *
+font_size_compute (GtkCssStyleProperty *property,
+                   GtkStyleContext     *context,
+                   GtkCssValue         *specified)
+{
+  return _gtk_css_number_value_compute (specified, context);
 }
 
 static GtkCssValue *
@@ -1192,11 +1216,12 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           font_size_parse,
                                           NULL,
+                                          font_size_compute,
+                                          query_length_as_double,
+                                          assign_length_from_double,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
-                                          NULL,
-                                          _gtk_css_value_new_from_double (10.0));
+                                          /* XXX: This should be 'normal' */
+                                          _gtk_css_number_value_new (10.0, GTK_CSS_PX));
 
   /* properties that aren't referenced when computing values
    * start here */

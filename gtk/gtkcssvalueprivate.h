@@ -75,7 +75,6 @@ GtkCssValue *_gtk_css_value_new_from_gvalue           (const GValue             
 GtkCssValue *_gtk_css_value_new_from_int              (gint                        val);
 GtkCssValue *_gtk_css_value_new_from_enum             (GType                       type,
                                                        gint                        val);
-GtkCssValue *_gtk_css_value_new_from_double           (double                      d);
 GtkCssValue *_gtk_css_value_new_take_strv             (char                      **strv);
 GtkCssValue *_gtk_css_value_new_from_boxed            (GType                       type,
                                                        gpointer                    boxed);
@@ -93,7 +92,6 @@ void         _gtk_css_value_init_gvalue               (const GtkCssValue        
 
 int                             _gtk_css_value_get_int                    (const GtkCssValue *value);
 int                             _gtk_css_value_get_enum                   (const GtkCssValue *value);
-double                          _gtk_css_value_get_double                 (const GtkCssValue *value);
 gpointer                        _gtk_css_value_dup_object                 (const GtkCssValue *value);
 gpointer                        _gtk_css_value_get_object                 (const GtkCssValue *value);
 gpointer                        _gtk_css_value_get_boxed                  (const GtkCssValue *value);
