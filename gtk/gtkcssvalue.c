@@ -214,17 +214,6 @@ _gtk_css_value_new_from_double (double d)
 }
 
 GtkCssValue *
-_gtk_css_value_new_take_string (char *string)
-{
-  GtkCssValue *value;
-
-  value = gtk_css_value_new (G_TYPE_STRING);
-  value->u.ptr = string;
-
-  return value;
-}
-
-GtkCssValue *
 _gtk_css_value_new_take_strv (char **strv)
 {
   GtkCssValue *value;
@@ -513,13 +502,6 @@ _gtk_css_value_get_double (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, G_TYPE_DOUBLE), 0);
   return value->u.dbl;
-}
-
-const char *
-_gtk_css_value_get_string (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, G_TYPE_STRING), 0);
-  return value->u.ptr;
 }
 
 gpointer
