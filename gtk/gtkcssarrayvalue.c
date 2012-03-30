@@ -59,6 +59,14 @@ gtk_css_value_array_equal (const GtkCssValue *value1,
   return TRUE;
 }
 
+static GtkCssValue *
+gtk_css_value_array_transition (GtkCssValue *start,
+                                GtkCssValue *end,
+                                double       progress)
+{
+  return NULL;
+}
+
 static void
 gtk_css_value_array_print (const GtkCssValue *value,
                            GString           *string)
@@ -82,6 +90,7 @@ gtk_css_value_array_print (const GtkCssValue *value,
 static const GtkCssValueClass GTK_CSS_VALUE_ARRAY = {
   gtk_css_value_array_free,
   gtk_css_value_array_equal,
+  gtk_css_value_array_transition,
   gtk_css_value_array_print
 };
 

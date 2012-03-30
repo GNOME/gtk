@@ -86,6 +86,14 @@ gtk_css_value_default_equal (const GtkCssValue *value1,
   return FALSE;
 }
 
+static GtkCssValue *
+gtk_css_value_default_transition (GtkCssValue *start,
+                                  GtkCssValue *end,
+                                  double       progress)
+{
+  return NULL;
+}
+
 static void
 gtk_css_value_default_print (const GtkCssValue *value,
                              GString           *string)
@@ -100,6 +108,7 @@ gtk_css_value_default_print (const GtkCssValue *value,
 static const GtkCssValueClass GTK_CSS_VALUE_DEFAULT = {
   gtk_css_value_default_free,
   gtk_css_value_default_equal,
+  gtk_css_value_default_transition,
   gtk_css_value_default_print
 };
 
@@ -393,6 +402,20 @@ _gtk_css_value_equal (const GtkCssValue *value1,
     return FALSE;
 
   return value1->class->equal (value1, value2);
+}
+
+GtkCssValue *
+_gtk_css_value_transition (GtkCssValue *start,
+                           GtkCssValue *end,
+                           double       progress)
+{
+  g_return_val_if_fail (start != NULL, FALSE);
+  g_return_val_if_fail (end != NULL, FALSE);
+
+  if (start->class != end->class)
+    return NULL;
+
+  return start->class->transition (start, end, progress);
 }
 
 void

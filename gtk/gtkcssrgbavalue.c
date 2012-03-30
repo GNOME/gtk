@@ -40,6 +40,22 @@ gtk_css_value_rgba_equal (const GtkCssValue *rgba1,
   return gdk_rgba_equal (&rgba1->rgba, &rgba2->rgba);
 }
 
+static GtkCssValue *
+gtk_css_value_rgba_transition (GtkCssValue *start,
+                               GtkCssValue *end,
+                               double       progress)
+{
+  GdkRGBA transition;
+
+  progress = CLAMP (progress, 0, 1);
+  transition.red = start->rgba.red + (end->rgba.red - start->rgba.red) * progress;
+  transition.green = start->rgba.green + (end->rgba.green - start->rgba.green) * progress;
+  transition.blue = start->rgba.blue + (end->rgba.blue - start->rgba.blue) * progress;
+  transition.alpha = start->rgba.alpha + (end->rgba.alpha - start->rgba.alpha) * progress;
+
+  return _gtk_css_rgba_value_new_from_rgba (&transition);
+}
+
 static void
 gtk_css_value_rgba_print (const GtkCssValue *rgba,
                           GString           *string)
@@ -52,6 +68,7 @@ gtk_css_value_rgba_print (const GtkCssValue *rgba,
 static const GtkCssValueClass GTK_CSS_VALUE_RGBA = {
   gtk_css_value_rgba_free,
   gtk_css_value_rgba_equal,
+  gtk_css_value_rgba_transition,
   gtk_css_value_rgba_print
 };
 

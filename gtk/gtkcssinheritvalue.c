@@ -37,6 +37,14 @@ gtk_css_value_inherit_equal (const GtkCssValue *value1,
   return TRUE;
 }
 
+static GtkCssValue *
+gtk_css_value_inherit_transition (GtkCssValue *start,
+                                  GtkCssValue *end,
+                                  double       progress)
+{
+  return NULL;
+}
+
 static void
 gtk_css_value_inherit_print (const GtkCssValue *value,
                              GString           *string)
@@ -47,6 +55,7 @@ gtk_css_value_inherit_print (const GtkCssValue *value,
 static const GtkCssValueClass GTK_CSS_VALUE_INHERIT = {
   gtk_css_value_inherit_free,
   gtk_css_value_inherit_equal,
+  gtk_css_value_inherit_transition,
   gtk_css_value_inherit_print
 };
 

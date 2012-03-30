@@ -39,6 +39,14 @@ gtk_css_value_string_equal (const GtkCssValue *value1,
   return g_strcmp0 (value1->string, value2->string) == 0;
 }
 
+static GtkCssValue *
+gtk_css_value_string_transition (GtkCssValue *start,
+                                 GtkCssValue *end,
+                                 double       progress)
+{
+  return NULL;
+}
+
 static void
 gtk_css_value_string_print (const GtkCssValue *value,
                             GString           *str)
@@ -83,6 +91,7 @@ gtk_css_value_string_print (const GtkCssValue *value,
 static const GtkCssValueClass GTK_CSS_VALUE_STRING = {
   gtk_css_value_string_free,
   gtk_css_value_string_equal,
+  gtk_css_value_string_transition,
   gtk_css_value_string_print
 };
 

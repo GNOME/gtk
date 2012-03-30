@@ -129,6 +129,14 @@ gtk_css_value_shadow_equal (const GtkCssValue *shadow1,
   return shadow1 == shadow2;
 }
 
+static GtkCssValue *
+gtk_css_value_shadow_transition (GtkCssValue *start,
+                                 GtkCssValue *end,
+                                 double       progress)
+{
+  return NULL;
+}
+
 static void
 gtk_css_value_shadow_print (const GtkCssValue *shadow,
                             GString           *string)
@@ -159,6 +167,7 @@ gtk_css_value_shadow_print (const GtkCssValue *shadow,
 static const GtkCssValueClass GTK_CSS_VALUE_SHADOW = {
   gtk_css_value_shadow_free,
   gtk_css_value_shadow_equal,
+  gtk_css_value_shadow_transition,
   gtk_css_value_shadow_print
 };
 

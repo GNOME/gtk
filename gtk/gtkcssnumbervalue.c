@@ -41,6 +41,20 @@ gtk_css_value_number_equal (const GtkCssValue *number1,
          number1->value == number2->value;
 }
 
+static GtkCssValue *
+gtk_css_value_number_transition (GtkCssValue *start,
+                                 GtkCssValue *end,
+                                 double       progress)
+{
+  /* FIXME: This needs to be supported at least for percentages,
+   * but for that we kinda need to support calc(5px + 50%) */
+  if (start->unit != end->unit)
+    return NULL;
+
+  return _gtk_css_number_value_new (start->value + (end->value - start->value) * progress,
+                                    start->unit);
+}
+
 static void
 gtk_css_value_number_print (const GtkCssValue *number,
                             GString           *string)
@@ -73,6 +87,7 @@ gtk_css_value_number_print (const GtkCssValue *number,
 static const GtkCssValueClass GTK_CSS_VALUE_NUMBER = {
   gtk_css_value_number_free,
   gtk_css_value_number_equal,
+  gtk_css_value_number_transition,
   gtk_css_value_number_print
 };
 

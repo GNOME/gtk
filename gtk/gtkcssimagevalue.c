@@ -40,6 +40,14 @@ gtk_css_value_image_equal (const GtkCssValue *value1,
   return value1->image == value2->image;
 }
 
+static GtkCssValue *
+gtk_css_value_image_transition (GtkCssValue *start,
+                                GtkCssValue *end,
+                                double       progress)
+{
+  return NULL;
+}
+
 static void
 gtk_css_value_image_print (const GtkCssValue *value,
                            GString           *string)
@@ -53,6 +61,7 @@ gtk_css_value_image_print (const GtkCssValue *value,
 static const GtkCssValueClass GTK_CSS_VALUE_IMAGE = {
   gtk_css_value_image_free,
   gtk_css_value_image_equal,
+  gtk_css_value_image_transition,
   gtk_css_value_image_print
 };
 
