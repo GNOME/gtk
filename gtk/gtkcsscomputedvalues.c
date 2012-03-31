@@ -194,6 +194,8 @@ _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
   if (id <= values->values->len)
    g_ptr_array_set_size (values->values, id + 1);
 
+  if (g_ptr_array_index (values->values, id))
+    _gtk_css_value_unref (g_ptr_array_index (values->values, id));
   g_ptr_array_index (values->values, id) = _gtk_css_value_ref (value);
 
   if (section)
