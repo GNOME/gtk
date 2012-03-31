@@ -1006,7 +1006,7 @@ style_data_lookup (GtkStyleContext *context)
   if (priv->theming_engine)
     g_object_unref (priv->theming_engine);
 
-  v = _gtk_css_computed_values_get_value_by_name (info->data->store, "engine");
+  v = _gtk_css_computed_values_get_value (info->data->store, GTK_CSS_PROPERTY_ENGINE);
   if (v)
     priv->theming_engine = _gtk_css_value_dup_object (v);
   else
@@ -2920,7 +2920,7 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
   gtk_style_context_set_state (context, flags);
   data = style_data_lookup (context);
   gtk_style_context_restore (context);
-  v = _gtk_css_computed_values_get_value_by_name (data->store, "transition");
+  v = _gtk_css_computed_values_get_value (data->store, GTK_CSS_PROPERTY_TRANSITION);
   if (!v)
     return;
   desc = _gtk_css_value_get_boxed (v);

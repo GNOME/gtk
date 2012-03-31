@@ -214,21 +214,6 @@ _gtk_css_computed_values_get_value (GtkCssComputedValues *values,
   return g_ptr_array_index (values->values, id);
 }
 
-GtkCssValue *
-_gtk_css_computed_values_get_value_by_name (GtkCssComputedValues *values,
-                                            const char           *name)
-{
-  GtkStyleProperty *prop;
-
-  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
-  g_return_val_if_fail (name != NULL, NULL);
-
-  prop = _gtk_style_property_lookup (name);
-  g_assert (GTK_IS_CSS_STYLE_PROPERTY (prop));
-  
-  return _gtk_css_computed_values_get_value (values, _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)));
-}
-
 GtkCssSection *
 _gtk_css_computed_values_get_section (GtkCssComputedValues *values,
                                       guint                 id)
