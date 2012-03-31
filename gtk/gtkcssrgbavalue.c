@@ -117,13 +117,13 @@ _gtk_css_rgba_value_compute_from_symbolic (GtkCssValue     *rgba,
           GtkStyleContext *parent = gtk_style_context_get_parent (context);
 
           if (parent)
-            return _gtk_css_value_ref (_gtk_style_context_peek_property (parent, "color"));
+            return _gtk_css_value_ref (_gtk_style_context_peek_property (parent, GTK_CSS_PROPERTY_COLOR));
           else
             return _gtk_css_rgba_value_compute_from_symbolic (fallback, NULL, context, TRUE);
         }
       else
         {
-          return _gtk_css_value_ref (_gtk_style_context_peek_property (context, "color"));
+          return _gtk_css_value_ref (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
         }
     }
   

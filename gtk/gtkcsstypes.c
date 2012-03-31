@@ -158,12 +158,12 @@ _gtk_css_number_compute (GtkCssNumber       *dest,
       dest->unit = GTK_CSS_PX;
       break;
     case GTK_CSS_EM:
-      dest->value = src->value * _gtk_css_number_value_get (_gtk_style_context_peek_property (context, "font-size"), 100);
+      dest->value = src->value * _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_FONT_SIZE), 100);
       dest->unit = GTK_CSS_PX;
       break;
     case GTK_CSS_EX:
       /* for now we pretend ex is half of em */
-      dest->value = src->value * _gtk_css_number_value_get (_gtk_style_context_peek_property (context, "font-size"), 100);
+      dest->value = src->value * _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_FONT_SIZE), 100);
       dest->unit = GTK_CSS_PX;
       break;
     case GTK_CSS_RAD:

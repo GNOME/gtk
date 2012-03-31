@@ -224,7 +224,7 @@ rgba_value_compute (GtkStyleContext *context,
       GdkRGBA rgba;
 
       if (symbolic == _gtk_symbolic_color_get_current_color ())
-        rgba = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, "color"));
+        rgba = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
       else if (!gtk_symbolic_color_resolve (symbolic, NULL, &rgba))
         rgba = white;
 

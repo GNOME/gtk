@@ -834,15 +834,12 @@ compute_border_width (GtkCssStyleProperty    *property,
                       GtkStyleContext        *context,
                       GtkCssValue            *specified)
 {
-  GtkCssStyleProperty *style;
   GtkBorderStyle border_style;
   
   /* The -1 is magic that is only true because we register the style
    * properties directly after the width properties.
    */
-  style = _gtk_css_style_property_lookup_by_id (_gtk_css_style_property_get_id (property) - 1);
-  
-  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, _gtk_style_property_get_name (GTK_STYLE_PROPERTY (style))));
+  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, _gtk_css_style_property_get_id (property) - 1));
 
   if (border_style == GTK_BORDER_STYLE_NONE ||
       border_style == GTK_BORDER_STYLE_HIDDEN)

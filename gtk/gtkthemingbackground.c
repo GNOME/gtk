@@ -55,7 +55,7 @@ _gtk_theming_background_apply_origin (GtkThemingBackground *bg)
   GtkCssArea origin;
   cairo_rectangle_t image_rect;
 
-  origin = _gtk_css_area_value_get (_gtk_style_context_peek_property (bg->context, "background-clip"));
+  origin = _gtk_css_area_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP));
 
   /* The default size of the background image depends on the
      background-origin value as this affects the top left
@@ -90,7 +90,7 @@ _gtk_theming_background_apply_origin (GtkThemingBackground *bg)
 static void
 _gtk_theming_background_apply_clip (GtkThemingBackground *bg)
 {
-  GtkCssArea clip = _gtk_css_area_value_get (_gtk_style_context_peek_property (bg->context, "background-clip"));
+  GtkCssArea clip = _gtk_css_area_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP));
 
   if (clip == GTK_CSS_AREA_PADDING_BOX)
     {
@@ -163,8 +163,8 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       double image_width, image_height;
       double width, height;
 
-      size = _gtk_css_value_get_background_size (_gtk_style_context_peek_property (bg->context, "background-size"));
-      pos = _gtk_css_value_get_background_position (_gtk_style_context_peek_property (bg->context, "background-position"));
+      size = _gtk_css_value_get_background_size (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE));
+      pos = _gtk_css_value_get_background_position (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION));
       gtk_style_context_get (bg->context, bg->flags,
                              "background-repeat", &hrepeat,
                              NULL);
@@ -298,7 +298,7 @@ static void
 _gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
                                       cairo_t              *cr)
 {
-  _gtk_css_shadow_value_paint_box (_gtk_style_context_peek_property (bg->context, "box-shadow"),
+  _gtk_css_shadow_value_paint_box (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BOX_SHADOW),
                                    cr,
                                    &bg->padding_box);
 }
@@ -332,7 +332,7 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
   _gtk_theming_background_apply_clip (bg);
   _gtk_theming_background_apply_origin (bg);
 
-  bg->image = _gtk_css_image_value_get_image (_gtk_style_context_peek_property (bg->context, "background-image"));
+  bg->image = _gtk_css_image_value_get_image (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE));
 }
 
 void

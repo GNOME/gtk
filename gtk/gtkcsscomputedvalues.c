@@ -157,8 +157,7 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
     {
       GtkCssValue *parent_value;
       /* Set NULL here and do the inheritance upon lookup? */
-      parent_value = _gtk_style_context_peek_property (parent,
-                                                       _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop)));
+      parent_value = _gtk_style_context_peek_property (parent, id);
 
       g_ptr_array_index (values->values, id) = _gtk_css_value_ref (parent_value);
     }

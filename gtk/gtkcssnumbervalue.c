@@ -189,13 +189,13 @@ _gtk_css_number_value_compute (GtkCssValue     *number,
       break;
     case GTK_CSS_EM:
       return _gtk_css_number_value_new (number->value *
-                                        _gtk_css_number_value_get (_gtk_style_context_peek_property (context, "font-size"), 100),
+                                        _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_FONT_SIZE), 100),
                                         GTK_CSS_PX);
       break;
     case GTK_CSS_EX:
       /* for now we pretend ex is half of em */
       return _gtk_css_number_value_new (number->value * 0.5 * 
-                                        _gtk_css_number_value_get (_gtk_style_context_peek_property (context, "font-size"), 100),
+                                        _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_FONT_SIZE), 100),
                                         GTK_CSS_PX);
     case GTK_CSS_RAD:
       return _gtk_css_number_value_new (number->value * 360.0 / (2 * G_PI),

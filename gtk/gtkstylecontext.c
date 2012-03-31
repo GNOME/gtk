@@ -2241,21 +2241,21 @@ style_property_values_cmp (gconstpointer bsearch_node1,
 
 GtkCssValue *
 _gtk_style_context_peek_property (GtkStyleContext *context,
-                                  const char      *property_name)
+                                  guint            property_id)
 {
   StyleData *data = style_data_lookup (context);
 
-  return _gtk_css_computed_values_get_value_by_name (data->store, property_name);
+  return _gtk_css_computed_values_get_value (data->store, property_id);
 }
 
 double
 _gtk_style_context_get_number (GtkStyleContext *context,
-                               const char      *property_name,
+                               guint            property_id,
                                double           one_hundred_percent)
 {
   GtkCssValue *value;
   
-  value = _gtk_style_context_peek_property (context, property_name);
+  value = _gtk_style_context_peek_property (context, property_id);
   return _gtk_css_number_value_get (value, one_hundred_percent);
 }
 
