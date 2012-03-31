@@ -5008,8 +5008,6 @@ gtk_window_map (GtkWidget *widget)
     gtk_window_set_focus_visible (window, gtk_window_get_focus_visible (priv->transient_parent));
   else
     gtk_window_set_focus_visible (window, visible_focus == GTK_POLICY_ALWAYS);
-
-  ensure_state_flag_backdrop (widget);
 }
 
 static gboolean
