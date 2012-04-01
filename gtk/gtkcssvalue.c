@@ -418,6 +418,18 @@ _gtk_css_value_transition (GtkCssValue *start,
   return start->class->transition (start, end, progress);
 }
 
+char *
+_gtk_css_value_to_string (const GtkCssValue *value)
+{
+  GString *string;
+
+  g_return_val_if_fail (value != NULL, NULL);
+
+  string = g_string_new (NULL);
+  _gtk_css_value_print (value, string);
+  return g_string_free (string, FALSE);
+}
+
 void
 _gtk_css_value_print (const GtkCssValue *value,
                       GString           *string)

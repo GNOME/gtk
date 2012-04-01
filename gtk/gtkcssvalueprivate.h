@@ -71,6 +71,7 @@ GtkCssValue *_gtk_css_value_transition                (GtkCssValue              
                                                        GtkCssValue                *end,
                                                        double                      progress);
 
+char *       _gtk_css_value_to_string                 (const GtkCssValue          *value);
 void         _gtk_css_value_print                     (const GtkCssValue          *value,
                                                        GString                    *string);
 
