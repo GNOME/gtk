@@ -76,6 +76,8 @@ gtk_css_value_number_print (const GtkCssValue *number,
     /* [GTK_CSS_DEG] = */ "deg",
     /* [GTK_CSS_GRAD] = */ "grad",
     /* [GTK_CSS_TURN] = */ "turn",
+    /* [GTK_CSS_S] = */ "s",
+    /* [GTK_CSS_MS] = */ "ms",
   };
 
   g_ascii_dtostr (buf, sizeof (buf), number->value);
@@ -167,6 +169,7 @@ _gtk_css_number_value_compute (GtkCssValue     *number,
     case GTK_CSS_NUMBER:
     case GTK_CSS_PX:
     case GTK_CSS_DEG:
+    case GTK_CSS_S:
       return _gtk_css_value_ref (number);
     case GTK_CSS_PT:
       return _gtk_css_number_value_new (number->value * 96.0 / 72.0,
@@ -206,6 +209,9 @@ _gtk_css_number_value_compute (GtkCssValue     *number,
     case GTK_CSS_TURN:
       return _gtk_css_number_value_new (number->value * 360.0,
                                         GTK_CSS_DEG);
+    case GTK_CSS_MS:
+      return _gtk_css_number_value_new (number->value / 1000.0,
+                                        GTK_CSS_S);
     }
 }
 

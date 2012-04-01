@@ -176,7 +176,10 @@ typedef enum /*< skip >*/ {
   GTK_CSS_RAD,
   GTK_CSS_DEG,
   GTK_CSS_GRAD,
-  GTK_CSS_TURN
+  GTK_CSS_TURN,
+  /* CSS term: <time> */
+  GTK_CSS_S,
+  GTK_CSS_MS,
 } GtkCssUnit;
 
 typedef struct _GtkCssNumber GtkCssNumber;

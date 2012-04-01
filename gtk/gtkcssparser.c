@@ -572,7 +572,9 @@ _gtk_css_parser_read_number (GtkCssParser           *parser,
     { "rad",  GTK_CSS_RAD,     GTK_CSS_PARSE_ANGLE  },
     { "deg",  GTK_CSS_DEG,     GTK_CSS_PARSE_ANGLE  },
     { "grad", GTK_CSS_GRAD,    GTK_CSS_PARSE_ANGLE  },
-    { "turn", GTK_CSS_TURN,    GTK_CSS_PARSE_ANGLE  }
+    { "turn", GTK_CSS_TURN,    GTK_CSS_PARSE_ANGLE  },
+    { "s",    GTK_CSS_S,       GTK_CSS_PARSE_TIME   },
+    { "ms",   GTK_CSS_MS,      GTK_CSS_PARSE_TIME   }
   };
   char *end, *unit;
 
