@@ -41,6 +41,7 @@
 #include "gtkanimationdescription.h"
 #include "gtkbindings.h"
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcsseasevalueprivate.h"
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagevalueprivate.h"
@@ -725,6 +726,91 @@ border_image_width_parse (GtkCssStyleProperty *property,
   result = _gtk_css_value_new_from_gvalue (&value);
   g_value_unset (&value);
 
+  return result;
+}
+
+static GtkCssValue *
+transition_property_parse (GtkCssStyleProperty *property,
+                           GtkCssParser        *parser,
+                           GFile               *base)
+{
+  GPtrArray *names;
+  GtkCssValue *result, *value;
+
+  if (_gtk_css_parser_try (parser, "none", TRUE))
+    return _gtk_css_array_value_new (NULL, 0);
+
+  names = g_ptr_array_new ();
+
+  do {
+    value = _gtk_css_ident_value_try_parse (parser);
+
+    if (value == NULL)
+      {
+        _gtk_css_parser_error (parser, "Expected an identifier");
+        g_ptr_array_free (names, TRUE);
+        return NULL;
+      }
+
+    g_ptr_array_add (names, value);
+  } while (_gtk_css_parser_try (parser, ",", TRUE));
+
+  result = _gtk_css_array_value_new ((GtkCssValue **) names->pdata, names->len);
+  g_ptr_array_free (names, TRUE);
+  return result;
+}
+
+static GtkCssValue *
+transition_time_parse (GtkCssStyleProperty *property,
+                       GtkCssParser        *parser,
+                       GFile               *base)
+{
+  GPtrArray *times;
+  GtkCssValue *result, *next;
+
+  times = g_ptr_array_new ();
+
+  do {
+    next = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
+
+    if (next == NULL)
+      {
+        g_ptr_array_free (times, TRUE);
+        return NULL;
+      }
+
+    g_ptr_array_add (times, next);
+  } while (_gtk_css_parser_try (parser, ",", TRUE));
+
+  result = _gtk_css_array_value_new ((GtkCssValue **) times->pdata, times->len);
+  g_ptr_array_free (times, TRUE);
+  return result;
+}
+
+static GtkCssValue *
+transition_timing_function_parse (GtkCssStyleProperty *property,
+                                  GtkCssParser        *parser,
+                                  GFile               *base)
+{
+  GPtrArray *funcs;
+  GtkCssValue *result, *next;
+
+  funcs = g_ptr_array_new ();
+
+  do {
+    next = _gtk_css_ease_value_parse (parser);
+
+    if (next == NULL)
+      {
+        g_ptr_array_free (funcs, TRUE);
+        return NULL;
+      }
+
+    g_ptr_array_add (funcs, next);
+  } while (_gtk_css_parser_try (parser, ",", TRUE));
+
+  result = _gtk_css_array_value_new ((GtkCssValue **) funcs->pdata, funcs->len);
+  g_ptr_array_free (funcs, TRUE);
   return result;
 }
 
@@ -1763,6 +1849,55 @@ _gtk_css_style_property_init_properties (void)
                                           assign_simple,
                                           NULL,
                                           _gtk_css_value_new_from_boxed (GTK_TYPE_BORDER, NULL));
+
+  value = _gtk_css_ident_value_new ("all");
+  gtk_css_style_property_register        ("transition-property",
+                                          GTK_CSS_PROPERTY_TRANSITION_PROPERTY,
+                                          G_TYPE_NONE,
+                                          0,
+                                          transition_property_parse,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (&value, 1));
+  value = _gtk_css_number_value_new (0, GTK_CSS_S);
+  gtk_css_style_property_register        ("transition-duration",
+                                          GTK_CSS_PROPERTY_TRANSITION_DURATION,
+                                          G_TYPE_NONE,
+                                          0,
+                                          transition_time_parse,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (&value, 1));
+  value = _gtk_css_ease_value_new_cubic_bezier (0.25, 0.1, 0.25, 1.0);
+  gtk_css_style_property_register        ("transition-timing-function",
+                                          GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION,
+                                          G_TYPE_NONE,
+                                          0,
+                                          transition_timing_function_parse,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (&value, 1));
+  gtk_css_style_property_register        ("transition-delay",
+                                          GTK_CSS_PROPERTY_TRANSITION_DELAY,
+                                          G_TYPE_NONE,
+                                          0,
+                                          transition_time_parse,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (&value, 1));
+
   gtk_css_style_property_register        ("engine",
                                           GTK_CSS_PROPERTY_ENGINE,
                                           GTK_TYPE_THEMING_ENGINE,
