@@ -426,6 +426,7 @@ gtk_private_h_sources =		\
 	gtkcssarrayvalueprivate.h	\
 	gtkcsscomputedvaluesprivate.h \
 	gtkcsscustompropertyprivate.h \
+	gtkcsseasevalueprivate.h	\
 	gtkcssenumvalueprivate.h	\
 	gtkcssimagegradientprivate.h	\
 	gtkcssimagelinearprivate.h	\
@@ -631,6 +632,7 @@ gtk_base_c_sources = 		\
 	gtkcssarrayvalue.c	\
 	gtkcsscomputedvalues.c	\
 	gtkcsscustomproperty.c	\
+	gtkcsseasevalue.c	\
 	gtkcssenumvalue.c	\
 	gtkcssimage.c		\
 	gtkcssimagegradient.c	\
