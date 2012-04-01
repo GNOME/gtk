@@ -183,7 +183,7 @@ _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
 
   if (values->values == NULL)
     values->values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
-  if (id <= values->values->len)
+  if (id >= values->values->len)
    g_ptr_array_set_size (values->values, id + 1);
 
   if (g_ptr_array_index (values->values, id))
