@@ -42,6 +42,10 @@
         <listitem>for GTK</listitem>
       </varlistentry>
       <varlistentry>
+        <term><filename>gtk/gtkx.h</filename></term>
+        <listitem>for the X-specfic widgets #GtkSocket and #GtkPlug</listitem>
+      </varlistentry>
+      <varlistentry>
         <term><filename>gtk/gtkunixprint.h</filename></term>
         <listitem>for low-level, UNIX-specific printing functions</listitem>
       </varlistentry>
