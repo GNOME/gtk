@@ -22,6 +22,7 @@
 #include "gtkcssimageprivate.h"
 
 /* for the types only */
+#include "gtk/gtkcssimagecrossfadeprivate.h"
 #include "gtk/gtkcssimagegradientprivate.h"
 #include "gtk/gtkcssimagelinearprivate.h"
 #include "gtk/gtkcssimageurlprivate.h"
@@ -324,7 +325,8 @@ gtk_css_image_get_parser_type (GtkCssParser *parser)
     { "-gtk-gradient", _gtk_css_image_gradient_get_type },
     { "-gtk-win32-theme-part", _gtk_css_image_win32_get_type },
     { "linear-gradient", _gtk_css_image_linear_get_type },
-    { "repeating-linear-gradient", _gtk_css_image_linear_get_type }
+    { "repeating-linear-gradient", _gtk_css_image_linear_get_type },
+    { "cross-fade", _gtk_css_image_cross_fade_get_type }
   };
   guint i;
 
