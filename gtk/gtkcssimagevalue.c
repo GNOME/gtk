@@ -19,7 +19,7 @@
 
 #include "gtkcssimagevalueprivate.h"
 
-#include "gtkstylepropertyprivate.h"
+#include "gtkcssimagecrossfadeprivate.h"
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
@@ -45,7 +45,13 @@ gtk_css_value_image_transition (GtkCssValue *start,
                                 GtkCssValue *end,
                                 double       progress)
 {
-  return NULL;
+  GtkCssImage *fade;
+
+  fade = _gtk_css_image_cross_fade_new (_gtk_css_image_value_get_image (start),
+                                        _gtk_css_image_value_get_image (end),
+                                        progress);
+      
+  return _gtk_css_image_value_new (fade);
 }
 
 static void
