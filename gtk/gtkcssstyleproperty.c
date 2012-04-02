@@ -36,6 +36,7 @@
 
 enum {
   PROP_0,
+  PROP_ANIMATED,
   PROP_ID,
   PROP_INHERIT,
   PROP_INITIAL
@@ -65,6 +66,9 @@ gtk_css_style_property_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ANIMATED:
+      property->animated = g_value_get_boolean (value);
+      break;
     case PROP_INHERIT:
       property->inherit = g_value_get_boolean (value);
       break;
@@ -88,6 +92,9 @@ gtk_css_style_property_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ANIMATED:
+      g_value_set_boolean (value, property->animated);
+      break;
     case PROP_ID:
       g_value_set_boolean (value, property->id);
       break;
@@ -176,6 +183,13 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
   object_class->set_property = gtk_css_style_property_set_property;
   object_class->get_property = gtk_css_style_property_get_property;
 
+  g_object_class_install_property (object_class,
+                                   PROP_ANIMATED,
+                                   g_param_spec_boolean ("animated",
+                                                         P_("Animated"),
+                                                         P_("Set if the value can be animated"),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class,
                                    PROP_ID,
                                    g_param_spec_uint ("id",
@@ -311,9 +325,27 @@ _gtk_css_style_property_lookup_by_id (guint id)
 gboolean
 _gtk_css_style_property_is_inherit (GtkCssStyleProperty *property)
 {
-  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), 0);
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
 
   return property->inherit;
+}
+
+/**
+ * _gtk_css_style_property_is_animated:
+ * @property: the property
+ *
+ * Queries if the given @property can be is animated. See
+ * <ulink url="http://www.w3.org/TR/css3-transitions/#animatable-css>
+ * the CSS documentation</ulink> for animatable properties.
+ *
+ * Returns: %TRUE if the property can be animated.
+ **/
+gboolean
+_gtk_css_style_property_is_animated (GtkCssStyleProperty *property)
+{
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
+
+  return property->animated;
 }
 
 /**

@@ -58,7 +58,8 @@
 /*** REGISTRATION ***/
 
 typedef enum {
-  GTK_STYLE_PROPERTY_INHERIT = (1 << 0)
+  GTK_STYLE_PROPERTY_INHERIT = (1 << 0),
+  GTK_STYLE_PROPERTY_ANIMATED = (1 << 1)
 } GtkStylePropertyFlags;
 
 static void
@@ -83,6 +84,7 @@ gtk_css_style_property_register (const char *                   name,
 
   node = g_object_new (GTK_TYPE_CSS_STYLE_PROPERTY,
                        "value-type", value_type,
+                       "animated", (flags & GTK_STYLE_PROPERTY_ANIMATED) ? TRUE : FALSE,
                        "inherit", (flags & GTK_STYLE_PROPERTY_INHERIT) ? TRUE : FALSE,
                        "initial-value", initial_value,
                        "name", name,

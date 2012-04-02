@@ -58,6 +58,7 @@ struct _GtkCssStyleProperty
   GtkCssValue *initial_value;
   guint id;
   guint inherit :1;
+  guint animated :1;
 
   GtkCssStylePropertyParseFunc parse_value;
   GtkCssStylePropertyPrintFunc print_value;
@@ -82,6 +83,7 @@ guint                   _gtk_css_style_property_get_n_properties(void);
 GtkCssStyleProperty *   _gtk_css_style_property_lookup_by_id    (guint                   id);
 
 gboolean                _gtk_css_style_property_is_inherit      (GtkCssStyleProperty    *property);
+gboolean                _gtk_css_style_property_is_animated     (GtkCssStyleProperty    *property);
 guint                   _gtk_css_style_property_get_id          (GtkCssStyleProperty    *property);
 GtkCssValue  *          _gtk_css_style_property_get_initial_value
                                                                 (GtkCssStyleProperty    *property);
