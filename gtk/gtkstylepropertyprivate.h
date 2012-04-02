@@ -34,10 +34,6 @@ G_BEGIN_DECLS
 typedef struct _GtkStyleProperty           GtkStyleProperty;
 typedef struct _GtkStylePropertyClass      GtkStylePropertyClass;
 
-typedef enum {
-  GTK_STYLE_PROPERTY_INHERIT = (1 << 0)
-} GtkStylePropertyFlags;
-
 typedef GtkCssValue *   (* GtkStyleQueryFunc)        (guint                   id,
 						      gpointer                data);
 

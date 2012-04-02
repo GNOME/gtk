@@ -57,6 +57,10 @@
 
 /*** REGISTRATION ***/
 
+typedef enum {
+  GTK_STYLE_PROPERTY_INHERIT = (1 << 0)
+} GtkStylePropertyFlags;
+
 static void
 gtk_css_style_property_register (const char *                   name,
                                  guint                          expected_id,
