@@ -1030,10 +1030,10 @@ gtk_style_context_set_invalid (GtkStyleContext *context,
 
   if (invalid)
     {
-      if (priv->widget)
-        gtk_widget_queue_resize (priv->widget);
       if (priv->parent)
         gtk_style_context_set_invalid (priv->parent, TRUE);
+      else if (priv->widget)
+        gtk_widget_queue_resize (priv->widget);
     }
 }
 
