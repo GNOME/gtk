@@ -30,6 +30,7 @@
 #include "gtkpango.h"
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcsstypesprivate.h"
@@ -1831,7 +1832,7 @@ render_frame_internal (GtkThemingEngine *engine,
       border.left = border.right = border.bottom = border.top;
       colors[0] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_COLOR));
       colors[3] = colors[2] = colors[1] = colors[0];
-      offset = _gtk_css_value_get_int (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_OFFSET));
+      offset = _gtk_css_number_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_OUTLINE_OFFSET), 100);
       
       /* reinit box here - outlines don't have a border radius */
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);

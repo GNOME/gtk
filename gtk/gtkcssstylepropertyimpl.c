@@ -651,15 +651,17 @@ outline_parse (GtkCssStyleProperty *property,
                GtkCssParser        *parser,
                GFile               *base)
 {
-  int i;
+  return _gtk_css_number_value_parse (parser,
+                                      GTK_CSS_NUMBER_AS_PIXELS
+                                      | GTK_CSS_PARSE_LENGTH);
+}
 
-  if (!_gtk_css_parser_try_int (parser, &i))
-    {
-      _gtk_css_parser_error (parser, "Expected an integer");
-      return NULL;
-    }
-
-  return _gtk_css_value_new_from_int (i);
+static GtkCssValue *
+outline_compute (GtkCssStyleProperty *property,
+                 GtkStyleContext     *context,
+                 GtkCssValue         *specified)
+{
+  return _gtk_css_number_value_compute (specified, context);
 }
 
 static GtkCssValue *
@@ -1616,11 +1618,11 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           outline_parse,
                                           NULL,
+                                          outline_compute,
+                                          query_length_as_int,
+                                          assign_length_from_int,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
-                                          NULL,
-                                          _gtk_css_value_new_from_int (0));
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
 
   gtk_css_style_property_register        ("background-clip",
                                           GTK_CSS_PROPERTY_BACKGROUND_CLIP,
