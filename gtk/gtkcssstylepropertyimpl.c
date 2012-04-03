@@ -426,60 +426,83 @@ parse_css_area (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+bindings_value_parse_one (GtkCssParser *parser)
+{
+  char *name;
+
+  name = _gtk_css_parser_try_ident (parser, TRUE);
+  if (name == NULL)
+    {
+      _gtk_css_parser_error (parser, "Not a valid binding name");
+      return NULL;
+    }
+
+
+  if (!gtk_binding_set_find (name))
+    {
+      _gtk_css_parser_error (parser, "No binding set named '%s'", name);
+      g_free (name);
+      return NULL;
+    }
+
+  return _gtk_css_string_value_new_take (name);
+}
+
+static GtkCssValue *
 bindings_value_parse (GtkCssStyleProperty *property,
                       GtkCssParser        *parser,
                       GFile               *base)
 {
-  GPtrArray *array;
-  GtkBindingSet *binding_set;
-  char *name;
-
-  array = g_ptr_array_new ();
-
-  do {
-      name = _gtk_css_parser_try_ident (parser, TRUE);
-      if (name == NULL)
-        {
-          _gtk_css_parser_error (parser, "Not a valid binding name");
-          g_ptr_array_free (array, TRUE);
-          return FALSE;
-        }
-
-      binding_set = gtk_binding_set_find (name);
-
-      if (!binding_set)
-        {
-          _gtk_css_parser_error (parser, "No binding set named '%s'", name);
-          g_free (name);
-          continue;
-        }
-
-      g_ptr_array_add (array, binding_set);
-      g_free (name);
-    }
-  while (_gtk_css_parser_try (parser, ",", TRUE));
-
-  return _gtk_css_value_new_take_binding_sets (array);
+  return _gtk_css_array_value_parse (parser, bindings_value_parse_one, TRUE);
 }
 
 static void
-bindings_value_print (GtkCssStyleProperty *property,
-                      const GtkCssValue   *value,
-                      GString             *string)
+bindings_value_query (GtkCssStyleProperty *property,
+                      const GtkCssValue   *css_value,
+                      GValue              *value)
 {
   GPtrArray *array;
   guint i;
 
-  array = _gtk_css_value_get_boxed (value);
+  g_value_init (value, G_TYPE_PTR_ARRAY);
 
-  for (i = 0; i < array->len; i++)
+  if (_gtk_css_array_value_get_n_values (css_value) == 0)
+    return;
+
+  array = g_ptr_array_new ();
+
+  for (i = 0; i < _gtk_css_array_value_get_n_values (css_value); i++)
     {
-      GtkBindingSet *binding_set = g_ptr_array_index (array, i);
+      GtkBindingSet *binding_set = gtk_binding_set_find (_gtk_css_string_value_get (_gtk_css_array_value_get_nth (css_value, i)));
 
-      if (i > 0)
-        g_string_append (string, ", ");
-      g_string_append (string, binding_set->set_name);
+      g_ptr_array_add (array, binding_set);
     }
+
+  g_value_take_boxed (value, array);
+}
+
+static GtkCssValue *
+bindings_value_assign (GtkCssStyleProperty *property,
+                       const GValue        *value)
+{
+  GPtrArray *binding_sets = g_value_get_boxed (value);
+  GtkCssValue **values, *result;
+  guint i;
+
+  if (binding_sets == NULL || binding_sets->len == 0)
+    return _gtk_css_array_value_new (NULL);
+
+  values = g_new (GtkCssValue *, binding_sets->len);
+
+  for (i = 0; i < binding_sets->len; i++)
+    {
+      GtkBindingSet *binding_set = g_ptr_array_index (binding_sets, i);
+      values[i] = _gtk_css_string_value_new (binding_set->set_name);
+    }
+
+  result = _gtk_css_array_value_new_from_array (values, binding_sets->len);
+  g_free (values);
+  return result;
 }
 
 static GtkCssValue *
@@ -1518,7 +1541,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("border-top-left-radius",
                                           GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS,
                                           G_TYPE_NONE,
-                                          0,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
                                           border_corner_radius_value_parse,
                                           NULL,
                                           border_corner_radius_value_compute,
@@ -1530,7 +1553,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("border-top-right-radius",
                                           GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS,
                                           G_TYPE_NONE,
-                                          0,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
                                           border_corner_radius_value_parse,
                                           NULL,
                                           border_corner_radius_value_compute,
@@ -1542,7 +1565,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("border-bottom-right-radius",
                                           GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS,
                                           G_TYPE_NONE,
-                                          0,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
                                           border_corner_radius_value_parse,
                                           NULL,
                                           border_corner_radius_value_compute,
@@ -1554,7 +1577,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("border-bottom-left-radius",
                                           GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS,
                                           G_TYPE_NONE,
-                                          0,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
                                           border_corner_radius_value_parse,
                                           NULL,
                                           border_corner_radius_value_compute,
@@ -1856,11 +1879,11 @@ _gtk_css_style_property_init_properties (void)
                                           G_TYPE_PTR_ARRAY,
                                           0,
                                           bindings_value_parse,
-                                          bindings_value_print,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
                                           NULL,
-                                          _gtk_css_value_new_take_binding_sets (NULL));
+                                          bindings_value_query,
+                                          bindings_value_assign,
+                                          NULL,
+                                          _gtk_css_array_value_new (NULL));
 }
 
