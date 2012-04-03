@@ -23,6 +23,7 @@
 
 #include "gtkthemingbackgroundprivate.h"
 
+#include "gtkcssarrayvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcsstypesprivate.h"
@@ -298,9 +299,17 @@ static void
 _gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
                                       cairo_t              *cr)
 {
-  _gtk_css_shadow_value_paint_box (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BOX_SHADOW),
-                                   cr,
-                                   &bg->padding_box);
+  GtkCssValue *shadows;
+  guint i;
+
+  shadows = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BOX_SHADOW);
+
+  for (i = 0; i < _gtk_css_array_value_get_n_values (shadows); i++)
+    {
+      _gtk_css_shadow_value_paint_box (_gtk_css_array_value_get_nth (shadows, i),
+                                       cr,
+                                       &bg->padding_box);
+    }
 }
 
 static void

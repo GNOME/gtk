@@ -154,6 +154,37 @@ _gtk_css_array_value_parse (GtkCssParser *parser,
 }
 
 GtkCssValue *
+_gtk_css_array_value_compute (GtkCssValue     *value,
+                              GtkCssValue *    (* compute_func) (GtkCssValue *, GtkStyleContext *),
+                              GtkStyleContext *context)
+{
+  GtkCssValue *result;
+  gboolean changed = FALSE;
+  guint i;
+
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_ARRAY, NULL);
+  g_return_val_if_fail (compute_func != NULL, NULL);
+
+  if (value->n_values == 0)
+    return _gtk_css_value_ref (value);
+
+  result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
+  for (i = 0; i < value->n_values; i++)
+    {
+      result->values[i] = (* compute_func) (value->values[i], context);
+      changed |= (result->values[i] != value->values[i]);
+    }
+
+  if (!changed)
+    {
+      _gtk_css_value_unref (result);
+      return _gtk_css_value_ref (value);
+    }
+
+  return result;
+}
+
+GtkCssValue *
 _gtk_css_array_value_get_nth (const GtkCssValue *value,
                               guint              i)
 {

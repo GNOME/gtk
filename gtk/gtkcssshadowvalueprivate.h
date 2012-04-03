@@ -30,7 +30,6 @@
 
 G_BEGIN_DECLS
 
-GtkCssValue *   _gtk_css_shadow_value_new_none        (void);
 GtkCssValue *   _gtk_css_shadow_value_parse           (GtkCssParser             *parser);
 
 GtkCssValue *   _gtk_css_shadow_value_compute         (GtkCssValue              *shadow,

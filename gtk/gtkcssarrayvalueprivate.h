@@ -22,6 +22,7 @@
 
 #include "gtkcssparserprivate.h"
 #include "gtkcssvalueprivate.h"
+#include "gtktypes.h"
 
 G_BEGIN_DECLS
 
@@ -29,9 +30,12 @@ GtkCssValue *       _gtk_css_array_value_new            (GtkCssValue           *
 GtkCssValue *       _gtk_css_array_value_new_from_array (GtkCssValue          **values,
                                                          guint                  n_values);
 GtkCssValue *       _gtk_css_array_value_parse          (GtkCssParser          *parser,
-                                                         GtkCssValue *          (* parse_func) (GtkCssParser *parser),
+                                                         GtkCssValue *          (* parse_func) (GtkCssParser *),
                                                          gboolean               allow_none);
 
+GtkCssValue *       _gtk_css_array_value_compute        (GtkCssValue           *value,
+                                                         GtkCssValue *          (* compute_func) (GtkCssValue *, GtkStyleContext *),
+                                                         GtkStyleContext       *context);
 GtkCssValue *       _gtk_css_array_value_get_nth        (const GtkCssValue     *value,
                                                          guint                  i);
 guint               _gtk_css_array_value_get_n_values   (const GtkCssValue     *value);

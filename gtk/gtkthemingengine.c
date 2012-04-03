@@ -28,6 +28,7 @@
 #include "gtkmodulesprivate.h"
 #include "gtkborderimageprivate.h"
 #include "gtkpango.h"
+#include "gtkcssarrayvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
@@ -2100,10 +2101,11 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
                                   PangoLayout      *layout)
 {
   GdkRGBA fg_color;
-  GtkCssValue *text_shadow = NULL;
+  GtkCssValue *shadows;
   GtkStateFlags flags;
   gdouble progress;
   gboolean running;
+  guint i;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
@@ -2132,11 +2134,14 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
       fg_color.alpha = CLAMP (fg_color.alpha + ((other_fg.alpha - fg_color.alpha) * progress), 0, 1);
     }
 
-  text_shadow = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_TEXT_SHADOW);
+  shadows = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_TEXT_SHADOW);
 
   prepare_context_for_layout (cr, x, y, layout);
 
-  _gtk_css_shadow_value_paint_layout (text_shadow, cr, layout);
+  for (i = 0; i < _gtk_css_array_value_get_n_values (shadows); i++)
+    {
+      _gtk_css_shadow_value_paint_layout (_gtk_css_array_value_get_nth (shadows, i), cr, layout);
+    }
 
   gdk_cairo_set_source_rgba (cr, &fg_color);
   pango_cairo_show_layout (cr, layout);
@@ -2750,10 +2755,11 @@ render_spinner (GtkThemingEngine *engine,
                 gdouble           height)
 {
   GtkStateFlags state;
-  GtkCssValue *shadow;
+  GtkCssValue *shadows;
   GdkRGBA color;
   gdouble progress;
   gdouble radius;
+  guint i;
 
   state = gtk_theming_engine_get_state (engine);
 
@@ -2763,14 +2769,18 @@ render_spinner (GtkThemingEngine *engine,
   radius = MIN (width / 2, height / 2);
 
   gtk_theming_engine_get_color (engine, state, &color);
-  shadow = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW);
+  shadows = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW);
 
   cairo_save (cr);
   cairo_translate (cr, x + width / 2, y + height / 2);
 
-  _gtk_css_shadow_value_paint_spinner (shadow, cr,
-                                       radius,
-                                       progress);
+  for (i = 0; i < _gtk_css_array_value_get_n_values (shadows); i++)
+    {
+      _gtk_css_shadow_value_paint_spinner (_gtk_css_array_value_get_nth (shadows, i),
+                                           cr,
+                                           radius,
+                                           progress);
+    }
 
   _gtk_theming_engine_paint_spinner (cr,
                                      radius,
@@ -2937,11 +2947,18 @@ gtk_theming_engine_render_icon (GtkThemingEngine *engine,
                                 gdouble x,
                                 gdouble y)
 {
+  GtkCssValue *shadows;
+  guint i;
+
   cairo_save (cr);
 
   gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
 
-  _gtk_css_shadow_value_paint_icon (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW), cr);
+  shadows = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW);
+  for (i = 0; i < _gtk_css_array_value_get_n_values (shadows); i++)
+    {
+      _gtk_css_shadow_value_paint_icon (_gtk_css_array_value_get_nth (shadows, i), cr);
+    }
 
   cairo_paint (cr);
 

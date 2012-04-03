@@ -486,7 +486,7 @@ shadow_value_parse (GtkCssStyleProperty *property,
                     GtkCssParser        *parser,
                     GFile               *base)
 {
-  return _gtk_css_shadow_value_parse (parser);
+  return _gtk_css_array_value_parse (parser, _gtk_css_shadow_value_parse, TRUE);
 }
 
 static GtkCssValue *
@@ -494,7 +494,7 @@ shadow_value_compute (GtkCssStyleProperty *property,
                       GtkStyleContext     *context,
                       GtkCssValue         *specified)
 {
-  return _gtk_css_shadow_value_compute (specified, context);
+  return _gtk_css_array_value_compute (specified, _gtk_css_shadow_value_compute, context);
 }
 
 static GtkCssValue *
@@ -1337,7 +1337,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_shadow_value_new_none ());
+                                          _gtk_css_array_value_new (NULL));
 
   gtk_css_style_property_register        ("icon-shadow",
                                           GTK_CSS_PROPERTY_ICON_SHADOW,
@@ -1349,7 +1349,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_shadow_value_new_none ());
+                                          _gtk_css_array_value_new (NULL));
 
   gtk_css_style_property_register        ("box-shadow",
                                           GTK_CSS_PROPERTY_BOX_SHADOW,
@@ -1361,7 +1361,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_shadow_value_new_none ());
+                                          _gtk_css_array_value_new (NULL));
 
   gtk_css_style_property_register        ("margin-top",
                                           GTK_CSS_PROPERTY_MARGIN_TOP,
