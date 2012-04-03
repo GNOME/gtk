@@ -40,6 +40,13 @@ struct _GtkCssValue {
   GtkCssValue *color;
 };
 
+static GtkCssValue *    gtk_css_shadow_value_new (GtkCssValue *hoffset,
+                                                  GtkCssValue *voffset,
+                                                  GtkCssValue *radius,
+                                                  GtkCssValue *spread,
+                                                  gboolean     inset,
+                                                  GtkCssValue *color);
+
 static void
 gtk_css_value_shadow_free (GtkCssValue *shadow)
 {
@@ -56,8 +63,12 @@ static gboolean
 gtk_css_value_shadow_equal (const GtkCssValue *shadow1,
                             const GtkCssValue *shadow2)
 {
-  /* FIXME */
-  return shadow1 == shadow2;
+  return shadow1->inset == shadow2->inset
+      && _gtk_css_value_equal (shadow1->hoffset, shadow2->hoffset)
+      && _gtk_css_value_equal (shadow1->voffset, shadow2->voffset)
+      && _gtk_css_value_equal (shadow1->radius, shadow2->radius)
+      && _gtk_css_value_equal (shadow1->spread, shadow2->spread)
+      && _gtk_css_value_equal (shadow1->color, shadow2->color);
 }
 
 static GtkCssValue *
@@ -65,7 +76,15 @@ gtk_css_value_shadow_transition (GtkCssValue *start,
                                  GtkCssValue *end,
                                  double       progress)
 {
-  return NULL;
+  if (start->inset != end->inset)
+    return NULL;
+
+  return gtk_css_shadow_value_new (_gtk_css_value_transition (start->hoffset, end->hoffset, progress),
+                                   _gtk_css_value_transition (start->voffset, end->voffset, progress),
+                                   _gtk_css_value_transition (start->radius, end->radius, progress),
+                                   _gtk_css_value_transition (start->spread, end->spread, progress),
+                                   start->inset,
+                                   _gtk_css_value_transition (start->color, end->color, progress));
 }
 
 static void
@@ -124,6 +143,21 @@ gtk_css_shadow_value_new (GtkCssValue *hoffset,
 
   return retval;
 }                  
+
+GtkCssValue *
+_gtk_css_shadow_value_new_for_transition (GtkCssValue *target)
+{
+  GdkRGBA transparent = { 0, 0, 0, 0 };
+
+  g_return_val_if_fail (target->class == &GTK_CSS_VALUE_SHADOW, NULL);
+
+  return gtk_css_shadow_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
+                                   _gtk_css_number_value_new (0, GTK_CSS_PX),
+                                   _gtk_css_number_value_new (0, GTK_CSS_PX),
+                                   _gtk_css_number_value_new (0, GTK_CSS_PX),
+                                   target->inset,
+                                   _gtk_css_rgba_value_new_from_rgba (&transparent));
+}
 
 static gboolean
 value_is_done_parsing (GtkCssParser *parser)
