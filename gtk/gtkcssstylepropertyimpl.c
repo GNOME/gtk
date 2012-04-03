@@ -41,6 +41,7 @@
 #include "gtkanimationdescription.h"
 #include "gtkbindings.h"
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcsscornervalueprivate.h"
 #include "gtkcsseasevalueprivate.h"
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssimageprivate.h"
@@ -502,45 +503,15 @@ border_corner_radius_value_parse (GtkCssStyleProperty *property,
                                   GtkCssParser        *parser,
                                   GFile               *base)
 {
-  GtkCssBorderCornerRadius corner;
-
-  if (!_gtk_css_parser_read_number (parser,
-                                    &corner.horizontal,
-                                    GTK_CSS_POSITIVE_ONLY
-                                    | GTK_CSS_PARSE_PERCENT
-                                    | GTK_CSS_NUMBER_AS_PIXELS
-                                    | GTK_CSS_PARSE_LENGTH))
-    return FALSE;
-
-  if (!_gtk_css_parser_has_number (parser))
-    corner.vertical = corner.horizontal;
-  else if (!_gtk_css_parser_read_number (parser,
-                                         &corner.vertical,
-                                         GTK_CSS_POSITIVE_ONLY
-                                         | GTK_CSS_PARSE_PERCENT
-                                         | GTK_CSS_NUMBER_AS_PIXELS
-                                         | GTK_CSS_PARSE_LENGTH))
-    return FALSE;
-
-  return _gtk_css_value_new_from_border_corner_radius (&corner);
+  return _gtk_css_corner_value_parse (parser);
 }
 
-static void
-border_corner_radius_value_print (GtkCssStyleProperty *property,
-                                  const GtkCssValue   *value,
-                                  GString             *string)
+static GtkCssValue *
+border_corner_radius_value_compute (GtkCssStyleProperty *property,
+                                    GtkStyleContext     *context,
+                                    GtkCssValue         *specified)
 {
-  const GtkCssBorderCornerRadius *corner;
-
-  corner = _gtk_css_value_get_border_corner_radius (value);
-
-  _gtk_css_number_print (&corner->horizontal, string);
-
-  if (!_gtk_css_number_equal (&corner->horizontal, &corner->vertical))
-    {
-      g_string_append_c (string, ' ');
-      _gtk_css_number_print (&corner->vertical, string);
-    }
+  return _gtk_css_corner_value_compute (specified, context);
 }
 
 static GtkCssValue *
@@ -1236,7 +1207,6 @@ _gtk_css_style_property_init_properties (void)
 {
   GtkCssBackgroundSize default_background_size = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), FALSE, FALSE };
   GtkCssBackgroundPosition default_background_position = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PERCENT), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PERCENT)};
-  GtkCssBorderCornerRadius no_corner_radius = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX) };
   GtkBorder border_of_ones = { 1, 1, 1, 1 };
   GtkCssBorderImageRepeat border_image_repeat = { GTK_CSS_REPEAT_STYLE_STRETCH, GTK_CSS_REPEAT_STYLE_STRETCH };
 
@@ -1547,48 +1517,52 @@ _gtk_css_style_property_init_properties (void)
 
   gtk_css_style_property_register        ("border-top-left-radius",
                                           GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS,
-                                          GTK_TYPE_CSS_BORDER_CORNER_RADIUS,
+                                          G_TYPE_NONE,
                                           0,
                                           border_corner_radius_value_parse,
-                                          border_corner_radius_value_print,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          border_corner_radius_value_compute,
                                           NULL,
-                                          _gtk_css_value_new_from_border_corner_radius (&no_corner_radius));
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
+                                                                     _gtk_css_number_value_new (0, GTK_CSS_PX)));
   gtk_css_style_property_register        ("border-top-right-radius",
                                           GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS,
-                                          GTK_TYPE_CSS_BORDER_CORNER_RADIUS,
+                                          G_TYPE_NONE,
                                           0,
                                           border_corner_radius_value_parse,
-                                          border_corner_radius_value_print,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          border_corner_radius_value_compute,
                                           NULL,
-                                          _gtk_css_value_new_from_border_corner_radius (&no_corner_radius));
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
+                                                                     _gtk_css_number_value_new (0, GTK_CSS_PX)));
   gtk_css_style_property_register        ("border-bottom-right-radius",
                                           GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS,
-                                          GTK_TYPE_CSS_BORDER_CORNER_RADIUS,
+                                          G_TYPE_NONE,
                                           0,
                                           border_corner_radius_value_parse,
-                                          border_corner_radius_value_print,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          border_corner_radius_value_compute,
                                           NULL,
-                                          _gtk_css_value_new_from_border_corner_radius (&no_corner_radius));
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
+                                                                     _gtk_css_number_value_new (0, GTK_CSS_PX)));
   gtk_css_style_property_register        ("border-bottom-left-radius",
                                           GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS,
-                                          GTK_TYPE_CSS_BORDER_CORNER_RADIUS,
+                                          G_TYPE_NONE,
                                           0,
                                           border_corner_radius_value_parse,
-                                          border_corner_radius_value_print,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          border_corner_radius_value_compute,
                                           NULL,
-                                          _gtk_css_value_new_from_border_corner_radius (&no_corner_radius));
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
+                                                                     _gtk_css_number_value_new (0, GTK_CSS_PX)));
 
   gtk_css_style_property_register        ("outline-style",
                                           GTK_CSS_PROPERTY_OUTLINE_STYLE,

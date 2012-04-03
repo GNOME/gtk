@@ -47,16 +47,11 @@ void            _gtk_rounded_box_init_rect                      (GtkRoundedBox  
                                                                  double               width,
                                                                  double               height);
 
-void            _gtk_rounded_box_apply_border_radius            (GtkRoundedBox *box,
-                                                                 GtkCssBorderCornerRadius **corner,
-                                                                 GtkJunctionSides junction);
 void            _gtk_rounded_box_apply_border_radius_for_engine (GtkRoundedBox       *box,
                                                                  GtkThemingEngine    *engine,
-                                                                 GtkStateFlags        state,
                                                                  GtkJunctionSides     junction);
 void            _gtk_rounded_box_apply_border_radius_for_context (GtkRoundedBox    *box,
                                                                   GtkStyleContext  *context,
-                                                                  GtkStateFlags     state,
                                                                   GtkJunctionSides  junction);
 
 void            _gtk_rounded_box_shrink                         (GtkRoundedBox       *box,

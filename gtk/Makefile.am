@@ -425,6 +425,7 @@ gtk_private_h_sources =		\
 	gtkcontainerprivate.h   \
 	gtkcssarrayvalueprivate.h	\
 	gtkcsscomputedvaluesprivate.h \
+	gtkcsscornervalueprivate.h	\
 	gtkcsscustompropertyprivate.h \
 	gtkcsseasevalueprivate.h	\
 	gtkcssenumvalueprivate.h	\
@@ -633,6 +634,7 @@ gtk_base_c_sources = 		\
 	gtkcontainer.c		\
 	gtkcssarrayvalue.c	\
 	gtkcsscomputedvalues.c	\
+	gtkcsscornervalue.c	\
 	gtkcsscustomproperty.c	\
 	gtkcsseasevalue.c	\
 	gtkcssenumvalue.c	\

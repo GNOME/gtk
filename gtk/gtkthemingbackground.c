@@ -324,7 +324,7 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
    */
   _gtk_rounded_box_init_rect (&bg->padding_box, 0, 0, bg->paint_area.width, bg->paint_area.height);
 
-  _gtk_rounded_box_apply_border_radius_for_context (&bg->padding_box, bg->context, bg->flags, bg->junction);
+  _gtk_rounded_box_apply_border_radius_for_context (&bg->padding_box, bg->context, bg->junction);
 
   bg->clip_box = bg->padding_box;
   _gtk_rounded_box_shrink (&bg->padding_box,

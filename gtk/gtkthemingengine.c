@@ -29,6 +29,7 @@
 #include "gtkborderimageprivate.h"
 #include "gtkpango.h"
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcsscornervalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
@@ -1817,7 +1818,7 @@ render_frame_internal (GtkThemingEngine *engine,
         }
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_apply_border_radius_for_engine (&border_box, engine, state, junction);
+      _gtk_rounded_box_apply_border_radius_for_engine (&border_box, engine, junction);
 
       render_border (cr, &border_box, &border, hidden_side, colors, border_style);
     }
@@ -2195,8 +2196,7 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   GtkJunctionSides junction;
   GtkStateFlags state;
   gint border_width;
-  GtkCssBorderCornerRadius *top_left_radius, *top_right_radius;
-  GtkCssBorderCornerRadius *bottom_left_radius, *bottom_right_radius;
+  GtkCssValue *corner[4];
   gdouble x0, y0, x1, y1, xc, yc, wc, hc;
   GtkBorder border;
 
@@ -2205,12 +2205,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   junction = gtk_theming_engine_get_junction_sides (engine);
 
   gtk_theming_engine_get_border (engine, state, &border);
-  gtk_theming_engine_get (engine, state,
-			  "border-top-left-radius", &top_left_radius,
-			  "border-top-right-radius", &top_right_radius,
-			  "border-bottom-right-radius", &bottom_right_radius,
-			  "border-bottom-left-radius", &bottom_left_radius,
-			  NULL);
+  corner[GTK_CSS_TOP_LEFT] = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS);
+  corner[GTK_CSS_TOP_RIGHT] = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS);
+  corner[GTK_CSS_BOTTOM_LEFT] = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS);
+  corner[GTK_CSS_BOTTOM_RIGHT] = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS);
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
@@ -2225,10 +2223,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       hc = border_width;
 
-      if (xy0_gap < _gtk_css_number_get (&top_left_radius->horizontal, width))
+      if (xy0_gap < _gtk_css_corner_value_get_x (corner[GTK_CSS_TOP_LEFT], width))
         junction |= GTK_JUNCTION_CORNER_TOPLEFT;
 
-      if (xy1_gap > width - _gtk_css_number_get (&top_right_radius->horizontal, width))
+      if (xy1_gap > width - _gtk_css_corner_value_get_x (corner[GTK_CSS_TOP_RIGHT], width))
         junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
       break;
     case GTK_POS_BOTTOM:
@@ -2237,10 +2235,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       hc = border_width;
 
-      if (xy0_gap < _gtk_css_number_get (&bottom_left_radius->horizontal, width))
+      if (xy0_gap < _gtk_css_corner_value_get_x (corner[GTK_CSS_BOTTOM_LEFT], width))
         junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
 
-      if (xy1_gap > width - _gtk_css_number_get (&bottom_right_radius->horizontal, width))
+      if (xy1_gap > width - _gtk_css_corner_value_get_x (corner[GTK_CSS_BOTTOM_RIGHT], width))
         junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
 
       break;
@@ -2250,10 +2248,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
 
-      if (xy0_gap < _gtk_css_number_get (&top_left_radius->vertical, height))
+      if (xy0_gap < _gtk_css_corner_value_get_y (corner[GTK_CSS_TOP_LEFT], height))
         junction |= GTK_JUNCTION_CORNER_TOPLEFT;
 
-      if (xy1_gap > height - _gtk_css_number_get (&bottom_left_radius->vertical, height))
+      if (xy1_gap > height - _gtk_css_corner_value_get_y (corner[GTK_CSS_BOTTOM_LEFT], height))
         junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
 
       break;
@@ -2263,10 +2261,10 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
 
-      if (xy0_gap < _gtk_css_number_get (&top_right_radius->vertical, height))
+      if (xy0_gap < _gtk_css_corner_value_get_y (corner[GTK_CSS_TOP_RIGHT], height))
         junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
 
-      if (xy1_gap > height - _gtk_css_number_get (&bottom_right_radius->vertical, height))
+      if (xy1_gap > height - _gtk_css_corner_value_get_y (corner[GTK_CSS_BOTTOM_RIGHT], height))
         junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
 
       break;
@@ -2284,11 +2282,6 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
                          0, junction);
 
   cairo_restore (cr);
-
-  g_free (top_left_radius);
-  g_free (top_right_radius);
-  g_free (bottom_right_radius);
-  g_free (bottom_left_radius);
 }
 
 static void

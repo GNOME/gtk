@@ -312,17 +312,6 @@ _gtk_css_value_new_from_background_position (const GtkCssBackgroundPosition *v)
 }
 
 GtkCssValue *
-_gtk_css_value_new_from_border_corner_radius (const GtkCssBorderCornerRadius *v)
-{
-  GtkCssValue *value;
-
-  value = gtk_css_value_new (GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
-  value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_BORDER_CORNER_RADIUS, v);
-
-  return value;
-}
-
-GtkCssValue *
 _gtk_css_value_new_from_border_image_repeat (const GtkCssBorderImageRepeat *v)
 {
   GtkCssValue *value;
@@ -576,13 +565,6 @@ const GtkCssBorderImageRepeat *
 _gtk_css_value_get_border_image_repeat (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT), NULL);
-  return value->u.ptr;
-}
-
-const GtkCssBorderCornerRadius *
-_gtk_css_value_get_border_corner_radius (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BORDER_CORNER_RADIUS), NULL);
   return value->u.ptr;
 }
 

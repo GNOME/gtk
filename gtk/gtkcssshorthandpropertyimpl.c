@@ -25,6 +25,7 @@
 #include <math.h>
 
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcsscornervalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagevalueprivate.h"
@@ -132,70 +133,79 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
                      GtkCssParser             *parser,
                      GFile                    *base)
 {
-  GtkCssBorderCornerRadius borders[4];
+  GtkCssValue *x[4] = { NULL, }, *y[4] = { NULL, };
   guint i;
 
-  for (i = 0; i < G_N_ELEMENTS (borders); i++)
+  for (i = 0; i < 4; i++)
     {
       if (!_gtk_css_parser_has_number (parser))
         break;
-      if (!_gtk_css_parser_read_number (parser,
-                                        &borders[i].horizontal,
-                                        GTK_CSS_POSITIVE_ONLY
-                                        | GTK_CSS_PARSE_PERCENT
-                                        | GTK_CSS_NUMBER_AS_PIXELS
-                                        | GTK_CSS_PARSE_LENGTH))
-        return FALSE;
+      x[i] = _gtk_css_number_value_parse (parser,
+                                          GTK_CSS_POSITIVE_ONLY
+                                          | GTK_CSS_PARSE_PERCENT
+                                          | GTK_CSS_NUMBER_AS_PIXELS
+                                          | GTK_CSS_PARSE_LENGTH);
+      if (x[i] == NULL)
+        goto fail;
     }
 
   if (i == 0)
     {
       _gtk_css_parser_error (parser, "Expected a number");
-      return FALSE;
+      goto fail;
     }
 
   /* The magic (i - 1) >> 1 below makes it take the correct value
    * according to spec. Feel free to check the 4 cases */
-  for (; i < G_N_ELEMENTS (borders); i++)
-    borders[i].horizontal = borders[(i - 1) >> 1].horizontal;
+  for (; i < 4; i++)
+    x[i] = _gtk_css_value_ref (x[(i - 1) >> 1]);
 
   if (_gtk_css_parser_try (parser, "/", TRUE))
     {
-      for (i = 0; i < G_N_ELEMENTS (borders); i++)
+      for (i = 0; i < 4; i++)
         {
           if (!_gtk_css_parser_has_number (parser))
             break;
-          if (!_gtk_css_parser_read_number (parser,
-                                            &borders[i].vertical,
-                                            GTK_CSS_POSITIVE_ONLY
-                                            | GTK_CSS_PARSE_PERCENT
-                                            | GTK_CSS_NUMBER_AS_PIXELS
-                                            | GTK_CSS_PARSE_LENGTH))
-            return FALSE;
+          y[i] = _gtk_css_number_value_parse (parser,
+                                              GTK_CSS_POSITIVE_ONLY
+                                              | GTK_CSS_PARSE_PERCENT
+                                              | GTK_CSS_NUMBER_AS_PIXELS
+                                              | GTK_CSS_PARSE_LENGTH);
+          if (y[i] == NULL)
+            goto fail;
         }
 
       if (i == 0)
         {
           _gtk_css_parser_error (parser, "Expected a number");
-          return FALSE;
+          goto fail;
         }
 
-      for (; i < G_N_ELEMENTS (borders); i++)
-        borders[i].vertical = borders[(i - 1) >> 1].vertical;
-
+      for (; i < 4; i++)
+        y[i] = _gtk_css_value_ref (y[(i - 1) >> 1]);
     }
   else
     {
-      for (i = 0; i < G_N_ELEMENTS (borders); i++)
-        borders[i].vertical = borders[i].horizontal;
+      for (i = 0; i < 4; i++)
+        y[i] = _gtk_css_value_ref (x[i]);
     }
 
-  for (i = 0; i < G_N_ELEMENTS (borders); i++)
+  for (i = 0; i < 4; i++)
     {
-      values[i] = _gtk_css_value_new_from_border_corner_radius (&borders[i]);
+      values[i] = _gtk_css_corner_value_new (x[i], y[i]);
     }
 
   return TRUE;
+
+fail:
+  for (i = 0; i < 4; i++)
+    {
+      if (x[i])
+        _gtk_css_value_unref (x[i]);
+      if (y[i])
+        _gtk_css_value_unref (y[i]);
+    }
+  return FALSE;
 }
 
 static gboolean 
@@ -603,19 +613,19 @@ unpack_border_radius (GtkCssShorthandProperty *shorthand,
                       GtkStateFlags            state,
                       const GValue            *value)
 {
-  GtkCssBorderCornerRadius border;
-  GValue v = G_VALUE_INIT;
+  GtkCssValue *css_value;
   guint i;
   
-  _gtk_css_number_init (&border.horizontal, g_value_get_int (value), GTK_CSS_PX);
-  border.vertical = border.horizontal;
-  g_value_init (&v, GTK_TYPE_CSS_BORDER_CORNER_RADIUS);
-  g_value_set_boxed (&v, &border);
+  css_value = _gtk_css_corner_value_new (_gtk_css_number_value_new (g_value_get_int (value), GTK_CSS_PX),
+                                         _gtk_css_number_value_new (g_value_get_int (value), GTK_CSS_PX));
 
   for (i = 0; i < 4; i++)
-    _gtk_style_property_assign (GTK_STYLE_PROPERTY (_gtk_css_shorthand_property_get_subproperty (shorthand, i)), props, state, &v);
+    _gtk_style_properties_set_property_by_property (props,
+                                                    _gtk_css_shorthand_property_get_subproperty (shorthand, i),
+                                                    state,
+                                                    css_value);
 
-  g_value_unset (&v);
+  _gtk_css_value_unref (css_value);
 }
 
 static void
@@ -624,7 +634,6 @@ pack_border_radius (GtkCssShorthandProperty *shorthand,
                     GtkStyleQueryFunc        query_func,
                     gpointer                 query_data)
 {
-  const GtkCssBorderCornerRadius *top_left;
   GtkCssStyleProperty *prop;
   GtkCssValue *v;
   int i = 0;
@@ -632,11 +641,7 @@ pack_border_radius (GtkCssShorthandProperty *shorthand,
   prop = GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("border-top-left-radius"));
   v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
   if (v)
-    {
-      top_left = _gtk_css_value_get_border_corner_radius (v);
-      if (top_left)
-        i = top_left->horizontal.value;
-    }
+    i = _gtk_css_corner_value_get_x (v, 100);
 
   g_value_init (value, G_TYPE_INT);
   g_value_set_int (value, i);
