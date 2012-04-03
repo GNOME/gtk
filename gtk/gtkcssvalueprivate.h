@@ -23,7 +23,6 @@
 #include <glib-object.h>
 #include "gtkcsstypesprivate.h"
 #include "gtksymboliccolor.h"
-#include "gtkthemingengine.h"
 
 G_BEGIN_DECLS
 
@@ -88,7 +87,6 @@ GtkCssValue *_gtk_css_value_new_from_boxed            (GType                    
 GtkCssValue *_gtk_css_value_new_from_color            (const GdkColor             *v);
 GtkCssValue *_gtk_css_value_new_take_symbolic_color   (GtkSymbolicColor           *v);
 GtkCssValue *_gtk_css_value_new_take_pattern          (cairo_pattern_t            *v);
-GtkCssValue *_gtk_css_value_new_from_theming_engine   (GtkThemingEngine           *v);
 GtkCssValue *_gtk_css_value_new_take_binding_sets     (GPtrArray                  *array);
 GtkCssValue *_gtk_css_value_new_from_background_size  (const GtkCssBackgroundSize *v);
 GtkCssValue *_gtk_css_value_new_from_background_position (const GtkCssBackgroundPosition *v);

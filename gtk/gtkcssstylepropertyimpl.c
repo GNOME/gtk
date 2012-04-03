@@ -43,6 +43,7 @@
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsseasevalueprivate.h"
+#include "gtkcssenginevalueprivate.h"
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagevalueprivate.h"
@@ -772,31 +773,23 @@ engine_parse (GtkCssStyleProperty *property,
               GtkCssParser        *parser,
               GFile               *base)
 {
-  GtkThemingEngine *engine;
-  char *str;
+  return _gtk_css_engine_value_parse (parser);
+}
 
-  if (_gtk_css_parser_try (parser, "none", TRUE))
-    return _gtk_css_value_new_from_theming_engine (gtk_theming_engine_load (NULL));
+static void
+engine_query (GtkCssStyleProperty *property,
+              const GtkCssValue   *css_value,
+              GValue              *value)
+{
+  g_value_init (value, GTK_TYPE_THEMING_ENGINE);
+  g_value_set_object (value, _gtk_css_engine_value_get_engine (css_value));
+}
 
-  str = _gtk_css_parser_try_ident (parser, TRUE);
-  if (str == NULL)
-    {
-      _gtk_css_parser_error (parser, "Expected a valid theme name");
-      return NULL;
-    }
-
-  engine = gtk_theming_engine_load (str);
-
-  if (engine == NULL)
-    {
-      _gtk_css_parser_error (parser, "Theming engine '%s' not found", str);
-      g_free (str);
-      return NULL;
-    }
-
-  g_free (str);
-
-  return _gtk_css_value_new_from_theming_engine (engine);
+static GtkCssValue *
+engine_assign (GtkCssStyleProperty *property,
+               const GValue        *value)
+{
+  return _gtk_css_engine_value_new (g_value_get_object (value));
 }
 
 static GtkCssValue *
@@ -1857,10 +1850,10 @@ _gtk_css_style_property_init_properties (void)
                                           engine_parse,
                                           NULL,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
+                                          engine_query,
+                                          engine_assign,
                                           NULL,
-                                          _gtk_css_value_new_from_theming_engine (gtk_theming_engine_load (NULL)));
+                                          _gtk_css_engine_value_new (gtk_theming_engine_load (NULL)));
   gtk_css_style_property_register        ("transition",
                                           GTK_CSS_PROPERTY_TRANSITION,
                                           GTK_TYPE_ANIMATION_DESCRIPTION,

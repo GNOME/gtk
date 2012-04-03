@@ -428,6 +428,7 @@ gtk_private_h_sources =		\
 	gtkcsscornervalueprivate.h	\
 	gtkcsscustompropertyprivate.h \
 	gtkcsseasevalueprivate.h	\
+	gtkcssenginevalueprivate.h	\
 	gtkcssenumvalueprivate.h	\
 	gtkcssimagecrossfadeprivate.h	\
 	gtkcssimagegradientprivate.h	\
@@ -638,6 +639,7 @@ gtk_base_c_sources = 		\
 	gtkcsscustomproperty.c	\
 	gtkcsseasevalue.c	\
 	gtkcssenumvalue.c	\
+	gtkcssenginevalue.c	\
 	gtkcssimage.c		\
 	gtkcssimagecrossfade.c	\
 	gtkcssimagegradient.c	\

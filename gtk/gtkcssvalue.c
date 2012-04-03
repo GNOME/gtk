@@ -257,17 +257,6 @@ _gtk_css_value_new_take_pattern (cairo_pattern_t *v)
 }
 
 GtkCssValue *
-_gtk_css_value_new_from_theming_engine (GtkThemingEngine *v)
-{
-  GtkCssValue *value;
-
-  value = gtk_css_value_new (GTK_TYPE_THEMING_ENGINE);
-  value->u.ptr = g_object_ref (v);
-
-  return value;
-}
-
-GtkCssValue *
 _gtk_css_value_new_take_binding_sets (GPtrArray *array)
 {
   GtkCssValue *value;
