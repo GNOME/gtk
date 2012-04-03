@@ -1,13 +1,9 @@
 include $(top_srcdir)/Makefile.decl
 
-if USE_WIN32
-wimp = ms-windows
-endif
-
 # the pixbuf engine needs to be ported to GtkThemingEngine
-SUBDIRS = $(wimp) # pixbuf
+SUBDIRS = # pixbuf
 
-DIST_SUBDIRS = ms-windows pixbuf
+DIST_SUBDIRS = pixbuf
 
 
 -include $(top_srcdir)/git.mk
