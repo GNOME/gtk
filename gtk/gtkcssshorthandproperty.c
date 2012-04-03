@@ -139,7 +139,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
         data[i] = _gtk_css_initial_value_new ();
     }
 
-  result = _gtk_css_array_value_new (data, shorthand->subproperties->len);
+  result = _gtk_css_array_value_new_from_array (data, shorthand->subproperties->len);
   g_free (data);
   
   return result;

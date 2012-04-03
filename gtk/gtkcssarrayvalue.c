@@ -94,18 +94,62 @@ static const GtkCssValueClass GTK_CSS_VALUE_ARRAY = {
   gtk_css_value_array_print
 };
 
+static GtkCssValue none_singleton = { &GTK_CSS_VALUE_ARRAY, 1, 0, { NULL } };
+
 GtkCssValue *
-_gtk_css_array_value_new (GtkCssValue **values,
-                          guint         n_values)
+_gtk_css_array_value_new (GtkCssValue *content)
+{
+  if (content == NULL)
+    return _gtk_css_value_ref (&none_singleton);
+
+  return _gtk_css_array_value_new_from_array (&content, 1);
+}
+
+GtkCssValue *
+_gtk_css_array_value_new_from_array (GtkCssValue **values,
+                                     guint         n_values)
 {
   GtkCssValue *result;
-  
-  g_return_val_if_fail (values != NULL || n_values == 0, NULL);
-
-  result = _gtk_css_value_alloc (&GTK_CSS_VALUE_ARRAY, sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (MAX (1, n_values) - 1));
+           
+  g_return_val_if_fail (values != NULL, NULL);
+  g_return_val_if_fail (n_values > 0, NULL);
+         
+  result = _gtk_css_value_alloc (&GTK_CSS_VALUE_ARRAY, sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (n_values - 1));
   result->n_values = n_values;
   memcpy (&result->values[0], values, sizeof (GtkCssValue *) * n_values);
+            
+  return result;
+}
 
+GtkCssValue *
+_gtk_css_array_value_parse (GtkCssParser *parser,
+                            GtkCssValue  *(* parse_func) (GtkCssParser *parser),
+                            gboolean      allow_none)
+{
+  GtkCssValue *value, *result;
+  GPtrArray *values;
+
+  if (allow_none &&
+      _gtk_css_parser_try (parser, "none", TRUE))
+    return _gtk_css_value_ref (&none_singleton);
+
+  values = g_ptr_array_new ();
+
+  do {
+    value = parse_func (parser);
+
+    if (value == NULL)
+      {
+        g_ptr_array_set_free_func (values, (GDestroyNotify) _gtk_css_value_unref);
+        g_ptr_array_free (values, TRUE);
+        return NULL;
+      }
+
+    g_ptr_array_add (values, value);
+  } while (_gtk_css_parser_try (parser, ",", TRUE));
+
+  result = _gtk_css_array_value_new_from_array ((GtkCssValue **) values->pdata, values->len);
+  g_ptr_array_free (values, TRUE);
   return result;
 }
 

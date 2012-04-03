@@ -20,12 +20,17 @@
 #ifndef __GTK_CSS_ARRAY_VALUE_PRIVATE_H__
 #define __GTK_CSS_ARRAY_VALUE_PRIVATE_H__
 
+#include "gtkcssparserprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
 
-GtkCssValue *       _gtk_css_array_value_new            (GtkCssValue          **values,
+GtkCssValue *       _gtk_css_array_value_new            (GtkCssValue           *content);
+GtkCssValue *       _gtk_css_array_value_new_from_array (GtkCssValue          **values,
                                                          guint                  n_values);
+GtkCssValue *       _gtk_css_array_value_parse          (GtkCssParser          *parser,
+                                                         GtkCssValue *          (* parse_func) (GtkCssParser *parser),
+                                                         gboolean               allow_none);
 
 GtkCssValue *       _gtk_css_array_value_get_nth        (const GtkCssValue     *value,
                                                          guint                  i);

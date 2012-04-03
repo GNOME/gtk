@@ -218,49 +218,39 @@ color_assign (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+font_family_parse_one (GtkCssParser *parser)
+{
+  char *name;
+
+  name = _gtk_css_parser_try_ident (parser, TRUE);
+  if (name)
+    {
+      GString *string = g_string_new (name);
+      g_free (name);
+      while ((name = _gtk_css_parser_try_ident (parser, TRUE)))
+        {
+          g_string_append_c (string, ' ');
+          g_string_append (string, name);
+          g_free (name);
+        }
+      name = g_string_free (string, FALSE);
+    }
+  else 
+    {
+      name = _gtk_css_parser_read_string (parser);
+      if (name == NULL)
+        return NULL;
+    }
+
+  return _gtk_css_string_value_new_take (name);
+}
+
+static GtkCssValue *
 font_family_parse (GtkCssStyleProperty *property,
                    GtkCssParser        *parser,
                    GFile               *base)
 {
-  GPtrArray *names;
-  GtkCssValue *result;
-  char *name;
-
-  /* We don't special case generic families. Pango should do
-   * that for us */
-
-  names = g_ptr_array_new ();
-
-  do {
-    name = _gtk_css_parser_try_ident (parser, TRUE);
-    if (name)
-      {
-        GString *string = g_string_new (name);
-        g_free (name);
-        while ((name = _gtk_css_parser_try_ident (parser, TRUE)))
-          {
-            g_string_append_c (string, ' ');
-            g_string_append (string, name);
-            g_free (name);
-          }
-        name = g_string_free (string, FALSE);
-      }
-    else 
-      {
-        name = _gtk_css_parser_read_string (parser);
-        if (name == NULL)
-          {
-            g_ptr_array_free (names, TRUE);
-            return FALSE;
-          }
-      }
-
-    g_ptr_array_add (names, _gtk_css_string_value_new_take (name));
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
-
-  result = _gtk_css_array_value_new ((GtkCssValue **) names->pdata, names->len);
-  g_ptr_array_free (names, TRUE);
-  return result;
+  return _gtk_css_array_value_parse (parser, font_family_parse_one, FALSE);
 }
 
 static void
@@ -300,7 +290,7 @@ font_family_assign (GtkCssStyleProperty *property,
       g_ptr_array_add (array, _gtk_css_string_value_new (*names));
     }
 
-  result = _gtk_css_array_value_new ((GtkCssValue **) array->pdata, array->len);
+  result = _gtk_css_array_value_new_from_array ((GtkCssValue **) array->pdata, array->len);
   g_ptr_array_free (array, TRUE);
   return result;
 }
@@ -736,34 +726,33 @@ border_image_width_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+transition_property_parse_one (GtkCssParser *parser)
+{
+  GtkCssValue *value;
+
+  value = _gtk_css_ident_value_try_parse (parser);
+
+  if (value == NULL)
+    {
+      _gtk_css_parser_error (parser, "Expected an identifier");
+      return NULL;
+    }
+
+  return value;
+}
+
+static GtkCssValue *
 transition_property_parse (GtkCssStyleProperty *property,
                            GtkCssParser        *parser,
                            GFile               *base)
 {
-  GPtrArray *names;
-  GtkCssValue *result, *value;
+  return _gtk_css_array_value_parse (parser, transition_property_parse_one, FALSE);
+}
 
-  if (_gtk_css_parser_try (parser, "none", TRUE))
-    return _gtk_css_array_value_new (NULL, 0);
-
-  names = g_ptr_array_new ();
-
-  do {
-    value = _gtk_css_ident_value_try_parse (parser);
-
-    if (value == NULL)
-      {
-        _gtk_css_parser_error (parser, "Expected an identifier");
-        g_ptr_array_free (names, TRUE);
-        return NULL;
-      }
-
-    g_ptr_array_add (names, value);
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
-
-  result = _gtk_css_array_value_new ((GtkCssValue **) names->pdata, names->len);
-  g_ptr_array_free (names, TRUE);
-  return result;
+static GtkCssValue *
+transition_time_parse_one (GtkCssParser *parser)
+{
+  return _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
 }
 
 static GtkCssValue *
@@ -771,26 +760,7 @@ transition_time_parse (GtkCssStyleProperty *property,
                        GtkCssParser        *parser,
                        GFile               *base)
 {
-  GPtrArray *times;
-  GtkCssValue *result, *next;
-
-  times = g_ptr_array_new ();
-
-  do {
-    next = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
-
-    if (next == NULL)
-      {
-        g_ptr_array_free (times, TRUE);
-        return NULL;
-      }
-
-    g_ptr_array_add (times, next);
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
-
-  result = _gtk_css_array_value_new ((GtkCssValue **) times->pdata, times->len);
-  g_ptr_array_free (times, TRUE);
-  return result;
+  return _gtk_css_array_value_parse (parser, transition_time_parse_one, FALSE);
 }
 
 static GtkCssValue *
@@ -798,26 +768,7 @@ transition_timing_function_parse (GtkCssStyleProperty *property,
                                   GtkCssParser        *parser,
                                   GFile               *base)
 {
-  GPtrArray *funcs;
-  GtkCssValue *result, *next;
-
-  funcs = g_ptr_array_new ();
-
-  do {
-    next = _gtk_css_ease_value_parse (parser);
-
-    if (next == NULL)
-      {
-        g_ptr_array_free (funcs, TRUE);
-        return NULL;
-      }
-
-    g_ptr_array_add (funcs, next);
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
-
-  result = _gtk_css_array_value_new ((GtkCssValue **) funcs->pdata, funcs->len);
-  g_ptr_array_free (funcs, TRUE);
-  return result;
+  return _gtk_css_array_value_parse (parser, _gtk_css_ease_value_parse, FALSE);
 }
 
 static GtkCssValue *
@@ -1281,7 +1232,6 @@ gtk_symbolic_color_new_rgba (double red,
 void
 _gtk_css_style_property_init_properties (void)
 {
-  GtkCssValue *value;
   GtkCssBackgroundSize default_background_size = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), FALSE, FALSE };
   GtkCssBackgroundPosition default_background_position = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PERCENT), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PERCENT)};
   GtkCssBorderCornerRadius no_corner_radius = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX) };
@@ -1332,7 +1282,6 @@ _gtk_css_style_property_init_properties (void)
                                           _gtk_css_value_new_take_symbolic_color (
                                             gtk_symbolic_color_new_rgba (0, 0, 0, 0)));
 
-  value = _gtk_css_string_value_new ("Sans");
   gtk_css_style_property_register        ("font-family",
                                           GTK_CSS_PROPERTY_FONT_FAMILY,
                                           G_TYPE_STRV,
@@ -1343,7 +1292,7 @@ _gtk_css_style_property_init_properties (void)
                                           font_family_query,
                                           font_family_assign,
                                           NULL,
-                                          _gtk_css_array_value_new (&value, 1));
+                                          _gtk_css_array_value_new (_gtk_css_string_value_new ("Sans")));
   gtk_css_style_property_register        ("font-style",
                                           GTK_CSS_PROPERTY_FONT_STYLE,
                                           PANGO_TYPE_STYLE,
@@ -1856,7 +1805,6 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           _gtk_css_value_new_from_boxed (GTK_TYPE_BORDER, NULL));
 
-  value = _gtk_css_ident_value_new ("all");
   gtk_css_style_property_register        ("transition-property",
                                           GTK_CSS_PROPERTY_TRANSITION_PROPERTY,
                                           G_TYPE_NONE,
@@ -1867,8 +1815,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_array_value_new (&value, 1));
-  value = _gtk_css_number_value_new (0, GTK_CSS_S);
+                                          _gtk_css_array_value_new (_gtk_css_ident_value_new ("all")));
   gtk_css_style_property_register        ("transition-duration",
                                           GTK_CSS_PROPERTY_TRANSITION_DURATION,
                                           G_TYPE_NONE,
@@ -1879,8 +1826,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_array_value_new (&value, 1));
-  value = _gtk_css_ease_value_new_cubic_bezier (0.25, 0.1, 0.25, 1.0);
+                                          _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
   gtk_css_style_property_register        ("transition-timing-function",
                                           GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION,
                                           G_TYPE_NONE,
@@ -1891,7 +1837,8 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_array_value_new (&value, 1));
+                                          _gtk_css_array_value_new (
+                                            _gtk_css_ease_value_new_cubic_bezier (0.25, 0.1, 0.25, 1.0)));
   gtk_css_style_property_register        ("transition-delay",
                                           GTK_CSS_PROPERTY_TRANSITION_DELAY,
                                           G_TYPE_NONE,
@@ -1902,7 +1849,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_array_value_new (&value, 1));
+                                          _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
 
   gtk_css_style_property_register        ("engine",
                                           GTK_CSS_PROPERTY_ENGINE,

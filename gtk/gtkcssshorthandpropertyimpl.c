@@ -434,8 +434,7 @@ parse_font (GtkCssShorthandProperty  *shorthand,
 
   if (mask & PANGO_FONT_MASK_FAMILY)
     {
-      GtkCssValue *value = _gtk_css_string_value_new (pango_font_description_get_family (desc));
-      values[0] = _gtk_css_array_value_new (&value, 1);
+      values[0] = _gtk_css_array_value_new (_gtk_css_string_value_new (pango_font_description_get_family (desc)));
     }
   if (mask & PANGO_FONT_MASK_STYLE)
     {
