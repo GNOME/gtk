@@ -21,6 +21,7 @@
 
 #include "gtkcssshadowvalueprivate.h"
 
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtksymboliccolorprivate.h"
@@ -31,10 +32,10 @@ struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
   guint inset :1;
 
-  gint16 hoffset;
-  gint16 voffset;
-  gint16 radius;
-  gint16 spread;
+  GtkCssValue *hoffset;
+  GtkCssValue *voffset;
+  GtkCssValue *radius;
+  GtkCssValue *spread;
 
   GtkCssValue *color;
 };
@@ -42,6 +43,10 @@ struct _GtkCssValue {
 static void
 gtk_css_value_shadow_free (GtkCssValue *shadow)
 {
+  _gtk_css_value_unref (shadow->hoffset);
+  _gtk_css_value_unref (shadow->voffset);
+  _gtk_css_value_unref (shadow->radius);
+  _gtk_css_value_unref (shadow->spread);
   _gtk_css_value_unref (shadow->color);
 
   g_slice_free (GtkCssValue, shadow);
@@ -67,20 +72,28 @@ static void
 gtk_css_value_shadow_print (const GtkCssValue *shadow,
                             GString           *string)
 {
-  if (shadow->inset)
-    g_string_append (string, "inset ");
+  _gtk_css_value_print (shadow->hoffset, string);
+  g_string_append_c (string, ' ');
+  _gtk_css_value_print (shadow->voffset, string);
+  g_string_append_c (string, ' ');
+  if (_gtk_css_number_value_get (shadow->radius, 100) != 0 ||
+      _gtk_css_number_value_get (shadow->spread, 100) != 0)
+    {
+      _gtk_css_value_print (shadow->radius, string);
+      g_string_append_c (string, ' ');
+    }
 
-  g_string_append_printf (string, "%d %d ",
-                          (gint) shadow->hoffset,
-                          (gint) shadow->voffset);
-
-  if (shadow->radius != 0)
-    g_string_append_printf (string, "%d ", (gint) shadow->radius);
-
-  if (shadow->spread != 0)
-    g_string_append_printf (string, "%d ", (gint) shadow->spread);
+  if (_gtk_css_number_value_get (shadow->spread, 100) != 0)
+    {
+      _gtk_css_value_print (shadow->spread, string);
+      g_string_append_c (string, ' ');
+    }
 
   _gtk_css_value_print (shadow->color, string);
+
+  if (shadow->inset)
+    g_string_append (string, " inset");
+
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_SHADOW = {
@@ -91,11 +104,11 @@ static const GtkCssValueClass GTK_CSS_VALUE_SHADOW = {
 };
 
 static GtkCssValue *
-gtk_css_shadow_value_new (gdouble hoffset,
-                          gdouble voffset,
-                          gdouble radius,
-                          gdouble spread,
-                          gboolean inset,
+gtk_css_shadow_value_new (GtkCssValue *hoffset,
+                          GtkCssValue *voffset,
+                          GtkCssValue *radius,
+                          GtkCssValue *spread,
+                          gboolean     inset,
                           GtkCssValue *color)
 {
   GtkCssValue *retval;
@@ -112,72 +125,119 @@ gtk_css_shadow_value_new (gdouble hoffset,
   return retval;
 }                  
 
+static gboolean
+value_is_done_parsing (GtkCssParser *parser)
+{
+  return _gtk_css_parser_is_eof (parser) ||
+         _gtk_css_parser_begins_with (parser, ',') ||
+         _gtk_css_parser_begins_with (parser, ';') ||
+         _gtk_css_parser_begins_with (parser, '}');
+}
+
 GtkCssValue *
 _gtk_css_shadow_value_parse (GtkCssParser *parser)
 {
-  gboolean have_inset, have_color, have_lengths;
-  gdouble hoffset, voffset, blur, spread;
-  GtkSymbolicColor *color;
+  enum {
+    HOFFSET,
+    VOFFSET,
+    RADIUS,
+    SPREAD,
+    COLOR,
+    N_VALUES
+  };
+  GtkCssValue *values[N_VALUES] = { NULL, };
+  gboolean inset;
   guint i;
 
-  have_inset = have_lengths = have_color = FALSE;
+  inset = _gtk_css_parser_try (parser, "inset", TRUE);
 
-  for (i = 0; i < 3; i++)
+  do
+  {
+    if (values[HOFFSET] == NULL &&
+         _gtk_css_parser_has_number (parser))
+      {
+        values[HOFFSET] = _gtk_css_number_value_parse (parser,
+                                                       GTK_CSS_PARSE_LENGTH
+                                                       | GTK_CSS_NUMBER_AS_PIXELS);
+        if (values[HOFFSET] == NULL)
+          goto fail;
+
+        values[VOFFSET] = _gtk_css_number_value_parse (parser,
+                                                       GTK_CSS_PARSE_LENGTH
+                                                       | GTK_CSS_NUMBER_AS_PIXELS);
+        if (values[VOFFSET] == NULL)
+          goto fail;
+
+        if (_gtk_css_parser_has_number (parser))
+          {
+            values[RADIUS] = _gtk_css_number_value_parse (parser,
+                                                          GTK_CSS_PARSE_LENGTH
+                                                          | GTK_CSS_POSITIVE_ONLY
+                                                          | GTK_CSS_NUMBER_AS_PIXELS);
+            if (values[RADIUS] == NULL)
+              goto fail;
+          }
+        else
+          values[RADIUS] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
+                                                        
+        if (_gtk_css_parser_has_number (parser))
+          {
+            values[SPREAD] = _gtk_css_number_value_parse (parser,
+                                                          GTK_CSS_PARSE_LENGTH
+                                                          | GTK_CSS_NUMBER_AS_PIXELS);
+            if (values[SPREAD] == NULL)
+              goto fail;
+          }
+        else
+          values[SPREAD] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
+      }
+    else if (!inset && _gtk_css_parser_try (parser, "inset", TRUE))
+      {
+        if (values[HOFFSET] == NULL)
+          goto fail;
+        inset = TRUE;
+        break;
+      }
+    else if (values[COLOR] == NULL)
+      {
+        GtkSymbolicColor *symbolic;
+
+        if (_gtk_css_parser_try (parser, "currentcolor", TRUE))
+          symbolic = gtk_symbolic_color_ref (_gtk_symbolic_color_get_current_color ());
+        else
+          symbolic = _gtk_css_parser_read_symbolic_color (parser);
+        if (symbolic == NULL)
+          goto fail;
+
+        values[COLOR] = _gtk_css_value_new_take_symbolic_color (symbolic);
+      }
+    else
+      {
+        /* We parsed everything and there's still stuff left?
+         * Pretend we didn't notice and let the normal code produce
+         * a 'junk at end of value' error */
+        goto fail;
+      }
+  }
+  while (values[HOFFSET] == NULL || !value_is_done_parsing (parser));
+
+  if (values[COLOR] == NULL)
+    values[COLOR] = _gtk_css_value_new_take_symbolic_color (
+                      gtk_symbolic_color_ref (
+                        _gtk_symbolic_color_get_current_color ()));
+
+  return gtk_css_shadow_value_new (values[HOFFSET], values[VOFFSET],
+                                   values[RADIUS], values[SPREAD],
+                                   inset, values[COLOR]);
+
+fail:
+  for (i = 0; i < N_VALUES; i++)
     {
-      if (!have_inset && 
-          _gtk_css_parser_try (parser, "inset", TRUE))
-        {
-          have_inset = TRUE;
-          continue;
-        }
-        
-      if (!have_lengths &&
-          _gtk_css_parser_try_double (parser, &hoffset))
-        {
-          have_lengths = TRUE;
-
-          if (!_gtk_css_parser_try_double (parser, &voffset))
-            {
-              _gtk_css_parser_error (parser, "Horizontal and vertical offsets are required");
-              if (have_color)
-                gtk_symbolic_color_unref (color);
-              return NULL;
-            }
-
-          if (!_gtk_css_parser_try_double (parser, &blur))
-            blur = 0;
-
-          if (!_gtk_css_parser_try_double (parser, &spread))
-            spread = 0;
-
-          continue;
-        }
-
-      if (!have_color)
-        {
-          have_color = TRUE;
-
-          /* XXX: the color is optional and UA-defined if it's missing,
-           * but it doesn't really make sense for us...
-           */
-          color = _gtk_css_parser_read_symbolic_color (parser);
-
-          if (color == NULL)
-            return NULL;
-        }
+      if (values[i])
+        _gtk_css_value_unref (values[i]);
     }
 
-  if (!have_color || !have_lengths)
-    {
-      _gtk_css_parser_error (parser, "Must specify at least color and offsets");
-      if (have_color)
-        gtk_symbolic_color_unref (color);
-      return NULL;
-    }
-
-  return gtk_css_shadow_value_new (hoffset, voffset,
-                                   blur, spread, have_inset,
-                                   _gtk_css_value_new_take_symbolic_color (color));
+  return NULL;
 }
 
 GtkCssValue *
@@ -193,8 +253,11 @@ _gtk_css_shadow_value_compute (GtkCssValue     *shadow,
                                                      context,
                                                      FALSE);
 
-  return gtk_css_shadow_value_new (shadow->hoffset, shadow->voffset,
-                                   shadow->radius, shadow->spread, shadow->inset,
+  return gtk_css_shadow_value_new (_gtk_css_number_value_compute (shadow->hoffset, context),
+                                   _gtk_css_number_value_compute (shadow->voffset, context),
+                                   _gtk_css_number_value_compute (shadow->radius, context),
+                                   _gtk_css_number_value_compute (shadow->spread, context),
+                                   shadow->inset,
                                    color);
 }
 
@@ -210,11 +273,15 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
 
   cairo_save (cr);
 
-  cairo_rel_move_to (cr, shadow->hoffset, shadow->voffset);
+  cairo_rel_move_to (cr, 
+                     _gtk_css_number_value_get (shadow->hoffset, 0),
+                     _gtk_css_number_value_get (shadow->voffset, 0));
   gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
   _gtk_pango_fill_layout (cr, layout);
 
-  cairo_rel_move_to (cr, -shadow->hoffset, -shadow->voffset);
+  cairo_rel_move_to (cr,
+                     - _gtk_css_number_value_get (shadow->hoffset, 0),
+                     - _gtk_css_number_value_get (shadow->voffset, 0));
   cairo_restore (cr);
 }
 
@@ -230,7 +297,9 @@ _gtk_css_shadow_value_paint_icon (const GtkCssValue *shadow,
   pattern = cairo_pattern_reference (cairo_get_source (cr));
   gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
 
-  cairo_translate (cr, shadow->hoffset, shadow->voffset);
+  cairo_translate (cr,
+                   _gtk_css_number_value_get (shadow->hoffset, 0),
+                   _gtk_css_number_value_get (shadow->voffset, 0));
   cairo_mask (cr, pattern);
 
   cairo_restore (cr);
@@ -247,7 +316,9 @@ _gtk_css_shadow_value_paint_spinner (const GtkCssValue *shadow,
 
   cairo_save (cr);
 
-  cairo_translate (cr, shadow->hoffset, shadow->voffset);
+  cairo_translate (cr,
+                   _gtk_css_number_value_get (shadow->hoffset, 0),
+                   _gtk_css_number_value_get (shadow->voffset, 0));
   _gtk_theming_engine_paint_spinner (cr,
                                      radius, progress,
                                      _gtk_css_rgba_value_get_rgba (shadow->color));
@@ -261,6 +332,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
                                  const GtkRoundedBox *padding_box)
 {
   GtkRoundedBox box;
+  double spread;
 
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
@@ -271,10 +343,11 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
   cairo_clip (cr);
 
   box = *padding_box;
-  _gtk_rounded_box_move (&box, shadow->hoffset, shadow->voffset);
-  _gtk_rounded_box_shrink (&box,
-                           shadow->spread, shadow->spread,
-                           shadow->spread, shadow->spread);
+  _gtk_rounded_box_move (&box,
+                         _gtk_css_number_value_get (shadow->hoffset, 0),
+                         _gtk_css_number_value_get (shadow->voffset, 0));
+  spread = _gtk_css_number_value_get (shadow->spread, 0);
+  _gtk_rounded_box_shrink (&box, spread, spread, spread, spread);
 
   _gtk_rounded_box_path (&box, cr);
   _gtk_rounded_box_clip_path (padding_box, cr);
