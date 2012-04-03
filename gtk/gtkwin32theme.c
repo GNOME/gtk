@@ -31,6 +31,7 @@
 
 static HINSTANCE uxtheme_dll = NULL;
 static gboolean use_xp_theme = FALSE;
+static OSVERSIONINFO os_version;
 static HTHEME needs_alpha_fixup1 = NULL;
 static HTHEME needs_alpha_fixup2 = NULL;
 static HTHEME needs_alpha_fixup3 = NULL;
@@ -84,7 +85,6 @@ static GHashTable *hthemes_by_class = NULL;
 static void
 _gtk_win32_theme_init (void)
 {
-  OSVERSIONINFO version;
   char *buf;
   char dummy;
   int n, k;
@@ -141,9 +141,10 @@ _gtk_win32_theme_init (void)
 
   hthemes_by_class = g_hash_table_new (g_str_hash, g_str_equal);
 
-  memset (&version, 0, sizeof (version));
-  version.dwOSVersionInfoSize = sizeof (version);
-  if (GetVersionEx (&version) && version.dwMajorVersion == 5)
+  memset (&os_version, 0, sizeof (os_version));
+  os_version.dwOSVersionInfoSize = sizeof (os_version);
+  GetVersionEx (&os_version);
+  if (os_version.dwMajorVersion == 5)
     {
       needs_alpha_fixup1 = _gtk_win32_lookup_htheme_by_classname ("scrollbar");
       needs_alpha_fixup2 = _gtk_win32_lookup_htheme_by_classname ("toolbar");
@@ -444,3 +445,16 @@ _gtk_win32_theme_color_resolve (const char *theme_class,
 #endif
   return TRUE;
 }
+
+const char *
+_gtk_win32_theme_get_default (void)
+{
+#ifdef G_OS_WIN32
+  _gtk_win32_theme_init ();
+  
+  if (use_xp_theme)
+    return (os_version.dwMajorVersion >= 6) ? "gtk-win32" : "gtk-win32-xp";
+#endif
+  return "gtk-win32-classic";
+}
+

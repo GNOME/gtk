@@ -45,10 +45,6 @@
 #include "quartz/gdkquartz.h"
 #endif
 
-#ifdef GDK_WINDOWING_WIN32
-#include <windows.h>
-#endif
-
 #undef GDK_DEPRECATED
 #undef GDK_DEPRECATED_FOR
 #define GDK_DEPRECATED
@@ -331,14 +327,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   guint result;
-#ifdef G_OS_WIN32
-  OSVERSIONINFO version;
-  BOOL version_res;
-
-  memset (&version, 0, sizeof (version));
-  version.dwOSVersionInfoSize = sizeof (version);
-  version_res = GetVersionEx (&version);
-#endif
 
   gobject_class->finalize = gtk_settings_finalize;
   gobject_class->get_property = gtk_settings_get_property;
@@ -420,9 +408,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Theme Name"),
                                                                    P_("Name of theme to load"),
 #ifdef G_OS_WIN32
-								  (version_res && version.dwMajorVersion >= 6) ?
-								  "gtk-win32" :
-								  "gtk-win32-xp",
+								  _gtk_win32_theme_get_default (),
 #else
                                                                   "Raleigh",
 #endif

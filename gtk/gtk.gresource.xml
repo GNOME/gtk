@@ -5,6 +5,7 @@
     <file>gtk-win32.css</file>
     <file>gtk-win32-xp.css</file>
     <file>gtk-win32-base.css</file>
+    <file>gtk-win32-classic.css</file>
     <file alias="cursor/dnd-ask.png">cursor_dnd_ask.png</file>
     <file alias="cursor/dnd-link.png">cursor_dnd_link.png</file>
     <file alias="cursor/dnd-none.png">cursor_dnd_none.png</file>
