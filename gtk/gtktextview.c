@@ -4804,8 +4804,6 @@ gtk_text_view_paint (GtkWidget      *widget,
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
-  GList *child_exposes;
-  GList *tmp_list;
   
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4833,33 +4831,14 @@ gtk_text_view_paint (GtkWidget      *widget,
           area->width, area->height);
 #endif
 
-  child_exposes = NULL;
-
   cairo_save (cr);
   cairo_translate (cr, -priv->xoffset, -priv->yoffset);
 
   gtk_text_layout_draw (priv->layout,
                         widget,
-                        cr,
-                        &child_exposes);
+                        cr);
 
   cairo_restore (cr);
-
-  tmp_list = child_exposes;
-  while (tmp_list != NULL)
-    {
-      GtkWidget *child = tmp_list->data;
-  
-      gtk_container_propagate_draw (GTK_CONTAINER (text_view),
-                                    child,
-                                    cr);
-
-      g_object_unref (child);
-      
-      tmp_list = tmp_list->next;
-    }
-
-  g_list_free (child_exposes);
 }
 
 static gboolean
@@ -4894,10 +4873,9 @@ gtk_text_view_draw (GtkWidget *widget,
       /* propagate_draw checks that event->window matches
        * child->window
        */
-      if (!vc->anchor)
-        gtk_container_propagate_draw (GTK_CONTAINER (widget),
-                                      vc->widget,
-                                      cr);
+      gtk_container_propagate_draw (GTK_CONTAINER (widget),
+                                    vc->widget,
+                                    cr);
       
       tmp_list = tmp_list->next;
     }

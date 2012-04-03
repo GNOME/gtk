@@ -108,7 +108,6 @@ struct _GtkTextRenderer
   cairo_t *cr;
   
   GdkRGBA *error_color;	/* Error underline color for this widget */
-  GList *widgets;      	/* widgets encountered when drawing */
 
   GdkRGBA rgba[4];
   guint8  rgba_set[4];
@@ -423,12 +422,7 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
     }
   else if (GTK_IS_WIDGET (attr->data))
     {
-      GtkWidget *widget;
-      
-      widget = GTK_WIDGET (attr->data);
-
-      text_renderer->widgets = g_list_prepend (text_renderer->widgets,
-					       g_object_ref (widget));
+      /* nothing to do */
     }
   else
     g_assert_not_reached (); /* not a pixbuf or widget */
@@ -497,11 +491,10 @@ text_renderer_begin (GtkTextRenderer *text_renderer,
 
 /* Returns a GSList of (referenced) widgets encountered while drawing.
  */
-static GList *
+static void
 text_renderer_end (GtkTextRenderer *text_renderer)
 {
   GtkStyleContext *context;
-  GList *widgets = text_renderer->widgets;
 
   cairo_restore (text_renderer->cr);
 
@@ -512,15 +505,11 @@ text_renderer_end (GtkTextRenderer *text_renderer)
   text_renderer->widget = NULL;
   text_renderer->cr = NULL;
 
-  text_renderer->widgets = NULL;
-
   if (text_renderer->error_color)
     {
       gdk_rgba_free (text_renderer->error_color);
       text_renderer->error_color = NULL;
     }
-
-  return widgets;
 }
 
 static cairo_region_t *
@@ -816,8 +805,7 @@ get_text_renderer (void)
 void
 gtk_text_layout_draw (GtkTextLayout *layout,
                       GtkWidget *widget,
-                      cairo_t *cr,
-                      GList **widgets)
+                      cairo_t *cr)
 {
   GtkStyleContext *context;
   gint offset_y;
@@ -826,7 +814,6 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   gboolean have_selection;
   GSList *line_list;
   GSList *tmp_list;
-  GList *tmp_widgets;
   GdkRectangle clip;
 
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
@@ -931,11 +918,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 
   gtk_text_layout_wrap_loop_end (layout);
 
-  tmp_widgets = text_renderer_end (text_renderer);
-  if (widgets)
-    *widgets = tmp_widgets;
-  else
-    g_list_free_full (tmp_widgets, g_object_unref);
+  text_renderer_end (text_renderer);
 
   g_slist_free (line_list);
 }
