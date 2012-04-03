@@ -443,6 +443,7 @@ gtk_private_h_sources =		\
 	gtkcssmatcherprivate.h	\
 	gtkcssnumbervalueprivate.h	\
 	gtkcssparserprivate.h	\
+	gtkcsspositionvalueprivate.h	\
 	gtkcssproviderprivate.h	\
 	gtkcssrgbavalueprivate.h	\
 	gtkcsssectionprivate.h 	\
@@ -653,6 +654,7 @@ gtk_base_c_sources = 		\
 	gtkcssmatcher.c		\
 	gtkcssnumbervalue.c	\
 	gtkcssparser.c		\
+	gtkcsspositionvalue.c	\
 	gtkcssprovider.c	\
 	gtkcssrgbavalue.c	\
 	gtkcsssection.c 	\

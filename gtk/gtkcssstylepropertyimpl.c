@@ -49,6 +49,7 @@
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcsspositionvalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
@@ -1037,152 +1038,7 @@ background_position_parse (GtkCssStyleProperty *property,
 			   GtkCssParser        *parser,
 			   GFile               *base)
 {
-  static const struct {
-    const char *name;
-    guint       percentage;
-    gboolean    horizontal;
-    gboolean    vertical;
-  } names[] = {
-    { "left",     0, TRUE,  FALSE },
-    { "right",  100, TRUE,  FALSE },
-    { "center",  50, TRUE,  TRUE  },
-    { "top",      0, FALSE, TRUE  },
-    { "bottom", 100, FALSE, TRUE  },
-    { NULL    ,   0, TRUE,  FALSE }, /* used for numbers */
-    { NULL    ,  50, TRUE,  TRUE  }  /* used for no value */
-  };
-  GtkCssBackgroundPosition pos;
-  GtkCssNumber *missing;
-  guint first, second;
-
-  for (first = 0; names[first].name != NULL; first++)
-    {
-      if (_gtk_css_parser_try (parser, names[first].name, TRUE))
-        {
-          if (names[first].horizontal)
-            {
-	      _gtk_css_number_init (&pos.x, names[first].percentage, GTK_CSS_PERCENT);
-              missing = &pos.y;
-            }
-          else
-            {
-	      _gtk_css_number_init (&pos.y, names[first].percentage, GTK_CSS_PERCENT);
-              missing = &pos.x;
-            }
-          break;
-        }
-    }
-  if (names[first].name == NULL)
-    {
-      missing = &pos.y;
-      if (!_gtk_css_parser_read_number (parser,
-					&pos.x,
-					GTK_CSS_PARSE_PERCENT
-					| GTK_CSS_PARSE_LENGTH))
-	return NULL;
-    }
-
-  for (second = 0; names[second].name != NULL; second++)
-    {
-      if (_gtk_css_parser_try (parser, names[second].name, TRUE))
-        {
-	  _gtk_css_number_init (missing, names[second].percentage, GTK_CSS_PERCENT);
-          break;
-        }
-    }
-
-  if (names[second].name == NULL)
-    {
-      if (_gtk_css_parser_has_number (parser))
-        {
-          if (missing != &pos.y)
-            {
-              _gtk_css_parser_error (parser, "Invalid combination of values");
-              return NULL;
-            }
-          if (!_gtk_css_parser_read_number (parser,
-                                            missing,
-                                            GTK_CSS_PARSE_PERCENT
-                                            | GTK_CSS_PARSE_LENGTH))
-	    return NULL;
-        }
-      else
-        {
-          second++;
-          _gtk_css_number_init (missing, 50, GTK_CSS_PERCENT);
-        }
-    }
-  else
-    {
-      if ((names[first].horizontal && !names[second].vertical) ||
-          (!names[first].horizontal && !names[second].horizontal))
-        {
-          _gtk_css_parser_error (parser, "Invalid combination of values");
-          return NULL;
-        }
-    }
-
-  return _gtk_css_value_new_from_background_position (&pos);
-}
-
-static void
-background_position_print (GtkCssStyleProperty *property,
-			   const GtkCssValue   *value,
-			   GString             *string)
-{
-  const GtkCssBackgroundPosition *pos = _gtk_css_value_get_background_position (value);
-  static const GtkCssNumber center = GTK_CSS_NUMBER_INIT (50, GTK_CSS_PERCENT);
-  static const struct {
-    const char *x_name;
-    const char *y_name;
-    GtkCssNumber number;
-  } values[] = { 
-    { "left",   "top",    GTK_CSS_NUMBER_INIT (0,   GTK_CSS_PERCENT) },
-    { "right",  "bottom", GTK_CSS_NUMBER_INIT (100, GTK_CSS_PERCENT) }
-  };
-  guint i;
-
-  if (_gtk_css_number_equal (&pos->x, &center))
-    {
-      if (_gtk_css_number_equal (&pos->y, &center))
-        {
-          g_string_append (string, "center");
-          return;
-        }
-    }
-  else
-    {
-      for (i = 0; i < G_N_ELEMENTS (values); i++)
-        {
-          if (_gtk_css_number_equal (&pos->x, &values[i].number))
-            {
-              g_string_append (string, values[i].x_name);
-              break;
-            }
-        }
-      if (i == G_N_ELEMENTS (values))
-        _gtk_css_number_print (&pos->x, string);
-
-      if (_gtk_css_number_equal (&pos->y, &center))
-        return;
-
-      g_string_append_c (string, ' ');
-    }
-
-  for (i = 0; i < G_N_ELEMENTS (values); i++)
-    {
-      if (_gtk_css_number_equal (&pos->y, &values[i].number))
-        {
-          g_string_append (string, values[i].y_name);
-          break;
-        }
-    }
-  if (i == G_N_ELEMENTS (values))
-    {
-      if (_gtk_css_number_equal (&pos->x, &center))
-        g_string_append (string, "center ");
-      _gtk_css_number_print (&pos->y, string);
-    }
+  return _gtk_css_position_value_parse (parser);
 }
 
 static GtkCssValue *
@@ -1190,19 +1046,7 @@ background_position_compute (GtkCssStyleProperty    *property,
 			     GtkStyleContext        *context,
 			     GtkCssValue            *specified)
 {
-  const GtkCssBackgroundPosition *spos = _gtk_css_value_get_background_position (specified);
-  GtkCssBackgroundPosition cpos;
-  gboolean changed;
-
-  changed = _gtk_css_number_compute (&cpos.x,
-				     &spos->x,
-				     context);
-  changed |= _gtk_css_number_compute (&cpos.y,
-				      &spos->y,
-				      context);
-  if (changed)
-    return _gtk_css_value_new_from_background_position (&cpos);
-  return _gtk_css_value_ref (specified);
+  return _gtk_css_position_value_compute (specified, context);
 }
 
 /*** REGISTRATION ***/
@@ -1222,7 +1066,6 @@ void
 _gtk_css_style_property_init_properties (void)
 {
   GtkCssBackgroundSize default_background_size = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), FALSE, FALSE };
-  GtkCssBackgroundPosition default_background_position = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PERCENT), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PERCENT)};
   GtkBorder border_of_ones = { 1, 1, 1, 1 };
   GtkCssBorderImageRepeat border_image_repeat = { GTK_CSS_REPEAT_STYLE_STRETCH, GTK_CSS_REPEAT_STYLE_STRETCH };
 
@@ -1650,14 +1493,15 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("background-position",
                                           GTK_CSS_PROPERTY_BACKGROUND_POSITION,
                                           G_TYPE_NONE,
-                                          0,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
                                           background_position_parse,
-                                          background_position_print,
+                                          NULL,
                                           background_position_compute,
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_value_new_from_background_position (&default_background_position));
+                                          _gtk_css_position_value_new (_gtk_css_number_value_new (0, GTK_CSS_PERCENT),
+                                                                       _gtk_css_number_value_new (0, GTK_CSS_PERCENT)));
 
   gtk_css_style_property_register        ("border-top-color",
                                           GTK_CSS_PROPERTY_BORDER_TOP_COLOR,

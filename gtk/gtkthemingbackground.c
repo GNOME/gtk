@@ -27,6 +27,7 @@
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
+#include "gtkcsspositionvalueprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkthemingengineprivate.h"
 
@@ -161,12 +162,12 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
     {
       GtkCssBackgroundRepeat hrepeat, vrepeat;
       const GtkCssBackgroundSize *size;
-      const GtkCssBackgroundPosition *pos;
+      const GtkCssValue *pos;
       double image_width, image_height;
       double width, height;
 
       size = _gtk_css_value_get_background_size (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE));
-      pos = _gtk_css_value_get_background_position (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION));
+      pos = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION);
       gtk_style_context_get (bg->context, bg->flags,
                              "background-repeat", &hrepeat,
                              NULL);
@@ -201,8 +202,8 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       if (hrepeat == GTK_CSS_BACKGROUND_NO_REPEAT && vrepeat == GTK_CSS_BACKGROUND_NO_REPEAT)
         {
 	  cairo_translate (cr,
-			   _gtk_css_number_get (&pos->x, bg->image_rect.width - image_width),
-			   _gtk_css_number_get (&pos->y, bg->image_rect.height - image_height));
+			   _gtk_css_position_value_get_x (pos, width - image_width),
+			   _gtk_css_position_value_get_y (pos, height - image_height));
           /* shortcut for normal case */
           _gtk_css_image_draw (bg->image, cr, image_width, image_height);
         }
@@ -280,8 +281,8 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
           cairo_destroy (cr2);
 
           cairo_set_source_surface (cr, surface,
-				    _gtk_css_number_get (&pos->x, bg->image_rect.width - image_width),
-				    _gtk_css_number_get (&pos->y, bg->image_rect.height - image_height));
+                                    _gtk_css_position_value_get_x (pos, width - image_width),
+                                    _gtk_css_position_value_get_y (pos, height - image_height));
           cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
           cairo_surface_destroy (surface);
 
