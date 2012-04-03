@@ -1370,6 +1370,29 @@ _gdk_device_add_axis (GdkDevice   *device,
 }
 
 void
+_gdk_device_get_axis_info (GdkDevice   *device,
+			   guint        index_,
+			   GdkAtom      *label_atom,
+			   GdkAxisUse   *use,
+			   gdouble      *min_value,
+			   gdouble      *max_value,
+			   gdouble      *resolution)
+{
+  GdkAxisInfo *info;
+
+  g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (index_ < device->axes->len);
+
+  info = &g_array_index (device->axes, GdkAxisInfo, index_);
+
+  *label_atom = info->label;
+  *use = info->use;
+  *min_value = info->min_value;
+  *max_value = info->max_value;
+  *resolution = info->resolution;
+}
+
+void
 _gdk_device_set_keys (GdkDevice *device,
                       guint      num_keys)
 {
