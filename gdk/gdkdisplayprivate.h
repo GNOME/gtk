@@ -114,7 +114,6 @@ struct _GdkDisplay
   GdkDevice *core_pointer;  /* Core pointer device */
 
   guint closed             : 1;  /* Whether this display has been closed */
-  guint ignore_core_events : 1;  /* Don't send core motion and button event */
 
   GArray *touch_implicit_grabs;
   GHashTable *device_grabs;

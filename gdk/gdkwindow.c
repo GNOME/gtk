@@ -9469,56 +9469,53 @@ proxy_pointer_event (GdkDisplay                 *display,
       if (!event_win)
         return TRUE;
 
-      if (!display->ignore_core_events)
-        {
-          event = gdk_event_new (event_type);
-          event->any.window = g_object_ref (event_win);
-          event->any.send_event = source_event->any.send_event;
+      event = gdk_event_new (event_type);
+      event->any.window = g_object_ref (event_win);
+      event->any.send_event = source_event->any.send_event;
 
-          gdk_event_set_device (event, gdk_event_get_device (source_event));
-          gdk_event_set_source_device (event, source_device);
+      gdk_event_set_device (event, gdk_event_get_device (source_event));
+      gdk_event_set_source_device (event, source_device);
 
-          if (event_type == GDK_TOUCH_UPDATE)
-            {
-              event->touch.time = time_;
-              event->touch.state = state | GDK_BUTTON1_MASK;
-              event->touch.sequence = source_event->touch.sequence;
-              event->touch.emulating_pointer = source_event->touch.emulating_pointer;
-              convert_toplevel_coords_to_window (event_win,
-                                                 toplevel_x, toplevel_y,
-                                                 &event->touch.x, &event->touch.y);
-              gdk_event_get_root_coords (source_event,
-                                         &event->touch.x_root,
-                                         &event->touch.y_root);
+      if (event_type == GDK_TOUCH_UPDATE)
+	{
+	  event->touch.time = time_;
+	  event->touch.state = state | GDK_BUTTON1_MASK;
+	  event->touch.sequence = source_event->touch.sequence;
+	  event->touch.emulating_pointer = source_event->touch.emulating_pointer;
+	  convert_toplevel_coords_to_window (event_win,
+					     toplevel_x, toplevel_y,
+					     &event->touch.x, &event->touch.y);
+	  gdk_event_get_root_coords (source_event,
+				     &event->touch.x_root,
+				     &event->touch.y_root);
 
-              event->touch.axes = g_memdup (source_event->touch.axes,
-                                            sizeof (gdouble) * gdk_device_get_n_axes (source_event->touch.device));
-            }
-          else
-            {
-              event->motion.time = time_;
-              event->motion.state = state;
-              event->motion.is_hint = is_hint;
+	  event->touch.axes = g_memdup (source_event->touch.axes,
+					sizeof (gdouble) * gdk_device_get_n_axes (source_event->touch.device));
+	}
+      else
+	{
+	  event->motion.time = time_;
+	  event->motion.state = state;
+	  event->motion.is_hint = is_hint;
 
-              convert_toplevel_coords_to_window (event_win,
-                                                 toplevel_x, toplevel_y,
-                                                 &event->motion.x, &event->motion.y);
-              gdk_event_get_root_coords (source_event,
-                                         &event->motion.x_root,
-                                         &event->motion.y_root);
+	  convert_toplevel_coords_to_window (event_win,
+					     toplevel_x, toplevel_y,
+					     &event->motion.x, &event->motion.y);
+	  gdk_event_get_root_coords (source_event,
+				     &event->motion.x_root,
+				     &event->motion.y_root);
 
-              if (is_touch_type (source_event->type))
-                event->motion.axes = g_memdup (source_event->touch.axes,
-                                               sizeof (gdouble) * gdk_device_get_n_axes (source_event->touch.device));
-              else
-                event->motion.axes = g_memdup (source_event->motion.axes,
-                                               sizeof (gdouble) * gdk_device_get_n_axes (source_event->motion.device));
-            }
+	  if (is_touch_type (source_event->type))
+	    event->motion.axes = g_memdup (source_event->touch.axes,
+					   sizeof (gdouble) * gdk_device_get_n_axes (source_event->touch.device));
+	  else
+	    event->motion.axes = g_memdup (source_event->motion.axes,
+					   sizeof (gdouble) * gdk_device_get_n_axes (source_event->motion.device));
+	}
 
-          /* Just insert the event */
-          _gdk_event_queue_insert_after (gdk_window_get_display (event_win),
-                                         source_event, event);
-        }
+      /* Just insert the event */
+      _gdk_event_queue_insert_after (gdk_window_get_display (event_win),
+				     source_event, event);
     }
 
   /* unlink all move events from queue.
@@ -9663,7 +9660,7 @@ proxy_button_event (GdkEvent *source_event,
   if (source_event->type == GDK_TOUCH_END && !is_touch_type (type))
     state |= GDK_BUTTON1_MASK;
 
-  if (event_win == NULL || display->ignore_core_events)
+  if (event_win == NULL)
     return TRUE;
 
   if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER &&
