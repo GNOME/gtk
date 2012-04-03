@@ -2876,6 +2876,10 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 			"horizontal-separator", &horizontal_separator,
 			NULL);
 
+  /* Don't handle extra mouse buttons events, let them bubble up */
+  if (event->button > 5)
+    return FALSE;
+ 
   /* Because grab_focus can cause reentrancy, we delay grab_focus until after
    * we're done handling the button press.
    */
