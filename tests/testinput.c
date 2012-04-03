@@ -25,6 +25,7 @@
 #include "config.h"
 #include <stdio.h>
 #include "gtk/gtk.h"
+#include <math.h>
 
 /* Backing surface for drawing area */
 
@@ -45,6 +46,9 @@ update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
 {
   static gint cursor_present = 0;
   gint state = !gdk_device_get_has_cursor (current_device) && cursor_proximity;
+
+  x = floor (x);
+  y = floor (y);
 
   if (surface != NULL)
     {
