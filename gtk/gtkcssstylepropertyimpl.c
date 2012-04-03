@@ -48,7 +48,7 @@
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
-#include "gtkcssshadowvalueprivate.h"
+#include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtksymboliccolorprivate.h"
 #include "gtkthemingengine.h"
@@ -486,7 +486,7 @@ shadow_value_parse (GtkCssStyleProperty *property,
                     GtkCssParser        *parser,
                     GFile               *base)
 {
-  return _gtk_css_array_value_parse (parser, _gtk_css_shadow_value_parse, TRUE);
+  return _gtk_css_shadows_value_parse (parser);
 }
 
 static GtkCssValue *
@@ -494,7 +494,7 @@ shadow_value_compute (GtkCssStyleProperty *property,
                       GtkStyleContext     *context,
                       GtkCssValue         *specified)
 {
-  return _gtk_css_array_value_compute (specified, _gtk_css_shadow_value_compute, context);
+  return _gtk_css_shadows_value_compute (specified, context);
 }
 
 static GtkCssValue *
@@ -1337,7 +1337,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_array_value_new (NULL));
+                                          _gtk_css_shadows_value_new_none ());
 
   gtk_css_style_property_register        ("icon-shadow",
                                           GTK_CSS_PROPERTY_ICON_SHADOW,
@@ -1349,7 +1349,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_array_value_new (NULL));
+                                          _gtk_css_shadows_value_new_none ());
 
   gtk_css_style_property_register        ("box-shadow",
                                           GTK_CSS_PROPERTY_BOX_SHADOW,
@@ -1361,7 +1361,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_array_value_new (NULL));
+                                          _gtk_css_shadows_value_new_none ());
 
   gtk_css_style_property_register        ("margin-top",
                                           GTK_CSS_PROPERTY_MARGIN_TOP,
