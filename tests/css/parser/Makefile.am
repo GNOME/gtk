@@ -304,6 +304,8 @@ EXTRA_DIST += \
 	pseudo-classes-unknown.ref.css \
 	selector.css \
 	selector.ref.css \
+	shadow.css \
+	shadow.ref.css \
 	shorthand.css \
 	shorthand.ref.css \
 	simple.css \
