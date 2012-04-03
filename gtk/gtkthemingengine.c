@@ -2690,10 +2690,10 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
 }
 
 void
-_gtk_theming_engine_paint_spinner (cairo_t *cr,
-                                   gdouble  radius,
-                                   gdouble  progress,
-                                   GdkRGBA *color)
+_gtk_theming_engine_paint_spinner (cairo_t       *cr,
+                                   gdouble        radius,
+                                   gdouble        progress,
+                                   const GdkRGBA *color)
 {
   guint num_steps, step;
   gdouble half;
