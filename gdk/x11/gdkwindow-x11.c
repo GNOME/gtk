@@ -4079,7 +4079,7 @@ wmspec_send_message (GdkDisplay *display,
               (XEvent *)&xclient);
 }
 
-static gboolean
+static void
 handle_wmspec_button_release (GdkDisplay *display,
                               XEvent     *xevent)
 {
@@ -4110,11 +4110,8 @@ handle_wmspec_button_release (GdkDisplay *display,
         {
           display_x11->wm_moveresize_button = 0;
           wmspec_send_message (display, window, 0, 0, _NET_WM_MOVERESIZE_CANCEL, 0);
-          return TRUE;
         }
     }
-
-  return FALSE;
 }
 
 static void
@@ -4395,11 +4392,11 @@ _gdk_x11_moveresize_handle_event (XEvent *event)
   GdkDisplay *display = gdk_x11_lookup_xdisplay (event->xany.display);
   MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
 
-  if (handle_wmspec_button_release (display, event))
-    return TRUE;
-
   if (!mv_resize || !mv_resize->moveresize_window)
-    return FALSE;
+    {
+      handle_wmspec_button_release (display, event);
+      return FALSE;
+    }
 
   button_mask = GDK_BUTTON1_MASK << (mv_resize->moveresize_button - 1);
 
@@ -4478,8 +4475,6 @@ _gdk_x11_moveresize_configure_done (GdkDisplay *display,
 {
   XEvent *tmp_event;
   MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
-
-  GDK_X11_DISPLAY (display)->wm_moveresize_button = 0;
 
   if (!mv_resize || window != mv_resize->moveresize_window)
     return FALSE;
