@@ -22,18 +22,6 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkstylecontextprivate.h"
 
-#define DEFINE_BOXED_TYPE_WITH_COPY_FUNC(TypeName, type_name) \
-\
-static TypeName * \
-type_name ## _copy (const TypeName *foo) \
-{ \
-  return g_memdup (foo, sizeof (TypeName)); \
-} \
-\
-G_DEFINE_BOXED_TYPE (TypeName, type_name, type_name ## _copy, g_free)
-
-DEFINE_BOXED_TYPE_WITH_COPY_FUNC (GtkCssBackgroundSize, _gtk_css_background_size)
-
 typedef struct _GtkCssChangeTranslation GtkCssChangeTranslation;
 struct _GtkCssChangeTranslation {
   GtkCssChange from;

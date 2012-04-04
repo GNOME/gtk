@@ -24,6 +24,7 @@
 #include "gtkthemingbackgroundprivate.h"
 
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcssbgsizevalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
@@ -113,39 +114,6 @@ _gtk_theming_background_apply_clip (GtkThemingBackground *bg)
 }
 
 static void
-_gtk_theming_background_get_cover_contain (GtkCssImage *image,
-                                           gboolean     cover,
-                                           double       width,
-                                           double       height,
-                                           double      *concrete_width,
-                                           double      *concrete_height)
-{
-  double aspect, image_aspect;
-  
-  image_aspect = _gtk_css_image_get_aspect_ratio (image);
-  if (image_aspect == 0.0)
-    {
-      *concrete_width = width;
-      *concrete_height = height;
-      return;
-    }
-
-  aspect = width / height;
-
-  if ((aspect >= image_aspect && cover) ||
-      (aspect < image_aspect && !cover))
-    {
-      *concrete_width = width;
-      *concrete_height = width / image_aspect;
-    }
-  else
-    {
-      *concrete_height = height;
-      *concrete_width = height * image_aspect;
-    }
-}
-
-static void
 _gtk_theming_background_paint (GtkThemingBackground *bg,
                                cairo_t              *cr)
 {
@@ -161,13 +129,11 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       && bg->image_rect.width > 0
       && bg->image_rect.height > 0)
     {
-      const GtkCssBackgroundSize *size;
       const GtkCssValue *pos, *repeat;
       double image_width, image_height;
       double width, height;
       GtkCssRepeatStyle hrepeat, vrepeat;
 
-      size = _gtk_css_value_get_background_size (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE));
       pos = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION);
       repeat = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_REPEAT);
       hrepeat = _gtk_css_background_repeat_value_get_x (repeat);
@@ -175,20 +141,12 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       width = bg->image_rect.width;
       height = bg->image_rect.height;
 
-      if (size->contain || size->cover)
-        _gtk_theming_background_get_cover_contain (bg->image,
-                                                   size->cover,
-                                                   width,
-                                                   height,
-                                                   &image_width,
-                                                   &image_height);
-      else
-        _gtk_css_image_get_concrete_size (bg->image,
-                                          /* note: 0 does the right thing here for 'auto' */
-                                          _gtk_css_number_get (&size->width, width),
-                                          _gtk_css_number_get (&size->height, height),
-                                          width, height,
-                                          &image_width, &image_height);
+      _gtk_css_bg_size_value_compute_size (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE),
+                                           bg->image,
+                                           width,
+                                           height,
+                                           &image_width,
+                                           &image_height);
 
       /* optimization */
       if (image_width == width)

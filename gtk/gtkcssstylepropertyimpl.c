@@ -41,6 +41,7 @@
 #include "gtkanimationdescription.h"
 #include "gtkbindings.h"
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcssbgsizevalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsseasevalueprivate.h"
 #include "gtkcssenginevalueprivate.h"
@@ -898,65 +899,7 @@ background_size_parse (GtkCssStyleProperty *property,
                        GtkCssParser        *parser,
                        GFile               *base)
 {
-  GtkCssBackgroundSize size = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), FALSE, FALSE};
-
-  if (_gtk_css_parser_try (parser, "cover", TRUE))
-    size.cover = TRUE;
-  else if (_gtk_css_parser_try (parser, "contain", TRUE))
-    size.contain = TRUE;
-  else
-    {
-      if (_gtk_css_parser_try (parser, "auto", TRUE))
-        _gtk_css_number_init (&size.width, 0, GTK_CSS_PX);
-      else if (!_gtk_css_parser_read_number (parser,
-                                             &size.width,
-                                             GTK_CSS_POSITIVE_ONLY
-                                             | GTK_CSS_PARSE_PERCENT
-                                             | GTK_CSS_PARSE_LENGTH))
-        return NULL;
-
-      if (_gtk_css_parser_try (parser, "auto", TRUE))
-        _gtk_css_number_init (&size.height, 0, GTK_CSS_PX);
-      else if (_gtk_css_parser_has_number (parser))
-        {
-          if (!_gtk_css_parser_read_number (parser,
-                                            &size.height,
-                                            GTK_CSS_POSITIVE_ONLY
-                                            | GTK_CSS_PARSE_PERCENT
-                                            | GTK_CSS_PARSE_LENGTH))
-            return NULL;
-        }
-      else
-        _gtk_css_number_init (&size.height, 0, GTK_CSS_PX);
-    }
-
-  return _gtk_css_value_new_from_background_size (&size);
-}
-
-static void
-background_size_print (GtkCssStyleProperty *property,
-                       const GtkCssValue   *value,
-                       GString             *string)
-{
-  const GtkCssBackgroundSize *size = _gtk_css_value_get_background_size (value);
-
-  if (size->cover)
-    g_string_append (string, "cover");
-  else if (size->contain)
-    g_string_append (string, "contain");
-  else
-    {
-      if (size->width.value == 0)
-        g_string_append (string, "auto");
-      else
-        _gtk_css_number_print (&size->width, string);
-
-      if (size->height.value != 0)
-        {
-          g_string_append (string, " ");
-          _gtk_css_number_print (&size->height, string);
-        }
-    }
+  return _gtk_css_bg_size_value_parse (parser);
 }
 
 static GtkCssValue *
@@ -964,21 +907,7 @@ background_size_compute (GtkCssStyleProperty    *property,
                          GtkStyleContext        *context,
                          GtkCssValue            *specified)
 {
-  const GtkCssBackgroundSize *ssize = _gtk_css_value_get_background_size (specified);
-  GtkCssBackgroundSize csize;
-  gboolean changed;
-
-  csize.cover = ssize->cover;
-  csize.contain = ssize->contain;
-  changed = _gtk_css_number_compute (&csize.width,
-				     &ssize->width,
-				     context);
-  changed |= _gtk_css_number_compute (&csize.height,
-				      &ssize->height,
-				      context);
-  if (changed)
-    return _gtk_css_value_new_from_background_size (&csize);
-  return _gtk_css_value_ref (specified);
+  return _gtk_css_bg_size_value_compute (specified, context);
 }
 
 static GtkCssValue *
@@ -1013,7 +942,6 @@ gtk_symbolic_color_new_rgba (double red,
 void
 _gtk_css_style_property_init_properties (void)
 {
-  GtkCssBackgroundSize default_background_size = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), FALSE, FALSE };
   GtkBorder border_of_ones = { 1, 1, 1, 1 };
 
   /* Initialize "color" and "font-size" first,
@@ -1431,12 +1359,12 @@ _gtk_css_style_property_init_properties (void)
                                           G_TYPE_NONE,
                                           0,
                                           background_size_parse,
-                                          background_size_print,
+                                          NULL,
                                           background_size_compute,
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_value_new_from_background_size (&default_background_size));
+                                          _gtk_css_bg_size_value_new (NULL, NULL));
   gtk_css_style_property_register        ("background-position",
                                           GTK_CSS_PROPERTY_BACKGROUND_POSITION,
                                           G_TYPE_NONE,

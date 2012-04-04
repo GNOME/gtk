@@ -88,7 +88,6 @@ GtkCssValue *_gtk_css_value_new_from_color            (const GdkColor           
 GtkCssValue *_gtk_css_value_new_take_symbolic_color   (GtkSymbolicColor           *v);
 GtkCssValue *_gtk_css_value_new_take_pattern          (cairo_pattern_t            *v);
 GtkCssValue *_gtk_css_value_new_take_binding_sets     (GPtrArray                  *array);
-GtkCssValue *_gtk_css_value_new_from_background_size  (const GtkCssBackgroundSize *v);
 void         _gtk_css_value_init_gvalue               (const GtkCssValue          *value,
 						       GValue                     *g_value);
 
@@ -99,7 +98,6 @@ gpointer                        _gtk_css_value_get_object                 (const
 gpointer                        _gtk_css_value_get_boxed                  (const GtkCssValue *value);
 const char **                   _gtk_css_value_get_strv                   (const GtkCssValue *value);
 GtkSymbolicColor               *_gtk_css_value_get_symbolic_color         (const GtkCssValue *value);
-const GtkCssBackgroundSize     *_gtk_css_value_get_background_size        (const GtkCssValue *value);
 GtkGradient                    *_gtk_css_value_get_gradient               (const GtkCssValue *value);
 
 G_END_DECLS

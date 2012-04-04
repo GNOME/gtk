@@ -279,17 +279,6 @@ _gtk_css_value_new_from_color (const GdkColor *v)
 }
 
 GtkCssValue *
-_gtk_css_value_new_from_background_size (const GtkCssBackgroundSize *v)
-{
-  GtkCssValue *value;
-
-  value = gtk_css_value_new (GTK_TYPE_CSS_BACKGROUND_SIZE);
-  value->u.ptr = g_boxed_copy0 (GTK_TYPE_CSS_BACKGROUND_SIZE, v);
-
-  return value;
-}
-
-GtkCssValue *
 _gtk_css_value_new_from_border_style (GtkBorderStyle style)
 {
   GtkCssValue *value;
@@ -512,13 +501,6 @@ _gtk_css_value_get_border_style (const GtkCssValue *value)
 {
   g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_BORDER_STYLE), 0);
   return value->u.gint;
-}
-
-const GtkCssBackgroundSize *
-_gtk_css_value_get_background_size (const GtkCssValue *value)
-{
-  g_return_val_if_fail (_gtk_css_value_holds (value, GTK_TYPE_CSS_BACKGROUND_SIZE), NULL);
-  return value->u.ptr;
 }
 
 GtkGradient *

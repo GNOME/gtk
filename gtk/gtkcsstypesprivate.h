@@ -160,23 +160,11 @@ typedef enum /*< skip >*/ {
 } GtkCssUnit;
 
 typedef struct _GtkCssNumber GtkCssNumber;
-typedef struct _GtkCssBackgroundSize GtkCssBackgroundSize;
 
 struct _GtkCssNumber {
   gdouble        value;
   GtkCssUnit     unit;
 };
-
-struct _GtkCssBackgroundSize {
-  GtkCssNumber width;  /* 0 means auto here */
-  GtkCssNumber height; /* 0 means auto here */
-  guint cover :1;
-  guint contain :1;
-};
-
-#define GTK_TYPE_CSS_BACKGROUND_SIZE _gtk_css_background_size_get_type ()
-
-GType           _gtk_css_background_size_get_type               (void);
 
 GtkCssChange    _gtk_css_change_for_sibling                      (GtkCssChange       match);
 GtkCssChange    _gtk_css_change_for_child                        (GtkCssChange       match);

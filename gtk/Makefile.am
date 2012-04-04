@@ -424,6 +424,7 @@ gtk_private_h_sources =		\
 	gtkcolorchooserprivate.h	\
 	gtkcontainerprivate.h   \
 	gtkcssarrayvalueprivate.h	\
+	gtkcssbgsizevalueprivate.h	\
 	gtkcsscomputedvaluesprivate.h \
 	gtkcsscornervalueprivate.h	\
 	gtkcsscustompropertyprivate.h \
@@ -636,6 +637,7 @@ gtk_base_c_sources = 		\
 	gtkcomboboxtext.c	\
 	gtkcontainer.c		\
 	gtkcssarrayvalue.c	\
+	gtkcssbgsizevalue.c	\
 	gtkcsscomputedvalues.c	\
 	gtkcsscornervalue.c	\
 	gtkcsscustomproperty.c	\
