@@ -734,15 +734,6 @@ AC_CHECK_FUNCS(mallinfo)
 AC_CHECK_FUNCS(getresuid)
 AC_TYPE_UID_T
 
-# Check for uxtheme.h (for MS-Windows Engine)
-AC_MSG_CHECKING(for uxtheme.h)
-AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <uxtheme.h>]])],
-                  [gtk_uxtheme_h=yes], [gtk_uxtheme_h=no])
-if test $gtk_uxtheme_h = yes; then
-   AC_DEFINE(HAVE_UXTHEME_H, 1, [Have uxtheme.h include file])
-fi
-AC_MSG_RESULT($gtk_uxtheme_h)
-
 # Check for round()
 AC_CHECK_LIB(m,round,have_round=yes,have_round=no)
 if test $have_round = yes; then
@@ -1752,9 +1743,6 @@ libgail-util/Makefile
 modules/Makefile
 modules/engines/Makefile
 modules/engines/pixbuf/Makefile
-modules/engines/ms-windows/Makefile
-modules/engines/ms-windows/Theme/Makefile
-modules/engines/ms-windows/Theme/gtk-3.0/Makefile
 modules/input/Makefile
 modules/printbackends/Makefile
 modules/printbackends/cups/Makefile
