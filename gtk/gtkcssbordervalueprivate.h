@@ -21,6 +21,7 @@
 #define __GTK_CSS_BORDER_VALUE_PRIVATE_H__
 
 #include "gtkcssparserprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS

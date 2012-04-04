@@ -18,6 +18,8 @@
 #include "config.h"
 
 #include "gtkcssparserprivate.h"
+
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkwin32themeprivate.h"
 
 #include <errno.h>
@@ -551,9 +553,8 @@ _gtk_css_parser_has_number (GtkCssParser *parser)
   return strchr ("+-0123456789.", parser->data[0]) != NULL;
 }
 
-gboolean
-_gtk_css_parser_read_number (GtkCssParser           *parser,
-                             GtkCssNumber           *number,
+GtkCssValue *
+_gtk_css_number_value_parse (GtkCssParser           *parser,
                              GtkCssNumberParseFlags  flags)
 {
   static const struct {
@@ -576,94 +577,98 @@ _gtk_css_parser_read_number (GtkCssParser           *parser,
     { "s",    GTK_CSS_S,       GTK_CSS_PARSE_TIME   },
     { "ms",   GTK_CSS_MS,      GTK_CSS_PARSE_TIME   }
   };
-  char *end, *unit;
+  char *end, *unit_name;
+  double value;
+  GtkCssUnit unit;
 
-  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
-  g_return_val_if_fail (number != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), NULL);
 
   errno = 0;
-  number->unit = GTK_CSS_NUMBER;
-  number->value = g_ascii_strtod (parser->data, &end);
+  value = g_ascii_strtod (parser->data, &end);
   if (errno)
     {
       _gtk_css_parser_error (parser, "not a number: %s", g_strerror (errno));
-      return FALSE;
+      return NULL;
     }
   if (parser->data == end)
     {
       _gtk_css_parser_error (parser, "not a number");
-      return FALSE;
+      return NULL;
     }
 
   parser->data = end;
 
   if (flags & GTK_CSS_POSITIVE_ONLY &&
-      number->value < 0)
+      value < 0)
     {
       _gtk_css_parser_error (parser, "negative values are not allowed.");
-      return FALSE;
+      return NULL;
     }
 
-  unit = _gtk_css_parser_try_ident (parser, FALSE);
+  unit_name = _gtk_css_parser_try_ident (parser, FALSE);
 
-  if (unit)
+  if (unit_name)
     {
       guint i;
 
       for (i = 0; i < G_N_ELEMENTS (units); i++)
         {
           if (flags & units[i].required_flags &&
-              g_ascii_strcasecmp (unit, units[i].name) == 0)
+              g_ascii_strcasecmp (unit_name, units[i].name) == 0)
             break;
         }
 
+      g_free (unit_name);
+
       if (i >= G_N_ELEMENTS (units))
         {
-          _gtk_css_parser_error (parser, "`%s' is not a valid unit.", unit);
-          g_free (unit);
-          return FALSE;
+          _gtk_css_parser_error (parser, "`%s' is not a valid unit.", unit_name);
+          return NULL;
         }
 
-      number->unit = units[i].unit;
-      g_free (unit);
+      unit = units[i].unit;
     }
   else
     {
       if ((flags & GTK_CSS_PARSE_PERCENT) &&
           _gtk_css_parser_try (parser, "%", FALSE))
         {
-          number->unit = GTK_CSS_PERCENT;
+          unit = GTK_CSS_PERCENT;
         }
-      else if (number->value == 0.0)
+      else if (value == 0.0)
         {
           if (flags & GTK_CSS_PARSE_NUMBER)
-            number->unit = GTK_CSS_NUMBER;
+            unit = GTK_CSS_NUMBER;
           else if (flags & GTK_CSS_PARSE_LENGTH)
-            number->unit = GTK_CSS_PX;
+            unit = GTK_CSS_PX;
+          else if (flags & GTK_CSS_PARSE_ANGLE)
+            unit = GTK_CSS_DEG;
+          else if (flags & GTK_CSS_PARSE_TIME)
+            unit = GTK_CSS_S;
           else
-            number->unit = GTK_CSS_PERCENT;
+            unit = GTK_CSS_PERCENT;
         }
       else if (flags & GTK_CSS_NUMBER_AS_PIXELS)
         {
           _gtk_css_parser_error_full (parser,
                                       GTK_CSS_PROVIDER_ERROR_DEPRECATED,
                                       "Not using units is deprecated. Assuming 'px'.");
-          number->unit = GTK_CSS_PX;
+          unit = GTK_CSS_PX;
         }
       else if (flags & GTK_CSS_PARSE_NUMBER)
         {
-          number->unit = GTK_CSS_NUMBER;
+          unit = GTK_CSS_NUMBER;
         }
       else
         {
           _gtk_css_parser_error (parser, "Unit is missing.");
-          return FALSE;
+          return NULL;
         }
     }
 
   _gtk_css_parser_skip_whitespace (parser);
 
-  return TRUE;
+  return _gtk_css_number_value_new (value, unit);
 }
 
 /* XXX: we should introduce GtkCssLenght that deals with

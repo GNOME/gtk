@@ -26,8 +26,19 @@
 
 G_BEGIN_DECLS
 
+typedef enum /*< skip >*/ {
+  GTK_CSS_POSITIVE_ONLY = (1 << 0),
+  GTK_CSS_PARSE_PERCENT = (1 << 1),
+  GTK_CSS_PARSE_NUMBER = (1 << 2),
+  GTK_CSS_NUMBER_AS_PIXELS = (1 << 3),
+  GTK_CSS_PARSE_LENGTH = (1 << 4),
+  GTK_CSS_PARSE_ANGLE = (1 << 5),
+  GTK_CSS_PARSE_TIME = (1 << 6)
+} GtkCssNumberParseFlags;
+
 GtkCssValue *   _gtk_css_number_value_new           (double                  value,
                                                      GtkCssUnit              unit);
+/* This function implemented in gtkcssparser.c */
 GtkCssValue *   _gtk_css_number_value_parse         (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
 

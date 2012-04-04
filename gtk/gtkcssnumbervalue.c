@@ -127,20 +127,6 @@ _gtk_css_number_value_new (double     value,
   return result;
 }
 
-GtkCssValue *
-_gtk_css_number_value_parse (GtkCssParser           *parser,
-                             GtkCssNumberParseFlags  flags)
-{
-  GtkCssNumber number;
-
-  g_return_val_if_fail (parser != NULL, NULL);
-
-  if (!_gtk_css_parser_read_number (parser, &number, flags))
-    return NULL;
-  
-  return _gtk_css_number_value_new (number.value, number.unit);
-}
-
 GtkCssUnit
 _gtk_css_number_value_get_unit (const GtkCssValue *value)
 {

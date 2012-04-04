@@ -159,29 +159,8 @@ typedef enum /*< skip >*/ {
   GTK_CSS_MS,
 } GtkCssUnit;
 
-typedef struct _GtkCssNumber GtkCssNumber;
-
-struct _GtkCssNumber {
-  gdouble        value;
-  GtkCssUnit     unit;
-};
-
 GtkCssChange    _gtk_css_change_for_sibling                      (GtkCssChange       match);
 GtkCssChange    _gtk_css_change_for_child                        (GtkCssChange       match);
-
-#define GTK_CSS_NUMBER_INIT(_value,_unit) { (_value), (_unit) }
-void            _gtk_css_number_init                            (GtkCssNumber       *number,
-                                                                 double              value,
-                                                                 GtkCssUnit          unit);
-gboolean        _gtk_css_number_equal                           (const GtkCssNumber *one,
-                                                                 const GtkCssNumber *two);
-double          _gtk_css_number_get                             (const GtkCssNumber *number,
-                                                                 double              one_hundred_percent);
-gboolean        _gtk_css_number_compute                         (GtkCssNumber       *dest,
-                                                                 const GtkCssNumber *src,
-                                                                 GtkStyleContext    *context);
-void            _gtk_css_number_print                           (const GtkCssNumber *number,
-                                                                 GString            *string);
 
 
 G_END_DECLS

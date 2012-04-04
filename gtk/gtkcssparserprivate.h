@@ -24,16 +24,6 @@
 
 G_BEGIN_DECLS
 
-typedef enum /*< skip >*/ {
-  GTK_CSS_POSITIVE_ONLY = (1 << 0),
-  GTK_CSS_PARSE_PERCENT = (1 << 1),
-  GTK_CSS_PARSE_NUMBER = (1 << 2),
-  GTK_CSS_NUMBER_AS_PIXELS = (1 << 3),
-  GTK_CSS_PARSE_LENGTH = (1 << 4),
-  GTK_CSS_PARSE_ANGLE = (1 << 5),
-  GTK_CSS_PARSE_TIME = (1 << 6)
-} GtkCssNumberParseFlags;
-
 typedef struct _GtkCssParser GtkCssParser;
 
 typedef void (* GtkCssParserErrorFunc) (GtkCssParser *parser,
@@ -93,9 +83,6 @@ gboolean        _gtk_css_parser_try_enum          (GtkCssParser          *parser
                                                    int                   *value);
 
 gboolean        _gtk_css_parser_has_number        (GtkCssParser          *parser);
-gboolean        _gtk_css_parser_read_number       (GtkCssParser          *parser,
-                                                   GtkCssNumber          *number,
-                                                   GtkCssNumberParseFlags flags);
 char *          _gtk_css_parser_read_string       (GtkCssParser          *parser);
 char *          _gtk_css_parser_read_value        (GtkCssParser          *parser);
 GtkSymbolicColor *_gtk_css_parser_read_symbolic_color
