@@ -379,13 +379,16 @@ else
 fi
 
 if test "x$enable_wayland_backend" == "xyes"; then
-  # Wayland uses cairo-gl
-  cairo_backends="$cairo_backends cairo-gl"
+  # For the cairo image backend
+  cairo_backends="$cairo_backends cairo"
   GDK_BACKENDS="$GDK_BACKENDS wayland"
   have_gio_unix=yes
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
-  WAYLAND_PACKAGES="wayland-client xkbcommon wayland-egl egl"
+  WAYLAND_PACKAGES="wayland-client xkbcommon "
+  if test "x$enable_wayland_cairo_gl" == "xyes"; then
+    WAYLAND_PACKAGES="$WAYLAND_PACKAGES wayland-egl egl"
+  fi
   AM_CONDITIONAL(USE_WAYLAND, true)
 else
   AM_CONDITIONAL(USE_WAYLAND, false)

@@ -17,7 +17,9 @@
 
 #include "config.h"
 
+#ifdef GDK_WAYLAND_USE_EGL
 #include <wayland-egl.h>
+#endif
 
 #include <stdlib.h>
 #include <string.h>
@@ -145,6 +147,7 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
   }
 }
 
+#ifdef GDK_WAYLAND_USE_EGL
 static gboolean
 gdk_display_init_egl(GdkDisplay *display)
 {
@@ -200,6 +203,7 @@ gdk_display_init_egl(GdkDisplay *display)
 
   return TRUE;
 }
+#endif
 
 GdkDisplay *
 _gdk_wayland_display_open (const gchar *display_name)
@@ -225,7 +229,12 @@ _gdk_wayland_display_open (const gchar *display_name)
   wl_display_add_global_listener(display_wayland->wl_display,
 				 gdk_display_handle_global, display_wayland);
 
+#ifdef GDK_WAYLAND_USE_EGL
   gdk_display_init_egl(display);
+#else
+  wl_display_iterate(wl_display, WL_DISPLAY_READABLE);
+  wl_display_roundtrip(wl_display);
+#endif
 
   display_wayland->event_source =
     _gdk_wayland_display_event_source_new (display);
@@ -257,7 +266,9 @@ gdk_wayland_display_dispose (GObject *object)
       display_wayland->event_source = NULL;
     }
 
+#ifdef GDK_WAYLAND_USE_EGL
   eglTerminate(display_wayland->egl_display);
+#endif
 
   G_OBJECT_CLASS (_gdk_display_wayland_parent_class)->dispose (object);
 }

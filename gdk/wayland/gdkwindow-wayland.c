@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/mman.h>
 
 #include <wayland-egl.h>
 
@@ -300,9 +301,14 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 static const cairo_user_data_key_t gdk_wayland_cairo_key;
 
 typedef struct _GdkWaylandCairoSurfaceData {
+#ifdef GDK_WAYLAND_USE_EGL
   EGLImageKHR image;
   GLuint texture;
   struct wl_egl_pixmap *pixmap;
+#else
+  gpointer buf;
+  size_t buf_length;
+#endif
   struct wl_buffer *buffer;
   GdkDisplayWayland *display;
   int32_t width, height;
@@ -366,6 +372,7 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   wl_surface_attach (impl->surface, data->buffer, dx, dy);
 }
 
+#ifdef GDK_WAYLAND_USE_EGL
 static void
 gdk_wayland_cairo_surface_destroy (void *p)
 {
@@ -419,6 +426,100 @@ gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
 
   return surface;
 }
+#else
+static struct wl_buffer *
+create_shm_buffer (struct wl_shm  *shm,
+                   int             width,
+                   int             height,
+                   uint32_t        format,
+                   size_t         *buf_length,
+                   void          **data_out)
+{
+  char filename[] = "/tmp/wayland-shm-XXXXXX";
+  struct wl_buffer *buffer;
+  int fd, size, stride;
+  void *data;
+
+  fd = mkstemp(filename);
+  if (fd < 0) {
+      fprintf(stderr, "open %s failed: %m\n", filename);
+      return NULL;
+  }
+  stride = width * 4;
+  size = stride * height;
+  if (ftruncate(fd, size) < 0) {
+      fprintf(stderr, "ftruncate failed: %m\n");
+      close(fd);
+      return NULL;
+  }
+
+  data = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+  unlink(filename);
+
+  if (data == MAP_FAILED) {
+      fprintf(stderr, "mmap failed: %m\n");
+      close(fd);
+      return NULL;
+  }
+
+  buffer = wl_shm_create_buffer(shm, fd,
+                                width, height,
+                                stride, format);
+
+  close(fd);
+
+  *data_out = data;
+  *buf_length = size;
+  return buffer;
+}
+
+static void
+gdk_wayland_cairo_surface_destroy (void *p)
+{
+  GdkWaylandCairoSurfaceData *data = p;
+
+  if (data->buffer)
+    wl_buffer_destroy(data->buffer);
+
+  munmap(data->buf, data->buf_length);
+  g_free(data);
+}
+
+static cairo_surface_t *
+gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
+				  int width, int height)
+{
+  GdkWaylandCairoSurfaceData *data;
+  cairo_surface_t *surface;
+
+  data = g_new (GdkWaylandCairoSurfaceData, 1);
+  data->display = display;
+  data->buffer = NULL;
+  data->width = width;
+  data->height = height;
+
+  data->buffer = create_shm_buffer (display->shm,
+                                    width,
+                                    height,
+                                    WL_SHM_FORMAT_XRGB8888,
+                                    &data->buf_length,
+                                    &data->buf);
+
+  surface = cairo_image_surface_create_for_data (data->buf,
+                                                 CAIRO_FORMAT_RGB24,
+                                                 width,
+                                                 height,
+                                                 width * 4);
+
+  cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
+                               data, gdk_wayland_cairo_surface_destroy);
+
+  if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
+    fprintf (stderr, "create image surface failed\n");
+
+  return surface;
+}
+#endif
 
 /* On this first call this creates a double reference - the first reference
  * is held by the GdkWindowImplWayland struct - since unlike other backends
@@ -1360,10 +1461,13 @@ gdk_wayland_window_destroy_notify (GdkWindow *window)
 }
 
 static void
-gdk_wayland_window_process_updates_recurse (GdkWindow *window,
-					    cairo_region_t *region)
+gdk_wayland_window_process_updates_recurse (GdkWindow      *window,
+                                            cairo_region_t *region)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+#ifndef GDK_WAYLAND_USE_EGL
+  GdkWaylandCairoSurfaceData *data = NULL;
+#endif
   cairo_rectangle_int_t rect;
   int i, n;
 
@@ -1372,12 +1476,23 @@ gdk_wayland_window_process_updates_recurse (GdkWindow *window,
   if (impl->cairo_surface)
     gdk_wayland_window_attach_image (window);
 
+#ifndef GDK_WAYLAND_USE_EGL
+  if (impl->server_surface)
+    data = cairo_surface_get_user_data (impl->server_surface,
+                                        &gdk_wayland_cairo_key);
+#endif
+
   n = cairo_region_num_rectangles(region);
   for (i = 0; i < n; i++)
     {
       cairo_region_get_rectangle (region, i, &rect);
+#ifndef GDK_WAYLAND_USE_EGL
+      if (data && data->buffer)
+        wl_buffer_damage (data->buffer,
+                          rect.x, rect.y, rect.width, rect.height);
+#endif
       wl_surface_damage (impl->surface,
-			 rect.x, rect.y, rect.width, rect.height);
+                         rect.x, rect.y, rect.width, rect.height);
     }
 
   _gdk_window_process_updates_recurse (window, region);

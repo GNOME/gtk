@@ -22,14 +22,19 @@
 #ifndef __GDK_DISPLAY_WAYLAND__
 #define __GDK_DISPLAY_WAYLAND__
 
+#include <config.h>
 #include <stdint.h>
 #include <wayland-client.h>
+
+#ifdef GDK_WAYLAND_USE_EGL
 #include <wayland-egl.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <cairo-gl.h>
+#endif
+
 #include <glib.h>
 #include <gdk/gdkkeys.h>
 #include <gdk/gdkwindow.h>
@@ -76,15 +81,20 @@ struct _GdkDisplayWayland
   struct wl_input_device *input_device;
   struct wl_data_device_manager *data_device_manager;
   GSource *event_source;
+
+#ifdef GDK_WAYLAND_USE_EGL
   EGLDisplay egl_display;
   EGLContext egl_context;
   cairo_device_t *cairo_device;
+#endif
 
   GdkCursor **cursors;
 
+#ifdef GDK_WAYLAND_USE_EGL
   PFNGLEGLIMAGETARGETTEXTURE2DOESPROC image_target_texture_2d;
   PFNEGLCREATEIMAGEKHRPROC create_image;
   PFNEGLDESTROYIMAGEKHRPROC destroy_image;
+#endif
 };
 
 struct _GdkDisplayWaylandClass
