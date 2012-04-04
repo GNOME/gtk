@@ -113,7 +113,6 @@ struct _GdkWindowImplWayland
    */
   cairo_surface_t *server_surface;
 
-  GLuint texture;
   uint32_t resize_edges;
 
   int focus_count;
@@ -865,9 +864,6 @@ gdk_wayland_window_destroy (GdkWindow *window,
       cairo_surface_set_user_data (impl->cairo_surface, &gdk_wayland_cairo_key,
 				   NULL, NULL);
     }
-
-  if (impl->texture)
-    glDeleteTextures(1, &impl->texture);
 
   if (!recursing && !foreign_destroy)
     {
