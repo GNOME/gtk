@@ -21,6 +21,7 @@
 #define __GTK_CSS_IMAGE_LINEAR_PRIVATE_H__
 
 #include "gtk/gtkcssimageprivate.h"
+#include "gtk/gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
 
@@ -36,20 +37,16 @@ typedef struct _GtkCssImageLinearClass      GtkCssImageLinearClass;
 typedef struct _GtkCssImageLinearColorStop  GtkCssImageLinearColorStop;
 
 struct _GtkCssImageLinearColorStop {
-  GtkCssNumber        offset;
-  union {
-    GtkSymbolicColor *symbolic;
-    GdkRGBA           rgba;
-  }                   color;
+  GtkCssValue        *offset;
+  GtkCssValue        *color;
 };
 
 struct _GtkCssImageLinear
 {
   GtkCssImage parent;
 
-  GtkCssNumber angle; /* warning: We use GTK_CSS_NUMBER as an enum for the corners */
+  GtkCssValue *angle; /* warning: We use GTK_CSS_NUMBER as an enum for the corners */
   GArray *stops;
-  guint is_computed :1;
   guint repeating :1;
 };
 
