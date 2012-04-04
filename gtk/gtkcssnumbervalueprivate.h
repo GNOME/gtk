@@ -31,6 +31,7 @@ GtkCssValue *   _gtk_css_number_value_new           (double                  val
 GtkCssValue *   _gtk_css_number_value_parse         (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
 
+GtkCssUnit      _gtk_css_number_value_get_unit      (const GtkCssValue      *value);
 double          _gtk_css_number_value_get           (const GtkCssValue      *number,
                                                      double                  one_hundred_percent);
 GtkCssValue *   _gtk_css_number_value_compute       (GtkCssValue            *number,

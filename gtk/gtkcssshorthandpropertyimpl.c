@@ -34,9 +34,7 @@
 #include "gtkcssrepeatvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
-#include "gtkcsstypesprivate.h"
 #include "gtkcssvalueprivate.h"
-#include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtksymboliccolorprivate.h"
 #include "gtktypebuiltins.h"
@@ -316,13 +314,15 @@ parse_border_image (GtkCssShorthandProperty  *shorthand,
 
           if (_gtk_css_parser_try (parser, "/", TRUE))
             {
-              GValue value = G_VALUE_INIT;
-
-              g_value_init (&value, GTK_TYPE_BORDER);
-              if (!_gtk_css_style_parse_value (&value, parser, base))
+              values[2] = _gtk_css_border_value_parse (parser,
+                                                       GTK_CSS_PARSE_PERCENT
+                                                       | GTK_CSS_PARSE_LENGTH
+                                                       | GTK_CSS_PARSE_NUMBER
+                                                       | GTK_CSS_POSITIVE_ONLY,
+                                                       TRUE,
+                                                       FALSE);
+              if (values[2] == NULL)
                 return FALSE;
-              values[2] = _gtk_css_value_new_from_gvalue (&value);
-              g_value_unset (&value);
             }
         }
       else

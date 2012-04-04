@@ -729,20 +729,13 @@ border_image_width_parse (GtkCssStyleProperty *property,
                           GtkCssParser        *parser,
                           GFile               *base)
 {
-  GValue value = G_VALUE_INIT;
-  GtkCssValue *result;
-
-  g_value_init (&value, GTK_TYPE_BORDER);
-  if (!_gtk_css_style_parse_value (&value, parser, base))
-    {
-      g_value_unset (&value);
-      return NULL;
-    }
-
-  result = _gtk_css_value_new_from_gvalue (&value);
-  g_value_unset (&value);
-
-  return result;
+  return _gtk_css_border_value_parse (parser,
+                                      GTK_CSS_PARSE_PERCENT
+                                      | GTK_CSS_PARSE_LENGTH
+                                      | GTK_CSS_PARSE_NUMBER
+                                      | GTK_CSS_POSITIVE_ONLY,
+                                      TRUE,
+                                      FALSE);
 }
 
 static GtkCssValue *
@@ -1543,11 +1536,14 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           border_image_width_parse,
                                           NULL,
+                                          compute_border,
+                                          query_border,
+                                          assign_border,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
-                                          NULL,
-                                          _gtk_css_value_new_from_boxed (GTK_TYPE_BORDER, NULL));
+                                          _gtk_css_border_value_new (_gtk_css_number_value_new (1, GTK_CSS_NUMBER),
+                                                                     _gtk_css_number_value_new (1, GTK_CSS_NUMBER),
+                                                                     _gtk_css_number_value_new (1, GTK_CSS_NUMBER),
+                                                                     _gtk_css_number_value_new (1, GTK_CSS_NUMBER)));
 
   gtk_css_style_property_register        ("transition-property",
                                           GTK_CSS_PROPERTY_TRANSITION_PROPERTY,

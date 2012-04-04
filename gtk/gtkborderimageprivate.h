@@ -35,8 +35,7 @@ struct _GtkBorderImage {
   GtkCssImage *source;
 
   GtkCssValue *slice;
-  gboolean has_width;
-  GtkBorder width;
+  GtkCssValue *width;
   GtkCssValue *repeat;
 };
 

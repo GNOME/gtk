@@ -141,6 +141,14 @@ _gtk_css_number_value_parse (GtkCssParser           *parser,
   return _gtk_css_number_value_new (number.value, number.unit);
 }
 
+GtkCssUnit
+_gtk_css_number_value_get_unit (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_NUMBER, GTK_CSS_NUMBER);
+
+  return value->unit;
+}
+
 double
 _gtk_css_number_value_get (const GtkCssValue *number,
                            double             one_hundred_percent)
