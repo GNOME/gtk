@@ -27,6 +27,7 @@
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssbordervalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
+#include "gtkcsseasevalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagevalueprivate.h"
@@ -543,6 +544,109 @@ parse_background (GtkCssShorthandProperty  *shorthand,
   return TRUE;
 }
 
+static gboolean
+parse_one_transition (GtkCssShorthandProperty  *shorthand,
+                      GtkCssValue             **values,
+                      GtkCssParser             *parser,
+                      GFile                    *base)
+{
+  do
+    {
+      /* the image part */
+      if (values[2] == NULL &&
+          _gtk_css_parser_has_number (parser) && !_gtk_css_parser_begins_with (parser, '-'))
+        {
+          GtkCssValue *number = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
+
+          if (number == NULL)
+            return FALSE;
+
+          if (values[1] == NULL)
+            values[1] = number;
+          else
+            values[2] = number;
+        }
+      else if (values[3] == NULL &&
+               _gtk_css_ease_value_can_parse (parser))
+        {
+          values[3] = _gtk_css_ease_value_parse (parser);
+
+          if (values[3] == NULL)
+            return FALSE;
+        }
+      else if (values[0] == NULL)
+        {
+          values[0] = _gtk_css_ident_value_try_parse (parser);
+          if (values[0] == NULL)
+            {
+              _gtk_css_parser_error (parser, "Unknown value for property");
+              return FALSE;
+            }
+
+        }
+      else
+        {
+          /* We parsed everything and there's still stuff left?
+           * Pretend we didn't notice and let the normal code produce
+           * a 'junk at end of value' error */
+          break;
+        }
+    }
+  while (!value_is_done_parsing (parser));
+
+  return TRUE;
+}
+
+static gboolean
+parse_transition (GtkCssShorthandProperty  *shorthand,
+                  GtkCssValue             **values,
+                  GtkCssParser             *parser,
+                  GFile                    *base)
+{
+  GtkCssValue *step_values[4];
+  GPtrArray *arrays[4];
+  guint i;
+
+  for (i = 0; i < 4; i++)
+    {
+      arrays[i] = g_ptr_array_new ();
+      step_values[i] = NULL;
+    }
+
+  do {
+    if (!parse_one_transition (shorthand, step_values, parser, base))
+      {
+        for (i = 0; i < 4; i++)
+          {
+            g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) _gtk_css_value_unref);
+            g_ptr_array_unref (arrays[i]);
+            return FALSE;
+          }
+      }
+
+      for (i = 0; i < 4; i++)
+        {
+          if (step_values[i] == NULL)
+            {
+              GtkCssValue *initial = _gtk_css_style_property_get_initial_value (
+                                         _gtk_css_shorthand_property_get_subproperty (shorthand, i));
+              step_values[i] = _gtk_css_value_ref (_gtk_css_array_value_get_nth (initial, 0));
+            }
+
+          g_ptr_array_add (arrays[i], step_values[i]);
+          step_values[i] = NULL;
+        }
+  } while (_gtk_css_parser_try (parser, ",", TRUE));
+
+  for (i = 0; i < 4; i++)
+    {
+      values[i] = _gtk_css_array_value_new_from_array ((GtkCssValue **) arrays[i]->pdata, arrays[i]->len);
+      g_ptr_array_unref (arrays[i]);
+    }
+
+  return TRUE;
+}
+
 /*** PACKING ***/
 
 static void
@@ -840,6 +944,7 @@ _gtk_css_shorthand_property_init_properties (void)
   const char *outline_subproperties[] = { "outline-width", "outline-style", "outline-color", NULL };
   const char *background_subproperties[] = { "background-image", "background-repeat", "background-clip", "background-origin",
                                              "background-color", NULL };
+  const char *transition_subproperties[] = { "transition-property", "transition-duration", "transition-delay", "transition-timing-function", NULL };
 
   _gtk_css_shorthand_property_register   ("font",
                                           PANGO_TYPE_FONT_DESCRIPTION,
@@ -929,6 +1034,12 @@ _gtk_css_shorthand_property_init_properties (void)
                                           G_TYPE_NONE,
                                           background_subproperties,
                                           parse_background,
+                                          NULL,
+                                          NULL);
+  _gtk_css_shorthand_property_register   ("transition",
+                                          G_TYPE_NONE,
+                                          transition_subproperties,
+                                          parse_transition,
                                           NULL,
                                           NULL);
 }
