@@ -445,6 +445,7 @@ gtk_private_h_sources =		\
 	gtkcssparserprivate.h	\
 	gtkcsspositionvalueprivate.h	\
 	gtkcssproviderprivate.h	\
+	gtkcssrepeatvalueprivate.h	\
 	gtkcssrgbavalueprivate.h	\
 	gtkcsssectionprivate.h 	\
 	gtkcssselectorprivate.h	\
@@ -656,6 +657,7 @@ gtk_base_c_sources = 		\
 	gtkcssparser.c		\
 	gtkcsspositionvalue.c	\
 	gtkcssprovider.c	\
+	gtkcssrepeatvalue.c	\
 	gtkcssrgbavalue.c	\
 	gtkcsssection.c 	\
 	gtkcssselector.c	\

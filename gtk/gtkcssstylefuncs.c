@@ -887,52 +887,6 @@ pattern_value_compute (GtkStyleContext *context,
     return _gtk_css_value_ref (specified);
 }
 
-static gboolean
-border_image_repeat_value_parse (GtkCssParser *parser,
-                                 GFile *file,
-                                 GValue *value)
-{
-  GtkCssBorderImageRepeat image_repeat;
-  GtkCssBorderRepeatStyle styles[2];
-  gint i, v;
-
-  for (i = 0; i < 2; i++)
-    {
-      if (_gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BORDER_REPEAT_STYLE, &v))
-        styles[i] = v;
-      else if (i == 0)
-        {
-          styles[1] = styles[0] = GTK_CSS_REPEAT_STYLE_STRETCH;
-          break;
-        }
-      else
-        styles[i] = styles[0];
-    }
-
-  image_repeat.hrepeat = styles[0];
-  image_repeat.vrepeat = styles[1];
-
-  g_value_set_boxed (value, &image_repeat);
-
-  return TRUE;
-}
-
-static void
-border_image_repeat_value_print (const GValue *value,
-                                 GString      *string)
-{
-  GtkCssBorderImageRepeat *image_repeat;
-
-  image_repeat = g_value_get_boxed (value);
-
-  enum_print (image_repeat->hrepeat, GTK_TYPE_CSS_BORDER_REPEAT_STYLE, string);
-  if (image_repeat->hrepeat != image_repeat->vrepeat)
-    {
-      g_string_append (string, " ");
-      enum_print (image_repeat->vrepeat, GTK_TYPE_CSS_BORDER_REPEAT_STYLE, string);
-    }
-}
-
 static gboolean 
 enum_value_parse (GtkCssParser *parser,
                   GFile        *base,
@@ -1100,10 +1054,6 @@ gtk_css_style_funcs_init (void)
                                 pattern_value_parse,
                                 pattern_value_print,
                                 pattern_value_compute);
-  register_conversion_function (GTK_TYPE_CSS_BORDER_IMAGE_REPEAT,
-                                border_image_repeat_value_parse,
-                                border_image_repeat_value_print,
-                                NULL);
   register_conversion_function (G_TYPE_ENUM,
                                 enum_value_parse,
                                 enum_value_print,

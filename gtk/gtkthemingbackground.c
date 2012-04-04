@@ -28,6 +28,7 @@
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
+#include "gtkcssrepeatvalueprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkthemingengineprivate.h"
 
@@ -160,19 +161,17 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       && bg->image_rect.width > 0
       && bg->image_rect.height > 0)
     {
-      GtkCssBackgroundRepeat hrepeat, vrepeat;
       const GtkCssBackgroundSize *size;
-      const GtkCssValue *pos;
+      const GtkCssValue *pos, *repeat;
       double image_width, image_height;
       double width, height;
+      GtkCssRepeatStyle hrepeat, vrepeat;
 
       size = _gtk_css_value_get_background_size (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE));
       pos = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION);
-      gtk_style_context_get (bg->context, bg->flags,
-                             "background-repeat", &hrepeat,
-                             NULL);
-      vrepeat = GTK_CSS_BACKGROUND_VERTICAL (hrepeat);
-      hrepeat = GTK_CSS_BACKGROUND_HORIZONTAL (hrepeat);
+      repeat = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_REPEAT);
+      hrepeat = _gtk_css_background_repeat_value_get_x (repeat);
+      vrepeat = _gtk_css_background_repeat_value_get_y (repeat);
       width = bg->image_rect.width;
       height = bg->image_rect.height;
 
@@ -193,13 +192,13 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
 
       /* optimization */
       if (image_width == width)
-        hrepeat = GTK_CSS_BACKGROUND_NO_REPEAT;
+        hrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
       if (image_height == height)
-        vrepeat = GTK_CSS_BACKGROUND_NO_REPEAT;
+        vrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
 
       cairo_translate (cr, bg->image_rect.x, bg->image_rect.y);
 
-      if (hrepeat == GTK_CSS_BACKGROUND_NO_REPEAT && vrepeat == GTK_CSS_BACKGROUND_NO_REPEAT)
+      if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT && vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
         {
 	  cairo_translate (cr,
 			   _gtk_css_position_value_get_x (pos, width - image_width),
@@ -229,24 +228,24 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
            * a third step: that other dimension is scaled so that the original
            * aspect ratio is restored. 
            */
-          if (hrepeat == GTK_CSS_BACKGROUND_ROUND)
+          if (hrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
             {
               double n = round (width / image_width);
 
               n = MAX (1, n);
 
-              if (vrepeat != GTK_CSS_BACKGROUND_ROUND
+              if (vrepeat != GTK_CSS_REPEAT_STYLE_ROUND
                   /* && vsize == auto (it is by default) */)
                 image_height *= width / (image_width * n);
               image_width = width / n;
             }
-          if (vrepeat == GTK_CSS_BACKGROUND_ROUND)
+          if (vrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
             {
               double n = round (height / image_height);
 
               n = MAX (1, n);
 
-              if (hrepeat != GTK_CSS_BACKGROUND_ROUND
+              if (hrepeat != GTK_CSS_REPEAT_STYLE_ROUND
                   /* && hsize == auto (it is by default) */)
                 image_width *= height / (image_height * n);
               image_height = height / n;
@@ -254,7 +253,7 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
 
           /* if hrepeat or vrepeat is 'space', we create a somewhat larger surface
            * to store the extra space. */
-          if (hrepeat == GTK_CSS_BACKGROUND_SPACE)
+          if (hrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
             {
               double n = floor (width / image_width);
               surface_width = n ? round (width / n) : 0;
@@ -262,7 +261,7 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
           else
             surface_width = round (image_width);
 
-          if (vrepeat == GTK_CSS_BACKGROUND_SPACE)
+          if (vrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
             {
               double n = floor (height / image_height);
               surface_height = n ? round (height / n) : 0;
@@ -288,8 +287,8 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
 
           cairo_rectangle (cr,
                            0, 0,
-                           hrepeat == GTK_CSS_BACKGROUND_NO_REPEAT ? image_width : width,
-                           vrepeat == GTK_CSS_BACKGROUND_NO_REPEAT ? image_height : height);
+                           hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT ? image_width : width,
+                           vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT ? image_height : height);
           cairo_fill (cr);
         }
     }

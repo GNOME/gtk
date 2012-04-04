@@ -30,6 +30,7 @@
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcssrepeatvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypesprivate.h"
@@ -277,45 +278,58 @@ parse_border_image (GtkCssShorthandProperty  *shorthand,
                     GtkCssParser             *parser,
                     GFile                    *base)
 {
-  GValue value = G_VALUE_INIT;
-  GtkCssImage *image;
-  
-  if (_gtk_css_parser_try (parser, "none", TRUE))
-    image = NULL;
-  else
+  do
     {
-      image = _gtk_css_image_new_parse (parser, base);
-      if (!image)
-        return FALSE;
+      if (values[0] == NULL &&
+          (_gtk_css_parser_has_prefix (parser, "none") ||
+           _gtk_css_image_can_parse (parser)))
+        {
+          GtkCssImage *image;
+
+          if (_gtk_css_parser_try (parser, "none", TRUE))
+            image = NULL;
+          else
+            {
+              image = _gtk_css_image_new_parse (parser, base);
+              if (image == NULL)
+                return FALSE;
+            }
+
+          values[0] = _gtk_css_image_value_new (image);
+        }
+      else if (values[3] == NULL &&
+               (values[3] = _gtk_css_border_repeat_value_try_parse (parser)))
+        {
+          /* please move along */
+        }
+      else if (values[1] == NULL)
+        {
+          GValue value = G_VALUE_INIT;
+
+          g_value_init (&value, GTK_TYPE_BORDER);
+          if (!_gtk_css_style_parse_value (&value, parser, base))
+            return FALSE;
+          values[1] = _gtk_css_value_new_from_gvalue (&value);
+          g_value_unset (&value);
+
+          if (_gtk_css_parser_try (parser, "/", TRUE))
+            {
+              g_value_init (&value, GTK_TYPE_BORDER);
+              if (!_gtk_css_style_parse_value (&value, parser, base))
+                return FALSE;
+              values[2] = _gtk_css_value_new_from_gvalue (&value);
+              g_value_unset (&value);
+            }
+        }
+      else
+        {
+          /* We parsed everything and there's still stuff left?
+           * Pretend we didn't notice and let the normal code produce
+           * a 'junk at end of value' error */
+          break;
+        }
     }
-  values[0] = _gtk_css_image_value_new (image);
-
-  if (value_is_done_parsing (parser))
-    return TRUE;
-
-  g_value_init (&value, GTK_TYPE_BORDER);
-  if (!_gtk_css_style_parse_value (&value, parser, base))
-    return FALSE;
-  values[1] = _gtk_css_value_new_from_gvalue (&value);
-  g_value_unset (&value);
-
-  if (_gtk_css_parser_try (parser, "/", TRUE))
-    {
-      g_value_init (&value, GTK_TYPE_BORDER);
-      if (!_gtk_css_style_parse_value (&value, parser, base))
-        return FALSE;
-      values[2] = _gtk_css_value_new_from_gvalue (&value);
-      g_value_unset (&value);
-    }
-
-  if (value_is_done_parsing (parser))
-    return TRUE;
-
-  g_value_init (&value, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
-  if (!_gtk_css_style_parse_value (&value, parser, base))
-    return FALSE;
-  values[3] = _gtk_css_value_new_from_gvalue (&value);
-  g_value_unset (&value);
+  while (!value_is_done_parsing (parser));
 
   return TRUE;
 }
@@ -352,13 +366,6 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
           return FALSE;
 
         values[2] = _gtk_css_value_new_take_symbolic_color (symbolic);
-      }
-    else
-      {
-        /* We parsed everything and there's still stuff left?
-         * Pretend we didn't notice and let the normal code produce
-         * a 'junk at end of value' error */
-        break;
       }
   }
   while (!value_is_done_parsing (parser));
@@ -474,8 +481,6 @@ parse_background (GtkCssShorthandProperty  *shorthand,
                   GtkCssParser             *parser,
                   GFile                    *base)
 {
-  int enum_value;
-
   do
     {
       /* the image part */
@@ -497,27 +502,9 @@ parse_background (GtkCssShorthandProperty  *shorthand,
           values[0] = _gtk_css_image_value_new (image);
         }
       else if (values[1] == NULL &&
-               _gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT, &enum_value))
+               (values[1] = _gtk_css_background_repeat_value_try_parse (parser)))
         {
-          if (enum_value <= GTK_CSS_BACKGROUND_REPEAT_MASK)
-            {
-              int vertical;
-
-              if (_gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT, &vertical))
-                {
-                  if (vertical >= GTK_CSS_BACKGROUND_REPEAT_MASK)
-                    {
-                      _gtk_css_parser_error (parser, "Not a valid 2nd value for border-repeat");
-                      return FALSE;
-                    }
-                  else
-                    enum_value |= vertical << GTK_CSS_BACKGROUND_REPEAT_SHIFT;
-                }
-              else
-                enum_value |= enum_value << GTK_CSS_BACKGROUND_REPEAT_SHIFT;
-            }
-
-          values[1] = _gtk_css_value_new_from_enum (GTK_TYPE_CSS_BACKGROUND_REPEAT, enum_value);
+          /* nothing to do here */
         }
       else if ((values[2] == NULL || values[3] == NULL) &&
                (values[3] = _gtk_css_area_value_try_parse (parser)))

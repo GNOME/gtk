@@ -114,33 +114,6 @@ enum { /*< skip >*/
   GTK_CSS_PROPERTY_N_PROPERTIES
 };
 
-/* We encode horizontal and vertical repeat in one enum value.
- * This eases parsing and storage, but you need to be aware that
- * you have to "unpack" this value.
- */
-#define GTK_CSS_BACKGROUND_REPEAT_SHIFT (8)
-#define GTK_CSS_BACKGROUND_REPEAT_MASK ((1 << GTK_CSS_BACKGROUND_REPEAT_SHIFT) - 1)
-#define GTK_CSS_BACKGROUND_HORIZONTAL(repeat) ((repeat) & GTK_CSS_BACKGROUND_REPEAT_MASK)
-#define GTK_CSS_BACKGROUND_VERTICAL(repeat) (((repeat) >> GTK_CSS_BACKGROUND_REPEAT_SHIFT) & GTK_CSS_BACKGROUND_REPEAT_MASK)
-typedef enum /*< enum >*/
-{
-  GTK_CSS_BACKGROUND_INVALID, /*< skip >*/
-  GTK_CSS_BACKGROUND_REPEAT, /* start at one so we know if a value has been set */
-  GTK_CSS_BACKGROUND_SPACE,
-  GTK_CSS_BACKGROUND_ROUND,
-  GTK_CSS_BACKGROUND_NO_REPEAT,
-  /* need to hardcode the numer or glib-mkenums makes us into a flags type */
-  GTK_CSS_BACKGROUND_REPEAT_X = 1025,
-  GTK_CSS_BACKGROUND_REPEAT_Y = 260
-} GtkCssBackgroundRepeat;
-
-typedef enum {
-  GTK_CSS_REPEAT_STYLE_STRETCH,
-  GTK_CSS_REPEAT_STYLE_REPEAT,
-  GTK_CSS_REPEAT_STYLE_ROUND,
-  GTK_CSS_REPEAT_STYLE_SPACE
-} GtkCssBorderRepeatStyle;
-
 typedef enum /*< skip >*/ {
   GTK_CSS_AREA_BORDER_BOX,
   GTK_CSS_AREA_PADDING_BOX,
@@ -188,7 +161,6 @@ typedef enum /*< skip >*/ {
 
 typedef struct _GtkCssNumber GtkCssNumber;
 typedef struct _GtkCssBackgroundSize GtkCssBackgroundSize;
-typedef struct _GtkCssBorderImageRepeat GtkCssBorderImageRepeat;
 
 struct _GtkCssNumber {
   gdouble        value;
@@ -202,16 +174,9 @@ struct _GtkCssBackgroundSize {
   guint contain :1;
 };
 
-struct _GtkCssBorderImageRepeat {
-  GtkCssBorderRepeatStyle vrepeat;
-  GtkCssBorderRepeatStyle hrepeat;
-};
-
 #define GTK_TYPE_CSS_BACKGROUND_SIZE _gtk_css_background_size_get_type ()
-#define GTK_TYPE_CSS_BORDER_IMAGE_REPEAT _gtk_css_border_image_repeat_get_type ()
 
 GType           _gtk_css_background_size_get_type               (void);
-GType           _gtk_css_border_image_repeat_get_type           (void);
 
 GtkCssChange    _gtk_css_change_for_sibling                      (GtkCssChange       match);
 GtkCssChange    _gtk_css_change_for_child                        (GtkCssChange       match);

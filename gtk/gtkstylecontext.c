@@ -23,6 +23,7 @@
 #include <gobject/gvaluecollector.h>
 
 #include "gtkstylecontextprivate.h"
+#include "gtkcssenginevalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtktypebuiltins.h"
@@ -974,7 +975,6 @@ style_data_lookup (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
-  GtkCssValue *v;
 
   priv = context->priv;
   info = priv->info_stack->data;
@@ -1006,11 +1006,9 @@ style_data_lookup (GtkStyleContext *context)
   if (priv->theming_engine)
     g_object_unref (priv->theming_engine);
 
-  v = _gtk_css_computed_values_get_value (info->data->store, GTK_CSS_PROPERTY_ENGINE);
-  if (v)
-    priv->theming_engine = _gtk_css_value_dup_object (v);
-  else
-    priv->theming_engine = g_object_ref (gtk_theming_engine_load (NULL));
+  priv->theming_engine = g_object_ref (
+                           _gtk_css_engine_value_get_engine (
+                             _gtk_css_computed_values_get_value (info->data->store, GTK_CSS_PROPERTY_ENGINE)));
 
   return info->data;
 }

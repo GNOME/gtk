@@ -50,6 +50,7 @@
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
+#include "gtkcssrepeatvalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
@@ -665,20 +666,15 @@ border_image_repeat_parse (GtkCssStyleProperty *property,
                            GtkCssParser        *parser,
                            GFile               *base)
 {
-  GValue value = G_VALUE_INIT;
-  GtkCssValue *result;
+  GtkCssValue *value = _gtk_css_border_repeat_value_try_parse (parser);
 
-  g_value_init (&value, GTK_TYPE_CSS_BORDER_IMAGE_REPEAT);
-  if (!_gtk_css_style_parse_value (&value, parser, base))
+  if (value == NULL)
     {
-      g_value_unset (&value);
+      _gtk_css_parser_error (parser, "Not a valid value");
       return NULL;
     }
 
-  result = _gtk_css_value_new_from_gvalue (&value);
-  g_value_unset (&value);
-
-  return result;
+  return value;
 }
 
 static GtkCssValue *
@@ -886,63 +882,15 @@ background_repeat_value_parse (GtkCssStyleProperty *property,
                                GtkCssParser        *parser,
                                GFile               *base)
 {
-  int repeat, vertical;
+  GtkCssValue *value = _gtk_css_background_repeat_value_try_parse (parser);
 
-  if (!_gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT, &repeat))
+  if (value == NULL)
     {
       _gtk_css_parser_error (parser, "Not a valid value");
-      return FALSE;
+      return NULL;
     }
 
-  if (repeat <= GTK_CSS_BACKGROUND_REPEAT_MASK)
-    {
-      if (_gtk_css_parser_try_enum (parser, GTK_TYPE_CSS_BACKGROUND_REPEAT, &vertical))
-        {
-          if (vertical >= GTK_CSS_BACKGROUND_REPEAT_MASK)
-            {
-              _gtk_css_parser_error (parser, "Not a valid 2nd value");
-              return FALSE;
-            }
-          else
-            repeat |= vertical << GTK_CSS_BACKGROUND_REPEAT_SHIFT;
-        }
-      else
-        repeat |= repeat << GTK_CSS_BACKGROUND_REPEAT_SHIFT;
-    }
-
-  return _gtk_css_value_new_from_enum (GTK_TYPE_CSS_BACKGROUND_REPEAT, repeat);
-}
-
-static void
-background_repeat_value_print (GtkCssStyleProperty *property,
-                               const GtkCssValue   *value,
-                               GString             *string)
-{
-  GEnumClass *enum_class;
-  GEnumValue *enum_value;
-  GtkCssBackgroundRepeat repeat;
-
-  repeat = _gtk_css_value_get_enum (value);
-  enum_class = g_type_class_ref (GTK_TYPE_CSS_BACKGROUND_REPEAT);
-  enum_value = g_enum_get_value (enum_class, repeat);
-
-  /* only triggers for 'repeat-x' and 'repeat-y' */
-  if (enum_value)
-    g_string_append (string, enum_value->value_nick);
-  else
-    {
-      enum_value = g_enum_get_value (enum_class, GTK_CSS_BACKGROUND_HORIZONTAL (repeat));
-      g_string_append (string, enum_value->value_nick);
-
-      if (GTK_CSS_BACKGROUND_HORIZONTAL (repeat) != GTK_CSS_BACKGROUND_VERTICAL (repeat))
-        {
-          enum_value = g_enum_get_value (enum_class, GTK_CSS_BACKGROUND_VERTICAL (repeat));
-          g_string_append (string, " ");
-          g_string_append (string, enum_value->value_nick);
-        }
-    }
-
-  g_type_class_unref (enum_class);
+  return value;
 }
 
 static GtkCssValue *
@@ -1067,7 +1015,6 @@ _gtk_css_style_property_init_properties (void)
 {
   GtkCssBackgroundSize default_background_size = { GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), GTK_CSS_NUMBER_INIT (0, GTK_CSS_PX), FALSE, FALSE };
   GtkBorder border_of_ones = { 1, 1, 1, 1 };
-  GtkCssBorderImageRepeat border_image_repeat = { GTK_CSS_REPEAT_STYLE_STRETCH, GTK_CSS_REPEAT_STYLE_STRETCH };
 
   /* Initialize "color" and "font-size" first,
    * so that when computing values later they are
@@ -1571,17 +1518,16 @@ _gtk_css_style_property_init_properties (void)
 
   gtk_css_style_property_register        ("background-repeat",
                                           GTK_CSS_PROPERTY_BACKGROUND_REPEAT,
-                                          GTK_TYPE_CSS_BACKGROUND_REPEAT,
+                                          G_TYPE_NONE,
                                           0,
                                           background_repeat_value_parse,
-                                          background_repeat_value_print,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
                                           NULL,
-                                          _gtk_css_value_new_from_enum (GTK_TYPE_CSS_BACKGROUND_REPEAT,
-                                                                        GTK_CSS_BACKGROUND_REPEAT | 
-                                                                        (GTK_CSS_BACKGROUND_REPEAT << GTK_CSS_BACKGROUND_REPEAT_SHIFT)));
+                                          NULL,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_background_repeat_value_new (GTK_CSS_REPEAT_STYLE_REPEAT,
+                                                                                GTK_CSS_REPEAT_STYLE_REPEAT));
   gtk_css_style_property_register        ("background-image",
                                           GTK_CSS_PROPERTY_BACKGROUND_IMAGE,
                                           CAIRO_GOBJECT_TYPE_PATTERN,
@@ -1607,15 +1553,16 @@ _gtk_css_style_property_init_properties (void)
                                           _gtk_css_image_value_new (NULL));
   gtk_css_style_property_register        ("border-image-repeat",
                                           GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT,
-                                          GTK_TYPE_CSS_BORDER_IMAGE_REPEAT,
+                                          G_TYPE_NONE,
                                           0,
                                           border_image_repeat_parse,
                                           NULL,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
                                           NULL,
-                                          _gtk_css_value_new_from_border_image_repeat (&border_image_repeat));
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_border_repeat_value_new (GTK_CSS_REPEAT_STYLE_STRETCH,
+                                                                            GTK_CSS_REPEAT_STYLE_STRETCH));
 
   /* XXX: The initial value is wrong, it should be 100% */
   gtk_css_style_property_register        ("border-image-slice",

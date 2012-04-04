@@ -24,8 +24,8 @@
 
 #include "gtkborder.h"
 #include "gtkcssimageprivate.h"
+#include "gtkcssvalueprivate.h"
 #include "gtkthemingengine.h"
-#include "gtkcsstypesprivate.h"
 
 G_BEGIN_DECLS
 
@@ -37,7 +37,7 @@ struct _GtkBorderImage {
   GtkBorder slice;
   gboolean has_width;
   GtkBorder width;
-  GtkCssBorderImageRepeat repeat;
+  GtkCssValue *repeat;
 };
 
 gboolean          _gtk_border_image_init             (GtkBorderImage       *image,

@@ -120,12 +120,6 @@ gtk_css_value_position_print (const GtkCssValue *position,
         g_string_append (string, "center ");
       _gtk_css_value_print (position->y, string);
     }
-  _gtk_css_value_print (position->x, string);
-  if (!_gtk_css_value_equal (position->x, position->y))
-    {
-      g_string_append_c (string, ' ');
-      _gtk_css_value_print (position->y, string);
-    }
 
 done:
   for (i = 0; i < G_N_ELEMENTS (values); i++)

@@ -26,6 +26,7 @@
 
 #include "gtkborderimageprivate.h"
 #include "gtkcssimagevalueprivate.h"
+#include "gtkcssrepeatvalueprivate.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtkthemingengineprivate.h"
 
@@ -54,7 +55,7 @@ _gtk_border_image_init (GtkBorderImage   *image,
   else
     image->has_width = FALSE;
 
-  image->repeat = *_gtk_css_value_get_border_image_repeat (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT));
+  image->repeat = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT);
 
   return TRUE;
 }
@@ -91,8 +92,8 @@ gtk_border_image_render_slice (cairo_t           *cr,
                                double             y,
                                double             width,
                                double             height,
-                               GtkCssBorderRepeatStyle  hrepeat,
-                               GtkCssBorderRepeatStyle  vrepeat)
+                               GtkCssRepeatStyle  hrepeat,
+                               GtkCssRepeatStyle  vrepeat)
 {
   double hscale, vscale;
   double xstep, ystep;
@@ -299,8 +300,8 @@ _gtk_border_image_render (GtkBorderImage   *image,
                                          vertical_border[v].offset,
                                          horizontal_border[h].size,
                                          vertical_border[v].size,
-                                         h == 1 ? image->repeat.hrepeat : GTK_CSS_REPEAT_STYLE_STRETCH,
-                                         v == 1 ? image->repeat.vrepeat : GTK_CSS_REPEAT_STYLE_STRETCH);
+                                         h == 1 ? _gtk_css_border_repeat_value_get_x (image->repeat) : GTK_CSS_REPEAT_STYLE_STRETCH,
+                                         v == 1 ? _gtk_css_border_repeat_value_get_y (image->repeat) : GTK_CSS_REPEAT_STYLE_STRETCH);
 
           cairo_surface_destroy (slice);
         }
