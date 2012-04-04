@@ -50,6 +50,7 @@ static gboolean
 value_is_done_parsing (GtkCssParser *parser)
 {
   return _gtk_css_parser_is_eof (parser) ||
+         _gtk_css_parser_begins_with (parser, ',') ||
          _gtk_css_parser_begins_with (parser, ';') ||
          _gtk_css_parser_begins_with (parser, '}');
 }
