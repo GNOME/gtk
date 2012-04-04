@@ -351,9 +351,6 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   /* Get a Wayland buffer from this new surface */
   data = cairo_surface_get_user_data (impl->cairo_surface,
 				      &gdk_wayland_cairo_key);
-  if (!data->buffer)
-    data->buffer =
-      wl_egl_pixmap_create_buffer(data->pixmap);
 
   if (impl->resize_edges & WL_SHELL_SURFACE_RESIZE_LEFT)
     dx = server_width - data->width;
@@ -415,6 +412,10 @@ gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
 
   if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
     fprintf (stderr, "create gl surface failed\n");
+
+  if (!data->buffer)
+    data->buffer =
+      wl_egl_pixmap_create_buffer(data->pixmap);
 
   return surface;
 }
