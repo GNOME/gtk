@@ -34,7 +34,7 @@ typedef struct _GtkBorderImage GtkBorderImage;
 struct _GtkBorderImage {
   GtkCssImage *source;
 
-  GtkBorder slice;
+  GtkCssValue *slice;
   gboolean has_width;
   GtkBorder width;
   GtkCssValue *repeat;

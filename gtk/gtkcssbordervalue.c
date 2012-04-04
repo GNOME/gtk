@@ -1,0 +1,235 @@
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 2011 Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "config.h"
+
+#include "gtkcssbordervalueprivate.h"
+
+#include "gtkcssnumbervalueprivate.h"
+
+struct _GtkCssValue {
+  GTK_CSS_VALUE_BASE
+  guint fill :1;
+  GtkCssValue *values[4];
+};
+
+static void
+gtk_css_value_border_free (GtkCssValue *value)
+{
+  guint i;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (value->values[i])
+        _gtk_css_value_unref (value->values[i]);
+    }
+
+  g_slice_free (GtkCssValue, value);
+}
+
+static gboolean
+gtk_css_value_border_equal (const GtkCssValue *value1,
+                            const GtkCssValue *value2)
+{
+  guint i;
+
+  if (value1->fill != value2->fill)
+    return FALSE;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (!_gtk_css_value_equal0 (value1->values[i], value2->values[i]))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static GtkCssValue *
+gtk_css_value_border_transition (GtkCssValue *start,
+                                 GtkCssValue *end,
+                                 double       progress)
+{
+  return NULL;
+}
+
+static void
+gtk_css_value_border_print (const GtkCssValue *value,
+                            GString           *string)
+{
+  guint i, n;
+
+  if (!_gtk_css_value_equal0 (value->values[GTK_CSS_RIGHT], value->values[GTK_CSS_LEFT]))
+    n = 4;
+  else if (!_gtk_css_value_equal0 (value->values[GTK_CSS_TOP], value->values[GTK_CSS_BOTTOM]))
+    n = 3;
+  else if (!_gtk_css_value_equal0 (value->values[GTK_CSS_TOP], value->values[GTK_CSS_RIGHT]))
+    n = 2;
+  else
+    n = 1;
+
+  for (i = 0; i < n; i++)
+    {
+      if (i > 0)
+        g_string_append_c (string, ' ');
+
+      if (value->values[i] == NULL)
+        g_string_append (string, "auto");
+      else
+        _gtk_css_value_print (value->values[i], string);
+    }
+
+  if (value->fill)
+    g_string_append (string, " fill");
+}
+
+static const GtkCssValueClass GTK_CSS_VALUE_BORDER = {
+  gtk_css_value_border_free,
+  gtk_css_value_border_equal,
+  gtk_css_value_border_transition,
+  gtk_css_value_border_print
+};
+
+GtkCssValue *
+_gtk_css_border_value_new (GtkCssValue *top,
+                           GtkCssValue *right,
+                           GtkCssValue *bottom,
+                           GtkCssValue *left)
+{
+  GtkCssValue *result;
+
+  result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_BORDER);
+  result->values[GTK_CSS_TOP] = top;
+  result->values[GTK_CSS_RIGHT] = right;
+  result->values[GTK_CSS_BOTTOM] = bottom;
+  result->values[GTK_CSS_LEFT] = left;
+
+  return result;
+}
+
+GtkCssValue *
+_gtk_css_border_value_parse (GtkCssParser           *parser,
+                             GtkCssNumberParseFlags  flags,
+                             gboolean                allow_auto,
+                             gboolean                allow_fill)
+{
+  GtkCssValue *result;
+  guint i;
+
+  result = _gtk_css_border_value_new (NULL, NULL, NULL, NULL);
+
+  if (allow_fill)
+    result->fill = _gtk_css_parser_try (parser, "fill", TRUE);
+
+  for (i = 0; i < 4; i++)
+    {
+      if (allow_auto && _gtk_css_parser_try (parser, "auto", TRUE))
+        continue;
+
+      if (!_gtk_css_parser_has_number (parser))
+        break;
+
+      result->values[i] = _gtk_css_number_value_parse (parser, flags);
+      if (result->values[i] == NULL)
+        {
+          _gtk_css_value_unref (result);
+          return NULL;
+        }
+    }
+
+  if (i == 0)
+    {
+      _gtk_css_parser_error (parser, "Expected a number");
+      _gtk_css_value_unref (result);
+      return NULL;
+    }
+
+  if (allow_fill && !result->fill)
+    result->fill = _gtk_css_parser_try (parser, "fill", TRUE);
+
+  for (; i < 4; i++)
+    {
+      if (result->values[(i - 1) >> 1])
+        result->values[i] = _gtk_css_value_ref (result->values[(i - 1) >> 1]);
+    }
+
+  return result;
+}
+
+GtkCssValue *
+_gtk_css_border_value_get_top (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_BORDER, NULL);
+
+  return value->values[GTK_CSS_TOP];
+}
+
+GtkCssValue *
+_gtk_css_border_value_get_right (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_BORDER, NULL);
+
+  return value->values[GTK_CSS_RIGHT];
+}
+
+GtkCssValue *
+_gtk_css_border_value_get_bottom (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_BORDER, NULL);
+
+  return value->values[GTK_CSS_BOTTOM];
+}
+
+GtkCssValue *
+_gtk_css_border_value_get_left (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_BORDER, NULL);
+
+  return value->values[GTK_CSS_LEFT];
+}
+
+GtkCssValue *
+_gtk_css_border_value_compute (GtkCssValue     *value,
+                               GtkStyleContext *context)
+{
+  GtkCssValue *computed;
+  gboolean changed = FALSE;
+  guint i;
+
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_BORDER, NULL);
+
+  computed = _gtk_css_border_value_new (NULL, NULL, NULL, NULL);
+  computed->fill = value->fill;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (value->values[i])
+        {
+          computed->values[i] = _gtk_css_number_value_compute (value->values[i], context);
+          changed |= (computed->values[i] != value->values[i]);
+        }
+    }
+
+  if (!changed)
+    {
+      _gtk_css_value_unref (computed);
+      return _gtk_css_value_ref (value);
+    }
+
+  return computed;
+}
+

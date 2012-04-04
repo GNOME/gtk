@@ -42,6 +42,7 @@
 #include "gtkbindings.h"
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssbgsizevalueprivate.h"
+#include "gtkcssbordervalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsseasevalueprivate.h"
 #include "gtkcssenginevalueprivate.h"
@@ -157,6 +158,38 @@ assign_length_from_double (GtkCssStyleProperty *property,
                            const GValue        *value)
 {
   return _gtk_css_number_value_new (g_value_get_double (value), GTK_CSS_PX);
+}
+
+static void
+query_border (GtkCssStyleProperty *property,
+              const GtkCssValue   *css_value,
+              GValue              *value)
+{
+  GtkBorder border;
+
+  g_value_init (value, GTK_TYPE_BORDER);
+  
+  border.top = round (_gtk_css_number_value_get (_gtk_css_border_value_get_top (css_value), 100));
+  border.right = round (_gtk_css_number_value_get (_gtk_css_border_value_get_right (css_value), 100));
+  border.bottom = round (_gtk_css_number_value_get (_gtk_css_border_value_get_bottom (css_value), 100));
+  border.left = round (_gtk_css_number_value_get (_gtk_css_border_value_get_left (css_value), 100));
+
+  g_value_set_boxed (value, &border);
+}
+
+static GtkCssValue *
+assign_border (GtkCssStyleProperty *property,
+               const GValue        *value)
+{
+  const GtkBorder *border = g_value_get_boxed (value);
+
+  if (border == NULL)
+    return _gtk_css_value_ref (_gtk_css_style_property_get_initial_value (property));
+  else
+    return _gtk_css_border_value_new (_gtk_css_number_value_new (border->top, GTK_CSS_PX),
+                                      _gtk_css_number_value_new (border->right, GTK_CSS_PX),
+                                      _gtk_css_number_value_new (border->bottom, GTK_CSS_PX),
+                                      _gtk_css_number_value_new (border->left, GTK_CSS_PX));
 }
 
 static GtkCssValue *
@@ -683,20 +716,12 @@ border_image_slice_parse (GtkCssStyleProperty *property,
                           GtkCssParser        *parser,
                           GFile               *base)
 {
-  GValue value = G_VALUE_INIT;
-  GtkCssValue *result;
-
-  g_value_init (&value, GTK_TYPE_BORDER);
-  if (!_gtk_css_style_parse_value (&value, parser, base))
-    {
-      g_value_unset (&value);
-      return NULL;
-    }
-
-  result = _gtk_css_value_new_from_gvalue (&value);
-  g_value_unset (&value);
-
-  return result;
+  return _gtk_css_border_value_parse (parser,
+                                      GTK_CSS_PARSE_PERCENT
+                                      | GTK_CSS_PARSE_NUMBER
+                                      | GTK_CSS_POSITIVE_ONLY,
+                                      FALSE,
+                                      TRUE);
 }
 
 static GtkCssValue *
@@ -718,6 +743,14 @@ border_image_width_parse (GtkCssStyleProperty *property,
   g_value_unset (&value);
 
   return result;
+}
+
+static GtkCssValue *
+compute_border (GtkCssStyleProperty *property,
+                GtkStyleContext     *context,
+                GtkCssValue         *specified)
+{
+  return _gtk_css_border_value_compute (specified, context);
 }
 
 static GtkCssValue *
@@ -942,8 +975,6 @@ gtk_symbolic_color_new_rgba (double red,
 void
 _gtk_css_style_property_init_properties (void)
 {
-  GtkBorder border_of_ones = { 1, 1, 1, 1 };
-
   /* Initialize "color" and "font-size" first,
    * so that when computing values later they are
    * done first. That way, 'currentColor' and font
@@ -1492,18 +1523,20 @@ _gtk_css_style_property_init_properties (void)
                                           _gtk_css_border_repeat_value_new (GTK_CSS_REPEAT_STYLE_STRETCH,
                                                                             GTK_CSS_REPEAT_STYLE_STRETCH));
 
-  /* XXX: The initial value is wrong, it should be 100% */
   gtk_css_style_property_register        ("border-image-slice",
                                           GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE,
                                           GTK_TYPE_BORDER,
                                           0,
                                           border_image_slice_parse,
                                           NULL,
+                                          compute_border,
+                                          query_border,
+                                          assign_border,
                                           NULL,
-                                          query_simple,
-                                          assign_simple,
-                                          NULL,
-                                          _gtk_css_value_new_from_boxed (GTK_TYPE_BORDER, &border_of_ones));
+                                          _gtk_css_border_value_new (_gtk_css_number_value_new (100, GTK_CSS_PERCENT),
+                                                                     _gtk_css_number_value_new (100, GTK_CSS_PERCENT),
+                                                                     _gtk_css_number_value_new (100, GTK_CSS_PERCENT),
+                                                                     _gtk_css_number_value_new (100, GTK_CSS_PERCENT)));
   gtk_css_style_property_register        ("border-image-width",
                                           GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH,
                                           GTK_TYPE_BORDER,

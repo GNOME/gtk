@@ -349,6 +349,19 @@ _gtk_css_value_equal (const GtkCssValue *value1,
   return value1->class->equal (value1, value2);
 }
 
+gboolean
+_gtk_css_value_equal0 (const GtkCssValue *value1,
+                       const GtkCssValue *value2)
+{
+  if (value1 == NULL && value2 == NULL)
+    return TRUE;
+
+  if (value1 == NULL || value2 == NULL)
+    return FALSE;
+
+  return _gtk_css_value_equal (value1, value2);
+}
+
 GtkCssValue *
 _gtk_css_value_transition (GtkCssValue *start,
                            GtkCssValue *end,

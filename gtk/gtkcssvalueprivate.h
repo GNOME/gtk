@@ -66,6 +66,8 @@ void         _gtk_css_value_unref                     (GtkCssValue              
 
 gboolean     _gtk_css_value_equal                     (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);
+gboolean     _gtk_css_value_equal0                    (const GtkCssValue          *value1,
+                                                       const GtkCssValue          *value2);
 GtkCssValue *_gtk_css_value_transition                (GtkCssValue                *start,
                                                        GtkCssValue                *end,
                                                        double                      progress);

@@ -25,7 +25,9 @@
 #include <math.h>
 
 #include "gtkborderimageprivate.h"
+#include "gtkcssbordervalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrepeatvalueprivate.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtkthemingengineprivate.h"
@@ -45,7 +47,7 @@ _gtk_border_image_init (GtkBorderImage   *image,
   if (image->source == NULL)
     return FALSE;
 
-  image->slice = *(GtkBorder *) _gtk_css_value_get_boxed (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE));
+  image->slice = _gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE);
   width = _gtk_css_value_get_boxed (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH));
   if (width)
     {
@@ -254,12 +256,12 @@ _gtk_border_image_render (GtkBorderImage   *image,
 
   gtk_border_image_compute_slice_size (horizontal_slice,
                                        source_width, 
-                                       image->slice.left,
-                                       image->slice.right);
+                                       _gtk_css_number_value_get (_gtk_css_border_value_get_left (image->slice), source_width),
+                                       _gtk_css_number_value_get (_gtk_css_border_value_get_right (image->slice), source_width));
   gtk_border_image_compute_slice_size (vertical_slice,
                                        source_height, 
-                                       image->slice.top,
-                                       image->slice.bottom);
+                                       _gtk_css_number_value_get (_gtk_css_border_value_get_top (image->slice), source_height),
+                                       _gtk_css_number_value_get (_gtk_css_border_value_get_bottom (image->slice), source_height));
   gtk_border_image_compute_border_size (horizontal_border,
                                         x,
                                         width,
