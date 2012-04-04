@@ -27,7 +27,6 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <cairo-gobject.h>
 
-#include "gtkanimationdescription.h"
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssprovider.h"
 #include "gtkcssrgbavalueprivate.h"
@@ -603,43 +602,6 @@ theming_engine_value_print (const GValue *value,
 }
 
 static gboolean 
-animation_description_value_parse (GtkCssParser *parser,
-                                   GFile        *base,
-                                   GValue       *value)
-{
-  GtkAnimationDescription *desc;
-  char *str;
-
-  str = _gtk_css_parser_read_value (parser);
-  if (str == NULL)
-    return FALSE;
-
-  desc = _gtk_animation_description_from_string (str);
-  g_free (str);
-
-  if (desc == NULL)
-    {
-      _gtk_css_parser_error (parser, "Invalid animation description");
-      return FALSE;
-    }
-  
-  g_value_take_boxed (value, desc);
-  return TRUE;
-}
-
-static void
-animation_description_value_print (const GValue *value,
-                                   GString      *string)
-{
-  GtkAnimationDescription *desc = g_value_get_boxed (value);
-
-  if (desc == NULL)
-    g_string_append (string, "none");
-  else
-    _gtk_animation_description_print (desc, string);
-}
-
-static gboolean 
 border_value_parse (GtkCssParser *parser,
                     GFile        *base,
                     GValue       *value)
@@ -1037,10 +999,6 @@ gtk_css_style_funcs_init (void)
   register_conversion_function (GTK_TYPE_THEMING_ENGINE,
                                 theming_engine_value_parse,
                                 theming_engine_value_print,
-                                NULL);
-  register_conversion_function (GTK_TYPE_ANIMATION_DESCRIPTION,
-                                animation_description_value_parse,
-                                animation_description_value_print,
                                 NULL);
   register_conversion_function (GTK_TYPE_BORDER,
                                 border_value_parse,

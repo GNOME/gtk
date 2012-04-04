@@ -911,15 +911,11 @@ gtk_expander_paint (GtkExpander *expander,
   gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
 
-  /* The expander is the only animatable region */
-  gtk_style_context_push_animatable_region (context, GUINT_TO_POINTER (1));
-
   gtk_render_expander (context, cr,
                        clip.x - allocation.x,
                        clip.y - allocation.y,
                        size, size);
 
-  gtk_style_context_pop_animatable_region (context);
   gtk_style_context_restore (context);
 }
 
@@ -1709,27 +1705,8 @@ gtk_expander_set_expanded (GtkExpander *expander,
   if (priv->expanded != expanded)
     {
       GtkWidget *widget = GTK_WIDGET (expander);
-      GtkSettings *settings = gtk_widget_get_settings (widget);
-      GtkStyleContext *context;
-      gboolean enable_animations;
 
-      context = gtk_widget_get_style_context (widget);
       priv->expanded = expanded;
-
-      g_object_get (settings, "gtk-enable-animations", &enable_animations, NULL);
-
-      if (enable_animations && gtk_widget_get_realized (widget))
-        {
-          gtk_style_context_save (context);
-          gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
-
-          gtk_style_context_notify_state_change (context,
-                                                 gtk_widget_get_window (widget),
-                                                 GUINT_TO_POINTER (1),
-                                                 GTK_STATE_ACTIVE,
-                                                 expanded);
-          gtk_style_context_restore (context);
-        }
 
       child = gtk_bin_get_child (GTK_BIN (expander));
 

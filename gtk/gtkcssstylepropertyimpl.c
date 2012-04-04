@@ -38,7 +38,6 @@
 #include "fallback-c89.c"
 
 /* the actual parsers we have */
-#include "gtkanimationdescription.h"
 #include "gtkbindings.h"
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssbgsizevalueprivate.h"
@@ -112,21 +111,6 @@ gtk_css_style_property_register (const char *                   name,
 }
 
 /*** IMPLEMENTATIONS ***/
-
-static void
-query_simple (GtkCssStyleProperty *property,
-              const GtkCssValue   *css_value,
-              GValue              *value)
-{
-  _gtk_css_value_init_gvalue (css_value, value);
-}
-
-static GtkCssValue *
-assign_simple (GtkCssStyleProperty *property,
-              const GValue        *value)
-{
-  return _gtk_css_value_new_from_gvalue (value);
-}
 
 static void
 query_length_as_int (GtkCssStyleProperty *property,
@@ -814,27 +798,6 @@ engine_assign (GtkCssStyleProperty *property,
                const GValue        *value)
 {
   return _gtk_css_engine_value_new (g_value_get_object (value));
-}
-
-static GtkCssValue *
-transition_parse (GtkCssStyleProperty *property,
-                  GtkCssParser        *parser,
-                  GFile               *base)
-{
-  GValue value = G_VALUE_INIT;
-  GtkCssValue *result;
-
-  g_value_init (&value, GTK_TYPE_ANIMATION_DESCRIPTION);
-  if (!_gtk_css_style_parse_value (&value, parser, base))
-    {
-      g_value_unset (&value);
-      return NULL;
-    }
-
-  result = _gtk_css_value_new_from_gvalue (&value);
-  g_value_unset (&value);
-
-  return result;
 }
 
 static GtkCssValue *
@@ -1602,17 +1565,6 @@ _gtk_css_style_property_init_properties (void)
                                           engine_assign,
                                           NULL,
                                           _gtk_css_engine_value_new (gtk_theming_engine_load (NULL)));
-  gtk_css_style_property_register        ("transition",
-                                          GTK_CSS_PROPERTY_TRANSITION,
-                                          GTK_TYPE_ANIMATION_DESCRIPTION,
-                                          0,
-                                          transition_parse,
-                                          NULL,
-                                          NULL,
-                                          query_simple,
-                                          assign_simple,
-                                          NULL,
-                                          _gtk_css_value_new_from_boxed (GTK_TYPE_ANIMATION_DESCRIPTION, NULL));
 
   /* Private property holding the binding sets */
   gtk_css_style_property_register        ("gtk-key-bindings",

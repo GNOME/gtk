@@ -26,7 +26,6 @@
 #include "gtkstyleprovider.h"
 #include "gtksymboliccolor.h"
 #include "gtkthemingengine.h"
-#include "gtkanimationdescription.h"
 #include "gtkgradient.h"
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"

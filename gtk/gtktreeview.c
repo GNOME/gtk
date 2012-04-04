@@ -2299,7 +2299,6 @@ gtk_tree_view_unrealize (GtkWidget *widget)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkTreeViewPrivate *priv = tree_view->priv;
-  GtkStyleContext *context;
   GList *list;
 
   if (priv->scroll_timeout != 0)
@@ -2319,9 +2318,6 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       g_source_remove (priv->open_dest_timeout);
       priv->open_dest_timeout = 0;
     }
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_cancel_animations (context, NULL);
 
   if (priv->presize_handler_timer != 0)
     {
@@ -9009,7 +9005,6 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
   gboolean selection_changed = FALSE, cursor_changed = FALSE;
   GtkRBTree *cursor_tree = NULL;
   GtkRBNode *cursor_node = NULL;
-  GtkStyleContext *context;
 
   g_return_if_fail (path != NULL);
 
@@ -9113,10 +9108,6 @@ gtk_tree_view_row_deleted (GtkTreeModel *model,
       gtk_tree_row_reference_free (tree_view->priv->top_row);
       tree_view->priv->top_row = NULL;
     }
-
-  /* Cancel any ongoing animation happening within the row */
-  context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-  gtk_style_context_cancel_animations (context, node);
 
   install_scroll_sync_handler (tree_view);
 
@@ -10140,13 +10131,10 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
 
-  gtk_style_context_push_animatable_region (context, node);
-
   gtk_render_expander (context, cr,
                        area.x, area.y,
                        area.width, area.height);
 
-  gtk_style_context_pop_animatable_region (context);
   gtk_style_context_restore (context);
 }
 
@@ -11255,7 +11243,6 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 {
   if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     {
-      GtkStyleContext *context;
       gint dy;
 	
       gdk_window_move (tree_view->priv->bin_window,
@@ -11297,9 +11284,6 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 	    }
 	}
       gdk_window_scroll (tree_view->priv->bin_window, 0, dy);
-
-      context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-      gtk_style_context_scroll_animations (context, tree_view->priv->bin_window, 0, dy);
 
       if (tree_view->priv->dy != (int) gtk_adjustment_get_value (tree_view->priv->vadjustment))
         {
@@ -11395,13 +11379,9 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
   if (tree_view->priv->model)
     {
       GList *tmplist = tree_view->priv->columns;
-      GtkStyleContext *context;
 
       gtk_tree_view_unref_and_check_selection_tree (tree_view, tree_view->priv->tree);
       gtk_tree_view_stop_editing (tree_view, TRUE);
-
-      context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-      gtk_style_context_cancel_animations (context, NULL);
 
       g_signal_handlers_disconnect_by_func (tree_view->priv->model,
 					    gtk_tree_view_row_changed,
@@ -12794,22 +12774,6 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
                                        tree, node,
                                        GTK_CELL_RENDERER_EXPANDED);
 
-  if (animate)
-    {
-      GtkStyleContext *context;
-
-      context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
-
-      gtk_style_context_notify_state_change (context, tree_view->priv->bin_window,
-                                             node, GTK_STATE_ACTIVE, TRUE);
-
-      _gtk_style_context_invalidate_animation_areas (context);
-      gtk_style_context_restore (context);
-    }
-
   install_presize_handler (tree_view);
 
   g_signal_emit (tree_view, tree_view_signals[ROW_EXPANDED], 0, &iter, path);
@@ -12972,22 +12936,6 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
     gtk_tree_view_real_set_cursor (tree_view, path, CLEAR_AND_SELECT | CURSOR_INVALID);
   if (selection_changed)
     g_signal_emit_by_name (tree_view->priv->selection, "changed");
-
-  if (animate)
-    {
-      GtkStyleContext *context;
-
-      context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
-
-      gtk_style_context_notify_state_change (context, tree_view->priv->bin_window,
-                                             node, GTK_STATE_ACTIVE, FALSE);
-
-      _gtk_style_context_invalidate_animation_areas (context);
-      gtk_style_context_restore (context);
-    }
 
   if (gtk_widget_get_mapped (GTK_WIDGET (tree_view)))
     {

@@ -1021,10 +1021,7 @@ gtk_switch_set_active (GtkSwitch *sw,
   if (priv->is_active != is_active)
     {
       AtkObject *accessible;
-      GtkWidget *widget;
-      GtkStyleContext *context;
 
-      widget = GTK_WIDGET (sw);
       priv->is_active = is_active;
 
       g_object_notify_by_pspec (G_OBJECT (sw), switch_props[PROP_ACTIVE]);
@@ -1037,14 +1034,6 @@ gtk_switch_set_active (GtkSwitch *sw,
 
       accessible = gtk_widget_get_accessible (GTK_WIDGET (sw));
       atk_object_notify_state_change (accessible, ATK_STATE_CHECKED, priv->is_active);
-
-      if (gtk_widget_get_realized (widget))
-        {
-          context = gtk_widget_get_style_context (widget);
-          gtk_style_context_notify_state_change (context,
-                                                 gtk_widget_get_window (widget),
-                                                 NULL, GTK_STATE_ACTIVE, is_active);
-        }
 
       if (priv->is_active)
         gtk_widget_set_state_flags (GTK_WIDGET (sw), GTK_STATE_FLAG_ACTIVE, FALSE);

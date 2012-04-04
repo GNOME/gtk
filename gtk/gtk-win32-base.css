@@ -77,10 +77,6 @@ GtkFrame {
     color: #fff;
 }
 
-.spinner:active {
-  transition: 750ms linear loop;
-}
-
 .notebook > GtkScrolledWindow.frame {
     border-style: none;
 }

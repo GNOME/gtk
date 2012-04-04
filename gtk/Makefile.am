@@ -405,7 +405,6 @@ gtk_private_h_sources =		\
 	gtkaccelgroupprivate.h	\
 	gtkaccelmapprivate.h	\
 	gtkallocatedbitmaskprivate.h	\
-	gtkanimationdescription.h \
 	gtkappchooserprivate.h	\
 	gtkappchoosermodule.h	\
 	gtkappchooseronline.h	\
@@ -525,7 +524,6 @@ gtk_private_h_sources =		\
 	gtktextutil.h		\
 	gtkthemingbackgroundprivate.h \
 	gtkthemingengineprivate.h \
-	gtktimeline.h		\
 	gtktoolpaletteprivate.h	\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
@@ -591,7 +589,6 @@ gtk_base_c_sources = 		\
 	gtkappchooseronline.c	\
 	gtkapplication.c	\
 	gtkapplicationwindow.c	\
-	gtkanimationdescription.c \
 	gtkarrow.c		\
 	gtkaspectframe.c	\
 	gtkassistant.c		\
@@ -819,7 +816,6 @@ gtk_base_c_sources = 		\
 	gtktextview.c		\
 	gtkthemingbackground.c  \
 	gtkthemingengine.c	\
-	gtktimeline.c		\
 	gtktoggleaction.c	\
 	gtktogglebutton.c	\
 	gtktoggletoolbutton.c	\

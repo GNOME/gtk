@@ -151,12 +151,6 @@ draw_cb_activity (GtkWidget *widget, cairo_t *cr)
   GtkWidgetPath *path;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_notify_state_change (context,
-                                         gtk_widget_get_window (widget),
-                                         NULL,
-                                         GTK_STATE_FLAG_ACTIVE,
-                                         TRUE);
-
   gtk_style_context_save (context);
 
   path = gtk_widget_path_new ();

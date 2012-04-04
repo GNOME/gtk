@@ -580,18 +580,17 @@ gtk_theming_engine_get_state (GtkThemingEngine *engine)
  * Returns: %TRUE if there is a running transition animation for @state.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.6: Always returns %FALSE
  **/
 gboolean
 gtk_theming_engine_state_is_running (GtkThemingEngine *engine,
                                      GtkStateType      state,
                                      gdouble          *progress)
 {
-  GtkThemingEnginePrivate *priv;
-
   g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), FALSE);
 
-  priv = engine->priv;
-  return gtk_style_context_state_is_running (priv->context, state, progress);
+  return FALSE;
 }
 
 /**

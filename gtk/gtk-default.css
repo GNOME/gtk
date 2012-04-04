@@ -36,10 +36,6 @@ GtkTreeView.view.expander:selected:hover {
   color: @text_color;
 }
 
-.expander:active {
-  transition: 200ms linear;
-}
-
 *:insensitive {
   border-color: shade (@bg_color, 0.7);
   background-color: shade (@bg_color, 0.9);
@@ -293,10 +289,6 @@ GtkLabel:selected {
 
 GtkLabel:selected:focused {
   background-color: @selected_bg_color;
-}
-
-.spinner:active {
-  transition: 750ms linear loop;
 }
 
 .info {
