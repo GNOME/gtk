@@ -370,23 +370,6 @@ gdk_wayland_window_attach_image (GdkWindow *window)
 }
 
 static void
-gdk_window_impl_wayland_finalize (GObject *object)
-{
-  GdkWindowImplWayland *impl;
-
-  g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (object));
-
-  impl = GDK_WINDOW_IMPL_WAYLAND (object);
-
-  if (impl->cursor)
-    g_object_unref (impl->cursor);
-  if (impl->server_surface)
-    cairo_surface_destroy (impl->server_surface);
-
-  G_OBJECT_CLASS (_gdk_window_impl_wayland_parent_class)->finalize (object);
-}
-
-static void
 gdk_wayland_cairo_surface_destroy (void *p)
 {
   GdkWaylandCairoSurfaceData *data = p;
@@ -462,6 +445,24 @@ gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
   cairo_surface_reference (impl->cairo_surface);
 
   return impl->cairo_surface;
+}
+
+
+static void
+gdk_window_impl_wayland_finalize (GObject *object)
+{
+  GdkWindowImplWayland *impl;
+
+  g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (object));
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (object);
+
+  if (impl->cursor)
+    g_object_unref (impl->cursor);
+  if (impl->server_surface)
+    cairo_surface_destroy (impl->server_surface);
+
+  G_OBJECT_CLASS (_gdk_window_impl_wayland_parent_class)->finalize (object);
 }
 
 static void
