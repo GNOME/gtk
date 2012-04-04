@@ -400,6 +400,9 @@ gtk_tool_item_property_notify (GObject    *object,
   if (tool_item->priv->menu_item && strcmp (pspec->name, "sensitive") == 0)
     gtk_widget_set_sensitive (tool_item->priv->menu_item,
 			      gtk_widget_get_sensitive (GTK_WIDGET (tool_item)));
+
+  if (G_OBJECT_CLASS (gtk_tool_item_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_tool_item_parent_class)->notify (object, pspec);
 }
 
 static void

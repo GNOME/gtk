@@ -914,6 +914,9 @@ gtk_socket_notify (GObject    *object,
 {
   if (strcmp (pspec->name, "is-focus") == 0)
     socket_update_focus_in (GTK_SOCKET (object));
+
+  if (G_OBJECT_CLASS (gtk_socket_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_socket_parent_class)->notify (object, pspec);
 }
 
 /**
