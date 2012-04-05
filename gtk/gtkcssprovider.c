@@ -2934,7 +2934,7 @@ gtk_css_provider_to_string (GtkCssProvider *provider)
 
   for (i = 0; i < priv->rulesets->len; i++)
     {
-      if (i > 0)
+      if (str->len != 0)
         g_string_append (str, "\n");
       gtk_css_ruleset_print (&g_array_index (priv->rulesets, GtkCssRuleset, i), str);
     }
