@@ -28,6 +28,8 @@
 #include <errno.h>
 #include <math.h>
 
+#include "fallback-c89.c"
+
 /**
  * SECTION:rgba_colors
  * @Short_description: RGBA colors
