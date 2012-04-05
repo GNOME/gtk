@@ -54,3 +54,14 @@ rint (double x)
   }
 }
 #endif
+
+#ifndef HAVE_NEARBYINT
+/* Workaround for nearbyint() for non-GCC/non-C99 compilers */
+/* This is quite similar to rint() in most respects */
+
+static inline double
+nearbyint (double x)
+{
+  return floor (x + 0.5);
+}
+#endif
