@@ -185,6 +185,7 @@ EXTRA_DIST += \
 	css-21-malformed-statements.css \
 	css-21-malformed-statements.errors \
 	css-21-malformed-statements.ref.css \
+	currentcolor-everywhere.css \
 	declarations.css \
 	declarations.errors \
 	declarations.ref.css \
