@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 typedef GtkSymbolicColor * (* GtkSymbolicColorLookupFunc) (gpointer data, const char *name);
 
 GtkCssValue *      _gtk_symbolic_color_resolve_full       (GtkSymbolicColor           *color,
+                                                           GtkCssValue                *current,
                                                            GtkSymbolicColorLookupFunc  func,
                                                            gpointer                    data);
 

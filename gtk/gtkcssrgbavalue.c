@@ -19,6 +19,7 @@
 
 #include "gtkcssrgbavalueprivate.h"
 
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtksymboliccolorprivate.h"
 
@@ -100,34 +101,29 @@ _gtk_css_rgba_value_compute_from_symbolic (GtkCssValue     *rgba,
                                            gboolean         for_color_property)
 {
   GtkSymbolicColor *symbolic;
-  GtkCssValue *resolved;
+  GtkCssValue *resolved, *current;
 
   g_return_val_if_fail (rgba != NULL, NULL);
 
-  symbolic = _gtk_css_value_get_symbolic_color (rgba);
-
-  if (symbolic == _gtk_symbolic_color_get_current_color ())
+  /* The computed value of the ‘currentColor’ keyword is the computed
+   * value of the ‘color’ property. If the ‘currentColor’ keyword is
+   * set on the ‘color’ property itself, it is treated as ‘color: inherit’. 
+   */
+  if (for_color_property)
     {
-      /* The computed value of the ‘currentColor’ keyword is the computed
-       * value of the ‘color’ property. If the ‘currentColor’ keyword is
-       * set on the ‘color’ property itself, it is treated as ‘color: inherit’. 
-       */
-      if (for_color_property)
-        {
-          GtkStyleContext *parent = gtk_style_context_get_parent (context);
+      GtkStyleContext *parent = gtk_style_context_get_parent (context);
 
-          if (parent)
-            return _gtk_css_value_ref (_gtk_style_context_peek_property (parent, GTK_CSS_PROPERTY_COLOR));
-          else
-            return _gtk_css_rgba_value_compute_from_symbolic (fallback, NULL, context, TRUE);
-        }
+      if (parent)
+        current = _gtk_style_context_peek_property (parent, GTK_CSS_PROPERTY_COLOR);
       else
-        {
-          return _gtk_css_value_ref (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
-        }
+        current = _gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR));
+    }
+  else
+    {
+      current = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR);
     }
   
-  resolved = _gtk_style_context_resolve_color_value (context, symbolic);
+  resolved = _gtk_style_context_resolve_color_value (context, current, symbolic);
 
   if (resolved == NULL)
     return _gtk_css_rgba_value_compute_from_symbolic (fallback, NULL, context, for_color_property);

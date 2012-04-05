@@ -629,15 +629,19 @@ gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
 			    GtkStyleProperties *props,
 			    GdkRGBA            *resolved_color)
 {
-  GtkCssValue *v;
+  GdkRGBA pink = { 1.0, 0.5, 0.5, 1.0 };
+  GtkCssValue *v, *current;
 
   g_return_val_if_fail (color != NULL, FALSE);
   g_return_val_if_fail (resolved_color != NULL, FALSE);
   g_return_val_if_fail (props == NULL || GTK_IS_STYLE_PROPERTIES (props), FALSE);
 
+  current = _gtk_css_rgba_value_new_from_rgba (&pink);
   v =_gtk_symbolic_color_resolve_full (color,
+                                       current,
 				       resolve_lookup_color,
 				       props);
+  _gtk_css_value_unref (current);
   if (v == NULL)
     return FALSE;
 
@@ -648,12 +652,14 @@ gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
 
 GtkCssValue *
 _gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
+                                  GtkCssValue                *current,
 				  GtkSymbolicColorLookupFunc  func,
 				  gpointer                    data)
 {
   GtkCssValue *value;
 
   g_return_val_if_fail (color != NULL, FALSE);
+  g_return_val_if_fail (current != NULL, FALSE);
   g_return_val_if_fail (func != NULL, FALSE);
 
   value = NULL;
@@ -670,7 +676,7 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
 	if (!named_color)
 	  return NULL;
 
-	return _gtk_symbolic_color_resolve_full (named_color, func, data);
+	return _gtk_symbolic_color_resolve_full (named_color, current, func, data);
       }
 
       break;
@@ -679,7 +685,7 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
 	GtkCssValue *val;
 	GdkRGBA shade;
 
-	val = _gtk_symbolic_color_resolve_full (color->shade.color, func, data);
+	val = _gtk_symbolic_color_resolve_full (color->shade.color, current, func, data);
 	if (val == NULL)
 	  return NULL;
 
@@ -697,7 +703,7 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
 	GtkCssValue *val;
 	GdkRGBA alpha;
 
-	val = _gtk_symbolic_color_resolve_full (color->alpha.color, func, data);
+	val = _gtk_symbolic_color_resolve_full (color->alpha.color, current, func, data);
 	if (val == NULL)
 	  return NULL;
 
@@ -715,13 +721,13 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
 	GtkCssValue *val;
 	GdkRGBA color1, color2, res;
 
-	val = _gtk_symbolic_color_resolve_full (color->mix.color1, func, data);
+	val = _gtk_symbolic_color_resolve_full (color->mix.color1, current, func, data);
 	if (val == NULL)
 	  return NULL;
 	color1 = *_gtk_css_rgba_value_get_rgba (val);
 	_gtk_css_value_unref (val);
 
-	val = _gtk_symbolic_color_resolve_full (color->mix.color2, func, data);
+	val = _gtk_symbolic_color_resolve_full (color->mix.color2, current, func, data);
 	if (val == NULL)
 	  return NULL;
 	color2 = *_gtk_css_rgba_value_get_rgba (val);
@@ -751,7 +757,10 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
 
       break;
     case COLOR_TYPE_CURRENT_COLOR:
-      return NULL;
+      if (current)
+        return _gtk_css_value_ref (current);
+      else
+        return NULL;
       break;
     default:
       g_assert_not_reached ();

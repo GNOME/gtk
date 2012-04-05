@@ -2524,12 +2524,15 @@ gtk_style_context_color_lookup_func (gpointer    contextp,
 
 GtkCssValue *
 _gtk_style_context_resolve_color_value (GtkStyleContext  *context,
+                                        GtkCssValue      *current,
 					GtkSymbolicColor *color)
 {
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
+  g_return_val_if_fail (current != NULL, FALSE);
   g_return_val_if_fail (color != NULL, FALSE);
 
   return _gtk_symbolic_color_resolve_full (color,
+                                           current,
                                            gtk_style_context_color_lookup_func,
                                            context);
 }
@@ -2547,6 +2550,7 @@ _gtk_style_context_resolve_color (GtkStyleContext  *context,
   g_return_val_if_fail (result != NULL, FALSE);
 
   val = _gtk_symbolic_color_resolve_full (color,
+                                          _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR),
 					  gtk_style_context_color_lookup_func,
 					  context);
   if (val == NULL)
