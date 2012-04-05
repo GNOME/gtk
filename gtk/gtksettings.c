@@ -45,6 +45,10 @@
 #include "quartz/gdkquartz.h"
 #endif
 
+#ifdef G_OS_WIN32
+#include "gtkwin32themeprivate.h"
+#endif
+
 #undef GDK_DEPRECATED
 #undef GDK_DEPRECATED_FOR
 #define GDK_DEPRECATED
