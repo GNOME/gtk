@@ -19,6 +19,7 @@
 #define __GTK_SYMBOLIC_COLOR_PRIVATE_H__
 
 #include "gtk/gtksymboliccolor.h"
+#include "gtk/gtkcssparserprivate.h"
 #include "gtk/gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
@@ -30,6 +31,8 @@ GtkCssValue *      _gtk_symbolic_color_resolve_full       (GtkSymbolicColor     
                                                            gpointer                    data);
 
 GtkSymbolicColor * _gtk_symbolic_color_get_current_color  (void);
+
+GtkSymbolicColor * _gtk_css_parser_read_symbolic_color    (GtkCssParser               *parser);
 
 G_END_DECLS
 

@@ -850,5 +850,240 @@ gtk_symbolic_color_to_string (GtkSymbolicColor *color)
     }
 
   return s;
-
 }
+
+typedef enum {
+  COLOR_RGBA,
+  COLOR_RGB,
+  COLOR_LIGHTER,
+  COLOR_DARKER,
+  COLOR_SHADE,
+  COLOR_ALPHA,
+  COLOR_MIX,
+  COLOR_WIN32
+} ColorParseType;
+
+static GtkSymbolicColor *
+gtk_css_parser_read_symbolic_color_function (GtkCssParser   *parser,
+                                             ColorParseType  color)
+{
+  GtkSymbolicColor *symbolic;
+  GtkSymbolicColor *child1, *child2;
+  double value;
+
+  if (!_gtk_css_parser_try (parser, "(", TRUE))
+    {
+      _gtk_css_parser_error (parser, "Missing opening bracket in color definition");
+      return NULL;
+    }
+
+  if (color == COLOR_RGB || color == COLOR_RGBA)
+    {
+      GdkRGBA rgba;
+      double tmp;
+      guint i;
+
+      for (i = 0; i < 3; i++)
+        {
+          if (i > 0 && !_gtk_css_parser_try (parser, ",", TRUE))
+            {
+              _gtk_css_parser_error (parser, "Expected ',' in color definition");
+              return NULL;
+            }
+
+          if (!_gtk_css_parser_try_double (parser, &tmp))
+            {
+              _gtk_css_parser_error (parser, "Invalid number for color value");
+              return NULL;
+            }
+          if (_gtk_css_parser_try (parser, "%", TRUE))
+            tmp /= 100.0;
+          else
+            tmp /= 255.0;
+          if (i == 0)
+            rgba.red = tmp;
+          else if (i == 1)
+            rgba.green = tmp;
+          else if (i == 2)
+            rgba.blue = tmp;
+          else
+            g_assert_not_reached ();
+        }
+
+      if (color == COLOR_RGBA)
+        {
+          if (i > 0 && !_gtk_css_parser_try (parser, ",", TRUE))
+            {
+              _gtk_css_parser_error (parser, "Expected ',' in color definition");
+              return NULL;
+            }
+
+          if (!_gtk_css_parser_try_double (parser, &rgba.alpha))
+            {
+              _gtk_css_parser_error (parser, "Invalid number for alpha value");
+              return NULL;
+            }
+        }
+      else
+        rgba.alpha = 1.0;
+      
+      symbolic = gtk_symbolic_color_new_literal (&rgba);
+    }
+  else if (color == COLOR_WIN32)
+    {
+      symbolic = _gtk_win32_theme_color_parse (parser);
+      if (symbolic == NULL)
+	return NULL;
+    }
+  else
+    {
+      child1 = _gtk_css_parser_read_symbolic_color (parser);
+      if (child1 == NULL)
+        return NULL;
+
+      if (color == COLOR_MIX)
+        {
+          if (!_gtk_css_parser_try (parser, ",", TRUE))
+            {
+              _gtk_css_parser_error (parser, "Expected ',' in color definition");
+              gtk_symbolic_color_unref (child1);
+              return NULL;
+            }
+
+          child2 = _gtk_css_parser_read_symbolic_color (parser);
+          if (child2 == NULL)
+            {
+              gtk_symbolic_color_unref (child1);
+              return NULL;
+            }
+        }
+      else
+        child2 = NULL;
+
+      if (color == COLOR_LIGHTER)
+        value = 1.3;
+      else if (color == COLOR_DARKER)
+        value = 0.7;
+      else
+        {
+          if (!_gtk_css_parser_try (parser, ",", TRUE))
+            {
+              _gtk_css_parser_error (parser, "Expected ',' in color definition");
+              gtk_symbolic_color_unref (child1);
+              if (child2)
+                gtk_symbolic_color_unref (child2);
+              return NULL;
+            }
+
+          if (!_gtk_css_parser_try_double (parser, &value))
+            {
+              _gtk_css_parser_error (parser, "Expected number in color definition");
+              gtk_symbolic_color_unref (child1);
+              if (child2)
+                gtk_symbolic_color_unref (child2);
+              return NULL;
+            }
+        }
+      
+      switch (color)
+        {
+        case COLOR_LIGHTER:
+        case COLOR_DARKER:
+        case COLOR_SHADE:
+          symbolic = gtk_symbolic_color_new_shade (child1, value);
+          break;
+        case COLOR_ALPHA:
+          symbolic = gtk_symbolic_color_new_alpha (child1, value);
+          break;
+        case COLOR_MIX:
+          symbolic = gtk_symbolic_color_new_mix (child1, child2, value);
+          break;
+        default:
+          g_assert_not_reached ();
+          symbolic = NULL;
+        }
+
+      gtk_symbolic_color_unref (child1);
+      if (child2)
+        gtk_symbolic_color_unref (child2);
+    }
+
+  if (!_gtk_css_parser_try (parser, ")", TRUE))
+    {
+      _gtk_css_parser_error (parser, "Expected ')' in color definition");
+      gtk_symbolic_color_unref (symbolic);
+      return NULL;
+    }
+
+  return symbolic;
+}
+
+GtkSymbolicColor *
+_gtk_css_parser_read_symbolic_color (GtkCssParser *parser)
+{
+  GtkSymbolicColor *symbolic;
+  GdkRGBA rgba;
+  guint color;
+  const char *names[] = {"rgba", "rgb",  "lighter", "darker", "shade", "alpha", "mix",
+			 GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME};
+  char *name;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  if (_gtk_css_parser_try (parser, "transparent", TRUE))
+    {
+      GdkRGBA transparent = { 0, 0, 0, 0 };
+      
+      return gtk_symbolic_color_new_literal (&transparent);
+    }
+
+  if (_gtk_css_parser_try (parser, "@", FALSE))
+    {
+      name = _gtk_css_parser_try_name (parser, TRUE);
+
+      if (name)
+        {
+          symbolic = gtk_symbolic_color_new_name (name);
+        }
+      else
+        {
+          _gtk_css_parser_error (parser, "'%s' is not a valid symbolic color name", name);
+          symbolic = NULL;
+        }
+
+      g_free (name);
+      return symbolic;
+    }
+
+  for (color = 0; color < G_N_ELEMENTS (names); color++)
+    {
+      if (_gtk_css_parser_try (parser, names[color], TRUE))
+        break;
+    }
+
+  if (color < G_N_ELEMENTS (names))
+    return gtk_css_parser_read_symbolic_color_function (parser, color);
+
+  if (_gtk_css_parser_try_hash_color (parser, &rgba))
+    return gtk_symbolic_color_new_literal (&rgba);
+
+  name = _gtk_css_parser_try_name (parser, TRUE);
+  if (name)
+    {
+      if (gdk_rgba_parse (&rgba, name))
+        {
+          symbolic = gtk_symbolic_color_new_literal (&rgba);
+        }
+      else
+        {
+          _gtk_css_parser_error (parser, "'%s' is not a valid color name", name);
+          symbolic = NULL;
+        }
+      g_free (name);
+      return symbolic;
+    }
+
+  _gtk_css_parser_error (parser, "Not a color definition");
+  return NULL;
+}
+

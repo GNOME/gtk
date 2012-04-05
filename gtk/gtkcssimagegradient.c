@@ -22,6 +22,7 @@
 #include "gtkcssimagegradientprivate.h"
 
 #include "gtkcssprovider.h"
+#include "gtksymboliccolorprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageGradient, _gtk_css_image_gradient, GTK_TYPE_CSS_IMAGE)
 

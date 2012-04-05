@@ -20,7 +20,6 @@
 
 #include "gtk/gtkcsstypesprivate.h"
 #include <gtk/gtkcssprovider.h>
-#include <gtk/gtksymboliccolor.h>
 
 G_BEGIN_DECLS
 
@@ -81,12 +80,12 @@ gboolean        _gtk_css_parser_try_length        (GtkCssParser          *parser
 gboolean        _gtk_css_parser_try_enum          (GtkCssParser          *parser,
                                                    GType                  enum_type,
                                                    int                   *value);
+gboolean        _gtk_css_parser_try_hash_color    (GtkCssParser          *parser,
+                                                   GdkRGBA               *rgba);
 
 gboolean        _gtk_css_parser_has_number        (GtkCssParser          *parser);
 char *          _gtk_css_parser_read_string       (GtkCssParser          *parser);
 char *          _gtk_css_parser_read_value        (GtkCssParser          *parser);
-GtkSymbolicColor *_gtk_css_parser_read_symbolic_color
-                                                  (GtkCssParser          *parser);
 GFile *         _gtk_css_parser_read_url          (GtkCssParser          *parser,
                                                    GFile                 *base);
 
