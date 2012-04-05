@@ -904,7 +904,10 @@ gtk_paned_get_preferred_size (GtkWidget      *widget,
   if (priv->child1 && gtk_widget_get_visible (priv->child1))
     {
       get_preferred_size_for_size (priv->child1, orientation, size, &child_min, &child_nat);
-      *minimum = child_min;
+      if (priv->child1_shrink && priv->orientation == orientation)
+        *minimum = 0;
+      else
+        *minimum = child_min;
       *natural = child_nat;
     }
 
@@ -914,7 +917,8 @@ gtk_paned_get_preferred_size (GtkWidget      *widget,
 
       if (priv->orientation == orientation)
         {
-          *minimum += child_min;
+          if (!priv->child2_shrink)
+            *minimum += child_min;
           *natural += child_nat;
         }
       else
