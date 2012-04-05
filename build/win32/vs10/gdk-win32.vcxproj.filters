@@ -18,6 +18,9 @@
     <ClCompile Include="..\..\..\gdk\win32\gdkcursor-win32.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\gdk\win32\gdkdevice-virtual.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\gdk\win32\gdkdevice-win32.c">
       <Filter>Source Files</Filter>
     </ClCompile>

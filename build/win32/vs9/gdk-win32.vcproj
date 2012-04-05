@@ -123,6 +123,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File RelativePath="..\..\..\gdk\win32\gdkcursor-win32.c" />
+			<File RelativePath="..\..\..\gdk\win32\gdkdevice-virtual.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkdevice-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkdevice-wintab.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkdevicemanager-win32.c" />

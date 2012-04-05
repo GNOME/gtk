@@ -114,6 +114,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\gdk\win32\gdkcursor-win32.c" />
+    <ClCompile Include="..\..\..\gdk\win32\gdkdevice-virtual.c" />
     <ClCompile Include="..\..\..\gdk\win32\gdkdevice-win32.c" />
     <ClCompile Include="..\..\..\gdk\win32\gdkdevice-wintab.c" />
     <ClCompile Include="..\..\..\gdk\win32\gdkdevicemanager-win32.c" />
