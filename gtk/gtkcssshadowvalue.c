@@ -236,10 +236,7 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser)
       {
         GtkSymbolicColor *symbolic;
 
-        if (_gtk_css_parser_try (parser, "currentcolor", TRUE))
-          symbolic = gtk_symbolic_color_ref (_gtk_symbolic_color_get_current_color ());
-        else
-          symbolic = _gtk_css_parser_read_symbolic_color (parser);
+        symbolic = _gtk_css_parser_read_symbolic_color (parser);
         if (symbolic == NULL)
           goto fail;
 

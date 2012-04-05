@@ -221,16 +221,9 @@ parse_border_color (GtkCssShorthandProperty  *shorthand,
 
   for (i = 0; i < 4; i++)
     {
-      if (_gtk_css_parser_try (parser, "currentcolor", TRUE))
-        {
-          symbolic = gtk_symbolic_color_ref (_gtk_symbolic_color_get_current_color ());
-        }
-      else
-        {
-          symbolic = _gtk_css_parser_read_symbolic_color (parser);
-          if (symbolic == NULL)
-            return FALSE;
-        }
+      symbolic = _gtk_css_parser_read_symbolic_color (parser);
+      if (symbolic == NULL)
+        return FALSE;
 
       values[i] = _gtk_css_value_new_take_symbolic_color (symbolic);
 

@@ -169,16 +169,9 @@ rgba_value_parse (GtkCssParser *parser,
   GtkSymbolicColor *symbolic;
   GdkRGBA rgba;
 
-  if (_gtk_css_parser_try (parser, "currentcolor", TRUE))
-    {
-      symbolic = gtk_symbolic_color_ref (_gtk_symbolic_color_get_current_color ());
-    }
-  else
-    {
-      symbolic = _gtk_css_parser_read_symbolic_color (parser);
-      if (symbolic == NULL)
-        return FALSE;
-    }
+  symbolic = _gtk_css_parser_read_symbolic_color (parser);
+  if (symbolic == NULL)
+    return FALSE;
 
   if (gtk_symbolic_color_resolve (symbolic, NULL, &rgba))
     {
@@ -312,16 +305,9 @@ symbolic_color_value_parse (GtkCssParser *parser,
 {
   GtkSymbolicColor *symbolic;
 
-  if (_gtk_css_parser_try (parser, "currentcolor", TRUE))
-    {
-      symbolic = gtk_symbolic_color_ref (_gtk_symbolic_color_get_current_color ());
-    }
-  else
-    {
-      symbolic = _gtk_css_parser_read_symbolic_color (parser);
-      if (symbolic == NULL)
-        return FALSE;
-    }
+  symbolic = _gtk_css_parser_read_symbolic_color (parser);
+  if (symbolic == NULL)
+    return FALSE;
 
   g_value_take_boxed (value, symbolic);
   return TRUE;

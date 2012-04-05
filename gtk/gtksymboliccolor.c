@@ -1039,6 +1039,9 @@ _gtk_css_parser_read_symbolic_color (GtkCssParser *parser)
 
   g_return_val_if_fail (parser != NULL, NULL);
 
+  if (_gtk_css_parser_try (parser, "currentColor", TRUE))
+    return gtk_symbolic_color_ref (_gtk_symbolic_color_get_current_color ());
+
   if (_gtk_css_parser_try (parser, "transparent", TRUE))
     {
       GdkRGBA transparent = { 0, 0, 0, 0 };
