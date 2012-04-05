@@ -749,17 +749,9 @@ AC_CHECK_FUNCS(mallinfo)
 AC_CHECK_FUNCS(getresuid)
 AC_TYPE_UID_T
 
-# Check for round()
-AC_CHECK_LIB(m,round,have_round=yes,have_round=no)
-if test $have_round = yes; then
-    AC_DEFINE(HAVE_ROUND, 1, [Define to 1 if round() is available])
-fi
-
-# Check for rint()
-AC_CHECK_LIB(m,rint,have_rint=yes,have_rint=no)
-if test $have_rint = yes; then
-    AC_DEFINE(HAVE_RINT, 1, [Define to 1 if rint() is available])
-fi
+# Check for round(), rint(), isnan(), isinf() and nearbyint()
+AC_CHECK_LIB(m,round,,)
+AC_CHECK_FUNCS(round rint isnan isinf nearbyint)
 
 # Checks for gdkspawn
 AC_CHECK_HEADERS(crt_externs.h)
