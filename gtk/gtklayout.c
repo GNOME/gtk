@@ -1123,7 +1123,5 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
       gdk_window_move (priv->bin_window,
 		       - gtk_adjustment_get_value (priv->hadjustment),
 		       - gtk_adjustment_get_value (priv->vadjustment));
-
-      gdk_window_process_updates (priv->bin_window, TRUE);
     }
 }

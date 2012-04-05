@@ -901,10 +901,7 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
       new_y = - gtk_adjustment_get_value (vadjustment);
 
       if (new_x != old_x || new_y != old_y)
-	{
-	  gdk_window_move (priv->bin_window, new_x, new_y);
-	  gdk_window_process_updates (priv->bin_window, TRUE);
-	}
+	gdk_window_move (priv->bin_window, new_x, new_y);
     }
 }
 

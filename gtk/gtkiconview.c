@@ -2360,20 +2360,6 @@ gtk_icon_view_real_toggle_cursor_item (GtkIconView *icon_view)
     }
 }
 
-/* Internal functions */
-static void
-gtk_icon_view_process_updates (GtkIconView *icon_view)
-{
-  /* Prior to drawing, we check if a layout has been scheduled.  If so,
-   * do it now that all cell view items have valid sizes before we proceeed
-   * (and resize the bin_window if required).
-   */
-  if (icon_view->priv->layout_idle_id != 0)
-    gtk_icon_view_layout (icon_view);
-
-  gdk_window_process_updates (icon_view->priv->bin_window, TRUE);
-}
-
 static void
 gtk_icon_view_set_hadjustment_values (GtkIconView *icon_view)
 {
@@ -2511,8 +2497,6 @@ gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
         gtk_icon_view_update_rubberband (GTK_WIDGET (icon_view));
       
       _gtk_icon_view_accessible_adjustment_changed (icon_view);
-
-      gtk_icon_view_process_updates (icon_view);
     }
 }
 

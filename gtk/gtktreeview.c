@@ -6810,21 +6810,6 @@ install_presize_handler (GtkTreeView *tree_view)
     }
 }
 
-static void
-gtk_tree_view_bin_process_updates (GtkTreeView *tree_view)
-{
-  /* Prior to drawing, we make sure the visible area is validated. */
-  if (tree_view->priv->presize_handler_timer)
-    {
-      g_source_remove (tree_view->priv->presize_handler_timer);
-      tree_view->priv->presize_handler_timer = 0;
-
-      do_presize_handler (tree_view);
-    }
-
-  gdk_window_process_updates (tree_view->priv->bin_window, TRUE);
-}
-
 static gboolean
 scroll_sync_handler (GtkTreeView *tree_view)
 {
@@ -9393,10 +9378,6 @@ gtk_tree_view_clamp_node_visible (GtkTreeView *tree_view,
   path = _gtk_tree_path_new_from_rbtree (tree, node);
   if (path)
     {
-      /* We process updates because we want to clear old selected items when we scroll.
-       * if this is removed, we get a "selection streak" at the bottom. */
-      gtk_tree_view_bin_process_updates (tree_view);
-
       gtk_tree_view_scroll_to_cell (tree_view, path, NULL, FALSE, 0.0, 0.0);
       gtk_tree_path_free (path);
     }
@@ -11311,9 +11292,6 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
           if (!tree_view->priv->in_top_row_to_dy)
             gtk_tree_view_dy_to_top_row (tree_view);
 	}
-
-      gdk_window_process_updates (tree_view->priv->header_window, TRUE);
-      gtk_tree_view_bin_process_updates (tree_view);
     }
 }
 

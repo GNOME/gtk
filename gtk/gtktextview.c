@@ -7700,26 +7700,6 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
    */
   gtk_text_view_validate_onscreen (text_view);
   
-  /* process exposes */
-  if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
-    {
-      DV (g_print ("Processing updates (%s)\n", G_STRLOC));
-      
-      if (priv->left_window)
-        gdk_window_process_updates (priv->left_window->bin_window, TRUE);
-
-      if (priv->right_window)
-        gdk_window_process_updates (priv->right_window->bin_window, TRUE);
-
-      if (priv->top_window)
-        gdk_window_process_updates (priv->top_window->bin_window, TRUE);
-      
-      if (priv->bottom_window)
-        gdk_window_process_updates (priv->bottom_window->bin_window, TRUE);
-  
-      gdk_window_process_updates (priv->text_window->bin_window, TRUE);
-    }
-
   /* If this got installed, get rid of it, it's just a waste of time. */
   if (priv->first_validate_idle != 0)
     {
