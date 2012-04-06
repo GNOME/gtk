@@ -86,7 +86,7 @@
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>..\..\..\libgail-util\gailutil.def</ModuleDefinitionFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
+      <ImportLibrary>$(TargetDir)$(ProjectName)-$(GtkApiVersion).lib</ImportLibrary>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
@@ -110,7 +110,7 @@
       <ModuleDefinitionFile>..\..\..\libgail-util\gailutil.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
+      <ImportLibrary>$(TargetDir)$(ProjectName)-$(GtkApiVersion).lib</ImportLibrary>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -132,7 +132,7 @@
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ModuleDefinitionFile>..\..\..\libgail-util\gailutil.def</ModuleDefinitionFile>
-      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
+      <ImportLibrary>$(TargetDir)$(ProjectName)-$(GtkApiVersion).lib</ImportLibrary>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -157,7 +157,7 @@
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <ImportLibrary>$(TargetDir)$(ProjectName).lib</ImportLibrary>
+      <ImportLibrary>$(TargetDir)$(ProjectName)-$(GtkApiVersion).lib</ImportLibrary>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
