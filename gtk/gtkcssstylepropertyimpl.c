@@ -400,10 +400,20 @@ css_image_value_compute (GtkCssStyleProperty    *property,
                          GtkStyleContext        *context,
                          GtkCssValue            *specified)
 {
-  GtkCssImage *image = _gtk_css_value_get_image (specified);
+  GtkCssImage *image, *computed;
+  
+  image = _gtk_css_value_get_image (specified);
 
-  if (image)
-    image = _gtk_css_image_compute (image, context);
+  if (image == NULL)
+    return _gtk_css_value_ref (specified);
+
+  computed = _gtk_css_image_compute (image, context);
+
+  if (computed == image)
+    {
+      g_object_unref (computed);
+      return _gtk_css_value_ref (specified);
+    }
 
   return _gtk_css_value_new_take_image (image);
 }
