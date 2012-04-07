@@ -3198,7 +3198,7 @@ gtk_menu_get_preferred_width (GtkWidget *widget,
       context = gtk_style_context_new ();
 
       /* Create a GtkCheckMenuItem path, only to query indicator spacing */
-      check_path = gtk_widget_path_copy (gtk_widget_get_path (widget));
+      check_path = _gtk_widget_create_path (widget);
       gtk_widget_path_append_type (check_path, GTK_TYPE_CHECK_MENU_ITEM);
 
       gtk_style_context_set_path (context, check_path);

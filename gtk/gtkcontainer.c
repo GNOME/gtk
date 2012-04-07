@@ -2338,7 +2338,7 @@ gtk_container_real_get_path_for_child (GtkContainer *container,
   GList *classes;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (container));
-  path = gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (container)));
+  path = _gtk_widget_create_path (GTK_WIDGET (container));
 
   /* Copy any permanent classes to the path */
   classes = gtk_style_context_list_classes (context);

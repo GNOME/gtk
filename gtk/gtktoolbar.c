@@ -3946,7 +3946,7 @@ gtk_toolbar_get_path_for_child (GtkContainer *container,
   g_list_foreach (children, add_widget_to_path, sibling_path);
   g_list_free (children);
 
-  path = gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (container)));
+  path = _gtk_widget_create_path (GTK_WIDGET (container));
   if (gtk_widget_get_visible (child))
     {
       vis_index = gtk_toolbar_get_visible_position (toolbar, child);

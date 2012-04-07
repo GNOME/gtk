@@ -745,7 +745,7 @@ create_query_path (GtkStyleContext *context)
   guint i, pos;
 
   priv = context->priv;
-  path = gtk_widget_path_copy (priv->widget ? gtk_widget_get_path (priv->widget) : priv->widget_path);
+  path = priv->widget ? _gtk_widget_create_path (priv->widget) : gtk_widget_path_copy (priv->widget_path);
   pos = gtk_widget_path_length (path) - 1;
 
   info = priv->info_stack->data;
@@ -2068,9 +2068,10 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 
   if (priv->widget || priv->widget_path)
     {
+      GtkWidgetPath *widget_path = priv->widget ? _gtk_widget_create_path (priv->widget) : priv->widget_path;
+
       if (gtk_style_provider_get_style_property (GTK_STYLE_PROVIDER (priv->cascade),
-                                                 priv->widget ? gtk_widget_get_path (priv->widget)
-                                                              : priv->widget_path,
+                                                 widget_path,
                                                  state, pspec, &pcache->value))
         {
           /* Resolve symbolic colors to GdkColor/GdkRGBA */
@@ -2109,8 +2110,14 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
               gtk_symbolic_color_unref (color);
             }
 
+          if (priv->widget)
+            gtk_widget_path_free (widget_path);
+
           return &pcache->value;
         }
+
+      if (priv->widget)
+        gtk_widget_path_free (widget_path);
     }
 
   /* not supplied by any provider, revert to default */

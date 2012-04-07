@@ -46,6 +46,7 @@
 #include "gtkstock.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetpath.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkspinbuttonaccessible.h"
 
@@ -746,7 +747,7 @@ gtk_spin_button_panel_nthchildize_context (GtkSpinButton *spin_button,
    * have to emulate what gtk_container_get_path_for_child() would do
    * for the button panels
    */
-  path = gtk_widget_path_copy (gtk_widget_get_path (widget));
+  path = _gtk_widget_create_path (widget);
   direction = gtk_widget_get_direction (widget);
   siblings_path = gtk_widget_path_new ();
 

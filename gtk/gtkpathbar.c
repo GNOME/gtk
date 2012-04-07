@@ -876,7 +876,7 @@ gtk_path_bar_get_path_for_child (GtkContainer *container,
   GtkPathBar *path_bar = GTK_PATH_BAR (container);
   GtkWidgetPath *path;
 
-  path = gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (path_bar)));
+  path = _gtk_widget_create_path (GTK_WIDGET (path_bar));
 
   if (gtk_widget_get_visible (child) &&
       gtk_widget_get_child_visible (child))

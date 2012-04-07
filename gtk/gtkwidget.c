@@ -13897,6 +13897,39 @@ gtk_widget_path_append_for_widget (GtkWidgetPath *path,
   return pos;
 }
 
+GtkWidgetPath *
+_gtk_widget_create_path (GtkWidget *widget)
+{
+  GtkWidget *parent;
+
+  parent = widget->priv->parent;
+
+  if (parent)
+    return gtk_container_get_path_for_child (GTK_CONTAINER (parent), widget);
+  else
+    {
+      /* Widget is either toplevel or unparented, treat both
+       * as toplevels style wise, since there are situations
+       * where style properties might be retrieved on that
+       * situation.
+       */
+      GtkWidget *attach_widget = NULL;
+      GtkWidgetPath *result;
+
+      if (GTK_IS_WINDOW (widget))
+        attach_widget = gtk_window_get_attached_to (GTK_WINDOW (widget));
+
+      if (attach_widget != NULL)
+        result = gtk_widget_path_copy (gtk_widget_get_path (attach_widget));
+      else
+        result = gtk_widget_path_new ();
+
+      gtk_widget_path_append_for_widget (result, widget);
+
+      return result;
+    }
+}
+
 /**
  * gtk_widget_get_path:
  * @widget: a #GtkWidget
@@ -13913,33 +13946,7 @@ gtk_widget_get_path (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   if (!widget->priv->path)
-    {
-      GtkWidget *parent;
-
-      parent = widget->priv->parent;
-
-      if (parent)
-        widget->priv->path = gtk_container_get_path_for_child (GTK_CONTAINER (parent), widget);
-      else
-        {
-          /* Widget is either toplevel or unparented, treat both
-           * as toplevels style wise, since there are situations
-           * where style properties might be retrieved on that
-           * situation.
-           */
-          GtkWidget *attach_widget = NULL;
-
-          if (GTK_IS_WINDOW (widget))
-            attach_widget = gtk_window_get_attached_to (GTK_WINDOW (widget));
-
-          if (attach_widget != NULL)
-            widget->priv->path = gtk_widget_path_copy (gtk_widget_get_path (attach_widget));
-          else
-            widget->priv->path = gtk_widget_path_new ();
-    
-          gtk_widget_path_append_for_widget (widget->priv->path, widget);
-        }
-    }
+    widget->priv->path = _gtk_widget_create_path (widget);
 
   return widget->priv->path;
 }

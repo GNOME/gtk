@@ -1415,7 +1415,7 @@ gtk_combo_box_get_path_for_child (GtkContainer *container,
   GtkWidgetPath *sibling_path;
   int pos;
 
-  path = gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (container)));
+  path = _gtk_widget_create_path (GTK_WIDGET (container));
 
   if (gtk_widget_get_visible (child))
     {
