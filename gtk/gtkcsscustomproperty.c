@@ -170,6 +170,15 @@ gtk_theming_engine_register_property (const gchar            *name_space,
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
   name = g_strdup_printf ("-%s-%s", name_space, pspec->name);
+
+  /* This also initializes the default properties */
+  if (_gtk_style_property_lookup (pspec->name))
+    {
+      g_warning ("a property with name '%s' already exists", name);
+      g_free (name);
+      return;
+    }
+  
   initial = gtk_css_custom_property_create_initial_value (pspec);
 
   node = g_object_new (GTK_TYPE_CSS_CUSTOM_PROPERTY,
@@ -206,6 +215,13 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
 
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
+  /* This also initializes the default properties */
+  if (_gtk_style_property_lookup (pspec->name))
+    {
+      g_warning ("a property with name '%s' already exists", pspec->name);
+      return;
+    }
+  
   initial = gtk_css_custom_property_create_initial_value (pspec);
 
   node = g_object_new (GTK_TYPE_CSS_CUSTOM_PROPERTY,
