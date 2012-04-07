@@ -356,8 +356,6 @@ struct _GtkStyleContextPrivate
   GHashTable *style_data;
   GSList *info_stack;
 
-  GtkThemingEngine *theming_engine;
-
   GtkTextDirection direction;
 
   GtkCssChange relevant_changes;
@@ -616,7 +614,6 @@ gtk_style_context_init (GtkStyleContext *style_context)
                                             style_info_equal,
                                             (GDestroyNotify) style_info_free,
                                             (GDestroyNotify) style_data_free);
-  priv->theming_engine = g_object_ref ((gpointer) gtk_theming_engine_load (NULL));
 
   priv->direction = GTK_TEXT_DIR_LTR;
 
@@ -652,9 +649,6 @@ gtk_style_context_finalize (GObject *object)
   g_object_unref (priv->cascade);
 
   g_slist_free_full (priv->info_stack, (GDestroyNotify) style_info_free);
-
-  if (priv->theming_engine)
-    g_object_unref (priv->theming_engine);
 
   G_OBJECT_CLASS (gtk_style_context_parent_class)->finalize (object);
 }
@@ -812,13 +806,6 @@ style_data_lookup (GtkStyleContext *context)
 
       gtk_widget_path_free (path);
     }
-
-  if (priv->theming_engine)
-    g_object_unref (priv->theming_engine);
-
-  priv->theming_engine = g_object_ref (
-                           _gtk_css_engine_value_get_engine (
-                             _gtk_css_computed_values_get_value (info->data->store, GTK_CSS_PROPERTY_ENGINE)));
 
   return info->data;
 }
@@ -3254,8 +3241,8 @@ gtk_render_check (GtkStyleContext *context,
                   gdouble          width,
                   gdouble          height)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -3263,14 +3250,14 @@ gtk_render_check (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_check (priv->theming_engine, cr,
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_check (engine, cr,
                               x, y, width, height);
 
   cairo_restore (cr);
@@ -3304,8 +3291,8 @@ gtk_render_option (GtkStyleContext *context,
                    gdouble          width,
                    gdouble          height)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -3313,13 +3300,13 @@ gtk_render_option (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_option (priv->theming_engine, cr,
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_option (engine, cr,
                                x, y, width, height);
 
   cairo_restore (cr);
@@ -3351,8 +3338,8 @@ gtk_render_arrow (GtkStyleContext *context,
                   gdouble          y,
                   gdouble          size)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -3360,16 +3347,16 @@ gtk_render_arrow (GtkStyleContext *context,
   if (size <= 0)
     return;
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_arrow (priv->theming_engine, cr,
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_arrow (engine, cr,
                               angle, x, y, size);
 
   gtk_style_context_restore (context);
@@ -3405,8 +3392,8 @@ gtk_render_background (GtkStyleContext *context,
                        gdouble          width,
                        gdouble          height)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -3414,13 +3401,13 @@ gtk_render_background (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_background (priv->theming_engine, cr, x, y, width, height);
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_background (engine, cr, x, y, width, height);
 
   cairo_restore (cr);
 }
@@ -3456,8 +3443,8 @@ gtk_render_frame (GtkStyleContext *context,
                   gdouble          width,
                   gdouble          height)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -3465,13 +3452,13 @@ gtk_render_frame (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_frame (priv->theming_engine, cr, x, y, width, height);
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_frame (engine, cr, x, y, width, height);
 
   cairo_restore (cr);
 }
@@ -3504,8 +3491,8 @@ gtk_render_expander (GtkStyleContext *context,
                      gdouble          width,
                      gdouble          height)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -3513,13 +3500,13 @@ gtk_render_expander (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_expander (priv->theming_engine, cr, x, y, width, height);
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_expander (engine, cr, x, y, width, height);
 
   cairo_restore (cr);
 }
@@ -3549,8 +3536,8 @@ gtk_render_focus (GtkStyleContext *context,
                   gdouble          width,
                   gdouble          height)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -3558,13 +3545,13 @@ gtk_render_focus (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_focus (priv->theming_engine, cr, x, y, width, height);
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_focus (engine, cr, x, y, width, height);
 
   cairo_restore (cr);
 }
@@ -3588,23 +3575,23 @@ gtk_render_layout (GtkStyleContext *context,
                    gdouble          y,
                    PangoLayout     *layout)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
   PangoRectangle extents;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
   g_return_if_fail (cr != NULL);
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
   pango_layout_get_extents (layout, &extents, NULL);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_layout (priv->theming_engine, cr, x, y, layout);
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_layout (engine, cr, x, y, layout);
 
   cairo_restore (cr);
 }
@@ -3630,19 +3617,19 @@ gtk_render_line (GtkStyleContext *context,
                  gdouble          x1,
                  gdouble          y1)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_line (priv->theming_engine, cr, x0, y0, x1, y1);
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_line (engine, cr, x0, y0, x1, y1);
 
   cairo_restore (cr);
 }
@@ -3677,8 +3664,8 @@ gtk_render_slider (GtkStyleContext *context,
                    gdouble          height,
                    GtkOrientation   orientation)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -3686,13 +3673,13 @@ gtk_render_slider (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_slider (priv->theming_engine, cr, x, y, width, height, orientation);
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_slider (engine, cr, x, y, width, height, orientation);
 
   cairo_restore (cr);
 }
@@ -3732,8 +3719,8 @@ gtk_render_frame_gap (GtkStyleContext *context,
                       gdouble          xy0_gap,
                       gdouble          xy1_gap)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -3749,13 +3736,13 @@ gtk_render_frame_gap (GtkStyleContext *context,
   else
     g_return_if_fail (xy1_gap <= width);
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_frame_gap (priv->theming_engine, cr,
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_frame_gap (engine, cr,
                                   x, y, width, height, gap_side,
                                   xy0_gap, xy1_gap);
 
@@ -3792,8 +3779,8 @@ gtk_render_extension (GtkStyleContext *context,
                       gdouble          height,
                       GtkPositionType  gap_side)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -3801,13 +3788,13 @@ gtk_render_extension (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_extension (priv->theming_engine, cr, x, y, width, height, gap_side);
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_extension (engine, cr, x, y, width, height, gap_side);
 
   cairo_restore (cr);
 }
@@ -3840,8 +3827,8 @@ gtk_render_handle (GtkStyleContext *context,
                    gdouble          width,
                    gdouble          height)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -3849,13 +3836,13 @@ gtk_render_handle (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_handle (priv->theming_engine, cr, x, y, width, height);
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_handle (engine, cr, x, y, width, height);
 
   cairo_restore (cr);
 }
@@ -3883,8 +3870,8 @@ gtk_render_activity (GtkStyleContext *context,
                      gdouble          width,
                      gdouble          height)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
@@ -3892,13 +3879,13 @@ gtk_render_activity (GtkStyleContext *context,
   if (width <= 0 || height <= 0)
     return;
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_activity (priv->theming_engine, cr, x, y, width, height);
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_activity (engine, cr, x, y, width, height);
 
   cairo_restore (cr);
 }
@@ -3922,18 +3909,18 @@ gtk_render_icon_pixbuf (GtkStyleContext     *context,
                         const GtkIconSource *source,
                         GtkIconSize          size)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
   g_return_val_if_fail (size > GTK_ICON_SIZE_INVALID || size == -1, NULL);
   g_return_val_if_fail (source != NULL, NULL);
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  return engine_class->render_icon_pixbuf (priv->theming_engine, source, size);
+  _gtk_theming_engine_set_context (engine, context);
+  return engine_class->render_icon_pixbuf (engine, source, size);
 }
 
 /**
@@ -3955,19 +3942,19 @@ gtk_render_icon (GtkStyleContext *context,
                  gdouble          x,
                  gdouble          y)
 {
-  GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  GtkThemingEngine *engine;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
-  priv = context->priv;
-  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+  engine = _gtk_css_engine_value_get_engine (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ENGINE));
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (engine);
 
   cairo_save (cr);
 
-  _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_icon (priv->theming_engine, cr, pixbuf, x, y);
+  _gtk_theming_engine_set_context (engine, context);
+  engine_class->render_icon (engine, cr, pixbuf, x, y);
 
   cairo_restore (cr);
 }
