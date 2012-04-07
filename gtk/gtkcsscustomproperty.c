@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include "gtkcssstylefuncsprivate.h"
+#include "gtkcsstypedvalueprivate.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtkthemingengine.h"
 
@@ -46,7 +47,6 @@ gtk_css_custom_property_parse_value (GtkStyleProperty *property,
 {
   GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (property);
   GValue value = G_VALUE_INIT;
-  GtkCssValue *result;
   gboolean success;
 
   if (custom->property_parse_func)
@@ -78,10 +78,7 @@ gtk_css_custom_property_parse_value (GtkStyleProperty *property,
       return NULL;
     }
 
-  result = _gtk_css_value_new_from_gvalue (&value);
-  g_value_unset (&value);
-
-  return result;
+  return _gtk_css_typed_value_new_take (&value);
 }
 
 static void
@@ -91,14 +88,15 @@ gtk_css_custom_property_query (GtkStyleProperty   *property,
                                gpointer            query_data)
 {
   GtkCssStyleProperty *style = GTK_CSS_STYLE_PROPERTY (property);
+  GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (property);
   GtkCssValue *css_value;
   
   css_value = (* query_func) (_gtk_css_style_property_get_id (style), query_data);
   if (css_value == NULL)
-    css_value =_gtk_css_style_property_get_initial_value (style);
+    css_value = _gtk_css_style_property_get_initial_value (style);
 
-  _gtk_css_value_init_gvalue (css_value, value);
-  g_assert (GTK_CSS_CUSTOM_PROPERTY (property)->pspec->value_type == G_VALUE_TYPE (value));
+  g_value_init (value, custom->pspec->value_type);
+  g_value_copy (_gtk_css_typed_value_get (css_value), value);
 }
 
 static void
@@ -107,7 +105,7 @@ gtk_css_custom_property_assign (GtkStyleProperty   *property,
                                 GtkStateFlags       state,
                                 const GValue       *value)
 {
-  GtkCssValue *css_value = _gtk_css_value_new_from_gvalue (value);
+  GtkCssValue *css_value = _gtk_css_typed_value_new (value);
   _gtk_style_properties_set_property_by_property (props,
                                                   GTK_CSS_STYLE_PROPERTY (property),
                                                   state,
@@ -174,7 +172,7 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
   else
     g_param_value_set_default (pspec, &value);
 
-  result = _gtk_css_value_new_from_gvalue (&value);
+  result = _gtk_css_typed_value_new (&value);
   g_value_unset (&value);
 
   return result;

@@ -456,6 +456,7 @@ gtk_private_h_sources =		\
 	gtkcssstringvalueprivate.h	\
 	gtkcssstylefuncsprivate.h \
 	gtkcssstylepropertyprivate.h \
+	gtkcsstypedvalueprivate.h	\
 	gtkcssvalueprivate.h	\
 	gtkcustompaperunixdialog.h \
 	gtkentryprivate.h	\
@@ -670,6 +671,7 @@ gtk_base_c_sources = 		\
 	gtkcssstylefuncs.c	\
 	gtkcssstyleproperty.c	\
 	gtkcssstylepropertyimpl.c \
+	gtkcsstypedvalue.c	\
 	gtkcssvalue.c		\
 	gtkcsstypes.c		\
 	gtkdialog.c		\

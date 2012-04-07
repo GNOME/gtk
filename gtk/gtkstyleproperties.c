@@ -27,8 +27,8 @@
 #include "gtksymboliccolor.h"
 #include "gtkthemingengine.h"
 #include "gtkgradient.h"
-#include "gtkcssshadowvalueprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
+#include "gtkcsstypedvalueprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkborderimageprivate.h"
 
@@ -891,7 +891,7 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
           data = &g_array_index (prop_to_merge->values, ValueData, i);
 
           if (replace && data->state == GTK_STATE_FLAG_NORMAL &&
-              _gtk_css_value_holds (data->value, PANGO_TYPE_FONT_DESCRIPTION))
+              _gtk_is_css_typed_value_of_type (data->value, PANGO_TYPE_FONT_DESCRIPTION))
             {
               /* Let normal state override all states
                * previously set in the original set
@@ -901,19 +901,19 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
 
           value = property_data_get_value (prop, data->state);
 
-          if (_gtk_css_value_holds (data->value, PANGO_TYPE_FONT_DESCRIPTION) &&
+          if (_gtk_is_css_typed_value_of_type (data->value, PANGO_TYPE_FONT_DESCRIPTION) &&
               value->value != NULL)
             {
               PangoFontDescription *font_desc;
               PangoFontDescription *font_desc_to_merge;
 
               /* Handle merging of font descriptions */
-              font_desc = _gtk_css_value_get_boxed (value->value);
-              font_desc_to_merge = _gtk_css_value_get_boxed (data->value);
+              font_desc = g_value_get_boxed (_gtk_css_typed_value_get (value->value));
+              font_desc_to_merge = g_value_get_boxed (_gtk_css_typed_value_get (data->value));
 
               pango_font_description_merge (font_desc, font_desc_to_merge, replace);
             }
-          else if (_gtk_css_value_holds (data->value, G_TYPE_PTR_ARRAY) &&
+          else if (_gtk_is_css_typed_value_of_type (data->value, G_TYPE_PTR_ARRAY) &&
                    value->value != NULL)
             {
               GPtrArray *array, *array_to_merge;
@@ -922,8 +922,8 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
               /* Append the array, mainly thought
                * for the gtk-key-bindings property
                */
-              array = _gtk_css_value_get_boxed (value->value);
-              array_to_merge = _gtk_css_value_get_boxed (data->value);
+              array = g_value_get_boxed (_gtk_css_typed_value_get (value->value));
+              array_to_merge = g_value_get_boxed (_gtk_css_typed_value_get (data->value));
 
               for (i = 0; i < array_to_merge->len; i++)
                 g_ptr_array_add (array, g_ptr_array_index (array_to_merge, i));

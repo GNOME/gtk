@@ -76,30 +76,6 @@ char *       _gtk_css_value_to_string                 (const GtkCssValue        
 void         _gtk_css_value_print                     (const GtkCssValue          *value,
                                                        GString                    *string);
 
-GType        _gtk_css_value_get_content_type          (const GtkCssValue          *value);
-gboolean     _gtk_css_value_holds                     (const GtkCssValue          *value,
-						       GType                       type);
-GtkCssValue *_gtk_css_value_new_from_gvalue           (const GValue               *g_value);
-GtkCssValue *_gtk_css_value_new_from_int              (gint                        val);
-GtkCssValue *_gtk_css_value_new_from_enum             (GType                       type,
-                                                       gint                        val);
-GtkCssValue *_gtk_css_value_new_take_strv             (char                      **strv);
-GtkCssValue *_gtk_css_value_new_from_boxed            (GType                       type,
-                                                       gpointer                    boxed);
-GtkCssValue *_gtk_css_value_new_from_color            (const GdkColor             *v);
-GtkCssValue *_gtk_css_value_new_take_pattern          (cairo_pattern_t            *v);
-GtkCssValue *_gtk_css_value_new_take_binding_sets     (GPtrArray                  *array);
-void         _gtk_css_value_init_gvalue               (const GtkCssValue          *value,
-						       GValue                     *g_value);
-
-int                             _gtk_css_value_get_int                    (const GtkCssValue *value);
-int                             _gtk_css_value_get_enum                   (const GtkCssValue *value);
-gpointer                        _gtk_css_value_dup_object                 (const GtkCssValue *value);
-gpointer                        _gtk_css_value_get_object                 (const GtkCssValue *value);
-gpointer                        _gtk_css_value_get_boxed                  (const GtkCssValue *value);
-const char **                   _gtk_css_value_get_strv                   (const GtkCssValue *value);
-GtkGradient                    *_gtk_css_value_get_gradient               (const GtkCssValue *value);
-
 G_END_DECLS
 
 #endif /* __GTK_CSS_VALUE_PRIVATE_H__ */

@@ -29,11 +29,10 @@
 
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssprovider.h"
-#include "gtkcssrgbavalueprivate.h"
+#include "gtkcsstypedvalueprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkgradient.h"
 #include "gtkprivatetypebuiltins.h"
-#include "gtkcssshadowvalueprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtksymboliccolorprivate.h"
 #include "gtkthemingengine.h"
@@ -209,16 +208,22 @@ rgba_value_compute (GtkStyleContext *context,
                     GtkCssValue     *specified)
 {
   GdkRGBA white = { 1, 1, 1, 1 };
+  const GValue *value;
+
+  value = _gtk_css_typed_value_get (specified);
   
-  if (_gtk_css_value_holds (specified, GTK_TYPE_SYMBOLIC_COLOR))
+  if (G_VALUE_HOLDS (value, GTK_TYPE_SYMBOLIC_COLOR))
     {
-      GtkSymbolicColor *symbolic = _gtk_css_value_get_boxed (specified);
+      GtkSymbolicColor *symbolic = g_value_get_boxed (value);
+      GValue new_value = G_VALUE_INIT;
       GdkRGBA rgba;
 
       if (!_gtk_style_context_resolve_color (context, symbolic, &rgba))
         rgba = white;
 
-      return _gtk_css_value_new_from_boxed (GDK_TYPE_RGBA, &rgba);
+      g_value_init (&new_value, GDK_TYPE_RGBA);
+      g_value_set_boxed (&new_value, &rgba);
+      return _gtk_css_typed_value_new_take (&new_value);
     }
   else
     return _gtk_css_value_ref (specified);
@@ -278,11 +283,16 @@ color_value_compute (GtkStyleContext *context,
 {
   GdkRGBA rgba;
   GdkColor color = { 0, 65535, 65535, 65535 };
+  const GValue *value;
 
-  if (_gtk_css_value_holds (specified, GTK_TYPE_SYMBOLIC_COLOR))
+  value = _gtk_css_typed_value_get (specified);
+  
+  if (G_VALUE_HOLDS (value, GTK_TYPE_SYMBOLIC_COLOR))
     {
+      GValue new_value = G_VALUE_INIT;
+
       if (_gtk_style_context_resolve_color (context,
-                                            _gtk_css_value_get_boxed (specified),
+                                            g_value_get_boxed (value),
                                             &rgba))
         {
           color.red = rgba.red * 65535. + 0.5;
@@ -290,7 +300,9 @@ color_value_compute (GtkStyleContext *context,
           color.blue = rgba.blue * 65535. + 0.5;
         }
       
-      return _gtk_css_value_new_from_color (&color);
+      g_value_init (&new_value, GDK_TYPE_COLOR);
+      g_value_set_boxed (&new_value, &color);
+      return _gtk_css_typed_value_new_take (&new_value);
     }
   else
     return _gtk_css_value_ref (specified);
@@ -821,13 +833,18 @@ static GtkCssValue *
 pattern_value_compute (GtkStyleContext *context,
                        GtkCssValue     *specified)
 {
-  if (_gtk_css_value_holds (specified, GTK_TYPE_GRADIENT))
+  const GValue *value = _gtk_css_typed_value_get (specified);
+
+  if (G_VALUE_HOLDS (value, GTK_TYPE_GRADIENT))
     {
+      GValue new_value = G_VALUE_INIT;
       cairo_pattern_t *gradient;
       
-      gradient = gtk_gradient_resolve_for_context (_gtk_css_value_get_gradient (specified), context);
+      gradient = gtk_gradient_resolve_for_context (g_value_get_boxed (value), context);
 
-      return _gtk_css_value_new_take_pattern (gradient);
+      g_value_init (&new_value, CAIRO_GOBJECT_TYPE_PATTERN);
+      g_value_take_boxed (&new_value, gradient);
+      return _gtk_css_typed_value_new_take (&new_value);
     }
   else
     return _gtk_css_value_ref (specified);
