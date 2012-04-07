@@ -659,24 +659,27 @@ pack_border (GtkCssShorthandProperty *shorthand,
 {
   GtkCssStyleProperty *prop;
   GtkBorder border;
-  GtkCssValue *v;
+  GValue v;
 
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 0);
-  v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
-  if (v)
-    border.top = _gtk_css_value_get_int (v);
+  _gtk_style_property_query (GTK_STYLE_PROPERTY (prop), &v, query_func, query_data);
+  border.top = g_value_get_int (&v);
+  g_value_unset (&v);
+
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 1);
-  v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
-  if (v)
-    border.right = _gtk_css_value_get_int (v);
+  _gtk_style_property_query (GTK_STYLE_PROPERTY (prop), &v, query_func, query_data);
+  border.right = g_value_get_int (&v);
+  g_value_unset (&v);
+
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 2);
-  v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
-  if (v)
-    border.bottom = _gtk_css_value_get_int (v);
+  _gtk_style_property_query (GTK_STYLE_PROPERTY (prop), &v, query_func, query_data);
+  border.bottom = g_value_get_int (&v);
+  g_value_unset (&v);
+
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 3);
-  v = (* query_func) (_gtk_css_style_property_get_id (prop), query_data);
-  if (v)
-    border.left = _gtk_css_value_get_int (v);
+  _gtk_style_property_query (GTK_STYLE_PROPERTY (prop), &v, query_func, query_data);
+  border.left = g_value_get_int (&v);
+  g_value_unset (&v);
 
   g_value_init (value, GTK_TYPE_BORDER);
   g_value_set_boxed (value, &border);
