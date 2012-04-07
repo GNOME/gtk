@@ -2830,12 +2830,31 @@ _gtk_style_context_validate (GtkStyleContext *context,
   if (priv->relevant_changes & change)
     {
       GtkStyleInfo *info = priv->info_stack->data;
+      GtkCssComputedValues *old, *new;
+
+      old = info->data ? g_object_ref (info->data->store) : NULL;
 
       if ((priv->relevant_changes & change) & ~GTK_STYLE_CONTEXT_CACHED_CHANGE)
         gtk_style_context_clear_cache (context);
+      else
+        info->data = NULL;
 
-      info->data = NULL;
-      gtk_style_context_do_invalidate (context);
+      if (old)
+        {
+          GtkBitmask *bitmask;
+
+          new = style_data_lookup (context)->store;
+
+          bitmask = _gtk_css_computed_values_get_difference (new, old);
+          if (!_gtk_bitmask_is_empty (bitmask))
+            gtk_style_context_do_invalidate (context);
+
+          _gtk_bitmask_free (bitmask);
+          g_object_unref (old);
+        }
+      else
+        gtk_style_context_do_invalidate (context);
+
     }
 
   change = _gtk_css_change_for_child (change);

@@ -227,3 +227,25 @@ _gtk_css_computed_values_get_section (GtkCssComputedValues *values,
   return g_ptr_array_index (values->sections, id);
 }
 
+GtkBitmask *
+_gtk_css_computed_values_get_difference (GtkCssComputedValues *values,
+                                         GtkCssComputedValues *other)
+{
+  GtkBitmask *result;
+  guint i, len;
+
+  len = MIN (values->values->len, other->values->len);
+  result = _gtk_bitmask_new ();
+  if (values->values->len != other->values->len)
+    result = _gtk_bitmask_invert_range (result, len, MAX (values->values->len, other->values->len));
+  
+  for (i = 0; i < len; i++)
+    {
+      if (!_gtk_css_value_equal (g_ptr_array_index (values->values, i),
+                                 g_ptr_array_index (other->values, i)))
+        result = _gtk_bitmask_set (result, i, TRUE);
+    }
+
+  return result;
+}
+
