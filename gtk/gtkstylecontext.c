@@ -2756,8 +2756,23 @@ gtk_style_context_pop_animatable_region (GtkStyleContext *context)
 }
 
 static void
-gtk_style_context_do_invalidate (GtkStyleContext *context,
-                                 gboolean         clear_caches)
+gtk_style_context_clear_cache (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  GSList *list;
+
+  priv = context->priv;
+
+  for (list = priv->info_stack; list; list = list->next)
+    {
+      GtkStyleInfo *info = list->data;
+      info->data = NULL;
+    }
+  g_hash_table_remove_all (priv->style_data);
+}
+
+static void
+gtk_style_context_do_invalidate (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
 
@@ -2770,18 +2785,6 @@ gtk_style_context_do_invalidate (GtkStyleContext *context,
     return;
 
   priv->invalidating_context = TRUE;
-
-  if (clear_caches)
-    {
-      GSList *list;
-
-      for (list = priv->info_stack; list; list = list->next)
-        {
-          GtkStyleInfo *info = list->data;
-          info->data = NULL;
-        }
-      g_hash_table_remove_all (priv->style_data);
-    }
 
   g_signal_emit (context, signals[CHANGED], 0);
 
@@ -2833,10 +2836,12 @@ _gtk_style_context_validate (GtkStyleContext *context,
   if (priv->relevant_changes & change)
     {
       GtkStyleInfo *info = priv->info_stack->data;
-      gboolean clear_cache = ((priv->relevant_changes & change) & ~GTK_STYLE_CONTEXT_CACHED_CHANGE) != 0;
+
+      if ((priv->relevant_changes & change) & ~GTK_STYLE_CONTEXT_CACHED_CHANGE)
+        gtk_style_context_clear_cache (context);
 
       info->data = NULL;
-      gtk_style_context_do_invalidate (context, clear_cache);
+      gtk_style_context_do_invalidate (context);
     }
 
   change = _gtk_css_change_for_child (change);
@@ -2882,7 +2887,8 @@ gtk_style_context_invalidate (GtkStyleContext *context)
 {
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_style_context_do_invalidate (context, TRUE);
+  gtk_style_context_clear_cache (context);
+  gtk_style_context_do_invalidate (context);
 }
 
 /**
