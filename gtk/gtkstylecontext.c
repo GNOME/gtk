@@ -2787,6 +2787,7 @@ gtk_style_context_do_invalidate (GtkStyleContext *context)
 
 void
 _gtk_style_context_validate (GtkStyleContext *context,
+                             gint64           timestamp,
                              GtkCssChange     change)
 {
   GtkStyleContextPrivate *priv;
@@ -2860,7 +2861,7 @@ _gtk_style_context_validate (GtkStyleContext *context,
   change = _gtk_css_change_for_child (change);
   for (list = priv->children; list; list = list->next)
     {
-      _gtk_style_context_validate (list->data, change);
+      _gtk_style_context_validate (list->data, timestamp, change);
     }
 }
 

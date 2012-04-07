@@ -1643,6 +1643,7 @@ static gboolean
 gtk_container_idle_sizer (gpointer data)
 {
   GSList *slist;
+  gint64 current_time;
 
   /* we may be invoked with a container_resize_queue of NULL, because
    * queue_resize could have been adding an extra idle function while
@@ -1657,9 +1658,12 @@ gtk_container_idle_sizer (gpointer data)
    * because size_allocate functions often change styles and so could
    * cause infinite loops in this function.
    */
+  current_time = g_get_monotonic_time ();
   for (slist = container_resize_queue; slist; slist = slist->next)
     {
-      _gtk_style_context_validate (gtk_widget_get_style_context (slist->data), 0);
+      _gtk_style_context_validate (gtk_widget_get_style_context (slist->data),
+                                   current_time,
+                                   0);
     }
 
   while (container_resize_queue)
@@ -1728,7 +1732,9 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
               break;
 
             case GTK_RESIZE_IMMEDIATE:
-              _gtk_style_context_validate (gtk_widget_get_style_context (GTK_WIDGET (resize_container)), 0);
+              _gtk_style_context_validate (gtk_widget_get_style_context (GTK_WIDGET (resize_container)),
+                                           g_get_monotonic_time (),
+                                           0);
               gtk_container_check_resize (resize_container);
               break;
 
