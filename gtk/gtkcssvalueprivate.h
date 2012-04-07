@@ -87,7 +87,6 @@ GtkCssValue *_gtk_css_value_new_take_strv             (char                     
 GtkCssValue *_gtk_css_value_new_from_boxed            (GType                       type,
                                                        gpointer                    boxed);
 GtkCssValue *_gtk_css_value_new_from_color            (const GdkColor             *v);
-GtkCssValue *_gtk_css_value_new_take_symbolic_color   (GtkSymbolicColor           *v);
 GtkCssValue *_gtk_css_value_new_take_pattern          (cairo_pattern_t            *v);
 GtkCssValue *_gtk_css_value_new_take_binding_sets     (GPtrArray                  *array);
 void         _gtk_css_value_init_gvalue               (const GtkCssValue          *value,
@@ -99,7 +98,6 @@ gpointer                        _gtk_css_value_dup_object                 (const
 gpointer                        _gtk_css_value_get_object                 (const GtkCssValue *value);
 gpointer                        _gtk_css_value_get_boxed                  (const GtkCssValue *value);
 const char **                   _gtk_css_value_get_strv                   (const GtkCssValue *value);
-GtkSymbolicColor               *_gtk_css_value_get_symbolic_color         (const GtkCssValue *value);
 GtkGradient                    *_gtk_css_value_get_gradient               (const GtkCssValue *value);
 
 G_END_DECLS

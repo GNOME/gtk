@@ -234,13 +234,10 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser)
       }
     else if (values[COLOR] == NULL)
       {
-        GtkSymbolicColor *symbolic;
+        values[COLOR] = _gtk_css_symbolic_value_new (parser);
 
-        symbolic = _gtk_css_parser_read_symbolic_color (parser);
-        if (symbolic == NULL)
+        if (values[COLOR] == NULL)
           goto fail;
-
-        values[COLOR] = _gtk_css_value_new_take_symbolic_color (symbolic);
       }
     else
       {
@@ -253,7 +250,7 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser)
   while (values[HOFFSET] == NULL || !value_is_done_parsing (parser));
 
   if (values[COLOR] == NULL)
-    values[COLOR] = _gtk_css_value_new_take_symbolic_color (
+    values[COLOR] = _gtk_css_symbolic_value_new_take_symbolic_color (
                       gtk_symbolic_color_ref (
                         _gtk_symbolic_color_get_current_color ()));
 
@@ -278,7 +275,7 @@ _gtk_css_shadow_value_compute (GtkCssValue     *shadow,
   GtkCssValue *color;
 
   color = _gtk_css_rgba_value_compute_from_symbolic (shadow->color,
-                                                     _gtk_css_value_new_take_symbolic_color (
+                                                     _gtk_css_symbolic_value_new_take_symbolic_color (
                                                        gtk_symbolic_color_ref (
                                                          _gtk_symbolic_color_get_current_color ())),
                                                      context,

@@ -872,6 +872,8 @@ typedef enum {
   COLOR_WIN32
 } ColorParseType;
 
+static GtkSymbolicColor * gtk_css_parser_read_symbolic_color (GtkCssParser *parser);
+
 static GtkSymbolicColor *
 gtk_css_parser_read_symbolic_color_function (GtkCssParser   *parser,
                                              ColorParseType  color)
@@ -946,7 +948,7 @@ gtk_css_parser_read_symbolic_color_function (GtkCssParser   *parser,
     }
   else
     {
-      child1 = _gtk_css_parser_read_symbolic_color (parser);
+      child1 = gtk_css_parser_read_symbolic_color (parser);
       if (child1 == NULL)
         return NULL;
 
@@ -959,7 +961,7 @@ gtk_css_parser_read_symbolic_color_function (GtkCssParser   *parser,
               return NULL;
             }
 
-          child2 = _gtk_css_parser_read_symbolic_color (parser);
+          child2 = gtk_css_parser_read_symbolic_color (parser);
           if (child2 == NULL)
             {
               gtk_symbolic_color_unref (child1);
@@ -1027,8 +1029,8 @@ gtk_css_parser_read_symbolic_color_function (GtkCssParser   *parser,
   return symbolic;
 }
 
-GtkSymbolicColor *
-_gtk_css_parser_read_symbolic_color (GtkCssParser *parser)
+static GtkSymbolicColor *
+gtk_css_parser_read_symbolic_color (GtkCssParser *parser)
 {
   GtkSymbolicColor *symbolic;
   GdkRGBA rgba;
@@ -1036,8 +1038,6 @@ _gtk_css_parser_read_symbolic_color (GtkCssParser *parser)
   const char *names[] = {"rgba", "rgb",  "lighter", "darker", "shade", "alpha", "mix",
 			 GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME};
   char *name;
-
-  g_return_val_if_fail (parser != NULL, NULL);
 
   if (_gtk_css_parser_try (parser, "currentColor", TRUE))
     return gtk_symbolic_color_ref (_gtk_symbolic_color_get_current_color ());
@@ -1097,5 +1097,13 @@ _gtk_css_parser_read_symbolic_color (GtkCssParser *parser)
 
   _gtk_css_parser_error (parser, "Not a color definition");
   return NULL;
+}
+
+GtkCssValue *
+_gtk_css_symbolic_value_new (GtkCssParser *parser)
+{
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  return _gtk_css_symbolic_value_new_take_symbolic_color (gtk_css_parser_read_symbolic_color (parser));
 }
 

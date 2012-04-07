@@ -169,7 +169,7 @@ rgba_value_parse (GtkCssParser *parser,
   GtkSymbolicColor *symbolic;
   GdkRGBA rgba;
 
-  symbolic = _gtk_css_parser_read_symbolic_color (parser);
+  symbolic = _gtk_symbolic_color_new_take_value (_gtk_css_symbolic_value_new (parser));
   if (symbolic == NULL)
     return FALSE;
 
@@ -212,12 +212,10 @@ rgba_value_compute (GtkStyleContext *context,
   
   if (_gtk_css_value_holds (specified, GTK_TYPE_SYMBOLIC_COLOR))
     {
-      GtkSymbolicColor *symbolic = _gtk_css_value_get_symbolic_color (specified);
+      GtkSymbolicColor *symbolic = _gtk_css_value_get_boxed (specified);
       GdkRGBA rgba;
 
-      if (symbolic == _gtk_symbolic_color_get_current_color ())
-        rgba = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
-      else if (!gtk_symbolic_color_resolve (symbolic, NULL, &rgba))
+      if (!_gtk_style_context_resolve_color (context, symbolic, &rgba))
         rgba = white;
 
       return _gtk_css_value_new_from_boxed (GDK_TYPE_RGBA, &rgba);
@@ -234,7 +232,7 @@ color_value_parse (GtkCssParser *parser,
   GtkSymbolicColor *symbolic;
   GdkRGBA rgba;
 
-  symbolic = _gtk_css_parser_read_symbolic_color (parser);
+  symbolic = _gtk_symbolic_color_new_take_value (_gtk_css_symbolic_value_new (parser));
   if (symbolic == NULL)
     return FALSE;
 
@@ -284,7 +282,7 @@ color_value_compute (GtkStyleContext *context,
   if (_gtk_css_value_holds (specified, GTK_TYPE_SYMBOLIC_COLOR))
     {
       if (_gtk_style_context_resolve_color (context,
-                                            _gtk_css_value_get_symbolic_color (specified),
+                                            _gtk_css_value_get_boxed (specified),
                                             &rgba))
         {
           color.red = rgba.red * 65535. + 0.5;
@@ -305,7 +303,7 @@ symbolic_color_value_parse (GtkCssParser *parser,
 {
   GtkSymbolicColor *symbolic;
 
-  symbolic = _gtk_css_parser_read_symbolic_color (parser);
+  symbolic = _gtk_symbolic_color_new_take_value (_gtk_css_symbolic_value_new (parser));
   if (symbolic == NULL)
     return FALSE;
 

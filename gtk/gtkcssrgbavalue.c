@@ -95,15 +95,14 @@ _gtk_css_rgba_value_get_rgba (const GtkCssValue *rgba)
 }
 
 GtkCssValue *
-_gtk_css_rgba_value_compute_from_symbolic (GtkCssValue     *rgba,
+_gtk_css_rgba_value_compute_from_symbolic (GtkCssValue     *symbolic,
                                            GtkCssValue     *fallback,
                                            GtkStyleContext *context,
                                            gboolean         for_color_property)
 {
-  GtkSymbolicColor *symbolic;
   GtkCssValue *resolved, *current;
 
-  g_return_val_if_fail (rgba != NULL, NULL);
+  g_return_val_if_fail (symbolic != NULL, NULL);
 
   /* The computed value of the ‘currentColor’ keyword is the computed
    * value of the ‘color’ property. If the ‘currentColor’ keyword is

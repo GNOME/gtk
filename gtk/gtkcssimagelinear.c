@@ -315,10 +315,9 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
 
   do {
     GtkCssImageLinearColorStop stop;
-    GtkSymbolicColor *symbolic;
 
-    symbolic = _gtk_css_parser_read_symbolic_color (parser);
-    if (symbolic == NULL)
+    stop.color = _gtk_css_symbolic_value_new (parser);
+    if (stop.color == NULL)
       return FALSE;
 
     if (_gtk_css_parser_has_number (parser))
@@ -328,7 +327,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
                                                    | GTK_CSS_PARSE_LENGTH);
         if (stop.offset == NULL)
           {
-            gtk_symbolic_color_unref (symbolic);
+            _gtk_css_value_unref (stop.color);
             return FALSE;
           }
       }
@@ -337,7 +336,6 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
         stop.offset = NULL;
       }
 
-    stop.color = _gtk_css_value_new_take_symbolic_color (symbolic);
     g_array_append_val (linear->stops, stop);
 
   } while (_gtk_css_parser_try (parser, ",", TRUE));
@@ -426,7 +424,7 @@ gtk_css_image_linear_compute (GtkCssImage     *image,
 
   copy->angle = _gtk_css_number_value_compute (linear->angle, context);
   
-  fallback = _gtk_css_value_new_take_symbolic_color (gtk_symbolic_color_new_literal (&transparent));
+  fallback = _gtk_css_symbolic_value_new_take_symbolic_color (gtk_symbolic_color_new_literal (&transparent));
   g_array_set_size (copy->stops, linear->stops->len);
   for (i = 0; i < linear->stops->len; i++)
     {

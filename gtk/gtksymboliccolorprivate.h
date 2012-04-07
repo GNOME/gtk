@@ -33,7 +33,20 @@ GtkCssValue *      _gtk_symbolic_color_resolve_full       (GtkSymbolicColor     
 
 GtkSymbolicColor * _gtk_symbolic_color_get_current_color  (void);
 
-GtkSymbolicColor * _gtk_css_parser_read_symbolic_color    (GtkCssParser               *parser);
+GtkCssValue *      _gtk_css_symbolic_value_new            (GtkCssParser               *parser);
+
+/* I made these inline functions instead of macros to gain type safety for the arguments passed in. */
+static inline GtkSymbolicColor *
+_gtk_symbolic_color_new_take_value (GtkCssValue *value)
+{
+  return (GtkSymbolicColor *) value;
+}
+
+static inline GtkCssValue *
+_gtk_css_symbolic_value_new_take_symbolic_color (GtkSymbolicColor *color)
+{
+  return (GtkCssValue *) color;
+}
 
 G_END_DECLS
 

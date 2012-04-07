@@ -181,13 +181,7 @@ color_parse (GtkCssStyleProperty *property,
              GtkCssParser        *parser,
              GFile               *base)
 {
-  GtkSymbolicColor *symbolic;
-
-  symbolic = _gtk_css_parser_read_symbolic_color (parser);
-  if (symbolic == NULL)
-    return NULL;
-
-  return _gtk_css_value_new_take_symbolic_color (symbolic);
+  return _gtk_css_symbolic_value_new (parser);
 }
 
 static GtkCssValue *
@@ -938,7 +932,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_query,
                                           color_assign,
                                           NULL,
-                                          _gtk_css_value_new_take_symbolic_color (
+                                          _gtk_css_symbolic_value_new_take_symbolic_color (
                                             gtk_symbolic_color_new_rgba (1, 1, 1, 1)));
   gtk_css_style_property_register        ("font-size",
                                           GTK_CSS_PROPERTY_FONT_SIZE,
@@ -965,7 +959,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_query,
                                           color_assign,
                                           NULL,
-                                          _gtk_css_value_new_take_symbolic_color (
+                                          _gtk_css_symbolic_value_new_take_symbolic_color (
                                             gtk_symbolic_color_new_rgba (0, 0, 0, 0)));
 
   gtk_css_style_property_register        ("font-family",
@@ -1368,7 +1362,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_query,
                                           color_assign,
                                           NULL,
-                                          _gtk_css_value_new_take_symbolic_color (
+                                          _gtk_css_symbolic_value_new_take_symbolic_color (
                                             gtk_symbolic_color_ref (
                                               _gtk_symbolic_color_get_current_color ())));
   gtk_css_style_property_register        ("border-right-color",
@@ -1381,7 +1375,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_query,
                                           color_assign,
                                           NULL,
-                                          _gtk_css_value_new_take_symbolic_color (
+                                          _gtk_css_symbolic_value_new_take_symbolic_color (
                                             gtk_symbolic_color_ref (
                                               _gtk_symbolic_color_get_current_color ())));
   gtk_css_style_property_register        ("border-bottom-color",
@@ -1394,7 +1388,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_query,
                                           color_assign,
                                           NULL,
-                                          _gtk_css_value_new_take_symbolic_color (
+                                          _gtk_css_symbolic_value_new_take_symbolic_color (
                                             gtk_symbolic_color_ref (
                                               _gtk_symbolic_color_get_current_color ())));
   gtk_css_style_property_register        ("border-left-color",
@@ -1407,7 +1401,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_query,
                                           color_assign,
                                           NULL,
-                                          _gtk_css_value_new_take_symbolic_color (
+                                          _gtk_css_symbolic_value_new_take_symbolic_color (
                                             gtk_symbolic_color_ref (
                                               _gtk_symbolic_color_get_current_color ())));
   gtk_css_style_property_register        ("outline-color",
@@ -1420,7 +1414,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_query,
                                           color_assign,
                                           NULL,
-                                          _gtk_css_value_new_take_symbolic_color (
+                                          _gtk_css_symbolic_value_new_take_symbolic_color (
                                             gtk_symbolic_color_ref (
                                               _gtk_symbolic_color_get_current_color ())));
 

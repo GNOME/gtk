@@ -46,7 +46,7 @@ gboolean       _gtk_style_context_resolve_color              (GtkStyleContext  *
                                                               GdkRGBA          *result);
 GtkCssValue *  _gtk_style_context_resolve_color_value        (GtkStyleContext  *context,
                                                               GtkCssValue      *current,
-                                                              GtkSymbolicColor *color);
+                                                              GtkCssValue      *color);
 void           _gtk_style_context_get_cursor_color           (GtkStyleContext *context,
                                                               GdkRGBA         *primary_color,
                                                               GdkRGBA         *secondary_color);

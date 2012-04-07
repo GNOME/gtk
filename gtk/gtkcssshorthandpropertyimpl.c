@@ -216,16 +216,13 @@ parse_border_color (GtkCssShorthandProperty  *shorthand,
                     GtkCssParser             *parser,
                     GFile                    *base)
 {
-  GtkSymbolicColor *symbolic;
   guint i;
 
   for (i = 0; i < 4; i++)
     {
-      symbolic = _gtk_css_parser_read_symbolic_color (parser);
-      if (symbolic == NULL)
+      values[i] = _gtk_css_symbolic_value_new (parser);
+      if (values[i] == NULL)
         return FALSE;
-
-      values[i] = _gtk_css_value_new_take_symbolic_color (symbolic);
 
       if (value_is_done_parsing (parser))
         break;
@@ -358,13 +355,9 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
       }
     else if (values[2] == NULL)
       {
-        GtkSymbolicColor *symbolic;
-
-        symbolic = _gtk_css_parser_read_symbolic_color (parser);
-        if (symbolic == NULL)
+        values[2] = _gtk_css_symbolic_value_new (parser);
+        if (values[2] == NULL)
           return FALSE;
-
-        values[2] = _gtk_css_value_new_take_symbolic_color (symbolic);
       }
   }
   while (!value_is_done_parsing (parser));
@@ -402,13 +395,10 @@ parse_border (GtkCssShorthandProperty  *shorthand,
       }
     else if (!G_IS_VALUE (&values[8]))
       {
-        GtkSymbolicColor *symbolic;
-
-        symbolic = _gtk_css_parser_read_symbolic_color (parser);
-        if (symbolic == NULL)
+        values[8] = _gtk_css_symbolic_value_new (parser);
+        if (values[8] == NULL)
           return FALSE;
 
-        values[8] = _gtk_css_value_new_take_symbolic_color (symbolic);
         values[9] = _gtk_css_value_ref (values[8]);
         values[10] = _gtk_css_value_ref (values[8]);
         values[11] = _gtk_css_value_ref (values[8]);
@@ -516,13 +506,9 @@ parse_background (GtkCssShorthandProperty  *shorthand,
         }
       else if (values[4] == NULL)
         {
-          GtkSymbolicColor *symbolic;
-          
-          symbolic = _gtk_css_parser_read_symbolic_color (parser);
-          if (symbolic == NULL)
+          values[4] = _gtk_css_symbolic_value_new (parser);
+          if (values[4] == NULL)
             return FALSE;
-
-          values[4] = _gtk_css_value_new_take_symbolic_color (symbolic);
         }
       else
         {
