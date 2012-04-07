@@ -9716,11 +9716,10 @@ proxy_button_event (GdkEvent *source_event,
       gdk_event_set_device (event, gdk_event_get_device (source_event));
       gdk_event_set_source_device (event, source_device);
 
-      if (type == GDK_BUTTON_RELEASE)
-	event->button.state |= GDK_BUTTON1_MASK;
-
       if (is_touch_type (source_event->type))
-	{
+        {
+          if (type == GDK_BUTTON_RELEASE)
+            event->button.state |= GDK_BUTTON1_MASK;
 	  event->button.button = 1;
 	  event->button.axes = g_memdup (source_event->touch.axes,
 					 sizeof (gdouble) * gdk_device_get_n_axes (source_event->touch.device));
