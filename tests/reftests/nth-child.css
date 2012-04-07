@@ -20,12 +20,12 @@
 
 :nth-child(7n+7),
 :nth-last-child(7n-700) {
-  text-shadow: red 1 1;
+  text-shadow: red 1px 1px;
 }
 
 :nth-child(11n+11),
 :nth-last-child(-11n+1100) {
-  text-shadow: green 1 1;
+  text-shadow: green 1px 1px;
 }
 
 #ref1 {
@@ -42,12 +42,12 @@
 
 #ref4 {
   color: blue;
-  text-shadow: green 1 1;
+  text-shadow: green 1px 1px;
 }
 
 #ref5 {
   font-weight: bold;
-  text-shadow: red 1 1;
+  text-shadow: red 1px 1px;
 }
 
 #ref6 {
@@ -81,7 +81,7 @@
 #ref12 {
   color: blue;
   font-weight: bold;
-  text-shadow: red 1 1;
+  text-shadow: red 1px 1px;
 }
 
 #ref13 {
@@ -90,13 +90,13 @@
 #ref14 {
   color: blue;
   font-weight: bold;
-  text-shadow: red 1 1;
+  text-shadow: red 1px 1px;
 }
 
 #ref15 {
   font-weight: bold;
   font-style: italic;
-  text-shadow: green 1 1;
+  text-shadow: green 1px 1px;
 }
 
 #ref16 {
@@ -114,7 +114,7 @@
 }
 
 #ref19 {
-  text-shadow: red 1 1;
+  text-shadow: red 1px 1px;
 }
 
 #ref20 {
@@ -126,12 +126,12 @@
 #ref21 {
   font-weight: bold;
   font-style: italic;
-  text-shadow: red 1 1;
+  text-shadow: red 1px 1px;
 }
 
 #ref22 {
   color: blue;
-  text-shadow: green 1 1;
+  text-shadow: green 1px 1px;
 }
 
 #ref23 {

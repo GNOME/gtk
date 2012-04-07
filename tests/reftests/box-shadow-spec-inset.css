@@ -27,15 +27,15 @@ GtkButton {
 .row2 {
   box-shadow:
     rgba(0,0,0,1)
-    15/*px*/ 15/*px*/
+    15px 15px
     inset
 }
 
 .row3 {
   box-shadow:
     rgba(0,0,0,1)
-    15/*px*/ 15/*px*/ 0
-    10/*px*/ /*spread*/
+    15px 15px 0
+    10px /*spread*/
     inset
 }
 

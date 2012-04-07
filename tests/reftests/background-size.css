@@ -3,7 +3,7 @@
 * {
   background-image: url("border-image-balls.png");
   color: black;
-  text-shadow: 1 1 white;
+  text-shadow: 1px 1px white;
 }
 
 #a {
