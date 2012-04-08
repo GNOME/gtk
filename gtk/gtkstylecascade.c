@@ -34,6 +34,7 @@ struct _GtkStyleProviderData
 {
   GtkStyleProvider *provider;
   guint priority;
+  guint changed_signal_id;
 };
 
 static GtkStyleProvider *
@@ -263,6 +264,7 @@ style_provider_data_clear (gpointer data_)
 {
   GtkStyleProviderData *data = data_;
 
+  g_signal_handler_disconnect (data->provider, data->changed_signal_id);
   g_object_unref (data->provider);
 }
 
@@ -313,10 +315,21 @@ _gtk_style_cascade_set_parent (GtkStyleCascade *cascade,
     return;
 
   if (parent)
-    g_object_ref (parent);
+    {
+      g_object_ref (parent);
+      g_signal_connect_swapped (parent,
+                                "-gtk-private-changed",
+                                G_CALLBACK (_gtk_style_provider_private_changed),
+                                cascade);
+    }
 
   if (cascade->parent)
-    g_object_unref (cascade->parent);
+    {
+      g_signal_handlers_disconnect_by_func (cascade->parent, 
+                                            _gtk_style_provider_private_changed,
+                                            cascade);
+      g_object_unref (cascade->parent);
+    }
 
   cascade->parent = parent;
 }
@@ -335,6 +348,10 @@ _gtk_style_cascade_add_provider (GtkStyleCascade  *cascade,
 
   data.provider = g_object_ref (provider);
   data.priority = priority;
+  data.changed_signal_id = g_signal_connect_swapped (provider,
+                                                     "-gtk-private-changed",
+                                                     G_CALLBACK (_gtk_style_provider_private_changed),
+                                                     cascade);
 
   /* ensure it gets removed first */
   _gtk_style_cascade_remove_provider (cascade, provider);
@@ -345,6 +362,8 @@ _gtk_style_cascade_add_provider (GtkStyleCascade  *cascade,
         break;
     }
   g_array_insert_val (cascade->providers, i, data);
+
+  _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (cascade));
 }
 
 void
@@ -363,6 +382,8 @@ _gtk_style_cascade_remove_provider (GtkStyleCascade  *cascade,
       if (data->provider == provider)
         {
           g_array_remove_index (cascade->providers, i);
+  
+          _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (cascade));
           break;
         }
     }

@@ -1738,6 +1738,8 @@ settings_invalidate_style (GtkSettings *settings)
       g_object_unref (priv->style);
       priv->style = NULL;
     }
+
+  _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (settings));
 }
 
 static void

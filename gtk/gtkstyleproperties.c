@@ -399,6 +399,8 @@ gtk_style_properties_map_color (GtkStyleProperties *props,
   g_hash_table_replace (priv->color_map,
                         g_strdup (name),
                         gtk_symbolic_color_ref (color));
+
+  _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (props));
 }
 
 /**
@@ -453,6 +455,8 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties  *props,
 
   _gtk_css_value_unref (val->value);
   val->value = _gtk_css_value_ref (value);
+
+  _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (props));
 }
 
 /**
@@ -797,6 +801,8 @@ gtk_style_properties_unset_property (GtkStyleProperties *props,
       data->value = NULL;
 
       g_array_remove_index (prop->values, pos);
+
+      _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (props));
     }
 }
 
@@ -815,6 +821,8 @@ gtk_style_properties_clear (GtkStyleProperties *props)
 
   priv = props->priv;
   g_hash_table_remove_all (priv->properties);
+
+  _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (props));
 }
 
 /**
@@ -935,4 +943,6 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
             }
         }
     }
+
+  _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (props));
 }

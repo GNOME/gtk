@@ -2537,6 +2537,8 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
 
   g_free (free_data);
 
+  _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (css_provider));
+
   return ret;
 }
 
@@ -2556,12 +2558,18 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                  GFile           *file,
                                  GError         **error)
 {
+  gboolean success;
+
   g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
 
   gtk_css_provider_reset (css_provider);
 
-  return gtk_css_provider_load_internal (css_provider, NULL, file, NULL, error);
+  success = gtk_css_provider_load_internal (css_provider, NULL, file, NULL, error);
+
+  _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (css_provider));
+
+  return success;
 }
 
 /**
