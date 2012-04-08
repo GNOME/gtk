@@ -304,7 +304,7 @@
 
 /* When these change we do a full restyling. Otherwise we try to figure out
  * if we need to change things. */
-#define GTK_STYLE_CONTEXT_RADICAL_CHANGE (GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS)
+#define GTK_STYLE_CONTEXT_RADICAL_CHANGE (GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE)
 /* When these change we don't clear the cache. This takes more memory but makes
  * things go faster. */
 #define GTK_STYLE_CONTEXT_CACHED_CHANGE (GTK_CSS_CHANGE_STATE)
@@ -601,6 +601,52 @@ style_data_free (StyleData *data)
 }
 
 static void
+gtk_style_context_cascade_changed (GtkStyleCascade *cascade,
+                                   GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  if (priv->widget)
+    _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_SOURCE);
+  else
+    gtk_style_context_invalidate (context);
+}
+
+static void
+gtk_style_context_set_cascade (GtkStyleContext *context,
+                               GtkStyleCascade *cascade)
+{
+  GtkStyleContextPrivate *priv;
+
+  priv = context->priv;
+
+  if (priv->cascade == cascade)
+    return;
+
+  if (cascade)
+    {
+      g_object_ref (cascade);
+      g_signal_connect (cascade,
+                        "-gtk-private-changed",
+                        G_CALLBACK (gtk_style_context_cascade_changed),
+                        context);
+    }
+
+  if (priv->cascade)
+    {
+      g_signal_handlers_disconnect_by_func (priv->cascade, 
+                                            gtk_style_context_cascade_changed,
+                                            context);
+      g_object_unref (priv->cascade);
+    }
+
+  priv->cascade = cascade;
+
+  if (cascade)
+    gtk_style_context_cascade_changed (cascade, context);
+}
+
+static void
 gtk_style_context_init (GtkStyleContext *style_context)
 {
   GtkStyleContextPrivate *priv;
@@ -618,13 +664,14 @@ gtk_style_context_init (GtkStyleContext *style_context)
   priv->direction = GTK_TEXT_DIR_LTR;
 
   priv->screen = gdk_screen_get_default ();
-  priv->cascade = _gtk_style_cascade_get_for_screen (priv->screen);
-  g_object_ref (priv->cascade);
   priv->relevant_changes = GTK_CSS_CHANGE_ANY;
 
   /* Create default info store */
   info = style_info_new ();
   priv->info_stack = g_slist_prepend (priv->info_stack, info);
+
+  gtk_style_context_set_cascade (style_context,
+                                 _gtk_style_cascade_get_for_screen (priv->screen));
 }
 
 static void
@@ -641,12 +688,12 @@ gtk_style_context_finalize (GObject *object)
 
   gtk_style_context_set_parent (style_context, NULL);
 
+  gtk_style_context_set_cascade (style_context, NULL);
+
   if (priv->widget_path)
     gtk_widget_path_free (priv->widget_path);
 
   g_hash_table_destroy (priv->style_data);
-
-  g_object_unref (priv->cascade);
 
   g_slist_free_full (priv->info_stack, (GDestroyNotify) style_info_free);
 
@@ -931,13 +978,14 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
       
       new_cascade = _gtk_style_cascade_new ();
       _gtk_style_cascade_set_parent (new_cascade, priv->cascade);
-      g_object_unref (priv->cascade);
-      priv->cascade = new_cascade;
+      _gtk_style_cascade_add_provider (new_cascade, provider, priority);
+      gtk_style_context_set_cascade (context, new_cascade);
+      g_object_unref (new_cascade);
     }
-
-  _gtk_style_cascade_add_provider (priv->cascade, provider, priority);
-
-  gtk_style_context_invalidate (context);
+  else
+    {
+      _gtk_style_cascade_add_provider (priv->cascade, provider, priority);
+    }
 }
 
 /**
@@ -2369,9 +2417,7 @@ gtk_style_context_set_screen (GtkStyleContext *context,
 
   if (priv->cascade == _gtk_style_cascade_get_for_screen (priv->screen))
     {
-      g_object_unref (priv->cascade);
-      priv->cascade = _gtk_style_cascade_get_for_screen (screen);
-      g_object_ref (priv->cascade);
+      gtk_style_context_set_cascade (context, _gtk_style_cascade_get_for_screen (screen));
     }
   else
     {
