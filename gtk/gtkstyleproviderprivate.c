@@ -18,13 +18,30 @@
 #include "config.h"
 
 #include "gtkstyleproviderprivate.h"
+
+#include "gtkintl.h"
 #include "gtkstyleprovider.h"
 
+enum {
+  CHANGED,
+  LAST_SIGNAL
+};
+
 G_DEFINE_INTERFACE (GtkStyleProviderPrivate, _gtk_style_provider_private, GTK_TYPE_STYLE_PROVIDER)
+
+guint signals[LAST_SIGNAL];
 
 static void
 _gtk_style_provider_private_default_init (GtkStyleProviderPrivateInterface *iface)
 {
+  signals[CHANGED] = g_signal_new (I_("-gtk-private-changed"),
+                                   G_TYPE_FROM_INTERFACE (iface),
+                                   G_SIGNAL_RUN_LAST,
+                                   G_STRUCT_OFFSET (GtkStyleProviderPrivateInterface, changed),
+                                   NULL, NULL,
+                                   g_cclosure_marshal_VOID__VOID,
+                                   G_TYPE_NONE, 0);
+
 }
 
 GtkSymbolicColor *
@@ -78,3 +95,12 @@ _gtk_style_provider_private_get_change (GtkStyleProviderPrivate *provider,
 
   return iface->get_change (provider, matcher);
 }
+
+void
+_gtk_style_provider_private_changed (GtkStyleProviderPrivate *provider)
+{
+  g_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
+
+  g_signal_emit (provider, signals[CHANGED], 0);
+}
+
