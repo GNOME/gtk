@@ -464,6 +464,10 @@ _gtk_css_style_property_is_specified_type (GtkCssStyleProperty *property,
     return TRUE;
 
   /* XXX: Someone needs to fix that legacy */
+  if ((_gtk_css_value_holds (property->initial_value, GDK_TYPE_RGBA) ||
+       _gtk_css_value_holds (property->initial_value, GDK_TYPE_COLOR)) &&
+      type == GTK_TYPE_GRADIENT)
+    return TRUE;
   if (_gtk_css_value_holds (property->initial_value, CAIRO_GOBJECT_TYPE_PATTERN) &&
       type == GTK_TYPE_GRADIENT)
     return TRUE;

@@ -81,33 +81,28 @@ _gtk_css_custom_property_init (GtkCssCustomProperty *custom_property)
 {
 }
 
-static GType
-gtk_css_custom_property_get_specified_type (GParamSpec *pspec)
-{
-  if (pspec->value_type == GDK_TYPE_RGBA ||
-      pspec->value_type == GDK_TYPE_COLOR)
-    return GTK_TYPE_SYMBOLIC_COLOR;
-  else
-    return pspec->value_type;
-}
-
 static GtkCssValue *
 gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
 {
   GValue value = G_VALUE_INIT;
 
-  g_value_init (&value, gtk_css_custom_property_get_specified_type (pspec));
+  g_value_init (&value, pspec->value_type);
 
   if (pspec->value_type == GTK_TYPE_THEMING_ENGINE)
     g_value_set_object (&value, gtk_theming_engine_load (NULL));
   else if (pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
     g_value_take_boxed (&value, pango_font_description_from_string ("Sans 10"));
-  else if (pspec->value_type == GDK_TYPE_RGBA ||
-           pspec->value_type == GDK_TYPE_COLOR)
+  else if (pspec->value_type == GDK_TYPE_RGBA)
     {
       GdkRGBA color;
       gdk_rgba_parse (&color, "pink");
-      g_value_take_boxed (&value, gtk_symbolic_color_new_literal (&color));
+      g_value_take_boxed (&value, &color);
+    }
+  else if (pspec->value_type == GDK_TYPE_COLOR)
+    {
+      GdkColor color;
+      gdk_color_parse ("pink", &color);
+      g_value_take_boxed (&value, &color);
     }
   else if (pspec->value_type == GTK_TYPE_BORDER)
     {
