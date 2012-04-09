@@ -415,7 +415,7 @@ css_image_value_compute (GtkCssStyleProperty    *property,
       return _gtk_css_value_ref (specified);
     }
 
-  return _gtk_css_value_new_take_image (image);
+  return _gtk_css_value_new_take_image (computed);
 }
 
 static gboolean 
