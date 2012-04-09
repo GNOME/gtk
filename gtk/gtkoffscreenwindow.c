@@ -220,13 +220,10 @@ static void
 gtk_offscreen_window_show (GtkWidget *widget)
 {
   gboolean need_resize;
-  GtkContainer *container;
 
   _gtk_widget_set_visible_flag (widget, TRUE);
 
-  container = GTK_CONTAINER (widget);
-  need_resize = _gtk_container_get_need_resize (container) || !gtk_widget_get_realized (widget);
-  _gtk_container_set_need_resize (container, FALSE);
+  need_resize = _gtk_widget_get_alloc_needed (widget) || !gtk_widget_get_realized (widget);
 
   if (need_resize)
     gtk_offscreen_window_resize (widget);

@@ -4805,8 +4805,7 @@ gtk_window_show (GtkWidget *widget)
 
   _gtk_widget_set_visible_flag (widget, TRUE);
 
-  need_resize = _gtk_container_get_need_resize (container) || !gtk_widget_get_realized (widget);
-  _gtk_container_set_need_resize (container, FALSE);
+  need_resize = _gtk_widget_get_alloc_needed (widget) || !gtk_widget_get_realized (widget);
 
   if (need_resize)
     {

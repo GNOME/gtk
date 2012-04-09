@@ -238,7 +238,6 @@ struct _GtkContainerPrivate
   guint border_width : 16;
 
   guint has_focus_chain    : 1;
-  guint need_resize        : 1;
   guint reallocate_redraws : 1;
   guint resize_mode        : 2;
   guint request_mode       : 2;
@@ -1342,7 +1341,6 @@ gtk_container_init (GtkContainer *container)
 
   priv->focus_child = NULL;
   priv->border_width = 0;
-  priv->need_resize = FALSE;
   priv->resize_mode = GTK_RESIZE_PARENT;
   priv->reallocate_redraws = FALSE;
 }
@@ -1723,14 +1721,6 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
               g_assert_not_reached ();
               break;
             }
-        }
-      else
-        {
-          /* we need to let hidden resize containers know that something
-           * changed while they where hidden (currently only evaluated by
-           * toplevels).
-           */
-          GTK_CONTAINER (widget)->priv->need_resize = TRUE;
         }
     }
 }
@@ -3344,19 +3334,6 @@ gtk_container_propagate_draw (GtkContainer   *container,
   _gtk_widget_draw_internal (child, cr, TRUE);
 
   cairo_restore (cr);
-}
-
-gboolean
-_gtk_container_get_need_resize (GtkContainer *container)
-{
-  return container->priv->need_resize;
-}
-
-void
-_gtk_container_set_need_resize (GtkContainer *container,
-                                gboolean      need_resize)
-{
-  container->priv->need_resize = need_resize;
 }
 
 gboolean
