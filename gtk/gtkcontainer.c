@@ -1666,6 +1666,47 @@ gtk_container_idle_sizer (gpointer data)
   return FALSE;
 }
 
+void
+_gtk_container_queue_resize_handler (GtkContainer *container)
+{
+  GtkWidget *widget;
+
+  g_return_if_fail (GTK_IS_RESIZE_CONTAINER (container));
+
+  widget = GTK_WIDGET (container);
+
+  if (gtk_widget_get_visible (widget) &&
+      (gtk_widget_is_toplevel (widget) ||
+       gtk_widget_get_realized (widget)))
+    {
+      switch (container->priv->resize_mode)
+        {
+        case GTK_RESIZE_QUEUE:
+          if (!_gtk_widget_get_resize_pending (widget))
+            {
+              _gtk_widget_set_resize_pending (widget, TRUE);
+              if (container_resize_queue == NULL)
+                gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE,
+                                           gtk_container_idle_sizer,
+                                           NULL, NULL);
+              container_resize_queue = g_slist_prepend (container_resize_queue, container);
+            }
+          break;
+
+        case GTK_RESIZE_IMMEDIATE:
+          _gtk_style_context_validate (gtk_widget_get_style_context (widget),
+                                       g_get_monotonic_time (),
+                                       0);
+          gtk_container_check_resize (container);
+
+        case GTK_RESIZE_PARENT:
+        default:
+          g_assert_not_reached ();
+          break;
+        }
+    }
+}
+
 static void
 _gtk_container_queue_resize_internal (GtkContainer *container,
                                       gboolean      invalidate_only)
@@ -1690,39 +1731,7 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
   while (widget);
 
   if (widget && !invalidate_only)
-    {
-      container = GTK_CONTAINER (widget);
-
-      if (gtk_widget_get_visible (widget) &&
-          (gtk_widget_is_toplevel (widget) ||
-           gtk_widget_get_realized (widget)))
-        {
-          switch (container->priv->resize_mode)
-            {
-            case GTK_RESIZE_QUEUE:
-              if (!_gtk_widget_get_resize_pending (widget))
-                {
-                  _gtk_widget_set_resize_pending (widget, TRUE);
-                  if (container_resize_queue == NULL)
-                    gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE,
-                                               gtk_container_idle_sizer,
-                                               NULL, NULL);
-                  container_resize_queue = g_slist_prepend (container_resize_queue, container);
-                }
-              break;
-
-            case GTK_RESIZE_IMMEDIATE:
-              _gtk_style_context_validate (gtk_widget_get_style_context (widget),
-                                           g_get_monotonic_time (),
-                                           0);
-              break;
-
-            case GTK_RESIZE_PARENT:
-              g_assert_not_reached ();
-              break;
-            }
-        }
-    }
+    _gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
 }
 
 /**
