@@ -93,7 +93,11 @@ _gtk_css_value_new_from_gvalue (const GValue *g_value)
       else if (g_type_is_a (type, G_TYPE_FLOAT))
 	value->u.flt = g_value_get_float (g_value);
       else
-	g_assert_not_reached ();
+        {
+          value->u.ptr = g_slice_new0 (GValue);
+          g_value_init (value->u.ptr, G_VALUE_TYPE (g_value));
+          g_value_copy (g_value, value->u.ptr);
+        }
     }
 
   return value;
@@ -145,7 +149,12 @@ _gtk_css_value_new_take_gvalue (GValue *g_value)
       else if (g_type_is_a (type, G_TYPE_FLOAT))
 	value->u.flt = g_value_get_float (g_value);
       else
-	g_assert_not_reached ();
+        {
+          value->u.ptr = g_slice_new0 (GValue);
+          g_value_init (value->u.ptr, G_VALUE_TYPE (g_value));
+          g_value_copy (g_value, value->u.ptr);
+          g_value_unset (g_value);
+        }
     }
 
   return value;
@@ -392,12 +401,37 @@ _gtk_css_value_unref (GtkCssValue *value)
 
   type = value->type;
 
-  if (g_type_is_a (type, G_TYPE_OBJECT) && value->u.ptr != NULL)
-    g_object_unref (value->u.ptr);
-  else if (g_type_is_a (type, G_TYPE_BOXED) && value->u.ptr != NULL)
-    g_boxed_free (type, value->u.ptr);
+  if (g_type_is_a (type, G_TYPE_OBJECT))
+    {
+      if (value->u.ptr != NULL)
+        g_object_unref (value->u.ptr);
+    }
+  else if (g_type_is_a (type, G_TYPE_BOXED))
+    {
+      if (value->u.ptr != NULL)
+        g_boxed_free (type, value->u.ptr);
+    }
   else if (g_type_is_a (type, G_TYPE_STRING))
     g_free (value->u.ptr);
+  else if (g_type_is_a (type, G_TYPE_INT))
+    {}
+  else if (g_type_is_a (type, G_TYPE_UINT))
+    {}
+  else if (g_type_is_a (type, G_TYPE_BOOLEAN))
+    {}
+  else if (g_type_is_a (type, G_TYPE_ENUM))
+    {}
+  else if (g_type_is_a (type, G_TYPE_FLAGS))
+    {}
+  else if (g_type_is_a (type, G_TYPE_DOUBLE))
+    {}
+  else if (g_type_is_a (type, G_TYPE_FLOAT))
+    {}
+  else
+    {
+      g_value_unset (value->u.ptr);
+      g_slice_free (GValue, value->u.ptr);
+    }
 
   g_slice_free (GtkCssValue, value);
 }
@@ -443,7 +477,7 @@ fill_gvalue (GtkCssValue *value,
   else if (g_type_is_a (type, G_TYPE_FLOAT))
     g_value_set_float (g_value, value->u.flt);
   else
-    g_assert_not_reached ();
+    g_value_copy (value->u.ptr, g_value);
 }
 
 void
