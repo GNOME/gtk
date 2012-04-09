@@ -96,13 +96,13 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
     {
       GdkRGBA color;
       gdk_rgba_parse (&color, "pink");
-      g_value_take_boxed (&value, &color);
+      g_value_set_boxed (&value, &color);
     }
   else if (pspec->value_type == GDK_TYPE_COLOR)
     {
       GdkColor color;
       gdk_color_parse ("pink", &color);
-      g_value_take_boxed (&value, &color);
+      g_value_set_boxed (&value, &color);
     }
   else if (pspec->value_type == GTK_TYPE_BORDER)
     {
