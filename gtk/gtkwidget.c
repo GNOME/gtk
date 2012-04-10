@@ -4126,6 +4126,9 @@ gtk_widget_real_hide (GtkWidget *widget)
 
       if (gtk_widget_get_mapped (widget))
 	gtk_widget_unmap (widget);
+
+      if (widget->priv->context)
+        _gtk_style_context_stop_animations (widget->priv->context);
     }
 }
 

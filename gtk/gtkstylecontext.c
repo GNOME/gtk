@@ -765,7 +765,7 @@ gtk_style_context_finalize (GObject *object)
   style_context = GTK_STYLE_CONTEXT (object);
   priv = style_context->priv;
 
-  gtk_style_context_stop_animating (style_context);
+  _gtk_style_context_stop_animations (style_context);
 
   /* children hold a reference to us */
   g_assert (priv->children == NULL);
@@ -1022,6 +1022,8 @@ _gtk_style_context_set_widget (GtkStyleContext *context,
   g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
 
   context->priv->widget = widget;
+
+  _gtk_style_context_stop_animations (context);
 
   _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANY_SELF);
 }
@@ -2913,6 +2915,17 @@ gtk_style_context_do_invalidate (GtkStyleContext *context)
   g_signal_emit (context, signals[CHANGED], 0);
 
   priv->invalidating_context = FALSE;
+}
+
+void
+_gtk_style_context_stop_animations (GtkStyleContext *context)
+{
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  if (!gtk_style_context_is_animating (context))
+    return;
+
+  gtk_style_context_stop_animating (context);
 }
 
 void
