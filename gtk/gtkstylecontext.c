@@ -342,6 +342,7 @@ struct StyleData
 {
   GtkCssComputedValues *store;
   GArray *property_cache;
+  guint ref_count;
 };
 
 struct _GtkStyleContextPrivate
@@ -465,6 +466,59 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
   g_type_class_add_private (object_class, sizeof (GtkStyleContextPrivate));
 }
 
+static StyleData *
+style_data_new (void)
+{
+  StyleData *data;
+
+  data = g_slice_new0 (StyleData);
+  data->ref_count = 1;
+
+  return data;
+}
+
+static void
+clear_property_cache (StyleData *data)
+{
+  guint i;
+
+  if (!data->property_cache)
+    return;
+
+  for (i = 0; i < data->property_cache->len; i++)
+    {
+      PropertyValue *node = &g_array_index (data->property_cache, PropertyValue, i);
+
+      g_param_spec_unref (node->pspec);
+      g_value_unset (&node->value);
+    }
+
+  g_array_free (data->property_cache, TRUE);
+  data->property_cache = NULL;
+}
+
+static StyleData *
+style_data_ref (StyleData *style_data)
+{
+  style_data->ref_count++;
+
+  return style_data;
+}
+
+static void
+style_data_unref (StyleData *data)
+{
+  data->ref_count--;
+
+  if (data->ref_count > 0)
+    return;
+
+  g_object_unref (data->store);
+  clear_property_cache (data);
+
+  g_slice_free (StyleData, data);
+}
+
 static GtkStyleInfo *
 style_info_new (void)
 {
@@ -480,6 +534,8 @@ style_info_new (void)
 static void
 style_info_free (GtkStyleInfo *info)
 {
+  if (info->data)
+    style_data_unref (info->data);
   g_array_free (info->style_classes, TRUE);
   g_array_free (info->regions, TRUE);
   g_slice_free (GtkStyleInfo, info);
@@ -501,7 +557,8 @@ style_info_copy (const GtkStyleInfo *info)
 
   copy->junction_sides = info->junction_sides;
   copy->state_flags = info->state_flags;
-  copy->data = info->data;
+  if (info->data)
+    copy->data = style_data_ref (info->data);
 
   return copy;
 }
@@ -567,45 +624,6 @@ style_info_equal (gconstpointer elem1,
   return TRUE;
 }
 
-static StyleData *
-style_data_new (void)
-{
-  StyleData *data;
-
-  data = g_slice_new0 (StyleData);
-
-  return data;
-}
-
-static void
-clear_property_cache (StyleData *data)
-{
-  guint i;
-
-  if (!data->property_cache)
-    return;
-
-  for (i = 0; i < data->property_cache->len; i++)
-    {
-      PropertyValue *node = &g_array_index (data->property_cache, PropertyValue, i);
-
-      g_param_spec_unref (node->pspec);
-      g_value_unset (&node->value);
-    }
-
-  g_array_free (data->property_cache, TRUE);
-  data->property_cache = NULL;
-}
-
-static void
-style_data_free (StyleData *data)
-{
-  g_object_unref (data->store);
-  clear_property_cache (data);
-
-  g_slice_free (StyleData, data);
-}
-
 static void
 gtk_style_context_cascade_changed (GtkStyleCascade *cascade,
                                    GtkStyleContext *context)
@@ -665,7 +683,7 @@ gtk_style_context_init (GtkStyleContext *style_context)
   priv->style_data = g_hash_table_new_full (style_info_hash,
                                             style_info_equal,
                                             (GDestroyNotify) style_info_free,
-                                            (GDestroyNotify) style_data_free);
+                                            (GDestroyNotify) style_data_unref);
 
   priv->direction = GTK_TEXT_DIR_LTR;
 
@@ -922,7 +940,11 @@ style_data_lookup (GtkStyleContext *context)
 
   info->data = g_hash_table_lookup (priv->style_data, info);
 
-  if (!info->data)
+  if (info->data)
+    {
+      style_data_ref (info->data);
+    }
+  else
     {
       GtkWidgetPath *path;
 
@@ -931,7 +953,7 @@ style_data_lookup (GtkStyleContext *context)
       info->data = style_data_new ();
       g_hash_table_insert (priv->style_data,
                            style_info_copy (info),
-                           info->data);
+                           style_data_ref (info->data));
 
       build_properties (context, info->data, path, info->state_flags);
 
@@ -983,7 +1005,11 @@ gtk_style_context_queue_invalidate_internal (GtkStyleContext *context,
 
   if (gtk_style_context_is_saved (context))
     {
-      info->data = NULL;
+      if (info->data)
+        {
+          style_data_unref (info->data);
+          info->data = NULL;
+        }
     }
   else
     {
@@ -2892,7 +2918,11 @@ gtk_style_context_clear_cache (GtkStyleContext *context)
   for (list = priv->info_stack; list; list = list->next)
     {
       GtkStyleInfo *info = list->data;
-      info->data = NULL;
+      if (info->data)
+        {
+          style_data_unref (info->data);
+          info->data = NULL;
+        }
     }
   g_hash_table_remove_all (priv->style_data);
 }
