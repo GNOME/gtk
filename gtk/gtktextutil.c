@@ -398,7 +398,7 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
    cairo_save (cr);
 
    cairo_translate (cr, 1 + DRAG_ICON_LAYOUT_BORDER, 1 + DRAG_ICON_LAYOUT_BORDER);
-   gtk_text_layout_draw (layout, widget, cr);
+   gtk_text_layout_draw (layout, widget, cr, NULL);
 
    cairo_restore (cr);
 

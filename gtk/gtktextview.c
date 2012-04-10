@@ -4836,7 +4836,8 @@ gtk_text_view_paint (GtkWidget      *widget,
 
   gtk_text_layout_draw (priv->layout,
                         widget,
-                        cr);
+                        cr,
+                        NULL);
 
   cairo_restore (cr);
 }

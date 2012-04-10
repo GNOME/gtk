@@ -92,7 +92,8 @@ G_BEGIN_DECLS
  */
 void gtk_text_layout_draw (GtkTextLayout        *layout,
                            GtkWidget            *widget,
-                           cairo_t              *cr);
+                           cairo_t              *cr,
+                           GList               **widgets);
 
 
 G_END_DECLS
