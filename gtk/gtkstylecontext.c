@@ -350,6 +350,9 @@ struct _GtkStyleContextPrivate
 
   GtkStyleCascade *cascade;
 
+  GtkStyleContext *animation_list_prev;
+  GtkStyleContext *animation_list_next;
+
   GtkStyleContext *parent;
   GSList *children;
   GtkWidget *widget;            
@@ -379,6 +382,8 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
+static GtkStyleContext *_running_animations = NULL;
+guint _running_animations_timer_id = 0;
 
 static void gtk_style_context_finalize (GObject *object);
 
@@ -675,6 +680,82 @@ gtk_style_context_init (GtkStyleContext *style_context)
                                  _gtk_style_cascade_get_for_screen (priv->screen));
 }
 
+static gboolean
+gtk_style_context_do_animations (gpointer unused)
+{
+  GtkStyleContext *context;
+
+  for (context = _running_animations;
+       context != NULL;
+       context = context->priv->animation_list_next)
+    {
+      _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANIMATE);
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gtk_style_context_is_animating (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  return priv->animation_list_prev != NULL
+      || _running_animations == context;
+}
+
+static void
+gtk_style_context_stop_animating (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  if (!gtk_style_context_is_animating (context))
+    return;
+
+  if (priv->animation_list_prev == NULL)
+    {
+      _running_animations = priv->animation_list_next;
+
+      if (_running_animations == NULL)
+        {
+          /* we were the last animation */
+          g_source_remove (_running_animations_timer_id);
+          _running_animations_timer_id = 0;
+        }
+    }
+  else
+    priv->animation_list_prev->priv->animation_list_next = priv->animation_list_next;
+
+  if (priv->animation_list_next)
+    priv->animation_list_next->priv->animation_list_prev = priv->animation_list_prev;
+
+  priv->animation_list_next = NULL;
+  priv->animation_list_prev = NULL;
+}
+
+static void G_GNUC_UNUSED
+gtk_style_context_start_animating (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  if (gtk_style_context_is_animating (context))
+    return;
+
+  if (_running_animations == NULL)
+    {
+      _running_animations_timer_id = gdk_threads_add_timeout (25,
+                                                              gtk_style_context_do_animations,
+                                                              NULL);
+      _running_animations = context;
+    }
+  else
+    {
+      priv->animation_list_next = _running_animations;
+      _running_animations->priv->animation_list_prev = context;
+      _running_animations = context;
+    }
+}
+
 static void
 gtk_style_context_finalize (GObject *object)
 {
@@ -683,6 +764,8 @@ gtk_style_context_finalize (GObject *object)
 
   style_context = GTK_STYLE_CONTEXT (object);
   priv = style_context->priv;
+
+  gtk_style_context_stop_animating (style_context);
 
   /* children hold a reference to us */
   g_assert (priv->children == NULL);
