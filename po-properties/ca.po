@@ -7,6 +7,7 @@
 # Josep Puigdemont <josep.puigdemont@gmail.com>, 2005, 2006.
 # David Planella <david.planella@gmail.com>, 2008, 2009, 2010.
 # Gil Forcada <gilforcada@guifi.net>, 2011, 2012.
+# Jordi Serratosa <jordis@softcatala.cat>, 2012.
 #
 # Recull de termes
 #
@@ -27,15 +28,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-15 23:35+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-03-15 22:36+0000\n"
 "PO-Revision-Date: 2012-03-12 21:54+0100\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
-"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bits\n"
+"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: ../gdk/gdkapplaunchcontext.c:129 ../gdk/gdkcursor.c:134
@@ -153,7 +155,7 @@ msgstr "Codi d'operació"
 
 #: ../gdk/x11/gdkdevicemanager-xi2.c:117
 msgid "Opcode for XInput2 requests"
-msgstr "Codi d'operació per a les peticions d'XInput2"
+msgstr "Codi d'operació per a les sol·licituds d'XInput2"
 
 #: ../gdk/x11/gdkdevicemanager-xi2.c:123
 msgid "Major"
@@ -701,8 +703,8 @@ msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
 msgstr ""
-"Quan sigui «TRUE» (cert), els apoderats d'elements d'eina per a aquesta "
-"acció es representaran en el menú sobreeixit de la barra d'eines."
+"Quan sigui «TRUE» (cert), els apoderats d'elements d'eina per a aquesta acció "
+"es representaran en el menú sobreeixit de la barra d'eines."
 
 #: ../gtk/gtkaction.c:355 ../gtk/gtktoolitem.c:198
 msgid "Visible when vertical"
@@ -1240,7 +1242,7 @@ msgstr "No homogeni"
 
 #: ../gtk/gtkbbox.c:212
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
-msgstr "Si és «TRUE» (cert), el fill no està lligat al redimensionat homogeni"
+msgstr "Si és «TRUE» (cert), el fill no està lligat al redimensionament homogeni"
 
 #: ../gtk/gtkbox.c:240 ../gtk/gtkcellareabox.c:315 ../gtk/gtkexpander.c:312
 #: ../gtk/gtkiconview.c:510 ../gtk/gtktreeviewcolumn.c:282
@@ -1481,7 +1483,7 @@ msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 msgstr ""
-"El dia seleccionat (com a número entre 1 i 31, o 0 per deseleccionar el dia "
+"El dia seleccionat (com a número entre 1 i 31, o 0 per desseleccionar el dia "
 "actualment seleccionat)"
 
 #: ../gtk/gtkcalendar.c:513
@@ -2426,7 +2428,7 @@ msgstr "Estat ràdio"
 
 #: ../gtk/gtkcellrenderertoggle.c:164
 msgid "Draw the toggle button as a radio button"
-msgstr "Dibuixa el botó de commutació com a botó de ràdio"
+msgstr "Dibuixa el botó de commutació com a botó d'opció"
 
 #: ../gtk/gtkcellrenderertoggle.c:171
 msgid "Indicator size"
@@ -2753,7 +2755,7 @@ msgstr "El tipus d'ombra que es dibuixarà al voltant del quadre combinat"
 
 #: ../gtk/gtkcontainer.c:456
 msgid "Resize mode"
-msgstr "Mode de redimensiat"
+msgstr "Mode de redimensionament"
 
 #: ../gtk/gtkcontainer.c:457
 msgid "Specify how resize events are handled"
@@ -2781,7 +2783,7 @@ msgstr "Subpropietats"
 
 #: ../gtk/gtkcssshorthandproperty.c:168
 msgid "The list of subproperties"
-msgstr "La llista de supropietats"
+msgstr "La llista de subpropietats"
 
 #: ../gtk/gtkcssstyleproperty.c:236
 msgid "ID"
@@ -2809,11 +2811,11 @@ msgstr "El tipus de valors després d'una consulta d'estil"
 
 #: ../gtk/gtkcssstyleproperty.c:257
 msgid "Inherit"
-msgstr "Heredat"
+msgstr "Heretat"
 
 #: ../gtk/gtkcssstyleproperty.c:258
 msgid "Set if the value is inherited by default"
-msgstr "Establert si el valor inicial s'hereda per defecte"
+msgstr "Establert si el valor inicial s'hereta per defecte"
 
 #: ../gtk/gtkcssstyleproperty.c:264
 msgid "Initial value"
@@ -3276,8 +3278,7 @@ msgstr "Amplada del menú emergent"
 #: ../gtk/gtkentrycompletion.c:394
 msgid "If TRUE, the popup window will have the same size as the entry"
 msgstr ""
-"Si és «TRUE» (cert), la finestra emergent tindrà la mateixa mida que "
-"l'entrada"
+"Si és «TRUE» (cert), la finestra emergent tindrà la mateixa mida que l'entrada"
 
 #: ../gtk/gtkentrycompletion.c:412
 msgid "Popup single match"
@@ -3373,7 +3374,7 @@ msgid ""
 "Whether the expander will resize the toplevel window upon expanding and "
 "collapsing"
 msgstr ""
-"Si l'expansor redmiensionarà la finestra de nivell superior en expandir-se i "
+"Si l'expansor redimensionarà la finestra de nivell superior en expandir-se i "
 "col·lapsar-se"
 
 #: ../gtk/gtkexpander.c:353 ../gtk/gtktoolitemgroup.c:1627
@@ -4481,8 +4482,8 @@ msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
-"Si és «TRUE» (cert), prement el botó dret del ratolí sobre el llibre de "
-"notes apareixerà un menú que podreu utilitzar per anar a una pàgina"
+"Si és «TRUE» (cert), prement el botó dret del ratolí sobre el llibre de notes "
+"apareixerà un menú que podreu utilitzar per anar a una pàgina"
 
 #: ../gtk/gtknotebook.c:743
 msgid "Group Name"
@@ -4740,7 +4741,7 @@ msgstr "Temps d'espera"
 
 #: ../gtk/gtkpressandhold.c:148
 msgid "Hold Time (in milliseconds)"
-msgstr "Temps d'espera (en milisegons)"
+msgstr "Temps d'espera (en mil·lisegons)"
 
 #: ../gtk/gtkpressandhold.c:152
 msgid "Drag Threshold"
@@ -4933,8 +4934,8 @@ msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr ""
-"«TRUE» (cert) si l'origen del context ha de ser al racó de la pàgina, i no "
-"al racó de l'àrea representable"
+"«TRUE» (cert) si l'origen del context ha de ser al racó de la pàgina, i no al "
+"racó de l'àrea representable"
 
 #: ../gtk/gtkprintoperation.c:1216
 msgid ""
@@ -5826,8 +5827,8 @@ msgstr "Suavitzat de vores Xft"
 #: ../gtk/gtksettings.c:522
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
-"Si s'ha de suavitzar les vores dels tipus de lletra Xft; 0=no, 1=sí, "
-"-1=predeterminat"
+"Si s'ha de suavitzar les vores dels tipus de lletra Xft; 0=no, 1=sí, -"
+"1=predeterminat"
 
 # Una mica d'ajuda per a "hint font":
 # http://www.cairographics.org/manual/cairo-Font-Options.html
@@ -5852,8 +5853,8 @@ msgstr "Transforma el contorn Xft"
 #: ../gtk/gtksettings.c:532
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
-"Si s'ha de transformar el contorn dels tipus de lletra Xft; 0=no, 1=sí, "
-"-1=predeterminat"
+"Si s'ha de transformar el contorn dels tipus de lletra Xft; 0=no, 1=sí, -"
+"1=predeterminat"
 
 #: ../gtk/gtksettings.c:541
 msgid "Xft Hint Style"
@@ -5863,8 +5864,8 @@ msgstr "Estil de transformació Xft"
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
-"Quin grau de transformació a emprar: «hintnone» (cap), "
-"«hintslight» (senzill), «hintmedium» (mitjà), o «hintfull» (complet)"
+"Quin grau de transformació a emprar: «hintnone» (cap), «hintslight» (senzill), "
+"«hintmedium» (mitjà), o «hintfull» (complet)"
 
 #: ../gtk/gtksettings.c:551
 msgid "Xft RGBA"
@@ -5880,7 +5881,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:561
 msgid "Xft DPI"
-msgstr "DPI de Xft"
+msgstr "PPP de Xft"
 
 #: ../gtk/gtksettings.c:562
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
@@ -6367,8 +6368,8 @@ msgid ""
 "Set to TRUE if the desktop environment is displaying the menubar, FALSE if "
 "the app should display it itself."
 msgstr ""
-"S'estableix a «TRUE» (cert) si l'entorn d'escriptori mostra la barra de "
-"menú, a «FALSE» (fals) si l'aplicació l'hauria de mostrar per ella mateixa."
+"S'estableix a «TRUE» (cert) si l'entorn d'escriptori mostra la barra de menú, "
+"a «FALSE» (fals) si l'aplicació l'hauria de mostrar per ella mateixa."
 
 #: ../gtk/gtksizegroup.c:380 ../gtk/gtktreeselection.c:129
 msgid "Mode"
@@ -7124,8 +7125,8 @@ msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 msgstr ""
-"Si l'element de la barra d'eines es considera important. Si és "
-"«TRUE» (cert), els botons de la barra d'eines mostraran el text en mode "
+"Si l'element de la barra d'eines es considera important. Si és «TRUE» (cert), "
+"els botons de la barra d'eines mostraran el text en mode "
 "GTK_TOOLBAR_BOTH_HORIZ"
 
 #: ../gtk/gtktoolitemgroup.c:1593
@@ -7536,11 +7537,11 @@ msgstr "Amplada actual de la columna"
 
 #: ../gtk/gtktreeviewcolumn.c:291
 msgid "Sizing"
-msgstr "Dimensionatge"
+msgstr "Dimensionament"
 
 #: ../gtk/gtktreeviewcolumn.c:292
 msgid "Resize mode of the column"
-msgstr "Mode de redimensionat de la columna"
+msgstr "Mode de redimensionament de la columna"
 
 #: ../gtk/gtktreeviewcolumn.c:300
 msgid "Fixed Width"
@@ -7660,7 +7661,7 @@ msgstr "El giny pare d'aquest giny. Ha de ser un giny contenidor"
 
 #: ../gtk/gtkwidget.c:998
 msgid "Width request"
-msgstr "Petició d'amplada"
+msgstr "Sol·licitud d'amplada"
 
 #: ../gtk/gtkwidget.c:999
 msgid ""
@@ -7672,7 +7673,7 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:1007
 msgid "Height request"
-msgstr "Petició d'alçada"
+msgstr "Sol·licitud d'alçada"
 
 #: ../gtk/gtkwidget.c:1008
 msgid ""
@@ -7774,7 +7775,7 @@ msgstr ""
 "La màscara d'incidències que decideix quin tipus de GdkEvents obté aquest "
 "giny"
 
-# NOTA: segons la següent cadena, indica si la funció show_all afecta a aquest
+# NOTA: segons la següent cadena, indica si la funció show_all afecta aquest
 #   giny o no, per tant he deixat el nom del mètode en anglès.
 #: ../gtk/gtkwidget.c:1101
 msgid "No show all"
@@ -8658,8 +8659,8 @@ msgstr "El títol del perfil de color a utilitzar"
 #~ "When TRUE, the detail string for rendering the steppers is suffixed with "
 #~ "position information"
 #~ msgstr ""
-#~ "Si és «TRUE» (cert) es prefixa amb informació de posició la cadena amb "
-#~ "les dades de renderització del lliscador"
+#~ "Si és «TRUE» (cert) es prefixa amb informació de posició la cadena amb les "
+#~ "dades de renderització del lliscador"
 
 #~ msgid ""
 #~ "The maximum number of items to be returned by gtk_recent_manager_get_items"
