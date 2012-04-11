@@ -35,6 +35,10 @@
 #include <gdk/x11/gdkx.h>
 #endif
 
+#ifdef HAVE_GIO_UNIX
+#include <gio/gdesktopappinfo.h>
+#endif
+
 /**
  * SECTION:gtkapplicationwindow
  * @title: GtkApplicationWindow
@@ -279,11 +283,32 @@ gtk_application_window_update_shell_shows_app_menu (GtkApplicationWindow *window
           if (app_menu != NULL)
             {
               const gchar *name;
+              GDesktopAppInfo *app_info = NULL;
 
               name = g_get_application_name ();
               if (name == g_get_prgname ())
-                name = _("Application");
+                {
+                  const gchar *app_name = NULL;
+
+#ifdef HAVE_GIO_UNIX
+                  gchar *desktop_name;
+
+                  desktop_name = g_strconcat (name, ".desktop", NULL);
+                  app_info = g_desktop_app_info_new (desktop_name);
+                  if (app_info != NULL)
+                    app_name = g_app_info_get_name (G_APP_INFO (app_info));
+
+                  g_free (desktop_name);
+#endif /* HAVE_GIO_UNIX */
+
+                  if (app_name != NULL &&
+                      g_strcmp0 (app_name, name) != 0)
+                    name = app_name;
+                  else
+                    name = _("Application");
+                }
               g_menu_append_submenu (window->priv->app_menu_section, name, app_menu);
+              g_clear_object (&app_info);
             }
         }
     }

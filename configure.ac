@@ -1292,6 +1292,9 @@ GTK_PRIVATE_PACKAGES=""
 if test "x$enable_x11_backend" = xyes; then
   GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES pangoft2"
 fi
+if test "$have_gio_unix" = "yes"; then
+  GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES gio-unix-2.0"
+fi
 GTK_EXTRA_LIBS=
 
 GTK_EXTRA_CFLAGS=
