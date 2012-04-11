@@ -27,11 +27,6 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_CSS_VALUE           (_gtk_css_value_get_type ())
-#define GTK_CSS_VALUE(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GTK_TYPE_CSS_VALUE, GtkCssValue))
-#define GTK_CSS_VALUE_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GTK_TYPE_CSS_VALUE, GtkCssValueClass))
-#define GTK_IS_CSS_VALUE(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GTK_TYPE_CSS_VALUE))
-#define GTK_IS_CSS_VALUE_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_VALUE))
-#define GTK_CSS_VALUE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_VALUE, GtkCssValueClass))
 
 /* A GtkCssValue is a refcounted immutable value type */
 
