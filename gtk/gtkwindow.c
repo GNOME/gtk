@@ -4990,7 +4990,7 @@ gtk_window_map (GtkWidget *widget)
       !gtk_widget_get_mapped (child))
     gtk_widget_map (child);
 
-  if (!gtk_widget_get_mapped (priv->title_box))
+  if (priv->title_box && !gtk_widget_get_mapped (priv->title_box))
     gtk_widget_map (priv->title_box);
 
   gdk_window = gtk_widget_get_window (widget);
