@@ -1,0 +1,42 @@
+/* Copy this to .config/gtk-3.0/gtk.css */
+
+.titlebar > GtkLabel:backdrop {
+  color: darker (@bg_color);
+}
+
+.titlebar > GtkLabel {
+  font: Sans Bold 10;
+  text-shadow: 1 1 lighter (@bg_color);
+}
+
+.titlebar GtkButton {
+  border-width: 0;
+  background: none;
+}
+
+.titlebar:backdrop {
+  background-image: none;
+}
+
+.titlebar {
+  background-image: -gtk-gradient (linear, center top, center bottom,
+       from (white),
+       to (darker(@bg_color)));
+  border-radius: 5 5 0 0;
+}
+
+.foo {
+  /* Nag Company until he implements the border-image-slice fill property */
+  border-image: url("toolButton.png") 0 5 / 0 5 stretch stretch;
+  border-width: 0 5 0 5;
+}
+
+.window-border {
+  background-color: blue;
+}
+
+.window-border {
+  border-image: url("theme.png") 21 24 22 24 / 21 24 22 24 stretch stretch;
+  border-width: 21 24 22 24;
+  border-style: solid;
+}
