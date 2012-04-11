@@ -1602,12 +1602,7 @@ gtk_menu_item_draw (GtkWidget *widget,
   child = gtk_bin_get_child (GTK_BIN (menu_item));
   parent = gtk_widget_get_parent (widget);
 
-  gtk_style_context_save (context);
-
   gtk_style_context_get_padding (context, state, &padding);
-
-  if (GTK_IS_MENU_BAR (parent))
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUBAR);
 
   if (child && (state & GTK_STATE_FLAG_PRELIGHT))
     {
@@ -1672,8 +1667,6 @@ gtk_menu_item_draw (GtkWidget *widget,
     }
 
   GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->draw (widget, cr);
-
-  gtk_style_context_restore (context);
 
   return FALSE;
 }
