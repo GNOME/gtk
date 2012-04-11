@@ -508,6 +508,7 @@ gtk_private_h_sources =		\
 	gtksettingsprivate.h	\
 	gtksizegroup-private.h	\
 	gtksocketprivate.h	\
+	gtkstyleanimationprivate.h \
 	gtkstylecascadeprivate.h \
 	gtkstylecontextprivate.h \
 	gtkstylepropertiesprivate.h \
@@ -791,6 +792,7 @@ gtk_base_c_sources = 		\
 	gtkstatusbar.c		\
 	gtkstatusicon.c		\
 	gtkstock.c		\
+	gtkstyleanimation.c	\
 	gtkstylecascade.c	\
 	gtkstylecontext.c	\
 	gtkstyleproperties.c	\
