@@ -63,11 +63,6 @@ struct _GtkButtonPrivate
 
 void _gtk_button_set_depressed             (GtkButton          *button,
                                             gboolean            depressed);
-void _gtk_button_paint                     (GtkButton          *button,
-                                            cairo_t            *cr,
-                                            int                 width,
-                                            int                 height,
-                                            GtkStateFlags       state);
 
 
 G_END_DECLS

@@ -1677,15 +1677,12 @@ gtk_button_size_allocate (GtkWidget     *widget,
     }
 }
 
-void
-_gtk_button_paint (GtkButton          *button,
-		   cairo_t            *cr,
-                   int                 width,
-                   int                 height,
-		   GtkStateFlags       state)
+static gboolean
+gtk_button_draw (GtkWidget *widget,
+		 cairo_t   *cr)
 {
+  GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = button->priv;
-  GtkWidget *widget;
   gint x, y;
   GtkBorder default_border;
   GtkBorder default_outside_border;
@@ -1694,13 +1691,12 @@ _gtk_button_paint (GtkButton          *button,
   gint focus_pad;
   GtkAllocation allocation;
   GtkStyleContext *context;
+  GtkStateFlags state;
   gboolean draw_focus;
+  gint width, height;
 
-  widget = GTK_WIDGET (button);
   context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
+  state = gtk_style_context_get_state (context);
 
   gtk_button_get_props (button, &default_border, &default_outside_border, NULL, NULL, &interior_focus);
   gtk_style_context_get_style (context,
@@ -1712,6 +1708,8 @@ _gtk_button_paint (GtkButton          *button,
 
   x = 0;
   y = 0;
+  width = allocation.width;
+  height = allocation.height;
 
   if (gtk_widget_has_default (widget) &&
       priv->relief == GTK_RELIEF_NORMAL)
@@ -1786,20 +1784,6 @@ _gtk_button_paint (GtkButton          *button,
 
       gtk_render_focus (context, cr, x, y, width, height);
     }
-
-  gtk_style_context_restore (context);
-}
-
-static gboolean
-gtk_button_draw (GtkWidget *widget,
-		 cairo_t   *cr)
-{
-  GtkButton *button = GTK_BUTTON (widget);
-
-  _gtk_button_paint (button, cr, 
-                     gtk_widget_get_allocated_width (widget),
-                     gtk_widget_get_allocated_height (widget),
-                     gtk_widget_get_state_flags (widget));
 
   GTK_WIDGET_CLASS (gtk_button_parent_class)->draw (widget, cr);
 
