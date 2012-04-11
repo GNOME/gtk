@@ -49,12 +49,19 @@
 #include "gtkintl.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtklabel.h"
+#include "gtkbox.h"
+#include "gtkbutton.h"
 #include "a11y/gtkwindowaccessible.h"
 
 #include "deprecated/gtkstyle.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
+#endif
+
+#ifdef GDK_WINDOWING_WAYLAND
+#include "wayland/gdkwayland.h"
 #endif
 
 /**
@@ -134,6 +141,13 @@ struct _GtkWindowPrivate
 
   guint    auto_mnemonics_timeout_id;
 
+  GtkWidget *title_box;
+  GtkWidget *title_label;
+  GtkWidget *title_close_button;
+  int        title_height;
+  GtkBorder  title_border;
+  GtkBorder  window_border;
+
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves
    * default-only parameters. Once mapped, we set them to FALSE.
@@ -183,6 +197,7 @@ struct _GtkWindowPrivate
                                             * grip-visible" notification
                                             */
   guint    gravity                   : 5; /* GdkGravity */
+  guint    client_decorated          : 1; /* Decorations drawn client-side */
 
 };
 
@@ -348,6 +363,12 @@ static void gtk_window_style_updated      (GtkWidget         *widget);
 static gboolean gtk_window_state_event    (GtkWidget          *widget,
                                            GdkEventWindowState *event);
 static void gtk_window_check_resize       (GtkContainer      *container);
+static void gtk_window_forall             (GtkContainer   *container,
+					   gboolean	include_internals,
+					   GtkCallback     callback,
+					   gpointer        callback_data);
+static void gtk_window_remove             (GtkContainer *container,
+					   GtkWidget    *child);
 static gint gtk_window_focus              (GtkWidget        *widget,
 				           GtkDirectionType  direction);
 static void gtk_window_move_focus         (GtkWidget         *widget,
@@ -428,6 +449,23 @@ static void        gtk_window_on_theme_variant_changed (GtkSettings *settings,
                                                         GtkWindow   *window);
 #endif
 static void        gtk_window_set_theme_variant         (GtkWindow  *window);
+
+
+static void gtk_window_get_preferred_width (GtkWidget *widget,
+                                            gint      *minimum_size,
+                                            gint      *natural_size);
+static void gtk_window_get_preferred_width_for_height (GtkWidget *widget,
+                                                       gint       height,
+                                                       gint      *minimum_size,
+                                                       gint      *natural_size);
+
+static void gtk_window_get_preferred_height (GtkWidget *widget,
+                                             gint      *minimum_size,
+                                             gint      *natural_size);
+static void gtk_window_get_preferred_height_for_width (GtkWidget *widget,
+                                                       gint       width,
+                                                       gint      *minimum_size,
+                                                       gint      *natural_size);
 
 static GSList      *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
@@ -589,8 +627,14 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->direction_changed = gtk_window_direction_changed;
   widget_class->state_changed = gtk_window_state_changed;
   widget_class->style_updated = gtk_window_style_updated;
+  widget_class->get_preferred_width = gtk_window_get_preferred_width;
+  widget_class->get_preferred_width_for_height = gtk_window_get_preferred_width_for_height;
+  widget_class->get_preferred_height = gtk_window_get_preferred_height;
+  widget_class->get_preferred_height_for_width = gtk_window_get_preferred_height_for_width;
 
   container_class->check_resize = gtk_window_check_resize;
+  container_class->forall = gtk_window_forall;
+  container_class->remove = gtk_window_remove;
 
   klass->set_focus = gtk_window_real_set_focus;
 
@@ -1116,6 +1160,22 @@ gtk_window_class_init (GtkWindowClass *klass)
 }
 
 static void
+gtk_window_title_close_clicked (GtkWidget *button, void *data)
+{
+  /* Synthesize delete_event to close dialog. */
+
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_DELETE);
+
+  event->any.window = g_object_ref (gtk_widget_get_window (button));
+  event->any.send_event = TRUE;
+
+  gtk_main_do_event (event);
+  gdk_event_free (event);
+}
+
+static void
 gtk_window_init (GtkWindow *window)
 {
   GtkStyleContext *context;
@@ -1638,6 +1698,9 @@ gtk_window_set_title (GtkWindow   *window,
       gdk_window_set_title (gtk_widget_get_window (widget),
                             priv->title);
     }
+
+  if (priv->title_label)
+    gtk_label_set_text (GTK_LABEL (priv->title_label), priv->title);
 
   g_object_notify (G_OBJECT (window), "title");
 }
@@ -4756,6 +4819,53 @@ gtk_window_finalize (GObject *object)
 }
 
 static void
+create_decoration (GtkWidget *widget)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = window->priv;
+  GtkStyleContext *context;
+  const char *title = "GtkWindow";
+
+  /* Decorations already created */
+  if (priv->client_decorated)
+    return;
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (!GDK_IS_WAYLAND_DISPLAY_MANAGER (gdk_display_manager_get ()))
+    return;
+#else
+  return;
+#endif
+
+  if (!priv->decorated)
+    return;
+
+  priv->client_decorated = TRUE;
+
+  if (priv->type != GTK_WINDOW_POPUP)
+    {
+      priv->title_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      context = gtk_widget_get_style_context (priv->title_box);
+      gtk_style_context_add_class (context, "titlebar");
+      gtk_widget_set_parent (priv->title_box, GTK_WIDGET (window));
+
+      priv->title_label = gtk_label_new (NULL);
+      if (priv->title)
+        title = priv->title;
+      gtk_label_set_markup (GTK_LABEL (priv->title_label), title);
+      gtk_box_pack_start (GTK_BOX (priv->title_box),
+                          priv->title_label, TRUE, TRUE, 0);
+
+      priv->title_close_button = gtk_button_new_with_label ("×");
+      gtk_box_pack_end (GTK_BOX (priv->title_box), priv->title_close_button,
+                        FALSE, FALSE, 0);
+      g_signal_connect (priv->title_close_button, "clicked",
+                        G_CALLBACK (gtk_window_title_close_clicked), window);
+      gtk_widget_show_all (priv->title_box);
+    }
+}
+
+static void
 gtk_window_show (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
@@ -4896,6 +5006,9 @@ gtk_window_map (GtkWidget *widget)
       gtk_widget_get_visible (child) &&
       !gtk_widget_get_mapped (child))
     gtk_widget_map (child);
+
+  if (priv->title_box && !gtk_widget_get_mapped (priv->title_box))
+    gtk_widget_map (priv->title_box);
 
   gdk_window = gtk_widget_get_window (widget);
 
@@ -5051,6 +5164,9 @@ gtk_window_unmap (GtkWidget *widget)
   priv->above_initially = (state & GDK_WINDOW_STATE_ABOVE) != 0;
   priv->below_initially = (state & GDK_WINDOW_STATE_BELOW) != 0;
 
+  if (priv->title_box)
+    gtk_widget_unmap (priv->title_box);
+
   child = gtk_bin_get_child (&(window->bin));
   if (child)
     gtk_widget_unmap (child);
@@ -5138,6 +5254,8 @@ gtk_window_realize (GtkWidget *widget)
   window = GTK_WINDOW (widget);
   priv = window->priv;
 
+  create_decoration (widget);
+
   gtk_widget_get_allocation (widget, &allocation);
 
   if (gtk_widget_get_parent_window (widget))
@@ -5224,6 +5342,7 @@ gtk_window_realize (GtkWidget *widget)
   attributes.height = allocation.height;
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_EXPOSURE_MASK |
+			    GDK_BUTTON_PRESS_MASK |
 			    GDK_KEY_PRESS_MASK |
 			    GDK_KEY_RELEASE_MASK |
 			    GDK_ENTER_NOTIFY_MASK |
@@ -5527,11 +5646,55 @@ _gtk_window_set_allocation (GtkWindow           *window,
                             GtkAllocation       *allocation_out)
 {
   GtkWidget *widget = (GtkWidget *)window;
+  GtkWindowPrivate *priv = window->priv;
+  GtkAllocation child_allocation;
+  guint border_width;
 
   g_assert (allocation != NULL);
   g_assert (allocation_out != NULL);
 
   gtk_widget_set_allocation (widget, allocation);
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+
+  /* Apply border width */
+  child_allocation = *allocation;
+  child_allocation.x += border_width;
+  child_allocation.y += border_width;
+  child_allocation.width -= border_width * 2;
+  child_allocation.height -= border_width * 2;
+
+  if (priv->client_decorated && priv->decorated &&
+      priv->title_box &&
+      gtk_widget_get_visual(priv->title_box))
+    {
+      GtkAllocation title_allocation;
+
+      title_allocation.x = priv->title_border.left +
+                           priv->window_border.left;
+      title_allocation.y = priv->title_border.top +
+                           priv->window_border.top;
+      title_allocation.width =
+        MAX (1, (gint) allocation->width -
+             priv->title_border.left - priv->title_border.right -
+             priv->window_border.left - priv->window_border.right);
+      title_allocation.height = priv->title_height;
+
+      gtk_widget_size_allocate (priv->title_box, &title_allocation);
+    }
+
+  if (priv->client_decorated && priv->decorated)
+    {
+      child_allocation.x += priv->window_border.left;
+      child_allocation.y += priv->window_border.top +
+                            priv->title_height +
+                            priv->title_border.top +
+                            priv->title_border.bottom;
+      child_allocation.width -= (priv->window_border.left +
+                                 priv->window_border.right);
+      child_allocation.height -= (child_allocation.y +
+                                  priv->window_border.bottom);
+    }
 
   if (gtk_widget_get_realized (widget))
     {
@@ -5551,7 +5714,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
         }
     }
 
-  *allocation_out = *allocation;
+  *allocation_out = child_allocation;
 }
 
 static void
@@ -5559,23 +5722,14 @@ gtk_window_size_allocate (GtkWidget     *widget,
                           GtkAllocation *allocation)
 {
   GtkWindow *window = GTK_WINDOW (widget);
-  GtkAllocation child_allocation;
   GtkWidget *child;
-  guint border_width;
+  GtkAllocation child_allocation;
 
   _gtk_window_set_allocation (window, allocation, &child_allocation);
 
   child = gtk_bin_get_child (&(window->bin));
   if (child && gtk_widget_get_visible (child))
-    {
-      border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
-      child_allocation.x += border_width;
-      child_allocation.y += border_width;
-      child_allocation.width = MAX (1, child_allocation.width - border_width * 2);
-      child_allocation.height = MAX (1, child_allocation.height - border_width * 2);
-
-      gtk_widget_size_allocate (child, &child_allocation);
-    }
+    gtk_widget_size_allocate (child, &child_allocation);
 }
 
 static gint
@@ -5904,6 +6058,7 @@ gtk_window_get_resize_grip_area (GtkWindow    *window,
                                  GdkRectangle *rect)
 {
   GtkWidget *widget = GTK_WIDGET (window);
+  GtkWindowPrivate *priv = window->priv;
   GtkAllocation allocation;
   gint grip_width;
   gint grip_height;
@@ -5928,10 +6083,12 @@ gtk_window_get_resize_grip_area (GtkWindow    *window,
 
   rect->width = grip_width;
   rect->height = grip_height;
-  rect->y = allocation.y + allocation.height - grip_height;
+  rect->y = allocation.y + allocation.height -
+    grip_height - priv->window_border.bottom;
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    rect->x = allocation.x + allocation.width - grip_width;
+    rect->x = allocation.x + allocation.width -
+      grip_width - priv->window_border.right;
   else
     rect->x = allocation.x;
 
@@ -6096,6 +6253,30 @@ gtk_window_button_press_event (GtkWidget *widget,
 
       return TRUE;
     }
+  else if (priv->client_decorated && priv->decorated && priv->title_box)
+    {
+      GtkAllocation allocation;
+      int border_width;
+
+      gtk_widget_get_allocation (priv->title_box, &allocation);
+      border_width =
+        gtk_container_get_border_width (GTK_CONTAINER (priv->title_box));
+
+      if (allocation.x - border_width <= event->x &&
+          event->x < allocation.x + border_width + allocation.width &&
+          allocation.y - border_width <= event->y &&
+          event->y < allocation.y + border_width + allocation.height)
+        {
+          gdk_window_begin_move_drag_for_device (gtk_widget_get_window(widget),
+                                                 gdk_event_get_device((GdkEvent *) event),
+                                                 event->button,
+                                                 event->x_root,
+                                                 event->y_root,
+                                                 event->time);
+
+          return TRUE;
+        }
+    }
 
   return FALSE;
 }
@@ -6259,6 +6440,49 @@ gtk_window_check_resize (GtkContainer *container)
     GTK_CONTAINER_CLASS (gtk_window_parent_class)->check_resize (container);
   else if (gtk_widget_get_visible (GTK_WIDGET (container)))
     gtk_window_move_resize (GTK_WINDOW (container));
+}
+
+static void
+gtk_window_forall (GtkContainer *container,
+                   gboolean	     include_internals,
+                   GtkCallback   callback,
+                   gpointer      callback_data)
+{
+  GtkWindow *window = GTK_WINDOW (container);
+  GtkWindowPrivate *priv = window->priv;
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (GTK_BIN (container));
+  if (child)
+    (* callback) (child, callback_data);
+
+  if (priv->title_box)
+    (* callback) (priv->title_box, callback_data);
+}
+
+static void
+gtk_window_remove (GtkContainer *container,
+                   GtkWidget    *child)
+{
+  GtkWindow *window = GTK_WINDOW (container);
+  GtkWindowPrivate *priv = window->priv;
+  gboolean widget_was_visible;
+
+  /* Modified from gtk_bin_remove() to work with the decoration widgets. */
+
+  widget_was_visible = gtk_widget_get_visible (child);
+  
+  gtk_widget_unparent (child);
+  if (gtk_bin_get_child (GTK_BIN (container)) == child)
+    _gtk_bin_set_child (GTK_BIN (container), NULL);
+  else if (priv->title_box == child)
+    priv->title_box = NULL;
+
+  /* queue resize regardless of gtk_widget_get_visible (container),
+   * since that's what is needed by toplevels, which derive from GtkBin.
+   */
+  if (widget_was_visible)
+    gtk_widget_queue_resize (GTK_WIDGET (container));
 }
 
 static gboolean
@@ -6435,6 +6659,273 @@ gtk_window_real_set_focus (GtkWindow *window,
 
       g_object_thaw_notify (G_OBJECT (focus));
       g_object_unref (focus);
+    }
+}
+
+static void 
+gtk_window_get_preferred_width (GtkWidget *widget,
+                                gint      *minimum_size,
+                                gint      *natural_size)
+{
+  GtkWindow *window;
+  GtkWidget *child;
+  GtkWindowPrivate *priv;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  guint border_width;
+  gint title_min = 0, title_nat = 0;
+  gint child_min = 0, child_nat = 0;
+
+  window = GTK_WINDOW (widget);
+  priv = window->priv;
+  child  = gtk_bin_get_child (GTK_BIN (window));
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+
+  if (priv->client_decorated &&
+      priv->decorated &&
+      priv->type == GTK_WINDOW_TOPLEVEL)
+    {
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_style_context_get_state (context);
+
+      if (priv->title_box)
+        {
+          gtk_widget_get_preferred_width (priv->title_box,
+                                          &title_min, &title_nat);
+
+          gtk_style_context_save (context);
+          gtk_style_context_add_class (context, "titlebar");
+          gtk_style_context_get_border (context, state, &priv->title_border);
+          gtk_style_context_restore (context);
+        }
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "window-border");
+      gtk_style_context_get_border (context, state, &priv->window_border);
+      gtk_style_context_restore (context);
+
+      title_min += border_width * 2 +
+                   priv->title_border.left + priv->title_border.right +
+                   priv->window_border.left + priv->window_border.right;
+      title_nat += border_width * 2 +
+                   priv->title_border.left + priv->title_border.right +
+                   priv->window_border.left + priv->window_border.right;
+
+    }
+
+  if (child && gtk_widget_get_visible (child))
+    {
+      gtk_widget_get_preferred_width (child, &child_min, &child_nat);
+      child_min += border_width * 2 +
+                   priv->window_border.left + priv->window_border.right;
+      child_nat += border_width * 2 +
+                   priv->window_border.left + priv->window_border.right;
+    }
+
+  *minimum_size = MAX (title_min, child_min);
+  *natural_size = MAX (title_nat, child_nat);
+}
+
+
+static void 
+gtk_window_get_preferred_width_for_height (GtkWidget *widget,
+                                           gint       height,
+                                           gint      *minimum_size,
+                                           gint      *natural_size)
+{
+  GtkWindow *window;
+  GtkWidget *child;
+  GtkWindowPrivate *priv;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  guint border_width;
+  gint title_min = 0, title_nat = 0;
+  gint child_min = 0, child_nat = 0;
+
+  window = GTK_WINDOW (widget);
+  priv = window->priv;
+  child  = gtk_bin_get_child (GTK_BIN (window));
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+
+  if (priv->client_decorated &&
+      priv->decorated &&
+      priv->type == GTK_WINDOW_TOPLEVEL)
+    {
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_style_context_get_state (context);
+
+      if (priv->title_box)
+        {
+          gtk_widget_get_preferred_width_for_height (priv->title_box,
+                                                     height,
+                                                     &title_min, &title_nat);
+          gtk_style_context_save (context);
+          gtk_style_context_add_class (context, "titlebar");
+          gtk_style_context_get_border (context, state, &priv->title_border);
+          gtk_style_context_restore (context);
+        }
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "window-border");
+      gtk_style_context_get_border (context, state, &priv->window_border);
+      gtk_style_context_restore (context);
+
+      title_min += border_width * 2 +
+                   priv->title_border.left + priv->title_border.right +
+                   priv->window_border.left + priv->window_border.right;
+      title_nat += border_width * 2 +
+                   priv->title_border.left + priv->title_border.right +
+                   priv->window_border.left + priv->window_border.right;
+
+    }
+
+  if (child && gtk_widget_get_visible (child))
+    {
+      gtk_widget_get_preferred_width_for_height (child, height,
+                                                 &child_min, &child_nat);
+      child_min += border_width * 2 +
+                   priv->window_border.left + priv->window_border.right;
+      child_nat += border_width * 2 +
+                   priv->window_border.left + priv->window_border.right;
+    }
+
+  *minimum_size = MAX (title_min, child_min);
+  *natural_size = MAX (title_nat, child_nat);
+}
+
+static void 
+gtk_window_get_preferred_height (GtkWidget *widget,
+                                 gint      *minimum_size,
+                                 gint      *natural_size)
+{
+  GtkWindow *window;
+  GtkWindowPrivate *priv;
+  GtkWidget *child;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  guint border_width;
+  int title_min = 0;
+
+  window = GTK_WINDOW (widget);
+  priv = window->priv;
+  child  = gtk_bin_get_child (GTK_BIN (window));
+
+  *minimum_size = 0;
+  *natural_size = 0;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+
+  if (priv->client_decorated &&
+      priv->decorated &&
+      priv->type == GTK_WINDOW_TOPLEVEL)
+    {
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_style_context_get_state (context);
+
+      if (priv->title_box)
+        {
+          gtk_widget_get_preferred_height (priv->title_box,
+                                           &title_min,
+                                           &priv->title_height);
+
+          gtk_style_context_save (context);
+          gtk_style_context_add_class (context, "titlebar");
+          gtk_style_context_get_border (context, state, &priv->title_border);
+          gtk_style_context_restore (context);
+        }
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "window-border");
+      gtk_style_context_get_border (context, state, &priv->window_border);
+      gtk_style_context_restore (context);
+
+      *minimum_size = title_min +
+                      priv->title_border.top + priv->title_border.bottom +
+                      priv->window_border.top + priv->window_border.bottom;
+
+      *natural_size = priv->title_height +
+                      priv->title_border.top + priv->title_border.bottom +
+                      priv->window_border.top + priv->window_border.bottom;
+    }
+
+  if (child && gtk_widget_get_visible (child))
+    {
+      gint child_min, child_nat;
+      gtk_widget_get_preferred_height (child, &child_min, &child_nat);
+
+      *minimum_size += child_min + 2 * border_width;
+      *natural_size += child_nat + 2 * border_width;
+    }
+}
+
+
+static void 
+gtk_window_get_preferred_height_for_width (GtkWidget *widget,
+                                           gint       width,
+                                           gint      *minimum_size,
+                                           gint      *natural_size)
+{
+  GtkWindow *window;
+  GtkWindowPrivate *priv;
+  GtkWidget *child;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  guint border_width;
+  int title_min = 0;
+
+  window = GTK_WINDOW (widget);
+  priv = window->priv;
+  child  = gtk_bin_get_child (GTK_BIN (window));
+
+  *minimum_size = 0;
+  *natural_size = 0;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+
+  if (priv->client_decorated &&
+      priv->decorated &&
+      priv->type == GTK_WINDOW_TOPLEVEL)
+    {
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_style_context_get_state (context);
+
+      if (priv->title_box)
+        {
+          gtk_widget_get_preferred_height_for_width (priv->title_box,
+                                                     width,
+                                                     &title_min,
+                                                     &priv->title_height);
+
+          gtk_style_context_save (context);
+          gtk_style_context_add_class (context, "titlebar");
+          gtk_style_context_get_border (context, state, &priv->title_border);
+          gtk_style_context_restore (context);
+        }
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "window-border");
+      gtk_style_context_get_border (context, state, &priv->window_border);
+      gtk_style_context_restore (context);
+
+      *minimum_size = title_min +
+                      priv->title_border.top + priv->title_border.bottom +
+                      priv->window_border.top + priv->window_border.bottom;
+
+      *natural_size = priv->title_height +
+                      priv->title_border.top + priv->title_border.bottom +
+                      priv->window_border.top + priv->window_border.bottom;
+    }
+
+  if (child && gtk_widget_get_visible (child))
+    {
+      gint child_min, child_nat;
+      gtk_widget_get_preferred_height_for_width (child, width,
+                                                 &child_min, &child_nat);
+
+      *minimum_size += child_min + 2 * border_width;
+      *natural_size += child_nat + 2 * border_width;
     }
 }
 
@@ -7566,15 +8057,64 @@ gtk_window_draw (GtkWidget *widget,
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
   GtkStyleContext *context;
   gboolean ret = FALSE;
+  GtkAllocation allocation;
 
   context = gtk_widget_get_style_context (widget);
 
   if (!gtk_widget_get_app_paintable (widget) &&
       gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
-      gtk_render_background (context, cr, 0, 0,
-			     gtk_widget_get_allocated_width (widget),
-			     gtk_widget_get_allocated_height (widget));
+      gtk_style_context_save (context);
+
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
+
+      if (priv->client_decorated &&
+          priv->decorated &&
+          priv->type == GTK_WINDOW_TOPLEVEL)
+        {
+          gtk_style_context_add_class (context, "window-border");
+          gtk_widget_get_allocation (widget, &allocation);
+          gtk_render_background (context, cr,
+                                 priv->window_border.left,
+                                 priv->window_border.top,
+                                 allocation.width -
+                                 (priv->window_border.left +
+                                  priv->window_border.right),
+                                 allocation.height -
+                                 (priv->window_border.top +
+                                  priv->window_border.bottom));
+          gtk_render_frame (context, cr,
+                            0, 0, allocation.width, allocation.height);
+        }
+      else
+        {
+          gtk_widget_get_allocation (widget, &allocation);
+          gtk_render_background (context, cr,
+                                 0, 0, allocation.width, allocation.height);
+        }
+
+      gtk_style_context_restore (context);
+    }
+
+  if (priv->title_box)
+    {
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "titlebar");
+      gtk_widget_get_allocation (priv->title_box, &allocation);  
+
+      /* Why do these subtract ? */
+      gtk_render_background (context, cr,
+			     allocation.x - priv->title_border.left,
+			     allocation.y - priv->title_border.top,
+			     allocation.width + priv->title_border.left + priv->title_border.right,
+			     allocation.height + priv->title_border.top + priv->title_border.left);
+      gtk_render_frame (context, cr,
+			allocation.x - priv->title_border.left,
+			allocation.y - priv->title_border.top,
+			allocation.width + priv->title_border.left + priv->title_border.right,
+			allocation.height + priv->title_border.top + priv->title_border.left);
+
+      gtk_style_context_restore (context);
     }
 
   if (GTK_WIDGET_CLASS (gtk_window_parent_class)->draw)
