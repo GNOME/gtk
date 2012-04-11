@@ -24,7 +24,9 @@
 
 #include "gtkstylecontextprivate.h"
 #include "gtkcontainerprivate.h"
+#include "gtkcssanimatedvaluesprivate.h"
 #include "gtkcssenginevalueprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtktypebuiltins.h"
@@ -34,7 +36,6 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtksymboliccolorprivate.h"
-#include "gtkcssnumbervalueprivate.h"
 #include "gtkiconfactory.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
@@ -520,6 +521,12 @@ style_data_unref (StyleData *data)
   g_slice_free (StyleData, data);
 }
 
+static gboolean
+style_data_is_animating (StyleData *style_data)
+{
+  return GTK_IS_CSS_ANIMATED_VALUES (style_data->store);
+}
+
 static GtkStyleInfo *
 style_info_new (void)
 {
@@ -775,7 +782,7 @@ gtk_style_context_stop_animating (GtkStyleContext *context)
   priv->animation_list_prev = NULL;
 }
 
-static void G_GNUC_UNUSED
+static void
 gtk_style_context_start_animating (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv = context->priv;
@@ -1629,6 +1636,11 @@ gtk_style_context_save (GtkStyleContext *context)
   priv = context->priv;
 
   priv->info = style_info_copy (priv->info);
+  /* Need to unset animations here because we can not know what style
+   * class potential transitions came from once we save().
+   */
+  if (priv->info->data && style_data_is_animating (priv->info->data))
+    style_info_set_data (priv->info, NULL);
 }
 
 /**
@@ -2930,7 +2942,78 @@ _gtk_style_context_stop_animations (GtkStyleContext *context)
   if (!gtk_style_context_is_animating (context))
     return;
 
+  style_info_set_data (context->priv->info, NULL);
+
   gtk_style_context_stop_animating (context);
+}
+
+static GtkBitmask *
+gtk_style_context_update_animations (GtkStyleContext *context,
+                                     gint64           timestamp)
+{
+  GtkBitmask *differences;
+  StyleData *style_data;
+  
+  style_data = style_data_lookup (context);
+
+  differences = _gtk_css_animated_values_advance (GTK_CSS_ANIMATED_VALUES (style_data->store),
+                                                  timestamp);
+
+  if (_gtk_css_animated_values_is_finished (GTK_CSS_ANIMATED_VALUES (style_data->store)))
+    _gtk_style_context_stop_animations (context);
+
+  return differences;
+}
+
+static gboolean
+gtk_style_context_should_animate (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  gboolean animate;
+
+  priv = context->priv;
+
+  if (priv->widget == NULL)
+    return FALSE;
+
+  if (!gtk_widget_get_mapped (priv->widget))
+    return FALSE;
+
+  g_object_get (gtk_widget_get_settings (context->priv->widget),
+                "gtk-enable-animations", &animate,
+                NULL);
+
+  return animate;
+}
+
+static void
+gtk_style_context_start_animations (GtkStyleContext      *context,
+                                    GtkCssComputedValues *previous,
+                                    gint64                timestamp)
+{
+  StyleData *animated;
+
+  if (!gtk_style_context_should_animate (context))
+    {
+      gtk_style_context_stop_animating (context);
+      return;
+    }
+
+  animated = style_data_new ();
+  animated->store = _gtk_css_animated_values_new (style_data_lookup (context)->store,
+                                                  previous,
+                                                  timestamp);
+
+  if (_gtk_css_animated_values_is_finished (GTK_CSS_ANIMATED_VALUES (animated->store)))
+    {
+      style_data_unref (animated);
+      gtk_style_context_stop_animating (context);
+      return;
+    }
+
+  style_info_set_data (context->priv->info, animated);
+  style_data_unref (animated);
+  gtk_style_context_start_animating (context);
 }
 
 void
@@ -2980,22 +3063,30 @@ _gtk_style_context_validate (GtkStyleContext *context,
   if (priv->relevant_changes & change)
     {
       GtkStyleInfo *info = priv->info;
-      GtkCssComputedValues *old, *new;
+      StyleData *current;
 
-      old = info->data ? g_object_ref (info->data->store) : NULL;
+      if (info->data)
+        current = style_data_ref (info->data);
+      else
+        current = NULL;
 
       if ((priv->relevant_changes & change) & ~GTK_STYLE_CONTEXT_CACHED_CHANGE)
         gtk_style_context_clear_cache (context);
       else
         style_info_set_data (info, NULL);
 
-      if (old)
+      if (current)
         {
-          new = style_data_lookup (context)->store;
+          StyleData *data;
 
-          changes = _gtk_css_computed_values_get_difference (new, old);
+          gtk_style_context_start_animations (context, current->store, timestamp);
+          change &= ~GTK_CSS_CHANGE_ANIMATE;
 
-          g_object_unref (old);
+          data = style_data_lookup (context);
+
+          changes = _gtk_css_computed_values_get_difference (data->store, current->store);
+
+          style_data_unref (current);
         }
       else
         {
@@ -3005,6 +3096,16 @@ _gtk_style_context_validate (GtkStyleContext *context,
     }
   else
     changes = _gtk_bitmask_new ();
+
+  if (change & GTK_CSS_CHANGE_ANIMATE &&
+      gtk_style_context_is_animating (context))
+    {
+      GtkBitmask *animation_changes;
+
+      animation_changes = gtk_style_context_update_animations (context, timestamp);
+      changes = _gtk_bitmask_union (changes, animation_changes);
+      _gtk_bitmask_free (animation_changes);
+    }
 
   if (!_gtk_bitmask_is_empty (changes))
     gtk_style_context_do_invalidate (context);
