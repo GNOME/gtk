@@ -2939,6 +2939,7 @@ _gtk_style_context_validate (GtkStyleContext *context,
                              GtkCssChange     change)
 {
   GtkStyleContextPrivate *priv;
+  GtkBitmask *changes;
   GSList *list;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
@@ -2990,27 +2991,31 @@ _gtk_style_context_validate (GtkStyleContext *context,
 
       if (old)
         {
-          GtkBitmask *bitmask;
-
           new = style_data_lookup (context)->store;
 
-          bitmask = _gtk_css_computed_values_get_difference (new, old);
-          if (!_gtk_bitmask_is_empty (bitmask))
-            gtk_style_context_do_invalidate (context);
+          changes = _gtk_css_computed_values_get_difference (new, old);
 
-          _gtk_bitmask_free (bitmask);
           g_object_unref (old);
         }
       else
-        gtk_style_context_do_invalidate (context);
-
+        {
+          changes = _gtk_bitmask_new ();
+          changes = _gtk_bitmask_invert_range (changes, 0, _gtk_css_style_property_get_n_properties ());
+        }
     }
+  else
+    changes = _gtk_bitmask_new ();
+
+  if (!_gtk_bitmask_is_empty (changes))
+    gtk_style_context_do_invalidate (context);
 
   change = _gtk_css_change_for_child (change);
   for (list = priv->children; list; list = list->next)
     {
       _gtk_style_context_validate (list->data, timestamp, change);
     }
+
+  _gtk_bitmask_free (changes);
 }
 
 void
