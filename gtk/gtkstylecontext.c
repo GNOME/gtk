@@ -994,6 +994,23 @@ style_data_lookup (GtkStyleContext *context)
   return data;
 }
 
+static StyleData *
+style_data_lookup_for_state (GtkStyleContext *context,
+                             GtkStateFlags    state)
+{
+  StyleData *data;
+
+  if (context->priv->info->state_flags == state)
+    return style_data_lookup (context);
+
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
+  data = style_data_lookup (context);
+  gtk_style_context_restore (context);
+
+  return data;
+}
+
 static void
 gtk_style_context_set_invalid (GtkStyleContext *context,
                                gboolean         invalid)
@@ -1338,11 +1355,8 @@ gtk_style_context_get_property (GtkStyleContext *context,
       return;
     }
 
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
-  data = style_data_lookup (context);
+  data = style_data_lookup_for_state (context, state);
   _gtk_style_property_query (prop, value, gtk_style_context_query_func, data->store);
-  gtk_style_context_restore (context);
 }
 
 /**
@@ -2195,10 +2209,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 
   priv = context->priv;
 
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
-  data = style_data_lookup (context);
-  gtk_style_context_restore (context);
+  data = style_data_lookup_for_state (context, state);
 
   key.widget_type = widget_type;
   key.state = state;
@@ -3421,10 +3432,7 @@ gtk_style_context_get_font (GtkStyleContext *context,
   priv = context->priv;
   g_return_val_if_fail (priv->widget != NULL || priv->widget_path != NULL, NULL);
 
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
-  data = style_data_lookup (context);
-  gtk_style_context_restore (context);
+  data = style_data_lookup_for_state (context, state);
 
   /* Yuck, fonts are created on-demand but we don't return a ref.
    * Do bad things to achieve this requirement */
