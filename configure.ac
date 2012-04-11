@@ -318,11 +318,11 @@ AC_ARG_ENABLE(quartz-relocation,
 
 cairo_backends=
 backend_immodules=
+have_gio_unix=no
 GDK_BACKENDS=
 GDK_EXTRA_LIBS=
 GDK_EXTRA_CFLAGS=
 GDK_WINDOWING=
-GIO_PACKAGE=gio-2.0
 PANGO_PACKAGES="pango pangocairo"
 
 if test "$enable_x11_backend" = "yes"; then
@@ -332,7 +332,7 @@ if test "$enable_x11_backend" = "yes"; then
   GDK_BACKENDS="$GDK_BACKENDS x11"
   # Pull in gio-unix for GDesktopAppInfo usage, see at least
   # gdkapplaunchcontext-x11.c
-  GIO_PACKAGE=gio-unix-2.0
+  have_gio_unix=yes
   backend_immodules="$backend_immodules,xim"
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_X11"
@@ -382,7 +382,7 @@ if test "x$enable_wayland_backend" == "xyes"; then
   # Wayland uses cairo-gl
   cairo_backends="$cairo_backends cairo-gl"
   GDK_BACKENDS="$GDK_BACKENDS wayland"
-  GIO_PACKAGE=gio-unix-2.0
+  have_gio_unix=yes
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
   WAYLAND_PACKAGES="wayland-client xkbcommon wayland-egl egl"
@@ -1194,6 +1194,15 @@ else
   AM_CONDITIONAL(USE_X11, false)
 fi
 
+# Check for gio-unix
+if test "$have_gio_unix" = "yes"; then
+  GDK_GIO_PACKAGE=gio-unix-2.0
+  AC_DEFINE([HAVE_GIO_UNIX], [1],
+            [Define if gio-unix is available])
+else
+  GDK_GIO_PACKAGE=gio-2.0
+fi
+
 # Check for Pango flags
 
 AC_MSG_CHECKING(Pango flags)
@@ -1226,7 +1235,7 @@ CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
 GDK_PACKAGES="$PANGO_PACKAGES gdk-pixbuf-2.0 cairo cairo-gobject"
-GDK_PRIVATE_PACKAGES="$GIO_PACKAGE $X_PACKAGES $WAYLAND_PACKAGES $cairo_backends"
+GDK_PRIVATE_PACKAGES="$GDK_GIO_PACKAGE $X_PACKAGES $WAYLAND_PACKAGES $cairo_backends"
 if test "x$enable_x11_backend" = xyes; then
   GDK_PRIVATE_PACKAGES="$GDK_PRIVATE_PACKAGES pangoft2"
 fi
