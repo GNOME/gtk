@@ -6994,7 +6994,16 @@ void
 _gtk_widget_set_has_default (GtkWidget *widget,
                              gboolean   has_default)
 {
+  GtkStyleContext *context;
+
   widget->priv->has_default = has_default;
+
+  context = gtk_widget_get_style_context (widget);
+
+  if (has_default)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_DEFAULT);
+  else
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_DEFAULT);
 }
 
 /**

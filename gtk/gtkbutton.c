@@ -1720,8 +1720,6 @@ _gtk_button_paint (GtkButton          *button,
       y += default_border.top;
       width -= default_border.left + default_border.right;
       height -= default_border.top + default_border.bottom;
-
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_DEFAULT);
     }
   else if (gtk_widget_get_can_default (widget))
     {
