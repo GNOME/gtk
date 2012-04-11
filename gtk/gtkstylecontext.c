@@ -331,6 +331,7 @@ struct PropertyValue
 
 struct GtkStyleInfo
 {
+  GtkStyleInfo *next;
   GArray *style_classes;
   GArray *regions;
   GtkJunctionSides junction_sides;
@@ -359,7 +360,7 @@ struct _GtkStyleContextPrivate
   GtkWidget *widget;            
   GtkWidgetPath *widget_path;
   GHashTable *style_data;
-  GSList *info_stack;
+  GtkStyleInfo *info;
 
   GtkTextDirection direction;
 
@@ -542,7 +543,17 @@ style_info_free (GtkStyleInfo *info)
 }
 
 static GtkStyleInfo *
-style_info_copy (const GtkStyleInfo *info)
+style_info_pop (GtkStyleInfo *info)
+{
+  GtkStyleInfo *next = info->next;
+
+  style_info_free (info);
+
+  return next;
+}
+
+static GtkStyleInfo *
+style_info_copy (GtkStyleInfo *info)
 {
   GtkStyleInfo *copy;
 
@@ -555,6 +566,7 @@ style_info_copy (const GtkStyleInfo *info)
                        info->regions->data,
                        info->regions->len);
 
+  copy->next = info;
   copy->junction_sides = info->junction_sides;
   copy->state_flags = info->state_flags;
   if (info->data)
@@ -674,7 +686,6 @@ static void
 gtk_style_context_init (GtkStyleContext *style_context)
 {
   GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
 
   priv = style_context->priv = G_TYPE_INSTANCE_GET_PRIVATE (style_context,
                                                             GTK_TYPE_STYLE_CONTEXT,
@@ -691,8 +702,7 @@ gtk_style_context_init (GtkStyleContext *style_context)
   priv->relevant_changes = GTK_CSS_CHANGE_ANY;
 
   /* Create default info store */
-  info = style_info_new ();
-  priv->info_stack = g_slist_prepend (priv->info_stack, info);
+  priv->info = style_info_new ();
 
   gtk_style_context_set_cascade (style_context,
                                  _gtk_style_cascade_get_for_screen (priv->screen));
@@ -797,7 +807,8 @@ gtk_style_context_finalize (GObject *object)
 
   g_hash_table_destroy (priv->style_data);
 
-  g_slist_free_full (priv->info_stack, (GDestroyNotify) style_info_free);
+  while (priv->info)
+    priv->info = style_info_pop (priv->info);
 
   G_OBJECT_CLASS (gtk_style_context_parent_class)->finalize (object);
 }
@@ -897,7 +908,7 @@ create_query_path (GtkStyleContext *context)
   path = priv->widget ? _gtk_widget_create_path (priv->widget) : gtk_widget_path_copy (priv->widget_path);
   pos = gtk_widget_path_length (path) - 1;
 
-  info = priv->info_stack->data;
+  info = priv->info;
 
   /* Set widget regions */
   for (i = 0; i < info->regions->len; i++)
@@ -930,7 +941,7 @@ style_data_lookup (GtkStyleContext *context)
   GtkStyleInfo *info;
 
   priv = context->priv;
-  info = priv->info_stack->data;
+  info = priv->info;
 
   /* Current data in use is cached, just return it */
   if (info->data)
@@ -993,7 +1004,7 @@ gtk_style_context_set_invalid (GtkStyleContext *context,
 static gboolean
 gtk_style_context_is_saved (GtkStyleContext *context)
 {
-  return context->priv->info_stack->next != NULL;
+  return context->priv->info->next != NULL;
 }
 
 static void
@@ -1001,7 +1012,7 @@ gtk_style_context_queue_invalidate_internal (GtkStyleContext *context,
                                              GtkCssChange     change)
 {
   GtkStyleContextPrivate *priv = context->priv;
-  GtkStyleInfo *info = priv->info_stack->data;
+  GtkStyleInfo *info = priv->info;
 
   if (gtk_style_context_is_saved (context))
     {
@@ -1402,14 +1413,9 @@ void
 gtk_style_context_set_state (GtkStyleContext *context,
                              GtkStateFlags    flags)
 {
-  GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  info = priv->info_stack->data;
-  info->state_flags = flags;
+  context->priv->info->state_flags = flags;
   
   gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_STATE);
 }
@@ -1427,15 +1433,9 @@ gtk_style_context_set_state (GtkStyleContext *context,
 GtkStateFlags
 gtk_style_context_get_state (GtkStyleContext *context)
 {
-  GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
-
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
-  priv = context->priv;
-  info = priv->info_stack->data;
-
-  return info->state_flags;
+  return context->priv->info->state_flags;
 }
 
 /**
@@ -1614,16 +1614,12 @@ void
 gtk_style_context_save (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
 
-  g_assert (priv->info_stack != NULL);
-
-  info = style_info_copy (priv->info_stack->data);
-  priv->info_stack = g_slist_prepend (priv->info_stack, info);
+  priv->info = style_info_copy (priv->info);
 }
 
 /**
@@ -1639,26 +1635,19 @@ void
 gtk_style_context_restore (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
 
-  if (priv->info_stack)
-    {
-      info = priv->info_stack->data;
-      priv->info_stack = g_slist_remove (priv->info_stack, info);
-      style_info_free (info);
-    }
+  priv->info = style_info_pop (priv->info);
 
-  if (!priv->info_stack)
+  if (!priv->info)
     {
       g_warning ("Unpaired gtk_style_context_restore() call");
 
       /* Create default region */
-      info = style_info_new ();
-      priv->info_stack = g_slist_prepend (priv->info_stack, info);
+      priv->info = style_info_new ();
     }
 }
 
@@ -1793,8 +1782,7 @@ gtk_style_context_add_class (GtkStyleContext *context,
   priv = context->priv;
   class_quark = g_quark_from_string (class_name);
 
-  g_assert (priv->info_stack != NULL);
-  info = priv->info_stack->data;
+  info = priv->info;
 
   if (!style_class_find (info->style_classes, class_quark, &position))
     {
@@ -1832,8 +1820,7 @@ gtk_style_context_remove_class (GtkStyleContext *context,
 
   priv = context->priv;
 
-  g_assert (priv->info_stack != NULL);
-  info = priv->info_stack->data;
+  info = priv->info;
 
   if (style_class_find (info->style_classes, class_quark, &position))
     {
@@ -1873,8 +1860,7 @@ gtk_style_context_has_class (GtkStyleContext *context,
 
   priv = context->priv;
 
-  g_assert (priv->info_stack != NULL);
-  info = priv->info_stack->data;
+  info = priv->info;
 
   if (style_class_find (info->style_classes, class_quark, NULL))
     return TRUE;
@@ -1907,8 +1893,7 @@ gtk_style_context_list_classes (GtkStyleContext *context)
 
   priv = context->priv;
 
-  g_assert (priv->info_stack != NULL);
-  info = priv->info_stack->data;
+  info = priv->info;
 
   for (i = 0; i < info->style_classes->len; i++)
     {
@@ -1946,8 +1931,7 @@ gtk_style_context_list_regions (GtkStyleContext *context)
 
   priv = context->priv;
 
-  g_assert (priv->info_stack != NULL);
-  info = priv->info_stack->data;
+  info = priv->info;
 
   for (i = 0; i < info->regions->len; i++)
     {
@@ -2031,8 +2015,7 @@ gtk_style_context_add_region (GtkStyleContext *context,
   priv = context->priv;
   region_quark = g_quark_from_string (region_name);
 
-  g_assert (priv->info_stack != NULL);
-  info = priv->info_stack->data;
+  info = priv->info;
 
   if (!region_find (info->regions, region_quark, &position))
     {
@@ -2075,8 +2058,7 @@ gtk_style_context_remove_region (GtkStyleContext *context,
 
   priv = context->priv;
 
-  g_assert (priv->info_stack != NULL);
-  info = priv->info_stack->data;
+  info = priv->info;
 
   if (region_find (info->regions, region_quark, &position))
     {
@@ -2123,8 +2105,7 @@ gtk_style_context_has_region (GtkStyleContext *context,
 
   priv = context->priv;
 
-  g_assert (priv->info_stack != NULL);
-  info = priv->info_stack->data;
+  info = priv->info;
 
   if (region_find (info->regions, region_quark, &position))
     {
@@ -2632,14 +2613,9 @@ void
 gtk_style_context_set_junction_sides (GtkStyleContext  *context,
                                       GtkJunctionSides  sides)
 {
-  GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  info = priv->info_stack->data;
-  info->junction_sides = sides;
+  context->priv->info->junction_sides = sides;
 }
 
 /**
@@ -2655,14 +2631,9 @@ gtk_style_context_set_junction_sides (GtkStyleContext  *context,
 GtkJunctionSides
 gtk_style_context_get_junction_sides (GtkStyleContext *context)
 {
-  GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
-
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
-  priv = context->priv;
-  info = priv->info_stack->data;
-  return info->junction_sides;
+  return context->priv->info->junction_sides;
 }
 
 static GtkSymbolicColor *
@@ -2911,13 +2882,12 @@ static void
 gtk_style_context_clear_cache (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GSList *list;
+  GtkStyleInfo *info;
 
   priv = context->priv;
 
-  for (list = priv->info_stack; list; list = list->next)
+  for (info = priv->info; info; info = info->next)
     {
-      GtkStyleInfo *info = list->data;
       if (info->data)
         {
           style_data_unref (info->data);
@@ -2991,7 +2961,7 @@ _gtk_style_context_validate (GtkStyleContext *context,
           GtkCssMatcher matcher;
 
           path = create_query_path (context);
-          _gtk_css_matcher_init (&matcher, path, ((GtkStyleInfo *) priv->info_stack->data)->state_flags);
+          _gtk_css_matcher_init (&matcher, path, priv->info->state_flags);
 
           priv->relevant_changes = _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                                                            &matcher);
@@ -3003,7 +2973,7 @@ _gtk_style_context_validate (GtkStyleContext *context,
 
   if (priv->relevant_changes & change)
     {
-      GtkStyleInfo *info = priv->info_stack->data;
+      GtkStyleInfo *info = priv->info;
       GtkCssComputedValues *old, *new;
 
       old = info->data ? g_object_ref (info->data->store) : NULL;
