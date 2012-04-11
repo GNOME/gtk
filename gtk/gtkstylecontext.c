@@ -533,10 +533,25 @@ style_info_new (void)
 }
 
 static void
-style_info_free (GtkStyleInfo *info)
+style_info_set_data (GtkStyleInfo *info,
+                     StyleData    *data)
 {
+  if (info->data == data)
+    return;
+
+  if (data)
+    style_data_ref (data);
+
   if (info->data)
     style_data_unref (info->data);
+
+  info->data = data;
+}
+
+static void
+style_info_free (GtkStyleInfo *info)
+{
+  style_info_set_data (info, NULL);
   g_array_free (info->style_classes, TRUE);
   g_array_free (info->regions, TRUE);
   g_slice_free (GtkStyleInfo, info);
@@ -569,8 +584,7 @@ style_info_copy (GtkStyleInfo *info)
   copy->next = info;
   copy->junction_sides = info->junction_sides;
   copy->state_flags = info->state_flags;
-  if (info->data)
-    copy->data = style_data_ref (info->data);
+  style_info_set_data (copy, info->data);
 
   return copy;
 }
@@ -938,7 +952,9 @@ static StyleData *
 style_data_lookup (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
+  GtkWidgetPath *path;
   GtkStyleInfo *info;
+  StyleData *data;
 
   priv = context->priv;
   info = priv->info;
@@ -949,29 +965,26 @@ style_data_lookup (GtkStyleContext *context)
 
   g_assert (priv->widget != NULL || priv->widget_path != NULL);
 
-  info->data = g_hash_table_lookup (priv->style_data, info);
-
-  if (info->data)
+  data = g_hash_table_lookup (priv->style_data, info);
+  if (data)
     {
-      style_data_ref (info->data);
-    }
-  else
-    {
-      GtkWidgetPath *path;
-
-      path = create_query_path (context);
-
-      info->data = style_data_new ();
-      g_hash_table_insert (priv->style_data,
-                           style_info_copy (info),
-                           style_data_ref (info->data));
-
-      build_properties (context, info->data, path, info->state_flags);
-
-      gtk_widget_path_free (path);
+      style_info_set_data (info, data);
+      return data;
     }
 
-  return info->data;
+  path = create_query_path (context);
+
+  data = style_data_new ();
+  style_info_set_data (info, data);
+  g_hash_table_insert (priv->style_data,
+                       style_info_copy (info),
+                       data);
+
+  build_properties (context, data, path, info->state_flags);
+
+  gtk_widget_path_free (path);
+
+  return data;
 }
 
 static void
@@ -1016,11 +1029,7 @@ gtk_style_context_queue_invalidate_internal (GtkStyleContext *context,
 
   if (gtk_style_context_is_saved (context))
     {
-      if (info->data)
-        {
-          style_data_unref (info->data);
-          info->data = NULL;
-        }
+      style_info_set_data (info, NULL);
     }
   else
     {
@@ -2888,11 +2897,7 @@ gtk_style_context_clear_cache (GtkStyleContext *context)
 
   for (info = priv->info; info; info = info->next)
     {
-      if (info->data)
-        {
-          style_data_unref (info->data);
-          info->data = NULL;
-        }
+      style_info_set_data (info, NULL);
     }
   g_hash_table_remove_all (priv->style_data);
 }
@@ -2981,7 +2986,7 @@ _gtk_style_context_validate (GtkStyleContext *context,
       if ((priv->relevant_changes & change) & ~GTK_STYLE_CONTEXT_CACHED_CHANGE)
         gtk_style_context_clear_cache (context);
       else
-        info->data = NULL;
+        style_info_set_data (info, NULL);
 
       if (old)
         {
