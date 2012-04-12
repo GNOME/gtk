@@ -501,12 +501,12 @@ gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
   data->buffer = create_shm_buffer (display->shm,
                                     width,
                                     height,
-                                    WL_SHM_FORMAT_XRGB8888,
+                                    WL_SHM_FORMAT_ARGB8888,
                                     &data->buf_length,
                                     &data->buf);
 
   surface = cairo_image_surface_create_for_data (data->buf,
-                                                 CAIRO_FORMAT_RGB24,
+                                                 CAIRO_FORMAT_ARGB32,
                                                  width,
                                                  height,
                                                  width * 4);
