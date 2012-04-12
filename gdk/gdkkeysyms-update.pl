@@ -1,15 +1,15 @@
 #!/usr/bin/env perl
 
-# Updates http://git.gnome.org/cgit/gtk+/tree/gdk/gdkkeysyms.h from upstream (X.org 7.x),
-# from http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h
+# Updates http://git.gnome.org/browse/gtk+/tree/gdk/gdkkeysyms.h from upstream (X.org 7.x),
+# from http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
 # 
 # Author  : Simos Xenitellis <simos at gnome dot org>.
 # Authos  : Bastien Nocera <hadess@hadess.net>
 # Version : 1.2
 #
-# Input   : http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h
-# Input   : http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=XF86keysym.h
-# Output  : http://git.gnome.org/cgit/gtk+/tree/gdk/gdkkeysyms.h
+# Input   : http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
+# Input   : http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h
+# Output  : http://git.gnome.org/browse/gtk+/tree/gdk/gdkkeysyms.h
 # 
 # Notes   : It downloads keysymdef.h from the Internet, if not found locally,
 # Notes   : and creates an updated gdkkeysyms.h
@@ -23,31 +23,31 @@ my @keysymelements;
 if ( ! -f "keysymdef.h" )
 {
 	print "Trying to download keysymdef.h from\n";
-	print "http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h\n";
-	die "Unable to download keysymdef.h from http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h\n" 
-		unless system("wget -c -O keysymdef.h \"http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h\"") == 0;
+	print "http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h\n";
+	die "Unable to download keysymdef.h from http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h\n" 
+		unless system("wget -c -O keysymdef.h \"http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h\"") == 0;
 	print " done.\n\n";
 }
 else
 {
 	print "We are using existing keysymdef.h found in this directory.\n";
 	print "It is assumed that you took care and it is a recent version\n";
-	print "as found at http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob;f=keysymdef.h\n\n";
+	print "as found at http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h\n\n";
 }
 
 if ( ! -f "XF86keysym.h" )
 {
 	print "Trying to download XF86keysym.h from\n";
-	print "http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=XF86keysym.h\n";
-	die "Unable to download keysymdef.h from http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=XF86keysym.h\n" 
-		unless system("wget -c -O XF86keysym.h \"http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=XF86keysym.h\"") == 0;
+	print "http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h\n";
+	die "Unable to download keysymdef.h from http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h\n" 
+		unless system("wget -c -O XF86keysym.h \"http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h\"") == 0;
 	print " done.\n\n";
 }
 else
 {
 	print "We are using existing XF86keysym.h found in this directory.\n";
 	print "It is assumed that you took care and it is a recent version\n";
-	print "as found at http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob;f=XF86keysym.h\n\n";
+	print "as found at http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h\n\n";
 }
 
 if ( -f "gdkkeysyms.h" )
@@ -57,7 +57,7 @@ if ( -f "gdkkeysyms.h" )
 	die "Exiting...\n\n";
 }
 
-# Source: http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob;f=keysymdef.h
+# Source: http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
 die "Could not open file keysymdef.h: $!\n" unless open(IN_KEYSYMDEF, "<:utf8", "keysymdef.h");
 
 # Output: gtk+/gdk/gdkkeysyms.h
@@ -93,11 +93,11 @@ print OUT_GDKKEYSYMS_COMPAT $LICENSE_HEADER;
 print OUT_GDKKEYSYMS<<EOF;
 
 /*
- * File auto-generated from script http://git.gnome.org/cgit/gtk+/tree/gdk/gdkkeysyms-update.pl
+ * File auto-generated from script http://git.gnome.org/browse/gtk+/tree/gdk/gdkkeysyms-update.pl
  * using the input file
- * http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h
+ * http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
  * and
- * http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=XF86keysym.h
+ * http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h
  */
 
 /*
@@ -154,7 +154,7 @@ close IN_KEYSYMDEF;
 
 #$gdksyms{"0"} = "0000";
 
-# Source: http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob;f=XF86keysym.h
+# Source: http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h
 die "Could not open file XF86keysym.h: $!\n" unless open(IN_XF86KEYSYM, "<:utf8", "XF86keysym.h");
 
 while (<IN_XF86KEYSYM>)
