@@ -18,11 +18,11 @@
 
 
 /*
- * File auto-generated from script http://git.gnome.org/cgit/gtk+/tree/gdk/gdkkeysyms-update.pl
+ * File auto-generated from script http://git.gnome.org/browse/gtk+/tree/gdk/gdkkeysyms-update.pl
  * using the input file
- * http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=keysymdef.h
+ * http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
  * and
- * http://gitweb.freedesktop.org/?p=xorg/proto/x11proto.git;a=blob_plain;f=XF86keysym.h
+ * http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h
  */
 
 /*
@@ -295,6 +295,7 @@
 #define GDK_KEY_dead_U 0xfe89
 #define GDK_KEY_dead_small_schwa 0xfe8a
 #define GDK_KEY_dead_capital_schwa 0xfe8b
+#define GDK_KEY_dead_greek 0xfe8c
 #define GDK_KEY_First_Virtual_Screen 0xfed0
 #define GDK_KEY_Prev_Virtual_Screen 0xfed1
 #define GDK_KEY_Next_Virtual_Screen 0xfed2
@@ -341,6 +342,12 @@
 #define GDK_KEY_Pointer_Accelerate 0xfefa
 #define GDK_KEY_Pointer_DfltBtnNext 0xfefb
 #define GDK_KEY_Pointer_DfltBtnPrev 0xfefc
+#define GDK_KEY_ch 0xfea0
+#define GDK_KEY_Ch 0xfea1
+#define GDK_KEY_CH 0xfea2
+#define GDK_KEY_c_h 0xfea3
+#define GDK_KEY_C_h 0xfea4
+#define GDK_KEY_C_H 0xfea5
 #define GDK_KEY_3270_Duplicate 0xfd01
 #define GDK_KEY_3270_FieldMark 0xfd02
 #define GDK_KEY_3270_Right2 0xfd03
@@ -620,9 +627,9 @@
 #define GDK_KEY_nacute 0x1f1
 #define GDK_KEY_ncaron 0x1f2
 #define GDK_KEY_odoubleacute 0x1f5
-#define GDK_KEY_udoubleacute 0x1fb
 #define GDK_KEY_rcaron 0x1f8
 #define GDK_KEY_uring 0x1f9
+#define GDK_KEY_udoubleacute 0x1fb
 #define GDK_KEY_tcedilla 0x1fe
 #define GDK_KEY_abovedot 0x1ff
 #define GDK_KEY_Hstroke 0x2a1
@@ -683,32 +690,32 @@
 #define GDK_KEY_uogonek 0x3f9
 #define GDK_KEY_utilde 0x3fd
 #define GDK_KEY_umacron 0x3fe
+#define GDK_KEY_Wcircumflex 0x1000174
+#define GDK_KEY_wcircumflex 0x1000175
+#define GDK_KEY_Ycircumflex 0x1000176
+#define GDK_KEY_ycircumflex 0x1000177
 #define GDK_KEY_Babovedot 0x1001e02
 #define GDK_KEY_babovedot 0x1001e03
 #define GDK_KEY_Dabovedot 0x1001e0a
-#define GDK_KEY_Wgrave 0x1001e80
-#define GDK_KEY_Wacute 0x1001e82
 #define GDK_KEY_dabovedot 0x1001e0b
-#define GDK_KEY_Ygrave 0x1001ef2
 #define GDK_KEY_Fabovedot 0x1001e1e
 #define GDK_KEY_fabovedot 0x1001e1f
 #define GDK_KEY_Mabovedot 0x1001e40
 #define GDK_KEY_mabovedot 0x1001e41
 #define GDK_KEY_Pabovedot 0x1001e56
-#define GDK_KEY_wgrave 0x1001e81
 #define GDK_KEY_pabovedot 0x1001e57
-#define GDK_KEY_wacute 0x1001e83
 #define GDK_KEY_Sabovedot 0x1001e60
-#define GDK_KEY_ygrave 0x1001ef3
+#define GDK_KEY_sabovedot 0x1001e61
+#define GDK_KEY_Tabovedot 0x1001e6a
+#define GDK_KEY_tabovedot 0x1001e6b
+#define GDK_KEY_Wgrave 0x1001e80
+#define GDK_KEY_wgrave 0x1001e81
+#define GDK_KEY_Wacute 0x1001e82
+#define GDK_KEY_wacute 0x1001e83
 #define GDK_KEY_Wdiaeresis 0x1001e84
 #define GDK_KEY_wdiaeresis 0x1001e85
-#define GDK_KEY_sabovedot 0x1001e61
-#define GDK_KEY_Wcircumflex 0x1000174
-#define GDK_KEY_Tabovedot 0x1001e6a
-#define GDK_KEY_Ycircumflex 0x1000176
-#define GDK_KEY_wcircumflex 0x1000175
-#define GDK_KEY_tabovedot 0x1001e6b
-#define GDK_KEY_ycircumflex 0x1000177
+#define GDK_KEY_Ygrave 0x1001ef2
+#define GDK_KEY_ygrave 0x1001ef3
 #define GDK_KEY_OE 0x13bc
 #define GDK_KEY_oe 0x13bd
 #define GDK_KEY_Ydiaeresis 0x13be
@@ -1203,6 +1210,7 @@
 #define GDK_KEY_leftdoublequotemark 0xad2
 #define GDK_KEY_rightdoublequotemark 0xad3
 #define GDK_KEY_prescription 0xad4
+#define GDK_KEY_permille 0xad5
 #define GDK_KEY_minutes 0xad6
 #define GDK_KEY_seconds 0xad7
 #define GDK_KEY_latincross 0xad9
@@ -1636,6 +1644,8 @@
 #define GDK_KEY_obarred 0x1000275
 #define GDK_KEY_SCHWA 0x100018f
 #define GDK_KEY_schwa 0x1000259
+#define GDK_KEY_EZH 0x10001b7
+#define GDK_KEY_ezh 0x1000292
 #define GDK_KEY_Lbelowdot 0x1001e36
 #define GDK_KEY_lbelowdot 0x1001e37
 #define GDK_KEY_Abelowdot 0x1001ea0
@@ -2293,5 +2303,7 @@
 #define GDK_KEY_ClearGrab 0x1008fe21
 #define GDK_KEY_Next_VMode 0x1008fe22
 #define GDK_KEY_Prev_VMode 0x1008fe23
+#define GDK_KEY_LogWindowTree 0x1008fe24
+#define GDK_KEY_LogGrabInfo 0x1008fe25
 
 #endif /* __GDK_KEYSYMS_H__ */
