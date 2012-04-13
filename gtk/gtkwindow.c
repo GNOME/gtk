@@ -5647,8 +5647,35 @@ _gtk_window_set_allocation (GtkWindow     *window,
                             GtkAllocation *allocation)
 {
   GtkWidget *widget = (GtkWidget *)window;
+  GtkWindowPrivate *priv = window->priv;
+  GtkAllocation child_allocation;
+  guint border_width;
 
   gtk_widget_set_allocation (widget, allocation);
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+  if (priv->title_box && gtk_widget_get_visual(priv->title_box))
+    {
+      child_allocation.x = priv->title_border.left + priv->window_border.left;
+      child_allocation.y = priv->title_border.top + priv->window_border.top;
+      child_allocation.width =
+        MAX (1, (gint) allocation->width -
+             priv->title_border.left - priv->title_border.right -
+             priv->window_border.left - priv->window_border.right);
+      child_allocation.height = priv->title_height;
+
+      gtk_widget_size_allocate (priv->title_box, &child_allocation);
+    }
+
+  child_allocation.x = border_width + priv->window_border.left;
+  child_allocation.y =
+    border_width + priv->window_border.top + priv->title_height +
+    priv->title_border.top + priv->title_border.bottom;
+  child_allocation.width =
+    MAX (1, (gint)allocation->width - child_allocation.x * 2);
+  child_allocation.height =
+    MAX (1, (gint)allocation->height -
+         child_allocation.y - border_width - priv->window_border.bottom);
 
   if (gtk_widget_get_realized (widget))
     {
@@ -5667,6 +5694,8 @@ _gtk_window_set_allocation (GtkWindow     *window,
           set_grip_position (window);
         }
     }
+
+  *allocation = child_allocation;
 }
 
 static void
@@ -5675,40 +5704,15 @@ gtk_window_size_allocate (GtkWidget     *widget,
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
-  GtkAllocation child_allocation;
   GtkWidget *child;
-  guint border_width;
 
+  /* Updates the allocation to the child allocation in place */
   _gtk_window_set_allocation (window, allocation);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
-  if (priv->title_box && gtk_widget_get_visual(priv->title_box))
-    {
-      child_allocation.x = priv->title_border.left + priv->window_border.left;
-      child_allocation.y = priv->title_border.top + priv->window_border.top;
-      child_allocation.width =
-        MAX (1, (gint) allocation->width -
-             priv->title_border.left - priv->title_border.right -
-             priv->window_border.left - priv->window_border.right);
-      child_allocation.height = priv->title_height;
-
-      gtk_widget_size_allocate (priv->title_box, &child_allocation);
-    }
 
   child = gtk_bin_get_child (&(window->bin));
   if (child && gtk_widget_get_visible (child))
     {
-      child_allocation.x = border_width + priv->window_border.left;
-      child_allocation.y =
-        border_width + priv->window_border.top + priv->title_height +
-        priv->title_border.top + priv->title_border.bottom;
-      child_allocation.width =
-        MAX (1, (gint)allocation->width - child_allocation.x * 2);
-      child_allocation.height =
-        MAX (1, (gint)allocation->height -
-             child_allocation.y - border_width - priv->window_border.bottom);
-
-      gtk_widget_size_allocate (child, &child_allocation);
+      gtk_widget_size_allocate (child, allocation);
     }
 }
 
