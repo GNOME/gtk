@@ -231,7 +231,7 @@ gtk_recent_chooser_menu_class_init (GtkRecentChooserMenuClass *klass)
   _gtk_recent_chooser_install_properties (gobject_class);
 
   /**
-   * GtkRecentChooserMenu:show-numbers
+   * GtkRecentChooserMenu:show-numbers:
    *
    * Whether the first ten items in the menu should be prepended by
    * a number acting as a unique mnemonic.

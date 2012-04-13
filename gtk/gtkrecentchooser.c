@@ -78,7 +78,7 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
   quark_gtk_use_action_appearance = g_quark_from_static_string (gtk_use_action_appearance_key);
   
   /**
-   * GtkRecentChooser::selection-changed
+   * GtkRecentChooser::selection-changed:
    * @chooser: the object which received the signal
    *
    * This signal is emitted when there is a change in the set of
@@ -98,7 +98,7 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
                   G_TYPE_NONE, 0);
    
   /**
-   * GtkRecentChooser::item-activated
+   * GtkRecentChooser::item-activated:
    * @chooser: the object which received the signal
    *
    * This signal is emitted when the user "activates" a recent item

@@ -170,15 +170,15 @@ _gdk_event_queue_insert_after (GdkDisplay *display,
 }
 
 /**
- * _gdk_event_queue_insert_after:
+ * _gdk_event_queue_insert_before:
  * @display: a #GdkDisplay
- * @sibling: Append after this event.
- * @event: Event to append.
+ * @sibling: Append before this event
+ * @event: Event to prepend
  *
- * Appends an event before the specified event, or if it isn't in
- * the queue, onto the tail of the event queue.
+ * Prepends an event before the specified event, or if it isn't in
+ * the queue, onto the head of the event queue.
  *
- * Returns: the newly appended list node.
+ * Returns: the newly prepended list node.
  *
  * Since: 2.16
  */

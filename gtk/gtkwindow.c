@@ -898,7 +898,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 GTK_PARAM_READWRITE));
 
   /**
-   * GtkWindow:has-resize-grip
+   * GtkWindow:has-resize-grip:
    *
    * Whether the window has a corner resize grip.
    *

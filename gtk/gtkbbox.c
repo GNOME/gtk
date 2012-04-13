@@ -391,7 +391,7 @@ gtk_button_box_get_child_secondary (GtkButtonBox *widget,
 }
 
 /**
- * gtk_button_box_set_child_secondary
+ * gtk_button_box_set_child_secondary:
  * @widget: a #GtkButtonBox
  * @child: a child of @widget
  * @is_secondary: if %TRUE, the @child appears in a secondary group of the

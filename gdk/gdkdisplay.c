@@ -1603,7 +1603,7 @@ gdk_display_request_selection_notification (GdkDisplay *display,
 }
 
 /**
- * gdk_display_supports_clipboard_persistence
+ * gdk_display_supports_clipboard_persistence:
  * @display: a #GdkDisplay
  *
  * Returns whether the speicifed display supports clipboard
@@ -1624,7 +1624,7 @@ gdk_display_supports_clipboard_persistence (GdkDisplay *display)
 }
 
 /**
- * gdk_display_store_clipboard
+ * gdk_display_store_clipboard:
  * @display:          a #GdkDisplay
  * @clipboard_window: a #GdkWindow belonging to the clipboard owner
  * @time_:            a timestamp

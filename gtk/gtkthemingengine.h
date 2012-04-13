@@ -50,7 +50,7 @@ struct _GtkThemingEngine
 };
 
 /**
- * GtkThemingEngineClass
+ * GtkThemingEngineClass:
  * @parent_class: The parent class.
  * @render_line: Renders a line between two points.
  * @render_background: Renders the background area of a widget region.

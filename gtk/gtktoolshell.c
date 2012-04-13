@@ -28,11 +28,10 @@
  * SECTION:gtktoolshell
  * @Short_description: Interface for containers containing GtkToolItem widgets
  * @Title: GtkToolShell
+ * @see_also: #GtkToolbar, #GtkToolItem
  *
  * The #GtkToolShell interface allows container widgets to provide additional
  * information when embedding #GtkToolItem widgets.
- *
- * @see_also: #GtkToolbar, #GtkToolItem
  */
 
 /**
@@ -219,7 +218,7 @@ gtk_tool_shell_get_text_alignment (GtkToolShell *shell)
 }
 
 /**
- * gtk_tool_shell_get_ellipsize_mode
+ * gtk_tool_shell_get_ellipsize_mode:
  * @shell: a #GtkToolShell
  *
  * Retrieves the current ellipsize mode for the tool shell. Tool items must not

@@ -942,7 +942,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          GTK_PARAM_READWRITE));
 
   /**
-   * GtkEntry:caps-lock-warning
+   * GtkEntry:caps-lock-warning:
    *
    * Whether password entries will show a warning when Caps Lock is on.
    *

@@ -1816,7 +1816,7 @@ gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
 }
 
 /**
- * gtk_clipboard_wait_for_targets
+ * gtk_clipboard_wait_for_targets:
  * @clipboard: a #GtkClipboard
  * @targets: (out) (array length=n_targets) (transfer container): location
  *           to store an array of targets. The result stored here must
@@ -1824,9 +1824,9 @@ gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
  * @n_targets: location to store number of items in @targets.
  *
  * Returns a list of targets that are present on the clipboard, or %NULL
- * if there aren't any targets available. The returned list must be 
+ * if there aren't any targets available. The returned list must be
  * freed with g_free().
- * This function waits for the data to be received using the main 
+ * This function waits for the data to be received using the main
  * loop, so events, timeouts, etc, may be dispatched during the wait.
  *
  * Return value: %TRUE if any targets are present on the clipboard,

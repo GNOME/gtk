@@ -2146,7 +2146,7 @@ gtk_icon_source_set_filename (GtkIconSource *source,
 }
 
 /**
- * gtk_icon_source_set_icon_name
+ * gtk_icon_source_set_icon_name:
  * @source: a #GtkIconSource
  * @icon_name: (allow-none): name of icon to use
  *

@@ -2335,7 +2335,7 @@ gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
 }
 
 /**
- * gtk_cell_area_apply_attributes
+ * gtk_cell_area_apply_attributes:
  * @area: a #GtkCellArea
  * @tree_model: the #GtkTreeModel to pull values from
  * @iter: the #GtkTreeIter in @tree_model to apply values for

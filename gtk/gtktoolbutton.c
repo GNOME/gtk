@@ -1226,7 +1226,7 @@ gtk_tool_button_get_stock_id (GtkToolButton *button)
 }
 
 /**
- * gtk_tool_button_set_icon_name
+ * gtk_tool_button_set_icon_name:
  * @button: a #GtkToolButton
  * @icon_name: (allow-none): the name of the themed icon
  *
@@ -1257,15 +1257,15 @@ gtk_tool_button_set_icon_name (GtkToolButton *button,
 }
 
 /**
- * gtk_tool_button_get_icon_name
+ * gtk_tool_button_get_icon_name:
  * @button: a #GtkToolButton
- * 
+ *
  * Returns the name of the themed icon for the tool button,
  * see gtk_tool_button_set_icon_name().
  *
  * Returns: the icon name or %NULL if the tool button has
  * no themed icon
- * 
+ *
  * Since: 2.8
  **/
 const gchar*

@@ -504,7 +504,7 @@ gtk_lock_button_new (GPermission *permission)
  *
  * Obtains the #GPermission object that controls @button.
  *
- * Returns: the #GPermission of @button
+ * Returns: (transfer none): the #GPermission of @button
  *
  * Since: 3.2
  */

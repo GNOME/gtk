@@ -691,7 +691,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                 P_("Whether this tag affects the alignment mode"));
 
   /**
-   * GtkCellRendererText::edited
+   * GtkCellRendererText::edited:
    * @renderer: the object which received the signal
    * @path: the path identifying the edited cell
    * @new_text: the new text

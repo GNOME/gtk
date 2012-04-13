@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 #define GTK_TYPE_CSS_SECTION         (gtk_css_section_get_type ())
 
 /**
- * GtkCssSection:
+ * GtkCssSectionType:
  * @GTK_CSS_SECTION_DOCUMENT: The section describes a complete document.
  *   This section time is the only one where gtk_css_section_get_parent()
  *   might return %NULL.

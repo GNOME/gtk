@@ -192,11 +192,11 @@ gtk_css_section_get_parent (const GtkCssSection *section)
  * @section: the section
  *
  * Gets the file that @section was parsed from. If no such file exists,
- * for example because the CSS was loaded via 
+ * for example because the CSS was loaded via
  * @gtk_css_provider_load_from_data(), then %NULL is returned.
  *
- * Returns: the #GFile that @section was parsed from or %NULL if
- *   @section was parsed from other data.
+ * Returns: (transfer none): the #GFile that @section was parsed from
+ *     or %NULL if @section was parsed from other data
  *
  * Since: 3.2
  **/

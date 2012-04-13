@@ -333,7 +333,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   /**
-   * GtkColorSelection:current-color
+   * GtkColorSelection:current-color:
    *
    * The current GdkColor color.
    *
@@ -355,7 +355,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                                                       GTK_PARAM_READWRITE));
 
   /**
-   * GtkColorSelection:current-rgba
+   * GtkColorSelection:current-rgba:
    *
    * The current RGBA color.
    *

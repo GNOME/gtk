@@ -2472,7 +2472,7 @@ gtk_text_iter_forward_text_chars  (GtkTextIter *iter,
 }
 
 /**
- * gtk_text_iter_forward_text_chars:
+ * gtk_text_iter_backward_text_chars:
  * @iter: a #GtkTextIter
  * @count: number of chars to move
  *

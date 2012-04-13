@@ -1708,7 +1708,7 @@ gtk_entry_completion_cursor_on_match (GtkEntryCompletion *completion,
  * Note that a text column must have been set for this function to work,
  * see gtk_entry_completion_set_text_column() for details. 
  *
- * Returns: (transfer: full): The common prefix all rows starting with @key
+ * Returns: (transfer full): The common prefix all rows starting with @key
  *   or %NULL if no row matches @key.
  *
  * Since: 3.4

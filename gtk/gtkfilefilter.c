@@ -20,6 +20,7 @@
  * SECTION:gtkfilefilter
  * @Short_description: A filter for selecting a file subset
  * @Title: GtkFileFilter
+ * @see_also: #GtkFileChooser
  *
  * A GtkFileFilter can be used to restrict the files being shown in a
  * #GtkFileChooser. Files can be filtered based on their name (with
@@ -63,8 +64,6 @@
  * </example>
  * </para>
  * </refsect2>
- *
- * @see_also: #GtkFileChooser
  */
 
 #include "config.h"

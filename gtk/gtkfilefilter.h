@@ -61,7 +61,7 @@ typedef enum {
  * The type of function that is used with custom filters, see
  * gtk_file_filter_add_custom().
  *
- * @Returns: %TRUE if the file should be displayed
+ * Returns: %TRUE if the file should be displayed
  */
 typedef gboolean (*GtkFileFilterFunc) (const GtkFileFilterInfo *filter_info,
 				       gpointer                 data);

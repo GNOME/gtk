@@ -753,7 +753,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                                GTK_PARAM_READWRITE));
 
  /**
-  * GtkMenu:arrow-scaling
+  * GtkMenu:arrow-scaling:
   *
   * Arbitrary constant to scale down the size of the scroll arrow.
   *
@@ -2000,7 +2000,7 @@ gtk_menu_real_can_activate_accel (GtkWidget *widget,
 }
 
 /**
- * gtk_menu_set_accel_path
+ * gtk_menu_set_accel_path:
  * @menu:       a valid #GtkMenu
  * @accel_path: (allow-none): a valid accelerator path
  *
@@ -2043,7 +2043,7 @@ gtk_menu_set_accel_path (GtkMenu     *menu,
 }
 
 /**
- * gtk_menu_get_accel_path
+ * gtk_menu_get_accel_path:
  * @menu: a valid #GtkMenu
  *
  * Retrieves the accelerator path set on the menu.

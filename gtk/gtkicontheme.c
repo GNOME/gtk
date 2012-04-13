@@ -429,7 +429,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
   gobject_class->finalize = gtk_icon_theme_finalize;
 
 /**
- * GtkIconTheme::changed
+ * GtkIconTheme::changed:
  * @icon_theme: the icon theme
  * 
  * Emitted when the current icon theme is switched or GTK+ detects

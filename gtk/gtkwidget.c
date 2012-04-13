@@ -1184,7 +1184,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							GTK_PARAM_READABLE));
 
   /**
-   * GtkWidget:double-buffered
+   * GtkWidget:double-buffered:
    *
    * Whether the widget is double buffered.
    *
@@ -1231,7 +1231,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                       GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:margin-left
+   * GtkWidget:margin-left:
    *
    * Margin on left side of widget.
    *
@@ -1252,7 +1252,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                      GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:margin-right
+   * GtkWidget:margin-right:
    *
    * Margin on right side of widget.
    *
@@ -1273,7 +1273,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                      GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:margin-top
+   * GtkWidget:margin-top:
    *
    * Margin on top side of widget.
    *
@@ -1294,7 +1294,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                      GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:margin-bottom
+   * GtkWidget:margin-bottom:
    *
    * Margin on bottom side of widget.
    *
@@ -1315,7 +1315,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                      GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:margin
+   * GtkWidget:margin:
    *
    * Sets all four sides' margin at once. If read, returns max
    * margin on any side.
@@ -1350,7 +1350,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_TYPE_NONE, 0);
 
   /**
-   * GtkWidget:hexpand
+   * GtkWidget:hexpand:
    *
    * Whether to expand horizontally. See gtk_widget_set_hexpand().
    *
@@ -1365,7 +1365,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:hexpand-set
+   * GtkWidget:hexpand-set:
    *
    * Whether to use the #GtkWidget:hexpand property. See gtk_widget_get_hexpand_set().
    *
@@ -1380,7 +1380,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:vexpand
+   * GtkWidget:vexpand:
    *
    * Whether to expand vertically. See gtk_widget_set_vexpand().
    *
@@ -1395,7 +1395,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:vexpand-set
+   * GtkWidget:vexpand-set:
    *
    * Whether to use the #GtkWidget:vexpand property. See gtk_widget_get_vexpand_set().
    *
@@ -1410,7 +1410,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   /**
-   * GtkWidget:expand
+   * GtkWidget:expand:
    *
    * Whether to expand in both directions. Setting this sets both #GtkWidget:hexpand and #GtkWidget:vexpand
    *
@@ -3012,7 +3012,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GTK_TYPE_TOOLTIP);
 
   /**
-   * GtkWidget::popup-menu
+   * GtkWidget::popup-menu:
    * @widget: the object which received the signal
    *
    * This signal gets emitted whenever a widget should pop up a context
@@ -5444,7 +5444,7 @@ widget_new_accel_closure (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_add_accelerator
+ * gtk_widget_add_accelerator:
  * @widget:       widget to install an accelerator on
  * @accel_signal: widget signal to emit on accelerator activation
  * @accel_group:  accel group for this widget, added to its toplevel
@@ -9511,7 +9511,7 @@ gtk_widget_get_size_request (GtkWidget *widget,
  * @width: new forced minimum width
  * @height: new forced minimum height
  * @old_width: location to store previous forced minimum width
- * @old_width: location to store previous forced minumum height
+ * @old_height: location to store previous forced minumum height
  *
  * Temporarily establishes a forced minimum size for a widget; this
  * is used by GtkWindow when calculating the size to add to the

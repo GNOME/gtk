@@ -11852,7 +11852,7 @@ gtk_tree_view_get_headers_clickable (GtkTreeView *tree_view)
 }
 
 /**
- * gtk_tree_view_set_rules_hint
+ * gtk_tree_view_set_rules_hint:
  * @tree_view: a #GtkTreeView
  * @setting: %TRUE if the tree requires reading across rows
  *
@@ -11888,7 +11888,7 @@ gtk_tree_view_set_rules_hint (GtkTreeView  *tree_view,
 }
 
 /**
- * gtk_tree_view_get_rules_hint
+ * gtk_tree_view_get_rules_hint:
  * @tree_view: a #GtkTreeView
  *
  * Gets the setting set by gtk_tree_view_set_rules_hint().

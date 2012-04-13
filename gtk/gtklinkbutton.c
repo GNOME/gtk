@@ -163,9 +163,9 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   klass->activate_link = gtk_link_button_activate_link;
 
   /**
-   * GtkLinkButton:uri
-   * 
-   * The URI bound to this button. 
+   * GtkLinkButton:uri:
+   *
+   * The URI bound to this button.
    *
    * Since: 2.10
    */
@@ -177,8 +177,8 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   				   			NULL,
   				   			G_PARAM_READWRITE));
   /**
-   * GtkLinkButton:visited
-   * 
+   * GtkLinkButton:visited:
+   *
    * The 'visited' state of this button. A visited link is drawn in a
    * different color.
    *

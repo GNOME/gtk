@@ -247,7 +247,6 @@ gtk_plug_init (GtkPlug *plug)
 
 /**
  * gtk_plug_handle_modality_on:
- *
  * @plug: a #GtkPlug
  *
  * Called from the GtkPlug backend when the corresponding socket has
@@ -271,7 +270,6 @@ gtk_plug_handle_modality_on (GtkPlug *plug)
 
 /**
  * gtk_plug_handle_modality_off:
- *
  * @plug: a #GtkPlug
  *
  * Called from the GtkPlug backend when the corresponding socket has
@@ -719,7 +717,6 @@ xembed_set_info (GdkWindow     *window,
 
 /**
  * gtk_plug_focus_first_last:
- *
  * @plug: a #GtkPlug
  * @direction: a direction
  *

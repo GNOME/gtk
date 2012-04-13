@@ -554,7 +554,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
   GType iface_type = G_TYPE_FROM_INTERFACE (iface);
 
   /**
-   * GtkFileChooser::current-folder-changed
+   * GtkFileChooser::current-folder-changed:
    * @chooser: the object which received the signal.
    *
    * This signal is emitted when the current folder in a #GtkFileChooser
@@ -580,7 +580,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 		G_TYPE_NONE, 0);
 
   /**
-   * GtkFileChooser::selection-changed
+   * GtkFileChooser::selection-changed:
    * @chooser: the object which received the signal.
    *
    * This signal is emitted when there is a change in the set of selected files
@@ -607,7 +607,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 		G_TYPE_NONE, 0);
 
   /**
-   * GtkFileChooser::update-preview
+   * GtkFileChooser::update-preview:
    * @chooser: the object which received the signal.
    *
    * This signal is emitted when the preview in a file chooser should be
@@ -641,7 +641,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 		G_TYPE_NONE, 0);
 
   /**
-   * GtkFileChooser::file-activated
+   * GtkFileChooser::file-activated:
    * @chooser: the object which received the signal.
    *
    * This signal is emitted when the user "activates" a file in the file

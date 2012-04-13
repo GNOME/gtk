@@ -610,7 +610,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 
 
   /**
-   * GtkCalendar:inner-border
+   * GtkCalendar:inner-border:
    *
    * The spacing around the day/week headers and main area.
    */
@@ -622,7 +622,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                              GTK_PARAM_READABLE));
 
   /**
-   * GtkCalndar:vertical-separation
+   * GtkCalndar:vertical-separation:
    *
    * Separation between day headers and main area.
    */
@@ -634,7 +634,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                              GTK_PARAM_READABLE));
 
   /**
-   * GtkCalendar:horizontal-separation
+   * GtkCalendar:horizontal-separation:
    *
    * Separation between week headers and main area.
    */

@@ -2356,7 +2356,7 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
 }
 
 /**
- * gtk_menu_item_set_accel_path
+ * gtk_menu_item_set_accel_path:
  * @menu_item:  a valid #GtkMenuItem
  * @accel_path: (allow-none): accelerator path, corresponding to this menu
  *     item's functionality, or %NULL to unset the current path.
@@ -2416,7 +2416,7 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
 }
 
 /**
- * gtk_menu_item_get_accel_path
+ * gtk_menu_item_get_accel_path:
  * @menu_item:  a valid #GtkMenuItem
  *
  * Retrieve the accelerator path that was previously set on @menu_item.

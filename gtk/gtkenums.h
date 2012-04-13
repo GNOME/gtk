@@ -90,7 +90,7 @@ typedef enum
 } GtkArrowPlacement;
 
 /**
- * GtkArrowType
+ * GtkArrowType:
  * @GTK_ARROW_UP: Represents an upward pointing arrow.
  * @GTK_ARROW_DOWN: Represents a downward pointing arrow.
  * @GTK_ARROW_LEFT: Represents a left pointing arrow.

@@ -280,7 +280,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
   gobject_class->finalize = gtk_recent_manager_finalize;
   
   /**
-   * GtkRecentManager:filename
+   * GtkRecentManager:filename:
    *
    * The full path to the file to be used to store and read the recently
    * used resources list
@@ -296,7 +296,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
 							(G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE)));
 
   /**
-   * GtkRecentManager:size
+   * GtkRecentManager:size:
    * 
    * The size of the recently used resources list.
    *
@@ -313,7 +313,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
 						     G_PARAM_READABLE));
   
   /**
-   * GtkRecentManager::changed
+   * GtkRecentManager::changed:
    * @recent_manager: the recent manager
    *
    * Emitted when the current recently used resources manager changes its

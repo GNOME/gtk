@@ -192,7 +192,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                                                         GTK_PARAM_WRITABLE));
 
   /**
-   * GtkCellView:background-gdk
+   * GtkCellView:background-gdk:
    *
    * The background color as a #GdkColor
    *
@@ -206,7 +206,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                                                       GDK_TYPE_COLOR,
                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
   /**
-   * GtkCellView:background-rgba
+   * GtkCellView:background-rgba:
    *
    * The background color as a #GdkRGBA
    *
@@ -221,7 +221,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                                                       GTK_PARAM_READWRITE));
 
   /**
-   * GtkCellView:model
+   * GtkCellView:model:
    *
    * The model for cell view
    *
@@ -237,7 +237,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 
 
   /**
-   * GtkCellView:cell-area
+   * GtkCellView:cell-area:
    *
    * The #GtkCellArea rendering cells
    *
@@ -255,7 +255,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   /**
-   * GtkCellView:cell-area-context
+   * GtkCellView:cell-area-context:
    *
    * The #GtkCellAreaContext used to compute the geometry of the cell view.
    *
@@ -280,7 +280,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   /**
-   * GtkCellView:draw-sensitive
+   * GtkCellView:draw-sensitive:
    *
    * Whether all cells should be draw as sensitive for this view regardless
    * of the actual cell properties (used to make menus with submenus appear
@@ -298,7 +298,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 							  GTK_PARAM_READWRITE));
 
   /**
-   * GtkCellView:fit-model
+   * GtkCellView:fit-model:
    *
    * Whether the view should request enough space to always fit
    * the size of every row in the model (used by the combo box to

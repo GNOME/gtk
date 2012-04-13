@@ -291,7 +291,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                                         GTK_PARAM_READWRITE));
 
   /**
-   * GtkMessageDialog:message-area
+   * GtkMessageDialog:message-area:
    *
    * The #GtkVBox that corresponds to the message area of this dialog.  See
    * gtk_message_dialog_get_message_area() for a detailed description of this
