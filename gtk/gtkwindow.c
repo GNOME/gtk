@@ -3374,7 +3374,7 @@ gtk_window_set_decorated (GtkWindow *window,
   gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
   if (gdk_window)
     {
-      if (priv->decorated)
+      if (priv->decorated && !priv->client_decorated)
         gdk_window_set_decorations (gdk_window,
                                     GDK_DECOR_ALL);
       else
@@ -4815,21 +4815,36 @@ create_decoration (GtkWidget *widget)
   GtkStyleContext *context;
   const char *title = "GtkWindow";
 
-  /* Decorations already created */
+  /* Client decorations already created */
   if (priv->client_decorated)
     return;
 
-#ifdef GDK_WINDOWING_WAYLAND
-  if (!GDK_IS_WAYLAND_DISPLAY_MANAGER (gdk_display_manager_get ()))
-    return;
-#else
-  return;
-#endif
-
+  /* No decorations at all */
   if (!priv->decorated)
     return;
 
-  priv->client_decorated = TRUE;
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY_MANAGER (gdk_display_manager_get ()))
+    priv->client_decorated = TRUE;
+#endif
+
+  if (!priv->client_decorated &&
+      g_getenv ("GTK_CSD") &&
+      g_str_equal (g_getenv ("GTK_CSD"), "1"))
+    {
+      GdkVisual *visual;
+
+      /* We need a visual with alpha */
+      visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
+      if (visual)
+        {
+          gtk_widget_set_visual (widget, visual);
+          priv->client_decorated = TRUE;
+        }
+    }
+
+  if (!priv->client_decorated)
+    return;
 
   if (priv->type != GTK_WINDOW_POPUP)
     {
@@ -5366,7 +5381,7 @@ gtk_window_realize (GtkWidget *widget)
   if (priv->wm_role)
     gdk_window_set_role (gdk_window, priv->wm_role);
   
-  if (!priv->decorated)
+  if (!priv->decorated || priv->client_decorated)
     gdk_window_set_decorations (gdk_window, 0);
   
   if (!priv->deletable)
