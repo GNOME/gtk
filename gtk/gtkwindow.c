@@ -197,6 +197,7 @@ struct _GtkWindowPrivate
                                             * grip-visible" notification
                                             */
   guint    gravity                   : 5; /* GdkGravity */
+  guint    client_decorated          : 1; /* Decorations drawn client-side */
 
 };
 
@@ -4814,6 +4815,10 @@ create_decoration (GtkWidget *widget)
   GtkStyleContext *context;
   const char *title = "GtkWindow";
 
+  /* Decorations already created */
+  if (priv->client_decorated)
+    return;
+
 #ifdef GDK_WINDOWING_WAYLAND
   if (!GDK_IS_WAYLAND_DISPLAY_MANAGER (gdk_display_manager_get ()))
     return;
@@ -4821,26 +4826,31 @@ create_decoration (GtkWidget *widget)
   return;
 #endif
 
-  if (priv->type == GTK_WINDOW_POPUP || !priv->decorated || priv->title_box)
+  if (!priv->decorated)
     return;
 
-  priv->title_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  context = gtk_widget_get_style_context (priv->title_box);
-  gtk_style_context_add_class (context, "titlebar");
-  gtk_widget_set_parent (priv->title_box, GTK_WIDGET (window));
+  priv->client_decorated = TRUE;
 
-  priv->title_label = gtk_label_new (NULL);
-  if (priv->title)
-    title = priv->title;
-  gtk_label_set_markup (GTK_LABEL (priv->title_label), title);
-  gtk_box_pack_start (GTK_BOX (priv->title_box),
-		      priv->title_label, TRUE, TRUE, 0);
+  if (priv->type != GTK_WINDOW_POPUP)
+    {
+      priv->title_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      context = gtk_widget_get_style_context (priv->title_box);
+      gtk_style_context_add_class (context, "titlebar");
+      gtk_widget_set_parent (priv->title_box, GTK_WIDGET (window));
 
-  priv->title_close_button = gtk_button_new_with_label ("×");
-  gtk_box_pack_end (GTK_BOX (priv->title_box),
-		    priv->title_close_button, FALSE, FALSE, 0);
-  g_signal_connect (priv->title_close_button, "clicked",
-		    G_CALLBACK (gtk_window_title_close_clicked), window);
+      priv->title_label = gtk_label_new (NULL);
+      if (priv->title)
+        title = priv->title;
+      gtk_label_set_markup (GTK_LABEL (priv->title_label), title);
+      gtk_box_pack_start (GTK_BOX (priv->title_box),
+                          priv->title_label, TRUE, TRUE, 0);
+
+      priv->title_close_button = gtk_button_new_with_label ("×");
+      gtk_box_pack_end (GTK_BOX (priv->title_box),
+                        priv->title_close_button, FALSE, FALSE, 0);
+      g_signal_connect (priv->title_close_button, "clicked",
+                        G_CALLBACK (gtk_window_title_close_clicked), window);
+    }
 }
 
 static void
@@ -6636,18 +6646,21 @@ gtk_window_get_preferred_width (GtkWidget *widget,
   border_width =
     2 * gtk_container_get_border_width (GTK_CONTAINER (window));
 
-  if (priv->title_box)
+  if (priv->client_decorated)
     {
-      gtk_widget_get_preferred_width (priv->title_box,
-                                      &title_min, &title_nat);
-
       context = gtk_widget_get_style_context (widget);
       state = gtk_style_context_get_state (context);
 
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, "titlebar");
-      gtk_style_context_get_border (context, state, &priv->title_border);
-      gtk_style_context_restore (context);
+      if (priv->title_box)
+        {
+          gtk_widget_get_preferred_width (priv->title_box,
+                                          &title_min, &title_nat);
+
+          gtk_style_context_save (context);
+          gtk_style_context_add_class (context, "titlebar");
+          gtk_style_context_get_border (context, state, &priv->title_border);
+          gtk_style_context_restore (context);
+        }
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, "window-border");
@@ -6693,19 +6706,21 @@ gtk_window_get_preferred_height (GtkWidget *widget,
   *minimum_size = 0;
   *natural_size = 0;
 
-  if (priv->title_box)
+  if (priv->client_decorated)
     {
-      gtk_widget_get_preferred_height (priv->title_box,
-                                       &title_min, &priv->title_height);
-
-
       context = gtk_widget_get_style_context (widget);
       state = gtk_style_context_get_state (context);
 
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, "titlebar");
-      gtk_style_context_get_border (context, state, &priv->title_border);
-      gtk_style_context_restore (context);
+      if (priv->title_box)
+        {
+          gtk_widget_get_preferred_height (priv->title_box,
+                                           &title_min, &priv->title_height);
+
+          gtk_style_context_save (context);
+          gtk_style_context_add_class (context, "titlebar");
+          gtk_style_context_get_border (context, state, &priv->title_border);
+          gtk_style_context_restore (context);
+        }
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, "window-border");
@@ -7874,7 +7889,7 @@ gtk_window_draw (GtkWidget *widget,
 
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
 
-      if (priv->title_box)
+      if (priv->client_decorated)
 	{
 	  gtk_style_context_add_class (context, "window-border");
 	  gtk_widget_get_allocation (widget, &allocation);
