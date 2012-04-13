@@ -419,6 +419,7 @@ gtk_private_h_sources =		\
 	gtkboxprivate.h         \
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
+	gtkcairoblurprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
 	gtkcolorswatchprivate.h	\
 	gtkcoloreditorprivate.h	\
@@ -615,6 +616,7 @@ gtk_base_c_sources = 		\
 	gtkbuilderparser.c	\
 	gtkbuilder-menus.c	\
 	gtkbutton.c		\
+	gtkcairoblur.c		\
 	gtkcalendar.c		\
 	gtkcellarea.c		\
 	gtkcellareabox.c	\
