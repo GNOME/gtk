@@ -342,7 +342,6 @@ struct _GtkWidgetPrivate
   guint in_reparent           : 1;
 
   /* Queue-resize related flags */
-  guint resize_pending        : 1;
   guint alloc_needed          : 1;
   guint width_request_needed  : 1;
   guint height_request_needed : 1;
@@ -8573,10 +8572,6 @@ gtk_widget_verify_invariants (GtkWidget *widget)
 
 #if 0
       /* widget_system.txt says these hold, but they don't. */
-      if (widget->priv->resize_pending)
-        g_warning ("%s %p resize pending but not realized",
-                   G_OBJECT_TYPE_NAME (widget), widget);
-
       if (widget->priv->alloc_needed)
         g_warning ("%s %p alloc needed but not realized",
                    G_OBJECT_TYPE_NAME (widget), widget);
@@ -13695,19 +13690,6 @@ gboolean
 gtk_widget_in_destruction (GtkWidget *widget)
 {
   return widget->priv->in_destruction;
-}
-
-gboolean
-_gtk_widget_get_resize_pending (GtkWidget *widget)
-{
-  return widget->priv->resize_pending;
-}
-
-void
-_gtk_widget_set_resize_pending (GtkWidget *widget,
-                                gboolean   resize_pending)
-{
-  widget->priv->resize_pending = resize_pending;
 }
 
 gboolean

@@ -239,6 +239,7 @@ struct _GtkContainerPrivate
 
   guint has_focus_chain    : 1;
   guint reallocate_redraws : 1;
+  guint resize_pending     : 1;
   guint resize_mode        : 2;
   guint request_mode       : 2;
 };
@@ -1351,7 +1352,7 @@ gtk_container_destroy (GtkWidget *widget)
   GtkContainer *container = GTK_CONTAINER (widget);
   GtkContainerPrivate *priv = container->priv;
 
-  if (_gtk_widget_get_resize_pending (GTK_WIDGET (container)))
+  if (priv->resize_pending)
     _gtk_container_dequeue_resize_handler (container);
 
   if (priv->focus_child)
@@ -1542,10 +1543,10 @@ void
 _gtk_container_dequeue_resize_handler (GtkContainer *container)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (_gtk_widget_get_resize_pending (GTK_WIDGET (container)));
+  g_return_if_fail (container->priv->resize_pending);
 
   container_resize_queue = g_slist_remove (container_resize_queue, container);
-  _gtk_widget_set_resize_pending (GTK_WIDGET (container), FALSE);
+  container->priv->resize_pending = FALSE;
 }
 
 /**
@@ -1650,15 +1651,15 @@ gtk_container_idle_sizer (gpointer data)
 
   while (container_resize_queue)
     {
-      GtkWidget *widget;
+      GtkContainer *container;
 
       slist = container_resize_queue;
       container_resize_queue = slist->next;
-      widget = slist->data;
+      container = slist->data;
       g_slist_free_1 (slist);
 
-      _gtk_widget_set_resize_pending (widget, FALSE);
-      gtk_container_check_resize (GTK_CONTAINER (widget));
+      container->priv->resize_pending = FALSE;
+      gtk_container_check_resize (container);
     }
 
   gdk_window_process_all_updates ();
@@ -1682,9 +1683,9 @@ _gtk_container_queue_resize_handler (GtkContainer *container)
       switch (container->priv->resize_mode)
         {
         case GTK_RESIZE_QUEUE:
-          if (!_gtk_widget_get_resize_pending (widget))
+          if (!container->priv->resize_pending)
             {
-              _gtk_widget_set_resize_pending (widget, TRUE);
+              container->priv->resize_pending = TRUE;
               if (container_resize_queue == NULL)
                 gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE,
                                            gtk_container_idle_sizer,

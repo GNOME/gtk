@@ -67,9 +67,6 @@ typedef struct {
 
 void         _gtk_widget_set_visible_flag   (GtkWidget *widget,
                                              gboolean   visible);
-gboolean     _gtk_widget_get_resize_pending (GtkWidget *widget);
-void         _gtk_widget_set_resize_pending (GtkWidget *widget,
-                                             gboolean   resize_pending);
 gboolean     _gtk_widget_get_in_reparent    (GtkWidget *widget);
 void         _gtk_widget_set_in_reparent    (GtkWidget *widget,
                                              gboolean   in_reparent);
