@@ -240,6 +240,7 @@ struct _GtkContainerPrivate
   guint has_focus_chain    : 1;
   guint reallocate_redraws : 1;
   guint resize_pending     : 1;
+  guint restyle_pending    : 1;
   guint resize_mode        : 2;
   guint request_mode       : 2;
 };
@@ -343,6 +344,7 @@ static guint                 vadjustment_key_id = 0;
 static const gchar           hadjustment_key[] = "gtk-hadjustment";
 static guint                 hadjustment_key_id = 0;
 static GSList               *container_resize_queue = NULL;
+static GSList               *container_restyle_queue = NULL;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };
 static GtkWidgetClass       *parent_class = NULL;
 extern GParamSpecPool       *_gtk_widget_child_property_pool;
@@ -1354,6 +1356,11 @@ gtk_container_destroy (GtkWidget *widget)
 
   if (priv->resize_pending)
     _gtk_container_dequeue_resize_handler (container);
+  if (priv->restyle_pending)
+    {
+      container_restyle_queue = g_slist_remove (container_restyle_queue, container);
+      priv->restyle_pending = FALSE;
+    }
 
   if (priv->focus_child)
     {
@@ -1628,27 +1635,35 @@ gtk_container_idle_sizer (gpointer data)
   GSList *slist;
   gint64 current_time;
 
+  /* We validate the style contexts in a single loop before even trying
+   * to handle resizes instead of doing validations inline.
+   * This is mostly necessary for compatibility reasons with old code,
+   * because both style_updated and size_allocate functions often change
+   * styles and so could cause infinite loops in this function.
+   *
+   * It's important to note that even an invalid style context returns
+   * sane values. So the result of an invalid style context will never be
+   * a program crash, but only a wrong layout or rendering.
+   */
+  current_time = g_get_monotonic_time ();
+  slist = container_restyle_queue;
+  container_restyle_queue = NULL;
+  for (; slist; slist = slist->next)
+    {
+      GtkContainer *container = slist->data;
+
+      container->priv->restyle_pending = FALSE;
+      _gtk_style_context_validate (gtk_widget_get_style_context (GTK_WIDGET (container)),
+                                   current_time,
+                                   0);
+    }
+
   /* we may be invoked with a container_resize_queue of NULL, because
    * queue_resize could have been adding an extra idle function while
    * the queue still got processed. we better just ignore such case
    * than trying to explicitely work around them with some extra flags,
    * since it doesn't cause any actual harm.
    */
-
-  /* We validate the style contexts in a single loop before even trying
-   * to handle resizes instead of doing validations inline.
-   * This is mostly necessary for compatibility reasons with old code,
-   * because size_allocate functions often change styles and so could
-   * cause infinite loops in this function.
-   */
-  current_time = g_get_monotonic_time ();
-  for (slist = container_resize_queue; slist; slist = slist->next)
-    {
-      _gtk_style_context_validate (gtk_widget_get_style_context (slist->data),
-                                   current_time,
-                                   0);
-    }
-
   while (container_resize_queue)
     {
       GtkContainer *container;
@@ -1664,11 +1679,24 @@ gtk_container_idle_sizer (gpointer data)
 
   gdk_window_process_all_updates ();
 
-  return FALSE;
+  return container_resize_queue != NULL || container_restyle_queue != NULL;
 }
 
-void
-_gtk_container_queue_resize_handler (GtkContainer *container)
+static void
+gtk_container_start_idle_sizer (GtkContainer *container)
+{
+  /* already started */
+  if (container_resize_queue != NULL ||
+      container_restyle_queue != NULL)
+    return;
+
+  gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE,
+                             gtk_container_idle_sizer,
+                             NULL, NULL);
+}
+
+static void
+gtk_container_queue_resize_handler (GtkContainer *container)
 {
   GtkWidget *widget;
 
@@ -1686,18 +1714,12 @@ _gtk_container_queue_resize_handler (GtkContainer *container)
           if (!container->priv->resize_pending)
             {
               container->priv->resize_pending = TRUE;
-              if (container_resize_queue == NULL)
-                gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE,
-                                           gtk_container_idle_sizer,
-                                           NULL, NULL);
+              gtk_container_start_idle_sizer (container);
               container_resize_queue = g_slist_prepend (container_resize_queue, container);
             }
           break;
 
         case GTK_RESIZE_IMMEDIATE:
-          _gtk_style_context_validate (gtk_widget_get_style_context (widget),
-                                       g_get_monotonic_time (),
-                                       0);
           gtk_container_check_resize (container);
 
         case GTK_RESIZE_PARENT:
@@ -1732,7 +1754,25 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
   while (widget);
 
   if (widget && !invalidate_only)
-    _gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
+    gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
+}
+
+void
+_gtk_container_queue_restyle (GtkContainer *container)
+{
+  GtkContainerPrivate *priv;
+
+  g_return_if_fail (GTK_CONTAINER (container));
+
+  priv = container->priv;
+
+  if (priv->restyle_pending)
+    return;
+
+  gtk_container_start_idle_sizer (container);
+
+  container_restyle_queue = g_slist_prepend (container_restyle_queue, container);
+  priv->restyle_pending = TRUE;
 }
 
 /**

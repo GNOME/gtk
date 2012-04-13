@@ -27,11 +27,11 @@ G_BEGIN_DECLS
 
 GList *  _gtk_container_get_all_children       (GtkContainer *container);
 void     _gtk_container_queue_resize           (GtkContainer *container);
+void     _gtk_container_queue_restyle          (GtkContainer *container);
 void     _gtk_container_resize_invalidate      (GtkContainer *container);
 void     _gtk_container_clear_resize_widgets   (GtkContainer *container);
 gchar*   _gtk_container_child_composite_name   (GtkContainer *container,
                                                 GtkWidget    *child);
-void     _gtk_container_queue_resize_handler   (GtkContainer *container);
 void     _gtk_container_dequeue_resize_handler (GtkContainer *container);
 GList *  _gtk_container_focus_sort             (GtkContainer     *container,
                                                 GList            *children,
