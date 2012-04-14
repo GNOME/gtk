@@ -1,3 +1,41 @@
+Overview of Changes in GTK+ 3.4.1
+=================================
+
+* Win32 fixes:
+ - Fix wintab support
+ - Fall back to Raleigh with th eclassic theme
+
+* OS X fixes:
+ - Fix manual resizing of windows
+
+* Bugs fixed:
+ 672961 Custom theme can crash apps with GtkEntryCompletion
+ 587441 Window expands horizontally rather than the text entry growing...
+ 672133 conflict between srcdir != builddir and generated enum types
+ 672358 Wayland and X11 backends simultaneously enabled is broken
+ 672544 Anchored widgets inside GtkTextView are drawn out of place...
+ 673090 gtk file-chooser: Autocompletion - Dropdown-list: selection fails
+ 673125 windows draw as unfocused/backdrop on window managers that do...
+ 673139 URL to mailing lists in README incorrect
+ 673200 gactionmuxer: Fix list_actions
+ 673328 After clicking empty parts of a toolbar/menubar the next mouse...
+ 673440 shouldn't set GDK_SOURCE_TOUCHSCREEN based on the name
+ 673441 GtkTreeView should not handle extra mouse buttons
+ 673458 GdkEventButton contains wrong buttons in modifier mask...
+ 673693 entrycompletion: set_property() should use property setter...
+ 673882 application-window: try to use the desktop name in the fallback...
+        Deal more gracefully with a flood of scroll events
+
+* Translation updates:
+ Catalan
+ Czech
+ German
+ Marathi
+ Odia
+ Swedish
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.4.0
 =================================
 
