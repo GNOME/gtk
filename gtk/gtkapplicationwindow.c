@@ -257,6 +257,32 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
     }
 }
 
+static gchar *
+gtk_application_window_get_app_desktop_name ()
+{
+  gchar *retval = NULL;
+
+#ifdef HAVE_GIO_UNIX
+  GDesktopAppInfo *app_info;
+  const gchar *app_name = NULL;
+  gchar *desktop_file;
+
+  desktop_file = g_strconcat (g_get_prgname (), ".desktop", NULL);
+  app_info = g_desktop_app_info_new (desktop_file);
+  g_free (desktop_file);
+
+  if (app_info != NULL)
+    app_name = g_app_info_get_name (G_APP_INFO (app_info));
+
+  if (app_name != NULL)
+    retval = g_strdup (app_name);
+
+  g_clear_object (&app_info);
+#endif /* HAVE_GIO_UNIX */
+
+  return retval;
+}
+
 static void
 gtk_application_window_update_shell_shows_app_menu (GtkApplicationWindow *window,
                                                     GtkSettings          *settings)
@@ -282,33 +308,25 @@ gtk_application_window_update_shell_shows_app_menu (GtkApplicationWindow *window
 
           if (app_menu != NULL)
             {
-              const gchar *name;
-              GDesktopAppInfo *app_info = NULL;
+              const gchar *app_name;
+              gchar *name;
 
-              name = g_get_application_name ();
-              if (name == g_get_prgname ())
+              app_name = g_get_application_name ();
+              if (app_name != g_get_prgname ())
                 {
-                  const gchar *app_name = NULL;
-
-#ifdef HAVE_GIO_UNIX
-                  gchar *desktop_name;
-
-                  desktop_name = g_strconcat (name, ".desktop", NULL);
-                  app_info = g_desktop_app_info_new (desktop_name);
-                  if (app_info != NULL)
-                    app_name = g_app_info_get_name (G_APP_INFO (app_info));
-
-                  g_free (desktop_name);
-#endif /* HAVE_GIO_UNIX */
-
-                  if (app_name != NULL &&
-                      g_strcmp0 (app_name, name) != 0)
-                    name = app_name;
-                  else
-                    name = _("Application");
+                  /* the app has set its application name, use it */
+                  name = g_strdup (app_name);
                 }
+              else
+                {
+                  /* get the name from .desktop file */
+                  name = gtk_application_window_get_app_desktop_name ();
+                  if (name == NULL)
+                    name = g_strdup (_("Application"));
+                }
+
               g_menu_append_submenu (window->priv->app_menu_section, name, app_menu);
-              g_clear_object (&app_info);
+              g_free (name);
             }
         }
     }
