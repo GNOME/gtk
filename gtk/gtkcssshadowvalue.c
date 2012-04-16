@@ -440,13 +440,12 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
                                  cairo_t             *cr,
                                  const GtkRoundedBox *padding_box)
 {
-  GtkRoundedBox box;
-  double spread;
+  GtkRoundedBox box, clip_box;
+  double spread, radius;
 
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
   cairo_save (cr);
-  cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
 
   _gtk_rounded_box_path (padding_box, cr);
   cairo_clip (cr);
@@ -458,11 +457,20 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
   spread = _gtk_css_number_value_get (shadow->spread, 0);
   _gtk_rounded_box_shrink (&box, spread, spread, spread, spread);
 
+  clip_box = *padding_box;
+  radius = _gtk_css_number_value_get (shadow->radius, 0);
+  _gtk_rounded_box_shrink (&clip_box, -radius, -radius, -radius, -radius);
+
+  cr = gtk_css_shadow_value_start_drawing (shadow, cr);
+
+  cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
   _gtk_rounded_box_path (&box, cr);
-  _gtk_rounded_box_clip_path (padding_box, cr);
+  _gtk_rounded_box_clip_path (&clip_box, cr);
 
   gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
   cairo_fill (cr);
+
+  cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
 
   cairo_restore (cr);
 }
