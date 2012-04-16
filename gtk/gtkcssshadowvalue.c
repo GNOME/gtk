@@ -440,11 +440,39 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
   spread = _gtk_css_number_value_get (shadow->spread, 0);
   _gtk_rounded_box_shrink (&box, spread, spread, spread, spread);
 
-  _gtk_rounded_box_path (&box, cr);
-  _gtk_rounded_box_clip_path (padding_box, cr);
+  if (_gtk_css_number_value_get (shadow->radius, 0) > 0)
+    {
+      cairo_t *blur_cr;
+      cairo_surface_t *surface;
 
-  gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
-  cairo_fill (cr);
+      _gtk_css_shadow_value_blur_surface_create (shadow, cr,
+                                                 &blur_cr, &surface);
+
+      /* Create the path on the surface to blur. */
+      _gtk_rounded_box_path (padding_box, blur_cr);
+      cairo_clip (blur_cr);
+
+      _gtk_rounded_box_path (&box, blur_cr);
+      _gtk_rounded_box_clip_path (padding_box, blur_cr);
+
+      cairo_set_fill_rule (blur_cr, CAIRO_FILL_RULE_EVEN_ODD);
+
+      gdk_cairo_set_source_rgba (blur_cr, _gtk_css_rgba_value_get_rgba (shadow->color));
+      cairo_fill (blur_cr);
+
+      _gtk_css_shadow_value_blur_surface_paint (shadow, cr, surface);
+
+      cairo_destroy (blur_cr);
+      cairo_surface_destroy (surface);
+    }
+  else
+    {
+      _gtk_rounded_box_path (&box, cr);
+      _gtk_rounded_box_clip_path (padding_box, cr);
+
+      gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
+      cairo_fill (cr);
+    }
 
   cairo_restore (cr);
 }
