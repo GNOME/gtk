@@ -163,7 +163,7 @@ set_pixbuf (GdkWaylandCursor *cursor, GdkPixbuf *pixbuf)
 }
 
 static GdkCursor *
-create_cursor(GdkDisplayWayland *display, GdkPixbuf *pixbuf, int x, int y)
+create_cursor(GdkWaylandDisplay *display, GdkPixbuf *pixbuf, int x, int y)
 {
   GdkWaylandCursor *cursor;
   int stride, fd;
@@ -251,7 +251,7 @@ GdkCursor *
 _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
 					  GdkCursorType  cursor_type)
 {
-  GdkDisplayWayland *wayland_display;
+  GdkWaylandDisplay *wayland_display;
   GdkPixbuf *pixbuf = NULL;
   GError *error = NULL;
   int i;
@@ -269,7 +269,7 @@ _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
       i = 0;
     }
 
-  wayland_display = GDK_DISPLAY_WAYLAND (display);
+  wayland_display = GDK_WAYLAND_DISPLAY (display);
   if (!wayland_display->cursors)
     wayland_display->cursors =
       g_new0 (GdkCursor *, G_N_ELEMENTS(cursor_definitions));

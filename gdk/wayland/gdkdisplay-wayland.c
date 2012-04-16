@@ -38,17 +38,17 @@
 #include "gdkkeysprivate.h"
 #include "gdkprivate-wayland.h"
 
-G_DEFINE_TYPE (GdkDisplayWayland, _gdk_display_wayland, GDK_TYPE_DISPLAY)
+G_DEFINE_TYPE (GdkWaylandDisplay, _gdk_wayland_display, GDK_TYPE_DISPLAY)
 
 static void
 gdk_input_init (GdkDisplay *display)
 {
-  GdkDisplayWayland *display_wayland;
+  GdkWaylandDisplay *display_wayland;
   GdkDeviceManager *device_manager;
   GdkDevice *device;
   GList *list, *l;
 
-  display_wayland = GDK_DISPLAY_WAYLAND (display);
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
   device_manager = gdk_display_get_device_manager (display);
 
   /* For backwards compatibility, just add
@@ -120,7 +120,7 @@ static void
 gdk_display_handle_global(struct wl_display *display, uint32_t id,
 			  const char *interface, uint32_t version, void *data)
 {
-  GdkDisplayWayland *display_wayland = data;
+  GdkWaylandDisplay *display_wayland = data;
   GdkDisplay *gdk_display = GDK_DISPLAY_OBJECT (data);
   struct wl_input_device *input;
 
@@ -151,15 +151,15 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
 static gboolean
 gdk_display_init_egl(GdkDisplay *display)
 {
-  GdkDisplayWayland *display_wayland = GDK_DISPLAY_WAYLAND (display);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLint major, minor, i;
   void *p;
 
   static const struct { const char *f; unsigned int offset; }
   extension_functions[] = {
-    { "glEGLImageTargetTexture2DOES", offsetof(GdkDisplayWayland, image_target_texture_2d) },
-    { "eglCreateImageKHR", offsetof(GdkDisplayWayland, create_image) },
-    { "eglDestroyImageKHR", offsetof(GdkDisplayWayland, destroy_image) }
+    { "glEGLImageTargetTexture2DOES", offsetof(GdkWaylandDisplay, image_target_texture_2d) },
+    { "eglCreateImageKHR", offsetof(GdkWaylandDisplay, create_image) },
+    { "eglDestroyImageKHR", offsetof(GdkWaylandDisplay, destroy_image) }
   };
 
   display_wayland->egl_display =
@@ -210,14 +210,14 @@ _gdk_wayland_display_open (const gchar *display_name)
 {
   struct wl_display *wl_display;
   GdkDisplay *display;
-  GdkDisplayWayland *display_wayland;
+  GdkWaylandDisplay *display_wayland;
 
   wl_display = wl_display_connect(display_name);
   if (!wl_display)
     return NULL;
 
-  display = g_object_new (GDK_TYPE_DISPLAY_WAYLAND, NULL);
-  display_wayland = GDK_DISPLAY_WAYLAND (display);
+  display = g_object_new (GDK_TYPE_WAYLAND_DISPLAY, NULL);
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   display_wayland->wl_display = wl_display;
 
@@ -250,7 +250,7 @@ _gdk_wayland_display_open (const gchar *display_name)
 static void
 gdk_wayland_display_dispose (GObject *object)
 {
-  GdkDisplayWayland *display_wayland = GDK_DISPLAY_WAYLAND (object);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (object);
 
   _gdk_wayland_display_manager_remove_display (gdk_display_manager_get (),
 					       GDK_DISPLAY (display_wayland));
@@ -270,13 +270,13 @@ gdk_wayland_display_dispose (GObject *object)
   eglTerminate(display_wayland->egl_display);
 #endif
 
-  G_OBJECT_CLASS (_gdk_display_wayland_parent_class)->dispose (object);
+  G_OBJECT_CLASS (_gdk_wayland_display_parent_class)->dispose (object);
 }
 
 static void
 gdk_wayland_display_finalize (GObject *object)
 {
-  GdkDisplayWayland *display_wayland = GDK_DISPLAY_WAYLAND (object);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (object);
 
   /* Keymap */
   if (display_wayland->keymap)
@@ -289,7 +289,7 @@ gdk_wayland_display_finalize (GObject *object)
 
   g_free (display_wayland->startup_notification_id);
 
-  G_OBJECT_CLASS (_gdk_display_wayland_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_wayland_display_parent_class)->finalize (object);
 }
 
 static const gchar *
@@ -311,7 +311,7 @@ gdk_wayland_display_get_screen (GdkDisplay *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (screen_num == 0, NULL);
 
-  return GDK_DISPLAY_WAYLAND (display)->screen;
+  return GDK_WAYLAND_DISPLAY (display)->screen;
 }
 
 static GdkScreen *
@@ -319,7 +319,7 @@ gdk_wayland_display_get_default_screen (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return GDK_DISPLAY_WAYLAND (display)->screen;
+  return GDK_WAYLAND_DISPLAY (display)->screen;
 }
 
 static void
@@ -331,11 +331,11 @@ gdk_wayland_display_beep (GdkDisplay *display)
 static void
 gdk_wayland_display_sync (GdkDisplay *display)
 {
-  GdkDisplayWayland *display_wayland;
+  GdkWaylandDisplay *display_wayland;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  display_wayland = GDK_DISPLAY_WAYLAND (display);
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   wl_display_roundtrip(display_wayland->wl_display);
 }
@@ -347,7 +347,7 @@ gdk_wayland_display_flush (GdkDisplay *display)
 
   if (!display->closed)
     _gdk_wayland_display_flush (display,
-				GDK_DISPLAY_WAYLAND (display)->event_source);
+				GDK_WAYLAND_DISPLAY (display)->event_source);
 }
 
 static gboolean
@@ -417,7 +417,7 @@ gdk_wayland_display_list_devices (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return GDK_DISPLAY_WAYLAND (display)->input_devices;
+  return GDK_WAYLAND_DISPLAY (display)->input_devices;
 }
 
 static void
@@ -531,10 +531,10 @@ gdk_wayland_display_event_data_free (GdkDisplay *display,
 static GdkKeymap *
 gdk_wayland_display_get_keymap (GdkDisplay *display)
 {
-  GdkDisplayWayland *display_wayland;
+  GdkWaylandDisplay *display_wayland;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  display_wayland = GDK_DISPLAY_WAYLAND (display);
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   if (!display_wayland->keymap)
     display_wayland->keymap = _gdk_wayland_keymap_new (display);
@@ -555,7 +555,7 @@ gdk_wayland_display_pop_error_trap (GdkDisplay *display,
 }
 
 static void
-_gdk_display_wayland_class_init (GdkDisplayWaylandClass * class)
+_gdk_wayland_display_class_init (GdkWaylandDisplayClass * class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);
@@ -610,7 +610,7 @@ _gdk_display_wayland_class_init (GdkDisplayWaylandClass * class)
 }
 
 static void
-_gdk_display_wayland_init (GdkDisplayWayland *display)
+_gdk_wayland_display_init (GdkWaylandDisplay *display)
 {
   _gdk_wayland_display_manager_add_display (gdk_display_manager_get (),
 					    GDK_DISPLAY (display));

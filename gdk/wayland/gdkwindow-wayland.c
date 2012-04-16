@@ -310,7 +310,7 @@ typedef struct _GdkWaylandCairoSurfaceData {
   size_t buf_length;
 #endif
   struct wl_buffer *buffer;
-  GdkDisplayWayland *display;
+  GdkWaylandDisplay *display;
   int32_t width, height;
 } GdkWaylandCairoSurfaceData;
 
@@ -388,7 +388,7 @@ gdk_wayland_cairo_surface_destroy (void *p)
 }
 
 static cairo_surface_t *
-gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
+gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
 				  int width, int height)
 {
   GdkWaylandCairoSurfaceData *data;
@@ -486,7 +486,7 @@ gdk_wayland_cairo_surface_destroy (void *p)
 }
 
 static cairo_surface_t *
-gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
+gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
 				  int width, int height)
 {
   GdkWaylandCairoSurfaceData *data;
@@ -530,8 +530,8 @@ static cairo_surface_t *
 gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkDisplayWayland *display_wayland =
-    GDK_DISPLAY_WAYLAND (gdk_window_get_display (impl->wrapper));
+  GdkWaylandDisplay *display_wayland =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (impl->wrapper));
 
   if (GDK_WINDOW_DESTROYED (impl->wrapper))
     return NULL;
@@ -679,12 +679,12 @@ static void
 gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
 {
   GdkDisplay *display;
-  GdkDisplayWayland *display_wayland;
+  GdkWaylandDisplay *display_wayland;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkEvent *event;
 
   display = gdk_window_get_display (window);
-  display_wayland = GDK_DISPLAY_WAYLAND (display);
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   if (impl->user_time != 0 &&
       display_wayland->user_time != 0 &&

@@ -350,7 +350,7 @@ input_handle_motion(void *data, struct wl_input_device *input_device,
 		    int32_t x, int32_t y, int32_t sx, int32_t sy)
 {
   GdkWaylandDevice *device = data;
-  GdkDisplayWayland *display = GDK_DISPLAY_WAYLAND (device->display);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
   GdkEvent *event;
 
   event = gdk_event_new (GDK_NOTHING);
@@ -386,7 +386,7 @@ input_handle_button(void *data, struct wl_input_device *input_device,
 		     uint32_t time, uint32_t button, uint32_t state)
 {
   GdkWaylandDevice *device = data;
-  GdkDisplayWayland *display = GDK_DISPLAY_WAYLAND (device->display);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
   GdkEvent *event;
   uint32_t modifier;
   int gdk_button;
@@ -911,14 +911,14 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 					struct wl_input_device *wl_device)
 {
   GdkDisplay *display;
-  GdkDisplayWayland *display_wayland;
+  GdkWaylandDisplay *display_wayland;
   GdkDeviceManagerCore *device_manager_core =
     GDK_DEVICE_MANAGER_CORE(device_manager);
   GdkWaylandDevice *device;
 
   device = g_new0 (GdkWaylandDevice, 1);
   display = gdk_device_manager_get_display (device_manager);
-  display_wayland = GDK_DISPLAY_WAYLAND (display);
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   device->display = display;
   device->pointer = g_object_new (GDK_TYPE_DEVICE_CORE,
@@ -1258,7 +1258,7 @@ gdk_wayland_device_offer_selection_content (GdkDevice                           
                                             gpointer                               userdata)
 {
   GdkDisplay *display;
-  GdkDisplayWayland *display_wayland;
+  GdkWaylandDisplay *display_wayland;
   GdkWaylandSelectionOffer *offer;
   GdkWaylandDevice *device;
   gint i;
@@ -1267,7 +1267,7 @@ gdk_wayland_device_offer_selection_content (GdkDevice                           
   device = GDK_DEVICE_CORE (gdk_device)->device;
 
   display = device->display;
-  display_wayland = GDK_DISPLAY_WAYLAND (display);
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   offer = g_new0 (GdkWaylandSelectionOffer, 1);
   offer->cb = cb;

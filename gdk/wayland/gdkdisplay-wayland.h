@@ -19,8 +19,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_DISPLAY_WAYLAND__
-#define __GDK_DISPLAY_WAYLAND__
+#ifndef __GDK_WAYLAND_DISPLAY__
+#define __GDK_WAYLAND_DISPLAY__
 
 #include <config.h>
 #include <stdint.h>
@@ -45,17 +45,17 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkDisplayWayland GdkDisplayWayland;
-typedef struct _GdkDisplayWaylandClass GdkDisplayWaylandClass;
+typedef struct _GdkWaylandDisplay GdkWaylandDisplay;
+typedef struct _GdkWaylandDisplayClass GdkWaylandDisplayClass;
 
-#define GDK_TYPE_DISPLAY_WAYLAND              (_gdk_display_wayland_get_type())
-#define GDK_DISPLAY_WAYLAND(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_WAYLAND, GdkDisplayWayland))
-#define GDK_DISPLAY_WAYLAND_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY_WAYLAND, GdkDisplayWaylandClass))
-#define GDK_IS_DISPLAY_WAYLAND(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DISPLAY_WAYLAND))
-#define GDK_IS_DISPLAY_WAYLAND_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY_WAYLAND))
-#define GDK_DISPLAY_WAYLAND_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY_WAYLAND, GdkDisplayWaylandClass))
+#define GDK_TYPE_WAYLAND_DISPLAY              (_gdk_wayland_display_get_type())
+#define GDK_WAYLAND_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_DISPLAY, GdkWaylandDisplay))
+#define GDK_WAYLAND_DISPLAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WAYLAND_DISPLAY, GdkWaylandDisplayClass))
+#define GDK_IS_WAYLAND_DISPLAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_DISPLAY))
+#define GDK_IS_WAYLAND_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WAYLAND_DISPLAY))
+#define GDK_WAYLAND_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WAYLAND_DISPLAY, GdkWaylandDisplayClass))
 
-struct _GdkDisplayWayland
+struct _GdkWaylandDisplay
 {
   GdkDisplay parent_instance;
   GdkScreen *screen;
@@ -97,13 +97,13 @@ struct _GdkDisplayWayland
 #endif
 };
 
-struct _GdkDisplayWaylandClass
+struct _GdkWaylandDisplayClass
 {
   GdkDisplayClass parent_class;
 };
 
-GType      _gdk_display_wayland_get_type            (void);
+GType      _gdk_wayland_display_get_type            (void);
 
 G_END_DECLS
 
-#endif				/* __GDK_DISPLAY_WAYLAND__ */
+#endif				/* __GDK_WAYLAND_DISPLAY__ */
