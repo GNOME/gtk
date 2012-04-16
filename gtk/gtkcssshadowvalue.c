@@ -432,12 +432,36 @@ _gtk_css_shadow_value_paint_spinner (const GtkCssValue *shadow,
 
   cairo_save (cr);
 
-  cairo_translate (cr,
-                   _gtk_css_number_value_get (shadow->hoffset, 0),
-                   _gtk_css_number_value_get (shadow->voffset, 0));
-  _gtk_theming_engine_paint_spinner (cr,
-                                     radius, progress,
-                                     _gtk_css_rgba_value_get_rgba (shadow->color));
+  if (_gtk_css_number_value_get (shadow->radius, 0) > 0)
+    {
+      cairo_t *blur_cr;
+      cairo_surface_t *surface;
+
+      _gtk_css_shadow_value_blur_surface_create (shadow, cr,
+                                                 &blur_cr, &surface);
+
+      /* Create the path on the surface to blur. */
+      cairo_translate (blur_cr,
+                       _gtk_css_number_value_get (shadow->hoffset, 0),
+                       _gtk_css_number_value_get (shadow->voffset, 0));
+      _gtk_theming_engine_paint_spinner (blur_cr,
+                                         radius, progress,
+                                         _gtk_css_rgba_value_get_rgba (shadow->color));
+
+      _gtk_css_shadow_value_blur_surface_paint (shadow, cr, surface);
+
+      cairo_destroy (blur_cr);
+      cairo_surface_destroy (surface);
+    }
+  else
+    {
+      cairo_translate (cr,
+                       _gtk_css_number_value_get (shadow->hoffset, 0),
+                       _gtk_css_number_value_get (shadow->voffset, 0));
+      _gtk_theming_engine_paint_spinner (cr,
+                                         radius, progress,
+                                         _gtk_css_rgba_value_get_rgba (shadow->color));
+    }
 
   cairo_restore (cr);
 }
