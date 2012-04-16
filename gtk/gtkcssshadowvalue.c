@@ -430,12 +430,16 @@ _gtk_css_shadow_value_paint_spinner (const GtkCssValue *shadow,
 
   cairo_save (cr);
 
+  cr = gtk_css_shadow_value_start_drawing (shadow, cr);
+
   cairo_translate (cr,
                    _gtk_css_number_value_get (shadow->hoffset, 0),
                    _gtk_css_number_value_get (shadow->voffset, 0));
   _gtk_theming_engine_paint_spinner (cr,
                                      radius, progress,
                                      _gtk_css_rgba_value_get_rgba (shadow->color));
+
+  cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
 
   cairo_restore (cr);
 }
