@@ -22,7 +22,7 @@ gtk3_widget_factory_LDADD = \
 	$(top_builddir)/gtk/libgtk-3.la \
 	$(GTK_DEP_LIBS)
 
-widget_factory_resources.c: widget-factory.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies $(srcdir)/widget-factory.gresource.xml)
+widget_factory_resources.c: widget-factory.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(srcdir)/widget-factory.gresource.xml)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $<
 
 EXTRA_DIST += \
