@@ -9,18 +9,18 @@
 # Deng Xiyue <manphiz@gmail.com>, 2007, 2008, 2009.
 # Hinker Liu <hinkerliu@gmail.com>, 2010.
 # Aron Xu <aronxu@gnome.org>, 2010, 2011.
-# Yinghua Wang <wantinghard@gmail.com>, 2010, 2011.
+# Wylmer Wang <wantinghard@gmail.com>, 2010-2012.
 # wei Li <lw124124@gmail.com>, 2011.
-# YunQiang Su <wzssyqa@gmail.com>, 2011.
+# YunQiang Su <wzssyqa@gmail.com>, 2011, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.properties master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-03-15 15:08+0000\n"
+"POT-Creation-Date: 2012-04-14 01:35+0000\n"
 "PO-Revision-Date: 2012-03-20 17:01+0000\n"
-"Last-Translator: YunQiang Su <wzssyqa@gmail.com>\n"
+"Last-Translator: Wylmer Wang <wantinghard@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -175,7 +175,7 @@ msgstr "单元格绘制器"
 
 #: ../gtk/a11y/gtkrenderercellaccessible.c:94
 msgid "The cell renderer represented by this accessible"
-msgstr ""
+msgstr "这一可访问项所代表的单元格绘制器"
 
 #: ../gtk/deprecated/gtkcolorsel.c:323
 msgid "Has Opacity Control"
@@ -265,9 +265,9 @@ msgstr "预览文字"
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "为了演示选中字体而显示的文字"
 
-#: ../gtk/deprecated/gtkhandlebox.c:224 ../gtk/gtkcombobox.c:1065
+#: ../gtk/deprecated/gtkhandlebox.c:224 ../gtk/gtkcombobox.c:1066
 #: ../gtk/gtkentry.c:892 ../gtk/gtkmenubar.c:216 ../gtk/gtkstatusbar.c:182
-#: ../gtk/gtktoolbar.c:614 ../gtk/gtkviewport.c:155
+#: ../gtk/gtktoolbar.c:615 ../gtk/gtkviewport.c:155
 msgid "Shadow type"
 msgstr "阴影类型"
 
@@ -313,11 +313,11 @@ msgid ""
 "detached."
 msgstr "用来表示手柄框的子控件是附属还是分离的二进制值"
 
-#: ../gtk/deprecated/gtkstyle.c:473
+#: ../gtk/deprecated/gtkstyle.c:474
 msgid "Style context"
 msgstr "风格方面"
 
-#: ../gtk/deprecated/gtkstyle.c:474
+#: ../gtk/deprecated/gtkstyle.c:475
 msgid "GtkStyleContext to get style from"
 msgstr "获得 GtkStyleContext 的风格"
 
@@ -337,24 +337,24 @@ msgstr "列数"
 msgid "The number of columns in the table"
 msgstr "表格的列数"
 
-#: ../gtk/deprecated/gtktable.c:209 ../gtk/gtkgrid.c:1388
+#: ../gtk/deprecated/gtktable.c:209 ../gtk/gtkgrid.c:1391
 msgid "Row spacing"
 msgstr "行距"
 
-#: ../gtk/deprecated/gtktable.c:210 ../gtk/gtkgrid.c:1389
+#: ../gtk/deprecated/gtktable.c:210 ../gtk/gtkgrid.c:1392
 msgid "The amount of space between two consecutive rows"
 msgstr "两行之间的间距"
 
-#: ../gtk/deprecated/gtktable.c:218 ../gtk/gtkgrid.c:1395
+#: ../gtk/deprecated/gtktable.c:218 ../gtk/gtkgrid.c:1398
 msgid "Column spacing"
 msgstr "列距"
 
-#: ../gtk/deprecated/gtktable.c:219 ../gtk/gtkgrid.c:1396
+#: ../gtk/deprecated/gtktable.c:219 ../gtk/gtkgrid.c:1399
 msgid "The amount of space between two consecutive columns"
 msgstr "两列之间的间距"
 
-#: ../gtk/deprecated/gtktable.c:227 ../gtk/gtkbox.c:250
-#: ../gtk/gtktoolbar.c:564 ../gtk/gtktoolitemgroup.c:1645
+#: ../gtk/deprecated/gtktable.c:227 ../gtk/gtkbox.c:251
+#: ../gtk/gtktoolbar.c:565 ../gtk/gtktoolitemgroup.c:1645
 msgid "Homogeneous"
 msgstr "统一大小"
 
@@ -362,11 +362,11 @@ msgstr "统一大小"
 msgid "If TRUE, the table cells are all the same width/height"
 msgstr "若为 TRUE 表示表格中所有单元格的宽度/高度都一样"
 
-#: ../gtk/deprecated/gtktable.c:235 ../gtk/gtkgrid.c:1416
+#: ../gtk/deprecated/gtktable.c:235 ../gtk/gtkgrid.c:1419
 msgid "Left attachment"
 msgstr "左侧附加"
 
-#: ../gtk/deprecated/gtktable.c:236 ../gtk/gtkgrid.c:1417 ../gtk/gtkmenu.c:726
+#: ../gtk/deprecated/gtktable.c:236 ../gtk/gtkgrid.c:1420 ../gtk/gtkmenu.c:727
 msgid "The column number to attach the left side of the child to"
 msgstr "将子部件左侧附加到哪一列"
 
@@ -378,7 +378,7 @@ msgstr "右侧附加"
 msgid "The column number to attach the right side of a child widget to"
 msgstr "将子部件右侧附加到哪一列"
 
-#: ../gtk/deprecated/gtktable.c:249 ../gtk/gtkgrid.c:1423
+#: ../gtk/deprecated/gtktable.c:249 ../gtk/gtkgrid.c:1426
 msgid "Top attachment"
 msgstr "上侧附加"
 
@@ -390,7 +390,7 @@ msgstr "将子部件上侧附加到哪一行"
 msgid "Bottom attachment"
 msgstr "下侧附加"
 
-#: ../gtk/deprecated/gtktable.c:257 ../gtk/gtkmenu.c:750
+#: ../gtk/deprecated/gtktable.c:257 ../gtk/gtkmenu.c:751
 msgid "The row number to attach the bottom of the child to"
 msgstr "将子部件下侧附加到哪一行"
 
@@ -570,7 +570,7 @@ msgstr "部件"
 
 #: ../gtk/gtkaccessible.c:159
 msgid "The widget referenced by this accessible."
-msgstr ""
+msgstr "这一可访问项所代表的部件。"
 
 #: ../gtk/gtkactionable.c:70
 msgid "action name"
@@ -598,7 +598,7 @@ msgid "A unique name for the action."
 msgstr "动作的唯一名称。"
 
 #: ../gtk/gtkaction.c:239 ../gtk/gtkbutton.c:235 ../gtk/gtkexpander.c:288
-#: ../gtk/gtkframe.c:169 ../gtk/gtklabel.c:726 ../gtk/gtkmenuitem.c:375
+#: ../gtk/gtkframe.c:170 ../gtk/gtklabel.c:726 ../gtk/gtkmenuitem.c:375
 #: ../gtk/gtktoolbutton.c:239 ../gtk/gtktoolitemgroup.c:1592
 msgid "Label"
 msgstr "标签"
@@ -767,7 +767,7 @@ msgid "Whether to use the related actions appearance properties"
 msgstr "是否使用相关的动作外观特性"
 
 #: ../gtk/gtkadjustment.c:121 ../gtk/gtkcellrendererprogress.c:136
-#: ../gtk/gtkscalebutton.c:218 ../gtk/gtkspinbutton.c:377
+#: ../gtk/gtkscalebutton.c:218 ../gtk/gtkspinbutton.c:378
 msgid "Value"
 msgstr "值"
 
@@ -981,36 +981,35 @@ msgstr "Widget 默认的文本"
 msgid "The default text appearing when there are no applications"
 msgstr "当没有应用程序时，显示默认文本"
 
-#: ../gtk/gtkapplication.c:754
+#: ../gtk/gtkapplication.c:757
 msgid "Register session"
 msgstr "注册会话"
 
-#: ../gtk/gtkapplication.c:755
+#: ../gtk/gtkapplication.c:758
 msgid "Register with the session manager"
 msgstr "向会话管理器注册"
 
-#: ../gtk/gtkapplication.c:760
+#: ../gtk/gtkapplication.c:763
 msgid "Application menu"
 msgstr "应用程序菜单"
 
-#: ../gtk/gtkapplication.c:761
+#: ../gtk/gtkapplication.c:764
 msgid "The GMenuModel for the application menu"
 msgstr "应用程序菜单所使用的 GMenuModel"
 
-#: ../gtk/gtkapplication.c:767
+#: ../gtk/gtkapplication.c:770
 msgid "Menubar"
 msgstr "菜单栏"
 
-#: ../gtk/gtkapplication.c:768
+#: ../gtk/gtkapplication.c:771
 msgid "The GMenuModel for the menubar"
 msgstr "菜单栏所使用的 GMenuModel"
 
-#: ../gtk/gtkapplicationwindow.c:952
+#: ../gtk/gtkapplicationwindow.c:977
 msgid "Show a menubar"
 msgstr "显示菜单栏"
 
-#: ../gtk/gtkapplicationwindow.c:953
-#| msgid "TRUE if the window should not be in the pager."
+#: ../gtk/gtkapplicationwindow.c:978
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr "TRUE 则窗口应在顶端显示菜单栏。"
 
@@ -1030,7 +1029,7 @@ msgstr "箭头阴影"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "箭头周围阴影的外观"
 
-#: ../gtk/gtkarrow.c:127 ../gtk/gtkcombobox.c:1049 ../gtk/gtkmenu.c:763
+#: ../gtk/gtkarrow.c:127 ../gtk/gtkcombobox.c:1050 ../gtk/gtkmenu.c:764
 #: ../gtk/gtkmenuitem.c:438
 msgid "Arrow Scaling"
 msgstr "箭头的缩放比例"
@@ -1187,63 +1186,63 @@ msgstr "不统一尺寸"
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "若为 TRUE，子部件可不受统一尺寸的限制"
 
-#: ../gtk/gtkbox.c:240 ../gtk/gtkcellareabox.c:315 ../gtk/gtkexpander.c:312
+#: ../gtk/gtkbox.c:241 ../gtk/gtkcellareabox.c:315 ../gtk/gtkexpander.c:312
 #: ../gtk/gtkiconview.c:510 ../gtk/gtktreeviewcolumn.c:282
 msgid "Spacing"
 msgstr "间距"
 
-#: ../gtk/gtkbox.c:241
+#: ../gtk/gtkbox.c:242
 msgid "The amount of space between children"
 msgstr "子部件间的间距总和"
 
-#: ../gtk/gtkbox.c:251
+#: ../gtk/gtkbox.c:252
 msgid "Whether the children should all be the same size"
 msgstr "子部件是否使用统一大小"
 
-#: ../gtk/gtkbox.c:271 ../gtk/gtkcellareabox.c:335 ../gtk/gtktoolbar.c:556
+#: ../gtk/gtkbox.c:272 ../gtk/gtkcellareabox.c:335 ../gtk/gtktoolbar.c:557
 #: ../gtk/gtktoolitemgroup.c:1652 ../gtk/gtktoolpalette.c:1069
 #: ../gtk/gtktreeviewcolumn.c:338
 msgid "Expand"
 msgstr "展开"
 
-#: ../gtk/gtkbox.c:272
+#: ../gtk/gtkbox.c:273
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "子部件是否在父部件增长时获得额外空间"
 
-#: ../gtk/gtkbox.c:288 ../gtk/gtktoolitemgroup.c:1659
+#: ../gtk/gtkbox.c:289 ../gtk/gtktoolitemgroup.c:1659
 msgid "Fill"
 msgstr "填充"
 
-#: ../gtk/gtkbox.c:289
+#: ../gtk/gtkbox.c:290
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr "给予子部件的额外空间是要分配给子部件还是要留空"
 
-#: ../gtk/gtkbox.c:296 ../gtk/gtktrayicon-x11.c:167
+#: ../gtk/gtkbox.c:297 ../gtk/gtktrayicon-x11.c:167
 msgid "Padding"
 msgstr "留空"
 
-#: ../gtk/gtkbox.c:297
+#: ../gtk/gtkbox.c:298
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr "子部件和其邻接部件之间的额外空间，以像素为单位"
 
-#: ../gtk/gtkbox.c:303
+#: ../gtk/gtkbox.c:304
 msgid "Pack type"
 msgstr "包裹类型"
 
-#: ../gtk/gtkbox.c:304
+#: ../gtk/gtkbox.c:305
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr "表明子部件是否要包裹于父部件的开始或结束内的 GtkPackType 值。"
 
-#: ../gtk/gtkbox.c:310 ../gtk/gtknotebook.c:765 ../gtk/gtkpaned.c:347
+#: ../gtk/gtkbox.c:311 ../gtk/gtknotebook.c:766 ../gtk/gtkpaned.c:348
 #: ../gtk/gtktoolitemgroup.c:1673
 msgid "Position"
 msgstr "位置"
 
-#: ../gtk/gtkbox.c:311 ../gtk/gtknotebook.c:766
+#: ../gtk/gtkbox.c:312 ../gtk/gtknotebook.c:767
 msgid "The index of the child in the parent"
 msgstr "子部件在父部件中的索引"
 
@@ -1282,7 +1281,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "如果设置的话，标签将用于拾取后备项目，而不是显示的项目"
 
-#: ../gtk/gtkbutton.c:259 ../gtk/gtkcombobox.c:855
+#: ../gtk/gtkbutton.c:259 ../gtk/gtkcombobox.c:856
 #: ../gtk/gtkfilechooserbutton.c:425
 msgid "Focus on click"
 msgstr "点击获得焦点"
@@ -1754,7 +1753,7 @@ msgstr "文字列"
 msgid "A column in the data source model to get the strings from"
 msgstr "用于获取字符串的数据源模型中的一列"
 
-#: ../gtk/gtkcellrenderercombo.c:169 ../gtk/gtkcombobox.c:922
+#: ../gtk/gtkcellrenderercombo.c:169 ../gtk/gtkcombobox.c:923
 msgid "Has Entry"
 msgstr "带输入"
 
@@ -1869,7 +1868,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "竖直方向的排列方式，从0(上对齐)到1(下对齐)"
 
 #: ../gtk/gtkcellrendererprogress.c:224 ../gtk/gtkprogressbar.c:150
-#: ../gtk/gtkrange.c:431
+#: ../gtk/gtkrange.c:429
 msgid "Inverted"
 msgstr "反转"
 
@@ -1877,12 +1876,12 @@ msgstr "反转"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "反转进度条增长的方向"
 
-#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:423
-#: ../gtk/gtkscalebutton.c:237 ../gtk/gtkspinbutton.c:316
+#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:421
+#: ../gtk/gtkscalebutton.c:237 ../gtk/gtkspinbutton.c:317
 msgid "Adjustment"
 msgstr "调整部件"
 
-#: ../gtk/gtkcellrendererspin.c:114 ../gtk/gtkspinbutton.c:317
+#: ../gtk/gtkcellrendererspin.c:114 ../gtk/gtkspinbutton.c:318
 msgid "The adjustment that holds the value of the spin button"
 msgstr "保存微调按钮值的调整"
 
@@ -1890,21 +1889,21 @@ msgstr "保存微调按钮值的调整"
 msgid "Climb rate"
 msgstr "爬升速率"
 
-#: ../gtk/gtkcellrendererspin.c:130 ../gtk/gtkspinbutton.c:325
+#: ../gtk/gtkcellrendererspin.c:130 ../gtk/gtkspinbutton.c:326
 msgid "The acceleration rate when you hold down a button"
 msgstr "当你按住一个按钮时的加速速率"
 
 #: ../gtk/gtkcellrendererspin.c:143 ../gtk/gtkscale.c:294
-#: ../gtk/gtkspinbutton.c:334
+#: ../gtk/gtkspinbutton.c:335
 msgid "Digits"
 msgstr "数字"
 
-#: ../gtk/gtkcellrendererspin.c:144 ../gtk/gtkspinbutton.c:335
+#: ../gtk/gtkcellrendererspin.c:144 ../gtk/gtkspinbutton.c:336
 msgid "The number of decimal places to display"
 msgstr "显示的小数点后位数"
 
 #: ../gtk/gtkcellrendererspinner.c:126 ../gtk/gtkcheckmenuitem.c:120
-#: ../gtk/gtkmenu.c:553 ../gtk/gtkspinner.c:114 ../gtk/gtkswitch.c:933
+#: ../gtk/gtkmenu.c:554 ../gtk/gtkspinner.c:114 ../gtk/gtkswitch.c:933
 #: ../gtk/gtktoggleaction.c:131 ../gtk/gtktogglebutton.c:176
 #: ../gtk/gtktoggletoolbutton.c:125
 msgid "Active"
@@ -2158,7 +2157,7 @@ msgstr ""
 "如果单元格渲染器没有足够的空间显示整个字符串，这里给出了将字符串拆为多行的方"
 "法"
 
-#: ../gtk/gtkcellrenderertext.c:596 ../gtk/gtkcombobox.c:744
+#: ../gtk/gtkcellrenderertext.c:596 ../gtk/gtkcombobox.c:745
 msgid "Wrap width"
 msgstr "换行宽度"
 
@@ -2357,13 +2356,13 @@ msgstr "CellView 模型"
 msgid "The model for cell view"
 msgstr "单元格视图的模型"
 
-#: ../gtk/gtkcellview.c:252 ../gtk/gtkcombobox.c:1008
+#: ../gtk/gtkcellview.c:252 ../gtk/gtkcombobox.c:1009
 #: ../gtk/gtkentrycompletion.c:446 ../gtk/gtkiconview.c:635
 #: ../gtk/gtktreemenu.c:327 ../gtk/gtktreeviewcolumn.c:426
 msgid "Cell Area"
 msgstr "单元格大小"
 
-#: ../gtk/gtkcellview.c:253 ../gtk/gtkcombobox.c:1009
+#: ../gtk/gtkcellview.c:253 ../gtk/gtkcombobox.c:1010
 #: ../gtk/gtkentrycompletion.c:447 ../gtk/gtkiconview.c:636
 #: ../gtk/gtktreemenu.c:328 ../gtk/gtktreeviewcolumn.c:427
 msgid "The GtkCellArea used to layout cells"
@@ -2495,97 +2494,97 @@ msgstr "可选中"
 msgid "Whether the swatch is selectable"
 msgstr "标签是否可选中"
 
-#: ../gtk/gtkcombobox.c:727
+#: ../gtk/gtkcombobox.c:728
 msgid "ComboBox model"
 msgstr "组合框模型"
 
-#: ../gtk/gtkcombobox.c:728
+#: ../gtk/gtkcombobox.c:729
 msgid "The model for the combo box"
 msgstr "组合框的模型"
 
-#: ../gtk/gtkcombobox.c:745
+#: ../gtk/gtkcombobox.c:746
 msgid "Wrap width for laying out the items in a grid"
 msgstr "在网格中排列项目时的换行宽度"
 
-#: ../gtk/gtkcombobox.c:767 ../gtk/gtktreemenu.c:381
+#: ../gtk/gtkcombobox.c:768 ../gtk/gtktreemenu.c:381
 msgid "Row span column"
 msgstr "行跨列"
 
-#: ../gtk/gtkcombobox.c:768 ../gtk/gtktreemenu.c:382
+#: ../gtk/gtkcombobox.c:769 ../gtk/gtktreemenu.c:382
 msgid "TreeModel column containing the row span values"
 msgstr "包含跨行值时的树型列"
 
-#: ../gtk/gtkcombobox.c:789 ../gtk/gtktreemenu.c:402
+#: ../gtk/gtkcombobox.c:790 ../gtk/gtktreemenu.c:402
 msgid "Column span column"
 msgstr "列跨列"
 
-#: ../gtk/gtkcombobox.c:790 ../gtk/gtktreemenu.c:403
+#: ../gtk/gtkcombobox.c:791 ../gtk/gtktreemenu.c:403
 msgid "TreeModel column containing the column span values"
 msgstr "包含跨列值时的树型列"
 
-#: ../gtk/gtkcombobox.c:811
+#: ../gtk/gtkcombobox.c:812
 msgid "Active item"
 msgstr "活动项"
 
-#: ../gtk/gtkcombobox.c:812
+#: ../gtk/gtkcombobox.c:813
 msgid "The item which is currently active"
 msgstr "当前活动的项目"
 
-#: ../gtk/gtkcombobox.c:831 ../gtk/gtkuimanager.c:482
+#: ../gtk/gtkcombobox.c:832 ../gtk/gtkuimanager.c:482
 msgid "Add tearoffs to menus"
 msgstr "在菜单上添加撕下标志"
 
-#: ../gtk/gtkcombobox.c:832
+#: ../gtk/gtkcombobox.c:833
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "下拉框是否应有分离菜单项"
 
-#: ../gtk/gtkcombobox.c:847 ../gtk/gtkentry.c:783
+#: ../gtk/gtkcombobox.c:848 ../gtk/gtkentry.c:783
 msgid "Has Frame"
 msgstr "有边框"
 
-#: ../gtk/gtkcombobox.c:848
+#: ../gtk/gtkcombobox.c:849
 msgid "Whether the combo box draws a frame around the child"
 msgstr "组合框是否在子项目周围绘制边框"
 
-#: ../gtk/gtkcombobox.c:856
+#: ../gtk/gtkcombobox.c:857
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "用鼠标点击复选框时复选框是否要获得焦点"
 
-#: ../gtk/gtkcombobox.c:871 ../gtk/gtkmenu.c:608
+#: ../gtk/gtkcombobox.c:872 ../gtk/gtkmenu.c:609
 msgid "Tearoff Title"
 msgstr "分离标题"
 
-#: ../gtk/gtkcombobox.c:872
+#: ../gtk/gtkcombobox.c:873
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "当此弹出被分离时可供窗口管理器显示的标题"
 
-#: ../gtk/gtkcombobox.c:889
+#: ../gtk/gtkcombobox.c:890
 msgid "Popup shown"
 msgstr "显示弹出"
 
-#: ../gtk/gtkcombobox.c:890
+#: ../gtk/gtkcombobox.c:891
 msgid "Whether the combo's dropdown is shown"
 msgstr "是否显示组合框的下拉按钮"
 
-#: ../gtk/gtkcombobox.c:906
+#: ../gtk/gtkcombobox.c:907
 msgid "Button Sensitivity"
 msgstr "按钮敏感"
 
-#: ../gtk/gtkcombobox.c:907
+#: ../gtk/gtkcombobox.c:908
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "当模型为空时下拉按钮是否敏感"
 
-#: ../gtk/gtkcombobox.c:923
+#: ../gtk/gtkcombobox.c:924
 msgid "Whether combo box has an entry"
 msgstr "组合框是否包含输入控件"
 
-#: ../gtk/gtkcombobox.c:938
+#: ../gtk/gtkcombobox.c:939
 msgid "Entry Text Column"
 msgstr "输入文本列"
 
-#: ../gtk/gtkcombobox.c:939
+#: ../gtk/gtkcombobox.c:940
 msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
@@ -2593,11 +2592,11 @@ msgstr ""
 "若组合框是通过 #GtkComboBox:has-entry = %TRUE 创建的，组合框模型中的这个列将"
 "关联到输入控件中的字符串"
 
-#: ../gtk/gtkcombobox.c:956
+#: ../gtk/gtkcombobox.c:957
 msgid "ID Column"
 msgstr "列数"
 
-#: ../gtk/gtkcombobox.c:957
+#: ../gtk/gtkcombobox.c:958
 msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
@@ -2605,69 +2604,69 @@ msgstr ""
 "若组合框是通过 #GtkComboBox:has-entry = %TRUE 创建的，组合框模型中的这个列将"
 "关联到输入控件中的字符串"
 
-#: ../gtk/gtkcombobox.c:972
+#: ../gtk/gtkcombobox.c:973
 msgid "Active id"
 msgstr "活动 ID"
 
-#: ../gtk/gtkcombobox.c:973
+#: ../gtk/gtkcombobox.c:974
 msgid "The value of the id column for the active row"
 msgstr "活动行的 ID 列的值"
 
-#: ../gtk/gtkcombobox.c:988
+#: ../gtk/gtkcombobox.c:989
 msgid "Popup Fixed Width"
 msgstr "固定宽度弹出"
 
-#: ../gtk/gtkcombobox.c:989
+#: ../gtk/gtkcombobox.c:990
 msgid ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
 msgstr "弹出的宽度是否应为与组合框所分配宽度相匹配的固定宽度"
 
-#: ../gtk/gtkcombobox.c:1015
+#: ../gtk/gtkcombobox.c:1016
 msgid "Appears as list"
 msgstr "表现为列表"
 
-#: ../gtk/gtkcombobox.c:1016
+#: ../gtk/gtkcombobox.c:1017
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "下拉框是否要显示为列表而不是菜单"
 
-#: ../gtk/gtkcombobox.c:1032
+#: ../gtk/gtkcombobox.c:1033
 msgid "Arrow Size"
 msgstr "箭头大小"
 
-#: ../gtk/gtkcombobox.c:1033
+#: ../gtk/gtkcombobox.c:1034
 msgid "The minimum size of the arrow in the combo box"
 msgstr "组合框中箭头大小的最小值"
 
-#: ../gtk/gtkcombobox.c:1050
+#: ../gtk/gtkcombobox.c:1051
 msgid "The amount of space used by the arrow"
 msgstr "箭头所占空间大小"
 
-#: ../gtk/gtkcombobox.c:1066
+#: ../gtk/gtkcombobox.c:1067
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "组合框周围应绘制哪种类型的阴影"
 
-#: ../gtk/gtkcontainer.c:456
+#: ../gtk/gtkcontainer.c:457
 msgid "Resize mode"
 msgstr "改变大小模式"
 
-#: ../gtk/gtkcontainer.c:457
+#: ../gtk/gtkcontainer.c:458
 msgid "Specify how resize events are handled"
 msgstr "指定如何处理改变大小事件"
 
-#: ../gtk/gtkcontainer.c:464
+#: ../gtk/gtkcontainer.c:465
 msgid "Border width"
 msgstr "边框宽度"
 
-#: ../gtk/gtkcontainer.c:465
+#: ../gtk/gtkcontainer.c:466
 msgid "The width of the empty border outside the containers children"
 msgstr "子部件容器外的空边框的宽度"
 
-#: ../gtk/gtkcontainer.c:473
+#: ../gtk/gtkcontainer.c:474
 msgid "Child"
 msgstr "子部件"
 
-#: ../gtk/gtkcontainer.c:474
+#: ../gtk/gtkcontainer.c:475
 msgid "Can be used to add a new child to the container"
 msgstr "可用于在容器内加入子部件"
 
@@ -3215,7 +3214,7 @@ msgstr "标签文字包含 XML 标记语言。参见 pango_parse_markup()"
 msgid "Space to put between the label and the child"
 msgstr "标签和子部件之间的空间"
 
-#: ../gtk/gtkexpander.c:322 ../gtk/gtkframe.c:204 ../gtk/gtktoolbutton.c:253
+#: ../gtk/gtkexpander.c:322 ../gtk/gtkframe.c:205 ../gtk/gtktoolbutton.c:253
 #: ../gtk/gtktoolitemgroup.c:1599
 msgid "Label widget"
 msgstr "标签部件"
@@ -3438,71 +3437,71 @@ msgstr "显示预览文字输入控件"
 msgid "Whether the preview text entry is shown or not"
 msgstr "是否显示预览文字输入控件"
 
-#: ../gtk/gtkframe.c:170
+#: ../gtk/gtkframe.c:171
 msgid "Text of the frame's label"
 msgstr "框架标签的文字"
 
-#: ../gtk/gtkframe.c:177
+#: ../gtk/gtkframe.c:178
 msgid "Label xalign"
 msgstr "标签水平排列"
 
-#: ../gtk/gtkframe.c:178
+#: ../gtk/gtkframe.c:179
 msgid "The horizontal alignment of the label"
 msgstr "标签的水平排列"
 
-#: ../gtk/gtkframe.c:186
+#: ../gtk/gtkframe.c:187
 msgid "Label yalign"
 msgstr "标签竖直排列"
 
-#: ../gtk/gtkframe.c:187
+#: ../gtk/gtkframe.c:188
 msgid "The vertical alignment of the label"
 msgstr "标签的竖直排列"
 
-#: ../gtk/gtkframe.c:195
+#: ../gtk/gtkframe.c:196
 msgid "Frame shadow"
 msgstr "框架阴影"
 
-#: ../gtk/gtkframe.c:196
+#: ../gtk/gtkframe.c:197
 msgid "Appearance of the frame border"
 msgstr "框架边框的外观"
 
-#: ../gtk/gtkframe.c:205
+#: ../gtk/gtkframe.c:206
 msgid "A widget to display in place of the usual frame label"
 msgstr "在通常的框架标签的位置显示的部件"
 
-#: ../gtk/gtkgrid.c:1402
+#: ../gtk/gtkgrid.c:1405
 msgid "Row Homogeneous"
 msgstr "行对齐"
 
-#: ../gtk/gtkgrid.c:1403
+#: ../gtk/gtkgrid.c:1406
 msgid "If TRUE, the rows are all the same height"
 msgstr "若为 TRUE 表示表格中每行都一样高度"
 
-#: ../gtk/gtkgrid.c:1409
+#: ../gtk/gtkgrid.c:1412
 msgid "Column Homogeneous"
 msgstr "列对齐"
 
-#: ../gtk/gtkgrid.c:1410
+#: ../gtk/gtkgrid.c:1413
 msgid "If TRUE, the columns are all the same width"
 msgstr "若为 TRUE 表示表格中每列都一样宽度"
 
-#: ../gtk/gtkgrid.c:1424
+#: ../gtk/gtkgrid.c:1427
 msgid "The row number to attach the top side of a child widget to"
 msgstr "将子部件上侧附加到哪一行"
 
-#: ../gtk/gtkgrid.c:1430 ../gtk/gtklayout.c:672 ../gtk/gtktreeviewcolumn.c:273
+#: ../gtk/gtkgrid.c:1433 ../gtk/gtklayout.c:672 ../gtk/gtktreeviewcolumn.c:273
 msgid "Width"
 msgstr "宽度"
 
-#: ../gtk/gtkgrid.c:1431
+#: ../gtk/gtkgrid.c:1434
 msgid "The number of columns that a child spans"
 msgstr "表格的列数"
 
-#: ../gtk/gtkgrid.c:1437 ../gtk/gtklayout.c:681
+#: ../gtk/gtkgrid.c:1440 ../gtk/gtklayout.c:681
 msgid "Height"
 msgstr "高度"
 
-#: ../gtk/gtkgrid.c:1438
+#: ../gtk/gtkgrid.c:1441
 msgid "The number of rows that a child spans"
 msgstr "表格的行数"
 
@@ -3665,7 +3664,7 @@ msgstr "图标集"
 msgid "Icon set to display"
 msgstr "要显示的图标集"
 
-#: ../gtk/gtkimage.c:249 ../gtk/gtkscalebutton.c:228 ../gtk/gtktoolbar.c:531
+#: ../gtk/gtkimage.c:249 ../gtk/gtkscalebutton.c:228 ../gtk/gtktoolbar.c:532
 #: ../gtk/gtktoolpalette.c:1007
 msgid "Icon size"
 msgstr "图标大小"
@@ -3714,7 +3713,7 @@ msgstr "菜单文字旁出现的子部件"
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "是否使用标签中的文字来创建后备菜单项"
 
-#: ../gtk/gtkimagemenuitem.c:207 ../gtk/gtkmenu.c:568
+#: ../gtk/gtkimagemenuitem.c:207 ../gtk/gtkmenu.c:569
 msgid "Accel Group"
 msgstr "加速组"
 
@@ -3743,7 +3742,7 @@ msgid "Width of border around the action area"
 msgstr "动作区域周围的边界宽度"
 
 #: ../gtk/gtkinvisible.c:101 ../gtk/gtkmountoperation.c:170
-#: ../gtk/gtkstatusicon.c:289 ../gtk/gtkstylecontext.c:442
+#: ../gtk/gtkstatusicon.c:289 ../gtk/gtkstylecontext.c:443
 #: ../gtk/gtkwindow.c:786
 msgid "Screen"
 msgstr "屏幕"
@@ -3947,7 +3946,7 @@ msgstr "菜单栏的子折叠方向"
 msgid "Style of bevel around the menubar"
 msgstr "菜单栏的周围的立体样式"
 
-#: ../gtk/gtkmenubar.c:224 ../gtk/gtktoolbar.c:581
+#: ../gtk/gtkmenubar.c:224 ../gtk/gtktoolbar.c:582
 msgid "Internal padding"
 msgstr "内部留空"
 
@@ -3955,139 +3954,139 @@ msgstr "内部留空"
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "菜单栏阴影和菜单项之间的边框空白总量"
 
-#: ../gtk/gtkmenu.c:554
+#: ../gtk/gtkmenu.c:555
 msgid "The currently selected menu item"
 msgstr "当前已选择的菜单项"
 
-#: ../gtk/gtkmenu.c:569
+#: ../gtk/gtkmenu.c:570
 msgid "The accel group holding accelerators for the menu"
 msgstr "保存菜单快捷键的加速组"
 
-#: ../gtk/gtkmenu.c:583 ../gtk/gtkmenuitem.c:360
+#: ../gtk/gtkmenu.c:584 ../gtk/gtkmenuitem.c:360
 msgid "Accel Path"
 msgstr "加速路径"
 
-#: ../gtk/gtkmenu.c:584
+#: ../gtk/gtkmenu.c:585
 msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr "加速路径用来方便地创建子项目的加速路径"
 
-#: ../gtk/gtkmenu.c:600
+#: ../gtk/gtkmenu.c:601
 msgid "Attach Widget"
 msgstr "附属部件"
 
-#: ../gtk/gtkmenu.c:601
+#: ../gtk/gtkmenu.c:602
 msgid "The widget the menu is attached to"
 msgstr "菜单所附属的部件"
 
-#: ../gtk/gtkmenu.c:609
+#: ../gtk/gtkmenu.c:610
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "当此菜单被折叠可供窗口管理器显示的标题"
 
-#: ../gtk/gtkmenu.c:623
+#: ../gtk/gtkmenu.c:624
 msgid "Tearoff State"
 msgstr "撕下状态"
 
-#: ../gtk/gtkmenu.c:624
+#: ../gtk/gtkmenu.c:625
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "表明菜单是否被撕下的布尔值"
 
-#: ../gtk/gtkmenu.c:638
+#: ../gtk/gtkmenu.c:639
 msgid "Monitor"
 msgstr "监视器"
 
-#: ../gtk/gtkmenu.c:639
+#: ../gtk/gtkmenu.c:640
 msgid "The monitor the menu will be popped up on"
 msgstr "要弹出菜单的监视器"
 
-#: ../gtk/gtkmenu.c:645
+#: ../gtk/gtkmenu.c:646
 msgid "Vertical Padding"
 msgstr "竖直留空"
 
-#: ../gtk/gtkmenu.c:646
+#: ../gtk/gtkmenu.c:647
 msgid "Extra space at the top and bottom of the menu"
 msgstr "菜单上下两端额外的空白"
 
-#: ../gtk/gtkmenu.c:668
+#: ../gtk/gtkmenu.c:669
 msgid "Reserve Toggle Size"
 msgstr "保留切换大小"
 
-#: ../gtk/gtkmenu.c:669
+#: ../gtk/gtkmenu.c:670
 msgid ""
 "A boolean that indicates whether the menu reserves space for toggles and "
 "icons"
 msgstr "一个显示是否为切换和图标保留菜单空间的布尔值"
 
-#: ../gtk/gtkmenu.c:675
+#: ../gtk/gtkmenu.c:676
 msgid "Horizontal Padding"
 msgstr "水平留空"
 
-#: ../gtk/gtkmenu.c:676
+#: ../gtk/gtkmenu.c:677
 msgid "Extra space at the left and right edges of the menu"
 msgstr "菜单左右两端额外的空白"
 
-#: ../gtk/gtkmenu.c:684
+#: ../gtk/gtkmenu.c:685
 msgid "Vertical Offset"
 msgstr "竖直偏移"
 
-#: ../gtk/gtkmenu.c:685
+#: ../gtk/gtkmenu.c:686
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "菜单为子菜单时，对它进行这么多像素的竖直偏移"
 
-#: ../gtk/gtkmenu.c:693
+#: ../gtk/gtkmenu.c:694
 msgid "Horizontal Offset"
 msgstr "水平偏移"
 
-#: ../gtk/gtkmenu.c:694
+#: ../gtk/gtkmenu.c:695
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "菜单为子菜单时，在水平方向上定位这么多像素的偏移"
 
-#: ../gtk/gtkmenu.c:702
+#: ../gtk/gtkmenu.c:703
 msgid "Double Arrows"
 msgstr "双箭头"
 
-#: ../gtk/gtkmenu.c:703
+#: ../gtk/gtkmenu.c:704
 msgid "When scrolling, always show both arrows."
 msgstr "滚动时总是显示两个箭头。"
 
-#: ../gtk/gtkmenu.c:716
+#: ../gtk/gtkmenu.c:717
 msgid "Arrow Placement"
 msgstr "箭头放置"
 
-#: ../gtk/gtkmenu.c:717
+#: ../gtk/gtkmenu.c:718
 msgid "Indicates where scroll arrows should be placed"
 msgstr "指示是否放置滚动箭头"
 
-#: ../gtk/gtkmenu.c:725
+#: ../gtk/gtkmenu.c:726
 msgid "Left Attach"
 msgstr "左侧附加"
 
-#: ../gtk/gtkmenu.c:733
+#: ../gtk/gtkmenu.c:734
 msgid "Right Attach"
 msgstr "右侧附加"
 
-#: ../gtk/gtkmenu.c:734
+#: ../gtk/gtkmenu.c:735
 msgid "The column number to attach the right side of the child to"
 msgstr "将子部件右侧附加到哪一列"
 
-#: ../gtk/gtkmenu.c:741
+#: ../gtk/gtkmenu.c:742
 msgid "Top Attach"
 msgstr "上侧附加"
 
-#: ../gtk/gtkmenu.c:742
+#: ../gtk/gtkmenu.c:743
 msgid "The row number to attach the top of the child to"
 msgstr "将子部件上侧附加到哪一行"
 
-#: ../gtk/gtkmenu.c:749
+#: ../gtk/gtkmenu.c:750
 msgid "Bottom Attach"
 msgstr "下侧附加"
 
-#: ../gtk/gtkmenu.c:764
+#: ../gtk/gtkmenu.c:765
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
 msgstr "任意常量用来按比例缩小滚动箭头的大小"
 
@@ -4230,7 +4229,7 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "部件的上下两端的额外空白，以像素计"
 
-#: ../gtk/gtkmountoperation.c:154 ../gtk/gtkstylecontext.c:465
+#: ../gtk/gtkmountoperation.c:154 ../gtk/gtkstylecontext.c:466
 msgid "Parent"
 msgstr "父"
 
@@ -4250,215 +4249,215 @@ msgstr "我们要显示对话框吗"
 msgid "The screen where this window will be displayed."
 msgstr "要显示此窗口的屏幕。"
 
-#: ../gtk/gtknotebook.c:690
+#: ../gtk/gtknotebook.c:691
 msgid "Page"
 msgstr "页"
 
-#: ../gtk/gtknotebook.c:691
+#: ../gtk/gtknotebook.c:692
 msgid "The index of the current page"
 msgstr "当前页的索引"
 
-#: ../gtk/gtknotebook.c:699
+#: ../gtk/gtknotebook.c:700
 msgid "Tab Position"
 msgstr "标签位置"
 
-#: ../gtk/gtknotebook.c:700
+#: ../gtk/gtknotebook.c:701
 msgid "Which side of the notebook holds the tabs"
 msgstr "标签位于笔记本哪一边"
 
-#: ../gtk/gtknotebook.c:707
+#: ../gtk/gtknotebook.c:708
 msgid "Show Tabs"
 msgstr "显示标签"
 
-#: ../gtk/gtknotebook.c:708
+#: ../gtk/gtknotebook.c:709
 msgid "Whether tabs should be shown"
 msgstr "是否应显示标签"
 
-#: ../gtk/gtknotebook.c:714
+#: ../gtk/gtknotebook.c:715
 msgid "Show Border"
 msgstr "显示边框"
 
-#: ../gtk/gtknotebook.c:715
+#: ../gtk/gtknotebook.c:716
 msgid "Whether the border should be shown"
 msgstr "是否应显示边框"
 
-#: ../gtk/gtknotebook.c:721
+#: ../gtk/gtknotebook.c:722
 msgid "Scrollable"
 msgstr "可滚动"
 
-#: ../gtk/gtknotebook.c:722
+#: ../gtk/gtknotebook.c:723
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "若为 TRUE，如果标签太多无法全部显示时，则会在旁边加上滚动箭头来适应"
 
-#: ../gtk/gtknotebook.c:728
+#: ../gtk/gtknotebook.c:729
 msgid "Enable Popup"
 msgstr "启用弹出菜单"
 
-#: ../gtk/gtknotebook.c:729
+#: ../gtk/gtknotebook.c:730
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr "若为 TRUE，则在笔记本中按鼠标右键将弹出菜单，您可以用它来跳至某一页"
 
-#: ../gtk/gtknotebook.c:743
+#: ../gtk/gtknotebook.c:744
 msgid "Group Name"
 msgstr "组名"
 
-#: ../gtk/gtknotebook.c:744
+#: ../gtk/gtknotebook.c:745
 msgid "Group name for tab drag and drop"
 msgstr "标签拖放组的名称"
 
-#: ../gtk/gtknotebook.c:751
+#: ../gtk/gtknotebook.c:752
 msgid "Tab label"
 msgstr "标签文字"
 
-#: ../gtk/gtknotebook.c:752
+#: ../gtk/gtknotebook.c:753
 msgid "The string displayed on the child's tab label"
 msgstr "子标签上要显示的字符串"
 
-#: ../gtk/gtknotebook.c:758
+#: ../gtk/gtknotebook.c:759
 msgid "Menu label"
 msgstr "菜单标签"
 
-#: ../gtk/gtknotebook.c:759
+#: ../gtk/gtknotebook.c:760
 msgid "The string displayed in the child's menu entry"
 msgstr "子菜单项中要显示的字符串"
 
-#: ../gtk/gtknotebook.c:772
+#: ../gtk/gtknotebook.c:773
 msgid "Tab expand"
 msgstr "标签展开"
 
-#: ../gtk/gtknotebook.c:773
+#: ../gtk/gtknotebook.c:774
 msgid "Whether to expand the child's tab"
 msgstr "是否展开子标签"
 
-#: ../gtk/gtknotebook.c:779
+#: ../gtk/gtknotebook.c:780
 msgid "Tab fill"
 msgstr "标签填充"
 
-#: ../gtk/gtknotebook.c:780
+#: ../gtk/gtknotebook.c:781
 msgid "Whether the child's tab should fill the allocated area"
 msgstr "子标签是否要占满整个分配区域"
 
-#: ../gtk/gtknotebook.c:787
+#: ../gtk/gtknotebook.c:788
 msgid "Tab reorderable"
 msgstr "标签可重新排列"
 
-#: ../gtk/gtknotebook.c:788
+#: ../gtk/gtknotebook.c:789
 msgid "Whether the tab is reorderable by user action"
 msgstr "标签是否允许用户手动重新排列"
 
-#: ../gtk/gtknotebook.c:794
+#: ../gtk/gtknotebook.c:795
 msgid "Tab detachable"
 msgstr "标签可漂移"
 
-#: ../gtk/gtknotebook.c:795
+#: ../gtk/gtknotebook.c:796
 msgid "Whether the tab is detachable"
 msgstr "标签是否可漂移"
 
-#: ../gtk/gtknotebook.c:810 ../gtk/gtkscrollbar.c:102
+#: ../gtk/gtknotebook.c:811 ../gtk/gtkscrollbar.c:102
 msgid "Secondary backward stepper"
 msgstr "次要反向指示器"
 
-#: ../gtk/gtknotebook.c:811
+#: ../gtk/gtknotebook.c:812
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "在标签头区域的另外一端显示第二个反向箭头"
 
-#: ../gtk/gtknotebook.c:826 ../gtk/gtkscrollbar.c:109
+#: ../gtk/gtknotebook.c:827 ../gtk/gtkscrollbar.c:109
 msgid "Secondary forward stepper"
 msgstr "次要正向指示器"
 
-#: ../gtk/gtknotebook.c:827
+#: ../gtk/gtknotebook.c:828
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "在标签头区域的另外一端显示第二个正向箭头"
 
-#: ../gtk/gtknotebook.c:841 ../gtk/gtkscrollbar.c:88
+#: ../gtk/gtknotebook.c:842 ../gtk/gtkscrollbar.c:88
 msgid "Backward stepper"
 msgstr "反向指示器"
 
-#: ../gtk/gtknotebook.c:842 ../gtk/gtkscrollbar.c:89
+#: ../gtk/gtknotebook.c:843 ../gtk/gtkscrollbar.c:89
 msgid "Display the standard backward arrow button"
 msgstr "显示标准的后退箭头按钮"
 
-#: ../gtk/gtknotebook.c:856 ../gtk/gtkscrollbar.c:95
+#: ../gtk/gtknotebook.c:857 ../gtk/gtkscrollbar.c:95
 msgid "Forward stepper"
 msgstr "正向指示器"
 
-#: ../gtk/gtknotebook.c:857 ../gtk/gtkscrollbar.c:96
+#: ../gtk/gtknotebook.c:858 ../gtk/gtkscrollbar.c:96
 msgid "Display the standard forward arrow button"
 msgstr "显示标准的前进箭头按钮"
 
-#: ../gtk/gtknotebook.c:871
+#: ../gtk/gtknotebook.c:872
 msgid "Tab overlap"
 msgstr "标签覆盖"
 
-#: ../gtk/gtknotebook.c:872
+#: ../gtk/gtknotebook.c:873
 msgid "Size of tab overlap area"
 msgstr "标签覆盖区域的大小"
 
-#: ../gtk/gtknotebook.c:887
+#: ../gtk/gtknotebook.c:888
 msgid "Tab curvature"
 msgstr "标签曲率"
 
-#: ../gtk/gtknotebook.c:888
+#: ../gtk/gtknotebook.c:889
 msgid "Size of tab curvature"
 msgstr "标签曲率的大小"
 
-#: ../gtk/gtknotebook.c:904
+#: ../gtk/gtknotebook.c:905
 msgid "Arrow spacing"
 msgstr "箭头间距"
 
-#: ../gtk/gtknotebook.c:905
+#: ../gtk/gtknotebook.c:906
 msgid "Scroll arrow spacing"
 msgstr "滚动箭头间距"
 
-#: ../gtk/gtknotebook.c:921
+#: ../gtk/gtknotebook.c:922
 msgid "Initial gap"
 msgstr "起始间隔"
 
-#: ../gtk/gtknotebook.c:922
+#: ../gtk/gtknotebook.c:923
 msgid "Initial gap before the first tab"
 msgstr "首个标签前的起始间隔"
 
-#: ../gtk/gtknumerableicon.c:651
+#: ../gtk/gtknumerableicon.c:652
 msgid "Icon's count"
 msgstr "图标数量"
 
-#: ../gtk/gtknumerableicon.c:652
+#: ../gtk/gtknumerableicon.c:653
 msgid "The count of the emblem currently displayed"
 msgstr "当前页的索引"
 
-#: ../gtk/gtknumerableicon.c:658
+#: ../gtk/gtknumerableicon.c:659
 msgid "Icon's label"
 msgstr "图标的标签"
 
-#: ../gtk/gtknumerableicon.c:659
+#: ../gtk/gtknumerableicon.c:660
 msgid "The label to be displayed over the icon"
 msgstr "此标签显示该图标"
 
-#: ../gtk/gtknumerableicon.c:665
+#: ../gtk/gtknumerableicon.c:666
 msgid "Icon's style context"
 msgstr "图标的风格背景"
 
-#: ../gtk/gtknumerableicon.c:666
+#: ../gtk/gtknumerableicon.c:667
 msgid "The style context to theme the icon appearance"
 msgstr "主题背景下出现的图标"
 
-#: ../gtk/gtknumerableicon.c:672
+#: ../gtk/gtknumerableicon.c:673
 msgid "Background icon"
 msgstr "背景图标"
 
-#: ../gtk/gtknumerableicon.c:673
+#: ../gtk/gtknumerableicon.c:674
 msgid "The icon for the number emblem background"
 msgstr "编号背景的图标"
 
-#: ../gtk/gtknumerableicon.c:679
+#: ../gtk/gtknumerableicon.c:680
 msgid "Background icon name"
 msgstr "背景图标名称"
 
-#: ../gtk/gtknumerableicon.c:680
+#: ../gtk/gtknumerableicon.c:681
 msgid "The icon name for the number emblem background"
 msgstr "编号背景的图标名称"
 
@@ -4471,56 +4470,56 @@ msgstr "方向"
 msgid "The orientation of the orientable"
 msgstr "定向的方向"
 
-#: ../gtk/gtkpaned.c:348
+#: ../gtk/gtkpaned.c:349
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr "面板分隔器的位置，按像素计(0 代表始终位于左/上)"
 
-#: ../gtk/gtkpaned.c:357
+#: ../gtk/gtkpaned.c:358
 msgid "Position Set"
 msgstr "位置设置"
 
-#: ../gtk/gtkpaned.c:358
+#: ../gtk/gtkpaned.c:359
 msgid "TRUE if the Position property should be used"
 msgstr "是否要使用位置属性"
 
-#: ../gtk/gtkpaned.c:364
+#: ../gtk/gtkpaned.c:365
 msgid "Handle Size"
 msgstr "手柄大小"
 
-#: ../gtk/gtkpaned.c:365
+#: ../gtk/gtkpaned.c:366
 msgid "Width of handle"
 msgstr "手柄宽度"
 
-#: ../gtk/gtkpaned.c:381
+#: ../gtk/gtkpaned.c:382
 msgid "Minimal Position"
 msgstr "最小位置"
 
-#: ../gtk/gtkpaned.c:382
+#: ../gtk/gtkpaned.c:383
 msgid "Smallest possible value for the \"position\" property"
 msgstr "“position”属性的最小可能值"
 
-#: ../gtk/gtkpaned.c:399
+#: ../gtk/gtkpaned.c:400
 msgid "Maximal Position"
 msgstr "最大位置"
 
-#: ../gtk/gtkpaned.c:400
+#: ../gtk/gtkpaned.c:401
 msgid "Largest possible value for the \"position\" property"
 msgstr "“position”属性的最大可能值"
 
-#: ../gtk/gtkpaned.c:417
+#: ../gtk/gtkpaned.c:418
 msgid "Resize"
 msgstr "改变大小"
 
-#: ../gtk/gtkpaned.c:418
+#: ../gtk/gtkpaned.c:419
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr "若为 TRUE，子部件将跟随面板部件展开并收缩"
 
-#: ../gtk/gtkpaned.c:433
+#: ../gtk/gtkpaned.c:434
 msgid "Shrink"
 msgstr "收缩"
 
-#: ../gtk/gtkpaned.c:434
+#: ../gtk/gtkpaned.c:435
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "若为 TRUE，子部件可小于其所请求的大小"
 
@@ -4989,131 +4988,131 @@ msgstr "此部件所属组的单选菜单项。"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "单选工具按钮所在的组"
 
-#: ../gtk/gtkrange.c:424
+#: ../gtk/gtkrange.c:422
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "包含此范围对象当前值的 GtkAdjustment"
 
-#: ../gtk/gtkrange.c:432
+#: ../gtk/gtkrange.c:430
 msgid "Invert direction slider moves to increase range value"
 msgstr "反向滑块移动增加范围值"
 
-#: ../gtk/gtkrange.c:439
+#: ../gtk/gtkrange.c:437
 msgid "Lower stepper sensitivity"
 msgstr "下指示器灵敏度"
 
-#: ../gtk/gtkrange.c:440
+#: ../gtk/gtkrange.c:438
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "指示调整部件下侧的指示器的灵敏度策略"
 
-#: ../gtk/gtkrange.c:448
+#: ../gtk/gtkrange.c:446
 msgid "Upper stepper sensitivity"
 msgstr "上指示器灵敏度"
 
-#: ../gtk/gtkrange.c:449
+#: ../gtk/gtkrange.c:447
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "指示调整部件上侧的指示器的灵敏度策略"
 
-#: ../gtk/gtkrange.c:466
+#: ../gtk/gtkrange.c:464
 msgid "Show Fill Level"
 msgstr "显示填充级别"
 
-#: ../gtk/gtkrange.c:467
+#: ../gtk/gtkrange.c:465
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "是否在滑槽上显示一个填充级别指示器图像"
 
-#: ../gtk/gtkrange.c:483
+#: ../gtk/gtkrange.c:481
 msgid "Restrict to Fill Level"
 msgstr "填充级别的限制条件"
 
-#: ../gtk/gtkrange.c:484
+#: ../gtk/gtkrange.c:482
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "是否限制填充级别的上界"
 
-#: ../gtk/gtkrange.c:499
+#: ../gtk/gtkrange.c:497
 msgid "Fill Level"
 msgstr "填充级别"
 
-#: ../gtk/gtkrange.c:500
+#: ../gtk/gtkrange.c:498
 msgid "The fill level."
 msgstr "填充级别。"
 
-#: ../gtk/gtkrange.c:517
+#: ../gtk/gtkrange.c:515
 msgid "Round Digits"
 msgstr "数字"
 
-#: ../gtk/gtkrange.c:518
+#: ../gtk/gtkrange.c:516
 msgid "The number of digits to round the value to."
 msgstr "四舍五入的数值。"
 
-#: ../gtk/gtkrange.c:526 ../gtk/gtkswitch.c:968
+#: ../gtk/gtkrange.c:524 ../gtk/gtkswitch.c:968
 msgid "Slider Width"
 msgstr "滑块宽度"
 
-#: ../gtk/gtkrange.c:527
+#: ../gtk/gtkrange.c:525
 msgid "Width of scrollbar or scale thumb"
 msgstr "滚动条或刻度块的宽度"
 
-#: ../gtk/gtkrange.c:534
+#: ../gtk/gtkrange.c:532
 msgid "Trough Border"
 msgstr "滑槽边框"
 
-#: ../gtk/gtkrange.c:535
+#: ../gtk/gtkrange.c:533
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "刻度/指示器和外部滑槽之间的间距"
 
-#: ../gtk/gtkrange.c:542
+#: ../gtk/gtkrange.c:540
 msgid "Stepper Size"
 msgstr "指示器大小"
 
-#: ../gtk/gtkrange.c:543
+#: ../gtk/gtkrange.c:541
 msgid "Length of step buttons at ends"
 msgstr "步进按钮最终的长度"
 
-#: ../gtk/gtkrange.c:556
+#: ../gtk/gtkrange.c:554
 msgid "Stepper Spacing"
 msgstr "指示器间距"
 
-#: ../gtk/gtkrange.c:557
+#: ../gtk/gtkrange.c:555
 msgid "Spacing between step buttons and thumb"
 msgstr "步进按钮和刻度之间的间距"
 
-#: ../gtk/gtkrange.c:564
+#: ../gtk/gtkrange.c:562
 msgid "Arrow X Displacement"
 msgstr "箭头水平位移"
 
-#: ../gtk/gtkrange.c:565
+#: ../gtk/gtkrange.c:563
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "当按钮被按下时，要将箭头在水平方向上移动的距离"
 
-#: ../gtk/gtkrange.c:572
+#: ../gtk/gtkrange.c:570
 msgid "Arrow Y Displacement"
 msgstr "箭头竖直位移"
 
-#: ../gtk/gtkrange.c:573
+#: ../gtk/gtkrange.c:571
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "当按钮被按下时，要将箭头在竖直方向上移动的距离"
 
-#: ../gtk/gtkrange.c:589
+#: ../gtk/gtkrange.c:587
 msgid "Trough Under Steppers"
 msgstr "指示器下面的滑槽"
 
-#: ../gtk/gtkrange.c:590
+#: ../gtk/gtkrange.c:588
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 msgstr "是否要画完整长度的滑槽或者是除去指示器和间距"
 
-#: ../gtk/gtkrange.c:603
+#: ../gtk/gtkrange.c:601
 msgid "Arrow scaling"
 msgstr "箭头比例"
 
-#: ../gtk/gtkrange.c:604
+#: ../gtk/gtkrange.c:602
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "相对于滚动按钮大小的箭头缩放比例"
 
@@ -5439,610 +5438,608 @@ msgstr "绘制"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "是要绘制分隔线，还是只是空白"
 
-#: ../gtk/gtksettings.c:351
+#: ../gtk/gtksettings.c:339
 msgid "Double Click Time"
 msgstr "双击间隔时间"
 
-#: ../gtk/gtksettings.c:352
+#: ../gtk/gtksettings.c:340
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr "把两次单击鼠标视作双击所允许的最大时间间隔(以毫秒计)"
 
-#: ../gtk/gtksettings.c:359
+#: ../gtk/gtksettings.c:347
 msgid "Double Click Distance"
 msgstr "双击距离"
 
-#: ../gtk/gtksettings.c:360
+#: ../gtk/gtksettings.c:348
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr "把两次单击鼠标视作双击所允许的最大距离(以像素计)"
 
-#: ../gtk/gtksettings.c:376
+#: ../gtk/gtksettings.c:364
 msgid "Cursor Blink"
 msgstr "光标闪烁"
 
-#: ../gtk/gtksettings.c:377
+#: ../gtk/gtksettings.c:365
 msgid "Whether the cursor should blink"
 msgstr "光标是否闪烁"
 
-#: ../gtk/gtksettings.c:384
+#: ../gtk/gtksettings.c:372
 msgid "Cursor Blink Time"
 msgstr "光标闪烁间隔时间"
 
-#: ../gtk/gtksettings.c:385
+#: ../gtk/gtksettings.c:373
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "光标闪烁的周期，以毫秒计"
 
-#: ../gtk/gtksettings.c:404
+#: ../gtk/gtksettings.c:392
 msgid "Cursor Blink Timeout"
 msgstr "光标闪烁超时"
 
-#: ../gtk/gtksettings.c:405
+#: ../gtk/gtksettings.c:393
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "光标停止闪烁后的时间，以秒计"
 
-#: ../gtk/gtksettings.c:412
+#: ../gtk/gtksettings.c:400
 msgid "Split Cursor"
 msgstr "分开光标"
 
-#: ../gtk/gtksettings.c:413
+#: ../gtk/gtksettings.c:401
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr "当左至右和右至左的文字混合出现时是否应显示两个光标"
 
-#: ../gtk/gtksettings.c:420
+#: ../gtk/gtksettings.c:408
 msgid "Theme Name"
 msgstr "主题名称"
 
-#: ../gtk/gtksettings.c:421
+#: ../gtk/gtksettings.c:409
 msgid "Name of theme to load"
 msgstr "要载入的布景主题文件名"
 
-#: ../gtk/gtksettings.c:435
+#: ../gtk/gtksettings.c:421
 msgid "Icon Theme Name"
 msgstr "图标主题名称"
 
-#: ../gtk/gtksettings.c:436
+#: ../gtk/gtksettings.c:422
 msgid "Name of icon theme to use"
 msgstr "要使用的图标主题名称"
 
-#: ../gtk/gtksettings.c:444
+#: ../gtk/gtksettings.c:430
 msgid "Fallback Icon Theme Name"
 msgstr "默认图标主题名称"
 
-#: ../gtk/gtksettings.c:445
+#: ../gtk/gtksettings.c:431
 msgid "Name of a icon theme to fall back to"
 msgstr "默认要使用的图标主题名称"
 
-#: ../gtk/gtksettings.c:453
+#: ../gtk/gtksettings.c:439
 msgid "Key Theme Name"
 msgstr "关键主题名称"
 
-#: ../gtk/gtksettings.c:454
+#: ../gtk/gtksettings.c:440
 msgid "Name of key theme to load"
 msgstr "要载入的关键主题文件名"
 
-#: ../gtk/gtksettings.c:462
+#: ../gtk/gtksettings.c:448
 msgid "Menu bar accelerator"
 msgstr "菜单栏快捷键"
 
-#: ../gtk/gtksettings.c:463
+#: ../gtk/gtksettings.c:449
 msgid "Keybinding to activate the menu bar"
 msgstr "激活菜单栏的键关联"
 
-#: ../gtk/gtksettings.c:471
+#: ../gtk/gtksettings.c:457
 msgid "Drag threshold"
 msgstr "拖动阀值"
 
-#: ../gtk/gtksettings.c:472
+#: ../gtk/gtksettings.c:458
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "光标在拖动前要移动的像素数"
 
-#: ../gtk/gtksettings.c:480
+#: ../gtk/gtksettings.c:466
 msgid "Font Name"
 msgstr "字体名称"
 
-#: ../gtk/gtksettings.c:481
+#: ../gtk/gtksettings.c:467
 msgid "Name of default font to use"
 msgstr "要使用的默认字体的名称"
 
-#: ../gtk/gtksettings.c:503
+#: ../gtk/gtksettings.c:489
 msgid "Icon Sizes"
 msgstr "图标大小"
 
-#: ../gtk/gtksettings.c:504
+#: ../gtk/gtksettings.c:490
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "图标大小的列表(gtk-menu=16,16:gtk-button=20,20..."
 
-#: ../gtk/gtksettings.c:512
+#: ../gtk/gtksettings.c:498
 msgid "GTK Modules"
 msgstr "GTK 模块"
 
-#: ../gtk/gtksettings.c:513
+#: ../gtk/gtksettings.c:499
 msgid "List of currently active GTK modules"
 msgstr "列出目前活动的 GTK 模块"
 
-#: ../gtk/gtksettings.c:521
+#: ../gtk/gtksettings.c:507
 msgid "Xft Antialias"
 msgstr "Xft 边缘平滑"
 
-#: ../gtk/gtksettings.c:522
+#: ../gtk/gtksettings.c:508
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "是否要对 Xft 字体边缘平滑；0=否，1=是，-1=默认"
 
-#: ../gtk/gtksettings.c:531
+#: ../gtk/gtksettings.c:517
 msgid "Xft Hinting"
 msgstr "Xft 微调"
 
-#: ../gtk/gtksettings.c:532
+#: ../gtk/gtksettings.c:518
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "是否要对 Xft 字体微调；0=否，1=是，-1=默认"
 
-#: ../gtk/gtksettings.c:541
+#: ../gtk/gtksettings.c:527
 msgid "Xft Hint Style"
 msgstr "Xft 微调样式"
 
-#: ../gtk/gtksettings.c:542
+#: ../gtk/gtksettings.c:528
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "要使用的微调程度；hintnone(无)、hintslight(轻微)、hintmedium(中等)或 hintfull"
 "(完全)"
 
-#: ../gtk/gtksettings.c:551
+#: ../gtk/gtksettings.c:537
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: ../gtk/gtksettings.c:552
+#: ../gtk/gtksettings.c:538
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "次像素平滑的类型；无、rgb、bgr、vrgb、vbgr"
 
-#: ../gtk/gtksettings.c:561
+#: ../gtk/gtksettings.c:547
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: ../gtk/gtksettings.c:562
+#: ../gtk/gtksettings.c:548
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Xft 的解析度，以 1024*每英寸点数为单位。-1 代表使用默认值"
 
-#: ../gtk/gtksettings.c:571
+#: ../gtk/gtksettings.c:557
 msgid "Cursor theme name"
 msgstr "光标主题名称"
 
-#: ../gtk/gtksettings.c:572
+#: ../gtk/gtksettings.c:558
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "要使用的光标主题的名称，或为 NULL 以使用默认的主题"
 
-#: ../gtk/gtksettings.c:580
+#: ../gtk/gtksettings.c:566
 msgid "Cursor theme size"
 msgstr "光标主题大小"
 
-#: ../gtk/gtksettings.c:581
+#: ../gtk/gtksettings.c:567
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "要使用的光标的大小，或为 0 以使用默认的大小"
 
-#: ../gtk/gtksettings.c:590
+#: ../gtk/gtksettings.c:576
 msgid "Alternative button order"
 msgstr "备选按钮次序"
 
-#: ../gtk/gtksettings.c:591
+#: ../gtk/gtksettings.c:577
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "对话框中的按钮是否要使用备选按钮次序"
 
-#: ../gtk/gtksettings.c:608
+#: ../gtk/gtksettings.c:594
 msgid "Alternative sort indicator direction"
 msgstr "备选排序指示器方向"
 
-#: ../gtk/gtksettings.c:609
+#: ../gtk/gtksettings.c:595
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
 msgstr "列表和树视图中排序指示器方向是否与默认的情况相反(这里向下指升序)"
 
-#: ../gtk/gtksettings.c:617
+#: ../gtk/gtksettings.c:603
 msgid "Show the 'Input Methods' menu"
 msgstr "显示“输入法”菜单"
 
-#: ../gtk/gtksettings.c:618
+#: ../gtk/gtksettings.c:604
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
 msgstr "输入框和文字视图的快捷菜单中是否提供更改输入法的选项"
 
-#: ../gtk/gtksettings.c:626
+#: ../gtk/gtksettings.c:612
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "显示“插入 Unicode 控制字符”菜单"
 
-#: ../gtk/gtksettings.c:627
+#: ../gtk/gtksettings.c:613
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
 msgstr "输入框和文字视图的快捷菜单中是否提供插入控制字符的选项"
 
-#: ../gtk/gtksettings.c:635
+#: ../gtk/gtksettings.c:621
 msgid "Start timeout"
 msgstr "启动超时"
 
-#: ../gtk/gtksettings.c:636
+#: ../gtk/gtksettings.c:622
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "当按钮按下时，超时的起始值"
 
-#: ../gtk/gtksettings.c:645
+#: ../gtk/gtksettings.c:631
 msgid "Repeat timeout"
 msgstr "重复超时"
 
-#: ../gtk/gtksettings.c:646
+#: ../gtk/gtksettings.c:632
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "当按钮按下时，超时的重复值"
 
-#: ../gtk/gtksettings.c:655
+#: ../gtk/gtksettings.c:641
 msgid "Expand timeout"
 msgstr "展开超时"
 
-#: ../gtk/gtksettings.c:656
+#: ../gtk/gtksettings.c:642
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr "当部件正在扩展新区域时，各种超时时限的扩展值"
 
-#: ../gtk/gtksettings.c:691
+#: ../gtk/gtksettings.c:677
 msgid "Color scheme"
 msgstr "配色方案"
 
-#: ../gtk/gtksettings.c:692
+#: ../gtk/gtksettings.c:678
 msgid "A palette of named colors for use in themes"
 msgstr "包含主题中使用的命名的颜色的调色板"
 
-#: ../gtk/gtksettings.c:701
+#: ../gtk/gtksettings.c:687
 msgid "Enable Animations"
 msgstr "允许动画"
 
-#: ../gtk/gtksettings.c:702
+#: ../gtk/gtksettings.c:688
 msgid "Whether to enable toolkit-wide animations."
 msgstr "是否允许工具箱级的动画。"
 
-#: ../gtk/gtksettings.c:723
+#: ../gtk/gtksettings.c:709
 msgid "Enable Touchscreen Mode"
 msgstr "启用触摸屏模式"
 
-#: ../gtk/gtksettings.c:724
+#: ../gtk/gtksettings.c:710
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr "设置为 TRUE 时，此屏幕上不显示运动通知事件"
 
-#: ../gtk/gtksettings.c:741
+#: ../gtk/gtksettings.c:727
 msgid "Tooltip timeout"
 msgstr "工具提示超时"
 
-#: ../gtk/gtksettings.c:742
+#: ../gtk/gtksettings.c:728
 msgid "Timeout before tooltip is shown"
 msgstr "工具提示显示前超时"
 
-#: ../gtk/gtksettings.c:767
+#: ../gtk/gtksettings.c:753
 msgid "Tooltip browse timeout"
 msgstr "工具提示浏览超时"
 
-#: ../gtk/gtksettings.c:768
+#: ../gtk/gtksettings.c:754
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr "启用浏览模式时显示工具提示超时"
 
-#: ../gtk/gtksettings.c:789
+#: ../gtk/gtksettings.c:775
 msgid "Tooltip browse mode timeout"
 msgstr "工具提示浏览模式超时"
 
-#: ../gtk/gtksettings.c:790
+#: ../gtk/gtksettings.c:776
 msgid "Timeout after which browse mode is disabled"
 msgstr "禁用浏览模式后超时"
 
-#: ../gtk/gtksettings.c:809
+#: ../gtk/gtksettings.c:795
 msgid "Keynav Cursor Only"
 msgstr "仅 Keynav 光标"
 
-#: ../gtk/gtksettings.c:810
+#: ../gtk/gtksettings.c:796
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr "设置为真时，只有光标键可用于遍历控件"
 
-#: ../gtk/gtksettings.c:827
+#: ../gtk/gtksettings.c:813
 msgid "Keynav Wrap Around"
 msgstr "Keynav 换行"
 
-#: ../gtk/gtksettings.c:828
+#: ../gtk/gtksettings.c:814
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "用键盘遍历控件时是否换行"
 
-#: ../gtk/gtksettings.c:848
+#: ../gtk/gtksettings.c:834
 msgid "Error Bell"
 msgstr "出错响铃"
 
-#: ../gtk/gtksettings.c:849
+#: ../gtk/gtksettings.c:835
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr "设置为真时，键盘遍历和其他出错时会有响铃"
 
-#: ../gtk/gtksettings.c:866
+#: ../gtk/gtksettings.c:852
 msgid "Color Hash"
 msgstr "颜色 Hash"
 
-#: ../gtk/gtksettings.c:867
+#: ../gtk/gtksettings.c:853
 msgid "A hash table representation of the color scheme."
 msgstr "表示配色方案的散列表"
 
-#: ../gtk/gtksettings.c:875
+#: ../gtk/gtksettings.c:861
 msgid "Default file chooser backend"
 msgstr "默认文件选择器后端"
 
-#: ../gtk/gtksettings.c:876
+#: ../gtk/gtksettings.c:862
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "默认要使用的 GtkFileChooser 后端名称"
 
-#: ../gtk/gtksettings.c:893
+#: ../gtk/gtksettings.c:879
 msgid "Default print backend"
 msgstr "默认打印后端"
 
-#: ../gtk/gtksettings.c:894
+#: ../gtk/gtksettings.c:880
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "默认要使用的 GtkPrintBackend 后端名称"
 
-#: ../gtk/gtksettings.c:917
+#: ../gtk/gtksettings.c:903
 msgid "Default command to run when displaying a print preview"
 msgstr "显示打印预览时默认执行的命令"
 
-#: ../gtk/gtksettings.c:918
+#: ../gtk/gtksettings.c:904
 msgid "Command to run when displaying a print preview"
 msgstr "当显示打印预览时默认执行该命令"
 
-#: ../gtk/gtksettings.c:934
+#: ../gtk/gtksettings.c:920
 msgid "Enable Mnemonics"
 msgstr "允许助记符"
 
-#: ../gtk/gtksettings.c:935
+#: ../gtk/gtksettings.c:921
 msgid "Whether labels should have mnemonics"
 msgstr "标签是否有助记符"
 
-#: ../gtk/gtksettings.c:951
+#: ../gtk/gtksettings.c:937
 msgid "Enable Accelerators"
 msgstr "开启快捷键"
 
-#: ../gtk/gtksettings.c:952
+#: ../gtk/gtksettings.c:938
 msgid "Whether menu items should have accelerators"
 msgstr "菜单项是否有快捷键"
 
-#: ../gtk/gtksettings.c:969
+#: ../gtk/gtksettings.c:955
 msgid "Recent Files Limit"
 msgstr "最近文件数限制"
 
-#: ../gtk/gtksettings.c:970
+#: ../gtk/gtksettings.c:956
 msgid "Number of recently used files"
 msgstr "最近文件数"
 
-#: ../gtk/gtksettings.c:990
+#: ../gtk/gtksettings.c:976
 msgid "Default IM module"
 msgstr "默认输入法模块"
 
-#: ../gtk/gtksettings.c:991
+#: ../gtk/gtksettings.c:977
 msgid "Which IM module should be used by default"
 msgstr "默认使用哪个输入法模块"
 
-#: ../gtk/gtksettings.c:1009
+#: ../gtk/gtksettings.c:995
 msgid "Recent Files Max Age"
 msgstr "最近使用文件的最长时间"
 
-#: ../gtk/gtksettings.c:1010
+#: ../gtk/gtksettings.c:996
 msgid "Maximum age of recently used files, in days"
 msgstr "最近使用文件的最长时间，以天数计"
 
-#: ../gtk/gtksettings.c:1019
+#: ../gtk/gtksettings.c:1005
 msgid "Fontconfig configuration timestamp"
 msgstr "Fontconfig 配置时间戳"
 
-#: ../gtk/gtksettings.c:1020
+#: ../gtk/gtksettings.c:1006
 msgid "Timestamp of current fontconfig configuration"
 msgstr "当前 fontconfig 配置的时间戳"
 
-#: ../gtk/gtksettings.c:1042
+#: ../gtk/gtksettings.c:1028
 msgid "Sound Theme Name"
 msgstr "声音主题名称"
 
-#: ../gtk/gtksettings.c:1043
+#: ../gtk/gtksettings.c:1029
 msgid "XDG sound theme name"
 msgstr "XDG 声音主题名称"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: ../gtk/gtksettings.c:1065
+#: ../gtk/gtksettings.c:1051
 msgid "Audible Input Feedback"
 msgstr "输入的声音反馈"
 
-#: ../gtk/gtksettings.c:1066
+#: ../gtk/gtksettings.c:1052
 msgid "Whether to play event sounds as feedback to user input"
 msgstr "是否播放声音来响应用户输入"
 
-#: ../gtk/gtksettings.c:1087
+#: ../gtk/gtksettings.c:1073
 msgid "Enable Event Sounds"
 msgstr "允许事件声音"
 
-#: ../gtk/gtksettings.c:1088
+#: ../gtk/gtksettings.c:1074
 msgid "Whether to play any event sounds at all"
 msgstr "是否播放任何事件声音"
 
-#: ../gtk/gtksettings.c:1103
+#: ../gtk/gtksettings.c:1089
 msgid "Enable Tooltips"
 msgstr "启用工具提示"
 
-#: ../gtk/gtksettings.c:1104
+#: ../gtk/gtksettings.c:1090
 msgid "Whether tooltips should be shown on widgets"
 msgstr "是否应在部件中显示工具提示"
 
-#: ../gtk/gtksettings.c:1117
+#: ../gtk/gtksettings.c:1103
 msgid "Toolbar style"
 msgstr "工具栏风格"
 
-#: ../gtk/gtksettings.c:1118
+#: ../gtk/gtksettings.c:1104
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "默认工具栏是只有文字，文字和图标，还是只有图标，等等"
 
-#: ../gtk/gtksettings.c:1132
+#: ../gtk/gtksettings.c:1118
 msgid "Toolbar Icon Size"
 msgstr "工具栏图标大小"
 
-#: ../gtk/gtksettings.c:1133
+#: ../gtk/gtksettings.c:1119
 msgid "The size of icons in default toolbars."
 msgstr "默认工具栏上的图标大小。"
 
-#: ../gtk/gtksettings.c:1150
+#: ../gtk/gtksettings.c:1136
 msgid "Auto Mnemonics"
 msgstr "允许助记符"
 
-#: ../gtk/gtksettings.c:1151
+#: ../gtk/gtksettings.c:1137
 msgid ""
 "Whether mnemonics should be automatically shown and hidden when the user "
 "presses the mnemonic activator."
 msgstr "当用户点击助记符激活器时助记符是否应当自动显示或隐藏。"
 
-#: ../gtk/gtksettings.c:1167
+#: ../gtk/gtksettings.c:1153
 msgid "Visible Focus"
 msgstr "可见的聚焦"
 
-#: ../gtk/gtksettings.c:1168
+#: ../gtk/gtksettings.c:1154
 msgid ""
 "Whether 'focus rectangles' should be hidden until the user starts to use the "
 "keyboard."
 msgstr "是否隐藏“聚焦矩形”，直到用户开始使用键盘。"
 
-#: ../gtk/gtksettings.c:1194
+#: ../gtk/gtksettings.c:1180
 msgid "Application prefers a dark theme"
 msgstr "应用程序更搭配暗色主题"
 
-#: ../gtk/gtksettings.c:1195
+#: ../gtk/gtksettings.c:1181
 msgid "Whether the application prefers to have a dark theme."
 msgstr "应用程序是否更适合使用暗色主题。"
 
-#: ../gtk/gtksettings.c:1210
+#: ../gtk/gtksettings.c:1196
 msgid "Show button images"
 msgstr "显示按钮图像"
 
-#: ../gtk/gtksettings.c:1211
+#: ../gtk/gtksettings.c:1197
 msgid "Whether images should be shown on buttons"
 msgstr "是否要在按钮中显示图像"
 
-#: ../gtk/gtksettings.c:1219 ../gtk/gtksettings.c:1313
+#: ../gtk/gtksettings.c:1205 ../gtk/gtksettings.c:1299
 msgid "Select on focus"
 msgstr "聚焦时选中"
 
-#: ../gtk/gtksettings.c:1220
+#: ../gtk/gtksettings.c:1206
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "当一项被聚焦时是否选中其内容"
 
-#: ../gtk/gtksettings.c:1237
+#: ../gtk/gtksettings.c:1223
 msgid "Password Hint Timeout"
 msgstr "密码提示超时"
 
-#: ../gtk/gtksettings.c:1238
+#: ../gtk/gtksettings.c:1224
 msgid "How long to show the last input character in hidden entries"
 msgstr "在隐藏输入框中显示的上个输入字符要多久"
 
-#: ../gtk/gtksettings.c:1247
+#: ../gtk/gtksettings.c:1233
 msgid "Show menu images"
 msgstr "显示菜单图像"
 
-#: ../gtk/gtksettings.c:1248
+#: ../gtk/gtksettings.c:1234
 msgid "Whether images should be shown in menus"
 msgstr "是否要在菜单中显示图像"
 
-#: ../gtk/gtksettings.c:1256
+#: ../gtk/gtksettings.c:1242
 msgid "Delay before drop down menus appear"
 msgstr "下拉菜单出现前的延迟"
 
-#: ../gtk/gtksettings.c:1257
+#: ../gtk/gtksettings.c:1243
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "菜单栏的子菜单出现前的延迟"
 
-#: ../gtk/gtksettings.c:1274
+#: ../gtk/gtksettings.c:1260
 msgid "Scrolled Window Placement"
 msgstr "滚动窗口放置"
 
-#: ../gtk/gtksettings.c:1275
+#: ../gtk/gtksettings.c:1261
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
 msgstr "如果不被滚动窗口自己覆盖，滚动窗口的内容要如何与滚动条进行协调排列"
 
-#: ../gtk/gtksettings.c:1284
+#: ../gtk/gtksettings.c:1270
 msgid "Can change accelerators"
 msgstr "可更改快捷键"
 
-#: ../gtk/gtksettings.c:1285
+#: ../gtk/gtksettings.c:1271
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "菜单快捷键是否可通过在菜单项上按键进行更改"
 
-#: ../gtk/gtksettings.c:1293
+#: ../gtk/gtksettings.c:1279
 msgid "Delay before submenus appear"
 msgstr "子菜单出现的延迟"
 
-#: ../gtk/gtksettings.c:1294
+#: ../gtk/gtksettings.c:1280
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "在子菜单出现前鼠标指针必须指向菜单项的最短时间"
 
-#: ../gtk/gtksettings.c:1303
+#: ../gtk/gtksettings.c:1289
 msgid "Delay before hiding a submenu"
 msgstr "隐藏子菜单的延迟"
 
-#: ../gtk/gtksettings.c:1304
+#: ../gtk/gtksettings.c:1290
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
 msgstr "在隐藏子菜单前鼠标指针必须远离子菜单的最短时间"
 
-#: ../gtk/gtksettings.c:1314
+#: ../gtk/gtksettings.c:1300
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "当可选择标签被聚焦时是否选中其内容"
 
-#: ../gtk/gtksettings.c:1322
+#: ../gtk/gtksettings.c:1308
 msgid "Custom palette"
 msgstr "自定义调色板"
 
-#: ../gtk/gtksettings.c:1323
+#: ../gtk/gtksettings.c:1309
 msgid "Palette to use in the color selector"
 msgstr "颜色选择器使用的调色板"
 
-#: ../gtk/gtksettings.c:1331
+#: ../gtk/gtksettings.c:1317
 msgid "IM Preedit style"
 msgstr "输入法候选样式"
 
-#: ../gtk/gtksettings.c:1332
+#: ../gtk/gtksettings.c:1318
 msgid "How to draw the input method preedit string"
 msgstr "如何绘制输入法候选字符串"
 
-#: ../gtk/gtksettings.c:1341
+#: ../gtk/gtksettings.c:1327
 msgid "IM Status style"
 msgstr "输入法状态样式"
 
-#: ../gtk/gtksettings.c:1342
+#: ../gtk/gtksettings.c:1328
 msgid "How to draw the input method statusbar"
 msgstr "如何绘制输入法状态栏"
 
-#: ../gtk/gtksettings.c:1351
+#: ../gtk/gtksettings.c:1337
 msgid "Desktop shell shows app menu"
 msgstr "桌面 Shell 显示应用程序菜单"
 
-#: ../gtk/gtksettings.c:1352
+#: ../gtk/gtksettings.c:1338
 msgid ""
 "Set to TRUE if the desktop environment is displaying the app menu, FALSE if "
 "the app should display it itself."
-msgstr ""
-"设置为 TRUE 则桌面环境显示应用程序菜单，FALSE 则由应用程序本身显示。"
+msgstr "设置为 TRUE 则桌面环境显示应用程序菜单，FALSE 则由应用程序本身显示。"
 
-#: ../gtk/gtksettings.c:1361
+#: ../gtk/gtksettings.c:1347
 msgid "Desktop shell shows the menubar"
 msgstr "桌面 Shell 显示菜单栏"
 
-#: ../gtk/gtksettings.c:1362
+#: ../gtk/gtksettings.c:1348
 msgid ""
 "Set to TRUE if the desktop environment is displaying the menubar, FALSE if "
 "the app should display it itself."
-msgstr ""
-"设置为 TRUE 则桌面环境显示应用程序菜单栏，FALSE 则由应用程序本身显示。"
+msgstr "设置为 TRUE 则桌面环境显示应用程序菜单栏，FALSE 则由应用程序本身显示。"
 
 #: ../gtk/gtksizegroup.c:380 ../gtk/gtktreeselection.c:129
 msgid "Mode"
@@ -6063,50 +6060,50 @@ msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr "如果为 TRUE，则在确定组大小时忽略未映射控件"
 
-#: ../gtk/gtkspinbutton.c:324
+#: ../gtk/gtkspinbutton.c:325
 msgid "Climb Rate"
 msgstr "爬升速率"
 
-#: ../gtk/gtkspinbutton.c:344
+#: ../gtk/gtkspinbutton.c:345
 msgid "Snap to Ticks"
 msgstr "凑整"
 
-#: ../gtk/gtkspinbutton.c:345
+#: ../gtk/gtkspinbutton.c:346
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
 msgstr "错误的输入是否被自动变为调节按钮最接近的步进增量"
 
-#: ../gtk/gtkspinbutton.c:352
+#: ../gtk/gtkspinbutton.c:353
 msgid "Numeric"
 msgstr "数字"
 
-#: ../gtk/gtkspinbutton.c:353
+#: ../gtk/gtkspinbutton.c:354
 msgid "Whether non-numeric characters should be ignored"
 msgstr "是否忽略非数字的字符"
 
-#: ../gtk/gtkspinbutton.c:360
+#: ../gtk/gtkspinbutton.c:361
 msgid "Wrap"
 msgstr "回绕"
 
-#: ../gtk/gtkspinbutton.c:361
+#: ../gtk/gtkspinbutton.c:362
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr "调节按钮的数值超过限制后是否会回绕"
 
-#: ../gtk/gtkspinbutton.c:368
+#: ../gtk/gtkspinbutton.c:369
 msgid "Update Policy"
 msgstr "更新策略"
 
-#: ../gtk/gtkspinbutton.c:369
+#: ../gtk/gtkspinbutton.c:370
 msgid ""
 "Whether the spin button should update always, or only when the value is legal"
 msgstr "调节按钮总是更新，还是只在数值合法时更新"
 
-#: ../gtk/gtkspinbutton.c:378
+#: ../gtk/gtkspinbutton.c:379
 msgid "Reads the current value, or sets a new value"
 msgstr "读取当前数值，或设置新值"
 
-#: ../gtk/gtkspinbutton.c:387
+#: ../gtk/gtkspinbutton.c:388
 msgid "Style of bevel around the spin button"
 msgstr "微调钮周围的立体样式"
 
@@ -6166,19 +6163,19 @@ msgstr "此托盘图标的工具提示内容"
 msgid "The title of this tray icon"
 msgstr "此托盘图标的标题"
 
-#: ../gtk/gtkstylecontext.c:443
+#: ../gtk/gtkstylecontext.c:444
 msgid "The associated GdkScreen"
 msgstr "已关联 GdkScreen"
 
-#: ../gtk/gtkstylecontext.c:449
+#: ../gtk/gtkstylecontext.c:450
 msgid "Direction"
 msgstr "方向"
 
-#: ../gtk/gtkstylecontext.c:450 ../gtk/gtktexttag.c:282
+#: ../gtk/gtkstylecontext.c:451 ../gtk/gtktexttag.c:282
 msgid "Text direction"
 msgstr "文字方向"
 
-#: ../gtk/gtkstylecontext.c:466
+#: ../gtk/gtkstylecontext.c:467
 msgid "The parent style context"
 msgstr "上层风格背景"
 
@@ -6631,79 +6628,79 @@ msgstr "绘制指示器"
 msgid "If the toggle part of the button is displayed"
 msgstr "是否显示按钮的切换标志"
 
-#: ../gtk/gtktoolbar.c:502 ../gtk/gtktoolpalette.c:1037
+#: ../gtk/gtktoolbar.c:503 ../gtk/gtktoolpalette.c:1037
 msgid "Toolbar Style"
 msgstr "工具栏风格"
 
-#: ../gtk/gtktoolbar.c:503
+#: ../gtk/gtktoolbar.c:504
 msgid "How to draw the toolbar"
 msgstr "如何绘制工具栏"
 
-#: ../gtk/gtktoolbar.c:510
+#: ../gtk/gtktoolbar.c:511
 msgid "Show Arrow"
 msgstr "显示箭头"
 
-#: ../gtk/gtktoolbar.c:511
+#: ../gtk/gtktoolbar.c:512
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "工具栏显示不下时是否要显示箭头"
 
-#: ../gtk/gtktoolbar.c:532
+#: ../gtk/gtktoolbar.c:533
 msgid "Size of icons in this toolbar"
 msgstr "此工具栏上的图标大小"
 
-#: ../gtk/gtktoolbar.c:547 ../gtk/gtktoolpalette.c:1023
+#: ../gtk/gtktoolbar.c:548 ../gtk/gtktoolpalette.c:1023
 msgid "Icon size set"
 msgstr "图标大小设置"
 
-#: ../gtk/gtktoolbar.c:548 ../gtk/gtktoolpalette.c:1024
+#: ../gtk/gtktoolbar.c:549 ../gtk/gtktoolpalette.c:1024
 msgid "Whether the icon-size property has been set"
 msgstr "图标大小属性是否已经设定"
 
-#: ../gtk/gtktoolbar.c:557
+#: ../gtk/gtktoolbar.c:558
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "子部件是否在工具栏增长时获得额外空间"
 
-#: ../gtk/gtktoolbar.c:565 ../gtk/gtktoolitemgroup.c:1646
+#: ../gtk/gtktoolbar.c:566 ../gtk/gtktoolitemgroup.c:1646
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "同类子部件是否使用统一大小"
 
-#: ../gtk/gtktoolbar.c:572
+#: ../gtk/gtktoolbar.c:573
 msgid "Spacer size"
 msgstr "间距大小"
 
-#: ../gtk/gtktoolbar.c:573
+#: ../gtk/gtktoolbar.c:574
 msgid "Size of spacers"
 msgstr "工具栏上间距的大小"
 
-#: ../gtk/gtktoolbar.c:582
+#: ../gtk/gtktoolbar.c:583
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "工具栏阴影与按钮之间的间距"
 
-#: ../gtk/gtktoolbar.c:590
+#: ../gtk/gtktoolbar.c:591
 msgid "Maximum child expand"
 msgstr "最大的子控件展开"
 
-#: ../gtk/gtktoolbar.c:591
+#: ../gtk/gtktoolbar.c:592
 msgid "Maximum amount of space an expandable item will be given"
 msgstr "可展开项能获得的最大的空间"
 
-#: ../gtk/gtktoolbar.c:599
+#: ../gtk/gtktoolbar.c:600
 msgid "Space style"
 msgstr "间距风格"
 
-#: ../gtk/gtktoolbar.c:600
+#: ../gtk/gtktoolbar.c:601
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "间距为竖直线或只是空白"
 
-#: ../gtk/gtktoolbar.c:607
+#: ../gtk/gtktoolbar.c:608
 msgid "Button relief"
 msgstr "按钮浮雕"
 
-#: ../gtk/gtktoolbar.c:608
+#: ../gtk/gtktoolbar.c:609
 msgid "Type of bevel around toolbar buttons"
 msgstr "工具栏按钮周围的立体效果类型"
 
-#: ../gtk/gtktoolbar.c:615
+#: ../gtk/gtktoolbar.c:616
 msgid "Style of bevel around the toolbar"
 msgstr "工具栏周围的立体效果样式"
 
