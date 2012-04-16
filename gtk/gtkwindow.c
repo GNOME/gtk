@@ -422,9 +422,11 @@ static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
 static void	   gtk_window_on_composited_changed (GdkScreen *screen,
 						     GtkWindow *window);
+#ifdef GDK_WINDOWING_X11
 static void        gtk_window_on_theme_variant_changed (GtkSettings *settings,
                                                         GParamSpec  *pspec,
                                                         GtkWindow   *window);
+#endif
 static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 
 static GSList      *toplevel_list = NULL;
@@ -8345,6 +8347,7 @@ gtk_window_set_theme_variant (GtkWindow *window)
 #endif
 }
 
+#ifdef GDK_WINDOWING_X11
 static void
 gtk_window_on_theme_variant_changed (GtkSettings *settings,
                                      GParamSpec  *pspec,
@@ -8353,6 +8356,7 @@ gtk_window_on_theme_variant_changed (GtkSettings *settings,
   if (window->priv->type == GTK_WINDOW_TOPLEVEL)
     gtk_window_set_theme_variant (window);
 }
+#endif
 
 static void
 gtk_window_on_composited_changed (GdkScreen *screen,
