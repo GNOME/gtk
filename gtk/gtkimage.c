@@ -157,7 +157,7 @@ static void gtk_image_get_preferred_height (GtkWidget    *widget,
 static void gtk_image_style_updated        (GtkWidget    *widget);
 static void gtk_image_screen_changed       (GtkWidget    *widget,
                                             GdkScreen    *prev_screen);
-static void gtk_image_destroy              (GtkWidget    *widget);
+static void gtk_image_finalize             (GObject      *object);
 static void gtk_image_reset                (GtkImage     *image);
 
 static void gtk_image_set_property         (GObject      *object,
@@ -199,10 +199,10 @@ gtk_image_class_init (GtkImageClass *class)
   
   gobject_class->set_property = gtk_image_set_property;
   gobject_class->get_property = gtk_image_get_property;
+  gobject_class->finalize = gtk_image_finalize;
 
   widget_class = GTK_WIDGET_CLASS (class);
   widget_class->draw = gtk_image_draw;
-  widget_class->destroy = gtk_image_destroy;
   widget_class->get_preferred_width = gtk_image_get_preferred_width;
   widget_class->get_preferred_height = gtk_image_get_preferred_height;
   widget_class->unmap = gtk_image_unmap;
@@ -359,14 +359,14 @@ gtk_image_init (GtkImage *image)
 }
 
 static void
-gtk_image_destroy (GtkWidget *widget)
+gtk_image_finalize (GObject *object)
 {
-  GtkImage *image = GTK_IMAGE (widget);
+  GtkImage *image = GTK_IMAGE (object);
 
   g_clear_object (&image->priv->icon_helper);
-
-  GTK_WIDGET_CLASS (gtk_image_parent_class)->destroy (widget);
-}
+  
+  G_OBJECT_CLASS (gtk_image_parent_class)->finalize (object);
+};
 
 static void 
 gtk_image_set_property (GObject      *object,
