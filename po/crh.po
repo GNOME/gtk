@@ -1323,17 +1323,15 @@ msgstr "Tüs _ismi:"
 
 # gtk/gtkcolorsel.c:1798
 #: ../gtk/gtkcoloreditor.c:457
-#, fuzzy
 msgctxt "Color channel"
 msgid "Saturation"
-msgstr "_Toyğunlıq:"
+msgstr "Toyğunlıq:"
 
 # gtk/gtkcolorsel.c:1800
 #: ../gtk/gtkcoloreditor.c:463
-#, fuzzy
 msgctxt "Color channel"
 msgid "Value"
-msgstr "_Deger:"
+msgstr "Deger:"
 
 #: ../gtk/gtkcoloreditor.c:471
 msgctxt "Color channel"
@@ -2001,7 +1999,7 @@ msgstr "_Qullanıcı adı:"
 # gtk/gtkfilesel.c:1795
 #: ../gtk/gtkmountoperation.c:602
 msgid "_Domain:"
-msgstr "_Saa:"
+msgstr "_Saha:"
 
 # gtk/gtkinputdialog.c:471
 #: ../gtk/gtkmountoperation.c:608
