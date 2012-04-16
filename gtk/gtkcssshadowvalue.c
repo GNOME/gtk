@@ -404,12 +404,17 @@ _gtk_css_shadow_value_paint_icon (const GtkCssValue *shadow,
 
   cairo_save (cr);
   pattern = cairo_pattern_reference (cairo_get_source (cr));
+
+  cr = gtk_css_shadow_value_start_drawing (shadow, cr);
+
   gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
 
   cairo_translate (cr,
                    _gtk_css_number_value_get (shadow->hoffset, 0),
                    _gtk_css_number_value_get (shadow->voffset, 0));
   cairo_mask (cr, pattern);
+
+  cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
 
   cairo_restore (cr);
   cairo_pattern_destroy (pattern);
