@@ -961,9 +961,9 @@ if test "x$enable_x11_backend" = xyes; then
   # Xext is optional, the chances a system has *none* of these things is so
   # small that we just unconditionally require it.
   AC_CHECK_FUNC(XOpenDisplay, :,
-                AC_MSG_ERROR([*** libX11 not found. Check 'config.log' for more details.]))
+                AC_MSG_ERROR([*** libX11 and libXext not found. Check 'config.log' for more details.]))
   AC_CHECK_FUNC(XextFindDisplay, :,
-                AC_MSG_ERROR([*** libXext not found. Check 'config.log' for more details.]))
+                AC_MSG_ERROR([*** libX11 and libXext not found. Check 'config.log' for more details.]))
 
   # Check for xReply
 
