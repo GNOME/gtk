@@ -88,11 +88,58 @@ gtk_css_value_string_print (const GtkCssValue *value,
   g_string_append_c (str, '"');
 }
 
+static void
+gtk_css_value_ident_print (const GtkCssValue *value,
+                            GString           *str)
+{
+  char *string = value->string;
+  gsize len;
+
+  do {
+    len = strcspn (string, "\"\n\r\f");
+    g_string_append_len (str, string, len);
+    string += len;
+    switch (*string)
+      {
+      case '\0':
+        break;
+      case '\n':
+        g_string_append (str, "\\A ");
+        break;
+      case '\r':
+        g_string_append (str, "\\D ");
+        break;
+      case '\f':
+        g_string_append (str, "\\C ");
+        break;
+      case '\"':
+        g_string_append (str, "\\\"");
+        break;
+      case '\'':
+        g_string_append (str, "\\'");
+        break;
+      case '\\':
+        g_string_append (str, "\\\\");
+        break;
+      default:
+        g_assert_not_reached ();
+        break;
+      }
+  } while (*string);
+}
+
 static const GtkCssValueClass GTK_CSS_VALUE_STRING = {
   gtk_css_value_string_free,
   gtk_css_value_string_equal,
   gtk_css_value_string_transition,
   gtk_css_value_string_print
+};
+
+static const GtkCssValueClass GTK_CSS_VALUE_IDENT = {
+  gtk_css_value_string_free,
+  gtk_css_value_string_equal,
+  gtk_css_value_string_transition,
+  gtk_css_value_ident_print
 };
 
 GtkCssValue *
@@ -131,6 +178,46 @@ _gtk_css_string_value_get (const GtkCssValue *value)
 {
   g_return_val_if_fail (value != NULL, NULL);
   g_return_val_if_fail (value->class == &GTK_CSS_VALUE_STRING, NULL);
+
+  return value->string;
+}
+
+GtkCssValue *
+_gtk_css_ident_value_new (const char *ident)
+{
+  return _gtk_css_ident_value_new_take (g_strdup (ident));
+}
+
+GtkCssValue *
+_gtk_css_ident_value_new_take (char *ident)
+{
+  GtkCssValue *result;
+
+  result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_IDENT);
+  result->string = ident;
+
+  return result;
+}
+
+GtkCssValue *
+_gtk_css_ident_value_try_parse (GtkCssParser *parser)
+{
+  char *ident;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  ident = _gtk_css_parser_try_ident (parser, TRUE);
+  if (ident == NULL)
+    return NULL;
+  
+  return _gtk_css_ident_value_new_take (ident);
+}
+
+const char *
+_gtk_css_ident_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value != NULL, NULL);
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_IDENT, NULL);
 
   return value->string;
 }
