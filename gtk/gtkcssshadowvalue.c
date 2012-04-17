@@ -346,8 +346,29 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
   cairo_rel_move_to (cr, 
                      _gtk_css_number_value_get (shadow->hoffset, 0),
                      _gtk_css_number_value_get (shadow->voffset, 0));
-  gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
-  _gtk_pango_fill_layout (cr, layout);
+
+  if (_gtk_css_number_value_get (shadow->radius, 0) > 0)
+    {
+      cairo_t *blur_cr;
+      cairo_surface_t *surface;
+
+      _gtk_css_shadow_value_blur_surface_create (shadow, cr,
+                                                 &blur_cr, &surface);
+
+      /* Create the path on the surface to blur. */
+      gdk_cairo_set_source_rgba (blur_cr, _gtk_css_rgba_value_get_rgba (shadow->color));
+      _gtk_pango_fill_layout (blur_cr, layout);
+
+      _gtk_css_shadow_value_blur_surface_paint (shadow, cr, surface);
+
+      cairo_destroy (blur_cr);
+      cairo_surface_destroy (surface); 
+    }
+  else
+    {
+      gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
+      _gtk_pango_fill_layout (cr, layout);
+    }
 
   cairo_rel_move_to (cr,
                      - _gtk_css_number_value_get (shadow->hoffset, 0),
