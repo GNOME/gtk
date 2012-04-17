@@ -380,8 +380,13 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
   cairo_rel_move_to (cr, 
                      _gtk_css_number_value_get (shadow->hoffset, 0),
                      _gtk_css_number_value_get (shadow->voffset, 0));
+
+  cr = gtk_css_shadow_value_start_drawing (shadow, cr);
+
   gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
   _gtk_pango_fill_layout (cr, layout);
+
+  cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
 
   cairo_rel_move_to (cr,
                      - _gtk_css_number_value_get (shadow->hoffset, 0),
