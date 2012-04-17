@@ -314,6 +314,8 @@ EXTRA_DIST += \
 	single-slash.errors\
 	single-slash.ref.css \
 	test.png \
+	transition.css \
+	transition.ref.css \
 	value-inherit.css \
 	value-inherit-shorthand.css \
 	value-inherit-shorthand.ref.css \
