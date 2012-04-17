@@ -29,6 +29,16 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GdkWaylandDisplayManager GdkWaylandDisplayManager;
+typedef struct _GdkWaylandDisplayManagerClass GdkWaylandDisplayManagerClass;
+
+#define GDK_TYPE_WAYLAND_DISPLAY_MANAGER              (gdk_wayland_display_manager_get_type())
+#define GDK_WAYLAND_DISPLAY_MANAGER(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_DISPLAY_MANAGER, GdkWaylandDisplayManager))
+#define GDK_WAYLAND_DISPLAY_MANAGER_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WAYLAND_DISPLAY_MANAGER, GdkWaylandDisplayManagerClass))
+#define GDK_IS_WAYLAND_DISPLAY_MANAGER(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_DISPLAY_MANAGER))
+#define GDK_IS_WAYLAND_DISPLAY_MANAGER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WAYLAND_DISPLAY_MANAGER))
+#define GDK_WAYLAND_DISPLAY_MANAGER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WAYLAND_DISPLAY_MANAGER, GdkWaylandDisplayManagerClass))
+
 GType      gdk_wayland_display_manager_get_type   (void);
 
 #if defined (GTK_COMPILATION) || defined (GDK_COMPILATION)
