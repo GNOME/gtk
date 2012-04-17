@@ -2700,6 +2700,8 @@ _gtk_theming_engine_paint_spinner (cairo_t       *cr,
 
   cairo_save (cr);
 
+  cairo_translate (cr, radius, radius);
+
   cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
   cairo_set_line_width (cr, 2.0);
 
@@ -2756,7 +2758,9 @@ render_spinner (GtkThemingEngine *engine,
   gtk_theming_engine_get_color (engine, state, &color);
 
   cairo_save (cr);
-  cairo_translate (cr, x + width / 2, y + height / 2);
+  cairo_translate (cr,
+                   x + (width - (2 * radius)) / 2,
+                   y + (height - (2 * radius)) / 2);
 
   _gtk_css_shadows_value_paint_spinner (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW),
                                         cr,
