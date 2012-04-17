@@ -113,6 +113,7 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
   printer->get_remote_ppd_attempts = 0;
   printer->remote_cups_connection_test = NULL;
   printer->auth_info_required = NULL;
+  printer->default_number_up = 1;
 }
 
 static void

@@ -1737,7 +1737,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       gchar   *default_cover_after = NULL;
       gboolean remote_printer = FALSE;
       gchar  **auth_info_required = NULL;
-      
+      gint     default_number_up = 1;
+
       /* Skip leading attributes until we hit a printer...
        */
       while (attr != NULL && attr->group_tag != IPP_TAG_PRINTER)
@@ -1864,6 +1865,10 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
                   auth_info_required[i] = g_strdup (attr->values[i].string.text);
               }
           }
+        else if (strcmp (attr->name, "number-up-default") == 0)
+          {
+            default_number_up = attr->values[0].integer;
+          }
         else
 	  {
 	    GTK_NOTE (PRINTING,
@@ -1987,6 +1992,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
           cups_printer->default_cover_before = g_strdup (default_cover_before);
           cups_printer->default_cover_after = g_strdup (default_cover_after);
+
+          cups_printer->default_number_up = default_number_up;
 
 	  cups_printer->hostname = g_strdup (hostname);
 	  cups_printer->port = port;
@@ -2188,7 +2195,8 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
       "job-sheets-supported",
       "job-sheets-default",
       "printer-type",
-      "auth-info-required"
+      "auth-info-required",
+      "number-up-default"
     };
 
   if (cups_backend->reading_ppds > 0 || cups_backend->list_printers_pending)
@@ -3613,44 +3621,11 @@ cups_printer_get_options (GtkPrinter           *printer,
 #ifdef HAVE_COLORD
   GtkPrintBackendCupsColordHelper *helper;
 #endif
+  char *default_number_up;
 
   set = gtk_printer_option_set_new ();
 
   /* Cups specific, non-ppd related settings */
-
-   /* Translators, this string is used to label the pages-per-sheet option 
-    * in the print dialog 
-    */
-  option = gtk_printer_option_new ("gtk-n-up", _("Pages per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
-  gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up),
-					 n_up, n_up);
-  gtk_printer_option_set (option, "1");
-  set_option_from_settings (option, settings);
-  gtk_printer_option_set_add (set, option);
-  g_object_unref (option);
-
-  if (cups_printer_get_capabilities (printer) & GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT)
-    {
-      for (i = 0; i < G_N_ELEMENTS (n_up_layout_display); i++)
-        n_up_layout_display[i] = _(n_up_layout_display[i]);
-  
-       /* Translators, this string is used to label the option in the print 
-        * dialog that controls in what order multiple pages are arranged 
-        */
-      option = gtk_printer_option_new ("gtk-n-up-layout", _("Page Ordering"), GTK_PRINTER_OPTION_TYPE_PICKONE);
-      gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up_layout),
-                                             n_up_layout, n_up_layout_display);
-
-      text_direction = gtk_widget_get_default_direction ();
-      if (text_direction == GTK_TEXT_DIR_LTR)
-        gtk_printer_option_set (option, "lrtb");
-      else
-        gtk_printer_option_set (option, "rltb");
-
-      set_option_from_settings (option, settings);
-      gtk_printer_option_set_add (set, option);
-      g_object_unref (option);
-    }
 
   for (i = 0; i < G_N_ELEMENTS(prio_display); i++)
     prio_display[i] = _(prio_display[i]);
@@ -3691,6 +3666,42 @@ cups_printer_get_options (GtkPrinter           *printer,
       gint num_of_covers = 0;
       gpointer value;
       gint j;
+
+       /* Translators, this string is used to label the pages-per-sheet option 
+        * in the print dialog 
+        */
+      option = gtk_printer_option_new ("gtk-n-up", _("Pages per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
+      gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up),
+					     n_up, n_up);
+      default_number_up = g_strdup_printf ("%d", cups_printer->default_number_up);
+      gtk_printer_option_set (option, default_number_up);
+      g_free (default_number_up);
+      set_option_from_settings (option, settings);
+      gtk_printer_option_set_add (set, option);
+      g_object_unref (option);
+
+      if (cups_printer_get_capabilities (printer) & GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT)
+        {
+          for (i = 0; i < G_N_ELEMENTS (n_up_layout_display); i++)
+            n_up_layout_display[i] = _(n_up_layout_display[i]);
+
+           /* Translators, this string is used to label the option in the print 
+            * dialog that controls in what order multiple pages are arranged 
+            */
+          option = gtk_printer_option_new ("gtk-n-up-layout", _("Page Ordering"), GTK_PRINTER_OPTION_TYPE_PICKONE);
+          gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up_layout),
+                                                 n_up_layout, n_up_layout_display);
+
+          text_direction = gtk_widget_get_default_direction ();
+          if (text_direction == GTK_TEXT_DIR_LTR)
+            gtk_printer_option_set (option, "lrtb");
+          else
+            gtk_printer_option_set (option, "rltb");
+
+          set_option_from_settings (option, settings);
+          gtk_printer_option_set_add (set, option);
+          g_object_unref (option);
+        }
 
       num_of_covers = backend->number_of_covers;
       cover = g_new (char *, num_of_covers + 1);

@@ -61,6 +61,8 @@ struct _GtkPrinterCups
   gchar  *default_cover_before;
   gchar  *default_cover_after;
 
+  gint    default_number_up;
+
   gboolean remote;
   guint get_remote_ppd_poll;
   gint  get_remote_ppd_attempts;
