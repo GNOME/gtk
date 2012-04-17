@@ -21,6 +21,7 @@
 
 #include "gtkcssshadowvalueprivate.h"
 
+#include "gtkcairoblurprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -300,6 +301,68 @@ fail:
     }
 
   return NULL;
+}
+
+static const cairo_user_data_key_t shadow_key;
+
+static cairo_t *
+gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
+                                    cairo_t           *cr)
+{
+  cairo_rectangle_int_t clip_rect;
+  cairo_surface_t *surface;
+  cairo_t *blur_cr;
+  gdouble radius;
+
+  radius = _gtk_css_number_value_get (shadow->radius, 0);
+  if (radius == 0.0)
+    return cr;
+
+  gdk_cairo_get_clip_rectangle (cr, &clip_rect);
+
+  /* Create a larger surface to center the blur. */
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        clip_rect.width + 2 * radius,
+                                        clip_rect.height + 2 * radius);
+  cairo_surface_set_device_offset (surface, radius - clip_rect.x, radius - clip_rect.y);
+  blur_cr = cairo_create (surface);
+  cairo_set_user_data (blur_cr, &shadow_key, cairo_reference (cr), (cairo_destroy_func_t) cairo_destroy);
+
+  if (cairo_has_current_point (cr))
+    {
+      double x, y;
+      
+      cairo_get_current_point (cr, &x, &y);
+      cairo_move_to (blur_cr, x, y);
+    }
+
+  return blur_cr;
+}
+
+static cairo_t *
+gtk_css_shadow_value_finish_drawing (const GtkCssValue *shadow,
+                                     cairo_t           *cr)
+{
+  gdouble radius;
+  cairo_t *original_cr;
+  cairo_surface_t *surface;
+
+  radius = _gtk_css_number_value_get (shadow->radius, 0);
+  if (radius == 0.0)
+    return cr;
+
+  surface = cairo_get_target (cr);
+  original_cr = cairo_get_user_data (cr, &shadow_key);
+
+  /* Blur the surface. */
+  _gtk_cairo_blur_surface (surface, radius);
+
+  cairo_set_source_surface (original_cr, surface, 0, 0);
+  cairo_paint (original_cr);
+
+  cairo_destroy (cr);
+
+  return original_cr;
 }
 
 void
