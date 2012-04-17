@@ -36,7 +36,6 @@ gtk/gtkactiongroup.c
 gtk/gtkactivatable.c
 gtk/gtkadjustment.c
 gtk/gtkalignment.c
-gtk/gtkanimationdescription.c
 gtk/gtkappchooserbutton.c
 gtk/gtkappchooser.c
 gtk/gtkappchooserdialog.c
@@ -198,6 +197,7 @@ gtk/gtkstock.c
 gtk/gtkstylecontext.c
 gtk/gtkstyleproperty.c
 gtk/gtkstyleprovider.c
+gtk/gtkstyleproviderprivate.c
 gtk/gtkswitch.c
 gtk/gtktextbuffer.c
 gtk/gtktextbufferrichtext.c
