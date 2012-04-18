@@ -357,15 +357,13 @@ _gtk_css_image_can_parse (GtkCssParser *parser)
 }
 
 GtkCssImage *
-_gtk_css_image_new_parse (GtkCssParser *parser,
-                          GFile        *base)
+_gtk_css_image_new_parse (GtkCssParser *parser)
 {
   GtkCssImageClass *klass;
   GtkCssImage *image;
   GType image_type;
 
   g_return_val_if_fail (parser != NULL, NULL);
-  g_return_val_if_fail (G_IS_FILE (base), NULL);
 
   image_type = gtk_css_image_get_parser_type (parser);
   if (image_type == G_TYPE_INVALID)
@@ -377,7 +375,7 @@ _gtk_css_image_new_parse (GtkCssParser *parser,
   image = g_object_new (image_type, NULL);
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
-  if (!klass->parse (image, parser, base))
+  if (!klass->parse (image, parser))
     {
       g_object_unref (image);
       return NULL;

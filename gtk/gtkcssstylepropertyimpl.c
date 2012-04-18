@@ -553,7 +553,7 @@ css_image_value_parse (GtkCssStyleProperty *property,
     image = NULL;
   else
     {
-      image = _gtk_css_image_new_parse (parser, base);
+      image = _gtk_css_image_new_parse (parser);
       if (image == NULL)
         return FALSE;
     }

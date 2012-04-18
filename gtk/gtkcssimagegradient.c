@@ -66,8 +66,7 @@ gtk_css_image_gradient_draw (GtkCssImage        *image,
 
 static gboolean
 gtk_css_image_gradient_parse (GtkCssImage  *image,
-                              GtkCssParser *parser,
-                              GFile        *base)
+                              GtkCssParser *parser)
 {
   GtkCssImageGradient *gradient = GTK_CSS_IMAGE_GRADIENT (image);
 

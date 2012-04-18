@@ -67,8 +67,7 @@ gtk_css_image_win32_draw (GtkCssImage        *image,
 
 static gboolean
 gtk_css_image_win32_parse (GtkCssImage  *image,
-                           GtkCssParser *parser,
-                           GFile        *base)
+                           GtkCssParser *parser)
 {
   GtkCssImageWin32 *wimage = GTK_CSS_IMAGE_WIN32 (image);
   char *class;

@@ -222,8 +222,7 @@ gtk_css_image_linear_draw (GtkCssImage        *image,
 
 static gboolean
 gtk_css_image_linear_parse (GtkCssImage  *image,
-                            GtkCssParser *parser,
-                            GFile        *base)
+                            GtkCssParser *parser)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
   guint i;

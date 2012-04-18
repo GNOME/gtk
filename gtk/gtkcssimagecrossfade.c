@@ -141,8 +141,7 @@ gtk_css_image_cross_fade_draw (GtkCssImage        *image,
 
 static gboolean
 gtk_css_image_cross_fade_parse (GtkCssImage  *image,
-                                GtkCssParser *parser,
-                                GFile        *base)
+                                GtkCssParser *parser)
 {
   GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
   GtkCssValue *number;
@@ -153,7 +152,7 @@ gtk_css_image_cross_fade_parse (GtkCssImage  *image,
       return FALSE;
     }
 
-  cross_fade->start = _gtk_css_image_new_parse (parser, base);
+  cross_fade->start = _gtk_css_image_new_parse (parser);
   if (cross_fade->start == NULL)
     return FALSE;
 
@@ -163,7 +162,7 @@ gtk_css_image_cross_fade_parse (GtkCssImage  *image,
       return FALSE;
     }
 
-  cross_fade->end = _gtk_css_image_new_parse (parser, base);
+  cross_fade->end = _gtk_css_image_new_parse (parser);
   if (cross_fade->end == NULL)
     return FALSE;
 

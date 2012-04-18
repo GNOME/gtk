@@ -281,7 +281,7 @@ parse_border_image (GtkCssShorthandProperty  *shorthand,
             image = NULL;
           else
             {
-              image = _gtk_css_image_new_parse (parser, base);
+              image = _gtk_css_image_new_parse (parser);
               if (image == NULL)
                 return FALSE;
             }
@@ -483,7 +483,7 @@ parse_background (GtkCssShorthandProperty  *shorthand,
             image = NULL;
           else
             {
-              image = _gtk_css_image_new_parse (parser, base);
+              image = _gtk_css_image_new_parse (parser);
               if (image == NULL)
                 return FALSE;
             }
