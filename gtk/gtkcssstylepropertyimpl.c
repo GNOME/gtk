@@ -175,8 +175,7 @@ assign_border (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 color_parse (GtkCssStyleProperty *property,
-             GtkCssParser        *parser,
-             GFile               *base)
+             GtkCssParser        *parser)
 {
   return _gtk_css_symbolic_value_new (parser);
 }
@@ -253,8 +252,7 @@ font_family_parse_one (GtkCssParser *parser)
 
 static GtkCssValue *
 font_family_parse (GtkCssStyleProperty *property,
-                   GtkCssParser        *parser,
-                   GFile               *base)
+                   GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, font_family_parse_one, FALSE);
 }
@@ -303,8 +301,7 @@ font_family_assign (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 parse_pango_style (GtkCssStyleProperty *property,
-                   GtkCssParser        *parser,
-                   GFile               *base)
+                   GtkCssParser        *parser)
 {
   GtkCssValue *value = _gtk_css_font_style_value_try_parse (parser);
   
@@ -332,8 +329,7 @@ assign_pango_style (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 parse_pango_weight (GtkCssStyleProperty *property,
-                    GtkCssParser        *parser,
-                    GFile               *base)
+                    GtkCssParser        *parser)
 {
   GtkCssValue *value = _gtk_css_font_weight_value_try_parse (parser);
   
@@ -361,8 +357,7 @@ assign_pango_weight (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 parse_pango_variant (GtkCssStyleProperty *property,
-                     GtkCssParser        *parser,
-                     GFile               *base)
+                     GtkCssParser        *parser)
 {
   GtkCssValue *value = _gtk_css_font_variant_value_try_parse (parser);
   
@@ -390,8 +385,7 @@ assign_pango_variant (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 parse_border_style (GtkCssStyleProperty *property,
-                    GtkCssParser        *parser,
-                    GFile               *base)
+                    GtkCssParser        *parser)
 {
   GtkCssValue *value = _gtk_css_border_style_value_try_parse (parser);
   
@@ -419,8 +413,7 @@ assign_border_style (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 parse_css_area (GtkCssStyleProperty *property,
-                GtkCssParser        *parser,
-                GFile               *base)
+                GtkCssParser        *parser)
 {
   GtkCssValue *value = _gtk_css_area_value_try_parse (parser);
   
@@ -455,8 +448,7 @@ bindings_value_parse_one (GtkCssParser *parser)
 
 static GtkCssValue *
 bindings_value_parse (GtkCssStyleProperty *property,
-                      GtkCssParser        *parser,
-                      GFile               *base)
+                      GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, bindings_value_parse_one, TRUE);
 }
@@ -512,8 +504,7 @@ bindings_value_assign (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 shadow_value_parse (GtkCssStyleProperty *property,
-                    GtkCssParser        *parser,
-                    GFile               *base)
+                    GtkCssParser        *parser)
 {
   return _gtk_css_shadows_value_parse (parser);
 }
@@ -528,8 +519,7 @@ shadow_value_compute (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 border_corner_radius_value_parse (GtkCssStyleProperty *property,
-                                  GtkCssParser        *parser,
-                                  GFile               *base)
+                                  GtkCssParser        *parser)
 {
   return _gtk_css_corner_value_parse (parser);
 }
@@ -544,8 +534,7 @@ border_corner_radius_value_compute (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 css_image_value_parse (GtkCssStyleProperty *property,
-                       GtkCssParser        *parser,
-                       GFile               *base)
+                       GtkCssParser        *parser)
 {
   GtkCssImage *image;
 
@@ -623,8 +612,7 @@ css_image_value_assign (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 font_size_parse (GtkCssStyleProperty *property,
-                 GtkCssParser        *parser,
-                 GFile               *base)
+                 GtkCssParser        *parser)
 {
   gdouble d;
 
@@ -647,8 +635,7 @@ font_size_compute (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 outline_parse (GtkCssStyleProperty *property,
-               GtkCssParser        *parser,
-               GFile               *base)
+               GtkCssParser        *parser)
 {
   return _gtk_css_number_value_parse (parser,
                                       GTK_CSS_NUMBER_AS_PIXELS
@@ -665,8 +652,7 @@ outline_compute (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 border_image_repeat_parse (GtkCssStyleProperty *property,
-                           GtkCssParser        *parser,
-                           GFile               *base)
+                           GtkCssParser        *parser)
 {
   GtkCssValue *value = _gtk_css_border_repeat_value_try_parse (parser);
 
@@ -681,8 +667,7 @@ border_image_repeat_parse (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 border_image_slice_parse (GtkCssStyleProperty *property,
-                          GtkCssParser        *parser,
-                          GFile               *base)
+                          GtkCssParser        *parser)
 {
   return _gtk_css_border_value_parse (parser,
                                       GTK_CSS_PARSE_PERCENT
@@ -694,8 +679,7 @@ border_image_slice_parse (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 border_image_width_parse (GtkCssStyleProperty *property,
-                          GtkCssParser        *parser,
-                          GFile               *base)
+                          GtkCssParser        *parser)
 {
   return _gtk_css_border_value_parse (parser,
                                       GTK_CSS_PARSE_PERCENT
@@ -732,8 +716,7 @@ transition_property_parse_one (GtkCssParser *parser)
 
 static GtkCssValue *
 transition_property_parse (GtkCssStyleProperty *property,
-                           GtkCssParser        *parser,
-                           GFile               *base)
+                           GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, transition_property_parse_one, FALSE);
 }
@@ -746,24 +729,21 @@ transition_time_parse_one (GtkCssParser *parser)
 
 static GtkCssValue *
 transition_time_parse (GtkCssStyleProperty *property,
-                       GtkCssParser        *parser,
-                       GFile               *base)
+                       GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, transition_time_parse_one, FALSE);
 }
 
 static GtkCssValue *
 transition_timing_function_parse (GtkCssStyleProperty *property,
-                                  GtkCssParser        *parser,
-                                  GFile               *base)
+                                  GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, _gtk_css_ease_value_parse, FALSE);
 }
 
 static GtkCssValue *
 engine_parse (GtkCssStyleProperty *property,
-              GtkCssParser        *parser,
-              GFile               *base)
+              GtkCssParser        *parser)
 {
   return _gtk_css_engine_value_parse (parser);
 }
@@ -786,8 +766,7 @@ engine_assign (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 parse_margin (GtkCssStyleProperty *property,
-              GtkCssParser        *parser,
-              GFile               *base)
+              GtkCssParser        *parser)
 {
   return _gtk_css_number_value_parse (parser,
                                       GTK_CSS_NUMBER_AS_PIXELS
@@ -804,8 +783,7 @@ compute_margin (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 parse_padding (GtkCssStyleProperty *property,
-               GtkCssParser        *parser,
-               GFile               *base)
+               GtkCssParser        *parser)
 {
   return _gtk_css_number_value_parse (parser,
                                       GTK_CSS_POSITIVE_ONLY
@@ -823,8 +801,7 @@ compute_padding (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 parse_border_width (GtkCssStyleProperty *property,
-                    GtkCssParser        *parser,
-                    GFile               *base)
+                    GtkCssParser        *parser)
 {
   return _gtk_css_number_value_parse (parser,
                                       GTK_CSS_POSITIVE_ONLY
@@ -853,8 +830,7 @@ compute_border_width (GtkCssStyleProperty    *property,
 
 static GtkCssValue *
 background_repeat_value_parse (GtkCssStyleProperty *property,
-                               GtkCssParser        *parser,
-                               GFile               *base)
+                               GtkCssParser        *parser)
 {
   GtkCssValue *value = _gtk_css_background_repeat_value_try_parse (parser);
 
@@ -869,8 +845,7 @@ background_repeat_value_parse (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 background_size_parse (GtkCssStyleProperty *property,
-                       GtkCssParser        *parser,
-                       GFile               *base)
+                       GtkCssParser        *parser)
 {
   return _gtk_css_bg_size_value_parse (parser);
 }
@@ -885,8 +860,7 @@ background_size_compute (GtkCssStyleProperty    *property,
 
 static GtkCssValue *
 background_position_parse (GtkCssStyleProperty *property,
-			   GtkCssParser        *parser,
-			   GFile               *base)
+			   GtkCssParser        *parser)
 {
   return _gtk_css_position_value_parse (parser);
 }
