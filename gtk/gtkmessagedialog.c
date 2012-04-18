@@ -384,25 +384,27 @@ static void
 setup_primary_label_font (GtkMessageDialog *dialog)
 {
   GtkMessageDialogPrivate *priv = dialog->priv;
-  gint size;
-  PangoFontDescription *font_desc;
-  GtkStyleContext *context;
-  GtkStateFlags state;
-
-  /* unset the font settings */
-  gtk_widget_override_font (priv->label, NULL);
 
   if (priv->has_secondary_text && !priv->has_primary_markup)
     {
-      context = gtk_widget_get_style_context (priv->label);
-      state = gtk_widget_get_state_flags (priv->label);
+      PangoAttrList *attributes;
+      PangoAttribute *attr;
 
-      size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
-      font_desc = pango_font_description_new ();
-      pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
-      pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
-      gtk_widget_override_font (priv->label, font_desc);
-      pango_font_description_free (font_desc);
+      attributes = pango_attr_list_new ();
+
+      attr = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
+      pango_attr_list_insert (attributes, attr);
+
+      attr = pango_attr_scale_new (PANGO_SCALE_LARGE);
+      pango_attr_list_insert (attributes, attr);
+
+      gtk_label_set_attributes (GTK_LABEL (priv->label), attributes);
+      pango_attr_list_unref (attributes);
+    }
+  else
+    {
+      /* unset the font settings */
+      gtk_label_set_attributes (GTK_LABEL (priv->label), NULL);
     }
 }
 
@@ -1006,8 +1008,6 @@ gtk_message_dialog_style_updated (GtkWidget *widget)
       gtk_container_set_border_width (GTK_CONTAINER (parent),
                                       MAX (0, border_width - 7));
     }
-
-  setup_primary_label_font (dialog);
 
   GTK_WIDGET_CLASS (gtk_message_dialog_parent_class)->style_updated (widget);
 }
