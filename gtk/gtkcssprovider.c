@@ -1406,8 +1406,7 @@ gtk_css_scanner_push_section (GtkCssScanner     *scanner,
 
   section = _gtk_css_section_new (scanner->section,
                                   section_type,
-                                  scanner->parser,
-                                  scanner->file);
+                                  scanner->parser);
 
   if (scanner->section)
     gtk_css_section_unref (scanner->section);

@@ -49,13 +49,11 @@ G_DEFINE_BOXED_TYPE (GtkCssSection, gtk_css_section, gtk_css_section_ref, gtk_cs
 GtkCssSection *
 _gtk_css_section_new (GtkCssSection     *parent,
                       GtkCssSectionType  type,
-                      GtkCssParser      *parser,
-                      GFile             *file)
+                      GtkCssParser      *parser)
 {
   GtkCssSection *section;
 
   g_return_val_if_fail (parser != NULL, NULL);
-  g_return_val_if_fail (file == NULL || G_IS_FILE (file), NULL);
 
   section = g_slice_new0 (GtkCssSection);
 
@@ -63,8 +61,9 @@ _gtk_css_section_new (GtkCssSection     *parent,
   section->section_type = type;
   if (parent)
     section->parent = gtk_css_section_ref (parent);
-  if (file)
-    section->file = g_object_ref (file);
+  section->file = _gtk_css_parser_get_file (parser);
+  if (section->file)
+    g_object_ref (section->file);
   section->start_line = _gtk_css_parser_get_line (parser);
   section->start_position = _gtk_css_parser_get_position (parser);
   section->parser = parser;
