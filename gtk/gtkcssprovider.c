@@ -1899,8 +1899,7 @@ parse_import (GtkCssScanner *scanner)
     }
   else
     {
-      file = _gtk_css_parser_read_url (scanner->parser,
-                                       gtk_css_scanner_get_base_url (scanner));
+      file = _gtk_css_parser_read_url (scanner->parser);
     }
 
   if (file == NULL)

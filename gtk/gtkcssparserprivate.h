@@ -47,6 +47,9 @@ void            _gtk_css_parser_error_full        (GtkCssParser          *parser
 
 guint           _gtk_css_parser_get_line          (GtkCssParser          *parser);
 guint           _gtk_css_parser_get_position      (GtkCssParser          *parser);
+GFile *         _gtk_css_parser_get_file          (GtkCssParser          *parser);
+GFile *         _gtk_css_parser_get_file_for_path (GtkCssParser          *parser,
+                                                   const char            *path);
 
 gboolean        _gtk_css_parser_is_eof            (GtkCssParser          *parser);
 gboolean        _gtk_css_parser_begins_with       (GtkCssParser          *parser,
@@ -87,8 +90,7 @@ gboolean        _gtk_css_parser_try_hash_color    (GtkCssParser          *parser
 gboolean        _gtk_css_parser_has_number        (GtkCssParser          *parser);
 char *          _gtk_css_parser_read_string       (GtkCssParser          *parser);
 char *          _gtk_css_parser_read_value        (GtkCssParser          *parser);
-GFile *         _gtk_css_parser_read_url          (GtkCssParser          *parser,
-                                                   GFile                 *base);
+GFile *         _gtk_css_parser_read_url          (GtkCssParser          *parser);
 
 void            _gtk_css_parser_skip_whitespace   (GtkCssParser          *parser);
 void            _gtk_css_parser_resync            (GtkCssParser          *parser,

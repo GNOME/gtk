@@ -725,7 +725,7 @@ pattern_value_parse (GtkCssParser *parser,
       cairo_t *cr;
       cairo_matrix_t matrix;
 
-      file = _gtk_css_parser_read_url (parser, base);
+      file = _gtk_css_parser_read_url (parser);
       if (file == NULL)
         return FALSE;
 

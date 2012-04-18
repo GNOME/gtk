@@ -72,7 +72,7 @@ gtk_css_image_url_parse (GtkCssImage  *image,
   GError *error = NULL;
   GFileInputStream *input;
 
-  file = _gtk_css_parser_read_url (parser, base);
+  file = _gtk_css_parser_read_url (parser);
   if (file == NULL)
     return FALSE;
 
