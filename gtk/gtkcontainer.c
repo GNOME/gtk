@@ -1721,6 +1721,7 @@ gtk_container_queue_resize_handler (GtkContainer *container)
 
         case GTK_RESIZE_IMMEDIATE:
           gtk_container_check_resize (container);
+          break;
 
         case GTK_RESIZE_PARENT:
         default:
