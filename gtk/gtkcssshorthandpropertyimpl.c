@@ -91,8 +91,7 @@ parse_four_numbers (GtkCssShorthandProperty  *shorthand,
 static gboolean
 parse_margin (GtkCssShorthandProperty  *shorthand,
               GtkCssValue             **values,
-              GtkCssParser             *parser,
-              GFile                    *base)
+              GtkCssParser             *parser)
 {
   return parse_four_numbers (shorthand,
                              values,
@@ -104,8 +103,7 @@ parse_margin (GtkCssShorthandProperty  *shorthand,
 static gboolean
 parse_padding (GtkCssShorthandProperty  *shorthand,
                GtkCssValue             **values,
-               GtkCssParser             *parser,
-               GFile                    *base)
+               GtkCssParser             *parser)
 {
   return parse_four_numbers (shorthand,
                              values,
@@ -118,8 +116,7 @@ parse_padding (GtkCssShorthandProperty  *shorthand,
 static gboolean
 parse_border_width (GtkCssShorthandProperty  *shorthand,
                     GtkCssValue             **values,
-                    GtkCssParser             *parser,
-                    GFile                    *base)
+                    GtkCssParser             *parser)
 {
   return parse_four_numbers (shorthand,
                              values,
@@ -132,8 +129,7 @@ parse_border_width (GtkCssShorthandProperty  *shorthand,
 static gboolean 
 parse_border_radius (GtkCssShorthandProperty  *shorthand,
                      GtkCssValue             **values,
-                     GtkCssParser             *parser,
-                     GFile                    *base)
+                     GtkCssParser             *parser)
 {
   GtkCssValue *x[4] = { NULL, }, *y[4] = { NULL, };
   guint i;
@@ -213,8 +209,7 @@ fail:
 static gboolean 
 parse_border_color (GtkCssShorthandProperty  *shorthand,
                     GtkCssValue             **values,
-                    GtkCssParser             *parser,
-                    GFile                    *base)
+                    GtkCssParser             *parser)
 {
   guint i;
 
@@ -239,8 +234,7 @@ parse_border_color (GtkCssShorthandProperty  *shorthand,
 static gboolean
 parse_border_style (GtkCssShorthandProperty  *shorthand,
                     GtkCssValue             **values,
-                    GtkCssParser             *parser,
-                    GFile                    *base)
+                    GtkCssParser             *parser)
 {
   guint i;
 
@@ -266,8 +260,7 @@ parse_border_style (GtkCssShorthandProperty  *shorthand,
 static gboolean
 parse_border_image (GtkCssShorthandProperty  *shorthand,
                     GtkCssValue             **values,
-                    GtkCssParser             *parser,
-                    GFile                    *base)
+                    GtkCssParser             *parser)
 {
   do
     {
@@ -333,8 +326,7 @@ parse_border_image (GtkCssShorthandProperty  *shorthand,
 static gboolean
 parse_border_side (GtkCssShorthandProperty  *shorthand,
                    GtkCssValue             **values,
-                   GtkCssParser             *parser,
-                   GFile                    *base)
+                   GtkCssParser             *parser)
 {
   do
   {
@@ -368,8 +360,7 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
 static gboolean
 parse_border (GtkCssShorthandProperty  *shorthand,
               GtkCssValue             **values,
-              GtkCssParser             *parser,
-              GFile                    *base)
+              GtkCssParser             *parser)
 {
   do
   {
@@ -422,8 +413,7 @@ parse_border (GtkCssShorthandProperty  *shorthand,
 static gboolean
 parse_font (GtkCssShorthandProperty  *shorthand,
             GtkCssValue             **values,
-            GtkCssParser             *parser,
-            GFile                    *base)
+            GtkCssParser             *parser)
 {
   PangoFontDescription *desc;
   guint mask;
@@ -467,8 +457,7 @@ parse_font (GtkCssShorthandProperty  *shorthand,
 static gboolean
 parse_background (GtkCssShorthandProperty  *shorthand,
                   GtkCssValue             **values,
-                  GtkCssParser             *parser,
-                  GFile                    *base)
+                  GtkCssParser             *parser)
 {
   do
     {
@@ -526,8 +515,7 @@ parse_background (GtkCssShorthandProperty  *shorthand,
 static gboolean
 parse_one_transition (GtkCssShorthandProperty  *shorthand,
                       GtkCssValue             **values,
-                      GtkCssParser             *parser,
-                      GFile                    *base)
+                      GtkCssParser             *parser)
 {
   do
     {
@@ -579,8 +567,7 @@ parse_one_transition (GtkCssShorthandProperty  *shorthand,
 static gboolean
 parse_transition (GtkCssShorthandProperty  *shorthand,
                   GtkCssValue             **values,
-                  GtkCssParser             *parser,
-                  GFile                    *base)
+                  GtkCssParser             *parser)
 {
   GtkCssValue *step_values[4];
   GPtrArray *arrays[4];
@@ -593,7 +580,7 @@ parse_transition (GtkCssShorthandProperty  *shorthand,
     }
 
   do {
-    if (!parse_one_transition (shorthand, step_values, parser, base))
+    if (!parse_one_transition (shorthand, step_values, parser))
       {
         for (i = 0; i < 4; i++)
           {

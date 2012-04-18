@@ -119,7 +119,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
           data[i] = _gtk_css_inherit_value_new ();
         }
     }
-  else if (!shorthand->parse (shorthand, data, parser, base))
+  else if (!shorthand->parse (shorthand, data, parser))
     {
       for (i = 0; i < shorthand->subproperties->len; i++)
         {
