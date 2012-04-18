@@ -30,6 +30,7 @@ typedef void (* GtkCssParserErrorFunc) (GtkCssParser *parser,
                                         gpointer      user_data);
 
 GtkCssParser *  _gtk_css_parser_new               (const char            *data,
+                                                   GFile                 *file,
                                                    GtkCssParserErrorFunc  error_func,
                                                    gpointer               user_data);
 void            _gtk_css_parser_free              (GtkCssParser          *parser);

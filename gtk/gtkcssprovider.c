@@ -1370,6 +1370,7 @@ gtk_css_scanner_new (GtkCssProvider *provider,
     }
 
   scanner->parser = _gtk_css_parser_new (text,
+                                         file,
                                          gtk_css_scanner_parser_error,
                                          scanner);
 

@@ -38,26 +38,31 @@
 
 struct _GtkCssParser
 {
-  const char *data;
-  GtkCssParserErrorFunc error_func;
-  gpointer              user_data;
+  const char            *data;
+  GFile                 *file;
+  GtkCssParserErrorFunc  error_func;
+  gpointer               user_data;
 
-  const char *line_start;
-  guint line;
+  const char            *line_start;
+  guint                  line;
 };
 
 GtkCssParser *
 _gtk_css_parser_new (const char            *data,
+                     GFile                 *file,
                      GtkCssParserErrorFunc  error_func,
                      gpointer               user_data)
 {
   GtkCssParser *parser;
 
   g_return_val_if_fail (data != NULL, NULL);
+  g_return_val_if_fail (file == NULL || G_IS_FILE (file), NULL);
 
   parser = g_slice_new0 (GtkCssParser);
 
   parser->data = data;
+  if (file)
+    parser->file = g_object_ref (file);
   parser->error_func = error_func;
   parser->user_data = user_data;
 
@@ -71,6 +76,9 @@ void
 _gtk_css_parser_free (GtkCssParser *parser)
 {
   g_return_if_fail (GTK_IS_CSS_PARSER (parser));
+
+  if (parser->file)
+    g_object_unref (parser->file);
 
   g_slice_free (GtkCssParser, parser);
 }
