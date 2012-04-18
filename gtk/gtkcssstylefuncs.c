@@ -49,7 +49,6 @@ static GHashTable *print_funcs = NULL;
 static GHashTable *compute_funcs = NULL;
 
 typedef gboolean         (* GtkStyleParseFunc)             (GtkCssParser           *parser,
-                                                            GFile                  *base,
                                                             GValue                 *value);
 typedef void             (* GtkStylePrintFunc)             (const GValue           *value,
                                                             GString                *string);
@@ -162,7 +161,6 @@ enum_print (int         value,
 
 static gboolean
 rgba_value_parse (GtkCssParser *parser,
-                  GFile        *base,
                   GValue       *value)
 {
   GtkSymbolicColor *symbolic;
@@ -231,7 +229,6 @@ rgba_value_compute (GtkStyleContext *context,
 
 static gboolean 
 color_value_parse (GtkCssParser *parser,
-                   GFile        *base,
                    GValue       *value)
 {
   GtkSymbolicColor *symbolic;
@@ -310,7 +307,6 @@ color_value_compute (GtkStyleContext *context,
 
 static gboolean
 symbolic_color_value_parse (GtkCssParser *parser,
-                            GFile        *base,
                             GValue       *value)
 {
   GtkSymbolicColor *symbolic;
@@ -341,7 +337,6 @@ symbolic_color_value_print (const GValue *value,
 
 static gboolean 
 font_description_value_parse (GtkCssParser *parser,
-                              GFile        *base,
                               GValue       *value)
 {
   PangoFontDescription *font_desc;
@@ -383,7 +378,6 @@ font_description_value_print (const GValue *value,
 
 static gboolean 
 boolean_value_parse (GtkCssParser *parser,
-                     GFile        *base,
                      GValue       *value)
 {
   if (_gtk_css_parser_try (parser, "true", TRUE) ||
@@ -417,14 +411,13 @@ boolean_value_print (const GValue *value,
 
 static gboolean 
 int_value_parse (GtkCssParser *parser,
-                 GFile        *base,
                  GValue       *value)
 {
   gint i;
 
   if (_gtk_css_parser_begins_with (parser, '-'))
     {
-      int res = _gtk_win32_theme_int_parse (parser, base, &i);
+      int res = _gtk_win32_theme_int_parse (parser, &i);
       if (res >= 0)
 	{
 	  g_value_set_int (value, i);
@@ -452,7 +445,6 @@ int_value_print (const GValue *value,
 
 static gboolean 
 uint_value_parse (GtkCssParser *parser,
-                  GFile        *base,
                   GValue       *value)
 {
   guint u;
@@ -476,7 +468,6 @@ uint_value_print (const GValue *value,
 
 static gboolean 
 double_value_parse (GtkCssParser *parser,
-                    GFile        *base,
                     GValue       *value)
 {
   gdouble d;
@@ -500,7 +491,6 @@ double_value_print (const GValue *value,
 
 static gboolean 
 float_value_parse (GtkCssParser *parser,
-                   GFile        *base,
                    GValue       *value)
 {
   gdouble d;
@@ -524,7 +514,6 @@ float_value_print (const GValue *value,
 
 static gboolean 
 string_value_parse (GtkCssParser *parser,
-                    GFile        *base,
                     GValue       *value)
 {
   char *str = _gtk_css_parser_read_string (parser);
@@ -545,7 +534,6 @@ string_value_print (const GValue *value,
 
 static gboolean 
 theming_engine_value_parse (GtkCssParser *parser,
-                            GFile        *base,
                             GValue       *value)
 {
   GtkThemingEngine *engine;
@@ -599,7 +587,6 @@ theming_engine_value_print (const GValue *value,
 
 static gboolean 
 border_value_parse (GtkCssParser *parser,
-                    GFile        *base,
                     GValue       *value)
 {
   GtkBorder border = { 0, };
@@ -612,7 +599,7 @@ border_value_parse (GtkCssParser *parser,
 	{
 	  /* These are strictly speaking signed, but we want to be able to use them
 	     for unsigned types too, as the actual ranges of values make this safe */
-	  int res = _gtk_win32_theme_int_parse (parser, base, &numbers[i]);
+	  int res = _gtk_win32_theme_int_parse (parser, &numbers[i]);
 
 	  if (res == 0) /* Parse error, report */
 	    return FALSE;
@@ -670,7 +657,6 @@ border_value_print (const GValue *value, GString *string)
 
 static gboolean 
 gradient_value_parse (GtkCssParser *parser,
-                      GFile        *base,
                       GValue       *value)
 {
   GtkGradient *gradient;
@@ -701,7 +687,6 @@ gradient_value_print (const GValue *value,
 
 static gboolean 
 pattern_value_parse (GtkCssParser *parser,
-                     GFile        *base,
                      GValue       *value)
 {
   if (_gtk_css_parser_try (parser, "none", TRUE))
@@ -712,7 +697,7 @@ pattern_value_parse (GtkCssParser *parser,
     {
       g_value_unset (value);
       g_value_init (value, GTK_TYPE_GRADIENT);
-      return gradient_value_parse (parser, base, value);
+      return gradient_value_parse (parser, value);
     }
   else
     {
@@ -852,7 +837,6 @@ pattern_value_compute (GtkStyleContext *context,
 
 static gboolean 
 enum_value_parse (GtkCssParser *parser,
-                  GFile        *base,
                   GValue       *value)
 {
   int v;
@@ -875,7 +859,6 @@ enum_value_print (const GValue *value,
 
 static gboolean 
 flags_value_parse (GtkCssParser *parser,
-                   GFile        *base,
                    GValue       *value)
 {
   GFlagsClass *flags_class;
@@ -1027,7 +1010,6 @@ gtk_css_style_funcs_init (void)
  * _gtk_css_style_parse_value:
  * @value: the value to parse into. Must be a valid initialized #GValue
  * @parser: the parser to parse from
- * @base: the base URL for @parser
  *
  * This is the generic parsing function used for CSS values. If the
  * function fails to parse a value, it will emit an error on @parser,
@@ -1037,8 +1019,7 @@ gtk_css_style_funcs_init (void)
  **/
 gboolean
 _gtk_css_style_parse_value (GValue       *value,
-                            GtkCssParser *parser,
-                            GFile        *base)
+                            GtkCssParser *parser)
 {
   GtkStyleParseFunc func;
 
@@ -1061,7 +1042,7 @@ _gtk_css_style_parse_value (GValue       *value,
       return FALSE;
     }
 
-  return (*func) (parser, base, value);
+  return (*func) (parser, value);
 }
 
 /**

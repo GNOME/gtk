@@ -1558,8 +1558,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
 					     val->value);
 
 	      found = _gtk_css_style_parse_value (value,
-						  scanner->parser,
-						  NULL);
+						  scanner->parser);
 
 	      gtk_css_scanner_destroy (scanner);
 

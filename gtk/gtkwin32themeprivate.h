@@ -49,7 +49,6 @@ cairo_surface_t *  _gtk_win32_theme_part_create_surface  (HTHEME       theme,
 							  int         *y_offs_out);
 
 int                _gtk_win32_theme_int_parse     (GtkCssParser      *parser,
-						   GFile             *base,
 						   int               *value);
 GtkSymbolicColor  *_gtk_win32_theme_color_parse   (GtkCssParser      *parser);
 gboolean           _gtk_win32_theme_color_resolve (const char        *theme_class,

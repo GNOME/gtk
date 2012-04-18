@@ -25,8 +25,7 @@
 G_BEGIN_DECLS
 
 gboolean            _gtk_css_style_parse_value             (GValue                 *value,
-                                                            GtkCssParser           *parser,
-                                                            GFile                  *base);
+                                                            GtkCssParser           *parser);
 void                _gtk_css_style_print_value             (const GValue           *value,
                                                             GString                *string);
 GtkCssValue *       _gtk_css_style_compute_value           (GtkStyleContext        *context,

@@ -315,7 +315,6 @@ _gtk_win32_theme_part_create_surface (HTHEME theme,
 
 int
 _gtk_win32_theme_int_parse (GtkCssParser      *parser,
-			    GFile             *base,
 			    int               *value)
 {
   char *class;
