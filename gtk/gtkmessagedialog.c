@@ -350,6 +350,9 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   gtk_widget_set_halign (priv->secondary_label, GTK_ALIGN_START);
   gtk_widget_set_valign (priv->secondary_label, GTK_ALIGN_START);
 
+  gtk_misc_set_alignment (GTK_MISC (priv->label), 0.0, 0.0);
+  gtk_misc_set_alignment (GTK_MISC (priv->secondary_label), 0.0, 0.0);
+
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   priv->message_area = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
 
