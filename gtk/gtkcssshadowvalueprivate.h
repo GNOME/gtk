@@ -42,12 +42,14 @@ void            _gtk_css_shadow_value_paint_layout    (const GtkCssValue        
                                                        PangoLayout              *layout);
 
 void            _gtk_css_shadow_value_paint_icon      (const GtkCssValue        *shadow,
-					               cairo_t                  *cr);
+                                                       cairo_t                  *cr,
+                                                       cairo_rectangle_t        *rect);
 
 void            _gtk_css_shadow_value_paint_spinner   (const GtkCssValue        *shadow,
                                                        cairo_t                  *cr,
                                                        gdouble                   radius,
                                                        gdouble                   progress);
+
 void            _gtk_css_shadow_value_paint_box       (const GtkCssValue        *shadow,
                                                        cairo_t                  *cr,
                                                        const GtkRoundedBox      *padding_box);

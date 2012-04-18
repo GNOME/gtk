@@ -228,7 +228,8 @@ _gtk_css_shadows_value_paint_layout (const GtkCssValue *shadows,
 
 void
 _gtk_css_shadows_value_paint_icon (const GtkCssValue *shadows,
-                                   cairo_t           *cr)
+                                   cairo_t           *cr,
+                                   cairo_rectangle_t *rect)
 {
   guint i;
 
@@ -236,7 +237,7 @@ _gtk_css_shadows_value_paint_icon (const GtkCssValue *shadows,
 
   for (i = 0; i < shadows->len; i++)
     {
-      _gtk_css_shadow_value_paint_icon (shadows->values[i], cr);
+      _gtk_css_shadow_value_paint_icon (shadows->values[i], cr, rect);
     }
 }
 

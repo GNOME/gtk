@@ -178,7 +178,7 @@ static GdkPixbuf * gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *e
                                                           GtkIconSize          size);
 static void gtk_theming_engine_render_icon (GtkThemingEngine *engine,
                                             cairo_t *cr,
-					    GdkPixbuf *pixbuf,
+                                            GdkPixbuf *pixbuf,
                                             gdouble x,
                                             gdouble y);
 
@@ -2928,15 +2928,22 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
 static void
 gtk_theming_engine_render_icon (GtkThemingEngine *engine,
                                 cairo_t *cr,
-				GdkPixbuf *pixbuf,
+                                GdkPixbuf *pixbuf,
                                 gdouble x,
                                 gdouble y)
 {
+  cairo_rectangle_t rect;
+
   cairo_save (cr);
 
   gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
 
-  _gtk_css_shadows_value_paint_icon (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW), cr);
+  rect.x = x;
+  rect.y = y;
+  rect.width = gdk_pixbuf_get_width (pixbuf);
+  rect.height = gdk_pixbuf_get_height (pixbuf);
+
+  _gtk_css_shadows_value_paint_icon (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW), cr, &rect);
 
   cairo_paint (cr);
 

@@ -18,6 +18,7 @@
  */
 
 #include "config.h"
+#include "math.h"
 
 #include "gtkcssshadowvalueprivate.h"
 
@@ -291,43 +292,41 @@ _gtk_css_shadow_value_compute (GtkCssValue     *shadow,
 }
 
 static void
-_gtk_css_shadow_value_blur_surface_create (const GtkCssValue *shadow,
-                                           cairo_t *original_cr,
-                                           cairo_t **out_cr,
-                                           cairo_surface_t **out_surface)
+gtk_css_shadow_value_blur_surface_create (const GtkCssValue *shadow,
+                                          cairo_t *original_cr,
+                                          cairo_t **out_cr,
+                                          cairo_surface_t **out_surface,
+                                          cairo_rectangle_int_t *rect_surface)
 {
-  cairo_rectangle_int_t clip_rect;
-  gdouble radius;
+  gint radius;
 
-  gdk_cairo_get_clip_rectangle (original_cr, &clip_rect);
-  radius = _gtk_css_number_value_get (shadow->radius, 0);
+  radius = ceil (_gtk_css_number_value_get (shadow->radius, 0));
 
   /* Create a larger surface to center the blur. */
   *out_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                             clip_rect.width + 2 * radius,
-                                             clip_rect.height + 2 * radius);
+                                             rect_surface->width + 2 * radius,
+                                             rect_surface->height + 2 * radius);
   *out_cr = cairo_create (*out_surface);
   cairo_translate (*out_cr, radius, radius);
 }
 
 static void
-_gtk_css_shadow_value_blur_surface_paint (const GtkCssValue *shadow,
-                                          cairo_t *cr,
-                                          cairo_surface_t *surface)
+gtk_css_shadow_value_blur_surface_paint (const GtkCssValue *shadow,
+                                         cairo_t *cr,
+                                         cairo_surface_t *surface,
+                                         cairo_rectangle_int_t *rect_surface)
 {
-  gdouble x, y;
-  gdouble radius;
+  gint radius;
 
-  radius = _gtk_css_number_value_get (shadow->radius, 0);
+  radius = ceil (_gtk_css_number_value_get (shadow->radius, 0));
 
   /* Blur the surface. */
   _gtk_cairo_blur_surface (surface, radius);
 
   /* Paint the blurred surface to cr. */
-  cairo_get_current_point (cr, &x, &y);
   cairo_set_source_surface (cr, surface, 
-                            x - radius, 
-                            y - radius);
+                            rect_surface->x - radius, 
+                            rect_surface->y - radius);
   cairo_paint (cr);
 }
 
@@ -349,17 +348,35 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
 
   if (_gtk_css_number_value_get (shadow->radius, 0) > 0)
     {
+      PangoRectangle ink_rect;
       cairo_t *blur_cr;
       cairo_surface_t *surface;
+      cairo_rectangle_int_t rect_surface;
+      gdouble x, y;
+      gint extra_pad;
 
-      _gtk_css_shadow_value_blur_surface_create (shadow, cr,
-                                                 &blur_cr, &surface);
+      /* Calculate blur surface coordinates. */
+      extra_pad = 1; /* Padding seems to help on blur edges, please verify. */
+      pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+      cairo_get_current_point (cr, &x, &y);
+      rect_surface.x = x + ink_rect.x - extra_pad; /* Loss of precision? */
+      rect_surface.y = y + ink_rect.y - extra_pad; /* Loss of precision? */
+      rect_surface.width = ink_rect.width + 2 * extra_pad;
+      rect_surface.height = ink_rect.height + 2 * extra_pad;
+
+      gtk_css_shadow_value_blur_surface_create (shadow, cr,
+                                                &blur_cr, &surface,
+                                                &rect_surface);
 
       /* Create the path on the surface to blur. */
+      cairo_translate (blur_cr,
+                       - ink_rect.x + extra_pad,
+                       - ink_rect.y + extra_pad);
+
       gdk_cairo_set_source_rgba (blur_cr, _gtk_css_rgba_value_get_rgba (shadow->color));
       _gtk_pango_fill_layout (blur_cr, layout);
 
-      _gtk_css_shadow_value_blur_surface_paint (shadow, cr, surface);
+      gtk_css_shadow_value_blur_surface_paint (shadow, cr, surface, &rect_surface);
 
       cairo_destroy (blur_cr);
       cairo_surface_destroy (surface); 
@@ -378,7 +395,8 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
 
 void
 _gtk_css_shadow_value_paint_icon (const GtkCssValue *shadow,
-			          cairo_t           *cr)
+                                  cairo_t           *cr,
+                                  cairo_rectangle_t *rect)
 {
   cairo_pattern_t *pattern;
 
@@ -391,19 +409,23 @@ _gtk_css_shadow_value_paint_icon (const GtkCssValue *shadow,
     {
       cairo_t *blur_cr;
       cairo_surface_t *surface;
+      cairo_rectangle_int_t rect_surface;
 
-      _gtk_css_shadow_value_blur_surface_create (shadow, cr,
-                                                 &blur_cr, &surface);
+      /* Calculate blur surface coordinates. */
+      rect_surface.x = rect->x + _gtk_css_number_value_get (shadow->hoffset, 0);
+      rect_surface.y = rect->y + _gtk_css_number_value_get (shadow->voffset, 0);
+      rect_surface.width = rect->width;
+      rect_surface.height = rect->height;
+
+      gtk_css_shadow_value_blur_surface_create (shadow, cr,
+                                                &blur_cr, &surface,
+                                                &rect_surface);
 
       /* Create the path on the surface to blur. */
       gdk_cairo_set_source_rgba (blur_cr, _gtk_css_rgba_value_get_rgba (shadow->color));
-          
-      cairo_translate (blur_cr,                        
-                       _gtk_css_number_value_get (shadow->hoffset, 0),
-                       _gtk_css_number_value_get (shadow->voffset, 0));
       cairo_mask (blur_cr, pattern);
 
-      _gtk_css_shadow_value_blur_surface_paint (shadow, cr, surface);
+      gtk_css_shadow_value_blur_surface_paint (shadow, cr, surface, &rect_surface);
 
       cairo_destroy (blur_cr);
       cairo_surface_destroy (surface); 
@@ -436,19 +458,24 @@ _gtk_css_shadow_value_paint_spinner (const GtkCssValue *shadow,
     {
       cairo_t *blur_cr;
       cairo_surface_t *surface;
+      cairo_rectangle_int_t rect_surface;
 
-      _gtk_css_shadow_value_blur_surface_create (shadow, cr,
-                                                 &blur_cr, &surface);
+      /* Calculate blur surface coordinates. */
+      rect_surface.x = _gtk_css_number_value_get (shadow->hoffset, 0);
+      rect_surface.y = _gtk_css_number_value_get (shadow->voffset, 0);
+      rect_surface.width = 2 * radius;
+      rect_surface.height = 2 * radius;
+
+      gtk_css_shadow_value_blur_surface_create (shadow, cr,
+                                                &blur_cr, &surface,
+                                                &rect_surface);
 
       /* Create the path on the surface to blur. */
-      cairo_translate (blur_cr,
-                       _gtk_css_number_value_get (shadow->hoffset, 0),
-                       _gtk_css_number_value_get (shadow->voffset, 0));
       _gtk_theming_engine_paint_spinner (blur_cr,
                                          radius, progress,
                                          _gtk_css_rgba_value_get_rgba (shadow->color));
 
-      _gtk_css_shadow_value_blur_surface_paint (shadow, cr, surface);
+      gtk_css_shadow_value_blur_surface_paint (shadow, cr, surface, &rect_surface);
 
       cairo_destroy (blur_cr);
       cairo_surface_destroy (surface);
@@ -493,9 +520,19 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
     {
       cairo_t *blur_cr;
       cairo_surface_t *surface;
+      cairo_rectangle_int_t rect_surface;
+      gdouble x, y;
 
-      _gtk_css_shadow_value_blur_surface_create (shadow, cr,
-                                                 &blur_cr, &surface);
+      /* Calculate blur surface coordinates. */
+      cairo_get_current_point (cr, &x, &y);
+      rect_surface.x = x; /* Loss of precision? */
+      rect_surface.x = y; /* Loss of precision? */
+      rect_surface.width = MAX (padding_box->box.width, box.box.width);
+      rect_surface.height = MAX (padding_box->box.height, box.box.height);
+
+      gtk_css_shadow_value_blur_surface_create (shadow, cr,
+                                                &blur_cr, &surface,
+                                                &rect_surface);
 
       /* Create the path on the surface to blur. */
       _gtk_rounded_box_path (padding_box, blur_cr);
@@ -509,7 +546,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
       gdk_cairo_set_source_rgba (blur_cr, _gtk_css_rgba_value_get_rgba (shadow->color));
       cairo_fill (blur_cr);
 
-      _gtk_css_shadow_value_blur_surface_paint (shadow, cr, surface);
+      gtk_css_shadow_value_blur_surface_paint (shadow, cr, surface, &rect_surface);
 
       cairo_destroy (blur_cr);
       cairo_surface_destroy (surface);
