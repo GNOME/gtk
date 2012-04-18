@@ -147,8 +147,7 @@ _gtk_css_style_property_query (GtkStyleProperty   *property,
 
 static GtkCssValue *
 gtk_css_style_property_parse_value (GtkStyleProperty *property,
-                                    GtkCssParser     *parser,
-                                    GFile            *base)
+                                    GtkCssParser     *parser)
 {
   GtkCssStyleProperty *style_property = GTK_CSS_STYLE_PROPERTY (property);
 

@@ -2200,8 +2200,7 @@ parse_declaration (GtkCssScanner *scanner,
       gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_VALUE);
 
       value = _gtk_style_property_parse_value (property,
-                                               scanner->parser,
-                                               gtk_css_scanner_get_base_url (scanner));
+                                               scanner->parser);
 
       if (value == NULL)
         {

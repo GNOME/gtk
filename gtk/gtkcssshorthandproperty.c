@@ -86,8 +86,7 @@ _gtk_css_shorthand_property_query (GtkStyleProperty   *property,
 
 static GtkCssValue *
 gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
-                                        GtkCssParser     *parser,
-                                        GFile            *base)
+                                        GtkCssParser     *parser)
 {
   GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
   GtkCssValue **data;

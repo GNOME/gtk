@@ -58,8 +58,7 @@ struct _GtkStylePropertyClass
                                                             GtkStyleQueryFunc       query_func,
                                                             gpointer                query_data);
   GtkCssValue *     (* parse_value)                        (GtkStyleProperty *      property,
-                                                            GtkCssParser           *parser,
-                                                            GFile                  *base);
+                                                            GtkCssParser           *parser);
 
   GHashTable   *properties;
 };
@@ -73,8 +72,7 @@ GtkStyleProperty *       _gtk_style_property_lookup        (const char          
 const char *             _gtk_style_property_get_name      (GtkStyleProperty       *property);
 
 GtkCssValue *            _gtk_style_property_parse_value   (GtkStyleProperty *      property,
-                                                            GtkCssParser           *parser,
-                                                            GFile                  *base);
+                                                            GtkCssParser           *parser);
 
 GType                    _gtk_style_property_get_value_type(GtkStyleProperty *      property);
 void                     _gtk_style_property_query         (GtkStyleProperty *      property,

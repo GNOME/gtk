@@ -42,8 +42,7 @@ gtk_css_custom_property_get_specified_type (GParamSpec *pspec)
 
 static GtkCssValue *
 gtk_css_custom_property_parse_value (GtkStyleProperty *property,
-                                     GtkCssParser     *parser,
-                                     GFile            *base)
+                                     GtkCssParser     *parser)
 {
   GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (property);
   GValue value = G_VALUE_INIT;

@@ -132,7 +132,6 @@ _gtk_style_property_init (GtkStyleProperty *property)
  * _gtk_style_property_parse_value:
  * @property: the property
  * @parser: the parser to parse from
- * @base: the base file for @aprser
  *
  * Tries to parse the given @property from the given @parser into
  * @value. The type that @value will be assigned is dependant on
@@ -148,8 +147,7 @@ _gtk_style_property_init (GtkStyleProperty *property)
  **/
 GtkCssValue *
 _gtk_style_property_parse_value (GtkStyleProperty *property,
-                                 GtkCssParser     *parser,
-                                 GFile            *base)
+                                 GtkCssParser     *parser)
 {
   GtkStylePropertyClass *klass;
 
@@ -158,7 +156,7 @@ _gtk_style_property_parse_value (GtkStyleProperty *property,
 
   klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
 
-  return klass->parse_value (property, parser, base);
+  return klass->parse_value (property, parser);
 }
 
 /**
