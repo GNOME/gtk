@@ -394,6 +394,7 @@ gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
 {
   GdkWaylandCairoSurfaceData *data;
   cairo_surface_t *surface;
+  cairo_status_t status;
 
   data = g_new (GdkWaylandCairoSurfaceData, 1);
   data->display = display;
@@ -418,8 +419,13 @@ gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
   cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
 			       data, gdk_wayland_cairo_surface_destroy);
 
-  if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
-    fprintf (stderr, "create gl surface failed\n");
+  status = cairo_surface_status (surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+    {
+      g_critical (G_STRLOC ": Unable to create Cairo GL surface: %s",
+                  cairo_status_to_string (status));
+
+    }
 
   if (!data->buffer)
     data->buffer =
