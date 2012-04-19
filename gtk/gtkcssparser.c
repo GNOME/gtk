@@ -669,15 +669,16 @@ _gtk_css_number_value_parse (GtkCssParser           *parser,
             break;
         }
 
-      g_free (unit_name);
-
       if (i >= G_N_ELEMENTS (units))
         {
           _gtk_css_parser_error (parser, "`%s' is not a valid unit.", unit_name);
+          g_free (unit_name);
           return NULL;
         }
 
       unit = units[i].unit;
+
+      g_free (unit_name);
     }
   else
     {
