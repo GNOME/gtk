@@ -826,7 +826,7 @@ gtk_application_new (const gchar       *application_id,
  * @application: a #GtkApplication
  * @window: a #GtkWindow
  *
- * Adds a window from @application.
+ * Adds a window to @application.
  *
  * This call is equivalent to setting the #GtkWindow:application
  * property of @window to @application.
