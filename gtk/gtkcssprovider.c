@@ -1573,6 +1573,15 @@ gtk_css_style_provider_get_color (GtkStyleProviderPrivate *provider,
   return g_hash_table_lookup (css_provider->priv->symbolic_colors, name);
 }
 
+static GtkCssKeyframes *
+gtk_css_style_provider_get_keyframes (GtkStyleProviderPrivate *provider,
+                                      const char              *name)
+{
+  GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
+
+  return g_hash_table_lookup (css_provider->priv->keyframes, name);
+}
+
 static void
 gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
                                const GtkCssMatcher     *matcher,
@@ -1652,6 +1661,7 @@ static void
 gtk_css_style_provider_private_iface_init (GtkStyleProviderPrivateInterface *iface)
 {
   iface->get_color = gtk_css_style_provider_get_color;
+  iface->get_keyframes = gtk_css_style_provider_get_keyframes;
   iface->lookup = gtk_css_style_provider_lookup;
   iface->get_change = gtk_css_style_provider_get_change;
 }

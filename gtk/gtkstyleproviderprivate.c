@@ -60,6 +60,23 @@ _gtk_style_provider_private_get_color (GtkStyleProviderPrivate *provider,
   return iface->get_color (provider, name);
 }
 
+GtkCssKeyframes *
+_gtk_style_provider_private_get_keyframes (GtkStyleProviderPrivate *provider,
+                                           const char              *name)
+{
+  GtkStyleProviderPrivateInterface *iface;
+
+  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+
+  iface = GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE (provider);
+
+  if (!iface->get_keyframes)
+    return NULL;
+
+  return iface->get_keyframes (provider, name);
+}
+
 void
 _gtk_style_provider_private_lookup (GtkStyleProviderPrivate *provider,
                                     const GtkCssMatcher     *matcher,
