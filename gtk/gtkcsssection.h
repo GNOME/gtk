@@ -40,6 +40,9 @@ G_BEGIN_DECLS
  * @GTK_CSS_SECTION_DECLARATION: The section defines the declaration of
  *   a CSS variable.
  * @GTK_CSS_SECTION_VALUE: The section defines the value of a CSS declaration.
+ * @GTK_CSS_SECTION_KEYFRAMES: The section defines keyframes. See <ulink
+ *   url="http://dev.w3.org/csswg/css3-animations/#keyframes">CSS
+ *   animations</ulink> for details. Since 3.6
  *
  * The different types of sections indicate parts of a CSS document as
  * parsed by GTK's CSS parser. They are oriented towards the CSS grammar
@@ -60,7 +63,8 @@ typedef enum
   GTK_CSS_SECTION_RULESET,
   GTK_CSS_SECTION_SELECTOR,
   GTK_CSS_SECTION_DECLARATION,
-  GTK_CSS_SECTION_VALUE
+  GTK_CSS_SECTION_VALUE,
+  GTK_CSS_SECTION_KEYFRAMES
 } GtkCssSectionType;
 
 typedef struct _GtkCssSection GtkCssSection;

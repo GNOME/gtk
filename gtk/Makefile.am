@@ -445,6 +445,7 @@ gtk_private_h_sources =		\
 	gtkcssimagewin32private.h	\
 	gtkcssinheritvalueprivate.h	\
 	gtkcssinitialvalueprivate.h	\
+	gtkcsskeyframesprivate.h	\
 	gtkcsslookupprivate.h	\
 	gtkcssmatcherprivate.h	\
 	gtkcssnumbervalueprivate.h	\
@@ -665,6 +666,7 @@ gtk_base_c_sources = 		\
 	gtkcssimagewin32.c	\
 	gtkcssinheritvalue.c	\
 	gtkcssinitialvalue.c	\
+	gtkcsskeyframes.c	\
 	gtkcsslookup.c		\
 	gtkcssmatcher.c		\
 	gtkcssnumbervalue.c	\

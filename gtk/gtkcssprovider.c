@@ -27,11 +27,12 @@
 
 #include "gtkbitmaskprivate.h"
 #include "gtkcssarrayvalueprivate.h"
-#include "gtkcssstylefuncsprivate.h"
+#include "gtkcsskeyframesprivate.h"
 #include "gtkcssparserprivate.h"
 #include "gtkcsssectionprivate.h"
 #include "gtkcssselectorprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
+#include "gtkcssstylefuncsprivate.h"
 #include "gtksymboliccolor.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"
@@ -1007,6 +1008,7 @@ struct _GtkCssProviderPrivate
   GScanner *scanner;
 
   GHashTable *symbolic_colors;
+  GHashTable *keyframes;
 
   GArray *rulesets;
   GResource *resource;
@@ -1423,6 +1425,9 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
   priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                  (GDestroyNotify) g_free,
                                                  (GDestroyNotify) gtk_symbolic_color_unref);
+  priv->keyframes = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                           (GDestroyNotify) g_free,
+                                           (GDestroyNotify) _gtk_css_value_unref);
 }
 
 static void
@@ -1666,8 +1671,8 @@ gtk_css_provider_finalize (GObject *object)
 
   g_array_free (priv->rulesets, TRUE);
 
-  if (priv->symbolic_colors)
-    g_hash_table_destroy (priv->symbolic_colors);
+  g_hash_table_destroy (priv->symbolic_colors);
+  g_hash_table_destroy (priv->keyframes);
 
   if (priv->resource)
     {
@@ -1797,6 +1802,7 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
     }
 
   g_hash_table_remove_all (priv->symbolic_colors);
+  g_hash_table_remove_all (priv->keyframes);
 
   for (i = 0; i < priv->rulesets->len; i++)
     gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
@@ -2083,6 +2089,71 @@ skip_semicolon:
   return TRUE;
 }
 
+static gboolean
+parse_keyframes (GtkCssScanner *scanner)
+{
+  GtkCssKeyframes *keyframes;
+  char *name;
+
+  gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
+
+  if (!_gtk_css_parser_try (scanner->parser, "@keyframes", TRUE))
+    {
+      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
+      return FALSE;
+    }
+
+  name = _gtk_css_parser_try_ident (scanner->parser, TRUE);
+  if (name == NULL)
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Expected name for keyframes");
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+      goto exit;
+    }
+
+  if (!_gtk_css_parser_try (scanner->parser, "{", TRUE))
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Expected '{' for keyframes");
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+      g_free (name);
+      goto exit;
+    }
+
+  keyframes = _gtk_css_keyframes_parse (scanner->parser);
+  if (keyframes == NULL)
+    {
+      _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+      g_free (name);
+      goto exit;
+    }
+
+  g_hash_table_insert (scanner->provider->priv->keyframes, name, keyframes);
+
+  if (!_gtk_css_parser_try (scanner->parser, "}", TRUE))
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "expected '}' after declarations");
+      if (!_gtk_css_parser_is_eof (scanner->parser))
+        _gtk_css_parser_resync (scanner->parser, FALSE, 0);
+    }
+
+exit:
+  gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
+
+  return TRUE;
+}
+
 static void
 parse_at_keyword (GtkCssScanner *scanner)
 {
@@ -2091,6 +2162,8 @@ parse_at_keyword (GtkCssScanner *scanner)
   if (parse_color_definition (scanner))
     return;
   if (parse_binding_set (scanner))
+    return;
+  if (parse_keyframes (scanner))
     return;
 
   else
@@ -2964,6 +3037,33 @@ gtk_css_provider_print_colors (GHashTable *colors,
   g_list_free (keys);
 }
 
+static void
+gtk_css_provider_print_keyframes (GHashTable *keyframes,
+                                  GString    *str)
+{
+  GList *keys, *walk;
+
+  keys = g_hash_table_get_keys (keyframes);
+  /* so the output is identical for identical styles */
+  keys = g_list_sort (keys, (GCompareFunc) strcmp);
+
+  for (walk = keys; walk; walk = walk->next)
+    {
+      const char *name = walk->data;
+      GtkCssKeyframes *keyframe = g_hash_table_lookup (keyframes, (gpointer) name);
+
+      if (str->len > 0)
+        g_string_append (str, "\n");
+      g_string_append (str, "@keyframes ");
+      g_string_append (str, name);
+      g_string_append (str, " {\n");
+      _gtk_css_keyframes_print (keyframe, str);
+      g_string_append (str, "}\n");
+    }
+
+  g_list_free (keys);
+}
+
 /**
  * gtk_css_provider_to_string:
  * @provider: the provider to write to a string
@@ -2994,6 +3094,7 @@ gtk_css_provider_to_string (GtkCssProvider *provider)
   str = g_string_new ("");
 
   gtk_css_provider_print_colors (priv->symbolic_colors, str);
+  gtk_css_provider_print_keyframes (priv->keyframes, str);
 
   for (i = 0; i < priv->rulesets->len; i++)
     {
