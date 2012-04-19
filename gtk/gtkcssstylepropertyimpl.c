@@ -398,6 +398,60 @@ parse_css_area (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_one_css_direction (GtkCssParser *parser)
+{
+  GtkCssValue *value = _gtk_css_direction_value_try_parse (parser);
+  
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
+static GtkCssValue *
+parse_css_direction (GtkCssStyleProperty *property,
+                     GtkCssParser        *parser)
+{
+  return _gtk_css_array_value_parse (parser, parse_one_css_direction);
+}
+
+static GtkCssValue *
+parse_one_css_play_state (GtkCssParser *parser)
+{
+  GtkCssValue *value = _gtk_css_play_state_value_try_parse (parser);
+  
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
+static GtkCssValue *
+parse_css_play_state (GtkCssStyleProperty *property,
+                      GtkCssParser        *parser)
+{
+  return _gtk_css_array_value_parse (parser, parse_one_css_play_state);
+}
+
+static GtkCssValue *
+parse_one_css_fill_mode (GtkCssParser *parser)
+{
+  GtkCssValue *value = _gtk_css_fill_mode_value_try_parse (parser);
+  
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
+static GtkCssValue *
+parse_css_fill_mode (GtkCssStyleProperty *property,
+                     GtkCssParser        *parser)
+{
+  return _gtk_css_array_value_parse (parser, parse_one_css_fill_mode);
+}
+
+static GtkCssValue *
 bindings_value_parse_one (GtkCssParser *parser)
 {
   char *name;
@@ -692,6 +746,22 @@ transition_timing_function_parse (GtkCssStyleProperty *property,
                                   GtkCssParser        *parser)
 {
   return _gtk_css_array_value_parse (parser, _gtk_css_ease_value_parse);
+}
+
+static GtkCssValue *
+iteration_count_parse_one (GtkCssParser *parser)
+{
+  if (_gtk_css_parser_try (parser, "infinite", TRUE))
+    return _gtk_css_number_value_new (HUGE_VAL, GTK_CSS_NUMBER);
+
+  return _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_POSITIVE_ONLY);
+}
+
+static GtkCssValue *
+iteration_count_parse (GtkCssStyleProperty *property,
+                       GtkCssParser        *parser)
+{
+  return _gtk_css_array_value_parse (parser, iteration_count_parse_one);
 }
 
 static GtkCssValue *
@@ -1105,7 +1175,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("background-size",
                                           GTK_CSS_PROPERTY_BACKGROUND_SIZE,
                                           G_TYPE_NONE,
-                                          0,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
                                           background_size_parse,
                                           NULL,
                                           NULL,
@@ -1263,6 +1333,72 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
+
+  gtk_css_style_property_register        ("animation-name",
+                                          GTK_CSS_PROPERTY_ANIMATION_NAME,
+                                          G_TYPE_NONE,
+                                          0,
+                                          transition_property_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (_gtk_css_ident_value_new ("none")));
+  gtk_css_style_property_register        ("animation-duration",
+                                          GTK_CSS_PROPERTY_ANIMATION_DURATION,
+                                          G_TYPE_NONE,
+                                          0,
+                                          transition_time_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
+  gtk_css_style_property_register        ("animation-timing-function",
+                                          GTK_CSS_PROPERTY_ANIMATION_TIMING_FUNCTION,
+                                          G_TYPE_NONE,
+                                          0,
+                                          transition_timing_function_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (
+                                            _gtk_css_ease_value_new_cubic_bezier (0.25, 0.1, 0.25, 1.0)));
+  gtk_css_style_property_register        ("animation-iteration-count",
+                                          GTK_CSS_PROPERTY_ANIMATION_ITERATION_COUNT,
+                                          G_TYPE_NONE,
+                                          0,
+                                          iteration_count_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (_gtk_css_number_value_new (1, GTK_CSS_NUMBER)));
+  gtk_css_style_property_register        ("animation-direction",
+                                          GTK_CSS_PROPERTY_ANIMATION_DIRECTION,
+                                          G_TYPE_NONE,
+                                          0,
+                                          parse_css_direction,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (_gtk_css_direction_value_new (GTK_CSS_DIRECTION_NORMAL)));
+  gtk_css_style_property_register        ("animation-play-state",
+                                          GTK_CSS_PROPERTY_ANIMATION_PLAY_STATE,
+                                          G_TYPE_NONE,
+                                          0,
+                                          parse_css_play_state,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (_gtk_css_play_state_value_new (GTK_CSS_PLAY_STATE_RUNNING)));
+  gtk_css_style_property_register        ("animation-delay",
+                                          GTK_CSS_PROPERTY_ANIMATION_DELAY,
+                                          G_TYPE_NONE,
+                                          0,
+                                          transition_time_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (_gtk_css_number_value_new (0, GTK_CSS_S)));
+  gtk_css_style_property_register        ("animation-fill-mode",
+                                          GTK_CSS_PROPERTY_ANIMATION_FILL_MODE,
+                                          G_TYPE_NONE,
+                                          0,
+                                          parse_css_fill_mode,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_array_value_new (_gtk_css_fill_mode_value_new (GTK_CSS_FILL_NONE)));
 
   gtk_css_style_property_register        ("engine",
                                           GTK_CSS_PROPERTY_ENGINE,
