@@ -654,6 +654,25 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_RIGHT "right"
 
+/**
+ * GTK_STYLE_CLASS_PULSE:
+ *
+ * A CSS class to use when rendering a pulse in an indeterminate progress bar.
+ *
+ * This is used by #GtkProgressBar and #GtkEntry.
+ */
+#define GTK_STYLE_CLASS_PULSE "pulse"
+
+/**
+ * GTK_STYLE_CLASS_ARROW:
+ *
+ * A CSS class used when rendering an arrow element.
+ *
+ * Note that #gtk_render_arrow automatically adds this style class
+ * to the style context when rendering an arrow element.
+ */
+#define GTK_STYLE_CLASS_ARROW "arrow"
+
 /* Predefined set of widget regions */
 
 /**
@@ -683,26 +702,6 @@ struct _GtkStyleContextClass
  * A widget region name to define a notebook tab.
  */
 #define GTK_STYLE_REGION_TAB "tab"
-
-/**
- * GTK_STYLE_CLASS_PULSE:
- *
- * A CSS class to use when rendering a pulse in an indeterminate progress bar.
- *
- * This is used by #GtkProgressBar and #GtkEntry.
- */
-#define GTK_STYLE_CLASS_PULSE "pulse"
-
-/**
- * GTK_STYLE_CLASS_ARROW:
- *
- * A CSS class used when rendering an arrow element.
- *
- * Note that #gtk_render_arrow automatically adds this style class
- * to the style context when rendering an arrow element.
- */
-#define GTK_STYLE_CLASS_ARROW "arrow"
-
 
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
 
