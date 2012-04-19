@@ -673,6 +673,14 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_ARROW "arrow"
 
+/**
+ * GTK_STYLE_CLASS_OSD:
+ *
+ * A CSS class used when rendering an OSD (On Screen Display) element,
+ * on top of another container.
+ */
+#define GTK_STYLE_CLASS_OSD "osd"
+
 /* Predefined set of widget regions */
 
 /**
