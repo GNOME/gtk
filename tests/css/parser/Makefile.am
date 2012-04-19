@@ -296,6 +296,8 @@ EXTRA_DIST += \
 	integer.css \
 	integer.errors \
 	integer.ref.css \
+	keyframes-empty.css \
+	keyframes-empty.ref.css \
 	linear-gradient.css \
 	linear-gradient.ref.css \
 	no-semicolon.css \
