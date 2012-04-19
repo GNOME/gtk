@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <errno.h>
 
 #include <wayland-egl.h>
 
@@ -440,33 +441,36 @@ create_shm_buffer (struct wl_shm  *shm,
   int fd, size, stride;
   void *data;
 
-  fd = mkstemp(filename);
+  fd = mkstemp (filename);
   if (fd < 0) {
-      fprintf(stderr, "open %s failed: %m\n", filename);
+      g_critical (G_STRLOC ": Unable to create temporary file (%s): %s",
+                  filename, g_strerror (errno));
       return NULL;
   }
   stride = width * 4;
   size = stride * height;
-  if (ftruncate(fd, size) < 0) {
-      fprintf(stderr, "ftruncate failed: %m\n");
+  if (ftruncate (fd, size) < 0) {
+      g_critical (G_STRLOC ": Truncating temporary file failed: %s",
+                  g_strerror (errno));
       close(fd);
       return NULL;
   }
 
-  data = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-  unlink(filename);
+  data = mmap (NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+  unlink (filename);
 
   if (data == MAP_FAILED) {
-      fprintf(stderr, "mmap failed: %m\n");
+      g_critical (G_STRLOC ": mmap'ping temporary file failed: %s",
+                  g_strerror (errno));
       close(fd);
       return NULL;
   }
 
-  buffer = wl_shm_create_buffer(shm, fd,
-                                width, height,
-                                stride, format);
+  buffer = wl_shm_create_buffer (shm, fd,
+                                 width, height,
+                                 stride, format);
 
-  close(fd);
+  close (fd);
 
   *data_out = data;
   *buf_length = size;
@@ -479,10 +483,10 @@ gdk_wayland_cairo_surface_destroy (void *p)
   GdkWaylandCairoSurfaceData *data = p;
 
   if (data->buffer)
-    wl_buffer_destroy(data->buffer);
+    wl_buffer_destroy (data->buffer);
 
-  munmap(data->buf, data->buf_length);
-  g_free(data);
+  munmap (data->buf, data->buf_length);
+  g_free (data);
 }
 
 static cairo_surface_t *
@@ -490,7 +494,8 @@ gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
 				  int width, int height)
 {
   GdkWaylandCairoSurfaceData *data;
-  cairo_surface_t *surface;
+  cairo_surface_t *surface = NULL;
+  cairo_status_t status;
 
   data = g_new (GdkWaylandCairoSurfaceData, 1);
   data->display = display;
@@ -514,8 +519,12 @@ gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
   cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
                                data, gdk_wayland_cairo_surface_destroy);
 
-  if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
-    fprintf (stderr, "create image surface failed\n");
+  status = cairo_surface_status (surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+    {
+      g_critical (G_STRLOC ": Unable to create Cairo image surface: %s",
+                  cairo_status_to_string (status));
+    }
 
   return surface;
 }
