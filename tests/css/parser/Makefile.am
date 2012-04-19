@@ -298,6 +298,8 @@ EXTRA_DIST += \
 	integer.ref.css \
 	keyframes-empty.css \
 	keyframes-empty.ref.css \
+	keyframes-ordering.css \
+	keyframes-ordering.ref.css \
 	linear-gradient.css \
 	linear-gradient.ref.css \
 	no-semicolon.css \
