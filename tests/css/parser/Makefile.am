@@ -278,6 +278,9 @@ EXTRA_DIST += \
 	font-family.css \
 	font-family.errors \
 	font-family.ref.css \
+	freed-string-in-error-messages.css \
+	freed-string-in-error-messages.errors \
+	freed-string-in-error-messages.ref.css \
 	import-cyclic-1.css \
 	import-cyclic-1.errors \
 	import-cyclic-1.ref.css \
