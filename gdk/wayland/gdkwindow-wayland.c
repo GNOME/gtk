@@ -808,14 +808,17 @@ gdk_window_wayland_restack_toplevel (GdkWindow *window,
 
 static void
 gdk_window_wayland_move_resize (GdkWindow *window,
-				gboolean   with_move,
-				gint       x,
-				gint       y,
-				gint       width,
-				gint       height)
+                                gboolean   with_move,
+                                gint       x,
+                                gint       y,
+                                gint       width,
+                                gint       height)
 {
-  window->x = x;
-  window->y = y;
+  if (with_move)
+    {
+      window->x = x;
+      window->y = y;
+    }
 
   /* If this function is called with width and height = -1 then that means
    * just move the window - don't update its size
