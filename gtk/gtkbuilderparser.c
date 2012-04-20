@@ -963,14 +963,14 @@ end_element (GMarkupParseContext *context,
   else if (strcmp (element_name, "interface") == 0)
     {
     }
-  else if (strcmp (element_name, "menu") == 0)
-    {
-      _gtk_builder_menu_end (data);
-    }
   else if (data->requested_objects && !data->inside_requested_object)
     {
       /* If outside a requested object, simply ignore this tag */
       return;
+    }
+  else if (strcmp (element_name, "menu") == 0)
+    {
+      _gtk_builder_menu_end (data);
     }
   else if (strcmp (element_name, "object") == 0)
     {
