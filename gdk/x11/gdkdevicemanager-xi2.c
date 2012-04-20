@@ -1305,13 +1305,24 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_Motion:
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
-        GdkDevice *source_device;
+        GdkDevice *source_device, *device;
         gdouble delta_x, delta_y;
 
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
+        device = g_hash_table_lookup (device_manager->id_table,
+                                      GUINT_TO_POINTER (xev->deviceid));
 
-        if (scroll_valuators_changed (GDK_X11_DEVICE_XI2 (source_device),
+        /* When scrolling, X might send events twice here; once with both the
+         * device and the source device set to the physical device, and once
+         * with the device set to the master device.
+         * Since we are only interested in the latter, and
+         * scroll_valuators_changed() updates the valuator cache for the
+         * source device, we need to explicitly ignore the first event in
+         * order to get the correct delta for the second.
+         */
+        if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE &&
+            scroll_valuators_changed (GDK_X11_DEVICE_XI2 (source_device),
                                       &xev->valuators, &delta_x, &delta_y))
           {
             event->scroll.type = GDK_SCROLL;
@@ -1333,9 +1344,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->scroll.delta_x = delta_x;
             event->scroll.delta_y = delta_y;
 
-            event->scroll.device = g_hash_table_lookup (device_manager->id_table,
-                                                        GUINT_TO_POINTER (xev->deviceid));
-
+            event->scroll.device = device;
             gdk_event_set_source_device (event, source_device);
 
             event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
@@ -1350,9 +1359,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->motion.x_root = (gdouble) xev->root_x;
         event->motion.y_root = (gdouble) xev->root_y;
 
-        event->motion.device = g_hash_table_lookup (device_manager->id_table,
-                                                    GINT_TO_POINTER (xev->deviceid));
-
+        event->motion.device = device;
         gdk_event_set_source_device (event, source_device);
 
         event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
