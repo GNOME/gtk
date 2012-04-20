@@ -158,6 +158,16 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_CELL "cell"
 
 /**
+ * GTK_STYLE_CLASS_DIM_LABEL:
+ *
+ * A CSS class to match dimmed labels.
+ *
+ * This should be used for toning down right aligned labels as
+ * compared to the entry value.
+ */
+#define GTK_STYLE_CLASS_DIM_LABEL "dim-label"
+
+/**
  * GTK_STYLE_CLASS_ENTRY:
  *
  * A CSS class to match text entries.
