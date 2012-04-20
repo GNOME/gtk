@@ -7020,6 +7020,7 @@ gtk_application_new
 gtk_application_add_window
 gtk_application_remove_window
 gtk_application_get_windows
+gtk_application_get_window_by_id
 
 <SUBSECTION>
 GtkApplicationInhibitFlags
@@ -7053,6 +7054,7 @@ GtkApplicationWindow
 gtk_application_window_new
 gtk_application_window_set_show_menubar
 gtk_application_window_get_show_menubar
+gtk_application_window_get_id
 
 <SUBSECTION Standard>
 GtkApplicationWindowClass

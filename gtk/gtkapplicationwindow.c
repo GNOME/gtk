@@ -218,6 +218,8 @@ struct _GtkApplicationWindowPrivate
   GDBusConnection *session;
   gchar           *object_path;
   guint            export_id;
+
+  guint            id;
 };
 
 static void
@@ -809,11 +811,13 @@ gtk_application_window_real_unrealize (GtkWidget *widget)
 gboolean
 gtk_application_window_publish (GtkApplicationWindow *window,
                                 GDBusConnection      *session,
-                                const gchar          *object_path)
+                                const gchar          *object_path,
+                                guint                 object_id)
 {
   g_assert (window->priv->session == NULL);
   g_assert (window->priv->export_id == 0);
   g_assert (window->priv->object_path == NULL);
+  g_assert (window->priv->id == 0);
 
   window->priv->export_id = g_dbus_connection_export_action_group (session, object_path,
                                                                    G_ACTION_GROUP (window->priv->actions),
@@ -824,6 +828,7 @@ gtk_application_window_publish (GtkApplicationWindow *window,
 
   window->priv->session = session;
   window->priv->object_path = g_strdup (object_path);
+  window->priv->id = object_id;
 
   return TRUE;
 }
@@ -834,10 +839,12 @@ gtk_application_window_unpublish (GtkApplicationWindow *window)
   g_assert (window->priv->session != NULL);
   g_assert (window->priv->export_id != 0);
   g_assert (window->priv->object_path != NULL);
+  g_assert (window->priv->id != 0);
 
   g_dbus_connection_unexport_action_group (window->priv->session, window->priv->export_id);
   window->priv->session = NULL;
   window->priv->export_id = 0;
+  window->priv->id = 0;
 
   g_free (window->priv->object_path);
   window->priv->object_path = NULL;
@@ -1085,4 +1092,24 @@ GtkAccelGroup *
 gtk_application_window_get_accel_group (GtkApplicationWindow *window)
 {
   return window->priv->accels;
+}
+
+/**
+ * gtk_application_window_get_id:
+ * @window: a #GtkApplicationWindow
+ *
+ * Returns the unique ID of the window. If the window has not yet been added to
+ * a #GtkApplication, returns <literal>0</literal>.
+ *
+ * Returns: the unique ID for @window, or <literal>0</literal> if the window
+ *   has not yet been added to a #GtkApplication
+ *
+ * Since: 3.6
+ */
+guint
+gtk_application_window_get_id (GtkApplicationWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_APPLICATION_WINDOW (window), 0);
+
+  return window->priv->id;
 }

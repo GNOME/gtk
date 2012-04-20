@@ -115,6 +115,10 @@ GDK_AVAILABLE_IN_3_4
 gboolean         gtk_application_is_inhibited       (GtkApplication             *application,
                                                      GtkApplicationInhibitFlags  flags);
 
+GDK_AVAILABLE_IN_3_6
+GtkWindow *      gtk_application_get_window_by_id   (GtkApplication             *application,
+                                                     guint                       id);
+
 G_END_DECLS
 
 #endif /* __GTK_APPLICATION_H__ */

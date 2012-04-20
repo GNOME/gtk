@@ -27,7 +27,8 @@
 G_GNUC_INTERNAL
 gboolean                gtk_application_window_publish                  (GtkApplicationWindow *window,
                                                                          GDBusConnection      *session,
-                                                                         const gchar          *object_path);
+                                                                         const gchar          *object_path,
+                                                                         guint                 object_id);
 
 G_GNUC_INTERNAL
 void                    gtk_application_window_unpublish                (GtkApplicationWindow *window);

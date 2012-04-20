@@ -67,6 +67,9 @@ void        gtk_application_window_set_show_menubar (GtkApplicationWindow *windo
 GDK_AVAILABLE_IN_3_4
 gboolean    gtk_application_window_get_show_menubar (GtkApplicationWindow *window);
 
+GDK_AVAILABLE_IN_3_6
+guint       gtk_application_window_get_id           (GtkApplicationWindow *window);
+
 G_END_DECLS
 
 #endif /* __GTK_APPLICATION_WINDOW_H__ */
