@@ -1062,7 +1062,7 @@ scroll_valuators_changed (GdkX11DeviceXI2 *device,
                           gdouble         *dx,
                           gdouble         *dy)
 {
-  gdouble has_scroll_valuators = FALSE;
+  gboolean has_scroll_valuators = FALSE;
   GdkScrollDirection direction;
   guint n_axes, i, n_val;
   gdouble *vals;
