@@ -35,6 +35,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include <sys/mman.h>
+#include <errno.h>
 
 #define GDK_TYPE_WAYLAND_CURSOR              (_gdk_wayland_cursor_get_type ())
 #define GDK_WAYLAND_CURSOR(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_CURSOR, GdkWaylandCursor))
@@ -193,28 +194,34 @@ create_cursor(GdkWaylandDisplay *display, GdkPixbuf *pixbuf, int x, int y)
   cursor->size = stride * cursor->height;
 
   fd = g_file_open_tmp("wayland-shm-XXXXXX", &filename, &error);
-  if (fd < 0) {
-    fprintf(stderr, "g_file_open_tmp failed: %s\n", error->message);
-    g_error_free (error);
-    return NULL;
+  if (fd < 0)
+    {
+      g_critical (G_STRLOC ": Error opening temporary file for buffer: %s",
+                  error->message);
+      g_error_free (error);
+      return NULL;
   }
 
   unlink (filename);
   g_free (filename);
 
-  if (ftruncate(fd, cursor->size) < 0) {
-    fprintf(stderr, "ftruncate failed: %m\n");
-    close(fd);
-    return NULL;
-  }
+  if (ftruncate(fd, cursor->size) < 0)
+    {
+      g_critical (G_STRLOC ": Error truncating file for buffer: %s",
+                  g_strerror (errno));
+      close(fd);
+      return NULL;
+    }
 
   cursor->map = mmap(NULL, cursor->size,
-		     PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-  if (cursor->map == MAP_FAILED) {
-    fprintf(stderr, "mmap failed: %m\n");
-    close(fd);
-    return NULL;
-  }
+                     PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+  if (cursor->map == MAP_FAILED)
+    {
+      g_critical (G_STRLOC ": Error mmap'ing file for buffer: %s",
+                  g_strerror (errno));
+      close(fd);
+      return NULL;
+    }
 
   if (pixbuf)
     set_pixbuf (cursor, pixbuf);
