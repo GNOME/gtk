@@ -427,6 +427,12 @@ on_name_vanished (GDBusConnection *connection,
     }
 }
 
+#ifdef G_OS_WIN32
+#define APP_EXTENSION ".exe"
+#else
+#define APP_EXTENSION
+#endif
+
 GtkWidget *
 do_application (GtkWidget *toplevel)
 {
@@ -445,8 +451,8 @@ do_application (GtkWidget *toplevel)
       const gchar *command;
       GError *error = NULL;
 
-      if (g_file_test ("./gtk3-demo-application", G_FILE_TEST_IS_EXECUTABLE))
-        command = "./gtk3-demo-application";
+      if (g_file_test ("./gtk3-demo-application" APP_EXTENSION, G_FILE_TEST_IS_EXECUTABLE))
+        command = "./gtk3-demo-application" APP_EXTENSION;
       else
         command = "gtk3-demo-application";
 
