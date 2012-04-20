@@ -258,7 +258,7 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
 }
 
 static gchar *
-gtk_application_window_get_app_desktop_name ()
+gtk_application_window_get_app_desktop_name (void)
 {
   gchar *retval = NULL;
 
