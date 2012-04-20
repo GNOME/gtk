@@ -2388,6 +2388,9 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
   /* let ppdOpenFd take over the ownership of the open file */
   g_io_channel_seek_position (data->ppd_io, 0, G_SEEK_SET, NULL);
   data->printer->ppd_file = ppdOpenFd (dup (g_io_channel_unix_get_fd (data->ppd_io)));
+#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2) || CUPS_VERSION_MAJOR > 1
+  ppdLocalize (data->printer->ppd_file);
+#endif
 
   ppdMarkDefaults (data->printer->ppd_file);
 
