@@ -1090,7 +1090,7 @@ gtk_drag_begin_idle (gpointer arg)
 
   [nswindow dragImage:drag_image
                    at:point
-               offset:NSMakeSize(0, 0)
+               offset:NSZeroSize
                 event:info->nsevent
            pasteboard:pasteboard
                source:nswindow
@@ -1134,8 +1134,25 @@ gtk_drag_begin_internal (GtkWidget         *widget,
     {
       if (gdk_event_get_coords (event, &x, &y))
         {
+          /* We need to translate (x, y) to coordinates relative to the
+           * toplevel GdkWindow, which should be the GdkWindow backing
+           * nswindow. Then, we convert to the NSWindow coordinate system.
+           */
+          GdkWindow *window = event->any.window;
+          GdkWindow *toplevel = gdk_window_get_effective_toplevel (window);
+
+          while (window != toplevel)
+            {
+              double old_x = x;
+              double old_y = y;
+
+              gdk_window_coords_to_parent (window, old_x, old_y,
+                                           &x, &y);
+              window = gdk_window_get_effective_parent (window);
+            }
+
           point.x = x;
-          point.y = y;
+          point.y = gdk_window_get_height (window) - y;
         }
       time = (double)gdk_event_get_time (event);
     }
