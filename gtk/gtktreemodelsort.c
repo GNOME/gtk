@@ -1406,12 +1406,13 @@ gtk_tree_model_sort_iter_previous (GtkTreeModel *tree_model,
 
   elt = iter->user_data2;
 
-  siter = g_sequence_iter_prev (elt->siter);
-  if (g_sequence_iter_is_begin (siter))
+  if (g_sequence_iter_is_begin (elt->siter))
     {
       iter->stamp = 0;
       return FALSE;
     }
+
+  siter = g_sequence_iter_prev (elt->siter);
   iter->user_data2 = GET_ELT (siter);
 
   return TRUE;

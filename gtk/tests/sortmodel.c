@@ -1113,6 +1113,64 @@ specific_bug_364946 (void)
   gtk_tree_model_sort_clear_cache (GTK_TREE_MODEL_SORT (s_model));
 }
 
+static void
+iter_test (GtkTreeModel *model)
+{
+  GtkTreeIter a, b;
+
+  g_assert (gtk_tree_model_get_iter_first (model, &a));
+
+  g_assert (gtk_tree_model_iter_next (model, &a));
+  g_assert (gtk_tree_model_iter_next (model, &a));
+  b = a;
+  g_assert (!gtk_tree_model_iter_next (model, &b));
+
+  g_assert (gtk_tree_model_iter_previous (model, &a));
+  g_assert (gtk_tree_model_iter_previous (model, &a));
+  b = a;
+  g_assert (!gtk_tree_model_iter_previous (model, &b));
+}
+
+static void
+specific_bug_674587 (void)
+{
+  GtkListStore *l;
+  GtkTreeStore *t;
+  GtkTreeModel *m;
+  GtkTreeIter a;
+
+  l = gtk_list_store_new (1, G_TYPE_STRING);
+
+  gtk_list_store_append (l, &a);
+  gtk_list_store_set (l, &a, 0, "0", -1);
+  gtk_list_store_append (l, &a);
+  gtk_list_store_set (l, &a, 0, "1", -1);
+  gtk_list_store_append (l, &a);
+  gtk_list_store_set (l, &a, 0, "2", -1);
+
+  iter_test (GTK_TREE_MODEL (l));
+
+  g_object_unref (l);
+
+  t = gtk_tree_store_new (1, G_TYPE_STRING);
+
+  gtk_tree_store_append (t, &a, NULL);
+  gtk_tree_store_set (t, &a, 0, "0", -1);
+  gtk_tree_store_append (t, &a, NULL);
+  gtk_tree_store_set (t, &a, 0, "1", -1);
+  gtk_tree_store_append (t, &a, NULL);
+  gtk_tree_store_set (t, &a, 0, "2", -1);
+
+  iter_test (GTK_TREE_MODEL (t));
+
+  m = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (t));
+
+  iter_test (m);
+
+  g_object_unref (t);
+  g_object_unref (m);
+}
+
 /* main */
 
 void
@@ -1146,4 +1204,7 @@ register_sort_model_tests (void)
                    specific_bug_300089);
   g_test_add_func ("/TreeModelSort/specific/bug-364946",
                    specific_bug_364946);
+  g_test_add_func ("/TreeModelSort/specific/bug-674587",
+                   specific_bug_674587);
 }
+
