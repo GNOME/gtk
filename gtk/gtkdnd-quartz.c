@@ -1099,6 +1099,12 @@ gtk_drag_begin_idle (gpointer arg)
   /* FIXME: If the event isn't a mouse event, use the global cursor position instead */
   point = [info->nsevent locationInWindow];
 
+  /* Account for the given hotspot position. The y position must be
+   * corrected to the NSWindow coordinate system.
+   */
+  point.x -= info->hot_x;
+  point.y += -(gdk_pixbuf_get_height (info->icon_pixbuf) - info->hot_y);
+
   drag_image = _gtk_quartz_create_image_from_pixbuf (info->icon_pixbuf);
   if (drag_image == NULL)
     {
