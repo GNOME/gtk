@@ -1318,7 +1318,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->scroll.direction = GDK_SCROLL_SMOOTH;
 
             GDK_NOTE(EVENTS,
-                     g_message ("smooth scroll:\twindow %ld\n\tdeltas: %f %f",
+                     g_message ("smooth scroll: %s\n\tdevice: %u\n\tsource device: %u\n\twindow %ld\n\tdeltas: %f %f",
+                                (xev->flags & XIPointerEmulated) ? "emulated" : "",
+                                xev->deviceid, xev->sourceid,
                                 xev->event, delta_x, delta_y));
 
 
