@@ -1004,13 +1004,67 @@ gtk_clipboard_set_can_store (GtkClipboard         *clipboard,
 void
 gtk_clipboard_store (GtkClipboard *clipboard)
 {
-  /* FIXME: Implement */
+  int i;
+  int n_targets = 0;
+  GtkTargetEntry *targets;
+
+  g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));
+
+  if (!clipboard->target_list)
+    return;
+
+  /* We simply store all targets into the OS X clipboard. We should be
+   * using the functions gdk_display_supports_clipboard_persistence() and
+   * gdk_display_store_clipboard(), but since for OS X the clipboard support
+   * was implemented in GTK+ and not through GdkSelections, we do it this
+   * way. Doing this properly could be worthwhile to implement in the future.
+   */
+
+  targets = gtk_target_table_new_from_list (clipboard->target_list,
+                                            &n_targets);
+  for (i = 0; i < n_targets; i++)
+    {
+      GtkSelectionData selection_data;
+
+      memset (&selection_data, 0, sizeof (GtkSelectionData));
+
+      selection_data.selection = clipboard->selection;
+      selection_data.target = gdk_atom_intern_static_string (targets[i].target);
+      selection_data.display = gdk_display_get_default ();
+      selection_data.length = -1;
+
+      clipboard->get_func (clipboard, &selection_data,
+                           targets[i].info, clipboard->user_data);
+
+      if (selection_data.length >= 0)
+        _gtk_quartz_set_selection_data_for_pasteboard (clipboard->pasteboard,
+                                                       &selection_data);
+
+      g_free (selection_data.data);
+    }
 }
 
 void
 _gtk_clipboard_store_all (void)
 {
-  /* FIXME: Implement */
+  GtkClipboard *clipboard;
+  GSList *displays, *list;
+
+  displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+
+  list = displays;
+  while (list)
+    {
+      GdkDisplay *display = list->data;
+
+      clipboard = clipboard_peek (display, GDK_SELECTION_CLIPBOARD, TRUE);
+
+      if (clipboard)
+        gtk_clipboard_store (clipboard);
+
+      list = list->next;
+    }
+  g_slist_free (displays);
 }
 
 #define __GTK_CLIPBOARD_C__
