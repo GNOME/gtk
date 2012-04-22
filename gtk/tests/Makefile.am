@@ -146,6 +146,17 @@ TEST_PROGS			+= regression-tests
 regression_tests_SOURCES	 = regression-tests.c
 regression_tests_LDADD		 = $(progs_ldadd)
 
+TEST_PROGS			+= keyhash
+keyhash_SOURCES			 = keyhash.c \
+				   ../gtkkeyhash.c ../gtkkeyhash.h \
+				   ../gtkprivate.c ../gtkprivate.h
+keyhash_LDADD			 = $(progs_ldadd)
+keyhash_CFLAGS			 = -DGTK_COMPILATION \
+				   -DGTK_LIBDIR=\"$(libdir)\" \
+				   -DGTK_DATADIR=\"$(datadir)\" \
+				   -DGTK_DATA_PREFIX=\"$(prefix)\" \
+				   -DGTK_SYSCONFDIR=\"$(sysconfdir)\"
+
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \
 	file-chooser-test-dir/text.txt
