@@ -29,7 +29,7 @@ enum {
 
 G_DEFINE_INTERFACE (GtkStyleProviderPrivate, _gtk_style_provider_private, GTK_TYPE_STYLE_PROVIDER)
 
-guint signals[LAST_SIGNAL];
+static guint signals[LAST_SIGNAL];
 
 static void
 _gtk_style_provider_private_default_init (GtkStyleProviderPrivateInterface *iface)
