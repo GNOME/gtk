@@ -603,7 +603,6 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
                                                 cups_printer->device_uri,
                                                 GTK_PRINT_BACKEND_CUPS (print_backend)->username);
 
-#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2) || CUPS_VERSION_MAJOR > 1
   httpAssembleURIf (HTTP_URI_CODING_ALL,
                     printer_absolute_uri,
                     sizeof (printer_absolute_uri),
@@ -613,13 +612,6 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
                     ippPort (),
                     "/printers/%s",
                     gtk_printer_get_name (gtk_print_job_get_printer (job)));
-#else
-  g_snprintf (printer_absolute_uri,
-              sizeof (printer_absolute_uri),
-              "ipp://localhost:%d/printers/%s",
-              ippPort (),
-              gtk_printer_get_name (gtk_print_job_get_printer (job)));
-#endif
 
   gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION,
                                    IPP_TAG_URI, "printer-uri",
@@ -1897,22 +1889,12 @@ cups_create_printer (GtkPrintBackendCups *cups_backend,
 			 info->printer_uri));
     }
 
-#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2) || CUPS_VERSION_MAJOR > 1
   httpSeparateURI (HTTP_URI_CODING_ALL, cups_printer->printer_uri,
 		   method, sizeof (method),
 		   username, sizeof (username),
 		   hostname, sizeof (hostname),
 		   &port,
 		   resource, sizeof (resource));
-
-#else
-  httpSeparate (cups_printer->printer_uri,
-		method,
-		username,
-		hostname,
-		&port,
-		resource);
-#endif
 
   if (strncmp (resource, "/printers/", 10) == 0)
     {
@@ -2415,10 +2397,7 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
   /* let ppdOpenFd take over the ownership of the open file */
   g_io_channel_seek_position (data->ppd_io, 0, G_SEEK_SET, NULL);
   data->printer->ppd_file = ppdOpenFd (dup (g_io_channel_unix_get_fd (data->ppd_io)));
-#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2) || CUPS_VERSION_MAJOR > 1
   ppdLocalize (data->printer->ppd_file);
-#endif
-
   ppdMarkDefaults (data->printer->ppd_file);
 
   gtk_printer_set_has_details (printer, TRUE);
@@ -3185,11 +3164,7 @@ value_is_off (const char *value)
 static char *
 ppd_group_name (ppd_group_t *group)
 {
-#if CUPS_VERSION_MAJOR > 1 || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR > 1) || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR == 1 && CUPS_VERSION_PATCH >= 18)
-  return group->name;
-#else
   return group->text;
-#endif
 }
 
 static int
@@ -4801,8 +4776,6 @@ cups_printer_get_capabilities (GtkPrinter *printer)
     GTK_PRINT_CAPABILITY_COPIES |
     GTK_PRINT_CAPABILITY_COLLATE |
     GTK_PRINT_CAPABILITY_REVERSE |
-#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 1 && CUPS_VERSION_PATCH >= 15) || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR > 1) || CUPS_VERSION_MAJOR > 1
     GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT |
-#endif
     GTK_PRINT_CAPABILITY_NUMBER_UP;
 }
