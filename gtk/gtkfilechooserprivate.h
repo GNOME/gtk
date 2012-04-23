@@ -190,6 +190,8 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_select_a_folder_label;
   GtkWidget *browse_select_a_folder_icon;
 
+  gulong toplevel_unmapped_id;
+
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
 

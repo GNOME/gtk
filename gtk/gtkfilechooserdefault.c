@@ -272,7 +272,6 @@ static void     gtk_file_chooser_default_dispose      (GObject               *ob
 static void     gtk_file_chooser_default_show_all       (GtkWidget             *widget);
 static void     gtk_file_chooser_default_realize        (GtkWidget             *widget);
 static void     gtk_file_chooser_default_map            (GtkWidget             *widget);
-static void     gtk_file_chooser_default_unmap          (GtkWidget             *widget);
 static void     gtk_file_chooser_default_hierarchy_changed (GtkWidget          *widget,
 							    GtkWidget          *previous_toplevel);
 static void     gtk_file_chooser_default_style_set      (GtkWidget             *widget,
@@ -412,6 +411,7 @@ static GSList  *search_get_selected_files    (GtkFileChooserDefault *impl);
 static void     search_entry_activate_cb     (GtkEntry              *entry, 
 					      gpointer               data);
 static void     settings_load                (GtkFileChooserDefault *impl);
+static void     settings_save                (GtkFileChooserDefault *impl);
 
 static void     recent_start_loading         (GtkFileChooserDefault *impl);
 static void     recent_stop_loading          (GtkFileChooserDefault *impl);
@@ -497,7 +497,6 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   widget_class->show_all = gtk_file_chooser_default_show_all;
   widget_class->realize = gtk_file_chooser_default_realize;
   widget_class->map = gtk_file_chooser_default_map;
-  widget_class->unmap = gtk_file_chooser_default_unmap;
   widget_class->hierarchy_changed = gtk_file_chooser_default_hierarchy_changed;
   widget_class->style_set = gtk_file_chooser_default_style_set;
   widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
@@ -5653,6 +5652,20 @@ toplevel_set_focus_cb (GtkWindow             *window,
   impl->toplevel_last_focus_widget = gtk_window_get_focus (window);
 }
 
+/* Callback used when the toplevel widget unmaps itself.  We don't do this in
+ * our own ::unmap() handler because in GTK+2, child widgets don't get
+ * unmapped.
+ */
+static void
+toplevel_unmap_cb (GtkWidget *widget,
+		   GtkFileChooserDefault *impl)
+{
+  settings_save (impl);
+
+  cancel_all_operations (impl);
+  impl->reload_state = RELOAD_EMPTY;
+}
+
 /* We monitor the focus widget on our toplevel to be able to know which widget
  * was last focused at the time our "should_respond" method gets called.
  */
@@ -5666,13 +5679,20 @@ gtk_file_chooser_default_hierarchy_changed (GtkWidget *widget,
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
   toplevel = gtk_widget_get_toplevel (widget);
 
-  if (previous_toplevel && 
-      impl->toplevel_set_focus_id != 0)
+  if (previous_toplevel)
     {
-      g_signal_handler_disconnect (previous_toplevel,
-                                   impl->toplevel_set_focus_id);
-      impl->toplevel_set_focus_id = 0;
-      impl->toplevel_last_focus_widget = NULL;
+      if (impl->toplevel_set_focus_id != 0)
+	{
+	  g_signal_handler_disconnect (previous_toplevel, impl->toplevel_set_focus_id);
+	  impl->toplevel_set_focus_id = 0;
+	  impl->toplevel_last_focus_widget = NULL;
+	}
+
+      if (impl->toplevel_unmapped_id != 0)
+	{
+	  g_signal_handler_disconnect (previous_toplevel, impl->toplevel_unmapped_id);
+	  impl->toplevel_unmapped_id = 0;
+	}
     }
 
   if (gtk_widget_is_toplevel (toplevel))
@@ -5681,6 +5701,10 @@ gtk_file_chooser_default_hierarchy_changed (GtkWidget *widget,
       impl->toplevel_set_focus_id = g_signal_connect (toplevel, "set-focus",
 						      G_CALLBACK (toplevel_set_focus_cb), impl);
       impl->toplevel_last_focus_widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
+
+      g_assert (impl->toplevel_unmapped_id == 0);
+      impl->toplevel_unmapped_id = g_signal_connect (toplevel, "unmap",
+						     G_CALLBACK (toplevel_unmap_cb), impl);
     }
 }
 
@@ -5993,22 +6017,6 @@ gtk_file_chooser_default_map (GtkWidget *widget)
   settings_load (impl);
 
   profile_end ("end", NULL);
-}
-
-/* GtkWidget::unmap method */
-static void
-gtk_file_chooser_default_unmap (GtkWidget *widget)
-{
-  GtkFileChooserDefault *impl;
-
-  impl = GTK_FILE_CHOOSER_DEFAULT (widget);
-
-  settings_save (impl);
-
-  cancel_all_operations (impl);
-  impl->reload_state = RELOAD_EMPTY;
-
-  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->unmap (widget);
 }
 
 static void
