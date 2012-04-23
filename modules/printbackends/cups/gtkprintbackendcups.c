@@ -603,7 +603,6 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
                                                 cups_printer->device_uri,
                                                 GTK_PRINT_BACKEND_CUPS (print_backend)->username);
 
-#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2) || CUPS_VERSION_MAJOR > 1
   httpAssembleURIf (HTTP_URI_CODING_ALL,
                     printer_absolute_uri,
                     sizeof (printer_absolute_uri),
@@ -613,13 +612,6 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
                     ippPort (),
                     "/printers/%s",
                     gtk_printer_get_name (gtk_print_job_get_printer (job)));
-#else
-  g_snprintf (printer_absolute_uri,
-              sizeof (printer_absolute_uri),
-              "ipp://localhost:%d/printers/%s",
-              ippPort (),
-              gtk_printer_get_name (gtk_print_job_get_printer (job)));
-#endif
 
   gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION,
                                    IPP_TAG_URI, "printer-uri",
@@ -1892,22 +1884,12 @@ cups_create_printer (GtkPrintBackendCups *cups_backend,
 			 info->printer_uri));
     }
 
-#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2) || CUPS_VERSION_MAJOR > 1
   httpSeparateURI (HTTP_URI_CODING_ALL, cups_printer->printer_uri,
 		   method, sizeof (method),
 		   username, sizeof (username),
 		   hostname, sizeof (hostname),
 		   &port,
 		   resource, sizeof (resource));
-
-#else
-  httpSeparate (cups_printer->printer_uri,
-		method,
-		username,
-		hostname,
-		&port,
-		resource);
-#endif
 
   if (strncmp (resource, "/printers/", 10) == 0)
     {
@@ -3173,11 +3155,7 @@ value_is_off (const char *value)
 static char *
 ppd_group_name (ppd_group_t *group)
 {
-#if CUPS_VERSION_MAJOR > 1 || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR > 1) || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR == 1 && CUPS_VERSION_PATCH >= 18)
-  return group->name;
-#else
   return group->text;
-#endif
 }
 
 static int
@@ -3788,45 +3766,6 @@ cups_printer_get_options (GtkPrinter           *printer,
       gpointer value;
       gint j;
 
-<<<<<<< HEAD
-=======
-       /* Translators, this string is used to label the pages-per-sheet option
-        * in the print dialog
-        */
-      option = gtk_printer_option_new ("gtk-n-up", _("Pages per Sheet"), GTK_PRINTER_OPTION_TYPE_PICKONE);
-      gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up),
-					     n_up, n_up);
-      default_number_up = g_strdup_printf ("%d", cups_printer->default_number_up);
-      gtk_printer_option_set (option, default_number_up);
-      g_free (default_number_up);
-      set_option_from_settings (option, settings);
-      gtk_printer_option_set_add (set, option);
-      g_object_unref (option);
-
-      if (cups_printer_get_capabilities (printer) & GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT)
-        {
-          for (i = 0; i < G_N_ELEMENTS (n_up_layout_display); i++)
-            n_up_layout_display[i] = _(n_up_layout_display[i]);
-
-           /* Translators, this string is used to label the option in the print
-            * dialog that controls in what order multiple pages are arranged
-            */
-          option = gtk_printer_option_new ("gtk-n-up-layout", _("Page Ordering"), GTK_PRINTER_OPTION_TYPE_PICKONE);
-          gtk_printer_option_choices_from_array (option, G_N_ELEMENTS (n_up_layout),
-                                                 n_up_layout, n_up_layout_display);
-
-          text_direction = gtk_widget_get_default_direction ();
-          if (text_direction == GTK_TEXT_DIR_LTR)
-            gtk_printer_option_set (option, "lrtb");
-          else
-            gtk_printer_option_set (option, "rltb");
-
-          set_option_from_settings (option, settings);
-          gtk_printer_option_set_add (set, option);
-          g_object_unref (option);
-        }
-
->>>>>>> 58ca845... Extract Function cups_create_printer
       num_of_covers = backend->number_of_covers;
       cover = g_new (char *, num_of_covers + 1);
       cover[num_of_covers] = NULL;
@@ -4825,8 +4764,6 @@ cups_printer_get_capabilities (GtkPrinter *printer)
     GTK_PRINT_CAPABILITY_COPIES |
     GTK_PRINT_CAPABILITY_COLLATE |
     GTK_PRINT_CAPABILITY_REVERSE |
-#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 1 && CUPS_VERSION_PATCH >= 15) || (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR > 1) || CUPS_VERSION_MAJOR > 1
     GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT |
-#endif
     GTK_PRINT_CAPABILITY_NUMBER_UP;
 }
