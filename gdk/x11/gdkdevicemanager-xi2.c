@@ -1330,7 +1330,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
             GDK_NOTE(EVENTS,
                      g_message ("smooth scroll: %s\n\tdevice: %u\n\tsource device: %u\n\twindow %ld\n\tdeltas: %f %f",
+#ifdef XINPUT_2_2
                                 (xev->flags & XIPointerEmulated) ? "emulated" : "",
+#else
+                                 "",
+#endif
                                 xev->deviceid, xev->sourceid,
                                 xev->event, delta_x, delta_y));
 
