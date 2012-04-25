@@ -1331,6 +1331,23 @@ choose_icon (GtkIconTheme       *icon_theme,
   
   ensure_valid_themes (icon_theme);
 
+  /* for symbolic icons, do a search in all registered themes first;
+   * a theme that inherits them from a parent theme might provide
+   * an alternative highcolor version, but still expect the symbolic icon
+   * to show up instead.
+   */
+  if (icon_names[0] &&
+      g_str_has_suffix (icon_names[0], "-symbolic"))
+    {
+      for (l = priv->themes; l; l = l->next)
+        {
+          IconTheme *theme = l->data;
+          icon_info = theme_lookup_icon (theme, icon_names[0], size, allow_svg, use_builtin);
+          if (icon_info)
+            goto out;
+        }
+    }
+
   for (l = priv->themes; l; l = l->next)
     {
       IconTheme *theme = l->data;
