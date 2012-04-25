@@ -5528,15 +5528,13 @@ static gint
 get_menu_height (GtkMenu *menu)
 {
   GtkMenuPrivate *priv = menu->priv;
-  GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (menu);
   GtkBorder padding;
   gint height;
 
-  gtk_widget_get_allocation (widget, &allocation);
   get_menu_padding (widget, &padding);
 
-  height = allocation.height;
+  height = priv->requested_height;
   height -= (gtk_container_get_border_width (GTK_CONTAINER (widget)) * 2) +
     padding.top + padding.bottom;
 
@@ -5600,6 +5598,7 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
             GtkWidget *new_child;
             gboolean new_upper_arrow_visible = priv->upper_arrow_visible && !priv->tearoff_active;
             GtkBorder arrow_border;
+
             get_arrows_border (menu, &arrow_border);
 
             if (priv->scroll_offset != old_offset)
@@ -5616,13 +5615,11 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
     case GTK_SCROLL_START:
       /* Ignore the enter event we might get if the pointer is on the menu */
       menu_shell->priv->ignore_enter = TRUE;
-      gtk_menu_scroll_to (menu, 0);
       gtk_menu_shell_select_first (menu_shell, TRUE);
       break;
     case GTK_SCROLL_END:
       /* Ignore the enter event we might get if the pointer is on the menu */
       menu_shell->priv->ignore_enter = TRUE;
-      gtk_menu_scroll_to (menu, end_position - page_size);
       _gtk_menu_shell_select_last (menu_shell, TRUE);
       break;
     default:
