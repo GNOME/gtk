@@ -38,6 +38,7 @@
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
 #include "gtkentryprivate.h"
+#include "gtkiconhelperprivate.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -607,49 +608,6 @@ gtk_spin_button_get_property (GObject      *object,
     }
 }
 
-static gint
-get_icon_size (void)
-{
-  gint width, height, icon_size;
-
-  gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height);
-  icon_size = MAX (width, height);
-
-  return icon_size;
-}
-
-static GdkPixbuf *
-create_one_pixbuf (GtkStyleContext *context,
-                   const gchar *icon_name)
-{
-  GtkIconInfo *icon_info;
-  GdkPixbuf *pix;
-  gint size = get_icon_size ();
-
-  icon_info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
-                                          icon_name, size,
-                                          GTK_ICON_LOOKUP_GENERIC_FALLBACK |
-                                          GTK_ICON_LOOKUP_USE_BUILTIN);
-
-  if (icon_info != NULL)
-    {
-      pix = gtk_icon_info_load_symbolic_for_context (icon_info, context, 
-                                                     NULL, NULL);
-      gtk_icon_info_free (icon_info);
-    }
-  else
-    {
-      GtkIconSet *icon_set;
-
-      icon_set = gtk_style_context_lookup_icon_set (context, GTK_STOCK_MISSING_IMAGE);
-      pix = gtk_icon_set_render_icon_pixbuf (icon_set, context, GTK_ICON_SIZE_MENU);
-
-      g_warning ("Unable to fetch icon %s from the icon theme", icon_name);
-    }
-
-  return pix;
-}
-
 static void
 gtk_spin_button_init (GtkSpinButton *spin_button)
 {
@@ -862,6 +820,10 @@ gtk_spin_button_panel_get_width (GtkSpinButton *spin_button,
   GtkBorder button_padding, button_border;
   GtkStyleContext *context;
   GtkStateFlags state;
+  gint icon_size, width, height;
+
+  gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height);
+  icon_size = MAX (width, height);
 
   context = gtk_spin_button_panel_get_context (spin_button, panel);
   state = gtk_spin_button_panel_get_state (spin_button, panel);
@@ -871,7 +833,7 @@ gtk_spin_button_panel_get_width (GtkSpinButton *spin_button,
 
   g_object_unref (context);
 
-  return get_icon_size () + button_padding.left + button_padding.right +
+  return icon_size + button_padding.left + button_padding.right +
     button_border.left + button_border.right;
 }
 
@@ -937,7 +899,8 @@ gtk_spin_button_panel_draw (GtkSpinButton   *spin_button,
   GtkStateFlags state;
   GtkWidget *widget;
   gdouble width, height, x, y;
-  GdkPixbuf *pix;
+  gint icon_width, icon_height;
+  GtkIconHelper *icon_helper;
 
   widget = GTK_WIDGET (spin_button);
 
@@ -951,24 +914,30 @@ gtk_spin_button_panel_draw (GtkSpinButton   *spin_button,
   height = gdk_window_get_height (panel);
   width = gdk_window_get_width (panel);
 
+  icon_helper = _gtk_icon_helper_new ();
+  _gtk_icon_helper_set_use_fallback (icon_helper, TRUE);
+
   if (panel == priv->down_panel)
-    pix = create_one_pixbuf (context, "list-remove-symbolic");
+    _gtk_icon_helper_set_icon_name (icon_helper, "list-remove-symbolic", GTK_ICON_SIZE_MENU);
   else
-    pix = create_one_pixbuf (context, "list-add-symbolic");
+    _gtk_icon_helper_set_icon_name (icon_helper, "list-add-symbolic", GTK_ICON_SIZE_MENU);
+
+  _gtk_icon_helper_get_size (icon_helper, context,
+                             &icon_width, &icon_height);
 
   gtk_render_background (context, cr,
                          0, 0, width, height);
   gtk_render_frame (context, cr,
                     0, 0, width, height);
 
-  x = floor ((width - gdk_pixbuf_get_width (pix)) / 2.0);
-  y = floor ((height - gdk_pixbuf_get_height (pix)) / 2.0);
+  x = floor ((width - icon_width) / 2.0);
+  y = floor ((height - icon_height) / 2.0);
 
-  gtk_render_icon (context, cr, pix,
-                   x, y);
+  _gtk_icon_helper_draw (icon_helper, context, cr,
+                         x, y);
   cairo_restore (cr);
 
-  g_object_unref (pix);
+  g_object_unref (icon_helper);
   g_object_unref (context);
 }
 
