@@ -2296,62 +2296,35 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
   GtkJunctionSides junction = 0;
   guint hidden_side = 0;
 
-  cairo_save (cr);
-
   switch (gap_side)
     {
     case GTK_POS_LEFT:
       junction = GTK_JUNCTION_LEFT;
       hidden_side = (1 << GTK_CSS_LEFT);
-
-      cairo_translate (cr, x + width, y);
-      cairo_rotate (cr, G_PI / 2);
       break;
     case GTK_POS_RIGHT:
       junction = GTK_JUNCTION_RIGHT;
       hidden_side = (1 << GTK_CSS_RIGHT);
-
-      cairo_translate (cr, x, y + height);
-      cairo_rotate (cr, - G_PI / 2);
       break;
     case GTK_POS_TOP:
       junction = GTK_JUNCTION_TOP;
       hidden_side = (1 << GTK_CSS_TOP);
-
-      cairo_translate (cr, x + width, y + height);
-      cairo_rotate (cr, G_PI);
       break;
     case GTK_POS_BOTTOM:
       junction = GTK_JUNCTION_BOTTOM;
       hidden_side = (1 << GTK_CSS_BOTTOM);
-
-      cairo_translate (cr, x, y);
       break;
     }
 
-  if (gap_side == GTK_POS_TOP ||
-      gap_side == GTK_POS_BOTTOM)
-    _gtk_theming_background_init (&bg, engine, 
-                                  0, 0,
-                                  width, height,
-                                  GTK_JUNCTION_BOTTOM);
-  else
-    _gtk_theming_background_init (&bg, engine, 
-                                  0, 0,
-                                  height, width,
-                                  GTK_JUNCTION_BOTTOM);
-
+  _gtk_theming_background_init (&bg, engine, 
+                                x, y,
+                                width, height,
+                                junction);
   _gtk_theming_background_render (&bg, cr);
-
-  cairo_restore (cr);
-
-  cairo_save (cr);
 
   render_frame_internal (engine, cr,
                          x, y, width, height,
                          hidden_side, junction);
-
-  cairo_restore (cr);
 }
 
 static void
