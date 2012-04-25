@@ -2412,6 +2412,8 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   _gtk_theming_background_init (&bg, engine, x, y, width, height, sides);
   _gtk_theming_background_render (&bg, cr);
 
+  gtk_theming_engine_render_frame (engine, cr, x, y, width, height);
+
   if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_GRIP))
     {
       /* reduce confusing values to a meaningful state */
