@@ -505,6 +505,15 @@ colord_client_connect_cb (GObject *source_object,
 
   g_object_unref (printer);
 }
+
+static void
+colord_printer_details_aquired_cb (GtkPrinterCups *printer,
+                                   gboolean success,
+                                   gpointer user_data)
+{
+  /* refresh the device */
+  colord_update_device (printer);
+}
 #endif
 
 /**
@@ -550,6 +559,11 @@ gtk_printer_cups_new (const char      *name,
                          colord_client_connect_cb,
                          g_object_ref (printer));
     }
+
+    /* update the device when we read the PPD */
+    g_signal_connect (printer, "details-acquired",
+                      G_CALLBACK (colord_printer_details_aquired_cb),
+                      printer);
 #endif
   return printer;
 }
