@@ -2719,7 +2719,6 @@ gtk_css_provider_get_named (const gchar *name,
 
   if (!provider)
     {
-      const gchar *home_dir;
       gchar *subpath, *path = NULL;
 
       if (variant)
@@ -2727,17 +2726,31 @@ gtk_css_provider_get_named (const gchar *name,
       else
         subpath = g_strdup ("gtk-3.0" G_DIR_SEPARATOR_S "gtk.css");
 
-      /* First look in the users home directory
+      /* First look in the user's config directory
        */
-      home_dir = g_get_home_dir ();
-      if (home_dir)
+      path = g_build_filename (g_get_user_data_dir (), "themes", name, subpath, NULL);
+      if (!g_file_test (path, G_FILE_TEST_EXISTS))
         {
-          path = g_build_filename (home_dir, ".themes", name, subpath, NULL);
+          g_free (path);
+          path = NULL;
+        }
 
-          if (!g_file_test (path, G_FILE_TEST_EXISTS))
+      /* Next look in the user's home directory
+       */
+      if (!path)
+        {
+          const gchar *home_dir;
+
+          home_dir = g_get_home_dir ();
+          if (home_dir)
             {
-              g_free (path);
-              path = NULL;
+              path = g_build_filename (home_dir, ".themes", name, subpath, NULL);
+
+              if (!g_file_test (path, G_FILE_TEST_EXISTS))
+                {
+                  g_free (path);
+                  path = NULL;
+                }
             }
         }
 
