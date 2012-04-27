@@ -207,12 +207,25 @@ _gtk_file_system_class_init (GtkFileSystemClass *class)
 }
 
 static GFile *
-get_bookmarks_file (void)
+get_legacy_bookmarks_file (void)
 {
   GFile *file;
   gchar *filename;
 
   filename = g_build_filename (g_get_home_dir (), ".gtk-bookmarks", NULL);
+  file = g_file_new_for_path (filename);
+  g_free (filename);
+
+  return file;
+}
+
+static GFile *
+get_bookmarks_file (void)
+{
+  GFile *file;
+  gchar *filename;
+
+  filename = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "bookmarks", NULL);
   file = g_file_new_for_path (filename);
   g_free (filename);
 
@@ -269,6 +282,8 @@ save_bookmarks (GFile  *bookmarks_file,
   GError *error = NULL;
   GString *contents;
   GSList *l;
+  GFile *parent_file;
+  gchar *path;
 
   contents = g_string_new ("");
 
@@ -290,16 +305,22 @@ save_bookmarks (GFile  *bookmarks_file,
       g_free (uri);
     }
 
-  if (!g_file_replace_contents (bookmarks_file,
-				contents->str,
-				strlen (contents->str),
-				NULL, FALSE, 0, NULL,
-				NULL, &error))
+  parent_file = g_file_get_parent (bookmarks_file);
+  path = g_file_get_path (parent_file);
+  if (g_mkdir_with_parents (path, 0700) == 0)
     {
-      g_critical ("%s", error->message);
-      g_error_free (error);
+      if (!g_file_replace_contents (bookmarks_file,
+                                    contents->str,
+                                    strlen (contents->str),
+                                    NULL, FALSE, 0, NULL,
+                                    NULL, &error))
+        {
+          g_critical ("%s", error->message);
+          g_error_free (error);
+        }
     }
-
+  g_free (path);
+  g_object_unref (parent_file);
   g_string_free (contents, TRUE);
 }
 
@@ -547,6 +568,18 @@ _gtk_file_system_init (GtkFileSystem *file_system)
   /* Bookmarks */
   bookmarks_file = get_bookmarks_file ();
   priv->bookmarks = read_bookmarks (bookmarks_file);
+  if (!priv->bookmarks)
+    {
+      GFile *legacy_bookmarks_file;
+
+      /* Read the legacy one and write it to the new one */
+      legacy_bookmarks_file = get_legacy_bookmarks_file ();
+      priv->bookmarks = read_bookmarks (legacy_bookmarks_file);
+      save_bookmarks (bookmarks_file, priv->bookmarks);
+
+      g_object_unref (legacy_bookmarks_file);
+    }
+
   priv->bookmarks_monitor = g_file_monitor_file (bookmarks_file,
 						 G_FILE_MONITOR_NONE,
 						 NULL, &error);
