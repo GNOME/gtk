@@ -522,6 +522,7 @@ do_toolpalette (GtkWidget *do_widget)
                                       GTK_POLICY_NEVER,
                                       GTK_POLICY_AUTOMATIC);
       gtk_container_set_border_width (GTK_CONTAINER (palette_scroller), 6);
+      gtk_widget_set_hexpand (palette_scroller, TRUE);
 
       gtk_container_add (GTK_CONTAINER (palette_scroller), palette);
       gtk_container_add (GTK_CONTAINER (hbox), palette_scroller);
