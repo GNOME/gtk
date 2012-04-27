@@ -92,6 +92,7 @@ struct GtkFileSystemPrivate
 
   /* This list contains GtkFileSystemBookmark structs */
   GSList *bookmarks;
+  GFile *bookmarks_file;
 
   GFileMonitor *bookmarks_monitor;
 };
@@ -206,6 +207,9 @@ gtk_file_system_finalize (GObject *object)
       g_slist_free (priv->bookmarks);
     }
 
+  if (priv->bookmarks_file)
+    g_object_unref (priv->bookmarks_file);
+
   G_OBJECT_CLASS (_gtk_file_system_parent_class)->finalize (object);
 }
 
@@ -239,12 +243,25 @@ _gtk_file_system_class_init (GtkFileSystemClass *class)
 }
 
 static GFile *
-get_bookmarks_file (void)
+get_legacy_bookmarks_file (void)
 {
   GFile *file;
   gchar *filename;
 
   filename = g_build_filename (g_get_home_dir (), ".gtk-bookmarks", NULL);
+  file = g_file_new_for_path (filename);
+  g_free (filename);
+
+  return file;
+}
+
+static GFile *
+get_bookmarks_file (void)
+{
+  GFile *file;
+  gchar *filename;
+
+  filename = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "bookmarks", NULL);
   file = g_file_new_for_path (filename);
   g_free (filename);
 
@@ -301,6 +318,8 @@ save_bookmarks (GFile  *bookmarks_file,
   GError *error = NULL;
   GString *contents;
   GSList *l;
+  GFile *parent_file;
+  gchar *path;
 
   contents = g_string_new ("");
 
@@ -322,16 +341,22 @@ save_bookmarks (GFile  *bookmarks_file,
       g_free (uri);
     }
 
-  if (!g_file_replace_contents (bookmarks_file,
-				contents->str,
-				strlen (contents->str),
-				NULL, FALSE, 0, NULL,
-				NULL, &error))
+  parent_file = g_file_get_parent (bookmarks_file);
+  path = g_file_get_path (parent_file);
+  if (g_mkdir_with_parents (path, 0700) == 0)
     {
-      g_critical ("%s", error->message);
-      g_error_free (error);
+      if (!g_file_replace_contents (bookmarks_file,
+                                    contents->str,
+                                    strlen (contents->str),
+                                    NULL, FALSE, 0, NULL,
+                                    NULL, &error))
+        {
+          g_critical ("%s", error->message);
+          g_error_free (error);
+        }
     }
-
+  g_free (path);
+  g_object_unref (parent_file);
   g_string_free (contents, TRUE);
 }
 
@@ -579,6 +604,14 @@ _gtk_file_system_init (GtkFileSystem *file_system)
   /* Bookmarks */
   bookmarks_file = get_bookmarks_file ();
   priv->bookmarks = read_bookmarks (bookmarks_file);
+  if (!priv->bookmarks)
+    {
+      /* Use the legacy file instead */
+      g_object_unref (bookmarks_file);
+      bookmarks_file = get_legacy_bookmarks_file ();
+      priv->bookmarks = read_bookmarks (bookmarks_file);
+    }
+
   priv->bookmarks_monitor = g_file_monitor_file (bookmarks_file,
 						 G_FILE_MONITOR_NONE,
 						 NULL, &error);
@@ -591,7 +624,7 @@ _gtk_file_system_init (GtkFileSystem *file_system)
     g_signal_connect (priv->bookmarks_monitor, "changed",
 		      G_CALLBACK (bookmarks_file_changed), file_system);
 
-  g_object_unref (bookmarks_file);
+  priv->bookmarks_file = g_object_ref (bookmarks_file);
 }
 
 /* GtkFileSystem public methods */
@@ -1097,7 +1130,6 @@ _gtk_file_system_insert_bookmark (GtkFileSystem  *file_system,
   GSList *bookmarks;
   GtkFileSystemBookmark *bookmark;
   gboolean result = TRUE;
-  GFile *bookmarks_file;
 
   priv = GTK_FILE_SYSTEM_GET_PRIVATE (file_system);
   bookmarks = priv->bookmarks;
@@ -1134,10 +1166,7 @@ _gtk_file_system_insert_bookmark (GtkFileSystem  *file_system,
   bookmark->file = g_object_ref (file);
 
   priv->bookmarks = g_slist_insert (priv->bookmarks, bookmark, position);
-
-  bookmarks_file = get_bookmarks_file ();
-  save_bookmarks (bookmarks_file, priv->bookmarks);
-  g_object_unref (bookmarks_file);
+  save_bookmarks (priv->bookmarks_file, priv->bookmarks);
 
   g_signal_emit (file_system, fs_signals[BOOKMARKS_CHANGED], 0);
 
@@ -1153,7 +1182,6 @@ _gtk_file_system_remove_bookmark (GtkFileSystem  *file_system,
   GtkFileSystemBookmark *bookmark;
   GSList *bookmarks;
   gboolean result = FALSE;
-  GFile *bookmarks_file;
 
   priv = GTK_FILE_SYSTEM_GET_PRIVATE (file_system);
 
@@ -1193,9 +1221,7 @@ _gtk_file_system_remove_bookmark (GtkFileSystem  *file_system,
       return FALSE;
     }
 
-  bookmarks_file = get_bookmarks_file ();
-  save_bookmarks (bookmarks_file, priv->bookmarks);
-  g_object_unref (bookmarks_file);
+  save_bookmarks (priv->bookmarks_file, priv->bookmarks);
 
   g_signal_emit (file_system, fs_signals[BOOKMARKS_CHANGED], 0);
 
@@ -1239,7 +1265,6 @@ _gtk_file_system_set_bookmark_label (GtkFileSystem *file_system,
 {
   GtkFileSystemPrivate *priv;
   gboolean changed = FALSE;
-  GFile *bookmarks_file;
   GSList *bookmarks;
 
   DEBUG ("set_bookmark_label");
@@ -1263,9 +1288,7 @@ _gtk_file_system_set_bookmark_label (GtkFileSystem *file_system,
 	}
     }
 
-  bookmarks_file = get_bookmarks_file ();
-  save_bookmarks (bookmarks_file, priv->bookmarks);
-  g_object_unref (bookmarks_file);
+  save_bookmarks (priv->bookmarks_file, priv->bookmarks);
 
   if (changed)
     g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
