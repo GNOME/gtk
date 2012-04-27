@@ -53,18 +53,12 @@ get_module_path (void)
 {
   const gchar *module_path_env;
   const gchar *exe_prefix;
-  const gchar *home_dir;
-  gchar *home_gtk_dir = NULL;
   gchar *module_path;
   gchar *default_dir;
   static gchar **result = NULL;
 
   if (result)
     return result;
-
-  home_dir = g_get_home_dir();
-  if (home_dir)
-    home_gtk_dir = g_build_filename (home_dir, ".gtk-3.0", NULL);
 
   module_path_env = g_getenv ("GTK_PATH");
   exe_prefix = g_getenv ("GTK_EXE_PREFIX");
@@ -74,20 +68,13 @@ get_module_path (void)
   else
     default_dir = g_build_filename (_gtk_get_libdir (), "gtk-3.0", NULL);
 
-  if (module_path_env && home_gtk_dir)
-    module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
-				module_path_env, home_gtk_dir, default_dir, NULL);
-  else if (module_path_env)
+  if (module_path_env)
     module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
 				module_path_env, default_dir, NULL);
-  else if (home_gtk_dir)
-    module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
-				home_gtk_dir, default_dir, NULL);
   else
     module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
 				default_dir, NULL);
 
-  g_free (home_gtk_dir);
   g_free (default_dir);
 
   result = pango_split_file_list (module_path);
