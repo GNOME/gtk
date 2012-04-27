@@ -38,7 +38,8 @@
 #include "gtkprintbackend.h"
 #include "gtkprintutils.h"
 
-#define CUSTOM_PAPER_FILENAME ".gtk-custom-papers"
+#define LEGACY_CUSTOM_PAPER_FILENAME ".gtk-custom-papers"
+#define CUSTOM_PAPER_FILENAME "custom-papers"
 
 
 typedef struct
@@ -131,11 +132,23 @@ _gtk_print_get_default_user_units (void)
 }
 
 static char *
-custom_paper_get_filename (void)
+custom_paper_get_legacy_filename (void)
 {
   gchar *filename;
 
   filename = g_build_filename (g_get_home_dir (),
+			       LEGACY_CUSTOM_PAPER_FILENAME, NULL);
+  g_assert (filename != NULL);
+  return filename;
+}
+
+static char *
+custom_paper_get_filename (void)
+{
+  gchar *filename;
+
+  filename = g_build_filename (g_get_user_config_dir (),
+                               "gtk-3.0",
 			       CUSTOM_PAPER_FILENAME, NULL);
   g_assert (filename != NULL);
   return filename;
@@ -156,6 +169,13 @@ _gtk_load_custom_papers (void)
   keyfile = g_key_file_new ();
   load_ok = g_key_file_load_from_file (keyfile, filename, 0, NULL);
   g_free (filename);
+  if (!load_ok)
+    {
+      /* try legacy file */
+      filename = custom_paper_get_legacy_filename ();
+      load_ok = g_key_file_load_from_file (keyfile, filename, 0, NULL);
+      g_free (filename);
+    }
   if (!load_ok)
     {
       g_key_file_free (keyfile);
@@ -209,7 +229,7 @@ _gtk_print_save_custom_papers (GtkListStore *store)
   GtkTreeModel *model = GTK_TREE_MODEL (store);
   GtkTreeIter iter;
   GKeyFile *keyfile;
-  gchar *filename, *data;
+  gchar *filename, *data, *parentdir;
   gsize len;
   gint i = 0;
 
@@ -233,9 +253,16 @@ _gtk_print_save_custom_papers (GtkListStore *store)
     }
 
   filename = custom_paper_get_filename ();
-  data = g_key_file_to_data (keyfile, &len, NULL);
-  g_file_set_contents (filename, data, len, NULL);
-  g_free (data);
+  parentdir = g_build_filename (g_get_user_config_dir (),
+                                "gtk-3.0",
+                                NULL);
+  if (g_mkdir_with_parents (parentdir, 0700) == 0)
+    {
+      data = g_key_file_to_data (keyfile, &len, NULL);
+      g_file_set_contents (filename, data, len, NULL);
+      g_free (data);
+    }
+  g_free (parentdir);
   g_free (filename);
 }
 
