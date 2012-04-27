@@ -473,7 +473,7 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
   gint remaining_space = 0;
   gint expand_space = 0;
 
-  gint page_start, page_size = 0;
+  gint total_size, page_size;
   gint offset = 0;
   guint i;
   guint border_width;
@@ -652,14 +652,14 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
       child_allocation.y += border_width;
       child_allocation.y += offset;
 
-      page_start = child_allocation.y;
+      total_size = child_allocation.y;
     }
   else
     {
       x += border_width;
       x += offset;
 
-      page_start = x;
+      total_size = x;
     }
 
   /* update the scrollbar to match the displayed adjustment */
@@ -671,14 +671,14 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
           GTK_TEXT_DIR_LTR == direction)
         {
           lower = 0;
-          upper = MAX (0, page_start);
+          upper = MAX (0, total_size);
 
           value = MIN (offset, upper - page_size);
           gtk_adjustment_clamp_page (adjustment, value, offset + page_size);
         }
       else
         {
-          lower = page_size - MAX (0, page_start);
+          lower = page_size - MAX (0, total_size);
           upper = page_size;
 
           offset = -offset;
