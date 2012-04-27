@@ -661,8 +661,8 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   priv->search_path = g_new (char *, priv->search_path_len);
   
   i = 0;
-  priv->search_path[i++] = g_build_filename (g_get_home_dir (), ".icons", NULL);
   priv->search_path[i++] = g_build_filename (g_get_user_data_dir (), "icons", NULL);
+  priv->search_path[i++] = g_build_filename (g_get_home_dir (), ".icons", NULL);
   
   for (j = 0; xdg_data_dirs[j]; j++) 
     priv->search_path[i++] = g_build_filename (xdg_data_dirs[j], "icons", NULL);
