@@ -24,10 +24,6 @@
     -Gtest-bar: 47;
 }
 
-GtkNotebook {
-    -GtkWidget-window-dragging: true;
-}
-
 GtkLabel:selected {
     background-color: gray;
 }

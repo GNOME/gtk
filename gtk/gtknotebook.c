@@ -2949,32 +2949,6 @@ gtk_notebook_button_press (GtkWidget      *widget,
           priv->drag_offset_y = priv->drag_begin_y - page->allocation.y;
         }
     }
-  else
-    {
-      GtkWidget *window;
-      window = gtk_widget_get_toplevel (widget);
-
-      if (window)
-        {
-          gboolean window_drag = FALSE;
-          gtk_widget_style_get (widget,
-                                "window-dragging", &window_drag,
-                                NULL);
-
-          if (window_drag)
-            {
-              priv->during_detach = FALSE;
-              priv->during_reorder = FALSE;
-              priv->pressed_button = event->button;
-
-              gtk_window_begin_move_drag (GTK_WINDOW (window),
-                                          event->button,
-                                          event->x_root,
-                                          event->y_root,
-                                          event->time);
-            }
-        }
-    }
 
   return TRUE;
 }
