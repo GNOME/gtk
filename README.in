@@ -72,6 +72,24 @@ and attach the patch to that bug report.
 Patches should be in unified diff form. (The -up option to GNU diff.)
 
 
+Release notes for 3.6
+=====================
+
+* Now follows the XDG Base Directory specification for user
+  configuration and data files. In detail,
+  * $XDG_CONFIG_HOME/gtk-3.0/custom-papers is the new location
+    for $HOME/.gtk-custom-papers
+  * $XDG_CONFIG_HOME/gtk-3.0/bookmarks is the new location
+    for $HOME/.gtk-bookmarks
+  * $XDG_DATA_HOME/themes is preferred over $HOME/.themes
+  * $XDG_DATA_HOME/icons is preferred over $HOME/.icons.
+  Existing files from the old location will still be read
+  if the new location does not exist.
+
+* $HOME/.gtk-3.0 is no longer in the default module load path.
+  If you want to load modules from there, add it to the GTK_PATH
+  environment variable.
+
 Release notes for 3.4
 =====================
 
