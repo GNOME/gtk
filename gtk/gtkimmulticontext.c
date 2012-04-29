@@ -257,6 +257,9 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 {
   GtkIMMulticontextPrivate *priv = multicontext->priv;
 
+  if (g_strcmp0 (priv->context_id, get_effective_context_id (multicontext)) != 0)
+    gtk_im_multicontext_set_slave (multicontext, NULL, FALSE);
+
   if (!priv->slave)
     {
       GtkIMContext *slave;
@@ -290,7 +293,8 @@ gtk_im_multicontext_set_client_window (GtkIMContext *context,
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMMulticontextPrivate *priv = multicontext->priv;
-  GdkScreen *screen; 
+  GtkIMContext *slave;
+  GdkScreen *screen;
   GtkSettings *settings;
   gboolean connected;
 
@@ -314,11 +318,9 @@ gtk_im_multicontext_set_client_window (GtkIMContext *context,
         }
     }
 
-  if (g_strcmp0 (priv->context_id, get_effective_context_id (multicontext)) != 0)
-    gtk_im_multicontext_set_slave (multicontext, NULL, FALSE);
-
-  if (priv->slave)
-    gtk_im_context_set_client_window (priv->slave, window);
+  slave = gtk_im_multicontext_get_slave (multicontext);
+  if (slave)
+    gtk_im_context_set_client_window (slave, window);
 }
 
 static void
@@ -392,12 +394,7 @@ gtk_im_multicontext_focus_in (GtkIMContext   *context)
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMMulticontextPrivate *priv = multicontext->priv;
-  GtkIMContext *slave;
-
-  if (g_strcmp0 (priv->context_id, get_effective_context_id (multicontext)) != 0)
-    gtk_im_multicontext_set_slave (multicontext, NULL, FALSE);
-
-  slave = gtk_im_multicontext_get_slave (multicontext);
+  GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
 
   priv->focus_in = TRUE;
 
