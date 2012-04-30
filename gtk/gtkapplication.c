@@ -185,6 +185,9 @@ gtk_application_x11_publish_menu (GtkApplication  *application,
 {
   gint i;
 
+  if (application->priv->session_bus == NULL)
+    return;
+
   /* unexport any existing menu */
   if (*id)
     {
@@ -999,6 +1002,10 @@ gtk_application_remove_accelerator (GtkApplication *application,
  *
  * Sets or unsets the application menu for @application.
  *
+ * This can only be done in the primary instance of the application,
+ * after it has been registered.  #GApplication:startup is a good place
+ * to call this.
+ *
  * The application menu is a single menu containing items that typically
  * impact the application as a whole, rather than acting on a specific
  * window or document.  For example, you would expect to see
@@ -1007,8 +1014,6 @@ gtk_application_remove_accelerator (GtkApplication *application,
  *
  * If supported, the application menu will be rendered by the desktop
  * environment.
- *
- * You might call this method in your #GApplication:startup signal handler.
  *
  * Use the base #GActionMap interface to add actions, to respond to the user
  * selecting these menu items.
@@ -1020,6 +1025,8 @@ gtk_application_set_app_menu (GtkApplication *application,
                               GMenuModel     *app_menu)
 {
   g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (g_application_get_is_registered (G_APPLICATION (application)));
+  g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
 
   if (app_menu != application->priv->app_menu)
     {
@@ -1069,6 +1076,10 @@ gtk_application_get_app_menu (GtkApplication *application)
  *
  * This is a menubar in the traditional sense.
  *
+ * This can only be done in the primary instance of the application,
+ * after it has been registered.  #GApplication:startup is a good place
+ * to call this.
+ *
  * Depending on the desktop environment, this may appear at the top of
  * each window, or at the top of the screen.  In some environments, if
  * both the application menu and the menubar are set, the application
@@ -1076,8 +1087,6 @@ gtk_application_get_app_menu (GtkApplication *application)
  * Other environments treat the two as completely separate -- for
  * example, the application menu may be rendered by the desktop shell
  * while the menubar (if set) remains in each individual window.
- *
- * You might call this method in your #GApplication:startup signal handler.
  *
  * Use the base #GActionMap interface to add actions, to respond to the user
  * selecting these menu items.
@@ -1089,6 +1098,8 @@ gtk_application_set_menubar (GtkApplication *application,
                              GMenuModel     *menubar)
 {
   g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (g_application_get_is_registered (G_APPLICATION (application)));
+  g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
 
   if (menubar != application->priv->menubar)
     {
