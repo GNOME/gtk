@@ -1527,7 +1527,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
   prop_name = g_strdup_printf ("-%s-%s",
                                g_type_name (pspec->owner_type),
                                pspec->name);
-  _gtk_css_matcher_init (&matcher, path, 0);
+  _gtk_css_matcher_init (&matcher, path, state);
 
   for (i = priv->rulesets->len - 1; i >= 0; i--)
     {
