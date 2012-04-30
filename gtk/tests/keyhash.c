@@ -53,6 +53,7 @@ test_basic (void)
 }
 
 
+#if 0
 typedef struct
 {
   guint           keyval;
@@ -184,6 +185,7 @@ test_virtual (void)
 
   _gtk_key_hash_free (hash);
 }
+#endif
 
 int
 main (int argc, char **argv)
