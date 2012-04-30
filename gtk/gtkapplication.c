@@ -279,6 +279,9 @@ object_path_from_appid (const gchar *appid)
 {
   gchar *appid_path, *iter;
 
+  if (appid == NULL)
+    return g_strdup ("/org/gtk/Application/anonymous");
+
   appid_path = g_strconcat ("/", appid, NULL);
   for (iter = appid_path; *iter; iter++)
     {
