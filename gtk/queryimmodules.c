@@ -38,7 +38,6 @@
 #include "gtk/gtkversion.h"
 
 #define GDK_DISABLE_DEPRECATION_WARNINGS
-#undef GTK_DISABLE_DEPRECATED
 
 #include "gtk/deprecated/gtkrc.h"
 
