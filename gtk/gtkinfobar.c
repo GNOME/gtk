@@ -155,8 +155,14 @@ static void     gtk_info_bar_get_property (GObject        *object,
                                            GValue         *value,
                                            GParamSpec     *pspec);
 static void     gtk_info_bar_style_updated (GtkWidget      *widget);
-static gboolean gtk_info_bar_draw         (GtkWidget      *widget,
-                                           cairo_t        *cr);
+static void     gtk_info_bar_get_preferred_width          (GtkWidget *widget,
+                                                           gint      *minimum_width,
+                                                           gint      *natural_width);
+static void     gtk_info_bar_get_preferred_height         (GtkWidget *widget,
+                                                           gint      *minimum_height,
+                                                           gint      *natural_height);
+static gboolean gtk_info_bar_draw                         (GtkWidget      *widget,
+                                                           cairo_t        *cr);
 static void     gtk_info_bar_buildable_interface_init     (GtkBuildableIface *iface);
 static GObject *gtk_info_bar_buildable_get_internal_child (GtkBuildable  *buildable,
                                                            GtkBuilder    *builder,
@@ -283,28 +289,79 @@ gtk_info_bar_close (GtkInfoBar *info_bar)
                          GTK_RESPONSE_CANCEL);
 }
 
-static gboolean
-gtk_info_bar_draw (GtkWidget      *widget,
-                   cairo_t        *cr)
+static void
+get_padding_and_border (GtkWidget *widget,
+                        GtkBorder *border)
 {
-  GtkInfoBarPrivate *priv = GTK_INFO_BAR (widget)->priv;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  GtkBorder tmp;
 
-  if (priv->message_type != GTK_MESSAGE_OTHER)
-    {
-      GtkStyleContext *context;
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
-      context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_padding (context, state, border);
+  gtk_style_context_get_border (context, state, &tmp);
+  border->top += tmp.top;
+  border->right += tmp.right;
+  border->bottom += tmp.bottom;
+  border->left += tmp.left;
+}
 
-      gtk_render_background (context, cr, 0, 0,
-                             gtk_widget_get_allocated_width (widget),
-                             gtk_widget_get_allocated_height (widget));
-      gtk_render_frame (context, cr, 0, 0,
-                        gtk_widget_get_allocated_width (widget),
-                        gtk_widget_get_allocated_height (widget));
-    }
+static void
+gtk_info_bar_get_preferred_width (GtkWidget *widget,
+                                  gint      *minimum_width,
+                                  gint      *natural_width)
+{
+  GtkBorder border;
 
-  if (GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->draw)
-    GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->draw (widget, cr);
+  get_padding_and_border (widget, &border);
+
+  GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->get_preferred_width (widget,
+                                                                     minimum_width,
+                                                                     natural_width);
+
+  if (minimum_width)
+    *minimum_width += border.left + border.right;
+  if (natural_width)
+    *natural_width += border.left + border.right;
+}
+
+static void
+gtk_info_bar_get_preferred_height (GtkWidget *widget,
+                                   gint      *minimum_height,
+                                   gint      *natural_height)
+{
+  GtkBorder border;
+
+  get_padding_and_border (widget, &border);
+
+  GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->get_preferred_height (widget,
+                                                                      minimum_height,
+                                                                      natural_height);
+
+  if (minimum_height)
+    *minimum_height += border.top + border.bottom;
+  if (natural_height)
+    *natural_height += border.top + border.bottom;
+}
+
+static gboolean
+gtk_info_bar_draw (GtkWidget *widget,
+                   cairo_t   *cr)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_render_background (context, cr, 0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
+  gtk_render_frame (context, cr, 0, 0,
+                    gtk_widget_get_allocated_width (widget),
+                    gtk_widget_get_allocated_height (widget));
+
+  GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->draw (widget, cr);
 
   return FALSE;
 }
@@ -324,6 +381,8 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   object_class->finalize = gtk_info_bar_finalize;
 
   widget_class->style_updated = gtk_info_bar_style_updated;
+  widget_class->get_preferred_width = gtk_info_bar_get_preferred_width;
+  widget_class->get_preferred_height = gtk_info_bar_get_preferred_height;
   widget_class->draw = gtk_info_bar_draw;
 
   klass->close = gtk_info_bar_close;
