@@ -192,8 +192,10 @@ main (int argc, char **argv)
   gtk_test_init (&argc, &argv);
 
   g_test_add_func ("/keyhash/basic", test_basic);
+#if 0
+  /* FIXME: need to make these independent of xkb configuration */
   g_test_add_func ("/keyhash/match", test_match);
   g_test_add_func ("/keyhash/virtual", test_virtual);
-
+#endif
   return g_test_run();
 }
