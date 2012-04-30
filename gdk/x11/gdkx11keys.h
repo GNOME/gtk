@@ -42,6 +42,11 @@ typedef struct _GdkX11KeymapClass GdkX11KeymapClass;
 
 GType gdk_x11_keymap_get_type (void);
 
+gint gdk_x11_keymap_get_group_for_state_libgtk_only (GdkKeymap *keymap,
+                                                     guint      state);
+
+gboolean gdk_x11_keymap_key_is_modifier_libgtk_only (GdkKeymap *keymap,
+                                                     guint      keycode);
 G_END_DECLS
 
 #endif /* __GDK_X11_KEYMAP_H__ */
