@@ -60,7 +60,7 @@ _gtk_theming_background_apply_origin (GtkThemingBackground *bg)
   GtkCssArea origin;
   cairo_rectangle_t image_rect;
 
-  origin = _gtk_css_area_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP));
+  origin = _gtk_css_area_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN));
 
   /* The default size of the background image depends on the
      background-origin value as this affects the top left
