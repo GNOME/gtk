@@ -1900,7 +1900,7 @@ cups_create_printer (GtkPrintBackendCups *cups_backend,
     {
       cups_printer->ppd_name = g_strdup (resource + 10);
       GTK_NOTE (PRINTING,
-		g_print ("CUPS Backend: Setting ppd name '%s' for printer/class '%s'\n", cups_printer->ppd_name, printer_name));
+		g_print ("CUPS Backend: Setting ppd name '%s' for printer/class '%s'\n", cups_printer->ppd_name, info->printer_name));
     }
 
   gethostname (uri, sizeof (uri));
