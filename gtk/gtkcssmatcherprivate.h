@@ -72,9 +72,9 @@ union _GtkCssMatcher {
   GtkCssMatcherSuperset     superset;
 };
 
-void              _gtk_css_matcher_init           (GtkCssMatcher          *matcher,
+gboolean          _gtk_css_matcher_init           (GtkCssMatcher          *matcher,
                                                    const GtkWidgetPath    *path,
-                                                   GtkStateFlags           state);
+                                                   GtkStateFlags           state) G_GNUC_WARN_UNUSED_RESULT;
 void              _gtk_css_matcher_any_init       (GtkCssMatcher          *matcher);
 void              _gtk_css_matcher_superset_init  (GtkCssMatcher          *matcher,
                                                    const GtkCssMatcher    *subset,

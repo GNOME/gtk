@@ -905,12 +905,12 @@ build_properties (GtkStyleContext *context,
 
   priv = context->priv;
 
-  _gtk_css_matcher_init (&matcher, path, state);
   lookup = _gtk_css_lookup_new ();
 
-  _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                      &matcher,
-                                      lookup);
+  if (_gtk_css_matcher_init (&matcher, path, state))
+    _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                        &matcher,
+                                        lookup);
 
   style_data->store = _gtk_css_computed_values_new ();
   _gtk_css_lookup_resolve (lookup, context, style_data->store);
@@ -3061,10 +3061,12 @@ _gtk_style_context_validate (GtkStyleContext *context,
           GtkCssMatcher matcher;
 
           path = create_query_path (context);
-          _gtk_css_matcher_init (&matcher, path, priv->info->state_flags);
+          if (_gtk_css_matcher_init (&matcher, path, priv->info->state_flags))
+            priv->relevant_changes = _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                                                             &matcher);
+          else
+            priv->relevant_changes = 0;
 
-          priv->relevant_changes = _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                                                           &matcher);
           priv->relevant_changes &= ~GTK_STYLE_CONTEXT_RADICAL_CHANGE;
 
           gtk_widget_path_unref (path);

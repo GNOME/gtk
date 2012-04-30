@@ -187,16 +187,21 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
   gtk_css_matcher_widget_path_has_position,
 };
 
-void
+gboolean
 _gtk_css_matcher_init (GtkCssMatcher       *matcher,
                        const GtkWidgetPath *path,
                        GtkStateFlags        state)
 {
+  if (gtk_widget_path_length (path) == 0)
+    return FALSE;
+
   matcher->path.klass = &GTK_CSS_MATCHER_WIDGET_PATH;
   matcher->path.path = path;
   matcher->path.state_flags = state;
   matcher->path.index = gtk_widget_path_length (path) - 1;
   matcher->path.sibling_index = gtk_widget_path_iter_get_sibling_index (path, matcher->path.index);
+
+  return TRUE;
 }
 
 /* GTK_CSS_MATCHER_WIDGET_ANY */

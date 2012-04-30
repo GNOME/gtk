@@ -1485,25 +1485,26 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
   props = gtk_style_properties_new ();
 
   css_provider_dump_symbolic_colors (css_provider, props);
-  _gtk_css_matcher_init (&matcher, path, 0);
-
-  for (i = 0; i < priv->rulesets->len; i++)
+  if (_gtk_css_matcher_init (&matcher, path, 0))
     {
-      GtkCssRuleset *ruleset;
+      for (i = 0; i < priv->rulesets->len; i++)
+        {
+          GtkCssRuleset *ruleset;
 
-      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+          ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
 
-      if (ruleset->styles == NULL)
-        continue;
+          if (ruleset->styles == NULL)
+            continue;
 
-      if (!gtk_css_ruleset_matches (ruleset, &matcher))
-        continue;
+          if (!gtk_css_ruleset_matches (ruleset, &matcher))
+            continue;
 
-      for (j = 0; j < ruleset->n_styles; j++)
-	_gtk_style_properties_set_property_by_property (props,
-							GTK_CSS_STYLE_PROPERTY (ruleset->styles[i].property),
-							_gtk_css_selector_get_state_flags (ruleset->selector),
-							ruleset->styles[i].value);
+          for (j = 0; j < ruleset->n_styles; j++)
+            _gtk_style_properties_set_property_by_property (props,
+                                                            GTK_CSS_STYLE_PROPERTY (ruleset->styles[i].property),
+                                                            _gtk_css_selector_get_state_flags (ruleset->selector),
+                                                            ruleset->styles[i].value);
+        }
     }
 
   return props;
@@ -1524,10 +1525,12 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
   gchar *prop_name;
   gint i;
 
+  if (!_gtk_css_matcher_init (&matcher, path, state))
+    return FALSE;
+
   prop_name = g_strdup_printf ("-%s-%s",
                                g_type_name (pspec->owner_type),
                                pspec->name);
-  _gtk_css_matcher_init (&matcher, path, state);
 
   for (i = priv->rulesets->len - 1; i >= 0; i--)
     {
