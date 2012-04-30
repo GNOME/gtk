@@ -1,3 +1,55 @@
+Overview of Changes in GTK+ 3.5.1
+=================================
+
+* Wayland:
+ - Allow the wayland backend to be used without cairo-gl
+ - Expose GdkWaylandDisplayManager for runtime checks
+
+* Theming:
+ - Optimizations to style invalidation
+ - Support CSS animatable properties
+
+* Bugs fixed
+ 563688 GtkScale (GtkRange) should jump to clicked position
+ 668931 Scrolling down via PageDown/PageUp keys impossible ...
+ 669989 gtk_grid_attach(): Documentation doesn't mention mu...
+ 670373 modules/printing/cups/gtkprintbackendcups.c won't b...
+ 672361 Remove cairo-gl dependency from wayland backend
+ 672789 gtk_builder_add_objects_from_file() crashes on GtkU...
+ 672993 print dialog overrides default cups number-up settings
+ 673259 The gdk/gdkkeysyms-update.pl script and the keysym ...
+ 673644 Scroll not working in document overview
+ 673650 Evince 3.4: adding new annotation is not possible (...
+ 674050 Free image->priv->icon_helper in gtk_image_finalize...
+ 674102 Defaults to wayland over x11 backend
+ 674118 application-window: Desktop file handling improvements
+ 674200 ./configure gives wrong error message if -lXext is ...
+ 674286 "Delete confirmation" dialog has wrong padding
+ 674326 Use localizations of option names and values contai...
+ 674468 Add GTK_STYLE_CLASS_DIM_LABEL
+ 674577 Non static variable in GtkStyleProviderPrivate
+ 674587 treemodelsort: allow iter_previous() to go past the...
+ 674806 icontheme: search first in all themes if the reques...
+ 674807 spinbutton: port to GtkIconHelper
+ 674808 themingengine: render a frame in gtk_render_handle()
+ 674809 themingengine: simplify render_extension() default ...
+ 674890 Fix the colord support in GtkPrinterCups when the P...
+ 646631 GTK should use XDG base dir spec instead of home
+
+* Translation updates
+ Bulgarian
+ Crimean Tatar
+ Czech
+ Galician
+ German
+ Hebrew
+ Norwegian bokmål
+ Russian
+ Serbian
+ Simplified Chinese
+ Slovenian
+
+
 Overview of Changes in GTK+ 3.4.1
 =================================
 
