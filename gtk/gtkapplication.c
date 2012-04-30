@@ -149,7 +149,7 @@ struct _GtkApplicationPrivate
 #ifdef GDK_WINDOWING_X11
   GDBusConnection *session_bus;
   const gchar     *application_id;
-  gchar           *object_path;
+  const gchar     *object_path;
 
   gchar           *app_menu_path;
   guint            app_menu_id;
@@ -274,34 +274,13 @@ gtk_application_window_removed_x11 (GtkApplication *application,
     gtk_application_window_unpublish (GTK_APPLICATION_WINDOW (window));
 }
 
-static gchar *
-object_path_from_appid (const gchar *appid)
-{
-  gchar *appid_path, *iter;
-
-  appid_path = g_strconcat ("/", appid, NULL);
-  for (iter = appid_path; *iter; iter++)
-    {
-      if (*iter == '.')
-        *iter = '/';
-
-      if (*iter == '-')
-        *iter = '_';
-    }
-
-  return appid_path;
-}
-
 static void gtk_application_startup_session_dbus (GtkApplication *app);
 
 static void
 gtk_application_startup_x11 (GtkApplication *application)
 {
-  const gchar *application_id;
-
-  application_id = g_application_get_application_id (G_APPLICATION (application));
-  application->priv->session_bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-  application->priv->object_path = object_path_from_appid (application_id);
+  application->priv->session_bus = g_application_get_dbus_connection (G_APPLICATION (application));
+  application->priv->object_path = g_application_get_dbus_object_path (G_APPLICATION (application));
 
   gtk_application_startup_session_dbus (GTK_APPLICATION (application));
 }
@@ -309,20 +288,13 @@ gtk_application_startup_x11 (GtkApplication *application)
 static void
 gtk_application_shutdown_x11 (GtkApplication *application)
 {
-  g_free (application->priv->object_path);
+  application->priv->session_bus = NULL;
   application->priv->object_path = NULL;
-  g_clear_object (&application->priv->session_bus);
 
   g_clear_object (&application->priv->sm_proxy);
   g_clear_object (&application->priv->client_proxy);
   g_free (application->priv->app_id);
   g_free (application->priv->client_path);
-}
-
-const gchar *
-gtk_application_get_dbus_object_path (GtkApplication *application)
-{
-  return application->priv->object_path;
 }
 
 const gchar *
