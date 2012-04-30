@@ -768,7 +768,7 @@ gtk_application_window_real_realize (GtkWidget *widget)
 
     gdkwindow = gtk_widget_get_window (GTK_WIDGET (window));
 
-    if (GDK_IS_X11_WINDOW (gdkwindow))
+    if (GDK_IS_X11_WINDOW (gdkwindow) && window->priv->session)
       {
         gdk_x11_window_set_utf8_property (gdkwindow, "_GTK_APPLICATION_ID",
                                           g_application_get_application_id (G_APPLICATION (application)));
