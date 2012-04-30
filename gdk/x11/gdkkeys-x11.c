@@ -1429,11 +1429,30 @@ _gdk_x11_display_manager_keyval_convert_case (GdkDisplayManager *manager,
     *upper = xupper;
 }
 
+/**
+ * gdk_x11_keymap_get_group_for_state:
+ * @keymap: a #GdkX11Keymap
+ * @state: raw state returned from X
+ *
+ * Extracts the group from the state field sent in an X Key event.
+ * This is only needed for code processing raw X events, since #GdkEventKey
+ * directly includes an is_modifier field.
+ *
+ * Returns: the index of the active keyboard group for the event
+ *
+ * Since: 3.6
+ */
 gint
-_gdk_x11_get_group_for_state (GdkDisplay      *display,
-                              GdkModifierType  state)
+gdk_x11_keymap_get_group_for_state (GdkKeymap *keymap,
+                                    guint      state)
 {
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  GdkDisplay *display;
+  GdkX11Display *display_x11;
+
+  g_return_val_if_fail (GDK_IS_X11_KEYMAP (keymap), 0);
+
+  display = keymap->display;
+  display_x11 = GDK_X11_DISPLAY (display);
 
 #ifdef HAVE_XKB
   if (display_x11->use_xkb)
@@ -1498,12 +1517,30 @@ gdk_x11_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
     }
 }
 
+/**
+ * gdk_x11_keymap_key_is_modifier:
+ * @keymap: a #GdkX11Keymap
+ * @keycode: the hardware keycode from a key event
+ *
+ * Determines whether a particular key code represents a key that
+ * is a modifier. That is, it's a key that normally just affects
+ * the keyboard state and the behavior of other keys rather than
+ * producing a direct effect itself. This is only needed for code
+ * processing raw X events, since #GdkEventKey directly includes
+ * an is_modifier field.
+ *
+ * Returns: %TRUE if the hardware keycode is a modifier key
+ *
+ * Since: 3.6
+ */
 gboolean
-_gdk_x11_keymap_key_is_modifier (GdkKeymap *keymap,
-                                 guint      keycode)
+gdk_x11_keymap_key_is_modifier (GdkKeymap *keymap,
+                                guint      keycode)
 {
   GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
   gint i;
+
+  g_return_val_if_fail (GDK_IS_X11_KEYMAP (keymap), FALSE);
 
   update_keyrange (keymap_x11);
   if (keycode < keymap_x11->min_keycode ||

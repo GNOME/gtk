@@ -982,6 +982,10 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent,
         gdk_event_set_device (event, keyboard);
 
         keymap = gdk_keymap_get_for_display (display);
+
+        event->key.group = gdk_x11_keymap_get_group_for_state (keymap, xevent->xkey.state);
+        event->key.is_modifier = gdk_x11_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
+
         gdk_keymap_translate_keyboard_state (keymap,
                                              event->key.hardware_keycode,
                                              event->key.state,
@@ -995,10 +999,6 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent,
 
         event->key.length = 0;
         event->key.string = g_strdup ("");
-
-        /* FIXME: These should be filled in properly */
-        event->key.group = 0;
-        event->key.is_modifier = FALSE;
 
         return_val = GDK_FILTER_TRANSLATE;
       }

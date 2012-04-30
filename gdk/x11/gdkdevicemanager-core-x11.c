@@ -145,7 +145,7 @@ translate_key_event (GdkDisplay              *display,
   gdk_event_set_device (event, device_manager->core_keyboard);
 
   event->key.state = (GdkModifierType) xevent->xkey.state;
-  event->key.group = _gdk_x11_get_group_for_state (display, xevent->xkey.state);
+  event->key.group = gdk_x11_keymap_get_group_for_state (keymap, xevent->xkey.state);
   event->key.hardware_keycode = xevent->xkey.keycode;
 
   event->key.keyval = GDK_KEY_VoidSymbol;
@@ -161,7 +161,7 @@ translate_key_event (GdkDisplay              *display,
   _gdk_x11_keymap_add_virt_mods (keymap, &state);
   event->key.state |= state;
 
-  event->key.is_modifier = _gdk_x11_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
+  event->key.is_modifier = gdk_x11_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
 
   _gdk_x11_event_translate_keyboard_string (&event->key);
 

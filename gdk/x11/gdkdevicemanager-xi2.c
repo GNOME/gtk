@@ -1160,10 +1160,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         event->key.time = xev->time;
         event->key.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
-        event->key.group = _gdk_x11_get_group_for_state (display, event->key.state);
+        event->key.group = xev->group.effective;
 
         event->key.hardware_keycode = xev->detail;
-        event->key.is_modifier = _gdk_x11_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
+        event->key.is_modifier = gdk_x11_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GUINT_TO_POINTER (xev->deviceid));
