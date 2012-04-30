@@ -115,7 +115,7 @@
  * The definition should be one of the predefined GDK version
  * macros: %GDK_VERSION_3_0, %GDK_VERSION_3_2,...
  *
- * This macro defines the lower bound for the GLib API to use.
+ * This macro defines the lower bound for the GDK API to use.
  *
  * If a function has been deprecated in a newer version of GDK,
  * it is possible to use this symbol to avoid the compiler warnings
