@@ -154,7 +154,6 @@ static void     gtk_info_bar_get_property (GObject        *object,
                                            guint           prop_id,
                                            GValue         *value,
                                            GParamSpec     *pspec);
-static void     gtk_info_bar_style_updated (GtkWidget      *widget);
 static void     gtk_info_bar_get_preferred_width          (GtkWidget *widget,
                                                            gint      *minimum_width,
                                                            gint      *natural_width);
@@ -380,7 +379,6 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   object_class->set_property = gtk_info_bar_set_property;
   object_class->finalize = gtk_info_bar_finalize;
 
-  widget_class->style_updated = gtk_info_bar_style_updated;
   widget_class->get_preferred_width = gtk_info_bar_get_preferred_width;
   widget_class->get_preferred_height = gtk_info_bar_get_preferred_height;
   widget_class->draw = gtk_info_bar_draw;
@@ -461,6 +459,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * content area of the info bar.
    *
    * Since: 2.18
+   * Deprecated: 3.6: Use gtk_container_set_border_width()
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("content-area-border",
@@ -478,6 +477,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * content area of the info bar.
    *
    * Since: 2.18
+   * Deprecated: 3.6: Use gtk_box_set_spacing()
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("content-area-spacing",
@@ -494,6 +494,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * Spacing between buttons in the action area of the info bar.
    *
    * Since: 2.18
+   * Deprecated: 3.6: Use gtk_box_set_spacing()
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("button-spacing",
@@ -510,6 +511,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * Width of the border around the action area of the info bar.
    *
    * Since: 2.18
+   * Deprecated: 3.6: Use gtk_container_set_border_width()
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("action-area-border",
@@ -525,32 +527,6 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 
   g_type_class_add_private (object_class, sizeof (GtkInfoBarPrivate));
-}
-
-static void
-gtk_info_bar_style_updated (GtkWidget *widget)
-{
-  GtkInfoBar *info_bar = GTK_INFO_BAR (widget);
-  gint button_spacing;
-  gint action_area_border;
-  gint content_area_spacing;
-  gint content_area_border;
-
-  GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->style_updated (widget);
-
-  gtk_widget_style_get (widget,
-                        "button-spacing", &button_spacing,
-                        "action-area-border", &action_area_border,
-                        "content-area-spacing", &content_area_spacing,
-                        "content-area-border", &content_area_border,
-                        NULL);
-
-  gtk_box_set_spacing (GTK_BOX (info_bar->priv->action_area), button_spacing);
-  gtk_container_set_border_width (GTK_CONTAINER (info_bar->priv->action_area),
-                                  action_area_border);
-  gtk_box_set_spacing (GTK_BOX (info_bar->priv->content_area), content_area_spacing);
-  gtk_container_set_border_width (GTK_CONTAINER (info_bar->priv->content_area),
-                                  content_area_border);
 }
 
 static void
@@ -587,8 +563,6 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   info_bar->priv->message_type = GTK_MESSAGE_OTHER;
 
   gtk_widget_pop_composite_child ();
-
-  gtk_info_bar_style_updated (widget);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
