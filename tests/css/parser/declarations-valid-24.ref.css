@@ -1,3 +1,6 @@
 * {
-  transition: 150ms ease-in-out;
+  transition-delay: 0;
+  transition-duration: 150ms;
+  transition-property: all;
+  transition-timing-function: ease-in-out;
 }
