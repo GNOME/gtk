@@ -273,13 +273,14 @@ _gtk_css_shadow_value_compute (GtkCssValue     *shadow,
                                GtkStyleContext *context)
 {
   GdkRGBA transparent = { 0, 0, 0, 0 };
-  GtkCssValue *color;
+  GtkCssValue *color, *fallback;
 
+  fallback = _gtk_css_symbolic_value_new_take_symbolic_color (gtk_symbolic_color_new_literal (&transparent));
   color = _gtk_css_rgba_value_compute_from_symbolic (shadow->color,
-                                                     _gtk_css_symbolic_value_new_take_symbolic_color (
-                                                       gtk_symbolic_color_new_literal (&transparent)),
+                                                     fallback,
                                                      context,
                                                      FALSE);
+  _gtk_css_value_unref (fallback);
 
   return gtk_css_shadow_value_new (_gtk_css_number_value_compute (shadow->hoffset, context),
                                    _gtk_css_number_value_compute (shadow->voffset, context),
