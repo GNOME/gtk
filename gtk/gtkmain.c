@@ -172,6 +172,7 @@ static const GDebugKey gtk_debug_keys[] = {
   {"printing", GTK_DEBUG_PRINTING},
   {"builder", GTK_DEBUG_BUILDER},
   {"size-request", GTK_DEBUG_SIZE_REQUEST},
+  {"no-css-cache", GTK_DEBUG_NO_CSS_CACHE}
 };
 #endif /* G_ENABLE_DEBUG */
 

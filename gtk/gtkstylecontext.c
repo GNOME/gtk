@@ -28,6 +28,7 @@
 #include "gtkcssenginevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
+#include "gtkdebug.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkthemingengineprivate.h"
@@ -3041,6 +3042,21 @@ _gtk_style_context_validate (GtkStyleContext *context,
   priv = context->priv;
 
   change |= priv->pending_changes;
+  
+  /* If you run your application with
+   *   GTK_DEBUG=no-css-cache
+   * every invalidation will purge the cache and completely query
+   * everything anew form the cache. This is slow (in particular
+   * when animating), but useful for figuring out bugs.
+   *
+   * We achieve that by pretending that everything that could have
+   * changed has and so we of course totally need to redo everything.
+   *
+   * Note that this also completely revalidates child widgets all
+   * the time.
+   */
+  if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_NO_CSS_CACHE))
+    change = GTK_CSS_CHANGE_ANY;
 
   if (!priv->invalid && change == 0)
     return;

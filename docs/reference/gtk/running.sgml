@@ -186,6 +186,14 @@ additional environment variables.
       <term>builder</term>
       <listitem><para>GtkBuilder support</para></listitem>
     </varlistentry>
+    <varlistentry>
+      <term>size-request</term>
+      <listitem><para>Size requests</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>no-css-cache</term>
+      <listitem><para>Bypass caching for CSS style properties.</para></listitem>
+    </varlistentry>
 
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all
