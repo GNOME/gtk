@@ -736,7 +736,8 @@ struct _GdkEventTouch
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
  *   buttons. See #GdkModifierType.
  * @direction: the direction to scroll to (one of %GDK_SCROLL_UP,
- *   %GDK_SCROLL_DOWN, %GDK_SCROLL_LEFT and %GDK_SCROLL_RIGHT).
+ *   %GDK_SCROLL_DOWN, %GDK_SCROLL_LEFT, %GDK_SCROLL_RIGHT or
+ *   %GDK_SCROLL_SMOOTH).
  * @device: the device where the event originated.
  * @x_root: the x coordinate of the pointer relative to the root of the
  *   screen.
@@ -746,6 +747,11 @@ struct _GdkEventTouch
  * Generated from button presses for the buttons 4 to 7. Wheel mice are
  * usually configured to generate button press events for buttons 4 and 5
  * when the wheel is turned.
+ *
+ * Some GDK backends can also generate 'smooth' scroll events, which
+ * can be recognized by the %GDK_SCROLL_SMOOTH scroll direction. For
+ * these, the scroll deltas can be obtained with
+ * gdk_event_get_scroll_deltas().
  */
 struct _GdkEventScroll
 {

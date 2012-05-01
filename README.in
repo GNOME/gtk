@@ -78,7 +78,10 @@ Release notes for 3.4
 * Scroll events have been separated from button events, and smooth
   scrolling has been added with a separate event mask. Widgets now
   need to have either GDK_SCROLL_MASK or GDK_SMOOTH_SCROLL_MASK in
-  their event mask to receive scroll events.
+  their event mask to receive scroll events. In addition, the
+  GdkScrollDirection enumeration has gained a new member,
+  GDK_SCROLL_SMOOTH, so switch statements will have to be amended
+  to cover this case.
 
 * GTK+ now uses <Primary> instead of <Control> in keyboard accelerators,
   for improved cross-platform handling. This should not affect
