@@ -272,12 +272,12 @@ GtkCssValue *
 _gtk_css_shadow_value_compute (GtkCssValue     *shadow,
                                GtkStyleContext *context)
 {
+  GdkRGBA transparent = { 0, 0, 0, 0 };
   GtkCssValue *color;
 
   color = _gtk_css_rgba_value_compute_from_symbolic (shadow->color,
                                                      _gtk_css_symbolic_value_new_take_symbolic_color (
-                                                       gtk_symbolic_color_ref (
-                                                         _gtk_symbolic_color_get_current_color ())),
+                                                       gtk_symbolic_color_new_literal (&transparent)),
                                                      context,
                                                      FALSE);
 
