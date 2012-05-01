@@ -65,19 +65,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-stretch-00">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-stretch-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-stretch-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">0</property>
@@ -85,19 +79,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-stretch-10">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-stretch-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-stretch-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">18</property>
@@ -105,19 +93,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-stretch-01">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-stretch-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-stretch-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">0</property>
@@ -125,19 +107,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-stretch-11">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-stretch-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-stretch-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">18</property>
@@ -201,19 +177,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-stretch-00">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-stretch-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-stretch-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">25</property>
@@ -221,19 +191,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-stretch-10">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-stretch-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-stretch-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">43</property>
@@ -241,19 +205,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-stretch-01">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-stretch-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-stretch-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">25</property>
@@ -261,19 +219,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-stretch-11">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-stretch-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-stretch-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">43</property>
@@ -337,19 +289,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-stretch-00">
+          <object class="GtkToolbar" id="toolbar-corner-round-stretch-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-stretch-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">50</property>
@@ -357,19 +303,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-stretch-10">
+          <object class="GtkToolbar" id="toolbar-corner-round-stretch-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-stretch-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">68</property>
@@ -377,19 +317,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-stretch-01">
+          <object class="GtkToolbar" id="toolbar-corner-round-stretch-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-stretch-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">50</property>
@@ -397,19 +331,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-stretch-11">
+          <object class="GtkToolbar" id="toolbar-corner-round-stretch-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-stretch-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">68</property>
@@ -501,19 +429,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-stretch-00">
+          <object class="GtkToolbar" id="toolbar-corner-space-stretch-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-stretch-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">75</property>
@@ -521,19 +443,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-stretch-10">
+          <object class="GtkToolbar" id="toolbar-corner-space-stretch-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-stretch-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">93</property>
@@ -541,19 +457,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-stretch-01">
+          <object class="GtkToolbar" id="toolbar-corner-space-stretch-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-stretch-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">75</property>
@@ -561,19 +471,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-stretch-11">
+          <object class="GtkToolbar" id="toolbar-corner-space-stretch-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-stretch-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">93</property>
@@ -637,19 +541,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-repeat-00">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-repeat-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-repeat-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">0</property>
@@ -657,19 +555,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-repeat-10">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-repeat-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-repeat-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">18</property>
@@ -677,19 +569,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-repeat-01">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-repeat-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-repeat-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">0</property>
@@ -697,19 +583,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-repeat-11">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-repeat-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-repeat-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">18</property>
@@ -773,19 +653,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-repeat-00">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-repeat-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-repeat-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">25</property>
@@ -793,19 +667,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-repeat-10">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-repeat-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-repeat-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">43</property>
@@ -813,19 +681,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-repeat-01">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-repeat-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-repeat-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">25</property>
@@ -833,19 +695,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-repeat-11">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-repeat-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-repeat-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">43</property>
@@ -909,19 +765,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-repeat-00">
+          <object class="GtkToolbar" id="toolbar-corner-round-repeat-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-repeat-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">50</property>
@@ -929,19 +779,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-repeat-10">
+          <object class="GtkToolbar" id="toolbar-corner-round-repeat-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-repeat-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">68</property>
@@ -949,19 +793,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-repeat-01">
+          <object class="GtkToolbar" id="toolbar-corner-round-repeat-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-repeat-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">50</property>
@@ -969,19 +807,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-repeat-11">
+          <object class="GtkToolbar" id="toolbar-corner-round-repeat-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-repeat-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">68</property>
@@ -1073,19 +905,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-repeat-00">
+          <object class="GtkToolbar" id="toolbar-corner-space-repeat-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-repeat-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">75</property>
@@ -1093,19 +919,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-repeat-10">
+          <object class="GtkToolbar" id="toolbar-corner-space-repeat-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-repeat-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">93</property>
@@ -1113,19 +933,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-repeat-01">
+          <object class="GtkToolbar" id="toolbar-corner-space-repeat-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-repeat-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">75</property>
@@ -1133,19 +947,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-repeat-11">
+          <object class="GtkToolbar" id="toolbar-corner-space-repeat-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-repeat-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">93</property>
@@ -1209,19 +1017,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-round-00">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-round-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-round-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">0</property>
@@ -1229,19 +1031,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-round-10">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-round-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-round-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">18</property>
@@ -1249,19 +1045,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-round-01">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-round-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-round-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">0</property>
@@ -1269,19 +1059,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-round-11">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-round-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-round-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">18</property>
@@ -1345,19 +1129,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-round-00">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-round-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-round-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">25</property>
@@ -1365,19 +1143,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-round-10">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-round-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-round-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">43</property>
@@ -1385,19 +1157,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-round-01">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-round-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-round-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">25</property>
@@ -1405,19 +1171,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-round-11">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-round-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-round-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">43</property>
@@ -1481,19 +1241,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-round-00">
+          <object class="GtkToolbar" id="toolbar-corner-round-round-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-round-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">50</property>
@@ -1501,19 +1255,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-round-10">
+          <object class="GtkToolbar" id="toolbar-corner-round-round-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-round-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">68</property>
@@ -1521,19 +1269,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-round-01">
+          <object class="GtkToolbar" id="toolbar-corner-round-round-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-round-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">50</property>
@@ -1541,19 +1283,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-round-11">
+          <object class="GtkToolbar" id="toolbar-corner-round-round-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-round-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">68</property>
@@ -1645,19 +1381,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-round-00">
+          <object class="GtkToolbar" id="toolbar-corner-space-round-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-round-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">75</property>
@@ -1665,19 +1395,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-round-10">
+          <object class="GtkToolbar" id="toolbar-corner-space-round-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-round-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">93</property>
@@ -1685,19 +1409,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-round-01">
+          <object class="GtkToolbar" id="toolbar-corner-space-round-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-round-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">75</property>
@@ -1705,19 +1423,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-round-11">
+          <object class="GtkToolbar" id="toolbar-corner-space-round-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-round-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">93</property>
@@ -1809,19 +1521,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-space-00">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-space-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-space-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">0</property>
@@ -1829,19 +1535,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-space-10">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-space-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-space-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">18</property>
@@ -1849,19 +1549,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-space-01">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-space-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-space-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">0</property>
@@ -1869,19 +1563,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-stretch-space-11">
+          <object class="GtkToolbar" id="toolbar-corner-stretch-space-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-stretch-space-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">18</property>
@@ -1973,19 +1661,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-space-00">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-space-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-space-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">25</property>
@@ -1993,19 +1675,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-space-10">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-space-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-space-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">43</property>
@@ -2013,19 +1689,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-space-01">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-space-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-space-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">25</property>
@@ -2033,19 +1703,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-repeat-space-11">
+          <object class="GtkToolbar" id="toolbar-corner-repeat-space-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-repeat-space-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">43</property>
@@ -2137,19 +1801,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-space-00">
+          <object class="GtkToolbar" id="toolbar-corner-round-space-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-space-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">50</property>
@@ -2157,19 +1815,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-space-10">
+          <object class="GtkToolbar" id="toolbar-corner-round-space-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-space-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">68</property>
@@ -2177,19 +1829,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-space-01">
+          <object class="GtkToolbar" id="toolbar-corner-round-space-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-space-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">50</property>
@@ -2197,19 +1843,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-round-space-11">
+          <object class="GtkToolbar" id="toolbar-corner-round-space-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-round-space-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">68</property>
@@ -2329,19 +1969,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-space-00">
+          <object class="GtkToolbar" id="toolbar-corner-space-space-00">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-space-00">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">75</property>
@@ -2349,19 +1983,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-space-10">
+          <object class="GtkToolbar" id="toolbar-corner-space-space-10">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-space-10">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">93</property>
@@ -2369,19 +1997,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-space-01">
+          <object class="GtkToolbar" id="toolbar-corner-space-space-01">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-space-01">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">75</property>
@@ -2389,19 +2011,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-space-space-11">
+          <object class="GtkToolbar" id="toolbar-corner-space-space-11">
+            <property name="name">red</property>
+            <property name="width_request">5</property>
+            <property name="height_request">5</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-space-space-11">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
             <property name="x">93</property>
