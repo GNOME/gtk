@@ -47,6 +47,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkintl.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtkwindowaccessible.h"
 
@@ -4806,6 +4807,10 @@ gtk_window_show (GtkWidget *widget)
   _gtk_widget_set_visible_flag (widget, TRUE);
 
   need_resize = _gtk_widget_get_alloc_needed (widget) || !gtk_widget_get_realized (widget);
+
+  _gtk_style_context_validate (gtk_widget_get_style_context (widget),
+                               g_get_monotonic_time (),
+                               0);
 
   if (need_resize)
     {
