@@ -700,14 +700,16 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   /* Now we go hide all the widgets that don't fit */
   while (list)
     {
+      child = BUTTON_DATA (list->data)->button;
       needs_reorder |= gtk_widget_get_child_visible (child) == TRUE;
-      gtk_widget_set_child_visible (BUTTON_DATA (list->data)->button, FALSE);
+      gtk_widget_set_child_visible (child, FALSE);
       list = list->prev;
     }
   for (list = first_button->next; list; list = list->next)
     {
+      child = BUTTON_DATA (list->data)->button;
       needs_reorder |= gtk_widget_get_child_visible (child) == TRUE;
-      gtk_widget_set_child_visible (BUTTON_DATA (list->data)->button, FALSE);
+      gtk_widget_set_child_visible (child, FALSE);
     }
 
   if (need_sliders || path_bar->fake_root)
