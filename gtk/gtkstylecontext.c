@@ -43,6 +43,7 @@
 #include "gtkstylecascadeprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtksettings.h"
+#include "gtksettingsprivate.h"
 
 /**
  * SECTION:gtkstylecontext
@@ -1237,6 +1238,7 @@ gtk_style_context_add_provider_for_screen (GdkScreen        *screen,
 
   g_return_if_fail (GDK_IS_SCREEN (screen));
   g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+  g_return_if_fail (!GTK_IS_SETTINGS (provider) || _gtk_settings_get_screen (GTK_SETTINGS (provider)) == screen);
 
   cascade = _gtk_style_cascade_get_for_screen (screen);
   _gtk_style_cascade_add_provider (cascade, provider, priority);
@@ -1259,6 +1261,7 @@ gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
 
   g_return_if_fail (GDK_IS_SCREEN (screen));
   g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+  g_return_if_fail (!GTK_IS_SETTINGS (provider));
 
   cascade = _gtk_style_cascade_get_for_screen (screen);
   _gtk_style_cascade_remove_provider (cascade, provider);
