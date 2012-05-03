@@ -226,7 +226,7 @@ get_pixbuf_box (GtkIconView     *icon_view,
   _gtk_icon_view_set_cell_data (icon_view, item);
   gtk_cell_area_foreach_alloc (icon_view->priv->cell_area, context,
                                GTK_WIDGET (icon_view),
-                               (GdkRectangle *)item, (GdkRectangle *)item,
+                               &item->cell_area, &item->cell_area,
                                (GtkCellAllocCallback)get_pixbuf_foreach, &data);
 
   return data.pixbuf_found;
