@@ -60,8 +60,6 @@
 #define CHECK_DARK  (1.0 / 3.0)
 #define CHECK_LIGHT (2.0 / 3.0)
 
-#define COLOR_SAMPLE_MARGIN 1
-
 struct _GtkColorButtonPrivate
 {
   GtkWidget *draw_area; /* Widget where we draw the color sample */
@@ -437,19 +435,12 @@ gtk_color_button_init (GtkColorButton *button)
   gtk_widget_push_composite_child ();
 
   button->priv->draw_area = gtk_drawing_area_new ();
-  g_object_set (button->priv->draw_area, 
-                "margin-top", COLOR_SAMPLE_MARGIN,
-                "margin-bottom", COLOR_SAMPLE_MARGIN,
-                "margin-left", 16,
-                "margin-right", 16,
-                NULL);
-
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (button), "Black");
   pango_layout_get_pixel_extents (layout, NULL, &rect);
   g_object_unref (layout);
 
   gtk_widget_set_size_request (button->priv->draw_area, 
-                               rect.width, rect.height - 2 * COLOR_SAMPLE_MARGIN);
+                               rect.width, rect.height);
 
   g_signal_connect (button->priv->draw_area, "draw",
                     G_CALLBACK (gtk_color_button_draw_cb), button);
