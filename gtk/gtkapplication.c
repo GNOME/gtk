@@ -502,7 +502,9 @@ gtk_application_init (GtkApplication *application)
                                                    GTK_TYPE_APPLICATION,
                                                    GtkApplicationPrivate);
 
+#ifdef GDK_WINDOWING_X11
   application->priv->next_id = 1;
+#endif
 }
 
 static void
