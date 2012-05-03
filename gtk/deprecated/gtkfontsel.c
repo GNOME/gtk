@@ -610,7 +610,9 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
  *
  * Creates a new #GtkFontSelection.
  *
- * Return value: a n ew #GtkFontSelection
+ * Return value: a new #GtkFontSelection
+ *
+ * Deprecated: 3.2: Use #GtkFontChooserWidget instead
  */
 GtkWidget *
 gtk_font_selection_new (void)
