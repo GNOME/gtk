@@ -20,9 +20,10 @@
 #include <float.h>
 
 #ifndef HAVE_ISNAN
-/* it seems of the supported compilers only */
-/* MSVC does not have isnan(), but it does
-/* have _isnan() which does the same as isnan() */
+/* it seems of the supported compilers only
+ * MSVC does not have isnan(), but it does
+ * have _isnan() which does the same as isnan()
+ */
 static inline gboolean
 isnan (double x)
 {
@@ -31,9 +32,10 @@ isnan (double x)
 #endif
 
 #ifndef HAVE_ISINF
-/* Unfortunately MSVC does not have finite() */
-/* but it does have _finite() which is the same */
-/* as finite() except when x is a NaN */
+/* Unfortunately MSVC does not have finite()
+ * but it does have _finite() which is the same
+ * as finite() except when x is a NaN
+ */
 static inline gboolean
 isinf (double x)
 {
