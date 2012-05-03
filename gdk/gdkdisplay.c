@@ -970,8 +970,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
            * synthesized when needed.
            */
           if (source_device &&
-              (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN ||
-               gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHPAD))
+              (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN))
             info->need_touch_press_enter = TRUE;
 
           pointer_window = NULL;
