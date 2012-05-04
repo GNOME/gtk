@@ -448,7 +448,8 @@ gtk_toggle_button_get_mode (GtkToggleButton *toggle_button)
  *
  * Sets the status of the toggle button. Set to %TRUE if you want the
  * GtkToggleButton to be 'pressed in', and %FALSE to raise it.
- * This action causes the toggled signal to be emitted.
+ * This action causes the #GtkToggleButton::toggled signal and the
+ * #GtkButton::clicked signal to be emitted.
  */
 void
 gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
