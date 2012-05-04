@@ -3186,21 +3186,15 @@ gtk_icon_view_row_inserted (GtkTreeModel *model,
   GtkIconView *icon_view = GTK_ICON_VIEW (data);
   gint index;
   GtkIconViewItem *item;
-  gboolean iters_persist;
   GList *list;
 
   /* ignore changes in branches */
   if (gtk_tree_path_get_depth (path) > 1)
     return;
 
-  iters_persist = gtk_tree_model_get_flags (icon_view->priv->model) & GTK_TREE_MODEL_ITERS_PERSIST;
-  
   index = gtk_tree_path_get_indices(path)[0];
 
   item = gtk_icon_view_item_new ();
-
-  if (iters_persist)
-    item->iter = *iter;
 
   item->index = index;
 
@@ -3330,11 +3324,8 @@ gtk_icon_view_build_items (GtkIconView *icon_view)
 {
   GtkTreeIter iter;
   int i;
-  gboolean iters_persist;
   GList *items = NULL;
 
-  iters_persist = gtk_tree_model_get_flags (icon_view->priv->model) & GTK_TREE_MODEL_ITERS_PERSIST;
-  
   if (!gtk_tree_model_get_iter_first (icon_view->priv->model,
 				      &iter))
     return;
@@ -3344,9 +3335,6 @@ gtk_icon_view_build_items (GtkIconView *icon_view)
   do
     {
       GtkIconViewItem *item = gtk_icon_view_item_new ();
-
-      if (iters_persist)
-	item->iter = iter;
 
       item->index = i;
       
@@ -4075,22 +4063,13 @@ void
 _gtk_icon_view_set_cell_data (GtkIconView     *icon_view,
 			      GtkIconViewItem *item)
 {
-  gboolean iters_persist;
   GtkTreeIter iter;
+  GtkTreePath *path;
 
-  iters_persist = gtk_tree_model_get_flags (icon_view->priv->model) & GTK_TREE_MODEL_ITERS_PERSIST;
-  
-  if (!iters_persist)
-    {
-      GtkTreePath *path;
-
-      path = gtk_tree_path_new_from_indices (item->index, -1);
-      if (!gtk_tree_model_get_iter (icon_view->priv->model, &iter, path))
-        return;
-      gtk_tree_path_free (path);
-    }
-  else
-    iter = item->iter;
+  path = gtk_tree_path_new_from_indices (item->index, -1);
+  if (!gtk_tree_model_get_iter (icon_view->priv->model, &iter, path))
+    return;
+  gtk_tree_path_free (path);
 
   gtk_cell_area_apply_attributes (icon_view->priv->cell_area, 
 				  icon_view->priv->model,

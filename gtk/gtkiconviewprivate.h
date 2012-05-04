@@ -25,7 +25,6 @@ struct _GtkIconViewItem
 {
   GdkRectangle cell_area;
 
-  GtkTreeIter iter;
   gint index;
   
   gint row, col;
