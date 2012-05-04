@@ -128,7 +128,7 @@
  *
  * <example>
  * <title>A UI definition</title>
- * <programlisting>
+ * <programlisting><![CDATA[
  * <ui>
  *   <menubar>
  *     <menu name="FileMenu" action="FileMenuAction">
@@ -153,7 +153,7 @@
  *     </placeholder>
  *   </toolbar>
  * </ui>
- * </programlisting>
+ * ]]></programlisting>
  * </example>
  *
  * The constructed widget hierarchy is very similar to the element tree
