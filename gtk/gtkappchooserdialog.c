@@ -212,71 +212,6 @@ ensure_online_button (GtkAppChooserDialog *self)
                                              g_object_ref (self));
 }
 
-/* An application is valid if:
- *
- * 1) The file exists
- * 2) The user has permissions to run the file
- */
-static gboolean
-check_application (GtkAppChooserDialog  *self,
-                   GAppInfo            **app_out)
-{
-  const char *command;
-  char *path = NULL;
-  char **argv = NULL;
-  int argc;
-  GError *error = NULL;
-  gint retval = TRUE;
-  GAppInfo *info;
-
-  command = NULL;
-
-  info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self->priv->app_chooser_widget));
-  if (info == NULL)
-    {
-      *app_out = NULL;
-      return FALSE;
-    }
-
-  command = g_app_info_get_executable (info);
-
-  g_shell_parse_argv (command, &argc, &argv, &error);
-
-  if (error)
-    {
-      show_error_dialog (_("Could not run application"),
-                         error->message,
-                         GTK_WINDOW (self));
-      g_error_free (error);
-      retval = FALSE;
-      goto cleanup;
-    }
-
-  path = g_find_program_in_path (argv[0]);
-  if (!path)
-    {
-      char *error_message;
-
-      error_message = g_strdup_printf (_("Could not find '%s'"),
-                                       argv[0]);
-
-      show_error_dialog (_("Could not find application"),
-                         error_message,
-                         GTK_WINDOW (self));
-      g_free (error_message);
-      retval = FALSE;
-      goto cleanup;
-    }
-
-  *app_out = info;
-
- cleanup:
-  g_strfreev (argv);
-  g_free (path);
-
-  return retval;
-}
-
 static void
 add_or_find_application (GtkAppChooserDialog *self)
 {
@@ -606,12 +541,7 @@ static GAppInfo *
 gtk_app_chooser_dialog_get_app_info (GtkAppChooser *object)
 {
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (object);
-  GAppInfo *app = NULL;
-
-  if (!check_application (self, &app))
-    return NULL;
-
-  return app;
+  return gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self->priv->app_chooser_widget));
 }
 
 static void
