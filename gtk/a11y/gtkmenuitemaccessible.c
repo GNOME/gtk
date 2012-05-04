@@ -38,8 +38,9 @@ static void menu_item_deselect (GtkMenuItem *item);
 static GtkWidget *get_label_from_container   (GtkWidget *container);
 static gchar     *get_text_from_label_widget (GtkWidget *widget);
 
-static gint menu_item_add_gtk    (GtkContainer   *container,
-                                  GtkWidget      *widget);
+static gint menu_item_insert_gtk (GtkMenuShell   *shell,
+                                  GtkWidget      *widget,
+                                  gint            position);
 static gint menu_item_remove_gtk (GtkContainer   *container,
                                   GtkWidget      *widget);
 
@@ -87,7 +88,7 @@ gtk_menu_item_accessible_initialize (AtkObject *obj,
   menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (data));
   if (menu)
     {
-      g_signal_connect (menu, "add", G_CALLBACK (menu_item_add_gtk), NULL);
+      g_signal_connect (menu, "insert", G_CALLBACK (menu_item_insert_gtk), NULL);
       g_signal_connect (menu, "remove", G_CALLBACK (menu_item_remove_gtk), NULL);
     }
 }
@@ -882,19 +883,18 @@ atk_selection_interface_init (AtkSelectionIface *iface)
 }
 
 static gint
-menu_item_add_gtk (GtkContainer *container,
-                   GtkWidget    *widget)
+menu_item_insert_gtk (GtkMenuShell *shell,
+                      GtkWidget    *widget,
+                      gint          position)
 {
   GtkWidget *parent_widget;
 
-  g_return_val_if_fail (GTK_IS_MENU (container), 1);
+  g_return_val_if_fail (GTK_IS_MENU (shell), 1);
 
-  parent_widget = gtk_menu_get_attach_widget (GTK_MENU (container));
+  parent_widget = gtk_menu_get_attach_widget (GTK_MENU (shell));
   if (GTK_IS_MENU_ITEM (parent_widget))
-    {
-      GTK_CONTAINER_ACCESSIBLE_CLASS (gtk_menu_item_accessible_parent_class)->add_gtk (container, widget, gtk_widget_get_accessible (parent_widget));
+    GTK_CONTAINER_ACCESSIBLE_CLASS (gtk_menu_item_accessible_parent_class)->add_gtk (GTK_CONTAINER (shell), widget, gtk_widget_get_accessible (parent_widget));
 
-    }
   return 1;
 }
 
@@ -913,6 +913,7 @@ menu_item_remove_gtk (GtkContainer *container,
     }
   return 1;
 }
+
 static void
 menu_item_select (GtkMenuItem *item)
 {
