@@ -107,7 +107,8 @@ enum {
   PROP_MAX_WIDTH_CHARS,
   PROP_WRAP_WIDTH,
   PROP_ALIGN,
-  
+  PROP_PLACEHOLDER_TEXT,
+
   /* Style args */
   PROP_BACKGROUND,
   PROP_FOREGROUND,
@@ -171,6 +172,7 @@ struct _GtkCellRendererTextPrivate
   PangoWrapMode         wrap_mode;
 
   gchar *text;
+  gchar *placeholder_text;
 
   gdouble font_scale;
 
@@ -619,7 +621,22 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 						      PANGO_TYPE_ALIGNMENT,
 						      PANGO_ALIGN_LEFT,
 						      GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkCellRendererText:placeholder-text:
+   *
+   * The text that will be displayed in the #GtkCellRenderer if
+   * #GtkCellRendererText:editable is %TRUE and the cell is empty.
+   *
+   * Since 3.6
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_PLACEHOLDER_TEXT,
+                                   g_param_spec_string ("placeholder-text",
+                                                        P_("Placeholder text"),
+                                                        P_("Text rendered when an editable cell is empty"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
 
 
   /* Style props are set or not */
@@ -726,6 +743,7 @@ gtk_cell_renderer_text_finalize (GObject *object)
   pango_font_description_free (priv->font);
 
   g_free (priv->text);
+  g_free (priv->placeholder_text);
 
   if (priv->extra_attrs)
     pango_attr_list_unref (priv->extra_attrs);
@@ -949,6 +967,10 @@ gtk_cell_renderer_text_get_property (GObject        *object,
     case PROP_MAX_WIDTH_CHARS:
       g_value_set_int (value, priv->max_width_chars);
       break;  
+
+    case PROP_PLACEHOLDER_TEXT:
+      g_value_set_string (value, priv->placeholder_text);
+      break;
 
     case PROP_BACKGROUND:
     case PROP_FOREGROUND:
@@ -1510,7 +1532,12 @@ gtk_cell_renderer_text_set_property (GObject      *object,
     case PROP_ALIGN_SET:
       priv->align_set = g_value_get_boolean (value);
       break;
-      
+
+    case PROP_PLACEHOLDER_TEXT:
+      g_free (priv->placeholder_text);
+      priv->placeholder_text = g_value_dup_string (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -1536,6 +1563,15 @@ gtk_cell_renderer_text_new (void)
   return g_object_new (GTK_TYPE_CELL_RENDERER_TEXT, NULL);
 }
 
+static inline gboolean
+show_placeholder_text (GtkCellRendererText *celltext)
+{
+  GtkCellRendererTextPrivate *priv = celltext->priv;
+
+  return priv->editable && priv->placeholder_text &&
+    (!priv->text || !priv->text[0]);
+}
+
 static void
 add_attr (PangoAttrList  *attr_list,
           PangoAttribute *attr)
@@ -1557,8 +1593,10 @@ get_layout (GtkCellRendererText *celltext,
   PangoLayout *layout;
   PangoUnderline uline;
   gint xpad;
+  gboolean placeholder_layout = show_placeholder_text (celltext);
 
-  layout = gtk_widget_create_pango_layout (widget, priv->text);
+  layout = gtk_widget_create_pango_layout (widget, placeholder_layout ?
+                                           priv->placeholder_text : priv->text);
 
   gtk_cell_renderer_get_padding (GTK_CELL_RENDERER (celltext), &xpad, NULL);
 
@@ -1569,7 +1607,7 @@ get_layout (GtkCellRendererText *celltext,
 
   pango_layout_set_single_paragraph_mode (layout, priv->single_paragraph);
 
-  if (cell_area)
+  if (!placeholder_layout && cell_area)
     {
       /* Add options that affect appearance but not size */
       
@@ -1593,6 +1631,22 @@ get_layout (GtkCellRendererText *celltext,
       if (priv->strikethrough_set)
         add_attr (attr_list,
                   pango_attr_strikethrough_new (priv->strikethrough));
+    }
+  else if (placeholder_layout)
+    {
+      PangoColor color;
+      GtkStyleContext *context;
+      GdkRGBA fg = { 0.5, 0.5, 0.5 };
+
+      context = gtk_widget_get_style_context (widget);
+      gtk_style_context_lookup_color (context, "placeholder_text_color", &fg);
+
+      color.red = CLAMP (fg.red * 65535. + 0.5, 0, 65535);
+      color.green = CLAMP (fg.green * 65535. + 0.5, 0, 65535);
+      color.blue = CLAMP (fg.blue * 65535. + 0.5, 0, 65535);
+
+      add_attr (attr_list,
+                pango_attr_foreground_new (color.red, color.green, color.blue));
     }
 
   add_attr (attr_list, pango_attr_font_desc_new (priv->font));
