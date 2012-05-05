@@ -50,8 +50,6 @@ struct _GtkIconViewPrivate
 
   GtkSelectionMode selection_mode;
 
-  guint layout_idle_id;
-
   GdkWindow *bin_window;
 
   GList *children;
