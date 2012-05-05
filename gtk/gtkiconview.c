@@ -66,8 +66,6 @@
 
 #define SCROLL_EDGE_SIZE 15
 
-#define GTK_ICON_VIEW_PRIORITY_LAYOUT (GDK_PRIORITY_REDRAW + 5)
-
 typedef struct _GtkIconViewChild GtkIconViewChild;
 struct _GtkIconViewChild
 {
@@ -138,10 +136,21 @@ static void             gtk_icon_view_unrealize                 (GtkWidget      
 static void             gtk_icon_view_style_updated             (GtkWidget          *widget);
 static void             gtk_icon_view_state_flags_changed       (GtkWidget          *widget,
 			                                         GtkStateFlags       previous_state);
+static GtkSizeRequestMode gtk_icon_view_get_request_mode        (GtkWidget          *widget);
 static void             gtk_icon_view_get_preferred_width       (GtkWidget          *widget,
 								 gint               *minimum,
 								 gint               *natural);
+static void             gtk_icon_view_get_preferred_width_for_height
+                                                                (GtkWidget          *widget,
+                                                                 gint                height,
+								 gint               *minimum,
+								 gint               *natural);
 static void             gtk_icon_view_get_preferred_height      (GtkWidget          *widget,
+								 gint               *minimum,
+								 gint               *natural);
+static void             gtk_icon_view_get_preferred_height_for_width
+                                                                (GtkWidget          *widget,
+                                                                 gint                width,
 								 gint               *minimum,
 								 gint               *natural);
 static void             gtk_icon_view_size_allocate             (GtkWidget          *widget,
@@ -197,7 +206,6 @@ static void                 gtk_icon_view_queue_draw_path                (GtkIco
 									  GtkTreePath *path);
 static void                 gtk_icon_view_queue_draw_item                (GtkIconView            *icon_view,
 									  GtkIconViewItem        *item);
-static void                 gtk_icon_view_queue_layout                   (GtkIconView            *icon_view);
 static void                 gtk_icon_view_start_rubberbanding            (GtkIconView            *icon_view,
                                                                           GdkDevice              *device,
 									  gint                    x,
@@ -349,8 +357,11 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->realize = gtk_icon_view_realize;
   widget_class->unrealize = gtk_icon_view_unrealize;
   widget_class->style_updated = gtk_icon_view_style_updated;
+  widget_class->get_request_mode = gtk_icon_view_get_request_mode;
   widget_class->get_preferred_width = gtk_icon_view_get_preferred_width;
   widget_class->get_preferred_height = gtk_icon_view_get_preferred_height;
+  widget_class->get_preferred_width_for_height = gtk_icon_view_get_preferred_width_for_height;
+  widget_class->get_preferred_height_for_width = gtk_icon_view_get_preferred_height_for_width;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
   widget_class->draw = gtk_icon_view_draw;
   widget_class->motion_notify_event = gtk_icon_view_motion;
@@ -1216,12 +1227,6 @@ gtk_icon_view_destroy (GtkWidget *widget)
 
   gtk_icon_view_set_model (icon_view, NULL);
 
-  if (icon_view->priv->layout_idle_id != 0)
-    {
-      g_source_remove (icon_view->priv->layout_idle_id);
-      icon_view->priv->layout_idle_id = 0;
-    }
-
   if (icon_view->priv->scroll_to_path != NULL)
     {
       gtk_tree_row_reference_free (icon_view->priv->scroll_to_path);
@@ -1360,20 +1365,253 @@ gtk_icon_view_style_updated (GtkWidget *widget)
   gtk_widget_queue_resize (widget);
 }
 
-static void
-gtk_icon_view_get_preferred_width (GtkWidget      *widget,
-				   gint           *minimum,
-				   gint           *natural)
+static gint
+gtk_icon_view_get_n_items (GtkIconView *icon_view)
 {
-  *minimum = *natural = GTK_ICON_VIEW (widget)->priv->width;
+  GtkIconViewPrivate *priv = icon_view->priv;
+
+  if (priv->model == NULL)
+    return 0;
+
+  return gtk_tree_model_iter_n_children (priv->model, NULL);
 }
 
 static void
-gtk_icon_view_get_preferred_height (GtkWidget      *widget,
-				   gint           *minimum,
-				   gint           *natural)
+cell_area_get_preferred_size (GtkIconView        *icon_view,
+                              GtkCellAreaContext *context,
+                              GtkOrientation      orientation,
+                              gint                for_size,
+                              gint               *minimum,
+                              gint               *natural)
 {
-  *minimum = *natural = GTK_ICON_VIEW (widget)->priv->height;
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      if (for_size > 0)
+        gtk_cell_area_get_preferred_width_for_height (icon_view->priv->cell_area,
+                                                      context,
+                                                      GTK_WIDGET (icon_view),
+                                                      for_size,
+                                                      minimum, natural);
+      else
+        gtk_cell_area_get_preferred_width (icon_view->priv->cell_area,
+                                           context,
+                                           GTK_WIDGET (icon_view),
+                                           minimum, natural);
+    }
+  else
+    {
+      if (for_size > 0)
+        gtk_cell_area_get_preferred_height_for_width (icon_view->priv->cell_area,
+                                                      context,
+                                                      GTK_WIDGET (icon_view),
+                                                      for_size,
+                                                      minimum, natural);
+      else
+        gtk_cell_area_get_preferred_height (icon_view->priv->cell_area,
+                                            context,
+                                            GTK_WIDGET (icon_view),
+                                            minimum, natural);
+    }
+}
+
+static void
+gtk_icon_view_get_preferred_item_size (GtkIconView    *icon_view,
+                                       GtkOrientation  orientation,
+                                       gint            for_size,
+                                       gint           *minimum,
+                                       gint           *natural)
+{
+  GtkIconViewPrivate *priv = icon_view->priv;
+  GtkCellAreaContext *context;
+  GList *items;
+
+  context = gtk_cell_area_create_context (priv->cell_area);
+
+  for_size -= 2 * priv->item_padding;
+
+  if (for_size > 0)
+    {
+      /* This is necessary for the context to work properly */
+      for (items = priv->items; items; items = items->next)
+        {
+          GtkIconViewItem *item = items->data;
+
+          _gtk_icon_view_set_cell_data (icon_view, item);
+          cell_area_get_preferred_size (icon_view, context, 1 - orientation, -1, NULL, NULL);
+        }
+    }
+
+  for (items = priv->items; items; items = items->next)
+    {
+      GtkIconViewItem *item = items->data;
+
+      _gtk_icon_view_set_cell_data (icon_view, item);
+      cell_area_get_preferred_size (icon_view, context, orientation, for_size, NULL, NULL);
+    }
+
+  cell_area_get_preferred_size (icon_view, context, orientation, for_size, minimum, natural);
+
+  if (minimum)
+    *minimum += 2 * priv->item_padding;
+  if (natural)
+    *natural += 2 * priv->item_padding;
+
+  g_object_unref (context);
+}
+
+static void
+gtk_icon_view_compute_n_items_for_size (GtkIconView    *icon_view,
+                                        GtkOrientation  orientation,
+                                        gint            size,
+                                        gint           *min_columns,
+                                        gint           *max_columns)
+{
+  GtkIconViewPrivate *priv = icon_view->priv;
+  int minimum, natural;
+
+  if (priv->columns > 0)
+    {
+      *min_columns = priv->columns;
+      *max_columns = priv->columns;
+      return;
+    }
+
+  size -= 2 * priv->margin;
+
+  gtk_icon_view_get_preferred_item_size (icon_view, orientation, -1, &minimum, &natural);
+  
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      size += priv->column_spacing;
+      minimum += priv->column_spacing;
+      natural += priv->column_spacing;
+    }
+  else
+    {
+      size += priv->row_spacing;
+      minimum += priv->row_spacing;
+      natural += priv->row_spacing;
+    }
+
+  if (size <= minimum)
+    *max_columns = 1;
+  else
+    *max_columns = size / minimum;
+  if (size <= natural)
+    *min_columns = 1;
+  else
+    *min_columns = size / natural;
+}
+
+static GtkSizeRequestMode
+gtk_icon_view_get_request_mode (GtkWidget *widget)
+{
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+}
+
+static void
+gtk_icon_view_get_preferred_width (GtkWidget *widget,
+				   gint      *minimum,
+				   gint      *natural)
+{
+  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
+  GtkIconViewPrivate *priv = icon_view->priv;
+  int item_min, item_nat;
+
+  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_HORIZONTAL, -1, &item_min, &item_nat);
+
+  if (priv->columns > 0)
+    {
+      *minimum = item_min * priv->columns + priv->column_spacing * (priv->columns - 1);
+      *natural = item_nat * priv->columns + priv->column_spacing * (priv->columns - 1);
+    }
+  else
+    {
+      int n_items = gtk_icon_view_get_n_items (icon_view);
+
+      *minimum = n_items ? item_min : 0;
+      *natural = item_nat * n_items + priv->column_spacing * (n_items - 1);
+    }
+
+  *minimum += 2 * priv->margin;
+  *natural += 2 * priv->margin;
+}
+
+static void
+gtk_icon_view_get_preferred_width_for_height (GtkWidget *widget,
+                                              gint       height,
+                                              gint      *minimum,
+                                              gint      *natural)
+{
+  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
+  GtkIconViewPrivate *priv = icon_view->priv;
+  int item_min, item_nat, min_rows, max_rows, n_items;
+
+  gtk_icon_view_compute_n_items_for_size (icon_view, GTK_ORIENTATION_VERTICAL, height, &min_rows, &max_rows);
+  n_items = gtk_icon_view_get_n_items (icon_view);
+
+  height = height + priv->row_spacing - 2 * priv->margin;
+
+  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_HORIZONTAL, height / max_rows - priv->row_spacing, &item_min, NULL);
+  *minimum = item_min * ((n_items + max_rows - 1) / max_rows);
+  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_HORIZONTAL, height / min_rows - priv->row_spacing, NULL, &item_nat);
+  *natural = item_nat * ((n_items + min_rows - 1) / min_rows);
+
+  *minimum += 2 * priv->margin;
+  *natural += 2 * priv->margin;
+}
+
+static void
+gtk_icon_view_get_preferred_height (GtkWidget *widget,
+				    gint      *minimum,
+				    gint      *natural)
+{
+  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
+  GtkIconViewPrivate *priv = icon_view->priv;
+  int item_min, item_nat, n_items;
+
+  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_VERTICAL, -1, &item_min, &item_nat);
+  n_items = gtk_icon_view_get_n_items (icon_view);
+
+  if (priv->columns > 0)
+    {
+      int n_rows = (n_items + priv->columns - 1) / priv->columns;
+
+      *minimum = item_min * n_rows + priv->row_spacing * (n_rows - 1);
+      *natural = item_nat * n_rows + priv->row_spacing * (n_rows - 1);
+    }
+  else
+    {
+      *minimum = n_items ? item_min : 0;
+      *natural = item_nat * n_items + priv->row_spacing * (n_items - 1);
+    }
+
+  *minimum += 2 * priv->margin;
+  *natural += 2 * priv->margin;
+}
+
+static void
+gtk_icon_view_get_preferred_height_for_width (GtkWidget *widget,
+                                              gint       width,
+                                              gint      *minimum,
+                                              gint      *natural)
+{
+  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
+  GtkIconViewPrivate *priv = icon_view->priv;
+  int item_min, item_nat, min_columns, max_columns, n_items;
+
+  gtk_icon_view_compute_n_items_for_size (icon_view, GTK_ORIENTATION_HORIZONTAL, width, &min_columns, &max_columns);
+  n_items = gtk_icon_view_get_n_items (icon_view);
+
+  width = width + priv->column_spacing - 2 * priv->margin;
+
+  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_VERTICAL, width / max_columns - priv->column_spacing, &item_min, NULL);
+  *minimum = (item_min + priv->row_spacing) * ((n_items + max_columns - 1) / max_columns) - priv->row_spacing;
+  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_VERTICAL, width / min_columns - priv->column_spacing, NULL, &item_nat);
+  *natural = (item_nat + priv->row_spacing) * ((n_items + min_columns - 1) / min_columns) - priv->row_spacing;
+
+  *minimum += 2 * priv->margin;
+  *natural += 2 * priv->margin;
 }
 
 static void
@@ -1397,6 +1635,8 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 
   gtk_widget_set_allocation (widget, allocation);
+
+  gtk_icon_view_layout (icon_view);
 
   if (gtk_widget_get_realized (widget))
     {
@@ -2640,12 +2880,6 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   gint item_width;
   gboolean size_changed = FALSE;
 
-  if (icon_view->priv->layout_idle_id != 0)
-    {
-      g_source_remove (icon_view->priv->layout_idle_id);
-      icon_view->priv->layout_idle_id = 0;
-    }
-  
   if (icon_view->priv->model == NULL)
     return;
 
@@ -2773,7 +3007,7 @@ gtk_icon_view_invalidate_sizes (GtkIconView *icon_view)
     }
 
   /* Re-layout the items */
-  gtk_icon_view_queue_layout (icon_view);
+  gtk_widget_queue_resize (GTK_WIDGET (icon_view));
 }
 
 static void
@@ -2928,31 +3162,6 @@ gtk_icon_view_queue_draw_item (GtkIconView     *icon_view,
 
   if (icon_view->priv->bin_window)
     gdk_window_invalidate_rect (icon_view->priv->bin_window, &rect, TRUE);
-}
-
-static gboolean
-layout_callback (gpointer user_data)
-{
-  GtkIconView *icon_view;
-
-  icon_view = GTK_ICON_VIEW (user_data);
-  
-  icon_view->priv->layout_idle_id = 0;
-
-  gtk_icon_view_layout (icon_view);
-  
-  return FALSE;
-}
-
-static void
-gtk_icon_view_queue_layout (GtkIconView *icon_view)
-{
-  if (icon_view->priv->layout_idle_id != 0)
-    return;
-
-  icon_view->priv->layout_idle_id =
-      gdk_threads_add_idle_full (GTK_ICON_VIEW_PRIORITY_LAYOUT,
-                                 layout_callback, icon_view, NULL);
 }
 
 void
@@ -3215,7 +3424,7 @@ gtk_icon_view_row_inserted (GtkTreeModel *model,
     
   verify_items (icon_view);
 
-  gtk_icon_view_queue_layout (icon_view);
+  gtk_widget_queue_resize (GTK_WIDGET (icon_view));
 }
 
 static void
@@ -3266,7 +3475,7 @@ gtk_icon_view_row_deleted (GtkTreeModel *model,
 
   verify_items (icon_view);  
   
-  gtk_icon_view_queue_layout (icon_view);
+  gtk_widget_queue_resize (GTK_WIDGET (icon_view));
 
   if (emit)
     g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
@@ -3314,7 +3523,7 @@ gtk_icon_view_rows_reordered (GtkTreeModel *model,
   g_list_free (icon_view->priv->items);
   icon_view->priv->items = items;
 
-  gtk_icon_view_queue_layout (icon_view);
+  gtk_widget_queue_resize (GTK_WIDGET (icon_view));
 
   verify_items (icon_view);  
 }
@@ -4763,14 +4972,11 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
 			icon_view);
 
       gtk_icon_view_build_items (icon_view);
-
-      gtk_icon_view_layout (icon_view);
     }
 
   g_object_notify (G_OBJECT (icon_view), "model");  
 
-  if (gtk_widget_get_realized (GTK_WIDGET (icon_view)))
-    gtk_widget_queue_resize (GTK_WIDGET (icon_view));
+  gtk_widget_queue_resize (GTK_WIDGET (icon_view));
 }
 
 /**
@@ -5426,7 +5632,7 @@ gtk_icon_view_set_columns (GtkIconView *icon_view,
       if (icon_view->priv->cell_area)
 	gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
-      gtk_icon_view_queue_layout (icon_view);
+      gtk_widget_queue_resize (GTK_WIDGET (icon_view));
       
       g_object_notify (G_OBJECT (icon_view), "columns");
     }  
