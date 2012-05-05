@@ -18,7 +18,7 @@
  *         Ryan Lortie <desrt@desrt.ca>
  */
 
-#include "gtkquartz-menu.h"
+#include "gtkmodelmenu-quartz.h"
 
 #include <gdk/gdkkeysyms.h>
 #include "gtkaccelmapprivate.h"
@@ -31,7 +31,7 @@
  * Copyright (C) 2009 Paul Davis
  */
 static unichar
-gtk_quartz_menu_get_unichar (gint key)
+gtk_quartz_model_menu_get_unichar (gint key)
 {
   if (key >= GDK_KEY_A && key <= GDK_KEY_Z)
     return key + (GDK_KEY_a - GDK_KEY_A);
@@ -310,7 +310,7 @@ gtk_quartz_action_observer_new (GNSMenuItem *item)
 }
 
 static gboolean
-gtk_quartz_menu_handle_changes (gpointer user_data)
+gtk_quartz_model_menu_handle_changes (gpointer user_data)
 {
   GNSMenu *menu = user_data;
 
@@ -318,7 +318,7 @@ gtk_quartz_menu_handle_changes (gpointer user_data)
 }
 
 static void
-gtk_quartz_menu_items_changed (GMenuModel *model,
+gtk_quartz_model_menu_items_changed (GMenuModel *model,
                                gint        position,
                                gint        removed,
                                gint        added,
@@ -349,7 +349,7 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
 - (void)model:(GMenuModel *)model didChangeAtPosition:(NSInteger)position removed:(NSInteger)removed added:(NSInteger)added
 {
   if (update_idle == 0)
-    update_idle = gdk_threads_add_idle (gtk_quartz_menu_handle_changes, self);
+    update_idle = gdk_threads_add_idle (gtk_quartz_model_menu_handle_changes, self);
 }
 
 - (void)appendItemFromModel:(GMenuModel *)aModel atIndex:(gint)index withHeading:(gchar **)heading
@@ -370,7 +370,7 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
 {
   gint n, i;
 
-  g_signal_connect (aModel, "items-changed", G_CALLBACK (gtk_quartz_menu_items_changed), self);
+  g_signal_connect (aModel, "items-changed", G_CALLBACK (gtk_quartz_model_menu_items_changed), self);
   connected = g_slist_prepend (connected, g_object_ref (aModel));
 
   n = g_menu_model_get_n_items (aModel);
@@ -414,7 +414,7 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
 {
   while (connected)
     {
-      g_signal_handlers_disconnect_by_func (connected->data, gtk_quartz_menu_items_changed, self);
+      g_signal_handlers_disconnect_by_func (connected->data, gtk_quartz_model_menu_items_changed, self);
       g_object_unref (connected->data);
 
       connected = g_slist_delete_link (connected, connected);
@@ -447,7 +447,7 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
 {
   while (connected)
     {
-      g_signal_handlers_disconnect_by_func (connected->data, gtk_quartz_menu_items_changed, self);
+      g_signal_handlers_disconnect_by_func (connected->data, gtk_quartz_model_menu_items_changed, self);
       g_object_unref (connected->data);
 
       connected = g_slist_delete_link (connected, connected);
@@ -511,7 +511,7 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
           path = _gtk_accel_path_for_action (action, target);
           if (gtk_accel_map_lookup_entry (path, &key))
             {
-              unichar character = gtk_quartz_menu_get_unichar (key.accel_key);
+              unichar character = gtk_quartz_model_menu_get_unichar (key.accel_key);
 
               if (character)
                 {

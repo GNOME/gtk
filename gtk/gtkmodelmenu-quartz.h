@@ -17,12 +17,12 @@
  * Author: William Hua <william@attente.ca>
  */
 
-#ifndef __GTK_QUARTZ_MENU_H__
-#define __GTK_QUARTZ_MENU_H__
+#ifndef __GTK_MODELMENU_QUARTZ_H__
+#define __GTK_MODELMENU_QUARTZ_H__
 
 #include "gactionobservable.h"
 
 void gtk_quartz_set_main_menu (GMenuModel        *model,
                                GActionObservable *observable);
 
-#endif /* __GTK_QUARTZ_MENU_H__ */
+#endif /* __GTK_MODELMENU_QUARTZ_H__ */

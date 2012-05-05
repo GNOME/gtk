@@ -37,7 +37,7 @@
 #include "gtkintl.h"
 
 #ifdef GDK_WINDOWING_QUARTZ
-#include "gtkquartz-menu.h"
+#include "gtkmodelmenu-quartz.h"
 #import <Cocoa/Cocoa.h>
 #include <Carbon/Carbon.h>
 #include "gtkmessagedialog.h"
