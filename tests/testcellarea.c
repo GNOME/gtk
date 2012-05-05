@@ -1,5 +1,4 @@
 #include <gtk/gtk.h>
-#include "cellareascaffold.h"
 
 /*******************************************************
  *                      Simple Test                    *
@@ -79,21 +78,22 @@ simple_list_model (void)
 }
 
 static GtkWidget *
-simple_scaffold (void)
+simple_iconview (void)
 {
   GtkTreeModel *model;
-  GtkWidget *scaffold;
+  GtkWidget *iconview;
   GtkCellArea *area;
   GtkCellRenderer *renderer;
 
-  scaffold = cell_area_scaffold_new ();
-  gtk_widget_show (scaffold);
+  iconview = gtk_icon_view_new ();
+  gtk_widget_show (iconview);
 
   model = simple_list_model ();
 
-  cell_area_scaffold_set_model (CELL_AREA_SCAFFOLD (scaffold), model);
+  gtk_icon_view_set_model (GTK_ICON_VIEW (iconview), model);
+  gtk_icon_view_set_item_orientation (GTK_ICON_VIEW (iconview), GTK_ORIENTATION_HORIZONTAL);
 
-  area = cell_area_scaffold_get_area (CELL_AREA_SCAFFOLD (scaffold));
+  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
 
   cell_1 = renderer = gtk_cell_renderer_text_new ();
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, FALSE, FALSE);
@@ -112,24 +112,23 @@ simple_scaffold (void)
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE, FALSE);
   gtk_cell_area_attribute_connect (area, renderer, "text", SIMPLE_COLUMN_DESCRIPTION);
 
-  return scaffold;
+  return iconview;
 }
 
 static void
 orientation_changed (GtkComboBox      *combo,
-		     CellAreaScaffold *scaffold)
+		     GtkIconView *iconview)
 {
-  GtkCellArea   *area = cell_area_scaffold_get_area (scaffold);
   GtkOrientation orientation = gtk_combo_box_get_active (combo);
 
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (area), orientation);
+  gtk_icon_view_set_item_orientation (iconview, orientation);
 }
 
 static void
 align_cell_2_toggled (GtkToggleButton  *toggle,
-		      CellAreaScaffold *scaffold)
+		      GtkIconView *iconview)
 {
-  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
   gboolean     align = gtk_toggle_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_2, "align", align, NULL);
@@ -137,9 +136,9 @@ align_cell_2_toggled (GtkToggleButton  *toggle,
 
 static void
 align_cell_3_toggled (GtkToggleButton  *toggle,
-		      CellAreaScaffold *scaffold)
+		      GtkIconView *iconview)
 {
-  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
   gboolean     align = gtk_toggle_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_3, "align", align, NULL);
@@ -147,9 +146,9 @@ align_cell_3_toggled (GtkToggleButton  *toggle,
 
 static void
 expand_cell_1_toggled (GtkToggleButton  *toggle,
-		       CellAreaScaffold *scaffold)
+		       GtkIconView *iconview)
 {
-  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
   gboolean     expand = gtk_toggle_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_1, "expand", expand, NULL);
@@ -157,9 +156,9 @@ expand_cell_1_toggled (GtkToggleButton  *toggle,
 
 static void
 expand_cell_2_toggled (GtkToggleButton  *toggle,
-		       CellAreaScaffold *scaffold)
+		       GtkIconView *iconview)
 {
-  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
   gboolean     expand = gtk_toggle_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_2, "expand", expand, NULL);
@@ -167,9 +166,9 @@ expand_cell_2_toggled (GtkToggleButton  *toggle,
 
 static void
 expand_cell_3_toggled (GtkToggleButton  *toggle,
-		       CellAreaScaffold *scaffold)
+		       GtkIconView *iconview)
 {
-  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
   gboolean     expand = gtk_toggle_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_3, "expand", expand, NULL);
@@ -179,13 +178,13 @@ static void
 simple_cell_area (void)
 {
   GtkWidget *window, *widget;
-  GtkWidget *scaffold, *frame, *vbox, *hbox;
+  GtkWidget *iconview, *frame, *vbox, *hbox;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
   gtk_window_set_title (GTK_WINDOW (window), "CellArea expand and alignments");
 
-  scaffold = simple_scaffold ();
+  iconview = simple_iconview ();
 
   hbox  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   frame = gtk_frame_new (NULL);
@@ -195,7 +194,7 @@ simple_cell_area (void)
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (frame), scaffold);
+  gtk_container_add (GTK_CONTAINER (frame), iconview);
 
   gtk_box_pack_end (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
 
@@ -212,7 +211,7 @@ simple_cell_area (void)
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "changed",
-                    G_CALLBACK (orientation_changed), scaffold);
+                    G_CALLBACK (orientation_changed), iconview);
 
   widget = gtk_check_button_new_with_label ("Align 2nd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
@@ -220,7 +219,7 @@ simple_cell_area (void)
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
   
   g_signal_connect (G_OBJECT (widget), "toggled",
-                    G_CALLBACK (align_cell_2_toggled), scaffold);
+                    G_CALLBACK (align_cell_2_toggled), iconview);
 
   widget = gtk_check_button_new_with_label ("Align 3rd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
@@ -228,7 +227,7 @@ simple_cell_area (void)
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
   
   g_signal_connect (G_OBJECT (widget), "toggled",
-                    G_CALLBACK (align_cell_3_toggled), scaffold);
+                    G_CALLBACK (align_cell_3_toggled), iconview);
 
 
   widget = gtk_check_button_new_with_label ("Expand 1st Cell");
@@ -237,7 +236,7 @@ simple_cell_area (void)
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
   
   g_signal_connect (G_OBJECT (widget), "toggled",
-                    G_CALLBACK (expand_cell_1_toggled), scaffold);
+                    G_CALLBACK (expand_cell_1_toggled), iconview);
 
   widget = gtk_check_button_new_with_label ("Expand 2nd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
@@ -245,7 +244,7 @@ simple_cell_area (void)
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
   
   g_signal_connect (G_OBJECT (widget), "toggled",
-                    G_CALLBACK (expand_cell_2_toggled), scaffold);
+                    G_CALLBACK (expand_cell_2_toggled), iconview);
 
   widget = gtk_check_button_new_with_label ("Expand 3rd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
@@ -253,7 +252,7 @@ simple_cell_area (void)
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
   
   g_signal_connect (G_OBJECT (widget), "toggled",
-                    G_CALLBACK (expand_cell_3_toggled), scaffold);
+                    G_CALLBACK (expand_cell_3_toggled), iconview);
 
   gtk_container_add (GTK_CONTAINER (window), hbox);
 
@@ -309,9 +308,9 @@ focus_list_model (void)
 static void
 cell_toggled (GtkCellRendererToggle *cell_renderer,
 	      const gchar           *path,
-	      CellAreaScaffold      *scaffold)
+	      GtkIconView      *iconview)
 {
-  GtkTreeModel *model = cell_area_scaffold_get_model (scaffold);
+  GtkTreeModel *model = gtk_icon_view_get_model (iconview);
   GtkTreeIter   iter;
   gboolean      active;
 
@@ -328,9 +327,9 @@ static void
 cell_edited (GtkCellRendererToggle *cell_renderer,
 	     const gchar           *path,
 	     const gchar           *new_text,
-	     CellAreaScaffold      *scaffold)
+	     GtkIconView      *iconview)
 {
-  GtkTreeModel *model = cell_area_scaffold_get_model (scaffold);
+  GtkTreeModel *model = gtk_icon_view_get_model (iconview);
   GtkTreeIter   iter;
 
   g_print ("Cell edited with new text '%s' !\n", new_text);
@@ -342,21 +341,22 @@ cell_edited (GtkCellRendererToggle *cell_renderer,
 }
 
 static GtkWidget *
-focus_scaffold (gboolean color_bg, GtkCellRenderer **focus, GtkCellRenderer **sibling)
+focus_iconview (gboolean color_bg, GtkCellRenderer **focus, GtkCellRenderer **sibling)
 {
   GtkTreeModel *model;
-  GtkWidget *scaffold;
+  GtkWidget *iconview;
   GtkCellArea *area;
   GtkCellRenderer *renderer, *toggle;
 
-  scaffold = cell_area_scaffold_new ();
-  gtk_widget_show (scaffold);
+  iconview = gtk_icon_view_new ();
+  gtk_widget_show (iconview);
 
   model = focus_list_model ();
 
-  cell_area_scaffold_set_model (CELL_AREA_SCAFFOLD (scaffold), model);
+  gtk_icon_view_set_model (GTK_ICON_VIEW (iconview), model);
+  gtk_icon_view_set_item_orientation (GTK_ICON_VIEW (iconview), GTK_ORIENTATION_HORIZONTAL);
 
-  area = cell_area_scaffold_get_area (CELL_AREA_SCAFFOLD (scaffold));
+  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
 
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (G_OBJECT (renderer), "editable", TRUE, NULL);
@@ -367,7 +367,7 @@ focus_scaffold (gboolean color_bg, GtkCellRenderer **focus, GtkCellRenderer **si
     g_object_set (G_OBJECT (renderer), "cell-background", "red", NULL);
 
   g_signal_connect (G_OBJECT (renderer), "edited",
-		    G_CALLBACK (cell_edited), scaffold);
+		    G_CALLBACK (cell_edited), iconview);
 
   toggle = renderer = gtk_cell_renderer_toggle_new ();
   g_object_set (G_OBJECT (renderer), "xalign", 0.0F, NULL);
@@ -381,7 +381,7 @@ focus_scaffold (gboolean color_bg, GtkCellRenderer **focus, GtkCellRenderer **si
     *focus = renderer;
 
   g_signal_connect (G_OBJECT (renderer), "toggled",
-		    G_CALLBACK (cell_toggled), scaffold);
+		    G_CALLBACK (cell_toggled), iconview);
 
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (G_OBJECT (renderer), 
@@ -400,14 +400,14 @@ focus_scaffold (gboolean color_bg, GtkCellRenderer **focus, GtkCellRenderer **si
 
   gtk_cell_area_add_focus_sibling (area, toggle, renderer);
 
-  return scaffold;
+  return iconview;
 }
 
 static void
 focus_sibling_toggled (GtkToggleButton  *toggle,
-		       CellAreaScaffold *scaffold)
+		       GtkIconView *iconview)
 {
-  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
   gboolean     active = gtk_toggle_button_get_active (toggle);
 
   if (active)
@@ -415,7 +415,7 @@ focus_sibling_toggled (GtkToggleButton  *toggle,
   else
     gtk_cell_area_remove_focus_sibling (area, focus_renderer, sibling_renderer);
 
-  gtk_widget_queue_draw (GTK_WIDGET (scaffold));
+  gtk_widget_queue_draw (GTK_WIDGET (iconview));
 }
 
 
@@ -423,7 +423,7 @@ static void
 focus_cell_area (void)
 {
   GtkWidget *window, *widget;
-  GtkWidget *scaffold, *frame, *vbox, *hbox;
+  GtkWidget *iconview, *frame, *vbox, *hbox;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   hbox  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
@@ -431,7 +431,7 @@ focus_cell_area (void)
 
   gtk_window_set_title (GTK_WINDOW (window), "Focus and editable cells");
 
-  scaffold = focus_scaffold (FALSE, &focus_renderer, &sibling_renderer);
+  iconview = focus_iconview (FALSE, &focus_renderer, &sibling_renderer);
 
   frame = gtk_frame_new (NULL);
   gtk_widget_show (frame);
@@ -439,7 +439,7 @@ focus_cell_area (void)
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (frame), scaffold);
+  gtk_container_add (GTK_CONTAINER (frame), iconview);
 
   gtk_box_pack_end (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
 
@@ -456,7 +456,7 @@ focus_cell_area (void)
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "changed",
-                    G_CALLBACK (orientation_changed), scaffold);
+                    G_CALLBACK (orientation_changed), iconview);
 
   widget = gtk_check_button_new_with_label ("Focus Sibling");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
@@ -464,7 +464,7 @@ focus_cell_area (void)
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "toggled",
-                    G_CALLBACK (focus_sibling_toggled), scaffold);
+                    G_CALLBACK (focus_sibling_toggled), iconview);
 
   gtk_container_add (GTK_CONTAINER (window), hbox);
 
@@ -478,9 +478,9 @@ focus_cell_area (void)
  *******************************************************/
 static void
 cell_spacing_changed (GtkSpinButton    *spin_button,
-		      CellAreaScaffold *scaffold)
+		      GtkIconView *iconview)
 {
-  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (iconview));
   gint        value;
 
   value = (gint)gtk_spin_button_get_value (spin_button);
@@ -490,31 +490,31 @@ cell_spacing_changed (GtkSpinButton    *spin_button,
 
 static void
 row_spacing_changed (GtkSpinButton    *spin_button,
-		     CellAreaScaffold *scaffold)
+		     GtkIconView *iconview)
 {
   gint value;
 
   value = (gint)gtk_spin_button_get_value (spin_button);
 
-  cell_area_scaffold_set_row_spacing (scaffold, value);
+  gtk_icon_view_set_row_spacing (iconview, value);
 }
 
 static void
-indentation_changed (GtkSpinButton    *spin_button,
-		     CellAreaScaffold *scaffold)
+item_padding_changed (GtkSpinButton    *spin_button,
+		     GtkIconView *iconview)
 {
   gint value;
 
   value = (gint)gtk_spin_button_get_value (spin_button);
 
-  cell_area_scaffold_set_indentation (scaffold, value);
+  gtk_icon_view_set_item_padding (iconview, value);
 }
 
 static void
 background_area (void)
 {
   GtkWidget *window, *widget, *label, *main_vbox;
-  GtkWidget *scaffold, *frame, *vbox, *hbox;
+  GtkWidget *iconview, *frame, *vbox, *hbox;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   hbox  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
@@ -526,14 +526,14 @@ background_area (void)
   gtk_window_set_title (GTK_WINDOW (window), "Background Area");
 
   label = gtk_label_new ("In this example, row spacing gets devided into the background area, "
-			 "column spacing is added between each background area, indentation is "
+			 "column spacing is added between each background area, item_padding is "
 			 "prepended space distributed to the background area.");
   gtk_label_set_line_wrap  (GTK_LABEL (label), TRUE);
   gtk_label_set_width_chars  (GTK_LABEL (label), 40);
   gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (main_vbox), label, FALSE, FALSE, 0);
 
-  scaffold = focus_scaffold (TRUE, NULL, NULL);
+  iconview = focus_iconview (TRUE, NULL, NULL);
 
   frame = gtk_frame_new (NULL);
   gtk_widget_show (frame);
@@ -541,7 +541,7 @@ background_area (void)
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
 
-  gtk_container_add (GTK_CONTAINER (frame), scaffold);
+  gtk_container_add (GTK_CONTAINER (frame), iconview);
 
   gtk_box_pack_end (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
 
@@ -559,7 +559,7 @@ background_area (void)
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "changed",
-                    G_CALLBACK (orientation_changed), scaffold);
+                    G_CALLBACK (orientation_changed), iconview);
 
   widget = gtk_spin_button_new_with_range (0, 10, 1);
   label = gtk_label_new ("Cell spacing");
@@ -572,10 +572,11 @@ background_area (void)
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "value-changed",
-                    G_CALLBACK (cell_spacing_changed), scaffold);
+                    G_CALLBACK (cell_spacing_changed), iconview);
 
 
   widget = gtk_spin_button_new_with_range (0, 10, 1);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), gtk_icon_view_get_row_spacing (GTK_ICON_VIEW (iconview)));
   label = gtk_label_new ("Row spacing");
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_widget_show (hbox);
@@ -586,10 +587,11 @@ background_area (void)
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "value-changed",
-                    G_CALLBACK (row_spacing_changed), scaffold);
+                    G_CALLBACK (row_spacing_changed), iconview);
 
   widget = gtk_spin_button_new_with_range (0, 30, 1);
-  label = gtk_label_new ("Intentation");
+  label = gtk_label_new ("Item padding");
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), gtk_icon_view_get_item_padding (GTK_ICON_VIEW (iconview)));
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_widget_show (hbox);
   gtk_widget_show (label);
@@ -599,7 +601,7 @@ background_area (void)
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
   g_signal_connect (G_OBJECT (widget), "value-changed",
-                    G_CALLBACK (indentation_changed), scaffold);
+                    G_CALLBACK (item_padding_changed), iconview);
 
   gtk_widget_show (window);
 }

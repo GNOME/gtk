@@ -377,9 +377,7 @@ testscrolledwindow_SOURCES =	\
 	testscrolledwindow.c
 
 testcellarea_SOURCES =		\
-	testcellarea.c		\
-	cellareascaffold.c	\
-	cellareascaffold.h
+	testcellarea.c
 
 testtreemenu_SOURCES =		\
 	testtreemenu.c
