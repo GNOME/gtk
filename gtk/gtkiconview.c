@@ -1463,16 +1463,31 @@ static void
 gtk_icon_view_compute_n_items_for_size (GtkIconView    *icon_view,
                                         GtkOrientation  orientation,
                                         gint            size,
-                                        gint           *min_columns,
-                                        gint           *max_columns)
+                                        gint           *min_items,
+                                        gint           *max_items)
 {
   GtkIconViewPrivate *priv = icon_view->priv;
   int minimum, natural;
 
   if (priv->columns > 0)
     {
-      *min_columns = priv->columns;
-      *max_columns = priv->columns;
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          if (min_items)
+            *min_items = priv->columns;
+          if (max_items)
+            *max_items = priv->columns;
+        }
+      else
+        {
+          int n_items = gtk_icon_view_get_n_items (icon_view);
+
+          if (min_items)
+            *min_items = (n_items + priv->columns - 1) / priv->columns;
+          if (max_items)
+            *max_items = (n_items + priv->columns - 1) / priv->columns;
+        }
+
       return;
     }
 
@@ -1493,14 +1508,21 @@ gtk_icon_view_compute_n_items_for_size (GtkIconView    *icon_view,
       natural += priv->row_spacing;
     }
 
-  if (size <= minimum)
-    *max_columns = 1;
-  else
-    *max_columns = size / minimum;
-  if (size <= natural)
-    *min_columns = 1;
-  else
-    *min_columns = size / natural;
+  if (max_items)
+    {
+      if (size <= minimum)
+        *max_items = 1;
+      else
+        *max_items = size / minimum;
+    }
+
+  if (min_items)
+    {
+      if (size <= natural)
+        *min_items = 1;
+      else
+        *min_items = size / natural;
+    }
 }
 
 static GtkSizeRequestMode
@@ -1545,17 +1567,16 @@ gtk_icon_view_get_preferred_width_for_height (GtkWidget *widget,
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
   GtkIconViewPrivate *priv = icon_view->priv;
-  int item_min, item_nat, min_rows, max_rows, n_items;
+  int item_min, item_nat, rows, n_items;
 
-  gtk_icon_view_compute_n_items_for_size (icon_view, GTK_ORIENTATION_VERTICAL, height, &min_rows, &max_rows);
+  gtk_icon_view_compute_n_items_for_size (icon_view, GTK_ORIENTATION_VERTICAL, height, &rows, NULL);
   n_items = gtk_icon_view_get_n_items (icon_view);
 
   height = height + priv->row_spacing - 2 * priv->margin;
 
-  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_HORIZONTAL, height / max_rows - priv->row_spacing, &item_min, NULL);
-  *minimum = item_min * ((n_items + max_rows - 1) / max_rows);
-  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_HORIZONTAL, height / min_rows - priv->row_spacing, NULL, &item_nat);
-  *natural = item_nat * ((n_items + min_rows - 1) / min_rows);
+  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_HORIZONTAL, height / rows - priv->row_spacing, &item_min, &item_nat);
+  *minimum = item_min * ((n_items + rows - 1) / rows);
+  *natural = item_nat * ((n_items + rows - 1) / rows);
 
   *minimum += 2 * priv->margin;
   *natural += 2 * priv->margin;
@@ -1598,17 +1619,16 @@ gtk_icon_view_get_preferred_height_for_width (GtkWidget *widget,
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
   GtkIconViewPrivate *priv = icon_view->priv;
-  int item_min, item_nat, min_columns, max_columns, n_items;
+  int item_min, item_nat, columns, n_items;
 
-  gtk_icon_view_compute_n_items_for_size (icon_view, GTK_ORIENTATION_HORIZONTAL, width, &min_columns, &max_columns);
+  gtk_icon_view_compute_n_items_for_size (icon_view, GTK_ORIENTATION_HORIZONTAL, width, NULL, &columns);
   n_items = gtk_icon_view_get_n_items (icon_view);
 
   width = width + priv->column_spacing - 2 * priv->margin;
 
-  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_VERTICAL, width / max_columns - priv->column_spacing, &item_min, NULL);
-  *minimum = (item_min + priv->row_spacing) * ((n_items + max_columns - 1) / max_columns) - priv->row_spacing;
-  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_VERTICAL, width / min_columns - priv->column_spacing, NULL, &item_nat);
-  *natural = (item_nat + priv->row_spacing) * ((n_items + min_columns - 1) / min_columns) - priv->row_spacing;
+  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_VERTICAL, width / columns - priv->column_spacing, &item_min, &item_nat);
+  *minimum = (item_min + priv->row_spacing) * ((n_items + columns - 1) / columns) - priv->row_spacing;
+  *natural = (item_nat + priv->row_spacing) * ((n_items + columns - 1) / columns) - priv->row_spacing;
 
   *minimum += 2 * priv->margin;
   *natural += 2 * priv->margin;
