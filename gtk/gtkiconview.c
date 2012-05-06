@@ -1451,6 +1451,14 @@ gtk_icon_view_get_preferred_item_size (GtkIconView    *icon_view,
 
   cell_area_get_preferred_size (icon_view, context, orientation, for_size, minimum, natural);
 
+  if (orientation == GTK_ORIENTATION_HORIZONTAL && priv->item_width >= 0)
+    {
+      if (minimum)
+        *minimum = MAX (*minimum, priv->item_width);
+      if (natural)
+        *natural = *minimum;
+    }
+
   if (minimum)
     *minimum += 2 * priv->item_padding;
   if (natural)
