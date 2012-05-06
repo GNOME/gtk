@@ -768,7 +768,6 @@ gtk_socket_add_grabbed_key (GtkSocket       *socket,
 
 /**
  * gtk_socket_remove_grabbed_key:
- *
  * @socket: a #GtkSocket
  * @keyval: a key
  * @modifiers: modifiers for the key
@@ -1160,7 +1159,6 @@ gtk_socket_handle_map_request (GtkSocket *socket)
 
 /**
  * gtk_socket_unmap_notify:
- *
  * @socket: a #GtkSocket
  *
  * Called from the GtkSocket backend when the plug has been unmapped ???
