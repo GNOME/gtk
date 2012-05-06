@@ -2777,7 +2777,8 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   GtkIconViewPrivate *priv = icon_view->priv;
   GtkWidget *widget = GTK_WIDGET (icon_view);
   GList *items;
-  gint item_width;
+  gint min_item_width, max_item_width; /* These include item_padding */
+  gint item_width; /* this doesn't include item_padding */
   gint n_columns, n_rows, n_items;
   gint col, row;
   GtkRequestedSize *sizes;
@@ -2795,12 +2796,13 @@ gtk_icon_view_layout (GtkIconView *icon_view)
                                           &n_columns);
   n_rows = (n_items + n_columns - 1) / n_columns;
 
+  gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_HORIZONTAL, -1, &min_item_width, &max_item_width);
+
   if (n_columns <= 1)
     {
       /* We might need vertical scrolling here */
-      gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_HORIZONTAL, -1, &item_width, NULL);
-      item_width += 2 * priv->item_padding + 2 * priv->margin;
-      priv->width = MAX (item_width, gtk_widget_get_allocated_width (widget));
+      int min_width = min_item_width + 2 * priv->margin;
+      priv->width = MAX (min_width, gtk_widget_get_allocated_width (widget));
     }
   else
     {
@@ -2809,6 +2811,7 @@ gtk_icon_view_layout (GtkIconView *icon_view)
 
   item_width = (priv->width - 2 * priv->margin + priv->column_spacing) / n_columns;
   item_width -= priv->column_spacing;
+  item_width = MIN (item_width, max_item_width);
   item_width -= 2 * priv->item_padding;
 
   gtk_cell_area_context_reset (priv->cell_area_context);
