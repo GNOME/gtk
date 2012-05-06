@@ -42,9 +42,6 @@ struct _GtkIconViewPrivate
 
   gulong              add_editable_id;
   gulong              remove_editable_id;
-  gulong              context_changed_id;
-
-  GPtrArray          *row_contexts;
 
   gint width, height;
 
