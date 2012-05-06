@@ -791,8 +791,9 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Sets the text area's border between the text and the frame.
    *
-   * Deprecated: 3.4: Use the standard border and padding CSS properties;
-   *   the value of this style property is ignored.
+   * Deprecated: 3.4: Use the standard border and padding CSS properties
+   *   (through objects like #GtkStyleContext and #GtkCssProvider); the value
+   *   of this style property is ignored.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_INNER_BORDER,
@@ -1380,8 +1381,9 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Since: 2.16
    *
-   * Deprecated: 3.4: Use the standard margin CSS property;
-   *   the value of this style property is ignored.
+   * Deprecated: 3.4: Use the standard margin CSS property (through objects
+   *   like #GtkStyleContext and #GtkCssProvider); the value of this style
+   *   property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("progress-border",
@@ -1876,8 +1878,9 @@ gtk_entry_class_init (GtkEntryClass *class)
    *
    * Since: 2.10
    *
-   * Deprecated: 3.4: Use the standard border and padding CSS properties;
-   *   the value of this style property is ignored.
+   * Deprecated: 3.4: Use the standard border and padding CSS properties
+   *   (through objects like #GtkStyleContext and #GtkCssProvider); the value
+   *   of this style property is ignored.
    */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("inner-border",
@@ -7334,8 +7337,9 @@ gtk_entry_get_has_frame (GtkEntry *entry)
  *
  * Since: 2.10
  *
- * Deprecated: 3.4: Use the standard border and padding CSS properties;
- *   the value set with this function is ignored by #GtkEntry.
+ * Deprecated: 3.4: Use the standard border and padding CSS properties (through
+ *   objects like #GtkStyleContext and #GtkCssProvider); the value set with
+ *   this function is ignored by #GtkEntry.
  **/
 void
 gtk_entry_set_inner_border (GtkEntry        *entry,
@@ -7357,8 +7361,9 @@ gtk_entry_set_inner_border (GtkEntry        *entry,
  *
  * Since: 2.10
  *
- * Deprecated: 3.4: Use the standard border and padding CSS properties;
- *   the value returned by this function is ignored by #GtkEntry.
+ * Deprecated: 3.4: Use the standard border and padding CSS properties (through
+ *   objects like #GtkStyleContext and #GtkCssProvider); the value returned by
+ *   this function is ignored by #GtkEntry.
  **/
 const GtkBorder *
 gtk_entry_get_inner_border (GtkEntry *entry)
