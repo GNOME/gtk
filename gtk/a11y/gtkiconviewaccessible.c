@@ -23,7 +23,6 @@
 
 #include "gtk/gtkadjustment.h"
 #include "gtk/gtkiconviewprivate.h"
-#include "gtk/gtkcellareacontext.h"
 #include "gtk/gtkcellrendererpixbuf.h"
 #include "gtk/gtkcellrenderertext.h"
 #include "gtk/gtkpango.h"
@@ -220,11 +219,12 @@ get_pixbuf_box (GtkIconView     *icon_view,
                 GdkRectangle    *box)
 {
   GetPixbufBoxData data = { { 0, }, FALSE };
+  GtkCellAreaContext *context;
+
+  context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
 
   _gtk_icon_view_set_cell_data (icon_view, item);
-  gtk_cell_area_context_allocate (icon_view->priv->cell_area_context, item->cell_area.width, item->cell_area.height);
-  gtk_cell_area_foreach_alloc (icon_view->priv->cell_area,
-                               icon_view->priv->cell_area_context,
+  gtk_cell_area_foreach_alloc (icon_view->priv->cell_area, context,
                                GTK_WIDGET (icon_view),
                                &item->cell_area, &item->cell_area,
                                (GtkCellAllocCallback)get_pixbuf_foreach, &data);
