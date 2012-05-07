@@ -1543,8 +1543,16 @@ gtk_icon_view_get_preferred_width (GtkWidget *widget,
     {
       int n_items = gtk_icon_view_get_n_items (icon_view);
 
-      *minimum = n_items ? item_min : 0;
-      *natural = item_nat * n_items + priv->column_spacing * (n_items - 1);
+      if (n_items == 0)
+        {
+          *minimum = 0;
+          *natural = 0;
+        }
+      else
+        {
+          *minimum = item_min;
+          *natural = item_nat * n_items + priv->column_spacing * (n_items - 1);
+        }
     }
 
   *minimum += 2 * priv->margin;
@@ -1595,8 +1603,16 @@ gtk_icon_view_get_preferred_height (GtkWidget *widget,
     }
   else
     {
-      *minimum = n_items ? item_min : 0;
-      *natural = item_nat * n_items + priv->row_spacing * (n_items - 1);
+      if (n_items == 0)
+        {
+          *minimum = 0;
+          *natural = 0;
+        }
+      else
+        {
+          *minimum = item_min;
+          *natural = item_nat * n_items + priv->row_spacing * (n_items - 1);
+        }
     }
 
   *minimum += 2 * priv->margin;
