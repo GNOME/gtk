@@ -971,6 +971,9 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->item_padding = 6;
 
   icon_view->priv->draw_focus = TRUE;
+
+  icon_view->priv->row_contexts = 
+    g_ptr_array_new_with_free_func ((GDestroyNotify)g_object_unref);
 }
 
 /* GObject methods */
@@ -1005,6 +1008,12 @@ gtk_icon_view_dispose (GObject *object)
     {
       g_object_unref (priv->cell_area_context);
       priv->cell_area_context = NULL;
+    }
+
+  if (priv->row_contexts)
+    {
+      g_ptr_array_free (priv->row_contexts, TRUE);
+      priv->row_contexts = NULL;
     }
 
   if (priv->cell_area)
@@ -2091,10 +2100,11 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
   if (start_editing && 
       icon_view->priv->cell_area)
     {
+      GtkCellAreaContext *context;
+
+      context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
       _gtk_icon_view_set_cell_data (icon_view, item);
-      gtk_cell_area_context_allocate (icon_view->priv->cell_area_context, item->cell_area.width, item->cell_area.height);
-      gtk_cell_area_activate (icon_view->priv->cell_area,
-                              icon_view->priv->cell_area_context, 
+      gtk_cell_area_activate (icon_view->priv->cell_area, context, 
 			      GTK_WIDGET (icon_view), &item->cell_area, 
 			      0 /* XXX flags */, TRUE);
     }
@@ -2246,10 +2256,12 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 
 	  if (cell != NULL && gtk_cell_renderer_is_activatable (cell))
 	    {
+	      GtkCellAreaContext *context;
+
+	      context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
+
 	      _gtk_icon_view_set_cell_data (icon_view, item);
-              gtk_cell_area_context_allocate (icon_view->priv->cell_area_context, item->cell_area.width, item->cell_area.height);
-	      gtk_cell_area_activate (icon_view->priv->cell_area,
-                                      icon_view->priv->cell_area_context,
+	      gtk_cell_area_activate (icon_view->priv->cell_area, context,
 				      GTK_WIDGET (icon_view),
 				      &item->cell_area, 0/* XXX flags */, FALSE);
 	    }
@@ -2519,16 +2531,17 @@ gtk_icon_view_item_hit_test (GtkIconView      *icon_view,
 			     gint              height)
 {
   HitTestData data = { { x, y, width, height }, FALSE };
+  GtkCellAreaContext *context;
   GdkRectangle *item_area = &item->cell_area;
    
   if (MIN (x + width, item_area->x + item_area->width) - MAX (x, item_area->x) <= 0 ||
       MIN (y + height, item_area->y + item_area->height) - MAX (y, item_area->y) <= 0)
     return FALSE;
 
+  context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
+
   _gtk_icon_view_set_cell_data (icon_view, item);
-  gtk_cell_area_context_allocate (icon_view->priv->cell_area_context, item->cell_area.width, item->cell_area.height);
-  gtk_cell_area_foreach_alloc (icon_view->priv->cell_area,
-                               icon_view->priv->cell_area_context,
+  gtk_cell_area_foreach_alloc (icon_view->priv->cell_area, context,
 			       GTK_WIDGET (icon_view),
 			       item_area, item_area,
 			       (GtkCellAllocCallback)hit_test, &data);
@@ -2588,16 +2601,15 @@ static gboolean
 gtk_icon_view_real_activate_cursor_item (GtkIconView *icon_view)
 {
   GtkTreePath *path;
+  GtkCellAreaContext *context;
 
   if (!icon_view->priv->cursor_item)
     return FALSE;
 
+  context = g_ptr_array_index (icon_view->priv->row_contexts, icon_view->priv->cursor_item->row);
+
   _gtk_icon_view_set_cell_data (icon_view, icon_view->priv->cursor_item);
-  gtk_cell_area_context_allocate (icon_view->priv->cell_area_context,
-                                  icon_view->priv->cursor_item->cell_area.width,
-                                  icon_view->priv->cursor_item->cell_area.height);
-  gtk_cell_area_activate (icon_view->priv->cell_area,
-                          icon_view->priv->cell_area_context,
+  gtk_cell_area_activate (icon_view->priv->cell_area, context,
                           GTK_WIDGET (icon_view),
                           &icon_view->priv->cursor_item->cell_area,
                           0 /* XXX flags */,
@@ -2827,8 +2839,10 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   item_width = MIN (item_width, max_item_width);
   item_width -= 2 * priv->item_padding;
 
+  /* Clear the per row contexts */
+  g_ptr_array_set_size (icon_view->priv->row_contexts, 0);
+
   gtk_cell_area_context_reset (priv->cell_area_context);
-  gtk_cell_area_context_allocate (priv->cell_area_context, item_width, -1);
   /* because layouting is complicated. We designed an API
    * that is O(N²) and nonsensical.
    * And we're proud of it. */
@@ -2848,20 +2862,23 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   /* Collect the heights for all rows */
   for (row = 0; row < n_rows; row++)
     {
+      GtkCellAreaContext *context = gtk_cell_area_copy_context (priv->cell_area, priv->cell_area_context);
+      g_ptr_array_add (priv->row_contexts, context);
+
       for (col = 0; col < n_columns && items; col++, items = items->next)
         {
           GtkIconViewItem *item = items->data;
 
           _gtk_icon_view_set_cell_data (icon_view, item);
           gtk_cell_area_get_preferred_height_for_width (priv->cell_area,
-                                                        priv->cell_area_context,
+                                                        context,
                                                         widget,
                                                         item_width, 
                                                         NULL, NULL);
         }
       
       sizes[row].data = GINT_TO_POINTER (row);
-      gtk_cell_area_context_get_preferred_height_for_width (priv->cell_area_context,
+      gtk_cell_area_context_get_preferred_height_for_width (context,
                                                             item_width,
                                                             &sizes[row].minimum_size,
                                                             &sizes[row].natural_size);
@@ -2884,6 +2901,9 @@ gtk_icon_view_layout (GtkIconView *icon_view)
 
   for (row = 0; row < n_rows; row++)
     {
+      GtkCellAreaContext *context = g_ptr_array_index (priv->row_contexts, row);
+      gtk_cell_area_context_allocate (context, item_width, sizes[row].minimum_size);
+
       priv->height += priv->item_padding;
 
       for (col = 0; col < n_columns && items; col++, items = items->next)
@@ -2938,6 +2958,7 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
   GtkStyleContext *style_context;
   GtkWidget *widget = GTK_WIDGET (icon_view);
   GtkIconViewPrivate *priv = icon_view->priv;
+  GtkCellAreaContext *context;
 
   if (priv->model == NULL)
     return;
@@ -2992,8 +3013,8 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
   cell_area.width  = item->cell_area.width;
   cell_area.height = item->cell_area.height;
 
-  gtk_cell_area_context_allocate (priv->cell_area_context, item->cell_area.width, item->cell_area.height);
-  gtk_cell_area_render (priv->cell_area, priv->cell_area_context,
+  context = g_ptr_array_index (priv->row_contexts, item->row);
+  gtk_cell_area_render (priv->cell_area, context,
                         widget, cr, &cell_area, &cell_area, flags,
                         draw_focus);
 
@@ -3170,19 +3191,17 @@ _gtk_icon_view_get_item_at_coords (GtkIconView          *icon_view,
 	  if (only_in_cell || cell_at_pos)
 	    {
 	      GtkCellRenderer *cell = NULL;
+	      GtkCellAreaContext *context;
 
+	      context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
 	      _gtk_icon_view_set_cell_data (icon_view, item);
 
 	      if (x >= item_area->x && x <= item_area->x + item_area->width &&
 		  y >= item_area->y && y <= item_area->y + item_area->height)
-                {
-                  gtk_cell_area_context_allocate (icon_view->priv->cell_area_context, item->cell_area.width, item->cell_area.height);
-                  cell = gtk_cell_area_get_cell_at_position (icon_view->priv->cell_area,
-                                                             icon_view->priv->cell_area_context,
-                                                             GTK_WIDGET (icon_view),
-                                                             item_area,
-                                                             x, y, NULL);
-                }
+		cell = gtk_cell_area_get_cell_at_position (icon_view->priv->cell_area, context,
+							   GTK_WIDGET (icon_view),
+							   item_area,
+							   x, y, NULL);
 
 	      if (cell_at_pos)
 		*cell_at_pos = cell;
@@ -4423,10 +4442,11 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
 
   if (cell)
     {
+      GtkCellAreaContext *context;
+
+      context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
       _gtk_icon_view_set_cell_data (icon_view, item);
-      gtk_cell_area_context_allocate (icon_view->priv->cell_area_context, item->cell_area.width, item->cell_area.height);
-      gtk_cell_area_get_cell_allocation (icon_view->priv->cell_area,
-                                         icon_view->priv->cell_area_context,
+      gtk_cell_area_get_cell_allocation (icon_view->priv->cell_area, context,
 					 GTK_WIDGET (icon_view),
 					 cell, &item->cell_area, &rect);
     }
