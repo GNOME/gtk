@@ -145,6 +145,10 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
+#define ACTION_AREA_DEFAULT_BORDER 5
+#define ACTION_AREA_DEFAULT_SPACING 6
+#define CONTENT_AREA_DEFAULT_BORDER 8
+#define CONTENT_AREA_DEFAULT_SPACING 16
 
 static void     gtk_info_bar_set_property (GObject        *object,
                                            guint           prop_id,
@@ -467,7 +471,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                                              P_("Width of border around the content area"),
                                                              0,
                                                              G_MAXINT,
-                                                             8,
+                                                             CONTENT_AREA_DEFAULT_BORDER,
                                                              GTK_PARAM_READABLE));
 
   /**
@@ -485,7 +489,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                                              P_("Spacing between elements of the area"),
                                                              0,
                                                              G_MAXINT,
-                                                             16,
+                                                             CONTENT_AREA_DEFAULT_SPACING,
                                                              GTK_PARAM_READABLE));
 
   /**
@@ -502,7 +506,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                                              P_("Spacing between buttons"),
                                                              0,
                                                              G_MAXINT,
-                                                             6,
+                                                             ACTION_AREA_DEFAULT_SPACING,
                                                              GTK_PARAM_READABLE));
 
   /**
@@ -519,7 +523,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                                              P_("Width of border around the action area"),
                                                              0,
                                                              G_MAXINT,
-                                                             5,
+                                                             ACTION_AREA_DEFAULT_BORDER,
                                                              GTK_PARAM_READABLE));
 
   binding_set = gtk_binding_set_by_class (klass);
@@ -556,6 +560,12 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
 
   info_bar->priv->content_area = content_area;
   info_bar->priv->action_area = action_area;
+
+  /* set default spacings */
+  gtk_box_set_spacing (GTK_BOX (info_bar->priv->action_area), ACTION_AREA_DEFAULT_SPACING);
+  gtk_container_set_border_width (GTK_CONTAINER (info_bar->priv->action_area), ACTION_AREA_DEFAULT_BORDER);
+  gtk_box_set_spacing (GTK_BOX (info_bar->priv->content_area), CONTENT_AREA_DEFAULT_SPACING);
+  gtk_container_set_border_width (GTK_CONTAINER (info_bar->priv->content_area), CONTENT_AREA_DEFAULT_BORDER);
 
   /* message-type is a CONSTRUCT property, so we init to a value
    * different from its default to trigger its property setter
