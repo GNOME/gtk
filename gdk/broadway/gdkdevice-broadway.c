@@ -40,15 +40,15 @@ static void gdk_broadway_device_warp (GdkDevice *device,
 				      GdkScreen *screen,
 				      gint       x,
 				      gint       y);
-static gboolean gdk_broadway_device_query_state (GdkDevice        *device,
-						 GdkWindow        *window,
-						 GdkWindow       **root_window,
-						 GdkWindow       **child_window,
-						 gint             *root_x,
-						 gint             *root_y,
-						 gint             *win_x,
-						 gint             *win_y,
-						 GdkModifierType  *mask);
+static void gdk_broadway_device_query_state (GdkDevice        *device,
+                                             GdkWindow        *window,
+                                             GdkWindow       **root_window,
+                                             GdkWindow       **child_window,
+                                             gint             *root_x,
+                                             gint             *root_y,
+                                             gint             *win_x,
+                                             gint             *win_y,
+                                             GdkModifierType  *mask);
 static GdkGrabStatus gdk_broadway_device_grab   (GdkDevice     *device,
 						 GdkWindow     *window,
 						 gboolean       owner_events,
@@ -140,7 +140,7 @@ gdk_broadway_device_warp (GdkDevice *device,
 {
 }
 
-static gboolean
+static void
 gdk_broadway_device_query_state (GdkDevice        *device,
 				 GdkWindow        *window,
 				 GdkWindow       **root_window,
@@ -159,7 +159,7 @@ gdk_broadway_device_query_state (GdkDevice        *device,
   gint device_root_x, device_root_y;
 
   if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
-    return FALSE;
+    return;
 
   display = gdk_device_get_display (device);
   broadway_display = GDK_BROADWAY_DISPLAY (display);
@@ -196,7 +196,7 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 	  else
 	    *child_window = toplevel; /* No native children */
 	}
-      return TRUE;
+      return;
     }
 
   /* Fallback when unconnected */
@@ -229,7 +229,7 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 	}
     }
 
-  return TRUE;
+  return;
 }
 
 void
