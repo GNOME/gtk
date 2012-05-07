@@ -92,6 +92,8 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
   gtk_box_set_spacing (GTK_BOX (fc_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
   gtk_container_set_border_width (GTK_CONTAINER (fc_dialog->action_area), 5);
 
+  gtk_window_set_role (GTK_WINDOW (dialog), "GtkFileChooserDialog");
+
   /* We do a signal connection here rather than overriding the method in
    * class_init because GtkDialog::response is a RUN_LAST signal.  We want *our*
    * handler to be run *first*, regardless of whether the user installs response
