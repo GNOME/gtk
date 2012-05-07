@@ -1247,8 +1247,9 @@ if test "x$enable_x11_backend" = xyes; then
   GDK_PRIVATE_PACKAGES="$GDK_PRIVATE_PACKAGES pangoft2"
 fi
 
-GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES $GDK_PRIVATE_PACKAGES` $MATH_LIB"
-GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags $GDK_PACKAGES $GDK_PRIVATE_PACKAGES` $GDK_EXTRA_CFLAGS"
+PKG_CHECK_MODULES(GDK_DEP, $GDK_PACKAGES $GDK_PRIVATE_PACKAGES)
+GDK_DEP_LIBS="$GDK_EXTRA_LIBS $GDK_DEP_LIBS $MATH_LIB"
+GDK_DEP_CFLAGS="$GDK_DEP_CFLAGS $GDK_EXTRA_CFLAGS"
 #
 # If we aren't writing explicit dependencies, then don't put the extra libraries we need
 # into the pkg-config files
@@ -1270,29 +1271,7 @@ AC_SUBST(GDK_DEP_CFLAGS)
 ########################################
 
 ATK_PACKAGES=atk
-AC_MSG_CHECKING(ATK flags)
-if $PKG_CONFIG --exists $ATK_PACKAGES ; then
-        ATK_CFLAGS=`$PKG_CONFIG --cflags $ATK_PACKAGES`
-        ATK_LIBS=`$PKG_CONFIG --libs $ATK_PACKAGES`
-
-        AC_MSG_RESULT($ATK_CFLAGS $ATK_LIBS)
-else
-        AC_MSG_ERROR([
-*** Accessibility Toolkit not found. Accessibility Toolkit is required
-*** to build GTK+.
-])
-fi
-
-if $PKG_CONFIG --uninstalled $ATK_PACKAGES; then
-        :
-else
-	gtk_save_LIBS="$LIBS"
-        LIBS="$ATK_LIBS $LIBS"
-        AC_TRY_LINK_FUNC(atk_object_get_type, : , AC_MSG_ERROR([
-                *** Cannot link to Accessibility Toolkit. Accessibility Toolkit is required
-                *** to build GTK+]))
-        LIBS="$gtk_save_LIBS"
-fi
+PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
 
 GTK_PACKAGES="atk cairo cairo-gobject gdk-pixbuf-2.0 gio-2.0"
 GTK_PRIVATE_PACKAGES=""
@@ -1305,8 +1284,9 @@ fi
 GTK_EXTRA_LIBS=
 
 GTK_EXTRA_CFLAGS=
-GTK_DEP_LIBS="$GDK_EXTRA_LIBS $GTK_DEP_LIBS_FOR_X `$PKG_CONFIG --libs $PANGO_PACKAGES $GTK_PACKAGES_FOR_X $GTK_PACKAGES $GTK_PRIVATE_PACKAGES` $GTK_EXTRA_LIBS $MATH_LIB"
-GTK_DEP_CFLAGS="`$PKG_CONFIG --cflags $GDK_PACKAGES $GTK_PACKAGES $GTK_PRIVATE_PACKAGES` $GDK_EXTRA_CFLAGS $GTK_EXTRA_CFLAGS"
+PKG_CHECK_MODULES(GTK_DEP, $PANGO_PACKAGES $GTK_PACKAGES_FOR_X $GTK_PACKAGES $GTK_PRIVATE_PACKAGES)
+GTK_DEP_LIBS="$GDK_EXTRA_LIBS $GTK_DEP_LIBS_FOR_X $GTK_DEP_LIBS $GTK_EXTRA_LIBS $MATH_LIB"
+GTK_DEP_CFLAGS="$GTK_DEP_CFLAGS $GDK_EXTRA_CFLAGS $GTK_EXTRA_CFLAGS"
 
 if test x"$os_win32" = xyes; then
   GTK_EXTRA_CFLAGS="$msnative_struct"
