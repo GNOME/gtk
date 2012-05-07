@@ -316,6 +316,16 @@ commit_cached_size (GtkWidget         *widget,
     }
 }
 
+static const char *
+get_vfunc_name (GtkSizeGroupMode orientation,
+                gint             for_size)
+{
+  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+    return for_size < 0 ? "get_preferred_width" : "get_preferred_width_for_height";
+  else
+    return for_size < 0 ? "get_preferred_height" : "get_preferred_height_for_width";
+}
+
 /* This is the main function that checks for a cached size and
  * possibly queries the widget class to compute the size if it's
  * not cached. If the for_size here is -1, then get_preferred_width()
@@ -410,8 +420,8 @@ compute_size_for_orientation (GtkWidget         *widget,
 
       if (min_size > nat_size)
         {
-          g_warning ("%s %p reported min size %d and natural size %d; natural size must be >= min size",
-                     G_OBJECT_TYPE_NAME (widget), widget, min_size, nat_size);
+          g_warning ("%s %p reported min size %d and natural size %d in %s(); natural size must be >= min size",
+                     G_OBJECT_TYPE_NAME (widget), widget, min_size, nat_size, get_vfunc_name (orientation, for_size));
         }
 
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
