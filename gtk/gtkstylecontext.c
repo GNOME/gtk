@@ -663,12 +663,7 @@ static void
 gtk_style_context_cascade_changed (GtkStyleCascade *cascade,
                                    GtkStyleContext *context)
 {
-  GtkStyleContextPrivate *priv = context->priv;
-
-  if (priv->widget)
-    _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_SOURCE);
-  else
-    gtk_style_context_invalidate (context);
+  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_SOURCE);
 }
 
 static void
@@ -2556,8 +2551,6 @@ gtk_style_context_set_screen (GtkStyleContext *context,
   priv->screen = screen;
 
   g_object_notify (G_OBJECT (context), "screen");
-
-  gtk_style_context_invalidate (context);
 }
 
 /**
@@ -3162,11 +3155,15 @@ _gtk_style_context_queue_invalidate (GtkStyleContext *context,
 
   priv = context->priv;
 
-  if (priv->widget == NULL && priv->widget_path == NULL)
-    return;
-
-  priv->pending_changes |= change;
-  gtk_style_context_set_invalid (context, TRUE);
+  if (priv->widget != NULL)
+    {
+      priv->pending_changes |= change;
+      gtk_style_context_set_invalid (context, TRUE);
+    }
+  else if (priv->widget_path == NULL)
+    {
+      gtk_style_context_invalidate (context);
+    }
 }
 
 /**
