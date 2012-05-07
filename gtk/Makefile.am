@@ -912,28 +912,41 @@ gtk_use_quartz_c_sources = 	\
 gtk_use_stub_c_sources = 	\
 	gtkmountoperation-stub.c
 gtk_all_c_sources += $(gtk_use_x11_c_sources) $(gtk_use_win32_c_sources) $(gtk_use_quartz_c_sources) $(gtk_use_stub_c_sources)
-if USE_X11
-gtk_private_h_sources += 	\
+gtk_use_x11_private_h_sources = 	\
 	gtkxembed.h		\
 	gtktrayicon.h		\
 	xembed.h
+if USE_X11
 gtk_c_sources += $(gtk_use_x11_c_sources)
-else
-if USE_WIN32
-gtk_private_h_sources += 	\
+gtk_private_h_sources += $(gtk_use_x11_private_h_sources)
+endif
+
+gtk_use_win32_private_h_sources = 	\
 	gtkwin32embed.h		\
 	gtkwin32embedwidget.h
+if USE_WIN32
 gtk_c_sources += $(gtk_use_win32_c_sources)
-else
-if USE_QUARTZ
-gtk_private_h_sources += 	\
+gtk_private_h_sources += $(gtk_use_win32_private_h_sources)
+endif
+
+gtk_use_quartz_private_h_sources = 	\
 	gtksearchenginequartz.h	\
 	gtkmodelmenu-quartz.h \
 	gtkquartz.h
+if USE_QUARTZ
 gtk_c_sources += $(gtk_use_quartz_c_sources)
 libgtk_3_la_CFLAGS = "-xobjective-c"
+gtk_private_h_sources += $(gtk_use_quartz_private_h_sources)
+endif
 
-else
+gtk_all_private_h_sources = \
+	$(gtk_use_x11_private_h_sources) \
+	 $(gtk_use_win32_private_h_sources) \
+	$(gtk_use_quartz_private_h_sources)
+
+if !USE_X11
+if !USE_WIN32
+if !USE_QUARTZ
 gtk_c_sources += $(gtk_use_stub_c_sources)
 endif
 endif
@@ -1017,7 +1030,7 @@ MAINTAINERCLEANFILES = \
 	stock-icons/icon-theme.cache
 
 EXTRA_HEADERS =
-EXTRA_DIST += $(gtk_private_h_sources) $(gtk_extra_sources)
+EXTRA_DIST += $(gtk_all_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)
 EXTRA_DIST += $(STOCK_ICONS)
 
