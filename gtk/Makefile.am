@@ -940,8 +940,9 @@ gtk_private_h_sources += $(gtk_use_quartz_private_h_sources)
 endif
 
 gtk_all_private_h_sources = \
+	$(gtk_private_h_sources) \
 	$(gtk_use_x11_private_h_sources) \
-	 $(gtk_use_win32_private_h_sources) \
+	$(gtk_use_win32_private_h_sources) \
 	$(gtk_use_quartz_private_h_sources)
 
 if !USE_X11
