@@ -199,6 +199,7 @@ const static struct {
   { 0xf2c6, GDK_dead_circumflex },
   { 0xf302, GDK_dead_circumflex },
   { 0xf07e, GDK_dead_tilde },
+  { 0xf2dc, GDK_dead_tilde },
   { 0xf303, GDK_dead_tilde },
   { 0xf342, GDK_dead_perispomeni },
   { 0xf0af, GDK_dead_macron },
