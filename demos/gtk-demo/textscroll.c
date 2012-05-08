@@ -85,7 +85,7 @@ scroll_to_bottom (GtkTextView *textview)
   gtk_text_iter_set_line_offset (&iter, 0);
 
   /* and place the mark at iter. the mark will stay there after we
-   * insert some text at the end because it has right gravity.
+   * insert some text at the end because it has left gravity.
    */
   mark = gtk_text_buffer_get_mark (buffer, "scroll");
   gtk_text_buffer_move_mark (buffer, mark, &iter);
