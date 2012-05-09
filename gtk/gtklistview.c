@@ -21,6 +21,7 @@
 
 #include "gtkenums.h"
 #include "gtkintl.h"
+#include "gtklabel.h"
 #include "gtktypebuiltins.h"
 
 /**
@@ -46,6 +47,9 @@
 
 typedef struct _GtkListViewItem GtkListViewItem;
 
+typedef GtkWidget * (* GtkListViewCreateFunc) (gpointer data);
+typedef void        (* GtkListViewUpdateFunc) (GtkWidget *widget, GtkTreeModel *model, GtkTreeIter *iter, gpointer data);
+
 struct _GtkListViewItem {
   guint                 pos;
   GtkWidget *           widget;
@@ -56,6 +60,11 @@ struct _GtkListViewPrivate {
   GtkTreeModel *        model;
   GtkSelectionMode      selection_mode;
   GtkListViewItem *     items;
+
+  GtkListViewCreateFunc widget_create;
+  GtkListViewUpdateFunc widget_update;
+  GDestroyNotify        widget_data_destroy;
+  gpointer              widget_data;
 };
 
 /* Signals */
@@ -144,15 +153,95 @@ gtk_list_view_get_n_items (GtkListView *list_view)
   return gtk_tree_model_iter_n_children (priv->model, NULL);
 }
 
-#include <gtklabel.h>
+/* I don't want to make this function public, it exposes too many internals.
+ * Also, experience from GtkCellLayoutDataFunc says that people are too
+ * careless about ensuring the provided functions are fast and idempotent.
+ * So I'd rather provide a bunch of wrappers.
+ */
+static void
+gtk_list_view_set_widget_creation_funcs (GtkListView           *list_view,
+                                         GtkListViewCreateFunc  create_func,
+                                         GtkListViewUpdateFunc  update_func,
+                                         GDestroyNotify         destroy_func,
+                                         gpointer               data)
+{
+  GtkListViewPrivate *priv;
+
+  g_return_if_fail (GTK_IS_LIST_VIEW (list_view));
+  g_return_if_fail (create_func != NULL);
+
+  priv = list_view->priv;
+
+  if (priv->widget_data_destroy)
+    priv->widget_data_destroy (priv->widget_data);
+
+  priv->widget_create = create_func;
+  priv->widget_update = update_func;
+  priv->widget_data_destroy = destroy_func;
+  priv->widget_data = data;
+
+  gtk_list_view_clear (list_view);
+  gtk_widget_queue_resize (GTK_WIDGET (list_view));
+}
+
+static GtkWidget *
+gtk_list_view_default_widget_create (gpointer unused)
+{
+  GtkWidget *widget;
+  
+  widget = gtk_label_new ("");
+  gtk_widget_show (widget);
+
+  return widget;
+}
+
+static void
+gtk_list_view_default_widget_update (GtkWidget    *widget,
+                                     GtkTreeModel *model,
+                                     GtkTreeIter  *iter,
+                                     gpointer      unused)
+{
+  GString *string;
+  guint i;
+  
+  string = g_string_new (NULL);
+
+  for (i = 0; i < gtk_tree_model_get_n_columns (model); i++)
+    {
+      GValue value = G_VALUE_INIT;
+      gchar *s;
+
+      if (i != 0)
+        g_string_append (string, ", ");
+      gtk_tree_model_get_value (model, iter, i, &value);
+      s = g_strdup_value_contents (&value);
+      g_value_unset (&value);
+      g_string_append (string, s);
+      g_free (s);
+    }
+  gtk_label_set_text (GTK_LABEL (widget), string->str);
+  g_string_free (string, TRUE);
+}
+
 static GtkWidget *
 gtk_list_view_create_widget (GtkListView *list_view,
                              guint        index)
 {
+  GtkListViewPrivate *priv = list_view->priv;
+  GtkTreeIter iter;
   GtkWidget *widget;
 
-  widget = gtk_label_new ("Hello World");
-  gtk_widget_show (widget);
+  widget = priv->widget_create (priv->widget_data);
+
+  if (!gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, index))
+    {
+      g_assert_not_reached ();
+    }
+
+  priv->widget_update (widget,
+                       priv->model,
+                       &iter,
+                       priv->widget_data);
 
   return widget;
 }
@@ -430,6 +519,11 @@ gtk_list_view_dispose (GObject *object)
 
   gtk_list_view_set_model (list_view, NULL);
   gtk_list_view_clear (list_view);
+  gtk_list_view_set_widget_creation_funcs (list_view,
+                                           gtk_list_view_default_widget_create,
+                                           gtk_list_view_default_widget_update,
+                                           NULL,
+                                           NULL);
 
   G_OBJECT_CLASS (gtk_list_view_parent_class)->dispose (object);
 }
@@ -557,6 +651,12 @@ gtk_list_view_init (GtkListView *list_view)
   list_view->priv = G_TYPE_INSTANCE_GET_PRIVATE (list_view,
                                                  GTK_TYPE_LIST_VIEW,
                                                  GtkListViewPrivate);
+
+  gtk_list_view_set_widget_creation_funcs (list_view,
+                                           gtk_list_view_default_widget_create,
+                                           gtk_list_view_default_widget_update,
+                                           NULL,
+                                           NULL);
 }
 
 /**
@@ -776,7 +876,6 @@ gtk_list_view_get_selection_mode (GtkListView *list_view)
 
   return list_view->priv->selection_mode;
 }
-
 
 gboolean                gtk_list_view_get_visible_range         (GtkListView             *list_view,
                                                                  GtkTreePath            **start_path,
