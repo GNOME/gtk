@@ -108,6 +108,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testtooltips			\
 	testexpand			\
 	testexpander			\
+	testlistview			\
 	testvolumebutton		\
 	testscrolledwindow		\
 	testswitch			\
@@ -232,6 +233,7 @@ testtreemenu_DEPENDENCIES = $(TEST_DEPS)
 testwindows_DEPENDENCIES = $(TEST_DEPS)
 testexpand_DEPENDENCIES = $(TEST_DEPS)
 testexpander_DEPENDENCIES = $(TEST_DEPS)
+testlistview_DEPENDENCIES = $(TEST_DEPS)
 testswitch_DEPENDENCIES = $(TEST_DEPS)
 styleexamples_DEPENDENCIES = $(TEST_DEPS)
 testtoplevelembed_DEPENDENCIES = $(TEST_DEPS)
@@ -408,6 +410,8 @@ testwindows_SOURCES = 	\
 testexpand_SOURCES = testexpand.c
 
 testexpander_SOURCES = testexpander.c
+
+testlistview_SOURCES = testlistview.c
 
 testswitch_SOURCES = testswitch.c
 
