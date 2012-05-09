@@ -22,6 +22,7 @@
 #include "gtkenums.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
+#include "gtkscrollbar.h"
 #include "gtktypebuiltins.h"
 
 /**
@@ -65,6 +66,8 @@ struct _GtkListViewPrivate {
   GtkListViewUpdateFunc widget_update;
   GDestroyNotify        widget_data_destroy;
   gpointer              widget_data;
+
+  GtkWidget *           scrollbar;
 };
 
 /* Signals */
@@ -329,6 +332,18 @@ gtk_list_view_update_items (GtkListView *list_view)
     }
 }
 
+/* FIXME: Also allow using natural width for scrollbar */
+static gint
+gtk_list_view_get_scrollbar_width (GtkListView *list_view)
+{
+  GtkListViewPrivate *priv = list_view->priv;
+  gint size;
+
+  gtk_widget_get_preferred_width (priv->scrollbar, &size, NULL);
+  
+  return size;
+}
+
 static void
 gtk_list_view_get_preferred_width (GtkWidget *widget,
 				   gint      *minimum,
@@ -350,6 +365,10 @@ gtk_list_view_get_preferred_width (GtkWidget *widget,
       min_total = MAX (min_total, min_child);
       nat_total = MAX (nat_total, nat_child);
     }
+
+  min_child = gtk_list_view_get_scrollbar_width (list_view);
+  min_total += min_child;
+  nat_total += min_child;
 
   *minimum = min_total;
   *natural = nat_total;
@@ -387,6 +406,12 @@ gtk_list_view_get_preferred_height (GtkWidget *widget,
       nat_total += nat_child;
     }
 
+  gtk_widget_get_preferred_height_for_width (priv->scrollbar,
+                                             gtk_list_view_get_scrollbar_width (list_view),
+                                             &min_child, &nat_child);
+  min_total = MAX (min_total, min_child);
+  nat_total = MAX (nat_total, nat_child);
+
   *minimum = min_total;
   *natural = nat_total;
 }
@@ -400,10 +425,14 @@ gtk_list_view_get_preferred_height_for_width (GtkWidget *widget,
   GtkListView *list_view = GTK_LIST_VIEW (widget);
   GtkListViewPrivate *priv = list_view->priv;
   GtkListViewItem *item;
+  gint scrollbar_width;
   gint min_total, nat_total;
   gint min_child, nat_child;
 
   gtk_list_view_update_items (list_view);
+
+  scrollbar_width = gtk_list_view_get_scrollbar_width (list_view);
+  width -= scrollbar_width;
 
   min_total = 0;
   nat_total = 0;
@@ -413,6 +442,10 @@ gtk_list_view_get_preferred_height_for_width (GtkWidget *widget,
       min_total += min_child;
       nat_total += nat_child;
     }
+
+  gtk_widget_get_preferred_height_for_width (priv->scrollbar, scrollbar_width, &min_child, &nat_child);
+  min_total = MAX (min_total, min_child);
+  nat_total = MAX (nat_total, nat_child);
 
   *minimum = min_total;
   *natural = nat_total;
@@ -426,6 +459,7 @@ gtk_list_view_size_allocate (GtkWidget      *widget,
   GtkListViewPrivate *priv = list_view->priv;
   GtkAllocation child_allocation;
   GtkListViewItem *item;
+  gint scrollbar_width;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -434,9 +468,17 @@ gtk_list_view_size_allocate (GtkWidget      *widget,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
 
+  scrollbar_width = gtk_list_view_get_scrollbar_width (list_view);
+
+  child_allocation.x = allocation->width - scrollbar_width;
+  child_allocation.y = 0;
+  child_allocation.width = scrollbar_width;
+  child_allocation.height = allocation->height;
+  gtk_widget_size_allocate (priv->scrollbar, &child_allocation);
+
   child_allocation.x = 0;
   child_allocation.y = 0;
-  child_allocation.width = allocation->width;
+  child_allocation.width = allocation->width - scrollbar_width;
   for (item = priv->items;
        item != NULL && child_allocation.y < allocation->height;
        item = item->next)
@@ -510,6 +552,8 @@ gtk_list_view_forall (GtkContainer *container,
     {
       (* callback) (item->widget, callback_data);
     }
+
+  (* callback) (priv->scrollbar, callback_data);
 }
 
 static void
@@ -648,9 +692,16 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 static void
 gtk_list_view_init (GtkListView *list_view)
 {
+  GtkListViewPrivate *priv;
+
   list_view->priv = G_TYPE_INSTANCE_GET_PRIVATE (list_view,
                                                  GTK_TYPE_LIST_VIEW,
                                                  GtkListViewPrivate);
+
+  priv = list_view->priv;
+  priv->scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, NULL);
+  gtk_widget_set_parent (priv->scrollbar, GTK_WIDGET (list_view));
+  gtk_widget_show (priv->scrollbar);
 
   gtk_list_view_set_widget_creation_funcs (list_view,
                                            gtk_list_view_default_widget_create,
