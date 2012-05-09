@@ -2996,7 +2996,7 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
   GtkIconViewPrivate *priv = icon_view->priv;
   GtkCellAreaContext *context;
 
-  if (priv->model == NULL)
+  if (priv->model == NULL || item->cell_area.width <= 0 || item->cell_area.height <= 0)
     return;
 
   _gtk_icon_view_set_cell_data (icon_view, item);
