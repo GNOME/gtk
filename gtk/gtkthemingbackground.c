@@ -135,7 +135,7 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       GtkCssRepeatStyle hrepeat, vrepeat;
 
       pos = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION);
-      repeat = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_REPEAT);
+      repeat = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_REPEAT), 0);
       hrepeat = _gtk_css_background_repeat_value_get_x (repeat);
       vrepeat = _gtk_css_background_repeat_value_get_y (repeat);
       width = bg->image_rect.width;

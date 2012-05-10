@@ -835,8 +835,7 @@ compute_border_width (GtkCssStyleProperty    *property,
 }
 
 static GtkCssValue *
-background_repeat_value_parse (GtkCssStyleProperty *property,
-                               GtkCssParser        *parser)
+background_repeat_value_parse_one (GtkCssParser *parser)
 {
   GtkCssValue *value = _gtk_css_background_repeat_value_try_parse (parser);
 
@@ -847,6 +846,13 @@ background_repeat_value_parse (GtkCssStyleProperty *property,
     }
 
   return value;
+}
+
+static GtkCssValue *
+background_repeat_value_parse (GtkCssStyleProperty *property,
+                               GtkCssParser        *parser)
+{
+  return _gtk_css_array_value_parse (parser, background_repeat_value_parse_one, FALSE);
 }
 
 static GtkCssValue *
@@ -1362,8 +1368,8 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_background_repeat_value_new (GTK_CSS_REPEAT_STYLE_REPEAT,
-                                                                                GTK_CSS_REPEAT_STYLE_REPEAT));
+                                          _gtk_css_array_value_new (_gtk_css_background_repeat_value_new (GTK_CSS_REPEAT_STYLE_REPEAT,
+                                                                                                          GTK_CSS_REPEAT_STYLE_REPEAT)));
   gtk_css_style_property_register        ("background-image",
                                           GTK_CSS_PROPERTY_BACKGROUND_IMAGE,
                                           CAIRO_GOBJECT_TYPE_PATTERN,
