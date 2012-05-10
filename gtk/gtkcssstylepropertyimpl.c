@@ -617,6 +617,49 @@ css_image_value_assign (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+background_image_value_parse_one (GtkCssParser *parser)
+{
+  return css_image_value_parse (NULL, parser);
+}
+
+static GtkCssValue *
+background_image_value_parse (GtkCssStyleProperty *property,
+                              GtkCssParser        *parser)
+{
+  return _gtk_css_array_value_parse (parser, background_image_value_parse_one, FALSE);
+}
+
+static GtkCssValue *
+background_image_value_compute_one (GtkCssValue     *value,
+                                    GtkStyleContext *context)
+{
+  return css_image_value_compute (NULL, context, value);
+}
+
+static GtkCssValue *
+background_image_value_compute (GtkCssStyleProperty    *property,
+                                GtkStyleContext        *context,
+                                GtkCssValue            *specified)
+{
+  return _gtk_css_array_value_compute (specified, background_image_value_compute_one, context);
+}
+
+static void
+background_image_value_query (GtkCssStyleProperty *property,
+                              const GtkCssValue   *css_value,
+                              GValue              *value)
+{
+  css_image_value_query (property, _gtk_css_array_value_get_nth (css_value, 0), value);
+}
+
+static GtkCssValue *
+background_image_value_assign (GtkCssStyleProperty *property,
+                               const GValue        *value)
+{
+  return _gtk_css_array_value_new (css_image_value_assign (property, value));
+}
+
+static GtkCssValue *
 font_size_parse (GtkCssStyleProperty *property,
                  GtkCssParser        *parser)
 {
@@ -1374,12 +1417,12 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_BACKGROUND_IMAGE,
                                           CAIRO_GOBJECT_TYPE_PATTERN,
                                           GTK_STYLE_PROPERTY_ANIMATED,
-                                          css_image_value_parse,
+                                          background_image_value_parse,
                                           NULL,
-                                          css_image_value_compute,
-                                          css_image_value_query,
-                                          css_image_value_assign,
-                                          _gtk_css_image_value_new (NULL));
+                                          background_image_value_compute,
+                                          background_image_value_query,
+                                          background_image_value_assign,
+                                          _gtk_css_array_value_new (_gtk_css_image_value_new (NULL)));
 
   gtk_css_style_property_register        ("border-image-source",
                                           GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE,

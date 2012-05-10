@@ -292,7 +292,7 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
   _gtk_theming_background_apply_clip (bg);
   _gtk_theming_background_apply_origin (bg);
 
-  bg->image = _gtk_css_image_value_get_image (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE));
+  bg->image = _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE), 0));
 }
 
 void
