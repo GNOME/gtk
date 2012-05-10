@@ -218,6 +218,13 @@ gdk_offscreen_window_reparent (GdkWindow *window,
 }
 
 static void
+gdk_window_set_device_cursor (GdkWindow     *window,
+			      GdkDevice     *device,
+			      GdkCursor     *cursor)
+{
+}
+
+static void
 from_embedder (GdkWindow *window,
 	       double embedder_x, double embedder_y,
 	       double *offscreen_x, double *offscreen_y)
@@ -727,7 +734,7 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->move_resize = gdk_offscreen_window_move_resize;
   impl_class->set_background = gdk_offscreen_window_set_background;
   impl_class->reparent = gdk_offscreen_window_reparent;
-  impl_class->set_device_cursor = NULL;
+  impl_class->set_device_cursor = gdk_offscreen_window_set_device_cursor;
   impl_class->get_geometry = gdk_offscreen_window_get_geometry;
   impl_class->get_root_coords = gdk_offscreen_window_get_root_coords;
   impl_class->get_device_state = gdk_offscreen_window_get_device_state;
