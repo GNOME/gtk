@@ -57,10 +57,9 @@ _gtk_theming_background_apply_window_background (GtkThemingBackground *bg,
 static void
 _gtk_theming_background_apply_origin (GtkThemingBackground *bg)
 {
-  GtkCssArea origin;
   cairo_rectangle_t image_rect;
-
-  origin = _gtk_css_area_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN));
+  GtkCssValue *value = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN);
+  GtkCssArea origin = _gtk_css_area_value_get (_gtk_css_array_value_get_nth (value, 0));
 
   /* The default size of the background image depends on the
      background-origin value as this affects the top left
@@ -95,7 +94,8 @@ _gtk_theming_background_apply_origin (GtkThemingBackground *bg)
 static void
 _gtk_theming_background_apply_clip (GtkThemingBackground *bg)
 {
-  GtkCssArea clip = _gtk_css_area_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP));
+  GtkCssValue *value = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP);
+  GtkCssArea clip = _gtk_css_area_value_get (_gtk_css_array_value_get_nth (value, 0));
 
   if (clip == GTK_CSS_AREA_PADDING_BOX)
     {

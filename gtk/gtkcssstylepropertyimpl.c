@@ -412,8 +412,7 @@ assign_border_style (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
-parse_css_area (GtkCssStyleProperty *property,
-                GtkCssParser        *parser)
+parse_css_area_one (GtkCssParser *parser)
 {
   GtkCssValue *value = _gtk_css_area_value_try_parse (parser);
   
@@ -421,6 +420,13 @@ parse_css_area (GtkCssStyleProperty *property,
     _gtk_css_parser_error (parser, "unknown value for property");
 
   return value;
+}
+
+static GtkCssValue *
+parse_css_area (GtkCssStyleProperty *property,
+                GtkCssParser        *parser)
+{
+  return _gtk_css_array_value_parse (parser, parse_css_area_one, FALSE);
 }
 
 static GtkCssValue *
@@ -1253,7 +1259,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_area_value_new (GTK_CSS_AREA_BORDER_BOX));
+                                          _gtk_css_array_value_new (_gtk_css_area_value_new (GTK_CSS_AREA_BORDER_BOX)));
   gtk_css_style_property_register        ("background-origin",
                                           GTK_CSS_PROPERTY_BACKGROUND_ORIGIN,
                                           G_TYPE_NONE,
@@ -1263,7 +1269,7 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           NULL,
-                                          _gtk_css_area_value_new (GTK_CSS_AREA_PADDING_BOX));
+                                          _gtk_css_array_value_new (_gtk_css_area_value_new (GTK_CSS_AREA_PADDING_BOX)));
   gtk_css_style_property_register        ("background-size",
                                           GTK_CSS_PROPERTY_BACKGROUND_SIZE,
                                           G_TYPE_NONE,
