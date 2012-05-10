@@ -874,7 +874,7 @@ static GtkCssValue *
 background_position_parse (GtkCssStyleProperty *property,
 			   GtkCssParser        *parser)
 {
-  return _gtk_css_position_value_parse (parser);
+  return _gtk_css_array_value_parse (parser, _gtk_css_position_value_parse, FALSE);
 }
 
 static GtkCssValue *
@@ -882,7 +882,7 @@ background_position_compute (GtkCssStyleProperty    *property,
 			     GtkStyleContext        *context,
 			     GtkCssValue            *specified)
 {
-  return _gtk_css_position_value_compute (specified, context);
+  return _gtk_css_array_value_compute (specified, _gtk_css_position_value_compute, context);
 }
 
 /*** REGISTRATION ***/
@@ -1295,8 +1295,8 @@ _gtk_css_style_property_init_properties (void)
                                           background_position_compute,
                                           NULL,
                                           NULL,
-                                          _gtk_css_position_value_new (_gtk_css_number_value_new (0, GTK_CSS_PERCENT),
-                                                                       _gtk_css_number_value_new (0, GTK_CSS_PERCENT)));
+                                          _gtk_css_array_value_new (_gtk_css_position_value_new (_gtk_css_number_value_new (0, GTK_CSS_PERCENT),
+                                                                                                 _gtk_css_number_value_new (0, GTK_CSS_PERCENT))));
 
   gtk_css_style_property_register        ("border-top-color",
                                           GTK_CSS_PROPERTY_BORDER_TOP_COLOR,
