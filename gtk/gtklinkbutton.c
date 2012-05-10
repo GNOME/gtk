@@ -526,7 +526,10 @@ gtk_link_button_button_press (GtkWidget      *widget,
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
-  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
+  /* Don't popup the menu if there's no URI set,
+   * otherwise the menu item will trigger a warning */
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event) &&
+      GTK_LINK_BUTTON (widget)->priv->uri != NULL)
     {
       gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), event);
 
