@@ -337,6 +337,38 @@ check_win32_special_case_after_compact_match (GtkIMContextSimple    *context_sim
 
 #endif
 
+#ifdef GDK_WINDOWING_QUARTZ
+
+static gboolean
+check_quartz_special_cases (GtkIMContextSimple *context_simple,
+                            gint                n_compose)
+{
+  if (n_compose == 2 &&
+      context_simple->compose_buffer[1] == GDK_space)
+    {
+      gunichar value = 0;
+
+      switch (context_simple->compose_buffer[0])
+        {
+        case GDK_dead_doubleacute:
+          value = '"'; break;
+        }
+
+      if (value > 0)
+        {
+          gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
+          context_simple->compose_buffer[0] = 0;
+
+          GTK_NOTE (MISC, g_print ("quartz: U+%04X\n", value));
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+#endif
+
 static gboolean
 check_compact_table (GtkIMContextSimple    *context_simple,
 	     const GtkComposeTableCompact *table,
@@ -1024,6 +1056,11 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 #ifdef GDK_WINDOWING_WIN32
       if (check_win32_special_cases (context_simple, n_compose))
 	return TRUE;
+#endif
+
+#ifdef GDK_WINDOWING_QUARTZ
+      if (check_quartz_special_cases (context_simple, n_compose))
+        return TRUE;
 #endif
 
       if (check_compact_table (context_simple, &gtk_compose_table_compact, n_compose))
