@@ -141,7 +141,7 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       width = bg->image_rect.width;
       height = bg->image_rect.height;
 
-      _gtk_css_bg_size_value_compute_size (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE),
+      _gtk_css_bg_size_value_compute_size (_gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE), 0),
                                            bg->image,
                                            width,
                                            height,
