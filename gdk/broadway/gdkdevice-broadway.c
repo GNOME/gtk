@@ -383,11 +383,9 @@ gdk_broadway_device_window_at_position (GdkDevice       *device,
   screen = gdk_screen_get_default ();
   root_window = gdk_screen_get_root_window (screen);
 
-  res = gdk_broadway_device_query_state (device, root_window, NULL, &window, NULL, NULL, win_x, win_y, mask);
-  if (res)
-    return window;
+  gdk_broadway_device_query_state (device, root_window, NULL, &window, NULL, NULL, win_x, win_y, mask);
 
-  return NULL;
+  return window;
 }
 
 static void
