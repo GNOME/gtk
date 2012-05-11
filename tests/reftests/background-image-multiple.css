@@ -1,0 +1,50 @@
+@import "reset-to-defaults.css";
+
+#button1 {
+    background-image: linear-gradient(alpha(red, 0.50)), linear-gradient(green);
+}
+
+#button2 {
+    background-color: green;
+    background-image: linear-gradient(alpha(red, 0.50)), linear-gradient(transparent);
+}
+
+#button3 {
+    padding: 12px;
+    background-image: linear-gradient(alpha(red, 0.50)), linear-gradient(green);
+    background-clip: content-box;
+}
+
+#button4 {
+    padding: 12px;
+    background-image: linear-gradient(red), linear-gradient(green);
+    background-clip: content-box, padding-box;
+}
+
+#button5 {
+    padding: 12px;
+    background-image: linear-gradient(red), linear-gradient(transparent);
+    background-clip: content-box, padding-box;
+    background-color: green;
+}
+
+#ref1,
+#ref2 {
+    background-color: #807f00;
+}
+
+#ref3 {
+    padding: 12px;
+    background-color: #807f00;
+    background-clip: content-box;
+}
+
+#ref4-bg,
+#ref5-bg {
+    background-color: green;
+}
+
+#ref4-fg,
+#ref5-fg {
+    background-color: red;
+}
