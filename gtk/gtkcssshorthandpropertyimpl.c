@@ -459,6 +459,8 @@ parse_background (GtkCssShorthandProperty  *shorthand,
                   GtkCssValue             **values,
                   GtkCssParser             *parser)
 {
+  GtkCssValue *value;
+
   do
     {
       /* the image part */
@@ -477,27 +479,34 @@ parse_background (GtkCssShorthandProperty  *shorthand,
                 return FALSE;
             }
 
-          values[0] = _gtk_css_image_value_new (image);
+          values[0] = _gtk_css_array_value_new (_gtk_css_image_value_new (image));
         }
       else if (values[1] == NULL &&
-               (values[1] = _gtk_css_background_repeat_value_try_parse (parser)))
+               (value = _gtk_css_background_repeat_value_try_parse (parser)))
         {
-          /* nothing to do here */
+          values[1] = _gtk_css_array_value_new (value);
+          value = NULL;
         }
       else if ((values[2] == NULL || values[3] == NULL) &&
-               (values[3] = _gtk_css_area_value_try_parse (parser)))
+               (value = _gtk_css_area_value_try_parse (parser)))
         {
+          values[3] = _gtk_css_array_value_new (value);
+
           if (values[2] == NULL)
             {
               values[2] = values[3];
               values[3] = NULL;
             }
+          value = NULL;
         }
       else if (values[4] == NULL)
         {
-          values[4] = _gtk_css_symbolic_value_new (parser);
-          if (values[4] == NULL)
+          value = _gtk_css_symbolic_value_new (parser);
+          if (value == NULL)
             return FALSE;
+
+          values[4] = _gtk_css_array_value_new (value);
+          value = NULL;
         }
       else
         {
