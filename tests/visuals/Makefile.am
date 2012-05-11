@@ -25,4 +25,6 @@ visuals_SOURCES = visuals.c
 
 EXTRA_DIST = \
 	inline-toolbar.ui \
+	linked-buttons-horizontal.ui \
+	linked-buttons-vertical.ui \
 	primary-toolbar.ui
