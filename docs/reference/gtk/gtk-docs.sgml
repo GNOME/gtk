@@ -12,9 +12,9 @@
     <releaseinfo>
       This document is for the GTK+ 3 library, version &version;.
       The latest versions can be found online at
-      <ulink role="online-location" url="http://developer.gnome.org/devel/gtk3/">http://developer.gnome.org/devel/gtk3/</ulink>.
+      <ulink role="online-location" url="http://developer.gnome.org/gtk3/">http://developer.gnome.org/gtk3/</ulink>.
       If you are looking for the older GTK+ 2 series of libraries,
-      see <ulink role="online-location" url="http://developer.gnome.org/devel/gtk/">http://developer.gnome.org/devel/gtk/</ulink>.
+      see <ulink role="online-location" url="http://developer.gnome.org/gtk/">http://developer.gnome.org/gtk/</ulink>.
     </releaseinfo>
   </bookinfo>
 
