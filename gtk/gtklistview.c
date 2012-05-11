@@ -325,7 +325,7 @@ gtk_list_view_update_items (GtkListView *list_view)
    * performance and memory increases (that hopefully should be linear).
    */
   n_total_items = gtk_list_view_get_n_items (list_view);
-  n_cached_items = gdk_screen_get_height (gtk_widget_get_screen (GTK_WIDGET (list_view)));
+  n_cached_items = gdk_screen_get_height (gtk_widget_get_screen (GTK_WIDGET (list_view))) / 4;
   n_cached_items = MIN (n_cached_items, n_total_items);
   if (priv->top)
     first = priv->top->pos;
