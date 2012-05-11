@@ -19,11 +19,14 @@
 
 #include "gtklistview.h"
 
+#include "gtkadjustment.h"
 #include "gtkenums.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkscrollbar.h"
 #include "gtktypebuiltins.h"
+
+#include <math.h>
 
 /**
  * SECTION:gtklistview
@@ -68,6 +71,11 @@ struct _GtkListViewPrivate {
   gpointer              widget_data;
 
   GtkWidget *           scrollbar;
+
+  GtkListViewItem *     top;                    /* first displayed item or NULL if none */
+  GtkListViewItem *     start;                  /* first 'instantiated' item relevant for size requests or NULL if none */
+  GtkListViewItem *     end;                    /* last 'instantiated' item relevant for size requests or NULL if none */
+  gint                  default_height;         /* height used for 'noninstantiated' items, set in size_allocate */
 };
 
 /* Signals */
@@ -105,27 +113,6 @@ gtk_list_view_item_free (GtkListViewItem *item)
   g_slice_free (GtkListViewItem, item);
 }
 
-#if 0
-static GtkListViewItem *
-gtk_list_view_get_item (GtkListView *list_view,
-                        guint        index)
-{
-  GtkListViewItem *item;
-
-  for (item = list_view->priv->items;
-       item != NULL && item->pos < index;
-       item = item->next)
-    {
-      /* nothing to do here */
-    }
-
-  if (item->pos == index)
-    return item;
-  else
-    return NULL;
-}
-#endif
-
 static gboolean
 gtk_list_view_contains_path (GtkListView *list_view,
                              GtkTreePath *path)
@@ -143,6 +130,10 @@ gtk_list_view_clear (GtkListView *list_view)
       gtk_list_view_item_free (priv->items);
       priv->items = NULL;
     }
+
+  priv->top = NULL;
+  priv->start = NULL;
+  priv->end = NULL;
 }
 
 static guint
@@ -264,6 +255,59 @@ gtk_list_view_create_item (GtkListView *list_view,
   return item;
 }
 
+static GtkListViewItem *
+gtk_list_view_get_item (GtkListView *list_view,
+                        guint        index,
+                        gboolean     create)
+{
+  GtkListViewPrivate *priv = list_view->priv;
+  GtkListViewItem *item, *prev;
+
+  prev = NULL;
+  for (item = priv->items;
+       item != NULL && item->pos < index;
+       item = item->next)
+    {
+      prev = item;
+    }
+
+  if (item && item->pos == index)
+    return item;
+
+  if (create)
+    {
+      GtkListViewItem *new_item = gtk_list_view_create_item (list_view, index);
+
+      if (prev)
+        prev->next = new_item;
+      else
+        priv->items = new_item;
+      new_item->next = item;
+
+      return new_item;
+    }
+  else
+    return NULL;
+}
+
+/* We treat the list of rows in the treemodel like a scrollbar:
+ * +-----------+---------+-------+
+ * |           |xxxxxxxxx|       |
+ * +-----------+---------+-------+
+ * The slider is the area we care about for size requests and is reduced
+ * in size. Only for these items do we instantiate widgets. For everything
+ * else, we just guess width/height and everything else. This function
+ * ensures this slider exists, and that the visible area is inside this
+ * slider.
+ * The area goes from
+ *   priv->first
+ * to
+ *   priv->last (inclusive)
+ *
+ * Note that a bunch of items might still exist in priv->items that are not
+ * part of this slider. Those are special rows (like the focus when not
+ * on screen). They are never involved in size computations though.
+ */
 static void
 gtk_list_view_update_items (GtkListView *list_view)
 {
@@ -283,7 +327,10 @@ gtk_list_view_update_items (GtkListView *list_view)
   n_total_items = gtk_list_view_get_n_items (list_view);
   n_cached_items = gdk_screen_get_height (gtk_widget_get_screen (GTK_WIDGET (list_view)));
   n_cached_items = MIN (n_cached_items, n_total_items);
-  first = 0;
+  if (priv->top)
+    first = priv->top->pos;
+  else
+    first = 0;
   first = MIN (first, n_total_items - n_cached_items);
   last = first + n_cached_items;
 
@@ -294,12 +341,16 @@ gtk_list_view_update_items (GtkListView *list_view)
     {
       if (item->pos < i || item->pos > last)
         {
+          GtkListViewItem *free_me = item;
           if (prev)
             prev->next = item->next;
           else
             priv->items = item->next;
-          item->next = NULL;
-          gtk_list_view_item_free (item);
+
+          item = item->next;
+          free_me->next = NULL;
+          gtk_list_view_item_free (free_me);
+          continue;
         }
 
       for (; i < last && i < item->pos; i++)
@@ -330,6 +381,18 @@ gtk_list_view_update_items (GtkListView *list_view)
       new_item->next = item;
       prev = new_item;
     }
+
+  if (priv->top == NULL)
+    priv->top = gtk_list_view_get_item (list_view, first, FALSE);
+  priv->start = priv->top;
+  priv->end = gtk_list_view_get_item (list_view, last - 1, FALSE);
+  g_assert (priv->start == NULL || priv->end != NULL);
+}
+
+static GtkSizeRequestMode
+gtk_list_view_get_request_mode (GtkWidget *widget)
+{
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 /* FIXME: Also allow using natural width for scrollbar */
@@ -359,11 +422,14 @@ gtk_list_view_get_preferred_width (GtkWidget *widget,
 
   min_total = 0;
   nat_total = 0;
-  for (item = priv->items; item; item = item->next)
+  if (priv->start != NULL)
     {
-      gtk_widget_get_preferred_width (item->widget, &min_child, &nat_child);
-      min_total = MAX (min_total, min_child);
-      nat_total = MAX (nat_total, nat_child);
+      for (item = priv->start; item != priv->end->next; item = item->next)
+        {
+          gtk_widget_get_preferred_width (item->widget, &min_child, &nat_child);
+          min_total = MAX (min_total, min_child);
+          nat_total = MAX (nat_total, nat_child);
+        }
     }
 
   min_child = gtk_list_view_get_scrollbar_width (list_view);
@@ -385,25 +451,59 @@ gtk_list_view_get_preferred_width_for_height (GtkWidget *widget,
 }
 
 static void
+gtk_list_view_get_heights (GtkListViewItem *item,
+                           GtkListViewItem *end,
+                           gint             for_size,
+                           gint            *min_max,
+                           gint            *min_sum,
+                           guint           *n_items)
+{
+  int child_height;
+
+  if (min_max)
+    *min_max = 0;
+  if (min_sum)
+    *min_sum = 0;
+  if (n_items)
+    *n_items = 0;
+
+  for (; item != end; item = item->next)
+    {
+      /* We only ever allocate min sizes, so ignore the other one */
+      if (for_size < 0)
+        gtk_widget_get_preferred_height (item->widget, &child_height, NULL);
+      else
+        gtk_widget_get_preferred_height_for_width (item->widget, for_size, &child_height, NULL);
+      if (min_max)
+        *min_max = MAX (*min_max, child_height);
+      if (min_sum)
+        *min_sum += child_height;
+      if (n_items)
+        *n_items += 1;
+    }
+}
+
+static void
 gtk_list_view_get_preferred_height (GtkWidget *widget,
 				    gint      *minimum,
 				    gint      *natural)
 {
   GtkListView *list_view = GTK_LIST_VIEW (widget);
   GtkListViewPrivate *priv = list_view->priv;
-  GtkListViewItem *item;
+  guint n_items, n_measured_items;
   gint min_total, nat_total;
   gint min_child, nat_child;
 
   gtk_list_view_update_items (list_view);
 
-  min_total = 0;
-  nat_total = 0;
-  for (item = priv->items; item; item = item->next)
+  gtk_list_view_get_heights (priv->start, priv->end, -1, &min_total, &nat_total, &n_measured_items);
+  if (n_measured_items)
     {
-      gtk_widget_get_preferred_height (item->widget, &min_child, &nat_child);
-      min_total += min_child;
-      nat_total += nat_child;
+      n_items = gtk_list_view_get_n_items (list_view);
+
+      /* XXX: overflow? */
+      nat_child = nat_total / n_measured_items;
+      nat_total += nat_child * (n_items - n_measured_items);
     }
 
   gtk_widget_get_preferred_height_for_width (priv->scrollbar,
@@ -424,7 +524,7 @@ gtk_list_view_get_preferred_height_for_width (GtkWidget *widget,
 {
   GtkListView *list_view = GTK_LIST_VIEW (widget);
   GtkListViewPrivate *priv = list_view->priv;
-  GtkListViewItem *item;
+  guint n_measured_items, n_items;
   gint scrollbar_width;
   gint min_total, nat_total;
   gint min_child, nat_child;
@@ -434,16 +534,19 @@ gtk_list_view_get_preferred_height_for_width (GtkWidget *widget,
   scrollbar_width = gtk_list_view_get_scrollbar_width (list_view);
   width -= scrollbar_width;
 
-  min_total = 0;
-  nat_total = 0;
-  for (item = priv->items; item; item = item->next)
+  gtk_list_view_get_heights (priv->start, priv->end, width, &min_total, &nat_total, &n_measured_items);
+  if (n_measured_items)
     {
-      gtk_widget_get_preferred_height_for_width (item->widget, width, &min_child, &nat_child);
-      min_total += min_child;
-      nat_total += nat_child;
+      n_items = gtk_list_view_get_n_items (list_view);
+
+      /* XXX: overflow? */
+      nat_child = nat_total / n_measured_items;
+      nat_total += nat_child * (n_items - n_measured_items);
     }
 
-  gtk_widget_get_preferred_height_for_width (priv->scrollbar, scrollbar_width, &min_child, &nat_child);
+  gtk_widget_get_preferred_height_for_width (priv->scrollbar,
+                                             gtk_list_view_get_scrollbar_width (list_view),
+                                             &min_child, &nat_child);
   min_total = MAX (min_total, min_child);
   nat_total = MAX (nat_total, nat_child);
 
@@ -458,8 +561,10 @@ gtk_list_view_size_allocate (GtkWidget      *widget,
   GtkListView *list_view = GTK_LIST_VIEW (widget);
   GtkListViewPrivate *priv = list_view->priv;
   GtkAllocation child_allocation;
+  GtkAdjustment *adjustment;
   GtkListViewItem *item;
-  gint scrollbar_width;
+  gint scrollbar_width, height_total;
+  guint n_allocated, n_measured;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -470,20 +575,21 @@ gtk_list_view_size_allocate (GtkWidget      *widget,
 
   scrollbar_width = gtk_list_view_get_scrollbar_width (list_view);
 
-  child_allocation.x = allocation->width - scrollbar_width;
-  child_allocation.y = 0;
-  child_allocation.width = scrollbar_width;
-  child_allocation.height = allocation->height;
-  gtk_widget_size_allocate (priv->scrollbar, &child_allocation);
-
   child_allocation.x = 0;
   child_allocation.y = 0;
   child_allocation.width = allocation->width - scrollbar_width;
   for (item = priv->items;
-       item != NULL && child_allocation.y < allocation->height;
+       item != priv->top;
        item = item->next)
     {
-      gtk_widget_get_preferred_height_for_width (item->widget, allocation->width, &child_allocation.height, NULL);
+      gtk_widget_set_child_visible (item->widget, FALSE);
+    }
+
+  for (n_allocated = 0;
+       item != NULL && child_allocation.y < allocation->height;
+       item = item->next, n_allocated++)
+    {
+      gtk_widget_get_preferred_height_for_width (item->widget, child_allocation.width, &child_allocation.height, NULL);
       gtk_widget_size_allocate (item->widget, &child_allocation);
       gtk_widget_set_child_visible (item->widget, TRUE);
 
@@ -494,6 +600,31 @@ gtk_list_view_size_allocate (GtkWidget      *widget,
     {
       gtk_widget_set_child_visible (item->widget, FALSE);
     }
+
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->scrollbar));
+  gtk_list_view_get_heights (priv->start, priv->end, child_allocation.width, NULL, &height_total, &n_measured);
+  if (n_measured)
+    {
+      priv->default_height = height_total / n_measured;
+      gtk_adjustment_configure (adjustment,
+                                priv->default_height * priv->top->pos,
+                                0,
+                                child_allocation.y + priv->default_height * (gtk_list_view_get_n_items (list_view) - n_allocated),
+                                allocation->height * 0.1,
+                                allocation->height * 0.9,
+                                allocation->height);
+    }
+  else
+    {
+      priv->default_height = 0;
+      gtk_adjustment_configure (adjustment, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    }
+
+  child_allocation.x = allocation->width - scrollbar_width;
+  child_allocation.y = 0;
+  child_allocation.width = scrollbar_width;
+  child_allocation.height = allocation->height;
+  gtk_widget_size_allocate (priv->scrollbar, &child_allocation);
 }
 
 static void
@@ -677,6 +808,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 							NULL,
 							G_PARAM_READWRITE));
 
+  widget_class->get_request_mode = gtk_list_view_get_request_mode;
   widget_class->get_preferred_width = gtk_list_view_get_preferred_width;
   widget_class->get_preferred_height = gtk_list_view_get_preferred_height;
   widget_class->get_preferred_width_for_height = gtk_list_view_get_preferred_width_for_height;
@@ -687,6 +819,54 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   container_class->forall = gtk_list_view_forall;
 
   g_type_class_add_private (klass, sizeof (GtkListViewPrivate));
+}
+
+static GtkListViewItem *
+gtk_list_view_find_item_for_y (GtkListView *list_view,
+                               gint         value)
+{
+  GtkListViewPrivate *priv = list_view->priv;
+  GtkListViewItem *item;
+  int height;
+
+  if (value < 0 || priv->start == NULL)
+    return NULL;
+
+  height = priv->top->pos * priv->default_height;
+  if (height > value)
+    return gtk_list_view_get_item (list_view, value / priv->default_height, TRUE);
+  else
+    value -= height;
+
+  for (item = priv->top; item && gtk_widget_get_child_visible (item->widget); item = item->next)
+    {
+      height = gtk_widget_get_allocated_height (item->widget);
+      if (height > value)
+        return item;
+      else
+        value -= height;
+    }
+
+  if (item)
+    {
+      height = priv->default_height * (gtk_list_view_get_n_items (list_view) - item->pos);
+      if (height > value)
+        return gtk_list_view_get_item (list_view, value / priv->default_height + item->pos, TRUE);
+    }
+  
+  return NULL;
+}
+
+static gboolean
+gtk_list_view_scrollbar_change_value_cb (GtkScrollbar  *scrollbar,
+                                         GtkScrollType  scroll_type,
+                                         double         new_value,
+                                         GtkListView   *list_view)
+{
+  list_view->priv->top = gtk_list_view_find_item_for_y (list_view, round (gtk_adjustment_get_value (gtk_range_get_adjustment (GTK_RANGE (scrollbar)))));
+  gtk_widget_queue_resize (GTK_WIDGET (list_view));
+
+  return FALSE;
 }
 
 static void
@@ -700,6 +880,10 @@ gtk_list_view_init (GtkListView *list_view)
 
   priv = list_view->priv;
   priv->scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, NULL);
+  g_signal_connect_after (priv->scrollbar,
+                          "change-value",
+                          G_CALLBACK (gtk_list_view_scrollbar_change_value_cb),
+                          list_view);
   gtk_widget_set_parent (priv->scrollbar, GTK_WIDGET (list_view));
   gtk_widget_show (priv->scrollbar);
 
@@ -951,8 +1135,6 @@ static void             gtk_list_view_destroy                   (GtkWidget      
 static void             gtk_list_view_style_updated             (GtkWidget          *widget);
 static void             gtk_list_view_state_flags_changed       (GtkWidget          *widget,
 			                                         GtkStateFlags       previous_state);
-static void             gtk_list_view_size_allocate             (GtkWidget          *widget,
-								 GtkAllocation      *allocation);
 static gboolean         gtk_list_view_draw                      (GtkWidget          *widget,
                                                                  cairo_t            *cr);
 static gboolean         gtk_list_view_motion                    (GtkWidget          *widget,
@@ -1931,20 +2113,6 @@ gtk_list_view_compute_n_items_for_size (GtkListView    *list_view,
         *min_items = 1;
       else
         *min_items = size / natural;
-    }
-}
-
-static void
-gtk_list_view_allocate_children (GtkListView *list_view)
-{
-  GList *list;
-
-  for (list = list_view->priv->children; list; list = list->next)
-    {
-      GtkListViewChild *child = list->data;
-
-      /* totally ignore our child's requisition */
-      gtk_widget_size_allocate (child->widget, &child->area);
     }
 }
 
