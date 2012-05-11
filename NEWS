@@ -1,3 +1,26 @@
+Overview of Changes in GTK+ 3.4.3
+=================================
+
+* GtkIconView:
+ - The sizing and layout has been rewritten
+
+* Bug fixes:
+ 478344 GtkTreeRowReference falsely said to auto-subscribe...
+ 587873 Documentation should explain MessageDialogs don't ...
+ 663072 GtkSelectionData is incorrectly documented
+ 670449 Splash screen stays
+ 672947 GtkEntryCompletion sizing/position fixes
+ 673237 window: Remove needless call to ensure_state_flag_...
+ 674192 out-of-tree build failure: demos/widget-factory/wi...
+ 674549 widget receives leave event when button released
+ 675421 GtkFileChooser should set its role
+ 675501 gtkquartz.h is not the gtk+-3.5.2.tar.xz archive
+
+* Translation updates:
+ Dutch
+ Italian
+
+
 Overview of Changes in GTK+ 3.4.2
 =================================
 
