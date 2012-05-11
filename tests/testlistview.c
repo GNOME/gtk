@@ -16,10 +16,11 @@ create_treemodel (void)
   words = g_strsplit (all_the_words, "\n", -1);
   g_free (all_the_words);
 
-  for (i = 0; words[i] && i < 10; i++)
+  for (i = 0; words[i]; i++)
     {
       gtk_list_store_insert_with_values (store, NULL, -1, 0, words[i], -1);
     }
+  g_print ("created GtkListStore with %u items\n", gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL));
 
   return GTK_TREE_MODEL (store);
 }
