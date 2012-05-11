@@ -35,14 +35,10 @@ struct _GtkThemingBackground {
   GtkStyleContext *context;
 
   cairo_rectangle_t paint_area;
-  cairo_rectangle_t image_rect;
+  GtkRoundedBox border_box;
+  GtkRoundedBox padding_box;
 
   GtkJunctionSides junction;
-  GtkCssImage *image;
-
-  GtkRoundedBox padding_box;
-  GtkRoundedBox clip_box;
-
   GtkStateFlags flags;
   GtkBorder border;
   GtkBorder padding;

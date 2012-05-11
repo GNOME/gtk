@@ -42,6 +42,14 @@
  */
 #include "fallback-c89.c"
 
+typedef struct {
+  cairo_rectangle_t image_rect;
+  GtkCssImage *image;
+  GtkRoundedBox clip_box;
+
+  gint idx;
+} GtkThemingBackgroundLayer;
+
 static void
 _gtk_theming_background_apply_window_background (GtkThemingBackground *bg,
                                                  cairo_t              *cr)
@@ -55,11 +63,12 @@ _gtk_theming_background_apply_window_background (GtkThemingBackground *bg,
 }
 
 static void
-_gtk_theming_background_apply_origin (GtkThemingBackground *bg)
+_gtk_theming_background_layer_apply_origin (GtkThemingBackground *bg,
+                                            GtkThemingBackgroundLayer *layer)
 {
   cairo_rectangle_t image_rect;
   GtkCssValue *value = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN);
-  GtkCssArea origin = _gtk_css_area_value_get (_gtk_css_array_value_get_nth (value, 0));
+  GtkCssArea origin = _gtk_css_area_value_get (_gtk_css_array_value_get_nth (value, layer->idx));
 
   /* The default size of the background image depends on the
      background-origin value as this affects the top left
@@ -88,24 +97,23 @@ _gtk_theming_background_apply_origin (GtkThemingBackground *bg)
 
   /* XXX: image_rect might have negative width/height here.
    * Do we need to do something about it? */
-  bg->image_rect = image_rect;
+  layer->image_rect = image_rect;
 }
 
 static void
-_gtk_theming_background_apply_clip (GtkThemingBackground *bg)
+_gtk_theming_background_apply_clip (GtkThemingBackground *bg,
+                                    GtkRoundedBox *box,
+                                    GtkCssArea clip)
 {
-  GtkCssValue *value = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP);
-  GtkCssArea clip = _gtk_css_area_value_get (_gtk_css_array_value_get_nth (value, 0));
-
   if (clip == GTK_CSS_AREA_PADDING_BOX)
     {
-      _gtk_rounded_box_shrink (&bg->clip_box,
+      _gtk_rounded_box_shrink (box,
 			       bg->border.top, bg->border.right,
 			       bg->border.bottom, bg->border.left);
     }
   else if (clip == GTK_CSS_AREA_CONTENT_BOX)
     {
-      _gtk_rounded_box_shrink (&bg->clip_box,
+      _gtk_rounded_box_shrink (box,
 			       bg->border.top + bg->padding.top,
 			       bg->border.right + bg->padding.right,
 			       bg->border.bottom + bg->padding.bottom,
@@ -114,35 +122,68 @@ _gtk_theming_background_apply_clip (GtkThemingBackground *bg)
 }
 
 static void
-_gtk_theming_background_paint (GtkThemingBackground *bg,
-                               cairo_t              *cr)
+_gtk_theming_background_layer_apply_clip (GtkThemingBackground *bg,
+                                          GtkThemingBackgroundLayer *layer)
 {
-  cairo_save (cr);
+  GtkCssValue *value = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP);
+  GtkCssArea clip = _gtk_css_area_value_get (_gtk_css_array_value_get_nth (value, layer->idx));
 
-  _gtk_rounded_box_path (&bg->clip_box, cr);
+  _gtk_theming_background_apply_clip (bg, &layer->clip_box, clip);
+}
+
+static void
+_gtk_theming_background_paint_color (GtkThemingBackground *bg,
+                                     cairo_t              *cr,
+                                     GtkCssValue          *background_image)
+{
+  GtkRoundedBox clip_box;
+  gint n_values = _gtk_css_array_value_get_n_values (background_image);
+  GtkCssArea clip = _gtk_css_area_value_get 
+    (_gtk_css_array_value_get_nth 
+     (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP), 
+      n_values - 1));
+
+  clip_box = bg->border_box;
+  _gtk_theming_background_apply_clip (bg, &clip_box, clip);
+
+  cairo_save (cr);
+  _gtk_rounded_box_path (&clip_box, cr);
   cairo_clip (cr);
 
   gdk_cairo_set_source_rgba (cr, &bg->bg_color);
   cairo_paint (cr);
 
-  if (bg->image
-      && bg->image_rect.width > 0
-      && bg->image_rect.height > 0)
+  cairo_restore (cr);
+}
+
+static void
+_gtk_theming_background_paint_layer (GtkThemingBackground *bg,
+                                     GtkThemingBackgroundLayer *layer,
+                                     cairo_t              *cr)
+{
+  cairo_save (cr);
+
+  _gtk_rounded_box_path (&layer->clip_box, cr);
+  cairo_clip (cr);
+
+  if (layer->image
+      && layer->image_rect.width > 0
+      && layer->image_rect.height > 0)
     {
       const GtkCssValue *pos, *repeat;
       double image_width, image_height;
       double width, height;
       GtkCssRepeatStyle hrepeat, vrepeat;
 
-      pos = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION), 0);
-      repeat = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_REPEAT), 0);
+      pos = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION), layer->idx);
+      repeat = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_REPEAT), layer->idx);
       hrepeat = _gtk_css_background_repeat_value_get_x (repeat);
       vrepeat = _gtk_css_background_repeat_value_get_y (repeat);
-      width = bg->image_rect.width;
-      height = bg->image_rect.height;
+      width = layer->image_rect.width;
+      height = layer->image_rect.height;
 
-      _gtk_css_bg_size_value_compute_size (_gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE), 0),
-                                           bg->image,
+      _gtk_css_bg_size_value_compute_size (_gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE), layer->idx),
+                                           layer->image,
                                            width,
                                            height,
                                            &image_width,
@@ -154,7 +195,7 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
       if (image_height == height)
         vrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
 
-      cairo_translate (cr, bg->image_rect.x, bg->image_rect.y);
+      cairo_translate (cr, layer->image_rect.x, layer->image_rect.y);
 
       if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT && vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
         {
@@ -162,7 +203,7 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
 			   _gtk_css_position_value_get_x (pos, width - image_width),
 			   _gtk_css_position_value_get_y (pos, height - image_height));
           /* shortcut for normal case */
-          _gtk_css_image_draw (bg->image, cr, image_width, image_height);
+          _gtk_css_image_draw (layer->image, cr, image_width, image_height);
         }
       else
         {
@@ -234,7 +275,7 @@ _gtk_theming_background_paint (GtkThemingBackground *bg,
           cairo_translate (cr2,
                            0.5 * (surface_width - image_width),
                            0.5 * (surface_height - image_height));
-          _gtk_css_image_draw (bg->image, cr2, image_width, image_height);
+          _gtk_css_image_draw (layer->image, cr2, image_width, image_height);
           cairo_destroy (cr2);
 
           cairo_set_source_surface (cr, surface,
@@ -264,6 +305,21 @@ _gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
 }
 
 static void
+_gtk_theming_background_init_layer (GtkThemingBackground *bg,
+                                    GtkThemingBackgroundLayer *layer,
+                                    GtkCssValue *background_image,
+                                    gint idx)
+{
+  layer->idx = idx;
+  layer->clip_box = bg->border_box;
+
+  _gtk_theming_background_layer_apply_clip (bg, layer);
+  _gtk_theming_background_layer_apply_origin (bg, layer);
+
+  layer->image = _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (background_image, layer->idx));
+}
+
+static void
 _gtk_theming_background_init_context (GtkThemingBackground *bg)
 {
   bg->flags = gtk_style_context_get_state (bg->context);
@@ -280,19 +336,13 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
    * In the future we might want to support different origins or clips, but
    * right now we just shrink to the default.
    */
-  _gtk_rounded_box_init_rect (&bg->padding_box, 0, 0, bg->paint_area.width, bg->paint_area.height);
+  _gtk_rounded_box_init_rect (&bg->border_box, 0, 0, bg->paint_area.width, bg->paint_area.height);
+  _gtk_rounded_box_apply_border_radius_for_context (&bg->border_box, bg->context, bg->junction);
 
-  _gtk_rounded_box_apply_border_radius_for_context (&bg->padding_box, bg->context, bg->junction);
-
-  bg->clip_box = bg->padding_box;
+  bg->padding_box = bg->border_box;
   _gtk_rounded_box_shrink (&bg->padding_box,
 			   bg->border.top, bg->border.right,
 			   bg->border.bottom, bg->border.left);
-
-  _gtk_theming_background_apply_clip (bg);
-  _gtk_theming_background_apply_origin (bg);
-
-  bg->image = _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE), 0));
 }
 
 void
@@ -332,7 +382,6 @@ _gtk_theming_background_init_from_context (GtkThemingBackground *bg,
   bg->paint_area.width = width;
   bg->paint_area.height = height;
 
-  bg->image = NULL;
   bg->junction = junction;
 
   _gtk_theming_background_init_context (bg);
@@ -342,11 +391,24 @@ void
 _gtk_theming_background_render (GtkThemingBackground *bg,
                                 cairo_t              *cr)
 {
+  gint idx;
+  GtkThemingBackgroundLayer layer;
+  GtkCssValue *background_image;
+
+  background_image = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
+
   cairo_save (cr);
   cairo_translate (cr, bg->paint_area.x, bg->paint_area.y);
 
   _gtk_theming_background_apply_window_background (bg, cr);
-  _gtk_theming_background_paint (bg, cr);
+  _gtk_theming_background_paint_color (bg, cr, background_image);
+
+  for (idx = _gtk_css_array_value_get_n_values (background_image) - 1; idx >= 0; idx--)
+    {
+      _gtk_theming_background_init_layer (bg, &layer, background_image, idx);
+      _gtk_theming_background_paint_layer (bg, &layer, cr);
+    }
+
   _gtk_theming_background_apply_shadow (bg, cr);
 
   cairo_restore (cr);
@@ -355,5 +417,12 @@ _gtk_theming_background_render (GtkThemingBackground *bg,
 gboolean
 _gtk_theming_background_has_background_image (GtkThemingBackground *bg)
 {
-  return (bg->image != NULL) ? TRUE : FALSE;
+  GtkCssImage *image;
+  GtkCssValue *value = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
+
+  if (_gtk_css_array_value_get_n_values (value) == 0)
+    return FALSE;
+
+  image = _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (value, 0));
+  return (image != NULL);
 }
