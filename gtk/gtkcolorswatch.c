@@ -120,7 +120,7 @@ swatch_draw (GtkWidget *widget,
         {
           cairo_save (cr);
 
-          _gtk_rounded_box_path (&background.clip_box, cr);
+          _gtk_rounded_box_path (&background.padding_box, cr);
           cairo_clip_preserve (cr);
 
           cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
@@ -159,9 +159,9 @@ swatch_draw (GtkWidget *widget,
         cairo_set_source_rgba (cr, 1., 1., 1., 0.4);
       else
         cairo_set_source_rgba (cr, 0., 0., 0., 0.4);
-      _gtk_rounded_box_shrink (&background.clip_box, 3, 3, 3, 3);
-      _gtk_rounded_box_path (&background.clip_box, cr);
-      cairo_stroke (cr);
+        _gtk_rounded_box_shrink (&background.padding_box, 3, 3, 3, 3);
+        _gtk_rounded_box_path (&background.padding_box, cr);
+        cairo_stroke (cr);
     }
 
   if (swatch->priv->icon)
