@@ -25,6 +25,7 @@
 #include <math.h>
 
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcssbgsizevalueprivate.h"
 #include "gtkcssbordervalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsseasevalueprivate.h"
@@ -32,6 +33,7 @@
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcsspositionvalueprivate.h"
 #include "gtkcssrepeatvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
@@ -481,32 +483,45 @@ parse_background (GtkCssShorthandProperty  *shorthand,
 
           values[0] = _gtk_css_array_value_new (_gtk_css_image_value_new (image));
         }
-      else if (values[1] == NULL &&
+      else if (values[3] == NULL &&
                (value = _gtk_css_background_repeat_value_try_parse (parser)))
         {
-          values[1] = _gtk_css_array_value_new (value);
+          values[3] = _gtk_css_array_value_new (value);
           value = NULL;
         }
-      else if ((values[2] == NULL || values[3] == NULL) &&
+      else if ((values[4] == NULL || values[5] == NULL) &&
                (value = _gtk_css_area_value_try_parse (parser)))
         {
-          values[3] = _gtk_css_array_value_new (value);
+          values[5] = _gtk_css_array_value_new (value);
 
-          if (values[2] == NULL)
+          if (values[4] == NULL)
             {
-              values[2] = values[3];
-              values[3] = NULL;
+              values[4] = values[5];
+              values[5] = NULL;
             }
           value = NULL;
         }
-      else if (values[4] == NULL)
+      else if (values[6] == NULL)
         {
           value = _gtk_css_symbolic_value_new (parser);
           if (value == NULL)
             return FALSE;
 
-          values[4] = _gtk_css_array_value_new (value);
+          values[6] = _gtk_css_array_value_new (value);
           value = NULL;
+        }
+      else if (values[1] == NULL &&
+               (value = _gtk_css_position_value_parse (parser)))
+        {
+          values[1] = _gtk_css_array_value_new (value);
+          value = NULL;
+
+          if (_gtk_css_parser_try (parser, "/", TRUE) &&
+              (value = _gtk_css_bg_size_value_parse (parser)))
+            {
+              values[2] = _gtk_css_array_value_new (value);
+              value = NULL;
+            }
         }
       else
         {
@@ -920,7 +935,7 @@ _gtk_css_shorthand_property_init_properties (void)
                                          "border-top-color", "border-right-color", "border-bottom-color", "border-left-color",
                                          "border-image-source", "border-image-slice", "border-image-width", "border-image-repeat", NULL };
   const char *outline_subproperties[] = { "outline-width", "outline-style", "outline-color", NULL };
-  const char *background_subproperties[] = { "background-image", "background-repeat", "background-clip", "background-origin",
+  const char *background_subproperties[] = { "background-image", "background-position", "background-size", "background-repeat", "background-clip", "background-origin",
                                              "background-color", NULL };
   const char *transition_subproperties[] = { "transition-property", "transition-duration", "transition-delay", "transition-timing-function", NULL };
 
