@@ -31,18 +31,18 @@
       </thead>
       <tbody>
         <row><entry>EggSMClient::quit-requested</entry><entry>instead of calling will_quit (FALSE,...) in response to this signal, install an inhibitor</entry></row>
-        <row><entry>EggSMClient::quit</entry><entry>the #GtkApplication::quit signal</entry></row>
-        <row><entry>EggSMClient::quit-cancelled</entry><entry></entry></row>
+        <row><entry>EggSMClient::quit</entry><entry>the #GApplication::shutdown signal</entry></row>
+        <row><entry>EggSMClient::quit-cancelled</entry><entry>-</entry></row>
         <row><entry>egg_sm_client_will_quit</entry><entry>instead of calling will_quit (FALSE,...), install an inhibitor</entry></row>
-        <row><entry>egg_sm_client_end_session</entry><entry>gtk_application_end_session()</entry></row>
+        <row><entry>egg_sm_client_end_session</entry><entry>-</entry></row>
       </tbody>
     </tgroup>
   </table>
 
   <para>
-    At this point, GtkApplication has no special support for state saving.
-    Applications can use GSettings or GKeyFile and save as much state as
-    they see fit in response to #GtkApplication::quit or whenever they
-    consider appropriate.
+    At this point, GtkApplication has no special support for state saving
+    and restarting. Applications can use GSettings or GKeyFile and save as
+    much state as they see fit in response to #GApplication::shutdown or
+    whenever they consider appropriate.
   </para>
 </chapter>
