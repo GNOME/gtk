@@ -10,6 +10,6 @@ noinst_DATA = gdk-win32-res.o
 endif
 
 gdk-win32-res.o : gdk.rc gtk.ico
-	$(WINDRES) gdk.rc $@
+	$(WINDRES) -I $(srcdir) gdk.rc $@
 
 -include $(top_srcdir)/git.mk
