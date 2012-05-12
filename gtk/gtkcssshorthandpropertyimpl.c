@@ -457,11 +457,11 @@ parse_font (GtkCssShorthandProperty  *shorthand,
 }
 
 static gboolean
-parse_background (GtkCssShorthandProperty  *shorthand,
-                  GtkCssValue             **values,
-                  GtkCssParser             *parser)
+parse_one_background (GtkCssShorthandProperty  *shorthand,
+                      GtkCssValue             **values,
+                      GtkCssParser             *parser)
 {
-  GtkCssValue *value;
+  GtkCssValue *value = NULL;
 
   do
     {
@@ -481,23 +481,36 @@ parse_background (GtkCssShorthandProperty  *shorthand,
                 return FALSE;
             }
 
-          values[0] = _gtk_css_array_value_new (_gtk_css_image_value_new (image));
+          values[0] = _gtk_css_image_value_new (image);
+        }
+      else if (values[1] == NULL &&
+               (value = _gtk_css_position_value_parse (parser)))
+        {
+          values[1] = value;
+          value = NULL;
+
+          if (_gtk_css_parser_try (parser, "/", TRUE) &&
+              (value = _gtk_css_bg_size_value_parse (parser)))
+            {
+              values[2] = value;
+              value = NULL;
+            }
         }
       else if (values[3] == NULL &&
                (value = _gtk_css_background_repeat_value_try_parse (parser)))
         {
-          values[3] = _gtk_css_array_value_new (value);
+          values[3] = value;
           value = NULL;
         }
       else if ((values[4] == NULL || values[5] == NULL) &&
                (value = _gtk_css_area_value_try_parse (parser)))
         {
-          values[5] = _gtk_css_array_value_new (value);
+          values[4] = value;
 
-          if (values[4] == NULL)
+          if (values[5] == NULL)
             {
-              values[4] = values[5];
-              values[5] = NULL;
+              values[5] = values[4];
+              values[4] = NULL;
             }
           value = NULL;
         }
@@ -505,23 +518,12 @@ parse_background (GtkCssShorthandProperty  *shorthand,
         {
           value = _gtk_css_symbolic_value_new (parser);
           if (value == NULL)
-            return FALSE;
+            values[6] = _gtk_css_value_ref (_gtk_css_style_property_get_initial_value 
+                                            (_gtk_css_shorthand_property_get_subproperty (shorthand, 6)));
+          else
+            values[6] = value;
 
-          values[6] = _gtk_css_array_value_new (value);
           value = NULL;
-        }
-      else if (values[1] == NULL &&
-               (value = _gtk_css_position_value_parse (parser)))
-        {
-          values[1] = _gtk_css_array_value_new (value);
-          value = NULL;
-
-          if (_gtk_css_parser_try (parser, "/", TRUE) &&
-              (value = _gtk_css_bg_size_value_parse (parser)))
-            {
-              values[2] = _gtk_css_array_value_new (value);
-              value = NULL;
-            }
         }
       else
         {
@@ -532,6 +534,62 @@ parse_background (GtkCssShorthandProperty  *shorthand,
         }
     }
   while (!value_is_done_parsing (parser));
+
+  if (values[5] != NULL && values[4] == NULL)
+    values[4] = _gtk_css_value_ref (values[5]);
+
+  return TRUE;
+}
+
+static gboolean
+parse_background (GtkCssShorthandProperty  *shorthand,
+                  GtkCssValue             **values,
+                  GtkCssParser             *parser)
+{
+  GtkCssValue *step_values[7];
+  GPtrArray *arrays[6];
+  guint i;
+
+  for (i = 0; i < 6; i++)
+    {
+      arrays[i] = g_ptr_array_new ();
+      step_values[i] = NULL;
+    }
+  
+  step_values[6] = NULL;
+
+  do {
+    if (!parse_one_background (shorthand, step_values, parser))
+      {
+        for (i = 0; i < 6; i++)
+          {
+            g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) _gtk_css_value_unref);
+            g_ptr_array_unref (arrays[i]);
+            return FALSE;
+          }
+      }
+
+      for (i = 0; i < 6; i++)
+        {
+          if (step_values[i] == NULL)
+            {
+              GtkCssValue *initial = _gtk_css_style_property_get_initial_value (
+                                         _gtk_css_shorthand_property_get_subproperty (shorthand, i));
+              step_values[i] = _gtk_css_value_ref (_gtk_css_array_value_get_nth (initial, 0));
+            }
+
+          g_ptr_array_add (arrays[i], step_values[i]);
+          step_values[i] = NULL;
+        }
+  } while (_gtk_css_parser_try (parser, ",", TRUE));
+
+  for (i = 0; i < 6; i++)
+    {
+      values[i] = _gtk_css_array_value_new_from_array ((GtkCssValue **) arrays[i]->pdata, arrays[i]->len);
+      g_ptr_array_unref (arrays[i]);
+    }
+
+  values[6] = step_values[6];
 
   return TRUE;
 }
