@@ -187,12 +187,18 @@ _gtk_css_position_value_parse (GtkCssParser *parser)
     }
   if (names[first].name == NULL)
     {
-      missing = &y;
-      x = _gtk_css_number_value_parse (parser,
-                                       GTK_CSS_PARSE_PERCENT
-                                       | GTK_CSS_PARSE_LENGTH);
-      if (x == NULL)
-	return NULL;
+      if (_gtk_css_parser_has_number (parser))
+        {
+          missing = &y;
+          x = _gtk_css_number_value_parse (parser,
+                                           GTK_CSS_PARSE_PERCENT
+                                           | GTK_CSS_PARSE_LENGTH);
+
+          if (x == NULL)
+            return NULL;
+        }
+      else
+        return NULL;
     }
 
   for (second = 0; names[second].name != NULL; second++)
