@@ -140,8 +140,11 @@ MATH_LIB=-lm
 AC_MSG_CHECKING([for native Win32])
 LIB_EXE_MACHINE_FLAG=X86
 EXE_MANIFEST_ARCHITECTURE=X86
+DISABLE_ON_W32=''
 case "$host" in
   *-*-mingw*)
+    dnl Comment-out certain gtk3.types.in lines
+    DISABLE_ON_W32='%'
     os_win32=yes
     gio_can_sniff=no
     MATH_LIB=
@@ -158,6 +161,7 @@ case "$host" in
 esac
 AC_MSG_RESULT([$os_win32])
 
+AC_SUBST(DISABLE_ON_W32)
 AC_SUBST(LIB_EXE_MACHINE_FLAG)
 AC_SUBST(EXE_MANIFEST_ARCHITECTURE)
 
@@ -1714,6 +1718,7 @@ docs/reference/Makefile
 docs/reference/gdk/Makefile
 docs/reference/gdk/version.xml
 docs/reference/gtk/Makefile
+docs/reference/gtk/gtk3.types
 docs/reference/gtk/version.xml
 docs/reference/libgail-util/Makefile
 docs/reference/libgail-util/version.xml

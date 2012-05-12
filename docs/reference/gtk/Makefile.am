@@ -390,7 +390,7 @@ FIXXREF_OPTIONS=--extra-dir=../gdk/html \
 include $(top_srcdir)/gtk-doc.make
 
 # Other files to distribute
-EXTRA_DIST += version.xml.in
+EXTRA_DIST += version.xml.in gtk3.types.in
 
 ########################################################################
 
