@@ -32,9 +32,9 @@ IGNORE_HFILES= 			\
 	x11			\
 	quartz
 
-# Extra files to add when scanning (relative to $srcdir)
+# Extra files to add when scanning
 EXTRA_HFILES=			\
-	../../../gdk/x11/gdkx.h
+	$(top_srcdir)/gdk/x11/gdkx.h
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed
 # if $(DOC_MODULE).types is non-empty.
