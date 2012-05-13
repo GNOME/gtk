@@ -15,6 +15,7 @@ demos =						\
 	clipboard.c				\
 	colorsel.c				\
 	combobox.c				\
+	css_basics.c				\
 	dialog.c				\
 	drawingarea.c				\
 	editable_cells.c			\
