@@ -71,12 +71,12 @@ LDADDS = \
 
 bin_PROGRAMS = gtk3-demo gtk3-demo-application
 
-BUILT_SOURCES = demos.h application_resources.c
+BUILT_SOURCES = demos.h demo_resources.c
 
 EXTRA_DIST += 				\
 	$(IMAGEFILES)			\
 	demo.ui				\
-	application.gresource.xml	\
+	demo.gresource.xml	\
 	application.ui			\
 	menus.ui			\
 	theming.ui			\
@@ -105,12 +105,12 @@ gtk3_demo_LDFLAGS = -export-dynamic
 
 gtk3_demo_application_SOURCES = \
 	application-standalone.c \
-	application_resources.c
+	demo_resources.c
 
 gtk3_demo_application_LDADD = $(LDADDS)
 
-application_resources.c: application.gresource.xml gtk-logo-24.png gtk-logo-48.png application.ui menus.ui
-	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $(srcdir)/application.gresource.xml
+demo_resources.c: demo.gresource.xml gtk-logo-24.png gtk-logo-48.png application.ui menus.ui
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $(srcdir)/demo.gresource.xml
 
 IMAGEFILES=	alphatest.png		\
 		apple-red.png		\
