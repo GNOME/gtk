@@ -76,13 +76,8 @@ BUILT_SOURCES = demos.h demo_resources.c
 EXTRA_DIST += 				\
 	$(IMAGEFILES)			\
 	demo.ui				\
-	demo.gresource.xml	\
-	application.ui			\
-	menus.ui			\
-	theming.ui			\
-	fancy.css			\
-	gtk-logo-24.png			\
-	gtk-logo-48.png			\
+	demo.gresource.xml		\
+	$(RESOURCES)			\
 	org.gtk.Demo.gschema.xml
 
 gsettings_SCHEMAS = \
@@ -110,8 +105,17 @@ gtk3_demo_application_SOURCES = \
 
 gtk3_demo_application_LDADD = $(LDADDS)
 
-demo_resources.c: demo.gresource.xml gtk-logo-24.png gtk-logo-48.png application.ui menus.ui
+demo_resources.c: demo.gresource.xml $(RESOURCES)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $(srcdir)/demo.gresource.xml
+
+RESOURCES=	application.ui			\
+		menus.ui			\
+		theming.ui			\
+		gtk-logo-24.png			\
+		gtk-logo-48.png			\
+		css_basics.css			\
+		fancy.css			\
+		reset.css
 
 IMAGEFILES=	alphatest.png		\
 		apple-red.png		\
@@ -131,11 +135,8 @@ IMAGEFILES=	alphatest.png		\
 democode_DATA = \
 	$(demos)		\
 	$(IMAGEFILES)		\
-	demo.ui			\
-	menus.ui		\
-	application.ui		\
-	theming.ui		\
-	fancy.css
+	$(RESOURCES)		\
+	demo.ui
 
 DISTCLEANFILES = demos.h
 

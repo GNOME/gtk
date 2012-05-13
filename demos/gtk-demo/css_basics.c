@@ -9,20 +9,6 @@
 
 static GtkWidget *window = NULL;
 
-#define DEFAULT_CSS \
-  "/* You can edit the CSS to change the appearance of this Window */\n" \
-  "\n" \
-  "GtkWindow {\n" \
-  "  engine: none;\n" \
-  "  background-image: none;\n" \
-  "  background-color: brown;\n" \
-  "}\n" \
-  "\n" \
-  "GtkTextView {\n" \
-  "  color: green;\n" \
-  "}\n" \
-  "\n"
-
 static void
 show_parsing_error (GtkCssProvider *provider,
                     GtkCssSection  *section,
@@ -83,6 +69,7 @@ do_css_basics (GtkWidget *do_widget)
       GtkWidget *container, *child;
       GtkStyleProvider *provider;
       GtkTextBuffer *text;
+      GBytes *bytes;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
@@ -110,9 +97,10 @@ do_css_basics (GtkWidget *do_widget)
                         "changed",
                         G_CALLBACK (css_text_changed),
                         provider);
-      gtk_text_buffer_set_text (text,
-                                DEFAULT_CSS,
-                                -1);
+
+      bytes = g_resources_lookup_data ("/css_basics/gtk.css", 0, NULL);
+      gtk_text_buffer_set_text (text, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+
       g_signal_connect (provider,
                         "parsing-error",
                         G_CALLBACK (show_parsing_error),

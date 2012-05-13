@@ -18,7 +18,6 @@ do_theming_style_classes (GtkWidget *do_widget)
 {
   GtkWidget *grid;
   GtkBuilder *builder;
-  gchar *filename;
   GError *err = NULL;
 
   if (!window)
@@ -32,9 +31,7 @@ do_theming_style_classes (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       builder = gtk_builder_new ();
-      filename = demo_find_file ("theming.ui", NULL);
-      gtk_builder_add_from_file (builder, filename, &err);
-      g_free (filename);
+      gtk_builder_add_from_resource (builder, "/theming_style_classes/theming.ui", NULL);
       if (err)
         {
           g_error ("ERROR: %s\n", err->message);
