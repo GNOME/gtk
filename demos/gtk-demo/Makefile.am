@@ -96,6 +96,7 @@ demos.h: @REBUILD@ $(demos) geninclude.pl
 gtk3_demo_SOURCES = 		\
 	$(demos)		\
 	demo-common.h		\
+	demo_resources.c	\
 	main.c			\
 	demos.h
 
