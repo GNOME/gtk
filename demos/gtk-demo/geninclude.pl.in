@@ -7,6 +7,7 @@ typedef struct _Demo Demo;
 
 struct _Demo 
 {
+  gchar *name;
   gchar *title;
   gchar *filename;
   GDoDemoFunc func;
@@ -36,7 +37,7 @@ for $file (@ARGV) {
 
     print "GtkWidget *do_$basename (GtkWidget *do_widget);\n";
 
-    push @demos, {"title" => $title, "file" => "$file $extra",
+    push @demos, {"name" => $basename, "title" => $title, "file" => "$file $extra",
 		  "func"  => "do_$basename"};
 }
 
@@ -64,7 +65,7 @@ foreach $href (@demos) {
 	$tmp = (defined @child_arrays)?($#child_arrays + 1):0;
 	push @child_arrays, "child$tmp";
 
-	push @demos, {"title" => $parent_name, "file" => "NULL",
+	push @demos, {"name" => "NULL", "title" => $parent_name, "file" => "NULL",
 		      "func" => "NULL"};
     }
 }
@@ -91,7 +92,7 @@ if (defined @parents) {
 		    print ",\n";
 		}
 		
-		print qq (  { "$1", "$demos[$j]{file}", $demos[$j]{func}, NULL });
+		print qq (  { "$demos[$j]{name}", "$1", "$demos[$j]{file}", $demos[$j]{func}, NULL });
 
 		# hack ... ugly
 		$demos[$j]{"title"} = "foo";
@@ -145,9 +146,9 @@ foreach $href (@demos) {
 	    if ($parents[$i] eq $href->{title}) {
 
 		if ($href->{file} eq 'NULL') {
-		    print qq (  { "$href->{title}", NULL, $href->{func}, $child_arrays[$i] });
+		    print qq (  { NULL, "$href->{title}", NULL, $href->{func}, $child_arrays[$i] });
 		} else {
-		    print qq (  { "$href->{title}", "$href->{file}", $href->{func}, $child_arrays[$i] });
+		    print qq (  { "$href->{name}", "$href->{title}", "$href->{file}", $href->{func}, $child_arrays[$i] });
 		}
 		
 		$handled = 1;
@@ -160,7 +161,7 @@ foreach $href (@demos) {
 	next;
     }
     
-    print qq (  { "$href->{title}", "$href->{file}", $href->{func}, NULL });
+    print qq (  { "$href->{name}", "$href->{title}", "$href->{file}", $href->{func}, NULL });
 }
 
 print ",\n";
