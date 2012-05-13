@@ -113,7 +113,7 @@ activate_about (GSimpleAction *action,
     NULL
   };
 
-  pixbuf = gdk_pixbuf_new_from_resource ("/logos/gtk-logo-48.png", NULL);
+  pixbuf = gdk_pixbuf_new_from_resource ("/application/logos/gtk-logo-48.png", NULL);
 
   gtk_show_about_dialog (GTK_WINDOW (window),
                          "program-name", "GTK+ Code Demos",
@@ -177,7 +177,7 @@ register_stock_icons (void)
       factory = gtk_icon_factory_new ();
       gtk_icon_factory_add_default (factory);
 
-      pixbuf = gdk_pixbuf_new_from_resource ("/logos/gtk-logo-24.png", NULL);
+      pixbuf = gdk_pixbuf_new_from_resource ("/application/logos/gtk-logo-24.png", NULL);
 
       icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);
       gtk_icon_factory_add (factory, "demo-gtk-logo", icon_set);
@@ -295,7 +295,7 @@ startup (GApplication *app)
   GMenuModel *menubar;
 
   builder = gtk_builder_new ();
-  gtk_builder_add_from_resource (builder, "/ui/menus.ui", NULL);
+  gtk_builder_add_from_resource (builder, "/application/ui/menus.ui", NULL);
 
   appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
   menubar = (GMenuModel *)gtk_builder_get_object (builder, "menubar");
@@ -331,7 +331,7 @@ activate (GApplication *app)
                                    window);
 
   builder = gtk_builder_new ();
-  gtk_builder_add_from_resource (builder, "/ui/application.ui", NULL);
+  gtk_builder_add_from_resource (builder, "/application/ui/application.ui", NULL);
 
   grid = (GtkWidget *)gtk_builder_get_object (builder, "grid");
   contents = (GtkWidget *)gtk_builder_get_object (builder, "contents");
