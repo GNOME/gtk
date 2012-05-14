@@ -2347,6 +2347,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   GtkJunctionSides sides;
   GtkThemingBackground bg;
   gint xx, yy;
+  gboolean has_image;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
@@ -2359,6 +2360,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   color_shade (&bg_color, 1.3, &lighter);
 
   _gtk_theming_background_init (&bg, engine, x, y, width, height, sides);
+  has_image = _gtk_theming_background_has_background_image (&bg);
   _gtk_theming_background_render (&bg, cr);
 
   gtk_theming_engine_render_frame (engine, cr, x, y, width, height);
@@ -2612,12 +2614,15 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
     }
   else if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_PANE_SEPARATOR))
     {
-      if (width > height)
-        for (xx = x + width / 2 - 15; xx <= x + width / 2 + 15; xx += 5)
-          render_dot (cr, &lighter, &darker, xx, y + height / 2 - 1, 3);
-      else
-        for (yy = y + height / 2 - 15; yy <= y + height / 2 + 15; yy += 5)
-          render_dot (cr, &lighter, &darker, x + width / 2 - 1, yy, 3);
+      if (!has_image)
+        {
+          if (width > height)
+            for (xx = x + width / 2 - 15; xx <= x + width / 2 + 15; xx += 5)
+              render_dot (cr, &lighter, &darker, xx, y + height / 2 - 1, 3);
+          else
+            for (yy = y + height / 2 - 15; yy <= y + height / 2 + 15; yy += 5)
+              render_dot (cr, &lighter, &darker, x + width / 2 - 1, yy, 3);
+        }
     }
   else
     {
