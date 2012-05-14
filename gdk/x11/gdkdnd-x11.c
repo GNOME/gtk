@@ -240,12 +240,12 @@ gdk_drag_context_find (GdkDisplay *display,
                        Window      source_xid,
                        Window      dest_xid)
 {
-  GList *tmp_list = contexts;
+  GList *tmp_list;
   GdkDragContext *context;
   GdkX11DragContext *context_x11;
   Window context_dest_xid;
 
-  while (tmp_list)
+  for (tmp_list = contexts; tmp_list; tmp_list = tmp_list->next)
     {
       context = (GdkDragContext *)tmp_list->data;
       context_x11 = (GdkX11DragContext *)context;
@@ -265,8 +265,6 @@ gdk_drag_context_find (GdkDisplay *display,
             (GDK_WINDOW_XID (context->source_window) == source_xid))) &&
           ((dest_xid == None) || (context_dest_xid == dest_xid)))
         return context;
-
-      tmp_list = tmp_list->next;
     }
 
   return NULL;
