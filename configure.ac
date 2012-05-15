@@ -751,7 +751,8 @@ AC_TYPE_UID_T
 
 # Check for round(), rint(), isnan(), isinf() and nearbyint()
 AC_CHECK_LIB(m,round,,)
-AC_CHECK_FUNCS(round rint isnan isinf nearbyint)
+AC_CHECK_FUNCS(round rint nearbyint)
+AC_CHECK_DECLS([isnan, isinf], [], [], [[#include <math.h>]])
 
 # Checks for gdkspawn
 AC_CHECK_HEADERS(crt_externs.h)

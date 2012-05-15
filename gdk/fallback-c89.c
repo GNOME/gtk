@@ -19,7 +19,7 @@
 
 #include <float.h>
 
-#ifndef HAVE_ISNAN
+#ifndef HAVE_DECL_ISNAN
 /* it seems of the supported compilers only
  * MSVC does not have isnan(), but it does
  * have _isnan() which does the same as isnan()
@@ -31,7 +31,7 @@ isnan (double x)
 }
 #endif
 
-#ifndef HAVE_ISINF
+#ifndef HAVE_DECL_ISINF
 /* Unfortunately MSVC does not have finite()
  * but it does have _finite() which is the same
  * as finite() except when x is a NaN
