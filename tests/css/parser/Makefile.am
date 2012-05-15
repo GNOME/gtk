@@ -154,8 +154,8 @@ EXTRA_DIST += \
 	background-position.ref.css \
 	background-repeat.css \
 	background-repeat.ref.css \
-	background-shorthand.css \
-	background-shorthand.ref.css \
+	background-shorthand-single.css \
+	background-shorthand-single.ref.css \
         background-size.css \
         background-size.ref.css \
 	boolean.css \
