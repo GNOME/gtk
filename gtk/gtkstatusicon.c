@@ -1328,10 +1328,9 @@ round_pixel_size (GtkWidget *widget,
 
   for (s = GTK_ICON_SIZE_MENU; s <= GTK_ICON_SIZE_DIALOG; s++)
     {
-      if (gtk_icon_size_lookup_for_settings (settings, s, &w, &h) &&
-	  w <= pixel_size && h <= pixel_size)
+      if (gtk_icon_size_lookup_for_settings (settings, s, &w, &h))
 	{
-	  d = MAX (pixel_size - w, pixel_size - h);
+	  d = MAX (abs (pixel_size - w), abs (pixel_size - h));
 	  if (d < dist)
 	    {
 	      dist = d;
