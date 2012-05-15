@@ -2854,6 +2854,10 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   gint n_columns, n_rows, n_items;
   gint col, row;
   GtkRequestedSize *sizes;
+  gboolean rtl;
+
+  rtl = gtk_widget_get_direction (GTK_WIDGET (icon_view)) == GTK_TEXT_DIR_RTL;
+
 
   n_items = gtk_icon_view_get_n_items (icon_view);
 
@@ -2952,8 +2956,13 @@ gtk_icon_view_layout (GtkIconView *icon_view)
           item->cell_area.height = sizes[row].minimum_size;
           item->row = row;
           item->col = col;
+          if (rtl)
+            {
+              item->cell_area.x = priv->width - item_width - item->cell_area.x;
+              item->col = n_columns - 1 - col;
+            }
         }
-      
+
       priv->height += sizes[row].minimum_size + priv->item_padding + priv->row_spacing;
     }
 
