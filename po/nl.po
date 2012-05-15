@@ -5,8 +5,9 @@
 # Tino Meinen <tino.meinen@gmail.com>, 2002–2010
 # Reinout van Schouwen <reinouts@gnome.org>, 2009
 # Vincent van Adrighem <adrighem@gnome.org>, 2009
-# Wouter Bolsterlee <wbolster@gnome.org>, 2011
-# Rachid BM <rachidbm@ubuntu.com>, 2011-2012.
+# Wouter Bolsterlee <wbolster@gnome.org>, 2011–2012
+#
+# Rachid BM <rachidbm@ubuntu.com>, 2011–2012
 # expander             - samenvouwer/openvouwen
 # image format         - bestandsformaat
 # image file           - afbeelding
@@ -20,13 +21,14 @@
 # separator            - scheiding/scheidingslijn/scheidingsteken
 # selected             - geselecteerde/gekozen
 # standard display     - standaard display
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-15 22:18+0200\n"
-"PO-Revision-Date: 2012-05-13 23:25+0200\n"
-"Last-Translator: Rachid BM <rachidbm@ubuntu.com>\n"
+"POT-Creation-Date: 2012-05-15 22:20+0200\n"
+"PO-Revision-Date: 2012-05-15 22:19+0200\n"
+"Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
 "Language-Team: Gnome NL\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -689,8 +691,8 @@ msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
 "for details, visit <a href=\"%s\">%s</a>"
 msgstr ""
-"Dit programma komt met ABSOLUUT GEEN GARANTIE;\n"
-"zie <a href=\"%s\">%s</a> voor details"
+"Dit programma komt ZONDER ENIGE GARANTIE;\n"
+"zie <a href=\"%s\">%s</a> voor details."
 
 #: ../gtk/gtkaboutdialog.c:357
 msgid "License"
@@ -4871,9 +4873,8 @@ msgid "Unspecified profile"
 msgstr "Ongespecificeerd profiel"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:249
-#, fuzzy
 msgid "output"
-msgstr "afdruk.%s"
+msgstr "afdruk"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:512
 msgid "Print to File"
