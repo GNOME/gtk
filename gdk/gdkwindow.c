@@ -7805,8 +7805,7 @@ update_cursor (GdkDisplay *display,
    * which native window has what cursor set. */
   toplevel = get_event_toplevel (pointer_window);
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (toplevel->impl);
-  if (impl_class->set_device_cursor)
-    impl_class->set_device_cursor (toplevel, device, cursor);
+  impl_class->set_device_cursor (toplevel, device, cursor);
 }
 
 static gboolean
