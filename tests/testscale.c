@@ -132,6 +132,15 @@ int main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (frame), scale);
   gtk_box_pack_start (GTK_BOX (box), frame, FALSE, FALSE, 0);
 
+  frame = gtk_frame_new ("With fill level");
+  scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 100, 1);
+  scales = g_slist_prepend (scales, scale);
+  gtk_scale_set_draw_value (GTK_SCALE (scale), FALSE);
+  gtk_range_set_show_fill_level (GTK_RANGE (scale), TRUE);
+  gtk_range_set_fill_level (GTK_RANGE (scale), 50);
+  gtk_container_add (GTK_CONTAINER (frame), scale);
+  gtk_box_pack_start (GTK_BOX (box), frame, FALSE, FALSE, 0);
+
   frame = gtk_frame_new ("Simple marks");
   extra_scale = scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, 0, 100, 1);
   scales = g_slist_prepend (scales, scale);
