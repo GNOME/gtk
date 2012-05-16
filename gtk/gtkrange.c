@@ -2236,13 +2236,6 @@ gtk_range_draw (GtkWidget *widget,
                 fill_y += priv->trough.height - fill_height;
             }
 
-#if 0
-          if (fill_level < gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment))
-            fill_detail = "trough-fill-level-full";
-          else
-            fill_detail = "trough-fill-level";
-#endif
-
           gtk_render_activity (context, cr,
                                fill_x, fill_y,
                                fill_width, fill_height);
