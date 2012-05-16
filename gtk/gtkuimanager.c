@@ -1396,17 +1396,16 @@ static gboolean
 free_node (GNode *node)
 {
   Node *info = NODE_INFO (node);
-  
-  g_list_free_full (info->uifiles, node_ui_reference_free);
 
-  if (info->action)
-    g_object_unref (info->action);
-  if (info->proxy)
-    g_object_unref (info->proxy);
-  if (info->extra)
-    g_object_unref (info->extra);
-  g_free (info->name);
+  g_list_free_full (info->uifiles, node_ui_reference_free);
+  info->uifiles = NULL;
+
+  g_clear_object (&info->action);
+  g_clear_object (&info->proxy);
+  g_clear_object (&info->extra);
+  g_clear_pointer (&info->name, g_free);
   g_slice_free (Node, info);
+  node->data = NULL;
 
   return FALSE;
 }
