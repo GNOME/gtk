@@ -2010,6 +2010,7 @@ gtk_range_draw (GtkWidget *widget,
   gboolean draw_trough = TRUE;
   gboolean draw_slider = TRUE;
   GtkStyleContext *context;
+  GtkBorder margin;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -2107,6 +2108,12 @@ gtk_range_draw (GtkWidget *widget,
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
+      gtk_style_context_get_margin (context, widget_state, &margin);
+
+      x += margin.left;
+      y += margin.top;
+      width -= margin.left + margin.right;
+      height -= margin.top + margin.bottom;
 
       if (draw_trough)
         {
@@ -3576,13 +3583,15 @@ gtk_range_calc_layout (GtkRange *range,
   GtkRangePrivate *priv = range->priv;
   gint slider_width, stepper_size, focus_width, trough_border, stepper_spacing;
   gint slider_length;
-  GtkBorder border;
+  GtkBorder border, trough_margin;
   gint n_steppers;
   gboolean has_steppers_ab;
   gboolean has_steppers_cd;
   gboolean trough_under_steppers;
   GdkRectangle range_rect;
   GtkWidget *widget;
+  GtkStyleContext *context;
+  GtkStateFlags state;
 
   if (!priv->need_recalc)
     return;
@@ -3598,6 +3607,13 @@ gtk_range_calc_layout (GtkRange *range,
    */
 
   widget = GTK_WIDGET (range);
+  context = gtk_widget_get_style_context (widget);
+
+  state = gtk_widget_get_state_flags (widget);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
+  gtk_style_context_get_margin (context, state, &trough_margin);
+  gtk_style_context_restore (context);
 
   gtk_range_get_props (range,
                        &slider_width, &stepper_size,
@@ -3716,16 +3732,16 @@ gtk_range_calc_layout (GtkRange *range,
       /* Now the trough is the remaining space between steppers B and C,
        * if any, minus spacing
        */
-      priv->trough.x = range_rect.x;
-      priv->trough.y = priv->stepper_b.y + priv->stepper_b.height + stepper_spacing * has_steppers_ab;
-      priv->trough.width = range_rect.width;
-      priv->trough.height = priv->stepper_c.y - priv->trough.y - stepper_spacing * has_steppers_cd;
+      priv->trough.x = range_rect.x + trough_margin.left;
+      priv->trough.y = priv->stepper_b.y + priv->stepper_b.height + stepper_spacing * has_steppers_ab + trough_margin.top;
+      priv->trough.width = range_rect.width - trough_margin.left - trough_margin.right;
+      priv->trough.height = priv->stepper_c.y - priv->trough.y - stepper_spacing * has_steppers_cd - trough_margin.bottom;
 
       /* Slider fits into the trough, with stepper_spacing on either side,
        * and the size/position based on the adjustment or fixed, depending.
        */
-      priv->slider.x = priv->trough.x + focus_width + trough_border;
-      priv->slider.width = priv->trough.width - (focus_width + trough_border) * 2;
+      priv->slider.x = range_rect.x + focus_width + trough_border;
+      priv->slider.width = range_rect.width - (focus_width + trough_border) * 2;
 
       /* Compute slider position/length */
       {
@@ -3864,17 +3880,16 @@ gtk_range_calc_layout (GtkRange *range,
       /* Now the trough is the remaining space between steppers B and C,
        * if any
        */
-      priv->trough.x = priv->stepper_b.x + priv->stepper_b.width + stepper_spacing * has_steppers_ab;
-      priv->trough.y = range_rect.y;
-
-      priv->trough.width = priv->stepper_c.x - priv->trough.x - stepper_spacing * has_steppers_cd;
-      priv->trough.height = range_rect.height;
+      priv->trough.x = priv->stepper_b.x + priv->stepper_b.width + stepper_spacing * has_steppers_ab + trough_margin.left;
+      priv->trough.y = range_rect.y + trough_margin.top;
+      priv->trough.width = priv->stepper_c.x - priv->trough.x - stepper_spacing * has_steppers_cd - trough_margin.right;
+      priv->trough.height = range_rect.height - trough_margin.top - trough_margin.bottom;
 
       /* Slider fits into the trough, with stepper_spacing on either side,
        * and the size/position based on the adjustment or fixed, depending.
        */
-      priv->slider.y = priv->trough.y + focus_width + trough_border;
-      priv->slider.height = priv->trough.height - (focus_width + trough_border) * 2;
+      priv->slider.y = range_rect.y + focus_width + trough_border;
+      priv->slider.height = range_rect.height - (focus_width + trough_border) * 2;
 
       /* Compute slider position/length */
       {
