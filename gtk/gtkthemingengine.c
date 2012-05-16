@@ -1050,10 +1050,8 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   gtk_theming_engine_get_color (engine, flags, &fg_color);
   gtk_theming_engine_get_background_color (engine, flags, &bg_color);
   gtk_theming_engine_get_border (engine, flags, &border);
-
-  gtk_theming_engine_get (engine, flags,
-                          "border-style", &border_style,
-                          NULL);
+  border_style = _gtk_css_border_style_value_get 
+    (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
@@ -1175,10 +1173,8 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   gtk_theming_engine_get_color (engine, flags, &fg_color);
   gtk_theming_engine_get_background_color (engine, flags, &bg_color);
   gtk_theming_engine_get_border (engine, flags, &border);
-
-  gtk_theming_engine_get (engine, flags,
-                          "border-style", &border_style,
-                          NULL);
+  border_style = _gtk_css_border_style_value_get 
+    (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
 
   exterior_size = MIN (width, height);
   border_width = MIN (MIN (border.top, border.bottom),
@@ -1741,9 +1737,7 @@ render_frame_internal (GtkThemingEngine *engine,
   GtkBorderStyle border_style[4];
   GtkRoundedBox border_box;
   GtkBorder border;
-  GdkRGBA *alloc_colors[4];
   GdkRGBA colors[4];
-  guint i;
 
   state = gtk_theming_engine_get_state (engine);
 
@@ -1754,22 +1748,15 @@ render_frame_internal (GtkThemingEngine *engine,
     _gtk_border_image_render (&border_image, &border, cr, x, y, width, height);
   else
     {
-      gtk_theming_engine_get (engine, state,
-                              "border-top-style", &border_style[0],
-                              "border-right-style", &border_style[1],
-                              "border-bottom-style", &border_style[2],
-                              "border-left-style", &border_style[3],
-                              "border-top-color", &alloc_colors[0],
-                              "border-right-color", &alloc_colors[1],
-                              "border-bottom-color", &alloc_colors[2],
-                              "border-left-color", &alloc_colors[3],
-                              NULL);
+      border_style[0] = _gtk_css_border_style_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+      border_style[1] = _gtk_css_border_style_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
+      border_style[2] = _gtk_css_border_style_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
+      border_style[3] = _gtk_css_border_style_value_get (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
 
-      for (i = 0; i < 4; i++)
-        {
-          colors[i] = *alloc_colors[i];
-          gdk_rgba_free (alloc_colors[i]);
-        }
+      colors[0] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+      colors[1] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR));
+      colors[2] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR));
+      colors[3] = *_gtk_css_rgba_value_get_rgba (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
       _gtk_rounded_box_apply_border_radius_for_engine (&border_box, engine, junction);
