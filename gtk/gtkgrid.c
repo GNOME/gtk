@@ -1594,7 +1594,7 @@ gtk_grid_attach_next_to (GtkGrid         *grid,
  * Gets the child of @grid whose area covers the grid
  * cell whose upper left corner is at @left, @top.
  *
- * Returns: the child at the given position, or %NULL
+ * Returns: (transfer none): the child at the given position, or %NULL
  *
  * Since: 3.2
  */
