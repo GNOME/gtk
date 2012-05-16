@@ -1106,22 +1106,14 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
     }
   else
     {
-      gdouble progress;
-      gboolean running;
-
-      running = gtk_theming_engine_state_is_running (engine, GTK_STATE_ACTIVE, &progress);
-
-      if ((flags & GTK_STATE_FLAG_ACTIVE) || running)
+      if (flags & GTK_STATE_FLAG_ACTIVE)
         {
-          if (!running)
-            progress = 1;
-
           cairo_translate (cr,
                            x + pad, y + pad);
 
           cairo_scale (cr, interior_size / 7., interior_size / 7.);
 
-          cairo_rectangle (cr, 0, 0, 7 * progress, 7);
+          cairo_rectangle (cr, 0, 0, 7, 7);
           cairo_clip (cr);
 
           cairo_move_to  (cr, 7.0, 0.0);
@@ -1748,8 +1740,6 @@ render_frame_internal (GtkThemingEngine *engine,
   GtkStateFlags state;
   GtkBorderStyle border_style[4];
   GtkRoundedBox border_box;
-  gdouble progress;
-  gboolean running;
   GtkBorder border;
   GdkRGBA *alloc_colors[4];
   GdkRGBA colors[4];
@@ -1775,45 +1765,10 @@ render_frame_internal (GtkThemingEngine *engine,
                               "border-left-color", &alloc_colors[3],
                               NULL);
 
-      running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
-
-      if (running)
+      for (i = 0; i < 4; i++)
         {
-          GtkStateFlags other_state;
-          GdkRGBA *other_colors[4];
-
-          if (state & GTK_STATE_FLAG_PRELIGHT)
-            {
-              other_state = state & ~(GTK_STATE_FLAG_PRELIGHT);
-              progress = 1 - progress;
-            }
-          else
-            other_state = state | GTK_STATE_FLAG_PRELIGHT;
-
-          gtk_theming_engine_get (engine, other_state,
-                                  "border-top-color", &other_colors[0],
-                                  "border-right-color", &other_colors[1],
-                                  "border-bottom-color", &other_colors[2],
-                                  "border-left-color", &other_colors[3],
-                                  NULL);
-
-          for (i = 0; i < 4; i++)
-            {
-              colors[i].red = CLAMP (alloc_colors[i]->red + ((other_colors[i]->red - alloc_colors[i]->red) * progress), 0, 1);
-              colors[i].green = CLAMP (alloc_colors[i]->green + ((other_colors[i]->green - alloc_colors[i]->green) * progress), 0, 1);
-              colors[i].blue = CLAMP (alloc_colors[i]->blue + ((other_colors[i]->blue - alloc_colors[i]->blue) * progress), 0, 1);
-              colors[i].alpha = CLAMP (alloc_colors[i]->alpha + ((other_colors[i]->alpha - alloc_colors[i]->alpha) * progress), 0, 1);
-              gdk_rgba_free (other_colors[i]);
-              gdk_rgba_free (alloc_colors[i]);
-            }
-        }
-      else
-        {
-          for (i = 0; i < 4; i++)
-            {
-              colors[i] = *alloc_colors[i];
-              gdk_rgba_free (alloc_colors[i]);
-            }
+          colors[i] = *alloc_colors[i];
+          gdk_rgba_free (alloc_colors[i]);
         }
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
@@ -1882,7 +1837,7 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   double x_double, y_double;
   gdouble angle;
   gint line_width;
-  gboolean running, is_rtl;
+  gboolean is_rtl;
   gdouble progress;
 
   cairo_save (cr);
@@ -1891,12 +1846,9 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   gtk_theming_engine_get_color (engine, flags, &fg_color);
   gtk_theming_engine_get_border_color (engine, flags, &outline_color);
 
-  running = gtk_theming_engine_state_is_running (engine, GTK_STATE_ACTIVE, &progress);
   is_rtl = (gtk_theming_engine_get_direction (engine) == GTK_TEXT_DIR_RTL);
   line_width = 1;
-
-  if (!running)
-    progress = (flags & GTK_STATE_FLAG_ACTIVE) ? 1 : 0;
+  progress = (flags & GTK_STATE_FLAG_ACTIVE) ? 1 : 0;
 
   if (!gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_HORIZONTAL))
     {
@@ -2103,35 +2055,10 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
 {
   GdkRGBA fg_color;
   GtkStateFlags flags;
-  gdouble progress;
-  gboolean running;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
   gtk_theming_engine_get_color (engine, flags, &fg_color);
-
-  running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
-
-  if (running)
-    {
-      GtkStateFlags other_flags;
-      GdkRGBA other_fg;
-
-      if (flags & GTK_STATE_FLAG_PRELIGHT)
-        {
-          other_flags = flags & ~(GTK_STATE_FLAG_PRELIGHT);
-          progress = 1 - progress;
-        }
-      else
-        other_flags = flags | GTK_STATE_FLAG_PRELIGHT;
-
-      gtk_theming_engine_get_color (engine, other_flags, &other_fg);
-
-      fg_color.red = CLAMP (fg_color.red + ((other_fg.red - fg_color.red) * progress), 0, 1);
-      fg_color.green = CLAMP (fg_color.green + ((other_fg.green - fg_color.green) * progress), 0, 1);
-      fg_color.blue = CLAMP (fg_color.blue + ((other_fg.blue - fg_color.blue) * progress), 0, 1);
-      fg_color.alpha = CLAMP (fg_color.alpha + ((other_fg.alpha - fg_color.alpha) * progress), 0, 1);
-    }
 
   prepare_context_for_layout (cr, x, y, layout);
 
@@ -2699,14 +2626,9 @@ render_spinner (GtkThemingEngine *engine,
 {
   GtkStateFlags state;
   GdkRGBA color;
-  gdouble progress;
   gdouble radius;
 
   state = gtk_theming_engine_get_state (engine);
-
-  if (!gtk_theming_engine_state_is_running (engine, GTK_STATE_ACTIVE, &progress))
-    progress = -1;
-
   radius = MIN (width / 2, height / 2);
 
   gtk_theming_engine_get_color (engine, state, &color);
@@ -2717,11 +2639,11 @@ render_spinner (GtkThemingEngine *engine,
   _gtk_css_shadows_value_paint_spinner (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW),
                                         cr,
                                         radius,
-                                        progress);
+                                        -1);
 
   _gtk_theming_engine_paint_spinner (cr,
                                      radius,
-                                     progress,
+                                     -1,
                                      &color);
 
   cairo_restore (cr);
