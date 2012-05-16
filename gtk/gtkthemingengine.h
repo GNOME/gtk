@@ -218,6 +218,7 @@ gboolean gtk_theming_engine_has_region (GtkThemingEngine *engine,
                                         GtkRegionFlags   *flags);
 
 GtkStateFlags gtk_theming_engine_get_state        (GtkThemingEngine *engine);
+GDK_DEPRECATED_IN_3_6
 gboolean      gtk_theming_engine_state_is_running (GtkThemingEngine *engine,
                                                    GtkStateType      state,
                                                    gdouble          *progress);
