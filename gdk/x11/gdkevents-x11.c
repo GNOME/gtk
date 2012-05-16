@@ -1799,16 +1799,15 @@ gdk_event_translate (GdkDisplay *display,
            * means we hid the window ourselves, so we will have already flipped
            * the iconified bit off.
            */
-          if (window)
-            {
-              if (GDK_WINDOW_IS_MAPPED (window))
-                gdk_synthesize_window_state (window,
-                                             0,
-                                             GDK_WINDOW_STATE_ICONIFIED);
-
-              _gdk_xgrab_check_unmap (window, xevent->xany.serial);
-            }
+          if (window && GDK_WINDOW_IS_MAPPED (window))
+            gdk_synthesize_window_state (window,
+                                         0,
+                                         GDK_WINDOW_STATE_ICONIFIED);
         }
+
+      if (window)
+        _gdk_xgrab_check_unmap (window, xevent->xany.serial);
+
       break;
       
     case MapNotify:
