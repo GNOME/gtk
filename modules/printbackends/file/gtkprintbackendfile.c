@@ -370,14 +370,13 @@ typedef struct {
   GDestroyNotify dnotify;
 } _PrintStreamData;
 
+/* expects GDK lock to be held */
 static void
-file_print_cb (GtkPrintBackendFile *print_backend,
-               GError              *error,
-               gpointer            user_data)
+file_print_cb_locked (GtkPrintBackendFile *print_backend,
+                      GError              *error,
+                      gpointer            user_data)
 {
   _PrintStreamData *ps = (_PrintStreamData *) user_data;
-
-  GDK_THREADS_ENTER ();
 
   if (ps->target_io_stream != NULL)
     g_output_stream_close (G_OUTPUT_STREAM (ps->target_io_stream), NULL, NULL);
@@ -393,8 +392,18 @@ file_print_cb (GtkPrintBackendFile *print_backend,
 
   if (ps->job)
     g_object_unref (ps->job);
- 
+
   g_free (ps);
+}
+
+static void
+file_print_cb (GtkPrintBackendFile *print_backend,
+               GError              *error,
+               gpointer            user_data)
+{
+  GDK_THREADS_ENTER ();
+
+  file_print_cb_locked (print_backend, error, user_data);
 
   GDK_THREADS_LEAVE ();
 }
@@ -412,7 +421,7 @@ file_write (GIOChannel   *source,
 
   error = NULL;
 
-  read_status = 
+  read_status =
     g_io_channel_read_chars (source,
                              buf,
                              _STREAM_MAX_CHUNK_SIZE,
@@ -490,8 +499,8 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
 error:
   if (internal_error != NULL)
     {
-      file_print_cb (GTK_PRINT_BACKEND_FILE (print_backend),
-                    internal_error, ps);
+      file_print_cb_locked (GTK_PRINT_BACKEND_FILE (print_backend),
+                            internal_error, ps);
 
       g_error_free (internal_error);
       return;
