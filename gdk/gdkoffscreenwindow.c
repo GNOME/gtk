@@ -218,9 +218,9 @@ gdk_offscreen_window_reparent (GdkWindow *window,
 }
 
 static void
-gdk_window_set_device_cursor (GdkWindow     *window,
-			      GdkDevice     *device,
-			      GdkCursor     *cursor)
+gdk_offscreen_window_set_device_cursor (GdkWindow     *window,
+					GdkDevice     *device,
+					GdkCursor     *cursor)
 {
 }
 
