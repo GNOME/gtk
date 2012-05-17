@@ -1,8 +1,9 @@
-/* Color Selector
+/* Color Chooser
  *
- * GtkColorSelection lets the user choose a color. GtkColorSelectionDialog is
- * a prebuilt dialog containing a GtkColorSelection.
- *
+ * A GtkColorChooser lets the user choose a color. There are several
+ * implementations of the GtkColorChooser interface in GTK+. The
+ * GtkColorChooserDialog is a prebuilt dialog containing a
+ * GtkColorChooserWidget.
  */
 
 #include <gtk/gtk.h>
@@ -77,7 +78,7 @@ do_colorsel (GtkWidget *do_widget)
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "Color Selection");
+      gtk_window_set_title (GTK_WINDOW (window), "Color Chooser");
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
