@@ -207,6 +207,9 @@ _gtk_accel_path_is_valid (const gchar *accel_path)
  * To change the accelerator during runtime programatically, use
  * gtk_accel_map_change_entry().
  * 
+ * Set @accel_key and @accel_mods to 0 to request a removal of
+ * the accelerator.
+ *
  * Note that @accel_path string will be stored in a #GQuark. Therefore, if you
  * pass a static string, you can save some memory by interning it first with 
  * g_intern_static_string().
