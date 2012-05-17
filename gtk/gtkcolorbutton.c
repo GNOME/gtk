@@ -619,6 +619,9 @@ gtk_color_button_clicked (GtkButton *b)
   gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (button->priv->cs_dialog),
                                    button->priv->use_alpha);
 
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (button->priv->cs_dialog),
+                              &button->priv->rgba);
+
   gtk_window_present (GTK_WINDOW (button->priv->cs_dialog));
 }
 
