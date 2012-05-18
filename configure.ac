@@ -361,12 +361,14 @@ else
   AM_CONDITIONAL(USE_WIN32, false)
 fi
 
+DISABLE_ON_QUARTZ=''
 if test "x$enable_quartz_backend" = xyes; then
   cairo_backends="$cairo_backends cairo-quartz"
   GDK_BACKENDS="$GDK_BACKENDS quartz"
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_QUARTZ"
   GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -framework Cocoa"
+  DISABLE_ON_QUARTZ='%'
   AM_CONDITIONAL(USE_QUARTZ, true)
   if test "x$quartz_relocation" = xyes; then
     AC_DEFINE([QUARTZ_RELOCATION], [1], [Use NSBundle functions to determine load paths for libraries, translations, etc.])
@@ -375,7 +377,7 @@ if test "x$enable_quartz_backend" = xyes; then
 else
   AM_CONDITIONAL(USE_QUARTZ, false)
 fi
-
+AC_SUBST(DISABLE_ON_QUARTZ)
 
 if test "x$enable_broadway_backend" == xyes; then
   GDK_BACKENDS="$GDK_BACKENDS broadway"
