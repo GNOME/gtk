@@ -3,6 +3,7 @@ demos/gtk-demo/menus.ui
 demos/gtk-demo/theming.ui
 demos/widget-factory/widget-factory.ui
 examples/bloatpad.c
+examples/plugman.c
 tests/a11y/accessible-name.ui
 tests/a11y/assistant.ui
 tests/a11y/buttons.ui
