@@ -43,6 +43,7 @@ demos =						\
 	stock_browser.c				\
 	textview.c				\
 	textscroll.c				\
+	theming.c				\
 	toolpalette.c				\
 	transparent.c				\
 	tree_store.c				\
@@ -76,6 +77,7 @@ EXTRA_DIST += 				\
 	application.gresource.xml	\
 	application.ui			\
 	menus.ui			\
+	theming.ui			\
 	gtk-logo-24.png			\
 	gtk-logo-48.png			\
 	org.gtk.Demo.gschema.xml
@@ -122,7 +124,13 @@ IMAGEFILES=	alphatest.png		\
 		gnu-keys.png		\
 		gtk-logo-rgb.gif
 
-democode_DATA = $(demos) $(IMAGEFILES) demo.ui menus.ui application.ui
+democode_DATA = \
+	$(demos)		\
+	$(IMAGEFILES)		\
+	demo.ui			\
+	menus.ui		\
+	application.ui		\
+	theming.ui
 
 DISTCLEANFILES = demos.h
 
