@@ -122,7 +122,7 @@ IMAGEFILES=	alphatest.png		\
 		gnu-keys.png		\
 		gtk-logo-rgb.gif
 
-democode_DATA = $(demos) $(IMAGEFILES) demo.ui
+democode_DATA = $(demos) $(IMAGEFILES) demo.ui menus.ui application.ui
 
 DISTCLEANFILES = demos.h
 

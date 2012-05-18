@@ -14,6 +14,7 @@ static GtkTextBuffer *source_buffer;
 
 static gchar *current_file = NULL;
 
+static GtkWidget *notebook;
 
 enum {
   TITLE_COLUMN,
@@ -514,6 +515,47 @@ fontify (void)
     }
 }
 
+static GtkWidget *create_text (GtkTextBuffer **buffer, gboolean is_source);
+
+static void
+add_data_tab (const gchar *filename)
+{
+  GtkTextBuffer *buffer = NULL;
+  gchar *full_filename;
+  GError *err = NULL;
+  gchar *text;
+  GtkWidget *widget, *label;
+
+  full_filename = demo_find_file (filename, &err);
+  if (!full_filename ||
+      !g_file_get_contents (full_filename, &text, NULL, &err))
+    {
+      g_warning ("%s", err->message);
+      g_error_free (err);
+      return;
+    }
+
+  widget = create_text (&buffer, FALSE);
+  gtk_widget_show_all (widget);
+  label = gtk_label_new (filename);
+  gtk_widget_show (label);
+  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
+
+  gtk_text_buffer_set_text (buffer, text, -1);
+
+  g_free (full_filename);
+  g_free (text);
+}
+
+static void
+remove_data_tabs (void)
+{
+  gint i;
+
+  for (i = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook)) - 1; i > 1; i--)
+    gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), i);
+}
+
 void
 load_file (const gchar *filename)
 {
@@ -524,15 +566,24 @@ load_file (const gchar *filename)
   GString *buffer = g_string_new (NULL);
   int state = 0;
   gboolean in_para = 0;
+  gchar **names;
+  gint i;
 
-  if (current_file && !strcmp (current_file, filename))
+  remove_data_tabs ();
+
+  names = g_strsplit (filename, " ", -1);
+
+  for (i = 1; names[i]; i++)
+    add_data_tab (names[i]);
+
+  if (current_file && !strcmp (current_file, names[0]))
     {
       g_string_free (buffer, TRUE);
       return;
     }
 
   g_free (current_file);
-  current_file = g_strdup (filename);
+  current_file = g_strdup (names[0]);
 
   gtk_text_buffer_get_bounds (info_buffer, &start, &end);
   gtk_text_buffer_delete (info_buffer, &start, &end);
@@ -540,7 +591,7 @@ load_file (const gchar *filename)
   gtk_text_buffer_get_bounds (source_buffer, &start, &end);
   gtk_text_buffer_delete (source_buffer, &start, &end);
 
-  full_filename = demo_find_file (filename, &err);
+  full_filename = demo_find_file (names[0], &err);
   if (!full_filename)
     {
       g_warning ("%s", err->message);
@@ -572,13 +623,16 @@ load_file (const gchar *filename)
           while (*p == '/' || *p == '*' || g_ascii_isspace (*p))
             p++;
           r = p;
-          while (*r != '/' && strlen (r))
+          while (*r != '/' && *r != ':' && *r != '\0')
             r++;
-          if (strlen (r) > 0)
+          if (*r == '/')
             p = r + 1;
+          if (r[0] == ':' && r[1] == ':')
+            *r = '\0';
           q = p + strlen (p);
           while (q > p && g_ascii_isspace (*(q - 1)))
             q--;
+
 
           if (q > p)
             {
@@ -594,6 +648,8 @@ load_file (const gchar *filename)
               gtk_text_buffer_apply_tag_by_name (info_buffer, "title", &start, &end);
 
               start = end;
+
+              while (*p != '\n') p++;
 
               state++;
             }
@@ -662,6 +718,8 @@ load_file (const gchar *filename)
   fontify ();
 
   g_string_free (buffer, TRUE);
+
+  g_strfreev (names);
 }
 
 void
@@ -928,7 +986,6 @@ int
 main (int argc, char **argv)
 {
   GtkWidget *window;
-  GtkWidget *notebook;
   GtkWidget *hbox;
   GtkWidget *tree;
 
