@@ -1,5 +1,6 @@
 demos/gtk-demo/demo.ui
 demos/gtk-demo/menus.ui
+demos/gtk-demo/theming.ui
 demos/widget-factory/widget-factory.ui
 examples/bloatpad.c
 tests/a11y/accessible-name.ui
