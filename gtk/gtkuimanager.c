@@ -1398,7 +1398,8 @@ free_node (GNode *node)
   g_clear_object (&info->action);
   g_clear_object (&info->proxy);
   g_clear_object (&info->extra);
-  g_clear_pointer (&info->name, g_free);
+  g_free (info->name);
+  info->name = NULL;
   g_slice_free (Node, info);
   node->data = NULL;
 
