@@ -2527,6 +2527,9 @@ test_message_area (void)
     "            <property name=\"label\" translatable=\"yes\">Message</property>"
     "          </object>"
     "        </child>"
+    "        <packing>"
+    "          <property name='expand'>False</property>"
+    "        </packing>"
     "      </object>"
     "    </child>"
     "    <child internal-child=\"action_area\">"
@@ -2684,3 +2687,4 @@ main (int argc, char **argv)
 
   return g_test_run();
 }
+

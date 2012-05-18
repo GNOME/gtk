@@ -969,10 +969,11 @@ gtk_info_bar_buildable_custom_tag_start (GtkBuildable  *buildable,
 {
   ActionWidgetsSubParserData *parser_data;
 
-  if (child)
-    return FALSE;
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+                                                tagname, parser, data))
+    return TRUE;
 
-  if (strcmp (tagname, "action-widgets") == 0)
+  if (!child && strcmp (tagname, "action-widgets") == 0)
     {
       parser_data = g_slice_new0 (ActionWidgetsSubParserData);
       parser_data->info_bar = GTK_INFO_BAR (buildable);
@@ -983,8 +984,7 @@ gtk_info_bar_buildable_custom_tag_start (GtkBuildable  *buildable,
       return TRUE;
     }
 
-  return parent_buildable_iface->custom_tag_start (buildable, builder, child,
-                                                   tagname, parser, data);
+  return FALSE;
 }
 
 static void
