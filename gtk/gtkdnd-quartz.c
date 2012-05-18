@@ -35,7 +35,6 @@
 #include "gtkimageprivate.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
-#include "gtkplug.h"
 #include "gtkstock.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
