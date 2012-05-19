@@ -3862,6 +3862,13 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
       info = icon_info_new ();
       info->loadable = G_LOADABLE_ICON (g_object_ref (icon));
 
+      if (G_IS_FILE_ICON (icon))
+        {
+          GFile *file = g_file_icon_get_file (G_FILE_ICON (icon));
+          if (file != NULL)
+            info->filename = g_file_get_path (file);
+        }
+
       info->dir_type = ICON_THEME_DIR_UNTHEMED;
       info->dir_size = size;
       info->desired_size = size;
