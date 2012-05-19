@@ -22,7 +22,7 @@ AM_CPPFLAGS =                   \
         -I$(top_builddir)       \
         $(DEP_CFLAGS)
 
-GTKDOC_LIBS = $(top_builddir)/libgail-util/libgailutil.la
+GTKDOC_LIBS = $(top_builddir)/libgail-util/libgailutil-3.la
 
 # gtkdoc-mkdb related varaibles
 MKDB_OPTIONS =
