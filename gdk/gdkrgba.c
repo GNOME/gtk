@@ -148,7 +148,8 @@ parse_rgb_value (const gchar  *str,
  * A standard name (Taken from the X11 rgb.txt file).
  * </listitem>
  * <listitem>
- * A hex value in the form '#rgb' '#rrggbb' '#rrrgggbbb' or '#rrrrggggbbbb'
+ * A hex value in the form '&num;rgb' '&num;rrggbb' '&num;rrrgggbbb'
+ * or '&num;rrrrggggbbbb'
  * </listitem>
  * <listitem>
  * A RGB color in the form 'rgb(r,g,b)' (In this case the color will
