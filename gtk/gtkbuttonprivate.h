@@ -59,6 +59,7 @@ struct _GtkButtonPrivate
   guint          use_action_appearance : 1;
   guint          use_stock             : 1;
   guint          use_underline         : 1;
+  guint          always_show_image     : 1;
 };
 
 void _gtk_button_set_depressed             (GtkButton          *button,

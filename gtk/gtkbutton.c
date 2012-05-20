@@ -91,6 +91,7 @@ enum {
   PROP_IMAGE_POSITION,
   PROP_ACTION_NAME,
   PROP_ACTION_TARGET,
+  PROP_ALWAYS_SHOW_IMAGE,
 
   /* activatable properties */
   PROP_ACTIVATABLE_RELATED_ACTION,
@@ -338,6 +339,25 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                       GTK_TYPE_POSITION_TYPE,
                                                       GTK_POS_LEFT,
                                                       GTK_PARAM_READWRITE));
+
+  /**
+   * GtkButton:always-show-image:
+   *
+   * If %TRUE, the button will ignore the #GtkSettings:gtk-button-images
+   * setting and always show the image, if available.
+   *
+   * Use this property if the button would be useless or hard to use
+   * without the image.
+   *
+   * Since: 3.6
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ALWAYS_SHOW_IMAGE,
+                                   g_param_spec_boolean ("always-show-image",
+                                                         P_("Always show image"),
+                                                         P_("Whether the image will always be shown"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   g_object_class_override_property (gobject_class, PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
@@ -786,6 +806,9 @@ gtk_button_set_property (GObject         *object,
     case PROP_IMAGE:
       gtk_button_set_image (button, (GtkWidget *) g_value_get_object (value));
       break;
+    case PROP_ALWAYS_SHOW_IMAGE:
+      gtk_button_set_always_show_image (button, g_value_get_boolean (value));
+      break;
     case PROP_RELIEF:
       gtk_button_set_relief (button, g_value_get_enum (value));
       break;
@@ -841,6 +864,9 @@ gtk_button_get_property (GObject         *object,
       break;
     case PROP_IMAGE:
       g_value_set_object (value, (GObject *)priv->image);
+      break;
+    case PROP_ALWAYS_SHOW_IMAGE:
+      g_value_set_boolean (value, gtk_button_get_always_show_image (button));
       break;
     case PROP_RELIEF:
       g_value_set_enum (value, priv->relief);
@@ -1032,6 +1058,9 @@ gtk_button_sync_action_properties (GtkActivatable *activatable,
       activatable_update_gicon (GTK_BUTTON (activatable), action);
       activatable_update_icon_name (GTK_BUTTON (activatable), action);
     }
+
+  gtk_button_set_always_show_image (button,
+                                    gtk_action_get_always_show_image (action));
 }
 
 static void
@@ -1093,7 +1122,7 @@ show_image (GtkButton *button)
   GtkButtonPrivate *priv = button->priv;
   gboolean show;
 
-  if (priv->label_text)
+  if (priv->label_text && !priv->always_show_image)
     {
       GtkSettings *settings;
 
@@ -1105,6 +1134,7 @@ show_image (GtkButton *button)
 
   return show;
 }
+
 
 static void
 gtk_button_construct_child (GtkButton *button)
@@ -2723,6 +2753,64 @@ gtk_button_get_image_position (GtkButton *button)
   g_return_val_if_fail (GTK_IS_BUTTON (button), GTK_POS_LEFT);
   
   return button->priv->image_position;
+}
+
+/**
+ * gtk_button_set_always_show_image:
+ * @button: a #GtkButton
+ * @always_show: %TRUE if the menuitem should always show the image
+ *
+ * If %TRUE, the button will ignore the #GtkSettings:gtk-button-images
+ * setting and always show the image, if available.
+ *
+ * Use this property if the button  would be useless or hard to use
+ * without the image.
+ *
+ * Since: 3.6
+ */
+void
+gtk_button_set_always_show_image (GtkButton *button,
+                                  gboolean    always_show)
+{
+  GtkButtonPrivate *priv;
+
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
+  priv = button->priv;
+
+  if (priv->always_show_image != always_show)
+    {
+      priv->always_show_image = always_show;
+
+      if (priv->image)
+        {
+          if (show_image (button))
+            gtk_widget_show (priv->image);
+          else
+            gtk_widget_hide (priv->image);
+        }
+
+      g_object_notify (G_OBJECT (button), "always-show-image");
+    }
+}
+
+/**
+ * gtk_button_get_always_show_image:
+ * @button: a #GtkButton
+ *
+ * Returns whether the button will ignore the #GtkSettings:gtk-button-images
+ * setting and always show the image, if available.
+ *
+ * Returns: %TRUE if the button will always show the image
+ *
+ * Since: 3.6
+ */
+gboolean
+gtk_button_get_always_show_image (GtkButton *button)
+{
+  g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
+
+  return button->priv->always_show_image;
 }
 
 /**
