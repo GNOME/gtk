@@ -32,6 +32,7 @@
 #include "gdkscreen.h"
 #include "gdkkeysyms.h"
 #include "gdkprivate-quartz.h"
+#include "gdkinputprivate.h"
 
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
@@ -1278,6 +1279,7 @@ gdk_event_translate (GdkEvent *event,
   int x, y;
   int x_root, y_root;
   gboolean return_val;
+  GdkEvent *input_event;
 
   /* There is no support for real desktop wide grabs, so we break
    * grabs when the application loses focus (gets deactivated).
@@ -1428,6 +1430,12 @@ gdk_event_translate (GdkEvent *event,
     case NSRightMouseUp:
     case NSOtherMouseUp:
       fill_button_event (window, event, nsevent, x, y, x_root, y_root);
+
+      input_event = gdk_event_new (GDK_NOTHING);
+      if (_gdk_input_fill_quartz_input_event (event, nsevent, input_event))
+        append_event (input_event, TRUE);
+      else
+        gdk_event_free (input_event);
       break;
 
     case NSLeftMouseDragged:
@@ -1435,6 +1443,12 @@ gdk_event_translate (GdkEvent *event,
     case NSOtherMouseDragged:
     case NSMouseMoved:
       fill_motion_event (window, event, nsevent, x, y, x_root, y_root);
+
+      input_event = gdk_event_new (GDK_NOTHING);
+      if (_gdk_input_fill_quartz_input_event (event, nsevent, input_event))
+        append_event (input_event, TRUE);
+      else
+        gdk_event_free (input_event);
       break;
 
     case NSScrollWheel:
@@ -1482,6 +1496,11 @@ gdk_event_translate (GdkEvent *event,
         else
           fill_key_event (window, event, nsevent, type);
       }
+      break;
+
+    case NSTabletProximity:
+      _gdk_input_quartz_tablet_proximity ([nsevent pointingDeviceType]);
+      return_val = FALSE;
       break;
 
     default:

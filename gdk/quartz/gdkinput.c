@@ -27,42 +27,58 @@
 #include "config.h"
 #include <stdlib.h>
 
+#import <Cocoa/Cocoa.h>
+#include <Carbon/Carbon.h>
+
 #include "gdkprivate-quartz.h"
+#include "gdkscreen-quartz.h"
 #include "gdkinput.h"
 #include "gdkprivate.h"
 #include "gdkinputprivate.h"
+
+
+#define N_CORE_POINTER_AXES 2
+#define N_INPUT_DEVICE_AXES 5
+
 
 static GdkDeviceAxis gdk_input_core_axes[] = {
   { GDK_AXIS_X, 0, 0 },
   { GDK_AXIS_Y, 0, 0 }
 };
 
-GdkDevice *_gdk_core_pointer = NULL;
+static GdkDeviceAxis gdk_quartz_pen_axes[] = {
+  { GDK_AXIS_X, 0, 0 },
+  { GDK_AXIS_Y, 0, 0 },
+  { GDK_AXIS_PRESSURE, 0, 1 },
+  { GDK_AXIS_XTILT, -1, 1 },
+  { GDK_AXIS_YTILT, -1, 1 }
+};
+
+static GdkDeviceAxis gdk_quartz_cursor_axes[] = {
+  { GDK_AXIS_X, 0, 0 },
+  { GDK_AXIS_Y, 0, 0 },
+  { GDK_AXIS_PRESSURE, 0, 1 },
+  { GDK_AXIS_XTILT, -1, 1 },
+  { GDK_AXIS_YTILT, -1, 1 }
+};
+
+static GdkDeviceAxis gdk_quartz_eraser_axes[] = {
+  { GDK_AXIS_X, 0, 0 },
+  { GDK_AXIS_Y, 0, 0 },
+  { GDK_AXIS_PRESSURE, 0, 1 },
+  { GDK_AXIS_XTILT, -1, 1 },
+  { GDK_AXIS_YTILT, -1, 1 }
+};
+
 
 /* Global variables  */
-
-gchar            *_gdk_input_gxid_host;
-gint              _gdk_input_gxid_port;
-gint              _gdk_input_ignore_core;
-GList            *_gdk_input_windows;
-GList            *_gdk_input_devices;
-
-void
-_gdk_init_input_core (void)
-{
-  _gdk_core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
-  
-  _gdk_core_pointer->name = "Core Pointer";
-  _gdk_core_pointer->source = GDK_SOURCE_MOUSE;
-  _gdk_core_pointer->mode = GDK_MODE_SCREEN;
-  _gdk_core_pointer->has_cursor = TRUE;
-  _gdk_core_pointer->num_axes = 2;
-  _gdk_core_pointer->axes = gdk_input_core_axes;
-  _gdk_core_pointer->num_keys = 0;
-  _gdk_core_pointer->keys = NULL;
-
-  _gdk_display->core_pointer = _gdk_core_pointer;
-}
+static GList     *_gdk_input_windows = NULL;
+static GList     *_gdk_input_devices = NULL;
+static GdkDevice *_gdk_core_pointer = NULL;
+static GdkDevice *_gdk_quartz_pen = NULL;
+static GdkDevice *_gdk_quartz_cursor = NULL;
+static GdkDevice *_gdk_quartz_eraser = NULL;
+static GdkDevice *active_device = NULL;
 
 static void
 gdk_device_finalize (GObject *object)
@@ -216,9 +232,11 @@ gdk_device_get_n_axes (GdkDevice *device)
 
 void
 gdk_device_set_axis_use (GdkDevice   *device,
-			 guint        index,
-			 GdkAxisUse   use)
+                         guint        index,
+                         GdkAxisUse   use)
 {
+#if 0
+  /* Remapping axes is unsupported for now */
   g_return_if_fail (device != NULL);
   g_return_if_fail (index < device->num_axes);
 
@@ -241,24 +259,67 @@ gdk_device_set_axis_use (GdkDevice   *device,
       device->axes[index].max = 1;
       break;
     }
+#endif
 }
 
-void 
+/**
+ * gdk_input_set_device_state:
+ * @device: The devices to set
+ * @mask: The new button mask
+ * @axes: The new axes values
+ *
+ * Set the state of a device's inputs for later
+ * retrieval by gdk_device_get_state.
+ */
+static void
+gdk_input_set_device_state (GdkDevice *device,
+                            GdkModifierType mask,
+                            gdouble *axes)
+{
+  GdkDevicePrivate *priv;
+  gint i;
+
+  if (device != _gdk_core_pointer)
+    {
+      priv = (GdkDevicePrivate *)device;
+      priv->last_state = mask;
+
+      for (i = 0; i < device->num_axes; ++i)
+        priv->last_axes_state[i] = axes[i];
+    }
+}
+
+void
 gdk_device_get_state (GdkDevice       *device,
                       GdkWindow       *window,
                       gdouble         *axes,
                       GdkModifierType *mask)
 {
-  gint x_int, y_int;
+  GdkDevicePrivate *priv;
+  gint i;
 
-  g_assert (device == _gdk_core_pointer);
-      
-  gdk_window_get_pointer (window, &x_int, &y_int, mask);
-
-  if (axes)
+  if (device == _gdk_core_pointer)
     {
-      axes[0] = x_int;
-      axes[1] = y_int;
+      gint x_int, y_int;
+
+      gdk_window_get_pointer (window, &x_int, &y_int, mask);
+
+      if (axes)
+        {
+          axes[0] = x_int;
+          axes[1] = y_int;
+        }
+    }
+  else
+    {
+      priv = (GdkDevicePrivate *)device;
+
+      if (mask)
+        *mask = priv->last_state;
+
+      if (axes)
+        for (i = 0; i < device->num_axes; ++i)
+          axes[i] = priv->last_axes_state[i];
     }
 }
 
@@ -296,6 +357,14 @@ gboolean
 gdk_device_set_mode (GdkDevice   *device,
                      GdkInputMode mode)
 {
+  /* FIXME: Window mode isn't supported yet */
+  if (device != _gdk_core_pointer &&
+      (mode == GDK_MODE_DISABLED || mode == GDK_MODE_SCREEN))
+    {
+      device->mode = mode;
+      return TRUE;
+    }
+
   return FALSE;
 }
 
@@ -408,9 +477,67 @@ _gdk_input_window_destroy (GdkWindow *window)
 void
 _gdk_input_init (void)
 {
-  _gdk_init_input_core ();
+  GdkDevicePrivate *priv;
+
+  _gdk_core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
+  _gdk_core_pointer->name = "Core Pointer";
+  _gdk_core_pointer->source = GDK_SOURCE_MOUSE;
+  _gdk_core_pointer->mode = GDK_MODE_SCREEN;
+  _gdk_core_pointer->has_cursor = TRUE;
+  _gdk_core_pointer->num_axes = N_CORE_POINTER_AXES;
+  _gdk_core_pointer->axes = gdk_input_core_axes;
+  _gdk_core_pointer->num_keys = 0;
+  _gdk_core_pointer->keys = NULL;
+
+  _gdk_display->core_pointer = _gdk_core_pointer;
   _gdk_input_devices = g_list_append (NULL, _gdk_core_pointer);
-  _gdk_input_ignore_core = FALSE;
+
+  _gdk_quartz_pen = g_object_new (GDK_TYPE_DEVICE, NULL);
+  _gdk_quartz_pen->name = "Quartz Pen";
+  _gdk_quartz_pen->source = GDK_SOURCE_PEN;
+  _gdk_quartz_pen->mode = GDK_MODE_SCREEN;
+  _gdk_quartz_pen->has_cursor = TRUE;
+  _gdk_quartz_pen->num_axes = N_INPUT_DEVICE_AXES;
+  _gdk_quartz_pen->axes = gdk_quartz_pen_axes;
+  _gdk_quartz_pen->num_keys = 0;
+  _gdk_quartz_pen->keys = NULL;
+
+  priv = (GdkDevicePrivate *)_gdk_quartz_pen;
+  priv->last_axes_state = g_malloc_n (_gdk_quartz_pen->num_axes, sizeof (gdouble));
+
+  _gdk_input_devices = g_list_append (_gdk_input_devices, _gdk_quartz_pen);
+
+  _gdk_quartz_cursor = g_object_new (GDK_TYPE_DEVICE, NULL);
+  _gdk_quartz_cursor->name = "Quartz Cursor";
+  _gdk_quartz_cursor->source = GDK_SOURCE_CURSOR;
+  _gdk_quartz_cursor->mode = GDK_MODE_SCREEN;
+  _gdk_quartz_cursor->has_cursor = TRUE;
+  _gdk_quartz_cursor->num_axes = N_INPUT_DEVICE_AXES;
+  _gdk_quartz_cursor->axes = gdk_quartz_cursor_axes;
+  _gdk_quartz_cursor->num_keys = 0;
+  _gdk_quartz_cursor->keys = NULL;
+
+  priv = (GdkDevicePrivate *)_gdk_quartz_cursor;
+  priv->last_axes_state = g_malloc_n (_gdk_quartz_cursor->num_axes, sizeof (gdouble));
+
+  _gdk_input_devices = g_list_append (_gdk_input_devices, _gdk_quartz_cursor);
+
+  _gdk_quartz_eraser = g_object_new (GDK_TYPE_DEVICE, NULL);
+  _gdk_quartz_eraser->name = "Quartz Eraser";
+  _gdk_quartz_eraser->source = GDK_SOURCE_ERASER;
+  _gdk_quartz_eraser->mode = GDK_MODE_SCREEN;
+  _gdk_quartz_eraser->has_cursor = TRUE;
+  _gdk_quartz_eraser->num_axes = N_INPUT_DEVICE_AXES;
+  _gdk_quartz_eraser->axes = gdk_quartz_eraser_axes;
+  _gdk_quartz_eraser->num_keys = 0;
+  _gdk_quartz_eraser->keys = NULL;
+
+  priv = (GdkDevicePrivate *)_gdk_quartz_eraser;
+  priv->last_axes_state = g_malloc_n (_gdk_quartz_eraser->num_axes, sizeof (gdouble));
+
+  _gdk_input_devices = g_list_append (_gdk_input_devices, _gdk_quartz_eraser);
+
+  active_device = _gdk_core_pointer;
 }
 
 void
@@ -423,14 +550,15 @@ _gdk_input_exit (void)
     {
       gdkdev = (GdkDevicePrivate *)(tmp_list->data);
       if (gdkdev != (GdkDevicePrivate *)_gdk_core_pointer)
-	{
-	  gdk_device_set_mode ((GdkDevice *)gdkdev, GDK_MODE_DISABLED);
+        {
+          gdk_device_set_mode ((GdkDevice *)gdkdev, GDK_MODE_DISABLED);
 
-	  g_free (gdkdev->info.name);
-	  g_free (gdkdev->info.axes);
-	  g_free (gdkdev->info.keys);
-	  g_free (gdkdev);
-	}
+          g_free (gdkdev->info.name);
+          g_free (gdkdev->info.axes);
+          g_free (gdkdev->info.keys);
+          g_free (gdkdev->last_axes_state);
+          g_free (gdkdev);
+        }
     }
 
   g_list_free (_gdk_input_devices);
@@ -467,4 +595,161 @@ void
 _gdk_input_window_crossing (GdkWindow *window,
                             gboolean   enter)
 {
+}
+
+/**
+ * _gdk_input_quartz_tablet_proximity:
+ * @deviceType: The result of [nsevent pointingDeviceType]
+ *
+ * Update the current active device based on a proximity event.
+ */
+void
+_gdk_input_quartz_tablet_proximity (NSPointingDeviceType deviceType)
+{
+  if (deviceType == NSPenPointingDevice)
+    active_device = _gdk_quartz_pen;
+  else if (deviceType == NSCursorPointingDevice)
+    active_device = _gdk_quartz_cursor;
+  else if (deviceType == NSEraserPointingDevice)
+    active_device = _gdk_quartz_eraser;
+  else
+    active_device = _gdk_core_pointer;
+}
+
+/**
+ * _gdk_input_fill_quartz_input_event:
+ * @event: The GDK mouse event.
+ * @nsevent: The NSEvent that generated the mouse event.
+ * @input_event: (out): Return location for the input event.
+ *
+ * Handle extended input for the passed event, the GdkEvent object
+ * passed in should be a filled mouse button or motion event.
+ *
+ * Return value: %TRUE if an extended input event was generated.
+ */
+gboolean
+_gdk_input_fill_quartz_input_event (GdkEvent *event,
+                                    NSEvent  *nsevent,
+                                    GdkEvent *input_event)
+{
+  gdouble *axes;
+  gint x, y;
+  gint x_target, y_target;
+  gdouble x_root, y_root;
+  gint state;
+  GdkInputWindow *iw;
+  GdkWindow *target_window;
+  GdkScreenQuartz *screen_quartz;
+
+  if ([nsevent subtype] == NSTabletProximityEventSubtype)
+    {
+      _gdk_input_quartz_tablet_proximity ([nsevent pointingDeviceType]);
+    }
+  else if (([nsevent subtype] != NSTabletPointEventSubtype) ||
+           (active_device == _gdk_core_pointer) ||
+           (active_device->mode == GDK_MODE_DISABLED))
+    {
+      _gdk_display->ignore_core_events = FALSE;
+      return FALSE;
+    }
+
+  switch (event->any.type)
+    {
+      case GDK_MOTION_NOTIFY:
+        x = event->motion.x;
+        y = event->motion.y;
+        state = event->motion.state;
+        break;
+      case GDK_BUTTON_PRESS:
+      case GDK_BUTTON_RELEASE:
+        x = event->button.x;
+        y = event->button.y;
+        state = event->button.state;
+        break;
+      default:
+        /* Not an input related event */
+        return FALSE;
+        break;
+    }
+
+  /* Input events won't be propagated through windows that aren't listening
+   * for input events, so _gdk_window_get_input_window_for_event finds the
+   * window to directly send the event to.
+   */
+  target_window = _gdk_window_get_input_window_for_event (event->any.window,
+                                                          event->any.type,
+                                                          0, x, y, 0);
+
+  iw = _gdk_input_window_find (target_window);
+
+  if (!iw)
+    {
+      /* Return if the target window doesn't have extended events enabled or
+       * hasn't asked for this type of event.
+       */
+      _gdk_display->ignore_core_events = FALSE;
+      return FALSE;
+    }
+
+  /* The cursor is inside an extended events window, block propagation of the
+   * core motion / button events
+   */
+  _gdk_display->ignore_core_events = TRUE;
+
+  axes = g_malloc_n (N_INPUT_DEVICE_AXES, sizeof (gdouble));
+
+  gdk_window_get_origin (target_window, &x_target, &y_target);
+
+  /* Equation for root x & y taken from _gdk_quartz_window_xy_to_gdk_xy
+   * recalculated here to get doubles instead of ints.
+   */
+  screen_quartz = GDK_SCREEN_QUARTZ (_gdk_screen);
+  x_root = [NSEvent mouseLocation].x - screen_quartz->min_x;
+  y_root = screen_quartz->height - [NSEvent mouseLocation].y + screen_quartz->min_y;
+
+  axes[0] = x_root - x_target;
+  axes[1] = y_root - y_target;
+  axes[2] = [nsevent pressure];
+  axes[3] = [nsevent tilt].x;
+  axes[4] = [nsevent tilt].y;
+
+  gdk_input_set_device_state (active_device, state, axes);
+
+  input_event->any.window     = target_window;
+  input_event->any.type       = event->any.type;
+  input_event->any.send_event = event->any.send_event;
+
+  switch (event->any.type)
+    {
+      case GDK_MOTION_NOTIFY:
+        input_event->motion.device = active_device;
+        input_event->motion.x      = axes[0];
+        input_event->motion.y      = axes[1];
+        input_event->motion.axes   = axes;
+        input_event->motion.x_root = x_root;
+        input_event->motion.y_root = y_root;
+
+        input_event->motion.time    = event->motion.time;
+        input_event->motion.state   = event->motion.state;
+        input_event->motion.is_hint = event->motion.is_hint;
+        break;
+      case GDK_BUTTON_PRESS:
+      case GDK_BUTTON_RELEASE:
+        input_event->button.device = active_device;
+        input_event->button.x      = axes[0];
+        input_event->button.y      = axes[1];
+        input_event->button.axes   = axes;
+        input_event->button.x_root = x_root;
+        input_event->button.y_root = y_root;
+
+        input_event->button.time   = event->button.time;
+        input_event->button.state  = event->button.state;
+        input_event->button.button = event->button.button;
+        break;
+      default:
+        return FALSE;
+        break;
+    }
+
+  return TRUE;
 }
