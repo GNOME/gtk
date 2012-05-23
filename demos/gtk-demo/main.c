@@ -655,7 +655,7 @@ load_file (const gchar *filename)
 
               start = end;
 
-              while (*p != '\n') p++;
+              while (*p && *p != '\n') p++;
 
               state++;
             }
