@@ -116,6 +116,7 @@ RESOURCES=	application.ui			\
 		gtk-logo-48.png			\
 		css_accordion.css		\
 		css_basics.css			\
+		cssview.css			\
 		fancy.css			\
 		reset.css
 

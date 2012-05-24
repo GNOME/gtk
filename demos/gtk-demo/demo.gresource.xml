@@ -9,6 +9,7 @@
     <file preprocess="xml-stripblanks">menus.ui</file>
   </gresource>
   <gresource prefix="/">
+    <file>cssview.css</file>
     <file>reset.css</file>
   </gresource>
   <gresource prefix="/css_accordion">
