@@ -51,18 +51,6 @@ typedef struct {
 } GtkThemingBackgroundLayer;
 
 static void
-_gtk_theming_background_apply_window_background (GtkThemingBackground *bg,
-                                                 cairo_t              *cr)
-{
-  if (gtk_style_context_has_class (bg->context, "background"))
-    {
-      cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.0); /* transparent */
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      cairo_paint (cr);
-    }
-}
-
-static void
 _gtk_theming_background_layer_apply_origin (GtkThemingBackground *bg,
                                             GtkThemingBackgroundLayer *layer)
 {
@@ -400,7 +388,6 @@ _gtk_theming_background_render (GtkThemingBackground *bg,
   cairo_save (cr);
   cairo_translate (cr, bg->paint_area.x, bg->paint_area.y);
 
-  _gtk_theming_background_apply_window_background (bg, cr);
   _gtk_theming_background_paint_color (bg, cr, background_image);
 
   for (idx = _gtk_css_array_value_get_n_values (background_image) - 1; idx >= 0; idx--)
