@@ -15,6 +15,7 @@ demos =						\
 	clipboard.c				\
 	colorsel.c				\
 	combobox.c				\
+	css_accordion.c                         \
 	css_basics.c				\
 	dialog.c				\
 	drawingarea.c				\
@@ -113,6 +114,7 @@ RESOURCES=	application.ui			\
 		theming.ui			\
 		gtk-logo-24.png			\
 		gtk-logo-48.png			\
+		css_accordion.css		\
 		css_basics.css			\
 		fancy.css			\
 		reset.css

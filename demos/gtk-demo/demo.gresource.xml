@@ -11,6 +11,9 @@
   <gresource prefix="/">
     <file>reset.css</file>
   </gresource>
+  <gresource prefix="/css_accordion">
+    <file alias="gtk.css">css_accordion.css</file>
+  </gresource>
   <gresource prefix="/css_basics">
     <file alias="gtk.css">css_basics.css</file>
   </gresource>
