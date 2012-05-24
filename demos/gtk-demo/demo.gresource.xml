@@ -18,6 +18,9 @@
   <gresource prefix="/css_basics">
     <file alias="gtk.css">css_basics.css</file>
   </gresource>
+  <gresource prefix="/css_multiplebgs">
+    <file alias="gtk.css">css_multiplebgs.css</file>
+  </gresource>
   <gresource prefix="/theming_custom_css">
     <file alias="gtk.css">fancy.css</file>
   </gresource>

@@ -17,6 +17,7 @@ demos =						\
 	combobox.c				\
 	css_accordion.c                         \
 	css_basics.c				\
+	css_multiplebgs.c			\
 	dialog.c				\
 	drawingarea.c				\
 	editable_cells.c			\
@@ -116,6 +117,7 @@ RESOURCES=	application.ui			\
 		gtk-logo-48.png			\
 		css_accordion.css		\
 		css_basics.css			\
+		css_multiplebgs.css		\
 		cssview.css			\
 		fancy.css			\
 		reset.css
