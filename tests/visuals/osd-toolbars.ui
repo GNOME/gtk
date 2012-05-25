@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="default_width">600</property>
+    <property name="default_height">600</property>
+    <child>
+      <object class="GtkOverlay" id="overlay1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+            <object class="GtkDrawingArea" id="filler">
+                <property name="visible">True</property>
+            </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkToolbar" id="bottom_toolbar">
+            <property name="visible">True</property>
+            <property name="show_arrow">False</property>
+            <property name="halign">center</property>
+            <property name="valign">end</property>
+            <property name="margin_bottom">24</property>
+            <style>
+                <class name="osd"/>
+            </style>
+            <child>
+              <object class="GtkToolItem" id="left_item">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkBox" id="left_box">
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">0</property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkToggleButton" id="camera">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkImage" id="camera_icon">
+                            <property name="visible">True</property>
+                            <property name="icon_name">camera-web-symbolic</property>
+                            <property name="icon_size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="volume">
+                        <property name="visible">True</property>
+                        <property name="active">True</property>
+                        <child>
+                          <object class="GtkImage" id="volume_icon">
+                            <property name="visible">True</property>
+                            <property name="icon_name">audio-volume-medium-symbolic</property>
+                            <property name="icon_size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="microphone">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <child>
+                          <object class="GtkImage" id="microphone_icon">
+                            <property name="visible">True</property>
+                            <property name="icon_name">audio-input-microphone-symbolic</property>
+                            <property name="icon_size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="bt">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="active">True</property>
+                        <child>
+                          <object class="GtkImage" id="bt_icon">
+                            <property name="visible">True</property>
+                            <property name="icon_name">bluetooth-active-symbolic</property>
+                            <property name="icon_size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem" id="toolbutton2">
+                <property name="draw">False</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolItem" id="toolitem4">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkLabel" id="status_label">
+                    <property name="visible">True</property>
+                    <property name="label">OSD Toolbar</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToolItem" id="right_item">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkBox" id="right_box">
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">0</property>
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkToggleButton" id="opt">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkImage" id="opt_icon">
+                            <property name="visible">True</property>
+                            <property name="icon_name">media-optical-symbolic</property>
+                            <property name="icon_size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="hdd">
+                        <property name="visible">True</property>
+                        <property name="active">True</property>
+                        <child>
+                          <object class="GtkImage" id="hdd_icon">
+                            <property name="visible">True</property>
+                            <property name="icon_name">drive-harddisk-symbolic</property>
+                            <property name="icon_size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="joy">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <child>
+                          <object class="GtkImage" id="joy_icon">
+                            <property name="visible">True</property>
+                            <property name="icon_name">input-gaming-symbolic</property>
+                            <property name="icon_size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="overlay">
+          <object class="GtkToolbar" id="top_toolbar">
+            <property name="visible">True</property>
+            <property name="show_arrow">False</property>
+            <property name="halign">center</property>
+            <property name="valign">start</property>
+            <property name="margin_top">24</property>
+            <property name="icon_size">1</property>
+            <style>
+                <class name="osd"/>
+            </style>
+            <child>
+              <object class="GtkToggleToolButton" id="tb1">
+                <property name="visible">True</property>
+                <property name="icon_name">edit-undo-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="tb2">
+                <property name="visible">True</property>
+                <property name="icon_name">edit-redo-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="tb3">
+                <property name="visible">True</property>
+                <property name="icon_name">start-here-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="tb4">
+                <property name="visible">True</property>
+                <property name="icon_name">applications-science-symbolic</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToolItem" id="tb5">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkLabel" id="tb5_label">
+                    <property name="visible">True</property>
+                    <property name="label">Another kind of OSD toolbar</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

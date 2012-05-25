@@ -27,4 +27,5 @@ EXTRA_DIST = \
 	inline-toolbar.ui \
 	linked-buttons-horizontal.ui \
 	linked-buttons-vertical.ui \
+	osd-toolbars.ui \
 	primary-toolbar.ui
