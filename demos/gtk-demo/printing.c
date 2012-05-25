@@ -149,8 +149,6 @@ do_printing (GtkWidget *do_widget)
   GtkPrintOperation *operation;
   GtkPrintSettings *settings;
   PrintData *data;
-  gchar *uri, *ext;
-  const gchar *dir;
   GError *error = NULL;
 
   operation = gtk_print_operation_new ();
@@ -170,25 +168,14 @@ do_printing (GtkWidget *do_widget)
   gtk_print_operation_set_embed_page_setup (operation, TRUE);
 
   settings = gtk_print_settings_new ();
-  dir = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
-  if (dir == NULL)
-    dir = g_get_home_dir ();
-  if (g_strcmp0 (gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT), "ps") == 0)
-    ext = ".ps";
-  else if (g_strcmp0 (gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT), "svg") == 0)
-    ext = ".svg";
-  else
-    ext = ".pdf";
 
-  uri = g_strconcat ("file://", dir, "/", "gtk-demo", ext, NULL);
-  gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_URI, uri);
+  gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_BASENAME, "gtk-demo");
   gtk_print_operation_set_print_settings (operation, settings);
 
   gtk_print_operation_run (operation, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW (do_widget), &error);
 
   g_object_unref (operation);
   g_object_unref (settings);
-  g_free (uri);
 
   if (error)
     {
