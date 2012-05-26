@@ -1106,6 +1106,10 @@ _gtk_style_context_set_widget (GtkStyleContext *context,
  *            %GTK_STYLE_PROVIDER_PRIORITY_USER
  *
  * Adds a style provider to @context, to be used in style construction.
+ * Note that a style provider added by this function only affects
+ * the style of the widget to which @context belongs. If you want
+ * to affect the style of all widgets, use
+ * gtk_style_context_add_provider_for_screen().
  *
  * <note><para>If both priorities are the same, A #GtkStyleProvider
  * added through this function takes precedence over another added
@@ -1212,8 +1216,7 @@ gtk_style_context_reset_widgets (GdkScreen *screen)
  *            %GTK_STYLE_PROVIDER_PRIORITY_USER
  *
  * Adds a global style provider to @screen, which will be used
- * in style construction for all #GtkStyleContext<!-- -->s under
- * @screen.
+ * in style construction for all #GtkStyleContexts under @screen.
  *
  * GTK+ uses this to make styling information from #GtkSettings
  * available.
