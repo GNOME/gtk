@@ -26,8 +26,8 @@
  * export ftw() and friends only if _XOPEN_SOURCE and _GNU_SOURCE
  * are defined. see bug #444097.
  */
-#define _XOPEN_SOURCE 500
-#define _GNU_SOURCE 
+#define _XOPEN_SOURCE 600
+#define _GNU_SOURCE
 
 #ifdef HAVE_FTW_H
 #include <ftw.h>
