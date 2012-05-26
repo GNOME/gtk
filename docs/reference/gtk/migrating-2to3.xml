@@ -1001,7 +1001,8 @@ AM_CONDITIONAL(BUILD_x11, [test "x$have_x11" = "xyes"])
       Another convenience function that can help when implementing
       ::draw for multi-window widgets is gtk_cairo_transform_to_window(),
       which transforms a cairo context from widget-relative coordinates
-      to window-relative coordinates.
+      to window-relative coordinates. You may want to use cairo_save() and
+      cairo_restore() when modifying the cairo context in your draw function.
     </para>
     <para>
       All GtkStyle drawing functions (gtk_paint_box(), etc) have been changed
