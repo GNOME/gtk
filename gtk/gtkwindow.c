@@ -8198,7 +8198,7 @@ gtk_window_set_resizable (GtkWindow *window,
 
   if (priv->resizable != resizable)
     {
-      priv->resizable = (resizable != FALSE);
+      priv->resizable = resizable;
 
       update_grip_visibility (window);
 
