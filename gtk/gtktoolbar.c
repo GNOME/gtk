@@ -2750,7 +2750,7 @@ gtk_toolbar_button_press (GtkWidget      *toolbar,
       return return_value;
     }
 
-  if (event->type == GDK_2BUTTON_PRESS)
+  if (event->type != GDK_BUTTON_PRESS)
     return FALSE;
 
   window = gtk_widget_get_toplevel (toolbar);
