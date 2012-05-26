@@ -623,12 +623,18 @@ load_file (const gchar *filename)
           while (*p == '/' || *p == '*' || g_ascii_isspace (*p))
             p++;
           r = p;
-          while (*r != '/' && *r != ':' && *r != '\0')
-            r++;
-          if (*r == '/')
-            p = r + 1;
-          if (r[0] == ':' && r[1] == ':')
-            *r = '\0';
+          while (*r != '\0')
+            {
+              while (*r != '/' && *r != ':' && *r != '\0')
+                r++;
+              if (*r == '/')
+                {
+                  r++;
+                  p = r;
+                }
+              if (r[0] == ':' && r[1] == ':')
+                *r = '\0';
+            }
           q = p + strlen (p);
           while (q > p && g_ascii_isspace (*(q - 1)))
             q--;

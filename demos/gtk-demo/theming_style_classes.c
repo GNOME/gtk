@@ -1,4 +1,4 @@
-/* Theming :: theming.ui
+/* Theming/Style Classes :: theming.ui
  *
  * GTK+ uses CSS for theming. Style classes can be associated
  * with widgets to inform the theme about intended rendering.
@@ -14,7 +14,7 @@
 static GtkWidget *window = NULL;
 
 GtkWidget *
-do_theming (GtkWidget *do_widget)
+do_theming_style_classes (GtkWidget *do_widget)
 {
   GtkWidget *grid;
   GtkBuilder *builder;

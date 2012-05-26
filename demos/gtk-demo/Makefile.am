@@ -43,7 +43,7 @@ demos =						\
 	stock_browser.c				\
 	textview.c				\
 	textscroll.c				\
-	theming.c				\
+	theming_style_classes.c			\
 	toolpalette.c				\
 	transparent.c				\
 	tree_store.c				\
