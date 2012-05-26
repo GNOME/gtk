@@ -149,7 +149,7 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
    * @modifier: the modifier combination of the accelerator
    * @accel_closure: the #GClosure of the accelerator
    *
-   * The accel-changed signal is emitted when a #GtkAccelGroupEntry
+   * The accel-changed signal is emitted when an entry
    * is added to or removed from the accel group.
    *
    * Widgets like #GtkAccelLabel which display an associated
