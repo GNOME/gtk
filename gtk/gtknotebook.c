@@ -2033,6 +2033,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
   gint tab_overlap;
   gint tab_curvature;
   gint arrow_spacing;
+  gint initial_gap;
   gint scroll_arrow_hlength;
   gint scroll_arrow_vlength;
 
@@ -2042,6 +2043,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
   gtk_widget_style_get (widget,
                         "focus-line-width", &focus_width,
                         "focus-padding", &focus_pad,
+                        "initial-gap", &initial_gap,
                         "tab-overlap", &tab_overlap,
                         "tab-curvature", &tab_curvature,
                         "arrow-spacing", &arrow_spacing,
@@ -2145,7 +2147,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
 
           action_width += action_widget_requisition[ACTION_WIDGET_START].width;
           action_width += action_widget_requisition[ACTION_WIDGET_END].width;
-          requisition->width = tab_width + tab_overlap + action_width;
+          requisition->width = tab_width + tab_overlap + action_width + initial_gap;
 
           requisition->height = tab_height;
           break;
@@ -2184,7 +2186,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
           action_height += action_widget_requisition[ACTION_WIDGET_START].height;
           action_height += action_widget_requisition[ACTION_WIDGET_END].height;
 
-          requisition->height = tab_height + tab_overlap + action_height;
+          requisition->height = tab_height + tab_overlap + action_height + initial_gap;
 
           requisition->height = MAX (requisition->height, tab_max + tab_overlap);
 
