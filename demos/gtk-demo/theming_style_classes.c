@@ -26,7 +26,7 @@ do_theming_style_classes (GtkWidget *do_widget)
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "Theming");
+      gtk_window_set_title (GTK_WINDOW (window), "Style Classes");
       gtk_container_set_border_width (GTK_CONTAINER (window), 12);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
