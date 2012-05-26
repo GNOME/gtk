@@ -622,7 +622,7 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
  *        string of text holding context around the insertion point.
  *        If the function returns %TRUE, then you must free the result
  *        stored in this location with g_free().
- * @cursor_index: (out) location to store byte index of the insertion
+ * @cursor_index: (out): location to store byte index of the insertion
  *        cursor within @text.
  * 
  * Retrieves context around the insertion point. Input methods
