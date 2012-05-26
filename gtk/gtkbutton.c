@@ -1461,7 +1461,10 @@ gtk_button_unmap (GtkWidget *widget)
   GtkButtonPrivate *priv = button->priv;
 
   if (priv->event_window)
-    gdk_window_hide (priv->event_window);
+    {
+      gdk_window_hide (priv->event_window);
+      priv->in_button = FALSE;
+    }
 
   GTK_WIDGET_CLASS (gtk_button_parent_class)->unmap (widget);
 }
