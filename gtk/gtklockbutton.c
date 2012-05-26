@@ -34,21 +34,21 @@
  * preference dialogs to allow users to obtain and revoke authorizations
  * needed to operate the controls. The required authorization is represented
  * by a #GPermission object. Concrete implementations of #GPermission may use
- * PolicyKit or some other authorization framework.
+ * PolicyKit or some other authorization framework. To obtain a PolicyKit-based
+ * #GPermission, use polkit_permission_new().
  *
- * If the user lacks the authorization but authorization can be obtained
- * through authentication, the widget looks like this
+ * If the user is not currently allowed to perform the action, but can obtain
+ * the permission, the widget looks like this
  * <informalexample><inlinegraphic fileref="lockbutton-locked.png"></inlinegraphic></informalexample>
- * and the user can click the button to obtain the authorization. Depending
+ * and the user can click the button to request the permission. Depending
  * on the platform, this may pop up an authentication dialog or ask the user
- * to authenticate in some other way. Once authorization is obtained, the
- * widget changes to this
+ * to authenticate in some other way. Once the user has obtained the permission,
+ * the widget changes to this
  * <informalexample><inlinegraphic fileref="lockbutton-unlocked.png"></inlinegraphic></informalexample>
- * and the authorization can be dropped by clicking the button. If the user
- * is not able to obtain authorization at all, the widget looks like this
+ * and the permission can be dropped again by clicking the button. If the user
+ * is not able to obtain the permission at all, the widget looks like this
  * <informalexample><inlinegraphic fileref="lockbutton-sorry.png"></inlinegraphic></informalexample>
- * If the user is authorized and cannot drop the authorization, the button
- * is hidden.
+ * If the user has the permission and cannot drop it, the button is hidden.
  *
  * The text (and tooltips) that are shown in the various cases can be adjusted
  * with the #GtkLockButton:text-lock, #GtkLockButton:text-unlock,
