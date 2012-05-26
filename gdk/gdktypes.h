@@ -135,7 +135,7 @@ typedef struct _GdkAppLaunchContext   GdkAppLaunchContext;
  *   in memory as 0xcc, 0xee, 0xff, 0x00.
  * @GDK_MSB_FIRST: The values are stored with the most-significant byte
  *   first. For instance, the 32-bit value 0xffeecc would be stored
- *   in memory as 0x00, 0xcc, 0xee, 0xff.
+ *   in memory as 0x00, 0xff, 0xee, 0xcc.
  *
  * A set of values describing the possible byte-orders
  * for storing pixel values in memory.
