@@ -94,6 +94,13 @@
     make CFLAGS+="-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
     </programlisting>
   </para>
+  <para>
+    Note that some parts of our API, such as enumeration values, are
+    not well covered by the deprecation warnings. In most cases, using
+    them will require you to also use deprecated functions, which will
+    trigger warnings. But some things, like the %GTK_DIALOG_NO_SEPARATOR
+    flag that has disappeared in GTK+ 3, may not. 
+  </para>
   </section>
 
   <section>
@@ -273,7 +280,7 @@ gdk_cairo_set_source_pixbuf() instead of cairo_set_source_surface().
         <para>
           Drawing layouts clipped is often used to avoid overdraw or to
           allow drawing selections. Code would have looked like this:
-	  <informalexample><programlisting>
+          <informalexample><programlisting>
 GdkGC *gc;
 
 /* setup */
