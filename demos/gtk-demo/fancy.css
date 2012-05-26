@@ -1,0 +1,24 @@
+GtkButton#fancy {
+  font-weight: bold;
+  background-image: linear-gradient(135deg, yellow, blue);
+  border-radius: 20px;
+  color: white;
+}
+
+GtkButton#fancy:hover {
+  font-weight: bold;
+  background-image: linear-gradient(135deg, blue, yellow);
+  border-radius: 20px;
+  color: white;
+}
+
+GtkButton#fancy:active {
+  font-weight: bold;
+  background-image: linear-gradient(yellow, yellow);
+  border-radius: 20px;
+  color: black;
+}
+
+GtkButton#fancy * {
+  color: inherit;
+}

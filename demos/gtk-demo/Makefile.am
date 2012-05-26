@@ -44,6 +44,7 @@ demos =						\
 	textview.c				\
 	textscroll.c				\
 	theming_style_classes.c			\
+	theming_custom_css.c			\
 	toolpalette.c				\
 	transparent.c				\
 	tree_store.c				\
@@ -78,6 +79,7 @@ EXTRA_DIST += 				\
 	application.ui			\
 	menus.ui			\
 	theming.ui			\
+	fancy.css			\
 	gtk-logo-24.png			\
 	gtk-logo-48.png			\
 	org.gtk.Demo.gschema.xml
@@ -130,7 +132,8 @@ democode_DATA = \
 	demo.ui			\
 	menus.ui		\
 	application.ui		\
-	theming.ui
+	theming.ui		\
+	fancy.css
 
 DISTCLEANFILES = demos.h
 
