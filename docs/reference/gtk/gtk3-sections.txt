@@ -62,7 +62,6 @@ GtkAccelGroupActivate
 GtkAccelGroupFindFunc
 gtk_accel_group_disconnect
 gtk_accel_group_disconnect_key
-gtk_accel_group_query
 gtk_accel_group_activate
 gtk_accel_group_lock
 gtk_accel_group_unlock
@@ -96,6 +95,7 @@ GTK_ACCEL_GROUP_GET_CLASS
 GTK_ACCEL_GROUP_GET_PRIVATE
 GtkAccelGroupPrivate
 GtkAccelGroupEntry
+gtk_accel_group_query
 gtk_accel_group_get_type
 </SECTION>
 
