@@ -23,13 +23,20 @@ for $file (@ARGV) {
     open INFO_FILE, $file or die "Cannot open '$file'\n";
     $title = <INFO_FILE>;
     $title =~ s@^\s*/\*\s*@@;
+    $extra = "";
+    if ($title =~ /^(.*)::(.*)$/) {
+        $title = $1;
+        $extra = " $2";
+    }
     $title =~ s@\s*$@@;
+    $extra =~ s@^\s*@@;
+    $extra =~ s@\s*$@@;
 
     close INFO_FILE;
 
     print "GtkWidget *do_$basename (GtkWidget *do_widget);\n";
 
-    push @demos, {"title" => $title, "file" => $file,
+    push @demos, {"title" => $title, "file" => "$file $extra",
 		  "func"  => "do_$basename"};
 }
 
