@@ -61,6 +61,11 @@
  *
  * gtk_text_buffer_create_tag() is the best way to create tags.
  * See <application>gtk3-demo</application> for numerous examples.
+ *
+ * For each property of #GtkTextTag, there is a "set" property, e.g.
+ * "font-set" corresponds to "font". These "set" properties reflect
+ * whether a property has been set or not.
+ * You should not set them independently.
  */
 
 #include "config.h"

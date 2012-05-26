@@ -41,12 +41,12 @@
  * elements on a #cairo_t. Typically, one cell renderer is used to
  * draw many cells on the screen.  To this extent, it isn't expected that a
  * CellRenderer keep any permanent state around.  Instead, any state is set
- * just prior to use using #GObject<!-- -->s property system.  Then, the
+ * just prior to use using #GObjects property system.  Then, the
  * cell is measured using gtk_cell_renderer_get_size(). Finally, the cell
  * is rendered in the correct location using gtk_cell_renderer_render().
  *
  * There are a number of rules that must be followed when writing a new
- * #GtkCellRenderer.  First and formost, its important that a certain set
+ * #GtkCellRenderer.  First and foremost, its important that a certain set
  * of properties will always yield a cell renderer of the same size,
  * barring a #GtkStyle change.  The #GtkCellRenderer also has a number of
  * generic properties that are expected to be honored by all children.
@@ -60,6 +60,11 @@
  * To make a cell renderer activatable or editable, you have to
  * implement the #GtkCellRendererClass.activate or
  * #GtkCellRendererClass.start_editing virtual functions, respectively.
+ *
+ * Many properties of #GtkCellRenderer and its subclasses have a
+ * corresponding "set" property, e.g. "cell-background-set" corresponds
+ * to "cell-background". These "set" properties reflect whether a property
+ * has been set or not. You should not set them independently.
  */
 
 
@@ -420,7 +425,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
   ADD_SET_PROP ("cell-background-set", PROP_CELL_BACKGROUND_SET,
                 P_("Cell background set"),
-                P_("Whether this tag affects the cell background color"));
+                P_("Whether the cell background color is set"));
 
   g_type_class_add_private (class, sizeof (GtkCellRendererPrivate));
 
