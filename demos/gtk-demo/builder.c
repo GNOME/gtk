@@ -27,6 +27,12 @@ about_activate (GtkAction *action)
   gtk_widget_hide (about_dlg);
 }
 
+G_MODULE_EXPORT void
+help_activate (GtkAction *action)
+{
+  g_print ("Help not available\n");
+}
+
 GtkWidget *
 do_builder (GtkWidget *do_widget)
 {

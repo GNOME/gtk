@@ -107,7 +107,14 @@
                         <property name="stock_id">gtk-about</property>
                         <signal handler="about_activate" name="activate"/>
                     </object>
-                    <accelerator key="F1"/>
+                    <accelerator key="F7"/>
+                </child>
+                <child>
+                    <object class="GtkAction" id="Help">
+                        <property name="name">Help</property>
+                        <property name="stock_id">gtk-help</property>
+                        <signal handler="help_activate" name="activate"/>
+                    </object>
                 </child>
             </object>
         </child>
@@ -127,6 +134,7 @@
               <menuitem action="Paste" name="Paste"/>
             </menu>
             <menu action="HelpMenu" name="HelpMenu">
+              <menuitem action="Help" name="Help"/>
               <menuitem action="About" name="About"/>
             </menu>
           </menubar>
