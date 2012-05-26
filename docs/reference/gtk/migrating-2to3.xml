@@ -82,9 +82,8 @@
     Over the years, a number of functions, and in some cases, entire
     widgets have been deprecated. These deprecations are clearly spelled
     out in the API reference, with hints about the recommended replacements.
-    The API reference also includes an
-    <link linkend="api-index-deprecated">index</link> of all deprecated
-    symbols.
+    The API reference for GTK+ 2 also includes an
+    <ulink url="http://developer.gnome.org/gtk/2.24/api-index-deprecated.html">index</ulink> of all deprecated symbols.
   </para>
   <para>
     To verify that your program does not use any deprecated symbols,
@@ -92,14 +91,14 @@
     as follows:
     <programlisting>
     make CFLAGS+="-DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
-    </programlisting>
+   </programlisting>
   </para>
   <para>
     Note that some parts of our API, such as enumeration values, are
     not well covered by the deprecation warnings. In most cases, using
     them will require you to also use deprecated functions, which will
     trigger warnings. But some things, like the %GTK_DIALOG_NO_SEPARATOR
-    flag that has disappeared in GTK+ 3, may not. 
+    flag that has disappeared in GTK+ 3, may not.
   </para>
   </section>
 
