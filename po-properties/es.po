@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-05-26 19:05+0000\n"
-"PO-Revision-Date: 2012-05-27 11:59+0200\n"
+"PO-Revision-Date: 2012-05-27 12:33+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1811,7 +1811,7 @@ msgstr "Establece el fondo de la celda"
 #: ../gtk/gtkcellrenderer.c:428
 #| msgid "Whether this tag affects the cell background color"
 msgid "Whether the cell background color is set"
-msgstr "Indica si se ha establecido el color de fondo de la celda"
+msgstr "Indica si el color de fondo de la celda está establecido"
 
 #: ../gtk/gtkcellrenderercombo.c:128
 msgid "Model"
