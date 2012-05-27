@@ -195,7 +195,8 @@ gtk_mirror_bin_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
   
-  gdk_window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask)
+  gdk_window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                               &attributes, attributes_mask);
   gtk_widget_set_window (widget, gdk_window);
   gdk_window_set_user_data (gdk_window, widget);
   g_signal_connect (gdk_window, "pick-embedded-child",
