@@ -754,7 +754,7 @@ gtk_application_class_init (GtkApplicationClass *class)
 
 /**
  * gtk_application_new:
- * @application_id: the application id
+ * @application_id (allow-none): The application ID.
  * @flags: the application flags
  *
  * Creates a new #GtkApplication instance.
@@ -774,7 +774,12 @@ gtk_application_class_init (GtkApplicationClass *class)
  * you can explicitly call gtk_init() before creating the application
  * instance.
  *
- * The application id must be valid. See g_application_id_is_valid().
+ * If non-%NULL, the application ID must be valid.  See
+ * g_application_id_is_valid().
+ *
+ * If no application ID is given then some features (most notably application 
+ * uniqueness) will be disabled. A null application ID is only allowed with 
+ * GTK+ 3.6 or later.
  *
  * Returns: a new #GtkApplication instance
  *
