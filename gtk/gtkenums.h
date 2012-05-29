@@ -950,5 +950,89 @@ typedef enum {
 
 G_END_DECLS
 
+/**
+ * GtkInputPurpose:
+ * @GTK_INPUT_PURPOSE_FREE_FORM: Allow any character
+ * @GTK_INPUT_PURPOSE_ALPHA: Allow only alphabetic characters
+ * @GTK_INPUT_PURPOSE_DIGITS: Allow only digits
+ * @GTK_INPUT_PURPOSE_NUMBER: Edited field expects numbers
+ * @GTK_INPUT_PURPOSE_PHONE: Edited field expects phone number
+ * @GTK_INPUT_PURPOSE_URL: Edited field expects URL
+ * @GTK_INPUT_PURPOSE_EMAIL: Edited field expects email address
+ * @GTK_INPUT_PURPOSE_NAME: Edited field expects the name of a person
+ * @GTK_INPUT_PURPOSE_PASSWORD: Like @GTK_INPUT_PURPOSE_FREE_FORM, but characters are hidden
+ * @GTK_INPUT_PURPOSE_PIN: Like @GTK_INPUT_PURPOSE_DIGITS, but characters are hidden
+ *
+ * Describes primary purpose of the input widget. This information is
+ * useful for on-screen keyboards and similar input methods to decide
+ * which keys should be presented to the user.
+ *
+ * Note that the purpose is not meant to impose a totally strict rule
+ * about allowed characters, and does not replace input validation.
+ * It is fine for an on-screen keyboard to let the user override the
+ * character set restriction that is expressed by the purpose. The
+ * application is expected to validate the entry contents, even if
+ * it specified a purpose.
+ *
+ * The difference between @GTK_INPUT_PURPOSE_DIGITS and
+ * @GTK_INPUT_PURPOSE_NUMBER is that the former accepts only digits
+ * while the latter also some punctuation (like commas or points, plus,
+ * minus) and 'e' or 'E' as in 3.14E+000.
+ *
+ * This enumeration may be extended in the future; input methods should
+ * interpret unknown values as 'free form'.
+ *
+ * Since: 3.6
+ */
+typedef enum
+{
+  GTK_INPUT_PURPOSE_FREE_FORM,
+  GTK_INPUT_PURPOSE_ALPHA,
+  GTK_INPUT_PURPOSE_DIGITS,
+  GTK_INPUT_PURPOSE_NUMBER,
+  GTK_INPUT_PURPOSE_PHONE,
+  GTK_INPUT_PURPOSE_URL,
+  GTK_INPUT_PURPOSE_EMAIL,
+  GTK_INPUT_PURPOSE_NAME,
+  GTK_INPUT_PURPOSE_PASSWORD,
+  GTK_INPUT_PURPOSE_PIN
+} GtkInputPurpose;
+
+/**
+ * GtkInputHints:
+ * @GDK_INPUT_HINT_NONE: No special behaviour suggested
+ * @GTK_INPUT_HINT_SPELLCHECK: Suggest checking for typos
+ * @GTK_INPUT_HINT_NO_SPELLCHECK: Suggest not checking for typos
+ * @GTK_INPUT_HINT_WORD_COMPLETION: Suggest word completion
+ * @GTK_INPUT_HINT_LOWERCASE: Suggest to convert all text to lowercase
+ * @GTK_INPUT_HINT_UPPERCASE_CHARS: Suggest to capitalize all text
+ * @GTK_INPUT_HINT_UPPERCASE_WORDS: Suggest to capitalize the first
+ *     character of each word
+ * @GTK_INPUT_HINT_UPPERCASE_SENTENCES: Suggest to capitalize the
+ *     first word of each sentence
+ *
+ * Describes hints that might be taken into account by input methods
+ * or applications. Note that input methods may already tailor their
+ * behaviour according to the #GtkInputPurpose of the entry.
+ *
+ * Some common sense is expected when using these flags - mixing
+ * @GTK_INPUT_HINT_LOWERCASE with any of the uppercase hints makes no sense.
+ *
+ * This enumeration may be extended in the future; input methods should
+ * ignore unknown values.
+ *
+ * Since: 3.6
+ */
+typedef enum
+{
+  GTK_INPUT_HINT_NONE                = 0,
+  GTK_INPUT_HINT_SPELLCHECK          = 1 << 0,
+  GTK_INPUT_HINT_NO_SPELLCHECK       = 1 << 1,
+  GTK_INPUT_HINT_WORD_COMPLETION     = 1 << 2,
+  GTK_INPUT_HINT_LOWERCASE           = 1 << 3,
+  GTK_INPUT_HINT_UPPERCASE_CHARS     = 1 << 4,
+  GTK_INPUT_HINT_UPPERCASE_WORDS     = 1 << 5,
+  GTK_INPUT_HINT_UPPERCASE_SENTENCES = 1 << 6
+} GtkInputHints;
 
 #endif /* __GTK_ENUMS_H__ */
