@@ -3248,6 +3248,38 @@ gtk_status_icon_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtklevelbar</FILE>
+<TITLE>GtkLevelBar</TITLE>
+GTK_LEVEL_BAR_OFFSET_LOW
+GTK_LEVEL_BAR_OFFSET_HIGH
+GtkLevelBarMode
+GtkLevelBar
+gtk_level_bar_new
+gtk_level_bar_new_for_interval
+gtk_level_bar_set_mode
+gtk_level_bar_get_mode
+gtk_level_bar_set_value
+gtk_level_bar_get_value
+gtk_level_bar_set_min_value
+gtk_level_bar_get_min_value
+gtk_level_bar_set_max_value
+gtk_level_bar_get_max_value
+gtk_level_bar_add_offset_value
+gtk_level_bar_remove_offset_value
+gtk_level_bar_get_offset_value
+<SUBSECTION Standard>
+GTK_LEVEL_BAR
+GTK_IS_LEVEL_BAR
+GTK_TYPE_LEVEL_BAR
+GTK_LEVEL_BAR_CLASS
+GTK_IS_LEVEL_BAR_CLASS
+GTK_LEVEL_BAR_GET_CLASS
+<SUBSECTION Private>
+GtkLevelBarPrivate
+gtk_level_bar_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtktable</FILE>
 <TITLE>GtkTable</TITLE>
 GtkTable
@@ -5721,6 +5753,7 @@ GTK_STYLE_CLASS_RIGHT
 GTK_STYLE_CLASS_LINKED
 GTK_STYLE_CLASS_ARROW
 GTK_STYLE_CLASS_OSD
+GTK_STYLE_CLASS_LEVEL_BAR
 GTK_STYLE_REGION_COLUMN
 GTK_STYLE_REGION_COLUMN_HEADER
 GTK_STYLE_REGION_ROW
