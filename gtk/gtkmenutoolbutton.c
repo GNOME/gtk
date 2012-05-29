@@ -269,7 +269,7 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
    * The ::show-menu signal is emitted before the menu is shown.
    *
    * It can be used to populate the menu on demand, using 
-   * gtk_menu_tool_button_get_menu(). 
+   * gtk_menu_tool_button_set_menu().
 
    * Note that even if you populate the menu dynamically in this way, 
    * you must set an empty menu on the #GtkMenuToolButton beforehand,
