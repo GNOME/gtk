@@ -128,6 +128,7 @@
 #include <gtk/gtkmain.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenubar.h>
+#include <gtk/gtkmenubutton.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmenutoolbutton.h>
