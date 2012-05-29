@@ -122,6 +122,7 @@
 #include <gtk/gtkinvisible.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklayout.h>
+#include <gtk/gtklevelbar.h>
 #include <gtk/gtklinkbutton.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtklockbutton.h>

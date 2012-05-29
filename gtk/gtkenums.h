@@ -932,6 +932,20 @@ typedef enum {
   GTK_BORDER_STYLE_RIDGE
 } GtkBorderStyle;
 
+/**
+ * GtkLevelBarMode:
+ * @GTK_LEVEL_BAR_MODE_CONTINUOUS: the bar has a continuous mode
+ * @GTK_LEVEL_BAR_MODE_DISCRETE: the bar has a discrete mode
+ *
+ * Describes how #GtkLevelBar contents should be rendered.
+ * Note that this enumeration could be extended with additional modes
+ * in the future.
+ */
+typedef enum {
+  GTK_LEVEL_BAR_MODE_CONTINUOUS,
+  GTK_LEVEL_BAR_MODE_DISCRETE
+} GtkLevelBarMode;
+
 G_END_DECLS
 
 
