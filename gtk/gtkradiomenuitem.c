@@ -93,7 +93,8 @@ G_DEFINE_TYPE (GtkRadioMenuItem, gtk_radio_menu_item, GTK_TYPE_CHECK_MENU_ITEM)
 
 /**
  * gtk_radio_menu_item_new:
- * @group: the group to which the radio menu item is to be attached
+ * @group: (element-type GtkRadioMenuItem): the group to which the
+ *    radio menu item is to be attached
  *
  * Creates a new #GtkRadioMenuItem.
  *
@@ -155,7 +156,7 @@ gtk_radio_menu_item_get_property (GObject    *object,
 /**
  * gtk_radio_menu_item_set_group:
  * @radio_menu_item: a #GtkRadioMenuItem.
- * @group: the new group.
+ * @group: (element-type GtkRadioMenuItem): the new group.
  *
  * Sets the group of a radio menu item, or changes it.
  */
@@ -265,7 +266,7 @@ gtk_radio_menu_item_new_with_label (GSList *group,
 
 /**
  * gtk_radio_menu_item_new_with_mnemonic:
- * @group: group the radio menu item is inside
+ * @group: (element-type GtkRadioMenuItem): group the radio menu item is inside
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
  *
