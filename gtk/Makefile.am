@@ -271,7 +271,6 @@ gtk_public_h_sources = 		\
 	gtkmain.h		\
 	gtkmenu.h		\
 	gtkmenubar.h		\
-	gtkmenubutton.h		\
 	gtkmenuitem.h		\
 	gtkmenushell.h		\
 	gtkmenutoolbutton.h	\
@@ -480,7 +479,6 @@ gtk_private_h_sources =		\
 	gtkimcontextsimpleseqs.h \
 	gtkintl.h		\
 	gtkkeyhash.h		\
-	gtkmenubuttonprivate.h	\
 	gtkmenuprivate.h	\
 	gtkmenuitemprivate.h	\
 	gtkmenushellprivate.h	\
@@ -733,7 +731,6 @@ gtk_base_c_sources = 		\
 	gtkmarshalers.c		\
 	gtkmenu.c		\
 	gtkmenubar.c		\
-	gtkmenubutton.c		\
 	gtkmenuitem.c		\
 	gtkmenushell.c		\
 	gtkmenutoolbutton.c	\
