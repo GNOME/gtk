@@ -1,4 +1,4 @@
-/* CSS Theming/CSS Accordion
+/* CSS Theming/CSS Accordion :: css_accordion.css
  *
  * A simple accordion demo written using CSS transitions and multiple backgrounds
  *

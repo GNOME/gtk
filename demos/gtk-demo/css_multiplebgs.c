@@ -1,4 +1,4 @@
-/* CSS Theming/Multiple Backgrounds
+/* CSS Theming/Multiple Backgrounds :: css_multiplebgs.css cssview.css
  *
  * Gtk themes are written using CSS. Every widget is build of multiple items
  * that you can style very similarly to a regular website.

@@ -1,4 +1,4 @@
-/* CSS Theming/CSS Basics
+/* CSS Theming/CSS Basics :: css_basics.css
  *
  * Gtk themes are written using CSS. Every widget is build of multiple items
  * that you can style very similarly to a regular website.
