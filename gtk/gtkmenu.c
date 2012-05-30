@@ -1719,7 +1719,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
  *     triggering menu item, or %NULL
  * @parent_menu_item: (allow-none): the menu item whose activation
  *     triggered the popup, or %NULL
- * @func: (allow-none): a user supplied function used to position
+ * @func: (scope async) (allow-none): a user supplied function used to position
  *     the menu, or %NULL
  * @data: user supplied data to be passed to @func.
  * @button: the mouse button which was pressed to initiate the event.
