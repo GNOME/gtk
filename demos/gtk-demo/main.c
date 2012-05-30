@@ -573,8 +573,10 @@ load_file (const gchar *filename)
 
   names = g_strsplit (filename, " ", -1);
 
-  for (i = 1; names[i]; i++)
-    add_data_tab (names[i]);
+  for (i = 1; names[i]; i++) {
+    if (strlen (names[i]) > 0)
+      add_data_tab (names[i]);
+  }
 
   if (current_file && !strcmp (current_file, names[0]))
     {
