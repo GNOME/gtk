@@ -84,11 +84,11 @@ do_css_multiplebgs (GtkWidget *do_widget)
 {
   if (!window)
     {
-      GtkWidget *paned, *container, *child, *b;
+      GtkWidget *paned, *container, *child;
       GtkStyleProvider *provider;
       GtkTextBuffer *text;
       GBytes *bytes;
-      
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
@@ -96,7 +96,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       container = gtk_overlay_new ();
-      gtk_widget_add_events (container, 
+      gtk_widget_add_events (container,
                              GDK_ENTER_NOTIFY_MASK |
                              GDK_LEAVE_NOTIFY_MASK |
                              GDK_POINTER_MOTION_MASK);
@@ -109,7 +109,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (container), child);
 
       child = gtk_button_new ();
-      gtk_widget_add_events (child, 
+      gtk_widget_add_events (child,
                              GDK_ENTER_NOTIFY_MASK |
                              GDK_LEAVE_NOTIFY_MASK |
                              GDK_POINTER_MOTION_MASK);
@@ -137,7 +137,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
                                   NULL);
 
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
-      
+
       container = gtk_scrolled_window_new (NULL, NULL);
       gtk_container_add (GTK_CONTAINER (paned), container);
       child = gtk_text_view_new_with_buffer (text);
