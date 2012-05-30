@@ -754,7 +754,7 @@ gtk_application_class_init (GtkApplicationClass *class)
 
 /**
  * gtk_application_new:
- * @application_id (allow-none): The application ID.
+ * @application_id: (allow-none): The application ID.
  * @flags: the application flags
  *
  * Creates a new #GtkApplication instance.
