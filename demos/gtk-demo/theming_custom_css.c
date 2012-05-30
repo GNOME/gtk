@@ -1,4 +1,4 @@
-/* Theming/Custom CSS :: fancy.css
+/* CSS Theming/Custom CSS :: fancy.css
  *
  * GTK+ uses CSS for theming. If required, applications can
  * install their own custom CSS style provider to achieve

@@ -1,4 +1,4 @@
-/* Theming/Style Classes :: theming.ui
+/* CSS Theming/Style Classes :: theming.ui
  *
  * GTK+ uses CSS for theming. Style classes can be associated
  * with widgets to inform the theme about intended rendering.
