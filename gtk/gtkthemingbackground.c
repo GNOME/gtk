@@ -196,6 +196,7 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
       else
         {
           int surface_width, surface_height;
+          cairo_rectangle_t fill_rect;
           cairo_surface_t *surface;
           cairo_t *cr2;
 
@@ -272,10 +273,30 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
           cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
           cairo_surface_destroy (surface);
 
-          cairo_rectangle (cr,
-                           0, 0,
-                           hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT ? image_width : width,
-                           vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT ? image_height : height);
+          if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
+            {
+              fill_rect.x = _gtk_css_position_value_get_x (pos, width - image_width);
+              fill_rect.width = image_width;
+            }
+          else
+            {
+              fill_rect.x = 0;
+              fill_rect.width = width;
+            }
+
+          if (vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
+            {
+              fill_rect.y = _gtk_css_position_value_get_y (pos, height - image_height);
+              fill_rect.height = image_height;
+            }
+          else
+            {
+              fill_rect.y = 0;
+              fill_rect.height = height;
+            }
+
+          cairo_rectangle (cr, fill_rect.x, fill_rect.y,
+                           fill_rect.width, fill_rect.height);
           cairo_fill (cr);
         }
     }
