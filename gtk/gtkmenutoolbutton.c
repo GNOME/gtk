@@ -23,6 +23,8 @@
 
 #include "gtktogglebutton.h"
 #include "gtkarrow.h"
+#include "gtkmenubutton.h"
+#include "gtkmenubuttonprivate.h"
 #include "gtkbox.h"
 #include "gtkmenu.h"
 #include "gtkmain.h"
@@ -72,16 +74,9 @@
 struct _GtkMenuToolButtonPrivate
 {
   GtkWidget *button;
-  GtkWidget *arrow;
   GtkWidget *arrow_button;
   GtkWidget *box;
-  GtkMenu   *menu;
 };
-
-static void gtk_menu_tool_button_destroy    (GtkWidget              *widget);
-
-static int  menu_deactivate_cb              (GtkMenuShell           *menu_shell,
-					     GtkMenuToolButton      *button);
 
 static void gtk_menu_tool_button_buildable_interface_init (GtkBuildableIface   *iface);
 static void gtk_menu_tool_button_buildable_add_child      (GtkBuildable        *buildable,
@@ -122,12 +117,17 @@ gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_DOWN, GTK_SHADOW_NONE);
+      gtk_menu_button_set_direction (GTK_MENU_BUTTON (priv->arrow_button), GTK_ARROW_DOWN);
     }
   else
     {
+      GtkTextDirection direction;
+      GtkArrowType type;
+
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
+      direction = gtk_widget_get_direction (GTK_WIDGET (button));
+      type = (direction == GTK_TEXT_DIR_LTR ? GTK_ARROW_RIGHT : GTK_ARROW_LEFT);
+      gtk_menu_button_set_direction (GTK_MENU_BUTTON (priv->arrow_button), type);
     }
 
   parent = gtk_widget_get_parent (priv->button);
@@ -191,19 +191,6 @@ gtk_menu_tool_button_toolbar_reconfigured (GtkToolItem *toolitem)
 }
 
 static void
-gtk_menu_tool_button_state_changed (GtkWidget    *widget,
-				    GtkStateType  previous_state)
-{
-  GtkMenuToolButton *button = GTK_MENU_TOOL_BUTTON (widget);
-  GtkMenuToolButtonPrivate *priv = button->priv;
-
-  if (!gtk_widget_is_sensitive (widget) && priv->menu)
-    {
-      gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
-    }
-}
-
-static void
 gtk_menu_tool_button_set_property (GObject      *object,
                                    guint         prop_id,
                                    const GValue *value,
@@ -234,7 +221,7 @@ gtk_menu_tool_button_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_MENU:
-      g_value_set_object (value, button->priv->menu);
+      g_value_set_object (value, gtk_menu_button_get_menu (GTK_MENU_BUTTON (button->priv->arrow_button)));
       break;
 
     default:
@@ -247,18 +234,13 @@ static void
 gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
 {
   GObjectClass *object_class;
-  GtkWidgetClass *widget_class;
   GtkToolItemClass *toolitem_class;
 
   object_class = (GObjectClass *)klass;
-  widget_class = (GtkWidgetClass *)klass;
   toolitem_class = (GtkToolItemClass *)klass;
 
   object_class->set_property = gtk_menu_tool_button_set_property;
   object_class->get_property = gtk_menu_tool_button_get_property;
-
-  widget_class->destroy = gtk_menu_tool_button_destroy;
-  widget_class->state_changed = gtk_menu_tool_button_state_changed;
 
   toolitem_class->toolbar_reconfigured = gtk_menu_tool_button_toolbar_reconfigured;
 
@@ -296,140 +278,9 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
 }
 
 static void
-menu_position_func (GtkMenu           *menu,
-                    int               *x,
-                    int               *y,
-                    gboolean          *push_in,
-                    GtkMenuToolButton *button)
-{
-  GtkMenuToolButtonPrivate *priv = button->priv;
-  GtkAllocation arrow_allocation;
-  GtkWidget *widget = GTK_WIDGET (button);
-  GtkRequisition menu_req;
-  GtkOrientation orientation;
-  GtkTextDirection direction;
-  GdkRectangle monitor;
-  gint monitor_num;
-  GdkScreen *screen;
-  GdkWindow *window;
-
-  gtk_widget_get_preferred_size (GTK_WIDGET (priv->menu),
-                                 &menu_req, NULL);
-
-  orientation = gtk_tool_item_get_orientation (GTK_TOOL_ITEM (button));
-  direction = gtk_widget_get_direction (widget);
-  window = gtk_widget_get_window (widget);
-
-  screen = gtk_widget_get_screen (GTK_WIDGET (menu));
-  monitor_num = gdk_screen_get_monitor_at_window (screen, window);
-  if (monitor_num < 0)
-    monitor_num = 0;
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      GtkAllocation allocation;
-
-      gtk_widget_get_allocation (widget, &allocation);
-      gtk_widget_get_allocation (priv->arrow_button, &arrow_allocation);
-
-      gdk_window_get_origin (window, x, y);
-      *x += allocation.x;
-      *y += allocation.y;
-
-      if (direction == GTK_TEXT_DIR_LTR)
-	*x += MAX (allocation.width - menu_req.width, 0);
-      else if (menu_req.width > allocation.width)
-        *x -= menu_req.width - allocation.width;
-
-      if ((*y + arrow_allocation.height + menu_req.height) <= monitor.y + monitor.height)
-	*y += arrow_allocation.height;
-      else if ((*y - menu_req.height) >= monitor.y)
-	*y -= menu_req.height;
-      else if (monitor.y + monitor.height - (*y + arrow_allocation.height) > *y)
-	*y += arrow_allocation.height;
-      else
-	*y -= menu_req.height;
-    }
-  else 
-    {
-      gdk_window_get_origin (gtk_button_get_event_window (GTK_BUTTON (priv->arrow_button)), x, y);
-
-      gtk_widget_get_allocation (priv->arrow_button, &arrow_allocation);
-
-      if (direction == GTK_TEXT_DIR_LTR)
-        *x += arrow_allocation.width;
-      else 
-        *x -= menu_req.width;
-
-      if (*y + menu_req.height > monitor.y + monitor.height &&
-	  *y + arrow_allocation.height - monitor.y > monitor.y + monitor.height - *y)
-	*y += arrow_allocation.height - menu_req.height;
-    }
-
-  *push_in = FALSE;
-}
-
-static void
-popup_menu_under_arrow (GtkMenuToolButton *button,
-                        GdkEventButton    *event)
-{
-  GtkMenuToolButtonPrivate *priv = button->priv;
-
-  g_signal_emit (button, signals[SHOW_MENU], 0);
-
-  if (!priv->menu)
-    return;
-
-  gtk_menu_popup (priv->menu, NULL, NULL,
-                  (GtkMenuPositionFunc) menu_position_func,
-                  button,
-                  event ? event->button : 0,
-                  event ? event->time : gtk_get_current_event_time ());
-}
-
-static void
-arrow_button_toggled_cb (GtkToggleButton   *togglebutton,
-                         GtkMenuToolButton *button)
-{
-  GtkMenuToolButtonPrivate *priv = button->priv;
-
-  if (!priv->menu)
-    return;
-
-  if (gtk_toggle_button_get_active (togglebutton) &&
-      !gtk_widget_get_visible (GTK_WIDGET (priv->menu)))
-    {
-      /* we get here only when the menu is activated by a key
-       * press, so that we can select the first menu item */
-      popup_menu_under_arrow (button, NULL);
-      gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
-    }
-}
-
-static gboolean
-arrow_button_button_press_event_cb (GtkWidget         *widget,
-                                    GdkEventButton    *event,
-                                    GtkMenuToolButton *button)
-{
-  if (event->button == GDK_BUTTON_PRIMARY)
-    {
-      popup_menu_under_arrow (button, event);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-      return TRUE;
-    }
-  else
-    {
-      return FALSE;
-    }
-}
-
-static void
 gtk_menu_tool_button_init (GtkMenuToolButton *button)
 {
   GtkWidget *box;
-  GtkWidget *arrow;
   GtkWidget *arrow_button;
   GtkWidget *real_button;
 
@@ -447,9 +298,7 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
   gtk_container_add (GTK_CONTAINER (box), real_button);
   g_object_unref (real_button);
 
-  arrow_button = gtk_toggle_button_new ();
-  arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
-  gtk_container_add (GTK_CONTAINER (arrow_button), arrow);
+  arrow_button = gtk_menu_button_new ();
   gtk_box_pack_end (GTK_BOX (box), arrow_button,
                     FALSE, FALSE, 0);
 
@@ -459,39 +308,12 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
   gtk_widget_show_all (box);
 
   gtk_container_add (GTK_CONTAINER (button), box);
+  gtk_menu_button_set_align_widget (GTK_MENU_BUTTON (arrow_button),
+                                    GTK_WIDGET (button));
 
   button->priv->button = real_button;
-  button->priv->arrow = arrow;
   button->priv->arrow_button = arrow_button;
   button->priv->box = box;
-
-  g_signal_connect (arrow_button, "toggled",
-		    G_CALLBACK (arrow_button_toggled_cb), button);
-  g_signal_connect (arrow_button, "button-press-event",
-		    G_CALLBACK (arrow_button_button_press_event_cb), button);
-}
-
-static void
-gtk_menu_tool_button_destroy (GtkWidget *widget)
-{
-  GtkMenuToolButton *button = GTK_MENU_TOOL_BUTTON (widget);
-
-  if (button->priv->menu)
-    {
-      g_signal_handlers_disconnect_by_func (button->priv->menu, 
-					    menu_deactivate_cb, 
-					    button);
-      gtk_menu_detach (button->priv->menu);
-
-      g_signal_handlers_disconnect_by_func (button->priv->arrow_button,
-					    arrow_button_toggled_cb, 
-					    button);
-      g_signal_handlers_disconnect_by_func (button->priv->arrow_button, 
-					    arrow_button_button_press_event_cb, 
-					    button);
-    }
-
-  GTK_WIDGET_CLASS (gtk_menu_tool_button_parent_class)->destroy (widget);
 }
 
 static void
@@ -569,30 +391,11 @@ gtk_menu_tool_button_new_from_stock (const gchar *stock_id)
   return GTK_TOOL_ITEM (button);
 }
 
-/* Callback for the "deactivate" signal on the pop-up menu.
- * This is used so that we unset the state of the toggle button
- * when the pop-up menu disappears. 
- */
-static int
-menu_deactivate_cb (GtkMenuShell      *menu_shell,
-		    GtkMenuToolButton *button)
-{
-  GtkMenuToolButtonPrivate *priv = button->priv;
-
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->arrow_button), FALSE);
-
-  return TRUE;
-}
-
 static void
-menu_detacher (GtkWidget *widget,
-               GtkMenu   *menu)
+_show_menu_emit (gpointer user_data)
 {
-  GtkMenuToolButtonPrivate *priv = GTK_MENU_TOOL_BUTTON (widget)->priv;
-
-  g_return_if_fail (priv->menu == menu);
-
-  priv->menu = NULL;
+  GtkMenuToolButton *button = (GtkMenuToolButton *) user_data;
+  g_signal_emit (button, signals[SHOW_MENU], 0);
 }
 
 /**
@@ -616,34 +419,10 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
 
   priv = button->priv;
 
-  if (priv->menu != GTK_MENU (menu))
-    {
-      if (priv->menu && gtk_widget_get_visible (GTK_WIDGET (priv->menu)))
-        gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
-
-      if (priv->menu)
-	{
-          g_signal_handlers_disconnect_by_func (priv->menu, 
-						menu_deactivate_cb, 
-						button);
-	  gtk_menu_detach (priv->menu);
-	}
-
-      priv->menu = GTK_MENU (menu);
-
-      if (priv->menu)
-        {
-          gtk_menu_attach_to_widget (priv->menu, GTK_WIDGET (button),
-                                     menu_detacher);
-
-          gtk_widget_set_sensitive (priv->arrow_button, TRUE);
-
-          g_signal_connect (priv->menu, "deactivate",
-                            G_CALLBACK (menu_deactivate_cb), button);
-        }
-      else
-       gtk_widget_set_sensitive (priv->arrow_button, FALSE);
-    }
+  _gtk_menu_button_set_menu_with_func (GTK_MENU_BUTTON (priv->arrow_button),
+                                       menu,
+                                       _show_menu_emit,
+                                       button);
 
   g_object_notify (G_OBJECT (button), "menu");
 }
@@ -662,9 +441,15 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
 GtkWidget *
 gtk_menu_tool_button_get_menu (GtkMenuToolButton *button)
 {
+  GtkMenu *ret;
+
   g_return_val_if_fail (GTK_IS_MENU_TOOL_BUTTON (button), NULL);
 
-  return GTK_WIDGET (button->priv->menu);
+  ret = gtk_menu_button_get_menu (GTK_MENU_BUTTON (button->priv->arrow_button));
+  if (!ret)
+    return NULL;
+
+  return GTK_WIDGET (ret);
 }
 
 /**
