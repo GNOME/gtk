@@ -45,7 +45,7 @@ struct _GtkActionableInterface
                                                  const gchar   *action_name);
   GVariant *    (* get_action_target_value)     (GtkActionable *actionable);
   void          (* set_action_target_value)     (GtkActionable *actionable,
-                                                 GVariant      *action_target_value);
+                                                 GVariant      *target_value);
 };
 
 GDK_AVAILABLE_IN_3_4
