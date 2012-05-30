@@ -229,7 +229,7 @@ struct _GtkWidgetClass
   void (* grab_notify)         (GtkWidget        *widget,
 				gboolean          was_grabbed);
   void (* child_notify)        (GtkWidget	 *widget,
-				GParamSpec       *pspec);
+				GParamSpec       *child_property);
   gboolean (* draw)	       (GtkWidget	 *widget,
                                 cairo_t          *cr);
 

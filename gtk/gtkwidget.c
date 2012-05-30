@@ -1689,7 +1689,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::child-notify:
    * @widget: the object which received the signal
-   * @pspec: the #GParamSpec of the changed child property
+   * @child_property: the #GParamSpec of the changed child property
    *
    * The ::child-notify signal is emitted for each
    * <link linkend="child-properties">child property</link>  that has
