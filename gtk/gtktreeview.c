@@ -3057,7 +3057,6 @@ gtk_tree_view_button_release (GtkWidget      *widget,
 
   if (event->button == 1)
     {
-      gtk_grab_remove (widget);
       if (tree_view->priv->button_pressed_node == tree_view->priv->prelight_node &&
           GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT))
 	{
@@ -3081,6 +3080,8 @@ gtk_tree_view_button_release (GtkWidget      *widget,
 
       tree_view->priv->button_pressed_tree = NULL;
       tree_view->priv->button_pressed_node = NULL;
+
+      gtk_grab_remove (widget);
     }
 
   return TRUE;
