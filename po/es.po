@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-05-14 12:28+0000\n"
+"POT-Creation-Date: 2012-05-28 12:59+0000\n"
 "PO-Revision-Date: 2012-05-14 14:52+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
@@ -1802,7 +1802,7 @@ msgstr "Copiar URL"
 
 #: ../gtk/gtklinkbutton.c:665
 msgid "Invalid URI"
-msgstr "URI inválida"
+msgstr "URI no válida"
 
 #: ../gtk/gtklockbutton.c:286
 msgid "Lock"
@@ -2179,11 +2179,11 @@ msgstr "Argumento invalido para PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1763
 msgid "Invalid pointer to PrintDlgEx"
-msgstr "Puntero inválido a PrintDlgEx"
+msgstr "Puntero no válido a PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1768
 msgid "Invalid handle to PrintDlgEx"
-msgstr "Manipulador inválido a PrintDlgEx"
+msgstr "Manipulador no válido a PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1773
 msgid "Unspecified error"
@@ -3158,7 +3158,7 @@ msgstr "Se encontró el atributo «%s» dos veces en el elemento <%s>"
 #: ../gtk/gtktextbufferserialize.c:850
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
-msgstr "El elemento <%s> tiene el ID inválido «%s»"
+msgstr "El elemento <%s> tiene un ID no válido «%s»"
 
 #: ../gtk/gtktextbufferserialize.c:860
 #, c-format
@@ -3173,7 +3173,7 @@ msgstr "El atributo «%s» se repite dos veces en el mismo elemento <%s>"
 #: ../gtk/gtktextbufferserialize.c:965 ../gtk/gtktextbufferserialize.c:990
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr "El atributo «%s» es inválido en el elemento <%s> en este contexto"
+msgstr "El atributo «%s» no es válido en el elemento <%s> en este contexto"
 
 #: ../gtk/gtktextbufferserialize.c:1029
 #, c-format
@@ -3225,7 +3225,7 @@ msgstr "La etiqueta «%s» ya está definida"
 #: ../gtk/gtktextbufferserialize.c:1307
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr "La etiqueta «%s» tiene prioridad «%s» inválida"
+msgstr "La etiqueta «%s» tiene prioridad «%s» no válida"
 
 #: ../gtk/gtktextbufferserialize.c:1360
 #, c-format
@@ -3293,17 +3293,17 @@ msgstr "En_samblador de ancho cero [ZWJ]"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "_No ensamblador de ancho cero [ZWNJ]"
 
-#: ../gtk/gtkuimanager.c:1782
+#: ../gtk/gtkuimanager.c:1781
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Etiqueta de inicio «%s» inesperada en la línea %d, carácter %d"
 
-#: ../gtk/gtkuimanager.c:1872
+#: ../gtk/gtkuimanager.c:1871
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Dato carácter inesperado en la línea %d, carácter %d"
 
-#: ../gtk/gtkuimanager.c:2739
+#: ../gtk/gtkuimanager.c:2738
 msgid "Empty"
 msgstr "Vacío"
 
@@ -4705,36 +4705,35 @@ msgid "Unspecified profile"
 msgstr "Perfil no especificado"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:249
-#| msgid "output.%s"
 msgid "output"
 msgstr "salida"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:512
+#: ../modules/printbackends/file/gtkprintbackendfile.c:521
 msgid "Print to File"
 msgstr "Imprimir a un archivo"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:638
+#: ../modules/printbackends/file/gtkprintbackendfile.c:647
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:638
+#: ../modules/printbackends/file/gtkprintbackendfile.c:647
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:638
+#: ../modules/printbackends/file/gtkprintbackendfile.c:647
 msgid "SVG"
 msgstr "SVG"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:651
+#: ../modules/printbackends/file/gtkprintbackendfile.c:660
 #: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "Páginas por _hoja:"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:710
+#: ../modules/printbackends/file/gtkprintbackendfile.c:719
 msgid "File"
 msgstr "Archivo"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:720
+#: ../modules/printbackends/file/gtkprintbackendfile.c:729
 msgid "_Output format"
 msgstr "Formato de _salida"
 
