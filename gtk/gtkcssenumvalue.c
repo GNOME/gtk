@@ -229,10 +229,13 @@ GtkCssValue *
 _gtk_css_font_weight_value_new (PangoWeight font_weight)
 {
   guint i;
+  gint w;
+
+  w = ((font_weight + 50) / 100) * 100;
 
   for (i = 0; i < G_N_ELEMENTS (font_weight_values); i++)
     {
-      if (font_weight_values[i].value == font_weight)
+      if (font_weight_values[i].value == w)
         return _gtk_css_value_ref (&font_weight_values[i]);
     }
 
