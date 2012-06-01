@@ -165,6 +165,7 @@
 #include <gtk/gtkscrollable.h>
 #include <gtk/gtkscrollbar.h>
 #include <gtk/gtkscrolledwindow.h>
+#include <gtk/gtksearchentry.h>
 #include <gtk/gtkselection.h>
 #include <gtk/gtkseparator.h>
 #include <gtk/gtkseparatormenuitem.h>

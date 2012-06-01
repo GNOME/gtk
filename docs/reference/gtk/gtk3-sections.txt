@@ -2958,6 +2958,22 @@ GtkScrolledWindowPrivate
 </SECTION>
 
 <SECTION>
+<FILE>gtksearchentry</FILE>
+<TITLE>GtkSearchEntry</TITLE>
+GtkSearchEntry
+gtk_search_entry_new
+<SUBSECTION Standard>
+GTK_TYPE_SEARCH_ENTRY
+GTK_SEARCH_ENTRY
+GTK_SEARCH_ENTRY_CLASS
+GTK_IS_SEARCH_ENTRY
+GTK_IS_SEARCH_ENTRY_CLASS
+GTK_SEARCH_ENTRY_GET_CLASS
+<SUBSECTION Private>
+gtk_search_entry_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkseparator</FILE>
 <TITLE>GtkSeparator</TITLE>
 GtkSeparator

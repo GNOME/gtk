@@ -129,6 +129,7 @@
       <xi:include href="xml/gtkhscale.xml" />
       <xi:include href="xml/gtkvscale.xml" />
       <xi:include href="xml/gtkspinbutton.xml" />
+      <xi:include href="xml/gtksearchentry.xml" />
       <xi:include href="xml/gtkeditable.xml" />
     </chapter>
 

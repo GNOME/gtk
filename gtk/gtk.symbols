@@ -2394,6 +2394,8 @@ gtk_scrolled_window_set_vadjustment
 gtk_scrolled_window_unset_placement
 gtk_scroll_step_get_type
 gtk_scroll_type_get_type
+gtk_search_entry_new
+gtk_search_entry_get_type
 gtk_selection_add_target
 gtk_selection_add_targets
 gtk_selection_clear_targets

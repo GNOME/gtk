@@ -170,22 +170,6 @@ icon_press_cb (GtkEntry       *entry,
   if (position == GTK_ENTRY_ICON_PRIMARY)
     gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
                     event->button, event->time);
-  else
-    clear_entry (entry);
-}
-
-static void
-text_changed_cb (GtkEntry   *entry,
-                 GParamSpec *pspec,
-                 GtkWidget  *button)
-{
-  gboolean has_text;
-
-  has_text = gtk_entry_get_text_length (entry) > 0;
-  gtk_entry_set_icon_sensitive (entry,
-                                GTK_ENTRY_ICON_SECONDARY,
-                                has_text);
-  gtk_widget_set_sensitive (button, has_text);
 }
 
 static void
@@ -282,7 +266,7 @@ do_search_entry (GtkWidget *do_widget)
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 0);
 
       /* Create our entry */
-      entry = gtk_entry_new ();
+      entry = gtk_search_entry_new ();
       gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
 
       /* Create the find and cancel buttons */
@@ -307,15 +291,8 @@ do_search_entry (GtkWidget *do_widget)
       search_by_name (NULL, GTK_ENTRY (entry));
 
       /* Set up the clear icon */
-      gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
-                                     GTK_ENTRY_ICON_SECONDARY,
-                                     GTK_STOCK_CLEAR);
-      text_changed_cb (GTK_ENTRY (entry), NULL, find_button);
-
       g_signal_connect (entry, "icon-press",
                         G_CALLBACK (icon_press_cb), NULL);
-      g_signal_connect (entry, "notify::text",
-                        G_CALLBACK (text_changed_cb), find_button);
       g_signal_connect (entry, "activate",
                         G_CALLBACK (activate_cb), NULL);
 

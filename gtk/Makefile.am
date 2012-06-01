@@ -309,6 +309,7 @@ gtk_public_h_sources = 		\
 	gtkscrollable.h		\
 	gtkscrollbar.h		\
 	gtkscrolledwindow.h	\
+	gtksearchentry.h	\
 	gtkselection.h		\
 	gtkseparator.h		\
 	gtkseparatormenuitem.h	\
@@ -571,6 +572,7 @@ gtk_base_c_sources = 		\
 	gactionobservable.c	\
 	gtkactionable.c		\
 	gtkquery.c		\
+	gtksearchentry.c	\
 	gtksearchengine.c	\
 	gtksearchenginesimple.c	\
 	fnmatch.c		\
