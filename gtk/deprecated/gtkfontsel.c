@@ -823,12 +823,11 @@ gtk_font_selection_show_available_fonts (GtkFontSelection *fontsel)
       const gchar *name = pango_font_family_get_name (families[i]);
       GtkTreeIter iter;
 
-      gtk_list_store_append (model, &iter);
-      gtk_list_store_set (model, &iter,
-			  FAMILY_COLUMN, families[i],
-			  FAMILY_NAME_COLUMN, name,
-			  -1);
-      
+      gtk_list_store_insert_with_values (model, &iter, -1,
+                                         FAMILY_COLUMN, families[i],
+                                         FAMILY_NAME_COLUMN, name,
+                                         -1);
+
       if (i == 0 || !g_ascii_strcasecmp (name, "sans"))
 	{
 	  match_family = families[i];
@@ -925,11 +924,10 @@ gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
       GtkTreeIter iter;
       const gchar *str = pango_font_face_get_face_name (faces[i]);
 
-      gtk_list_store_append (model, &iter);
-      gtk_list_store_set (model, &iter,
-			  FACE_COLUMN, faces[i],
-			  FACE_NAME_COLUMN, str,
-			  -1);
+      gtk_list_store_insert_with_values (model, &iter, -1,
+                                         FACE_COLUMN, faces[i],
+                                         FACE_NAME_COLUMN, str,
+                                         -1);
 
       if (i == 0)
 	{
@@ -1036,8 +1034,8 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel,
 	{
 	  GtkTreeIter iter;
 
-	  gtk_list_store_append (model, &iter);
-	  gtk_list_store_set (model, &iter, SIZE_COLUMN, font_sizes[i], -1);
+	  gtk_list_store_insert_with_values (model, &iter, -1,
+	                                     SIZE_COLUMN, font_sizes[i], -1);
 
 	  if (font_sizes[i] * PANGO_SCALE == priv->size)
 	    set_cursor_to_iter (GTK_TREE_VIEW (priv->size_list), &iter);
