@@ -1053,7 +1053,8 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel,
 	      found = TRUE;
 	    }
 
-	  gtk_tree_model_iter_next (GTK_TREE_MODEL (model), &iter);
+          if (!gtk_tree_model_iter_next (GTK_TREE_MODEL (model), &iter))
+            break;
 	}
 
       if (!found)
