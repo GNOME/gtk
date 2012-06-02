@@ -1642,12 +1642,14 @@ void
 gtk_grid_insert_row (GtkGrid *grid,
                      gint     position)
 {
-  GtkGridPrivate *priv = grid->priv;
+  GtkGridPrivate *priv;
   GtkGridChild *child;
   GList *list;
   gint top, height;
 
   g_return_if_fail (GTK_IS_GRID (grid));
+
+  priv = grid->priv;
 
   for (list = priv->children; list; list = list->next)
     {
@@ -1686,12 +1688,14 @@ void
 gtk_grid_insert_column (GtkGrid *grid,
                         gint     position)
 {
-  GtkGridPrivate *priv = grid->priv;
+  GtkGridPrivate *priv;
   GtkGridChild *child;
   GList *list;
   gint left, width;
 
   g_return_if_fail (GTK_IS_GRID (grid));
+
+  priv = grid->priv;
 
   for (list = priv->children; list; list = list->next)
     {
