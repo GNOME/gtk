@@ -1603,9 +1603,13 @@ gtk_grid_get_child_at (GtkGrid *grid,
                        gint     left,
                        gint     top)
 {
-  GtkGridPrivate *priv = grid->priv;
+  GtkGridPrivate *priv;
   GtkGridChild *child;
   GList *list;
+
+  g_return_val_if_fail (GTK_IS_GRID (grid), NULL);
+
+  priv = grid->priv;
 
   for (list = priv->children; list; list = list->next)
     {
