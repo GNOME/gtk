@@ -6006,7 +6006,7 @@ create_settings (GtkWidget *widget)
 
   if (!window)
     {
-      window = create_prop_editor (G_OBJECT (gtk_settings_get_default ()), 0);
+      window = create_prop_editor (G_OBJECT (gtk_settings_get_default ()), GTK_TYPE_SETTINGS);
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (widget));
 
