@@ -23,8 +23,8 @@ msgstr ""
 "Project-Id-Version: gtk+_properties HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-05-21 18:00+0000\n"
-"PO-Revision-Date: 2012-05-23 23:37+0200\n"
+"POT-Creation-Date: 2012-06-02 12:42+0000\n"
+"PO-Revision-Date: 2012-06-03 13:38+0200 \n"
 "Last-Translator: Bruno Brouard <annoa.b@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -751,7 +751,7 @@ msgstr ""
 "Si vrai (TRUE), les menus vides mandataires de cette action sont masqués."
 
 #: ../gtk/gtkaction.c:379 ../gtk/gtkactiongroup.c:233
-#: ../gtk/gtkcellrenderer.c:291 ../gtk/gtkwidget.c:1023
+#: ../gtk/gtkcellrenderer.c:296 ../gtk/gtkwidget.c:1023
 msgid "Sensitive"
 msgstr "Sensible"
 
@@ -1720,131 +1720,131 @@ msgstr "Mode accélérateur"
 msgid "The type of accelerators"
 msgstr "Le type d'accélérateur"
 
-#: ../gtk/gtkcellrenderer.c:275
+#: ../gtk/gtkcellrenderer.c:280
 msgid "mode"
 msgstr "mode"
 
-#: ../gtk/gtkcellrenderer.c:276
+#: ../gtk/gtkcellrenderer.c:281
 msgid "Editable mode of the CellRenderer"
 msgstr "Mode d'édition de l'objet CellRenderer"
 
-#: ../gtk/gtkcellrenderer.c:284
+#: ../gtk/gtkcellrenderer.c:289
 msgid "visible"
 msgstr "visible"
 
-#: ../gtk/gtkcellrenderer.c:285
+#: ../gtk/gtkcellrenderer.c:290
 msgid "Display the cell"
 msgstr "Affiche la cellule"
 
-#: ../gtk/gtkcellrenderer.c:292
+#: ../gtk/gtkcellrenderer.c:297
 msgid "Display the cell sensitive"
 msgstr "Affiche la cellule sensible"
 
-#: ../gtk/gtkcellrenderer.c:299
+#: ../gtk/gtkcellrenderer.c:304
 msgid "xalign"
 msgstr "xalign"
 
-#: ../gtk/gtkcellrenderer.c:300
+#: ../gtk/gtkcellrenderer.c:305
 msgid "The x-align"
 msgstr "L'alignement dans le sens des x"
 
-#: ../gtk/gtkcellrenderer.c:309
+#: ../gtk/gtkcellrenderer.c:314
 msgid "yalign"
 msgstr "yalign"
 
-#: ../gtk/gtkcellrenderer.c:310
+#: ../gtk/gtkcellrenderer.c:315
 msgid "The y-align"
 msgstr "L'alignement dans le sens des y"
 
-#: ../gtk/gtkcellrenderer.c:319
+#: ../gtk/gtkcellrenderer.c:324
 msgid "xpad"
 msgstr "xpad"
 
-#: ../gtk/gtkcellrenderer.c:320
+#: ../gtk/gtkcellrenderer.c:325
 msgid "The xpad"
 msgstr "Le remplissage dans le sens des x"
 
-#: ../gtk/gtkcellrenderer.c:329
+#: ../gtk/gtkcellrenderer.c:334
 msgid "ypad"
 msgstr "ypad"
 
-#: ../gtk/gtkcellrenderer.c:330
+#: ../gtk/gtkcellrenderer.c:335
 msgid "The ypad"
 msgstr "Le remplissage dans le sens des y"
 
-#: ../gtk/gtkcellrenderer.c:339
+#: ../gtk/gtkcellrenderer.c:344
 msgid "width"
 msgstr "largeur"
 
-#: ../gtk/gtkcellrenderer.c:340
+#: ../gtk/gtkcellrenderer.c:345
 msgid "The fixed width"
 msgstr "La largeur fixe"
 
-#: ../gtk/gtkcellrenderer.c:349
+#: ../gtk/gtkcellrenderer.c:354
 msgid "height"
 msgstr "hauteur"
 
-#: ../gtk/gtkcellrenderer.c:350
+#: ../gtk/gtkcellrenderer.c:355
 msgid "The fixed height"
 msgstr "La hauteur fixe"
 
-#: ../gtk/gtkcellrenderer.c:359
+#: ../gtk/gtkcellrenderer.c:364
 msgid "Is Expander"
 msgstr "Est extensible"
 
-#: ../gtk/gtkcellrenderer.c:360
+#: ../gtk/gtkcellrenderer.c:365
 msgid "Row has children"
 msgstr "La ligne contient des éléments enfants"
 
-#: ../gtk/gtkcellrenderer.c:368
+#: ../gtk/gtkcellrenderer.c:373
 msgid "Is Expanded"
 msgstr "Est étendue"
 
-#: ../gtk/gtkcellrenderer.c:369
+#: ../gtk/gtkcellrenderer.c:374
 msgid "Row is an expander row, and is expanded"
 msgstr "La ligne est extensible et a été étendue"
 
-#: ../gtk/gtkcellrenderer.c:376
+#: ../gtk/gtkcellrenderer.c:381
 msgid "Cell background color name"
 msgstr "Nom de la couleur d'arrière-plan de la cellule"
 
-#: ../gtk/gtkcellrenderer.c:377
+#: ../gtk/gtkcellrenderer.c:382
 msgid "Cell background color as a string"
 msgstr "Couleur d'arrière-plan de la cellule sous forme de chaîne littérale"
 
-#: ../gtk/gtkcellrenderer.c:391
+#: ../gtk/gtkcellrenderer.c:396
 msgid "Cell background color"
 msgstr "Couleur d'arrière-plan de la cellule"
 
-#: ../gtk/gtkcellrenderer.c:392
+#: ../gtk/gtkcellrenderer.c:397
 msgid "Cell background color as a GdkColor"
 msgstr "Couleur d'arrière-plan de la cellule sous forme de GdkColor"
 
-#: ../gtk/gtkcellrenderer.c:405
+#: ../gtk/gtkcellrenderer.c:410
 msgid "Cell background RGBA color"
 msgstr "Couleur RGBA d'arrière-plan de la cellule"
 
-#: ../gtk/gtkcellrenderer.c:406
+#: ../gtk/gtkcellrenderer.c:411
 msgid "Cell background color as a GdkRGBA"
 msgstr "Couleur d'arrière-plan de la cellule sous la forme GdkRGBA"
 
-#: ../gtk/gtkcellrenderer.c:413
+#: ../gtk/gtkcellrenderer.c:418
 msgid "Editing"
 msgstr "Modification"
 
-#: ../gtk/gtkcellrenderer.c:414
+#: ../gtk/gtkcellrenderer.c:419
 msgid "Whether the cell renderer is currently in editing mode"
 msgstr ""
 "Indique si le rendu graphique de la cellule est actuellement en mode édition"
 
-#: ../gtk/gtkcellrenderer.c:422
+#: ../gtk/gtkcellrenderer.c:427
 msgid "Cell background set"
 msgstr "Arrière-plan de cellule défini"
 
-#: ../gtk/gtkcellrenderer.c:423
-msgid "Whether this tag affects the cell background color"
+#: ../gtk/gtkcellrenderer.c:428
+msgid "Whether the cell background color is set"
 msgstr ""
-"Indique si cette balise affecte la couleur d'arrière-plan de la cellule"
+"Indique si la couleur d'arrière-plan de la cellule est définie"
 
 #: ../gtk/gtkcellrenderercombo.c:128
 msgid "Model"
@@ -2070,22 +2070,22 @@ msgid "Whether to keep all text in a single paragraph"
 msgstr "Indique s'il faut garder tout le texte dans un paragraphe unique"
 
 #: ../gtk/gtkcellrenderertext.c:288 ../gtk/gtkcellview.c:189
-#: ../gtk/gtktexttag.c:198
+#: ../gtk/gtktexttag.c:203
 msgid "Background color name"
 msgstr "Nom de la couleur d'arrière-plan"
 
 #: ../gtk/gtkcellrenderertext.c:289 ../gtk/gtkcellview.c:190
-#: ../gtk/gtktexttag.c:199
+#: ../gtk/gtktexttag.c:204
 msgid "Background color as a string"
 msgstr "Couleur d'arrière-plan sous forme de chaîne littérale"
 
 #: ../gtk/gtkcellrenderertext.c:303 ../gtk/gtkcellview.c:204
-#: ../gtk/gtktexttag.c:213
+#: ../gtk/gtktexttag.c:218
 msgid "Background color"
 msgstr "Couleur d'arrière-plan"
 
 #: ../gtk/gtkcellrenderertext.c:304 ../gtk/gtkcellview.c:205
-#: ../gtk/gtktexttag.c:214
+#: ../gtk/gtktexttag.c:219
 msgid "Background color as a GdkColor"
 msgstr "Couleur d'arrière-plan sous forme de GdkColor"
 
@@ -2094,24 +2094,24 @@ msgid "Background color as RGBA"
 msgstr "Couleur RGBA d'arrière-plan"
 
 #: ../gtk/gtkcellrenderertext.c:319 ../gtk/gtkcellview.c:219
-#: ../gtk/gtktexttag.c:229
+#: ../gtk/gtktexttag.c:234
 msgid "Background color as a GdkRGBA"
 msgstr "Couleur d'arrière-plan sous la forme d'un objet GdkRGBA"
 
-#: ../gtk/gtkcellrenderertext.c:325 ../gtk/gtktexttag.c:244
+#: ../gtk/gtkcellrenderertext.c:325 ../gtk/gtktexttag.c:249
 msgid "Foreground color name"
 msgstr "Nom de la couleur de premier plan"
 
-#: ../gtk/gtkcellrenderertext.c:326 ../gtk/gtktexttag.c:245
+#: ../gtk/gtkcellrenderertext.c:326 ../gtk/gtktexttag.c:250
 msgid "Foreground color as a string"
 msgstr "Couleur de premier plan sous forme de chaîne littérale"
 
-#: ../gtk/gtkcellrenderertext.c:340 ../gtk/gtktexttag.c:259
+#: ../gtk/gtkcellrenderertext.c:340 ../gtk/gtktexttag.c:264
 #: ../gtk/gtktrayicon-x11.c:135
 msgid "Foreground color"
 msgstr "Couleur de premier plan"
 
-#: ../gtk/gtkcellrenderertext.c:341 ../gtk/gtktexttag.c:260
+#: ../gtk/gtkcellrenderertext.c:341 ../gtk/gtktexttag.c:265
 msgid "Foreground color as a GdkColor"
 msgstr "Couleur de premier plan sous forme de GdkColor"
 
@@ -2119,80 +2119,80 @@ msgstr "Couleur de premier plan sous forme de GdkColor"
 msgid "Foreground color as RGBA"
 msgstr "Couleur RGBA de premier plan"
 
-#: ../gtk/gtkcellrenderertext.c:356 ../gtk/gtktexttag.c:275
+#: ../gtk/gtkcellrenderertext.c:356 ../gtk/gtktexttag.c:280
 msgid "Foreground color as a GdkRGBA"
 msgstr "Couleur de premier plan sous la forme d'un objet GdkRGBA"
 
 #: ../gtk/gtkcellrenderertext.c:364 ../gtk/gtkentry.c:759
-#: ../gtk/gtktexttag.c:291 ../gtk/gtktextview.c:684
+#: ../gtk/gtktexttag.c:296 ../gtk/gtktextview.c:684
 msgid "Editable"
 msgstr "Modifiable"
 
-#: ../gtk/gtkcellrenderertext.c:365 ../gtk/gtktexttag.c:292
+#: ../gtk/gtkcellrenderertext.c:365 ../gtk/gtktexttag.c:297
 #: ../gtk/gtktextview.c:685
 msgid "Whether the text can be modified by the user"
 msgstr "Indique si le texte peut être modifié par l'utilisateur"
 
 #: ../gtk/gtkcellrenderertext.c:372 ../gtk/gtkcellrenderertext.c:380
-#: ../gtk/gtkfontchooser.c:65 ../gtk/gtktexttag.c:307 ../gtk/gtktexttag.c:315
+#: ../gtk/gtkfontchooser.c:65 ../gtk/gtktexttag.c:312 ../gtk/gtktexttag.c:320
 msgid "Font"
 msgstr "Police"
 
 #: ../gtk/gtkcellrenderertext.c:373 ../gtk/gtkfontchooser.c:66
-#: ../gtk/gtktexttag.c:308
+#: ../gtk/gtktexttag.c:313
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr ""
 "Description de la police sous forme de chaîne littérale, par ex. « Sans "
 "Italic 12 »"
 
 #: ../gtk/gtkcellrenderertext.c:381 ../gtk/gtkfontchooser.c:79
-#: ../gtk/gtktexttag.c:316
+#: ../gtk/gtktexttag.c:321
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Description de la police sous forme de structure PangoFontDescription"
 
-#: ../gtk/gtkcellrenderertext.c:389 ../gtk/gtktexttag.c:323
+#: ../gtk/gtkcellrenderertext.c:389 ../gtk/gtktexttag.c:328
 msgid "Font family"
 msgstr "Famille de la police"
 
-#: ../gtk/gtkcellrenderertext.c:390 ../gtk/gtktexttag.c:324
+#: ../gtk/gtkcellrenderertext.c:390 ../gtk/gtktexttag.c:329
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr ""
 "Nom de la famille de la police, par ex. Sans, Helvetica, Times, Monospace"
 
 #: ../gtk/gtkcellrenderertext.c:397 ../gtk/gtkcellrenderertext.c:398
-#: ../gtk/gtktexttag.c:331
+#: ../gtk/gtktexttag.c:336
 msgid "Font style"
 msgstr "Style de la police"
 
 #: ../gtk/gtkcellrenderertext.c:406 ../gtk/gtkcellrenderertext.c:407
-#: ../gtk/gtktexttag.c:340
+#: ../gtk/gtktexttag.c:345
 msgid "Font variant"
 msgstr "Variante de la police"
 
 #: ../gtk/gtkcellrenderertext.c:415 ../gtk/gtkcellrenderertext.c:416
-#: ../gtk/gtktexttag.c:349
+#: ../gtk/gtktexttag.c:354
 msgid "Font weight"
 msgstr "Graisse de la police"
 
 #: ../gtk/gtkcellrenderertext.c:425 ../gtk/gtkcellrenderertext.c:426
-#: ../gtk/gtktexttag.c:360
+#: ../gtk/gtktexttag.c:365
 msgid "Font stretch"
 msgstr "Espacement de la police"
 
 #: ../gtk/gtkcellrenderertext.c:434 ../gtk/gtkcellrenderertext.c:435
-#: ../gtk/gtktexttag.c:369
+#: ../gtk/gtktexttag.c:374
 msgid "Font size"
 msgstr "Taille de la police"
 
-#: ../gtk/gtkcellrenderertext.c:444 ../gtk/gtktexttag.c:389
+#: ../gtk/gtkcellrenderertext.c:444 ../gtk/gtktexttag.c:394
 msgid "Font points"
 msgstr "Corps de la police"
 
-#: ../gtk/gtkcellrenderertext.c:445 ../gtk/gtktexttag.c:390
+#: ../gtk/gtkcellrenderertext.c:445 ../gtk/gtktexttag.c:395
 msgid "Font size in points"
 msgstr "Taille de la police en points"
 
-#: ../gtk/gtkcellrenderertext.c:454 ../gtk/gtktexttag.c:379
+#: ../gtk/gtkcellrenderertext.c:454 ../gtk/gtktexttag.c:384
 msgid "Font scale"
 msgstr "Échelle de la police"
 
@@ -2200,7 +2200,7 @@ msgstr "Échelle de la police"
 msgid "Font scaling factor"
 msgstr "Facteur d'échelle de la police"
 
-#: ../gtk/gtkcellrenderertext.c:464 ../gtk/gtktexttag.c:458
+#: ../gtk/gtkcellrenderertext.c:464 ../gtk/gtktexttag.c:463
 msgid "Rise"
 msgstr "Élévation"
 
@@ -2211,23 +2211,23 @@ msgstr ""
 "Décalage du texte au-dessus de la ligne de base (au-dessous si l'élévation "
 "est négative)"
 
-#: ../gtk/gtkcellrenderertext.c:476 ../gtk/gtktexttag.c:498
+#: ../gtk/gtkcellrenderertext.c:476 ../gtk/gtktexttag.c:503
 msgid "Strikethrough"
 msgstr "Barré"
 
-#: ../gtk/gtkcellrenderertext.c:477 ../gtk/gtktexttag.c:499
+#: ../gtk/gtkcellrenderertext.c:477 ../gtk/gtktexttag.c:504
 msgid "Whether to strike through the text"
 msgstr "Indique si le texte est barré"
 
-#: ../gtk/gtkcellrenderertext.c:484 ../gtk/gtktexttag.c:506
+#: ../gtk/gtkcellrenderertext.c:484 ../gtk/gtktexttag.c:511
 msgid "Underline"
 msgstr "Souligné"
 
-#: ../gtk/gtkcellrenderertext.c:485 ../gtk/gtktexttag.c:507
+#: ../gtk/gtkcellrenderertext.c:485 ../gtk/gtktexttag.c:512
 msgid "Style of underline for this text"
 msgstr "Style de soulignement pour ce texte"
 
-#: ../gtk/gtkcellrenderertext.c:493 ../gtk/gtktexttag.c:418
+#: ../gtk/gtkcellrenderertext.c:493 ../gtk/gtktexttag.c:423
 msgid "Language"
 msgstr "Langue"
 
@@ -2272,7 +2272,7 @@ msgstr "Largeur maximale en caractères"
 msgid "The maximum width of the cell, in characters"
 msgstr "La largeur maximale de la cellule, en nombre de caractères"
 
-#: ../gtk/gtkcellrenderertext.c:578 ../gtk/gtktexttag.c:515
+#: ../gtk/gtkcellrenderertext.c:578 ../gtk/gtktexttag.c:520
 msgid "Wrap mode"
 msgstr "Mode de coupure"
 
@@ -2309,117 +2309,117 @@ msgid "Text rendered when an editable cell is empty"
 msgstr "Texte rendu lorsqu'une cellule modifiable est vide"
 
 #: ../gtk/gtkcellrenderertext.c:647 ../gtk/gtkcellview.c:323
-#: ../gtk/gtktexttag.c:620
+#: ../gtk/gtktexttag.c:625
 msgid "Background set"
 msgstr "Arrière-plan défini"
 
 #: ../gtk/gtkcellrenderertext.c:648 ../gtk/gtkcellview.c:324
-#: ../gtk/gtktexttag.c:621
+#: ../gtk/gtktexttag.c:626
 msgid "Whether this tag affects the background color"
 msgstr "Indique si ce marqueur affecte la couleur d'arrière-plan"
 
-#: ../gtk/gtkcellrenderertext.c:651 ../gtk/gtktexttag.c:628
+#: ../gtk/gtkcellrenderertext.c:651 ../gtk/gtktexttag.c:633
 msgid "Foreground set"
 msgstr "Premier plan défini"
 
-#: ../gtk/gtkcellrenderertext.c:652 ../gtk/gtktexttag.c:629
+#: ../gtk/gtkcellrenderertext.c:652 ../gtk/gtktexttag.c:634
 msgid "Whether this tag affects the foreground color"
 msgstr "Indique si ce marqueur affecte la couleur de premier plan"
 
-#: ../gtk/gtkcellrenderertext.c:655 ../gtk/gtktexttag.c:632
+#: ../gtk/gtkcellrenderertext.c:655 ../gtk/gtktexttag.c:637
 msgid "Editability set"
 msgstr "Modifications possibles"
 
-#: ../gtk/gtkcellrenderertext.c:656 ../gtk/gtktexttag.c:633
+#: ../gtk/gtkcellrenderertext.c:656 ../gtk/gtktexttag.c:638
 msgid "Whether this tag affects text editability"
 msgstr "Indique si ce marqueur affecte la possibilité de modifier le texte"
 
-#: ../gtk/gtkcellrenderertext.c:659 ../gtk/gtktexttag.c:636
+#: ../gtk/gtkcellrenderertext.c:659 ../gtk/gtktexttag.c:641
 msgid "Font family set"
 msgstr "Famille de police définie"
 
-#: ../gtk/gtkcellrenderertext.c:660 ../gtk/gtktexttag.c:637
+#: ../gtk/gtkcellrenderertext.c:660 ../gtk/gtktexttag.c:642
 msgid "Whether this tag affects the font family"
 msgstr "Indique si ce marqueur affecte la famille de la police"
 
-#: ../gtk/gtkcellrenderertext.c:663 ../gtk/gtktexttag.c:640
+#: ../gtk/gtkcellrenderertext.c:663 ../gtk/gtktexttag.c:645
 msgid "Font style set"
 msgstr "Style de police défini"
 
-#: ../gtk/gtkcellrenderertext.c:664 ../gtk/gtktexttag.c:641
+#: ../gtk/gtkcellrenderertext.c:664 ../gtk/gtktexttag.c:646
 msgid "Whether this tag affects the font style"
 msgstr "Indique si ce marqueur affecte le style de police"
 
-#: ../gtk/gtkcellrenderertext.c:667 ../gtk/gtktexttag.c:644
+#: ../gtk/gtkcellrenderertext.c:667 ../gtk/gtktexttag.c:649
 msgid "Font variant set"
 msgstr "Variante de police définie"
 
-#: ../gtk/gtkcellrenderertext.c:668 ../gtk/gtktexttag.c:645
+#: ../gtk/gtkcellrenderertext.c:668 ../gtk/gtktexttag.c:650
 msgid "Whether this tag affects the font variant"
 msgstr "Indique si ce marqueur affecte la variante de la police"
 
-#: ../gtk/gtkcellrenderertext.c:671 ../gtk/gtktexttag.c:648
+#: ../gtk/gtkcellrenderertext.c:671 ../gtk/gtktexttag.c:653
 msgid "Font weight set"
 msgstr "Graisse de police définie"
 
-#: ../gtk/gtkcellrenderertext.c:672 ../gtk/gtktexttag.c:649
+#: ../gtk/gtkcellrenderertext.c:672 ../gtk/gtktexttag.c:654
 msgid "Whether this tag affects the font weight"
 msgstr "Indique si ce marqueur affecte la graisse de la police"
 
-#: ../gtk/gtkcellrenderertext.c:675 ../gtk/gtktexttag.c:652
+#: ../gtk/gtkcellrenderertext.c:675 ../gtk/gtktexttag.c:657
 msgid "Font stretch set"
 msgstr "Espacement de police défini"
 
-#: ../gtk/gtkcellrenderertext.c:676 ../gtk/gtktexttag.c:653
+#: ../gtk/gtkcellrenderertext.c:676 ../gtk/gtktexttag.c:658
 msgid "Whether this tag affects the font stretch"
 msgstr "Indique si ce marqueur affecte l'espacement de la police"
 
-#: ../gtk/gtkcellrenderertext.c:679 ../gtk/gtktexttag.c:656
+#: ../gtk/gtkcellrenderertext.c:679 ../gtk/gtktexttag.c:661
 msgid "Font size set"
 msgstr "Taille de police définie"
 
-#: ../gtk/gtkcellrenderertext.c:680 ../gtk/gtktexttag.c:657
+#: ../gtk/gtkcellrenderertext.c:680 ../gtk/gtktexttag.c:662
 msgid "Whether this tag affects the font size"
 msgstr "Indique si ce marqueur affecte la taille de la police"
 
-#: ../gtk/gtkcellrenderertext.c:683 ../gtk/gtktexttag.c:660
+#: ../gtk/gtkcellrenderertext.c:683 ../gtk/gtktexttag.c:665
 msgid "Font scale set"
 msgstr "Échelle de police définie"
 
-#: ../gtk/gtkcellrenderertext.c:684 ../gtk/gtktexttag.c:661
+#: ../gtk/gtkcellrenderertext.c:684 ../gtk/gtktexttag.c:666
 msgid "Whether this tag scales the font size by a factor"
 msgstr ""
 "Indique si ce marqueur modifie l'échelle de la police d'un facteur donné"
 
-#: ../gtk/gtkcellrenderertext.c:687 ../gtk/gtktexttag.c:680
+#: ../gtk/gtkcellrenderertext.c:687 ../gtk/gtktexttag.c:685
 msgid "Rise set"
 msgstr "Élévation définie"
 
-#: ../gtk/gtkcellrenderertext.c:688 ../gtk/gtktexttag.c:681
+#: ../gtk/gtkcellrenderertext.c:688 ../gtk/gtktexttag.c:686
 msgid "Whether this tag affects the rise"
 msgstr "Indique si ce marqueur affecte l'élévation"
 
-#: ../gtk/gtkcellrenderertext.c:691 ../gtk/gtktexttag.c:696
+#: ../gtk/gtkcellrenderertext.c:691 ../gtk/gtktexttag.c:701
 msgid "Strikethrough set"
 msgstr "Barré défini"
 
-#: ../gtk/gtkcellrenderertext.c:692 ../gtk/gtktexttag.c:697
+#: ../gtk/gtkcellrenderertext.c:692 ../gtk/gtktexttag.c:702
 msgid "Whether this tag affects strikethrough"
 msgstr "Indique si ce marqueur affecte le style barré des caractères"
 
-#: ../gtk/gtkcellrenderertext.c:695 ../gtk/gtktexttag.c:704
+#: ../gtk/gtkcellrenderertext.c:695 ../gtk/gtktexttag.c:709
 msgid "Underline set"
 msgstr "Soulignement défini"
 
-#: ../gtk/gtkcellrenderertext.c:696 ../gtk/gtktexttag.c:705
+#: ../gtk/gtkcellrenderertext.c:696 ../gtk/gtktexttag.c:710
 msgid "Whether this tag affects underlining"
 msgstr "Indique si ce marqueur affecte le soulignement"
 
-#: ../gtk/gtkcellrenderertext.c:699 ../gtk/gtktexttag.c:668
+#: ../gtk/gtkcellrenderertext.c:699 ../gtk/gtktexttag.c:673
 msgid "Language set"
 msgstr "Langue définie"
 
-#: ../gtk/gtkcellrenderertext.c:700 ../gtk/gtktexttag.c:669
+#: ../gtk/gtkcellrenderertext.c:700 ../gtk/gtktexttag.c:674
 msgid "Whether this tag affects the language the text is rendered as"
 msgstr ""
 "Indique si ce marqueur affecte la langue utilisée pour afficher le texte"
@@ -3972,7 +3972,7 @@ msgstr "Le texte de l'étiquette"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Une liste d'attributs de style à appliquer au texte de l'étiquette"
 
-#: ../gtk/gtklabel.c:755 ../gtk/gtktexttag.c:399 ../gtk/gtktextview.c:701
+#: ../gtk/gtklabel.c:755 ../gtk/gtktexttag.c:404 ../gtk/gtktextview.c:701
 msgid "Justification"
 msgstr "Justification"
 
@@ -6442,8 +6442,8 @@ msgid ""
 "Whether a middle click on a mouse should paste the 'PRIMARY' clipboard "
 "content at the cursor location."
 msgstr ""
-"Indique si un clic avec le bouton du milieu doit coller le contenu du "
-"presse-papiers « principal » à l'emplacement du curseur."
+"Indique si un clic avec le bouton du milieu doit coller le contenu du presse-"
+"papiers « principal » à l'emplacement du curseur."
 
 #: ../gtk/gtksizegroup.c:380 ../gtk/gtktreeselection.c:129
 msgid "Mode"
@@ -6585,7 +6585,7 @@ msgstr "L'objet GdkScreen associé"
 msgid "Direction"
 msgstr "Direction"
 
-#: ../gtk/gtkstylecontext.c:450 ../gtk/gtktexttag.c:282
+#: ../gtk/gtkstylecontext.c:450 ../gtk/gtktexttag.c:287
 msgid "Text direction"
 msgstr "Direction du texte"
 
@@ -6682,25 +6682,25 @@ msgstr "Gravité gauche"
 msgid "Whether the mark has left gravity"
 msgstr "Indique si la marque dispose de la gravité vers la gauche"
 
-#: ../gtk/gtktexttag.c:188
+#: ../gtk/gtktexttag.c:193
 msgid "Tag name"
 msgstr "Nom de la balise"
 
-#: ../gtk/gtktexttag.c:189
+#: ../gtk/gtktexttag.c:194
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
 msgstr ""
 "Nom utilisé pour référencer cette balise texte. NULL pour les balises "
 "anonymes"
 
-#: ../gtk/gtktexttag.c:228
+#: ../gtk/gtktexttag.c:233
 msgid "Background RGBA"
 msgstr "RGBA d'arrière-plan"
 
-#: ../gtk/gtktexttag.c:236
+#: ../gtk/gtktexttag.c:241
 msgid "Background full height"
 msgstr "Arrière-plan sur toute la hauteur"
 
-#: ../gtk/gtktexttag.c:237
+#: ../gtk/gtktexttag.c:242
 msgid ""
 "Whether the background color fills the entire line height or only the height "
 "of the tagged characters"
@@ -6708,27 +6708,27 @@ msgstr ""
 "Indique si la couleur d'arrière-plan doit remplir toute la hauteur de la "
 "ligne ou seulement la hauteur des caractères mis en évidence"
 
-#: ../gtk/gtktexttag.c:274
+#: ../gtk/gtktexttag.c:279
 msgid "Foreground RGBA"
 msgstr "RGBA de premier plan"
 
-#: ../gtk/gtktexttag.c:283
+#: ../gtk/gtktexttag.c:288
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Direction du texte, de droite à gauche ou de gauche à droite"
 
-#: ../gtk/gtktexttag.c:332
+#: ../gtk/gtktexttag.c:337
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
 msgstr ""
 "Style de la police en tant que constante PangoStyle, par ex. "
 "PANGO_STYLE_ITALIC"
 
-#: ../gtk/gtktexttag.c:341
+#: ../gtk/gtktexttag.c:346
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr ""
 "Variante de la police en tant que constante PangoVariant, par ex. "
 "PANGO_VARIANT_SMALL_CAPS"
 
-#: ../gtk/gtktexttag.c:350
+#: ../gtk/gtktexttag.c:355
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
 "example, PANGO_WEIGHT_BOLD"
@@ -6736,17 +6736,17 @@ msgstr ""
 "Graisse de la police sous forme d'un entier, voir les constantes prédéfinies "
 "PangoWeight ; par exemple, PANGO_WEIGHT_BOLD"
 
-#: ../gtk/gtktexttag.c:361
+#: ../gtk/gtktexttag.c:366
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr ""
 "Espacement de police en tant que constante PangoStretch, par ex. "
 "PANGO_STRETCH_CONDENSED"
 
-#: ../gtk/gtktexttag.c:370
+#: ../gtk/gtktexttag.c:375
 msgid "Font size in Pango units"
 msgstr "Taille de la police en unités Pango"
 
-#: ../gtk/gtktexttag.c:380
+#: ../gtk/gtktexttag.c:385
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
@@ -6757,11 +6757,11 @@ msgstr ""
 "changements de thème, etc. en conséquence elle est recommandée. Pango "
 "prédéfinit quelques facteurs d'échelle tels que PANGO_SCALE_X_LARGE"
 
-#: ../gtk/gtktexttag.c:400 ../gtk/gtktextview.c:702
+#: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:702
 msgid "Left, right, or center justification"
 msgstr "Alignement à droite, à gauche ou au centre"
 
-#: ../gtk/gtktexttag.c:419
+#: ../gtk/gtktexttag.c:424
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
@@ -6770,31 +6770,31 @@ msgstr ""
 "aide pour l'affichage du texte. Si ce n'est pas défini, une valeur par "
 "défaut appropriée sera utilisée."
 
-#: ../gtk/gtktexttag.c:426
+#: ../gtk/gtktexttag.c:431
 msgid "Left margin"
 msgstr "Marge gauche"
 
-#: ../gtk/gtktexttag.c:427 ../gtk/gtktextview.c:711
+#: ../gtk/gtktexttag.c:432 ../gtk/gtktextview.c:711
 msgid "Width of the left margin in pixels"
 msgstr "Largeur de la marge de gauche en pixels"
 
-#: ../gtk/gtktexttag.c:436
+#: ../gtk/gtktexttag.c:441
 msgid "Right margin"
 msgstr "Marge droite"
 
-#: ../gtk/gtktexttag.c:437 ../gtk/gtktextview.c:721
+#: ../gtk/gtktexttag.c:442 ../gtk/gtktextview.c:721
 msgid "Width of the right margin in pixels"
 msgstr "Largeur de la marge de droite en pixels"
 
-#: ../gtk/gtktexttag.c:447 ../gtk/gtktextview.c:730
+#: ../gtk/gtktexttag.c:452 ../gtk/gtktextview.c:730
 msgid "Indent"
 msgstr "Indentation"
 
-#: ../gtk/gtktexttag.c:448 ../gtk/gtktextview.c:731
+#: ../gtk/gtktexttag.c:453 ../gtk/gtktextview.c:731
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Indentation du paragraphe, en pixels"
 
-#: ../gtk/gtktexttag.c:459
+#: ../gtk/gtktexttag.c:464
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
@@ -6802,177 +6802,177 @@ msgstr ""
 "Décalage du texte au-dessus de la ligne de base (au-dessous de la ligne de "
 "base si l'élévation est négative) en unités Pango"
 
-#: ../gtk/gtktexttag.c:468
+#: ../gtk/gtktexttag.c:473
 msgid "Pixels above lines"
 msgstr "Pixels au-dessus de la ligne"
 
-#: ../gtk/gtktexttag.c:469 ../gtk/gtktextview.c:655
+#: ../gtk/gtktexttag.c:474 ../gtk/gtktextview.c:655
 msgid "Pixels of blank space above paragraphs"
 msgstr "Blanc en pixels au-dessus des paragraphes"
 
-#: ../gtk/gtktexttag.c:478
+#: ../gtk/gtktexttag.c:483
 msgid "Pixels below lines"
 msgstr "Pixels au-dessous des lignes"
 
-#: ../gtk/gtktexttag.c:479 ../gtk/gtktextview.c:665
+#: ../gtk/gtktexttag.c:484 ../gtk/gtktextview.c:665
 msgid "Pixels of blank space below paragraphs"
 msgstr "Blanc en pixels au-dessous des paragraphes"
 
-#: ../gtk/gtktexttag.c:488
+#: ../gtk/gtktexttag.c:493
 msgid "Pixels inside wrap"
 msgstr "Pixels dans les sauts de ligne"
 
-#: ../gtk/gtktexttag.c:489 ../gtk/gtktextview.c:675
+#: ../gtk/gtktexttag.c:494 ../gtk/gtktextview.c:675
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Blanc en pixels entre lignes coupées dans un paragraphe"
 
-#: ../gtk/gtktexttag.c:516 ../gtk/gtktextview.c:693
+#: ../gtk/gtktexttag.c:521 ../gtk/gtktextview.c:693
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Indique s'il n'y a jamais saut de ligne, ou bien s'ils doivent être placés "
 "entre mots ou entre caractères"
 
-#: ../gtk/gtktexttag.c:525 ../gtk/gtktextview.c:740
+#: ../gtk/gtktexttag.c:530 ../gtk/gtktextview.c:740
 msgid "Tabs"
 msgstr "Onglets"
 
-#: ../gtk/gtktexttag.c:526 ../gtk/gtktextview.c:741
+#: ../gtk/gtktexttag.c:531 ../gtk/gtktextview.c:741
 msgid "Custom tabs for this text"
 msgstr "Onglets personnalisés pour ce texte"
 
-#: ../gtk/gtktexttag.c:544
+#: ../gtk/gtktexttag.c:549
 msgid "Invisible"
 msgstr "Invisible"
 
-#: ../gtk/gtktexttag.c:545
+#: ../gtk/gtktexttag.c:550
 msgid "Whether this text is hidden."
 msgstr "Indique si ce texte est caché."
 
-#: ../gtk/gtktexttag.c:559
+#: ../gtk/gtktexttag.c:564
 msgid "Paragraph background color name"
 msgstr "Nom de la couleur d'arrière-plan du paragraphe"
 
-#: ../gtk/gtktexttag.c:560
+#: ../gtk/gtktexttag.c:565
 msgid "Paragraph background color as a string"
 msgstr ""
 "Couleur d'arrière-plan du paragraphe exprimé sous forme de chaîne littérale"
 
-#: ../gtk/gtktexttag.c:576
+#: ../gtk/gtktexttag.c:581
 msgid "Paragraph background color"
 msgstr "Couleur d'arrière-plan du paragraphe"
 
-#: ../gtk/gtktexttag.c:577
+#: ../gtk/gtktexttag.c:582
 msgid "Paragraph background color as a GdkColor"
 msgstr "Couleur d'arrière-plan du paragraphe exprimé sous forme d'un GdkColor"
 
-#: ../gtk/gtktexttag.c:591
+#: ../gtk/gtktexttag.c:596
 msgid "Paragraph background RGBA"
 msgstr "RGBA d'arrière-plan de paragraphe"
 
-#: ../gtk/gtktexttag.c:592
+#: ../gtk/gtktexttag.c:597
 msgid "Paragraph background RGBA as a GdkRGBA"
 msgstr "Couleur d'arrière-plan du paragraphe exprimé sous forme d'un GdkRGBA"
 
-#: ../gtk/gtktexttag.c:610
+#: ../gtk/gtktexttag.c:615
 msgid "Margin Accumulates"
 msgstr "Cumul de marges"
 
-#: ../gtk/gtktexttag.c:611
+#: ../gtk/gtktexttag.c:616
 msgid "Whether left and right margins accumulate."
 msgstr "Indique si les marges gauche et droite s'additionnent."
 
-#: ../gtk/gtktexttag.c:624
+#: ../gtk/gtktexttag.c:629
 msgid "Background full height set"
 msgstr "Arrière-plan défini sur toute la hauteur"
 
-#: ../gtk/gtktexttag.c:625
+#: ../gtk/gtktexttag.c:630
 msgid "Whether this tag affects background height"
 msgstr "Indique si cette balise affecte la hauteur de l'arrière-plan"
 
-#: ../gtk/gtktexttag.c:664
+#: ../gtk/gtktexttag.c:669
 msgid "Justification set"
 msgstr "Justification définie"
 
-#: ../gtk/gtktexttag.c:665
+#: ../gtk/gtktexttag.c:670
 msgid "Whether this tag affects paragraph justification"
 msgstr "Indique si cette balise affecte la justification des paragraphes"
 
-#: ../gtk/gtktexttag.c:672
+#: ../gtk/gtktexttag.c:677
 msgid "Left margin set"
 msgstr "Marge gauche définie"
 
-#: ../gtk/gtktexttag.c:673
+#: ../gtk/gtktexttag.c:678
 msgid "Whether this tag affects the left margin"
 msgstr "Indique si cette balise affecte la marge de gauche"
 
-#: ../gtk/gtktexttag.c:676
+#: ../gtk/gtktexttag.c:681
 msgid "Indent set"
 msgstr "Indentation définie"
 
-#: ../gtk/gtktexttag.c:677
+#: ../gtk/gtktexttag.c:682
 msgid "Whether this tag affects indentation"
 msgstr "Indique si cette balise affecte l'indentation"
 
-#: ../gtk/gtktexttag.c:684
+#: ../gtk/gtktexttag.c:689
 msgid "Pixels above lines set"
 msgstr "Pixels au-dessus de la ligne définis"
 
-#: ../gtk/gtktexttag.c:685 ../gtk/gtktexttag.c:689
+#: ../gtk/gtktexttag.c:690 ../gtk/gtktexttag.c:694
 msgid "Whether this tag affects the number of pixels above lines"
 msgstr ""
 "Indique si cette balise affecte le nombre de pixels au-dessus des lignes"
 
-#: ../gtk/gtktexttag.c:688
+#: ../gtk/gtktexttag.c:693
 msgid "Pixels below lines set"
 msgstr "Pixels au-dessous de la ligne définis"
 
-#: ../gtk/gtktexttag.c:692
+#: ../gtk/gtktexttag.c:697
 msgid "Pixels inside wrap set"
 msgstr "Pixels entre coupures définis"
 
-#: ../gtk/gtktexttag.c:693
+#: ../gtk/gtktexttag.c:698
 msgid "Whether this tag affects the number of pixels between wrapped lines"
 msgstr ""
 "Indique si cette balise affecte le nombre de pixels entre les lignes coupées"
 
-#: ../gtk/gtktexttag.c:700
+#: ../gtk/gtktexttag.c:705
 msgid "Right margin set"
 msgstr "Marge droite définie"
 
-#: ../gtk/gtktexttag.c:701
+#: ../gtk/gtktexttag.c:706
 msgid "Whether this tag affects the right margin"
 msgstr "Indique si cette balise affecte la marge de droite"
 
-#: ../gtk/gtktexttag.c:708
+#: ../gtk/gtktexttag.c:713
 msgid "Wrap mode set"
 msgstr "Mode de coupure défini"
 
-#: ../gtk/gtktexttag.c:709
+#: ../gtk/gtktexttag.c:714
 msgid "Whether this tag affects line wrap mode"
 msgstr "Indique si cette balise affecte le mode de coupure des lignes"
 
-#: ../gtk/gtktexttag.c:712
+#: ../gtk/gtktexttag.c:717
 msgid "Tabs set"
 msgstr "Tabulations définies"
 
-#: ../gtk/gtktexttag.c:713
+#: ../gtk/gtktexttag.c:718
 msgid "Whether this tag affects tabs"
 msgstr "Indique si cette balise affecte les tabulations"
 
-#: ../gtk/gtktexttag.c:716
+#: ../gtk/gtktexttag.c:721
 msgid "Invisible set"
 msgstr "Invisible défini"
 
-#: ../gtk/gtktexttag.c:717
+#: ../gtk/gtktexttag.c:722
 msgid "Whether this tag affects text visibility"
 msgstr "Indique si cette balise affecte la visibilité du texte"
 
-#: ../gtk/gtktexttag.c:720
+#: ../gtk/gtktexttag.c:725
 msgid "Paragraph background set"
 msgstr "Arrière-plan du paragraphe défini"
 
-#: ../gtk/gtktexttag.c:721
+#: ../gtk/gtktexttag.c:726
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Indique si cette balise affecte la couleur de fond du paragraphe"
 
@@ -8422,4 +8422,3 @@ msgstr "Titre du profil de couleurs"
 #: ../modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Le titre du profil de couleurs à utiliser"
-
