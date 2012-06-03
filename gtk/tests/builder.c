@@ -2515,7 +2515,6 @@ static void
 test_message_area (void)
 {
   GtkBuilder *builder;
-  GError *error;
   GObject *obj, *obj1;
   const gchar buffer[] =
     "<interface>"
@@ -2526,10 +2525,10 @@ test_message_area (void)
     "          <object class=\"GtkLabel\" id=\"content\">"
     "            <property name=\"label\" translatable=\"yes\">Message</property>"
     "          </object>"
+    "          <packing>"
+    "            <property name='expand'>False</property>"
+    "          </packing>"
     "        </child>"
-    "        <packing>"
-    "          <property name='expand'>False</property>"
-    "        </packing>"
     "      </object>"
     "    </child>"
     "    <child internal-child=\"action_area\">"
@@ -2548,9 +2547,7 @@ test_message_area (void)
     "  </object>"
     "</interface>";
 
-  error = NULL;
   builder = builder_new_from_string (buffer, -1, NULL);
-  g_assert (error == NULL);
   obj = gtk_builder_get_object (builder, "infobar1");
   g_assert (GTK_IS_INFO_BAR (obj));
   obj1 = gtk_builder_get_object (builder, "content");
