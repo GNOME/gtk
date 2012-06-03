@@ -154,15 +154,6 @@
                                  owner:self
                               userData:nil
                           assumeInside:NO];
-
-  if (NSPointInRect ([[self window] convertScreenToBase:[NSEvent mouseLocation]], rect))
-    {
-      /* When a new window (and thus view) has been created, and the mouse
-       * is in the window area, we will not receive an NSMouseEntered
-       * event.  Therefore, we synthesize an enter notify event manually.
-       */
-      _gdk_quartz_events_send_enter_notify_event (gdk_window);
-    }
 }
 
 -(void)viewDidMoveToWindow

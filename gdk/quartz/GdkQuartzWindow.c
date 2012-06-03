@@ -142,6 +142,24 @@
   return inMove;
 }
 
+-(void)checkSendEnterNotify
+{
+  /* When a new window has been created, and the mouse
+   * is in the window area, we will not receive an NSMouseEntered
+   * event.  Therefore, we synthesize an enter notify event manually.
+   */
+  if (!initialPositionKnown)
+    {
+      initialPositionKnown = YES;
+
+      if (NSPointInRect ([NSEvent mouseLocation], [self frame]))
+        {
+          GdkWindow *window = [[self contentView] gdkWindow];
+          _gdk_quartz_events_send_enter_notify_event (window);
+        }
+    }
+}
+
 -(void)windowDidMove:(NSNotification *)aNotification
 {
   GdkWindow *window = [[self contentView] gdkWindow];
@@ -159,6 +177,8 @@
   event->configure.height = private->height;
 
   _gdk_event_queue_append (gdk_display_get_default (), event);
+
+  [self checkSendEnterNotify];
 }
 
 -(void)windowDidResize:(NSNotification *)aNotification
@@ -189,6 +209,8 @@
   event->configure.height = private->height;
 
   _gdk_event_queue_append (gdk_display_get_default (), event);
+
+  [self checkSendEnterNotify];
 }
 
 -(id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag screen:(NSScreen *)screen
