@@ -264,6 +264,8 @@ additional environment variables.
     that enables <literal>XSETTINGS</literal> and has a value in
     <literal>Gtk/IMModule</literal>, that will be used for the default
     IM module.
+    This also can be a colon-separated list of input-methods, which
+    GTK+ will try in turn until it finds one available on the system.
   </para>
 </formalpara>
 

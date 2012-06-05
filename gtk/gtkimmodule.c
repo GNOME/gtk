@@ -650,6 +650,26 @@ match_locale (const gchar *locale,
   return 0;
 }
 
+static const gchar *
+lookup_immodule (gchar **immodules_list)
+{
+  while (immodules_list && *immodules_list)
+    {
+      if (g_strcmp0 (*immodules_list, SIMPLE_ID) == 0)
+        return SIMPLE_ID;
+      else
+       {
+         GtkIMModule *module;
+         module = g_hash_table_lookup (contexts_hash, *immodules_list);
+         if (module)
+           return module->contexts[0]->context_id;
+       }
+      immodules_list++;
+    }
+
+  return NULL;
+}
+
 /**
  * _gtk_im_module_get_default_context_id:
  * @client_window: a window
@@ -666,7 +686,7 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
   const gchar *context_id = NULL;
   gint best_goodness = 0;
   gint i;
-  gchar *tmp_locale, *tmp;
+  gchar *tmp_locale, *tmp, **immodules;
   const gchar *envvar;
   GdkScreen *screen;
   GtkSettings *settings;
@@ -674,11 +694,16 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
   if (!contexts_hash)
     gtk_im_module_initialize ();
 
-  envvar = g_getenv ("GTK_IM_MODULE");
-  if (envvar &&
-      (strcmp (envvar, SIMPLE_ID) == 0 ||
-       g_hash_table_lookup (contexts_hash, envvar))) 
-    return envvar;
+  envvar = g_getenv("GTK_IM_MODULE");
+  if (envvar)
+    {
+        immodules = g_strsplit(envvar, ":", 0);
+        context_id = lookup_immodule(immodules);
+        g_strfreev(immodules);
+
+        if (context_id)
+          return context_id;
+    }
 
   /* Check if the certain immodule is set in XSETTINGS.
    */
@@ -689,15 +714,9 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
       g_object_get (G_OBJECT (settings), "gtk-im-module", &tmp, NULL);
       if (tmp)
         {
-          if (strcmp (tmp, SIMPLE_ID) == 0)
-            context_id = SIMPLE_ID;
-          else
-            {
-              GtkIMModule *module;
-              module = g_hash_table_lookup (contexts_hash, tmp);
-              if (module)
-                context_id = module->contexts[0]->context_id;
-            }
+          immodules = g_strsplit(tmp, ":", 0);
+          context_id = lookup_immodule(immodules);
+          g_strfreev(immodules);
           g_free (tmp);
 
        	  if (context_id)

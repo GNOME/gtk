@@ -850,6 +850,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Which IM (input method) module should be used by default. This is the 
    * input method that will be used if the user has not explicitly chosen 
    * another input method from the IM context menu.  
+   * This also can be a colon-separated list of input methods, which GTK+
+   * will try in turn until it finds one available on the system.
    *
    * See #GtkIMContext and see the #GtkSettings:gtk-show-input-method-menu property.
    */
