@@ -542,11 +542,8 @@ gtk_text_cell_accessible_get_character_extents (AtkText      *text,
   gtk_renderer = GTK_CELL_RENDERER_TEXT (gail_renderer->renderer);
 
   g_object_get (gtk_renderer, "text", &renderer_text, NULL);
-  if (text == NULL)
-    {
-      g_free (renderer_text);
-      return;
-    }
+  if (renderer_text == NULL)
+    return;
 
   parent = atk_object_get_parent (ATK_OBJECT (text));
   if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
