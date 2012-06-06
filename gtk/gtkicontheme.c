@@ -232,6 +232,8 @@ struct _GtkIconInfo
   GdkPixbuf *pixbuf;
   GError *load_error;
   gdouble scale;
+
+  GtkRequisition *symbolic_pixbuf_size;
 };
 
 typedef struct
@@ -2737,6 +2739,8 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
     g_object_unref (icon_info->pixbuf);
   if (icon_info->cache_pixbuf)
     g_object_unref (icon_info->cache_pixbuf);
+  if (icon_info->symbolic_pixbuf_size)
+    gtk_requisition_free (icon_info->symbolic_pixbuf_size);
 
   g_slice_free (GtkIconInfo, icon_info);
 }
@@ -3169,6 +3173,7 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
   GdkPixbuf *pixbuf;
   gchar *data;
   gchar *success, *warning, *err;
+  gchar *width, *height;
 
   /* css_fg can't possibly have failed, otherwise
    * that would mean we have a broken style */
@@ -3192,13 +3197,29 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
       err = gdk_color_to_css (&error_default_color);
     }
 
+  if (!icon_info->symbolic_pixbuf_size)
+    {
+      /* Fetch size from the original icon */
+      pixbuf = gdk_pixbuf_new_from_file (icon_info->filename, error);
+
+      if (!pixbuf)
+        return NULL;
+
+      icon_info->symbolic_pixbuf_size = gtk_requisition_new ();
+      icon_info->symbolic_pixbuf_size->width = gdk_pixbuf_get_width (pixbuf);
+      icon_info->symbolic_pixbuf_size->height = gdk_pixbuf_get_height (pixbuf);
+      g_object_unref (pixbuf);
+    }
+
+  width = g_strdup_printf ("%d", icon_info->symbolic_pixbuf_size->width);
+  height = g_strdup_printf ("%d", icon_info->symbolic_pixbuf_size->height);
 
   data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
                       "<svg version=\"1.1\"\n"
                       "     xmlns=\"http://www.w3.org/2000/svg\"\n"
                       "     xmlns:xi=\"http://www.w3.org/2001/XInclude\"\n"
-                      "     width=\"16\"\n"
-                      "     height=\"16\">\n"
+                      "     width=\"", width, "\"\n"
+                      "     height=\"", height, "\">\n"
                       "  <style type=\"text/css\">\n"
                       "    rect,path {\n"
                       "      fill: ", css_fg," !important;\n"
@@ -3219,6 +3240,8 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
   g_free (warning);
   g_free (err);
   g_free (success);
+  g_free (width);
+  g_free (height);
 
   stream = g_memory_input_stream_new_from_data (data, -1, g_free);
   pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
