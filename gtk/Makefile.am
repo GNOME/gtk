@@ -1109,7 +1109,7 @@ endif
 
 if USE_QUARTZ
 install-mac-key-theme:
-	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0
+	$(MKDIR_P) $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0
 	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.mac $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0/gtk-keys.css
 uninstall-mac-key-theme:
 	rm -f $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0/gtk-keys.css
@@ -1152,9 +1152,9 @@ dist-hook: ../build/win32/vs9/gtk.vcproj ../build/win32/vs10/gtk.vcxproj ../buil
 
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme
-	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Default/gtk-3.0
+	$(MKDIR_P) $(DESTDIR)$(datadir)/themes/Default/gtk-3.0
 	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.default $(DESTDIR)$(datadir)/themes/Default/gtk-3.0/gtk-keys.css
-	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0
+	$(MKDIR_P) $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0
 	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0/gtk-keys.css
 
 uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme
