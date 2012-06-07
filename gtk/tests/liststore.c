@@ -455,6 +455,23 @@ list_store_test_insert_before_NULL (void)
   g_object_unref (store);
 }
 
+/* setting values */
+static void
+list_store_set_gvalue_to_transform (void)
+{
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GValue value = G_VALUE_INIT;
+
+  /* https://bugzilla.gnome.org/show_bug.cgi?id=677649 */
+  store = gtk_list_store_new (1, G_TYPE_LONG);
+  gtk_list_store_append (store, &iter);
+
+  g_value_init (&value, G_TYPE_INT);
+  g_value_set_int (&value, 42);
+  gtk_list_store_set_value (store, &iter, 0, &value);
+}
+
 /* removal */
 static void
 list_store_test_remove_begin (ListStore     *fixture,
@@ -1018,6 +1035,8 @@ register_list_store_tests (void)
 		   list_store_test_insert_before_NULL);
 
   /* setting values (FIXME) */
+  g_test_add_func ("/ListStore/set-gvalue-to-transform",
+                   list_store_set_gvalue_to_transform);
 
   /* removal */
   g_test_add ("/ListStore/remove-begin", ListStore, NULL,

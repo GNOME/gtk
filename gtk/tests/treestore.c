@@ -456,6 +456,23 @@ tree_store_test_insert_before_NULL (void)
   g_object_unref (store);
 }
 
+/* setting values */
+static void
+tree_store_set_gvalue_to_transform (void)
+{
+  GtkTreeStore *store;
+  GtkTreeIter iter;
+  GValue value = G_VALUE_INIT;
+
+  /* https://bugzilla.gnome.org/show_bug.cgi?id=677649 */
+  store = gtk_tree_store_new (1, G_TYPE_LONG);
+  gtk_tree_store_append (store, &iter, NULL);
+
+  g_value_init (&value, G_TYPE_INT);
+  g_value_set_int (&value, 42);
+  gtk_tree_store_set_value (store, &iter, 0, &value);
+}
+
 /* removal */
 static void
 tree_store_test_remove_begin (TreeStore     *fixture,
@@ -1052,6 +1069,8 @@ register_tree_store_tests (void)
 		   tree_store_test_insert_before_NULL);
 
   /* setting values (FIXME) */
+  g_test_add_func ("/TreeStore/set-gvalue-to-transform",
+                   tree_store_set_gvalue_to_transform);
 
   /* removal */
   g_test_add ("/TreeStore/remove-begin", TreeStore, NULL,
