@@ -853,8 +853,7 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
 
   if (! g_type_is_a (G_VALUE_TYPE (value), priv->column_headers[column]))
     {
-      if (! (g_value_type_compatible (G_VALUE_TYPE (value), priv->column_headers[column]) &&
-	     g_value_type_compatible (priv->column_headers[column], G_VALUE_TYPE (value))))
+      if (! (g_value_type_transformable (G_VALUE_TYPE (value), priv->column_headers[column])))
 	{
 	  g_warning ("%s: Unable to convert from %s to %s\n",
 		     G_STRLOC,
@@ -862,6 +861,8 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
 		     g_type_name (priv->column_headers[column]));
 	  return retval;
 	}
+
+      g_value_init (&real_value, priv->column_headers[column]);
       if (!g_value_transform (value, &real_value))
 	{
 	  g_warning ("%s: Unable to make conversion from %s to %s\n",
