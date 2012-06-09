@@ -921,8 +921,8 @@ struct _GdkEventConfigure
  *   <function>XSendEvent</function>).
  * @atom: the property that was changed.
  * @time: the time of the event in milliseconds.
- * @state: whether the property was changed (%GDK_PROPERTY_NEW_VALUE) or
- *   deleted (%GDK_PROPERTY_DELETE).
+ * @state: (type GdkPropertyState): whether the property was changed
+ *   (%GDK_PROPERTY_NEW_VALUE) or deleted (%GDK_PROPERTY_DELETE).
  *
  * Describes a property change on a window.
  */
