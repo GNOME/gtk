@@ -1215,8 +1215,8 @@ gdk_event_get_scroll_direction (const GdkEvent *event,
 /**
  * gdk_event_get_scroll_deltas:
  * @event: a #GdkEvent
- * @delta_x: return location for X delta
- * @delta_y: return location for Y delta
+ * @delta_x: (out): return location for X delta
+ * @delta_y: (out): return location for Y delta
  *
  * Retrieves the scroll deltas from a #GdkEvent
  *
