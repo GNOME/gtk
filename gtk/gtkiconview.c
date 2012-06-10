@@ -2868,16 +2868,9 @@ gtk_icon_view_layout (GtkIconView *icon_view)
                                           &n_columns, &item_width);
   n_rows = (n_items + n_columns - 1) / n_columns;
 
-  if (n_columns <= 1)
-    {
-      /* We might need vertical scrolling here */
-      int min_width = item_width + 2 * priv->item_padding + 2 * priv->margin;
-      priv->width = MAX (min_width, gtk_widget_get_allocated_width (widget));
-    }
-  else
-    {
-      priv->width = gtk_widget_get_allocated_width (widget);
-    }
+  priv->width = n_columns * (item_width + 2 * priv->item_padding + priv->column_spacing) - priv->column_spacing;
+  priv->width += 2 * priv->margin;
+  priv->width = MAX (priv->width, gtk_widget_get_allocated_width (widget));
 
   /* Clear the per row contexts */
   g_ptr_array_set_size (icon_view->priv->row_contexts, 0);
