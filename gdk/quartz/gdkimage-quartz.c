@@ -135,39 +135,64 @@ _gdk_quartz_image_copy_to_image (GdkDrawable *drawable,
       guchar *data;
       int x, y;
       NSSize size;
-
-      view = GDK_WINDOW_IMPL_QUARTZ (drawable)->view;
-
-      /* We return the image even if we can't copy to it. */
-      if (![view lockFocusIfCanDraw])
-        return image;
-
+            
       rect = NSMakeRect (src_x, src_y, width, height);
+      
+      if (GDK_WINDOW_IMPL_QUARTZ (drawable) == GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (_gdk_root)->impl))
+        {
+          /* Special case for the root window. */
+          CGImageRef root_image_ref = CGWindowListCreateImage (rect,
+                                                               kCGWindowListOptionOnScreenOnly,
+                                                               kCGNullWindowID,
+                                                               kCGWindowImageDefault);
+          rep = [[NSBitmapImageRep alloc] initWithCGImage: root_image_ref];
+          CGImageRelease (root_image_ref);
+        }
+      else
+        {
+          view = GDK_WINDOW_IMPL_QUARTZ (drawable)->view;
 
-      rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect: rect];
-      [view unlockFocus];
+          /* We return the image even if we can't copy to it. */
+          if (![view lockFocusIfCanDraw])
+            return image;
+
+          rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect: rect];
+          [view unlockFocus];
+        }
 	  
       data = [rep bitmapData];
       size = [rep size];
 
       for (y = 0; y < size.height; y++)
-	{
-	  guchar *src = data + y * [rep bytesPerRow];
+        {
+          guchar *src = data + y * [rep bytesPerRow];
 
-	  for (x = 0; x < size.width; x++)
-	    {
-	      gint32 pixel;
+          for (x = 0; x < size.width; x++)
+            {
+              gint32 pixel;
 
-	      if (image->byte_order == GDK_LSB_FIRST)
-		pixel = src[0] << 8 | src[1] << 16 |src[2] << 24;
-	      else
-		pixel = src[0] << 16 | src[1] << 8 |src[2];
+              if ([rep hasAlpha])
+                {
+                  if (image->byte_order == GDK_LSB_FIRST)
+                    pixel = src[3] | src[2] << 8 | src[1] << 16 | src[0] << 24;
+                  else
+                    pixel = src[3] << 24 | src[2] << 16 | src[1] << 8 | src[0];
 
-	      src += 3;
+                  src += [rep bitsPerPixel] / 8;
+                }
+              else
+                {
+                  if (image->byte_order == GDK_LSB_FIRST)
+                    pixel = src[3] | src[2] << 8 |src[1] << 16;
+                  else
+                    pixel = src[3] << 16 | src[2] << 8 |src[1];
 
-	      gdk_image_put_pixel (image, dest_x + x, dest_y + y, pixel);
-	    }
-	}
+                  src += [rep bitsPerPixel] / 8;
+                }
+
+              gdk_image_put_pixel (image, dest_x + x, dest_y + y, pixel);
+            }
+        }
 
       [rep release];
     }
