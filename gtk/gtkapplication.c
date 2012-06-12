@@ -811,7 +811,7 @@ GtkApplication *
 gtk_application_new (const gchar       *application_id,
                      GApplicationFlags  flags)
 {
-  g_return_val_if_fail (g_application_id_is_valid (application_id), NULL);
+  g_return_val_if_fail (application_id == NULL || g_application_id_is_valid (application_id), NULL);
 
   g_type_init ();
 
