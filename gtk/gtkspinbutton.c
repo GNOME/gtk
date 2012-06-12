@@ -792,7 +792,7 @@ gtk_spin_button_panel_get_state (GtkSpinButton *spin_button,
   else
     {
       if (priv->click_child == panel)
-        state |= GTK_STATE_ACTIVE;
+        state |= GTK_STATE_FLAG_ACTIVE;
       else if (priv->in_child == panel &&
                priv->click_child == NULL)
         state |= GTK_STATE_FLAG_PRELIGHT;
@@ -855,7 +855,7 @@ gtk_spin_button_panel_get_allocations (GtkSpinButton *spin_button,
   gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (spin_button));
-  gtk_style_context_get_border (context, GTK_STATE_NORMAL, &space);
+  gtk_style_context_get_border (context, GTK_STATE_FLAG_NORMAL, &space);
 
   req_height = requisition.height - gtk_widget_get_margin_top (widget) - gtk_widget_get_margin_bottom (widget);
   down_panel_width = gtk_spin_button_panel_get_width (spin_button, priv->down_panel);
