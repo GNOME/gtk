@@ -30,6 +30,7 @@
 #include "gtkbox.h"
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"
+#include "gtksearchentry.h"
 #include "gtkgrid.h"
 #include "gtkfontchooser.h"
 #include "gtkfontchooserutils.h"
@@ -242,53 +243,11 @@ gtk_font_chooser_widget_refilter_font_list (GtkFontChooserWidget *fontchooser)
 }
 
 static void
-text_changed_cb (GtkEntry       *entry,
-                 GParamSpec     *pspec,
+text_changed_cb (GtkEntry             *entry,
+                 GParamSpec           *pspec,
                  GtkFontChooserWidget *fc)
 {
-  GtkFontChooserWidgetPrivate *priv = fc->priv;
-  const gchar *text;
-
-  text = gtk_entry_get_text (entry);
-
-  if (text == NULL || text[0] == '\0')
-    {
-      GIcon *icon;
-
-      icon = g_themed_icon_new_with_default_fallbacks ("edit-find-symbolic");
-      g_object_set (G_OBJECT (priv->search_entry),
-                    "secondary-icon-gicon", icon,
-                    "secondary-icon-activatable", FALSE,
-                    "secondary-icon-sensitive", FALSE,
-                    NULL);
-      g_object_unref (icon);
-    }
-  else
-    {
-      if (!gtk_entry_get_icon_activatable (GTK_ENTRY (priv->search_entry), GTK_ENTRY_ICON_SECONDARY))
-        {
-          GIcon *icon;
-
-          icon = g_themed_icon_new_with_default_fallbacks ("edit-clear-symbolic");
-          g_object_set (G_OBJECT (priv->search_entry),
-                        "secondary-icon-gicon", icon,
-                        "secondary-icon-activatable", TRUE,
-                        "secondary-icon-sensitive", TRUE,
-                        NULL);
-          g_object_unref (icon);
-        }
-    }
-
   gtk_font_chooser_widget_refilter_font_list (fc);
-}
-
-static void
-icon_press_cb (GtkEntry             *entry,
-               GtkEntryIconPosition  pos,
-               GdkEvent             *event,
-               gpointer              user_data)
-{
-  gtk_entry_set_text (entry, "");
 }
 
 static void
@@ -507,7 +466,6 @@ row_deleted_cb  (GtkTreeModel *model,
 static void
 gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 {
-  GIcon *icon;
   GtkFontChooserWidgetPrivate *priv;
   GtkWidget *scrolled_win;
   GtkWidget *grid;
@@ -526,7 +484,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   gtk_widget_push_composite_child ();
 
   /* Creating fundamental widgets for the private struct */
-  priv->search_entry = gtk_entry_new ();
+  priv->search_entry = gtk_search_entry_new ();
   priv->family_face_list = gtk_tree_view_new ();
   gtk_tree_view_set_enable_search (GTK_TREE_VIEW (priv->family_face_list), FALSE);
   priv->preview = gtk_entry_new ();
@@ -596,22 +554,11 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   gtk_entry_set_text (GTK_ENTRY (priv->preview),
                       pango_language_get_sample_string (NULL));
 
-  /* Set search icon and place holder text */
-  icon = g_themed_icon_new_with_default_fallbacks ("edit-find-symbolic");
-  g_object_set (G_OBJECT (priv->search_entry),
-                "secondary-icon-gicon", icon,
-                "secondary-icon-activatable", FALSE,
-                "secondary-icon-sensitive", FALSE,
-                NULL);
-  g_object_unref (icon);
-
   gtk_entry_set_placeholder_text (GTK_ENTRY (priv->search_entry), _("Search font name"));
 
-  /** Callback connections **/
+  /* Callback connections */
   g_signal_connect (priv->search_entry, "notify::text",
                     G_CALLBACK (text_changed_cb), fontchooser);
-  g_signal_connect (priv->search_entry,
-                    "icon-press", G_CALLBACK (icon_press_cb), NULL);
 
   g_signal_connect (gtk_range_get_adjustment (GTK_RANGE (priv->size_slider)),
                     "value-changed", G_CALLBACK (size_change_cb), fontchooser);
