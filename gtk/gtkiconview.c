@@ -1515,19 +1515,23 @@ gtk_icon_view_compute_n_items_for_size (GtkIconView    *icon_view,
                                         gint           *max_item_size)
 {
   GtkIconViewPrivate *priv = icon_view->priv;
-  int minimum, natural;
+  int minimum, natural, spacing;
 
   g_return_if_fail (min_item_size == NULL || min_items != NULL);
   g_return_if_fail (max_item_size == NULL || max_items != NULL);
 
   gtk_icon_view_get_preferred_item_size (icon_view, orientation, -1, &minimum, &natural);
 
-  size -= 2 * priv->margin;
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    size += priv->column_spacing;
+    spacing = priv->column_spacing;
   else
-    size += priv->row_spacing;
+    spacing = priv->row_spacing;
   
+  size -= 2 * priv->margin;
+  size += spacing;
+  minimum += spacing;
+  natural += spacing;
+
   if (priv->columns > 0)
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -1549,17 +1553,6 @@ gtk_icon_view_compute_n_items_for_size (GtkIconView    *icon_view,
     }
   else
     {
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        {
-          minimum += priv->column_spacing;
-          natural += priv->column_spacing;
-        }
-      else
-        {
-          minimum += priv->row_spacing;
-          natural += priv->row_spacing;
-        }
-
       if (max_items)
         {
           if (size <= minimum)
@@ -1580,22 +1573,16 @@ gtk_icon_view_compute_n_items_for_size (GtkIconView    *icon_view,
   if (min_item_size)
     {
       *min_item_size = size / *min_items;
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        *min_item_size -= priv->column_spacing;
-      else
-        *min_item_size -= priv->row_spacing;
       *min_item_size = MIN (*min_item_size, natural);
+      *min_item_size -= spacing;
       *min_item_size -= 2 * priv->item_padding;
     }
 
   if (max_item_size)
     {
       *max_item_size = size / *max_items;
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        *max_item_size -= priv->column_spacing;
-      else
-        *max_item_size -= priv->row_spacing;
       *max_item_size = MIN (*max_item_size, natural);
+      *max_item_size -= spacing;
       *max_item_size -= 2 * priv->item_padding;
     }
 }
