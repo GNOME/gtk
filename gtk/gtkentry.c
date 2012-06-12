@@ -9571,14 +9571,15 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
                 gtk_entry_set_text (GTK_ENTRY (completion->priv->entry), "");
             }
 
-          /* Move the cursor to the end for Right/Esc, to the
-             beginning for Left */
+          /* Move the cursor to the end for Right/Esc */
           if (event->keyval == GDK_KEY_Right ||
               event->keyval == GDK_KEY_KP_Right ||
               event->keyval == GDK_KEY_Escape)
             gtk_editable_set_position (GTK_EDITABLE (widget), -1);
+          /* Let the default keybindings run for Left, i.e. either move to the
+           * previous character or select word if a modifier is used */
           else
-            gtk_editable_set_position (GTK_EDITABLE (widget), 0);
+            retval = FALSE;
         }
 
 keypress_completion_out:
