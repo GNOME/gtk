@@ -1691,11 +1691,12 @@ gtk_list_store_reorder_func (GSequenceIter *a,
 }
   
 /**
- * gtk_list_store_reorder: (skip)
+ * gtk_list_store_reorder:
  * @store: A #GtkListStore.
- * @new_order: (array): an array of integers mapping the new position of each child
- *      to its old position before the re-ordering,
- *      i.e. @new_order<literal>[newpos] = oldpos</literal>.
+ * @new_order: (array zero-terminated=1): an array of integers mapping the new
+ *      position of each child to its old position before the re-ordering,
+ *      i.e. @new_order<literal>[newpos] = oldpos</literal>. It must have
+ *      exactly as many items as the list store's length.
  *
  * Reorders @store to follow the order indicated by @new_order. Note that
  * this function only works with unsorted stores.
