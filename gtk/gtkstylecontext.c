@@ -1054,7 +1054,7 @@ gtk_style_context_queue_invalidate_internal (GtkStyleContext *context,
     }
   else
     {
-      _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_STATE);
+      _gtk_style_context_queue_invalidate (context, change);
       /* XXX: We need to invalidate siblings here somehow */
     }
 }
