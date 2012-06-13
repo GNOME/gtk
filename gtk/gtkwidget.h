@@ -743,7 +743,7 @@ void     gtk_widget_set_margin_bottom (GtkWidget *widget,
 gint	     gtk_widget_get_events	(GtkWidget	*widget);
 GdkEventMask gtk_widget_get_device_events (GtkWidget	*widget,
                                            GdkDevice    *device);
-GDK_DEPRECATED_IN_3_0_FOR(gdk_window_get_device_position)
+GDK_DEPRECATED_IN_3_4_FOR(gdk_window_get_device_position)
 void	     gtk_widget_get_pointer	(GtkWidget	*widget,
 					 gint		*x,
 					 gint		*y);
