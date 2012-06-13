@@ -1675,8 +1675,8 @@ gtk_icon_view_get_preferred_width_for_height (GtkWidget *widget,
   n_items = gtk_icon_view_get_n_items (icon_view);
 
   gtk_icon_view_get_preferred_item_size (icon_view, GTK_ORIENTATION_HORIZONTAL, row_height, &item_min, &item_nat);
-  *minimum = item_min * ((n_items + rows - 1) / rows);
-  *natural = item_nat * ((n_items + rows - 1) / rows);
+  *minimum = (item_min + priv->column_spacing) * ((n_items + rows - 1) / rows) - priv->column_spacing;
+  *natural = (item_nat + priv->column_spacing) * ((n_items + rows - 1) / rows) - priv->column_spacing;
 
   *minimum += 2 * priv->margin;
   *natural += 2 * priv->margin;
