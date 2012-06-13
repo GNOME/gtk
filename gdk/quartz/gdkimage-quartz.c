@@ -131,16 +131,14 @@ _gdk_quartz_image_copy_to_image (GdkDrawable *drawable,
     {
       GdkQuartzView *view;
       NSBitmapImageRep *rep;
-      NSRect rect;
       guchar *data;
       int x, y;
       NSSize size;
-            
-      rect = NSMakeRect (src_x, src_y, width, height);
-      
+
       if (GDK_WINDOW_IMPL_QUARTZ (drawable) == GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (_gdk_root)->impl))
         {
           /* Special case for the root window. */
+	  CGRect rect = CGRectMake (src_x, src_y, width, height);
           CGImageRef root_image_ref = CGWindowListCreateImage (rect,
                                                                kCGWindowListOptionOnScreenOnly,
                                                                kCGNullWindowID,
@@ -150,6 +148,7 @@ _gdk_quartz_image_copy_to_image (GdkDrawable *drawable,
         }
       else
         {
+	  NSRect rect = NSMakeRect (src_x, src_y, width, height);
           view = GDK_WINDOW_IMPL_QUARTZ (drawable)->view;
 
           /* We return the image even if we can't copy to it. */
