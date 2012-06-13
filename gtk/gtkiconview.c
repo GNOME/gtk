@@ -1605,7 +1605,7 @@ gtk_icon_view_compute_n_items_for_size (GtkIconView    *icon_view,
   if (min_item_size)
     {
       *min_item_size = size / *min_items;
-      *min_item_size = MIN (*min_item_size, natural);
+      *min_item_size = CLAMP (*min_item_size, minimum, natural);
       *min_item_size -= spacing;
       *min_item_size -= 2 * priv->item_padding;
     }
@@ -1613,7 +1613,7 @@ gtk_icon_view_compute_n_items_for_size (GtkIconView    *icon_view,
   if (max_item_size)
     {
       *max_item_size = size / *max_items;
-      *max_item_size = MIN (*max_item_size, natural);
+      *max_item_size = CLAMP (*max_item_size, minimum, natural);
       *max_item_size -= spacing;
       *max_item_size -= 2 * priv->item_padding;
     }
