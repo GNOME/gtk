@@ -1441,10 +1441,11 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry::activate:
    * @entry: The entry on which the signal is emitted
    *
-   * The ::activate signal is emitted when the the user hits
+   * The ::activate signal is emitted when the user hits
    * the Enter key.
    *
-   * While this signal is used as a <link linkend="keybinding-signals">keybinding signal</link>,
+   * While this signal is used as a
+   * <link linkend="keybinding-signals">keybinding signal</link>,
    * it is also commonly used by applications to intercept
    * activation of entries.
    *
