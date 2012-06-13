@@ -1393,6 +1393,31 @@ adjust_wrap_width (GtkIconView *icon_view)
     }
 }
 
+/* General notes about layout
+ *
+ * The icon view is layouted like this:
+ *
+ * +----------+  s  +----------+
+ * | padding  |  p  | padding  |
+ * | +------+ |  a  | +------+ |
+ * | | cell | |  c  | | cell | |
+ * | +------+ |  i  | +------+ |
+ * |          |  n  |          |
+ * +----------+  g  +----------+
+ *
+ * In size request and allocation code, there are 3 sizes that are used:
+ * * cell size
+ *   This is the size returned by gtk_cell_area_get_preferred_foo(). In places
+ *   where code is interacting with the cell area and renderers this is useful.
+ * * padded size
+ *   This is the cell size plus the item padding on each side.
+ * * spaced size
+ *   This is the padded size plus the spacing. This is what's used for most
+ *   calculations because it can (ab)use the following formula:
+ *   iconview_size = 2 * margin + n_items * spaced_size - spacing
+ * So when reading this code and fixing my bugs where I confuse these two, be
+ * aware of this distinction.
+ */
 static void
 cell_area_get_preferred_size (GtkIconView        *icon_view,
                               GtkCellAreaContext *context,
