@@ -247,10 +247,11 @@ static gboolean
 module_is_blacklisted (const gchar *name,
                        gboolean     verbose)
 {
-  if (g_str_equal (name, "gail"))
+  if (g_str_equal (name, "gail") ||
+      g_str_equal (name, "atk-bridge"))
     {
       if (verbose)
-        g_message ("Not loading module \"gail\": The functionality is provided by GTK natively. Please try to not load it.");
+        g_message ("Not loading module \"%s\": The functionality is provided by GTK natively. Please try to not load it.", name);
 
       return TRUE;
     }
