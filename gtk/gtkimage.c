@@ -1384,6 +1384,13 @@ gtk_image_draw (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
 
+  gtk_render_background (context, cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget), gtk_widget_get_allocated_height (widget));
+  gtk_render_frame (context, cr,
+                    0, 0,
+                    gtk_widget_get_allocated_width (widget), gtk_widget_get_allocated_height (widget));
+
   gtk_misc_get_alignment (misc, &xalign, &yalign);
   gtk_image_get_preferred_size (image, &width, &height);
   _gtk_misc_get_padding_and_border (misc, &border);
@@ -1391,11 +1398,8 @@ gtk_image_draw (GtkWidget *widget,
   if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;
 
-  x = floor ((gtk_widget_get_allocated_width (widget) - width) * xalign);
-  y = floor ((gtk_widget_get_allocated_height (widget) - height) * yalign);
-
-  gtk_render_background (context, cr, x, y, width, height);
-  gtk_render_frame (context, cr, x, y, width, height);
+  x = floor ((gtk_widget_get_allocated_width (widget) - width) * xalign) + border.left;
+  y = floor ((gtk_widget_get_allocated_height (widget) - height) * yalign) + border.top;
 
   x += border.left;
   y += border.top;
