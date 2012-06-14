@@ -1469,8 +1469,8 @@ gtk_icon_view_get_preferred_item_size (GtkIconView    *icon_view,
 
   if (priv->items == NULL)
     {
-      *minimum = 0;
-      *natural = 0;
+      *minimum = 1;
+      *natural = 1;
       return;
     }
 
@@ -1530,9 +1530,9 @@ gtk_icon_view_get_preferred_item_size (GtkIconView    *icon_view,
     }
 
   if (minimum)
-    *minimum += 2 * priv->item_padding;
+    *minimum = MAX (1, *minimum + 2 * priv->item_padding);
   if (natural)
-    *natural += 2 * priv->item_padding;
+    *natural = MAX (1, *natural + 2 * priv->item_padding);
 
   g_object_unref (context);
 }
