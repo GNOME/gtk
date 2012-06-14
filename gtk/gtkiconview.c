@@ -1467,6 +1467,13 @@ gtk_icon_view_get_preferred_item_size (GtkIconView    *icon_view,
   GtkCellAreaContext *context;
   GList *items;
 
+  if (priv->items == NULL)
+    {
+      *minimum = 0;
+      *natural = 0;
+      return;
+    }
+
   context = gtk_cell_area_create_context (priv->cell_area);
 
   for_size -= 2 * priv->item_padding;
