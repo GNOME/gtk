@@ -1456,6 +1456,12 @@ cell_area_get_preferred_size (GtkIconView        *icon_view,
     }
 }
 
+static gboolean
+gtk_icon_view_is_empty (GtkIconView *icon_view)
+{
+  return icon_view->priv->items == NULL;
+}
+
 static void
 gtk_icon_view_get_preferred_item_size (GtkIconView    *icon_view,
                                        GtkOrientation  orientation,
@@ -1467,7 +1473,7 @@ gtk_icon_view_get_preferred_item_size (GtkIconView    *icon_view,
   GtkCellAreaContext *context;
   GList *items;
 
-  if (priv->items == NULL)
+  if (gtk_icon_view_is_empty (icon_view))
     {
       *minimum = 1;
       *natural = 1;
