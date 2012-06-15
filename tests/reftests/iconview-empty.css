@@ -1,0 +1,5 @@
+@import "reset-to-defaults.css";
+
+GtkIconView, GtkImage {
+  background-color: blue;
+}
