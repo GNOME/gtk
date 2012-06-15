@@ -136,6 +136,7 @@ gtk/gtkliststore.c
 gtk/gtklockbutton.c
 gtk/gtkmain.c
 gtk/gtkmenubar.c
+gtk/gtkmenubutton.c
 gtk/gtkmenu.c
 gtk/gtkmenuitem.c
 gtk/gtkmenushell.c
