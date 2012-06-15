@@ -1401,9 +1401,6 @@ gtk_image_draw (GtkWidget *widget,
   x = floor ((gtk_widget_get_allocated_width (widget) - width) * xalign) + border.left;
   y = floor ((gtk_widget_get_allocated_height (widget) - height) * yalign) + border.top;
 
-  x += border.left;
-  y += border.top;
-
   if (gtk_image_get_storage_type (image) == GTK_IMAGE_ANIMATION)
     {
       GdkPixbuf *pixbuf = get_animation_frame (image);
