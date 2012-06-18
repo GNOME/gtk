@@ -27,7 +27,7 @@
 #include "gdkwayland.h"
 #include "gdkinternals.h"
 
-#include <X11/extensions/XKBcommon.h>
+#include <xkbcommon/xkbcommon.h>
 
 struct _GdkWaylandDisplayManager
 {

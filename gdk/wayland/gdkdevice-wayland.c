@@ -32,7 +32,7 @@
 #include "gdkdevicemanagerprivate.h"
 #include "gdkprivate-wayland.h"
 
-#include <X11/extensions/XKBcommon.h>
+#include <xkbcommon/xkbcommon.h>
 #include <X11/keysym.h>
 
 #include <sys/time.h>

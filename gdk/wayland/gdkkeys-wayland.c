@@ -39,7 +39,7 @@
 #include "gdkdisplay-wayland.h"
 #include "gdkkeysprivate.h"
 
-#include <X11/extensions/XKBcommon.h>
+#include <xkbcommon/xkbcommon.h>
 
 typedef struct _GdkWaylandKeymap          GdkWaylandKeymap;
 typedef struct _GdkWaylandKeymapClass     GdkWaylandKeymapClass;
