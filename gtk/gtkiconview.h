@@ -235,6 +235,11 @@ void    gtk_icon_view_convert_widget_to_bin_window_coords     (GtkIconView *icon
                                                                gint         wy,
                                                                gint        *bx,
                                                                gint        *by);
+GDK_AVAILABLE_IN_3_6
+gboolean gtk_icon_view_get_cell_area                          (GtkIconView     *icon_view,
+							       GtkTreePath     *path,
+							       GtkCellRenderer *cell,
+							       GdkRectangle    *rect);
 
 
 void    gtk_icon_view_set_tooltip_item                        (GtkIconView     *icon_view,

@@ -4451,6 +4451,69 @@ gtk_icon_view_get_item_at_pos (GtkIconView      *icon_view,
 }
 
 /**
+ * gtk_icon_view_get_cell_area:
+ * @icon_view: a #GtkIconView
+ * @path: a #GtkTreePath
+ * @cell: (allow-none): a #GtkCellRenderer or %NULL
+ * @rect: (out): rectangle to fill with cell rect
+ *
+ * Fills the bounding rectangle in widget coordinates for the cell specified by
+ * @path and @cell. If @cell is %NULL the main cell area is used.
+ *
+ * This function is only valid if @icon_view is realized.
+ *
+ * Return value: %FALSE if there is no such item, %TRUE otherwise
+ *
+ * Since: 3.6
+ */
+gboolean
+gtk_icon_view_get_cell_area (GtkIconView     *icon_view,
+                             GtkTreePath     *path,
+                             GtkCellRenderer *cell,
+                             GdkRectangle    *rect)
+{
+  GtkIconViewItem *item = NULL;
+  gint x, y;
+
+  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
+  g_return_val_if_fail (cell == NULL || GTK_IS_CELL_RENDERER (cell), FALSE);
+
+  if (gtk_tree_path_get_depth (path) > 0)
+    item = g_list_nth_data (icon_view->priv->items,
+			    gtk_tree_path_get_indices(path)[0]);
+
+  if (!item)
+    return FALSE;
+
+  if (cell)
+    {
+      GtkCellAreaContext *context;
+
+      context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
+      _gtk_icon_view_set_cell_data (icon_view, item);
+      gtk_cell_area_get_cell_allocation (icon_view->priv->cell_area, context,
+					 GTK_WIDGET (icon_view),
+					 cell, &item->cell_area, rect);
+    }
+  else
+    {
+      rect->x = item->cell_area.x - icon_view->priv->item_padding;
+      rect->y = item->cell_area.y - icon_view->priv->item_padding;
+      rect->width  = item->cell_area.width  + icon_view->priv->item_padding * 2;
+      rect->height = item->cell_area.height + icon_view->priv->item_padding * 2;
+    }
+
+  if (icon_view->priv->bin_window)
+    {
+      gdk_window_get_position (icon_view->priv->bin_window, &x, &y);
+      rect->x += x;
+      rect->y += y;
+    }
+
+  return TRUE;
+}
+
+/**
  * gtk_icon_view_set_tooltip_item:
  * @icon_view: a #GtkIconView
  * @tooltip: a #GtkTooltip
@@ -4494,46 +4557,15 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
                                 GtkCellRenderer *cell)
 {
   GdkRectangle rect;
-  GtkIconViewItem *item = NULL;
-  gint x, y;
- 
+
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
   g_return_if_fail (cell == NULL || GTK_IS_CELL_RENDERER (cell));
 
-  if (gtk_tree_path_get_depth (path) > 0)
-    item = g_list_nth_data (icon_view->priv->items,
-                            gtk_tree_path_get_indices(path)[0]);
- 
-  if (!item)
+  if (!gtk_icon_view_get_cell_area (icon_view, path, cell, &rect))
     return;
 
-  if (cell)
-    {
-      GtkCellAreaContext *context;
-
-      context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
-      _gtk_icon_view_set_cell_data (icon_view, item);
-      gtk_cell_area_get_cell_allocation (icon_view->priv->cell_area, context,
-					 GTK_WIDGET (icon_view),
-					 cell, &item->cell_area, &rect);
-    }
-  else
-    {
-      rect.x = item->cell_area.x - icon_view->priv->item_padding;
-      rect.y = item->cell_area.y - icon_view->priv->item_padding;
-      rect.width  = item->cell_area.width  + icon_view->priv->item_padding * 2;
-      rect.height = item->cell_area.height + icon_view->priv->item_padding * 2;
-    }
-  
-  if (icon_view->priv->bin_window)
-    {
-      gdk_window_get_position (icon_view->priv->bin_window, &x, &y);
-      rect.x += x;
-      rect.y += y; 
-    }
-
-  gtk_tooltip_set_tip_area (tooltip, &rect); 
+  gtk_tooltip_set_tip_area (tooltip, &rect);
 }
 
 
