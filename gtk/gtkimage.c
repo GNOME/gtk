@@ -445,7 +445,7 @@ gtk_image_get_property (GObject     *object,
       g_value_set_string (value, priv->filename);
       break;
     case PROP_STOCK:
-      g_value_set_string (value, _gtk_icon_helper_get_icon_name (priv->icon_helper));
+      g_value_set_string (value, _gtk_icon_helper_get_stock_id (priv->icon_helper));
       break;
     case PROP_ICON_SET:
       g_value_set_boxed (value, _gtk_icon_helper_peek_icon_set (priv->icon_helper));
