@@ -365,6 +365,8 @@ gtk_image_finalize (GObject *object)
 
   g_clear_object (&image->priv->icon_helper);
   
+  g_free (image->priv->filename);
+
   G_OBJECT_CLASS (gtk_image_parent_class)->finalize (object);
 };
 
