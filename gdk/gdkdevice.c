@@ -939,7 +939,7 @@ GList *
 gdk_device_list_slave_devices (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER, NULL);
+  g_return_val_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER, NULL);
 
   return g_list_copy (device->slaves);
 }
