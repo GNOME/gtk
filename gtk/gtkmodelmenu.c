@@ -39,6 +39,7 @@ typedef struct {
   GSList            *connected;
   gboolean           with_separators;
   gint               n_items;
+  gchar             *action_namespace;
 } GtkModelMenuBinding;
 
 static void
@@ -49,6 +50,7 @@ gtk_model_menu_binding_items_changed (GMenuModel *model,
                                       gpointer    user_data);
 static void gtk_model_menu_binding_append_model (GtkModelMenuBinding *binding,
                                                  GMenuModel *model,
+                                                 const gchar *action_namespace,
                                                  gboolean with_separators);
 
 static void
@@ -66,6 +68,7 @@ gtk_model_menu_binding_free (gpointer data)
     }
 
   g_object_unref (binding->model);
+  g_free (binding->action_namespace);
 
   g_slice_free (GtkModelMenuBinding, binding);
 }
@@ -73,6 +76,7 @@ gtk_model_menu_binding_free (gpointer data)
 static void
 gtk_model_menu_binding_append_item (GtkModelMenuBinding  *binding,
                                     GMenuModel           *model,
+                                    const gchar          *action_namespace,
                                     gint                  item_index,
                                     gchar               **heading)
 {
@@ -80,15 +84,30 @@ gtk_model_menu_binding_append_item (GtkModelMenuBinding  *binding,
 
   if ((section = g_menu_model_get_item_link (model, item_index, "section")))
     {
+      const gchar *section_namespace = NULL;
+
       g_menu_model_get_item_attribute (model, item_index, "label", "s", heading);
-      gtk_model_menu_binding_append_model (binding, section, FALSE);
+      g_menu_model_get_item_attribute (model, item_index, "action-namespace", "s", &section_namespace);
+
+      if (action_namespace)
+        {
+          gchar *namespace = g_strjoin (".", action_namespace, section_namespace, NULL);
+          gtk_model_menu_binding_append_model (binding, section, namespace, FALSE);
+          g_free (namespace);
+        }
+      else
+        {
+          gtk_model_menu_binding_append_model (binding, section, section_namespace, FALSE);
+        }
+
+      g_free (section_namespace);
       g_object_unref (section);
     }
   else
     {
       GtkMenuItem *item;
 
-      item = gtk_model_menu_item_new (model, item_index, binding->accels);
+      item = gtk_model_menu_item_new (model, item_index, action_namespace, binding->accels);
       gtk_menu_shell_append (binding->shell, GTK_WIDGET (item));
       gtk_widget_show (GTK_WIDGET (item));
       binding->n_items++;
@@ -98,6 +117,7 @@ gtk_model_menu_binding_append_item (GtkModelMenuBinding  *binding,
 static void
 gtk_model_menu_binding_append_model (GtkModelMenuBinding *binding,
                                      GMenuModel          *model,
+                                     const gchar         *action_namespace,
                                      gboolean             with_separators)
 {
   gint n, i;
@@ -140,7 +160,7 @@ gtk_model_menu_binding_append_model (GtkModelMenuBinding *binding,
       gint our_position = binding->n_items;
       gchar *heading = NULL;
 
-      gtk_model_menu_binding_append_item (binding, model, i, &heading);
+      gtk_model_menu_binding_append_item (binding, model, action_namespace, i, &heading);
 
       if (with_separators && our_position < binding->n_items)
         {
@@ -182,7 +202,7 @@ gtk_model_menu_binding_populate (GtkModelMenuBinding *binding)
   binding->n_items = 0;
 
   /* add new items from the model */
-  gtk_model_menu_binding_append_model (binding, binding->model, binding->with_separators);
+  gtk_model_menu_binding_append_model (binding, binding->model, binding->action_namespace, binding->with_separators);
 }
 
 static gboolean
@@ -227,6 +247,7 @@ gtk_model_menu_binding_items_changed (GMenuModel *model,
 static void
 gtk_model_menu_bind (GtkMenuShell *shell,
                      GMenuModel   *model,
+                     const gchar  *action_namespace,
                      gboolean      with_separators)
 {
   GtkModelMenuBinding *binding;
@@ -238,6 +259,7 @@ gtk_model_menu_bind (GtkMenuShell *shell,
   binding->update_idle = 0;
   binding->connected = NULL;
   binding->with_separators = with_separators;
+  binding->action_namespace = g_strdup (action_namespace);
 
   g_object_set_data_full (G_OBJECT (shell), "gtk-model-menu-binding", binding, gtk_model_menu_binding_free);
 }
@@ -258,6 +280,7 @@ gtk_model_menu_populate (GtkMenuShell  *shell,
 
 GtkWidget *
 gtk_model_menu_create_menu (GMenuModel    *model,
+                            const gchar   *action_namespace,
                             GtkAccelGroup *accels)
 {
   GtkWidget *menu;
@@ -265,7 +288,7 @@ gtk_model_menu_create_menu (GMenuModel    *model,
   menu = gtk_menu_new ();
   gtk_menu_set_accel_group (GTK_MENU (menu), accels);
 
-  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, TRUE);
+  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, action_namespace, TRUE);
   gtk_model_menu_populate (GTK_MENU_SHELL (menu), accels);
 
   return menu;
@@ -293,7 +316,7 @@ gtk_menu_new_from_model (GMenuModel *model)
   GtkWidget *menu;
 
   menu = gtk_menu_new ();
-  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, TRUE);
+  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, NULL, TRUE);
   gtk_model_menu_populate (GTK_MENU_SHELL (menu), NULL);
 
   return menu;
@@ -307,7 +330,7 @@ gtk_model_menu_create_menu_bar (GMenuModel    *model,
 
   menubar = gtk_menu_bar_new ();
 
-  gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, FALSE);
+  gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, NULL, FALSE);
   gtk_model_menu_populate (GTK_MENU_SHELL (menubar), accels);
 
   return menubar;
@@ -336,7 +359,7 @@ gtk_menu_bar_new_from_model (GMenuModel *model)
 
   menubar = gtk_menu_bar_new ();
 
-  gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, FALSE);
+  gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, NULL, FALSE);
   gtk_model_menu_populate (GTK_MENU_SHELL (menubar), NULL);
 
   return menubar;

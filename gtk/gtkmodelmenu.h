@@ -30,6 +30,7 @@ GtkWidget * gtk_model_menu_create_menu_bar (GMenuModel        *model,
 
 G_GNUC_INTERNAL
 GtkWidget * gtk_model_menu_create_menu     (GMenuModel        *model,
+                                            const gchar       *action_namespace,
                                             GtkAccelGroup     *accels);
 
 #endif /* __GTK_MODEL_MENU_H__ */
