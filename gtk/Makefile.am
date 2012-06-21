@@ -864,6 +864,15 @@ gtk_base_c_sources = 		\
 gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)
 
+gtk_dbus_built_sources = gtkdbusgenerated.c gtkdbusgenerated.h
+
+$(gtk_dbus_built_sources) : Makefile.am gtkdbusinterfaces.xml
+	gdbus-codegen \
+	--interface-prefix org.Gtk. \
+	--c-namespace Gtk \
+	--generate-c-code gtkdbusgenerated \
+	gtkdbusinterfaces.xml
+
 gtk_os_unix_c_sources = 		\
 	gtkcustompaperunixdialog.c	\
 	gtkpagesetupunixdialog.c	\
@@ -875,7 +884,8 @@ gtk_os_unix_c_sources = 		\
 	gtkprintoperation-unix.c	\
 	gtkprintunixdialog.c		\
         gtkprintbackend.c		\
-	gtksearchenginetracker.c
+	gtksearchenginetracker.c        \
+	$(gtk_dbus_built_sources)
 gtk_all_c_sources += $(gtk_os_unix_c_sources)
 if OS_UNIX
 gtk_private_h_sources += \
@@ -989,12 +999,14 @@ gtk_built_public_sources =			\
 
 # built headers that don't get installed
 gtk_built_private_headers =			\
+	gtkdbusgenerated.h			\
 	gtkresources.h				\
 	gtkmarshalers.h				\
 	gtkbuiltincache.h			\
 	gtkprivatetypebuiltins.h
 
 gtk_built_sources =				\
+	gtkdbusgenerated.c			\
 	gtkresources.c				\
 	gtktypebuiltins.c			\
 	gtktypefuncs.c				\
