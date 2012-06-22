@@ -33,7 +33,9 @@
 #include "gailutil.h"
 #include "gailmisc.h"
 
+#ifdef HAVE_ATK_BRIDGE
 #include <atk-bridge.h>
+#endif
 
 static gboolean gail_focus_watcher      (GSignalInvocationHint *ihint,
                                          guint                  n_param_values,
@@ -807,7 +809,9 @@ _gtk_accessibility_init (void)
   focus_tracker_id = atk_add_focus_tracker (gail_focus_tracker);
 
   _gail_util_install ();
+#ifdef HAVE_ATK_BRIDGE
   atk_bridge_adaptor_init (NULL, NULL);
+#endif
 
   atk_misc_instance = g_object_new (GAIL_TYPE_MISC, NULL);
 }

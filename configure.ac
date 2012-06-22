@@ -1278,11 +1278,21 @@ AC_SUBST(GDK_DEP_CFLAGS)
 # Check for Accessibility Toolkit flags
 ########################################
 
-ATK_PACKAGES="atk atk-bridge-2.0"
+AC_ARG_WITH(atk-bridge,
+	    AS_HELP_STRING([--without-atk-bridge], [Do not use atk-bridge-2.0]),
+	    :, with_atk_bridge=$enable_x11_backend)
+
+if test x$with_atk_bridge != xno; then
+   ATK_PACKAGES="atk atk-bridge-2.0"
+   AC_DEFINE([HAVE_ATK_BRIDGE], [1], [Define if we're using atk-bridge-2.0])
+else
+   ATK_PACKAGES="atk"
+fi
+
 PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
 
 GTK_PACKAGES="atk cairo cairo-gobject gdk-pixbuf-2.0 gio-2.0"
-GTK_PRIVATE_PACKAGES="atk-bridge-2.0"
+GTK_PRIVATE_PACKAGES="$ATK_PACKAGES"
 if test "x$enable_x11_backend" = xyes; then
   GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES pangoft2"
 fi
