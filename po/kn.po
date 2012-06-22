@@ -1139,7 +1139,7 @@ msgstr "ಕೇವಲ ಸ್ಥಳೀಯ ಕಡತಗಳನ್ನು ಮಾತ್
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
 #: gtk/gtkfilechooserentry.c:1191
 msgid "Incomplete hostname; end it with '/'"
-msgstr "ಅಪೂರ್ಣವಾದ ಅತಿಥೇಯದ ಹೆಸರು; / ಅದನ್ನು ಪೂರ್ಣಗೊಳಿಸಿ"
+msgstr "ಅಪೂರ್ಣವಾದ ಅತಿಥೇಯದ ಹೆಸರು; '/' ಅದನ್ನು ಪೂರ್ಣಗೊಳಿಸಿ"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
