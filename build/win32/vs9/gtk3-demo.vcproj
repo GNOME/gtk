@@ -169,6 +169,10 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\clipboard.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\colorsel.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\combobox.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\css_accordion.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\css_basics.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\css_multiplebgs.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\demo_resources.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\dialog.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\drawingarea.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\editable_cells.c" />
@@ -198,6 +202,8 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\stock_browser.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\textscroll.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\textview.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\theming_custom_css.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\theming_style_classes.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\toolpalette.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\transparent.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\tree_store.c" />

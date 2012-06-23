@@ -173,6 +173,10 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\clipboard.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\colorsel.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\combobox.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\css_accordion.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\css_basics.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\css_multiplebgs.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\demo_resources.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\dialog.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\drawingarea.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\editable_cells.c" />
@@ -202,6 +206,8 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\stock_browser.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\textscroll.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\textview.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\theming_custom_css.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\theming_style_classes.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\toolpalette.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\transparent.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\tree_store.c" />
