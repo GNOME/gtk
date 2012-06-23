@@ -25,6 +25,8 @@ copy $(Configuration)\$(Platform)\bin\*.exe $(CopyDir)\bin\gtk3-demo
 
 copy ..\..\..\demos\gtk-demo\*.c $(CopyDir)\bin\gtk3-demo
 
+copy ..\..\..\demos\gtk-demo\*.css $(CopyDir)\bin\gtk3-demo
+
 copy ..\..\..\demos\gtk-demo\*.h $(CopyDir)\bin\gtk3-demo
 
 copy ..\..\..\demos\gtk-demo\*.ui $(CopyDir)\bin\gtk3-demo
