@@ -282,9 +282,9 @@ gtk_css_ease_value_parse_steps (GtkCssParser *parser)
 GtkCssValue *
 _gtk_css_ease_value_parse (GtkCssParser *parser)
 {
-  g_return_val_if_fail (parser != NULL, NULL);
-
   guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
 
   for (i = 0; i < G_N_ELEMENTS (parser_values); i++)
     {
