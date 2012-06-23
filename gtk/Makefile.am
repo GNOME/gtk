@@ -871,7 +871,7 @@ $(gtk_dbus_built_sources) : Makefile.am gtkdbusinterfaces.xml
 	--interface-prefix org.Gtk. \
 	--c-namespace Gtk \
 	--generate-c-code gtkdbusgenerated \
-	gtkdbusinterfaces.xml
+	$(srcdir)/gtkdbusinterfaces.xml
 
 gtk_os_unix_c_sources = 		\
 	gtkcustompaperunixdialog.c	\
