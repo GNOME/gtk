@@ -1653,6 +1653,7 @@ EXTRA_DIST +=                   \
 	gtkprint-win32.c	\
 	gtksearchenginequartz.h \
 	gtk.gresource.xml	\
+	gtkdbusinterfaces.xml	\
 	gtk-default.css		\
 	gtk-keys.css.default	\
 	gtk-keys.css.emacs	\
