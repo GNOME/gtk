@@ -4149,7 +4149,7 @@ focus_tabs_in (GtkNotebook *notebook)
   if (priv->show_tabs && priv->cur_page)
     {
       gtk_widget_grab_focus (GTK_WIDGET (notebook));
-
+      gtk_notebook_set_focus_child (notebook, NULL);
       gtk_notebook_switch_focus_tab (notebook,
                                      g_list_find (priv->children,
                                                   priv->cur_page));
