@@ -3150,11 +3150,8 @@ hide_drag_window (GtkNotebook        *notebook,
     {
       g_object_ref (page->tab_label);
 
-      if (GTK_IS_WINDOW (parent))
-        {
-          /* parent widget is the drag window */
-          gtk_container_remove (GTK_CONTAINER (parent), page->tab_label);
-        }
+      if (GTK_IS_WINDOW (parent)) /* parent widget is the drag window */
+        gtk_container_remove (GTK_CONTAINER (parent), page->tab_label);
       else
         gtk_widget_unparent (page->tab_label);
 
@@ -4932,7 +4929,17 @@ gtk_notebook_remove_tab_label (GtkNotebook     *notebook,
       page->mnemonic_activate_signal = 0;
 
       gtk_widget_set_state_flags (page->tab_label, 0, TRUE);
-      gtk_widget_unparent (page->tab_label);
+      if (gtk_widget_get_window (page->tab_label) != gtk_widget_get_window (GTK_WIDGET (notebook)) ||
+          !NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page))
+        {
+          GtkWidget *parent;
+
+          parent = gtk_widget_get_parent (page->tab_label);
+          if (GTK_IS_WINDOW (parent))
+            gtk_container_remove (GTK_CONTAINER (parent), page->tab_label);
+          else
+            gtk_widget_unparent (page->tab_label);
+        }
       page->tab_label = NULL;
     }
 }
