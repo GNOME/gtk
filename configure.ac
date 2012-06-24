@@ -374,6 +374,9 @@ if test "x$enable_quartz_backend" = xyes; then
   if test "x$quartz_relocation" = xyes; then
     AC_DEFINE([QUARTZ_RELOCATION], [1], [Use NSBundle functions to determine load paths for libraries, translations, etc.])
   fi
+  # Pull in gio-unix for GDesktopAppInfo usage, see at least
+  # gdkapplaunchcontext-x11.c
+  have_gio_unix=yes
 
 else
   AM_CONDITIONAL(USE_QUARTZ, false)
