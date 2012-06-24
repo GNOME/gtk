@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-03 15:05+0200\n"
-"PO-Revision-Date: 2012-06-03 15:05+0200\n"
+"POT-Creation-Date: 2012-06-24 23:56+0200\n"
+"PO-Revision-Date: 2012-06-24 23:57+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -33,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Gtranslator 2.91.4\n"
+"X-Generator: Gtranslator 2.91.5\n"
 
 #: ../gdk/gdkapplaunchcontext.c:129 ../gdk/gdkcursor.c:134
 #: ../gdk/gdkdevicemanager.c:170
@@ -1436,7 +1436,7 @@ msgstr ""
 "Indica se as propiedades child_displacement_x/_y deberían afectar tamén ao "
 "rectángulo do foco"
 
-#: ../gtk/gtkbutton.c:543 ../gtk/gtkentry.c:801 ../gtk/gtkentry.c:1887
+#: ../gtk/gtkbutton.c:543 ../gtk/gtkentry.c:801 ../gtk/gtkentry.c:1888
 msgid "Inner Border"
 msgstr "Bordo interior"
 
@@ -3210,7 +3210,7 @@ msgstr "Bordo do progreso"
 msgid "Border around the progress bar"
 msgstr "O bordo ao redor da barra de progreso"
 
-#: ../gtk/gtkentry.c:1888
+#: ../gtk/gtkentry.c:1889
 msgid "Border between text and frame."
 msgstr "Bordo entre o texto e o marco."
 
@@ -3871,7 +3871,7 @@ msgstr "O espazamento entre os elementos da área de acción"
 msgid "Width of border around the action area"
 msgstr "Largura do bordo arredor da área de acción"
 
-#: ../gtk/gtkinvisible.c:101 ../gtk/gtkmountoperation.c:170
+#: ../gtk/gtkinvisible.c:101 ../gtk/gtkmountoperation.c:178
 #: ../gtk/gtkstatusicon.c:290 ../gtk/gtkstylecontext.c:442
 #: ../gtk/gtkwindow.c:787
 msgid "Screen"
@@ -4092,6 +4092,38 @@ msgstr ""
 "Cantidade de espazo do bordo entre a sombra da barra de menús e os elementos "
 "de menú"
 
+#: ../gtk/gtkmenubutton.c:381
+msgid "menu"
+msgstr "menú"
+
+#: ../gtk/gtkmenubutton.c:382
+msgid "The dropdown menu."
+msgstr "O menú despregábel."
+
+#: ../gtk/gtkmenubutton.c:397
+msgid "menu-model"
+msgstr "menu-model"
+
+#: ../gtk/gtkmenubutton.c:398
+msgid "The dropdown menu's model."
+msgstr "O modelo do menú despregábel."
+
+#: ../gtk/gtkmenubutton.c:411
+msgid "align-widget"
+msgstr "align-widget"
+
+#: ../gtk/gtkmenubutton.c:412
+msgid "The parent widget which the menu should align with."
+msgstr "O widget pai co que o menú debe aliñarse."
+
+#: ../gtk/gtkmenubutton.c:426
+msgid "direction"
+msgstr "dirección"
+
+#: ../gtk/gtkmenubutton.c:427
+msgid "The direction the arrow should point."
+msgstr "A dirección á que a frecha apunta."
+
 #: ../gtk/gtkmenu.c:555
 msgid "The currently selected menu item"
 msgstr "O elemento de menú actualmente seleccionado"
@@ -4288,11 +4320,11 @@ msgstr "Obtén o foco"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Un booleano que determina se o menú captura o foco do teclado"
 
-#: ../gtk/gtkmenutoolbutton.c:290
+#: ../gtk/gtkmenutoolbutton.c:272
 msgid "Menu"
 msgstr "Menú"
 
-#: ../gtk/gtkmenutoolbutton.c:291
+#: ../gtk/gtkmenutoolbutton.c:273
 msgid "The dropdown menu"
 msgstr "O menú despregábel"
 
@@ -4386,23 +4418,23 @@ msgstr ""
 "A cantidade de espazos, en píxeles, para engadir na parte superior e "
 "inferior do widget"
 
-#: ../gtk/gtkmountoperation.c:154 ../gtk/gtkstylecontext.c:465
+#: ../gtk/gtkmountoperation.c:162 ../gtk/gtkstylecontext.c:465
 msgid "Parent"
 msgstr "Pai"
 
-#: ../gtk/gtkmountoperation.c:155
+#: ../gtk/gtkmountoperation.c:163
 msgid "The parent window"
 msgstr "A xanela pai"
 
-#: ../gtk/gtkmountoperation.c:162
+#: ../gtk/gtkmountoperation.c:170
 msgid "Is Showing"
 msgstr "Estase mostrando"
 
-#: ../gtk/gtkmountoperation.c:163
+#: ../gtk/gtkmountoperation.c:171
 msgid "Are we showing a dialog"
 msgstr "Se estamos mostrando un diálogo"
 
-#: ../gtk/gtkmountoperation.c:171
+#: ../gtk/gtkmountoperation.c:179
 msgid "The screen where this window will be displayed."
 msgstr "A pantalla onde esta xanela se mostrará."
 
