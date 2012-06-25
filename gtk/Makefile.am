@@ -869,7 +869,7 @@ gtk_dbus_built_sources = gtkdbusgenerated.c gtkdbusgenerated.h
 $(gtk_dbus_built_sources) : Makefile.am gtkdbusinterfaces.xml
 	gdbus-codegen \
 	--interface-prefix org.Gtk. \
-	--c-namespace Gtk \
+	--c-namespace _Gtk \
 	--generate-c-code gtkdbusgenerated \
 	$(srcdir)/gtkdbusinterfaces.xml
 

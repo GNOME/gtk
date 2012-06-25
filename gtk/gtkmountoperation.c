@@ -119,7 +119,7 @@ struct _GtkMountOperationPrivate {
   GdkScreen *screen;
 
   /* bus proxy */
-  GtkMountOperationHandler *handler;
+  _GtkMountOperationHandler *handler;
   GCancellable *cancellable;
   gboolean handler_showing;
 
@@ -191,11 +191,11 @@ gtk_mount_operation_init (GtkMountOperation *operation)
                                                  GtkMountOperationPrivate);
 
   operation->priv->handler =
-    gtk_mount_operation_handler_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                                                        G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
-                                                        "org.gtk.MountOperationHandler",
-                                                        "/org/gtk/MountOperationHandler",
-                                                        NULL, NULL);
+    _gtk_mount_operation_handler_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
+                                                         G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+                                                         "org.gtk.MountOperationHandler",
+                                                         "/org/gtk/MountOperationHandler",
+                                                         NULL, NULL);
   name_owner = g_dbus_proxy_get_name_owner (G_DBUS_PROXY (operation->priv->handler));
   if (!name_owner)
     g_clear_object (&operation->priv->handler);
@@ -278,7 +278,7 @@ static void
 gtk_mount_operation_proxy_finish (GtkMountOperation     *op,
                                   GMountOperationResult  result)
 {
-  gtk_mount_operation_handler_call_close (op->priv->handler, NULL, NULL, NULL);
+  _gtk_mount_operation_handler_call_close (op->priv->handler, NULL, NULL, NULL);
 
   op->priv->handler_showing = FALSE;
   g_object_notify (G_OBJECT (op), "is-showing");
@@ -721,7 +721,7 @@ call_password_proxy_cb (GObject      *source,
                         GAsyncResult *res,
                         gpointer      user_data)
 {
-  GtkMountOperationHandler *proxy = GTK_MOUNT_OPERATION_HANDLER (source);
+  _GtkMountOperationHandler *proxy = _GTK_MOUNT_OPERATION_HANDLER (source);
   GMountOperation *op = user_data;
   GMountOperationResult result;
   GVariant *result_details;
@@ -730,8 +730,11 @@ call_password_proxy_cb (GObject      *source,
   GVariant *value;
   GError *error = NULL;
 
-  if (!gtk_mount_operation_handler_call_ask_password_finish (proxy,
-        &result, &result_details, res, &error))
+  if (!_gtk_mount_operation_handler_call_ask_password_finish (proxy,
+                                                              &result,
+                                                              &result_details,
+                                                              res,
+                                                              &error))
     {
       result = G_MOUNT_OPERATION_ABORTED;
       g_warning ("Shell mount operation error: %s\n", error->message);
@@ -767,11 +770,11 @@ gtk_mount_operation_ask_password_do_proxy (GtkMountOperation *operation,
   /* keep a ref to the operation while the handler is showing */
   g_object_ref (operation);
 
-  gtk_mount_operation_handler_call_ask_password (operation->priv->handler, id,
-                                                 message, "drive-harddisk",
-                                                 default_user, default_domain,
-                                                 operation->priv->ask_flags, NULL,
-                                                 call_password_proxy_cb, operation);
+  _gtk_mount_operation_handler_call_ask_password (operation->priv->handler, id,
+                                                  message, "drive-harddisk",
+                                                  default_user, default_domain,
+                                                  operation->priv->ask_flags, NULL,
+                                                  call_password_proxy_cb, operation);
 }
 
 static void
@@ -885,7 +888,7 @@ call_question_proxy_cb (GObject      *source,
                         GAsyncResult *res,
                         gpointer      user_data)
 {
-  GtkMountOperationHandler *proxy = GTK_MOUNT_OPERATION_HANDLER (source);
+  _GtkMountOperationHandler *proxy = _GTK_MOUNT_OPERATION_HANDLER (source);
   GMountOperation *op = user_data;
   GMountOperationResult result;
   GVariant *result_details;
@@ -894,8 +897,11 @@ call_question_proxy_cb (GObject      *source,
   GVariant *value;
   GError *error = NULL;
 
-  if (!gtk_mount_operation_handler_call_ask_question_finish (proxy, &result,
-        &result_details, res, &error))
+  if (!_gtk_mount_operation_handler_call_ask_question_finish (proxy,
+                                                              &result,
+                                                              &result_details,
+                                                              res,
+                                                              &error))
     {
       result = G_MOUNT_OPERATION_ABORTED;
       g_warning ("Shell mount operation error: %s\n", error->message);
@@ -928,10 +934,10 @@ gtk_mount_operation_ask_question_do_proxy (GtkMountOperation *operation,
   /* keep a ref to the operation while the handler is showing */
   g_object_ref (operation);
 
-  gtk_mount_operation_handler_call_ask_question (operation->priv->handler, id,
-                                                 message, "drive-harddisk",
-                                                 choices, NULL,
-                                                 call_question_proxy_cb, operation);
+  _gtk_mount_operation_handler_call_ask_question (operation->priv->handler, id,
+                                                  message, "drive-harddisk",
+                                                  choices, NULL,
+                                                  call_question_proxy_cb, operation);
 }
 
 static void
@@ -1499,7 +1505,7 @@ call_processes_proxy_cb (GObject     *source,
                         GAsyncResult *res,
                         gpointer      user_data)
 {
-  GtkMountOperationHandler *proxy = GTK_MOUNT_OPERATION_HANDLER (source);
+  _GtkMountOperationHandler *proxy = _GTK_MOUNT_OPERATION_HANDLER (source);
   GMountOperation *op = user_data;
   GMountOperationResult result;
   GVariant *result_details;
@@ -1508,8 +1514,11 @@ call_processes_proxy_cb (GObject     *source,
   GVariant *value;
   GError *error = NULL;
 
-  if (!gtk_mount_operation_handler_call_show_processes_finish (proxy,
-         &result, &result_details, res, &error))
+  if (!_gtk_mount_operation_handler_call_show_processes_finish (proxy,
+                                                                &result,
+                                                                &result_details,
+                                                                res,
+                                                                &error))
     {
       result = G_MOUNT_OPERATION_ABORTED;
       g_warning ("Shell mount operation error: %s\n", error->message);
@@ -1549,13 +1558,13 @@ gtk_mount_operation_show_processes_do_proxy (GtkMountOperation *operation,
   /* keep a ref to the operation while the handler is showing */
   g_object_ref (operation);
 
-  gtk_mount_operation_handler_call_show_processes (operation->priv->handler, id,
-                                                   message, "drive-harddisk",
-                                                   g_variant_new_fixed_array (G_VARIANT_TYPE_INT32,
-                                                                              processes->data, processes->len,
-                                                                              sizeof (GPid)),
-                                                   choices, NULL,
-                                                   call_processes_proxy_cb, operation);
+  _gtk_mount_operation_handler_call_show_processes (operation->priv->handler, id,
+                                                    message, "drive-harddisk",
+                                                    g_variant_new_fixed_array (G_VARIANT_TYPE_INT32,
+                                                                               processes->data, processes->len,
+                                                                               sizeof (GPid)),
+                                                    choices, NULL,
+                                                    call_processes_proxy_cb, operation);
 }
 
 static void
@@ -1629,7 +1638,7 @@ gtk_mount_operation_aborted (GMountOperation *op)
 
   if (priv->handler != NULL)
     {
-      gtk_mount_operation_handler_call_close (priv->handler, NULL, NULL, NULL);
+      _gtk_mount_operation_handler_call_close (priv->handler, NULL, NULL, NULL);
 
       priv->handler_showing = FALSE;
       g_object_notify (G_OBJECT (op), "is-showing");
