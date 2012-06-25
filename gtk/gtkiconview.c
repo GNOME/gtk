@@ -4451,7 +4451,7 @@ gtk_icon_view_get_item_at_pos (GtkIconView      *icon_view,
 }
 
 /**
- * gtk_icon_view_get_cell_area:
+ * gtk_icon_view_get_cell_rect:
  * @icon_view: a #GtkIconView
  * @path: a #GtkTreePath
  * @cell: (allow-none): a #GtkCellRenderer or %NULL
@@ -4467,7 +4467,7 @@ gtk_icon_view_get_item_at_pos (GtkIconView      *icon_view,
  * Since: 3.6
  */
 gboolean
-gtk_icon_view_get_cell_area (GtkIconView     *icon_view,
+gtk_icon_view_get_cell_rect (GtkIconView     *icon_view,
                              GtkTreePath     *path,
                              GtkCellRenderer *cell,
                              GdkRectangle    *rect)
@@ -4562,7 +4562,7 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
   g_return_if_fail (cell == NULL || GTK_IS_CELL_RENDERER (cell));
 
-  if (!gtk_icon_view_get_cell_area (icon_view, path, cell, &rect))
+  if (!gtk_icon_view_get_cell_rect (icon_view, path, cell, &rect))
     return;
 
   gtk_tooltip_set_tip_area (tooltip, &rect);
