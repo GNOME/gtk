@@ -1,3 +1,48 @@
+Overview of Changes in GTK+ 3.5.6
+=================================
+
+* GtkSearchEntry is a subclass of GtkEntry that is set up to be
+  used as a search entry
+
+* GtkMenuButton is button that pops up a menu. The menu can be
+  generated from a GMenu or provided manually
+
+* The GtkMountOperation code will now use gnome-shell to present
+  a system-modal mount dialog when available
+
+* The accessibility bridge code that exports accessible objects
+  on the bus is used by default (atk-bridge has been converted into
+  a library that GTK+ links against). To avoid the linking, you can
+  pass --without-atk-bridge when configuring GTK+.
+
+* Bugs fixed:
+ 613561 single quote missing in translation of gtk-2-18.kn.po
+ 652809 Add "search" entry
+ 668013 Add menu button
+ 669986 Some keyboard navigation breakage with GtkNotebook
+ 670369 gdk: annotate the attributes_mask type for gdk_window_new
+ 674963 GtkMountOperation should proxy to the Shell for modal dial...
+ 676077 Windows: Weird characters appearing when using certain key...
+ 677491 'toolkit-accessibility' default value should be 'true' for...
+ 677551 a11y: fix a typo leading to a crash
+ 677649 gtk[list,tree]store: fix transformation of GValues upon set
+ 677774 gdk: add missing annotations to gdk_event_get_scroll_deltas
+ 677809 Regression: gtkiconview changes in 3.4.2 / master break ch...
+ 677915 entry-completion: don't move to leftmost character with in...
+ 677941 Gtk.ListStore doesn't have the method "reorder" as its doc...
+ 677943 DnD of notebook tabs lead to Gtk-WARNING
+ 678175 Memory leak in GtkImage
+ 678407 GtkImage: fix get_property('stock')
+ 678418 Lacks a way to get the position of an item in the icon view
+
+* Translation updates:
+ Arabic
+ Galician
+ Greek
+ Spanish
+ Telugu
+
+
 Overview of Changes in GTK+ 3.5.4
 =================================
 
@@ -53,6 +98,7 @@ Overview of Changes in GTK+ 3.5.4
  676429 no way to force showing icons in buttons
  677055 gtkmenutoolbutton bug fixes
  677109 Fixes for interactions between background-repeat ...
+ 677127 Misc annotation fixes
  677202 docs: Add section for new 3.6 symbols
  677203 docs: Fix duplicate declarations in sections
  677293 GtkFontSelectionDialog partially broken on gtk 3.4
