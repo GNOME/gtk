@@ -18,6 +18,8 @@
     <columns>
       <!-- column-name Cool -->
       <column type="gboolean"/>
+      <!-- column-name Icon -->
+      <column type="gchararray"/>
       <!-- column-name Name -->
       <column type="gchararray"/>
       <!-- column-name Nick -->
@@ -26,13 +28,15 @@
     <data>
       <row>
         <col id="0">True</col>
-        <col id="1" translatable="yes">Andrea</col>
-        <col id="2" translatable="yes">Cimi</col>
+        <col id="1">emblem-default-symbolic</col>
+        <col id="2" translatable="yes">Andrea</col>
+        <col id="3" translatable="yes">Cimi</col>
       </row>
       <row>
         <col id="0">False</col>
-        <col id="1" translatable="yes">Otto</col>
-        <col id="2" translatable="yes">chaotic</col>
+        <col id="1">emblem-important-symbolic</col>
+        <col id="2" translatable="yes">Otto</col>
+        <col id="3" translatable="yes">chaotic</col>
       </row>
     </data>
   </object>
@@ -1639,12 +1643,25 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           </object>
                         </child>
                         <child>
+                          <object class="GtkTreeViewColumn" id="treeviewcolumn4">
+                            <property name="title" translatable="yes">Icon</property>
+                            <child>
+                              <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1">
+                                <property name="follow_state">true</property>
+                              </object>
+                              <attributes>
+                                <attribute name="icon_name">1</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkTreeViewColumn" id="treeviewcolumn1">
                             <property name="title" translatable="yes">Name</property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderertext3"/>
                               <attributes>
-                                <attribute name="text">1</attribute>
+                                <attribute name="text">2</attribute>
                               </attributes>
                             </child>
                           </object>
@@ -1655,7 +1672,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <child>
                               <object class="GtkCellRendererText" id="cellrenderertext4"/>
                               <attributes>
-                                <attribute name="text">2</attribute>
+                                <attribute name="text">3</attribute>
                               </attributes>
                             </child>
                           </object>
