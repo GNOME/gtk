@@ -33,7 +33,7 @@
 #include "gailutil.h"
 #include "gailmisc.h"
 
-#ifdef HAVE_ATK_BRIDGE
+#ifdef GDK_WINDOWING_X11
 #include <atk-bridge.h>
 #endif
 
@@ -809,7 +809,7 @@ _gtk_accessibility_init (void)
   focus_tracker_id = atk_add_focus_tracker (gail_focus_tracker);
 
   _gail_util_install ();
-#ifdef HAVE_ATK_BRIDGE
+#ifdef GDK_WINDOWING_X11
   atk_bridge_adaptor_init (NULL, NULL);
 #endif
 

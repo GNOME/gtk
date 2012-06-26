@@ -1281,13 +1281,8 @@ AC_SUBST(GDK_DEP_CFLAGS)
 # Check for Accessibility Toolkit flags
 ########################################
 
-AC_ARG_WITH(atk-bridge,
-	    AS_HELP_STRING([--without-atk-bridge], [Do not use atk-bridge-2.0]),
-	    :, with_atk_bridge=$enable_x11_backend)
-
-if test x$with_atk_bridge != xno; then
+if test x$enable_x11_backend = xyes; then
    ATK_PACKAGES="atk atk-bridge-2.0"
-   AC_DEFINE([HAVE_ATK_BRIDGE], [1], [Define if we're using atk-bridge-2.0])
 else
    ATK_PACKAGES="atk"
 fi
