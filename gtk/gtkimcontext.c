@@ -104,6 +104,7 @@ enum {
   COMMIT,
   RETRIEVE_SURROUNDING,
   DELETE_SURROUNDING,
+  CLEAR_AREA,
   LAST_SIGNAL
 };
 
@@ -297,6 +298,15 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
                   G_TYPE_BOOLEAN, 2,
                   G_TYPE_INT,
 		  G_TYPE_INT);
+
+  im_context_signals[CLEAR_AREA] =
+    g_signal_new (I_("clear-area"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  NULL, NULL, NULL,
+                  _gtk_marshal_VOID__BOXED_BOXED,
+                  G_TYPE_NONE, 2,
+                  GDK_TYPE_RECTANGLE, GDK_TYPE_RECTANGLE);
 }
 
 static void
