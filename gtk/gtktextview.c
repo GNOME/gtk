@@ -194,6 +194,8 @@ struct _GtkTextViewPrivate
 
   GtkTextPendingScroll *pending_scroll;
 
+  gint osk_dy;
+
   /* Default style settings */
   gint pixels_above_lines;
   gint pixels_below_lines;
@@ -441,6 +443,10 @@ static gboolean gtk_text_view_delete_surrounding_handler   (GtkIMContext  *conte
 							    gint           offset,
 							    gint           n_chars,
 							    GtkTextView   *text_view);
+static void     gtk_text_view_clear_area_handler           (GtkIMContext  *context,
+                                                            GdkRectangle  *clear_area,
+                                                            GdkRectangle  *cursor_area,
+                                                            GtkTextView   *text_view);
 
 static void gtk_text_view_mark_set_handler       (GtkTextBuffer     *buffer,
                                                   const GtkTextIter *location,
@@ -1403,6 +1409,8 @@ gtk_text_view_init (GtkTextView *text_view)
  		    G_CALLBACK (gtk_text_view_retrieve_surrounding_handler), text_view);
   g_signal_connect (priv->im_context, "delete-surrounding",
  		    G_CALLBACK (gtk_text_view_delete_surrounding_handler), text_view);
+  g_signal_connect (priv->im_context, "clear-area",
+ 		    G_CALLBACK (gtk_text_view_clear_area_handler), text_view);
 
   priv->cursor_visible = TRUE;
 
@@ -7855,6 +7863,21 @@ gtk_text_view_delete_surrounding_handler (GtkIMContext  *context,
 				      priv->editable);
 
   return TRUE;
+}
+
+static void
+gtk_text_view_clear_area_handler (GtkIMContext          *context,
+                                  cairo_rectangle_int_t *clear_area,
+                                  cairo_rectangle_int_t *cursor_rect,
+                                  GtkTextView           *text_view)
+{
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (text_view);
+  gtk_widget_unset_clear_area (widget, TRUE);
+
+  if (clear_area->width != 0 && clear_area->height != 0)
+    gtk_widget_request_clear_area (widget, clear_area, cursor_rect);
 }
 
 static void
