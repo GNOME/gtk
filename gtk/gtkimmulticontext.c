@@ -99,6 +99,9 @@ static gboolean gtk_im_multicontext_delete_surrounding_cb   (GtkIMContext      *
 							     gint               offset,
 							     gint               n_chars,
 							     GtkIMMulticontext *multicontext);
+static void     gtk_im_multicontext_clear_area_cb           (GtkIMContext      *slave,
+                                                             GdkRectangle      *rect,
+                                                             GtkIMMulticontext *multicontext);
 
 static const gchar *global_context_id = NULL;
 
@@ -222,6 +225,9 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
 			multicontext);
       g_signal_connect (priv->slave, "delete-surrounding",
 			G_CALLBACK (gtk_im_multicontext_delete_surrounding_cb),
+			multicontext);
+      g_signal_connect (priv->slave, "clear-area",
+			G_CALLBACK (gtk_im_multicontext_clear_area_cb),
 			multicontext);
       
       if (!priv->use_preedit)	/* Default is TRUE */
@@ -542,6 +548,14 @@ gtk_im_multicontext_delete_surrounding_cb (GtkIMContext      *slave,
 			 offset, n_chars, &result);
 
   return result;
+}
+
+static void
+gtk_im_multicontext_clear_area_cb (GtkIMContext      *slave,
+                                   GdkRectangle      *rect,
+                                   GtkIMMulticontext *multicontext)
+{
+  g_signal_emit_by_name (multicontext, "clear-area", rect);
 }
 
 static void
