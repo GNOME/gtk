@@ -78,7 +78,7 @@ typedef 	GdkRectangle	   GtkAllocation;
 /**
  * GtkCallback:
  * @widget: the widget to operate on
- * @data: user-supplied data
+ * @data: (closure): user-supplied data
  *
  * The type of the callback functions used for e.g. iterating over
  * the children of a container, see gtk_container_foreach().
