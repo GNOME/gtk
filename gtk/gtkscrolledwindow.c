@@ -175,6 +175,7 @@ struct _GtkScrolledWindowPrivate
 
   gdouble                unclamped_hadj_value;
   gdouble                unclamped_vadj_value;
+  gdouble                clear_area_dy;
 };
 
 typedef struct
@@ -282,6 +283,13 @@ static gboolean _gtk_scrolled_window_set_adjustment_value      (GtkScrolledWindo
                                                                 gdouble            value,
                                                                 gboolean           allow_overshooting,
                                                                 gboolean           snap_to_border);
+static gboolean gtk_scrolled_window_request_clear_area (GtkWidget             *widget,
+                                                        cairo_rectangle_int_t *clear_area,
+                                                        cairo_rectangle_int_t *cursor_area,
+                                                        gpointer               user_data);
+static gboolean gtk_scrolled_window_unset_clear_area   (GtkWidget             *widget,
+                                                        gboolean               snap_back,
+                                                        gpointer               user_data);
 
 static guint signals[LAST_SIGNAL] = {0};
 
@@ -593,9 +601,17 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_scrolled_window_update_real_placement (scrolled_window);
   priv->min_content_width = -1;
   priv->min_content_height = -1;
+  priv->clear_area_dy = 0;
 
   gtk_scrolled_window_set_kinetic_scrolling (scrolled_window, TRUE);
   gtk_scrolled_window_set_capture_button_press (scrolled_window, TRUE);
+
+  g_signal_connect (scrolled_window, "request-clear-area",
+                    G_CALLBACK (gtk_scrolled_window_request_clear_area),
+                    NULL);
+  g_signal_connect (scrolled_window, "unset-clear-area",
+                    G_CALLBACK (gtk_scrolled_window_unset_clear_area),
+                    NULL);
 }
 
 /**
@@ -2379,7 +2395,11 @@ _gtk_scrolled_window_set_adjustment_value (GtkScrolledWindow *scrolled_window,
   if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)))
     prev_value = &priv->unclamped_hadj_value;
   else if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)))
-    prev_value = &priv->unclamped_vadj_value;
+    {
+      if (!snap_to_border)
+        upper += priv->clear_area_dy;
+      prev_value = &priv->unclamped_vadj_value;
+    }
   else
     return FALSE;
 
@@ -3475,6 +3495,60 @@ gtk_scrolled_window_grab_notify (GtkWidget *widget,
       priv->last_button_event_valid = FALSE;
     }
 }
+
+static gboolean
+gtk_scrolled_window_request_clear_area (GtkWidget             *widget,
+					cairo_rectangle_int_t *cursor_area,
+					cairo_rectangle_int_t *clear_area,
+					gpointer               user_data)
+{
+  GtkScrolledWindowPrivate *priv;
+  GtkAdjustment *adjustment;
+  gdouble value;
+
+  priv = GTK_SCROLLED_WINDOW (widget)->priv;
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
+  value = priv->unclamped_vadj_value;
+
+  priv->clear_area_dy = cursor_area->y + cursor_area->height - clear_area->y;
+  value = priv->unclamped_vadj_value + priv->clear_area_dy;
+  _gtk_scrolled_window_set_adjustment_value (GTK_SCROLLED_WINDOW (widget),
+                                             adjustment, value,
+                                             FALSE, FALSE);
+
+  return TRUE;
+}
+
+static gboolean
+gtk_scrolled_window_unset_clear_area (GtkWidget *widget,
+                                      gboolean   snap_back,
+                                      gpointer   user_data)
+{
+  GtkScrolledWindowPrivate *priv;
+
+  priv = GTK_SCROLLED_WINDOW (widget)->priv;
+
+  if (priv->clear_area_dy != 0)
+    {
+      if (snap_back)
+        {
+          GtkAdjustment *adjustment;
+          gdouble value;
+
+          adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
+          value = priv->unclamped_vadj_value - priv->clear_area_dy;
+          _gtk_scrolled_window_set_adjustment_value (GTK_SCROLLED_WINDOW (widget),
+                                                     adjustment, value,
+                                                     FALSE, FALSE);
+        }
+
+      priv->clear_area_dy = 0;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 
 /**
  * gtk_scrolled_window_get_min_content_width:
