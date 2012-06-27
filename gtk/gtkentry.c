@@ -501,6 +501,10 @@ static gboolean gtk_entry_delete_surrounding_cb   (GtkIMContext *context,
 						   gint          offset,
 						   gint          n_chars,
 						   GtkEntry     *entry);
+static void     gtk_entry_clear_area_cb           (GtkIMContext          *context,
+                                                   cairo_rectangle_int_t *clear_area,
+                                                   cairo_rectangle_int_t *cursor_rect,
+                                                   GtkEntry              *entry);
 
 /* Internal routines
  */
@@ -2488,6 +2492,8 @@ gtk_entry_init (GtkEntry *entry)
 		    G_CALLBACK (gtk_entry_retrieve_surrounding_cb), entry);
   g_signal_connect (priv->im_context, "delete-surrounding",
 		    G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
+  g_signal_connect (priv->im_context, "clear-area",
+		    G_CALLBACK (gtk_entry_clear_area_cb), entry);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_ENTRY);
@@ -5402,6 +5408,25 @@ gtk_entry_delete_surrounding_cb (GtkIMContext *slave,
                               priv->current_pos + offset + n_chars);
 
   return TRUE;
+}
+
+static void
+gtk_entry_clear_area_cb (GtkIMContext          *context,
+                         cairo_rectangle_int_t *clear_area,
+                         cairo_rectangle_int_t *cursor_rect,
+                         GtkEntry              *entry)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  GtkWidget *widget;
+
+  if (!priv->editable)
+    return;
+
+  widget = GTK_WIDGET (entry);
+  gtk_widget_unset_clear_area (widget, TRUE);
+
+  if (clear_area->width != 0 && clear_area->height != 0)
+    gtk_widget_request_clear_area (widget, clear_area, cursor_rect);
 }
 
 /* Internal functions
