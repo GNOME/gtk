@@ -886,6 +886,11 @@ GDK_AVAILABLE_IN_3_4
 GdkModifierType   gtk_widget_get_modifier_mask (GtkWidget         *widget,
                                                 GdkModifierIntent  intent);
 
+gboolean gtk_widget_request_clear_area (GtkWidget             *widget,
+                                        cairo_rectangle_int_t *clear_area,
+                                        cairo_rectangle_int_t *cursor_position);
+gboolean gtk_widget_unset_clear_area   (GtkWidget             *widget,
+                                        gboolean               snap_back);
 
 G_END_DECLS
 

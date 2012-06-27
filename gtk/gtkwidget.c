@@ -481,6 +481,8 @@ enum {
   DRAG_FAILED,
   STYLE_UPDATED,
   TOUCH_EVENT,
+  REQUEST_CLEAR_AREA,
+  UNSET_CLEAR_AREA,
   LAST_SIGNAL
 };
 
@@ -3110,6 +3112,23 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__UINT,
                   G_TYPE_BOOLEAN, 1, G_TYPE_UINT);
+
+  widget_signals[REQUEST_CLEAR_AREA] =
+    g_signal_new (I_("request-clear-area"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST, 0,
+                  g_signal_accumulator_true_handled, NULL,
+                  _gtk_marshal_BOOLEAN__BOXED_BOXED,
+                  G_TYPE_BOOLEAN, 2,
+                  CAIRO_GOBJECT_TYPE_RECTANGLE_INT,
+                  CAIRO_GOBJECT_TYPE_RECTANGLE_INT);
+  widget_signals[UNSET_CLEAR_AREA] =
+    g_signal_new (I_("unset-clear-area"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST, 0,
+                  g_signal_accumulator_true_handled, NULL,
+                  _gtk_marshal_BOOLEAN__BOOLEAN,
+                  G_TYPE_BOOLEAN, 1, G_TYPE_BOOLEAN);
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK,
@@ -14071,4 +14090,57 @@ _gtk_widget_set_style (GtkWidget *widget,
                        GtkStyle  *style)
 {
   widget->priv->style = style;
+}
+
+gboolean
+gtk_widget_request_clear_area (GtkWidget             *widget,
+                               cairo_rectangle_int_t *clear_area,
+			       cairo_rectangle_int_t *cursor_position)
+{
+  gboolean handled = FALSE;
+  GtkWidget *cur;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (cursor_position != NULL, FALSE);
+  g_return_val_if_fail (clear_area != NULL, FALSE);
+
+  if (cursor_position->x < clear_area->x - cursor_position->width ||
+      cursor_position->x >= clear_area->x + clear_area->width ||
+      cursor_position->y < clear_area->y - cursor_position->height ||
+      cursor_position->y >= clear_area->y + clear_area->height)
+    return FALSE;
+
+  cur = widget;
+
+  while (!handled && cur)
+    {
+      g_signal_emit (cur, widget_signals[REQUEST_CLEAR_AREA], 0,
+                     cursor_position, clear_area, &handled);
+
+      if (!handled)
+        cur = gtk_widget_get_parent (cur);
+    }
+
+  return handled;
+}
+
+gboolean
+gtk_widget_unset_clear_area (GtkWidget *widget,
+                             gboolean   snap_back)
+{
+  gboolean handled = FALSE;
+  GtkWidget *cur;
+
+  cur = widget;
+
+  while (!handled && cur)
+    {
+      g_signal_emit (cur, widget_signals[UNSET_CLEAR_AREA], 0,
+                     snap_back, &handled);
+
+      if (!handled)
+        cur = gtk_widget_get_parent (cur);
+    }
+
+  return handled;
 }
