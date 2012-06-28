@@ -673,7 +673,7 @@ set_color (GtkStyle        *style,
       break;
     }
 
-  if (color)
+  if (color && color->alpha > 0.01)
     {
       dest->pixel = 0;
       dest->red = CLAMP ((guint) (color->red * 65535), 0, 65535);
