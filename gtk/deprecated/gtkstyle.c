@@ -617,33 +617,15 @@ gtk_style_get_property (GObject      *object,
     }
 }
 
-static void
-set_color (GtkStyle        *style,
-           GtkStyleContext *context,
-           GtkStateType     state,
-           GtkRcFlags       prop)
+static gboolean
+set_color_from_context (GtkStyle *style,
+                        GtkStateType state,
+                        GtkStyleContext *context,
+                        GtkStateFlags flags,
+                        GtkRcFlags prop)
 {
-  GtkStateFlags flags;
   GdkRGBA *color = NULL;
   GdkColor *dest = { 0 }; /* Shut up gcc */
-
-  switch (state)
-    {
-    case GTK_STATE_ACTIVE:
-      flags = GTK_STATE_FLAG_ACTIVE;
-      break;
-    case GTK_STATE_PRELIGHT:
-      flags = GTK_STATE_FLAG_PRELIGHT;
-      break;
-    case GTK_STATE_SELECTED:
-      flags = GTK_STATE_FLAG_SELECTED;
-      break;
-    case GTK_STATE_INSENSITIVE:
-      flags = GTK_STATE_FLAG_INSENSITIVE;
-      break;
-    default:
-      flags = 0;
-    }
 
   switch (prop)
     {
@@ -673,13 +655,57 @@ set_color (GtkStyle        *style,
       break;
     }
 
-  if (color && color->alpha > 0.01)
+  if (!color || !(color->alpha > 0.01))
+    return FALSE;
+
+  dest->pixel = 0;
+  dest->red = CLAMP ((guint) (color->red * 65535), 0, 65535);
+  dest->green = CLAMP ((guint) (color->green * 65535), 0, 65535);
+  dest->blue = CLAMP ((guint) (color->blue * 65535), 0, 65535);
+  gdk_rgba_free (color);
+
+  return TRUE;
+}
+
+static void
+set_color (GtkStyle        *style,
+           GtkStyleContext *context,
+           GtkStateType     state,
+           GtkRcFlags       prop)
+{
+  GtkStateFlags flags;
+
+  switch (state)
     {
-      dest->pixel = 0;
-      dest->red = CLAMP ((guint) (color->red * 65535), 0, 65535);
-      dest->green = CLAMP ((guint) (color->green * 65535), 0, 65535);
-      dest->blue = CLAMP ((guint) (color->blue * 65535), 0, 65535);
-      gdk_rgba_free (color);
+    case GTK_STATE_ACTIVE:
+      flags = GTK_STATE_FLAG_ACTIVE;
+      break;
+    case GTK_STATE_PRELIGHT:
+      flags = GTK_STATE_FLAG_PRELIGHT;
+      break;
+    case GTK_STATE_SELECTED:
+      flags = GTK_STATE_FLAG_SELECTED;
+      break;
+    case GTK_STATE_INSENSITIVE:
+      flags = GTK_STATE_FLAG_INSENSITIVE;
+      break;
+    default:
+      flags = 0;
+    }
+
+  /* Try to fill in the values from the associated GtkStyleContext.
+   * Since fully-transparent black is a very common default (e.g. for 
+   * background-color properties), and we must store the result in a GdkColor
+   * to retain API compatibility, in case the fetched color is fully transparent
+   * we give themes a fallback style class they can style, before using the
+   * hardcoded default values.
+   */
+  if (!set_color_from_context (style, state, context, flags, prop))
+    {
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "gtkstyle-fallback");
+      set_color_from_context (style, state, context, flags, prop);
+      gtk_style_context_restore (context);
     }
 }
 
