@@ -7063,6 +7063,8 @@ gtk_application_add_window
 gtk_application_remove_window
 gtk_application_get_windows
 gtk_application_get_window_by_id
+gtk_application_add_accelerator
+gtk_application_remove_accelerator
 
 <SUBSECTION>
 GtkApplicationInhibitFlags
