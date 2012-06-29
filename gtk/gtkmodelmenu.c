@@ -267,6 +267,7 @@ gtk_model_menu_create_menu (GMenuModel        *model,
   GtkWidget *menu;
 
   menu = gtk_menu_new ();
+  gtk_menu_set_accel_group (GTK_MENU (menu), accels);
 
   gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, TRUE);
   gtk_model_menu_populate (GTK_MENU_SHELL (menu), actions, accels);
@@ -291,6 +292,7 @@ notify_attach (GtkMenu    *menu,
       actions = gtk_application_window_get_observable (GTK_APPLICATION_WINDOW (toplevel));
       accels = gtk_application_window_get_accel_group (GTK_APPLICATION_WINDOW (toplevel));
 
+      gtk_menu_set_accel_group (menu, accels);
       gtk_model_menu_populate (GTK_MENU_SHELL (menu), actions, accels);
     }
 }
