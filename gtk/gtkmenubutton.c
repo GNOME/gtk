@@ -307,7 +307,9 @@ popup_menu (GtkMenuButton  *menu_button,
         break;
   }
 
-  gtk_menu_popup_for_device (GTK_MENU (priv->menu), event->device, NULL, NULL,
+  gtk_menu_popup_for_device (GTK_MENU (priv->menu),
+                             event ? event->device : NULL,
+                             NULL, NULL,
                              func,
                              GTK_WIDGET (menu_button),
                              NULL,
