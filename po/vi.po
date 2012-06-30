@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-06-13 20:33+0000\n"
-"PO-Revision-Date: 2012-03-03 22:28+0700\n"
+"PO-Revision-Date: 2012-06-30 09:41+0700\n"
 "Last-Translator: Nguyễn Thái Ngọc Duy <pclouds@gmail.com>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -114,7 +114,7 @@ msgstr "Pause"
 #: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr "Scroll_Lock"
+msgstr "Scroll Lock"
 
 #: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
@@ -189,88 +189,88 @@ msgstr "Ins"
 #: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr "Num_Lock"
+msgstr "Num Lock"
 
 #. Translators: KP_ means 'key pad' here
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "KP_Space"
+msgstr "Khoảng trắng"
 
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr "KP_Tab"
+msgstr "Tab (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "KP_Enter"
+msgstr "Enter (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "KP_Home"
+msgstr "Home (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3977
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "KP_Left"
+msgstr "Trái (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3978
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "KP_Up"
+msgstr "Lên (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3979
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "KP_Right"
+msgstr "Phải (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3980
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "KP_Down"
+msgstr "Xuống (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3981
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "KP_Page_Up"
+msgstr "Page Up (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3982
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr "KP_Prior"
+msgstr "Prior (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3983
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "KP_Page_Down"
+msgstr "Page Down (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3984
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr "KP_Next"
+msgstr "Next (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3985
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "KP_End"
+msgstr "End (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3986
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr "KP_Begin"
+msgstr "Begin (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3987
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "KP_Insert"
+msgstr "Insert (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3988
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "KP_Delete"
+msgstr "Delete (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3989
 msgctxt "keyboard label"
@@ -281,72 +281,72 @@ msgstr "Del"
 #: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessUp"
-msgstr "MànHìnhTăngSáng"
+msgstr "Tăng độ sáng"
 
 #: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessDown"
-msgstr "MànHìnhGiảmSáng"
+msgstr "Giảm độ sáng"
 
 #: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
 msgid "XF86AudioMute"
-msgstr "ÂmThanhTắt"
+msgstr "Tắt tiếng"
 
 #: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
 msgid "XF86AudioLowerVolume"
-msgstr "ÂmThanhVặnNhỏ"
+msgstr "Giảm âm"
 
 #: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
 msgid "XF86AudioRaiseVolume"
-msgstr "ÂmThanhVặnLớn"
+msgstr "Tăng âm"
 
 #: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
 msgid "XF86AudioPlay"
-msgstr "ÂmThanhPhát"
+msgstr "Phát"
 
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
 msgid "XF86AudioStop"
-msgstr "ÂmThanhDừng"
+msgstr "Dừng"
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
 msgid "XF86AudioNext"
-msgstr "ÂmThanhTiếp"
+msgstr "Tới"
 
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
 msgid "XF86AudioPrev"
-msgstr "ÂmThanhLùi"
+msgstr "Lùi"
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
 msgid "XF86AudioRecord"
-msgstr "ÂmThanhThu"
+msgstr "Thu"
 
 #: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
 msgid "XF86AudioPause"
-msgstr "ÂmThanhTạmDừng"
+msgstr "Tạm dừng"
 
 #: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
 msgid "XF86AudioRewind"
-msgstr "ÂmThanhVòngLại"
+msgstr "Quay lại"
 
 #: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
 msgid "XF86AudioMedia"
-msgstr "ÂmThanhPhươngTiện"
+msgstr "Phương tiện âm thanh"
 
 #: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
 msgid "XF86ScreenSaver"
-msgstr "BảoVệMànHình"
+msgstr "Bảo vệ màn hình"
 
 #: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
@@ -391,17 +391,17 @@ msgstr "WebCam"
 #: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
 msgid "XF86Display"
-msgstr "HiểnThị"
+msgstr "Hiển thị"
 
 #: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
 msgid "XF86TouchpadToggle"
-msgstr "TouchpadBậtTắt"
+msgstr "Bật tắt Touchpad"
 
 #: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
 msgid "XF86WakeUp"
-msgstr "ThứcDậy"
+msgstr "Đánh thức"
 
 #: ../gdk/keyname-table.h:4016
 msgctxt "keyboard label"
@@ -1923,7 +1923,7 @@ msgstr ""
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:954
 msgid "Terminal Pager"
-msgstr "Trình phân trang thiết bị đầu cuối"
+msgstr "Trình phân trang"
 
 #: ../gtk/gtkmountoperation-x11.c:955
 msgid "Top Command"
@@ -2128,7 +2128,7 @@ msgstr "Hết giấy"
 #: ../gtk/gtkprintoperation-win32.c:613
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2126
 msgid "Paused"
-msgstr "Bị tạm ngừng"
+msgstr "Tạm ngừng"
 
 #: ../gtk/gtkprintoperation-win32.c:615
 msgid "Need user intervention"
@@ -4616,7 +4616,7 @@ msgstr "Xem chung"
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3748
 msgid "Pages per Sheet"
-msgstr "Trang mỗi tờ giấy"
+msgstr "Số trang mỗi tờ"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
@@ -4654,7 +4654,7 @@ msgstr "In tại thời điểm"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3889
 #, c-format
 msgid "Custom %sx%s"
-msgstr "Tự chọn  %sx%s"
+msgstr "Tự chọn %sx%s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3970
 msgid "Printer Profile"
@@ -4682,10 +4682,9 @@ msgid "Unspecified profile"
 msgstr "Hồ sơ xác định"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:249
-#, fuzzy
 #| msgid "output.%s"
 msgid "output"
-msgstr "inra.%s"
+msgstr "đầu ra"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:521
 msgid "Print to File"
@@ -4708,7 +4707,7 @@ msgstr "SVG"
 #: ../modules/printbackends/file/gtkprintbackendfile.c:660
 #: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
-msgstr "T_rang trên mỗi tờ :"
+msgstr "Số t_rang mỗi tờ:"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:719
 msgid "File"
@@ -4724,7 +4723,7 @@ msgstr "In vào LPR"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:419
 msgid "Pages Per Sheet"
-msgstr "Trang trên mỗi tờ"
+msgstr "Số trang mỗi tờ"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:426
 msgid "Command Line"
