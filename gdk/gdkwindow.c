@@ -397,11 +397,11 @@ gdk_window_class_init (GdkWindowClass *klass)
   /**
    * GdkWindow::to-embedder:
    * @window: the offscreen window on which the signal is emitted
-   * @offscreen-x: x coordinate in the offscreen window
-   * @offscreen-y: y coordinate in the offscreen window
-   * @embedder-x: (out) (type double): return location for the x
+   * @offscreen_x: x coordinate in the offscreen window
+   * @offscreen_y: y coordinate in the offscreen window
+   * @embedder_x: (out) (type double): return location for the x
    *     coordinate in the embedder window
-   * @embedder-y: (out) (type double): return location for the y
+   * @embedder_y: (out) (type double): return location for the y
    *     coordinate in the embedder window
    *
    * The ::to-embedder signal is emitted to translate coordinates
@@ -428,11 +428,11 @@ gdk_window_class_init (GdkWindowClass *klass)
   /**
    * GdkWindow::from-embedder:
    * @window: the offscreen window on which the signal is emitted
-   * @embedder-x: x coordinate in the embedder window
-   * @embedder-y: y coordinate in the embedder window
-   * @offscreen-x: (out) (type double): return location for the x
+   * @embedder_x: x coordinate in the embedder window
+   * @embedder_y: y coordinate in the embedder window
+   * @offscreen_x: (out) (type double): return location for the x
    *     coordinate in the offscreen window
-   * @offscreen-y: (out) (type double): return location for the y
+   * @offscreen_y: (out) (type double): return location for the y
    *     coordinate in the offscreen window
    *
    * The ::from-embedder signal is emitted to translate coordinates
