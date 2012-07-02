@@ -1441,8 +1441,7 @@ rewrite_event_for_grabs (GdkEvent *event)
  * </para></listitem>
  * <listitem><para>
  *   Find the widget which got the event. If the widget can't be determined
- *   the event is thrown away unless it belongs to a INCR transaction. In that
- *   case it is passed to gtk_selection_incr_event().
+ *   the event is thrown away unless it belongs to a INCR transaction.
  * </para></listitem>
  * <listitem><para>
  *   Then the event is pushed onto a stack so you can query the currently
@@ -2108,7 +2107,7 @@ gtk_grab_remove (GtkWidget *widget)
 /**
  * gtk_device_grab_add:
  * @widget: a #GtkWidget
- * @device: a #GtkDevice to grab on.
+ * @device: a #GdkDevice to grab on.
  * @block_others: %TRUE to prevent other devices to interact with @widget.
  *
  * Adds a GTK+ grab on @device, so all the events on @device and its

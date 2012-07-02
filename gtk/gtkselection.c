@@ -661,8 +661,8 @@ gtk_target_table_free (GtkTargetEntry *targets,
 
 /**
  * gtk_selection_owner_set_for_display:
- * @display: the #Gdkdisplay where the selection is set
- * @widget: (allow-none): new selection owner (a #GdkWidget), or %NULL.
+ * @display: the #GdkDisplay where the selection is set
+ * @widget: (allow-none): new selection owner (a #GtkWidget), or %NULL.
  * @selection: an interned atom representing the selection to claim.
  * @time_: timestamp with which to claim the selection
  *

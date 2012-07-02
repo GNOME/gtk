@@ -159,7 +159,7 @@ gtk_radio_tool_button_new (GSList *group)
  * The new #GtkRadioToolButton will contain an icon and label from the
  * stock item indicated by @stock_id.
  * 
- * Return value: The new #GtkRadioToolItem
+ * Return value: The new #GtkRadioToolButton
  * 
  * Since: 2.4
  **/

@@ -6748,7 +6748,7 @@ gtk_icon_view_drag_data_received (GtkWidget        *widget,
 /* Drag-and-Drop support */
 /**
  * gtk_icon_view_enable_model_drag_source:
- * @icon_view: a #GtkIconTreeView
+ * @icon_view: a #GtkIconView
  * @start_button_mask: Mask of allowed buttons to start drag
  * @targets: (array length=n_targets): the table of targets that the drag will
  *           support

@@ -44,7 +44,7 @@ G_BEGIN_DECLS
  * @GTK_RECENT_SORT_LRU: Sort the returned list with the least recently used
  *   items first.
  * @GTK_RECENT_SORT_CUSTOM: Sort the returned list using a custom sorting
- *   function passed using gtk_recent_manager_set_sort_func().
+ *   function passed using gtk_recent_chooser_set_sort_func().
  *
  * Used to specify the sorting method to be applyed to the recently
  * used resource list.

@@ -203,7 +203,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    *
    * The preferred place to ellipsize the string, if the progress bar does
    * not have enough room to display the entire string, specified as a
-   * #PangoEllisizeMode.
+   * #PangoEllipsizeMode.
    *
    * Note that setting this property to a value other than
    * %PANGO_ELLIPSIZE_NONE has the side-effect that the progress bar requests

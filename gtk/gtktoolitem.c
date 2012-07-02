@@ -785,10 +785,7 @@ gtk_tool_item_get_orientation (GtkToolItem *tool_item)
  * <listitem> GTK_TOOLBAR_TEXT, meaning the tool item should only
  * show text</listitem>
  * <listitem> GTK_TOOLBAR_BOTH_HORIZ, meaning the tool item should show
- * both an icon and a label, arranged horizontally (however, note the 
- * #GtkToolButton:has_text_horizontally property that makes tool buttons not
- * show labels when the toolbar style is GTK_TOOLBAR_BOTH_HORIZ.
- * </listitem>
+ * both an icon and a label, arranged horizontally</listitem>
  * </itemizedlist>
  * 
  * Return value: A #GtkToolbarStyle indicating the toolbar style used
@@ -814,7 +811,7 @@ gtk_tool_item_get_toolbar_style (GtkToolItem *tool_item)
  * gtk_tool_item_get_relief_style:
  * @tool_item: a #GtkToolItem 
  * 
- * Returns the relief style of @tool_item. See gtk_button_set_relief_style().
+ * Returns the relief style of @tool_item. See gtk_button_set_relief().
  * Custom subclasses of #GtkToolItem should call this function in the handler
  * of the #GtkToolItem::toolbar_reconfigured signal to find out the
  * relief style of buttons.

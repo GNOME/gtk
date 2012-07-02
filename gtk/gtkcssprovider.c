@@ -916,7 +916,7 @@
  *       <row>
  *         <entry>text-shadow</entry>
  *         <entry>shadow list (see above)</entry>
- *         <entry>#GtkTextShadow</entry>
+ *         <entry>internal use only</entry>
  *         <entry><literallayout>text-shadow: 1 1 0 blue, -4 -4 red;</literallayout></entry>
  *       </row>
  *       <row>

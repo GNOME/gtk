@@ -2533,7 +2533,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    * The ::drag-begin signal is emitted on the drag source when a drag is
    * started. A typical reason to connect to this signal is to set up a
-   * custom drag icon with gtk_drag_source_set_icon().
+   * custom drag icon with e.g. gtk_drag_source_set_icon_pixbuf().
    *
    * Note that some widgets set up a drag icon in the default handler of
    * this signal, so you may have to use g_signal_connect_after() to
@@ -5369,7 +5369,7 @@ widget_new_accel_closure (GtkWidget *widget,
  * Installs an accelerator for this @widget in @accel_group that causes
  * @accel_signal to be emitted if the accelerator is activated.
  * The @accel_group needs to be added to the widget's toplevel via
- * gtk_window_add_accel_group(), and the signal must be of type %G_RUN_ACTION.
+ * gtk_window_add_accel_group(), and the signal must be of type %G_SIGNAL_ACTION.
  * Accelerators added through this function are not user changeable during
  * runtime. If you want to support accelerators that can be changed by the
  * user, use gtk_accel_map_add_entry() and gtk_widget_set_accel_path() or
@@ -7010,10 +7010,10 @@ _gtk_widget_set_has_default (GtkWidget *widget,
  * gtk_widget_grab_default:
  * @widget: a #GtkWidget
  *
- * Causes @widget to become the default widget. @widget must have the
- * %GTK_CAN_DEFAULT flag set; typically you have to set this flag
- * yourself by calling <literal>gtk_widget_set_can_default (@widget,
- * %TRUE)</literal>. The default widget is activated when
+ * Causes @widget to become the default widget. @widget must be able to be
+ * a default widget; typically you would ensure this yourself
+ * by calling gtk_widget_set_can_default() with a %TRUE value.
+ * The default widget is activated when
  * the user presses Enter in a window. Default widgets must be
  * activatable, that is, gtk_widget_activate() should affect them. Note
  * that #GtkEntry widgets require the "activates-default" property
@@ -7729,7 +7729,7 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
  * to turn off the buffering. "Double buffered" simply means that
  * gdk_window_begin_paint_region() and gdk_window_end_paint() are called
  * automatically around expose events sent to the
- * widget. gdk_window_begin_paint() diverts all drawing to a widget's
+ * widget. gdk_window_begin_paint_region() diverts all drawing to a widget's
  * window to an offscreen buffer, and gdk_window_end_paint() draws the
  * buffer to the screen. The result is that users see the window
  * update in one smooth step, and don't see individual graphics
@@ -7742,7 +7742,7 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
  * Note: if you turn off double-buffering, you have to handle
  * expose events, since even the clearing to the background color or
  * pixmap will not happen automatically (as it is done in
- * gdk_window_begin_paint()).
+ * gdk_window_begin_paint_region()).
  **/
 void
 gtk_widget_set_double_buffered (GtkWidget *widget,
@@ -9713,7 +9713,7 @@ gtk_widget_add_device_events (GtkWidget    *widget,
  * <literal>gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW)</literal>
  * would return
  * %NULL if @widget wasn't inside a toplevel window, and if the
- * window was inside a #GtkWindow-derived widget which was in turn
+ * window was inside a #GtkWindow<!-- -->-derived widget which was in turn
  * inside the toplevel #GtkWindow. While the second case may
  * seem unlikely, it actually happens when a #GtkPlug is embedded
  * inside a #GtkSocket within the same application.
@@ -9782,7 +9782,7 @@ gtk_widget_get_ancestor (GtkWidget *widget,
  *
  * Sets the visual that should be used for by widget and its children for
  * creating #GdkWindows. The visual must be on the same #GdkScreen as
- * returned by gdk_widget_get_screen(), so handling the
+ * returned by gtk_widget_get_screen(), so handling the
  * #GtkWidget::screen-changed signal is necessary.
  *
  * Setting a new @visual will not cause @widget to recreate its windows,

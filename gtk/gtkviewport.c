@@ -46,7 +46,7 @@
  * #GtkGrid, #GtkBox, and so on.
  *
  * If a widget has native scrolling abilities, such as #GtkTextView,
- * #GtkTreeView or #GtkIconview, it can be added to a #GtkScrolledWindow
+ * #GtkTreeView or #GtkIconView, it can be added to a #GtkScrolledWindow
  * with gtk_container_add(). If a widget does not, you must first add the
  * widget to a #GtkViewport, then add the viewport to the scrolled window.
  * The convenience function gtk_scrolled_window_add_with_viewport() does

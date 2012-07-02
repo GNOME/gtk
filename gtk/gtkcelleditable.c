@@ -120,7 +120,7 @@ gtk_cell_editable_start_editing (GtkCellEditable *cell_editable,
 
 /**
  * gtk_cell_editable_editing_done:
- * @cell_editable: A #GtkTreeEditable
+ * @cell_editable: A #GtkCellEditable
  * 
  * Emits the #GtkCellEditable::editing-done signal. 
  **/
@@ -134,7 +134,7 @@ gtk_cell_editable_editing_done (GtkCellEditable *cell_editable)
 
 /**
  * gtk_cell_editable_remove_widget:
- * @cell_editable: A #GtkTreeEditable
+ * @cell_editable: A #GtkCellEditable
  * 
  * Emits the #GtkCellEditable::remove-widget signal.  
  **/

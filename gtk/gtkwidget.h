@@ -160,7 +160,7 @@ struct _GtkWidget
  *   method it is possible for a #GtkLabel to tell its parent how much height
  *   would be required if the label were to be allocated a said width.
  * @adjust_size_request: Convert an initial size request from a widget's
- *   #GtkSizeRequest virtual method implementations into a size request to
+ *   #GtkSizeRequestMode virtual method implementations into a size request to
  *   be used by parent containers in laying out the widget.
  *   adjust_size_request adjusts <emphasis>from</emphasis> a child widget's
  *   original request <emphasis>to</emphasis> what a parent container should

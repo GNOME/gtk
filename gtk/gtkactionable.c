@@ -133,7 +133,7 @@ gtk_actionable_set_action_name (GtkActionable *actionable,
  *
  * Gets the current target value of @actionabe.
  *
- * See gtk_actionable_set_target_value() for more information.
+ * See gtk_actionable_set_action_target_value() for more information.
  *
  * Returns: (transfer none): the current target value
  *
@@ -224,8 +224,8 @@ gtk_actionable_set_action_target (GtkActionable *actionable,
  * actionable widget.
  *
  * This allows for the effect of both gtk_actionable_set_action_name()
- * and gtk_actionable_set_target() in the common case that the target is
- * string-valued.
+ * and gtk_actionable_set_action_target_value() in the common case that
+ * the target is string-valued.
  *
  * @detailed_action_name is a string of the form
  * <literal>"action::target"</literal> where <literal>action</literal>

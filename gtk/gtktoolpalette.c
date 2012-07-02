@@ -989,7 +989,7 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
    * GtkToolPalette:icon-size:
    *
    * The size of the icons in a tool palette is normally determined by
-   * the #GtkSettings:toolbar-icon-size setting. When this property is set,
+   * the #GtkSettings:gtk-toolbar-icon-size setting. When this property is set,
    * it overrides the setting.
    *
    * This should only be used for special-purpose tool palettes, normal
@@ -1673,7 +1673,7 @@ gtk_tool_palette_get_drag_item (GtkToolPalette         *palette,
 /**
  * gtk_tool_palette_set_drag_source:
  * @palette: a #GtkToolPalette
- * @targets: the #GtkToolPaletteDragTarget<!-- -->s
+ * @targets: the #GtkToolPaletteDragTargets
  *     which the widget should support
  *
  * Sets the tool palette as a drag source.
@@ -1712,7 +1712,7 @@ gtk_tool_palette_set_drag_source (GtkToolPalette            *palette,
  * @widget: a #GtkWidget which should be a drag destination for @palette
  * @flags: the flags that specify what actions GTK+ should take for drops
  *     on that widget
- * @targets: the #GtkToolPaletteDragTarget<!-- -->s which the widget
+ * @targets: the #GtkToolPaletteDragTargets which the widget
  *     should support
  * @actions: the #GdkDragAction<!-- -->s which the widget should suppport
  *

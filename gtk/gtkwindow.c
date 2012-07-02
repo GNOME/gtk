@@ -1927,8 +1927,8 @@ _gtk_window_internal_set_focus (GtkWindow *window,
  * unsets the default widget for a #GtkWindow about. When setting
  * (rather than unsetting) the default widget it's generally easier to
  * call gtk_widget_grab_focus() on the widget. Before making a widget
- * the default widget, you must set the #GTK_CAN_DEFAULT flag on the
- * widget you'd like to make the default using GTK_WIDGET_SET_FLAGS().
+ * the default widget, you must call gtk_widget_set_can_default() on the
+ * widget you'd like to make the default.
  **/
 void
 gtk_window_set_default (GtkWindow *window,
@@ -3401,7 +3401,7 @@ gtk_window_get_decorated (GtkWindow *window)
  * using this function, GTK+ will do its best to convince the window
  * manager not to show a close button. Depending on the system, this
  * function may not have any effect when called on a window that is
- * already visible, so you should call it before calling gtk_window_show().
+ * already visible, so you should call it before calling gtk_widget_show().
  *
  * On Windows, this function always works, since there's no window manager
  * policy involved.
@@ -9818,7 +9818,7 @@ _gtk_window_get_wmclass (GtkWindow  *window,
  * @setting: the new value
  *
  * Tells GTK+ whether to drop its extra reference to the window
- * when gtk_window_destroy() is called.
+ * when gtk_widget_destroy() is called.
  *
  * This function is only exported for the benefit of language
  * bindings which may need to keep the window alive until their

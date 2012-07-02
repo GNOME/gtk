@@ -414,11 +414,11 @@ gtk_adjustment_get_value (GtkAdjustment *adjustment)
  * @value: the new value.
  *
  * Sets the #GtkAdjustment value. The value is clamped to lie between
- * #GtkAdjustment.lower and #GtkAdjustment.upper.
+ * #GtkAdjustment:lower and #GtkAdjustment:upper.
  *
  * Note that for adjustments which are used in a #GtkScrollbar, the effective
- * range of allowed values goes from #GtkAdjustment.lower to
- * #GtkAdjustment.upper - #GtkAdjustment.page_size.
+ * range of allowed values goes from #GtkAdjustment:lower to
+ * #GtkAdjustment:upper - #GtkAdjustment:page_size.
  */
 void
 gtk_adjustment_set_value (GtkAdjustment *adjustment,
@@ -769,9 +769,9 @@ gtk_adjustment_value_changed (GtkAdjustment *adjustment)
  * @lower: the lower value.
  * @upper: the upper value.
  *
- * Updates the #GtkAdjustment #GtkAdjustment.value to ensure that the range
+ * Updates the #GtkAdjustment #GtkAdjustment:value to ensure that the range
  * between @lower and @upper is in the current page (i.e. between
- * #GtkAdjustment.value and #GtkAdjustment.value + #GtkAdjustment.page_size).
+ * #GtkAdjustment:value and #GtkAdjustment:value + #GtkAdjustment:page_size).
  * If the range is larger than the page size, then only the start of it will
  * be in the current page.
  * A #GtkAdjustment::changed signal will be emitted if the value is changed.

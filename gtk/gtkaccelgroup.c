@@ -1462,6 +1462,7 @@ gtk_accelerator_parse (const gchar     *accelerator,
  * gtk_accelerator_name_with_keycode:
  * @display: (allow-none): a #GdkDisplay or %NULL to use the default display
  * @accelerator_key: accelerator keyval
+ * @keycode: accelerator keycode
  * @accelerator_mods: accelerator modifier mask
  *
  * Converts an accelerator keyval and modifier mask
@@ -1647,6 +1648,7 @@ gtk_accelerator_name (guint           accelerator_key,
  * gtk_accelerator_get_label_with_keycode:
  * @display: (allow-none): a #GdkDisplay or %NULL to use the default display
  * @accelerator_key: accelerator keyval
+ * @keycode: accelerator keycode
  * @accelerator_mods: accelerator modifier mask
  *
  * Converts an accelerator keyval and modifier mask

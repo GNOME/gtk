@@ -21,7 +21,7 @@
  * @Title: GtkCellLayout
  *
  * #GtkCellLayout is an interface to be implemented by all objects which
- * want to provide a #GtkTreeViewColumn-like API for packing cells, setting
+ * want to provide a #GtkTreeViewColumn<!-- -->-like API for packing cells, setting
  * attributes and data funcs.
  *
  * One of the notable features provided by implementations of GtkCellLayout
@@ -38,7 +38,7 @@
  * <title>GtkCellLayouts as GtkBuildable</title>
  * <para>
  * Implementations of GtkCellLayout which also implement the GtkBuildable
- * interface (#GtkCellView, #GtkIconView, #GtkComboBox, #GtkComboBoxEntry,
+ * interface (#GtkCellView, #GtkIconView, #GtkComboBox,
  * #GtkEntryCompletion, #GtkTreeViewColumn) accept GtkCellRenderer objects
  * as &lt;child&gt; elements in UI definitions. They support a custom
  * &lt;attributes&gt; element for their children, which can contain

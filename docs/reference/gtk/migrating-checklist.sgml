@@ -295,7 +295,7 @@ my_widget_key_press_event_handler (GtkWidget *widget, GdkEventKey *event)
 
     <para>
       Named icons can be used for window icons (see gtk_window_set_icon_name())
-      and images (see gtk_image_set_icon_name()). You can also use named icons
+      and images (see gtk_image_set_from_icon_name()). You can also use named icons
       for drag-and-drop (see gtk_drag_source_set_icon_name()) and in treeview
       cells (see the #GtkCellRendererPixbuf:icon-name property).
     </para>

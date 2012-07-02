@@ -168,10 +168,10 @@ gtk_css_section_get_section_type (const GtkCssSection *section)
  *
  * Gets the parent section for the given @section. The parent section is
  * the section that contains this @section. A special case are sections of
- * type #GTK_CSS_SECTION_TYPE_DOCUMENT. Their parent will either be %NULL
+ * type #GTK_CSS_SECTION_DOCUMENT. Their parent will either be %NULL
  * if they are the original CSS document that was loaded by
  * gtk_css_provider_load_from_file() or a section of type
- * #GTK_CSS_SECTION_TYPE_IMPORT if it was loaded with an import rule from
+ * #GTK_CSS_SECTION_IMPORT if it was loaded with an import rule from
  * a different file.
  *
  * Returns: the parent section or %NULL if none

@@ -3948,7 +3948,7 @@ gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
  * gtk_print_unix_dialog_get_current_page:
  * @dialog: a #GtkPrintUnixDialog
  *
- * Gets the current page of the #GtkPrintDialog.
+ * Gets the current page of the #GtkPrintUnixDialog.
  *
  * Returns: the current page of @dialog
  *

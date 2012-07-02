@@ -409,7 +409,8 @@ gtk_activatable_action_notify (GtkAction      *action,
  *
  * <note><para>Be careful to call this before setting the local
  * copy of the #GtkAction property, since this function uses 
- * gtk_activatable_get_action() to retrieve the previous action</para></note>
+ * gtk_activatable_get_related_action() to retrieve the
+ * previous action</para></note>
  *
  * Since: 2.16
  */

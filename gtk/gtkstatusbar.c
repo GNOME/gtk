@@ -390,10 +390,10 @@ gtk_statusbar_push (GtkStatusbar *statusbar,
 
 /**
  * gtk_statusbar_pop:
- * @statusbar: a #GtkStatusBar
+ * @statusbar: a #GtkStatusbar
  * @context_id: a context identifier
  * 
- * Removes the first message in the #GtkStatusBar's stack
+ * Removes the first message in the #GtkStatusbar's stack
  * with the given context id. 
  *
  * Note that this may not change the displayed message, if 
@@ -440,7 +440,7 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
 
 /**
  * gtk_statusbar_remove:
- * @statusbar: a #GtkStatusBar
+ * @statusbar: a #GtkStatusbar
  * @context_id: a context identifier
  * @message_id: a message identifier, as returned by gtk_statusbar_push()
  *
@@ -492,7 +492,7 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
 
 /**
  * gtk_statusbar_remove_all:
- * @statusbar: a #GtkStatusBar
+ * @statusbar: a #GtkStatusbar
  * @context_id: a context identifier
  *
  * Forces the removal of all messages from a statusbar's
@@ -563,7 +563,7 @@ gtk_statusbar_remove_all (GtkStatusbar *statusbar,
 
 /**
  * gtk_statusbar_get_message_area:
- * @statusbar: a #GtkStatusBar
+ * @statusbar: a #GtkStatusbar
  *
  * Retrieves the box containing the label widget.
  *

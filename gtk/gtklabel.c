@@ -66,7 +66,7 @@
  *
  * The #GtkLabel widget displays a small amount of text. As the name
  * implies, most labels are used to label another widget such as a
- * #GtkButton, a #GtkMenuItem, or a #GtkOptionMenu.
+ * #GtkButton, a #GtkMenuItem, or a #GtkComboBox.
  *
  * <refsect2 id="GtkLabel-BUILDER-UI">
  * <title>GtkLabel as GtkBuildable</title>
@@ -840,7 +840,7 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * The preferred place to ellipsize the string, if the label does 
    * not have enough room to display the entire string, specified as a 
-   * #PangoEllisizeMode. 
+   * #PangoEllipsizeMode. 
    *
    * Note that setting this property to a value other than 
    * %PANGO_ELLIPSIZE_NONE has the side-effect that the label requests 
@@ -1965,9 +1965,9 @@ gtk_label_get_mnemonic_widget (GtkLabel *label)
  *
  * If the label has been set so that it has an mnemonic key this function
  * returns the keyval used for the mnemonic accelerator. If there is no
- * mnemonic set up it returns #GDK_VoidSymbol.
+ * mnemonic set up it returns #GDK_KEY_VoidSymbol.
  *
- * Returns: GDK keyval usable for accelerators, or #GDK_VoidSymbol
+ * Returns: GDK keyval usable for accelerators, or #GDK_KEY_VoidSymbol
  **/
 guint
 gtk_label_get_mnemonic_keyval (GtkLabel *label)

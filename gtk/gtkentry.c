@@ -7197,7 +7197,7 @@ gtk_entry_get_text_length (GtkEntry *entry)
  *
  * (For experts: if @setting is %TRUE, the entry calls
  * gtk_window_activate_default() on the window containing the entry, in
- * the default handler for the #GtkWidget::activate signal.)
+ * the default handler for the #GtkEntry::activate signal.)
  **/
 void
 gtk_entry_set_activates_default (GtkEntry *entry,
@@ -8202,7 +8202,7 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
 
 /**
  * gtk_entry_set_icon_drag_source:
- * @entry: a #GtkIconEntry
+ * @entry: a #GtkEntry
  * @icon_pos: icon position
  * @target_list: the targets (data formats) in which the data can be provided
  * @actions: a bitmask of the allowed drag actions
@@ -8495,7 +8495,7 @@ gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
  * Use %NULL for @tooltip to remove an existing tooltip.
  *
  * See also gtk_widget_set_tooltip_markup() and 
- * gtk_enty_set_icon_tooltip_text().
+ * gtk_entry_set_icon_tooltip_text().
  *
  * Since: 2.16
  */

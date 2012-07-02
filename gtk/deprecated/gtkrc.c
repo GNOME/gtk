@@ -1690,7 +1690,7 @@ gtk_rc_find_module_in_path (const gchar *module_file)
 
 /**
  * gtk_rc_parse_state:
- * @scanner: a #GtkScanner (must be initialized for parsing an RC file)
+ * @scanner: a #GScanner (must be initialized for parsing an RC file)
  * @state: (out): A pointer to a #GtkStateType variable in which to
  *  store the result.
  *

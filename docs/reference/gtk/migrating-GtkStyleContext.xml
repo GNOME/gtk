@@ -134,7 +134,7 @@
     </simplelist>
 
     <para>
-      One of the main differences to #GtkStyle-based engines is that the
+      One of the main differences to #GtkStyle<!-- -->-based engines is that the
       rendered widget is totally isolated from the theme engine, all style
       information is meant to be retrieved from the #GtkThemingEngine API,
       or from the #GtkWidgetPath obtained from gtk_theming_engine_get_path(),
@@ -171,7 +171,7 @@
     </para>
 
     <para>
-      The installed properties depend on the #GtkThemeEngine::name property,
+      The installed properties depend on the #GtkThemingEngine:name property,
       so they should be added in the <literal>constructed()</literal> vfunc.
       For example, if an engine with the name "Clearlooks" installs a
       "focus-color" property with the type #GdkRGBA, the property

@@ -11350,7 +11350,7 @@ gtk_tree_view_get_model (GtkTreeView *tree_view)
 
 /**
  * gtk_tree_view_set_model:
- * @tree_view: A #GtkTreeNode.
+ * @tree_view: A #GtkTreeView.
  * @model: (allow-none): The model.
  *
  * Sets the model for a #GtkTreeView.  If the @tree_view already has a model
@@ -12141,7 +12141,7 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
  * @dnotify: destroy notifier for @data
  *
  * Convenience function that inserts a new column into the #GtkTreeView
- * with the given cell renderer and a #GtkCellDataFunc to set cell renderer
+ * with the given cell renderer and a #GtkTreeCellDataFunc to set cell renderer
  * attributes (normally using data from the model). See also
  * gtk_tree_view_column_set_cell_data_func(), gtk_tree_view_column_pack_start().
  * If @tree_view has "fixed_height" mode enabled, then the new column will have its

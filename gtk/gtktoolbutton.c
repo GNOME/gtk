@@ -46,7 +46,7 @@
  * #GtkToolButton<!-- -->s are #GtkToolItems containing buttons.
  *
  * Use gtk_tool_button_new() to create a new #GtkToolButton. Use
- * gtk_tool_button_new_with_stock() to create a #GtkToolButton
+ * gtk_tool_button_new_from_stock() to create a #GtkToolButton
  * containing a stock item.
  *
  * The label of a #GtkToolButton is determined by the properties

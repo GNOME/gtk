@@ -35,7 +35,7 @@
  * #GtkMenuItem in a #GtkMenuBar or popped up by activating a
  * #GtkMenuItem in another #GtkMenu.
  *
- * A #GtkMenu can also be popped up by activating a #GtkOptionMenu.
+ * A #GtkMenu can also be popped up by activating a #GtkComboBox.
  * Other composite widgets such as the #GtkNotebook can pop up a
  * #GtkMenu as well.
  *
@@ -1863,7 +1863,7 @@ gtk_menu_popdown (GtkMenu *menu)
  * @menu: a #GtkMenu
  *
  * Returns the selected menu item from the menu.  This is used by the
- * #GtkOptionMenu.
+ * #GtkComboBox.
  *
  * Returns: (transfer none): the #GtkMenuItem that was last selected
  *          in the menu.  If a selection has not yet been made, the
@@ -1908,7 +1908,7 @@ gtk_menu_get_active (GtkMenu *menu)
  *         from 0 to n-1
  *
  * Selects the specified menu item within the menu.  This is used by
- * the #GtkOptionMenu and should not be used by anyone else.
+ * the #GtkComboBox and should not be used by anyone else.
  */
 void
 gtk_menu_set_active (GtkMenu *menu,

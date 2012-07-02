@@ -96,7 +96,7 @@
  * By default GtkPrintOperation uses an external application to do
  * print preview. To implement a custom print preview, an application
  * must connect to the preview signal. The functions
- * gtk_print_operation_print_preview_render_page(),
+ * gtk_print_operation_preview_render_page(),
  * gtk_print_operation_preview_end_preview() and
  * gtk_print_operation_preview_is_selected()
  * are useful when implementing a print preview.
@@ -1032,7 +1032,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    /**
    * GtkPrintOperation::preview:
    * @operation: the #GtkPrintOperation on which the signal was emitted
-   * @preview: the #GtkPrintPreviewOperation for the current operation
+   * @preview: the #GtkPrintOperationPreview for the current operation
    * @context: the #GtkPrintContext that will be used
    * @parent: (allow-none): the #GtkWindow to use as window parent, or %NULL
    *
@@ -1400,7 +1400,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_EMBED_PAGE_SETUP,
 				   g_param_spec_boolean ("embed-page-setup",
 							 P_("Embed Page Setup"),
-							 P_("TRUE if page setup combos are embedded in GtkPrintDialog"),
+							 P_("TRUE if page setup combos are embedded in GtkPrintUnixDialog"),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
   /**
@@ -2389,7 +2389,7 @@ gtk_print_operation_set_defer_drawing (GtkPrintOperation *op)
 /**
  * gtk_print_operation_set_embed_page_setup:
  * @op: a #GtkPrintOperation
- * @embed: %TRUE to embed page setup selection in the #GtkPrintDialog
+ * @embed: %TRUE to embed page setup selection in the #GtkPrintUnixDialog
  *
  * Embed page size combo box and orientation combo box into page setup page.
  * Selected page setup is stored as default page setup in #GtkPrintOperation.

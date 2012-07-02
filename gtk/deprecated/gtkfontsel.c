@@ -1293,7 +1293,7 @@ gtk_font_selection_get_size_entry (GtkFontSelection *fontsel)
  * gtk_font_selection_get_size_list:
  * @fontsel: a #GtkFontSelection
  *
- * This returns the #GtkTreeeView used to list font sizes.
+ * This returns the #GtkTreeView used to list font sizes.
  *
  * Return value: (transfer none): A #GtkWidget that is part of @fontsel
  *

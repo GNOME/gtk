@@ -1069,7 +1069,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * a notebook where the tab will be attached. It is also
    * responsible for moving/resizing the window and adding the
    * necessary properties to the notebook (e.g. the
-   * #GtkNotebook:group ).
+   * #GtkNotebook:group-name ).
    *
    * Returns: (transfer none): a #GtkNotebook that @page should be
    *     added to, or %NULL.

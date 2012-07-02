@@ -79,7 +79,7 @@
  * gtk_application_set_app_menu(). The #GMenuModel that this function
  * expects is usually constructed using #GtkBuilder, as seen in the
  * following example. To specify a menubar that will be shown by
- * #GApplicationWindows, use gtk_application_set_menubar(). Use the base
+ * #GtkApplicationWindow<!-- -->s, use gtk_application_set_menubar(). Use the base
  * #GActionMap interface to add actions, to respond to the user
  * selecting these menu items.
  *
@@ -763,7 +763,7 @@ gtk_application_class_init (GtkApplicationClass *class)
  * as soon as the application gets registered as the primary instance.
  *
  * Concretely, gtk_init() is called in the default handler for the
- * #GApplication:startup signal. Therefore, #GtkApplication subclasses should
+ * #GApplication::startup signal. Therefore, #GtkApplication subclasses should
  * chain up in their #GApplication:startup handler before using any GTK+ API.
  *
  * Note that commandline arguments are not passed to gtk_init().
@@ -923,7 +923,8 @@ gtk_application_get_window_by_id (GtkApplication *application,
  * is pressed.
  *
  * @accelerator must be a string that can be parsed by
- * gtk_accelerator_parse(), e.g. "<Primary>q" or "<Control><Alt>p".
+ * gtk_accelerator_parse(), e.g. "&lt;Primary&gt;q" or
+ * "&lt;Control&gt;&lt;Alt&gt;p".
  *
  * @action_name must be the name of an action as it would be used
  * in the app menu, i.e. actions that have been added to the application
@@ -1352,7 +1353,7 @@ gtk_application_startup_session_dbus (GtkApplication *app)
  * that should not be interrupted, such as creating a CD or DVD. The
  * types of actions that may be blocked are specified by the @flags
  * parameter. When the application completes the operation it should
- * call g_application_uninhibit() to remove the inhibitor. Note that
+ * call gtk_application_uninhibit() to remove the inhibitor. Note that
  * an application can have multiple inhibitors, and all of the must
  * be individually removed. Inhibitors are also cleared when the
  * application exits.
@@ -1367,7 +1368,7 @@ gtk_application_startup_session_dbus (GtkApplication *app)
  * this window to find out more about why the action is inhibited.
  *
  * Returns: A non-zero cookie that is used to uniquely identify this
- *     request. It should be used as an argument to g_application_uninhibit()
+ *     request. It should be used as an argument to gtk_application_uninhibit()
  *     in order to remove the request. If the platform does not support
  *     inhibiting or the request failed for some reason, 0 is returned.
  *
@@ -1420,9 +1421,9 @@ gtk_application_inhibit (GtkApplication             *application,
 /**
  * gtk_application_uninhibit:
  * @application: the #GApplication
- * @cookie: a cookie that was returned by g_application_inhibit()
+ * @cookie: a cookie that was returned by gtk_application_inhibit()
  *
- * Removes an inhibitor that has been established with g_application_inhibit().
+ * Removes an inhibitor that has been established with gtk_application_inhibit().
  * Inhibitors are also cleared when the application exits.
  *
  * Since: 3.4
