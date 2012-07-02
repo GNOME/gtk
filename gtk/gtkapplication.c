@@ -218,6 +218,7 @@ static void
 gtk_application_set_app_menu_x11 (GtkApplication *application,
                                   GMenuModel     *app_menu)
 {
+  g_free (application->priv->app_menu_path);
   gtk_application_x11_publish_menu (application, "appmenu", app_menu,
                                     &application->priv->app_menu_id,
                                     &application->priv->app_menu_path);
@@ -227,6 +228,7 @@ static void
 gtk_application_set_menubar_x11 (GtkApplication *application,
                                  GMenuModel     *menubar)
 {
+  g_free (application->priv->menubar_path);
   gtk_application_x11_publish_menu (application, "menubar", menubar,
                                     &application->priv->menubar_id,
                                     &application->priv->menubar_path);
@@ -663,6 +665,17 @@ gtk_application_finalize (GObject *object)
 
   g_clear_object (&application->priv->app_menu);
   g_clear_object (&application->priv->menubar);
+
+#ifdef GDK_WINDOWING_X11
+  g_free (application->priv->app_menu_path);
+  g_free (application->priv->menubar_path);
+
+  g_free (application->priv->client_path);
+  g_free (application->priv->app_id);
+
+  g_clear_object (&application->priv->sm_proxy);
+  g_clear_object (&application->priv->client_proxy);
+#endif
 
   G_OBJECT_CLASS (gtk_application_parent_class)
     ->finalize (object);
