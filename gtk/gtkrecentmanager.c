@@ -539,6 +539,18 @@ gtk_recent_manager_monitor_changed (GFileMonitor      *monitor,
 static gchar *
 get_default_filename (void)
 {
+  if (g_mkdir_with_parents (g_get_user_data_dir (), 0755) == -1)
+    {
+      int saved_errno = errno;
+
+      g_critical ("Unable to create user data directory '%s' for storing "
+                  "the recently used files list: %s",
+                  g_get_user_data_dir (),
+                  g_strerror (saved_errno));
+
+      return NULL;
+    }
+
   return g_build_filename (g_get_user_data_dir (),
                            GTK_RECENTLY_USED_FILE,
                            NULL);
