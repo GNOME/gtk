@@ -64,6 +64,7 @@ theme_symbols[] =
   { "overlay_stretch", 	TOKEN_OVERLAY_STRETCH },
   { "arrow_direction", 	TOKEN_ARROW_DIRECTION },
   { "orientation", 	TOKEN_ORIENTATION },
+  { "direction", 	TOKEN_DIRECTION },
   { "expander_style",	TOKEN_EXPANDER_STYLE },
   { "window_edge",	TOKEN_WINDOW_EDGE },
 
@@ -130,7 +131,10 @@ theme_symbols[] =
   { "EAST",		TOKEN_EAST },
   { "SOUTH_WEST",	TOKEN_SOUTH_WEST },
   { "SOUTH",		TOKEN_SOUTH },
-  { "SOUTH_EAST",	TOKEN_SOUTH_EAST }
+  { "SOUTH_EAST",	TOKEN_SOUTH_EAST },
+
+  { "LTR",              TOKEN_LTR },
+  { "RTL",              TOKEN_RTL }
 };
 
 static GtkRcStyleClass *parent_class;
@@ -609,6 +613,34 @@ theme_parse_window_edge(GScanner * scanner,
   return G_TOKEN_NONE;
 }
 
+static guint
+theme_parse_direction(GScanner * scanner,
+                      ThemeImage * data)
+{
+  guint               token;
+
+  token = g_scanner_get_next_token(scanner);
+  if (token != TOKEN_DIRECTION)
+    return TOKEN_DIRECTION;
+
+  token = g_scanner_get_next_token(scanner);
+  if (token != G_TOKEN_EQUAL_SIGN)
+    return G_TOKEN_EQUAL_SIGN;
+
+  token = g_scanner_get_next_token(scanner);
+
+  if (token == TOKEN_LTR)
+    data->match_data.direction = GTK_TEXT_DIR_LTR;
+  else if (token == TOKEN_RTL)
+    data->match_data.direction = GTK_TEXT_DIR_RTL;
+  else
+    return TOKEN_LTR;
+
+  data->match_data.flags |= THEME_MATCH_DIRECTION;
+  
+  return G_TOKEN_NONE;
+}
+
 static void
 theme_image_ref (ThemeImage *data)
 {
@@ -741,6 +773,9 @@ theme_parse_image(GtkSettings  *settings,
 	case TOKEN_WINDOW_EDGE:
 	  token = theme_parse_window_edge(scanner, data);
 	  break;
+        case TOKEN_DIRECTION:
+          token = theme_parse_direction(scanner, data);
+          break;
 	default:
 	  g_scanner_get_next_token(scanner);
 	  token = G_TOKEN_RIGHT_CURLY;
