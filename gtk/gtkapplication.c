@@ -297,6 +297,9 @@ gtk_application_shutdown_x11 (GtkApplication *application)
   g_clear_object (&application->priv->client_proxy);
   g_free (application->priv->app_id);
   g_free (application->priv->client_path);
+
+  g_free (application->priv->app_menu_path);
+  g_free (application->priv->menubar_path);
 }
 
 const gchar *
@@ -665,17 +668,6 @@ gtk_application_finalize (GObject *object)
 
   g_clear_object (&application->priv->app_menu);
   g_clear_object (&application->priv->menubar);
-
-#ifdef GDK_WINDOWING_X11
-  g_free (application->priv->app_menu_path);
-  g_free (application->priv->menubar_path);
-
-  g_free (application->priv->client_path);
-  g_free (application->priv->app_id);
-
-  g_clear_object (&application->priv->sm_proxy);
-  g_clear_object (&application->priv->client_proxy);
-#endif
 
   G_OBJECT_CLASS (gtk_application_parent_class)
     ->finalize (object);
