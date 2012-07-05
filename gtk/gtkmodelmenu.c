@@ -29,6 +29,8 @@
 #include "gtkmodelmenuitem.h"
 #include "gtkapplicationprivate.h"
 
+#define MODEL_MENU_WIDGET_DATA "gtk-model-menu-widget-data"
+
 typedef struct {
   GActionObservable *actions;
   GMenuModel        *model;
@@ -276,24 +278,60 @@ gtk_model_menu_create_menu (GMenuModel        *model,
 }
 
 static void
+gtk_model_menu_connect_app_window (GtkMenu *menu,
+                                   GtkApplicationWindow *window)
+{
+  GActionObservable *actions;
+  GtkAccelGroup *accels;
+
+  actions = gtk_application_window_get_observable (window);
+  accels = gtk_application_window_get_accel_group (window);
+
+  gtk_menu_set_accel_group (menu, accels);
+  gtk_model_menu_populate (GTK_MENU_SHELL (menu), actions, accels);
+}
+
+static void
+attach_widget_hierarchy_changed (GtkWidget *attach_widget,
+                                 GtkWidget *previous_toplevel,
+                                 gpointer user_data)
+{
+  GtkWidget *toplevel;
+  GtkMenu *menu = user_data;
+
+  toplevel = gtk_widget_get_toplevel (attach_widget);
+  if (GTK_IS_APPLICATION_WINDOW (toplevel))
+    gtk_model_menu_connect_app_window (menu, GTK_APPLICATION_WINDOW (toplevel));
+}
+
+static void
 notify_attach (GtkMenu    *menu,
                GParamSpec *pspec,
                gpointer    data)
 {
-  GtkWidget *widget;
-  GtkWidget *toplevel;
-  GActionObservable *actions;
-  GtkAccelGroup *accels;
+  GtkWidget *attach_widget, *toplevel;
 
-  widget = gtk_menu_get_attach_widget (menu);
-  toplevel = gtk_widget_get_toplevel (widget);
+  attach_widget = g_object_get_data (G_OBJECT (menu), MODEL_MENU_WIDGET_DATA);
+  if (attach_widget != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (attach_widget, attach_widget_hierarchy_changed, menu);
+      g_object_set_data (G_OBJECT (menu), MODEL_MENU_WIDGET_DATA, NULL);
+    }
+
+  attach_widget = gtk_menu_get_attach_widget (menu);
+  if (!attach_widget)
+    return;
+
+  toplevel = gtk_widget_get_toplevel (attach_widget);
   if (GTK_IS_APPLICATION_WINDOW (toplevel))
     {
-      actions = gtk_application_window_get_observable (GTK_APPLICATION_WINDOW (toplevel));
-      accels = gtk_application_window_get_accel_group (GTK_APPLICATION_WINDOW (toplevel));
-
-      gtk_menu_set_accel_group (menu, accels);
-      gtk_model_menu_populate (GTK_MENU_SHELL (menu), actions, accels);
+      gtk_model_menu_connect_app_window (menu, GTK_APPLICATION_WINDOW (toplevel));
+    }
+  else
+    {
+      g_object_set_data (G_OBJECT (menu), MODEL_MENU_WIDGET_DATA, attach_widget);
+      g_signal_connect_object (attach_widget, "hierarchy-changed",
+                               G_CALLBACK (attach_widget_hierarchy_changed), menu, 0);
     }
 }
 
