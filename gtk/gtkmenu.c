@@ -1297,6 +1297,7 @@ gtk_menu_detach (GtkMenu *menu)
   /* Fallback title for menu comes from attach widget */
   gtk_menu_update_title (menu);
 
+  g_object_notify (G_OBJECT (menu), "attach-widget");
   g_object_unref (menu);
 }
 
