@@ -1785,24 +1785,41 @@ _gtk_tree_view_accessible_toggle_visibility (GtkTreeView       *treeview,
                                              GtkTreeViewColumn *column)
 {
   AtkObject *obj;
-  guint id;
+  guint i, id;
 
   obj = _gtk_widget_peek_accessible (GTK_WIDGET (treeview));
   if (obj == NULL)
     return;
 
-  id = get_column_number (treeview, column);
-
   if (gtk_tree_view_column_get_visible (column))
-    _gtk_tree_view_accessible_do_add_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
-                                             treeview,
-                                             column,
-                                             id);
+    {
+      id = get_column_number (treeview, column);
+
+      _gtk_tree_view_accessible_do_add_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                               treeview,
+                                               column,
+                                               id);
+    }
   else
-    _gtk_tree_view_accessible_do_remove_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
-                                                treeview,
-                                                column,
-                                                id);
+    {
+      id = 0;
+
+      for (i = 0; i < gtk_tree_view_get_n_columns (treeview); i++)
+        {
+          GtkTreeViewColumn *cur = gtk_tree_view_get_column (treeview, i);
+          
+          if (gtk_tree_view_column_get_visible (cur))
+            id++;
+
+          if (cur == column)
+            break;
+        }
+
+      _gtk_tree_view_accessible_do_remove_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                                  treeview,
+                                                  column,
+                                                  id);
+    }
 }
 
 static GtkTreeViewColumn *
