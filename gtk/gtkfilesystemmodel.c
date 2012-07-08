@@ -123,6 +123,7 @@ struct _FileModelNode
 					 */
 
   guint                 visible :1;     /* if the file is currently visible */
+  guint                 filtered :1;    /* if the file is currently filtered */
   guint                 frozen_add :1;  /* true if the model was frozen and the entry has not been added yet */
 
   GValue                values[1];      /* actually n_columns values */
@@ -309,6 +310,18 @@ emit_row_deleted_for_row (GtkFileSystemModel *model, guint row)
 }
 
 static void
+node_set_filtered (GtkFileSystemModel *model, guint id, gboolean filtered)
+{
+  FileModelNode *node = get_node (model, id);
+
+  if (node->filtered == filtered ||
+      node->frozen_add)
+    return;
+
+  node->filtered = filtered;
+}
+
+static void
 node_set_visible (GtkFileSystemModel *model, guint id, gboolean visible)
 {
   FileModelNode *node = get_node (model, id);
@@ -337,7 +350,7 @@ node_set_visible (GtkFileSystemModel *model, guint id, gboolean visible)
 }
 
 static gboolean
-node_should_be_visible (GtkFileSystemModel *model, guint id)
+node_should_be_filtered (GtkFileSystemModel *model, guint id)
 {
   FileModelNode *node = get_node (model, id);
   GtkFileFilterInfo filter_info = { 0, };
@@ -348,28 +361,10 @@ node_should_be_visible (GtkFileSystemModel *model, guint id)
   char *uri = NULL;
 
   if (node->info == NULL)
-    return FALSE;
-
-  if (!model->show_hidden &&
-      (g_file_info_get_is_hidden (node->info) || g_file_info_get_is_backup (node->info)))
-    return FALSE;
-
-  if (_gtk_file_info_consider_as_directory (node->info))
-    {
-      if (!model->show_folders)
-        return FALSE;
-
-      if (!model->filter_folders)
-        return TRUE;
-    }
-  else
-    {
-      if (!model->show_files)
-        return FALSE;
-    }
+    return TRUE;
 
   if (model->filter == NULL)
-    return TRUE;
+    return FALSE;
 
   /* fill info */
   required = gtk_file_filter_get_needed (model->filter);
@@ -411,11 +406,43 @@ node_should_be_visible (GtkFileSystemModel *model, guint id)
         }
     }
 
-  result = gtk_file_filter_filter (model->filter, &filter_info);
+  result = !gtk_file_filter_filter (model->filter, &filter_info);
 
   g_free (mime_type);
   g_free (filename);
   g_free (uri);
+
+  return result;
+}
+
+static gboolean
+node_should_be_visible (GtkFileSystemModel *model, guint id)
+{
+  FileModelNode *node = get_node (model, id);
+  gboolean result;
+
+  if (node->info == NULL)
+    return FALSE;
+
+  if (!model->show_hidden &&
+      (g_file_info_get_is_hidden (node->info) || g_file_info_get_is_backup (node->info)))
+    return FALSE;
+
+  if (_gtk_file_info_consider_as_directory (node->info))
+    {
+      if (!model->show_folders)
+        return FALSE;
+
+      if (!model->filter_folders)
+        return TRUE;
+    }
+  else
+    {
+      if (!model->show_files)
+        return FALSE;
+    }
+
+  result = !node_should_be_filtered (model, id);
 
   return result;
 }
@@ -1403,6 +1430,7 @@ gtk_file_system_model_refilter_all (GtkFileSystemModel *model)
   /* start at index 1, don't change the editable */
   for (i = 1; i < model->files->len; i++)
     {
+      node_set_filtered (model, i, node_should_be_filtered (model, i));
       node_set_visible (model, i, node_should_be_visible (model, i));
     }
 
@@ -1547,6 +1575,31 @@ _gtk_file_system_model_iter_is_visible (GtkFileSystemModel *model,
 
   node = get_node (model, ITER_INDEX (iter));
   return node->visible;
+}
+
+/**
+ * _gtk_file_system_model_iter_is_filtered:
+ * @model: the model
+ * @iter: a valid iterator
+ *
+ * Checks if the iterator is filtered. A filtered iterator references
+ * a row that is currently exposed using the #GtkTreeModel API. If
+ * the iterator is filtered, it references a file that filtered by
+ * the current filter.
+ *
+ * Returns: %TRUE if the iterator is filtered
+ **/
+gboolean
+_gtk_file_system_model_iter_is_filtered (GtkFileSystemModel *model,
+                                         GtkTreeIter        *iter)
+{
+  FileModelNode *node;
+
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  node = get_node (model, ITER_INDEX (iter));
+  return node->filtered;
 }
 
 /**
@@ -1746,8 +1799,12 @@ add_file (GtkFileSystemModel *model,
   g_slice_free1 (model->node_size, node);
 
   if (!model->frozen)
-    node_set_visible (model, model->files->len -1,
-                      node_should_be_visible (model, model->files->len - 1));
+    {
+      node_set_filtered (model, model->files->len -1,
+                         node_should_be_filtered (model, model->files->len - 1));
+      node_set_visible (model, model->files->len -1,
+                        node_should_be_visible (model, model->files->len - 1));
+    }
   gtk_file_system_model_sort_node (model, model->files->len -1);
 }
 
@@ -1776,6 +1833,7 @@ remove_file (GtkFileSystemModel *model,
 
   node = get_node (model, id);
   node_set_visible (model, id, FALSE);
+  node_set_filtered (model, id, FALSE);
 
   g_hash_table_remove (model->file_lookup, file);
   g_object_unref (node->file);
@@ -1887,6 +1945,7 @@ _gtk_file_system_model_add_editable (GtkFileSystemModel *model, GtkTreeIter *ite
   g_return_if_fail (!get_node (model, 0)->visible);
 
   node_set_visible (model, 0, TRUE);
+  node_set_filtered (model, 0, FALSE);
   ITER_INIT_FROM_INDEX (model, iter, 0);
 }
 
@@ -1905,6 +1964,7 @@ _gtk_file_system_model_remove_editable (GtkFileSystemModel *model)
   g_return_if_fail (get_node (model, 0)->visible);
 
   node_set_visible (model, 0, FALSE);
+  node_set_filtered (model, 0, FALSE);
 }
 
 /**
@@ -1962,6 +2022,7 @@ _gtk_file_system_model_thaw_updates (GtkFileSystemModel *model)
             continue;
           node->frozen_add = FALSE;
           node_set_visible (model, i, node_should_be_visible (model, i));
+          node_set_filtered (model, i, node_should_be_filtered (model, i));
         }
     }
 }
