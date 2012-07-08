@@ -7942,7 +7942,8 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
    * the icon helper's cache ref directly.
    */
   pixbuf = gtk_entry_ensure_pixbuf (entry, icon_pos);
-  g_object_unref (pixbuf);
+  if (pixbuf)
+    g_object_unref (pixbuf);
 
   return pixbuf;
 }
