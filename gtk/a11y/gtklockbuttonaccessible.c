@@ -1,0 +1,34 @@
+/* GAIL - The GNOME Accessibility Implementation Library
+ * Copyright 2001, 2002, 2003 Sun Microsystems Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "config.h"
+
+#include <string.h>
+#include <gtk/gtk.h>
+#include "gtklockbuttonaccessible.h"
+
+G_DEFINE_TYPE (GtkLockButtonAccessible, _gtk_lock_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE)
+
+static void
+_gtk_lock_button_accessible_class_init (GtkLockButtonAccessibleClass *klass)
+{
+}
+
+static void
+_gtk_lock_button_accessible_init (GtkLockButtonAccessible *lockbutton)
+{
+}

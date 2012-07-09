@@ -24,6 +24,7 @@
 #include "gtklabel.h"
 #include "gtksizegroup.h"
 #include "gtkintl.h"
+#include "a11y/gtklockbuttonaccessible.h"
 
 /**
  * SECTION:gtklockbutton
@@ -261,6 +262,7 @@ static void
 gtk_lock_button_class_init (GtkLockButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkButtonClass *button_class = GTK_BUTTON_CLASS (klass);
 
   gobject_class->finalize     = gtk_lock_button_finalize;
@@ -323,6 +325,8 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |
                          G_PARAM_STATIC_STRINGS));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LOCK_BUTTON_ACCESSIBLE);
 }
 
 static void
