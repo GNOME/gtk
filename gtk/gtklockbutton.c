@@ -185,10 +185,12 @@ gtk_lock_button_set_property (GObject      *object,
 
     case PROP_TEXT_LOCK:
       gtk_label_set_text (GTK_LABEL (priv->label_lock), g_value_get_string (value));
+      _gtk_lock_button_accessible_name_changed (button);
       break;
 
     case PROP_TEXT_UNLOCK:
       gtk_label_set_text (GTK_LABEL (priv->label_unlock), g_value_get_string (value));
+      _gtk_lock_button_accessible_name_changed (button);
       break;
 
     case PROP_TOOLTIP_LOCK:
@@ -388,8 +390,12 @@ update_state (GtkLockButton *button)
     }
 
   gtk_image_set_from_gicon (GTK_IMAGE (priv->image), icon, GTK_ICON_SIZE_MENU);
-  gtk_widget_set_visible (priv->label_lock, allowed);
-  gtk_widget_set_visible (priv->label_unlock, !allowed);
+  if (gtk_widget_get_visible (priv->label_lock) != allowed)
+    {
+      gtk_widget_set_visible (priv->label_lock, allowed);
+      gtk_widget_set_visible (priv->label_unlock, !allowed);
+      _gtk_lock_button_accessible_name_changed (button);
+    }
   gtk_widget_set_tooltip_markup (GTK_WIDGET (button), tooltip);
   gtk_widget_set_sensitive (GTK_WIDGET (button), sensitive);
   gtk_widget_set_visible (GTK_WIDGET (button), visible);

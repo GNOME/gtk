@@ -17,8 +17,10 @@
 
 #include "config.h"
 
-#include "gtk/gtklockbuttonprivate.h"
 #include "gtklockbuttonaccessible.h"
+
+#include "gtk/gtklockbuttonprivate.h"
+#include "gtk/gtkwidgetprivate.h"
 
 G_DEFINE_TYPE (GtkLockButtonAccessible, _gtk_lock_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE)
 
@@ -46,3 +48,16 @@ static void
 _gtk_lock_button_accessible_init (GtkLockButtonAccessible *lockbutton)
 {
 }
+
+void
+_gtk_lock_button_accessible_name_changed (GtkLockButton *lockbutton)
+{
+  AtkObject *obj;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (lockbutton));
+  if (obj == NULL)
+    return;
+
+  g_object_notify (G_OBJECT (obj), "accessible-name");
+}
+

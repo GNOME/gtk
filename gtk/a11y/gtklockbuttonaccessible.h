@@ -19,6 +19,7 @@
 #define __GTK_LOCK_BUTTON_ACCESSIBLE_H__
 
 #include "gtkbuttonaccessible.h"
+#include "gtk/gtklockbutton.h"
 
 G_BEGIN_DECLS
 
@@ -43,6 +44,9 @@ struct _GtkLockButtonAccessibleClass
 };
 
 GType _gtk_lock_button_accessible_get_type (void);
+
+void  _gtk_lock_button_accessible_name_changed (GtkLockButton *lockbutton);
+
 
 G_END_DECLS
 
