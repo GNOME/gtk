@@ -731,11 +731,11 @@ pid_get_parent (GPid pid)
   int mib[] = { CTL_KERN, KERN_PROC, KERN_PROC_PID, pid,
                 sizeof(struct kinfo_proc), 0 };
 
-  if (sysctl(mib, nitems(mib), NULL, &len, NULL, 0) == -1)
+  if (sysctl(mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
       return (-1);
   mib[5] = (len / sizeof(struct kinfo_proc));
 
-  if (sysctl(mib, nitems(mib), &kp, &len, NULL, 0) < 0)
+  if (sysctl(mib, G_N_ELEMENTS (mib), &kp, &len, NULL, 0) < 0)
       return -1;
 
   ppid = kp.p_ppid;
@@ -760,7 +760,7 @@ pid_get_env (GPid pid, const gchar *key)
   key_len = strlen (key);
 
   ret = NULL;
-  if (sysctl(mib, nitems(mib), strs, &len, NULL, 0) != -1)
+  if (sysctl(mib, G_N_ELEMENTS (mib), strs, &len, NULL, 0) != -1)
     {
       for (i = 0; strs[i] != NULL; i++)
 	{
@@ -792,7 +792,7 @@ pid_get_command_line (GPid pid)
 
   strs = (char **)realloc(strs, len);
 
-  if (sysctl(mib, nitems(mib), strs, &len, NULL, 0) == -1) {
+  if (sysctl(mib, G_N_ELEMENTS (mib), strs, &len, NULL, 0) == -1) {
     g_free (strs);
     return ret;
   }
