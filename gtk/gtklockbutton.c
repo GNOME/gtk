@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gtklockbutton.h"
+#include "gtklockbuttonprivate.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
@@ -564,3 +564,19 @@ gtk_lock_button_set_permission (GtkLockButton *button,
       g_object_notify (G_OBJECT (button), "permission");
     }
 }
+
+const char *
+_gtk_lock_button_get_current_text (GtkLockButton *button)
+{
+  GtkLockButtonPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_LOCK_BUTTON (button), NULL);
+
+  priv = button->priv;
+
+  if (gtk_widget_get_visible (priv->label_lock))
+    return gtk_label_get_text (GTK_LABEL (priv->label_lock));
+  else
+    return gtk_label_get_text (GTK_LABEL (priv->label_unlock));
+}
+
