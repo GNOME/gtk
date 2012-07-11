@@ -701,6 +701,22 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_LEVEL_BAR "level-bar"
 
+/**
+ * GTK_STYLE_CLASS_CURSOR_HANDLE:
+ *
+ * A CSS class used when rendering a drag handle for
+ * text selection.
+ */
+#define GTK_STYLE_CLASS_CURSOR_HANDLE "cursor-handle"
+
+/**
+ * GTK_STYLE_CLASS_INVERTED_CURSOR_HANDLE:
+ *
+ * A CSS class used when rendering a drag handle for
+ * text selection.
+ */
+#define GTK_STYLE_CLASS_INVERTED_CURSOR_HANDLE "inverted-cursor-handle"
+
 /* Predefined set of widget regions */
 
 /**

@@ -394,8 +394,9 @@ gtk_appchooser_impl_c_sources = \
 	gtkappchooseronlinepk.c
 endif
 
-gtk_private_type_h_sources = \
-	gtkcsstypesprivate.h
+gtk_private_type_h_sources =	\
+	gtkcsstypesprivate.h	\
+	gtktexthandleprivate.h
 
 
 # GTK+ header files that don't get installed
@@ -525,6 +526,7 @@ gtk_private_h_sources =		\
 	gtktextbtree.h		\
 	gtktextbufferserialize.h \
 	gtktextchildprivate.h	\
+	gtktexthandleprivate.h	\
 	gtktextiterprivate.h	\
 	gtktextmarkprivate.h	\
 	gtktextsegment.h	\
@@ -821,6 +823,7 @@ gtk_base_c_sources = 		\
 	gtktextbufferserialize.c \
 	gtktextchild.c		\
 	gtktextdisplay.c	\
+	gtktexthandle.c		\
 	gtktextiter.c		\
 	gtktextlayout.c		\
 	gtktextmark.c		\
