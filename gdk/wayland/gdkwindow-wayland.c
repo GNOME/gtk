@@ -685,7 +685,16 @@ shell_surface_popup_done (void                    *data,
   gdk_window_hide (window);
 }
 
+static void
+shell_surface_ping (void                    *data,
+                    struct wl_shell_surface *shell_surface,
+                    uint32_t                 serial)
+{
+  wl_shell_surface_pong(shell_surface, serial);
+}
+
 static const struct wl_shell_surface_listener shell_surface_listener = {
+  shell_surface_ping,
   shell_surface_handle_configure,
   shell_surface_popup_done
 };
