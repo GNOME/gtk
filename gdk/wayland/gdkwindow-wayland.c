@@ -696,6 +696,13 @@ shell_surface_ping (void                    *data,
                     struct wl_shell_surface *shell_surface,
                     uint32_t                 serial)
 {
+
+  GdkWindow *window = GDK_WINDOW (data);
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+
+  _gdk_wayland_display_update_serial (wayland_display, serial);
+
   wl_shell_surface_pong(shell_surface, serial);
 }
 
