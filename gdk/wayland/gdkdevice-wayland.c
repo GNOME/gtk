@@ -1320,9 +1320,20 @@ static GdkDevice *
 gdk_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager)
 {
   GdkDeviceManagerCore *device_manager_core;
+  GList *l;
 
   device_manager_core = (GdkDeviceManagerCore *) device_manager;
-  return device_manager_core->devices->data;
+
+  /* Find the first pointer device */
+  for (l = device_manager_core->devices; l != NULL; l = l->next)
+    {
+      GdkDevice *device = l->data;
+
+      if (gdk_device_get_source (device) == GDK_SOURCE_MOUSE)
+        return device;
+    }
+
+  return NULL;
 }
 
 static void
