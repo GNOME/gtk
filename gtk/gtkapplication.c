@@ -79,7 +79,7 @@
  * gtk_application_set_app_menu(). The #GMenuModel that this function
  * expects is usually constructed using #GtkBuilder, as seen in the
  * following example. To specify a menubar that will be shown by
- * #GtkApplicationWindow<!-- -->s, use gtk_application_set_menubar(). Use the base
+ * #GtkApplicationWindows, use gtk_application_set_menubar(). Use the base
  * #GActionMap interface to add actions, to respond to the user
  * selecting these menu items.
  *
@@ -1053,7 +1053,8 @@ gtk_application_set_app_menu (GtkApplication *application,
       if (application->priv->app_menu != NULL)
         g_object_ref (application->priv->app_menu);
 
-      extract_accels_from_menu (app_menu, application);
+      if (app_menu)
+        extract_accels_from_menu (app_menu, application);
 
 #ifdef GDK_WINDOWING_X11
       gtk_application_set_app_menu_x11 (application, app_menu);
@@ -1126,7 +1127,8 @@ gtk_application_set_menubar (GtkApplication *application,
       if (application->priv->menubar != NULL)
         g_object_ref (application->priv->menubar);
 
-      extract_accels_from_menu (menubar, application);
+      if (menubar)
+        extract_accels_from_menu (menubar, application);
 
 #ifdef GDK_WINDOWING_X11
       gtk_application_set_menubar_x11 (application, menubar);
