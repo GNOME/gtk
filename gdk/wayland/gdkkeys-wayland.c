@@ -98,6 +98,7 @@ gdk_wayland_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 					   GdkKeymapKey **keys,
 					   gint          *n_keys)
 {
+#if 0
   GArray *retval;
   uint32_t keycode;
   struct xkb_desc *xkb;
@@ -157,6 +158,8 @@ gdk_wayland_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   *keys = (GdkKeymapKey *) g_array_free (retval, FALSE);
 
   return *n_keys > 0;
+#endif
+  return FALSE;
 }
 
 static gboolean
@@ -166,6 +169,7 @@ gdk_wayland_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
 					    guint        **keyvals,
 					    gint          *n_entries)
 {
+#if 0
   GArray *key_array;
   GArray *keyval_array;
   struct xkb_desc *xkb;
@@ -256,19 +260,25 @@ gdk_wayland_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
     }
 
   return *n_entries > 0;
+#endif
+  return FALSE;
 }
 
 static guint
 gdk_wayland_keymap_lookup_key (GdkKeymap          *keymap,
 			       const GdkKeymapKey *key)
 {
+#if 0
   struct xkb_desc *xkb;
 
   xkb = GDK_WAYLAND_KEYMAP (keymap)->xkb;
 
   return XkbKeySymEntry (xkb, key->keycode, key->level, key->group);
+#endif
+  return 0;
 }
 
+#if 0
 /* This is copied straight from XFree86 Xlib, to:
  *  - add the group and level return.
  *  - change the interpretation of mods_rtrn as described
@@ -398,6 +408,7 @@ MyEnhancedXkbTranslateKeyCode(struct xkb_desc *       xkb,
 
     return (syms[col] != 0);
 }
+#endif
 
 static gboolean
 gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
@@ -409,6 +420,7 @@ gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 					     gint            *level,
 					     GdkModifierType *consumed_modifiers)
 {
+#if 0
   GdkWaylandKeymap *wayland_keymap;
   uint32_t tmp_keyval = 0;
   guint tmp_modifiers;
@@ -462,9 +474,11 @@ gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
     *keyval = tmp_keyval;
 
   return tmp_keyval != 0;
+#endif
+  return FALSE;
 }
 
-
+#if 0
 static void
 update_modmap (GdkWaylandKeymap *wayland_keymap)
 {
@@ -483,7 +497,7 @@ update_modmap (GdkWaylandKeymap *wayland_keymap)
 
   if (!vmods[0].atom)
     for (i = 0; vmods[i].name; i++)
-      vmods[i].atom = xkb_intern_atom(vmods[i].name);
+      vmods[i].atom = xkb_atom(vmods[i].name);
 
   for (i = 0; i < 8; i++)
     wayland_keymap->modmap[i] = 1 << i;
@@ -503,6 +517,7 @@ update_modmap (GdkWaylandKeymap *wayland_keymap)
 	}
     }
 }
+#endif
 
 static void
 gdk_wayland_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
@@ -585,6 +600,7 @@ _gdk_wayland_keymap_init (GdkWaylandKeymap *keymap)
 {
 }
 
+#if 0
 static void
 update_keymaps (GdkWaylandKeymap *keymap)
 {
@@ -621,6 +637,7 @@ update_keymaps (GdkWaylandKeymap *keymap)
       keymap->modmap[modifier] |= mask;
     }
 }
+#endif
 
 GdkKeymap *
 _gdk_wayland_keymap_new (GdkDisplay *display)
@@ -630,6 +647,7 @@ _gdk_wayland_keymap_new (GdkDisplay *display)
 
   keymap = g_object_new (_gdk_wayland_keymap_get_type(), NULL);
   GDK_KEYMAP (keymap)->display = display;
+#if 0
 
   names.rules = "evdev";
   names.model = "pc105";
@@ -637,10 +655,9 @@ _gdk_wayland_keymap_new (GdkDisplay *display)
   names.variant = "";
   names.options = "";
   keymap->xkb = xkb_compile_keymap_from_rules(&names);
-
   update_modmap (keymap);
   update_keymaps (keymap);
-
+#endif
   return GDK_KEYMAP (keymap);
 }
 
