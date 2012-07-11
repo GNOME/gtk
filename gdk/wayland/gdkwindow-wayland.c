@@ -309,6 +309,7 @@ typedef struct _GdkWaylandCairoSurfaceData {
 #else
   gpointer buf;
   size_t buf_length;
+  struct wl_shm_pool *pool;
 #endif
   struct wl_buffer *buffer;
   GdkWaylandDisplay *display;
@@ -434,16 +435,31 @@ gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
   return surface;
 }
 #else
-static struct wl_buffer *
-create_shm_buffer (struct wl_shm  *shm,
-                   int             width,
-                   int             height,
-                   uint32_t        format,
-                   size_t         *buf_length,
-                   void          **data_out)
+static void
+gdk_wayland_cairo_surface_destroy (void *p)
+{
+  GdkWaylandCairoSurfaceData *data = p;
+
+  if (data->buffer)
+    wl_buffer_destroy (data->buffer);
+
+  if (data->pool)
+    wl_shm_pool_destroy (data->pool);
+
+  munmap (data->buf, data->buf_length);
+  g_free (data);
+}
+
+
+static struct wl_shm_pool *
+_create_shm_pool (struct wl_shm  *shm,
+                  int             width,
+                  int             height,
+                  size_t         *buf_length,
+                  void          **data_out)
 {
   char filename[] = "/tmp/wayland-shm-XXXXXX";
-  struct wl_buffer *buffer;
+  struct wl_shm_pool *pool;
   int fd, size, stride;
   void *data;
 
@@ -472,27 +488,14 @@ create_shm_buffer (struct wl_shm  *shm,
       return NULL;
   }
 
-  buffer = wl_shm_create_buffer (shm, fd,
-                                 width, height,
-                                 stride, format);
+  pool = wl_shm_create_pool(shm, fd, size);
 
   close (fd);
 
   *data_out = data;
   *buf_length = size;
-  return buffer;
-}
 
-static void
-gdk_wayland_cairo_surface_destroy (void *p)
-{
-  GdkWaylandCairoSurfaceData *data = p;
-
-  if (data->buffer)
-    wl_buffer_destroy (data->buffer);
-
-  munmap (data->buf, data->buf_length);
-  g_free (data);
+  return pool;
 }
 
 static cairo_surface_t *
@@ -502,6 +505,7 @@ gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
   GdkWaylandCairoSurfaceData *data;
   cairo_surface_t *surface = NULL;
   cairo_status_t status;
+  int stride;
 
   data = g_new (GdkWaylandCairoSurfaceData, 1);
   data->display = display;
@@ -509,18 +513,22 @@ gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
   data->width = width;
   data->height = height;
 
-  data->buffer = create_shm_buffer (display->shm,
-                                    width,
-                                    height,
-                                    WL_SHM_FORMAT_ARGB8888,
-                                    &data->buf_length,
-                                    &data->buf);
+  stride = width * 4;
+
+  data->pool = _create_shm_pool (display->shm,
+                                 width, height,
+                                 &data->buf_length,
+                                 &data->buf);
+
+  data->buffer = wl_shm_pool_create_buffer (data->pool, 0,
+                                            width, height,
+                                            stride, WL_SHM_FORMAT_ARGB8888);
 
   surface = cairo_image_surface_create_for_data (data->buf,
                                                  CAIRO_FORMAT_ARGB32,
                                                  width,
                                                  height,
-                                                 width * 4);
+                                                 stride);
 
   cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
                                data, gdk_wayland_cairo_surface_destroy);
