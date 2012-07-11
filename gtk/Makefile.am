@@ -265,7 +265,6 @@ gtk_public_h_sources = 		\
 	gtkinvisible.h		\
 	gtklabel.h		\
 	gtklayout.h		\
-	gtklevelbar.h		\
 	gtklinkbutton.h		\
 	gtkliststore.h		\
 	gtklockbutton.h		\
@@ -730,7 +729,6 @@ gtk_base_c_sources = 		\
 	gtkkeyhash.c		\
 	gtklabel.c		\
 	gtklayout.c		\
-	gtklevelbar.c		\
 	gtklinkbutton.c		\
 	gtkliststore.c		\
 	gtklockbutton.c		\

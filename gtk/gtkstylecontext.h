@@ -691,16 +691,6 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_OSD "osd"
 
-/**
- * GTK_STYLE_CLASS_LEVEL_BAR:
- *
- * A CSS class used when rendering a level indicator, such
- * as a battery charge level, or a password strength.
- *
- * This is used by #GtkLevelBar.
- */
-#define GTK_STYLE_CLASS_LEVEL_BAR "level-bar"
-
 /* Predefined set of widget regions */
 
 /**

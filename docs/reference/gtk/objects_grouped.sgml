@@ -90,7 +90,6 @@
     <link linkend="GtkCalendar">GtkCalendar</link>
     <link linkend="GtkProgressBar">GtkProgressBar</link>
     <link linkend="GtkStatusbar">GtkStatusbar</link>
-    <link linkend="GtkStrengthBar">GtkStrengthBar</link>
     <link linkend="GtkHRuler">GtkHRuler</link>
     <link linkend="GtkVRuler">GtkVRuler</link>
     <link linkend="GtkHScrollbar">GtkHScrollbar</link>
