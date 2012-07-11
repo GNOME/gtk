@@ -37,9 +37,6 @@ _gdk_wayland_display_set_selection_owner (GdkDisplay *display,
 					  guint32     time,
 					  gboolean    send_event)
 {
-  fprintf(stderr, "set selection owner: atom %ld, owner %p\n",
-	  selection, owner);
-
   return TRUE;
 }
 
