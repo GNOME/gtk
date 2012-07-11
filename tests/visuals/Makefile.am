@@ -25,7 +25,6 @@ visuals_SOURCES = visuals.c
 
 EXTRA_DIST = \
 	inline-toolbar.ui \
-	level-bar.ui \
 	linked-buttons-horizontal.ui \
 	linked-buttons-vertical.ui \
 	osd-toolbars.ui \
