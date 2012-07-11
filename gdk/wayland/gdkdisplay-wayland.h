@@ -92,8 +92,6 @@ struct _GdkWaylandDisplay
   cairo_device_t *cairo_device;
 #endif
 
-  GdkCursor **cursors;
-
 #ifdef GDK_WAYLAND_USE_EGL
   PFNGLEGLIMAGETARGETTEXTURE2DOESPROC image_target_texture_2d;
   PFNEGLCREATEIMAGEKHRPROC create_image;

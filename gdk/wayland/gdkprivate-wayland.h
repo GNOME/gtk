@@ -68,7 +68,9 @@ gboolean   _gdk_wayland_display_supports_cursor_color (GdkDisplay *display);
 
 struct wl_buffer *_gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 						  int       *x,
-						  int       *y);
+						  int       *y,
+                                                  int       *w,
+                                                  int       *h);
 
 GdkDragProtocol _gdk_wayland_window_get_drag_protocol (GdkWindow *window,
 						       GdkWindow **target);

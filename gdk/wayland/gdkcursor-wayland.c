@@ -34,8 +34,7 @@
 #include "gdkwayland.h"
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-#include <sys/mman.h>
-#include <errno.h>
+#include <wayland-cursor.h>
 
 #define GDK_TYPE_WAYLAND_CURSOR              (_gdk_wayland_cursor_get_type ())
 #define GDK_WAYLAND_CURSOR(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_CURSOR, GdkWaylandCursor))
@@ -52,8 +51,8 @@ struct _GdkWaylandCursor
   GdkCursor cursor;
   gchar *name;
   guint serial;
-  int x, y, width, height, size;
-  void *map;
+  int hotspot_x, hotspot_y;
+  int width, height;
   struct wl_buffer *buffer;
 };
 
@@ -83,12 +82,19 @@ gdk_wayland_cursor_get_image (GdkCursor *cursor)
 }
 
 struct wl_buffer *
-_gdk_wayland_cursor_get_buffer (GdkCursor *cursor, int *x, int *y)
+_gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
+                                int       *x,
+                                int       *y,
+                                int       *w,
+                                int       *h)
 {
   GdkWaylandCursor *wayland_cursor = GDK_WAYLAND_CURSOR (cursor);
 
-  *x = wayland_cursor->x;
-  *y = wayland_cursor->y;
+  *x = wayland_cursor->hotspot_x;
+  *y = wayland_cursor->hotspot_y;
+
+  *w = wayland_cursor->width;
+  *h = wayland_cursor->height;
 
   return wayland_cursor->buffer;
 }
@@ -109,6 +115,8 @@ _gdk_wayland_cursor_init (GdkWaylandCursor *cursor)
 {
 }
 
+/* Use to implement from_pixbuf below */
+#if 0
 static void
 set_pixbuf (GdkWaylandCursor *cursor, GdkPixbuf *pixbuf)
 {
@@ -170,6 +178,7 @@ create_cursor(GdkWaylandDisplay *display, GdkPixbuf *pixbuf, int x, int y)
   int stride, fd;
   char *filename;
   GError *error = NULL;
+  struct wl_shm_pool *pool;
 
   cursor = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
 			 "cursor-type", GDK_CURSOR_IS_PIXMAP,
@@ -236,109 +245,55 @@ create_cursor(GdkWaylandDisplay *display, GdkPixbuf *pixbuf, int x, int y)
 
   close(fd);
 
-  return GDK_CURSOR (cursor);
+ return GDK_CURSOR (cursor);
 }
+#endif
 
+/* TODO: Extend this table */
 static const struct {
   GdkCursorType type;
-  const char *filename;
-  int hotspot_x, hotspot_y;
-} cursor_definitions[] = {
-  { GDK_BLANK_CURSOR, NULL, 0, 0 },
-  { GDK_HAND1, "hand1.png", 18, 11 },
-  { GDK_HAND2, "hand2.png", 14,  8 },
-  { GDK_LEFT_PTR, "left_ptr.png", 10, 5 },
-  { GDK_SB_H_DOUBLE_ARROW, "sb_h_double_arrow.png", 15, 15 },
-  { GDK_SB_V_DOUBLE_ARROW, "sb_v_double_arrow.png", 15, 15 },
-  { GDK_XTERM, "xterm.png", 15, 15 },
-  { GDK_BOTTOM_RIGHT_CORNER, "bottom_right_corner.png", 28, 28 }
+  const gchar *cursor_name;
+} cursor_mapping[] = {
+  { GDK_BLANK_CURSOR,          NULL   },
+  { GDK_HAND1,                "hand1" },
+  { GDK_HAND2,                "hand2" },
+  { GDK_LEFT_PTR,             "left_ptr" },
+  { GDK_SB_H_DOUBLE_ARROW,    "sb_h_double_arrow" },
+  { GDK_SB_V_DOUBLE_ARROW,    "sb_v_double_arrow" },
+  { GDK_XTERM,                "xterm" },
+  { GDK_BOTTOM_RIGHT_CORNER,  "bottom_right_corner" }
 };
 
 GdkCursor *
 _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
 					  GdkCursorType  cursor_type)
 {
-  GdkWaylandDisplay *wayland_display;
-  GdkPixbuf *pixbuf = NULL;
-  GError *error = NULL;
   int i;
 
-  for (i = 0; i < G_N_ELEMENTS (cursor_definitions); i++)
+  for (i = 0; i < G_N_ELEMENTS (cursor_mapping); i++)
     {
-      if (cursor_definitions[i].type == cursor_type)
+      if (cursor_mapping[i].type == cursor_type)
 	break;
     }
 
-  if (i == G_N_ELEMENTS (cursor_definitions))
+  if (i == G_N_ELEMENTS (cursor_mapping))
     {
       g_warning ("Unhandled cursor type %d, falling back to blank\n",
                  cursor_type);
       i = 0;
     }
 
-  wayland_display = GDK_WAYLAND_DISPLAY (display);
-  if (!wayland_display->cursors)
-    wayland_display->cursors =
-      g_new0 (GdkCursor *, G_N_ELEMENTS(cursor_definitions));
-  if (wayland_display->cursors[i])
-    return g_object_ref (wayland_display->cursors[i]);
-
-  GDK_NOTE (CURSOR,
-	    g_message ("Creating new cursor for type %d, filename %s",
-		       cursor_type, cursor_definitions[i].filename));
-
-  if (cursor_type != GDK_BLANK_CURSOR)
-    {
-      const gchar * const *directories;
-      gint j;
-
-      directories = g_get_system_data_dirs();
-
-      for (j = 0; directories[j] != NULL; j++)
-        {
-          gchar *filename;
-          filename = g_build_filename (directories[j],
-                                       "weston",
-                                       cursor_definitions[i].filename,
-                                       NULL);
-          if (g_file_test (filename, G_FILE_TEST_EXISTS))
-            {
-              pixbuf = gdk_pixbuf_new_from_file (filename, &error);
-
-              if (error != NULL)
-                {
-                  g_warning ("Failed to load cursor: %s: %s",
-                             filename, error->message);
-                  g_error_free(error);
-                  return NULL;
-                }
-              break;
-            }
-        }
-
-      if (!pixbuf)
-        {
-          g_warning ("Unable to find cursor for: %s",
-                     cursor_definitions[i].filename);
-          return NULL;
-        }
-    }
-
-  wayland_display->cursors[i] =
-    create_cursor(wayland_display, pixbuf,
-		  cursor_definitions[i].hotspot_x,
-		  cursor_definitions[i].hotspot_y);
-  if (pixbuf)
-    g_object_unref (pixbuf);
-
-  return g_object_ref (wayland_display->cursors[i]);
+  return _gdk_wayland_display_get_cursor_for_name (display,
+                                                   cursor_mapping[i].cursor_name);
 }
 
-GdkCursor*
+GdkCursor *
 _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
 					  const gchar *name)
 {
   GdkWaylandCursor *private;
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
+  struct wl_cursor *cursor;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
@@ -349,9 +304,35 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
   private->name = g_strdup (name);
   private->serial = theme_serial;
 
+  /* Blank cursor case */
+  if (!name)
+    return GDK_CURSOR (private);
+
+  cursor = wl_cursor_theme_get_cursor (wayland_display->cursor_theme,
+                                       name);
+
+  if (!cursor)
+    {
+      g_warning (G_STRLOC ": Unable to load %s from the cursor theme", name);
+      g_object_unref (private);
+      return NULL;
+    }
+
+  /* TODO: Do something clever so we can do animated cursors - move the
+   * wl_pointer_set_cursor to a function here so that we can do the magic to
+   * iterate through
+   */
+  private->hotspot_x = cursor->images[0]->hotspot_x;
+  private->hotspot_y = cursor->images[0]->hotspot_y;
+  private->width = cursor->images[0]->width;
+  private->height = cursor->images[0]->height;
+
+  private->buffer = wl_cursor_image_get_buffer(cursor->images[0]);
+
   return GDK_CURSOR (private);
 }
 
+/* TODO: Needs implementing */
 GdkCursor *
 _gdk_wayland_display_get_cursor_for_pixbuf (GdkDisplay *display,
 					    GdkPixbuf  *pixbuf,
@@ -381,9 +362,8 @@ _gdk_wayland_display_get_default_cursor_size (GdkDisplay *display,
 					      guint       *width,
 					      guint       *height)
 {
-  /* FIXME: wayland settings? */
-  *width = 64;
-  *height = 64;
+  *width = 32;
+  *height = 32;
 }
 
 void

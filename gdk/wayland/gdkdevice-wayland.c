@@ -80,6 +80,8 @@ struct _GdkWaylandDevice
   DataOffer *selection_offer;
 
   GdkWaylandSelectionOffer *selection_offer_out;
+
+  struct wl_surface *pointer_surface;
 };
 
 struct _GdkDeviceCore
@@ -156,7 +158,7 @@ gdk_device_core_set_window_cursor (GdkDevice *device,
 {
   GdkWaylandDevice *wd = GDK_DEVICE_CORE(device)->device;
   struct wl_buffer *buffer;
-  int x, y;
+  int x, y, w, h;
 
   if (cursor)
     g_object_ref (cursor);
@@ -169,8 +171,10 @@ gdk_device_core_set_window_cursor (GdkDevice *device,
                                                          GDK_LEFT_PTR);
     }
 
-  buffer = _gdk_wayland_cursor_get_buffer(cursor, &x, &y);
-  wl_input_device_attach(wd->device, wd->time, buffer, x, y);
+  buffer = _gdk_wayland_cursor_get_buffer (cursor, &x, &y, &w, &h);
+  wl_pointer_set_cursor (wd->wl_pointer, wd->time, wd->pointer_surface, x, y);
+  wl_surface_attach (wd->pointer_surface, buffer, 0, 0);
+  wl_surface_damage (wd->pointer_surface,  0, 0, w, h);
 
   g_object_unref (cursor);
 }
@@ -1274,6 +1278,8 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
   wl_data_device_add_listener (device->data_device,
                                &data_device_listener, device);
 
+  device->pointer_surface =
+    wl_compositor_create_surface (display_wayland->compositor);
 }
 
 static void
