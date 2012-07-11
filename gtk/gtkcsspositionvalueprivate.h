@@ -33,8 +33,6 @@ double          _gtk_css_position_value_get_x         (const GtkCssValue      *p
                                                      double                  one_hundred_percent);
 double          _gtk_css_position_value_get_y         (const GtkCssValue      *position,
                                                      double                  one_hundred_percent);
-GtkCssValue *   _gtk_css_position_value_compute       (GtkCssValue            *position,
-                                                     GtkStyleContext        *context);
 
 
 G_END_DECLS

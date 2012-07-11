@@ -33,9 +33,6 @@ G_BEGIN_DECLS
 GtkCssValue *   _gtk_css_shadows_value_new_none       (void);
 GtkCssValue *   _gtk_css_shadows_value_parse          (GtkCssParser             *parser);
 
-GtkCssValue *   _gtk_css_shadows_value_compute        (GtkCssValue              *shadows,
-                                                       GtkStyleContext          *context);
-
 void            _gtk_css_shadows_value_paint_layout   (const GtkCssValue        *shadows,
                                                        cairo_t                  *cr,
                                                        PangoLayout              *layout);

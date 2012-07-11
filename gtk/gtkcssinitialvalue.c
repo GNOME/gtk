@@ -30,6 +30,14 @@ gtk_css_value_initial_free (GtkCssValue *value)
   g_assert_not_reached ();
 }
 
+static GtkCssValue *
+gtk_css_value_initial_compute (GtkCssValue     *value,
+                               GtkStyleContext *context)
+{
+  /* This value should be caught further up */
+  g_return_val_if_reached (_gtk_css_value_ref (value));
+}
+
 static gboolean
 gtk_css_value_initial_equal (const GtkCssValue *value1,
                              const GtkCssValue *value2)
@@ -54,6 +62,7 @@ gtk_css_value_initial_print (const GtkCssValue *value,
 
 static const GtkCssValueClass GTK_CSS_VALUE_INITIAL = {
   gtk_css_value_initial_free,
+  gtk_css_value_initial_compute,
   gtk_css_value_initial_equal,
   gtk_css_value_initial_transition,
   gtk_css_value_initial_print

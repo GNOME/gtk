@@ -32,6 +32,13 @@ gtk_css_value_string_free (GtkCssValue *value)
   g_slice_free (GtkCssValue, value);
 }
 
+static GtkCssValue *
+gtk_css_value_string_compute (GtkCssValue     *value,
+                              GtkStyleContext *context)
+{
+  return _gtk_css_value_ref (value);
+}
+
 static gboolean
 gtk_css_value_string_equal (const GtkCssValue *value1,
                             const GtkCssValue *value2)
@@ -130,6 +137,7 @@ gtk_css_value_ident_print (const GtkCssValue *value,
 
 static const GtkCssValueClass GTK_CSS_VALUE_STRING = {
   gtk_css_value_string_free,
+  gtk_css_value_string_compute,
   gtk_css_value_string_equal,
   gtk_css_value_string_transition,
   gtk_css_value_string_print
@@ -137,6 +145,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_STRING = {
 
 static const GtkCssValueClass GTK_CSS_VALUE_IDENT = {
   gtk_css_value_string_free,
+  gtk_css_value_string_compute,
   gtk_css_value_string_equal,
   gtk_css_value_string_transition,
   gtk_css_value_ident_print

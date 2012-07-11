@@ -36,8 +36,6 @@ void            _gtk_css_bg_size_value_compute_size (const GtkCssValue      *bg_
                                                      double                  area_height,
                                                      double                 *out_width,
                                                      double                 *out_height);
-GtkCssValue *   _gtk_css_bg_size_value_compute      (GtkCssValue            *bg_size,
-                                                     GtkStyleContext        *context);
 
 
 G_END_DECLS

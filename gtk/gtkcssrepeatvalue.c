@@ -33,6 +33,13 @@ gtk_css_value_repeat_free (GtkCssValue *value)
   g_slice_free (GtkCssValue, value);
 }
 
+static GtkCssValue *
+gtk_css_value_repeat_compute (GtkCssValue     *value,
+                              GtkStyleContext *context)
+{
+  return _gtk_css_value_ref (value);
+}
+
 static gboolean
 gtk_css_value_repeat_equal (const GtkCssValue *repeat1,
                             const GtkCssValue *repeat2)
@@ -103,6 +110,7 @@ gtk_css_value_border_repeat_print (const GtkCssValue *repeat,
 
 static const GtkCssValueClass GTK_CSS_VALUE_BACKGROUND_REPEAT = {
   gtk_css_value_repeat_free,
+  gtk_css_value_repeat_compute,
   gtk_css_value_repeat_equal,
   gtk_css_value_repeat_transition,
   gtk_css_value_background_repeat_print
@@ -110,6 +118,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_BACKGROUND_REPEAT = {
 
 static const GtkCssValueClass GTK_CSS_VALUE_BORDER_REPEAT = {
   gtk_css_value_repeat_free,
+  gtk_css_value_repeat_compute,
   gtk_css_value_repeat_equal,
   gtk_css_value_repeat_transition,
   gtk_css_value_border_repeat_print

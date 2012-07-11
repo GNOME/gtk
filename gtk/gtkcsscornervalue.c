@@ -36,6 +36,24 @@ gtk_css_value_corner_free (GtkCssValue *value)
   g_slice_free (GtkCssValue, value);
 }
 
+static GtkCssValue *
+gtk_css_value_corner_compute (GtkCssValue     *corner,
+                              GtkStyleContext *context)
+{
+  GtkCssValue *x, *y;
+
+  x = _gtk_css_value_compute (corner->x, context);
+  y = _gtk_css_value_compute (corner->y, context);
+  if (x == corner->x && y == corner->y)
+    {
+      _gtk_css_value_unref (x);
+      _gtk_css_value_unref (y);
+      return _gtk_css_value_ref (corner);
+    }
+
+  return _gtk_css_corner_value_new (x, y);
+}
+
 static gboolean
 gtk_css_value_corner_equal (const GtkCssValue *corner1,
                             const GtkCssValue *corner2)
@@ -78,6 +96,7 @@ gtk_css_value_corner_print (const GtkCssValue *corner,
 
 static const GtkCssValueClass GTK_CSS_VALUE_CORNER = {
   gtk_css_value_corner_free,
+  gtk_css_value_corner_compute,
   gtk_css_value_corner_equal,
   gtk_css_value_corner_transition,
   gtk_css_value_corner_print
@@ -146,25 +165,5 @@ _gtk_css_corner_value_get_y (const GtkCssValue *corner,
   g_return_val_if_fail (corner->class == &GTK_CSS_VALUE_CORNER, 0.0);
 
   return _gtk_css_number_value_get (corner->y, one_hundred_percent);
-}
-
-GtkCssValue *
-_gtk_css_corner_value_compute (GtkCssValue     *corner,
-                               GtkStyleContext *context)
-{
-  GtkCssValue *x, *y;
-
-  g_return_val_if_fail (corner->class == &GTK_CSS_VALUE_CORNER, NULL);
-
-  x = _gtk_css_number_value_compute (corner->x, context);
-  y = _gtk_css_number_value_compute (corner->y, context);
-  if (x == corner->x && y == corner->y)
-    {
-      _gtk_css_value_unref (x);
-      _gtk_css_value_unref (y);
-      return _gtk_css_value_ref (corner);
-    }
-
-  return _gtk_css_corner_value_new (x, y);
 }
 

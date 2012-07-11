@@ -117,6 +117,17 @@ gtk_css_value_symbolic_free (GtkCssValue *value)
   g_slice_free (GtkSymbolicColor, color);
 }
 
+static GtkCssValue *
+gtk_css_value_symbolic_compute (GtkCssValue     *value,
+                                GtkStyleContext *context)
+{
+  /* for now we expect this to never be called
+   * because all cases are handled via
+   * _gtk_css_rgba_value_compute_from_symbolic()
+   */
+  g_return_val_if_reached (_gtk_css_value_ref (value));
+}
+
 static gboolean
 gtk_css_value_symbolic_equal (const GtkCssValue *value1,
                               const GtkCssValue *value2)
@@ -180,6 +191,7 @@ gtk_css_value_symbolic_print (const GtkCssValue *value,
 
 static const GtkCssValueClass GTK_CSS_VALUE_SYMBOLIC = {
   gtk_css_value_symbolic_free,
+  gtk_css_value_symbolic_compute,
   gtk_css_value_symbolic_equal,
   gtk_css_value_symbolic_transition,
   gtk_css_value_symbolic_print

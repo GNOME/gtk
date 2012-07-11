@@ -36,6 +36,24 @@ gtk_css_value_position_free (GtkCssValue *value)
   g_slice_free (GtkCssValue, value);
 }
 
+static GtkCssValue *
+gtk_css_value_position_compute (GtkCssValue     *position,
+                                GtkStyleContext *context)
+{
+  GtkCssValue *x, *y;
+
+  x = _gtk_css_value_compute (position->x, context);
+  y = _gtk_css_value_compute (position->y, context);
+  if (x == position->x && y == position->y)
+    {
+      _gtk_css_value_unref (x);
+      _gtk_css_value_unref (y);
+      return _gtk_css_value_ref (position);
+    }
+
+  return _gtk_css_position_value_new (x, y);
+}
+
 static gboolean
 gtk_css_value_position_equal (const GtkCssValue *position1,
                               const GtkCssValue *position2)
@@ -129,6 +147,7 @@ done:
 
 static const GtkCssValueClass GTK_CSS_VALUE_POSITION = {
   gtk_css_value_position_free,
+  gtk_css_value_position_compute,
   gtk_css_value_position_equal,
   gtk_css_value_position_transition,
   gtk_css_value_position_print
@@ -268,25 +287,5 @@ _gtk_css_position_value_get_y (const GtkCssValue *position,
   g_return_val_if_fail (position->class == &GTK_CSS_VALUE_POSITION, 0.0);
 
   return _gtk_css_number_value_get (position->y, one_hundred_percent);
-}
-
-GtkCssValue *
-_gtk_css_position_value_compute (GtkCssValue     *position,
-                                 GtkStyleContext *context)
-{
-  GtkCssValue *x, *y;
-
-  g_return_val_if_fail (position->class == &GTK_CSS_VALUE_POSITION, NULL);
-
-  x = _gtk_css_number_value_compute (position->x, context);
-  y = _gtk_css_number_value_compute (position->y, context);
-  if (x == position->x && y == position->y)
-    {
-      _gtk_css_value_unref (x);
-      _gtk_css_value_unref (y);
-      return _gtk_css_value_ref (position);
-    }
-
-  return _gtk_css_position_value_new (x, y);
 }
 

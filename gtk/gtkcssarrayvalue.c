@@ -40,6 +40,33 @@ gtk_css_value_array_free (GtkCssValue *value)
   g_slice_free1 (sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (value->n_values - 1), value);
 }
 
+static GtkCssValue *
+gtk_css_value_array_compute (GtkCssValue     *value,
+                             GtkStyleContext *context)
+{
+  GtkCssValue *result;
+  gboolean changed = FALSE;
+  guint i;
+
+  if (value->n_values == 0)
+    return _gtk_css_value_ref (value);
+
+  result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
+  for (i = 0; i < value->n_values; i++)
+    {
+      result->values[i] = _gtk_css_value_compute (value->values[i], context);
+      changed |= (result->values[i] != value->values[i]);
+    }
+
+  if (!changed)
+    {
+      _gtk_css_value_unref (result);
+      return _gtk_css_value_ref (value);
+    }
+
+  return result;
+}
+
 static gboolean
 gtk_css_value_array_equal (const GtkCssValue *value1,
                            const GtkCssValue *value2)
@@ -89,6 +116,7 @@ gtk_css_value_array_print (const GtkCssValue *value,
 
 static const GtkCssValueClass GTK_CSS_VALUE_ARRAY = {
   gtk_css_value_array_free,
+  gtk_css_value_array_compute,
   gtk_css_value_array_equal,
   gtk_css_value_array_transition,
   gtk_css_value_array_print
@@ -150,37 +178,6 @@ _gtk_css_array_value_parse (GtkCssParser *parser,
 
   result = _gtk_css_array_value_new_from_array ((GtkCssValue **) values->pdata, values->len);
   g_ptr_array_free (values, TRUE);
-  return result;
-}
-
-GtkCssValue *
-_gtk_css_array_value_compute (GtkCssValue     *value,
-                              GtkCssValue *    (* compute_func) (GtkCssValue *, GtkStyleContext *),
-                              GtkStyleContext *context)
-{
-  GtkCssValue *result;
-  gboolean changed = FALSE;
-  guint i;
-
-  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_ARRAY, NULL);
-  g_return_val_if_fail (compute_func != NULL, NULL);
-
-  if (value->n_values == 0)
-    return _gtk_css_value_ref (value);
-
-  result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
-  for (i = 0; i < value->n_values; i++)
-    {
-      result->values[i] = (* compute_func) (value->values[i], context);
-      changed |= (result->values[i] != value->values[i]);
-    }
-
-  if (!changed)
-    {
-      _gtk_css_value_unref (result);
-      return _gtk_css_value_ref (value);
-    }
-
   return result;
 }
 

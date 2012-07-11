@@ -33,6 +33,28 @@ gtk_css_value_image_free (GtkCssValue *value)
   g_slice_free (GtkCssValue, value);
 }
 
+static GtkCssValue *
+gtk_css_value_image_compute (GtkCssValue     *value,
+                             GtkStyleContext *context)
+{
+  GtkCssImage *image, *computed;
+  
+  image = _gtk_css_image_value_get_image (value);
+
+  if (image == NULL)
+    return _gtk_css_value_ref (value);
+
+  computed = _gtk_css_image_compute (image, context);
+
+  if (computed == image)
+    {
+      g_object_unref (computed);
+      return _gtk_css_value_ref (value);
+    }
+
+  return _gtk_css_image_value_new (computed);
+}
+
 static gboolean
 gtk_css_value_image_equal (const GtkCssValue *value1,
                            const GtkCssValue *value2)
@@ -66,6 +88,7 @@ gtk_css_value_image_print (const GtkCssValue *value,
 
 static const GtkCssValueClass GTK_CSS_VALUE_IMAGE = {
   gtk_css_value_image_free,
+  gtk_css_value_image_compute,
   gtk_css_value_image_equal,
   gtk_css_value_image_transition,
   gtk_css_value_image_print

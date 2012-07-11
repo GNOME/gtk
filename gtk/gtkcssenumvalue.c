@@ -35,6 +35,13 @@ gtk_css_value_enum_free (GtkCssValue *value)
   g_slice_free (GtkCssValue, value);
 }
 
+static GtkCssValue *
+gtk_css_value_enum_compute (GtkCssValue     *value,
+                            GtkStyleContext *context)
+{
+  return _gtk_css_value_ref (value);
+}
+
 static gboolean
 gtk_css_value_enum_equal (const GtkCssValue *enum1,
                           const GtkCssValue *enum2)
@@ -61,6 +68,7 @@ gtk_css_value_enum_print (const GtkCssValue *value,
 
 static const GtkCssValueClass GTK_CSS_VALUE_BORDER_STYLE = {
   gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
   gtk_css_value_enum_print
@@ -115,6 +123,7 @@ _gtk_css_border_style_value_get (const GtkCssValue *value)
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_STYLE = {
   gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
   gtk_css_value_enum_print
@@ -162,6 +171,7 @@ _gtk_css_font_style_value_get (const GtkCssValue *value)
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT = {
   gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
   gtk_css_value_enum_print
@@ -208,6 +218,7 @@ _gtk_css_font_variant_value_get (const GtkCssValue *value)
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_WEIGHT = {
   gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
   gtk_css_value_enum_print
@@ -275,6 +286,7 @@ _gtk_css_font_weight_value_get (const GtkCssValue *value)
 
 static const GtkCssValueClass GTK_CSS_VALUE_AREA = {
   gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
   gtk_css_value_enum_print

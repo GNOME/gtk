@@ -33,8 +33,6 @@ double          _gtk_css_corner_value_get_x         (const GtkCssValue      *cor
                                                      double                  one_hundred_percent);
 double          _gtk_css_corner_value_get_y         (const GtkCssValue      *corner,
                                                      double                  one_hundred_percent);
-GtkCssValue *   _gtk_css_corner_value_compute       (GtkCssValue            *corner,
-                                                     GtkStyleContext        *context);
 
 
 G_END_DECLS

@@ -40,9 +40,6 @@ GtkCssValue *   _gtk_css_border_value_get_right     (const GtkCssValue      *val
 GtkCssValue *   _gtk_css_border_value_get_bottom    (const GtkCssValue      *value);
 GtkCssValue *   _gtk_css_border_value_get_left      (const GtkCssValue      *value);
 
-GtkCssValue *   _gtk_css_border_value_compute       (GtkCssValue            *border,
-                                                     GtkStyleContext        *context);
-
 
 G_END_DECLS
 

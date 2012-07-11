@@ -61,6 +61,16 @@ _gtk_css_value_unref (GtkCssValue *value)
   value->class->free (value);
 }
 
+GtkCssValue *
+_gtk_css_value_compute (GtkCssValue     *value,
+                        GtkStyleContext *context)
+{
+  g_return_val_if_fail (value != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  return value->class->compute (value, context);
+}
+
 gboolean
 _gtk_css_value_equal (const GtkCssValue *value1,
                       const GtkCssValue *value2)

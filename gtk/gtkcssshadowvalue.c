@@ -59,6 +59,28 @@ gtk_css_value_shadow_free (GtkCssValue *shadow)
   g_slice_free (GtkCssValue, shadow);
 }
 
+static GtkCssValue *
+gtk_css_value_shadow_compute (GtkCssValue     *shadow,
+                              GtkStyleContext *context)
+{
+  GdkRGBA transparent = { 0, 0, 0, 0 };
+  GtkCssValue *color, *fallback;
+
+  fallback = _gtk_css_symbolic_value_new_take_symbolic_color (gtk_symbolic_color_new_literal (&transparent));
+  color = _gtk_css_rgba_value_compute_from_symbolic (shadow->color,
+                                                     fallback,
+                                                     context,
+                                                     FALSE);
+  _gtk_css_value_unref (fallback);
+
+  return gtk_css_shadow_value_new (_gtk_css_value_compute (shadow->hoffset, context),
+                                   _gtk_css_value_compute (shadow->voffset, context),
+                                   _gtk_css_value_compute (shadow->radius, context),
+                                   _gtk_css_value_compute (shadow->spread, context),
+                                   shadow->inset,
+                                   color);
+}
+
 static gboolean
 gtk_css_value_shadow_equal (const GtkCssValue *shadow1,
                             const GtkCssValue *shadow2)
@@ -117,6 +139,7 @@ gtk_css_value_shadow_print (const GtkCssValue *shadow,
 
 static const GtkCssValueClass GTK_CSS_VALUE_SHADOW = {
   gtk_css_value_shadow_free,
+  gtk_css_value_shadow_compute,
   gtk_css_value_shadow_equal,
   gtk_css_value_shadow_transition,
   gtk_css_value_shadow_print
@@ -266,28 +289,6 @@ fail:
     }
 
   return NULL;
-}
-
-GtkCssValue *
-_gtk_css_shadow_value_compute (GtkCssValue     *shadow,
-                               GtkStyleContext *context)
-{
-  GdkRGBA transparent = { 0, 0, 0, 0 };
-  GtkCssValue *color, *fallback;
-
-  fallback = _gtk_css_symbolic_value_new_take_symbolic_color (gtk_symbolic_color_new_literal (&transparent));
-  color = _gtk_css_rgba_value_compute_from_symbolic (shadow->color,
-                                                     fallback,
-                                                     context,
-                                                     FALSE);
-  _gtk_css_value_unref (fallback);
-
-  return gtk_css_shadow_value_new (_gtk_css_number_value_compute (shadow->hoffset, context),
-                                   _gtk_css_number_value_compute (shadow->voffset, context),
-                                   _gtk_css_number_value_compute (shadow->radius, context),
-                                   _gtk_css_number_value_compute (shadow->spread, context),
-                                   shadow->inset,
-                                   color);
 }
 
 void

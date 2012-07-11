@@ -47,6 +47,25 @@ gtk_css_value_shadows_free (GtkCssValue *value)
   g_slice_free1 (sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (value->len - 1), value);
 }
 
+static GtkCssValue *
+gtk_css_value_shadows_compute (GtkCssValue     *value,
+                               GtkStyleContext *context)
+{
+  GtkCssValue *result;
+  guint i;
+
+  if (value->len == 0)
+    return _gtk_css_value_ref (value);
+
+  result = gtk_css_shadows_value_new (value->values, value->len);
+  for (i = 0; i < value->len; i++)
+    {
+      result->values[i] = _gtk_css_value_compute (value->values[i], context);
+    }
+
+  return result;
+}
+
 static gboolean
 gtk_css_value_shadows_equal (const GtkCssValue *value1,
                              const GtkCssValue *value2)
@@ -132,6 +151,7 @@ gtk_css_value_shadows_print (const GtkCssValue *value,
 
 static const GtkCssValueClass GTK_CSS_VALUE_SHADOWS = {
   gtk_css_value_shadows_free,
+  gtk_css_value_shadows_compute,
   gtk_css_value_shadows_equal,
   gtk_css_value_shadows_transition,
   gtk_css_value_shadows_print
@@ -187,27 +207,6 @@ _gtk_css_shadows_value_parse (GtkCssParser *parser)
 
   result = gtk_css_shadows_value_new ((GtkCssValue **) values->pdata, values->len);
   g_ptr_array_free (values, TRUE);
-  return result;
-}
-
-GtkCssValue *
-_gtk_css_shadows_value_compute (GtkCssValue     *value,
-                                GtkStyleContext *context)
-{
-  GtkCssValue *result;
-  guint i;
-
-  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_SHADOWS, NULL);
-
-  if (value->len == 0)
-    return _gtk_css_value_ref (value);
-
-  result = gtk_css_shadows_value_new (value->values, value->len);
-  for (i = 0; i < value->len; i++)
-    {
-      result->values[i] = _gtk_css_shadow_value_compute (value->values[i], context);
-    }
-
   return result;
 }
 

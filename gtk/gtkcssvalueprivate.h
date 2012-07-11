@@ -23,6 +23,7 @@
 #include <glib-object.h>
 #include "gtkcsstypesprivate.h"
 #include "gtksymboliccolor.h"
+#include "gtktypes.h"
 
 G_BEGIN_DECLS
 
@@ -41,6 +42,8 @@ typedef struct _GtkCssValueClass      GtkCssValueClass;
 struct _GtkCssValueClass {
   void          (* free)                              (GtkCssValue                *value);
 
+  GtkCssValue * (* compute)                           (GtkCssValue                *value,
+                                                       GtkStyleContext            *context);
   gboolean      (* equal)                             (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);
   GtkCssValue * (* transition)                        (GtkCssValue                *start,
@@ -59,6 +62,8 @@ GtkCssValue *_gtk_css_value_alloc                     (const GtkCssValueClass   
 GtkCssValue *_gtk_css_value_ref                       (GtkCssValue                *value);
 void         _gtk_css_value_unref                     (GtkCssValue                *value);
 
+GtkCssValue *_gtk_css_value_compute                   (GtkCssValue                *value,
+                                                       GtkStyleContext            *context);
 gboolean     _gtk_css_value_equal                     (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);
 gboolean     _gtk_css_value_equal0                    (const GtkCssValue          *value1,

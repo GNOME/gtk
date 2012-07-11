@@ -421,7 +421,7 @@ gtk_css_image_linear_compute (GtkCssImage     *image,
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_LINEAR, NULL);
   copy->repeating = linear->repeating;
 
-  copy->angle = _gtk_css_number_value_compute (linear->angle, context);
+  copy->angle = _gtk_css_value_compute (linear->angle, context);
   
   fallback = _gtk_css_symbolic_value_new_take_symbolic_color (gtk_symbolic_color_new_literal (&transparent));
   g_array_set_size (copy->stops, linear->stops->len);
@@ -438,7 +438,7 @@ gtk_css_image_linear_compute (GtkCssImage     *image,
                                                                 FALSE);
       
       if (stop->offset)
-        scopy->offset = _gtk_css_number_value_compute (stop->offset, context);
+        scopy->offset = _gtk_css_value_compute (stop->offset, context);
       else
         scopy->offset = NULL;
     }
