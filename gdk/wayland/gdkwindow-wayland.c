@@ -1389,6 +1389,9 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
 				      guint32        timestamp)
 {
   GdkWindowImplWayland *impl;
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+
   uint32_t grab_type;
 
   if (GDK_WINDOW_DESTROYED (window) ||
@@ -1439,7 +1442,8 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
 
   wl_shell_surface_resize (impl->shell_surface,
                            _gdk_wayland_device_get_wl_seat (device),
-                           timestamp, grab_type);
+                           _gdk_wayland_display_get_serial (wayland_display),
+                           grab_type);
 
   /* This is needed since Wayland will absorb all the pointer events after the
    * above function - FIXME: Is this always safe..?
@@ -1456,6 +1460,8 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
 				    guint32    timestamp)
 {
   GdkWindowImplWayland *impl;
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
@@ -1464,7 +1470,8 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   wl_shell_surface_move (impl->shell_surface,
-                         _gdk_wayland_device_get_wl_seat (device), timestamp);
+                         _gdk_wayland_device_get_wl_seat (device),
+                         _gdk_wayland_display_get_serial (wayland_display));
 
   /* This is needed since Wayland will absorb all the pointer events after the
    * above function - FIXME: Is this always safe..?
