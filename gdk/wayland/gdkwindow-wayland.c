@@ -661,7 +661,6 @@ gdk_wayland_window_map (GdkWindow *window)
 static void
 shell_surface_handle_configure(void *data,
                                struct wl_shell_surface *shell_surface,
-                               uint32_t time,
                                uint32_t edges,
                                int32_t width,
                                int32_t height)
