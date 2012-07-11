@@ -29,6 +29,7 @@
 #include <gdk/gdk.h>
 
 #include "gtkcsstypesprivate.h"
+#include "gtktexthandleprivate.h"
 
 G_BEGIN_DECLS
 

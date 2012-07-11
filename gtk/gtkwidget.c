@@ -3292,6 +3292,19 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                              1, G_MAXINT, 16,
                                                              GTK_PARAM_READABLE));
 
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_int ("text-handle-width",
+                                                             P_("Width of text selection handles"),
+                                                             P_("Width of text selection handles"),
+                                                             1, G_MAXINT, 16,
+                                                             GTK_PARAM_READABLE));
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_int ("text-handle-height",
+                                                             P_("Height of text selection handles"),
+                                                             P_("Height of text selection handles"),
+                                                             1, G_MAXINT, 20,
+                                                             GTK_PARAM_READABLE));
+
   g_type_class_add_private (klass, sizeof (GtkWidgetPrivate));
 
   gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
