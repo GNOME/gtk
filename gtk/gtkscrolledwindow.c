@@ -2907,6 +2907,9 @@ gtk_scrolled_window_captured_event (GtkWidget *widget,
   gboolean retval = FALSE;
   GtkScrolledWindowPrivate *priv = GTK_SCROLLED_WINDOW (widget)->priv;
 
+  if (gdk_window_get_window_type (event->any.window) == GDK_WINDOW_TEMP)
+    return FALSE;
+
   switch (event->type)
     {
     case GDK_TOUCH_BEGIN:
