@@ -6845,17 +6845,18 @@ file_system_model_set (GtkFileSystemModel *model,
         {
           gboolean sensitive = TRUE;
 
-          if (impl->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER &&
-              impl->action != GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+          if (!(impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
+		|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
             {
-              sensitive = TRUE;
+              sensitive = TRUE; /* for file modes... */
             }
           else if (!_gtk_file_info_consider_as_directory (info))
             {
-              sensitive = FALSE;
+              sensitive = FALSE; /* for folder modes, files are not sensitive... */
             }
           else
             {
+	      /* ... and for folder modes, folders are sensitive only if the filter says so */
               GtkTreeIter iter;
               if (!_gtk_file_system_model_get_iter_for_file (model, &iter, file))
                 g_assert_not_reached ();
