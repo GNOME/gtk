@@ -637,3 +637,17 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *wayland_display)
                                                         w,
                                                         wayland_display->shm);
 }
+
+guint32
+_gdk_wayland_display_get_serial (GdkWaylandDisplay *wayland_display)
+{
+  return wayland_display->serial;
+}
+
+void
+_gdk_wayland_display_update_serial (GdkWaylandDisplay *wayland_display,
+                                    guint32            serial)
+{
+  if (serial > wayland_display->serial)
+    wayland_display->serial = serial;
+}

@@ -70,8 +70,9 @@ struct _GdkWaylandDisplay
   /* Startup notification */
   gchar *startup_notification_id;
 
-  /* Time of most recent user interaction. */
+  /* Time of most recent user interaction and most recent serial */
   gulong user_time;
+  guint32 serial;
 
   /* Wayland fields below */
   struct wl_display *wl_display;

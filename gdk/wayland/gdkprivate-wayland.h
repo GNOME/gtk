@@ -155,4 +155,7 @@ void _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
                                              struct wl_seat *seat,
                                              guint32         time_);
 
+guint32 _gdk_wayland_display_get_serial (GdkWaylandDisplay *wayland_display);
+void _gdk_wayland_display_update_serial (GdkWaylandDisplay *wayland_display, guint32 serial);
+
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */
