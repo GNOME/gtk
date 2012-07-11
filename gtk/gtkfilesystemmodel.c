@@ -314,10 +314,6 @@ node_set_filtered (GtkFileSystemModel *model, guint id, gboolean filtered)
 {
   FileModelNode *node = get_node (model, id);
 
-  if (node->filtered == filtered ||
-      node->frozen_add)
-    return;
-
   node->filtered = filtered;
 }
 
