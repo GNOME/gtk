@@ -122,8 +122,11 @@ gchar *     _gdk_wayland_display_utf8_to_string_target (GdkDisplay  *display,
 
 GdkDeviceManager *_gdk_wayland_device_manager_new (GdkDisplay *display);
 void              _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
-							  struct wl_input_device *device);
-struct wl_input_device *_gdk_wayland_device_get_device (GdkDevice *device);
+							  struct wl_seat *seat);
+
+struct wl_seat *_gdk_wayland_device_get_wl_seat (GdkDevice *device);
+struct wl_pointer *_gdk_wayland_device_get_wl_pointer (GdkDevice *device);
+struct wl_keyboard *_gdk_wayland_device_get_wl_keyboard (GdkDevice *device);
 
 void     _gdk_wayland_display_deliver_event (GdkDisplay *display, GdkEvent *event);
 GSource *_gdk_wayland_display_event_source_new (GdkDisplay *display);
@@ -146,8 +149,8 @@ void _gdk_wayland_display_manager_add_display (GdkDisplayManager *manager,
 void _gdk_wayland_display_manager_remove_display (GdkDisplayManager *manager,
 						  GdkDisplay        *display);
 
-void _gdk_wayland_window_set_device_grabbed (GdkWindow *window,
-                                             struct wl_input_device *input_device,
-                                             guint32 time_);
+void _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
+                                             struct wl_seat *seat,
+                                             guint32         time_);
 
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */

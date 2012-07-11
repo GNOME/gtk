@@ -130,7 +130,7 @@ struct _GdkWindowImplWayland
   GdkGeometry geometry_hints;
   GdkWindowHints geometry_mask;
 
-  struct wl_input_device *grab_input_device;
+  struct wl_seat *grab_input_seat;
   guint32 grab_time;
 };
 
@@ -635,7 +635,7 @@ gdk_wayland_window_map (GdkWindow *window)
                * grab before showing the popup window.
                */
               wl_shell_surface_set_popup (impl->shell_surface,
-                                          parent->grab_input_device, parent->grab_time,
+                                          parent->grab_input_seat, parent->grab_time,
                                           parent->shell_surface,
                                           window->x, window->y, 0);
             } else {
@@ -1425,7 +1425,7 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   wl_shell_surface_resize (impl->shell_surface,
-                           _gdk_wayland_device_get_device (device),
+                           _gdk_wayland_device_get_wl_seat (device),
                            timestamp, grab_type);
 
   /* This is needed since Wayland will absorb all the pointer events after the
@@ -1451,7 +1451,7 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   wl_shell_surface_move (impl->shell_surface,
-                         _gdk_wayland_device_get_device (device), timestamp);
+                         _gdk_wayland_device_get_wl_seat (device), timestamp);
 
   /* This is needed since Wayland will absorb all the pointer events after the
    * above function - FIXME: Is this always safe..?
@@ -1689,9 +1689,9 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
 
 
 void
-_gdk_wayland_window_set_device_grabbed (GdkWindow              *window,
-                                        struct wl_input_device *input_device,
-                                        guint32                 time_)
+_gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
+                                        struct wl_seat *seat,
+                                        guint32         time_)
 {
   GdkWindowImplWayland *impl;
 
@@ -1699,6 +1699,6 @@ _gdk_wayland_window_set_device_grabbed (GdkWindow              *window,
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  impl->grab_input_device = input_device;
+  impl->grab_input_seat = seat;
   impl->grab_time = time_;
 }

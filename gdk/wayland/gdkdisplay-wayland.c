@@ -124,7 +124,7 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
 {
   GdkWaylandDisplay *display_wayland = data;
   GdkDisplay *gdk_display = GDK_DISPLAY_OBJECT (data);
-  struct wl_input_device *input;
+  struct wl_seat *seat;
 
   if (strcmp(interface, "wl_compositor") == 0) {
     display_wayland->compositor =
@@ -141,10 +141,10 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
       wl_display_bind(display, id, &wl_output_interface);
     wl_output_add_listener(display_wayland->output,
 			   &output_listener, display_wayland);
-  } else if (strcmp(interface, "wl_input_device") == 0) {
-    input = wl_display_bind(display, id, &wl_input_device_interface);
+  } else if (strcmp(interface, "wl_seat") == 0) {
+    seat = wl_display_bind (display, id, &wl_seat_interface);
     _gdk_wayland_device_manager_add_device (gdk_display->device_manager,
-					    input);
+					    seat);
   } else if (strcmp(interface, "wl_data_device_manager") == 0) {
       display_wayland->data_device_manager =
         wl_display_bind(display, id,
