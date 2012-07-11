@@ -944,9 +944,12 @@ pointer_handle_enter (void              *data,
                       wl_fixed_t         sx,
                       wl_fixed_t         sy)
 {
-
   GdkWaylandDevice *device = data;
   GdkEvent *event;
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (device->display);
+
+  _gdk_wayland_display_update_serial (wayland_display, serial);
 
   device->pointer_focus = wl_surface_get_user_data(surface);
   g_object_ref(device->pointer_focus);
@@ -982,6 +985,10 @@ pointer_handle_leave (void              *data,
 {
   GdkWaylandDevice *device = data;
   GdkEvent *event;
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (device->display);
+
+  _gdk_wayland_display_update_serial (wayland_display, serial);
 
   event = gdk_event_new (GDK_LEAVE_NOTIFY);
   event->crossing.window = g_object_ref (device->pointer_focus);
@@ -1054,6 +1061,10 @@ pointer_handle_button (void              *data,
   GdkEvent *event;
   uint32_t modifier;
   int gdk_button;
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (device->display);
+
+  _gdk_wayland_display_update_serial (wayland_display, serial);
 
   switch (button) {
   case 273:
