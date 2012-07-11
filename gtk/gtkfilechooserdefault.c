@@ -6731,7 +6731,7 @@ file_system_model_set (GtkFileSystemModel *model,
               GtkTreeIter iter;
               if (!_gtk_file_system_model_get_iter_for_file (model, &iter, file))
                 g_assert_not_reached ();
-              sensitive = !_gtk_file_system_model_iter_is_filtered (model, &iter);
+              sensitive = !_gtk_file_system_model_iter_is_filtered_out (model, &iter);
             }
 
           g_value_set_boolean (value, sensitive);

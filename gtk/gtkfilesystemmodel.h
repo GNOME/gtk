@@ -55,8 +55,8 @@ GtkFileSystemModel *_gtk_file_system_model_new_for_directory(GFile *            
 GCancellable *      _gtk_file_system_model_get_cancellable  (GtkFileSystemModel *model);
 gboolean            _gtk_file_system_model_iter_is_visible  (GtkFileSystemModel *model,
 							     GtkTreeIter        *iter);
-gboolean            _gtk_file_system_model_iter_is_filtered (GtkFileSystemModel *model,
-							     GtkTreeIter        *iter);
+gboolean            _gtk_file_system_model_iter_is_filtered_out (GtkFileSystemModel *model,
+								 GtkTreeIter        *iter);
 GFileInfo *         _gtk_file_system_model_get_info         (GtkFileSystemModel *model,
 							     GtkTreeIter        *iter);
 gboolean            _gtk_file_system_model_get_iter_for_file(GtkFileSystemModel *model,
