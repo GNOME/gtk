@@ -307,18 +307,16 @@ emit_row_deleted_for_row (GtkFileSystemModel *model, guint row)
 }
 
 static void
-node_set_filtered_out (GtkFileSystemModel *model, guint id, gboolean filtered_out)
+node_set_visible_and_filtered_out (GtkFileSystemModel *model, guint id, gboolean visible, gboolean filtered_out)
 {
   FileModelNode *node = get_node (model, id);
+
+  /* Filteredness */
 
   node->filtered_out = filtered_out;
-}
 
-static void
-node_set_visible (GtkFileSystemModel *model, guint id, gboolean visible)
-{
-  FileModelNode *node = get_node (model, id);
-
+  /* Visibility */
+  
   if (node->visible == visible ||
       node->frozen_add)
     return;
@@ -409,7 +407,7 @@ node_should_be_filtered_out (GtkFileSystemModel *model, guint id)
 }
 
 static gboolean
-node_should_be_visible (GtkFileSystemModel *model, guint id)
+node_should_be_visible (GtkFileSystemModel *model, guint id, gboolean filtered_out)
 {
   FileModelNode *node = get_node (model, id);
   gboolean result;
@@ -435,9 +433,21 @@ node_should_be_visible (GtkFileSystemModel *model, guint id)
         return FALSE;
     }
 
-  result = !node_should_be_filtered_out (model, id);
+  result = !filtered_out;
 
   return result;
+}
+
+static void
+node_compute_visibility_and_filters (GtkFileSystemModel *model, guint id)
+{
+  gboolean filtered_out;
+  gboolean visible;
+
+  filtered_out = node_should_be_filtered_out (model, id);
+  visible = node_should_be_visible (model, id, filtered_out);
+
+  node_set_visible_and_filtered_out (model, id, visible, filtered_out);
 }
 
 /*** GtkTreeModel ***/
@@ -1422,10 +1432,7 @@ gtk_file_system_model_refilter_all (GtkFileSystemModel *model)
 
   /* start at index 1, don't change the editable */
   for (i = 1; i < model->files->len; i++)
-    {
-      node_set_filtered_out (model, i, node_should_be_filtered_out (model, i));
-      node_set_visible (model, i, node_should_be_visible (model, i));
-    }
+    node_compute_visibility_and_filters (model, i);
 
   model->filter_on_thaw = FALSE;
   _gtk_file_system_model_thaw_updates (model);
@@ -1793,12 +1800,8 @@ add_file (GtkFileSystemModel *model,
   g_slice_free1 (model->node_size, node);
 
   if (!model->frozen)
-    {
-      node_set_filtered_out (model, model->files->len -1,
-			     node_should_be_filtered_out (model, model->files->len - 1));
-      node_set_visible (model, model->files->len -1,
-                        node_should_be_visible (model, model->files->len - 1));
-    }
+    node_compute_visibility_and_filters (model, model->files->len -1);
+
   gtk_file_system_model_sort_node (model, model->files->len -1);
 }
 
@@ -1826,8 +1829,7 @@ remove_file (GtkFileSystemModel *model,
     return;
 
   node = get_node (model, id);
-  node_set_visible (model, id, FALSE);
-  node_set_filtered_out (model, id, FALSE);
+  node_set_visible_and_filtered_out (model, id, FALSE, FALSE);
 
   g_hash_table_remove (model->file_lookup, file);
   g_object_unref (node->file);
@@ -1938,8 +1940,7 @@ _gtk_file_system_model_add_editable (GtkFileSystemModel *model, GtkTreeIter *ite
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (!get_node (model, 0)->visible);
 
-  node_set_visible (model, 0, TRUE);
-  node_set_filtered_out (model, 0, FALSE);
+  node_set_visible_and_filtered_out (model, 0, TRUE, FALSE);
   ITER_INIT_FROM_INDEX (model, iter, 0);
 }
 
@@ -1957,8 +1958,7 @@ _gtk_file_system_model_remove_editable (GtkFileSystemModel *model)
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (get_node (model, 0)->visible);
 
-  node_set_visible (model, 0, FALSE);
-  node_set_filtered_out (model, 0, FALSE);
+  node_set_visible_and_filtered_out (model, 0, FALSE, FALSE);
 }
 
 /**
@@ -2015,8 +2015,7 @@ _gtk_file_system_model_thaw_updates (GtkFileSystemModel *model)
           if (!node->frozen_add)
             continue;
           node->frozen_add = FALSE;
-          node_set_visible (model, i, node_should_be_visible (model, i));
-          node_set_filtered_out (model, i, node_should_be_filtered_out (model, i));
+          node_compute_visibility_and_filters (model, i);
         }
     }
 }
