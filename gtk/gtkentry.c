@@ -65,6 +65,7 @@
 #include "gtkicontheme.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtktexthandleprivate.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -160,6 +161,8 @@ struct _GtkEntryPrivate
 
   gchar        *placeholder_text;
 
+  GtkTextHandle *text_handle;
+
   gfloat        xalign;
 
   gint          ascent;                     /* font ascent in pango units  */
@@ -215,6 +218,8 @@ struct _GtkEntryPrivate
   guint         select_words            : 1;
   guint         select_lines            : 1;
   guint         truncate_multiline      : 1;
+  guint         cursor_handle_dragged   : 1;
+  guint         selection_handle_dragged : 1;
 };
 
 struct _EntryIconInfo
@@ -575,6 +580,16 @@ static GdkPixbuf *  gtk_entry_ensure_pixbuf            (GtkEntry             *en
                                                         GtkEntryIconPosition  icon_pos);
 static void         gtk_entry_update_cached_style_values(GtkEntry      *entry);
 static gboolean     get_middle_click_paste             (GtkEntry *entry);
+
+/* GtkTextHandle handlers */
+static void         gtk_entry_handle_dragged           (GtkTextHandle         *handle,
+                                                        GtkTextHandlePosition  pos,
+                                                        gint                   x,
+                                                        gint                   y,
+                                                        GtkEntry              *entry);
+static void         gtk_entry_handle_drag_finished     (GtkTextHandle         *handle,
+                                                        GtkTextHandlePosition  pos,
+                                                        GtkEntry              *entry);
 
 /* Completion */
 static gint         gtk_entry_completion_timeout       (gpointer            data);
@@ -2552,6 +2567,12 @@ gtk_entry_init (GtkEntry *entry)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_ENTRY);
 
   gtk_entry_update_cached_style_values (entry);
+
+  priv->text_handle = _gtk_text_handle_new (GTK_WIDGET (entry));
+  g_signal_connect (priv->text_handle, "handle-dragged",
+                    G_CALLBACK (gtk_entry_handle_dragged), entry);
+  g_signal_connect (priv->text_handle, "drag-finished",
+                    G_CALLBACK (gtk_entry_handle_drag_finished), entry);
 }
 
 static void
@@ -2789,6 +2810,7 @@ gtk_entry_finalize (GObject *object)
   if (priv->recompute_idle)
     g_source_remove (priv->recompute_idle);
 
+  g_object_unref (priv->text_handle);
   g_free (priv->placeholder_text);
   g_free (priv->im_module);
 
@@ -3010,6 +3032,9 @@ gtk_entry_unmap (GtkWidget *widget)
   EntryIconInfo *icon_info = NULL;
   gint i;
 
+  _gtk_text_handle_set_mode (priv->text_handle,
+                             GTK_TEXT_HANDLE_MODE_NONE);
+
   for (i = 0; i < MAX_ICONS; i++)
     {
       if ((icon_info = priv->icons[i]) != NULL)
@@ -3083,7 +3108,7 @@ gtk_entry_realize (GtkWidget *widget)
 
   gtk_entry_adjust_scroll (entry);
   gtk_entry_update_primary_selection (entry);
-
+  _gtk_text_handle_set_relative_to (priv->text_handle, priv->text_area);
 
   /* If the icon positions are already setup, create their windows.
    * Otherwise if they don't exist yet, then construct_icon_info()
@@ -3111,6 +3136,7 @@ gtk_entry_unrealize (GtkWidget *widget)
   gtk_entry_reset_layout (entry);
   
   gtk_im_context_set_client_window (priv->im_context, NULL);
+  _gtk_text_handle_set_relative_to (priv->text_handle, NULL);
 
   clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_PRIMARY);
   if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry))
@@ -3852,7 +3878,85 @@ in_selection (GtkEntry *entry,
   g_free (ranges);
   return retval;
 }
-	      
+
+static void
+_gtk_entry_move_handle (GtkEntry              *entry,
+                        GtkTextHandlePosition  pos,
+                        gint                   x,
+                        gint                   y,
+                        gint                   height)
+{
+  GtkEntryPrivate *priv = entry->priv;
+
+  if (((!priv->cursor_handle_dragged &&
+        pos == GTK_TEXT_HANDLE_POSITION_CURSOR) ||
+       (!priv->selection_handle_dragged &&
+        pos == GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND)) &&
+      (x < 0 || x > gdk_window_get_width (priv->text_area)))
+    {
+      /* Hide the opposite handle if it's not being manipulated
+       * too and fell outside of the visible text area.
+       */
+      _gtk_text_handle_set_visible (priv->text_handle, pos, FALSE);
+    }
+  else
+    {
+      GdkRectangle rect;
+
+      rect.x = CLAMP (x, 0, gdk_window_get_width (priv->text_area));
+      rect.y = y;
+      rect.width = 1;
+      rect.height = height;
+
+      _gtk_text_handle_set_visible (priv->text_handle, pos, TRUE);
+      _gtk_text_handle_set_position (priv->text_handle, pos, &rect);
+    }
+}
+
+static gint
+_gtk_entry_get_selection_bound_location (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  PangoLayout *layout;
+  PangoRectangle pos;
+  gint x;
+
+  layout = gtk_entry_ensure_layout (entry, FALSE);
+  pango_layout_index_to_pos (layout, priv->selection_bound, &pos);
+
+  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+    x = (pos.x + pos.width) / PANGO_SCALE;
+  else
+    x = pos.x / PANGO_SCALE;
+
+  return x;
+}
+
+static void
+_gtk_entry_update_handles (GtkEntry          *entry,
+                           GtkTextHandleMode  mode)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  gint strong_x, x, height;
+
+  height = gdk_window_get_height (priv->text_area);
+  _gtk_text_handle_set_mode (priv->text_handle, mode);
+
+  /* Update cursor */
+  gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
+  x = strong_x - priv->scroll_offset;
+  _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_CURSOR,
+                          x, 0, height);
+
+  /* Update selection bound */
+  if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
+    {
+      x = _gtk_entry_get_selection_bound_location (entry) - priv->scroll_offset;
+      _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND,
+                              x, 0, height);
+    }
+}
+
 static gint
 gtk_entry_button_press (GtkWidget      *widget,
 			GdkEventButton *event)
@@ -3998,7 +4102,18 @@ gtk_entry_button_press (GtkWidget      *widget,
 	      priv->drag_start_y = event->y;
 	    }
 	  else
-            gtk_editable_set_position (editable, tmp_pos);
+            {
+              GdkDevice *source;
+
+              gtk_editable_set_position (editable, tmp_pos);
+              source = gdk_event_get_source_device ((GdkEvent *) event);
+
+              if (gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN)
+                {
+                  priv->cursor_handle_dragged = TRUE;
+                  _gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
+                }
+            }
 	  break;
  
 	case GDK_2BUTTON_PRESS:
@@ -4088,8 +4203,14 @@ gtk_entry_button_release (GtkWidget      *widget,
   if (priv->in_drag)
     {
       gint tmp_pos = gtk_entry_find_position (entry, priv->drag_start_x);
+      GdkDevice *source;
 
       gtk_editable_set_position (GTK_EDITABLE (entry), tmp_pos);
+
+      source = gdk_event_get_source_device ((GdkEvent *) event);
+
+      if (gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN)
+        _gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
 
       priv->in_drag = 0;
     }
@@ -4186,6 +4307,9 @@ gtk_entry_motion_notify (GtkWidget      *widget,
           gchar *text = NULL;
           cairo_surface_t *surface;
 
+          _gtk_text_handle_set_mode (priv->text_handle,
+                                     GTK_TEXT_HANDLE_MODE_NONE);
+
           gtk_target_list_add_text_targets (target_list, 0);
 
           text = _gtk_entry_get_selected_text (entry);
@@ -4212,12 +4336,18 @@ gtk_entry_motion_notify (GtkWidget      *widget,
     }
   else
     {
+      GdkInputSource input_source;
+      GdkDevice *source;
+
       if (event->y < 0)
 	tmp_pos = 0;
       else if (event->y >= gdk_window_get_height (priv->text_area))
 	tmp_pos = gtk_entry_buffer_get_length (get_buffer (entry));
       else
 	tmp_pos = gtk_entry_find_position (entry, event->x + priv->scroll_offset);
+
+      source = gdk_event_get_source_device ((GdkEvent *) event);
+      input_source = gdk_device_get_source (source);
 
       if (priv->select_words)
 	{
@@ -4254,13 +4384,33 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 	      if (priv->current_pos != max)
 		pos = min;
 	    }
-	
+
+          /* Don't allow backwards selection on touch devices,
+           * so handles don't get inverted.
+           */
+          if (input_source == GDK_SOURCE_TOUCHSCREEN)
+            pos = MAX (gtk_entry_move_backward_word (entry, bound, TRUE), pos);
+
 	  gtk_entry_set_positions (entry, pos, bound);
 	}
       else
-        gtk_entry_set_positions (entry, tmp_pos, -1);
+        {
+          /* Don't allow backwards selection on touch devices,
+           * so handles don't get inverted.
+           */
+          if (input_source == GDK_SOURCE_TOUCHSCREEN)
+            tmp_pos = MAX (priv->selection_bound + 1, tmp_pos);
+          gtk_entry_set_positions (entry, tmp_pos, -1);
+        }
+
+      /* Update touch handles' position */
+      if (input_source == GDK_SOURCE_TOUCHSCREEN)
+        _gtk_entry_update_handles (entry,
+                                   (priv->current_pos == priv->selection_bound) ?
+                                   GTK_TEXT_HANDLE_MODE_CURSOR :
+                                   GTK_TEXT_HANDLE_MODE_SELECTION);
     }
-      
+
   return TRUE;
 }
 
@@ -4300,6 +4450,8 @@ gtk_entry_key_press (GtkWidget   *widget,
 
   gtk_entry_reset_blink_time (entry);
   gtk_entry_pend_cursor_blink (entry);
+  _gtk_text_handle_set_mode (priv->text_handle,
+                             GTK_TEXT_HANDLE_MODE_NONE);
 
   if (priv->editable)
     {
@@ -4403,6 +4555,9 @@ gtk_entry_focus_out (GtkWidget     *widget,
   GtkEntryPrivate *priv = entry->priv;
   GtkEntryCompletion *completion;
   GdkKeymap *keymap;
+
+  _gtk_text_handle_set_mode (priv->text_handle,
+                             GTK_TEXT_HANDLE_MODE_NONE);
 
   gtk_widget_queue_draw (widget);
 
@@ -6020,6 +6175,74 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
     }
 }
 
+static void
+gtk_entry_handle_dragged (GtkTextHandle         *handle,
+                          GtkTextHandlePosition  pos,
+                          gint                   x,
+                          gint                   y,
+                          GtkEntry              *entry)
+{
+  gint cursor_pos, selection_bound_pos, tmp_pos;
+  GtkEntryPrivate *priv = entry->priv;
+  GtkTextHandleMode mode;
+
+  cursor_pos = priv->current_pos;
+  selection_bound_pos = priv->selection_bound;
+  mode = _gtk_text_handle_get_mode (handle);
+  tmp_pos = gtk_entry_find_position (entry, x + priv->scroll_offset);
+
+  if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR)
+    {
+      gint max_pos;
+
+      priv->cursor_handle_dragged = TRUE;
+
+      if (priv->select_words)
+        max_pos = gtk_entry_move_forward_word (entry, priv->selection_bound, TRUE);
+      else
+        max_pos = MAX (priv->selection_bound + 1, 0);
+
+      cursor_pos = MAX (tmp_pos, max_pos);
+    }
+  else
+    {
+      gint min_pos;
+
+      priv->selection_handle_dragged = TRUE;
+
+      if (priv->select_words)
+        min_pos = gtk_entry_move_backward_word (entry, priv->current_pos, TRUE);
+      else
+        min_pos = priv->current_pos - 1;
+
+      selection_bound_pos = MIN (tmp_pos, min_pos);
+    }
+
+  if (cursor_pos != priv->current_pos ||
+      selection_bound_pos != priv->selection_bound)
+    {
+      if (mode == GTK_TEXT_HANDLE_MODE_CURSOR)
+        gtk_entry_set_positions (entry, cursor_pos, cursor_pos);
+      else
+        gtk_entry_set_positions (entry, cursor_pos, selection_bound_pos);
+
+      _gtk_entry_update_handles (entry, mode);
+    }
+}
+
+static void
+gtk_entry_handle_drag_finished (GtkTextHandle         *handle,
+                                GtkTextHandlePosition  pos,
+                                GtkEntry              *entry)
+{
+  GtkEntryPrivate *priv = entry->priv;
+
+  if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR)
+    priv->cursor_handle_dragged = FALSE;
+  else
+    priv->selection_handle_dragged = FALSE;
+}
+
 void
 _gtk_entry_reset_im_context (GtkEntry *entry)
 {
@@ -6194,6 +6417,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   PangoLayout *layout;
   PangoLayoutLine *line;
   PangoRectangle logical_rect;
+  GtkTextHandleMode handle_mode;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
     return;
@@ -6230,22 +6454,33 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 
   priv->scroll_offset = CLAMP (priv->scroll_offset, min_offset, max_offset);
 
-  /* And make sure cursors are on screen. Note that the cursor is
-   * actually drawn one pixel into the INNER_BORDER space on
-   * the right, when the scroll is at the utmost right. This
-   * looks better to to me than confining the cursor inside the
-   * border entirely, though it means that the cursor gets one
-   * pixel closer to the edge of the widget on the right than
-   * on the left. This might need changing if one changed
-   * INNER_BORDER from 2 to 1, as one would do on a
-   * small-screen-real-estate display.
-   *
-   * We always make sure that the strong cursor is on screen, and
-   * put the weak cursor on screen if possible.
-   */
+  if (priv->selection_handle_dragged && !priv->cursor_handle_dragged)
+    {
+      /* The text handle corresponding to the selection bound is
+       * being dragged, ensure it stays onscreen even if we scroll
+       * cursors away, this is so both handles can cause content
+       * to scroll.
+       */
+      strong_x = weak_x = _gtk_entry_get_selection_bound_location (entry);
+    }
+  else
+    {
+      /* And make sure cursors are on screen. Note that the cursor is
+       * actually drawn one pixel into the INNER_BORDER space on
+       * the right, when the scroll is at the utmost right. This
+       * looks better to to me than confining the cursor inside the
+       * border entirely, though it means that the cursor gets one
+       * pixel closer to the edge of the widget on the right than
+       * on the left. This might need changing if one changed
+       * INNER_BORDER from 2 to 1, as one would do on a
+       * small-screen-real-estate display.
+       *
+       * We always make sure that the strong cursor is on screen, and
+       * put the weak cursor on screen if possible.
+       */
+      gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, &weak_x);
+    }
 
-  gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, &weak_x);
-  
   strong_xoffset = strong_x - priv->scroll_offset;
 
   if (strong_xoffset < 0)
@@ -6272,6 +6507,11 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
     }
 
   g_object_notify (G_OBJECT (entry), "scroll-offset");
+
+  handle_mode = _gtk_text_handle_get_mode (priv->text_handle);
+
+  if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
+    _gtk_entry_update_handles (entry, handle_mode);
 }
 
 static void
@@ -6294,7 +6534,7 @@ gtk_entry_move_adjustments (GtkEntry *entry)
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  /* Cursor position, layout offset, border width, and widget allocation */
+  /* Cursor/char position, layout offset, border width, and widget allocation */
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &x, NULL);
   get_layout_position (entry, &layout_x, NULL);
   _gtk_entry_get_borders (entry, &borders);
