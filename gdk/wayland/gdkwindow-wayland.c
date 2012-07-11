@@ -764,7 +764,11 @@ gdk_wayland_window_hide (GdkWindow *window)
 
   if (impl->surface)
     {
-      wl_surface_destroy(impl->surface);
+      if (impl->shell_surface)
+        wl_shell_surface_destroy(impl->shell_surface);
+      if (impl->surface)
+        wl_surface_destroy(impl->surface);
+      impl->shell_surface = NULL;
       impl->surface = NULL;
       cairo_surface_destroy(impl->server_surface);
       impl->server_surface = NULL;
@@ -788,13 +792,17 @@ gdk_window_wayland_withdraw (GdkWindow *window)
 
       impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
       if (impl->surface)
-	{
-	  wl_surface_destroy(impl->surface);
-	  impl->surface = NULL;
-	  cairo_surface_destroy(impl->server_surface);
-	  impl->server_surface = NULL;
-	  impl->mapped = FALSE;
-	}
+        {
+          if (impl->shell_surface)
+            wl_shell_surface_destroy(impl->shell_surface);
+          if (impl->surface)
+            wl_surface_destroy(impl->surface);
+          impl->shell_surface = NULL;
+          impl->surface = NULL;
+          cairo_surface_destroy(impl->server_surface);
+          impl->server_surface = NULL;
+          impl->mapped = FALSE;
+        }
     }
 }
 
@@ -1034,9 +1042,12 @@ gdk_wayland_window_destroy (GdkWindow *window,
 
   if (!recursing && !foreign_destroy)
     {
-      if (GDK_WINDOW_IMPL_WAYLAND (window->impl)->surface)
-	wl_surface_destroy(GDK_WINDOW_IMPL_WAYLAND (window->impl)->surface);
-	wl_shell_surface_destroy(GDK_WINDOW_IMPL_WAYLAND (window->impl)->shell_surface);
+      if (impl->shell_surface)
+        wl_shell_surface_destroy(impl->shell_surface);
+      if (impl->surface)
+        wl_surface_destroy(impl->surface);
+      impl->shell_surface = NULL;
+      impl->surface = NULL;
     }
 }
 
