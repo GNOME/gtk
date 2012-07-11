@@ -38,6 +38,8 @@
 #include "gdkkeysprivate.h"
 #include "gdkprivate-wayland.h"
 
+static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *wayland_display);
+
 G_DEFINE_TYPE (GdkWaylandDisplay, _gdk_wayland_display, GDK_TYPE_DISPLAY)
 
 static void
@@ -129,6 +131,9 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
       wl_display_bind(display, id, &wl_compositor_interface);
   } else if (strcmp(interface, "wl_shm") == 0) {
     display_wayland->shm = wl_display_bind(display, id, &wl_shm_interface);
+
+    /* SHM interface is prerequisite */
+    _gdk_wayland_display_load_cursor_theme(display_wayland);
   } else if (strcmp(interface, "wl_shell") == 0) {
     display_wayland->shell = wl_display_bind(display, id, &wl_shell_interface);
   } else if (strcmp(interface, "wl_output") == 0) {
@@ -614,4 +619,21 @@ _gdk_wayland_display_init (GdkWaylandDisplay *display)
 {
   _gdk_wayland_display_manager_add_display (gdk_display_manager_get (),
 					    GDK_DISPLAY (display));
+}
+
+static void
+_gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *wayland_display)
+{
+  guint w, h;
+  gchar *theme_name = NULL; /* FIXME: Do something here */
+
+  g_assert (wayland_display);
+  g_assert (wayland_display->shm);
+
+  _gdk_wayland_display_get_default_cursor_size (GDK_DISPLAY (wayland_display),
+                                                &w, &h);
+
+  wayland_display->cursor_theme = wl_cursor_theme_load (theme_name,
+                                                        w,
+                                                        wayland_display->shm);
 }

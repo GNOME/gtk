@@ -25,6 +25,7 @@
 #include <config.h>
 #include <stdint.h>
 #include <wayland-client.h>
+#include <wayland-cursor.h>
 
 #ifdef GDK_WAYLAND_USE_EGL
 #include <wayland-egl.h>
@@ -80,6 +81,9 @@ struct _GdkWaylandDisplay
   struct wl_output *output;
   struct wl_input_device *input_device;
   struct wl_data_device_manager *data_device_manager;
+
+  struct wl_cursor_theme *cursor_theme;
+
   GSource *event_source;
 
 #ifdef GDK_WAYLAND_USE_EGL
