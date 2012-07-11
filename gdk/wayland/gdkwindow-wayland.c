@@ -643,10 +643,10 @@ gdk_wayland_window_map (GdkWindow *window)
                */
               wl_shell_surface_set_popup (impl->shell_surface,
                                           parent->grab_input_seat, parent->grab_time,
-                                          parent->shell_surface,
+                                          parent->surface,
                                           window->x, window->y, 0);
             } else {
-                wl_shell_surface_set_transient (impl->shell_surface, parent->shell_surface,
+                wl_shell_surface_set_transient (impl->shell_surface, parent->surface,
                                                 window->x, window->y, 0);
             }
         }
