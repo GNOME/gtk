@@ -136,7 +136,7 @@ gdk_wayland_display_manager_lookup_keyval (GdkDisplayManager *manager,
 {
   g_return_val_if_fail (keyval_name != NULL, 0);
 
-  return xkb_string_to_keysym(keyval_name);
+  return xkb_keysym_from_name(keyval_name);
 }
 
 static gchar *
@@ -157,7 +157,7 @@ gdk_wayland_display_manager_get_keyval_name (GdkDisplayManager *manager,
       return "KP_Page_Down";
     }
 
-  xkb_keysym_to_string(keyval, buf, sizeof buf);
+  xkb_keysym_get_name(keyval, buf, sizeof (buf));
 
   return buf;
 }
