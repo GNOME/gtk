@@ -1511,9 +1511,6 @@ gdk_wayland_window_process_updates_recurse (GdkWindow      *window,
                                             cairo_region_t *region)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-#ifndef GDK_WAYLAND_USE_EGL
-  GdkWaylandCairoSurfaceData *data = NULL;
-#endif
   cairo_rectangle_int_t rect;
   int i, n;
 
@@ -1522,21 +1519,10 @@ gdk_wayland_window_process_updates_recurse (GdkWindow      *window,
   if (impl->cairo_surface)
     gdk_wayland_window_attach_image (window);
 
-#ifndef GDK_WAYLAND_USE_EGL
-  if (impl->server_surface)
-    data = cairo_surface_get_user_data (impl->server_surface,
-                                        &gdk_wayland_cairo_key);
-#endif
-
   n = cairo_region_num_rectangles(region);
   for (i = 0; i < n; i++)
     {
       cairo_region_get_rectangle (region, i, &rect);
-#ifndef GDK_WAYLAND_USE_EGL
-      if (data && data->buffer)
-        wl_buffer_damage (data->buffer,
-                          rect.x, rect.y, rect.width, rect.height);
-#endif
       wl_surface_damage (impl->surface,
                          rect.x, rect.y, rect.width, rect.height);
     }
