@@ -407,7 +407,7 @@ if test "x$enable_wayland_backend" == "xyes"; then
   have_gio_unix=yes
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
-  WAYLAND_PACKAGES="wayland-client xkbcommon "
+  WAYLAND_PACKAGES="wayland-client xkbcommon wayland-cursor"
   if test "x$enable_wayland_cairo_gl" == "xyes"; then
     WAYLAND_PACKAGES="$WAYLAND_PACKAGES wayland-egl egl"
   fi
