@@ -415,11 +415,18 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
   gint calc_width;
   gint calc_height;
   gint xpad, ypad;
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
 
   if (!_gtk_icon_helper_get_is_empty (priv->icon_helper))
     _gtk_icon_helper_get_size (priv->icon_helper, 
                                gtk_widget_get_style_context (widget),
                                &pixbuf_width, &pixbuf_height);
+
+  gtk_style_context_restore (context);
 
   if (priv->pixbuf_expander_open)
     {
@@ -516,6 +523,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
     state = gtk_cell_renderer_get_state (cell, widget, flags);
 
   gtk_style_context_set_state (context, state);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
 
   g_object_get (cell, "is-expander", &is_expander, NULL);
   if (is_expander)
