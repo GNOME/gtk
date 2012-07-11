@@ -157,6 +157,8 @@ gdk_device_core_set_window_cursor (GdkDevice *device,
                                    GdkCursor *cursor)
 {
   GdkWaylandDevice *wd = GDK_DEVICE_CORE(device)->device;
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   struct wl_buffer *buffer;
   int x, y, w, h;
 
@@ -172,7 +174,10 @@ gdk_device_core_set_window_cursor (GdkDevice *device,
     }
 
   buffer = _gdk_wayland_cursor_get_buffer (cursor, &x, &y, &w, &h);
-  wl_pointer_set_cursor (wd->wl_pointer, wd->time, wd->pointer_surface, x, y);
+  wl_pointer_set_cursor (wd->wl_pointer,
+                         _gdk_wayland_display_get_serial (wayland_display),
+                         wd->pointer_surface,
+                         x, y);
   wl_surface_attach (wd->pointer_surface, buffer, 0, 0);
   wl_surface_damage (wd->pointer_surface,  0, 0, w, h);
 
