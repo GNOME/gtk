@@ -17,6 +17,8 @@
 @define-color error_fg_color rgb (166, 38, 38);
 @define-color error_bg_color rgb (237, 54, 54);
 
+@define-color success_bg_color #4e9a06;
+
 * {
   color: @fg_color;
   border-color: shade (@bg_color, 0.6);
@@ -180,6 +182,26 @@ GtkTreeView.view.expander:selected:hover {
   color: @selected_fg_color;
   border-style: outset;
   border-width: 1px;
+}
+
+.level-bar.indicator-discrete {
+    margin: 1px;
+}
+
+.level-bar.fill-block {
+    background-color: @selected_bg_color;
+}
+
+.level-bar.fill-block.level-low {
+    background-color: @warning_bg_color;
+}
+
+.level-bar.fill-block.level-high {
+    background-color: @success_bg_color;
+}
+
+.level-bar.fill-block.empty-fill-block {
+    background-color: @base_color;
 }
 
 GtkCheckButton:hover,
