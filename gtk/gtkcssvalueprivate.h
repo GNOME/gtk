@@ -43,6 +43,7 @@ struct _GtkCssValueClass {
   void          (* free)                              (GtkCssValue                *value);
 
   GtkCssValue * (* compute)                           (GtkCssValue                *value,
+                                                       guint                       property_id,
                                                        GtkStyleContext            *context);
   gboolean      (* equal)                             (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);
@@ -63,6 +64,7 @@ GtkCssValue *_gtk_css_value_ref                       (GtkCssValue              
 void         _gtk_css_value_unref                     (GtkCssValue                *value);
 
 GtkCssValue *_gtk_css_value_compute                   (GtkCssValue                *value,
+                                                       guint                       property_id,
                                                        GtkStyleContext            *context);
 gboolean     _gtk_css_value_equal                     (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);

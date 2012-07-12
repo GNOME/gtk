@@ -43,6 +43,7 @@ gtk_css_value_border_free (GtkCssValue *value)
 
 static GtkCssValue *
 gtk_css_value_border_compute (GtkCssValue     *value,
+                              guint            property_id,
                               GtkStyleContext *context)
 {
   GtkCssValue *computed;
@@ -56,7 +57,7 @@ gtk_css_value_border_compute (GtkCssValue     *value,
     {
       if (value->values[i])
         {
-          computed->values[i] = _gtk_css_value_compute (value->values[i], context);
+          computed->values[i] = _gtk_css_value_compute (value->values[i], property_id, context);
           changed |= (computed->values[i] != value->values[i]);
         }
     }

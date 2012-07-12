@@ -42,6 +42,7 @@ gtk_css_value_array_free (GtkCssValue *value)
 
 static GtkCssValue *
 gtk_css_value_array_compute (GtkCssValue     *value,
+                             guint            property_id,
                              GtkStyleContext *context)
 {
   GtkCssValue *result;
@@ -54,7 +55,7 @@ gtk_css_value_array_compute (GtkCssValue     *value,
   result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
   for (i = 0; i < value->n_values; i++)
     {
-      result->values[i] = _gtk_css_value_compute (value->values[i], context);
+      result->values[i] = _gtk_css_value_compute (value->values[i], property_id, context);
       changed |= (result->values[i] != value->values[i]);
     }
 

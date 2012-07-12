@@ -49,6 +49,7 @@ gtk_css_value_shadows_free (GtkCssValue *value)
 
 static GtkCssValue *
 gtk_css_value_shadows_compute (GtkCssValue     *value,
+                               guint            property_id,
                                GtkStyleContext *context)
 {
   GtkCssValue *result;
@@ -60,7 +61,7 @@ gtk_css_value_shadows_compute (GtkCssValue     *value,
   result = gtk_css_shadows_value_new (value->values, value->len);
   for (i = 0; i < value->len; i++)
     {
-      result->values[i] = _gtk_css_value_compute (value->values[i], context);
+      result->values[i] = _gtk_css_value_compute (value->values[i], property_id, context);
     }
 
   return result;

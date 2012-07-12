@@ -35,6 +35,7 @@ gtk_css_value_number_free (GtkCssValue *value)
 
 static GtkCssValue *
 gtk_css_value_number_compute (GtkCssValue     *number,
+                              guint            property_id,
                               GtkStyleContext *context)
 {
   switch (number->unit)

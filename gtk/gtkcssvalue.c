@@ -63,12 +63,13 @@ _gtk_css_value_unref (GtkCssValue *value)
 
 GtkCssValue *
 _gtk_css_value_compute (GtkCssValue     *value,
+                        guint            property_id,
                         GtkStyleContext *context)
 {
   g_return_val_if_fail (value != NULL, NULL);
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
-  return value->class->compute (value, context);
+  return value->class->compute (value, property_id, context);
 }
 
 gboolean

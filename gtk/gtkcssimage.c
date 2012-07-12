@@ -58,6 +58,7 @@ gtk_css_image_real_get_aspect_ratio (GtkCssImage *image)
 
 static GtkCssImage *
 gtk_css_image_real_compute (GtkCssImage     *image,
+                            guint            property_id,
                             GtkStyleContext *context)
 {
   return g_object_ref (image);
@@ -115,6 +116,7 @@ _gtk_css_image_get_aspect_ratio (GtkCssImage *image)
 
 GtkCssImage *
 _gtk_css_image_compute (GtkCssImage     *image,
+                        guint            property_id,
                         GtkStyleContext *context)
 {
   GtkCssImageClass *klass;
@@ -124,7 +126,7 @@ _gtk_css_image_compute (GtkCssImage     *image,
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
-  return klass->compute (image, context);
+  return klass->compute (image, property_id, context);
 }
 
 void

@@ -32,6 +32,7 @@ gtk_css_value_initial_free (GtkCssValue *value)
 
 static GtkCssValue *
 gtk_css_value_initial_compute (GtkCssValue     *value,
+                               guint            property_id,
                                GtkStyleContext *context)
 {
   /* This value should be caught further up */

@@ -56,6 +56,7 @@ struct _GtkCssImageClass
 
   /* create "computed value" in CSS terms, returns a new reference */
   GtkCssImage *(* compute)                         (GtkCssImage        *image,
+                                                    guint               property_id,
                                                     GtkStyleContext    *context);
 
   /* draw to 0,0 with the given width and height */
@@ -81,6 +82,7 @@ int            _gtk_css_image_get_height           (GtkCssImage        *image);
 double         _gtk_css_image_get_aspect_ratio     (GtkCssImage        *image);
 
 GtkCssImage *  _gtk_css_image_compute              (GtkCssImage        *image,
+                                                    guint               property_id,
                                                     GtkStyleContext    *context);
 
 void           _gtk_css_image_draw                 (GtkCssImage        *image,

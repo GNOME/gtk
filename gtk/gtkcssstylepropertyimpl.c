@@ -520,7 +520,7 @@ shadow_value_compute (GtkCssStyleProperty *property,
                       GtkStyleContext     *context,
                       GtkCssValue         *specified)
 {
-  return _gtk_css_value_compute (specified, context);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static GtkCssValue *
@@ -535,7 +535,7 @@ border_corner_radius_value_compute (GtkCssStyleProperty *property,
                                     GtkStyleContext     *context,
                                     GtkCssValue         *specified)
 {
-  return _gtk_css_value_compute (specified, context);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static GtkCssValue *
@@ -561,7 +561,7 @@ css_image_value_compute (GtkCssStyleProperty    *property,
                          GtkStyleContext        *context,
                          GtkCssValue            *specified)
 {
-  return _gtk_css_value_compute (specified, context);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static void
@@ -619,7 +619,7 @@ background_image_value_compute (GtkCssStyleProperty    *property,
                                 GtkStyleContext        *context,
                                 GtkCssValue            *specified)
 {
-  return _gtk_css_value_compute (specified, context);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static void
@@ -657,7 +657,7 @@ font_size_compute (GtkCssStyleProperty *property,
                    GtkStyleContext     *context,
                    GtkCssValue         *specified)
 {
-  return _gtk_css_value_compute (specified, context);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static GtkCssValue *
@@ -674,7 +674,7 @@ outline_compute (GtkCssStyleProperty *property,
                  GtkStyleContext     *context,
                  GtkCssValue         *specified)
 {
-  return _gtk_css_value_compute (specified, context);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static GtkCssValue *
@@ -722,7 +722,7 @@ compute_border (GtkCssStyleProperty *property,
                 GtkStyleContext     *context,
                 GtkCssValue         *specified)
 {
-  return _gtk_css_value_compute (specified, context);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static GtkCssValue *
@@ -805,7 +805,7 @@ compute_margin (GtkCssStyleProperty *property,
                 GtkStyleContext     *context,
                 GtkCssValue         *specified)
 {
-  return _gtk_css_value_compute (specified, context);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static GtkCssValue *
@@ -823,7 +823,7 @@ compute_padding (GtkCssStyleProperty *property,
                  GtkStyleContext     *context,
                  GtkCssValue         *specified)
 {
-  return _gtk_css_value_compute (specified, context);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static GtkCssValue *
@@ -852,7 +852,7 @@ compute_border_width (GtkCssStyleProperty    *property,
       border_style == GTK_BORDER_STYLE_HIDDEN)
     return _gtk_css_number_value_new (0, GTK_CSS_PX);
   else
-    return _gtk_css_value_compute (specified, context);
+    return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static GtkCssValue *
@@ -888,7 +888,7 @@ background_size_compute (GtkCssStyleProperty    *property,
                          GtkStyleContext        *context,
                          GtkCssValue            *specified)
 {
-  return _gtk_css_value_compute (specified, context);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static GtkCssValue *
@@ -903,7 +903,7 @@ background_position_compute (GtkCssStyleProperty    *property,
 			     GtkStyleContext        *context,
 			     GtkCssValue            *specified)
 {
-  return _gtk_css_value_compute (specified, context);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 /*** REGISTRATION ***/

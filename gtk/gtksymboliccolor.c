@@ -119,6 +119,7 @@ gtk_css_value_symbolic_free (GtkCssValue *value)
 
 static GtkCssValue *
 gtk_css_value_symbolic_compute (GtkCssValue     *value,
+                                guint            property_id,
                                 GtkStyleContext *context)
 {
   /* for now we expect this to never be called

@@ -34,6 +34,7 @@ gtk_css_value_string_free (GtkCssValue *value)
 
 static GtkCssValue *
 gtk_css_value_string_compute (GtkCssValue     *value,
+                              guint            property_id,
                               GtkStyleContext *context)
 {
   return _gtk_css_value_ref (value);

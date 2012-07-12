@@ -42,13 +42,14 @@ gtk_css_value_bg_size_free (GtkCssValue *value)
 
 GtkCssValue *
 gtk_css_value_bg_size_compute (GtkCssValue     *value,
+                               guint            property_id,
                                GtkStyleContext *context)
 {
   if (value->x == NULL && value->y == NULL)
     return _gtk_css_value_ref (value);
 
-  return _gtk_css_bg_size_value_new (value->x ? _gtk_css_value_compute (value->x, context) : NULL,
-                                     value->y ? _gtk_css_value_compute (value->y, context) : NULL);
+  return _gtk_css_bg_size_value_new (value->x ? _gtk_css_value_compute (value->x, property_id, context) : NULL,
+                                     value->y ? _gtk_css_value_compute (value->y, property_id, context) : NULL);
 }
 
 static gboolean

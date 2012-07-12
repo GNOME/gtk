@@ -35,6 +35,7 @@ gtk_css_value_image_free (GtkCssValue *value)
 
 static GtkCssValue *
 gtk_css_value_image_compute (GtkCssValue     *value,
+                             guint            property_id,
                              GtkStyleContext *context)
 {
   GtkCssImage *image, *computed;
@@ -44,7 +45,7 @@ gtk_css_value_image_compute (GtkCssValue     *value,
   if (image == NULL)
     return _gtk_css_value_ref (value);
 
-  computed = _gtk_css_image_compute (image, context);
+  computed = _gtk_css_image_compute (image, property_id, context);
 
   if (computed == image)
     {

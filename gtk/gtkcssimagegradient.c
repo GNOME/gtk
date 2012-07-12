@@ -28,6 +28,7 @@ G_DEFINE_TYPE (GtkCssImageGradient, _gtk_css_image_gradient, GTK_TYPE_CSS_IMAGE)
 
 static GtkCssImage *
 gtk_css_image_gradient_compute (GtkCssImage     *image,
+                                guint            property_id,
                                 GtkStyleContext *context)
 {
   GtkCssImageGradient *gradient = GTK_CSS_IMAGE_GRADIENT (image);

@@ -61,6 +61,7 @@ gtk_css_value_shadow_free (GtkCssValue *shadow)
 
 static GtkCssValue *
 gtk_css_value_shadow_compute (GtkCssValue     *shadow,
+                              guint            property_id,
                               GtkStyleContext *context)
 {
   GdkRGBA transparent = { 0, 0, 0, 0 };
@@ -73,10 +74,10 @@ gtk_css_value_shadow_compute (GtkCssValue     *shadow,
                                                      FALSE);
   _gtk_css_value_unref (fallback);
 
-  return gtk_css_shadow_value_new (_gtk_css_value_compute (shadow->hoffset, context),
-                                   _gtk_css_value_compute (shadow->voffset, context),
-                                   _gtk_css_value_compute (shadow->radius, context),
-                                   _gtk_css_value_compute (shadow->spread, context),
+  return gtk_css_shadow_value_new (_gtk_css_value_compute (shadow->hoffset, property_id, context),
+                                   _gtk_css_value_compute (shadow->voffset, property_id, context),
+                                   _gtk_css_value_compute (shadow->radius, property_id, context),
+                                   _gtk_css_value_compute (shadow->spread, property_id, context),
                                    shadow->inset,
                                    color);
 }
