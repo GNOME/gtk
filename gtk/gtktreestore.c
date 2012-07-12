@@ -1266,14 +1266,14 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
  * @tree_store: A #GtkTreeStore
  * @iter: (out): An unset #GtkTreeIter to set to the new row
  * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
- * @position: position to insert the new row
+ * @position: position to insert the new row, or -1 for last
  *
  * Creates a new row at @position.  If parent is non-%NULL, then the row will be
  * made a child of @parent.  Otherwise, the row will be created at the toplevel.
- * If @position is larger than the number of rows at that level, then the new
- * row will be inserted to the end of the list.  @iter will be changed to point
- * to this new row.  The row will be empty after this function is called.  To
- * fill in values, you need to call gtk_tree_store_set() or
+ * If @position is -1 or is larger than the number of rows at that level, then
+ * the new row will be inserted to the end of the list.  @iter will be changed
+ * to point to this new row.  The row will be empty after this function is
+ * called.  To fill in values, you need to call gtk_tree_store_set() or
  * gtk_tree_store_set_value().
  *
  **/
@@ -1583,7 +1583,7 @@ gtk_tree_store_insert_with_values (GtkTreeStore *tree_store,
  * @tree_store: A #GtkTreeStore
  * @iter: (out) (allow-none): An unset #GtkTreeIter to set the new row, or %NULL.
  * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
- * @position: position to insert the new row
+ * @position: position to insert the new row, or -1 for last
  * @columns: (array length=n_values): an array of column numbers
  * @values: (array length=n_values): an array of GValues
  * @n_values: the length of the @columns and @values arrays

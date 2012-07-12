@@ -1249,12 +1249,12 @@ gtk_list_store_remove (GtkListStore *list_store,
  * gtk_list_store_insert:
  * @list_store: A #GtkListStore
  * @iter: (out): An unset #GtkTreeIter to set to the new row
- * @position: position to insert the new row
+ * @position: position to insert the new row, or -1 for last
  *
  * Creates a new row at @position.  @iter will be changed to point to this new
- * row.  If @position is larger than the number of rows on the list, then the
- * new row will be appended to the list. The row will be empty after this
- * function is called.  To fill in values, you need to call 
+ * row.  If @position is -1 or is larger than the number of rows on the list,
+ * then the new row will be appended to the list. The row will be empty after
+ * this function is called.  To fill in values, you need to call
  * gtk_list_store_set() or gtk_list_store_set_value().
  *
  **/
@@ -1271,7 +1271,6 @@ gtk_list_store_insert (GtkListStore *list_store,
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
-  g_return_if_fail (position >= 0);
 
   priv = list_store->priv;
 
@@ -1280,7 +1279,7 @@ gtk_list_store_insert (GtkListStore *list_store,
   seq = priv->seq;
 
   length = g_sequence_get_length (seq);
-  if (position > length)
+  if (position > length || position < 0)
     position = length;
 
   ptr = g_sequence_get_iter_at_pos (seq, position);
@@ -1405,14 +1404,10 @@ void
 gtk_list_store_append (GtkListStore *list_store,
 		       GtkTreeIter  *iter)
 {
-  GtkListStorePrivate *priv;
-
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
 
-  priv = list_store->priv;
-
-  gtk_list_store_insert (list_store, iter, g_sequence_get_length (priv->seq));
+  gtk_list_store_insert (list_store, iter, -1);
 }
 
 static void
@@ -2225,7 +2220,7 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
   seq = priv->seq;
 
   length = g_sequence_get_length (seq);
-  if (position > length)
+  if (position > length || position < 0)
     position = length;
 
   ptr = g_sequence_get_iter_at_pos (seq, position);
@@ -2261,7 +2256,7 @@ gtk_list_store_insert_with_values (GtkListStore *list_store,
  * gtk_list_store_insert_with_valuesv:
  * @list_store: A #GtkListStore
  * @iter: (out) (allow-none): An unset #GtkTreeIter to set to the new row, or %NULL.
- * @position: position to insert the new row
+ * @position: position to insert the new row, or -1 for last
  * @columns: (array length=n_values): an array of column numbers
  * @values: (array length=n_values): an array of GValues 
  * @n_values: the length of the @columns and @values arrays
@@ -2305,7 +2300,7 @@ gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
   seq = priv->seq;
 
   length = g_sequence_get_length (seq);
-  if (position > length)
+  if (position > length || position < 0)
     position = length;
 
   ptr = g_sequence_get_iter_at_pos (seq, position);
