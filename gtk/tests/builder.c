@@ -2634,6 +2634,77 @@ test_gmenu (void)
   g_object_unref (builder);
 }
 
+static void
+test_level_bar (void)
+{
+  GtkBuilder *builder;
+  GError *error = NULL;
+  GObject *obj, *obj1;
+  const gchar buffer1[] =
+    "<interface>"
+    "  <object class=\"GtkWindow\" id=\"window\">"
+    "    <child>"
+    "      <object class=\"GtkLevelBar\" id=\"levelbar\">"
+    "        <property name=\"value\">4.70</property>"
+    "        <property name=\"min-value\">2</property>"
+    "        <property name=\"max-value\">5</property>"
+    "        <offsets>"
+    "          <offset name=\"low\" value=\"2.25\"/>"
+    "          <offset name=\"custom\" value=\"3\"/>"
+    "          <offset name=\"high\" value=\"3\"/>"
+    "        </offsets>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "</interface>";
+  const gchar buffer2[] =
+    "<interface>"
+    "  <object class=\"GtkLevelBar\" id=\"levelbar\">"
+    "    <offsets>"
+    "      <offset name=\"low\" bogus_attr=\"foo\"/>"
+    "    </offsets>"
+    "  </object>"
+    "</interface>";
+  const gchar buffer3[] =
+    "<interface>"
+    "  <object class=\"GtkLevelBar\" id=\"levelbar\">"
+    "    <offsets>"
+    "      <offset name=\"low\" value=\"1\"/>"
+    "    </offsets>"
+    "    <bogus_tag>"
+    "    </bogus_tag>"
+    "  </object>"
+    "</interface>";
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, buffer1, -1, &error);
+  g_assert (error == NULL);
+
+  obj = gtk_builder_get_object (builder, "window");
+  g_assert (GTK_IS_WINDOW (obj));
+  obj1 = gtk_builder_get_object (builder, "levelbar");
+  g_assert (GTK_IS_LEVEL_BAR (obj1));
+  g_object_unref (builder);
+
+  error = NULL;
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, buffer2, -1, &error);
+  g_assert (g_error_matches (error,
+                             GTK_BUILDER_ERROR,
+                             GTK_BUILDER_ERROR_INVALID_ATTRIBUTE));
+  g_error_free (error);
+  g_object_unref (builder);
+
+  error = NULL;
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, buffer3, -1, &error);
+  g_assert (g_error_matches (error,
+                             GTK_BUILDER_ERROR,
+                             GTK_BUILDER_ERROR_UNHANDLED_TAG));
+  g_error_free (error);
+  g_object_unref (builder);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2681,6 +2752,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/MessageArea", test_message_area);
   g_test_add_func ("/Builder/MessageDialog", test_message_dialog);
   g_test_add_func ("/Builder/GMenu", test_gmenu);
+  g_test_add_func ("/Builder/LevelBar", test_level_bar);
 
   return g_test_run();
 }
