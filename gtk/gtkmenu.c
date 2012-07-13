@@ -4279,7 +4279,7 @@ gtk_menu_captured_event (GtkWidget *widget,
   menu = GTK_MENU (widget);
   priv = menu->priv;
 
-  if (!priv->upper_arrow_visible && !priv->lower_arrow_visible)
+  if (!priv->upper_arrow_visible && !priv->lower_arrow_visible && priv->drag_start_y < 0)
     return retval;
 
   source_device = gdk_event_get_source_device (event);
@@ -4352,7 +4352,10 @@ gtk_menu_captured_event (GtkWidget *widget,
               if (priv->lower_arrow_visible)
                 view_height -= arrow_border.bottom;
 
-              offset = CLAMP (offset, 0, priv->requested_height - view_height);
+              offset = CLAMP (offset,
+                              MIN (priv->scroll_offset, 0),
+                              MAX (priv->scroll_offset, priv->requested_height - view_height));
+
               gtk_menu_scroll_to (menu, offset);
 
               retval = TRUE;
