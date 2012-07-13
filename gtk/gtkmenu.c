@@ -4998,10 +4998,10 @@ gtk_menu_scroll_to (GtkMenu *menu,
 
   /* Scroll the menu: */
   if (gtk_widget_get_realized (widget))
-    gdk_window_move (priv->bin_window, 0, -offset);
-
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (priv->view_window, x, y, view_width, view_height);
+    {
+      gdk_window_move (priv->bin_window, 0, -offset);
+      gdk_window_move_resize (priv->view_window, x, y, view_width, view_height);
+    }
 
   priv->scroll_offset = offset;
 }
