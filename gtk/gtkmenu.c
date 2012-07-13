@@ -4314,8 +4314,7 @@ gtk_menu_captured_event (GtkWidget *widget,
       break;
     case GDK_TOUCH_UPDATE:
     case GDK_MOTION_NOTIFY:
-      if ((!gdk_event_get_state (event, &state) || (state & GDK_BUTTON1_MASK) 
-!= 0) &&
+      if ((!gdk_event_get_state (event, &state) || (state & GDK_BUTTON1_MASK) != 0) &&
           gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN)
         {
           if (!priv->drag_already_pressed)
