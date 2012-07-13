@@ -1112,6 +1112,41 @@ pointer_handle_axis (void              *data,
                      uint32_t           axis,
                      wl_fixed_t         value)
 {
+  GdkWaylandDevice *device = data;
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
+  GdkEvent *event;
+  gdouble delta_x, delta_y;
+
+  switch (axis) {
+  case WL_POINTER_AXIS_VERTICAL_SCROLL:
+    delta_x = 0;
+    delta_y = -wl_fixed_to_double (value);
+    break;
+  case WL_POINTER_AXIS_HORIZONTAL_SCROLL:
+    delta_x = -wl_fixed_to_double (value);
+    delta_y = 0;
+  default:
+    g_return_if_reached ();
+  }
+
+  device->time = time;
+  event = gdk_event_new (GDK_SCROLL);
+  event->scroll.window = g_object_ref (device->pointer_focus);
+  gdk_event_set_device (event, device->pointer);
+  event->scroll.time = time;
+  event->scroll.x = (gdouble) device->surface_x;
+  event->scroll.y = (gdouble) device->surface_y;
+  event->scroll.direction = GDK_SCROLL_SMOOTH;
+  event->scroll.delta_x = delta_x;
+  event->scroll.delta_y = delta_y;
+  event->button.state = device->modifiers;
+  gdk_event_set_screen (event, display->screen);
+
+  GDK_NOTE (EVENTS,
+            g_message ("scroll %f %f",
+                       event->scroll.delta_x, event->scroll.delta_y));
+
+  _gdk_wayland_display_deliver_event (device->display, event);
 }
 
 static void
