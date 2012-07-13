@@ -124,6 +124,11 @@ void _gtk_icon_helper_draw (GtkIconHelper *self,
                             gdouble x,
                             gdouble y);
 
+gboolean _gtk_icon_helper_get_force_scale_pixbuf (GtkIconHelper *self);
+void     _gtk_icon_helper_set_force_scale_pixbuf (GtkIconHelper *self,
+                                                  gboolean       force_scale);
+
+
 G_END_DECLS
 
 #endif /* __GTK_ICON_HELPER_H__ */

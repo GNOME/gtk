@@ -36,7 +36,8 @@ struct _GtkIconHelperPrivate {
   GtkIconSize icon_size;
   gint pixel_size;
 
-  gboolean use_fallback;
+  guint use_fallback : 1;
+  guint force_scale_pixbuf : 1;
 
   GdkPixbuf *rendered_pixbuf;
   GtkStateFlags last_rendered_state;
@@ -277,6 +278,35 @@ ensure_pixbuf_for_icon_set (GtkIconHelper *self,
     gtk_icon_set_render_icon_pixbuf (icon_set, context, self->priv->icon_size);
 }
 
+static void
+ensure_pixbuf_at_size (GtkIconHelper   *self,
+                       GtkStyleContext *context)
+{
+  gint width, height;
+
+  if (!check_invalidate_pixbuf (self, context))
+    return;
+
+  if (self->priv->rendered_pixbuf)
+    return;
+
+  if (self->priv->pixel_size != -1 ||
+      self->priv->icon_size != GTK_ICON_SIZE_INVALID)
+    {
+      ensure_icon_size (self, context, &width, &height);
+
+      if (width < gdk_pixbuf_get_width (self->priv->orig_pixbuf) ||
+          height < gdk_pixbuf_get_height (self->priv->orig_pixbuf))
+        self->priv->rendered_pixbuf =
+          gdk_pixbuf_scale_simple (self->priv->orig_pixbuf,
+                                   width, height,
+                                   GDK_INTERP_BILINEAR);
+    }
+
+  if (!self->priv->rendered_pixbuf)
+    self->priv->rendered_pixbuf = g_object_ref (self->priv->orig_pixbuf);
+}
+
 GdkPixbuf *
 _gtk_icon_helper_ensure_pixbuf (GtkIconHelper *self,
                                 GtkStyleContext *context)
@@ -287,7 +317,10 @@ _gtk_icon_helper_ensure_pixbuf (GtkIconHelper *self,
   switch (self->priv->storage_type)
     {
     case GTK_IMAGE_PIXBUF:
-      pixbuf = g_object_ref (self->priv->orig_pixbuf);
+      if (self->priv->force_scale_pixbuf)
+        ensure_pixbuf_at_size (self, context);
+      else
+        pixbuf = g_object_ref (self->priv->orig_pixbuf);
       break;
 
     case GTK_IMAGE_STOCK:
@@ -562,4 +595,21 @@ gboolean
 _gtk_icon_helper_get_is_empty (GtkIconHelper *self)
 {
   return (self->priv->storage_type == GTK_IMAGE_EMPTY);
+}
+
+gboolean
+_gtk_icon_helper_get_force_scale_pixbuf (GtkIconHelper *self)
+{
+  return self->priv->force_scale_pixbuf;
+}
+
+void
+_gtk_icon_helper_set_force_scale_pixbuf (GtkIconHelper *self,
+                                         gboolean       force_scale)
+{
+  if (self->priv->force_scale_pixbuf != force_scale)
+    {
+      self->priv->force_scale_pixbuf = force_scale;
+      _gtk_icon_helper_invalidate (self);
+    }
 }
