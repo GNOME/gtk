@@ -836,6 +836,7 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   status_icon->priv = priv;
 
   priv->icon_helper = _gtk_icon_helper_new ();
+  _gtk_icon_helper_set_force_scale_pixbuf (priv->icon_helper, TRUE);
   priv->visible      = TRUE;
 
 #ifdef GDK_WINDOWING_X11
@@ -1352,7 +1353,6 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 #endif
   GtkStyleContext *context;
   GtkWidget *widget;
-  GtkImageType storage_type = _gtk_icon_helper_get_storage_type (priv->icon_helper);
   GdkPixbuf *pixbuf;
   gint round_size;
 
@@ -1365,32 +1365,8 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
   context = gtk_widget_get_style_context (widget);
   round_size = round_pixel_size (widget, priv->size);
 
-  if (storage_type == GTK_IMAGE_PIXBUF)
-    {
-      GdkPixbuf *scaled;
-      gint width;
-      gint height;
-
-      pixbuf = _gtk_icon_helper_ensure_pixbuf (priv->icon_helper, context);
-
-      width  = gdk_pixbuf_get_width  (pixbuf);
-      height = gdk_pixbuf_get_height (pixbuf);
-
-      if (width > round_size || height > round_size)
-        {
-          scaled = gdk_pixbuf_scale_simple (pixbuf,
-                                            MIN (round_size, width),
-                                            MIN (round_size, height),
-                                            GDK_INTERP_BILINEAR);
-          g_object_unref (pixbuf);
-          pixbuf = scaled;
-        }
-    }
-  else
-    {
-      _gtk_icon_helper_set_pixel_size (priv->icon_helper, round_size);
-      pixbuf = _gtk_icon_helper_ensure_pixbuf (priv->icon_helper, context);
-    }
+  _gtk_icon_helper_set_pixel_size (priv->icon_helper, round_size);
+  pixbuf = _gtk_icon_helper_ensure_pixbuf (priv->icon_helper, context);
 
   if (pixbuf != NULL)
     {
