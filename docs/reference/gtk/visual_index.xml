@@ -18,11 +18,11 @@
   <link linkend="GtkComboBox">
     <inlinegraphic fileref="combo-box.png" format="PNG"></inlinegraphic>
   </link>
-  <link linkend="GtkComboBoxEntry">
-    <inlinegraphic fileref="combo-box-entry.png" format="PNG"></inlinegraphic>
-  </link>
   <link linkend="GtkEntry">
     <inlinegraphic fileref="entry.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkSearchEntry">
+    <inlinegraphic fileref="search-entry.png" format="PNG"></inlinegraphic>
   </link>
   <link linkend="GtkFileChooserButton">
     <inlinegraphic fileref="file-button.png" format="PNG"></inlinegraphic>
@@ -53,6 +53,9 @@
   </link>
   <link linkend="GtkLockButton">
     <inlinegraphic fileref="lockbutton.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkMenuButton">
+    <inlinegraphic fileref="menu-button.png" format="PNG"></inlinegraphic>
   </link>
   <link linkend="GtkMenuBar">
     <inlinegraphic fileref="menubar.png" format="PNG"></inlinegraphic>

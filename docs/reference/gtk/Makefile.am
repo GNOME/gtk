@@ -296,6 +296,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/combo-box.png					\
 	$(srcdir)/images/combo-box-entry.png				\
 	$(srcdir)/images/entry.png					\
+	$(srcdir)/images/search-entry.png				\
 	$(srcdir)/images/figure-hierarchical-drawing.png		\
 	$(srcdir)/images/figure-windowed-label.png			\
 	$(srcdir)/images/file-button.png				\
@@ -310,11 +311,12 @@ HTML_IMAGES = \
 	$(srcdir)/images/link-button.png				\
 	$(srcdir)/images/list-and-tree.png				\
 	$(srcdir)/images/lock-button.png				\
-	$(srcdir)/images/lockbutton.png				\
+	$(srcdir)/images/lockbutton.png	        			\
 	$(srcdir)/images/lockbutton-locked.png				\
 	$(srcdir)/images/lockbutton-unlocked.png			\
 	$(srcdir)/images/lockbutton-sorry.png				\
 	$(srcdir)/images/menubar.png					\
+	$(srcdir)/images/menu-button.png				\
 	$(srcdir)/images/messagedialog.png				\
 	$(srcdir)/images/multiline-text.png				\
 	$(srcdir)/images/notebook.png					\

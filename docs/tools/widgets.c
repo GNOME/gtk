@@ -224,6 +224,26 @@ create_link_button (void)
   return new_widget_info ("link-button", align, SMALL);
 }
 
+static WidgetInfo *
+create_menu_button (void)
+{
+  GtkWidget *widget;
+  GtkWidget *align;
+  GtkWidget *image;
+  GtkWidget *menu;
+
+  widget = gtk_menu_button_new ();
+  image = gtk_image_new ();
+  gtk_image_set_from_icon_name (GTK_IMAGE (image), "emblem-system-symbolic", GTK_ICON_SIZE_MENU);
+  gtk_button_set_image (GTK_BUTTON (widget), image);
+  menu = gtk_menu_new ();
+  gtk_menu_button_set_menu (GTK_MENU_BUTTON (widget), menu);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+
+  return new_widget_info ("menu-button", align, SMALL);
+}
+
 #define G_TYPE_TEST_PERMISSION      (g_test_permission_get_type ())
 #define G_TEST_PERMISSION(inst)     (G_TYPE_CHECK_INSTANCE_CAST ((inst), \
                                      G_TYPE_TEST_PERMISSION,             \
@@ -285,6 +305,20 @@ create_entry (void)
   gtk_container_add (GTK_CONTAINER (align), widget);
 
   return  new_widget_info ("entry", align, SMALL);
+}
+
+static WidgetInfo *
+create_search_entry (void)
+{
+  GtkWidget *widget;
+  GtkWidget *align;
+
+  widget = gtk_search_entry_new ();
+  gtk_entry_set_placeholder_text (GTK_ENTRY (widget), "Search...");
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+
+  return  new_widget_info ("search-entry", align, SMALL);
 }
 
 static WidgetInfo *
@@ -1233,6 +1267,8 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_lockbutton ());
   retval = g_list_prepend (retval, create_fontchooserdialog ());
   retval = g_list_prepend (retval, create_colorchooserdialog ());
+  retval = g_list_prepend (retval, create_menu_button ());
+  retval = g_list_prepend (retval, create_search_entry ());
 
   return retval;
 }
