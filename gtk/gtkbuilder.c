@@ -973,6 +973,13 @@ gtk_builder_new (void)
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_FILE_ERROR 
  * domain.
  *
+ * It's not really reasonable to attempt to handle failures of this
+ * call.  You should not use this function with untrusted files (ie:
+ * files that are not part of your application).  Broken #GtkBuilder
+ * files can easily crash your program, and it's possible that memory
+ * was leaked leading up to the reported failure.  The only reasonable
+ * thing to do when an error is detected is to call g_error().
+ *
  * Returns: A positive value on success, 0 if an error occurred
  *
  * Since: 2.12
@@ -1143,6 +1150,10 @@ _gtk_builder_extend_with_template (GtkBuilder    *builder,
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_RESOURCE_ERROR
  * domain.
  *
+ * It's not really reasonable to attempt to handle failures of this
+ * call.  The only reasonable thing to do when an error is detected is
+ * to call g_error().
+ *
  * Returns: A positive value on success, 0 if an error occurred
  *
  * Since: 3.4
@@ -1293,6 +1304,10 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  *
  * Upon errors 0 will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR or #G_MARKUP_ERROR domain.
+ *
+ * It's not really reasonable to attempt to handle failures of this
+ * call.  The only reasonable thing to do when an error is detected is
+ * to call g_error().
  *
  * Returns: A positive value on success, 0 if an error occurred
  *
