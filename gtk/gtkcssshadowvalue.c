@@ -64,22 +64,12 @@ gtk_css_value_shadow_compute (GtkCssValue     *shadow,
                               guint            property_id,
                               GtkStyleContext *context)
 {
-  GdkRGBA transparent = { 0, 0, 0, 0 };
-  GtkCssValue *color, *fallback;
-
-  fallback = _gtk_css_symbolic_value_new_take_symbolic_color (gtk_symbolic_color_new_literal (&transparent));
-  color = _gtk_css_rgba_value_compute_from_symbolic (shadow->color,
-                                                     fallback,
-                                                     context,
-                                                     FALSE);
-  _gtk_css_value_unref (fallback);
-
   return gtk_css_shadow_value_new (_gtk_css_value_compute (shadow->hoffset, property_id, context),
                                    _gtk_css_value_compute (shadow->voffset, property_id, context),
                                    _gtk_css_value_compute (shadow->radius, property_id, context),
                                    _gtk_css_value_compute (shadow->spread, property_id, context),
                                    shadow->inset,
-                                   color);
+                                   _gtk_css_value_compute (shadow->color, property_id, context));
 }
 
 static gboolean

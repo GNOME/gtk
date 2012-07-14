@@ -17,6 +17,8 @@
 
 #include "config.h"
 #include "gtkcssrgbavalueprivate.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkstylepropertyprivate.h"
 #include "gtksymboliccolorprivate.h"
 #include "gtkstyleproperties.h"
 #include "gtkintl.h"
@@ -118,15 +120,68 @@ gtk_css_value_symbolic_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
+gtk_css_value_symbolic_get_fallback (guint            property_id,
+                                     GtkStyleContext *context)
+{
+  static const GdkRGBA transparent = { 0, 0, 0, 0 };
+
+  switch (property_id)
+    {
+      case GTK_CSS_PROPERTY_BACKGROUND_IMAGE:
+      case GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE:
+      case GTK_CSS_PROPERTY_TEXT_SHADOW:
+      case GTK_CSS_PROPERTY_ICON_SHADOW:
+      case GTK_CSS_PROPERTY_BOX_SHADOW:
+        return _gtk_css_rgba_value_new_from_rgba (&transparent);
+      case GTK_CSS_PROPERTY_COLOR:
+      case GTK_CSS_PROPERTY_BACKGROUND_COLOR:
+      case GTK_CSS_PROPERTY_BORDER_TOP_COLOR:
+      case GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR:
+      case GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR:
+      case GTK_CSS_PROPERTY_BORDER_LEFT_COLOR:
+      case GTK_CSS_PROPERTY_OUTLINE_COLOR:
+        return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
+                                       property_id,
+                                       context);
+      default:
+        if (property_id < GTK_CSS_PROPERTY_N_PROPERTIES)
+          g_warning ("No fallback color defined for property '%s'", 
+                     _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (property_id))));
+        return _gtk_css_rgba_value_new_from_rgba (&transparent);
+    }
+}
+
+static GtkCssValue *
 gtk_css_value_symbolic_compute (GtkCssValue     *value,
                                 guint            property_id,
                                 GtkStyleContext *context)
 {
-  /* for now we expect this to never be called
-   * because all cases are handled via
-   * _gtk_css_rgba_value_compute_from_symbolic()
+  GtkCssValue *resolved, *current;
+
+  /* The computed value of the ‘currentColor’ keyword is the computed
+   * value of the ‘color’ property. If the ‘currentColor’ keyword is
+   * set on the ‘color’ property itself, it is treated as ‘color: inherit’. 
    */
-  g_return_val_if_reached (_gtk_css_value_ref (value));
+  if (property_id == GTK_CSS_PROPERTY_COLOR)
+    {
+      GtkStyleContext *parent = gtk_style_context_get_parent (context);
+
+      if (parent)
+        current = _gtk_style_context_peek_property (parent, GTK_CSS_PROPERTY_COLOR);
+      else
+        current = _gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR));
+    }
+  else
+    {
+      current = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR);
+    }
+  
+  resolved = _gtk_style_context_resolve_color_value (context, current, value);
+
+  if (resolved == NULL)
+    return gtk_css_value_symbolic_get_fallback (property_id, context);
+
+  return resolved;
 }
 
 static gboolean

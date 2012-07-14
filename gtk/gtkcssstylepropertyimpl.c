@@ -185,10 +185,7 @@ color_compute (GtkCssStyleProperty    *property,
                GtkStyleContext        *context,
                GtkCssValue            *specified)
 {
-  return _gtk_css_rgba_value_compute_from_symbolic (specified,
-                                                    _gtk_css_style_property_get_initial_value (property),
-                                                    context,
-                                                    FALSE);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static GtkCssValue *
@@ -196,14 +193,7 @@ color_property_compute (GtkCssStyleProperty    *property,
                         GtkStyleContext        *context,
                         GtkCssValue            *specified)
 {
-  GtkCssValue *value;
-
-  value = _gtk_css_rgba_value_compute_from_symbolic (specified,
-                                                    _gtk_css_style_property_get_initial_value (property),
-                                                    context,
-                                                    TRUE);
-  _gtk_css_rgba_value_get_rgba (value);
-  return value;
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static void
