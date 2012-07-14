@@ -3227,12 +3227,12 @@ gtk_tree_model_filter_iter_previous (GtkTreeModel *model,
 
   elt = iter->user_data2;
 
-  siter = g_sequence_iter_prev (elt->visible_siter);
-  if (g_sequence_iter_is_begin (siter))
+  if (g_sequence_iter_is_begin (elt->visible_siter))
     {
       iter->stamp = 0;
       return FALSE;
     }
+  siter = g_sequence_iter_prev (elt->visible_siter);
 
   iter->user_data2 = GET_ELT (siter);
 
