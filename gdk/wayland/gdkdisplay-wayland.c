@@ -533,8 +533,8 @@ gdk_wayland_display_event_data_free (GdkDisplay *display,
 {
 }
 
-static GdkKeymap *
-gdk_wayland_display_get_keymap (GdkDisplay *display)
+GdkKeymap *
+_gdk_wayland_display_get_keymap (GdkDisplay *display)
 {
   GdkWaylandDisplay *display_wayland;
 
@@ -602,7 +602,7 @@ _gdk_wayland_display_class_init (GdkWaylandDisplayClass * class)
   display_class->event_data_copy = gdk_wayland_display_event_data_copy;
   display_class->event_data_free = gdk_wayland_display_event_data_free;
   display_class->create_window_impl = _gdk_wayland_display_create_window_impl;
-  display_class->get_keymap = gdk_wayland_display_get_keymap;
+  display_class->get_keymap = _gdk_wayland_display_get_keymap;
   display_class->push_error_trap = gdk_wayland_display_push_error_trap;
   display_class->pop_error_trap = gdk_wayland_display_pop_error_trap;
   display_class->get_selection_owner = _gdk_wayland_display_get_selection_owner;
