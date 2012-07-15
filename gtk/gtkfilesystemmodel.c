@@ -316,7 +316,12 @@ node_set_visible_and_filtered_out (GtkFileSystemModel *model, guint id, gboolean
 
   /* Filteredness */
 
-  node->filtered_out = filtered_out;
+  if (node->filtered_out != filtered_out)
+    {
+      node->filtered_out = filtered_out;
+      if (node->visible && visible)
+        emit_row_changed_for_node (model, id);
+    }
 
   /* Visibility */
   
