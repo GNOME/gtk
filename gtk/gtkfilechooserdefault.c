@@ -6204,13 +6204,6 @@ gtk_file_chooser_default_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->unmap (widget);
 }
 
-static void
-install_list_model_filter (GtkFileChooserDefault *impl)
-{
-  _gtk_file_system_model_set_filter (impl->browse_files_model,
-                                     impl->current_filter);
-}
-
 #define COMPARE_DIRECTORIES										       \
   GtkFileChooserDefault *impl = user_data;								       \
   GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);                                                \
@@ -6991,7 +6984,7 @@ set_list_model (GtkFileChooserDefault *impl,
   g_signal_connect (impl->browse_files_model, "finished-loading",
 		    G_CALLBACK (browse_files_model_finished_loading_cb), impl);
 
-  install_list_model_filter (impl);
+  _gtk_file_system_model_set_filter (impl->browse_files_model, impl->current_filter);
 
   profile_end ("end", NULL);
 
@@ -9688,13 +9681,22 @@ set_current_filter (GtkFileChooserDefault *impl,
 				  filter_index);
 
       if (impl->browse_files_model)
-	install_list_model_filter (impl);
+        {
+          _gtk_file_system_model_set_filter (impl->browse_files_model, impl->current_filter);
+          _gtk_file_system_model_clear_cache (impl->browse_files_model, MODEL_COL_IS_SENSITIVE);
+        }
 
       if (impl->search_model)
-        _gtk_file_system_model_set_filter (impl->search_model, filter);
+        {
+          _gtk_file_system_model_set_filter (impl->search_model, filter);
+          _gtk_file_system_model_clear_cache (impl->search_model, MODEL_COL_IS_SENSITIVE);
+        }
 
       if (impl->recent_model)
-        _gtk_file_system_model_set_filter (impl->recent_model, filter);
+        {
+          _gtk_file_system_model_set_filter (impl->recent_model, filter);
+          _gtk_file_system_model_clear_cache (impl->recent_model, MODEL_COL_IS_SENSITIVE);
+        }
 
       g_object_notify (G_OBJECT (impl), "filter");
     }
