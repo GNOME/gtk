@@ -116,8 +116,10 @@ GtkWidget*            gtk_button_get_image          (GtkButton      *button);
 void                  gtk_button_set_image_position (GtkButton      *button,
 						     GtkPositionType position);
 GtkPositionType       gtk_button_get_image_position (GtkButton      *button);
+GDK_AVAILABLE_IN_3_6
 void                  gtk_button_set_always_show_image (GtkButton   *button,
                                                         gboolean     always_show);
+GDK_AVAILABLE_IN_3_6
 gboolean              gtk_button_get_always_show_image (GtkButton   *button);
 
 GdkWindow*            gtk_button_get_event_window   (GtkButton      *button);
