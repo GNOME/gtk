@@ -1,3 +1,38 @@
+Overview of Changes from GTK+ 2.24.10 to 2.24.11
+================================================
+
+* X11:
+ - Use _NET_WM_STATE_HIDDEN for iconification when supported
+
+* Win32:
+ - Don't drash when installed in a top-level directory
+
+* Quartz:
+ - Make function keys work
+ - Fix the build on OS X 10.7
+ - Fix manual resizing of windows
+ - Handle some key events better (such as dead tilde)
+
+* Bugs fixed:
+ 603559 gtk should handle missing immodules better
+ 640308 GtkStatusIcon never emits plug-removed on socket
+ 643131 gtk_tray_icon_dispose
+ 655065 Build failure on OS X 10.7 Lion
+ 667155 Demos in gtk2 don't comply with gseal
+ 670093 gdk_window_get_screen() not documented in new symbols
+ 670400 First shortcut capture is broken
+ 672125 gtk_enumerate_printers() doesn't call the destroy no...
+ 674556 File chooser dialog does not save its sizes
+ 675421 GtkFileChooser should set its role
+ 675835 Unable to open Preferences > Folders after refreshin...
+ 676362 _gdk_quartz_image_copy_to_image always returns black...
+        iconview: fix autoscroll
+        printing: fix the build with cups 1.6
+
+* Translation updates
+ Romanian
+
+
 Overview of Changes from GTK+ 2.24.9 to 2.24.10
 ===============================================
 
