@@ -86,7 +86,7 @@ window1
       layer: widget
       alpha: 1
       <AtkImage>
-      image size: -1 x -1
+      image size: 20 x 20
       image description: (null)
       <AtkAction>
       action 0 name: click
@@ -102,7 +102,7 @@ window1
       layer: widget
       alpha: 1
       <AtkImage>
-      image size: -1 x -1
+      image size: 20 x 20
       image description: (null)
       <AtkAction>
       action 0 name: click
