@@ -577,6 +577,11 @@ main (int argc, char **argv)
   gtk_file_filter_add_mime_type (filter, "image/png");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, "Starts with D");
+  gtk_file_filter_add_pattern (filter, "D*");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+
   g_signal_connect (dialog, "notify::filter",
 		    G_CALLBACK (filter_changed), NULL);
 
