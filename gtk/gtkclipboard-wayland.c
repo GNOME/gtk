@@ -48,6 +48,8 @@ struct _GtkClipboard
   GObject *owner;
   GdkDisplay *display;
 
+  GdkAtom selection;
+
   SetContentClosure *last_closure;
 };
 
@@ -122,34 +124,68 @@ gtk_clipboard_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-GtkClipboard *
-gtk_clipboard_get_for_display (GdkDisplay *display,
-                               GdkAtom     selection)
+static void
+clipboard_display_closed (GdkDisplay   *display,
+			  gboolean      is_error,
+			  GtkClipboard *clipboard)
 {
-  GtkClipboard *clipboard;
+  GSList *clipboards;
+
+  clipboards = g_object_get_data (G_OBJECT (display), "gtk-clipboard-list");
+  g_object_run_dispose (G_OBJECT (clipboard));
+  clipboards = g_slist_remove (clipboards, clipboard);
+  g_object_set_data (G_OBJECT (display), I_("gtk-clipboard-list"), clipboards);
+  g_object_unref (clipboard);
+}
+
+static GtkClipboard *
+clipboard_peek (GdkDisplay *display, 
+		GdkAtom     selection,
+		gboolean    only_if_exists)
+{
+  GtkClipboard *clipboard = NULL;
+  GSList *clipboards;
+  GSList *tmp_list;
 
   if (selection == GDK_NONE)
     selection = GDK_SELECTION_CLIPBOARD;
 
-  if (selection != GDK_SELECTION_CLIPBOARD)
+  clipboards = g_object_get_data (G_OBJECT (display), "gtk-clipboard-list");
+
+  tmp_list = clipboards;
+  while (tmp_list)
     {
-      g_warning (G_STRLOC ": Only able to create clipboard for CLIPBOARD");
+      clipboard = tmp_list->data;
+      if (clipboard->selection == selection)
+        break;
+
+      tmp_list = tmp_list->next;
     }
 
-  selection = GDK_SELECTION_CLIPBOARD;
+  if (!tmp_list && !only_if_exists)
+    {
+      clipboard = g_object_new (GTK_TYPE_CLIPBOARD, NULL);
+      clipboard->selection = selection;
+      clipboard->display = display;
 
-  clipboard = g_object_get_data (G_OBJECT (display), "gtk-clipboard");
-
-  if (clipboard)
-    return clipboard;
-
-  clipboard = g_object_new (GTK_TYPE_CLIPBOARD, NULL);
-  clipboard->display = display;
-
-  g_object_set_data (G_OBJECT (display), "gtk-clipboard", clipboard);
-
-  /* TODO: Need to connect to display closed to free this */
+      clipboards = g_slist_prepend (clipboards, clipboard);
+      g_object_set_data (G_OBJECT (display), I_("gtk-clipboard-list"), clipboards);
+      g_signal_connect (display, "closed",
+                        G_CALLBACK (clipboard_display_closed), clipboard);
+      gdk_display_request_selection_notification (display, selection);
+    }
+  
   return clipboard;
+}
+
+GtkClipboard *
+gtk_clipboard_get_for_display (GdkDisplay *display,
+                               GdkAtom     selection)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (!gdk_display_is_closed (display), NULL);
+
+  return clipboard_peek (display, selection, FALSE);
 }
 
 GtkClipboard *
@@ -164,6 +200,7 @@ struct _SetContentClosure {
     GtkClipboardGetFunc get_func;
     GtkClipboardClearFunc clear_func;
     guint info;
+    gboolean have_owner;
     gpointer userdata;
     GtkTargetPair *targets;
     gint n_targets;
@@ -203,6 +240,21 @@ _offer_cb (GdkDevice   *device,
   return (gchar *)selection_data.data;
 }
 
+static void
+clipboard_owner_destroyed (gpointer data,
+			   GObject *owner)
+{
+  GtkClipboard *clipboard = (GtkClipboard *) data;
+  SetContentClosure *last_closure = clipboard->last_closure;
+
+  last_closure->userdata = NULL;
+  last_closure->get_func = NULL;
+  last_closure->clear_func = NULL;
+  last_closure->have_owner = FALSE;
+
+  gtk_clipboard_clear (clipboard);
+}
+
 static gboolean
 gtk_clipboard_set_contents (GtkClipboard         *clipboard,
                             const GtkTargetEntry *targets,
@@ -216,20 +268,33 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
   GdkDevice *device;
   gint i;
   gchar **mimetypes;
-  SetContentClosure *closure;
+  SetContentClosure *closure, *last_closure;
 
-  gtk_clipboard_clear (clipboard);
+  last_closure = clipboard->last_closure;
+  if (!last_closure ||
+      (!last_closure->have_owner && have_owner) ||
+      (last_closure->userdata != user_data)) {
+    gtk_clipboard_clear (clipboard);
+
+    closure = g_new0 (SetContentClosure, 1);
+    closure->clipboard = clipboard;
+    closure->userdata = user_data;
+    closure->have_owner = have_owner;
+
+    if (have_owner)
+      g_object_weak_ref (G_OBJECT (user_data), clipboard_owner_destroyed, clipboard);
+  } else {
+    closure = last_closure;
+    g_free (closure->targets);
+  }
+
+  closure->get_func = get_func;
+  closure->clear_func = clear_func;
+  closure->targets = g_new0 (GtkTargetPair, n_targets);
+  closure->n_targets = n_targets;
 
   device_manager = gdk_display_get_device_manager (gdk_display_get_default ());
   device = gdk_device_manager_get_client_pointer (device_manager);
-
-  closure = g_new0 (SetContentClosure, 1);
-  closure->clipboard = clipboard;
-  closure->get_func = get_func;
-  closure->clear_func = clear_func;
-  closure->userdata = user_data;
-  closure->targets = g_new0 (GtkTargetPair, n_targets);
-  closure->n_targets = n_targets;
 
   mimetypes = g_new (gchar *, n_targets);
 
@@ -318,7 +383,12 @@ gtk_clipboard_clear (GtkClipboard *clipboard)
                                            clipboard->last_closure->userdata);
     }
 
-  /* TODO: Free last closure */
+  if (clipboard->last_closure->have_owner)
+    g_object_weak_unref (G_OBJECT (clipboard->last_closure->userdata),
+                         clipboard_owner_destroyed, clipboard);
+  g_free (clipboard->last_closure->targets);
+  g_free (clipboard->last_closure);
+
   clipboard->last_closure = NULL;
 }
 
