@@ -619,6 +619,8 @@ _gdk_wayland_display_init (GdkWaylandDisplay *display)
 {
   _gdk_wayland_display_manager_add_display (gdk_display_manager_get (),
 					    GDK_DISPLAY (display));
+
+  display->xkb_context = xkb_context_new (0);
 }
 
 static void

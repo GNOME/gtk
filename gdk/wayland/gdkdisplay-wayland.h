@@ -87,6 +87,8 @@ struct _GdkWaylandDisplay
 
   GSource *event_source;
 
+  struct xkb_context *xkb_context;
+
 #ifdef GDK_WAYLAND_USE_EGL
   EGLDisplay egl_display;
   EGLContext egl_context;

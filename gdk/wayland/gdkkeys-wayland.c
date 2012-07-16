@@ -49,6 +49,11 @@ struct _GdkWaylandKeymap
   GdkKeymap parent_instance;
   GdkModifierType modmap[8];
   struct xkb_desc *xkb;
+  struct xkb_keymap *keymap;
+  struct xkb_state *state;
+  xkb_mod_mask_t control_mask;
+  xkb_mod_mask_t alt_mask;
+  xkb_mod_mask_t shift_mask;
 };
 
 struct _GdkWaylandKeymapClass
@@ -659,6 +664,32 @@ _gdk_wayland_keymap_new (GdkDisplay *display)
   update_keymaps (keymap);
 #endif
   return GDK_KEYMAP (keymap);
+}
+
+void
+_gdk_wayland_keymap_update_keymap (GdkKeymap  *gdk_keymap,
+                                   struct xkb_keymap *xkb_keymap)
+{
+  GdkWaylandKeymap *keymap;
+
+  keymap = GDK_WAYLAND_KEYMAP (gdk_keymap);
+
+  if (keymap->keymap)
+    xkb_map_unref (keymap->keymap);
+
+  keymap->keymap = xkb_keymap;
+
+  if (keymap->state)
+    xkb_state_unref (keymap->state);
+
+  keymap->state = xkb_state_new (keymap->keymap);
+
+  keymap->control_mask =
+    1 << xkb_map_mod_get_index(keymap->keymap, "Control");
+  keymap->alt_mask =
+    1 << xkb_map_mod_get_index(keymap->keymap, "Mod1");
+  keymap->shift_mask =
+    1 << xkb_map_mod_get_index(keymap->keymap, "Shift");
 }
 
 struct xkb_desc *_gdk_wayland_keymap_get_xkb_desc (GdkKeymap *keymap)

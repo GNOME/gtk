@@ -33,6 +33,8 @@
 #include <gdk/gdkprivate.h>
 #include <gdk/wayland/gdkdisplay-wayland.h>
 
+#include <xkbcommon/xkbcommon.h>
+
 #include "gdkinternals.h"
 
 #include "config.h"
@@ -89,6 +91,8 @@ void _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 					      gint           attributes_mask);
 
 GdkKeymap *_gdk_wayland_display_get_keymap (GdkDisplay *display);
+void       _gdk_wayland_keymap_update_keymap (GdkKeymap  *gdk_keymap,
+                                              struct xkb_keymap *xkb_keymap);
 
 GdkWindow *_gdk_wayland_display_get_selection_owner (GdkDisplay *display,
 						 GdkAtom     selection);

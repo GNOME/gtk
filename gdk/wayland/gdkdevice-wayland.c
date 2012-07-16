@@ -36,6 +36,7 @@
 #include <X11/keysym.h>
 
 #include <sys/time.h>
+#include <sys/mman.h>
 
 #define GDK_TYPE_DEVICE_CORE         (gdk_device_core_get_type ())
 #define GDK_DEVICE_CORE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE_CORE, GdkDeviceCore))
@@ -1126,6 +1127,37 @@ keyboard_handle_keymap (void               *data,
                        int                 fd,
                        uint32_t            size)
 {
+  GdkWaylandDevice *device = data;
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
+  GdkKeymap *gdk_keymap;
+  gchar *keymap_data;
+  struct xkb_keymap *keymap;
+
+  if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1)
+    {
+      g_critical (G_STRLOC ": Unknown keymap format");
+      close (fd);
+      return;
+    }
+
+  keymap_data = mmap (NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+  if (keymap_data == MAP_FAILED)
+    {
+      g_critical (G_STRLOC ": Unable to map fd for keymap %s", g_strerror (errno));
+      close (fd);
+      return;
+    }
+
+  keymap = xkb_map_new_from_string (display->xkb_context,
+                                    keymap_data,
+                                    format,
+                                    0);
+
+  munmap (keymap_data, size);
+  close (fd);
+
+  gdk_keymap = _gdk_wayland_display_get_keymap (device->display);
+  _gdk_wayland_keymap_update_keymap (gdk_keymap, keymap);
 }
 
 static void
