@@ -818,12 +818,9 @@ static const struct wl_data_offer_listener data_offer_listener = {
 static void
 data_device_data_offer (void                  *data,
                         struct wl_data_device *data_device,
-                        uint32_t               id)
+                        struct wl_data_offer  *_offer)
 {
   DataOffer *offer;
-
-  g_debug (G_STRLOC ": %s data_device = %p id = %lu",
-           G_STRFUNC, data_device, (long unsigned int)id);
 
   /* This structure is reference counted to handle the case where you get a
    * leave but are in the middle of transferring data
@@ -831,10 +828,7 @@ data_device_data_offer (void                  *data,
   offer = g_new0 (DataOffer, 1);
   offer->ref_count = 1;
   offer->types = g_ptr_array_new_with_free_func (g_free);
-  offer->offer = (struct wl_data_offer *)
-    wl_proxy_create_for_id ((struct wl_proxy *) data_device,
-                            id,
-                            &wl_data_offer_interface);
+  offer->offer = _offer;
 
   /* The DataOffer structure is then retrieved later since this sets the user
    * data.
