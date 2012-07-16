@@ -831,18 +831,7 @@ compute_border_width (GtkCssStyleProperty    *property,
                       GtkStyleContext        *context,
                       GtkCssValue            *specified)
 {
-  GtkBorderStyle border_style;
-  
-  /* The -1 is magic that is only true because we register the style
-   * properties directly after the width properties.
-   */
-  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, _gtk_css_style_property_get_id (property) - 1));
-
-  if (border_style == GTK_BORDER_STYLE_NONE ||
-      border_style == GTK_BORDER_STYLE_HIDDEN)
-    return _gtk_css_number_value_new (0, GTK_CSS_PX);
-  else
-    return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static GtkCssValue *
@@ -1107,8 +1096,8 @@ _gtk_css_style_property_init_properties (void)
                                           query_length_as_int,
                                           assign_length_from_int,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
-  /* IMPORTANT: compute_border_width() requires that the border-width
-   * properties be immeditaly followed by the border-style properties
+  /* IMPORTANT: the border-width properties must come after border-style properties,
+   * they depend on them for their value computation.
    */
   gtk_css_style_property_register        ("border-top-style",
                                           GTK_CSS_PROPERTY_BORDER_TOP_STYLE,
