@@ -177,6 +177,16 @@ struct _GtkDragFindData
 
 @end
 
+/**
+ * gtk_drag_get_data: (method)
+ * @widget: the widget that will receive the
+ *   #GtkWidget::drag-data-received signal.
+ * @context: the drag context
+ * @target: the target (form of the data) to retrieve.
+ * @time_: a timestamp for retrieving the data. This will
+ *   generally be the time received in a #GtkWidget::drag-motion"
+ *   or #GtkWidget::drag-drop" signal.
+ */
 void 
 gtk_drag_get_data (GtkWidget      *widget,
 		   GdkDragContext *context,
@@ -233,6 +243,14 @@ gtk_drag_get_data (GtkWidget      *widget,
     }      
 }
 
+/**
+ * gtk_drag_finish: (method)
+ * @context: the drag context.
+ * @success: a flag indicating whether the drop was successful
+ * @del: a flag indicating whether the source should delete the
+ *   original data. (This should be %TRUE for a move)
+ * @time_: the timestamp from the #GtkWidget::drag-drop signal.
+ */
 void 
 gtk_drag_finish (GdkDragContext *context,
 		 gboolean        success,
@@ -312,6 +330,10 @@ gtk_drag_clear_source_info (GdkDragContext *context)
   g_object_set_qdata (G_OBJECT (context), dest_info_quark, NULL);
 }
 
+/**
+ * gtk_drag_get_source_widget: (method)
+ * @context: a (destination side) drag context
+ */
 GtkWidget *
 gtk_drag_get_source_widget (GdkDragContext *context)
 {
@@ -364,14 +386,10 @@ gtk_drag_highlight_draw (GtkWidget *widget,
   return FALSE;
 }
 
-/*************************************************************
- * gtk_drag_highlight:
- *     Highlight the given widget in the default manner.
- *   arguments:
- *     widget:
- *   results:
- *************************************************************/
-
+/**
+ * gtk_drag_highlight: (method)
+ * @widget: a widget to highlight
+ */
 void 
 gtk_drag_highlight (GtkWidget  *widget)
 {
@@ -384,14 +402,10 @@ gtk_drag_highlight (GtkWidget  *widget)
   gtk_widget_queue_draw (widget);
 }
 
-/*************************************************************
- * gtk_drag_unhighlight:
- *     Refresh the given widget to remove the highlight.
- *   arguments:
- *     widget:
- *   results:
- *************************************************************/
-
+/**
+ * gtk_drag_unhighlight: (method)
+ * @widget: a widget to remove the highlight from.
+ */
 void 
 gtk_drag_unhighlight (GtkWidget *widget)
 {
@@ -468,6 +482,17 @@ gtk_drag_dest_site_destroy (gpointer data)
   g_free (site);
 }
 
+/**
+ * gtk_drag_dest_set: (method)
+ * @widget: a #GtkWidget
+ * @flags: which types of default drag behavior to use
+ * @targets: (allow-none) (array length=n_targets): a pointer to an array of #GtkTargetEntry<!-- -->s
+ *     indicating the drop types that this @widget will accept, or %NULL.
+ *     Later you can access the list with gtk_drag_dest_get_target_list()
+ *     and gtk_drag_dest_find_target().
+ * @n_targets: the number of entries in @targets
+ * @actions: a bitmask of possible actions for a drop onto this @widget.
+ */
 void 
 gtk_drag_dest_set (GtkWidget            *widget,
 		   GtkDestDefaults       flags,
@@ -509,6 +534,16 @@ gtk_drag_dest_set (GtkWidget            *widget,
 			  site, gtk_drag_dest_site_destroy);
 }
 
+/**
+ * gtk_drag_dest_set_proxy: (method)
+ * @widget: a #GtkWidget
+ * @proxy_window: the window to which to forward drag events
+ * @protocol: the drag protocol which the @proxy_window accepts
+ *   (You can use gdk_drag_get_protocol() to determine this)
+ * @use_coordinates: If %TRUE, send the same coordinates to the
+ *   destination, because it is an embedded
+ *   subwindow.
+ */
 void 
 gtk_drag_dest_set_proxy (GtkWidget      *widget,
 			 GdkWindow      *proxy_window,
@@ -518,6 +553,10 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
   g_warning ("gtk_drag_dest_set_proxy is not supported on Mac OS X.");
 }
 
+/**
+ * gtk_drag_dest_unset: (method)
+ * @widget: a #GtkWidget
+ */
 void 
 gtk_drag_dest_unset (GtkWidget *widget)
 {
@@ -539,6 +578,10 @@ gtk_drag_dest_unset (GtkWidget *widget)
   g_object_set_data (G_OBJECT (widget), I_("gtk-drag-dest"), NULL);
 }
 
+/**
+ * gtk_drag_dest_get_target_list: (method)
+ * @widget: a #GtkWidget
+ */
 GtkTargetList*
 gtk_drag_dest_get_target_list (GtkWidget *widget)
 {
@@ -551,6 +594,11 @@ gtk_drag_dest_get_target_list (GtkWidget *widget)
   return site ? site->target_list : NULL;  
 }
 
+/**
+ * gtk_drag_dest_set_target_list: (method)
+ * @widget: a #GtkWidget that's a drag destination
+ * @target_list: (allow-none): list of droppable targets, or %NULL for none
+ */
 void
 gtk_drag_dest_set_target_list (GtkWidget      *widget,
                                GtkTargetList  *target_list)
@@ -579,6 +627,10 @@ gtk_drag_dest_set_target_list (GtkWidget      *widget,
   register_types (widget, site);
 }
 
+/**
+ * gtk_drag_dest_add_text_targets: (method)
+ * @widget: a #GtkWidget that's a drag destination
+ */
 void
 gtk_drag_dest_add_text_targets (GtkWidget *widget)
 {
@@ -594,6 +646,11 @@ gtk_drag_dest_add_text_targets (GtkWidget *widget)
   gtk_target_list_unref (target_list);
 }
 
+
+/**
+ * gtk_drag_dest_add_image_targets: (method)
+ * @widget: a #GtkWidget that's a drag destination
+ */
 void
 gtk_drag_dest_add_image_targets (GtkWidget *widget)
 {
@@ -609,6 +666,10 @@ gtk_drag_dest_add_image_targets (GtkWidget *widget)
   gtk_target_list_unref (target_list);
 }
 
+/**
+ * gtk_drag_dest_add_uri_targets: (method)
+ * @widget: a #GtkWidget that's a drag destination
+ */
 void
 gtk_drag_dest_add_uri_targets (GtkWidget *widget)
 {
@@ -876,6 +937,11 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
   return (site->flags & GTK_DEST_DEFAULT_DROP) ? TRUE : retval;
 }
 
+/**
+ * gtk_drag_dest_set_track_motion: (method)
+ * @widget: a #GtkWidget that's a drag destination
+ * @track_motion: whether to accept all targets
+ */
 void
 gtk_drag_dest_set_track_motion (GtkWidget *widget,
 				gboolean   track_motion)
@@ -891,6 +957,10 @@ gtk_drag_dest_set_track_motion (GtkWidget *widget,
   site->track_motion = track_motion != FALSE;
 }
 
+/**
+ * gtk_drag_dest_get_track_motion: (method)
+ * @widget: a #GtkWidget that's a drag destination
+ */
 gboolean
 gtk_drag_dest_get_track_motion (GtkWidget *widget)
 {
@@ -989,6 +1059,13 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 }
 
 
+/**
+ * gtk_drag_dest_find_target: (method)
+ * @widget: drag destination widget
+ * @context: drag context
+ * @target_list: (allow-none): list of droppable targets, or %NULL to use
+ *    gtk_drag_dest_get_target_list (@widget).
+ */
 GdkAtom
 gtk_drag_dest_find_target (GtkWidget      *widget,
                            GdkDragContext *context,
@@ -1231,6 +1308,15 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   return context;
 }
 
+/**
+ * gtk_drag_begin: (method)
+ * @widget: the source widget.
+ * @targets: The targets (data formats) in which the
+ *    source can provide the data.
+ * @actions: A bitmask of the allowed drag actions for this drag.
+ * @button: The button the user clicked to start the drag.
+ * @event: The event that triggered the start of the drag.
+ */
 GdkDragContext *
 gtk_drag_begin (GtkWidget         *widget,
 		GtkTargetList     *targets,
@@ -1306,6 +1392,15 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
   return retval;
 }
 
+/**
+ * gtk_drag_source_set: (method)
+ * @widget: a #GtkWidget
+ * @start_button_mask: the bitmask of buttons that can start the drag
+ * @targets: (allow-none) (array length=n_targets): the table of targets that the drag will support,
+ *     may be %NULL
+ * @n_targets: the number of items in @targets
+ * @actions: the bitmask of possible actions for a drag from this widget
+ */
 void 
 gtk_drag_source_set (GtkWidget            *widget,
 		     GdkModifierType       start_button_mask,
@@ -1357,14 +1452,10 @@ gtk_drag_source_set (GtkWidget            *widget,
   site->actions = actions;
 }
 
-/*************************************************************
- * gtk_drag_source_unset
- *     Unregister this widget as a drag source.
- *   arguments:
- *     widget:
- *   results:
- *************************************************************/
-
+/**
+ * gtk_drag_source_unset: (method)
+ * @widget: a #GtkWidget
+ */
 void 
 gtk_drag_source_unset (GtkWidget *widget)
 {
@@ -1383,6 +1474,10 @@ gtk_drag_source_unset (GtkWidget *widget)
     }
 }
 
+/**
+ * gtk_drag_source_get_target_list: (method)
+ * @widget: a #GtkWidget
+ */
 GtkTargetList *
 gtk_drag_source_get_target_list (GtkWidget *widget)
 {
@@ -1396,6 +1491,11 @@ gtk_drag_source_get_target_list (GtkWidget *widget)
 
 }
 
+/**
+ * gtk_drag_source_set_target_list: (method)
+ * @widget: a #GtkWidget that's a drag source
+ * @target_list: (allow-none): list of draggable targets, or %NULL for none
+ */
 void
 gtk_drag_source_set_target_list (GtkWidget     *widget,
                                  GtkTargetList *target_list)
@@ -1448,6 +1548,10 @@ gtk_drag_source_add_text_targets (GtkWidget *widget)
   gtk_target_list_unref (target_list);
 }
 
+/**
+ * gtk_drag_source_add_image_targets: (method)
+ * @widget: a #GtkWidget that's is a drag source
+ */
 void
 gtk_drag_source_add_image_targets (GtkWidget *widget)
 {
@@ -1463,6 +1567,10 @@ gtk_drag_source_add_image_targets (GtkWidget *widget)
   gtk_target_list_unref (target_list);
 }
 
+/**
+ * gtk_drag_source_add_uri_targets: (method)
+ * @widget: a #GtkWidget that's is a drag source
+ */
 void
 gtk_drag_source_add_uri_targets (GtkWidget *widget)
 {
@@ -1513,6 +1621,11 @@ gtk_drag_source_site_destroy (gpointer data)
   g_free (site);
 }
 
+/**
+ * gtk_drag_source_set_icon_pixbuf: (method)
+ * @widget: a #GtkWidget
+ * @pixbuf: the #GdkPixbuf for the drag icon
+ */
 void 
 gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
 				 GdkPixbuf   *pixbuf)
@@ -1925,7 +2038,14 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
     }  
 }
 
-
+/**
+ * gtk_drag_check_threshold: (method)
+ * @widget: a #GtkWidget
+ * @start_x: X coordinate of start of drag
+ * @start_y: Y coordinate of start of drag
+ * @current_x: current X coordinate
+ * @current_y: current Y coordinate
+ */
 gboolean
 gtk_drag_check_threshold (GtkWidget *widget,
 			  gint       start_x,
