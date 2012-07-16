@@ -155,10 +155,7 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
 
   if (specified)
     {
-      g_ptr_array_index (values->values, id) =
-	_gtk_css_style_property_compute_value (prop,
-					       context,
-					       specified);
+      g_ptr_array_index (values->values, id) = _gtk_css_value_compute (specified, id, context);
     }
   else
     {

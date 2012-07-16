@@ -61,6 +61,20 @@ _gtk_css_value_unref (GtkCssValue *value)
   value->class->free (value);
 }
 
+/**
+ * _gtk_css_value_compute:
+ * @value: the value to compute from
+ * @property_id: the ID of the property to compute
+ * @context: the context to use for resolving
+ *
+ * Converts the specified @value into the computed value for the CSS
+ * property given by @property_id using the information in @context.
+ * This step is explained in detail in
+ * <ulink url="http://www.w3.org/TR/css3-cascade/#computed>
+ * the CSS documentation</ulink>.
+ *
+ * Returns: the comptued value
+ **/
 GtkCssValue *
 _gtk_css_value_compute (GtkCssValue     *value,
                         guint            property_id,
@@ -124,6 +138,15 @@ _gtk_css_value_to_string (const GtkCssValue *value)
   return g_string_free (string, FALSE);
 }
 
+/**
+ * _gtk_css_value_print:
+ * @value: the value to print
+ * @string: the string to print to
+ *
+ * Prints @value to the given @string in CSS format. The @value must be a
+ * valid specified value as parsed using the parse functions or as assigned
+ * via _gtk_style_property_assign().
+ **/
 void
 _gtk_css_value_print (const GtkCssValue *value,
                       GString           *string)

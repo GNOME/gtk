@@ -2839,7 +2839,7 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
           g_string_append (str, "  ");
           g_string_append (str, _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop->property)));
           g_string_append (str, ": ");
-          _gtk_css_style_property_print_value (prop->property, prop->value, str);
+          _gtk_css_value_print (prop->value, str);
           g_string_append (str, ";\n");
         }
 

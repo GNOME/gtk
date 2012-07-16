@@ -227,27 +227,9 @@ gtk_css_style_property_real_parse_value (GtkCssStyleProperty *property,
 }
 
 static void
-gtk_css_style_property_real_print_value (GtkCssStyleProperty *property,
-                                         const GtkCssValue   *value,
-                                         GString             *string)
-{
-  _gtk_css_value_print (value, string);
-}
-
-static GtkCssValue *
-gtk_css_style_property_real_compute_value (GtkCssStyleProperty *property,
-                                           GtkStyleContext     *context,
-                                           GtkCssValue         *specified)
-{
-  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
-}
-
-static void
 _gtk_css_style_property_init (GtkCssStyleProperty *property)
 {
   property->parse_value = gtk_css_style_property_real_parse_value;
-  property->print_value = gtk_css_style_property_real_print_value;
-  property->compute_value = gtk_css_style_property_real_compute_value;
 }
 
 /**
@@ -370,53 +352,4 @@ _gtk_css_style_property_get_initial_value (GtkCssStyleProperty *property)
   g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), NULL);
 
   return property->initial_value;
-}
-
-/**
- * _gtk_css_style_property_compute_value:
- * @property: the property
- * @computed: (out): an uninitialized value to be filled with the result
- * @context: the context to use for resolving
- * @specified: the value to compute from
- *
- * Converts the @specified value into the @computed value using the
- * information in @context. This step is explained in detail in
- * <ulink url="http://www.w3.org/TR/css3-cascade/#computed>
- * the CSS documentation</ulink>.
- **/
-GtkCssValue *
-_gtk_css_style_property_compute_value (GtkCssStyleProperty *property,
-                                       GtkStyleContext     *context,
-                                       GtkCssValue         *specified)
-{
-  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), NULL);
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  return property->compute_value (property, context, specified);
-}
-
-/**
- * _gtk_css_style_property_print_value:
- * @property: the property
- * @value: the value to print
- * @string: the string to print to
- *
- * Prints @value to the given @string in CSS format. The @value must be a
- * valid specified value as parsed using the parse functions or as assigned
- * via _gtk_style_property_assign().
- **/
-void
-_gtk_css_style_property_print_value (GtkCssStyleProperty    *property,
-                                     GtkCssValue            *value,
-                                     GString                *string)
-{
-  g_return_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property));
-  g_return_if_fail (value != NULL);
-  g_return_if_fail (string != NULL);
-
-  if (_gtk_css_value_is_inherit (value) ||
-      _gtk_css_value_is_initial (value))
-    _gtk_css_value_print (value, string);
-  else
-    property->print_value (property, value, string);
 }

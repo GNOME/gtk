@@ -36,12 +36,6 @@ typedef struct _GtkCssStylePropertyClass      GtkCssStylePropertyClass;
 
 typedef GtkCssValue *    (* GtkCssStylePropertyParseFunc)  (GtkCssStyleProperty    *property,
                                                             GtkCssParser           *parser);
-typedef void             (* GtkCssStylePropertyPrintFunc)  (GtkCssStyleProperty    *property,
-                                                            const GtkCssValue      *value,
-                                                            GString                *string);
-typedef GtkCssValue  *   (* GtkCssStylePropertyComputeFunc)(GtkCssStyleProperty    *property,
-                                                            GtkStyleContext        *context,
-                                                            GtkCssValue            *specified);
 typedef void             (* GtkCssStylePropertyQueryFunc)  (GtkCssStyleProperty    *property,
                                                             const GtkCssValue      *cssvalue,
                                                             GValue                 *value);
@@ -57,8 +51,6 @@ struct _GtkCssStyleProperty
   guint animated :1;
 
   GtkCssStylePropertyParseFunc parse_value;
-  GtkCssStylePropertyPrintFunc print_value;
-  GtkCssStylePropertyComputeFunc compute_value;
   GtkCssStylePropertyQueryFunc query_value;
   GtkCssStylePropertyAssignFunc assign_value;
 };
@@ -82,10 +74,6 @@ gboolean                _gtk_css_style_property_is_animated     (GtkCssStyleProp
 guint                   _gtk_css_style_property_get_id          (GtkCssStyleProperty    *property);
 GtkCssValue  *          _gtk_css_style_property_get_initial_value
                                                                 (GtkCssStyleProperty    *property);
-
-GtkCssValue *           _gtk_css_style_property_compute_value   (GtkCssStyleProperty    *property,
-                                                                 GtkStyleContext        *context,
-                                                                 GtkCssValue            *specified);
 
 void                    _gtk_css_style_property_print_value     (GtkCssStyleProperty    *property,
                                                                  GtkCssValue            *value,
