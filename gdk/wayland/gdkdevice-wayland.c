@@ -1139,7 +1139,7 @@ pointer_handle_axis (void              *data,
   event->scroll.direction = GDK_SCROLL_SMOOTH;
   event->scroll.delta_x = delta_x;
   event->scroll.delta_y = delta_y;
-  event->button.state = device->modifiers;
+  event->scroll.state = device->modifiers;
   gdk_event_set_screen (event, display->screen);
 
   GDK_NOTE (EVENTS,
