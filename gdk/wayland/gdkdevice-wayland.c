@@ -1178,7 +1178,6 @@ keyboard_handle_enter (void               *data,
                        struct wl_surface  *surface,
                        struct wl_array    *keys)
 {
-
   GdkWaylandDevice *device = data;
   GdkEvent *event;
   GdkWaylandDisplay *wayland_display =
