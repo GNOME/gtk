@@ -49,6 +49,7 @@ struct _GdkWaylandKeymap
   GdkKeymap parent_instance;
 
   struct xkb_keymap *xkb_keymap;
+  struct xkb_state *xkb_state;
 };
 
 struct _GdkWaylandKeymapClass
@@ -656,6 +657,7 @@ _gdk_wayland_keymap_new ()
   names.variant = "";
   names.options = "";
   keymap->xkb_keymap = xkb_map_new_from_names(context, &names, XKB_MAP_COMPILE_PLACEHOLDER);
+  keymap->xkb_state = xkb_state_new (keymap->xkb_keymap);
   xkb_context_unref (context);
 
   return GDK_KEYMAP (keymap);
@@ -682,6 +684,7 @@ _gdk_wayland_keymap_new_from_fd (uint32_t format,
   keymap->xkb_keymap = xkb_map_new_from_string (context, map_str, format, XKB_MAP_COMPILE_PLACEHOLDER);
   munmap (map_str, size);
   close (fd);
+  keymap->xkb_state = xkb_state_new (keymap->xkb_keymap);
   xkb_context_unref (context);
 
   return GDK_KEYMAP (keymap);
@@ -692,7 +695,7 @@ struct xkb_keymap *_gdk_wayland_keymap_get_xkb_keymap (GdkKeymap *keymap)
   return GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
 }
 
-struct xkb_desc *_gdk_wayland_keymap_get_xkb_desc (GdkKeymap *keymap)
+struct xkb_state *_gdk_wayland_keymap_get_xkb_state (GdkKeymap *keymap)
 {
-  return GDK_WAYLAND_KEYMAP (keymap)->xkb;
+  return GDK_WAYLAND_KEYMAP (keymap)->xkb_state;
 }

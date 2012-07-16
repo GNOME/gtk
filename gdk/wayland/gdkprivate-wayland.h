@@ -52,6 +52,7 @@ GdkKeymap *_gdk_wayland_keymap_new (void);
 GdkKeymap *_gdk_wayland_keymap_new_from_fd (uint32_t format,
                                             uint32_t fd, uint32_t size);
 struct xkb_desc *_gdk_wayland_keymap_get_xkb_desc (GdkKeymap *keymap);
+struct xkb_state *_gdk_wayland_keymap_get_xkb_state (GdkKeymap *keymap);
 
 GdkCursor *_gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
 						     GdkCursorType  cursor_type);
