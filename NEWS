@@ -1,6 +1,9 @@
 Overview of Changes in GTK+ 3.5.8
 =================================
 
+* gtk-launch: A new commandline utility to launch an application
+  from its desktop file
+
 * GtkStrengthBar: A new widget for displaying the strength
   or level or some quantity
 
@@ -24,6 +27,7 @@ Overview of Changes in GTK+ 3.5.8
  679537 Crash in GtkEntry gtk_entry_get_icon_pixbuf()
  679705 Using NULL with gtk_application_set_menubar causes seg...
  677892 Add a GtkStrengthBar widget
+ 679342 Add a gtk-launch utility
 
 * Translation updates:
  Bulgarian
