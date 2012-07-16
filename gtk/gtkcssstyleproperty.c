@@ -239,7 +239,7 @@ gtk_css_style_property_real_compute_value (GtkCssStyleProperty *property,
                                            GtkStyleContext     *context,
                                            GtkCssValue         *specified)
 {
-  return _gtk_css_value_ref (specified);
+  return _gtk_css_value_compute (specified, _gtk_css_style_property_get_id (property), context);
 }
 
 static void
