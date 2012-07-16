@@ -56,6 +56,16 @@ typedef enum { /*< skip >*/
                                    GTK_CSS_CHANGE_PARENT_POSITION | GTK_CSS_CHANGE_PARENT_SIBLING_POSITION | \
                                    GTK_CSS_CHANGE_PARENT_STATE | GTK_CSS_CHANGE_PARENT_SIBLING_STATE)
 
+typedef enum /*< skip >*/ {
+  GTK_CSS_DEPENDS_ON_PARENT = (1 << 0),
+  GTK_CSS_EQUALS_PARENT = (1 << 1),
+  GTK_CSS_DEPENDS_ON_COLOR = (1 << 2),
+  GTK_CSS_DEPENDS_ON_FONT_SIZE = (1 << 3)
+} GtkCssDependencies;
+
+#define GTK_CSS_DEPENDS_ON_EVERYTHING (GTK_CSS_DEPENDS_ON_PARENT | GTK_CSS_EQUALS_PARENT \
+                                       | GTK_CSS_DEPENDS_ON_COLOR | GTK_CSS_DEPENDS_ON_FONT_SIZE)
+
 enum { /*< skip >*/
   GTK_CSS_PROPERTY_COLOR,
   GTK_CSS_PROPERTY_FONT_SIZE,

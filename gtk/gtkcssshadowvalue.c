@@ -60,16 +60,19 @@ gtk_css_value_shadow_free (GtkCssValue *shadow)
 }
 
 static GtkCssValue *
-gtk_css_value_shadow_compute (GtkCssValue     *shadow,
-                              guint            property_id,
-                              GtkStyleContext *context)
+gtk_css_value_shadow_compute (GtkCssValue        *shadow,
+                              guint               property_id,
+                              GtkStyleContext    *context,
+                              GtkCssDependencies *dependencies)
 {
-  return gtk_css_shadow_value_new (_gtk_css_value_compute (shadow->hoffset, property_id, context),
-                                   _gtk_css_value_compute (shadow->voffset, property_id, context),
-                                   _gtk_css_value_compute (shadow->radius, property_id, context),
-                                   _gtk_css_value_compute (shadow->spread, property_id, context),
+  *dependencies = GTK_CSS_DEPENDS_ON_EVERYTHING;
+
+  return gtk_css_shadow_value_new (_gtk_css_value_compute (shadow->hoffset, property_id, context, NULL),
+                                   _gtk_css_value_compute (shadow->voffset, property_id, context, NULL),
+                                   _gtk_css_value_compute (shadow->radius, property_id, context, NULL),
+                                   _gtk_css_value_compute (shadow->spread, property_id, context, NULL),
                                    shadow->inset,
-                                   _gtk_css_value_compute (shadow->color, property_id, context));
+                                   _gtk_css_value_compute (shadow->color, property_id, context, NULL));
 }
 
 static gboolean

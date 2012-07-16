@@ -35,11 +35,14 @@ gtk_css_value_typed_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_typed_compute (GtkCssValue     *value,
-                             guint            property_id,
-                             GtkStyleContext *context)
+gtk_css_value_typed_compute (GtkCssValue        *value,
+                             guint               property_id,
+                             GtkStyleContext    *context,
+                             GtkCssDependencies *dependencies)
 {
   GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (_gtk_css_style_property_lookup_by_id (property_id));
+
+  *dependencies = GTK_CSS_DEPENDS_ON_EVERYTHING;
 
   return _gtk_css_style_compute_value (context, custom->pspec->value_type, value);
 }

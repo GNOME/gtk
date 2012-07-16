@@ -66,6 +66,9 @@ _gtk_css_value_unref (GtkCssValue *value)
  * @value: the value to compute from
  * @property_id: the ID of the property to compute
  * @context: the context to use for resolving
+ * @dependencies: (out) (allow-none): Set to the dependencies of the
+ *     computed values that indicate when this value needs to be
+ *     recomputed and how.
  *
  * Converts the specified @value into the computed value for the CSS
  * property given by @property_id using the information in @context.
@@ -73,17 +76,24 @@ _gtk_css_value_unref (GtkCssValue *value)
  * <ulink url="http://www.w3.org/TR/css3-cascade/#computed>
  * the CSS documentation</ulink>.
  *
- * Returns: the comptued value
+ * Returns: the computed value
  **/
 GtkCssValue *
-_gtk_css_value_compute (GtkCssValue     *value,
-                        guint            property_id,
-                        GtkStyleContext *context)
+_gtk_css_value_compute (GtkCssValue        *value,
+                        guint               property_id,
+                        GtkStyleContext    *context,
+                        GtkCssDependencies *dependencies)
 {
+  GtkCssDependencies fallback;
+
   g_return_val_if_fail (value != NULL, NULL);
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
-  return value->class->compute (value, property_id, context);
+  if (dependencies == NULL)
+    dependencies = &fallback;
+  *dependencies = 0;
+
+  return value->class->compute (value, property_id, context, dependencies);
 }
 
 gboolean

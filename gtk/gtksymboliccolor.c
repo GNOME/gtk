@@ -142,7 +142,8 @@ gtk_css_value_symbolic_get_fallback (guint            property_id,
       case GTK_CSS_PROPERTY_OUTLINE_COLOR:
         return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
                                        property_id,
-                                       context);
+                                       context,
+                                       NULL);
       default:
         if (property_id < GTK_CSS_PROPERTY_N_PROPERTIES)
           g_warning ("No fallback color defined for property '%s'", 
@@ -152,11 +153,14 @@ gtk_css_value_symbolic_get_fallback (guint            property_id,
 }
 
 static GtkCssValue *
-gtk_css_value_symbolic_compute (GtkCssValue     *value,
-                                guint            property_id,
-                                GtkStyleContext *context)
+gtk_css_value_symbolic_compute (GtkCssValue        *value,
+                                guint               property_id,
+                                GtkStyleContext    *context,
+                                GtkCssDependencies *dependencies)
 {
   GtkCssValue *resolved, *current;
+
+  *dependencies = GTK_CSS_DEPENDS_ON_EVERYTHING;
 
   /* The computed value of the ‘currentColor’ keyword is the computed
    * value of the ‘color’ property. If the ‘currentColor’ keyword is

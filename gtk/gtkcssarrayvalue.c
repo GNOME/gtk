@@ -41,9 +41,10 @@ gtk_css_value_array_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_array_compute (GtkCssValue     *value,
-                             guint            property_id,
-                             GtkStyleContext *context)
+gtk_css_value_array_compute (GtkCssValue        *value,
+                             guint               property_id,
+                             GtkStyleContext    *context,
+                             GtkCssDependencies *dependencies)
 {
   GtkCssValue *result;
   gboolean changed = FALSE;
@@ -52,10 +53,12 @@ gtk_css_value_array_compute (GtkCssValue     *value,
   if (value->n_values == 0)
     return _gtk_css_value_ref (value);
 
+  *dependencies = GTK_CSS_DEPENDS_ON_EVERYTHING;
+
   result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
   for (i = 0; i < value->n_values; i++)
     {
-      result->values[i] = _gtk_css_value_compute (value->values[i], property_id, context);
+      result->values[i] = _gtk_css_value_compute (value->values[i], property_id, context, NULL);
       changed |= (result->values[i] != value->values[i]);
     }
 

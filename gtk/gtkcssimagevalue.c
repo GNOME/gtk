@@ -34,9 +34,10 @@ gtk_css_value_image_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_image_compute (GtkCssValue     *value,
-                             guint            property_id,
-                             GtkStyleContext *context)
+gtk_css_value_image_compute (GtkCssValue        *value,
+                             guint               property_id,
+                             GtkStyleContext    *context,
+                             GtkCssDependencies *dependencies)
 {
   GtkCssImage *image, *computed;
   
@@ -52,6 +53,8 @@ gtk_css_value_image_compute (GtkCssValue     *value,
       g_object_unref (computed);
       return _gtk_css_value_ref (value);
     }
+
+  *dependencies = GTK_CSS_DEPENDS_ON_EVERYTHING;
 
   return _gtk_css_image_value_new (computed);
 }

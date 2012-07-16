@@ -34,9 +34,10 @@ gtk_css_value_repeat_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_repeat_compute (GtkCssValue     *value,
-                              guint            property_id,
-                              GtkStyleContext *context)
+gtk_css_value_repeat_compute (GtkCssValue        *value,
+                              guint               property_id,
+                              GtkStyleContext    *context,
+                              GtkCssDependencies *dependencies)
 {
   return _gtk_css_value_ref (value);
 }
