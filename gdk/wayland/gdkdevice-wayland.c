@@ -1233,6 +1233,177 @@ keyboard_handle_leave (void               *data,
   _gdk_wayland_display_deliver_event (device->display, event);
 }
 
+static gboolean
+keyboard_repeat (gpointer data);
+
+static GdkModifierType
+get_modifier (struct xkb_state *state)
+{
+  GdkModifierType modifiers = 0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_SHIFT, XKB_STATE_EFFECTIVE) > 0)?GDK_SHIFT_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_CAPS, XKB_STATE_EFFECTIVE) > 0)?GDK_LOCK_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_CTRL, XKB_STATE_EFFECTIVE) > 0)?GDK_CONTROL_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_ALT, XKB_STATE_EFFECTIVE) > 0)?GDK_MOD1_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, "Mod2", XKB_STATE_EFFECTIVE) > 0)?GDK_MOD2_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, "Mod3", XKB_STATE_EFFECTIVE) > 0)?GDK_MOD3_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_LOGO, XKB_STATE_EFFECTIVE) > 0)?GDK_MOD4_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, "Mod5", XKB_STATE_EFFECTIVE) > 0)?GDK_MOD5_MASK:0;
+
+  return modifiers;
+}
+
+static void
+translate_keyboard_string (GdkEventKey *event)
+{
+  gunichar c = 0;
+  gchar buf[7];
+
+  /* Fill in event->string crudely, since various programs
+   * depend on it.
+   */
+  event->string = NULL;
+
+  if (event->keyval != GDK_KEY_VoidSymbol)
+    c = gdk_keyval_to_unicode (event->keyval);
+
+  if (c)
+    {
+      gsize bytes_written;
+      gint len;
+
+      /* Apply the control key - Taken from Xlib
+       */
+      if (event->state & GDK_CONTROL_MASK)
+        {
+          if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
+          else if (c == '2')
+            {
+              event->string = g_memdup ("\0\0", 2);
+              event->length = 1;
+              buf[0] = '\0';
+              return;
+            }
+          else if (c >= '3' && c <= '7') c -= ('3' - '\033');
+          else if (c == '8') c = '\177';
+          else if (c == '/') c = '_' & 0x1F;
+        }
+
+      len = g_unichar_to_utf8 (c, buf);
+      buf[len] = '\0';
+
+      event->string = g_locale_from_utf8 (buf, len,
+                                          NULL, &bytes_written,
+                                          NULL);
+      if (event->string)
+        event->length = bytes_written;
+    }
+  else if (event->keyval == GDK_KEY_Escape)
+    {
+      event->length = 1;
+      event->string = g_strdup ("\033");
+    }
+  else if (event->keyval == GDK_KEY_Return ||
+          event->keyval == GDK_KEY_KP_Enter)
+    {
+      event->length = 1;
+      event->string = g_strdup ("\r");
+    }
+
+  if (!event->string)
+    {
+      event->length = 0;
+      event->string = g_strdup ("");
+    }
+}
+
+static gboolean
+deliver_key_event(GdkWaylandDevice *device,
+                  uint32_t time, uint32_t key, uint32_t state)
+{
+  GdkEvent *event;
+  struct xkb_state *xkb_state;
+  GdkKeymap *keymap;
+  xkb_keysym_t sym;
+  uint32_t num_syms;
+  const xkb_keysym_t *syms;
+
+  keymap = device->keymap;
+  xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
+
+  num_syms = xkb_key_get_syms (xkb_state, key, &syms);
+  sym = XKB_KEY_NoSymbol;
+  if (num_syms == 1)
+    sym = syms[0];
+
+  device->time = time;
+  device->modifiers = get_modifier (xkb_state);
+
+  event = gdk_event_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
+  event->key.window = device->keyboard_focus?g_object_ref (device->keyboard_focus):NULL;
+  gdk_event_set_device (event, device->keyboard);
+  event->button.time = time;
+  event->key.state = device->modifiers;
+  event->key.group = 0;
+  event->key.hardware_keycode = sym;
+  event->key.keyval = sym;
+
+  event->key.is_modifier = device->modifiers > 0;
+
+  translate_keyboard_string (&event->key);
+
+  _gdk_wayland_display_deliver_event (device->display, event);
+
+  GDK_NOTE (EVENTS,
+            g_message ("keyboard event, code %d, sym %d, "
+                       "string %s, mods 0x%x",
+                       event->key.hardware_keycode, event->key.keyval,
+                       event->key.string, event->key.state));
+
+  device->repeat_count++;
+  device->repeat_key = key;
+
+  if (state == 0)
+    {
+      if (device->repeat_timer)
+        {
+          g_source_remove (device->repeat_timer);
+          device->repeat_timer = 0;
+        }
+      return FALSE;
+    }
+  else if (device->modifiers)
+    {
+      return FALSE;
+    }
+  else switch (device->repeat_count)
+    {
+    case 1:
+      if (device->repeat_timer)
+        {
+          g_source_remove (device->repeat_timer);
+          device->repeat_timer = 0;
+        }
+
+      device->repeat_timer =
+        gdk_threads_add_timeout (400, keyboard_repeat, device);
+      return TRUE;
+    case 2:
+      device->repeat_timer =
+        gdk_threads_add_timeout (80, keyboard_repeat, device);
+      return FALSE;
+    default:
+      return TRUE;
+    }
+}
+
+static gboolean
+keyboard_repeat (gpointer data)
+{
+  GdkWaylandDevice *device = data;
+
+  return deliver_key_event (device, device->time, device->repeat_key, 1);
+}
+
 static void
 keyboard_handle_key (void               *data,
                      struct wl_keyboard *keyboard,
@@ -1241,6 +1412,13 @@ keyboard_handle_key (void               *data,
                      uint32_t            key,
                      uint32_t            state_w)
 {
+  GdkWaylandDevice *device = data;
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (device->display);
+
+  device->repeat_count = 0;
+  _gdk_wayland_display_update_serial (wayland_display, serial);
+  deliver_key_event (data, time, key + 8, state_w);
 }
 
 static void
@@ -1252,6 +1430,15 @@ keyboard_handle_modifiers (void               *data,
                            uint32_t            mods_locked,
                            uint32_t            group)
 {
+  GdkWaylandDevice *device = data;
+  GdkKeymap *keymap;
+  struct xkb_state *xkb_state;
+
+  keymap = device->keymap;
+  xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
+  device->modifiers = mods_depressed | mods_latched | mods_locked;
+
+  xkb_state_update_mask (xkb_state, mods_depressed, mods_latched, mods_locked, group, 0, 0);
 }
 
 static const struct wl_pointer_listener pointer_listener = {
