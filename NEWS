@@ -1,6 +1,9 @@
 Overview of Changes in GTK+ 3.5.8
 =================================
 
+* GtkStrengthBar: A new widget for displaying the strength
+  or level or some quantity
+
 * Wayland: Updates for changes in the Wayland protocol
 
 * Bugs fixed:
@@ -20,6 +23,7 @@ Overview of Changes in GTK+ 3.5.8
  679454 modelmenu: listen for toplevel changes on the attach w...
  679537 Crash in GtkEntry gtk_entry_get_icon_pixbuf()
  679705 Using NULL with gtk_application_set_menubar causes seg...
+ 677892 Add a GtkStrengthBar widget
 
 * Translation updates:
  Bulgarian
