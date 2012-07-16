@@ -65,6 +65,8 @@ struct _GdkWaylandDevice
   GdkDevice *pointer;
   GdkDevice *keyboard;
 
+  GdkKeymap *keymap;
+
   GdkModifierType modifiers;
   GdkWindow *pointer_focus;
   GdkWindow *keyboard_focus;
@@ -374,6 +376,12 @@ struct wl_keyboard *
 _gdk_wayland_device_get_wl_keyboard (GdkDevice *device)
 {
   return GDK_DEVICE_CORE (device)->device->wl_keyboard;
+}
+
+GdkKeymap *
+_gdk_wayland_device_get_keymap (GdkDevice *device)
+{
+  return GDK_DEVICE_CORE (device)->device->keymap;
 }
 
 #if 0
@@ -1157,36 +1165,10 @@ keyboard_handle_keymap (void               *data,
                        uint32_t            size)
 {
   GdkWaylandDevice *device = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
-  GdkKeymap *gdk_keymap;
-  gchar *keymap_data;
-  struct xkb_keymap *keymap;
+  if (device->keymap)
+    g_object_unref (device->keymap);
 
-  if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1)
-    {
-      g_critical (G_STRLOC ": Unknown keymap format");
-      close (fd);
-      return;
-    }
-
-  keymap_data = mmap (NULL, size, PROT_READ, MAP_SHARED, fd, 0);
-  if (keymap_data == MAP_FAILED)
-    {
-      g_critical (G_STRLOC ": Unable to map fd for keymap %s", g_strerror (errno));
-      close (fd);
-      return;
-    }
-
-  keymap = xkb_map_new_from_string (display->xkb_context,
-                                    keymap_data,
-                                    format,
-                                    0);
-
-  munmap (keymap_data, size);
-  close (fd);
-
-  gdk_keymap = _gdk_wayland_display_get_keymap (device->display);
-  _gdk_wayland_keymap_update_keymap (gdk_keymap, keymap);
+  device->keymap = _gdk_wayland_keymap_new_from_fd (format, fd, size);
 }
 
 static void
@@ -1386,6 +1368,7 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   device = g_new0 (GdkWaylandDevice, 1);
+  device->keymap = _gdk_wayland_keymap_new ();
   device->display = display;
   device->device_manager = device_manager;
 

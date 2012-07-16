@@ -48,7 +48,9 @@ GType _gdk_wayland_window_get_type    (void);
 void _gdk_wayland_window_add_focus    (GdkWindow *window);
 void _gdk_wayland_window_remove_focus (GdkWindow *window);
 
-GdkKeymap *_gdk_wayland_keymap_new (GdkDisplay *display);
+GdkKeymap *_gdk_wayland_keymap_new (void);
+GdkKeymap *_gdk_wayland_keymap_new_from_fd (uint32_t format,
+                                            uint32_t fd, uint32_t size);
 struct xkb_desc *_gdk_wayland_keymap_get_xkb_desc (GdkKeymap *keymap);
 
 GdkCursor *_gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
@@ -90,10 +92,6 @@ void _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 					      GdkWindowAttr *attributes,
 					      gint           attributes_mask);
 
-GdkKeymap *_gdk_wayland_display_get_keymap (GdkDisplay *display);
-void       _gdk_wayland_keymap_update_keymap (GdkKeymap  *gdk_keymap,
-                                              struct xkb_keymap *xkb_keymap);
-
 GdkWindow *_gdk_wayland_display_get_selection_owner (GdkDisplay *display,
 						 GdkAtom     selection);
 gboolean   _gdk_wayland_display_set_selection_owner (GdkDisplay *display,
@@ -133,6 +131,8 @@ void              _gdk_wayland_device_manager_add_device (GdkDeviceManager *devi
 struct wl_seat *_gdk_wayland_device_get_wl_seat (GdkDevice *device);
 struct wl_pointer *_gdk_wayland_device_get_wl_pointer (GdkDevice *device);
 struct wl_keyboard *_gdk_wayland_device_get_wl_keyboard (GdkDevice *device);
+
+GdkKeymap *_gdk_wayland_device_get_keymap (GdkDevice *device);
 
 void     _gdk_wayland_display_deliver_event (GdkDisplay *display, GdkEvent *event);
 GSource *_gdk_wayland_display_event_source_new (GdkDisplay *display);

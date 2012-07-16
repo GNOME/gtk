@@ -30,13 +30,13 @@
 #include <unistd.h>
 #include <limits.h>
 #include <errno.h>
+#include <sys/mman.h>
 
 #include "gdk.h"
 #include "gdkwayland.h"
 
 #include "gdkprivate-wayland.h"
 #include "gdkinternals.h"
-#include "gdkdisplay-wayland.h"
 #include "gdkkeysprivate.h"
 
 #include <xkbcommon/xkbcommon.h>
@@ -47,13 +47,8 @@ typedef struct _GdkWaylandKeymapClass     GdkWaylandKeymapClass;
 struct _GdkWaylandKeymap
 {
   GdkKeymap parent_instance;
-  GdkModifierType modmap[8];
-  struct xkb_desc *xkb;
-  struct xkb_keymap *keymap;
-  struct xkb_state *state;
-  xkb_mod_mask_t control_mask;
-  xkb_mod_mask_t alt_mask;
-  xkb_mod_mask_t shift_mask;
+
+  struct xkb_keymap *xkb_keymap;
 };
 
 struct _GdkWaylandKeymapClass
@@ -645,51 +640,56 @@ update_keymaps (GdkWaylandKeymap *keymap)
 #endif
 
 GdkKeymap *
-_gdk_wayland_keymap_new (GdkDisplay *display)
+_gdk_wayland_keymap_new ()
 {
   GdkWaylandKeymap *keymap;
+  struct xkb_context *context;
   struct xkb_rule_names names;
 
   keymap = g_object_new (_gdk_wayland_keymap_get_type(), NULL);
-  GDK_KEYMAP (keymap)->display = display;
-#if 0
+
+  context = xkb_context_new (0);
 
   names.rules = "evdev";
   names.model = "pc105";
   names.layout = "us";
   names.variant = "";
   names.options = "";
-  keymap->xkb = xkb_compile_keymap_from_rules(&names);
-  update_modmap (keymap);
-  update_keymaps (keymap);
-#endif
+  keymap->xkb_keymap = xkb_map_new_from_names(context, &names, XKB_MAP_COMPILE_PLACEHOLDER);
+  xkb_context_unref (context);
+
   return GDK_KEYMAP (keymap);
 }
 
-void
-_gdk_wayland_keymap_update_keymap (GdkKeymap  *gdk_keymap,
-                                   struct xkb_keymap *xkb_keymap)
+GdkKeymap *
+_gdk_wayland_keymap_new_from_fd (uint32_t format,
+                                 uint32_t fd, uint32_t size)
 {
   GdkWaylandKeymap *keymap;
+  struct xkb_context *context;
+  char *map_str;
 
-  keymap = GDK_WAYLAND_KEYMAP (gdk_keymap);
+  keymap = g_object_new (_gdk_wayland_keymap_get_type(), NULL);
 
-  if (keymap->keymap)
-    xkb_map_unref (keymap->keymap);
+  context = xkb_context_new (0);
 
-  keymap->keymap = xkb_keymap;
+  map_str = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+  if (map_str == MAP_FAILED) {
+    close(fd);
+    return NULL;
+  }
 
-  if (keymap->state)
-    xkb_state_unref (keymap->state);
+  keymap->xkb_keymap = xkb_map_new_from_string (context, map_str, format, XKB_MAP_COMPILE_PLACEHOLDER);
+  munmap (map_str, size);
+  close (fd);
+  xkb_context_unref (context);
 
-  keymap->state = xkb_state_new (keymap->keymap);
+  return GDK_KEYMAP (keymap);
+}
 
-  keymap->control_mask =
-    1 << xkb_map_mod_get_index(keymap->keymap, "Control");
-  keymap->alt_mask =
-    1 << xkb_map_mod_get_index(keymap->keymap, "Mod1");
-  keymap->shift_mask =
-    1 << xkb_map_mod_get_index(keymap->keymap, "Shift");
+struct xkb_keymap *_gdk_wayland_keymap_get_xkb_keymap (GdkKeymap *keymap)
+{
+  return GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
 }
 
 struct xkb_desc *_gdk_wayland_keymap_get_xkb_desc (GdkKeymap *keymap)

@@ -536,15 +536,26 @@ gdk_wayland_display_event_data_free (GdkDisplay *display,
 GdkKeymap *
 _gdk_wayland_display_get_keymap (GdkDisplay *display)
 {
-  GdkWaylandDisplay *display_wayland;
+  GdkDeviceManager *device_manager;
+  GList *list, *l;
+  GdkDevice *core_keyboard = NULL;
 
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  display_wayland = GDK_WAYLAND_DISPLAY (display);
+  device_manager = gdk_display_get_device_manager (display);
+  list = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
 
-  if (!display_wayland->keymap)
-    display_wayland->keymap = _gdk_wayland_keymap_new (display);
+  for (l = list; l; l = l->next)
+    {
+      GdkDevice *device;
+      device = list->data;
 
-  return display_wayland->keymap;
+      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
+	continue;
+
+      core_keyboard = device;
+      break;
+    }
+
+  return core_keyboard?_gdk_wayland_device_get_keymap (core_keyboard):NULL;
 }
 
 static void
