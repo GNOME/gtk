@@ -1162,6 +1162,29 @@ keyboard_handle_enter (void               *data,
                        struct wl_array    *keys)
 {
 
+  GdkWaylandDevice *device = data;
+  GdkEvent *event;
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (device->display);
+
+  _gdk_wayland_display_update_serial (wayland_display, serial);
+
+  device->keyboard_focus = wl_surface_get_user_data(surface);
+  g_object_ref(device->keyboard_focus);
+
+  event = gdk_event_new (GDK_FOCUS_CHANGE);
+  event->focus_change.window = g_object_ref (device->keyboard_focus);
+  event->focus_change.send_event = FALSE;
+  event->focus_change.in = TRUE;
+  gdk_event_set_device (event, device->keyboard);
+
+  GDK_NOTE (EVENTS,
+            g_message ("focus int, device %p surface %p",
+                       device, device->keyboard_focus));
+
+  _gdk_wayland_display_deliver_event (device->display, event);
+
+  _gdk_wayland_window_add_focus (device->keyboard_focus);
 }
 
 static void
@@ -1170,6 +1193,28 @@ keyboard_handle_leave (void               *data,
                        uint32_t            serial,
                        struct wl_surface  *surface)
 {
+  GdkWaylandDevice *device = data;
+  GdkEvent *event;
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (device->display);
+
+  _gdk_wayland_display_update_serial (wayland_display, serial);
+
+  _gdk_wayland_window_remove_focus (device->keyboard_focus);
+  event = gdk_event_new (GDK_FOCUS_CHANGE);
+  event->focus_change.window = g_object_ref (device->keyboard_focus);
+  event->focus_change.send_event = FALSE;
+  event->focus_change.in = FALSE;
+  gdk_event_set_device (event, device->keyboard);
+
+  g_object_unref(device->keyboard_focus);
+  device->keyboard_focus = NULL;
+
+  GDK_NOTE (EVENTS,
+            g_message ("focus out, device %p surface %p",
+                       device, device->keyboard_focus));
+
+  _gdk_wayland_display_deliver_event (device->display, event);
 }
 
 static void
