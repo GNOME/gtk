@@ -130,6 +130,7 @@ gtk/gtkinfobar.c
 gtk/gtkinvisible.c
 gtk/gtklabel.c
 gtk/gtklayout.c
+gtk/gtklevelbar.c
 gtk/gtklinkbutton.c
 gtk/gtkliststore.c
 gtk/gtklockbutton.c
