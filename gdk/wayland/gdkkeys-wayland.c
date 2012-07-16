@@ -84,13 +84,15 @@ gdk_wayland_keymap_have_bidi_layouts (GdkKeymap *keymap)
 static gboolean
 gdk_wayland_keymap_get_caps_lock_state (GdkKeymap *keymap)
 {
-  return FALSE;
+  return xkb_state_led_name_is_active (GDK_WAYLAND_KEYMAP (keymap)->xkb_state,
+                                       XKB_LED_NAME_CAPS);
 }
 
 static gboolean
 gdk_wayland_keymap_get_num_lock_state (GdkKeymap *keymap)
 {
-  return FALSE;
+  return xkb_state_led_name_is_active (GDK_WAYLAND_KEYMAP (keymap)->xkb_state,
+                                       XKB_LED_NAME_NUM);
 }
 
 static gboolean
