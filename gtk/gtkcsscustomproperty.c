@@ -122,22 +122,9 @@ _gtk_css_custom_property_class_init (GtkCssCustomPropertyClass *klass)
   property_class->assign = gtk_css_custom_property_assign;
 }
 
-static GtkCssValue *
-gtk_css_custom_property_compute_value (GtkCssStyleProperty *property,
-                                       GtkStyleContext     *context,
-                                       GtkCssValue         *specified)
-{
-  GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (property);
-
-  return _gtk_css_style_compute_value (context, custom->pspec->value_type, specified);
-}
-
 static void
 _gtk_css_custom_property_init (GtkCssCustomProperty *custom)
 {
-  GtkCssStyleProperty *style = GTK_CSS_STYLE_PROPERTY (custom);
-
-  style->compute_value = gtk_css_custom_property_compute_value;
 }
 
 static GtkCssValue *

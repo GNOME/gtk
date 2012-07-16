@@ -19,6 +19,7 @@
 
 #include "gtkcsstypedvalueprivate.h"
 
+#include "gtkcsscustompropertyprivate.h"
 #include "gtkcssstylefuncsprivate.h"
 
 struct _GtkCssValue {
@@ -38,7 +39,9 @@ gtk_css_value_typed_compute (GtkCssValue     *value,
                              guint            property_id,
                              GtkStyleContext *context)
 {
-  return _gtk_css_value_ref (value);
+  GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (_gtk_css_style_property_lookup_by_id (property_id));
+
+  return _gtk_css_style_compute_value (context, custom->pspec->value_type, value);
 }
 
 static gboolean
