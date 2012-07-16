@@ -341,6 +341,7 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
 
   priv->label = gtk_label_new (NULL);
   priv->image = gtk_image_new_from_stock (NULL, GTK_ICON_SIZE_DIALOG);
+  g_object_set (priv->image, "use-fallback", TRUE, NULL);
   gtk_widget_set_halign (priv->image, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (priv->image, GTK_ALIGN_START);
 
@@ -424,6 +425,7 @@ setup_type (GtkMessageDialog *dialog,
 {
   GtkMessageDialogPrivate *priv = dialog->priv;
   const gchar *stock_id = NULL;
+  const gchar *icon_name = NULL;
   AtkObject *atk_obj;
  
   priv->message_type = type;
@@ -432,18 +434,22 @@ setup_type (GtkMessageDialog *dialog,
     {
     case GTK_MESSAGE_INFO:
       stock_id = GTK_STOCK_DIALOG_INFO;
+      icon_name = GTK_STOCK_DIALOG_INFO "-symbolic";
       break;
 
     case GTK_MESSAGE_QUESTION:
       stock_id = GTK_STOCK_DIALOG_QUESTION;
+      icon_name = GTK_STOCK_DIALOG_QUESTION "-symbolic";
       break;
 
     case GTK_MESSAGE_WARNING:
       stock_id = GTK_STOCK_DIALOG_WARNING;
+      icon_name = GTK_STOCK_DIALOG_WARNING "-symbolic";
       break;
       
     case GTK_MESSAGE_ERROR:
       stock_id = GTK_STOCK_DIALOG_ERROR;
+      icon_name = GTK_STOCK_DIALOG_ERROR "-symbolic";
       break;
 
     case GTK_MESSAGE_OTHER:
@@ -454,8 +460,8 @@ setup_type (GtkMessageDialog *dialog,
       break;
     }
 
-  if (stock_id)
-    gtk_image_set_from_stock (GTK_IMAGE (priv->image), stock_id,
+  if (icon_name)
+    gtk_image_set_from_icon_name (GTK_IMAGE (priv->image), icon_name,
                               GTK_ICON_SIZE_DIALOG);
       
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (dialog));
