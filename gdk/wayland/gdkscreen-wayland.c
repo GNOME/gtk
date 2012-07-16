@@ -77,6 +77,9 @@ struct _GdkWaylandMonitor
 
 G_DEFINE_TYPE (GdkWaylandScreen, _gdk_wayland_screen, GDK_TYPE_SCREEN)
 
+#define MM_PER_INCH 25
+#define DEFAULT_DPI 96
+
 static void
 init_monitor_geometry (GdkWaylandMonitor *monitor,
 		       int x, int y, int width, int height)
@@ -86,8 +89,8 @@ init_monitor_geometry (GdkWaylandMonitor *monitor,
   monitor->geometry.width = width;
   monitor->geometry.height = height;
 
-  monitor->width_mm = -1;
-  monitor->height_mm = -1;
+  monitor->width_mm = width/DEFAULT_DPI*MM_PER_INCH;
+  monitor->height_mm = height/DEFAULT_DPI*MM_PER_INCH;
   monitor->output_name = NULL;
   monitor->manufacturer = NULL;
 }
@@ -297,6 +300,69 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
 				const gchar *name,
 				GValue      *value)
 {
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+
+  if (strcmp ("gtk-theme-name", name) == 0)
+    {
+      const gchar *s = "Adwaita";
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, s));
+      g_value_set_string (value, s);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-icon-theme-name", name) == 0)
+    {
+      const gchar *s = "gnome";
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, s));
+      g_value_set_string (value, s);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-double-click-time", name) == 0)
+    {
+      gint i = 250;
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %d\n", name, i));
+      g_value_set_int (value, i);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-double-click-distance", name) == 0)
+    {
+      gint i = 5;
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %d\n", name, i));
+      g_value_set_int (value, i);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-dnd-drag-threshold", name) == 0)
+    {
+      gint i = 8;
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %d\n", name, i));
+      g_value_set_int (value, i);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-split-cursor", name) == 0)
+    {
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : FALSE\n", name));
+      g_value_set_boolean (value, FALSE);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-alternative-button-order", name) == 0)
+    {
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : TRUE\n", name));
+      g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-alternative-sort-arrows", name) == 0)
+    {
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : TRUE\n", name));
+      g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
+  else if (strcmp ("gtk-xft-dpi", name) == 0)
+    {
+      gint i = 96*1024;
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : TRUE\n", name));
+      g_value_set_int (value, i);
+      return TRUE;
+    }
+
   return FALSE;
 }
 
