@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="gtk-launch">
+
+<refentryinfo>
+  <title>gtk-launch</title>
+  <productname>gtk+</productname>
+  <authorgroup>
+    <author>
+      <contrib>Developer</contrib>
+      <firstname>Tomáš</firstname>
+      <surname>Bžatek</surname>
+      <email>tbzatek@redhat.com</email>
+    </author>
+  </authorgroup>
+</refentryinfo>
+
+<refmeta>
+  <refentrytitle>gtk-launch</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="manual">User Commands</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+  <refname>gtk-launch</refname>
+  <refpurpose>Launch an application</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtk-launch</command>
+<arg>APPLICATION</arg>
+<arg choice="opt" rep="repeat">URI</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+<command>gtk-launch</command> launches an application using the given name.
+The application is started with proper startup notification on a default
+display, unless specified otherwise.
+</para>
+<para>
+<command>gtk-launch</command> takes at least one argument, the name of
+the application to launch. The name should match application desktop file name,
+as residing in /usr/share/application, with or without the '.desktop' suffix.
+</para>
+<para>
+If called with more than one argument, the rest of them besides the application name
+are considered URI locations and are passed as arguments to the launched application.
+</para>
+</refsect1>
+
+<refsect1><title>Options</title>
+  <para>The following options are understood:</para>
+  <variablelist>
+    <varlistentry>
+    <term><option>-?</option>, <option>--help</option></term>
+      <listitem><para>Prints a short help text and exits.</para></listitem>
+    </varlistentry>
+  </variablelist>
+</refsect1>
+
+<refsect1><title>Bugs</title>
+<para>
+None known yet.
+</para>
+</refsect1>
+
+</refentry>
