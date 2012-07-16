@@ -6756,6 +6756,33 @@ specific_bug_659022_row_deleted_free_level (void)
   g_object_unref (model);
 }
 
+static void
+specific_bug_679910 (void)
+{
+  GtkTreeModel *filter;
+  GtkListStore *store;
+  GtkTreeIter iter, nil_iter;
+  GtkTreeIter filter_iter;
+
+  store = gtk_list_store_new (1, G_TYPE_POINTER);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);
+
+  gtk_list_store_append (store, &nil_iter);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_append (store, &nil_iter);
+
+  gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (filter),
+                                                    &filter_iter,
+                                                    &iter);
+  iter = filter_iter;
+  g_return_if_fail (gtk_tree_model_iter_next (filter, &iter));
+  iter = filter_iter;
+  g_return_if_fail (gtk_tree_model_iter_previous (filter, &iter));
+
+  g_object_unref (filter);
+  g_object_unref (store);
+}
+
 /* main */
 
 void
@@ -7115,4 +7142,6 @@ register_filter_model_tests (void)
                    specific_bug_659022_row_deleted_node_invisible);
   g_test_add_func ("/TreeModelFilter/specific/bug-659022/row-deleted-free-level",
                    specific_bug_659022_row_deleted_free_level);
+  g_test_add_func ("/TreeModelFilter/specific/bug-679910",
+                   specific_bug_679910);
 }
