@@ -1,6 +1,6 @@
 # translation of gtk+-properties.master.te.po to Telugu
 # Telugu translation of gtk+-properties
-# Copyright (C)2005,2012 Swecha localisation team<localization@swecha.net>
+# Copyright (C)2005, 2012 Swecha localisation team<localization@swecha.net>
 # This file is distributed under the same license as the gtk+ package.
 #
 # File simply created not to break the gtk+ build.
