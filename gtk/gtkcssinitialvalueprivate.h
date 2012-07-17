@@ -26,8 +26,6 @@ G_BEGIN_DECLS
 
 GtkCssValue *   _gtk_css_initial_value_new            (void);
 
-gboolean        _gtk_css_value_is_initial             (const GtkCssValue          *value);
-
 G_END_DECLS
 
 #endif /* __GTK_CSS_INITIAL_VALUE_PRIVATE_H__ */

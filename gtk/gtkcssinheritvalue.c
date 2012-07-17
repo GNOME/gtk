@@ -19,6 +19,9 @@
 
 #include "gtkcssinheritvalueprivate.h"
 
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkstylecontextprivate.h"
+
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
 };
@@ -35,8 +38,14 @@ gtk_css_value_inherit_compute (GtkCssValue     *value,
                                guint            property_id,
                                GtkStyleContext *context)
 {
-  /* This value should be caught further up */
-  g_return_val_if_reached (_gtk_css_value_ref (value));
+  GtkStyleContext *parent = gtk_style_context_get_parent (context);
+
+  if (parent)
+    return _gtk_css_value_ref (_gtk_style_context_peek_property (parent, property_id));
+  else
+    return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
+                                   property_id,
+                                   context);
 }
 
 static gboolean
@@ -75,12 +84,4 @@ GtkCssValue *
 _gtk_css_inherit_value_new (void)
 {
   return _gtk_css_value_ref (&inherit);
-}
-
-gboolean
-_gtk_css_value_is_inherit (const GtkCssValue *value)
-{
-  g_return_val_if_fail (value != NULL, FALSE);
-
-  return value == &inherit;
 }

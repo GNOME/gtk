@@ -26,8 +26,6 @@ G_BEGIN_DECLS
 
 GtkCssValue *   _gtk_css_inherit_value_new            (void);
 
-gboolean        _gtk_css_value_is_inherit             (const GtkCssValue          *value);
-
 G_END_DECLS
 
 #endif /* __GTK_CSS_INHERIT_VALUE_PRIVATE_H__ */

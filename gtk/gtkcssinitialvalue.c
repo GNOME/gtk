@@ -19,6 +19,8 @@
 
 #include "gtkcssinitialvalueprivate.h"
 
+#include "gtkcssstylepropertyprivate.h"
+
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
 };
@@ -35,8 +37,9 @@ gtk_css_value_initial_compute (GtkCssValue     *value,
                                guint            property_id,
                                GtkStyleContext *context)
 {
-  /* This value should be caught further up */
-  g_return_val_if_reached (_gtk_css_value_ref (value));
+  return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
+                                 property_id,
+                                 context);
 }
 
 static gboolean
@@ -75,12 +78,4 @@ GtkCssValue *
 _gtk_css_initial_value_new (void)
 {
   return _gtk_css_value_ref (&initial);
-}
-
-gboolean
-_gtk_css_value_is_initial (const GtkCssValue *value)
-{
-  g_return_val_if_fail (value != NULL, FALSE);
-
-  return value == &initial;
 }
