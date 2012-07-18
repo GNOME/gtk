@@ -633,23 +633,25 @@ gdk_wayland_window_map (GdkWindow *window)
     {
       if (impl->transient_for)
         {
+          struct wl_seat *grab_input_seat = NULL;
+
           parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
 
-          if (impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU ||
-              impl->hint == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU ||
-              impl->hint == GDK_WINDOW_TYPE_HINT_COMBO)
+          /* Use the device that was used for the grab as the device for
+           * the popup window setup - so this relies on GTK+ taking the
+           * grab before showing the popup window.
+           */
+          if (impl->grab_input_seat)
+            grab_input_seat = impl->grab_input_seat;
+
+          if (!grab_input_seat)
+            grab_input_seat = parent->grab_input_seat;
+
+          if (grab_input_seat &&
+              (impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU ||
+               impl->hint == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU ||
+               impl->hint == GDK_WINDOW_TYPE_HINT_COMBO))
             {
-              struct wl_seat *grab_input_seat = NULL;
-
-              /* Use the device that was used for the grab as the device for
-               * the popup window setup - so this relies on GTK+ taking the
-               * grab before showing the popup window.
-               */
-              if (impl->grab_input_seat)
-                grab_input_seat = impl->grab_input_seat;
-
-              if (!grab_input_seat)
-                grab_input_seat = parent->grab_input_seat;
 
               wl_shell_surface_set_popup (impl->shell_surface,
                                           grab_input_seat,
