@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-14 14:11+0800\n"
-"PO-Revision-Date: 2012-07-14 10:23+0800\n"
+"POT-Creation-Date: 2012-07-18 19:33+0800\n"
+"PO-Revision-Date: 2012-07-18 10:39+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -3850,6 +3850,54 @@ msgstr "佈置元件寬度"
 #: ../gtk/gtklayout.c:682
 msgid "The height of the layout"
 msgstr "佈置元件高度"
+
+#: ../gtk/gtklevelbar.c:870
+msgid "Currently filled value level"
+msgstr "目前填滿數值等級"
+
+#: ../gtk/gtklevelbar.c:871
+msgid "Currently filled value level of the level bar"
+msgstr "等級列目前的填滿數值等級"
+
+#: ../gtk/gtklevelbar.c:884
+msgid "Minimum value level for the bar"
+msgstr "該列的最小數值等級"
+
+#: ../gtk/gtklevelbar.c:885
+msgid "Minimum value level that can be displayed by the bar"
+msgstr "該列能顯示的最小數值等級"
+
+#: ../gtk/gtklevelbar.c:898
+msgid "Maximum value level for the bar"
+msgstr "該列的最大數值等級"
+
+#: ../gtk/gtklevelbar.c:899
+msgid "Maximum value level that can be displayed by the bar"
+msgstr "該列能顯示的最大數值等級"
+
+#: ../gtk/gtklevelbar.c:918
+msgid "The mode of the value indicator"
+msgstr "數值指示器的模式"
+
+#: ../gtk/gtklevelbar.c:919
+msgid "The mode of the value indicator displayed by the bar"
+msgstr "該列能顯示的數值指示器模式"
+
+#: ../gtk/gtklevelbar.c:934
+msgid "Minimum height for filling blocks"
+msgstr "填滿區塊的最小高度"
+
+#: ../gtk/gtklevelbar.c:935
+msgid "Minimum height for blocks that fill the bar"
+msgstr "該列填滿區塊的最小高度"
+
+#: ../gtk/gtklevelbar.c:948
+msgid "Minimum width for filling blocks"
+msgstr "填滿區塊的最小寬度"
+
+#: ../gtk/gtklevelbar.c:949
+msgid "Minimum width for blocks that fill the bar"
+msgstr "該列填滿區塊的最小寬度"
 
 #: ../gtk/gtklinkbutton.c:175
 msgid "URI"
