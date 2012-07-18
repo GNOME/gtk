@@ -129,6 +129,7 @@ gtk/gtkimmulticontext.c
 gtk/gtkinfobar.c
 gtk/gtkinvisible.c
 gtk/gtklabel.c
+gtk/gtk-launch.c
 gtk/gtklayout.c
 gtk/gtklevelbar.c
 gtk/gtklinkbutton.c
