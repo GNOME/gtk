@@ -1652,14 +1652,19 @@ gtk_container_idle_sizer (gpointer data)
     {
       GSList *next = slist->next;
       GtkContainer *container = slist->data;
+      GtkBitmask *empty;
+
+      empty = _gtk_bitmask_new ();
 
       container->priv->restyle_pending = FALSE;
       _gtk_style_context_validate (gtk_widget_get_style_context (GTK_WIDGET (container)),
                                    current_time,
-                                   0);
+                                   0,
+                                   empty);
 
       g_slist_free_1 (slist);
       slist = next;
+      _gtk_bitmask_free (empty);
     }
 
   /* we may be invoked with a container_resize_queue of NULL, because

@@ -4798,6 +4798,7 @@ gtk_window_show (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
   GtkContainer *container = GTK_CONTAINER (window);
+  GtkBitmask *empty;
   gboolean need_resize;
   gboolean is_plug;
 
@@ -4811,9 +4812,12 @@ gtk_window_show (GtkWidget *widget)
 
   need_resize = _gtk_widget_get_alloc_needed (widget) || !gtk_widget_get_realized (widget);
 
+  empty = _gtk_bitmask_new ();
   _gtk_style_context_validate (gtk_widget_get_style_context (widget),
                                g_get_monotonic_time (),
-                               0);
+                               0,
+                               empty);
+  _gtk_bitmask_free (empty);
 
   if (need_resize)
     {
