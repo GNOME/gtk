@@ -635,9 +635,9 @@ gdk_wayland_window_map (GdkWindow *window)
         {
           parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
 
-          if (impl->hint & GDK_WINDOW_TYPE_HINT_POPUP_MENU ||
-              impl->hint & GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU ||
-              impl->hint & GDK_WINDOW_TYPE_HINT_COMBO)
+          if (impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU ||
+              impl->hint == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU ||
+              impl->hint == GDK_WINDOW_TYPE_HINT_COMBO)
             {
               struct wl_seat *grab_input_seat = NULL;
 
