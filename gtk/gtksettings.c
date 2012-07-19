@@ -722,7 +722,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Since: 2.10
    *
-   * Deprecated: 3.4. Generally the behavior touchscreen input should be
+   * Deprecated: 3.4. Generally, the behavior for touchscreen input should be
    *             performed dynamically based on gdk_event_get_source_device().
    */
   result = settings_install_property_parser (class,
