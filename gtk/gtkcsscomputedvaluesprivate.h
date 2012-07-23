@@ -43,8 +43,12 @@ struct _GtkCssComputedValues
 {
   GObject parent;
 
-  GPtrArray              *values;
+  GPtrArray             *values;
   GPtrArray             *sections;
+  GtkBitmask            *depends_on_parent;
+  GtkBitmask            *equals_parent;
+  GtkBitmask            *depends_on_color;
+  GtkBitmask            *depends_on_font_size;
 };
 
 struct _GtkCssComputedValuesClass

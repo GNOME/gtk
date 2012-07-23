@@ -254,6 +254,15 @@ _gtk_css_animated_values_new (GtkCssComputedValues *computed,
                                           _gtk_css_computed_values_get_section (computed, i));
     }
 
+  _gtk_bitmask_free (GTK_CSS_COMPUTED_VALUES (values)->depends_on_parent);
+  _gtk_bitmask_free (GTK_CSS_COMPUTED_VALUES (values)->equals_parent);
+  _gtk_bitmask_free (GTK_CSS_COMPUTED_VALUES (values)->depends_on_color);
+  _gtk_bitmask_free (GTK_CSS_COMPUTED_VALUES (values)->depends_on_font_size);
+  GTK_CSS_COMPUTED_VALUES (values)->depends_on_parent = _gtk_bitmask_copy (computed->depends_on_parent);
+  GTK_CSS_COMPUTED_VALUES (values)->equals_parent = _gtk_bitmask_copy (computed->equals_parent);
+  GTK_CSS_COMPUTED_VALUES (values)->depends_on_color = _gtk_bitmask_copy (computed->depends_on_color);
+  GTK_CSS_COMPUTED_VALUES (values)->depends_on_font_size = _gtk_bitmask_copy (computed->depends_on_font_size);
+
   gtk_css_animated_values_start_animations (values, timestamp, source);
 
   ignore = _gtk_css_animated_values_advance (values, timestamp);
