@@ -107,6 +107,14 @@
  * </programlisting>
  * </example>
  *
+ * <example><title>Handling fallback yourself</title>
+ * <programlisting>
+ * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/sunny.c">
+ *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ * </xi:include>
+ * </programlisting>
+ * </example>
+ *
  * The XML format understood by #GtkBuilder for #GMenuModel consists
  * of a toplevel <tag class="starttag">menu</tag> element, which contains
  * one or more <tag class="starttag">item</tag> elements. Each
