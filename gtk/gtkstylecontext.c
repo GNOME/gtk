@@ -3027,6 +3027,43 @@ gtk_style_context_start_animations (GtkStyleContext      *context,
   gtk_style_context_start_animating (context);
 }
 
+static gboolean
+gtk_style_context_needs_full_revalidate (GtkStyleContext  *context,
+                                         GtkCssChange      change)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  /* Try to avoid invalidating if we can */
+  if (change & GTK_STYLE_CONTEXT_RADICAL_CHANGE)
+    {
+      priv->relevant_changes = GTK_CSS_CHANGE_ANY;
+    }
+  else
+    {
+      if (priv->relevant_changes == GTK_CSS_CHANGE_ANY)
+        {
+          GtkWidgetPath *path;
+          GtkCssMatcher matcher;
+
+          path = create_query_path (context);
+          if (_gtk_css_matcher_init (&matcher, path, priv->info->state_flags))
+            priv->relevant_changes = _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                                                             &matcher);
+          else
+            priv->relevant_changes = 0;
+
+          priv->relevant_changes &= ~GTK_STYLE_CONTEXT_RADICAL_CHANGE;
+
+          gtk_widget_path_unref (path);
+        }
+    }
+
+  if (priv->relevant_changes & change)
+    return TRUE;
+  else
+    return FALSE;
+}
+
 void
 _gtk_style_context_validate (GtkStyleContext  *context,
                              gint64            timestamp,
@@ -3065,31 +3102,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   gtk_style_context_set_invalid (context, FALSE);
 
   /* Try to avoid invalidating if we can */
-  if (change & GTK_STYLE_CONTEXT_RADICAL_CHANGE)
-    {
-      priv->relevant_changes = GTK_CSS_CHANGE_ANY;
-    }
-  else
-    {
-      if (priv->relevant_changes == GTK_CSS_CHANGE_ANY)
-        {
-          GtkWidgetPath *path;
-          GtkCssMatcher matcher;
-
-          path = create_query_path (context);
-          if (_gtk_css_matcher_init (&matcher, path, priv->info->state_flags))
-            priv->relevant_changes = _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                                                             &matcher);
-          else
-            priv->relevant_changes = 0;
-
-          priv->relevant_changes &= ~GTK_STYLE_CONTEXT_RADICAL_CHANGE;
-
-          gtk_widget_path_unref (path);
-        }
-    }
-
-  if (priv->relevant_changes & change)
+  if (gtk_style_context_needs_full_revalidate (context, change))
     {
       GtkStyleInfo *info = priv->info;
       StyleData *current;
