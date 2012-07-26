@@ -43,12 +43,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="imm32.lib"
-				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll"
+				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="$(IntDir)\gdk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="$(TargetDir)$(ProjectName)-win32-$(GtkApiVersion).lib"
+				ImportLibrary="$(TargetDir)$(ProjectName)-$(GtkApiVersion).lib"
 				TargetMachine="1"
 			/>
 		</Configuration>
@@ -73,14 +73,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="imm32.lib"
-				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll"
+				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="$(IntDir)\gdk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="$(TargetDir)$(ProjectName)-win32-$(GtkApiVersion).lib"
+				ImportLibrary="$(TargetDir)$(ProjectName)-$(GtkApiVersion).lib"
 				TargetMachine="1"
 			/>
 		</Configuration>
@@ -108,12 +108,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="imm32.lib"
-				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll"
+				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="$(IntDir)\gdk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="$(TargetDir)$(ProjectName)-win32-$(GtkApiVersion).lib"
+				ImportLibrary="$(TargetDir)$(ProjectName)-$(GtkApiVersion).lib"
 				TargetMachine="17"
 			/>
 		</Configuration>
@@ -138,14 +138,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="imm32.lib"
-				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll"
+				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="$(IntDir)\gdk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="$(TargetDir)$(ProjectName)-win32-$(GtkApiVersion).lib"
+				ImportLibrary="$(TargetDir)$(ProjectName)-$(GtkApiVersion).lib"
 				TargetMachine="17"
 			/>
 		</Configuration>
