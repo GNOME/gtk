@@ -591,8 +591,6 @@ copy ..\..\..\gdk\gdkconfig.h $(CopyDir)\include\gtk-3.0\gdk
 
 copy $(Configuration)\$(Platform)\bin\*-$(GtkApiVersion).lib $(CopyDir)\lib
 
-copy $(Configuration)\$(Platform)\bin\gailutil.lib $(CopyDir)\lib
-
 
 mkdir $(CopyDir)\share\glib-2.0\schemas
 
