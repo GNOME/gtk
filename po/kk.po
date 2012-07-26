@@ -7,60 +7,60 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-02-23 13:54+0000\n"
-"PO-Revision-Date: 2012-02-27 13:53+0600\n"
+"POT-Creation-Date: 2012-07-18 21:10+0000\n"
+"PO-Revision-Date: 2012-07-21 19:38+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
+"Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: kk\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 "X-Poedit-Language: Kazakh\n"
 "X-Poedit-Country: KAZAKHSTAN\n"
 
-#: ../gdk/gdk.c:135
+#: ../gdk/gdk.c:153
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "--gdk-debug опциясын талдау қатесі"
 
-#: ../gdk/gdk.c:155
+#: ../gdk/gdk.c:173
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "--gdk-no-debug опциясын талдау қатесі"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:183
+#: ../gdk/gdk.c:201
 msgid "Program class as used by the window manager"
 msgstr "Терезелер басқарушы қолданатындай бағдарлама класы"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:184
+#: ../gdk/gdk.c:202
 msgid "CLASS"
 msgstr "КЛАСС"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:186
+#: ../gdk/gdk.c:204
 msgid "Program name as used by the window manager"
 msgstr "Терезелер басқарушы қолданатындай бағдарлама аты"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:187
+#: ../gdk/gdk.c:205
 msgid "NAME"
 msgstr "АТЫ"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:189
+#: ../gdk/gdk.c:207
 msgid "X display to use"
 msgstr "Қолданылатын X дисплейі"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:190
+#: ../gdk/gdk.c:208
 msgid "DISPLAY"
 msgstr "ДИСПЛЕЙ"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:193
+#: ../gdk/gdk.c:211
 msgid "GDK debugging flags to set"
 msgstr "GDK жөндеу жалаушалары орнатылған"
 
@@ -68,15 +68,15 @@ msgstr "GDK жөндеу жалаушалары орнатылған"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:194
-#: ../gdk/gdk.c:197
-#: ../gtk/gtkmain.c:454
-#: ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:212
+#: ../gdk/gdk.c:215
+#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:456
 msgid "FLAGS"
 msgstr "ЖАЛАУШАЛАР"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:196
+#: ../gdk/gdk.c:214
 msgid "GDK debugging flags to unset"
 msgstr "GDK жөндеу жалаушалары орнатылмаған"
 
@@ -90,420 +90,540 @@ msgstr "GDK жөндеу жалаушалары орнатылмаған"
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
 #. * KP_Space      - Space (keypad)
+#. * Page_Up       - Page up
 #.
-#: ../gdk/keyname-table.h:3951
+#: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "BackSpace"
 
-#: ../gdk/keyname-table.h:3952
+#: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Tab"
 msgstr "Tab"
 
-#: ../gdk/keyname-table.h:3953
+#: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Return"
 msgstr "Return"
 
-#: ../gdk/keyname-table.h:3954
+#: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "Pause"
 msgstr "Аялдату"
 
-#: ../gdk/keyname-table.h:3955
+#: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
 msgstr "Scroll_Lock"
 
-#: ../gdk/keyname-table.h:3956
+#: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Sys_Req"
 msgstr "Sys_Req"
 
-#: ../gdk/keyname-table.h:3957
+#: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Escape"
 msgstr "Escape"
 
-#: ../gdk/keyname-table.h:3958
+#: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Multi_key"
 msgstr "Multi_key"
 
-#: ../gdk/keyname-table.h:3959
+#: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "Үй бумасы"
 
-#: ../gdk/keyname-table.h:3960
+#: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "Left"
 msgstr "Сол жақ"
 
-#: ../gdk/keyname-table.h:3961
+#: ../gdk/keyname-table.h:3962
 msgctxt "keyboard label"
 msgid "Up"
 msgstr "Жоғары"
 
-#: ../gdk/keyname-table.h:3962
+#: ../gdk/keyname-table.h:3963
 msgctxt "keyboard label"
 msgid "Right"
 msgstr "Оң жақ"
 
-#: ../gdk/keyname-table.h:3963
+#: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "Down"
 msgstr "Төмен"
 
-#: ../gdk/keyname-table.h:3964
+#: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page_Up"
 
-#: ../gdk/keyname-table.h:3965
+#: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page_Down"
 
-#: ../gdk/keyname-table.h:3966
+#: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "End"
 msgstr "End"
 
-#: ../gdk/keyname-table.h:3967
+#: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "Begin"
 msgstr "Begin"
 
-#: ../gdk/keyname-table.h:3968
+#: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Print"
 
-#: ../gdk/keyname-table.h:3969
+#: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "Insert"
 msgstr "Insert"
 
-#: ../gdk/keyname-table.h:3970
+#: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "Num_Lock"
 msgstr "Num_Lock"
 
 #. Translators: KP_ means 'key pad' here
-#: ../gdk/keyname-table.h:3972
+#: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Space"
 msgstr "KP_Space"
 
-#: ../gdk/keyname-table.h:3973
+#: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Tab"
 msgstr "KP_Tab"
 
-#: ../gdk/keyname-table.h:3974
+#: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Enter"
 msgstr "KP_Enter"
 
-#: ../gdk/keyname-table.h:3975
+#: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "KP_Home"
 msgstr "KP_Home"
 
-#: ../gdk/keyname-table.h:3976
+#: ../gdk/keyname-table.h:3977
 msgctxt "keyboard label"
 msgid "KP_Left"
 msgstr "KP_Left"
 
-#: ../gdk/keyname-table.h:3977
+#: ../gdk/keyname-table.h:3978
 msgctxt "keyboard label"
 msgid "KP_Up"
 msgstr "KP_Up"
 
-#: ../gdk/keyname-table.h:3978
+#: ../gdk/keyname-table.h:3979
 msgctxt "keyboard label"
 msgid "KP_Right"
 msgstr "KP_Right"
 
-#: ../gdk/keyname-table.h:3979
+#: ../gdk/keyname-table.h:3980
 msgctxt "keyboard label"
 msgid "KP_Down"
 msgstr "KP_Down"
 
-#: ../gdk/keyname-table.h:3980
+#: ../gdk/keyname-table.h:3981
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
 msgstr "KP_Page_Up"
 
-#: ../gdk/keyname-table.h:3981
+#: ../gdk/keyname-table.h:3982
 msgctxt "keyboard label"
 msgid "KP_Prior"
 msgstr "KP_Prior"
 
-#: ../gdk/keyname-table.h:3982
+#: ../gdk/keyname-table.h:3983
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
 msgstr "KP_Page_Down"
 
-#: ../gdk/keyname-table.h:3983
+#: ../gdk/keyname-table.h:3984
 msgctxt "keyboard label"
 msgid "KP_Next"
 msgstr "KP_Next"
 
-#: ../gdk/keyname-table.h:3984
+#: ../gdk/keyname-table.h:3985
 msgctxt "keyboard label"
 msgid "KP_End"
 msgstr "KP_End"
 
-#: ../gdk/keyname-table.h:3985
+#: ../gdk/keyname-table.h:3986
 msgctxt "keyboard label"
 msgid "KP_Begin"
 msgstr "KP_Begin"
 
-#: ../gdk/keyname-table.h:3986
+#: ../gdk/keyname-table.h:3987
 msgctxt "keyboard label"
 msgid "KP_Insert"
 msgstr "KP_Insert"
 
-#: ../gdk/keyname-table.h:3987
+#: ../gdk/keyname-table.h:3988
 msgctxt "keyboard label"
 msgid "KP_Delete"
 msgstr "KP_Delete"
 
-#: ../gdk/keyname-table.h:3988
+#: ../gdk/keyname-table.h:3989
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
 
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
-#: ../gdk/keyname-table.h:3990
+#: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessUp"
 msgstr "XF86MonBrightnessUp"
 
-#: ../gdk/keyname-table.h:3991
+#: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
 msgid "XF86MonBrightnessDown"
 msgstr "XF86MonBrightnessDown"
 
-#: ../gdk/keyname-table.h:3992
+#: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
 msgid "XF86AudioMute"
 msgstr "XF86AudioMute"
 
-#: ../gdk/keyname-table.h:3993
+#: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
 msgid "XF86AudioLowerVolume"
 msgstr "XF86AudioLowerVolume"
 
-#: ../gdk/keyname-table.h:3994
+#: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
 msgid "XF86AudioRaiseVolume"
 msgstr "XF86AudioRaiseVolume"
 
-#: ../gdk/keyname-table.h:3995
+#: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
 msgid "XF86AudioPlay"
 msgstr "XF86AudioPlay"
 
-#: ../gdk/keyname-table.h:3996
+#: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
 msgid "XF86AudioStop"
 msgstr "XF86AudioStop"
 
-#: ../gdk/keyname-table.h:3997
+#: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
 msgid "XF86AudioNext"
 msgstr "XF86AudioNext"
 
-#: ../gdk/keyname-table.h:3998
+#: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
 msgid "XF86AudioPrev"
 msgstr "XF86AudioPrev"
 
-#: ../gdk/keyname-table.h:3999
+#: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
 msgid "XF86AudioRecord"
 msgstr "XF86AudioRecord"
 
-#: ../gdk/keyname-table.h:4000
+#: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
 msgid "XF86AudioPause"
 msgstr "XF86AudioPause"
 
-#: ../gdk/keyname-table.h:4001
+#: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
 msgid "XF86AudioRewind"
 msgstr "XF86AudioRewind"
 
-#: ../gdk/keyname-table.h:4002
+#: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
 msgid "XF86AudioMedia"
 msgstr "XF86AudioMedia"
 
-#: ../gdk/keyname-table.h:4003
+#: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
 msgid "XF86ScreenSaver"
 msgstr "XF86ScreenSaver"
 
-#: ../gdk/keyname-table.h:4004
+#: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
 msgid "XF86Battery"
 msgstr "XF86Battery"
 
-#: ../gdk/keyname-table.h:4005
+#: ../gdk/keyname-table.h:4006
 msgctxt "keyboard label"
 msgid "XF86Launch1"
 msgstr "XF86Launch1"
 
-#: ../gdk/keyname-table.h:4006
+#: ../gdk/keyname-table.h:4007
 msgctxt "keyboard label"
 msgid "XF86Forward"
 msgstr "XF86Forward"
 
-#: ../gdk/keyname-table.h:4007
+#: ../gdk/keyname-table.h:4008
 msgctxt "keyboard label"
 msgid "XF86Back"
 msgstr "XF86Back"
 
-#: ../gdk/keyname-table.h:4008
+#: ../gdk/keyname-table.h:4009
 msgctxt "keyboard label"
 msgid "XF86Sleep"
 msgstr "XF86Sleep"
 
-#: ../gdk/keyname-table.h:4009
+#: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
 msgid "XF86Hibernate"
 msgstr "XF86Hibernate"
 
-#: ../gdk/keyname-table.h:4010
+#: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
 msgid "XF86WLAN"
 msgstr "XF86WLAN"
 
-#: ../gdk/keyname-table.h:4011
+#: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
 msgid "XF86WebCam"
 msgstr "XF86WebCam"
 
-#: ../gdk/keyname-table.h:4012
+#: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
 msgid "XF86Display"
 msgstr "XF86Display"
 
-#: ../gdk/keyname-table.h:4013
+#: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
 msgid "XF86TouchpadToggle"
 msgstr "XF86TouchpadToggle"
 
-#: ../gdk/keyname-table.h:4014
+#: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
 msgid "XF86WakeUp"
 msgstr "XF86WakeUp"
 
-#: ../gdk/keyname-table.h:4015
+#: ../gdk/keyname-table.h:4016
 msgctxt "keyboard label"
 msgid "XF86Suspend"
 msgstr "XF86Suspend"
 
 #. Description of --sync in --help output
-#: ../gdk/win32/gdkmain-win32.c:55
+#: ../gdk/win32/gdkmain-win32.c:53
 msgid "Don't batch GDI requests"
 msgstr "GDI сұранымдарын топтамау"
 
 #. Description of --no-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:57
+#: ../gdk/win32/gdkmain-win32.c:55
 msgid "Don't use the Wintab API for tablet support"
 msgstr "Tablet қолдауы үшін Wintab API қолданбау"
 
 #. Description of --ignore-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:59
+#: ../gdk/win32/gdkmain-win32.c:57
 msgid "Same as --no-wintab"
 msgstr "Тура --no-wintab сияқты"
 
 #. Description of --use-wintab in --help output
-#: ../gdk/win32/gdkmain-win32.c:61
+#: ../gdk/win32/gdkmain-win32.c:59
 msgid "Do use the Wintab API [default]"
 msgstr "Wintab API [бастапқы] қолданбау"
 
 #. Description of --max-colors=COLORS in --help output
-#: ../gdk/win32/gdkmain-win32.c:63
+#: ../gdk/win32/gdkmain-win32.c:61
 msgid "Size of the palette in 8 bit mode"
 msgstr "8 биттік режиміндегі палитра өлшемі"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: ../gdk/win32/gdkmain-win32.c:64
+#: ../gdk/win32/gdkmain-win32.c:62
 msgid "COLORS"
 msgstr "ТҮСТЕР"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:294
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:292
 #, c-format
 msgid "Starting %s"
 msgstr "%s қосылу"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:307
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:305
 #, c-format
 msgid "Opening %s"
 msgstr "%s ашу"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:312
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:310
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "%d нәрсе ашылуда"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:42
+#: ../gtk/a11y/gtkspinneraccessible.c:40
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "Айналғыш"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:43
+#: ../gtk/a11y/gtkspinneraccessible.c:41
 msgid "Provides visual indication of progress"
 msgstr "Үрдістің графикалық көрсеткішін ұсынады"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:65
+#: ../gtk/a11y/gtkswitchaccessible.c:63
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "Ауыстыру"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:66
+#: ../gtk/a11y/gtkswitchaccessible.c:64
 msgid "Switches between on and off states"
 msgstr "On және off қалып-күйлерін ауыстырғышы"
 
+#: ../gtk/deprecated/gtkcolorsel.c:425
+msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
+msgstr "Өіңізге керек түсті сыртқы шеңберден таңдаңыз. Ол түстің күңгірттігін не ашықтығын ішіндегі үшбұрыштан көрсетіңіз."
+
+#: ../gtk/deprecated/gtkcolorsel.c:451
+msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
+msgstr "Түс алушыны шертіп, экранның кез-келген аймағының түсін таңдау үшін жай ғана ол түске шертіңіз."
+
+#: ../gtk/deprecated/gtkcolorsel.c:461
+msgid "_Hue:"
+msgstr "Р_еңі:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:462
+msgid "Position on the color wheel."
+msgstr "Түс шеңберіндегі орны."
+
+#: ../gtk/deprecated/gtkcolorsel.c:464
+msgid "S_aturation:"
+msgstr "Қ_аңықтылығы:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:465
+msgid "Intensity of the color."
+msgstr "Түс мөлдірлілігі."
+
+#: ../gtk/deprecated/gtkcolorsel.c:466
+msgid "_Value:"
+msgstr "Мә_ні:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:467
+msgid "Brightness of the color."
+msgstr "Түс жарықтылығы."
+
+#: ../gtk/deprecated/gtkcolorsel.c:468
+msgid "_Red:"
+msgstr "Қ_ызыл:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:469
+msgid "Amount of red light in the color."
+msgstr "Түстегі қызыл мәннің шамасы."
+
+#: ../gtk/deprecated/gtkcolorsel.c:470
+msgid "_Green:"
+msgstr "Ж_асыл:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:471
+msgid "Amount of green light in the color."
+msgstr "Түстегі жасыл мәннің шамасы."
+
+#: ../gtk/deprecated/gtkcolorsel.c:472
+msgid "_Blue:"
+msgstr "_Көк:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:473
+msgid "Amount of blue light in the color."
+msgstr "Түстегі көк мәннің шамасы."
+
+#: ../gtk/deprecated/gtkcolorsel.c:476
+msgid "Op_acity:"
+msgstr "Мө_лдірсіздігі:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:484
+#: ../gtk/deprecated/gtkcolorsel.c:494
+msgid "Transparency of the color."
+msgstr "Түс мөлдірлілігі."
+
+#: ../gtk/deprecated/gtkcolorsel.c:501
+msgid "Color _name:"
+msgstr "Тү_с аты:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:516
+msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
+msgstr "Сіз осында HTML-дей он алтылық түрде түс мәнін не жай ғана түс атын енгізе аласыз, мысалға, 'orange'."
+
+#: ../gtk/deprecated/gtkcolorsel.c:548
+msgid "_Palette:"
+msgstr "_Палитра:"
+
+#: ../gtk/deprecated/gtkcolorsel.c:578
+msgid "Color Wheel"
+msgstr "Түстер шеңбері."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1072
+msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
+msgstr "Алдында таңдалған түс, қазіргі таңдаумен салыстыру үшін көрсетілген. Осы түсті палитраға тартып апаруға, не оны ағымдағы түс қылу үшін осы түстер ауыстырғыштың екінші жағына тартып апарыңыз."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1078
+msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
+msgstr "Сіз таңдаған түс. Оны сақтау үшін палитраға тартып апарсаңыз болады."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1084
+msgid "The previously-selected color, for comparison to the color you're selecting now."
+msgstr "Алдында таңдалған түс, қазіргі таңдаумен салыстыру үшін көрсетілген."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1088
+msgid "The color you've chosen."
+msgstr "Сіз таңдаған түс."
+
+#: ../gtk/deprecated/gtkcolorsel.c:1491
+msgid "_Save color here"
+msgstr "_Түсті осында сақтау"
+
+#: ../gtk/deprecated/gtkcolorsel.c:1695
+msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr "Ағымдағы түс ретінде орнату үшін палитраның осы мүшесін шертіңіз. Осы мүшені өзгерту үшін, түс таңдаушыны осында тартып әкеліңіз, не оң жақпен шертіп, \"Түсті осында сақтау\"-ды таңдаңыз."
+
+#. We emit the response for the Select button manually,
+#. * since we want to save the color first
+#.
+#: ../gtk/deprecated/gtkcolorseldialog.c:201
+#: ../gtk/gtkappchooserdialog.c:574
+#: ../gtk/gtkcolorchooserdialog.c:150
+#: ../gtk/gtkfontchooserdialog.c:174
+msgid "_Select"
+msgstr "_Таңдау"
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:219
+msgid "Color Selection"
+msgstr "Түсті таңдау"
+
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: ../gtk/deprecated/gtkfontsel.c:126
+#: ../gtk/deprecated/gtkfontsel.c:124
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: ../gtk/deprecated/gtkfontsel.c:395
+#: ../gtk/deprecated/gtkfontsel.c:393
 msgid "_Family:"
 msgstr "_Отбасы:"
 
-#: ../gtk/deprecated/gtkfontsel.c:402
+#: ../gtk/deprecated/gtkfontsel.c:400
 msgid "_Style:"
 msgstr "_Стилі:"
 
-#: ../gtk/deprecated/gtkfontsel.c:409
+#: ../gtk/deprecated/gtkfontsel.c:407
 msgid "Si_ze:"
 msgstr "Өл_шемі:"
 
 #. create the text entry widget
-#: ../gtk/deprecated/gtkfontsel.c:586
+#: ../gtk/deprecated/gtkfontsel.c:584
 msgid "_Preview:"
 msgstr "А_лдын-ала қарау:"
 
-#: ../gtk/deprecated/gtkfontsel.c:1739
-#: ../gtk/gtkfontchooserdialog.c:185
+#: ../gtk/deprecated/gtkfontsel.c:1720
+#: ../gtk/gtkfontchooserdialog.c:183
 msgid "Font Selection"
 msgstr "Қаріпті таңдау"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:106
+#: ../gtk/gtkaboutdialog.c:104
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
@@ -512,33 +632,33 @@ msgstr ""
 "Бұл бағдарлама ЕШҚАНДАЙ КЕПІЛДЕМЕСІЗ таратылады;\n"
 "көбірек білу үшін, <a href=\"%s\">%s</a> шолыңыз"
 
-#: ../gtk/gtkaboutdialog.c:359
+#: ../gtk/gtkaboutdialog.c:357
 msgid "License"
 msgstr "Лицензиясы"
 
-#: ../gtk/gtkaboutdialog.c:360
+#: ../gtk/gtkaboutdialog.c:358
 msgid "The license of the program"
 msgstr "Бағдарлама лицензиясы"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:753
+#: ../gtk/gtkaboutdialog.c:751
 msgid "C_redits"
 msgstr "Ж_асағандар"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:766
+#: ../gtk/gtkaboutdialog.c:764
 msgid "_License"
 msgstr "Л_ицензиясы"
 
-#: ../gtk/gtkaboutdialog.c:982
+#: ../gtk/gtkaboutdialog.c:980
 msgid "Could not show link"
 msgstr "Сілтемені көрсету мүмкін емес"
 
-#: ../gtk/gtkaboutdialog.c:1019
+#: ../gtk/gtkaboutdialog.c:1017
 msgid "Homepage"
 msgstr "Үй парағы"
 
-#: ../gtk/gtkaboutdialog.c:1073
+#: ../gtk/gtkaboutdialog.c:1071
 #, c-format
 msgid "About %s"
 msgstr "%s туралы"
@@ -564,7 +684,7 @@ msgstr "Бейнелеуі"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:158
+#: ../gtk/gtkaccellabel.c:156
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -574,7 +694,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:164
+#: ../gtk/gtkaccellabel.c:162
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -584,7 +704,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:170
+#: ../gtk/gtkaccellabel.c:168
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -594,7 +714,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:804
+#: ../gtk/gtkaccellabel.c:802
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -604,7 +724,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:817
+#: ../gtk/gtkaccellabel.c:815
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -614,105 +734,98 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:831
+#: ../gtk/gtkaccellabel.c:829
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:847
+#: ../gtk/gtkaccellabel.c:845
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: ../gtk/gtkaccellabel.c:850
+#: ../gtk/gtkaccellabel.c:848
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: ../gtk/gtkappchooserbutton.c:292
+#: ../gtk/gtkappchooserbutton.c:290
 msgid "Other application..."
 msgstr "Басқа қолданба..."
 
-#: ../gtk/gtkappchooserdialog.c:139
+#: ../gtk/gtkappchooserdialog.c:137
 msgid "Failed to look for applications online"
 msgstr "Қолданбаларды желіден іздеу сәтсіз аяқталды"
 
-#: ../gtk/gtkappchooserdialog.c:190
+#: ../gtk/gtkappchooserdialog.c:188
 msgid "Find applications online"
 msgstr "Қолданбаларды желіден іздеу"
 
-#: ../gtk/gtkappchooserdialog.c:249
+#: ../gtk/gtkappchooserdialog.c:247
 msgid "Could not run application"
 msgstr "Қолданбаны жөнелту мүмкін емес"
 
-#: ../gtk/gtkappchooserdialog.c:262
+#: ../gtk/gtkappchooserdialog.c:260
 #, c-format
 msgid "Could not find '%s'"
 msgstr "'%s' табу мүмкін емес"
 
-#: ../gtk/gtkappchooserdialog.c:265
+#: ../gtk/gtkappchooserdialog.c:263
 msgid "Could not find application"
 msgstr "Қолданбаны табу мүмкін емес"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:399
+#: ../gtk/gtkappchooserdialog.c:397
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "\"%s\" ашу үшін қолданбаны таңдау"
 
-#: ../gtk/gtkappchooserdialog.c:400
-#: ../gtk/gtkappchooserwidget.c:656
+#: ../gtk/gtkappchooserdialog.c:398
+#: ../gtk/gtkappchooserwidget.c:654
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "\"%s\" ашу үшін қолжетерлік қолданбалар жоқ"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:406
+#: ../gtk/gtkappchooserdialog.c:404
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "\"%s\" түрдегі файлдарды ашу үшін қолданбаны таңдау"
 
-#: ../gtk/gtkappchooserdialog.c:408
+#: ../gtk/gtkappchooserdialog.c:406
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "\"%s\" түрдегі файлдарды ашу үшін қолданбалар қолжетерсіз"
 
-#: ../gtk/gtkappchooserdialog.c:424
+#: ../gtk/gtkappchooserdialog.c:422
 msgid "Click \"Show other applications\", for more options, or \"Find applications online\" to install a new application"
 msgstr "Көбірек опциялар үшін \"Басқа қолданбаларды көрсету\", ал, жаңа қолданбаны орнату үшін  \"Қолданбаларды желіден іздеу\" таңдаңыз"
 
-#: ../gtk/gtkappchooserdialog.c:494
+#: ../gtk/gtkappchooserdialog.c:492
 msgid "Forget association"
 msgstr "Сәйкестілікті ұмыту"
 
-#: ../gtk/gtkappchooserdialog.c:560
+#: ../gtk/gtkappchooserdialog.c:558
 msgid "Show other applications"
 msgstr "Басқа қолданбаларды көрсету"
 
-#: ../gtk/gtkappchooserdialog.c:576
-#: ../gtk/gtkcolorchooserdialog.c:127
-#: ../gtk/deprecated/gtkcolorseldialog.c:203
-#: ../gtk/gtkfontchooserdialog.c:176
-msgid "_Select"
-msgstr "_Таңдау"
-
-#: ../gtk/gtkappchooserwidget.c:605
+#: ../gtk/gtkappchooserwidget.c:603
 msgid "Default Application"
 msgstr "Үнсіз келісім бойынша қолданба"
 
-#: ../gtk/gtkappchooserwidget.c:743
+#: ../gtk/gtkappchooserwidget.c:741
 msgid "Recommended Applications"
 msgstr "Ұсынылатын қолданбалар"
 
-#: ../gtk/gtkappchooserwidget.c:758
+#: ../gtk/gtkappchooserwidget.c:756
 msgid "Related Applications"
 msgstr "Туыс қолданбалар"
 
-#: ../gtk/gtkappchooserwidget.c:772
+#: ../gtk/gtkappchooserwidget.c:770
 msgid "Other Applications"
 msgstr "Басқа қолданбалар"
 
-#: ../gtk/gtkapplication.c:1490
+#: ../gtk/gtkapplication.c:1529
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -723,55 +836,55 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:286
-#: ../gtk/gtkprintoperation-unix.c:477
-#: ../gtk/gtkprintoperation-win32.c:1447
+#: ../gtk/gtkapplicationwindow.c:327
+#: ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "Қолданба"
 
-#: ../gtk/gtkassistant.c:1005
+#: ../gtk/gtkassistant.c:1004
 msgid "C_ontinue"
 msgstr "Жа_лғастыру"
 
-#: ../gtk/gtkassistant.c:1008
+#: ../gtk/gtkassistant.c:1007
 msgid "Go _Back"
 msgstr "Ар_тқа"
 
-#: ../gtk/gtkassistant.c:1012
+#: ../gtk/gtkassistant.c:1011
 msgid "_Finish"
 msgstr "А_яқтау"
 
-#: ../gtk/gtkbuilder-menus.c:222
+#: ../gtk/gtkbuilder-menus.c:220
 #, c-format
 msgid "Element <%s> not allowed inside <%s>"
 msgstr "<%s> элементін <%s> ішінде орналастыру рұқсат етілмеген"
 
-#: ../gtk/gtkbuilder-menus.c:227
+#: ../gtk/gtkbuilder-menus.c:225
 #, c-format
 msgid "Element <%s> not allowed at toplevel"
 msgstr "<%s> элементі жоғары деңгейде орналасуы рұқсат етілмеген"
 
-#: ../gtk/gtkbuilder-menus.c:316
+#: ../gtk/gtkbuilder-menus.c:314
 #, c-format
 msgid "text may not appear inside <%s>"
 msgstr "мәтін <%s> ішінде болмауы мүмкін"
 
-#: ../gtk/gtkbuilderparser.c:343
+#: ../gtk/gtkbuilderparser.c:341
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
 msgstr "%d жолындағы функцияның қате түрі: '%s'"
 
-#: ../gtk/gtkbuilderparser.c:407
+#: ../gtk/gtkbuilderparser.c:405
 #, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "Объект ID '%s' қайталануы, жол нөмірі %d (алдыңғысы %d)"
 
-#: ../gtk/gtkbuilderparser.c:867
+#: ../gtk/gtkbuilderparser.c:865
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Түбірлік элементі қате: '%s'"
 
-#: ../gtk/gtkbuilderparser.c:908
+#: ../gtk/gtkbuilderparser.c:906
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Өңделмеген тег: '%s'"
@@ -786,7 +899,7 @@ msgstr "Өңделмеген тег: '%s'"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:873
+#: ../gtk/gtkcalendar.c:872
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -794,7 +907,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:911
+#: ../gtk/gtkcalendar.c:910
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -860,7 +973,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: ../gtk/gtkcellrendereraccel.c:286
+#: ../gtk/gtkcellrendereraccel.c:282
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Сөндірулі"
@@ -869,7 +982,7 @@ msgstr "Сөндірулі"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: ../gtk/gtkcellrendereraccel.c:296
+#: ../gtk/gtkcellrendereraccel.c:292
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Қате"
@@ -878,417 +991,289 @@ msgstr "Қате"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:423
-#: ../gtk/gtkcellrendereraccel.c:740
+#: ../gtk/gtkcellrendereraccel.c:416
+#: ../gtk/gtkcellrendereraccel.c:745
 msgid "New accelerator..."
 msgstr "Жаңа үдеткіш..."
 
-#: ../gtk/gtkcellrendererprogress.c:374
-#: ../gtk/gtkcellrendererprogress.c:464
+#: ../gtk/gtkcellrendererprogress.c:372
+#: ../gtk/gtkcellrendererprogress.c:462
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:192
-#: ../gtk/gtkcolorbutton.c:461
+#: ../gtk/gtkcolorbutton.c:188
+#: ../gtk/gtkcolorbutton.c:450
 msgid "Pick a Color"
 msgstr "Түсті таңдаңыз"
 
-#: ../gtk/gtkcolorchooserdialog.c:136
-#| msgid "Select a folder"
+#: ../gtk/gtkcolorchooserdialog.c:164
 msgid "Select a Color"
 msgstr "Түсті тандаңыз"
 
-#: ../gtk/gtkcolorchooserwidget.c:283
+#: ../gtk/gtkcolorchooserwidget.c:281
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Қызыл %d%%, Жасыл %d%%, Көк %d%%, Мөлдір %d%%"
 
-#: ../gtk/gtkcolorchooserwidget.c:289
+#: ../gtk/gtkcolorchooserwidget.c:287
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Қызыл %d%%, Жасыл %d%%, Көк %d%%"
 
-#: ../gtk/gtkcolorchooserwidget.c:340
+#: ../gtk/gtkcolorchooserwidget.c:360
 #, c-format
-#| msgid "Color"
 msgid "Color: %s"
 msgstr "Түс: %s"
 
-#: ../gtk/gtkcolorchooserwidget.c:411
+#: ../gtk/gtkcolorchooserwidget.c:419
 msgctxt "Color name"
 msgid "Light Scarlet Red"
 msgstr "Ашық алқызыл"
 
-#: ../gtk/gtkcolorchooserwidget.c:412
+#: ../gtk/gtkcolorchooserwidget.c:420
 msgctxt "Color name"
 msgid "Scarlet Red"
 msgstr "Алқызыл"
 
-#: ../gtk/gtkcolorchooserwidget.c:413
+#: ../gtk/gtkcolorchooserwidget.c:421
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
 msgstr "Күңгірт алқызыл"
 
-#: ../gtk/gtkcolorchooserwidget.c:414
+#: ../gtk/gtkcolorchooserwidget.c:422
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "Ашық қызғылт сары"
 
-#: ../gtk/gtkcolorchooserwidget.c:415
-#| msgid "Range"
+#: ../gtk/gtkcolorchooserwidget.c:423
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Қызғылт сары"
 
-#: ../gtk/gtkcolorchooserwidget.c:416
+#: ../gtk/gtkcolorchooserwidget.c:424
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "Күңгірт қызғылт сары"
 
-#: ../gtk/gtkcolorchooserwidget.c:417
+#: ../gtk/gtkcolorchooserwidget.c:425
 msgctxt "Color name"
 msgid "Light Butter"
 msgstr "Ашық сарғылт"
 
-#: ../gtk/gtkcolorchooserwidget.c:418
+#: ../gtk/gtkcolorchooserwidget.c:426
 msgctxt "Color name"
 msgid "Butter"
 msgstr "Сарғылт"
 
-#: ../gtk/gtkcolorchooserwidget.c:419
+#: ../gtk/gtkcolorchooserwidget.c:427
 msgctxt "Color name"
 msgid "Dark Butter"
 msgstr "Күңгірт сарғылт"
 
-#: ../gtk/gtkcolorchooserwidget.c:420
+#: ../gtk/gtkcolorchooserwidget.c:428
 msgctxt "Color name"
 msgid "Light Chameleon"
 msgstr "Ашық хамелеон"
 
-#: ../gtk/gtkcolorchooserwidget.c:421
+#: ../gtk/gtkcolorchooserwidget.c:429
 msgctxt "Color name"
 msgid "Chameleon"
 msgstr "Хамелеон"
 
-#: ../gtk/gtkcolorchooserwidget.c:422
+#: ../gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Dark Chameleon"
 msgstr "Күңгірт хамелеон"
 
-#: ../gtk/gtkcolorchooserwidget.c:423
+#: ../gtk/gtkcolorchooserwidget.c:431
 msgctxt "Color name"
 msgid "Light Sky Blue"
 msgstr "Ашық көгілдір"
 
-#: ../gtk/gtkcolorchooserwidget.c:424
+#: ../gtk/gtkcolorchooserwidget.c:432
 msgctxt "Color name"
 msgid "Sky Blue"
 msgstr "Көгілдір"
 
-#: ../gtk/gtkcolorchooserwidget.c:425
+#: ../gtk/gtkcolorchooserwidget.c:433
 msgctxt "Color name"
 msgid "Dark Sky Blue"
 msgstr "Күңгірт көгілдір"
 
-#: ../gtk/gtkcolorchooserwidget.c:426
+#: ../gtk/gtkcolorchooserwidget.c:434
 msgctxt "Color name"
 msgid "Light Plum"
 msgstr "Ашық алхоры"
 
-#: ../gtk/gtkcolorchooserwidget.c:427
-#| msgid "Volume"
+#: ../gtk/gtkcolorchooserwidget.c:435
 msgctxt "Color name"
 msgid "Plum"
 msgstr "Алхоры"
 
-#: ../gtk/gtkcolorchooserwidget.c:428
+#: ../gtk/gtkcolorchooserwidget.c:436
 msgctxt "Color name"
 msgid "Dark Plum"
 msgstr "Күңгірт алхоры"
 
-#: ../gtk/gtkcolorchooserwidget.c:429
+#: ../gtk/gtkcolorchooserwidget.c:437
 msgctxt "Color name"
 msgid "Light Chocolate"
 msgstr "Ашық шоколад"
 
-#: ../gtk/gtkcolorchooserwidget.c:430
-#| msgid "C_ollate"
+#: ../gtk/gtkcolorchooserwidget.c:438
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "Шоколад"
 
-#: ../gtk/gtkcolorchooserwidget.c:431
+#: ../gtk/gtkcolorchooserwidget.c:439
 msgctxt "Color name"
 msgid "Dark Chocolate"
 msgstr "Күңгірт шоколад"
 
-#: ../gtk/gtkcolorchooserwidget.c:432
+#: ../gtk/gtkcolorchooserwidget.c:440
 msgctxt "Color name"
 msgid "Light Aluminum 1"
 msgstr "Ашық алюминий 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:433
+#: ../gtk/gtkcolorchooserwidget.c:441
 msgctxt "Color name"
 msgid "Aluminum 1"
 msgstr "Алюминий 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:434
+#: ../gtk/gtkcolorchooserwidget.c:442
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
 msgstr "Күңгірт алюминий 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:435
+#: ../gtk/gtkcolorchooserwidget.c:443
 msgctxt "Color name"
 msgid "Light Aluminum 2"
 msgstr "Ашық алюминий 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:436
+#: ../gtk/gtkcolorchooserwidget.c:444
 msgctxt "Color name"
 msgid "Aluminum 2"
 msgstr "Алюминий 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:437
+#: ../gtk/gtkcolorchooserwidget.c:445
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
 msgstr "Күңгірт алюминий 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:451
-#| msgctxt "Stock label, navigation"
-#| msgid "_Back"
+#: ../gtk/gtkcolorchooserwidget.c:459
 msgctxt "Color name"
 msgid "Black"
 msgstr "Қара"
 
-#: ../gtk/gtkcolorchooserwidget.c:452
+#: ../gtk/gtkcolorchooserwidget.c:460
 msgctxt "Color name"
 msgid "Very Dark Gray"
 msgstr "Өте күңгірт сұр"
 
-#: ../gtk/gtkcolorchooserwidget.c:453
+#: ../gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
 msgid "Darker Gray"
 msgstr "Қүңгірттеу сұр"
 
-#: ../gtk/gtkcolorchooserwidget.c:454
+#: ../gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Dark Gray"
 msgstr "Қүңгірт сұр"
 
-#: ../gtk/gtkcolorchooserwidget.c:455
-#| msgid "Medium"
+#: ../gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Medium Gray"
 msgstr "Орташа сұр"
 
-#: ../gtk/gtkcolorchooserwidget.c:456
+#: ../gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Light Gray"
 msgstr "Ашық сұр"
 
-#: ../gtk/gtkcolorchooserwidget.c:457
+#: ../gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Lighter Gray"
 msgstr "Ашықтау сұр"
 
-#: ../gtk/gtkcolorchooserwidget.c:458
+#: ../gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Very Light Gray"
 msgstr "Өте ашық сұр"
 
-#: ../gtk/gtkcolorchooserwidget.c:459
+#: ../gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "White"
 msgstr "Ақ"
 
 #. translators: label for the custom section in the color chooser
-#: ../gtk/gtkcolorchooserwidget.c:508
-#| msgid "Custom size"
+#: ../gtk/gtkcolorchooserwidget.c:516
 msgid "Custom"
 msgstr "Таңдауыңызша"
 
-#: ../gtk/gtkcolorchooserwidget.c:516
-#| msgid "Create Fo_lder"
+#: ../gtk/gtkcolorchooserwidget.c:524
 msgid "Create custom color"
 msgstr "Таңдауыңызша түсті жасау"
 
-#: ../gtk/gtkcolorchooserwidget.c:535
+#: ../gtk/gtkcolorchooserwidget.c:543
 #, c-format
-#| msgid "Custom %sx%s"
 msgid "Custom color %d: %s"
 msgstr "Таңдауыңызша түс %d: %s"
 
-#: ../gtk/gtkcoloreditor.c:413
-#| msgid "Color _name:"
+#: ../gtk/gtkcoloreditor.c:412
 msgid "Color Name"
 msgstr "Түс аты"
 
-#: ../gtk/gtkcoloreditor.c:458
-#| msgid "S_aturation:"
+#: ../gtk/gtkcoloreditor.c:457
 msgctxt "Color channel"
 msgid "Saturation"
 msgstr "Қаңықтылығы"
 
-#: ../gtk/gtkcoloreditor.c:464
-#| msgid "_Value:"
+#: ../gtk/gtkcoloreditor.c:463
 msgctxt "Color channel"
 msgid "Value"
 msgstr "Мәні"
 
-#: ../gtk/gtkcoloreditor.c:472
+#: ../gtk/gtkcoloreditor.c:471
 msgctxt "Color channel"
 msgid "S"
 msgstr "Қ"
 
-#: ../gtk/gtkcoloreditor.c:474
+#: ../gtk/gtkcoloreditor.c:473
 msgctxt "Color channel"
 msgid "V"
 msgstr "М"
 
-#: ../gtk/gtkcoloreditor.c:482
-#: ../gtk/gtkcolorscale.c:297
-#| msgid "_Hue:"
+#: ../gtk/gtkcoloreditor.c:481
+#: ../gtk/gtkcolorscale.c:301
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "Реңі"
 
-#: ../gtk/gtkcoloreditor.c:489
+#: ../gtk/gtkcoloreditor.c:488
 msgctxt "Color channel"
 msgid "H"
 msgstr "Р"
 
-#: ../gtk/gtkcoloreditor.c:497
-#: ../gtk/gtkcolorscale.c:299
+#: ../gtk/gtkcoloreditor.c:496
+#: ../gtk/gtkcolorscale.c:303
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Мөлдір"
 
-#: ../gtk/gtkcoloreditor.c:504
-#| msgctxt "paper size"
-#| msgid "A0"
+#: ../gtk/gtkcoloreditor.c:503
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
-#: ../gtk/gtkcolorplane.c:393
-#| msgid "Color _name:"
+#: ../gtk/gtkcolorplane.c:438
 msgid "Color Plane"
 msgstr "Түстер кеңістігі"
 
-#: ../gtk/gtkcolorswatch.c:446
-#| msgid "Custom size"
+#: ../gtk/gtkcolorswatch.c:447
 msgid "_Customize"
 msgstr "_Баптау"
-
-#: ../gtk/deprecated/gtkcolorsel.c:426
-msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
-msgstr "Өіңізге керек түсті сыртқы шеңберден таңдаңыз. Ол түстің күңгірттігін не ашықтығын ішіндегі үшбұрыштан көрсетіңіз."
-
-#: ../gtk/deprecated/gtkcolorsel.c:452
-msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
-msgstr "Түс алушыны шертіп, экранның кез-келген аймағының түсін таңдау үшін жай ғана ол түске шертіңіз."
-
-#: ../gtk/deprecated/gtkcolorsel.c:462
-msgid "_Hue:"
-msgstr "Р_еңі:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:463
-msgid "Position on the color wheel."
-msgstr "Түс шеңберіндегі орны."
-
-#: ../gtk/deprecated/gtkcolorsel.c:465
-msgid "S_aturation:"
-msgstr "Қ_аңықтылығы:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:466
-msgid "Intensity of the color."
-msgstr "Түс мөлдірлілігі."
-
-#: ../gtk/deprecated/gtkcolorsel.c:467
-msgid "_Value:"
-msgstr "Мә_ні:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:468
-msgid "Brightness of the color."
-msgstr "Түс жарықтылығы."
-
-#: ../gtk/deprecated/gtkcolorsel.c:469
-msgid "_Red:"
-msgstr "Қ_ызыл:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:470
-msgid "Amount of red light in the color."
-msgstr "Түстегі қызыл мәннің шамасы."
-
-#: ../gtk/deprecated/gtkcolorsel.c:471
-msgid "_Green:"
-msgstr "Ж_асыл:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:472
-msgid "Amount of green light in the color."
-msgstr "Түстегі жасыл мәннің шамасы."
-
-#: ../gtk/deprecated/gtkcolorsel.c:473
-msgid "_Blue:"
-msgstr "_Көк:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:474
-msgid "Amount of blue light in the color."
-msgstr "Түстегі көк мәннің шамасы."
-
-#: ../gtk/deprecated/gtkcolorsel.c:477
-msgid "Op_acity:"
-msgstr "Мө_лдірсіздігі:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:485
-#: ../gtk/deprecated/gtkcolorsel.c:495
-msgid "Transparency of the color."
-msgstr "Түс мөлдірлілігі."
-
-#: ../gtk/deprecated/gtkcolorsel.c:502
-msgid "Color _name:"
-msgstr "Тү_с аты:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:517
-msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
-msgstr "Сіз осында HTML-дей он алтылық түрде түс мәнін не жай ғана түс атын енгізе аласыз, мысалға, 'orange'."
-
-#: ../gtk/deprecated/gtkcolorsel.c:549
-msgid "_Palette:"
-msgstr "_Палитра:"
-
-#: ../gtk/deprecated/gtkcolorsel.c:579
-msgid "Color Wheel"
-msgstr "Түстер шеңбері."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1073
-msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
-msgstr "Алдында таңдалған түс, қазіргі таңдаумен салыстыру үшін көрсетілген. Осы түсті палитраға тартып апаруға, не оны ағымдағы түс қылу үшін осы түстер ауыстырғыштың екінші жағына тартып апарыңыз."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1079
-msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
-msgstr "Сіз таңдаған түс. Оны сақтау үшін палитраға тартып апарсаңыз болады."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1085
-msgid "The previously-selected color, for comparison to the color you're selecting now."
-msgstr "Алдында таңдалған түс, қазіргі таңдаумен салыстыру үшін көрсетілген."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1089
-msgid "The color you've chosen."
-msgstr "Сіз таңдаған түс."
-
-#: ../gtk/deprecated/gtkcolorsel.c:1492
-msgid "_Save color here"
-msgstr "_Түсті осында сақтау"
-
-#: ../gtk/deprecated/gtkcolorsel.c:1696
-msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr "Ағымдағы түс ретінде орнату үшін палитраның осы мүшесін шертіңіз. Осы мүшені өзгерту үшін, түс таңдаушыны осында тартып әкеліңіз, не оң жақпен шертіп, \"Түсті осында сақтау\"-ды таңдаңыз."
-
-#: ../gtk/deprecated/gtkcolorseldialog.c:221
-msgid "Color Selection"
-msgstr "Түсті таңдау"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -1296,86 +1281,78 @@ msgstr "Түсті таңдау"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: ../gtk/gtkcustompaperunixdialog.c:116
+#: ../gtk/gtkcustompaperunixdialog.c:115
 msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:372
-#: ../gtk/gtkprintunixdialog.c:3325
+#: ../gtk/gtkcustompaperunixdialog.c:397
+#: ../gtk/gtkprintunixdialog.c:3264
 msgid "Manage Custom Sizes"
 msgstr "Таңдауыңызша өлшемдерді басқару"
 
-#: ../gtk/gtkcustompaperunixdialog.c:533
-#: ../gtk/gtkpagesetupunixdialog.c:780
+#: ../gtk/gtkcustompaperunixdialog.c:558
+#: ../gtk/gtkpagesetupunixdialog.c:778
 msgid "inch"
 msgstr "дюйм"
 
-#: ../gtk/gtkcustompaperunixdialog.c:535
-#: ../gtk/gtkpagesetupunixdialog.c:778
+#: ../gtk/gtkcustompaperunixdialog.c:560
+#: ../gtk/gtkpagesetupunixdialog.c:776
 msgid "mm"
 msgstr "мм"
 
-#: ../gtk/gtkcustompaperunixdialog.c:580
+#: ../gtk/gtkcustompaperunixdialog.c:605
 msgid "Margins from Printer..."
 msgstr "Принтерден парақ шет өрістері..."
 
-#: ../gtk/gtkcustompaperunixdialog.c:746
+#: ../gtk/gtkcustompaperunixdialog.c:771
 #, c-format
 msgid "Custom Size %d"
 msgstr "Таңдауыңызша өлшем %d"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1084
+#: ../gtk/gtkcustompaperunixdialog.c:1109
 msgid "_Width:"
 msgstr "_Ені:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1095
+#: ../gtk/gtkcustompaperunixdialog.c:1120
 msgid "_Height:"
 msgstr "_Биіктігі:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1106
+#: ../gtk/gtkcustompaperunixdialog.c:1131
 msgid "Paper Size"
 msgstr "Қағаз өлшемі"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1115
+#: ../gtk/gtkcustompaperunixdialog.c:1140
 msgid "_Top:"
 msgstr "Жоғар_ы:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1126
+#: ../gtk/gtkcustompaperunixdialog.c:1151
 msgid "_Bottom:"
 msgstr "Тө_мен:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1137
+#: ../gtk/gtkcustompaperunixdialog.c:1162
 msgid "_Left:"
 msgstr "Со_л жақ:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1148
+#: ../gtk/gtkcustompaperunixdialog.c:1173
 msgid "_Right:"
 msgstr "Оң ж_ақ:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1187
+#: ../gtk/gtkcustompaperunixdialog.c:1212
 msgid "Paper Margins"
 msgstr "Қағаздың шет өрістері"
 
-#: ../gtk/gtkentry.c:8744
-#: ../gtk/gtktextview.c:8287
+#: ../gtk/gtkentry.c:8784
+#: ../gtk/gtktextview.c:8262
 msgid "Input _Methods"
 msgstr "Ен_гізу тәсілдері"
 
-#: ../gtk/gtkentry.c:8758
-#: ../gtk/gtktextview.c:8301
+#: ../gtk/gtkentry.c:8798
+#: ../gtk/gtktextview.c:8276
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode б_асқару таңбасын кірістіру"
 
-#: ../gtk/gtkentry.c:10220
-msgid "Caps Lock and Num Lock are on"
-msgstr "Caps Lock пен Num Lock қосулы тұр"
-
-#: ../gtk/gtkentry.c:10222
-msgid "Num Lock is on"
-msgstr "Num Lock is қосулы тұр"
-
-#: ../gtk/gtkentry.c:10224
+#: ../gtk/gtkentry.c:10272
 msgid "Caps Lock is on"
 msgstr "Caps Lock қосулы тұр"
 
@@ -1420,65 +1397,65 @@ msgstr "Caps Lock қосулы тұр"
 #. **************** *
 #. *  Private Macros  *
 #. * ****************
-#: ../gtk/gtkfilechooserbutton.c:105
+#: ../gtk/gtkfilechooserbutton.c:104
 msgid "Select a File"
 msgstr "Файлды таңдаңыз"
 
-#: ../gtk/gtkfilechooserbutton.c:106
-#: ../gtk/gtkfilechooserdefault.c:1816
+#: ../gtk/gtkfilechooserbutton.c:105
+#: ../gtk/gtkfilechooserdefault.c:1817
 msgid "Desktop"
 msgstr "Жұмыс үстелі"
 
-#: ../gtk/gtkfilechooserbutton.c:107
+#: ../gtk/gtkfilechooserbutton.c:106
 msgid "(None)"
 msgstr "(Ешнәрсе)"
 
-#: ../gtk/gtkfilechooserbutton.c:2047
+#: ../gtk/gtkfilechooserbutton.c:2046
 msgid "Other..."
 msgstr "Басқа..."
 
-#: ../gtk/gtkfilechooserdefault.c:153
+#: ../gtk/gtkfilechooserdefault.c:152
 msgid "Type name of new folder"
 msgstr "Жаңа буманың атын енгізіңіз"
 
-#: ../gtk/gtkfilechooserdefault.c:967
+#: ../gtk/gtkfilechooserdefault.c:968
 msgid "Could not retrieve information about the file"
 msgstr "Файл туралы ақпаратты алу мүмкін емес"
 
-#: ../gtk/gtkfilechooserdefault.c:978
+#: ../gtk/gtkfilechooserdefault.c:979
 msgid "Could not add a bookmark"
 msgstr "Бетбелгіні қосу мүмкін емес"
 
-#: ../gtk/gtkfilechooserdefault.c:989
+#: ../gtk/gtkfilechooserdefault.c:990
 msgid "Could not remove bookmark"
 msgstr "Бетбелгіні өшіру мүмкін емес"
 
-#: ../gtk/gtkfilechooserdefault.c:1000
+#: ../gtk/gtkfilechooserdefault.c:1001
 msgid "The folder could not be created"
 msgstr "Буманы жасау мүмкін емес"
 
-#: ../gtk/gtkfilechooserdefault.c:1013
+#: ../gtk/gtkfilechooserdefault.c:1014
 msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
 msgstr "Буманы жасау мүмкін емес, өйткені аттас файл бар болып тұр. Бума үшін басқа атын таңдаңыз, не файлды өшіріңіз."
 
-#: ../gtk/gtkfilechooserdefault.c:1027
+#: ../gtk/gtkfilechooserdefault.c:1028
 msgid "You need to choose a valid filename."
 msgstr "Сізге дұрыс файл атын көрсету керек."
 
-#: ../gtk/gtkfilechooserdefault.c:1030
+#: ../gtk/gtkfilechooserdefault.c:1031
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "%s ішінде файлды жасау мүмкін емес, өтйкені ол бума емес"
 
-#: ../gtk/gtkfilechooserdefault.c:1042
+#: ../gtk/gtkfilechooserdefault.c:1043
 msgid "You may only select folders.  The item that you selected is not a folder; try using a different item."
 msgstr "Сізге тек бумаларды таңдауға болады.  Сіз таңдаған нәрсе бума емес; басқа нәрсені таңдап көріңіз."
 
-#: ../gtk/gtkfilechooserdefault.c:1052
+#: ../gtk/gtkfilechooserdefault.c:1053
 msgid "Invalid file name"
 msgstr "Файл аты қате"
 
-#: ../gtk/gtkfilechooserdefault.c:1062
+#: ../gtk/gtkfilechooserdefault.c:1063
 msgid "The folder contents could not be displayed"
 msgstr "Бума құрамасын көрсету мүмкін емес"
 
@@ -1486,224 +1463,224 @@ msgstr "Бума құрамасын көрсету мүмкін емес"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1588
+#: ../gtk/gtkfilechooserdefault.c:1589
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, қайда: %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1737
+#: ../gtk/gtkfilechooserdefault.c:1738
 msgid "Search"
 msgstr "Іздеу"
 
-#: ../gtk/gtkfilechooserdefault.c:1761
-#: ../gtk/gtkfilechooserdefault.c:4987
+#: ../gtk/gtkfilechooserdefault.c:1762
+#: ../gtk/gtkfilechooserdefault.c:4988
 msgid "Recently Used"
 msgstr "Соңғы қолданылған"
 
-#: ../gtk/gtkfilechooserdefault.c:2360
+#: ../gtk/gtkfilechooserdefault.c:2361
 msgid "Select which types of files are shown"
 msgstr "Файлдардың қай түрлері көрсетілетінін таңдаңыз"
 
-#: ../gtk/gtkfilechooserdefault.c:2719
+#: ../gtk/gtkfilechooserdefault.c:2720
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' бумасын бетбелгілерге қосу"
 
-#: ../gtk/gtkfilechooserdefault.c:2763
+#: ../gtk/gtkfilechooserdefault.c:2764
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Ағымдағы буманы бетбелгілерге қосу"
 
-#: ../gtk/gtkfilechooserdefault.c:2765
+#: ../gtk/gtkfilechooserdefault.c:2766
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Таңдалған бумаларды бетбелгілерге қосу"
 
-#: ../gtk/gtkfilechooserdefault.c:2803
+#: ../gtk/gtkfilechooserdefault.c:2804
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' бетбелгісін өшіру"
 
-#: ../gtk/gtkfilechooserdefault.c:2805
+#: ../gtk/gtkfilechooserdefault.c:2806
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "'%s' бетбелгісін өшіру мүмкін емес"
 
-#: ../gtk/gtkfilechooserdefault.c:2812
-#: ../gtk/gtkfilechooserdefault.c:3698
+#: ../gtk/gtkfilechooserdefault.c:2813
+#: ../gtk/gtkfilechooserdefault.c:3699
 msgid "Remove the selected bookmark"
 msgstr "Таңдалған бетбелгіні өшіру"
 
-#: ../gtk/gtkfilechooserdefault.c:3376
+#: ../gtk/gtkfilechooserdefault.c:3377
 msgid "Remove"
 msgstr "Өшіру"
 
-#: ../gtk/gtkfilechooserdefault.c:3385
+#: ../gtk/gtkfilechooserdefault.c:3386
 msgid "Rename..."
 msgstr "Атын ауыстыру..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3549
+#: ../gtk/gtkfilechooserdefault.c:3550
 msgid "Places"
 msgstr "Орындар"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3606
+#: ../gtk/gtkfilechooserdefault.c:3607
 msgid "_Places"
 msgstr "Орын_дар"
 
-#: ../gtk/gtkfilechooserdefault.c:3686
+#: ../gtk/gtkfilechooserdefault.c:3687
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Таңдалған буманы бетбелгілерге қосу"
 
-#: ../gtk/gtkfilechooserdefault.c:3947
+#: ../gtk/gtkfilechooserdefault.c:3948
 msgid "Could not select file"
 msgstr "Файлды таңдау мүмкін емес"
 
-#: ../gtk/gtkfilechooserdefault.c:4172
+#: ../gtk/gtkfilechooserdefault.c:4173
 msgid "_Visit this file"
 msgstr "Бұл файлға _бару"
 
-#: ../gtk/gtkfilechooserdefault.c:4175
+#: ../gtk/gtkfilechooserdefault.c:4176
 msgid "_Copy file's location"
 msgstr "Ф_айл адресін көшіру"
 
-#: ../gtk/gtkfilechooserdefault.c:4178
+#: ../gtk/gtkfilechooserdefault.c:4179
 msgid "_Add to Bookmarks"
 msgstr "Б_етбелгілерге қосу"
 
-#: ../gtk/gtkfilechooserdefault.c:4185
+#: ../gtk/gtkfilechooserdefault.c:4186
 msgid "Show _Hidden Files"
 msgstr "Жас_ырын файлдарды көрсету"
 
-#: ../gtk/gtkfilechooserdefault.c:4188
+#: ../gtk/gtkfilechooserdefault.c:4189
 msgid "Show _Size Column"
 msgstr "Ө_лшем бағанын көрсету"
 
-#: ../gtk/gtkfilechooserdefault.c:4413
+#: ../gtk/gtkfilechooserdefault.c:4414
 msgid "Files"
 msgstr "Файлдар"
 
-#: ../gtk/gtkfilechooserdefault.c:4464
+#: ../gtk/gtkfilechooserdefault.c:4465
 msgid "Name"
 msgstr "Аты"
 
-#: ../gtk/gtkfilechooserdefault.c:4487
+#: ../gtk/gtkfilechooserdefault.c:4488
 msgid "Size"
 msgstr "Өлшемі"
 
-#: ../gtk/gtkfilechooserdefault.c:4501
+#: ../gtk/gtkfilechooserdefault.c:4502
 msgid "Modified"
 msgstr "Өзгертілген"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4594
-#: ../gtk/gtkprinteroptionwidget.c:837
+#: ../gtk/gtkfilechooserdefault.c:4595
+#: ../gtk/gtkprinteroptionwidget.c:835
 msgid "_Name:"
 msgstr "_Аты:"
 
-#: ../gtk/gtkfilechooserdefault.c:4825
+#: ../gtk/gtkfilechooserdefault.c:4826
 msgid "Type a file name"
 msgstr "Файл атын енгізіңіз"
 
-#: ../gtk/gtkfilechooserdefault.c:4872
-#: ../gtk/gtkfilechooserdefault.c:4883
+#: ../gtk/gtkfilechooserdefault.c:4873
+#: ../gtk/gtkfilechooserdefault.c:4884
 msgid "Please select a folder below"
 msgstr "Буманы тандаңыз"
 
-#: ../gtk/gtkfilechooserdefault.c:4878
+#: ../gtk/gtkfilechooserdefault.c:4879
 msgid "Please type a file name"
 msgstr "Файл атын енгізіңіз"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4949
+#: ../gtk/gtkfilechooserdefault.c:4950
 msgid "Create Fo_lder"
 msgstr "Бу_маны жасау"
 
-#: ../gtk/gtkfilechooserdefault.c:4997
+#: ../gtk/gtkfilechooserdefault.c:4998
 msgid "Search:"
 msgstr "Іздеу:"
 
-#: ../gtk/gtkfilechooserdefault.c:5048
+#: ../gtk/gtkfilechooserdefault.c:5049
 msgid "_Location:"
 msgstr "Ор_наласуы:"
 
-#: ../gtk/gtkfilechooserdefault.c:5499
+#: ../gtk/gtkfilechooserdefault.c:5500
 msgid "Save in _folder:"
 msgstr "Бу_маға сақтау:"
 
-#: ../gtk/gtkfilechooserdefault.c:5501
+#: ../gtk/gtkfilechooserdefault.c:5502
 msgid "Create in _folder:"
 msgstr "Бума_да жасау:"
 
-#: ../gtk/gtkfilechooserdefault.c:6595
+#: ../gtk/gtkfilechooserdefault.c:6589
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s құрамасын оқу мүмкін емес"
 
-#: ../gtk/gtkfilechooserdefault.c:6599
+#: ../gtk/gtkfilechooserdefault.c:6593
 msgid "Could not read the contents of the folder"
 msgstr "Бума құрамасын оқу мүмкін емес"
 
-#: ../gtk/gtkfilechooserdefault.c:6692
-#: ../gtk/gtkfilechooserdefault.c:6760
-#: ../gtk/gtkfilechooserdefault.c:6912
+#: ../gtk/gtkfilechooserdefault.c:6686
+#: ../gtk/gtkfilechooserdefault.c:6754
+#: ../gtk/gtkfilechooserdefault.c:6934
 msgid "Unknown"
 msgstr "Белгісіз"
 
-#: ../gtk/gtkfilechooserdefault.c:6707
+#: ../gtk/gtkfilechooserdefault.c:6701
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6709
+#: ../gtk/gtkfilechooserdefault.c:6703
 msgid "Yesterday at %H:%M"
 msgstr "Кеше, уақыты %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7383
+#: ../gtk/gtkfilechooserdefault.c:7405
 msgid "Cannot change to folder because it is not local"
 msgstr "Бумаға ауысу мүмкін емес, өйткені ол жергілікті емес"
 
-#: ../gtk/gtkfilechooserdefault.c:7984
-#: ../gtk/gtkfilechooserdefault.c:8005
+#: ../gtk/gtkfilechooserdefault.c:8009
+#: ../gtk/gtkfilechooserdefault.c:8030
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s жарлығы бар болып тұр"
 
-#: ../gtk/gtkfilechooserdefault.c:8095
+#: ../gtk/gtkfilechooserdefault.c:8120
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s жарлығы жоқ болып тұр"
 
-#: ../gtk/gtkfilechooserdefault.c:8341
-#: ../gtk/gtkprintunixdialog.c:550
+#: ../gtk/gtkfilechooserdefault.c:8366
+#: ../gtk/gtkprintunixdialog.c:548
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" аты бар файл бар болып тұр. Оны алмастыруды қалайсыз ба?"
 
-#: ../gtk/gtkfilechooserdefault.c:8344
-#: ../gtk/gtkprintunixdialog.c:554
+#: ../gtk/gtkfilechooserdefault.c:8369
+#: ../gtk/gtkprintunixdialog.c:552
 #, c-format
 msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Файл \"%s\" ішінде бар болып тұр.  Оны алмастыру нітижесінде құрамасы үстінен жазылады."
 
-#: ../gtk/gtkfilechooserdefault.c:8349
-#: ../gtk/gtkprintunixdialog.c:561
+#: ../gtk/gtkfilechooserdefault.c:8374
+#: ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
 msgstr "А_лмастыру"
 
-#: ../gtk/gtkfilechooserdefault.c:9156
+#: ../gtk/gtkfilechooserdefault.c:9181
 msgid "Could not start the search process"
 msgstr "Іздеу үрдісін бастау мүмкін емес"
 
-#: ../gtk/gtkfilechooserdefault.c:9157
+#: ../gtk/gtkfilechooserdefault.c:9182
 msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
 msgstr "Индекстеу қызметімен байланыс орнату мүмкін емес. Оның қосулы тұрғанын тексеріңіз."
 
-#: ../gtk/gtkfilechooserdefault.c:9171
+#: ../gtk/gtkfilechooserdefault.c:9196
 msgid "Could not send the search request"
 msgstr "Іздеу сұранымын жіберу мүмкін емес"
 
-#: ../gtk/gtkfilechooserdefault.c:9772
+#: ../gtk/gtkfilechooserdefault.c:9806
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s тіркеу мүмкін емес"
@@ -1713,91 +1690,141 @@ msgstr "%s тіркеу мүмкін емес"
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: ../gtk/gtkfilesystem.c:48
+#: ../gtk/gtkfilesystem.c:47
 msgid "File System"
 msgstr "Файлдық жүйе"
 
-#: ../gtk/gtkfontbutton.c:355
+#: ../gtk/gtkfontbutton.c:354
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:437
-#: ../gtk/gtkfontbutton.c:564
+#: ../gtk/gtkfontbutton.c:436
+#: ../gtk/gtkfontbutton.c:563
 msgid "Pick a Font"
 msgstr "Қаріпті таңдаңыз"
 
-#: ../gtk/gtkfontbutton.c:1122
+#: ../gtk/gtkfontbutton.c:1121
 msgid "Font"
 msgstr "Қаріп"
 
-#: ../gtk/gtkfontchooserwidget.c:113
+#: ../gtk/gtkfontchooserwidget.c:110
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr "Сұранымға сай қаріптер табылмады. Сұранымды өзгертіп, қайталап көріңіз."
 
-#: ../gtk/gtkfontchooserwidget.c:612
+#: ../gtk/gtkfontchooserwidget.c:557
 msgid "Search font name"
 msgstr "Қаріп атынан іздеу"
 
-#: ../gtk/gtkfontchooserwidget.c:948
+#: ../gtk/gtkfontchooserwidget.c:891
 msgid "Font Family"
 msgstr "Қаріптер отбасы"
 
-#: ../gtk/gtkicontheme.c:1611
+#: ../gtk/gtkicontheme.c:1627
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "'%s' таңбашасы темада жоқ"
 
-#: ../gtk/gtkicontheme.c:3119
+#: ../gtk/gtkicontheme.c:3137
 msgid "Failed to load icon"
 msgstr "Таңбашаны жүктеу сәтсіз"
 
-#: ../gtk/gtkimmodule.c:517
+#: ../gtk/gtkimmodule.c:515
 msgid "Simple"
 msgstr "Қарапайым"
 
-#: ../gtk/gtkimmulticontext.c:604
+#: ../gtk/gtkimmulticontext.c:600
 msgctxt "input method menu"
 msgid "System"
 msgstr "Жүйе"
 
-#: ../gtk/gtkimmulticontext.c:614
+#: ../gtk/gtkimmulticontext.c:610
 msgctxt "input method menu"
 msgid "None"
 msgstr "Жоқ"
 
-#: ../gtk/gtkimmulticontext.c:697
+#: ../gtk/gtkimmulticontext.c:693
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Жүйе (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6215
+#: ../gtk/gtklabel.c:6224
 msgid "_Open Link"
 msgstr "Сі_лтемені ашу"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6227
+#: ../gtk/gtklabel.c:6236
 msgid "Copy _Link Address"
 msgstr "Сілтеме адр_есін көшіру"
 
-#: ../gtk/gtklinkbutton.c:500
+#: ../gtk/gtk-launch.c:69
+msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
+msgstr "ҚОЛДАНБА [URI...] - ҚОЛДАНБАны URI-мен жөнелту."
+
+#. Translators: this message will appear after the usage string
+#. and before the list of options.
+#: ../gtk/gtk-launch.c:73
+msgid ""
+"Launch specified application by its desktop file info\n"
+"optionally passing list of URIs as arguments."
+msgstr ""
+"Көрсетілген қолданбаны оның  desktop файлы ақпаратымен\n"
+"жөнелту, қосымша түрде аргументтер ретінде URI тізімін беру."
+
+#: ../gtk/gtk-launch.c:85
+#, c-format
+#| msgid "Error loading icon: %s"
+msgid "Error parsing commandline options: %s\n"
+msgstr "Командалық жол опцияларын талдау қатесі: %s\n"
+
+#: ../gtk/gtk-launch.c:87
+#: ../gtk/gtk-launch.c:100
+#, c-format
+msgid "Try \"%s --help\" for more information."
+msgstr "Көбірек білу үшін \"%s --help\" көріңіз."
+
+#. Translators: the %s is the program name. This error message
+#. means the user is calling gtk-launch without any argument.
+#: ../gtk/gtk-launch.c:98
+#, c-format
+#| msgid "Find applications online"
+msgid "%s: missing application name"
+msgstr "%s:  қолданба аты жоқ"
+
+#. Translators: the first %s is the program name, the second one
+#. is the application name.
+#: ../gtk/gtk-launch.c:122
+#, c-format
+#| msgid "Could not run application"
+msgid "%s: no such application %s"
+msgstr "%s: ондай қолданба жоқ %s"
+
+#. Translators: the first %s is the program name, the second one
+#. is the error message.
+#: ../gtk/gtk-launch.c:140
+#, c-format
+#| msgid "Error loading icon: %s"
+msgid "%s: error launching application: %s\n"
+msgstr "%s: қолданбаны жөнелту қатесі: %s\n"
+
+#: ../gtk/gtklinkbutton.c:499
 msgid "Copy URL"
 msgstr "URL көшіру"
 
-#: ../gtk/gtklinkbutton.c:663
+#: ../gtk/gtklinkbutton.c:665
 msgid "Invalid URI"
 msgstr "URI қате"
 
-#: ../gtk/gtklockbutton.c:288
+#: ../gtk/gtklockbutton.c:290
 msgid "Lock"
 msgstr "Блоктау"
 
-#: ../gtk/gtklockbutton.c:297
+#: ../gtk/gtklockbutton.c:299
 msgid "Unlock"
 msgstr "Босату"
 
-#: ../gtk/gtklockbutton.c:306
+#: ../gtk/gtklockbutton.c:308
 msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
@@ -1805,7 +1832,7 @@ msgstr ""
 "Сұхбат блокталмаған.\n"
 "Кейінгі өзгерістерді болдырмау үшін шертіңіз"
 
-#: ../gtk/gtklockbutton.c:315
+#: ../gtk/gtklockbutton.c:317
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
@@ -1813,7 +1840,7 @@ msgstr ""
 "Сұхбат блокталған.\n"
 "Өзгерістер жасау үшін шертіңіз"
 
-#: ../gtk/gtklockbutton.c:324
+#: ../gtk/gtklockbutton.c:326
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
@@ -1822,27 +1849,27 @@ msgstr ""
 "Жүйелік әкімшіге хабарласыңыз"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:446
 msgid "Load additional GTK+ modules"
 msgstr "Қосымша GTK+ модульдерін жүктеу"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:447
 msgid "MODULES"
 msgstr "МОДУЛЬДЕР"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:449
 msgid "Make all warnings fatal"
 msgstr "Барлық ескертулерді қатаң деп белгілеу"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:452
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ жөндеу жалаушалары орнатылған"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:455
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ жөндеу жалаушалары орнатылмаған"
 
@@ -1851,105 +1878,105 @@ msgstr "GTK+ жөндеу жалаушалары орнатылмаған"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:707
+#: ../gtk/gtkmain.c:706
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:775
+#: ../gtk/gtkmain.c:774
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Экранды ашу мүмкін емес: %s"
 
-#: ../gtk/gtkmain.c:841
+#: ../gtk/gtkmain.c:840
 msgid "GTK+ Options"
 msgstr "GTK+ опциялары"
 
-#: ../gtk/gtkmain.c:841
+#: ../gtk/gtkmain.c:840
 msgid "Show GTK+ Options"
 msgstr "GTK+ опцияларын көрсету"
 
-#: ../gtk/gtkmountoperation.c:486
+#: ../gtk/gtkmountoperation.c:518
 msgid "Co_nnect"
 msgstr "Ба_йланыс орнату"
 
-#: ../gtk/gtkmountoperation.c:556
+#: ../gtk/gtkmountoperation.c:588
 msgid "Connect _anonymously"
 msgstr "Анон_имды байланыс орнату"
 
-#: ../gtk/gtkmountoperation.c:565
+#: ../gtk/gtkmountoperation.c:597
 msgid "Connect as u_ser:"
 msgstr "_Пайдаланушы ретінде байланыс орнату:"
 
-#: ../gtk/gtkmountoperation.c:599
+#: ../gtk/gtkmountoperation.c:632
 msgid "_Username:"
 msgstr "_Пайдаланушы аты:"
 
-#: ../gtk/gtkmountoperation.c:604
+#: ../gtk/gtkmountoperation.c:637
 msgid "_Domain:"
 msgstr "До_мен:"
 
-#: ../gtk/gtkmountoperation.c:610
+#: ../gtk/gtkmountoperation.c:643
 msgid "_Password:"
 msgstr "_Пароль:"
 
-#: ../gtk/gtkmountoperation.c:628
+#: ../gtk/gtkmountoperation.c:661
 msgid "Forget password _immediately"
 msgstr "Парольді _көп ұзамай ұмыту"
 
-#: ../gtk/gtkmountoperation.c:638
+#: ../gtk/gtkmountoperation.c:671
 msgid "Remember password until you _logout"
 msgstr "Шыққаныңызға д_ейін парольді есте сақтау"
 
-#: ../gtk/gtkmountoperation.c:648
+#: ../gtk/gtkmountoperation.c:681
 msgid "Remember _forever"
 msgstr "Әрқаша_нға есте сақтау"
 
-#: ../gtk/gtkmountoperation.c:877
+#: ../gtk/gtkmountoperation.c:1070
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Белгісіз қолданба (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1060
+#: ../gtk/gtkmountoperation.c:1253
 msgid "Unable to end process"
 msgstr "Үрдісті аяқтау мүмкін емес"
 
-#: ../gtk/gtkmountoperation.c:1097
+#: ../gtk/gtkmountoperation.c:1290
 msgid "_End Process"
 msgstr "Үрдіс_ті аяқтау "
 
-#: ../gtk/gtkmountoperation-stub.c:64
+#: ../gtk/gtkmountoperation-stub.c:62
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "PID %d бар үрдісті өлтіру мүмкін емес. Әрекет іске асырылмаған."
 
 #. translators: this string is a name for the 'less' command
-#: ../gtk/gtkmountoperation-x11.c:956
+#: ../gtk/gtkmountoperation-x11.c:954
 msgid "Terminal Pager"
 msgstr "Терминалды пейджер"
 
-#: ../gtk/gtkmountoperation-x11.c:957
+#: ../gtk/gtkmountoperation-x11.c:955
 msgid "Top Command"
 msgstr "Top командасы"
 
-#: ../gtk/gtkmountoperation-x11.c:958
+#: ../gtk/gtkmountoperation-x11.c:956
 msgid "Bourne Again Shell"
 msgstr "Bourne Again қошамы"
 
-#: ../gtk/gtkmountoperation-x11.c:959
+#: ../gtk/gtkmountoperation-x11.c:957
 msgid "Bourne Shell"
 msgstr "Bourne қоршамы"
 
-#: ../gtk/gtkmountoperation-x11.c:960
+#: ../gtk/gtkmountoperation-x11.c:958
 msgid "Z Shell"
 msgstr "Z қоршамы"
 
-#: ../gtk/gtkmountoperation-x11.c:1057
+#: ../gtk/gtkmountoperation-x11.c:1055
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "PID %d бар үрдісті аяқтау мүмкін емес: %s"
 
-#: ../gtk/gtknotebook.c:5036
-#: ../gtk/gtknotebook.c:7690
+#: ../gtk/gtknotebook.c:5045
+#: ../gtk/gtknotebook.c:7699
 #, c-format
 msgid "Page %u"
 msgstr "Парақ %u"
@@ -1957,27 +1984,27 @@ msgstr "Парақ %u"
 #. Translators: the format here is used to build the string that will be rendered
 #. * in the number emblem.
 #.
-#: ../gtk/gtknumerableicon.c:482
+#: ../gtk/gtknumerableicon.c:481
 #, c-format
 msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
 
-#: ../gtk/gtkpagesetup.c:648
-#: ../gtk/gtkpapersize.c:848
-#: ../gtk/gtkpapersize.c:888
+#: ../gtk/gtkpagesetup.c:646
+#: ../gtk/gtkpapersize.c:846
+#: ../gtk/gtkpapersize.c:886
 msgid "Not a valid page setup file"
 msgstr "Баспағы шығару баптаулары бар қате файл"
 
-#: ../gtk/gtkpagesetupunixdialog.c:169
+#: ../gtk/gtkpagesetupunixdialog.c:167
 msgid "Any Printer"
 msgstr "Кез-келген принтер"
 
-#: ../gtk/gtkpagesetupunixdialog.c:169
+#: ../gtk/gtkpagesetupunixdialog.c:167
 msgid "For portable documents"
 msgstr "Тасымалы құжаттар үшін"
 
-#: ../gtk/gtkpagesetupunixdialog.c:798
+#: ../gtk/gtkpagesetupunixdialog.c:796
 #, c-format
 msgid ""
 "Margins:\n"
@@ -1992,54 +2019,54 @@ msgstr ""
 " Үсті: %s %s\n"
 " Асты: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:847
-#: ../gtk/gtkprintunixdialog.c:3376
+#: ../gtk/gtkpagesetupunixdialog.c:845
+#: ../gtk/gtkprintunixdialog.c:3318
 msgid "Manage Custom Sizes..."
 msgstr "Таңдауыңызша өлшемдерді басқару..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:898
+#: ../gtk/gtkpagesetupunixdialog.c:896
 msgid "_Format for:"
 msgstr "Ү_шін пішімдеу:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:919
-#: ../gtk/gtkprintunixdialog.c:3524
+#: ../gtk/gtkpagesetupunixdialog.c:917
+#: ../gtk/gtkprintunixdialog.c:3466
 msgid "_Paper size:"
 msgstr "Қағаз өл_шемі:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:948
+#: ../gtk/gtkpagesetupunixdialog.c:946
 msgid "_Orientation:"
 msgstr "Бағдар_ы:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1008
-#: ../gtk/gtkprintunixdialog.c:3579
+#: ../gtk/gtkpagesetupunixdialog.c:1006
+#: ../gtk/gtkprintunixdialog.c:3520
 msgid "Page Setup"
 msgstr "Парақ баптаулары"
 
-#: ../gtk/gtkpathbar.c:158
+#: ../gtk/gtkpathbar.c:159
 msgid "Up Path"
 msgstr "Ағашпен жоғары"
 
-#: ../gtk/gtkpathbar.c:160
+#: ../gtk/gtkpathbar.c:161
 msgid "Down Path"
 msgstr "Ағашпен төмен"
 
-#: ../gtk/gtkpathbar.c:1621
+#: ../gtk/gtkpathbar.c:1644
 msgid "File System Root"
 msgstr "Файлдық жүйенің түбірі"
 
-#: ../gtk/gtkprintbackend.c:750
+#: ../gtk/gtkprintbackend.c:748
 msgid "Authentication"
 msgstr "Аутентификация"
 
-#: ../gtk/gtkprinteroptionwidget.c:730
+#: ../gtk/gtkprinteroptionwidget.c:728
 msgid "Not available"
 msgstr "Қол жетерлік емес"
 
-#: ../gtk/gtkprinteroptionwidget.c:830
+#: ../gtk/gtkprinteroptionwidget.c:828
 msgid "Select a folder"
 msgstr "Буманы тандаңыз"
 
-#: ../gtk/gtkprinteroptionwidget.c:845
+#: ../gtk/gtkprinteroptionwidget.c:843
 msgid "_Save in folder:"
 msgstr "Бу_мада сақтау:"
 
@@ -2047,183 +2074,183 @@ msgstr "Бу_мада сақтау:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: ../gtk/gtkprintoperation.c:262
+#: ../gtk/gtkprintoperation.c:260
 #, c-format
 msgid "%s job #%d"
 msgstr "%s тапсырма #%d"
 
-#: ../gtk/gtkprintoperation.c:1779
+#: ../gtk/gtkprintoperation.c:1777
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Бастапқы күйі"
 
-#: ../gtk/gtkprintoperation.c:1780
+#: ../gtk/gtkprintoperation.c:1778
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Баспаға шығаруды дайындау"
 
-#: ../gtk/gtkprintoperation.c:1781
+#: ../gtk/gtkprintoperation.c:1779
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Мәліметті жасау"
 
-#: ../gtk/gtkprintoperation.c:1782
+#: ../gtk/gtkprintoperation.c:1780
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Ақпарат жіберілуде"
 
-#: ../gtk/gtkprintoperation.c:1783
+#: ../gtk/gtkprintoperation.c:1781
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Күту"
 
-#: ../gtk/gtkprintoperation.c:1784
+#: ../gtk/gtkprintoperation.c:1782
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Қате салдарынан тоқтатылған"
 
-#: ../gtk/gtkprintoperation.c:1785
+#: ../gtk/gtkprintoperation.c:1783
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Баспаға шығару"
 
-#: ../gtk/gtkprintoperation.c:1786
+#: ../gtk/gtkprintoperation.c:1784
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Аяқталған"
 
-#: ../gtk/gtkprintoperation.c:1787
+#: ../gtk/gtkprintoperation.c:1785
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Қатемен аяқталды"
 
-#: ../gtk/gtkprintoperation.c:2354
+#: ../gtk/gtkprintoperation.c:2352
 #, c-format
 msgid "Preparing %d"
 msgstr "Дайындау %d"
 
-#: ../gtk/gtkprintoperation.c:2356
-#: ../gtk/gtkprintoperation.c:2986
+#: ../gtk/gtkprintoperation.c:2354
+#: ../gtk/gtkprintoperation.c:2984
 msgid "Preparing"
 msgstr "Дайындау"
 
-#: ../gtk/gtkprintoperation.c:2359
+#: ../gtk/gtkprintoperation.c:2357
 #, c-format
 msgid "Printing %d"
 msgstr "Баспаға шығару %d"
 
-#: ../gtk/gtkprintoperation.c:3016
+#: ../gtk/gtkprintoperation.c:3014
 msgid "Error creating print preview"
 msgstr "Баспаға шығарудың алдын-ала қарауды жасау қатесі"
 
-#: ../gtk/gtkprintoperation.c:3019
+#: ../gtk/gtkprintoperation.c:3017
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Ең мүмкін болған себебі - уақытша файлды жасай алмауы."
 
-#: ../gtk/gtkprintoperation-unix.c:304
+#: ../gtk/gtkprintoperation-unix.c:302
 msgid "Error launching preview"
 msgstr "Алдын-ала қарауды жөнелту қатесі"
 
-#: ../gtk/gtkprintoperation-win32.c:611
+#: ../gtk/gtkprintoperation-win32.c:609
 msgid "Printer offline"
 msgstr "Принтер қосылмаған"
 
-#: ../gtk/gtkprintoperation-win32.c:613
+#: ../gtk/gtkprintoperation-win32.c:611
 msgid "Out of paper"
 msgstr "Қағаз бітті"
 
 #. Translators: this is a printer status.
-#: ../gtk/gtkprintoperation-win32.c:615
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2087
+#: ../gtk/gtkprintoperation-win32.c:613
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2126
 msgid "Paused"
 msgstr "Аялдатылған"
 
-#: ../gtk/gtkprintoperation-win32.c:617
+#: ../gtk/gtkprintoperation-win32.c:615
 msgid "Need user intervention"
 msgstr "Пайдаланушының қатысуы керек"
 
-#: ../gtk/gtkprintoperation-win32.c:717
+#: ../gtk/gtkprintoperation-win32.c:715
 msgid "Custom size"
 msgstr "Таңдауыңызша өлшем"
 
-#: ../gtk/gtkprintoperation-win32.c:1539
+#: ../gtk/gtkprintoperation-win32.c:1537
 msgid "No printer found"
 msgstr "Принтер табылмады"
 
-#: ../gtk/gtkprintoperation-win32.c:1566
+#: ../gtk/gtkprintoperation-win32.c:1564
 msgid "Invalid argument to CreateDC"
 msgstr "CreateDC үшін қате аргумент"
 
-#: ../gtk/gtkprintoperation-win32.c:1602
-#: ../gtk/gtkprintoperation-win32.c:1829
+#: ../gtk/gtkprintoperation-win32.c:1600
+#: ../gtk/gtkprintoperation-win32.c:1827
 msgid "Error from StartDoc"
 msgstr "StartDoc-тан қате"
 
-#: ../gtk/gtkprintoperation-win32.c:1684
-#: ../gtk/gtkprintoperation-win32.c:1707
-#: ../gtk/gtkprintoperation-win32.c:1755
+#: ../gtk/gtkprintoperation-win32.c:1682
+#: ../gtk/gtkprintoperation-win32.c:1705
+#: ../gtk/gtkprintoperation-win32.c:1753
 msgid "Not enough free memory"
 msgstr "Бос жады жеткіліксіз"
 
-#: ../gtk/gtkprintoperation-win32.c:1760
+#: ../gtk/gtkprintoperation-win32.c:1758
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx үшін қате аргумент"
 
-#: ../gtk/gtkprintoperation-win32.c:1765
+#: ../gtk/gtkprintoperation-win32.c:1763
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx үшін қате сілтегіш"
 
-#: ../gtk/gtkprintoperation-win32.c:1770
+#: ../gtk/gtkprintoperation-win32.c:1768
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx үшін қате дескриптор"
 
-#: ../gtk/gtkprintoperation-win32.c:1775
+#: ../gtk/gtkprintoperation-win32.c:1773
 msgid "Unspecified error"
 msgstr "Көрсетілмеген қате"
 
-#: ../gtk/gtkprintunixdialog.c:688
+#: ../gtk/gtkprintunixdialog.c:681
 msgid "Getting printer information failed"
 msgstr "Принтер ақпаратын алу сәтсіз"
 
-#: ../gtk/gtkprintunixdialog.c:1961
+#: ../gtk/gtkprintunixdialog.c:1905
 msgid "Getting printer information..."
 msgstr "Принтер ақпаратын алу..."
 
-#: ../gtk/gtkprintunixdialog.c:2235
+#: ../gtk/gtkprintunixdialog.c:2173
 msgid "Printer"
 msgstr "Принтер"
 
 #. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2245
+#: ../gtk/gtkprintunixdialog.c:2183
 msgid "Location"
 msgstr "Орналасуы"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2256
+#: ../gtk/gtkprintunixdialog.c:2194
 msgid "Status"
 msgstr "Күйі"
 
-#: ../gtk/gtkprintunixdialog.c:2282
+#: ../gtk/gtkprintunixdialog.c:2220
 msgid "Range"
 msgstr "Диапазон"
 
-#: ../gtk/gtkprintunixdialog.c:2286
+#: ../gtk/gtkprintunixdialog.c:2224
 msgid "_All Pages"
 msgstr "Барл_ық парақтар"
 
-#: ../gtk/gtkprintunixdialog.c:2291
+#: ../gtk/gtkprintunixdialog.c:2229
 msgid "C_urrent Page"
 msgstr "Ағ_ымдағы парақ"
 
-#: ../gtk/gtkprintunixdialog.c:2299
+#: ../gtk/gtkprintunixdialog.c:2237
 msgid "Se_lection"
 msgstr "Таң_далғанды"
 
-#: ../gtk/gtkprintunixdialog.c:2305
+#: ../gtk/gtkprintunixdialog.c:2243
 msgid "Pag_es:"
 msgstr "Парақ_тар:"
 
-#: ../gtk/gtkprintunixdialog.c:2306
+#: ../gtk/gtkprintunixdialog.c:2244
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2231,28 +2258,28 @@ msgstr ""
 "Бір не бірнеше аралықты көрсетіңіз,\n"
 " мыс. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:2315
+#: ../gtk/gtkprintunixdialog.c:2253
 msgid "Pages"
 msgstr "Парақтар"
 
-#: ../gtk/gtkprintunixdialog.c:2326
+#: ../gtk/gtkprintunixdialog.c:2264
 msgid "Copies"
 msgstr "Көшірмелер"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2331
+#: ../gtk/gtkprintunixdialog.c:2269
 msgid "Copie_s:"
 msgstr "Кө_шірмелер саны:"
 
-#: ../gtk/gtkprintunixdialog.c:2347
+#: ../gtk/gtkprintunixdialog.c:2285
 msgid "C_ollate"
 msgstr "Ж_инау"
 
-#: ../gtk/gtkprintunixdialog.c:2353
+#: ../gtk/gtkprintunixdialog.c:2291
 msgid "_Reverse"
 msgstr "К_ері"
 
-#: ../gtk/gtkprintunixdialog.c:2369
+#: ../gtk/gtkprintunixdialog.c:2307
 msgid "General"
 msgstr "Жалпы"
 
@@ -2262,169 +2289,169 @@ msgstr "Жалпы"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3109
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3647
+#: ../gtk/gtkprintunixdialog.c:3047
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
 msgid "Left to right, top to bottom"
 msgstr "Солдан оңға, үстінен астыға"
 
-#: ../gtk/gtkprintunixdialog.c:3109
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3647
+#: ../gtk/gtkprintunixdialog.c:3047
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
 msgid "Left to right, bottom to top"
 msgstr "Солдан оңға, астынан үстіге"
 
-#: ../gtk/gtkprintunixdialog.c:3110
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3648
+#: ../gtk/gtkprintunixdialog.c:3048
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Right to left, top to bottom"
 msgstr "Оңнан солға, үстінен астыға"
 
-#: ../gtk/gtkprintunixdialog.c:3110
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3648
+#: ../gtk/gtkprintunixdialog.c:3048
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Right to left, bottom to top"
 msgstr "Оңнан солға, астынан үстіге"
 
-#: ../gtk/gtkprintunixdialog.c:3111
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3649
+#: ../gtk/gtkprintunixdialog.c:3049
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
 msgid "Top to bottom, left to right"
 msgstr "Үстінен астыға, солдан оңға"
 
-#: ../gtk/gtkprintunixdialog.c:3111
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3649
+#: ../gtk/gtkprintunixdialog.c:3049
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
 msgid "Top to bottom, right to left"
 msgstr "Үстінен астыға, оңнан солға"
 
-#: ../gtk/gtkprintunixdialog.c:3112
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3650
+#: ../gtk/gtkprintunixdialog.c:3050
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
 msgid "Bottom to top, left to right"
 msgstr "Астынан үстіге, солдан оңға"
 
-#: ../gtk/gtkprintunixdialog.c:3112
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3650
+#: ../gtk/gtkprintunixdialog.c:3050
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
 msgid "Bottom to top, right to left"
 msgstr "Астынан үстіге, оңнан солға"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3116
-#: ../gtk/gtkprintunixdialog.c:3129
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3684
+#: ../gtk/gtkprintunixdialog.c:3054
+#: ../gtk/gtkprintunixdialog.c:3067
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3766
 msgid "Page Ordering"
 msgstr "Парақтар реті"
 
-#: ../gtk/gtkprintunixdialog.c:3145
+#: ../gtk/gtkprintunixdialog.c:3083
 msgid "Left to right"
 msgstr "Солдан оңға"
 
-#: ../gtk/gtkprintunixdialog.c:3146
+#: ../gtk/gtkprintunixdialog.c:3084
 msgid "Right to left"
 msgstr "Оңнан солға"
 
-#: ../gtk/gtkprintunixdialog.c:3158
+#: ../gtk/gtkprintunixdialog.c:3096
 msgid "Top to bottom"
 msgstr "Үстінен астыға"
 
-#: ../gtk/gtkprintunixdialog.c:3159
+#: ../gtk/gtkprintunixdialog.c:3097
 msgid "Bottom to top"
 msgstr "Астынан үстіге"
 
-#: ../gtk/gtkprintunixdialog.c:3399
+#: ../gtk/gtkprintunixdialog.c:3341
 msgid "Layout"
 msgstr "Жайма"
 
-#: ../gtk/gtkprintunixdialog.c:3403
+#: ../gtk/gtkprintunixdialog.c:3345
 msgid "T_wo-sided:"
 msgstr "Е_кі жақты:"
 
-#: ../gtk/gtkprintunixdialog.c:3415
+#: ../gtk/gtkprintunixdialog.c:3357
 msgid "Pages per _side:"
 msgstr "Бір жақ_тағы парақтар:"
 
-#: ../gtk/gtkprintunixdialog.c:3429
+#: ../gtk/gtkprintunixdialog.c:3371
 msgid "Page or_dering:"
 msgstr "Парақт_ар реті:"
 
-#: ../gtk/gtkprintunixdialog.c:3442
+#: ../gtk/gtkprintunixdialog.c:3384
 msgid "_Only print:"
 msgstr "Т_ек шығару:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3454
+#: ../gtk/gtkprintunixdialog.c:3396
 msgid "All sheets"
 msgstr "Барлық парақтар"
 
-#: ../gtk/gtkprintunixdialog.c:3455
+#: ../gtk/gtkprintunixdialog.c:3397
 msgid "Even sheets"
 msgstr "Жұп парақтар"
 
-#: ../gtk/gtkprintunixdialog.c:3456
+#: ../gtk/gtkprintunixdialog.c:3398
 msgid "Odd sheets"
 msgstr "Тақ парақтар"
 
-#: ../gtk/gtkprintunixdialog.c:3459
+#: ../gtk/gtkprintunixdialog.c:3401
 msgid "Sc_ale:"
 msgstr "Мас_штаб:"
 
-#: ../gtk/gtkprintunixdialog.c:3483
+#: ../gtk/gtkprintunixdialog.c:3425
 msgid "Paper"
 msgstr "Қағаз"
 
-#: ../gtk/gtkprintunixdialog.c:3487
+#: ../gtk/gtkprintunixdialog.c:3429
 msgid "Paper _type:"
 msgstr "Қаға_з түрі:"
 
-#: ../gtk/gtkprintunixdialog.c:3499
+#: ../gtk/gtkprintunixdialog.c:3441
 msgid "Paper _source:"
 msgstr "Қ_ағаз көзі:"
 
-#: ../gtk/gtkprintunixdialog.c:3511
+#: ../gtk/gtkprintunixdialog.c:3453
 msgid "Output t_ray:"
 msgstr "Шығ_ыс сөресі:"
 
-#: ../gtk/gtkprintunixdialog.c:3544
+#: ../gtk/gtkprintunixdialog.c:3486
 msgid "Or_ientation:"
 msgstr "_Бағдары:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3556
+#: ../gtk/gtkprintunixdialog.c:3498
 msgid "Portrait"
 msgstr "Тік"
 
-#: ../gtk/gtkprintunixdialog.c:3557
+#: ../gtk/gtkprintunixdialog.c:3499
 msgid "Landscape"
 msgstr "Жатық"
 
-#: ../gtk/gtkprintunixdialog.c:3558
+#: ../gtk/gtkprintunixdialog.c:3500
 msgid "Reverse portrait"
 msgstr "Теріс тік"
 
-#: ../gtk/gtkprintunixdialog.c:3559
+#: ../gtk/gtkprintunixdialog.c:3501
 msgid "Reverse landscape"
 msgstr "Теріс жатық"
 
-#: ../gtk/gtkprintunixdialog.c:3604
+#: ../gtk/gtkprintunixdialog.c:3545
 msgid "Job Details"
 msgstr "Тапсырма ақпараты"
 
-#: ../gtk/gtkprintunixdialog.c:3608
+#: ../gtk/gtkprintunixdialog.c:3549
 msgid "Pri_ority:"
 msgstr "Пр_иоритет:"
 
-#: ../gtk/gtkprintunixdialog.c:3620
+#: ../gtk/gtkprintunixdialog.c:3561
 msgid "_Billing info:"
 msgstr "_Орналасуы:"
 
-#: ../gtk/gtkprintunixdialog.c:3635
+#: ../gtk/gtkprintunixdialog.c:3576
 msgid "Print Document"
 msgstr "Құжатты баспаға шығару"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3642
+#: ../gtk/gtkprintunixdialog.c:3583
 msgid "_Now"
 msgstr "Қ_азір"
 
-#: ../gtk/gtkprintunixdialog.c:3651
+#: ../gtk/gtkprintunixdialog.c:3592
 msgid "A_t:"
 msgstr "Қа_шан:"
 
@@ -2432,7 +2459,7 @@ msgstr "Қа_шан:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: ../gtk/gtkprintunixdialog.c:3657
+#: ../gtk/gtkprintunixdialog.c:3598
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2440,106 +2467,106 @@ msgstr ""
 "Басып шығару уақытын көрсетіңіз,\n"
 " мысалы, 15:30, 14:15:20"
 
-#: ../gtk/gtkprintunixdialog.c:3665
+#: ../gtk/gtkprintunixdialog.c:3606
 msgid "Time of print"
 msgstr "Басып шығару уақыты"
 
-#: ../gtk/gtkprintunixdialog.c:3679
+#: ../gtk/gtkprintunixdialog.c:3620
 msgid "On _hold"
 msgstr "Кү_ту"
 
-#: ../gtk/gtkprintunixdialog.c:3680
+#: ../gtk/gtkprintunixdialog.c:3621
 msgid "Hold the job until it is explicitly released"
 msgstr "Қосымша команда берілгенге дейін тапсырманы күттіру"
 
-#: ../gtk/gtkprintunixdialog.c:3698
+#: ../gtk/gtkprintunixdialog.c:3639
 msgid "Add Cover Page"
 msgstr "Титулдық парақты қосу"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3705
+#: ../gtk/gtkprintunixdialog.c:3646
 msgid "Be_fore:"
 msgstr "Де_йін:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3720
+#: ../gtk/gtkprintunixdialog.c:3661
 msgid "_After:"
 msgstr "К_ейін:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3735
+#: ../gtk/gtkprintunixdialog.c:3676
 msgid "Job"
 msgstr "Тапсырма"
 
-#: ../gtk/gtkprintunixdialog.c:3801
+#: ../gtk/gtkprintunixdialog.c:3742
 msgid "Advanced"
 msgstr "Кеңейтілген"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3839
+#: ../gtk/gtkprintunixdialog.c:3780
 msgid "Image Quality"
 msgstr "Сурет сапасы"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3843
+#: ../gtk/gtkprintunixdialog.c:3784
 msgid "Color"
 msgstr "Түс"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3848
+#: ../gtk/gtkprintunixdialog.c:3789
 msgid "Finishing"
 msgstr "Аяқтау"
 
-#: ../gtk/gtkprintunixdialog.c:3858
+#: ../gtk/gtkprintunixdialog.c:3799
 msgid "Some of the settings in the dialog conflict"
 msgstr "Сұхбаттағы кейбір баптаулар өзара ерегіседі"
 
-#: ../gtk/gtkprintunixdialog.c:3881
+#: ../gtk/gtkprintunixdialog.c:3825
 msgid "Print"
 msgstr "Баспаға шығару"
 
-#: ../gtk/gtkrecentchooserdefault.c:482
+#: ../gtk/gtkrecentchooserdefault.c:480
 msgid "Select which type of documents are shown"
 msgstr "Көрсетілетін құжаттар түрлерін таңдаңыз"
 
-#: ../gtk/gtkrecentchooserdefault.c:1132
-#: ../gtk/gtkrecentchooserdefault.c:1169
+#: ../gtk/gtkrecentchooserdefault.c:1130
+#: ../gtk/gtkrecentchooserdefault.c:1167
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "URI '%s' үшін нәрсе табылмады"
 
-#: ../gtk/gtkrecentchooserdefault.c:1296
+#: ../gtk/gtkrecentchooserdefault.c:1294
 msgid "Untitled filter"
 msgstr "Атаусыз фильтр"
 
-#: ../gtk/gtkrecentchooserdefault.c:1649
+#: ../gtk/gtkrecentchooserdefault.c:1647
 msgid "Could not remove item"
 msgstr "Элементті өшіру мүмкін емес"
 
-#: ../gtk/gtkrecentchooserdefault.c:1693
+#: ../gtk/gtkrecentchooserdefault.c:1691
 msgid "Could not clear list"
 msgstr "Тізімді тазарту мүмкін емес"
 
-#: ../gtk/gtkrecentchooserdefault.c:1777
+#: ../gtk/gtkrecentchooserdefault.c:1775
 msgid "Copy _Location"
 msgstr "_Сілтеме адресін көшіру"
 
-#: ../gtk/gtkrecentchooserdefault.c:1790
+#: ../gtk/gtkrecentchooserdefault.c:1788
 msgid "_Remove From List"
 msgstr "Ті_зімнен өшіру"
 
-#: ../gtk/gtkrecentchooserdefault.c:1799
+#: ../gtk/gtkrecentchooserdefault.c:1797
 msgid "_Clear List"
 msgstr "Тізі_мді тазарту"
 
-#: ../gtk/gtkrecentchooserdefault.c:1813
+#: ../gtk/gtkrecentchooserdefault.c:1811
 msgid "Show _Private Resources"
 msgstr "Ж_еке ресурстарды көрсету"
 
@@ -2553,22 +2580,22 @@ msgstr "Ж_еке ресурстарды көрсету"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:362
+#: ../gtk/gtkrecentchoosermenu.c:360
 msgid "No items found"
 msgstr "Ешнәрсе табылмады"
 
-#: ../gtk/gtkrecentchoosermenu.c:528
-#: ../gtk/gtkrecentchoosermenu.c:584
+#: ../gtk/gtkrecentchoosermenu.c:526
+#: ../gtk/gtkrecentchoosermenu.c:582
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "URI `%s' бар соңғы қолданылған ресурс жоқ"
 
-#: ../gtk/gtkrecentchoosermenu.c:794
+#: ../gtk/gtkrecentchoosermenu.c:792
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s' ашу"
 
-#: ../gtk/gtkrecentchoosermenu.c:824
+#: ../gtk/gtkrecentchoosermenu.c:822
 msgid "Unknown item"
 msgstr "Белгісіз элемент"
 
@@ -2577,7 +2604,7 @@ msgstr "Белгісіз элемент"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:835
+#: ../gtk/gtkrecentchoosermenu.c:833
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2586,45 +2613,45 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:840
+#: ../gtk/gtkrecentchoosermenu.c:838
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:999
-#: ../gtk/gtkrecentmanager.c:1012
-#: ../gtk/gtkrecentmanager.c:1149
-#: ../gtk/gtkrecentmanager.c:1159
-#: ../gtk/gtkrecentmanager.c:1211
-#: ../gtk/gtkrecentmanager.c:1220
-#: ../gtk/gtkrecentmanager.c:1235
+#: ../gtk/gtkrecentmanager.c:1010
+#: ../gtk/gtkrecentmanager.c:1023
+#: ../gtk/gtkrecentmanager.c:1160
+#: ../gtk/gtkrecentmanager.c:1170
+#: ../gtk/gtkrecentmanager.c:1222
+#: ../gtk/gtkrecentmanager.c:1231
+#: ../gtk/gtkrecentmanager.c:1246
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' бар нәрсе табылмады"
 
-#: ../gtk/gtkrecentmanager.c:2435
+#: ../gtk/gtkrecentmanager.c:2446
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "URI '%s' үшін аты '%s' болатын ешбір тіркелген қолданба табылмады"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/gtkstock.c:326
+#: ../gtk/gtkstock.c:324
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Ақпарат"
 
-#: ../gtk/gtkstock.c:327
+#: ../gtk/gtkstock.c:325
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Ескерту"
 
-#: ../gtk/gtkstock.c:328
+#: ../gtk/gtkstock.c:326
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Қате"
 
-#: ../gtk/gtkstock.c:329
+#: ../gtk/gtkstock.c:327
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Сұрақ"
@@ -2632,482 +2659,482 @@ msgstr "Сұрақ"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: ../gtk/gtkstock.c:334
+#: ../gtk/gtkstock.c:332
 msgctxt "Stock label"
 msgid "_About"
 msgstr "Осы тур_алы"
 
-#: ../gtk/gtkstock.c:335
+#: ../gtk/gtkstock.c:333
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "Қ_осу"
 
-#: ../gtk/gtkstock.c:336
+#: ../gtk/gtkstock.c:334
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "Іске _асыру"
 
-#: ../gtk/gtkstock.c:337
+#: ../gtk/gtkstock.c:335
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Жуан"
 
-#: ../gtk/gtkstock.c:338
+#: ../gtk/gtkstock.c:336
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "Ба_с тарту"
 
-#: ../gtk/gtkstock.c:339
+#: ../gtk/gtkstock.c:337
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "CD-Rom ди_скі"
 
-#: ../gtk/gtkstock.c:340
+#: ../gtk/gtkstock.c:338
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "Та_зарту"
 
-#: ../gtk/gtkstock.c:341
+#: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Жабу"
 
-#: ../gtk/gtkstock.c:342
+#: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "Ба_йланысты орнату"
 
-#: ../gtk/gtkstock.c:343
+#: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Айналдыру"
 
-#: ../gtk/gtkstock.c:344
+#: ../gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Көшіру"
 
-#: ../gtk/gtkstock.c:345
+#: ../gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "Қ_иып алу"
 
-#: ../gtk/gtkstock.c:346
+#: ../gtk/gtkstock.c:344
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "Ө_шіру"
 
-#: ../gtk/gtkstock.c:347
+#: ../gtk/gtkstock.c:345
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Елемеу"
 
-#: ../gtk/gtkstock.c:348
+#: ../gtk/gtkstock.c:346
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "Б_айланысты үзу"
 
-#: ../gtk/gtkstock.c:349
+#: ../gtk/gtkstock.c:347
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "Ор_ындау"
 
-#: ../gtk/gtkstock.c:350
+#: ../gtk/gtkstock.c:348
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "Тү_зету"
 
-#: ../gtk/gtkstock.c:351
+#: ../gtk/gtkstock.c:349
 msgctxt "Stock label"
 msgid "_File"
 msgstr "_Файл"
 
-#: ../gtk/gtkstock.c:352
+#: ../gtk/gtkstock.c:350
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Табу"
 
-#: ../gtk/gtkstock.c:353
+#: ../gtk/gtkstock.c:351
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Табу м_ен алмастыру"
 
-#: ../gtk/gtkstock.c:354
+#: ../gtk/gtkstock.c:352
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "Floppy д_искі"
 
-#: ../gtk/gtkstock.c:355
+#: ../gtk/gtkstock.c:353
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "Т_олық экранға"
 
-#: ../gtk/gtkstock.c:356
+#: ../gtk/gtkstock.c:354
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "Толық _экраннан шығу"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: ../gtk/gtkstock.c:358
+#: ../gtk/gtkstock.c:356
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "Төмен_ге"
 
 #. This is a navigation label as in "go to the first page"
-#: ../gtk/gtkstock.c:360
+#: ../gtk/gtkstock.c:358
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Бірінші"
 
 #. This is a navigation label as in "go to the last page"
-#: ../gtk/gtkstock.c:362
+#: ../gtk/gtkstock.c:360
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_Соңғы"
 
 #. This is a navigation label as in "go to the top of the page"
-#: ../gtk/gtkstock.c:364
+#: ../gtk/gtkstock.c:362
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "Жоғар_ыға"
 
 #. This is a navigation label as in "go back"
-#: ../gtk/gtkstock.c:366
+#: ../gtk/gtkstock.c:364
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "Ар_тқа"
 
 #. This is a navigation label as in "go down"
-#: ../gtk/gtkstock.c:368
+#: ../gtk/gtkstock.c:366
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "Тө_мен"
 
 #. This is a navigation label as in "go forward"
-#: ../gtk/gtkstock.c:370
+#: ../gtk/gtkstock.c:368
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "А_лға"
 
 #. This is a navigation label as in "go up"
-#: ../gtk/gtkstock.c:372
+#: ../gtk/gtkstock.c:370
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "Жоғ_ары"
 
-#: ../gtk/gtkstock.c:373
+#: ../gtk/gtkstock.c:371
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "Қ_атты диск"
 
-#: ../gtk/gtkstock.c:374
+#: ../gtk/gtkstock.c:372
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "Кө_мек"
 
-#: ../gtk/gtkstock.c:375
+#: ../gtk/gtkstock.c:373
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "Ү_й бумасы"
 
-#: ../gtk/gtkstock.c:376
+#: ../gtk/gtkstock.c:374
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Шегінуді үлкейту"
 
-#: ../gtk/gtkstock.c:377
+#: ../gtk/gtkstock.c:375
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Шегінуді кішірейту"
 
-#: ../gtk/gtkstock.c:378
+#: ../gtk/gtkstock.c:376
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Мазмұны"
 
-#: ../gtk/gtkstock.c:379
+#: ../gtk/gtkstock.c:377
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "Ақ_параты"
 
-#: ../gtk/gtkstock.c:380
+#: ../gtk/gtkstock.c:378
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "Кө_лбеу"
 
-#: ../gtk/gtkstock.c:381
+#: ../gtk/gtkstock.c:379
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "Ө_ту"
 
 #. This is about text justification, "centered text"
-#: ../gtk/gtkstock.c:383
+#: ../gtk/gtkstock.c:381
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "Ор_тасы"
 
 #. This is about text justification
-#: ../gtk/gtkstock.c:385
+#: ../gtk/gtkstock.c:383
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "Т_олтыру"
 
 #. This is about text justification, "left-justified text"
-#: ../gtk/gtkstock.c:387
+#: ../gtk/gtkstock.c:385
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Сол"
 
 #. This is about text justification, "right-justified text"
-#: ../gtk/gtkstock.c:389
+#: ../gtk/gtkstock.c:387
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "_Оң"
 
 #. Media label, as in "fast forward"
-#: ../gtk/gtkstock.c:392
+#: ../gtk/gtkstock.c:390
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "А_лға"
 
 #. Media label, as in "next song"
-#: ../gtk/gtkstock.c:394
+#: ../gtk/gtkstock.c:392
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Келесі"
 
 #. Media label, as in "pause music"
-#: ../gtk/gtkstock.c:396
+#: ../gtk/gtkstock.c:394
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "А_ялдату"
 
 #. Media label, as in "play music"
-#: ../gtk/gtkstock.c:398
+#: ../gtk/gtkstock.c:396
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "Ой_нату"
 
 #. Media label, as in  "previous song"
-#: ../gtk/gtkstock.c:400
+#: ../gtk/gtkstock.c:398
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "Алд_ыңғысы"
 
 #. Media label
-#: ../gtk/gtkstock.c:402
+#: ../gtk/gtkstock.c:400
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "Ж_азу"
 
 #. Media label
-#: ../gtk/gtkstock.c:404
+#: ../gtk/gtkstock.c:402
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "Ар_тқа"
 
 #. Media label
-#: ../gtk/gtkstock.c:406
+#: ../gtk/gtkstock.c:404
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "Т_оқтату"
 
-#: ../gtk/gtkstock.c:407
+#: ../gtk/gtkstock.c:405
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "Ж_елі"
 
-#: ../gtk/gtkstock.c:408
+#: ../gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "_New"
 msgstr "Ж_аңа"
 
-#: ../gtk/gtkstock.c:409
+#: ../gtk/gtkstock.c:407
 msgctxt "Stock label"
 msgid "_No"
 msgstr "Ж_оқ"
 
-#: ../gtk/gtkstock.c:410
+#: ../gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "О_К"
 
-#: ../gtk/gtkstock.c:411
+#: ../gtk/gtkstock.c:409
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Ашу"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:413
+#: ../gtk/gtkstock.c:411
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Жатық"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:415
+#: ../gtk/gtkstock.c:413
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Тік"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:417
+#: ../gtk/gtkstock.c:415
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Теріс жатық"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:419
+#: ../gtk/gtkstock.c:417
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Теріс тік"
 
-#: ../gtk/gtkstock.c:420
+#: ../gtk/gtkstock.c:418
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Парақ ба_птаулары"
 
-#: ../gtk/gtkstock.c:421
+#: ../gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "Кірі_стіру"
 
-#: ../gtk/gtkstock.c:422
+#: ../gtk/gtkstock.c:420
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Баптаулар"
 
-#: ../gtk/gtkstock.c:423
+#: ../gtk/gtkstock.c:421
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "Бас_паға шығару"
 
-#: ../gtk/gtkstock.c:424
+#: ../gtk/gtkstock.c:422
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "Баспа а_лдында қарау"
 
-#: ../gtk/gtkstock.c:425
+#: ../gtk/gtkstock.c:423
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "Қас_иеттері"
 
-#: ../gtk/gtkstock.c:426
+#: ../gtk/gtkstock.c:424
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Шығу"
 
-#: ../gtk/gtkstock.c:427
+#: ../gtk/gtkstock.c:425
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "Қа_йталау"
 
-#: ../gtk/gtkstock.c:428
+#: ../gtk/gtkstock.c:426
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "Жаңар_ту"
 
-#: ../gtk/gtkstock.c:429
+#: ../gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "Ө_шіру"
 
-#: ../gtk/gtkstock.c:430
+#: ../gtk/gtkstock.c:428
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "Қай_тару"
 
-#: ../gtk/gtkstock.c:431
+#: ../gtk/gtkstock.c:429
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Сақтау"
 
-#: ../gtk/gtkstock.c:432
+#: ../gtk/gtkstock.c:430
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Қала_йша сақтау"
 
-#: ../gtk/gtkstock.c:433
+#: ../gtk/gtkstock.c:431
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Б_арлығын таңдау"
 
-#: ../gtk/gtkstock.c:434
+#: ../gtk/gtkstock.c:432
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "Тү_с"
 
-#: ../gtk/gtkstock.c:435
+#: ../gtk/gtkstock.c:433
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "Қа_ріп"
 
 #. Sorting direction
-#: ../gtk/gtkstock.c:437
+#: ../gtk/gtkstock.c:435
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "Өс_у ретімен"
 
 #. Sorting direction
-#: ../gtk/gtkstock.c:439
+#: ../gtk/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "Ке_му ретімен"
 
-#: ../gtk/gtkstock.c:440
+#: ../gtk/gtkstock.c:438
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "Е_млені тексеру"
 
-#: ../gtk/gtkstock.c:441
+#: ../gtk/gtkstock.c:439
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "Тоқ_тату"
 
 #. Font variant
-#: ../gtk/gtkstock.c:443
+#: ../gtk/gtkstock.c:441
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "С_ызылған"
 
-#: ../gtk/gtkstock.c:444
+#: ../gtk/gtkstock.c:442
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "Ө_шірілгенді қалпына келтіру"
 
 #. Font variant
-#: ../gtk/gtkstock.c:446
+#: ../gtk/gtkstock.c:444
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "Асты сы_зылған"
 
-#: ../gtk/gtkstock.c:447
+#: ../gtk/gtkstock.c:445
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "Бол_дырмау"
 
-#: ../gtk/gtkstock.c:448
+#: ../gtk/gtkstock.c:446
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Иә"
 
 #. Zoom
-#: ../gtk/gtkstock.c:450
+#: ../gtk/gtkstock.c:448
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "Қалы_пты өлшемі"
 
 #. Zoom
-#: ../gtk/gtkstock.c:452
+#: ../gtk/gtkstock.c:450
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "Жақ_сырақ сыю"
 
-#: ../gtk/gtkstock.c:453
+#: ../gtk/gtkstock.c:451
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "Үлке_йту"
 
-#: ../gtk/gtkstock.c:454
+#: ../gtk/gtkstock.c:452
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Кі_шірейту"
@@ -3116,9 +3143,9 @@ msgstr "Кі_шірейту"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:349
-#: ../gtk/gtkswitch.c:409
-#: ../gtk/gtkswitch.c:616
+#: ../gtk/gtkswitch.c:342
+#: ../gtk/gtkswitch.c:397
+#: ../gtk/gtkswitch.c:591
 msgctxt "switch"
 msgid "ON"
 msgstr "ON"
@@ -3126,220 +3153,220 @@ msgstr "ON"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:357
-#: ../gtk/gtkswitch.c:410
-#: ../gtk/gtkswitch.c:645
+#: ../gtk/gtkswitch.c:350
+#: ../gtk/gtkswitch.c:398
+#: ../gtk/gtkswitch.c:620
 msgctxt "switch"
 msgid "OFF"
 msgstr "OFF"
 
-#: ../gtk/gtktextbufferrichtext.c:651
+#: ../gtk/gtktextbufferrichtext.c:649
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "%s десериализациялап көру кезінде белгісіз қате"
 
-#: ../gtk/gtktextbufferrichtext.c:710
+#: ../gtk/gtktextbufferrichtext.c:708
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "%s пішімі үшін десериализация функциясы табылмады"
 
-#: ../gtk/gtktextbufferserialize.c:800
-#: ../gtk/gtktextbufferserialize.c:826
+#: ../gtk/gtktextbufferserialize.c:798
+#: ../gtk/gtktextbufferserialize.c:824
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "<%s> элементінде \"id\" мен \"name\" екеуі де бар"
 
-#: ../gtk/gtktextbufferserialize.c:810
-#: ../gtk/gtktextbufferserialize.c:836
+#: ../gtk/gtktextbufferserialize.c:808
+#: ../gtk/gtktextbufferserialize.c:834
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "<%s> элементінен \"%s\" атрибуты екі рет табылды"
 
-#: ../gtk/gtktextbufferserialize.c:852
+#: ../gtk/gtktextbufferserialize.c:850
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
 msgstr "<%s> элементінің \"%s\" ID-і қате"
 
-#: ../gtk/gtktextbufferserialize.c:862
+#: ../gtk/gtktextbufferserialize.c:860
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> элементінің не \"name\", не \"id\" атрибуты жоқ"
 
-#: ../gtk/gtktextbufferserialize.c:949
+#: ../gtk/gtktextbufferserialize.c:947
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "<%s> элементінде \"%s\" атрибуты екі рет қайталанды"
 
-#: ../gtk/gtktextbufferserialize.c:967
-#: ../gtk/gtktextbufferserialize.c:992
+#: ../gtk/gtktextbufferserialize.c:965
+#: ../gtk/gtktextbufferserialize.c:990
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Бұл контекстте \"%s\" атрибуты <%s> элементінің ішінде қате"
 
-#: ../gtk/gtktextbufferserialize.c:1031
+#: ../gtk/gtktextbufferserialize.c:1029
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "\"%s\" тегі анықталмаған."
 
-#: ../gtk/gtktextbufferserialize.c:1043
+#: ../gtk/gtktextbufferserialize.c:1041
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Анонимды тег табылды, тегтерді жасау мүмкін емес."
 
-#: ../gtk/gtktextbufferserialize.c:1054
+#: ../gtk/gtktextbufferserialize.c:1052
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "\"%s\" тегі буферде жоқ, тегтерді жасау мүмкін емес."
 
-#: ../gtk/gtktextbufferserialize.c:1153
-#: ../gtk/gtktextbufferserialize.c:1228
-#: ../gtk/gtktextbufferserialize.c:1333
-#: ../gtk/gtktextbufferserialize.c:1407
+#: ../gtk/gtktextbufferserialize.c:1151
+#: ../gtk/gtktextbufferserialize.c:1226
+#: ../gtk/gtktextbufferserialize.c:1331
+#: ../gtk/gtktextbufferserialize.c:1405
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "<%s> элементін <%s> алдында орналастыру рұқсат етілмеген"
 
-#: ../gtk/gtktextbufferserialize.c:1184
+#: ../gtk/gtktextbufferserialize.c:1182
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "\"%s\" - атрибуттың дұрыс түрі емес"
 
-#: ../gtk/gtktextbufferserialize.c:1192
+#: ../gtk/gtktextbufferserialize.c:1190
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "\"%s\" - атрибуттың дұрыс аты емес"
 
-#: ../gtk/gtktextbufferserialize.c:1202
+#: ../gtk/gtktextbufferserialize.c:1200
 #, c-format
 msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" қазір \"%s\" түріндегі мәнге, \"%s\" атрибуты үшін, түрлендіру мүмкін емес"
 
-#: ../gtk/gtktextbufferserialize.c:1211
+#: ../gtk/gtktextbufferserialize.c:1209
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "\"%s\" - \"%s\" атрибуты үшін дұрыс мән емес"
 
-#: ../gtk/gtktextbufferserialize.c:1296
+#: ../gtk/gtktextbufferserialize.c:1294
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "\"%s\" тегі анықталып тұр"
 
-#: ../gtk/gtktextbufferserialize.c:1309
+#: ../gtk/gtktextbufferserialize.c:1307
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "\"%s\" тегтің \"%s\" приоритеті қате"
 
-#: ../gtk/gtktextbufferserialize.c:1362
+#: ../gtk/gtktextbufferserialize.c:1360
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Мәтінде ен қашық нәрсе <text_view_markup> болуы тиіс, <%s> емес"
 
-#: ../gtk/gtktextbufferserialize.c:1371
-#: ../gtk/gtktextbufferserialize.c:1387
+#: ../gtk/gtktextbufferserialize.c:1369
+#: ../gtk/gtktextbufferserialize.c:1385
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "<%s> элементі көрсетілген болып тұр"
 
-#: ../gtk/gtktextbufferserialize.c:1393
+#: ../gtk/gtktextbufferserialize.c:1391
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "<text> элементі <tags> элементінің алдында кездесуі мүмкін емес"
 
-#: ../gtk/gtktextbufferserialize.c:1792
+#: ../gtk/gtktextbufferserialize.c:1790
 msgid "Serialized data is malformed"
 msgstr "Сериализацияланған мәліметтер қате жасалған."
 
-#: ../gtk/gtktextbufferserialize.c:1870
+#: ../gtk/gtktextbufferserialize.c:1868
 msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "Сериализацияланған мәліметтер қате жасалған. Бірінші секциясы GTKTEXTBUFFERCONTENTS-0001 емес болып тұр"
 
-#: ../gtk/gtktextutil.c:60
+#: ../gtk/gtktextutil.c:58
 msgid "LRM _Left-to-right mark"
 msgstr "LRM Белгі _солдан оңға"
 
-#: ../gtk/gtktextutil.c:61
+#: ../gtk/gtktextutil.c:59
 msgid "RLM _Right-to-left mark"
 msgstr "RLM Белгі _оңнан солға"
 
-#: ../gtk/gtktextutil.c:62
+#: ../gtk/gtktextutil.c:60
 msgid "LRE Left-to-right _embedding"
 msgstr "LRE Солдан оңға _кірістіру"
 
-#: ../gtk/gtktextutil.c:63
+#: ../gtk/gtktextutil.c:61
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE Оңнан солға кіріс_тіру"
 
-#: ../gtk/gtktextutil.c:64
+#: ../gtk/gtktextutil.c:62
 msgid "LRO Left-to-right _override"
 msgstr "LRO Солдан оңға үстінен ж_абу"
 
-#: ../gtk/gtktextutil.c:65
+#: ../gtk/gtktextutil.c:63
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO Оңнан солға үстінен жа_бу"
 
-#: ../gtk/gtktextutil.c:66
+#: ../gtk/gtktextutil.c:64
 msgid "PDF _Pop directional formatting"
 msgstr "PDF Ті_гінен орналастыру"
 
-#: ../gtk/gtktextutil.c:67
+#: ../gtk/gtktextutil.c:65
 msgid "ZWS _Zero width space"
 msgstr "ZWS _Нөлдік бос аралық"
 
-#: ../gtk/gtktextutil.c:68
+#: ../gtk/gtktextutil.c:66
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ Нөлдік бі_рігуші"
 
-#: ../gtk/gtktextutil.c:69
+#: ../gtk/gtktextutil.c:67
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Нөлдік аж_ыратушы"
 
-#: ../gtk/gtkuimanager.c:1779
+#: ../gtk/gtkuimanager.c:1781
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Күтілмеген бастау '%s' тегі (%d жол, %d таңба)"
 
-#: ../gtk/gtkuimanager.c:1869
+#: ../gtk/gtkuimanager.c:1871
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Күтілмеген таңба ақпараты кездесті (%d жол, %d таңба)"
 
-#: ../gtk/gtkuimanager.c:2736
+#: ../gtk/gtkuimanager.c:2738
 msgid "Empty"
 msgstr "Бос"
 
-#: ../gtk/gtkvolumebutton.c:170
+#: ../gtk/gtkvolumebutton.c:169
 msgid "Volume"
 msgstr "Даусы"
 
-#: ../gtk/gtkvolumebutton.c:172
+#: ../gtk/gtkvolumebutton.c:171
 msgid "Turns volume down or up"
 msgstr "Дыбысын көтеру не түсіру"
 
-#: ../gtk/gtkvolumebutton.c:175
+#: ../gtk/gtkvolumebutton.c:174
 msgid "Adjusts the volume"
 msgstr "Дыбысты баптау"
 
-#: ../gtk/gtkvolumebutton.c:181
-#: ../gtk/gtkvolumebutton.c:184
+#: ../gtk/gtkvolumebutton.c:180
+#: ../gtk/gtkvolumebutton.c:183
 msgid "Volume Down"
 msgstr "Дыбысты азайту"
 
-#: ../gtk/gtkvolumebutton.c:183
+#: ../gtk/gtkvolumebutton.c:182
 msgid "Decreases the volume"
 msgstr "Дыбысты азайтады"
 
-#: ../gtk/gtkvolumebutton.c:187
-#: ../gtk/gtkvolumebutton.c:190
+#: ../gtk/gtkvolumebutton.c:186
+#: ../gtk/gtkvolumebutton.c:189
 msgid "Volume Up"
 msgstr "Дыбысты көтеру"
 
-#: ../gtk/gtkvolumebutton.c:189
+#: ../gtk/gtkvolumebutton.c:188
 msgid "Increases the volume"
 msgstr "Дыбысты көтереді"
 
-#: ../gtk/gtkvolumebutton.c:247
+#: ../gtk/gtkvolumebutton.c:246
 msgid "Muted"
 msgstr "Дыбысы сөндірілген"
 
-#: ../gtk/gtkvolumebutton.c:251
+#: ../gtk/gtkvolumebutton.c:250
 msgid "Full Volume"
 msgstr "Толық дыбысы"
 
@@ -3348,7 +3375,7 @@ msgstr "Толық дыбысы"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: ../gtk/gtkvolumebutton.c:264
+#: ../gtk/gtkvolumebutton.c:263
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -4175,102 +4202,102 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: ../gtk/updateiconcache.c:1370
+#: ../gtk/updateiconcache.c:1368
 #, c-format
 msgid "Failed to write header\n"
 msgstr "Тақырыптамасын жазу сәтсіз\n"
 
-#: ../gtk/updateiconcache.c:1376
+#: ../gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "Хэш кестесін жазу сәтсіз\n"
 
-#: ../gtk/updateiconcache.c:1382
+#: ../gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "Бума индексін жазу сәтсіз\n"
 
-#: ../gtk/updateiconcache.c:1390
+#: ../gtk/updateiconcache.c:1388
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "Тақырыптаманы қайта жазу сәтсіз\n"
 
-#: ../gtk/updateiconcache.c:1484
+#: ../gtk/updateiconcache.c:1482
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Файлды ашу қатемен аяқталды %s : %s\n"
 
-#: ../gtk/updateiconcache.c:1492
-#: ../gtk/updateiconcache.c:1522
+#: ../gtk/updateiconcache.c:1490
+#: ../gtk/updateiconcache.c:1520
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Кэш файлын жазу сәтсіз: %s\n"
 
-#: ../gtk/updateiconcache.c:1532
+#: ../gtk/updateiconcache.c:1530
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Жасалған кэш қате.\n"
 
-#: ../gtk/updateiconcache.c:1546
+#: ../gtk/updateiconcache.c:1544
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s үшін жаңа %s атын орнату мүмкін емес: %s, кейін %s өшіріледі.\n"
 
-#: ../gtk/updateiconcache.c:1560
+#: ../gtk/updateiconcache.c:1558
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s атын жаңа %s атына ауыстыру мүмкін емес: %s\n"
 
-#: ../gtk/updateiconcache.c:1570
+#: ../gtk/updateiconcache.c:1568
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s атын қайта %s етіп орнату мүмкін емес: %s.\n"
 
-#: ../gtk/updateiconcache.c:1597
+#: ../gtk/updateiconcache.c:1595
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Кэш файлы сәтті жасалды.\n"
 
-#: ../gtk/updateiconcache.c:1636
+#: ../gtk/updateiconcache.c:1634
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Бар кэшті үстінен жазу, ескірмесе де"
 
-#: ../gtk/updateiconcache.c:1637
+#: ../gtk/updateiconcache.c:1635
 msgid "Don't check for the existence of index.theme"
 msgstr "index.theme файлының бар-жоғын тексермеу"
 
-#: ../gtk/updateiconcache.c:1638
+#: ../gtk/updateiconcache.c:1636
 msgid "Don't include image data in the cache"
 msgstr "Кэш ішіне сурет файлдарын қоспау"
 
-#: ../gtk/updateiconcache.c:1639
+#: ../gtk/updateiconcache.c:1637
 msgid "Output a C header file"
 msgstr "C тақырыптама файлын шығару"
 
-#: ../gtk/updateiconcache.c:1640
+#: ../gtk/updateiconcache.c:1638
 msgid "Turn off verbose output"
 msgstr "Кеңейтілген шығысты сөндіру"
 
-#: ../gtk/updateiconcache.c:1641
+#: ../gtk/updateiconcache.c:1639
 msgid "Validate existing icon cache"
 msgstr "Бар болып тұрған таңбашалар кэшін тексеру"
 
-#: ../gtk/updateiconcache.c:1708
+#: ../gtk/updateiconcache.c:1706
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Файл табылмады: %s\n"
 
-#: ../gtk/updateiconcache.c:1714
+#: ../gtk/updateiconcache.c:1712
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Дұрыс таңбашалар кэші емес: %s\n"
 
-#: ../gtk/updateiconcache.c:1727
+#: ../gtk/updateiconcache.c:1725
 #, c-format
 msgid "No theme index file.\n"
 msgstr "Теманың индекс файлы табылмады.\n"
 
-#: ../gtk/updateiconcache.c:1731
+#: ../gtk/updateiconcache.c:1729
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4280,375 +4307,374 @@ msgstr ""
 "Осында таңбашалар кэшін жасауды шынымен қаласаңыз, --ignore-theme-index қолданыңыз.\n"
 
 #. ID
-#: ../modules/input/imam-et.c:454
+#: ../modules/input/imam-et.c:452
 msgid "Amharic (EZ+)"
 msgstr "Амхарлық (EZ+)"
 
 #. ID
-#: ../modules/input/imcedilla.c:92
+#: ../modules/input/imcedilla.c:90
 msgid "Cedilla"
 msgstr "Седиль"
 
 #. ID
-#: ../modules/input/imcyrillic-translit.c:217
+#: ../modules/input/imcyrillic-translit.c:215
 msgid "Cyrillic (Transliterated)"
 msgstr "Кириллица (транслитерация)"
 
 #. ID
-#: ../modules/input/iminuktitut.c:127
+#: ../modules/input/iminuktitut.c:125
 msgid "Inuktitut (Transliterated)"
 msgstr "Инуктикут (транслитерация)"
 
 #. ID
-#: ../modules/input/imipa.c:145
+#: ../modules/input/imipa.c:143
 msgid "IPA"
 msgstr "МФА (IPA)"
 
 #. ID
-#: ../modules/input/immultipress.c:31
+#: ../modules/input/immultipress.c:29
 msgid "Multipress"
 msgstr "Мультипресс"
 
 #. ID
-#: ../modules/input/imthai.c:35
+#: ../modules/input/imthai.c:33
 msgid "Thai-Lao"
 msgstr "Тай-Лаос"
 
 #. ID
-#: ../modules/input/imti-er.c:453
+#: ../modules/input/imti-er.c:451
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Тигринья-Эритрея (EZ+)"
 
 #. ID
-#: ../modules/input/imti-et.c:453
+#: ../modules/input/imti-et.c:451
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "Тигринья-Эфиопия (EZ+)"
 
 #. ID
-#: ../modules/input/imviqr.c:244
+#: ../modules/input/imviqr.c:242
 msgid "Vietnamese (VIQR)"
 msgstr "Вьетнам (VIQR)"
 
 #. ID
-#: ../modules/input/imxim.c:28
+#: ../modules/input/imxim.c:26
 msgid "X Input Method"
 msgstr "X енгізу тәсілі"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:880
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1099
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:858
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1073
 msgid "Username:"
 msgstr "Пайдаланушы аты:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:881
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1108
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:859
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1082
 msgid "Password:"
 msgstr "Пароль:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:920
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1121
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:898
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1095
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "'%s' құжатын %s принтерінен басып шығару үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:922
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:900
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "%s жерінде құажтты басып шығару үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:926
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:904
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "'%s' тапсырмасының атрибуттарын алу үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:928
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:906
 msgid "Authentication is required to get attributes of a job"
 msgstr "Тапсырманың атрибуттарын алу үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:932
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:910
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "'%s' принтерінің атрибуттарын алу үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:934
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:912
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Принтердің атрибуттарын алу үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:937
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:915
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "%s үшін бастапқы принтерді алу үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:940
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:918
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "%s жерінен принтерлерді алу үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:945
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:923
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%s ішінен файлды алу үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:947
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:925
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1093
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1067
 msgid "Domain:"
 msgstr "Домен:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1123
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1097
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "'%s' құжаттын басып шығару үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1128
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1102
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Бұл құжатты %s принтерінен басып шығару үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1130
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1104
 msgid "Authentication is required to print this document"
 msgstr "Бұл құжатты басып шығару үшін аутентификация керек"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1755
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1666
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "'%s' принтерінде тонер аз."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1756
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1667
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "'%s' принтерінде тонер біткен."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1758
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1669
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "'%s' принтерінің айқындауышы аз."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1760
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1671
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "'%s' принтерінің айқындауышы біткен."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1762
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1673
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "'%s' принтерінде кем дегенде бір тонер бітіп жатыр."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1764
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1675
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "'%s' принтерінде кем дегенде бір тонер бітті."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1765
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1676
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "'%s' принтерінің қорабы ашық."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1766
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1677
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "'%s' принтерінің есігі ашық."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1767
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1678
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "'%s' принтерінде қағаз аз."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1768
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1679
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "'%s' принтерінде қағаз жоқ."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1769
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1680
 #, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "'%s' принтері қазір қосылмаған."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1770
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1681
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "'%s' принтерімен мәселелер бар."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2084
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
 msgid "Paused ; Rejecting Jobs"
 msgstr "Аялдатылған; Тапсырмаларды тайдыру"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2090
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Rejecting Jobs"
 msgstr "Тапсырмаларды тайдыру"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2862
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2909
 msgid "Two Sided"
 msgstr "Екі жақты"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2863
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2910
 msgid "Paper Type"
 msgstr "Қағаз түрі"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2864
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2911
 msgid "Paper Source"
 msgstr "Қағаз көзі"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2865
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2912
 msgid "Output Tray"
 msgstr "Шығыс сөресі"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2866
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2913
 msgid "Resolution"
 msgstr "Ажыратылымдығы"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2867
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2914
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript алдын-ала сүзгілеу"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2876
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2923
 msgid "One Sided"
 msgstr "Бір жақты"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2878
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2925
 msgid "Long Edge (Standard)"
 msgstr "Ұзын жағымен"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2880
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2927
 msgid "Short Edge (Flip)"
 msgstr "Қысқа жағымен"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2882
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2884
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2892
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2929
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2931
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2939
 msgid "Auto Select"
 msgstr "Авто таңдау"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2886
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2888
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2890
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2894
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3390
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2933
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2935
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2937
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2941
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3429
 msgid "Printer Default"
 msgstr "Принтердің негізгісі"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2896
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2943
 msgid "Embed GhostScript fonts only"
 msgstr "Тек GhostScript қаріптерін ілестіру"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2898
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2945
 msgid "Convert to PS level 1"
 msgstr "PS 1 деңгейіне айналдыру"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2900
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2947
 msgid "Convert to PS level 2"
 msgstr "PS 2 деңгейіне айналдыру"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2902
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2949
 msgid "No pre-filtering"
 msgstr "Алдын-ала сүзгілеу жоқ"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2911
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2958
 msgid "Miscellaneous"
 msgstr "Әр түрлі"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3642
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
 msgid "Urgent"
 msgstr "Жедел"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3642
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
 msgid "High"
 msgstr "Жоғары"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3642
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
 msgid "Medium"
 msgstr "Орташа"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3642
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
 msgid "Low"
 msgstr "Төмен"
-
-#. Cups specific, non-ppd related settings
-#. Translators, this string is used to label the pages-per-sheet option
-#. * in the print dialog
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3668
-msgid "Pages per Sheet"
-msgstr "Бір параққа беттер"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3705
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3711
 msgid "Job Priority"
 msgstr "Тапсырма приоритеті"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3716
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3722
 msgid "Billing Info"
 msgstr "Орналасуы"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3731
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
 msgid "None"
 msgstr "Жоқ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3731
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
 msgid "Classified"
 msgstr "Классификацияланған"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3731
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
 msgid "Confidential"
 msgstr "Конфиденциалды"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3731
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
 msgid "Secret"
 msgstr "Құпия сөз"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3731
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
 msgid "Standard"
 msgstr "Қалыпты"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3731
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
 msgid "Top Secret"
 msgstr "Қатаң құпия"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3731
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
 msgid "Unclassified"
 msgstr "Классификацияланбаған"
+
+#. Translators, this string is used to label the pages-per-sheet option
+#. * in the print dialog
+#.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3748
+msgid "Pages per Sheet"
+msgstr "Бір параққа беттер"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3766
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3808
 msgid "Before"
 msgstr "Дейін"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3781
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3823
 msgid "After"
 msgstr "Кейін"
 
@@ -4656,14 +4682,14 @@ msgstr "Кейін"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3801
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3843
 msgid "Print at"
 msgstr "Уақыты"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3812
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3854
 msgid "Print at time"
 msgstr "Баспаны бастау уақыты"
 
@@ -4671,117 +4697,122 @@ msgstr "Баспаны бастау уақыты"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3847
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3889
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Ерекше %sx%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3928
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3970
 msgid "Printer Profile"
 msgstr "Принтер профайлы"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3935
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3977
 msgid "Unavailable"
 msgstr "Қолжетерсіз"
 
 #. TRANSLATORS: when we're running an old CUPS, and
 #. * it hasn't registered the device with colord
-#: ../modules/printbackends/cups/gtkprintercups.c:222
+#: ../modules/printbackends/cups/gtkprintercups.c:221
 msgid "Color management unavailable"
 msgstr "Түстерді басқару қолжетерсіз"
 
 #. TRANSLATORS: when there is no color profile available
-#: ../modules/printbackends/cups/gtkprintercups.c:234
+#: ../modules/printbackends/cups/gtkprintercups.c:233
 msgid "No profile available"
 msgstr "Ешбір профайл қолжетерсіз"
 
 #. TRANSLATORS: when the color profile has no title
-#: ../modules/printbackends/cups/gtkprintercups.c:245
+#: ../modules/printbackends/cups/gtkprintercups.c:244
 msgid "Unspecified profile"
 msgstr "Көрсетілмеген профайл"
 
-#. default filename used for print-to-file
-#: ../modules/printbackends/file/gtkprintbackendfile.c:250
-#, c-format
-msgid "output.%s"
-msgstr "шығыс.%s"
+#: ../modules/printbackends/file/gtkprintbackendfile.c:249
+#| msgid "output.%s"
+msgid "output"
+msgstr "шығыс"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:501
+#: ../modules/printbackends/file/gtkprintbackendfile.c:521
 msgid "Print to File"
 msgstr "Print to File"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:627
+#: ../modules/printbackends/file/gtkprintbackendfile.c:647
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:627
+#: ../modules/printbackends/file/gtkprintbackendfile.c:647
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:627
+#: ../modules/printbackends/file/gtkprintbackendfile.c:647
 msgid "SVG"
 msgstr "SVG"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:640
-#: ../modules/printbackends/test/gtkprintbackendtest.c:503
+#: ../modules/printbackends/file/gtkprintbackendfile.c:660
+#: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "Бір _параққа беттер:"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:699
+#: ../modules/printbackends/file/gtkprintbackendfile.c:719
 msgid "File"
 msgstr "Файл"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:709
+#: ../modules/printbackends/file/gtkprintbackendfile.c:729
 msgid "_Output format"
 msgstr "Шығыс _пішімі"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:395
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:393
 msgid "Print to LPR"
 msgstr "LPR-ге басып шығару"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:421
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:419
 msgid "Pages Per Sheet"
 msgstr "Бір параққа беттер"
 
-#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:428
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:426
 msgid "Command Line"
 msgstr "Командалық жол"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:811
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:809
 msgid "printer offline"
 msgstr "принтер қосылмаған"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:829
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:827
 msgid "ready to print"
 msgstr "басып шығаруға дайын"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:832
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:830
 msgid "processing job"
 msgstr "тапсырманы өңдеу"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:836
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:834
 msgid "paused"
 msgstr "аялдатылған"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:839
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:837
 msgid "unknown"
 msgstr "белгісіз"
 
 #. default filename used for print-to-test
-#: ../modules/printbackends/test/gtkprintbackendtest.c:234
+#: ../modules/printbackends/test/gtkprintbackendtest.c:232
 #, c-format
 msgid "test-output.%s"
 msgstr "сынау-шығысы.%s"
 
-#: ../modules/printbackends/test/gtkprintbackendtest.c:467
+#: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Сынау принтеріне шығару"
+
+#~ msgid "Caps Lock and Num Lock are on"
+#~ msgstr "Caps Lock пен Num Lock қосулы тұр"
+
+#~ msgid "Num Lock is on"
+#~ msgstr "Num Lock is қосулы тұр"
 
 #~ msgid "Received invalid color data\n"
 #~ msgstr "Алынған түс мәні қате\n"
@@ -4812,9 +4843,6 @@ msgstr "Сынау принтеріне шығару"
 
 #~ msgid "Path does not exist"
 #~ msgstr "Жол жоқ болып тұр"
-
-#~ msgid "Error loading icon: %s"
-#~ msgstr "Таңбашаны жүктеу қатесі: %s"
 
 #~ msgid ""
 #~ "Could not find the icon '%s'. The '%s' theme\n"
