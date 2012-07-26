@@ -108,13 +108,14 @@ rotated_text_expose_event (GtkWidget      *widget,
 
   PangoAttrList *attrs;
   GtkAllocation allocation;
+  int width, height;
+  double device_radius;
+  int i;
   
   gtk_widget_get_allocation (widget, &allocation);
 
-  int width = allocation.width;
-  int height = allocation.height;
-  double device_radius;
-  int i;
+  width = allocation.width;
+  height = allocation.height;
 
   /* Create a cairo context and set up a transformation matrix so that the user
    * space coordinates for the centered square where we draw are [-RADIUS, RADIUS],
