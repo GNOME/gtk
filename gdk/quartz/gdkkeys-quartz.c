@@ -629,16 +629,14 @@ gdk_quartz_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
   return *n_entries > 0;
 }
 
+#define GET_KEYVAL(keycode, group, level) (keyval_array[(keycode * KEYVALS_PER_KEYCODE + group * 2 + level)])
+
 static guint
 gdk_quartz_keymap_lookup_key (GdkKeymap          *keymap,
                               const GdkKeymapKey *key)
 {
-  /* FIXME: Implement */
-
-  return 0;
+  return GET_KEYVAL (key->keycode, key->group, key->level);
 }
-
-#define GET_KEYVAL(keycode, group, level) (keyval_array[(keycode * KEYVALS_PER_KEYCODE + group * 2 + level)])
 
 static guint
 translate_keysym (guint           hardware_keycode,
