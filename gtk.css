@@ -1,17 +1,38 @@
 /* Copy this to .config/gtk-3.0/gtk.css */
-
 .titlebar > GtkLabel:backdrop {
+  color: darker (@bg_color);
+  text-shadow: none;
+}
+
+.titlebar GtkLabel {
+  font: Sans Bold 10;
+  text-shadow: 1px 1px lighter (@bg_color);
+}
+
+.titlebar GtkButton:backdrop {
+  border-image: none;
+  background-image: none;
+}
+
+.titlebar GtkButton GtkLabel:backdrop {
+  text-shadow: none;
   color: darker (@bg_color);
 }
 
-.titlebar > GtkLabel {
-  font: Sans Bold 10;
-  text-shadow: 1 1 lighter (@bg_color);
+.titlebar GtkButton GtkLabel {
+  font: Sans Bold 12;
+  color: white;
+  text-shadow: 0px 1px darker (darker (@bg_color));
 }
 
 .titlebar GtkButton {
-  border-width: 0;
-  background: none;
+  border-style: none;
+  border-color: darker (@bg_color);
+
+  background-image: -gtk-gradient (linear, center top, center bottom,
+       from (@bg_color),
+       color-stop (0.5, darker (@bg_color)),
+       to (@bg_color));
 }
 
 .titlebar:backdrop {
@@ -21,22 +42,20 @@
 .titlebar {
   background-image: -gtk-gradient (linear, center top, center bottom,
        from (white),
-       to (darker(@bg_color)));
-  border-radius: 5 5 0 0;
-}
-
-.foo {
-  /* Nag Company until he implements the border-image-slice fill property */
-  border-image: url("toolButton.png") 0 5 / 0 5 stretch stretch;
-  border-width: 0 5 0 5;
+       to (@bg_color));
+  border-radius: 5px 5px 0px 0px;
 }
 
 .window-border {
-  background-color: blue;
-}
-
-.window-border {
-  border-image: url("theme.png") 21 24 22 24 / 21 24 22 24 stretch stretch;
-  border-width: 21 24 22 24;
+  border-image: url("theme.png") 21 24 22 24 stretch;
+  border-width: 21px 24px 22px 24px;
   border-style: solid;
 }
+
+.window-border-bar {
+  border-style: solid;
+  border-width: 1px 1px 2px 1px;
+  border-color: darker (@bg_color);
+  border-radius: 5px 5px 0px 0px;
+}
+
