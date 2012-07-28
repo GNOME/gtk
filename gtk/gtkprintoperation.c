@@ -3064,9 +3064,9 @@ print_pages (GtkPrintOperation       *op,
       priv->rloop = g_main_loop_new (NULL, FALSE);
 
       g_object_ref (op);
-      GDK_THREADS_LEAVE ();
+      gdk_threads_leave ();
       g_main_loop_run (priv->rloop);
-      GDK_THREADS_ENTER ();
+      gdk_threads_enter ();
       
       g_main_loop_unref (priv->rloop);
       priv->rloop = NULL;

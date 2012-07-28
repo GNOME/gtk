@@ -26,13 +26,13 @@ G_DEFINE_TYPE (GailMisc, _gail_misc, ATK_TYPE_MISC)
 static void
 gail_misc_threads_enter (AtkMisc *misc)
 {
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 }
 
 static void
 gail_misc_threads_leave (AtkMisc *misc)
 {
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 }
 
 static void

@@ -1158,9 +1158,9 @@ gtk_main (void)
 
   if (g_main_loop_is_running (main_loops->data))
     {
-      GDK_THREADS_LEAVE ();
+      gdk_threads_leave ();
       g_main_loop_run (loop);
-      GDK_THREADS_ENTER ();
+      gdk_threads_enter ();
       gdk_flush ();
     }
 
@@ -1235,9 +1235,9 @@ gtk_events_pending (void)
 {
   gboolean result;
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
   result = g_main_context_pending (NULL);
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 
   return result;
 }
@@ -1258,9 +1258,9 @@ gtk_events_pending (void)
 gboolean
 gtk_main_iteration (void)
 {
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
   g_main_context_iteration (NULL, TRUE);
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 
   if (main_loops)
     return !g_main_loop_is_running (main_loops->data);
@@ -1282,9 +1282,9 @@ gtk_main_iteration (void)
 gboolean
 gtk_main_iteration_do (gboolean blocking)
 {
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
   g_main_context_iteration (NULL, blocking);
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 
   if (main_loops)
     return !g_main_loop_is_running (main_loops->data);

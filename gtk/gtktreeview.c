@@ -7166,7 +7166,7 @@ drag_scan_timeout (gpointer data)
   GtkTreeViewColumn *column = NULL;
   GdkRectangle visible_rect;
 
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 
   tree_view = GTK_TREE_VIEW (data);
 
@@ -7204,7 +7204,7 @@ drag_scan_timeout (gpointer data)
         }
     }
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 
   return TRUE;
 }

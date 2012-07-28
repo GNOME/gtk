@@ -674,9 +674,9 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
 
   if (g_main_loop_is_running (closure->loop))
     {
-      GDK_THREADS_LEAVE ();
+      gdk_threads_leave ();
       g_main_loop_run (closure->loop);
-      GDK_THREADS_ENTER ();
+      gdk_threads_enter ();
     }
 
   g_main_loop_unref (closure->loop);

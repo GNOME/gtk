@@ -1410,9 +1410,9 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
 
   if (g_main_loop_is_running (results.loop))
     {
-      GDK_THREADS_LEAVE ();
+      gdk_threads_leave ();
       g_main_loop_run (results.loop);
-      GDK_THREADS_ENTER ();
+      gdk_threads_enter ();
     }
 
   g_main_loop_unref (results.loop);
@@ -1463,9 +1463,9 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
 
   if (g_main_loop_is_running (results.loop))
     {
-      GDK_THREADS_LEAVE ();
+      gdk_threads_leave ();
       g_main_loop_run (results.loop);
-      GDK_THREADS_ENTER ();
+      gdk_threads_enter ();
     }
 
   g_main_loop_unref (results.loop);
@@ -1531,9 +1531,9 @@ gtk_clipboard_wait_for_rich_text (GtkClipboard  *clipboard,
 
   if (g_main_loop_is_running (results.loop))
     {
-      GDK_THREADS_LEAVE ();
+      gdk_threads_leave ();
       g_main_loop_run (results.loop);
-      GDK_THREADS_ENTER ();
+      gdk_threads_enter ();
     }
 
   g_main_loop_unref (results.loop);
@@ -1591,9 +1591,9 @@ gtk_clipboard_wait_for_image (GtkClipboard *clipboard)
 
   if (g_main_loop_is_running (results.loop))
     {
-      GDK_THREADS_LEAVE ();
+      gdk_threads_leave ();
       g_main_loop_run (results.loop);
-      GDK_THREADS_ENTER ();
+      gdk_threads_enter ();
     }
 
   g_main_loop_unref (results.loop);
@@ -1646,9 +1646,9 @@ gtk_clipboard_wait_for_uris (GtkClipboard *clipboard)
 
   if (g_main_loop_is_running (results.loop))
     {
-      GDK_THREADS_LEAVE ();
+      gdk_threads_leave ();
       g_main_loop_run (results.loop);
-      GDK_THREADS_ENTER ();
+      gdk_threads_enter ();
     }
 
   g_main_loop_unref (results.loop);
@@ -2132,9 +2132,9 @@ gtk_clipboard_store (GtkClipboard *clipboard)
 
   if (g_main_loop_is_running (clipboard->store_loop))
     {
-      GDK_THREADS_LEAVE ();
+      gdk_threads_leave ();
       g_main_loop_run (clipboard->store_loop);
-      GDK_THREADS_ENTER ();
+      gdk_threads_enter ();
     }
   
   g_main_loop_unref (clipboard->store_loop);

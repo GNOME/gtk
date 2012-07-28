@@ -1861,7 +1861,7 @@ gtk_tool_item_group_animation_cb (gpointer data)
   gint64 timestamp = gtk_tool_item_group_get_animation_timestamp (group);
   gboolean retval;
 
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 
   /* Enque this early to reduce number of expose events. */
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (group));
@@ -1874,7 +1874,7 @@ gtk_tool_item_group_animation_cb (gpointer data)
 
   retval = (priv->animation_timeout != NULL);
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 
   return retval;
 }

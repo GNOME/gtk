@@ -2249,7 +2249,7 @@ add_idle_while_impl_is_alive (GtkFileChooserDefault *impl, GCallback callback)
 static gboolean
 edited_idle_cb (GtkFileChooserDefault *impl)
 {
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
   
   g_source_destroy (impl->edited_idle);
   impl->edited_idle = NULL;
@@ -2287,7 +2287,7 @@ edited_idle_cb (GtkFileChooserDefault *impl)
       impl->edited_new_text = NULL;
     }
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 
   return FALSE;
 }
@@ -6779,14 +6779,14 @@ file_system_model_got_thumbnail (GObject *object, GAsyncResult *res, gpointer da
   if (queried == NULL)
     return;
 
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 
   /* now we know model is valid */
 
   /* file was deleted */
   if (!_gtk_file_system_model_get_iter_for_file (model, &iter, file))
     {
-      GDK_THREADS_LEAVE ();
+      gdk_threads_leave ();
       return;
     }
 
@@ -6800,7 +6800,7 @@ file_system_model_got_thumbnail (GObject *object, GAsyncResult *res, gpointer da
 
   g_object_unref (info);
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 }
 
 static gboolean
@@ -9333,7 +9333,7 @@ search_entry_activate_cb (GtkEntry *entry,
 static gboolean
 focus_entry_idle_cb (GtkFileChooserDefault *impl)
 {
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
   
   g_source_destroy (impl->focus_entry_idle);
   impl->focus_entry_idle = NULL;
@@ -9341,7 +9341,7 @@ focus_entry_idle_cb (GtkFileChooserDefault *impl)
   if (impl->search_entry)
     gtk_widget_grab_focus (impl->search_entry);
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 
   return FALSE;
 }
