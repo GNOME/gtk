@@ -616,14 +616,14 @@ gdk_event_prepare (GSource *source,
 {
   gboolean retval;
 
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
   
   *timeout = -1;
 
   retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
 	    _gdk_quartz_event_loop_check_pending ());
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 
   return retval;
 }
@@ -633,7 +633,7 @@ gdk_event_check (GSource *source)
 {
   gboolean retval;
 
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 
   /* Refresh the autorelease pool if we're at the base CFRunLoop level
    * (indicated by current_loop_level) and the base g_main_loop level
@@ -653,7 +653,7 @@ gdk_event_check (GSource *source)
   retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
 	    _gdk_quartz_event_loop_check_pending ());
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 
   return retval;
 }
@@ -665,7 +665,7 @@ gdk_event_dispatch (GSource     *source,
 {
   GdkEvent *event;
 
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 
   _gdk_quartz_display_queue_events (_gdk_display);
 
@@ -678,7 +678,7 @@ gdk_event_dispatch (GSource     *source,
       gdk_event_free (event);
     }
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 
   return TRUE;
 }

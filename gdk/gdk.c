@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS 1
+
 #include "gdkmain.h"
 
 #include "gdkinternals.h"
@@ -757,12 +759,12 @@ gdk_threads_dispatch (gpointer data)
   GdkThreadsDispatch *dispatch = data;
   gboolean ret = FALSE;
 
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 
   if (!g_source_is_destroyed (g_main_current_source ()))
     ret = dispatch->func (dispatch->data);
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 
   return ret;
 }

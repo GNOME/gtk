@@ -1483,11 +1483,11 @@ process_internal_connection (GIOChannel  *gioc,
 {
   GdkInternalConnection *connection = (GdkInternalConnection *)data;
 
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 
   XProcessInternalConnection ((Display*)connection->display, connection->fd);
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 
   return TRUE;
 }
