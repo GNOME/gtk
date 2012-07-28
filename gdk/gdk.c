@@ -663,6 +663,9 @@ gdk_init (int *argc, char ***argv)
  * GDK and GTK+ functions can be called safely and without causing race
  * conditions. Only one thread at a time can be in such a critial
  * section.
+ *
+ * Deprecated:3.6: All GDK and GTK+ calls should be made from the main
+ *     thread
  */
 void
 gdk_threads_enter (void)
@@ -675,6 +678,9 @@ gdk_threads_enter (void)
  * gdk_threads_leave:
  *
  * Leaves a critical region begun with gdk_threads_enter().
+ *
+ * Deprecated:3.6: All GDK and GTK+ calls should be made from the main
+ *     thread
  */
 void
 gdk_threads_leave (void)
@@ -703,6 +709,9 @@ gdk_threads_impl_unlock (void)
  *
  * This call must be made before any use of the main loop from
  * GTK+; to be safe, call it before gtk_init().
+ *
+ * Deprecated:3.6: All GDK and GTK+ calls should be made from the main
+ *     thread
  */
 void
 gdk_threads_init (void)
@@ -739,6 +748,9 @@ gdk_threads_init (void)
  *
  * This method must be called before gdk_threads_init(), and cannot
  * be called multiple times.
+ *
+ * Deprecated:3.6: All GDK and GTK+ calls should be made from the main
+ *     thread
  *
  * Since: 2.4
  **/
