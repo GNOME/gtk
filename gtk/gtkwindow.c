@@ -9572,8 +9572,8 @@ _gtk_window_set_is_active (GtkWindow *window,
  * in-process, parented GtkPlug)
  *
  * Internal function used by #GtkPlug when it gets parented/unparented by a
- * #GtkSocket.  This keeps the @window's #GTK_TOPLEVEL flag in sync with the
- * global list of toplevel windows.
+ * #GtkSocket.  This keeps the @window's #GTK_WINDOW_TOPLEVEL flag in sync
+ * with the global list of toplevel windows.
  */
 void
 _gtk_window_set_is_toplevel (GtkWindow *window,
