@@ -6659,7 +6659,7 @@ gtk_window_get_preferred_width (GtkWidget *widget,
   border_width =
     2 * gtk_container_get_border_width (GTK_CONTAINER (window));
 
-  if (priv->client_decorated)
+  if (priv->client_decorated && priv->type == GTK_WINDOW_TOPLEVEL)
     {
       context = gtk_widget_get_style_context (widget);
       state = gtk_style_context_get_state (context);
@@ -6719,7 +6719,7 @@ gtk_window_get_preferred_height (GtkWidget *widget,
   *minimum_size = 0;
   *natural_size = 0;
 
-  if (priv->client_decorated)
+  if (priv->client_decorated && priv->type == GTK_WINDOW_TOPLEVEL)
     {
       context = gtk_widget_get_style_context (widget);
       state = gtk_style_context_get_state (context);
@@ -7902,7 +7902,7 @@ gtk_window_draw (GtkWidget *widget,
 
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
 
-      if (priv->client_decorated)
+      if (priv->client_decorated && priv->type == GTK_WINDOW_TOPLEVEL)
 	{
 	  gtk_style_context_add_class (context, "window-border");
 	  gtk_widget_get_allocation (widget, &allocation);
