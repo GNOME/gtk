@@ -64,7 +64,7 @@ enum
 
 G_DEFINE_TYPE(GtkMenuButton, gtk_menu_button, GTK_TYPE_TOGGLE_BUTTON)
 
-static void gtk_menu_button_finalize (GObject *object);
+static void gtk_menu_button_dispose (GObject *object);
 
 static void
 gtk_menu_button_set_property (GObject      *object,
@@ -367,7 +367,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 
   gobject_class->set_property = gtk_menu_button_set_property;
   gobject_class->get_property = gtk_menu_button_get_property;
-  gobject_class->finalize = gtk_menu_button_finalize;
+  gobject_class->dispose = gtk_menu_button_dispose;
 
   widget_class->state_flags_changed = gtk_menu_button_state_flags_changed;
   widget_class->button_press_event = gtk_menu_button_button_press_event;
@@ -772,7 +772,7 @@ gtk_menu_button_get_direction (GtkMenuButton *menu_button)
 }
 
 static void
-gtk_menu_button_finalize (GObject *object)
+gtk_menu_button_dispose (GObject *object)
 {
   GtkMenuButtonPrivate *priv = GTK_MENU_BUTTON (object)->priv;
 
@@ -786,5 +786,5 @@ gtk_menu_button_finalize (GObject *object)
 
   g_clear_object (&priv->model);
 
-  G_OBJECT_CLASS (gtk_menu_button_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_menu_button_parent_class)->dispose (object);
 }
