@@ -1721,6 +1721,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * restore it. The signal emission takes care of calling cairo_save()
    * before and cairo_restore() after invoking the handler.
    *
+   * Returns: %TRUE to stop other handlers from being invoked for the event.
+   % %FALSE to propagate the event further.
+   *
    * Since: 3.0
    */
   widget_signals[DRAW] =
@@ -1739,6 +1742,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * GtkWidget::mnemonic-activate:
    * @widget: the object which received the signal.
    * @arg1:
+   *
+   * Returns: %TRUE to stop other handlers from being invoked for the event.
+   * %FALSE to propagate the event further.
    */
   widget_signals[MNEMONIC_ACTIVATE] =
     g_signal_new (I_("mnemonic-activate"),
@@ -3037,6 +3043,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * GtkWidget::show-help:
    * @widget: the object which received the signal.
    * @help_type:
+   *
+   * Returns: %TRUE to stop other handlers from being invoked for the event.
+   * %FALSE to propagate the event further.
    */
   widget_signals[SHOW_HELP] =
     g_signal_new (I_("show-help"),
