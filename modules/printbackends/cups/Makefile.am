@@ -12,6 +12,7 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/gdk				\
 	$(CUPS_CFLAGS)					\
 	$(COLORD_CFLAGS)				\
+	-DGTK_COMPILATION				\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GTK_DEP_CFLAGS)				\
 	$(GTK_DEBUG_FLAGS)

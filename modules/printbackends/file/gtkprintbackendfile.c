@@ -401,11 +401,11 @@ file_print_cb (GtkPrintBackendFile *print_backend,
                GError              *error,
                gpointer            user_data)
 {
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 
   file_print_cb_locked (print_backend, error, user_data);
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 }
 
 static gboolean

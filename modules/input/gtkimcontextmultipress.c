@@ -197,7 +197,7 @@ on_timeout (gpointer data)
 {
   GtkImContextMultipress *multipress_context;
 
-  GDK_THREADS_ENTER ();
+  gdk_threads_enter ();
 
   multipress_context = GTK_IM_CONTEXT_MULTIPRESS (data);
 
@@ -207,7 +207,7 @@ on_timeout (gpointer data)
 
   multipress_context->timeout_id = 0;
 
-  GDK_THREADS_LEAVE ();
+  gdk_threads_leave ();
 
   return G_SOURCE_REMOVE; /* don't call me again */
 }

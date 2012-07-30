@@ -17,6 +17,7 @@ libprintbackend_file_la_CPPFLAGS = \
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir)/gdk				\
 	-I$(top_builddir)/gdk				\
+	-DGTK_COMPILATION				\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(AM_CPPFLAGS)
 
