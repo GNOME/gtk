@@ -448,10 +448,6 @@ gdk_init (int *argc, char ***argv)
  * which protects all use of GTK+. That is, only one thread can use GTK+
  * at any given time.
  *
- * Unfortunately the above holds with the X11 backend only. With the
- * Win32 backend, GDK calls should not be attempted from multiple threads
- * at all.
- *
  * You must call gdk_threads_init() before executing any other GTK+ or
  * GDK functions in a threaded GTK+ program.
  *
@@ -653,6 +649,19 @@ gdk_init (int *argc, char ***argv)
  * }
  * </programlisting>
  * </informalexample>
+ *
+ * Unfortunately, all of the above documentation holds with the X11
+ * backend only. With the Win32 backend, GDK and GTK+ calls should not
+ * be attempted from multiple threads at all. Combining the GDK lock
+ * with other locks such as the Python global interpreter lock can be
+ * complicated.
+ *
+ * For these reason, the threading support has been deprecated in
+ * GTK+ 3.6. Instead of calling GTK+ directly from multiple threads,
+ * it is recommended to use g_idle_add(), g_main_context_invoke()
+ * and similar functions to make these calls from the main thread
+ * instead. The main thread is the thread which has called gtk_init()
+ * and is running the GTK+ mainloop.
  */
 
 
