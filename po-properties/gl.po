@@ -24,8 +24,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-24 23:56+0200\n"
-"PO-Revision-Date: 2012-06-24 23:57+0200\n"
+"POT-Creation-Date: 2012-07-30 02:27+0200\n"
+"PO-Revision-Date: 2012-07-30 02:29+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
 "Language: gl\n"
@@ -1027,35 +1027,35 @@ msgstr "Texto predeterminado do widget"
 msgid "The default text appearing when there are no applications"
 msgstr "O texto predeterminado que aparece cando non hai aplicativos"
 
-#: ../gtk/gtkapplication.c:736
+#: ../gtk/gtkapplication.c:741
 msgid "Register session"
 msgstr "Rexistrar sesión"
 
-#: ../gtk/gtkapplication.c:737
+#: ../gtk/gtkapplication.c:742
 msgid "Register with the session manager"
 msgstr "Rexistrar co xestor de sesións"
 
-#: ../gtk/gtkapplication.c:742
+#: ../gtk/gtkapplication.c:747
 msgid "Application menu"
 msgstr "Menú de aplicativo"
 
-#: ../gtk/gtkapplication.c:743
+#: ../gtk/gtkapplication.c:748
 msgid "The GMenuModel for the application menu"
 msgstr "O GMenModel para o menú de aplicativos"
 
-#: ../gtk/gtkapplication.c:749
+#: ../gtk/gtkapplication.c:754
 msgid "Menubar"
 msgstr "Barra de menú"
 
-#: ../gtk/gtkapplication.c:750
+#: ../gtk/gtkapplication.c:755
 msgid "The GMenuModel for the menubar"
 msgstr "O GMenuModel para a barra de menú"
 
-#: ../gtk/gtkapplicationwindow.c:1002
+#: ../gtk/gtkapplicationwindow.c:1010
 msgid "Show a menubar"
 msgstr "Mostrar unha barra de menú"
 
-#: ../gtk/gtkapplicationwindow.c:1003
+#: ../gtk/gtkapplicationwindow.c:1011
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr ""
 "Certo se a xanela debe mostrar unha barra de menú na parte superior da xanela"
@@ -3995,6 +3995,54 @@ msgstr "A largura da disposición"
 msgid "The height of the layout"
 msgstr "A altura da disposición"
 
+#: ../gtk/gtklevelbar.c:870
+msgid "Currently filled value level"
+msgstr "Valor do nivel de recheo actual"
+
+#: ../gtk/gtklevelbar.c:871
+msgid "Currently filled value level of the level bar"
+msgstr "Valor do nivel de recheo actual da barra de nivel"
+
+#: ../gtk/gtklevelbar.c:884
+msgid "Minimum value level for the bar"
+msgstr "Mínimo valor do nivel para a barra"
+
+#: ../gtk/gtklevelbar.c:885
+msgid "Minimum value level that can be displayed by the bar"
+msgstr "Valor mínimo do nivel que se pode mostrar na barra"
+
+#: ../gtk/gtklevelbar.c:898
+msgid "Maximum value level for the bar"
+msgstr "Valor máximo do nivel para a barra"
+
+#: ../gtk/gtklevelbar.c:899
+msgid "Maximum value level that can be displayed by the bar"
+msgstr "Valor máximo do nivel que se pode mostrar na barra"
+
+#: ../gtk/gtklevelbar.c:918
+msgid "The mode of the value indicator"
+msgstr "O modo do indicador do valor"
+
+#: ../gtk/gtklevelbar.c:919
+msgid "The mode of the value indicator displayed by the bar"
+msgstr "O modo do indicador do valor mostrado na barra"
+
+#: ../gtk/gtklevelbar.c:934
+msgid "Minimum height for filling blocks"
+msgstr "Altura mínima dos bloques de recheo"
+
+#: ../gtk/gtklevelbar.c:935
+msgid "Minimum height for blocks that fill the bar"
+msgstr "Altura mínima dos bloques que rechean a caixa"
+
+#: ../gtk/gtklevelbar.c:948
+msgid "Minimum width for filling blocks"
+msgstr "Anchura mínima dos bloques de recheo"
+
+#: ../gtk/gtklevelbar.c:949
+msgid "Minimum width for blocks that fill the bar"
+msgstr "Anchura mínima dos bloques que rechean a caixa"
+
 #: ../gtk/gtklinkbutton.c:175
 msgid "URI"
 msgstr "URI"
@@ -4011,51 +4059,51 @@ msgstr "Visitada"
 msgid "Whether this link has been visited."
 msgstr "Indica se esta ligazón foi visitada."
 
-#: ../gtk/gtklockbutton.c:276
+#: ../gtk/gtklockbutton.c:280
 msgid "Permission"
 msgstr "Permiso"
 
-#: ../gtk/gtklockbutton.c:277
+#: ../gtk/gtklockbutton.c:281
 msgid "The GPermission object controlling this button"
 msgstr "O obxecto GPermission que controla este botón"
 
-#: ../gtk/gtklockbutton.c:284
+#: ../gtk/gtklockbutton.c:288
 msgid "Lock Text"
 msgstr "Texto de bloqueo"
 
-#: ../gtk/gtklockbutton.c:285
+#: ../gtk/gtklockbutton.c:289
 msgid "The text to display when prompting the user to lock"
 msgstr "O texto que mostrar ao preguntarlle ao usuario para bloquear"
 
-#: ../gtk/gtklockbutton.c:293
+#: ../gtk/gtklockbutton.c:297
 msgid "Unlock Text"
 msgstr "Texto de desbloqueo"
 
-#: ../gtk/gtklockbutton.c:294
+#: ../gtk/gtklockbutton.c:298
 msgid "The text to display when prompting the user to unlock"
 msgstr "O texto que mostrar ao preguntar ao usuario para desbloquear"
 
-#: ../gtk/gtklockbutton.c:302
+#: ../gtk/gtklockbutton.c:306
 msgid "Lock Tooltip"
 msgstr "Suxestión de bloqueo"
 
-#: ../gtk/gtklockbutton.c:303
+#: ../gtk/gtklockbutton.c:307
 msgid "The tooltip to display when prompting the user to lock"
 msgstr "A suxestión que mostrar ao preguntar ao usuario para bloquear"
 
-#: ../gtk/gtklockbutton.c:311
+#: ../gtk/gtklockbutton.c:315
 msgid "Unlock Tooltip"
 msgstr "Suxestión de bloqueo"
 
-#: ../gtk/gtklockbutton.c:312
+#: ../gtk/gtklockbutton.c:316
 msgid "The tooltip to display when prompting the user to unlock"
 msgstr "A suxestión que mostrar ao preguntar ao usuario que desbloquear"
 
-#: ../gtk/gtklockbutton.c:320
+#: ../gtk/gtklockbutton.c:324
 msgid "Not Authorized Tooltip"
 msgstr "Suxestión de non autorizado"
 
-#: ../gtk/gtklockbutton.c:321
+#: ../gtk/gtklockbutton.c:325
 msgid ""
 "The tooltip to display when prompting the user cannot obtain authorization"
 msgstr ""
@@ -4092,35 +4140,35 @@ msgstr ""
 "Cantidade de espazo do bordo entre a sombra da barra de menús e os elementos "
 "de menú"
 
-#: ../gtk/gtkmenubutton.c:381
+#: ../gtk/gtkmenubutton.c:387
 msgid "menu"
 msgstr "menú"
 
-#: ../gtk/gtkmenubutton.c:382
+#: ../gtk/gtkmenubutton.c:388
 msgid "The dropdown menu."
 msgstr "O menú despregábel."
 
-#: ../gtk/gtkmenubutton.c:397
+#: ../gtk/gtkmenubutton.c:403
 msgid "menu-model"
 msgstr "menu-model"
 
-#: ../gtk/gtkmenubutton.c:398
+#: ../gtk/gtkmenubutton.c:404
 msgid "The dropdown menu's model."
 msgstr "O modelo do menú despregábel."
 
-#: ../gtk/gtkmenubutton.c:411
+#: ../gtk/gtkmenubutton.c:417
 msgid "align-widget"
 msgstr "align-widget"
 
-#: ../gtk/gtkmenubutton.c:412
+#: ../gtk/gtkmenubutton.c:418
 msgid "The parent widget which the menu should align with."
 msgstr "O widget pai co que o menú debe aliñarse."
 
-#: ../gtk/gtkmenubutton.c:426
+#: ../gtk/gtkmenubutton.c:432
 msgid "direction"
 msgstr "dirección"
 
-#: ../gtk/gtkmenubutton.c:427
+#: ../gtk/gtkmenubutton.c:433
 msgid "The direction the arrow should point."
 msgstr "A dirección á que a frecha apunta."
 
@@ -5021,11 +5069,11 @@ msgstr "TRUE se existe unha selección."
 msgid "Embed Page Setup"
 msgstr "Configuración da páxina incorporada"
 
-#: ../gtk/gtkprintoperation.c:1403
-msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
+#: ../gtk/gtkprintoperation.c:1403 ../gtk/gtkprintunixdialog.c:426
+msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr ""
 "TRUE se as caixas de combinación da configuración de páxina están "
-"incorporados no GtkPrintDialog"
+"incorporadas no GtkPrintUnixDialog"
 
 #: ../gtk/gtkprintoperation.c:1424
 msgid "Number of Pages To Print"
@@ -5062,12 +5110,6 @@ msgstr "Se a caixa de diálogo permite a selección"
 #: ../gtk/gtkprintunixdialog.c:418
 msgid "Whether the application has a selection"
 msgstr "Cando o aplicativo ten unha seleccion"
-
-#: ../gtk/gtkprintunixdialog.c:426
-msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
-msgstr ""
-"TRUE se as caixas de combinación da configuración de páxina están "
-"incorporadas no GtkPrintUnixDialog"
 
 #: ../gtk/gtkprogressbar.c:158
 msgid "Fraction"
@@ -5167,7 +5209,7 @@ msgstr ""
 "a acción actual do seu grupo."
 
 #: ../gtk/gtkradioaction.c:133 ../gtk/gtkradiobutton.c:162
-#: ../gtk/gtkradiomenuitem.c:425 ../gtk/gtkradiotoolbutton.c:83
+#: ../gtk/gtkradiomenuitem.c:426 ../gtk/gtkradiotoolbutton.c:83
 msgid "Group"
 msgstr "Grupo"
 
@@ -5191,7 +5233,7 @@ msgstr ""
 msgid "The radio button whose group this widget belongs to."
 msgstr "O botón de opción a cuxo grupo pertence este widget."
 
-#: ../gtk/gtkradiomenuitem.c:426
+#: ../gtk/gtkradiomenuitem.c:427
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "O elemento do menú de opción a cuxo grupo pertence este widget."
 
@@ -8290,6 +8332,11 @@ msgstr "Título do perfil de cor"
 msgid "The title of the color profile to use"
 msgstr "O título do perfil de cor que usar"
 
+#~ msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
+#~ msgstr ""
+#~ "TRUE se as caixas de combinación da configuración de páxina están "
+#~ "incorporados no GtkPrintDialog"
+
 #~ msgid "Specified type"
 #~ msgstr "Tipo especificado"
 
@@ -8690,9 +8737,6 @@ msgstr "O título do perfil de cor que usar"
 #~ msgid "Minimum X"
 #~ msgstr "X mínimo"
 
-#~ msgid "Minimum possible value for X"
-#~ msgstr "Mínimo valor posíbel para X"
-
 #~ msgid "Maximum X"
 #~ msgstr "X máximo"
 
@@ -8707,9 +8751,6 @@ msgstr "O título do perfil de cor que usar"
 
 #~ msgid "Maximum Y"
 #~ msgstr "Y máximo"
-
-#~ msgid "Maximum possible value for Y"
-#~ msgstr "Máximo valor posíbel para Y"
 
 #~ msgid "File System Backend"
 #~ msgstr "Backend do sistema de ficheiros"
