@@ -4934,12 +4934,18 @@ gtk_notebook_remove_tab_label (GtkNotebook     *notebook,
         {
           GtkWidget *parent;
 
+          /* we hit this condition during dnd of a detached tab */
           parent = gtk_widget_get_parent (page->tab_label);
           if (GTK_IS_WINDOW (parent))
             gtk_container_remove (GTK_CONTAINER (parent), page->tab_label);
           else
             gtk_widget_unparent (page->tab_label);
         }
+      else
+        {
+          gtk_widget_unparent (page->tab_label);
+        }
+
       page->tab_label = NULL;
     }
 }
