@@ -231,6 +231,28 @@
  * </refsect2>
  */
 
+typedef struct
+{
+  gchar *name;
+  GType type;
+  guint offset;
+  gboolean private;
+} InternalChildData;
+
+typedef struct
+{
+  gchar *name;
+  GObject *object;
+} InternalChild;
+
+struct _GtkContainerClassPrivate
+{
+  GSList *tmpl_classes;
+
+  const gchar *tmpl;
+  GtkBuilderConnectFunc connect_func;
+  GList *internal_children; /* InternalChildData list */
+};
 
 struct _GtkContainerPrivate
 {
@@ -244,6 +266,8 @@ struct _GtkContainerPrivate
   guint restyle_pending    : 1;
   guint resize_mode        : 2;
   guint request_mode       : 2;
+
+  GArray *internal_children; /* InternalChild array */
 };
 
 enum {
@@ -271,6 +295,9 @@ static void     gtk_container_base_class_finalize  (GtkContainerClass *klass);
 static void     gtk_container_class_init           (GtkContainerClass *klass);
 static void     gtk_container_init                 (GtkContainer      *container);
 static void     gtk_container_destroy              (GtkWidget         *widget);
+static GObject *gtk_container_constructor          (GType                  type,
+                                                    guint                  n_construct_properties,
+                                                    GObjectConstructParam *construct_properties);
 static void     gtk_container_set_property         (GObject         *object,
                                                     guint            prop_id,
                                                     const GValue    *value,
@@ -390,6 +417,8 @@ gtk_container_get_type (void)
                                    GTK_TYPE_BUILDABLE,
                                    &buildable_info);
 
+      g_type_add_class_private (container_type, sizeof (GtkContainerClassPrivate));
+
     }
 
   return container_type;
@@ -398,7 +427,18 @@ gtk_container_get_type (void)
 static void
 gtk_container_base_class_init (GtkContainerClass *class)
 {
+  GtkContainerClassPrivate *priv;
+
   /* reset instance specifc class fields that don't get inherited */
+  class->priv = priv =  G_TYPE_CLASS_GET_PRIVATE (class,
+                                                  GTK_TYPE_CONTAINER,
+                                                  GtkContainerClassPrivate);
+
+  priv->tmpl = NULL;
+  priv->tmpl_classes = NULL;
+  priv->connect_func = NULL;
+  priv->internal_children = NULL;
+  
   class->set_child_property = NULL;
   class->get_child_property = NULL;
 }
@@ -406,6 +446,7 @@ gtk_container_base_class_init (GtkContainerClass *class)
 static void
 gtk_container_base_class_finalize (GtkContainerClass *class)
 {
+  GtkContainerClassPrivate *priv = class->priv;
   GList *list, *node;
 
   list = g_param_spec_pool_list_owned (_gtk_widget_child_property_pool, G_OBJECT_CLASS_TYPE (class));
@@ -418,6 +459,8 @@ gtk_container_base_class_finalize (GtkContainerClass *class)
       g_param_spec_unref (pspec);
     }
   g_list_free (list);
+
+  g_slist_free (priv->tmpl_classes);
 }
 
 static void
@@ -431,6 +474,7 @@ gtk_container_class_init (GtkContainerClass *class)
   vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
 
+  gobject_class->constructor  = gtk_container_constructor;
   gobject_class->set_property = gtk_container_set_property;
   gobject_class->get_property = gtk_container_get_property;
 
@@ -520,10 +564,37 @@ gtk_container_class_init (GtkContainerClass *class)
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_CONTAINER_ACCESSIBLE);
 }
 
+static GObject *
+gtk_container_buildable_get_internal_child (GtkBuildable *buildable,
+                                            GtkBuilder   *builder,
+                                            const gchar  *childname)
+{
+  GArray *internal_children;
+
+  g_return_val_if_fail (childname && childname[0], NULL);
+
+  if ((internal_children = GTK_CONTAINER (buildable)->priv->internal_children))
+    {
+      gint i, len;
+      
+      for (i = 0, len = internal_children->len; i < len; i++)
+        {
+          InternalChild *data = &g_array_index (internal_children, InternalChild, i);
+
+          if (g_strcmp0 (data->name, childname) == 0) return data->object;
+        }
+    }
+  
+  return parent_buildable_iface->get_internal_child (buildable,
+                                                     builder,
+                                                     childname);
+}
+
 static void
 gtk_container_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->get_internal_child = gtk_container_buildable_get_internal_child;
   iface->add_child = gtk_container_buildable_add_child;
   iface->custom_tag_start = gtk_container_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_container_buildable_custom_tag_end;
@@ -1319,6 +1390,105 @@ gtk_container_class_list_child_properties (GObjectClass *cclass,
   return pspecs;
 }
 
+/**
+ * gtk_container_class_set_template_from_resource:
+ * @container_class: a #GtkContainerClass
+ * @resource_path: the #GtkBuilder xml resource path
+ *
+ * This is used when implementing new composite widget types
+ * to specify a UI template for instances of this type.
+ *
+ * Templates are in the <link linkend="BUILDER-UI">GtkBuilder UI description</link>
+ * format and are used to implement composite widget types in
+ * an automated way. 
+ *
+ * Instances with an assigned template will have thier children
+ * built at object construct time.
+ *
+ * The provided xml is expected to have a <template> tag instead of <object> 
+ * with id="this" and an extra 'parent' property specifying from with type 
+ * the new class derives from.
+ * 
+ * Since: 3.0
+ */
+void
+gtk_container_class_set_template_from_resource (GtkContainerClass *container_class,
+                                                const gchar       *resource_path)
+{
+  GtkContainerClassPrivate *priv;
+  GObjectClass  *oclass;
+  
+  g_return_if_fail (GTK_IS_CONTAINER_CLASS(container_class));
+  g_return_if_fail (resource_path && resource_path[0]);
+
+  priv = container_class->priv;
+
+  priv->tmpl = resource_path;
+
+  /* Collect an ordered list of class which have templates to build */
+  for (oclass = G_OBJECT_CLASS (container_class);
+       GTK_IS_CONTAINER_CLASS (oclass);
+       oclass = g_type_class_peek_parent (oclass))
+    {
+      GtkContainerClassPrivate *cpriv = GTK_CONTAINER_CLASS (oclass)->priv;
+
+      if (cpriv->tmpl)
+        priv->tmpl_classes = g_slist_prepend (priv->tmpl_classes, oclass);
+    }
+}
+
+/**
+ * gtk_container_class_set_connect_func:
+ * @container_class: a #GtkContainerClass
+ * @connect_func: the #GtkBuilderConnectFunc to use when connecting signals internally.
+ *
+ * Sets the function to be used when automatically connecting signals
+ * defined by this class's GtkBuilder template.
+ */
+void
+gtk_container_class_set_connect_func (GtkContainerClass *container_class,
+                                      GtkBuilderConnectFunc connect_func)
+{
+  g_return_if_fail (GTK_IS_CONTAINER_CLASS(container_class));
+  g_return_if_fail (connect_func != NULL);
+
+  container_class->priv->connect_func = connect_func;
+}
+
+/**
+ * gtk_container_class_declare_internal_child:
+ * @container_class: a #GtkContainerClass
+ * @use_private: True if struct_offset refers to the instance private struct
+ * @struct_offset: offset where to save composite children pointer
+ * @name: the name of the composite children to declare
+ *
+ * Declare a child defined in the template as an internal children.
+ * Use #G_STRUCT_OFFSET to pass in the struct_offset of the pointer that will be set automatically on construction.
+ * If you do not need to keep a pointer set use_private to FALSE and struct_offset to 0.
+ */
+void
+gtk_container_class_declare_internal_child (GtkContainerClass *container_class,
+                                            gboolean use_private,
+                                            guint struct_offset,
+                                            const gchar *name)
+{
+  GtkContainerClassPrivate *priv;
+  InternalChildData *child;
+
+  g_return_if_fail (GTK_IS_CONTAINER_CLASS (container_class));
+  g_return_if_fail (name);
+
+  priv = container_class->priv;
+
+  child = g_new0 (InternalChildData, 1);
+  child->name = g_strdup (name);
+  child->private = use_private;
+  child->type = G_TYPE_FROM_CLASS (container_class);
+  child->offset = struct_offset;
+
+  priv->internal_children = g_list_prepend (priv->internal_children, child);
+}
+
 static void
 gtk_container_add_unimplemented (GtkContainer     *container,
                                  GtkWidget        *widget)
@@ -1347,6 +1517,7 @@ gtk_container_init (GtkContainer *container)
   priv->border_width = 0;
   priv->resize_mode = GTK_RESIZE_PARENT;
   priv->reallocate_redraws = FALSE;
+  priv->internal_children = NULL;
 }
 
 static void
@@ -1375,9 +1546,123 @@ gtk_container_destroy (GtkWidget *widget)
   if (priv->has_focus_chain)
     gtk_container_unset_focus_chain (container);
 
+  if (priv->internal_children)
+    {
+      GArray *internal_children = priv->internal_children;
+      gint i, len = internal_children->len;
+
+      for (i = 0; i < len; i++)
+        {
+          InternalChild *data = &g_array_index (internal_children, InternalChild, i);
+          g_object_unref (data->object);
+        }
+      g_array_unref (internal_children);
+      priv->internal_children = NULL;
+    }
+
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
 
   GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+}
+
+static void
+gtk_container_child_set_internal (GtkContainer *container,
+                                  InternalChildData *child,
+                                  GObject *internal)
+{
+  GtkContainerPrivate *priv = container->priv;
+  InternalChild data;
+  GObject **retval;
+
+  if (!priv->internal_children)
+    priv->internal_children = g_array_new (FALSE, FALSE, sizeof (InternalChild));
+
+  if (GTK_IS_WIDGET (internal))
+    gtk_widget_set_composite_name (GTK_WIDGET (internal), child->name);
+
+  data.name = child->name;
+  data.object = g_object_ref (internal);
+  g_array_append_val (priv->internal_children, data);
+
+  if (child->private)
+    {
+      gpointer pstruct = G_TYPE_INSTANCE_GET_PRIVATE (container, child->type, gpointer);
+      retval = G_STRUCT_MEMBER_P (pstruct, child->offset);
+    }
+  else
+    retval = G_STRUCT_MEMBER_P (container, child->offset);
+
+  *retval = internal;
+}
+
+static GObject *
+gtk_container_constructor (GType                  type,
+                           guint                  n_construct_properties,
+                           GObjectConstructParam *construct_properties)
+{
+  GtkContainerClassPrivate *priv;
+  GtkContainer *container;
+  GError *error = NULL;
+  GtkBuilder *builder;
+  GObject *object;
+  GSList *l;
+
+  object = G_OBJECT_CLASS (parent_class)->constructor (type,
+                                                       n_construct_properties,
+                                                       construct_properties);
+
+  priv = GTK_CONTAINER_CLASS (G_OBJECT_GET_CLASS (object))->priv;
+  container = GTK_CONTAINER (object);
+
+  gtk_widget_push_composite_child ();
+
+  /* Build the templates for each class starting with the superclass descending */
+  for (l = priv->tmpl_classes; l; l = g_slist_next (l))
+    {
+      GtkContainerClassPrivate *cpriv = GTK_CONTAINER_CLASS (l->data)->priv;
+      GList *children;
+      guint ret;
+        
+      builder = gtk_builder_new ();
+      gtk_builder_expose_object (builder, "this", object);
+      ret = gtk_builder_add_to_parent_from_resource (builder, object, cpriv->tmpl, &error);
+
+      if (ret)
+        {
+          /* Setup internal children */
+          for (children = cpriv->internal_children; children; children = g_list_next (children))
+            {
+              InternalChildData *child = children->data;
+              GObject *internal;
+
+              if ((internal = gtk_builder_get_object (builder, child->name)))
+                gtk_container_child_set_internal (container, child, internal);
+              else
+                {
+                  g_warning ("Unable to setup internal child %s while building GtkContainer class %s",
+                             g_type_name (type), child->name);
+                  continue;
+                }
+            }
+
+          if (cpriv->connect_func)
+            gtk_builder_connect_signals_full (builder, cpriv->connect_func, container);
+          else
+            gtk_builder_connect_signals (builder, container);
+        }
+      else
+	{
+	  g_critical ("Unable to build GtkContainer class %s from template: %s", 
+		      g_type_name (type), error->message);
+	  g_error_free (error);
+	}
+
+      g_object_unref (builder);
+    }
+
+  gtk_widget_pop_composite_child ();
+  
+  return object;
 }
 
 static void

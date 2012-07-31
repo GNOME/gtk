@@ -31,6 +31,8 @@
 
 
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkadjustment.h>
+#include <gtk/gtkbuilder.h>
 
 
 G_BEGIN_DECLS
@@ -42,10 +44,10 @@ G_BEGIN_DECLS
 #define GTK_IS_CONTAINER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CONTAINER))
 #define GTK_CONTAINER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CONTAINER, GtkContainerClass))
 
-
 typedef struct _GtkContainer              GtkContainer;
 typedef struct _GtkContainerPrivate       GtkContainerPrivate;
 typedef struct _GtkContainerClass         GtkContainerClass;
+typedef struct _GtkContainerClassPrivate  GtkContainerClassPrivate;
 
 struct _GtkContainer
 {
@@ -88,9 +90,10 @@ struct _GtkContainerClass
 
 
   /*< private >*/
-
   unsigned int _handle_border_width : 1;
 
+  GtkContainerClassPrivate *priv;
+  
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -99,7 +102,6 @@ struct _GtkContainerClass
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
   void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
 };
 
 
@@ -218,6 +220,16 @@ void    gtk_container_forall		     (GtkContainer *container,
 					      gpointer	    callback_data);
 
 void    gtk_container_class_handle_border_width (GtkContainerClass *klass);
+
+/* Class-level functions */
+void    gtk_container_class_set_template_from_resource (GtkContainerClass *container_class,
+                                                        const gchar       *resource_path);
+void    gtk_container_class_set_connect_func           (GtkContainerClass *container_class,
+                                                        GtkBuilderConnectFunc connect_func);
+void    gtk_container_class_declare_internal_child     (GtkContainerClass *container_class,
+                                                        gboolean use_private,
+                                                        guint struct_offset,
+                                                        const gchar *name);
 
 GtkWidgetPath * gtk_container_get_path_for_child (GtkContainer      *container,
                                                   GtkWidget         *child);
