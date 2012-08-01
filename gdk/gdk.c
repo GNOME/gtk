@@ -661,7 +661,9 @@ gdk_init (int *argc, char ***argv)
  * it is recommended to use g_idle_add(), g_main_context_invoke()
  * and similar functions to make these calls from the main thread
  * instead. The main thread is the thread which has called gtk_init()
- * and is running the GTK+ mainloop.
+ * and is running the GTK+ mainloop. GTK+ itself will continue to
+ * use the GDK lock internally as long as the deprecated functionality
+ * is still available, and other libraries should probably do the same.
  */
 
 
