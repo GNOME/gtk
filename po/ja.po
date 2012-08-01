@@ -2662,7 +2662,7 @@ msgstr "質問"
 #: ../gtk/gtkstock.c:332
 msgctxt "Stock label"
 msgid "_About"
-msgstr "情報(_A)"
+msgstr "このアプリケーションについて(_A)"
 
 #: ../gtk/gtkstock.c:333
 msgctxt "Stock label"
