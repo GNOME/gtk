@@ -4,6 +4,18 @@
 ]>
 <refentry id="gtk-query-immodules-3.0">
 
+<refentryinfo>
+  <title>gtk-query-immodules-3.0</title>
+  <productname>GTK+</productname>
+  <authorgroup>
+    <author>
+      <contrib>Developer</contrib>
+      <firstname>Matthias</firstname>
+      <surname>Clasen</surname>
+    </author>
+  </authorgroup>
+</refentryinfo>
+
 <refmeta>
   <refentrytitle>gtk-query-immodules-3.0</refentrytitle>
   <manvolnum>1</manvolnum>
@@ -19,7 +31,7 @@
 <cmdsynopsis>
 <command>gtk-query-immodules-3.0</command>
 <arg choice="opt">--update-cache</arg>
-<arg choice="opt" rep="repeat">module</arg>
+<arg choice="opt" rep="repeat">MODULE</arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 
@@ -37,11 +49,13 @@ module path.
 If called with arguments, it looks for the specified modules. The arguments
 may be absolute or relative paths.
 </para>
+
 <para>
 Normally, the output of <command>gtk-query-immodules-3.0</command> is written
-to <filename><replaceable>libdir</replaceable>/gtk-3.0/3.0.0/immodules.cache</filename>, where GTK+ looks for it by default. If it is written to some other
-location, the environment variable <link linkend="gtk-im-module-file"><envar>GTK_IM_MODULE_FILE</envar></link>
-can be set to point GTK+ at the file.
+to <filename><replaceable>libdir</replaceable>/gtk-3.0/3.0.0/immodules.cache</filename>,
+where GTK+ looks for it by default. If it is written to some other location,
+the <envar>GTK_IM_MODULE_FILE</envar> environment variable can be set to point
+GTK+ at the file.
 </para>
 </refsect1>
 
@@ -55,19 +69,28 @@ can be set to point GTK+ at the file.
 </variablelist>
 </refsect1>
 
-<refsect1><title>Environment</title>
-<para>
-The environment variable <link linkend="gtk-path"><envar>GTK_PATH</envar></link>
-can be used to prepend directories to the input method module path.
-</para>
+<refsect1><title>Files</title>
+<variablelist>
+  <varlistentry>
+    <term><filename><replaceable>libdir</replaceable>/gtk-3.0/3.0.0/immodules.cache</filename></term>
+    <listitem><para>The default im cache file used by GTK+ applications</para></listitem>
+  </varlistentry>
+</variablelist>
+
 </refsect1>
 
-<refsect1><title>Bugs</title>
-<para>
-None known yet.
-</para>
+<refsect1><title>Environment</title>
+<variablelist>
+  <varlistentry>
+    <term><link linkend="gtk-path"><envar>GTK_PATH</envar></link></term>
+    <listitem><para>Prepends directories to the input method module path</para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><link linkend="gtk-im-module-file"><envar>GTK_IM_MODULE_FILE</envar></link></term>
+    <listitem><para>Specifies an alternative im module cache for GTK+
+    applications</para></listitem>
+  </varlistentry>
+</variablelist>
 </refsect1>
 
 </refentry>
-
-

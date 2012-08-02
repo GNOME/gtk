@@ -6,7 +6,7 @@
 
 <refentryinfo>
   <title>gtk-launch</title>
-  <productname>gtk+</productname>
+  <productname>GTK+</productname>
   <authorgroup>
     <author>
       <contrib>Developer</contrib>
@@ -48,8 +48,9 @@ the application to launch. The name should match application desktop file name,
 as residing in /usr/share/application, with or without the '.desktop' suffix.
 </para>
 <para>
-If called with more than one argument, the rest of them besides the application name
-are considered URI locations and are passed as arguments to the launched application.
+If called with more than one argument, the rest of them besides the application
+name are considered URI locations and are passed as arguments to the launched
+application.
 </para>
 </refsect1>
 
@@ -61,12 +62,6 @@ are considered URI locations and are passed as arguments to the launched applica
       <listitem><para>Prints a short help text and exits.</para></listitem>
     </varlistentry>
   </variablelist>
-</refsect1>
-
-<refsect1><title>Bugs</title>
-<para>
-None known yet.
-</para>
 </refsect1>
 
 </refentry>

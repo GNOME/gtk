@@ -4,6 +4,18 @@
 ]>
 <refentry id="gtk-update-icon-cache">
 
+<refentryinfo>
+  <title>gtk-update-icon-cache</title>
+  <productname>GTK+</productname>
+  <authorgroup>
+    <author>
+      <contrib>Developer</contrib>
+      <firstname>Matthias</firstname>
+      <surname>Clasen</surname>
+    </author>
+  </authorgroup>
+</refentryinfo>
+
 <refmeta>
   <refentrytitle>gtk-update-icon-cache</refentrytitle>
   <manvolnum>1</manvolnum>
@@ -97,12 +109,6 @@
     </para></listitem>
   </varlistentry>
 </variablelist>
-</refsect1>
-
-<refsect1><title>Bugs</title>
-<para>
-None known yet.
-</para>
 </refsect1>
 
 </refentry>
