@@ -1603,33 +1603,53 @@ AM_CONDITIONAL(HAVE_COLORD, test "x$have_colord" = "xyes")
 
 GTK_DOC_CHECK([1.11],[--flavour no-tmpl])
 
-AC_CHECK_PROG(DB2HTML, db2html, true, false)
-AM_CONDITIONAL(HAVE_DOCBOOK, $DB2HTML)
-
 AC_ARG_ENABLE(man,
               [AS_HELP_STRING([--enable-man],
-                              [regenerate man pages from Docbook [default=no]])],
-              [enable_man=yes],
-              [enable_man=no])
+                              [generate man pages [default=auto]])],,
+              enable_man=maybe)
 
-if test "${enable_man}" != no; then
-  dnl
-  dnl Check for xsltproc
-  dnl
+if test "$enable_man" != no; then
   AC_PATH_PROG([XSLTPROC], [xsltproc])
   if test -z "$XSLTPROC"; then
+    if test "$enable_man" = yes ; then
+      AC_MSG_ERROR([xsltproc is required for --enable-man])
+    fi
     enable_man=no
   fi
-
-  dnl check for DocBook DTD and stylesheets in the local catalog.
-  JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.1.2//EN],
-     [DocBook XML DTD V4.1.2],,enable_man=no)
-  JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl],
-     [DocBook XSL Stylesheets],,enable_man=no)
 fi
 
-AM_CONDITIONAL(ENABLE_MAN, test x$enable_man != xno)
+if test "$enable_man" != no; then
+  dnl check for DocBook DTD in the local catalog
+  JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.1.2//EN],
+     [DocBook XML DTD V4.1.2], [have_docbook_dtd=yes], [have_docbook_dtd=no])
+  if test "$have_docbook_dtd" != yes; then
+    if test "$enable_man" = yes ; then
+      AC_MSG_ERROR([DocBook DTD is required for --enable-man])
+    fi
+    enable_man=no
+  fi
+fi
 
+if test "$enable_man" != no; then
+  dnl check for DocBook XSL stylesheets in the local catalog
+  JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl],
+     [DocBook XSL Stylesheets], [have_docbook_style=yes],[have_docbook_style=no])
+  if test "$have_docbook_dtd" != yes; then
+    if test "$enable_man" = yes ; then
+      AC_MSG_ERROR([DocBook XSL Stylesheets are required for --enable-man])
+    fi
+    enable_man=no
+  fi
+fi
+
+AM_CONDITIONAL(ENABLE_MAN, test "$enable_man" != no)
+
+AC_MSG_CHECKING([whether to generate man pages])
+if test "$enable_man" != no; then
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
+fi
 
 ##################################################
 # Output commands
