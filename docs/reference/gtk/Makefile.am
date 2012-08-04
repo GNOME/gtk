@@ -309,6 +309,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/icon-view.png					\
 	$(srcdir)/images/image.png					\
 	$(srcdir)/images/label.png					\
+	$(srcdir)/images/levelbar.png					\
 	$(srcdir)/images/link-button.png				\
 	$(srcdir)/images/list-and-tree.png				\
 	$(srcdir)/images/lock-button.png				\
