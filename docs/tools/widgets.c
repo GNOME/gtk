@@ -228,9 +228,9 @@ static WidgetInfo *
 create_menu_button (void)
 {
   GtkWidget *widget;
-  GtkWidget *align;
   GtkWidget *image;
   GtkWidget *menu;
+  GtkWidget *vbox;
 
   widget = gtk_menu_button_new ();
   image = gtk_image_new ();
@@ -238,10 +238,15 @@ create_menu_button (void)
   gtk_button_set_image (GTK_BUTTON (widget), image);
   menu = gtk_menu_new ();
   gtk_menu_button_set_menu (GTK_MENU_BUTTON (widget), menu);
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-  gtk_container_add (GTK_CONTAINER (align), widget);
 
-  return new_widget_info ("menu-button", align, SMALL);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Menu Button"), TRUE, TRUE, 0);
+
+  return new_widget_info ("menu-button", vbox, SMALL);
 }
 
 #define G_TYPE_TEST_PERMISSION      (g_test_permission_get_type ())
@@ -282,14 +287,20 @@ g_test_permission_class_init (GTestPermissionClass *class)
 static WidgetInfo *
 create_lockbutton (void)
 {
+  GtkWidget *vbox;
   GtkWidget *widget;
-  GtkWidget *align;
 
   widget = gtk_lock_button_new (g_object_new (G_TYPE_TEST_PERMISSION, NULL));
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-  gtk_container_add (GTK_CONTAINER (align), widget);
 
-  return new_widget_info ("lock-button", align, SMALL);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("Lock Button"),
+		      FALSE, FALSE, 0);
+  gtk_widget_set_halign (vbox, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
+
+  return new_widget_info ("lock-button", vbox, SMALL);
 }
 
 static WidgetInfo *
@@ -988,6 +999,24 @@ create_progressbar (void)
 }
 
 static WidgetInfo *
+create_level_bar (void)
+{
+  GtkWidget *vbox;
+  GtkWidget *widget;
+
+  widget = gtk_level_bar_new ();
+  gtk_level_bar_set_value (GTK_LEVEL_BAR (widget), 0.333);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, TRUE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("Level Bar"),
+		      FALSE, FALSE, 0);
+
+  return new_widget_info ("levelbar", vbox, SMALL);
+}
+
+static WidgetInfo *
 create_scrolledwindow (void)
 {
   GtkWidget *scrolledwin, *label;
@@ -1269,6 +1298,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_colorchooserdialog ());
   retval = g_list_prepend (retval, create_menu_button ());
   retval = g_list_prepend (retval, create_search_entry ());
+  retval = g_list_prepend (retval, create_level_bar ());
 
   return retval;
 }
