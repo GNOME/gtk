@@ -1835,9 +1835,9 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
 	    info->auth_info_required[i] = g_strdup (ippGetString (attr, i, NULL));
 	}
     }
-  else if (strcmp (attr->name, "number-up-default") == 0)
+  else if (strcmp (ippGetName (attr), "number-up-default") == 0)
     {
-      info->default_number_up = attr->values[0].integer;
+      info->default_number_up = ippGetInteger (attr, 0);
     }
   else
     {
