@@ -73,8 +73,6 @@ guint    gdk_threads_add_timeout_seconds      (guint          interval,
                                                gpointer       data);
 
 
-#if !(GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_3_6)
-
 /**
  * GDK_THREADS_ENTER:
  *
@@ -99,8 +97,6 @@ guint    gdk_threads_add_timeout_seconds      (guint          interval,
  * Deprecated:3.6: Deprecated in 3.6.
  */
 #define GDK_THREADS_LEAVE() gdk_threads_leave()
-
-#endif
 
 #undef GDK_THREADS_DEPRECATED
 
