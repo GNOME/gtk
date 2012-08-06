@@ -241,8 +241,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * @widget: the object which received the signal.
    *
    * The ::color-set signal is emitted when the user selects a color.
-   * When handling this signal, use gtk_color_button_get_color() and
-   * gtk_color_button_get_alpha() (or gtk_color_button_get_rgba()) to
+   * When handling this signal, use gtk_color_button_get_rgba() to
    * find out which color was just selected.
    *
    * Note that this signal is only emitted when the <emphasis>user</emphasis>
