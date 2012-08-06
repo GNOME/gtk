@@ -220,8 +220,8 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * GtkAdjustment::changed:
    * @adjustment: the object which received the signal.
    *
-   * Emitted when one or more of the #GtkAdjustment fields have been changed,
-   * other than the value field.
+   * Emitted when one or more of the #GtkAdjustment properties have been
+   * changed, other than the #GtkAdjustment:value property.
    */
   adjustment_signals[CHANGED] =
     g_signal_new (I_("changed"),
@@ -236,7 +236,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * GtkAdjustment::value-changed:
    * @adjustment: the object which received the signal.
    *
-   * Emitted when the #GtkAdjustment value field has been changed.
+   * Emitted when the #GtkAdjustment:value property has been changed.
    */
   adjustment_signals[VALUE_CHANGED] =
     g_signal_new (I_("value-changed"),
@@ -470,16 +470,16 @@ gtk_adjustment_get_lower (GtkAdjustment *adjustment)
  * Sets the minimum value of the adjustment.
  *
  * When setting multiple adjustment properties via their individual
- * setters, multiple "changed" signals will be emitted. However, since
- * the emission of the "changed" signal is tied to the emission of the
- * "GObject::notify" signals of the changed properties, it's possible
- * to compress the "changed" signals into one by calling
+ * setters, multiple #GtkAdjustment::changed signals will be emitted. However, since
+ * the emission of the #GtkAdjustment::changed signal is tied to the emission of the
+ * #GObject::notify signals of the changed properties, it's possible
+ * to compress the #GtkAdjustment::changed signals into one by calling
  * g_object_freeze_notify() and g_object_thaw_notify() around the
  * calls to the individual setters.
  *
  * Alternatively, using a single g_object_set() for all the properties
  * to change, or using gtk_adjustment_configure() has the same effect
- * of compressing "changed" emissions.
+ * of compressing #GtkAdjustment::changed emissions.
  *
  * Since: 2.14
  **/
@@ -523,7 +523,7 @@ gtk_adjustment_get_upper (GtkAdjustment *adjustment)
  * property is nonzero.
  *
  * See gtk_adjustment_set_lower() about how to compress multiple
- * emissions of the "changed" signal when setting multiple adjustment
+ * emissions of the #GtkAdjustment::changed signal when setting multiple adjustment
  * properties.
  *
  * Since: 2.14
@@ -564,7 +564,7 @@ gtk_adjustment_get_step_increment (GtkAdjustment *adjustment)
  * Sets the step increment of the adjustment.
  *
  * See gtk_adjustment_set_lower() about how to compress multiple
- * emissions of the "changed" signal when setting multiple adjustment
+ * emissions of the #GtkAdjustment::changed signal when setting multiple adjustment
  * properties.
  *
  * Since: 2.14
@@ -605,7 +605,7 @@ gtk_adjustment_get_page_increment (GtkAdjustment *adjustment)
  * Sets the page increment of the adjustment.
  *
  * See gtk_adjustment_set_lower() about how to compress multiple
- * emissions of the "changed" signal when setting multiple adjustment
+ * emissions of the #GtkAdjustment::changed signal when setting multiple adjustment
  * properties.
  *
  * Since: 2.14
@@ -646,7 +646,7 @@ gtk_adjustment_get_page_size (GtkAdjustment *adjustment)
  * Sets the page size of the adjustment.
  *
  * See gtk_adjustment_set_lower() about how to compress multiple
- * emissions of the "changed" signal when setting multiple adjustment
+ * emissions of the GtkAdjustment::changed signal when setting multiple adjustment
  * properties.
  *
  * Since: 2.14
@@ -673,9 +673,9 @@ gtk_adjustment_set_page_size (GtkAdjustment *adjustment,
  *
  * Sets all properties of the adjustment at once.
  *
- * Use this function to avoid multiple emissions of the "changed"
+ * Use this function to avoid multiple emissions of the #GtkAdjustment::changed
  * signal. See gtk_adjustment_set_lower() for an alternative way
- * of compressing multiple emissions of "changed" into one.
+ * of compressing multiple emissions of #GtkAdjustment::changed into one.
  *
  * Since: 2.14
  **/
@@ -736,7 +736,7 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
  *
  * Emits a #GtkAdjustment::changed signal from the #GtkAdjustment.
  * This is typically called by the owner of the #GtkAdjustment after it has
- * changed any of the #GtkAdjustment fields other than the value.
+ * changed any of the #GtkAdjustment properties other than the value.
  */
 void
 gtk_adjustment_changed (GtkAdjustment *adjustment)
@@ -752,7 +752,7 @@ gtk_adjustment_changed (GtkAdjustment *adjustment)
  *
  * Emits a #GtkAdjustment::value_changed signal from the #GtkAdjustment.
  * This is typically called by the owner of the #GtkAdjustment after it has
- * changed the #GtkAdjustment value field.
+ * changed the #GtkAdjustment:value property.
  */
 void
 gtk_adjustment_value_changed (GtkAdjustment *adjustment)
@@ -769,7 +769,7 @@ gtk_adjustment_value_changed (GtkAdjustment *adjustment)
  * @lower: the lower value.
  * @upper: the upper value.
  *
- * Updates the #GtkAdjustment #GtkAdjustment:value to ensure that the range
+ * Updates the #GtkAdjustment:value property to ensure that the range
  * between @lower and @upper is in the current page (i.e. between
  * #GtkAdjustment:value and #GtkAdjustment:value + #GtkAdjustment:page_size).
  * If the range is larger than the page size, then only the start of it will
