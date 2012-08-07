@@ -1,3 +1,42 @@
+Overview of Changes in GTK+ 3.5.10
+==================================
+
+* Wayland:
+ - Add keyboard handling
+ - Improve clipboard handling
+ - Add default settings implementation
+
+* GDK thread support has been deprecated
+
+* Bugs fixed:
+ 679910 GtkTreeModelFilter: Fix _iter_previous() when iter...
+ 679978 Optimize gtk_widget_path_copy() by preallocating "...
+ 680754 deprecate gdk thread functions
+ 680803 menubutton: Clear references in dispose, not finalize
+ 680822 Document return value of GtkWidget::draw
+ 680901 GTK+: The chinese translations of "even sheet" and...
+ 680949 GtkColorButton documentation seems self-contradictory
+ 680988 GtkMenuButton down direction positioning suboptimal
+ 681005 [IconView] wrong transfer annotation for get_toolt...
+ 681006 Escape should cancel DnD operation
+ 681064 container: restyle queue leaks
+
+* Updated translations
+ Galician
+ German
+ Greek
+ Gujarati
+ Japanese
+ Kazakh
+ Norwegian bokmål
+ Persian
+ Serbian
+ Slovenian
+ Spanish
+ Telugu
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.5.8
 =================================
 
