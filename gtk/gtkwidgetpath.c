@@ -174,15 +174,16 @@ gtk_widget_path_copy (const GtkWidgetPath *path)
 
   new_path = gtk_widget_path_new ();
 
+  g_array_set_size (new_path->elems, path->elems->len);
+
   for (i = 0; i < path->elems->len; i++)
     {
-      GtkPathElement *elem, new;
+      GtkPathElement *elem, *dest;
 
       elem = &g_array_index (path->elems, GtkPathElement, i);
+      dest = &g_array_index (new_path->elems, GtkPathElement, i);
 
-      gtk_path_element_copy (&new, elem);
-
-      g_array_append_val (new_path->elems, new);
+      gtk_path_element_copy (dest, elem);
     }
 
   return new_path;
