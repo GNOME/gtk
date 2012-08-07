@@ -83,8 +83,6 @@
 
 typedef struct _ToolbarContent ToolbarContent;
 
-#define DEFAULT_IPADDING    0
-
 #define DEFAULT_SPACE_SIZE  12
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
 #define SPACE_LINE_DIVISION 10.0
@@ -577,13 +575,22 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                              DEFAULT_SPACE_SIZE,
 							     GTK_PARAM_READABLE));
   
+  /**
+   * GtkToolbar:internal-padding:
+   *
+   * Amount of border space between the toolbar shadow and the buttons.
+   *
+   * Deprecated: 3.6: Use the standard padding CSS property
+   *   (through objects like #GtkStyleContext and #GtkCssProvider); the value
+   *   of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("internal-padding",
 							     P_("Internal padding"),
 							     P_("Amount of border space between the toolbar shadow and the buttons"),
 							     0,
 							     G_MAXINT,
-                                                             DEFAULT_IPADDING,
+                                                             0,
                                                              GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
@@ -891,7 +898,6 @@ get_widget_padding_and_border (GtkWidget *widget,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder tmp;
-  gint ipadding = 0;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_style_context_get_state (context);
@@ -899,12 +905,10 @@ get_widget_padding_and_border (GtkWidget *widget,
   gtk_style_context_get_padding (context, state, padding);
   gtk_style_context_get_border (context, state, &tmp);
 
-  gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
-
-  padding->top += tmp.top + ipadding;
-  padding->right += tmp.right + ipadding;
-  padding->bottom += tmp.bottom + ipadding;
-  padding->left += tmp.left + ipadding;
+  padding->top += tmp.top;
+  padding->right += tmp.right;
+  padding->bottom += tmp.bottom;
+  padding->left += tmp.left;
 }
 
 static void
