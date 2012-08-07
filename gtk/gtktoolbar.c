@@ -251,7 +251,6 @@ static void       gtk_toolbar_reconfigured         (GtkToolbar          *toolbar
 
 static GtkReliefStyle       get_button_relief    (GtkToolbar *toolbar);
 static gint                 get_max_child_expand (GtkToolbar *toolbar);
-static GtkShadowType        get_shadow_type      (GtkToolbar *toolbar);
 
 /* methods on ToolbarContent 'class' */
 static ToolbarContent *toolbar_content_new_tool_item        (GtkToolbar          *toolbar,
@@ -617,6 +616,15 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                               GTK_TYPE_RELIEF_STYLE,
                                                               GTK_RELIEF_NONE,
                                                               GTK_PARAM_READABLE));
+  /**
+   * GtkToolbar:shadow-type:
+   *
+   * Style of bevel around the toolbar.
+   *
+   * Deprecated: 3.6: Use the standard border CSS property
+   *   (through objects like #GtkStyleContext and #GtkCssProvider); the value
+   *   of this style property is ignored.
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_enum ("shadow-type",
                                                               P_("Shadow type"),
@@ -1022,17 +1030,10 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 
   /* Extra spacing */
   border_width = gtk_container_get_border_width (GTK_CONTAINER (toolbar));
+  get_widget_padding_and_border (widget, &padding);
 
-  requisition->width += 2 * border_width;
-  requisition->height += 2 * border_width;
-
-  if (get_shadow_type (toolbar) != GTK_SHADOW_NONE)
-    {
-      get_widget_padding_and_border (widget, &padding);
-
-      requisition->width += padding.left + padding.right;
-      requisition->height += padding.top + padding.bottom;
-    }
+  requisition->width += 2 * border_width + padding.left + padding.right;
+  requisition->height += 2 * border_width + padding.top + padding.bottom;
   
   priv->button_maxw = max_homogeneous_child_width;
   priv->button_maxh = max_homogeneous_child_height;
@@ -1510,7 +1511,6 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   gboolean overflowing;
   gboolean size_changed;
   GtkAllocation item_area;
-  GtkShadowType shadow_type;
 
   gtk_widget_get_allocation (widget, &widget_allocation);
   size_changed = FALSE;
@@ -1539,34 +1539,19 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
   gtk_widget_get_preferred_size (priv->arrow_button,
                                  &arrow_requisition, NULL);
-
-  shadow_type = get_shadow_type (toolbar);
-
   get_widget_padding_and_border (widget, &padding);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      available_size = size = allocation->width - 2 * border_width;
-      short_size = allocation->height - 2 * border_width;
+      available_size = size = allocation->width - 2 * border_width - padding.left - padding.right;
+      short_size = allocation->height - 2 * border_width - padding.top - padding.bottom;
       arrow_size = arrow_requisition.width;
-
-      if (shadow_type != GTK_SHADOW_NONE)
-        {
-          available_size -= padding.left + padding.right;
-          short_size -= padding.top + padding.bottom;
-        }
     }
   else
     {
-      available_size = size = allocation->height - 2 * border_width;
-      short_size = allocation->width - 2 * border_width;
+      available_size = size = allocation->height - 2 * border_width - padding.top - padding.bottom;
+      short_size = allocation->width - 2 * border_width - padding.left - padding.right;
       arrow_size = arrow_requisition.height;
-
-      if (shadow_type != GTK_SHADOW_NONE)
-        {
-          available_size -= padding.top + padding.bottom;
-          short_size -= padding.left + padding.right;
-        }
     }
 
   n_items = g_list_length (priv->content);
@@ -1736,35 +1721,18 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   /* translate the items by allocation->(x,y) */
   for (i = 0; i < n_items; ++i)
     {
-      allocations[i].x += allocation->x;
-      allocations[i].y += allocation->y;
-
-      if (shadow_type != GTK_SHADOW_NONE)
-        {
-          allocations[i].x += padding.left;
-          allocations[i].y += padding.top;
-        }
+      allocations[i].x += allocation->x + padding.left;
+      allocations[i].y += allocation->y + padding.top;
     }
 
   if (need_arrow)
     {
-      arrow_allocation.x += allocation->x;
-      arrow_allocation.y += allocation->y;
-
-      if (shadow_type != GTK_SHADOW_NONE)
-        {
-          arrow_allocation.x += padding.left;
-          arrow_allocation.y += padding.top;
-        }
+      arrow_allocation.x += allocation->x + padding.left;
+      arrow_allocation.y += allocation->y + padding.top;
     }
 
-  item_area.x += allocation->x;
-  item_area.y += allocation->y;
-  if (shadow_type != GTK_SHADOW_NONE)
-    {
-      item_area.x += padding.left;
-      item_area.y += padding.top;
-    }
+  item_area.x += allocation->x + padding.left;
+  item_area.y += allocation->y + padding.top;
 
   /* did anything change? */
   for (list = priv->content, i = 0; list != NULL; list = list->next, i++)
@@ -3669,18 +3637,6 @@ get_max_child_expand (GtkToolbar *toolbar)
                         "max-child-expand", &mexpand,
                         NULL);
   return mexpand;
-}
-
-static GtkShadowType
-get_shadow_type (GtkToolbar *toolbar)
-{
-  GtkShadowType shadow_type;
-  
-  gtk_widget_style_get (GTK_WIDGET (toolbar),
-			"shadow-type", &shadow_type,
-			NULL);
-  
-  return shadow_type;
 }
 
 /* GTK+ internal methods */
