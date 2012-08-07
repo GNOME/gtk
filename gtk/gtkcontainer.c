@@ -1648,14 +1648,18 @@ gtk_container_idle_sizer (gpointer data)
   current_time = g_get_monotonic_time ();
   slist = container_restyle_queue;
   container_restyle_queue = NULL;
-  for (; slist; slist = slist->next)
+  while (slist)
     {
+      GSList *next = slist->next;
       GtkContainer *container = slist->data;
 
       container->priv->restyle_pending = FALSE;
       _gtk_style_context_validate (gtk_widget_get_style_context (GTK_WIDGET (container)),
                                    current_time,
                                    0);
+
+      g_slist_free_1 (slist);
+      slist = next;
     }
 
   /* we may be invoked with a container_resize_queue of NULL, because
