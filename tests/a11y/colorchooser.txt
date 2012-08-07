@@ -50,6 +50,11 @@ window1
             name: Color Wheel
             description: Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle.
             controlled-by: 0
+                           0
+                           100
+                           255
+                           255
+                           255
             state: enabled focusable sensitive showing visible
             toolkit: gtk
             <AtkComponent>
