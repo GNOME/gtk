@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # taijuin <taijuin@gmail.com>, 2010.
 # Wei-Lun Chao <chaoweilun@gmail.com>, 2010.
-#
+# Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.3.11\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-14 14:10+0800\n"
-"PO-Revision-Date: 2012-07-14 14:10+0800\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-08-01 08:28+0000\n"
+"PO-Revision-Date: 2012-08-07 13:41+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
 "Language: zh_TW\n"
@@ -17,49 +18,51 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Virtaal 0.7.1\n"
+"X-Project-Style: gnome\n"
 
-#: ../gdk/gdk.c:153
+#: ../gdk/gdk.c:155
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "解析選項 --gdk-debug 時發生錯誤"
 
-#: ../gdk/gdk.c:173
+#: ../gdk/gdk.c:175
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "解析選項 --gdk-no-debug 時發生錯誤"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:201
+#: ../gdk/gdk.c:203
 msgid "Program class as used by the window manager"
 msgstr "視窗總管所需的程式類別名稱"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:202
+#: ../gdk/gdk.c:204
 msgid "CLASS"
 msgstr "類別"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:204
+#: ../gdk/gdk.c:206
 msgid "Program name as used by the window manager"
 msgstr "視窗總管中使用的程式名稱"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:205
+#: ../gdk/gdk.c:207
 msgid "NAME"
 msgstr "名稱"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:207
+#: ../gdk/gdk.c:209
 msgid "X display to use"
 msgstr "使用的 X 畫面"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:208
+#: ../gdk/gdk.c:210
 msgid "DISPLAY"
 msgstr "畫面"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:211
+#: ../gdk/gdk.c:213
 msgid "GDK debugging flags to set"
 msgstr "準備設定的 GDK 偵錯旗標"
 
@@ -67,12 +70,12 @@ msgstr "準備設定的 GDK 偵錯旗標"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:212 ../gdk/gdk.c:215 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
+#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
 msgid "FLAGS"
 msgstr "旗標"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:214
+#: ../gdk/gdk.c:216
 msgid "GDK debugging flags to unset"
 msgstr "準備去除的 GDK 偵錯旗標"
 
@@ -629,7 +632,7 @@ msgstr "大小(_Z)："
 msgid "_Preview:"
 msgstr "預覽(_P)："
 
-#: ../gtk/deprecated/gtkfontsel.c:1738 ../gtk/gtkfontchooserdialog.c:183
+#: ../gtk/deprecated/gtkfontsel.c:1720 ../gtk/gtkfontchooserdialog.c:183
 msgid "Font Selection"
 msgstr "字型選擇"
 
@@ -848,7 +851,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:327 ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkapplicationwindow.c:335 ../gtk/gtkprintoperation-unix.c:475
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "應用程式"
@@ -1400,7 +1403,7 @@ msgstr "Caps Lock 已開啟"
 msgid "Select a File"
 msgstr "選取檔案"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1815
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1817
 msgid "Desktop"
 msgstr "桌面"
 
@@ -1416,48 +1419,48 @@ msgstr "其他…"
 msgid "Type name of new folder"
 msgstr "請輸入新資料夾名稱"
 
-#: ../gtk/gtkfilechooserdefault.c:966
+#: ../gtk/gtkfilechooserdefault.c:968
 msgid "Could not retrieve information about the file"
 msgstr "無法取得關於檔案的資訊"
 
-#: ../gtk/gtkfilechooserdefault.c:977
+#: ../gtk/gtkfilechooserdefault.c:979
 msgid "Could not add a bookmark"
 msgstr "無法加入書籤"
 
-#: ../gtk/gtkfilechooserdefault.c:988
+#: ../gtk/gtkfilechooserdefault.c:990
 msgid "Could not remove bookmark"
 msgstr "無法移除書籤"
 
-#: ../gtk/gtkfilechooserdefault.c:999
+#: ../gtk/gtkfilechooserdefault.c:1001
 msgid "The folder could not be created"
 msgstr "無法建立資料夾"
 
-#: ../gtk/gtkfilechooserdefault.c:1012
+#: ../gtk/gtkfilechooserdefault.c:1014
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr "此資料夾無法建立，因為已有相同名稱的檔案存在。嘗試使用不同的資料夾名稱，或者先重新命名該檔案。"
 
-#: ../gtk/gtkfilechooserdefault.c:1026
+#: ../gtk/gtkfilechooserdefault.c:1028
 msgid "You need to choose a valid filename."
 msgstr "你需要選擇有效的檔案名稱"
 
-#: ../gtk/gtkfilechooserdefault.c:1029
+#: ../gtk/gtkfilechooserdefault.c:1031
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "不能在 %s 下建立檔案，因為它不是資料夾"
 
-#: ../gtk/gtkfilechooserdefault.c:1041
+#: ../gtk/gtkfilechooserdefault.c:1043
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
 msgstr "你只能選擇資料夾。你所選取的項目不是資料夾；請嘗試使用不同的項目。"
 
-#: ../gtk/gtkfilechooserdefault.c:1051
+#: ../gtk/gtkfilechooserdefault.c:1053
 msgid "Invalid file name"
 msgstr "無效的檔案名稱"
 
-#: ../gtk/gtkfilechooserdefault.c:1061
+#: ../gtk/gtkfilechooserdefault.c:1063
 msgid "The folder contents could not be displayed"
 msgstr "無法顯示資料夾內容"
 
@@ -1465,218 +1468,218 @@ msgstr "無法顯示資料夾內容"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1587
+#: ../gtk/gtkfilechooserdefault.c:1589
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s 於 %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1736
+#: ../gtk/gtkfilechooserdefault.c:1738
 msgid "Search"
 msgstr "搜尋"
 
-#: ../gtk/gtkfilechooserdefault.c:1760 ../gtk/gtkfilechooserdefault.c:4986
+#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4988
 msgid "Recently Used"
 msgstr "最近使用的"
 
-#: ../gtk/gtkfilechooserdefault.c:2359
+#: ../gtk/gtkfilechooserdefault.c:2361
 msgid "Select which types of files are shown"
 msgstr "選擇顯示哪種類型的檔案"
 
-#: ../gtk/gtkfilechooserdefault.c:2718
+#: ../gtk/gtkfilechooserdefault.c:2720
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "將資料夾「%s」加入書籤"
 
-#: ../gtk/gtkfilechooserdefault.c:2762
+#: ../gtk/gtkfilechooserdefault.c:2764
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "將目前的資料夾加入書籤"
 
-#: ../gtk/gtkfilechooserdefault.c:2764
+#: ../gtk/gtkfilechooserdefault.c:2766
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "將已選的資料夾加入書籤"
 
-#: ../gtk/gtkfilechooserdefault.c:2802
+#: ../gtk/gtkfilechooserdefault.c:2804
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "移除書籤「%s」"
 
-#: ../gtk/gtkfilechooserdefault.c:2804
+#: ../gtk/gtkfilechooserdefault.c:2806
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "無法移除書籤「%s」"
 
-#: ../gtk/gtkfilechooserdefault.c:2811 ../gtk/gtkfilechooserdefault.c:3697
+#: ../gtk/gtkfilechooserdefault.c:2813 ../gtk/gtkfilechooserdefault.c:3699
 msgid "Remove the selected bookmark"
 msgstr "移除已選的書籤"
 
-#: ../gtk/gtkfilechooserdefault.c:3375
+#: ../gtk/gtkfilechooserdefault.c:3377
 msgid "Remove"
 msgstr "移除"
 
-#: ../gtk/gtkfilechooserdefault.c:3384
+#: ../gtk/gtkfilechooserdefault.c:3386
 msgid "Rename..."
 msgstr "重新命名…"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3548
+#: ../gtk/gtkfilechooserdefault.c:3550
 msgid "Places"
 msgstr "位置"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3605
+#: ../gtk/gtkfilechooserdefault.c:3607
 msgid "_Places"
 msgstr "位置(_P)"
 
-#: ../gtk/gtkfilechooserdefault.c:3685
+#: ../gtk/gtkfilechooserdefault.c:3687
 msgid "Add the selected folder to the Bookmarks"
 msgstr "將已選的資料夾加入書籤"
 
-#: ../gtk/gtkfilechooserdefault.c:3946
+#: ../gtk/gtkfilechooserdefault.c:3948
 msgid "Could not select file"
 msgstr "無法選取檔案"
 
-#: ../gtk/gtkfilechooserdefault.c:4171
+#: ../gtk/gtkfilechooserdefault.c:4173
 msgid "_Visit this file"
 msgstr "查閱這個檔案(_V)"
 
-#: ../gtk/gtkfilechooserdefault.c:4174
+#: ../gtk/gtkfilechooserdefault.c:4176
 msgid "_Copy file's location"
 msgstr "複製檔案的位置(_C)"
 
-#: ../gtk/gtkfilechooserdefault.c:4177
+#: ../gtk/gtkfilechooserdefault.c:4179
 msgid "_Add to Bookmarks"
 msgstr "加入書籤(_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:4184
+#: ../gtk/gtkfilechooserdefault.c:4186
 msgid "Show _Hidden Files"
 msgstr "顯示隱藏檔(_H)"
 
-#: ../gtk/gtkfilechooserdefault.c:4187
+#: ../gtk/gtkfilechooserdefault.c:4189
 msgid "Show _Size Column"
 msgstr "顯示大小欄位(_S)"
 
-#: ../gtk/gtkfilechooserdefault.c:4412
+#: ../gtk/gtkfilechooserdefault.c:4414
 msgid "Files"
 msgstr "檔案"
 
-#: ../gtk/gtkfilechooserdefault.c:4463
+#: ../gtk/gtkfilechooserdefault.c:4465
 msgid "Name"
 msgstr "名稱"
 
-#: ../gtk/gtkfilechooserdefault.c:4486
+#: ../gtk/gtkfilechooserdefault.c:4488
 msgid "Size"
 msgstr "大小"
 
-#: ../gtk/gtkfilechooserdefault.c:4500
+#: ../gtk/gtkfilechooserdefault.c:4502
 msgid "Modified"
 msgstr "已修改"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4593 ../gtk/gtkprinteroptionwidget.c:835
+#: ../gtk/gtkfilechooserdefault.c:4595 ../gtk/gtkprinteroptionwidget.c:835
 msgid "_Name:"
 msgstr "名稱(_N):"
 
-#: ../gtk/gtkfilechooserdefault.c:4824
+#: ../gtk/gtkfilechooserdefault.c:4826
 msgid "Type a file name"
 msgstr "輸入檔案名稱"
 
-#: ../gtk/gtkfilechooserdefault.c:4871 ../gtk/gtkfilechooserdefault.c:4882
+#: ../gtk/gtkfilechooserdefault.c:4873 ../gtk/gtkfilechooserdefault.c:4884
 msgid "Please select a folder below"
 msgstr "請選擇下面的資料夾"
 
-#: ../gtk/gtkfilechooserdefault.c:4877
+#: ../gtk/gtkfilechooserdefault.c:4879
 msgid "Please type a file name"
 msgstr "請輸入檔案名稱"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4948
+#: ../gtk/gtkfilechooserdefault.c:4950
 msgid "Create Fo_lder"
 msgstr "建立資料夾(_L)"
 
-#: ../gtk/gtkfilechooserdefault.c:4996
+#: ../gtk/gtkfilechooserdefault.c:4998
 msgid "Search:"
 msgstr "搜尋："
 
-#: ../gtk/gtkfilechooserdefault.c:5047
+#: ../gtk/gtkfilechooserdefault.c:5049
 msgid "_Location:"
 msgstr "位置(_L):"
 
-#: ../gtk/gtkfilechooserdefault.c:5498
+#: ../gtk/gtkfilechooserdefault.c:5500
 msgid "Save in _folder:"
 msgstr "儲存於資料夾(_F):"
 
-#: ../gtk/gtkfilechooserdefault.c:5500
+#: ../gtk/gtkfilechooserdefault.c:5502
 msgid "Create in _folder:"
 msgstr "新增於資料夾(_F)："
 
-#: ../gtk/gtkfilechooserdefault.c:6594
+#: ../gtk/gtkfilechooserdefault.c:6589
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "無法讀取 %s 的內容"
 
-#: ../gtk/gtkfilechooserdefault.c:6598
+#: ../gtk/gtkfilechooserdefault.c:6593
 msgid "Could not read the contents of the folder"
 msgstr "無法讀取資料夾的內容"
 
-#: ../gtk/gtkfilechooserdefault.c:6691 ../gtk/gtkfilechooserdefault.c:6759
-#: ../gtk/gtkfilechooserdefault.c:6911
+#: ../gtk/gtkfilechooserdefault.c:6686 ../gtk/gtkfilechooserdefault.c:6754
+#: ../gtk/gtkfilechooserdefault.c:6934
 msgid "Unknown"
 msgstr "不明"
 
-#: ../gtk/gtkfilechooserdefault.c:6706
+#: ../gtk/gtkfilechooserdefault.c:6701
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6708
+#: ../gtk/gtkfilechooserdefault.c:6703
 msgid "Yesterday at %H:%M"
 msgstr "昨天 %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7382
+#: ../gtk/gtkfilechooserdefault.c:7405
 msgid "Cannot change to folder because it is not local"
 msgstr "無法進入資料夾，因為它不是本地資料夾"
 
-#: ../gtk/gtkfilechooserdefault.c:7983 ../gtk/gtkfilechooserdefault.c:8004
+#: ../gtk/gtkfilechooserdefault.c:8009 ../gtk/gtkfilechooserdefault.c:8030
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "捷徑 %s 已經存在"
 
-#: ../gtk/gtkfilechooserdefault.c:8094
+#: ../gtk/gtkfilechooserdefault.c:8120
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "捷徑 %s 不存在"
 
-#: ../gtk/gtkfilechooserdefault.c:8340 ../gtk/gtkprintunixdialog.c:548
+#: ../gtk/gtkfilechooserdefault.c:8366 ../gtk/gtkprintunixdialog.c:548
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "名為「%s」的檔案已存在。是否要取代它？"
 
-#: ../gtk/gtkfilechooserdefault.c:8343 ../gtk/gtkprintunixdialog.c:552
+#: ../gtk/gtkfilechooserdefault.c:8369 ../gtk/gtkprintunixdialog.c:552
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "該檔案已存在於「%s」。取代它會覆蓋它的內容。"
 
-#: ../gtk/gtkfilechooserdefault.c:8348 ../gtk/gtkprintunixdialog.c:559
+#: ../gtk/gtkfilechooserdefault.c:8374 ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
 msgstr "取代(_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:9155
+#: ../gtk/gtkfilechooserdefault.c:9181
 msgid "Could not start the search process"
 msgstr "無法開始搜尋程序"
 
-#: ../gtk/gtkfilechooserdefault.c:9156
+#: ../gtk/gtkfilechooserdefault.c:9182
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "此程式無法建立至 indexer 伺服程式的連線。請確認它是否已執行。"
 
-#: ../gtk/gtkfilechooserdefault.c:9170
+#: ../gtk/gtkfilechooserdefault.c:9196
 msgid "Could not send the search request"
 msgstr "無法傳送搜尋要求"
 
-#: ../gtk/gtkfilechooserdefault.c:9771
+#: ../gtk/gtkfilechooserdefault.c:9806
 #, c-format
 msgid "Could not mount %s"
 msgstr "無法掛載 %s"
@@ -1752,6 +1755,54 @@ msgstr "開啟連結(_O)"
 #: ../gtk/gtklabel.c:6236
 msgid "Copy _Link Address"
 msgstr "複製連結位址(_L)"
+
+#: ../gtk/gtk-launch.c:69
+msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
+msgstr "APPLICATION [URI...] - 以 URI 開啟 APPLICATION。"
+
+#. Translators: this message will appear after the usage string
+#. and before the list of options.
+#: ../gtk/gtk-launch.c:73
+msgid ""
+"Launch specified application by its desktop file info\n"
+"optionally passing list of URIs as arguments."
+msgstr ""
+"根據桌面檔案資訊執行指定的應用程式\n"
+"可以選擇性傳送 URI 清單作為引數。"
+
+#: ../gtk/gtk-launch.c:85
+#, c-format
+#| msgid "Error parsing option --gdk-debug"
+msgid "Error parsing commandline options: %s\n"
+msgstr "分析命令列選項時發生錯誤：%s\n"
+
+#: ../gtk/gtk-launch.c:87 ../gtk/gtk-launch.c:100
+#, c-format
+msgid "Try \"%s --help\" for more information."
+msgstr "使用「%s --help」以獲得更多資訊。"
+
+#. Translators: the %s is the program name. This error message
+#. means the user is calling gtk-launch without any argument.
+#: ../gtk/gtk-launch.c:98
+#, c-format
+#| msgid "Find applications online"
+msgid "%s: missing application name"
+msgstr "%s：缺少應用程式名稱"
+
+#. Translators: the first %s is the program name, the second one
+#. is the application name.
+#: ../gtk/gtk-launch.c:122
+#, c-format
+#| msgid "Could not run application"
+msgid "%s: no such application %s"
+msgstr "%s：沒有應用程式 %s"
+
+#. Translators: the first %s is the program name, the second one
+#. is the error message.
+#: ../gtk/gtk-launch.c:140
+#, c-format
+msgid "%s: error launching application: %s\n"
+msgstr "%s：執行應用程式時發生錯誤：%s\n"
 
 #: ../gtk/gtklinkbutton.c:499
 msgid "Copy URL"
@@ -1920,7 +1971,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "不能結束 PID 為 %d 的程序：%s"
 
-#: ../gtk/gtknotebook.c:5045 ../gtk/gtknotebook.c:7699
+#: ../gtk/gtknotebook.c:5051 ../gtk/gtknotebook.c:7705
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"
