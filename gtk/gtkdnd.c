@@ -411,6 +411,18 @@ root_key_filter (GdkXEvent *xevent,
   if ((ev->type == KeyPress || ev->type == KeyRelease) &&
       ev->xkey.root == ev->xkey.window)
     ev->xkey.window = (Window)data;
+  else if (ev->type == GenericEvent)
+    {
+      XGenericEventCookie *cookie;
+      XIDeviceEvent *dev;
+
+      cookie = &ev->xcookie;
+      dev = (XIDeviceEvent *) cookie->data;
+
+      if (dev->evtype == XI_KeyPress ||
+          dev->evtype == XI_KeyRelease)
+        dev->event = (Window)data;
+    }
 
   return GDK_FILTER_CONTINUE;
 }
