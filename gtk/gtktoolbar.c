@@ -1021,21 +1021,14 @@ gtk_toolbar_size_request (GtkWidget      *widget,
     }
 
   /* Extra spacing */
-  get_widget_padding_and_border (widget, &padding);
   border_width = gtk_container_get_border_width (GTK_CONTAINER (toolbar));
 
-  requisition->width += 2 * border_width + padding.left + padding.right;
-  requisition->height += 2 * border_width + padding.top + padding.bottom;
+  requisition->width += 2 * border_width;
+  requisition->height += 2 * border_width;
 
   if (get_shadow_type (toolbar) != GTK_SHADOW_NONE)
     {
-      GtkStyleContext *context;
-      GtkStateFlags state;
-      GtkBorder padding;
-
-      context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
-      gtk_style_context_get_padding (context, state, &padding);
+      get_widget_padding_and_border (widget, &padding);
 
       requisition->width += padding.left + padding.right;
       requisition->height += padding.top + padding.bottom;
@@ -1553,8 +1546,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      available_size = size = allocation->width - 2 * border_width - padding.left - padding.right;
-      short_size = allocation->height - 2 * border_width - padding.top - padding.bottom;
+      available_size = size = allocation->width - 2 * border_width;
+      short_size = allocation->height - 2 * border_width;
       arrow_size = arrow_requisition.width;
 
       if (shadow_type != GTK_SHADOW_NONE)
@@ -1565,8 +1558,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     }
   else
     {
-      available_size = size = allocation->height - 2 * border_width - padding.top - padding.bottom;
-      short_size = allocation->width - 2 * border_width - padding.left - padding.right;
+      available_size = size = allocation->height - 2 * border_width;
+      short_size = allocation->width - 2 * border_width;
       arrow_size = arrow_requisition.height;
 
       if (shadow_type != GTK_SHADOW_NONE)
@@ -1690,7 +1683,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     }
 
   /* position items */
-  pos = border_width + padding.left;
+  pos = border_width;
   for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
     {
       /* Both NORMAL and OVERFLOWN items get a position.
@@ -1699,7 +1692,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       if (new_states[i] == NORMAL || new_states[i] == OVERFLOWN)
         {
           allocations[i].x = pos;
-          allocations[i].y = border_width + padding.top;
+          allocations[i].y = border_width;
           allocations[i].height = short_size;
 
           pos += allocations[i].width;
@@ -1709,12 +1702,12 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   /* position arrow */
   if (need_arrow)
     {
-      arrow_allocation.x = available_size - border_width - padding.left - arrow_allocation.width;
-      arrow_allocation.y = border_width + padding.top;
+      arrow_allocation.x = available_size - border_width - arrow_allocation.width;
+      arrow_allocation.y = border_width;
     }
 
-  item_area.x = border_width + padding.left;
-  item_area.y = border_width + padding.top;
+  item_area.x = border_width;
+  item_area.y = border_width;
   item_area.width = available_size - (need_arrow? arrow_size : 0);
   item_area.height = short_size;
 
