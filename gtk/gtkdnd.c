@@ -3439,6 +3439,7 @@ gtk_drag_set_icon_surface (GdkDragContext    *context,
     }
 
   gdk_window_set_background_pattern (gtk_widget_get_window (window), pattern);
+  cairo_pattern_destroy (pattern);
 
   gtk_drag_set_icon_window (context, window, extents.x, extents.y, TRUE);
 }
