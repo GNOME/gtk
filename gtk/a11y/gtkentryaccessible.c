@@ -20,6 +20,7 @@
 #include <gtk/gtk.h>
 #include "gtkpango.h"
 #include "gtkentryaccessible.h"
+#include "gtkentryprivate.h"
 #include "gtkcomboboxaccessible.h"
 
 /* Callbacks */
@@ -213,22 +214,13 @@ gtk_entry_accessible_get_text (AtkText *atk_text,
                                gint     end_pos)
 {
   GtkWidget *widget;
-  const gchar *text;
+  gchar *text;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
   if (widget == NULL)
     return NULL;
 
-  /* FIXME: is this acceptable ? */
-  if (!gtk_entry_get_visibility (GTK_ENTRY (widget)))
-    return g_strdup ("");
-
-  text = gtk_entry_get_text (GTK_ENTRY (widget));
-
-  if (text)
-    return g_utf8_substring (text, start_pos, end_pos > -1 ? end_pos : g_utf8_strlen (text, -1));
-
-  return NULL;
+  return _gtk_entry_get_display_text (GTK_ENTRY (widget), start_pos, end_pos);
 }
 
 static gchar *
@@ -243,10 +235,6 @@ gtk_entry_accessible_get_text_before_offset (AtkText         *text,
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     return NULL;
-
-  /* FIXME: is this acceptable ? */
-  if (!gtk_entry_get_visibility (GTK_ENTRY (widget)))
-    return g_strdup ("");
 
   return _gtk_pango_get_text_before (gtk_entry_get_layout (GTK_ENTRY (widget)),
                                      boundary_type, offset,
@@ -266,10 +254,6 @@ gtk_entry_accessible_get_text_at_offset (AtkText         *text,
   if (widget == NULL)
     return NULL;
 
-  /* FIXME: is this acceptable ? */
-  if (!gtk_entry_get_visibility (GTK_ENTRY (widget)))
-    return g_strdup ("");
-
   return _gtk_pango_get_text_at (gtk_entry_get_layout (GTK_ENTRY (widget)),
                                  boundary_type, offset,
                                  start_offset, end_offset);
@@ -288,10 +272,6 @@ gtk_entry_accessible_get_text_after_offset (AtkText         *text,
   if (widget == NULL)
     return NULL;
 
-  /* FIXME: is this acceptable ? */
-  if (!gtk_entry_get_visibility (GTK_ENTRY (widget)))
-    return g_strdup ("");
-
   return _gtk_pango_get_text_after (gtk_entry_get_layout (GTK_ENTRY (widget)),
                                     boundary_type, offset,
                                     start_offset, end_offset);
@@ -301,18 +281,23 @@ static gint
 gtk_entry_accessible_get_character_count (AtkText *atk_text)
 {
   GtkWidget *widget;
-  const gchar *text;
+  gchar *text;
+  glong char_count;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
   if (widget == NULL)
     return 0;
 
-  text = gtk_entry_get_text (GTK_ENTRY (widget));
+  text = _gtk_entry_get_display_text (GTK_ENTRY (widget), 0, -1);
 
+  char_count = 0;
   if (text)
-    return g_utf8_strlen (text, -1);
+    {
+      char_count = g_utf8_strlen (text, -1);
+      g_free (text);
+    }
 
-  return 0;
+  return char_count;
 }
 
 static gint
@@ -415,7 +400,7 @@ gtk_entry_accessible_get_character_extents (AtkText      *text,
   GtkWidget *widget;
   GtkEntry *entry;
   PangoRectangle char_rect;
-  const gchar *entry_text;
+  gchar *entry_text;
   gint index, x_layout, y_layout;
   GdkWindow *window;
   gint x_window, y_window;
@@ -427,8 +412,10 @@ gtk_entry_accessible_get_character_extents (AtkText      *text,
   entry = GTK_ENTRY (widget);
 
   gtk_entry_get_layout_offsets (entry, &x_layout, &y_layout);
-  entry_text = gtk_entry_get_text (entry);
+  entry_text = _gtk_entry_get_display_text (entry, 0, -1);
   index = g_utf8_offset_to_pointer (entry_text, offset) - entry_text;
+  g_free (entry_text);
+
   pango_layout_index_to_pos (gtk_entry_get_layout (entry), index, &char_rect);
   pango_extents_to_pixels (&char_rect, NULL);
 
@@ -458,11 +445,12 @@ gtk_entry_accessible_get_offset_at_point (AtkText      *atk_text,
 {
   GtkWidget *widget;
   GtkEntry *entry;
-  const gchar *text;
+  gchar *text;
   gint index, x_layout, y_layout;
   gint x_window, y_window;
   gint x_local, y_local;
   GdkWindow *window;
+  glong offset;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
   if (widget == NULL)
@@ -497,13 +485,15 @@ gtk_entry_accessible_get_offset_at_point (AtkText      *atk_text,
         index = -1;
     }
 
+  offset = -1;
   if (index != -1)
     {
-      text = gtk_entry_get_text (entry);
-      return g_utf8_pointer_to_offset (text, text + index);
+      text = _gtk_entry_get_display_text (entry, 0, -1);
+      offset = g_utf8_pointer_to_offset (text, text + index);
+      g_free (text);
     }
 
-  return -1;
+  return offset;
 }
 
 static gint
@@ -620,23 +610,28 @@ gtk_entry_accessible_get_character_at_offset (AtkText *atk_text,
                                               gint     offset)
 {
   GtkWidget *widget;
-  const gchar *text;
+  gchar *text;
   gchar *index;
+  gunichar result;
+
+  result = '\0';
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
   if (widget == NULL)
-    return '\0';
+    return result;
 
   if (!gtk_entry_get_visibility (GTK_ENTRY (widget)))
-    return '\0';
+    return result;
 
-  text = gtk_entry_get_text (GTK_ENTRY (widget));
-  if (offset >= g_utf8_strlen (text, -1))
-    return '\0';
+  text = _gtk_entry_get_display_text (GTK_ENTRY (widget), 0, -1);
+  if (offset < g_utf8_strlen (text, -1))
+    {
+      index = g_utf8_offset_to_pointer (text, offset);
+      result = g_utf8_get_char (index);
+      g_free (text);
+    }
 
-  index = g_utf8_offset_to_pointer (text, offset);
-
-  return g_utf8_get_char (index);
+  return result;
 }
 
 static void
@@ -870,10 +865,11 @@ delete_text_cb (GtkEditable *editable,
 
   if (end < 0)
     {
-      const gchar *text;
+      gchar *text;
 
-      text = gtk_entry_get_text (GTK_ENTRY (editable));
+      text = _gtk_entry_get_display_text (GTK_ENTRY (editable), 0, -1);
       end = g_utf8_strlen (text, -1);
+      g_free (text);
     }
 
   if (end == start)
