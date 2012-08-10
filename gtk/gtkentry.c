@@ -2750,10 +2750,10 @@ gtk_entry_get_display_mode (GtkEntry *entry)
   return DISPLAY_INVISIBLE;
 }
 
-static gchar*
-gtk_entry_get_display_text (GtkEntry *entry,
-                            gint      start_pos,
-                            gint      end_pos)
+gchar*
+_gtk_entry_get_display_text (GtkEntry *entry,
+                             gint      start_pos,
+                             gint      end_pos)
 {
   GtkEntryPasswordHint *password_hint;
   GtkEntryPrivate *priv;
@@ -5170,8 +5170,8 @@ gtk_entry_backspace (GtkEntry *entry)
 	  gchar *normalized_text;
           glong  len;
 
-	  cluster_text = gtk_entry_get_display_text (entry, prev_pos,
-	                                             priv->current_pos);
+	  cluster_text = _gtk_entry_get_display_text (entry, prev_pos,
+                                                      priv->current_pos);
 	  normalized_text = g_utf8_normalize (cluster_text,
 			  		      strlen (cluster_text),
 					      G_NORMALIZE_NFD);
@@ -5222,7 +5222,7 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
           return;
         }
 
-      str = gtk_entry_get_display_text (entry, start, end);
+      str = _gtk_entry_get_display_text (entry, start, end);
       gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (entry),
 							GDK_SELECTION_CLIPBOARD),
 			      str, -1);
@@ -5380,7 +5380,7 @@ gtk_entry_retrieve_surrounding_cb (GtkIMContext *context,
   gchar *text;
 
   /* XXXX ??? does this even make sense when text is not visible? Should we return FALSE? */
-  text = gtk_entry_get_display_text (entry, 0, -1);
+  text = _gtk_entry_get_display_text (entry, 0, -1);
   gtk_im_context_set_surrounding (context, text, strlen (text), /* Length in bytes */
 				  g_utf8_offset_to_pointer (text, priv->current_pos) - text);
   g_free (text);
@@ -5598,7 +5598,7 @@ gtk_entry_create_layout (GtkEntry *entry,
 
   pango_layout_set_single_paragraph_mode (layout, TRUE);
 
-  display = placeholder_layout ? g_strdup (priv->placeholder_text) : gtk_entry_get_display_text (entry, 0, -1);
+  display = placeholder_layout ? g_strdup (priv->placeholder_text) : _gtk_entry_get_display_text (entry, 0, -1);
   n_bytes = strlen (display);
 
   if (!placeholder_layout && include_preedit)
@@ -6563,7 +6563,7 @@ primary_get_cb (GtkClipboard     *clipboard,
   
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
-      gchar *str = gtk_entry_get_display_text (entry, start, end);
+      gchar *str = _gtk_entry_get_display_text (entry, start, end);
       gtk_selection_data_set_text (selection_data, str, -1);
       g_free (str);
     }
@@ -9102,7 +9102,7 @@ gtk_entry_drag_data_get (GtkWidget        *widget,
 
   if (gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end))
     {
-      gchar *str = gtk_entry_get_display_text (GTK_ENTRY (widget), sel_start, sel_end);
+      gchar *str = _gtk_entry_get_display_text (GTK_ENTRY (widget), sel_start, sel_end);
 
       gtk_selection_data_set_text (selection_data, str, -1);
       

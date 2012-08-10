@@ -77,8 +77,11 @@ void     _gtk_entry_completion_popup        (GtkEntryCompletion *completion,
                                              GdkDevice          *device);
 void     _gtk_entry_completion_popdown      (GtkEntryCompletion *completion);
 
-void      _gtk_entry_get_borders            (GtkEntry  *entry,
-                                             GtkBorder *borders);
+gchar*   _gtk_entry_get_display_text       (GtkEntry *entry,
+                                            gint      start_pos,
+                                            gint      end_pos);
+void     _gtk_entry_get_border             (GtkEntry  *entry,
+                                            GtkBorder *borders);
 void     _gtk_entry_reset_im_context       (GtkEntry  *entry);
 GtkIMContext* _gtk_entry_get_im_context    (GtkEntry  *entry);
 void     _gtk_entry_set_is_cell_renderer   (GtkEntry  *entry,
