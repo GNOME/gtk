@@ -106,11 +106,24 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 }
 
 static void
+draw_indicator_changed (GObject    *object,
+                        GParamSpec *pspec,
+                        gpointer    user_data)
+{
+  GtkButton *button = GTK_BUTTON (object);
+
+  if (gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (button)))
+    gtk_button_set_alignment (button, 0.0, 0.5);
+  else
+    gtk_button_set_alignment (button, 0.5, 0.5);
+}
+
+static void
 gtk_check_button_init (GtkCheckButton *check_button)
 {
   gtk_widget_set_receives_default (GTK_WIDGET (check_button), FALSE);
+  g_signal_connect (check_button, "notify::draw-indicator", G_CALLBACK (draw_indicator_changed), NULL);
   gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (check_button), TRUE);
-  gtk_button_set_alignment (GTK_BUTTON (check_button), 0.0, 0.5);
 }
 
 /**
