@@ -185,7 +185,7 @@ app_chooser_online_get_default_ready_cb (GObject *source,
       GtkWidget *action_area;
 
       action_area = gtk_dialog_get_action_area (GTK_DIALOG (self));
-      self->priv->online_button = gtk_button_new_with_label (_("Find applications online"));
+      self->priv->online_button = gtk_button_new_with_mnemonic (_("_Find applications online"));
       gtk_box_pack_start (GTK_BOX (action_area), self->priv->online_button,
                           FALSE, FALSE, 0);
       gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area), self->priv->online_button,
