@@ -59,6 +59,46 @@ window1
       "label"
       parent: box1
       index: 1
+      name: password entry:
+      label-for: entry2
+      state: enabled multi-line sensitive visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: password entry:
+      character count: 15
+      caret offset: 0
+      default attributes: bg-color: <omitted>
+                          bg-full-height: 0
+                          direction: <omitted>
+                          editable: false
+                          family-name: <omitted>
+                          fg-color: <omitted>
+                          indent: 0
+                          invisible: false
+                          justification: left
+                          language: <omitted>
+                          left-margin: 0
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          right-margin: 0
+                          rise: 0
+                          scale: 1
+                          size: <omitted>
+                          stretch: <omitted>
+                          strikethrough: false
+                          style: <omitted>
+                          underline: none
+                          variant: <omitted>
+                          weight: <omitted>
+                          wrap-mode: word
+    label3
+      "label"
+      parent: box1
+      index: 2
       name: spinbutton:
       label-for: spinbutton1
       state: enabled multi-line sensitive visible
@@ -98,7 +138,7 @@ window1
     entry1
       "text"
       parent: box1
-      index: 2
+      index: 3
       labelled-by: label1
       state: editable enabled focusable sensitive single-line visible
       toolkit: gtk
@@ -137,11 +177,53 @@ window1
       <AtkAction>
       action 0 name: activate
       action 0 keybinding: <Alt>e
+    entry2
+      "password text"
+      parent: box1
+      index: 4
+      labelled-by: label2
+      state: editable enabled focusable sensitive single-line visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: *************
+      character count: 13
+      caret offset: 0
+      default attributes: bg-color: <omitted>
+                          bg-full-height: 0
+                          direction: <omitted>
+                          editable: false
+                          family-name: <omitted>
+                          fg-color: <omitted>
+                          indent: 0
+                          invisible: false
+                          justification: left
+                          language: <omitted>
+                          left-margin: 0
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          right-margin: 0
+                          rise: 0
+                          scale: 1
+                          size: <omitted>
+                          stretch: <omitted>
+                          strikethrough: false
+                          style: <omitted>
+                          underline: none
+                          variant: <omitted>
+                          weight: <omitted>
+                          wrap-mode: word
+      <AtkAction>
+      action 0 name: activate
+      action 0 keybinding: <Alt>p
     spinbutton1
       "spin button"
       parent: box1
-      index: 3
-      labelled-by: label2
+      index: 5
+      labelled-by: label3
       state: editable enabled focusable sensitive single-line visible
       toolkit: gtk
       <AtkComponent>
