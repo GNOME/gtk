@@ -5372,7 +5372,7 @@ gtk_icon_view_unselect_path (GtkIconView *icon_view,
  *
  * To free the return value, use:
  * |[
- * g_list_free_full (list, (GDestroyNotify) gtk_tree_patch_free);
+ * g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
  * ]|
  *
  * Return value: (element-type GtkTreePath) (transfer full): A #GList containing a #GtkTreePath for each selected row.
