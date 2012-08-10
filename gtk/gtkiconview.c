@@ -4901,6 +4901,8 @@ void
 gtk_icon_view_set_model (GtkIconView *icon_view,
 			 GtkTreeModel *model)
 {
+  gboolean dirty;
+
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
   g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
   
@@ -4916,6 +4918,8 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
   /* The area can be NULL while disposing */
   if (icon_view->priv->cell_area)
     gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+
+  dirty = gtk_icon_view_unselect_all_internal (icon_view);
 
   if (model)
     {
@@ -5000,6 +5004,9 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
     }
 
   g_object_notify (G_OBJECT (icon_view), "model");  
+
+  if (dirty)
+    g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
 
   gtk_widget_queue_resize (GTK_WIDGET (icon_view));
 }
