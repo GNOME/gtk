@@ -3111,7 +3111,7 @@ msgstr "E_lzomi"
 #: ../gtk/gtkswitch.c:347 ../gtk/gtkswitch.c:407 ../gtk/gtkswitch.c:614
 msgctxt "switch"
 msgid "ON"
-msgstr "EK"
+msgstr "❙"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
@@ -3119,7 +3119,7 @@ msgstr "EK"
 #: ../gtk/gtkswitch.c:355 ../gtk/gtkswitch.c:408 ../gtk/gtkswitch.c:643
 msgctxt "switch"
 msgid "OFF"
-msgstr "FOR"
+msgstr "○"
 
 #: ../gtk/gtktextbufferrichtext.c:649
 #, c-format
