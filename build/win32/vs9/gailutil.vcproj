@@ -23,7 +23,7 @@
 			Name="Debug|Win32"
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="2"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -42,7 +42,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				AdditionalDependencies="atk-1.0.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				GenerateDebugInformation="true"
@@ -77,7 +77,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="atk-1.0.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				ModuleDefinitionFile="..\..\..\libgail-util\gailutil.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -89,7 +89,7 @@
 			Name="Release|Win32"
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="2"
-			CharacterSet="1"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -126,6 +126,7 @@
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="2"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -143,7 +144,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="atk-1.0.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				ModuleDefinitionFile="..\..\..\libgail-util\gailutil.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"

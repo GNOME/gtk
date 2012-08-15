@@ -46,6 +46,7 @@
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="4"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -87,6 +88,7 @@
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="4"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"

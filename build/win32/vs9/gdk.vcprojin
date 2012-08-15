@@ -44,7 +44,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="imm32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				ModuleDefinitionFile="$(IntDir)\gdk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -57,6 +57,7 @@
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="2"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -74,7 +75,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="imm32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				ModuleDefinitionFile="$(IntDir)\gdk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -109,7 +110,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="imm32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				ModuleDefinitionFile="$(IntDir)\gdk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -122,6 +123,7 @@
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="2"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -139,7 +141,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="imm32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				ModuleDefinitionFile="$(IntDir)\gdk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"

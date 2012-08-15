@@ -23,7 +23,7 @@
 			Name="Debug|Win32"
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="4"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -67,7 +67,7 @@
 			Name="Release|Win32"
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="4"
-			CharacterSet="1"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -91,6 +91,7 @@
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="4"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
