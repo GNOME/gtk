@@ -97,6 +97,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "fallback-c89.c"
+
 #define DEFAULT_BLOCK_SIZE 3
 
 /* these don't make sense outside of GtkLevelBar, so we don't add
@@ -647,7 +649,7 @@ offset_start_element (GMarkupParseContext  *context,
 
       if (name && value_str)
         {
-          offset = gtk_level_bar_offset_new (name, strtof (value_str, NULL));
+          offset = gtk_level_bar_offset_new (name, g_ascii_strtod (value_str, NULL));
           parser_data->offsets = g_list_prepend (parser_data->offsets, offset);
         }
     }
