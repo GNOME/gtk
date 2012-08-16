@@ -281,7 +281,9 @@ enum
   PROP_HADJUSTMENT,
   PROP_VADJUSTMENT,
   PROP_HSCROLL_POLICY,
-  PROP_VSCROLL_POLICY
+  PROP_VSCROLL_POLICY,
+  PROP_INPUT_PURPOSE,
+  PROP_INPUT_HINTS
 };
 
 static void gtk_text_view_finalize             (GObject          *object);
@@ -777,7 +779,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    /**
     * GtkTextView:im-module:
     *
-    * Which IM (input method) module should be used for this entry. 
+    * Which IM (input method) module should be used for this text_view. 
     * See #GtkIMContext.
     *
     * Setting this to a non-%NULL value overrides the
@@ -793,6 +795,24 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                          P_("Which IM module should be used"),
                                                          NULL,
                                                          GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_INPUT_PURPOSE,
+                                   g_param_spec_enum ("input-purpose",
+                                                      P_("Purpose"),
+                                                      P_("Purpose of the text field"),
+                                                      GTK_TYPE_INPUT_PURPOSE,
+                                                      GTK_INPUT_PURPOSE_FREE_FORM,
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_INPUT_HINTS,
+                                   g_param_spec_flags ("input-hints",
+                                                       P_("hints"),
+                                                       P_("Hints for the text field behaviour"),
+                                                       GTK_TYPE_INPUT_HINTS,
+                                                       GTK_INPUT_HINT_NONE,
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
    /* GtkScrollable interface */
    g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
@@ -1055,7 +1075,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   /**
    * GtkTextView::populate-popup:
-   * @entry: The text view on which the signal is emitted
+   * @text_view: The text view on which the signal is emitted
    * @menu: the menu that is being populated
    *
    * The ::populate-popup signal gets emitted before showing the 
@@ -3170,6 +3190,14 @@ gtk_text_view_set_property (GObject         *object,
       gtk_widget_queue_resize (GTK_WIDGET (text_view));
       break;
 
+    case PROP_INPUT_PURPOSE:
+      gtk_text_view_set_input_purpose (text_view, g_value_get_enum (value));
+      break;
+
+    case PROP_INPUT_HINTS:
+      gtk_text_view_set_input_hints (text_view, g_value_get_flags (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3264,6 +3292,14 @@ gtk_text_view_get_property (GObject         *object,
 
     case PROP_VSCROLL_POLICY:
       g_value_set_enum (value, priv->vscroll_policy);
+      break;
+
+    case PROP_INPUT_PURPOSE:
+      g_value_set_enum (value, gtk_text_view_get_input_purpose (text_view));
+      break;
+
+    case PROP_INPUT_HINTS:
+      g_value_set_flags (value, gtk_text_view_get_input_hints (text_view));
       break;
 
     default:
@@ -9630,4 +9666,66 @@ gtk_text_view_move_visually (GtkTextView *text_view,
   gtk_text_view_ensure_layout (text_view);
 
   return gtk_text_layout_move_iter_visually (text_view->priv->layout, iter, count);
+}
+
+void
+gtk_text_view_set_input_purpose (GtkTextView     *text_view,
+                                 GtkInputPurpose  purpose)
+
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+
+  if (gtk_text_view_get_input_purpose (text_view) != purpose)
+    {
+      g_object_set (G_OBJECT (text_view->priv->im_context),
+                    "input-purpose", purpose,
+                    NULL);
+
+      g_object_notify (G_OBJECT (text_view), "input-purpose");
+  }
+}
+
+GtkInputPurpose
+gtk_text_view_get_input_purpose (GtkTextView *text_view)
+{
+  GtkInputPurpose purpose;
+
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), GTK_INPUT_PURPOSE_FREE_FORM);
+
+  g_object_get (G_OBJECT (text_view->priv->im_context),
+                "input-purpose", &purpose,
+                NULL);
+
+  return purpose;
+}
+
+void
+gtk_text_view_set_input_hints (GtkTextView   *text_view,
+                               GtkInputHints  hints)
+
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+
+  if (gtk_text_view_get_input_hints (text_view) != hints)
+    {
+      g_object_set (G_OBJECT (text_view->priv->im_context),
+                    "input-hints", hints,
+                    NULL);
+
+      g_object_notify (G_OBJECT (text_view), "input-hints");
+  }
+}
+
+GtkInputHints
+gtk_text_view_get_input_hints (GtkTextView *text_view)
+{
+  GtkInputHints hints;
+
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), GTK_INPUT_HINT_NONE);
+
+  g_object_get (G_OBJECT (text_view->priv->im_context),
+                "input-hints", &hints,
+                NULL);
+
+  return hints;
 }
