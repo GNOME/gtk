@@ -1,79 +1,78 @@
-# translation of gtk+ to Galician
 # Galician translation of gtk+.
 # Copyright (C) 1999, 2000 Jesus Bravo Alvarez
+#
 # Proxecto Trasno - Adaptación do software libre á lingua galega:  Se desexas
-# colaborar connosco, podes atopar máis información en http://trasno.gpul.org
+# colaborar connosco, podes atopar máis información en http://www.trasno.net
+#
 # First Version: 1999-08-30 18:49+0200
 # Based on es.po by Pablo Saratxaga <srtxg@chanae.alphanet.ch>
 # and pt.po by Nuno Ferreira <nmrf@rnl.ist.utl.pt>
+#
 # Jesus Bravo Alvarez <jba@pobox.com>, 1999, 2000.
 # Ignacio Casal Quinteiro <nacho.resa@gmail.com>, 2005, 2006.
 # Ignacio Casal Quinteiro <icq@svn.gnome.org>, 2008.
 # Mancomún - Centro de Referencia e Servizos de Software Libre <g11n@mancomun.org>, 2009.
 # Antón Méixome <meixome@mancomun.org>, 2009.
-# Anton Meixome <certima@certima.net>, 2009.
-# Antón Méixome <meixome@certima.net>, 2010.
-# Francisco Diéguez <frandieguez@ubuntu.com>, 2010.
-# Fran Diéguez <frandieguez@gnome.org>, 2009, 2010, 2011.
-# Fran Dieguez <frandieguez@gnome.org>, 2009, 2010, 2011, 2012.
-#
+# Antón Méixome <meixome@certima.net>, 2009, 2010.
+# Fran Diéguez <frandieguez@gnome.org>, 2009, 2010, 2011, 2012.
+# Leandro Regueiro <leandro.regueiro@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-30 02:29+0200\n"
-"PO-Revision-Date: 2012-07-30 02:31+0200\n"
-"Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
-"Language-Team: Galician <gnome-l10n-gl@gnome.org>\n"
+"POT-Creation-Date: 2012-08-16 23:29+0200\n"
+"PO-Revision-Date: 2012-08-15 19:15+0200\n"
+"Last-Translator: Leandro Regueiro <leandro.regueiro@gmail.com>\n"
+"Language-Team: Galego <kde-i18n-doc@kde.org>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Gtranslator 2.91.5\n"
+"X-Generator: Lokalize 1.0\n"
 
-#: ../gdk/gdk.c:153
+#: ../gdk/gdk.c:155
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Produciuse un erro ao analizar a opción --gdk-debug"
 
-#: ../gdk/gdk.c:173
+#: ../gdk/gdk.c:175
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Produciuse un erro ao analizar a opción --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:201
+#: ../gdk/gdk.c:203
 msgid "Program class as used by the window manager"
 msgstr "Clase do programa tal como a usa o xestor de xanelas"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:202
+#: ../gdk/gdk.c:204
 msgid "CLASS"
 msgstr "CLASE"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:204
+#: ../gdk/gdk.c:206
 msgid "Program name as used by the window manager"
 msgstr "Nome do programa tal como o usa o xestor de xanelas"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:205
+#: ../gdk/gdk.c:207
 msgid "NAME"
 msgstr "NOME"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:207
+#: ../gdk/gdk.c:209
 msgid "X display to use"
 msgstr "Visor [display] X que usar"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:208
+#: ../gdk/gdk.c:210
 msgid "DISPLAY"
 msgstr "VISOR"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:211
+#: ../gdk/gdk.c:213
 msgid "GDK debugging flags to set"
 msgstr "Opcións de depuración GDK para estabelecer"
 
@@ -81,12 +80,12 @@ msgstr "Opcións de depuración GDK para estabelecer"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:212 ../gdk/gdk.c:215 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
+#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
 msgid "FLAGS"
 msgstr "OPCIÓNS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:214
+#: ../gdk/gdk.c:216
 msgid "GDK debugging flags to unset"
 msgstr "Opcións de depuración GDK que quitar"
 
@@ -427,7 +426,7 @@ msgstr "Non poñer en lotes as solicitudes GDI"
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:55
 msgid "Don't use the Wintab API for tablet support"
-msgstr "Non usar a API Wintab para a compatibilide de táboas dixitalizadoras"
+msgstr "Non usar a API Wintab para a compatibilidade de tabletas"
 
 #. Description of --ignore-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:57
@@ -796,11 +795,11 @@ msgstr "Outro aplicativo…"
 
 #: ../gtk/gtkappchooserdialog.c:137
 msgid "Failed to look for applications online"
-msgstr "Produciuse un fallo ao buscar os aplicativos en liña"
+msgstr "Produciuse un erro ao buscar os aplicativos en Internet"
 
 #: ../gtk/gtkappchooserdialog.c:188
-msgid "Find applications online"
-msgstr "Buscar os aplicativos en liña"
+msgid "_Find applications online"
+msgstr "_Atopar aplicativos en Internet"
 
 #: ../gtk/gtkappchooserdialog.c:247
 msgid "Could not run application"
@@ -1042,7 +1041,7 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:450
+#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:449
 msgid "Pick a Color"
 msgstr "Escolla unha cor"
 
@@ -1063,7 +1062,7 @@ msgstr "Vermello %d%%, Verde %d%%, Azul %d%%"
 #: ../gtk/gtkcolorchooserwidget.c:360
 #, c-format
 msgid "Color: %s"
-msgstr "Col: %s"
+msgstr "Cor: %s"
 
 #: ../gtk/gtkcolorchooserwidget.c:419
 msgctxt "Color name"
@@ -1458,7 +1457,7 @@ msgstr "Non foi posíbel engadir un marcador"
 
 #: ../gtk/gtkfilechooserdefault.c:990
 msgid "Could not remove bookmark"
-msgstr "Non foi posíbel eliminar o marcador"
+msgstr "Non foi posíbel retirar o marcador"
 
 #: ../gtk/gtkfilechooserdefault.c:1001
 msgid "The folder could not be created"
@@ -1536,20 +1535,20 @@ msgstr "Engadir os cartafoles seleccionados aos marcadores"
 #: ../gtk/gtkfilechooserdefault.c:2804
 #, c-format
 msgid "Remove the bookmark '%s'"
-msgstr "Eliminar o marcador «%s»"
+msgstr "Retirar o marcador «%s»"
 
 #: ../gtk/gtkfilechooserdefault.c:2806
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
-msgstr "Non é posíbel quitar o marcador «%s»"
+msgstr "Non é posíbel retirar o marcador «%s»"
 
 #: ../gtk/gtkfilechooserdefault.c:2813 ../gtk/gtkfilechooserdefault.c:3699
 msgid "Remove the selected bookmark"
-msgstr "Quitar o marcador seleccionado"
+msgstr "Retirar o marcador seleccionado"
 
 #: ../gtk/gtkfilechooserdefault.c:3377
 msgid "Remove"
-msgstr "Quitar"
+msgstr "Retirar"
 
 #: ../gtk/gtkfilechooserdefault.c:3386
 msgid "Rename..."
@@ -1837,7 +1836,7 @@ msgstr "%s: non existe o aplicativo %s"
 #: ../gtk/gtk-launch.c:140
 #, c-format
 msgid "%s: error launching application: %s\n"
-msgstr "%s: erro ao iniciar o aplicativo: %s\n"
+msgstr "%s: produciuse un erro ao iniciar o aplicativo: %s\n"
 
 #: ../gtk/gtklinkbutton.c:499
 msgid "Copy URL"
@@ -2007,7 +2006,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Non é posíbel finalizar o proceso co PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5045 ../gtk/gtknotebook.c:7699
+#: ../gtk/gtknotebook.c:5051 ../gtk/gtknotebook.c:7705
 #, c-format
 msgid "Page %u"
 msgstr "Páxina %u"
@@ -2235,7 +2234,7 @@ msgstr "Erro non especificado"
 
 #: ../gtk/gtkprintunixdialog.c:681
 msgid "Getting printer information failed"
-msgstr "Produciuse un fallo ao obter a información da impresora"
+msgstr "Produciuse un erro ao obter a información da impresora"
 
 #: ../gtk/gtkprintunixdialog.c:1905
 msgid "Getting printer information..."
@@ -2571,7 +2570,7 @@ msgstr "Filtro sen título"
 
 #: ../gtk/gtkrecentchooserdefault.c:1647
 msgid "Could not remove item"
-msgstr "Non foi posíbel eliminar o elemento"
+msgstr "Non foi posíbel retirar o elemento"
 
 #: ../gtk/gtkrecentchooserdefault.c:1691
 msgid "Could not clear list"
@@ -2583,7 +2582,7 @@ msgstr "Copiar _localización"
 
 #: ../gtk/gtkrecentchooserdefault.c:1788
 msgid "_Remove From List"
-msgstr "Elimina_r da lista"
+msgstr "Retira_r da lista"
 
 #: ../gtk/gtkrecentchooserdefault.c:1797
 msgid "_Clear List"
@@ -2846,7 +2845,7 @@ msgstr "_Arriba"
 #: ../gtk/gtkstock.c:371
 msgctxt "Stock label"
 msgid "_Hard Disk"
-msgstr "_Disco ríxido"
+msgstr "_Disco duro"
 
 #: ../gtk/gtkstock.c:372
 msgctxt "Stock label"
@@ -3057,7 +3056,7 @@ msgstr "_Actualizar"
 #: ../gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Remove"
-msgstr "_Eliminar"
+msgstr "_Retirar"
 
 #: ../gtk/gtkstock.c:428
 msgctxt "Stock label"
@@ -4219,32 +4218,32 @@ msgstr "ROC 8k"
 #: ../gtk/updateiconcache.c:1368
 #, c-format
 msgid "Failed to write header\n"
-msgstr "Produciuse un fallo ao escribir a cabeceira\n"
+msgstr "Produciuse un erro ao escribir a cabeceira\n"
 
 #: ../gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write hash table\n"
-msgstr "Produciuse un fallo ao escribir a táboa hash\n"
+msgstr "Produciuse un erro ao escribir a táboa hash\n"
 
 #: ../gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write folder index\n"
-msgstr "Produciuse un fallo ao escribir o índice do cartafol\n"
+msgstr "Produciuse un erro ao escribir o índice do cartafol\n"
 
 #: ../gtk/updateiconcache.c:1388
 #, c-format
 msgid "Failed to rewrite header\n"
-msgstr "Produciuse un fallo ao reescribir a cabeceira\n"
+msgstr "Produciuse un erro ao reescribir a cabeceira\n"
 
 #: ../gtk/updateiconcache.c:1482
 #, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "Produciuse un fallo ao abrir o ficheiro %s : %s\n"
+msgstr "Produciuse un erro ao abrir o ficheiro %s : %s\n"
 
 #: ../gtk/updateiconcache.c:1490 ../gtk/updateiconcache.c:1520
 #, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "Produciuse un fallo ao escribir o ficheiro da caché: %s\n"
+msgstr "Produciuse un erro ao escribir o ficheiro da caché: %s\n"
 
 #: ../gtk/updateiconcache.c:1530
 #, c-format
@@ -4254,7 +4253,7 @@ msgstr "A caché xerada non é válida.\n"
 #: ../gtk/updateiconcache.c:1544
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr "Non foi posíbel renomear %s como %s: %s, ao eliminar %s despois.\n"
+msgstr "Non foi posíbel renomear %s como %s: %s, polo tanto retírase %s.\n"
 
 #: ../gtk/updateiconcache.c:1558
 #, c-format
@@ -5742,22 +5741,3 @@ msgstr "Imprimir para probar a impresora"
 
 #~ msgid "Y t_ilt:"
 #~ msgstr "I_nclinación Y:"
-
-# ¿Alguén sabe que diaños é isto?
-#~ msgid "_Wheel:"
-#~ msgstr "_Roda:"
-
-#~ msgid "none"
-#~ msgstr "ningún"
-
-#~ msgid "(disabled)"
-#~ msgstr "(desactivado)"
-
-#~ msgid "(unknown)"
-#~ msgstr "(descoñecido)"
-
-#~ msgid "Cl_ear"
-#~ msgstr "Li_mpar"
-
-#~ msgid "--- No Tip ---"
-#~ msgstr "--- Sen suxestión ---"
