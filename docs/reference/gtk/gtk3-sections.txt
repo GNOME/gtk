@@ -1081,6 +1081,12 @@ gtk_entry_get_icon_tooltip_markup
 gtk_entry_set_icon_drag_source
 gtk_entry_get_current_icon_drag_source
 gtk_entry_get_icon_area
+GtkInputPurpose
+gtk_entry_set_input_purpose
+gtk_entry_get_input_purpose
+GtkInputHints
+gtk_entry_set_input_hints
+gtk_entry_get_input_hints
 
 <SUBSECTION Standard>
 GTK_ENTRY
@@ -3672,6 +3678,10 @@ gtk_text_view_get_accepts_tab
 gtk_text_view_get_default_attributes
 gtk_text_view_im_context_filter_keypress
 gtk_text_view_reset_im_context
+gtk_text_view_set_input_purpose
+gtk_text_view_get_input_purpose
+gtk_text_view_set_input_hints
+gtk_text_view_get_input_hints
 GTK_TEXT_VIEW_PRIORITY_VALIDATE
 <SUBSECTION Standard>
 GTK_TEXT_VIEW

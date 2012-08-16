@@ -796,6 +796,16 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                          NULL,
                                                          GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTextView:input-purpose:
+   *
+   * The purpose of this text field.
+   *
+   * This property can be used by on-screen keyboards and other input
+   * methods to adjust their behaviour.
+   *
+   * Since: 3.6
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_INPUT_PURPOSE,
                                    g_param_spec_enum ("input-purpose",
@@ -805,6 +815,14 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                       GTK_INPUT_PURPOSE_FREE_FORM,
                                                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkTextView:input-hints:
+   *
+   * Additional hints (beyond #GtkTextView:input-purpose) that
+   * allow input methods to fine-tune their behaviour.
+   *
+   * Since: 3.6
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_INPUT_HINTS,
                                    g_param_spec_flags ("input-hints",
@@ -9668,6 +9686,18 @@ gtk_text_view_move_visually (GtkTextView *text_view,
   return gtk_text_layout_move_iter_visually (text_view->priv->layout, iter, count);
 }
 
+/**
+ * gtk_text_view_set_input_purpose:
+ * @text_vew: a #GtkTextView
+ * @purpose: the purpose
+ *
+ * Sets the #GtkTextView:input-purpose property which
+ * can be used by on-screen keyboards and other input
+ * methods to adjust their behaviour.
+ *
+ * Since: 3.6
+ */
+
 void
 gtk_text_view_set_input_purpose (GtkTextView     *text_view,
                                  GtkInputPurpose  purpose)
@@ -9685,6 +9715,15 @@ gtk_text_view_set_input_purpose (GtkTextView     *text_view,
   }
 }
 
+/**
+ * gtk_text_view_get_input_purpose:
+ * @text_view: a #GtkTextView
+ *
+ * Gets the value of the #GtkTextView:input-purpose property.
+ *
+ * Since: 3.6
+ */
+
 GtkInputPurpose
 gtk_text_view_get_input_purpose (GtkTextView *text_view)
 {
@@ -9698,6 +9737,17 @@ gtk_text_view_get_input_purpose (GtkTextView *text_view)
 
   return purpose;
 }
+
+/**
+ * gtk_text_view_set_input_hints:
+ * @text_view: a #GtkTextView
+ * @hints: the hints
+ *
+ * Sets the #GtkTextView:input-hints property, which
+ * allows input methods to fine-tune their behaviour.
+ *
+ * Since: 3.6
+ */
 
 void
 gtk_text_view_set_input_hints (GtkTextView   *text_view,
@@ -9715,6 +9765,15 @@ gtk_text_view_set_input_hints (GtkTextView   *text_view,
       g_object_notify (G_OBJECT (text_view), "input-hints");
   }
 }
+
+/**
+ * gtk_text_view_get_input_hints:
+ * @text_view: a #GtkTextView
+ *
+ * Gets the value of the #GtkTextView:input-hints property.
+ *
+ * Since: 3.6
+ */
 
 GtkInputHints
 gtk_text_view_get_input_hints (GtkTextView *text_view)

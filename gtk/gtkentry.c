@@ -1361,6 +1361,20 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         GTK_TYPE_ENTRY_COMPLETION,
                                                         GTK_PARAM_READWRITE));
 
+  /**
+   * GtkEntry:input-purpose:
+   *
+   * The purpose of this text field.
+   *
+   * This property can be used by on-screen keyboards and other input
+   * methods to adjust their behaviour.
+   *
+   * Note that setting the purpose to %GTK_INPUT_PURPOSE_PASSWORD or
+   * %GTK_INPUT_PURPOSE_PIN is independent from setting
+   * #GtkEntry:visibility.
+   *
+   * Since: 3.6
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_INPUT_PURPOSE,
                                    g_param_spec_enum ("input-purpose",
@@ -1370,6 +1384,14 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                       GTK_INPUT_PURPOSE_FREE_FORM,
                                                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkEntry:input-hints:
+   *
+   * Additional hints (beyond #GtkEntry:input-purpose) that
+   * allow input methods to fine-tune their behaviour.
+   *
+   * Since: 3.6
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_INPUT_HINTS,
                                    g_param_spec_flags ("input-hints",
@@ -6941,14 +6963,19 @@ gtk_entry_set_text (GtkEntry    *entry,
  * @visible: %TRUE if the contents of the entry are displayed
  *           as plaintext
  *
- * Sets whether the contents of the entry are visible or not. 
- * When visibility is set to %FALSE, characters are displayed 
- * as the invisible char, and will also appear that way when 
+ * Sets whether the contents of the entry are visible or not.
+ * When visibility is set to %FALSE, characters are displayed
+ * as the invisible char, and will also appear that way when
  * the text in the entry widget is copied elsewhere.
  *
  * By default, GTK+ picks the best invisible character available
  * in the current font, but it can be changed with
  * gtk_entry_set_invisible_char().
+ *
+ * Note that you probably want to set #GtkEntry:input-purpose
+ * to %GTK_INPUT_PURPOSE_PASSWORD or %GTK_INPUT_PURPOSE_PIN to
+ * inform input methods about the purpose of this entry,
+ * in addition to setting visibility to %FALSE.
  */
 void
 gtk_entry_set_visibility (GtkEntry *entry,
@@ -10333,6 +10360,17 @@ _gtk_entry_set_is_cell_renderer (GtkEntry *entry,
   entry->priv->is_cell_renderer = is_cell_renderer;
 }
 
+/**
+ * gtk_entry_set_input_purpose:
+ * @entry: a #GtkEntry
+ * @purpose: the purpose
+ *
+ * Sets the #GtkEntry:input-purpose property which
+ * can be used by on-screen keyboards and other input
+ * methods to adjust their behaviour.
+ *
+ * Since: 3.6
+ */
 void
 gtk_entry_set_input_purpose (GtkEntry        *entry,
                              GtkInputPurpose  purpose)
@@ -10350,6 +10388,14 @@ gtk_entry_set_input_purpose (GtkEntry        *entry,
   }
 }
 
+/**
+ * gtk_entry_get_input_purpose:
+ * @entry: a #GtkEntry
+ *
+ * Gets the value of the #GtkEntry:input-purpose property.
+ *
+ * Since: 3.6
+ */
 GtkInputPurpose
 gtk_entry_get_input_purpose (GtkEntry *entry)
 {
@@ -10364,6 +10410,16 @@ gtk_entry_get_input_purpose (GtkEntry *entry)
   return purpose;
 }
 
+/**
+ * gtk_entry_set_input_hints:
+ * @entry: a #GtkEntry
+ * @hints: the hints
+ *
+ * Sets the #GtkEntry:input-hints property, which
+ * allows input methods to fine-tune their behaviour.
+ *
+ * Since: 3.6
+ */
 void
 gtk_entry_set_input_hints (GtkEntry      *entry,
                            GtkInputHints  hints)
@@ -10381,6 +10437,14 @@ gtk_entry_set_input_hints (GtkEntry      *entry,
   }
 }
 
+/**
+ * gtk_entry_get_input_hints:
+ * @entry: a #GtkEntry
+ *
+ * Gets the value of the #GtkEntry:input-hints property.
+ *
+ * Since: 3.6
+ */
 GtkInputHints
 gtk_entry_get_input_hints (GtkEntry *entry)
 {
