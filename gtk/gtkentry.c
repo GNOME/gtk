@@ -308,7 +308,9 @@ enum {
   PROP_IM_MODULE,
   PROP_EDITING_CANCELED,
   PROP_PLACEHOLDER_TEXT,
-  PROP_COMPLETION
+  PROP_COMPLETION,
+  PROP_INPUT_PURPOSE,
+  PROP_INPUT_HINTS
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -1359,6 +1361,25 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         GTK_TYPE_ENTRY_COMPLETION,
                                                         GTK_PARAM_READWRITE));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_INPUT_PURPOSE,
+                                   g_param_spec_enum ("input-purpose",
+                                                      P_("Purpose"),
+                                                      P_("Purpose of the text field"),
+                                                      GTK_TYPE_INPUT_PURPOSE,
+                                                      GTK_INPUT_PURPOSE_FREE_FORM,
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_INPUT_HINTS,
+                                   g_param_spec_flags ("input-hints",
+                                                       P_("hints"),
+                                                       P_("Hints for the text field behaviour"),
+                                                       GTK_TYPE_INPUT_HINTS,
+                                                       GTK_INPUT_HINT_NONE,
+                                                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+
   /**
    * GtkEntry:icon-prelight:
    *
@@ -2162,6 +2183,14 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_completion (entry, GTK_ENTRY_COMPLETION (g_value_get_object (value)));
       break;
 
+    case PROP_INPUT_PURPOSE:
+      gtk_entry_set_input_purpose (entry, g_value_get_enum (value));
+      break;
+
+    case PROP_INPUT_HINTS:
+      gtk_entry_set_input_hints (entry, g_value_get_flags (value));
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -2384,6 +2413,14 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_COMPLETION:
       g_value_set_object (value, G_OBJECT (gtk_entry_get_completion (entry)));
+      break;
+
+    case PROP_INPUT_PURPOSE:
+      g_value_set_enum (value, gtk_entry_get_input_purpose (entry));
+      break;
+
+    case PROP_INPUT_HINTS:
+      g_value_set_flags (value, gtk_entry_get_input_hints (entry));
       break;
 
     default:
@@ -10294,4 +10331,66 @@ _gtk_entry_set_is_cell_renderer (GtkEntry *entry,
                                  gboolean  is_cell_renderer)
 {
   entry->priv->is_cell_renderer = is_cell_renderer;
+}
+
+void
+gtk_entry_set_input_purpose (GtkEntry        *entry,
+                             GtkInputPurpose  purpose)
+
+{
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  if (gtk_entry_get_input_purpose (entry) != purpose)
+    {
+      g_object_set (G_OBJECT (entry->priv->im_context),
+                    "input-purpose", purpose,
+                    NULL);
+
+      g_object_notify (G_OBJECT (entry), "input-purpose");
+  }
+}
+
+GtkInputPurpose
+gtk_entry_get_input_purpose (GtkEntry *entry)
+{
+  GtkInputPurpose purpose;
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), GTK_INPUT_PURPOSE_FREE_FORM);
+
+  g_object_get (G_OBJECT (entry->priv->im_context),
+                "input-purpose", &purpose,
+                NULL);
+
+  return purpose;
+}
+
+void
+gtk_entry_set_input_hints (GtkEntry      *entry,
+                           GtkInputHints  hints)
+
+{
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  if (gtk_entry_get_input_hints (entry) != hints)
+    {
+      g_object_set (G_OBJECT (entry->priv->im_context),
+                    "input-hints", hints,
+                    NULL);
+
+      g_object_notify (G_OBJECT (entry), "input-hints");
+  }
+}
+
+GtkInputHints
+gtk_entry_get_input_hints (GtkEntry *entry)
+{
+  GtkInputHints hints;
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), GTK_INPUT_HINT_NONE);
+
+  g_object_get (G_OBJECT (entry->priv->im_context),
+                "input-hints", &hints,
+                NULL);
+
+  return hints;
 }

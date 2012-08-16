@@ -908,6 +908,8 @@ gtk_entry_get_icon_storage_type
 gtk_entry_get_icon_tooltip_markup
 gtk_entry_get_icon_tooltip_text
 gtk_entry_get_inner_border
+gtk_entry_get_input_hints
+gtk_entry_get_input_purpose
 gtk_entry_get_invisible_char
 gtk_entry_get_layout
 gtk_entry_get_layout_offsets
@@ -945,6 +947,8 @@ gtk_entry_set_icon_sensitive
 gtk_entry_set_icon_tooltip_markup
 gtk_entry_set_icon_tooltip_text
 gtk_entry_set_inner_border
+gtk_entry_set_input_hints
+gtk_entry_set_input_purpose
 gtk_entry_set_invisible_char
 gtk_entry_set_max_length
 gtk_entry_set_overwrite_mode

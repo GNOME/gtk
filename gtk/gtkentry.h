@@ -277,6 +277,18 @@ gboolean    gtk_entry_im_context_filter_keypress         (GtkEntry             *
                                                           GdkEventKey          *event);
 void        gtk_entry_reset_im_context                   (GtkEntry             *entry);
 
+GDK_AVAILABLE_IN_3_6
+void            gtk_entry_set_input_purpose                  (GtkEntry             *entry,
+                                                              GtkInputPurpose       purpose);
+GDK_AVAILABLE_IN_3_6
+GtkInputPurpose gtk_entry_get_input_purpose                  (GtkEntry             *entry);
+
+GDK_AVAILABLE_IN_3_6
+void            gtk_entry_set_input_hints                    (GtkEntry             *entry,
+                                                              GtkInputHints         hints);
+GDK_AVAILABLE_IN_3_6
+GtkInputHints   gtk_entry_get_input_hints                    (GtkEntry             *entry);
+
 
 G_END_DECLS
 
