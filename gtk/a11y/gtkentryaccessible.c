@@ -214,7 +214,6 @@ gtk_entry_accessible_get_text (AtkText *atk_text,
                                gint     end_pos)
 {
   GtkWidget *widget;
-  gchar *text;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
   if (widget == NULL)
