@@ -19,6 +19,7 @@
 #include <string.h>
 #include "gtkimcontext.h"
 #include "gtkprivate.h"
+#include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 
@@ -107,7 +108,20 @@ enum {
   LAST_SIGNAL
 };
 
-static guint im_context_signals[LAST_SIGNAL] = { 0 };
+enum {
+  PROP_INPUT_PURPOSE = 1,
+  PROP_INPUT_HINTS,
+  LAST_PROPERTY
+};
+
+static guint im_context_signals[LAST_SIGNAL] = { 0, };
+static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
+
+typedef struct _GtkIMContextPrivate GtkIMContextPrivate;
+struct _GtkIMContextPrivate {
+  GtkInputPurpose purpose;
+  GtkInputHints hints;
+};
 
 static void     gtk_im_context_real_get_preedit_string (GtkIMContext   *context,
 							gchar         **str,
@@ -122,6 +136,16 @@ static void     gtk_im_context_real_set_surrounding    (GtkIMContext   *context,
 							const char     *text,
 							gint            len,
 							gint            cursor_index);
+
+static void     gtk_im_context_get_property            (GObject        *obj,
+                                                        guint           property_id,
+                                                        GValue         *value,
+                                                        GParamSpec     *pspec);
+static void     gtk_im_context_set_property            (GObject        *obj,
+                                                        guint           property_id,
+                                                        const GValue   *value,
+                                                        GParamSpec     *pspec);
+
 
 G_DEFINE_ABSTRACT_TYPE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT)
 
@@ -185,6 +209,11 @@ G_DEFINE_ABSTRACT_TYPE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT)
 static void
 gtk_im_context_class_init (GtkIMContextClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = gtk_im_context_get_property;
+  object_class->set_property = gtk_im_context_set_property;
+
   klass->get_preedit_string = gtk_im_context_real_get_preedit_string;
   klass->filter_keypress = gtk_im_context_real_filter_keypress;
   klass->get_surrounding = gtk_im_context_real_get_surrounding;
@@ -297,6 +326,25 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
                   G_TYPE_BOOLEAN, 2,
                   G_TYPE_INT,
 		  G_TYPE_INT);
+
+  properties[PROP_INPUT_PURPOSE] =
+    g_param_spec_enum ("input-purpose",
+                         P_("Purpose"),
+                         P_("Purpose of the text field"),
+                         GTK_TYPE_INPUT_PURPOSE,
+                         GTK_INPUT_PURPOSE_FREE_FORM,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_INPUT_HINTS] =
+    g_param_spec_flags ("input-hints",
+                         P_("hints"),
+                         P_("Hints for the text field behaviour"),
+                         GTK_TYPE_INPUT_HINTS,
+                         GTK_INPUT_HINT_NONE,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  g_type_class_add_private (klass, sizeof (GtkIMContextPrivate));
+  g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 }
 
 static void
@@ -705,4 +753,48 @@ gtk_im_context_delete_surrounding (GtkIMContext *context,
 		 offset, n_chars, &result);
 
   return result;
+}
+
+static void
+gtk_im_context_get_property (GObject    *obj,
+                             guint       property_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+  GtkIMContextPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (obj, GTK_TYPE_IM_CONTEXT, GtkIMContextPrivate);
+
+  switch (property_id)
+    {
+    case PROP_INPUT_PURPOSE:
+      g_value_set_enum (value, priv->purpose);
+      break;
+    case PROP_INPUT_HINTS:
+      g_value_set_flags (value, priv->hints);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_im_context_set_property (GObject      *obj,
+                             guint         property_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  GtkIMContextPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (obj, GTK_TYPE_IM_CONTEXT, GtkIMContextPrivate);
+
+  switch (property_id)
+    {
+    case PROP_INPUT_PURPOSE:
+      priv->purpose = g_value_get_enum (value);
+      break;
+    case PROP_INPUT_HINTS:
+      priv->hints = g_value_get_flags (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
+      break;
+    }
 }
