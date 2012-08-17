@@ -959,6 +959,8 @@ gtk_application_window_init (GtkApplicationWindow *window)
   window->priv->accels = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), window->priv->accels);
 
+  gtk_widget_insert_action_group (GTK_WIDGET (window), "win", G_ACTION_GROUP (window->priv->actions));
+
   /* window->priv->actions is the one and only ref on the group, so when
    * we dispose, the action group will die, disconnecting all signals.
    */
