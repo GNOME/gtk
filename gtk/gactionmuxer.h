@@ -46,6 +46,13 @@ G_GNUC_INTERNAL
 void                    g_action_muxer_remove                           (GActionMuxer *muxer,
                                                                          const gchar  *prefix);
 
+G_GNUC_INTERNAL
+GActionMuxer *          g_action_muxer_get_parent                       (GActionMuxer *muxer);
+
+G_GNUC_INTERNAL
+void                    g_action_muxer_set_parent                       (GActionMuxer *muxer,
+                                                                         GActionMuxer *parent);
+
 G_END_DECLS
 
 #endif /* __G_ACTION_MUXER_H__ */

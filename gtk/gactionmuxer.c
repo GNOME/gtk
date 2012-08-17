@@ -63,13 +63,23 @@ struct _GActionMuxer
 {
   GObject parent_instance;
 
-  GHashTable *actions;
+  GHashTable *observed_actions;
   GHashTable *groups;
+  GActionMuxer *parent;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GActionMuxer, g_action_muxer, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, g_action_muxer_group_iface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_OBSERVABLE, g_action_muxer_observable_iface_init))
+
+enum
+{
+  PROP_0,
+  PROP_PARENT,
+  NUM_PROPERTIES
+};
+
+static GParamSpec *properties[NUM_PROPERTIES];
 
 typedef struct
 {
@@ -86,145 +96,241 @@ typedef struct
   gulong        handler_ids[4];
 } Group;
 
+static void
+g_action_muxer_append_group_actions (gpointer key,
+                                     gpointer value,
+                                     gpointer user_data)
+{
+  const gchar *prefix = key;
+  Group *group = value;
+  GArray *actions = user_data;
+  gchar **group_actions;
+  gchar **action;
+
+  group_actions = g_action_group_list_actions (group->group);
+  for (action = group_actions; *action; action++)
+    {
+      gchar *fullname;
+
+      fullname = g_strconcat (prefix, ".", *action, NULL);
+      g_array_append_val (actions, fullname);
+    }
+
+  g_strfreev (group_actions);
+}
+
 static gchar **
 g_action_muxer_list_actions (GActionGroup *action_group)
 {
   GActionMuxer *muxer = G_ACTION_MUXER (action_group);
-  GHashTableIter iter;
-  gchar *key;
-  gchar **keys;
-  gsize i;
+  GArray *actions;
 
-  keys = g_new (gchar *, g_hash_table_size (muxer->actions) + 1);
+  actions = g_array_new (TRUE, FALSE, sizeof (gchar *));
 
-  i = 0;
-  g_hash_table_iter_init (&iter, muxer->actions);
-  while (g_hash_table_iter_next (&iter, (gpointer *) &key, NULL))
-    keys[i++] = g_strdup (key);
-  keys[i] = NULL;
+  for ( ; muxer != NULL; muxer = muxer->parent)
+    {
+      g_hash_table_foreach (muxer->groups,
+                            g_action_muxer_append_group_actions,
+                            actions);
+    }
 
-  return keys;
+  return (gchar **) g_array_free (actions, FALSE);
 }
 
 static Group *
 g_action_muxer_find_group (GActionMuxer  *muxer,
-                              const gchar     **name)
+                           const gchar   *full_name,
+                           const gchar  **action_name)
 {
   const gchar *dot;
   gchar *prefix;
   Group *group;
 
-  dot = strchr (*name, '.');
+  dot = strchr (full_name, '.');
 
   if (!dot)
     return NULL;
 
-  prefix = g_strndup (*name, dot - *name);
+  prefix = g_strndup (full_name, dot - full_name);
   group = g_hash_table_lookup (muxer->groups, prefix);
   g_free (prefix);
 
-  *name = dot + 1;
+  if (action_name)
+    *action_name = dot + 1;
 
   return group;
 }
 
-static Action *
-g_action_muxer_lookup_action (GActionMuxer  *muxer,
-                              const gchar   *prefix,
-                              const gchar   *action_name,
-                              gchar        **fullname)
-{
-  Action *action;
-
-  *fullname = g_strconcat (prefix, ".", action_name, NULL);
-  action = g_hash_table_lookup (muxer->actions, *fullname);
-
-  return action;
-}
-
 static void
-g_action_muxer_action_enabled_changed (GActionGroup *action_group,
+g_action_muxer_action_enabled_changed (GActionMuxer *muxer,
                                        const gchar  *action_name,
-                                       gboolean      enabled,
-                                       gpointer      user_data)
+                                       gboolean      enabled)
 {
-  Group *group = user_data;
-  gchar *fullname;
   Action *action;
   GSList *node;
 
-  action = g_action_muxer_lookup_action (group->muxer, group->prefix, action_name, &fullname);
+  action = g_hash_table_lookup (muxer->observed_actions, action_name);
   for (node = action ? action->watchers : NULL; node; node = node->next)
-    g_action_observer_action_enabled_changed (node->data, G_ACTION_OBSERVABLE (group->muxer), fullname, enabled);
-  g_action_group_action_enabled_changed (G_ACTION_GROUP (group->muxer), fullname, enabled);
+    g_action_observer_action_enabled_changed (node->data, G_ACTION_OBSERVABLE (muxer), action_name, enabled);
+  g_action_group_action_enabled_changed (G_ACTION_GROUP (muxer), action_name, enabled);
+}
+
+static void
+g_action_muxer_group_action_enabled_changed (GActionGroup *action_group,
+                                             const gchar  *action_name,
+                                             gboolean      enabled,
+                                             gpointer      user_data)
+{
+  Group *group = user_data;
+  gchar *fullname;
+
+  fullname = g_strconcat (group->prefix, ".", action_name, NULL);
+  g_action_muxer_action_enabled_changed (group->muxer, fullname, enabled);
+
   g_free (fullname);
 }
 
 static void
-g_action_muxer_action_state_changed (GActionGroup *action_group,
+g_action_muxer_parent_action_enabled_changed (GActionGroup *action_group,
+                                              const gchar  *action_name,
+                                              gboolean      enabled,
+                                              gpointer      user_data)
+{
+  GActionMuxer *muxer = user_data;
+
+  g_action_muxer_action_enabled_changed (muxer, action_name, enabled);
+}
+
+static void
+g_action_muxer_action_state_changed (GActionMuxer *muxer,
                                      const gchar  *action_name,
-                                     GVariant     *state,
-                                     gpointer      user_data)
+                                     GVariant     *state)
 {
-  Group *group = user_data;
-  gchar *fullname;
   Action *action;
   GSList *node;
 
-  action = g_action_muxer_lookup_action (group->muxer, group->prefix, action_name, &fullname);
+  action = g_hash_table_lookup (muxer->observed_actions, action_name);
   for (node = action ? action->watchers : NULL; node; node = node->next)
-    g_action_observer_action_state_changed (node->data, G_ACTION_OBSERVABLE (group->muxer), fullname, state);
-  g_action_group_action_state_changed (G_ACTION_GROUP (group->muxer), fullname, state);
+    g_action_observer_action_state_changed (node->data, G_ACTION_OBSERVABLE (muxer), action_name, state);
+  g_action_group_action_state_changed (G_ACTION_GROUP (muxer), action_name, state);
+}
+
+static void
+g_action_muxer_group_action_state_changed (GActionGroup *action_group,
+                                           const gchar  *action_name,
+                                           GVariant     *state,
+                                           gpointer      user_data)
+{
+  Group *group = user_data;
+  gchar *fullname;
+
+  fullname = g_strconcat (group->prefix, ".", action_name, NULL);
+  g_action_muxer_action_state_changed (group->muxer, fullname, state);
+
   g_free (fullname);
 }
 
 static void
-g_action_muxer_action_added (GActionGroup *action_group,
+g_action_muxer_parent_action_state_changed (GActionGroup *action_group,
+                                            const gchar  *action_name,
+                                            GVariant     *state,
+                                            gpointer      user_data)
+{
+  GActionMuxer *muxer = user_data;
+
+  g_action_muxer_action_state_changed (muxer, action_name, state);
+}
+
+static void
+g_action_muxer_action_added (GActionMuxer *muxer,
                              const gchar  *action_name,
-                             gpointer      user_data)
+                             GActionGroup *original_group,
+                             const gchar  *orignal_action_name)
 {
   const GVariantType *parameter_type;
-  Group *group = user_data;
   gboolean enabled;
   GVariant *state;
+  Action *action;
 
-  if (g_action_group_query_action (group->group, action_name, &enabled, &parameter_type, NULL, NULL, &state))
+  action = g_hash_table_lookup (muxer->observed_actions, action_name);
+
+  if (action && action->watchers &&
+      g_action_group_query_action (original_group, orignal_action_name,
+                                   &enabled, &parameter_type, NULL, NULL, &state))
     {
-      gchar *fullname;
-      Action *action;
       GSList *node;
 
-      action = g_action_muxer_lookup_action (group->muxer, group->prefix, action_name, &fullname);
-
-      for (node = action ? action->watchers : NULL; node; node = node->next)
+      for (node = action->watchers; node; node = node->next)
         g_action_observer_action_added (node->data,
-                                        G_ACTION_OBSERVABLE (group->muxer),
-                                        fullname, parameter_type, enabled, state);
-
-      g_action_group_action_added (G_ACTION_GROUP (group->muxer), fullname);
+                                        G_ACTION_OBSERVABLE (muxer),
+                                        action_name, parameter_type, enabled, state);
 
       if (state)
         g_variant_unref (state);
-
-      g_free (fullname);
     }
+
+  g_action_group_action_added (G_ACTION_GROUP (muxer), action_name);
 }
 
 static void
-g_action_muxer_action_removed (GActionGroup *action_group,
-                               const gchar  *action_name,
-                               gpointer      user_data)
+g_action_muxer_action_added_to_group (GActionGroup *action_group,
+                                      const gchar  *action_name,
+                                      gpointer      user_data)
 {
   Group *group = user_data;
   gchar *fullname;
+
+  fullname = g_strconcat (group->prefix, ".", action_name, NULL);
+  g_action_muxer_action_added (group->muxer, fullname, action_group, action_name);
+
+  g_free (fullname);
+}
+
+static void
+g_action_muxer_action_added_to_parent (GActionGroup *action_group,
+                                       const gchar  *action_name,
+                                       gpointer      user_data)
+{
+  GActionMuxer *muxer = user_data;
+
+  g_action_muxer_action_added (muxer, action_name, action_group, action_name);
+}
+
+static void
+g_action_muxer_action_removed (GActionMuxer *muxer,
+                               const gchar  *action_name)
+{
   Action *action;
   GSList *node;
 
-  action = g_action_muxer_lookup_action (group->muxer, group->prefix, action_name, &fullname);
+  action = g_hash_table_lookup (muxer->observed_actions, action_name);
   for (node = action ? action->watchers : NULL; node; node = node->next)
-    g_action_observer_action_removed (node->data, G_ACTION_OBSERVABLE (group->muxer), fullname);
-  g_action_group_action_removed (G_ACTION_GROUP (group->muxer), fullname);
+    g_action_observer_action_removed (node->data, G_ACTION_OBSERVABLE (muxer), action_name);
+  g_action_group_action_removed (G_ACTION_GROUP (muxer), action_name);
+}
+
+static void
+g_action_muxer_action_removed_from_group (GActionGroup *action_group,
+                                          const gchar  *action_name,
+                                          gpointer      user_data)
+{
+  Group *group = user_data;
+  gchar *fullname;
+
+  fullname = g_strconcat (group->prefix, ".", action_name, NULL);
+  g_action_muxer_action_removed (group->muxer, fullname);
+
   g_free (fullname);
+}
+
+static void
+g_action_muxer_action_removed_from_parent (GActionGroup *action_group,
+                                           const gchar  *action_name,
+                                           gpointer      user_data)
+{
+  GActionMuxer *muxer = user_data;
+
+  g_action_muxer_action_removed (muxer, action_name);
 }
 
 static gboolean
@@ -238,14 +344,20 @@ g_action_muxer_query_action (GActionGroup        *action_group,
 {
   GActionMuxer *muxer = G_ACTION_MUXER (action_group);
   Group *group;
+  const gchar *unprefixed_name;
 
-  group = g_action_muxer_find_group (muxer, &action_name);
+  group = g_action_muxer_find_group (muxer, action_name, &unprefixed_name);
 
-  if (!group)
-    return FALSE;
+  if (group)
+    return g_action_group_query_action (group->group, unprefixed_name, enabled,
+                                        parameter_type, state_type, state_hint, state);
 
-  return g_action_group_query_action (group->group, action_name, enabled,
-                                      parameter_type, state_type, state_hint, state);
+  if (muxer->parent)
+    return g_action_group_query_action (G_ACTION_GROUP (muxer->parent), action_name,
+                                        enabled, parameter_type,
+                                        state_type, state_hint, state);
+
+  return FALSE;
 }
 
 static void
@@ -255,11 +367,14 @@ g_action_muxer_activate_action (GActionGroup *action_group,
 {
   GActionMuxer *muxer = G_ACTION_MUXER (action_group);
   Group *group;
+  const gchar *unprefixed_name;
 
-  group = g_action_muxer_find_group (muxer, &action_name);
+  group = g_action_muxer_find_group (muxer, action_name, &unprefixed_name);
 
   if (group)
-    g_action_group_activate_action (group->group, action_name, parameter);
+    g_action_group_activate_action (group->group, unprefixed_name, parameter);
+  else if (muxer->parent)
+    g_action_group_activate_action (G_ACTION_GROUP (muxer->parent), action_name, parameter);
 }
 
 static void
@@ -269,11 +384,14 @@ g_action_muxer_change_action_state (GActionGroup *action_group,
 {
   GActionMuxer *muxer = G_ACTION_MUXER (action_group);
   Group *group;
+  const gchar *unprefixed_name;
 
-  group = g_action_muxer_find_group (muxer, &action_name);
+  group = g_action_muxer_find_group (muxer, action_name, &unprefixed_name);
 
   if (group)
-    g_action_group_change_action_state (group->group, action_name, state);
+    g_action_group_change_action_state (group->group, unprefixed_name, state);
+  else if (muxer->parent)
+    g_action_group_change_action_state (G_ACTION_GROUP (muxer->parent), action_name, state);
 }
 
 static void
@@ -289,14 +407,7 @@ g_action_muxer_unregister_internal (Action   *action,
         *ptr = g_slist_remove (*ptr, observer);
 
         if (action->watchers == NULL)
-          {
-            g_hash_table_remove (muxer->actions, action->fullname);
-            g_free (action->fullname);
-
-            g_slice_free (Action, action);
-
-            g_object_unref (muxer);
-          }
+            g_hash_table_remove (muxer->observed_actions, action->fullname);
 
         break;
       }
@@ -319,16 +430,16 @@ g_action_muxer_register_observer (GActionObservable *observable,
   GActionMuxer *muxer = G_ACTION_MUXER (observable);
   Action *action;
 
-  action = g_hash_table_lookup (muxer->actions, name);
+  action = g_hash_table_lookup (muxer->observed_actions, name);
 
   if (action == NULL)
     {
       action = g_slice_new (Action);
-      action->muxer = g_object_ref (muxer);
+      action->muxer = muxer;
       action->fullname = g_strdup (name);
       action->watchers = NULL;
 
-      g_hash_table_insert (muxer->actions, action->fullname, action);
+      g_hash_table_insert (muxer->observed_actions, action->fullname, action);
     }
 
   action->watchers = g_slist_prepend (action->watchers, observer);
@@ -343,7 +454,7 @@ g_action_muxer_unregister_observer (GActionObservable *observable,
   GActionMuxer *muxer = G_ACTION_MUXER (observable);
   Action *action;
 
-  action = g_hash_table_lookup (muxer->actions, name);
+  action = g_hash_table_lookup (muxer->observed_actions, name);
   g_object_weak_unref (G_OBJECT (observer), g_action_muxer_weak_notify, action);
   g_action_muxer_unregister_internal (action, observer);
 }
@@ -365,12 +476,27 @@ g_action_muxer_free_group (gpointer data)
 }
 
 static void
+g_action_muxer_free_action (gpointer data)
+{
+  Action *action = data;
+  GSList *it;
+
+  for (it = action->watchers; it; it = it->next)
+    g_object_weak_unref (G_OBJECT (it->data), g_action_muxer_weak_notify, action);
+
+  g_slist_free (action->watchers);
+  g_free (action->fullname);
+
+  g_slice_free (Action, action);
+}
+
+static void
 g_action_muxer_finalize (GObject *object)
 {
   GActionMuxer *muxer = G_ACTION_MUXER (object);
 
-  g_assert_cmpint (g_hash_table_size (muxer->actions), ==, 0);
-  g_hash_table_unref (muxer->actions);
+  g_assert_cmpint (g_hash_table_size (muxer->observed_actions), ==, 0);
+  g_hash_table_unref (muxer->observed_actions);
   g_hash_table_unref (muxer->groups);
 
   G_OBJECT_CLASS (g_action_muxer_parent_class)
@@ -378,9 +504,68 @@ g_action_muxer_finalize (GObject *object)
 }
 
 static void
+g_action_muxer_dispose (GObject *object)
+{
+  GActionMuxer *muxer = G_ACTION_MUXER (object);
+
+  if (muxer->parent)
+  {
+    g_signal_handlers_disconnect_by_func (muxer->parent, g_action_muxer_action_added_to_parent, muxer);
+    g_signal_handlers_disconnect_by_func (muxer->parent, g_action_muxer_action_removed_from_parent, muxer);
+    g_signal_handlers_disconnect_by_func (muxer->parent, g_action_muxer_parent_action_enabled_changed, muxer);
+    g_signal_handlers_disconnect_by_func (muxer->parent, g_action_muxer_parent_action_state_changed, muxer);
+
+    g_clear_object (&muxer->parent);
+  }
+
+  g_hash_table_remove_all (muxer->observed_actions);
+
+  G_OBJECT_CLASS (g_action_muxer_parent_class)
+    ->dispose (object);
+}
+
+static void
+g_action_muxer_get_property (GObject    *object,
+                             guint       property_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+  GActionMuxer *muxer = G_ACTION_MUXER (object);
+
+  switch (property_id)
+    {
+    case PROP_PARENT:
+      g_value_set_object (value, g_action_muxer_get_parent (muxer));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    }
+}
+
+static void
+g_action_muxer_set_property (GObject      *object,
+                             guint         property_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  GActionMuxer *muxer = G_ACTION_MUXER (object);
+
+  switch (property_id)
+    {
+    case PROP_PARENT:
+      g_action_muxer_set_parent (muxer, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    }
+}
+
+static void
 g_action_muxer_init (GActionMuxer *muxer)
 {
-  muxer->actions = g_hash_table_new (g_str_hash, g_str_equal);
+  muxer->observed_actions = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_action_muxer_free_action);
   muxer->groups = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_action_muxer_free_group);
 }
 
@@ -403,7 +588,18 @@ g_action_muxer_group_iface_init (GActionGroupInterface *iface)
 static void
 g_action_muxer_class_init (GObjectClass *class)
 {
+  class->get_property = g_action_muxer_get_property;
+  class->set_property = g_action_muxer_set_property;
   class->finalize = g_action_muxer_finalize;
+  class->dispose = g_action_muxer_dispose;
+
+  properties[PROP_PARENT] = g_param_spec_object ("parent", "Parent",
+                                                 "The parent muxer",
+                                                 G_TYPE_ACTION_MUXER,
+                                                 G_PARAM_READWRITE |
+                                                 G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (class, NUM_PROPERTIES, properties);
 }
 
 /*
@@ -447,17 +643,17 @@ g_action_muxer_insert (GActionMuxer *muxer,
 
   actions = g_action_group_list_actions (group->group);
   for (i = 0; actions[i]; i++)
-    g_action_muxer_action_added (group->group, actions[i], group);
+    g_action_muxer_action_added_to_group (group->group, actions[i], group);
   g_strfreev (actions);
 
   group->handler_ids[0] = g_signal_connect (group->group, "action-added",
-                                            G_CALLBACK (g_action_muxer_action_added), group);
+                                            G_CALLBACK (g_action_muxer_action_added_to_group), group);
   group->handler_ids[1] = g_signal_connect (group->group, "action-removed",
-                                            G_CALLBACK (g_action_muxer_action_removed), group);
+                                            G_CALLBACK (g_action_muxer_action_removed_from_group), group);
   group->handler_ids[2] = g_signal_connect (group->group, "action-enabled-changed",
-                                            G_CALLBACK (g_action_muxer_action_enabled_changed), group);
+                                            G_CALLBACK (g_action_muxer_group_action_enabled_changed), group);
   group->handler_ids[3] = g_signal_connect (group->group, "action-state-changed",
-                                            G_CALLBACK (g_action_muxer_action_state_changed), group);
+                                            G_CALLBACK (g_action_muxer_group_action_state_changed), group);
 }
 
 /*
@@ -487,7 +683,7 @@ g_action_muxer_remove (GActionMuxer *muxer,
 
       actions = g_action_group_list_actions (group->group);
       for (i = 0; actions[i]; i++)
-        g_action_muxer_action_removed (group->group, actions[i], group);
+        g_action_muxer_action_removed_from_group (group->group, actions[i], group);
       g_strfreev (actions);
 
       g_action_muxer_free_group (group);
@@ -503,4 +699,78 @@ GActionMuxer *
 g_action_muxer_new (void)
 {
   return g_object_new (G_TYPE_ACTION_MUXER, NULL);
+}
+
+/* g_action_muxer_get_parent:
+ * @muxer: a #GActionMuxer
+ *
+ * Returns: (transfer-none): the parent of @muxer, or NULL.
+ */
+GActionMuxer *
+g_action_muxer_get_parent (GActionMuxer *muxer)
+{
+  g_return_val_if_fail (G_IS_ACTION_MUXER (muxer), NULL);
+
+  return muxer->parent;
+}
+
+/* g_action_muxer_set_parent:
+ * @muxer: a #GActionMuxer
+ * @parent: (allow-none): the new parent #GActionMuxer
+ *
+ * Sets the parent of @muxer to @parent.
+ */
+void
+g_action_muxer_set_parent (GActionMuxer *muxer,
+                           GActionMuxer *parent)
+{
+  g_return_if_fail (G_IS_ACTION_MUXER (muxer));
+  g_return_if_fail (parent == NULL || G_IS_ACTION_MUXER (parent));
+
+  if (muxer->parent == parent)
+    return;
+
+  if (muxer->parent != NULL)
+    {
+      gchar **actions;
+      gchar **it;
+
+      actions = g_action_group_list_actions (G_ACTION_GROUP (muxer->parent));
+      for (it = actions; *it; it++)
+        g_action_muxer_action_removed (muxer, *it);
+      g_strfreev (actions);
+
+      g_signal_handlers_disconnect_by_func (muxer->parent, g_action_muxer_action_added_to_parent, muxer);
+      g_signal_handlers_disconnect_by_func (muxer->parent, g_action_muxer_action_removed_from_parent, muxer);
+      g_signal_handlers_disconnect_by_func (muxer->parent, g_action_muxer_parent_action_enabled_changed, muxer);
+      g_signal_handlers_disconnect_by_func (muxer->parent, g_action_muxer_parent_action_state_changed, muxer);
+
+      g_object_unref (muxer->parent);
+    }
+
+  muxer->parent = parent;
+
+  if (muxer->parent != NULL)
+    {
+      gchar **actions;
+      gchar **it;
+
+      g_object_ref (muxer->parent);
+
+      actions = g_action_group_list_actions (G_ACTION_GROUP (muxer->parent));
+      for (it = actions; *it; it++)
+        g_action_muxer_action_added (muxer, *it, G_ACTION_GROUP (muxer->parent), *it);
+      g_strfreev (actions);
+
+      g_signal_connect (muxer->parent, "action-added",
+                        G_CALLBACK (g_action_muxer_action_added_to_parent), muxer);
+      g_signal_connect (muxer->parent, "action-removed",
+                        G_CALLBACK (g_action_muxer_action_removed_from_parent), muxer);
+      g_signal_connect (muxer->parent, "action-enabled-changed",
+                        G_CALLBACK (g_action_muxer_parent_action_enabled_changed), muxer);
+      g_signal_connect (muxer->parent, "action-state-changed",
+                        G_CALLBACK (g_action_muxer_parent_action_state_changed), muxer);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (muxer), properties[PROP_PARENT]);
 }
