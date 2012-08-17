@@ -47,6 +47,7 @@
 #include "gtkapplicationprivate.h"
 #include "gtkactionable.h"
 #include "a11y/gtkswitchaccessible.h"
+#include "gtkactionhelper.h"
 
 #include <math.h>
 
@@ -57,10 +58,7 @@ struct _GtkSwitchPrivate
 {
   GdkWindow *event_window;
   GtkAction *action;
-
-  gchar                 *action_name;
-  GVariant              *action_target;
-  GSimpleActionObserver *action_observer;
+  GtkActionHelper *action_helper;
 
   gint handle_x;
   gint offset;
@@ -95,9 +93,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static GParamSpec *switch_props[LAST_PROP] = { NULL, };
 
-static void gtk_switch_hierarchy_changed (GtkWidget *widget,
-                                          GtkWidget *previous_toplevel);
- 
 static void gtk_switch_actionable_iface_init (GtkActionableInterface *iface);
 static void gtk_switch_activatable_interface_init (GtkActivatableIface *iface);
 
@@ -675,44 +670,15 @@ gtk_switch_set_use_action_appearance (GtkSwitch *sw,
 }
 
 static void
-gtk_switch_update_action_observer (GtkSwitch *sw)
-{
-  GtkWidget *window;
-
-  /* we are the only owner so this will clear all the signals */
-  g_clear_object (&sw->priv->action_observer);
-
-  window = gtk_widget_get_toplevel (GTK_WIDGET (sw));
-
-  if (GTK_IS_APPLICATION_WINDOW (window) && sw->priv->action_name)
-    {
-      GSimpleActionObserver *observer;
-
-      observer = gtk_application_window_create_observer (GTK_APPLICATION_WINDOW (window),
-                                                         sw->priv->action_name,
-                                                         sw->priv->action_target);
-
-      g_object_bind_property (observer, "active", sw, "active", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (observer, "enabled", sw, "sensitive", G_BINDING_SYNC_CREATE);
-
-      sw->priv->action_observer = observer;
-    }
-}
-
-static void
 gtk_switch_set_action_name (GtkActionable *actionable,
                             const gchar   *action_name)
 {
   GtkSwitch *sw = GTK_SWITCH (actionable);
 
-  g_return_if_fail (GTK_IS_SWITCH (sw));
+  if (!sw->priv->action_helper)
+    sw->priv->action_helper = gtk_action_helper_new (actionable);
 
-  g_free (sw->priv->action_name);
-  sw->priv->action_name = g_strdup (action_name);
-
-  gtk_switch_update_action_observer (sw);
-
-  g_object_notify (G_OBJECT (sw), "action-name");
+  gtk_action_helper_set_action_name (sw->priv->action_helper, action_name);
 }
 
 static void
@@ -721,24 +687,10 @@ gtk_switch_set_action_target_value (GtkActionable *actionable,
 {
   GtkSwitch *sw = GTK_SWITCH (actionable);
 
-  g_return_if_fail (GTK_IS_SWITCH (sw));
+  if (!sw->priv->action_helper)
+    sw->priv->action_helper = gtk_action_helper_new (actionable);
 
-  if (action_target != sw->priv->action_target &&
-      (!action_target || !sw->priv->action_target ||
-       !g_variant_equal (action_target, sw->priv->action_target)))
-    {
-      if (sw->priv->action_target)
-        g_variant_unref (sw->priv->action_target);
-
-      sw->priv->action_target = NULL;
-
-      if (action_target)
-        sw->priv->action_target = g_variant_ref_sink (action_target);
-
-      gtk_switch_update_action_observer (sw);
-
-      g_object_notify (G_OBJECT (sw), "action-target");
-    }
+  gtk_action_helper_set_action_target_value (sw->priv->action_helper, action_target);
 }
 
 static const gchar *
@@ -746,7 +698,7 @@ gtk_switch_get_action_name (GtkActionable *actionable)
 {
   GtkSwitch *sw = GTK_SWITCH (actionable);
 
-  return sw->priv->action_name;
+  return gtk_action_helper_get_action_name (sw->priv->action_helper);
 }
 
 static GVariant *
@@ -754,7 +706,7 @@ gtk_switch_get_action_target_value (GtkActionable *actionable)
 {
   GtkSwitch *sw = GTK_SWITCH (actionable);
 
-  return sw->priv->action_target;
+  return gtk_action_helper_get_action_target_value (sw->priv->action_helper);
 }
 
 static void
@@ -764,28 +716,6 @@ gtk_switch_actionable_iface_init (GtkActionableInterface *iface)
   iface->set_action_name = gtk_switch_set_action_name;
   iface->get_action_target_value = gtk_switch_get_action_target_value;
   iface->set_action_target_value = gtk_switch_set_action_target_value;
-}
-
-static void
-gtk_switch_hierarchy_changed (GtkWidget *widget,
-                              GtkWidget *previous_toplevel)
-{
-  GtkSwitch *sw = GTK_SWITCH (widget);
-  GtkWidgetClass *parent_class;
-
-  parent_class = GTK_WIDGET_CLASS (gtk_switch_parent_class);
-  if (parent_class->hierarchy_changed)
-    parent_class->hierarchy_changed (widget, previous_toplevel);
-
-  if (sw->priv->action_name)
-    {
-      GtkWidget *toplevel;
-
-      toplevel = gtk_widget_get_toplevel (widget);
-
-      if (toplevel != previous_toplevel)
-        gtk_switch_update_action_observer (sw);
-    }
 }
 
 static void
@@ -846,11 +776,11 @@ gtk_switch_get_property (GObject    *gobject,
       break;
 
     case PROP_ACTION_NAME:
-      g_value_set_string (value, priv->action_name);
+      g_value_set_string (value, gtk_action_helper_get_action_name (priv->action_helper));
       break;
 
     case PROP_ACTION_TARGET:
-      g_value_set_variant (value, priv->action_target);
+      g_value_set_variant (value, gtk_action_helper_get_action_target_value (priv->action_helper));
       break;
 
     default:
@@ -863,13 +793,7 @@ gtk_switch_dispose (GObject *object)
 {
   GtkSwitchPrivate *priv = GTK_SWITCH (object)->priv;
 
-  g_clear_object (&priv->action_observer);
-
-  if (priv->action_name)
-    {
-      g_free (priv->action_name);
-      priv->action_name = NULL;
-    }
+  g_clear_object (&priv->action_helper);
 
   if (priv->action)
     {
@@ -931,7 +855,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   widget_class->motion_notify_event = gtk_switch_motion;
   widget_class->enter_notify_event = gtk_switch_enter;
   widget_class->leave_notify_event = gtk_switch_leave;
-  widget_class->hierarchy_changed = gtk_switch_hierarchy_changed;
 
   klass->activate = gtk_switch_activate;
 
@@ -1026,8 +949,8 @@ gtk_switch_set_active (GtkSwitch *sw,
 
       g_object_notify_by_pspec (G_OBJECT (sw), switch_props[PROP_ACTIVE]);
 
-      if (priv->action_observer)
-        g_simple_action_observer_activate (priv->action_observer);
+      if (priv->action_helper)
+        gtk_action_helper_activate (priv->action_helper);
 
       if (priv->action)
         gtk_action_activate (priv->action);
