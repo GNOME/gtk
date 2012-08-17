@@ -407,6 +407,7 @@ gtk_private_h_sources =		\
 	gtkapplicationprivate.h	\
 	gtkaccelgroupprivate.h	\
 	gtkaccelmapprivate.h	\
+	gtkactionhelper.h	\
 	gtkallocatedbitmaskprivate.h	\
 	gtkappchooserprivate.h	\
 	gtkappchoosermodule.h	\
@@ -586,6 +587,7 @@ gtk_base_c_sources = 		\
 	gtkaccelmap.c		\
 	gtkaccessible.c		\
 	gtkaction.c		\
+	gtkactionhelper.c	\
 	gtkactiongroup.c	\
 	gtkactivatable.c	\
 	gtkadjustment.c		\
