@@ -27,6 +27,7 @@
 
 #include "gtkcsstypesprivate.h"
 #include "gtkwidget.h"
+#include "gactionmuxer.h"
 
 G_BEGIN_DECLS
 
@@ -177,6 +178,9 @@ GtkWidgetPath *   _gtk_widget_create_path                  (GtkWidget    *widget
 void              _gtk_widget_invalidate_style_context     (GtkWidget    *widget,
                                                             GtkCssChange  change);
 void              _gtk_widget_style_context_invalidated    (GtkWidget    *widget);
+
+void              _gtk_widget_update_parent_muxer          (GtkWidget    *widget);
+GActionMuxer *    _gtk_widget_get_action_muxer             (GtkWidget    *widget);
 
 G_END_DECLS
 

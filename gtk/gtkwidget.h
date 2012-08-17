@@ -886,6 +886,10 @@ GDK_AVAILABLE_IN_3_4
 GdkModifierType   gtk_widget_get_modifier_mask (GtkWidget         *widget,
                                                 GdkModifierIntent  intent);
 
+GDK_AVAILABLE_IN_3_6
+void                    gtk_widget_insert_action_group                  (GtkWidget    *widget,
+                                                                         const gchar  *name,
+                                                                         GActionGroup *group);
 
 G_END_DECLS
 

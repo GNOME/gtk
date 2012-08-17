@@ -5291,6 +5291,7 @@ gtk_widget_get_mapped
 gtk_widget_get_requisition
 gtk_widget_device_is_shadowed
 gtk_widget_get_modifier_mask
+gtk_widget_insert_action_group
 
 <SUBSECTION>
 gtk_widget_get_path

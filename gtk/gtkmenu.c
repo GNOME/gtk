@@ -1220,6 +1220,8 @@ gtk_menu_attach_to_widget (GtkMenu           *menu,
   /* Attach the widget to the toplevel window. */
   gtk_window_set_attached_to (GTK_WINDOW (menu->priv->toplevel), attach_widget);
 
+  _gtk_widget_update_parent_muxer (GTK_WIDGET (menu));
+
   /* Fallback title for menu comes from attach widget */
   gtk_menu_update_title (menu);
 
@@ -1293,6 +1295,8 @@ gtk_menu_detach (GtkMenu *menu)
     gtk_widget_unrealize (GTK_WIDGET (menu));
 
   g_slice_free (GtkMenuAttachData, data);
+
+  _gtk_widget_update_parent_muxer (GTK_WIDGET (menu));
 
   /* Fallback title for menu comes from attach widget */
   gtk_menu_update_title (menu);

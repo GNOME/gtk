@@ -390,6 +390,9 @@ struct _GtkWidgetPrivate
   /* The widget's requested sizes */
   SizeRequestCache requests;
 
+  /* actions attached to this or any parent widget */
+  GActionMuxer *muxer;
+
   /* The widget's window or its parent window if it does
    * not have a window. (Which will be indicated by the
    * GTK_NO_WINDOW flag being set).
@@ -3898,6 +3901,8 @@ gtk_widget_unparent (GtkWidget *widget)
   gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_BACKDROP);
   if (priv->context)
     gtk_style_context_set_parent (priv->context, NULL);
+
+  _gtk_widget_update_parent_muxer (widget);
 
   g_signal_emit (widget, widget_signals[PARENT_SET], 0, old_parent);
   if (toplevel)
@@ -7968,6 +7973,8 @@ gtk_widget_set_parent (GtkWidget *widget,
     gtk_style_context_set_parent (priv->context,
                                   gtk_widget_get_style_context (parent));
 
+  _gtk_widget_update_parent_muxer (widget);
+
   g_signal_emit (widget, widget_signals[PARENT_SET], 0, NULL);
   if (priv->parent->priv->anchored)
     _gtk_widget_propagate_hierarchy_changed (widget, NULL);
@@ -10267,6 +10274,8 @@ gtk_widget_dispose (GObject *object)
       g_signal_emit (object, widget_signals[DESTROY], 0);
       priv->in_destruction = FALSE;
     }
+
+  g_clear_object (&priv->muxer);
 
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
@@ -14071,4 +14080,62 @@ _gtk_widget_set_style (GtkWidget *widget,
                        GtkStyle  *style)
 {
   widget->priv->style = style;
+}
+
+void
+_gtk_widget_update_parent_muxer (GtkWidget *widget)
+{
+  GtkWidget *parent;
+  GActionMuxer *parent_muxer;
+
+  if (widget->priv->muxer == NULL)
+    return;
+
+  if (GTK_IS_MENU (widget))
+    parent = gtk_menu_get_attach_widget (GTK_MENU (widget));
+  else
+    parent = gtk_widget_get_parent (widget);
+
+  parent_muxer = parent ? _gtk_widget_get_action_muxer (parent) : NULL;
+
+  g_action_muxer_set_parent (widget->priv->muxer, parent_muxer);
+}
+
+GActionMuxer *
+_gtk_widget_get_action_muxer (GtkWidget *widget)
+{
+  if (widget->priv->muxer == NULL)
+    {
+      widget->priv->muxer = g_action_muxer_new ();
+      _gtk_widget_update_parent_muxer (widget);
+    }
+
+  return widget->priv->muxer;
+}
+
+/**
+ * gtk_widget_insert_action_group:
+ * @widget: a #GtkWidget
+ * @name: the prefix for actions in @group
+ * @group: a #GActionGroup
+ *
+ * Inserts @group into @widget. Children of @widget that implement
+ * #GtkActionable can then be associated with actions in @group by
+ * setting their 'action-name' to @prefix.<action-name>.
+ *
+ * Since: 3.6
+ */
+void
+gtk_widget_insert_action_group (GtkWidget    *widget,
+                                const gchar  *name,
+                                GActionGroup *group)
+{
+  GActionMuxer *muxer;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (name != NULL);
+
+  muxer = _gtk_widget_get_action_muxer (widget);
+
+  g_action_muxer_insert (muxer, name, group);
 }

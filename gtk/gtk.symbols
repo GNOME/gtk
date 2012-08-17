@@ -3828,6 +3828,7 @@ gtk_widget_unmap
 gtk_widget_unparent
 gtk_widget_unrealize
 gtk_widget_unset_state_flags
+gtk_widget_insert_action_group
 #ifdef GDK_WINDOWING_WIN32
 gtk_win32_embed_widget_get_type
 #endif
