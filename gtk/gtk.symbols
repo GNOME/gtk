@@ -246,6 +246,7 @@ gtk_application_window_get_type
 gtk_application_window_get_id
 gtk_application_window_new
 gtk_application_window_set_show_menubar
+gtk_application_get_active_window
 gtk_arrow_get_type
 gtk_arrow_new
 gtk_arrow_placement_get_type

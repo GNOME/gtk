@@ -132,7 +132,8 @@ enum {
   PROP_ZERO,
   PROP_REGISTER_SESSION,
   PROP_APP_MENU,
-  PROP_MENUBAR
+  PROP_MENUBAR,
+  PROP_ACTIVE_WINDOW
 };
 
 G_DEFINE_TYPE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
@@ -405,6 +406,8 @@ gtk_application_focus_in_event_cb (GtkWindow      *window,
       priv->windows = g_list_concat (link, priv->windows);
     }
 
+  g_object_notify (G_OBJECT (application), "active-window");
+
 #ifdef GDK_WINDOWING_QUARTZ
   gtk_application_focus_changed (application, window);
 #endif
@@ -529,6 +532,8 @@ gtk_application_window_added (GtkApplication *application,
 #ifdef GDK_WINDOWING_X11
   gtk_application_window_added_x11 (application, window);
 #endif
+
+  g_object_notify (G_OBJECT (application), "active-window");
 }
 
 static void
@@ -536,6 +541,9 @@ gtk_application_window_removed (GtkApplication *application,
                                 GtkWindow      *window)
 {
   GtkApplicationPrivate *priv = application->priv;
+  gpointer old_active;
+
+  old_active = priv->windows;
 
 #ifdef GDK_WINDOWING_X11
   gtk_application_window_removed_x11 (application, window);
@@ -548,6 +556,9 @@ gtk_application_window_removed (GtkApplication *application,
   g_application_release (G_APPLICATION (application));
   priv->windows = g_list_remove (priv->windows, window);
   gtk_window_set_application (window, NULL);
+
+  if (priv->windows != old_active)
+    g_object_notify (G_OBJECT (application), "active-window");
 }
 
 static void
@@ -755,6 +766,13 @@ gtk_application_class_init (GtkApplicationClass *class)
                          P_("The GMenuModel for the menubar"),
                          G_TYPE_MENU_MODEL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class, PROP_ACTIVE_WINDOW,
+    g_param_spec_object ("active-window",
+                         P_("Active window"),
+                         P_("The window which most recently had focus"),
+                         GTK_TYPE_WINDOW,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -913,6 +931,29 @@ gtk_application_get_window_by_id (GtkApplication *application,
     }
 
   return NULL;
+}
+
+/**
+ * gtk_application_get_active_window:
+ * @application: a #GtkApplication
+ *
+ * Gets the "active" window for the application.
+ *
+ * The active window is the one that was most recently focused (within
+ * the application).  This window may not have the focus at the moment
+ * if another application has it -- this is just the most
+ * recently-focused window within this application.
+ *
+ * Returns: (transfer none): the active window
+ *
+ * Since: 3.6
+ **/
+GtkWindow *
+gtk_application_get_active_window (GtkApplication *application)
+{
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
+
+  return application->priv->windows ? application->priv->windows->data : NULL;
 }
 
 /**
