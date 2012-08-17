@@ -26,7 +26,7 @@
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
-#include "gtkfilechooserbutton.h"
+#include "gtkfilechooserdialog.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkliststore.h"
@@ -42,25 +42,37 @@
 #define GTK_PRINTER_OPTION_WIDGET_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINTER_OPTION_WIDGET, GtkPrinterOptionWidgetPrivate))
 
+/* This defines the max file length that the file chooser
+ * button should display. The total length will be
+ * FILENAME_LENGTH_MAX+3 because the truncated name is prefixed
+ * with "...".
+ */
+#define FILENAME_LENGTH_MAX 27
+
 static void gtk_printer_option_widget_finalize (GObject *object);
 
 static void deconstruct_widgets (GtkPrinterOptionWidget *widget);
-static void construct_widgets (GtkPrinterOptionWidget *widget);
-static void update_widgets (GtkPrinterOptionWidget *widget);
+static void construct_widgets   (GtkPrinterOptionWidget *widget);
+static void update_widgets      (GtkPrinterOptionWidget *widget);
+
+static gchar *trim_long_filename (const gchar *filename);
 
 struct GtkPrinterOptionWidgetPrivate
 {
   GtkPrinterOption *source;
   gulong source_changed_handler;
-  
+
   GtkWidget *check;
   GtkWidget *combo;
   GtkWidget *entry;
   GtkWidget *image;
   GtkWidget *label;
   GtkWidget *info_label;
-  GtkWidget *filechooser;
   GtkWidget *box;
+  GtkWidget *button;
+
+  /* the last location for save to file, that the user selected */
+  gchar *last_location;
 };
 
 enum {
@@ -86,7 +98,7 @@ static void gtk_printer_option_widget_get_property (GObject      *object,
 						    GValue       *value,
 						    GParamSpec   *pspec);
 static gboolean gtk_printer_option_widget_mnemonic_activate (GtkWidget *widget,
-							      gboolean  group_cycling);
+							     gboolean   group_cycling);
 
 static void
 gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
@@ -201,6 +213,8 @@ gtk_printer_option_widget_mnemonic_activate (GtkWidget *widget,
     return gtk_widget_mnemonic_activate (priv->combo, group_cycling);
   if (priv->entry)
     return gtk_widget_mnemonic_activate (priv->entry, group_cycling);
+  if (priv->button)
+    return gtk_widget_mnemonic_activate (priv->button, group_cycling);
 
   return FALSE;
 }
@@ -438,14 +452,6 @@ deconstruct_widgets (GtkPrinterOptionWidget *widget)
       priv->entry = NULL;
     }
 
-  /* make sure entry and combo are destroyed first */
-  /* as we use the two of them to create the filechooser */
-  if (priv->filechooser)
-    {
-      gtk_widget_destroy (priv->filechooser);
-      priv->filechooser = NULL;
-    }
-
   if (priv->image)
     {
       gtk_widget_destroy (priv->image);
@@ -478,64 +484,100 @@ check_toggled_cb (GtkToggleButton        *toggle_button,
 }
 
 static void
-filesave_changed_cb (GtkWidget              *button,
-                     GtkPrinterOptionWidget *widget)
+dialog_response_callback (GtkDialog              *dialog,
+                          gint                    response_id,
+                          GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  gchar *uri, *file;
-  gchar *directory;
+  gchar *uri = NULL;
+  gchar *new_location = NULL;
 
-  file = g_filename_from_utf8 (gtk_entry_get_text (GTK_ENTRY (priv->entry)),
-			       -1, NULL, NULL, NULL);
-  if (file == NULL)
-    return;
-
-  /* combine the value of the chooser with the value of the entry */
-  g_signal_handler_block (priv->source, priv->source_changed_handler);  
-
-  directory = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (priv->combo));
-
-  if ((g_uri_parse_scheme (file) == NULL) && (directory != NULL))
+  if (response_id == GTK_RESPONSE_ACCEPT)
     {
-      if (g_path_is_absolute (file))
-        uri = g_filename_to_uri (file, NULL, NULL);
-      else
+      gchar *filename;
+      gchar *filename_utf8;
+      gchar *filename_short;
+
+      new_location = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+      filename_short = trim_long_filename (filename_utf8);
+      gtk_button_set_label (GTK_BUTTON (priv->button), filename_short);
+      g_free (filename_short);
+      g_free (filename_utf8);
+      g_free (filename);
+    }
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  if (new_location)
+    uri = new_location;
+  else
+    uri = priv->last_location;
+
+  if (uri)
+    {
+      gtk_printer_option_set (priv->source, uri);
+      emit_changed (widget);
+    }
+
+  g_free (new_location);
+  g_free (priv->last_location);
+  priv->last_location = NULL;
+
+  /* unblock the handler which was blocked in the filesave_choose_cb function */
+  g_signal_handler_unblock (priv->source, priv->source_changed_handler);
+}
+
+static void
+filesave_choose_cb (GtkWidget              *button,
+                    GtkPrinterOptionWidget *widget)
+{
+  GtkPrinterOptionWidgetPrivate *priv = widget->priv;
+  gchar *last_location = NULL;
+  GtkWidget *dialog;
+  GtkWindow *toplevel;
+
+  /* this will be unblocked in the dialog_response_callback function */
+  g_signal_handler_block (priv->source, priv->source_changed_handler);
+
+  toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (widget)));
+  dialog = gtk_file_chooser_dialog_new (_("Select a filename"),
+                                        toplevel,
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        _("_Select"), GTK_RESPONSE_ACCEPT,
+                                        NULL);
+
+  /* The confirmation dialog will appear, when the user clicks print */
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), FALSE);
+
+  /* select the current filename in the dialog */
+  if (priv->source != NULL)
+    {
+      priv->last_location = last_location = g_strdup (priv->source->value);
+      if (last_location)
         {
-          gchar *path;
+          GFile *file;
+          gchar *basename;
+          gchar *basename_utf8;
 
-#ifdef G_OS_UNIX
-          if (file[0] == '~' && file[1] == '/')
-            {
-              path = g_build_filename (g_get_home_dir (), file + 2, NULL);
-            }
-          else
-#endif
-            {
-              path = g_build_filename (directory, file, NULL);
-            }
-
-          uri = g_filename_to_uri (path, NULL, NULL);
-
-          g_free (path);
+          gtk_file_chooser_select_uri (GTK_FILE_CHOOSER (dialog), last_location);
+          file = g_file_new_for_uri (last_location);
+          basename = g_file_get_basename (file);
+          basename_utf8 = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
+          gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), basename_utf8);
+          g_free (basename_utf8);
+          g_free (basename);
+          g_object_unref (file);
         }
     }
-  else
-    {
-      if (g_uri_parse_scheme (file) != NULL)
-        uri = g_strdup (file);
-      else
-        uri = g_build_path ("/", gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (priv->combo)), file, NULL);
-    }
- 
-  if (uri)
-    gtk_printer_option_set (priv->source, uri);
 
-  g_free (uri);
-  g_free (file);
-  g_free (directory);
-
-  g_signal_handler_unblock (priv->source, priv->source_changed_handler);
-  emit_changed (widget);
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (dialog_response_callback), widget);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static gchar *
@@ -763,12 +805,11 @@ construct_widgets (GtkPrinterOptionWidget *widget)
               gtk_entry_set_visibility (entry, FALSE); 
 	    }
         }
-       
 
       for (i = 0; i < source->num_choices; i++)
-	  combo_box_append (priv->combo,
-			    source->choices_display[i],
-			    source->choices[i]);
+        combo_box_append (priv->combo,
+                          source->choices_display[i],
+                          source->choices[i]);
       gtk_widget_show (priv->combo);
       gtk_box_pack_start (GTK_BOX (widget), priv->combo, TRUE, TRUE, 0);
       g_signal_connect (priv->combo, "changed", G_CALLBACK (combo_changed_cb), widget);
@@ -786,10 +827,10 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       gtk_box_pack_start (GTK_BOX (widget), priv->box, TRUE, TRUE, 0);
       for (i = 0; i < source->num_choices; i++)
 	group = alternative_append (priv->box,
-				    source->choices_display[i],
-				    source->choices[i],
-				    widget,
-				    group);
+                                    source->choices_display[i],
+                                    source->choices[i],
+                                    widget,
+                                    group);
 
       if (source->display_text)
 	{
@@ -816,45 +857,16 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       break;
 
     case GTK_PRINTER_OPTION_TYPE_FILESAVE:
-      {
-        GtkWidget *label;
-        
-        priv->filechooser = gtk_grid_new ();
-        gtk_grid_set_row_spacing (GTK_GRID (priv->filechooser), 6);
-        gtk_grid_set_column_spacing (GTK_GRID (priv->filechooser), 12);
+      priv->button = gtk_button_new ();
+      gtk_widget_show (priv->button);
+      gtk_box_pack_start (GTK_BOX (widget), priv->button, TRUE, TRUE, 0);
+      g_signal_connect (priv->button, "clicked", G_CALLBACK (filesave_choose_cb), widget);
 
-        /* TODO: make this a gtkfilechooserentry once we move to GTK */
-        priv->entry = gtk_entry_new ();
-        priv->combo = gtk_file_chooser_button_new (_("Select a folder"),
-                                                   GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+      text = g_strdup_printf ("%s:", source->display_text);
+      priv->label = gtk_label_new_with_mnemonic (text);
+      g_free (text);
+      gtk_widget_show (priv->label);
 
-        g_object_set (priv->combo, "local-only", FALSE, NULL);
-        gtk_entry_set_activates_default (GTK_ENTRY (priv->entry),
-                                         gtk_printer_option_get_activates_default (source));
-
-        label = gtk_label_new_with_mnemonic (_("_Name:"));
-        gtk_widget_set_halign (label, GTK_ALIGN_START);
-        gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-        gtk_label_set_mnemonic_widget (GTK_LABEL (label), priv->entry);
-
-        gtk_grid_attach (GTK_GRID (priv->filechooser), label, 0, 0, 1, 1);
-        gtk_grid_attach (GTK_GRID (priv->filechooser), priv->entry, 1, 0, 1, 1);
-
-        label = gtk_label_new_with_mnemonic (_("_Save in folder:"));
-        gtk_widget_set_halign (label, GTK_ALIGN_START);
-        gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-        gtk_label_set_mnemonic_widget (GTK_LABEL (label), priv->combo);
-
-        gtk_grid_attach (GTK_GRID (priv->filechooser), label, 0, 1, 1, 1);
-        gtk_grid_attach (GTK_GRID (priv->filechooser), priv->combo, 1, 1, 1, 1);
-
-        gtk_widget_show_all (priv->filechooser);
-        gtk_box_pack_start (GTK_BOX (widget), priv->filechooser, TRUE, TRUE, 0);
-
-        g_signal_connect (priv->entry, "changed", G_CALLBACK (filesave_changed_cb), widget);
-
-        g_signal_connect (priv->combo, "selection-changed", G_CALLBACK (filesave_changed_cb), widget);
-      }
       break;
 
     case GTK_PRINTER_OPTION_TYPE_INFO:
@@ -876,6 +888,45 @@ construct_widgets (GtkPrinterOptionWidget *widget)
 
   priv->image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_MENU);
   gtk_box_pack_start (GTK_BOX (widget), priv->image, FALSE, FALSE, 0);
+}
+
+/**
+ * If the filename exceeds FILENAME_LENGTH_MAX, then trim it and replace
+ * the first three letters with three dots.
+ */
+static gchar *
+trim_long_filename (const gchar *filename)
+{
+  const gchar *home;
+  gint len, offset;
+  gchar *result;
+
+  home = g_get_home_dir ();
+  if (g_str_has_prefix (filename, home))
+    {
+      gchar *homeless_filename;
+
+      offset = g_utf8_strlen (home, -1);
+      len = g_utf8_strlen (filename, -1);
+      homeless_filename = g_utf8_substring (filename, offset, len);
+      result = g_strconcat ("~", homeless_filename, NULL);
+      g_free (homeless_filename);
+    }
+  else
+    result = g_strdup (filename);
+
+  len = g_utf8_strlen (result, -1);
+  if (len > FILENAME_LENGTH_MAX)
+    {
+      gchar *suffix;
+
+      suffix = g_utf8_substring (result, len - FILENAME_LENGTH_MAX, len);
+      g_free (result);
+      result = g_strconcat ("...", suffix, NULL);
+      g_free (suffix);
+    }
+
+  return result;
 }
 
 static void
@@ -927,37 +978,28 @@ update_widgets (GtkPrinterOptionWidget *widget)
       }
     case GTK_PRINTER_OPTION_TYPE_FILESAVE:
       {
-        gchar *filename = g_filename_from_uri (source->value, NULL, NULL);
+        gchar *text;
+        gchar *filename;
+
+        filename = g_filename_from_uri (source->value, NULL, NULL);
         if (filename != NULL)
           {
-            gchar *basename, *dirname, *text;
-
-            basename = g_path_get_basename (filename);
-            dirname = g_path_get_dirname (filename);
-
-            text = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
-	    
-            /* need to update dirname and basename without triggering function to avoid loosing names */
-            g_signal_handlers_block_by_func (priv->entry, G_CALLBACK (filesave_changed_cb), widget);
-            g_signal_handlers_block_by_func (priv->combo, G_CALLBACK (filesave_changed_cb), widget);
-
+            text = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
             if (text != NULL)
-              gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
-            if (g_path_is_absolute (dirname))
-              gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (priv->combo),
-                                                   dirname);
+              {
+                gchar *short_filename;
 
-            g_signal_handlers_unblock_by_func (priv->entry, G_CALLBACK (filesave_changed_cb), widget);
-            g_signal_handlers_unblock_by_func (priv->combo, G_CALLBACK (filesave_changed_cb), widget);
-            
+                short_filename = trim_long_filename (text);
+                gtk_button_set_label (GTK_BUTTON (priv->button), short_filename);
+                g_free (short_filename);
+              }
+
             g_free (text);
-            g_free (basename);
-            g_free (dirname);
             g_free (filename);
           }
-	else
-	  gtk_entry_set_text (GTK_ENTRY (priv->entry), source->value);
-	break;
+        else
+          gtk_button_set_label (GTK_BUTTON (priv->button), source->value);
+        break;
       }
     case GTK_PRINTER_OPTION_TYPE_INFO:
       gtk_label_set_text (GTK_LABEL (priv->info_label), source->value);
@@ -991,6 +1033,6 @@ gtk_printer_option_widget_get_value (GtkPrinterOptionWidget *widget)
 
   if (priv->source)
     return priv->source->value;
-  
+
   return "";
 }
