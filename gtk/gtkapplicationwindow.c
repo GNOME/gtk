@@ -22,6 +22,7 @@
 #include "gtkapplicationwindow.h"
 
 #include "gtkapplicationprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkmodelmenu.h"
 #include "gactionmuxer.h"
@@ -420,11 +421,6 @@ free_accel_closures (GtkApplicationWindow *window)
   window->priv->accel_closures = NULL;
 }
 
-typedef struct {
-  GtkApplicationWindow *window;
-  GActionGroup *actions;
-} AccelData;
-
 /* Hack. We iterate over the accel map instead of the actions,
  * in order to pull the parameters out of accel map entries
  */
@@ -435,9 +431,8 @@ add_accel_closure (gpointer         data,
                    GdkModifierType  accel_mods,
                    gboolean         changed)
 {
-  AccelData *d = data;
-  GtkApplicationWindow *window = d->window;
-  GActionGroup *actions = d->actions;
+  GtkApplicationWindow *window = data;
+  GActionGroup *actions;
   const gchar *path;
   const gchar *p;
   gchar *action_name;
@@ -465,6 +460,7 @@ add_accel_closure (gpointer         data,
       parameter = NULL;
     }
 
+  actions = G_ACTION_GROUP (_gtk_widget_get_action_muxer (GTK_WIDGET (window)));
   if (g_action_group_has_action (actions, action_name))
     {
       closure = (AccelClosure*) g_closure_new_object (sizeof (AccelClosure), g_object_ref (actions));
@@ -485,14 +481,9 @@ add_accel_closure (gpointer         data,
 static void
 gtk_application_window_update_accels (GtkApplicationWindow *window)
 {
-  AccelData data;
-
   free_accel_closures (window);
 
-  data.window = window;
-  data.actions = G_ACTION_GROUP (window->priv->muxer);
-
-  gtk_accel_map_foreach (&data, add_accel_closure);
+  gtk_accel_map_foreach (window, add_accel_closure);
 }
 
 static void
