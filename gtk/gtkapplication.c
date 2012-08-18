@@ -33,7 +33,6 @@
 #include "gtkmain.h"
 #include "gtkrecentmanager.h"
 #include "gtkaccelmapprivate.h"
-#include "gactionmuxer.h"
 #include "gtkintl.h"
 
 #ifdef GDK_WINDOWING_QUARTZ
