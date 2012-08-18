@@ -47,7 +47,7 @@ msgstr "类"
 #. Description of --name=NAME in --help output
 #: ../gdk/gdk.c:154
 msgid "Program name as used by the window manager"
-msgstr "窗口管理其所使用的程序名"
+msgstr "窗口管理器所使用的程序名"
 
 #. Placeholder in --name=NAME in --help output
 #: ../gdk/gdk.c:155
