@@ -20,7 +20,7 @@
 
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkaction.h>
-
+#include <gtk/gtkactionhelper.h>
 
 G_BEGIN_DECLS
 
@@ -37,6 +37,7 @@ struct _GtkMenuItemPrivate
   gchar  *accel_path;
 
   GtkAction *action;
+  GtkActionHelper *action_helper;
 
   guint show_submenu_indicator : 1;
   guint submenu_placement      : 1;

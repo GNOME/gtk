@@ -44,7 +44,6 @@
 #include "gtktypebuiltins.h"
 #include "a11y/gtkmenuitemaccessible.h"
 
-
 /**
  * SECTION:gtkmenuitem
  * @Short_description: The widget used for item in menus
@@ -97,7 +96,10 @@ enum {
 
   /* activatable properties */
   PROP_ACTIVATABLE_RELATED_ACTION,
-  PROP_ACTIVATABLE_USE_ACTION_APPEARANCE
+  PROP_ACTIVATABLE_USE_ACTION_APPEARANCE,
+
+  PROP_ACTION_NAME,
+  PROP_ACTION_TARGET
 };
 
 
@@ -179,6 +181,7 @@ static void gtk_menu_item_buildable_custom_finished(GtkBuildable        *buildab
                                                     const gchar         *tagname,
                                                     gpointer             user_data);
 
+static void gtk_menu_item_actionable_interface_init  (GtkActionableInterface *iface);
 static void gtk_menu_item_activatable_interface_init (GtkActivatableIface  *iface);
 static void gtk_menu_item_update                     (GtkActivatable       *activatable,
                                                       GtkAction            *action,
@@ -198,7 +201,58 @@ G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_menu_item_buildable_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
-                                                gtk_menu_item_activatable_interface_init))
+                                                gtk_menu_item_activatable_interface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE,
+                                                gtk_menu_item_actionable_interface_init))
+
+static void
+gtk_menu_item_set_action_name (GtkActionable *actionable,
+                               const gchar   *action_name)
+{
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (actionable);
+
+  if (!menu_item->priv->action_helper)
+    menu_item->priv->action_helper = gtk_action_helper_new (actionable);
+
+  gtk_action_helper_set_action_name (menu_item->priv->action_helper, action_name);
+}
+
+static void
+gtk_menu_item_set_action_target_value (GtkActionable *actionable,
+                                       GVariant      *action_target)
+{
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (actionable);
+
+  if (!menu_item->priv->action_helper)
+    menu_item->priv->action_helper = gtk_action_helper_new (actionable);
+
+  gtk_action_helper_set_action_target_value (menu_item->priv->action_helper, action_target);
+}
+
+static const gchar *
+gtk_menu_item_get_action_name (GtkActionable *actionable)
+{
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (actionable);
+
+  return gtk_action_helper_get_action_name (menu_item->priv->action_helper);
+}
+
+static GVariant *
+gtk_menu_item_get_action_target_value (GtkActionable *actionable)
+{
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (actionable);
+
+  return gtk_action_helper_get_action_target_value (menu_item->priv->action_helper);
+}
+
+static void
+gtk_menu_item_actionable_interface_init (GtkActionableInterface *iface)
+{
+  iface->set_action_name = gtk_menu_item_set_action_name;
+  iface->get_action_name = gtk_menu_item_get_action_name;
+  iface->set_action_target_value = gtk_menu_item_set_action_target_value;
+  iface->get_action_target_value = gtk_menu_item_get_action_target_value;
+}
 
 static void
 gtk_menu_item_class_init (GtkMenuItemClass *klass)
@@ -396,6 +450,9 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
+
+  g_object_class_override_property (gobject_class, PROP_ACTION_NAME, "action-name");
+  g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
 
   gtk_widget_class_install_style_property_parser (widget_class,
                                                   g_param_spec_enum ("selected-shadow-type",
@@ -602,6 +659,12 @@ gtk_menu_item_set_property (GObject      *object,
     case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE:
       gtk_menu_item_set_use_action_appearance (menu_item, g_value_get_boolean (value));
       break;
+    case PROP_ACTION_NAME:
+      gtk_menu_item_set_action_name (GTK_ACTIONABLE (menu_item), g_value_get_string (value));
+      break;
+    case PROP_ACTION_TARGET:
+      gtk_menu_item_set_action_target_value (GTK_ACTIONABLE (menu_item), g_value_get_variant (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -639,6 +702,12 @@ gtk_menu_item_get_property (GObject    *object,
       break;
     case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE:
       g_value_set_boolean (value, priv->use_action_appearance);
+      break;
+    case PROP_ACTION_NAME:
+      g_value_set_string (value, gtk_action_helper_get_action_name (priv->action_helper));
+      break;
+    case PROP_ACTION_TARGET:
+      g_value_set_variant (value, gtk_action_helper_get_action_target_value (priv->action_helper));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1748,6 +1817,9 @@ static void
 gtk_real_menu_item_activate (GtkMenuItem *menu_item)
 {
   GtkMenuItemPrivate *priv = menu_item->priv;
+
+  if (priv->action_helper)
+    gtk_action_helper_activate (priv->action_helper);
 
   if (priv->action)
     gtk_action_activate (priv->action);
