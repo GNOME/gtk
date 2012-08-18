@@ -20,9 +20,11 @@
 #ifndef __GTK_MODELMENU_QUARTZ_H__
 #define __GTK_MODELMENU_QUARTZ_H__
 
-#include "gactionobservable.h"
+#include "gtkapplication.h"
 
-void gtk_quartz_set_main_menu (GMenuModel        *model,
-                               GActionObservable *observable);
+void gtk_quartz_set_main_menu   (GMenuModel     *model,
+                                 GtkApplication *application);
+
+void gtk_quartz_clear_main_menu (void);
 
 #endif /* __GTK_MODELMENU_QUARTZ_H__ */

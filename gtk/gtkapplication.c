@@ -167,7 +167,6 @@ struct _GtkApplicationPrivate
 #endif
 
 #ifdef GDK_WINDOWING_QUARTZ
-  GActionMuxer *muxer;
   GMenu *combined;
 
   GSList *inhibitors;
@@ -346,7 +345,9 @@ gtk_application_menu_changed_quartz (GObject    *object,
   g_menu_append_submenu (combined, "Application", gtk_application_get_app_menu (application));
   g_menu_append_section (combined, NULL, gtk_application_get_menubar (application));
 
-  gtk_quartz_set_main_menu (G_MENU_MODEL (combined), G_ACTION_OBSERVABLE (application->priv->muxer));
+  gtk_quartz_set_main_menu (G_MENU_MODEL (combined), application);
+
+  g_object_unref (combined);
 }
 
 static void gtk_application_startup_session_quartz (GtkApplication *app);
@@ -355,9 +356,6 @@ static void
 gtk_application_startup_quartz (GtkApplication *application)
 {
   [NSApp finishLaunching];
-
-  application->priv->muxer = g_action_muxer_new ();
-  g_action_muxer_insert (application->priv->muxer, "app", G_ACTION_GROUP (application));
 
   g_signal_connect (application, "notify::app-menu", G_CALLBACK (gtk_application_menu_changed_quartz), NULL);
   g_signal_connect (application, "notify::menubar", G_CALLBACK (gtk_application_menu_changed_quartz), NULL);
@@ -369,24 +367,13 @@ gtk_application_startup_quartz (GtkApplication *application)
 static void
 gtk_application_shutdown_quartz (GtkApplication *application)
 {
-  g_signal_handlers_disconnect_by_func (application, gtk_application_menu_changed_quartz, NULL);
+  gtk_quartz_clear_main_menu ();
 
-  g_object_unref (application->priv->muxer);
-  application->priv->muxer = NULL;
+  g_signal_handlers_disconnect_by_func (application, gtk_application_menu_changed_quartz, NULL);
 
   g_slist_free_full (application->priv->inhibitors,
 		     (GDestroyNotify) gtk_application_quartz_inhibitor_free);
   application->priv->inhibitors = NULL;
-}
-
-static void
-gtk_application_focus_changed (GtkApplication *application,
-                               GtkWindow      *window)
-{
-  if (G_IS_ACTION_GROUP (window))
-    g_action_muxer_insert (application->priv->muxer, "win", G_ACTION_GROUP (window));
-  else
-    g_action_muxer_remove (application->priv->muxer, "win");
 }
 #endif
 
@@ -407,10 +394,6 @@ gtk_application_focus_in_event_cb (GtkWindow      *window,
     }
 
   g_object_notify (G_OBJECT (application), "active-window");
-
-#ifdef GDK_WINDOWING_QUARTZ
-  gtk_application_focus_changed (application, window);
-#endif
 
   return FALSE;
 }

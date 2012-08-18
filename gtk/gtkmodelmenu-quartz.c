@@ -22,6 +22,7 @@
 
 #include <gdk/gdkkeysyms.h>
 #include "gtkaccelmapprivate.h"
+#include "gtkactionhelper.h"
 
 #import <Cocoa/Cocoa.h>
 
@@ -174,20 +175,16 @@ gtk_quartz_model_menu_get_unichar (gint key)
 
 
 
-typedef struct _GtkQuartzActionObserver GtkQuartzActionObserver;
-
-
-
 @interface GNSMenu : NSMenu
 {
-  GActionObservable *actions;
-  GMenuModel        *model;
-  guint              update_idle;
-  GSList            *connected;
-  gboolean           with_separators;
+  GtkApplication *application;
+  GMenuModel     *model;
+  guint           update_idle;
+  GSList         *connected;
+  gboolean        with_separators;
 }
 
-- (id)initWithTitle:(NSString *)title model:(GMenuModel *)aModel actions:(GActionObservable *)someActions hasSeparators:(BOOL)hasSeparators;
+- (id)initWithTitle:(NSString *)title model:(GMenuModel *)aModel application:(GtkApplication *)application hasSeparators:(BOOL)hasSeparators;
 
 - (void)model:(GMenuModel *)model didChangeAtPosition:(NSInteger)position removed:(NSInteger)removed added:(NSInteger)added;
 
@@ -199,115 +196,18 @@ typedef struct _GtkQuartzActionObserver GtkQuartzActionObserver;
 
 @interface GNSMenuItem : NSMenuItem
 {
-  gchar                   *action;
-  GVariant                *target;
-  BOOL                     canActivate;
-  GActionGroup            *actions;
-  GtkQuartzActionObserver *observer;
+  GtkActionHelper *helper;
 }
 
-- (id)initWithModel:(GMenuModel *)model index:(NSInteger)index observable:(GActionObservable *)observable;
-
-- (void)observableActionAddedWithParameterType:(const GVariantType *)parameterType enabled:(BOOL)enabled state:(GVariant *)state;
-- (void)observableActionEnabledChangedTo:(BOOL)enabled;
-- (void)observableActionStateChangedTo:(GVariant *)state;
-- (void)observableActionRemoved;
+- (id)initWithModel:(GMenuModel *)model index:(NSInteger)index application:(GtkApplication *)application;
 
 - (void)didSelectItem:(id)sender;
+
+- (void)helperChanged;
 
 @end
 
 
-
-struct _GtkQuartzActionObserver
-{
-  GObject parent_instance;
-
-  GNSMenuItem *item;
-};
-
-
-
-typedef GObjectClass GtkQuartzActionObserverClass;
-
-static void gtk_quartz_action_observer_observer_iface_init (GActionObserverInterface *iface);
-G_DEFINE_TYPE_WITH_CODE (GtkQuartzActionObserver, gtk_quartz_action_observer, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_OBSERVER, gtk_quartz_action_observer_observer_iface_init))
-
-static void
-gtk_quartz_action_observer_action_added (GActionObserver    *observer,
-                                         GActionObservable  *observable,
-                                         const gchar        *action_name,
-                                         const GVariantType *parameter_type,
-                                         gboolean            enabled,
-                                         GVariant           *state)
-{
-  GtkQuartzActionObserver *qao = (GtkQuartzActionObserver *) observer;
-
-  [qao->item observableActionAddedWithParameterType:parameter_type enabled:enabled state:state];
-}
-
-static void
-gtk_quartz_action_observer_action_enabled_changed (GActionObserver   *observer,
-                                                   GActionObservable *observable,
-                                                   const gchar       *action_name,
-                                                   gboolean           enabled)
-{
-  GtkQuartzActionObserver *qao = (GtkQuartzActionObserver *) observer;
-
-  [qao->item observableActionEnabledChangedTo:enabled];
-}
-
-static void
-gtk_quartz_action_observer_action_state_changed (GActionObserver   *observer,
-                                                 GActionObservable *observable,
-                                                 const gchar       *action_name,
-                                                 GVariant          *state)
-{
-  GtkQuartzActionObserver *qao = (GtkQuartzActionObserver *) observer;
-
-  [qao->item observableActionStateChangedTo:state];
-}
-
-static void
-gtk_quartz_action_observer_action_removed (GActionObserver   *observer,
-                                           GActionObservable *observable,
-                                           const gchar       *action_name)
-{
-  GtkQuartzActionObserver *qao = (GtkQuartzActionObserver *) observer;
-
-  [qao->item observableActionRemoved];
-}
-
-static void
-gtk_quartz_action_observer_init (GtkQuartzActionObserver *item)
-{
-}
-
-static void
-gtk_quartz_action_observer_observer_iface_init (GActionObserverInterface *iface)
-{
-  iface->action_added = gtk_quartz_action_observer_action_added;
-  iface->action_enabled_changed = gtk_quartz_action_observer_action_enabled_changed;
-  iface->action_state_changed = gtk_quartz_action_observer_action_state_changed;
-  iface->action_removed = gtk_quartz_action_observer_action_removed;
-}
-
-static void
-gtk_quartz_action_observer_class_init (GtkQuartzActionObserverClass *class)
-{
-}
-
-static GtkQuartzActionObserver *
-gtk_quartz_action_observer_new (GNSMenuItem *item)
-{
-  GtkQuartzActionObserver *observer;
-
-  observer = g_object_new (gtk_quartz_action_observer_get_type (), NULL);
-  observer->item = item;
-
-  return observer;
-}
 
 static gboolean
 gtk_quartz_model_menu_handle_changes (gpointer user_data)
@@ -330,10 +230,17 @@ gtk_quartz_model_menu_items_changed (GMenuModel *model,
 }
 
 void
-gtk_quartz_set_main_menu (GMenuModel        *model,
-                          GActionObservable *observable)
+gtk_quartz_set_main_menu (GMenuModel     *model,
+                          GtkApplication *application)
 {
-  [NSApp setMainMenu:[[[GNSMenu alloc] initWithTitle:@"Main Menu" model:model actions:observable hasSeparators:NO] autorelease]];
+  [NSApp setMainMenu:[[[GNSMenu alloc] initWithTitle:@"Main Menu" model:model application:application hasSeparators:NO] autorelease]];
+}
+
+void
+gtk_quartz_clear_main_menu (void)
+{
+  // ensure that we drop all GNSMenuItem (to ensure 'application' has no extra references)
+  [NSApp setMainMenu:[[[NSMenu alloc] init] autorelease]];
 }
 
 @interface GNSMenu ()
@@ -363,7 +270,7 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
       g_object_unref (section);
     }
   else
-    [self addItem:[[[GNSMenuItem alloc] initWithModel:aModel index:index observable:actions] autorelease]];
+    [self addItem:[[[GNSMenuItem alloc] initWithModel:aModel index:index application:application] autorelease]];
 }
 
 - (void)appendFromModel:(GMenuModel *)aModel withSeparators:(BOOL)withSeparators
@@ -427,14 +334,14 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
   return G_SOURCE_REMOVE;
 }
 
-- (id)initWithTitle:(NSString *)title model:(GMenuModel *)aModel actions:(GActionObservable *)someActions hasSeparators:(BOOL)hasSeparators
+- (id)initWithTitle:(NSString *)title model:(GMenuModel *)aModel application:(GtkApplication *)anApplication hasSeparators:(BOOL)hasSeparators
 {
   if((self = [super initWithTitle:title]) != nil)
     {
       [self setAutoenablesItems:NO];
 
       model = g_object_ref (aModel);
-      actions = g_object_ref (someActions);
+      application = g_object_ref (anApplication);
       with_separators = hasSeparators;
 
       [self populate];
@@ -453,7 +360,7 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
       connected = g_slist_delete_link (connected, connected);
     }
 
-  g_object_unref (actions);
+  g_object_unref (application);
   g_object_unref (model);
 
   [super dealloc];
@@ -463,9 +370,19 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
 
 
 
+static void
+gtk_quartz_action_helper_changed (GObject    *object,
+                                  GParamSpec *pspec,
+                                  gpointer    user_data)
+{
+  GNSMenuItem *item = user_data;
+
+  [item helperChanged];
+}
+
 @implementation GNSMenuItem
 
-- (id)initWithModel:(GMenuModel *)model index:(NSInteger)index observable:(GActionObservable *)observable
+- (id)initWithModel:(GMenuModel *)model index:(NSInteger)index application:(GtkApplication *)application
 {
   gchar *title = NULL;
 
@@ -489,15 +406,16 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
   if ((self = [super initWithTitle:[NSString stringWithUTF8String:title ? : ""] action:@selector(didSelectItem:) keyEquivalent:@""]) != nil)
     {
       GMenuModel *submenu;
+      gchar      *action;
+      GVariant   *target;
 
+      action = NULL;
       g_menu_model_get_item_attribute (model, index, G_MENU_ATTRIBUTE_ACTION, "s", &action);
       target = g_menu_model_get_item_attribute_value (model, index, G_MENU_ATTRIBUTE_TARGET, NULL);
-      actions = g_object_ref (observable);
-      observer = gtk_quartz_action_observer_new (self);
 
       if ((submenu = g_menu_model_get_item_link (model, index, G_MENU_LINK_SUBMENU)))
         {
-          [self setSubmenu:[[[GNSMenu alloc] initWithTitle:[NSString stringWithUTF8String:title] model:submenu actions:observable hasSeparators:YES] autorelease]];
+          [self setSubmenu:[[[GNSMenu alloc] initWithTitle:[NSString stringWithUTF8String:title] model:submenu application:application hasSeparators:YES] autorelease]];
           g_object_unref (submenu);
         }
 
@@ -506,7 +424,13 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
           GtkAccelKey key;
           gchar *path;
 
-          g_action_observable_register_observer (observable, action, G_ACTION_OBSERVER (observer));
+          helper = gtk_action_helper_new_with_application (application);
+          gtk_action_helper_set_action_name         (helper, action);
+          gtk_action_helper_set_action_target_value (helper, target);
+
+          g_signal_connect (helper, "notify", G_CALLBACK (gtk_quartz_action_helper_changed), self);
+
+          [self helperChanged];
 
           path = _gtk_accel_path_for_action (action, target);
           if (gtk_accel_map_lookup_entry (path, &key))
@@ -537,15 +461,6 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
           g_free (path);
 
           [self setTarget:self];
-
-          gboolean            enabled;
-          const GVariantType *parameterType;
-          GVariant           *state;
-
-          if (g_action_group_query_action (actions, action, &enabled, &parameterType, NULL, NULL, &state))
-            [self observableActionAddedWithParameterType:parameterType enabled:enabled state:state];
-          else
-            [self setEnabled:NO];
         }
     }
 
@@ -556,74 +471,36 @@ gtk_quartz_set_main_menu (GMenuModel        *model,
 
 - (void)dealloc
 {
-  if (observer != NULL)
-    g_object_unref (observer);
-
-  if (actions != NULL)
-    g_object_unref (actions);
-
-  if (target != NULL)
-    g_variant_unref (target);
-
-  g_free (action);
+  if (helper != NULL)
+    g_object_unref (helper);
 
   [super dealloc];
 }
 
-- (void)observableActionAddedWithParameterType:(const GVariantType *)parameterType enabled:(BOOL)enabled state:(GVariant *)state
-{
-  canActivate = (target == NULL && parameterType == NULL) ||
-                (target != NULL && parameterType != NULL &&
-                 g_variant_is_of_type (target, parameterType));
-
-  if (canActivate)
-    {
-      if (target != NULL && state != NULL)
-        {
-          [self setOnStateImage:[NSImage imageNamed:@"NSMenuRadio"]];
-          [self setState:g_variant_equal (state, target) ? NSOnState : NSOffState];
-        }
-      else if (state != NULL && g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
-        {
-          [self setOnStateImage:[NSImage imageNamed:@"NSMenuCheckmark"]];
-          [self setState:g_variant_get_boolean (state) ? NSOnState : NSOffState];
-        }
-      else
-        [self setState:NSOffState];
-
-      [self setEnabled:enabled];
-    }
-  else
-    [self setEnabled:NO];
-}
-
-- (void)observableActionEnabledChangedTo:(BOOL)enabled
-{
-  if (canActivate)
-    [self setEnabled:enabled];
-}
-
-- (void)observableActionStateChangedTo:(GVariant *)state
-{
-  if (canActivate)
-    {
-      if (target != NULL)
-        [self setState:g_variant_equal (state, target) ? NSOnState : NSOffState];
-      else if (g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
-        [self setState:g_variant_get_boolean (state) ? NSOnState : NSOffState];
-    }
-}
-
-- (void)observableActionRemoved
-{
-  if (canActivate)
-    [self setEnabled:NO];
-}
-
 - (void)didSelectItem:(id)sender
 {
-  if (canActivate)
-    g_action_group_activate_action (actions, action, target);
+  gtk_action_helper_activate (helper);
+}
+
+- (void)helperChanged
+{
+  [self setEnabled:gtk_action_helper_get_enabled (helper)];
+  [self setState:gtk_action_helper_get_active (helper)];
+
+  switch (gtk_action_helper_get_role (helper))
+    {
+      case GTK_ACTION_HELPER_ROLE_NORMAL:
+        [self setOnStateImage:nil];
+        break;
+      case GTK_ACTION_HELPER_ROLE_TOGGLE:
+        [self setOnStateImage:[NSImage imageNamed:@"NSMenuCheckmark"]];
+        break;
+      case GTK_ACTION_HELPER_ROLE_RADIO:
+        [self setOnStateImage:[NSImage imageNamed:@"NSMenuRadio"]];
+        break;
+      default:
+        g_assert_not_reached ();
+    }
 }
 
 @end
