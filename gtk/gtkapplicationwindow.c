@@ -25,7 +25,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkmodelmenu.h"
-#include "gactionmuxer.h"
 #include "gtkaccelgroup.h"
 #include "gtkaccelmap.h"
 #include "gtkintl.h"
@@ -214,8 +213,6 @@ gtk_application_window_actions_new (GtkApplicationWindow *window)
 struct _GtkApplicationWindowPrivate
 {
   GSimpleActionGroup *actions;
-  GActionObservable *muxer;
-  gboolean muxer_initialised;
   GtkWidget *menubar;
   GtkAccelGroup *accels;
   GSList *accel_closures;
@@ -748,13 +745,6 @@ gtk_application_window_real_realize (GtkWidget *widget)
   g_signal_connect (settings, "notify::gtk-shell-shows-menubar",
                     G_CALLBACK (gtk_application_window_shell_shows_menubar_changed), window);
 
-  if (!window->priv->muxer_initialised)
-    {
-      g_action_muxer_insert (G_ACTION_MUXER (window->priv->muxer), "app", G_ACTION_GROUP (application));
-      g_action_muxer_insert (G_ACTION_MUXER (window->priv->muxer), "win", G_ACTION_GROUP (window));
-      window->priv->muxer_initialised = TRUE;
-    }
-
   gtk_application_window_update_shell_shows_app_menu (window, settings);
   gtk_application_window_update_shell_shows_menubar (window, settings);
   gtk_application_window_update_menubar (window);
@@ -877,7 +867,6 @@ gtk_application_window_real_forall_internal (GtkContainer *container,
     ->forall (container, include_internal, callback, user_data);
 }
 
-
 static void
 gtk_application_window_get_property (GObject    *object,
                                      guint       prop_id,
@@ -933,7 +922,6 @@ gtk_application_window_dispose (GObject *object)
   g_clear_object (&window->priv->menubar_section);
   g_clear_object (&window->priv->actions);
   g_clear_object (&window->priv->accels);
-  g_clear_object (&window->priv->muxer);
 
   G_OBJECT_CLASS (gtk_application_window_parent_class)
     ->dispose (object);
@@ -963,8 +951,6 @@ gtk_application_window_init (GtkApplicationWindow *window)
                             G_CALLBACK (g_action_group_action_state_changed), window);
   g_signal_connect_swapped (window->priv->actions, "action-removed",
                             G_CALLBACK (g_action_group_action_removed), window);
-
-  window->priv->muxer = G_ACTION_OBSERVABLE (g_action_muxer_new ());
 }
 
 static void
