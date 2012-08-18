@@ -20,19 +20,16 @@
 #ifndef __GTK_MODEL_MENU_H__
 #define __GTK_MODEL_MENU_H__
 
-#include <gtk/gactionobservable.h>
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gio/gio.h>
 
 G_GNUC_INTERNAL
 GtkWidget * gtk_model_menu_create_menu_bar (GMenuModel        *model,
-                                            GActionObservable *actions,
                                             GtkAccelGroup     *accels);
 
 G_GNUC_INTERNAL
 GtkWidget * gtk_model_menu_create_menu     (GMenuModel        *model,
-                                            GActionObservable *actions,
                                             GtkAccelGroup     *accels);
 
 #endif /* __GTK_MODEL_MENU_H__ */

@@ -20,7 +20,6 @@
 #ifndef __GTK_MODEL_MENU_ITEM_H__
 #define __GTK_MODEL_MENU_ITEM_H__
 
-#include <gtk/gactionobservable.h>
 #include <gtk/gtkcheckmenuitem.h>
 
 #define GTK_TYPE_MODEL_MENU_ITEM                            (gtk_model_menu_item_get_type ())
@@ -37,7 +36,6 @@ GType                   gtk_model_menu_item_get_type                    (void) G
 G_GNUC_INTERNAL
 GtkMenuItem *           gtk_model_menu_item_new                         (GMenuModel        *model,
                                                                          gint               item_index,
-                                                                         GActionObservable *actions,
                                                                          GtkAccelGroup     *accels);
 
 #endif /* __GTK_MODEL_MENU_ITEM_H__ */
