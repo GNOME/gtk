@@ -401,7 +401,6 @@ gtk_private_type_h_sources = \
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
 	gactionmuxer.h		\
-	gsimpleactionobserver.h	\
 	gactionobserver.h	\
 	gactionobservable.h	\
 	gtkapplicationprivate.h	\
@@ -572,7 +571,6 @@ deprecated_c_sources = 			\
 gtk_base_c_sources = 		\
 	$(deprecated_c_sources)	\
 	gactionmuxer.c		\
-	gsimpleactionobserver.c	\
 	gactionobserver.c	\
 	gactionobservable.c	\
 	gtkactionable.c		\
