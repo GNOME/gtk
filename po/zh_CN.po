@@ -726,7 +726,7 @@ msgstr "XPM 图像格式"
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:115
 msgid "Program class as used by the window manager"
-msgstr "窗口管理其所使用的程序类"
+msgstr "窗口管理器所使用的程序类"
 
 #. Placeholder in --class=CLASS in --help output
 #: gdk/gdk.c:116
