@@ -1073,22 +1073,6 @@ gtk_application_window_set_show_menubar (GtkApplicationWindow *window,
     }
 }
 
-GSimpleActionObserver *
-gtk_application_window_create_observer (GtkApplicationWindow *window,
-                                        const gchar          *action_name,
-                                        GVariant             *target)
-{
-  g_return_val_if_fail (GTK_IS_APPLICATION_WINDOW (window), NULL);
-
-  return g_simple_action_observer_new (window->priv->muxer, action_name, target);
-}
-
-GActionObservable *
-gtk_application_window_get_observable (GtkApplicationWindow *window)
-{
-  return G_ACTION_OBSERVABLE (window->priv->muxer);
-}
-
 GtkAccelGroup *
 gtk_application_window_get_accel_group (GtkApplicationWindow *window)
 {
