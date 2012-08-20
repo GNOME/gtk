@@ -1698,7 +1698,12 @@ gtk_main_do_event (GdkEvent *event)
 
               window = gtk_widget_get_toplevel (grab_widget);
               if (GTK_IS_WINDOW (window))
-                gtk_window_set_mnemonics_visible (GTK_WINDOW (window), mnemonics_visible);
+                {
+                  if (mnemonics_visible)
+                    _gtk_window_set_auto_mnemonics_visible (GTK_WINDOW (window));
+                  else
+                    gtk_window_set_mnemonics_visible (GTK_WINDOW (window), FALSE);
+                }
             }
         }
       /* else fall through */
