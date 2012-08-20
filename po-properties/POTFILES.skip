@@ -93,3 +93,4 @@ tests/visuals/inline-toolbar.ui
 tests/visuals/linked-buttons-horizontal.ui
 tests/visuals/linked-buttons-vertical.ui
 tests/visuals/primary-toolbar.ui
+tests/visuals/suggested-action-buttons.ui
