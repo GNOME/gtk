@@ -48,7 +48,7 @@ int main (int argc, char **argv)
 	gtk_widget_show_all (menu_widget);
 
 	button = gtk_menu_button_new ();
-	gtk_menu_button_set_menu (GTK_MENU_BUTTON (button), menu_widget);
+	gtk_menu_button_set_popup (GTK_MENU_BUTTON (button), menu_widget);
 	gtk_grid_attach (GTK_GRID (grid),
 			 button,
 			 1, 1,

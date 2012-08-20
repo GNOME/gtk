@@ -221,7 +221,7 @@ gtk_menu_tool_button_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_MENU:
-      g_value_set_object (value, gtk_menu_button_get_menu (GTK_MENU_BUTTON (button->priv->arrow_button)));
+      g_value_set_object (value, gtk_menu_button_get_popup (GTK_MENU_BUTTON (button->priv->arrow_button)));
       break;
 
     default:
@@ -419,10 +419,10 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
 
   priv = button->priv;
 
-  _gtk_menu_button_set_menu_with_func (GTK_MENU_BUTTON (priv->arrow_button),
-                                       menu,
-                                       _show_menu_emit,
-                                       button);
+  _gtk_menu_button_set_popup_with_func (GTK_MENU_BUTTON (priv->arrow_button),
+                                        menu,
+                                        _show_menu_emit,
+                                        button);
 
   g_object_notify (G_OBJECT (button), "menu");
 }
@@ -445,7 +445,7 @@ gtk_menu_tool_button_get_menu (GtkMenuToolButton *button)
 
   g_return_val_if_fail (GTK_IS_MENU_TOOL_BUTTON (button), NULL);
 
-  ret = gtk_menu_button_get_menu (GTK_MENU_BUTTON (button->priv->arrow_button));
+  ret = gtk_menu_button_get_popup (GTK_MENU_BUTTON (button->priv->arrow_button));
   if (!ret)
     return NULL;
 
