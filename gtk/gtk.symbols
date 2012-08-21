@@ -1441,6 +1441,8 @@ gtk_init_abi_check
 gtk_init_check_abi_check
 #endif
 gtk_init_with_args
+gtk_input_hints_get_type
+gtk_input_purpose_get_type
 gtk_invisible_get_screen
 gtk_invisible_get_type
 gtk_invisible_new
@@ -1557,12 +1559,14 @@ gtk_menu_bar_set_child_pack_direction
 gtk_menu_bar_set_pack_direction
 gtk_menu_button_get_align_widget
 gtk_menu_button_get_direction
+gtk_menu_button_get_menu
 gtk_menu_button_get_menu_model
 gtk_menu_button_get_popup
 gtk_menu_button_get_type
 gtk_menu_button_new
 gtk_menu_button_set_align_widget
 gtk_menu_button_set_direction
+gtk_menu_button_set_menu
 gtk_menu_button_set_menu_model
 gtk_menu_button_set_popup
 gtk_menu_detach
