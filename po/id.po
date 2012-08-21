@@ -2,21 +2,22 @@
 # Copyright (C) 2003 THE gtk+'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gtk+ package.
 #
+#
 # Mohammad DAMT <mdamt@bisnisweb.com>, 2003, 2004, 2005.
 # Ahmad Riza H Nst  <rizahnst@gnome.org>, 2006.
 # Muhammad Hilman <hilman09121991@yahoo.com>, 2008.
 # Andika Triwidada <andika@gmail.com>, 2010, 2011, 2012.
 # Dirgita <dirgitadevina@yahoo.co.id>, 2010.
-# Dirgita Devina <dirgitadevina@yahoo.co.id>, 2010.
-#
+# Dirgita Devina <dirgitadevina@yahoo.co.id>, 2010, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-07-09 17:19+0000\n"
-"PO-Revision-Date: 2012-07-13 10:58+0700\n"
-"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
-"Language-Team: GNOME Indonesian Translation Team <gnome@i15n.org>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-08-20 22:55+0000\n"
+"PO-Revision-Date: 2012-08-13 15:36+0700\n"
+"Last-Translator: Dirgita <dirgitadevina@yahoo.co.id>\n"
+"Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,50 +25,50 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Language: Indonesian\n"
 "X-Poedit-Country: Indonesia\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 1.2\n"
 
-#: ../gdk/gdk.c:153
+#: ../gdk/gdk.c:155
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Galat sewaktu mengurai opsi --gdk-debug"
 
-#: ../gdk/gdk.c:173
+#: ../gdk/gdk.c:175
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Galat sewaktu mengurai opsi --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:201
+#: ../gdk/gdk.c:203
 msgid "Program class as used by the window manager"
 msgstr "Kelas program yang digunakan pengatur jendela program"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:202
+#: ../gdk/gdk.c:204
 msgid "CLASS"
 msgstr "KELAS"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:204
+#: ../gdk/gdk.c:206
 msgid "Program name as used by the window manager"
 msgstr "Nama program sebagaimana digunakan oleh program pengatur jendela"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:205
+#: ../gdk/gdk.c:207
 msgid "NAME"
 msgstr "NAMA"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:207
+#: ../gdk/gdk.c:209
 msgid "X display to use"
 msgstr "Tampilan X yang akan dipakai"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:208
+#: ../gdk/gdk.c:210
 msgid "DISPLAY"
 msgstr "TAMPILAN"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:211
+#: ../gdk/gdk.c:213
 msgid "GDK debugging flags to set"
 msgstr "Tanda debug GDK yang hendak disetel"
 
@@ -75,15 +76,12 @@ msgstr "Tanda debug GDK yang hendak disetel"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:212
-#: ../gdk/gdk.c:215
-#: ../gtk/gtkmain.c:453
-#: ../gtk/gtkmain.c:456
+#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
 msgid "FLAGS"
 msgstr "TANDA"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:214
+#: ../gdk/gdk.c:216
 msgid "GDK debugging flags to unset"
 msgstr "Tanda debug GDK yang ingin dibuang setelannya"
 
@@ -481,12 +479,20 @@ msgid "Switches between on and off states"
 msgstr "Bertukar antara keadaan nyala dan mati"
 
 #: ../gtk/deprecated/gtkcolorsel.c:425
-msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
-msgstr "Pilih warna untuk ring terluar. Pilih tingkat kegelapan atau keterangan pada warna tersebut menggunakan segitiga yang ada di dalam."
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Pilih warna untuk ring terluar. Pilih tingkat kegelapan atau keterangan pada "
+"warna tersebut menggunakan segitiga yang ada di dalam."
 
 #: ../gtk/deprecated/gtkcolorsel.c:451
-msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
-msgstr "Klik pada pengambil warna, lalu klik pada warna apa saja di layar untuk memilih warna tersebut."
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Klik pada pengambil warna, lalu klik pada warna apa saja di layar untuk "
+"memilih warna tersebut."
 
 #: ../gtk/deprecated/gtkcolorsel.c:461
 msgid "_Hue:"
@@ -540,8 +546,7 @@ msgstr "Intensitas cahaya biru pada warna."
 msgid "Op_acity:"
 msgstr "Op_asitas:"
 
-#: ../gtk/deprecated/gtkcolorsel.c:484
-#: ../gtk/deprecated/gtkcolorsel.c:494
+#: ../gtk/deprecated/gtkcolorsel.c:484 ../gtk/deprecated/gtkcolorsel.c:494
 msgid "Transparency of the color."
 msgstr "Nilai transparansi warna."
 
@@ -550,8 +555,12 @@ msgid "Color _name:"
 msgstr "_Nama warna:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:516
-msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
-msgstr "Anda dapat memasukkan nilai warna dalam gaya HTML heksadesimal, atau bisa juga masukkan namanya, misalnya 'orange'."
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Anda dapat memasukkan nilai warna dalam gaya HTML heksadesimal, atau bisa "
+"juga masukkan namanya, misalnya 'orange'."
 
 #: ../gtk/deprecated/gtkcolorsel.c:548
 msgid "_Palette:"
@@ -562,16 +571,30 @@ msgid "Color Wheel"
 msgstr "Roda Warna"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1072
-msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
-msgstr "Warna yang sebelumnya dipilih sebagai warna perbandingan dengan warna yang Anda pilih sekarang. Ambil warna ini ke dalam palet, atau pilih warna ini sebagai warna aktif dengan menyeretnya ke dalam kotak warna."
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+"Warna yang sebelumnya dipilih sebagai warna perbandingan dengan warna yang "
+"Anda pilih sekarang. Ambil warna ini ke dalam palet, atau pilih warna ini "
+"sebagai warna aktif dengan menyeretnya ke dalam kotak warna."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1078
-msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
-msgstr "Warna yang Anda pilih. Ambil warna ini ke dalam palet agar dapat digunakan di kemudian hari"
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"Warna yang Anda pilih. Ambil warna ini ke dalam palet agar dapat digunakan "
+"di kemudian hari"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1084
-msgid "The previously-selected color, for comparison to the color you're selecting now."
-msgstr "Warna yang sebelumnya dipilih, untuk perbandingan dengan warna yang kini sedang Anda pilih."
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now."
+msgstr ""
+"Warna yang sebelumnya dipilih, untuk perbandingan dengan warna yang kini "
+"sedang Anda pilih."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1088
 msgid "The color you've chosen."
@@ -582,16 +605,19 @@ msgid "_Save color here"
 msgstr "_Simpan warna di sini"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1695
-msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr "Klik pada palet untuk menjadikannya sebagai warna aktif. Untuk merubahnya, ambil warna pada kotak warna atau klik kanan dan pilih \"Simpan warna di sini\""
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+"Klik pada palet untuk menjadikannya sebagai warna aktif. Untuk merubahnya, "
+"ambil warna pada kotak warna atau klik kanan dan pilih \"Simpan warna di sini"
+"\""
 
 #. We emit the response for the Select button manually,
 #. * since we want to save the color first
 #.
-#: ../gtk/deprecated/gtkcolorseldialog.c:201
-#: ../gtk/gtkappchooserdialog.c:574
-#: ../gtk/gtkcolorchooserdialog.c:150
-#: ../gtk/gtkfontchooserdialog.c:174
+#: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:574
+#: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
 msgid "_Select"
 msgstr "_Pilih"
 
@@ -622,8 +648,7 @@ msgstr "_Ukuran:"
 msgid "_Preview:"
 msgstr "_Pratinjau:"
 
-#: ../gtk/deprecated/gtkfontsel.c:1738
-#: ../gtk/gtkfontchooserdialog.c:183
+#: ../gtk/deprecated/gtkfontsel.c:1720 ../gtk/gtkfontchooserdialog.c:183
 msgid "Font Selection"
 msgstr "Seleksi Fonta"
 
@@ -632,9 +657,6 @@ msgstr "Seleksi Fonta"
 #.
 #: ../gtk/gtkaboutdialog.c:104
 #, c-format
-#| msgid ""
-#| "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a "
-#| "href=\"%s\">%s</a>"
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
 "for details, visit <a href=\"%s\">%s</a>"
@@ -768,8 +790,8 @@ msgid "Failed to look for applications online"
 msgstr "Gagal mencari aplikasi daring"
 
 #: ../gtk/gtkappchooserdialog.c:188
-msgid "Find applications online"
-msgstr "Cari aplikasi daring"
+msgid "_Find applications online"
+msgstr "_Cari aplikasi daring"
 
 #: ../gtk/gtkappchooserdialog.c:247
 msgid "Could not run application"
@@ -790,8 +812,7 @@ msgstr "Tidak dapat menemukan aplikasi"
 msgid "Select an application to open \"%s\""
 msgstr "Pilih aplikasi untuk membuka \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:398
-#: ../gtk/gtkappchooserwidget.c:654
+#: ../gtk/gtkappchooserdialog.c:398 ../gtk/gtkappchooserwidget.c:654
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "Tak tersedia aplikasi untuk membuka \"%s\""
@@ -808,8 +829,12 @@ msgid "No applications available to open \"%s\" files"
 msgstr "Tak tersedia aplikasi untuk membuka berka \"%s\""
 
 #: ../gtk/gtkappchooserdialog.c:422
-msgid "Click \"Show other applications\", for more options, or \"Find applications online\" to install a new application"
-msgstr "Klik \"Tampilkan aplikasi lain\" untuk opsi lebih banyak, atau \"Cari aplikasi daring\" untuk memasang aplikasi baru"
+msgid ""
+"Click \"Show other applications\", for more options, or \"Find applications "
+"online\" to install a new application"
+msgstr ""
+"Klik \"Tampilkan aplikasi lain\" untuk opsi lebih banyak, atau \"Cari "
+"aplikasi daring\" untuk memasang aplikasi baru"
 
 #: ../gtk/gtkappchooserdialog.c:492
 msgid "Forget association"
@@ -835,7 +860,7 @@ msgstr "Aplikasi Terkait"
 msgid "Other Applications"
 msgstr "Aplikasi Lain"
 
-#: ../gtk/gtkapplication.c:1527
+#: ../gtk/gtkapplication.c:1552
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -846,8 +871,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:327
-#: ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkapplicationwindow.c:333 ../gtk/gtkprintoperation-unix.c:475
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "Aplikasi"
@@ -866,13 +890,11 @@ msgstr "_Selesai"
 
 #: ../gtk/gtkbuilder-menus.c:220
 #, c-format
-#| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed inside <%s>"
 msgstr "Elemen <%s> tak diperbolehkan di dalam <%s>"
 
 #: ../gtk/gtkbuilder-menus.c:225
 #, c-format
-#| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed at toplevel"
 msgstr "Elemen <%s> tak diperbolehkan di aras puncak"
 
@@ -944,8 +966,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1941
-#: ../gtk/gtkcalendar.c:2633
+#: ../gtk/gtkcalendar.c:1941 ../gtk/gtkcalendar.c:2633
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -961,8 +982,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1973
-#: ../gtk/gtkcalendar.c:2499
+#: ../gtk/gtkcalendar.c:1973 ../gtk/gtkcalendar.c:2499
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1004,25 +1024,21 @@ msgstr "Tak valid"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:416
-#: ../gtk/gtkcellrendereraccel.c:745
+#: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:745
 msgid "New accelerator..."
 msgstr "Akselerator baru..."
 
-#: ../gtk/gtkcellrendererprogress.c:372
-#: ../gtk/gtkcellrendererprogress.c:462
+#: ../gtk/gtkcellrendererprogress.c:372 ../gtk/gtkcellrendererprogress.c:462
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:188
-#: ../gtk/gtkcolorbutton.c:450
+#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:449
 msgid "Pick a Color"
 msgstr "Pilih Warna"
 
 #: ../gtk/gtkcolorchooserdialog.c:164
-#| msgid "Select a folder"
 msgid "Select a Color"
 msgstr "Pilih Warna"
 
@@ -1038,7 +1054,6 @@ msgstr "Merah %d%%, Hijau %d%%, Biru %d%%"
 
 #: ../gtk/gtkcolorchooserwidget.c:360
 #, c-format
-#| msgid "Color"
 msgid "Color: %s"
 msgstr "Warna: %s"
 
@@ -1063,7 +1078,6 @@ msgid "Light Orange"
 msgstr "Oranye Terang"
 
 #: ../gtk/gtkcolorchooserwidget.c:423
-#| msgid "Range"
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Oranye"
@@ -1139,7 +1153,6 @@ msgid "Light Chocolate"
 msgstr "Coklat Terang"
 
 #: ../gtk/gtkcolorchooserwidget.c:438
-#| msgid "C_ollate"
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "Coklat"
@@ -1200,7 +1213,6 @@ msgid "Dark Gray"
 msgstr "Kelabu Gelap"
 
 #: ../gtk/gtkcolorchooserwidget.c:463
-#| msgid "Medium"
 msgctxt "Color name"
 msgid "Medium Gray"
 msgstr "Kelabu Sedang"
@@ -1227,34 +1239,28 @@ msgstr "Putih"
 
 #. translators: label for the custom section in the color chooser
 #: ../gtk/gtkcolorchooserwidget.c:516
-#| msgid "Custom size"
 msgid "Custom"
 msgstr "Sesuaian"
 
 #: ../gtk/gtkcolorchooserwidget.c:524
-#| msgid "Create Fo_lder"
 msgid "Create custom color"
 msgstr "Buat warga gubahan"
 
 #: ../gtk/gtkcolorchooserwidget.c:543
 #, c-format
-#| msgid "Custom %sx%s"
 msgid "Custom color %d: %s"
 msgstr "Warna gubahan %d: %s"
 
 #: ../gtk/gtkcoloreditor.c:412
-#| msgid "Color _name:"
 msgid "Color Name"
 msgstr "Nama Warna"
 
 #: ../gtk/gtkcoloreditor.c:457
-#| msgid "S_aturation:"
 msgctxt "Color channel"
 msgid "Saturation"
 msgstr "Saturasi"
 
 #: ../gtk/gtkcoloreditor.c:463
-#| msgid "_Value:"
 msgctxt "Color channel"
 msgid "Value"
 msgstr "Nilai"
@@ -1269,9 +1275,7 @@ msgctxt "Color channel"
 msgid "V"
 msgstr "V"
 
-#: ../gtk/gtkcoloreditor.c:481
-#: ../gtk/gtkcolorscale.c:301
-#| msgid "_Hue:"
+#: ../gtk/gtkcoloreditor.c:481 ../gtk/gtkcolorscale.c:301
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "Hue"
@@ -1281,26 +1285,21 @@ msgctxt "Color channel"
 msgid "H"
 msgstr "H"
 
-#: ../gtk/gtkcoloreditor.c:496
-#: ../gtk/gtkcolorscale.c:303
+#: ../gtk/gtkcoloreditor.c:496 ../gtk/gtkcolorscale.c:303
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
 
 #: ../gtk/gtkcoloreditor.c:503
-#| msgctxt "paper size"
-#| msgid "A0"
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
 #: ../gtk/gtkcolorplane.c:438
-#| msgid "Color _name:"
 msgid "Color Plane"
 msgstr "Bidang Warna"
 
 #: ../gtk/gtkcolorswatch.c:447
-#| msgid "Custom size"
 msgid "_Customize"
 msgstr "_Gubah"
 
@@ -1315,18 +1314,15 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:397
-#: ../gtk/gtkprintunixdialog.c:3264
+#: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3264
 msgid "Manage Custom Sizes"
 msgstr "Kelola Ukuran Sesuaian"
 
-#: ../gtk/gtkcustompaperunixdialog.c:558
-#: ../gtk/gtkpagesetupunixdialog.c:778
+#: ../gtk/gtkcustompaperunixdialog.c:558 ../gtk/gtkpagesetupunixdialog.c:778
 msgid "inch"
 msgstr "inci"
 
-#: ../gtk/gtkcustompaperunixdialog.c:560
-#: ../gtk/gtkpagesetupunixdialog.c:776
+#: ../gtk/gtkcustompaperunixdialog.c:560 ../gtk/gtkpagesetupunixdialog.c:776
 msgid "mm"
 msgstr "mm"
 
@@ -1371,17 +1367,15 @@ msgstr "_Kanan:"
 msgid "Paper Margins"
 msgstr "Margin Kertas"
 
-#: ../gtk/gtkentry.c:8781
-#: ../gtk/gtktextview.c:8262
+#: ../gtk/gtkentry.c:8848 ../gtk/gtktextview.c:8316
 msgid "Input _Methods"
 msgstr "_Metode Input"
 
-#: ../gtk/gtkentry.c:8795
-#: ../gtk/gtktextview.c:8276
+#: ../gtk/gtkentry.c:8862 ../gtk/gtktextview.c:8330
 msgid "_Insert Unicode Control Character"
 msgstr "_Isikan karakter kontrol Unicode"
 
-#: ../gtk/gtkentry.c:10269
+#: ../gtk/gtkentry.c:10336
 msgid "Caps Lock is on"
 msgstr "Caps Lock menyala"
 
@@ -1430,8 +1424,7 @@ msgstr "Caps Lock menyala"
 msgid "Select a File"
 msgstr "Pilih Berkas"
 
-#: ../gtk/gtkfilechooserbutton.c:105
-#: ../gtk/gtkfilechooserdefault.c:1815
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1817
 msgid "Desktop"
 msgstr "Desktop"
 
@@ -1447,44 +1440,53 @@ msgstr "Lainnya..."
 msgid "Type name of new folder"
 msgstr "Ketikkan nama folder baru"
 
-#: ../gtk/gtkfilechooserdefault.c:966
+#: ../gtk/gtkfilechooserdefault.c:968
 msgid "Could not retrieve information about the file"
 msgstr "Informasi mengenai berkas ini tidak tersedia"
 
-#: ../gtk/gtkfilechooserdefault.c:977
+#: ../gtk/gtkfilechooserdefault.c:979
 msgid "Could not add a bookmark"
 msgstr "Tidak dapat menambah buku alamat"
 
-#: ../gtk/gtkfilechooserdefault.c:988
+#: ../gtk/gtkfilechooserdefault.c:990
 msgid "Could not remove bookmark"
 msgstr "Tidak dapat menghapus penanda alamat"
 
-#: ../gtk/gtkfilechooserdefault.c:999
+#: ../gtk/gtkfilechooserdefault.c:1001
 msgid "The folder could not be created"
 msgstr "Folder tidak dapat dibuat"
 
-#: ../gtk/gtkfilechooserdefault.c:1012
-msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
-msgstr "Folder ini tidak dapat dibuat karena sudah ada berkas di situ dengan nama yang sama. Silakan ganti nama folder ini, atau ganti nama berkas itu terlebih dahulu."
+#: ../gtk/gtkfilechooserdefault.c:1014
+msgid ""
+"The folder could not be created, as a file with the same name already "
+"exists.  Try using a different name for the folder, or rename the file first."
+msgstr ""
+"Folder ini tidak dapat dibuat karena sudah ada berkas di situ dengan nama "
+"yang sama. Silakan ganti nama folder ini, atau ganti nama berkas itu "
+"terlebih dahulu."
 
-#: ../gtk/gtkfilechooserdefault.c:1026
+#: ../gtk/gtkfilechooserdefault.c:1028
 msgid "You need to choose a valid filename."
 msgstr "Anda perlu memilih nama berkas yang valid."
 
-#: ../gtk/gtkfilechooserdefault.c:1029
+#: ../gtk/gtkfilechooserdefault.c:1031
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Tak bisa membuat berkas di bawah %s karena itu bukan folder"
 
-#: ../gtk/gtkfilechooserdefault.c:1041
-msgid "You may only select folders.  The item that you selected is not a folder; try using a different item."
-msgstr "Anda hanya boleh memilih folder.  Butir yang Anda pilih bukan folder; cobalah memilih butir lain."
+#: ../gtk/gtkfilechooserdefault.c:1043
+msgid ""
+"You may only select folders.  The item that you selected is not a folder; "
+"try using a different item."
+msgstr ""
+"Anda hanya boleh memilih folder.  Butir yang Anda pilih bukan folder; "
+"cobalah memilih butir lain."
 
-#: ../gtk/gtkfilechooserdefault.c:1051
+#: ../gtk/gtkfilechooserdefault.c:1053
 msgid "Invalid file name"
 msgstr "Nama berkas tidak sah"
 
-#: ../gtk/gtkfilechooserdefault.c:1061
+#: ../gtk/gtkfilechooserdefault.c:1063
 msgid "The folder contents could not be displayed"
 msgstr "Isi folder tidak dapat ditampilkan"
 
@@ -1492,224 +1494,222 @@ msgstr "Isi folder tidak dapat ditampilkan"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1587
+#: ../gtk/gtkfilechooserdefault.c:1589
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s pada %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1736
+#: ../gtk/gtkfilechooserdefault.c:1738
 msgid "Search"
 msgstr "Cari"
 
-#: ../gtk/gtkfilechooserdefault.c:1760
-#: ../gtk/gtkfilechooserdefault.c:4986
+#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4988
 msgid "Recently Used"
 msgstr "Baru-baru Ini Digunakan"
 
-#: ../gtk/gtkfilechooserdefault.c:2359
+#: ../gtk/gtkfilechooserdefault.c:2361
 msgid "Select which types of files are shown"
 msgstr "Pilih jenis berkas yang ingin ditampilkan"
 
-#: ../gtk/gtkfilechooserdefault.c:2718
+#: ../gtk/gtkfilechooserdefault.c:2720
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Menambahkan folder '%s' dalam penanda tautan"
 
-#: ../gtk/gtkfilechooserdefault.c:2762
+#: ../gtk/gtkfilechooserdefault.c:2764
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Masukkan folder ini dalam penanda tautan"
 
-#: ../gtk/gtkfilechooserdefault.c:2764
+#: ../gtk/gtkfilechooserdefault.c:2766
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Menambahkan folder yang dipilih dalam penanda tautan"
 
-#: ../gtk/gtkfilechooserdefault.c:2802
+#: ../gtk/gtkfilechooserdefault.c:2804
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Menghapus penanda '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2804
+#: ../gtk/gtkfilechooserdefault.c:2806
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Penanda '%s' tidak dapat dihapus"
 
-#: ../gtk/gtkfilechooserdefault.c:2811
-#: ../gtk/gtkfilechooserdefault.c:3697
+#: ../gtk/gtkfilechooserdefault.c:2813 ../gtk/gtkfilechooserdefault.c:3699
 msgid "Remove the selected bookmark"
 msgstr "Menghapus penanda yang dipilih"
 
-#: ../gtk/gtkfilechooserdefault.c:3375
+#: ../gtk/gtkfilechooserdefault.c:3377
 msgid "Remove"
 msgstr "Hapus"
 
-#: ../gtk/gtkfilechooserdefault.c:3384
+#: ../gtk/gtkfilechooserdefault.c:3386
 msgid "Rename..."
 msgstr "Ubah Nama..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3548
+#: ../gtk/gtkfilechooserdefault.c:3550
 msgid "Places"
 msgstr "Lokasi"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3605
+#: ../gtk/gtkfilechooserdefault.c:3607
 msgid "_Places"
 msgstr "_Lokasi"
 
-#: ../gtk/gtkfilechooserdefault.c:3685
+#: ../gtk/gtkfilechooserdefault.c:3687
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Menambahkan folder yang dipilih dalam Penanda Tautan"
 
-#: ../gtk/gtkfilechooserdefault.c:3946
+#: ../gtk/gtkfilechooserdefault.c:3948
 msgid "Could not select file"
 msgstr "Tidak dapat memilih berkas"
 
-#: ../gtk/gtkfilechooserdefault.c:4171
+#: ../gtk/gtkfilechooserdefault.c:4173
 msgid "_Visit this file"
 msgstr "Kunjungi _berkas ini"
 
-#: ../gtk/gtkfilechooserdefault.c:4174
+#: ../gtk/gtkfilechooserdefault.c:4176
 msgid "_Copy file's location"
 msgstr "Salin _lokasi berkas"
 
-#: ../gtk/gtkfilechooserdefault.c:4177
+#: ../gtk/gtkfilechooserdefault.c:4179
 msgid "_Add to Bookmarks"
 msgstr "T_ambah dalam Penanda Tautan"
 
-#: ../gtk/gtkfilechooserdefault.c:4184
+#: ../gtk/gtkfilechooserdefault.c:4186
 msgid "Show _Hidden Files"
 msgstr "_Tampilkan Berkas Tersembunyi"
 
-#: ../gtk/gtkfilechooserdefault.c:4187
+#: ../gtk/gtkfilechooserdefault.c:4189
 msgid "Show _Size Column"
 msgstr "Tampilkan Kolom _Ukuran"
 
-#: ../gtk/gtkfilechooserdefault.c:4412
+#: ../gtk/gtkfilechooserdefault.c:4414
 msgid "Files"
 msgstr "Berkas"
 
-#: ../gtk/gtkfilechooserdefault.c:4463
+#: ../gtk/gtkfilechooserdefault.c:4465
 msgid "Name"
 msgstr "Nama"
 
-#: ../gtk/gtkfilechooserdefault.c:4486
+#: ../gtk/gtkfilechooserdefault.c:4488
 msgid "Size"
 msgstr "Ukuran"
 
-#: ../gtk/gtkfilechooserdefault.c:4500
+#: ../gtk/gtkfilechooserdefault.c:4502
 msgid "Modified"
 msgstr "Diubah"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4593
-#: ../gtk/gtkprinteroptionwidget.c:835
+#: ../gtk/gtkfilechooserdefault.c:4595 ../gtk/gtkprinteroptionwidget.c:835
 msgid "_Name:"
 msgstr "_Nama:"
 
-#: ../gtk/gtkfilechooserdefault.c:4824
+#: ../gtk/gtkfilechooserdefault.c:4826
 msgid "Type a file name"
 msgstr "Ketikkan nama berkas"
 
-#: ../gtk/gtkfilechooserdefault.c:4871
-#: ../gtk/gtkfilechooserdefault.c:4882
+#: ../gtk/gtkfilechooserdefault.c:4873 ../gtk/gtkfilechooserdefault.c:4884
 msgid "Please select a folder below"
 msgstr "Pilih folder di bawah"
 
-#: ../gtk/gtkfilechooserdefault.c:4877
+#: ../gtk/gtkfilechooserdefault.c:4879
 msgid "Please type a file name"
 msgstr "Ketikkan nama berkas"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4948
+#: ../gtk/gtkfilechooserdefault.c:4950
 msgid "Create Fo_lder"
 msgstr "Buat Fo_lder"
 
-#: ../gtk/gtkfilechooserdefault.c:4996
+#: ../gtk/gtkfilechooserdefault.c:4998
 msgid "Search:"
 msgstr "Cari:"
 
-#: ../gtk/gtkfilechooserdefault.c:5047
+#: ../gtk/gtkfilechooserdefault.c:5049
 msgid "_Location:"
 msgstr "_Lokasi:"
 
-#: ../gtk/gtkfilechooserdefault.c:5498
+#: ../gtk/gtkfilechooserdefault.c:5500
 msgid "Save in _folder:"
 msgstr "Simpan dalam _folder:"
 
-#: ../gtk/gtkfilechooserdefault.c:5500
+#: ../gtk/gtkfilechooserdefault.c:5502
 msgid "Create in _folder:"
 msgstr "Buat dalam _folder:"
 
-#: ../gtk/gtkfilechooserdefault.c:6594
+#: ../gtk/gtkfilechooserdefault.c:6589
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Tidak dapat membaca isi dari %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6598
+#: ../gtk/gtkfilechooserdefault.c:6593
 msgid "Could not read the contents of the folder"
 msgstr "Tidak bisa membaca isi dari folder"
 
-#: ../gtk/gtkfilechooserdefault.c:6691
-#: ../gtk/gtkfilechooserdefault.c:6759
-#: ../gtk/gtkfilechooserdefault.c:6911
+#: ../gtk/gtkfilechooserdefault.c:6686 ../gtk/gtkfilechooserdefault.c:6754
+#: ../gtk/gtkfilechooserdefault.c:6934
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
-#: ../gtk/gtkfilechooserdefault.c:6706
+#: ../gtk/gtkfilechooserdefault.c:6701
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6708
+#: ../gtk/gtkfilechooserdefault.c:6703
 msgid "Yesterday at %H:%M"
 msgstr "Kemarin, pukul %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7382
+#: ../gtk/gtkfilechooserdefault.c:7405
 msgid "Cannot change to folder because it is not local"
 msgstr "Tidak dapat mengganti folder karena tidak berada pada komputer lokal"
 
-#: ../gtk/gtkfilechooserdefault.c:7983
-#: ../gtk/gtkfilechooserdefault.c:8004
+#: ../gtk/gtkfilechooserdefault.c:8009 ../gtk/gtkfilechooserdefault.c:8030
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Pintasan %s sudah ada"
 
-#: ../gtk/gtkfilechooserdefault.c:8094
+#: ../gtk/gtkfilechooserdefault.c:8120
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Pintasan %s tidak ada"
 
-#: ../gtk/gtkfilechooserdefault.c:8340
-#: ../gtk/gtkprintunixdialog.c:548
+#: ../gtk/gtkfilechooserdefault.c:8366 ../gtk/gtkprintunixdialog.c:548
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Berkas \"%s\" sudah ada. Timpa?"
 
-#: ../gtk/gtkfilechooserdefault.c:8343
-#: ../gtk/gtkprintunixdialog.c:552
+#: ../gtk/gtkfilechooserdefault.c:8369 ../gtk/gtkprintunixdialog.c:552
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr "Berkas sudah ada dalam \"%s\". Berkas lama akan diganti dengan yang baru bila Anda menimpanya."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr ""
+"Berkas sudah ada dalam \"%s\". Berkas lama akan diganti dengan yang baru "
+"bila Anda menimpanya."
 
-#: ../gtk/gtkfilechooserdefault.c:8348
-#: ../gtk/gtkprintunixdialog.c:559
+#: ../gtk/gtkfilechooserdefault.c:8374 ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
 msgstr "_Timpa"
 
-#: ../gtk/gtkfilechooserdefault.c:9155
+#: ../gtk/gtkfilechooserdefault.c:9181
 msgid "Could not start the search process"
 msgstr "Tidak dapat memulai proses pencarian"
 
-#: ../gtk/gtkfilechooserdefault.c:9156
-msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
-msgstr "Program tidak dapat membuat koneksi ke indexer daemon.  Pastikan program sedang berjalan."
+#: ../gtk/gtkfilechooserdefault.c:9182
+msgid ""
+"The program was not able to create a connection to the indexer daemon.  "
+"Please make sure it is running."
+msgstr ""
+"Program tidak dapat membuat koneksi ke indexer daemon.  Pastikan program "
+"sedang berjalan."
 
-#: ../gtk/gtkfilechooserdefault.c:9170
+#: ../gtk/gtkfilechooserdefault.c:9196
 msgid "Could not send the search request"
 msgstr "Tidak dapat mengirim permintaan pencarian"
 
-#: ../gtk/gtkfilechooserdefault.c:9771
+#: ../gtk/gtkfilechooserdefault.c:9806
 #, c-format
 msgid "Could not mount %s"
 msgstr "Tidak dapat mengaitkan %s"
@@ -1727,8 +1727,7 @@ msgstr "Sistem Berkas"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:436
-#: ../gtk/gtkfontbutton.c:563
+#: ../gtk/gtkfontbutton.c:436 ../gtk/gtkfontbutton.c:563
 msgid "Pick a Font"
 msgstr "Pilih Fonta"
 
@@ -1738,23 +1737,24 @@ msgstr "Fonta"
 
 #: ../gtk/gtkfontchooserwidget.c:110
 msgid "No fonts matched your search. You can revise your search and try again."
-msgstr "Tak ada fonta yang cocok dengan pencarian Anda. Anda dapat mengubah pencarian Anda dan mencoba lagi."
+msgstr ""
+"Tak ada fonta yang cocok dengan pencarian Anda. Anda dapat mengubah "
+"pencarian Anda dan mencoba lagi."
 
 #: ../gtk/gtkfontchooserwidget.c:557
 msgid "Search font name"
 msgstr "Cari nama fonta"
 
 #: ../gtk/gtkfontchooserwidget.c:891
-#| msgid "_Family:"
 msgid "Font Family"
 msgstr "Keluarga Fonta"
 
-#: ../gtk/gtkicontheme.c:1625
+#: ../gtk/gtkicontheme.c:1627
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon '%s' tidak ada pada tema"
 
-#: ../gtk/gtkicontheme.c:3133
+#: ../gtk/gtkicontheme.c:3137
 msgid "Failed to load icon"
 msgstr "Gagal memuat ikon"
 
@@ -1787,6 +1787,51 @@ msgstr "_Buka Taut"
 #: ../gtk/gtklabel.c:6236
 msgid "Copy _Link Address"
 msgstr "Sa_lin Alamat Taut"
+
+#: ../gtk/gtk-launch.c:69
+msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
+msgstr "APLIKASI [URI...] - meluncurkan APLIKASI dengan URI."
+
+#. Translators: this message will appear after the usage string
+#. and before the list of options.
+#: ../gtk/gtk-launch.c:73
+msgid ""
+"Launch specified application by its desktop file info\n"
+"optionally passing list of URIs as arguments."
+msgstr ""
+"Meluncurkan aplikasi yang dinyatakan oleh info berkas desktopnya\n"
+"dan secara opsional menyampaikan daftar URI sebagai argumen."
+
+#: ../gtk/gtk-launch.c:85
+#, c-format
+msgid "Error parsing commandline options: %s\n"
+msgstr "Galat sewaktu mengurai opsi baris perintah: %s\n"
+
+#: ../gtk/gtk-launch.c:87 ../gtk/gtk-launch.c:100
+#, c-format
+msgid "Try \"%s --help\" for more information."
+msgstr "Coba \"%s --help\" untuk informasi lebih banyak."
+
+#. Translators: the %s is the program name. This error message
+#. means the user is calling gtk-launch without any argument.
+#: ../gtk/gtk-launch.c:98
+#, c-format
+msgid "%s: missing application name"
+msgstr "%s: kurang nama aplikasi"
+
+#. Translators: the first %s is the program name, the second one
+#. is the application name.
+#: ../gtk/gtk-launch.c:122
+#, c-format
+msgid "%s: no such application %s"
+msgstr "%s: tak ada aplikasi %s"
+
+#. Translators: the first %s is the program name, the second one
+#. is the error message.
+#: ../gtk/gtk-launch.c:140
+#, c-format
+msgid "%s: error launching application: %s\n"
+msgstr "%s: galat saat meluncurkan aplikasi: %s\n"
 
 #: ../gtk/gtklinkbutton.c:499
 msgid "Copy URL"
@@ -1899,35 +1944,35 @@ msgstr "_Domain:"
 msgid "_Password:"
 msgstr "_Sandi:"
 
-#: ../gtk/gtkmountoperation.c:661
+#: ../gtk/gtkmountoperation.c:662
 msgid "Forget password _immediately"
 msgstr "Lupakan sandi seket_ika"
 
-#: ../gtk/gtkmountoperation.c:671
+#: ../gtk/gtkmountoperation.c:672
 msgid "Remember password until you _logout"
 msgstr "Ingat sandi sampai Anda _log keluar"
 
-#: ../gtk/gtkmountoperation.c:681
+#: ../gtk/gtkmountoperation.c:682
 msgid "Remember _forever"
 msgstr "Ingat sela_manya"
 
-#: ../gtk/gtkmountoperation.c:1070
+#: ../gtk/gtkmountoperation.c:1071
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Aplikasi Tak Dikenal (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1253
+#: ../gtk/gtkmountoperation.c:1254
 msgid "Unable to end process"
 msgstr "Tak bisa mengakhiri proses"
 
-#: ../gtk/gtkmountoperation.c:1290
+#: ../gtk/gtkmountoperation.c:1291
 msgid "_End Process"
 msgstr "Akhiri Pros_es"
 
 #: ../gtk/gtkmountoperation-stub.c:62
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
-msgstr "Tidak dapat membunuh proses dengan PID %d. Operasi belum diimplementasi."
+msgstr "Tak bisa mematikan proses dengan PID %d. Operasi belum diimplementasi."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:954
@@ -1956,8 +2001,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Tidak dapat mengakhiri proses dengan PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5045
-#: ../gtk/gtknotebook.c:7699
+#: ../gtk/gtknotebook.c:5051 ../gtk/gtknotebook.c:7705
 #, c-format
 msgid "Page %u"
 msgstr "Halaman %u"
@@ -1971,8 +2015,7 @@ msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
 
-#: ../gtk/gtkpagesetup.c:646
-#: ../gtk/gtkpapersize.c:846
+#: ../gtk/gtkpagesetup.c:646 ../gtk/gtkpapersize.c:846
 #: ../gtk/gtkpapersize.c:886
 msgid "Not a valid page setup file"
 msgstr "Bukan berkas tata halaman yang sah"
@@ -2000,8 +2043,7 @@ msgstr ""
 " Atas: %s %s\n"
 " Bawah: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:845
-#: ../gtk/gtkprintunixdialog.c:3318
+#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3318
 msgid "Manage Custom Sizes..."
 msgstr "Kelola Ukuran Sesuaian..."
 
@@ -2009,8 +2051,7 @@ msgstr "Kelola Ukuran Sesuaian..."
 msgid "_Format for:"
 msgstr "_Bentuk untuk:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:917
-#: ../gtk/gtkprintunixdialog.c:3466
+#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3466
 msgid "_Paper size:"
 msgstr "_Ukuran kertas:"
 
@@ -2018,8 +2059,7 @@ msgstr "_Ukuran kertas:"
 msgid "_Orientation:"
 msgstr "_Orientasi:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1006
-#: ../gtk/gtkprintunixdialog.c:3520
+#: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3520
 msgid "Page Setup"
 msgstr "Atur Halaman"
 
@@ -2068,7 +2108,7 @@ msgstr "Keadaan awal"
 #: ../gtk/gtkprintoperation.c:1778
 msgctxt "print operation status"
 msgid "Preparing to print"
-msgstr "Bersiap mencetak..."
+msgstr "Bersiap mencetak"
 
 #: ../gtk/gtkprintoperation.c:1779
 msgctxt "print operation status"
@@ -2110,8 +2150,7 @@ msgstr "Selesai dengan galat"
 msgid "Preparing %d"
 msgstr "Bersiap %d"
 
-#: ../gtk/gtkprintoperation.c:2354
-#: ../gtk/gtkprintoperation.c:2984
+#: ../gtk/gtkprintoperation.c:2354 ../gtk/gtkprintoperation.c:2984
 msgid "Preparing"
 msgstr "Bersiap"
 
@@ -2162,13 +2201,11 @@ msgstr "Tidak menemukan pencetak"
 msgid "Invalid argument to CreateDC"
 msgstr "Argumen tak valid untuk CreateDC"
 
-#: ../gtk/gtkprintoperation-win32.c:1600
-#: ../gtk/gtkprintoperation-win32.c:1827
+#: ../gtk/gtkprintoperation-win32.c:1600 ../gtk/gtkprintoperation-win32.c:1827
 msgid "Error from StartDoc"
 msgstr "Kesalahan dari StartDoc"
 
-#: ../gtk/gtkprintoperation-win32.c:1682
-#: ../gtk/gtkprintoperation-win32.c:1705
+#: ../gtk/gtkprintoperation-win32.c:1682 ../gtk/gtkprintoperation-win32.c:1705
 #: ../gtk/gtkprintoperation-win32.c:1753
 msgid "Not enough free memory"
 msgstr "Tidak cukup memori bebas"
@@ -2313,8 +2350,7 @@ msgstr "Dasar ke puncak, kanan ke kiri"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3054
-#: ../gtk/gtkprintunixdialog.c:3067
+#: ../gtk/gtkprintunixdialog.c:3054 ../gtk/gtkprintunixdialog.c:3067
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3766
 msgid "Page Ordering"
 msgstr "Urutan Halaman"
@@ -2517,8 +2553,7 @@ msgstr "Cetak"
 msgid "Select which type of documents are shown"
 msgstr "Pilih jenis berkas mana yang ingin ditampilkan"
 
-#: ../gtk/gtkrecentchooserdefault.c:1130
-#: ../gtk/gtkrecentchooserdefault.c:1167
+#: ../gtk/gtkrecentchooserdefault.c:1130 ../gtk/gtkrecentchooserdefault.c:1167
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Tidak menemukan item untuk URI '%s'"
@@ -2565,8 +2600,7 @@ msgstr "Tampilkan Sumber _Pribadi"
 msgid "No items found"
 msgstr "Tidak menemukan item"
 
-#: ../gtk/gtkrecentchoosermenu.c:526
-#: ../gtk/gtkrecentchoosermenu.c:582
+#: ../gtk/gtkrecentchoosermenu.c:526 ../gtk/gtkrecentchoosermenu.c:582
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Tidak ada sumber yang sering digunakan dengan URI '%s'"
@@ -2600,21 +2634,19 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:998
-#: ../gtk/gtkrecentmanager.c:1011
-#: ../gtk/gtkrecentmanager.c:1148
-#: ../gtk/gtkrecentmanager.c:1158
-#: ../gtk/gtkrecentmanager.c:1210
-#: ../gtk/gtkrecentmanager.c:1219
-#: ../gtk/gtkrecentmanager.c:1234
+#: ../gtk/gtkrecentmanager.c:1010 ../gtk/gtkrecentmanager.c:1023
+#: ../gtk/gtkrecentmanager.c:1160 ../gtk/gtkrecentmanager.c:1170
+#: ../gtk/gtkrecentmanager.c:1222 ../gtk/gtkrecentmanager.c:1231
+#: ../gtk/gtkrecentmanager.c:1246
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Tidak dapat menemukan objek dengan URI '%s'"
 
-#: ../gtk/gtkrecentmanager.c:2434
+#: ../gtk/gtkrecentmanager.c:2446
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr "Tak ditemukan aplikasi terdaftar dengan nama '%s' bagi butir dengan URI '%s'"
+msgstr ""
+"Tak ditemukan aplikasi terdaftar dengan nama '%s' bagi butir dengan URI '%s'"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:324
@@ -3032,7 +3064,7 @@ msgstr "_Simpan"
 #: ../gtk/gtkstock.c:430
 msgctxt "Stock label"
 msgid "Save _As"
-msgstr "Simp_an Sebagai..."
+msgstr "Simp_an Sebagai"
 
 #: ../gtk/gtkstock.c:431
 msgctxt "Stock label"
@@ -3124,9 +3156,7 @@ msgstr "P_erkecil Tampilan"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:342
-#: ../gtk/gtkswitch.c:397
-#: ../gtk/gtkswitch.c:591
+#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:586
 msgctxt "switch"
 msgid "ON"
 msgstr "NYALA"
@@ -3134,9 +3164,7 @@ msgstr "NYALA"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:350
-#: ../gtk/gtkswitch.c:398
-#: ../gtk/gtkswitch.c:620
+#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:615
 msgctxt "switch"
 msgid "OFF"
 msgstr "MATI"
@@ -3151,14 +3179,12 @@ msgstr "Kesalahan tidak dikenal ketika mencoba deserialisasi %s"
 msgid "No deserialize function found for format %s"
 msgstr "Tidak menemukan fungsi deserialiasi untuk bentuk %s"
 
-#: ../gtk/gtktextbufferserialize.c:798
-#: ../gtk/gtktextbufferserialize.c:824
+#: ../gtk/gtktextbufferserialize.c:798 ../gtk/gtktextbufferserialize.c:824
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Bagian \"id\" dan \"nama\" ditemukan pada bagian <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:808
-#: ../gtk/gtktextbufferserialize.c:834
+#: ../gtk/gtktextbufferserialize.c:808 ../gtk/gtktextbufferserialize.c:834
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Atribu \"%s\" ditemukan dua kali di bagian <%s>"
@@ -3178,8 +3204,7 @@ msgstr "bagian <%s> telah memiliki atribut \"nama\" ataupun \"id\""
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Atribut \"%s\" mengulang dua kali pada bagian <%s> yang sama"
 
-#: ../gtk/gtktextbufferserialize.c:965
-#: ../gtk/gtktextbufferserialize.c:990
+#: ../gtk/gtktextbufferserialize.c:965 ../gtk/gtktextbufferserialize.c:990
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Atribut \"%s\" salah pada bagian <%s> dalam konteks ini"
@@ -3198,10 +3223,8 @@ msgstr "Tag tak dikenal ditemukan dan tags tidak bisa dibuat."
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "Tag \"%s\" tidak ada dalam buffer dan tags tidak bisa dibuat."
 
-#: ../gtk/gtktextbufferserialize.c:1151
-#: ../gtk/gtktextbufferserialize.c:1226
-#: ../gtk/gtktextbufferserialize.c:1331
-#: ../gtk/gtktextbufferserialize.c:1405
+#: ../gtk/gtktextbufferserialize.c:1151 ../gtk/gtktextbufferserialize.c:1226
+#: ../gtk/gtktextbufferserialize.c:1331 ../gtk/gtktextbufferserialize.c:1405
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Elemen <%s> tidak diperbolehkan di bawah <%s>"
@@ -3218,7 +3241,8 @@ msgstr "\"%s\" bukan nama atribut yang benar"
 
 #: ../gtk/gtktextbufferserialize.c:1200
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" tidak bisa dirubah ke nilai jenis \"%s\" untuk atribut \"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:1209
@@ -3241,8 +3265,7 @@ msgstr "Tag \"%s\" memiliki prioritas yang salah \"%s\""
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Bagian terluar dari teks harus <text_view_markup> bukan <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1369
-#: ../gtk/gtktextbufferserialize.c:1385
+#: ../gtk/gtktextbufferserialize.c:1369 ../gtk/gtktextbufferserialize.c:1385
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Suatu bagian <%s> sudah ditentukan"
@@ -3256,8 +3279,10 @@ msgid "Serialized data is malformed"
 msgstr "Data yang diserialkan rusak"
 
 #: ../gtk/gtktextbufferserialize.c:1868
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "Data yang diserialkan rusak. Bagian pertama bukan GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr ""
+"Data yang diserialkan rusak. Bagian pertama bukan GTKTEXTBUFFERCONTENTS-0001"
 
 #: ../gtk/gtktextutil.c:58
 msgid "LRM _Left-to-right mark"
@@ -3325,8 +3350,7 @@ msgstr "Naikkan atau turunkan keras suara"
 msgid "Adjusts the volume"
 msgstr "Atur keras suara"
 
-#: ../gtk/gtkvolumebutton.c:180
-#: ../gtk/gtkvolumebutton.c:183
+#: ../gtk/gtkvolumebutton.c:180 ../gtk/gtkvolumebutton.c:183
 msgid "Volume Down"
 msgstr "Pelankan Suara"
 
@@ -3334,8 +3358,7 @@ msgstr "Pelankan Suara"
 msgid "Decreases the volume"
 msgstr "Memelankan suara"
 
-#: ../gtk/gtkvolumebutton.c:186
-#: ../gtk/gtkvolumebutton.c:189
+#: ../gtk/gtkvolumebutton.c:186 ../gtk/gtkvolumebutton.c:189
 msgid "Volume Up"
 msgstr "Besarkan Suara"
 
@@ -3817,8 +3840,7 @@ msgctxt "paper size"
 msgid "10x14"
 msgstr "10x14"
 
-#: ../gtk/paper_names_offsets.c:95
-#: ../gtk/paper_names_offsets.c:96
+#: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
 msgstr "10x15"
@@ -4208,8 +4230,7 @@ msgstr "Gagal menulis ulang judul\n"
 msgid "Failed to open file %s : %s\n"
 msgstr "Gagal membuka berkas %s: %s\n"
 
-#: ../gtk/updateiconcache.c:1490
-#: ../gtk/updateiconcache.c:1520
+#: ../gtk/updateiconcache.c:1490 ../gtk/updateiconcache.c:1520
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Gagal menulis singgahan berkas: %s\n"
@@ -4285,7 +4306,8 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "Tanpa berkas index dalam '%s'.\n"
-"JIka Anda benar benar ingin membuat cache ikon di sini, gunakan --ignore-theme-index.\n"
+"JIka Anda benar benar ingin membuat cache ikon di sini, gunakan --ignore-"
+"theme-index.\n"
 
 #. ID
 #: ../modules/input/imam-et.c:452
@@ -4710,7 +4732,6 @@ msgid "Unspecified profile"
 msgstr "Profil tak dinyatakan"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:249
-#| msgid "output.%s"
 msgid "output"
 msgstr "keluaran"
 
@@ -4789,4 +4810,3 @@ msgstr "keluaran.%s"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Cetak untuk Menguji Pencetak"
-
