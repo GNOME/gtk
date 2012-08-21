@@ -66,7 +66,7 @@ GtkWidget   *gtk_menu_button_new            (void);
 
 GDK_AVAILABLE_IN_3_6
 void         gtk_menu_button_set_popup      (GtkMenuButton *menu_button,
-                                             GtkWidget     *menu);
+                                             GtkWidget     *popup);
 GDK_AVAILABLE_IN_3_6
 GtkMenu     *gtk_menu_button_get_popup      (GtkMenuButton *menu_button);
 
