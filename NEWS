@@ -1,3 +1,46 @@
+Overview of Changes in GTK+ 3.5.12
+==================================
+
+* GtkApplication:
+ - Add gtk_application_get_active_window to get the active window
+ - Add gtk_widget_insert_action_group to allow more flexibility
+   when associating widgets with actions
+
+* GtkMenuButton:
+ - The gtk_menu_button_set_menu function is getting renamed
+   to gtk_menu_button_set_popup. The old name is still available
+   for now, but will be removed before 3.6
+
+* GtkToolbar:
+ - use CSS properties instead of style properties for padding
+
+* Input method support:
+ - GtkEntry and GtkTextView now have input-purpose and input-hints
+   properties that let applications provide useful hints to
+   input methods, like 'this entry is for a phone nr'.
+
+* Bugs:
+ 373279 Toggling a GtkToggleButton emits "clicked", not "toggled"
+ 651244 Add a "purpose" tag for GtkEntries
+ 673478 Chain up notify implementations
+ 681577 Missing mnemonic in "Find applications online"
+ 681591 Masked string for password fields is not exposed to accessibility
+ 681613 icon view doesn't emit selection changed when the model changes
+ 682193 404 in GTK+ docs for duplicated "stable" URL suffix to ATK link
+ 682235 gtkmenubutton: repurpose set_menu for GMenuModel
+
+* Translation updates:
+ Assamese
+ Esperanto
+ Galician
+ Lithuanian
+ Marathi
+ Portuguese
+ Serbian
+ Spanish
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.5.10
 ==================================
 
