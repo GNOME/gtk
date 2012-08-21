@@ -9688,7 +9688,7 @@ gtk_text_view_move_visually (GtkTextView *text_view,
 
 /**
  * gtk_text_view_set_input_purpose:
- * @text_vew: a #GtkTextView
+ * @text_view: a #GtkTextView
  * @purpose: the purpose
  *
  * Sets the #GtkTextView:input-purpose property which
