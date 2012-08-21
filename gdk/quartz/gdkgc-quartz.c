@@ -684,7 +684,7 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
            */
           info->drawable = drawable;
 
-	  baseSpace = (fill == GDK_STIPPLED) ? CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB) : NULL;
+	  baseSpace = (fill == GDK_STIPPLED) ? CGColorSpaceCreateDeviceRGB () : NULL;
 	  patternSpace = CGColorSpaceCreatePattern (baseSpace);
 
 	  CGContextSetFillColorSpace (context, patternSpace);

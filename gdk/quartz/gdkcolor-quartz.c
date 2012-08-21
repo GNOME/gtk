@@ -237,7 +237,7 @@ _gdk_quartz_colormap_get_cgcolor_from_pixel (GdkDrawable *drawable,
         else
           components[3] = 1.0;
 
-        colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
+        colorspace = CGColorSpaceCreateDeviceRGB ();
         color = CGColorCreate (colorspace, components);
         CGColorSpaceRelease (colorspace);
         break;

@@ -586,7 +586,7 @@ gdk_quartz_draw_pixbuf (GdkDrawable     *drawable,
 
   data = gdk_pixbuf_get_pixels (pixbuf);
 
-  colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
+  colorspace = CGColorSpaceCreateDeviceRGB ();
   data_provider = CGDataProviderCreateWithData (NULL, data, pixbuf_height * rowstride, NULL);
 
   image = CGImageCreate (pixbuf_width, pixbuf_height, 8,
@@ -634,7 +634,7 @@ gdk_quartz_draw_image (GdkDrawable     *drawable,
   if (!context)
     return;
 
-  colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
+  colorspace = CGColorSpaceCreateDeviceRGB ();
   data_provider = CGDataProviderCreateWithData (NULL, image->mem, image->height * image->bpl, NULL);
 
   /* FIXME: Make sure that this function draws 32-bit images correctly,
