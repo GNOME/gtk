@@ -84,7 +84,7 @@ gtk_model_menu_binding_append_item (GtkModelMenuBinding  *binding,
 
   if ((section = g_menu_model_get_item_link (model, item_index, "section")))
     {
-      const gchar *section_namespace = NULL;
+      gchar *section_namespace = NULL;
 
       g_menu_model_get_item_attribute (model, item_index, "label", "s", heading);
       g_menu_model_get_item_attribute (model, item_index, "action-namespace", "s", &section_namespace);
