@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-08-19 22:53+0000\n"
-"PO-Revision-Date: 2012-08-22 08:58+0700\n"
+"PO-Revision-Date: 2012-08-22 09:01+0700\n"
 "Last-Translator: Nguyễn Thái Ngọc Duy <pclouds@gmail.com>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "Language: vi\n"
@@ -782,10 +782,9 @@ msgid "Failed to look for applications online"
 msgstr "Lỗi tìm ứng dụng trực tuyến"
 
 #: ../gtk/gtkappchooserdialog.c:188
-#, fuzzy
 #| msgid "Find applications online"
 msgid "_Find applications online"
-msgstr "Tìm ứng dụng trực tuyến"
+msgstr "_Tìm ứng dụng trực tuyến"
 
 #: ../gtk/gtkappchooserdialog.c:247
 msgid "Could not run application"
@@ -1782,7 +1781,7 @@ msgstr "Chép địa chỉ _liên kết"
 
 #: ../gtk/gtk-launch.c:69
 msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
-msgstr ""
+msgstr "ỨNG-DỤNG [URI...] - chạy ứng dụng ỨNG-DỤNG với URI."
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -1791,41 +1790,43 @@ msgid ""
 "Launch specified application by its desktop file info\n"
 "optionally passing list of URIs as arguments."
 msgstr ""
+"Chạy ứng dụng xác định theo tập tin desktop<\n"
+"có thể truyền danh sách URI làm đối số."
 
 #: ../gtk/gtk-launch.c:85
-#, fuzzy, c-format
+#, c-format
 #| msgid "Error loading icon: %s"
 msgid "Error parsing commandline options: %s\n"
-msgstr "Gặp lỗi khi tải biểu tượng: %s"
+msgstr "Gặp lỗi khi phân tích tham số dòng lệnh: %s\n"
 
 #: ../gtk/gtk-launch.c:87 ../gtk/gtk-launch.c:100
 #, c-format
 msgid "Try \"%s --help\" for more information."
-msgstr ""
+msgstr "Dùng \"%s --help\" để biết chi tiết."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
 #: ../gtk/gtk-launch.c:98
-#, fuzzy, c-format
+#, c-format
 #| msgid "Find applications online"
 msgid "%s: missing application name"
-msgstr "Tìm ứng dụng trực tuyến"
+msgstr "%s: thiếu tên ứng dụng"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
 #: ../gtk/gtk-launch.c:122
-#, fuzzy, c-format
+#, c-format
 #| msgid "Could not run application"
 msgid "%s: no such application %s"
-msgstr "Không thể chạy ứng dụng"
+msgstr "%s: không có ứng dụng %s"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
 #: ../gtk/gtk-launch.c:140
-#, fuzzy, c-format
+#, c-format
 #| msgid "Error loading icon: %s"
 msgid "%s: error launching application: %s\n"
-msgstr "Gặp lỗi khi tải biểu tượng: %s"
+msgstr "%s:  lỗi chạy ứng dụng: %s\n"
 
 #: ../gtk/gtklinkbutton.c:499
 msgid "Copy URL"
