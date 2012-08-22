@@ -101,6 +101,7 @@ _gtk_quartz_target_list_to_pasteboard_types (GtkTargetList *target_list)
     {
       GtkTargetPair *pair = list->data;
       gchar *target = gdk_atom_name (pair->target);
+      g_return_val_if_fail (pair->flags < 16, NULL);
       [set addObject:target_to_pasteboard_type (target)];
       g_free (target);
     }
