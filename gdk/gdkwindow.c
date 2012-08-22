@@ -254,6 +254,7 @@ static void gdk_window_invalidate_rect_full (GdkWindow          *window,
 					     gboolean            invalidate_children,
 					     ClearBg             clear_bg);
 static void _gdk_window_propagate_has_alpha_background (GdkWindow *window);
+static cairo_surface_t *gdk_window_ref_impl_surface (GdkWindow *window);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -2671,7 +2672,7 @@ gdk_window_get_content (GdkWindow *window)
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
-  surface = _gdk_window_ref_cairo_surface (window);
+  surface = gdk_window_ref_impl_surface (window);
   content = cairo_surface_get_content (surface);
   cairo_surface_destroy (surface);
 
@@ -10129,7 +10130,7 @@ gdk_window_create_similar_surface (GdkWindow *     window,
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   
-  window_surface = _gdk_window_ref_cairo_surface (window);
+  window_surface = gdk_window_ref_impl_surface (window);
 
   switch (_gdk_rendering_mode)
   {
