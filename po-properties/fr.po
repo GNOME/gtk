@@ -16,7 +16,7 @@
 # Gérard Baylard <Geodebay@gmail.com>, 2011.
 #
 # spin button : bouton compteur
-# spinner : bouton animé
+# spinner : indicateur d'activité
 #
 msgid ""
 msgstr ""
@@ -24,7 +24,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-06-02 12:42+0000\n"
-"PO-Revision-Date: 2012-06-03 13:38+0200 \n"
+"PO-Revision-Date: 2012-08-22 15:36+0200\n"
 "Last-Translator: Bruno Brouard <annoa.b@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -2030,16 +2030,16 @@ msgstr "Actif"
 
 #: ../gtk/gtkcellrendererspinner.c:126
 msgid "Whether the spinner is active (ie. shown) in the cell"
-msgstr "Indique si le bouton animé est actif (c-à-d affiché) dans la cellule"
+msgstr "Indique si l'indicateur d'activité est actif (c-à-d affiché) dans la cellule"
 
 #: ../gtk/gtkcellrendererspinner.c:144
 msgid "Pulse of the spinner"
-msgstr "Rythme du bouton animé"
+msgstr "Rythme de l'indicateur d'activité"
 
 #: ../gtk/gtkcellrendererspinner.c:158
 msgid "The GtkIconSize value that specifies the size of the rendered spinner"
 msgstr ""
-"La valeur GtkIconSize qui définit la taille d'affichage du bouton animé"
+"La valeur GtkIconSize qui définit la taille d'affichage de l'indicateur d'activité"
 
 #: ../gtk/gtkcellrenderertext.c:256
 msgid "Text to render"
@@ -6523,7 +6523,7 @@ msgstr "Style de bordure autour du bouton compteur"
 
 #: ../gtk/gtkspinner.c:115
 msgid "Whether the spinner is active"
-msgstr "Indique si le bouton animé est actif"
+msgstr "Indique si l'indicateur d'activité est actif"
 
 #: ../gtk/gtkstatusbar.c:183
 msgid "Style of bevel around the statusbar text"
