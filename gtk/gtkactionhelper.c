@@ -523,7 +523,10 @@ gtk_action_helper_set_action_target_value (GtkActionHelper *helper,
     return;
 
   if (target_value && helper->target && g_variant_equal (target_value, helper->target))
-    return;
+    {
+      g_variant_unref (g_variant_ref_sink (target_value));
+      return;
+    }
 
   if (helper->target)
     {
@@ -533,6 +536,10 @@ gtk_action_helper_set_action_target_value (GtkActionHelper *helper,
 
   if (target_value)
     helper->target = g_variant_ref_sink (target_value);
+
+  /* The action_name has not yet been set.  Don't do anything yet. */
+  if (helper->action_name == NULL)
+    return;
 
   was_enabled = helper->enabled;
   was_active = helper->active;
