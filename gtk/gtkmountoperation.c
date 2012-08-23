@@ -124,11 +124,12 @@ struct _GtkMountOperationPrivate {
   gboolean handler_showing;
 
   /* for the ask-password dialog */
-  GtkWidget *entry_container;
+  GtkWidget *grid;
   GtkWidget *username_entry;
   GtkWidget *domain_entry;
   GtkWidget *password_entry;
   GtkWidget *anonymous_toggle;
+  GList *user_widgets;
 
   GAskPasswordFlags ask_flags;
   GPasswordSave     password_save;
@@ -207,6 +208,9 @@ gtk_mount_operation_finalize (GObject *object)
 {
   GtkMountOperation *operation = GTK_MOUNT_OPERATION (object);
   GtkMountOperationPrivate *priv = operation->priv;
+
+  if (priv->user_widgets)
+    g_list_free (priv->user_widgets);
 
   if (priv->parent_window)
     g_object_unref (priv->parent_window);
@@ -401,6 +405,7 @@ pw_dialog_anonymous_toggled (GtkWidget         *widget,
 {
   GtkMountOperationPrivate *priv = operation->priv;
   gboolean is_valid;
+  GList *l;
 
   priv->anonymous = widget == priv->anonymous_toggle;
 
@@ -409,7 +414,11 @@ pw_dialog_anonymous_toggled (GtkWidget         *widget,
   else
     is_valid = pw_dialog_input_is_valid (operation);
 
-  gtk_widget_set_sensitive (priv->entry_container, priv->anonymous == FALSE);
+  for (l = priv->user_widgets; l != NULL; l = l->next)
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (l->data), !priv->anonymous);
+    }
+
   gtk_dialog_set_response_sensitive (GTK_DIALOG (priv->dialog),
                                      GTK_RESPONSE_OK,
                                      is_valid);
@@ -442,28 +451,31 @@ pw_dialog_cycle_focus (GtkWidget         *widget,
 }
 
 static GtkWidget *
-table_add_entry (GtkWidget  *table,
-                 int         row,
-                 const char *label_text,
-                 const char *value,
-                 gpointer    user_data)
+table_add_entry (GtkMountOperation *operation,
+                 int                row,
+                 const char        *label_text,
+                 const char        *value,
+                 gpointer           user_data)
 {
   GtkWidget *entry;
   GtkWidget *label;
 
   label = gtk_label_new_with_mnemonic (label_text);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_hexpand (label, FALSE);
+  operation->priv->user_widgets = g_list_prepend (operation->priv->user_widgets, label);
 
   entry = gtk_entry_new ();
+  gtk_widget_set_hexpand (entry, TRUE);
 
   if (value)
     gtk_entry_set_text (GTK_ENTRY (entry), value);
 
-  gtk_grid_attach (GTK_GRID (table), label, 0, row, 1, 1);
-  gtk_grid_attach (GTK_GRID (table), entry, 1, row, 1, 1);
+  gtk_grid_attach (GTK_GRID (operation->priv->grid), label, 0, row, 1, 1);
+  gtk_grid_attach (GTK_GRID (operation->priv->grid), entry, 1, row, 1, 1);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+  operation->priv->user_widgets = g_list_prepend (operation->priv->user_widgets, entry);
 
   g_signal_connect (entry, "changed",
                     G_CALLBACK (pw_dialog_verify_input), user_data);
@@ -484,13 +496,15 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   GtkWidget *widget;
   GtkDialog *dialog;
   GtkWindow *window;
-  GtkWidget *hbox, *main_vbox, *vbox, *icon;
-  GtkWidget *table;
-  GtkWidget *message_label;
+  GtkWidget *hbox, *main_vbox, *icon;
+  GtkWidget *grid;
+  GtkWidget *label;
   GtkWidget *content_area, *action_area;
   gboolean   can_anonymous;
   guint      rows;
+  gchar *primary;
   const gchar *secondary;
+  PangoAttrList *attrs;
 
   priv = operation->priv;
 
@@ -542,37 +556,45 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   secondary = strstr (message, "\n");
   if (secondary != NULL)
     {
-      gchar *s;
-      gchar *primary;
-
       primary = g_strndup (message, secondary - message + 1);
-      s = g_strdup_printf ("<big><b>%s</b></big>%s", primary, secondary);
-
-      message_label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (message_label), s);
-      gtk_widget_set_halign (message_label, GTK_ALIGN_START);
-      gtk_widget_set_valign (message_label, GTK_ALIGN_CENTER);
-      gtk_label_set_line_wrap (GTK_LABEL (message_label), TRUE);
-      gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (message_label),
-                          FALSE, TRUE, 0);
-
-      g_free (s);
-      g_free (primary);
     }
   else
     {
-      message_label = gtk_label_new (message);
-      gtk_widget_set_halign (message_label, GTK_ALIGN_START);
-      gtk_widget_set_valign (message_label, GTK_ALIGN_CENTER);
-      gtk_label_set_line_wrap (GTK_LABEL (message_label), TRUE);
-      gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (message_label),
+      primary = g_strdup (message);
+    }
+
+  label = gtk_label_new (primary);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (label),
+                      FALSE, TRUE, 0);
+  g_free (primary);
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
+  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  pango_attr_list_unref (attrs);
+
+  if (secondary != NULL)
+    {
+      label = gtk_label_new (secondary);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+      gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+      gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (label),
                           FALSE, FALSE, 0);
     }
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_box_pack_start (GTK_BOX (main_vbox), vbox, FALSE, FALSE, 0);
+  grid = gtk_grid_new ();
+  operation->priv->grid = grid;
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 12);
+  gtk_widget_set_margin_bottom (grid, 12);
+  gtk_box_pack_start (GTK_BOX (main_vbox), grid, FALSE, FALSE, 0);
 
   can_anonymous = priv->ask_flags & G_ASK_PASSWORD_ANONYMOUS_SUPPORTED;
+
+  rows = 0;
 
   priv->anonymous_toggle = NULL;
   if (can_anonymous)
@@ -581,11 +603,16 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       GtkWidget *choice;
       GSList    *group;
 
-      anon_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-      gtk_box_pack_start (GTK_BOX (vbox), anon_box,
-                          FALSE, FALSE, 0);
+      label = gtk_label_new (_("Connect As"));
+      gtk_widget_set_halign (label, GTK_ALIGN_END);
+      gtk_widget_set_valign (label, GTK_ALIGN_START);
+      gtk_widget_set_hexpand (label, FALSE);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, rows, 1, 1);
 
-      choice = gtk_radio_button_new_with_mnemonic (NULL, _("Connect _anonymously"));
+      anon_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_grid_attach (GTK_GRID (grid), anon_box, 1, rows++, 1, 1);
+
+      choice = gtk_radio_button_new_with_mnemonic (NULL, _("_Anonymous"));
       gtk_box_pack_start (GTK_BOX (anon_box),
                           choice,
                           FALSE, FALSE, 0);
@@ -594,7 +621,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       priv->anonymous_toggle = choice;
 
       group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (choice));
-      choice = gtk_radio_button_new_with_mnemonic (group, _("Connect as u_ser:"));
+      choice = gtk_radio_button_new_with_mnemonic (group, _("Registered U_ser"));
       gtk_box_pack_start (GTK_BOX (anon_box),
                           choice,
                           FALSE, FALSE, 0);
@@ -602,63 +629,42 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
                         G_CALLBACK (pw_dialog_anonymous_toggled), operation);
     }
 
-  rows = 0;
-
-  if (priv->ask_flags & G_ASK_PASSWORD_NEED_PASSWORD)
-    rows++;
-
-  if (priv->ask_flags & G_ASK_PASSWORD_NEED_USERNAME)
-    rows++;
-
-  if (priv->ask_flags &G_ASK_PASSWORD_NEED_DOMAIN)
-    rows++;
-
-  /* The table that holds the entries */
-  table = gtk_grid_new ();
-  gtk_grid_set_row_spacing (GTK_GRID (table), 6);
-  gtk_grid_set_column_spacing (GTK_GRID (table), 6);
-
-  if (can_anonymous)
-    gtk_widget_set_margin_left (table, 12);
-
-  gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
-  priv->entry_container = table;
-
-  rows = 0;
-
   priv->username_entry = NULL;
 
   if (priv->ask_flags & G_ASK_PASSWORD_NEED_USERNAME)
-    priv->username_entry = table_add_entry (table, rows++, _("_Username:"),
+    priv->username_entry = table_add_entry (operation, rows++, _("_Username"),
                                             default_user, operation);
 
   priv->domain_entry = NULL;
   if (priv->ask_flags & G_ASK_PASSWORD_NEED_DOMAIN)
-    priv->domain_entry = table_add_entry (table, rows++, _("_Domain:"),
+    priv->domain_entry = table_add_entry (operation, rows++, _("_Domain"),
                                           default_domain, operation);
 
   priv->password_entry = NULL;
   if (priv->ask_flags & G_ASK_PASSWORD_NEED_PASSWORD)
     {
-      priv->password_entry = table_add_entry (table, rows++, _("_Password:"),
+      priv->password_entry = table_add_entry (operation, rows++, _("_Password"),
                                               NULL, operation);
       gtk_entry_set_visibility (GTK_ENTRY (priv->password_entry), FALSE);
     }
 
    if (priv->ask_flags & G_ASK_PASSWORD_SAVING_SUPPORTED)
     {
-      GtkWidget    *choice;
       GtkWidget    *remember_box;
+      GtkWidget    *choice;
       GSList       *group;
       GPasswordSave password_save;
 
-      remember_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-      gtk_box_pack_start (GTK_BOX (vbox), remember_box,
-                          FALSE, FALSE, 0);
+      remember_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_grid_attach (GTK_GRID (grid), remember_box, 0, rows++, 2, 1);
+      priv->user_widgets = g_list_prepend (priv->user_widgets, remember_box);
+
+      label = gtk_label_new ("");
+      gtk_container_add (GTK_CONTAINER (remember_box), label);
 
       password_save = g_mount_operation_get_password_save (G_MOUNT_OPERATION (operation));
       priv->password_save = password_save;
-      
+
       choice = gtk_radio_button_new_with_mnemonic (NULL, _("Forget password _immediately"));
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (choice),
                                     password_save == G_PASSWORD_SAVE_NEVER);
