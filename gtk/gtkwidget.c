@@ -14138,5 +14138,8 @@ gtk_widget_insert_action_group (GtkWidget    *widget,
 
   muxer = _gtk_widget_get_action_muxer (widget);
 
-  g_action_muxer_insert (muxer, name, group);
+  if (group)
+    g_action_muxer_insert (muxer, name, group);
+  else
+    g_action_muxer_remove (muxer, name);
 }
