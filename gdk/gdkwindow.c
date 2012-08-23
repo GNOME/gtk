@@ -264,6 +264,42 @@ static const cairo_user_data_key_t gdk_window_cairo_key;
 
 G_DEFINE_ABSTRACT_TYPE (GdkWindow, gdk_window, G_TYPE_OBJECT)
 
+#ifdef DEBUG_WINDOW_PRINTING
+char *
+print_region (cairo_region_t *region)
+{
+  GString *s = g_string_new ("{");
+  if (cairo_region_is_empty (region))
+    {
+      g_string_append (s, "empty");
+    }
+  else
+    {
+      int num = cairo_region_num_rectangles (region);
+      cairo_rectangle_int_t r;
+
+      if (num == 1)
+	{
+	  cairo_region_get_rectangle (region, 0, &r);
+	  g_string_append_printf (s, "%dx%d @%d,%d", r.width, r.height, r.x, r.y);
+	}
+      else
+	{
+	  cairo_region_get_extents (region, &r);
+	  g_string_append_printf (s, "extent: %dx%d @%d,%d, details: ", r.width, r.height, r.x, r.y);
+	  for (int i = 0; i < num; i++)
+	    {
+	      g_string_append_printf (s, "[%dx%d @%d,%d]", r.width, r.height, r.x, r.y);
+	      if (i != num -1)
+		g_string_append (s, ", ");
+	    }
+	}
+    }
+  g_string_append (s, "}");
+  return g_string_free (s, FALSE);
+}
+#endif
+
 GType
 _gdk_paintable_get_type (void)
 {
@@ -9813,11 +9849,16 @@ proxy_button_event (GdkEvent *source_event,
 }
 
 #ifdef DEBUG_WINDOW_PRINTING
+
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
+
 static void
 gdk_window_print (GdkWindow *window,
 		  int indent)
 {
-  GdkRectangle r;
+  char *s;
   const char *window_types[] = {
     "root",
     "toplevel",
@@ -9856,11 +9897,8 @@ gdk_window_print (GdkWindow *window,
   g_print (" abs[%d,%d]",
 	   window->abs_x, window->abs_y);
 
-  cairo_region_get_extents (window->clip_region, &r);
-  if (cairo_region_is_empty (window->clip_region))
-    g_print (" clipbox[empty]");
-  else
-    g_print (" clipbox[%d,%d %dx%d]", r.x, r.y, r.width, r.height);
+  s = print_region (window->clip_region);
+  g_print (" clipbox[%s]", s);
 
   g_print ("\n");
 }
