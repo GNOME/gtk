@@ -2783,60 +2783,55 @@ gdk_cairo_create_for_impl (GdkWindow *window)
   return cr;
 }
 
-/* Ensure that all content related to this (sub)window is pushed to the
-   native region. If there is an active paint then that area is not
-   pushed, in order to not show partially finished double buffers. */
+/* This is called whenever something is drawing directly to the
+ * window, bypassing the double buffering. When this happens we
+ * need to mark any the currently drawn data in the double buffer
+ * as invalid to avoid later drawing it back over the directly
+ * rendered pixels. We also need to mark this region as "flushed"
+ * so that if we later try to paint on it double-buffered we need
+ * to read back the on-window pixels rather than relying on what
+ * is in the current double-buffer pixmap.
+ *
+ * Note that this doesn't correctly handle the case where the
+ * non-double buffered drawing uses transparency and relies on
+ * what the windows below it draws. A fix for that would require
+ * drawing the existing double-buffered background to the window,
+ * but that causes ugly flashes. Non-double buffered drawing is
+ * typically only used in old code or when the drawed widget
+ * already has a double-buffering layer, and in these cases the
+ * pixels are opaque anyway. If you need transparency, don't
+ * disable double buffering.
+ */
 static void
 gdk_window_flush_implicit_paint (GdkWindow *window)
 {
   GdkWindow *impl_window;
   GdkWindowPaint *paint;
   cairo_region_t *region;
-  GSList *list;
 
   impl_window = gdk_window_get_impl_window (window);
   if (impl_window->implicit_paint == NULL)
     return;
 
   paint = impl_window->implicit_paint;
-  region = cairo_region_copy (window->clip_region_with_children);
 
+  region = cairo_region_copy (window->clip_region_with_children);
   cairo_region_translate (region, window->abs_x, window->abs_y);
 
+  /* Anything in the whole flushed window that was drawn is now
+     considered unpainted, so that we don't push it back at the
+     end of the implicit paint overwriting the directly rendered
+     pixels. */
+  cairo_region_subtract (paint->region, region);
+
+  /* Save flushed area so we can read it back if we draw over it later */
   if (paint->flushed == NULL)
-    paint->flushed = cairo_region_copy (region);
+    paint->flushed = region;
   else
-    cairo_region_union (paint->flushed, region);
-
-  cairo_region_intersect (region, paint->region);
-
-  /* Don't flush active double buffers, as that may show partially done
-   * rendering */
-  for (list = window->paint_stack; list != NULL; list = list->next)
     {
-      GdkWindowPaint *tmp_paint = list->data;
-
-      cairo_region_subtract (region, tmp_paint->region);
+      cairo_region_union (paint->flushed, region);
+      cairo_region_destroy (region);
     }
-
-  if (!GDK_WINDOW_DESTROYED (window) && !cairo_region_is_empty (region))
-    {
-      cairo_t *cr;
-
-      /* Remove flushed region from the implicit paint */
-      cairo_region_subtract (paint->region, region);
-
-      /* Some regions are valid, push these to window now */
-      cr = gdk_cairo_create_for_impl (window);
-      gdk_cairo_region (cr, region);
-      cairo_clip (cr);
-      cairo_set_source_surface (cr, paint->surface, 0, 0);
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-    }
-
-  cairo_region_destroy (region);
 }
 
 /* Ends an implicit paint, paired with gdk_window_begin_implicit_paint returning TRUE */
