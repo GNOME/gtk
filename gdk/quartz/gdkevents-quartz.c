@@ -224,8 +224,11 @@ static guint32
 get_time_from_ns_event (NSEvent *event)
 {
   double time = [event timestamp];
-  
-  return time * 1000.0;
+
+  /* cast via double->uint64 conversion to make sure that it is
+   * wrapped on 32-bit machines when it overflows
+   */
+  return (guint32) (guint64) (time * 1000.0);
 }
 
 static int
