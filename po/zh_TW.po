@@ -7,10 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.3.11\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
-"2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-08-01 08:28+0000\n"
-"PO-Revision-Date: 2012-08-03 14:57+0800\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-08-23 15:39+0800\n"
+"PO-Revision-Date: 2012-08-22 20:05+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: <>\n"
 "Language: zh_TW\n"
@@ -773,8 +772,8 @@ msgid "Failed to look for applications online"
 msgstr "無法在線上尋找應用程式"
 
 #: ../gtk/gtkappchooserdialog.c:188
-msgid "Find applications online"
-msgstr "線上尋找應用程式"
+msgid "_Find applications online"
+msgstr "線上尋找應用程式(_F)"
 
 #: ../gtk/gtkappchooserdialog.c:247
 msgid "Could not run application"
@@ -843,7 +842,7 @@ msgstr "相關的應用程式"
 msgid "Other Applications"
 msgstr "其他的應用程式"
 
-#: ../gtk/gtkapplication.c:1529
+#: ../gtk/gtkapplication.c:1552
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -854,7 +853,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:335 ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkapplicationwindow.c:333 ../gtk/gtkprintoperation-unix.c:475
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "應用程式"
@@ -1016,7 +1015,7 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:450
+#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:449
 msgid "Pick a Color"
 msgstr "選取顏色"
 
@@ -1349,15 +1348,15 @@ msgstr "右(_R):"
 msgid "Paper Margins"
 msgstr "紙張邊界"
 
-#: ../gtk/gtkentry.c:8784 ../gtk/gtktextview.c:8262
+#: ../gtk/gtkentry.c:8848 ../gtk/gtktextview.c:8316
 msgid "Input _Methods"
 msgstr "輸入法(_M)"
 
-#: ../gtk/gtkentry.c:8798 ../gtk/gtktextview.c:8276
+#: ../gtk/gtkentry.c:8862 ../gtk/gtktextview.c:8330
 msgid "_Insert Unicode Control Character"
 msgstr "插入萬國碼控制字元(_I)"
 
-#: ../gtk/gtkentry.c:10272
+#: ../gtk/gtkentry.c:10336
 msgid "Caps Lock is on"
 msgstr "Caps Lock 已開啟"
 
@@ -1777,7 +1776,6 @@ msgstr ""
 
 #: ../gtk/gtk-launch.c:85
 #, c-format
-#| msgid "Error parsing option --gdk-debug"
 msgid "Error parsing commandline options: %s\n"
 msgstr "分析命令列選項時發生錯誤：%s\n"
 
@@ -1790,7 +1788,6 @@ msgstr "使用「%s --help」以獲得更多資訊。"
 #. means the user is calling gtk-launch without any argument.
 #: ../gtk/gtk-launch.c:98
 #, c-format
-#| msgid "Find applications online"
 msgid "%s: missing application name"
 msgstr "%s：缺少應用程式名稱"
 
@@ -1798,7 +1795,6 @@ msgstr "%s：缺少應用程式名稱"
 #. is the application name.
 #: ../gtk/gtk-launch.c:122
 #, c-format
-#| msgid "Could not run application"
 msgid "%s: no such application %s"
 msgstr "%s：沒有應用程式 %s"
 
@@ -1920,28 +1916,28 @@ msgstr "網域(_D):"
 msgid "_Password:"
 msgstr "密碼(_P):"
 
-#: ../gtk/gtkmountoperation.c:661
+#: ../gtk/gtkmountoperation.c:662
 msgid "Forget password _immediately"
 msgstr "立刻忘記密碼(_I)"
 
-#: ../gtk/gtkmountoperation.c:671
+#: ../gtk/gtkmountoperation.c:672
 msgid "Remember password until you _logout"
 msgstr "記憶密碼到登出之前(_L)"
 
-#: ../gtk/gtkmountoperation.c:681
+#: ../gtk/gtkmountoperation.c:682
 msgid "Remember _forever"
 msgstr "永遠記住密碼(_F)"
 
-#: ../gtk/gtkmountoperation.c:1070
+#: ../gtk/gtkmountoperation.c:1071
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "不明的應用程式（PID %d）"
 
-#: ../gtk/gtkmountoperation.c:1253
+#: ../gtk/gtkmountoperation.c:1254
 msgid "Unable to end process"
 msgstr "無法終止程序"
 
-#: ../gtk/gtkmountoperation.c:1290
+#: ../gtk/gtkmountoperation.c:1291
 msgid "_End Process"
 msgstr "終止程序(_E)"
 
@@ -3132,7 +3128,7 @@ msgstr "拉遠(_O)"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:342 ../gtk/gtkswitch.c:397 ../gtk/gtkswitch.c:591
+#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:586
 msgctxt "switch"
 msgid "ON"
 msgstr "開"
@@ -3140,7 +3136,7 @@ msgstr "開"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:350 ../gtk/gtkswitch.c:398 ../gtk/gtkswitch.c:620
+#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:615
 msgctxt "switch"
 msgid "OFF"
 msgstr "關"
