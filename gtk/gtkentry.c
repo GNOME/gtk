@@ -220,6 +220,7 @@ struct _GtkEntryPrivate
   guint         truncate_multiline      : 1;
   guint         cursor_handle_dragged   : 1;
   guint         selection_handle_dragged : 1;
+  guint         update_handles_on_focus : 1;
 };
 
 struct _EntryIconInfo
@@ -4026,7 +4027,14 @@ gtk_entry_button_press (GtkWidget      *widget,
   else if (event->button == GDK_BUTTON_PRIMARY)
     {
       gboolean have_selection = gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end);
+      gboolean is_touchscreen;
+      GdkDevice *source;
 
+      source = gdk_event_get_source_device ((GdkEvent *) event);
+      is_touchscreen = test_touchscreen ||
+        gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
+
+      priv->update_handles_on_focus = is_touchscreen;
       priv->select_words = FALSE;
       priv->select_lines = FALSE;
 
@@ -4105,13 +4113,9 @@ gtk_entry_button_press (GtkWidget      *widget,
 	    }
 	  else
             {
-              GdkDevice *source;
-
               gtk_editable_set_position (editable, tmp_pos);
-              source = gdk_event_get_source_device ((GdkEvent *) event);
 
-              if (test_touchscreen ||
-                  gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN)
+              if (is_touchscreen)
                 {
                   priv->cursor_handle_dragged = TRUE;
                   _gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
@@ -4547,6 +4551,10 @@ gtk_entry_focus_in (GtkWidget     *widget,
       gtk_entry_reset_blink_time (entry);
       gtk_entry_check_cursor_blink (entry);
     }
+
+  if (priv->update_handles_on_focus &&
+      gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), NULL, NULL))
+    _gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_SELECTION);
 
   return FALSE;
 }
