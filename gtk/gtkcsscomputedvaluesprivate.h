@@ -68,6 +68,7 @@ void                    _gtk_css_computed_values_compute_value        (GtkCssCom
 void                    _gtk_css_computed_values_set_value            (GtkCssComputedValues     *values,
                                                                        guint                     id,
                                                                        GtkCssValue              *value,
+                                                                       GtkCssDependencies        dependencies,
                                                                        GtkCssSection            *section);
                                                                         
 GtkCssValue *           _gtk_css_computed_values_get_value            (GtkCssComputedValues     *values,

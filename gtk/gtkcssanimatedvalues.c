@@ -251,6 +251,7 @@ _gtk_css_animated_values_new (GtkCssComputedValues *computed,
       _gtk_css_computed_values_set_value (GTK_CSS_COMPUTED_VALUES (values), 
                                           i,
                                           value,
+                                          0,
                                           _gtk_css_computed_values_get_section (computed, i));
     }
 

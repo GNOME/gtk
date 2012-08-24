@@ -108,11 +108,10 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
                                         GtkCssSection        *section)
 {
   GtkCssDependencies dependencies;
+  GtkCssValue *value;
 
   g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-  gtk_css_computed_values_ensure_array (values, id + 1);
 
   /* http://www.w3.org/TR/css3-cascade/#cascade
    * Then, for every element, the value for each property can be found
@@ -131,27 +130,11 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
   else
     _gtk_css_value_ref (specified);
 
-  g_ptr_array_index (values->values, id) = _gtk_css_value_compute (specified, id, context, &dependencies);
+  value = _gtk_css_value_compute (specified, id, context, &dependencies);
 
-  if (dependencies & (GTK_CSS_DEPENDS_ON_PARENT | GTK_CSS_EQUALS_PARENT))
-    values->depends_on_parent = _gtk_bitmask_set (values->depends_on_parent, id, TRUE);
-  if (dependencies & (GTK_CSS_EQUALS_PARENT))
-    values->equals_parent = _gtk_bitmask_set (values->equals_parent, id, TRUE);
-  if (dependencies & (GTK_CSS_DEPENDS_ON_COLOR))
-    values->depends_on_color = _gtk_bitmask_set (values->depends_on_color, id, TRUE);
-  if (dependencies & (GTK_CSS_DEPENDS_ON_FONT_SIZE))
-    values->depends_on_font_size = _gtk_bitmask_set (values->depends_on_font_size, id, TRUE);
+  _gtk_css_computed_values_set_value (values, id, value, dependencies, section);
 
-  if (section)
-    {
-      if (values->sections == NULL)
-        values->sections = g_ptr_array_new_with_free_func (maybe_unref_section);
-      if (values->sections->len <= id)
-        g_ptr_array_set_size (values->sections, id + 1);
-
-      g_ptr_array_index (values->sections, id) = gtk_css_section_ref (section);
-    }
-  
+  _gtk_css_value_unref (value);
   _gtk_css_value_unref (specified);
 }
                                     
@@ -159,6 +142,7 @@ void
 _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
                                     guint                 id,
                                     GtkCssValue          *value,
+                                    GtkCssDependencies    dependencies,
                                     GtkCssSection        *section)
 {
   g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
@@ -168,6 +152,15 @@ _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
   if (g_ptr_array_index (values->values, id))
     _gtk_css_value_unref (g_ptr_array_index (values->values, id));
   g_ptr_array_index (values->values, id) = _gtk_css_value_ref (value);
+
+  if (dependencies & (GTK_CSS_DEPENDS_ON_PARENT | GTK_CSS_EQUALS_PARENT))
+    values->depends_on_parent = _gtk_bitmask_set (values->depends_on_parent, id, TRUE);
+  if (dependencies & (GTK_CSS_EQUALS_PARENT))
+    values->equals_parent = _gtk_bitmask_set (values->equals_parent, id, TRUE);
+  if (dependencies & (GTK_CSS_DEPENDS_ON_COLOR))
+    values->depends_on_color = _gtk_bitmask_set (values->depends_on_color, id, TRUE);
+  if (dependencies & (GTK_CSS_DEPENDS_ON_FONT_SIZE))
+    values->depends_on_font_size = _gtk_bitmask_set (values->depends_on_font_size, id, TRUE);
 
   if (section)
     {

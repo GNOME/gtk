@@ -51,7 +51,8 @@ gtk_css_transition_set_values (GtkStyleAnimation    *animation,
         value = _gtk_css_value_ref (transition->end);
     }
 
-  _gtk_css_computed_values_set_value (values, transition->property, value, NULL);
+  /* XXX: Is using 0 correct here? */
+  _gtk_css_computed_values_set_value (values, transition->property, value, 0, NULL);
   _gtk_css_value_unref (value);
 
   return _gtk_bitmask_set (changed, transition->property, TRUE);
