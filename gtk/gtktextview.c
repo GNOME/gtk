@@ -234,6 +234,7 @@ struct _GtkTextViewPrivate
 
   guint cursor_handle_dragged : 1;
   guint selection_handle_dragged : 1;
+  guint update_handles_on_focus : 1
 };
 
 struct _GtkTextPendingScroll
@@ -4789,7 +4790,15 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
   if (event->type == GDK_BUTTON_PRESS)
     {
+      GdkDevice *device;
+      gboolean is_touchscreen;
+
       gtk_text_view_reset_im_context (text_view);
+
+      device = gdk_event_get_source_device ((GdkEvent *) event);
+      is_touchscreen = test_touchscreen ||
+        gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
+      priv->update_handles_on_focus = is_touchscreen;
 
       if (gdk_event_triggers_context_menu ((GdkEvent *) event))
         {
@@ -4824,14 +4833,10 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
           else
             {
               GtkTextHandleMode mode;
-              GdkDevice *device;
 
               gtk_text_view_start_selection_drag (text_view, &iter, event);
-              device = gdk_event_get_source_device ((GdkEvent *) event);
 
-              if (priv->editable &&
-                  (test_touchscreen ||
-                   gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN))
+              if (priv->editable && is_touchscreen)
                 mode = GTK_TEXT_HANDLE_MODE_CURSOR;
               else
                 mode = GTK_TEXT_HANDLE_MODE_NONE;
@@ -4979,6 +4984,10 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
       priv->need_im_reset = TRUE;
       gtk_im_context_focus_in (priv->im_context);
     }
+
+  if (priv->update_handles_on_focus &&
+      gtk_text_buffer_get_selection_bounds (get_buffer (text_view), NULL, NULL))
+    _gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
 
   return FALSE;
 }
