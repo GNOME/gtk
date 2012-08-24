@@ -4338,11 +4338,14 @@ gtk_entry_motion_notify (GtkWidget      *widget,
     {
       GdkInputSource input_source;
       GdkDevice *source;
+      guint length;
+
+      length = gtk_entry_buffer_get_length (get_buffer (entry));
 
       if (event->y < 0)
 	tmp_pos = 0;
       else if (event->y >= gdk_window_get_height (priv->text_area))
-	tmp_pos = gtk_entry_buffer_get_length (get_buffer (entry));
+	tmp_pos = length;
       else
 	tmp_pos = gtk_entry_find_position (entry, event->x + priv->scroll_offset);
 
@@ -4389,7 +4392,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
            * so handles don't get inverted.
            */
           if (input_source == GDK_SOURCE_TOUCHSCREEN)
-            pos = MAX (gtk_entry_move_backward_word (entry, bound, TRUE), pos);
+            pos = MIN (MAX (pos, gtk_entry_move_backward_word (entry, bound, TRUE)), length);
 
 	  gtk_entry_set_positions (entry, pos, bound);
 	}
@@ -4399,7 +4402,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
            * so handles don't get inverted.
            */
           if (input_source == GDK_SOURCE_TOUCHSCREEN)
-            tmp_pos = MAX (priv->selection_bound + 1, tmp_pos);
+            tmp_pos = MIN (MAX (tmp_pos, priv->selection_bound + 1), length);
           gtk_entry_set_positions (entry, tmp_pos, -1);
         }
 
