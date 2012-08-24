@@ -43,17 +43,17 @@ gtk_css_value_position_compute (GtkCssValue        *position,
                                 GtkCssDependencies *dependencies)
 {
   GtkCssValue *x, *y;
+  GtkCssDependencies x_deps, y_deps;
 
-  x = _gtk_css_value_compute (position->x, property_id, context, NULL);
-  y = _gtk_css_value_compute (position->y, property_id, context, NULL);
+  x = _gtk_css_value_compute (position->x, property_id, context, &x_deps);
+  y = _gtk_css_value_compute (position->y, property_id, context, &y_deps);
+  *dependencies = _gtk_css_dependencies_union (x_deps, y_deps);
   if (x == position->x && y == position->y)
     {
       _gtk_css_value_unref (x);
       _gtk_css_value_unref (y);
       return _gtk_css_value_ref (position);
     }
-
-  *dependencies = GTK_CSS_DEPENDS_ON_EVERYTHING;
 
   return _gtk_css_position_value_new (x, y);
 }

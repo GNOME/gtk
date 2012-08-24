@@ -170,8 +170,10 @@ typedef enum /*< skip >*/ {
   GTK_CSS_MS,
 } GtkCssUnit;
 
-GtkCssChange    _gtk_css_change_for_sibling                      (GtkCssChange       match);
-GtkCssChange    _gtk_css_change_for_child                        (GtkCssChange       match);
+GtkCssChange            _gtk_css_change_for_sibling              (GtkCssChange       match);
+GtkCssChange            _gtk_css_change_for_child                (GtkCssChange       match);
+GtkCssDependencies      _gtk_css_dependencies_union              (GtkCssDependencies first,
+                                                                  GtkCssDependencies second);
 
 
 G_END_DECLS
