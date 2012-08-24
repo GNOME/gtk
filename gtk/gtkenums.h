@@ -1010,6 +1010,8 @@ typedef enum
  *     character of each word
  * @GTK_INPUT_HINT_UPPERCASE_SENTENCES: Suggest to capitalize the
  *     first word of each sentence
+ * @GTK_INPUT_HINT_INHIBIT_OSK: Suggest to not show an onscreen keyboard
+ *     (e.g for a calculator that already has all the keys).
  *
  * Describes hints that might be taken into account by input methods
  * or applications. Note that input methods may already tailor their
@@ -1032,7 +1034,8 @@ typedef enum
   GTK_INPUT_HINT_LOWERCASE           = 1 << 3,
   GTK_INPUT_HINT_UPPERCASE_CHARS     = 1 << 4,
   GTK_INPUT_HINT_UPPERCASE_WORDS     = 1 << 5,
-  GTK_INPUT_HINT_UPPERCASE_SENTENCES = 1 << 6
+  GTK_INPUT_HINT_UPPERCASE_SENTENCES = 1 << 6,
+  GTK_INPUT_HINT_INHIBIT_OSK         = 1 << 7
 } GtkInputHints;
 
 #endif /* __GTK_ENUMS_H__ */
