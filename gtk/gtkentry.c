@@ -6193,29 +6193,37 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
 
   if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR)
     {
-      gint max_pos;
-
       priv->cursor_handle_dragged = TRUE;
 
-      if (priv->select_words)
-        max_pos = gtk_entry_move_forward_word (entry, priv->selection_bound, TRUE);
-      else
-        max_pos = MAX (priv->selection_bound + 1, 0);
+      if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
+        {
+          gint max_pos;
 
-      cursor_pos = MAX (tmp_pos, max_pos);
+          if (priv->select_words)
+            max_pos = gtk_entry_move_forward_word (entry, priv->selection_bound, TRUE);
+          else
+            max_pos = MAX (priv->selection_bound + 1, 0);
+
+          cursor_pos = MAX (tmp_pos, max_pos);
+        }
+      else
+        cursor_pos = tmp_pos;
     }
   else
     {
-      gint min_pos;
-
       priv->selection_handle_dragged = TRUE;
 
-      if (priv->select_words)
-        min_pos = gtk_entry_move_backward_word (entry, priv->current_pos, TRUE);
-      else
-        min_pos = priv->current_pos - 1;
+      if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
+        {
+          gint min_pos;
 
-      selection_bound_pos = MIN (tmp_pos, min_pos);
+          if (priv->select_words)
+            min_pos = gtk_entry_move_backward_word (entry, priv->current_pos, TRUE);
+          else
+            min_pos = priv->current_pos - 1;
+
+          selection_bound_pos = MIN (tmp_pos, min_pos);
+        }
     }
 
   if (cursor_pos != priv->current_pos ||
