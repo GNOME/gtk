@@ -4311,9 +4311,6 @@ gtk_entry_motion_notify (GtkWidget      *widget,
           gchar *text = NULL;
           cairo_surface_t *surface;
 
-          _gtk_text_handle_set_mode (priv->text_handle,
-                                     GTK_TEXT_HANDLE_MODE_NONE);
-
           gtk_target_list_add_text_targets (target_list, 0);
 
           text = _gtk_entry_get_selected_text (entry);
