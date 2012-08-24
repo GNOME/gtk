@@ -319,6 +319,7 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
+static gboolean test_touchscreen = FALSE;
 
 typedef enum {
   CURSOR_STANDARD,
@@ -1950,6 +1951,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                G_PARAM_DEPRECATED));
 
   g_type_class_add_private (gobject_class, sizeof (GtkEntryPrivate));
+  test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN_FEATURES") != NULL;
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
 }
@@ -4108,7 +4110,8 @@ gtk_entry_button_press (GtkWidget      *widget,
               gtk_editable_set_position (editable, tmp_pos);
               source = gdk_event_get_source_device ((GdkEvent *) event);
 
-              if (gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN)
+              if (test_touchscreen ||
+                  gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN)
                 {
                   priv->cursor_handle_dragged = TRUE;
                   _gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
@@ -4209,7 +4212,8 @@ gtk_entry_button_release (GtkWidget      *widget,
 
       source = gdk_event_get_source_device ((GdkEvent *) event);
 
-      if (gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN)
+      if (test_touchscreen ||
+          gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN)
         _gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
 
       priv->in_drag = 0;
@@ -4391,7 +4395,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
           /* Don't allow backwards selection on touch devices,
            * so handles don't get inverted.
            */
-          if (input_source == GDK_SOURCE_TOUCHSCREEN)
+          if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
             pos = MIN (MAX (pos, gtk_entry_move_backward_word (entry, bound, TRUE)), length);
 
 	  gtk_entry_set_positions (entry, pos, bound);
@@ -4401,13 +4405,13 @@ gtk_entry_motion_notify (GtkWidget      *widget,
           /* Don't allow backwards selection on touch devices,
            * so handles don't get inverted.
            */
-          if (input_source == GDK_SOURCE_TOUCHSCREEN)
+          if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
             tmp_pos = MIN (MAX (tmp_pos, priv->selection_bound + 1), length);
           gtk_entry_set_positions (entry, tmp_pos, -1);
         }
 
       /* Update touch handles' position */
-      if (input_source == GDK_SOURCE_TOUCHSCREEN)
+      if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
         _gtk_entry_update_handles (entry,
                                    (priv->current_pos == priv->selection_bound) ?
                                    GTK_TEXT_HANDLE_MODE_CURSOR :

@@ -575,6 +575,7 @@ static gint           text_window_get_height      (GtkTextWindow     *win);
 
 
 static guint signals[LAST_SIGNAL] = { 0 };
+static gboolean test_touchscreen = FALSE;
 
 G_DEFINE_TYPE_WITH_CODE (GtkTextView, gtk_text_view, GTK_TYPE_CONTAINER,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
@@ -1406,6 +1407,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   g_type_class_add_private (gobject_class, sizeof (GtkTextViewPrivate));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_VIEW_ACCESSIBLE);
+  test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN_FEATURES") != NULL;
 }
 
 static void
@@ -4828,7 +4830,8 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
               device = gdk_event_get_source_device ((GdkEvent *) event);
 
               if (priv->editable &&
-                  gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN)
+                  (test_touchscreen ||
+                   gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN))
                 mode = GTK_TEXT_HANDLE_MODE_CURSOR;
               else
                 mode = GTK_TEXT_HANDLE_MODE_NONE;
@@ -4922,7 +4925,8 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
           device = gdk_event_get_source_device ((GdkEvent *) event);
 
           if (priv->editable &&
-              gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN)
+              (test_touchscreen ||
+               gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN))
             mode = GTK_TEXT_HANDLE_MODE_CURSOR;
           else
             mode = GTK_TEXT_HANDLE_MODE_NONE;
@@ -6476,7 +6480,7 @@ move_mark_to_pointer_and_scroll (GtkTextView    *text_view,
   buffer = get_buffer (text_view);
   get_iter_at_pointer (text_view, device, &newplace, NULL, NULL);
 
-  if (source == GDK_SOURCE_TOUCHSCREEN)
+  if (test_touchscreen || source == GDK_SOURCE_TOUCHSCREEN)
     {
       GtkTextIter min;
 
@@ -6714,7 +6718,7 @@ selection_motion_event_handler (GtkTextView    *text_view,
       start = cursor;
       extend_selection (text_view, data->granularity, &start, &end);
 
-      if (input_source == GDK_SOURCE_TOUCHSCREEN)
+      if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
         {
           /* Don't allow backwards selection on touch devices,
            * so handles don't get inverted.
@@ -6751,7 +6755,7 @@ selection_motion_event_handler (GtkTextView    *text_view,
   text_view->priv->scroll_timeout =
     gdk_threads_add_timeout (50, selection_scan_timeout, text_view);
 
-  if (input_source == GDK_SOURCE_TOUCHSCREEN)
+  if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
     _gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
 
   return TRUE;
