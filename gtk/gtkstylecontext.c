@@ -890,30 +890,6 @@ gtk_style_context_impl_get_property (GObject    *object,
     }
 }
 
-static void
-build_properties (GtkStyleContext *context,
-                  StyleData       *style_data,
-                  GtkWidgetPath   *path,
-                  GtkStateFlags    state)
-{
-  GtkStyleContextPrivate *priv;
-  GtkCssMatcher matcher;
-  GtkCssLookup *lookup;
-
-  priv = context->priv;
-
-  lookup = _gtk_css_lookup_new (NULL);
-
-  if (_gtk_css_matcher_init (&matcher, path, state))
-    _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                        &matcher,
-                                        lookup);
-
-  style_data->store = _gtk_css_computed_values_new ();
-  _gtk_css_lookup_resolve (lookup, context, style_data->store);
-  _gtk_css_lookup_free (lookup);
-}
-
 static GtkWidgetPath *
 create_query_path (GtkStyleContext *context)
 {
@@ -952,11 +928,37 @@ create_query_path (GtkStyleContext *context)
   return path;
 }
 
+static void
+build_properties (GtkStyleContext      *context,
+                  GtkCssComputedValues *values,
+                  GtkStateFlags         state,
+                  const GtkBitmask     *relevant_changes)
+{
+  GtkStyleContextPrivate *priv;
+  GtkCssMatcher matcher;
+  GtkWidgetPath *path;
+  GtkCssLookup *lookup;
+
+  priv = context->priv;
+
+  path = create_query_path (context);
+  lookup = _gtk_css_lookup_new (relevant_changes);
+
+  if (_gtk_css_matcher_init (&matcher, path, state))
+    _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                        &matcher,
+                                        lookup);
+
+  _gtk_css_lookup_resolve (lookup, context, values);
+
+  _gtk_css_lookup_free (lookup);
+  gtk_widget_path_free (path);
+}
+
 static StyleData *
 style_data_lookup (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GtkWidgetPath *path;
   GtkStyleInfo *info;
   StyleData *data;
 
@@ -976,17 +978,14 @@ style_data_lookup (GtkStyleContext *context)
       return data;
     }
 
-  path = create_query_path (context);
-
   data = style_data_new ();
+  data->store = _gtk_css_computed_values_new ();
   style_info_set_data (info, data);
   g_hash_table_insert (priv->style_data,
                        style_info_copy (info),
                        data);
 
-  build_properties (context, data, path, info->state_flags);
-
-  gtk_widget_path_free (path);
+  build_properties (context, data->store, info->state_flags, NULL);
 
   return data;
 }
