@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-22 23:48+0200\n"
-"PO-Revision-Date: 2012-08-22 23:49+0200\n"
+"POT-Creation-Date: 2012-08-25 00:29+0200\n"
+"PO-Revision-Date: 2012-08-25 00:30+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1913,52 +1913,56 @@ msgstr "Opcje biblioteki GTK+"
 msgid "Show GTK+ Options"
 msgstr "Wyświetla opcje biblioteki GTK+"
 
-#: ../gtk/gtkmountoperation.c:518
+#: ../gtk/gtkmountoperation.c:532
 msgid "Co_nnect"
 msgstr "P_ołącz"
 
-#: ../gtk/gtkmountoperation.c:588
-msgid "Connect _anonymously"
-msgstr "Połączenie _anonimowe"
+#: ../gtk/gtkmountoperation.c:606
+msgid "Connect As"
+msgstr "Połączenie jako użytkownik"
 
-#: ../gtk/gtkmountoperation.c:597
-msgid "Connect as u_ser:"
-msgstr "Połączenie jako _użytkownik:"
+#: ../gtk/gtkmountoperation.c:615
+msgid "_Anonymous"
+msgstr "_Anonimowy"
 
-#: ../gtk/gtkmountoperation.c:632
-msgid "_Username:"
-msgstr "_Nazwa użytkownika:"
+#: ../gtk/gtkmountoperation.c:624
+msgid "Registered U_ser"
+msgstr "_Zarejestrowany"
 
-#: ../gtk/gtkmountoperation.c:637
-msgid "_Domain:"
-msgstr "_Domena:"
+#: ../gtk/gtkmountoperation.c:635
+msgid "_Username"
+msgstr "_Nazwa użytkownika"
 
-#: ../gtk/gtkmountoperation.c:643
-msgid "_Password:"
-msgstr "_Hasło:"
+#: ../gtk/gtkmountoperation.c:640
+msgid "_Domain"
+msgstr "_Domena"
 
-#: ../gtk/gtkmountoperation.c:662
+#: ../gtk/gtkmountoperation.c:646
+msgid "_Password"
+msgstr "_Hasło"
+
+#: ../gtk/gtkmountoperation.c:668
 msgid "Forget password _immediately"
 msgstr "_Natychmiastowe usunięcie hasła"
 
-#: ../gtk/gtkmountoperation.c:672
+#: ../gtk/gtkmountoperation.c:678
 msgid "Remember password until you _logout"
 msgstr "_Zapamiętanie hasła do wylogowania"
 
-#: ../gtk/gtkmountoperation.c:682
+#: ../gtk/gtkmountoperation.c:688
 msgid "Remember _forever"
 msgstr "Z_apamiętanie na stałe"
 
-#: ../gtk/gtkmountoperation.c:1071
+#: ../gtk/gtkmountoperation.c:1077
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Nieznany program (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1254
+#: ../gtk/gtkmountoperation.c:1260
 msgid "Unable to end process"
 msgstr "Nie można zakończyć procesu"
 
-#: ../gtk/gtkmountoperation.c:1291
+#: ../gtk/gtkmountoperation.c:1297
 msgid "_End Process"
 msgstr "_Zakończ proces"
 
