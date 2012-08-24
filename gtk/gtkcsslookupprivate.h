@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkCssLookup GtkCssLookup;
 
-GtkCssLookup *          _gtk_css_lookup_new                     (void);
+GtkCssLookup *          _gtk_css_lookup_new                     (const GtkBitmask   *relevant);
 void                    _gtk_css_lookup_free                    (GtkCssLookup       *lookup);
 
 const GtkBitmask *      _gtk_css_lookup_get_missing             (const GtkCssLookup *lookup);

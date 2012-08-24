@@ -36,14 +36,22 @@ struct _GtkCssLookup {
 };
 
 GtkCssLookup *
-_gtk_css_lookup_new (void)
+_gtk_css_lookup_new (const GtkBitmask *relevant)
 {
   GtkCssLookup *lookup;
   guint n = _gtk_css_style_property_get_n_properties ();
 
   lookup = g_malloc0 (sizeof (GtkCssLookup) + sizeof (GtkCssLookupValue) * n);
-  lookup->missing = _gtk_bitmask_new ();
-  lookup->missing = _gtk_bitmask_invert_range (lookup->missing, 0, n);
+
+  if (relevant)
+    {
+      lookup->missing = _gtk_bitmask_copy (relevant);
+    }
+  else
+    {
+      lookup->missing = _gtk_bitmask_new ();
+      lookup->missing = _gtk_bitmask_invert_range (lookup->missing, 0, n);
+    }
 
   return lookup;
 }
@@ -169,11 +177,13 @@ _gtk_css_lookup_resolve (GtkCssLookup         *lookup,
                                             lookup->values[i].computed,
                                             0,
                                             lookup->values[i].section);
-      else
+      else if (lookup->values[i].value ||
+               _gtk_bitmask_get (lookup->missing, i))
         _gtk_css_computed_values_compute_value (values,
                                                 context,
                                                 i,
                                                 lookup->values[i].value,
                                                 lookup->values[i].section);
+      /* else not a relevant property */
     }
 }

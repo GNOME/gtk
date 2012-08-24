@@ -902,7 +902,7 @@ build_properties (GtkStyleContext *context,
 
   priv = context->priv;
 
-  lookup = _gtk_css_lookup_new ();
+  lookup = _gtk_css_lookup_new (NULL);
 
   if (_gtk_css_matcher_init (&matcher, path, state))
     _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
