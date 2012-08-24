@@ -3071,6 +3071,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
                              const GtkBitmask *parent_changes)
 {
   GtkStyleContextPrivate *priv;
+  GtkStyleInfo *info;
+  StyleData *current;
   GtkBitmask *changes;
   GSList *list;
 
@@ -3095,23 +3097,22 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_NO_CSS_CACHE))
     change = GTK_CSS_CHANGE_ANY;
 
-  if (!priv->invalid && change == 0)
+  if (!priv->invalid && change == 0 && _gtk_bitmask_is_empty (parent_changes))
     return;
 
   priv->pending_changes = 0;
   gtk_style_context_set_invalid (context, FALSE);
 
+  info = priv->info;
+  if (info->data)
+    current = style_data_ref (info->data);
+  else
+    current = NULL;
+
   /* Try to avoid invalidating if we can */
-  if (gtk_style_context_needs_full_revalidate (context, change))
+  if (current == NULL ||
+      gtk_style_context_needs_full_revalidate (context, change))
     {
-      GtkStyleInfo *info = priv->info;
-      StyleData *current;
-
-      if (info->data)
-        current = style_data_ref (info->data);
-      else
-        current = NULL;
-
       if ((priv->relevant_changes & change) & ~GTK_STYLE_CONTEXT_CACHED_CHANGE)
         gtk_style_context_clear_cache (context);
       else
@@ -3137,7 +3138,14 @@ _gtk_style_context_validate (GtkStyleContext  *context,
         }
     }
   else
-    changes = _gtk_bitmask_new ();
+    {
+      changes = _gtk_bitmask_copy (parent_changes);
+      changes = _gtk_bitmask_intersect (changes, current->store->depends_on_parent);
+      if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_COLOR))
+        changes = _gtk_bitmask_union (changes, current->store->depends_on_color);
+      if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_FONT_SIZE))
+        changes = _gtk_bitmask_union (changes, current->store->depends_on_font_size);
+    }
 
   if (change & GTK_CSS_CHANGE_ANIMATE &&
       gtk_style_context_is_animating (context))
