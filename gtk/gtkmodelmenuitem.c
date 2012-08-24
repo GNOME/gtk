@@ -24,6 +24,7 @@
 #include "gtkaccelmapprivate.h"
 #include "gtkactionhelper.h"
 #include "gtkmodelmenu.h"
+#include "gtkwidgetprivate.h"
 
 struct _GtkModelMenuItem
 {
@@ -81,6 +82,28 @@ gtk_actionable_set_namespaced_action_name (GtkActionable *actionable,
 }
 
 static void
+gtk_model_menu_item_submenu_shown (GtkWidget *widget,
+                                   gpointer   user_data)
+{
+  const gchar *action_name = user_data;
+  GActionMuxer *muxer;
+
+  muxer = _gtk_widget_get_action_muxer (widget);
+  g_action_group_change_action_state (G_ACTION_GROUP (muxer), action_name, g_variant_new_boolean (TRUE));
+}
+
+static void
+gtk_model_menu_item_submenu_hidden (GtkWidget *widget,
+                                    gpointer   user_data)
+{
+  const gchar *action_name = user_data;
+  GActionMuxer *muxer;
+
+  muxer = _gtk_widget_get_action_muxer (widget);
+  g_action_group_change_action_state (G_ACTION_GROUP (muxer), action_name, g_variant_new_boolean (FALSE));
+}
+
+static void
 gtk_model_menu_item_setup (GtkModelMenuItem  *item,
                            GMenuModel        *model,
                            gint               item_index,
@@ -128,6 +151,28 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
 
       else if (g_str_equal (key, "target"))
         gtk_actionable_set_action_target_value (GTK_ACTIONABLE (item), value);
+
+      else if (g_str_equal (key, "submenu-action") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+        {
+          GtkWidget *submenu;
+
+          submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (item));
+
+          if (submenu != NULL)
+            {
+              const gchar *action = g_variant_get_string (value, NULL);
+              gchar *full_action;
+
+              if (action_namespace)
+                full_action = g_strjoin (".", action_namespace, action, NULL);
+              else
+                full_action = g_strdup (action);
+
+              g_object_set_data_full (G_OBJECT (submenu), "gtkmodelmenu-visibility-action", full_action, g_free);
+              g_signal_connect (submenu, "show", G_CALLBACK (gtk_model_menu_item_submenu_shown), full_action);
+              g_signal_connect (submenu, "hide", G_CALLBACK (gtk_model_menu_item_submenu_hidden), full_action);
+            }
+        }
 
       g_variant_unref (value);
     }
