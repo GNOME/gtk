@@ -64,10 +64,62 @@ gdk_quartz_event_get_nsevent (GdkEvent *event)
   return ((GdkEventPrivate *) event)->windowing_data;
 }
 
+static void
+gdk_quartz_ns_notification_callback (CFNotificationCenterRef  center,
+                                     void                    *observer,
+                                     CFStringRef              name,
+                                     const void              *object,
+                                     CFDictionaryRef          userInfo)
+{
+  GdkEvent new_event;
+
+  new_event.type = GDK_SETTING;
+  new_event.setting.window = gdk_screen_get_root_window (_gdk_screen);
+  new_event.setting.send_event = FALSE;
+  new_event.setting.action = GDK_SETTING_ACTION_CHANGED;
+  new_event.setting.name = NULL;
+
+  /* Translate name */
+  if (CFStringCompare (name,
+                       CFSTR("AppleNoRedisplayAppearancePreferenceChanged"),
+                       0) == kCFCompareEqualTo)
+    new_event.setting.name = "gtk-primary-button-warps-slider";
+
+  if (!new_event.setting.name)
+    return;
+
+  gdk_event_put (&new_event);
+}
+
+static void
+gdk_quartz_events_init_notifications (void)
+{
+  static gboolean notifications_initialized = FALSE;
+
+  if (notifications_initialized)
+    return;
+  notifications_initialized = TRUE;
+
+  /* Initialize any handlers for notifications we want to push to GTK
+   * through GdkEventSettings.
+   */
+
+  /* This is an undocumented *distributed* notification to listen for changes
+   * in scrollbar jump behavior. It is used by LibreOffice and WebKit as well.
+   */
+  CFNotificationCenterAddObserver (CFNotificationCenterGetDistributedCenter (),
+                                   NULL,
+                                   &gdk_quartz_ns_notification_callback,
+                                   CFSTR ("AppleNoRedisplayAppearancePreferenceChanged"),
+                                   NULL,
+                                   CFNotificationSuspensionBehaviorDeliverImmediately);
+}
+
 void
 _gdk_events_init (void)
 {
   _gdk_quartz_event_loop_init ();
+  gdk_quartz_events_init_notifications ();
 
   current_keyboard_window = g_object_ref (_gdk_root);
 }
@@ -1560,6 +1612,19 @@ gdk_screen_get_setting (GdkScreen   *screen,
       str = g_strdup_printf ("%s 12", [name UTF8String]);
       g_value_set_string (value, str);
       g_free (str);
+
+      GDK_QUARTZ_RELEASE_POOL;
+
+      return TRUE;
+    }
+  else if (strcmp (name, "gtk-primary-button-warps-slider") == 0)
+    {
+      GDK_QUARTZ_ALLOC_POOL;
+
+      BOOL setting = [[NSUserDefaults standardUserDefaults] boolForKey:@"AppleScrollerPagingBehavior"];
+
+      /* If the Apple property is YES, it means "warp" */
+      g_value_set_boolean (value, setting == YES);
 
       GDK_QUARTZ_RELEASE_POOL;
 

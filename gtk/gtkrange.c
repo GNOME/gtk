@@ -532,12 +532,6 @@ gtk_range_class_init (GtkRangeClass *class)
 							     G_MAXINT,
 							     0,
 							     GTK_PARAM_READABLE));
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("primary-button-warps-slider",
-                                                                 P_("Primary button warps slider"),
-                                                                 P_("Whether a primary click on the trough should warp the slider into position"),
-                                                                 FALSE,
-                                                                 GTK_PARAM_READABLE));
 
   /**
    * GtkRange:activate-slider:
@@ -2331,9 +2325,9 @@ gtk_range_button_press (GtkWidget      *widget,
   if (gtk_range_update_mouse_location (range))
     gtk_widget_queue_draw (widget);
 
-  gtk_widget_style_get (widget,
-                        "primary-button-warps-slider", &primary_warps,
-                        NULL);
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-primary-button-warps-slider", &primary_warps,
+                NULL);
   if (primary_warps)
     {
       warp_button = 1;
