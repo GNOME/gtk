@@ -2522,6 +2522,8 @@ gtk_range_button_press (GtkWidget      *widget,
   GtkRangePrivate *priv = range->priv;
   GdkDevice *device, *source_device;
   GdkInputSource source;
+  gboolean primary_warps;
+  gint page_increment_button, warp_button;
 
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
@@ -2540,6 +2542,20 @@ gtk_range_button_press (GtkWidget      *widget,
   if (gtk_range_update_mouse_location (range))
     gtk_widget_queue_draw (widget);
 
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-primary-button-warps-slider", &primary_warps,
+                NULL);
+  if (primary_warps)
+    {
+      warp_button = GDK_BUTTON_PRIMARY;
+      page_increment_button = GDK_BUTTON_SECONDARY;
+    }
+  else
+    {
+      warp_button = GDK_BUTTON_MIDDLE;
+      page_increment_button = GDK_BUTTON_PRIMARY;
+    }
+
   if (priv->mouse_location == MOUSE_SLIDER &&
       gdk_event_triggers_context_menu ((GdkEvent *)event))
     {
@@ -2552,7 +2568,7 @@ gtk_range_button_press (GtkWidget      *widget,
 
   if (source != GDK_SOURCE_TOUCHSCREEN &&
       priv->mouse_location == MOUSE_TROUGH &&
-      event->button == GDK_BUTTON_SECONDARY)
+      event->button == page_increment_button)
     {
       /* button 2 steps by page increment, as with button 2 on a stepper
        */
@@ -2603,7 +2619,7 @@ gtk_range_button_press (GtkWidget      *widget,
     }
   else if ((priv->mouse_location == MOUSE_TROUGH &&
             (source == GDK_SOURCE_TOUCHSCREEN ||
-             event->button == GDK_BUTTON_PRIMARY)) ||
+             event->button == warp_button)) ||
            priv->mouse_location == MOUSE_SLIDER)
     {
       gboolean need_value_update = FALSE;

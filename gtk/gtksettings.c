@@ -193,6 +193,7 @@ enum {
   PROP_TOOLBAR_STYLE,
   PROP_TOOLBAR_ICON_SIZE,
   PROP_AUTO_MNEMONICS,
+  PROP_PRIMARY_BUTTON_WARPS_SLIDER,
   PROP_VISIBLE_FOCUS,
   PROP_APPLICATION_PREFER_DARK_THEME,
   PROP_BUTTON_IMAGES,
@@ -1143,6 +1144,23 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_AUTO_MNEMONICS);
+
+  /**
+   * GtkSettings:gtk-primary-button-warps-slider
+   *
+   * Whether a click in a #GtkRange trough should scroll to the click position or
+   * scroll by a single page in the respective direction.
+   *
+   * Since: 2.24
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-primary-button-warps-slider",
+                                                                   P_("Primary button warps slider"),
+                                                                   P_("Whether a primary click on the trough should warp the slider into position"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_PRIMARY_BUTTON_WARPS_SLIDER);
 
   /**
    * GtkSettings:gtk-visible-focus:
