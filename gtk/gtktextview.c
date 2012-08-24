@@ -4508,7 +4508,8 @@ gtk_text_view_handle_dragged (GtkTextHandle         *handle,
       priv->cursor_handle_dragged = TRUE;
       bound = old_bound;
 
-      if (gtk_text_iter_compare (&iter, &old_bound) <= 0)
+      if (mode == GTK_TEXT_HANDLE_MODE_SELECTION &&
+	  gtk_text_iter_compare (&iter, &old_bound) <= 0)
         {
           iter = old_bound;
           gtk_text_iter_forward_char (&iter);
@@ -4523,7 +4524,8 @@ gtk_text_view_handle_dragged (GtkTextHandle         *handle,
       priv->selection_handle_dragged = TRUE;
       cursor = old_cursor;
 
-      if (gtk_text_iter_compare (&iter, &old_cursor) >= 0)
+      if (mode == GTK_TEXT_HANDLE_MODE_SELECTION &&
+	  gtk_text_iter_compare (&iter, &old_cursor) >= 0)
         {
           iter = old_cursor;
           gtk_text_iter_backward_char (&iter);
