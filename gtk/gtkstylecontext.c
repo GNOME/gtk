@@ -2925,6 +2925,36 @@ gtk_style_context_clear_cache (GtkStyleContext *context)
 }
 
 static void
+gtk_style_context_update_cache (GtkStyleContext  *context,
+                                const GtkBitmask *parent_changes)
+{
+  GtkStyleContextPrivate *priv;
+  GHashTableIter iter;
+  gpointer key, value;
+
+  priv = context->priv;
+
+  g_hash_table_remove_all (priv->style_data);
+
+  g_hash_table_iter_init (&iter, priv->style_data);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GtkStyleInfo *info = key;
+      StyleData *data = value;
+      GtkBitmask *changes;
+
+      changes = _gtk_bitmask_copy (parent_changes);
+      changes = _gtk_bitmask_intersect (changes, data->store->depends_on_parent);
+      if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_COLOR))
+        changes = _gtk_bitmask_union (changes, data->store->depends_on_color);
+      if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_FONT_SIZE))
+        changes = _gtk_bitmask_union (changes, data->store->depends_on_font_size);
+
+      build_properties (context, data->store, info->state_flags, changes);
+    }
+}
+
+static void
 gtk_style_context_do_invalidate (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
@@ -3113,9 +3143,14 @@ _gtk_style_context_validate (GtkStyleContext  *context,
       gtk_style_context_needs_full_revalidate (context, change))
     {
       if ((priv->relevant_changes & change) & ~GTK_STYLE_CONTEXT_CACHED_CHANGE)
-        gtk_style_context_clear_cache (context);
+        {
+          gtk_style_context_clear_cache (context);
+        }
       else
-        style_info_set_data (info, NULL);
+        {
+          gtk_style_context_update_cache (context, parent_changes);
+          style_info_set_data (info, NULL);
+        }
 
       if (current)
         {
@@ -3144,6 +3179,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
         changes = _gtk_bitmask_union (changes, current->store->depends_on_color);
       if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_FONT_SIZE))
         changes = _gtk_bitmask_union (changes, current->store->depends_on_font_size);
+
+      gtk_style_context_update_cache (context, parent_changes);
     }
 
   if (change & GTK_CSS_CHANGE_ANIMATE &&
