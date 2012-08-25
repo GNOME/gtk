@@ -55,6 +55,8 @@ struct _GtkIMMulticontextPrivate
   guint                  focus_in             : 1;
 };
 
+static void     gtk_im_multicontext_notify             (GObject                 *object,
+                                                        GParamSpec              *pspec);
 static void     gtk_im_multicontext_finalize           (GObject                 *object);
 
 static void     gtk_im_multicontext_set_slave          (GtkIMMulticontext       *multicontext,
@@ -100,6 +102,8 @@ static gboolean gtk_im_multicontext_delete_surrounding_cb   (GtkIMContext      *
 							     gint               n_chars,
 							     GtkIMMulticontext *multicontext);
 
+static void propagate_purpose (GtkIMMulticontext *context);
+
 static const gchar *global_context_id = NULL;
 
 G_DEFINE_TYPE (GtkIMMulticontext, gtk_im_multicontext, GTK_TYPE_IM_CONTEXT)
@@ -109,7 +113,9 @@ gtk_im_multicontext_class_init (GtkIMMulticontextClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkIMContextClass *im_context_class = GTK_IM_CONTEXT_CLASS (class);
-  
+
+  gobject_class->notify = gtk_im_multicontext_notify;
+
   im_context_class->set_client_window = gtk_im_multicontext_set_client_window;
   im_context_class->get_preedit_string = gtk_im_multicontext_get_preedit_string;
   im_context_class->filter_keypress = gtk_im_multicontext_filter_keypress;
@@ -198,12 +204,14 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
       if (!finalizing)
 	need_preedit_changed = TRUE;
     }
-  
+
   priv->slave = slave;
 
   if (priv->slave)
     {
       g_object_ref (priv->slave);
+
+      propagate_purpose (multicontext);
 
       g_signal_connect (priv->slave, "preedit-start",
 			G_CALLBACK (gtk_im_multicontext_preedit_start_cb),
@@ -223,7 +231,7 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
       g_signal_connect (priv->slave, "delete-surrounding",
 			G_CALLBACK (gtk_im_multicontext_delete_surrounding_cb),
 			multicontext);
-      
+
       if (!priv->use_preedit)	/* Default is TRUE */
 	gtk_im_context_set_use_preedit (slave, FALSE);
       if (priv->client_window)
@@ -753,4 +761,29 @@ gtk_im_multicontext_set_context_id (GtkIMMulticontext *context,
   g_free (priv->context_id_aux);
   priv->context_id_aux = g_strdup (context_id);
   gtk_im_multicontext_set_slave (context, NULL, FALSE);
+}
+
+static void
+propagate_purpose (GtkIMMulticontext *context)
+{
+  GtkInputPurpose purpose;
+  GtkInputHints hints;
+
+g_print ("propagate purpose to %p\n", context->priv->slave);
+
+  if (context->priv->slave == NULL)
+    return;
+
+  g_object_get (context, "input-purpose", &purpose, NULL);
+  g_object_set (context->priv->slave, "input-purpose", purpose, NULL);
+
+  g_object_get (context, "input-hints", &hints, NULL);
+  g_object_set (context->priv->slave, "input-hints", hints, NULL);
+}
+
+static void
+gtk_im_multicontext_notify (GObject      *object,
+                            GParamSpec   *pspec)
+{
+  propagate_purpose (GTK_IM_MULTICONTEXT (object));
 }
