@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Gtk+ 2.15.3\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-08-19 22:53+0000\n"
+"POT-Creation-Date: 2012-08-24 22:14+0000\n"
 "PO-Revision-Date: 2012-08-22 09:01+0700\n"
 "Last-Translator: Nguyễn Thái Ngọc Duy <pclouds@gmail.com>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -782,7 +782,6 @@ msgid "Failed to look for applications online"
 msgstr "Lỗi tìm ứng dụng trực tuyến"
 
 #: ../gtk/gtkappchooserdialog.c:188
-#| msgid "Find applications online"
 msgid "_Find applications online"
 msgstr "_Tìm ứng dụng trực tuyến"
 
@@ -853,7 +852,7 @@ msgstr "Ứng dụng liên quan"
 msgid "Other Applications"
 msgstr "Ứng dụng khác"
 
-#: ../gtk/gtkapplication.c:1529
+#: ../gtk/gtkapplication.c:1552
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -864,7 +863,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:335 ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkapplicationwindow.c:333 ../gtk/gtkprintoperation-unix.c:475
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "Ứng dụng"
@@ -1359,15 +1358,15 @@ msgstr "_Phải:"
 msgid "Paper Margins"
 msgstr "Lề giấy"
 
-#: ../gtk/gtkentry.c:8784 ../gtk/gtktextview.c:8262
+#: ../gtk/gtkentry.c:8848 ../gtk/gtktextview.c:8316
 msgid "Input _Methods"
 msgstr "Cách _gõ"
 
-#: ../gtk/gtkentry.c:8798 ../gtk/gtktextview.c:8276
+#: ../gtk/gtkentry.c:8862 ../gtk/gtktextview.c:8330
 msgid "_Insert Unicode Control Character"
 msgstr "_Chèn ký tự điều khiển Unicode"
 
-#: ../gtk/gtkentry.c:10272
+#: ../gtk/gtkentry.c:10336
 msgid "Caps Lock is on"
 msgstr "Caps Lock đã bật"
 
@@ -1795,7 +1794,6 @@ msgstr ""
 
 #: ../gtk/gtk-launch.c:85
 #, c-format
-#| msgid "Error loading icon: %s"
 msgid "Error parsing commandline options: %s\n"
 msgstr "Gặp lỗi khi phân tích tham số dòng lệnh: %s\n"
 
@@ -1808,7 +1806,6 @@ msgstr "Dùng \"%s --help\" để biết chi tiết."
 #. means the user is calling gtk-launch without any argument.
 #: ../gtk/gtk-launch.c:98
 #, c-format
-#| msgid "Find applications online"
 msgid "%s: missing application name"
 msgstr "%s: thiếu tên ứng dụng"
 
@@ -1816,7 +1813,6 @@ msgstr "%s: thiếu tên ứng dụng"
 #. is the application name.
 #: ../gtk/gtk-launch.c:122
 #, c-format
-#| msgid "Could not run application"
 msgid "%s: no such application %s"
 msgstr "%s: không có ứng dụng %s"
 
@@ -1824,7 +1820,6 @@ msgstr "%s: không có ứng dụng %s"
 #. is the error message.
 #: ../gtk/gtk-launch.c:140
 #, c-format
-#| msgid "Error loading icon: %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s:  lỗi chạy ứng dụng: %s\n"
 
@@ -1915,52 +1910,66 @@ msgstr "Tùy chọn GTK+"
 msgid "Show GTK+ Options"
 msgstr "Hiện tùy chọn GTK+"
 
-#: ../gtk/gtkmountoperation.c:518
+#: ../gtk/gtkmountoperation.c:532
 msgid "Co_nnect"
 msgstr "Kết _nối"
 
-#: ../gtk/gtkmountoperation.c:588
-msgid "Connect _anonymously"
+#: ../gtk/gtkmountoperation.c:606
+#, fuzzy
+#| msgid "Co_nnect"
+msgid "Connect As"
+msgstr "Kết _nối"
+
+#: ../gtk/gtkmountoperation.c:615
+#, fuzzy
+#| msgid "Connect _anonymously"
+msgid "_Anonymous"
 msgstr "Kết nối nặc d_anh"
 
-#: ../gtk/gtkmountoperation.c:597
-msgid "Connect as u_ser:"
-msgstr "Kết nố_i dưới người dùng:"
+#: ../gtk/gtkmountoperation.c:624
+msgid "Registered U_ser"
+msgstr ""
 
-#: ../gtk/gtkmountoperation.c:632
-msgid "_Username:"
+#: ../gtk/gtkmountoperation.c:635
+#, fuzzy
+#| msgid "_Username:"
+msgid "_Username"
 msgstr "Tên người _dùng:"
 
-#: ../gtk/gtkmountoperation.c:637
-msgid "_Domain:"
+#: ../gtk/gtkmountoperation.c:640
+#, fuzzy
+#| msgid "_Domain:"
+msgid "_Domain"
 msgstr "_Miền:"
 
-#: ../gtk/gtkmountoperation.c:643
-msgid "_Password:"
+#: ../gtk/gtkmountoperation.c:646
+#, fuzzy
+#| msgid "_Password:"
+msgid "_Password"
 msgstr "Mật _khẩu :"
 
-#: ../gtk/gtkmountoperation.c:661
+#: ../gtk/gtkmountoperation.c:668
 msgid "Forget password _immediately"
 msgstr "_Quên mật khẩu ngay"
 
-#: ../gtk/gtkmountoperation.c:671
+#: ../gtk/gtkmountoperation.c:678
 msgid "Remember password until you _logout"
 msgstr "_Nhớ mật khẩu đến khi bạn đăng xuất"
 
-#: ../gtk/gtkmountoperation.c:681
+#: ../gtk/gtkmountoperation.c:688
 msgid "Remember _forever"
 msgstr "_Nhớ mãi mãi"
 
-#: ../gtk/gtkmountoperation.c:1070
+#: ../gtk/gtkmountoperation.c:1077
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Ứng dụng lạ (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1253
+#: ../gtk/gtkmountoperation.c:1260
 msgid "Unable to end process"
 msgstr "Không thế chấm dứt tiến trình"
 
-#: ../gtk/gtkmountoperation.c:1290
+#: ../gtk/gtkmountoperation.c:1297
 msgid "_End Process"
 msgstr "_Chấm dứt tiến trình"
 
@@ -3150,7 +3159,7 @@ msgstr "Thu _nhỏ"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:342 ../gtk/gtkswitch.c:397 ../gtk/gtkswitch.c:591
+#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:586
 msgctxt "switch"
 msgid "ON"
 msgstr "BẬT"
@@ -3158,7 +3167,7 @@ msgstr "BẬT"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:350 ../gtk/gtkswitch.c:398 ../gtk/gtkswitch.c:620
+#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:615
 msgctxt "switch"
 msgid "OFF"
 msgstr "TẮT"
@@ -4812,6 +4821,9 @@ msgstr "tinra.%s"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "In vào máy in thử ra"
+
+#~ msgid "Connect as u_ser:"
+#~ msgstr "Kết nố_i dưới người dùng:"
 
 #~ msgid "Caps Lock and Num Lock are on"
 #~ msgstr "Caps Lock và Num Lock đều bật"
