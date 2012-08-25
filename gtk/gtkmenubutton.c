@@ -440,10 +440,26 @@ gtk_menu_button_button_press_event (GtkWidget      *widget,
 }
 
 static void
+gtk_menu_button_add (GtkContainer *container,
+                     GtkWidget    *child)
+{
+  GtkMenuButton *button = GTK_MENU_BUTTON (container);
+
+  if (button->priv->arrow_widget)
+    {
+      gtk_container_remove (container, button->priv->arrow_widget);
+      button->priv->arrow_widget = NULL;
+    }
+
+  GTK_CONTAINER_CLASS (gtk_menu_button_parent_class)->add (container, child);
+}
+
+static void
 gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkToggleButtonClass *toggle_button_class = GTK_TOGGLE_BUTTON_CLASS (klass);
 
   g_type_class_add_private (klass, sizeof (GtkMenuButtonPrivate));
@@ -455,6 +471,8 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 
   widget_class->state_flags_changed = gtk_menu_button_state_flags_changed;
   widget_class->button_press_event = gtk_menu_button_button_press_event;
+
+  container_class->add = gtk_menu_button_add;
 
   toggle_button_class->toggled = gtk_menu_button_toggled;
 
