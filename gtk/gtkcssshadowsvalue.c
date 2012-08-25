@@ -54,17 +54,17 @@ gtk_css_value_shadows_compute (GtkCssValue        *value,
                                GtkCssDependencies *dependencies)
 {
   GtkCssValue *result;
+  GtkCssDependencies child_deps;
   guint i;
 
   if (value->len == 0)
     return _gtk_css_value_ref (value);
 
-  *dependencies = GTK_CSS_DEPENDS_ON_EVERYTHING;
-
   result = gtk_css_shadows_value_new (value->values, value->len);
   for (i = 0; i < value->len; i++)
     {
-      result->values[i] = _gtk_css_value_compute (value->values[i], property_id, context, NULL);
+      result->values[i] = _gtk_css_value_compute (value->values[i], property_id, context, &child_deps);
+      *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
     }
 
   return result;

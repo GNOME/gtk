@@ -46,13 +46,25 @@ gtk_css_value_bg_size_compute (GtkCssValue        *value,
                                GtkStyleContext    *context,
                                GtkCssDependencies *dependencies)
 {
+  GtkCssValue *x, *y;
+  GtkCssDependencies x_deps, y_deps;
+
   if (value->x == NULL && value->y == NULL)
     return _gtk_css_value_ref (value);
 
-  *dependencies = GTK_CSS_DEPENDS_ON_EVERYTHING;
+  x_deps = y_deps = 0;
+  x = y = NULL;
 
-  return _gtk_css_bg_size_value_new (value->x ? _gtk_css_value_compute (value->x, property_id, context, NULL) : NULL,
-                                     value->y ? _gtk_css_value_compute (value->y, property_id, context, NULL) : NULL);
+  if (value->x)
+    x = _gtk_css_value_compute (value->x, property_id, context, &x_deps);
+
+  if (value->y)
+    y = _gtk_css_value_compute (value->y, property_id, context, &y_deps);
+
+  *dependencies = _gtk_css_dependencies_union (x_deps, y_deps);
+
+  return _gtk_css_bg_size_value_new (value->x ? x : NULL,
+                                     value->y ? y : NULL);
 }
 
 static gboolean

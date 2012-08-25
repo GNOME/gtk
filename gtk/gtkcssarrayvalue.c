@@ -49,16 +49,18 @@ gtk_css_value_array_compute (GtkCssValue        *value,
   GtkCssValue *result;
   gboolean changed = FALSE;
   guint i;
+  GtkCssDependencies child_deps;
 
   if (value->n_values == 0)
     return _gtk_css_value_ref (value);
 
-  *dependencies = GTK_CSS_DEPENDS_ON_EVERYTHING;
-
   result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
   for (i = 0; i < value->n_values; i++)
     {
-      result->values[i] = _gtk_css_value_compute (value->values[i], property_id, context, NULL);
+      result->values[i] = _gtk_css_value_compute (value->values[i], property_id, context, &child_deps);
+
+      *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
+
       changed |= (result->values[i] != value->values[i]);
     }
 
