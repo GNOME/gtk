@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
-"2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-08-14 11:44+0000\n"
-"PO-Revision-Date: 2012-08-16 15:52+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-08-24 22:14+0000\n"
+"PO-Revision-Date: 2012-08-25 12:05+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Gtranslator 2.91.5\n"
-"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gdk/gdk.c:155
 #, c-format
@@ -795,7 +795,6 @@ msgid "Failed to look for applications online"
 msgstr "Falló al buscar aplicaciones en línea"
 
 #: ../gtk/gtkappchooserdialog.c:188
-#| msgid "Find applications online"
 msgid "_Find applications online"
 msgstr "_Buscar aplicaciones en línea"
 
@@ -866,7 +865,7 @@ msgstr "Aplicaciones relacionadas"
 msgid "Other Applications"
 msgstr "Otras aplicaciones"
 
-#: ../gtk/gtkapplication.c:1529
+#: ../gtk/gtkapplication.c:1552
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -877,7 +876,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:335 ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkapplicationwindow.c:333 ../gtk/gtkprintoperation-unix.c:475
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "Aplicación"
@@ -1374,15 +1373,15 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: ../gtk/gtkentry.c:8784 ../gtk/gtktextview.c:8262
+#: ../gtk/gtkentry.c:8848 ../gtk/gtktextview.c:8316
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:8798 ../gtk/gtktextview.c:8276
+#: ../gtk/gtkentry.c:8862 ../gtk/gtktextview.c:8330
 msgid "_Insert Unicode Control Character"
 msgstr "_Insertar un carácter de control Unicode"
 
-#: ../gtk/gtkentry.c:10272
+#: ../gtk/gtkentry.c:10336
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
@@ -1929,52 +1928,61 @@ msgstr "Opciones GTK+"
 msgid "Show GTK+ Options"
 msgstr "Mostrar opciones GTK+"
 
-#: ../gtk/gtkmountoperation.c:518
+#: ../gtk/gtkmountoperation.c:532
 msgid "Co_nnect"
 msgstr "Co_nectar"
 
-#: ../gtk/gtkmountoperation.c:588
-msgid "Connect _anonymously"
-msgstr "Conectar de forma _anónima"
+#: ../gtk/gtkmountoperation.c:606
+#| msgid "Co_nnect"
+msgid "Connect As"
+msgstr "Conectar como"
 
-#: ../gtk/gtkmountoperation.c:597
-msgid "Connect as u_ser:"
-msgstr "Conectar como u_suario:"
+#: ../gtk/gtkmountoperation.c:615
+#| msgid "Connect _anonymously"
+msgid "_Anonymous"
+msgstr "_Anónimo"
 
-#: ../gtk/gtkmountoperation.c:632
-msgid "_Username:"
-msgstr "_Usuario:"
+#: ../gtk/gtkmountoperation.c:624
+msgid "Registered U_ser"
+msgstr "U_suario registrado"
 
-#: ../gtk/gtkmountoperation.c:637
-msgid "_Domain:"
-msgstr "_Dominio:"
+#: ../gtk/gtkmountoperation.c:635
+#| msgid "_Username:"
+msgid "_Username"
+msgstr "Nombre de _usuario"
 
-#: ../gtk/gtkmountoperation.c:643
-msgid "_Password:"
-msgstr "_Contraseña:"
+#: ../gtk/gtkmountoperation.c:640
+#| msgid "_Domain:"
+msgid "_Domain"
+msgstr "_Dominio"
 
-#: ../gtk/gtkmountoperation.c:661
+#: ../gtk/gtkmountoperation.c:646
+#| msgid "_Password:"
+msgid "_Password"
+msgstr "_Contraseña"
+
+#: ../gtk/gtkmountoperation.c:668
 msgid "Forget password _immediately"
 msgstr "Olvidar contraseña _inmediatamente"
 
-#: ../gtk/gtkmountoperation.c:671
+#: ../gtk/gtkmountoperation.c:678
 msgid "Remember password until you _logout"
 msgstr "Recordar la contraseña hasta _salir de la sesión"
 
-#: ../gtk/gtkmountoperation.c:681
+#: ../gtk/gtkmountoperation.c:688
 msgid "Remember _forever"
 msgstr "_Recordar para siempre"
 
-#: ../gtk/gtkmountoperation.c:1070
+#: ../gtk/gtkmountoperation.c:1077
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Aplicación desconocida (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1253
+#: ../gtk/gtkmountoperation.c:1260
 msgid "Unable to end process"
 msgstr "No se pudo finalizar el proceso"
 
-#: ../gtk/gtkmountoperation.c:1290
+#: ../gtk/gtkmountoperation.c:1297
 msgid "_End Process"
 msgstr "_Finalizar proceso"
 
@@ -3168,7 +3176,7 @@ msgstr "_Reducir"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:342 ../gtk/gtkswitch.c:397 ../gtk/gtkswitch.c:591
+#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:586
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -3176,7 +3184,7 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:350 ../gtk/gtkswitch.c:398 ../gtk/gtkswitch.c:620
+#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:615
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
@@ -4830,6 +4838,9 @@ msgstr "salida-de-prueba.%s"
 msgid "Print to Test Printer"
 msgstr "Imprimir a la impresora de prueba"
 
+#~ msgid "Connect as u_ser:"
+#~ msgstr "Conectar como u_suario:"
+
 #~ msgid "Caps Lock and Num Lock are on"
 #~ msgstr "Bloq Mayús y Bloq Num están activados"
 
@@ -4900,8 +4911,8 @@ msgstr "Imprimir a la impresora de prueba"
 
 #~ msgid "different idatas found for symlinked '%s' and '%s'\n"
 #~ msgstr ""
-#~ "se encontraron diferentes idatas para el «%s» enlazado simbólicamente y «%"
-#~ "s»\n"
+#~ "se encontraron diferentes idatas para el «%s» enlazado simbólicamente y "
+#~ "«%s»\n"
 
 #~ msgid "_Add"
 #~ msgstr "_Añadir"
@@ -5013,8 +5024,8 @@ msgstr "Imprimir a la impresora de prueba"
 #~ "Internal error: Image loader module '%s' failed to complete an operation, "
 #~ "but didn't give a reason for the failure"
 #~ msgstr ""
-#~ "Error interno: El módulo de carga de imágenes «%s» ha fallado al completar "
-#~ "una operación, pero no ha dado ninguna razón del fallo"
+#~ "Error interno: El módulo de carga de imágenes «%s» ha fallado al "
+#~ "completar una operación, pero no ha dado ninguna razón del fallo"
 
 #~ msgid "Incremental loading of image type '%s' is not supported"
 #~ msgstr ""
@@ -5217,8 +5228,8 @@ msgstr "Imprimir a la impresora de prueba"
 #~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 #~ "parsed."
 #~ msgstr ""
-#~ "La calidad de un JPEG debe ser un valor entre 0 y 100; el valor «%s» no se "
-#~ "puede interpretar."
+#~ "La calidad de un JPEG debe ser un valor entre 0 y 100; el valor «%s» no "
+#~ "se puede interpretar."
 
 #~ msgid ""
 #~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -5315,15 +5326,15 @@ msgstr "Imprimir a la impresora de prueba"
 #~ "PNG compression level must be a value between 0 and 9; value '%s' could "
 #~ "not be parsed."
 #~ msgstr ""
-#~ "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%s» no "
-#~ "se puede interpretar."
+#~ "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%s» "
+#~ "no se puede interpretar."
 
 #~ msgid ""
 #~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
 #~ "allowed."
 #~ msgstr ""
-#~ "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%d» no "
-#~ "está permitido."
+#~ "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%d» "
+#~ "no está permitido."
 
 #~ msgid ""
 #~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
