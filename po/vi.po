@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-08-24 22:14+0000\n"
-"PO-Revision-Date: 2012-08-22 09:01+0700\n"
+"PO-Revision-Date: 2012-08-25 11:19+0700\n"
 "Last-Translator: Nguyễn Thái Ngọc Duy <pclouds@gmail.com>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "Language: vi\n"
@@ -546,7 +546,7 @@ msgstr "Độ trong suốt của màu."
 
 #: ../gtk/deprecated/gtkcolorsel.c:501
 msgid "Color _name:"
-msgstr "Tê_n màu :"
+msgstr "Tê_n màu:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:516
 msgid ""
@@ -1332,7 +1332,7 @@ msgstr "_Rộng:"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1120
 msgid "_Height:"
-msgstr "_Cao :"
+msgstr "_Cao:"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1131
 msgid "Paper Size"
@@ -1915,38 +1915,33 @@ msgid "Co_nnect"
 msgstr "Kết _nối"
 
 #: ../gtk/gtkmountoperation.c:606
-#, fuzzy
 #| msgid "Co_nnect"
 msgid "Connect As"
-msgstr "Kết _nối"
+msgstr "Kết nối kiểu"
 
 #: ../gtk/gtkmountoperation.c:615
-#, fuzzy
 #| msgid "Connect _anonymously"
 msgid "_Anonymous"
-msgstr "Kết nối nặc d_anh"
+msgstr "_Nặc danh"
 
 #: ../gtk/gtkmountoperation.c:624
 msgid "Registered U_ser"
-msgstr ""
+msgstr "Người dùng có đăng _ký"
 
 #: ../gtk/gtkmountoperation.c:635
-#, fuzzy
 #| msgid "_Username:"
 msgid "_Username"
-msgstr "Tên người _dùng:"
+msgstr "Tên người _dùng"
 
 #: ../gtk/gtkmountoperation.c:640
-#, fuzzy
 #| msgid "_Domain:"
 msgid "_Domain"
-msgstr "_Miền:"
+msgstr "_Miền"
 
 #: ../gtk/gtkmountoperation.c:646
-#, fuzzy
 #| msgid "_Password:"
 msgid "_Password"
-msgstr "Mật _khẩu :"
+msgstr "Mật _khẩu"
 
 #: ../gtk/gtkmountoperation.c:668
 msgid "Forget password _immediately"
@@ -2053,7 +2048,7 @@ msgstr "Quản lý kích cỡ riêng..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:896
 msgid "_Format for:"
-msgstr "Định dạng ch_o :"
+msgstr "Định dạng ch_o:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3466
 msgid "_Paper size:"
@@ -2291,7 +2286,7 @@ msgstr "Bản sao"
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
 #: ../gtk/gtkprintunixdialog.c:2269
 msgid "Copie_s:"
-msgstr "Bản _sao :"
+msgstr "Bản _sao:"
 
 #: ../gtk/gtkprintunixdialog.c:2285
 msgid "C_ollate"
