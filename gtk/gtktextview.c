@@ -9712,7 +9712,7 @@ gtk_text_view_set_input_purpose (GtkTextView     *text_view,
                     NULL);
 
       g_object_notify (G_OBJECT (text_view), "input-purpose");
-  }
+    }
 }
 
 /**
@@ -9763,7 +9763,7 @@ gtk_text_view_set_input_hints (GtkTextView   *text_view,
                     NULL);
 
       g_object_notify (G_OBJECT (text_view), "input-hints");
-  }
+    }
 }
 
 /**

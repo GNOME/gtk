@@ -10385,7 +10385,7 @@ gtk_entry_set_input_purpose (GtkEntry        *entry,
                     NULL);
 
       g_object_notify (G_OBJECT (entry), "input-purpose");
-  }
+    }
 }
 
 /**
@@ -10434,7 +10434,7 @@ gtk_entry_set_input_hints (GtkEntry      *entry,
                     NULL);
 
       g_object_notify (G_OBJECT (entry), "input-hints");
-  }
+    }
 }
 
 /**
