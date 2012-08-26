@@ -599,7 +599,7 @@ gtk_table_init (GtkTable *table)
  * must both be in the range 1 .. 65535. For historical reasons, 0 is accepted
  * as well and is silently interpreted as 1.
  *
- * Returns: A pointer to the the newly created table widget.
+ * Returns: A pointer to the newly created table widget.
  *
  * Deprecated: 3.4: Use gtk_grid_new().
  */

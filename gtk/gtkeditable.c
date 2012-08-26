@@ -222,7 +222,7 @@ gtk_editable_insert_text (GtkEditable *editable,
  *
  * Deletes a sequence of characters. The characters that are deleted are 
  * those characters at positions from @start_pos up to, but not including 
- * @end_pos. If @end_pos is negative, then the the characters deleted
+ * @end_pos. If @end_pos is negative, then the characters deleted
  * are those from @start_pos to the end of the text.
  *
  * Note that the positions are specified in characters, not bytes.
@@ -247,7 +247,7 @@ gtk_editable_delete_text (GtkEditable *editable,
  *
  * Retrieves a sequence of characters. The characters that are retrieved 
  * are those characters at positions from @start_pos up to, but not 
- * including @end_pos. If @end_pos is negative, then the the characters 
+ * including @end_pos. If @end_pos is negative, then the characters
  * retrieved are those characters from @start_pos to the end of the text.
  * 
  * Note that positions are specified in characters, not bytes.
@@ -367,7 +367,7 @@ gtk_editable_delete_selection (GtkEditable *editable)
  *
  * Selects a region of text. The characters that are selected are 
  * those characters at positions from @start_pos up to, but not 
- * including @end_pos. If @end_pos is negative, then the the 
+ * including @end_pos. If @end_pos is negative, then the
  * characters selected are those characters from @start_pos to 
  * the end of the text.
  * 

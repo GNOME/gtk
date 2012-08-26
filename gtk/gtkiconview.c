@@ -2259,7 +2259,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 					       &cell);
 
       /*
-       * We consider only the the cells' area as the item area if the
+       * We consider only the cells' area as the item area if the
        * item is not selected, but if it *is* selected, the complete
        * selection rectangle is considered to be part of the item.
        */

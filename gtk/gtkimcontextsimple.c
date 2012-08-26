@@ -494,7 +494,7 @@ check_compact_table (GtkIMContextSimple           *context_simple,
 }
 
 /* This function receives a sequence of Unicode characters and tries to
- * normalize it (NFC). We check for the case the the resulting string
+ * normalize it (NFC). We check for the case where the resulting string
  * has length 1 (single character).
  * NFC normalisation normally rearranges diacritic marks, unless these
  * belong to the same Canonical Combining Class.

@@ -84,7 +84,7 @@ gtk_buildable_set_name (GtkBuildable *buildable,
  *
  * Gets the name of the @buildable object. 
  * 
- * #GtkBuilder sets the name based on the the 
+ * #GtkBuilder sets the name based on the
  * <link linkend="BUILDER-UI">GtkBuilder UI definition</link> 
  * used to construct the @buildable.
  *

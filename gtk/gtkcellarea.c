@@ -183,7 +183,7 @@
  * call to #GtkWidgetClass.get_preferred_height_for_width(). Returning
  * a perfect height for width that is larger than the screen area is
  * inconsequential since after the layouting receives an allocation
- * from a scrolled window it simply continues to drive the the scrollbar
+ * from a scrolled window it simply continues to drive the scrollbar
  * values while more and more height is required for the row heights
  * that are calculated in the background.
  * </para>
