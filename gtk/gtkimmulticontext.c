@@ -769,8 +769,6 @@ propagate_purpose (GtkIMMulticontext *context)
   GtkInputPurpose purpose;
   GtkInputHints hints;
 
-g_print ("propagate purpose to %p\n", context->priv->slave);
-
   if (context->priv->slave == NULL)
     return;
 
