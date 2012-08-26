@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
 "cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-08-10 11:35+0000\n"
-"PO-Revision-Date: 2012-08-10 20:57+0530\n"
+"POT-Creation-Date: 2012-08-26 14:55+0000\n"
+"PO-Revision-Date: 2012-08-26 22:05+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: as_IN <kde-i18n-doc@kde.org>\n"
 "Language: \n"
@@ -783,7 +783,6 @@ msgid "Failed to look for applications online"
 msgstr "অনুপ্ৰয়োগসমূহক অনলাইন বিছাৰি চাবলে ব্যৰ্থ"
 
 #: ../gtk/gtkappchooserdialog.c:188
-#| msgid "Find applications online"
 msgid "_Find applications online"
 msgstr "অনুপ্ৰয়োগসমূহক অনলাইন সন্ধান কৰক (_F)"
 
@@ -854,7 +853,7 @@ msgstr "আনুষংগিক অনুপ্ৰয়োগসমূহ"
 msgid "Other Applications"
 msgstr "অন্য অনুপ্ৰয়োগসমূহ"
 
-#: ../gtk/gtkapplication.c:1529
+#: ../gtk/gtkapplication.c:1552
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -865,7 +864,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:335 ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkapplicationwindow.c:333 ../gtk/gtkprintoperation-unix.c:475
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "অনুপ্ৰয়োগ"
@@ -1361,15 +1360,15 @@ msgstr "সোঁ ফালৰ (_R):"
 msgid "Paper Margins"
 msgstr "কাগজৰ প্ৰান্তিক অংশ"
 
-#: ../gtk/gtkentry.c:8784 ../gtk/gtktextview.c:8262
+#: ../gtk/gtkentry.c:8848 ../gtk/gtktextview.c:8316
 msgid "Input _Methods"
 msgstr "নিবেশ পদ্ধতি (_M)"
 
-#: ../gtk/gtkentry.c:8798 ../gtk/gtktextview.c:8276
+#: ../gtk/gtkentry.c:8862 ../gtk/gtktextview.c:8330
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode নিয়ন্ত্ৰণ আকৰ ভৰাওক (_I)"
 
-#: ../gtk/gtkentry.c:10272
+#: ../gtk/gtkentry.c:10336
 msgid "Caps Lock is on"
 msgstr "ক্যাপ্সলক সক্ৰিয় হৈ আছে"
 
@@ -1750,17 +1749,17 @@ msgstr "আইকণ তোলাত বিফল"
 msgid "Simple"
 msgstr "সাধাৰণ"
 
-#: ../gtk/gtkimmulticontext.c:600
+#: ../gtk/gtkimmulticontext.c:608
 msgctxt "input method menu"
 msgid "System"
 msgstr "চিস্টেম"
 
-#: ../gtk/gtkimmulticontext.c:610
+#: ../gtk/gtkimmulticontext.c:618
 msgctxt "input method menu"
 msgid "None"
 msgstr "শূণ্য"
 
-#: ../gtk/gtkimmulticontext.c:693
+#: ../gtk/gtkimmulticontext.c:701
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -1908,52 +1907,61 @@ msgstr "GTK+ বিকল্প"
 msgid "Show GTK+ Options"
 msgstr "GTK+ বিকল্প দেখুৱাওক"
 
-#: ../gtk/gtkmountoperation.c:518
+#: ../gtk/gtkmountoperation.c:532
 msgid "Co_nnect"
 msgstr "সংযোগ কৰক (_n)"
 
-#: ../gtk/gtkmountoperation.c:588
-msgid "Connect _anonymously"
-msgstr "অজ্ঞাত ৰূপে সংযোগ কৰক (_a)"
+#: ../gtk/gtkmountoperation.c:606
+#| msgid "Co_nnect"
+msgid "Connect As"
+msgstr "এই ধৰণে সংযোগ কৰক"
 
-#: ../gtk/gtkmountoperation.c:597
-msgid "Connect as u_ser:"
-msgstr "ব্যৱহাৰকৰোঁতা হিচাপে সংযোগ কৰক (_s):"
+#: ../gtk/gtkmountoperation.c:615
+#| msgid "Connect _anonymously"
+msgid "_Anonymous"
+msgstr "বেনামী (_A)"
 
-#: ../gtk/gtkmountoperation.c:632
-msgid "_Username:"
-msgstr "ব্যৱহাৰকৰোঁতাৰ নাম (_U):"
+#: ../gtk/gtkmountoperation.c:624
+msgid "Registered U_ser"
+msgstr "ৰেজিস্টাৰ্ড ব্যৱহাৰকাৰী (_s)"
 
-#: ../gtk/gtkmountoperation.c:637
-msgid "_Domain:"
-msgstr "ডোমেইন (_D):"
+#: ../gtk/gtkmountoperation.c:635
+#| msgid "_Username:"
+msgid "_Username"
+msgstr "ব্যৱহাৰকাৰীনাম (_U)"
 
-#: ../gtk/gtkmountoperation.c:643
-msgid "_Password:"
-msgstr "পাছৱাৰ্ড (_P):"
+#: ../gtk/gtkmountoperation.c:640
+#| msgid "_Domain:"
+msgid "_Domain"
+msgstr "ডমেইন (_D)"
 
-#: ../gtk/gtkmountoperation.c:661
+#: ../gtk/gtkmountoperation.c:646
+#| msgid "_Password:"
+msgid "_Password"
+msgstr "পাছৱাৰ্ড (_P)"
+
+#: ../gtk/gtkmountoperation.c:668
 msgid "Forget password _immediately"
 msgstr "তৎক্ষণাৎ পাছৱাৰ্ড পাহৰি যাওক (_i)"
 
-#: ../gtk/gtkmountoperation.c:671
+#: ../gtk/gtkmountoperation.c:678
 msgid "Remember password until you _logout"
 msgstr "বাহিৰ হোৱা লৈকে পাছৱাৰ্ড মনত ৰাখিব (_l)"
 
-#: ../gtk/gtkmountoperation.c:681
+#: ../gtk/gtkmountoperation.c:688
 msgid "Remember _forever"
 msgstr "চিৰকাললৈ মনত ৰাখিব (_f)"
 
-#: ../gtk/gtkmountoperation.c:1070
+#: ../gtk/gtkmountoperation.c:1077
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "অজ্ঞাত অনুপ্ৰয়োগ (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1253
+#: ../gtk/gtkmountoperation.c:1260
 msgid "Unable to end process"
 msgstr "প্ৰক্ৰিয়া অন্ত কৰিব নোৱাৰি"
 
-#: ../gtk/gtkmountoperation.c:1290
+#: ../gtk/gtkmountoperation.c:1297
 msgid "_End Process"
 msgstr "প্ৰক্ৰিয়া অন্ত কৰক (_E)"
 
@@ -3142,7 +3150,7 @@ msgstr "সৰু কৰি প্ৰদৰ্শন (_O)"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:342 ../gtk/gtkswitch.c:397 ../gtk/gtkswitch.c:591
+#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:586
 msgctxt "switch"
 msgid "ON"
 msgstr "অন"
@@ -3150,7 +3158,7 @@ msgstr "অন"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:350 ../gtk/gtkswitch.c:398 ../gtk/gtkswitch.c:620
+#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:615
 msgctxt "switch"
 msgid "OFF"
 msgstr "অফ"
@@ -4792,6 +4800,9 @@ msgstr "test-output.%s"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "পৰীক্ষণ মূদ্ৰকলৈ মূদ্ৰণ কৰক"
+
+#~ msgid "Connect as u_ser:"
+#~ msgstr "ব্যৱহাৰকৰোঁতা হিচাপে সংযোগ কৰক (_s):"
 
 #~ msgid "Caps Lock and Num Lock are on"
 #~ msgstr "ক্যাপ্স লক আৰু নাম কক সক্ৰিয় হৈ আছে"
