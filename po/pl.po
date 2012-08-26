@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-25 00:29+0200\n"
-"PO-Revision-Date: 2012-08-25 00:30+0200\n"
+"POT-Creation-Date: 2012-08-26 14:52+0200\n"
+"PO-Revision-Date: 2012-08-26 14:53+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1753,19 +1753,19 @@ msgstr "Wczytanie ikony się nie powiodło"
 
 #: ../gtk/gtkimmodule.c:515
 msgid "Simple"
-msgstr "Prosty"
+msgstr "Prosta"
 
-#: ../gtk/gtkimmulticontext.c:600
+#: ../gtk/gtkimmulticontext.c:608
 msgctxt "input method menu"
 msgid "System"
 msgstr "Systemowa"
 
-#: ../gtk/gtkimmulticontext.c:610
+#: ../gtk/gtkimmulticontext.c:618
 msgctxt "input method menu"
 msgid "None"
 msgstr "Brak"
 
-#: ../gtk/gtkimmulticontext.c:693
+#: ../gtk/gtkimmulticontext.c:701
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
