@@ -15,9 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.20.1.1\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-07-22 19:50+0000\n"
-"PO-Revision-Date: 2012-07-24 17:57+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-08-26 16:36+0000\n"
+"PO-Revision-Date: 2012-08-26 21:58+0200\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: team@gnome.gr\n"
 "Language: el\n"
@@ -28,48 +29,48 @@ msgstr ""
 "X-Generator: Virtaal 0.7.0\n"
 "X-Project-Style: gnome\n"
 
-#: ../gdk/gdk.c:153
+#: ../gdk/gdk.c:155
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Σφάλμα ανάλυσης επιλογής --gdk-debug"
 
-#: ../gdk/gdk.c:173
+#: ../gdk/gdk.c:175
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Σφάλμα ανάλυσης επιλογής --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:201
+#: ../gdk/gdk.c:203
 msgid "Program class as used by the window manager"
 msgstr "Κλάση προγράμματος όπως χρησιμοποιείται από τον διαχειριστή παραθύρων"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:202
+#: ../gdk/gdk.c:204
 msgid "CLASS"
 msgstr "ΚΛΑΣΗ"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:204
+#: ../gdk/gdk.c:206
 msgid "Program name as used by the window manager"
 msgstr "Όνομα προγράμματος όπως χρησιμοποιείται από το διαχειριστή παραθύρων"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:205
+#: ../gdk/gdk.c:207
 msgid "NAME"
 msgstr "ΟΝΟΜΑ"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:207
+#: ../gdk/gdk.c:209
 msgid "X display to use"
 msgstr "Προβολή X για χρήση"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:208
+#: ../gdk/gdk.c:210
 msgid "DISPLAY"
 msgstr "ΠΡΟΒΟΛΗ"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:211
+#: ../gdk/gdk.c:213
 msgid "GDK debugging flags to set"
 msgstr "Σημαίες αποσφαλμάτωσης του GTK για ορισμό"
 
@@ -77,15 +78,12 @@ msgstr "Σημαίες αποσφαλμάτωσης του GTK για ορισμ
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:212
-#: ../gdk/gdk.c:215
-#: ../gtk/gtkmain.c:453
-#: ../gtk/gtkmain.c:456
+#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
 msgid "FLAGS"
 msgstr "ΣΗΜΑΙΕΣ"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:214
+#: ../gdk/gdk.c:216
 msgid "GDK debugging flags to unset"
 msgstr "Σημαίες αποσφαλμάτωσης του GTK για αφαίρεση"
 
@@ -104,7 +102,7 @@ msgstr "Σημαίες αποσφαλμάτωσης του GTK για αφαίρ
 #: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "BackSpace"
-msgstr "Οπισθοδιαγραφή"
+msgstr "BackSpace"
 
 #: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
@@ -484,12 +482,20 @@ msgid "Switches between on and off states"
 msgstr "Εναλλαγή μεταξύ αναμμένου και σβηστού"
 
 #: ../gtk/deprecated/gtkcolorsel.c:425
-msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
-msgstr "Επιλέξτε το χρώμα που επιθυμείτε από τον εξωτερικό δακτύλιο. Επιλέξτε τη διαβάθμιση φωτεινότητας του χρώματος από το εσωτερικό τρίγωνο."
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Επιλέξτε το χρώμα που επιθυμείτε από τον εξωτερικό δακτύλιο. Επιλέξτε τη "
+"διαβάθμιση φωτεινότητας του χρώματος από το εσωτερικό τρίγωνο."
 
 #: ../gtk/deprecated/gtkcolorsel.c:451
-msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
-msgstr "Πατήστε το σταγονόμετρο, και μετά κλικ σε ένα χρώμα οπουδήποτε στην οθόνη, για να επιλέξετε αυτό το χρώμα."
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Πατήστε το σταγονόμετρο, και μετά κλικ σε ένα χρώμα οπουδήποτε στην οθόνη, "
+"για να επιλέξετε αυτό το χρώμα."
 
 #: ../gtk/deprecated/gtkcolorsel.c:461
 msgid "_Hue:"
@@ -543,8 +549,7 @@ msgstr "Ποσότητα γαλάζιου φωτός στο χρώμα."
 msgid "Op_acity:"
 msgstr "Α_διαφάνεια:"
 
-#: ../gtk/deprecated/gtkcolorsel.c:484
-#: ../gtk/deprecated/gtkcolorsel.c:494
+#: ../gtk/deprecated/gtkcolorsel.c:484 ../gtk/deprecated/gtkcolorsel.c:494
 msgid "Transparency of the color."
 msgstr "Διαφάνεια του χρώματος."
 
@@ -553,8 +558,12 @@ msgid "Color _name:"
 msgstr "Όνομα _χρώματος:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:516
-msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
-msgstr "Εδώ μπορείτε να εισάγετε δεκαεξαδική τιμή τύπου HTML ή απλά ένα όνομα χρώματος, όπως 'πορτοκαλί'."
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Εδώ μπορείτε να εισάγετε δεκαεξαδική τιμή τύπου HTML ή απλά ένα όνομα "
+"χρώματος, όπως 'πορτοκαλί'."
 
 #: ../gtk/deprecated/gtkcolorsel.c:548
 msgid "_Palette:"
@@ -565,15 +574,27 @@ msgid "Color Wheel"
 msgstr "Χρωματικός τροχός"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1072
-msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
-msgstr "Το προηγούμενο χρώμα, συγκρινόμενο με το νέο χρώμα που επιλέγετε τώρα. Μπορείτε να το σύρετε σε μια θέση της παλέτας για να το αποθηκεύσετε, ή να το σύρετε πάνω στο διπλανό χρώμα για να το επαναφέρετε ως τρέχον."
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+"Το προηγούμενο χρώμα, συγκρινόμενο με το νέο χρώμα που επιλέγετε τώρα. "
+"Μπορείτε να το σύρετε σε μια θέση της παλέτας για να το αποθηκεύσετε, ή να "
+"το σύρετε πάνω στο διπλανό χρώμα για να το επαναφέρετε ως τρέχον."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1078
-msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
-msgstr "Το χρώμα που επιλέξατε. Μπορείτε να σύρετε το χρώμα σε μια θέση της παλέτας για να το αποθηκεύσετε και να το χρησιμοποιείτε στο μέλλον."
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"Το χρώμα που επιλέξατε. Μπορείτε να σύρετε το χρώμα σε μια θέση της παλέτας "
+"για να το αποθηκεύσετε και να το χρησιμοποιείτε στο μέλλον."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1084
-msgid "The previously-selected color, for comparison to the color you're selecting now."
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now."
 msgstr "Το προηγούμενο χρώμα, συγκρινόμενο με το νέο χρώμα που επιλέγετε τώρα."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1088
@@ -585,16 +606,19 @@ msgid "_Save color here"
 msgstr "_Αποθήκευση χρώματος εδώ"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1695
-msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr "Κάντε κλικ σε αυτό το χρώμα της παλέτας για να το επιλέξετε ως τρέχον. Για να το αλλάξετε, σύρετε ένα νέο χρώμα στη θέση αυτή, ή κάντε δεξί κλικ και επιλέξτε \"Αποθήκευση χρώματος εδώ.\""
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+"Κάντε κλικ σε αυτό το χρώμα της παλέτας για να το επιλέξετε ως τρέχον. Για "
+"να το αλλάξετε, σύρετε ένα νέο χρώμα στη θέση αυτή, ή κάντε δεξί κλικ και "
+"επιλέξτε \"Αποθήκευση χρώματος εδώ.\""
 
 #. We emit the response for the Select button manually,
 #. * since we want to save the color first
 #.
-#: ../gtk/deprecated/gtkcolorseldialog.c:201
-#: ../gtk/gtkappchooserdialog.c:574
-#: ../gtk/gtkcolorchooserdialog.c:150
-#: ../gtk/gtkfontchooserdialog.c:174
+#: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:574
+#: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
 msgid "_Select"
 msgstr "_Επιλογή"
 
@@ -625,8 +649,7 @@ msgstr "Μέ_γεθος:"
 msgid "_Preview:"
 msgstr "_Προεπισκόπηση:"
 
-#: ../gtk/deprecated/gtkfontsel.c:1720
-#: ../gtk/gtkfontchooserdialog.c:183
+#: ../gtk/deprecated/gtkfontsel.c:1720 ../gtk/gtkfontchooserdialog.c:183
 msgid "Font Selection"
 msgstr "Επιλογή γραμματοσειράς"
 
@@ -768,8 +791,8 @@ msgid "Failed to look for applications online"
 msgstr "Αδυναμία αναζήτησης εφαρμογών στο διαδίκτυο"
 
 #: ../gtk/gtkappchooserdialog.c:188
-msgid "Find applications online"
-msgstr "Εύρεση εφαρμογών στο διαδίκτυο"
+msgid "_Find applications online"
+msgstr "_Εύρεση εφαρμογών στο διαδίκτυο"
 
 #: ../gtk/gtkappchooserdialog.c:247
 msgid "Could not run application"
@@ -790,8 +813,7 @@ msgstr "Αδυναμία εύρεσης εφαρμογής"
 msgid "Select an application to open \"%s\""
 msgstr "Επιλέξτε μια εφαρμογή για να ανοίξετε το \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:398
-#: ../gtk/gtkappchooserwidget.c:654
+#: ../gtk/gtkappchooserdialog.c:398 ../gtk/gtkappchooserwidget.c:654
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "Δεν υπάρχουν διαθέσιμες εφαρμογές για άνοιγμα του \"%s\""
@@ -808,8 +830,12 @@ msgid "No applications available to open \"%s\" files"
 msgstr "Δεν υπάρχουν διαθέσιμες εφαρμογές για το άνοιγμα αρχείων \"%s\""
 
 #: ../gtk/gtkappchooserdialog.c:422
-msgid "Click \"Show other applications\", for more options, or \"Find applications online\" to install a new application"
-msgstr "Πατήστε το \"Εμφάνιση άλλων εφαρμογών\", για περισσότερες επιλογές ή \"Εύρεση εφαρμογών στο διαδίκτυο\" για να εγκαταστήσετε μια νέα εφαρμογή"
+msgid ""
+"Click \"Show other applications\", for more options, or \"Find applications "
+"online\" to install a new application"
+msgstr ""
+"Πατήστε το \"Εμφάνιση άλλων εφαρμογών\", για περισσότερες επιλογές ή "
+"\"Εύρεση εφαρμογών στο διαδίκτυο\" για να εγκαταστήσετε μια νέα εφαρμογή"
 
 #: ../gtk/gtkappchooserdialog.c:492
 msgid "Forget association"
@@ -835,7 +861,7 @@ msgstr "Σχετικές εφαρμογές"
 msgid "Other Applications"
 msgstr "Άλλες εφαρμογές"
 
-#: ../gtk/gtkapplication.c:1529
+#: ../gtk/gtkapplication.c:1552
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -846,8 +872,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:327
-#: ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkapplicationwindow.c:333 ../gtk/gtkprintoperation-unix.c:475
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "Εφαρμογή"
@@ -887,7 +912,9 @@ msgstr "Άκυρος τύπος συνάρτησης στη γραμμή %d: '%s
 #: ../gtk/gtkbuilderparser.c:405
 #, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-msgstr "Διπλή ταυτότητα του αντικειμένου '%s' στη γραμμή %d (προηγουμένως στη γραμμή %d)"
+msgstr ""
+"Διπλή ταυτότητα του αντικειμένου '%s' στη γραμμή %d (προηγουμένως στη γραμμή "
+"%d)"
 
 #: ../gtk/gtkbuilderparser.c:865
 #, c-format
@@ -941,8 +968,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1941
-#: ../gtk/gtkcalendar.c:2633
+#: ../gtk/gtkcalendar.c:1941 ../gtk/gtkcalendar.c:2633
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -958,8 +984,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1973
-#: ../gtk/gtkcalendar.c:2499
+#: ../gtk/gtkcalendar.c:1973 ../gtk/gtkcalendar.c:2499
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1001,20 +1026,17 @@ msgstr "Άκυρο"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:416
-#: ../gtk/gtkcellrendereraccel.c:745
+#: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:745
 msgid "New accelerator..."
 msgstr "Νέα συντόμευση..."
 
-#: ../gtk/gtkcellrendererprogress.c:372
-#: ../gtk/gtkcellrendererprogress.c:462
+#: ../gtk/gtkcellrendererprogress.c:372 ../gtk/gtkcellrendererprogress.c:462
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:188
-#: ../gtk/gtkcolorbutton.c:450
+#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:449
 msgid "Pick a Color"
 msgstr "Επιλογή χρώματος"
 
@@ -1255,8 +1277,7 @@ msgctxt "Color channel"
 msgid "V"
 msgstr "Τιμή"
 
-#: ../gtk/gtkcoloreditor.c:481
-#: ../gtk/gtkcolorscale.c:301
+#: ../gtk/gtkcoloreditor.c:481 ../gtk/gtkcolorscale.c:301
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "Απόχρωση"
@@ -1266,8 +1287,7 @@ msgctxt "Color channel"
 msgid "H"
 msgstr "Απόχρωση"
 
-#: ../gtk/gtkcoloreditor.c:496
-#: ../gtk/gtkcolorscale.c:303
+#: ../gtk/gtkcoloreditor.c:496 ../gtk/gtkcolorscale.c:303
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Άλφα"
@@ -1296,18 +1316,15 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:397
-#: ../gtk/gtkprintunixdialog.c:3264
+#: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3264
 msgid "Manage Custom Sizes"
 msgstr "Διαχείριση προσαρμοσμένων μεγεθών"
 
-#: ../gtk/gtkcustompaperunixdialog.c:558
-#: ../gtk/gtkpagesetupunixdialog.c:778
+#: ../gtk/gtkcustompaperunixdialog.c:558 ../gtk/gtkpagesetupunixdialog.c:778
 msgid "inch"
 msgstr "inch"
 
-#: ../gtk/gtkcustompaperunixdialog.c:560
-#: ../gtk/gtkpagesetupunixdialog.c:776
+#: ../gtk/gtkcustompaperunixdialog.c:560 ../gtk/gtkpagesetupunixdialog.c:776
 msgid "mm"
 msgstr "mm"
 
@@ -1352,17 +1369,15 @@ msgstr "_Δεξιά:"
 msgid "Paper Margins"
 msgstr "Περιθώρια χαρτιού"
 
-#: ../gtk/gtkentry.c:8784
-#: ../gtk/gtktextview.c:8262
+#: ../gtk/gtkentry.c:8848 ../gtk/gtktextview.c:8316
 msgid "Input _Methods"
 msgstr "_Μέθοδοι εισαγωγής"
 
-#: ../gtk/gtkentry.c:8798
-#: ../gtk/gtktextview.c:8276
+#: ../gtk/gtkentry.c:8862 ../gtk/gtktextview.c:8330
 msgid "_Insert Unicode Control Character"
 msgstr "_Εισαγωγή χαρακτήρα ελέγχου Unicode"
 
-#: ../gtk/gtkentry.c:10272
+#: ../gtk/gtkentry.c:10336
 msgid "Caps Lock is on"
 msgstr "Είναι πατημένο το Caps Lock"
 
@@ -1411,8 +1426,7 @@ msgstr "Είναι πατημένο το Caps Lock"
 msgid "Select a File"
 msgstr "Επιλέξτε ένα αρχείο"
 
-#: ../gtk/gtkfilechooserbutton.c:105
-#: ../gtk/gtkfilechooserdefault.c:1817
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1817
 msgid "Desktop"
 msgstr "Επιφάνεια εργασίας"
 
@@ -1445,8 +1459,13 @@ msgid "The folder could not be created"
 msgstr "Αδυναμία δημιουργίας φακέλου"
 
 #: ../gtk/gtkfilechooserdefault.c:1014
-msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
-msgstr "Δεν ήταν δυνατή η δημιουργία του φακέλου, επειδή υπάρχει ήδη αρχείο με αυτό το όνομα. Χρησιμοποιήστε διαφορετικό όνομα για το φάκελο, ή μετονομάστε πρώτα το αρχείο."
+msgid ""
+"The folder could not be created, as a file with the same name already "
+"exists.  Try using a different name for the folder, or rename the file first."
+msgstr ""
+"Δεν ήταν δυνατή η δημιουργία του φακέλου, επειδή υπάρχει ήδη αρχείο με αυτό "
+"το όνομα. Χρησιμοποιήστε διαφορετικό όνομα για το φάκελο, ή μετονομάστε "
+"πρώτα το αρχείο."
 
 #: ../gtk/gtkfilechooserdefault.c:1028
 msgid "You need to choose a valid filename."
@@ -1458,8 +1477,12 @@ msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Αποτυχία δημιουργίας αρχείου στο %s διότι δεν είναι φάκελος"
 
 #: ../gtk/gtkfilechooserdefault.c:1043
-msgid "You may only select folders.  The item that you selected is not a folder; try using a different item."
-msgstr "Μπορείτε να επιλέξετε μόνο φακέλους. Το αντικείμενο που επιλέξατε δεν είναι φάκελος· επιλέξτε ένα άλλο στοιχείο."
+msgid ""
+"You may only select folders.  The item that you selected is not a folder; "
+"try using a different item."
+msgstr ""
+"Μπορείτε να επιλέξετε μόνο φακέλους. Το αντικείμενο που επιλέξατε δεν είναι "
+"φάκελος· επιλέξτε ένα άλλο στοιχείο."
 
 #: ../gtk/gtkfilechooserdefault.c:1053
 msgid "Invalid file name"
@@ -1482,8 +1505,7 @@ msgstr "%1$s στο %2$s"
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#: ../gtk/gtkfilechooserdefault.c:1762
-#: ../gtk/gtkfilechooserdefault.c:4988
+#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4988
 msgid "Recently Used"
 msgstr "Πρόσφατα"
 
@@ -1516,8 +1538,7 @@ msgstr "Αφαίρεση του σελιδοδείκτη '%s'"
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Αδυναμία απομάκρυνσης σελιδοδείκτη '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2813
-#: ../gtk/gtkfilechooserdefault.c:3699
+#: ../gtk/gtkfilechooserdefault.c:2813 ../gtk/gtkfilechooserdefault.c:3699
 msgid "Remove the selected bookmark"
 msgstr "Αφαίρεση του επιλεγμένου σελιδοδείκτη"
 
@@ -1584,8 +1605,7 @@ msgid "Modified"
 msgstr "Τροποποιήθηκε"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4595
-#: ../gtk/gtkprinteroptionwidget.c:835
+#: ../gtk/gtkfilechooserdefault.c:4595 ../gtk/gtkprinteroptionwidget.c:835
 msgid "_Name:"
 msgstr "Όν_ομα:"
 
@@ -1593,8 +1613,7 @@ msgstr "Όν_ομα:"
 msgid "Type a file name"
 msgstr "Εισάγετε όνομα αρχείου"
 
-#: ../gtk/gtkfilechooserdefault.c:4873
-#: ../gtk/gtkfilechooserdefault.c:4884
+#: ../gtk/gtkfilechooserdefault.c:4873 ../gtk/gtkfilechooserdefault.c:4884
 msgid "Please select a folder below"
 msgstr "Παρακαλώ επιλέξτε ένα φάκελο παρακάτω"
 
@@ -1632,8 +1651,7 @@ msgstr "Αδυναμία ανάγνωσης των περιεχομένων το
 msgid "Could not read the contents of the folder"
 msgstr "Αδυναμία ανάγνωσης των περιεχομένων του φακέλου"
 
-#: ../gtk/gtkfilechooserdefault.c:6686
-#: ../gtk/gtkfilechooserdefault.c:6754
+#: ../gtk/gtkfilechooserdefault.c:6686 ../gtk/gtkfilechooserdefault.c:6754
 #: ../gtk/gtkfilechooserdefault.c:6934
 msgid "Unknown"
 msgstr "Άγνωστο"
@@ -1650,8 +1668,7 @@ msgstr "Χθες, στις %H:%M"
 msgid "Cannot change to folder because it is not local"
 msgstr "Αποτυχία μετάβασης στο φάκελο, γιατί δεν είναι τοπικός"
 
-#: ../gtk/gtkfilechooserdefault.c:8009
-#: ../gtk/gtkfilechooserdefault.c:8030
+#: ../gtk/gtkfilechooserdefault.c:8009 ../gtk/gtkfilechooserdefault.c:8030
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Υπάρχει ήδη συντόμευση %s"
@@ -1661,20 +1678,20 @@ msgstr "Υπάρχει ήδη συντόμευση %s"
 msgid "Shortcut %s does not exist"
 msgstr "Δεν υπάρχει συντόμευση %s"
 
-#: ../gtk/gtkfilechooserdefault.c:8366
-#: ../gtk/gtkprintunixdialog.c:548
+#: ../gtk/gtkfilechooserdefault.c:8366 ../gtk/gtkprintunixdialog.c:548
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Υπάρχει ήδη αρχείο με το όνομα \"%s\". Θέλετε να αντικατασταθεί;"
 
-#: ../gtk/gtkfilechooserdefault.c:8369
-#: ../gtk/gtkprintunixdialog.c:552
+#: ../gtk/gtkfilechooserdefault.c:8369 ../gtk/gtkprintunixdialog.c:552
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr "Το αρχείο υπάρχει ήδη στο \"%s\". Η αντικατάσταση του θα αντικαταστήσει και τα περιεχόμενα του."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr ""
+"Το αρχείο υπάρχει ήδη στο \"%s\". Η αντικατάσταση του θα αντικαταστήσει και "
+"τα περιεχόμενα του."
 
-#: ../gtk/gtkfilechooserdefault.c:8374
-#: ../gtk/gtkprintunixdialog.c:559
+#: ../gtk/gtkfilechooserdefault.c:8374 ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
 msgstr "_Αντικατάσταση"
 
@@ -1683,8 +1700,12 @@ msgid "Could not start the search process"
 msgstr "Αποτυχία εκκίνησης της διεργασίας αναζήτησης"
 
 #: ../gtk/gtkfilechooserdefault.c:9182
-msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
-msgstr "Το πρόγραμμα δεν κατάφερε να συνδεθεί με την υπηρεσία δημιουργίας ευρετηρίων. Βεβαιωθείτε ότι η υπηρεσία εκτελείται."
+msgid ""
+"The program was not able to create a connection to the indexer daemon.  "
+"Please make sure it is running."
+msgstr ""
+"Το πρόγραμμα δεν κατάφερε να συνδεθεί με την υπηρεσία δημιουργίας "
+"ευρετηρίων. Βεβαιωθείτε ότι η υπηρεσία εκτελείται."
 
 #: ../gtk/gtkfilechooserdefault.c:9196
 msgid "Could not send the search request"
@@ -1708,8 +1729,7 @@ msgstr "Σύστημα αρχείων"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:436
-#: ../gtk/gtkfontbutton.c:563
+#: ../gtk/gtkfontbutton.c:436 ../gtk/gtkfontbutton.c:563
 msgid "Pick a Font"
 msgstr "Επιλογή γραμματοσειράς"
 
@@ -1719,7 +1739,9 @@ msgstr "Γραμματοσειρά"
 
 #: ../gtk/gtkfontchooserwidget.c:110
 msgid "No fonts matched your search. You can revise your search and try again."
-msgstr "Καμιά γραμματοσειρά που να ταιριάζει στην αναζήτησή σας. Μπορείτε να αναθεωρήσετε την αναζήτησή σας και ξαναπροσπαθήστε."
+msgstr ""
+"Καμιά γραμματοσειρά που να ταιριάζει στην αναζήτησή σας. Μπορείτε να "
+"αναθεωρήσετε την αναζήτησή σας και ξαναπροσπαθήστε."
 
 #: ../gtk/gtkfontchooserwidget.c:557
 msgid "Search font name"
@@ -1742,17 +1764,17 @@ msgstr "Αποτυχία φόρτωσης εικονιδίου"
 msgid "Simple"
 msgstr "Απλό"
 
-#: ../gtk/gtkimmulticontext.c:600
+#: ../gtk/gtkimmulticontext.c:608
 msgctxt "input method menu"
 msgid "System"
 msgstr "Σύστημα"
 
-#: ../gtk/gtkimmulticontext.c:610
+#: ../gtk/gtkimmulticontext.c:618
 msgctxt "input method menu"
 msgid "None"
 msgstr "Κανένα"
 
-#: ../gtk/gtkimmulticontext.c:693
+#: ../gtk/gtkimmulticontext.c:701
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -1779,17 +1801,16 @@ msgid ""
 "Launch specified application by its desktop file info\n"
 "optionally passing list of URIs as arguments."
 msgstr ""
-"Εκτελέστε τις καθορισμένες εφαρμογές από τις πληροφορίες του αρχείου desktop\n"
+"Εκτελέστε τις καθορισμένες εφαρμογές από τις πληροφορίες του αρχείου "
+"desktop\n"
 "προαιρετικά περνώντας τη λίστα των URIs ως ορίσματα."
 
 #: ../gtk/gtk-launch.c:85
 #, c-format
-#| msgid "Error loading icon: %s"
 msgid "Error parsing commandline options: %s\n"
 msgstr "Σφάλμα ανάλυσης επιλογών της γραμμής εντολών: %s\n"
 
-#: ../gtk/gtk-launch.c:87
-#: ../gtk/gtk-launch.c:100
+#: ../gtk/gtk-launch.c:87 ../gtk/gtk-launch.c:100
 #, c-format
 msgid "Try \"%s --help\" for more information."
 msgstr "Δοκιμάστε \"%s --help\" για περισσότερες πληροφορίες."
@@ -1798,7 +1819,6 @@ msgstr "Δοκιμάστε \"%s --help\" για περισσότερες πλη�
 #. means the user is calling gtk-launch without any argument.
 #: ../gtk/gtk-launch.c:98
 #, c-format
-#| msgid "Find applications online"
 msgid "%s: missing application name"
 msgstr "%s: λείπει το όνομα της εφαρμογής"
 
@@ -1806,7 +1826,6 @@ msgstr "%s: λείπει το όνομα της εφαρμογής"
 #. is the application name.
 #: ../gtk/gtk-launch.c:122
 #, c-format
-#| msgid "Could not run application"
 msgid "%s: no such application %s"
 msgstr "%s: δεν υπάρχει τέτοια εφαρμογή %s"
 
@@ -1814,7 +1833,6 @@ msgstr "%s: δεν υπάρχει τέτοια εφαρμογή %s"
 #. is the error message.
 #: ../gtk/gtk-launch.c:140
 #, c-format
-#| msgid "Error loading icon: %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: σφάλμα φόρτωσης εφαρμογής: %s\n"
 
@@ -1905,59 +1923,65 @@ msgstr "Επιλογές GTK+"
 msgid "Show GTK+ Options"
 msgstr "Εμφάνιση επιλογών GTK+"
 
-#: ../gtk/gtkmountoperation.c:518
+#: ../gtk/gtkmountoperation.c:532
 msgid "Co_nnect"
 msgstr "_Σύνδεση"
 
-#: ../gtk/gtkmountoperation.c:588
-msgid "Connect _anonymously"
-msgstr "_Ανώνυμη σύνδεση"
+#: ../gtk/gtkmountoperation.c:606
+msgid "Connect As"
+msgstr "Σύνδεση ως"
 
-#: ../gtk/gtkmountoperation.c:597
-msgid "Connect as u_ser:"
-msgstr "Σύνδεση ως _χρήστης:"
+#: ../gtk/gtkmountoperation.c:615
+msgid "_Anonymous"
+msgstr "_Ανώνυμος"
 
-#: ../gtk/gtkmountoperation.c:632
-msgid "_Username:"
-msgstr "Όν_ομα χρήστη:"
+#: ../gtk/gtkmountoperation.c:624
+msgid "Registered U_ser"
+msgstr "Καταχωρημένος _χρήστης"
 
-#: ../gtk/gtkmountoperation.c:637
-msgid "_Domain:"
-msgstr "_Τομέας:"
+#: ../gtk/gtkmountoperation.c:635
+msgid "_Username"
+msgstr "Όν_ομα χρήστη"
 
-#: ../gtk/gtkmountoperation.c:643
-msgid "_Password:"
-msgstr "Σ_υνθηματικό:"
+#: ../gtk/gtkmountoperation.c:640
+msgid "_Domain"
+msgstr "_Τομέας"
 
-#: ../gtk/gtkmountoperation.c:661
+#: ../gtk/gtkmountoperation.c:646
+msgid "_Password"
+msgstr "Σ_υνθηματικό"
+
+#: ../gtk/gtkmountoperation.c:668
 msgid "Forget password _immediately"
-msgstr "Όχ_ι απομνημόνευση του συνθηματικού"
+msgstr "Μη απομνημόνευση του συνθηματικού"
 
-#: ../gtk/gtkmountoperation.c:671
+#: ../gtk/gtkmountoperation.c:678
 msgid "Remember password until you _logout"
 msgstr "Α_πομνημόνευση συνθηματικού μέχρι την αποσύνδεση"
 
-#: ../gtk/gtkmountoperation.c:681
+#: ../gtk/gtkmountoperation.c:688
 msgid "Remember _forever"
 msgstr "_Μόνιμη απομνημόνευση συνθηματικού"
 
-#: ../gtk/gtkmountoperation.c:1070
+#: ../gtk/gtkmountoperation.c:1077
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Άγνωστη εφαρμογή (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1253
+#: ../gtk/gtkmountoperation.c:1260
 msgid "Unable to end process"
 msgstr "Αδυναμία τερματισμού διεργασίας"
 
-#: ../gtk/gtkmountoperation.c:1290
+#: ../gtk/gtkmountoperation.c:1297
 msgid "_End Process"
 msgstr "_Τερματισμός διεργασίας"
 
 #: ../gtk/gtkmountoperation-stub.c:62
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
-msgstr "Αδυναμία βίαιου τερματισμού διεργασίας με PID %d. Η λειτουργία δεν έχει υλοποιηθεί."
+msgstr ""
+"Αδυναμία βίαιου τερματισμού διεργασίας με PID %d. Η λειτουργία δεν έχει "
+"υλοποιηθεί."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:954
@@ -1985,8 +2009,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Αδυναμία τερματισμού διεργασίας με PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5045
-#: ../gtk/gtknotebook.c:7699
+#: ../gtk/gtknotebook.c:5051 ../gtk/gtknotebook.c:7705
 #, c-format
 msgid "Page %u"
 msgstr "Σελίδα %u"
@@ -2000,8 +2023,7 @@ msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
 
-#: ../gtk/gtkpagesetup.c:646
-#: ../gtk/gtkpapersize.c:846
+#: ../gtk/gtkpagesetup.c:646 ../gtk/gtkpapersize.c:846
 #: ../gtk/gtkpapersize.c:886
 msgid "Not a valid page setup file"
 msgstr "Άκυρο αρχείο διαμόρφωσης σελίδας"
@@ -2029,8 +2051,7 @@ msgstr ""
 " Πάνω: %s %s\n"
 " Κάτω: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:845
-#: ../gtk/gtkprintunixdialog.c:3318
+#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3318
 msgid "Manage Custom Sizes..."
 msgstr "Διαχείριση προσαρμοσμένων μεγεθών..."
 
@@ -2038,8 +2059,7 @@ msgstr "Διαχείριση προσαρμοσμένων μεγεθών..."
 msgid "_Format for:"
 msgstr "_Μορφοποίηση για:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:917
-#: ../gtk/gtkprintunixdialog.c:3466
+#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3466
 msgid "_Paper size:"
 msgstr "Μέγε_θος χαρτιού:"
 
@@ -2047,8 +2067,7 @@ msgstr "Μέγε_θος χαρτιού:"
 msgid "_Orientation:"
 msgstr "_Προσανατολισμός:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1006
-#: ../gtk/gtkprintunixdialog.c:3520
+#: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3520
 msgid "Page Setup"
 msgstr "Διαμόρφωση σελίδας"
 
@@ -2139,8 +2158,7 @@ msgstr "Ολοκληρώθηκε με σφάλμα"
 msgid "Preparing %d"
 msgstr "Προετοιμασία %d"
 
-#: ../gtk/gtkprintoperation.c:2354
-#: ../gtk/gtkprintoperation.c:2984
+#: ../gtk/gtkprintoperation.c:2354 ../gtk/gtkprintoperation.c:2984
 msgid "Preparing"
 msgstr "Προετοιμασία"
 
@@ -2191,13 +2209,11 @@ msgstr "Δε βρέθηκε εκτυπωτής"
 msgid "Invalid argument to CreateDC"
 msgstr "Άκυρο όρισμα στο CreateDC"
 
-#: ../gtk/gtkprintoperation-win32.c:1600
-#: ../gtk/gtkprintoperation-win32.c:1827
+#: ../gtk/gtkprintoperation-win32.c:1600 ../gtk/gtkprintoperation-win32.c:1827
 msgid "Error from StartDoc"
 msgstr "Σφάλμα του StartDoc"
 
-#: ../gtk/gtkprintoperation-win32.c:1682
-#: ../gtk/gtkprintoperation-win32.c:1705
+#: ../gtk/gtkprintoperation-win32.c:1682 ../gtk/gtkprintoperation-win32.c:1705
 #: ../gtk/gtkprintoperation-win32.c:1753
 msgid "Not enough free memory"
 msgstr "Ανεπάρκεια μνήμης"
@@ -2342,8 +2358,7 @@ msgstr "Από κάτω προς τα πάνω, από δεξιά προς αρ�
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3054
-#: ../gtk/gtkprintunixdialog.c:3067
+#: ../gtk/gtkprintunixdialog.c:3054 ../gtk/gtkprintunixdialog.c:3067
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3766
 msgid "Page Ordering"
 msgstr "Σειρά σελίδων"
@@ -2546,8 +2561,7 @@ msgstr "Εκτύπωση"
 msgid "Select which type of documents are shown"
 msgstr "Επιλέξτε τον τύπο εγγράφων που θα προβάλλονται"
 
-#: ../gtk/gtkrecentchooserdefault.c:1130
-#: ../gtk/gtkrecentchooserdefault.c:1167
+#: ../gtk/gtkrecentchooserdefault.c:1130 ../gtk/gtkrecentchooserdefault.c:1167
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Χωρίς καταχώριση για το URI '%s'"
@@ -2594,8 +2608,7 @@ msgstr "Προβολή ι_διωτικών πόρων"
 msgid "No items found"
 msgstr "Δε βρέθηκαν καταχωρίσεις"
 
-#: ../gtk/gtkrecentchoosermenu.c:526
-#: ../gtk/gtkrecentchoosermenu.c:582
+#: ../gtk/gtkrecentchoosermenu.c:526 ../gtk/gtkrecentchoosermenu.c:582
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Δε βρέθηκε πρόσφατα χρησιμοποιημένη καταχώριση με URI `%s'"
@@ -2629,12 +2642,9 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1010
-#: ../gtk/gtkrecentmanager.c:1023
-#: ../gtk/gtkrecentmanager.c:1160
-#: ../gtk/gtkrecentmanager.c:1170
-#: ../gtk/gtkrecentmanager.c:1222
-#: ../gtk/gtkrecentmanager.c:1231
+#: ../gtk/gtkrecentmanager.c:1010 ../gtk/gtkrecentmanager.c:1023
+#: ../gtk/gtkrecentmanager.c:1160 ../gtk/gtkrecentmanager.c:1170
+#: ../gtk/gtkrecentmanager.c:1222 ../gtk/gtkrecentmanager.c:1231
 #: ../gtk/gtkrecentmanager.c:1246
 #, c-format
 msgid "Unable to find an item with URI '%s'"
@@ -2643,7 +2653,8 @@ msgstr "Αδυναμία εύρεσης καταχώρισης με URI '%s'"
 #: ../gtk/gtkrecentmanager.c:2446
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr "Δεν βρέθηκε καταχωρημένη εφαρμογή με όνομα '%s' για το στοιχείο με URI '%s'"
+msgstr ""
+"Δεν βρέθηκε καταχωρημένη εφαρμογή με όνομα '%s' για το στοιχείο με URI '%s'"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:324
@@ -3153,9 +3164,7 @@ msgstr "Σμίκρ_υνση"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:342
-#: ../gtk/gtkswitch.c:397
-#: ../gtk/gtkswitch.c:591
+#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:586
 msgctxt "switch"
 msgid "ON"
 msgstr "ΝΑΙ"
@@ -3163,9 +3172,7 @@ msgstr "ΝΑΙ"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:350
-#: ../gtk/gtkswitch.c:398
-#: ../gtk/gtkswitch.c:620
+#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:615
 msgctxt "switch"
 msgid "OFF"
 msgstr "ΟΧΙ"
@@ -3180,14 +3187,12 @@ msgstr "Άγνωστο σφάλμα κατά την προσπάθεια απο�
 msgid "No deserialize function found for format %s"
 msgstr "Δε βρέθηκε συνάρτηση αποσειριοποίησης για τον τύπο %s"
 
-#: ../gtk/gtktextbufferserialize.c:798
-#: ../gtk/gtktextbufferserialize.c:824
+#: ../gtk/gtktextbufferserialize.c:798 ../gtk/gtktextbufferserialize.c:824
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Τόσο το \"id\" όσο και το \"name\" βρέθηκαν στο στοιχείο <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:808
-#: ../gtk/gtktextbufferserialize.c:834
+#: ../gtk/gtktextbufferserialize.c:808 ../gtk/gtktextbufferserialize.c:834
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Το γνώρισμα \"%s\" βρέθηκε δύο φορές στο στοιχείο <%s>"
@@ -3207,11 +3212,11 @@ msgstr "Το στοιχείο <%s> δεν διαθέτει γνώρισμα \"na
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Το γνώρισμα \"%s\" επαναλαμβάνεται δύο φορές στο ίδιο στοιχείο <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:965
-#: ../gtk/gtktextbufferserialize.c:990
+#: ../gtk/gtktextbufferserialize.c:965 ../gtk/gtktextbufferserialize.c:990
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr "Το γνώρισμα \"%s\" είναι άκυρο για το στοιχείο <%s> σε αυτήν την περίπτωση"
+msgstr ""
+"Το γνώρισμα \"%s\" είναι άκυρο για το στοιχείο <%s> σε αυτήν την περίπτωση"
 
 #: ../gtk/gtktextbufferserialize.c:1029
 #, c-format
@@ -3225,12 +3230,12 @@ msgstr "Βρέθηκε ανώνυμη ετικέτα και δεν μπορού�
 #: ../gtk/gtktextbufferserialize.c:1052
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr "Η ετικέτα \"%s\" δεν υπάρχει στην ενδιάμεση μνήμη και δεν μπορούν να δημιουργηθούν ετικέτες."
+msgstr ""
+"Η ετικέτα \"%s\" δεν υπάρχει στην ενδιάμεση μνήμη και δεν μπορούν να "
+"δημιουργηθούν ετικέτες."
 
-#: ../gtk/gtktextbufferserialize.c:1151
-#: ../gtk/gtktextbufferserialize.c:1226
-#: ../gtk/gtktextbufferserialize.c:1331
-#: ../gtk/gtktextbufferserialize.c:1405
+#: ../gtk/gtktextbufferserialize.c:1151 ../gtk/gtktextbufferserialize.c:1226
+#: ../gtk/gtktextbufferserialize.c:1331 ../gtk/gtktextbufferserialize.c:1405
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Το στοιχείο <%s> δεν επιτρέπεται κάτω από το <%s>"
@@ -3247,8 +3252,11 @@ msgstr "Το \"%s\" δεν είναι έγκυρο όνομα γνωρίσματ
 
 #: ../gtk/gtktextbufferserialize.c:1200
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr "Το \"%s\" δεν μπορεί να μετατραπεί σε τιμή του τύπου \"%s\" για το γνώρισμα \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgstr ""
+"Το \"%s\" δεν μπορεί να μετατραπεί σε τιμή του τύπου \"%s\" για το γνώρισμα "
+"\"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:1209
 #, c-format
@@ -3268,10 +3276,11 @@ msgstr "Η ετικέτα \"%s\" έχει άκυρη προτεραιότητα 
 #: ../gtk/gtktextbufferserialize.c:1360
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr "Το εξωτερικό στοιχείο στο κείμενο θα πρέπει να είναι το <text_view_markup> και όχι το <%s>"
+msgstr ""
+"Το εξωτερικό στοιχείο στο κείμενο θα πρέπει να είναι το <text_view_markup> "
+"και όχι το <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1369
-#: ../gtk/gtktextbufferserialize.c:1385
+#: ../gtk/gtktextbufferserialize.c:1369 ../gtk/gtktextbufferserialize.c:1385
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Ένα στοιχείο <%s> έχει ήδη καθοριστεί"
@@ -3285,8 +3294,11 @@ msgid "Serialized data is malformed"
 msgstr "Τα σειριακά δεδομένα είναι κακοσχηματισμένα"
 
 #: ../gtk/gtktextbufferserialize.c:1868
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "Τα σειριακά δεδομένα δεν έχουν τη σωστή μορφή. Η πρώτη ενότητα δεν είναι GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr ""
+"Τα σειριακά δεδομένα δεν έχουν τη σωστή μορφή. Η πρώτη ενότητα δεν είναι "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #: ../gtk/gtktextutil.c:58
 msgid "LRM _Left-to-right mark"
@@ -3354,8 +3366,7 @@ msgstr "Αυξομειώνει την ένταση του ήχου"
 msgid "Adjusts the volume"
 msgstr "Ρυθμίζει την ένταση του ήχου"
 
-#: ../gtk/gtkvolumebutton.c:180
-#: ../gtk/gtkvolumebutton.c:183
+#: ../gtk/gtkvolumebutton.c:180 ../gtk/gtkvolumebutton.c:183
 msgid "Volume Down"
 msgstr "Μείωση έντασης"
 
@@ -3363,8 +3374,7 @@ msgstr "Μείωση έντασης"
 msgid "Decreases the volume"
 msgstr "Μειώνει την ένταση του ήχου"
 
-#: ../gtk/gtkvolumebutton.c:186
-#: ../gtk/gtkvolumebutton.c:189
+#: ../gtk/gtkvolumebutton.c:186 ../gtk/gtkvolumebutton.c:189
 msgid "Volume Up"
 msgstr "Αύξηση έντασης"
 
@@ -3846,8 +3856,7 @@ msgctxt "paper size"
 msgid "10x14"
 msgstr "10x14"
 
-#: ../gtk/paper_names_offsets.c:95
-#: ../gtk/paper_names_offsets.c:96
+#: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
 msgstr "10x15"
@@ -4237,8 +4246,7 @@ msgstr "Αποτυχία επανεγγραφής κεφαλίδας\n"
 msgid "Failed to open file %s : %s\n"
 msgstr "Αποτυχία ανοίγματος αρχείου %s : %s\n"
 
-#: ../gtk/updateiconcache.c:1490
-#: ../gtk/updateiconcache.c:1520
+#: ../gtk/updateiconcache.c:1490 ../gtk/updateiconcache.c:1520
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Αποτυχία εγγραφής αρχείου κρυφής μνήμης: %s\n"
@@ -4314,7 +4322,8 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "Χωρίς αρχείο ευρετηρίου θέματος στο '%s'.\n"
-"Αν θέλετε να δημιουργήσετε εδώ κρυφή μνήμη εικονιδίων, χρησιμοποιήστε το --ignore-theme-index.\n"
+"Αν θέλετε να δημιουργήσετε εδώ κρυφή μνήμη εικονιδίων, χρησιμοποιήστε το --"
+"ignore-theme-index.\n"
 
 #. ID
 #: ../modules/input/imam-et.c:452
@@ -4385,7 +4394,8 @@ msgstr "Συνθηματικό:"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1095
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "Απαιτείται πιστοποίηση για την εκτύπωση του εγγράφου '%s' στον εκτυπωτή %s"
+msgstr ""
+"Απαιτείται πιστοποίηση για την εκτύπωση του εγγράφου '%s' στον εκτυπωτή %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:900
 #, c-format
@@ -4817,6 +4827,9 @@ msgstr "δοκιμαστικό.%s"
 msgid "Print to Test Printer"
 msgstr "Εκτύπωση σε δοκιμαστικό εκτυπωτή"
 
+#~ msgid "Connect as u_ser:"
+#~ msgstr "Σύνδεση ως _χρήστης:"
+
 #~ msgid "Received invalid color data\n"
 #~ msgstr "Ελήφθησαν μη έγκυρα δεδομένα χρώματος\n"
 
@@ -5171,7 +5184,6 @@ msgstr "Εκτύπωση σε δοκιμαστικό εκτυπωτή"
 #~ msgstr "Κατεστραμμένα δεδομένα εικονοστοιχείων εικόνας"
 
 #~ msgid "failed to allocate image buffer of %u byte"
-
 #~ msgid_plural "failed to allocate image buffer of %u bytes"
 #~ msgstr[0] "Αποτυχία διάθεσης %u byte ως ενδιάμεσης μνήμης εικόνας"
 #~ msgstr[1] "Αποτυχία διάθεσης %u bytes ως ενδιάμεσης μνήμης εικόνας"
