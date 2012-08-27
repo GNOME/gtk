@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-22 10:29+0200\n"
-"PO-Revision-Date: 2012-08-22 10:29+0200\n"
+"POT-Creation-Date: 2012-08-27 10:23+0200\n"
+"PO-Revision-Date: 2012-08-27 10:23+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nn@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -1747,17 +1747,17 @@ msgstr "Feil under lasting av ikon"
 msgid "Simple"
 msgstr "Enkel"
 
-#: ../gtk/gtkimmulticontext.c:600
+#: ../gtk/gtkimmulticontext.c:608
 msgctxt "input method menu"
 msgid "System"
 msgstr "System"
 
-#: ../gtk/gtkimmulticontext.c:610
+#: ../gtk/gtkimmulticontext.c:618
 msgctxt "input method menu"
 msgid "None"
 msgstr "Ingen"
 
-#: ../gtk/gtkimmulticontext.c:693
+#: ../gtk/gtkimmulticontext.c:701
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -1905,52 +1905,56 @@ msgstr "Alternativer for GTK+"
 msgid "Show GTK+ Options"
 msgstr "Vis alternativer for GTK+"
 
-#: ../gtk/gtkmountoperation.c:518
+#: ../gtk/gtkmountoperation.c:532
 msgid "Co_nnect"
 msgstr "K_oble til"
 
-#: ../gtk/gtkmountoperation.c:588
-msgid "Connect _anonymously"
-msgstr "Koble til _anonymt"
+#: ../gtk/gtkmountoperation.c:606
+msgid "Connect As"
+msgstr "Koble til som"
 
-#: ../gtk/gtkmountoperation.c:597
-msgid "Connect as u_ser:"
-msgstr "Koble til _som bruker:"
+#: ../gtk/gtkmountoperation.c:615
+msgid "_Anonymous"
+msgstr "_Anonym"
 
-#: ../gtk/gtkmountoperation.c:632
-msgid "_Username:"
-msgstr "Br_ukernavn:"
+#: ../gtk/gtkmountoperation.c:624
+msgid "Registered U_ser"
+msgstr "Registrert _bruker"
 
-#: ../gtk/gtkmountoperation.c:637
-msgid "_Domain:"
-msgstr "_Domene:"
+#: ../gtk/gtkmountoperation.c:635
+msgid "_Username"
+msgstr "Br_ukernavn"
 
-#: ../gtk/gtkmountoperation.c:643
-msgid "_Password:"
-msgstr "_Passord:"
+#: ../gtk/gtkmountoperation.c:640
+msgid "_Domain"
+msgstr "_Domene"
 
-#: ../gtk/gtkmountoperation.c:662
+#: ../gtk/gtkmountoperation.c:646
+msgid "_Password"
+msgstr "_Passord"
+
+#: ../gtk/gtkmountoperation.c:668
 msgid "Forget password _immediately"
 msgstr "Glem _passordet med det samme"
 
-#: ../gtk/gtkmountoperation.c:672
+#: ../gtk/gtkmountoperation.c:678
 msgid "Remember password until you _logout"
 msgstr "Husk passordet til du _logger ut"
 
-#: ../gtk/gtkmountoperation.c:682
+#: ../gtk/gtkmountoperation.c:688
 msgid "Remember _forever"
 msgstr "Husk _for alltid"
 
-#: ../gtk/gtkmountoperation.c:1071
+#: ../gtk/gtkmountoperation.c:1077
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Ukjent program (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1254
+#: ../gtk/gtkmountoperation.c:1260
 msgid "Unable to end process"
 msgstr "Kan ikke avslutte prosess"
 
-#: ../gtk/gtkmountoperation.c:1291
+#: ../gtk/gtkmountoperation.c:1297
 msgid "_End Process"
 msgstr "A_vslutt prosess"
 
