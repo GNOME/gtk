@@ -30,7 +30,8 @@ void                _gtk_css_style_print_value             (const GValue        
                                                             GString                *string);
 GtkCssValue *       _gtk_css_style_compute_value           (GtkStyleContext        *context,
 							    GType                   target_type,
-                                                            GtkCssValue            *specified);
+                                                            GtkCssValue            *specified,
+                                                            GtkCssDependencies     *dependencies);
 
 G_END_DECLS
 
