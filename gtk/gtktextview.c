@@ -458,6 +458,8 @@ static void gtk_text_view_target_list_notify     (GtkTextBuffer     *buffer,
 static void gtk_text_view_paste_done_handler     (GtkTextBuffer     *buffer,
                                                   GtkClipboard      *clipboard,
                                                   gpointer           data);
+static void gtk_text_view_buffer_changed_handler (GtkTextBuffer     *buffer,
+                                                  gpointer           data);
 static void gtk_text_view_get_virtual_cursor_pos (GtkTextView       *text_view,
                                                   GtkTextIter       *cursor,
                                                   gint              *x,
@@ -507,6 +509,8 @@ static void gtk_text_view_handle_dragged       (GtkTextHandle         *handle,
                                                 gint                   x,
                                                 gint                   y,
                                                 GtkTextView           *text_view);
+static void _gtk_text_view_update_handles      (GtkTextView           *text_view,
+                                                GtkTextHandleMode      mode);
 
 /* FIXME probably need the focus methods. */
 
@@ -1575,6 +1579,9 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_signal_handlers_disconnect_by_func (priv->buffer,
                                             gtk_text_view_paste_done_handler,
                                             text_view);
+      g_signal_handlers_disconnect_by_func (priv->buffer,
+                                            gtk_text_view_buffer_changed_handler,
+                                            text_view);
 
       if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
 	{
@@ -1624,6 +1631,9 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_signal_connect (priv->buffer, "paste-done",
 			G_CALLBACK (gtk_text_view_paste_done_handler),
                         text_view);
+      g_signal_connect (priv->buffer, "changed",
+			G_CALLBACK (gtk_text_view_buffer_changed_handler),
+                        text_view);
 
       gtk_text_view_target_list_notify (priv->buffer, NULL, text_view);
 
@@ -1633,6 +1643,8 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 							      GDK_SELECTION_PRIMARY);
 	  gtk_text_buffer_add_selection_clipboard (priv->buffer, clipboard);
 	}
+
+      _gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_NONE);
     }
 
   _gtk_text_view_accessible_set_buffer (text_view, old_buffer);
@@ -4563,13 +4575,21 @@ _gtk_text_view_update_handles (GtkTextView       *text_view,
   GtkTextIter cursor, bound, min, max;
   GtkTextBuffer *buffer;
 
-  _gtk_text_handle_set_mode (priv->text_handle, mode);
   buffer = get_buffer (text_view);
 
   gtk_text_buffer_get_iter_at_mark (buffer, &cursor,
                                     gtk_text_buffer_get_insert (buffer));
   gtk_text_buffer_get_iter_at_mark (buffer, &bound,
                                     gtk_text_buffer_get_selection_bound (buffer));
+
+  if (mode == GTK_TEXT_HANDLE_MODE_SELECTION &&
+      gtk_text_iter_compare (&cursor, &bound) == 0)
+    {
+      mode = (priv->editable) ? GTK_TEXT_HANDLE_MODE_CURSOR :
+        GTK_TEXT_HANDLE_MODE_NONE;
+    }
+
+  _gtk_text_handle_set_mode (priv->text_handle, mode);
 
   if (gtk_text_iter_compare (&cursor, &bound) >= 0)
     {
@@ -4582,10 +4602,9 @@ _gtk_text_view_update_handles (GtkTextView       *text_view,
       max = bound;
     }
 
-
   if (mode != GTK_TEXT_HANDLE_MODE_NONE)
     _gtk_text_view_set_handle_position (text_view, &max,
-                                          GTK_TEXT_HANDLE_POSITION_SELECTION_END);
+                                        GTK_TEXT_HANDLE_POSITION_SELECTION_END);
 
   if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
     _gtk_text_view_set_handle_position (text_view, &min,
@@ -6316,6 +6335,17 @@ gtk_text_view_paste_done_handler (GtkTextBuffer *buffer,
     }
 
   priv->scroll_after_paste = TRUE;
+}
+
+static void
+gtk_text_view_buffer_changed_handler (GtkTextBuffer     *buffer,
+                                      gpointer           data)
+{
+  GtkTextView *text_view = data;
+  GtkTextViewPrivate *priv;
+
+  priv = text_view->priv;
+  _gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_NONE);
 }
 
 static void
@@ -8163,7 +8193,11 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
     }
 
   if (need_reset)
-    gtk_text_view_reset_im_context (text_view);
+    {
+      gtk_text_view_reset_im_context (text_view);
+      _gtk_text_view_update_handles (text_view,
+                                     _gtk_text_handle_get_mode (text_view->priv->text_handle));
+    }
 }
 
 static void
