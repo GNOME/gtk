@@ -281,14 +281,16 @@ gtk_gradient_resolve (GtkGradient         *gradient,
 }
 
 cairo_pattern_t *
-gtk_gradient_resolve_for_context (GtkGradient     *gradient,
-                                  GtkStyleContext *context)
+_gtk_gradient_resolve_full (GtkGradient        *gradient,
+                            GtkStyleContext    *context,
+                            GtkCssDependencies *dependencies)
 {
   cairo_pattern_t *pattern;
   guint i;
 
-  g_return_val_if_fail (gradient != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
+  g_return_val_if_fail (gradient != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+  g_return_val_if_fail (*dependencies == 0, NULL);
 
   if (gradient->radius0 == 0 && gradient->radius1 == 0)
     pattern = cairo_pattern_create_linear (gradient->x0, gradient->y0,
@@ -303,19 +305,33 @@ gtk_gradient_resolve_for_context (GtkGradient     *gradient,
     {
       ColorStop *stop;
       GdkRGBA rgba;
+      GtkCssDependencies stop_deps;
 
       stop = &g_array_index (gradient->stops, ColorStop, i);
 
       /* if color resolving fails, assume transparency */
-      if (!_gtk_style_context_resolve_color (context, stop->color, &rgba, NULL))
+      if (!_gtk_style_context_resolve_color (context, stop->color, &rgba, &stop_deps))
         rgba.red = rgba.green = rgba.blue = rgba.alpha = 0.0;
 
+      *dependencies = _gtk_css_dependencies_union (*dependencies, stop_deps);
       cairo_pattern_add_color_stop_rgba (pattern, stop->offset,
                                          rgba.red, rgba.green,
                                          rgba.blue, rgba.alpha);
     }
 
   return pattern;
+}
+
+cairo_pattern_t *
+gtk_gradient_resolve_for_context (GtkGradient     *gradient,
+                                  GtkStyleContext *context)
+{
+  GtkCssDependencies ignored = 0;
+
+  g_return_val_if_fail (gradient != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  return _gtk_gradient_resolve_full (gradient, context, &ignored);
 }
 
 static void

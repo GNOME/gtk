@@ -34,6 +34,7 @@
 #include "gtkgradient.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkstylepropertiesprivate.h"
 #include "gtksymboliccolorprivate.h"
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
@@ -830,9 +831,7 @@ pattern_value_compute (GtkStyleContext    *context,
       GValue new_value = G_VALUE_INIT;
       cairo_pattern_t *gradient;
       
-      *dependencies = GTK_CSS_DEPENDS_ON_EVERYTHING;
-
-      gradient = gtk_gradient_resolve_for_context (g_value_get_boxed (value), context);
+      gradient = _gtk_gradient_resolve_full (g_value_get_boxed (value), context, dependencies);
 
       g_value_init (&new_value, CAIRO_GOBJECT_TYPE_PATTERN);
       g_value_take_boxed (&new_value, gradient);

@@ -33,6 +33,11 @@ void           _gtk_style_properties_set_property_by_property (GtkStylePropertie
                                                                GtkStateFlags            state,
                                                                GtkCssValue             *value);
 
+cairo_pattern_t *
+              _gtk_gradient_resolve_full  (GtkGradient         *gradient,
+                                           GtkStyleContext     *context,
+                                           GtkCssDependencies  *dependencies);
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_PROPERTIES_PRIVATE_H__ */
