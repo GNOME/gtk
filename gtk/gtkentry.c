@@ -218,8 +218,6 @@ struct _GtkEntryPrivate
   guint         select_words            : 1;
   guint         select_lines            : 1;
   guint         truncate_multiline      : 1;
-  guint         cursor_handle_dragged   : 1;
-  guint         selection_handle_dragged : 1;
   guint         update_handles_on_focus : 1;
 };
 
@@ -588,9 +586,6 @@ static void         gtk_entry_handle_dragged           (GtkTextHandle         *h
                                                         GtkTextHandlePosition  pos,
                                                         gint                   x,
                                                         gint                   y,
-                                                        GtkEntry              *entry);
-static void         gtk_entry_handle_drag_finished     (GtkTextHandle         *handle,
-                                                        GtkTextHandlePosition  pos,
                                                         GtkEntry              *entry);
 
 /* Completion */
@@ -2574,8 +2569,6 @@ gtk_entry_init (GtkEntry *entry)
   priv->text_handle = _gtk_text_handle_new (GTK_WIDGET (entry));
   g_signal_connect (priv->text_handle, "handle-dragged",
                     G_CALLBACK (gtk_entry_handle_dragged), entry);
-  g_signal_connect (priv->text_handle, "drag-finished",
-                    G_CALLBACK (gtk_entry_handle_drag_finished), entry);
 }
 
 static void
@@ -3891,14 +3884,11 @@ _gtk_entry_move_handle (GtkEntry              *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
 
-  if (((!priv->cursor_handle_dragged &&
-        pos == GTK_TEXT_HANDLE_POSITION_CURSOR) ||
-       (!priv->selection_handle_dragged &&
-        pos == GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND)) &&
+  if (!_gtk_text_handle_get_is_dragged (priv->text_handle, pos) &&
       (x < 0 || x > gdk_window_get_width (priv->text_area)))
     {
-      /* Hide the opposite handle if it's not being manipulated
-       * too and fell outside of the visible text area.
+      /* Hide the handle if it's not being manipulated
+       * and fell outside of the visible text area.
        */
       _gtk_text_handle_set_visible (priv->text_handle, pos, FALSE);
     }
@@ -3940,24 +3930,29 @@ _gtk_entry_update_handles (GtkEntry          *entry,
                            GtkTextHandleMode  mode)
 {
   GtkEntryPrivate *priv = entry->priv;
-  gint strong_x, x, height;
+  gint strong_x, height;
+  gint cursor, bound;
 
   height = gdk_window_get_height (priv->text_area);
   _gtk_text_handle_set_mode (priv->text_handle, mode);
 
-  /* Update cursor */
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
-  x = strong_x - priv->scroll_offset;
-  _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_CURSOR,
-                          x, 0, height);
+  cursor = strong_x - priv->scroll_offset;
 
-  /* Update selection bound */
   if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
     {
-      x = _gtk_entry_get_selection_bound_location (entry) - priv->scroll_offset;
-      _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND,
-                              x, 0, height);
+      bound = _gtk_entry_get_selection_bound_location (entry) - priv->scroll_offset;
+
+      /* Update start selection bound */
+      _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_SELECTION_START,
+                              MIN (cursor, bound), 0, height);
     }
+  else
+    bound = cursor;
+
+  /* Update end bound/cursor */
+  _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_SELECTION_END,
+                          MAX (cursor, bound), 0, height);
 }
 
 static gint
@@ -4116,10 +4111,7 @@ gtk_entry_button_press (GtkWidget      *widget,
               gtk_editable_set_position (editable, tmp_pos);
 
               if (is_touchscreen)
-                {
-                  priv->cursor_handle_dragged = TRUE;
-                  _gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
-                }
+                _gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
             }
 	  break;
  
@@ -4131,6 +4123,9 @@ gtk_entry_button_press (GtkWidget      *widget,
 	  priv->in_drag = FALSE;
 	  priv->select_words = TRUE;
 	  gtk_entry_select_word (entry);
+
+          if (is_touchscreen)
+            _gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_SELECTION);
 	  break;
 	
 	case GDK_3BUTTON_PRESS:
@@ -4141,6 +4136,8 @@ gtk_entry_button_press (GtkWidget      *widget,
 	  priv->in_drag = FALSE;
 	  priv->select_lines = TRUE;
 	  gtk_entry_select_line (entry);
+          if (is_touchscreen)
+            _gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_SELECTION);
 	  break;
 
 	default:
@@ -6197,44 +6194,53 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
   gint cursor_pos, selection_bound_pos, tmp_pos;
   GtkEntryPrivate *priv = entry->priv;
   GtkTextHandleMode mode;
+  gint *min, *max;
 
   cursor_pos = priv->current_pos;
   selection_bound_pos = priv->selection_bound;
   mode = _gtk_text_handle_get_mode (handle);
   tmp_pos = gtk_entry_find_position (entry, x + priv->scroll_offset);
 
-  if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR)
+  if (mode == GTK_TEXT_HANDLE_MODE_CURSOR ||
+      cursor_pos >= selection_bound_pos)
     {
-      priv->cursor_handle_dragged = TRUE;
-
-      if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
-        {
-          gint max_pos;
-
-          if (priv->select_words)
-            max_pos = gtk_entry_move_forward_word (entry, priv->selection_bound, TRUE);
-          else
-            max_pos = MAX (priv->selection_bound + 1, 0);
-
-          cursor_pos = MAX (tmp_pos, max_pos);
-        }
-      else
-        cursor_pos = tmp_pos;
+      max = &cursor_pos;
+      min = &selection_bound_pos;
     }
   else
     {
-      priv->selection_handle_dragged = TRUE;
+      max = &selection_bound_pos;
+      min = &cursor_pos;
+    }
 
+  if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
+    {
       if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
         {
           gint min_pos;
 
           if (priv->select_words)
-            min_pos = gtk_entry_move_backward_word (entry, priv->current_pos, TRUE);
+            min_pos = gtk_entry_move_forward_word (entry, *min, TRUE);
           else
-            min_pos = priv->current_pos - 1;
+            min_pos = MAX (*min + 1, 0);
 
-          selection_bound_pos = MIN (tmp_pos, min_pos);
+          tmp_pos = MAX (tmp_pos, min_pos);
+        }
+
+      *max = tmp_pos;
+    }
+  else
+    {
+      if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
+        {
+          gint max_pos;
+
+          if (priv->select_words)
+            max_pos = gtk_entry_move_backward_word (entry, *max, TRUE);
+          else
+            max_pos = *max - 1;
+
+          *min = MIN (tmp_pos, max_pos);
         }
     }
 
@@ -6248,19 +6254,6 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
 
       _gtk_entry_update_handles (entry, mode);
     }
-}
-
-static void
-gtk_entry_handle_drag_finished (GtkTextHandle         *handle,
-                                GtkTextHandlePosition  pos,
-                                GtkEntry              *entry)
-{
-  GtkEntryPrivate *priv = entry->priv;
-
-  if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR)
-    priv->cursor_handle_dragged = FALSE;
-  else
-    priv->selection_handle_dragged = FALSE;
 }
 
 void
@@ -6425,6 +6418,23 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
     }
 }
 
+static gboolean
+_gtk_entry_get_is_selection_handle_dragged (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  GtkTextHandlePosition pos;
+
+  if (_gtk_text_handle_get_mode (priv->text_handle) != GTK_TEXT_HANDLE_MODE_SELECTION)
+    return FALSE;
+
+  if (priv->current_pos >= priv->selection_bound)
+    pos = GTK_TEXT_HANDLE_POSITION_SELECTION_START;
+  else
+    pos = GTK_TEXT_HANDLE_POSITION_SELECTION_END;
+
+  return _gtk_text_handle_get_is_dragged (priv->text_handle, pos);
+}
+
 static void
 gtk_entry_adjust_scroll (GtkEntry *entry)
 {
@@ -6474,7 +6484,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 
   priv->scroll_offset = CLAMP (priv->scroll_offset, min_offset, max_offset);
 
-  if (priv->selection_handle_dragged && !priv->cursor_handle_dragged)
+  if (_gtk_entry_get_is_selection_handle_dragged (entry))
     {
       /* The text handle corresponding to the selection bound is
        * being dragged, ensure it stays onscreen even if we scroll
