@@ -4390,23 +4390,10 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 		pos = min;
 	    }
 
-          /* Don't allow backwards selection on touch devices,
-           * so handles don't get inverted.
-           */
-          if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
-            pos = MIN (MAX (pos, gtk_entry_move_backward_word (entry, bound, TRUE)), length);
-
 	  gtk_entry_set_positions (entry, pos, bound);
 	}
       else
-        {
-          /* Don't allow backwards selection on touch devices,
-           * so handles don't get inverted.
-           */
-          if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
-            tmp_pos = MIN (MAX (tmp_pos, priv->selection_bound + 1), length);
-          gtk_entry_set_positions (entry, tmp_pos, -1);
-        }
+        gtk_entry_set_positions (entry, tmp_pos, -1);
 
       /* Update touch handles' position */
       if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
