@@ -900,6 +900,8 @@ gtk_private_h_sources += \
 	gtkprinteroptionwidget.h	\
 	gtksearchenginetracker.h
 gtk_c_sources += $(gtk_os_unix_c_sources)
+else
+gtk_c_sources += $(gtk_dbus_built_sources)
 endif
 
 gtk_os_win32_c_sources = \
