@@ -6485,20 +6485,6 @@ move_mark_to_pointer_and_scroll (GtkTextView    *text_view,
   buffer = get_buffer (text_view);
   get_iter_at_pointer (text_view, device, &newplace, NULL, NULL);
 
-  if (test_touchscreen || source == GDK_SOURCE_TOUCHSCREEN)
-    {
-      GtkTextIter min;
-
-      gtk_text_buffer_get_iter_at_mark (buffer, &min,
-                                        gtk_text_buffer_get_selection_bound (buffer));
-
-      if (gtk_text_iter_compare (&newplace, &min) <= 0)
-	{
-	  newplace = min;
-	  gtk_text_iter_forward_char (&newplace);
-	}
-    }
-
   mark = gtk_text_buffer_get_mark (buffer, mark_name);
 
   /* This may invalidate the layout */
@@ -6723,27 +6709,11 @@ selection_motion_event_handler (GtkTextView    *text_view,
       start = cursor;
       extend_selection (text_view, data->granularity, &start, &end);
 
-      if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
-        {
-          /* Don't allow backwards selection on touch devices,
-           * so handles don't get inverted.
-           */
-          if (gtk_text_iter_compare (&cursor, &orig_end) <= 0)
-	    {
-	      end = orig_end;
-	      gtk_text_iter_forward_char (&end);
-	    }
-
-          gtk_text_buffer_select_range (buffer, &orig_start, &end);
-        }
+      /* either the selection extends to the front, or end (or not) */
+      if (gtk_text_iter_compare (&cursor, &orig_start) < 0)
+        gtk_text_buffer_select_range (buffer, &start, &orig_end);
       else
-        {
-          /* either the selection extends to the front, or end (or not) */
-          if (gtk_text_iter_compare (&cursor, &orig_start) < 0)
-            gtk_text_buffer_select_range (buffer, &start, &orig_end);
-          else
-            gtk_text_buffer_select_range (buffer, &end, &orig_start);
-        }
+        gtk_text_buffer_select_range (buffer, &end, &orig_start);
 
       gtk_text_view_scroll_mark_onscreen (text_view,
 					  gtk_text_buffer_get_insert (buffer));
