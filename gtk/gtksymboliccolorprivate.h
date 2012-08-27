@@ -28,8 +28,10 @@ typedef GtkSymbolicColor * (* GtkSymbolicColorLookupFunc) (gpointer data, const 
 
 GtkCssValue *      _gtk_symbolic_color_resolve_full       (GtkSymbolicColor           *color,
                                                            GtkCssValue                *current,
+                                                           GtkCssDependencies          current_deps,
                                                            GtkSymbolicColorLookupFunc  func,
-                                                           gpointer                    data);
+                                                           gpointer                    data,
+                                                           GtkCssDependencies         *dependencies);
 
 GtkSymbolicColor * _gtk_symbolic_color_get_current_color  (void);
 

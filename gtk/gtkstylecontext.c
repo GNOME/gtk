@@ -2263,7 +2263,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
               else
                 g_value_init (&pcache->value, GDK_TYPE_COLOR);
 
-              if (_gtk_style_context_resolve_color (context, color, &rgba))
+              if (_gtk_style_context_resolve_color (context, color, &rgba, NULL))
                 {
                   if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
                     g_value_set_boxed (&pcache->value, &rgba);
@@ -2677,9 +2677,11 @@ gtk_style_context_color_lookup_func (gpointer    contextp,
 }
 
 GtkCssValue *
-_gtk_style_context_resolve_color_value (GtkStyleContext  *context,
-                                        GtkCssValue      *current,
-					GtkCssValue      *color)
+_gtk_style_context_resolve_color_value (GtkStyleContext    *context,
+                                        GtkCssValue        *current,
+                                        GtkCssDependencies  current_deps,
+					GtkCssValue        *color,
+                                        GtkCssDependencies *dependencies)
 {
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
   g_return_val_if_fail (current != NULL, FALSE);
@@ -2687,15 +2689,18 @@ _gtk_style_context_resolve_color_value (GtkStyleContext  *context,
 
   return _gtk_symbolic_color_resolve_full ((GtkSymbolicColor *) color,
                                            current,
+                                           current_deps,
                                            gtk_style_context_color_lookup_func,
-                                           context);
+                                           context,
+                                           dependencies);
 }
 
 
 gboolean
-_gtk_style_context_resolve_color (GtkStyleContext  *context,
-                                  GtkSymbolicColor *color,
-                                  GdkRGBA          *result)
+_gtk_style_context_resolve_color (GtkStyleContext    *context,
+                                  GtkSymbolicColor   *color,
+                                  GdkRGBA            *result,
+                                  GtkCssDependencies *dependencies)
 {
   GtkCssValue *val;
 
@@ -2705,8 +2710,10 @@ _gtk_style_context_resolve_color (GtkStyleContext  *context,
 
   val = _gtk_symbolic_color_resolve_full (color,
                                           _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR),
+                                          GTK_CSS_DEPENDS_ON_COLOR,
 					  gtk_style_context_color_lookup_func,
-					  context);
+					  context,
+                                          dependencies);
   if (val == NULL)
     return FALSE;
 
@@ -2740,7 +2747,7 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
   if (sym_color == NULL)
     return FALSE;
 
-  return _gtk_style_context_resolve_color (context, sym_color, color);
+  return _gtk_style_context_resolve_color (context, sym_color, color, NULL);
 }
 
 /**

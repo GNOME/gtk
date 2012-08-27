@@ -307,7 +307,7 @@ gtk_gradient_resolve_for_context (GtkGradient     *gradient,
       stop = &g_array_index (gradient->stops, ColorStop, i);
 
       /* if color resolving fails, assume transparency */
-      if (!_gtk_style_context_resolve_color (context, stop->color, &rgba))
+      if (!_gtk_style_context_resolve_color (context, stop->color, &rgba, NULL))
         rgba.red = rgba.green = rgba.blue = rgba.alpha = 0.0;
 
       cairo_pattern_add_color_stop_rgba (pattern, stop->offset,

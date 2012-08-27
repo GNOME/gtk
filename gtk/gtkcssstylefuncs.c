@@ -216,7 +216,7 @@ rgba_value_compute (GtkStyleContext *context,
       GValue new_value = G_VALUE_INIT;
       GdkRGBA rgba;
 
-      if (!_gtk_style_context_resolve_color (context, symbolic, &rgba))
+      if (!_gtk_style_context_resolve_color (context, symbolic, &rgba, NULL))
         rgba = white;
 
       g_value_init (&new_value, GDK_TYPE_RGBA);
@@ -290,7 +290,8 @@ color_value_compute (GtkStyleContext *context,
 
       if (_gtk_style_context_resolve_color (context,
                                             g_value_get_boxed (value),
-                                            &rgba))
+                                            &rgba,
+                                            NULL))
         {
           color.red = rgba.red * 65535. + 0.5;
           color.green = rgba.green * 65535. + 0.5;
