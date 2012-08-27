@@ -35,7 +35,8 @@ typedef struct _GtkTextHandleClass GtkTextHandleClass;
 typedef enum
 {
   GTK_TEXT_HANDLE_POSITION_CURSOR,
-  GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND
+  GTK_TEXT_HANDLE_POSITION_SELECTION_START,
+  GTK_TEXT_HANDLE_POSITION_SELECTION_END = GTK_TEXT_HANDLE_POSITION_CURSOR
 } GtkTextHandlePosition;
 
 typedef enum
@@ -80,6 +81,9 @@ void            _gtk_text_handle_set_visible  (GtkTextHandle         *handle,
 
 void            _gtk_text_handle_set_relative_to (GtkTextHandle *handle,
                                                   GdkWindow     *window);
+
+gboolean        _gtk_text_handle_get_is_dragged (GtkTextHandle         *handle,
+                                                 GtkTextHandlePosition  pos);
 
 G_END_DECLS
 

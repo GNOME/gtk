@@ -45,6 +45,7 @@ struct _HandleWindow
   GdkRectangle pointing_to;
   gint dx;
   gint dy;
+  guint dragged : 1;
 };
 
 struct _GtkTextHandlePrivate
@@ -106,7 +107,7 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_ENTRY);
 
-  if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR)
+  if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_CURSOR_HANDLE);
   else
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_INVERTED_CURSOR_HANDLE);
@@ -142,10 +143,10 @@ _gtk_text_handle_update_shape (GtkTextHandle *handle,
                                            gdk_window_get_width (window),
                                            gdk_window_get_height (window));
 
-      if (window == priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window)
-        pos = GTK_TEXT_HANDLE_POSITION_CURSOR;
-      else if (window == priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND].window)
-        pos = GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND;
+      if (window == priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window)
+        pos = GTK_TEXT_HANDLE_POSITION_SELECTION_START;
+      else if (window == priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window)
+        pos = GTK_TEXT_HANDLE_POSITION_SELECTION_END;
 
       cr = cairo_create (surface);
       _gtk_text_handle_draw (handle, cr, pos);
@@ -213,10 +214,10 @@ gtk_text_handle_widget_draw (GtkWidget     *widget,
   if (!priv->realized)
     return FALSE;
 
-  if (gtk_cairo_should_draw_window (cr, priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window))
-    pos = GTK_TEXT_HANDLE_POSITION_CURSOR;
-  else if (gtk_cairo_should_draw_window (cr, priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND].window))
-    pos = GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND;
+  if (gtk_cairo_should_draw_window (cr, priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window))
+    pos = GTK_TEXT_HANDLE_POSITION_SELECTION_START;
+  else if (gtk_cairo_should_draw_window (cr, priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window))
+    pos = GTK_TEXT_HANDLE_POSITION_SELECTION_END;
   else
     return FALSE;
 
@@ -234,10 +235,10 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
 
   priv = handle->priv;
 
-  if (event->any.window == priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window)
-    pos = GTK_TEXT_HANDLE_POSITION_CURSOR;
-  else if (event->any.window == priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND].window)
-    pos = GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND;
+  if (event->any.window == priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window)
+    pos = GTK_TEXT_HANDLE_POSITION_SELECTION_START;
+  else if (event->any.window == priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window)
+    pos = GTK_TEXT_HANDLE_POSITION_SELECTION_END;
   else
     return FALSE;
 
@@ -245,14 +246,15 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
     {
       priv->windows[pos].dx = event->button.x;
       priv->windows[pos].dy = event->button.y;
+      priv->windows[pos].dragged = TRUE;
     }
   else if (event->type == GDK_BUTTON_RELEASE)
     {
       g_signal_emit (handle, signals[DRAG_FINISHED], 0, pos);
       priv->windows[pos].dx =  priv->windows[pos].dy = 0;
+      priv->windows[pos].dragged = FALSE;
     }
-  else if (event->type == GDK_MOTION_NOTIFY &&
-           (event->motion.state & GDK_BUTTON1_MASK) != 0)
+  else if (event->type == GDK_MOTION_NOTIFY && priv->windows[pos].dragged)
     {
       gint x, y, width, height;
 
@@ -262,7 +264,7 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
       x = event->motion.x_root - priv->windows[pos].dx + (width / 2) - x;
       y = event->motion.y_root - priv->windows[pos].dy - y;
 
-      if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND)
+      if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_START)
         y += height;
 
       g_signal_emit (handle, signals[HANDLE_DRAGGED], 0, pos, x, y);
@@ -314,8 +316,8 @@ _gtk_text_handle_update_window (GtkTextHandle         *handle,
 static void
 _gtk_text_handle_update_windows (GtkTextHandle *handle)
 {
-  _gtk_text_handle_update_window (handle, GTK_TEXT_HANDLE_POSITION_CURSOR);
-  _gtk_text_handle_update_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND);
+  _gtk_text_handle_update_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
+  _gtk_text_handle_update_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END);
 }
 
 static void
@@ -354,11 +356,11 @@ gtk_text_handle_finalize (GObject *object)
   if (priv->relative_to)
     g_object_unref (priv->relative_to);
 
-  if (priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window)
-    gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window);
+  if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window)
+    gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
 
-  if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND].window)
-    gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND].window);
+  if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window)
+    gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window);
 
   if (g_signal_handler_is_connected (priv->parent, priv->draw_signal_id))
     g_signal_handler_disconnect (priv->parent, priv->draw_signal_id);
@@ -501,24 +503,24 @@ _gtk_text_handle_set_relative_to (GtkTextHandle *handle,
 
   if (priv->relative_to)
     {
-      gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window);
-      gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND].window);
+      gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
+      gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window);
       g_object_unref (priv->relative_to);
     }
 
   if (window)
     {
       priv->relative_to = g_object_ref (window);
-      priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window =
+      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window =
         _gtk_text_handle_create_window (handle);
-      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND].window =
+      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window =
         _gtk_text_handle_create_window (handle);
       priv->realized = TRUE;
     }
   else
     {
-      priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window = NULL;
-      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND].window = NULL;
+      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window = NULL;
+      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window = NULL;
       priv->relative_to = NULL;
       priv->realized = FALSE;
     }
@@ -544,17 +546,17 @@ _gtk_text_handle_set_mode (GtkTextHandle     *handle,
     case GTK_TEXT_HANDLE_MODE_CURSOR:
       /* Only display one handle */
       gdk_window_show (priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window);
-      gdk_window_hide (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND].window);
+      gdk_window_hide (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
       break;
       case GTK_TEXT_HANDLE_MODE_SELECTION:
         /* Display both handles */
-      gdk_window_show (priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window);
-      gdk_window_show (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND].window);
+      gdk_window_show (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
+      gdk_window_show (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window);
       break;
     case GTK_TEXT_HANDLE_MODE_NONE:
     default:
-      gdk_window_hide (priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window);
-      gdk_window_hide (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_BOUND].window);
+      gdk_window_hide (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
+      gdk_window_hide (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window);
       break;
     }
 
@@ -584,6 +586,8 @@ _gtk_text_handle_set_position (GtkTextHandle         *handle,
   g_return_if_fail (GTK_IS_TEXT_HANDLE (handle));
 
   priv = handle->priv;
+  pos = CLAMP (pos, GTK_TEXT_HANDLE_POSITION_CURSOR,
+               GTK_TEXT_HANDLE_POSITION_SELECTION_START);
 
   if (!priv->realized)
     return;
@@ -621,6 +625,8 @@ _gtk_text_handle_set_visible (GtkTextHandle         *handle,
   g_return_if_fail (GTK_IS_TEXT_HANDLE (handle));
 
   priv = handle->priv;
+  pos = CLAMP (pos, GTK_TEXT_HANDLE_POSITION_CURSOR,
+               GTK_TEXT_HANDLE_POSITION_SELECTION_START);
 
   if (!priv->realized)
     return;
@@ -642,4 +648,19 @@ _gtk_text_handle_set_visible (GtkTextHandle         *handle,
       if (!gdk_window_is_visible (window))
         gdk_window_show (window);
     }
+}
+
+gboolean
+_gtk_text_handle_get_is_dragged (GtkTextHandle         *handle,
+                                 GtkTextHandlePosition  pos)
+{
+  GtkTextHandlePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_TEXT_HANDLE (handle), FALSE);
+
+  priv = handle->priv;
+  pos = CLAMP (pos, GTK_TEXT_HANDLE_POSITION_CURSOR,
+               GTK_TEXT_HANDLE_POSITION_SELECTION_START);
+
+  return priv->windows[pos].dragged;
 }
