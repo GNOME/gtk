@@ -274,6 +274,10 @@ static void  gtk_scrolled_window_realize               (GtkWidget           *wid
 static void  gtk_scrolled_window_unrealize             (GtkWidget           *widget);
 static void  gtk_scrolled_window_map                   (GtkWidget           *widget);
 static void  gtk_scrolled_window_unmap                 (GtkWidget           *widget);
+static void  gtk_scrolled_window_state_flags_changed   (GtkWidget           *widget,
+                                                        GtkStateFlags        previous_state);
+static void  gtk_scrolled_window_style_updated         (GtkWidget           *widget);
+
 static void  gtk_scrolled_window_grab_notify           (GtkWidget           *widget,
                                                         gboolean             was_grabbed);
 
@@ -348,6 +352,8 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->unrealize = gtk_scrolled_window_unrealize;
   widget_class->map = gtk_scrolled_window_map;
   widget_class->unmap = gtk_scrolled_window_unmap;
+  widget_class->state_flags_changed = gtk_scrolled_window_state_flags_changed;
+  widget_class->style_updated = gtk_scrolled_window_style_updated;
   widget_class->grab_notify = gtk_scrolled_window_grab_notify;
 
   container_class->add = gtk_scrolled_window_add;
@@ -1507,32 +1513,14 @@ gtk_scrolled_window_draw (GtkWidget *widget,
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkAllocation relative_allocation;
-  cairo_pattern_t *pattern = NULL;
   GtkStyleContext *context;
-  GtkWidget *child;
 
   context = gtk_widget_get_style_context (widget);
   gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
 
-  /* Use child's background if possible */
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-  if (child && gtk_widget_get_has_window (child))
-    pattern = gdk_window_get_background_pattern (gtk_widget_get_window (child));
-
-  if (pattern &&
-      cairo_pattern_get_type (pattern) == CAIRO_PATTERN_TYPE_SOLID)
-    {
-      cairo_set_source (cr, pattern);
-
-      cairo_rectangle (cr, relative_allocation.x, relative_allocation.y,
-                       relative_allocation.width, relative_allocation.height);
-      cairo_fill (cr);
-    }
-  else
-    gtk_render_background (context, cr,
-                           relative_allocation.x, relative_allocation.y,
-                           relative_allocation.width, relative_allocation.height);
+  gtk_render_background (context, cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget), gtk_widget_get_allocated_height (widget));
 
   if (priv->hscrollbar_visible && 
       priv->vscrollbar_visible)
@@ -3443,6 +3431,37 @@ gtk_scrolled_window_unmap (GtkWidget *widget)
   gdk_window_hide (scrolled_window->priv->overshoot_window);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unmap (widget);
+}
+
+static void
+_gtk_scrolled_window_update_background (GtkScrolledWindow *scrolled_window)
+{
+  GtkWidget *widget = GTK_WIDGET (scrolled_window);
+
+  if (gtk_widget_get_realized (widget))
+    {
+      GtkStyleContext *context;
+
+      context = gtk_widget_get_style_context (widget);
+      gtk_style_context_set_background (context, scrolled_window->priv->overshoot_window);
+    }
+}
+
+static void
+gtk_scrolled_window_state_flags_changed (GtkWidget     *widget,
+                                         GtkStateFlags  previous_state)
+{
+  _gtk_scrolled_window_update_background (GTK_SCROLLED_WINDOW (widget));
+  gtk_widget_queue_draw (widget);
+}
+
+static void
+gtk_scrolled_window_style_updated (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->style_updated (widget);
+
+  _gtk_scrolled_window_update_background (GTK_SCROLLED_WINDOW (widget));
+  gtk_widget_queue_draw (widget);
 }
 
 static void
