@@ -46,15 +46,13 @@ gtk_css_value_image_compute (GtkCssValue        *value,
   if (image == NULL)
     return _gtk_css_value_ref (value);
 
-  computed = _gtk_css_image_compute (image, property_id, context);
+  computed = _gtk_css_image_compute (image, property_id, context, dependencies);
 
   if (computed == image)
     {
       g_object_unref (computed);
       return _gtk_css_value_ref (value);
     }
-
-  *dependencies = GTK_CSS_DEPENDS_ON_EVERYTHING;
 
   return _gtk_css_image_value_new (computed);
 }

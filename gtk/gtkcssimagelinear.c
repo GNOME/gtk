@@ -409,9 +409,10 @@ gtk_css_image_linear_print (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_linear_compute (GtkCssImage     *image,
-                              guint            property_id,
-                              GtkStyleContext *context)
+gtk_css_image_linear_compute (GtkCssImage        *image,
+                              guint               property_id,
+                              GtkStyleContext    *context,
+                              GtkCssDependencies *dependencies)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
   GtkCssImageLinear *copy;
@@ -420,22 +421,29 @@ gtk_css_image_linear_compute (GtkCssImage     *image,
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_LINEAR, NULL);
   copy->repeating = linear->repeating;
 
-  copy->angle = _gtk_css_value_compute (linear->angle, property_id, context, NULL);
+  copy->angle = _gtk_css_value_compute (linear->angle, property_id, context, dependencies);
   
   g_array_set_size (copy->stops, linear->stops->len);
   for (i = 0; i < linear->stops->len; i++)
     {
       GtkCssImageLinearColorStop *stop, *scopy;
+      GtkCssDependencies child_deps;
 
       stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, i);
       scopy = &g_array_index (copy->stops, GtkCssImageLinearColorStop, i);
               
-      scopy->color = _gtk_css_value_compute (stop->color, property_id, context, NULL);
+      scopy->color = _gtk_css_value_compute (stop->color, property_id, context, &child_deps);
+      *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
       
       if (stop->offset)
-        scopy->offset = _gtk_css_value_compute (stop->offset, property_id, context, NULL);
+        {
+          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, context, &child_deps);
+          *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
+        }
       else
-        scopy->offset = NULL;
+        {
+          scopy->offset = NULL;
+        }
     }
 
   return GTK_CSS_IMAGE (copy);
