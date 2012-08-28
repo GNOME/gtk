@@ -63,9 +63,6 @@ typedef enum /*< skip >*/ {
   GTK_CSS_DEPENDS_ON_FONT_SIZE = (1 << 3)
 } GtkCssDependencies;
 
-#define GTK_CSS_DEPENDS_ON_EVERYTHING (GTK_CSS_DEPENDS_ON_PARENT | GTK_CSS_EQUALS_PARENT \
-                                       | GTK_CSS_DEPENDS_ON_COLOR | GTK_CSS_DEPENDS_ON_FONT_SIZE)
-
 enum { /*< skip >*/
   GTK_CSS_PROPERTY_COLOR,
   GTK_CSS_PROPERTY_FONT_SIZE,
