@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-08-19 22:53+0000\n"
-"PO-Revision-Date: 2012-08-20 23:17+0300\n"
+"POT-Creation-Date: 2012-08-26 14:55+0000\n"
+"PO-Revision-Date: 2012-08-28 22:15+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <>\n"
 "Language: lt\n"
@@ -767,7 +767,6 @@ msgid "Failed to look for applications online"
 msgstr "Nepavyko rasti programų internete"
 
 #: ../gtk/gtkappchooserdialog.c:188
-#| msgid "Find applications online"
 msgid "_Find applications online"
 msgstr "_Ieškoti programų internete"
 
@@ -835,7 +834,7 @@ msgstr "Susijusios programos"
 msgid "Other Applications"
 msgstr "Kitos programos"
 
-#: ../gtk/gtkapplication.c:1529
+#: ../gtk/gtkapplication.c:1552
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -846,7 +845,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:335
+#: ../gtk/gtkapplicationwindow.c:333
 #: ../gtk/gtkprintoperation-unix.c:475
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
@@ -1352,17 +1351,17 @@ msgstr "_Dešinė:"
 msgid "Paper Margins"
 msgstr "Popieriaus paraštės"
 
-#: ../gtk/gtkentry.c:8784
-#: ../gtk/gtktextview.c:8262
+#: ../gtk/gtkentry.c:8848
+#: ../gtk/gtktextview.c:8316
 msgid "Input _Methods"
 msgstr "Įvesties _metodai"
 
-#: ../gtk/gtkentry.c:8798
-#: ../gtk/gtktextview.c:8276
+#: ../gtk/gtkentry.c:8862
+#: ../gtk/gtktextview.c:8330
 msgid "_Insert Unicode Control Character"
 msgstr "Įterpti _Unicode valdymo simbolį"
 
-#: ../gtk/gtkentry.c:10272
+#: ../gtk/gtkentry.c:10336
 msgid "Caps Lock is on"
 msgstr "Caps Lock įjungtas"
 
@@ -1742,17 +1741,17 @@ msgstr "Nepavyko įkelti piktogramos"
 msgid "Simple"
 msgstr "Paprastasis"
 
-#: ../gtk/gtkimmulticontext.c:600
+#: ../gtk/gtkimmulticontext.c:608
 msgctxt "input method menu"
 msgid "System"
 msgstr "Sistemos numatytasis"
 
-#: ../gtk/gtkimmulticontext.c:610
+#: ../gtk/gtkimmulticontext.c:618
 msgctxt "input method menu"
 msgid "None"
 msgstr "Joks"
 
-#: ../gtk/gtkimmulticontext.c:693
+#: ../gtk/gtkimmulticontext.c:701
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -1784,7 +1783,6 @@ msgstr ""
 
 #: ../gtk/gtk-launch.c:85
 #, c-format
-#| msgid "Error parsing option --gdk-debug"
 msgid "Error parsing commandline options: %s\n"
 msgstr "Klaida skaitant komandų eilutės parinktis: %s\n"
 
@@ -1798,7 +1796,6 @@ msgstr "Daugiau informacijos gausite įvykdę „%s --help“"
 #. means the user is calling gtk-launch without any argument.
 #: ../gtk/gtk-launch.c:98
 #, c-format
-#| msgid "Find applications online"
 msgid "%s: missing application name"
 msgstr "%s: trūksta programos pavadinimo"
 
@@ -1806,7 +1803,6 @@ msgstr "%s: trūksta programos pavadinimo"
 #. is the application name.
 #: ../gtk/gtk-launch.c:122
 #, c-format
-#| msgid "Could not run application"
 msgid "%s: no such application %s"
 msgstr "%s: nėra tokios programos %s"
 
@@ -1904,52 +1900,61 @@ msgstr "GTK+ parinktys"
 msgid "Show GTK+ Options"
 msgstr "Rodyti GTK+ parinktis"
 
-#: ../gtk/gtkmountoperation.c:518
+#: ../gtk/gtkmountoperation.c:532
 msgid "Co_nnect"
 msgstr "Prisi_jungti"
 
-#: ../gtk/gtkmountoperation.c:588
-msgid "Connect _anonymously"
-msgstr "Jungtis _anonimiškai"
+#: ../gtk/gtkmountoperation.c:606
+#| msgid "Co_nnect"
+msgid "Connect As"
+msgstr "Prisijungti kaip"
 
-#: ../gtk/gtkmountoperation.c:597
-msgid "Connect as u_ser:"
-msgstr "_Vartotojo vardas:"
+#: ../gtk/gtkmountoperation.c:615
+#| msgid "Connect _anonymously"
+msgid "_Anonymous"
+msgstr "_Anonimas"
 
-#: ../gtk/gtkmountoperation.c:632
-msgid "_Username:"
-msgstr "_Vartotojo vardas:"
+#: ../gtk/gtkmountoperation.c:624
+msgid "Registered U_ser"
+msgstr "Registruotas na_udotojas"
 
-#: ../gtk/gtkmountoperation.c:637
-msgid "_Domain:"
-msgstr "S_ritis:"
+#: ../gtk/gtkmountoperation.c:635
+#| msgid "_Username:"
+msgid "_Username"
+msgstr "Na_udotojo vardas"
 
-#: ../gtk/gtkmountoperation.c:643
-msgid "_Password:"
-msgstr "_Slaptažodis:"
+#: ../gtk/gtkmountoperation.c:640
+#| msgid "_Domain:"
+msgid "_Domain"
+msgstr "S_ritis"
 
-#: ../gtk/gtkmountoperation.c:661
+#: ../gtk/gtkmountoperation.c:646
+#| msgid "_Password:"
+msgid "_Password"
+msgstr "_Slaptažodis"
+
+#: ../gtk/gtkmountoperation.c:668
 msgid "Forget password _immediately"
 msgstr "_Neįsiminti slaptažodžio"
 
-#: ../gtk/gtkmountoperation.c:671
+#: ../gtk/gtkmountoperation.c:678
 msgid "Remember password until you _logout"
 msgstr "Įsiminti slaptažodį iki _atsijungsite"
 
-#: ../gtk/gtkmountoperation.c:681
+#: ../gtk/gtkmountoperation.c:688
 msgid "Remember _forever"
 msgstr "Įsiminti _visam laikui"
 
-#: ../gtk/gtkmountoperation.c:1070
+#: ../gtk/gtkmountoperation.c:1077
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Nežinoma programa (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1253
+#: ../gtk/gtkmountoperation.c:1260
 msgid "Unable to end process"
 msgstr "Nepavyko užbaigti proceso"
 
-#: ../gtk/gtkmountoperation.c:1290
+#: ../gtk/gtkmountoperation.c:1297
 msgid "_End Process"
 msgstr "_Užbaigti procesą"
 
@@ -3152,9 +3157,9 @@ msgstr "Su_mažinti"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:342
-#: ../gtk/gtkswitch.c:397
-#: ../gtk/gtkswitch.c:591
+#: ../gtk/gtkswitch.c:337
+#: ../gtk/gtkswitch.c:392
+#: ../gtk/gtkswitch.c:586
 msgctxt "switch"
 msgid "ON"
 msgstr "Įjungta"
@@ -3162,9 +3167,9 @@ msgstr "Įjungta"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:350
-#: ../gtk/gtkswitch.c:398
-#: ../gtk/gtkswitch.c:620
+#: ../gtk/gtkswitch.c:345
+#: ../gtk/gtkswitch.c:393
+#: ../gtk/gtkswitch.c:615
 msgctxt "switch"
 msgid "OFF"
 msgstr "Išjungta"
@@ -4737,7 +4742,6 @@ msgid "Unspecified profile"
 msgstr "Nenurodytas profilis"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:249
-#| msgid "output.%s"
 msgid "output"
 msgstr "išvestis"
 
