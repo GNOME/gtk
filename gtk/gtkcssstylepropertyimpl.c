@@ -409,8 +409,11 @@ bindings_value_parse_one (GtkCssParser *parser)
       return NULL;
     }
 
-
-  if (!gtk_binding_set_find (name))
+  if (g_ascii_strcasecmp (name, "none"))
+    {
+      name = NULL;
+    }
+  else if (!gtk_binding_set_find (name))
     {
       _gtk_css_parser_error (parser, "No binding set named '%s'", name);
       g_free (name);
@@ -424,7 +427,7 @@ static GtkCssValue *
 bindings_value_parse (GtkCssStyleProperty *property,
                       GtkCssParser        *parser)
 {
-  return _gtk_css_array_value_parse (parser, bindings_value_parse_one, TRUE);
+  return _gtk_css_array_value_parse (parser, bindings_value_parse_one, FALSE);
 }
 
 static void
@@ -440,12 +443,23 @@ bindings_value_query (GtkCssStyleProperty *property,
   if (_gtk_css_array_value_get_n_values (css_value) == 0)
     return;
 
-  array = g_ptr_array_new ();
+  array = NULL;
 
   for (i = 0; i < _gtk_css_array_value_get_n_values (css_value); i++)
     {
-      GtkBindingSet *binding_set = gtk_binding_set_find (_gtk_css_string_value_get (_gtk_css_array_value_get_nth (css_value, i)));
+      const char *name;
+      GtkBindingSet *binding_set;
+      
+      name = _gtk_css_string_value_get (_gtk_css_array_value_get_nth (css_value, i));
+      if (name == NULL)
+        continue;
 
+      binding_set = gtk_binding_set_find (name);
+      if (binding_set == NULL)
+        continue;
+      
+      if (array == NULL)
+        array = g_ptr_array_new ();
       g_ptr_array_add (array, binding_set);
     }
 
@@ -461,7 +475,7 @@ bindings_value_assign (GtkCssStyleProperty *property,
   guint i;
 
   if (binding_sets == NULL || binding_sets->len == 0)
-    return _gtk_css_array_value_new (NULL);
+    return _gtk_css_array_value_new (_gtk_css_string_value_new (NULL));
 
   values = g_new (GtkCssValue *, binding_sets->len);
 
@@ -1267,6 +1281,6 @@ _gtk_css_style_property_init_properties (void)
                                           bindings_value_parse,
                                           bindings_value_query,
                                           bindings_value_assign,
-                                          _gtk_css_array_value_new (NULL));
+                                          _gtk_css_array_value_new (_gtk_css_string_value_new (NULL)));
 }
 
