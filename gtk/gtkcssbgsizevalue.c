@@ -40,7 +40,7 @@ gtk_css_value_bg_size_free (GtkCssValue *value)
   g_slice_free (GtkCssValue, value);
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_value_bg_size_compute (GtkCssValue        *value,
                                guint               property_id,
                                GtkStyleContext    *context,
