@@ -757,6 +757,7 @@ gtk_css_section_get_type
 gtk_css_section_ref
 gtk_css_section_type_get_type
 gtk_css_section_unref
+gtk_css_value_bg_size_compute
 #ifdef G_OS_UNIX
 gtk_custom_paper_unix_dialog_get_type
 #endif
