@@ -128,13 +128,10 @@ static const GtkCssValueClass GTK_CSS_VALUE_ARRAY = {
   gtk_css_value_array_print
 };
 
-static GtkCssValue none_singleton = { &GTK_CSS_VALUE_ARRAY, 1, 0, { NULL } };
-
 GtkCssValue *
 _gtk_css_array_value_new (GtkCssValue *content)
 {
-  if (content == NULL)
-    return _gtk_css_value_ref (&none_singleton);
+  g_return_val_if_fail (content != NULL, NULL);
 
   return _gtk_css_array_value_new_from_array (&content, 1);
 }
