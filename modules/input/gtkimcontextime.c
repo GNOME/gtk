@@ -375,6 +375,8 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime, gint *pos_ret)
   if (pos_ret)
     *pos_ret = 0;
 
+  if (!context_ime->client_window)
+    return g_strdup ("");
   hwnd = GDK_WINDOW_HWND (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)
@@ -434,6 +436,8 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
   HWND hwnd;
   HIMC himc;
 
+  if (!context_ime->client_window)
+    return attrs;
   hwnd = GDK_WINDOW_HWND (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)
