@@ -392,7 +392,7 @@ setup_primary_label_font (GtkMessageDialog *dialog)
 {
   GtkMessageDialogPrivate *priv = dialog->priv;
 
-  if (priv->has_secondary_text && !priv->has_primary_markup)
+  if (!priv->has_primary_markup)
     {
       PangoAttrList *attributes;
       PangoAttribute *attr;
@@ -402,8 +402,11 @@ setup_primary_label_font (GtkMessageDialog *dialog)
       attr = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
       pango_attr_list_insert (attributes, attr);
 
-      attr = pango_attr_scale_new (PANGO_SCALE_LARGE);
-      pango_attr_list_insert (attributes, attr);
+      if (priv->has_secondary_text)
+        {
+          attr = pango_attr_scale_new (PANGO_SCALE_LARGE);
+          pango_attr_list_insert (attributes, attr);
+        }
 
       gtk_label_set_attributes (GTK_LABEL (priv->label), attributes);
       pango_attr_list_unref (attributes);
@@ -806,9 +809,6 @@ gtk_message_dialog_set_markup (GtkMessageDialog *message_dialog,
  * Sets the secondary text of the message dialog to be @message_format
  * (with printf()-style).
  *
- * Note that setting a secondary text makes the primary text become
- * bold, unless you have provided explicit markup.
- *
  * Since: 2.6
  */
 void
@@ -856,9 +856,6 @@ gtk_message_dialog_format_secondary_text (GtkMessageDialog *message_dialog,
  * Sets the secondary text of the message dialog to be @message_format (with
  * printf()-style), which is marked up with the
  * <link linkend="PangoMarkupFormat">Pango text markup language</link>.
- *
- * Note that setting a secondary text makes the primary text become
- * bold, unless you have provided explicit markup.
  *
  * Due to an oversight, this function does not escape special XML characters
  * like gtk_message_dialog_new_with_markup() does. Thus, if the arguments
