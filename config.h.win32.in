@@ -20,9 +20,6 @@
 /* Define the location where the catalogs will be installed */
 #define GTK_LOCALEDIR "NONE/share/locale"
 
-/* Define if we're using atk-bridge-2.0 */
-/* #undef HAVE_ATK_BRIDGE */
-
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 #define HAVE_BIND_TEXTDOMAIN_CODESET 1
 
@@ -298,6 +295,11 @@
 
 /* Define to 1 if the X Window System is missing or not being used. */
 /* #undef X_DISPLAY_MISSING */
+
+/* Enable large inode numbers on Mac OS X 10.5.  */
+#ifndef _DARWIN_USE_64_BIT_INODE
+# define _DARWIN_USE_64_BIT_INODE 1
+#endif
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */
