@@ -3933,8 +3933,13 @@ _gtk_entry_update_handles (GtkEntry          *entry,
   gint strong_x, height;
   gint cursor, bound;
 
-  height = gdk_window_get_height (priv->text_area);
   _gtk_text_handle_set_mode (priv->text_handle, mode);
+
+  /* Wait for recomputation before repositioning */
+  if (priv->recompute_idle != 0)
+    return;
+
+  height = gdk_window_get_height (priv->text_area);
 
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
   cursor = strong_x - priv->scroll_offset;
@@ -5736,10 +5741,17 @@ recompute_idle_func (gpointer data)
 
   if (gtk_widget_has_screen (GTK_WIDGET (entry)))
     {
+      GtkTextHandleMode handle_mode;
+
       gtk_entry_adjust_scroll (entry);
       gtk_widget_queue_draw (GTK_WIDGET (entry));
 
       update_im_cursor_location (entry);
+
+      handle_mode = _gtk_text_handle_get_mode (priv->text_handle);
+
+      if (handle_mode != GTK_TEXT_HANDLE_MODE_NONE)
+        _gtk_entry_update_handles (entry, handle_mode);
     }
 
   return FALSE;
