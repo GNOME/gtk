@@ -222,7 +222,7 @@ static GtkCssValue *
 font_family_parse (GtkCssStyleProperty *property,
                    GtkCssParser        *parser)
 {
-  return _gtk_css_array_value_parse (parser, font_family_parse_one, FALSE);
+  return _gtk_css_array_value_parse (parser, font_family_parse_one);
 }
 
 static void
@@ -394,7 +394,7 @@ static GtkCssValue *
 parse_css_area (GtkCssStyleProperty *property,
                 GtkCssParser        *parser)
 {
-  return _gtk_css_array_value_parse (parser, parse_css_area_one, FALSE);
+  return _gtk_css_array_value_parse (parser, parse_css_area_one);
 }
 
 static GtkCssValue *
@@ -427,7 +427,7 @@ static GtkCssValue *
 bindings_value_parse (GtkCssStyleProperty *property,
                       GtkCssParser        *parser)
 {
-  return _gtk_css_array_value_parse (parser, bindings_value_parse_one, FALSE);
+  return _gtk_css_array_value_parse (parser, bindings_value_parse_one);
 }
 
 static void
@@ -569,7 +569,7 @@ static GtkCssValue *
 background_image_value_parse (GtkCssStyleProperty *property,
                               GtkCssParser        *parser)
 {
-  return _gtk_css_array_value_parse (parser, background_image_value_parse_one, FALSE);
+  return _gtk_css_array_value_parse (parser, background_image_value_parse_one);
 }
 
 static void
@@ -671,7 +671,7 @@ static GtkCssValue *
 transition_property_parse (GtkCssStyleProperty *property,
                            GtkCssParser        *parser)
 {
-  return _gtk_css_array_value_parse (parser, transition_property_parse_one, FALSE);
+  return _gtk_css_array_value_parse (parser, transition_property_parse_one);
 }
 
 static GtkCssValue *
@@ -684,14 +684,14 @@ static GtkCssValue *
 transition_time_parse (GtkCssStyleProperty *property,
                        GtkCssParser        *parser)
 {
-  return _gtk_css_array_value_parse (parser, transition_time_parse_one, FALSE);
+  return _gtk_css_array_value_parse (parser, transition_time_parse_one);
 }
 
 static GtkCssValue *
 transition_timing_function_parse (GtkCssStyleProperty *property,
                                   GtkCssParser        *parser)
 {
-  return _gtk_css_array_value_parse (parser, _gtk_css_ease_value_parse, FALSE);
+  return _gtk_css_array_value_parse (parser, _gtk_css_ease_value_parse);
 }
 
 static GtkCssValue *
@@ -764,21 +764,21 @@ static GtkCssValue *
 background_repeat_value_parse (GtkCssStyleProperty *property,
                                GtkCssParser        *parser)
 {
-  return _gtk_css_array_value_parse (parser, background_repeat_value_parse_one, FALSE);
+  return _gtk_css_array_value_parse (parser, background_repeat_value_parse_one);
 }
 
 static GtkCssValue *
 background_size_parse (GtkCssStyleProperty *property,
                        GtkCssParser        *parser)
 {
-  return _gtk_css_array_value_parse (parser, _gtk_css_bg_size_value_parse, FALSE);
+  return _gtk_css_array_value_parse (parser, _gtk_css_bg_size_value_parse);
 }
 
 static GtkCssValue *
 background_position_parse (GtkCssStyleProperty *property,
 			   GtkCssParser        *parser)
 {
-  return _gtk_css_array_value_parse (parser, _gtk_css_position_value_parse, FALSE);
+  return _gtk_css_array_value_parse (parser, _gtk_css_position_value_parse);
 }
 
 /*** REGISTRATION ***/

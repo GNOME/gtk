@@ -157,15 +157,10 @@ _gtk_css_array_value_new_from_array (GtkCssValue **values,
 
 GtkCssValue *
 _gtk_css_array_value_parse (GtkCssParser *parser,
-                            GtkCssValue  *(* parse_func) (GtkCssParser *parser),
-                            gboolean      allow_none)
+                            GtkCssValue  *(* parse_func) (GtkCssParser *parser))
 {
   GtkCssValue *value, *result;
   GPtrArray *values;
-
-  if (allow_none &&
-      _gtk_css_parser_try (parser, "none", TRUE))
-    return _gtk_css_value_ref (&none_singleton);
 
   values = g_ptr_array_new ();
 
