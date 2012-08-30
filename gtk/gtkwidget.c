@@ -2586,6 +2586,32 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                              P_("The length of vertical scroll arrows"),
                                                              1, G_MAXINT, 16,
                                                              GTK_PARAM_READABLE));
+
+  /**
+   * GtkWidget:tooltip-alpha:
+   *
+   * The "tooltip-alpha" style property defines the opacity of
+   * widget tooltips.
+   */
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_uchar ("tooltip-alpha",
+                                                               P_("Tooltips opacity"),
+                                                               P_("The opacity to be used when drawing tooltips"),
+                                                               0, 255, 255,
+                                                               GTK_PARAM_READABLE));
+
+  /**
+   * GtkWidget:tooltip-radius:
+   *
+   * The "tooltip-radius" style property defines the radius of
+   * widget tooltips.
+   */
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_uint ("tooltip-radius",
+                                                              P_("Tooltips radius"),
+                                                              P_("The radius to be used when drawing tooltips"),
+                                                              0, G_MAXINT, 0,
+                                                              GTK_PARAM_READABLE));
 }
 
 static void

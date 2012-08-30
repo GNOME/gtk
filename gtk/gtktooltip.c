@@ -97,6 +97,7 @@ static void       gtk_tooltip_display_closed       (GdkDisplay      *display,
 						    GtkTooltip      *tooltip);
 static void       gtk_tooltip_set_last_window      (GtkTooltip      *tooltip,
 						    GdkWindow       *window);
+static void       update_shape                     (GtkTooltip      *tooltip);
 
 
 G_DEFINE_TYPE (GtkTooltip, gtk_tooltip, G_TYPE_OBJECT);
@@ -109,6 +110,39 @@ gtk_tooltip_class_init (GtkTooltipClass *klass)
   object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = gtk_tooltip_dispose;
+}
+
+static void
+on_composited_changed (GtkWidget  *window,
+                       GtkTooltip *tooltip)
+{
+  update_shape (tooltip);
+}
+
+static void
+on_screen_changed (GtkWidget  *window,
+                   GdkScreen  *previous,
+                   GtkTooltip *tooltip)
+{
+  GdkScreen *screen;
+  GdkColormap *cmap;
+
+  screen = gtk_widget_get_screen (window);
+
+  cmap = NULL;
+  if (gdk_screen_is_composited (screen))
+    cmap = gdk_screen_get_rgba_colormap (screen);
+  if (cmap == NULL)
+    cmap = gdk_screen_get_rgb_colormap (screen);
+
+  gtk_widget_set_colormap (window, cmap);
+}
+
+static void
+on_realized (GtkWidget  *window,
+             GtkTooltip *tooltip)
+{
+  update_shape (tooltip);
 }
 
 static void
@@ -129,8 +163,12 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   tooltip->last_window = NULL;
 
   tooltip->window = g_object_ref (gtk_window_new (GTK_WINDOW_POPUP));
+
+  on_screen_changed (tooltip->window, NULL, tooltip);
+
   gtk_window_set_type_hint (GTK_WINDOW (tooltip->window),
 			    GDK_WINDOW_TYPE_HINT_TOOLTIP);
+
   gtk_widget_set_app_paintable (tooltip->window, TRUE);
   gtk_window_set_resizable (GTK_WINDOW (tooltip->window), FALSE);
   gtk_widget_set_name (tooltip->window, "gtk-tooltip");
@@ -163,6 +201,13 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   gtk_label_set_line_wrap (GTK_LABEL (tooltip->label), TRUE);
   gtk_box_pack_start (GTK_BOX (tooltip->box), tooltip->label,
 		      FALSE, FALSE, 0);
+
+  g_signal_connect (tooltip->window, "composited-changed",
+                    G_CALLBACK (on_composited_changed), tooltip);
+  g_signal_connect (tooltip->window, "screen-changed",
+                    G_CALLBACK (on_screen_changed), tooltip);
+  g_signal_connect (tooltip->window, "realize",
+                    G_CALLBACK (on_realized), tooltip);
 
   tooltip->custom_widget = NULL;
 }
@@ -510,19 +555,164 @@ gtk_tooltip_window_style_set (GtkTooltip *tooltip)
   gtk_widget_queue_draw (tooltip->window);
 }
 
+static void
+draw_round_rect (cairo_t *cr,
+                 gdouble  aspect,
+                 gdouble  x,
+                 gdouble  y,
+                 gdouble  corner_radius,
+                 gdouble  width,
+                 gdouble  height)
+{
+  gdouble radius = corner_radius / aspect;
+
+  cairo_move_to (cr, x + radius, y);
+
+  /* top-right, left of the corner */
+  cairo_line_to (cr, x + width - radius, y);
+
+  /* top-right, below the corner */
+  cairo_arc (cr,
+             x + width - radius, y + radius, radius,
+             -90.0f * G_PI / 180.0f, 0.0f * G_PI / 180.0f);
+
+  /* bottom-right, above the corner */
+  cairo_line_to (cr, x + width, y + height - radius);
+
+  /* bottom-right, left of the corner */
+  cairo_arc (cr,
+             x + width - radius, y + height - radius, radius,
+             0.0f * G_PI / 180.0f, 90.0f * G_PI / 180.0f);
+
+  /* bottom-left, right of the corner */
+  cairo_line_to (cr, x + radius, y + height);
+
+  /* bottom-left, above the corner */
+  cairo_arc (cr,
+             x + radius, y + height - radius, radius,
+             90.0f * G_PI / 180.0f, 180.0f * G_PI / 180.0f);
+
+  /* top-left, below the corner */
+  cairo_line_to (cr, x, y + radius);
+
+  /* top-left, right of the corner */
+  cairo_arc (cr,
+             x + radius, y + radius, radius,
+             180.0f * G_PI / 180.0f, 270.0f * G_PI / 180.0f);
+
+  cairo_close_path (cr);
+}
+
+static void
+fill_background (GtkWidget  *widget,
+                 cairo_t    *cr,
+                 GdkColor   *bg_color,
+                 GdkColor   *border_color,
+                 guchar      alpha)
+{
+  gint tooltip_radius;
+
+  if (!gtk_widget_is_composited (widget))
+    alpha = 255;
+
+  gtk_widget_style_get (widget,
+                        "tooltip-radius", &tooltip_radius,
+                        NULL);
+
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint (cr);
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
+  draw_round_rect (cr,
+                   1.0, 0.5, 0.5, tooltip_radius,
+                   widget->allocation.width - 1,
+                   widget->allocation.height - 1);
+
+  cairo_set_source_rgba (cr,
+                         (float) bg_color->red / 65535.0,
+                         (float) bg_color->green / 65535.0,
+                         (float) bg_color->blue / 65535.0,
+                         (float) alpha / 255.0);
+  cairo_fill_preserve (cr);
+
+  cairo_set_source_rgba (cr,
+                         (float) border_color->red / 65535.0,
+                         (float) border_color->green / 65535.0,
+                         (float) border_color->blue / 65535.0,
+                         (float) alpha / 255.0);
+  cairo_set_line_width (cr, 1.0);
+  cairo_stroke (cr);
+}
+
+static void
+update_shape (GtkTooltip *tooltip)
+{
+  GdkBitmap *mask;
+  cairo_t *cr;
+  gint width, height, tooltip_radius;
+
+  gtk_widget_style_get (tooltip->window,
+                        "tooltip-radius", &tooltip_radius,
+                        NULL);
+
+  if (tooltip_radius == 0 ||
+      gtk_widget_is_composited (tooltip->window))
+    {
+      gtk_widget_shape_combine_mask (tooltip->window, NULL, 0, 0);
+      return;
+    }
+
+  gtk_window_get_size (GTK_WINDOW (tooltip->window), &width, &height);
+  mask = (GdkBitmap *) gdk_pixmap_new (NULL, width, height, 1);
+  cr = gdk_cairo_create (mask);
+
+  fill_background (tooltip->window, cr,
+                   &tooltip->window->style->black,
+                   &tooltip->window->style->black,
+                   255);
+  gtk_widget_shape_combine_mask (tooltip->window, mask, 0, 0);
+
+  cairo_destroy (cr);
+  g_object_unref (mask);
+}
+
 static gboolean
 gtk_tooltip_paint_window (GtkTooltip *tooltip)
 {
-  gtk_paint_flat_box (tooltip->window->style,
-		      tooltip->window->window,
-		      GTK_STATE_NORMAL,
-		      GTK_SHADOW_OUT,
-		      NULL,
-		      tooltip->window,
-		      "tooltip",
-		      0, 0,
-		      tooltip->window->allocation.width,
-		      tooltip->window->allocation.height);
+  guchar tooltip_alpha;
+  gint tooltip_radius;
+
+  gtk_widget_style_get (tooltip->window,
+                        "tooltip-alpha", &tooltip_alpha,
+                        "tooltip-radius", &tooltip_radius,
+                        NULL);
+
+  if (tooltip_alpha != 255 || tooltip_radius != 0)
+    {
+      cairo_t *cr;
+
+      cr = gdk_cairo_create (tooltip->window->window);
+      fill_background (tooltip->window, cr,
+                       &tooltip->window->style->bg [GTK_STATE_NORMAL],
+                       &tooltip->window->style->bg [GTK_STATE_SELECTED],
+                       tooltip_alpha);
+      cairo_destroy (cr);
+
+      update_shape (tooltip);
+    }
+  else
+    {
+      gtk_paint_flat_box (tooltip->window->style,
+                          tooltip->window->window,
+                          GTK_STATE_NORMAL,
+                          GTK_SHADOW_OUT,
+                          NULL,
+                          tooltip->window,
+                          "tooltip",
+                          0, 0,
+                          tooltip->window->allocation.width,
+                          tooltip->window->allocation.height);
+    }
 
   return FALSE;
 }
