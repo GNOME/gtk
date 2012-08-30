@@ -84,6 +84,7 @@ gtk_css_value_bg_size_equal (const GtkCssValue *value1,
 static GtkCssValue *
 gtk_css_value_bg_size_transition (GtkCssValue *start,
                                   GtkCssValue *end,
+                                  guint        property_id,
                                   double       progress)
 {
   GtkCssValue *x, *y;
@@ -99,7 +100,7 @@ gtk_css_value_bg_size_transition (GtkCssValue *start,
 
   if (start->x)
     {
-      x = _gtk_css_value_transition (start->x, end->x, progress);
+      x = _gtk_css_value_transition (start->x, end->x, property_id, progress);
       if (x == NULL)
         return NULL;
     }
@@ -108,7 +109,7 @@ gtk_css_value_bg_size_transition (GtkCssValue *start,
 
   if (start->y)
     {
-      y = _gtk_css_value_transition (start->y, end->y, progress);
+      y = _gtk_css_value_transition (start->y, end->y, property_id, progress);
       if (y == NULL)
         {
           _gtk_css_value_unref (x);

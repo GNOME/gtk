@@ -238,6 +238,7 @@ gtk_css_value_symbolic_equal (const GtkCssValue *value1,
 static GtkCssValue *
 gtk_css_value_symbolic_transition (GtkCssValue *start,
                                    GtkCssValue *end,
+                                   guint        property_id,
                                    double       progress)
 {
   return NULL;

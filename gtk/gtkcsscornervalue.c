@@ -68,15 +68,16 @@ gtk_css_value_corner_equal (const GtkCssValue *corner1,
 
 static GtkCssValue *
 gtk_css_value_corner_transition (GtkCssValue *start,
-                                GtkCssValue *end,
-                                double       progress)
+                                 GtkCssValue *end,
+                                 guint        property_id,
+                                 double       progress)
 {
   GtkCssValue *x, *y;
 
-  x = _gtk_css_value_transition (start->x, end->x, progress);
+  x = _gtk_css_value_transition (start->x, end->x, property_id, progress);
   if (x == NULL)
     return NULL;
-  y = _gtk_css_value_transition (start->y, end->y, progress);
+  y = _gtk_css_value_transition (start->y, end->y, property_id, progress);
   if (y == NULL)
     {
       _gtk_css_value_unref (x);

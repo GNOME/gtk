@@ -46,6 +46,7 @@ gtk_css_transition_set_values (GtkStyleAnimation    *animation,
 
       value = _gtk_css_value_transition (transition->start,
                                          transition->end,
+                                         transition->property,
                                          progress);
       if (value == NULL)
         value = _gtk_css_value_ref (transition->end);

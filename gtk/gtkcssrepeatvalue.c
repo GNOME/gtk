@@ -53,6 +53,7 @@ gtk_css_value_repeat_equal (const GtkCssValue *repeat1,
 static GtkCssValue *
 gtk_css_value_repeat_transition (GtkCssValue *start,
                                  GtkCssValue *end,
+                                 guint        property_id,
                                  double       progress)
 {
   return NULL;

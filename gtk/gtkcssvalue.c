@@ -125,6 +125,7 @@ _gtk_css_value_equal0 (const GtkCssValue *value1,
 GtkCssValue *
 _gtk_css_value_transition (GtkCssValue *start,
                            GtkCssValue *end,
+                           guint        property_id,
                            double       progress)
 {
   g_return_val_if_fail (start != NULL, FALSE);
@@ -133,7 +134,7 @@ _gtk_css_value_transition (GtkCssValue *start,
   if (start->class != end->class)
     return NULL;
 
-  return start->class->transition (start, end, progress);
+  return start->class->transition (start, end, property_id, progress);
 }
 
 char *

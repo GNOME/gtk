@@ -69,14 +69,15 @@ gtk_css_value_position_equal (const GtkCssValue *position1,
 static GtkCssValue *
 gtk_css_value_position_transition (GtkCssValue *start,
                                    GtkCssValue *end,
+                                   guint        property_id,
                                    double       progress)
 {
   GtkCssValue *x, *y;
 
-  x = _gtk_css_value_transition (start->x, end->x, progress);
+  x = _gtk_css_value_transition (start->x, end->x, property_id, progress);
   if (x == NULL)
     return NULL;
-  y = _gtk_css_value_transition (start->y, end->y, progress);
+  y = _gtk_css_value_transition (start->y, end->y, property_id, progress);
   if (y == NULL)
     {
       _gtk_css_value_unref (x);

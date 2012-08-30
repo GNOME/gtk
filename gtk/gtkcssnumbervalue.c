@@ -142,6 +142,7 @@ gtk_css_value_number_equal (const GtkCssValue *number1,
 static GtkCssValue *
 gtk_css_value_number_transition (GtkCssValue *start,
                                  GtkCssValue *end,
+                                 guint        property_id,
                                  double       progress)
 {
   /* FIXME: This needs to be supported at least for percentages,

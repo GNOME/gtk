@@ -67,6 +67,7 @@ gtk_css_value_image_equal (const GtkCssValue *value1,
 static GtkCssValue *
 gtk_css_value_image_transition (GtkCssValue *start,
                                 GtkCssValue *end,
+                                guint        property_id,
                                 double       progress)
 {
   GtkCssImage *fade;

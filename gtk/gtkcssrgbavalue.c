@@ -53,6 +53,7 @@ gtk_css_value_rgba_equal (const GtkCssValue *rgba1,
 static GtkCssValue *
 gtk_css_value_rgba_transition (GtkCssValue *start,
                                GtkCssValue *end,
+                               guint        property_id,
                                double       progress)
 {
   GdkRGBA transition;

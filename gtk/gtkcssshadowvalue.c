@@ -106,17 +106,18 @@ gtk_css_value_shadow_equal (const GtkCssValue *shadow1,
 static GtkCssValue *
 gtk_css_value_shadow_transition (GtkCssValue *start,
                                  GtkCssValue *end,
+                                 guint        property_id,
                                  double       progress)
 {
   if (start->inset != end->inset)
     return NULL;
 
-  return gtk_css_shadow_value_new (_gtk_css_value_transition (start->hoffset, end->hoffset, progress),
-                                   _gtk_css_value_transition (start->voffset, end->voffset, progress),
-                                   _gtk_css_value_transition (start->radius, end->radius, progress),
-                                   _gtk_css_value_transition (start->spread, end->spread, progress),
+  return gtk_css_shadow_value_new (_gtk_css_value_transition (start->hoffset, end->hoffset, property_id, progress),
+                                   _gtk_css_value_transition (start->voffset, end->voffset, property_id, progress),
+                                   _gtk_css_value_transition (start->radius, end->radius, property_id, progress),
+                                   _gtk_css_value_transition (start->spread, end->spread, property_id, progress),
                                    start->inset,
-                                   _gtk_css_value_transition (start->color, end->color, progress));
+                                   _gtk_css_value_transition (start->color, end->color, property_id, progress));
 }
 
 static void

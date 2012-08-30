@@ -50,6 +50,7 @@ struct _GtkCssValueClass {
                                                        const GtkCssValue          *value2);
   GtkCssValue * (* transition)                        (GtkCssValue                *start,
                                                        GtkCssValue                *end,
+                                                       guint                       property_id,
                                                        double                      progress);
   void          (* print)                             (const GtkCssValue          *value,
                                                        GString                    *string);
@@ -74,6 +75,7 @@ gboolean     _gtk_css_value_equal0                    (const GtkCssValue        
                                                        const GtkCssValue          *value2);
 GtkCssValue *_gtk_css_value_transition                (GtkCssValue                *start,
                                                        GtkCssValue                *end,
+                                                       guint                       property_id,
                                                        double                      progress);
 
 char *       _gtk_css_value_to_string                 (const GtkCssValue          *value);

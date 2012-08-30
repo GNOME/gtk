@@ -54,6 +54,7 @@ gtk_css_value_enum_equal (const GtkCssValue *enum1,
 static GtkCssValue *
 gtk_css_value_enum_transition (GtkCssValue *start,
                                GtkCssValue *end,
+                               guint        property_id,
                                double       progress)
 {
   return NULL;

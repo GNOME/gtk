@@ -84,6 +84,7 @@ gtk_css_value_ease_equal (const GtkCssValue *ease1,
 static GtkCssValue *
 gtk_css_value_ease_transition (GtkCssValue *start,
                                GtkCssValue *end,
+                               guint        property_id,
                                double       progress)
 {
   return NULL;
