@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-26 14:52+0200\n"
-"PO-Revision-Date: 2012-08-26 14:53+0200\n"
+"POT-Creation-Date: 2012-08-31 20:47+0200\n"
+"PO-Revision-Date: 2012-08-31 20:48+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1361,15 +1361,15 @@ msgstr "_Prawy:"
 msgid "Paper Margins"
 msgstr "Marginesy papieru"
 
-#: ../gtk/gtkentry.c:8848 ../gtk/gtktextview.c:8316
+#: ../gtk/gtkentry.c:8804 ../gtk/gtktextview.c:8316
 msgid "Input _Methods"
 msgstr "_Metoda wprowadzania danych"
 
-#: ../gtk/gtkentry.c:8862 ../gtk/gtktextview.c:8330
+#: ../gtk/gtkentry.c:8818 ../gtk/gtktextview.c:8330
 msgid "_Insert Unicode Control Character"
 msgstr "_Wstaw znak kontrolny Unikodu"
 
-#: ../gtk/gtkentry.c:10336
+#: ../gtk/gtkentry.c:9771
 msgid "Caps Lock is on"
 msgstr "Klawisz Caps Lock jest włączony"
 
