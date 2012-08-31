@@ -142,7 +142,6 @@ struct _GtkEntryPrivate
 
   GtkEntryBuffer        *buffer;
   GtkIMContext          *im_context;
-  GtkShadowType          shadow_type;
   GtkWidget             *popup_menu;
 
   GdkDevice             *device;
@@ -189,6 +188,7 @@ struct _GtkEntryPrivate
   guint16       preedit_length;              /* length of preedit string, in bytes */
   guint16	preedit_cursor;	             /* offset of cursor within preedit string, in chars */
 
+  guint         shadow_type             : 4;
   guint         editable                : 1;
   guint         in_drag                 : 1;
   guint         overwrite_mode          : 1;
@@ -10457,4 +10457,15 @@ gtk_entry_get_input_hints (GtkEntry *entry)
                 NULL);
 
   return hints;
+}
+
+void
+gtk_entry_set_attributes (GtkEntry      *entry,
+                          PangoAttrList *attrs)
+{
+}
+
+PangoAttrList *
+gtk_entry_get_attributes (GtkEntry *attrs)
+{
 }
