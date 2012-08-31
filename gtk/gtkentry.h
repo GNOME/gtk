@@ -289,6 +289,11 @@ void            gtk_entry_set_input_hints                    (GtkEntry          
 GDK_AVAILABLE_IN_3_6
 GtkInputHints   gtk_entry_get_input_hints                    (GtkEntry             *entry);
 
+GDK_AVAILABLE_IN_3_6
+void            gtk_entry_set_attributes                     (GtkEntry             *entry,
+                                                              PangoAttrList        *attrs);
+GDK_AVAILABLE_IN_3_6
+PangoAttrList  *gtk_entry_get_attributes                     (GtkEntry             *entry);
 
 G_END_DECLS
 

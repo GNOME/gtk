@@ -890,6 +890,7 @@ gtk_entry_completion_set_popup_single_match
 gtk_entry_completion_set_text_column
 gtk_entry_get_activates_default
 gtk_entry_get_alignment
+gtk_entry_get_attributes
 gtk_entry_get_buffer
 gtk_entry_get_completion
 gtk_entry_get_current_icon_drag_source
@@ -932,6 +933,7 @@ gtk_entry_progress_pulse
 gtk_entry_reset_im_context
 gtk_entry_set_activates_default
 gtk_entry_set_alignment
+gtk_entry_set_attributes
 gtk_entry_set_buffer
 gtk_entry_set_completion
 gtk_entry_set_cursor_hadjustment

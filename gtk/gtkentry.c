@@ -147,6 +147,7 @@ struct _GtkEntryPrivate
   GdkWindow             *text_area;
 
   PangoLayout           *cached_layout;
+  PangoAttrList         *attrs;
 
   gchar        *im_module;
 
@@ -307,7 +308,8 @@ enum {
   PROP_PLACEHOLDER_TEXT,
   PROP_COMPLETION,
   PROP_INPUT_PURPOSE,
-  PROP_INPUT_HINTS
+  PROP_INPUT_HINTS,
+  PROP_ATTRIBUTES
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -1375,6 +1377,22 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                        GTK_INPUT_HINT_NONE,
                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GtkEntry:attributes:
+   *
+   * A list of Pango attributes to apply to the text of the entry.
+   *
+   * This is mainly useful to change the size or weight of the text.
+   *
+   * Since: 3.6
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ATTRIBUTES,
+                                   g_param_spec_boxed ("attributes",
+                                                       P_("Attributes"),
+                                                       P_("A list of style attributes to apply to the text of the label"),
+                                                       PANGO_TYPE_ATTR_LIST,
+                                                       GTK_PARAM_READWRITE));
 
   /**
    * GtkEntry:icon-prelight:
@@ -2187,6 +2205,10 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_input_hints (entry, g_value_get_flags (value));
       break;
 
+    case PROP_ATTRIBUTES:
+      gtk_entry_set_attributes (entry, g_value_get_boxed (value));
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -2417,6 +2439,10 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_INPUT_HINTS:
       g_value_set_flags (value, gtk_entry_get_input_hints (entry));
+      break;
+
+    case PROP_ATTRIBUTES:
+      g_value_set_boxed (value, priv->attrs);
       break;
 
     default:
@@ -5606,9 +5632,9 @@ gtk_entry_create_layout (GtkEntry *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
-  PangoLayout *layout = gtk_widget_create_pango_layout (widget, NULL);
-  PangoAttrList *tmp_attrs = pango_attr_list_new ();
-  gboolean placeholder_layout = show_placeholder_text (entry);
+  PangoLayout *layout;
+  PangoAttrList *tmp_attrs;
+  gboolean placeholder_layout;
 
   gchar *preedit_string = NULL;
   gint preedit_length = 0;
@@ -5617,8 +5643,13 @@ gtk_entry_create_layout (GtkEntry *entry,
   gchar *display;
   guint n_bytes;
 
+  layout = gtk_widget_create_pango_layout (widget, NULL);
   pango_layout_set_single_paragraph_mode (layout, TRUE);
 
+  tmp_attrs = priv->attrs ? pango_attr_list_ref (priv->attrs)
+                          : pango_attr_list_new ();
+
+  placeholder_layout = show_placeholder_text (entry);
   display = placeholder_layout ? g_strdup (priv->placeholder_text) : _gtk_entry_get_display_text (entry, 0, -1);
   n_bytes = strlen (display);
 
@@ -5646,12 +5677,9 @@ gtk_entry_create_layout (GtkEntry *entry,
       gint cursor_index = g_utf8_offset_to_pointer (display, priv->current_pos) - display;
 
       g_string_insert (tmp_string, cursor_index, preedit_string);
-      
       pango_layout_set_text (layout, tmp_string->str, tmp_string->len);
-      
       pango_attr_list_splice (tmp_attrs, preedit_attrs,
 			      cursor_index, preedit_length);
-      
       g_string_free (tmp_string, TRUE);
     }
   else
@@ -9893,3 +9921,54 @@ gtk_entry_get_input_hints (GtkEntry *entry)
 
   return hints;
 }
+
+/**
+ * gtk_entry_set_attributes:
+ * @entry: a #GtkEntry
+ * @attrs: a #PangoAttrList
+ *
+ * Sets a #PangoAttrList; the attributes in the list are applied to the
+ * entry text.
+ *
+ * Since: 3.6
+ */
+void
+gtk_entry_set_attributes (GtkEntry      *entry,
+                          PangoAttrList *attrs)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  if (attrs)
+    pango_attr_list_ref (attrs);
+
+  if (priv->attrs)
+    pango_attr_list_unref (priv->attrs);
+  priv->attrs = attrs;
+
+  g_object_notify (G_OBJECT (entry), "attributes");
+
+  gtk_entry_recompute (entry);
+  gtk_widget_queue_resize (GTK_WIDGET (entry));
+}
+
+/**
+ * gtk_entry_get_attributes:
+ * @entry: a #GtkEntry
+ *
+ * Gets the attribute list that was set on the entry using
+ * gtk_entry_set_attributes(), if any.
+ *
+ * Return value: (transfer none): the attribute list, or %NULL
+ *     if none was set.
+ *
+ * Since: 3.6
+ */
+PangoAttrList *
+gtk_entry_get_attributes (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  return entry->priv->attrs;
+}
+
