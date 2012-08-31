@@ -2683,8 +2683,11 @@ dialog_response_cb (GtkDialog *dialog,
   if (response == GTK_RESPONSE_ACCEPT ||
       response == GTK_RESPONSE_OK)
     {
-      g_signal_emit_by_name (user_data, "current-folder-changed");
-      g_signal_emit_by_name (user_data, "selection-changed");
+      g_signal_emit_by_name (button, "current-folder-changed");
+      g_signal_emit_by_name (button, "selection-changed");
+
+      update_label_and_image (button);
+      update_combo_box (button);
     }
   else if (priv->old_file)
     {
@@ -2712,9 +2715,6 @@ dialog_response_cb (GtkDialog *dialog,
       priv->old_file = NULL;
     }
 
-  update_label_and_image (user_data);
-  update_combo_box (user_data);
-  
   if (priv->active)
     {
       g_signal_handler_unblock (priv->dialog,
@@ -2731,7 +2731,7 @@ dialog_response_cb (GtkDialog *dialog,
 
   if (response == GTK_RESPONSE_ACCEPT ||
       response == GTK_RESPONSE_OK)
-    g_signal_emit (user_data, file_chooser_button_signals[FILE_SET], 0);
+    g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
 }
 
 
