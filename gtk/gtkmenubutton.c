@@ -173,7 +173,6 @@ enum
 
 G_DEFINE_TYPE(GtkMenuButton, gtk_menu_button, GTK_TYPE_TOGGLE_BUTTON)
 
-static void gtk_menu_button_constructed (GObject *object);
 static void gtk_menu_button_dispose (GObject *object);
 
 static void
@@ -466,7 +465,6 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 
   gobject_class->set_property = gtk_menu_button_set_property;
   gobject_class->get_property = gtk_menu_button_get_property;
-  gobject_class->constructed = gtk_menu_button_constructed;
   gobject_class->dispose = gtk_menu_button_dispose;
 
   widget_class->state_flags_changed = gtk_menu_button_state_flags_changed;
@@ -551,7 +549,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                                                       P_("The direction the arrow should point."),
                                                       GTK_TYPE_ARROW_TYPE,
                                                       GTK_ARROW_DOWN,
-                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                      G_PARAM_READWRITE));
 }
 
 static void
@@ -573,6 +571,8 @@ gtk_menu_button_init (GtkMenuButton *menu_button)
   priv = G_TYPE_INSTANCE_GET_PRIVATE (menu_button, GTK_TYPE_MENU_BUTTON, GtkMenuButtonPrivate);
   menu_button->priv = priv;
   priv->arrow_type = GTK_ARROW_DOWN;
+
+  add_arrow (menu_button);
 
   gtk_widget_set_sensitive (GTK_WIDGET (menu_button), FALSE);
 }
@@ -874,11 +874,8 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
 
   priv->arrow_type = direction;
 
-  child = gtk_bin_get_child (GTK_BIN (menu_button));
-  if (child == NULL)
-    return;
-
   /* Is it custom content? We don't change that */
+  child = gtk_bin_get_child (GTK_BIN (menu_button));
   if (priv->arrow_widget != child)
     return;
 
@@ -901,17 +898,6 @@ gtk_menu_button_get_direction (GtkMenuButton *menu_button)
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), GTK_ARROW_DOWN);
 
   return menu_button->priv->arrow_type;
-}
-
-static void
-gtk_menu_button_constructed (GObject *object)
-{
-  GtkMenuButton *button = GTK_MENU_BUTTON (object);
-
-  if (button->priv->arrow_type != GTK_ARROW_NONE)
-    add_arrow (button);
-
-  G_OBJECT_CLASS (gtk_menu_button_parent_class)->constructed (object);
 }
 
 static void
