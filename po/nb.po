@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-27 10:23+0200\n"
-"PO-Revision-Date: 2012-08-27 10:23+0200\n"
+"POT-Creation-Date: 2012-09-01 10:42+0200\n"
+"PO-Revision-Date: 2012-09-01 10:43+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nn@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -607,6 +607,7 @@ msgstr ""
 #.
 #: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:574
 #: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
+#: ../gtk/gtkprinteroptionwidget.c:550
 msgid "_Select"
 msgstr "Vel_g"
 
@@ -1302,7 +1303,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3264
+#: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3275
 msgid "Manage Custom Sizes"
 msgstr "Håndter egendefinerte størrelser"
 
@@ -1355,15 +1356,15 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:8848 ../gtk/gtktextview.c:8316
+#: ../gtk/gtkentry.c:8832 ../gtk/gtktextview.c:8316
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: ../gtk/gtkentry.c:8862 ../gtk/gtktextview.c:8330
+#: ../gtk/gtkentry.c:8846 ../gtk/gtktextview.c:8330
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
-#: ../gtk/gtkentry.c:10336
+#: ../gtk/gtkentry.c:9799
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -1590,7 +1591,7 @@ msgid "Modified"
 msgstr "Endret"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4595 ../gtk/gtkprinteroptionwidget.c:835
+#: ../gtk/gtkfilechooserdefault.c:4595
 msgid "_Name:"
 msgstr "_Navn:"
 
@@ -2032,7 +2033,7 @@ msgstr ""
 " Topp: %s %s\n"
 " Bunn: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3318
+#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
 msgid "Manage Custom Sizes..."
 msgstr "Håndter egendefinerte størrelser …"
 
@@ -2040,7 +2041,7 @@ msgstr "Håndter egendefinerte størrelser …"
 msgid "_Format for:"
 msgstr "_Format for:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3466
+#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3477
 msgid "_Paper size:"
 msgstr "_Papirstørrelse:"
 
@@ -2048,7 +2049,7 @@ msgstr "_Papirstørrelse:"
 msgid "_Orientation:"
 msgstr "_Orientering:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3520
+#: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3531
 msgid "Page Setup"
 msgstr "Sideoppsett"
 
@@ -2068,17 +2069,13 @@ msgstr "Filsystemrot"
 msgid "Authentication"
 msgstr "Autentisering"
 
-#: ../gtk/gtkprinteroptionwidget.c:728
+#: ../gtk/gtkprinteroptionwidget.c:546
+msgid "Select a filename"
+msgstr "Velg et filnavn"
+
+#: ../gtk/gtkprinteroptionwidget.c:770
 msgid "Not available"
 msgstr "Ikke tilgjengelig"
-
-#: ../gtk/gtkprinteroptionwidget.c:828
-msgid "Select a folder"
-msgstr "Velg en mappe"
-
-#: ../gtk/gtkprinteroptionwidget.c:843
-msgid "_Save in folder:"
-msgstr "_Lagre i mappe:"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
@@ -2220,45 +2217,45 @@ msgstr "Uspesifisert feil"
 msgid "Getting printer information failed"
 msgstr "Klarte ikke å hente informasjon om skriveren"
 
-#: ../gtk/gtkprintunixdialog.c:1905
+#: ../gtk/gtkprintunixdialog.c:1916
 msgid "Getting printer information..."
 msgstr "Henter informasjon om skriver …"
 
-#: ../gtk/gtkprintunixdialog.c:2173
+#: ../gtk/gtkprintunixdialog.c:2184
 msgid "Printer"
 msgstr "Skriver"
 
 #. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2183
+#: ../gtk/gtkprintunixdialog.c:2194
 msgid "Location"
 msgstr "Adresse"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2194
+#: ../gtk/gtkprintunixdialog.c:2205
 msgid "Status"
 msgstr "Status"
 
-#: ../gtk/gtkprintunixdialog.c:2220
+#: ../gtk/gtkprintunixdialog.c:2231
 msgid "Range"
 msgstr "Område"
 
-#: ../gtk/gtkprintunixdialog.c:2224
+#: ../gtk/gtkprintunixdialog.c:2235
 msgid "_All Pages"
 msgstr "Alle sider"
 
-#: ../gtk/gtkprintunixdialog.c:2229
+#: ../gtk/gtkprintunixdialog.c:2240
 msgid "C_urrent Page"
 msgstr "D_enne siden"
 
-#: ../gtk/gtkprintunixdialog.c:2237
+#: ../gtk/gtkprintunixdialog.c:2248
 msgid "Se_lection"
 msgstr "Utva_lg"
 
-#: ../gtk/gtkprintunixdialog.c:2243
+#: ../gtk/gtkprintunixdialog.c:2254
 msgid "Pag_es:"
 msgstr "Sid_er:"
 
-#: ../gtk/gtkprintunixdialog.c:2244
+#: ../gtk/gtkprintunixdialog.c:2255
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2266,28 +2263,28 @@ msgstr ""
 "Oppgi en ett eller flere sideområder,\n"
 " f.eks 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:2253
+#: ../gtk/gtkprintunixdialog.c:2264
 msgid "Pages"
 msgstr "Sider"
 
-#: ../gtk/gtkprintunixdialog.c:2264
+#: ../gtk/gtkprintunixdialog.c:2275
 msgid "Copies"
 msgstr "Kopier"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2269
+#: ../gtk/gtkprintunixdialog.c:2280
 msgid "Copie_s:"
 msgstr "_Kopier:"
 
-#: ../gtk/gtkprintunixdialog.c:2285
+#: ../gtk/gtkprintunixdialog.c:2296
 msgid "C_ollate"
 msgstr "S_lå sammen"
 
-#: ../gtk/gtkprintunixdialog.c:2291
+#: ../gtk/gtkprintunixdialog.c:2302
 msgid "_Reverse"
 msgstr "_Omvendt"
 
-#: ../gtk/gtkprintunixdialog.c:2307
+#: ../gtk/gtkprintunixdialog.c:2318
 msgid "General"
 msgstr "Generelt"
 
@@ -2297,42 +2294,42 @@ msgstr "Generelt"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3047
+#: ../gtk/gtkprintunixdialog.c:3058
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
 msgid "Left to right, top to bottom"
 msgstr "Venstre til høyre, topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3047
+#: ../gtk/gtkprintunixdialog.c:3058
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
 msgid "Left to right, bottom to top"
 msgstr "Venstre til høyre, bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3048
+#: ../gtk/gtkprintunixdialog.c:3059
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Right to left, top to bottom"
 msgstr "Høyre til venstre, topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3048
+#: ../gtk/gtkprintunixdialog.c:3059
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Right to left, bottom to top"
 msgstr "Høyre til venstre, bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3049
+#: ../gtk/gtkprintunixdialog.c:3060
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
 msgid "Top to bottom, left to right"
 msgstr "Topp til bunn, venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3049
+#: ../gtk/gtkprintunixdialog.c:3060
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
 msgid "Top to bottom, right to left"
 msgstr "Topp til bunn, høyre til venstre"
 
-#: ../gtk/gtkprintunixdialog.c:3050
+#: ../gtk/gtkprintunixdialog.c:3061
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
 msgid "Bottom to top, left to right"
 msgstr "Bunn til topp, venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3050
+#: ../gtk/gtkprintunixdialog.c:3061
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
 msgid "Bottom to top, right to left"
 msgstr "Bunn til topp, høyre til venstre"
@@ -2340,125 +2337,125 @@ msgstr "Bunn til topp, høyre til venstre"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3054 ../gtk/gtkprintunixdialog.c:3067
+#: ../gtk/gtkprintunixdialog.c:3065 ../gtk/gtkprintunixdialog.c:3078
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3766
 msgid "Page Ordering"
 msgstr "Siderekkefølge"
 
-#: ../gtk/gtkprintunixdialog.c:3083
+#: ../gtk/gtkprintunixdialog.c:3094
 msgid "Left to right"
 msgstr "Venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3084
+#: ../gtk/gtkprintunixdialog.c:3095
 msgid "Right to left"
 msgstr "Høyre til venstre"
 
-#: ../gtk/gtkprintunixdialog.c:3096
+#: ../gtk/gtkprintunixdialog.c:3107
 msgid "Top to bottom"
 msgstr "Topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3097
+#: ../gtk/gtkprintunixdialog.c:3108
 msgid "Bottom to top"
 msgstr "Bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3341
+#: ../gtk/gtkprintunixdialog.c:3352
 msgid "Layout"
 msgstr "Utforming"
 
-#: ../gtk/gtkprintunixdialog.c:3345
+#: ../gtk/gtkprintunixdialog.c:3356
 msgid "T_wo-sided:"
 msgstr "T_osidig:"
 
-#: ../gtk/gtkprintunixdialog.c:3357
+#: ../gtk/gtkprintunixdialog.c:3368
 msgid "Pages per _side:"
 msgstr "Ark per _side:"
 
-#: ../gtk/gtkprintunixdialog.c:3371
+#: ../gtk/gtkprintunixdialog.c:3382
 msgid "Page or_dering:"
 msgstr "Si_derekkefølge:"
 
-#: ../gtk/gtkprintunixdialog.c:3384
+#: ../gtk/gtkprintunixdialog.c:3395
 msgid "_Only print:"
 msgstr "K_un skriv ut:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3396
+#: ../gtk/gtkprintunixdialog.c:3407
 msgid "All sheets"
 msgstr "Alle ark"
 
-#: ../gtk/gtkprintunixdialog.c:3397
+#: ../gtk/gtkprintunixdialog.c:3408
 msgid "Even sheets"
 msgstr "Like ark"
 
-#: ../gtk/gtkprintunixdialog.c:3398
+#: ../gtk/gtkprintunixdialog.c:3409
 msgid "Odd sheets"
 msgstr "Ulike ark"
 
-#: ../gtk/gtkprintunixdialog.c:3401
+#: ../gtk/gtkprintunixdialog.c:3412
 msgid "Sc_ale:"
 msgstr "Sk_aler:"
 
-#: ../gtk/gtkprintunixdialog.c:3425
+#: ../gtk/gtkprintunixdialog.c:3436
 msgid "Paper"
 msgstr "Papir"
 
-#: ../gtk/gtkprintunixdialog.c:3429
+#: ../gtk/gtkprintunixdialog.c:3440
 msgid "Paper _type:"
 msgstr "Papir_type:"
 
-#: ../gtk/gtkprintunixdialog.c:3441
+#: ../gtk/gtkprintunixdialog.c:3452
 msgid "Paper _source:"
 msgstr "Papi_rkilde:"
 
-#: ../gtk/gtkprintunixdialog.c:3453
+#: ../gtk/gtkprintunixdialog.c:3464
 msgid "Output t_ray:"
 msgstr "U_tskuff:"
 
-#: ../gtk/gtkprintunixdialog.c:3486
+#: ../gtk/gtkprintunixdialog.c:3497
 msgid "Or_ientation:"
 msgstr "Or_ientering:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3498
+#: ../gtk/gtkprintunixdialog.c:3509
 msgid "Portrait"
 msgstr "Portrett"
 
-#: ../gtk/gtkprintunixdialog.c:3499
+#: ../gtk/gtkprintunixdialog.c:3510
 msgid "Landscape"
 msgstr "Landskap"
 
-#: ../gtk/gtkprintunixdialog.c:3500
+#: ../gtk/gtkprintunixdialog.c:3511
 msgid "Reverse portrait"
 msgstr "Omvendt portrett"
 
-#: ../gtk/gtkprintunixdialog.c:3501
+#: ../gtk/gtkprintunixdialog.c:3512
 msgid "Reverse landscape"
 msgstr "Omvendt landskap"
 
-#: ../gtk/gtkprintunixdialog.c:3545
+#: ../gtk/gtkprintunixdialog.c:3556
 msgid "Job Details"
 msgstr "Detaljer for jobb"
 
-#: ../gtk/gtkprintunixdialog.c:3549
+#: ../gtk/gtkprintunixdialog.c:3560
 msgid "Pri_ority:"
 msgstr "Pri_oritet:"
 
-#: ../gtk/gtkprintunixdialog.c:3561
+#: ../gtk/gtkprintunixdialog.c:3572
 msgid "_Billing info:"
 msgstr "_Faktureringsinformasjon:"
 
-#: ../gtk/gtkprintunixdialog.c:3576
+#: ../gtk/gtkprintunixdialog.c:3587
 msgid "Print Document"
 msgstr "Skriv ut dokument"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3583
+#: ../gtk/gtkprintunixdialog.c:3594
 msgid "_Now"
 msgstr "_Nå"
 
-#: ../gtk/gtkprintunixdialog.c:3592
+#: ../gtk/gtkprintunixdialog.c:3603
 msgid "A_t:"
 msgstr "_Tid:"
 
@@ -2466,7 +2463,7 @@ msgstr "_Tid:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: ../gtk/gtkprintunixdialog.c:3598
+#: ../gtk/gtkprintunixdialog.c:3609
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2474,68 +2471,68 @@ msgstr ""
 "Oppgi klokkeslett for utskrift.\n"
 " f.eks 15.30, 2.35 pm, 14.15.20, 11.46.30 am, 4 pm"
 
-#: ../gtk/gtkprintunixdialog.c:3606
+#: ../gtk/gtkprintunixdialog.c:3617
 msgid "Time of print"
 msgstr "Tid for utskrift"
 
-#: ../gtk/gtkprintunixdialog.c:3620
+#: ../gtk/gtkprintunixdialog.c:3631
 msgid "On _hold"
 msgstr "På _vent"
 
-#: ../gtk/gtkprintunixdialog.c:3621
+#: ../gtk/gtkprintunixdialog.c:3632
 msgid "Hold the job until it is explicitly released"
 msgstr "Sett jobben på vent inntil den er eksplisitt aktivert"
 
-#: ../gtk/gtkprintunixdialog.c:3639
+#: ../gtk/gtkprintunixdialog.c:3650
 msgid "Add Cover Page"
 msgstr "Legg til omslag"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3646
+#: ../gtk/gtkprintunixdialog.c:3657
 msgid "Be_fore:"
 msgstr "_Før:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3661
+#: ../gtk/gtkprintunixdialog.c:3672
 msgid "_After:"
 msgstr "_Etter:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3676
+#: ../gtk/gtkprintunixdialog.c:3687
 msgid "Job"
 msgstr "Jobb"
 
-#: ../gtk/gtkprintunixdialog.c:3742
+#: ../gtk/gtkprintunixdialog.c:3753
 msgid "Advanced"
 msgstr "Avansert"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3780
+#: ../gtk/gtkprintunixdialog.c:3791
 msgid "Image Quality"
 msgstr "Bildekvalitet"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3784
+#: ../gtk/gtkprintunixdialog.c:3795
 msgid "Color"
 msgstr "Farge"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3789
+#: ../gtk/gtkprintunixdialog.c:3800
 msgid "Finishing"
 msgstr "Fullfører"
 
-#: ../gtk/gtkprintunixdialog.c:3799
+#: ../gtk/gtkprintunixdialog.c:3810
 msgid "Some of the settings in the dialog conflict"
 msgstr "Noen innstillinger i dialogen er i konflikt"
 
-#: ../gtk/gtkprintunixdialog.c:3825
+#: ../gtk/gtkprintunixdialog.c:3836
 msgid "Print"
 msgstr "Skriv ut"
 
