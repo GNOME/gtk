@@ -826,11 +826,16 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       gtk_widget_show (priv->box);
       gtk_box_pack_start (GTK_BOX (widget), priv->box, TRUE, TRUE, 0);
       for (i = 0; i < source->num_choices; i++)
-	group = alternative_append (priv->box,
-                                    source->choices_display[i],
-                                    source->choices[i],
-                                    widget,
-                                    group);
+        {
+	  group = alternative_append (priv->box,
+                                      source->choices_display[i],
+                                      source->choices[i],
+                                      widget,
+                                      group);
+          /* for mnemonic activation */
+          if (i == 0)
+            priv->button = group->data;
+        }
 
       if (source->display_text)
 	{
