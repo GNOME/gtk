@@ -2075,10 +2075,9 @@ msgid "Authentication"
 msgstr "Xác thực"
 
 #: ../gtk/gtkprinteroptionwidget.c:546
-#, fuzzy
 #| msgid "Select a File"
 msgid "Select a filename"
-msgstr "Chọn tập tin"
+msgstr "Chọn tên tập tin"
 
 #: ../gtk/gtkprinteroptionwidget.c:770
 msgid "Not available"
