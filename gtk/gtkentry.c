@@ -564,6 +564,11 @@ static void         gtk_entry_get_text_area_size       (GtkEntry       *entry,
 							gint           *y,
 							gint           *width,
 							gint           *height);
+static void         gtk_entry_get_frame_size           (GtkEntry       *entry,
+							gint           *x,
+							gint           *y,
+							gint           *width,
+							gint           *height);
 static void         get_text_area_size                 (GtkEntry       *entry,
 							gint           *x,
 							gint           *y,
@@ -705,6 +710,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->toggle_overwrite = gtk_entry_toggle_overwrite;
   class->activate = gtk_entry_real_activate;
   class->get_text_area_size = gtk_entry_get_text_area_size;
+  class->get_frame_size = gtk_entry_get_frame_size;
   
   quark_inner_border = g_quark_from_static_string ("gtk-entry-inner-border");
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
@@ -3395,12 +3401,11 @@ get_text_area_size (GtkEntry *entry,
 
 
 static void
-get_frame_size (GtkEntry *entry,
-                gboolean  relative_to_window,
-                gint     *x,
-                gint     *y,
-                gint     *width,
-                gint     *height)
+gtk_entry_get_frame_size (GtkEntry *entry,
+                          gint     *x,
+                          gint     *y,
+                          gint     *width,
+                          gint     *height)
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkAllocation allocation;
@@ -3415,7 +3420,7 @@ get_frame_size (GtkEntry *entry,
   gtk_widget_get_allocation (widget, &allocation);
 
   if (x)
-    *x = relative_to_window ? allocation.x : 0;
+    *x = allocation.x;
 
   if (y)
     {
@@ -3424,8 +3429,7 @@ get_frame_size (GtkEntry *entry,
       else
         *y = (allocation.height - req_height) / 2;
 
-      if (relative_to_window)
-        *y += allocation.y;
+      *y += allocation.y;
     }
 
   if (width)
@@ -3437,6 +3441,36 @@ get_frame_size (GtkEntry *entry,
         *height = allocation.height;
       else
         *height = req_height;
+    }
+}
+
+static void
+get_frame_size (GtkEntry *entry,
+                gboolean  relative_to_window,
+                gint     *x,
+                gint     *y,
+                gint     *width,
+                gint     *height)
+{
+  GtkEntryClass *class;
+  GtkWidget *widget = GTK_WIDGET (entry);
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  class = GTK_ENTRY_GET_CLASS (entry);
+
+  if (class->get_frame_size)
+    class->get_frame_size (entry, x, y, width, height);
+
+  if (!relative_to_window)
+    {
+      GtkAllocation allocation;
+      gtk_widget_get_allocation (widget, &allocation);
+
+      if (x)
+        *x -= allocation.x;
+      if (y)
+        *y -= allocation.y;
     }
 }
 
@@ -5939,7 +5973,7 @@ get_layout_position (GtkEntry *entry,
   
   layout = gtk_entry_ensure_layout (entry, TRUE);
 
-  gtk_entry_get_text_area_size (entry, NULL, NULL, &area_width, &area_height);
+  get_text_area_size (entry, NULL, NULL, &area_width, &area_height);
   area_height = PANGO_SCALE * area_height;
 
   line = pango_layout_get_lines_readonly (layout)->data;
