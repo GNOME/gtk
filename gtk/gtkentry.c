@@ -3913,9 +3913,13 @@ _gtk_entry_get_selection_bound_location (GtkEntry *entry)
   PangoLayout *layout;
   PangoRectangle pos;
   gint x;
+  const gchar *text;
+  gint index;
 
   layout = gtk_entry_ensure_layout (entry, FALSE);
-  pango_layout_index_to_pos (layout, priv->selection_bound, &pos);
+  text = pango_layout_get_text (layout);
+  index = g_utf8_offset_to_pointer (text, priv->selection_bound) - text;
+  pango_layout_index_to_pos (layout, index, &pos);
 
   if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
     x = (pos.x + pos.width) / PANGO_SCALE;
