@@ -6349,9 +6349,6 @@ gtk_text_view_buffer_changed_handler (GtkTextBuffer     *buffer,
                                       gpointer           data)
 {
   GtkTextView *text_view = data;
-  GtkTextViewPrivate *priv;
-
-  priv = text_view->priv;
   _gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_NONE);
 }
 
