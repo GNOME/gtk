@@ -3950,13 +3950,26 @@ _gtk_entry_update_handles (GtkEntry          *entry,
 
   if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
     {
+      gint start, end;
+
       bound = _gtk_entry_get_selection_bound_location (entry) - priv->scroll_offset;
+
+      if (priv->selection_bound > priv->current_pos)
+        {
+          start = cursor;
+          end = bound;
+        }
+      else
+        {
+          start = bound;
+          end = cursor;
+        }
 
       /* Update start selection bound */
       _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_SELECTION_START,
-                              MIN (cursor, bound), 0, height);
+                              start, 0, height);
       _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_SELECTION_END,
-                              MAX (cursor, bound), 0, height);
+                              end, 0, height);
     }
   else
     _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_CURSOR,
