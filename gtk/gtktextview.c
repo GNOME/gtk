@@ -4585,8 +4585,13 @@ _gtk_text_view_update_handles (GtkTextView       *text_view,
   if (mode == GTK_TEXT_HANDLE_MODE_SELECTION &&
       gtk_text_iter_compare (&cursor, &bound) == 0)
     {
-      mode = gtk_widget_is_sensitive (GTK_WIDGET (text_view)) ? GTK_TEXT_HANDLE_MODE_CURSOR :
-        GTK_TEXT_HANDLE_MODE_NONE;
+      mode = GTK_TEXT_HANDLE_MODE_CURSOR;
+    }
+
+  if (mode == GTK_TEXT_HANDLE_MODE_CURSOR &&
+      (!gtk_widget_is_sensitive (GTK_WIDGET (text_view)) || !priv->cursor_visible))
+    {
+      mode = GTK_TEXT_HANDLE_MODE_NONE;
     }
 
   _gtk_text_handle_set_mode (priv->text_handle, mode);
