@@ -6217,11 +6217,7 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
         {
           gint min_pos;
 
-          if (priv->select_words)
-            min_pos = gtk_entry_move_forward_word (entry, *min, TRUE);
-          else
-            min_pos = MAX (*min + 1, 0);
-
+          min_pos = MAX (*min + 1, 0);
           tmp_pos = MAX (tmp_pos, min_pos);
         }
 
@@ -6233,11 +6229,7 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
         {
           gint max_pos;
 
-          if (priv->select_words)
-            max_pos = gtk_entry_move_backward_word (entry, *max, TRUE);
-          else
-            max_pos = *max - 1;
-
+          max_pos = *max - 1;
           *min = MIN (tmp_pos, max_pos);
         }
     }
