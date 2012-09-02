@@ -276,7 +276,7 @@ static void gtk_spin_button_real_change_value (GtkSpinButton   *spin,
 
 static gint gtk_spin_button_default_input  (GtkSpinButton      *spin_button,
                                             gdouble            *new_val);
-static gint gtk_spin_button_default_output (GtkSpinButton      *spin_button);
+static void gtk_spin_button_default_output (GtkSpinButton      *spin_button);
 
 static guint spinbutton_signals[LAST_SIGNAL] = {0};
 
@@ -1108,27 +1108,26 @@ gtk_spin_button_set_orientation (GtkSpinButton *spin,
   gtk_widget_queue_resize (GTK_WIDGET (spin));
 }
 
-static int
-compute_double_length (double val, int digits)
+static gint
+measure_string_width (PangoLayout *layout,
+                      const gchar *string)
 {
-  int a;
-  int extra;
+  gint width;
 
-  a = 1;
-  if (fabs (val) > 1.0)
-    a = floor (log10 (fabs (val))) + 1;
+  pango_layout_set_text (layout, string, -1);
+  pango_layout_get_pixel_size (layout, &width, NULL);
 
-  extra = 0;
+  return width;
+}
 
-  /* The dot: */
-  if (digits > 0)
-    extra++;
+static gchar *
+gtk_spin_button_format_for_value (GtkSpinButton *spin_button,
+                                  gdouble        value)
+{
+  GtkSpinButtonPrivate *priv = spin_button->priv;
+  gchar *buf = g_strdup_printf ("%0.*f", priv->digits, value);
 
-  /* The sign: */
-  if (val < 0)
-    extra++;
-
-  return a + digits + extra;
+  return buf;
 }
 
 static void
@@ -1147,52 +1146,42 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
 
   if (gtk_entry_get_width_chars (entry) < 0)
     {
-      PangoContext *context;
-      const PangoFontDescription *font_desc;
-      PangoFontMetrics *metrics;
-      gint width;
-      gint w;
-      gint string_len;
-      gint max_string_len;
-      gint digit_width;
+      gint width, w;
       gboolean interior_focus;
       gint focus_width;
       GtkBorder borders;
+      PangoLayout *layout;
+      gchar *str;
 
       gtk_style_context_get_style (style_context,
                                    "interior-focus", &interior_focus,
                                    "focus-line-width", &focus_width,
                                    NULL);
-      font_desc = gtk_style_context_get_font (style_context, GTK_STATE_FLAG_NORMAL);
 
-      context = gtk_widget_get_pango_context (widget);
-      metrics = pango_context_get_metrics (context, font_desc,
-                                           pango_context_get_language (context));
-
-      digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
-      digit_width = PANGO_SCALE *
-        ((digit_width + PANGO_SCALE - 1) / PANGO_SCALE);
-
-      pango_font_metrics_unref (metrics);
+      layout = pango_layout_copy (gtk_entry_get_layout (entry));
 
       /* Get max of MIN_SPIN_BUTTON_WIDTH, size of upper, size of lower */
       width = MIN_SPIN_BUTTON_WIDTH;
-      max_string_len = MAX (10, compute_double_length (1e9 * gtk_adjustment_get_step_increment (priv->adjustment),
-                                                       priv->digits));
 
-      string_len = compute_double_length (gtk_adjustment_get_upper (priv->adjustment),
-                                          priv->digits);
-      w = PANGO_PIXELS (MIN (string_len, max_string_len) * digit_width);
+      str = gtk_spin_button_format_for_value (spin_button,
+                                              gtk_adjustment_get_upper (priv->adjustment));
+      w = measure_string_width (layout, str);
       width = MAX (width, w);
-      string_len = compute_double_length (gtk_adjustment_get_lower (priv->adjustment), priv->digits);
-      w = PANGO_PIXELS (MIN (string_len, max_string_len) * digit_width);
+      g_free (str);
+
+      str = gtk_spin_button_format_for_value (spin_button,
+                                              gtk_adjustment_get_lower (priv->adjustment));
+      w = measure_string_width (layout, str);
       width = MAX (width, w);
+      g_free (str);
 
       _gtk_entry_get_borders (entry, &borders);
       width += borders.left + borders.right;
 
       *minimum = width;
       *natural = width;
+
+      g_object_unref (layout);
     }
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -1970,17 +1959,17 @@ gtk_spin_button_default_input (GtkSpinButton *spin_button,
     return FALSE;
 }
 
-static gint
+static void
 gtk_spin_button_default_output (GtkSpinButton *spin_button)
 {
   GtkSpinButtonPrivate *priv = spin_button->priv;
-
-  gchar *buf = g_strdup_printf ("%0.*f", priv->digits, gtk_adjustment_get_value (priv->adjustment));
+  gchar *buf = gtk_spin_button_format_for_value (spin_button,
+                                                 gtk_adjustment_get_value (priv->adjustment));
 
   if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (spin_button))))
     gtk_entry_set_text (GTK_ENTRY (spin_button), buf);
+
   g_free (buf);
-  return FALSE;
 }
 
 

@@ -3273,7 +3273,9 @@ gtk_entry_get_preferred_height (GtkWidget *widget,
   GtkStateFlags state;
   PangoContext *context;
   gint height;
+  PangoLayout *layout;
 
+  layout = gtk_entry_ensure_layout (entry, TRUE);
   context = gtk_widget_get_pango_context (widget);
 
   style_context = gtk_widget_get_style_context (widget);
@@ -3285,12 +3287,12 @@ gtk_entry_get_preferred_height (GtkWidget *widget,
 
   priv->ascent = pango_font_metrics_get_ascent (metrics);
   priv->descent = pango_font_metrics_get_descent (metrics);
+  pango_font_metrics_unref (metrics);
 
   _gtk_entry_get_borders (entry, &borders);
+  pango_layout_get_pixel_size (layout, NULL, &height);
 
-  height = PANGO_PIXELS (priv->ascent + priv->descent) + borders.top + borders.bottom;
-
-  pango_font_metrics_unref (metrics);
+  height += borders.top + borders.bottom;
 
   *minimum = height;
   *natural = height;
