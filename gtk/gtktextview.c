@@ -4585,7 +4585,7 @@ _gtk_text_view_update_handles (GtkTextView       *text_view,
   if (mode == GTK_TEXT_HANDLE_MODE_SELECTION &&
       gtk_text_iter_compare (&cursor, &bound) == 0)
     {
-      mode = (priv->editable) ? GTK_TEXT_HANDLE_MODE_CURSOR :
+      mode = gtk_widget_is_sensitive (GTK_WIDGET (text_view)) ? GTK_TEXT_HANDLE_MODE_CURSOR :
         GTK_TEXT_HANDLE_MODE_NONE;
     }
 
@@ -4779,6 +4779,8 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
+  GdkDevice *device;
+  gboolean is_touchscreen;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4802,16 +4804,14 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
     gtk_text_layout_spew (GTK_TEXT_VIEW (widget)->layout);
 #endif
 
+  device = gdk_event_get_source_device ((GdkEvent *) event);
+  is_touchscreen = test_touchscreen ||
+                   gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
+
   if (event->type == GDK_BUTTON_PRESS)
     {
-      GdkDevice *device;
-      gboolean is_touchscreen;
-
       gtk_text_view_reset_im_context (text_view);
 
-      device = gdk_event_get_source_device ((GdkEvent *) event);
-      is_touchscreen = test_touchscreen ||
-        gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
       priv->update_handles_on_focus = is_touchscreen;
 
       if (gdk_event_triggers_context_menu ((GdkEvent *) event))
@@ -4850,7 +4850,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
               gtk_text_view_start_selection_drag (text_view, &iter, event);
 
-              if (priv->editable && is_touchscreen)
+              if (gtk_widget_is_sensitive (widget) && is_touchscreen)
                 mode = GTK_TEXT_HANDLE_MODE_CURSOR;
               else
                 mode = GTK_TEXT_HANDLE_MODE_NONE;
@@ -4886,6 +4886,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 	   event->button == GDK_BUTTON_PRIMARY)
     {
       GtkTextIter iter;
+      GtkTextHandleMode mode;
 
       gtk_text_view_end_selection_drag (text_view);
 
@@ -4893,12 +4894,18 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 					 &iter,
 					 event->x + priv->xoffset,
 					 event->y + priv->yoffset);
-      
+
       gtk_text_view_start_selection_drag (text_view, &iter, event);
-      _gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
+
+      if (gtk_widget_is_sensitive (widget) && is_touchscreen)
+        mode = GTK_TEXT_HANDLE_MODE_SELECTION;
+      else
+        mode = GTK_TEXT_HANDLE_MODE_NONE;
+
+      _gtk_text_view_update_handles (text_view, mode);
       return TRUE;
     }
-  
+
   return FALSE;
 }
 
@@ -4944,7 +4951,7 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
 
           device = gdk_event_get_source_device ((GdkEvent *) event);
 
-          if (priv->editable &&
+          if (gtk_widget_is_sensitive (widget) &&
               (test_touchscreen ||
                gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN))
             mode = GTK_TEXT_HANDLE_MODE_CURSOR;
