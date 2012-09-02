@@ -3951,13 +3951,12 @@ _gtk_entry_update_handles (GtkEntry          *entry,
       /* Update start selection bound */
       _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_SELECTION_START,
                               MIN (cursor, bound), 0, height);
+      _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_SELECTION_END,
+                              MAX (cursor, bound), 0, height);
     }
   else
-    bound = cursor;
-
-  /* Update end bound/cursor */
-  _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_SELECTION_END,
-                          MAX (cursor, bound), 0, height);
+    _gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_CURSOR,
+                            cursor, 0, height);
 }
 
 static gint
