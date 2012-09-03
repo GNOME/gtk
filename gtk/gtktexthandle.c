@@ -53,6 +53,7 @@ struct _GtkTextHandlePrivate
   HandleWindow windows[2];
   GtkWidget *parent;
   GdkWindow *relative_to;
+  GtkStyleContext *style_context;
 
   gulong draw_signal_id;
   gulong event_signal_id;
@@ -93,7 +94,6 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
                        GtkTextHandlePosition  pos)
 {
   GtkTextHandlePrivate *priv;
-  GtkStyleContext *context;
   gint width, height;
 
   priv = handle->priv;
@@ -103,19 +103,21 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
   cairo_set_source_rgba (cr, 0, 0, 0, 0);
   cairo_paint (cr);
 
-  context = gtk_widget_get_style_context (priv->parent);
-  gtk_style_context_save (context);
+  gtk_style_context_save (priv->style_context);
+  gtk_style_context_add_class (priv->style_context,
+                               GTK_STYLE_CLASS_CURSOR_HANDLE);
 
   if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_CURSOR_HANDLE);
+    gtk_style_context_add_class (priv->style_context,
+                                 GTK_STYLE_CLASS_BOTTOM);
   else
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_INVERTED_CURSOR_HANDLE);
+    gtk_style_context_add_class (priv->style_context,
+                                 GTK_STYLE_CLASS_TOP);
 
   _gtk_text_handle_get_size (handle, &width, &height);
-  gtk_render_slider (context, cr, 0, 0, width, height,
-                     GTK_ORIENTATION_HORIZONTAL);
+  gtk_render_background (priv->style_context, cr, 0, 0, width, height);
 
-  gtk_style_context_restore (context);
+  gtk_style_context_restore (priv->style_context);
   cairo_restore (cr);
 }
 
@@ -317,6 +319,9 @@ _gtk_text_handle_update_window (GtkTextHandle         *handle,
 static void
 _gtk_text_handle_update_windows (GtkTextHandle *handle)
 {
+  GtkTextHandlePrivate *priv = handle->priv;
+
+  gtk_style_context_invalidate (priv->style_context);
   _gtk_text_handle_update_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
   _gtk_text_handle_update_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END);
 }
@@ -374,6 +379,8 @@ gtk_text_handle_finalize (GObject *object)
 
   if (g_signal_handler_is_connected (priv->parent, priv->style_updated_id))
     g_signal_handler_disconnect (priv->parent, priv->style_updated_id);
+
+  g_object_unref (priv->style_context);
 
   G_OBJECT_CLASS (_gtk_text_handle_parent_class)->finalize (object);
 }
@@ -478,9 +485,19 @@ _gtk_text_handle_class_init (GtkTextHandleClass *klass)
 static void
 _gtk_text_handle_init (GtkTextHandle *handle)
 {
-  handle->priv = G_TYPE_INSTANCE_GET_PRIVATE (handle,
-                                              GTK_TYPE_TEXT_HANDLE,
-                                              GtkTextHandlePrivate);
+  GtkTextHandlePrivate *priv;
+  GtkWidgetPath *path;
+
+  handle->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (handle,
+                                                     GTK_TYPE_TEXT_HANDLE,
+                                                     GtkTextHandlePrivate);
+
+  path = gtk_widget_path_new ();
+  gtk_widget_path_append_type (path, GTK_TYPE_TEXT_HANDLE);
+
+  priv->style_context = gtk_style_context_new ();
+  gtk_style_context_set_path (priv->style_context, path);
+  gtk_widget_path_free (path);
 }
 
 GtkTextHandle *
