@@ -209,6 +209,7 @@ gtk/gtktextbufferrichtext.c
 gtk/gtktextbufferserialize.c
 gtk/gtktextchild.c
 gtk/gtktextdisplay.c
+gtk/gtktexthandle.c
 gtk/gtktextiter.c
 gtk/gtktextlayout.c
 gtk/gtktextmark.c
