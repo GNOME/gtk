@@ -1,3 +1,53 @@
+Overview of Changes in GTK+ 3.5.14
+==================================
+
+* Input method support
+ - Propagate input purpose and hints to individual IMs
+ - Add a hint to suppress on-screen keyboards
+
+* GtkEntry can now set Pango attributes for its text
+
+* GtkEntry and GtkTextView show 'selection handles' when
+  used with touch devices
+
+* GtkSpinButton can be oriented vertically
+
+* Bugs fixed
+ 645065 GtkFileChooserButton doesn't handle closing its dialo...
+ 661973 gtk+ reacts on F10 press incorrectly with xkeyboard-c...
+ 672046 Issues with widget state propagation
+ 672431 the alt+tab app switch makes mnemonics flash
+ 676787 Update printing demo to use new print setting
+ 679144 Gdk doesn't properly find the child area with alpha
+ 681617 radio button text isn't centered when draw indicator ...
+ 682129 Print Dialog / Improving "Print to file" option
+ 682291 GtkMenuButton .ui issues
+ 682552 Improve the layout of the mount operations dialog
+ 682662 GtkAspectFrame: vertical alignment should be top/bott...
+ 682724 Fix a typo in the the comments
+ 682825 Also compile gtkdbusgenerated.c on non-UNIX environme...
+ 682919 Crash in GTK+-3.x (3.0.x-3.5.12+) on Windows with CJK...
+ 683001 Make headings bold in message dialogs by default
+ 683168 Make spinbutton orientable
+
+* Translation updates
+ Assamese
+ French
+ Galician
+ Greek
+ Indonesian
+ Japanese
+ Kazakh
+ Latvian
+ Lithuanian
+ Norwegian bokmål
+ Persian
+ Polish
+ Punjabi
+ Spanish
+ Vietnamese
+
+
 Overview of Changes in GTK+ 3.5.12
 ==================================
 
