@@ -18,6 +18,8 @@
 #include "config.h"
 
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcssimagevalueprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 
 #include <string.h>
 
@@ -92,13 +94,203 @@ gtk_css_value_array_equal (const GtkCssValue *value1,
   return TRUE;
 }
 
+static guint
+gcd (guint a, guint b)
+{
+  while (b != 0)
+    {
+      guint t = b;
+      b = a % b;
+      a = t;
+    }
+  return a;
+}
+
+static guint
+lcm (guint a, guint b)
+{
+  return a / gcd (a, b) * b;
+}
+
+static GtkCssValue *
+gtk_css_value_array_transition_repeat (GtkCssValue *start,
+                                       GtkCssValue *end,
+                                       guint        property_id,
+                                       double       progress)
+{
+  GtkCssValue **transitions;
+  guint i, n;
+
+  n = lcm (start->n_values, end->n_values);
+  transitions = g_newa (GtkCssValue *, n);
+
+  for (i = 0; i < n; i++)
+    {
+      transitions[i] = _gtk_css_value_transition (start->values[i],
+                                                  end->values[i],
+                                                  property_id,
+                                                  progress);
+      if (transitions[i] == NULL)
+        {
+          while (i--)
+            _gtk_css_value_unref (transitions[i]);
+          return NULL;
+        }
+    }
+
+  return _gtk_css_array_value_new_from_array (transitions, n);
+}
+
+static GtkCssValue *
+gtk_css_array_value_create_default_transition_value (guint property_id)
+{
+  switch (property_id)
+    {
+    case GTK_CSS_PROPERTY_BACKGROUND_IMAGE:
+      return _gtk_css_image_value_new (NULL);
+    default:
+      g_return_val_if_reached (NULL);
+    }
+}
+
+static GtkCssValue *
+gtk_css_value_array_transition_extend (GtkCssValue *start,
+                                       GtkCssValue *end,
+                                       guint        property_id,
+                                       double       progress)
+{
+  GtkCssValue **transitions;
+  guint i, n;
+
+  n = MAX (start->n_values, end->n_values);
+  transitions = g_newa (GtkCssValue *, n);
+
+  for (i = 0; i < MIN (start->n_values, end->n_values); i++)
+    {
+      transitions[i] = _gtk_css_value_transition (start->values[i],
+                                                  end->values[i],
+                                                  property_id,
+                                                  progress);
+      if (transitions[i] == NULL)
+        {
+          while (i--)
+            _gtk_css_value_unref (transitions[i]);
+          return NULL;
+        }
+    }
+
+  if (start->n_values != end->n_values)
+    {
+      GtkCssValue *default_value;
+
+      default_value = gtk_css_array_value_create_default_transition_value (property_id);
+
+      for (; i < start->n_values; i++)
+        {
+          transitions[i] = _gtk_css_value_transition (start->values[i],
+                                                      default_value,
+                                                      property_id,
+                                                      progress);
+          if (transitions[i] == NULL)
+            {
+              while (i--)
+                _gtk_css_value_unref (transitions[i]);
+              return NULL;
+            }
+        }
+
+      for (; i < end->n_values; i++)
+        {
+          transitions[i] = _gtk_css_value_transition (default_value,
+                                                      end->values[i],
+                                                      property_id,
+                                                      progress);
+          if (transitions[i] == NULL)
+            {
+              while (i--)
+                _gtk_css_value_unref (transitions[i]);
+              return NULL;
+            }
+        }
+
+    }
+
+  g_assert (i == n);
+
+  return _gtk_css_array_value_new_from_array (transitions, n);
+}
+
 static GtkCssValue *
 gtk_css_value_array_transition (GtkCssValue *start,
                                 GtkCssValue *end,
                                 guint        property_id,
                                 double       progress)
 {
-  return NULL;
+  switch (property_id)
+    {
+    case GTK_CSS_PROPERTY_BACKGROUND_CLIP:
+    case GTK_CSS_PROPERTY_BACKGROUND_ORIGIN:
+    case GTK_CSS_PROPERTY_BACKGROUND_SIZE:
+    case GTK_CSS_PROPERTY_BACKGROUND_POSITION:
+    case GTK_CSS_PROPERTY_BACKGROUND_REPEAT:
+      return gtk_css_value_array_transition_repeat (start, end, property_id, progress);
+    case GTK_CSS_PROPERTY_BACKGROUND_IMAGE:
+      return gtk_css_value_array_transition_extend (start, end, property_id, progress);
+    case GTK_CSS_PROPERTY_COLOR:
+    case GTK_CSS_PROPERTY_FONT_SIZE:
+    case GTK_CSS_PROPERTY_BACKGROUND_COLOR:
+    case GTK_CSS_PROPERTY_FONT_FAMILY:
+    case GTK_CSS_PROPERTY_FONT_STYLE:
+    case GTK_CSS_PROPERTY_FONT_VARIANT:
+    case GTK_CSS_PROPERTY_FONT_WEIGHT:
+    case GTK_CSS_PROPERTY_TEXT_SHADOW:
+    case GTK_CSS_PROPERTY_ICON_SHADOW:
+    case GTK_CSS_PROPERTY_BOX_SHADOW:
+    case GTK_CSS_PROPERTY_MARGIN_TOP:
+    case GTK_CSS_PROPERTY_MARGIN_LEFT:
+    case GTK_CSS_PROPERTY_MARGIN_BOTTOM:
+    case GTK_CSS_PROPERTY_MARGIN_RIGHT:
+    case GTK_CSS_PROPERTY_PADDING_TOP:
+    case GTK_CSS_PROPERTY_PADDING_LEFT:
+    case GTK_CSS_PROPERTY_PADDING_BOTTOM:
+    case GTK_CSS_PROPERTY_PADDING_RIGHT:
+    case GTK_CSS_PROPERTY_BORDER_TOP_STYLE:
+    case GTK_CSS_PROPERTY_BORDER_TOP_WIDTH:
+    case GTK_CSS_PROPERTY_BORDER_LEFT_STYLE:
+    case GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH:
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE:
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH:
+    case GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE:
+    case GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH:
+    case GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS:
+    case GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS:
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS:
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS:
+    case GTK_CSS_PROPERTY_OUTLINE_STYLE:
+    case GTK_CSS_PROPERTY_OUTLINE_WIDTH:
+    case GTK_CSS_PROPERTY_OUTLINE_OFFSET:
+    case GTK_CSS_PROPERTY_BORDER_TOP_COLOR:
+    case GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR:
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR:
+    case GTK_CSS_PROPERTY_BORDER_LEFT_COLOR:
+    case GTK_CSS_PROPERTY_OUTLINE_COLOR:
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE:
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT:
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE:
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH:
+    case GTK_CSS_PROPERTY_ENGINE:
+    default:
+      /* keep all values that are not arrays here, so we get a warning if we ever turn them
+       * into arrays and start animating them. */
+      g_warning ("Don't know how to transition arrays for property '%s'", 
+                 _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (property_id))));
+    case GTK_CSS_PROPERTY_TRANSITION_PROPERTY:
+    case GTK_CSS_PROPERTY_TRANSITION_DURATION:
+    case GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION:
+    case GTK_CSS_PROPERTY_TRANSITION_DELAY:
+    case GTK_CSS_PROPERTY_GTK_KEY_BINDINGS:
+      return NULL;
+    }
 }
 
 static void
