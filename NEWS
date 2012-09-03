@@ -1,3 +1,22 @@
+Overview of Changes from GTK+ 2.24.11 to 2.24.12
+================================================
+
+* Allow building with automake 1.12
+
+* Bugs fixed:
+ 616997 gtk_recent_manager_add_item() is slow
+ 680346 gtk+-2.24.11 (commit 3f6592f6) breaks keyboard input...
+ 680901 GTK+: The chinese translations of "even sheet" and  ...
+ 681784 colorspaces used in gtk+ and cairo quartz backends d...
+ 683070 tooltip: add tooltip-radius and tooltip-alpha style ...
+ 683279 range: add a primary-button-warps-slider style prope...
+        quartz: fix corruption during scrolling in some cases
+
+* Translation updates:
+ Polish
+ Traditional Chinese
+
+
 Overview of Changes from GTK+ 2.24.10 to 2.24.11
 ================================================
 
