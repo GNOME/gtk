@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-03 04:21+0000\n"
-"PO-Revision-Date: 2012-09-03 12:56+0200\n"
+"POT-Creation-Date: 2012-09-03 14:00+0000\n"
+"PO-Revision-Date: 2012-09-03 16:06+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -6676,6 +6676,19 @@ msgstr ""
 "La lista de destinos que soporta este búfer para pegar desde el portapapeles "
 "y el destino del DND"
 
+#: ../gtk/gtktexthandle.c:462 ../gtk/gtktexthandle.c:463
+#: ../gtk/gtkwidget.c:993
+msgid "Parent widget"
+msgstr "Widget padre"
+
+#: ../gtk/gtktexthandle.c:470 ../gtk/gtkwidget.c:1184
+msgid "Window"
+msgstr "Ventana"
+
+#: ../gtk/gtktexthandle.c:471
+msgid "Window the coordinates are based upon"
+msgstr "Ventana en la que se basan las coordenadas"
+
 #: ../gtk/gtktextmark.c:127
 msgid "Mark name"
 msgstr "Nombre de la marca"
@@ -7739,10 +7752,6 @@ msgstr "Nombre del widget"
 msgid "The name of the widget"
 msgstr "El nombre del widget"
 
-#: ../gtk/gtkwidget.c:993
-msgid "Parent widget"
-msgstr "Widget padre"
-
 #: ../gtk/gtkwidget.c:994
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "El widget padre de este widget. Debe ser un widget contenedor"
@@ -7876,10 +7885,6 @@ msgstr "Indica que gtk_widget_show_all() no debe afectar a este widget"
 #: ../gtk/gtkwidget.c:1128
 msgid "Whether this widget has a tooltip"
 msgstr "Indica si el widget tiene un consejo"
-
-#: ../gtk/gtkwidget.c:1184
-msgid "Window"
-msgstr "Ventana"
 
 #: ../gtk/gtkwidget.c:1185
 msgid "The widget's window if it is realized"
@@ -8110,12 +8115,10 @@ msgid "The length of vertical scroll arrows"
 msgstr "La longitud de las flechas de desplazamiento vertical"
 
 #: ../gtk/gtkwidget.c:3297 ../gtk/gtkwidget.c:3298
-#| msgid "Width of handle"
 msgid "Width of text selection handles"
 msgstr "Anchura de la selección de texto"
 
 #: ../gtk/gtkwidget.c:3303 ../gtk/gtkwidget.c:3304
-#| msgid "The title of the font selection dialog"
 msgid "Height of text selection handles"
 msgstr "Altura de la selección de texto"
 
