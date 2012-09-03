@@ -574,6 +574,7 @@ static gint           text_window_get_height      (GtkTextWindow     *win);
 
 
 static guint signals[LAST_SIGNAL] = { 0 };
+static gboolean test_touchscreen = FALSE;
 
 G_DEFINE_TYPE_WITH_CODE (GtkTextView, gtk_text_view, GTK_TYPE_CONTAINER,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
@@ -1405,6 +1406,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   g_type_class_add_private (gobject_class, sizeof (GtkTextViewPrivate));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_VIEW_ACCESSIBLE);
+  test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN") != NULL;
 }
 
 static void
@@ -4808,7 +4810,8 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 #endif
 
   device = gdk_event_get_source_device ((GdkEvent *) event);
-  is_touchscreen = gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
+  is_touchscreen = test_touchscreen ||
+                   gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
   if (event->type == GDK_BUTTON_PRESS)
     {
@@ -4952,7 +4955,8 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
           device = gdk_event_get_source_device ((GdkEvent *) event);
 
           if (gtk_widget_is_sensitive (widget) &&
-              gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN)
+              (test_touchscreen ||
+               gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN))
             mode = GTK_TEXT_HANDLE_MODE_CURSOR;
           else
             mode = GTK_TEXT_HANDLE_MODE_NONE;
@@ -6759,7 +6763,7 @@ selection_motion_event_handler (GtkTextView    *text_view,
   text_view->priv->scroll_timeout =
     gdk_threads_add_timeout (50, selection_scan_timeout, text_view);
 
-  if (input_source == GDK_SOURCE_TOUCHSCREEN)
+  if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
     gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
 
   return TRUE;

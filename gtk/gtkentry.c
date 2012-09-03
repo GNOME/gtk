@@ -318,6 +318,7 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
+static gboolean test_touchscreen = FALSE;
 
 typedef enum {
   CURSOR_STANDARD,
@@ -1938,6 +1939,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                G_PARAM_DEPRECATED));
 
   g_type_class_add_private (gobject_class, sizeof (GtkEntryPrivate));
+  test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN") != NULL;
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
 }
@@ -4044,7 +4046,8 @@ gtk_entry_button_press (GtkWidget      *widget,
       GdkDevice *source;
 
       source = gdk_event_get_source_device ((GdkEvent *) event);
-      is_touchscreen = gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
+      is_touchscreen = test_touchscreen ||
+        gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
 
       priv->select_words = FALSE;
       priv->select_lines = FALSE;
@@ -4229,7 +4232,8 @@ gtk_entry_button_release (GtkWidget      *widget,
 
       source = gdk_event_get_source_device ((GdkEvent *) event);
 
-      if (gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN)
+      if (test_touchscreen ||
+          gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN)
         gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
 
       priv->in_drag = 0;
@@ -4411,7 +4415,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
         gtk_entry_set_positions (entry, tmp_pos, -1);
 
       /* Update touch handles' position */
-      if (input_source == GDK_SOURCE_TOUCHSCREEN)
+      if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
         gtk_entry_update_handles (entry,
                                   (priv->current_pos == priv->selection_bound) ?
                                   GTK_TEXT_HANDLE_MODE_CURSOR :
