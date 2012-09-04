@@ -381,9 +381,9 @@ static int shortcuts_get_index (GtkFileChooserDefault *impl,
 				ShortcutsIndex         where);
 static int shortcut_find_position (GtkFileChooserDefault *impl,
 				   GFile                 *file);
-#endif
 
 static void bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl);
+#endif
 
 static gboolean list_select_func   (GtkTreeSelection      *selection,
 				    GtkTreeModel          *model,
@@ -1533,9 +1533,11 @@ get_file_info_finished (GCancellable *cancellable,
 	}
       else if (request->type == SHORTCUTS_CURRENT_FOLDER)
         {
+#if REMOVE_FOR_PLACES_SIDEBAR
 	  /* Remove the current folder separator */
 	  gint separator_pos = shortcuts_get_index (request->impl, SHORTCUTS_CURRENT_FOLDER_SEPARATOR);
 	  shortcuts_remove_rows (request->impl, separator_pos, 1);
+#endif
         }
 
       goto out;
@@ -1570,6 +1572,7 @@ out:
   if (model_cancellable)
     g_object_unref (model_cancellable);
 }
+#endif
 
 /* FIXME: GtkFileSystem needs a function to split a remote path
  * into hostname and path components, or maybe just have a 
@@ -1627,6 +1630,7 @@ _gtk_file_chooser_label_for_file (GFile *file)
   return label;
 }
 
+#if REMOVE_FOR_PLACES_SIDEBAR
 /* Inserts a path in the shortcuts tree, making a copy of it; alternatively,
  * inserts a volume.  A position of -1 indicates the end of the tree.
  */
@@ -7435,7 +7439,9 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 
   check_preview_change (impl);
+#if REMOVE_FOR_PLACES_SIDEBAR
   bookmarks_check_add_sensitivity (impl);
+#endif
 
   g_signal_emit_by_name (impl, "selection-changed", 0);
 
@@ -10211,7 +10217,9 @@ list_selection_changed (GtkTreeSelection      *selection,
   path_bar_update (impl);
 
   check_preview_change (impl);
+#if REMOVE_FOR_PLACES_SIDEBAR
   bookmarks_check_add_sensitivity (impl);
+#endif
   check_copy_file_location_sensitivity (impl);
 
   g_signal_emit_by_name (impl, "selection-changed", 0);
@@ -10432,8 +10440,10 @@ home_folder_handler (GtkFileChooserDefault *impl)
 static void
 desktop_folder_handler (GtkFileChooserDefault *impl)
 {
+#if REMOVE_FOR_PLACES_SIDEBAR
   if (impl->has_desktop)
     switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_DESKTOP));
+#endif
 }
 
 /* Handler for the "search-shortcut" keybinding signal */
@@ -10442,7 +10452,9 @@ search_shortcut_handler (GtkFileChooserDefault *impl)
 {
   if (impl->has_search)
     {
+#if REMOVE_FOR_PLACES_SIDEBAR
       switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_SEARCH));
+#endif
 
       /* we want the entry widget to grab the focus the first
        * time, not the browse_files_tree_view widget.
@@ -10456,7 +10468,9 @@ search_shortcut_handler (GtkFileChooserDefault *impl)
 static void
 recent_shortcut_handler (GtkFileChooserDefault *impl)
 {
+#if REMOVE_FOR_PLACES_SIDEBAR
   switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_RECENT));
+#endif
 }
 
 static void
@@ -10469,7 +10483,9 @@ quick_bookmark_handler (GtkFileChooserDefault *impl,
   if (bookmark_index < 0 || bookmark_index >= impl->num_bookmarks)
     return;
 
+#if REMOVE_FOR_PLACES_SIDEBAR
   bookmark_pos = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS) + bookmark_index;
+#endif
 
   path = gtk_tree_path_new_from_indices (bookmark_pos, -1);
 #if REMOVE_FOR_PLACES_SIDEBAR
