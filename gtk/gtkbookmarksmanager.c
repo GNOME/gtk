@@ -40,12 +40,25 @@ _gtk_bookmark_free (GtkBookmark *bookmark)
 }
 
 static GFile *
-get_bookmarks_file (void)
+get_legacy_bookmarks_file (void)
 {
   GFile *file;
   gchar *filename;
 
   filename = g_build_filename (g_get_home_dir (), ".gtk-bookmarks", NULL);
+  file = g_file_new_for_path (filename);
+  g_free (filename);
+
+  return file;
+}
+
+static GFile *
+get_bookmarks_file (void)
+{
+  GFile *file;
+  gchar *filename;
+
+  filename = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "bookmarks", NULL);
   file = g_file_new_for_path (filename);
   g_free (filename);
 
@@ -189,6 +202,17 @@ _gtk_bookmarks_manager_new (GtkBookmarksChangedFunc changed_func, gpointer chang
 
   bookmarks_file = get_bookmarks_file ();
   manager->bookmarks = read_bookmarks (bookmarks_file);
+  if (!priv->bookmarks)
+    {
+      GFile *legacy_bookmarks_file;
+
+      /* Read the legacy one and write it to the new one */
+      legacy_bookmarks_file = get_legacy_bookmarks_file ();
+      priv->bookmarks = read_bookmarks (legacy_bookmarks_file);
+      save_bookmarks (bookmarks_file, priv->bookmarks);
+
+      g_object_unref (legacy_bookmarks_file);
+    }
 
   error = NULL;
   manager->bookmarks_monitor = g_file_monitor_file (bookmarks_file,
