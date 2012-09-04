@@ -445,12 +445,21 @@ gtk_menu_button_add (GtkContainer *container,
   GtkMenuButton *button = GTK_MENU_BUTTON (container);
 
   if (button->priv->arrow_widget)
-    {
-      gtk_container_remove (container, button->priv->arrow_widget);
-      button->priv->arrow_widget = NULL;
-    }
+    gtk_container_remove (container, button->priv->arrow_widget);
 
   GTK_CONTAINER_CLASS (gtk_menu_button_parent_class)->add (container, child);
+}
+
+static void
+gtk_menu_button_remove (GtkContainer *container,
+                        GtkWidget    *child)
+{
+  GtkMenuButton *button = GTK_MENU_BUTTON (container);
+
+  if (child == button->priv->arrow_widget)
+    button->priv->arrow_widget = NULL;
+
+  GTK_CONTAINER_CLASS (gtk_menu_button_parent_class)->remove (container, child);
 }
 
 static void
@@ -471,6 +480,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   widget_class->button_press_event = gtk_menu_button_button_press_event;
 
   container_class->add = gtk_menu_button_add;
+  container_class->remove = gtk_menu_button_remove;
 
   toggle_button_class->toggled = gtk_menu_button_toggled;
 
