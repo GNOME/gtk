@@ -43,6 +43,8 @@
 #include "gtkplacessidebar.h"
 #include "gtkscrolledwindow.h"
 #include "gtkseparatormenuitem.h"
+#include "gtksettings.h"
+#include "gtkstock.h"
 #include "gtktreeselection.h"
 #include "gtktreednd.h"
 #include "gtkwindow.h"
