@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-31 20:44+0200\n"
-"PO-Revision-Date: 2012-08-31 20:45+0200\n"
+"POT-Creation-Date: 2012-09-04 02:24+0200\n"
+"PO-Revision-Date: 2012-09-04 02:25+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1242,7 +1242,7 @@ msgid "The stock ID of the stock icon to render"
 msgstr "Identyfikator rysowanej standardowej ikony"
 
 #: ../gtk/gtkcellrendererpixbuf.c:143 ../gtk/gtkcellrendererspinner.c:158
-#: ../gtk/gtkrecentmanager.c:250 ../gtk/gtkstatusicon.c:271
+#: ../gtk/gtkrecentmanager.c:253 ../gtk/gtkstatusicon.c:271
 msgid "Size"
 msgstr "Rozmiar"
 
@@ -2857,7 +2857,7 @@ msgstr "Tytuł okna dialogowego wyboru plików."
 msgid "The desired width of the button widget, in characters."
 msgstr "Żądana szerokość widżetu przycisku w znakach."
 
-#: ../gtk/gtkfilesel.c:526 ../gtk/gtkimage.c:256 ../gtk/gtkrecentmanager.c:214
+#: ../gtk/gtkfilesel.c:526 ../gtk/gtkimage.c:256 ../gtk/gtkrecentmanager.c:217
 #: ../gtk/gtkstatusicon.c:222
 msgid "Filename"
 msgstr "Nazwa pliku"
@@ -4807,11 +4807,20 @@ msgstr ""
 "Określa jak daleko powinna zostać przemieszczona w pionie strzałka, kiedy "
 "przycisk jest wciśnięty"
 
-#: ../gtk/gtkrange.c:546
+#: ../gtk/gtkrange.c:537
+msgid "Primary button warps slider"
+msgstr "Przycisk podstawowy przewija suwak"
+
+#: ../gtk/gtkrange.c:538
+msgid ""
+"Whether a primary click on the trough should warp the slider into position"
+msgstr "Określa, czy kliknięcie podstawowe na pasku powinno przewinąć suwak"
+
+#: ../gtk/gtkrange.c:552
 msgid "Draw slider ACTIVE during drag"
 msgstr "Suwak AKTYWNY podczas przeciągania"
 
-#: ../gtk/gtkrange.c:547
+#: ../gtk/gtkrange.c:553
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -4819,11 +4828,11 @@ msgstr ""
 "Wartość TRUE oznacza, że podczas przeciągania suwaki będą rysowane AKTYWNE z "
 "cieniem wewnątrz"
 
-#: ../gtk/gtkrange.c:563
+#: ../gtk/gtkrange.c:569
 msgid "Trough Side Details"
 msgstr "Szczegóły paska"
 
-#: ../gtk/gtkrange.c:564
+#: ../gtk/gtkrange.c:570
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
@@ -4831,11 +4840,11 @@ msgstr ""
 "Gdy TRUE, części paska po dwóch stronach suwaka będą rysowane z innymi "
 "szczegółami"
 
-#: ../gtk/gtkrange.c:580
+#: ../gtk/gtkrange.c:586
 msgid "Trough Under Steppers"
 msgstr "Pasek pod przyciskami kroku"
 
-#: ../gtk/gtkrange.c:581
+#: ../gtk/gtkrange.c:587
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -4843,20 +4852,20 @@ msgstr ""
 "Określa, czy rysować pasek na całej długości zakresu lub czy wyłączyć odstęp "
 "i przyciski kroku"
 
-#: ../gtk/gtkrange.c:594
+#: ../gtk/gtkrange.c:600
 msgid "Arrow scaling"
 msgstr "Skalowanie kursora"
 
-#: ../gtk/gtkrange.c:595
+#: ../gtk/gtkrange.c:601
 msgid "Arrow scaling with regard to scroll button size"
 msgstr ""
 "Zezwolenie na skalowaniem z uwzględnieniem rozmiaru przycisku przewijania"
 
-#: ../gtk/gtkrange.c:611
+#: ../gtk/gtkrange.c:617
 msgid "Stepper Position Details"
 msgstr "Szczegóły pozycji kroku"
 
-#: ../gtk/gtkrange.c:612
+#: ../gtk/gtkrange.c:618
 msgid ""
 "When TRUE, the detail string for rendering the steppers is suffixed with "
 "position information"
@@ -4926,7 +4935,7 @@ msgstr ""
 "Określa, czy zaznaczone zasoby powinny być ograniczone do lokalnych adresów "
 "URI file:"
 
-#: ../gtk/gtkrecentchooser.c:234 ../gtk/gtkrecentmanager.c:234
+#: ../gtk/gtkrecentchooser.c:234 ../gtk/gtkrecentmanager.c:237
 msgid "Limit"
 msgstr "Ograniczenie"
 
@@ -4946,17 +4955,17 @@ msgstr "Porządek sortowania wyświetlanych elementów"
 msgid "The current filter for selecting which resources are displayed"
 msgstr "Bieżący filtr służący do zaznaczania które zasoby mają być wyświetlane"
 
-#: ../gtk/gtkrecentmanager.c:215
+#: ../gtk/gtkrecentmanager.c:218
 msgid "The full path to the file to be used to store and read the list"
 msgstr "Pełna ścieżka do pliku używanego do przechowywania i odczytu listy"
 
-#: ../gtk/gtkrecentmanager.c:235
+#: ../gtk/gtkrecentmanager.c:238
 msgid ""
 "The maximum number of items to be returned by gtk_recent_manager_get_items()"
 msgstr ""
 "Maksymalna liczba elementów zwracanych przez gtk_recent_manager_get_items()"
 
-#: ../gtk/gtkrecentmanager.c:251
+#: ../gtk/gtkrecentmanager.c:254
 msgid "The size of the recently used resources list"
 msgstr "Rozmiar listy ostatnio używanych zasobów"
 
