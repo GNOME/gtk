@@ -1,3 +1,8 @@
+Overview of Changes in GTK+ 3.5.16
+==================================
+
+* Fix critical warnings on startup in nautilus
+
 Overview of Changes in GTK+ 3.5.14
 ==================================
 
