@@ -47,6 +47,7 @@
 #include "gtkstock.h"
 #include "gtktreeselection.h"
 #include "gtktreednd.h"
+#include "gtktypebuiltins.h"
 #include "gtkwindow.h"
 
 #define EJECT_BUTTON_XPAD 6
@@ -3507,7 +3508,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      _gtk_marshal_VOID__OBJECT_ENUM,
 			      G_TYPE_NONE, 2,
 			      G_TYPE_OBJECT,
-			      G_TYPE_ENUM);
+			      GTK_TYPE_PLACES_OPEN_MODE);
 
 	places_sidebar_signals [INITIATED_UNMOUNT] =
 		g_signal_new (I_("initiated-unmount"),
