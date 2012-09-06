@@ -51,6 +51,7 @@
 #include "gtkmountoperation.h"
 #include "gtkpaned.h"
 #include "gtkpathbar.h"
+#include "gtkplacessidebar.h"
 #include "gtkprivate.h"
 #include "gtkradiobutton.h"
 #include "gtkrecentfilter.h"
@@ -3741,7 +3742,8 @@ static GtkWidget *
 shortcuts_pane_create (GtkFileChooserDefault *impl,
 		       GtkSizeGroup          *size_group)
 {
-  return gtk_label_new ("yay");
+  impl->places_sidebar = gtk_places_sidebar_new ();
+  return impl->places_sidebar;
 }
 
 static gboolean

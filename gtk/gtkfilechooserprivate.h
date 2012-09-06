@@ -198,6 +198,8 @@ struct _GtkFileChooserDefault
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
 
+  GtkWidget *places_sidebar;
+
   /* OPERATION_MODE_SEARCH */
   GtkWidget *search_hbox;
   GtkWidget *search_entry;
