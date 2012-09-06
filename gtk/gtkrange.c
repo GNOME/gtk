@@ -2401,7 +2401,7 @@ gtk_range_button_press (GtkWidget      *widget,
        * dragging the slider with a trough click using the warp button;
        * we warp the slider to mouse position, then begin the slider drag.
        */
-      if (event->button == warp_button)
+      if (range->layout->mouse_location != MOUSE_SLIDER)
         {
           gdouble slider_low_value, slider_high_value, new_value;
           
