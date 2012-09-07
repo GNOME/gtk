@@ -17,6 +17,13 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* TODO:
+ *
+ * * Fix instances of "#if REMOVE_FOR_PLACES_SIDEBAR"
+ *
+ * * Fix FIXME-places-sidebar
+ */
+
 #include "config.h"
 
 #include "gtkfilechooserdefault.h"
@@ -3737,12 +3744,42 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 }
 #endif
 
+static void
+places_sidebar_location_selected_cb (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode, GtkFileChooserDefault *impl)
+{
+  gboolean clear_entry;
+
+  /* FIXME-places-sidebar: see shortcuts_activate_iter() for missing pieces.  In particular:
+   *
+   * * Search mode
+   *
+   * * Recent-files mode
+   */
+
+  /* In the Save modes, we want to preserve what the uesr typed in the filename
+   * entry, so that he may choose another folder without erasing his typed name.
+   */
+  if (impl->location_entry
+      && !(impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
+	   || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
+    clear_entry = TRUE;
+  else
+    clear_entry = FALSE;
+
+  change_folder_and_display_error (impl, location, clear_entry);
+}
+
 /* Creates the widgets for the shortcuts/bookmarks pane */
 static GtkWidget *
 shortcuts_pane_create (GtkFileChooserDefault *impl,
 		       GtkSizeGroup          *size_group)
 {
   impl->places_sidebar = gtk_places_sidebar_new ();
+
+  g_signal_connect (impl->places_sidebar, "location-selected",
+		    G_CALLBACK (places_sidebar_location_selected_cb),
+		    impl);
+
   return impl->places_sidebar;
 }
 
