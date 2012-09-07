@@ -24,6 +24,18 @@
  *
  */
 
+/* TODO:
+ *
+ * * Fix instances of "#if DO_NOT_COMPILE"
+ *
+ * * Fix instances of "#if 0"
+ *
+ * * Fix FIXMEs
+ *
+ * * Nautilus needs to use gtk_places_sidebar_set_uri() instead of built-in
+ *   notification from the NautilusWindowSlot.
+ */
+
 #include "config.h"
 
 #include <gio/gio.h>
@@ -61,7 +73,6 @@ struct _GtkPlacesSidebar {
 	GtkCellRenderer    *eject_icon_cell_renderer;
 	char 	           *uri;
 	GtkListStore       *store;
-	GtkTreeModel       *filter_model;
 	GtkBookmarksManager *bookmarks_manager;
 	GVolumeMonitor *volume_monitor;
 
@@ -87,12 +98,18 @@ struct _GtkPlacesSidebar {
 	GtkWidget *popup_menu_empty_trash_item;
 	GtkWidget *popup_menu_start_item;
 	GtkWidget *popup_menu_stop_item;
+	GtkWidget *popup_menu_properties_separator_item;
+	GtkWidget *popup_menu_properties_item;
 
 	/* volume mounting - delayed open process */
 	gboolean mounting;
+#if 0
+ 	NautilusWindowSlot *go_to_after_mount_slot;
+#endif
 	GtkPlacesOpenMode go_to_after_mount_open_mode;
 
-	GtkTreePath *eject_highlight_path;
+	GDBusProxy *hostnamed_proxy;
+	char *hostname;
 
 	guint multiple_tabs_supported : 1;
 	guint multiple_windows_supported : 1;
@@ -119,13 +136,13 @@ enum {
 	PLACES_SIDEBAR_COLUMN_VOLUME,
 	PLACES_SIDEBAR_COLUMN_MOUNT,
 	PLACES_SIDEBAR_COLUMN_NAME,
-	PLACES_SIDEBAR_COLUMN_ICON,
+	PLACES_SIDEBAR_COLUMN_GICON,
 	PLACES_SIDEBAR_COLUMN_INDEX,
 	PLACES_SIDEBAR_COLUMN_EJECT,
 	PLACES_SIDEBAR_COLUMN_NO_EJECT,
 	PLACES_SIDEBAR_COLUMN_BOOKMARK,
 	PLACES_SIDEBAR_COLUMN_TOOLTIP,
-	PLACES_SIDEBAR_COLUMN_EJECT_ICON,
+	PLACES_SIDEBAR_COLUMN_EJECT_GICON,
 	PLACES_SIDEBAR_COLUMN_SECTION_TYPE,
 	PLACES_SIDEBAR_COLUMN_HEADING_TEXT,
 
@@ -134,6 +151,7 @@ enum {
 
 typedef enum {
 	PLACES_BUILT_IN,
+	PLACES_XDG_DIR,
 	PLACES_MOUNTED_VOLUME,
 	PLACES_BOOKMARK,
 	PLACES_HEADING,
@@ -192,8 +210,8 @@ static void bookmarks_check_popup_sensitivity          (GtkPlacesSidebar *sideba
 
 /* Identifiers for target types */
 enum {
-  GTK_TREE_MODEL_ROW,
-  TEXT_URI_LIST
+	GTK_TREE_MODEL_ROW,
+	TEXT_URI_LIST
 };
 
 /* Target types for dragging from the shortcuts list */
@@ -209,30 +227,28 @@ static const GtkTargetEntry dnd_drop_targets [] = {
 
 /* Drag and drop interface declarations */
 typedef struct {
-  GtkTreeModelFilter parent;
+	GtkListStore parent;
 
-  GtkPlacesSidebar *sidebar;
-} ShortcutsModelFilter;
+	GtkPlacesSidebar *sidebar;
+} ShortcutsModel;
 
 typedef struct {
-  GtkTreeModelFilterClass parent_class;
-} ShortcutsModelFilterClass;
+	GtkListStoreClass parent_class;
+} ShortcutsModelClass;
 
-#define SHORTCUTS_MODEL_FILTER_TYPE (shortcuts_model_filter_get_type ())
-#define SHORTCUTS_MODEL_FILTER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SHORTCUTS_MODEL_FILTER_TYPE, ShortcutsModelFilter))
+#define SHORTCUTS_MODEL_TYPE (shortcuts_model_get_type ())
+#define SHORTCUTS_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SHORTCUTS_MODEL_TYPE, ShortcutsModel))
 
-static GType shortcuts_model_filter_get_type (void);
-static void shortcuts_model_filter_drag_source_iface_init (GtkTreeDragSourceIface *iface);
+static GType shortcuts_model_get_type (void);
+static void shortcuts_model_drag_source_iface_init (GtkTreeDragSourceIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (ShortcutsModelFilter,
-			 shortcuts_model_filter,
-			 GTK_TYPE_TREE_MODEL_FILTER,
+G_DEFINE_TYPE_WITH_CODE (ShortcutsModel,
+			 shortcuts_model,
+			 GTK_TYPE_LIST_STORE,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
-						shortcuts_model_filter_drag_source_iface_init));
+						shortcuts_model_drag_source_iface_init));
 
-static GtkTreeModel *shortcuts_model_filter_new (GtkPlacesSidebar *sidebar,
-						 GtkTreeModel          *child_model,
-						 GtkTreePath           *root);
+static GtkListStore *shortcuts_model_new (GtkPlacesSidebar *sidebar);
 
 G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_SCROLLED_WINDOW);
 
@@ -275,42 +291,6 @@ get_icon_size (GtkPlacesSidebar *sidebar)
 		return 16;
 }
 
-static GdkPixbuf *
-get_eject_icon (GtkPlacesSidebar *sidebar,
-		gboolean highlighted)
-{
-	GdkPixbuf *eject;
-	GtkIconInfo *icon_info;
-	GIcon *icon;
-	int icon_size;
-	GtkIconTheme *icon_theme;
-	GtkStyleContext *style;
-
-	icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (sidebar)));
-	icon_size = get_icon_size (sidebar);
-	icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_EJECT);
-	icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon, icon_size, 0);
-
-	style = gtk_widget_get_style_context (GTK_WIDGET (sidebar));
-
-	gtk_style_context_save (style);
-
-	if (highlighted)
-		gtk_style_context_set_state (style, GTK_STATE_FLAG_PRELIGHT);
-
-	eject = gtk_icon_info_load_symbolic_for_context (icon_info,
-							 style,
-							 NULL,
-							 NULL);
-
-	gtk_style_context_restore (style);
-
-	g_object_unref (icon);
-	gtk_icon_info_free (icon_info);
-
-	return eject;
-}
-
 #if 0
 /* FIXME: remove this?  Let's allow the user to bookmark whatever he damn well pleases */
 static gboolean
@@ -321,6 +301,11 @@ is_built_in_bookmark (NautilusFile *file)
 
 	if (nautilus_file_is_home (file)) {
 		return TRUE;
+	}
+
+	if (nautilus_file_is_desktop_directory (file) &&
+	    !g_settings_get_boolean (gnome_background_preferences, NAUTILUS_PREFERENCES_SHOW_DESKTOP)) {
+		return FALSE;
 	}
 
 	built_in = FALSE;
@@ -345,7 +330,7 @@ add_heading (GtkPlacesSidebar *sidebar,
 	     SectionType section_type,
 	     const gchar *title)
 {
-	GtkTreeIter iter, child_iter;
+	GtkTreeIter iter;
 
 	gtk_list_store_append (sidebar->store, &iter);
 	gtk_list_store_set (sidebar->store, &iter,
@@ -356,12 +341,7 @@ add_heading (GtkPlacesSidebar *sidebar,
 			    PLACES_SIDEBAR_COLUMN_NO_EJECT, TRUE,
 			    -1);
 
-	gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (sidebar->filter_model));
-	gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (sidebar->filter_model),
-							  &child_iter,
-							  &iter);
-
-	return child_iter;
+	return iter;
 }
 
 static void
@@ -390,25 +370,7 @@ check_heading_for_section (GtkPlacesSidebar *sidebar,
 	}
 }
 
-static GdkPixbuf *
-get_pixbuf_from_gicon (GtkPlacesSidebar *sidebar, GIcon *icon)
-{
-	int icon_size;
-	GtkIconTheme *icon_theme;
-	GtkIconInfo *icon_info;
-	GdkPixbuf *pixbuf;
-
-	icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (sidebar)));
-	icon_size = get_icon_size (sidebar);
-	icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme, icon, icon_size, 0);
-
-	pixbuf = gtk_icon_info_load_icon (icon_info, NULL); /* NULL-GError */
-	gtk_icon_info_free (icon_info);
-
-	return pixbuf;
-}
-
-static GtkTreeIter
+static void
 add_place (GtkPlacesSidebar *sidebar,
 	   PlaceType place_type,
 	   SectionType section_type,
@@ -421,15 +383,12 @@ add_place (GtkPlacesSidebar *sidebar,
 	   const int index,
 	   const char *tooltip)
 {
-	GdkPixbuf            *pixbuf;
-	GtkTreeIter           iter, child_iter;
-	GdkPixbuf	     *eject;
+	GtkTreeIter           iter;
+	GIcon *eject;
 	gboolean show_eject, show_unmount;
 	gboolean show_eject_button;
 
 	check_heading_for_section (sidebar, section_type);
-
-	pixbuf = get_pixbuf_from_gicon (sidebar, icon);
 
 	check_unmount_and_eject (mount, volume, drive,
 				 &show_unmount, &show_eject);
@@ -445,14 +404,14 @@ add_place (GtkPlacesSidebar *sidebar,
 	}
 
 	if (show_eject_button) {
-		eject = get_eject_icon (sidebar, FALSE);
+		eject = g_themed_icon_new_with_default_fallbacks ("media-eject-symbolic");
 	} else {
 		eject = NULL;
 	}
 
 	gtk_list_store_append (sidebar->store, &iter);
 	gtk_list_store_set (sidebar->store, &iter,
-			    PLACES_SIDEBAR_COLUMN_ICON, pixbuf,
+			    PLACES_SIDEBAR_COLUMN_GICON, icon,
 			    PLACES_SIDEBAR_COLUMN_NAME, name,
 			    PLACES_SIDEBAR_COLUMN_URI, uri,
 			    PLACES_SIDEBAR_COLUMN_DRIVE, drive,
@@ -464,45 +423,166 @@ add_place (GtkPlacesSidebar *sidebar,
 			    PLACES_SIDEBAR_COLUMN_NO_EJECT, !show_eject_button,
 			    PLACES_SIDEBAR_COLUMN_BOOKMARK, place_type != PLACES_BOOKMARK,
 			    PLACES_SIDEBAR_COLUMN_TOOLTIP, tooltip,
-			    PLACES_SIDEBAR_COLUMN_EJECT_ICON, eject,
+			    PLACES_SIDEBAR_COLUMN_EJECT_GICON, eject,
 			    PLACES_SIDEBAR_COLUMN_SECTION_TYPE, section_type,
 			    -1);
 
-	if (pixbuf != NULL) {
-		g_object_unref (pixbuf);
+	if (eject != NULL) {
+		g_object_unref (eject);
 	}
-	gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (sidebar->filter_model));
-	gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (sidebar->filter_model),
-							  &child_iter,
-							  &iter);
-	return child_iter;
+}
+
+typedef struct {
+	const gchar *location;
+	const gchar *last_uri;
+	GtkPlacesSidebar *sidebar;
+	GtkTreePath *path;
+} RestoreLocationData;
+
+static gboolean
+restore_selection_foreach (GtkTreeModel *model,
+			   GtkTreePath *path,
+			   GtkTreeIter *iter,
+			   gpointer user_data)
+{
+	RestoreLocationData *data = user_data;
+	gchar *uri;
+
+	gtk_tree_model_get (model, iter,
+			    PLACES_SIDEBAR_COLUMN_URI, &uri,
+			    -1);
+
+	if (g_strcmp0 (uri, data->last_uri) == 0 ||
+	    g_strcmp0 (uri, data->location) == 0) {
+		data->path = gtk_tree_path_copy (path);
+	}
+
+	g_free (uri);
+
+	return (data->path != NULL);
 }
 
 static void
-compare_for_selection (GtkPlacesSidebar *sidebar,
-		       const gchar *location,
-		       const gchar *added_uri,
-		       const gchar *last_uri,
-		       GtkTreeIter *iter,
-		       GtkTreePath **path)
+sidebar_update_restore_selection (GtkPlacesSidebar *sidebar,
+				  const gchar *location,
+				  const gchar *last_uri)
 {
-	int res;
+	RestoreLocationData data;
+	GtkTreeSelection *selection;
 
-	res = g_strcmp0 (added_uri, last_uri);
+	data.location = location;
+	data.last_uri = last_uri;
+	data.sidebar = sidebar;
+	data.path = NULL;
 
-	if (res == 0) {
-		/* last_uri always comes first */
-		if (*path != NULL) {
-			gtk_tree_path_free (*path);
-		}
-		*path = gtk_tree_model_get_path (sidebar->filter_model,
-						 iter);
-	} else if (g_strcmp0 (location, added_uri) == 0) {
-		if (*path == NULL) {
-			*path = gtk_tree_model_get_path (sidebar->filter_model,
-							 iter);
+	gtk_tree_model_foreach (GTK_TREE_MODEL (sidebar->store),
+				restore_selection_foreach, &data);
+
+	if (data.path != NULL) {
+		selection = gtk_tree_view_get_selection (sidebar->tree_view);
+		gtk_tree_selection_select_path (selection, data.path);
+		gtk_tree_path_free (data.path);
+	}
+}
+
+static GIcon *
+special_directory_get_gicon (GUserDirectory directory)
+{
+
+#define ICON_CASE(x)				\
+	case G_USER_DIRECTORY_ ## x:					\
+		return g_themed_icon_new (ICON_NAME_FOLDER_ ## x);
+
+	switch (directory) {
+
+		ICON_CASE (DOCUMENTS);
+		ICON_CASE (DOWNLOAD);
+		ICON_CASE (MUSIC);
+		ICON_CASE (PICTURES);
+		ICON_CASE (PUBLIC_SHARE);
+		ICON_CASE (TEMPLATES);
+		ICON_CASE (VIDEOS);
+
+	default:
+		return g_themed_icon_new ("folder-symbolic");
+	}
+
+#undef ICON_CASE
+}
+
+static gboolean
+recent_is_supported (void)
+{
+	const char * const *supported;
+	int i;
+
+	supported = g_vfs_get_supported_uri_schemes (g_vfs_get_default ());
+	if (!supported) {
+		return FALSE;
+	}
+
+	for (i = 0; supported[i] != NULL; i++) {
+		if (strcmp ("recent", supported[i]) == 0) {
+			return TRUE;
 		}
 	}
+	return FALSE;
+}
+
+static void
+add_special_dirs (GtkPlacesSidebar *sidebar)
+{
+	GList *dirs;
+	int index;
+
+	dirs = NULL;
+	for (index = 0; index < G_USER_N_DIRECTORIES; index++) {
+		const char *path;
+		GFile *root;
+		GIcon *icon;
+		char *name;
+		char *mount_uri;
+		char *tooltip;
+
+		if (index == G_USER_DIRECTORY_DESKTOP ||
+		    index == G_USER_DIRECTORY_TEMPLATES ||
+		    index == G_USER_DIRECTORY_PUBLIC_SHARE) {
+			continue;
+		}
+
+		path = g_get_user_special_dir (index);
+
+		/* xdg resets special dirs to the home directory in case
+		 * it's not finiding what it expects. We don't want the home
+		 * to be added multiple times in that weird configuration.
+		 */
+		if (path == NULL
+		    || g_strcmp0 (path, g_get_home_dir ()) == 0
+		    || g_list_find_custom (dirs, path, (GCompareFunc) g_strcmp0) != NULL) {
+			continue;
+		}
+
+		root = g_file_new_for_path (path);
+		name = g_file_get_basename (root);
+		icon = special_directory_get_gicon (index);
+		mount_uri = g_file_get_uri (root);
+		tooltip = g_file_get_parse_name (root);
+
+		add_place (sidebar, PLACES_XDG_DIR,
+			   SECTION_COMPUTER,
+			   name, icon, mount_uri,
+			   NULL, NULL, NULL, 0,
+			   tooltip);
+		g_free (name);
+		g_object_unref (root);
+		g_object_unref (icon);
+		g_free (mount_uri);
+		g_free (tooltip);
+
+		dirs = g_list_prepend (dirs, (char *)path);
+	}
+
+	g_list_free (dirs);
 }
 
 static char *
@@ -517,32 +597,8 @@ get_home_directory_uri (void)
 	return g_strconcat ("file://", home, NULL);
 }
 
-static GIcon *
-get_gicon_for_user_special_directory (GUserDirectory directory)
-{
-	#define ICON_CASE(x) \
-		case G_USER_DIRECTORY_ ## x:\
-			return g_themed_icon_new (ICON_NAME_FOLDER_ ## x);
-
-	switch (directory) {
-		ICON_CASE (DESKTOP);
-		ICON_CASE (DOCUMENTS);
-		ICON_CASE (DOWNLOAD);
-		ICON_CASE (MUSIC);
-		ICON_CASE (PICTURES);
-		ICON_CASE (PUBLIC_SHARE);
-		ICON_CASE (TEMPLATES);
-		ICON_CASE (VIDEOS);
-
-	default:
-		return g_themed_icon_new ("folder");
-	}
-
-	#undef ICON_CASE
-}
-
-static const char *
-get_desktop_directory (void)
+static char *
+get_desktop_directory_uri (void)
 {
 	const char *name;
 
@@ -553,7 +609,7 @@ get_desktop_directory (void)
 	if (!g_strcmp0 (name, g_get_home_dir ())) {
 		return NULL;
 	} else {
-		return name;
+		return g_strconcat ("file://", name, NULL);
 	}
 }
 
@@ -562,7 +618,6 @@ update_places (GtkPlacesSidebar *sidebar)
 {
 	GtkTreeSelection *selection;
 	GtkTreeIter last_iter;
-	GtkTreePath *select_path;
 	GtkTreeModel *model;
 	GVolumeMonitor *volume_monitor;
 	GList *mounts, *l, *ll;
@@ -573,18 +628,15 @@ update_places (GtkPlacesSidebar *sidebar)
 	GVolume *volume;
 	GSList *bookmarks, *sl;
 	int index;
-	const char *desktop_path;
-	char *mount_uri, *name, *last_uri;
+	char *location, *mount_uri, *name, *last_uri, *identifier;
 	char *bookmark_name;
-	const gchar *path;
 	GIcon *icon;
 	GFile *root;
 	char *tooltip;
-	GList *network_mounts;
+	GList *network_mounts, *network_volumes;
 
 	model = NULL;
 	last_uri = NULL;
-	select_path = NULL;
 
 	selection = gtk_tree_view_get_selection (sidebar->tree_view);
 	if (gtk_tree_selection_get_selected (selection, &model, &last_iter)) {
@@ -597,9 +649,72 @@ update_places (GtkPlacesSidebar *sidebar)
 	sidebar->devices_header_added = FALSE;
 	sidebar->bookmarks_header_added = FALSE;
 
+#if 0
+	/* FIXME: the "location" is used at the end of this function
+	 * to restore the current location.  How do we do that now?
+	 */
+	slot = nautilus_window_get_active_slot (sidebar->window);
+	location = nautilus_window_slot_get_current_uri (slot);
+#else
+	location = NULL;
+#endif
+
+	network_mounts = network_volumes = NULL;
 	volume_monitor = sidebar->volume_monitor;
 
-	/* first go through all connected drives */
+	/* add built in bookmarks */
+
+	add_heading (sidebar, SECTION_COMPUTER,
+		     _("Places"));
+
+	if (recent_is_supported ()) {
+		mount_uri = "recent:///"; /* No need to strdup */
+		icon = g_themed_icon_new ("document-open-recent-symbolic");
+		add_place (sidebar, PLACES_BUILT_IN,
+			   SECTION_COMPUTER,
+			   _("Recent"), icon, mount_uri,
+			   NULL, NULL, NULL, 0,
+			   _("Recent files"));
+		g_object_unref (icon);
+	}
+
+	/* home folder */
+	mount_uri = get_home_directory_uri ();
+	icon = g_themed_icon_new (ICON_NAME_HOME);
+	add_place (sidebar, PLACES_BUILT_IN,
+		   SECTION_COMPUTER,
+		   _("Home"), icon,
+		   mount_uri, NULL, NULL, NULL, 0,
+		   _("Open your personal folder"));
+	g_object_unref (icon);
+	g_free (mount_uri);
+
+	if (sidebar->show_desktop) {
+		/* desktop */
+		mount_uri = get_desktop_directory_uri ();
+		icon = g_themed_icon_new (ICON_NAME_DESKTOP);
+		add_place (sidebar, PLACES_BUILT_IN,
+			   SECTION_COMPUTER,
+			   _("Desktop"), icon,
+			   mount_uri, NULL, NULL, NULL, 0,
+			   _("Open the contents of your desktop in a folder"));
+		g_object_unref (icon);
+		g_free (mount_uri);
+	}
+
+	/* XDG directories */
+	add_special_dirs (sidebar);
+
+	mount_uri = "trash:///"; /* No need to strdup */
+	icon = g_themed_icon_new (ICON_NAME_TRASH);
+	add_place (sidebar, PLACES_BUILT_IN,
+		   SECTION_COMPUTER,
+		   _("Trash"), icon, mount_uri,
+		   NULL, NULL, NULL, 0,
+		   _("Open the trash"));
+	g_object_unref (icon);
+
+	/* go through all connected drives */
 	drives = g_volume_monitor_get_connected_drives (volume_monitor);
 
 	for (l = drives; l != NULL; l = l->next) {
@@ -609,22 +724,28 @@ update_places (GtkPlacesSidebar *sidebar)
 		if (volumes != NULL) {
 			for (ll = volumes; ll != NULL; ll = ll->next) {
 				volume = ll->data;
+				identifier = g_volume_get_identifier (volume, G_VOLUME_IDENTIFIER_KIND_CLASS);
+
+				if (g_strcmp0 (identifier, "network") == 0) {
+					g_free (identifier);
+					network_volumes = g_list_prepend (network_volumes, volume);
+					continue;
+				}
+				g_free (identifier);
+
 				mount = g_volume_get_mount (volume);
 				if (mount != NULL) {
 					/* Show mounted volume in the sidebar */
-					icon = g_mount_get_icon (mount);
+					icon = g_mount_get_symbolic_icon (mount);
 					root = g_mount_get_default_location (mount);
 					mount_uri = g_file_get_uri (root);
 					name = g_mount_get_name (mount);
 					tooltip = g_file_get_parse_name (root);
 
-					last_iter = add_place (sidebar, PLACES_MOUNTED_VOLUME,
-							       SECTION_DEVICES,
-							       name, icon, mount_uri,
-							       drive, volume, mount, 0, tooltip);
-					compare_for_selection (sidebar,
-							       sidebar->uri, mount_uri, last_uri,
-							       &last_iter, &select_path);
+					add_place (sidebar, PLACES_MOUNTED_VOLUME,
+						   SECTION_DEVICES,
+						   name, icon, mount_uri,
+						   drive, volume, mount, 0, tooltip);
 					g_object_unref (root);
 					g_object_unref (mount);
 					g_object_unref (icon);
@@ -640,14 +761,14 @@ update_places (GtkPlacesSidebar *sidebar)
 					 * cue that the user should remember to yank out the media if
 					 * he just unmounted it.
 					 */
-					icon = g_volume_get_icon (volume);
+					icon = g_volume_get_symbolic_icon (volume);
 					name = g_volume_get_name (volume);
 					tooltip = g_strdup_printf (_("Mount and open %s"), name);
 
-					last_iter = add_place (sidebar, PLACES_MOUNTED_VOLUME,
-							       SECTION_DEVICES,
-							       name, icon, NULL,
-							       drive, volume, NULL, 0, tooltip);
+					add_place (sidebar, PLACES_MOUNTED_VOLUME,
+						   SECTION_DEVICES,
+						   name, icon, NULL,
+						   drive, volume, NULL, 0, tooltip);
 					g_object_unref (icon);
 					g_free (name);
 					g_free (tooltip);
@@ -665,14 +786,14 @@ update_places (GtkPlacesSidebar *sidebar)
 				 * work.. but it's also for human beings who like to turn off media detection
 				 * in the OS to save battery juice.
 				 */
-				icon = g_drive_get_icon (drive);
+				icon = g_drive_get_symbolic_icon (drive);
 				name = g_drive_get_name (drive);
 				tooltip = g_strdup_printf (_("Mount and open %s"), name);
 
-				last_iter = add_place (sidebar, PLACES_BUILT_IN,
-						       SECTION_DEVICES,
-						       name, icon, NULL,
-						       drive, NULL, NULL, 0, tooltip);
+				add_place (sidebar, PLACES_BUILT_IN,
+					   SECTION_DEVICES,
+					   name, icon, NULL,
+					   drive, NULL, NULL, 0, tooltip);
 				g_object_unref (icon);
 				g_free (tooltip);
 				g_free (name);
@@ -692,21 +813,28 @@ update_places (GtkPlacesSidebar *sidebar)
 			g_object_unref (drive);
 			continue;
 		}
+
+		identifier = g_volume_get_identifier (volume, G_VOLUME_IDENTIFIER_KIND_CLASS);
+
+		if (g_strcmp0 (identifier, "network") == 0) {
+			g_free (identifier);
+			network_volumes = g_list_prepend (network_volumes, volume);
+			continue;
+		}
+		g_free (identifier);
+
 		mount = g_volume_get_mount (volume);
 		if (mount != NULL) {
-			icon = g_mount_get_icon (mount);
+			icon = g_mount_get_symbolic_icon (mount);
 			root = g_mount_get_default_location (mount);
 			mount_uri = g_file_get_uri (root);
 			tooltip = g_file_get_parse_name (root);
 			g_object_unref (root);
 			name = g_mount_get_name (mount);
-			last_iter = add_place (sidebar, PLACES_MOUNTED_VOLUME,
-					       SECTION_DEVICES,
-					       name, icon, mount_uri,
-					       NULL, volume, mount, 0, tooltip);
-			compare_for_selection (sidebar,
-					       sidebar->uri, mount_uri, last_uri,
-					       &last_iter, &select_path);
+			add_place (sidebar, PLACES_MOUNTED_VOLUME,
+				   SECTION_DEVICES,
+				   name, icon, mount_uri,
+				   NULL, volume, mount, 0, tooltip);
 			g_object_unref (mount);
 			g_object_unref (icon);
 			g_free (name);
@@ -714,18 +842,68 @@ update_places (GtkPlacesSidebar *sidebar)
 			g_free (mount_uri);
 		} else {
 			/* see comment above in why we add an icon for an unmounted mountable volume */
-			icon = g_volume_get_icon (volume);
+			icon = g_volume_get_symbolic_icon (volume);
 			name = g_volume_get_name (volume);
-			last_iter = add_place (sidebar, PLACES_MOUNTED_VOLUME,
-					       SECTION_DEVICES,
-					       name, icon, NULL,
-					       NULL, volume, NULL, 0, name);
+			add_place (sidebar, PLACES_MOUNTED_VOLUME,
+				   SECTION_DEVICES,
+				   name, icon, NULL,
+				   NULL, volume, NULL, 0, name);
 			g_object_unref (icon);
 			g_free (name);
 		}
 		g_object_unref (volume);
 	}
 	g_list_free (volumes);
+
+	/* file system root */
+
+ 	mount_uri = "file:///"; /* No need to strdup */
+	icon = g_themed_icon_new (ICON_NAME_FILESYSTEM);
+	add_place (sidebar, PLACES_BUILT_IN,
+		   SECTION_DEVICES,
+		   sidebar->hostname, icon,
+		   mount_uri, NULL, NULL, NULL, 0,
+		   _("Open the contents of the File System"));
+	g_object_unref (icon);
+
+	/* add mounts that has no volume (/etc/mtab mounts, ftp, sftp,...) */
+	mounts = g_volume_monitor_get_mounts (volume_monitor);
+
+	for (l = mounts; l != NULL; l = l->next) {
+		mount = l->data;
+		if (g_mount_is_shadowed (mount)) {
+			g_object_unref (mount);
+			continue;
+		}
+		volume = g_mount_get_volume (mount);
+		if (volume != NULL) {
+		    	g_object_unref (volume);
+			g_object_unref (mount);
+			continue;
+		}
+		root = g_mount_get_default_location (mount);
+
+		if (!g_file_is_native (root)) {
+			network_mounts = g_list_prepend (network_mounts, mount);
+			continue;
+		}
+
+		icon = g_mount_get_symbolic_icon (mount);
+		mount_uri = g_file_get_uri (root);
+		name = g_mount_get_name (mount);
+		tooltip = g_file_get_parse_name (root);
+		add_place (sidebar, PLACES_MOUNTED_VOLUME,
+			   SECTION_COMPUTER,
+			   name, icon, mount_uri,
+			   NULL, NULL, mount, 0, tooltip);
+		g_object_unref (root);
+		g_object_unref (mount);
+		g_object_unref (icon);
+		g_free (name);
+		g_free (mount_uri);
+		g_free (tooltip);
+	}
+	g_list_free (mounts);
 
 	/* add bookmarks */
 
@@ -755,20 +933,19 @@ update_places (GtkPlacesSidebar *sidebar)
 #endif
 
 		bookmark_name = _gtk_bookmarks_manager_get_bookmark_label (sidebar->bookmarks_manager, root);
+		icon = NULL; /* FIXME: icon = nautilus_bookmark_get_icon (bookmark); */
 		mount_uri = g_file_get_uri (root);
 		tooltip = g_file_get_parse_name (root);
-		icon = NULL; /* FIXME: icon = nautilus_bookmark_get_icon (bookmark); */
 
-		last_iter = add_place (sidebar, PLACES_BOOKMARK,
-				       SECTION_BOOKMARKS,
-				       bookmark_name, icon, mount_uri,
-				       NULL, NULL, NULL, index,
-				       tooltip);
-		compare_for_selection (sidebar,
-				       sidebar->uri, mount_uri, last_uri,
-				       &last_iter, &select_path);
+		add_place (sidebar, PLACES_BOOKMARK,
+			   SECTION_BOOKMARKS,
+			   bookmark_name, icon, mount_uri,
+			   NULL, NULL, NULL, index,
+			   tooltip);
 
-		g_object_unref (icon);
+		if (icon)
+			g_object_unref (icon);
+
 		g_free (mount_uri);
 		g_free (tooltip);
 		g_free (bookmark_name);
@@ -777,171 +954,56 @@ update_places (GtkPlacesSidebar *sidebar)
 	g_slist_foreach (bookmarks, (GFunc) g_object_unref, NULL);
 	g_slist_free (bookmarks);
 
-	last_iter = add_heading (sidebar, SECTION_COMPUTER,
-			       _("Computer"));
-
-	/* add built in bookmarks */
-
-	/* home folder */
-	mount_uri = get_home_directory_uri ();
-	if (mount_uri) {
-		icon = g_themed_icon_new (ICON_NAME_HOME);
-		last_iter = add_place (sidebar, PLACES_BUILT_IN,
-				       SECTION_COMPUTER,
-				       _("Home"), icon,
-				       mount_uri, NULL, NULL, NULL, 0,
-				       _("Open your personal folder"));
-		g_object_unref (icon);
-		compare_for_selection (sidebar,
-				       sidebar->uri, mount_uri, last_uri,
-				       &last_iter, &select_path);
-		g_free (mount_uri);
-	}
-
-	desktop_path = get_desktop_directory ();
-	if (sidebar->show_desktop && desktop_path) {
-		/* desktop */
-		mount_uri = g_filename_to_uri (desktop_path, NULL, NULL);
-		icon = g_themed_icon_new (ICON_NAME_DESKTOP);
-		last_iter = add_place (sidebar, PLACES_BUILT_IN,
-				       SECTION_COMPUTER,
-				       _("Desktop"), icon,
-				       mount_uri, NULL, NULL, NULL, 0,
-				       _("Open the contents of your desktop in a folder"));
-		g_object_unref (icon);
-		compare_for_selection (sidebar,
-				       sidebar->uri, mount_uri, last_uri,
-				       &last_iter, &select_path);
-		g_free (mount_uri);
-	}
-
-	/* XDG directories */
-	for (index = 0; index < G_USER_N_DIRECTORIES; index++) {
-
-		if (index == G_USER_DIRECTORY_DESKTOP ||
-		    index == G_USER_DIRECTORY_TEMPLATES ||
-		    index == G_USER_DIRECTORY_PUBLIC_SHARE) {
-			continue;
-		}
-
-		path = g_get_user_special_dir (index);
-
-		/* xdg resets special dirs to the home directory in case
-		 * it's not finiding what it expects. We don't want the home
-		 * to be added multiple times in that weird configuration.
-		 */
-		if (!path || g_strcmp0 (path, g_get_home_dir ()) == 0) {
-			continue;
-		}
-
-		root = g_file_new_for_path (path);
-		name = g_file_get_basename (root);
-		icon = get_gicon_for_user_special_directory (index);
-		mount_uri = g_file_get_uri (root);
-		tooltip = g_file_get_parse_name (root);
-
-		last_iter = add_place (sidebar, PLACES_BUILT_IN,
-				       SECTION_COMPUTER,
-				       name, icon, mount_uri,
-				       NULL, NULL, NULL, 0,
-				       tooltip);
-		compare_for_selection (sidebar,
-				       sidebar->uri, mount_uri, last_uri,
-				       &last_iter, &select_path);
-		g_free (name);
-		g_object_unref (root);
-		g_object_unref (icon);
-		g_free (mount_uri);
-		g_free (tooltip);
-	}
-
-	/* add mounts that has no volume (/etc/mtab mounts, ftp, sftp,...) */
-	network_mounts = NULL;
-	mounts = g_volume_monitor_get_mounts (volume_monitor);
-
-	for (l = mounts; l != NULL; l = l->next) {
-		mount = l->data;
-		if (g_mount_is_shadowed (mount)) {
-			g_object_unref (mount);
-			continue;
-		}
-		volume = g_mount_get_volume (mount);
-		if (volume != NULL) {
-		    	g_object_unref (volume);
-			g_object_unref (mount);
-			continue;
-		}
-		root = g_mount_get_default_location (mount);
-
-		if (!g_file_is_native (root)) {
-			network_mounts = g_list_prepend (network_mounts, g_object_ref (mount));
-			continue;
-		}
-
-		icon = g_mount_get_icon (mount);
-		mount_uri = g_file_get_uri (root);
-		name = g_mount_get_name (mount);
-		tooltip = g_file_get_parse_name (root);
-		last_iter = add_place (sidebar, PLACES_MOUNTED_VOLUME,
-				       SECTION_COMPUTER,
-				       name, icon, mount_uri,
-				       NULL, NULL, mount, 0, tooltip);
-		compare_for_selection (sidebar,
-				       sidebar->uri, mount_uri, last_uri,
-				       &last_iter, &select_path);
-		g_object_unref (root);
-		g_object_unref (mount);
-		g_object_unref (icon);
-		g_free (name);
-		g_free (mount_uri);
-		g_free (tooltip);
-	}
-	g_list_free (mounts);
-
-	/* file system root */
- 	mount_uri = "file:///"; /* No need to strdup */
-	icon = g_themed_icon_new (ICON_NAME_FILESYSTEM);
-	last_iter = add_place (sidebar, PLACES_BUILT_IN,
-			       SECTION_COMPUTER,
-			       _("File System"), icon,
-			       mount_uri, NULL, NULL, NULL, 0,
-			       _("Open the contents of the File System"));
-	g_object_unref (icon);
-	compare_for_selection (sidebar,
-			       sidebar->uri, mount_uri, last_uri,
-			       &last_iter, &select_path);
-
-	mount_uri = "trash:///"; /* No need to strdup */
-	icon = g_themed_icon_new (ICON_NAME_TRASH);
-	last_iter = add_place (sidebar, PLACES_BUILT_IN,
-			       SECTION_COMPUTER,
-			       _("Trash"), icon, mount_uri,
-			       NULL, NULL, NULL, 0,
-			       _("Open the trash"));
-	compare_for_selection (sidebar,
-			       sidebar->uri, mount_uri, last_uri,
-			       &last_iter, &select_path);
-	g_object_unref (icon);
-
 	/* network */
-	last_iter = add_heading (sidebar, SECTION_NETWORK,
-				 _("Network"));
+	add_heading (sidebar, SECTION_NETWORK,
+		     _("Network"));
+
+ 	mount_uri = "network:///"; /* No need to strdup */
+	icon = g_themed_icon_new (ICON_NAME_NETWORK);
+	add_place (sidebar, PLACES_BUILT_IN,
+		   SECTION_NETWORK,
+		   _("Browse Network"), icon,
+		   mount_uri, NULL, NULL, NULL, 0,
+		   _("Browse the contents of the network"));
+	g_object_unref (icon);
+
+	network_volumes = g_list_reverse (network_volumes);
+	for (l = network_volumes; l != NULL; l = l->next) {
+		volume = l->data;
+		mount = g_volume_get_mount (volume);
+
+		if (mount != NULL) {
+			network_mounts = g_list_prepend (network_mounts, mount);
+			continue;
+		} else {
+			icon = g_volume_get_symbolic_icon (volume);
+			name = g_volume_get_name (volume);
+			tooltip = g_strdup_printf (_("Mount and open %s"), name);
+
+			add_place (sidebar, PLACES_MOUNTED_VOLUME,
+				   SECTION_NETWORK,
+				   name, icon, NULL,
+				   NULL, volume, NULL, 0, tooltip);
+			g_object_unref (icon);
+			g_free (name);
+			g_free (tooltip);
+		}
+	}
+
+	g_list_free_full (network_volumes, g_object_unref);
 
 	network_mounts = g_list_reverse (network_mounts);
 	for (l = network_mounts; l != NULL; l = l->next) {
 		mount = l->data;
 		root = g_mount_get_default_location (mount);
-		icon = g_mount_get_icon (mount);
+		icon = g_mount_get_symbolic_icon (mount);
 		mount_uri = g_file_get_uri (root);
 		name = g_mount_get_name (mount);
 		tooltip = g_file_get_parse_name (root);
-		last_iter = add_place (sidebar, PLACES_MOUNTED_VOLUME,
-				       SECTION_NETWORK,
-				       name, icon, mount_uri,
-				       NULL, NULL, mount, 0, tooltip);
-		compare_for_selection (sidebar,
-				       sidebar->uri, mount_uri, last_uri,
-				       &last_iter, &select_path);
+		add_place (sidebar, PLACES_MOUNTED_VOLUME,
+			   SECTION_NETWORK,
+			   name, icon, mount_uri,
+			   NULL, NULL, mount, 0, tooltip);
 		g_object_unref (root);
 		g_object_unref (mount);
 		g_object_unref (icon);
@@ -952,27 +1014,10 @@ update_places (GtkPlacesSidebar *sidebar)
 
 	g_list_free_full (network_mounts, g_object_unref);
 
-	/* network:// */
- 	mount_uri = "network:///"; /* No need to strdup */
-	icon = g_themed_icon_new (ICON_NAME_NETWORK);
-	last_iter = add_place (sidebar, PLACES_BUILT_IN,
-			       SECTION_NETWORK,
-			       _("Browse Network"), icon,
-			       mount_uri, NULL, NULL, NULL, 0,
-			       _("Browse the contents of the network"));
-	g_object_unref (icon);
-	compare_for_selection (sidebar,
-			       sidebar->uri, mount_uri, last_uri,
-			       &last_iter, &select_path);
+	/* restore selection */
+	sidebar_update_restore_selection (sidebar, location, last_uri);
 
-	if (select_path != NULL) {
-		gtk_tree_selection_select_path (selection, select_path);
-	}
-
-	if (select_path != NULL) {
-		gtk_tree_path_free (select_path);
-	}
-
+	g_free (location);
 	g_free (last_uri);
 }
 
@@ -1129,12 +1174,12 @@ clicked_eject_button (GtkPlacesSidebar *sidebar,
 
 /* Computes the appropriate row and position for dropping */
 static gboolean
-compute_drop_position (GtkTreeView *tree_view,
+compute_drop_position (GtkTreeView             *tree_view,
 		       int                      x,
 		       int                      y,
 		       GtkTreePath            **path,
 		       GtkTreeViewDropPosition *pos,
-		       GtkPlacesSidebar *sidebar)
+		       GtkPlacesSidebar        *sidebar)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
@@ -1142,10 +1187,8 @@ compute_drop_position (GtkTreeView *tree_view,
 	SectionType section_type;
 
 	if (!gtk_tree_view_get_dest_row_at_pos (tree_view,
-					   x,
-					   y,
-					   path,
-					   pos)) {
+						x, y,
+						path, pos)) {
 		return FALSE;
 	}
 
@@ -1157,9 +1200,11 @@ compute_drop_position (GtkTreeView *tree_view,
 			    PLACES_SIDEBAR_COLUMN_SECTION_TYPE, &section_type,
 			    -1);
 
-	if (place_type == PLACES_HEADING && section_type != SECTION_BOOKMARKS) {
+	if (section_type != SECTION_BOOKMARKS &&
+	    place_type == PLACES_HEADING) {
 		/* never drop on headings, but special case the bookmarks heading,
-		 * so we can drop bookmarks in between it and the first item.
+		 * so we can drop bookmarks in between it and the first item when
+		 * reordering.
 		 */
 
 		gtk_tree_path_free (*path);
@@ -1172,25 +1217,18 @@ compute_drop_position (GtkTreeView *tree_view,
 	    sidebar->drag_data_received &&
 	    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
 		/* don't allow dropping bookmarks into non-bookmark areas */
-
 		gtk_tree_path_free (*path);
 		*path = NULL;
 
 		return FALSE;
 	}
 
-	if (section_type == SECTION_BOOKMARKS) {
+	if (sidebar->drag_data_received &&
+	    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
+		/* bookmark rows can only be reordered */
 		*pos = GTK_TREE_VIEW_DROP_AFTER;
 	} else {
-		/* non-bookmark shortcuts can only be dragged into */
 		*pos = GTK_TREE_VIEW_DROP_INTO_OR_BEFORE;
-	}
-
-	if (*pos != GTK_TREE_VIEW_DROP_BEFORE &&
-	    sidebar->drag_data_received &&
-	    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
-		/* bookmark rows are never dragged into other bookmark rows */
-		*pos = GTK_TREE_VIEW_DROP_AFTER;
 	}
 
 	return TRUE;
@@ -1230,39 +1268,6 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 	}
 }
 
-#if 0
-/* FIXME: remove this?  Let's allow the user to bookmark whatever he damn well pleases */
-static gboolean
-can_accept_file_as_bookmark (NautilusFile *file)
-{
-	return (nautilus_file_is_directory (file) &&
-		!is_built_in_bookmark (file));
-}
-
-static gboolean
-can_accept_items_as_bookmarks (const GList *items)
-{
-	int max;
-	char *uri;
-	NautilusFile *file;
-
-	/* Iterate through selection checking if item will get accepted as a bookmark.
-	 * If more than 100 items selected, return an over-optimistic result.
-	 */
-	for (max = 100; items != NULL && max >= 0; items = items->next, max--) {
-		uri = ((NautilusDragSelectionItem *)items->data)->uri;
-		file = nautilus_file_get_by_uri (uri);
-		if (!can_accept_file_as_bookmark (file)) {
-			nautilus_file_unref (file);
-			return FALSE;
-		}
-		nautilus_file_unref (file);
-	}
-
-	return TRUE;
-}
-#endif
-
 static gboolean
 drag_motion_callback (GtkTreeView *tree_view,
 		      GdkDragContext *context,
@@ -1291,30 +1296,20 @@ drag_motion_callback (GtkTreeView *tree_view,
 		goto out;
 	}
 
-	if (pos == GTK_TREE_VIEW_DROP_BEFORE ||
-	    pos == GTK_TREE_VIEW_DROP_AFTER ) {
+	if (pos == GTK_TREE_VIEW_DROP_AFTER ) {
 		if (sidebar->drag_data_received &&
 		    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
 			action = GDK_ACTION_MOVE;
-		}
-#if 1
-		else
-			action = GDK_ACTION_COPY;
-#else
-		/* FIXME: remove this?  Let's allow the user to bookmark whatever he damn well pleases */
-		else if (can_accept_items_as_bookmarks (sidebar->drag_list)) {
-			action = GDK_ACTION_COPY;
 		} else {
 			action = 0;
 		}
-#endif
 	} else {
 		if (sidebar->drag_list == NULL) {
 			action = 0;
 		} else {
-			gtk_tree_model_get_iter (sidebar->filter_model,
+			gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store),
 						 &iter, path);
-			gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model),
+			gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
 					    &iter,
 					    PLACES_SIDEBAR_COLUMN_URI, &uri,
 					    -1);
@@ -1354,46 +1349,8 @@ drag_leave_callback (GtkTreeView *tree_view,
 		     GtkPlacesSidebar *sidebar)
 {
 	free_drag_data (sidebar);
-	gtk_tree_view_set_drag_dest_row (tree_view, NULL, GTK_TREE_VIEW_DROP_BEFORE);
+	gtk_tree_view_set_drag_dest_row (tree_view, NULL, 0);
 	g_signal_stop_emission_by_name (tree_view, "drag-leave");
-}
-
-/* Parses a "text/uri-list" string and inserts its URIs as bookmarks */
-static void
-bookmarks_drop_uris (GtkPlacesSidebar *sidebar,
-		     GtkSelectionData      *selection_data,
-		     int                    position)
-{
-	char **uris;
-	int i;
-
-	uris = gtk_selection_data_get_uris (selection_data);
-	if (!uris)
-		return;
-
-	for (i = 0; uris[i]; i++) {
-		char *uri;
-		GFile *location;
-
-		uri = uris[i];
-
-#if 0
-		/* FIXME: remove this?  Let's allow the user to bookmark whatever he damn well pleases */
-		if (!can_accept_file_as_bookmark (file)) {
-			nautilus_file_unref (file);
-			continue;
-		}
-#endif
-
-		location = g_file_new_for_uri (uri);
-
-		if (_gtk_bookmarks_manager_insert_bookmark (sidebar->bookmarks_manager, location, position, NULL)) /* NULL-GError */
-			position++;
-
-		g_object_unref (location);
-	}
-
-	g_strfreev (uris);
 }
 
 static GList *
@@ -1467,11 +1424,11 @@ reorder_bookmarks (GtkPlacesSidebar *sidebar,
 	int old_position;
 
 	/* Get the selected path */
+	if (!get_selected_iter (sidebar, &iter)) {
+		return;
+	}
 
-	if (!get_selected_iter (sidebar, &iter))
-		g_assert_not_reached ();
-
-	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model), &iter,
+	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 			    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &type,
 			    PLACES_SIDEBAR_COLUMN_INDEX, &old_position,
 			    -1);
@@ -1515,7 +1472,7 @@ drag_data_received_callback (GtkWidget *widget,
 	if (!sidebar->drag_data_received) {
 		if (gtk_selection_data_get_target (selection_data) != GDK_NONE &&
 		    info == TEXT_URI_LIST) {
-			sidebar->drag_list = build_selection_list (gtk_selection_data_get_data (selection_data));
+			sidebar->drag_list = build_selection_list ((const gchar *) gtk_selection_data_get_data (selection_data));
 		} else {
 			sidebar->drag_list = NULL;
 		}
@@ -1530,12 +1487,14 @@ drag_data_received_callback (GtkWidget *widget,
 	}
 
 	/* Compute position */
-	compute_drop_position (tree_view, x, y, &tree_path, &tree_pos, sidebar);
+	success = compute_drop_position (tree_view, x, y, &tree_path, &tree_pos, sidebar);
+	if (!success) {
+		goto out;
+	}
 
 	success = FALSE;
 
-	if (tree_pos == GTK_TREE_VIEW_DROP_BEFORE ||
-	    tree_pos == GTK_TREE_VIEW_DROP_AFTER) {
+	if (tree_pos == GTK_TREE_VIEW_DROP_AFTER) {
 		model = gtk_tree_view_get_model (tree_view);
 
 		if (!gtk_tree_model_get_iter (model, &iter, tree_path)) {
@@ -1558,10 +1517,6 @@ drag_data_received_callback (GtkWidget *widget,
 		}
 
 		switch (info) {
-		case TEXT_URI_LIST:
-			bookmarks_drop_uris (sidebar, selection_data, position);
-			success = TRUE;
-			break;
 		case GTK_TREE_MODEL_ROW:
 			reorder_bookmarks (sidebar, position);
 			success = TRUE;
@@ -1592,7 +1547,7 @@ drag_data_received_callback (GtkWidget *widget,
 
 			switch (info) {
 			case TEXT_URI_LIST:
-				selection_list = build_selection_list (gtk_selection_data_get_data (selection_data));
+				selection_list = build_selection_list ((const gchar *) gtk_selection_data_get_data (selection_data));
 				uris = uri_list_from_selection (selection_list);
 				nautilus_file_operations_copy_move (uris, NULL, drop_uri,
 								    real_action, GTK_WIDGET (tree_view),
@@ -1659,6 +1614,8 @@ bookmarks_popup_menu_detach_cb (GtkWidget *attach_widget,
 	sidebar->popup_menu_start_item = NULL;
 	sidebar->popup_menu_stop_item = NULL;
 	sidebar->popup_menu_empty_trash_item = NULL;
+	sidebar->popup_menu_properties_separator_item = NULL;
+	sidebar->popup_menu_properties_item = NULL;
 }
 
 static void
@@ -1729,6 +1686,10 @@ bookmarks_check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 	GDrive *drive = NULL;
 	GVolume *volume = NULL;
 	GMount *mount = NULL;
+	GFile *location;
+#if DO_NOT_COMPILE
+	NautilusDirectory *directory;
+#endif
 	gboolean show_mount;
 	gboolean show_unmount;
 	gboolean show_eject;
@@ -1736,6 +1697,7 @@ bookmarks_check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 	gboolean show_start;
 	gboolean show_stop;
 	gboolean show_empty_trash;
+	gboolean show_properties;
 	char *uri = NULL;
 
 	type = PLACES_BUILT_IN;
@@ -1745,7 +1707,7 @@ bookmarks_check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 	}
 
 	if (get_selected_iter (sidebar, &iter)) {
-		gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model), &iter,
+		gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 				    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &type,
 				    PLACES_SIDEBAR_COLUMN_DRIVE, &drive,
 				    PLACES_SIDEBAR_COLUMN_VOLUME, &volume,
@@ -1772,6 +1734,22 @@ bookmarks_check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 	show_empty_trash = (uri != NULL) &&
 			   (!strcmp (uri, "trash:///"));
 
+#if DO_NOT_COMPILE
+	/* Only show properties for local mounts */
+	show_properties = (mount != NULL);
+	if (mount != NULL) {
+		location = g_mount_get_default_location (mount);
+		directory = nautilus_directory_get (location);
+
+		show_properties = nautilus_directory_is_local (directory);
+
+		nautilus_directory_unref (directory);
+		g_object_unref (location);
+	}
+#else
+	show_properties = FALSE;
+#endif
+
 	gtk_widget_set_visible (sidebar->popup_menu_separator_item,
 		      show_mount || show_unmount || show_eject || show_empty_trash);
 	gtk_widget_set_visible (sidebar->popup_menu_mount_item, show_mount);
@@ -1781,6 +1759,8 @@ bookmarks_check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 	gtk_widget_set_visible (sidebar->popup_menu_start_item, show_start);
 	gtk_widget_set_visible (sidebar->popup_menu_stop_item, show_stop);
 	gtk_widget_set_visible (sidebar->popup_menu_empty_trash_item, show_empty_trash);
+	gtk_widget_set_visible (sidebar->popup_menu_properties_separator_item, show_properties);
+	gtk_widget_set_visible (sidebar->popup_menu_properties_item, show_properties);
 
 	/* Adjust start/stop items to reflect the type of the drive */
 	gtk_menu_item_set_label (GTK_MENU_ITEM (sidebar->popup_menu_start_item), _("_Start"));
@@ -1935,15 +1915,15 @@ open_shortcut_from_menu (GtkPlacesSidebar *sidebar,
 			 GtkPlacesOpenMode open_mode)
 {
 	GtkTreeModel *model;
-	GtkTreePath *path;
 	GtkTreeIter iter;
+	GtkTreePath *path = NULL;
 
 	model = gtk_tree_view_get_model (sidebar->tree_view);
 	gtk_tree_view_get_cursor (sidebar->tree_view, &path, NULL);
 
-	gtk_tree_model_get_iter (model, &iter, path);
-
-	open_selected_bookmark (sidebar, model, &iter, open_mode);
+	if (path != NULL && gtk_tree_model_get_iter (model, &iter, path)) {
+		open_selected_bookmark (sidebar, model, &iter, open_mode);
+	}
 
 	gtk_tree_path_free (path);
 }
@@ -1977,20 +1957,24 @@ add_bookmark (GtkPlacesSidebar *sidebar)
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	char *uri;
+	char *name;
 	GFile *location;
 	NautilusBookmark *bookmark;
 
 	model = gtk_tree_view_get_model (sidebar->tree_view);
 
 	if (get_selected_iter (sidebar, &iter)) {
-		gtk_tree_model_get (model, &iter, PLACES_SIDEBAR_COLUMN_URI, &uri, -1);
+		gtk_tree_model_get (model, &iter,
+				    PLACES_SIDEBAR_COLUMN_URI, &uri,
+				    PLACES_SIDEBAR_COLUMN_NAME, &name,
+				    -1);
 
 		if (uri == NULL) {
 			return;
 		}
 
 		location = g_file_new_for_uri (uri);
-		bookmark = nautilus_bookmark_new (location, NULL, NULL);
+		bookmark = nautilus_bookmark_new (location, name, NULL);
 
 		if (!nautilus_bookmark_list_contains (sidebar->bookmarks, bookmark)) {
 			nautilus_bookmark_list_append (sidebar->bookmarks, bookmark);
@@ -1999,6 +1983,7 @@ add_bookmark (GtkPlacesSidebar *sidebar)
 		g_object_unref (location);
 		g_object_unref (bookmark);
 		g_free (uri);
+		g_free (name);
 	}
 #endif
 }
@@ -2022,7 +2007,7 @@ rename_selected_bookmark (GtkPlacesSidebar *sidebar)
 	PlaceType type;
 
 	if (get_selected_iter (sidebar, &iter)) {
-		gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model), &iter,
+		gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 				    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &type,
 				    -1);
 
@@ -2030,7 +2015,7 @@ rename_selected_bookmark (GtkPlacesSidebar *sidebar)
 			return;
 		}
 
-		path = gtk_tree_model_get_path (GTK_TREE_MODEL (sidebar->filter_model), &iter);
+		path = gtk_tree_model_get_path (GTK_TREE_MODEL (sidebar->store), &iter);
 		column = gtk_tree_view_get_column (GTK_TREE_VIEW (sidebar->tree_view), 0);
 		renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
 		cell = g_list_nth_data (renderers, 6);
@@ -2062,7 +2047,7 @@ remove_selected_bookmarks (GtkPlacesSidebar *sidebar)
 		return;
 	}
 
-	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model), &iter,
+	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 			    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &type,
 			    -1);
 
@@ -2070,7 +2055,7 @@ remove_selected_bookmarks (GtkPlacesSidebar *sidebar)
 		return;
 	}
 
-	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model), &iter,
+	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 			    PLACES_SIDEBAR_COLUMN_INDEX, &index,
 			    -1);
 
@@ -2096,13 +2081,13 @@ mount_shortcut_cb (GtkMenuItem           *item,
 		return;
 	}
 
-	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model), &iter,
+	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 			    PLACES_SIDEBAR_COLUMN_VOLUME, &volume,
 			    -1);
 
 	if (volume != NULL) {
 #if DO_NOT_COMPILE
-		nautilus_file_operations_mount_volume (NULL, volume);
+		nautilus_file_operations_mount_volume (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))), volume);
 		g_object_unref (volume);
 #endif
 	}
@@ -2114,7 +2099,6 @@ unmount_done (gpointer data)
 	GtkPlacesSidebar *sidebar;
 
 	sidebar = data;
-	emit_initiated_unmount (sidebar, FALSE);
 	g_object_unref (sidebar);
 }
 
@@ -2123,7 +2107,6 @@ do_unmount (GMount *mount,
 	    GtkPlacesSidebar *sidebar)
 {
 	if (mount != NULL) {
-		emit_initiated_unmount (sidebar, TRUE);
 #if DO_NOT_COMPILE
 		nautilus_file_operations_unmount_mount_full (NULL, mount, FALSE, TRUE,
 							     unmount_done,
@@ -2142,7 +2125,7 @@ do_unmount_selection (GtkPlacesSidebar *sidebar)
 		return;
 	}
 
-	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model), &iter,
+	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 			    PLACES_SIDEBAR_COLUMN_MOUNT, &mount,
 			    -1);
 
@@ -2160,6 +2143,34 @@ unmount_shortcut_cb (GtkMenuItem           *item,
 }
 
 static void
+show_unmount_progress_cb (GMountOperation *op,
+			  const gchar *message,
+			  gint64 time_left,
+			  gint64 bytes_left,
+			  gpointer user_data)
+{
+#if DO_NOT_COMPILE
+	NautilusApplication *app = NAUTILUS_APPLICATION (g_application_get_default ());
+
+	if (bytes_left == 0) {
+		nautilus_application_notify_unmount_done (app, message);
+	} else {
+		nautilus_application_notify_unmount_show (app, message);
+	}
+#endif
+}
+
+static void
+show_unmount_progress_aborted_cb (GMountOperation *op,
+				  gpointer user_data)
+{
+#if DO_NOT_COMPILE
+	NautilusApplication *app = NAUTILUS_APPLICATION (g_application_get_default ());
+	nautilus_application_notify_unmount_done (app, NULL);
+#endif
+}
+
+static void
 drive_eject_cb (GObject *source_object,
 		GAsyncResult *res,
 		gpointer user_data)
@@ -2170,7 +2181,6 @@ drive_eject_cb (GObject *source_object,
 	char *name;
 
 	sidebar = user_data;
-	emit_initiated_unmount (sidebar, FALSE);
 
 	error = NULL;
 	if (!g_drive_eject_with_operation_finish (G_DRIVE (source_object), res, &error)) {
@@ -2198,7 +2208,6 @@ volume_eject_cb (GObject *source_object,
 	char *name;
 
 	sidebar = user_data;
-	emit_initiated_unmount (sidebar, FALSE);
 
 	error = NULL;
 	if (!g_volume_eject_with_operation_finish (G_VOLUME (source_object), res, &error)) {
@@ -2226,7 +2235,6 @@ mount_eject_cb (GObject *source_object,
 	char *name;
 
 	sidebar = user_data;
-	emit_initiated_unmount (sidebar, FALSE);
 
 	error = NULL;
 	if (!g_mount_eject_with_operation_finish (G_MOUNT (source_object), res, &error)) {
@@ -2253,18 +2261,20 @@ do_eject (GMount *mount,
 
 	mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
 	if (mount != NULL) {
-		emit_initiated_unmount (sidebar, TRUE);
 		g_mount_eject_with_operation (mount, 0, mount_op, NULL, mount_eject_cb,
 					      g_object_ref (sidebar));
 	} else if (volume != NULL) {
-		emit_initiated_unmount (sidebar, TRUE);
 		g_volume_eject_with_operation (volume, 0, mount_op, NULL, volume_eject_cb,
 					      g_object_ref (sidebar));
 	} else if (drive != NULL) {
-		emit_initiated_unmount (sidebar, TRUE);
 		g_drive_eject_with_operation (drive, 0, mount_op, NULL, drive_eject_cb,
 					      g_object_ref (sidebar));
 	}
+
+	g_signal_connect (mount_op, "show-unmount-progress",
+			  G_CALLBACK (show_unmount_progress_cb), sidebar);
+	g_signal_connect (mount_op, "aborted",
+			  G_CALLBACK (show_unmount_progress_aborted_cb), sidebar);
 	g_object_unref (mount_op);
 }
 
@@ -2281,7 +2291,7 @@ eject_shortcut_cb (GtkMenuItem           *item,
 		return;
 	}
 
-	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model), &iter,
+	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 			    PLACES_SIDEBAR_COLUMN_MOUNT, &mount,
 			    PLACES_SIDEBAR_COLUMN_VOLUME, &volume,
 			    PLACES_SIDEBAR_COLUMN_DRIVE, &drive,
@@ -2302,7 +2312,7 @@ eject_or_unmount_bookmark (GtkPlacesSidebar *sidebar,
 	GDrive *drive;
 	gboolean ret;
 
-	model = GTK_TREE_MODEL (sidebar->filter_model);
+	model = GTK_TREE_MODEL (sidebar->store);
 
 	if (!path) {
 		return FALSE;
@@ -2350,7 +2360,7 @@ eject_or_unmount_selection (GtkPlacesSidebar *sidebar)
 		return FALSE;
 	}
 
-	path = gtk_tree_model_get_path (GTK_TREE_MODEL (sidebar->filter_model), &iter);
+	path = gtk_tree_model_get_path (GTK_TREE_MODEL (sidebar->store), &iter);
 	if (path == NULL) {
 		return FALSE;
 	}
@@ -2400,7 +2410,7 @@ rescan_shortcut_cb (GtkMenuItem           *item,
 		return;
 	}
 
-	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model), &iter,
+	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 			    PLACES_SIDEBAR_COLUMN_DRIVE, &drive,
 			    -1);
 
@@ -2448,7 +2458,7 @@ start_shortcut_cb (GtkMenuItem           *item,
 		return;
 	}
 
-	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model), &iter,
+	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 			    PLACES_SIDEBAR_COLUMN_DRIVE, &drive,
 			    -1);
 
@@ -2475,7 +2485,6 @@ drive_stop_cb (GObject *source_object,
 	char *name;
 
 	sidebar = user_data;
-	emit_initiated_unmount (sidebar, FALSE);
 
 	error = NULL;
 	if (!g_drive_poll_for_media_finish (G_DRIVE (source_object), res, &error)) {
@@ -2503,7 +2512,7 @@ stop_shortcut_cb (GtkMenuItem           *item,
 		return;
 	}
 
-	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model), &iter,
+	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 			    PLACES_SIDEBAR_COLUMN_DRIVE, &drive,
 			    -1);
 
@@ -2511,7 +2520,6 @@ stop_shortcut_cb (GtkMenuItem           *item,
 		GMountOperation *mount_op;
 
 		mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
-		emit_initiated_unmount (sidebar, TRUE);
 		g_drive_stop (drive, G_MOUNT_UNMOUNT_NONE, mount_op, NULL, drive_stop_cb,
 			      g_object_ref (sidebar));
 		g_object_unref (mount_op);
@@ -2533,17 +2541,9 @@ find_prev_or_next_row (GtkPlacesSidebar *sidebar,
 		       GtkTreeIter *iter,
 		       gboolean go_up)
 {
-	GtkTreeSelection *selection;
-	GtkTreeModel *model;
-	int place_type;
+	GtkTreeModel *model = GTK_TREE_MODEL (sidebar->store);
 	gboolean res;
-
-	selection = gtk_tree_view_get_selection (sidebar->tree_view);
-	res = gtk_tree_selection_get_selected (selection, &model, iter);
-
-	if (!res) {
-		goto out;
-	}
+	int place_type;
 
 	if (go_up) {
 		res = gtk_tree_model_iter_previous (model, iter);
@@ -2564,7 +2564,6 @@ find_prev_or_next_row (GtkPlacesSidebar *sidebar,
 		}
 	}
 
- out:
 	return res;
 }
 
@@ -2580,77 +2579,139 @@ find_next_row (GtkPlacesSidebar *sidebar, GtkTreeIter *iter)
 	return find_prev_or_next_row (sidebar, iter, FALSE);
 }
 
+static void
+properties_cb (GtkMenuItem      *item,
+	       GtkPlacesSidebar *sidebar)
+{
+#if DO_NOT_COMPILE
+	GtkTreeModel *model;
+	GtkTreePath *path = NULL;
+	GtkTreeIter iter;
+	GList *list;
+	NautilusFile *file;
+	char *uri;
+
+	model = gtk_tree_view_get_model (sidebar->tree_view);
+	gtk_tree_view_get_cursor (sidebar->tree_view, &path, NULL);
+
+	if (path == NULL || !gtk_tree_model_get_iter (model, &iter, path)) {
+		gtk_tree_path_free (path);
+		return;
+	}
+
+	gtk_tree_model_get (model, &iter, PLACES_SIDEBAR_COLUMN_URI, &uri, -1);
+
+	if (uri != NULL) {
+
+		file = nautilus_file_get_by_uri (uri);
+		list = g_list_prepend (NULL, nautilus_file_ref (file));
+
+		nautilus_properties_window_present (list, GTK_WIDGET (sidebar), NULL);
+
+		nautilus_file_list_free (list);
+		g_free (uri);
+	}
+
+	gtk_tree_path_free (path);
+#endif
+}
+
+static gboolean
+gtk_places_sidebar_focus (GtkWidget *widget,
+		          GtkDirectionType direction)
+{
+	GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (widget);
+	GtkTreePath *path;
+	GtkTreeIter iter;
+	gboolean res;
+
+	res = get_selected_iter (sidebar, &iter);
+
+	if (!res) {
+		gtk_tree_model_get_iter_first (GTK_TREE_MODEL (sidebar->store), &iter);
+		res = find_next_row (sidebar, &iter);
+		if (res) {
+			path = gtk_tree_model_get_path (GTK_TREE_MODEL (sidebar->store), &iter);
+			gtk_tree_view_set_cursor (sidebar->tree_view, path, NULL, FALSE);
+			gtk_tree_path_free (path);
+		}
+	}
+
+	return GTK_WIDGET_CLASS (gtk_places_sidebar_parent_class)->focus (widget, direction);
+}
+
 /* Handler for GtkWidget::key-press-event on the shortcuts list */
 static gboolean
 bookmarks_key_press_event_cb (GtkWidget             *widget,
 			      GdkEventKey           *event,
 			      GtkPlacesSidebar *sidebar)
 {
-  guint modifiers;
-  GtkTreeIter iter;
+	guint modifiers;
+	GtkTreeIter selected_iter;
+	GtkTreePath *path;
 
-  modifiers = gtk_accelerator_get_default_mod_mask ();
+	if (!get_selected_iter (sidebar, &selected_iter)) {
+		return FALSE;
+	}
 
-  if ((event->keyval == GDK_KEY_Return ||
-       event->keyval == GDK_KEY_KP_Enter ||
-       event->keyval == GDK_KEY_ISO_Enter ||
-       event->keyval == GDK_KEY_space)) {
+	modifiers = gtk_accelerator_get_default_mod_mask ();
 
-      GtkTreeModel *model;
-      GtkTreeSelection *selection;
-      GtkTreeIter iter;
-      GtkPlacesOpenMode open_mode = GTK_PLACES_OPEN_MODE_NORMAL;
+	if ((event->keyval == GDK_KEY_Return ||
+		event->keyval == GDK_KEY_KP_Enter ||
+		event->keyval == GDK_KEY_ISO_Enter ||
+		event->keyval == GDK_KEY_space)) {
 
-      if ((event->state & modifiers) == GDK_SHIFT_MASK) {
-	open_mode = GTK_PLACES_OPEN_MODE_NEW_TAB;
-      } else if ((event->state & modifiers) == GDK_CONTROL_MASK) {
-	open_mode = GTK_PLACES_OPEN_MODE_NEW_WINDOW;
-      }
+		GtkPlacesOpenMode open_mode = GTK_PLACES_OPEN_MODE_NORMAL;
 
-      model = gtk_tree_view_get_model (sidebar->tree_view);
-      selection = gtk_tree_view_get_selection (sidebar->tree_view);
-      gtk_tree_selection_get_selected (selection, NULL, &iter);
+		if ((event->state & modifiers) == GDK_SHIFT_MASK) {
+			open_mode = GTK_PLACES_OPEN_MODE_NEW_TAB;
+		} else if ((event->state & modifiers) == GDK_CONTROL_MASK) {
+			open_mode = GTK_PLACES_OPEN_MODE_NEW_WINDOW;
+		}
 
-      open_selected_bookmark (sidebar, model, &iter, open_mode);
+		open_selected_bookmark (sidebar, GTK_TREE_MODEL (sidebar->store),
+					&selected_iter, open_mode);
 
-      return TRUE;
-  }
+		return TRUE;
+	}
 
-  if (event->keyval == GDK_KEY_Down &&
-      (event->state & modifiers) == GDK_MOD1_MASK) {
-      return eject_or_unmount_selection (sidebar);
-  }
+	if (event->keyval == GDK_KEY_Down &&
+	    (event->state & modifiers) == GDK_MOD1_MASK) {
+		return eject_or_unmount_selection (sidebar);
+	}
 
-  if (event->keyval == GDK_KEY_Up) {
-      if (find_prev_row (sidebar, &iter)) {
-	      gtk_tree_selection_select_iter (gtk_tree_view_get_selection (sidebar->tree_view),
-					      &iter);
-      }
-      return TRUE;
-  }
+	if (event->keyval == GDK_KEY_Up) {
+		if (find_prev_row (sidebar, &selected_iter)) {
+			path = gtk_tree_model_get_path (GTK_TREE_MODEL (sidebar->store), &selected_iter);
+			gtk_tree_view_set_cursor (sidebar->tree_view, path, NULL, FALSE);
+			gtk_tree_path_free (path);
+		}
+		return TRUE;
+	}
 
-  if (event->keyval == GDK_KEY_Down) {
-      if (find_next_row (sidebar, &iter)) {
-	      gtk_tree_selection_select_iter (gtk_tree_view_get_selection (sidebar->tree_view),
-					      &iter);
-      }
-      return TRUE;
-  }
+	if (event->keyval == GDK_KEY_Down) {
+		if (find_next_row (sidebar, &selected_iter)) {
+			path = gtk_tree_model_get_path (GTK_TREE_MODEL (sidebar->store), &selected_iter);
+			gtk_tree_view_set_cursor (sidebar->tree_view, path, NULL, FALSE);
+			gtk_tree_path_free (path);
+		}
+		return TRUE;
+	}
 
-  if ((event->keyval == GDK_KEY_Delete
-      || event->keyval == GDK_KEY_KP_Delete)
-      && (event->state & modifiers) == 0) {
-      remove_selected_bookmarks (sidebar);
-      return TRUE;
-  }
+	if ((event->keyval == GDK_KEY_Delete
+	     || event->keyval == GDK_KEY_KP_Delete)
+	    && (event->state & modifiers) == 0) {
+		remove_selected_bookmarks (sidebar);
+		return TRUE;
+	}
 
-  if ((event->keyval == GDK_KEY_F2)
-      && (event->state & modifiers) == 0) {
-      rename_selected_bookmark (sidebar);
-      return TRUE;
-  }
+	if ((event->keyval == GDK_KEY_F2)
+	    && (event->state & modifiers) == 0) {
+		rename_selected_bookmark (sidebar);
+		return TRUE;
+	}
 
-  return FALSE;
+	return FALSE;
 }
 
 static GtkMenuItem *
@@ -2786,6 +2847,19 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 		    G_CALLBACK (empty_trash_cb), sidebar);
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
+
+	/* Properties menu item */
+
+	sidebar->popup_menu_properties_separator_item =
+		GTK_WIDGET (eel_gtk_menu_append_separator (GTK_MENU (sidebar->popup_menu)));
+
+	item = gtk_menu_item_new_with_mnemonic (_("_Properties"));
+	sidebar->popup_menu_properties_item = item;
+	g_signal_connect (item, "activate",
+			  G_CALLBACK (properties_cb), sidebar);
+	gtk_widget_show (item);
+	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
+
 #endif
 
 	bookmarks_check_popup_sensitivity (sidebar);
@@ -2818,7 +2892,7 @@ bookmarks_popup_menu (GtkPlacesSidebar *sidebar,
 	} else {
 		button = 0;
 	}
-	
+
 	gtk_menu_popup (GTK_MENU (sidebar->popup_menu),		/* menu */
 			NULL,					/* parent_menu_shell */
 			NULL,					/* parent_menu_item */
@@ -2848,6 +2922,7 @@ bookmarks_button_release_event_cb (GtkWidget *widget,
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	GtkTreeView *tree_view;
+	gboolean ret = FALSE;
 	gboolean res;
 
 	path = NULL;
@@ -2866,177 +2941,50 @@ bookmarks_button_release_event_cb (GtkWidget *widget,
 	tree_view = GTK_TREE_VIEW (widget);
 	model = gtk_tree_view_get_model (tree_view);
 
+	if (event->window != gtk_tree_view_get_bin_window (tree_view)) {
+		return FALSE;
+ 	}
+
+	res = gtk_tree_view_get_path_at_pos (tree_view, (int) event->x, (int) event->y,
+					     &path, NULL, NULL, NULL);
+
+	if (!res || path == NULL) {
+		return FALSE;
+	}
+
+	res = gtk_tree_model_get_iter (model, &iter, path);
+	if (!res) {
+		gtk_tree_path_free (path);
+		return FALSE;
+	}
+
 	if (event->button == 1) {
-
-		if (event->window != gtk_tree_view_get_bin_window (tree_view)) {
-			return FALSE;
-		}
-
-		res = gtk_tree_view_get_path_at_pos (tree_view, (int) event->x, (int) event->y,
-						     &path, NULL, NULL, NULL);
-
-		if (!res) {
-			return FALSE;
-		}
-
-		gtk_tree_model_get_iter (model, &iter, path);
-
 		open_selected_bookmark (sidebar, model, &iter, 0);
-
-		gtk_tree_path_free (path);
-	}
-
-	return FALSE;
-}
-
-static void
-update_eject_buttons (GtkPlacesSidebar *sidebar,
-		      GtkTreePath 	    *path)
-{
-	GtkTreeIter iter;
-	gboolean icon_visible, path_same;
-
-	icon_visible = TRUE;
-
-	if (path == NULL && sidebar->eject_highlight_path == NULL) {
-		/* Both are null - highlight up to date */
-		return;
-	}
-
-	path_same = (path != NULL) &&
-		(sidebar->eject_highlight_path != NULL) &&
-		(gtk_tree_path_compare (sidebar->eject_highlight_path, path) == 0);
-
-	if (path_same) {
-		/* Same path - highlight up to date */
-		return;
-	}
-
-	if (path) {
-		gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->filter_model),
-					 &iter,
-					 path);
-
-		gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model),
-				    &iter,
-				    PLACES_SIDEBAR_COLUMN_EJECT, &icon_visible,
-				    -1);
-	}
-
-	if (!icon_visible || path == NULL || !path_same) {
-		/* remove highlighting and reset the saved path, as we are leaving
-		 * an eject button area.
-		 */
-		if (sidebar->eject_highlight_path) {
-			gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store),
-						 &iter,
-						 sidebar->eject_highlight_path);
-
-			gtk_list_store_set (sidebar->store,
-					    &iter,
-					    PLACES_SIDEBAR_COLUMN_EJECT_ICON, get_eject_icon (sidebar, FALSE),
-					    -1);
-			gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (sidebar->filter_model));
-
-			gtk_tree_path_free (sidebar->eject_highlight_path);
-			sidebar->eject_highlight_path = NULL;
-		}
-
-		if (!icon_visible) {
-			return;
-		}
-	}
-
-	if (path != NULL) {
-		/* add highlighting to the selected path, as the icon is visible and
-		 * we're hovering it.
-		 */
-		gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store),
-					 &iter,
-					 path);
-		gtk_list_store_set (sidebar->store,
-				    &iter,
-				    PLACES_SIDEBAR_COLUMN_EJECT_ICON, get_eject_icon (sidebar, TRUE),
-				    -1);
-		gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (sidebar->filter_model));
-
-		sidebar->eject_highlight_path = gtk_tree_path_copy (path);
-	}
-}
-
-static gboolean
-bookmarks_motion_event_cb (GtkWidget             *widget,
-			   GdkEventMotion        *event,
-			   GtkPlacesSidebar *sidebar)
-{
-	GtkTreePath *path;
-
-	path = NULL;
-
-	if (over_eject_button (sidebar, event->x, event->y, &path)) {
-		update_eject_buttons (sidebar, path);
-		gtk_tree_path_free (path);
-
-		return TRUE;
-	}
-
-	update_eject_buttons (sidebar, NULL);
-
-	return FALSE;
-}
-
-/* Callback used when a button is pressed on the shortcuts list.
- * We trap button 3 to bring up a popup menu, and button 2 to
- * open in a new tab.
- */
-static gboolean
-bookmarks_button_press_event_cb (GtkWidget             *widget,
-				 GdkEventButton        *event,
-				 GtkPlacesSidebar *sidebar)
-{
-	if (event->type != GDK_BUTTON_PRESS) {
-		/* ignore multiple clicks */
-		return TRUE;
-	}
-
-	if (event->button == 3) {
-		bookmarks_popup_menu (sidebar, event);
 	} else if (event->button == 2) {
-		GtkTreeModel *model;
-		GtkTreePath *path;
-		GtkTreeIter iter;
-		GtkTreeView *tree_view;
 		GtkPlacesOpenMode open_mode = GTK_PLACES_OPEN_MODE_NORMAL;
 
-		tree_view = GTK_TREE_VIEW (widget);
-		g_assert (tree_view == sidebar->tree_view);
-
-		model = gtk_tree_view_get_model (tree_view);
-
-		gtk_tree_view_get_path_at_pos (tree_view, (int) event->x, (int) event->y,
-					       &path, NULL, NULL, NULL);
-		gtk_tree_model_get_iter (model, &iter, path);
-
-		if (sidebar->multiple_tabs_supported) {
-			if (event->state & GDK_CONTROL_MASK)
-				open_mode = GTK_PLACES_OPEN_MODE_NEW_WINDOW;
-			else
-				open_mode = GTK_PLACES_OPEN_MODE_NEW_TAB;
-		} else {
-			open_mode = GTK_PLACES_OPEN_MODE_NEW_WINDOW;
-		}
+		open_mode = ((event->state & GDK_CONTROL_MASK) ?
+			     GTK_PLACES_OPEN_MODE_NEW_WINDOW :
+			     GTK_PLACES_OPEN_MODE_NEW_TAB);
 
 		open_selected_bookmark (sidebar, model, &iter, open_mode);
+		ret = TRUE;
+	} else if (event->button == 3) {
+		PlaceType row_type;
 
-		if (path != NULL) {
-			gtk_tree_path_free (path);
-			return TRUE;
+		gtk_tree_model_get (model, &iter,
+				    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &row_type,
+				    -1);
+
+		if (row_type != PLACES_HEADING) {
+			bookmarks_popup_menu (sidebar, event);
 		}
 	}
 
-	return FALSE;
-}
+	gtk_tree_path_free (path);
 
+	return ret;
+}
 
 static void
 bookmarks_edited (GtkCellRenderer       *cell,
@@ -3053,8 +3001,8 @@ bookmarks_edited (GtkCellRenderer       *cell,
 	g_object_set (cell, "editable", FALSE, NULL);
 
 	path = gtk_tree_path_new_from_string (path_string);
-	gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->filter_model), &iter, path);
-	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->filter_model), &iter,
+	gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store), &iter, path);
+	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 		            PLACES_SIDEBAR_COLUMN_INDEX, &index,
 		            -1);
 	gtk_tree_path_free (path);
@@ -3188,6 +3136,99 @@ heading_cell_renderer_func (GtkTreeViewColumn *column,
 	}
 }
 
+static gint
+places_sidebar_sort_func (GtkTreeModel *model,
+			  GtkTreeIter *iter_a,
+			  GtkTreeIter *iter_b,
+			  gpointer user_data)
+{
+	SectionType section_type_a, section_type_b;
+	PlaceType place_type_a, place_type_b;
+	gint retval = 0;
+
+	gtk_tree_model_get (model, iter_a,
+			    PLACES_SIDEBAR_COLUMN_SECTION_TYPE, &section_type_a,
+			    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &place_type_a,
+			    -1);
+	gtk_tree_model_get (model, iter_b,
+			    PLACES_SIDEBAR_COLUMN_SECTION_TYPE, &section_type_b,
+			    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &place_type_b,
+			    -1);
+
+	/* fall back to the default order if we're not in the
+	 * XDG part of the computer section.
+	 */
+	if ((section_type_a == section_type_b) &&
+	    (section_type_a == SECTION_COMPUTER) &&
+	    (place_type_a == place_type_b) &&
+	    (place_type_a == PLACES_XDG_DIR)) {
+		gchar *name_a, *name_b;
+
+		gtk_tree_model_get (model, iter_a,
+				    PLACES_SIDEBAR_COLUMN_NAME, &name_a,
+				    -1);
+		gtk_tree_model_get (model, iter_b,
+				    PLACES_SIDEBAR_COLUMN_NAME, &name_b,
+				    -1);
+
+		retval = g_utf8_collate (name_a, name_b);
+
+		g_free (name_a);
+		g_free (name_b);
+	}
+
+	return retval;
+}
+
+static void
+update_hostname (GtkPlacesSidebar *sidebar)
+{
+	GVariant *variant;
+	gsize len;
+	const gchar *hostname;
+
+	if (sidebar->hostnamed_proxy == NULL)
+		return;
+
+	variant = g_dbus_proxy_get_cached_property (sidebar->hostnamed_proxy,
+						    "PrettyHostname");
+	if (variant == NULL) {
+		return;
+	}
+
+	hostname = g_variant_get_string (variant, &len);
+	if (len > 0 &&
+	    g_strcmp0 (sidebar->hostname, hostname) != 0) {
+		g_free (sidebar->hostname);
+		sidebar->hostname = g_strdup (hostname);
+		update_places (sidebar);
+	}
+
+	g_variant_unref (variant);
+}
+
+static void
+hostname_proxy_new_cb (GObject      *source_object,
+		       GAsyncResult *res,
+		       gpointer      user_data)
+{
+	GtkPlacesSidebar *sidebar = user_data;
+	GError *error = NULL;
+
+	sidebar->hostnamed_proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
+	if (error != NULL) {
+		g_debug ("Failed to create D-Bus proxy: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+
+	g_signal_connect_swapped (sidebar->hostnamed_proxy,
+				  "g-properties-changed",
+				  G_CALLBACK (update_hostname),
+				  sidebar);
+	update_hostname (sidebar);
+}
+
 static void
 create_volume_monitor (GtkPlacesSidebar *sidebar)
 {
@@ -3314,9 +3355,10 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
 	/* icon renderer */
 	cell = gtk_cell_renderer_pixbuf_new ();
+	g_object_set (cell, "follow-state", TRUE, NULL);
 	gtk_tree_view_column_pack_start (col, cell, FALSE);
 	gtk_tree_view_column_set_attributes (col, cell,
-					     "pixbuf", PLACES_SIDEBAR_COLUMN_ICON,
+					     "gicon", PLACES_SIDEBAR_COLUMN_GICON,
 					     NULL);
 	gtk_tree_view_column_set_cell_data_func (col, cell,
 						 icon_cell_renderer_func,
@@ -3344,11 +3386,12 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 		      /* align right, because for some reason gtk+ expands
 			 this even though we tell it not to. */
 		      "xalign", 1.0,
+		      "follow-state", TRUE,
 		      NULL);
 	gtk_tree_view_column_pack_start (col, cell, FALSE);
 	gtk_tree_view_column_set_attributes (col, cell,
 					     "visible", PLACES_SIDEBAR_COLUMN_EJECT,
-					     "pixbuf", PLACES_SIDEBAR_COLUMN_EJECT_ICON,
+					     "gicon", PLACES_SIDEBAR_COLUMN_EJECT_GICON,
 					     NULL);
 
 	/* normal text renderer */
@@ -3374,32 +3417,21 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 	gtk_tree_view_column_set_max_width (GTK_TREE_VIEW_COLUMN (col), 24);
 	gtk_tree_view_append_column (tree_view, col);
 
-	sidebar->store = gtk_list_store_new (PLACES_SIDEBAR_COLUMN_COUNT,
-					     G_TYPE_INT,
-					     G_TYPE_STRING,
-					     G_TYPE_DRIVE,
-					     G_TYPE_VOLUME,
-					     G_TYPE_MOUNT,
-					     G_TYPE_STRING,
-					     GDK_TYPE_PIXBUF,
-					     G_TYPE_INT,
-					     G_TYPE_BOOLEAN,
-					     G_TYPE_BOOLEAN,
-					     G_TYPE_BOOLEAN,
-					     G_TYPE_STRING,
-					     GDK_TYPE_PIXBUF,
-					     G_TYPE_INT,
-					     G_TYPE_STRING);
-
+	sidebar->store = shortcuts_model_new (sidebar);
 	gtk_tree_view_set_tooltip_column (tree_view, PLACES_SIDEBAR_COLUMN_TOOLTIP);
 
-	sidebar->filter_model = shortcuts_model_filter_new (sidebar,
-							    GTK_TREE_MODEL (sidebar->store),
-							    NULL);
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sidebar->store),
+					      PLACES_SIDEBAR_COLUMN_NAME,
+					      GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (sidebar->store),
+					 PLACES_SIDEBAR_COLUMN_NAME,
+					 places_sidebar_sort_func,
+					 sidebar, NULL);
 
-	gtk_tree_view_set_model (tree_view, sidebar->filter_model);
+	gtk_tree_view_set_model (tree_view, GTK_TREE_MODEL (sidebar->store));
 	gtk_container_add (GTK_CONTAINER (sidebar), GTK_WIDGET (tree_view));
 	gtk_widget_show (GTK_WIDGET (tree_view));
+	gtk_tree_view_set_enable_search (tree_view, FALSE);
 
 	gtk_widget_show (GTK_WIDGET (sidebar));
 	sidebar->tree_view = tree_view;
@@ -3438,10 +3470,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (bookmarks_selection_changed_cb), sidebar);
 	g_signal_connect (tree_view, "popup-menu",
 			  G_CALLBACK (bookmarks_popup_menu_cb), sidebar);
-	g_signal_connect (tree_view, "button-press-event",
-			  G_CALLBACK (bookmarks_button_press_event_cb), sidebar);
-	g_signal_connect (tree_view, "motion-notify-event",
-			  G_CALLBACK (bookmarks_motion_event_cb), sidebar);
 	g_signal_connect (tree_view, "button-release-event",
 			  G_CALLBACK (bookmarks_button_release_event_cb), sidebar);
 
@@ -3453,6 +3481,17 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 				 G_CALLBACK (trash_state_changed_cb),
 				 sidebar, 0);
 #endif
+
+	sidebar->hostname = g_strdup (_("Computer"));
+	g_dbus_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
+				  G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
+				  NULL,
+				  "org.freedesktop.hostname1",
+				  "/org/freedesktop/hostname1",
+				  "org.freedesktop.hostname1",
+				  NULL,
+				  hostname_proxy_new_cb,
+ 				  sidebar);
 }
 
 static void
@@ -3469,19 +3508,39 @@ gtk_places_sidebar_dispose (GObject *object)
 
 	free_drag_data (sidebar);
 
-	if (sidebar->eject_highlight_path != NULL) {
-		gtk_tree_path_free (sidebar->eject_highlight_path);
-		sidebar->eject_highlight_path = NULL;
-	}
-
 	if (sidebar->bookmarks_manager != NULL) {
 		_gtk_bookmarks_manager_free (sidebar->bookmarks_manager);
 		sidebar->bookmarks_manager = NULL;
 	}
 
 	g_clear_object (&sidebar->store);
-	g_clear_object (&sidebar->volume_monitor);
-	g_clear_object (&sidebar->filter_model);
+
+	if (sidebar->volume_monitor != NULL) {
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+						      volume_added_callback, sidebar);
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+						      volume_removed_callback, sidebar);
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+						      volume_changed_callback, sidebar);
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+						      mount_added_callback, sidebar);
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+						      mount_removed_callback, sidebar);
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+						      mount_changed_callback, sidebar);
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+						      drive_disconnected_callback, sidebar);
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+						      drive_connected_callback, sidebar);
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+						      drive_changed_callback, sidebar);
+
+		g_clear_object (&sidebar->volume_monitor);
+	}
+
+	g_clear_object (&sidebar->hostnamed_proxy);
+	g_free (sidebar->hostname);
+	sidebar->hostname = NULL;
 
 	G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
 }
@@ -3496,6 +3555,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	gobject_class->dispose = gtk_places_sidebar_dispose;
 
 	GTK_WIDGET_CLASS (class)->style_set = gtk_places_sidebar_style_set;
+	GTK_WIDGET_CLASS (class)->focus = gtk_places_sidebar_focus;
 
 	/* FIXME: add docstrings for the signals */
 
@@ -3549,24 +3609,14 @@ gtk_places_sidebar_new (void)
 	return GTK_WIDGET (g_object_new (gtk_places_sidebar_get_type (), NULL));
 }
 
+
 
 /* Drag and drop interfaces */
 
-static void
-shortcuts_model_filter_class_init (ShortcutsModelFilterClass *class)
-{
-}
-
-static void
-shortcuts_model_filter_init (ShortcutsModelFilter *model)
-{
-	model->sidebar = NULL;
-}
-
-/* GtkTreeDragSource::row_draggable implementation for the shortcuts filter model */
+/* GtkTreeDragSource::row_draggable implementation for the shortcuts model */
 static gboolean
-shortcuts_model_filter_row_draggable (GtkTreeDragSource *drag_source,
-				      GtkTreePath       *path)
+shortcuts_model_row_draggable (GtkTreeDragSource *drag_source,
+			       GtkTreePath       *path)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
@@ -3589,27 +3639,57 @@ shortcuts_model_filter_row_draggable (GtkTreeDragSource *drag_source,
 
 /* Fill the GtkTreeDragSourceIface vtable */
 static void
-shortcuts_model_filter_drag_source_iface_init (GtkTreeDragSourceIface *iface)
+shortcuts_model_class_init (ShortcutsModelClass *klass)
 {
-	iface->row_draggable = shortcuts_model_filter_row_draggable;
 }
 
-static GtkTreeModel *
-shortcuts_model_filter_new (GtkPlacesSidebar *sidebar,
-			    GtkTreeModel     *child_model,
-			    GtkTreePath      *root)
+static void
+shortcuts_model_init (ShortcutsModel *model)
 {
-	ShortcutsModelFilter *model;
+	model->sidebar = NULL;
+}
 
-	model = g_object_new (SHORTCUTS_MODEL_FILTER_TYPE,
-			      "child-model", child_model,
-			      "virtual-root", root,
-			      NULL);
+static void
+shortcuts_model_drag_source_iface_init (GtkTreeDragSourceIface *iface)
+{
+	iface->row_draggable = shortcuts_model_row_draggable;
+}
 
+static GtkListStore *
+shortcuts_model_new (GtkPlacesSidebar *sidebar)
+{
+	ShortcutsModel *model;
+	GType model_types[PLACES_SIDEBAR_COLUMN_COUNT] = {
+		G_TYPE_INT, 
+		G_TYPE_STRING,
+		G_TYPE_DRIVE,
+		G_TYPE_VOLUME,
+		G_TYPE_MOUNT,
+		G_TYPE_STRING,
+		G_TYPE_ICON,
+		G_TYPE_INT,
+		G_TYPE_BOOLEAN,
+		G_TYPE_BOOLEAN,
+		G_TYPE_BOOLEAN,
+		G_TYPE_STRING,
+		G_TYPE_ICON,
+		G_TYPE_INT,
+		G_TYPE_STRING
+	};
+
+	model = g_object_new (shortcuts_model_get_type (), NULL);
 	model->sidebar = sidebar;
 
-	return GTK_TREE_MODEL (model);
+	gtk_list_store_set_column_types (GTK_LIST_STORE (model),
+					 PLACES_SIDEBAR_COLUMN_COUNT,
+					 model_types);
+
+	return GTK_LIST_STORE (model);
 }
+
+
+
+/* Public methods for GtkPlacesSidebar */
 
 /**
  * gtk_places_sidebar_set_current_uri:
@@ -3646,10 +3726,10 @@ gtk_places_sidebar_set_current_uri (GtkPlacesSidebar *sidebar, const char *uri)
 
 		/* set selection if any place matches the uri */
 		gtk_tree_selection_unselect_all (selection);
-  		valid = gtk_tree_model_get_iter_first (sidebar->filter_model, &iter);
+  		valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (sidebar->store), &iter);
 
 		while (valid) {
-			gtk_tree_model_get (sidebar->filter_model, &iter,
+			gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
 		 		       	    PLACES_SIDEBAR_COLUMN_URI, &iter_uri,
 					    -1);
 			if (iter_uri != NULL) {
@@ -3660,7 +3740,7 @@ gtk_places_sidebar_set_current_uri (GtkPlacesSidebar *sidebar, const char *uri)
 				}
 				g_free (iter_uri);
 			}
-        	 	valid = gtk_tree_model_iter_next (sidebar->filter_model, &iter);
+        	 	valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (sidebar->store), &iter);
 		}
     	}
 }
