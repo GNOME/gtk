@@ -910,6 +910,8 @@ update_places (GtkPlacesSidebar *sidebar)
 	bookmarks = _gtk_bookmarks_manager_list_bookmarks (sidebar->bookmarks_manager);
 
 	for (sl = bookmarks, index = 0; sl; sl = sl->next, index++) {
+		GFileInfo *info;
+
 		root = sl->data;
 
 #if 0
@@ -932,23 +934,36 @@ update_places (GtkPlacesSidebar *sidebar)
 		nautilus_file_unref (file);
 #endif
 
-		bookmark_name = _gtk_bookmarks_manager_get_bookmark_label (sidebar->bookmarks_manager, root);
-		icon = NULL; /* FIXME: icon = nautilus_bookmark_get_icon (bookmark); */
-		mount_uri = g_file_get_uri (root);
-		tooltip = g_file_get_parse_name (root);
+		/* FIXME: we are getting file info synchronously.  We may want to do it async at some point. */
+		info = g_file_query_info (root,
+					  "standard::display-name,standard::icon",
+					  G_FILE_QUERY_INFO_NONE,
+					  NULL,
+					  NULL); /* NULL-GError */
 
-		add_place (sidebar, PLACES_BOOKMARK,
-			   SECTION_BOOKMARKS,
-			   bookmark_name, icon, mount_uri,
-			   NULL, NULL, NULL, index,
-			   tooltip);
+		if (info) {
+			bookmark_name = _gtk_bookmarks_manager_get_bookmark_label (sidebar->bookmarks_manager, root);
 
-		if (icon)
-			g_object_unref (icon);
+			if (bookmark_name == NULL)
+				bookmark_name = g_strdup (g_file_info_get_display_name (info));
 
-		g_free (mount_uri);
-		g_free (tooltip);
-		g_free (bookmark_name);
+			icon = g_file_info_get_icon (info);
+
+			mount_uri = g_file_get_uri (root);
+			tooltip = g_file_get_parse_name (root);
+
+			add_place (sidebar, PLACES_BOOKMARK,
+				   SECTION_BOOKMARKS,
+				   bookmark_name, icon, mount_uri,
+				   NULL, NULL, NULL, index,
+				   tooltip);
+
+			g_free (mount_uri);
+			g_free (tooltip);
+			g_free (bookmark_name);
+
+			g_object_unref (info);
+		}
 	}
 
 	g_slist_foreach (bookmarks, (GFunc) g_object_unref, NULL);
