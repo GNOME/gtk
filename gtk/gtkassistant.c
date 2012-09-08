@@ -719,6 +719,10 @@ set_current_page (GtkAssistant *assistant,
   priv->current_page = (GtkAssistantPage *)g_list_nth_data (priv->pages, page_num);
 
   g_signal_emit (assistant, signals [PREPARE], 0, priv->current_page->page);
+  /* do not continue if the prepare signal handler has already changed the
+   * current page */
+  if (priv->current_page != (GtkAssistantPage *)g_list_nth_data (priv->pages, page_num))
+    return;
 
   update_title_state (assistant);
 
