@@ -1263,6 +1263,8 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
 	int found = 0;
 	
         for (i=0,entry=type->map;i<type->map_count;i++,entry++) {
+            if (!entry->active || syms[col+entry->level] == syms[col])
+              continue;
 	    if (mods_rtrn) {
 		int bits = 0;
 		unsigned long tmp = entry->mods.mask;
@@ -1271,23 +1273,30 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
 			bits++;
 		    tmp >>= 1;
 		}
-		/* We always add one-modifiers levels to mods_rtrn since
-		 * they can't wipe out bits in the state unless the
-		 * level would be triggered. But return other modifiers
-		 * 
-		 */
+                /* We always add one-modifiers levels to mods_rtrn since
+                 * they can't wipe out bits in the state unless the
+                 * level would be triggered. But not if they don't change
+                 * the symbol (otherwise we can't discriminate Shift-F10
+                 * and F10 anymore). And don't add modifiers that are
+                 * explicitly marked as preserved, either.
+                 */
 		if (bits == 1 || (mods&type->mods.mask)==entry->mods.mask)
-		    *mods_rtrn |= entry->mods.mask;
+                  {
+                    if (type->preserve)
+                      *mods_rtrn |= (entry->mods.mask & ~type->preserve[i].mask);
+                    else
+                      *mods_rtrn |= entry->mods.mask;
+                  }
 	    }
-	    
-            if (!found&&entry->active&&((mods&type->mods.mask)==entry->mods.mask)) {
+
+            if (!found && ((mods&type->mods.mask) == entry->mods.mask)) {
                 col+= entry->level;
                 if (type->preserve)
                     preserve= type->preserve[i].mask;
 
                 if (level_rtrn)
                   *level_rtrn = entry->level;
-                
+
                 found = 1;
             }
         }
