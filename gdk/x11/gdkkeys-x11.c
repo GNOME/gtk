@@ -1113,7 +1113,7 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
         int found = 0;
 
         for (i=0,entry=type->map;i<type->map_count;i++,entry++) {
-            if (!entry->active)
+            if (!entry->active || syms[col+entry->level] == syms[col])
               continue;
             if (mods_rtrn) {
                 int bits = 0;
@@ -1130,7 +1130,7 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
                  * and F10 anymore). And don't add modifiers that are
                  * explicitly marked as preserved, either.
                  */
-                if ((bits == 1 && syms[col+entry->level] != syms[col]) ||
+                if (bits == 1 ||
                     (mods&type->mods.mask) == entry->mods.mask)
                   {
                     if (type->preserve)
@@ -1140,7 +1140,7 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
                   }
             }
 
-            if (!found&&((mods&type->mods.mask)==entry->mods.mask)) {
+            if (!found && ((mods&type->mods.mask) == entry->mods.mask)) {
                 col+= entry->level;
                 if (type->preserve)
                     preserve= type->preserve[i].mask;
