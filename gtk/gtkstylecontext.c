@@ -700,6 +700,14 @@ gtk_style_context_set_cascade (GtkStyleContext *context,
     gtk_style_context_cascade_changed (cascade, context);
 }
 
+GtkStyleProviderPrivate *
+_gtk_style_context_get_style_provider (GtkStyleContext *context)
+{
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  return GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade);
+}
+
 static void
 gtk_style_context_init (GtkStyleContext *style_context)
 {
