@@ -370,7 +370,7 @@ _gtk_css_ease_value_transform (const GtkCssValue *ease,
       }
     case GTK_CSS_EASE_STEPS:
       progress *= ease->u.steps.steps;
-      progress = floor (progress) + ease->u.steps.start ? 0 : 1;
+      progress = floor (progress) + (ease->u.steps.start ? 0 : 1);
       return progress / ease->u.steps.steps;
     default:
       g_assert_not_reached ();
