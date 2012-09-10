@@ -33,7 +33,6 @@
 
 typedef struct {
   GMenuModel        *model;
-  GtkAccelGroup     *accels;
   GtkMenuShell      *shell;
   guint              update_idle;
   GSList            *connected;
@@ -107,7 +106,7 @@ gtk_model_menu_binding_append_item (GtkModelMenuBinding  *binding,
     {
       GtkMenuItem *item;
 
-      item = gtk_model_menu_item_new (model, item_index, action_namespace, binding->accels);
+      item = gtk_model_menu_item_new (model, item_index, action_namespace);
       gtk_menu_shell_append (binding->shell, GTK_WIDGET (item));
       gtk_widget_show (GTK_WIDGET (item));
       binding->n_items++;
@@ -254,7 +253,6 @@ gtk_model_menu_bind (GtkMenuShell *shell,
 
   binding = g_slice_new (GtkModelMenuBinding);
   binding->model = g_object_ref (model);
-  binding->accels = NULL;
   binding->shell = shell;
   binding->update_idle = 0;
   binding->connected = NULL;
@@ -266,30 +264,25 @@ gtk_model_menu_bind (GtkMenuShell *shell,
 
 
 static void
-gtk_model_menu_populate (GtkMenuShell  *shell,
-                         GtkAccelGroup *accels)
+gtk_model_menu_populate (GtkMenuShell *shell)
 {
   GtkModelMenuBinding *binding;
 
   binding = (GtkModelMenuBinding*) g_object_get_data (G_OBJECT (shell), "gtk-model-menu-binding");
-
-  binding->accels = accels;
 
   gtk_model_menu_binding_populate (binding);
 }
 
 GtkWidget *
 gtk_model_menu_create_menu (GMenuModel    *model,
-                            const gchar   *action_namespace,
-                            GtkAccelGroup *accels)
+                            const gchar   *action_namespace)
 {
   GtkWidget *menu;
 
   menu = gtk_menu_new ();
-  gtk_menu_set_accel_group (GTK_MENU (menu), accels);
 
   gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, action_namespace, TRUE);
-  gtk_model_menu_populate (GTK_MENU_SHELL (menu), accels);
+  gtk_model_menu_populate (GTK_MENU_SHELL (menu));
 
   return menu;
 }
@@ -317,21 +310,20 @@ gtk_menu_new_from_model (GMenuModel *model)
 
   menu = gtk_menu_new ();
   gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, NULL, TRUE);
-  gtk_model_menu_populate (GTK_MENU_SHELL (menu), NULL);
+  gtk_model_menu_populate (GTK_MENU_SHELL (menu));
 
   return menu;
 }
 
 GtkWidget *
-gtk_model_menu_create_menu_bar (GMenuModel    *model,
-                                GtkAccelGroup *accels)
+gtk_model_menu_create_menu_bar (GMenuModel *model)
 {
   GtkWidget *menubar;
 
   menubar = gtk_menu_bar_new ();
 
   gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, NULL, FALSE);
-  gtk_model_menu_populate (GTK_MENU_SHELL (menubar), accels);
+  gtk_model_menu_populate (GTK_MENU_SHELL (menubar));
 
   return menubar;
 }
@@ -360,7 +352,7 @@ gtk_menu_bar_new_from_model (GMenuModel *model)
   menubar = gtk_menu_bar_new ();
 
   gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, NULL, FALSE);
-  gtk_model_menu_populate (GTK_MENU_SHELL (menubar), NULL);
+  gtk_model_menu_populate (GTK_MENU_SHELL (menubar));
 
   return menubar;
 }

@@ -25,12 +25,10 @@
 #include <gio/gio.h>
 
 G_GNUC_INTERNAL
-GtkWidget * gtk_model_menu_create_menu_bar (GMenuModel        *model,
-                                            GtkAccelGroup     *accels);
+GtkWidget * gtk_model_menu_create_menu_bar (GMenuModel        *model);
 
 G_GNUC_INTERNAL
 GtkWidget * gtk_model_menu_create_menu     (GMenuModel        *model,
-                                            const gchar       *action_namespace,
-                                            GtkAccelGroup     *accels);
+                                            const gchar       *action_namespace);
 
 #endif /* __GTK_MODEL_MENU_H__ */

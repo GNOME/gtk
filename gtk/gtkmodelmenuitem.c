@@ -25,6 +25,7 @@
 #include "gtkactionhelper.h"
 #include "gtkmodelmenu.h"
 #include "gtkwidgetprivate.h"
+#include "gtkaccellabel.h"
 
 struct _GtkModelMenuItem
 {
@@ -107,8 +108,7 @@ static void
 gtk_model_menu_item_setup (GtkModelMenuItem  *item,
                            GMenuModel        *model,
                            gint               item_index,
-                           const gchar       *action_namespace,
-                           GtkAccelGroup     *accels)
+                           const gchar       *action_namespace)
 {
   GMenuAttributeIter *iter;
   GMenuModel *submenu;
@@ -125,12 +125,12 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
       if (action_namespace)
         {
           gchar *namespace = g_strjoin (".", action_namespace, section_namespace, NULL);
-          menu = gtk_model_menu_create_menu (submenu, namespace, accels);
+          menu = gtk_model_menu_create_menu (submenu, namespace);
           g_free (namespace);
         }
       else
         {
-          menu = gtk_model_menu_create_menu (submenu, section_namespace, accels);
+          menu = gtk_model_menu_create_menu (submenu, section_namespace);
         }
 
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), menu);
@@ -144,6 +144,26 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
     {
       if (g_str_equal (key, "label") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
         gtk_menu_item_set_label (GTK_MENU_ITEM (item), g_variant_get_string (value, NULL));
+
+      else if (g_str_equal (key, "accel") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+        {
+          GdkModifierType modifiers;
+          guint key;
+
+          gtk_accelerator_parse (g_variant_get_string (value, NULL), &key, &modifiers);
+
+          if (key)
+            {
+              GtkAccelLabel *accel_label;
+
+              /* Ensure that the GtkAccelLabel has been created... */
+              (void) gtk_menu_item_get_label (GTK_MENU_ITEM (item));
+              accel_label = GTK_ACCEL_LABEL (gtk_bin_get_child (GTK_BIN (item)));
+              g_assert (accel_label);
+
+              gtk_accel_label_set_accel (accel_label, key, modifiers);
+            }
+        }
 
       else if (g_str_equal (key, "action") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
         gtk_actionable_set_namespaced_action_name (GTK_ACTIONABLE (item), action_namespace,
@@ -260,14 +280,13 @@ gtk_model_menu_item_class_init (GtkModelMenuItemClass *class)
 GtkMenuItem *
 gtk_model_menu_item_new (GMenuModel        *model,
                          gint               item_index,
-                         const gchar       *action_namespace,
-                         GtkAccelGroup     *accels)
+                         const gchar       *action_namespace)
 {
   GtkModelMenuItem *item;
 
   item = g_object_new (GTK_TYPE_MODEL_MENU_ITEM, NULL);
 
-  gtk_model_menu_item_setup (item, model, item_index, action_namespace, accels);
+  gtk_model_menu_item_setup (item, model, item_index, action_namespace);
 
   return GTK_MENU_ITEM (item);
 }

@@ -65,6 +65,7 @@ gtk_accel_label_get_accel_width
 gtk_accel_label_get_type
 gtk_accel_label_new
 gtk_accel_label_refetch
+gtk_accel_label_set_accel
 gtk_accel_label_set_accel_closure
 gtk_accel_label_set_accel_widget
 gtk_accel_map_add_entry
