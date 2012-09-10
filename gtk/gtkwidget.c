@@ -642,7 +642,6 @@ static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 static void             gtk_widget_invalidate_widget_windows    (GtkWidget        *widget,
 								 cairo_region_t        *region);
 static GdkScreen *      gtk_widget_get_screen_unchecked         (GtkWidget        *widget);
-static void		gtk_widget_queue_shallow_draw		(GtkWidget        *widget);
 static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
                                                                  guint      signal_id);
 
@@ -4650,7 +4649,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (gtk_widget_get_realized (widget))
-    gtk_widget_queue_shallow_draw (widget);
+    gtk_widget_queue_draw (widget);
 
   _gtk_size_group_queue_resize (widget, 0);
 }
@@ -4770,29 +4769,6 @@ gtk_widget_invalidate_widget_windows (GtkWidget *widget,
 
   gdk_window_invalidate_maybe_recurse (priv->window, region,
 				       invalidate_predicate, widget);
-}
-
-/**
- * gtk_widget_queue_shallow_draw:
- * @widget: a #GtkWidget
- *
- * Like gtk_widget_queue_draw(), but only windows owned
- * by @widget are invalidated.
- **/
-static void
-gtk_widget_queue_shallow_draw (GtkWidget *widget)
-{
-  GdkRectangle rect;
-  cairo_region_t *region;
-
-  if (!gtk_widget_get_realized (widget))
-    return;
-
-  gtk_widget_get_allocation (widget, &rect);
-
-  region = cairo_region_create_rectangle (&rect);
-  gtk_widget_invalidate_widget_windows (widget, region);
-  cairo_region_destroy (region);
 }
 
 /**
@@ -5856,7 +5832,7 @@ static gboolean
 gtk_widget_real_focus_in_event (GtkWidget     *widget,
                                 GdkEventFocus *event)
 {
-  gtk_widget_queue_shallow_draw (widget);
+  gtk_widget_queue_draw (widget);
 
   return FALSE;
 }
@@ -5865,7 +5841,7 @@ static gboolean
 gtk_widget_real_focus_out_event (GtkWidget     *widget,
                                  GdkEventFocus *event)
 {
-  gtk_widget_queue_shallow_draw (widget);
+  gtk_widget_queue_draw (widget);
 
   return FALSE;
 }
