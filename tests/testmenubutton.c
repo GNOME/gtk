@@ -37,8 +37,8 @@ int main (int argc, char **argv)
 		GtkWidget *item;
 		char *label;
 
-		label = g_strdup_printf ("Item %d", i);
-		item = gtk_menu_item_new_with_label (label);
+		label = g_strdup_printf ("Item _%d", i);
+		item = gtk_menu_item_new_with_mnemonic (label);
 		g_free (label);
 		gtk_menu_attach (GTK_MENU (menu_widget),
 				 item,
@@ -59,7 +59,7 @@ int main (int argc, char **argv)
 	menu = g_menu_new ();
 	for (i = 5; i > 0; i--) {
 		char *label;
-		label = g_strdup_printf ("Item %d", i);
+		label = g_strdup_printf ("Item _%d", i);
 		g_menu_insert (menu, i - 1, label, NULL);
 		g_free (label);
 	}
