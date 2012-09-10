@@ -2644,13 +2644,18 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
                                     gdouble           width,
                                     gdouble           height)
 {
-  if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_SPINNER))
+  GtkThemingBackground bg;
+  
+  _gtk_theming_background_init (&bg, engine, x, y, width, height, 0);
+  
+  if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_SPINNER) &&
+      !_gtk_theming_background_has_background_image (&bg))
     {
       render_spinner (engine, cr, x, y, width, height);
     }
   else
     {
-      gtk_theming_engine_render_background (engine, cr, x, y, width, height);
+      _gtk_theming_background_render (&bg, cr);
       gtk_theming_engine_render_frame (engine, cr, x, y, width, height);
     }
 }
