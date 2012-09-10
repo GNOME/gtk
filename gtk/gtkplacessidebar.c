@@ -2053,10 +2053,10 @@ rename_shortcut_cb (GtkMenuItem           *item,
 static void
 remove_selected_bookmarks (GtkPlacesSidebar *sidebar)
 {
-#if DO_NOT_COMPILE
 	GtkTreeIter iter;
 	PlaceType type;
-	int index;
+	char *uri;
+	GFile *file;
 
 	if (!get_selected_iter (sidebar, &iter)) {
 		return;
@@ -2071,11 +2071,14 @@ remove_selected_bookmarks (GtkPlacesSidebar *sidebar)
 	}
 
 	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
-			    PLACES_SIDEBAR_COLUMN_INDEX, &index,
+			    PLACES_SIDEBAR_COLUMN_URI, &uri,
 			    -1);
 
-	nautilus_bookmark_list_delete_item_at (sidebar->bookmarks, index);
-#endif
+	file = g_file_new_for_uri (uri);
+	_gtk_bookmarks_manager_remove_bookmark (sidebar->bookmarks_manager, file, NULL); /* NULL-GError */
+
+	g_object_unref (file);
+	g_free (uri);
 }
 
 static void
