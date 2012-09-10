@@ -3010,26 +3010,25 @@ bookmarks_edited (GtkCellRenderer       *cell,
 		  gchar                 *new_text,
 		  GtkPlacesSidebar *sidebar)
 {
-#if DO_NOT_COMPILE
 	GtkTreePath *path;
 	GtkTreeIter iter;
-	NautilusBookmark *bookmark;
-	int index;
+	char *uri;
+	GFile *file;
 
 	g_object_set (cell, "editable", FALSE, NULL);
 
 	path = gtk_tree_path_new_from_string (path_string);
 	gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store), &iter, path);
 	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
-		            PLACES_SIDEBAR_COLUMN_INDEX, &index,
+		            PLACES_SIDEBAR_COLUMN_URI, &uri,
 		            -1);
 	gtk_tree_path_free (path);
-	bookmark = nautilus_bookmark_list_item_at (sidebar->bookmarks, index);
 
-	if (bookmark != NULL) {
-		nautilus_bookmark_set_custom_name (bookmark, new_text);
-	}
-#endif
+	file = g_file_new_for_uri (uri);
+	_gtk_bookmarks_manager_set_bookmark_label (sidebar->bookmarks_manager, file, new_text);
+
+	g_object_unref (file);
+	g_free (uri);
 }
 
 static void
