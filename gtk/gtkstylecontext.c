@@ -3057,7 +3057,8 @@ gtk_style_context_start_animations (GtkStyleContext      *context,
   animated = style_data_new ();
   animated->store = _gtk_css_animated_values_new (style_data_lookup (context)->store,
                                                   previous,
-                                                  timestamp);
+                                                  timestamp,
+                                                  context);
 
   if (_gtk_css_animated_values_is_finished (GTK_CSS_ANIMATED_VALUES (animated->store)))
     {

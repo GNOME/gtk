@@ -52,7 +52,8 @@ GType                   _gtk_css_animated_values_get_type             (void) G_G
 
 GtkCssComputedValues *  _gtk_css_animated_values_new                  (GtkCssComputedValues     *computed,
                                                                        GtkCssComputedValues     *source,
-                                                                       gint64                    timestamp);
+                                                                       gint64                    timestamp,
+                                                                       GtkStyleContext          *context);
 
 GtkBitmask *            _gtk_css_animated_values_advance              (GtkCssAnimatedValues     *values,
                                                                        gint64                    timestamp) G_GNUC_WARN_UNUSED_RESULT;

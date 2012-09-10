@@ -21,14 +21,18 @@
 
 #include "gtkcssanimatedvaluesprivate.h"
 
+#include "gtkcssanimationprivate.h"
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcssenumvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransitionprivate.h"
 #include "gtkstyleanimationprivate.h"
+#include "gtkstylepropertiesprivate.h"
 #include "gtkstylepropertyprivate.h"
+#include "gtkstyleproviderprivate.h"
 
 G_DEFINE_TYPE (GtkCssAnimatedValues, _gtk_css_animated_values, GTK_TYPE_CSS_COMPUTED_VALUES)
 
@@ -176,7 +180,6 @@ gtk_css_animated_values_start_transitions (GtkCssAnimatedValues *values,
   delays = _gtk_css_computed_values_get_value (computed, GTK_CSS_PROPERTY_TRANSITION_DELAY);
   timing_functions = _gtk_css_computed_values_get_value (computed, GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION);
 
-
   for (i = 0; i < GTK_CSS_PROPERTY_N_PROPERTIES; i++)
     {
       GtkStyleAnimation *animation;
@@ -215,20 +218,97 @@ gtk_css_animated_values_start_transitions (GtkCssAnimatedValues *values,
     }
 }
 
+static GtkStyleAnimation *
+gtk_css_animated_values_find_animation (GtkCssAnimatedValues *values,
+                                        const char           *name)
+{
+  GSList *list;
+
+  for (list = values->animations; list; list = list->next)
+    {
+      if (!GTK_IS_CSS_ANIMATION (list->data))
+        continue;
+
+      if (g_str_equal (_gtk_css_animation_get_name (list->data), name))
+        return list->data;
+    }
+
+  return NULL;
+}
+
+static void
+gtk_css_animated_values_start_css_animations (GtkCssAnimatedValues *values,
+                                              gint64                timestamp,
+                                              GtkStyleContext      *context)
+{
+  GtkCssComputedValues *computed;
+  GtkStyleProviderPrivate *provider;
+  GtkCssValue *durations, *delays, *timing_functions, *animations;
+  GtkCssValue *iteration_counts, *directions, *play_states, *fill_modes;
+  guint i;
+
+  computed = GTK_CSS_COMPUTED_VALUES (values);
+
+  provider = _gtk_style_context_get_style_provider (context);
+  animations = _gtk_css_computed_values_get_value (computed, GTK_CSS_PROPERTY_ANIMATION_NAME);
+  durations = _gtk_css_computed_values_get_value (computed, GTK_CSS_PROPERTY_ANIMATION_DURATION);
+  delays = _gtk_css_computed_values_get_value (computed, GTK_CSS_PROPERTY_ANIMATION_DELAY);
+  timing_functions = _gtk_css_computed_values_get_value (computed, GTK_CSS_PROPERTY_ANIMATION_TIMING_FUNCTION);
+  iteration_counts = _gtk_css_computed_values_get_value (computed, GTK_CSS_PROPERTY_ANIMATION_ITERATION_COUNT);
+  directions = _gtk_css_computed_values_get_value (computed, GTK_CSS_PROPERTY_ANIMATION_DIRECTION);
+  play_states = _gtk_css_computed_values_get_value (computed, GTK_CSS_PROPERTY_ANIMATION_PLAY_STATE);
+  fill_modes = _gtk_css_computed_values_get_value (computed, GTK_CSS_PROPERTY_ANIMATION_FILL_MODE);
+
+  for (i = 0; i < _gtk_css_array_value_get_n_values (animations); i++)
+    {
+      GtkStyleAnimation *animation;
+      GtkCssKeyframes *keyframes;
+      const char *name;
+      
+      name = _gtk_css_ident_value_get (_gtk_css_array_value_get_nth (animations, i));
+      if (g_ascii_strcasecmp (name, "none") == 0)
+        continue;
+
+      animation = gtk_css_animated_values_find_animation (values, name);
+      if (animation)
+        continue;
+
+      keyframes = _gtk_style_provider_private_get_keyframes (provider, name);
+      if (keyframes == NULL)
+        continue;
+
+      keyframes = _gtk_css_keyframes_compute (keyframes, context);
+
+      animation = _gtk_css_animation_new (name,
+                                          keyframes,
+                                          timestamp + _gtk_css_number_value_get (_gtk_css_array_value_get_nth (delays, i), 100) * G_USEC_PER_SEC,
+                                          _gtk_css_number_value_get (_gtk_css_array_value_get_nth (durations, i), 100) * G_USEC_PER_SEC,
+                                          _gtk_css_array_value_get_nth (timing_functions, i),
+                                          _gtk_css_direction_value_get (_gtk_css_array_value_get_nth (directions, i)),
+                                          _gtk_css_play_state_value_get (_gtk_css_array_value_get_nth (play_states, i)),
+                                          _gtk_css_fill_mode_value_get (_gtk_css_array_value_get_nth (fill_modes, i)),
+                                          _gtk_css_number_value_get (_gtk_css_array_value_get_nth (iteration_counts, i), 100));
+      values->animations = g_slist_prepend (values->animations, animation);
+    }
+}
+
 /* PUBLIC API */
 
 static void
 gtk_css_animated_values_start_animations (GtkCssAnimatedValues *values,
                                           gint64                timestamp,
-                                          GtkCssComputedValues *source)
+                                          GtkCssComputedValues *source,
+                                          GtkStyleContext      *context)
 {
   gtk_css_animated_values_start_transitions (values, timestamp, source);
+  gtk_css_animated_values_start_css_animations (values, timestamp, context);
 }
 
 GtkCssComputedValues *
 _gtk_css_animated_values_new (GtkCssComputedValues *computed,
                               GtkCssComputedValues *source,
-                              gint64                timestamp)
+                              gint64                timestamp,
+                              GtkStyleContext      *context)
 {
   GtkCssAnimatedValues *values;
   GtkCssValue *value;
@@ -237,6 +317,7 @@ _gtk_css_animated_values_new (GtkCssComputedValues *computed,
 
   g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (computed), NULL);
   g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (source), NULL);
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
   values = g_object_new (GTK_TYPE_CSS_ANIMATED_VALUES, NULL);
 
@@ -264,7 +345,7 @@ _gtk_css_animated_values_new (GtkCssComputedValues *computed,
   GTK_CSS_COMPUTED_VALUES (values)->depends_on_color = _gtk_bitmask_copy (computed->depends_on_color);
   GTK_CSS_COMPUTED_VALUES (values)->depends_on_font_size = _gtk_bitmask_copy (computed->depends_on_font_size);
 
-  gtk_css_animated_values_start_animations (values, timestamp, source);
+  gtk_css_animated_values_start_animations (values, timestamp, source, context);
 
   ignore = _gtk_css_animated_values_advance (values, timestamp);
   _gtk_bitmask_free (ignore);
