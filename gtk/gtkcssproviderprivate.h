@@ -22,7 +22,12 @@
 
 G_BEGIN_DECLS
 
-gchar *_gtk_css_provider_get_theme_dir (void);
+gchar *         _gtk_css_provider_get_theme_dir        (void);
+
+GtkCssProvider *_gtk_css_provider_get_named_for_screen (GdkScreen   *screen,
+                                                        const gchar *name,
+                                                        const gchar *variant);
+
 
 G_END_DECLS
 

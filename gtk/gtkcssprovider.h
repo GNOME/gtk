@@ -86,8 +86,7 @@ gboolean         gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
                                                   const gchar     *path,
                                                   GError         **error);
 
-GtkCssProvider * gtk_css_provider_get_default (void);
-
+GtkCssProvider * gtk_css_provider_get_default    (void);
 GtkCssProvider * gtk_css_provider_get_named (const gchar *name,
                                              const gchar *variant);
 

@@ -2607,6 +2607,196 @@ _gtk_css_provider_load_from_resource (GtkCssProvider  *css_provider,
   return result;
 }
 
+static char *
+_find_theme_path (const gchar    *name,
+                  const gchar    *variant)
+{
+  gchar *subpath;
+  gchar *path = NULL;
+
+  if (variant)
+    subpath = g_strdup_printf ("gtk-3.0" G_DIR_SEPARATOR_S "gtk-%s.css", variant);
+  else
+    subpath = g_strdup ("gtk-3.0" G_DIR_SEPARATOR_S "gtk.css");
+
+  /* First look in the user's config directory
+   */
+  path = g_build_filename (g_get_user_data_dir (), "themes", name, subpath, NULL);
+  if (!g_file_test (path, G_FILE_TEST_EXISTS))
+    {
+      g_free (path);
+      path = NULL;
+    }
+
+  /* Next look in the user's home directory
+   */
+  if (!path)
+    {
+      const gchar *home_dir;
+
+      home_dir = g_get_home_dir ();
+      if (home_dir)
+        {
+          path = g_build_filename (home_dir, ".themes", name, subpath, NULL);
+
+          if (!g_file_test (path, G_FILE_TEST_EXISTS))
+            {
+              g_free (path);
+              path = NULL;
+            }
+        }
+    }
+
+  if (!path)
+    {
+      gchar *theme_dir;
+
+      theme_dir = _gtk_css_provider_get_theme_dir ();
+      path = g_build_filename (theme_dir, name, subpath, NULL);
+      g_free (theme_dir);
+
+      if (!g_file_test (path, G_FILE_TEST_EXISTS))
+        {
+          g_free (path);
+          path = NULL;
+        }
+    }
+
+  g_free (subpath);
+
+  return path;
+}
+
+static gboolean
+_provider_load (GtkCssProvider *provider,
+                const gchar    *name,
+                const gchar    *variant)
+{
+  gchar *resource_path;
+  gboolean loaded = FALSE;
+
+  g_assert (provider != NULL);
+
+  if (variant)
+    resource_path = g_strdup_printf ("/org/gtk/libgtk/%s-%s.css", name, variant);
+  else
+    resource_path = g_strdup_printf ("/org/gtk/libgtk/%s.css", name);
+
+  if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
+    {
+      loaded = _gtk_css_provider_load_from_resource (provider, resource_path);
+    }
+  g_free (resource_path);
+
+  if (!loaded)
+    {
+      char *path;
+
+      path = _find_theme_path (name, variant);
+
+      if (path)
+        {
+          char *dir;
+          char *resource_file;
+          GResource *resource;
+
+          dir = g_path_get_dirname (path);
+          resource_file = g_build_filename (dir, "gtk.gresource", NULL);
+          resource = g_resource_load (resource_file, NULL);
+          g_free (resource_file);
+
+          if (resource != NULL)
+            g_resources_register (resource);
+
+          loaded = gtk_css_provider_load_from_path (provider, path, NULL);
+          if (!loaded)
+            {
+              if (resource != NULL)
+                {
+                  g_resources_unregister (resource);
+                  g_resource_unref (resource);
+                }
+            }
+          else
+            {
+              /* Only set this after load success, as load_from_path will clear it */
+              provider->priv->resource = resource;
+            }
+
+          g_free (dir);
+        }
+      g_free (path);
+    }
+
+  return loaded;
+}
+
+static void
+destroy_theme_cache (GHashTable *themes)
+{
+  g_hash_table_destroy (themes);
+}
+
+/*
+ * _gtk_css_provider_get_named_for_screen:
+ * @screen: a #GdkScreen.
+ * @name: A theme name
+ * @variant: (allow-none): variant to load, for example, "dark", or
+ *     %NULL for the default
+ *
+ * Loads a theme from the usual theme paths
+ *
+ * Returns: (transfer none): a #GtkCssProvider with the theme loaded.
+ *     This memory is owned by GTK+, and you must not free it.
+ */
+GtkCssProvider *
+_gtk_css_provider_get_named_for_screen (GdkScreen   *screen,
+                                        const gchar *name,
+                                        const gchar *variant)
+{
+  GtkCssProvider *provider;
+  GHashTable *themes;
+  gchar *key;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  themes = g_object_get_data (G_OBJECT (screen), "gtk-themes");
+  if (G_UNLIKELY (!themes))
+    {
+      themes = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+      g_object_set_data_full (G_OBJECT (screen),
+                              I_("gtk-themes"),
+                              themes,
+                              (GDestroyNotify)destroy_theme_cache);
+    }
+
+  if (name == NULL)
+    key = g_strdup ("");
+  else if (variant == NULL)
+    key = g_strdup (name);
+  else
+    key = g_strconcat (name, "-", variant, NULL);
+
+  provider = g_hash_table_lookup (themes, key);
+
+  if (!provider)
+    {
+      gboolean save = TRUE;
+
+      provider = gtk_css_provider_new ();
+
+      if (name != NULL)
+        save = _provider_load (provider, name, variant);
+
+      if (save)
+        g_hash_table_insert (themes, g_strdup (key), provider);
+    }
+
+  g_free (key);
+
+  return provider;
+}
+
 /**
  * gtk_css_provider_get_default:
  *
@@ -2619,14 +2809,12 @@ _gtk_css_provider_load_from_resource (GtkCssProvider  *css_provider,
 GtkCssProvider *
 gtk_css_provider_get_default (void)
 {
-  static GtkCssProvider *provider;
+  GdkScreen *screen = gdk_screen_get_default ();
 
-  if (G_UNLIKELY (!provider))
-    {
-      provider = gtk_css_provider_new ();
-    }
-
-  return provider;
+  if (screen)
+    return _gtk_css_provider_get_named_for_screen (screen, NULL, NULL);
+  else
+    return NULL;
 }
 
 gchar *
@@ -2643,153 +2831,6 @@ _gtk_css_provider_get_theme_dir (void)
     path = g_build_filename (_gtk_get_data_prefix (), "share", "themes", NULL);
 
   return path;
-}
-
-/**
- * gtk_css_provider_get_named:
- * @name: A theme name
- * @variant: (allow-none): variant to load, for example, "dark", or
- *     %NULL for the default
- *
- * Loads a theme from the usual theme paths
- *
- * Returns: (transfer none): a #GtkCssProvider with the theme loaded.
- *     This memory is owned by GTK+, and you must not free it.
- */
-GtkCssProvider *
-gtk_css_provider_get_named (const gchar *name,
-                            const gchar *variant)
-{
-  static GHashTable *themes = NULL;
-  GtkCssProvider *provider;
-  gchar *key;
-
-  if (variant == NULL)
-    key = (gchar *)name;
-  else
-    key = g_strconcat (name, "-", variant, NULL);
-
-  if (G_UNLIKELY (!themes))
-    themes = g_hash_table_new (g_str_hash, g_str_equal);
-
-  provider = g_hash_table_lookup (themes, key);
-
-  if (!provider)
-    {
-      gchar *resource_path = NULL;
-
-      if (variant)
-        resource_path = g_strdup_printf ("/org/gtk/libgtk/%s-%s.css", name, variant);
-      else
-        resource_path = g_strdup_printf ("/org/gtk/libgtk/%s.css", name);
-
-      if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
-	{
-	  provider = gtk_css_provider_new ();
-	  if (!_gtk_css_provider_load_from_resource (provider, resource_path))
-	    {
-	      g_object_unref (provider);
-	      provider = NULL;
-	    }
-	}
-      g_free (resource_path);
-    }
-
-  if (!provider)
-    {
-      gchar *subpath, *path = NULL;
-
-      if (variant)
-        subpath = g_strdup_printf ("gtk-3.0" G_DIR_SEPARATOR_S "gtk-%s.css", variant);
-      else
-        subpath = g_strdup ("gtk-3.0" G_DIR_SEPARATOR_S "gtk.css");
-
-      /* First look in the user's config directory
-       */
-      path = g_build_filename (g_get_user_data_dir (), "themes", name, subpath, NULL);
-      if (!g_file_test (path, G_FILE_TEST_EXISTS))
-        {
-          g_free (path);
-          path = NULL;
-        }
-
-      /* Next look in the user's home directory
-       */
-      if (!path)
-        {
-          const gchar *home_dir;
-
-          home_dir = g_get_home_dir ();
-          if (home_dir)
-            {
-              path = g_build_filename (home_dir, ".themes", name, subpath, NULL);
-
-              if (!g_file_test (path, G_FILE_TEST_EXISTS))
-                {
-                  g_free (path);
-                  path = NULL;
-                }
-            }
-        }
-
-      if (!path)
-        {
-          gchar *theme_dir;
-
-          theme_dir = _gtk_css_provider_get_theme_dir ();
-          path = g_build_filename (theme_dir, name, subpath, NULL);
-          g_free (theme_dir);
-
-          if (!g_file_test (path, G_FILE_TEST_EXISTS))
-            {
-              g_free (path);
-              path = NULL;
-            }
-        }
-
-      g_free (subpath);
-
-      if (path)
-        {
-          char *dir, *resource_file;
-          GResource *resource;
-
-          provider = gtk_css_provider_new ();
-
-          dir = g_path_get_dirname (path);
-          resource_file = g_build_filename (dir, "gtk.gresource", NULL);
-          resource = g_resource_load (resource_file, NULL);
-          g_free (resource_file);
-
-          if (resource != NULL)
-            g_resources_register (resource);
-
-          if (!gtk_css_provider_load_from_path (provider, path, NULL))
-            {
-	      if (resource != NULL)
-		{
-		  g_resources_unregister (resource);
-		  g_resource_unref (resource);
-		}
-              g_object_unref (provider);
-              provider = NULL;
-            }
-          else
-	    {
-	      /* Only set this after load success, as load_from_path will clear it */
-	      provider->priv->resource = resource;
-	      g_hash_table_insert (themes, g_strdup (key), provider);
-	    }
-
-          g_free (path);
-          g_free (dir);
-        }
-    }
-
-  if (key != name)
-    g_free (key);
-
-  return provider;
 }
 
 static int
