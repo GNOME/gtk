@@ -65,6 +65,7 @@ void gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean sh
 void gtk_places_sidebar_set_show_properties (GtkPlacesSidebar *sidebar, gboolean show_properties);
 
 void gtk_places_sidebar_set_show_trash (GtkPlacesSidebar *sidebar, gboolean show_trash);
+void gtk_places_sidebar_set_trash_is_full (GtkPlacesSidebar *sidebar, gboolean is_full);
 
 G_END_DECLS
 

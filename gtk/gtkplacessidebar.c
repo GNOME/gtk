@@ -36,6 +36,15 @@
  *
  * * Nautilus needs to use gtk_places_sidebar_set_uri() instead of built-in
  *   notification from the NautilusWindowSlot.
+ *
+ * * Nautilus needs to do the following for trash handling:
+ *
+ *     * Call gtk_places_sidebar_set_show_trash().
+ *
+ *     * Set up a NautilusTrashMonitor and when its state changes, call
+ *       gtk_places_sidebar_set_trash_is_full ().
+ *
+ *     * Connect to the "empty-trash-requested" signal on the sidebar and empty the trash when it is emitted.
  */
 
 #include "config.h"
@@ -115,19 +124,21 @@ struct _GtkPlacesSidebar {
 	guint show_desktop : 1;
 	guint show_properties : 1;
 	guint show_trash : 1;
+	guint trash_is_full : 1;
 };
 
 struct _GtkPlacesSidebarClass {
 	GtkScrolledWindowClass parent;
 
-	void (* location_selected)  (GtkPlacesSidebar *sidebar,
-				     GFile            *location,
-				     GtkPlacesOpenMode open_mode);
-	void (* initiated_unmount)  (GtkPlacesSidebar *sidebar,
-				     gboolean          initiated_unmount);
-	void (* show_error_message) (GtkPlacesSidebar *sidebar,
-				     const char       *primary,
-				     const char       *secondary);
+	void (* location_selected)     (GtkPlacesSidebar *sidebar,
+				        GFile            *location,
+				        GtkPlacesOpenMode open_mode);
+	void (* empty_trash_requested) (GtkPlacesSidebar *sidebar);
+	void (* initiated_unmount)     (GtkPlacesSidebar *sidebar,
+				        gboolean          initiated_unmount);
+	void (* show_error_message)    (GtkPlacesSidebar *sidebar,
+				        const char       *primary,
+				        const char       *secondary);
 };
 
 enum {
@@ -167,6 +178,7 @@ typedef enum {
 
 enum {
 	LOCATION_SELECTED,
+	EMPTY_TRASH_REQUESTED,
 	INITIATED_UNMOUNT,
 	SHOW_ERROR_MESSAGE,
 	LAST_SIGNAL,
@@ -179,6 +191,7 @@ enum {
 #define ICON_NAME_EJECT		"media-eject-symbolic"
 #define ICON_NAME_NETWORK	"network-workgroup"
 #define ICON_NAME_TRASH		"user-trash"
+#define ICON_NAME_TRASH_FULL	"user-trash-full"
 
 #define ICON_NAME_FOLDER_DESKTOP	"user-desktop"
 #define ICON_NAME_FOLDER_DOCUMENTS	"folder-documents"
@@ -262,6 +275,12 @@ emit_location_selected (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpe
 
 	g_signal_emit (sidebar, places_sidebar_signals[LOCATION_SELECTED], 0,
 		       location, open_mode);
+}
+
+static void
+emit_empty_trash_requested (GtkPlacesSidebar *sidebar)
+{
+	g_signal_emit (sidebar, places_sidebar_signals[EMPTY_TRASH_REQUESTED], 0);
 }
 
 static void
@@ -708,7 +727,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
 	if (sidebar->show_trash) {
 		mount_uri = "trash:///"; /* No need to strdup */
-		icon = g_themed_icon_new (ICON_NAME_TRASH);
+		icon = g_themed_icon_new (sidebar->trash_is_full ? ICON_NAME_TRASH_FULL : ICON_NAME_TRASH);
 		add_place (sidebar, PLACES_BUILT_IN,
 			   SECTION_COMPUTER,
 			   _("Trash"), icon, mount_uri,
@@ -1729,9 +1748,7 @@ bookmarks_check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 
 	gtk_widget_set_sensitive (sidebar->popup_menu_remove_item, (type == PLACES_BOOKMARK));
 	gtk_widget_set_sensitive (sidebar->popup_menu_rename_item, (type == PLACES_BOOKMARK));
-#if DO_NOT_COMPILE
-	gtk_widget_set_sensitive (sidebar->popup_menu_empty_trash_item, !nautilus_trash_monitor_is_empty ());
-#endif
+	gtk_widget_set_sensitive (sidebar->popup_menu_empty_trash_item, sidebar->trash_is_full);
 
  	check_visibility (mount, volume, drive,
  			  &show_mount, &show_unmount, &show_eject, &show_rescan, &show_start, &show_stop);
@@ -2534,12 +2551,10 @@ stop_shortcut_cb (GtkMenuItem           *item,
 }
 
 static void
-empty_trash_cb (GtkMenuItem           *item,
+empty_trash_cb (GtkMenuItem      *item,
 		GtkPlacesSidebar *sidebar)
 {
-#if DO_NOT_COMPILE
-	nautilus_file_operations_empty_trash (GTK_WIDGET (sidebar->window));
-#endif
+	emit_empty_trash_requested (sidebar);
 }
 
 static gboolean
@@ -3022,23 +3037,6 @@ bookmarks_editing_canceled (GtkCellRenderer       *cell,
 	g_object_set (cell, "editable", FALSE, NULL);
 }
 
-#if DO_NOT_COMPILE
-static void
-trash_state_changed_cb (NautilusTrashMonitor *trash_monitor,
-			gboolean             state,
-			gpointer             data)
-{
-	GtkPlacesSidebar *sidebar;
-
-	sidebar = GTK_PLACES_SIDEBAR (data);
-
-	/* The trash icon changed, update the sidebar */
-	update_places (sidebar);
-
-	bookmarks_check_popup_sensitivity (sidebar);
-}
-#endif
-
 static gboolean
 tree_selection_func (GtkTreeSelection *selection,
 		     GtkTreeModel *model,
@@ -3476,13 +3474,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
 	tree_view_set_activate_on_single_click (sidebar->tree_view);
 
-#if DO_NOT_COMPILE
-	g_signal_connect_object (nautilus_trash_monitor_get (),
-				 "trash_state_changed",
-				 G_CALLBACK (trash_state_changed_cb),
-				 sidebar, 0);
-#endif
-
 	sidebar->hostname = g_strdup (_("Computer"));
 	g_dbus_proxy_new_for_bus (G_BUS_TYPE_SYSTEM,
 				  G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES,
@@ -3570,6 +3561,15 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_NONE, 2,
 			      G_TYPE_OBJECT,
 			      GTK_TYPE_PLACES_OPEN_MODE);
+
+	places_sidebar_signals [EMPTY_TRASH_REQUESTED] =
+		g_signal_new (I_("empty-trash-requested"),
+			      G_OBJECT_CLASS_TYPE (gobject_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, empty_trash_requested),
+			      NULL, NULL,
+			      _gtk_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
 
 	places_sidebar_signals [INITIATED_UNMOUNT] =
 		g_signal_new (I_("initiated-unmount"),
@@ -3820,3 +3820,12 @@ gtk_places_sidebar_set_show_trash (GtkPlacesSidebar *sidebar, gboolean show_tras
 	update_places (sidebar);
 }
 
+void
+gtk_places_sidebar_set_trash_is_full (GtkPlacesSidebar *sidebar, gboolean is_full)
+{
+	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+	sidebar->trash_is_full = !!is_full;
+	update_places (sidebar);
+	bookmarks_check_popup_sensitivity (sidebar);
+}
