@@ -64,6 +64,11 @@ gboolean _gtk_bookmarks_manager_remove_bookmark (GtkBookmarksManager *manager,
 						 GFile               *file,
 						 GError             **error);
 
+gboolean _gtk_bookmarks_manager_reorder_bookmark (GtkBookmarksManager *manager,
+						  GFile               *file,
+						  gint                 new_position,
+						  GError             **error);
+
 gchar * _gtk_bookmarks_manager_get_bookmark_label (GtkBookmarksManager *manager,
 						   GFile               *file);
 

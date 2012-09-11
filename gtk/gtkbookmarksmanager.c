@@ -382,6 +382,55 @@ _gtk_bookmarks_manager_remove_bookmark (GtkBookmarksManager *manager,
   return TRUE;
 }
 
+gboolean
+_gtk_bookmarks_manager_reorder_bookmark (GtkBookmarksManager *manager,
+					 GFile               *file,
+					 gint                 new_position,
+					 GError             **error)
+{
+  GSList *link;
+  GFile *bookmarks_file;
+
+  g_return_val_if_fail (manager != NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  if (!manager->bookmarks)
+    return FALSE;
+
+  link = find_bookmark_link_for_file (manager->bookmarks, file);
+  if (link)
+    {
+      GtkBookmark *bookmark = link->data; 
+
+      manager->bookmarks = g_slist_remove_link (manager->bookmarks, link);
+      g_slist_free_1 (link);
+
+      manager->bookmarks = g_slist_insert (manager->bookmarks, bookmark, new_position);
+    }
+  else
+    {
+      gchar *uri = g_file_get_uri (file);
+
+      g_set_error (error,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
+		   "%s does not exist in the bookmarks list",
+		   uri);
+
+      g_free (uri);
+
+      return FALSE;
+    }
+
+  bookmarks_file = get_bookmarks_file ();
+  save_bookmarks (bookmarks_file, manager->bookmarks);
+  g_object_unref (bookmarks_file);
+
+  notify_changed (manager);
+
+  return TRUE;
+}
+
 gchar *
 _gtk_bookmarks_manager_get_bookmark_label (GtkBookmarksManager *manager,
 					   GFile               *file)

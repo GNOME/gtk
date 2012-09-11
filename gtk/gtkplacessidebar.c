@@ -32,6 +32,8 @@
  *
  * * Fix FIXMEs
  *
+ * * Grep for "NULL-GError" and see if they should be taken care of
+ *
  * * Nautilus needs to use gtk_places_sidebar_set_uri() instead of built-in
  *   notification from the NautilusWindowSlot.
  */
@@ -1437,10 +1439,9 @@ static void
 reorder_bookmarks (GtkPlacesSidebar *sidebar,
 		   int                   new_position)
 {
-#if DO_NOT_COMPILE
 	GtkTreeIter iter;
-	PlaceType type;
-	int old_position;
+	char *uri;
+	GFile *file;
 
 	/* Get the selected path */
 	if (!get_selected_iter (sidebar, &iter)) {
@@ -1448,19 +1449,14 @@ reorder_bookmarks (GtkPlacesSidebar *sidebar,
 	}
 
 	gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
-			    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &type,
-			    PLACES_SIDEBAR_COLUMN_INDEX, &old_position,
+			    PLACES_SIDEBAR_COLUMN_URI, &uri,
 			    -1);
 
-	if (type != PLACES_BOOKMARK ||
-	    old_position < 0 ||
-	    old_position >= nautilus_bookmark_list_length (sidebar->bookmarks)) {
-		return;
-	}
+	file = g_file_new_for_uri (uri);
+	_gtk_bookmarks_manager_reorder_bookmark (sidebar->bookmarks_manager, file, new_position, NULL); /* NULL-GError */
 
-	nautilus_bookmark_list_move_item (sidebar->bookmarks, old_position,
-					  new_position);
-#endif
+	g_object_unref (file);
+	g_free (uri);
 }
 
 static void
