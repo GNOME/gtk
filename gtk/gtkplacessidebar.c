@@ -186,23 +186,23 @@ enum {
 };
 
 /* Names for themed icons */
-#define ICON_NAME_HOME		"user-home"
+#define ICON_NAME_HOME		"user-home-symbolic"
 #define ICON_NAME_DESKTOP	"user-desktop"
-#define ICON_NAME_FILESYSTEM	"drive-harddisk-system"
+#define ICON_NAME_FILESYSTEM	"drive-harddisk-symbolic"
 #define ICON_NAME_EJECT		"media-eject-symbolic"
-#define ICON_NAME_NETWORK	"network-workgroup"
-#define ICON_NAME_TRASH		"user-trash"
-#define ICON_NAME_TRASH_FULL	"user-trash-full"
+#define ICON_NAME_NETWORK	"network-workgroup-symbolic"
+#define ICON_NAME_TRASH		"user-trash-symbolic"
+#define ICON_NAME_TRASH_FULL	"user-trash-full-symbolic"
 
 #define ICON_NAME_FOLDER_DESKTOP	"user-desktop"
-#define ICON_NAME_FOLDER_DOCUMENTS	"folder-documents"
-#define ICON_NAME_FOLDER_DOWNLOAD	"folder-download"
-#define ICON_NAME_FOLDER_MUSIC		"folder-music"
-#define ICON_NAME_FOLDER_PICTURES	"folder-pictures"
-#define ICON_NAME_FOLDER_PUBLIC_SHARE	"folder-publicshare"
-#define ICON_NAME_FOLDER_TEMPLATES	"folder-templates"
-#define ICON_NAME_FOLDER_VIDEOS		"folder-videos"
-#define ICON_NAME_FOLDER_SAVED_SEARCH	"folder-saved-search"
+#define ICON_NAME_FOLDER_DOCUMENTS	"folder-documents-symbolic"
+#define ICON_NAME_FOLDER_DOWNLOAD	"folder-download-symbolic"
+#define ICON_NAME_FOLDER_MUSIC		"folder-music-symbolic"
+#define ICON_NAME_FOLDER_PICTURES	"folder-pictures-symbolic"
+#define ICON_NAME_FOLDER_PUBLIC_SHARE	"folder-publicshare-symbolic"
+#define ICON_NAME_FOLDER_TEMPLATES	"folder-templates-symbolic"
+#define ICON_NAME_FOLDER_VIDEOS		"folder-videos-symbolic"
+#define ICON_NAME_FOLDER_SAVED_SEARCH	"folder-saved-search-symbolic"
 
 static guint places_sidebar_signals [LAST_SIGNAL] = { 0 };
 
