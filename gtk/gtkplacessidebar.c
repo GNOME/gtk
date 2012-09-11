@@ -3016,7 +3016,7 @@ bookmarks_edited (GtkCellRenderer       *cell,
 	gtk_tree_path_free (path);
 
 	file = g_file_new_for_uri (uri);
-	_gtk_bookmarks_manager_set_bookmark_label (sidebar->bookmarks_manager, file, new_text);
+	_gtk_bookmarks_manager_set_bookmark_label (sidebar->bookmarks_manager, file, new_text, NULL); /* NULL-GError */
 
 	g_object_unref (file);
 	g_free (uri);

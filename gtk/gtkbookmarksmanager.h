@@ -67,8 +67,9 @@ gboolean _gtk_bookmarks_manager_remove_bookmark (GtkBookmarksManager *manager,
 gchar * _gtk_bookmarks_manager_get_bookmark_label (GtkBookmarksManager *manager,
 						   GFile               *file);
 
-void _gtk_bookmarks_manager_set_bookmark_label (GtkBookmarksManager *manager,
-						GFile               *file,
-						const gchar         *label);
+gboolean _gtk_bookmarks_manager_set_bookmark_label (GtkBookmarksManager *manager,
+						    GFile               *file,
+						    const gchar         *label,
+						    GError             **error);
 
 #endif /* __GTK_BOOKMARKS_MANAGER_H__ */

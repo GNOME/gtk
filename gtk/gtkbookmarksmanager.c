@@ -276,38 +276,39 @@ _gtk_bookmarks_manager_list_bookmarks (GtkBookmarksManager *manager)
   return g_slist_reverse (files);
 }
 
+GSList *
+find_bookmark_link_for_file (GSList *bookmarks, GFile *file)
+{
+  for (; bookmarks; bookmarks = bookmarks->next)
+    {
+      GtkBookmark *bookmark = bookmarks->data;
+
+      if (g_file_equal (file, bookmark->file))
+	return bookmarks;
+    }
+
+  return NULL;
+}
+
 gboolean
 _gtk_bookmarks_manager_insert_bookmark (GtkBookmarksManager *manager,
 					GFile               *file,
 					gint                 position,
 					GError             **error)
 {
-  GSList *bookmarks;
+  GSList *link;
   GtkBookmark *bookmark;
-  gboolean result = TRUE;
   GFile *bookmarks_file;
 
   g_return_val_if_fail (manager != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  bookmarks = manager->bookmarks;
+  link = find_bookmark_link_for_file (manager->bookmarks, file);
 
-  while (bookmarks)
+  if (link)
     {
-      bookmark = bookmarks->data;
-      bookmarks = bookmarks->next;
-
-      if (g_file_equal (bookmark->file, file))
-	{
-	  /* File is already in bookmarks */
-	  result = FALSE;
-	  break;
-	}
-    }
-
-  if (!result)
-    {
-      gchar *uri = g_file_get_uri (file);
+      bookmark = link->data;
+      gchar *uri = g_file_get_uri (bookmark->file);
 
       g_set_error (error,
 		   GTK_FILE_CHOOSER_ERROR,
@@ -339,9 +340,7 @@ _gtk_bookmarks_manager_remove_bookmark (GtkBookmarksManager *manager,
 					GFile               *file,
 					GError             **error)
 {
-  GtkBookmark *bookmark;
-  GSList *bookmarks;
-  gboolean result = FALSE;
+  GSList *link;
   GFile *bookmarks_file;
 
   g_return_val_if_fail (manager != NULL, FALSE);
@@ -350,25 +349,16 @@ _gtk_bookmarks_manager_remove_bookmark (GtkBookmarksManager *manager,
   if (!manager->bookmarks)
     return FALSE;
 
-  bookmarks = manager->bookmarks;
-
-  while (bookmarks)
+  link = find_bookmark_link_for_file (manager->bookmarks, file);
+  if (link)
     {
-      bookmark = bookmarks->data;
+      GtkBookmark *bookmark = link->data;
 
-      if (g_file_equal (bookmark->file, file))
-	{
-	  result = TRUE;
-	  manager->bookmarks = g_slist_remove_link (manager->bookmarks, bookmarks);
-	  _gtk_bookmark_free (bookmark);
-	  g_slist_free_1 (bookmarks);
-	  break;
-	}
-
-      bookmarks = bookmarks->next;
+      manager->bookmarks = g_slist_remove_link (manager->bookmarks, link);
+      _gtk_bookmark_free (bookmark);
+      g_slist_free_1 (link);
     }
-
-  if (!result)
+  else
     {
       gchar *uri = g_file_get_uri (file);
 
@@ -421,40 +411,46 @@ _gtk_bookmarks_manager_get_bookmark_label (GtkBookmarksManager *manager,
   return label;
 }
 
-void
+gboolean
 _gtk_bookmarks_manager_set_bookmark_label (GtkBookmarksManager *manager,
 					   GFile               *file,
-					   const gchar         *label)
+					   const gchar         *label,
+					   GError             **error)
 {
-  gboolean changed = FALSE;
   GFile *bookmarks_file;
-  GSList *bookmarks;
+  GSList *link;
 
-  g_return_if_fail (manager != NULL);
-  g_return_if_fail (file != NULL);
+  g_return_val_if_fail (manager != NULL, FALSE);
+  g_return_val_if_fail (file != NULL, FALSE);
 
-  bookmarks = manager->bookmarks;
-
-  while (bookmarks)
+  link = find_bookmark_link_for_file (manager->bookmarks, file);
+  if (link)
     {
-      GtkBookmark *bookmark;
+      GtkBookmark *bookmark = link->data;
 
-      bookmark = bookmarks->data;
-      bookmarks = bookmarks->next;
+      g_free (bookmark->label);
+      bookmark->label = g_strdup (label);
+    }
+  else
+    {
+      gchar *uri = g_file_get_uri (file);
 
-      if (g_file_equal (file, bookmark->file))
-	{
-          g_free (bookmark->label);
-	  bookmark->label = g_strdup (label);
-	  changed = TRUE;
-	  break;
-	}
+      g_set_error (error,
+		   GTK_FILE_CHOOSER_ERROR,
+		   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
+		   "%s does not exist in the bookmarks list",
+		   uri);
+
+      g_free (uri);
+
+      return FALSE;
     }
 
   bookmarks_file = get_bookmarks_file ();
   save_bookmarks (bookmarks_file, manager->bookmarks);
   g_object_unref (bookmarks_file);
 
-  if (changed)
-    notify_changed (manager);
+  notify_changed (manager);
+
+  return TRUE;
 }
