@@ -62,6 +62,10 @@ void gtk_places_sidebar_set_multiple_windows_supported (GtkPlacesSidebar *sideba
 
 void gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_desktop);
 
+void gtk_places_sidebar_set_show_properties (GtkPlacesSidebar *sidebar, gboolean show_properties);
+
+void gtk_places_sidebar_set_show_trash (GtkPlacesSidebar *sidebar, gboolean show_trash);
+
 G_END_DECLS
 
 #endif /* __GTK_PLACES_SIDEBAR_H__ */

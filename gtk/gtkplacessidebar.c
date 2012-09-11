@@ -114,6 +114,8 @@ struct _GtkPlacesSidebar {
 	guint multiple_tabs_supported : 1;
 	guint multiple_windows_supported : 1;
 	guint show_desktop : 1;
+	guint show_properties : 1;
+	guint show_trash : 1;
 };
 
 struct _GtkPlacesSidebarClass {
@@ -705,14 +707,16 @@ update_places (GtkPlacesSidebar *sidebar)
 	/* XDG directories */
 	add_special_dirs (sidebar);
 
-	mount_uri = "trash:///"; /* No need to strdup */
-	icon = g_themed_icon_new (ICON_NAME_TRASH);
-	add_place (sidebar, PLACES_BUILT_IN,
-		   SECTION_COMPUTER,
-		   _("Trash"), icon, mount_uri,
-		   NULL, NULL, NULL, 0,
-		   _("Open the trash"));
-	g_object_unref (icon);
+	if (sidebar->show_trash) {
+		mount_uri = "trash:///"; /* No need to strdup */
+		icon = g_themed_icon_new (ICON_NAME_TRASH);
+		add_place (sidebar, PLACES_BUILT_IN,
+			   SECTION_COMPUTER,
+			   _("Trash"), icon, mount_uri,
+			   NULL, NULL, NULL, 0,
+			   _("Open the trash"));
+		g_object_unref (icon);
+	}
 
 	/* go through all connected drives */
 	drives = g_volume_monitor_get_connected_drives (volume_monitor);
@@ -1702,9 +1706,6 @@ bookmarks_check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 	GVolume *volume = NULL;
 	GMount *mount = NULL;
 	GFile *location;
-#if DO_NOT_COMPILE
-	NautilusDirectory *directory;
-#endif
 	gboolean show_mount;
 	gboolean show_unmount;
 	gboolean show_eject;
@@ -1742,28 +1743,22 @@ bookmarks_check_popup_sensitivity (GtkPlacesSidebar *sidebar)
  	check_visibility (mount, volume, drive,
  			  &show_mount, &show_unmount, &show_eject, &show_rescan, &show_start, &show_stop);
 
-	/* We actually want both eject and unmount since eject will unmount all volumes.
-	 * TODO: hide unmount if the drive only has a single mountable volume
-	 */
+	if (sidebar->show_trash) {
+		show_empty_trash = ((uri != NULL) &&
+				    (!strcmp (uri, "trash:///")));
+	} else
+		show_empty_trash = FALSE;
 
-	show_empty_trash = (uri != NULL) &&
-			   (!strcmp (uri, "trash:///"));
-
-#if DO_NOT_COMPILE
 	/* Only show properties for local mounts */
-	show_properties = (mount != NULL);
-	if (mount != NULL) {
-		location = g_mount_get_default_location (mount);
-		directory = nautilus_directory_get (location);
-
-		show_properties = nautilus_directory_is_local (directory);
-
-		nautilus_directory_unref (directory);
-		g_object_unref (location);
-	}
-#else
-	show_properties = FALSE;
-#endif
+	if (sidebar->show_properties) {
+		show_properties = (mount != NULL);
+		if (mount != NULL) {
+			location = g_mount_get_default_location (mount);
+			show_properties = g_file_is_native (location);
+			g_object_unref (location);
+		}
+	} else
+		show_properties = FALSE;
 
 	gtk_widget_set_visible (sidebar->popup_menu_separator_item,
 		      show_mount || show_unmount || show_eject || show_empty_trash);
@@ -2545,14 +2540,14 @@ stop_shortcut_cb (GtkMenuItem           *item,
 	g_object_unref (drive);
 }
 
-#if DO_NOT_COMPILE
 static void
 empty_trash_cb (GtkMenuItem           *item,
 		GtkPlacesSidebar *sidebar)
 {
+#if DO_NOT_COMPILE
 	nautilus_file_operations_empty_trash (GTK_WIDGET (sidebar->window));
-}
 #endif
+}
 
 static gboolean
 find_prev_or_next_row (GtkPlacesSidebar *sidebar,
@@ -2856,20 +2851,18 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
 
-#if DO_NOT_COMPILE
 	/* Empty Trash menu item */
 
 	item = gtk_menu_item_new_with_mnemonic (_("Empty _Trash"));
 	sidebar->popup_menu_empty_trash_item = item;
 	g_signal_connect (item, "activate",
-		    G_CALLBACK (empty_trash_cb), sidebar);
+			  G_CALLBACK (empty_trash_cb), sidebar);
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
 
 	/* Properties menu item */
 
-	sidebar->popup_menu_properties_separator_item =
-		GTK_WIDGET (eel_gtk_menu_append_separator (GTK_MENU (sidebar->popup_menu)));
+	sidebar->popup_menu_properties_separator_item = GTK_WIDGET (append_menu_separator (GTK_MENU (sidebar->popup_menu)));
 
 	item = gtk_menu_item_new_with_mnemonic (_("_Properties"));
 	sidebar->popup_menu_properties_item = item;
@@ -2877,8 +2870,6 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (properties_cb), sidebar);
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-#endif
 
 	bookmarks_check_popup_sensitivity (sidebar);
 }
@@ -3817,3 +3808,22 @@ gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_de
 	sidebar->show_desktop = !!show_desktop;
 	update_places (sidebar);
 }
+
+void
+gtk_places_sidebar_set_show_properties (GtkPlacesSidebar *sidebar, gboolean show_properties)
+{
+	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+	sidebar->show_properties = !!show_properties;
+	bookmarks_check_popup_sensitivity (sidebar);
+}
+
+void
+gtk_places_sidebar_set_show_trash (GtkPlacesSidebar *sidebar, gboolean show_trash)
+{
+	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+	sidebar->show_trash = !!show_trash;
+	update_places (sidebar);
+}
+
