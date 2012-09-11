@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
 "cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-08-26 14:58+0000\n"
-"PO-Revision-Date: 2012-08-26 21:52+0530\n"
+"POT-Creation-Date: 2012-09-11 09:39+0000\n"
+"PO-Revision-Date: 2012-09-11 19:06+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: as_IN <kde-i18n-doc@kde.org>\n"
 "Language: \n"
@@ -269,7 +269,7 @@ msgid "The text to display in order to demonstrate the selected font"
 msgstr "চিহ্নিত ফন্টকে প্ৰদৰ্শনৰ বাবে যি লিখনী লেখা হ'ব"
 
 #: ../gtk/deprecated/gtkhandlebox.c:224 ../gtk/gtkcombobox.c:1067
-#: ../gtk/gtkentry.c:896 ../gtk/gtkmenubar.c:216 ../gtk/gtkstatusbar.c:182
+#: ../gtk/gtkentry.c:890 ../gtk/gtkmenubar.c:216 ../gtk/gtkstatusbar.c:182
 #: ../gtk/gtktoolbar.c:630 ../gtk/gtkviewport.c:155
 msgid "Shadow type"
 msgstr "ছায়াৰ ধৰণ"
@@ -448,7 +448,8 @@ msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
-"এপ্লিকেচনৰ নাম।  কোনো নাম নিদিলে অবিকল্পিতৰূপে g_get_application_name() ব্যৱহৃত হয়।"
+"এপ্লিকেচনৰ নাম।  কোনো নাম নিদিলে অবিকল্পিতৰূপে g_get_application_name() ব্যৱহৃত "
+"হয়।"
 
 #: ../gtk/gtkaboutdialog.c:302
 msgid "Program version"
@@ -652,7 +653,7 @@ msgstr "প্ৰদৰ্শন কৰা GIcon"
 
 #: ../gtk/gtkaction.c:323 ../gtk/gtkcellrendererpixbuf.c:211
 #: ../gtk/gtkimage.c:291 ../gtk/gtkprinter.c:172 ../gtk/gtkstatusicon.c:247
-#: ../gtk/gtkwindow.c:779
+#: ../gtk/gtkwindow.c:783
 msgid "Icon Name"
 msgstr "আইকনৰ নাম"
 
@@ -780,7 +781,7 @@ msgid "Whether to use the related actions appearance properties"
 msgstr "সম্বন্ধিত কাৰ্য্যৰ প্ৰদৰ্শনৰ গুণ ব্যৱহাৰ কৰা যাব নে"
 
 #: ../gtk/gtkadjustment.c:121 ../gtk/gtkcellrendererprogress.c:136
-#: ../gtk/gtkscalebutton.c:218 ../gtk/gtkspinbutton.c:380
+#: ../gtk/gtkscalebutton.c:218 ../gtk/gtkspinbutton.c:397
 msgid "Value"
 msgstr "মান"
 
@@ -1027,12 +1028,10 @@ msgid "The GMenuModel for the menubar"
 msgstr "মেনুবাৰৰ বাবে GMenuModel"
 
 #: ../gtk/gtkapplication.c:754
-#| msgid "Active id"
 msgid "Active window"
 msgstr "সক্ৰিয় উইন্ডো"
 
 #: ../gtk/gtkapplication.c:755
-#| msgid "The cell which currently has focus"
 msgid "The window which most recently had focus"
 msgstr "উইন্ডো যাৰ ওপৰত শেহতীয়া ফকাচ আছিল"
 
@@ -1407,7 +1406,7 @@ msgid ""
 "rectangle"
 msgstr "child_displacement_x/_y বৈশিষ্ট্য ফোকাসকাৰী আয়তক্ষেত্ৰকেও প্ৰভাবিত কৰিব নে"
 
-#: ../gtk/gtkbutton.c:539 ../gtk/gtkentry.c:803 ../gtk/gtkentry.c:1931
+#: ../gtk/gtkbutton.c:539 ../gtk/gtkentry.c:797 ../gtk/gtkentry.c:1941
 msgid "Inner Border"
 msgstr "Border"
 
@@ -1863,7 +1862,7 @@ msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "অঙ্কিত পিক্সবাফকে অৱস্থা অনুসাৰে ৰং কৰা হ'ব নে"
 
 #: ../gtk/gtkcellrendererpixbuf.c:245 ../gtk/gtkimage.c:308
-#: ../gtk/gtkwindow.c:725
+#: ../gtk/gtkwindow.c:729
 msgid "Icon"
 msgstr "আইকন"
 
@@ -1872,7 +1871,7 @@ msgid "Value of the progress bar"
 msgstr "প্ৰ'গ্ৰেছবাৰৰ মান"
 
 #: ../gtk/gtkcellrendererprogress.c:154 ../gtk/gtkcellrenderertext.c:255
-#: ../gtk/gtkentrybuffer.c:350 ../gtk/gtkentry.c:847
+#: ../gtk/gtkentrybuffer.c:350 ../gtk/gtkentry.c:841
 #: ../gtk/gtkmessagedialog.c:230 ../gtk/gtkprogressbar.c:174
 #: ../gtk/gtktextbuffer.c:219
 msgid "Text"
@@ -1922,11 +1921,11 @@ msgid "Invert the direction in which the progress bar grows"
 msgstr "প্ৰগ্ৰেছ বাৰৰ প্ৰগতিৰ দিক সলনি কৰক"
 
 #: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:424
-#: ../gtk/gtkscalebutton.c:237 ../gtk/gtkspinbutton.c:319
+#: ../gtk/gtkscalebutton.c:237 ../gtk/gtkspinbutton.c:336
 msgid "Adjustment"
 msgstr "সমন্বয়"
 
-#: ../gtk/gtkcellrendererspin.c:114 ../gtk/gtkspinbutton.c:320
+#: ../gtk/gtkcellrendererspin.c:114 ../gtk/gtkspinbutton.c:337
 msgid "The adjustment that holds the value of the spin button"
 msgstr "স্পিন বুটামৰ মান ধাৰনকাৰী সমন্বয়"
 
@@ -1935,16 +1934,16 @@ msgstr "স্পিন বুটামৰ মান ধাৰনকাৰী �
 msgid "Climb rate"
 msgstr "ওপৰত উঠাৰ গতি"
 
-#: ../gtk/gtkcellrendererspin.c:130 ../gtk/gtkspinbutton.c:328
+#: ../gtk/gtkcellrendererspin.c:130 ../gtk/gtkspinbutton.c:345
 msgid "The acceleration rate when you hold down a button"
 msgstr "বুটাম টিপি ধৰি ৰাখিলে গতিবৃদ্ধিৰ মান"
 
 #: ../gtk/gtkcellrendererspin.c:143 ../gtk/gtkscale.c:294
-#: ../gtk/gtkspinbutton.c:337
+#: ../gtk/gtkspinbutton.c:354
 msgid "Digits"
 msgstr "অংক"
 
-#: ../gtk/gtkcellrendererspin.c:144 ../gtk/gtkspinbutton.c:338
+#: ../gtk/gtkcellrendererspin.c:144 ../gtk/gtkspinbutton.c:355
 msgid "The number of decimal places to display"
 msgstr "দশমিকেৰ পৰ যি সংখ্যক অংক প্ৰদৰ্শন কৰা হ'ব"
 
@@ -1979,7 +1978,8 @@ msgstr "মাৰ্কআপ"
 msgid "Marked up text to render"
 msgstr "প্ৰদৰ্শন কৰাৰ বাবে মাৰ্কআপ কৰা লিখনী"
 
-#: ../gtk/gtkcellrenderertext.c:271 ../gtk/gtklabel.c:733
+#: ../gtk/gtkcellrenderertext.c:271 ../gtk/gtkentry.c:1410
+#: ../gtk/gtklabel.c:733
 msgid "Attributes"
 msgstr "বৈশিষ্ট্যাবলী"
 
@@ -2049,13 +2049,13 @@ msgstr " RGBA হিচাপে পুৰভূমিৰ ৰং"
 msgid "Foreground color as a GdkRGBA"
 msgstr " GdkRGBA হিচাপে পুৰভূমিৰ ৰং"
 
-#: ../gtk/gtkcellrenderertext.c:364 ../gtk/gtkentry.c:761
-#: ../gtk/gtktexttag.c:296 ../gtk/gtktextview.c:686
+#: ../gtk/gtkcellrenderertext.c:364 ../gtk/gtkentry.c:755
+#: ../gtk/gtktexttag.c:296 ../gtk/gtktextview.c:702
 msgid "Editable"
 msgstr "সম্পাদনযোগ্য"
 
 #: ../gtk/gtkcellrenderertext.c:365 ../gtk/gtktexttag.c:297
-#: ../gtk/gtktextview.c:687
+#: ../gtk/gtktextview.c:703
 msgid "Whether the text can be modified by the user"
 msgstr "ব্যৱহাৰকাৰী এই লিখনীক পৰিবৰ্তন কৰিব নোৱাৰিব"
 
@@ -2218,7 +2218,7 @@ msgstr "সংৰেখন"
 msgid "How to align the lines"
 msgstr "শাৰীসমূহ কেনেকৈ সংৰেখন কৰা হব"
 
-#: ../gtk/gtkcellrenderertext.c:636 ../gtk/gtkentry.c:1013
+#: ../gtk/gtkcellrenderertext.c:636 ../gtk/gtkentry.c:1007
 msgid "Placeholder text"
 msgstr "প্লেইচহোল্ডাৰ লিখনী"
 
@@ -2411,13 +2411,13 @@ msgid "The model for cell view"
 msgstr "উল্লিখিত সময় অবধি"
 
 #: ../gtk/gtkcellview.c:252 ../gtk/gtkcombobox.c:1010
-#: ../gtk/gtkentrycompletion.c:446 ../gtk/gtkiconview.c:642
+#: ../gtk/gtkentrycompletion.c:451 ../gtk/gtkiconview.c:642
 #: ../gtk/gtktreemenu.c:332 ../gtk/gtktreeviewcolumn.c:426
 msgid "Cell Area"
 msgstr "কোষ কালি"
 
 #: ../gtk/gtkcellview.c:253 ../gtk/gtkcombobox.c:1011
-#: ../gtk/gtkentrycompletion.c:447 ../gtk/gtkiconview.c:643
+#: ../gtk/gtkentrycompletion.c:452 ../gtk/gtkiconview.c:643
 #: ../gtk/gtktreemenu.c:333 ../gtk/gtktreeviewcolumn.c:427
 msgid "The GtkCellArea used to layout cells"
 msgstr "কোষ সংস্থাপন কৰিবলে ব্যৱহৃত GtkCellArea"
@@ -2592,7 +2592,7 @@ msgstr "মেনুতে টিয়াৰঅফ যোগ কৰক"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "ড্ৰপডাউনত কোনো টিয়াৰ-অফ তালিকা বস্তু থাকিব নে"
 
-#: ../gtk/gtkcombobox.c:849 ../gtk/gtkentry.c:786
+#: ../gtk/gtkcombobox.c:849 ../gtk/gtkentry.c:780
 msgid "Has Frame"
 msgstr "ফ্ৰেইম আছে"
 
@@ -2804,7 +2804,7 @@ msgstr "ডাইলগৰ তলৰ ফালে অবস্থিত বু�
 msgid "The contents of the buffer"
 msgstr "বাফাৰৰ সমল"
 
-#: ../gtk/gtkentrybuffer.c:365 ../gtk/gtkentry.c:927
+#: ../gtk/gtkentrybuffer.c:365 ../gtk/gtkentry.c:921
 msgid "Text length"
 msgstr "লিখনীৰ দৈৰ্ঘ্য"
 
@@ -2812,47 +2812,47 @@ msgstr "লিখনীৰ দৈৰ্ঘ্য"
 msgid "Length of the text currently in the buffer"
 msgstr "বাফাৰত থকা টেকস্টৰ দৈৰ্ঘ্য"
 
-#: ../gtk/gtkentrybuffer.c:380 ../gtk/gtkentry.c:769
+#: ../gtk/gtkentrybuffer.c:380 ../gtk/gtkentry.c:763
 msgid "Maximum length"
 msgstr "সৰ্বোচ্চ দৈৰ্ঘ্য"
 
-#: ../gtk/gtkentrybuffer.c:381 ../gtk/gtkentry.c:770
+#: ../gtk/gtkentrybuffer.c:381 ../gtk/gtkentry.c:764
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "এই অন্তৰ্ভুক্তিৰ বাবে সৰ্বোচ্চ সংখ্যক অক্ষৰ। ইয়াৰ মান শূণ্য হতে পাৰবেন না"
 
-#: ../gtk/gtkentry.c:733
+#: ../gtk/gtkentry.c:727
 msgid "Text Buffer"
 msgstr "লিখনী বাফাৰ"
 
-#: ../gtk/gtkentry.c:734
+#: ../gtk/gtkentry.c:728
 msgid "Text buffer object which actually stores entry text"
 msgstr "টেকস্ট বাফাৰ অব্জেক্ট যি প্ৰকৃততে নিবেশৰ লিখনী ৰক্ষা কৰে"
 
-#: ../gtk/gtkentry.c:741 ../gtk/gtklabel.c:821
+#: ../gtk/gtkentry.c:735 ../gtk/gtklabel.c:821
 msgid "Cursor Position"
 msgstr "কাৰ্ছাৰৰ অবস্থান"
 
-#: ../gtk/gtkentry.c:742 ../gtk/gtklabel.c:822
+#: ../gtk/gtkentry.c:736 ../gtk/gtklabel.c:822
 msgid "The current position of the insertion cursor in chars"
 msgstr "অক্ষৰ হিচাপে লেখা ভৰোৱাৰ (Insertion) কাৰ্ছাৰৰ অবস্থান"
 
-#: ../gtk/gtkentry.c:751 ../gtk/gtklabel.c:831
+#: ../gtk/gtkentry.c:745 ../gtk/gtklabel.c:831
 msgid "Selection Bound"
 msgstr "চিহ্নিত কৰাৰ সীমানা"
 
-#: ../gtk/gtkentry.c:752 ../gtk/gtklabel.c:832
+#: ../gtk/gtkentry.c:746 ../gtk/gtklabel.c:832
 msgid "The position of the opposite end of the selection from the cursor in chars"
 msgstr "অক্ষৰ হিচাপে চিহ্নিত অংশৰ বিপৰীত প্ৰান্তৰ অবস্থান"
 
-#: ../gtk/gtkentry.c:762
+#: ../gtk/gtkentry.c:756
 msgid "Whether the entry contents can be edited"
 msgstr "অন্তৰ্ভুক্তিৰ (Entry) অভ্যন্তৰীণ বস্তু (Content) এডিট কৰা যাব নে"
 
-#: ../gtk/gtkentry.c:778
+#: ../gtk/gtkentry.c:772
 msgid "Visibility"
 msgstr "দৃষ্টিগ্ৰাহ্যতা"
 
-#: ../gtk/gtkentry.c:779
+#: ../gtk/gtkentry.c:773
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2860,416 +2860,419 @@ msgstr ""
 "যদি FALSE হয় তেন্তে প্ৰকৃত লিখনীৰ পৰিবৰ্তে \"অদৃশ্য অক্ষৰ\" দেখা যায় (পাসওয়াৰ্ডেৰ "
 "ক্ষেত্ৰে প্ৰযোজ্য)"
 
-#: ../gtk/gtkentry.c:787
+#: ../gtk/gtkentry.c:781
 msgid "FALSE removes outside bevel from entry"
 msgstr "FASLE তালিকাৰ পৰা বহিঃস্থ বেভেলকে অপসাৰণ কৰে"
 
-#: ../gtk/gtkentry.c:804
+#: ../gtk/gtkentry.c:798
 msgid "Border between text and frame. Overrides the inner-border style property"
 msgstr "Border"
 
-#: ../gtk/gtkentry.c:812 ../gtk/gtkentry.c:1455
+#: ../gtk/gtkentry.c:806 ../gtk/gtkentry.c:1465
 msgid "Invisible character"
 msgstr "অদৃশ্য অক্ষৰ"
 
-#: ../gtk/gtkentry.c:813 ../gtk/gtkentry.c:1456
+#: ../gtk/gtkentry.c:807 ../gtk/gtkentry.c:1466
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "অন্তৰ্ভুক্তিৰ (Entry) সমল আড়াল কৰাৰ বাবে ব্যৱহৃত অক্ষৰ (\"পাসওয়াৰ্ড অৱস্থা\" এ ব্যৱহৃত)"
 
-#: ../gtk/gtkentry.c:820
+#: ../gtk/gtkentry.c:814
 msgid "Activates default"
 msgstr "অবিকল্পিতকে সক্ৰিয় কৰে"
 
-#: ../gtk/gtkentry.c:821
+#: ../gtk/gtkentry.c:815
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
 "Enter বুটাম চাপলে অবিকল্পিতকে সক্ৰিয় কৰা হ'ব নে (যেনে কোনো ডাইলগৰ অবিকল্পিত বুটাম)"
 
-#: ../gtk/gtkentry.c:827
+#: ../gtk/gtkentry.c:821
 msgid "Width in chars"
 msgstr "অক্ষৰৰ প্ৰস্থ"
 
-#: ../gtk/gtkentry.c:828
+#: ../gtk/gtkentry.c:822
 msgid "Number of characters to leave space for in the entry"
 msgstr "প্ৰতি অন্তৰ্ভুক্তিতে যত অক্ষৰ ৰিক্ত ৰাখিব"
 
-#: ../gtk/gtkentry.c:837
+#: ../gtk/gtkentry.c:831
 msgid "Scroll offset"
 msgstr "স্ক্ৰল অফসংহতি"
 
-#: ../gtk/gtkentry.c:838
+#: ../gtk/gtkentry.c:832
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "অন্তৰ্ভুক্তিৰ (Entry) যি সংখ্যক পিক্সেলকে পৰ্দাৰ বামে সৰিয়ে নিয়ে যাওয়া হৈছে"
 
-#: ../gtk/gtkentry.c:848
+#: ../gtk/gtkentry.c:842
 msgid "The contents of the entry"
 msgstr "অন্তৰ্ভুক্তিৰ (Entry) অভ্যন্তৰীণ বস্তু"
 
-#: ../gtk/gtkentry.c:863 ../gtk/gtkmisc.c:103
+#: ../gtk/gtkentry.c:857 ../gtk/gtkmisc.c:103
 msgid "X align"
 msgstr "এক্স অক্ষ"
 
-#: ../gtk/gtkentry.c:864 ../gtk/gtkmisc.c:104
+#: ../gtk/gtkentry.c:858 ../gtk/gtkmisc.c:104
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr "পথালি সংৰেখন, ০ (বাম)ৰ পৰা ১ (ডান)।  RTL নকশাৰ বাবে বিপৰীত"
 
-#: ../gtk/gtkentry.c:880
+#: ../gtk/gtkentry.c:874
 msgid "Truncate multiline"
 msgstr "Truncate multiline"
 
-#: ../gtk/gtkentry.c:881
+#: ../gtk/gtkentry.c:875
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Whether to truncate multiline pastes to one line."
 
-#: ../gtk/gtkentry.c:897
+#: ../gtk/gtkentry.c:891
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "সৰ্বমোট হলো"
 
-#: ../gtk/gtkentry.c:912 ../gtk/gtktextview.c:766
+#: ../gtk/gtkentry.c:906 ../gtk/gtktextview.c:782
 msgid "Overwrite mode"
 msgstr "অভাৰৰাইট কৰাৰ অৱস্থা"
 
 #
-#: ../gtk/gtkentry.c:913
+#: ../gtk/gtkentry.c:907
 msgid "Whether new text overwrites existing text"
 msgstr "যি লিখনী লেখা হ'ব ই বিদ্যমান লিখনীৰ অভাৰৰাইট কৰা হ'ব নে"
 
-#: ../gtk/gtkentry.c:928
+#: ../gtk/gtkentry.c:922
 msgid "Length of the text currently in the entry"
 msgstr "Length of the text currently in the entry"
 
-#: ../gtk/gtkentry.c:943
+#: ../gtk/gtkentry.c:937
 msgid "Invisible character set"
 msgstr "অদৃশ্য আখৰ সংসহি"
 
-#: ../gtk/gtkentry.c:944
+#: ../gtk/gtkentry.c:938
 msgid "Whether the invisible character has been set"
 msgstr "অদৃশ্য আখৰটোক সংহিত কৰা হৈছে নে"
 
-#: ../gtk/gtkentry.c:962
+#: ../gtk/gtkentry.c:956
 msgid "Caps Lock warning"
 msgstr "Caps Lock warning"
 
-#: ../gtk/gtkentry.c:963
+#: ../gtk/gtkentry.c:957
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr "Whether password entries will show a warning when Caps Lock is on"
 
 #
-#: ../gtk/gtkentry.c:977
+#: ../gtk/gtkentry.c:971
 msgid "Progress Fraction"
 msgstr "ভগ্নাংশ"
 
 #
-#: ../gtk/gtkentry.c:978
+#: ../gtk/gtkentry.c:972
 msgid "The current fraction of the task that's been completed"
 msgstr "পুৰো কামটাৰ যি ভগ্নাংশ সম্পূৰ্ণ হৈছে"
 
 #
-#: ../gtk/gtkentry.c:995
+#: ../gtk/gtkentry.c:989
 msgid "Progress Pulse Step"
 msgstr "স্পন্দন ধাপ"
 
 #
-#: ../gtk/gtkentry.c:996
+#: ../gtk/gtkentry.c:990
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
 msgstr ""
 "মোট কামৰ যি ভগাংশ পৰিমাণ সম্পন্ন হলে স্পন্দনেৰ ফলে লাফাতে থাকা ব্লকটিকে সৰানো যাব "
 
-#: ../gtk/gtkentry.c:1014
+#: ../gtk/gtkentry.c:1008
 msgid "Show text in the entry when it's empty and unfocused"
 msgstr "প্ৰবিষ্টিত লিখনী দেখুৱা যেতিয়া ই ৰিক্ত আৰু অকেন্দ্ৰীত"
 
 #
-#: ../gtk/gtkentry.c:1028
+#: ../gtk/gtkentry.c:1022
 msgid "Primary pixbuf"
 msgstr "পিক্সবাফ"
 
 #
-#: ../gtk/gtkentry.c:1029
+#: ../gtk/gtkentry.c:1023
 msgid "Primary pixbuf for the entry"
 msgstr "খোলা প্ৰসাৰকৰ বাবে Pixbuf"
 
 #
-#: ../gtk/gtkentry.c:1043
+#: ../gtk/gtkentry.c:1037
 msgid "Secondary pixbuf"
 msgstr "দ্বিতীয় Text"
 
 #
-#: ../gtk/gtkentry.c:1044
+#: ../gtk/gtkentry.c:1038
 msgid "Secondary pixbuf for the entry"
 msgstr "সম্মুখগামী গৌণ স্টেপাৰ"
 
-#: ../gtk/gtkentry.c:1058
+#: ../gtk/gtkentry.c:1052
 msgid "Primary stock ID"
 msgstr "Primary stock ID"
 
-#: ../gtk/gtkentry.c:1059
+#: ../gtk/gtkentry.c:1053
 msgid "Stock ID for primary icon"
 msgstr "Stock ID for primary icon"
 
 #
-#: ../gtk/gtkentry.c:1073
+#: ../gtk/gtkentry.c:1067
 msgid "Secondary stock ID"
 msgstr "দ্বিতীয় Text"
 
-#: ../gtk/gtkentry.c:1074
+#: ../gtk/gtkentry.c:1068
 msgid "Stock ID for secondary icon"
 msgstr "Stock ID for secondary icon"
 
 #
-#: ../gtk/gtkentry.c:1088
+#: ../gtk/gtkentry.c:1082
 msgid "Primary icon name"
 msgstr "তালিকা সৰ্বমোট"
 
-#: ../gtk/gtkentry.c:1089
+#: ../gtk/gtkentry.c:1083
 msgid "Icon name for primary icon"
 msgstr "Icon name for primary icon"
 
 #
-#: ../gtk/gtkentry.c:1103
+#: ../gtk/gtkentry.c:1097
 msgid "Secondary icon name"
 msgstr "দ্বিতীয় Text"
 
-#: ../gtk/gtkentry.c:1104
+#: ../gtk/gtkentry.c:1098
 msgid "Icon name for secondary icon"
 msgstr "Icon name for secondary icon"
 
-#: ../gtk/gtkentry.c:1118
+#: ../gtk/gtkentry.c:1112
 msgid "Primary GIcon"
 msgstr "Primary GIcon"
 
 #
-#: ../gtk/gtkentry.c:1119
+#: ../gtk/gtkentry.c:1113
 msgid "GIcon for primary icon"
 msgstr "এই উইন্ডোৰ বাবে আইকন"
 
 #
-#: ../gtk/gtkentry.c:1133
+#: ../gtk/gtkentry.c:1127
 msgid "Secondary GIcon"
 msgstr "দ্বিতীয়"
 
-#: ../gtk/gtkentry.c:1134
+#: ../gtk/gtkentry.c:1128
 msgid "GIcon for secondary icon"
 msgstr "GIcon for secondary icon"
 
 #
-#: ../gtk/gtkentry.c:1148
+#: ../gtk/gtkentry.c:1142
 msgid "Primary storage type"
 msgstr "সংৰক্ষণৰ ধৰণ"
 
 #
-#: ../gtk/gtkentry.c:1149
+#: ../gtk/gtkentry.c:1143
 msgid "The representation being used for primary icon"
 msgstr "তথ্যচিত্ৰে বাবে যি উপস্থাপনা ব্যৱহাৰ কৰা হচ্ছে"
 
 #
-#: ../gtk/gtkentry.c:1164
+#: ../gtk/gtkentry.c:1158
 msgid "Secondary storage type"
 msgstr "সম্মুখগামী গৌণ স্টেপাৰ"
 
 #
-#: ../gtk/gtkentry.c:1165
+#: ../gtk/gtkentry.c:1159
 msgid "The representation being used for secondary icon"
 msgstr "তথ্যচিত্ৰে বাবে যি উপস্থাপনা ব্যৱহাৰ কৰা হচ্ছে"
 
-#: ../gtk/gtkentry.c:1186
+#: ../gtk/gtkentry.c:1180
 msgid "Primary icon activatable"
 msgstr "Primary icon activatable"
 
 #
-#: ../gtk/gtkentry.c:1187
+#: ../gtk/gtkentry.c:1181
 msgid "Whether the primary icon is activatable"
 msgstr "কামটো সক্ৰিয় হয় নে নহয়"
 
 #
-#: ../gtk/gtkentry.c:1207
+#: ../gtk/gtkentry.c:1201
 msgid "Secondary icon activatable"
 msgstr "কাৰ্ছাৰ আঁকায় ব্যৱহৃত দ্বিতীয় ৰং"
 
 #
-#: ../gtk/gtkentry.c:1208
+#: ../gtk/gtkentry.c:1202
 msgid "Whether the secondary icon is activatable"
 msgstr "কামটো সক্ৰিয় হয় নে নহয়"
 
 #
-#: ../gtk/gtkentry.c:1230
+#: ../gtk/gtkentry.c:1224
 msgid "Primary icon sensitive"
 msgstr "সেল sensitive প্ৰদৰ্শন কৰক"
 
 #
-#: ../gtk/gtkentry.c:1231
+#: ../gtk/gtkentry.c:1225
 msgid "Whether the primary icon is sensitive"
 msgstr ""
 "তালিকাৰ সদস্যদেৰ মিলিয়ে দেখাৰ সময় বড় বা ছোট হাতেৰ অক্ষৰ পৃথকভাবে বিবেচনা কৰা "
 "হ'ব নে"
 
 #
-#: ../gtk/gtkentry.c:1252
+#: ../gtk/gtkentry.c:1246
 msgid "Secondary icon sensitive"
 msgstr "দ্বিতীয় Text"
 
 #
-#: ../gtk/gtkentry.c:1253
+#: ../gtk/gtkentry.c:1247
 msgid "Whether the secondary icon is sensitive"
 msgstr "কামটো সক্ৰিয় হয় নে নহয়"
 
 #
-#: ../gtk/gtkentry.c:1269
+#: ../gtk/gtkentry.c:1263
 msgid "Primary icon tooltip text"
 msgstr "সেল sensitive প্ৰদৰ্শন কৰক"
 
 #
-#: ../gtk/gtkentry.c:1270 ../gtk/gtkentry.c:1306
+#: ../gtk/gtkentry.c:1264 ../gtk/gtkentry.c:1300
 msgid "The contents of the tooltip on the primary icon"
 msgstr "সৰ্বমোট উল্লিখিত সময় অবধি"
 
 #
-#: ../gtk/gtkentry.c:1286
+#: ../gtk/gtkentry.c:1280
 msgid "Secondary icon tooltip text"
 msgstr "কাৰ্ছাৰ আঁকায় ব্যৱহৃত দ্বিতীয় ৰং"
 
 #
-#: ../gtk/gtkentry.c:1287 ../gtk/gtkentry.c:1325
+#: ../gtk/gtkentry.c:1281 ../gtk/gtkentry.c:1319
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "সৰ্বমোট উল্লিখিত সময় অবধি"
 
 #
-#: ../gtk/gtkentry.c:1305
+#: ../gtk/gtkentry.c:1299
 msgid "Primary icon tooltip markup"
 msgstr "তালিকা সৰ্বমোট"
 
 #
-#: ../gtk/gtkentry.c:1324
+#: ../gtk/gtkentry.c:1318
 msgid "Secondary icon tooltip markup"
 msgstr "দ্বিতীয় Text"
 
 #
-#: ../gtk/gtkentry.c:1344 ../gtk/gtktextview.c:794
+#: ../gtk/gtkentry.c:1338 ../gtk/gtktextview.c:810
 msgid "IM module"
 msgstr "অবিকল্পিত প্ৰস্থ"
 
 #
-#: ../gtk/gtkentry.c:1345 ../gtk/gtktextview.c:795
+#: ../gtk/gtkentry.c:1339 ../gtk/gtktextview.c:811
 msgid "Which IM module should be used"
 msgstr "পেলেট ব্যৱহৃত হ'ব নে"
 
-#: ../gtk/gtkentry.c:1359
+#: ../gtk/gtkentry.c:1353
 msgid "Completion"
 msgstr "সমাপ্তি"
 
-#: ../gtk/gtkentry.c:1360
+#: ../gtk/gtkentry.c:1354
 msgid "The auxiliary completion object"
 msgstr "অনুসংগিক সমাপ্তি অবজেক্ট"
 
-#: ../gtk/gtkentry.c:1381 ../gtk/gtkimcontext.c:332 ../gtk/gtktextview.c:812
+#: ../gtk/gtkentry.c:1375 ../gtk/gtkimcontext.c:332 ../gtk/gtktextview.c:828
 msgid "Purpose"
 msgstr "কাৰণ"
 
-#: ../gtk/gtkentry.c:1382 ../gtk/gtkimcontext.c:333 ../gtk/gtktextview.c:813
-#| msgid "Pulse of the spinner"
+#: ../gtk/gtkentry.c:1376 ../gtk/gtkimcontext.c:333 ../gtk/gtktextview.c:829
 msgid "Purpose of the text field"
 msgstr "লিখনী ক্ষেত্ৰৰ উদ্দেশ্য"
 
-#: ../gtk/gtkentry.c:1398 ../gtk/gtkimcontext.c:340 ../gtk/gtktextview.c:829
+#: ../gtk/gtkentry.c:1392 ../gtk/gtkimcontext.c:340 ../gtk/gtktextview.c:845
 msgid "hints"
 msgstr "ইংগিত"
 
-#: ../gtk/gtkentry.c:1399 ../gtk/gtkimcontext.c:341 ../gtk/gtktextview.c:830
+#: ../gtk/gtkentry.c:1393 ../gtk/gtkimcontext.c:341 ../gtk/gtktextview.c:846
 msgid "Hints for the text field behaviour"
 msgstr "লিখনী ক্ষেত্ৰ ব্যৱহাৰৰ বাবে ইংগিত"
 
+#: ../gtk/gtkentry.c:1411 ../gtk/gtklabel.c:734
+msgid "A list of style attributes to apply to the text of the label"
+msgstr "লেবেলৰ লিখনীত প্ৰয়োগ কৰাৰ বাবে শৈলী বৈশিষ্ট্যৰ এটা তালিকা"
+
 #
-#: ../gtk/gtkentry.c:1415
+#: ../gtk/gtkentry.c:1425
 msgid "Icon Prelight"
 msgstr "উচ্চতা"
 
 #
-#: ../gtk/gtkentry.c:1416
+#: ../gtk/gtkentry.c:1426
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "ট্যাব প্ৰদৰ্শন কৰা হ'ব নে"
 
 #
-#: ../gtk/gtkentry.c:1433
+#: ../gtk/gtkentry.c:1443
 msgid "Progress Border"
 msgstr "দীৰ্ঘ বাকচৰ প্ৰান্ত"
 
 #
-#: ../gtk/gtkentry.c:1434
+#: ../gtk/gtkentry.c:1444
 msgid "Border around the progress bar"
 msgstr "প্ৰগ্ৰেছবাৰত যি লিখনী প্ৰদৰ্শন কৰা হ'ব"
 
-#: ../gtk/gtkentry.c:1932
+#: ../gtk/gtkentry.c:1942
 msgid "Border between text and frame."
 msgstr "Border."
 
-#: ../gtk/gtkentrycompletion.c:318
+#: ../gtk/gtkentrycompletion.c:323
 msgid "Completion Model"
 msgstr "সমাপ্তি আৰ্হি"
 
-#: ../gtk/gtkentrycompletion.c:319
+#: ../gtk/gtkentrycompletion.c:324
 msgid "The model to find matches in"
 msgstr "যি মডেলে মিল খোঁজা হ'ব"
 
-#: ../gtk/gtkentrycompletion.c:325
+#: ../gtk/gtkentrycompletion.c:330
 msgid "Minimum Key Length"
 msgstr "মূলশব্দেৰ (Key) সৰ্বনিম্ন দৈৰ্ঘ্য"
 
-#: ../gtk/gtkentrycompletion.c:326
+#: ../gtk/gtkentrycompletion.c:331
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "মিল খোঁজায় ব্যৱহৃত মূলশব্দেৰ (Key) সৰ্বনিম্ন দৈৰ্ঘ্য"
 
-#: ../gtk/gtkentrycompletion.c:342 ../gtk/gtkiconview.c:438
+#: ../gtk/gtkentrycompletion.c:347 ../gtk/gtkiconview.c:438
 msgid "Text column"
 msgstr "লিখনী স্তম্ভ"
 
-#: ../gtk/gtkentrycompletion.c:343
+#: ../gtk/gtkentrycompletion.c:348
 msgid "The column of the model containing the strings."
 msgstr "আৰ্হিৰ যি স্তম্ভ পংতি আছে।"
 
-#: ../gtk/gtkentrycompletion.c:362
+#: ../gtk/gtkentrycompletion.c:367
 msgid "Inline completion"
 msgstr "ইন-শাৰী সমাপ্তি"
 
-#: ../gtk/gtkentrycompletion.c:363
+#: ../gtk/gtkentrycompletion.c:368
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "সাধাৰণ (Common) উপসৰ্গকে স্বয়ংক্ৰিয়ভাবে ভৰোৱা হ'ব নে"
 
-#: ../gtk/gtkentrycompletion.c:377
+#: ../gtk/gtkentrycompletion.c:382
 msgid "Popup completion"
 msgstr "পপ-আপ সমাপ্তি"
 
-#: ../gtk/gtkentrycompletion.c:378
+#: ../gtk/gtkentrycompletion.c:383
 msgid "Whether the completions should be shown in a popup window"
 msgstr "পপ-আপ উইন্ডোতে সমাপ্তি প্ৰদৰ্শন কৰা হ'ব নে"
 
-#: ../gtk/gtkentrycompletion.c:393
+#: ../gtk/gtkentrycompletion.c:398
 msgid "Popup set width"
 msgstr "পপ-আপ সংহতি তৰ প্ৰস্থ"
 
-#: ../gtk/gtkentrycompletion.c:394
+#: ../gtk/gtkentrycompletion.c:399
 msgid "If TRUE, the popup window will have the same size as the entry"
 msgstr "ইয়াৰ মান সত্য (TRUE) হলে, পপ-আপ উইন্ডোৰ আকাৰ হ'ব প্ৰবিষ্টিৰ আকাৰৰ সমান"
 
-#: ../gtk/gtkentrycompletion.c:412
+#: ../gtk/gtkentrycompletion.c:417
 msgid "Popup single match"
 msgstr "পপ-আপ এটা মিল"
 
-#: ../gtk/gtkentrycompletion.c:413
+#: ../gtk/gtkentrycompletion.c:418
 msgid "If TRUE, the popup window will appear for a single match."
 msgstr "ইয়াৰ মান সত্য (TRUE) হলে, এটা মিলৰ বাবে পপ-আপ উইন্ডো আবিৰ্ভূত হ'ব।"
 
-#: ../gtk/gtkentrycompletion.c:427
+#: ../gtk/gtkentrycompletion.c:432
 msgid "Inline selection"
 msgstr "ইনশাৰী"
 
-#: ../gtk/gtkentrycompletion.c:428
+#: ../gtk/gtkentrycompletion.c:433
 msgid "Your description here"
 msgstr "বিবৰণ"
 
@@ -3389,8 +3392,8 @@ msgstr "ফিল্টাৰ"
 #: ../gtk/gtkfilechooser.c:753
 msgid "The current filter for selecting which files are displayed"
 msgstr ""
-"যি সকল ফাইলৰ নাম দেখানো হ'ব, তাদেৰ বাছাই কৰাৰ কামে বৰ্তমানে যি ফিল্টাৰটি "
-"ব্যৱহৃত হচ্ছে"
+"যি সকল ফাইলৰ নাম দেখানো হ'ব, তাদেৰ বাছাই কৰাৰ কামে বৰ্তমানে যি ফিল্টাৰটি ব্যৱহৃত "
+"হচ্ছে"
 
 #: ../gtk/gtkfilechooser.c:758
 msgid "Local Only"
@@ -3468,8 +3471,7 @@ msgstr "ফোল্ডাৰ সৃষ্টিৰ অনুমতি দিয়
 msgid ""
 "Whether a file chooser not in open mode will offer the user to create new "
 "folders."
-msgstr ""
-"খোলা অৱস্থাত নথকা ফাইল নিৰ্বাচকে ব্যৱহাৰকৰ্তাক নতুন ফোল্ডাৰ সৃষ্টি কৰিব দিব নে।"
+msgstr "খোলা অৱস্থাত নথকা ফাইল নিৰ্বাচকে ব্যৱহাৰকৰ্তাক নতুন ফোল্ডাৰ সৃষ্টি কৰিব দিব নে।"
 
 #: ../gtk/gtkfixed.c:150 ../gtk/gtklayout.c:646 ../gtk/gtktreeviewcolumn.c:263
 msgid "X position"
@@ -3851,11 +3853,11 @@ msgstr "কাৰ্য্যক্ষেত্ৰ ওচৰৰ প্ৰান�
 
 #: ../gtk/gtkinvisible.c:101 ../gtk/gtkmountoperation.c:179
 #: ../gtk/gtkstatusicon.c:290 ../gtk/gtkstylecontext.c:442
-#: ../gtk/gtkwindow.c:787
+#: ../gtk/gtkwindow.c:791
 msgid "Screen"
 msgstr "পৰ্দা"
 
-#: ../gtk/gtkinvisible.c:102 ../gtk/gtkwindow.c:788
+#: ../gtk/gtkinvisible.c:102 ../gtk/gtkwindow.c:792
 msgid "The screen where this window will be displayed"
 msgstr "এই উইন্ডোটো যি পৰ্দাত প্ৰদৰ্শিত হ'ব"
 
@@ -3863,11 +3865,7 @@ msgstr "এই উইন্ডোটো যি পৰ্দাত প্ৰদ�
 msgid "The text of the label"
 msgstr "লেবেলৰ লিখনী"
 
-#: ../gtk/gtklabel.c:734
-msgid "A list of style attributes to apply to the text of the label"
-msgstr "লেবেলৰ লিখনীত প্ৰয়োগ কৰাৰ বাবে শৈলী বৈশিষ্ট্যৰ এটা তালিকা"
-
-#: ../gtk/gtklabel.c:755 ../gtk/gtktexttag.c:404 ../gtk/gtktextview.c:703
+#: ../gtk/gtklabel.c:755 ../gtk/gtktexttag.c:404 ../gtk/gtktextview.c:719
 msgid "Justification"
 msgstr "সমপ্ৰান্ত নিৰ্ধাৰণ"
 
@@ -4113,39 +4111,39 @@ msgstr "অভ্যন্তৰীণ পেডিং (Padding)"
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "মেনুবাৰৰ ছায়া আৰু মেনুবাৰৰ সদস্যিৰ মাজত প্ৰান্তীয় স্থান"
 
-#: ../gtk/gtkmenubutton.c:469
+#: ../gtk/gtkmenubutton.c:497
 msgid "popup"
 msgstr "পপআপ"
 
-#: ../gtk/gtkmenubutton.c:470 ../gtk/gtkmenubutton.c:486
+#: ../gtk/gtkmenubutton.c:498 ../gtk/gtkmenubutton.c:514
 msgid "The dropdown menu."
 msgstr "ড্ৰপডাউন মেনু।"
 
-#: ../gtk/gtkmenubutton.c:485
+#: ../gtk/gtkmenubutton.c:513
 msgid "menu"
 msgstr "মেনু"
 
-#: ../gtk/gtkmenubutton.c:501
+#: ../gtk/gtkmenubutton.c:529
 msgid "menu-model"
 msgstr "মেনু-আৰ্হি"
 
-#: ../gtk/gtkmenubutton.c:502
+#: ../gtk/gtkmenubutton.c:530
 msgid "The dropdown menu's model."
 msgstr "ড্ৰপডাউন মেনুৰ আৰ্হি।"
 
-#: ../gtk/gtkmenubutton.c:515
+#: ../gtk/gtkmenubutton.c:543
 msgid "align-widget"
 msgstr "সংৰেখন-উইজেট"
 
-#: ../gtk/gtkmenubutton.c:516
+#: ../gtk/gtkmenubutton.c:544
 msgid "The parent widget which the menu should align with."
 msgstr "উপধায়ক উইজেট যাৰ লগত মেনু সংৰেখিত হব লাগে।"
 
-#: ../gtk/gtkmenubutton.c:530
+#: ../gtk/gtkmenubutton.c:558
 msgid "direction"
 msgstr "দিশ"
 
-#: ../gtk/gtkmenubutton.c:531
+#: ../gtk/gtkmenubutton.c:559
 msgid "The direction the arrow should point."
 msgstr "দিশ যলৈ কাঁড়ে ইংগিত কৰিব লাগে।"
 
@@ -4863,11 +4861,11 @@ msgstr "বিকল্প মান"
 msgid "Value of the option"
 msgstr "বিকল্পৰ মান"
 
-#: ../gtk/gtkprinteroptionwidget.c:120
+#: ../gtk/gtkprinteroptionwidget.c:132
 msgid "Source option"
 msgstr "উৎস"
 
-#: ../gtk/gtkprinteroptionwidget.c:121
+#: ../gtk/gtkprinteroptionwidget.c:133
 msgid "The PrinterOption backing this widget"
 msgstr "The PrinterOption backing this widget"
 
@@ -5547,103 +5545,103 @@ msgstr "স্ক্ৰলবাৰৰ বিপৰীত প্ৰান্ত�
 msgid "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "প্ৰদৰ্শন দ্বিতীয় সক্ৰিয় সৰ্বমোট"
 
-#: ../gtk/gtkscrolledwindow.c:366
+#: ../gtk/gtkscrolledwindow.c:372
 msgid "Horizontal Adjustment"
 msgstr "পথালি সমন্বয়"
 
-#: ../gtk/gtkscrolledwindow.c:367
+#: ../gtk/gtkscrolledwindow.c:373
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "পথালি অবস্থানেৰ বাবে GtkAdjustment"
 
-#: ../gtk/gtkscrolledwindow.c:373
+#: ../gtk/gtkscrolledwindow.c:379
 msgid "Vertical Adjustment"
 msgstr "উলম্ব সমন্বয়"
 
-#: ../gtk/gtkscrolledwindow.c:374
+#: ../gtk/gtkscrolledwindow.c:380
 msgid "The GtkAdjustment for the vertical position"
 msgstr "উলম্ব অবস্থানেৰ বাবে GtkAdjustment"
 
-#: ../gtk/gtkscrolledwindow.c:380
+#: ../gtk/gtkscrolledwindow.c:386
 msgid "Horizontal Scrollbar Policy"
 msgstr "পথালি স্ক্ৰলবাৰৰ নীতি"
 
-#: ../gtk/gtkscrolledwindow.c:381
+#: ../gtk/gtkscrolledwindow.c:387
 msgid "When the horizontal scrollbar is displayed"
 msgstr "যখন পথালি স্ক্ৰলবাৰ প্ৰদৰ্শিত হ'ব"
 
-#: ../gtk/gtkscrolledwindow.c:388
+#: ../gtk/gtkscrolledwindow.c:394
 msgid "Vertical Scrollbar Policy"
 msgstr "উলম্ব স্ক্ৰলবাৰৰ নীতি"
 
-#: ../gtk/gtkscrolledwindow.c:389
+#: ../gtk/gtkscrolledwindow.c:395
 msgid "When the vertical scrollbar is displayed"
 msgstr "যখন উলম্ব স্ক্ৰলবাৰ প্ৰদৰ্শিত হ'ব"
 
-#: ../gtk/gtkscrolledwindow.c:397
+#: ../gtk/gtkscrolledwindow.c:403
 msgid "Window Placement"
 msgstr "উইন্ডো স্থাপন"
 
-#: ../gtk/gtkscrolledwindow.c:398
+#: ../gtk/gtkscrolledwindow.c:404
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
 msgstr "হলো."
 
-#: ../gtk/gtkscrolledwindow.c:415
+#: ../gtk/gtkscrolledwindow.c:421
 msgid "Window Placement Set"
 msgstr "Window Placement Set"
 
-#: ../gtk/gtkscrolledwindow.c:416
+#: ../gtk/gtkscrolledwindow.c:422
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
 msgstr "সৰ্বমোট."
 
-#: ../gtk/gtkscrolledwindow.c:422
+#: ../gtk/gtkscrolledwindow.c:428
 msgid "Shadow Type"
 msgstr "ছায়াৰ ধৰণ"
 
-#: ../gtk/gtkscrolledwindow.c:423
+#: ../gtk/gtkscrolledwindow.c:429
 msgid "Style of bevel around the contents"
 msgstr "অভ্যন্তৰস্থ বস্তুৰ (Content) চাৰপাশে অবস্থিত বেভেলৰ ধৰণ"
 
-#: ../gtk/gtkscrolledwindow.c:437
+#: ../gtk/gtkscrolledwindow.c:443
 msgid "Scrollbars within bevel"
 msgstr "Scrollbars within bevel"
 
-#: ../gtk/gtkscrolledwindow.c:438
+#: ../gtk/gtkscrolledwindow.c:444
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Place scrollbars within the scrolled window's bevel"
 
-#: ../gtk/gtkscrolledwindow.c:444
+#: ../gtk/gtkscrolledwindow.c:450
 msgid "Scrollbar spacing"
 msgstr "স্ক্ৰলবাৰে ৰিক্ত স্থানৰ পৰিমাণ"
 
-#: ../gtk/gtkscrolledwindow.c:445
+#: ../gtk/gtkscrolledwindow.c:451
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "স্ক্ৰলবাৰ এবং স্ক্ৰলবাৰৰ সৈতে সংযুক্ত উইন্ডোৰ মধ্যবৰ্তী পিক্সেলৰসংখ্যা"
 
-#: ../gtk/gtkscrolledwindow.c:461
+#: ../gtk/gtkscrolledwindow.c:467
 msgid "Minimum Content Width"
 msgstr "নুন্যতম সমল প্ৰস্থ"
 
-#: ../gtk/gtkscrolledwindow.c:462
+#: ../gtk/gtkscrolledwindow.c:468
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr "নুন্যতম প্ৰস্থ যোনটো স্ক্ৰল কৰা উইন্ডোয় তাৰ সমললে আবন্টন কৰিব"
 
-#: ../gtk/gtkscrolledwindow.c:476
+#: ../gtk/gtkscrolledwindow.c:482
 msgid "Minimum Content Height"
 msgstr "নুন্যতম সমল উচ্চতা"
 
-#: ../gtk/gtkscrolledwindow.c:477
+#: ../gtk/gtkscrolledwindow.c:483
 msgid "The minimum height that the scrolled window will allocate to its content"
 msgstr "নুন্যতম উচ্চতা যোনটো স্ক্ৰল কৰা উইন্ডোয় তাৰ সমললে আবন্টন কৰিব"
 
-#: ../gtk/gtkscrolledwindow.c:492
+#: ../gtk/gtkscrolledwindow.c:498
 msgid "Kinetic Scrolling"
 msgstr "গতিজ স্ক্ৰলিং"
 
-#: ../gtk/gtkscrolledwindow.c:493
+#: ../gtk/gtkscrolledwindow.c:499
 msgid "Kinetic scrolling mode."
 msgstr "গতিজ স্ক্ৰলিং অৱস্থা।"
 
@@ -5655,11 +5653,11 @@ msgstr "অঙ্কন"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "বিভাজকটি অঁকা হৈছে নাকি ৰিক্ত"
 
-#: ../gtk/gtksettings.c:343
+#: ../gtk/gtksettings.c:344
 msgid "Double Click Time"
 msgstr "দুইবাৰ ক্লিক কৰিব বাহিৰে সময়"
 
-#: ../gtk/gtksettings.c:344
+#: ../gtk/gtksettings.c:345
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -5667,11 +5665,11 @@ msgstr ""
 "সৰ্বোচ্চ যি সময়েৰ ভেতৰ পৰপৰ দুইবাৰ ক্লিক কৰিলে ই জোড়া ক্লিক হিচাপে গণ্য হ'ব "
 "(মিলিসেকেন্ডে)"
 
-#: ../gtk/gtksettings.c:351
+#: ../gtk/gtksettings.c:352
 msgid "Double Click Distance"
 msgstr "জোড়া ক্লিকেৰ সময়েৰ ব্যৱধান"
 
-#: ../gtk/gtksettings.c:352
+#: ../gtk/gtksettings.c:353
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -5679,35 +5677,35 @@ msgstr ""
 "সৰ্বোচ্চ যি সময়েৰ ভেতৰ পৰপৰ দুইবাৰ ক্লিক কৰিলে ই জোড়া ক্লিক হিচাপে গণ্য হ'ব "
 "(পিক্সেল হিসেবে)"
 
-#: ../gtk/gtksettings.c:368
+#: ../gtk/gtksettings.c:369
 msgid "Cursor Blink"
 msgstr "কাৰ্ছাৰৰ "
 
-#: ../gtk/gtksettings.c:369
+#: ../gtk/gtksettings.c:370
 msgid "Whether the cursor should blink"
 msgstr "কাৰ্ছাৰ ঝলকানো হ'ব কি না"
 
-#: ../gtk/gtksettings.c:376
+#: ../gtk/gtksettings.c:377
 msgid "Cursor Blink Time"
 msgstr "কাৰ্ছাৰ ৰ সময়"
 
-#: ../gtk/gtksettings.c:377
+#: ../gtk/gtksettings.c:378
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "কাৰ্ছাৰ ৰ সময়কালৰ দৈৰ্ঘ্য, মিলিসেকেন্ডে ব্যক্ত "
 
-#: ../gtk/gtksettings.c:396
+#: ../gtk/gtksettings.c:397
 msgid "Cursor Blink Timeout"
 msgstr "Cursor Blink Timeout"
 
-#: ../gtk/gtksettings.c:397
+#: ../gtk/gtksettings.c:398
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "সময় পৰে সেকেন্ড"
 
-#: ../gtk/gtksettings.c:404
+#: ../gtk/gtksettings.c:405
 msgid "Split Cursor"
 msgstr "বিভক্ত কাৰ্ছাৰ"
 
-#: ../gtk/gtksettings.c:405
+#: ../gtk/gtksettings.c:406
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -5715,157 +5713,157 @@ msgstr ""
 "বাম-থেকে-ডান এবং ডান-থেকে-বাম এধৰনেৰ লিখনীৰ মিশ্ৰণ প্ৰদৰ্শনেৰ সময় দুটি কাৰ্ছাৰ "
 "ব্যৱহাৰ কৰা হ'ব নে"
 
-#: ../gtk/gtksettings.c:412
+#: ../gtk/gtksettings.c:413
 msgid "Theme Name"
 msgstr "থিমেৰ নাম"
 
-#: ../gtk/gtksettings.c:413
+#: ../gtk/gtksettings.c:414
 msgid "Name of theme to load"
 msgstr "ল'ড কৰিবলগিয়া থীমৰ নাম"
 
-#: ../gtk/gtksettings.c:425
+#: ../gtk/gtksettings.c:426
 msgid "Icon Theme Name"
 msgstr "আইকন থিমেৰ নাম"
 
-#: ../gtk/gtksettings.c:426
+#: ../gtk/gtksettings.c:427
 msgid "Name of icon theme to use"
 msgstr "যি আইকন থীম ব্যৱহাৰ কৰা হ'ব তাৰ নাম"
 
-#: ../gtk/gtksettings.c:434
+#: ../gtk/gtksettings.c:435
 msgid "Fallback Icon Theme Name"
 msgstr "আইকন নাম"
 
-#: ../gtk/gtksettings.c:435
+#: ../gtk/gtksettings.c:436
 msgid "Name of a icon theme to fall back to"
 msgstr "নাম সৰ্বমোট"
 
-#: ../gtk/gtksettings.c:443
+#: ../gtk/gtksettings.c:444
 msgid "Key Theme Name"
 msgstr "মূল (Key) থিমেৰ নাম"
 
-#: ../gtk/gtksettings.c:444
+#: ../gtk/gtksettings.c:445
 msgid "Name of key theme to load"
 msgstr "ল'ড কৰিবলগিয়া মূল থীমৰ নাম"
 
-#: ../gtk/gtksettings.c:452
+#: ../gtk/gtksettings.c:453
 msgid "Menu bar accelerator"
 msgstr "মেনু বাৰৰ চটপট কী (Key)"
 
-#: ../gtk/gtksettings.c:453
+#: ../gtk/gtksettings.c:454
 msgid "Keybinding to activate the menu bar"
 msgstr "যি সকল কী (Key) সংহতি মেনুবাৰকে সক্ৰিয় কৰে"
 
-#: ../gtk/gtksettings.c:461
+#: ../gtk/gtksettings.c:462
 msgid "Drag threshold"
 msgstr "টেনে আনাৰ সৰ্বোচ্চ সীমা"
 
-#: ../gtk/gtksettings.c:462
+#: ../gtk/gtksettings.c:463
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "টেনে লোৱাৰ আগত কাৰ্ছাৰটি যি সংখ্যক পিক্সেল নড়তে পাৰে"
 
-#: ../gtk/gtksettings.c:470
+#: ../gtk/gtksettings.c:471
 msgid "Font Name"
 msgstr "ফন্টৰ নাম"
 
-#: ../gtk/gtksettings.c:471
+#: ../gtk/gtksettings.c:472
 msgid "Name of default font to use"
 msgstr "যি অবিকল্পিত ফন্টটি ব্যৱহাৰ কৰা হ'ব তাৰ নাম"
 
-#: ../gtk/gtksettings.c:493
+#: ../gtk/gtksettings.c:494
 msgid "Icon Sizes"
 msgstr "আইকনৰ আয়তন"
 
-#: ../gtk/gtksettings.c:494
+#: ../gtk/gtksettings.c:495
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "আইকনৰ আকাৰৰ তালিকা (gtk-menu= ১৬, ১৬:gtk-button=২০,২০..."
 
-#: ../gtk/gtksettings.c:502
+#: ../gtk/gtksettings.c:503
 msgid "GTK Modules"
 msgstr "জি.টি.কে. মডিউল"
 
-#: ../gtk/gtksettings.c:503
+#: ../gtk/gtksettings.c:504
 msgid "List of currently active GTK modules"
 msgstr "বৰ্তমানে সক্ৰিয় জি.টি.কে. মডিউলৰ তালিকা"
 
-#: ../gtk/gtksettings.c:511
+#: ../gtk/gtksettings.c:512
 msgid "Xft Antialias"
 msgstr "Xft এন্টিএলিয়াসিং"
 
-#: ../gtk/gtksettings.c:512
+#: ../gtk/gtksettings.c:513
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Xft ফন্টৰ ওপৰ এন্টিএলিয়াস প্ৰযোজ্য হ'ব নে; ০=না, ১=হ্যাঁ, -১=অবিকল্পিত"
 
-#: ../gtk/gtksettings.c:521
+#: ../gtk/gtksettings.c:522
 msgid "Xft Hinting"
 msgstr "Xft হিন্টিং"
 
-#: ../gtk/gtksettings.c:522
+#: ../gtk/gtksettings.c:523
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Xft ফন্টৰ ওপৰ হিন্ট প্ৰযোজ্য হ'ব নে; ০=না, ১=হ্যাঁ, -১=অবিকল্পিত"
 
-#: ../gtk/gtksettings.c:531
+#: ../gtk/gtksettings.c:532
 msgid "Xft Hint Style"
 msgstr "Xft হিন্টেৰ ধৰণ"
 
-#: ../gtk/gtksettings.c:532
+#: ../gtk/gtksettings.c:533
 msgid "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr "যি মাত্ৰাৰ হিন্টিং ব্যৱহাৰ কৰা হ'ব; কিছুই না, স্বল্প, মধ্যম, বা সম্পূৰ্ণ"
 
-#: ../gtk/gtksettings.c:541
+#: ../gtk/gtksettings.c:542
 msgid "Xft RGBA"
 msgstr "Xft আৰজিবিএ"
 
-#: ../gtk/gtksettings.c:542
+#: ../gtk/gtksettings.c:543
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "সাবপিক্সেল এন্টিএলিয়াসিং তৰ ধৰণ;  কিছুই না, স্বল্প, মধ্যম, বা সম্পূৰ্ণ"
 
-#: ../gtk/gtksettings.c:551
+#: ../gtk/gtksettings.c:552
 msgid "Xft DPI"
 msgstr "Xft ডিপিএএই"
 
-#: ../gtk/gtksettings.c:552
+#: ../gtk/gtksettings.c:553
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "১০২৪ * ডট/ইঞ্চি হিচাপে Xft তৰ বিভাজন।  -১ হলে অবিকল্পিত মান ব্যৱহাৰ কৰা হ'ব"
 
-#: ../gtk/gtksettings.c:561
+#: ../gtk/gtksettings.c:562
 msgid "Cursor theme name"
 msgstr "কাৰ্ছাৰ থিমেৰ নাম"
 
-#: ../gtk/gtksettings.c:562
+#: ../gtk/gtksettings.c:563
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "নাম সৰ্বমোট"
 
-#: ../gtk/gtksettings.c:570
+#: ../gtk/gtksettings.c:571
 msgid "Cursor theme size"
 msgstr "কাৰ্ছাৰ থিমেৰ আকাৰ"
 
-#: ../gtk/gtksettings.c:571
+#: ../gtk/gtksettings.c:572
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "মাপ উল্লিখিত সময় অবধি"
 
-#: ../gtk/gtksettings.c:580
+#: ../gtk/gtksettings.c:581
 msgid "Alternative button order"
 msgstr "বিকল্প বুটাম-বিন্যাস"
 
-#: ../gtk/gtksettings.c:581
+#: ../gtk/gtksettings.c:582
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "ডাইলগৰ বুটামসমূহ বিকল্প বুটাম-বিন্যাস ব্যৱহাৰ কৰিব নে"
 
-#: ../gtk/gtksettings.c:598
+#: ../gtk/gtksettings.c:599
 msgid "Alternative sort indicator direction"
 msgstr "Alternative ক্ৰমবিন্যাস"
 
-#: ../gtk/gtksettings.c:599
+#: ../gtk/gtksettings.c:600
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
 msgstr "সৰ্বমোট ক্ৰমবিন্যাস তালিকা হলো"
 
-#: ../gtk/gtksettings.c:607
+#: ../gtk/gtksettings.c:608
 msgid "Show the 'Input Methods' menu"
 msgstr "'ইনপুট পদ্ধতি' নামক তালিকা প্ৰদৰ্শিত হ'ব"
 
-#: ../gtk/gtksettings.c:608
+#: ../gtk/gtksettings.c:609
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
@@ -5873,11 +5871,11 @@ msgstr ""
 "প্ৰবিষ্টিৰ কনলিখনী তালিকা আৰু লিখনী প্ৰদৰ্শন ব্যৱস্থাৰ দ্বাৰা ইনপুট পদ্ধতি পৰিবৰ্তনেৰ "
 "সুবিধা উপলব্ধ কৰা হ'ব কি না"
 
-#: ../gtk/gtksettings.c:616
+#: ../gtk/gtksettings.c:617
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "সন্নিবেশ কৰক Unicode"
 
-#: ../gtk/gtksettings.c:617
+#: ../gtk/gtksettings.c:618
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -5885,247 +5883,247 @@ msgstr ""
 "প্ৰবিষ্টিৰ কনলিখনী তালিকা আৰু লিখনী প্ৰদৰ্শন ব্যৱস্থাৰ দ্বাৰা কন্ট্ৰোল ক্যাৰেক্টাৰ "
 "সন্নিবেশৰ সুবিধা উপলব্ধ কৰা হ'ব কি না"
 
-#: ../gtk/gtksettings.c:625
+#: ../gtk/gtksettings.c:626
 msgid "Start timeout"
 msgstr "আৰম্ভ"
 
-#: ../gtk/gtksettings.c:626
+#: ../gtk/gtksettings.c:627
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "উল্লিখিত সময় অবধি হলো"
 
-#: ../gtk/gtksettings.c:635
+#: ../gtk/gtksettings.c:636
 msgid "Repeat timeout"
 msgstr "Repeat timeout"
 
-#: ../gtk/gtksettings.c:636
+#: ../gtk/gtksettings.c:637
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "উল্লিখিত সময় অবধি হলো"
 
-#: ../gtk/gtksettings.c:645
+#: ../gtk/gtksettings.c:646
 msgid "Expand timeout"
 msgstr "প্ৰসাৰণ"
 
-#: ../gtk/gtksettings.c:646
+#: ../gtk/gtksettings.c:647
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr "প্ৰসাৰণ উল্লিখিত সময় অবধি হলো"
 
-#: ../gtk/gtksettings.c:681
+#: ../gtk/gtksettings.c:682
 msgid "Color scheme"
 msgstr "ৰং যোজনা "
 
-#: ../gtk/gtksettings.c:682
+#: ../gtk/gtksettings.c:683
 msgid "A palette of named colors for use in themes"
 msgstr "সৰ্বমোট উল্লিখিত সময় অবধি"
 
-#: ../gtk/gtksettings.c:691
+#: ../gtk/gtksettings.c:692
 msgid "Enable Animations"
 msgstr "অ্যানিমেশন সক্ৰিয় কৰা হ'ব"
 
-#: ../gtk/gtksettings.c:692
+#: ../gtk/gtksettings.c:693
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Whether to enable toolkit-wide animations."
 
-#: ../gtk/gtksettings.c:713
+#: ../gtk/gtksettings.c:714
 msgid "Enable Touchscreen Mode"
 msgstr "সক্ৰিয় কৰক অৱস্থা"
 
-#: ../gtk/gtksettings.c:714
+#: ../gtk/gtksettings.c:715
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr "না সক্ৰিয়"
 
-#: ../gtk/gtksettings.c:731
+#: ../gtk/gtksettings.c:732
 msgid "Tooltip timeout"
 msgstr "টুলটিপ"
 
-#: ../gtk/gtksettings.c:732
+#: ../gtk/gtksettings.c:733
 msgid "Timeout before tooltip is shown"
 msgstr "পূৰ্বে হলো"
 
-#: ../gtk/gtksettings.c:757
+#: ../gtk/gtksettings.c:758
 msgid "Tooltip browse timeout"
 msgstr "টুলটিপ"
 
-#: ../gtk/gtksettings.c:758
+#: ../gtk/gtksettings.c:759
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr "পূৰ্বে হলো অৱস্থা হলো"
 
-#: ../gtk/gtksettings.c:779
+#: ../gtk/gtksettings.c:780
 msgid "Tooltip browse mode timeout"
 msgstr "টুলটিপ অৱস্থা"
 
-#: ../gtk/gtksettings.c:780
+#: ../gtk/gtksettings.c:781
 msgid "Timeout after which browse mode is disabled"
 msgstr "পৰে অৱস্থা হলো"
 
-#: ../gtk/gtksettings.c:799
+#: ../gtk/gtksettings.c:800
 msgid "Keynav Cursor Only"
 msgstr "Keynav Cursor Only"
 
-#: ../gtk/gtksettings.c:800
+#: ../gtk/gtksettings.c:801
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr "When TRUE, there are only cursor keys available to navigate widgets"
 
-#: ../gtk/gtksettings.c:817
+#: ../gtk/gtksettings.c:818
 msgid "Keynav Wrap Around"
 msgstr "গুটানো"
 
-#: ../gtk/gtksettings.c:818
+#: ../gtk/gtksettings.c:819
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "Whether to wrap around when keyboard-navigating widgets"
 
-#: ../gtk/gtksettings.c:838
+#: ../gtk/gtksettings.c:839
 msgid "Error Bell"
 msgstr "ত্ৰুটি"
 
-#: ../gtk/gtksettings.c:839
+#: ../gtk/gtksettings.c:840
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr "অন্যান্য"
 
-#: ../gtk/gtksettings.c:856
+#: ../gtk/gtksettings.c:857
 msgid "Color Hash"
 msgstr "Color Hash"
 
-#: ../gtk/gtksettings.c:857
+#: ../gtk/gtksettings.c:858
 msgid "A hash table representation of the color scheme."
 msgstr "সৰ্বমোট ৰং."
 
-#: ../gtk/gtksettings.c:865
+#: ../gtk/gtksettings.c:866
 msgid "Default file chooser backend"
 msgstr "স্বাভাবিক অবস্থায় ব্যৱহৃত ফাইল বাছাইকাৰী ব্যাকএন্ড"
 
-#: ../gtk/gtksettings.c:866
+#: ../gtk/gtksettings.c:867
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "স্বাভাবিক অবস্থায় যি GtkFileChooser ব্যাকএন্ড ব্যৱহাৰ কৰা হ'ব তাৰ নাম"
 
-#: ../gtk/gtksettings.c:883
+#: ../gtk/gtksettings.c:884
 msgid "Default print backend"
 msgstr "অবিকল্পিত"
 
-#: ../gtk/gtksettings.c:884
+#: ../gtk/gtksettings.c:885
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "তালিকা সৰ্বমোট"
 
-#: ../gtk/gtksettings.c:907
+#: ../gtk/gtksettings.c:908
 msgid "Default command to run when displaying a print preview"
 msgstr "অবিকল্পিত"
 
-#: ../gtk/gtksettings.c:908
+#: ../gtk/gtksettings.c:909
 msgid "Command to run when displaying a print preview"
 msgstr "Command to run when displaying a print preview"
 
-#: ../gtk/gtksettings.c:924
+#: ../gtk/gtksettings.c:925
 msgid "Enable Mnemonics"
 msgstr "সক্ৰিয় কৰক"
 
-#: ../gtk/gtksettings.c:925
+#: ../gtk/gtksettings.c:926
 msgid "Whether labels should have mnemonics"
 msgstr "Whether labels should have mnemonics"
 
-#: ../gtk/gtksettings.c:941
+#: ../gtk/gtksettings.c:942
 msgid "Enable Accelerators"
 msgstr "সক্ৰিয় কৰক"
 
-#: ../gtk/gtksettings.c:942
+#: ../gtk/gtksettings.c:943
 msgid "Whether menu items should have accelerators"
 msgstr "Whether menu items should have accelerators"
 
-#: ../gtk/gtksettings.c:959
+#: ../gtk/gtksettings.c:960
 msgid "Recent Files Limit"
 msgstr "Recent Files Limit"
 
-#: ../gtk/gtksettings.c:960
+#: ../gtk/gtksettings.c:961
 msgid "Number of recently used files"
 msgstr "সৰ্বমোট"
 
 #
-#: ../gtk/gtksettings.c:980
+#: ../gtk/gtksettings.c:981
 msgid "Default IM module"
 msgstr "অবিকল্পিত প্ৰস্থ"
 
 #
-#: ../gtk/gtksettings.c:981
+#: ../gtk/gtksettings.c:982
 msgid "Which IM module should be used by default"
 msgstr "পেলেট ব্যৱহৃত হ'ব নে"
 
 #
-#: ../gtk/gtksettings.c:999
+#: ../gtk/gtksettings.c:1000
 msgid "Recent Files Max Age"
 msgstr "ব্যৱস্থাপক"
 
 #
-#: ../gtk/gtksettings.c:1000
+#: ../gtk/gtksettings.c:1001
 msgid "Maximum age of recently used files, in days"
 msgstr "সৰ্বমোট"
 
-#: ../gtk/gtksettings.c:1009
+#: ../gtk/gtksettings.c:1010
 msgid "Fontconfig configuration timestamp"
 msgstr "Fontconfig configuration timestamp"
 
-#: ../gtk/gtksettings.c:1010
+#: ../gtk/gtksettings.c:1011
 msgid "Timestamp of current fontconfig configuration"
 msgstr "Timestamp of current fontconfig configuration"
 
 #
-#: ../gtk/gtksettings.c:1032
+#: ../gtk/gtksettings.c:1033
 msgid "Sound Theme Name"
 msgstr "শব্দেৰ থিমেৰ নাম"
 
 #
-#: ../gtk/gtksettings.c:1033
+#: ../gtk/gtksettings.c:1034
 msgid "XDG sound theme name"
 msgstr "কাৰ্ছাৰ থিমেৰ নাম"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: ../gtk/gtksettings.c:1055
+#: ../gtk/gtksettings.c:1056
 msgid "Audible Input Feedback"
 msgstr "Audible Input Feedback"
 
 #
-#: ../gtk/gtksettings.c:1056
+#: ../gtk/gtksettings.c:1057
 msgid "Whether to play event sounds as feedback to user input"
 msgstr "ইনপুটেৰ প্ৰতি উইজেট সাড়া দেয় নে"
 
 #
-#: ../gtk/gtksettings.c:1077
+#: ../gtk/gtksettings.c:1078
 msgid "Enable Event Sounds"
 msgstr "অ্যানিমেশন সক্ৰিয় কৰা হ'ব"
 
 #
-#: ../gtk/gtksettings.c:1078
+#: ../gtk/gtksettings.c:1079
 msgid "Whether to play any event sounds at all"
 msgstr "\"অসামঞ্জস্যপূৰ্ণ\" অবস্থা প্ৰদৰ্শন কৰা হ'ব নে"
 
 #
-#: ../gtk/gtksettings.c:1093
+#: ../gtk/gtksettings.c:1094
 msgid "Enable Tooltips"
 msgstr "টুল-টিপ সক্ৰিয় কৰা হ'ব"
 
 #
-#: ../gtk/gtksettings.c:1094
+#: ../gtk/gtksettings.c:1095
 msgid "Whether tooltips should be shown on widgets"
 msgstr "ট্যাব প্ৰদৰ্শন কৰা হ'ব নে"
 
-#: ../gtk/gtksettings.c:1107
+#: ../gtk/gtksettings.c:1108
 msgid "Toolbar style"
 msgstr "টুলবাৰৰ ধৰণ"
 
-#: ../gtk/gtksettings.c:1108
+#: ../gtk/gtksettings.c:1109
 msgid "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "অবিকল্পিত টুলবাৰে অকল লিখনী বা লিখনী আৰু আইকন বা অকল আইকন, ইত্যাদি থাকিব নে"
 
-#: ../gtk/gtksettings.c:1122
+#: ../gtk/gtksettings.c:1123
 msgid "Toolbar Icon Size"
 msgstr "টুলবাৰ আইকনৰ আকাৰ"
 
-#: ../gtk/gtksettings.c:1123
+#: ../gtk/gtksettings.c:1124
 msgid "The size of icons in default toolbars."
 msgstr "অবিকল্পিত টুলবাৰসমূহত থকা আইকনৰ আকাৰ।"
 
-#: ../gtk/gtksettings.c:1140
+#: ../gtk/gtksettings.c:1141
 msgid "Auto Mnemonics"
 msgstr "স্বচালিত নিমনিকসমূহ"
 
-#: ../gtk/gtksettings.c:1141
+#: ../gtk/gtksettings.c:1142
 msgid ""
 "Whether mnemonics should be automatically shown and hidden when the user "
 "presses the mnemonic activator."
@@ -6133,135 +6131,144 @@ msgstr ""
 "যেতিয়া ব্যৱহাৰকাৰীয়ে নিমনিক এক্টিভেটৰ দবায় তেতিয়া নিমনিকসমূহ স্বচালিতভাৱে দেখুৱা "
 "আৰু লুকোৱা হ'ব নে।"
 
-#: ../gtk/gtksettings.c:1157
+#: ../gtk/gtksettings.c:1158
+#| msgid "Primary icon sensitive"
+msgid "Primary button warps slider"
+msgstr "প্ৰাথমিক বুটামে স্লাইডাৰ ৱাৰ্প কৰে"
+
+#: ../gtk/gtksettings.c:1159
+msgid "Whether a primary click on the trough should warp the slider into position"
+msgstr "ট্ৰ'ত এটা প্ৰাথমিক ক্লিকে স্লাইডাৰক অৱস্থানত ৱাৰ্প কৰিব লাগে নে"
+
+#: ../gtk/gtksettings.c:1175
 msgid "Visible Focus"
 msgstr "দৃশ্যমান মনোনিৱেষ"
 
-#: ../gtk/gtksettings.c:1158
+#: ../gtk/gtksettings.c:1176
 msgid ""
 "Whether 'focus rectangles' should be hidden until the user starts to use the "
 "keyboard."
 msgstr "ব্যৱহাৰকাৰীয়ে কিবৰ্ড ব্যৱহাৰ কৰা লৈকে 'মনোনিৱেষ আযতসমূহ' লুকাই থোৱা হব নে।"
 
-#: ../gtk/gtksettings.c:1184
+#: ../gtk/gtksettings.c:1202
 msgid "Application prefers a dark theme"
 msgstr "এপ্লিকেচনে এটা এন্ধাৰ থীম পছন্দ কৰে"
 
-#: ../gtk/gtksettings.c:1185
+#: ../gtk/gtksettings.c:1203
 msgid "Whether the application prefers to have a dark theme."
 msgstr "এপ্লিকেচনে এটা এন্ধাৰ থীম পছন্দ কৰিব নে"
 
-#: ../gtk/gtksettings.c:1200
+#: ../gtk/gtksettings.c:1218
 msgid "Show button images"
 msgstr "বুটামৰ ছবি প্ৰদৰ্শন কৰক"
 
-#: ../gtk/gtksettings.c:1201
+#: ../gtk/gtksettings.c:1219
 msgid "Whether images should be shown on buttons"
 msgstr "বুটামত ছবি প্ৰদৰ্শন কৰা হ'ব নে"
 
-#: ../gtk/gtksettings.c:1209 ../gtk/gtksettings.c:1303
+#: ../gtk/gtksettings.c:1227 ../gtk/gtksettings.c:1321
 msgid "Select on focus"
 msgstr "ফোকাস কৰিলে চিহ্নিত হ'ব"
 
-#: ../gtk/gtksettings.c:1210
+#: ../gtk/gtksettings.c:1228
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "কোন অন্তৰ্ভুক্তিৰ (Entry) অভ্যন্তৰীণ বস্তুকে ফ'কাচ কৰিলে ই চিহ্নিত হ'ব নে"
 
-#: ../gtk/gtksettings.c:1227
+#: ../gtk/gtksettings.c:1245
 msgid "Password Hint Timeout"
 msgstr "গুপ্তশব্দ"
 
-#: ../gtk/gtksettings.c:1228
+#: ../gtk/gtksettings.c:1246
 msgid "How long to show the last input character in hidden entries"
 msgstr "শেষ"
 
-#: ../gtk/gtksettings.c:1237
+#: ../gtk/gtksettings.c:1255
 msgid "Show menu images"
 msgstr "Show menu images"
 
-#: ../gtk/gtksettings.c:1238
+#: ../gtk/gtksettings.c:1256
 msgid "Whether images should be shown in menus"
 msgstr "Whether images should be shown in menus"
 
-#: ../gtk/gtksettings.c:1246
+#: ../gtk/gtksettings.c:1264
 msgid "Delay before drop down menus appear"
 msgstr "ড্ৰপ ড্ৰাউন তালিকা দেখা দেয়াৰ আগত বিলম্ব"
 
-#: ../gtk/gtksettings.c:1247
+#: ../gtk/gtksettings.c:1265
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "মেনুবাৰৰ পৰা কোনো সাবমেনু দেখা দেয়াৰ আগত বিলম্ব"
 
-#: ../gtk/gtksettings.c:1264
+#: ../gtk/gtksettings.c:1282
 msgid "Scrolled Window Placement"
 msgstr "Scrolled Window Placement"
 
-#: ../gtk/gtksettings.c:1265
+#: ../gtk/gtksettings.c:1283
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
 msgstr "সৰ্বমোট."
 
-#: ../gtk/gtksettings.c:1274
+#: ../gtk/gtksettings.c:1292
 msgid "Can change accelerators"
 msgstr "চটপট কী (Key) পৰিবৰ্তন কৰিব পাৰে"
 
-#: ../gtk/gtksettings.c:1275
+#: ../gtk/gtksettings.c:1293
 msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "মেনু আইটেমেৰ ওপৰ চাপ দিয়ে চটপট কী (Key) পৰিবৰ্তন কৰা যাব নে"
 
-#: ../gtk/gtksettings.c:1283
+#: ../gtk/gtksettings.c:1301
 msgid "Delay before submenus appear"
 msgstr "সাবমেনু দেখা যাওয়াৰ আগত বিলম্ব"
 
-#: ../gtk/gtksettings.c:1284
+#: ../gtk/gtksettings.c:1302
 msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "সাবমেনু দেখা যাওয়াৰ আগত সৰ্বনিম্ন যি সময় যাবত্‍ পইন্টাৰটি মেনুতে প্ৰদৰ্শিত সাবমেনুৰ "
 "নামেৰ ওপৰ থাকবে"
 
-#: ../gtk/gtksettings.c:1293
+#: ../gtk/gtksettings.c:1311
 msgid "Delay before hiding a submenu"
 msgstr "সাবমেনু আড়াল কৰাৰ আগত বিলম্ব"
 
-#: ../gtk/gtksettings.c:1294
+#: ../gtk/gtksettings.c:1312
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
 msgstr "পইন্টাৰ সাবমেনুৰ ফালে সৰে আসাৰ সময় সাবমেনুটি আড়াল কৰাৰ আগত বিলম্ব"
 
-#: ../gtk/gtksettings.c:1304
+#: ../gtk/gtksettings.c:1322
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "সৰ্বমোট হলো"
 
-#: ../gtk/gtksettings.c:1312
+#: ../gtk/gtksettings.c:1330
 msgid "Custom palette"
 msgstr "স্বনিৰ্বাচিত পেলেট"
 
-#: ../gtk/gtksettings.c:1313
+#: ../gtk/gtksettings.c:1331
 msgid "Palette to use in the color selector"
 msgstr "ৰং নিৰ্বাচকে যি পেলেট ব্যৱহাৰ কৰা হ'ব"
 
-#: ../gtk/gtksettings.c:1321
+#: ../gtk/gtksettings.c:1339
 msgid "IM Preedit style"
 msgstr "IM তৰ এডিটপূৰ্ব ধৰণ"
 
-#: ../gtk/gtksettings.c:1322
+#: ../gtk/gtksettings.c:1340
 msgid "How to draw the input method preedit string"
 msgstr "যিধৰণে ইনপুট পদ্ধতিৰ এডিটপূৰ্ব পংক্তি অঁকা হ'ব"
 
-#: ../gtk/gtksettings.c:1331
+#: ../gtk/gtksettings.c:1349
 msgid "IM Status style"
 msgstr "IM তৰ অবস্থাসূচক ধৰণ"
 
-#: ../gtk/gtksettings.c:1332
+#: ../gtk/gtksettings.c:1350
 msgid "How to draw the input method statusbar"
 msgstr "যি ভাবে ইনপুট পদ্ধতিৰ স্ট্যাটাসবাৰ"
 
-#: ../gtk/gtksettings.c:1341
+#: ../gtk/gtksettings.c:1359
 msgid "Desktop shell shows app menu"
 msgstr "ডেস্কটপ শ্বেলে এপ্লিকেচন মেনু দেখায়"
 
-#: ../gtk/gtksettings.c:1342
+#: ../gtk/gtksettings.c:1360
 msgid ""
 "Set to TRUE if the desktop environment is displaying the app menu, FALSE if "
 "the app should display it itself."
@@ -6269,11 +6276,11 @@ msgstr ""
 "যদি ডেস্কটপ মেনুয়ে এপ্লিকেচন মেনু প্ৰদৰ্শন কৰে তেন্তে TRUE সংহত, অথবা FALSE যদি "
 "এপ্লিকেচনে ইয়াক নিজেই প্ৰদৰ্শন কৰিব লাগে।"
 
-#: ../gtk/gtksettings.c:1351
+#: ../gtk/gtksettings.c:1369
 msgid "Desktop shell shows the menubar"
 msgstr "ডেস্কটপ শ্বেলে মেনুবাৰ দেখায়"
 
-#: ../gtk/gtksettings.c:1352
+#: ../gtk/gtksettings.c:1370
 msgid ""
 "Set to TRUE if the desktop environment is displaying the menubar, FALSE if "
 "the app should display it itself."
@@ -6281,11 +6288,11 @@ msgstr ""
 "যদি ডেস্কটপ মেনুয়ে মেনুবাৰ প্ৰদৰ্শন কৰে তেন্তে TRUE লে সংহত, অথবা FALSE যদি "
 "এপ্লিকেচনে ইয়াক নিজেই প্ৰদৰ্শন কৰিব লাগে।"
 
-#: ../gtk/gtksettings.c:1369
+#: ../gtk/gtksettings.c:1387
 msgid "Enable primary paste"
 msgstr "প্ৰাথমিক পেইস্ট সামৰ্থবান কৰক"
 
-#: ../gtk/gtksettings.c:1370
+#: ../gtk/gtksettings.c:1388
 msgid ""
 "Whether a middle click on a mouse should paste the 'PRIMARY' clipboard "
 "content at the cursor location."
@@ -6309,15 +6316,15 @@ msgstr "লুকানো উইজেটকে অগ্ৰাহ্য কৰ
 msgid "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr "সৰ্বমোট"
 
-#: ../gtk/gtkspinbutton.c:327
+#: ../gtk/gtkspinbutton.c:344
 msgid "Climb Rate"
 msgstr "ওপৰত উঠাৰ গতি"
 
-#: ../gtk/gtkspinbutton.c:347
+#: ../gtk/gtkspinbutton.c:364
 msgid "Snap to Ticks"
 msgstr "টিক তৰ স্ন্যাপ (Snap)"
 
-#: ../gtk/gtkspinbutton.c:348
+#: ../gtk/gtkspinbutton.c:365
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
@@ -6325,35 +6332,35 @@ msgstr ""
 "ত্ৰুটিপূৰ্ণ মানবোৰ স্বয়ংক্ৰিয়ভাবে স্পিন বুটামৰ ওচৰতবৰ্তী ধাপবৃদ্ধি মান ত পৰিবৰ্তন কৰা "
 "হ'ব নে"
 
-#: ../gtk/gtkspinbutton.c:355
+#: ../gtk/gtkspinbutton.c:372
 msgid "Numeric"
 msgstr "সংখ্যাতাত্ত্বিক"
 
-#: ../gtk/gtkspinbutton.c:356
+#: ../gtk/gtkspinbutton.c:373
 msgid "Whether non-numeric characters should be ignored"
 msgstr "সংখ্যা নয় ইয়াৰকম অক্ষৰ অগ্ৰাহ্য কৰা হ'ব নে"
 
-#: ../gtk/gtkspinbutton.c:363
+#: ../gtk/gtkspinbutton.c:380
 msgid "Wrap"
 msgstr "গুটানো"
 
-#: ../gtk/gtkspinbutton.c:364
+#: ../gtk/gtkspinbutton.c:381
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr "স্পিন বুটাম তাৰ সৰ্বোচ্চ সীমায় পৌঁছে গুটিয়ে সৰ্বনিম্ন মানে নেমে যাব নে"
 
-#: ../gtk/gtkspinbutton.c:371
+#: ../gtk/gtkspinbutton.c:388
 msgid "Update Policy"
 msgstr "আপডেট কৰাৰ নীতি"
 
-#: ../gtk/gtkspinbutton.c:372
+#: ../gtk/gtkspinbutton.c:389
 msgid "Whether the spin button should update always, or only when the value is legal"
 msgstr "স্পিন বুটাম কখন আপডেট কৰিব - সৰ্বদা নাকি কেবল মানটি বৈধ হলেই"
 
-#: ../gtk/gtkspinbutton.c:381
+#: ../gtk/gtkspinbutton.c:398
 msgid "Reads the current value, or sets a new value"
 msgstr "বৰ্তমান মানটি পড়ে অথবা নতুন মান নিৰ্ধাৰণ কৰে"
 
-#: ../gtk/gtkspinbutton.c:390
+#: ../gtk/gtkspinbutton.c:411
 msgid "Style of bevel around the spin button"
 msgstr "স্পিন বুটামৰ চতুপাৰ্শ্বস্থ বেভেলৰ ধৰণ"
 
@@ -6501,6 +6508,20 @@ msgid ""
 "destination"
 msgstr "তালিকা সৰ্বমোট উল্লিখিত সময় অবধি"
 
+#: ../gtk/gtktexthandle.c:469 ../gtk/gtktexthandle.c:470
+#: ../gtk/gtkwidget.c:993
+msgid "Parent widget"
+msgstr "পেৰেন্ট উইজেট"
+
+#
+#: ../gtk/gtktexthandle.c:477 ../gtk/gtkwidget.c:1184
+msgid "Window"
+msgstr "সংযোগ পথ"
+
+#: ../gtk/gtktexthandle.c:478
+msgid "Window the coordinates are based upon"
+msgstr "উইন্ডো যাৰ ওপৰত অক্ষবোৰ ভিত্তিয়"
+
 #: ../gtk/gtktextmark.c:127
 msgid "Mark name"
 msgstr "Mark name"
@@ -6577,7 +6598,7 @@ msgstr ""
 "ভালভাবে খাপখাইয়ে নেয় বিধায় ইয়াক ব্যৱহাৰৰ পৰামৰ্শ দিয়া গেল।  পেনগো একো গুণিতক, "
 "যেনে PANGO_SCALE_X_LARGE তৰ মান পূৰ্বৰ পৰা নিৰ্ধাৰণ কৰি থাকে।"
 
-#: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:704
+#: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:720
 msgid "Left, right, or center justification"
 msgstr "বাম, ডান অথবা কেন্দ্ৰীয় জাস্টিফিকেশন (Justification)"
 
@@ -6594,7 +6615,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "বাঁ দিকেৰ সীমা"
 
-#: ../gtk/gtktexttag.c:432 ../gtk/gtktextview.c:713
+#: ../gtk/gtktexttag.c:432 ../gtk/gtktextview.c:729
 msgid "Width of the left margin in pixels"
 msgstr "বাঁ দিকেৰ মাৰ্জিনেৰ প্ৰস্থ (পিক্সেলে)"
 
@@ -6602,15 +6623,15 @@ msgstr "বাঁ দিকেৰ মাৰ্জিনেৰ প্ৰস্থ
 msgid "Right margin"
 msgstr "ডান দিকেৰ সীমা"
 
-#: ../gtk/gtktexttag.c:442 ../gtk/gtktextview.c:723
+#: ../gtk/gtktexttag.c:442 ../gtk/gtktextview.c:739
 msgid "Width of the right margin in pixels"
 msgstr "ডান দিকেৰ মাৰ্জিনেৰ প্ৰস্থ (পিক্সেলে)"
 
-#: ../gtk/gtktexttag.c:452 ../gtk/gtktextview.c:732
+#: ../gtk/gtktexttag.c:452 ../gtk/gtktextview.c:748
 msgid "Indent"
 msgstr "ইনডেন্ট"
 
-#: ../gtk/gtktexttag.c:453 ../gtk/gtktextview.c:733
+#: ../gtk/gtktexttag.c:453 ../gtk/gtktextview.c:749
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "অনুচ্ছেদটিকে সীমাৰ পৰা যত পিক্সেল ছাড় দেয়া হ'ব"
 
@@ -6626,7 +6647,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "শাৰীতৰ ওপৰত পিক্সেলৰসংখ্যা"
 
-#: ../gtk/gtktexttag.c:474 ../gtk/gtktextview.c:657
+#: ../gtk/gtktexttag.c:474 ../gtk/gtktextview.c:673
 msgid "Pixels of blank space above paragraphs"
 msgstr "অনুচ্ছেদেৰ ওপৰ যত পিক্সেল ৰিক্ত স্থান থাকবে"
 
@@ -6634,7 +6655,7 @@ msgstr "অনুচ্ছেদেৰ ওপৰ যত পিক্সেল �
 msgid "Pixels below lines"
 msgstr "শাৰীতৰ তলে পিক্সেলৰসংখ্যা"
 
-#: ../gtk/gtktexttag.c:484 ../gtk/gtktextview.c:667
+#: ../gtk/gtktexttag.c:484 ../gtk/gtktextview.c:683
 msgid "Pixels of blank space below paragraphs"
 msgstr "অনুচ্ছেদেৰ তলে যত পিক্সেল ৰিক্ত স্থান থাকবে"
 
@@ -6642,21 +6663,21 @@ msgstr "অনুচ্ছেদেৰ তলে যত পিক্সেল �
 msgid "Pixels inside wrap"
 msgstr "গুটিয়ে নেয়াৰ ক্ষেত্ৰে পিক্সেল সংখ্যা"
 
-#: ../gtk/gtktexttag.c:494 ../gtk/gtktextview.c:677
+#: ../gtk/gtktexttag.c:494 ../gtk/gtktextview.c:693
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "কোন অনুচ্ছেদেৰ মেৰিওৱা দুটি শাৰীতৰ মাজত যত পিক্সেল ফাঁক থাকবে"
 
-#: ../gtk/gtktexttag.c:521 ../gtk/gtktextview.c:695
+#: ../gtk/gtktexttag.c:521 ../gtk/gtktextview.c:711
 msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "শাৰী কখনোই গুটিয়ে নেয়া নহ'ব, শব্দ শেষ হলে গুটিয়ে নেয়া নহ'বকি অক্ষৰ শেষ হলে গুটিয়ে "
 "নেয়া হ'ব"
 
-#: ../gtk/gtktexttag.c:530 ../gtk/gtktextview.c:742
+#: ../gtk/gtktexttag.c:530 ../gtk/gtktextview.c:758
 msgid "Tabs"
 msgstr "ট্যাব"
 
-#: ../gtk/gtktexttag.c:531 ../gtk/gtktextview.c:743
+#: ../gtk/gtktexttag.c:531 ../gtk/gtktextview.c:759
 msgid "Custom tabs for this text"
 msgstr "এই লিখনীৰ বাবে ইচ্ছামাফিক আকাৰৰ ট্যাব"
 
@@ -6792,63 +6813,63 @@ msgstr "অনুচ্ছেদেৰ পটভূমিৰ সংহতি"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "এই টেগটো অনুচ্ছেদেৰ পটভূমিৰ ৰঙক প্ৰভাবিত কৰে নে"
 
-#: ../gtk/gtktextview.c:656
+#: ../gtk/gtktextview.c:672
 msgid "Pixels Above Lines"
 msgstr "শাৰীতৰ ওপৰত পিক্সেলৰসংখ্যা"
 
-#: ../gtk/gtktextview.c:666
+#: ../gtk/gtktextview.c:682
 msgid "Pixels Below Lines"
 msgstr "শাৰীতৰ তলে পিক্সেলৰসংখ্যা"
 
-#: ../gtk/gtktextview.c:676
+#: ../gtk/gtktextview.c:692
 msgid "Pixels Inside Wrap"
 msgstr "জড়ানোৰ মাজতকাৰ পিক্সেলৰসংখ্যা"
 
-#: ../gtk/gtktextview.c:694
+#: ../gtk/gtktextview.c:710
 msgid "Wrap Mode"
 msgstr "জড়ানো (wrap) অবস্থা"
 
-#: ../gtk/gtktextview.c:712
+#: ../gtk/gtktextview.c:728
 msgid "Left Margin"
 msgstr "বাঁদিকেৰ সীমা"
 
-#: ../gtk/gtktextview.c:722
+#: ../gtk/gtktextview.c:738
 msgid "Right Margin"
 msgstr "সোঁফালৰ সীমা"
 
-#: ../gtk/gtktextview.c:750
+#: ../gtk/gtktextview.c:766
 msgid "Cursor Visible"
 msgstr "কাৰ্ছাৰ দৃশ্যমান"
 
-#: ../gtk/gtktextview.c:751
+#: ../gtk/gtktextview.c:767
 msgid "If the insertion cursor is shown"
 msgstr "যদি লেখা ভৰোৱাৰ (Insetion) কাৰ্ছাৰ প্ৰদৰ্শন কৰা হয়"
 
-#: ../gtk/gtktextview.c:758
+#: ../gtk/gtktextview.c:774
 msgid "Buffer"
 msgstr "বাফাৰ"
 
-#: ../gtk/gtktextview.c:759
+#: ../gtk/gtktextview.c:775
 msgid "The buffer which is displayed"
 msgstr "যি বাফাৰটি প্ৰদৰ্শন কৰা হয়"
 
-#: ../gtk/gtktextview.c:767
+#: ../gtk/gtktextview.c:783
 msgid "Whether entered text overwrites existing contents"
 msgstr "যি লিখনী লেখা হ'ব ই বিদ্যমান লিখনীৰ অভাৰৰাইট কৰা হ'ব নে"
 
-#: ../gtk/gtktextview.c:774
+#: ../gtk/gtktextview.c:790
 msgid "Accepts tab"
 msgstr "ট্যাব তৰ ব্যৱহাৰ অনুমোদন কৰে"
 
-#: ../gtk/gtktextview.c:775
+#: ../gtk/gtktextview.c:791
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "ট্যাব চাপলে যি অক্ষৰটি লেখা হ'ব ই ট্যাব-ই হ'ব নে"
 
-#: ../gtk/gtktextview.c:846
+#: ../gtk/gtktextview.c:862
 msgid "Error underline color"
 msgstr "ভুল নিৰ্দেশক নিম্নৰেখাৰ ৰং"
 
-#: ../gtk/gtktextview.c:847
+#: ../gtk/gtktextview.c:863
 msgid "Color with which to draw error-indication underlines"
 msgstr "ভুল নিৰ্দেশক নিম্নৰেখা আঁকতে যি ৰং ব্যৱহৃত হ'ব"
 
@@ -7387,7 +7408,7 @@ msgstr "খানি পংক্তিৰ বাবে"
 msgid "Whether to display the column"
 msgstr "স্তম্ভ প্ৰদৰ্শন কৰা হ'ব নে"
 
-#: ../gtk/gtktreeviewcolumn.c:255 ../gtk/gtkwindow.c:657
+#: ../gtk/gtktreeviewcolumn.c:255 ../gtk/gtkwindow.c:661
 msgid "Resizable"
 msgstr "পৰিবৰ্তনযোগ্য আকাৰ"
 
@@ -7514,10 +7535,6 @@ msgstr "উইজেটৰ নাম"
 #: ../gtk/gtkwidget.c:987
 msgid "The name of the widget"
 msgstr "উইজেটৰ নাম"
-
-#: ../gtk/gtkwidget.c:993
-msgid "Parent widget"
-msgstr "পেৰেন্ট উইজেট"
 
 #: ../gtk/gtkwidget.c:994
 msgid "The parent widget of this widget. Must be a Container widget"
@@ -7648,11 +7665,6 @@ msgstr "gtk_widget_show_all() এই উইজেটকে প্ৰভাবি
 #: ../gtk/gtkwidget.c:1128
 msgid "Whether this widget has a tooltip"
 msgstr "Whether this widget has a tooltip"
-
-#
-#: ../gtk/gtkwidget.c:1184
-msgid "Window"
-msgstr "সংযোগ পথ"
 
 #: ../gtk/gtkwidget.c:1185
 msgid "The widget's window if it is realized"
@@ -7882,47 +7894,57 @@ msgstr "Vertical Scroll Arrow Length"
 msgid "The length of vertical scroll arrows"
 msgstr "সৰ্বমোট"
 
-#: ../gtk/gtkwindow.c:615
+#: ../gtk/gtkwidget.c:3297 ../gtk/gtkwidget.c:3298
+#| msgid "Width of handle"
+msgid "Width of text selection handles"
+msgstr "লিখনী নিৰ্বাচন হাতলৰ প্ৰস্থ"
+
+#: ../gtk/gtkwidget.c:3303 ../gtk/gtkwidget.c:3304
+#| msgid "Opacity of the selection box"
+msgid "Height of text selection handles"
+msgstr "লিখনী নিৰ্বাচন হাতলসমূহৰ উচ্চতা"
+
+#: ../gtk/gtkwindow.c:619
 msgid "Window Type"
 msgstr "উইন্ডোৰ ধৰণ"
 
-#: ../gtk/gtkwindow.c:616
+#: ../gtk/gtkwindow.c:620
 msgid "The type of the window"
 msgstr "উইন্ডোৰ ধৰণ "
 
-#: ../gtk/gtkwindow.c:624
+#: ../gtk/gtkwindow.c:628
 msgid "Window Title"
 msgstr "উইন্ডোৰ শীৰ্ষক "
 
-#: ../gtk/gtkwindow.c:625
+#: ../gtk/gtkwindow.c:629
 msgid "The title of the window"
 msgstr "উইন্ডোৰ শীৰ্ষক "
 
-#: ../gtk/gtkwindow.c:632
+#: ../gtk/gtkwindow.c:636
 msgid "Window Role"
 msgstr "উইন্ডোৰ ভূমিকা"
 
-#: ../gtk/gtkwindow.c:633
+#: ../gtk/gtkwindow.c:637
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "কোন সেশন পুনৰুদ্ধাৰৰ সময় উইন্ডোৰ বাবে যি একক (Unique) নিৰ্দেশক ব্যৱহৃত হ'ব"
 
-#: ../gtk/gtkwindow.c:649
+#: ../gtk/gtkwindow.c:653
 msgid "Startup ID"
 msgstr "Startup ID"
 
-#: ../gtk/gtkwindow.c:650
+#: ../gtk/gtkwindow.c:654
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr "উল্লিখিত সময় অবধি"
 
-#: ../gtk/gtkwindow.c:658
+#: ../gtk/gtkwindow.c:662
 msgid "If TRUE, users can resize the window"
 msgstr "যদি TRUE হয় তেন্তে ব্যৱহাৰকাৰীগণ উইন্ডোৰ আকাৰ পৰিবৰ্তন কৰিব পাৰবেন"
 
-#: ../gtk/gtkwindow.c:665
+#: ../gtk/gtkwindow.c:669
 msgid "Modal"
 msgstr "মোডাল (Modal)"
 
-#: ../gtk/gtkwindow.c:666
+#: ../gtk/gtkwindow.c:670
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -7930,91 +7952,91 @@ msgstr ""
 "যদি TRUE হয় তেন্তে উইন্ডোটো মোডাল (এই উইন্ডোটো যখন দেখা যাব থাকবে তখন অন্যান্য "
 "উইন্ডো ব্যৱহাৰ কৰা যাব না)"
 
-#: ../gtk/gtkwindow.c:673
+#: ../gtk/gtkwindow.c:677
 msgid "Window Position"
 msgstr "উইন্ডোৰ অবস্থান"
 
-#: ../gtk/gtkwindow.c:674
+#: ../gtk/gtkwindow.c:678
 msgid "The initial position of the window"
 msgstr "উইন্ডোৰ প্ৰাথমিক অবস্থান"
 
-#: ../gtk/gtkwindow.c:682
+#: ../gtk/gtkwindow.c:686
 msgid "Default Width"
 msgstr "অবিকল্পিত প্ৰস্থ"
 
-#: ../gtk/gtkwindow.c:683
+#: ../gtk/gtkwindow.c:687
 msgid "The default width of the window, used when initially showing the window"
 msgstr "উইন্ডোটো প্ৰথমবাৰ প্ৰদৰ্শনেৰ সময় যি অবিকল্পিত প্ৰস্থ ব্যৱহাৰ কৰা হ'ব"
 
-#: ../gtk/gtkwindow.c:692
+#: ../gtk/gtkwindow.c:696
 msgid "Default Height"
 msgstr "অবিকল্পিত উচ্চতা"
 
-#: ../gtk/gtkwindow.c:693
+#: ../gtk/gtkwindow.c:697
 msgid "The default height of the window, used when initially showing the window"
 msgstr "উইন্ডোটো প্ৰথমবাৰ প্ৰদৰ্শনেৰ সময় যি অবিকল্পিত উচ্চতা ব্যৱহাৰ কৰা হ'ব"
 
-#: ../gtk/gtkwindow.c:702
+#: ../gtk/gtkwindow.c:706
 msgid "Destroy with Parent"
 msgstr "পেৰেন্ট সাথেই বন্ধ কৰক"
 
-#: ../gtk/gtkwindow.c:703
+#: ../gtk/gtkwindow.c:707
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "পেৰেন্ট উইন্ডো বন্ধ কৰি দিলে এই উইন্ডোটোও বন্ধ কৰা হ'ব নে"
 
-#: ../gtk/gtkwindow.c:717
+#: ../gtk/gtkwindow.c:721
 msgid "Hide the titlebar during maximization"
 msgstr "সৰ্বাধিকৰণৰ সময়ত শীৰ্ষকবাৰ লুকাওক"
 
-#: ../gtk/gtkwindow.c:718
+#: ../gtk/gtkwindow.c:722
 msgid "If this window's titlebar should be hidden when the window is maximized"
 msgstr "উইন্ডো ডাঙৰ কৰাৰ সময়ত এই উইন্ডোৰ শীৰ্ষকবাৰ লুকুৱা হব নে"
 
-#: ../gtk/gtkwindow.c:726
+#: ../gtk/gtkwindow.c:730
 msgid "Icon for this window"
 msgstr "এই উইন্ডোৰ বাবে আইকন"
 
-#: ../gtk/gtkwindow.c:744
+#: ../gtk/gtkwindow.c:748
 msgid "Mnemonics Visible"
 msgstr "নিমোনিকসমূহ দৃশ্যমান"
 
-#: ../gtk/gtkwindow.c:745
+#: ../gtk/gtkwindow.c:749
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "নিমোনিকসমূহ বৰ্তমানে এইখন উইন্ডোত দৃশ্যমান নে"
 
-#: ../gtk/gtkwindow.c:763
+#: ../gtk/gtkwindow.c:767
 msgid "Focus Visible"
 msgstr "মনোনিৱেষ দৃশ্যমান"
 
-#: ../gtk/gtkwindow.c:764
+#: ../gtk/gtkwindow.c:768
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr "মনোনিৱেষ আয়তসমূহ এই উইন্ডোত বৰ্তমানে দৃশ্যমান নে"
 
-#: ../gtk/gtkwindow.c:780
+#: ../gtk/gtkwindow.c:784
 msgid "Name of the themed icon for this window"
 msgstr "এই উইন্ডোৰ বাবে থীমযুক্ত আইকনৰ নাম"
 
-#: ../gtk/gtkwindow.c:795
+#: ../gtk/gtkwindow.c:799
 msgid "Is Active"
 msgstr "সক্ৰিয় অবস্থায় আছে"
 
-#: ../gtk/gtkwindow.c:796
+#: ../gtk/gtkwindow.c:800
 msgid "Whether the toplevel is the current active window"
 msgstr "সৰ্বোচ্চ স্তৰটি বৰ্তমানে সক্ৰিয় উইন্ডো নে"
 
-#: ../gtk/gtkwindow.c:803
+#: ../gtk/gtkwindow.c:807
 msgid "Focus in Toplevel"
 msgstr "ওপৰতৰ স্তৰৰ ফোকাস"
 
-#: ../gtk/gtkwindow.c:804
+#: ../gtk/gtkwindow.c:808
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "ইনপুটেৰ ফ'কাচ GtkWindow'ৰ মাজত আছে নে"
 
-#: ../gtk/gtkwindow.c:811
+#: ../gtk/gtkwindow.c:815
 msgid "Type hint"
 msgstr "ধৰণ সংক্ৰান্ত ইঙ্গিত"
 
-#: ../gtk/gtkwindow.c:812
+#: ../gtk/gtkwindow.c:816
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -8022,123 +8044,123 @@ msgstr ""
 "এটি কি ধৰনেৰ উইন্ডো এবং ইয়াক কিভাবে ব্যৱহাৰ কৰিব হ'ব সে ব্যাপাৰে ডেস্কটপকে "
 "সাহায্য কৰাৰ বাবে ইঙ্গিত।"
 
-#: ../gtk/gtkwindow.c:820
+#: ../gtk/gtkwindow.c:824
 msgid "Skip taskbar"
 msgstr "টাস্কবাৰ এড়িয়ে যাওয়া হোক"
 
-#: ../gtk/gtkwindow.c:821
+#: ../gtk/gtkwindow.c:825
 msgid "TRUE if the window should not be in the task bar."
 msgstr "উইন্ডোটো টাস্কবাৰে নাথাকিলে TRUE।"
 
-#: ../gtk/gtkwindow.c:828
+#: ../gtk/gtkwindow.c:832
 msgid "Skip pager"
 msgstr "পেজাৰ এড়িয়ে যাওয়া হোক"
 
-#: ../gtk/gtkwindow.c:829
+#: ../gtk/gtkwindow.c:833
 msgid "TRUE if the window should not be in the pager."
 msgstr "পেজাৰে উইন্ডোটো নাথাকিলে TRUE।"
 
-#: ../gtk/gtkwindow.c:836
+#: ../gtk/gtkwindow.c:840
 msgid "Urgent"
 msgstr "জৰুৰি"
 
-#: ../gtk/gtkwindow.c:837
+#: ../gtk/gtkwindow.c:841
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "ইয়াৰ মান সত্য (TRUE) হলে, উইন্ডোকে ব্যৱহাৰকাৰীৰ গোচৰে আনা হ'ব।"
 
-#: ../gtk/gtkwindow.c:851
+#: ../gtk/gtkwindow.c:855
 msgid "Accept focus"
 msgstr "ফোকাস অনুমোদন কৰক"
 
-#: ../gtk/gtkwindow.c:852
+#: ../gtk/gtkwindow.c:856
 msgid "TRUE if the window should receive the input focus."
 msgstr "উইন্ডোটো ইনপুট ফোকাসৰ লক্ষ্য হলে ইয়াৰ মান TRUE।"
 
-#: ../gtk/gtkwindow.c:866
+#: ../gtk/gtkwindow.c:870
 msgid "Focus on map"
 msgstr "মানচিত্ৰৰ ওপৰ ফ'কাচ কৰক"
 
-#: ../gtk/gtkwindow.c:867
+#: ../gtk/gtkwindow.c:871
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "ইয়াৰ মান সত্য (TRUE) হলে উইন্ডোটো ইনপুট ফোকাসৰ লক্ষ্য হ'ব।"
 
-#: ../gtk/gtkwindow.c:881
+#: ../gtk/gtkwindow.c:885
 msgid "Decorated"
 msgstr "সজ্জিত"
 
-#: ../gtk/gtkwindow.c:882
+#: ../gtk/gtkwindow.c:886
 msgid "Whether the window should be decorated by the window manager"
 msgstr "উইন্ডো ব্যৱস্থাপক উইন্ডোটো সজ্জিত কৰিব নে"
 
-#: ../gtk/gtkwindow.c:896
+#: ../gtk/gtkwindow.c:900
 msgid "Deletable"
 msgstr "Deletable"
 
-#: ../gtk/gtkwindow.c:897
+#: ../gtk/gtkwindow.c:901
 msgid "Whether the window frame should have a close button"
 msgstr "Whether the window frame should have a close button"
 
-#: ../gtk/gtkwindow.c:916
+#: ../gtk/gtkwindow.c:920
 msgid "Resize grip"
 msgstr "গ্ৰিপক ৰিচাইজ কৰা"
 
-#: ../gtk/gtkwindow.c:917
+#: ../gtk/gtkwindow.c:921
 msgid "Specifies whether the window should have a resize grip"
 msgstr "উইন্ডোটোৰ ৰিচাইজ "
 
-#: ../gtk/gtkwindow.c:931
+#: ../gtk/gtkwindow.c:935
 msgid "Resize grip is visible"
 msgstr "ৰিচাইজ গ্ৰিপ দৃশ্যমান"
 
-#: ../gtk/gtkwindow.c:932
+#: ../gtk/gtkwindow.c:936
 msgid "Specifies whether the window's resize grip is visible."
 msgstr "উইন্ডোৰ ৰিচাইজ দলটো দৃশ্যমান হয় নে তাকে"
 
-#: ../gtk/gtkwindow.c:948
+#: ../gtk/gtkwindow.c:952
 msgid "Gravity"
 msgstr "মাধ্যাকৰ্ষণ"
 
-#: ../gtk/gtkwindow.c:949
+#: ../gtk/gtkwindow.c:953
 msgid "The window gravity of the window"
 msgstr "এই উইন্ডোটোৰ উইন্ডো মাধ্যাকৰ্ষণ"
 
-#: ../gtk/gtkwindow.c:966
+#: ../gtk/gtkwindow.c:970
 msgid "Transient for Window"
 msgstr "উল্লিখিত সময় অবধি"
 
-#: ../gtk/gtkwindow.c:967
+#: ../gtk/gtkwindow.c:971
 msgid "The transient parent of the dialog"
 msgstr "parent সৰ্বমোট"
 
-#: ../gtk/gtkwindow.c:987
+#: ../gtk/gtkwindow.c:991
 msgid "Attached to Widget"
 msgstr "উইজেটলে সংযুক্ত"
 
-#: ../gtk/gtkwindow.c:988
+#: ../gtk/gtkwindow.c:992
 msgid "The widget where the window is attached"
 msgstr "উইজেট যত উইন্ডো সংলঘ্ন আছে"
 
-#: ../gtk/gtkwindow.c:1003
+#: ../gtk/gtkwindow.c:1007
 msgid "Opacity for Window"
 msgstr "উল্লিখিত সময় অবধি"
 
-#: ../gtk/gtkwindow.c:1004
+#: ../gtk/gtkwindow.c:1008
 msgid "The opacity of the window, from 0 to 1"
 msgstr "সৰ্বমোট ১"
 
-#: ../gtk/gtkwindow.c:1014 ../gtk/gtkwindow.c:1015
+#: ../gtk/gtkwindow.c:1018 ../gtk/gtkwindow.c:1019
 msgid "Width of resize grip"
 msgstr "ৰিচাইজ গ্ৰিপৰ প্ৰস্থ"
 
-#: ../gtk/gtkwindow.c:1020 ../gtk/gtkwindow.c:1021
+#: ../gtk/gtkwindow.c:1024 ../gtk/gtkwindow.c:1025
 msgid "Height of resize grip"
 msgstr "ৰিচাইজ গ্ৰিপৰ উচ্চতা"
 
-#: ../gtk/gtkwindow.c:1043
+#: ../gtk/gtkwindow.c:1047
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: ../gtk/gtkwindow.c:1044
+#: ../gtk/gtkwindow.c:1048
 msgid "The GtkApplication for the window"
 msgstr "উইন্ডোৰ বাবে GtkApplication "
 
