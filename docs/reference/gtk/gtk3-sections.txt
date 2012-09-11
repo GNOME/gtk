@@ -2246,6 +2246,7 @@ gtk_menu_shell_set_take_focus
 gtk_menu_shell_get_take_focus
 gtk_menu_shell_get_selected_item
 gtk_menu_shell_get_parent_shell
+gtk_menu_shell_bind_model
 GtkMenuDirectionType
 <SUBSECTION Standard>
 GTK_MENU_SHELL

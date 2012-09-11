@@ -23,7 +23,6 @@
 
 #include "gtkaccelmapprivate.h"
 #include "gtkactionhelper.h"
-#include "gtkmodelmenu.h"
 #include "gtkwidgetprivate.h"
 #include "gtkaccellabel.h"
 
@@ -121,17 +120,16 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
       GtkWidget *menu;
 
       g_menu_model_get_item_attribute (model, item_index, "action-namespace", "s", &section_namespace);
+      menu = gtk_menu_new ();
 
       if (action_namespace)
         {
           gchar *namespace = g_strjoin (".", action_namespace, section_namespace, NULL);
-          menu = gtk_model_menu_create_menu (submenu, namespace);
+          gtk_menu_shell_bind_model (GTK_MENU_SHELL (menu), submenu, namespace, TRUE);
           g_free (namespace);
         }
       else
-        {
-          menu = gtk_model_menu_create_menu (submenu, section_namespace);
-        }
+        gtk_menu_shell_bind_model (GTK_MENU_SHELL (menu), submenu, section_namespace, TRUE);
 
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), menu);
 

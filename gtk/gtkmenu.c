@@ -5784,3 +5784,32 @@ gtk_menu_get_reserve_toggle_size (GtkMenu *menu)
 
   return !menu->priv->no_toggle_size;
 }
+
+/**
+ * gtk_menu_new_from_model:
+ * @model: a #GMenuModel
+ *
+ * Creates a #GtkMenu and populates it with menu items and
+ * submenus according to @model.
+ *
+ * The created menu items are connected to actions found in the
+ * #GtkApplicationWindow to which the menu belongs - typically
+ * by means of being attached to a widget (see gtk_menu_attach_to_widget())
+ * that is contained within the #GtkApplicationWindows widget hierarchy.
+ *
+ * Returns: a new #GtkMenu
+ *
+ * Since: 3.4
+ */
+GtkWidget *
+gtk_menu_new_from_model (GMenuModel *model)
+{
+  GtkWidget *menu;
+
+  g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
+
+  menu = gtk_menu_new ();
+  gtk_menu_shell_bind_model (GTK_MENU_SHELL (menu), model, NULL, TRUE);
+
+  return menu;
+}

@@ -24,9 +24,9 @@
 #include "gtkapplicationprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
-#include "gtkmodelmenu.h"
 #include "gtkaccelgroup.h"
 #include "gtkaccelmap.h"
+#include "gtkmenubar.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
 
@@ -256,7 +256,7 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
       g_menu_append_section (combined, NULL, G_MENU_MODEL (window->priv->app_menu_section));
       g_menu_append_section (combined, NULL, G_MENU_MODEL (window->priv->menubar_section));
 
-      window->priv->menubar = gtk_model_menu_create_menu_bar (G_MENU_MODEL (combined));
+      window->priv->menubar = gtk_menu_bar_new_from_model (G_MENU_MODEL (combined));
       gtk_widget_set_parent (window->priv->menubar, GTK_WIDGET (window));
       gtk_widget_show_all (window->priv->menubar);
       g_object_unref (combined);

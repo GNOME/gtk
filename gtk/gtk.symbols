@@ -1622,6 +1622,7 @@ gtk_menu_set_tearoff_state
 gtk_menu_set_title
 gtk_menu_shell_activate_item
 gtk_menu_shell_append
+gtk_menu_shell_bind_model
 gtk_menu_shell_cancel
 gtk_menu_shell_deactivate
 gtk_menu_shell_deselect
