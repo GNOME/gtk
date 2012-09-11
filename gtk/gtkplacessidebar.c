@@ -105,9 +105,6 @@ struct _GtkPlacesSidebar {
 
 	/* volume mounting - delayed open process */
 	gboolean mounting;
-#if 0
- 	NautilusWindowSlot *go_to_after_mount_slot;
-#endif
 	GtkPlacesOpenMode go_to_after_mount_open_mode;
 
 	GDBusProxy *hostnamed_proxy;
