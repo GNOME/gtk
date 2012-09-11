@@ -21,6 +21,7 @@
  *
  *  Authors : Mr Jamie McCracken (jamiemcc at blueyonder dot co dot uk)
  *            Cosimo Cecchi <cosimoc@gnome.org>
+ *            Federico Mena Quintero <federico@gnome.org>
  *
  */
 
