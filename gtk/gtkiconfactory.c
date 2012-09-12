@@ -367,7 +367,6 @@ gtk_icon_factory_lookup (GtkIconFactory *factory,
   return g_hash_table_lookup (priv->icons, stock_id);
 }
 
-static GtkIconFactory *gtk_default_icons = NULL;
 static GSList *default_factories = NULL;
 
 /**
@@ -409,15 +408,32 @@ gtk_icon_factory_remove_default (GtkIconFactory  *factory)
   g_object_unref (factory);
 }
 
-void
-_gtk_icon_factory_ensure_default_icons (void)
+static GtkIconFactory *
+_gtk_icon_factory_get_default_icons (void)
 {
-  if (gtk_default_icons == NULL)
-    {
-      gtk_default_icons = gtk_icon_factory_new ();
+  static GtkIconFactory *default_icons = NULL;
+  GtkIconFactory *icons = NULL;
+  GdkScreen *screen = gdk_screen_get_default ();
 
-      get_default_icons (gtk_default_icons);
+  if (screen)
+    icons = g_object_get_data (G_OBJECT (screen), "gtk-default-icons");
+
+  if (icons == NULL)
+    {
+      if (default_icons == NULL)
+        {
+          default_icons = gtk_icon_factory_new ();
+          get_default_icons (default_icons);
+        }
+      if (screen)
+        g_object_set_data_full (G_OBJECT (screen),
+                                I_("gtk-default-icons"),
+                                default_icons,
+                                g_object_unref);
+      icons = default_icons;
     }
+
+  return icons;
 }
 
 /**
@@ -436,6 +452,7 @@ GtkIconSet *
 gtk_icon_factory_lookup_default (const gchar *stock_id)
 {
   GSList *tmp_list;
+  GtkIconFactory *default_icons;
 
   g_return_val_if_fail (stock_id != NULL, NULL);
 
@@ -452,9 +469,11 @@ gtk_icon_factory_lookup_default (const gchar *stock_id)
       tmp_list = g_slist_next (tmp_list);
     }
 
-  _gtk_icon_factory_ensure_default_icons ();
-
-  return gtk_icon_factory_lookup (gtk_default_icons, stock_id);
+  default_icons = _gtk_icon_factory_get_default_icons ();
+  if (default_icons)
+    return gtk_icon_factory_lookup (default_icons, stock_id);
+  else
+    return NULL;
 }
 
 static void
@@ -2800,7 +2819,7 @@ _gtk_icon_factory_list_ids (void)
 
   ids = NULL;
 
-  _gtk_icon_factory_ensure_default_icons ();
+  _gtk_icon_factory_get_default_icons ();
 
   tmp_list = all_icon_factories;
   while (tmp_list != NULL)
