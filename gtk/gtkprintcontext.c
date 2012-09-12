@@ -286,6 +286,36 @@ _gtk_print_context_rotate_according_to_orientation (GtkPrintContext *context)
 }
 
 void
+_gtk_print_context_reverse_according_to_orientation (GtkPrintContext *context)
+{
+  cairo_t *cr = context->cr;
+  cairo_matrix_t matrix;
+  gdouble width, height;
+
+  width = gtk_page_setup_get_paper_width (context->page_setup, GTK_UNIT_INCH);
+  width = width * context->surface_dpi_x / context->pixels_per_unit_x;
+  height = gtk_page_setup_get_paper_height (context->page_setup, GTK_UNIT_INCH);
+  height = height * context->surface_dpi_y / context->pixels_per_unit_y;
+
+  switch (gtk_page_setup_get_orientation (context->page_setup))
+    {
+    default:
+    case GTK_PAGE_ORIENTATION_PORTRAIT:
+    case GTK_PAGE_ORIENTATION_LANDSCAPE:
+      break;
+    case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
+    case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
+      cairo_translate (cr, width, height);
+      cairo_matrix_init (&matrix,
+			 -1,  0,
+			  0, -1,
+			  0,  0);
+      cairo_transform (cr, &matrix);
+      break;
+    }
+}
+
+void
 _gtk_print_context_translate_into_margin (GtkPrintContext *context)
 {
   gdouble left, top;

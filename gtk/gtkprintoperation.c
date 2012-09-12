@@ -2050,14 +2050,11 @@ pdf_start_page (GtkPrintOperation *op,
 		GtkPrintContext   *print_context,
 		GtkPageSetup      *page_setup)
 {
-  GtkPaperSize *paper_size;
   cairo_surface_t *surface = op->priv->platform_data;
   gdouble w, h;
 
-  paper_size = gtk_page_setup_get_paper_size (page_setup);
-
-  w = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
-  h = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
+  w = gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_POINTS);
+  h = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
   
   cairo_pdf_surface_set_size (surface, w, h);
 }
@@ -2146,7 +2143,7 @@ run_pdf (GtkPrintOperation  *op,
   priv->manual_reverse = FALSE;
   priv->manual_page_set = GTK_PAGE_SET_ALL;
   priv->manual_scale = 1.0;
-  priv->manual_orientation = TRUE;
+  priv->manual_orientation = FALSE;
   priv->manual_number_up = 1;
   priv->manual_number_up_layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
   
@@ -2498,6 +2495,8 @@ common_render_page (GtkPrintOperation *op,
   
   if (priv->manual_orientation)
     _gtk_print_context_rotate_according_to_orientation (print_context);
+  else
+    _gtk_print_context_reverse_according_to_orientation (print_context);
 
   if (priv->manual_number_up > 1)
     {
@@ -3048,7 +3047,7 @@ print_pages (GtkPrintOperation       *op,
       priv->manual_reverse = gtk_print_settings_get_reverse (priv->print_settings);
       priv->manual_page_set = gtk_print_settings_get_page_set (priv->print_settings);
       priv->manual_scale = gtk_print_settings_get_scale (priv->print_settings) / 100.0;
-      priv->manual_orientation = TRUE;
+      priv->manual_orientation = FALSE;
       priv->manual_number_up = gtk_print_settings_get_number_up (priv->print_settings);
       priv->manual_number_up_layout = gtk_print_settings_get_number_up_layout (priv->print_settings);
     }
