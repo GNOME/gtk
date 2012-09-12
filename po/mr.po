@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-08-10 11:35+0000\n"
-"PO-Revision-Date: 2012-08-17 14:44+0530\n"
+"POT-Creation-Date: 2012-09-10 13:12+0000\n"
+"PO-Revision-Date: 2012-09-12 18:30+0530\n"
 "Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
-"Language-Team: Marathi <fedora-trans-mr@redhat.com>\n"
+"Language-Team: Marathi <maajhe-sanganak@freelists.org>\n"
 "Language: mr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -614,6 +614,7 @@ msgstr ""
 #.
 #: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:574
 #: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
+#: ../gtk/gtkprinteroptionwidget.c:550
 msgid "_Select"
 msgstr "निवडा (_S)"
 
@@ -786,7 +787,6 @@ msgid "Failed to look for applications online"
 msgstr "ॲप्लिकेशन्स् ऑनलाइनरित्या शोधण्यास अपयशी"
 
 #: ../gtk/gtkappchooserdialog.c:188
-#| msgid "Find applications online"
 msgid "_Find applications online"
 msgstr "ॲप्लिकेशन्स् ऑनलाइन शोधा (_F)"
 
@@ -857,7 +857,7 @@ msgstr "संबंधित ॲप्लिकेशन्स्"
 msgid "Other Applications"
 msgstr "इतर ॲप्लिकेशन्स्"
 
-#: ../gtk/gtkapplication.c:1529
+#: ../gtk/gtkapplication.c:1552
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -868,7 +868,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:335 ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkapplicationwindow.c:333 ../gtk/gtkprintoperation-unix.c:475
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "अनुप्रयोग"
@@ -1310,7 +1310,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3264
+#: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3275
 msgid "Manage Custom Sizes"
 msgstr "स्वेच्छेचे आकार व्यवस्थापा"
 
@@ -1363,15 +1363,15 @@ msgstr "उजवा(_R):"
 msgid "Paper Margins"
 msgstr "कागद समास"
 
-#: ../gtk/gtkentry.c:8784 ../gtk/gtktextview.c:8262
+#: ../gtk/gtkentry.c:9140 ../gtk/gtktextview.c:8583
 msgid "Input _Methods"
 msgstr "इनपुट पद्धती (_M)"
 
-#: ../gtk/gtkentry.c:8798 ../gtk/gtktextview.c:8276
+#: ../gtk/gtkentry.c:9154 ../gtk/gtktextview.c:8597
 msgid "_Insert Unicode Control Character"
 msgstr "युनिकोड नियंत्रण अक्षर घाला(_I)"
 
-#: ../gtk/gtkentry.c:10272
+#: ../gtk/gtkentry.c:10107
 msgid "Caps Lock is on"
 msgstr "Caps Lock सुरू आहे"
 
@@ -1599,7 +1599,7 @@ msgid "Modified"
 msgstr "बदलेले"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4595 ../gtk/gtkprinteroptionwidget.c:835
+#: ../gtk/gtkfilechooserdefault.c:4595
 msgid "_Name:"
 msgstr "नाव(_N):"
 
@@ -1758,17 +1758,17 @@ msgstr "चिन्ह दाखल करू शकले नाही"
 msgid "Simple"
 msgstr "सोपे"
 
-#: ../gtk/gtkimmulticontext.c:600
+#: ../gtk/gtkimmulticontext.c:608
 msgctxt "input method menu"
 msgid "System"
 msgstr "प्रणाली"
 
-#: ../gtk/gtkimmulticontext.c:610
+#: ../gtk/gtkimmulticontext.c:618
 msgctxt "input method menu"
 msgid "None"
 msgstr "काहिच नाही"
 
-#: ../gtk/gtkimmulticontext.c:693
+#: ../gtk/gtkimmulticontext.c:701
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -1796,12 +1796,12 @@ msgid ""
 "optionally passing list of URIs as arguments."
 msgstr ""
 "डेस्कटॉप फाइल जे वैकल्पिकरित्या URIs ची सूची आर्ग्युमेंट म्हणून पुरवली जाते, "
-"ह्या तर्फे निर्देशीत\n"
+"ह्या तर्फे "
+"निर्देशीत\n"
 "ॲप्लिकेशन सुरू करा."
 
 #: ../gtk/gtk-launch.c:85
 #, c-format
-#| msgid "Error loading icon: %s"
 msgid "Error parsing commandline options: %s\n"
 msgstr "आदेशओळ पर्याय वाचतेवेळी त्रुटी: %s\n"
 
@@ -1814,7 +1814,6 @@ msgstr "अधिक माहितीकरीता \"%s --help\" वाप�
 #. means the user is calling gtk-launch without any argument.
 #: ../gtk/gtk-launch.c:98
 #, c-format
-#| msgid "Find applications online"
 msgid "%s: missing application name"
 msgstr "%s: ॲप्लिकेशन नाव आढळले नाही"
 
@@ -1822,7 +1821,6 @@ msgstr "%s: ॲप्लिकेशन नाव आढळले नाही"
 #. is the application name.
 #: ../gtk/gtk-launch.c:122
 #, c-format
-#| msgid "Could not run application"
 msgid "%s: no such application %s"
 msgstr "%s: ॲप्लिकेशन %s आढळले नाही"
 
@@ -1830,7 +1828,6 @@ msgstr "%s: ॲप्लिकेशन %s आढळले नाही"
 #. is the error message.
 #: ../gtk/gtk-launch.c:140
 #, c-format
-#| msgid "Error loading icon: %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: ॲप्लिकेशन सुरू करतेवेळी त्रुटी: %s\n"
 
@@ -1921,52 +1918,61 @@ msgstr "GTK+ पर्याय"
 msgid "Show GTK+ Options"
 msgstr "GTK+ पर्याय दाखवा"
 
-#: ../gtk/gtkmountoperation.c:518
+#: ../gtk/gtkmountoperation.c:532
 msgid "Co_nnect"
 msgstr "जुळवणी (_n)"
 
-#: ../gtk/gtkmountoperation.c:588
-msgid "Connect _anonymously"
-msgstr "निनावी जुळवणी (_a)"
+#: ../gtk/gtkmountoperation.c:606
+#| msgid "Co_nnect"
+msgid "Connect As"
+msgstr "असे जुळणी करा"
 
-#: ../gtk/gtkmountoperation.c:597
-msgid "Connect as u_ser:"
-msgstr "वापरकर्ता स्वरूप जुळवणी (_s):"
+#: ../gtk/gtkmountoperation.c:615
+#| msgid "Connect _anonymously"
+msgid "_Anonymous"
+msgstr "निनावी (_A)"
 
-#: ../gtk/gtkmountoperation.c:632
-msgid "_Username:"
-msgstr "वापरकर्ता नाव (_U):"
+#: ../gtk/gtkmountoperation.c:624
+msgid "Registered U_ser"
+msgstr "नोंदणीकृत वापरकर्ता (_s)"
 
-#: ../gtk/gtkmountoperation.c:637
-msgid "_Domain:"
-msgstr "क्षेत्र (_D):"
+#: ../gtk/gtkmountoperation.c:635
+#| msgid "_Username:"
+msgid "_Username"
+msgstr "वापरकर्तानाव (_U)"
 
-#: ../gtk/gtkmountoperation.c:643
-msgid "_Password:"
-msgstr "पासवर्ड(_P):"
+#: ../gtk/gtkmountoperation.c:640
+#| msgid "_Domain:"
+msgid "_Domain"
+msgstr "डोमेन (_D)"
 
-#: ../gtk/gtkmountoperation.c:661
+#: ../gtk/gtkmountoperation.c:646
+#| msgid "_Password:"
+msgid "_Password"
+msgstr "पासवर्ड (_P)"
+
+#: ../gtk/gtkmountoperation.c:668
 msgid "Forget password _immediately"
 msgstr "पासवर्ड लगेच विसरा (_i)"
 
-#: ../gtk/gtkmountoperation.c:671
+#: ../gtk/gtkmountoperation.c:678
 msgid "Remember password until you _logout"
 msgstr "लॉगऑउट होईपर्यंत पासवर्ड लक्षात ठेवा (_l)"
 
-#: ../gtk/gtkmountoperation.c:681
+#: ../gtk/gtkmountoperation.c:688
 msgid "Remember _forever"
 msgstr "नेहमीकरीता लक्षात ठेवा (_f)"
 
-#: ../gtk/gtkmountoperation.c:1070
+#: ../gtk/gtkmountoperation.c:1077
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "अपरिचीत ॲप्लिकेशन (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1253
+#: ../gtk/gtkmountoperation.c:1260
 msgid "Unable to end process"
 msgstr "कार्य समाप्त करण्यास अशक्य"
 
-#: ../gtk/gtkmountoperation.c:1290
+#: ../gtk/gtkmountoperation.c:1297
 msgid "_End Process"
 msgstr "कार्य समाप्त करा (_E)"
 
@@ -2043,7 +2049,7 @@ msgstr ""
 " वर: %s %s\n"
 " तळ: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3318
+#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
 msgid "Manage Custom Sizes..."
 msgstr "स्वेच्छेचे आकार व्यवस्थापा..."
 
@@ -2051,7 +2057,7 @@ msgstr "स्वेच्छेचे आकार व्यवस्थाप�
 msgid "_Format for:"
 msgstr "यासाठी स्वरुप(_F):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3466
+#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3477
 msgid "_Paper size:"
 msgstr "कागदाचा आकार(_P):"
 
@@ -2059,7 +2065,7 @@ msgstr "कागदाचा आकार(_P):"
 msgid "_Orientation:"
 msgstr "प्राङ्मुखीकरण(_O):"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3520
+#: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3531
 msgid "Page Setup"
 msgstr "पृष्ठ व्यवस्था"
 
@@ -2079,17 +2085,14 @@ msgstr "फाइल प्रणाली रूट"
 msgid "Authentication"
 msgstr "ऑथेंटीकेशन"
 
-#: ../gtk/gtkprinteroptionwidget.c:728
+#: ../gtk/gtkprinteroptionwidget.c:546
+#| msgid "Select a File"
+msgid "Select a filename"
+msgstr "फाइलनाव नीवडा"
+
+#: ../gtk/gtkprinteroptionwidget.c:770
 msgid "Not available"
 msgstr "उपलब्ध नाही"
-
-#: ../gtk/gtkprinteroptionwidget.c:828
-msgid "Select a folder"
-msgstr "फोल्डर निवडा"
-
-#: ../gtk/gtkprinteroptionwidget.c:843
-msgid "_Save in folder:"
-msgstr "फोल्डरमध्ये सुरक्षित करा (_S):"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
@@ -2230,45 +2233,45 @@ msgstr "न दर्शवलेली चूक"
 msgid "Getting printer information failed"
 msgstr "छपाई माहिती प्राप्त करण्यास अपयशी"
 
-#: ../gtk/gtkprintunixdialog.c:1905
+#: ../gtk/gtkprintunixdialog.c:1916
 msgid "Getting printer information..."
 msgstr "छपाई माहिती प्राप्त करत आहे..."
 
-#: ../gtk/gtkprintunixdialog.c:2173
+#: ../gtk/gtkprintunixdialog.c:2184
 msgid "Printer"
 msgstr "प्रिंटर"
 
 #. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2183
+#: ../gtk/gtkprintunixdialog.c:2194
 msgid "Location"
 msgstr "ठिकाण"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2194
+#: ../gtk/gtkprintunixdialog.c:2205
 msgid "Status"
 msgstr "स्थिती"
 
-#: ../gtk/gtkprintunixdialog.c:2220
+#: ../gtk/gtkprintunixdialog.c:2231
 msgid "Range"
 msgstr "क्षेत्र"
 
-#: ../gtk/gtkprintunixdialog.c:2224
+#: ../gtk/gtkprintunixdialog.c:2235
 msgid "_All Pages"
 msgstr "सर्व पान (_A)"
 
-#: ../gtk/gtkprintunixdialog.c:2229
+#: ../gtk/gtkprintunixdialog.c:2240
 msgid "C_urrent Page"
 msgstr "वर्तमान पान (_u)"
 
-#: ../gtk/gtkprintunixdialog.c:2237
+#: ../gtk/gtkprintunixdialog.c:2248
 msgid "Se_lection"
 msgstr "नीवड (_l): "
 
-#: ../gtk/gtkprintunixdialog.c:2243
+#: ../gtk/gtkprintunixdialog.c:2254
 msgid "Pag_es:"
 msgstr "पान (_e):"
 
-#: ../gtk/gtkprintunixdialog.c:2244
+#: ../gtk/gtkprintunixdialog.c:2255
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2276,28 +2279,28 @@ msgstr ""
 "एक किंवा अधिक पान क्षेत्र निश्चित करा,\n"
 " उ.दा. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:2253
+#: ../gtk/gtkprintunixdialog.c:2264
 msgid "Pages"
 msgstr "पाने"
 
-#: ../gtk/gtkprintunixdialog.c:2264
+#: ../gtk/gtkprintunixdialog.c:2275
 msgid "Copies"
 msgstr "प्रती"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2269
+#: ../gtk/gtkprintunixdialog.c:2280
 msgid "Copie_s:"
 msgstr "प्रत संख्या (_s):"
 
-#: ../gtk/gtkprintunixdialog.c:2285
+#: ../gtk/gtkprintunixdialog.c:2296
 msgid "C_ollate"
 msgstr "कोलेट (_o)"
 
-#: ../gtk/gtkprintunixdialog.c:2291
+#: ../gtk/gtkprintunixdialog.c:2302
 msgid "_Reverse"
 msgstr "उलटे(_R)"
 
-#: ../gtk/gtkprintunixdialog.c:2307
+#: ../gtk/gtkprintunixdialog.c:2318
 msgid "General"
 msgstr "सामान्य"
 
@@ -2307,42 +2310,42 @@ msgstr "सामान्य"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3047
+#: ../gtk/gtkprintunixdialog.c:3058
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
 msgid "Left to right, top to bottom"
 msgstr "डावीकडून उजवीकडे, शिर्ष ते तळ"
 
-#: ../gtk/gtkprintunixdialog.c:3047
+#: ../gtk/gtkprintunixdialog.c:3058
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
 msgid "Left to right, bottom to top"
 msgstr "डावीकडून उजवीकडे, तळ ते शिर्ष"
 
-#: ../gtk/gtkprintunixdialog.c:3048
+#: ../gtk/gtkprintunixdialog.c:3059
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Right to left, top to bottom"
 msgstr "उजवीकडून डावीकडे, शिर्ष ते तळ"
 
-#: ../gtk/gtkprintunixdialog.c:3048
+#: ../gtk/gtkprintunixdialog.c:3059
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Right to left, bottom to top"
 msgstr "उजवीकडून डावीकडे, तळ ते शिर्ष"
 
-#: ../gtk/gtkprintunixdialog.c:3049
+#: ../gtk/gtkprintunixdialog.c:3060
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
 msgid "Top to bottom, left to right"
 msgstr "शिर्ष ते तळ, डावीकडून उजवीकडे"
 
-#: ../gtk/gtkprintunixdialog.c:3049
+#: ../gtk/gtkprintunixdialog.c:3060
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
 msgid "Top to bottom, right to left"
 msgstr "शिर्ष ते तळ, उजवीकडून डावीकडे"
 
-#: ../gtk/gtkprintunixdialog.c:3050
+#: ../gtk/gtkprintunixdialog.c:3061
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
 msgid "Bottom to top, left to right"
 msgstr "तळ ते शिर्ष, डावीकडून उजवीकडे"
 
-#: ../gtk/gtkprintunixdialog.c:3050
+#: ../gtk/gtkprintunixdialog.c:3061
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
 msgid "Bottom to top, right to left"
 msgstr "तळ ते शिर्ष, उजवीकडून डावीकडे"
@@ -2350,125 +2353,125 @@ msgstr "तळ ते शिर्ष, उजवीकडून डावीक�
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3054 ../gtk/gtkprintunixdialog.c:3067
+#: ../gtk/gtkprintunixdialog.c:3065 ../gtk/gtkprintunixdialog.c:3078
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3766
 msgid "Page Ordering"
 msgstr "पानाची क्रमवारी"
 
-#: ../gtk/gtkprintunixdialog.c:3083
+#: ../gtk/gtkprintunixdialog.c:3094
 msgid "Left to right"
 msgstr "डावीकडून उजवीकडे"
 
-#: ../gtk/gtkprintunixdialog.c:3084
+#: ../gtk/gtkprintunixdialog.c:3095
 msgid "Right to left"
 msgstr "उजवीकडून डावीकडे"
 
-#: ../gtk/gtkprintunixdialog.c:3096
+#: ../gtk/gtkprintunixdialog.c:3107
 msgid "Top to bottom"
 msgstr "शिर्ष ते तळ"
 
-#: ../gtk/gtkprintunixdialog.c:3097
+#: ../gtk/gtkprintunixdialog.c:3108
 msgid "Bottom to top"
 msgstr "तळ ते शिर्ष"
 
-#: ../gtk/gtkprintunixdialog.c:3341
+#: ../gtk/gtkprintunixdialog.c:3352
 msgid "Layout"
 msgstr "लेआउट"
 
-#: ../gtk/gtkprintunixdialog.c:3345
+#: ../gtk/gtkprintunixdialog.c:3356
 msgid "T_wo-sided:"
 msgstr "पाठपोट(_w):"
 
-#: ../gtk/gtkprintunixdialog.c:3357
+#: ../gtk/gtkprintunixdialog.c:3368
 msgid "Pages per _side:"
 msgstr "प्रत्येक बाजूस लागणारी पाने (_s):"
 
-#: ../gtk/gtkprintunixdialog.c:3371
+#: ../gtk/gtkprintunixdialog.c:3382
 msgid "Page or_dering:"
 msgstr "पान क्रमवारी (_d):"
 
-#: ../gtk/gtkprintunixdialog.c:3384
+#: ../gtk/gtkprintunixdialog.c:3395
 msgid "_Only print:"
 msgstr "फक्त मुद्रण(_O):"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3396
+#: ../gtk/gtkprintunixdialog.c:3407
 msgid "All sheets"
 msgstr "सर्व पत्रे"
 
-#: ../gtk/gtkprintunixdialog.c:3397
+#: ../gtk/gtkprintunixdialog.c:3408
 msgid "Even sheets"
 msgstr "सम पत्रे"
 
-#: ../gtk/gtkprintunixdialog.c:3398
+#: ../gtk/gtkprintunixdialog.c:3409
 msgid "Odd sheets"
 msgstr "विषम पत्रे"
 
-#: ../gtk/gtkprintunixdialog.c:3401
+#: ../gtk/gtkprintunixdialog.c:3412
 msgid "Sc_ale:"
 msgstr "प्रमाण(_a):"
 
-#: ../gtk/gtkprintunixdialog.c:3425
+#: ../gtk/gtkprintunixdialog.c:3436
 msgid "Paper"
 msgstr "कागद"
 
-#: ../gtk/gtkprintunixdialog.c:3429
+#: ../gtk/gtkprintunixdialog.c:3440
 msgid "Paper _type:"
 msgstr "कागद प्रकार(_t):"
 
-#: ../gtk/gtkprintunixdialog.c:3441
+#: ../gtk/gtkprintunixdialog.c:3452
 msgid "Paper _source:"
 msgstr "कागद स्त्रोत(_s):"
 
-#: ../gtk/gtkprintunixdialog.c:3453
+#: ../gtk/gtkprintunixdialog.c:3464
 msgid "Output t_ray:"
 msgstr "आऊटपुट ट्रे(_r):"
 
-#: ../gtk/gtkprintunixdialog.c:3486
+#: ../gtk/gtkprintunixdialog.c:3497
 msgid "Or_ientation:"
 msgstr "दिशानिर्देशन (_i):"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3498
+#: ../gtk/gtkprintunixdialog.c:3509
 msgid "Portrait"
 msgstr "उभे"
 
-#: ../gtk/gtkprintunixdialog.c:3499
+#: ../gtk/gtkprintunixdialog.c:3510
 msgid "Landscape"
 msgstr "आडवे"
 
-#: ../gtk/gtkprintunixdialog.c:3500
+#: ../gtk/gtkprintunixdialog.c:3511
 msgid "Reverse portrait"
 msgstr "उलटे उभे"
 
-#: ../gtk/gtkprintunixdialog.c:3501
+#: ../gtk/gtkprintunixdialog.c:3512
 msgid "Reverse landscape"
 msgstr "उलटे आडवे"
 
-#: ../gtk/gtkprintunixdialog.c:3545
+#: ../gtk/gtkprintunixdialog.c:3556
 msgid "Job Details"
 msgstr "कार्य तपशील"
 
-#: ../gtk/gtkprintunixdialog.c:3549
+#: ../gtk/gtkprintunixdialog.c:3560
 msgid "Pri_ority:"
 msgstr "प्राधान्यक्रम(_o):"
 
-#: ../gtk/gtkprintunixdialog.c:3561
+#: ../gtk/gtkprintunixdialog.c:3572
 msgid "_Billing info:"
 msgstr "बिलिंगविषयी माहिती(_B):"
 
-#: ../gtk/gtkprintunixdialog.c:3576
+#: ../gtk/gtkprintunixdialog.c:3587
 msgid "Print Document"
 msgstr "दस्तावेज छपाई करा"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3583
+#: ../gtk/gtkprintunixdialog.c:3594
 msgid "_Now"
 msgstr "आत्ता (_N)"
 
-#: ../gtk/gtkprintunixdialog.c:3592
+#: ../gtk/gtkprintunixdialog.c:3603
 msgid "A_t:"
 msgstr "याक्षणी (_t):"
 
@@ -2476,7 +2479,7 @@ msgstr "याक्षणी (_t):"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: ../gtk/gtkprintunixdialog.c:3598
+#: ../gtk/gtkprintunixdialog.c:3609
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2484,68 +2487,68 @@ msgstr ""
 "छपाईचे वेळ निश्चित करा,\n"
 " उ.दा. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: ../gtk/gtkprintunixdialog.c:3606
+#: ../gtk/gtkprintunixdialog.c:3617
 msgid "Time of print"
 msgstr "छपाईची वेळ"
 
-#: ../gtk/gtkprintunixdialog.c:3620
+#: ../gtk/gtkprintunixdialog.c:3631
 msgid "On _hold"
 msgstr "स्थगीत केले (_h)"
 
-#: ../gtk/gtkprintunixdialog.c:3621
+#: ../gtk/gtkprintunixdialog.c:3632
 msgid "Hold the job until it is explicitly released"
 msgstr "सोडHold the job until it is explicitly released"
 
-#: ../gtk/gtkprintunixdialog.c:3639
+#: ../gtk/gtkprintunixdialog.c:3650
 msgid "Add Cover Page"
 msgstr "प्रारंभ पान जोडा"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3646
+#: ../gtk/gtkprintunixdialog.c:3657
 msgid "Be_fore:"
 msgstr "आधी(_f):"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3661
+#: ../gtk/gtkprintunixdialog.c:3672
 msgid "_After:"
 msgstr "नंतर(_A):"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3676
+#: ../gtk/gtkprintunixdialog.c:3687
 msgid "Job"
 msgstr "काम"
 
-#: ../gtk/gtkprintunixdialog.c:3742
+#: ../gtk/gtkprintunixdialog.c:3753
 msgid "Advanced"
 msgstr "प्रगत"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3780
+#: ../gtk/gtkprintunixdialog.c:3791
 msgid "Image Quality"
 msgstr "प्रतिमा दर्जा"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3784
+#: ../gtk/gtkprintunixdialog.c:3795
 msgid "Color"
 msgstr "रंग"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3789
+#: ../gtk/gtkprintunixdialog.c:3800
 msgid "Finishing"
 msgstr "संपवित आहे"
 
-#: ../gtk/gtkprintunixdialog.c:3799
+#: ../gtk/gtkprintunixdialog.c:3810
 msgid "Some of the settings in the dialog conflict"
 msgstr "संवादातील काही रचना संघर्षमयी आहेत"
 
-#: ../gtk/gtkprintunixdialog.c:3825
+#: ../gtk/gtkprintunixdialog.c:3836
 msgid "Print"
 msgstr "छापा"
 
@@ -3156,7 +3159,7 @@ msgstr "दृष्य बदल मोठे करा (_O)"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:342 ../gtk/gtkswitch.c:397 ../gtk/gtkswitch.c:591
+#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:586
 msgctxt "switch"
 msgid "ON"
 msgstr "ON"
@@ -3164,7 +3167,7 @@ msgstr "ON"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:350 ../gtk/gtkswitch.c:398 ../gtk/gtkswitch.c:620
+#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:615
 msgctxt "switch"
 msgid "OFF"
 msgstr "OFF"
@@ -4733,7 +4736,6 @@ msgid "Unspecified profile"
 msgstr "प्रोफाइल निर्देशीत केले नाही"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:249
-#| msgid "output.%s"
 msgid "output"
 msgstr "आऊटपुट"
 
@@ -4812,6 +4814,15 @@ msgstr "चाचणी-आऊटपुट.%s"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "चाचणी छपाईयंत्रकरीता छपाई"
+
+#~ msgid "Connect as u_ser:"
+#~ msgstr "वापरकर्ता स्वरूप जुळवणी (_s):"
+
+#~ msgid "Select a folder"
+#~ msgstr "फोल्डर निवडा"
+
+#~ msgid "_Save in folder:"
+#~ msgstr "फोल्डरमध्ये सुरक्षित करा (_S):"
 
 #~ msgid "X screen to use"
 #~ msgstr "वापरावयाची X स्क्रीन"
