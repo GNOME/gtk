@@ -383,6 +383,14 @@ gtk_tool_palette_dispose (GObject *object)
       palette->priv->text_size_group = NULL;
     }
 
+  if (palette->priv->settings_connection > 0)
+    {
+      g_signal_handler_disconnect (palette->priv->settings, palette->priv->settings_connection);
+      palette->priv->settings_connection = 0;
+    }
+
+  g_clear_object (&palette->priv->settings);
+
   G_OBJECT_CLASS (gtk_tool_palette_parent_class)->dispose (object);
 }
 
@@ -932,6 +940,7 @@ gtk_tool_palette_screen_changed (GtkWidget *widget,
   if (old_settings)
   {
     g_signal_handler_disconnect (old_settings, priv->settings_connection);
+    priv->settings_connection = 0;
     g_object_unref (old_settings);
   }
 

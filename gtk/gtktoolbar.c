@@ -2091,7 +2091,7 @@ gtk_toolbar_screen_changed (GtkWidget *widget,
   if (old_settings)
     {
       g_signal_handler_disconnect (old_settings, priv->settings_connection);
-
+      priv->settings_connection = 0;
       g_object_unref (old_settings);
     }
 
@@ -3121,6 +3121,14 @@ gtk_toolbar_dispose (GObject *object)
       gtk_widget_destroy (GTK_WIDGET (priv->menu));
       priv->menu = NULL;
     }
+
+  if (priv->settings_connection > 0)
+    {
+      g_signal_handler_disconnect (priv->settings, priv->settings_connection);
+      priv->settings_connection = 0;
+    }
+
+  g_clear_object (&priv->settings);
 
  G_OBJECT_CLASS (gtk_toolbar_parent_class)->dispose (object);
 }
