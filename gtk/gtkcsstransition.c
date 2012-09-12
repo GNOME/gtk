@@ -68,6 +68,15 @@ gtk_css_transition_is_finished (GtkStyleAnimation *animation,
   return at_time_us >= transition->end_time;
 }
 
+static gboolean
+gtk_css_transition_is_static (GtkStyleAnimation *animation,
+                              gint64             at_time_us)
+{
+  GtkCssTransition *transition = GTK_CSS_TRANSITION (animation);
+
+  return at_time_us >= transition->end_time;
+}
+
 static void
 gtk_css_transition_finalize (GObject *object)
 {
@@ -90,6 +99,7 @@ _gtk_css_transition_class_init (GtkCssTransitionClass *klass)
 
   animation_class->set_values = gtk_css_transition_set_values;
   animation_class->is_finished = gtk_css_transition_is_finished;
+  animation_class->is_static = gtk_css_transition_is_static;
 }
 
 static void

@@ -143,6 +143,18 @@ gtk_css_animation_is_finished (GtkStyleAnimation *style_animation,
   return FALSE;
 }
 
+static gboolean
+gtk_css_animation_is_static (GtkStyleAnimation *style_animation,
+                             gint64             at_time_us)
+{
+  GtkCssAnimation *animation = GTK_CSS_ANIMATION (style_animation);
+  double iteration;
+
+  iteration = gtk_css_animation_get_iteration (animation, at_time_us);
+
+  return iteration >= animation->iteration_count;
+}
+
 static void
 gtk_css_animation_finalize (GObject *object)
 {
@@ -165,6 +177,7 @@ _gtk_css_animation_class_init (GtkCssAnimationClass *klass)
 
   animation_class->set_values = gtk_css_animation_set_values;
   animation_class->is_finished = gtk_css_animation_is_finished;
+  animation_class->is_static = gtk_css_animation_is_static;
 }
 
 static void

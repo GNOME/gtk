@@ -46,6 +46,8 @@ struct _GtkStyleAnimationClass
 
   gboolean      (* is_finished)                         (GtkStyleAnimation      *animation,
                                                          gint64                  at_time_us);
+  gboolean      (* is_static)                           (GtkStyleAnimation      *animation,
+                                                         gint64                  at_time_us);
   GtkBitmask *  (* set_values)                          (GtkStyleAnimation      *animation,
                                                          GtkBitmask             *changed,
                                                          gint64                  for_time_us,
@@ -59,6 +61,8 @@ GtkBitmask *    _gtk_style_animation_set_values         (GtkStyleAnimation      
                                                          gint64                  for_time_us,
                                                          GtkCssComputedValues   *values) G_GNUC_WARN_UNUSED_RESULT;
 gboolean        _gtk_style_animation_is_finished        (GtkStyleAnimation      *animation,
+                                                         gint64                  at_time_us);
+gboolean        _gtk_style_animation_is_static          (GtkStyleAnimation      *animation,
                                                          gint64                  at_time_us);
 
 
