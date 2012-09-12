@@ -4015,7 +4015,23 @@ gtk_paint_spinner (GtkStyle           *style,
   cairo_restore (cr);
 }
 
-static GtkStyle        *gtk_default_style = NULL;
+static GtkStyle *
+gtk_widget_get_default_style_for_screen (GdkScreen *screen)
+{
+  GtkStyle *default_style;
+
+  default_style = g_object_get_data (G_OBJECT (screen), "gtk-legacy-default-style");
+  if (default_style == NULL)
+    {
+      default_style = gtk_style_new ();
+      g_object_set_data_full (G_OBJECT (screen),
+                              I_("gtk-legacy-default-style"),
+                              default_style,
+                              g_object_unref);
+    }
+
+  return default_style;
+}
 
 /**
  * gtk_widget_get_default_style:
@@ -4032,13 +4048,12 @@ static GtkStyle        *gtk_default_style = NULL;
 GtkStyle*
 gtk_widget_get_default_style (void)
 {
-  if (!gtk_default_style)
-    {
-      gtk_default_style = gtk_style_new ();
-      g_object_ref (gtk_default_style);
-    }
+  GdkScreen *screen = gdk_screen_get_default ();
 
-  return gtk_default_style;
+  if (screen)
+    return gtk_widget_get_default_style_for_screen (screen);
+  else
+    return NULL;
 }
 
 /**
