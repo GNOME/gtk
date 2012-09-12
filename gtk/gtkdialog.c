@@ -195,6 +195,9 @@ static ResponseData * get_response_data          (GtkWidget    *widget,
                                                   gboolean      create);
 
 static void      gtk_dialog_buildable_interface_init     (GtkBuildableIface *iface);
+static GObject * gtk_dialog_buildable_get_internal_child (GtkBuildable  *buildable,
+                                                          GtkBuilder    *builder,
+                                                          const gchar   *childname);
 static gboolean  gtk_dialog_buildable_custom_tag_start   (GtkBuildable  *buildable,
                                                           GtkBuilder    *builder,
                                                           GObject       *child,
@@ -207,6 +210,12 @@ static void      gtk_dialog_buildable_custom_finished    (GtkBuildable  *buildab
                                                           const gchar   *tagname,
                                                           gpointer       user_data);
 
+
+enum {
+  PROP_0,
+  PROP_HAS_SEPARATOR
+};
+
 enum {
   RESPONSE,
   CLOSE,
@@ -218,68 +227,17 @@ static guint dialog_signals[LAST_SIGNAL];
 G_DEFINE_TYPE_WITH_CODE (GtkDialog, gtk_dialog, GTK_TYPE_WINDOW,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_dialog_buildable_interface_init))
-static void
-update_spacings (GtkDialog *dialog)
-{
-  GtkDialogPrivate *priv = dialog->priv;
-  gint content_area_border;
-  gint content_area_spacing;
-  gint button_spacing;
-  gint action_area_border;
-
-  gtk_widget_style_get (GTK_WIDGET (dialog),
-                        "content-area-border", &content_area_border,
-                        "content-area-spacing", &content_area_spacing,
-                        "button-spacing", &button_spacing,
-                        "action-area-border", &action_area_border,
-                        NULL);
-
-  
-  gtk_container_set_border_width (GTK_CONTAINER (priv->vbox),
-                                  content_area_border);
-  if (!_gtk_box_get_spacing_set (GTK_BOX (priv->vbox)))
-    {
-      gtk_box_set_spacing (GTK_BOX (priv->vbox), content_area_spacing);
-      _gtk_box_set_spacing_set (GTK_BOX (priv->vbox), FALSE);
-    }
-  gtk_box_set_spacing (GTK_BOX (priv->action_area), button_spacing);
-  gtk_container_set_border_width (GTK_CONTAINER (priv->action_area),
-                                  action_area_border);
-}
-
-static GObject *
-gtk_dialog_constructor (GType                  type,
-                        guint                  n_construct_properties,
-                        GObjectConstructParam *construct_properties)
-{
-  GObject *obj;
-  
-  obj = G_OBJECT_CLASS (gtk_dialog_parent_class)->constructor (type,
-                                                               n_construct_properties,
-                                                               construct_properties);
-
-  update_spacings (GTK_DIALOG (obj));
-
-  gtk_window_set_type_hint (GTK_WINDOW (obj), GDK_WINDOW_TYPE_HINT_DIALOG);
-  gtk_window_set_position (GTK_WINDOW (obj), GTK_WIN_POS_CENTER_ON_PARENT);
-
-  return obj;
-}
 
 static void
 gtk_dialog_class_init (GtkDialogClass *class)
 {
-  GtkContainerClass *container_class;
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
   GtkBindingSet *binding_set;
 
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
-  container_class = GTK_CONTAINER_CLASS (class);
 
-  gobject_class->constructor = gtk_dialog_constructor;
-  
   widget_class->map = gtk_dialog_map;
   widget_class->style_updated = gtk_dialog_style_updated;
 
@@ -375,30 +333,48 @@ gtk_dialog_class_init (GtkDialogClass *class)
   binding_set = gtk_binding_set_by_class (class);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
+}
 
-  gtk_container_class_set_template_from_resource (container_class,
-                                                  "/org/gtk/libgtk/gtkdialog.ui");
+static void
+update_spacings (GtkDialog *dialog)
+{
+  GtkDialogPrivate *priv = dialog->priv;
+  gint content_area_border;
+  gint content_area_spacing;
+  gint button_spacing;
+  gint action_area_border;
 
-  gtk_container_class_declare_internal_child (container_class, TRUE,
-                                              G_STRUCT_OFFSET (GtkDialogPrivate, vbox),
-                                              "vbox");
-  gtk_container_class_declare_internal_child (container_class, TRUE,
-                                              G_STRUCT_OFFSET (GtkDialogPrivate, action_area),
-                                              "action_area");
+  gtk_widget_style_get (GTK_WIDGET (dialog),
+                        "content-area-border", &content_area_border,
+                        "content-area-spacing", &content_area_spacing,
+                        "button-spacing", &button_spacing,
+                        "action-area-border", &action_area_border,
+                        NULL);
+
+  
+  gtk_container_set_border_width (GTK_CONTAINER (priv->vbox),
+                                  content_area_border);
+  if (!_gtk_box_get_spacing_set (GTK_BOX (priv->vbox)))
+    {
+      gtk_box_set_spacing (GTK_BOX (priv->vbox), content_area_spacing);
+      _gtk_box_set_spacing_set (GTK_BOX (priv->vbox), FALSE);
+    }
+  gtk_box_set_spacing (GTK_BOX (priv->action_area),
+                       button_spacing);
+  gtk_container_set_border_width (GTK_CONTAINER (priv->action_area),
+                                  action_area_border);
 }
 
 static void
 gtk_dialog_init (GtkDialog *dialog)
 {
   GtkDialogPrivate *priv;
-  
-  dialog->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
-                                                     GTK_TYPE_DIALOG,
-                                                     GtkDialogPrivate);
 
-  priv->vbox = NULL;
-  priv->action_area = NULL;
-  
+  dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
+                                              GTK_TYPE_DIALOG,
+                                              GtkDialogPrivate);
+  priv = dialog->priv;
+
   /* To avoid breaking old code that prevents destroy on delete event
    * by connecting a handler, we have to have the FIRST signal
    * connection on the dialog.
@@ -407,6 +383,25 @@ gtk_dialog_init (GtkDialog *dialog)
                     "delete-event",
                     G_CALLBACK (gtk_dialog_delete_event_handler),
                     NULL);
+
+  priv->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_add (GTK_CONTAINER (dialog), priv->vbox);
+  gtk_widget_show (priv->vbox);
+
+  priv->action_area = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
+
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (priv->action_area),
+                             GTK_BUTTONBOX_END);
+
+  gtk_box_pack_end (GTK_BOX (priv->vbox), priv->action_area,
+                    FALSE, TRUE, 0);
+  gtk_widget_show (priv->action_area);
+
+  gtk_window_set_type_hint (GTK_WINDOW (dialog),
+			    GDK_WINDOW_TYPE_HINT_DIALOG);
+  gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER_ON_PARENT);
+
+  update_spacings (dialog);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
@@ -415,8 +410,26 @@ static void
 gtk_dialog_buildable_interface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->get_internal_child = gtk_dialog_buildable_get_internal_child;
   iface->custom_tag_start = gtk_dialog_buildable_custom_tag_start;
   iface->custom_finished = gtk_dialog_buildable_custom_finished;
+}
+
+static GObject *
+gtk_dialog_buildable_get_internal_child (GtkBuildable *buildable,
+					 GtkBuilder   *builder,
+					 const gchar  *childname)
+{
+  GtkDialogPrivate *priv = GTK_DIALOG (buildable)->priv;
+
+  if (strcmp (childname, "vbox") == 0)
+    return G_OBJECT (priv->vbox);
+  else if (strcmp (childname, "action_area") == 0)
+    return G_OBJECT (priv->action_area);
+
+  return parent_buildable_iface->get_internal_child (buildable,
+                                                     builder,
+                                                     childname);
 }
 
 static gboolean
