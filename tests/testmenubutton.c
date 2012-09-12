@@ -8,6 +8,7 @@ int main (int argc, char **argv)
 	GtkWidget *grid;
 	GtkWidget *entry;
 	GtkWidget *menu_widget;
+	GtkAccelGroup *accel_group;
 	guint i;
 	GMenu *menu;
 
@@ -18,6 +19,9 @@ int main (int argc, char **argv)
 
 	grid = gtk_grid_new ();
 	gtk_container_add (GTK_CONTAINER (window), grid);
+
+	accel_group = gtk_accel_group_new ();
+	gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
 	/* Button next to entry */
 	entry = gtk_entry_new ();
@@ -35,11 +39,17 @@ int main (int argc, char **argv)
 	menu_widget = gtk_menu_new ();
 	for (i = 5; i > 0; i--) {
 		GtkWidget *item;
-		char *label;
 
-		label = g_strdup_printf ("Item _%d", i);
-		item = gtk_menu_item_new_with_mnemonic (label);
-		g_free (label);
+		if (i == 3) {
+			item = gtk_image_menu_item_new_from_stock (GTK_STOCK_COPY, accel_group);
+		} else {
+			char *label;
+
+			label = g_strdup_printf ("Item _%d", i);
+			item = gtk_menu_item_new_with_mnemonic (label);
+			g_free (label);
+		}
+		gtk_menu_item_set_use_underline (GTK_MENU_ITEM (item), TRUE);
 		gtk_menu_attach (GTK_MENU (menu_widget),
 				 item,
 				 0, 1,
