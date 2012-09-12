@@ -222,6 +222,8 @@ void    gtk_container_forall		     (GtkContainer *container,
 void    gtk_container_class_handle_border_width (GtkContainerClass *klass);
 
 /* Class-level functions */
+void    gtk_container_class_set_template_from_string   (GtkContainerClass *container_class,
+                                                        const gchar       *template_string);
 void    gtk_container_class_set_template_from_resource (GtkContainerClass *container_class,
                                                         const gchar       *resource_path);
 void    gtk_container_class_set_connect_func           (GtkContainerClass *container_class,

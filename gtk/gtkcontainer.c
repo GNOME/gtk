@@ -245,11 +245,18 @@ typedef struct
   GObject *object;
 } InternalChild;
 
+typedef enum
+{
+  TMPL_STRING,
+  TMPL_RESOURCE
+} GtkContainerTemplateType;
+
 struct _GtkContainerClassPrivate
 {
   GSList *tmpl_classes;
 
   const gchar *tmpl;
+  GtkContainerTemplateType tmpl_type;
   GtkBuilderConnectFunc connect_func;
   GList *internal_children; /* InternalChildData list */
 };
@@ -1390,6 +1397,49 @@ gtk_container_class_list_child_properties (GObjectClass *cclass,
   return pspecs;
 }
 
+static void
+gtk_container_class_set_template (GtkContainerClass *container_class,
+                                  const gchar       *tmpl,
+                                  GtkContainerTemplateType tmpl_type)
+{
+  GtkContainerClassPrivate *priv = container_class->priv;
+  GObjectClass  *oclass;
+
+  priv->tmpl = tmpl;
+  priv->tmpl_type = tmpl_type;
+
+  /* Collect an ordered list of class which have templates to build */
+  for (oclass = G_OBJECT_CLASS (container_class);
+       GTK_IS_CONTAINER_CLASS (oclass);
+       oclass = g_type_class_peek_parent (oclass))
+    {
+      GtkContainerClassPrivate *cpriv = GTK_CONTAINER_CLASS (oclass)->priv;
+
+      if (cpriv->tmpl)
+        priv->tmpl_classes = g_slist_prepend (priv->tmpl_classes, oclass);
+    }
+}
+
+/**
+ * gtk_container_class_set_template_from_string:
+ * @container_class: a #GtkContainerClass
+ * @template_string: the #GtkBuilder xml string
+ *
+ * For type implementations it is recommended to use #gtk_container_class_set_template_from_resource
+ * instead of this function.
+ * 
+ * Since: 3.6
+ */
+void
+gtk_container_class_set_template_from_string (GtkContainerClass *container_class,
+                                              const gchar       *template_string)
+{
+  g_return_if_fail (GTK_IS_CONTAINER_CLASS (container_class));
+  g_return_if_fail (template_string && template_string[0]);
+
+  gtk_container_class_set_template (container_class, template_string, TMPL_STRING);
+}
+
 /**
  * gtk_container_class_set_template_from_resource:
  * @container_class: a #GtkContainerClass
@@ -1409,32 +1459,16 @@ gtk_container_class_list_child_properties (GObjectClass *cclass,
  * with id="this" and an extra 'parent' property specifying from with type 
  * the new class derives from.
  * 
- * Since: 3.0
+ * Since: 3.6
  */
 void
 gtk_container_class_set_template_from_resource (GtkContainerClass *container_class,
                                                 const gchar       *resource_path)
 {
-  GtkContainerClassPrivate *priv;
-  GObjectClass  *oclass;
-  
-  g_return_if_fail (GTK_IS_CONTAINER_CLASS(container_class));
+  g_return_if_fail (GTK_IS_CONTAINER_CLASS (container_class));
   g_return_if_fail (resource_path && resource_path[0]);
 
-  priv = container_class->priv;
-
-  priv->tmpl = resource_path;
-
-  /* Collect an ordered list of class which have templates to build */
-  for (oclass = G_OBJECT_CLASS (container_class);
-       GTK_IS_CONTAINER_CLASS (oclass);
-       oclass = g_type_class_peek_parent (oclass))
-    {
-      GtkContainerClassPrivate *cpriv = GTK_CONTAINER_CLASS (oclass)->priv;
-
-      if (cpriv->tmpl)
-        priv->tmpl_classes = g_slist_prepend (priv->tmpl_classes, oclass);
-    }
+  gtk_container_class_set_template (container_class, resource_path, TMPL_RESOURCE);
 }
 
 /**
@@ -1444,6 +1478,8 @@ gtk_container_class_set_template_from_resource (GtkContainerClass *container_cla
  *
  * Sets the function to be used when automatically connecting signals
  * defined by this class's GtkBuilder template.
+ *
+ * Since: 3.6
  */
 void
 gtk_container_class_set_connect_func (GtkContainerClass *container_class,
@@ -1465,6 +1501,8 @@ gtk_container_class_set_connect_func (GtkContainerClass *container_class,
  * Declare a child defined in the template as an internal children.
  * Use #G_STRUCT_OFFSET to pass in the struct_offset of the pointer that will be set automatically on construction.
  * If you do not need to keep a pointer set use_private to FALSE and struct_offset to 0.
+ * 
+ * Since: 3.6
  */
 void
 gtk_container_class_declare_internal_child (GtkContainerClass *container_class,
@@ -1625,7 +1663,19 @@ gtk_container_constructor (GType                  type,
         
       builder = gtk_builder_new ();
       gtk_builder_expose_object (builder, "this", object);
-      ret = gtk_builder_add_to_parent_from_resource (builder, object, cpriv->tmpl, &error);
+
+      switch (cpriv->tmpl_type)
+        {
+          case TMPL_STRING:
+            ret = gtk_builder_add_to_parent_from_string (builder, object, cpriv->tmpl, -1, &error);
+          break;
+          case TMPL_RESOURCE:
+            ret = gtk_builder_add_to_parent_from_resource (builder, object, cpriv->tmpl, &error);
+          break;
+          default:
+            ret = 0;
+          break;
+        }
 
       if (ret)
         {
