@@ -39,7 +39,6 @@ struct _GtkCssAnimatedValues
   GtkCssComputedValues parent;
 
   gint64 current_time;                  /* the current time in our world */
-  GtkCssComputedValues *computed;       /* the computed values we'd have without animations */
   GSList *animations;                   /* the running animations */
 };
 

@@ -125,9 +125,8 @@ gtk_css_animation_set_values (GtkStyleAnimation    *style_animation,
       value = _gtk_css_keyframes_get_value (animation->keyframes,
                                             i,
                                             progress,
-                                            _gtk_css_computed_values_get_value (values, i));
-      /* XXX: Is using 0 correct here? */
-      _gtk_css_computed_values_set_value (values, property_id, value, 0, NULL);
+                                            _gtk_css_computed_values_get_intrinsic_value (values, i));
+      _gtk_css_computed_values_set_animated_value (values, property_id, value);
       _gtk_css_value_unref (value);
       
       changed = _gtk_bitmask_set (changed, property_id, TRUE);

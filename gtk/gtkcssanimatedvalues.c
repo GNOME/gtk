@@ -41,7 +41,6 @@ gtk_css_animated_values_dispose (GObject *object)
 {
   GtkCssAnimatedValues *values = GTK_CSS_ANIMATED_VALUES (object);
 
-  g_clear_object (&values->computed);
   g_slist_free_full (values->animations, g_object_unref);
   values->animations = NULL;
 
@@ -164,15 +163,11 @@ gtk_css_animated_values_start_transitions (GtkCssAnimatedValues *values,
                                            GtkCssComputedValues *source)
 {
   TransitionInfo transitions[GTK_CSS_PROPERTY_N_PROPERTIES] = { { 0, } };
-  GtkCssComputedValues *source_computed, *computed;
+  GtkCssComputedValues *computed;
   GtkCssValue *durations, *delays, *timing_functions;
   guint i;
 
   computed = GTK_CSS_COMPUTED_VALUES (values);
-  if (GTK_IS_CSS_ANIMATED_VALUES (source))
-    source_computed = GTK_CSS_ANIMATED_VALUES (source)->computed;
-  else
-    source_computed = source;
 
   transition_infos_set (transitions, _gtk_css_computed_values_get_value (computed, GTK_CSS_PROPERTY_TRANSITION_PROPERTY));
 
@@ -194,8 +189,8 @@ gtk_css_animated_values_start_transitions (GtkCssAnimatedValues *values,
       if (duration + delay == 0.0)
         continue;
 
-      start = _gtk_css_computed_values_get_value (source_computed, i);
-      end = _gtk_css_computed_values_get_value (values->computed, i);
+      start = _gtk_css_computed_values_get_intrinsic_value (source, i);
+      end = _gtk_css_computed_values_get_intrinsic_value (computed, i);
       if (_gtk_css_value_equal (start, end))
         {
           if (GTK_IS_CSS_ANIMATED_VALUES (source))
@@ -321,7 +316,6 @@ _gtk_css_animated_values_new (GtkCssComputedValues *computed,
 
   values = g_object_new (GTK_TYPE_CSS_ANIMATED_VALUES, NULL);
 
-  values->computed = g_object_ref (computed);
   for (i = 0; ; i++)
     {
       value = _gtk_css_computed_values_get_value (computed, i);
@@ -357,15 +351,20 @@ GtkBitmask *
 _gtk_css_animated_values_advance (GtkCssAnimatedValues *values,
                                   gint64                timestamp)
 {
+  GtkCssComputedValues *computed;
   GtkBitmask *changed;
+  GPtrArray *old_animated_values;
   GSList *list;
 
   g_return_val_if_fail (GTK_IS_CSS_ANIMATED_VALUES (values), NULL);
   g_return_val_if_fail (timestamp >= values->current_time, NULL);
 
+  computed = GTK_CSS_COMPUTED_VALUES (values);
   changed = _gtk_bitmask_new ();
 
   values->current_time = timestamp;
+  old_animated_values = computed->animated_values;
+  computed->animated_values = NULL;
 
   list = values->animations;
   while (list)
@@ -386,6 +385,9 @@ _gtk_css_animated_values_advance (GtkCssAnimatedValues *values,
         }
     }
   
+  if (old_animated_values)
+    g_ptr_array_unref (old_animated_values);
+
   return changed;
 }
 
