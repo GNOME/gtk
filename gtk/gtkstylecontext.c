@@ -3169,8 +3169,6 @@ _gtk_style_context_validate (GtkStyleContext  *context,
           data = style_data_lookup (context);
 
           changes = _gtk_css_computed_values_get_difference (data->store, current->store);
-
-          style_data_unref (current);
         }
       else
         {
@@ -3189,6 +3187,9 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
       gtk_style_context_update_cache (context, parent_changes);
     }
+
+  if (current)
+    style_data_unref (current);
 
   if (change & GTK_CSS_CHANGE_ANIMATE &&
       gtk_style_context_is_animating (context))
