@@ -165,6 +165,12 @@ void            gtk_action_group_set_sensitive           (GtkActionGroup        
 gboolean        gtk_action_group_get_visible             (GtkActionGroup             *action_group);
 void            gtk_action_group_set_visible             (GtkActionGroup             *action_group,
 							  gboolean                    visible);
+GDK_AVAILABLE_IN_3_6
+GtkAccelGroup  *gtk_action_group_get_accel_group         (GtkActionGroup             *action_group);
+GDK_AVAILABLE_IN_3_6
+void            gtk_action_group_set_accel_group         (GtkActionGroup             *action_group,
+                                                          GtkAccelGroup              *accel_group);
+
 GtkAction      *gtk_action_group_get_action              (GtkActionGroup             *action_group,
 							  const gchar                *action_name);
 GList          *gtk_action_group_list_actions            (GtkActionGroup             *action_group);
