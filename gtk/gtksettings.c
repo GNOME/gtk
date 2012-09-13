@@ -1146,12 +1146,12 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_AUTO_MNEMONICS);
 
   /**
-   * GtkSettings:gtk-primary-button-warps-slider
+   * GtkSettings:gtk-primary-button-warps-slider:
    *
    * Whether a click in a #GtkRange trough should scroll to the click position or
    * scroll by a single page in the respective direction.
    *
-   * Since: 2.24
+   * Since: 3.6
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-primary-button-warps-slider",
