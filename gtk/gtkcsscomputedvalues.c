@@ -90,16 +90,6 @@ maybe_unref_section (gpointer section)
     gtk_css_section_unref (section);
 }
 
-static void
-gtk_css_computed_values_ensure_array (GtkCssComputedValues *values,
-                                      guint                 at_least_size)
-{
-  if (values->values == NULL)
-    values->values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
-  if (at_least_size > values->values->len)
-   g_ptr_array_set_size (values->values, at_least_size);
-}
-
 void
 _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
                                         GtkStyleContext      *context,
@@ -147,7 +137,10 @@ _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
 {
   g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
 
-  gtk_css_computed_values_ensure_array (values, id + 1);
+  if (values->values == NULL)
+    values->values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
+  if (id >= values->values->len)
+   g_ptr_array_set_size (values->values, id + 1);
 
   if (g_ptr_array_index (values->values, id))
     _gtk_css_value_unref (g_ptr_array_index (values->values, id));
