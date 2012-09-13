@@ -655,8 +655,14 @@ set_color_from_context (GtkStyle *style,
       break;
     }
 
-  if (!color || !(color->alpha > 0.01))
+  if (!color)
     return FALSE;
+
+  if (!(color->alpha > 0.01))
+    {
+      gdk_rgba_free (color);
+      return FALSE;
+    }
 
   dest->pixel = 0;
   dest->red = CLAMP ((guint) (color->red * 65535), 0, 65535);
