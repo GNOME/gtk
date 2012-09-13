@@ -24,7 +24,6 @@
 
 #include "gtkstylecontextprivate.h"
 #include "gtkcontainerprivate.h"
-#include "gtkcssanimatedvaluesprivate.h"
 #include "gtkcssenginevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
@@ -526,7 +525,7 @@ style_data_unref (StyleData *data)
 static gboolean
 style_data_is_animating (StyleData *style_data)
 {
-  return GTK_IS_CSS_ANIMATED_VALUES (style_data->store);
+  return !_gtk_css_computed_values_is_static (style_data->store);
 }
 
 static GtkStyleInfo *
@@ -3011,10 +3010,10 @@ gtk_style_context_update_animations (GtkStyleContext *context,
   
   style_data = style_data_lookup (context);
 
-  differences = _gtk_css_animated_values_advance (GTK_CSS_ANIMATED_VALUES (style_data->store),
+  differences = _gtk_css_computed_values_advance (style_data->store,
                                                   timestamp);
 
-  if (_gtk_css_animated_values_is_finished (GTK_CSS_ANIMATED_VALUES (style_data->store)))
+  if (_gtk_css_computed_values_is_static (style_data->store))
     _gtk_style_context_stop_animations (context);
 
   return differences;
@@ -3043,32 +3042,27 @@ gtk_style_context_should_animate (GtkStyleContext *context)
 
 static void
 gtk_style_context_start_animations (GtkStyleContext      *context,
+                                    GtkCssComputedValues *values,
                                     GtkCssComputedValues *previous,
                                     gint64                timestamp)
 {
-  StyleData *animated;
-
   if (!gtk_style_context_should_animate (context))
     {
       gtk_style_context_stop_animating (context);
       return;
     }
 
-  animated = style_data_new ();
-  animated->store = _gtk_css_animated_values_new (style_data_lookup (context)->store,
-                                                  previous,
-                                                  timestamp,
-                                                  context);
+  _gtk_css_computed_values_start_animations (values,
+                                             timestamp,
+                                             previous,
+                                             context);
 
-  if (_gtk_css_animated_values_is_finished (GTK_CSS_ANIMATED_VALUES (animated->store)))
+  if (_gtk_css_computed_values_is_static (values))
     {
-      style_data_unref (animated);
       gtk_style_context_stop_animating (context);
       return;
     }
 
-  style_info_set_data (context->priv->info, animated);
-  style_data_unref (animated);
   gtk_style_context_start_animating (context);
 }
 
@@ -3172,10 +3166,10 @@ _gtk_style_context_validate (GtkStyleContext  *context,
         {
           StyleData *data;
 
-          gtk_style_context_start_animations (context, current->store, timestamp);
-          change &= ~GTK_CSS_CHANGE_ANIMATE;
-
           data = style_data_lookup (context);
+
+          gtk_style_context_start_animations (context, data->store, current->store, timestamp);
+          change &= ~GTK_CSS_CHANGE_ANIMATE;
 
           changes = _gtk_css_computed_values_get_difference (data->store, current->store);
         }

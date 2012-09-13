@@ -43,13 +43,17 @@ struct _GtkCssComputedValues
 {
   GObject parent;
 
-  GPtrArray             *values;
-  GPtrArray             *sections;
-  GPtrArray             *animated_values;
-  GtkBitmask            *depends_on_parent;
-  GtkBitmask            *equals_parent;
-  GtkBitmask            *depends_on_color;
-  GtkBitmask            *depends_on_font_size;
+  GPtrArray             *values;               /* the unanimated (aka intrinsic) values */
+  GPtrArray             *sections;             /* sections the values are defined in */
+
+  GPtrArray             *animated_values;      /* NULL or array of animated values/NULL if not animated */
+  gint64                 current_time;         /* the current time in our world */
+  GSList                *animations;           /* the running animations, least important one first */
+
+  GtkBitmask            *depends_on_parent;    /* for intrinsic values */
+  GtkBitmask            *equals_parent;        /* dito */
+  GtkBitmask            *depends_on_color;     /* dito */
+  GtkBitmask            *depends_on_font_size; /* dito */
 };
 
 struct _GtkCssComputedValuesClass
@@ -84,6 +88,13 @@ GtkCssValue *           _gtk_css_computed_values_get_intrinsic_value  (GtkCssCom
 GtkBitmask *            _gtk_css_computed_values_get_difference       (GtkCssComputedValues     *values,
                                                                        GtkCssComputedValues     *other);
 
+void                    _gtk_css_computed_values_start_animations     (GtkCssComputedValues     *values,
+                                                                       gint64                    timestamp,
+                                                                       GtkCssComputedValues     *source,
+                                                                       GtkStyleContext          *context);
+GtkBitmask *            _gtk_css_computed_values_advance              (GtkCssComputedValues     *values,
+                                                                       gint64                    timestamp);
+gboolean                _gtk_css_computed_values_is_static            (GtkCssComputedValues     *values);
 
 G_END_DECLS
 
