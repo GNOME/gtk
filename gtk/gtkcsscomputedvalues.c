@@ -42,6 +42,11 @@ gtk_css_computed_values_dispose (GObject *object)
       g_ptr_array_unref (values->sections);
       values->sections = NULL;
     }
+  if (values->animated_values)
+    {
+      g_ptr_array_unref (values->animated_values);
+      values->animated_values = NULL;
+    }
 
   G_OBJECT_CLASS (_gtk_css_computed_values_parent_class)->dispose (object);
 }
@@ -127,7 +132,26 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues *values,
   _gtk_css_value_unref (value);
   _gtk_css_value_unref (specified);
 }
-                                    
+
+void
+_gtk_css_computed_values_set_animated_value (GtkCssComputedValues *values,
+                                             guint                 id,
+                                             GtkCssValue          *value)
+{
+  g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
+  g_return_if_fail (value != NULL);
+
+  if (values->animated_values == NULL)
+    values->animated_values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
+  if (id >= values->animated_values->len)
+   g_ptr_array_set_size (values->animated_values, id + 1);
+
+  if (g_ptr_array_index (values->animated_values, id))
+    _gtk_css_value_unref (g_ptr_array_index (values->animated_values, id));
+  g_ptr_array_index (values->animated_values, id) = _gtk_css_value_ref (value);
+
+}
+
 void
 _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
                                     guint                 id,
@@ -169,6 +193,20 @@ _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
 GtkCssValue *
 _gtk_css_computed_values_get_value (GtkCssComputedValues *values,
                                     guint                 id)
+{
+  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
+
+  if (values->animated_values &&
+      id < values->animated_values->len &&
+      g_ptr_array_index (values->animated_values, id))
+    return g_ptr_array_index (values->animated_values, id);
+
+  return _gtk_css_computed_values_get_intrinsic_value (values, id);
+}
+
+GtkCssValue *
+_gtk_css_computed_values_get_intrinsic_value (GtkCssComputedValues *values,
+                                              guint                 id)
 {
   g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
 

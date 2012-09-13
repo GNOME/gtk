@@ -45,6 +45,7 @@ struct _GtkCssComputedValues
 
   GPtrArray             *values;
   GPtrArray             *sections;
+  GPtrArray             *animated_values;
   GtkBitmask            *depends_on_parent;
   GtkBitmask            *equals_parent;
   GtkBitmask            *depends_on_color;
@@ -70,10 +71,15 @@ void                    _gtk_css_computed_values_set_value            (GtkCssCom
                                                                        GtkCssValue              *value,
                                                                        GtkCssDependencies        dependencies,
                                                                        GtkCssSection            *section);
+void                    _gtk_css_computed_values_set_animated_value   (GtkCssComputedValues     *values,
+                                                                       guint                     id,
+                                                                       GtkCssValue              *value);
                                                                         
 GtkCssValue *           _gtk_css_computed_values_get_value            (GtkCssComputedValues     *values,
                                                                        guint                     id);
 GtkCssSection *         _gtk_css_computed_values_get_section          (GtkCssComputedValues     *values,
+                                                                       guint                     id);
+GtkCssValue *           _gtk_css_computed_values_get_intrinsic_value  (GtkCssComputedValues     *values,
                                                                        guint                     id);
 GtkBitmask *            _gtk_css_computed_values_get_difference       (GtkCssComputedValues     *values,
                                                                        GtkCssComputedValues     *other);
