@@ -671,6 +671,7 @@ gettext_initialization (void)
 
 /* XXX: Remove me after getting rid of gail */
 extern void _gtk_accessibility_init (void);
+extern void _gtk_accessibility_shutdown (void);
 
 static void
 do_post_parse_initialization (int    *argc,
@@ -1172,11 +1173,15 @@ gtk_main (void)
 
   if (gtk_main_loop_level == 0)
     {
+      /* Keep this section in sync with gtk_application_shutdown() */
+
       /* Try storing all clipboard data we have */
       _gtk_clipboard_store_all ();
 
       /* Synchronize the recent manager singleton */
       _gtk_recent_manager_sync ();
+
+      _gtk_accessibility_shutdown ();
     }
 }
 
