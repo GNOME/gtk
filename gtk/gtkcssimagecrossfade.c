@@ -121,6 +121,7 @@ gtk_css_image_cross_fade_draw (GtkCssImage        *image,
                                                 cairo_get_target (cr),
                                                 width, height);
           cairo_set_source_surface (cr, surface, 0, 0);
+          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
           cairo_paint_with_alpha (cr, cross_fade->progress);
           cairo_surface_destroy (surface);
 
