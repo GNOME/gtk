@@ -579,10 +579,7 @@ load_file (const gchar *filename)
   }
 
   if (current_file && !strcmp (current_file, names[0]))
-    {
-      g_string_free (buffer, TRUE);
-      return;
-    }
+    goto out;
 
   g_free (current_file);
   current_file = g_strdup (names[0]);
@@ -598,7 +595,7 @@ load_file (const gchar *filename)
     {
       g_warning ("%s", err->message);
       g_error_free (err);
-      return;
+      goto out;
     }
 
   file = g_fopen (full_filename, "r");
@@ -609,7 +606,7 @@ load_file (const gchar *filename)
   g_free (full_filename);
 
   if (!file)
-    return;
+    goto out;
 
   gtk_text_buffer_get_iter_at_offset (info_buffer, &start, 0);
   while (read_line (file, buffer))
@@ -725,6 +722,7 @@ load_file (const gchar *filename)
 
   fontify ();
 
+out:
   g_string_free (buffer, TRUE);
 
   g_strfreev (names);
