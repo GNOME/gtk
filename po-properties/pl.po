@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-11 16:38+0200\n"
-"PO-Revision-Date: 2012-09-11 16:40+0200\n"
+"POT-Creation-Date: 2012-09-14 23:45+0200\n"
+"PO-Revision-Date: 2012-09-14 23:49+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -609,7 +609,7 @@ msgstr "działanie cel wartość"
 msgid "The parameter for action invocations"
 msgstr "Parametr dla wywołań działania"
 
-#: ../gtk/gtkaction.c:220 ../gtk/gtkactiongroup.c:226 ../gtk/gtkprinter.c:123
+#: ../gtk/gtkaction.c:220 ../gtk/gtkactiongroup.c:228 ../gtk/gtkprinter.c:123
 #: ../gtk/gtktextmark.c:126 ../gtk/gtkthemingengine.c:255
 msgid "Name"
 msgstr "Nazwa"
@@ -731,7 +731,7 @@ msgstr "Ukrywanie jeśli pusta"
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Określa, czy pośrednicy pustego menu dla tej czynności będą ukrywani."
 
-#: ../gtk/gtkaction.c:379 ../gtk/gtkactiongroup.c:233
+#: ../gtk/gtkaction.c:379 ../gtk/gtkactiongroup.c:235
 #: ../gtk/gtkcellrenderer.c:296 ../gtk/gtkwidget.c:1026
 msgid "Sensitive"
 msgstr "Czuły"
@@ -740,7 +740,7 @@ msgstr "Czuły"
 msgid "Whether the action is enabled."
 msgstr "Określa, czy czynność jest dostępna."
 
-#: ../gtk/gtkaction.c:386 ../gtk/gtkactiongroup.c:240
+#: ../gtk/gtkaction.c:386 ../gtk/gtkactiongroup.c:242
 #: ../gtk/gtkstatusicon.c:298 ../gtk/gtktreeviewcolumn.c:247
 #: ../gtk/gtkwidget.c:1019
 msgid "Visible"
@@ -770,17 +770,25 @@ msgstr "Stałe wyświetlanie obrazu"
 msgid "Whether the image will always be shown"
 msgstr "Określa, czy obraz będzie stale wyświetlany"
 
-#: ../gtk/gtkactiongroup.c:227
+#: ../gtk/gtkactiongroup.c:229
 msgid "A name for the action group."
 msgstr "Nazwa dla grupy czynności."
 
-#: ../gtk/gtkactiongroup.c:234
+#: ../gtk/gtkactiongroup.c:236
 msgid "Whether the action group is enabled."
 msgstr "Określa, czy grupa czynności jest dostępna."
 
-#: ../gtk/gtkactiongroup.c:241
+#: ../gtk/gtkactiongroup.c:243
 msgid "Whether the action group is visible."
 msgstr "Określa, czy grupa czynności jest widoczna."
+
+#: ../gtk/gtkactiongroup.c:249
+msgid "Accelerator Group"
+msgstr "Grupa klawiszów skrótów"
+
+#: ../gtk/gtkactiongroup.c:250
+msgid "The accelerator group the actions of this group should use."
+msgstr "Grupa klawiszów skrótów, której powinny używać czynności tej grupy."
 
 #: ../gtk/gtkactivatable.c:287
 msgid "Related Action"
@@ -1699,7 +1707,7 @@ msgstr "Tryb klawisza skrótu"
 
 #: ../gtk/gtkcellrendereraccel.c:204
 msgid "The type of accelerators"
-msgstr "Rodzaj klawiszy skrótów"
+msgstr "Typ klawiszy skrótów"
 
 #: ../gtk/gtkcellrenderer.c:280
 msgid "mode"
@@ -5921,7 +5929,7 @@ msgstr "RGBA Xft"
 
 #: ../gtk/gtksettings.c:543
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
-msgstr "Rodzaj wygładzania pikseli; none (brak), rgb, bgr, vrgb, vbgr"
+msgstr "Typ wygładzania pikseli; none (brak), rgb, bgr, vrgb, vbgr"
 
 #: ../gtk/gtksettings.c:552
 msgid "Xft DPI"
