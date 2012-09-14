@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-14 23:45+0200\n"
-"PO-Revision-Date: 2012-09-14 23:49+0200\n"
+"PO-Revision-Date: 2012-09-14 23:50+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -784,11 +784,11 @@ msgstr "Określa, czy grupa czynności jest widoczna."
 
 #: ../gtk/gtkactiongroup.c:249
 msgid "Accelerator Group"
-msgstr "Grupa klawiszów skrótów"
+msgstr "Grupa klawiszy skrótów"
 
 #: ../gtk/gtkactiongroup.c:250
 msgid "The accelerator group the actions of this group should use."
-msgstr "Grupa klawiszów skrótów, której powinny używać czynności tej grupy."
+msgstr "Grupa klawiszy skrótów, której powinny używać czynności tej grupy."
 
 #: ../gtk/gtkactivatable.c:287
 msgid "Related Action"
