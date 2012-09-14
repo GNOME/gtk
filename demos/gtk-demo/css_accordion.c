@@ -61,6 +61,7 @@ do_css_accordion (GtkWidget *do_widget)
       data = g_bytes_get_data (bytes, &data_size);
 
       gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider), (gchar *)data, data_size, NULL);
+      g_bytes_unref (bytes);
 
       apply_css (window, provider);
     }
