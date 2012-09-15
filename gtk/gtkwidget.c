@@ -2516,7 +2516,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-leave:
    * @widget: the object which received the signal.
-   * @drag_context: the drag context
+   * @context: the drag context
    * @time: the timestamp of the motion event
    *
    * The ::drag-leave signal is emitted on the drop site when the cursor
@@ -2538,7 +2538,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-begin:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    *
    * The ::drag-begin signal is emitted on the drag source when a drag is
    * started. A typical reason to connect to this signal is to set up a
@@ -2561,7 +2561,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-end:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    *
    * The ::drag-end signal is emitted on the drag source when a drag is
    * finished.  A typical reason to connect to this signal is to undo
@@ -2580,7 +2580,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-data-delete:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    *
    * The ::drag-data-delete signal is emitted on the drag source when a drag
    * with the action %GDK_ACTION_MOVE is successfully completed. The signal
@@ -2600,7 +2600,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-failed:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    * @result: the result of the drag operation
    *
    * The ::drag-failed signal is emitted on the drag source when a drag has
@@ -2627,12 +2627,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-motion:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    * @x: the x coordinate of the current cursor position
    * @y: the y coordinate of the current cursor position
    * @time: the timestamp of the motion event
    *
-   * The drag-motion signal is emitted on the drop site when the user
+   * The ::drag-motion signal is emitted on the drop site when the user
    * moves the cursor over the widget during a drag. The signal handler
    * must determine whether the cursor position is in a drop zone or not.
    * If it is not in a drop zone, it returns %FALSE and no further processing
@@ -2655,11 +2655,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * the drop site with gtk_drag_highlight().
    * |[
    * static void
-   * drag_motion (GtkWidget *widget,
+   * drag_motion (GtkWidget      *widget,
    *              GdkDragContext *context,
-   *              gint x,
-   *              gint y,
-   *              guint time)
+   *              gint            x,
+   *              gint            y,
+   *              guint           time)
    * {
    *   GdkAtom target;
    *
@@ -2676,7 +2676,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *     gdk_drag_status (context, 0, time);
    *   else
    *    {
-   *      private_data->pending_status = context->suggested_action;
+   *      private_data->pending_status = gdk_drag_context_get_suggested_action (context);
    *      gtk_drag_get_data (widget, context, target, time);
    *    }
    *
@@ -2698,11 +2698,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *    {
    *      private_data->suggested_action = 0;
    *
-   *     /&ast; We are getting this data due to a request in drag_motion,
-   *      * rather than due to a request in drag_drop, so we are just
-   *      * supposed to call gdk_drag_status (), not actually paste in
-   *      * the data.
-   *      &ast;/
+   *      /&ast; We are getting this data due to a request in drag_motion,
+   *       * rather than due to a request in drag_drop, so we are just
+   *       * supposed to call gdk_drag_status(), not actually paste in
+   *       * the data.
+   *       &ast;/
    *      str = gtk_selection_data_get_text (selection_data);
    *      if (!data_is_acceptable (str))
    *        gdk_drag_status (context, 0, time);
@@ -2734,7 +2734,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-drop:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    * @x: the x coordinate of the current cursor position
    * @y: the y coordinate of the current cursor position
    * @time: the timestamp of the motion event
@@ -2768,7 +2768,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-data-get:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    * @data: the #GtkSelectionData to be filled with the dragged data
    * @info: the info that has been registered with the target in the
    *        #GtkTargetList
@@ -2796,7 +2796,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-data-received:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    * @x: where the drop happened
    * @y: where the drop happened
    * @data: the received data
@@ -2811,16 +2811,17 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * If the data was received in response to a #GtkWidget::drag-drop signal
    * (and this is the last target to be received), the handler for this
    * signal is expected to process the received data and then call
-   * gtk_drag_finish(), setting the @success parameter depending on whether
-   * the data was processed successfully.
+   * gtk_drag_finish(), setting the @success parameter depending on
+   * whether the data was processed successfully.
    *
-   * The handler may inspect and modify @drag_context->action before calling
-   * gtk_drag_finish(), e.g. to implement %GDK_ACTION_ASK as shown in the
-   * following example:
+   * The handler may inspect the selected action with
+   * gdk_drag_context_get_selected_action() before calling
+   * gtk_drag_finish(), e.g. to implement %GDK_ACTION_ASK as
+   * shown in the following example:
    * |[
    * void
    * drag_data_received (GtkWidget          *widget,
-   *                     GdkDragContext     *drag_context,
+   *                     GdkDragContext     *context,
    *                     gint                x,
    *                     gint                y,
    *                     GtkSelectionData   *data,
@@ -2829,7 +2830,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * {
    *   if ((data->length >= 0) && (data->format == 8))
    *     {
-   *       if (drag_context->action == GDK_ACTION_ASK)
+   *       GdkDragAction action;
+   *
+   *       /&ast; handle data here &ast;/
+   *
+   *       action = gdk_drag_context_get_selected_action (context);
+   *       if (action == GDK_ACTION_ASK)
    *         {
    *           GtkWidget *dialog;
    *           gint response;
@@ -2844,16 +2850,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *           gtk_widget_destroy (dialog);
    *
    *           if (response == GTK_RESPONSE_YES)
-   *             drag_context->action = GDK_ACTION_MOVE;
+   *             action = GDK_ACTION_MOVE;
    *           else
-   *             drag_context->action = GDK_ACTION_COPY;
+   *             action = GDK_ACTION_COPY;
    *          }
    *
-   *       gtk_drag_finish (drag_context, TRUE, FALSE, time);
-   *       return;
+   *       gtk_drag_finish (context, TRUE, action == GDK_ACTION_MOVE, time);
    *     }
-   *
-   *    gtk_drag_finish (drag_context, FALSE, FALSE, time);
+   *   else
+   *     gtk_drag_finish (context, FALSE, FALSE, time);
    *  }
    * ]|
    */
