@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-11 14:41+0000\n"
-"PO-Revision-Date: 2012-09-11 18:51+0100\n"
+"POT-Creation-Date: 2012-09-15 18:17+0000\n"
+"PO-Revision-Date: 2012-09-15 20:46+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: Slovenian\n"
@@ -598,7 +598,7 @@ msgid "The parameter for action invocations"
 msgstr "Parameter obujenja dejanja"
 
 #: ../gtk/gtkaction.c:220
-#: ../gtk/gtkactiongroup.c:226
+#: ../gtk/gtkactiongroup.c:228
 #: ../gtk/gtkprinter.c:123
 #: ../gtk/gtktextmark.c:126
 #: ../gtk/gtkthemingengine.c:255
@@ -722,7 +722,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Izbrana možnost omogoča, da so prazni predmeti menija skriti."
 
 #: ../gtk/gtkaction.c:379
-#: ../gtk/gtkactiongroup.c:233
+#: ../gtk/gtkactiongroup.c:235
 #: ../gtk/gtkcellrenderer.c:296
 #: ../gtk/gtkwidget.c:1026
 msgid "Sensitive"
@@ -733,7 +733,7 @@ msgid "Whether the action is enabled."
 msgstr "Ali naj je dejanje omogočeno."
 
 #: ../gtk/gtkaction.c:386
-#: ../gtk/gtkactiongroup.c:240
+#: ../gtk/gtkactiongroup.c:242
 #: ../gtk/gtkstatusicon.c:298
 #: ../gtk/gtktreeviewcolumn.c:247
 #: ../gtk/gtkwidget.c:1019
@@ -764,17 +764,25 @@ msgstr "Vedno pokaži sliko"
 msgid "Whether the image will always be shown"
 msgstr "Ali bo slika vedno prikazana"
 
-#: ../gtk/gtkactiongroup.c:227
+#: ../gtk/gtkactiongroup.c:229
 msgid "A name for the action group."
 msgstr "Ime skupine dejanj."
 
-#: ../gtk/gtkactiongroup.c:234
+#: ../gtk/gtkactiongroup.c:236
 msgid "Whether the action group is enabled."
 msgstr "Ali naj bo skupina dejanj omogočena."
 
-#: ../gtk/gtkactiongroup.c:241
+#: ../gtk/gtkactiongroup.c:243
 msgid "Whether the action group is visible."
 msgstr "Ali naj bo skupina dejanj vidna."
+
+#: ../gtk/gtkactiongroup.c:249
+msgid "Accelerator Group"
+msgstr "Skupina pospeševalnika"
+
+#: ../gtk/gtkactiongroup.c:250
+msgid "The accelerator group the actions of this group should use."
+msgstr "Dejanja skupine pospeševalnika, ki naj bi jih skupina izvajala."
 
 #: ../gtk/gtkactivatable.c:287
 msgid "Related Action"
