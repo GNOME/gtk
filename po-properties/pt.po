@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-12 23:21+0100\n"
-"PO-Revision-Date: 2012-09-12 23:25+0000\n"
+"POT-Creation-Date: 2012-09-15 19:31+0100\n"
+"PO-Revision-Date: 2012-09-12 19:32+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "Language: pt\n"
@@ -596,7 +596,7 @@ msgstr "valor do alvo da acção"
 msgid "The parameter for action invocations"
 msgstr "O parâmtro para as invocações da acção"
 
-#: ../gtk/gtkaction.c:220 ../gtk/gtkactiongroup.c:226 ../gtk/gtkprinter.c:123
+#: ../gtk/gtkaction.c:220 ../gtk/gtkactiongroup.c:228 ../gtk/gtkprinter.c:123
 #: ../gtk/gtktextmark.c:126 ../gtk/gtkthemingengine.c:255
 msgid "Name"
 msgstr "Nome"
@@ -720,7 +720,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 "Quando VERDADEIRO, proxies de menu vazio para esta acção são escondidas."
 
-#: ../gtk/gtkaction.c:379 ../gtk/gtkactiongroup.c:233
+#: ../gtk/gtkaction.c:379 ../gtk/gtkactiongroup.c:235
 #: ../gtk/gtkcellrenderer.c:296 ../gtk/gtkwidget.c:1026
 msgid "Sensitive"
 msgstr "Sensível"
@@ -729,7 +729,7 @@ msgstr "Sensível"
 msgid "Whether the action is enabled."
 msgstr "Se a acção está ou não activa."
 
-#: ../gtk/gtkaction.c:386 ../gtk/gtkactiongroup.c:240
+#: ../gtk/gtkaction.c:386 ../gtk/gtkactiongroup.c:242
 #: ../gtk/gtkstatusicon.c:298 ../gtk/gtktreeviewcolumn.c:247
 #: ../gtk/gtkwidget.c:1019
 msgid "Visible"
@@ -759,17 +759,25 @@ msgstr "Apresentar sempre a imagem"
 msgid "Whether the image will always be shown"
 msgstr "Se a imagem será ou não sempre visível"
 
-#: ../gtk/gtkactiongroup.c:227
+#: ../gtk/gtkactiongroup.c:229
 msgid "A name for the action group."
 msgstr "Um nome para o grupo da acção."
 
-#: ../gtk/gtkactiongroup.c:234
+#: ../gtk/gtkactiongroup.c:236
 msgid "Whether the action group is enabled."
 msgstr "Se o grupo de acção está ou não activo."
 
-#: ../gtk/gtkactiongroup.c:241
+#: ../gtk/gtkactiongroup.c:243
 msgid "Whether the action group is visible."
 msgstr "Se o grupo de acção está ou não visível."
+
+#: ../gtk/gtkactiongroup.c:249
+msgid "Accelerator Group"
+msgstr "Grupo do Atalho"
+
+#: ../gtk/gtkactiongroup.c:250
+msgid "The accelerator group the actions of this group should use."
+msgstr "O atalho de grupo que as acções deste grupo deverão utilizar."
 
 #: ../gtk/gtkactivatable.c:287
 msgid "Related Action"
@@ -6220,7 +6228,8 @@ msgstr "Botão primário move o botão deslizante para o local"
 msgid ""
 "Whether a primary click on the trough should warp the slider into position"
 msgstr ""
-"Se um clique primário na calha deverá mover ou não o botão deslizante para essa posição"
+"Se um clique primário na calha deverá mover ou não o botão deslizante para "
+"essa posição"
 
 #: ../gtk/gtksettings.c:1175
 msgid "Visible Focus"
