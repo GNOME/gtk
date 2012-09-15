@@ -28,8 +28,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-11 09:39+0000\n"
-"PO-Revision-Date: 2012-09-13 03:12+0200\n"
+"POT-Creation-Date: 2012-09-14 21:35+0000\n"
+"PO-Revision-Date: 2012-09-15 12:16+0200\n"
 "Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
 "Language-Team: Greek Translation Team\n"
 "Language: el\n"
@@ -620,7 +620,7 @@ msgstr "τιμή προορισμού ενέργειας"
 msgid "The parameter for action invocations"
 msgstr "Η παράμετρος για επικλήσεις ενέργειας"
 
-#: ../gtk/gtkaction.c:220 ../gtk/gtkactiongroup.c:226 ../gtk/gtkprinter.c:123
+#: ../gtk/gtkaction.c:220 ../gtk/gtkactiongroup.c:228 ../gtk/gtkprinter.c:123
 #: ../gtk/gtktextmark.c:126 ../gtk/gtkthemingengine.c:255
 msgid "Name"
 msgstr "'Όνομα"
@@ -747,7 +747,7 @@ msgstr ""
 "Όταν είναι TRUE, οι κενοί διαμεσολαβητές μενού για αυτή την ενέργεια θα "
 "αποκρύπτονται."
 
-#: ../gtk/gtkaction.c:379 ../gtk/gtkactiongroup.c:233
+#: ../gtk/gtkaction.c:379 ../gtk/gtkactiongroup.c:235
 #: ../gtk/gtkcellrenderer.c:296 ../gtk/gtkwidget.c:1026
 msgid "Sensitive"
 msgstr "Ευαίσθητο"
@@ -756,7 +756,7 @@ msgstr "Ευαίσθητο"
 msgid "Whether the action is enabled."
 msgstr "Αν αυτή η ενέργεια θα είναι ενεργοποιημένη."
 
-#: ../gtk/gtkaction.c:386 ../gtk/gtkactiongroup.c:240
+#: ../gtk/gtkaction.c:386 ../gtk/gtkactiongroup.c:242
 #: ../gtk/gtkstatusicon.c:298 ../gtk/gtktreeviewcolumn.c:247
 #: ../gtk/gtkwidget.c:1019
 msgid "Visible"
@@ -786,17 +786,26 @@ msgstr "Πάντα εμφάνιση εικόνας"
 msgid "Whether the image will always be shown"
 msgstr "Αν θα εμφανίζεται πάντα η εικόνα"
 
-#: ../gtk/gtkactiongroup.c:227
+#: ../gtk/gtkactiongroup.c:229
 msgid "A name for the action group."
 msgstr "Ένα όνομα για αυτή την ομάδα ενεργειών."
 
-#: ../gtk/gtkactiongroup.c:234
+#: ../gtk/gtkactiongroup.c:236
 msgid "Whether the action group is enabled."
 msgstr "Αν αυτή η ομάδα ενέργειας θα είναι ενεργοποιημένη."
 
-#: ../gtk/gtkactiongroup.c:241
+#: ../gtk/gtkactiongroup.c:243
 msgid "Whether the action group is visible."
 msgstr "Αν αυτή η ομάδα ενέργειας θα είναι ορατή."
+
+#: ../gtk/gtkactiongroup.c:249
+#| msgid "Accelerator Mode"
+msgid "Accelerator Group"
+msgstr "Ομάδα συντόμευσης"
+
+#: ../gtk/gtkactiongroup.c:250
+msgid "The accelerator group the actions of this group should use."
+msgstr "Η ομάδα συντόμευσης που πρέπει να χρησιμοποιούν οι ενέργειες."
 
 #: ../gtk/gtkactivatable.c:287
 msgid "Related Action"
@@ -6302,7 +6311,6 @@ msgstr ""
 "πατάει το πλήκτρο ενεργοποίησής τους."
 
 #: ../gtk/gtksettings.c:1158
-#| msgid "Primary icon sensitive"
 msgid "Primary button warps slider"
 msgstr "Το πρωτεύον κουμπί στρεβλώνει την κύλιση"
 
