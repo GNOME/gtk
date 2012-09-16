@@ -103,6 +103,9 @@ _gtk_css_value_equal (const GtkCssValue *value1,
   g_return_val_if_fail (value1 != NULL, FALSE);
   g_return_val_if_fail (value2 != NULL, FALSE);
 
+  if (value1 == value2)
+    return TRUE;
+
   if (value1->class != value2->class)
     return FALSE;
 
@@ -113,7 +116,8 @@ gboolean
 _gtk_css_value_equal0 (const GtkCssValue *value1,
                        const GtkCssValue *value2)
 {
-  if (value1 == NULL && value2 == NULL)
+  /* Inclues both values being NULL */
+  if (value1 == value2)
     return TRUE;
 
   if (value1 == NULL || value2 == NULL)
