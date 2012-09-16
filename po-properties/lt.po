@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-11 09:39+0000\n"
-"PO-Revision-Date: 2012-09-13 22:54+0300\n"
+"POT-Creation-Date: 2012-09-14 21:35+0000\n"
+"PO-Revision-Date: 2012-09-16 23:13+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -596,7 +596,7 @@ msgid "The parameter for action invocations"
 msgstr "Prametras veiksmų iškvietimams"
 
 #: ../gtk/gtkaction.c:220
-#: ../gtk/gtkactiongroup.c:226
+#: ../gtk/gtkactiongroup.c:228
 #: ../gtk/gtkprinter.c:123
 #: ../gtk/gtktextmark.c:126
 #: ../gtk/gtkthemingengine.c:255
@@ -720,7 +720,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Jei TEIGIAMA, šio veiksmo tuščių meniu tarpinės yra paslėptos."
 
 #: ../gtk/gtkaction.c:379
-#: ../gtk/gtkactiongroup.c:233
+#: ../gtk/gtkactiongroup.c:235
 #: ../gtk/gtkcellrenderer.c:296
 #: ../gtk/gtkwidget.c:1026
 msgid "Sensitive"
@@ -731,7 +731,7 @@ msgid "Whether the action is enabled."
 msgstr "Ar veiksmas yra įjungtas."
 
 #: ../gtk/gtkaction.c:386
-#: ../gtk/gtkactiongroup.c:240
+#: ../gtk/gtkactiongroup.c:242
 #: ../gtk/gtkstatusicon.c:298
 #: ../gtk/gtktreeviewcolumn.c:247
 #: ../gtk/gtkwidget.c:1019
@@ -762,17 +762,26 @@ msgstr "Visuomet rodyti paveikslėlį"
 msgid "Whether the image will always be shown"
 msgstr "Ar visuomet rodyti paveikslėlius"
 
-#: ../gtk/gtkactiongroup.c:227
+#: ../gtk/gtkactiongroup.c:229
 msgid "A name for the action group."
 msgstr "Veiksmų grupės vardas."
 
-#: ../gtk/gtkactiongroup.c:234
+#: ../gtk/gtkactiongroup.c:236
 msgid "Whether the action group is enabled."
 msgstr "Ar veiksmų grupė yra įjungta."
 
-#: ../gtk/gtkactiongroup.c:241
+#: ../gtk/gtkactiongroup.c:243
 msgid "Whether the action group is visible."
 msgstr "Ar veiksmų grupė yra matoma."
+
+#: ../gtk/gtkactiongroup.c:249
+#| msgid "Accelerator Mode"
+msgid "Accelerator Group"
+msgstr "Trumpinių grupė"
+
+#: ../gtk/gtkactiongroup.c:250
+msgid "The accelerator group the actions of this group should use."
+msgstr "Trumpinių grupė, kurią šios grupės veiksmai turėtų naudoti."
 
 #: ../gtk/gtkactivatable.c:287
 msgid "Related Action"
@@ -6094,7 +6103,6 @@ msgid "Whether mnemonics should be automatically shown and hidden when the user 
 msgstr "Ar mnemonikos turėtų būti automatiškai rodomos/slepiamos, naudotojui spustelėjus jų aktyvinimo klavišą."
 
 #: ../gtk/gtksettings.c:1158
-#| msgid "Primary icon sensitive"
 msgid "Primary button warps slider"
 msgstr "Pirminis paspaudimas perstuma slinktuką"
 
