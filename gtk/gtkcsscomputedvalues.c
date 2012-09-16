@@ -513,8 +513,6 @@ _gtk_css_computed_values_advance (GtkCssComputedValues *values,
   g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
   g_return_val_if_fail (timestamp >= values->current_time, NULL);
 
-  changed = _gtk_bitmask_new ();
-
   values->current_time = timestamp;
   old_computed_values = values->animated_values;
   values->animated_values = NULL;
@@ -526,10 +524,9 @@ _gtk_css_computed_values_advance (GtkCssComputedValues *values,
       
       list = list->next;
 
-      changed = _gtk_style_animation_set_values (animation,
-                                                 changed,
-                                                 timestamp,
-                                                 GTK_CSS_COMPUTED_VALUES (values));
+      _gtk_style_animation_set_values (animation,
+                                       timestamp,
+                                       GTK_CSS_COMPUTED_VALUES (values));
       
       if (_gtk_style_animation_is_finished (animation, timestamp))
         {
@@ -538,8 +535,6 @@ _gtk_css_computed_values_advance (GtkCssComputedValues *values,
         }
     }
 
-  _gtk_bitmask_free (changed);
-  
   /* figure out changes */
   changed = _gtk_bitmask_new ();
 

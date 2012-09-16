@@ -23,13 +23,11 @@
 
 G_DEFINE_ABSTRACT_TYPE (GtkStyleAnimation, _gtk_style_animation, G_TYPE_OBJECT)
 
-static GtkBitmask *
+static void
 gtk_style_animation_real_set_values (GtkStyleAnimation    *animation,
-                                     GtkBitmask           *changed,
                                      gint64                for_time_us,
                                      GtkCssComputedValues *values)
 {
-  return changed;
 }
 
 static gboolean
@@ -59,20 +57,19 @@ _gtk_style_animation_init (GtkStyleAnimation *animation)
 {
 }
 
-GtkBitmask *
+void
 _gtk_style_animation_set_values (GtkStyleAnimation    *animation,
-                                 GtkBitmask           *changed,
                                  gint64                for_time_us,
                                  GtkCssComputedValues *values)
 {
   GtkStyleAnimationClass *klass;
 
-  g_return_val_if_fail (GTK_IS_STYLE_ANIMATION (animation), changed);
-  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), changed);
+  g_return_if_fail (GTK_IS_STYLE_ANIMATION (animation));
+  g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
 
   klass = GTK_STYLE_ANIMATION_GET_CLASS (animation);
 
-  return klass->set_values (animation, changed, for_time_us, values);
+  return klass->set_values (animation, for_time_us, values);
 }
 
 gboolean

@@ -97,9 +97,8 @@ gtk_css_animation_get_progress_from_iteration (GtkCssAnimation *animation,
     }
 }
 
-static GtkBitmask *
+static void
 gtk_css_animation_set_values (GtkStyleAnimation    *style_animation,
-                              GtkBitmask           *changed,
                               gint64                for_time_us,
                               GtkCssComputedValues *values)
 {
@@ -110,7 +109,7 @@ gtk_css_animation_set_values (GtkStyleAnimation    *style_animation,
   iteration = gtk_css_animation_get_iteration (animation, for_time_us);
 
   if (!gtk_css_animation_is_executing_at_iteration (animation, iteration))
-    return changed;
+    return;
 
   progress = gtk_css_animation_get_progress_from_iteration (animation, iteration);
   progress = _gtk_css_ease_value_transform (animation->ease, progress);
@@ -128,11 +127,7 @@ gtk_css_animation_set_values (GtkStyleAnimation    *style_animation,
                                             _gtk_css_computed_values_get_intrinsic_value (values, i));
       _gtk_css_computed_values_set_animated_value (values, property_id, value);
       _gtk_css_value_unref (value);
-      
-      changed = _gtk_bitmask_set (changed, property_id, TRUE);
     }
-
-  return changed;
 }
 
 static gboolean

@@ -25,9 +25,8 @@
 
 G_DEFINE_TYPE (GtkCssTransition, _gtk_css_transition, GTK_TYPE_STYLE_ANIMATION)
 
-static GtkBitmask *
+static void
 gtk_css_transition_set_values (GtkStyleAnimation    *animation,
-                               GtkBitmask           *changed,
                                gint64                for_time_us,
                                GtkCssComputedValues *values)
 {
@@ -54,8 +53,6 @@ gtk_css_transition_set_values (GtkStyleAnimation    *animation,
 
   _gtk_css_computed_values_set_animated_value (values, transition->property, value);
   _gtk_css_value_unref (value);
-
-  return _gtk_bitmask_set (changed, transition->property, TRUE);
 }
 
 static gboolean
