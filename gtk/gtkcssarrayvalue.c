@@ -126,8 +126,8 @@ gtk_css_value_array_transition_repeat (GtkCssValue *start,
 
   for (i = 0; i < n; i++)
     {
-      transitions[i] = _gtk_css_value_transition (start->values[i],
-                                                  end->values[i],
+      transitions[i] = _gtk_css_value_transition (start->values[i % start->n_values],
+                                                  end->values[i % end->n_values],
                                                   property_id,
                                                   progress);
       if (transitions[i] == NULL)
