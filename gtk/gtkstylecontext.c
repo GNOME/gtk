@@ -3041,10 +3041,10 @@ gtk_style_context_should_animate (GtkStyleContext *context)
 }
 
 static void
-gtk_style_context_start_animations (GtkStyleContext      *context,
-                                    GtkCssComputedValues *values,
-                                    GtkCssComputedValues *previous,
-                                    gint64                timestamp)
+gtk_style_context_create_animations (GtkStyleContext      *context,
+                                     GtkCssComputedValues *values,
+                                     GtkCssComputedValues *previous,
+                                     gint64                timestamp)
 {
   if (!gtk_style_context_should_animate (context))
     {
@@ -3052,10 +3052,10 @@ gtk_style_context_start_animations (GtkStyleContext      *context,
       return;
     }
 
-  _gtk_css_computed_values_start_animations (values,
-                                             timestamp,
-                                             previous,
-                                             context);
+  _gtk_css_computed_values_create_animations (values,
+                                              timestamp,
+                                              previous,
+                                              context);
 
   if (_gtk_css_computed_values_is_static (values))
     {
@@ -3168,8 +3168,11 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
           data = style_data_lookup (context);
 
-          gtk_style_context_start_animations (context, data->store, current->store, timestamp);
-          change &= ~GTK_CSS_CHANGE_ANIMATE;
+          gtk_style_context_create_animations (context, data->store, current->store, timestamp);
+          if (_gtk_css_computed_values_is_static (data->store))
+            change &= ~GTK_CSS_CHANGE_ANIMATE;
+          else
+            change |= GTK_CSS_CHANGE_ANIMATE;
 
           changes = _gtk_css_computed_values_get_difference (data->store, current->store);
         }

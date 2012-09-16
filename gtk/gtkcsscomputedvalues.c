@@ -364,9 +364,9 @@ gtk_css_computed_values_find_transition (GtkCssComputedValues *values,
 }
 
 static void
-gtk_css_computed_values_start_transitions (GtkCssComputedValues *values,
-                                           gint64                timestamp,
-                                           GtkCssComputedValues *source)
+gtk_css_computed_values_create_css_transitions (GtkCssComputedValues *values,
+                                                gint64                timestamp,
+                                                GtkCssComputedValues *source)
 {
   TransitionInfo transitions[GTK_CSS_PROPERTY_N_PROPERTIES] = { { 0, } };
   GtkCssValue *durations, *delays, *timing_functions;
@@ -432,9 +432,9 @@ gtk_css_computed_values_find_animation (GtkCssComputedValues *values,
 }
 
 static void
-gtk_css_computed_values_start_css_animations (GtkCssComputedValues *values,
-                                              gint64                timestamp,
-                                              GtkStyleContext      *context)
+gtk_css_computed_values_create_css_animations (GtkCssComputedValues *values,
+                                               gint64                timestamp,
+                                               GtkStyleContext      *context)
 {
   GtkStyleProviderPrivate *provider;
   GtkCssValue *durations, *delays, *timing_functions, *animations;
@@ -487,18 +487,13 @@ gtk_css_computed_values_start_css_animations (GtkCssComputedValues *values,
 /* PUBLIC API */
 
 void
-_gtk_css_computed_values_start_animations (GtkCssComputedValues *values,
-                                           gint64                timestamp,
-                                           GtkCssComputedValues *source,
-                                           GtkStyleContext      *context)
+_gtk_css_computed_values_create_animations (GtkCssComputedValues *values,
+                                            gint64                timestamp,
+                                            GtkCssComputedValues *source,
+                                            GtkStyleContext      *context)
 {
-  GtkBitmask *ignore;
-
-  gtk_css_computed_values_start_transitions (values, timestamp, source);
-  gtk_css_computed_values_start_css_animations (values, timestamp, context);
-
-  ignore = _gtk_css_computed_values_advance (values, timestamp);
-  _gtk_bitmask_free (ignore);
+  gtk_css_computed_values_create_css_transitions (values, timestamp, source);
+  gtk_css_computed_values_create_css_animations (values, timestamp, context);
 }
 
 GtkBitmask *
