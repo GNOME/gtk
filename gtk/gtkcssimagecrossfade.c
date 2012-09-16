@@ -19,6 +19,7 @@
 
 #include "config.h"
 
+#include <math.h>
 #include <string.h>
 
 #include "gtkcssimagecrossfadeprivate.h"
@@ -105,37 +106,33 @@ gtk_css_image_cross_fade_draw (GtkCssImage        *image,
     }
   else
     {
-      cairo_surface_t *surface;
-
       if (cross_fade->start && cross_fade->end)
         {
           /* to reduce the group size */
-          cairo_rectangle (cr, 0, 0, width, height);
+          cairo_rectangle (cr, 0, 0, ceil (width), ceil (height));
           cairo_clip (cr);
 
           cairo_push_group (cr);
 
           _gtk_css_image_draw (cross_fade->start, cr, width, height);
 
-          surface = _gtk_css_image_get_surface (cross_fade->end,
-                                                cairo_get_target (cr),
-                                                width, height);
-          cairo_set_source_surface (cr, surface, 0, 0);
+          cairo_push_group (cr);
+          _gtk_css_image_draw (cross_fade->end, cr, width, height);
+          cairo_pop_group_to_source (cr);
+
           cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
           cairo_paint_with_alpha (cr, cross_fade->progress);
-          cairo_surface_destroy (surface);
 
           cairo_pop_group_to_source (cr);
           cairo_paint (cr);
         }
       else if (cross_fade->start || cross_fade->end)
         {
-          surface = _gtk_css_image_get_surface (cross_fade->start ? cross_fade->start : cross_fade->end,
-                                                cairo_get_target (cr),
-                                                width, height);
-          cairo_set_source_surface (cr, surface, 0, 0);
+          cairo_push_group (cr);
+          _gtk_css_image_draw (cross_fade->start ? cross_fade->start : cross_fade->end, cr, width, height);
+          cairo_pop_group_to_source (cr);
+
           cairo_paint_with_alpha (cr, cross_fade->start ? 1.0 - cross_fade->progress : cross_fade->progress);
-          cairo_surface_destroy (surface);
         }
     }
 }
