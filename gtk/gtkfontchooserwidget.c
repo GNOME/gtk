@@ -1062,7 +1062,13 @@ gtk_font_chooser_widget_ensure_selection (GtkFontChooserWidget *fontchooser)
                                                         &filter_iter,
                                                         &priv->font_iter))
     {
+      GtkTreePath *path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->filter_model),
+                                                   &filter_iter);
+
       gtk_tree_selection_select_iter (selection, &filter_iter);
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->family_face_list),
+                                    path, NULL, FALSE, 0.0, 0.0);
+      gtk_tree_path_free (path);
     }
   else
     {
