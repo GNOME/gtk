@@ -508,6 +508,7 @@ _gtk_css_computed_values_advance (GtkCssComputedValues *values,
   GtkBitmask *changed;
   GPtrArray *old_computed_values;
   GSList *list;
+  guint i;
 
   g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
   g_return_val_if_fail (timestamp >= values->current_time, NULL);
@@ -536,7 +537,23 @@ _gtk_css_computed_values_advance (GtkCssComputedValues *values,
           g_object_unref (animation);
         }
     }
+
+  _gtk_bitmask_free (changed);
   
+  /* figure out changes */
+  changed = _gtk_bitmask_new ();
+
+  for (i = 0; i < GTK_CSS_PROPERTY_N_PROPERTIES; i++)
+    {
+      GtkCssValue *old_animated, *new_animated;
+
+      old_animated = old_computed_values && i < old_computed_values->len ? g_ptr_array_index (old_computed_values, i) : NULL;
+      new_animated = values->animated_values && i < values->animated_values->len ? g_ptr_array_index (values->animated_values, i) : NULL;
+
+      if (!_gtk_css_value_equal0 (old_animated, new_animated))
+        changed = _gtk_bitmask_set (changed, i, TRUE);
+    }
+
   if (old_computed_values)
     g_ptr_array_unref (old_computed_values);
 
