@@ -639,16 +639,16 @@ gtk_menu_bar_draw (GtkWidget *widget,
   border = gtk_container_get_border_width (GTK_CONTAINER (widget));
   context = gtk_widget_get_style_context (widget);
 
-  if (get_shadow_type (GTK_MENU_BAR (widget)) != GTK_SHADOW_NONE)
-    gtk_render_background (context, cr,
-                           border, border,
-                           gtk_widget_get_allocated_width (widget) - border * 2,
-                           gtk_widget_get_allocated_height (widget) - border * 2);
+  gtk_render_background (context, cr,
+                         border, border,
+                         gtk_widget_get_allocated_width (widget) - border * 2,
+                         gtk_widget_get_allocated_height (widget) - border * 2);
 
-  gtk_render_frame (context, cr,
-                    border, border,
-                    gtk_widget_get_allocated_width (widget) - border * 2,
-                    gtk_widget_get_allocated_height (widget) - border * 2);
+  if (get_shadow_type (GTK_MENU_BAR (widget)) != GTK_SHADOW_NONE)
+    gtk_render_frame (context, cr,
+                      border, border,
+                      gtk_widget_get_allocated_width (widget) - border * 2,
+                      gtk_widget_get_allocated_height (widget) - border * 2);
 
   GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->draw (widget, cr);
 
