@@ -378,3 +378,69 @@ GtkCalendar.button:hover {
   border-width: 0;
   padding: 2px;
 }
+
+@keyframes spinner {
+  0% { background-position: 50.00% 0.00%, 89.09% 18.83%, 98.75% 61.13%, 71.69% 95.05%, 28.31% 95.05%, 1.25% 61.13%, 10.91% 18.83%; }
+  3.125% { background-position: 59.75% 0.96%, 94.42% 27.05%, 95.64% 70.42%, 62.49% 98.42%, 19.93% 89.95%, 0.02% 51.40%, 17.74% 11.80%; }
+  6.25% { background-position: 69.13% 3.81%, 98.05% 36.16%, 90.78% 78.93%, 52.80% 99.92%, 12.72% 83.32%, 0.71% 41.62%, 25.81% 6.24%; }
+  9.375% { background-position: 77.78% 8.43%, 99.82% 45.80%, 84.35% 86.33%, 43.01% 99.51%, 6.93% 75.40%, 3.29% 32.17%, 34.82% 2.36%; }
+  12.5% { background-position: 85.36% 14.64%, 99.69% 55.60%, 76.60% 92.34%, 33.49% 97.19%, 2.81% 66.51%, 7.66% 23.40%, 44.40% 0.31%; }
+  15.625% { background-position: 91.57% 22.22%, 97.64% 65.18%, 67.83% 96.71%, 24.60% 93.07%, 0.49% 56.99%, 13.67% 15.65%, 54.20% 0.18%; }
+  18.75% { background-position: 96.19% 30.87%, 93.76% 74.19%, 58.38% 99.29%, 16.68% 87.28%, 0.08% 47.20%, 21.07% 9.22%, 63.84% 1.95%; }
+  21.875% { background-position: 99.04% 40.25%, 88.20% 82.26%, 48.60% 99.98%, 10.05% 80.07%, 1.58% 37.51%, 29.58% 4.36%, 72.95% 5.58%; }
+  25% { background-position: 100.00% 50.00%, 81.17% 89.09%, 38.87% 98.75%, 4.95% 71.69%, 4.95% 28.31%, 38.87% 1.25%, 81.17% 10.91%; }
+  28.125% { background-position: 99.04% 59.75%, 72.95% 94.42%, 29.58% 95.64%, 1.58% 62.49%, 10.05% 19.93%, 48.60% 0.02%, 88.20% 17.74%; }
+  31.25% { background-position: 96.19% 69.13%, 63.84% 98.05%, 21.07% 90.78%, 0.08% 52.80%, 16.68% 12.72%, 58.38% 0.71%, 93.76% 25.81%; }
+  34.375% { background-position: 91.57% 77.78%, 54.20% 99.82%, 13.67% 84.35%, 0.49% 43.01%, 24.60% 6.93%, 67.83% 3.29%, 97.64% 34.82%; }
+  37.5% { background-position: 85.36% 85.36%, 44.40% 99.69%, 7.66% 76.60%, 2.81% 33.49%, 33.49% 2.81%, 76.60% 7.66%, 99.69% 44.40%; }
+  40.625% { background-position: 77.78% 91.57%, 34.82% 97.64%, 3.29% 67.83%, 6.93% 24.60%, 43.01% 0.49%, 84.35% 13.67%, 99.82% 54.20%; }
+  43.75% { background-position: 69.13% 96.19%, 25.81% 93.76%, 0.71% 58.38%, 12.72% 16.68%, 52.80% 0.08%, 90.78% 21.07%, 98.05% 63.84%; }
+  46.875% { background-position: 59.75% 99.04%, 17.74% 88.20%, 0.02% 48.60%, 19.93% 10.05%, 62.49% 1.58%, 95.64% 29.58%, 94.42% 72.95%; }
+  50% { background-position: 50.00% 100.00%, 10.91% 81.17%, 1.25% 38.87%, 28.31% 4.95%, 71.69% 4.95%, 98.75% 38.87%, 89.09% 81.17%; }
+  53.125% { background-position: 40.25% 99.04%, 5.58% 72.95%, 4.36% 29.58%, 37.51% 1.58%, 80.07% 10.05%, 99.98% 48.60%, 82.26% 88.20%; }
+  56.25% { background-position: 30.87% 96.19%, 1.95% 63.84%, 9.22% 21.07%, 47.20% 0.08%, 87.28% 16.68%, 99.29% 58.38%, 74.19% 93.76%; }
+  59.375% { background-position: 22.22% 91.57%, 0.18% 54.20%, 15.65% 13.67%, 56.99% 0.49%, 93.07% 24.60%, 96.71% 67.83%, 65.18% 97.64%; }
+  62.5% { background-position: 14.64% 85.36%, 0.31% 44.40%, 23.40% 7.66%, 66.51% 2.81%, 97.19% 33.49%, 92.34% 76.60%, 55.60% 99.69%; }
+  65.625% { background-position: 8.43% 77.78%, 2.36% 34.82%, 32.17% 3.29%, 75.40% 6.93%, 99.51% 43.01%, 86.33% 84.35%, 45.80% 99.82%; }
+  68.75% { background-position: 3.81% 69.13%, 6.24% 25.81%, 41.62% 0.71%, 83.32% 12.72%, 99.92% 52.80%, 78.93% 90.78%, 36.16% 98.05%; }
+  71.875% { background-position: 0.96% 59.75%, 11.80% 17.74%, 51.40% 0.02%, 89.95% 19.93%, 98.42% 62.49%, 70.42% 95.64%, 27.05% 94.42%; }
+  75% { background-position: 0.00% 50.00%, 18.83% 10.91%, 61.13% 1.25%, 95.05% 28.31%, 95.05% 71.69%, 61.13% 98.75%, 18.83% 89.09%; }
+  78.125% { background-position: 0.96% 40.25%, 27.05% 5.58%, 70.42% 4.36%, 98.42% 37.51%, 89.95% 80.07%, 51.40% 99.98%, 11.80% 82.26%; }
+  81.25% { background-position: 3.81% 30.87%, 36.16% 1.95%, 78.93% 9.22%, 99.92% 47.20%, 83.32% 87.28%, 41.62% 99.29%, 6.24% 74.19%; }
+  84.375% { background-position: 8.43% 22.22%, 45.80% 0.18%, 86.33% 15.65%, 99.51% 56.99%, 75.40% 93.07%, 32.17% 96.71%, 2.36% 65.18%; }
+  87.5% { background-position: 14.64% 14.64%, 55.60% 0.31%, 92.34% 23.40%, 97.19% 66.51%, 66.51% 97.19%, 23.40% 92.34%, 0.31% 55.60%; }
+  90.625% { background-position: 22.22% 8.43%, 65.18% 2.36%, 96.71% 32.17%, 93.07% 75.40%, 56.99% 99.51%, 15.65% 86.33%, 0.18% 45.80%; }
+  93.75% { background-position: 30.87% 3.81%, 74.19% 6.24%, 99.29% 41.62%, 87.28% 83.32%, 47.20% 99.92%, 9.22% 78.93%, 1.95% 36.16%; }
+  96.875% { background-position: 40.25% 0.96%, 82.26% 11.80%, 99.98% 51.40%, 80.07% 89.95%, 37.51% 98.42%, 4.36% 70.42%, 5.58% 27.05%; }
+  100% { background-position: 50.00% 0.00%, 89.09% 18.83%, 98.75% 61.13%, 71.69% 95.05%, 28.31% 95.05%, 1.25% 61.13%, 10.91% 18.83%; }
+}
+
+.spinner {
+  background-color: transparent;
+  background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent));
+  background-position: 50.00% 0.00%, 89.09% 18.83%, 98.75% 61.13%, 71.69% 95.05%, 28.31% 95.05%, 1.25% 61.13%, 10.91% 18.83%;
+  background-size: 20% 20%;
+  background-repeat: no-repeat;
+  transition: background 500ms ease-out;
+  animation: spinner 1s infinite linear;
+  animation-play-state: paused;
+}
+
+.spinner:active {
+  background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor,0.5)), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor,0.5833)), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor,0.6667)), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor,0.75)), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor,0.8333)), to(transparent)),
+                    -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor,0.9167)), to(transparent));
+  background-size: 25% 25%, 10% 10%, 12.5% 12.5%, 15% 15%, 17.5% 17.5%, 20% 20%, 22.5% 22.5%;
+  animation-play-state: running;
+  transition: background 500ms ease-out;
+}
