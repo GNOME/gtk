@@ -2817,6 +2817,29 @@ gtk_css_provider_get_default (void)
     return NULL;
 }
 
+/**
+ * gtk_css_provider_get_named:
+ * @name: A theme name
+ * @variant: (allow-none): variant to load, for example, "dark", or
+ *     %NULL for the default
+ *
+ * Loads a theme from the usual theme paths
+ *
+ * Returns: (transfer none): a #GtkCssProvider with the theme loaded.
+ *     This memory is owned by GTK+, and you must not free it.
+ */
+GtkCssProvider *
+gtk_css_provider_get_named (const gchar *name,
+                            const gchar *variant)
+{
+  GdkScreen *screen = gdk_screen_get_default ();
+
+  if (screen)
+    return _gtk_css_provider_get_named_for_screen (screen, name, variant);
+  else
+    return NULL;
+}
+
 gchar *
 _gtk_css_provider_get_theme_dir (void)
 {
