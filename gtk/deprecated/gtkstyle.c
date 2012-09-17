@@ -4045,15 +4045,23 @@ gtk_widget_get_default_style_for_screen (GdkScreen *screen)
  *     gtk_css_provider_get_default() to obtain a #GtkStyleProvider
  *     with the default widget style information.
  */
-GtkStyle*
+GtkStyle *
 gtk_widget_get_default_style (void)
 {
+  static GtkStyle *default_style = NULL;
+  GtkStyle *style = NULL;
   GdkScreen *screen = gdk_screen_get_default ();
 
   if (screen)
-    return gtk_widget_get_default_style_for_screen (screen);
+    style = gtk_widget_get_default_style_for_screen (screen);
   else
-    return NULL;
+    {
+      if (default_style == NULL)
+        default_style = gtk_style_new ();
+      style = default_style;
+    }
+
+  return style;
 }
 
 /**
