@@ -3147,6 +3147,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   if (current == NULL ||
       gtk_style_context_needs_full_revalidate (context, change))
     {
+      StyleData *data;
+
       if ((priv->relevant_changes & change) & ~GTK_STYLE_CONTEXT_CACHED_CHANGE)
         {
           gtk_style_context_clear_cache (context);
@@ -3157,22 +3159,20 @@ _gtk_style_context_validate (GtkStyleContext  *context,
           style_info_set_data (info, NULL);
         }
 
+      data = style_data_lookup (context);
+
+      _gtk_css_computed_values_create_animations (data->store,
+                                                  timestamp,
+                                                  current && gtk_style_context_should_create_transitions (context) ? current->store : NULL,
+                                                  context);
+      if (_gtk_css_computed_values_is_static (data->store))
+        change &= ~GTK_CSS_CHANGE_ANIMATE;
+      else
+        change |= GTK_CSS_CHANGE_ANIMATE;
+      _gtk_style_context_update_animating (context);
+
       if (current)
         {
-          StyleData *data;
-
-          data = style_data_lookup (context);
-
-          _gtk_css_computed_values_create_animations (data->store,
-                                                      timestamp,
-                                                      gtk_style_context_should_create_transitions (context) ? current->store : NULL,
-                                                      context);
-          if (_gtk_css_computed_values_is_static (data->store))
-            change &= ~GTK_CSS_CHANGE_ANIMATE;
-          else
-            change |= GTK_CSS_CHANGE_ANIMATE;
-          _gtk_style_context_update_animating (context);
-
           changes = _gtk_css_computed_values_get_difference (data->store, current->store);
 
           /* In the case where we keep the cache, we want unanimated values */
