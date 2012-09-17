@@ -339,9 +339,14 @@ gtk_level_bar_draw_fill_continuous (GtkLevelBar           *self,
     (self->priv->max_value - self->priv->min_value);
 
   if (self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    block_area.width = (gint) floor (block_area.width * fill_percentage);
+    {
+      block_area.width = (gint) floor (block_area.width * fill_percentage);
+    }
   else
-    block_area.height = (gint) floor (block_area.height * fill_percentage);
+    {
+      block_area.height = (gint) floor (block_area.height * fill_percentage);
+      block_area.y += base_area.height - block_area.height;
+    }
 
   gtk_render_background (context, cr, block_area.x, block_area.y,
                          block_area.width, block_area.height);
@@ -392,6 +397,7 @@ gtk_level_bar_draw_fill_discrete (GtkLevelBar           *self,
     {
       block_draw_width = MAX (block_draw_width, block_area.width - block_margin.left - block_margin.right);
       block_area.x += block_margin.left;
+      block_area.y += block_area.height - block_draw_height;
     }
 
   for (idx = 0; idx < num_blocks; idx++)
@@ -399,7 +405,7 @@ gtk_level_bar_draw_fill_discrete (GtkLevelBar           *self,
       if (self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         block_area.x += block_margin.left;
       else
-        block_area.y += block_margin.top;
+        block_area.y -= block_margin.bottom;
 
       if (idx > num_filled - 1)
         gtk_style_context_add_class (context, STYLE_CLASS_EMPTY_FILL_BLOCK);
@@ -414,7 +420,7 @@ gtk_level_bar_draw_fill_discrete (GtkLevelBar           *self,
       if (self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         block_area.x += block_draw_width + block_margin.right;
       else
-        block_area.y += block_draw_height + block_margin.bottom;
+        block_area.y -= block_draw_height + block_margin.top;
     }
 
   gtk_style_context_restore (context);
