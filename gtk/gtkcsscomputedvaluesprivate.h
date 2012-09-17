@@ -94,6 +94,7 @@ void                    _gtk_css_computed_values_create_animations    (GtkCssCom
                                                                        GtkStyleContext          *context);
 GtkBitmask *            _gtk_css_computed_values_advance              (GtkCssComputedValues     *values,
                                                                        gint64                    timestamp);
+void                    _gtk_css_computed_values_cancel_animations    (GtkCssComputedValues     *values);
 gboolean                _gtk_css_computed_values_is_static            (GtkCssComputedValues     *values);
 
 G_END_DECLS

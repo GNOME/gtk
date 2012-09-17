@@ -3173,6 +3173,9 @@ _gtk_style_context_validate (GtkStyleContext  *context,
             change |= GTK_CSS_CHANGE_ANIMATE;
 
           changes = _gtk_css_computed_values_get_difference (data->store, current->store);
+
+          /* In the case where we keep the cache, we want unanimated values */
+          _gtk_css_computed_values_cancel_animations (current->store);
         }
       else
         {

@@ -565,3 +565,19 @@ _gtk_css_computed_values_is_static (GtkCssComputedValues *values)
 
   return TRUE;
 }
+
+void
+_gtk_css_computed_values_cancel_animations (GtkCssComputedValues *values)
+{
+  g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
+
+  if (values->animated_values)
+    {
+      g_ptr_array_unref (values->animated_values);
+      values->animated_values = NULL;
+    }
+
+  g_slist_free_full (values->animations, g_object_unref);
+  values->animations = NULL;
+}
+
