@@ -2948,8 +2948,6 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
 
   priv = context->priv;
 
-  g_hash_table_remove_all (priv->style_data);
-
   g_hash_table_iter_init (&iter, priv->style_data);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
