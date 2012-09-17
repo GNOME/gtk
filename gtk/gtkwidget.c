@@ -4156,9 +4156,6 @@ gtk_widget_real_hide (GtkWidget *widget)
 
       if (gtk_widget_get_mapped (widget))
 	gtk_widget_unmap (widget);
-
-      if (widget->priv->context)
-        _gtk_style_context_stop_animations (widget->priv->context);
     }
 }
 
@@ -10371,6 +10368,9 @@ gtk_widget_real_map (GtkWidget *widget)
 
       if (gtk_widget_get_has_window (widget))
 	gdk_window_show (priv->window);
+
+      if (widget->priv->context)
+        _gtk_style_context_update_animating (widget->priv->context);
     }
 }
 
@@ -10393,6 +10393,9 @@ gtk_widget_real_unmap (GtkWidget *widget)
 
       if (gtk_widget_get_has_window (widget))
 	gdk_window_hide (priv->window);
+
+      if (widget->priv->context)
+        _gtk_style_context_update_animating (widget->priv->context);
     }
 }
 

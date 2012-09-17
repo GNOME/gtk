@@ -402,6 +402,7 @@ static void gtk_style_context_impl_get_property (GObject      *object,
 static GtkSymbolicColor *
             gtk_style_context_color_lookup_func (gpointer      contextp,
                                                  const char   *name);
+static StyleData *style_data_lookup             (GtkStyleContext *context);
 
 
 G_DEFINE_TYPE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT)
@@ -809,6 +810,41 @@ gtk_style_context_start_animating (GtkStyleContext *context)
     }
 }
 
+static gboolean
+gtk_style_context_should_animate (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  StyleData *data;
+  gboolean animate;
+
+  priv = context->priv;
+
+  if (priv->widget == NULL)
+    return FALSE;
+
+  if (!gtk_widget_get_mapped (priv->widget))
+    return FALSE;
+
+  data = style_data_lookup (context);
+  if (!style_data_is_animating (data))
+    return FALSE;
+
+  g_object_get (gtk_widget_get_settings (context->priv->widget),
+                "gtk-enable-animations", &animate,
+                NULL);
+
+  return animate;
+}
+
+void
+_gtk_style_context_update_animating (GtkStyleContext *context)
+{
+  if (gtk_style_context_should_animate (context))
+    gtk_style_context_start_animating (context);
+  else
+    gtk_style_context_stop_animating (context);
+}
+
 static void
 gtk_style_context_finalize (GObject *object)
 {
@@ -818,7 +854,7 @@ gtk_style_context_finalize (GObject *object)
   style_context = GTK_STYLE_CONTEXT (object);
   priv = style_context->priv;
 
-  _gtk_style_context_stop_animations (style_context);
+  gtk_style_context_stop_animating (style_context);
 
   /* children hold a reference to us */
   g_assert (priv->children == NULL);
@@ -1096,7 +1132,7 @@ _gtk_style_context_set_widget (GtkStyleContext *context,
 
   context->priv->widget = widget;
 
-  _gtk_style_context_stop_animations (context);
+  _gtk_style_context_update_animating (context);
 
   _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANY_SELF);
 }
@@ -2986,19 +3022,6 @@ gtk_style_context_do_invalidate (GtkStyleContext *context)
   priv->invalidating_context = FALSE;
 }
 
-void
-_gtk_style_context_stop_animations (GtkStyleContext *context)
-{
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-  if (!gtk_style_context_is_animating (context))
-    return;
-
-  style_info_set_data (context->priv->info, NULL);
-
-  gtk_style_context_stop_animating (context);
-}
-
 static GtkBitmask *
 gtk_style_context_update_animations (GtkStyleContext *context,
                                      gint64           timestamp)
@@ -3012,56 +3035,9 @@ gtk_style_context_update_animations (GtkStyleContext *context,
                                                   timestamp);
 
   if (_gtk_css_computed_values_is_static (style_data->store))
-    _gtk_style_context_stop_animations (context);
+    _gtk_style_context_update_animating (context);
 
   return differences;
-}
-
-static gboolean
-gtk_style_context_should_animate (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv;
-  gboolean animate;
-
-  priv = context->priv;
-
-  if (priv->widget == NULL)
-    return FALSE;
-
-  if (!gtk_widget_get_mapped (priv->widget))
-    return FALSE;
-
-  g_object_get (gtk_widget_get_settings (context->priv->widget),
-                "gtk-enable-animations", &animate,
-                NULL);
-
-  return animate;
-}
-
-static void
-gtk_style_context_create_animations (GtkStyleContext      *context,
-                                     GtkCssComputedValues *values,
-                                     GtkCssComputedValues *previous,
-                                     gint64                timestamp)
-{
-  if (!gtk_style_context_should_animate (context))
-    {
-      gtk_style_context_stop_animating (context);
-      return;
-    }
-
-  _gtk_css_computed_values_create_animations (values,
-                                              timestamp,
-                                              previous,
-                                              context);
-
-  if (_gtk_css_computed_values_is_static (values))
-    {
-      gtk_style_context_stop_animating (context);
-      return;
-    }
-
-  gtk_style_context_start_animating (context);
 }
 
 static gboolean
@@ -3166,11 +3142,15 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
           data = style_data_lookup (context);
 
-          gtk_style_context_create_animations (context, data->store, current->store, timestamp);
+          _gtk_css_computed_values_create_animations (data->store,
+                                                      timestamp,
+                                                      current->store,
+                                                      context);
           if (_gtk_css_computed_values_is_static (data->store))
             change &= ~GTK_CSS_CHANGE_ANIMATE;
           else
             change |= GTK_CSS_CHANGE_ANIMATE;
+          _gtk_style_context_update_animating (context);
 
           changes = _gtk_css_computed_values_get_difference (data->store, current->store);
 
