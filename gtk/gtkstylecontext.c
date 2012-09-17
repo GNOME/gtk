@@ -3077,6 +3077,27 @@ gtk_style_context_needs_full_revalidate (GtkStyleContext  *context,
     return FALSE;
 }
 
+static gboolean
+gtk_style_context_should_create_transitions (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  gboolean animate;
+
+  priv = context->priv;
+
+  if (priv->widget == NULL)
+    return FALSE;
+
+  if (!gtk_widget_get_mapped (priv->widget))
+    return FALSE;
+
+  g_object_get (gtk_widget_get_settings (context->priv->widget),
+                "gtk-enable-animations", &animate,
+                NULL);
+
+  return animate;
+}
+
 void
 _gtk_style_context_validate (GtkStyleContext  *context,
                              gint64            timestamp,
@@ -3144,7 +3165,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
           _gtk_css_computed_values_create_animations (data->store,
                                                       timestamp,
-                                                      current->store,
+                                                      gtk_style_context_should_create_transitions (context) ? current->store : NULL,
                                                       context);
           if (_gtk_css_computed_values_is_static (data->store))
             change &= ~GTK_CSS_CHANGE_ANIMATE;

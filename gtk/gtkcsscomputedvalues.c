@@ -492,7 +492,8 @@ _gtk_css_computed_values_create_animations (GtkCssComputedValues *values,
                                             GtkCssComputedValues *source,
                                             GtkStyleContext      *context)
 {
-  gtk_css_computed_values_create_css_transitions (values, timestamp, source);
+  if (source != NULL)
+    gtk_css_computed_values_create_css_transitions (values, timestamp, source);
   gtk_css_computed_values_create_css_animations (values, timestamp, context);
 }
 
