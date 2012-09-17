@@ -27,18 +27,22 @@
 
 G_DEFINE_TYPE (GtkCssAnimation, _gtk_css_animation, GTK_TYPE_STYLE_ANIMATION)
 
+/* NB: Return value can be negative (if animation hasn't started yet) */
+static gint64
+gtk_css_animation_get_elapsed (GtkCssAnimation *animation,
+                               gint64           for_time_us)
+{
+  if (animation->play_state == GTK_CSS_PLAY_STATE_PAUSED)
+    return animation->timestamp;
+  else
+    return for_time_us - animation->timestamp;
+}
 /* NB: Return value can be negative and +-Inf */
 static double
 gtk_css_animation_get_iteration (GtkCssAnimation *animation,
                                  gint64           for_time_us)
 {
-  gint64 elapsed;
-  double iterations;
-
-  elapsed = for_time_us - animation->timestamp;
-  iterations = (double) elapsed / animation->duration;
-
-  return iterations;
+  return (double) gtk_css_animation_get_elapsed (animation, for_time_us) / animation->duration;
 }
 
 static gboolean
@@ -144,6 +148,9 @@ gtk_css_animation_is_static (GtkStyleAnimation *style_animation,
   GtkCssAnimation *animation = GTK_CSS_ANIMATION (style_animation);
   double iteration;
 
+  if (animation->play_state == GTK_CSS_PLAY_STATE_PAUSED)
+    return TRUE;
+
   iteration = gtk_css_animation_get_iteration (animation, at_time_us);
 
   return iteration >= animation->iteration_count;
@@ -182,7 +189,8 @@ _gtk_css_animation_init (GtkCssAnimation *animation)
 GtkStyleAnimation *
 _gtk_css_animation_new (const char      *name,
                         GtkCssKeyframes *keyframes,
-                        gint64           start_time_us,
+                        gint64           timestamp,
+                        gint64           delay_us,
                         gint64           duration_us,
                         GtkCssValue     *ease,
                         GtkCssDirection  direction,
@@ -201,7 +209,11 @@ _gtk_css_animation_new (const char      *name,
 
   animation->name = g_strdup (name);
   animation->keyframes = _gtk_css_keyframes_ref (keyframes);
-  animation->timestamp = start_time_us;
+  if (play_state == GTK_CSS_PLAY_STATE_PAUSED)
+    animation->timestamp = - delay_us;
+  else
+    animation->timestamp = timestamp + delay_us;
+
   animation->duration = duration_us;
   animation->ease = _gtk_css_value_ref (ease);
   animation->direction = direction;
@@ -219,3 +231,26 @@ _gtk_css_animation_get_name (GtkCssAnimation *animation)
 
   return animation->name;
 }
+
+GtkStyleAnimation *
+_gtk_css_animation_copy (GtkCssAnimation *animation,
+                         gint64           at_time_us,
+                         GtkCssPlayState  play_state)
+{
+  g_return_val_if_fail (GTK_IS_CSS_ANIMATION (animation), NULL);
+
+  if (animation->play_state == play_state)
+    return g_object_ref (animation);
+
+  return _gtk_css_animation_new (animation->name,
+                                 animation->keyframes,
+                                 at_time_us,
+                                 - gtk_css_animation_get_elapsed (animation, at_time_us),
+                                 animation->duration,
+                                 animation->ease,
+                                 animation->direction,
+                                 play_state,
+                                 animation->fill_mode,
+                                 animation->iteration_count);
+}
+

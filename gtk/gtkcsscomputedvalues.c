@@ -434,6 +434,7 @@ gtk_css_computed_values_find_animation (GtkCssComputedValues *values,
 static void
 gtk_css_computed_values_create_css_animations (GtkCssComputedValues *values,
                                                gint64                timestamp,
+                                               GtkCssComputedValues *source,
                                                GtkStyleContext      *context)
 {
   GtkStyleProviderPrivate *provider;
@@ -465,21 +466,34 @@ gtk_css_computed_values_create_css_animations (GtkCssComputedValues *values,
       if (animation)
         continue;
 
-      keyframes = _gtk_style_provider_private_get_keyframes (provider, name);
-      if (keyframes == NULL)
-        continue;
+      if (source)
+        animation = gtk_css_computed_values_find_animation (source, name);
 
-      keyframes = _gtk_css_keyframes_compute (keyframes, context);
+      if (animation)
+        {
+          animation = _gtk_css_animation_copy (GTK_CSS_ANIMATION (animation),
+                                               timestamp,
+                                               _gtk_css_play_state_value_get (_gtk_css_array_value_get_nth (play_states, i)));
+        }
+      else
+        {
+          keyframes = _gtk_style_provider_private_get_keyframes (provider, name);
+          if (keyframes == NULL)
+            continue;
 
-      animation = _gtk_css_animation_new (name,
-                                          keyframes,
-                                          timestamp + _gtk_css_number_value_get (_gtk_css_array_value_get_nth (delays, i), 100) * G_USEC_PER_SEC,
-                                          _gtk_css_number_value_get (_gtk_css_array_value_get_nth (durations, i), 100) * G_USEC_PER_SEC,
-                                          _gtk_css_array_value_get_nth (timing_functions, i),
-                                          _gtk_css_direction_value_get (_gtk_css_array_value_get_nth (directions, i)),
-                                          _gtk_css_play_state_value_get (_gtk_css_array_value_get_nth (play_states, i)),
-                                          _gtk_css_fill_mode_value_get (_gtk_css_array_value_get_nth (fill_modes, i)),
-                                          _gtk_css_number_value_get (_gtk_css_array_value_get_nth (iteration_counts, i), 100));
+          keyframes = _gtk_css_keyframes_compute (keyframes, context);
+
+          animation = _gtk_css_animation_new (name,
+                                              keyframes,
+                                              timestamp,
+                                              _gtk_css_number_value_get (_gtk_css_array_value_get_nth (delays, i), 100) * G_USEC_PER_SEC,
+                                              _gtk_css_number_value_get (_gtk_css_array_value_get_nth (durations, i), 100) * G_USEC_PER_SEC,
+                                              _gtk_css_array_value_get_nth (timing_functions, i),
+                                              _gtk_css_direction_value_get (_gtk_css_array_value_get_nth (directions, i)),
+                                              _gtk_css_play_state_value_get (_gtk_css_array_value_get_nth (play_states, i)),
+                                              _gtk_css_fill_mode_value_get (_gtk_css_array_value_get_nth (fill_modes, i)),
+                                              _gtk_css_number_value_get (_gtk_css_array_value_get_nth (iteration_counts, i), 100));
+        }
       values->animations = g_slist_prepend (values->animations, animation);
     }
 }
@@ -494,7 +508,7 @@ _gtk_css_computed_values_create_animations (GtkCssComputedValues *values,
 {
   if (source != NULL)
     gtk_css_computed_values_create_css_transitions (values, timestamp, source);
-  gtk_css_computed_values_create_css_animations (values, timestamp, context);
+  gtk_css_computed_values_create_css_animations (values, timestamp, source, context);
 }
 
 GtkBitmask *
