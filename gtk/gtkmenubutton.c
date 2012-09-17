@@ -249,6 +249,7 @@ menu_position_up_down_func (GtkMenu       *menu,
 {
   GtkMenuButtonPrivate *priv = menu_button->priv;
   GtkWidget *widget = GTK_WIDGET (menu_button);
+  GtkWidget *toplevel;
   GtkRequisition menu_req;
   GtkTextDirection direction;
   GdkRectangle monitor;
@@ -257,6 +258,16 @@ menu_position_up_down_func (GtkMenu       *menu,
   GdkWindow *window;
   GtkAllocation allocation, arrow_allocation;
   GtkAlign align;
+
+  /* In the common case the menu button is showing a dropdown menu, set the
+   * corresponding type hint on the toplevel, so the WM can omit the top side
+   * of the shadows.
+   */
+  if (priv->arrow_type == GTK_ARROW_DOWN)
+    {
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (priv->popup));
+      gtk_window_set_type_hint (GTK_WINDOW (toplevel), GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU);
+    }
 
   gtk_widget_get_preferred_size (GTK_WIDGET (priv->popup),
                                  &menu_req, NULL);
