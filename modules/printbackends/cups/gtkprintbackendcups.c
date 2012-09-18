@@ -558,8 +558,8 @@ add_cups_options (const gchar *key,
         }
     }
 
-  /* Add "Custom." prefix to custom values. */
-  if (custom_value)
+  /* Add "Custom." prefix to custom values if not already added. */
+  if (custom_value && !g_str_has_prefix (value, "Custom."))
     {
       new_value = g_strdup_printf ("Custom.%s", value);
       gtk_cups_request_encode_option (request, key, new_value);
