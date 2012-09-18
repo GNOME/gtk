@@ -747,10 +747,10 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
         }
 
 #ifdef HAVE_XSYNC
-      if (!is_substructure && toplevel && display_x11->use_sync && !XSyncValueIsZero (toplevel->pending_counter_value))
+      if (!is_substructure && toplevel && display_x11->use_sync && toplevel->pending_counter_value != 0)
 	{
-	  toplevel->current_counter_value = toplevel->pending_counter_value;
-	  XSyncIntToValue (&toplevel->pending_counter_value, 0);
+	  toplevel->configure_counter_value = toplevel->pending_counter_value;
+	  toplevel->pending_counter_value = 0;
 	}
 #endif
 
@@ -1126,9 +1126,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
       if (toplevel)
 	{
 #ifdef HAVE_XSYNC
-	  XSyncIntsToValue (&toplevel->pending_counter_value,
-			    xevent->xclient.data.l[2],
-			    xevent->xclient.data.l[3]);
+	  toplevel->pending_counter_value = xevent->xclient.data.l[2] + ((gint64)xevent->xclient.data.l[3] << 32);
 #endif
 	}
       return GDK_FILTER_REMOVE;
