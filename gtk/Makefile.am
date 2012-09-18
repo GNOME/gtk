@@ -490,7 +490,6 @@ gtk_private_h_sources =		\
 	gtkmenuitemprivate.h	\
 	gtkmenushellprivate.h	\
 	gtkmnemonichash.h	\
-	gtkmodelmenu.h		\
 	gtkmodelmenuitem.h	\
 	gtkmodifierstyle.h	\
 	gtkmodulesprivate.h	\
