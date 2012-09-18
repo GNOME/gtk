@@ -120,6 +120,7 @@ enum {
   PROP_MIN_VALUE,
   PROP_MAX_VALUE,
   PROP_MODE,
+  PROP_INVERTED,
   LAST_PROPERTY,
   PROP_ORIENTATION /* overridden */
 };
@@ -147,6 +148,8 @@ struct _GtkLevelBarPrivate {
   GList *offsets;
 
   GtkLevelBarMode bar_mode;
+
+  guint inverted : 1;
 };
 
 static void gtk_level_bar_set_value_internal (GtkLevelBar *self,
@@ -303,6 +306,7 @@ gtk_level_bar_get_borders (GtkLevelBar *self,
 static void
 gtk_level_bar_draw_fill_continuous (GtkLevelBar           *self,
                                     cairo_t               *cr,
+                                    gboolean               inverted,
                                     cairo_rectangle_int_t *fill_area)
 {
   GtkWidget *widget = GTK_WIDGET (self);
@@ -339,9 +343,19 @@ gtk_level_bar_draw_fill_continuous (GtkLevelBar           *self,
     (self->priv->max_value - self->priv->min_value);
 
   if (self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    block_area.width = (gint) floor (block_area.width * fill_percentage);
+    {
+      block_area.width = (gint) floor (block_area.width * fill_percentage);
+
+      if (inverted)
+        block_area.x += base_area.width - block_area.width;
+    }
   else
-    block_area.height = (gint) floor (block_area.height * fill_percentage);
+    {
+      block_area.height = (gint) floor (block_area.height * fill_percentage);
+
+      if (inverted)
+        block_area.y += base_area.height - block_area.height;
+    }
 
   gtk_render_background (context, cr, block_area.x, block_area.y,
                          block_area.width, block_area.height);
@@ -354,6 +368,7 @@ gtk_level_bar_draw_fill_continuous (GtkLevelBar           *self,
 static void
 gtk_level_bar_draw_fill_discrete (GtkLevelBar           *self,
                                   cairo_t               *cr,
+                                  gboolean               inverted,
                                   cairo_rectangle_int_t *fill_area)
 {
   GtkWidget *widget = GTK_WIDGET (self);
@@ -387,19 +402,35 @@ gtk_level_bar_draw_fill_discrete (GtkLevelBar           *self,
     {
       block_draw_height = MAX (block_draw_height, block_area.height - block_margin.top - block_margin.bottom);
       block_area.y += block_margin.top;
+
+      if (inverted)
+        block_area.x += block_area.width - block_draw_width;
     }
   else
     {
       block_draw_width = MAX (block_draw_width, block_area.width - block_margin.left - block_margin.right);
       block_area.x += block_margin.left;
+
+      if (inverted)
+        block_area.y += block_area.height - block_draw_height;
     }
 
   for (idx = 0; idx < num_blocks; idx++)
     {
       if (self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-        block_area.x += block_margin.left;
+        {
+          if (inverted)
+            block_area.x -= block_margin.right;
+          else
+            block_area.x += block_margin.left;
+        }
       else
-        block_area.y += block_margin.top;
+        {
+          if (inverted)
+            block_area.y -= block_margin.bottom;
+          else
+            block_area.y += block_margin.top;
+        }
 
       if (idx > num_filled - 1)
         gtk_style_context_add_class (context, STYLE_CLASS_EMPTY_FILL_BLOCK);
@@ -412,9 +443,19 @@ gtk_level_bar_draw_fill_discrete (GtkLevelBar           *self,
                         block_draw_width, block_draw_height);
 
       if (self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-        block_area.x += block_draw_width + block_margin.right;
+        {
+          if (inverted)
+            block_area.x -= block_draw_width + block_margin.left;
+          else
+            block_area.x += block_draw_width + block_margin.right;
+        }
       else
-        block_area.y += block_draw_height + block_margin.bottom;
+        {
+          if (inverted)
+            block_area.y -= block_draw_height + block_margin.top;
+          else
+            block_area.y += block_draw_height + block_margin.bottom;
+        }
     }
 
   gtk_style_context_restore (context);
@@ -426,6 +467,7 @@ gtk_level_bar_draw_fill (GtkLevelBar *self,
 {
   GtkWidget *widget = GTK_WIDGET (self);
   GtkBorder trough_borders;
+  gboolean inverted;
   cairo_rectangle_int_t fill_area;
 
   gtk_level_bar_get_borders (self, &trough_borders);
@@ -437,10 +479,12 @@ gtk_level_bar_draw_fill (GtkLevelBar *self,
   fill_area.height = gtk_widget_get_allocated_height (widget) -
     trough_borders.top - trough_borders.bottom;
 
+  inverted = self->priv->inverted;
+
   if (self->priv->bar_mode == GTK_LEVEL_BAR_MODE_CONTINUOUS)
-    gtk_level_bar_draw_fill_continuous (self, cr, &fill_area);
+    gtk_level_bar_draw_fill_continuous (self, cr, inverted, &fill_area);
   else if (self->priv->bar_mode == GTK_LEVEL_BAR_MODE_DISCRETE)
-    gtk_level_bar_draw_fill_discrete (self, cr, &fill_area);
+    gtk_level_bar_draw_fill_discrete (self, cr, inverted, &fill_area);
 }
 
 static gboolean
@@ -769,6 +813,9 @@ gtk_level_bar_get_property (GObject    *obj,
     case PROP_MODE:
       g_value_set_enum (value, gtk_level_bar_get_mode (self));
       break;
+    case PROP_INVERTED:
+      g_value_set_boolean (value, gtk_level_bar_get_inverted (self));
+      break;
     case PROP_ORIENTATION:
       g_value_set_enum (value, self->priv->orientation);
       break;
@@ -799,6 +846,9 @@ gtk_level_bar_set_property (GObject      *obj,
       break;
     case PROP_MODE:
       gtk_level_bar_set_mode (self, g_value_get_enum (value));
+      break;
+    case PROP_INVERTED:
+      gtk_level_bar_set_inverted (self, g_value_get_boolean (value));
       break;
     case PROP_ORIENTATION:
       gtk_level_bar_set_orientation (self, g_value_get_enum (value));
@@ -924,6 +974,21 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                        G_PARAM_READWRITE);
 
   /**
+   * GtkLevelBar:inverted:
+   *
+   * Level bars normally grow from top to bottom or left to right.
+   * Inverted level bars grow in the opposite direction.
+   *
+   * Since: 3.8
+   */
+  properties[PROP_INVERTED] =
+    g_param_spec_boolean ("inverted",
+                          P_("Inverted"),
+                          P_("Invert the direction in which the level bar grows"),
+                          FALSE,
+                          G_PARAM_READWRITE);
+
+  /**
    * GtkLevelBar:min-block-height:
    *
    * The min-block-height style property determines the minimum
@@ -980,6 +1045,8 @@ gtk_level_bar_init (GtkLevelBar *self)
   /* set initial orientation and style classes */
   self->priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
+
+  self->priv->inverted = FALSE;
 
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
 }
@@ -1205,6 +1272,53 @@ gtk_level_bar_set_mode (GtkLevelBar     *self,
 
       gtk_level_bar_update_mode_style_classes (self);
       gtk_widget_queue_resize (GTK_WIDGET (self));
+    }
+}
+
+/**
+ * gtk_level_bar_get_inverted:
+ * @self: a #GtkLevelBar
+ *
+ * Return the value of the #GtkLevelBar:inverted property.
+ *
+ * Return value: %TRUE if the level bar is inverted
+ *
+ * Since: 3.8
+ */
+gboolean
+gtk_level_bar_get_inverted (GtkLevelBar *self)
+{
+  g_return_val_if_fail (GTK_IS_LEVEL_BAR (self), FALSE);
+
+  return self->priv->inverted;
+}
+
+/**
+ * gtk_level_bar_set_inverted:
+ * @self: a #GtkLevelBar
+ * @inverted: %TRUE to invert the progress bar
+ *
+ * Sets the value of the #GtkLevelBar:inverted property.
+ *
+ * Since: 3.8
+ */
+void
+gtk_level_bar_set_inverted (GtkLevelBar *self,
+                            gboolean     inverted)
+{
+  GtkLevelBarPrivate *priv;
+
+  g_return_if_fail (GTK_IS_LEVEL_BAR (self));
+
+  priv = self->priv;
+
+  if (priv->inverted != inverted)
+    {
+      priv->inverted = inverted;
+
+      gtk_widget_queue_resize (GTK_WIDGET (self));
+
+      g_object_notify (G_OBJECT (self), "inverted");
     }
 }
 

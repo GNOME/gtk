@@ -110,6 +110,13 @@ void       gtk_level_bar_set_max_value      (GtkLevelBar *self,
 GDK_AVAILABLE_IN_3_6
 gdouble    gtk_level_bar_get_max_value      (GtkLevelBar *self);
 
+GDK_AVAILABLE_IN_3_8
+void       gtk_level_bar_set_inverted       (GtkLevelBar *self,
+                                             gboolean     inverted);
+
+GDK_AVAILABLE_IN_3_8
+gboolean   gtk_level_bar_get_inverted       (GtkLevelBar *self);
+
 GDK_AVAILABLE_IN_3_6
 void       gtk_level_bar_add_offset_value   (GtkLevelBar *self,
                                              const gchar *name,
