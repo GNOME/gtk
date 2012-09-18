@@ -65,25 +65,6 @@
  * <firstterm>composited</firstterm> window it is the responsibility of the
  * application to render the window contents at the right spot.
  * </para>
- * <example id="composited-window-example">
- * <title>Composited windows</title>
- * <programlisting>
- * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/gdk/composited-window-example.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include>
- * </programlisting></example>
- * <para>
- * In the example <xref linkend="composited-window-example"/>, a button is
- * placed inside of an event box inside of a window. The event box is set as
- * composited and therefore is no longer automatically drawn to the screen.
- *
- * When the contents of the event box change, an expose event is generated on
- * its parent window (which, in this case, belongs to the toplevel #GtkWindow).
- * The expose handler for this widget is responsible for merging the changes
- * back on the screen in the way that it wishes.
- *
- * In our case, we merge the contents with a 50% transparency. We also set the
- * background colour of the window to red. The effect is that the background
- * shows through the button.
- * </para>
  * </refsect2>
  * <refsect2 id="OFFSCREEN-WINDOWS">
  * <title>Offscreen Windows</title>
