@@ -4585,6 +4585,9 @@ gtk_widget_realize (GtkWidget *widget)
       _gtk_widget_enable_device_events (widget);
       gtk_widget_update_devices_mask (widget, TRUE);
 
+      if (GTK_IS_CONTAINER (widget))
+        _gtk_container_maybe_start_idle_sizer (GTK_CONTAINER (widget));
+
       gtk_widget_pop_verify_invariants (widget);
     }
 }

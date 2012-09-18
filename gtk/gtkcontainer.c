@@ -236,6 +236,9 @@ struct _GtkContainerPrivate
 {
   GtkWidget *focus_child;
 
+  guint resize_handler;
+  GdkFrameClock *resize_clock;
+
   guint border_width : 16;
 
   guint has_focus_chain    : 1;
@@ -344,8 +347,6 @@ static const gchar           vadjustment_key[] = "gtk-vadjustment";
 static guint                 vadjustment_key_id = 0;
 static const gchar           hadjustment_key[] = "gtk-hadjustment";
 static guint                 hadjustment_key_id = 0;
-static GSList               *container_resize_queue = NULL;
-static GSList               *container_restyle_queue = NULL;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };
 static GtkWidgetClass       *parent_class = NULL;
 extern GParamSpecPool       *_gtk_widget_child_property_pool;
@@ -1357,10 +1358,15 @@ gtk_container_destroy (GtkWidget *widget)
 
   if (priv->resize_pending)
     _gtk_container_dequeue_resize_handler (container);
+
   if (priv->restyle_pending)
+    priv->restyle_pending = FALSE;
+
+  if (priv->resize_handler)
     {
-      container_restyle_queue = g_slist_remove (container_restyle_queue, container);
-      priv->restyle_pending = FALSE;
+      g_signal_handler_disconnect (priv->resize_clock, priv->resize_handler);
+      priv->resize_handler = 0;
+      priv->resize_clock = NULL;
     }
 
   if (priv->focus_child)
@@ -1553,7 +1559,6 @@ _gtk_container_dequeue_resize_handler (GtkContainer *container)
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (container->priv->resize_pending);
 
-  container_resize_queue = g_slist_remove (container_resize_queue, container);
   container->priv->resize_pending = FALSE;
 }
 
@@ -1630,12 +1635,10 @@ gtk_container_set_reallocate_redraws (GtkContainer *container,
   container->priv->reallocate_redraws = needs_redraws ? TRUE : FALSE;
 }
 
-static gboolean
-gtk_container_idle_sizer (gpointer data)
+static void
+gtk_container_idle_sizer (GdkFrameClock *clock,
+			  GtkContainer  *container)
 {
-  GSList *slist;
-  gint64 current_time;
-
   /* We validate the style contexts in a single loop before even trying
    * to handle resizes instead of doing validations inline.
    * This is mostly necessary for compatibility reasons with old code,
@@ -1646,16 +1649,13 @@ gtk_container_idle_sizer (gpointer data)
    * sane values. So the result of an invalid style context will never be
    * a program crash, but only a wrong layout or rendering.
    */
-  current_time = g_get_monotonic_time ();
-  slist = container_restyle_queue;
-  container_restyle_queue = NULL;
-  while (slist)
+  if (container->priv->restyle_pending)
     {
-      GSList *next = slist->next;
-      GtkContainer *container = slist->data;
       GtkBitmask *empty;
+      gint64 current_time;
 
       empty = _gtk_bitmask_new ();
+      current_time = g_get_monotonic_time ();
 
       container->priv->restyle_pending = FALSE;
       _gtk_style_context_validate (gtk_widget_get_style_context (GTK_WIDGET (container)),
@@ -1663,8 +1663,6 @@ gtk_container_idle_sizer (gpointer data)
                                    0,
                                    empty);
 
-      g_slist_free_1 (slist);
-      slist = next;
       _gtk_bitmask_free (empty);
     }
 
@@ -1674,35 +1672,40 @@ gtk_container_idle_sizer (gpointer data)
    * than trying to explicitely work around them with some extra flags,
    * since it doesn't cause any actual harm.
    */
-  while (container_resize_queue)
+  if (container->priv->resize_pending)
     {
-      GtkContainer *container;
-
-      slist = container_resize_queue;
-      container_resize_queue = slist->next;
-      container = slist->data;
-      g_slist_free_1 (slist);
-
       container->priv->resize_pending = FALSE;
       gtk_container_check_resize (container);
     }
 
-  gdk_window_process_all_updates ();
-
-  return container_resize_queue != NULL || container_restyle_queue != NULL;
+  if (!container->priv->restyle_pending && !container->priv->resize_pending)
+    {
+      g_signal_handler_disconnect (clock, container->priv->resize_handler);
+      container->priv->resize_handler = 0;
+      container->priv->resize_clock = NULL;
+    }
+  else
+    {
+      gdk_frame_clock_request_frame (clock);
+    }
 }
 
 static void
 gtk_container_start_idle_sizer (GtkContainer *container)
 {
-  /* already started */
-  if (container_resize_queue != NULL ||
-      container_restyle_queue != NULL)
+  GdkFrameClock *clock;
+
+  if (container->priv->resize_handler != 0)
     return;
 
-  gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE,
-                             gtk_container_idle_sizer,
-                             NULL, NULL);
+  clock = gtk_widget_get_frame_clock (GTK_WIDGET (container));
+  if (clock == NULL)
+    return;
+
+  container->priv->resize_clock = clock;
+  container->priv->resize_handler = g_signal_connect (clock, "layout",
+						      G_CALLBACK (gtk_container_idle_sizer), container);
+  gdk_frame_clock_request_frame (clock);
 }
 
 static void
@@ -1725,7 +1728,6 @@ gtk_container_queue_resize_handler (GtkContainer *container)
             {
               container->priv->resize_pending = TRUE;
               gtk_container_start_idle_sizer (container);
-              container_resize_queue = g_slist_prepend (container_resize_queue, container);
             }
           break;
 
@@ -1780,8 +1782,6 @@ _gtk_container_queue_restyle (GtkContainer *container)
     return;
 
   gtk_container_start_idle_sizer (container);
-
-  container_restyle_queue = g_slist_prepend (container_restyle_queue, container);
   priv->restyle_pending = TRUE;
 }
 
@@ -1813,6 +1813,13 @@ void
 _gtk_container_resize_invalidate (GtkContainer *container)
 {
   _gtk_container_queue_resize_internal (container, TRUE);
+}
+
+void
+_gtk_container_maybe_start_idle_sizer (GtkContainer *container)
+{
+  if (container->priv->restyle_pending || container->priv->resize_pending)
+    gtk_container_start_idle_sizer (container);
 }
 
 void

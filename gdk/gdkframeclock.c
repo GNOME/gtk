@@ -79,6 +79,7 @@ G_DEFINE_INTERFACE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
 enum {
   FRAME_REQUESTED,
   BEFORE_PAINT,
+  LAYOUT,
   PAINT,
   AFTER_PAINT,
   LAST_SIGNAL
@@ -115,6 +116,23 @@ gdk_frame_clock_default_init (GdkFrameClockInterface *iface)
    */
   signals[BEFORE_PAINT] =
     g_signal_new (g_intern_static_string ("before-paint"),
+                  GDK_TYPE_FRAME_CLOCK,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
+  /**
+   * GdkFrameClock::layout:
+   * @clock: the frame clock emitting the signal
+   *
+   * This signal is emitted immediately before the paint signal and
+   * indicates that the frame time has been updated, and signal
+   * handlers should perform any preparatory work before painting.
+   */
+  signals[LAYOUT] =
+    g_signal_new (g_intern_static_string ("layout"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
@@ -278,6 +296,9 @@ gdk_frame_clock_paint (GdkFrameClock *clock)
 
   g_signal_emit (G_OBJECT (clock),
                  signals[BEFORE_PAINT], 0);
+
+  g_signal_emit (G_OBJECT (clock),
+                 signals[LAYOUT], 0);
 
   g_signal_emit (G_OBJECT (clock),
                  signals[PAINT], 0);
