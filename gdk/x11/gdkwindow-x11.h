@@ -126,6 +126,9 @@ struct _GdkToplevelX11
   /* Set if the WM is presenting us as focused, i.e. with active decorations
    */
   guint have_focused : 1;
+
+  /* If we're expecting a response from the compositor after painting a frame */
+  guint frame_pending : 1;
   
   gulong map_serial;	/* Serial of last transition from unmapped */
   

@@ -213,6 +213,51 @@ set_sync_counter(Display     *display,
     XSyncSetCounter(display, counter, sync_value);
 }
 
+static void
+gdk_x11_window_begin_frame (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+  if (!WINDOW_IS_TOPLEVEL (window) ||
+      impl->toplevel->extended_update_counter == None)
+    return;
+
+  impl->toplevel->current_counter_value += 1;
+  set_sync_counter(GDK_WINDOW_XDISPLAY (impl->wrapper),
+		   impl->toplevel->extended_update_counter,
+		   impl->toplevel->current_counter_value);
+}
+
+static void
+gdk_x11_window_end_frame (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+  if (!WINDOW_IS_TOPLEVEL (window) ||
+      impl->toplevel->extended_update_counter == None)
+    return;
+
+  impl->toplevel->current_counter_value += 1;
+  set_sync_counter(GDK_WINDOW_XDISPLAY (impl->wrapper),
+		   impl->toplevel->extended_update_counter,
+		   impl->toplevel->current_counter_value);
+
+  if (gdk_x11_screen_supports_net_wm_hint (gdk_window_get_screen (window),
+                                           gdk_atom_intern_static_string ("_NET_WM_FRAME_DRAWN")))
+    {
+      impl->toplevel->frame_pending = TRUE;
+      gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
+    }
+}
+
 /*****************************************************
  * X11 specific implementations of generic functions *
  *****************************************************/
@@ -616,9 +661,8 @@ ensure_sync_counter (GdkWindow *window)
     {
       GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
       GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
-      GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
-      if (toplevel && impl->use_synchronized_configure &&
+      if (toplevel &&
 	  toplevel->update_counter == None &&
 	  GDK_X11_DISPLAY (display)->use_sync)
 	{
@@ -716,6 +760,20 @@ setup_toplevel_window (GdkWindow *window,
     gdk_x11_window_set_user_time (window, GDK_X11_DISPLAY (x11_screen->display)->user_time);
 
   ensure_sync_counter (window);
+}
+
+static void
+on_frame_clock_before_paint (GdkFrameClock *clock,
+                             GdkWindow     *window)
+{
+  gdk_x11_window_begin_frame (window);
+}
+
+static void
+on_frame_clock_after_paint (GdkFrameClock *clock,
+                            GdkWindow     *window)
+{
+  gdk_x11_window_end_frame (window);
 }
 
 void
@@ -878,6 +936,10 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
   gdk_window_set_frame_clock (window, clock);
+  g_signal_connect (clock, "before-paint",
+                    G_CALLBACK (on_frame_clock_before_paint), window);
+  g_signal_connect (clock, "after-paint",
+                    G_CALLBACK (on_frame_clock_after_paint), window);
 }
 
 static GdkEventMask
