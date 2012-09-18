@@ -2928,15 +2928,15 @@ settings_update_theme (GtkSettings *settings)
   if (theme_name && *theme_name)
     {
       if (prefer_dark_theme)
-        provider = _gtk_css_provider_get_named_for_screen (priv->screen, theme_name, "dark");
+        provider = gtk_css_provider_get_named (theme_name, "dark");
 
       if (!provider)
-        provider = _gtk_css_provider_get_named_for_screen (priv->screen, theme_name, NULL);
+        provider = gtk_css_provider_get_named (theme_name, NULL);
     }
 
   /* If we didn't find the named theme, fall back */
   if (!provider)
-    provider = _gtk_css_provider_get_named_for_screen (priv->screen, "Raleigh", NULL);
+    provider = gtk_css_provider_get_named ("Raleigh", NULL);
 
   settings_update_provider (priv->screen, &priv->theme_provider, provider);
 
@@ -2971,7 +2971,7 @@ settings_update_key_theme (GtkSettings *settings)
                 NULL);
 
   if (key_theme_name && *key_theme_name)
-    provider = _gtk_css_provider_get_named_for_screen (priv->screen, key_theme_name, "keys");
+    provider = gtk_css_provider_get_named (key_theme_name, "keys");
 
   settings_update_provider (priv->screen, &priv->key_theme_provider, provider);
   g_free (key_theme_name);
