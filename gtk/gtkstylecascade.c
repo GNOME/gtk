@@ -172,7 +172,7 @@ gtk_style_cascade_get_color (GtkStyleProviderPrivate *provider,
   return NULL;
 }
 
-GtkCssKeyframes *
+static GtkCssKeyframes *
 gtk_style_cascade_get_keyframes (GtkStyleProviderPrivate *provider,
                                  const char              *name)
 {
