@@ -908,23 +908,35 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 
   if (enable_accels && (accel_label->priv->accel_closure || accel_label->priv->accel_key))
     {
-      guint accel_key = accel_label->priv->accel_key;
-      GdkModifierType accel_mods = accel_label->priv->accel_mods;
+      gboolean have_accel = FALSE;
+      guint accel_key;
+      GdkModifierType accel_mods;
+
+      /* First check for a manual accel set with _set_accel() */
+      if (accel_label->priv->accel_key)
+        {
+          accel_mods = accel_label->priv->accel_mods;
+          accel_key = accel_label->priv->accel_key;
+          have_accel = TRUE;
+        }
 
       /* If we don't have a hardcoded value, check the accel group */
-      if (!accel_key)
+      if (!have_accel)
         {
-          GtkAccelKey *key = gtk_accel_group_find (accel_label->priv->accel_group, find_accel, accel_label->priv->accel_closure);
+          GtkAccelKey *key;
+
+          key = gtk_accel_group_find (accel_label->priv->accel_group, find_accel, accel_label->priv->accel_closure);
 
           if (key && key->accel_flags & GTK_ACCEL_VISIBLE)
             {
               accel_key = key->accel_key;
               accel_mods = key->accel_mods;
+              have_accel = TRUE;
             }
         }
 
       /* If we found a key using either method, set it */
-      if (accel_key)
+      if (have_accel)
 	{
 	  GtkAccelLabelClass *klass;
 	  gchar *tmp;
@@ -934,10 +946,12 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 	  accel_label->priv->accel_string = g_strconcat ("   ", tmp, NULL);
 	  g_free (tmp);
 	}
-      if (!accel_label->priv->accel_string)
-	accel_label->priv->accel_string = g_strdup ("-/-");
+
+      else
+        /* Otherwise we have a closure with no key.  Show "-/-". */
+        accel_label->priv->accel_string = g_strdup ("-/-");
     }
-  
+
   if (!accel_label->priv->accel_string)
     accel_label->priv->accel_string = g_strdup ("");
 
