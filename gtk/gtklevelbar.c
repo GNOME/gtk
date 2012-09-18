@@ -480,6 +480,11 @@ gtk_level_bar_draw_fill (GtkLevelBar *self,
     trough_borders.top - trough_borders.bottom;
 
   inverted = self->priv->inverted;
+  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+    {
+      if (self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+        inverted = !inverted;
+    }
 
   if (self->priv->bar_mode == GTK_LEVEL_BAR_MODE_CONTINUOUS)
     gtk_level_bar_draw_fill_continuous (self, cr, inverted, &fill_area);
