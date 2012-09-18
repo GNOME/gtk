@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C++ Express 2010
+# Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gdk-win32", "gdk-win32.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gdk", "gdk.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F7}"
@@ -7,6 +7,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk", "gtk.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-demo", "gtk-demo.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gailutil", "gailutil.vcxproj", "{B3B6558A-01C8-4C72-9BDE-84ABB1AE67DF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "install", "install.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FB}"
 EndProject
@@ -50,6 +52,14 @@ Global
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FC}.Release|Win32.Build.0 = Release|Win32
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FC}.Release|x64.ActiveCfg = Release|x64
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FC}.Release|x64.Build.0 = Release|x64
+		{B3B6558A-01C8-4C72-9BDE-84ABB1AE67DF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B3B6558A-01C8-4C72-9BDE-84ABB1AE67DF}.Debug|Win32.Build.0 = Debug|Win32
+		{B3B6558A-01C8-4C72-9BDE-84ABB1AE67DF}.Debug|x64.ActiveCfg = Debug|x64
+		{B3B6558A-01C8-4C72-9BDE-84ABB1AE67DF}.Debug|x64.Build.0 = Debug|x64
+		{B3B6558A-01C8-4C72-9BDE-84ABB1AE67DF}.Release|Win32.ActiveCfg = Release|Win32
+		{B3B6558A-01C8-4C72-9BDE-84ABB1AE67DF}.Release|Win32.Build.0 = Release|Win32
+		{B3B6558A-01C8-4C72-9BDE-84ABB1AE67DF}.Release|x64.ActiveCfg = Release|x64
+		{B3B6558A-01C8-4C72-9BDE-84ABB1AE67DF}.Release|x64.Build.0 = Release|x64
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FB}.Debug|Win32.ActiveCfg = Debug|Win32
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FB}.Debug|Win32.Build.0 = Debug|Win32
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FB}.Debug|x64.ActiveCfg = Debug|x64
