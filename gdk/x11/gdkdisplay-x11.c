@@ -681,6 +681,13 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
                                              GDK_WINDOW_STATE_ICONIFIED);
             }
 
+          if (window_impl->toplevel &&
+              window_impl->toplevel->frame_pending)
+            {
+              window_impl->toplevel->frame_pending = FALSE;
+              gdk_frame_clock_thaw (gdk_window_get_frame_clock (event->any.window));
+            }
+
           _gdk_x11_window_grab_check_unmap (window, xevent->xany.serial);
         }
 
@@ -1129,6 +1136,21 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
 	  toplevel->pending_counter_value = xevent->xclient.data.l[2] + ((gint64)xevent->xclient.data.l[3] << 32);
 #endif
 	}
+      return GDK_FILTER_REMOVE;
+    }
+
+  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_FRAME_DRAWN"))
+    {
+      GdkWindowImplX11 *window_impl;
+
+      window_impl = GDK_WINDOW_IMPL_X11 (event->any.window->impl);
+      if (window_impl->toplevel &&
+          window_impl->toplevel->frame_pending)
+        {
+          window_impl->toplevel->frame_pending = FALSE;
+          gdk_frame_clock_thaw (gdk_window_get_frame_clock (event->any.window));
+        }
+
       return GDK_FILTER_REMOVE;
     }
 
