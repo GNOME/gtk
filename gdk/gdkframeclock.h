@@ -54,6 +54,7 @@ struct _GdkFrameClockInterface
   /* signals */
   /* void (* frame_requested)    (GdkFrameClock *clock); */
   /* void (* before_paint)       (GdkFrameClock *clock); */
+  /* void (* layout)             1(GdkFrameClock *clock); */
   /* void (* paint)              (GdkFrameClock *clock); */
   /* void (* after_paint)        (GdkFrameClock *clock); */
 };
