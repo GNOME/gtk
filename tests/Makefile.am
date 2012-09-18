@@ -25,6 +25,7 @@ testsocket_programs = testsocket testsocket_child
 endif
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
+	animated-resizing		\
 	simple				\
 	flicker				\
 	print-editor			\
@@ -149,6 +150,7 @@ endif
 
 endif
 
+animated_resizing_DEPENDENCIES = $(TEST_DEPS)
 flicker_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
