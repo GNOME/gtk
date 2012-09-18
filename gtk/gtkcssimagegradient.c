@@ -46,6 +46,54 @@ gtk_css_image_gradient_compute (GtkCssImage        *image,
   return GTK_CSS_IMAGE (copy);
 }
 
+static gboolean
+gtk_css_image_gradient_draw_circle (GtkCssImageGradient *image,
+                                    cairo_t              *cr,
+                                    double               width,
+                                    double               height)
+{
+  cairo_pattern_t *pattern = image->pattern;
+  double x0, y0, x1, y1, r0, r1;
+  GdkRGBA color0, color1;
+  double offset0, offset1;
+  int n_stops;
+
+  if (cairo_pattern_get_type (pattern) != CAIRO_PATTERN_TYPE_RADIAL)
+    return FALSE;
+  if (cairo_pattern_get_extend (pattern) != CAIRO_EXTEND_PAD)
+    return FALSE;
+
+  cairo_pattern_get_radial_circles (pattern, &x0, &y0, &r0, &x1, &y1, &r1);
+
+  if (x0 != x1 ||
+      y0 != y1 ||
+      r0 != 0.0)
+    return FALSE;
+
+  cairo_pattern_get_color_stop_count (pattern, &n_stops);
+  if (n_stops != 2)
+    return FALSE;
+
+  cairo_pattern_get_color_stop_rgba (pattern, 0, &offset0, &color0.red, &color0.green, &color0.blue, &color0.alpha);
+  cairo_pattern_get_color_stop_rgba (pattern, 1, &offset1, &color1.red, &color1.green, &color1.blue, &color1.alpha);
+  if (offset0 != offset1)
+    return FALSE;
+
+  cairo_scale (cr, width, height);
+
+  cairo_rectangle (cr, 0, 0, 1, 1);
+  cairo_clip (cr);
+
+  gdk_cairo_set_source_rgba (cr, &color1);
+  cairo_paint (cr);
+
+  gdk_cairo_set_source_rgba (cr, &color0);
+  cairo_arc (cr, x1, y1, r1 * offset1, 0, 2 * G_PI);
+  cairo_fill (cr);
+
+  return TRUE;
+}
+
 static void
 gtk_css_image_gradient_draw (GtkCssImage        *image,
                              cairo_t            *cr,
@@ -59,6 +107,9 @@ gtk_css_image_gradient_draw (GtkCssImage        *image,
       g_warning ("trying to paint unresolved gradient");
       return;
     }
+
+  if (gtk_css_image_gradient_draw_circle (gradient, cr, width, height))
+    return;
 
   cairo_scale (cr, width, height);
 
