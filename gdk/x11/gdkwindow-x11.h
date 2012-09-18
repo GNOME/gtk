@@ -144,11 +144,13 @@ struct _GdkToplevelX11
  
 #ifdef HAVE_XSYNC
   XID update_counter;
-  XSyncValue pending_counter_value; /* latest _NET_WM_SYNC_REQUEST value received */
-  XSyncValue current_counter_value; /* Latest _NET_WM_SYNC_REQUEST value received
-				     * where we have also seen the corresponding
-				     * ConfigureNotify
-				     */
+  XID extended_update_counter;
+  gint64 pending_counter_value; /* latest _NET_WM_SYNC_REQUEST value received */
+  gint64 configure_counter_value; /* Latest _NET_WM_SYNC_REQUEST value received
+				 * where we have also seen the corresponding
+				 * ConfigureNotify
+				 */
+  gint64 current_counter_value;
 #endif
 };
 

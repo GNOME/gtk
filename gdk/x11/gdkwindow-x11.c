@@ -200,6 +200,19 @@ _gdk_x11_window_update_size (GdkWindowImplX11 *impl)
     }
 }
 
+static void
+set_sync_counter(Display     *display,
+		 XSyncCounter counter,
+                 gint64       value)
+{
+    XSyncValue sync_value;
+
+    XSyncIntsToValue(&sync_value,
+                     value & G_GINT64_CONSTANT(0xFFFFFFFF),
+                     value >> 32);
+    XSyncSetCounter(display, counter, sync_value);
+}
+
 /*****************************************************
  * X11 specific implementations of generic functions *
  *****************************************************/
@@ -612,20 +625,24 @@ ensure_sync_counter (GdkWindow *window)
 	  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
 	  XSyncValue value;
 	  Atom atom;
+	  XID counters[2];
 
 	  XSyncIntToValue (&value, 0);
 	  
 	  toplevel->update_counter = XSyncCreateCounter (xdisplay, value);
+	  toplevel->extended_update_counter = XSyncCreateCounter (xdisplay, value);
 	  
 	  atom = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_SYNC_REQUEST_COUNTER");
-	  
+
+	  counters[0] = toplevel->update_counter;
+	  counters[1] = toplevel->extended_update_counter;
 	  XChangeProperty (xdisplay, GDK_WINDOW_XID (window),
 			   atom, XA_CARDINAL,
 			   32, PropModeReplace,
-			   (guchar *)&toplevel->update_counter, 1);
+			   (guchar *)counters, 2);
 	  
-	  XSyncIntToValue (&toplevel->current_counter_value, 0);
+	  toplevel->current_counter_value = 0;
 	}
     }
 #endif
@@ -1006,7 +1023,7 @@ gdk_toplevel_x11_free_contents (GdkDisplay *display,
 			   toplevel->update_counter);
       toplevel->update_counter = None;
 
-      XSyncIntToValue (&toplevel->current_counter_value, 0);
+      toplevel->current_counter_value = 0;
     }
 #endif
 }
@@ -4863,13 +4880,21 @@ gdk_x11_window_configure_finished (GdkWindow *window)
 
       if (toplevel && toplevel->update_counter != None &&
 	  GDK_X11_DISPLAY (display)->use_sync &&
-	  !XSyncValueIsZero (toplevel->current_counter_value))
+	  toplevel->configure_counter_value != 0)
 	{
-	  XSyncSetCounter (GDK_WINDOW_XDISPLAY (window), 
-			   toplevel->update_counter,
-			   toplevel->current_counter_value);
-	  
-	  XSyncIntToValue (&toplevel->current_counter_value, 0);
+	  set_sync_counter (GDK_WINDOW_XDISPLAY (window),
+			    toplevel->update_counter,
+			    toplevel->configure_counter_value);
+
+	  toplevel->current_counter_value = toplevel->configure_counter_value;
+	  if ((toplevel->current_counter_value % 2) == 1)
+	    toplevel->current_counter_value += 1;
+
+	  toplevel->configure_counter_value = 0;
+
+	  set_sync_counter (GDK_WINDOW_XDISPLAY (window),
+			    toplevel->extended_update_counter,
+			    toplevel->current_counter_value);
 	}
     }
 #endif
