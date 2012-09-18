@@ -253,6 +253,9 @@ static GHashTable *get_color_hash                (GtkSettings           *setting
 static void gtk_settings_load_from_key_file      (GtkSettings           *settings,
                                                   const gchar           *path,
                                                   GtkSettingsSource      source);
+static void settings_update_provider             (GdkScreen             *screen,
+                                                  GtkCssProvider       **old,
+                                                  GtkCssProvider        *new);
 
 /* the default palette for GtkColorSelelection */
 static const gchar default_color_palette[] =
@@ -1568,14 +1571,10 @@ gtk_settings_finalize (GObject *object)
 
   g_datalist_clear (&priv->queued_settings);
 
-  if (priv->theme_provider)
-    g_object_unref (priv->theme_provider);
+  settings_update_provider (priv->screen, &priv->theme_provider, NULL);
+  settings_update_provider (priv->screen, &priv->key_theme_provider, NULL);
 
-  if (priv->key_theme_provider)
-    g_object_unref (priv->key_theme_provider);
-
-  if (priv->style)
-    g_object_unref (priv->style);
+  g_clear_object (&priv->style);
 
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
