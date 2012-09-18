@@ -201,6 +201,8 @@ gtk_mount_operation_init (GtkMountOperation *operation)
   if (!name_owner)
     g_clear_object (&operation->priv->handler);
   g_free (name_owner);
+
+  g_dbus_proxy_set_default_timeout (G_DBUS_PROXY (operation->priv->handler), G_MAXINT);
 }
 
 static void
