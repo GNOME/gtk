@@ -1675,6 +1675,18 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_drag_data_received
  */
 static void
+remove_switch_tab_timer (GtkNotebook *notebook)
+{
+  GtkNotebookPrivate *priv = notebook->priv;
+
+  if (priv->switch_tab_timer)
+    {
+      g_source_remove (priv->switch_tab_timer);
+      priv->switch_tab_timer = 0;
+    }
+}
+
+static void
 gtk_notebook_destroy (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
@@ -1701,11 +1713,7 @@ gtk_notebook_destroy (GtkWidget *widget)
       priv->source_targets = NULL;
     }
 
-  if (priv->switch_tab_timer)
-    {
-      g_source_remove (priv->switch_tab_timer);
-      priv->switch_tab_timer = 0;
-    }
+  remove_switch_tab_timer (notebook);
 
   GTK_WIDGET_CLASS (gtk_notebook_parent_class)->destroy (widget);
 }
@@ -3789,11 +3797,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
     }
   else
     {
-      if (priv->switch_tab_timer)
-        {
-          g_source_remove (priv->switch_tab_timer);
-          priv->switch_tab_timer = 0;
-        }
+      remove_switch_tab_timer (notebook);
     }
 
   return (target == tab_target) ? TRUE : FALSE;
@@ -3807,13 +3811,8 @@ gtk_notebook_drag_leave (GtkWidget      *widget,
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
 
-  if (priv->switch_tab_timer)
-    {
-      g_source_remove (priv->switch_tab_timer);
-      priv->switch_tab_timer = 0;
-    }
-
-  stop_scrolling (GTK_NOTEBOOK (widget));
+  remove_switch_tab_timer (notebook);
+  stop_scrolling (notebook);
 }
 
 static gboolean
