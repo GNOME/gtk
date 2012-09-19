@@ -2924,18 +2924,13 @@ settings_update_theme (GtkSettings *settings)
                 "gtk-application-prefer-dark-theme", &prefer_dark_theme,
                 NULL);
 
-  if (theme_name && *theme_name)
+  if (!theme_name || !*theme_name)
     {
-      if (prefer_dark_theme)
-        provider = gtk_css_provider_get_named (theme_name, "dark");
-
-      if (!provider)
-        provider = gtk_css_provider_get_named (theme_name, NULL);
+      g_free (theme_name);
+      theme_name = g_strdup ("Raleigh");
     }
-
-  /* If we didn't find the named theme, fall back */
-  if (!provider)
-    provider = gtk_css_provider_get_named ("Raleigh", NULL);
+  
+  provider = gtk_css_provider_get_named (theme_name, prefer_dark_theme ? "dark" : NULL);
 
   settings_update_provider (priv->screen, &priv->theme_provider, provider);
 

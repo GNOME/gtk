@@ -2792,6 +2792,22 @@ _gtk_css_provider_load_named (GtkCssProvider *provider,
       g_free (path);
       g_free (dir);
     }
+  else
+    {
+      /* Things failed! Fall back! Fall back! */
+
+      if (variant)
+        {
+          /* If there was a variant, try without */
+          _gtk_css_provider_load_named (provider, name, NULL);
+        }
+      else
+        {
+          /* Worst case, fall back to Raleigh */
+          g_return_if_fail (!g_str_equal (name, "Raleigh")); /* infloop protection */
+          _gtk_css_provider_load_named (provider, "Raleigh", NULL);
+        }
+    }
 }
 
 /**
