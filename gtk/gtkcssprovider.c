@@ -2692,10 +2692,22 @@ _gtk_css_provider_get_theme_dir (void)
   return path;
 }
 
-static void
-gtk_css_provider_load_named (GtkCssProvider *provider,
-                             const gchar    *name,
-                             const gchar    *variant)
+/**
+ * _gtk_css_provider_load_named:
+ * @provider: a #GtkCssProvider
+ * @name: A theme name
+ * @variant: (allow-none): variant to load, for example, "dark", or
+ *     %NULL for the default
+ *
+ * Loads a theme from the usual theme paths. The actual process of
+ * finding the theme might change between releases, but it is
+ * guaranteed that this function uses the same mechanism to load the
+ * theme than GTK uses for loading its own theme.
+ **/
+void
+_gtk_css_provider_load_named (GtkCssProvider *provider,
+                              const gchar    *name,
+                              const gchar    *variant)
 {
   gchar *subpath, *path;
   gchar *resource_path;
@@ -2813,7 +2825,7 @@ gtk_css_provider_get_named (const gchar *name,
   if (!provider)
     {
       provider = gtk_css_provider_new ();
-      gtk_css_provider_load_named (provider, name, variant);
+      _gtk_css_provider_load_named (provider, name, variant);
       g_hash_table_insert (themes, g_strdup (key), provider);
     }
   
