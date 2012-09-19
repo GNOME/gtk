@@ -2664,16 +2664,15 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
   return result;
 }
 
-static gboolean
-_gtk_css_provider_load_from_resource (GtkCssProvider  *css_provider,
-				      const gchar     *resource_path)
+static void
+gtk_css_provider_load_from_resource (GtkCssProvider  *css_provider,
+			             const gchar     *resource_path)
 {
   GFile *file;
   char *uri, *escaped;
-  gboolean result;
 
-  g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
-  g_return_val_if_fail (resource_path != NULL, FALSE);
+  g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
+  g_return_if_fail (resource_path != NULL);
 
   escaped = g_uri_escape_string (resource_path,
 				 G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, FALSE);
@@ -2683,11 +2682,9 @@ _gtk_css_provider_load_from_resource (GtkCssProvider  *css_provider,
   file = g_file_new_for_uri (uri);
   g_free (uri);
 
-  result = gtk_css_provider_load_from_file (css_provider, file, NULL);
+  gtk_css_provider_load_from_file (css_provider, file, NULL);
 
   g_object_unref (file);
-
-  return result;
 }
 
 /**
@@ -2768,11 +2765,7 @@ gtk_css_provider_get_named (const gchar *name,
       if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
         {
           provider = gtk_css_provider_new ();
-          if (!_gtk_css_provider_load_from_resource (provider, resource_path))
-            {
-              g_object_unref (provider);
-              provider = NULL;
-            }
+          gtk_css_provider_load_from_resource (provider, resource_path);
         }
       g_free (resource_path);
     }
