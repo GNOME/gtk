@@ -293,6 +293,8 @@ gtk_settings_init (GtkSettings *settings)
   g_datalist_init (&priv->queued_settings);
   object_list = g_slist_prepend (object_list, settings);
 
+  priv->theme_provider = gtk_css_provider_new ();
+
   /* build up property array for all yet existing properties and queue
    * notification for them (at least notification for internal properties
    * will instantly be caught)
@@ -1612,6 +1614,10 @@ settings_init_style (GtkSettings *settings)
                                              GTK_STYLE_PROVIDER (settings),
                                              GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
 
+  gtk_style_context_add_provider_for_screen (screen,
+                                             GTK_STYLE_PROVIDER (settings->priv->theme_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
+
   settings_update_theme (settings);
   settings_update_key_theme (settings);
 }
@@ -2915,7 +2921,6 @@ static void
 settings_update_theme (GtkSettings *settings)
 {
   GtkSettingsPrivate *priv = settings->priv;
-  GtkCssProvider *provider = NULL;
   gboolean prefer_dark_theme;
   gchar *theme_name;
 
@@ -2930,9 +2935,9 @@ settings_update_theme (GtkSettings *settings)
       theme_name = g_strdup ("Raleigh");
     }
   
-  provider = gtk_css_provider_get_named (theme_name, prefer_dark_theme ? "dark" : NULL);
-
-  settings_update_provider (priv->screen, &priv->theme_provider, provider);
+  _gtk_css_provider_load_named (priv->theme_provider,
+                                theme_name,
+                                prefer_dark_theme ? "dark" : NULL);
 
   if (theme_name && *theme_name)
     {
