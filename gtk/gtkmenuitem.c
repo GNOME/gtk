@@ -604,6 +604,8 @@ gtk_menu_item_dispose (GObject *object)
   GtkMenuItem *menu_item = GTK_MENU_ITEM (object);
   GtkMenuItemPrivate *priv = menu_item->priv;
 
+  g_clear_object (&priv->action_helper);
+
   if (priv->action)
     {
       gtk_action_disconnect_accelerator (priv->action);
