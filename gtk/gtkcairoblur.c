@@ -173,23 +173,19 @@ _expblur (guchar* pixels,
           gint    width,
           gint    height,
           gint    channels,
-          gint    radius,
+          double  radius,
           gint    aprec,
           gint    zprec)
 {
   gint alpha;
-  gint row = 0;
-  gint col = 0;
-
-  if (radius < 1)
-    return;
+  int row, col;
 
   /* Calculate the alpha such that 90% of 
    * the kernel is within the radius.
    * (Kernel extends to infinity) */
   alpha = (gint) ((1 << aprec) * (1.0f - expf (-2.3f / (radius + 1.f))));
 
-  for (; row < height; row++)
+  for (row = 0; row < height; row++)
     _blurrow (pixels,
               width,
               height,
@@ -199,7 +195,7 @@ _expblur (guchar* pixels,
               aprec,
               zprec);
 
-  for(; col < width; col++)
+  for(col = 0; col < width; col++)
     _blurcol (pixels,
               width,
               height,
@@ -217,11 +213,10 @@ _expblur (guchar* pixels,
  * @radius: the blur radius.
  *
  * Blurs the cairo image surface at the given radius.
- *
  */
 void
 _gtk_cairo_blur_surface (cairo_surface_t* surface,
-                         guint            radius)
+                         double           radius)
 {
   cairo_format_t format;
   guchar*        pixels;
