@@ -382,14 +382,10 @@ gdk_check_wm_state_changed (GdkWindow *window)
     do_net_wm_state_changes (window);
 }
 
-static GdkWindow *
-get_event_window (GdkEventTranslator *translator,
-                  XEvent             *xevent)
+static Window
+get_event_xwindow (XEvent             *xevent)
 {
-  GdkDisplay *display;
   Window xwindow;
-
-  display = (GdkDisplay *) translator;
 
   switch (xevent->type)
     {
@@ -405,11 +401,20 @@ get_event_window (GdkEventTranslator *translator,
     case ConfigureNotify:
       xwindow = xevent->xconfigure.window;
       break;
+    case ReparentNotify:
+      xwindow = xevent->xreparent.window;
+      break;
+    case GravityNotify:
+      xwindow = xevent->xgravity.window;
+      break;
+    case CirculateNotify:
+      xwindow = xevent->xcirculate.window;
+      break;
     default:
       xwindow = xevent->xany.window;
     }
 
-  return gdk_x11_window_lookup_for_display (display, xwindow);
+  return xwindow;
 }
 
 static gboolean
@@ -418,7 +423,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
                                  GdkEvent           *event,
                                  XEvent             *xevent)
 {
+  Window xwindow;
   GdkWindow *window;
+  gboolean is_substructure;
   GdkWindowImplX11 *window_impl = NULL;
   GdkScreen *screen = NULL;
   GdkX11Screen *x11_screen = NULL;
@@ -426,12 +433,20 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   gboolean return_val;
 
-  /* Find the GdkWindow that this event relates to.
-   * Basically this means substructure events
-   * are reported same as structure events
+  /* Find the GdkWindow that this event relates to. If that's
+   * not the same as the window that the event was sent to,
+   * we are getting an event from SubstructureNotifyMask.
+   * We ignore such events for internal operation, but we
+   * need to report them to the application because of
+   * GDK_SUBSTRUCTURE_MASK (which should be removed at next
+   * opportunity.) The most likely reason for getting these
+   * events is when we are used in the Metacity or Mutter
+   * window managers.
    */
-  window = get_event_window (translator, xevent);
+  xwindow = get_event_xwindow (xevent);
+  is_substructure = xwindow != xevent->xany.window;
 
+  window = gdk_x11_window_lookup_for_display (display, xwindow);
   if (window)
     {
       /* We may receive events such as NoExpose/GraphicsExpose
@@ -460,7 +475,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	}
     }
 
-  if (xevent->type == DestroyNotify)
+  if (xevent->type == DestroyNotify && !is_substructure)
     {
       int i, n;
 
@@ -622,8 +637,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 		g_message ("destroy notify:\twindow: %ld",
 			   xevent->xdestroywindow.window));
 
-      /* Ignore DestroyNotify from SubstructureNotifyMask */
-      if (xevent->xdestroywindow.window == xevent->xdestroywindow.event)
+      if (!is_substructure)
 	{
 	  event->any.type = GDK_DESTROY;
 	  event->any.window = window;
@@ -646,27 +660,29 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       event->any.type = GDK_UNMAP;
       event->any.window = window;
 
-      /* If the WM supports the _NET_WM_STATE_HIDDEN hint, we do not want to
-       * interpret UnmapNotify events as implying iconic state.
-       * http://bugzilla.gnome.org/show_bug.cgi?id=590726.
-       */
-      if (screen &&
-          !gdk_x11_screen_supports_net_wm_hint (screen,
-                                                gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN")))
-        {
-          /* If we are shown (not withdrawn) and get an unmap, it means we were
-           * iconified in the X sense. If we are withdrawn, and get an unmap, it
-           * means we hid the window ourselves, so we will have already flipped
-           * the iconified bit off.
+      if (window && !is_substructure)
+	{
+          /* If the WM supports the _NET_WM_STATE_HIDDEN hint, we do not want to
+           * interpret UnmapNotify events as implying iconic state.
+           * http://bugzilla.gnome.org/show_bug.cgi?id=590726.
            */
-          if (window && GDK_WINDOW_IS_MAPPED (window))
-            gdk_synthesize_window_state (window,
-                                         0,
-                                         GDK_WINDOW_STATE_ICONIFIED);
-        }
+          if (screen &&
+              !gdk_x11_screen_supports_net_wm_hint (screen,
+                                                    gdk_atom_intern_static_string ("_NET_WM_STATE_HIDDEN")))
+            {
+              /* If we are shown (not withdrawn) and get an unmap, it means we were
+               * iconified in the X sense. If we are withdrawn, and get an unmap, it
+               * means we hid the window ourselves, so we will have already flipped
+               * the iconified bit off.
+               */
+              if (GDK_WINDOW_IS_MAPPED (window))
+                gdk_synthesize_window_state (window,
+                                             0,
+                                             GDK_WINDOW_STATE_ICONIFIED);
+            }
 
-      if (window)
-        _gdk_x11_window_grab_check_unmap (window, xevent->xany.serial);
+          _gdk_x11_window_grab_check_unmap (window, xevent->xany.serial);
+        }
 
       break;
 
@@ -678,11 +694,14 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       event->any.type = GDK_MAP;
       event->any.window = window;
 
-      /* Unset iconified if it was set */
-      if (window && (window->state & GDK_WINDOW_STATE_ICONIFIED))
-        gdk_synthesize_window_state (window,
-                                     GDK_WINDOW_STATE_ICONIFIED,
-                                     0);
+      if (window && !is_substructure)
+	{
+	  /* Unset iconified if it was set */
+	  if (window->state & GDK_WINDOW_STATE_ICONIFIED)
+	    gdk_synthesize_window_state (window,
+					 GDK_WINDOW_STATE_ICONIFIED,
+					 0);
+	}
 
       break;
 
@@ -728,7 +747,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
         }
 
 #ifdef HAVE_XSYNC
-      if (toplevel && display_x11->use_sync && !XSyncValueIsZero (toplevel->pending_counter_value))
+      if (!is_substructure && toplevel && display_x11->use_sync && !XSyncValueIsZero (toplevel->pending_counter_value))
 	{
 	  toplevel->current_counter_value = toplevel->pending_counter_value;
 	  XSyncIntToValue (&toplevel->pending_counter_value, 0);
@@ -773,21 +792,24 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	      event->configure.x = xevent->xconfigure.x;
 	      event->configure.y = xevent->xconfigure.y;
 	    }
-	  window->x = event->configure.x;
-	  window->y = event->configure.y;
-	  window->width = xevent->xconfigure.width;
-	  window->height = xevent->xconfigure.height;
+	  if (!is_substructure)
+	    {
+	      window->x = event->configure.x;
+	      window->y = event->configure.y;
+	      window->width = xevent->xconfigure.width;
+	      window->height = xevent->xconfigure.height;
 
-	  _gdk_window_update_size (window);
-	  _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
+	      _gdk_window_update_size (window);
+	      _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
 
-          if (window->resize_count >= 1)
-            {
-              window->resize_count -= 1;
+	      if (window->resize_count >= 1)
+		{
+		  window->resize_count -= 1;
 
-              if (window->resize_count == 0)
-                _gdk_x11_moveresize_configure_done (display, window);
-            }
+		  if (window->resize_count == 0)
+		    _gdk_x11_moveresize_configure_done (display, window);
+		}
+	    }
         }
       break;
 
