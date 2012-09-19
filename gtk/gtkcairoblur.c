@@ -219,9 +219,6 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
                          double           radius)
 {
   cairo_format_t format;
-  guchar*        pixels;
-  guint          width;
-  guint          height;
 
   g_return_if_fail (surface != NULL);
   g_return_if_fail (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE);
@@ -236,23 +233,13 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
   /* Before we mess with the surface execute any pending drawing. */
   cairo_surface_flush (surface);
 
-  pixels = cairo_image_surface_get_data (surface);
-  width  = cairo_image_surface_get_width (surface);
-  height = cairo_image_surface_get_height (surface);
-  format = cairo_image_surface_get_format (surface);
-
-  switch (format)
-  {
-    case CAIRO_FORMAT_ARGB32:
-      _expblur (pixels, width, height, 4, radius, 16, 7);
-      break;
-    case CAIRO_FORMAT_RGB24:
-      _expblur (pixels, width, height, 4, radius, 16, 7);
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-  }
+  _expblur (cairo_image_surface_get_data (surface),
+            cairo_image_surface_get_width (surface),
+            cairo_image_surface_get_height (surface),
+            4,
+            radius,
+            16,
+            7);
 
   /* Inform cairo we altered the surfaces contents. */
   cairo_surface_mark_dirty (surface);
