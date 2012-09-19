@@ -1843,7 +1843,7 @@ msgstr ""
 #, c-format
 #| msgid "Error loading icon: %s"
 msgid "Error parsing commandline options: %s\n"
-msgstr "കമാന്‍ഡ്‌ലൈന്‍ ഐച്ഛികങ്ങള്‍ പാഴ്സ് ചെയ്യുന്നതില്‍ പിശക് %s"
+msgstr "കമാന്‍ഡ്‌ലൈന്‍ ഐച്ഛികങ്ങള്‍ പാഴ്സ് ചെയ്യുന്നതില്‍ പിശക് %s\n"
 
 #: ../gtk/gtk-launch.c:87 ../gtk/gtk-launch.c:100
 #, c-format
@@ -1870,7 +1870,7 @@ msgstr "%s: %s പോലുള്ള പ്രയോഗം"
 #, c-format
 #| msgid "Error loading icon: %s"
 msgid "%s: error launching application: %s\n"
-msgstr "%s: പ്രയോഗം ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
+msgstr "%s: പ്രയോഗം ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s\n"
 
 #: ../gtk/gtklinkbutton.c:499
 msgid "Copy URL"
