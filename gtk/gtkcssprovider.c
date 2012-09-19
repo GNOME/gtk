@@ -2848,22 +2848,11 @@ gtk_css_provider_get_named (const gchar *name,
           if (resource != NULL)
             g_resources_register (resource);
 
-          if (!gtk_css_provider_load_from_path (provider, path, NULL))
-            {
-              if (resource != NULL)
-                {
-                  g_resources_unregister (resource);
-                  g_resource_unref (resource);
-                }
-              g_object_unref (provider);
-              provider = NULL;
-            }
-          else
-            {
-              /* Only set this after load success, as load_from_path will clear it */
-              provider->priv->resource = resource;
-              g_hash_table_insert (themes, g_strdup (key), provider);
-            }
+          gtk_css_provider_load_from_path (provider, path, NULL);
+
+          /* Only set this after load, as load_from_path will clear it */
+          provider->priv->resource = resource;
+          g_hash_table_insert (themes, g_strdup (key), provider);
 
           g_free (path);
           g_free (dir);
