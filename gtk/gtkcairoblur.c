@@ -227,8 +227,7 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
   g_return_if_fail (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE);
 
   format = cairo_image_surface_get_format (surface);
-  g_return_if_fail (format == CAIRO_FORMAT_A8 ||
-                    format == CAIRO_FORMAT_RGB24 ||
+  g_return_if_fail (format == CAIRO_FORMAT_RGB24 ||
                     format == CAIRO_FORMAT_ARGB32);
 
   if (radius == 0)
@@ -248,12 +247,10 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
       _expblur (pixels, width, height, 4, radius, 16, 7);
       break;
     case CAIRO_FORMAT_RGB24:
-      _expblur (pixels, width, height, 3, radius, 16, 7);
-      break;
-    case CAIRO_FORMAT_A8:
-      _expblur (pixels, width, height, 1, radius, 16, 7);
+      _expblur (pixels, width, height, 4, radius, 16, 7);
       break;
     default:
+      g_assert_not_reached ();
       break;
   }
 
