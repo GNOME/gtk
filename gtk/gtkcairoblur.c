@@ -133,7 +133,7 @@ _blurcol (guchar* pixels,
   zB = *((guchar*) ptr + 2) << zprec;
   zA = *((guchar*) ptr + 3) << zprec;
 
-  for (index = 1; index < height - 1; index++)
+  for (index = 0; index < height; index++)
     _blurinner (&ptr[index * rowstride],
                 &zR,
                 &zG,
