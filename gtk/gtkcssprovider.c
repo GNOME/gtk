@@ -2567,7 +2567,10 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
  * Loads @data into @css_provider, making it clear any previously loaded
  * information.
  *
- * Returns: %TRUE if the data could be loaded.
+ * Returns: %TRUE. The return value is deprecated and %FALSE will only be
+ *     returned for backwards compatibility reasons if an @error is not 
+ *     %NULL and a loading error occured. To track errors while loading
+ *     CSS, connect to the GtkCssProvider::parsing-error signal.
  **/
 gboolean
 gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
@@ -2612,7 +2615,10 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
  * Loads the data contained in @file into @css_provider, making it
  * clear any previously loaded information.
  *
- * Returns: %TRUE if the data could be loaded.
+ * Returns: %TRUE. The return value is deprecated and %FALSE will only be
+ *     returned for backwards compatibility reasons if an @error is not 
+ *     %NULL and a loading error occured. To track errors while loading
+ *     CSS, connect to the GtkCssProvider::parsing-error signal.
  **/
 gboolean
 gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
@@ -2642,7 +2648,10 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
  * Loads the data contained in @path into @css_provider, making it clear
  * any previously loaded information.
  *
- * Returns: %TRUE if the data could be loaded.
+ * Returns: %TRUE. The return value is deprecated and %FALSE will only be
+ *     returned for backwards compatibility reasons if an @error is not 
+ *     %NULL and a loading error occured. To track errors while loading
+ *     CSS, connect to the GtkCssProvider::parsing-error signal.
  **/
 gboolean
 gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
