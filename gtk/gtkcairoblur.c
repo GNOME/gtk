@@ -64,6 +64,7 @@ static inline void
 _blurrow (guchar* pixels,
           gint    width,
           gint    height,
+          gint    rowstride,
           gint    channels,
           gint    line,
           gint    alpha,
@@ -77,7 +78,7 @@ _blurrow (guchar* pixels,
   gint    index;
   guchar* scanline;
 
-  scanline = &(pixels[line * width * channels]);
+  scanline = &pixels[line * rowstride];
 
   zR = *scanline << zprec;
   zG = *(scanline + 1) << zprec;
@@ -109,6 +110,7 @@ static inline void
 _blurcol (guchar* pixels,
           gint    width,
           gint    height,
+          gint    rowstride,
           gint    channels,
           gint    x,
           gint    alpha,
@@ -131,8 +133,8 @@ _blurcol (guchar* pixels,
   zB = *((guchar*) ptr + 2) << zprec;
   zA = *((guchar*) ptr + 3) << zprec;
 
-  for (index = width; index < (height - 1) * width; index += width)
-    _blurinner ((guchar*) &ptr[index * channels],
+  for (index = 1; index < height - 1; index++)
+    _blurinner (&ptr[index * rowstride],
                 &zR,
                 &zG,
                 &zB,
@@ -141,8 +143,8 @@ _blurcol (guchar* pixels,
                 aprec,
                 zprec);
 
-  for (index = (height - 2) * width; index >= 0; index -= width)
-    _blurinner ((guchar*) &ptr[index * channels],
+  for (index = height - 2; index >= 0; index--)
+    _blurinner (&ptr[index * rowstride],
                 &zR,
                 &zG,
                 &zB,
@@ -157,6 +159,7 @@ _blurcol (guchar* pixels,
  * @pixels: image data
  * @width: image width
  * @height: image height
+ * @rowstride: image rowstride
  * @channels: image channels
  * @radius: kernel radius
  * @aprec: precision of alpha parameter in fixed-point format 0.aprec
@@ -172,6 +175,7 @@ static void
 _expblur (guchar* pixels,
           gint    width,
           gint    height,
+          gint    rowstride,
           gint    channels,
           double  radius,
           gint    aprec,
@@ -189,6 +193,7 @@ _expblur (guchar* pixels,
     _blurrow (pixels,
               width,
               height,
+              rowstride,
               channels,
               row,
               alpha,
@@ -199,6 +204,7 @@ _expblur (guchar* pixels,
     _blurcol (pixels,
               width,
               height,
+              rowstride,
               channels,
               col,
               alpha,
@@ -236,6 +242,7 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
   _expblur (cairo_image_surface_get_data (surface),
             cairo_image_surface_get_width (surface),
             cairo_image_surface_get_height (surface),
+            cairo_image_surface_get_stride (surface),
             4,
             radius,
             16,
