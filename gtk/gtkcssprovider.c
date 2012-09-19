@@ -2692,6 +2692,96 @@ _gtk_css_provider_get_theme_dir (void)
   return path;
 }
 
+static void
+gtk_css_provider_load_named (GtkCssProvider *provider,
+                             const gchar    *name,
+                             const gchar    *variant)
+{
+  gchar *subpath, *path;
+  gchar *resource_path;
+
+  g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
+  g_return_if_fail (name != NULL);
+
+  gtk_css_provider_reset (provider);
+
+  /* try loading the resource for the theme. This is mostly meant for built-in
+   * themes.
+   */
+  if (variant)
+    resource_path = g_strdup_printf ("/org/gtk/libgtk/%s-%s.css", name, variant);
+  else
+    resource_path = g_strdup_printf ("/org/gtk/libgtk/%s.css", name);
+
+  if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
+    {
+      gtk_css_provider_load_from_resource (provider, resource_path);
+      g_free (resource_path);
+      return;
+    }
+  g_free (resource_path);
+
+
+  /* Next try looking for files in the various theme directories.
+   */
+  if (variant)
+    subpath = g_strdup_printf ("gtk-3.0" G_DIR_SEPARATOR_S "gtk-%s.css", variant);
+  else
+    subpath = g_strdup ("gtk-3.0" G_DIR_SEPARATOR_S "gtk.css");
+
+  /* First look in the user's config directory
+   */
+  path = g_build_filename (g_get_user_data_dir (), "themes", name, subpath, NULL);
+  if (!g_file_test (path, G_FILE_TEST_EXISTS))
+    {
+      g_free (path);
+      /* Next look in the user's home directory
+       */
+      path = g_build_filename (g_get_home_dir (), ".themes", name, subpath, NULL);
+      if (!g_file_test (path, G_FILE_TEST_EXISTS))
+        {
+          gchar *theme_dir;
+
+          g_free (path);
+
+          /* Finally, try in the default theme directory */
+          theme_dir = _gtk_css_provider_get_theme_dir ();
+          path = g_build_filename (theme_dir, name, subpath, NULL);
+          g_free (theme_dir);
+
+          if (!g_file_test (path, G_FILE_TEST_EXISTS))
+            {
+              g_free (path);
+              path = NULL;
+            }
+        }
+    }
+
+  g_free (subpath);
+
+  if (path)
+    {
+      char *dir, *resource_file;
+      GResource *resource;
+
+      dir = g_path_get_dirname (path);
+      resource_file = g_build_filename (dir, "gtk.gresource", NULL);
+      resource = g_resource_load (resource_file, NULL);
+      g_free (resource_file);
+
+      if (resource != NULL)
+        g_resources_register (resource);
+
+      gtk_css_provider_load_from_path (provider, path, NULL);
+
+      /* Only set this after load, as load_from_path will clear it */
+      provider->priv->resource = resource;
+
+      g_free (path);
+      g_free (dir);
+    }
+}
+
 /**
  * gtk_css_provider_get_named:
  * @name: A theme name
@@ -2712,113 +2802,22 @@ gtk_css_provider_get_named (const gchar *name,
   gchar *key;
 
   if (variant == NULL)
-    key = (gchar *)name;
+    key = g_strdup (name);
   else
     key = g_strconcat (name, "-", variant, NULL);
   if (G_UNLIKELY (!themes))
     themes = g_hash_table_new (g_str_hash, g_str_equal);
 
   provider = g_hash_table_lookup (themes, key);
-
+  
   if (!provider)
     {
-      gchar *resource_path = NULL;
-
-      if (variant)
-        resource_path = g_strdup_printf ("/org/gtk/libgtk/%s-%s.css", name, variant);
-      else
-        resource_path = g_strdup_printf ("/org/gtk/libgtk/%s.css", name);
-
-      if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
-        {
-          provider = gtk_css_provider_new ();
-          gtk_css_provider_load_from_resource (provider, resource_path);
-        }
-      g_free (resource_path);
+      provider = gtk_css_provider_new ();
+      gtk_css_provider_load_named (provider, name, variant);
+      g_hash_table_insert (themes, g_strdup (key), provider);
     }
-
-  if (!provider)
-    {
-      gchar *subpath, *path = NULL;
-
-      if (variant)
-        subpath = g_strdup_printf ("gtk-3.0" G_DIR_SEPARATOR_S "gtk-%s.css", variant);
-      else
-        subpath = g_strdup ("gtk-3.0" G_DIR_SEPARATOR_S "gtk.css");
-
-      /* First look in the user's config directory
-       */
-      path = g_build_filename (g_get_user_data_dir (), "themes", name, subpath, NULL);
-      if (!g_file_test (path, G_FILE_TEST_EXISTS))
-        {
-          g_free (path);
-          path = NULL;
-        }
-
-      /* Next look in the user's home directory
-       */
-      if (!path)
-        {
-          const gchar *home_dir;
-
-          home_dir = g_get_home_dir ();
-          if (home_dir)
-            {
-              path = g_build_filename (home_dir, ".themes", name, subpath, NULL);
-
-              if (!g_file_test (path, G_FILE_TEST_EXISTS))
-                {
-                  g_free (path);
-                  path = NULL;
-                }
-            }
-        }
-
-      if (!path)
-        {
-          gchar *theme_dir;
-
-          theme_dir = _gtk_css_provider_get_theme_dir ();
-          path = g_build_filename (theme_dir, name, subpath, NULL);
-          g_free (theme_dir);
-
-          if (!g_file_test (path, G_FILE_TEST_EXISTS))
-            {
-              g_free (path);
-              path = NULL;
-            }
-        }
-
-      g_free (subpath);
-
-      if (path)
-        {
-          char *dir, *resource_file;
-          GResource *resource;
-
-          provider = gtk_css_provider_new ();
-
-          dir = g_path_get_dirname (path);
-          resource_file = g_build_filename (dir, "gtk.gresource", NULL);
-          resource = g_resource_load (resource_file, NULL);
-          g_free (resource_file);
-
-          if (resource != NULL)
-            g_resources_register (resource);
-
-          gtk_css_provider_load_from_path (provider, path, NULL);
-
-          /* Only set this after load, as load_from_path will clear it */
-          provider->priv->resource = resource;
-          g_hash_table_insert (themes, g_strdup (key), provider);
-
-          g_free (path);
-          g_free (dir);
-        }
-    }
-
-  if (key != name)
-    g_free (key);
+  
+  g_free (key);
 
   return provider;
 }
