@@ -771,15 +771,9 @@ gtk_spin_button_panel_nthchildize_context (GtkSpinButton *spin_button,
   gtk_widget_path_iter_add_class (siblings_path, down_pos, GTK_STYLE_CLASS_SPINBUTTON);
 
   if (panel == priv->down_panel)
-    {
-      gtk_widget_path_append_with_siblings (path, siblings_path, up_pos);
-      gtk_widget_path_append_with_siblings (path, siblings_path, down_pos);
-    }
+    gtk_widget_path_append_with_siblings (path, siblings_path, down_pos);
   else
-    {
-      gtk_widget_path_append_with_siblings (path, siblings_path, down_pos);
-      gtk_widget_path_append_with_siblings (path, siblings_path, up_pos);
-    }
+    gtk_widget_path_append_with_siblings (path, siblings_path, up_pos);
 
   gtk_style_context_set_path (context, path);
   gtk_widget_path_unref (path);
