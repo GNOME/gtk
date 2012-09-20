@@ -721,7 +721,7 @@ gtk_color_button_get_alpha (GtkColorButton *button)
 }
 
 /**
- * gtk_color_button_set_rgba:
+ * gtk_color_button_set_rgba: (skip)
  * @button: a #GtkColorButton
  * @rgba: a #GdkRGBA to set the current color with
  *
