@@ -219,7 +219,6 @@ static void
 gtk_application_set_app_menu_x11 (GtkApplication *application,
                                   GMenuModel     *app_menu)
 {
-  g_free (application->priv->app_menu_path);
   gtk_application_x11_publish_menu (application, "appmenu", app_menu,
                                     &application->priv->app_menu_id,
                                     &application->priv->app_menu_path);
@@ -229,7 +228,6 @@ static void
 gtk_application_set_menubar_x11 (GtkApplication *application,
                                  GMenuModel     *menubar)
 {
-  g_free (application->priv->menubar_path);
   gtk_application_x11_publish_menu (application, "menubar", menubar,
                                     &application->priv->menubar_id,
                                     &application->priv->menubar_path);
@@ -294,13 +292,13 @@ gtk_application_shutdown_x11 (GtkApplication *application)
   application->priv->session_bus = NULL;
   application->priv->object_path = NULL;
 
+  gtk_application_set_app_menu_x11 (application, NULL);
+  gtk_application_set_menubar_x11 (application, NULL);
+
   g_clear_object (&application->priv->sm_proxy);
   g_clear_object (&application->priv->client_proxy);
   g_free (application->priv->app_id);
   g_free (application->priv->client_path);
-
-  g_free (application->priv->app_menu_path);
-  g_free (application->priv->menubar_path);
 }
 
 const gchar *

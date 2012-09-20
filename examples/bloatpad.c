@@ -366,6 +366,7 @@ bloat_pad_startup (GApplication *application)
                                "</interface>", -1, NULL);
   gtk_application_set_app_menu (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
+  //gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   bloatpad->time = G_MENU (gtk_builder_get_object (builder, "time-menu"));
   g_object_unref (builder);
 }
