@@ -21,8 +21,6 @@
 
 #include "gtkcssshadowvalueprivate.h"
 
-#include <math.h>
-
 #include "gtkcairoblurprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
@@ -311,7 +309,7 @@ static cairo_t *
 gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
                                     cairo_t           *cr)
 {
-  cairo_rectangle_t clip;
+  cairo_rectangle_int_t clip_rect;
   cairo_surface_t *surface;
   cairo_t *blur_cr;
   gdouble radius;
@@ -320,16 +318,13 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
   if (radius == 0.0)
     return cr;
 
-  radius = ceil (radius);
-  cairo_clip_extents (cr, &clip.x, &clip.y, &clip.width, &clip.height);
-  clip.x -= radius;
-  clip.y -= radius;
-  clip.width += 2 * radius;
-  clip.height += 2 * radius;
+  gdk_cairo_get_clip_rectangle (cr, &clip_rect);
 
   /* Create a larger surface to center the blur. */
-  surface = cairo_recording_surface_create (CAIRO_CONTENT_COLOR_ALPHA, &clip);
-  cairo_surface_set_device_offset (surface, - clip.x, - clip.y);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        clip_rect.width + 2 * radius,
+                                        clip_rect.height + 2 * radius);
+  cairo_surface_set_device_offset (surface, radius - clip_rect.x, radius - clip_rect.y);
   blur_cr = cairo_create (surface);
   cairo_set_user_data (blur_cr, &shadow_key, cairo_reference (cr), (cairo_destroy_func_t) cairo_destroy);
 
@@ -349,39 +344,23 @@ gtk_css_shadow_value_finish_drawing (const GtkCssValue *shadow,
                                      cairo_t           *cr)
 {
   gdouble radius;
-  cairo_t *original_cr, *image_cr;
-  cairo_surface_t *recording_surface, *image_surface;
-  cairo_rectangle_t ink;
+  cairo_t *original_cr;
+  cairo_surface_t *surface;
 
   radius = _gtk_css_number_value_get (shadow->radius, 0);
   if (radius == 0.0)
     return cr;
 
-  recording_surface = cairo_get_target (cr);
+  surface = cairo_get_target (cr);
   original_cr = cairo_get_user_data (cr, &shadow_key);
 
   /* Blur the surface. */
-  cairo_recording_surface_ink_extents (recording_surface, &ink.x, &ink.y, &ink.width, &ink.height);
-  ink.width = ceil (ink.width + ink.x - floor (ink.x)) + 2 * ceil (radius);
-  ink.height = ceil (ink.height + ink.y - floor (ink.y)) + 2 * ceil (radius);
-  ink.x = floor (ink.x) + ceil (radius);
-  ink.y = floor (ink.y) + ceil (radius);
+  _gtk_cairo_blur_surface (surface, radius);
 
-  image_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, ink.width, ink.height);
-  cairo_surface_set_device_offset (image_surface, - ink.x, - ink.y);
-  
-  image_cr = cairo_create (image_surface);
-  cairo_set_source_surface (image_cr, recording_surface, 0, 0);
-  cairo_paint (image_cr);
-  cairo_destroy (image_cr);
-
-  _gtk_cairo_blur_surface (image_surface, radius);
-
-  cairo_set_source_surface (original_cr, image_surface, 0, 0);
+  cairo_set_source_surface (original_cr, surface, 0, 0);
   cairo_paint (original_cr);
 
   cairo_destroy (cr);
-  cairo_surface_destroy (image_surface);
 
   return original_cr;
 }
