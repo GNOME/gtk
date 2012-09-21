@@ -6248,7 +6248,7 @@ maybe_set_mnemonics_visible (GtkWindow *window)
                                 NULL, &mask);
           if (window->priv->mnemonic_modifier == (mask & gtk_accelerator_get_default_mod_mask ()))
             {
-              gtk_window_set_mnemonics_visible (window, TRUE);
+              _gtk_window_set_auto_mnemonics_visible (window);
               break;
             }
         }
