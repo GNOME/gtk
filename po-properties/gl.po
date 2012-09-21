@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-19 03:00+0200\n"
-"PO-Revision-Date: 2012-09-19 03:04+0200\n"
+"PO-Revision-Date: 2012-09-21 13:26+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -6259,12 +6259,13 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:1174
 msgid "Primary button warps slider"
-msgstr "Sensibilidade do botón primario"
+msgstr "O botón primario deforma o deslizador"
 
 #: ../gtk/gtksettings.c:1175
 msgid ""
 "Whether a primary click on the trough should warp the slider into position"
 msgstr ""
+"Indica si unha pulsación no carril debe deformar o deslizador na posición"
 
 #: ../gtk/gtksettings.c:1191
 msgid "Visible Focus"
