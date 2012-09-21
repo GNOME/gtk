@@ -39,4 +39,7 @@
     <file>gnome-gsame.png</file>
     <file>gnu-keys.png</file>
   </gresource>
+  <gresource prefix="/css_shadows">
+    <file alias="gtk.css">css_shadows.css</file>
+  </gresource>
 </gresources>
