@@ -336,12 +336,14 @@ menu_position_side_func (GtkMenu       *menu,
   GdkScreen *screen;
   GdkWindow *window;
   GtkAlign align;
+  GtkTextDirection direction;
 
   gtk_widget_get_preferred_size (GTK_WIDGET (priv->popup),
                                  &menu_req, NULL);
 
   window = gtk_widget_get_window (widget);
 
+  direction = gtk_widget_get_direction (widget);
   align = gtk_widget_get_valign (GTK_WIDGET (menu));
   screen = gtk_widget_get_screen (GTK_WIDGET (menu));
   monitor_num = gdk_screen_get_monitor_at_window (screen, window);
@@ -353,7 +355,9 @@ menu_position_side_func (GtkMenu       *menu,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  if (priv->arrow_type == GTK_ARROW_RIGHT)
+  if ((priv->arrow_type == GTK_ARROW_RIGHT && direction == GTK_TEXT_DIR_LTR) ||
+      (priv->arrow_type == GTK_ARROW_LEFT && direction == GTK_TEXT_DIR_RTL))
+
     {
       if (*x + allocation.width + menu_req.width <= monitor.x + monitor.width)
         *x += allocation.width;
