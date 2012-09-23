@@ -11,7 +11,7 @@
     <releaseinfo>
       This document is for the GTK+ 2 library; the latest versions can be found online at
       <ulink role="online-location"
-      url="http://library.gnome.org/devel/gtk/">http://library.gnome.org/devel/gtk</ulink>.
+      url="http://library.gnome.org/devel/gtk2/">http://library.gnome.org/devel/gtk2</ulink>.
       If you're looking for the newer GTK+ 3 series of libraries,
       see <ulink role="online-location"
       url="http://library.gnome.org/devel/gtk3/">http://library.gnome.org/devel/gtk3/</ulink>.

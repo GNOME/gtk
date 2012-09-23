@@ -10,7 +10,7 @@
     <releaseinfo>
       This document is for GDK 2 library; the latest versions can be found online at
       <ulink role="online-location"
-      url="http://library.gnome.org/devel/gdk/">http://library.gnome.org/devel/gdk/</ulink>.
+      url="http://library.gnome.org/devel/gdk2/">http://library.gnome.org/devel/gdk2/</ulink>.
       If you're looking for the newer GDK 3 series of libraries,
       see <ulink role="online-location"
       url="http://library.gnome.org/devel/gdk3/">http://library.gnome.org/devel/gdk3/</ulink>.
