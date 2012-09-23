@@ -1,3 +1,19 @@
+Overview of Changes from GTK+ 2.24.12 to 2.24.13
+================================================
+
+* Implement a gtk-primary-button-warps-slider setting
+  that lets us adjust scale and scrollbar behaviour
+  according to platform.
+
+* Bug fixes:
+ 661973 Try harder to discriminate Shift-F10 and F10
+ 675365 Always check if the global context id changed
+ 674108 Hard crash due to wrong NSAutoreleasePool stacking
+
+* Translation updates:
+ Polish
+
+
 Overview of Changes from GTK+ 2.24.11 to 2.24.12
 ================================================
 
