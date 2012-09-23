@@ -1787,6 +1787,7 @@ gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc
 gtk/a11y/Makefile
+gtk/actors/Makefile
 gtk/tests/Makefile
 libgail-util/Makefile
 modules/Makefile
