@@ -1895,6 +1895,42 @@ gtk_tree_model_rows_reordered (GtkTreeModel *tree_model,
   g_signal_emit (tree_model, tree_model_signals[ROWS_REORDERED], 0, path, iter, new_order);
 }
 
+/**
+ * gtk_tree_model_rows_reordered_with_length:
+ * @tree_model: a #GtkTreeModel
+ * @path: a #GtkTreePath pointing to the tree node whose children
+ *     have been reordered
+ * @iter: (allow-none): a valid #GtkTreeIter pointing to the node
+ *     whose children have been reordered, or %NULL if the depth
+ *     of @path is 0
+ * @new_order: (array length=length): an array of integers
+ *     mapping the current position of each child to its old
+ *     position before the re-ordering,
+ *     i.e. @new_order<literal>[newpos] = oldpos</literal>
+ * @length: length of @new_order array
+ *
+ * Emits the #GtkTreeModel::rows-reordered signal on @tree_model.
+ *
+ * This should be called by models when their rows have been
+ * reordered.
+ *
+ * Rename to: gtk_tree_model_rows_reordered
+ *
+ * Since: 3.10
+ */
+void
+gtk_tree_model_rows_reordered_with_length (GtkTreeModel *tree_model,
+                                           GtkTreePath  *path,
+                                           GtkTreeIter  *iter,
+                                           gint         *new_order,
+                                           gint          length)
+{
+  g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
+  g_return_if_fail (new_order != NULL);
+  g_return_if_fail (length == gtk_tree_model_iter_n_children (tree_model, iter));
+
+  g_signal_emit (tree_model, tree_model_signals[ROWS_REORDERED], 0, path, iter, new_order);
+}
 
 static gboolean
 gtk_tree_model_foreach_helper (GtkTreeModel            *model,
