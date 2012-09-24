@@ -1000,7 +1000,7 @@ typedef enum
 
 /**
  * GtkInputHints:
- * @GDK_INPUT_HINT_NONE: No special behaviour suggested
+ * @GTK_INPUT_HINT_NONE: No special behaviour suggested
  * @GTK_INPUT_HINT_SPELLCHECK: Suggest checking for typos
  * @GTK_INPUT_HINT_NO_SPELLCHECK: Suggest not checking for typos
  * @GTK_INPUT_HINT_WORD_COMPLETION: Suggest word completion
