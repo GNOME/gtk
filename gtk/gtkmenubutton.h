@@ -25,7 +25,8 @@
 #ifndef __GTK_MENU_BUTTON_H__
 #define __GTK_MENU_BUTTON_H__
 
-#include <gtk/gtk.h>
+#include <gtk/gtktogglebutton.h>
+#include <gtk/gtkmenu.h>
 
 G_BEGIN_DECLS
 

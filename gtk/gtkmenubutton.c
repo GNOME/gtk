@@ -145,6 +145,9 @@
 #include "gtkmenubutton.h"
 #include "gtkmenubuttonprivate.h"
 #include "gtkarrow.h"
+#include "gtktypebuiltins.h"
+#include "gtkwindow.h"
+#include "gtkmain.h"
 
 #include "gtkprivate.h"
 #include "gtkintl.h"
