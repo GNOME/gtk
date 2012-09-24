@@ -1,3 +1,37 @@
+Overview of Changes in GTK+ 3.6.0
+=================================
+
+* Add support for blur to CSS shadows
+
+* Bugs fixed:
+ 679883 When printing Custom paper sizes GTK Print Dialog...
+ 684258 Crash when calling gtk_application_set_menubar twice
+ 684606 GtkMenuButton: implement rtl flipping
+ 684607 GtkSearchEntry: flip the clear icon in rtl
+        Fix style context path for internal buttons
+
+* Translation updates:
+ Bengali
+ Brazilian Portuguese
+ Bulgarian
+ Catalan
+ Catalan (Valencian)
+ Czech
+ Galician
+ German
+ Gujarati
+ Hebrew
+ Hindi
+ Kannada
+ Kyrgyz
+ Latvian
+ Malayalam
+ Punjabi
+ Russian
+ Serbian
+ Telugu
+
+
 Overview of Changes in GTK+ 3.5.18
 ==================================
 
