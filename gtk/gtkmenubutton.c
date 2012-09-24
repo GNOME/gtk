@@ -747,19 +747,6 @@ gtk_menu_button_get_popup (GtkMenuButton *menu_button)
   return GTK_MENU (menu_button->priv->popup);
 }
 
-void
-gtk_menu_button_set_menu (GtkMenuButton *menu_button,
-                          GtkWidget     *menu)
-{
-  gtk_menu_button_set_popup (menu_button, menu);
-}
-
-GtkMenu *
-gtk_menu_button_get_menu (GtkMenuButton *menu_button)
-{
-  return gtk_menu_button_get_popup (menu_button);
-}
-
 /**
  * gtk_menu_button_set_menu_model:
  * @menu_button: a #GtkMenuButton
