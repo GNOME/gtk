@@ -23,7 +23,7 @@
 #ifndef __GTK_BUILDER_H__
 #define __GTK_BUILDER_H__
 
-#include <glib-object.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
