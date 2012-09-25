@@ -54,6 +54,16 @@ _gtk_size_request_cache_free (SizeRequestCache *cache)
     }
 }
 
+gboolean
+_gtk_size_request_cache_is_empty (SizeRequestCache *cache)
+{
+  return !cache->request_mode_valid
+      && !cache->flags[0].cached_size_valid
+      && !cache->flags[0].n_cached_requests
+      && !cache->flags[1].cached_size_valid
+      && !cache->flags[1].n_cached_requests;
+}
+
 void
 _gtk_size_request_cache_clear (SizeRequestCache *cache)
                                

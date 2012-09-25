@@ -3,10 +3,12 @@ include $(top_srcdir)/Makefile.decl
 noinst_LTLIBRARIES = libgtkactors.la
 
 gtkactors_c_sources =			\
-	gtkactor.c
+	gtkactor.c			\
+	gtklayoutmanager.c
 
 gtkactors_private_h_sources =		\
-	gtkactorprivate.h
+	gtkactorprivate.h		\
+	gtklayoutmanagerprivate.h
 
 libgtkactors_la_SOURCES = 		\
 	$(gtkactors_c_sources)		\

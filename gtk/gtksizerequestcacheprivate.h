@@ -67,6 +67,7 @@ typedef struct {
 void            _gtk_size_request_cache_init                    (SizeRequestCache       *cache);
 void            _gtk_size_request_cache_free                    (SizeRequestCache       *cache);
 
+gboolean        _gtk_size_request_cache_is_empty                (SizeRequestCache       *cache);
 void            _gtk_size_request_cache_clear                   (SizeRequestCache       *cache);
 void            _gtk_size_request_cache_commit                  (SizeRequestCache       *cache,
                                                                  GtkOrientation          orientation,
