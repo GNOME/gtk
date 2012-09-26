@@ -63,15 +63,15 @@ copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h&#x0D;&#x0A;
 echo on&#x0D;&#x0A;
 mkdir $(OutDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\*.dll $(OutDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\*.exe $(OutDir)\bin&#x0D;&#x0A;
 
-mkdir $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy $(ConfigurationName)\$(PlatformName)\bin\*.exe $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.png $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.gif $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.ui $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.jpg $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.c $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.h $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
+mkdir $(OutDir)\share\gtk-$(GtkApiVersion)\demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.png $(OutDir)\share\gtk-$(GtkApiVersion)\demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.gif $(OutDir)\share\gtk-$(GtkApiVersion)\demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.ui $(OutDir)\share\gtk-$(GtkApiVersion)\demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.jpg $(OutDir)\share\gtk-$(GtkApiVersion)\demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.c $(OutDir)\share\gtk-$(GtkApiVersion)\demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.h $(OutDir)\share\gtk-$(GtkApiVersion)\demo&#x0D;&#x0A;
 
 mkdir $(OutDir)\lib&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\*-$(GtkApiVersion).lib $(OutDir)\lib&#x0D;&#x0A;

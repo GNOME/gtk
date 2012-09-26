@@ -18,22 +18,22 @@ mkdir $(CopyDir)\bin
 
 copy $(Configuration)\$(Platform)\bin\*.dll $(CopyDir)\bin
 
+copy $(Configuration)\$(Platform)\bin\*.exe $(CopyDir)\bin
 
-mkdir $(CopyDir)\bin\gtk-demo
 
-copy $(Configuration)\$(Platform)\bin\*.exe $(CopyDir)\bin\gtk-demo
+mkdir $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.png $(CopyDir)\bin\gtk-demo
+copy ..\..\..\demos\gtk-demo\*.png $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.gif $(CopyDir)\bin\gtk-demo
+copy ..\..\..\demos\gtk-demo\*.gif $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.ui $(CopyDir)\bin\gtk-demo
+copy ..\..\..\demos\gtk-demo\*.ui $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.jpg $(CopyDir)\bin\gtk-demo
+copy ..\..\..\demos\gtk-demo\*.jpg $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.c $(CopyDir)\bin\gtk-demo
+copy ..\..\..\demos\gtk-demo\*.c $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.h $(CopyDir)\bin\gtk-demo
+copy ..\..\..\demos\gtk-demo\*.h $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
 
 mkdir $(CopyDir)\lib
