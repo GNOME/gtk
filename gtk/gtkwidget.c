@@ -409,6 +409,9 @@ struct _GtkWidgetPrivate
   /* The widget's parent */
   GtkWidget *parent;
 
+  /* Animations and other things to update on clock ticks */
+  GList *frame_clock_targets;
+
 #ifdef G_ENABLE_DEBUG
   /* Number of gtk_widget_push_verify_invariants () */
   guint verifying_invariants_count;
@@ -4533,6 +4536,7 @@ gtk_widget_realize (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv;
   cairo_region_t *region;
+  GList *tmp_list;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->priv->anchored ||
@@ -4587,6 +4591,12 @@ gtk_widget_realize (GtkWidget *widget)
 
       if (GTK_IS_CONTAINER (widget))
         _gtk_container_maybe_start_idle_sizer (GTK_CONTAINER (widget));
+
+      for (tmp_list = priv->frame_clock_targets; tmp_list; tmp_list = tmp_list->next)
+        {
+          GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
+          gdk_frame_clock_target_set_clock (tmp_list->data, frame_clock);
+        }
 
       gtk_widget_pop_verify_invariants (widget);
     }
@@ -10533,6 +10543,10 @@ gtk_widget_real_destroy (GtkWidget *object)
 
   gtk_grab_remove (widget);
 
+  g_list_foreach (priv->frame_clock_targets, (GFunc)g_object_unref, NULL);
+  g_list_free (priv->frame_clock_targets);
+  priv->frame_clock_targets = NULL;
+
   if (priv->style)
     g_object_unref (priv->style);
   priv->style = gtk_widget_get_default_style ();
@@ -14581,4 +14595,66 @@ gtk_widget_insert_action_group (GtkWidget    *widget,
     g_action_muxer_insert (muxer, name, group);
   else
     g_action_muxer_remove (muxer, name);
+}
+
+/**
+ * gtk_widget_add_frame_clock_target:
+ * @widget: a #GtkWidget
+ * @target: the #GdkClockTarget
+ *
+ * Associates a #GdkClockTarget with the widget. When the widget
+ * is realized and gets a #GdkFrameClock the clock target will be
+ * added to that frame clock.
+ */
+void
+gtk_widget_add_frame_clock_target (GtkWidget           *widget,
+                                   GdkFrameClockTarget *target)
+{
+  GtkWidgetPrivate *priv;
+  priv = widget->priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_FRAME_CLOCK_TARGET (target));
+
+  priv->frame_clock_targets = g_list_prepend (priv->frame_clock_targets, target);
+  g_object_ref (target);
+
+  if (gtk_widget_get_realized (widget))
+    {
+      GdkFrameClock *clock;
+      clock = gtk_widget_get_frame_clock (widget);
+      gdk_frame_clock_target_set_clock (target, clock);
+    }
+}
+
+/**
+ * gtk_widget_remove_frame_clock_target:
+ * @widget: a #GtkWidget
+ * @target: the #GdkClockTarget
+ *
+ * Removes a #GdkClockTarget previously added with
+ * gtk_widget_add_frame_clock_target.
+ */
+void
+gtk_widget_remove_frame_clock_target (GtkWidget          *widget,
+                                      GdkFrameClockTarget *target)
+{
+  GtkWidgetPrivate *priv;
+  GList *tmp_list;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_FRAME_CLOCK_TARGET (target));
+
+  priv = widget->priv;
+
+  tmp_list = g_list_find (priv->frame_clock_targets, target);
+  if (tmp_list == NULL)
+    return;
+
+  priv->frame_clock_targets = g_list_delete_link (priv->frame_clock_targets, tmp_list);
+
+  if (gtk_widget_get_realized (widget))
+    gdk_frame_clock_target_set_clock (target, NULL);
+
+  g_object_unref (target);
 }

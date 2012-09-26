@@ -358,20 +358,21 @@ struct _GtkStyleContextPrivate
 
   GtkStyleCascade *cascade;
 
-  GtkStyleContext *animation_list_prev;
-  GtkStyleContext *animation_list_next;
-
   GtkStyleContext *parent;
   GSList *children;
-  GtkWidget *widget;            
+  GtkWidget *widget;
   GtkWidgetPath *widget_path;
   GHashTable *style_data;
   GtkStyleInfo *info;
+
+  GdkFrameClock *frame_clock;
+  guint frame_clock_update_id;
 
   GtkCssChange relevant_changes;
   GtkCssChange pending_changes;
 
   const GtkBitmask *invalidating_context;
+  guint animating : 1;
   guint invalid : 1;
 };
 
@@ -388,10 +389,10 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
-static GtkStyleContext *_running_animations = NULL;
-guint _running_animations_timer_id = 0;
 
 static void gtk_style_context_finalize (GObject *object);
+
+static void frame_clock_target_iface_init (GdkFrameClockTargetInterface *target);
 
 static void gtk_style_context_impl_set_property (GObject      *object,
                                                  guint         prop_id,
@@ -404,7 +405,11 @@ static void gtk_style_context_impl_get_property (GObject      *object,
 static StyleData *style_data_lookup             (GtkStyleContext *context);
 
 
-G_DEFINE_TYPE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT)
+static void gtk_style_context_disconnect_update (GtkStyleContext *context);
+static void gtk_style_context_connect_update    (GtkStyleContext *context);
+
+G_DEFINE_TYPE_WITH_CODE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_FRAME_CLOCK_TARGET, frame_clock_target_iface_init))
 
 static void
 gtk_style_context_real_changed (GtkStyleContext *context)
@@ -467,6 +472,25 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                                                         GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkStyleContextPrivate));
+}
+
+static void
+gtk_style_context_set_clock (GdkFrameClockTarget *target,
+                             GdkFrameClock       *clock)
+{
+  GtkStyleContext *context = GTK_STYLE_CONTEXT (target);
+  GtkStyleContextPrivate *priv = context->priv;
+
+  gtk_style_context_disconnect_update (context);
+  priv->frame_clock = clock;
+  if (priv->animating)
+    gtk_style_context_connect_update (context);
+}
+
+static void
+frame_clock_target_iface_init (GdkFrameClockTargetInterface *iface)
+{
+  iface->set_clock = gtk_style_context_set_clock;
 }
 
 static StyleData *
@@ -724,19 +748,14 @@ gtk_style_context_init (GtkStyleContext *style_context)
                                  _gtk_style_cascade_get_for_screen (priv->screen));
 }
 
-static gboolean
-gtk_style_context_do_animations (gpointer unused)
+static void
+gtk_style_context_update (GdkFrameClock  *clock,
+                          GtkStyleContext *context)
 {
-  GtkStyleContext *context;
+  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANIMATE);
 
-  for (context = _running_animations;
-       context != NULL;
-       context = context->priv->animation_list_next)
-    {
-      _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANIMATE);
-    }
-
-  return TRUE;
+  /* A little blech to request one more than we need */
+  gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
 }
 
 static gboolean
@@ -744,8 +763,35 @@ gtk_style_context_is_animating (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv = context->priv;
 
-  return priv->animation_list_prev != NULL
-      || _running_animations == context;
+  return priv->animating;
+}
+
+static void
+gtk_style_context_disconnect_update (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  if (priv->frame_clock && priv->frame_clock_update_id)
+    {
+      g_signal_handler_disconnect (priv->frame_clock,
+                                   priv->frame_clock_update_id);
+      priv->frame_clock_update_id = 0;
+    }
+}
+
+static void
+gtk_style_context_connect_update (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  if (priv->frame_clock && priv->frame_clock_update_id == 0)
+    {
+      priv->frame_clock_update_id = g_signal_connect (priv->frame_clock,
+                                                      "update",
+                                                      G_CALLBACK (gtk_style_context_update),
+                                                      context);
+      gdk_frame_clock_request_phase (priv->frame_clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
+    }
 }
 
 static void
@@ -756,25 +802,14 @@ gtk_style_context_stop_animating (GtkStyleContext *context)
   if (!gtk_style_context_is_animating (context))
     return;
 
-  if (priv->animation_list_prev == NULL)
+  priv->animating = FALSE;
+
+  gtk_style_context_disconnect_update (context);
+  if (priv->widget)
     {
-      _running_animations = priv->animation_list_next;
-
-      if (_running_animations == NULL)
-        {
-          /* we were the last animation */
-          g_source_remove (_running_animations_timer_id);
-          _running_animations_timer_id = 0;
-        }
+      gtk_widget_remove_frame_clock_target (priv->widget,
+                                            GDK_FRAME_CLOCK_TARGET (context));
     }
-  else
-    priv->animation_list_prev->priv->animation_list_next = priv->animation_list_next;
-
-  if (priv->animation_list_next)
-    priv->animation_list_next->priv->animation_list_prev = priv->animation_list_prev;
-
-  priv->animation_list_next = NULL;
-  priv->animation_list_prev = NULL;
 }
 
 static void
@@ -785,18 +820,13 @@ gtk_style_context_start_animating (GtkStyleContext *context)
   if (gtk_style_context_is_animating (context))
     return;
 
-  if (_running_animations == NULL)
+  priv->animating = TRUE;
+
+  gtk_style_context_connect_update (context);
+  if (priv->widget)
     {
-      _running_animations_timer_id = gdk_threads_add_timeout (25,
-                                                              gtk_style_context_do_animations,
-                                                              NULL);
-      _running_animations = context;
-    }
-  else
-    {
-      priv->animation_list_next = _running_animations;
-      _running_animations->priv->animation_list_prev = context;
-      _running_animations = context;
+      gtk_widget_add_frame_clock_target (priv->widget,
+                                         GDK_FRAME_CLOCK_TARGET (context));
     }
 }
 

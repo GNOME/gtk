@@ -28,6 +28,19 @@
 
 #include "gdkframeclock.h"
 
+G_DEFINE_INTERFACE (GdkFrameClockTarget, gdk_frame_clock_target, G_TYPE_OBJECT)
+
+static void
+gdk_frame_clock_target_default_init (GdkFrameClockTargetInterface *iface)
+{
+}
+
+void gdk_frame_clock_target_set_clock (GdkFrameClockTarget *target,
+                                       GdkFrameClock       *clock)
+{
+  GDK_FRAME_CLOCK_TARGET_GET_IFACE (target)->set_clock (target, clock);
+}
+
 /**
  * SECTION:frameclock
  * @Short_description: Frame clock syncs painting to a window or display
@@ -79,6 +92,7 @@ G_DEFINE_INTERFACE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
 enum {
   FRAME_REQUESTED,
   BEFORE_PAINT,
+  UPDATE,
   LAYOUT,
   PAINT,
   AFTER_PAINT,
@@ -116,6 +130,21 @@ gdk_frame_clock_default_init (GdkFrameClockInterface *iface)
    */
   signals[BEFORE_PAINT] =
     g_signal_new (g_intern_static_string ("before-paint"),
+                  GDK_TYPE_FRAME_CLOCK,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
+  /**
+   * GdkFrameClock::update:
+   * @clock: the frame clock emitting the signal
+   *
+   * FIXME.
+   */
+  signals[UPDATE] =
+    g_signal_new (g_intern_static_string ("update"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,

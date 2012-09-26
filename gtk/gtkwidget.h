@@ -905,6 +905,13 @@ void                    gtk_widget_insert_action_group                  (GtkWidg
                                                                          const gchar  *name,
                                                                          GActionGroup *group);
 
+GDK_AVAILABLE_IN_3_2
+void gtk_widget_add_frame_clock_target (GtkWidget           *widget,
+                                        GdkFrameClockTarget *target);
+GDK_AVAILABLE_IN_3_2
+void gtk_widget_remove_frame_clock_target (GtkWidget           *widget,
+                                           GdkFrameClockTarget *target);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_H__ */
