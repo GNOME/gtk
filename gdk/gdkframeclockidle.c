@@ -189,7 +189,16 @@ gdk_frame_clock_paint_idle (void *data)
            * they don't get repeated if you freeze/thaw while
            * in them. */
 	  g_signal_emit_by_name (G_OBJECT (clock), "before-paint");
-	  priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
+	  priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
+	}
+    case GDK_FRAME_CLOCK_PHASE_UPDATE:
+      if (priv->freeze_count == 0)
+	{
+          if (priv->requested & GDK_FRAME_CLOCK_PHASE_UPDATE)
+            {
+              priv->requested &= ~GDK_FRAME_CLOCK_PHASE_UPDATE;
+              g_signal_emit_by_name (G_OBJECT (clock), "update");
+            }
 	}
     case GDK_FRAME_CLOCK_PHASE_LAYOUT:
       if (priv->freeze_count == 0)
