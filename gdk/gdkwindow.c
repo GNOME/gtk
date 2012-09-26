@@ -10038,7 +10038,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
 {
   GdkWindow *event_window;
   gdouble x, y;
-  gboolean unlink_event;
+  gboolean unlink_event = FALSE;
   GdkDeviceGrabInfo *button_release_grab;
   GdkPointerWindowInfo *pointer_info = NULL;
   GdkDevice *device, *source_device;
@@ -10081,7 +10081,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
 
   event_window = event->any.window;
   if (!event_window)
-    return;
+    goto out;
 
 #ifdef DEBUG_WINDOW_PRINTING
   if (event->type == GDK_KEY_PRESS &&
@@ -10096,13 +10096,13 @@ _gdk_windowing_got_event (GdkDisplay *display,
     {
       event_window->native_visibility = event->visibility.state;
       gdk_window_update_visibility_recursively (event_window, event_window);
-      return;
+      goto out;
     }
 
   if (!(is_button_type (event->type) ||
         is_motion_type (event->type)) ||
       event_window->window_type == GDK_WINDOW_ROOT)
-    return;
+    goto out;
 
   is_toplevel = gdk_window_is_toplevel (event_window);
 
@@ -10195,7 +10195,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
         _gdk_display_enable_motion_hints (display, device);
     }
 
-  unlink_event = FALSE;
   if (is_motion_type (event->type))
     unlink_event = proxy_pointer_event (display, event, serial);
   else if (is_button_type (event->type))
@@ -10237,6 +10236,13 @@ _gdk_windowing_got_event (GdkDisplay *display,
       g_list_free_1 (event_link);
       gdk_event_free (event);
     }
+
+  /* This does two things - first it sees if there are motions at the
+   * end of the queue that can be compressed. Second, if there is just
+   * a single motion that won't be dispatched because it is a compression
+   * candidate it queues up flushing the event queue.
+   */
+  _gdk_event_queue_handle_motion_compression (display);
 }
 
 /**
@@ -11604,6 +11610,22 @@ gdk_property_delete (GdkWindow *window,
 }
 
 static void
+gdk_window_flush_events (GdkFrameClock *clock,
+                         void          *data)
+{
+  GdkWindow *window;
+  GdkDisplay *display;
+
+  window = GDK_WINDOW (data);
+
+  display = gdk_window_get_display (window);
+  _gdk_display_flush_events (display);
+  _gdk_display_set_events_paused (display, TRUE);
+
+  gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS);
+}
+
+static void
 gdk_window_paint_on_clock (GdkFrameClock *clock,
 			   void          *data)
 {
@@ -11614,6 +11636,19 @@ gdk_window_paint_on_clock (GdkFrameClock *clock,
   /* Update window and any children on the same clock.
    */
   gdk_window_process_updates_with_mode (window, PROCESS_UPDATES_WITH_SAME_CLOCK_CHILDREN);
+}
+
+static void
+gdk_window_resume_events (GdkFrameClock *clock,
+                          void          *data)
+{
+  GdkWindow *window;
+  GdkDisplay *display;
+
+  window = GDK_WINDOW (data);
+
+  display = gdk_window_get_display (window);
+  _gdk_display_set_events_paused (display, FALSE);
 }
 
 /**
@@ -11652,15 +11687,29 @@ gdk_window_set_frame_clock (GdkWindow     *window,
     {
       g_object_ref (clock);
       g_signal_connect (G_OBJECT (clock),
+                        "flush-events",
+                        G_CALLBACK (gdk_window_flush_events),
+                        window);
+      g_signal_connect (G_OBJECT (clock),
                         "paint",
                         G_CALLBACK (gdk_window_paint_on_clock),
+                        window);
+      g_signal_connect (G_OBJECT (clock),
+                        "resume-events",
+                        G_CALLBACK (gdk_window_resume_events),
                         window);
     }
 
   if (window->frame_clock)
     {
       g_signal_handlers_disconnect_by_func (G_OBJECT (window->frame_clock),
+                                            G_CALLBACK (gdk_window_flush_events),
+                                            window);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (window->frame_clock),
                                             G_CALLBACK (gdk_window_paint_on_clock),
+                                            window);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (window->frame_clock),
+                                            G_CALLBACK (gdk_window_resume_events),
                                             window);
       g_object_unref (window->frame_clock);
     }

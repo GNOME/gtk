@@ -300,6 +300,9 @@ GList* _gdk_event_queue_insert_after (GdkDisplay *display,
 GList* _gdk_event_queue_insert_before(GdkDisplay *display,
                                       GdkEvent   *after_event,
                                       GdkEvent   *event);
+
+void    _gdk_event_queue_handle_motion_compression (GdkDisplay *display);
+
 void   _gdk_event_button_generate    (GdkDisplay *display,
                                       GdkEvent   *event);
 

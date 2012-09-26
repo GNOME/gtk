@@ -85,13 +85,27 @@ _gdk_event_emit (GdkEvent *event)
 GList*
 _gdk_event_queue_find_first (GdkDisplay *display)
 {
-  GList *tmp_list = display->queued_events;
+  GList *tmp_list;
+  GList *pending_motion = NULL;
 
+  if (display->events_paused)
+    return NULL;
+
+  tmp_list = display->queued_events;
   while (tmp_list)
     {
       GdkEventPrivate *event = tmp_list->data;
-      if (!(event->flags & GDK_EVENT_PENDING))
-	return tmp_list;
+
+      if (event->flags & GDK_EVENT_PENDING)
+        continue;
+
+      if (pending_motion)
+        return pending_motion;
+
+      if (event->event.type == GDK_MOTION_NOTIFY && !display->flushing_events)
+        pending_motion = tmp_list;
+      else
+        return tmp_list;
 
       tmp_list = g_list_next (tmp_list);
     }
@@ -246,6 +260,55 @@ _gdk_event_unqueue (GdkDisplay *display)
     }
 
   return event;
+}
+
+void
+_gdk_event_queue_handle_motion_compression (GdkDisplay *display)
+{
+  GList *tmp_list;
+  GList *pending_motions = NULL;
+  GdkWindow *pending_motion_window = NULL;
+
+  /* If the last N events in the event queue are motion notify
+   * events for the same window, drop all but the last */
+
+  tmp_list = display->queued_tail;
+
+  while (tmp_list)
+    {
+      GdkEventPrivate *event = tmp_list->data;
+
+      if (event->flags & GDK_EVENT_PENDING)
+        break;
+
+      if (event->event.type != GDK_MOTION_NOTIFY)
+        break;
+
+      if (pending_motion_window != NULL &&
+          pending_motion_window != event->event.motion.window)
+        break;
+
+      pending_motion_window = event->event.motion.window;
+      pending_motions = tmp_list;
+
+      tmp_list = tmp_list->prev;
+    }
+
+  while (pending_motions && pending_motions->next != NULL)
+    {
+      GList *next = pending_motions->next;
+      display->queued_events = g_list_delete_link (display->queued_events,
+                                                   pending_motions);
+      pending_motions = next;
+    }
+
+  if (pending_motions &&
+      pending_motions == display->queued_events &&
+      pending_motions == display->queued_tail)
+    {
+      GdkFrameClock *clock = gdk_window_get_frame_clock (pending_motion_window);
+      gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
+    }
 }
 
 /**

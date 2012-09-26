@@ -26,6 +26,7 @@ endif
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
 	animated-resizing		\
+	motion-compression		\
 	simple				\
 	flicker				\
 	print-editor			\
@@ -152,6 +153,7 @@ endif
 
 animated_resizing_DEPENDENCIES = $(TEST_DEPS)
 flicker_DEPENDENCIES = $(TEST_DEPS)
+motion_compression_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
 testheightforwidth_DEPENDENCIES = $(TEST_DEPS)
