@@ -934,18 +934,16 @@ gtk_style_context_impl_get_property (GObject    *object,
 }
 
 static GtkWidgetPath *
-create_query_path (GtkStyleContext *context)
+create_query_path (GtkStyleContext *context,
+                   GtkStyleInfo    *info)
 {
   GtkStyleContextPrivate *priv;
   GtkWidgetPath *path;
-  GtkStyleInfo *info;
   guint i, pos;
 
   priv = context->priv;
   path = priv->widget ? _gtk_widget_create_path (priv->widget) : gtk_widget_path_copy (priv->widget_path);
   pos = gtk_widget_path_length (path) - 1;
-
-  info = priv->info;
 
   /* Set widget regions */
   for (i = 0; i < info->regions->len; i++)
@@ -974,7 +972,7 @@ create_query_path (GtkStyleContext *context)
 static void
 build_properties (GtkStyleContext      *context,
                   GtkCssComputedValues *values,
-                  GtkStateFlags         state,
+                  GtkStyleInfo         *info,
                   const GtkBitmask     *relevant_changes)
 {
   GtkStyleContextPrivate *priv;
@@ -984,10 +982,10 @@ build_properties (GtkStyleContext      *context,
 
   priv = context->priv;
 
-  path = create_query_path (context);
+  path = create_query_path (context, info);
   lookup = _gtk_css_lookup_new (relevant_changes);
 
-  if (_gtk_css_matcher_init (&matcher, path, state))
+  if (_gtk_css_matcher_init (&matcher, path, info->state_flags))
     _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                         &matcher,
                                         lookup);
@@ -1028,7 +1026,7 @@ style_data_lookup (GtkStyleContext *context)
                        style_info_copy (info),
                        data);
 
-  build_properties (context, data->store, info->state_flags, NULL);
+  build_properties (context, data->store, info, NULL);
 
   return data;
 }
@@ -2998,7 +2996,7 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
       if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_FONT_SIZE))
         changes = _gtk_bitmask_union (changes, data->store->depends_on_font_size);
 
-      build_properties (context, data->store, info->state_flags, changes);
+      build_properties (context, data->store, info, changes);
     }
 }
 
@@ -3058,7 +3056,7 @@ gtk_style_context_needs_full_revalidate (GtkStyleContext  *context,
           GtkWidgetPath *path;
           GtkCssMatcher matcher;
 
-          path = create_query_path (context);
+          path = create_query_path (context, priv->info);
           if (_gtk_css_matcher_init (&matcher, path, priv->info->state_flags))
             priv->relevant_changes = _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                                                              &matcher);
