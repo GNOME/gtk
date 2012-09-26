@@ -114,6 +114,8 @@ struct _GdkDisplay
   GdkDevice *core_pointer;  /* Core pointer device */
 
   guint closed             : 1;  /* Whether this display has been closed */
+  guint events_paused      : 1;  /* Whether events are blocked */
+  guint flushing_events    : 1;  /* Inside gdk_display_flush_events */
 
   GArray *touch_implicit_grabs;
   GHashTable *device_grabs;
@@ -296,6 +298,9 @@ void                _gdk_display_pointer_info_foreach (GdkDisplay       *display
                                                        GdkDisplayPointerInfoForeach func,
                                                        gpointer          user_data);
 gulong              _gdk_display_get_next_serial      (GdkDisplay       *display);
+void                _gdk_display_set_events_paused    (GdkDisplay       *display,
+                                                       gboolean          events_paused);
+void                _gdk_display_flush_events         (GdkDisplay       *display);
 void                _gdk_display_event_data_copy      (GdkDisplay       *display,
                                                        const GdkEvent   *event,
                                                        GdkEvent         *new_event);

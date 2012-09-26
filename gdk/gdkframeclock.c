@@ -91,11 +91,13 @@ G_DEFINE_INTERFACE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
 
 enum {
   FRAME_REQUESTED,
+  FLUSH_EVENTS,
   BEFORE_PAINT,
   UPDATE,
   LAYOUT,
   PAINT,
   AFTER_PAINT,
+  RESUME_EVENTS,
   LAST_SIGNAL
 };
 
@@ -113,6 +115,21 @@ gdk_frame_clock_default_init (GdkFrameClockInterface *iface)
    */
   signals[FRAME_REQUESTED] =
     g_signal_new (g_intern_static_string ("frame-requested"),
+                  GDK_TYPE_FRAME_CLOCK,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
+  /**
+   * GdkFrameClock::flush-events:
+   * @clock: the frame clock emitting the signal
+   *
+   * FIXME.
+   */
+  signals[FLUSH_EVENTS] =
+    g_signal_new (g_intern_static_string ("flush-events"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
@@ -196,6 +213,21 @@ gdk_frame_clock_default_init (GdkFrameClockInterface *iface)
    */
   signals[AFTER_PAINT] =
     g_signal_new (g_intern_static_string ("after-paint"),
+                  GDK_TYPE_FRAME_CLOCK,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
+  /**
+   * GdkFrameClock::resume-events:
+   * @clock: the frame clock emitting the signal
+   *
+   * FIXME.
+   */
+  signals[RESUME_EVENTS] =
+    g_signal_new (g_intern_static_string ("resume-events"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,

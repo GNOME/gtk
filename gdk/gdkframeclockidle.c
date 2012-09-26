@@ -39,13 +39,15 @@ struct _GdkFrameClockIdlePrivate
   guint64 frame_time;
   guint64 min_next_frame_time;
 
-  guint idle_id;
+  guint flush_idle_id;
+  guint paint_idle_id;
   guint freeze_count;
 
   GdkFrameClockPhase requested;
   GdkFrameClockPhase phase;
 };
 
+static gboolean gdk_frame_clock_flush_idle (void *data);
 static gboolean gdk_frame_clock_paint_idle (void *data);
 
 static void gdk_frame_clock_idle_finalize             (GObject                *object);
@@ -144,7 +146,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
 {
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
-  if (priv->idle_id == 0 && priv->freeze_count == 0 && priv->requested != 0)
+  if (priv->freeze_count == 0)
     {
       guint min_interval = 0;
 
@@ -155,14 +157,53 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
           min_interval = (min_interval_us + 500) / 1000;
         }
 
-      priv->idle_id = gdk_threads_add_timeout_full (GDK_PRIORITY_REDRAW,
-                                                    min_interval,
-                                                    gdk_frame_clock_paint_idle,
-                                                    g_object_ref (clock_idle),
-                                                    (GDestroyNotify) g_object_unref);
+      if (priv->flush_idle_id == 0 &&
+          (priv->requested & GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS) != 0)
+        {
+          priv->flush_idle_id = gdk_threads_add_timeout_full (GDK_PRIORITY_EVENTS + 1,
+                                                              min_interval,
+                                                              gdk_frame_clock_flush_idle,
+                                                              g_object_ref (clock_idle),
+                                                              (GDestroyNotify) g_object_unref);
+        }
 
-      gdk_frame_clock_frame_requested (GDK_FRAME_CLOCK (clock_idle));
+      if (priv->paint_idle_id == 0 &&
+          (priv->requested & ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS) != 0)
+        {
+          priv->paint_idle_id = gdk_threads_add_timeout_full (GDK_PRIORITY_REDRAW,
+                                                              min_interval,
+                                                              gdk_frame_clock_paint_idle,
+                                                              g_object_ref (clock_idle),
+                                                              (GDestroyNotify) g_object_unref);
+
+          gdk_frame_clock_frame_requested (GDK_FRAME_CLOCK (clock_idle));
+        }
     }
+}
+
+static gboolean
+gdk_frame_clock_flush_idle (void *data)
+{
+  GdkFrameClock *clock = GDK_FRAME_CLOCK (data);
+  GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
+  GdkFrameClockIdlePrivate *priv = clock_idle->priv;
+
+  priv->flush_idle_id = 0;
+
+  if (priv->phase != GDK_FRAME_CLOCK_PHASE_NONE)
+    return FALSE;
+
+  priv->phase = GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
+  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
+
+  g_signal_emit_by_name (G_OBJECT (clock), "flush-events");
+
+  if ((priv->requested & ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS) != 0)
+    priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
+  else
+    priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+
+  return FALSE;
 }
 
 static gboolean
@@ -171,25 +212,34 @@ gdk_frame_clock_paint_idle (void *data)
   GdkFrameClock *clock = GDK_FRAME_CLOCK (data);
   GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
+  gboolean skip_to_resume_events;
 
-  priv->idle_id = 0;
+  priv->paint_idle_id = 0;
+
+  skip_to_resume_events =
+    (priv->requested & ~(GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS | GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS)) == 0;
 
   switch (priv->phase)
     {
+    case GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS:
+      break;
     case GDK_FRAME_CLOCK_PHASE_NONE:
     case GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT:
       if (priv->freeze_count == 0)
 	{
           priv->frame_time = compute_frame_time (clock_idle);
 
-	  priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
-          priv->requested &= ~GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
-          /* We always emit ::before-paint and ::after-paint even if
-           * not explicitly requested, and unlike other phases,
+          priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
+          /* We always emit ::before-paint and ::after-paint if
+           * any of the intermediate phases are requested and
            * they don't get repeated if you freeze/thaw while
            * in them. */
-	  g_signal_emit_by_name (G_OBJECT (clock), "before-paint");
-	  priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
+          if (!skip_to_resume_events)
+            {
+              priv->requested &= ~GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
+              g_signal_emit_by_name (G_OBJECT (clock), "before-paint");
+            }
+          priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
 	}
     case GDK_FRAME_CLOCK_PHASE_UPDATE:
       if (priv->freeze_count == 0)
@@ -224,9 +274,24 @@ gdk_frame_clock_paint_idle (void *data)
       if (priv->freeze_count == 0)
 	{
 	  priv->phase = GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
-          priv->requested &= ~GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
-	  g_signal_emit_by_name (G_OBJECT (clock), "after-paint");
-          /* the ::after-paint phase doesn't get repeated on freeze/thaw */
+          if (!skip_to_resume_events)
+            {
+              priv->requested &= ~GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
+              g_signal_emit_by_name (G_OBJECT (clock), "after-paint");
+            }
+          /* the ::after-paint phase doesn't get repeated on freeze/thaw,
+           */
+          priv->phase = GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS;
+	}
+    case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
+      if (priv->freeze_count == 0)
+	{
+          if (priv->requested & GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS)
+            {
+              priv->requested &= ~GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS;
+              g_signal_emit_by_name (G_OBJECT (clock), "resume-events");
+            }
+          /* the ::resume-event phase doesn't get repeated on freeze/thaw */
 	  priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
 	}
     }
@@ -276,10 +341,15 @@ gdk_frame_clock_idle_freeze (GdkFrameClock *clock)
 
   if (priv->freeze_count == 1)
     {
-      if (priv->idle_id)
+      if (priv->flush_idle_id)
 	{
-	  g_source_remove (priv->idle_id);
-	  priv->idle_id = 0;
+	  g_source_remove (priv->flush_idle_id);
+	  priv->flush_idle_id = 0;
+	}
+      if (priv->paint_idle_id)
+	{
+	  g_source_remove (priv->paint_idle_id);
+	  priv->paint_idle_id = 0;
 	}
     }
 }
@@ -294,7 +364,14 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
 
   priv->freeze_count--;
   if (priv->freeze_count == 0)
-    maybe_start_idle (clock_idle);
+    {
+      maybe_start_idle (clock_idle);
+      /* If nothing is requested so we didn't start an idle, we need
+       * to skip to the end of the state chain, since the idle won't
+       * run and do it for us. */
+      if (priv->paint_idle_id == 0)
+        priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+    }
 }
 
 static void

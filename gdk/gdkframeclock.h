@@ -64,12 +64,14 @@ void gdk_frame_clock_target_set_clock (GdkFrameClockTarget *target,
 #define GDK_FRAME_CLOCK_GET_IFACE(inst)  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GDK_TYPE_FRAME_CLOCK, GdkFrameClockInterface))
 
 typedef enum {
-  GDK_FRAME_CLOCK_PHASE_NONE         = 0,
-  GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT = 1 << 0,
-  GDK_FRAME_CLOCK_PHASE_UPDATE       = 1 << 1,
-  GDK_FRAME_CLOCK_PHASE_LAYOUT       = 1 << 2,
-  GDK_FRAME_CLOCK_PHASE_PAINT        = 1 << 3,
-  GDK_FRAME_CLOCK_PHASE_AFTER_PAINT  = 1 << 4
+  GDK_FRAME_CLOCK_PHASE_NONE          = 0,
+  GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS  = 1 << 0,
+  GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT  = 1 << 1,
+  GDK_FRAME_CLOCK_PHASE_UPDATE        = 1 << 2,
+  GDK_FRAME_CLOCK_PHASE_LAYOUT        = 1 << 3,
+  GDK_FRAME_CLOCK_PHASE_PAINT         = 1 << 4,
+  GDK_FRAME_CLOCK_PHASE_AFTER_PAINT   = 1 << 5,
+  GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS = 1 << 6
 } GdkFrameClockPhase;
 
 struct _GdkFrameClockInterface
@@ -87,11 +89,13 @@ struct _GdkFrameClockInterface
 
   /* signals */
   /* void (* frame_requested)    (GdkFrameClock *clock); */
+  /* void (* flush_events)       (GdkFrameClock *clock); */
   /* void (* before_paint)       (GdkFrameClock *clock); */
   /* void (* update)             (GdkFrameClock *clock); */
   /* void (* layout)             (GdkFrameClock *clock); */
   /* void (* paint)              (GdkFrameClock *clock); */
   /* void (* after_paint)        (GdkFrameClock *clock); */
+  /* void (* resume_events)      (GdkFrameClock *clock); */
 };
 
 GType    gdk_frame_clock_get_type             (void) G_GNUC_CONST;
