@@ -195,7 +195,8 @@ _gtk_text_handle_create_window (GtkTextHandle *handle)
       mask |= GDK_WA_VISUAL;
     }
 
-  window = gdk_window_new (NULL, &attributes, mask);
+  window = gdk_window_new (gtk_widget_get_root_window (priv->parent),
+			   &attributes, mask);
   gdk_window_set_user_data (window, priv->parent);
   gdk_window_set_background_rgba (window, &bg);
 

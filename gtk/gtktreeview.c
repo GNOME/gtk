@@ -3923,7 +3923,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
           attributes.y = y;
 	  attributes.width = width;
 	  attributes.height = height;
-	  tree_view->priv->drag_highlight_window = gdk_window_new (NULL, &attributes, attributes_mask);
+	  tree_view->priv->drag_highlight_window = gdk_window_new (gtk_widget_get_root_window (widget), &attributes, attributes_mask);
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
 	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
