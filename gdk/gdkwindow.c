@@ -1363,6 +1363,11 @@ gdk_window_new (GdkWindow     *parent,
       return NULL;
     }
 
+  if (attributes_mask & GDK_WA_VISUAL)
+    {
+      g_return_val_if_fail (gdk_visual_get_screen (attributes->visual) == screen, NULL);
+    }
+
   display = gdk_screen_get_display (screen);
 
   window = _gdk_display_create_window (display);
