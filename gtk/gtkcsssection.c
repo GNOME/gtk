@@ -303,3 +303,45 @@ gtk_css_section_get_end_position (const GtkCssSection *section)
     return section->end_position;
 }
 
+void
+_gtk_css_section_print (const GtkCssSection  *section,
+                        GString              *string)
+{
+  if (section->file)
+    {
+      GFileInfo *info;
+
+      info = g_file_query_info (section->file, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
+
+      if (info)
+        {
+          g_string_append (string, g_file_info_get_display_name (info));
+          g_object_unref (info);
+        }
+      else
+        {
+          g_string_append (string, "<broken file>");
+        }
+    }
+  else
+    {
+      g_string_append (string, "<data>");
+    }
+
+  g_string_append_printf (string, ":%u:%u", 
+                          gtk_css_section_get_end_line (section) + 1,
+                          gtk_css_section_get_end_position (section));
+}
+
+char *
+_gtk_css_section_to_string (const GtkCssSection *section)
+{
+  GString *string;
+
+  g_return_val_if_fail (section != NULL, NULL);
+
+  string = g_string_new (NULL);
+  _gtk_css_section_print (section, string);
+
+  return g_string_free (string, FALSE);
+}

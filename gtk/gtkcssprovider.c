@@ -1063,34 +1063,13 @@ gtk_css_provider_parsing_error (GtkCssProvider  *provider,
                                      0,
                                      TRUE))
     {
-      GFileInfo *info;
-      GFile *file;
-      const char *path;
+      char *s = _gtk_css_section_to_string (section);
 
-      file = gtk_css_section_get_file (section);
-      if (file)
-        {
-          info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
-
-          if (info)
-            path = g_file_info_get_display_name (info);
-          else
-            path = "<broken file>";
-        }
-      else
-        {
-          info = NULL;
-          path = "<data>";
-        }
-
-      g_warning ("Theme parsing error: %s:%u:%u: %s",
-                 path,
-                 gtk_css_section_get_end_line (section) + 1,
-                 gtk_css_section_get_end_position (section),
+      g_warning ("Theme parsing error: %s: %s",
+                 s,
                  error->message);
 
-      if (info)
-        g_object_unref (info);
+      g_free (s);
     }
 }
 
@@ -1826,32 +1805,14 @@ gtk_css_provider_propagate_error (GtkCssProvider  *provider,
                                   GError         **propagate_to)
 {
 
-  GFileInfo *info;
-  GFile *file;
-  const char *path;
-
-  file = gtk_css_section_get_file (section);
-  if (file)
-    {
-      info = g_file_query_info (file,G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
-
-      if (info)
-        path = g_file_info_get_display_name (info);
-      else
-        path = "<broken file>";
-    }
-  else
-    {
-      info = NULL;
-      path = "<unknown>";
-    }
+  char *s;
 
   /* don't fail for deprecations */
   if (g_error_matches (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED))
     {
-      g_warning ("Theme parsing error: %s:%u:%u: %s", path,
-                 gtk_css_section_get_end_line (section) + 1,
-                 gtk_css_section_get_end_position (section), error->message);
+      s = _gtk_css_section_to_string (section);
+      g_warning ("Theme parsing error: %s: %s", s, error->message);
+      g_free (s);
       return;
     }
 
@@ -1860,12 +1821,9 @@ gtk_css_provider_propagate_error (GtkCssProvider  *provider,
     return;
 
   *propagate_to = g_error_copy (error);
-  g_prefix_error (propagate_to, "%s:%u:%u: ", path,
-                  gtk_css_section_get_end_line (section) + 1,
-                  gtk_css_section_get_end_position (section));
-
-  if (info)
-    g_object_unref (info);
+  s = _gtk_css_section_to_string (section);
+  g_prefix_error (propagate_to, "%s", s);
+  g_free (s);
 }
 
 static gboolean
