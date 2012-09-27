@@ -52,6 +52,7 @@ enum {
   PROP_LOOP,
   PROP_DIRECTION,
   PROP_FRAME_CLOCK,
+  PROP_PROGRESS_TYPE,
   PROP_SCREEN,
   PROP_WIDGET
 };
@@ -119,6 +120,14 @@ gtk_timeline_class_init (GtkTimelineClass *klass)
                                                         "clock used for timing the animation (not needed if :widget is set)",
                                                         GDK_TYPE_FRAME_CLOCK,
                                                         G_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+                                   PROP_PROGRESS_TYPE,
+                                   g_param_spec_enum ("progress-type",
+                                                      "Progress Type",
+                                                      "Easing function for animation progress",
+                                                      GTK_TYPE_TIMELINE_PROGRESS_TYPE,
+                                                      GTK_TIMELINE_PROGRESS_EASE_OUT,
+                                                      G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
                                    PROP_SCREEN,
                                    g_param_spec_object ("screen",
@@ -222,6 +231,10 @@ gtk_timeline_set_property (GObject      *object,
       gtk_timeline_set_frame_clock (timeline,
                                     GDK_FRAME_CLOCK (g_value_get_object (value)));
       break;
+    case PROP_PROGRESS_TYPE:
+      gtk_timeline_set_progress_type (timeline,
+                                      g_value_get_enum (value));
+      break;
     case PROP_SCREEN:
       gtk_timeline_set_screen (timeline,
                                GDK_SCREEN (g_value_get_object (value)));
@@ -260,6 +273,9 @@ gtk_timeline_get_property (GObject    *object,
       break;
     case PROP_FRAME_CLOCK:
       g_value_set_object (value, priv->frame_clock);
+      break;
+    case PROP_PROGRESS_TYPE:
+      g_value_set_enum (value, priv->progress_type);
       break;
     case PROP_SCREEN:
       g_value_set_object (value, priv->screen);
@@ -454,7 +470,7 @@ gtk_timeline_stop_running (GtkTimeline *timeline)
     gtk_timeline_stop_updating (timeline);
 }
 
-/*
+/**
  * gtk_timeline_new:
  * @widget: a widget the timeline will be used with
  * @duration: duration in milliseconds for the timeline
@@ -473,7 +489,7 @@ gtk_timeline_new (GtkWidget *widget,
                        NULL);
 }
 
-/*
+/**
  * gtk_timeline_start:
  * @timeline: A #GtkTimeline
  *
@@ -507,7 +523,7 @@ gtk_timeline_start (GtkTimeline *timeline)
     }
 }
 
-/*
+/**
  * gtk_timeline_pause:
  * @timeline: A #GtkTimeline
  *
@@ -531,7 +547,7 @@ gtk_timeline_pause (GtkTimeline *timeline)
     }
 }
 
-/*
+/**
  * gtk_timeline_rewind:
  * @timeline: A #GtkTimeline
  *
@@ -555,7 +571,7 @@ gtk_timeline_rewind (GtkTimeline *timeline)
     priv->last_time = gdk_frame_clock_get_frame_time (priv->frame_clock);
 }
 
-/*
+/**
  * gtk_timeline_is_running:
  * @timeline: A #GtkTimeline
  *
@@ -575,7 +591,7 @@ gtk_timeline_is_running (GtkTimeline *timeline)
   return priv->running;
 }
 
-/*
+/**
  * gtk_timeline_get_elapsed_time:
  * @timeline: A #GtkTimeline
  *
@@ -614,7 +630,7 @@ gtk_timeline_get_loop (GtkTimeline *timeline)
   return priv->loop;
 }
 
-/*
+/**
  * gtk_timeline_set_loop:
  * @timeline: A #GtkTimeline
  * @loop: %TRUE to make the timeline loop
@@ -668,7 +684,7 @@ gtk_timeline_get_duration (GtkTimeline *timeline)
   return priv->duration;
 }
 
-/*
+/**
  * gtk_timeline_set_direction:
  * @timeline: A #GtkTimeline
  * @direction: direction
@@ -737,6 +753,11 @@ gtk_timeline_set_frame_clock (GtkTimeline   *timeline,
   g_object_notify (G_OBJECT (timeline), "paint-clock");
 }
 
+/**
+ * gtk_timeline_get_frame_clock:
+ *
+ * Returns: (transfer none): 
+ */
 GdkFrameClock *
 gtk_timeline_get_frame_clock (GtkTimeline *timeline)
 {
@@ -773,6 +794,11 @@ gtk_timeline_set_screen (GtkTimeline *timeline,
   g_object_notify (G_OBJECT (timeline), "screen");
 }
 
+/**
+ * gtk_timeline_get_screen:
+ *
+ * Returns: (transfer none): 
+ */
 GdkScreen *
 gtk_timeline_get_screen (GtkTimeline *timeline)
 {
@@ -814,6 +840,11 @@ gtk_timeline_set_widget (GtkTimeline *timeline,
   g_object_notify (G_OBJECT (timeline), "widget");
 }
 
+/**
+ * gtk_timeline_get_widget:
+ *
+ * Returns: (transfer none): 
+ */
 GtkWidget *
 gtk_timeline_get_widget (GtkTimeline *timeline)
 {
