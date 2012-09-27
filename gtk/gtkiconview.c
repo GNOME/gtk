@@ -3042,14 +3042,12 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
 
   state &= ~(GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_PRELIGHT);
 
+  if ((state & GTK_STATE_FLAG_FOCUSED) &&
+      item == icon_view->priv->cursor_item)
+    flags |= GTK_CELL_RENDERER_FOCUSED;
+
   if (item->selected)
     {
-      if ((state & GTK_STATE_FLAG_FOCUSED) &&
-          item == icon_view->priv->cursor_item)
-        {
-          flags |= GTK_CELL_RENDERER_FOCUSED;
-        }
-
       state |= GTK_STATE_FLAG_SELECTED;
       flags |= GTK_CELL_RENDERER_SELECTED;
     }
