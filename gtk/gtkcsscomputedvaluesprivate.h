@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 #define GTK_IS_CSS_COMPUTED_VALUES_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_COMPUTED_VALUES))
 #define GTK_CSS_COMPUTED_VALUES_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_COMPUTED_VALUES, GtkCssComputedValuesClass))
 
-typedef struct _GtkCssComputedValues           GtkCssComputedValues;
+/* typedef struct _GtkCssComputedValues           GtkCssComputedValues; */
 typedef struct _GtkCssComputedValuesClass      GtkCssComputedValuesClass;
 
 struct _GtkCssComputedValues

@@ -23,6 +23,9 @@
 
 G_BEGIN_DECLS
 
+/* forward declaration for GtkCssValue */
+typedef struct _GtkCssComputedValues GtkCssComputedValues;
+
 typedef enum { /*< skip >*/
   GTK_CSS_CHANGE_CLASS                    = (1 <<  0),
   GTK_CSS_CHANGE_NAME                     = (1 <<  1),
