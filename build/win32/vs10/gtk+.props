@@ -18,24 +18,24 @@ mkdir $(CopyDir)\bin
 
 copy $(Configuration)\$(Platform)\bin\*.dll $(CopyDir)\bin
 
+copy $(Configuration)\$(Platform)\bin\*.exe $(CopyDir)\bin
 
-mkdir $(CopyDir)\bin\gtk3-demo
 
-copy $(Configuration)\$(Platform)\bin\*.exe $(CopyDir)\bin\gtk3-demo
+mkdir $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.c $(CopyDir)\bin\gtk3-demo
+copy ..\..\..\demos\gtk-demo\*.c $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.css $(CopyDir)\bin\gtk3-demo
+copy ..\..\..\demos\gtk-demo\*.css $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.h $(CopyDir)\bin\gtk3-demo
+copy ..\..\..\demos\gtk-demo\*.h $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.ui $(CopyDir)\bin\gtk3-demo
+copy ..\..\..\demos\gtk-demo\*.ui $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.jpg $(CopyDir)\bin\gtk3-demo
+copy ..\..\..\demos\gtk-demo\*.jpg $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.png $(CopyDir)\bin\gtk3-demo
+copy ..\..\..\demos\gtk-demo\*.png $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
-copy ..\..\..\demos\gtk-demo\*.gif $(CopyDir)\bin\gtk3-demo
+copy ..\..\..\demos\gtk-demo\*.gif $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
 
 mkdir $(CopyDir)\lib
@@ -319,6 +319,8 @@ copy ..\..\..\gtk\gtklabel.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtklayout.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
+copy ..\..\..\gtk\gtklevelbar.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
+
 copy ..\..\..\gtk\gtklinkbutton.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkliststore.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
@@ -330,6 +332,8 @@ copy ..\..\..\gtk\gtkmain.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 copy ..\..\..\gtk\gtkmenu.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkmenubar.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkmenubutton.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkmenuitem.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
@@ -410,6 +414,8 @@ copy ..\..\..\gtk\gtkscrollable.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 copy ..\..\..\gtk\gtkscrollbar.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkscrolledwindow.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
+
+copy ..\..\..\gtk\gtksearchentry.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkselection.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
