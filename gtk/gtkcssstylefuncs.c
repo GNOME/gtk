@@ -810,9 +810,11 @@ pattern_value_print (const GValue *value,
         }
       surface_print (surface, string);
       break;
-    case CAIRO_PATTERN_TYPE_SOLID:
     case CAIRO_PATTERN_TYPE_LINEAR:
     case CAIRO_PATTERN_TYPE_RADIAL:
+      g_string_append (string, "none /* FIXME: add support for printing gradients */");
+      break;
+    case CAIRO_PATTERN_TYPE_SOLID:
     default:
       g_assert_not_reached ();
       break;
