@@ -22,7 +22,6 @@
 
 #include <glib-object.h>
 #include "gtkcsstypesprivate.h"
-#include "gtksymboliccolor.h"
 #include "gtktypes.h"
 
 G_BEGIN_DECLS
