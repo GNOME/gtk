@@ -9812,7 +9812,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK;
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
-  tree_view->priv->drag_window = gdk_window_new (tree_view->priv->bin_window,
+  tree_view->priv->drag_window = gdk_window_new (tree_view->priv->header_window,
                                                  &attributes,
                                                  attributes_mask);
   gdk_window_set_user_data (tree_view->priv->drag_window, GTK_WIDGET (tree_view));
