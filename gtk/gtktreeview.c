@@ -3317,7 +3317,8 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
 					 tree_view->priv->cur_reorder->left_column);
     }
   tree_view->priv->drag_column = NULL;
-  gdk_window_hide (tree_view->priv->drag_window);
+  gdk_window_destroy (tree_view->priv->drag_window);
+  tree_view->priv->drag_window = NULL;
 
   for (l = tree_view->priv->column_drag_info; l != NULL; l = l->next)
     g_slice_free (GtkTreeViewColumnReorder, l->data);
@@ -9787,9 +9788,12 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
   GtkWidget *button;
   GdkDevice *pointer, *keyboard;
+  GdkWindowAttr attributes;
+  guint attributes_mask;
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
   g_return_if_fail (tree_view->priv->cur_reorder == NULL);
+  g_return_if_fail (tree_view->priv->drag_window == NULL);
 
   gtk_tree_view_set_column_drag_info (tree_view, column);
 
@@ -9798,28 +9802,22 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
 
   button = gtk_tree_view_column_get_button (column);
 
-  if (tree_view->priv->drag_window == NULL)
-    {
-      GdkWindowAttr attributes;
-      guint attributes_mask;
+  gtk_widget_get_allocation (button, &button_allocation);
 
-      gtk_widget_get_allocation (button, &button_allocation);
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.wclass = GDK_INPUT_OUTPUT;
+  attributes.x = button_allocation.x;
+  attributes.y = 0;
+  attributes.width = button_allocation.width;
+  attributes.height = button_allocation.height;
+  attributes.visual = gtk_widget_get_visual (GTK_WIDGET (tree_view));
+  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK;
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
-      attributes.window_type = GDK_WINDOW_CHILD;
-      attributes.wclass = GDK_INPUT_OUTPUT;
-      attributes.x = button_allocation.x;
-      attributes.y = 0;
-      attributes.width = button_allocation.width;
-      attributes.height = button_allocation.height;
-      attributes.visual = gtk_widget_get_visual (GTK_WIDGET (tree_view));
-      attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK;
-      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
-
-      tree_view->priv->drag_window = gdk_window_new (tree_view->priv->bin_window,
-                                                     &attributes,
-                                                     attributes_mask);
-      gdk_window_set_user_data (tree_view->priv->drag_window, GTK_WIDGET (tree_view));
-    }
+  tree_view->priv->drag_window = gdk_window_new (tree_view->priv->bin_window,
+                                                 &attributes,
+                                                 attributes_mask);
+  gdk_window_set_user_data (tree_view->priv->drag_window, GTK_WIDGET (tree_view));
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
