@@ -3275,6 +3275,7 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
   GList *l;
   gboolean rtl;
   GdkDevice *device, *other;
+  GtkStyleContext *context;
 
   tree_view = GTK_TREE_VIEW (widget);
 
@@ -3286,6 +3287,10 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
 
   /* Move the button back */
   button = gtk_tree_view_column_get_button (tree_view->priv->drag_column);
+
+  context = gtk_widget_get_style_context (button);
+  gtk_style_context_remove_class (context, STYLE_CLASS_DND);
+
   g_object_ref (button);
   gtk_container_remove (GTK_CONTAINER (tree_view), button);
   gtk_widget_set_parent_window (button, tree_view->priv->header_window);
@@ -9788,6 +9793,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   GdkDevice *pointer, *keyboard;
   GdkWindowAttr attributes;
   guint attributes_mask;
+  GtkStyleContext *context;
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
   g_return_if_fail (tree_view->priv->cur_reorder == NULL);
@@ -9799,6 +9805,9 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
     return;
 
   button = gtk_tree_view_column_get_button (column);
+
+  context = gtk_widget_get_style_context (button);
+  gtk_style_context_add_class (context, STYLE_CLASS_DND);
 
   gtk_widget_get_allocation (button, &button_allocation);
 
