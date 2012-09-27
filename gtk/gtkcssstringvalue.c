@@ -65,6 +65,12 @@ gtk_css_value_string_print (const GtkCssValue *value,
   char *string = value->string;
   gsize len;
 
+  if (string == NULL)
+    {
+      g_string_append (str, "none");
+      return;
+    }
+
   g_string_append_c (str, '"');
 
   do {
