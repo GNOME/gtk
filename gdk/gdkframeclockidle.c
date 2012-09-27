@@ -29,12 +29,15 @@
 #include "gdkframeclockidle.h"
 #include "gdk.h"
 
+#define FRAME_INTERVAL 16667 // microseconds
+
 struct _GdkFrameClockIdlePrivate
 {
   GTimer *timer;
   /* timer_base is used to avoid ever going backward */
   guint64 timer_base;
   guint64 frame_time;
+  guint64 min_next_frame_time;
 
   guint idle_id;
   guint freeze_count;
@@ -93,7 +96,7 @@ compute_frame_time (GdkFrameClockIdle *idle)
   guint64 computed_frame_time;
   guint64 elapsed;
 
-  elapsed = ((guint64) (g_timer_elapsed (priv->timer, NULL) * 1000)) + priv->timer_base;
+  elapsed = g_get_monotonic_time () + priv->timer_base;
   if (elapsed < priv->frame_time)
     {
       /* clock went backward. adapt to that by forevermore increasing
@@ -118,7 +121,8 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
   guint64 computed_frame_time;
 
   /* can't change frame time during a paint */
-  if (priv->phase != GDK_FRAME_CLOCK_PHASE_NONE)
+  if (priv->phase != GDK_FRAME_CLOCK_PHASE_NONE &&
+      priv->phase != GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS)
     return priv->frame_time;
 
   /* Outside a paint, pick something close to "now" */
@@ -129,7 +133,7 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
    * get_frame_time() would normally be used outside of a paint to
    * record an animation start time for example.
    */
-  if ((computed_frame_time - priv->frame_time) > 16)
+  if ((computed_frame_time - priv->frame_time) > FRAME_INTERVAL)
     priv->frame_time = computed_frame_time;
 
   return priv->frame_time;
@@ -142,10 +146,20 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
 
   if (priv->idle_id == 0 && priv->freeze_count == 0 && priv->requested != 0)
     {
-      priv->idle_id = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
-                                                 gdk_frame_clock_paint_idle,
-                                                 g_object_ref (clock_idle),
-                                                 (GDestroyNotify) g_object_unref);
+      guint min_interval = 0;
+
+      if (priv->min_next_frame_time != 0)
+        {
+          guint64 now = compute_frame_time (clock_idle);
+          guint64 min_interval_us = MAX (priv->min_next_frame_time, now) - now;
+          min_interval = (min_interval_us + 500) / 1000;
+        }
+
+      priv->idle_id = gdk_threads_add_timeout_full (GDK_PRIORITY_REDRAW,
+                                                    min_interval,
+                                                    gdk_frame_clock_paint_idle,
+                                                    g_object_ref (clock_idle),
+                                                    (GDestroyNotify) g_object_unref);
 
       gdk_frame_clock_frame_requested (GDK_FRAME_CLOCK (clock_idle));
     }
@@ -160,14 +174,14 @@ gdk_frame_clock_paint_idle (void *data)
 
   priv->idle_id = 0;
 
-  priv->frame_time = compute_frame_time (clock_idle);
-
   switch (priv->phase)
     {
     case GDK_FRAME_CLOCK_PHASE_NONE:
     case GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT:
       if (priv->freeze_count == 0)
 	{
+          priv->frame_time = compute_frame_time (clock_idle);
+
 	  priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
           priv->requested &= ~GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
           /* We always emit ::before-paint and ::after-paint even if
@@ -208,7 +222,19 @@ gdk_frame_clock_paint_idle (void *data)
 	}
     }
 
-  maybe_start_idle (clock_idle);
+  if (priv->freeze_count == 0 && priv->requested != 0)
+    {
+      /* We need to start over again immediately - this implies that there is no
+       * throttling at the backend layer, so we need to back-off ourselves.
+       */
+      gdk_flush ();
+      priv->min_next_frame_time = priv->frame_time + FRAME_INTERVAL;
+      maybe_start_idle (clock_idle);
+    }
+  else
+    {
+      priv->min_next_frame_time = 0;
+    }
 
   return FALSE;
 }
