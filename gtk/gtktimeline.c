@@ -20,30 +20,30 @@
 #include <gtk/gtksettings.h>
 #include <math.h>
 
-#define MSECS_PER_SEC 1000
-#define FRAME_INTERVAL(nframes) (MSECS_PER_SEC / nframes)
-#define DEFAULT_FPS 30
-
 typedef struct GtkTimelinePriv GtkTimelinePriv;
 
 struct GtkTimelinePriv
 {
   guint duration;
-  guint source_id;
 
-  GTimer *timer;
+  guint64 last_time;
   gdouble elapsed_time;
 
   gdouble progress;
   gdouble last_progress;
 
+  GtkWidget *widget;
+  GdkFrameClock *frame_clock;
   GdkScreen *screen;
+
+  guint update_id;
 
   GtkTimelineProgressType progress_type;
 
   guint animations_enabled : 1;
   guint loop               : 1;
   guint direction          : 1;
+  guint running            : 1;
 };
 
 enum {
@@ -51,7 +51,9 @@ enum {
   PROP_DURATION,
   PROP_LOOP,
   PROP_DIRECTION,
-  PROP_SCREEN
+  PROP_FRAME_CLOCK,
+  PROP_SCREEN,
+  PROP_WIDGET
 };
 
 enum {
@@ -65,6 +67,11 @@ enum {
 static guint signals [LAST_SIGNAL] = { 0, };
 
 
+static void gtk_timeline_start_running (GtkTimeline *timeline);
+static void gtk_timeline_stop_running (GtkTimeline *timeline);
+
+static void frame_clock_target_iface_init (GdkFrameClockTargetInterface *target);
+
 static void  gtk_timeline_set_property  (GObject         *object,
                                          guint            prop_id,
                                          const GValue    *value,
@@ -75,9 +82,11 @@ static void  gtk_timeline_get_property  (GObject         *object,
                                          GParamSpec      *pspec);
 static void  gtk_timeline_finalize      (GObject *object);
 
+static void  gtk_timeline_set_clock     (GdkFrameClockTarget *target,
+                                         GdkFrameClock       *frame_clock);
 
-G_DEFINE_TYPE (GtkTimeline, gtk_timeline, G_TYPE_OBJECT)
-
+G_DEFINE_TYPE_WITH_CODE (GtkTimeline, gtk_timeline, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_FRAME_CLOCK_TARGET, frame_clock_target_iface_init))
 
 static void
 gtk_timeline_class_init (GtkTimelineClass *klass)
@@ -104,11 +113,25 @@ gtk_timeline_class_init (GtkTimelineClass *klass)
                                                          FALSE,
                                                          G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
+                                   PROP_FRAME_CLOCK,
+                                   g_param_spec_object ("paint-clock",
+                                                        "Frame Clock",
+                                                        "clock used for timing the animation (not needed if :widget is set)",
+                                                        GDK_TYPE_FRAME_CLOCK,
+                                                        G_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
                                    PROP_SCREEN,
                                    g_param_spec_object ("screen",
                                                         "Screen",
-                                                        "Screen to get the settings from",
+                                                        "Screen to get the settings from (not needed if :widget is set)",
                                                         GDK_TYPE_SCREEN,
+                                                        G_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+                                   PROP_WIDGET,
+                                   g_param_spec_object ("widget",
+                                                        "Widget",
+                                                        "Widget the timeline will be used with",
+                                                        GTK_TYPE_WIDGET,
                                                         G_PARAM_READWRITE));
 
   signals[STARTED] =
@@ -152,6 +175,12 @@ gtk_timeline_class_init (GtkTimelineClass *klass)
 }
 
 static void
+frame_clock_target_iface_init (GdkFrameClockTargetInterface *iface)
+{
+  iface->set_clock = gtk_timeline_set_clock;
+}
+
+static void
 gtk_timeline_init (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
@@ -162,6 +191,7 @@ gtk_timeline_init (GtkTimeline *timeline)
 
   priv->duration = 0.0;
   priv->direction = GTK_TIMELINE_DIRECTION_FORWARD;
+  priv->progress_type = GTK_TIMELINE_PROGRESS_EASE_OUT;
   priv->screen = gdk_screen_get_default ();
 
   priv->last_progress = 0;
@@ -188,9 +218,17 @@ gtk_timeline_set_property (GObject      *object,
     case PROP_DIRECTION:
       gtk_timeline_set_direction (timeline, g_value_get_enum (value));
       break;
+    case PROP_FRAME_CLOCK:
+      gtk_timeline_set_frame_clock (timeline,
+                                    GDK_FRAME_CLOCK (g_value_get_object (value)));
+      break;
     case PROP_SCREEN:
       gtk_timeline_set_screen (timeline,
                                GDK_SCREEN (g_value_get_object (value)));
+      break;
+    case PROP_WIDGET:
+      gtk_timeline_set_widget (timeline,
+                               GTK_WIDGET (g_value_get_object (value)));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -220,8 +258,14 @@ gtk_timeline_get_property (GObject    *object,
     case PROP_DIRECTION:
       g_value_set_enum (value, priv->direction);
       break;
+    case PROP_FRAME_CLOCK:
+      g_value_set_object (value, priv->frame_clock);
+      break;
     case PROP_SCREEN:
       g_value_set_object (value, priv->screen);
+      break;
+    case PROP_WIDGET:
+      g_value_set_object (value, priv->widget);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -237,16 +281,22 @@ gtk_timeline_finalize (GObject *object)
   timeline = (GtkTimeline *) object;
   priv = timeline->priv;
 
-  if (priv->source_id)
+  if (priv->running)
     {
-      g_source_remove (priv->source_id);
-      priv->source_id = 0;
+      gtk_timeline_stop_running (timeline);
+      priv->running = FALSE;
     }
 
-  if (priv->timer)
-    g_timer_destroy (priv->timer);
-
   G_OBJECT_CLASS (gtk_timeline_parent_class)->finalize (object);
+}
+
+/* Implementation of GdkFrameClockTarget method */
+static void
+gtk_timeline_set_clock (GdkFrameClockTarget *target,
+                        GdkFrameClock       *frame_clock)
+{
+  gtk_timeline_set_frame_clock (GTK_TIMELINE (target),
+                                frame_clock);
 }
 
 static gdouble
@@ -286,19 +336,22 @@ calculate_progress (gdouble                 linear_progress,
   return progress;
 }
 
-static gboolean
-gtk_timeline_run_frame (GtkTimeline *timeline)
+static void
+gtk_timeline_on_update (GdkFrameClock *clock,
+                        GtkTimeline   *timeline)
 {
   GtkTimelinePriv *priv;
   gdouble delta_progress, progress;
+  guint64 now;
 
   /* the user may unref us during the signals, so save ourselves */
   g_object_ref (timeline);
 
   priv = timeline->priv;
 
-  priv->elapsed_time = (guint) (g_timer_elapsed (priv->timer, NULL) * 1000);
-  g_timer_start (priv->timer);
+  now = gdk_frame_clock_get_frame_time (clock);
+  priv->elapsed_time = (now - priv->last_time) / 1000;
+  priv->last_time = now;
 
   if (priv->animations_enabled)
     {
@@ -332,46 +385,91 @@ gtk_timeline_run_frame (GtkTimeline *timeline)
         gtk_timeline_rewind (timeline);
       else
         {
-          if (priv->source_id)
-            {
-              g_source_remove (priv->source_id);
-              priv->source_id = 0;
-            }
-          g_timer_stop (priv->timer);
+          gtk_timeline_stop_running (timeline);
+          priv->running = FALSE;
+
           g_signal_emit (timeline, signals [FINISHED], 0);
           g_object_unref (timeline);
-          return FALSE;
+          return;
         }
     }
 
   g_object_unref (timeline);
+  gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
+}
 
-  return TRUE;
+static void
+gtk_timeline_start_updating (GtkTimeline *timeline)
+{
+  GtkTimelinePriv *priv = timeline->priv;
+
+  g_assert (priv->running && priv->frame_clock && priv->update_id == 0);
+
+  priv->update_id = g_signal_connect (priv->frame_clock,
+                                      "update",
+                                      G_CALLBACK (gtk_timeline_on_update),
+                                      timeline);
+
+  gdk_frame_clock_request_phase (priv->frame_clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
+  priv->last_time = gdk_frame_clock_get_frame_time (priv->frame_clock);
+}
+
+static void
+gtk_timeline_stop_updating (GtkTimeline *timeline)
+{
+  GtkTimelinePriv *priv = timeline->priv;
+
+  g_assert (priv->running && priv->frame_clock && priv->update_id != 0);
+
+  g_signal_handler_disconnect (priv->frame_clock,
+                               priv->update_id);
+  priv->update_id = 0;
+}
+
+static void
+gtk_timeline_start_running (GtkTimeline *timeline)
+{
+  GtkTimelinePriv *priv = timeline->priv;
+
+  g_assert (priv->running);
+
+  if (priv->widget)
+    gtk_widget_add_frame_clock_target (priv->widget,
+                                       GDK_FRAME_CLOCK_TARGET (timeline));
+  else if (priv->frame_clock)
+    gtk_timeline_start_updating (timeline);
+}
+
+static void
+gtk_timeline_stop_running (GtkTimeline *timeline)
+{
+  GtkTimelinePriv *priv = timeline->priv;
+
+  g_assert (priv->running);
+
+  if (priv->widget)
+    gtk_widget_remove_frame_clock_target (priv->widget,
+                                          GDK_FRAME_CLOCK_TARGET (timeline));
+  else if (priv->frame_clock)
+    gtk_timeline_stop_updating (timeline);
 }
 
 /*
  * gtk_timeline_new:
+ * @widget: a widget the timeline will be used with
  * @duration: duration in milliseconds for the timeline
  *
- * Creates a new #GtkTimeline with the specified number of frames.
+ * Creates a new #GtkTimeline with the specified duration
  *
  * Return Value: the newly created #GtkTimeline
  */
 GtkTimeline *
-gtk_timeline_new (guint duration)
+gtk_timeline_new (GtkWidget *widget,
+                  guint      duration)
 {
   return g_object_new (GTK_TYPE_TIMELINE,
+                       "widget", widget,
                        "duration", duration,
-                       NULL);
-}
-
-GtkTimeline *
-gtk_timeline_new_for_screen (guint      duration,
-                              GdkScreen *screen)
-{
-  return g_object_new (GTK_TYPE_TIMELINE,
-                       "duration", duration,
-                       "screen", screen,
                        NULL);
 }
 
@@ -392,13 +490,8 @@ gtk_timeline_start (GtkTimeline *timeline)
 
   priv = timeline->priv;
 
-  if (!priv->source_id)
+  if (!priv->running)
     {
-      if (priv->timer)
-        g_timer_continue (priv->timer);
-      else
-        priv->timer = g_timer_new ();
-
       if (priv->screen)
         {
           settings = gtk_settings_get_for_screen (priv->screen);
@@ -407,15 +500,10 @@ gtk_timeline_start (GtkTimeline *timeline)
 
       priv->animations_enabled = enable_animations;
 
-      g_signal_emit (timeline, signals [STARTED], 0);
+      priv->running = TRUE;
+      gtk_timeline_start_running (timeline);
 
-      if (enable_animations)
-        priv->source_id = gdk_threads_add_timeout (FRAME_INTERVAL (DEFAULT_FPS),
-                                                   (GSourceFunc) gtk_timeline_run_frame,
-                                                   timeline);
-      else
-        priv->source_id = gdk_threads_add_idle ((GSourceFunc) gtk_timeline_run_frame,
-                                                timeline);
+      g_signal_emit (timeline, signals [STARTED], 0);
     }
 }
 
@@ -434,11 +522,11 @@ gtk_timeline_pause (GtkTimeline *timeline)
 
   priv = timeline->priv;
 
-  if (priv->source_id)
+  if (priv->running)
     {
-      g_timer_stop (priv->timer);
-      g_source_remove (priv->source_id);
-      priv->source_id = 0;
+      gtk_timeline_stop_running (timeline);
+      priv->running = FALSE;
+
       g_signal_emit (timeline, signals [PAUSED], 0);
     }
 }
@@ -463,14 +551,8 @@ gtk_timeline_rewind (GtkTimeline *timeline)
   else
     priv->progress = priv->last_progress = 0.;
 
-  /* reset timer */
-  if (priv->timer)
-    {
-      g_timer_start (priv->timer);
-
-      if (!priv->source_id)
-        g_timer_stop (priv->timer);
-    }
+  if (priv->running && priv->frame_clock)
+    priv->last_time = gdk_frame_clock_get_frame_time (priv->frame_clock);
 }
 
 /*
@@ -490,7 +572,7 @@ gtk_timeline_is_running (GtkTimeline *timeline)
 
   priv = timeline->priv;
 
-  return (priv->source_id != 0);
+  return priv->running;
 }
 
 /*
@@ -625,20 +707,68 @@ gtk_timeline_get_direction (GtkTimeline *timeline)
 }
 
 void
+gtk_timeline_set_frame_clock (GtkTimeline   *timeline,
+                              GdkFrameClock *frame_clock)
+{
+  GtkTimelinePriv *priv;
+
+  g_return_if_fail (GTK_IS_TIMELINE (timeline));
+  g_return_if_fail (frame_clock == NULL || GDK_IS_FRAME_CLOCK (frame_clock));
+
+  priv = timeline->priv;
+
+  if (frame_clock == priv->frame_clock)
+    return;
+
+  if (priv->running && priv->frame_clock)
+    gtk_timeline_stop_updating (timeline);
+
+  if (priv->frame_clock)
+    g_object_unref (priv->frame_clock);
+
+  priv->frame_clock = frame_clock;
+
+  if (priv->frame_clock)
+    g_object_ref (priv->frame_clock);
+
+  if (priv->running && priv->frame_clock)
+    gtk_timeline_start_updating (timeline);
+
+  g_object_notify (G_OBJECT (timeline), "paint-clock");
+}
+
+GdkFrameClock *
+gtk_timeline_get_frame_clock (GtkTimeline *timeline)
+{
+  GtkTimelinePriv *priv;
+
+  g_return_val_if_fail (GTK_IS_TIMELINE (timeline), NULL);
+
+  priv = timeline->priv;
+  return priv->frame_clock;
+}
+
+void
 gtk_timeline_set_screen (GtkTimeline *timeline,
                          GdkScreen   *screen)
 {
   GtkTimelinePriv *priv;
 
   g_return_if_fail (GTK_IS_TIMELINE (timeline));
-  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (screen == NULL || GDK_IS_SCREEN (screen));
 
   priv = timeline->priv;
+
+  if (screen == priv->screen)
+    return;
 
   if (priv->screen)
     g_object_unref (priv->screen);
 
-  priv->screen = g_object_ref (screen);
+  priv->screen = screen;
+
+  if (priv->screen)
+    g_object_ref (priv->screen);
 
   g_object_notify (G_OBJECT (timeline), "screen");
 }
@@ -652,6 +782,47 @@ gtk_timeline_get_screen (GtkTimeline *timeline)
 
   priv = timeline->priv;
   return priv->screen;
+}
+void
+gtk_timeline_set_widget (GtkTimeline *timeline,
+                         GtkWidget   *widget)
+{
+  GtkTimelinePriv *priv;
+
+  g_return_if_fail (GTK_IS_TIMELINE (timeline));
+  g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
+
+  priv = timeline->priv;
+
+  if (widget == priv->widget)
+    return;
+
+  if (priv->running)
+    gtk_timeline_stop_running (timeline);
+
+  if (priv->widget)
+    g_object_unref (priv->widget);
+
+  priv->widget = widget;
+
+  if (priv->widget)
+    g_object_ref (widget);
+
+  if (priv->running)
+    gtk_timeline_start_running (timeline);
+
+  g_object_notify (G_OBJECT (timeline), "widget");
+}
+
+GtkWidget *
+gtk_timeline_get_widget (GtkTimeline *timeline)
+{
+  GtkTimelinePriv *priv;
+
+  g_return_val_if_fail (GTK_IS_TIMELINE (timeline), NULL);
+
+  priv = timeline->priv;
+  return priv->widget;
 }
 
 gdouble

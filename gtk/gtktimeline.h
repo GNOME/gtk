@@ -20,6 +20,7 @@
 
 #include <glib-object.h>
 #include <gtk/gtkenums.h>
+#include <gtk/gtkwidget.h>
 #include <gdk/gdk.h>
 
 G_BEGIN_DECLS
@@ -62,7 +63,7 @@ struct GtkTimelineClass
   void (* paused)            (GtkTimeline *timeline);
 
   void (* frame)             (GtkTimeline *timeline,
-			      gdouble     progress);
+			      gdouble      progress);
 
   void (* __gtk_reserved1) (void);
   void (* __gtk_reserved2) (void);
@@ -73,9 +74,8 @@ struct GtkTimelineClass
 
 GType                   gtk_timeline_get_type          (void) G_GNUC_CONST;
 
-GtkTimeline *           gtk_timeline_new               (guint                    duration);
-GtkTimeline *           gtk_timeline_new_for_screen    (guint                    duration,
-                                                        GdkScreen               *screen);
+GtkTimeline *           gtk_timeline_new               (GtkWidget               *widget,
+                                                        guint                    duration);
 
 void                    gtk_timeline_start             (GtkTimeline             *timeline);
 void                    gtk_timeline_pause             (GtkTimeline             *timeline);
@@ -90,11 +90,19 @@ void                    gtk_timeline_set_loop          (GtkTimeline             
 
 guint                   gtk_timeline_get_duration      (GtkTimeline             *timeline);
 void                    gtk_timeline_set_duration      (GtkTimeline             *timeline,
-                                                         guint                    duration);
+                                                        guint                    duration);
+
+GdkFrameClock *         gtk_timeline_get_frame_clock   (GtkTimeline             *timeline);
+void                    gtk_timeline_set_frame_clock   (GtkTimeline             *timeline,
+                                                        GdkFrameClock           *frame_clock);
 
 GdkScreen *             gtk_timeline_get_screen        (GtkTimeline             *timeline);
 void                    gtk_timeline_set_screen        (GtkTimeline             *timeline,
                                                         GdkScreen               *screen);
+
+GtkWidget *             gtk_timeline_get_widget        (GtkTimeline             *timeline);
+void                    gtk_timeline_set_widget        (GtkTimeline             *timeline,
+                                                        GtkWidget               *widget);
 
 GtkTimelineDirection    gtk_timeline_get_direction     (GtkTimeline             *timeline);
 void                    gtk_timeline_set_direction     (GtkTimeline             *timeline,
@@ -105,7 +113,6 @@ gdouble                 gtk_timeline_get_progress      (GtkTimeline             
 GtkTimelineProgressType gtk_timeline_get_progress_type (GtkTimeline             *timeline);
 void                    gtk_timeline_set_progress_type (GtkTimeline             *timeline,
                                                         GtkTimelineProgressType  progress_type);
-
 
 G_END_DECLS
 
