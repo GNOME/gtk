@@ -47,6 +47,12 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\css_multiplebgs.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\css_pixbufs.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\css_shadows.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\demo_resources.c">
       <Filter>Source Files</Filter>
     </ClCompile>
