@@ -740,7 +740,7 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor        *color,
   GtkCssValue *value;
 
   g_return_val_if_fail (color != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), FALSE);
+  g_return_val_if_fail (provider == NULL || GTK_IS_STYLE_PROVIDER_PRIVATE (provider), FALSE);
   g_return_val_if_fail (current != NULL, FALSE);
 
   if (dependencies == NULL)
