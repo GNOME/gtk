@@ -357,7 +357,7 @@ gtk_timeline_on_update (GdkFrameClock *clock,
                         GtkTimeline   *timeline)
 {
   GtkTimelinePriv *priv;
-  gdouble delta_progress, progress;
+  gdouble delta_progress, progress, adjust;
   guint64 now;
 
   /* the user may unref us during the signals, so save ourselves */
@@ -381,6 +381,21 @@ gtk_timeline_on_update (GdkFrameClock *clock,
 
       priv->last_progress = progress;
 
+      /* When looping, if we go past the end, start that much into the
+       * next cycle */
+      if (progress < 0.0)
+        {
+          adjust = progress - ceil(progress);
+          progress = 0.0;
+        }
+      else if (progress > 1.0)
+        {
+          adjust = progress - floor(progress);
+          progress = 1.0;
+        }
+      else
+        adjust = 0.0;
+
       progress = CLAMP (progress, 0., 1.);
     }
   else
@@ -398,7 +413,10 @@ gtk_timeline_on_update (GdkFrameClock *clock,
       loop = priv->loop && priv->animations_enabled;
 
       if (loop)
-        gtk_timeline_rewind (timeline);
+        {
+          gtk_timeline_rewind (timeline);
+          priv->progress += adjust;
+        }
       else
         {
           gtk_timeline_stop_running (timeline);
