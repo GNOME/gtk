@@ -1408,6 +1408,12 @@ gtk_container_class_set_template (GtkContainerClass *container_class,
   priv->tmpl = tmpl;
   priv->tmpl_type = tmpl_type;
 
+  if (priv->tmpl_classes)
+    {
+      g_slist_free (priv->tmpl_classes);
+      priv->tmpl_classes = NULL;
+    }
+
   /* Collect an ordered list of class which have templates to build */
   for (oclass = G_OBJECT_CLASS (container_class);
        GTK_IS_CONTAINER_CLASS (oclass);
