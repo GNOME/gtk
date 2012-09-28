@@ -4,7 +4,7 @@ include $(top_srcdir)/Makefile.decl
 AUTOMAKE_OPTIONS = 1.6
 
 # The name of the module.
-DOC_MODULE=gtk
+DOC_MODULE=gtk2
 
 # The top-level SGML file.
 DOC_MAIN_SGML_FILE=gtk-docs.sgml
