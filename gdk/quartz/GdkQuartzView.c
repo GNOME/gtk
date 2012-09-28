@@ -86,6 +86,25 @@
   if (NSEqualRects (rect, NSZeroRect))
     return;
 
+  if (!GDK_WINDOW_IS_MAPPED (gdk_window))
+    {
+      /* If the window is not yet mapped, clip_region_with_children
+       * will be empty causing the usual code below to draw nothing.
+       * To not see garbage on the screen, we draw an aesthetic color
+       * here. The garbage would be visible if any widget enabled
+       * the NSView's CALayer in order to add sublayers for custom
+       * native rendering.
+       */
+      [NSGraphicsContext saveGraphicsState];
+
+      [[[self window] backgroundColor] setFill];
+      [NSBezierPath fillRect:rect];
+
+      [NSGraphicsContext restoreGraphicsState];
+
+      return;
+    }
+
   /* Clear our own bookkeeping of regions that need display */
   if (impl->needs_display_region)
     {
