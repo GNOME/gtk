@@ -58,9 +58,6 @@ void           _gtk_style_context_get_cursor_color           (GtkStyleContext   
                                                               GdkRGBA            *primary_color,
                                                               GdkRGBA            *secondary_color);
 
-GtkStyleProviderPrivate *
-               _gtk_style_context_get_style_provider         (GtkStyleContext    *context);
-
 void           _gtk_style_context_update_animating           (GtkStyleContext    *context);
 
 G_END_DECLS

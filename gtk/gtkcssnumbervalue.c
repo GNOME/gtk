@@ -35,10 +35,12 @@ gtk_css_value_number_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_number_compute (GtkCssValue        *number,
-                              guint               property_id,
-                              GtkStyleContext    *context,
-                              GtkCssDependencies *dependencies)
+gtk_css_value_number_compute (GtkCssValue             *number,
+                              guint                    property_id,
+                              GtkStyleProviderPrivate *provider,
+                              GtkCssComputedValues    *values,
+                              GtkCssComputedValues    *parent_values,
+                              GtkCssDependencies      *dependencies)
 {
   GtkBorderStyle border_style;
 
@@ -46,27 +48,27 @@ gtk_css_value_number_compute (GtkCssValue        *number,
   switch (property_id)
     {
       case GTK_CSS_PROPERTY_BORDER_TOP_WIDTH:
-        border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+        border_style = _gtk_css_border_style_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
         if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
           return _gtk_css_number_value_new (0, GTK_CSS_PX);
         break;
       case GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH:
-        border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
+        border_style = _gtk_css_border_style_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
         if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
           return _gtk_css_number_value_new (0, GTK_CSS_PX);
         break;
       case GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH:
-        border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
+        border_style = _gtk_css_border_style_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
         if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
           return _gtk_css_number_value_new (0, GTK_CSS_PX);
         break;
       case GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH:
-        border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
+        border_style = _gtk_css_border_style_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
         if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
           return _gtk_css_number_value_new (0, GTK_CSS_PX);
         break;
       case GTK_CSS_PROPERTY_OUTLINE_WIDTH:
-        border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_STYLE));
+        border_style = _gtk_css_border_style_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_OUTLINE_STYLE));
         if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
           return _gtk_css_number_value_new (0, GTK_CSS_PX);
         break;
@@ -107,14 +109,14 @@ gtk_css_value_number_compute (GtkCssValue        *number,
     case GTK_CSS_EM:
       *dependencies = GTK_CSS_DEPENDS_ON_FONT_SIZE;
       return _gtk_css_number_value_new (number->value *
-                                        _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_FONT_SIZE), 100),
+                                        _gtk_css_number_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_FONT_SIZE), 100),
                                         GTK_CSS_PX);
       break;
     case GTK_CSS_EX:
       /* for now we pretend ex is half of em */
       *dependencies = GTK_CSS_DEPENDS_ON_FONT_SIZE;
       return _gtk_css_number_value_new (number->value * 0.5 * 
-                                        _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_FONT_SIZE), 100),
+                                        _gtk_css_number_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_FONT_SIZE), 100),
                                         GTK_CSS_PX);
     case GTK_CSS_RAD:
       return _gtk_css_number_value_new (number->value * 360.0 / (2 * G_PI),

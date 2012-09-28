@@ -24,7 +24,6 @@
 
 #include "gtk/gtkbitmaskprivate.h"
 #include "gtk/gtkcsssection.h"
-#include "gtk/gtkstylecontext.h"
 #include "gtk/gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
@@ -66,7 +65,8 @@ GType                   _gtk_css_computed_values_get_type             (void) G_G
 GtkCssComputedValues *  _gtk_css_computed_values_new                  (void);
 
 void                    _gtk_css_computed_values_compute_value        (GtkCssComputedValues     *values,
-                                                                       GtkStyleContext          *context,
+                                                                       GtkStyleProviderPrivate  *provider,
+                                                                       GtkCssComputedValues     *parent_values,
                                                                        guint                     id,
                                                                        GtkCssValue              *specified,
                                                                        GtkCssSection            *section);
@@ -89,9 +89,10 @@ GtkBitmask *            _gtk_css_computed_values_get_difference       (GtkCssCom
                                                                        GtkCssComputedValues     *other);
 
 void                    _gtk_css_computed_values_create_animations    (GtkCssComputedValues     *values,
+                                                                       GtkCssComputedValues     *parent_values,
                                                                        gint64                    timestamp,
-                                                                       GtkCssComputedValues     *source,
-                                                                       GtkStyleContext          *context);
+                                                                       GtkStyleProviderPrivate  *provider,
+                                                                       GtkCssComputedValues     *source);
 GtkBitmask *            _gtk_css_computed_values_advance              (GtkCssComputedValues     *values,
                                                                        gint64                    timestamp);
 void                    _gtk_css_computed_values_cancel_animations    (GtkCssComputedValues     *values);

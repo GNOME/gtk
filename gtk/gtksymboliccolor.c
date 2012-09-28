@@ -120,8 +120,10 @@ gtk_css_value_symbolic_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_symbolic_get_fallback (guint            property_id,
-                                     GtkStyleContext *context)
+gtk_css_value_symbolic_get_fallback (guint                    property_id,
+                                     GtkStyleProviderPrivate *provider,
+                                     GtkCssComputedValues    *values,
+                                     GtkCssComputedValues    *parent_values)
 {
   static const GdkRGBA transparent = { 0, 0, 0, 0 };
 
@@ -142,7 +144,9 @@ gtk_css_value_symbolic_get_fallback (guint            property_id,
       case GTK_CSS_PROPERTY_OUTLINE_COLOR:
         return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
                                        property_id,
-                                       context,
+                                       provider,
+                                       values,
+                                       parent_values,
                                        NULL);
       default:
         if (property_id < GTK_CSS_PROPERTY_N_PROPERTIES)
@@ -153,10 +157,12 @@ gtk_css_value_symbolic_get_fallback (guint            property_id,
 }
 
 static GtkCssValue *
-gtk_css_value_symbolic_compute (GtkCssValue        *value,
-                                guint               property_id,
-                                GtkStyleContext    *context,
-                                GtkCssDependencies *dependencies)
+gtk_css_value_symbolic_compute (GtkCssValue             *value,
+                                guint                    property_id,
+                                GtkStyleProviderPrivate *provider,
+                                GtkCssComputedValues    *values,
+                                GtkCssComputedValues    *parent_values,
+                                GtkCssDependencies      *dependencies)
 {
   GtkCssValue *resolved, *current;
   GtkCssDependencies current_deps;
@@ -167,11 +173,9 @@ gtk_css_value_symbolic_compute (GtkCssValue        *value,
    */
   if (property_id == GTK_CSS_PROPERTY_COLOR)
     {
-      GtkStyleContext *parent = gtk_style_context_get_parent (context);
-
-      if (parent)
+      if (parent_values)
         {
-          current = _gtk_style_context_peek_property (parent, GTK_CSS_PROPERTY_COLOR);
+          current = _gtk_css_computed_values_get_value (parent_values, GTK_CSS_PROPERTY_COLOR);
           current_deps = GTK_CSS_EQUALS_PARENT;
         }
       else
@@ -182,14 +186,18 @@ gtk_css_value_symbolic_compute (GtkCssValue        *value,
     }
   else
     {
-      current = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR);
+      current = _gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR);
       current_deps = GTK_CSS_DEPENDS_ON_COLOR;
     }
   
-  resolved = _gtk_style_context_resolve_color_value (context, current, current_deps, value, dependencies);
+  resolved = _gtk_symbolic_color_resolve_full ((GtkSymbolicColor *) value,
+                                               provider,
+                                               current,
+                                               current_deps,
+                                               dependencies);
 
   if (resolved == NULL)
-    return gtk_css_value_symbolic_get_fallback (property_id, context);
+    return gtk_css_value_symbolic_get_fallback (property_id, provider, values, parent_values);
 
   return resolved;
 }

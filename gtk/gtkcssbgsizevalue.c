@@ -41,10 +41,12 @@ gtk_css_value_bg_size_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_bg_size_compute (GtkCssValue        *value,
-                               guint               property_id,
-                               GtkStyleContext    *context,
-                               GtkCssDependencies *dependencies)
+gtk_css_value_bg_size_compute (GtkCssValue             *value,
+                               guint                    property_id,
+                               GtkStyleProviderPrivate *provider,
+                               GtkCssComputedValues    *values,
+                               GtkCssComputedValues    *parent_values,
+                               GtkCssDependencies      *dependencies)
 {
   GtkCssValue *x, *y;
   GtkCssDependencies x_deps, y_deps;
@@ -56,10 +58,10 @@ gtk_css_value_bg_size_compute (GtkCssValue        *value,
   x = y = NULL;
 
   if (value->x)
-    x = _gtk_css_value_compute (value->x, property_id, context, &x_deps);
+    x = _gtk_css_value_compute (value->x, property_id, provider, values, parent_values, &x_deps);
 
   if (value->y)
-    y = _gtk_css_value_compute (value->y, property_id, context, &y_deps);
+    y = _gtk_css_value_compute (value->y, property_id, provider, values, parent_values, &y_deps);
 
   *dependencies = _gtk_css_dependencies_union (x_deps, y_deps);
 

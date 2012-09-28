@@ -33,14 +33,18 @@ gtk_css_value_initial_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_initial_compute (GtkCssValue        *value,
-                               guint               property_id,
-                               GtkStyleContext    *context,
-                               GtkCssDependencies *dependencies)
+gtk_css_value_initial_compute (GtkCssValue             *value,
+                               guint                    property_id,
+                               GtkStyleProviderPrivate *provider,
+                               GtkCssComputedValues    *values,
+                               GtkCssComputedValues    *parent_values,
+                               GtkCssDependencies      *dependencies)
 {
   return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
                                  property_id,
-                                 context,
+                                 provider,
+                                 values,
+                                 parent_values,
                                  dependencies);
 }
 

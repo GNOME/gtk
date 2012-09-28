@@ -22,7 +22,6 @@
 
 #include <glib-object.h>
 #include "gtkcsstypesprivate.h"
-#include "gtktypes.h"
 
 G_BEGIN_DECLS
 
@@ -43,7 +42,9 @@ struct _GtkCssValueClass {
 
   GtkCssValue * (* compute)                           (GtkCssValue                *value,
                                                        guint                       property_id,
-                                                       GtkStyleContext            *context,
+                                                       GtkStyleProviderPrivate    *provider,
+                                                       GtkCssComputedValues       *values,
+                                                       GtkCssComputedValues       *parent_values,
                                                        GtkCssDependencies         *dependencies);
   gboolean      (* equal)                             (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);
@@ -66,7 +67,9 @@ void         _gtk_css_value_unref                     (GtkCssValue              
 
 GtkCssValue *_gtk_css_value_compute                   (GtkCssValue                *value,
                                                        guint                       property_id,
-                                                       GtkStyleContext            *context,
+                                                       GtkStyleProviderPrivate    *provider,
+                                                       GtkCssComputedValues       *values,
+                                                       GtkCssComputedValues       *parent_values,
                                                        GtkCssDependencies         *dependencies);
 gboolean     _gtk_css_value_equal                     (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);

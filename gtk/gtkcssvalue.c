@@ -19,6 +19,9 @@
 
 #include "gtkcssvalueprivate.h"
 
+#include "gtkcsscomputedvaluesprivate.h"
+#include "gtkstyleproviderprivate.h"
+
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
 };
@@ -65,7 +68,9 @@ _gtk_css_value_unref (GtkCssValue *value)
  * _gtk_css_value_compute:
  * @value: the value to compute from
  * @property_id: the ID of the property to compute
- * @context: the context to use for resolving
+ * @provider: Style provider for looking up extra information
+ * @values: values to compute for
+ * @parent_values: parent values to use for inherited values
  * @dependencies: (out) (allow-none): Set to the dependencies of the
  *     computed values that indicate when this value needs to be
  *     recomputed and how.
@@ -79,21 +84,25 @@ _gtk_css_value_unref (GtkCssValue *value)
  * Returns: the computed value
  **/
 GtkCssValue *
-_gtk_css_value_compute (GtkCssValue        *value,
-                        guint               property_id,
-                        GtkStyleContext    *context,
-                        GtkCssDependencies *dependencies)
+_gtk_css_value_compute (GtkCssValue             *value,
+                        guint                    property_id,
+                        GtkStyleProviderPrivate *provider,
+                        GtkCssComputedValues    *values,
+                        GtkCssComputedValues    *parent_values,
+                        GtkCssDependencies      *dependencies)
 {
   GtkCssDependencies fallback;
 
   g_return_val_if_fail (value != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
+  g_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_COMPUTED_VALUES (parent_values), NULL);
 
   if (dependencies == NULL)
     dependencies = &fallback;
   *dependencies = 0;
 
-  return value->class->compute (value, property_id, context, dependencies);
+  return value->class->compute (value, property_id, provider, values, parent_values, dependencies);
 }
 
 gboolean

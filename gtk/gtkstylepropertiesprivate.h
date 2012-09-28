@@ -34,9 +34,11 @@ void           _gtk_style_properties_set_property_by_property (GtkStylePropertie
                                                                GtkCssValue             *value);
 
 cairo_pattern_t *
-              _gtk_gradient_resolve_full  (GtkGradient         *gradient,
-                                           GtkStyleContext     *context,
-                                           GtkCssDependencies  *dependencies);
+               _gtk_gradient_resolve_full                     (GtkGradient             *gradient,
+                                                               GtkStyleProviderPrivate *provider,
+                                                               GtkCssComputedValues    *values,
+                                                               GtkCssComputedValues    *parent_values,
+                                                               GtkCssDependencies      *dependencies);
 
 G_END_DECLS
 

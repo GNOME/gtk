@@ -28,10 +28,12 @@
 G_DEFINE_TYPE (GtkCssImageGradient, _gtk_css_image_gradient, GTK_TYPE_CSS_IMAGE)
 
 static GtkCssImage *
-gtk_css_image_gradient_compute (GtkCssImage        *image,
-                                guint               property_id,
-                                GtkStyleContext    *context,
-                                GtkCssDependencies *dependencies)
+gtk_css_image_gradient_compute (GtkCssImage             *image,
+                                guint                    property_id,
+                                GtkStyleProviderPrivate *provider,
+                                GtkCssComputedValues    *values,
+                                GtkCssComputedValues    *parent_values,
+                                GtkCssDependencies      *dependencies)
 {
   GtkCssImageGradient *gradient = GTK_CSS_IMAGE_GRADIENT (image);
   GtkCssImageGradient *copy;
@@ -41,7 +43,7 @@ gtk_css_image_gradient_compute (GtkCssImage        *image,
 
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_GRADIENT, NULL);
   copy->gradient = gtk_gradient_ref (gradient->gradient);
-  copy->pattern = _gtk_gradient_resolve_full (copy->gradient, context, dependencies);
+  copy->pattern = _gtk_gradient_resolve_full (copy->gradient, provider, values, parent_values, dependencies);
 
   return GTK_CSS_IMAGE (copy);
 }

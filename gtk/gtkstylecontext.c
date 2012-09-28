@@ -697,14 +697,6 @@ gtk_style_context_set_cascade (GtkStyleContext *context,
     gtk_style_context_cascade_changed (cascade, context);
 }
 
-GtkStyleProviderPrivate *
-_gtk_style_context_get_style_provider (GtkStyleContext *context)
-{
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  return GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade);
-}
-
 static void
 gtk_style_context_init (GtkStyleContext *style_context)
 {
@@ -987,7 +979,10 @@ build_properties (GtkStyleContext      *context,
                                         &matcher,
                                         lookup);
 
-  _gtk_css_lookup_resolve (lookup, context, values);
+  _gtk_css_lookup_resolve (lookup, 
+                           GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                           values,
+                           priv->parent ? style_data_lookup (priv->parent)->store : NULL);
 
   _gtk_css_lookup_free (lookup);
   gtk_widget_path_free (path);
@@ -3146,9 +3141,10 @@ _gtk_style_context_validate (GtkStyleContext  *context,
       data = style_data_lookup (context);
 
       _gtk_css_computed_values_create_animations (data->store,
+                                                  priv->parent ? style_data_lookup (priv->parent)->store : NULL,
                                                   timestamp,
-                                                  current && gtk_style_context_should_create_transitions (context) ? current->store : NULL,
-                                                  context);
+                                                  GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                                  current && gtk_style_context_should_create_transitions (context) ? current->store : NULL);
       if (_gtk_css_computed_values_is_static (data->store))
         change &= ~GTK_CSS_CHANGE_ANIMATE;
       else
@@ -4584,3 +4580,21 @@ _gtk_style_context_get_attributes (AtkAttributeSet *attributes,
 
   return attributes;
 }
+
+cairo_pattern_t *
+gtk_gradient_resolve_for_context (GtkGradient     *gradient,
+                                  GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+  GtkCssDependencies ignored = 0;
+
+  g_return_val_if_fail (gradient != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  return _gtk_gradient_resolve_full (gradient,
+                                     GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                     style_data_lookup (context)->store,
+                                     priv->parent ? style_data_lookup (priv->parent)->store : NULL,
+                                     &ignored);
+}
+
