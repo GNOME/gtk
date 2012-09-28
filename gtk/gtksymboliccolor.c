@@ -674,15 +674,6 @@ _shade_color (GdkRGBA *color,
   *color = temp;
 }
 
-static GtkSymbolicColor *
-resolve_lookup_color (gpointer data, const char *name)
-{
-  if (data == NULL)
-    return NULL;
-
-  return gtk_style_properties_lookup_color (data, name);
-}
-
 /**
  * gtk_symbolic_color_resolve:
  * @color: a #GtkSymbolicColor
@@ -717,10 +708,9 @@ gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
 
   current = _gtk_css_rgba_value_new_from_rgba (&pink);
   v =_gtk_symbolic_color_resolve_full (color,
+                                       GTK_STYLE_PROVIDER_PRIVATE (props),
                                        current,
                                        0,
-				       resolve_lookup_color,
-				       props,
                                        NULL);
   _gtk_css_value_unref (current);
   if (v == NULL)
@@ -732,19 +722,18 @@ gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
 }
 
 GtkCssValue *
-_gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
-                                  GtkCssValue                *current,
-                                  GtkCssDependencies          current_deps,
-				  GtkSymbolicColorLookupFunc  func,
-				  gpointer                    data,
-                                  GtkCssDependencies         *dependencies)
+_gtk_symbolic_color_resolve_full (GtkSymbolicColor        *color,
+                                  GtkStyleProviderPrivate *provider,
+                                  GtkCssValue             *current,
+                                  GtkCssDependencies       current_deps,
+                                  GtkCssDependencies      *dependencies)
 {
   GtkCssDependencies unused;
   GtkCssValue *value;
 
   g_return_val_if_fail (color != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), FALSE);
   g_return_val_if_fail (current != NULL, FALSE);
-  g_return_val_if_fail (func != NULL, FALSE);
 
   if (dependencies == NULL)
     dependencies = &unused;
@@ -759,12 +748,12 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
       {
 	GtkSymbolicColor *named_color;
 
-	named_color = func (data, color->name);
+        named_color = _gtk_style_provider_private_get_color (provider, color->name);
 
 	if (!named_color)
 	  return NULL;
 
-	return _gtk_symbolic_color_resolve_full (named_color, current, current_deps, func, data, dependencies);
+	return _gtk_symbolic_color_resolve_full (named_color, provider, current, current_deps, dependencies);
       }
 
       break;
@@ -773,7 +762,7 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
 	GtkCssValue *val;
 	GdkRGBA shade;
 
-	val = _gtk_symbolic_color_resolve_full (color->shade.color, current, current_deps, func, data, dependencies);
+	val = _gtk_symbolic_color_resolve_full (color->shade.color, provider, current, current_deps, dependencies);
 	if (val == NULL)
 	  return NULL;
 
@@ -792,7 +781,7 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
 	GtkCssValue *val;
 	GdkRGBA alpha;
 
-	val = _gtk_symbolic_color_resolve_full (color->alpha.color, current, current_deps, func, data, dependencies);
+	val = _gtk_symbolic_color_resolve_full (color->alpha.color, provider, current, current_deps, dependencies);
 	if (val == NULL)
 	  return NULL;
 
@@ -812,13 +801,13 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor           *color,
 	GdkRGBA color1, color2, res;
         GtkCssDependencies dep1, dep2;
 
-	val = _gtk_symbolic_color_resolve_full (color->mix.color1, current, current_deps, func, data, &dep1);
+	val = _gtk_symbolic_color_resolve_full (color->mix.color1, provider, current, current_deps, &dep1);
 	if (val == NULL)
 	  return NULL;
 	color1 = *_gtk_css_rgba_value_get_rgba (val);
 	_gtk_css_value_unref (val);
 
-	val = _gtk_symbolic_color_resolve_full (color->mix.color2, current, current_deps, func, data, &dep2);
+	val = _gtk_symbolic_color_resolve_full (color->mix.color2, provider, current, current_deps, &dep2);
 	if (val == NULL)
 	  return NULL;
 	color2 = *_gtk_css_rgba_value_get_rgba (val);

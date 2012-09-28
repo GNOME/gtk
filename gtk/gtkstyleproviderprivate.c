@@ -50,6 +50,10 @@ _gtk_style_provider_private_get_color (GtkStyleProviderPrivate *provider,
 {
   GtkStyleProviderPrivateInterface *iface;
 
+  /* for compat with gtk_symbolic_color_resolve() */
+  if (provider == NULL)
+    return NULL;
+
   g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
 
   iface = GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE (provider);

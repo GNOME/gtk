@@ -25,6 +25,7 @@ G_BEGIN_DECLS
 
 /* forward declaration for GtkCssValue */
 typedef struct _GtkCssComputedValues GtkCssComputedValues;
+typedef struct _GtkStyleProviderPrivate GtkStyleProviderPrivate; /* dummy typedef */
 
 typedef enum { /*< skip >*/
   GTK_CSS_CHANGE_CLASS                    = (1 <<  0),

@@ -399,9 +399,6 @@ static void gtk_style_context_impl_get_property (GObject      *object,
                                                  guint         prop_id,
                                                  GValue       *value,
                                                  GParamSpec   *pspec);
-static GtkSymbolicColor *
-            gtk_style_context_color_lookup_func (gpointer      contextp,
-                                                 const char   *name);
 static StyleData *style_data_lookup             (GtkStyleContext *context);
 
 
@@ -2708,15 +2705,6 @@ gtk_style_context_get_junction_sides (GtkStyleContext *context)
   return context->priv->info->junction_sides;
 }
 
-static GtkSymbolicColor *
-gtk_style_context_color_lookup_func (gpointer    contextp,
-                                     const char *name)
-{
-  GtkStyleContext *context = contextp;
-
-  return _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade), name);
-}
-
 GtkCssValue *
 _gtk_style_context_resolve_color_value (GtkStyleContext    *context,
                                         GtkCssValue        *current,
@@ -2729,10 +2717,9 @@ _gtk_style_context_resolve_color_value (GtkStyleContext    *context,
   g_return_val_if_fail (color != NULL, FALSE);
 
   return _gtk_symbolic_color_resolve_full ((GtkSymbolicColor *) color,
+                                           GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade),
                                            current,
                                            current_deps,
-                                           gtk_style_context_color_lookup_func,
-                                           context,
                                            dependencies);
 }
 
@@ -2750,10 +2737,9 @@ _gtk_style_context_resolve_color (GtkStyleContext    *context,
   g_return_val_if_fail (result != NULL, FALSE);
 
   val = _gtk_symbolic_color_resolve_full (color,
+                                          GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade),
                                           _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR),
                                           GTK_CSS_DEPENDS_ON_COLOR,
-					  gtk_style_context_color_lookup_func,
-					  context,
                                           dependencies);
   if (val == NULL)
     return FALSE;
@@ -2784,7 +2770,7 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
   g_return_val_if_fail (color_name != NULL, FALSE);
   g_return_val_if_fail (color != NULL, FALSE);
 
-  sym_color = gtk_style_context_color_lookup_func (context, color_name);
+  sym_color = _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade), color_name);
   if (sym_color == NULL)
     return FALSE;
 

@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 #define GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE(o)  (G_TYPE_INSTANCE_GET_INTERFACE ((o), GTK_TYPE_STYLE_PROVIDER_PRIVATE, GtkStyleProviderPrivateInterface))
 
 typedef struct _GtkStyleProviderPrivateInterface GtkStyleProviderPrivateInterface;
-typedef struct _GtkStyleProviderPrivate GtkStyleProviderPrivate; /* dummy typedef */
+/* typedef struct _GtkStyleProviderPrivate GtkStyleProviderPrivate; */ /* dummy typedef */
 
 struct _GtkStyleProviderPrivateInterface
 {
