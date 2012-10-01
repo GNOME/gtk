@@ -1,4 +1,4 @@
-@import url("reset.css");
+@import url("resource:///reset.css");
 
 * {
     transition-property: color, background-color, border-color, background-image, padding, border-width;
