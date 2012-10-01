@@ -3035,12 +3035,15 @@ gtk_style_context_needs_full_revalidate (GtkStyleContext  *context,
       if (priv->relevant_changes == GTK_CSS_CHANGE_ANY)
         {
           GtkWidgetPath *path;
-          GtkCssMatcher matcher;
+          GtkCssMatcher matcher, superset;
 
           path = create_query_path (context, priv->info);
           if (_gtk_css_matcher_init (&matcher, path, priv->info->state_flags))
-            priv->relevant_changes = _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                                                             &matcher);
+            {
+              _gtk_css_matcher_superset_init (&superset, &matcher, GTK_STYLE_CONTEXT_RADICAL_CHANGE & ~GTK_CSS_CHANGE_SOURCE);
+              priv->relevant_changes = _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                                                               &superset);
+            }
           else
             priv->relevant_changes = 0;
 
