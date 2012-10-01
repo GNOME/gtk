@@ -40,6 +40,7 @@ typedef enum { /*< skip >*/
   GTK_CSS_CHANGE_SIBLING_STATE            = (1 <<  7),
   GTK_CSS_CHANGE_PARENT_CLASS             = (1 <<  8),
   GTK_CSS_CHANGE_PARENT_NAME              = (1 <<  9),
+  GTK_CSS_CHANGE_PARENT_REGION            = GTK_CSS_CHANGE_PARENT_NAME,
   GTK_CSS_CHANGE_PARENT_POSITION          = (1 << 10),
   GTK_CSS_CHANGE_PARENT_STATE             = (1 << 11),
   GTK_CSS_CHANGE_PARENT_SIBLING_CLASS     = (1 << 12),
