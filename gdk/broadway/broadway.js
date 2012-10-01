@@ -2788,30 +2788,30 @@ function connect()
 	ws = newWS (loc);
     }
 
-	ws.onopen = function() {
-	    inputSocket = ws;
-	    var w, h;
-	    if (useToplevelWindows) {
-		w = window.screen.width;
-		h = window.screen.height;
-	    } else {
+    ws.onopen = function() {
+	inputSocket = ws;
+	var w, h;
+	if (useToplevelWindows) {
+	    w = window.screen.width;
+	    h = window.screen.height;
+	} else {
+	    w = window.innerWidth;
+	    h = window.innerHeight;
+	    window.onresize = function(ev) {
+		var w, h;
 		w = window.innerWidth;
 		h = window.innerHeight;
-		window.onresize = function(ev) {
-		    var w, h;
-		    w = window.innerWidth;
-		    h = window.innerHeight;
-		    sendInput ("d", [w, h]);
-		};
-	    }
-	    sendInput ("d", [w, h]);
-	};
-	ws.onclose = function() {
-	    inputSocket = null;
-	};
-	ws.onmessage = function(event) {
-	    handleMessage(event.data);
-	};
+		sendInput ("d", [w, h]);
+	    };
+	}
+	sendInput ("d", [w, h]);
+    };
+    ws.onclose = function() {
+	inputSocket = null;
+    };
+    ws.onmessage = function(event) {
+	handleMessage(event.data);
+    };
 
     setupDocument(document);
     window.onunload = function (ev) {
