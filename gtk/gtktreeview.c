@@ -11922,7 +11922,7 @@ _gtk_tree_view_reset_header_styles (GtkTreeView *tree_view)
       if (!header_widget)
         header_widget = gtk_tree_view_column_get_button (column);
 
-      _gtk_widget_invalidate_style_context (header_widget, GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_SIBLING_POSITION);
+      _gtk_widget_invalidate_style_context (header_widget, GTK_CSS_CHANGE_PARENT_REGION);
     }
 }
 
