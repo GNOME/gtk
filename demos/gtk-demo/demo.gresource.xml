@@ -20,6 +20,7 @@
   </gresource>
   <gresource prefix="/css_multiplebgs">
     <file alias="gtk.css">css_multiplebgs.css</file>
+    <file>brick.png</file>
   </gresource>
   <gresource prefix="/theming_custom_css">
     <file alias="gtk.css">fancy.css</file>
