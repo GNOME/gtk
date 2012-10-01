@@ -697,18 +697,21 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   KeySym keysym;
   Status status;
   gboolean result = FALSE;
-  GdkWindow *root_window = gdk_screen_get_root_window (gdk_window_get_screen (event->window));
-
+  GdkWindow *root_window;
+  GdkWindow *window;
   XKeyPressedEvent xevent;
 
   if (event->type == GDK_KEY_RELEASE && !context_xim->filter_key_release)
     return FALSE;
 
+  root_window = gdk_screen_get_root_window (gdk_window_get_screen (event->window));
+  window = gdk_window_get_toplevel (event->window);
+
   xevent.type = (event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
   xevent.serial = 0;		/* hope it doesn't matter */
   xevent.send_event = event->send_event;
-  xevent.display = GDK_WINDOW_XDISPLAY (event->window);
-  xevent.window = GDK_WINDOW_XID (event->window);
+  xevent.display = GDK_WINDOW_XDISPLAY (window);
+  xevent.window = GDK_WINDOW_XID (window);
   xevent.root = GDK_WINDOW_XID (root_window);
   xevent.subwindow = xevent.window;
   xevent.time = event->time;
