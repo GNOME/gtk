@@ -46,8 +46,8 @@
 }
 
 @keyframes size-the-image {
-    0% { background-size: 96px, 12px, 96px, 12px, 96px, 12px, 96px, 12px, 100% }
-    100% { background-size: 12px, 96px, 12px, 96px, 12px, 96px, 12px, 96px, 100% }
+    0% { background-size: 96px, 12px, 96px, 12px, 96px, 12px, 96px, 12px, auto }
+    100% { background-size: 12px, 96px, 12px, 96px, 12px, 96px, 12px, 96px, auto }
 }
 
 GtkWindow {
