@@ -58,7 +58,7 @@ base64_uint32 (guint32 v, char *c)
  ***********************************************************/
 
 struct PngTarget {
-  GString *url;
+  GString *buf;
   int state;
   int save;
 };
@@ -71,71 +71,71 @@ write_png_url (void		  *closure,
   struct PngTarget *target = closure;
   gsize res, old_len;
 
-  old_len = target->url->len;
-  g_string_set_size (target->url,
+  old_len = target->buf->len;
+  g_string_set_size (target->buf,
 		     old_len + (data_len / 3 + 1) * 4 + 4);
 
   res = g_base64_encode_step (data, data_len, FALSE,
-			      target->url->str + old_len,
+			      target->buf->str + old_len,
 			      &target->state, &target->save);
 
-  g_string_set_size (target->url,  old_len + res);
+  g_string_set_size (target->buf,  old_len + res);
 
   return CAIRO_STATUS_SUCCESS;
 }
 
-static char *
-to_png_rgb (int w, int h, int byte_stride, guint32 *data)
+static void
+to_png_url_rgb (GString *buf, int w, int h, int byte_stride, guint32 *data)
 {
   cairo_surface_t *surface;
   struct PngTarget target;
   gsize res, old_len;
 
-  target.url = g_string_new ("data:image/png;base64,");
+  target.buf = buf;
   target.state = 0;
   target.save = 0;
+
+  g_string_append (buf, "data:image/png;base64,");
 
   surface = cairo_image_surface_create_for_data ((guchar *)data,
 						 CAIRO_FORMAT_RGB24, w, h, byte_stride);
 
   cairo_surface_write_to_png_stream (surface, write_png_url, &target);
 
-  old_len = target.url->len;
+  old_len = buf->len;
 
-  g_string_set_size (target.url, old_len + 4);
+  g_string_set_size (buf, old_len + 4);
   res = g_base64_encode_close (FALSE,
-			       target.url->str + old_len,
+			       buf->str + old_len,
 			       &target.state, &target.save);
-  g_string_set_size (target.url, old_len + res);
-
-  return g_string_free (target.url, FALSE);
+  g_string_set_size (buf, old_len + res);
 }
 
-static char *
-to_png_rgba (int w, int h, int byte_stride, guint32 *data)
+static void
+to_png_url_rgba (GString *buf, int w, int h, int byte_stride, guint32 *data)
 {
   cairo_surface_t *surface;
   struct PngTarget target;
   gsize res, old_len;
 
-  target.url = g_string_new ("data:image/png;base64,");
+  target.buf = buf;
   target.state = 0;
   target.save = 0;
+
+  g_string_append (buf, "data:image/png;base64,");
 
   surface = cairo_image_surface_create_for_data ((guchar *)data,
 						 CAIRO_FORMAT_ARGB32, w, h, byte_stride);
 
   cairo_surface_write_to_png_stream (surface, write_png_url, &target);
 
-  old_len = target.url->len;
+  old_len = buf->len;
 
-  g_string_set_size (target.url, old_len + 4);
+  g_string_set_size (buf, old_len + 4);
   res = g_base64_encode_close (FALSE,
-			       target.url->str + old_len,
+			       buf->str + old_len,
 			       &target.state, &target.save);
-  g_string_set_size (target.url, old_len + res);
-
-  return g_string_free (target.url, FALSE);
+  g_string_set_size (buf, old_len + res);
 }
 
 #if 0
@@ -503,16 +503,9 @@ void
 broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
 			 int w, int h, int byte_stride, void *data)
 {
-  gsize buf_size;
-  gsize url_len;
-  char *url, *buf;
+  char buf[HEADER_LEN + 15];
+  gsize image_start, len;
   int p;
-
-  url = to_png_rgb (w, h, byte_stride, (guint32*)data);
-  url_len = strlen (url);
-
-  buf_size = HEADER_LEN + 15 + url_len;
-  buf = g_malloc (buf_size);
 
   p = write_header (output, buf, 'i');
 
@@ -520,15 +513,20 @@ broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
   append_uint16 (x, buf, &p);
   append_uint16 (y, buf, &p);
 
-  append_uint32 (url_len, buf, &p);
+  append_uint32 (0, buf, &p);
 
-  g_assert (p == HEADER_LEN + 15);
-  strncpy (buf + p, url, url_len);
+  g_assert (p == sizeof (buf));
 
-  broadway_output_sendmsg (output, buf, buf_size);
+  broadway_output_sendmsg (output, buf, sizeof (buf));
 
-  g_free (buf);
-  free (url);
+  image_start = output->buf->len;
+
+  to_png_url_rgb (output->buf, w, h, byte_stride, (guint32*)data);
+
+  len = output->buf->len - image_start;
+  p = image_start - 6;
+  append_uint32 (len, output->buf->str, &p);
+  g_assert (p == image_start);
 }
 
 typedef struct  {
@@ -758,40 +756,38 @@ void
 broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
 			  int w, int h, int byte_stride, void *data)
 {
+  char buf[HEADER_LEN + 15];
   BroadwayBox *rects;
   int p, i, n_rects;
+  gsize image_start, len;
 
   rects = rgba_find_rects (data, w, h, byte_stride, &n_rects);
 
   for (i = 0; i < n_rects; i++)
     {
-      gsize url_len, buf_size;
-      char *buf, *url;
       guint8 *subdata;
-
-      subdata = (guint8 *)data + rects[i].x1 * 4 + rects[i].y1 * byte_stride;
-      url = to_png_rgba (rects[i].x2 - rects[i].x1,
-			 rects[i].y2 - rects[i].y1,
-			 byte_stride, (guint32*)subdata);
-
-      url_len = strlen (url);
-      buf_size = HEADER_LEN + 15 + url_len;
-      buf = g_malloc (buf_size);
-
 
       p = write_header (output, buf, 'i');
       append_uint16 (id, buf, &p);
       append_uint16 (x + rects[i].x1, buf, &p);
       append_uint16 (y + rects[i].y1, buf, &p);
 
-      append_uint32 (url_len, buf, &p);
-      g_assert (p == HEADER_LEN + 15);
-      strncpy (buf + p, url, url_len);
+      append_uint32 (0, buf, &p);
+      g_assert (p == sizeof (buf));
 
-      broadway_output_sendmsg (output, buf, buf_size);
+      broadway_output_sendmsg (output, buf, sizeof (buf));
 
-      free (url);
-      g_free (buf);
+      image_start = output->buf->len;
+
+      subdata = (guint8 *)data + rects[i].x1 * 4 + rects[i].y1 * byte_stride;
+      to_png_url_rgba (output->buf, rects[i].x2 - rects[i].x1,
+		       rects[i].y2 - rects[i].y1,
+		       byte_stride, (guint32*)subdata);
+
+      len = output->buf->len - image_start;
+      p = image_start - 6;
+      append_uint32 (len, output->buf->str, &p);
+      g_assert (p == image_start);
     }
 
   free (rects);
