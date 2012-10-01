@@ -40,7 +40,6 @@ struct _GtkCssTransition
 
   guint        property;
   GtkCssValue *start;
-  GtkCssValue *end;
   GtkCssValue *ease;
   gint64       start_time;
   gint64       end_time;
@@ -55,7 +54,6 @@ GType                   _gtk_css_transition_get_type        (void) G_GNUC_CONST;
 
 GtkStyleAnimation *     _gtk_css_transition_new             (guint               property,
                                                              GtkCssValue        *start,
-                                                             GtkCssValue        *end,
                                                              GtkCssValue        *ease,
                                                              gint64              start_time_us,
                                                              gint64              end_time_us);

@@ -31,24 +31,26 @@ gtk_css_transition_set_values (GtkStyleAnimation    *animation,
                                GtkCssComputedValues *values)
 {
   GtkCssTransition *transition = GTK_CSS_TRANSITION (animation);
-  GtkCssValue *value;
+  GtkCssValue *value, *end;
   double progress;
+
+  end = _gtk_css_computed_values_get_intrinsic_value (values, transition->property);
 
   if (transition->start_time >= for_time_us)
     value = _gtk_css_value_ref (transition->start);
   else if (transition->end_time <= for_time_us)
-    value = _gtk_css_value_ref (transition->end);
+    value = _gtk_css_value_ref (end);
   else
     {
       progress = (double) (for_time_us - transition->start_time) / (transition->end_time - transition->start_time);
       progress = _gtk_css_ease_value_transform (transition->ease, progress);
 
       value = _gtk_css_value_transition (transition->start,
-                                         transition->end,
+                                         end,
                                          transition->property,
                                          progress);
       if (value == NULL)
-        value = _gtk_css_value_ref (transition->end);
+        value = _gtk_css_value_ref (end);
     }
 
   _gtk_css_computed_values_set_animated_value (values, transition->property, value);
@@ -79,7 +81,6 @@ gtk_css_transition_finalize (GObject *object)
   GtkCssTransition *transition = GTK_CSS_TRANSITION (object);
 
   _gtk_css_value_unref (transition->start);
-  _gtk_css_value_unref (transition->end);
   _gtk_css_value_unref (transition->ease);
 
   G_OBJECT_CLASS (_gtk_css_transition_parent_class)->finalize (object);
@@ -106,7 +107,6 @@ _gtk_css_transition_init (GtkCssTransition *transition)
 GtkStyleAnimation *
 _gtk_css_transition_new (guint        property,
                          GtkCssValue *start,
-                         GtkCssValue *end,
                          GtkCssValue *ease,
                          gint64       start_time_us,
                          gint64       end_time_us)
@@ -114,7 +114,6 @@ _gtk_css_transition_new (guint        property,
   GtkCssTransition *transition;
 
   g_return_val_if_fail (start != NULL, NULL);
-  g_return_val_if_fail (end != NULL, NULL);
   g_return_val_if_fail (ease != NULL, NULL);
   g_return_val_if_fail (start_time_us <= end_time_us, NULL);
 
@@ -122,7 +121,6 @@ _gtk_css_transition_new (guint        property,
 
   transition->property = property;
   transition->start = _gtk_css_value_ref (start);
-  transition->end = _gtk_css_value_ref (end);
   transition->ease = _gtk_css_value_ref (ease);
   transition->start_time = start_time_us;
   transition->end_time = end_time_us;
