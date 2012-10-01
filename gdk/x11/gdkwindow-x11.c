@@ -4858,6 +4858,11 @@ _gdk_x11_display_before_process_all_updates (GdkDisplay *display)
 void
 _gdk_x11_display_after_process_all_updates (GdkDisplay *display)
 {
+  /* Sync after all drawing, otherwise the client can get "ahead" of
+     the server rendering during animations, such that we fill up
+     the Xserver pipes with sync rendering ops not letting other
+     clients (including the VM) do anything. */
+  XSync (GDK_DISPLAY_XDISPLAY (display), FALSE);
 }
 
 static Bool
