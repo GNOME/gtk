@@ -130,7 +130,7 @@ typedef struct HttpRequest {
   GString *request;
 }  HttpRequest;
 
-static void start_output (HttpRequest *request, gboolean proto_v7_plus);
+static void start_output (HttpRequest *request, gboolean proto_v7_plus, gboolean binary);
 
 static void
 http_request_free (HttpRequest *request)
@@ -876,7 +876,7 @@ start_input (HttpRequest *request, gboolean binary)
 
   broadway_display->input = input;
 
-  start_output (request, proto_v7_plus);
+  start_output (request, proto_v7_plus, binary);
 
   /* This will free and close the data input stream, but we got all the buffered content already */
   http_request_free (request);
@@ -894,7 +894,7 @@ start_input (HttpRequest *request, gboolean binary)
 }
 
 static void
-start_output (HttpRequest *request, gboolean proto_v7_plus)
+start_output (HttpRequest *request, gboolean proto_v7_plus, gboolean binary)
 {
   GSocket *socket;
   GdkBroadwayDisplay *broadway_display;
@@ -914,7 +914,7 @@ start_output (HttpRequest *request, gboolean proto_v7_plus)
 
   broadway_display->output =
     broadway_output_new (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
-			 broadway_display->saved_serial, proto_v7_plus);
+			 broadway_display->saved_serial, proto_v7_plus, binary);
 
   _gdk_broadway_resync_windows ();
 

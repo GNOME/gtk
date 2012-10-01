@@ -57,6 +57,42 @@ base64_uint32 (guint32 v, char *c)
  *  conversion of raw image data to png data: uris         *
  ***********************************************************/
 
+static cairo_status_t
+write_png_data (void		  *closure,
+		const unsigned char *data,
+		unsigned int	   data_len)
+{
+  GString *buf = closure;
+
+  g_string_append_len (buf,  (char *)data, data_len);
+
+  return CAIRO_STATUS_SUCCESS;
+}
+
+static void
+to_png_rgb (GString *buf, int w, int h, int byte_stride, guint32 *data)
+{
+  cairo_surface_t *surface;
+
+  surface = cairo_image_surface_create_for_data ((guchar *)data,
+						 CAIRO_FORMAT_RGB24, w, h, byte_stride);
+
+  cairo_surface_write_to_png_stream (surface, write_png_data, buf);
+  cairo_surface_destroy (surface);
+}
+
+static void
+to_png_rgba (GString *buf, int w, int h, int byte_stride, guint32 *data)
+{
+  cairo_surface_t *surface;
+
+  surface = cairo_image_surface_create_for_data ((guchar *)data,
+						 CAIRO_FORMAT_ARGB32, w, h, byte_stride);
+
+  cairo_surface_write_to_png_stream (surface, write_png_data, buf);
+  cairo_surface_destroy (surface);
+}
+
 struct PngTarget {
   GString *buf;
   int state;
@@ -101,6 +137,7 @@ to_png_url_rgb (GString *buf, int w, int h, int byte_stride, guint32 *data)
 						 CAIRO_FORMAT_RGB24, w, h, byte_stride);
 
   cairo_surface_write_to_png_stream (surface, write_png_url, &target);
+  cairo_surface_destroy (surface);
 
   old_len = buf->len;
 
@@ -128,6 +165,7 @@ to_png_url_rgba (GString *buf, int w, int h, int byte_stride, guint32 *data)
 						 CAIRO_FORMAT_ARGB32, w, h, byte_stride);
 
   cairo_surface_write_to_png_stream (surface, write_png_url, &target);
+  cairo_surface_destroy (surface);
 
   old_len = buf->len;
 
@@ -177,6 +215,7 @@ struct BroadwayOutput {
   int error;
   guint32 serial;
   gboolean proto_v7_plus;
+  gboolean binary;
 };
 
 static void
@@ -235,6 +274,9 @@ broadway_output_flush (BroadwayOutput *output)
 
   if (!output->proto_v7_plus)
     broadway_output_send_cmd_pre_v7 (output, output->buf->str, output->buf->len);
+  else if (output->binary)
+    broadway_output_send_cmd (output, TRUE, BROADWAY_WS_BINARY,
+			      output->buf->str, output->buf->len);
   else
     broadway_output_send_cmd (output, TRUE, BROADWAY_WS_TEXT,
 			      output->buf->str, output->buf->len);
@@ -247,7 +289,7 @@ broadway_output_flush (BroadwayOutput *output)
 
 BroadwayOutput *
 broadway_output_new (GOutputStream *out, guint32 serial,
-		     gboolean proto_v7_plus)
+		     gboolean proto_v7_plus, gboolean binary)
 {
   BroadwayOutput *output;
 
@@ -257,6 +299,7 @@ broadway_output_new (GOutputStream *out, guint32 serial,
   output->buf = g_string_new ("");
   output->serial = serial;
   output->proto_v7_plus = proto_v7_plus;
+  output->binary = binary;
 
   return output;
 }
@@ -288,13 +331,19 @@ append_char (BroadwayOutput *output, char c)
 static void
 append_bool (BroadwayOutput *output, gboolean val)
 {
-  g_string_append_c (output->buf, val ? '1': '0');
+  if (output->binary)
+    g_string_append_c (output->buf, val ? 1: 0);
+  else
+    g_string_append_c (output->buf, val ? '1': '0');
 }
 
 static void
 append_flags (BroadwayOutput *output, guint32 val)
 {
-  g_string_append_c (output->buf, val + '0');
+  if (output->binary)
+    g_string_append_c (output->buf, val);
+  else
+    g_string_append_c (output->buf, val + '0');
 }
 
 
@@ -302,22 +351,60 @@ static void
 append_uint16 (BroadwayOutput *output, guint32 v)
 {
   gsize old_len = output->buf->len;
-  g_string_set_size (output->buf, old_len + 3);
-  base64_uint16 (v, output->buf->str + old_len);
+
+  if (output->binary)
+    {
+      guint8 *buf = (guint8 *)output->buf->str + old_len;
+
+      g_string_set_size (output->buf, old_len + 2);
+      buf[0] = (v >> 0) & 0xff;
+      buf[1] = (v >> 8) & 0xff;
+    }
+  else
+    {
+      g_string_set_size (output->buf, old_len + 3);
+      base64_uint16 (v, output->buf->str + old_len);
+    }
 }
 
 static void
 append_uint32 (BroadwayOutput *output, guint32 v)
 {
   gsize old_len = output->buf->len;
-  g_string_set_size (output->buf, old_len + 6);
-  base64_uint32 (v, output->buf->str + old_len);
+
+  if (output->binary)
+    {
+      guint8 *buf = (guint8 *)output->buf->str + old_len;
+
+      g_string_set_size (output->buf, old_len + 4);
+      buf[0] = (v >> 0) & 0xff;
+      buf[1] = (v >> 8) & 0xff;
+      buf[2] = (v >> 16) & 0xff;
+      buf[3] = (v >> 24) & 0xff;
+    }
+  else
+    {
+      g_string_set_size (output->buf, old_len + 6);
+      base64_uint32 (v, output->buf->str + old_len);
+    }
 }
 
 static void
 overwrite_uint32 (BroadwayOutput *output, gsize pos, guint32 v)
 {
-  base64_uint32 (v, output->buf->str + pos);
+  if (output->binary)
+    {
+      guint8 *buf = (guint8 *)output->buf->str + pos;
+
+      buf[0] = (v >> 0) & 0xff;
+      buf[1] = (v >> 8) & 0xff;
+      buf[2] = (v >> 16) & 0xff;
+      buf[3] = (v >> 24) & 0xff;
+    }
+  else
+    {
+      base64_uint32 (v, output->buf->str + pos);
+    }
 }
 
 
@@ -464,7 +551,10 @@ broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
   append_uint32 (output, 0);
 
   image_start = output->buf->len;
-  to_png_url_rgb (output->buf, w, h, byte_stride, (guint32*)data);
+  if (output->binary)
+    to_png_rgb (output->buf, w, h, byte_stride, (guint32*)data);
+  else
+    to_png_url_rgb (output->buf, w, h, byte_stride, (guint32*)data);
 
   len = output->buf->len - image_start;
 
@@ -719,9 +809,14 @@ broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
       image_start = output->buf->len;
 
       subdata = (guint8 *)data + rects[i].x1 * 4 + rects[i].y1 * byte_stride;
-      to_png_url_rgba (output->buf, rects[i].x2 - rects[i].x1,
-		       rects[i].y2 - rects[i].y1,
-		       byte_stride, (guint32*)subdata);
+      if (output->binary)
+	to_png_rgba (output->buf, rects[i].x2 - rects[i].x1,
+		     rects[i].y2 - rects[i].y1,
+		     byte_stride, (guint32*)subdata);
+      else
+	to_png_url_rgba (output->buf, rects[i].x2 - rects[i].x1,
+			 rects[i].y2 - rects[i].y1,
+			 byte_stride, (guint32*)subdata);
 
       len = output->buf->len - image_start;
 

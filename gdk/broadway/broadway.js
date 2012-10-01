@@ -790,9 +790,10 @@ function handleCommands(cmd)
 	    q.img.src = url;
 	    surfaces[q.id].drawQueue.push(q);
 	    if (!q.img.complete) {
-		q.img.onload = function() { handleOutstanding(); };
+		q.img.onload = function() { cmd.free_image_url (url); handleOutstanding(); };
 		return false;
 	    }
+	    cmd.free_image_url (url);
 	    break;
 
 	case 'b': // Copy rects
@@ -886,10 +887,66 @@ TextCommands.prototype.get_image_url = function() {
     this.pos = this.pos + size;
     return url;
 };
+TextCommands.prototype.free_image_url = function(url) {
+};
+
+function BinCommands(message) {
+    this.arraybuffer = message;
+    this.u8 = new Uint8Array(message);
+    this.length = this.u8.length;
+    this.pos = 0;
+}
+
+BinCommands.prototype.get_char = function() {
+    return String.fromCharCode(this.u8[this.pos++]);
+};
+BinCommands.prototype.get_bool = function() {
+    return this.u8[this.pos++] != 0;
+};
+BinCommands.prototype.get_flags = function() {
+    return this.u8[this.pos++];
+}
+BinCommands.prototype.get_16 = function() {
+    var v =
+	this.u8[this.pos] +
+	(this.u8[this.pos+1] << 8);
+    this.pos = this.pos + 2;
+    return v;
+};
+BinCommands.prototype.get_16s = function() {
+    var v = this.get_16 ();
+    if (v > 32767)
+	return v - 65536;
+    else
+	return v;
+};
+BinCommands.prototype.get_32 = function() {
+    var v =
+	this.u8[this.pos] +
+	(this.u8[this.pos+1] << 8) +
+	(this.u8[this.pos+2] << 16) +
+	(this.u8[this.pos+3] << 24);
+    this.pos = this.pos + 4;
+    return v;
+};
+BinCommands.prototype.get_image_url = function() {
+    var size = this.get_32();
+    var png_blob = new Blob ([this.arraybuffer.slice (this.pos, this.pos + size)], {type:"image/png"});
+    var url = URL.createObjectURL(png_blob, {oneTimeOnly: true});
+    this.pos = this.pos + size;
+    return url;
+};
+BinCommands.prototype.free_image_url = function(url) {
+    URL.revokeObjectURL(url);
+};
 
 function handleMessage(message)
 {
-    var cmd = new TextCommands(message);
+    var cmd;
+    if (message instanceof ArrayBuffer)
+	cmd = new BinCommands(message);
+    else
+	cmd = new TextCommands(message);
     outstandingCommands.push(cmd);
     if (outstandingCommands.length == 1) {
 	handleOutstanding();
