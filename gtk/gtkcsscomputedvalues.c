@@ -195,6 +195,12 @@ _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
   if (dependencies & (GTK_CSS_DEPENDS_ON_FONT_SIZE))
     values->depends_on_font_size = _gtk_bitmask_set (values->depends_on_font_size, id, TRUE);
 
+  if (values->sections && values->sections->len > id && g_ptr_array_index (values->sections, id))
+    {
+      gtk_css_section_unref (g_ptr_array_index (values->sections, id));
+      g_ptr_array_index (values->sections, id) = NULL;
+    }
+
   if (section)
     {
       if (values->sections == NULL)
