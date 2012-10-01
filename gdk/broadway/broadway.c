@@ -173,6 +173,7 @@ to_png_a (int w, int h, int byte_stride, guint8 *data)
 
 struct BroadwayOutput {
   GOutputStream *out;
+  GString *buf;
   int error;
   guint32 serial;
   gboolean proto_v7_plus;
@@ -212,13 +213,20 @@ broadway_output_send_cmd (BroadwayOutput *output,
 }
 
 static void
+broadway_output_send_cmd_pre_v7 (BroadwayOutput *output,
+				 const void *buf, gsize count)
+{
+  g_output_stream_write_all (output->out, "\0", 1, NULL, NULL, NULL);
+  g_output_stream_write_all (output->out, buf, count, NULL, NULL, NULL);
+  g_output_stream_write_all (output->out, "\xff", 1, NULL, NULL, NULL);
+}
+
+
+static void
 broadway_output_sendmsg (BroadwayOutput *output,
 			 const void *buf, gsize count)
 {
-  if (!output->proto_v7_plus)
-    g_output_stream_write_all (output->out, buf, count, NULL, NULL, NULL);
-  else
-    broadway_output_send_cmd (output, TRUE, BROADWAY_WS_TEXT, buf, count);
+  g_string_append_len (output->buf, buf, count);
 }
 
 void broadway_output_pong (BroadwayOutput *output)
@@ -227,42 +235,36 @@ void broadway_output_pong (BroadwayOutput *output)
     broadway_output_send_cmd (output, TRUE, BROADWAY_WS_CNX_PONG, NULL, 0);
 }
 
-static void
-broadway_output_sendmsg_initiate (BroadwayOutput *output)
-{
-  if (!output->proto_v7_plus)
-    g_output_stream_write (output->out, "\0", 1, NULL, NULL);
-  else
-    {
-    }
-}
-
 int
 broadway_output_flush (BroadwayOutput *output)
 {
+  if (output->buf->len == 0)
+    return TRUE;
+
   if (!output->proto_v7_plus)
-    {
-      broadway_output_sendmsg (output, "\xff", 1);
-      broadway_output_sendmsg (output, "\0", 1);
-      return !output->error;
-    }
-  else /* no need to flush */
-    return !output->error;
+    broadway_output_send_cmd_pre_v7 (output, output->buf->str, output->buf->len);
+  else
+    broadway_output_send_cmd (output, TRUE, BROADWAY_WS_TEXT,
+			      output->buf->str, output->buf->len);
+
+  g_string_set_size (output->buf, 0);
+
+  return !output->error;
+
 }
 
 BroadwayOutput *
-broadway_output_new(GOutputStream *out, guint32 serial,
-		    gboolean proto_v7_plus)
+broadway_output_new (GOutputStream *out, guint32 serial,
+		     gboolean proto_v7_plus)
 {
   BroadwayOutput *output;
 
   output = g_new0 (BroadwayOutput, 1);
 
   output->out = g_object_ref (out);
+  output->buf = g_string_new ("");
   output->serial = serial;
   output->proto_v7_plus = proto_v7_plus;
-
-  broadway_output_sendmsg_initiate (output);
 
   return output;
 }
