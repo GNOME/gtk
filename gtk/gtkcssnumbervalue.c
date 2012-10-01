@@ -42,40 +42,6 @@ gtk_css_value_number_compute (GtkCssValue             *number,
                               GtkCssComputedValues    *parent_values,
                               GtkCssDependencies      *dependencies)
 {
-  GtkBorderStyle border_style;
-
-  /* I don't like this special case being here in this generic code path, but no idea where else to put it. */
-  switch (property_id)
-    {
-      case GTK_CSS_PROPERTY_BORDER_TOP_WIDTH:
-        border_style = _gtk_css_border_style_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          return _gtk_css_number_value_new (0, GTK_CSS_PX);
-        break;
-      case GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH:
-        border_style = _gtk_css_border_style_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          return _gtk_css_number_value_new (0, GTK_CSS_PX);
-        break;
-      case GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH:
-        border_style = _gtk_css_border_style_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          return _gtk_css_number_value_new (0, GTK_CSS_PX);
-        break;
-      case GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH:
-        border_style = _gtk_css_border_style_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          return _gtk_css_number_value_new (0, GTK_CSS_PX);
-        break;
-      case GTK_CSS_PROPERTY_OUTLINE_WIDTH:
-        border_style = _gtk_css_border_style_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_OUTLINE_STYLE));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          return _gtk_css_number_value_new (0, GTK_CSS_PX);
-        break;
-      default:
-        break;
-    }
-
   switch (number->unit)
     {
     default:
