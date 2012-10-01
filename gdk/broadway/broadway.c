@@ -221,14 +221,6 @@ broadway_output_send_cmd_pre_v7 (BroadwayOutput *output,
   g_output_stream_write_all (output->out, "\xff", 1, NULL, NULL, NULL);
 }
 
-
-static void
-broadway_output_sendmsg (BroadwayOutput *output,
-			 const void *buf, gsize count)
-{
-  g_string_append_len (output->buf, buf, count);
-}
-
 void broadway_output_pong (BroadwayOutput *output)
 {
   if (output->proto_v7_plus)
@@ -287,32 +279,53 @@ broadway_output_get_next_serial (BroadwayOutput *output)
  *                     Core rendering operations                        *
  ************************************************************************/
 
-#define HEADER_LEN (1+6)
-
 static void
-append_uint16 (guint32 v, char *buf, int *p)
+append_char (BroadwayOutput *output, char c)
 {
-  base64_uint16 (v, &buf[*p]);
-  *p += 3;
+  g_string_append_c (output->buf, c);
 }
 
 static void
-append_uint32 (guint32 v, char *buf, int *p)
+append_bool (BroadwayOutput *output, gboolean val)
 {
-  base64_uint32 (v, &buf[*p]);
-  *p += 6;
+  g_string_append_c (output->buf, val ? '1': '0');
 }
 
-static int
-write_header(BroadwayOutput *output, char *buf, char op)
+static void
+append_flags (BroadwayOutput *output, guint32 val)
 {
-  int p;
+  g_string_append_c (output->buf, val + '0');
+}
 
-  p = 0;
-  buf[p++] = op;
-  append_uint32 (output->serial++, buf, &p);
 
-  return p;
+static void
+append_uint16 (BroadwayOutput *output, guint32 v)
+{
+  gsize old_len = output->buf->len;
+  g_string_set_size (output->buf, old_len + 3);
+  base64_uint16 (v, output->buf->str + old_len);
+}
+
+static void
+append_uint32 (BroadwayOutput *output, guint32 v)
+{
+  gsize old_len = output->buf->len;
+  g_string_set_size (output->buf, old_len + 6);
+  base64_uint32 (v, output->buf->str + old_len);
+}
+
+static void
+overwrite_uint32 (BroadwayOutput *output, gsize pos, guint32 v)
+{
+  base64_uint32 (v, output->buf->str + pos);
+}
+
+
+static void
+write_header(BroadwayOutput *output, char op)
+{
+  append_char (output, op);
+  append_uint32 (output, output->serial++);
 }
 
 void
@@ -320,29 +333,20 @@ broadway_output_copy_rectangles (BroadwayOutput *output,  int id,
 				 BroadwayRect *rects, int n_rects,
 				 int dx, int dy)
 {
-  char *buf;
-  int len, i, p;
+  int i;
 
-  len = HEADER_LEN + 3 + 3 + 3*4*n_rects + 3 + 3;
-
-  buf = g_malloc (len);
-  p = write_header (output, buf, 'b');
-  append_uint16 (id, buf, &p);
-  append_uint16 (n_rects, buf, &p);
+  write_header (output, 'b');
+  append_uint16 (output, id);
+  append_uint16 (output, n_rects);
   for (i = 0; i < n_rects; i++)
     {
-      append_uint16 (rects[i].x, buf, &p);
-      append_uint16 (rects[i].y, buf, &p);
-      append_uint16 (rects[i].width, buf, &p);
-      append_uint16 (rects[i].height, buf, &p);
+      append_uint16 (output, rects[i].x);
+      append_uint16 (output, rects[i].y);
+      append_uint16 (output, rects[i].width);
+      append_uint16 (output, rects[i].height);
     }
-  append_uint16 (dx, buf, &p);
-  append_uint16 (dy, buf, &p);
-
-  assert (p == len);
-
-  broadway_output_sendmsg (output, buf, len);
-  free (buf);
+  append_uint16 (output, dx);
+  append_uint16 (output, dy);
 }
 
 void
@@ -350,31 +354,18 @@ broadway_output_grab_pointer (BroadwayOutput *output,
 			      int id,
 			      gboolean owner_event)
 {
-  char buf[HEADER_LEN + 3 + 1];
-  int p;
-
-  p = write_header (output, buf, 'g');
-  append_uint16 (id, buf, &p);
-  buf[p++] = owner_event ? '1': '0';
-
-  assert (p == sizeof (buf));
-
-  broadway_output_sendmsg (output, buf, sizeof (buf));
+  write_header (output, 'g');
+  append_uint16 (output, id);
+  append_bool (output, owner_event);
 }
 
 guint32
 broadway_output_ungrab_pointer (BroadwayOutput *output)
 {
-  char buf[HEADER_LEN];
   guint32 serial;
-  int p;
 
   serial = output->serial;
-  p = write_header (output, buf, 'u');
-
-  assert (p == sizeof (buf));
-
-  broadway_output_sendmsg (output, buf, sizeof (buf));
+  write_header (output, 'u');
 
   return serial;
 }
@@ -384,62 +375,34 @@ broadway_output_new_surface(BroadwayOutput *output,
 			    int id, int x, int y, int w, int h,
 			    gboolean is_temp)
 {
-  char buf[HEADER_LEN + 16];
-  int p;
-
-  p = write_header (output, buf, 's');
-  append_uint16 (id, buf, &p);
-  append_uint16 (x, buf, &p);
-  append_uint16 (y, buf, &p);
-  append_uint16 (w, buf, &p);
-  append_uint16 (h, buf, &p);
-  buf[p++] = is_temp ? '1' : '0';
-
-  assert (p == sizeof (buf));
-
-  broadway_output_sendmsg (output, buf, sizeof (buf));
+  write_header (output, 's');
+  append_uint16 (output, id);
+  append_uint16 (output, x);
+  append_uint16 (output, y);
+  append_uint16 (output, w);
+  append_uint16 (output, h);
+  append_bool (output, is_temp);
 }
 
 void
 broadway_output_show_surface(BroadwayOutput *output,  int id)
 {
-  char buf[HEADER_LEN + 3];
-  int p;
-
-  p = write_header (output, buf, 'S');
-  append_uint16 (id, buf, &p);
-
-  assert (p == sizeof (buf));
-
-  broadway_output_sendmsg (output, buf, sizeof (buf));
+  write_header (output, 'S');
+  append_uint16 (output, id);
 }
 
 void
 broadway_output_hide_surface(BroadwayOutput *output,  int id)
 {
-  char buf[HEADER_LEN + 3];
-  int p;
-
-  p = write_header (output, buf, 'H');
-  append_uint16 (id, buf, &p);
-
-  assert (p == sizeof (buf));
-
-  broadway_output_sendmsg (output, buf, sizeof (buf));
+  write_header (output, 'H');
+  append_uint16 (output, id);
 }
 
 void
 broadway_output_destroy_surface(BroadwayOutput *output,  int id)
 {
-  char buf[HEADER_LEN + 3];
-  int p;
-
-  p = write_header (output, buf, 'd');
-  append_uint16 (id, buf, &p);
-
-  assert (p == sizeof (buf));
-
-  broadway_output_sendmsg (output, buf, sizeof (buf));
+  write_header (output, 'd');
+  append_uint16 (output, id);
 }
 
 
@@ -453,31 +416,25 @@ broadway_output_move_resize_surface (BroadwayOutput *output,
 				     int             w,
 				     int             h)
 {
-  char buf[HEADER_LEN+3+1+6+6];
-  int p;
   int val;
 
   if (!has_pos && !has_size)
     return;
 
-  p = write_header (output, buf, 'm');
-
+  write_header (output, 'm');
   val = (!!has_pos) | ((!!has_size) << 1);
-  append_uint16 (id, buf, &p);
-  buf[p++] = val + '0';
+  append_uint16 (output, id);
+  append_flags (output, val);
   if (has_pos)
     {
-      append_uint16 (x, buf, &p);
-      append_uint16 (y, buf, &p);
+      append_uint16 (output, x);
+      append_uint16 (output, y);
     }
   if (has_size)
     {
-      append_uint16 (w, buf, &p);
-      append_uint16 (h, buf, &p);
+      append_uint16 (output, w);
+      append_uint16 (output, h);
     }
-  assert (p <= sizeof (buf));
-
-  broadway_output_sendmsg (output, buf, p);
 }
 
 void
@@ -485,17 +442,9 @@ broadway_output_set_transient_for (BroadwayOutput *output,
 				   int             id,
 				   int             parent_id)
 {
-  char buf[HEADER_LEN + 6];
-  int p;
-
-  p = write_header (output, buf, 'p');
-
-  append_uint16 (id, buf, &p);
-  append_uint16 (parent_id, buf, &p);
-
-  assert (p == sizeof (buf));
-
-  broadway_output_sendmsg (output, buf, sizeof (buf));
+  write_header (output, 'p');
+  append_uint16 (output, id);
+  append_uint16 (output, parent_id);
 }
 
 
@@ -503,30 +452,23 @@ void
 broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
 			 int w, int h, int byte_stride, void *data)
 {
-  char buf[HEADER_LEN + 15];
-  gsize image_start, len;
-  int p;
+  gsize size_start, image_start, len;
 
-  p = write_header (output, buf, 'i');
+  write_header (output, 'i');
 
-  append_uint16 (id, buf, &p);
-  append_uint16 (x, buf, &p);
-  append_uint16 (y, buf, &p);
+  append_uint16 (output, id);
+  append_uint16 (output, x);
+  append_uint16 (output, y);
 
-  append_uint32 (0, buf, &p);
-
-  g_assert (p == sizeof (buf));
-
-  broadway_output_sendmsg (output, buf, sizeof (buf));
+  size_start = output->buf->len;
+  append_uint32 (output, 0);
 
   image_start = output->buf->len;
-
   to_png_url_rgb (output->buf, w, h, byte_stride, (guint32*)data);
 
   len = output->buf->len - image_start;
-  p = image_start - 6;
-  append_uint32 (len, output->buf->str, &p);
-  g_assert (p == image_start);
+
+  overwrite_uint32 (output, size_start, len);
 }
 
 typedef struct  {
@@ -756,10 +698,9 @@ void
 broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
 			  int w, int h, int byte_stride, void *data)
 {
-  char buf[HEADER_LEN + 15];
   BroadwayBox *rects;
-  int p, i, n_rects;
-  gsize image_start, len;
+  int i, n_rects;
+  gsize size_start, image_start, len;
 
   rects = rgba_find_rects (data, w, h, byte_stride, &n_rects);
 
@@ -767,15 +708,13 @@ broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
     {
       guint8 *subdata;
 
-      p = write_header (output, buf, 'i');
-      append_uint16 (id, buf, &p);
-      append_uint16 (x + rects[i].x1, buf, &p);
-      append_uint16 (y + rects[i].y1, buf, &p);
+      write_header (output, 'i');
+      append_uint16 (output, id);
+      append_uint16 (output, x + rects[i].x1);
+      append_uint16 (output, y + rects[i].y1);
 
-      append_uint32 (0, buf, &p);
-      g_assert (p == sizeof (buf));
-
-      broadway_output_sendmsg (output, buf, sizeof (buf));
+      size_start = output->buf->len;
+      append_uint32 (output, 0);
 
       image_start = output->buf->len;
 
@@ -785,9 +724,8 @@ broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
 		       byte_stride, (guint32*)subdata);
 
       len = output->buf->len - image_start;
-      p = image_start - 6;
-      append_uint32 (len, output->buf->str, &p);
-      g_assert (p == image_start);
+
+      overwrite_uint32 (output, size_start, len);
     }
 
   free (rects);
@@ -797,13 +735,6 @@ void
 broadway_output_surface_flush (BroadwayOutput *output,
 			       int             id)
 {
-  char buf[HEADER_LEN + 3];
-  int p;
-
-  p = write_header (output, buf, 'f');
-  append_uint16 (id, buf, &p);
-
-  g_assert (p == sizeof (buf));
-
-  broadway_output_sendmsg (output, buf, sizeof (buf));
+  write_header (output, 'f');
+  append_uint16 (output, id);
 }
