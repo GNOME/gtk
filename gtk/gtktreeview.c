@@ -8548,12 +8548,10 @@ gtk_tree_view_get_path_for_child (GtkContainer *container,
       if (!list->next)
         flags |= GTK_REGION_LAST;
 
-      gtk_widget_path_iter_add_region (path, -1, GTK_STYLE_REGION_COLUMN_HEADER, flags);
+      gtk_widget_path_iter_add_region (path, gtk_widget_path_length (path) - 2, GTK_STYLE_REGION_COLUMN_HEADER, flags);
       break;
     }
   g_list_free (visible_columns);
-
-  gtk_widget_path_append_for_widget (path, child);
 
   return path;
 }
