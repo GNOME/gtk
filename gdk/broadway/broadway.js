@@ -2755,6 +2755,18 @@ function setupDocument(document)
     }
 }
 
+function newWS(loc) {
+    var ws = null;
+    if ("WebSocket" in window) {
+	ws = new WebSocket(loc, "broadway");
+    } else if ("MozWebSocket" in window) { // Firefox 6
+	ws = new MozWebSocket(loc);
+    } else {
+	alert("WebSocket not supported, broadway will not work!");
+    }
+    return ws;
+}
+
 function connect()
 {
     var url = window.location.toString();
@@ -2767,15 +2779,13 @@ function connect()
 
     var loc = window.location.toString().replace("http:", "ws:");
     loc = loc.substr(0, loc.lastIndexOf('/')) + "/socket";
-    var ws = null;
 
-    if ("WebSocket" in window) {
-	ws = new WebSocket(loc, "broadway");
-    } else if ("MozWebSocket" in window) { // Firefox 6
-	ws = new MozWebSocket(loc);
+    var supports_binary = newWS (loc + "-test").binaryType == "blob";
+    if (supports_binary) {
+	ws = newWS (loc + "-bin");
+	ws.binaryType = "arraybuffer";
     } else {
-	alert("WebSocket not supported, input will not work!");
-	return;
+	ws = newWS (loc);
     }
 
 	ws.onopen = function() {
