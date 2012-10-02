@@ -1669,11 +1669,11 @@ to_visible_column_id (GtkTreeView *treeview,
   return id - invisible;
 }
 
-void
-_gtk_tree_view_accessible_do_add_column (GtkTreeViewAccessible *accessible,
-                                         GtkTreeView           *treeview,
-                                         GtkTreeViewColumn     *column,
-                                         guint                  id)
+static void
+gtk_tree_view_accessible_do_add_column (GtkTreeViewAccessible *accessible,
+                                        GtkTreeView           *treeview,
+                                        GtkTreeViewColumn     *column,
+                                        guint                  id)
 {
   guint row, n_rows, n_cols;
 
@@ -1706,17 +1706,17 @@ _gtk_tree_view_accessible_add_column (GtkTreeView       *treeview,
   if (obj == NULL)
     return;
 
-  _gtk_tree_view_accessible_do_add_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
-                                           treeview,
-                                           column,
-                                           to_visible_column_id (treeview, id));
+  gtk_tree_view_accessible_do_add_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                          treeview,
+                                          column,
+                                          to_visible_column_id (treeview, id));
 }
 
-void
-_gtk_tree_view_accessible_do_remove_column (GtkTreeViewAccessible *accessible,
-                                            GtkTreeView           *treeview,
-                                            GtkTreeViewColumn     *column,
-                                            guint                  id)
+static void
+gtk_tree_view_accessible_do_remove_column (GtkTreeViewAccessible *accessible,
+                                           GtkTreeView           *treeview,
+                                           GtkTreeViewColumn     *column,
+                                           guint                  id)
 {
   GtkTreeViewAccessibleCellInfo *cell_info;
   GHashTableIter iter;
@@ -1761,10 +1761,10 @@ _gtk_tree_view_accessible_remove_column (GtkTreeView       *treeview,
   if (obj == NULL)
     return;
 
-  _gtk_tree_view_accessible_do_remove_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
-                                              treeview,
-                                              column,
-                                              to_visible_column_id (treeview, id));
+  gtk_tree_view_accessible_do_remove_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                             treeview,
+                                             column,
+                                             to_visible_column_id (treeview, id));
 }
 
 void
@@ -1795,10 +1795,10 @@ _gtk_tree_view_accessible_toggle_visibility (GtkTreeView       *treeview,
     {
       id = get_column_number (treeview, column);
 
-      _gtk_tree_view_accessible_do_add_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
-                                               treeview,
-                                               column,
-                                               id);
+      gtk_tree_view_accessible_do_add_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                              treeview,
+                                              column,
+                                              id);
     }
   else
     {
@@ -1815,10 +1815,10 @@ _gtk_tree_view_accessible_toggle_visibility (GtkTreeView       *treeview,
             break;
         }
 
-      _gtk_tree_view_accessible_do_remove_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
-                                                  treeview,
-                                                  column,
-                                                  id);
+      gtk_tree_view_accessible_do_remove_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                                 treeview,
+                                                 column,
+                                                 id);
     }
 }
 

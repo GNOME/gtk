@@ -17,6 +17,8 @@
 
 #include "config.h"
 
+#include "gail.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 

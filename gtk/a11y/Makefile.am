@@ -54,6 +54,7 @@ gail_c_sources =			\
 	gailmisc.c
 
 gail_private_h_sources =		\
+	gail.h				\
 	gtkarrowaccessible.h		\
 	gtkbooleancellaccessible.h	\
 	gtkboxaccessible.h		\

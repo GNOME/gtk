@@ -51,6 +51,8 @@ typedef struct
 
 } GtkIconViewItemAccessibleClass;
 
+GType _gtk_icon_view_item_accessible_get_type (void);
+
 static gboolean gtk_icon_view_item_accessible_is_showing (GtkIconViewItemAccessible *item);
 
 static void atk_component_item_interface_init (AtkComponentIface *iface);

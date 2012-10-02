@@ -37,6 +37,8 @@ struct _GtkLinkButtonAccessibleLinkClass
 
 static void atk_action_interface_init (AtkActionIface *iface);
 
+GType _gtk_link_button_accessible_link_get_type (void);
+
 G_DEFINE_TYPE_WITH_CODE (GtkLinkButtonAccessibleLink, _gtk_link_button_accessible_link, ATK_TYPE_HYPERLINK,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 

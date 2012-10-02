@@ -128,6 +128,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 
+#include "a11y/gail.h"
 #include "a11y/gailutil.h"
 
 /* Private type definitions
@@ -668,10 +669,6 @@ gettext_initialization (void)
 #    endif
 #endif  
 }
-
-/* XXX: Remove me after getting rid of gail */
-extern void _gtk_accessibility_init (void);
-extern void _gtk_accessibility_shutdown (void);
 
 static void
 do_post_parse_initialization (int    *argc,
