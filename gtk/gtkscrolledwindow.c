@@ -126,7 +126,6 @@
 #define TOUCH_BYPASS_CAPTURED_THRESHOLD 30
 
 /* Kinetic scrolling */
-#define FRAME_INTERVAL (1000 / 60)
 #define MAX_OVERSHOOT_DISTANCE 50
 #define FRICTION_DECELERATION 0.003
 #define OVERSHOOT_INVERSE_ACCELERATION 0.003
@@ -283,6 +282,8 @@ static gboolean _gtk_scrolled_window_set_adjustment_value      (GtkScrolledWindo
                                                                 gdouble            value,
                                                                 gboolean           allow_overshooting,
                                                                 gboolean           snap_to_border);
+
+static void gtk_scrolled_window_cancel_deceleration (GtkScrolledWindow *scrolled_window);
 
 static guint signals[LAST_SIGNAL] = {0};
 
@@ -2383,10 +2384,10 @@ _gtk_scrolled_window_set_adjustment_value (GtkScrolledWindow *scrolled_window,
   return (*prev_value != value);
 }
 
-static gboolean
-scrolled_window_deceleration_cb (gpointer user_data)
+static void
+scrolled_window_deceleration_cb (GdkFrameClock     *frame_clock,
+                                 KineticScrollData *data)
 {
-  KineticScrollData *data = user_data;
   GtkScrolledWindow *scrolled_window = data->scrolled_window;
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkAdjustment *hadjustment, *vadjustment;
@@ -2401,7 +2402,7 @@ scrolled_window_deceleration_cb (gpointer user_data)
   _gtk_scrolled_window_get_overshoot (scrolled_window,
                                       &old_overshoot_x, &old_overshoot_y);
 
-  current_time = g_get_monotonic_time ();
+  current_time = gdk_frame_clock_get_frame_time (frame_clock);
   elapsed = (current_time - data->last_deceleration_time) / 1000;
   data->last_deceleration_time = current_time;
 
@@ -2495,12 +2496,9 @@ scrolled_window_deceleration_cb (gpointer user_data)
 
   if (overshoot_x != 0 || overshoot_y != 0 ||
       data->x_velocity != 0 || data->y_velocity != 0)
-    return TRUE;
+    gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
   else
-    {
-      priv->deceleration_id = 0;
-      return FALSE;
-    }
+    gtk_scrolled_window_cancel_deceleration (scrolled_window);
 }
 
 static void
@@ -2510,7 +2508,11 @@ gtk_scrolled_window_cancel_deceleration (GtkScrolledWindow *scrolled_window)
 
   if (priv->deceleration_id)
     {
-      g_source_remove (priv->deceleration_id);
+      GdkFrameClock *frame_clock;
+
+      frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (scrolled_window));
+      g_signal_handler_disconnect (frame_clock,
+                                   priv->deceleration_id);
       priv->deceleration_id = 0;
     }
 }
@@ -2519,12 +2521,15 @@ static void
 gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GdkFrameClock *frame_clock;
   KineticScrollData *data;
   gdouble angle;
 
+  frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (scrolled_window));
+
   data = g_new0 (KineticScrollData, 1);
   data->scrolled_window = scrolled_window;
-  data->last_deceleration_time = g_get_monotonic_time ();
+  data->last_deceleration_time = gdk_frame_clock_get_frame_time (frame_clock);
   data->x_velocity = priv->x_velocity;
   data->y_velocity = priv->y_velocity;
 
@@ -2536,10 +2541,12 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
   data->vel_sine = sin (angle);
 
   scrolled_window->priv->deceleration_id =
-    gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT,
-                                  FRAME_INTERVAL,
-                                  scrolled_window_deceleration_cb,
-                                  data, (GDestroyNotify) g_free);
+    g_signal_connect_data (frame_clock, "update",
+                           G_CALLBACK (scrolled_window_deceleration_cb),
+                           data,
+                           (GClosureNotify) g_free,
+                           0);
+  gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
 }
 
 static gboolean
