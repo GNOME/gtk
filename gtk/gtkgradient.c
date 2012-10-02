@@ -16,11 +16,13 @@
  */
 
 #include "config.h"
-#include "gtkgradient.h"
+
+#include "gtkgradientprivate.h"
+
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkstyleproperties.h"
-#include "gtkstylepropertiesprivate.h"
+#include "gtksymboliccolorprivate.h"
 
 /**
  * SECTION:gtkgradient
