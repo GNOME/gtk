@@ -9334,9 +9334,8 @@ gtk_widget_set_usize_internal (GtkWidget          *widget,
  * @height: height @widget should request, or -1 to unset
  *
  * Sets the minimum size of a widget; that is, the widget's size
- * request will be @width by @height. You can use this function to
- * force a widget to be either larger or smaller than it normally
- * would be.
+ * request will be at least @width by @height. You can use this 
+ * function to force a widget to be larger than it normally would be.
  *
  * In most cases, gtk_window_set_default_size() is a better choice for
  * toplevel windows than this function; setting the default size will
@@ -9359,9 +9358,6 @@ gtk_widget_set_usize_internal (GtkWidget          *widget,
  *
  * If the size request in a given direction is -1 (unset), then
  * the "natural" size request of the widget will be used instead.
- *
- * Widgets can't actually be allocated a size less than 1 by 1, but
- * you can pass 0,0 to this function to mean "as small as possible."
  *
  * The size request set here does not include any margin from the
  * #GtkWidget properties margin-left, margin-right, margin-top, and
