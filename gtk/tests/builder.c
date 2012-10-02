@@ -25,6 +25,16 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
+/* exported for GtkBuilder */
+void signal_normal (GtkWindow *window, GParamSpec spec);
+void signal_after (GtkWindow *window, GParamSpec spec);
+void signal_object (GtkButton *button, GParamSpec spec);
+void signal_object_after (GtkButton *button, GParamSpec spec);
+void signal_first (GtkButton *button, GParamSpec spec);
+void signal_second (GtkButton *button, GParamSpec spec);
+void signal_extra (GtkButton *button, GParamSpec spec);
+void signal_extra2 (GtkButton *button, GParamSpec spec);
+
 /* Copied from gtkiconfactory.c; keep in sync! */
 struct _GtkIconSet
 {

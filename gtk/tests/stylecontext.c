@@ -313,7 +313,7 @@ test_style_property (void)
   g_object_unref (context);
 }
 
-void
+static void
 test_basic_properties (void)
 {
   GtkStyleContext *context;
