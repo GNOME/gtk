@@ -49,6 +49,8 @@ struct _GtkFillLayoutRendererClass
   PangoRendererClass parent_class;
 };
 
+GType _gtk_fill_layout_renderer_get_type (void);
+
 G_DEFINE_TYPE (GtkFillLayoutRenderer, _gtk_fill_layout_renderer, PANGO_TYPE_RENDERER)
 
 static void

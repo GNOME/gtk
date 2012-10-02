@@ -454,6 +454,8 @@ typedef struct {
 
 static void shortcuts_pane_model_filter_drag_source_iface_init (GtkTreeDragSourceIface *iface);
 
+GType _shortcuts_pane_model_filter_get_type (void);
+
 G_DEFINE_TYPE_WITH_CODE (ShortcutsPaneModelFilter,
 			 _shortcuts_pane_model_filter,
 			 GTK_TYPE_TREE_MODEL_FILTER,
