@@ -54,6 +54,11 @@ void            _gtk_rounded_box_apply_border_radius_for_context (GtkRoundedBox 
                                                                   GtkStyleContext  *context,
                                                                   GtkJunctionSides  junction);
 
+void            _gtk_rounded_box_grow                           (GtkRoundedBox       *box,
+                                                                 double               top,
+                                                                 double               right,
+                                                                 double               bottom,
+                                                                 double               left);
 void            _gtk_rounded_box_shrink                         (GtkRoundedBox       *box,
                                                                  double               top,
                                                                  double               right,

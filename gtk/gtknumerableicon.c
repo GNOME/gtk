@@ -41,6 +41,7 @@
 #include <config.h>
 
 #include "gtknumerableicon.h"
+#include "gtknumerableiconprivate.h"
 
 #include "gtkicontheme.h"
 #include "gtkintl.h"
