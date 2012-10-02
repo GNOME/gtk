@@ -72,13 +72,14 @@ gtk_css_value_image_transition (GtkCssValue *start,
                                 guint        property_id,
                                 double       progress)
 {
-  GtkCssImage *fade;
+  GtkCssImage *transition;
 
-  fade = _gtk_css_image_cross_fade_new (_gtk_css_image_value_get_image (start),
-                                        _gtk_css_image_value_get_image (end),
-                                        progress);
+  transition = _gtk_css_image_transition (_gtk_css_image_value_get_image (start),
+                                          _gtk_css_image_value_get_image (end),
+                                          property_id,
+                                          progress);
       
-  return _gtk_css_image_value_new (fade);
+  return _gtk_css_image_value_new (transition);
 }
 
 static void

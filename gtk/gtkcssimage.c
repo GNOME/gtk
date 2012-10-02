@@ -69,6 +69,15 @@ gtk_css_image_real_compute (GtkCssImage             *image,
   return g_object_ref (image);
 }
 
+GtkCssImage *
+gtk_css_image_real_transition (GtkCssImage *start,
+                               GtkCssImage *end,
+                               guint        property_id,
+                               double       progress)
+{
+  return _gtk_css_image_cross_fade_new (start, end, progress);
+}
+
 static void
 _gtk_css_image_class_init (GtkCssImageClass *klass)
 {
@@ -76,6 +85,7 @@ _gtk_css_image_class_init (GtkCssImageClass *klass)
   klass->get_height = gtk_css_image_real_get_height;
   klass->get_aspect_ratio = gtk_css_image_real_get_aspect_ratio;
   klass->compute = gtk_css_image_real_compute;
+  klass->transition = gtk_css_image_real_transition;
 }
 
 static void
@@ -141,6 +151,36 @@ _gtk_css_image_compute (GtkCssImage             *image,
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
   return klass->compute (image, property_id, provider, values, parent_values, dependencies);
+}
+
+GtkCssImage *
+_gtk_css_image_transition (GtkCssImage *start,
+                           GtkCssImage *end,
+                           guint        property_id,
+                           double       progress)
+{
+  GtkCssImageClass *klass;
+
+  g_return_val_if_fail (start == NULL || GTK_IS_CSS_IMAGE (start), NULL);
+  g_return_val_if_fail (end == NULL || GTK_IS_CSS_IMAGE (end), NULL);
+
+  progress = CLAMP (progress, 0.0, 1.0);
+
+  if (start == NULL)
+    {
+      if (end == NULL)
+        return NULL;
+      else
+        {
+          start = end;
+          end = NULL;
+          progress = 1.0 - progress;
+        }
+    }
+
+  klass = GTK_CSS_IMAGE_GET_CLASS (start);
+
+  return klass->transition (start, end, property_id, progress);
 }
 
 void

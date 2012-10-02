@@ -61,6 +61,11 @@ struct _GtkCssImageClass
                                                     GtkCssComputedValues       *values,
                                                     GtkCssComputedValues       *parent_values,
                                                     GtkCssDependencies         *dependencies);
+  /* transition between start and end image (end may be NULL), returns new reference */
+  GtkCssImage *(* transition)                      (GtkCssImage                *start,
+                                                    GtkCssImage                *end,
+                                                    guint                       property_id,
+                                                    double                      progress);
 
   /* draw to 0,0 with the given width and height */
   void         (* draw)                            (GtkCssImage                *image,
@@ -90,6 +95,10 @@ GtkCssImage *  _gtk_css_image_compute              (GtkCssImage                *
                                                     GtkCssComputedValues       *values,
                                                     GtkCssComputedValues       *parent_values,
                                                     GtkCssDependencies         *dependencies);
+GtkCssImage *  _gtk_css_image_transition           (GtkCssImage                *start,
+                                                    GtkCssImage                *end,
+                                                    guint                       property_id,
+                                                    double                      progress);
 
 void           _gtk_css_image_draw                 (GtkCssImage                *image,
                                                     cairo_t                    *cr,

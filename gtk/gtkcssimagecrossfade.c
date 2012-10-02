@@ -114,6 +114,9 @@ gtk_css_image_cross_fade_draw (GtkCssImage        *image,
 
           cairo_push_group (cr);
 
+          /* performance trick */
+          cairo_reset_clip (cr);
+
           _gtk_css_image_draw (cross_fade->start, cr, width, height);
 
           cairo_push_group (cr);
