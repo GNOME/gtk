@@ -321,8 +321,6 @@ test_type (gconstpointer data)
   g_type_class_unref (klass);
 }
 
-extern void pixbuf_init (void);
-
 int
 main (int argc, char **argv)
 {
@@ -330,7 +328,6 @@ main (int argc, char **argv)
   guint i;
 
   gtk_test_init (&argc, &argv);
-  pixbuf_init ();
   gtk_test_register_all_types();
   
   otypes = gtk_test_list_all_types (NULL);

@@ -59,7 +59,7 @@ accel_SOURCES			 = accel.c
 accel_LDADD			 = $(progs_ldadd)
 
 #TEST_PROGS			+= object
-#object_SOURCES			 = object.c pixbuf-init.c
+#object_SOURCES			 = object.c
 #object_LDADD			 = $(progs_ldadd)
 
 # this doesn't work in make distcheck, since running
@@ -71,7 +71,7 @@ accel_LDADD			 = $(progs_ldadd)
 
 # Should be ported to new API's
 #TEST_PROGS			+= filechooser
-#filechooser_SOURCES		 = filechooser.c pixbuf-init.c
+#filechooser_SOURCES		 = filechooser.c
 #filechooser_LDADD		 = $(progs_ldadd)
 
 TEST_PROGS			+= builder
@@ -81,12 +81,12 @@ builder_LDFLAGS			 = -export-dynamic
 
 if OS_UNIX
 #TEST_PROGS			+= defaultvalue
-#defaultvalue_SOURCES		 = defaultvalue.c pixbuf-init.c
+#defaultvalue_SOURCES		 = defaultvalue.c
 #defaultvalue_LDADD 		 = $(progs_ldadd)
 endif
 
 TEST_PROGS			+= textbuffer
-textbuffer_SOURCES		 = textbuffer.c pixbuf-init.c
+textbuffer_SOURCES		 = textbuffer.c
 textbuffer_LDADD		 = $(progs_ldadd)
 
 TEST_PROGS			+= textiter
