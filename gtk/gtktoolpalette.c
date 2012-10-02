@@ -1298,9 +1298,9 @@ gtk_tool_palette_get_style (GtkToolPalette *palette)
   return palette->priv->style;
 }
 
-gint
-_gtk_tool_palette_compare_groups (gconstpointer a,
-                                  gconstpointer b)
+static gint
+gtk_tool_palette_compare_groups (gconstpointer a,
+                                 gconstpointer b)
 {
   const GtkToolItemGroupInfo *group_a = a;
   const GtkToolItemGroupInfo *group_b = b;
@@ -1351,7 +1351,7 @@ gtk_tool_palette_set_group_position (GtkToolPalette   *palette,
   group_new->pos = position;
   group_old->pos = old_position;
 
-  g_ptr_array_sort (palette->priv->groups, _gtk_tool_palette_compare_groups);
+  g_ptr_array_sort (palette->priv->groups, gtk_tool_palette_compare_groups);
 
   gtk_widget_queue_resize (GTK_WIDGET (palette));
 }

@@ -48,7 +48,7 @@ gtk_css_image_gradient_compute (GtkCssImage             *image,
   return GTK_CSS_IMAGE (copy);
 }
 
-cairo_pattern_t *
+static cairo_pattern_t *
 fade_pattern (cairo_pattern_t *pattern,
               double           opacity)
 {
@@ -82,7 +82,7 @@ fade_pattern (cairo_pattern_t *pattern,
   return pattern;
 }
 
-cairo_pattern_t *
+static cairo_pattern_t *
 transition_pattern (cairo_pattern_t *start,
                     cairo_pattern_t *end,
                     double           progress)
@@ -141,7 +141,7 @@ transition_pattern (cairo_pattern_t *start,
   return result;
 }
 
-GtkCssImage *
+static GtkCssImage *
 gtk_css_image_gradient_transition (GtkCssImage *start_image,
                                    GtkCssImage *end_image,
                                    guint        property_id,

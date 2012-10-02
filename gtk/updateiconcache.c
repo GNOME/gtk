@@ -88,9 +88,9 @@ static int check_dir_mtime (const char        *dir,
   return 0;
 }
 
- gboolean
- is_cache_up_to_date (const gchar *path)
- {
+static gboolean
+is_cache_up_to_date (const gchar *path)
+{
   gchar *cache_path;
   gint retval;
 

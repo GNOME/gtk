@@ -641,9 +641,9 @@ _free_signal_info (SignalInfo *info,
   g_slice_free (SignalInfo, info);
 }
 
-void
-_free_requires_info (RequiresInfo *info,
-		     gpointer user_data)
+static void
+free_requires_info (RequiresInfo *info,
+                    gpointer user_data)
 {
   g_free (info->library);
   g_slice_free (RequiresInfo, info);
@@ -958,7 +958,7 @@ end_element (GMarkupParseContext *context,
 			 req_info->major, req_info->minor,
 			 GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
 	}
-      _free_requires_info (req_info, NULL);
+      free_requires_info (req_info, NULL);
     }
   else if (strcmp (element_name, "interface") == 0)
     {
@@ -1110,7 +1110,7 @@ free_info (CommonInfo *info)
   else if (strcmp (info->tag.name, "signal") == 0)
     _free_signal_info ((SignalInfo *)info, NULL);
   else if (strcmp (info->tag.name, "requires") == 0)
-    _free_requires_info ((RequiresInfo *)info, NULL);
+    free_requires_info ((RequiresInfo *)info, NULL);
   else if (strcmp (info->tag.name, "menu") == 0)
     free_menu_info ((MenuInfo *)info);
   else

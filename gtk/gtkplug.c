@@ -441,16 +441,16 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
   g_signal_emit_by_name (socket_, "plug-added");
 }
 
-/**
- * _gtk_plug_send_delete_event:
+/*
+ * gtk_plug_send_delete_event:
  * @widget: a #GtkWidget
  *
  * Send a GDK_DELETE event to the @widget and destroy it if
  * necessary. Internal GTK function, called from this file or the
  * backend-specific GtkPlug implementation.
  */
-void
-_gtk_plug_send_delete_event (GtkWidget *widget)
+static void
+gtk_plug_send_delete_event (GtkWidget *widget)
 {
   GdkEvent *event = gdk_event_new (GDK_DELETE);
 
@@ -530,7 +530,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
     gtk_widget_destroy (GTK_WIDGET (socket_));
 
   if (window)
-    _gtk_plug_send_delete_event (widget);
+    gtk_plug_send_delete_event (widget);
 
   g_object_unref (plug);
 
@@ -895,7 +895,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent,
 		if (xre->parent == GDK_WINDOW_XID (gdk_screen_get_root_window (screen)))
 		  {
 		    GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: calling gtk_plug_send_delete_event()"));
-		    _gtk_plug_send_delete_event (widget);
+		    gtk_plug_send_delete_event (widget);
 
 		    g_object_notify (G_OBJECT (plug), "embedded");
 		  }

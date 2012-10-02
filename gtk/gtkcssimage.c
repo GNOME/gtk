@@ -69,7 +69,7 @@ gtk_css_image_real_compute (GtkCssImage             *image,
   return g_object_ref (image);
 }
 
-GtkCssImage *
+static GtkCssImage *
 gtk_css_image_real_transition (GtkCssImage *start,
                                GtkCssImage *end,
                                guint        property_id,
@@ -375,7 +375,7 @@ _gtk_css_image_get_surface (GtkCssImage     *image,
   return result;
 }
 
-GType
+static GType
 gtk_css_image_get_parser_type (GtkCssParser *parser)
 {
   static const struct {
