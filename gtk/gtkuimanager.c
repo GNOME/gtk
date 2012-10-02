@@ -2416,50 +2416,6 @@ find_toolbar_position (GNode      *node,
   return TRUE;
 }
 
-/**
- * _gtk_menu_is_empty:
- * @menu: (allow-none): a #GtkMenu or %NULL
- * 
- * Determines whether @menu is empty. A menu is considered empty if it
- * the only visible children are tearoff menu items or "filler" menu 
- * items which were inserted to mark the menu as empty.
- * 
- * This function is used by #GtkAction.
- *
- * Return value: whether @menu is empty.
- **/
-gboolean
-_gtk_menu_is_empty (GtkWidget *menu)
-{
-  GList *children, *cur;
-  gboolean result = TRUE;
-
-  g_return_val_if_fail (menu == NULL || GTK_IS_MENU (menu), TRUE);
-
-  if (!menu)
-    return FALSE;
-
-  children = gtk_container_get_children (GTK_CONTAINER (menu));
-
-  cur = children;
-  while (cur) 
-    {
-      if (gtk_widget_get_visible (cur->data))
-	{
-	  if (!GTK_IS_TEAROFF_MENU_ITEM (cur->data) &&
-	      !g_object_get_data (cur->data, "gtk-empty-menu-item"))
-            {
-	      result = FALSE;
-              break;
-            }
-	}
-      cur = cur->next;
-    }
-  g_list_free (children);
-
-  return result;
-}
-
 enum {
   SEPARATOR_MODE_SMART,
   SEPARATOR_MODE_VISIBLE,
