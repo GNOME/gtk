@@ -75,7 +75,12 @@ gtk_css_image_real_transition (GtkCssImage *start,
                                guint        property_id,
                                double       progress)
 {
-  return _gtk_css_image_cross_fade_new (start, end, progress);
+  if (progress <= 0.0)
+    return g_object_ref (start);
+  else if (progress >= 1.0)
+    return end ? g_object_ref (end) : NULL;
+  else
+    return _gtk_css_image_cross_fade_new (start, end, progress);
 }
 
 static void
