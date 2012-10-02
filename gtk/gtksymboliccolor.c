@@ -249,7 +249,9 @@ gtk_css_value_symbolic_transition (GtkCssValue *start,
                                    guint        property_id,
                                    double       progress)
 {
-  return NULL;
+  return (GtkCssValue *) gtk_symbolic_color_new_mix ((GtkSymbolicColor *) start,
+                                                     (GtkSymbolicColor *) end,
+                                                     progress);
 }
 
 static void

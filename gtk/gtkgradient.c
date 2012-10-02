@@ -440,3 +440,91 @@ gtk_gradient_to_string (GtkGradient *gradient)
 
   return g_string_free (str, FALSE);
 }
+
+static GtkGradient *
+gtk_gradient_fade (GtkGradient *gradient,
+                   double       opacity)
+{
+  GtkGradient *faded;
+  guint i;
+
+  faded = g_slice_new (GtkGradient);
+  faded->stops = g_array_new (FALSE, FALSE, sizeof (ColorStop));
+
+  faded->x0 = gradient->x0;
+  faded->y0 = gradient->y0;
+  faded->x1 = gradient->x1;
+  faded->y1 = gradient->y1;
+  faded->radius0 = gradient->radius0;
+  faded->radius1 = gradient->radius1;
+
+  faded->ref_count = 1;
+
+  for (i = 0; i < gradient->stops->len; i++)
+    {
+      GtkSymbolicColor *color;
+      ColorStop *stop;
+
+      stop = &g_array_index (gradient->stops, ColorStop, i);
+      color = gtk_symbolic_color_new_alpha (stop->color, opacity);
+      gtk_gradient_add_color_stop (gradient, stop->offset, color);
+      gtk_symbolic_color_unref (color);
+    }
+
+  return faded;
+}
+
+GtkGradient *
+_gtk_gradient_transition (GtkGradient *start,
+                          GtkGradient *end,
+                          guint        property_id,
+                          double       progress)
+{
+  GtkGradient *gradient;
+  guint i;
+
+  g_return_val_if_fail (start != NULL, NULL);
+
+  if (end == NULL)
+    return gtk_gradient_fade (start, 1.0 - CLAMP (progress, 0.0, 1.0));
+
+  if (start->stops->len != end->stops->len)
+    return NULL;
+
+  /* check both are radial/linear */
+  if ((start->radius0 == 0 && start->radius1 == 0) != (end->radius0 == 0 && end->radius1 == 0))
+    return NULL;
+
+  gradient = g_slice_new (GtkGradient);
+  gradient->stops = g_array_new (FALSE, FALSE, sizeof (ColorStop));
+
+  gradient->x0 = (1 - progress) * start->x0 + progress * end->x0;
+  gradient->y0 = (1 - progress) * start->y0 + progress * end->y0;
+  gradient->x1 = (1 - progress) * start->x1 + progress * end->x1;
+  gradient->y1 = (1 - progress) * start->y1 + progress * end->y1;
+  gradient->radius0 = (1 - progress) * start->radius0 + progress * end->radius0;
+  gradient->radius1 = (1 - progress) * start->radius1 + progress * end->radius1;
+
+  gradient->ref_count = 1;
+
+  for (i = 0; i < start->stops->len; i++)
+    {
+      ColorStop *start_stop, *end_stop;
+      GtkSymbolicColor *color;
+      double offset;
+
+      start_stop = &g_array_index (start->stops, ColorStop, i);
+      end_stop = &g_array_index (end->stops, ColorStop, i);
+
+      offset = (1 - progress) * start_stop->offset + progress * end_stop->offset;
+      color = (GtkSymbolicColor *) _gtk_css_value_transition ((GtkCssValue *) start_stop->color,
+                                                              (GtkCssValue *) end_stop->color,
+                                                              property_id,
+                                                              progress);
+      g_assert (color);
+      gtk_gradient_add_color_stop (gradient, offset, color);
+      gtk_symbolic_color_unref (color);
+    }
+
+  return gradient;
+}

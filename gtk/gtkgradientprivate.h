@@ -29,6 +29,11 @@ cairo_pattern_t *       _gtk_gradient_resolve_full            (GtkGradient      
                                                                GtkCssComputedValues    *parent_values,
                                                                GtkCssDependencies      *dependencies);
 
+GtkGradient *           _gtk_gradient_transition              (GtkGradient             *start,
+                                                               GtkGradient             *end,
+                                                               guint                    property_id,
+                                                               double                   progress);
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_PROPERTIES_PRIVATE_H__ */
