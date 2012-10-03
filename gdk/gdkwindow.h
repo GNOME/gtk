@@ -32,6 +32,7 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkevents.h>
+#include <gdk/gdkframeclock.h>
 
 G_BEGIN_DECLS
 
@@ -900,6 +901,11 @@ void       gdk_window_geometry_changed         (GdkWindow     *window);
 void       gdk_window_set_support_multidevice (GdkWindow *window,
                                                gboolean   support_multidevice);
 gboolean   gdk_window_get_support_multidevice (GdkWindow *window);
+
+/* Frame clock */
+void           gdk_window_set_frame_clock      (GdkWindow     *window,
+                                                GdkFrameClock *clock);
+GdkFrameClock* gdk_window_get_frame_clock      (GdkWindow     *window);
 
 G_END_DECLS
 

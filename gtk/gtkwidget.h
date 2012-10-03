@@ -473,6 +473,8 @@ void	   gtk_widget_queue_draw_region   (GtkWidget	       *widget,
                                            const cairo_region_t*region);
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
+GdkFrameClock* gtk_widget_get_frame_clock (GtkWidget           *widget);
+
 GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_size)
 void       gtk_widget_size_request        (GtkWidget           *widget,
                                            GtkRequisition      *requisition);

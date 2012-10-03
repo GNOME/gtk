@@ -80,6 +80,7 @@ gdk_public_h_sources = 				\
 	gdkkeysyms-compat.h			\
 	gdkmain.h				\
 	gdkpango.h				\
+	gdkframeclock.h				\
 	gdkpixbuf.h				\
 	gdkprivate.h				\
 	gdkproperty.h				\
@@ -101,6 +102,7 @@ gdk_private_headers = 				\
 	gdkdisplaymanagerprivate.h		\
 	gdkdisplayprivate.h			\
 	gdkdndprivate.h				\
+	gdkframeclockidle.h			\
 	gdkscreenprivate.h			\
 	gdkinternals.h				\
 	gdkintl.h				\
@@ -125,6 +127,8 @@ gdk_c_sources = 				\
 	gdkkeys.c				\
 	gdkkeyuni.c				\
 	gdkoffscreenwindow.c			\
+	gdkframeclock.c				\
+	gdkframeclockidle.c			\
 	gdkpango.c				\
 	gdkpixbuf-drawable.c			\
 	gdkrectangle.c				\
