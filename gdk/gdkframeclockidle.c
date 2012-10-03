@@ -37,6 +37,7 @@ struct _GdkFrameClockIdlePrivate
   guint64 frame_time;
 
   guint idle_id;
+  guint freeze_count;
 
   GdkFrameClockPhase requested;
   GdkFrameClockPhase phase;
@@ -72,6 +73,7 @@ gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
   priv = frame_clock_idle->priv;
 
   priv->timer = g_timer_new ();
+  priv->freeze_count = 0;
 }
 
 static void
@@ -138,7 +140,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
 {
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
-  if (priv->idle_id == 0 && priv->requested != 0)
+  if (priv->idle_id == 0 && priv->freeze_count == 0 && priv->requested != 0)
     {
       priv->idle_id = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
                                                  gdk_frame_clock_paint_idle,
@@ -160,19 +162,51 @@ gdk_frame_clock_paint_idle (void *data)
 
   priv->frame_time = compute_frame_time (clock_idle);
 
-  priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
-  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
-  g_signal_emit_by_name (G_OBJECT (clock), "before-paint");
-  priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
-  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
-  g_signal_emit_by_name (G_OBJECT (clock), "layout");
-  priv->phase = GDK_FRAME_CLOCK_PHASE_PAINT;
-  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
-  g_signal_emit_by_name (G_OBJECT (clock), "paint");
-  priv->phase = GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
-  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
-  g_signal_emit_by_name (G_OBJECT (clock), "after-paint");
-  priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+  switch (priv->phase)
+    {
+    case GDK_FRAME_CLOCK_PHASE_NONE:
+    case GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT:
+      if (priv->freeze_count == 0)
+	{
+	  priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
+          priv->requested &= ~GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
+          /* We always emit ::before-paint and ::after-paint even if
+           * not explicitly requested, and unlike other phases,
+           * they don't get repeated if you freeze/thaw while
+           * in them. */
+	  g_signal_emit_by_name (G_OBJECT (clock), "before-paint");
+	  priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
+	}
+    case GDK_FRAME_CLOCK_PHASE_LAYOUT:
+      if (priv->freeze_count == 0)
+	{
+	  priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
+          if (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT)
+            {
+              priv->requested &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
+              g_signal_emit_by_name (G_OBJECT (clock), "layout");
+            }
+	}
+    case GDK_FRAME_CLOCK_PHASE_PAINT:
+      if (priv->freeze_count == 0)
+	{
+	  priv->phase = GDK_FRAME_CLOCK_PHASE_PAINT;
+          if (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT)
+            {
+              priv->requested &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
+              g_signal_emit_by_name (G_OBJECT (clock), "paint");
+            }
+	}
+    case GDK_FRAME_CLOCK_PHASE_AFTER_PAINT:
+      if (priv->freeze_count == 0)
+	{
+	  priv->phase = GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
+          priv->requested &= ~GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
+	  g_signal_emit_by_name (G_OBJECT (clock), "after-paint");
+          /* the ::after-paint phase doesn't get repeated on freeze/thaw */
+	  priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+	}
+    }
 
   maybe_start_idle (clock_idle);
 
@@ -199,11 +233,43 @@ gdk_frame_clock_idle_get_requested (GdkFrameClock *clock)
 }
 
 static void
+gdk_frame_clock_idle_freeze (GdkFrameClock *clock)
+{
+  GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
+
+  priv->freeze_count++;
+
+  if (priv->freeze_count == 1)
+    {
+      if (priv->idle_id)
+	{
+	  g_source_remove (priv->idle_id);
+	  priv->idle_id = 0;
+	}
+    }
+}
+
+static void
+gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
+{
+  GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
+  GdkFrameClockIdlePrivate *priv = clock_idle->priv;
+
+  g_return_if_fail (priv->freeze_count > 0);
+
+  priv->freeze_count--;
+  if (priv->freeze_count == 0)
+    maybe_start_idle (clock_idle);
+}
+
+static void
 gdk_frame_clock_idle_interface_init (GdkFrameClockInterface *iface)
 {
   iface->get_frame_time = gdk_frame_clock_idle_get_frame_time;
   iface->request_phase = gdk_frame_clock_idle_request_phase;
   iface->get_requested = gdk_frame_clock_idle_get_requested;
+  iface->freeze = gdk_frame_clock_idle_freeze;
+  iface->thaw = gdk_frame_clock_idle_thaw;
 }
 
 GdkFrameClock *

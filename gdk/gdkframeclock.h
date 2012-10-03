@@ -61,6 +61,9 @@ struct _GdkFrameClockInterface
                                         GdkFrameClockPhase  phase);
   GdkFrameClockPhase (* get_requested) (GdkFrameClock      *clock);
 
+  void     (* freeze)              (GdkFrameClock *clock);
+  void     (* thaw)                (GdkFrameClock *clock);
+
   /* signals */
   /* void (* frame_requested)    (GdkFrameClock *clock); */
   /* void (* before_paint)       (GdkFrameClock *clock); */
@@ -76,6 +79,9 @@ guint64  gdk_frame_clock_get_frame_time      (GdkFrameClock *clock);
 void               gdk_frame_clock_request_phase (GdkFrameClock      *clock,
                                                   GdkFrameClockPhase  phase);
 GdkFrameClockPhase gdk_frame_clock_get_requested (GdkFrameClock      *clock);
+
+void     gdk_frame_clock_freeze              (GdkFrameClock *clock);
+void     gdk_frame_clock_thaw                (GdkFrameClock *clock);
 
 /* Convenience API */
 void  gdk_frame_clock_get_frame_time_val (GdkFrameClock  *clock,

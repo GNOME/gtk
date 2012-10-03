@@ -226,6 +226,23 @@ gdk_frame_clock_request_phase (GdkFrameClock      *clock,
 }
 
 
+void
+gdk_frame_clock_freeze (GdkFrameClock *clock)
+{
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
+
+  GDK_FRAME_CLOCK_GET_IFACE (clock)->freeze (clock);
+}
+
+
+void
+gdk_frame_clock_thaw (GdkFrameClock *clock)
+{
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
+
+  GDK_FRAME_CLOCK_GET_IFACE (clock)->thaw (clock);
+}
+
 /**
  * gdk_frame_clock_get_requested:
  * @clock: the clock
