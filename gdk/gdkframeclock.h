@@ -43,18 +43,28 @@ G_BEGIN_DECLS
 typedef struct _GdkFrameClock          GdkFrameClock;
 typedef struct _GdkFrameClockInterface GdkFrameClockInterface;
 
+typedef enum {
+  GDK_FRAME_CLOCK_PHASE_NONE         = 0,
+  GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT = 1 << 0,
+  GDK_FRAME_CLOCK_PHASE_LAYOUT       = 1 << 1,
+  GDK_FRAME_CLOCK_PHASE_PAINT        = 1 << 2,
+  GDK_FRAME_CLOCK_PHASE_AFTER_PAINT  = 1 << 3
+} GdkFrameClockPhase;
+
 struct _GdkFrameClockInterface
 {
   GTypeInterface		   base_iface;
 
   guint64  (* get_frame_time)      (GdkFrameClock *clock);
-  void     (* request_frame)       (GdkFrameClock *clock);
-  gboolean (* get_frame_requested) (GdkFrameClock *clock);
+
+  void               (* request_phase) (GdkFrameClock      *clock,
+                                        GdkFrameClockPhase  phase);
+  GdkFrameClockPhase (* get_requested) (GdkFrameClock      *clock);
 
   /* signals */
   /* void (* frame_requested)    (GdkFrameClock *clock); */
   /* void (* before_paint)       (GdkFrameClock *clock); */
-  /* void (* layout)             1(GdkFrameClock *clock); */
+  /* void (* layout)             (GdkFrameClock *clock); */
   /* void (* paint)              (GdkFrameClock *clock); */
   /* void (* after_paint)        (GdkFrameClock *clock); */
 };
@@ -62,8 +72,10 @@ struct _GdkFrameClockInterface
 GType    gdk_frame_clock_get_type             (void) G_GNUC_CONST;
 
 guint64  gdk_frame_clock_get_frame_time      (GdkFrameClock *clock);
-void     gdk_frame_clock_request_frame       (GdkFrameClock *clock);
-gboolean gdk_frame_clock_get_frame_requested (GdkFrameClock *clock);
+
+void               gdk_frame_clock_request_phase (GdkFrameClock      *clock,
+                                                  GdkFrameClockPhase  phase);
+GdkFrameClockPhase gdk_frame_clock_get_requested (GdkFrameClock      *clock);
 
 /* Convenience API */
 void  gdk_frame_clock_get_frame_time_val (GdkFrameClock  *clock,
@@ -71,7 +83,6 @@ void  gdk_frame_clock_get_frame_time_val (GdkFrameClock  *clock,
 
 /* Signal emitters (used in frame clock implementations) */
 void     gdk_frame_clock_frame_requested     (GdkFrameClock *clock);
-void     gdk_frame_clock_paint               (GdkFrameClock *clock);
 
 G_END_DECLS
 
