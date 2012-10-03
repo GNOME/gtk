@@ -35,6 +35,7 @@
 #include "gdkasync.h"
 #include "gdkeventsource.h"
 #include "gdkdisplay-x11.h"
+#include "gdkframeclockidle.h"
 #include "gdkprivate-x11.h"
 
 #include <stdlib.h>
@@ -712,6 +713,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   GdkWindowImplX11 *impl;
   GdkX11Screen *x11_screen;
   GdkX11Display *display_x11;
+  GdkFrameClock *clock;
 
   Window xparent;
   Visual *xvisual;
@@ -856,6 +858,9 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
                                       GDK_WINDOW_XID (window), event_mask,
                                       StructureNotifyMask | PropertyChangeMask);
+
+  clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
+  gdk_window_set_frame_clock (window, clock);
 }
 
 static GdkEventMask
