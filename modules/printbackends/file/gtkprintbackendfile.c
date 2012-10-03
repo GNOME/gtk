@@ -291,7 +291,7 @@ _cairo_write (void                *closure,
               unsigned int         length)
 {
   GIOChannel *io = (GIOChannel *)closure;
-  gsize written;
+  gsize written = 0;
   GError *error;
 
   error = NULL;
@@ -301,14 +301,20 @@ _cairo_write (void                *closure,
 
   while (length > 0) 
     {
-      g_io_channel_write_chars (io, (const gchar *) data, length, &written, &error);
+      GIOStatus status;
 
-      if (error != NULL)
-	{
-	  GTK_NOTE (PRINTING,
-                     g_print ("FILE Backend: Error writting to temp file, %s\n", error->message));
+      status = g_io_channel_write_chars (io, (const gchar *) data, length, &written, &error);
 
-          g_error_free (error);
+      if (status == G_IO_STATUS_ERROR)
+        {
+          if (error != NULL)
+            {
+              GTK_NOTE (PRINTING,
+                        g_print ("FILE Backend: Error writting to temp file, %s\n", error->message));
+
+              g_error_free (error);
+            }
+
 	  return CAIRO_STATUS_WRITE_ERROR;
 	}    
 
