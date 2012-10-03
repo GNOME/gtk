@@ -4778,6 +4778,54 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_get_frame_clock:
+ * @widget: a #GtkWidget
+ *
+ * Obtains the frame clock for a widget. The frame clock is a global
+ * "ticker" that can be used to drive animations and repaints.  The
+ * most common reason to get the frame clock is to call
+ * gdk_frame_clock_get_frame_time(), in order to get a time to use for
+ * animating. For example you might record the start of the animation
+ * with an initial value from gdk_frame_clock_get_frame_time(), and
+ * then update the animation by calling
+ * gdk_frame_clock_get_frame_time() again during each repaint.
+ *
+ * gdk_frame_clock_request_frame() will result in a new frame on the
+ * clock, but won't necessarily repaint any widgets. To repaint a
+ * widget, you have to use gtk_widget_queue_draw() which invalidates
+ * the widget (thus scheduling it to receive a draw on the next
+ * frame). gtk_widget_queue_draw() will also end up requesting a frame
+ * on the appropriate frame clock.
+ *
+ * A widget's frame clock will not change while the widget is
+ * mapped. Reparenting a widget (which implies a temporary unmap) can
+ * change the widget's frame clock.
+ *
+ * Unrealized widgets do not have a frame clock.
+ *
+ * Since: 3.0
+ * Return value: a #GdkFrameClock (or #NULL if widget is unrealized)
+ */
+GdkFrameClock*
+gtk_widget_get_frame_clock (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  if (widget->priv->realized)
+    {
+      GdkWindow *window;
+
+      window = gtk_widget_get_window (widget);
+      g_assert (window != NULL);
+      return gdk_window_get_frame_clock (window);
+    }
+  else
+    {
+      return NULL;
+    }
+}
+
+/**
  * gtk_widget_size_request:
  * @widget: a #GtkWidget
  * @requisition: (out): a #GtkRequisition to be filled in

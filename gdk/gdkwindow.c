@@ -37,6 +37,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkvisualprivate.h"
 #include "gdkmarshalers.h"
+#include "gdkframeclockidle.h"
 #include "gdkwindowimpl.h"
 
 #include <math.h>
@@ -169,7 +170,8 @@ enum {
 
 enum {
   PROP_0,
-  PROP_CURSOR
+  PROP_CURSOR,
+  PROP_FRAME_CLOCK
 };
 
 typedef enum {
@@ -237,6 +239,10 @@ static void gdk_window_invalidate_rect_full (GdkWindow          *window,
 					     ClearBg             clear_bg);
 static void _gdk_window_propagate_has_alpha_background (GdkWindow *window);
 static cairo_surface_t *gdk_window_ref_impl_surface (GdkWindow *window);
+
+static void gdk_window_process_all_updates_internal (gboolean default_clock_only);
+
+static void gdk_ensure_default_frame_clock  (void);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -386,6 +392,23 @@ gdk_window_class_init (GdkWindowClass *klass)
                                                         P_("Cursor"),
                                                         P_("Cursor"),
                                                         GDK_TYPE_CURSOR,
+                                                        G_PARAM_READWRITE));
+
+  /**
+   * GdkWindow:paint-clock:
+   *
+   * The frame clock for a #GdkWindow, see #GdkFrameClock
+   *
+   * The frame clock remains the same for the lifetime of the window.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_FRAME_CLOCK,
+                                   g_param_spec_object ("paint-clock",
+                                                        P_("Frame clock"),
+                                                        P_("Frame clock"),
+                                                        GDK_TYPE_FRAME_CLOCK,
                                                         G_PARAM_READWRITE));
 
   /**
@@ -600,6 +623,10 @@ gdk_window_set_property (GObject      *object,
       gdk_window_set_cursor (window, g_value_get_object (value));
       break;
 
+    case PROP_FRAME_CLOCK:
+      gdk_window_set_frame_clock (window, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -618,6 +645,10 @@ gdk_window_get_property (GObject    *object,
     {
     case PROP_CURSOR:
       g_value_set_object (value, gdk_window_get_cursor (window));
+      break;
+
+    case PROP_FRAME_CLOCK:
+      g_value_set_object (value, gdk_window_get_frame_clock (window));
       break;
 
     default:
@@ -3778,7 +3809,7 @@ gdk_cairo_create (GdkWindow *window)
 /* Code for dirty-region queueing
  */
 static GSList *update_windows = NULL;
-static guint update_idle = 0;
+static GdkFrameClock *_gdk_default_frame_clock = NULL;
 static gboolean debug_updates = FALSE;
 
 static inline gboolean
@@ -3877,12 +3908,25 @@ gdk_window_remove_update_window (GdkWindow *window)
   update_windows = g_slist_remove (update_windows, window);
 }
 
-static gboolean
-gdk_window_update_idle (gpointer data)
+static void
+gdk_window_paint_default_clock_updates (gpointer data)
 {
-  gdk_window_process_all_updates ();
+  gdk_window_process_all_updates_internal (TRUE);
+}
 
-  return FALSE;
+static void
+gdk_ensure_default_frame_clock (void)
+{
+  if (_gdk_default_frame_clock == NULL)
+    {
+      _gdk_default_frame_clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE,
+                                               NULL);
+
+      g_signal_connect (G_OBJECT (_gdk_default_frame_clock),
+                        "paint",
+                        G_CALLBACK (gdk_window_paint_default_clock_updates),
+                        NULL);
+    }
 }
 
 static gboolean
@@ -3903,11 +3947,7 @@ gdk_window_schedule_update (GdkWindow *window)
        gdk_window_is_toplevel_frozen (window)))
     return;
 
-  if (!update_idle)
-    update_idle =
-      gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
-				 gdk_window_update_idle,
-				 NULL, NULL);
+  gdk_frame_clock_request_frame (gdk_window_get_frame_clock (window));
 }
 
 void
@@ -4220,6 +4260,19 @@ after_process_all_updates (void)
   g_slist_free (displays);
 }
 
+/**
+ * gdk_window_process_all_updates:
+ *
+ * Calls gdk_window_process_updates() for all windows (see #GdkWindow)
+ * in the application.
+ *
+ **/
+void
+gdk_window_process_all_updates (void)
+{
+  gdk_window_process_all_updates_internal (FALSE);
+}
+
 /* Currently it is not possible to override
  * gdk_window_process_all_updates in the same manner as
  * gdk_window_process_updates and gdk_window_invalidate_maybe_recurse
@@ -4230,15 +4283,8 @@ after_process_all_updates (void)
  * displays and call the mehod.
  */
 
-/**
- * gdk_window_process_all_updates:
- *
- * Calls gdk_window_process_updates() for all windows (see #GdkWindow)
- * in the application.
- *
- **/
-void
-gdk_window_process_all_updates (void)
+static void
+gdk_window_process_all_updates_internal (gboolean default_clock_only)
 {
   GSList *old_update_windows = update_windows;
   GSList *tmp_list = update_windows;
@@ -4250,18 +4296,13 @@ gdk_window_process_all_updates (void)
       /* We can't do this now since that would recurse, so
 	 delay it until after the recursion is done. */
       got_recursive_update = TRUE;
-      update_idle = 0;
       return;
     }
 
   in_process_all_updates = TRUE;
   got_recursive_update = FALSE;
 
-  if (update_idle)
-    g_source_remove (update_idle);
-
   update_windows = NULL;
-  update_idle = 0;
 
   before_process_all_updates ();
 
@@ -4274,7 +4315,8 @@ gdk_window_process_all_updates (void)
       if (!GDK_WINDOW_DESTROYED (window))
 	{
 	  if (window->update_freeze_count ||
-	      gdk_window_is_toplevel_frozen (window))
+	      gdk_window_is_toplevel_frozen (window) ||
+	      (default_clock_only && window->frame_clock != NULL))
 	    gdk_window_add_update_window (window);
 	  else
 	    gdk_window_process_updates_internal (window);
@@ -4296,31 +4338,20 @@ gdk_window_process_all_updates (void)
      redraw now so that it eventually happens,
      otherwise we could miss an update if nothing
      else schedules an update. */
-  if (got_recursive_update && !update_idle)
-    update_idle =
-      gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
-				 gdk_window_update_idle,
-				 NULL, NULL);
+  if (got_recursive_update)
+    gdk_window_schedule_update (NULL);
 }
 
-/**
- * gdk_window_process_updates:
- * @window: a #GdkWindow
- * @update_children: whether to also process updates for child windows
- *
- * Sends one or more expose events to @window. The areas in each
- * expose event will cover the entire update area for the window (see
- * gdk_window_invalidate_region() for details). Normally GDK calls
- * gdk_window_process_all_updates() on your behalf, so there's no
- * need to call this function unless you want to force expose events
- * to be delivered immediately and synchronously (vs. the usual
- * case, where GDK delivers them in an idle handler). Occasionally
- * this is useful to produce nicer scrolling behavior, for example.
- *
- **/
-void
-gdk_window_process_updates (GdkWindow *window,
-			    gboolean   update_children)
+
+enum {
+  PROCESS_UPDATES_NO_RECURSE,
+  PROCESS_UPDATES_WITH_ALL_CHILDREN,
+  PROCESS_UPDATES_WITH_SAME_CLOCK_CHILDREN
+};
+
+static void
+gdk_window_process_updates_with_mode (GdkWindow     *window,
+                                      int            recurse_mode)
 {
   GdkWindow *impl_window;
 
@@ -4346,7 +4377,7 @@ gdk_window_process_updates (GdkWindow *window,
       gdk_window_remove_update_window ((GdkWindow *)impl_window);
     }
 
-  if (update_children)
+  if (recurse_mode != PROCESS_UPDATES_NO_RECURSE)
     {
       /* process updates in reverse stacking order so composition or
        * painting over achieves the desired effect for offscreen windows
@@ -4358,14 +4389,47 @@ gdk_window_process_updates (GdkWindow *window,
 
       for (node = g_list_last (children); node; node = node->prev)
 	{
-	  gdk_window_process_updates (node->data, TRUE);
-	  g_object_unref (node->data);
+          GdkWindow *child = node->data;
+          if (recurse_mode == PROCESS_UPDATES_WITH_ALL_CHILDREN ||
+              (recurse_mode == PROCESS_UPDATES_WITH_SAME_CLOCK_CHILDREN &&
+               child->frame_clock == NULL))
+            {
+              gdk_window_process_updates (child, TRUE);
+            }
+	  g_object_unref (child);
 	}
 
       g_list_free (children);
     }
 
   g_object_unref (window);
+}
+
+/**
+ * gdk_window_process_updates:
+ * @window: a #GdkWindow
+ * @update_children: whether to also process updates for child windows
+ *
+ * Sends one or more expose events to @window. The areas in each
+ * expose event will cover the entire update area for the window (see
+ * gdk_window_invalidate_region() for details). Normally GDK calls
+ * gdk_window_process_all_updates() on your behalf, so there's no
+ * need to call this function unless you want to force expose events
+ * to be delivered immediately and synchronously (vs. the usual
+ * case, where GDK delivers them in an idle handler). Occasionally
+ * this is useful to produce nicer scrolling behavior, for example.
+ *
+ **/
+void
+gdk_window_process_updates (GdkWindow *window,
+			    gboolean   update_children)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  return gdk_window_process_updates_with_mode (window,
+                                               update_children ?
+                                               PROCESS_UPDATES_WITH_ALL_CHILDREN :
+                                               PROCESS_UPDATES_NO_RECURSE);
 }
 
 static void
@@ -11534,4 +11598,114 @@ gdk_property_delete (GdkWindow *window,
                      GdkAtom    property)
 {
   GDK_WINDOW_IMPL_GET_CLASS (window->impl)->delete_property (window, property);
+}
+
+static void
+gdk_window_paint_on_clock (GdkFrameClock *clock,
+			   void          *data)
+{
+  GdkWindow *window;
+
+  window = GDK_WINDOW (data);
+
+  /* Update window and any children on the same clock.
+   */
+  gdk_window_process_updates_with_mode (window, PROCESS_UPDATES_WITH_SAME_CLOCK_CHILDREN);
+}
+
+/**
+ * gdk_window_set_frame_clock:
+ * @window: window to set frame clock on
+ * @clock: the clock
+ *
+ * Sets the frame clock for the window. The frame clock for a window
+ * cannot be changed while the window is mapped. Set the frame
+ * clock to #NULL to use the default frame clock. (By default the
+ * frame clock comes from the window's parent or is a global default
+ * frame clock.)
+ *
+ * Since: 3.0
+ */
+void
+gdk_window_set_frame_clock (GdkWindow     *window,
+                            GdkFrameClock *clock)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (clock == NULL || GDK_IS_FRAME_CLOCK (clock));
+  g_return_if_fail (!GDK_WINDOW_IS_MAPPED (window));
+
+  if (clock == window->frame_clock)
+    return;
+
+  /* If we are using our parent's clock, then the parent will repaint
+   * us when that clock fires. If we are using the default clock, then
+   * it does a gdk_window_process_all_updates() which will repaint us
+   * when the clock fires. If we are using our own clock, then we have
+   * to connect to "paint" on it ourselves and paint ourselves and
+   * any child windows.
+   */
+
+  if (clock)
+    {
+      g_object_ref (clock);
+      g_signal_connect (G_OBJECT (clock),
+                        "paint",
+                        G_CALLBACK (gdk_window_paint_on_clock),
+                        window);
+    }
+
+  if (window->frame_clock)
+    {
+      g_signal_handlers_disconnect_by_func (G_OBJECT (window->frame_clock),
+                                            G_CALLBACK (gdk_window_paint_on_clock),
+                                            window);
+      g_object_unref (window->frame_clock);
+    }
+
+  window->frame_clock = clock;
+  g_object_notify (G_OBJECT (window), "paint-clock");
+
+  /* We probably should recurse child windows and emit notify on their
+   * paint-clock properties also, and we should emit notify when a
+   * window is first parented.
+   */
+}
+
+/**
+ * gdk_window_get_frame_clock:
+ * @window: window to get frame clock for
+ *
+ * Gets the frame clock for the window. The frame clock for a window
+ * never changes while the window is mapped. It may be changed at
+ * other times.
+ *
+ * Since: 3.0
+ * Return value: (transfer none): the frame clock
+ */
+GdkFrameClock*
+gdk_window_get_frame_clock (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (window->frame_clock != NULL)
+    {
+      /* Frame clock set explicitly on this window */
+      return window->frame_clock;
+    }
+  else
+    {
+      GdkWindow *parent;
+
+      /* parent's frame clock or default */
+      parent = gdk_window_get_effective_parent (window);
+      if (parent != NULL)
+        {
+          return gdk_window_get_frame_clock (parent);
+        }
+      else
+        {
+          gdk_ensure_default_frame_clock ();
+          return _gdk_default_frame_clock;
+        }
+    }
 }
