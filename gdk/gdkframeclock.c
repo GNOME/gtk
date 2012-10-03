@@ -47,7 +47,7 @@
  * for example.
  *
  * A frame clock is idle until someone requests a frame with
- * gdk_frame_clock_request_frame(). At that time, the frame clock
+ * gdk_frame_clock_request_phase(). At that time, the frame clock
  * emits its GdkFrameClock:frame-requested signal if no frame was
  * already pending.
  *
@@ -203,7 +203,7 @@ gdk_frame_clock_get_frame_time (GdkFrameClock *clock)
 }
 
 /**
- * gdk_frame_clock_request_frame:
+ * gdk_frame_clock_request_phase:
  * @clock: the clock
  *
  * Asks the frame clock to paint a frame. The frame
@@ -217,15 +217,17 @@ gdk_frame_clock_get_frame_time (GdkFrameClock *clock)
  * Since: 3.0
  */
 void
-gdk_frame_clock_request_frame (GdkFrameClock *clock)
+gdk_frame_clock_request_phase (GdkFrameClock      *clock,
+                               GdkFrameClockPhase  phase)
 {
   g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
 
-  GDK_FRAME_CLOCK_GET_IFACE (clock)->request_frame (clock);
+  GDK_FRAME_CLOCK_GET_IFACE (clock)->request_phase (clock, phase);
 }
 
+
 /**
- * gdk_frame_clock_get_frame_requested:
+ * gdk_frame_clock_get_requested:
  * @clock: the clock
  *
  * Gets whether a frame paint has been requested but has not been
@@ -235,12 +237,12 @@ gdk_frame_clock_request_frame (GdkFrameClock *clock)
  * Since: 3.0
  * Return value: TRUE if a frame paint is pending
  */
-gboolean
-gdk_frame_clock_get_frame_requested (GdkFrameClock *clock)
+GdkFrameClockPhase
+gdk_frame_clock_get_requested (GdkFrameClock *clock)
 {
   g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), FALSE);
 
-  return GDK_FRAME_CLOCK_GET_IFACE (clock)->get_frame_requested (clock);
+  return GDK_FRAME_CLOCK_GET_IFACE (clock)->get_requested (clock);
 }
 
 /**
@@ -280,29 +282,4 @@ gdk_frame_clock_frame_requested (GdkFrameClock *clock)
 
   g_signal_emit (G_OBJECT (clock),
                  signals[FRAME_REQUESTED], 0);
-}
-
-/**
- * gdk_frame_clock_paint:
- * @clock: the clock
- *
- * Emits the before-paint, paint, and after-paint signals. Used in
- * implementations of the #GdkFrameClock interface.
- */
-void
-gdk_frame_clock_paint (GdkFrameClock *clock)
-{
-  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
-
-  g_signal_emit (G_OBJECT (clock),
-                 signals[BEFORE_PAINT], 0);
-
-  g_signal_emit (G_OBJECT (clock),
-                 signals[LAYOUT], 0);
-
-  g_signal_emit (G_OBJECT (clock),
-                 signals[PAINT], 0);
-
-  g_signal_emit (G_OBJECT (clock),
-                 signals[AFTER_PAINT], 0);
 }

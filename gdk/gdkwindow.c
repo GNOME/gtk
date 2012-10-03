@@ -3947,7 +3947,8 @@ gdk_window_schedule_update (GdkWindow *window)
        gdk_window_is_toplevel_frozen (window)))
     return;
 
-  gdk_frame_clock_request_frame (gdk_window_get_frame_clock (window));
+  gdk_frame_clock_request_phase (gdk_window_get_frame_clock (window),
+                                 GDK_FRAME_CLOCK_PHASE_PAINT);
 }
 
 void

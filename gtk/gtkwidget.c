@@ -4793,7 +4793,7 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
  * then update the animation by calling
  * gdk_frame_clock_get_frame_time() again during each repaint.
  *
- * gdk_frame_clock_request_frame() will result in a new frame on the
+ * gdk_frame_clock_request_phase() will result in a new frame on the
  * clock, but won't necessarily repaint any widgets. To repaint a
  * widget, you have to use gtk_widget_queue_draw() which invalidates
  * the widget (thus scheduling it to receive a draw on the next

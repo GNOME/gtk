@@ -38,8 +38,11 @@ struct _GdkFrameClockIdlePrivate
 
   guint idle_id;
 
-  unsigned int in_paint : 1;
+  GdkFrameClockPhase requested;
+  GdkFrameClockPhase phase;
 };
+
+static gboolean gdk_frame_clock_paint_idle (void *data);
 
 static void gdk_frame_clock_idle_finalize             (GObject                *object);
 static void gdk_frame_clock_idle_interface_init       (GdkFrameClockInterface *iface);
@@ -113,7 +116,7 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
   guint64 computed_frame_time;
 
   /* can't change frame time during a paint */
-  if (priv->in_paint)
+  if (priv->phase != GDK_FRAME_CLOCK_PHASE_NONE)
     return priv->frame_time;
 
   /* Outside a paint, pick something close to "now" */
@@ -130,6 +133,22 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
   return priv->frame_time;
 }
 
+static void
+maybe_start_idle (GdkFrameClockIdle *clock_idle)
+{
+  GdkFrameClockIdlePrivate *priv = clock_idle->priv;
+
+  if (priv->idle_id == 0 && priv->requested != 0)
+    {
+      priv->idle_id = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
+                                                 gdk_frame_clock_paint_idle,
+                                                 g_object_ref (clock_idle),
+                                                 (GDestroyNotify) g_object_unref);
+
+      gdk_frame_clock_frame_requested (GDK_FRAME_CLOCK (clock_idle));
+    }
+}
+
 static gboolean
 gdk_frame_clock_paint_idle (void *data)
 {
@@ -139,44 +158,60 @@ gdk_frame_clock_paint_idle (void *data)
 
   priv->idle_id = 0;
 
-  priv->in_paint = TRUE;
   priv->frame_time = compute_frame_time (clock_idle);
 
-  gdk_frame_clock_paint (clock);
+  priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
+  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
+  g_signal_emit_by_name (G_OBJECT (clock), "before-paint");
+  priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
+  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
+  g_signal_emit_by_name (G_OBJECT (clock), "layout");
+  priv->phase = GDK_FRAME_CLOCK_PHASE_PAINT;
+  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
+  g_signal_emit_by_name (G_OBJECT (clock), "paint");
+  priv->phase = GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
+  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
+  g_signal_emit_by_name (G_OBJECT (clock), "after-paint");
+  priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
 
-  priv->in_paint = FALSE;
+  maybe_start_idle (clock_idle);
 
   return FALSE;
 }
 
 static void
-gdk_frame_clock_idle_request_frame (GdkFrameClock *clock)
+gdk_frame_clock_idle_request_phase (GdkFrameClock      *clock,
+                                    GdkFrameClockPhase  phase)
 {
-  GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
+  GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
+  GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
-  if (priv->idle_id == 0)
-    {
-      priv->idle_id = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
-                                                 gdk_frame_clock_paint_idle,
-                                                 g_object_ref (clock),
-                                                 (GDestroyNotify) g_object_unref);
-
-      gdk_frame_clock_frame_requested (clock);
-    }
+  priv->requested |= phase;
+  maybe_start_idle (clock_idle);
 }
 
-static gboolean
-gdk_frame_clock_idle_get_frame_requested (GdkFrameClock *clock)
+static GdkFrameClockPhase
+gdk_frame_clock_idle_get_requested (GdkFrameClock *clock)
 {
   GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
 
-  return priv->idle_id != 0;
+  return priv->requested;
 }
 
 static void
 gdk_frame_clock_idle_interface_init (GdkFrameClockInterface *iface)
 {
   iface->get_frame_time = gdk_frame_clock_idle_get_frame_time;
-  iface->request_frame = gdk_frame_clock_idle_request_frame;
-  iface->get_frame_requested = gdk_frame_clock_idle_get_frame_requested;
+  iface->request_phase = gdk_frame_clock_idle_request_phase;
+  iface->get_requested = gdk_frame_clock_idle_get_requested;
+}
+
+GdkFrameClock *
+_gdk_frame_clock_idle_new (void)
+{
+  GdkFrameClockIdle *clock;
+
+  clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
+
+  return GDK_FRAME_CLOCK (clock);
 }
