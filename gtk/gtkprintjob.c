@@ -269,20 +269,20 @@ gtk_print_job_finalize (GObject *object)
   GtkPrintJob *job = GTK_PRINT_JOB (object);
   GtkPrintJobPrivate *priv = job->priv;
 
+  if (priv->surface)
+    cairo_surface_destroy (priv->surface);
+
+  if (priv->backend)
+    g_object_unref (priv->backend);
+
   if (priv->spool_io != NULL)
     {
       g_io_channel_unref (priv->spool_io);
       priv->spool_io = NULL;
     }
 
-  if (priv->backend)
-    g_object_unref (priv->backend);
-
   if (priv->printer)
     g_object_unref (priv->printer);
-
-  if (priv->surface)
-    cairo_surface_destroy (priv->surface);
 
   if (priv->settings)
     g_object_unref (priv->settings);
