@@ -1750,10 +1750,14 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
   gtk_widget_get_preferred_height (priv->hscrollbar, &sb_height, NULL);
   gtk_widget_get_preferred_width (priv->vscrollbar, &sb_width, NULL);
 
-  /* Subtract some things from our available allocation size */
+  gtk_widget_get_allocation (widget, &widget_allocation);
+
   allocation->x = 0;
   allocation->y = 0;
+  allocation->width = widget_allocation.width;
+  allocation->height = widget_allocation.height;
 
+  /* Subtract some things from our available allocation size */
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
       GtkStyleContext *context;
@@ -1771,13 +1775,11 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
 
       allocation->x += padding.left + border.left;
       allocation->y += padding.top + border.top;
+      allocation->width = MAX (1, allocation->width - (padding.left + border.left + padding.right + border.right));
+      allocation->height = MAX (1, allocation->height - (padding.top + border.top + padding.bottom + border.bottom));
 
       gtk_style_context_restore (context);
     }
-
-  gtk_widget_get_allocation (widget, &widget_allocation);
-  allocation->width = MAX (1, (gint) widget_allocation.width - allocation->x * 2);
-  allocation->height = MAX (1, (gint) widget_allocation.height - allocation->y * 2);
 
   if (priv->vscrollbar_visible)
     {
@@ -2172,11 +2174,9 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	  priv->real_window_placement == GTK_CORNER_TOP_RIGHT)
 	child_allocation.y = (relative_allocation.y +
 			      relative_allocation.height +
-			      sb_spacing +
-			      (priv->shadow_type == GTK_SHADOW_NONE ?
-			       0 : padding.top + border.top));
+			      sb_spacing);
       else
-	child_allocation.y = 0;
+	child_allocation.y = relative_allocation.y - sb_spacing - sb_height;
 
       child_allocation.width = relative_allocation.width;
       child_allocation.height = sb_height;
@@ -2189,15 +2189,12 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
             {
               child_allocation.x -= padding.left + border.left;
               child_allocation.width += padding.left + padding.right + border.left + border.right;
-            }
-          else if (GTK_CORNER_TOP_RIGHT == priv->real_window_placement ||
-                   GTK_CORNER_TOP_LEFT == priv->real_window_placement)
-            {
-              child_allocation.y -= padding.top + border.top;
-            }
-          else
-            {
-              child_allocation.y += padding.top + border.top;
+
+              if (priv->real_window_placement == GTK_CORNER_TOP_LEFT ||
+                  priv->real_window_placement == GTK_CORNER_TOP_RIGHT)
+                child_allocation.y += padding.bottom + border.bottom;
+              else
+                child_allocation.y -= padding.top + border.top;
             }
 	}
 
@@ -2219,11 +2216,9 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	    priv->real_window_placement == GTK_CORNER_BOTTOM_LEFT)))
 	child_allocation.x = (relative_allocation.x +
 			      relative_allocation.width +
-			      sb_spacing +
-			      (priv->shadow_type == GTK_SHADOW_NONE ?
-			       0 : padding.left + border.left));
+			      sb_spacing);
       else
-	child_allocation.x = 0;
+	child_allocation.x = relative_allocation.x - sb_spacing - sb_width;
 
       child_allocation.y = relative_allocation.y;
       child_allocation.width = sb_width;
@@ -2237,17 +2232,18 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
             {
               child_allocation.y -= padding.top + border.top;
 	      child_allocation.height += padding.top + padding.bottom + border.top + border.bottom;
+
+              if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL &&
+                   (priv->real_window_placement == GTK_CORNER_TOP_RIGHT ||
+                    priv->real_window_placement == GTK_CORNER_BOTTOM_RIGHT)) ||
+                  (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR &&
+                   (priv->real_window_placement == GTK_CORNER_TOP_LEFT ||
+                    priv->real_window_placement == GTK_CORNER_BOTTOM_LEFT)))
+                child_allocation.x += padding.right + border.right;
+              else
+                child_allocation.x -= padding.left + border.left;
             }
-          else if (GTK_CORNER_BOTTOM_LEFT == priv->real_window_placement ||
-                   GTK_CORNER_TOP_LEFT == priv->real_window_placement)
-            {
-              child_allocation.x -= padding.left + border.left;
-            }
-          else
-            {
-              child_allocation.x += padding.left + border.left;
-            }
-	}
+        }
 
       gtk_widget_size_allocate (priv->vscrollbar, &child_allocation);
     }
