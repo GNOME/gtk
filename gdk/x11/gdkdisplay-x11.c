@@ -688,6 +688,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
               gdk_frame_clock_thaw (gdk_window_get_frame_clock (event->any.window));
             }
 
+	  if (toplevel)
+            gdk_window_freeze_toplevel_updates_libgtk_only (window);
+
           _gdk_x11_window_grab_check_unmap (window, xevent->xany.serial);
         }
 
@@ -708,6 +711,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	    gdk_synthesize_window_state (window,
 					 GDK_WINDOW_STATE_ICONIFIED,
 					 0);
+
+	  if (toplevel)
+	    gdk_window_thaw_toplevel_updates_libgtk_only (window);
 	}
 
       break;
