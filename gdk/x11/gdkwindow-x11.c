@@ -226,10 +226,13 @@ gdk_x11_window_begin_frame (GdkWindow *window)
       impl->toplevel->extended_update_counter == None)
     return;
 
-  impl->toplevel->current_counter_value += 1;
-  set_sync_counter(GDK_WINDOW_XDISPLAY (impl->wrapper),
-		   impl->toplevel->extended_update_counter,
-		   impl->toplevel->current_counter_value);
+  if (impl->toplevel->current_counter_value % 2 == 0)
+    {
+      impl->toplevel->current_counter_value += 1;
+      set_sync_counter(GDK_WINDOW_XDISPLAY (impl->wrapper),
+		       impl->toplevel->extended_update_counter,
+		       impl->toplevel->current_counter_value);
+    }
 }
 
 static void
@@ -245,16 +248,19 @@ gdk_x11_window_end_frame (GdkWindow *window)
       impl->toplevel->extended_update_counter == None)
     return;
 
-  impl->toplevel->current_counter_value += 1;
-  set_sync_counter(GDK_WINDOW_XDISPLAY (impl->wrapper),
-		   impl->toplevel->extended_update_counter,
-		   impl->toplevel->current_counter_value);
-
-  if (gdk_x11_screen_supports_net_wm_hint (gdk_window_get_screen (window),
-                                           gdk_atom_intern_static_string ("_NET_WM_FRAME_DRAWN")))
+  if (impl->toplevel->current_counter_value % 2 == 1)
     {
-      impl->toplevel->frame_pending = TRUE;
-      gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
+      impl->toplevel->current_counter_value += 1;
+      set_sync_counter(GDK_WINDOW_XDISPLAY (impl->wrapper),
+		       impl->toplevel->extended_update_counter,
+		       impl->toplevel->current_counter_value);
+
+      if (gdk_x11_screen_supports_net_wm_hint (gdk_window_get_screen (window),
+					       gdk_atom_intern_static_string ("_NET_WM_FRAME_DRAWN")))
+        {
+          impl->toplevel->frame_pending = TRUE;
+          gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
+        }
     }
 }
 
@@ -760,6 +766,9 @@ setup_toplevel_window (GdkWindow *window,
     gdk_x11_window_set_user_time (window, GDK_X11_DISPLAY (x11_screen->display)->user_time);
 
   ensure_sync_counter (window);
+
+  /* Start off in a frozen state - we'll finish this when we first paint */
+  gdk_x11_window_begin_frame (window);
 }
 
 static void
