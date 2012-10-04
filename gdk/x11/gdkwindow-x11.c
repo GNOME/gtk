@@ -940,6 +940,9 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
                     G_CALLBACK (on_frame_clock_before_paint), window);
   g_signal_connect (clock, "after-paint",
                     G_CALLBACK (on_frame_clock_after_paint), window);
+
+  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
+    gdk_window_freeze_toplevel_updates_libgtk_only (window);
 }
 
 static GdkEventMask
