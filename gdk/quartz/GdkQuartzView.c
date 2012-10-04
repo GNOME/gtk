@@ -92,7 +92,7 @@
        */
       [NSGraphicsContext saveGraphicsState];
 
-      [[[self window] backgroundColor] setFill];
+      [[NSColor windowBackgroundColor] setFill];
       [NSBezierPath fillRect:rect];
 
       [NSGraphicsContext restoreGraphicsState];
