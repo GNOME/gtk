@@ -341,7 +341,8 @@ gdkmarshalers.h: @REBUILD@ gdkmarshalers.list
 	&& mv gdkmarshalers-h.tmp gdkmarshalers.h \
 	|| ( rm -f gdkmarshalers-h.tmp && exit 1)
 gdkmarshalers.c: @REBUILD@ gdkmarshalers.list
-	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body > gdkmarshalers-c.tmp	\
+	$(AM_V_GEN) (echo "#include \"gdkmarshalers.h\""; \
+	 $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body) > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
 	|| ( rm -f gdkmarshalers-c.tmp && exit 1 )
 
