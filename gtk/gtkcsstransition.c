@@ -38,9 +38,7 @@ gtk_css_transition_set_values (GtkStyleAnimation    *animation,
 
   if (transition->start_time >= for_time_us)
     value = _gtk_css_value_ref (transition->start);
-  else if (transition->end_time <= for_time_us)
-    value = _gtk_css_value_ref (end);
-  else
+  else if (transition->end_time > for_time_us)
     {
       progress = (double) (for_time_us - transition->start_time) / (transition->end_time - transition->start_time);
       progress = _gtk_css_ease_value_transform (transition->ease, progress);
@@ -52,9 +50,14 @@ gtk_css_transition_set_values (GtkStyleAnimation    *animation,
       if (value == NULL)
         value = _gtk_css_value_ref (end);
     }
+  else
+    value = NULL;
 
-  _gtk_css_computed_values_set_animated_value (values, transition->property, value);
-  _gtk_css_value_unref (value);
+  if (value)
+    {
+      _gtk_css_computed_values_set_animated_value (values, transition->property, value);
+      _gtk_css_value_unref (value);
+    }
 }
 
 static gboolean
