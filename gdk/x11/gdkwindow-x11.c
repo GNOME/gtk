@@ -4953,10 +4953,6 @@ gdk_x11_window_get_xid (GdkWindow *window)
   return GDK_WINDOW_IMPL_X11 (window->impl)->xid;
 }
 
-extern GdkDragContext * _gdk_x11_window_drag_begin (GdkWindow *window,
-                                                    GdkDevice *device,
-                                                    GList     *targets);
-
 static void
 gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
 {
