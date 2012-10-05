@@ -411,7 +411,7 @@ gtk_css_computed_values_create_css_transitions (GtkCssComputedValues *values,
       else
         {
           animation = _gtk_css_transition_new (i,
-                                               start,
+                                               _gtk_css_computed_values_get_value (source, i),
                                                _gtk_css_array_value_get_nth (timing_functions, i),
                                                timestamp + delay * G_USEC_PER_SEC,
                                                timestamp + (delay + duration) * G_USEC_PER_SEC);
