@@ -40,28 +40,36 @@ gtk_css_image_linear_get_start_end (GtkCssImageLinear *linear,
   double pos;
   guint i;
       
-  stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, 0);
-  if (stop->offset == NULL)
-    *start = 0;
-  else
-    *start = _gtk_css_number_value_get (stop->offset, length) / length;
-
-  *end = *start;
-
-  for (i = 0; i < linear->stops->len; i++)
+  if (linear->repeating)
     {
-      stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, i);
+      stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, 0);
+      if (stop->offset == NULL)
+        *start = 0;
+      else
+        *start = _gtk_css_number_value_get (stop->offset, length) / length;
+
+      *end = *start;
+
+      for (i = 0; i < linear->stops->len; i++)
+        {
+          stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, i);
+          
+          if (stop->offset == NULL)
+            continue;
+
+          pos = _gtk_css_number_value_get (stop->offset, length) / length;
+
+          *end = MAX (pos, *end);
+        }
       
       if (stop->offset == NULL)
-        continue;
-
-      pos = _gtk_css_number_value_get (stop->offset, length) / length;
-
-      *end = MAX (pos, *end);
+        *end = MAX (*end, 1.0);
     }
-  
-  if (stop->offset == NULL)
-    *end = MAX (*end, 1.0);
+  else
+    {
+      *start = 0;
+      *end = 1;
+    }
 }
 
 static void
