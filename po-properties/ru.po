@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-09-14 21:35+0000\n"
-"PO-Revision-Date: 2012-09-15 19:36+0400\n"
+"PO-Revision-Date: 2012-10-07 17:15+0400\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -6247,12 +6247,12 @@ msgstr ""
 #: ../gtk/gtksettings.c:1158
 #| msgid "Primary icon sensitive"
 msgid "Primary button warps slider"
-msgstr "Основная кнопка переносит ползунок"
+msgstr "Нажатие основной кнопки мыши переносит ползунок"
 
 #: ../gtk/gtksettings.c:1159
 msgid ""
 "Whether a primary click on the trough should warp the slider into position"
-msgstr "Перености ли ползунок нажатие основной кнопки"
+msgstr "Переносится ли ползунок в место нажатия основной кнопки мыши"
 
 #: ../gtk/gtksettings.c:1175
 msgid "Visible Focus"
