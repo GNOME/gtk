@@ -307,12 +307,12 @@ gdk_display_get_event (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  GDK_DISPLAY_GET_CLASS (display)->queue_events (display);
-
   if (display->events_paused)
     return NULL;
-  else
-    return _gdk_event_unqueue (display);
+
+  GDK_DISPLAY_GET_CLASS (display)->queue_events (display);
+
+  return _gdk_event_unqueue (display);
 }
 
 /**
