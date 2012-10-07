@@ -88,7 +88,7 @@ _gdk_event_queue_find_first (GdkDisplay *display)
   GList *tmp_list;
   GList *pending_motion = NULL;
 
-  if (display->events_paused)
+  if (display->event_pause_count > 0)
     return NULL;
 
   tmp_list = display->queued_events;

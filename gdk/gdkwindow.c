@@ -11620,7 +11620,7 @@ gdk_window_flush_events (GdkFrameClock *clock,
 
   display = gdk_window_get_display (window);
   _gdk_display_flush_events (display);
-  _gdk_display_set_events_paused (display, TRUE);
+  _gdk_display_pause_events (display);
 
   gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS);
 }
@@ -11648,7 +11648,7 @@ gdk_window_resume_events (GdkFrameClock *clock,
   window = GDK_WINDOW (data);
 
   display = gdk_window_get_display (window);
-  _gdk_display_set_events_paused (display, FALSE);
+  _gdk_display_unpause_events (display);
 }
 
 /**

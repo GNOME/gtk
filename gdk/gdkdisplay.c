@@ -307,7 +307,7 @@ gdk_display_get_event (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  if (display->events_paused)
+  if (display->event_pause_count > 0)
     return NULL;
 
   GDK_DISPLAY_GET_CLASS (display)->queue_events (display);
@@ -2008,10 +2008,17 @@ gdk_display_notify_startup_complete (GdkDisplay  *display,
 }
 
 void
-_gdk_display_set_events_paused (GdkDisplay       *display,
-                                gboolean          events_paused)
+_gdk_display_pause_events (GdkDisplay *display)
 {
-  display->events_paused = !!events_paused;
+  display->event_pause_count++;
+}
+
+void
+_gdk_display_unpause_events (GdkDisplay *display)
+{
+  g_return_if_fail (display->event_pause_count > 0);
+
+  display->event_pause_count--;
 }
 
 void
