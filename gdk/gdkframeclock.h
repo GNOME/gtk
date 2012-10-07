@@ -70,8 +70,8 @@ typedef enum {
   GDK_FRAME_CLOCK_PHASE_UPDATE        = 1 << 2,
   GDK_FRAME_CLOCK_PHASE_LAYOUT        = 1 << 3,
   GDK_FRAME_CLOCK_PHASE_PAINT         = 1 << 4,
-  GDK_FRAME_CLOCK_PHASE_AFTER_PAINT   = 1 << 5,
-  GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS = 1 << 6
+  GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS = 1 << 5,
+  GDK_FRAME_CLOCK_PHASE_AFTER_PAINT   = 1 << 6
 } GdkFrameClockPhase;
 
 struct _GdkFrameClockInterface

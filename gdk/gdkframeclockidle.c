@@ -219,82 +219,78 @@ gdk_frame_clock_paint_idle (void *data)
   skip_to_resume_events =
     (priv->requested & ~(GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS | GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS)) == 0;
 
-  switch (priv->phase)
+  if (!skip_to_resume_events)
     {
-    case GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS:
-      break;
-    case GDK_FRAME_CLOCK_PHASE_NONE:
-    case GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT:
-      if (priv->freeze_count == 0)
-	{
-          priv->frame_time = compute_frame_time (clock_idle);
-
-          priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
-          /* We always emit ::before-paint and ::after-paint if
-           * any of the intermediate phases are requested and
-           * they don't get repeated if you freeze/thaw while
-           * in them. */
-          if (!skip_to_resume_events)
+      switch (priv->phase)
+        {
+        case GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS:
+          break;
+        case GDK_FRAME_CLOCK_PHASE_NONE:
+        case GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT:
+          if (priv->freeze_count == 0)
             {
+              priv->frame_time = compute_frame_time (clock_idle);
+
+              priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
+
+              /* We always emit ::before-paint and ::after-paint if
+               * any of the intermediate phases are requested and
+               * they don't get repeated if you freeze/thaw while
+               * in them. */
               priv->requested &= ~GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
               g_signal_emit_by_name (G_OBJECT (clock), "before-paint");
+              priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
             }
-          priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
-	}
-    case GDK_FRAME_CLOCK_PHASE_UPDATE:
-      if (priv->freeze_count == 0)
-	{
-          if (priv->requested & GDK_FRAME_CLOCK_PHASE_UPDATE)
+        case GDK_FRAME_CLOCK_PHASE_UPDATE:
+          if (priv->freeze_count == 0)
             {
-              priv->requested &= ~GDK_FRAME_CLOCK_PHASE_UPDATE;
-              g_signal_emit_by_name (G_OBJECT (clock), "update");
+              if (priv->requested & GDK_FRAME_CLOCK_PHASE_UPDATE)
+                {
+                  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_UPDATE;
+                  g_signal_emit_by_name (G_OBJECT (clock), "update");
+                }
             }
-	}
-    case GDK_FRAME_CLOCK_PHASE_LAYOUT:
-      if (priv->freeze_count == 0)
-	{
-	  priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
-          if (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT)
+        case GDK_FRAME_CLOCK_PHASE_LAYOUT:
+          if (priv->freeze_count == 0)
             {
-              priv->requested &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
-              g_signal_emit_by_name (G_OBJECT (clock), "layout");
+              priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
+              if (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT)
+                {
+                  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
+                  g_signal_emit_by_name (G_OBJECT (clock), "layout");
+                }
             }
-	}
-    case GDK_FRAME_CLOCK_PHASE_PAINT:
-      if (priv->freeze_count == 0)
-	{
-	  priv->phase = GDK_FRAME_CLOCK_PHASE_PAINT;
-          if (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT)
+        case GDK_FRAME_CLOCK_PHASE_PAINT:
+          if (priv->freeze_count == 0)
             {
-              priv->requested &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
-              g_signal_emit_by_name (G_OBJECT (clock), "paint");
+              priv->phase = GDK_FRAME_CLOCK_PHASE_PAINT;
+              if (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT)
+                {
+                  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_PAINT;
+                  g_signal_emit_by_name (G_OBJECT (clock), "paint");
+                }
             }
-	}
-    case GDK_FRAME_CLOCK_PHASE_AFTER_PAINT:
-      if (priv->freeze_count == 0)
-	{
-	  priv->phase = GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
-          if (!skip_to_resume_events)
+        case GDK_FRAME_CLOCK_PHASE_AFTER_PAINT:
+          if (priv->freeze_count == 0)
             {
               priv->requested &= ~GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
               g_signal_emit_by_name (G_OBJECT (clock), "after-paint");
+              /* the ::after-paint phase doesn't get repeated on freeze/thaw,
+               */
+              priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
             }
-          /* the ::after-paint phase doesn't get repeated on freeze/thaw,
-           */
-          priv->phase = GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS;
-	}
-    case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
-      if (priv->freeze_count == 0)
-	{
-          if (priv->requested & GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS)
-            {
-              priv->requested &= ~GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS;
-              g_signal_emit_by_name (G_OBJECT (clock), "resume-events");
-            }
-          /* the ::resume-event phase doesn't get repeated on freeze/thaw */
-	  priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
-	}
+        case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
+          ;
+        }
     }
+
+  if (priv->requested & GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS)
+    {
+      priv->requested &= ~GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS;
+      g_signal_emit_by_name (G_OBJECT (clock), "resume-events");
+    }
+
+  priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
 
   if (priv->freeze_count == 0 && priv->requested != 0)
     {
