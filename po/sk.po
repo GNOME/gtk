@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2011-12-08 17:46+0000\n"
-"PO-Revision-Date: 2011-12-14 14:13+0100\n"
+"PO-Revision-Date: 2012-10-10 12:40+0100\n"
 "Last-Translator: Pavol Šimo <palo.simo@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -3124,7 +3124,7 @@ msgstr "Zvýši hlasitosť"
 
 #: ../gtk/gtkvolumebutton.c:247
 msgid "Muted"
-msgstr "Umlčané"
+msgstr "Stlmené"
 
 #: ../gtk/gtkvolumebutton.c:251
 msgid "Full Volume"
