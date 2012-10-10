@@ -383,7 +383,7 @@ else
 fi
 AC_SUBST(DISABLE_ON_QUARTZ)
 
-if test "x$enable_broadway_backend" == xyes; then
+if test "x$enable_broadway_backend" = xyes; then
   GDK_BACKENDS="$GDK_BACKENDS broadway"
   cairo_backends="$cairo_backends cairo"
   GDK_WINDOWING="$GDK_WINDOWING
@@ -394,8 +394,8 @@ else
   AM_CONDITIONAL(USE_BROADWAY, false)
 fi
 
-if test "x$enable_wayland_backend" == "xyes"; then
-  if test "x$enable_wayland_cairo_gl" == "xyes"; then
+if test "x$enable_wayland_backend" = "xyes"; then
+  if test "x$enable_wayland_cairo_gl" = "xyes"; then
     # Wayland can use cairo-gl
     cairo_backends="$cairo_backends cairo-gl"
     AC_DEFINE(GDK_WAYLAND_USE_EGL, [1], [Whether to use EGL in Wayland backend])
@@ -408,7 +408,7 @@ if test "x$enable_wayland_backend" == "xyes"; then
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
   WAYLAND_PACKAGES="wayland-client xkbcommon wayland-cursor"
-  if test "x$enable_wayland_cairo_gl" == "xyes"; then
+  if test "x$enable_wayland_cairo_gl" = "xyes"; then
     WAYLAND_PACKAGES="$WAYLAND_PACKAGES wayland-egl egl"
   fi
   AM_CONDITIONAL(USE_WAYLAND, true)
