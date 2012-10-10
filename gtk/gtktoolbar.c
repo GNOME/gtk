@@ -44,6 +44,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkorientable.h"
+#include "gtkorientableprivate.h"
 #include "gtkradiobutton.h"
 #include "gtkradiotoolbutton.h"
 #include "gtkseparatormenuitem.h"
@@ -2578,6 +2579,7 @@ gtk_toolbar_orientation_changed (GtkToolbar    *toolbar,
       
       gtk_toolbar_reconfigured (toolbar);
       
+      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (toolbar));
       gtk_widget_queue_resize (GTK_WIDGET (toolbar));
       g_object_notify (G_OBJECT (toolbar), "orientation");
     }
