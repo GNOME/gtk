@@ -61,6 +61,9 @@ struct _GtkCssImageClass
                                                     GtkCssComputedValues       *values,
                                                     GtkCssComputedValues       *parent_values,
                                                     GtkCssDependencies         *dependencies);
+  /* compare two images for equality */
+  gboolean     (* equal)                           (GtkCssImage                *image1,
+                                                    GtkCssImage                *image2);
   /* transition between start and end image (end may be NULL), returns new reference */
   GtkCssImage *(* transition)                      (GtkCssImage                *start,
                                                     GtkCssImage                *end,
@@ -95,6 +98,8 @@ GtkCssImage *  _gtk_css_image_compute              (GtkCssImage                *
                                                     GtkCssComputedValues       *values,
                                                     GtkCssComputedValues       *parent_values,
                                                     GtkCssDependencies         *dependencies);
+gboolean       _gtk_css_image_equal                (GtkCssImage                *image1,
+                                                    GtkCssImage                *image2);
 GtkCssImage *  _gtk_css_image_transition           (GtkCssImage                *start,
                                                     GtkCssImage                *end,
                                                     guint                       property_id,
