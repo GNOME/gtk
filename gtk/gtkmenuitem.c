@@ -1719,11 +1719,8 @@ gtk_menu_item_draw (GtkWidget *widget,
 
   gtk_style_context_get_padding (context, state, &padding);
 
-  if (child && (state & GTK_STATE_FLAG_PRELIGHT))
-    {
-      gtk_render_background (context, cr, x, y, w, h);
-      gtk_render_frame (context, cr, x, y, w, h);
-    }
+  gtk_render_background (context, cr, x, y, w, h);
+  gtk_render_frame (context, cr, x, y, w, h);
 
   if (priv->submenu && !GTK_IS_MENU_BAR (parent))
     {
