@@ -224,7 +224,10 @@ _gtk_css_position_value_parse (GtkCssParser *parser)
             return NULL;
         }
       else
-        return NULL;
+        {
+          _gtk_css_parser_error (parser, "Unrecognized position value");
+          return NULL;
+        }
     }
 
   for (second = 0; names[second].name != NULL; second++)
