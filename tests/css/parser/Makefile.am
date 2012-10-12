@@ -152,6 +152,9 @@ EXTRA_DIST += \
 	background-position.css \
 	background-position.errors \
 	background-position.ref.css \
+	background-position-errors.css \
+	background-position-errors.errors \
+	background-position-errors.ref.css \
 	background-repeat.css \
 	background-repeat.ref.css \
 	background-shorthand.css \
