@@ -23,6 +23,12 @@
 #include "gtkentryprivate.h"
 #include "gtkcomboboxaccessible.h"
 
+struct _GtkEntryAccessiblePrivate
+{
+  gint cursor_position;
+  gint selection_bound;
+};
+
 /* Callbacks */
 
 static void     insert_text_cb             (GtkEditable        *editable,
@@ -109,10 +115,9 @@ gtk_entry_accessible_initialize (AtkObject *obj,
   gtk_entry_accessible = GTK_ENTRY_ACCESSIBLE (obj);
 
   entry = GTK_ENTRY (data);
-  gtk_editable_get_selection_bounds (GTK_EDITABLE (entry),
-                                     &start_pos, &end_pos);
-  gtk_entry_accessible->cursor_position = end_pos;
-  gtk_entry_accessible->selection_bound = start_pos;
+  gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_pos, &end_pos);
+  gtk_entry_accessible->priv->cursor_position = end_pos;
+  gtk_entry_accessible->priv->selection_bound = start_pos;
 
   /* Set up signal callbacks */
   g_signal_connect (entry, "insert-text", G_CALLBACK (insert_text_cb), NULL);
@@ -146,7 +151,7 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
        * The entry cursor position has moved so generate the signal.
        */
       g_signal_emit_by_name (atk_obj, "text-caret-moved",
-                             entry->cursor_position);
+                             entry->priv->cursor_position);
     }
   else if (g_strcmp0 (pspec->name, "selection-bound") == 0)
     {
@@ -199,13 +204,18 @@ _gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
   class->get_attributes = gtk_entry_accessible_get_attributes;
 
   widget_class->notify_gtk = gtk_entry_accessible_notify_gtk;
+
+  g_type_class_add_private (klass, sizeof (GtkEntryAccessiblePrivate));
 }
 
 static void
 _gtk_entry_accessible_init (GtkEntryAccessible *entry)
 {
-  entry->cursor_position = 0;
-  entry->selection_bound = 0;
+  entry->priv = G_TYPE_INSTANCE_GET_PRIVATE (entry,
+                                             GTK_TYPE_ENTRY_ACCESSIBLE,
+                                             GtkEntryAccessiblePrivate);
+  entry->priv->cursor_position = 0;
+  entry->priv->selection_bound = 0;
 }
 
 static gchar *
@@ -889,8 +899,8 @@ check_for_selection_change (GtkEntryAccessible *accessible,
 
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
-      if (end != accessible->cursor_position ||
-          start != accessible->selection_bound)
+      if (end != accessible->priv->cursor_position ||
+          start != accessible->priv->selection_bound)
         /*
          * This check is here as this function can be called
          * for notification of selection_bound and current_pos.
@@ -903,11 +913,11 @@ check_for_selection_change (GtkEntryAccessible *accessible,
   else
     {
       /* We had a selection */
-      ret_val = (accessible->cursor_position != accessible->selection_bound);
+      ret_val = (accessible->priv->cursor_position != accessible->priv->selection_bound);
     }
 
-  accessible->cursor_position = end;
-  accessible->selection_bound = start;
+  accessible->priv->cursor_position = end;
+  accessible->priv->selection_bound = start;
 
   return ret_val;
 }
