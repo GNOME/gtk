@@ -38,7 +38,6 @@ struct _GtkArrowAccessible
   GtkWidgetAccessible parent;
 
   GtkArrowAccessiblePrivate *priv;
-  gchar *image_description;
 };
 
 struct _GtkArrowAccessibleClass
