@@ -30,14 +30,15 @@ G_BEGIN_DECLS
 #define GTK_IS_CONTAINER_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CONTAINER_ACCESSIBLE))
 #define GTK_CONTAINER_ACCESSIBLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CONTAINER_ACCESSIBLE, GtkContainerAccessibleClass))
 
-typedef struct _GtkContainerAccessible      GtkContainerAccessible;
-typedef struct _GtkContainerAccessibleClass GtkContainerAccessibleClass;
+typedef struct _GtkContainerAccessible        GtkContainerAccessible;
+typedef struct _GtkContainerAccessibleClass   GtkContainerAccessibleClass;
+typedef struct _GtkContainerAccessiblePrivate GtkContainerAccessiblePrivate;
 
 struct _GtkContainerAccessible
 {
   GtkWidgetAccessible parent;
 
-  GList *children;
+  GtkContainerAccessiblePrivate *priv;
 };
 
 struct _GtkContainerAccessibleClass
