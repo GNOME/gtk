@@ -20,6 +20,11 @@
 #include <gtk/gtk.h>
 #include "gtkimagecellaccessible.h"
 
+struct _GtkImageCellAccessiblePrivate
+{
+  gchar *image_description;
+};
+
 static void atk_image_interface_init (AtkImageIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkImageCellAccessible, _gtk_image_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
@@ -30,7 +35,7 @@ gtk_image_cell_accessible_finalize (GObject *object)
 {
   GtkImageCellAccessible *image_cell = GTK_IMAGE_CELL_ACCESSIBLE (object);
 
-  g_free (image_cell->image_description);
+  g_free (image_cell->priv->image_description);
   G_OBJECT_CLASS (_gtk_image_cell_accessible_parent_class)->finalize (object);
 }
 
@@ -40,12 +45,16 @@ _gtk_image_cell_accessible_class_init (GtkImageCellAccessibleClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->finalize = gtk_image_cell_accessible_finalize;
+
+  g_type_class_add_private (klass, sizeof (GtkImageCellAccessiblePrivate));
 }
 
 static void
 _gtk_image_cell_accessible_init (GtkImageCellAccessible *image_cell)
 {
-  image_cell->image_description = NULL;
+  image_cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (image_cell,
+                                                  GTK_TYPE_IMAGE_CELL_ACCESSIBLE,
+                                                  GtkImageCellAccessiblePrivate);
 }
 
 static const gchar *
@@ -53,7 +62,7 @@ gtk_image_cell_accessible_get_image_description (AtkImage *image)
 {
   GtkImageCellAccessible *image_cell = GTK_IMAGE_CELL_ACCESSIBLE (image);
 
-  return image_cell->image_description;
+  return image_cell->priv->image_description;
 }
 
 static gboolean
@@ -62,10 +71,10 @@ gtk_image_cell_accessible_set_image_description (AtkImage    *image,
 {
   GtkImageCellAccessible *image_cell = GTK_IMAGE_CELL_ACCESSIBLE (image);
 
-  g_free (image_cell->image_description);
-  image_cell->image_description = g_strdup (description);
+  g_free (image_cell->priv->image_description);
+  image_cell->priv->image_description = g_strdup (description);
 
-  if (image_cell->image_description)
+  if (image_cell->priv->image_description)
     return TRUE;
   else
     return FALSE;
