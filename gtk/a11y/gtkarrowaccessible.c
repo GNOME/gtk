@@ -20,6 +20,10 @@
 #include <gtk/gtk.h>
 #include "gtkarrowaccessible.h"
 
+struct _GtkArrowAccessiblePrivate
+{
+  gchar *image_description;
+};
 
 static void atk_image_interface_init (AtkImageIface  *iface);
 
@@ -40,7 +44,7 @@ gtk_arrow_accessible_finalize (GObject *object)
 {
   GtkArrowAccessible *arrow = GTK_ARROW_ACCESSIBLE (object);
 
-  g_free (arrow->image_description);
+  g_free (arrow->priv->image_description);
 
   G_OBJECT_CLASS (_gtk_arrow_accessible_parent_class)->finalize (object);
 }
@@ -54,12 +58,16 @@ _gtk_arrow_accessible_class_init (GtkArrowAccessibleClass *klass)
   atk_object_class->initialize = gtk_arrow_accessible_initialize;
 
   gobject_class->finalize = gtk_arrow_accessible_finalize;
+
+  g_type_class_add_private (klass, sizeof (GtkArrowAccessiblePrivate));
 }
 
 static void
 _gtk_arrow_accessible_init (GtkArrowAccessible *arrow)
 {
-  arrow->image_description = NULL;
+  arrow->priv = G_TYPE_INSTANCE_GET_PRIVATE (arrow,
+                                             GTK_TYPE_ARROW_ACCESSIBLE,
+                                             GtkArrowAccessiblePrivate);
 }
 
 static const gchar *
@@ -67,7 +75,7 @@ gtk_arrow_accessible_get_image_description (AtkImage *obj)
 {
   GtkArrowAccessible *arrow = GTK_ARROW_ACCESSIBLE (obj);
 
-  return arrow->image_description;
+  return arrow->priv->image_description;
 }
 
 static gboolean
@@ -76,8 +84,8 @@ gtk_arrow_accessible_set_image_description (AtkImage    *obj,
 {
   GtkArrowAccessible *arrow = GTK_ARROW_ACCESSIBLE (obj);
 
-  g_free (arrow->image_description);
-  arrow->image_description = g_strdup (description);
+  g_free (arrow->priv->image_description);
+  arrow->priv->image_description = g_strdup (description);
 
   return TRUE;
 
