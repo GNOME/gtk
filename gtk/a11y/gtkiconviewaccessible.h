@@ -30,15 +30,15 @@ G_BEGIN_DECLS
 #define GTK_IS_ICON_VIEW_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ICON_VIEW_ACCESSIBLE))
 #define GTK_ICON_VIEW_ACCESSIBLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ICON_VIEW_ACCESSIBLE, GtkIconViewAccessibleClass))
 
-typedef struct _GtkIconViewAccessible      GtkIconViewAccessible;
-typedef struct _GtkIconViewAccessibleClass GtkIconViewAccessibleClass;
+typedef struct _GtkIconViewAccessible        GtkIconViewAccessible;
+typedef struct _GtkIconViewAccessibleClass   GtkIconViewAccessibleClass;
+typedef struct _GtkIconViewAccessiblePrivate GtkIconViewAccessiblePrivate;
 
 struct _GtkIconViewAccessible
 {
   GtkContainerAccessible parent;
 
-  GList *items;
-  GtkTreeModel *model;
+  GtkIconViewAccessiblePrivate *priv;
 };
 
 struct _GtkIconViewAccessibleClass
