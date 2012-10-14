@@ -21,6 +21,12 @@
 #include <gtk/gtkpango.h>
 #include "gtklabelaccessible.h"
 
+struct _GtkLabelAccessiblePrivate
+{
+  gchar *text;
+  gint cursor_position;
+  gint selection_bound;
+};
 
 static void atk_text_interface_init (AtkTextIface *iface);
 
@@ -30,6 +36,9 @@ G_DEFINE_TYPE_WITH_CODE (GtkLabelAccessible, _gtk_label_accessible, GTK_TYPE_WID
 static void
 _gtk_label_accessible_init (GtkLabelAccessible *label)
 {
+  label->priv = G_TYPE_INSTANCE_GET_PRIVATE (label,
+                                             GTK_TYPE_LABEL_ACCESSIBLE,
+                                             GtkLabelAccessiblePrivate);
 }
 
 static void
@@ -45,7 +54,7 @@ gtk_label_accessible_initialize (AtkObject *obj,
 
   widget = GTK_WIDGET (data);
 
-  accessible->text = g_strdup (gtk_label_get_text (GTK_LABEL (widget)));
+  accessible->priv->text = g_strdup (gtk_label_get_text (GTK_LABEL (widget)));
 
   /*
    * Check whether ancestor of GtkLabel is a GtkButton and if so
@@ -73,17 +82,17 @@ check_for_selection_change (GtkLabelAccessible *accessible,
 
   if (gtk_label_get_selection_bounds (label, &start, &end))
     {
-      if (end != accessible->cursor_position ||
-          start != accessible->selection_bound)
+      if (end != accessible->priv->cursor_position ||
+          start != accessible->priv->selection_bound)
         ret_val = TRUE;
     }
   else
     {
-      ret_val = (accessible->cursor_position != accessible->selection_bound);
+      ret_val = (accessible->priv->cursor_position != accessible->priv->selection_bound);
     }
 
-  accessible->cursor_position = end;
-  accessible->selection_bound = start;
+  accessible->priv->cursor_position = end;
+  accessible->priv->selection_bound = start;
 
   return ret_val;
 }
@@ -105,18 +114,18 @@ gtk_label_accessible_notify_gtk (GObject    *obj,
       const gchar *text;
 
       text = gtk_label_get_text (GTK_LABEL (widget));
-      if (g_strcmp0 (accessible->text, text) == 0)
+      if (g_strcmp0 (accessible->priv->text, text) == 0)
         return;
 
       /* Create a delete text and an insert text signal */
-      length = g_utf8_strlen (accessible->text, -1);
+      length = g_utf8_strlen (accessible->priv->text, -1);
       if (length > 0)
         g_signal_emit_by_name (atk_obj, "text-changed::delete", 0, length);
 
-      g_free (accessible->text);
-      accessible->text = g_strdup (text);
+      g_free (accessible->priv->text);
+      accessible->priv->text = g_strdup (text);
 
-      length = g_utf8_strlen (accessible->text, -1);
+      length = g_utf8_strlen (accessible->priv->text, -1);
       if (length > 0)
         g_signal_emit_by_name (atk_obj, "text-changed::insert", 0, length);
 
@@ -147,7 +156,7 @@ gtk_label_accessible_finalize (GObject *object)
 {
   GtkLabelAccessible *accessible = GTK_LABEL_ACCESSIBLE (object);
 
-  g_free (accessible->text);
+  g_free (accessible->priv->text);
 
   G_OBJECT_CLASS (_gtk_label_accessible_parent_class)->finalize (object);
 }
@@ -277,6 +286,8 @@ _gtk_label_accessible_class_init (GtkLabelAccessibleClass *klass)
   class->ref_state_set = gtk_label_accessible_ref_state_set;
   class->ref_relation_set = gtk_label_accessible_ref_relation_set;
   class->initialize = gtk_label_accessible_initialize;
+
+  g_type_class_add_private (klass, sizeof (GtkLabelAccessiblePrivate));
 }
 
 /* atktext.h */
