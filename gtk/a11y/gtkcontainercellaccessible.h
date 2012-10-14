@@ -30,14 +30,15 @@ G_BEGIN_DECLS
 #define GTK_IS_CONTAINER_CELL_ACCESSIBLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CONTAINER_CELL_ACCESSIBLE))
 #define GTK_CONTAINER_CELL_ACCESSIBLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CONTAINER_CELL_ACCESSIBLE, GtkContainerCellAccessibleClass))
 
-typedef struct _GtkContainerCellAccessible      GtkContainerCellAccessible;
-typedef struct _GtkContainerCellAccessibleClass GtkContainerCellAccessibleClass;
+typedef struct _GtkContainerCellAccessible        GtkContainerCellAccessible;
+typedef struct _GtkContainerCellAccessibleClass   GtkContainerCellAccessibleClass;
+typedef struct _GtkContainerCellAccessiblePrivate GtkContainerCellAccessiblePrivate;
 
 struct _GtkContainerCellAccessible
 {
   GtkCellAccessible parent;
-  GList *children;
-  gint NChildren;
+
+  GtkContainerCellAccessiblePrivate *priv;
 };
 
 struct _GtkContainerCellAccessibleClass
@@ -52,6 +53,7 @@ void                        _gtk_container_cell_accessible_add_child    (GtkCont
                                                                          GtkCellAccessible          *child);
 void                        _gtk_container_cell_accessible_remove_child (GtkContainerCellAccessible *container,
                                                                          GtkCellAccessible          *child);
+GList                     *_gtk_container_cell_accessible_get_children  (GtkContainerCellAccessible *container);
 
 G_END_DECLS
 

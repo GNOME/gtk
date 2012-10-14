@@ -20,6 +20,11 @@
 #include <gtk/gtk.h>
 #include "gtkcontainercellaccessible.h"
 
+struct _GtkContainerCellAccessiblePrivate
+{
+  GList *children;
+  gint n_children;
+};
 
 G_DEFINE_TYPE (GtkContainerCellAccessible, _gtk_container_cell_accessible, GTK_TYPE_CELL_ACCESSIBLE)
 
@@ -29,7 +34,7 @@ gtk_container_cell_accessible_finalize (GObject *obj)
 {
   GtkContainerCellAccessible *container = GTK_CONTAINER_CELL_ACCESSIBLE (obj);
 
-  g_list_free_full (container->children, g_object_unref);
+  g_list_free_full (container->priv->children, g_object_unref);
 
   G_OBJECT_CLASS (_gtk_container_cell_accessible_parent_class)->finalize (obj);
 }
@@ -40,7 +45,7 @@ gtk_container_cell_accessible_get_n_children (AtkObject *obj)
 {
   GtkContainerCellAccessible *cell = GTK_CONTAINER_CELL_ACCESSIBLE (obj);
 
-  return cell->NChildren;
+  return cell->priv->n_children;
 }
 
 static AtkObject *
@@ -50,7 +55,7 @@ gtk_container_cell_accessible_ref_child (AtkObject *obj,
   GtkContainerCellAccessible *cell = GTK_CONTAINER_CELL_ACCESSIBLE (obj);
   GList *l;
 
-  l = g_list_nth (cell->children, child);
+  l = g_list_nth (cell->priv->children, child);
   if (l == NULL)
     return NULL;
 
@@ -63,7 +68,7 @@ gtk_container_cell_accessible_update_cache (GtkCellAccessible *cell)
   GtkContainerCellAccessible *container = GTK_CONTAINER_CELL_ACCESSIBLE (cell);
   GList *l;
 
-  for (l = container->children; l; l = l->next)
+  for (l = container->priv->children; l; l = l->next)
     {
       _gtk_cell_accessible_update_cache (l->data);
     }
@@ -75,7 +80,7 @@ gtk_container_cell_widget_set (GtkAccessible *accessible)
   GtkContainerCellAccessible *container = GTK_CONTAINER_CELL_ACCESSIBLE (accessible);
   GList *l;
 
-  for (l = container->children; l; l = l->next)
+  for (l = container->priv->children; l; l = l->next)
     {
       gtk_accessible_set_widget (l->data, gtk_accessible_get_widget (accessible));
     }
@@ -89,7 +94,7 @@ gtk_container_cell_widget_unset (GtkAccessible *accessible)
   GtkContainerCellAccessible *container = GTK_CONTAINER_CELL_ACCESSIBLE (accessible);
   GList *l;
 
-  for (l = container->children; l; l = l->next)
+  for (l = container->priv->children; l; l = l->next)
     {
       gtk_accessible_set_widget (l->data, NULL);
     }
@@ -114,31 +119,28 @@ _gtk_container_cell_accessible_class_init (GtkContainerCellAccessibleClass *klas
   accessible_class->widget_unset = gtk_container_cell_widget_unset;
 
   cell_class->update_cache = gtk_container_cell_accessible_update_cache;
+
+  g_type_class_add_private (g_object_class, sizeof (GtkContainerCellAccessiblePrivate));
 }
 
 static void
 _gtk_container_cell_accessible_init (GtkContainerCellAccessible *cell)
 {
+  cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (cell,
+                                            GTK_TYPE_CONTAINER_CELL_ACCESSIBLE,
+                                            GtkContainerCellAccessiblePrivate);
 }
 
 GtkContainerCellAccessible *
 _gtk_container_cell_accessible_new (void)
 {
   GObject *object;
-  AtkObject *atk_object;
-  GtkContainerCellAccessible *container;
 
   object = g_object_new (GTK_TYPE_CONTAINER_CELL_ACCESSIBLE, NULL);
 
-  g_return_val_if_fail (object != NULL, NULL);
+  ATK_OBJECT (object)->role = ATK_ROLE_TABLE_CELL;
 
-  atk_object = ATK_OBJECT (object);
-  atk_object->role = ATK_ROLE_TABLE_CELL;
-
-  container = GTK_CONTAINER_CELL_ACCESSIBLE (object);
-  container->children = NULL;
-  container->NChildren = 0;
-  return container;
+  return GTK_CONTAINER_CELL_ACCESSIBLE (object);
 }
 
 void
@@ -148,8 +150,8 @@ _gtk_container_cell_accessible_add_child (GtkContainerCellAccessible *container,
   g_return_if_fail (GTK_IS_CONTAINER_CELL_ACCESSIBLE (container));
   g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (child));
 
-  container->NChildren++;
-  container->children = g_list_append (container->children, child);
+  container->priv->n_children++;
+  container->priv->children = g_list_append (container->priv->children, child);
   atk_object_set_parent (ATK_OBJECT (child), ATK_OBJECT (container));
 }
 
@@ -159,8 +161,16 @@ _gtk_container_cell_accessible_remove_child (GtkContainerCellAccessible *contain
 {
   g_return_if_fail (GTK_IS_CONTAINER_CELL_ACCESSIBLE (container));
   g_return_if_fail (GTK_IS_CELL_ACCESSIBLE (child));
-  g_return_if_fail (container->NChildren > 0);
+  g_return_if_fail (container->priv->n_children > 0);
 
-  container->children = g_list_remove (container->children, child);
-  container->NChildren--;
+  container->priv->children = g_list_remove (container->priv->children, child);
+  container->priv->n_children--;
+}
+
+GList *
+_gtk_conainer_cell_accessible_get_children (GtkContainerCellAccessible *container)
+{
+  g_return_val_if_fail (GTK_IS_CONTAINER_CELL_ACCESSIBLE (container), NULL);
+
+  return container->priv->children;
 }
