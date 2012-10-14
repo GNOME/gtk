@@ -20,6 +20,12 @@
 #include <gtk/gtk.h>
 #include "gtkcomboboxaccessible.h"
 
+struct _GtkComboBoxAccessiblePrivate
+{
+  gchar         *name;
+  gint           old_selection;
+  gboolean       popup_set;
+};
 
 static void atk_action_interface_init    (AtkActionIface    *iface);
 static void atk_selection_interface_init (AtkSelectionIface *iface);
@@ -41,9 +47,9 @@ changed_cb (GtkWidget *widget)
   index = gtk_combo_box_get_active (combo_box);
   obj = gtk_widget_get_accessible (widget);
   accessible = GTK_COMBO_BOX_ACCESSIBLE (obj);
-  if (accessible->old_selection != index)
+  if (accessible->priv->old_selection != index)
     {
-      accessible->old_selection = index;
+      accessible->priv->old_selection = index;
       g_object_notify (G_OBJECT (obj), "accessible-name");
       g_signal_emit_by_name (obj, "selection-changed");
     }
@@ -63,13 +69,13 @@ gtk_combo_box_accessible_initialize (AtkObject *obj,
   accessible = GTK_COMBO_BOX_ACCESSIBLE (obj);
 
   g_signal_connect (combo_box, "changed", G_CALLBACK (changed_cb), NULL);
-  accessible->old_selection = gtk_combo_box_get_active (combo_box);
+  accessible->priv->old_selection = gtk_combo_box_get_active (combo_box);
 
   popup = gtk_combo_box_get_popup_accessible (combo_box);
   if (popup)
     {
       atk_object_set_parent (popup, obj);
-      accessible->popup_set = TRUE;
+      accessible->priv->popup_set = TRUE;
     }
   if (gtk_combo_box_get_has_entry (combo_box))
     atk_object_set_parent (gtk_widget_get_accessible (gtk_bin_get_child (GTK_BIN (combo_box))), obj);
@@ -82,7 +88,7 @@ gtk_combo_box_accessible_finalize (GObject *object)
 {
   GtkComboBoxAccessible *combo_box = GTK_COMBO_BOX_ACCESSIBLE (object);
 
-  g_free (combo_box->name);
+  g_free (combo_box->priv->name);
 
   G_OBJECT_CLASS (_gtk_combo_box_accessible_parent_class)->finalize (object);
 }
@@ -120,8 +126,8 @@ gtk_combo_box_accessible_get_name (AtkObject *obj)
           gtk_tree_model_get_value (model, &iter, i, &value);
           if (G_VALUE_HOLDS_STRING (&value))
             {
-              g_free (accessible->name);
-              accessible->name =  g_strdup (g_value_get_string (&value));
+              g_free (accessible->priv->name);
+              accessible->priv->name =  g_strdup (g_value_get_string (&value));
               g_value_unset (&value);
               break;
             }
@@ -129,7 +135,7 @@ gtk_combo_box_accessible_get_name (AtkObject *obj)
             g_value_unset (&value);
         }
     }
-  return accessible->name;
+  return accessible->priv->name;
 }
 
 static gint
@@ -165,10 +171,10 @@ gtk_combo_box_accessible_ref_child (AtkObject *obj,
     {
       child = gtk_combo_box_get_popup_accessible (GTK_COMBO_BOX (widget));
       box = GTK_COMBO_BOX_ACCESSIBLE (obj);
-      if (box->popup_set == FALSE)
+      if (!box->priv->popup_set)
         {
           atk_object_set_parent (child, obj);
-          box->popup_set = TRUE;
+          box->priv->popup_set = TRUE;
         }
     }
   else if (i == 1 && gtk_combo_box_get_has_entry (GTK_COMBO_BOX (widget)))
@@ -195,14 +201,19 @@ _gtk_combo_box_accessible_class_init (GtkComboBoxAccessibleClass *klass)
   class->get_n_children = gtk_combo_box_accessible_get_n_children;
   class->ref_child = gtk_combo_box_accessible_ref_child;
   class->initialize = gtk_combo_box_accessible_initialize;
+
+  g_type_class_add_private (klass, sizeof (GtkComboBoxAccessiblePrivate));
 }
 
 static void
 _gtk_combo_box_accessible_init (GtkComboBoxAccessible *combo_box)
 {
-  combo_box->old_selection = -1;
-  combo_box->name = NULL;
-  combo_box->popup_set = FALSE;
+  combo_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (combo_box,
+                                                 GTK_TYPE_COMBO_BOX_ACCESSIBLE,
+                                                 GtkComboBoxAccessiblePrivate);
+  combo_box->priv->old_selection = -1;
+  combo_box->priv->name = NULL;
+  combo_box->priv->popup_set = FALSE;
 }
 
 static gboolean
