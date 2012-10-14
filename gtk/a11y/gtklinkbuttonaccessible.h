@@ -29,14 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_LINK_BUTTON_ACCESSIBLE_CLASS(klass)     (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LINK_BUTTON_ACCESSIBLE))
 #define GTK_LINK_BUTTON_ACCESSIBLE_GET_CLASS(obj)      (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LINK_BUTTON_ACCESSIBLE, GtkLinkButtonAccessibleClass))
 
-typedef struct _GtkLinkButtonAccessible      GtkLinkButtonAccessible;
-typedef struct _GtkLinkButtonAccessibleClass GtkLinkButtonAccessibleClass;
+typedef struct _GtkLinkButtonAccessible        GtkLinkButtonAccessible;
+typedef struct _GtkLinkButtonAccessibleClass   GtkLinkButtonAccessibleClass;
+typedef struct _GtkLinkButtonAccessiblePrivate GtkLinkButtonAccessiblePrivate;
 
 struct _GtkLinkButtonAccessible
 {
   GtkButtonAccessible parent;
 
-  AtkHyperlink *link;
+  GtkLinkButtonAccessiblePrivate *priv;
 };
 
 struct _GtkLinkButtonAccessibleClass

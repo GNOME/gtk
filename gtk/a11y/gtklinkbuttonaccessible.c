@@ -23,6 +23,11 @@
 typedef struct _GtkLinkButtonAccessibleLink GtkLinkButtonAccessibleLink;
 typedef struct _GtkLinkButtonAccessibleLinkClass GtkLinkButtonAccessibleLinkClass;
 
+struct _GtkLinkButtonAccessiblePrivate
+{
+  AtkHyperlink *link;
+};
+
 struct _GtkLinkButtonAccessibleLink
 {
   AtkHyperlink parent;
@@ -180,14 +185,14 @@ gtk_link_button_accessible_get_hyperlink (AtkHyperlinkImpl *impl)
 {
   GtkLinkButtonAccessible *button = GTK_LINK_BUTTON_ACCESSIBLE (impl);
 
-  if (!button->link)
+  if (!button->priv->link)
     {
-      button->link = gtk_link_button_accessible_link_new (button);
+      button->priv->link = gtk_link_button_accessible_link_new (button);
       g_signal_connect (gtk_accessible_get_widget (GTK_ACCESSIBLE (button)),
-                        "activate-link", G_CALLBACK (activate_link), button->link);
+                        "activate-link", G_CALLBACK (activate_link), button->priv->link);
     }
 
-  return g_object_ref (button->link);
+  return g_object_ref (button->priv->link);
 }
 
 static void atk_hypertext_impl_interface_init (AtkHyperlinkImplIface *iface);
@@ -198,6 +203,9 @@ G_DEFINE_TYPE_WITH_CODE (GtkLinkButtonAccessible, _gtk_link_button_accessible, G
 static void
 _gtk_link_button_accessible_init (GtkLinkButtonAccessible *button)
 {
+  button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
+                                              GTK_TYPE_LINK_BUTTON_ACCESSIBLE,
+                                              GtkLinkButtonAccessiblePrivate);
 }
 
 static void
@@ -205,8 +213,8 @@ gtk_link_button_accessible_finalize (GObject *object)
 {
   GtkLinkButtonAccessible *button = GTK_LINK_BUTTON_ACCESSIBLE (object);
 
-  if (button->link)
-    g_object_unref (button->link);
+  if (button->priv->link)
+    g_object_unref (button->priv->link);
 
   G_OBJECT_CLASS (_gtk_link_button_accessible_parent_class)->finalize (object);
 }
@@ -215,6 +223,8 @@ static void
 _gtk_link_button_accessible_class_init (GtkLinkButtonAccessibleClass *klass)
 {
   G_OBJECT_CLASS (klass)->finalize = gtk_link_button_accessible_finalize;
+
+  g_type_class_add_private (klass, sizeof (GtkLinkButtonAccessiblePrivate));
 }
 
 static void
