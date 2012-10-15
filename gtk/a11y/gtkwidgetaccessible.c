@@ -24,6 +24,11 @@
 #include "gtkwidgetaccessible.h"
 #include "gtknotebookpageaccessible.h"
 
+struct _GtkWidgetAccessiblePrivate
+{
+  AtkLayer layer;
+};
+
 #define TOOLTIP_KEY "tooltip"
 
 extern GtkWidget *_focus_widget;
@@ -133,7 +138,7 @@ gtk_widget_accessible_initialize (AtkObject *obj,
   g_signal_connect (widget, "map", G_CALLBACK (map_cb), NULL);
   g_signal_connect (widget, "unmap", G_CALLBACK (map_cb), NULL);
 
-  GTK_WIDGET_ACCESSIBLE (obj)->layer = ATK_LAYER_WIDGET;
+  GTK_WIDGET_ACCESSIBLE (obj)->priv->layer = ATK_LAYER_WIDGET;
   obj->role = ATK_ROLE_UNKNOWN;
 
   gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (obj), widget);
@@ -534,11 +539,16 @@ _gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
   class->initialize = gtk_widget_accessible_initialize;
   class->get_attributes = gtk_widget_accessible_get_attributes;
   class->focus_event = gtk_widget_accessible_focus_event;
+
+  g_type_class_add_private (klass, sizeof (GtkWidgetAccessiblePrivate));
 }
 
 static void
 _gtk_widget_accessible_init (GtkWidgetAccessible *accessible)
 {
+  accessible->priv = G_TYPE_INSTANCE_GET_PRIVATE (accessible,
+                                                  GTK_TYPE_WIDGET_ACCESSIBLE,
+                                                  GtkWidgetAccessiblePrivate);
 }
 
 static void
@@ -615,7 +625,7 @@ gtk_widget_accessible_get_layer (AtkComponent *component)
 {
   GtkWidgetAccessible *accessible = GTK_WIDGET_ACCESSIBLE (component);
 
-  return accessible->layer;
+  return accessible->priv->layer;
 }
 
 static gboolean
@@ -832,4 +842,11 @@ gtk_widget_accessible_all_parents_visible (GtkWidget *widget)
     }
 
   return result;
+}
+
+void
+_gtk_widget_accessible_set_layer (GtkWidgetAccessible *accessible,
+                                  AtkLayer             layer)
+{
+  accessible->priv->layer = layer;
 }

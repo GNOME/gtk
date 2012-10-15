@@ -72,7 +72,7 @@ gtk_menu_item_accessible_initialize (AtkObject *obj,
         atk_object_set_parent (obj, gtk_widget_get_accessible (parent_widget));
     }
 
-  GTK_WIDGET_ACCESSIBLE (obj)->layer = ATK_LAYER_POPUP;
+  _gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_POPUP);
 
   obj->role = ATK_ROLE_MENU_ITEM;
 

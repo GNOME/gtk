@@ -30,14 +30,15 @@ G_BEGIN_DECLS
 #define GTK_IS_WIDGET_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WIDGET_ACCESSIBLE))
 #define GTK_WIDGET_ACCESSIBLE_GET_CLASS(obj)           (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WIDGET_ACCESSIBLE, GtkWidgetAccessibleClass))
 
-typedef struct _GtkWidgetAccessible      GtkWidgetAccessible;
-typedef struct _GtkWidgetAccessibleClass GtkWidgetAccessibleClass;
+typedef struct _GtkWidgetAccessible        GtkWidgetAccessible;
+typedef struct _GtkWidgetAccessibleClass   GtkWidgetAccessibleClass;
+typedef struct _GtkWidgetAccessiblePrivate GtkWidgetAccessiblePrivate;
 
 struct _GtkWidgetAccessible
 {
   GtkAccessible parent;
 
-  AtkLayer layer;
+  GtkWidgetAccessiblePrivate *priv;
 };
 
 struct _GtkWidgetAccessibleClass
@@ -53,6 +54,9 @@ struct _GtkWidgetAccessibleClass
 };
 
 GType _gtk_widget_accessible_get_type (void);
+
+void  _gtk_widget_accessible_set_layer (GtkWidgetAccessible *accessible,
+                                        AtkLayer             layer);
 
 G_END_DECLS
 
