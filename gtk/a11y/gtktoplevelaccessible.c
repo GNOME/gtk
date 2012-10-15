@@ -30,6 +30,10 @@
 
 #include "gtktoplevelaccessible.h"
 
+struct _GtkToplevelAccessiblePrivate
+{
+  GList *window_list;
+};
 
 G_DEFINE_TYPE (GtkToplevelAccessible, _gtk_toplevel_accessible, ATK_TYPE_OBJECT)
 
@@ -49,8 +53,8 @@ gtk_toplevel_accessible_object_finalize (GObject *obj)
 {
   GtkToplevelAccessible *toplevel = GTK_TOPLEVEL_ACCESSIBLE (obj);
 
-  if (toplevel->window_list)
-    g_list_free (toplevel->window_list);
+  if (toplevel->priv->window_list)
+    g_list_free (toplevel->priv->window_list);
 
   G_OBJECT_CLASS (_gtk_toplevel_accessible_parent_class)->finalize (obj);
 }
@@ -60,7 +64,7 @@ gtk_toplevel_accessible_get_n_children (AtkObject *obj)
 {
   GtkToplevelAccessible *toplevel = GTK_TOPLEVEL_ACCESSIBLE (obj);
 
-  return g_list_length (toplevel->window_list);
+  return g_list_length (toplevel->priv->window_list);
 }
 
 static AtkObject *
@@ -72,7 +76,7 @@ gtk_toplevel_accessible_ref_child (AtkObject *obj,
   AtkObject *atk_obj;
 
   toplevel = GTK_TOPLEVEL_ACCESSIBLE (obj);
-  widget = g_list_nth_data (toplevel->window_list, i);
+  widget = g_list_nth_data (toplevel->priv->window_list, i);
   if (!widget)
     return NULL;
 
@@ -141,6 +145,8 @@ _gtk_toplevel_accessible_class_init (GtkToplevelAccessibleClass *klass)
   class->get_parent = NULL;
 
   g_object_class->finalize = gtk_toplevel_accessible_object_finalize;
+
+  g_type_class_add_private (klass, sizeof (GtkToplevelAccessiblePrivate));
 }
 
 static void
@@ -152,18 +158,18 @@ remove_child (GtkToplevelAccessible *toplevel,
   guint window_count = 0;
   AtkObject *child;
 
-  if (toplevel->window_list)
+  if (toplevel->priv->window_list)
     {
       GtkWindow *tmp_window;
 
-      for (l = toplevel->window_list; l; l = l->next)
+      for (l = toplevel->priv->window_list; l; l = l->next)
         {
           tmp_window = GTK_WINDOW (l->data);
 
           if (window == tmp_window)
             {
               /* Remove the window from the window_list & emit the signal */
-              toplevel->window_list = g_list_delete_link (toplevel->window_list, l);
+              toplevel->priv->window_list = g_list_delete_link (toplevel->priv->window_list, l);
               child = gtk_widget_get_accessible (GTK_WIDGET (window));
               g_signal_emit_by_name (atk_obj, "children-changed::remove",
                                      window_count, child, NULL);
@@ -209,8 +215,8 @@ show_event_watcher (GSignalInvocationHint *ihint,
     return TRUE;
 
   /* Add the window to the list & emit the signal */
-  toplevel->window_list = g_list_append (toplevel->window_list, widget);
-  n_children = g_list_length (toplevel->window_list);
+  toplevel->priv->window_list = g_list_append (toplevel->priv->window_list, widget);
+  n_children = g_list_length (toplevel->priv->window_list);
 
   atk_object_set_parent (child, atk_obj);
   g_signal_emit_by_name (atk_obj, "children-changed::add",
@@ -248,7 +254,11 @@ _gtk_toplevel_accessible_init (GtkToplevelAccessible *toplevel)
   GList *l;
   guint signal_id;
 
-  l = toplevel->window_list = gtk_window_list_toplevels ();
+  toplevel->priv = G_TYPE_INSTANCE_GET_PRIVATE (toplevel,
+                                                GTK_TYPE_TOPLEVEL_ACCESSIBLE,
+                                                GtkToplevelAccessiblePrivate);
+
+  l = toplevel->priv->window_list = gtk_window_list_toplevels ();
 
   while (l)
     {
@@ -264,7 +274,7 @@ _gtk_toplevel_accessible_init (GtkToplevelAccessible *toplevel)
         {
           GList *temp_l  = l->next;
 
-          toplevel->window_list = g_list_delete_link (toplevel->window_list, l);
+          toplevel->priv->window_list = g_list_delete_link (toplevel->priv->window_list, l);
           l = temp_l;
         }
       else
@@ -284,4 +294,10 @@ _gtk_toplevel_accessible_init (GtkToplevelAccessible *toplevel)
   signal_id  = g_signal_lookup ("hide", GTK_TYPE_WINDOW);
   g_signal_add_emission_hook (signal_id, 0,
                               hide_event_watcher, toplevel, (GDestroyNotify) NULL);
+}
+
+GList *
+_gtk_toplevel_accessible_get_children (GtkToplevelAccessible *accessible)
+{
+  return accessible->priv->window_list;
 }

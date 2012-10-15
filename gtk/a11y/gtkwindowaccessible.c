@@ -190,7 +190,7 @@ gtk_window_accessible_get_index_in_parent (AtkObject *accessible)
       if (GTK_IS_TOPLEVEL_ACCESSIBLE (atk_obj))
         {
           GtkToplevelAccessible *toplevel = GTK_TOPLEVEL_ACCESSIBLE (atk_obj);
-          index = g_list_index (toplevel->window_list, window);
+          index = g_list_index (_gtk_toplevel_accessible_get_children (toplevel), window);
         }
       else
         {
