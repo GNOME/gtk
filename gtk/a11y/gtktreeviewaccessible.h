@@ -30,14 +30,15 @@ G_BEGIN_DECLS
 #define GTK_IS_TREE_VIEW_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_VIEW_ACCESSIBLE))
 #define GTK_TREE_VIEW_ACCESSIBLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_VIEW_ACCESSIBLE, GtkTreeViewAccessibleClass))
 
-typedef struct _GtkTreeViewAccessible      GtkTreeViewAccessible;
-typedef struct _GtkTreeViewAccessibleClass GtkTreeViewAccessibleClass;
+typedef struct _GtkTreeViewAccessible        GtkTreeViewAccessible;
+typedef struct _GtkTreeViewAccessibleClass   GtkTreeViewAccessibleClass;
+typedef struct _GtkTreeViewAccessiblePrivate GtkTreeViewAccessiblePrivate;
 
 struct _GtkTreeViewAccessible
 {
   GtkContainerAccessible parent;
 
-  GHashTable    *cell_infos;
+  GtkTreeViewAccessiblePrivate *priv;
 };
 
 struct _GtkTreeViewAccessibleClass
