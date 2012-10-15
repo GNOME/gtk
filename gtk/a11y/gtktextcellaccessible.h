@@ -30,15 +30,15 @@ G_BEGIN_DECLS
 #define GTK_IS_TEXT_CELL_ACCESSIBLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_CELL_ACCESSIBLE))
 #define GTK_TEXT_CELL_ACCESSIBLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT_CELL_ACCESSIBLE, GtkTextCellAccessibleClass))
 
-typedef struct _GtkTextCellAccessible      GtkTextCellAccessible;
-typedef struct _GtkTextCellAccessibleClass GtkTextCellAccessibleClass;
+typedef struct _GtkTextCellAccessible        GtkTextCellAccessible;
+typedef struct _GtkTextCellAccessibleClass   GtkTextCellAccessibleClass;
+typedef struct _GtkTextCellAccessiblePrivate GtkTextCellAccessiblePrivate;
 
 struct _GtkTextCellAccessible
 {
   GtkRendererCellAccessible parent;
-  gchar *cell_text;
-  gint caret_pos;
-  gint cell_length;
+
+  GtkTextCellAccessiblePrivate *priv;
 };
 
 struct _GtkTextCellAccessibleClass
