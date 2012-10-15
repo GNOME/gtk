@@ -20,6 +20,10 @@
 #include <gtk/gtk.h>
 #include "gtkradiomenuitemaccessible.h"
 
+struct _GtkRadioMenuItemAccessiblePrivate
+{
+  GSList *old_group;
+};
 
 G_DEFINE_TYPE (GtkRadioMenuItemAccessible, _gtk_radio_menu_item_accessible, GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE)
 
@@ -43,7 +47,7 @@ gtk_radio_menu_item_accessible_ref_relation_set (AtkObject *obj)
   /* If the radio menu_item's group has changed remove the relation */
   list = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (widget));
 
-  if (radio_menu_item->old_group != list)
+  if (radio_menu_item->priv->old_group != list)
     {
       AtkRelation *relation;
 
@@ -54,7 +58,7 @@ gtk_radio_menu_item_accessible_ref_relation_set (AtkObject *obj)
   if (!atk_relation_set_contains (relation_set, ATK_RELATION_MEMBER_OF))
     {
       /* Get the members of the menu_item group */
-      radio_menu_item->old_group = list;
+      radio_menu_item->priv->old_group = list;
       if (list)
         {
           AtkObject **accessible_array;
@@ -102,10 +106,14 @@ _gtk_radio_menu_item_accessible_class_init (GtkRadioMenuItemAccessibleClass *kla
 
   class->ref_relation_set = gtk_radio_menu_item_accessible_ref_relation_set;
   class->initialize = gtk_radio_menu_item_accessible_initialize;
+
+  g_type_class_add_private (klass, sizeof (GtkRadioMenuItemAccessiblePrivate));
 }
 
 static void
 _gtk_radio_menu_item_accessible_init (GtkRadioMenuItemAccessible *radio_menu_item)
 {
-  radio_menu_item->old_group = NULL;
+  radio_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (radio_menu_item,
+                                                       GTK_TYPE_RADIO_MENU_ITEM_ACCESSIBLE,
+                                                       GtkRadioMenuItemAccessiblePrivate);
 }
