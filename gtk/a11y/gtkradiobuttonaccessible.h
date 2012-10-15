@@ -29,14 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_RADIO_BUTTON_ACCESSIBLE_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RADIO_BUTTON_ACCESSIBLE))
 #define GTK_RADIO_BUTTON_ACCESSIBLE_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RADIO_BUTTON_ACCESSIBLE, GtkRadioButtonAccessibleClass))
 
-typedef struct _GtkRadioButtonAccessible      GtkRadioButtonAccessible;
-typedef struct _GtkRadioButtonAccessibleClass GtkRadioButtonAccessibleClass;
+typedef struct _GtkRadioButtonAccessible        GtkRadioButtonAccessible;
+typedef struct _GtkRadioButtonAccessibleClass   GtkRadioButtonAccessibleClass;
+typedef struct _GtkRadioButtonAccessiblePrivate GtkRadioButtonAccessiblePrivate;
 
 struct _GtkRadioButtonAccessible
 {
   GtkToggleButtonAccessible parent;
 
-  GSList *old_group;
+  GtkRadioButtonAccessiblePrivate *priv;
 };
 
 struct _GtkRadioButtonAccessibleClass
