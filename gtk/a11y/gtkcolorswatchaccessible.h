@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_COLOR_SWATCH_ACCESSIBLE_CLASS(klass)              (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COLOR_SWATCH_ACCESSIBLE))
 #define GTK_COLOR_SWATCH_ACCESSIBLE_GET_CLASS(obj)             (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_COLOR_SWATCH_ACCESSIBLE, GtkColorSwatchAccessibleClass))
 
-typedef struct _GtkColorSwatchAccessible      GtkColorSwatchAccessible;
-typedef struct _GtkColorSwatchAccessibleClass GtkColorSwatchAccessibleClass;
+typedef struct _GtkColorSwatchAccessible        GtkColorSwatchAccessible;
+typedef struct _GtkColorSwatchAccessibleClass   GtkColorSwatchAccessibleClass;
+typedef struct _GtkColorSwatchAccessiblePrivate GtkColorSwatchAccessiblePrivate;
 
 struct _GtkColorSwatchAccessible
 {
   GtkWidgetAccessible parent;
+
+  GtkColorSwatchAccessiblePrivate *priv;
 };
 
 struct _GtkColorSwatchAccessibleClass

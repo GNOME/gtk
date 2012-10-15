@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_CHECK_MENU_ITEM_ACCESSIBLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE))
 #define GTK_CHECK_MENU_ITEM_ACCESSIBLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE, GtkCheckMenuItemAccessibleClass))
 
-typedef struct _GtkCheckMenuItemAccessible      GtkCheckMenuItemAccessible;
-typedef struct _GtkCheckMenuItemAccessibleClass GtkCheckMenuItemAccessibleClass;
+typedef struct _GtkCheckMenuItemAccessible        GtkCheckMenuItemAccessible;
+typedef struct _GtkCheckMenuItemAccessibleClass   GtkCheckMenuItemAccessibleClass;
+typedef struct _GtkCheckMenuItemAccessiblePrivate GtkCheckMenuItemAccessiblePrivate;
 
 struct _GtkCheckMenuItemAccessible
 {
   GtkMenuItemAccessible parent;
+
+  GtkCheckMenuItemAccessiblePrivate *priv;
 };
 
 struct _GtkCheckMenuItemAccessibleClass

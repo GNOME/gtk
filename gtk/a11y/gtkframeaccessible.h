@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_FRAME_ACCESSIBLE_CLASS(klass)           (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FRAME_ACCESSIBLE))
 #define GTK_FRAME_ACCESSIBLE_GET_CLASS(obj)            (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FRAME_ACCESSIBLE, GtkFrameAccessibleClass))
 
-typedef struct _GtkFrameAccessible      GtkFrameAccessible;
-typedef struct _GtkFrameAccessibleClass GtkFrameAccessibleClass;
+typedef struct _GtkFrameAccessible        GtkFrameAccessible;
+typedef struct _GtkFrameAccessibleClass   GtkFrameAccessibleClass;
+typedef struct _GtkFrameAccessiblePrivate GtkFrameAccessiblePrivate;
 
 struct _GtkFrameAccessible
 {
   GtkContainerAccessible parent;
+
+  GtkFrameAccessiblePrivate *priv;
 };
 
 struct _GtkFrameAccessibleClass

@@ -30,12 +30,15 @@ G_BEGIN_DECLS
 #define GTK_IS_LOCK_BUTTON_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LOCK_BUTTON_ACCESSIBLE))
 #define GTK_LOCK_BUTTON_ACCESSIBLE_GET_CLASS(obj)           (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LOCK_BUTTON_ACCESSIBLE, GtkLockButtonAccessibleClass))
 
-typedef struct _GtkLockButtonAccessible      GtkLockButtonAccessible;
-typedef struct _GtkLockButtonAccessibleClass GtkLockButtonAccessibleClass;
+typedef struct _GtkLockButtonAccessible        GtkLockButtonAccessible;
+typedef struct _GtkLockButtonAccessibleClass   GtkLockButtonAccessibleClass;
+typedef struct _GtkLockButtonAccessiblePrivate GtkLockButtonAccessiblePrivate;
 
 struct _GtkLockButtonAccessible
 {
   GtkButtonAccessible parent;
+
+  GtkLockButtonAccessiblePrivate *priv;
 };
 
 struct _GtkLockButtonAccessibleClass

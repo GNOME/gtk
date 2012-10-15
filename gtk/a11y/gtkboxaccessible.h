@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_BOX_ACCESSIBLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BOX_ACCESSIBLE))
 #define GTK_BOX_ACCESSIBLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_BOX_ACCESSIBLE, GtkBoxAccessibleClass))
 
-typedef struct _GtkBoxAccessible      GtkBoxAccessible;
-typedef struct _GtkBoxAccessibleClass GtkBoxAccessibleClass;
+typedef struct _GtkBoxAccessible        GtkBoxAccessible;
+typedef struct _GtkBoxAccessibleClass   GtkBoxAccessibleClass;
+typedef struct _GtkBoxAccessiblePrivate GtkBoxAccessiblePrivate;
 
 struct _GtkBoxAccessible
 {
   GtkContainerAccessible parent;
+
+  GtkBoxAccessiblePrivate *priv;
 };
 
 struct _GtkBoxAccessibleClass

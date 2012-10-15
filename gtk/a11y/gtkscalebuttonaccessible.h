@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_SCALE_BUTTON_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SCALE_BUTTON_ACCESSIBLE))
 #define GTK_SCALE_BUTTON_ACCESSIBLE_GET_CLASS(obj)           (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SCALE_BUTTON_ACCESSIBLE, GtkScaleButtonAccessibleClass))
 
-typedef struct _GtkScaleButtonAccessible      GtkScaleButtonAccessible;
-typedef struct _GtkScaleButtonAccessibleClass GtkScaleButtonAccessibleClass;
+typedef struct _GtkScaleButtonAccessible        GtkScaleButtonAccessible;
+typedef struct _GtkScaleButtonAccessibleClass   GtkScaleButtonAccessibleClass;
+typedef struct _GtkScaleButtonAccessiblePrivate GtkScaleButtonAccessiblePrivate;
 
 struct _GtkScaleButtonAccessible
 {
   GtkButtonAccessible parent;
+
+  GtkScaleButtonAccessiblePrivate *priv;
 };
 
 struct _GtkScaleButtonAccessibleClass
