@@ -168,7 +168,7 @@ _gtk_container_cell_accessible_remove_child (GtkContainerCellAccessible *contain
 }
 
 GList *
-_gtk_conainer_cell_accessible_get_children (GtkContainerCellAccessible *container)
+_gtk_container_cell_accessible_get_children (GtkContainerCellAccessible *container)
 {
   g_return_val_if_fail (GTK_IS_CONTAINER_CELL_ACCESSIBLE (container), NULL);
 
