@@ -101,10 +101,11 @@ gtk_image_cell_accessible_get_image_size (AtkImage *image,
   *width = 0;
   *height = 0;
 
-  cell_renderer = GTK_RENDERER_CELL_ACCESSIBLE (cell)->renderer;
-  g_object_get (GTK_CELL_RENDERER_PIXBUF (cell_renderer),
+  g_object_get (cell, "renderer", &cell_renderer, NULL);
+  g_object_get (cell_renderer,
                 "pixbuf", &pixbuf,
                 NULL);
+  g_object_unref (cell_renderer);
 
   if (pixbuf)
     {

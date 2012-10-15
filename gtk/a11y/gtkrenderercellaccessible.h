@@ -30,13 +30,15 @@ G_BEGIN_DECLS
 #define GTK_IS_RENDERER_CELL_ACCESSIBLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RENDERER_CELL_ACCESSIBLE))
 #define GTK_RENDERER_CELL_ACCESSIBLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RENDERER_CELL_ACCESSIBLE, GtkRendererCellAccessibleClass))
 
-typedef struct _GtkRendererCellAccessible      GtkRendererCellAccessible;
-typedef struct _GtkRendererCellAccessibleClass GtkRendererCellAccessibleClass;
+typedef struct _GtkRendererCellAccessible        GtkRendererCellAccessible;
+typedef struct _GtkRendererCellAccessibleClass   GtkRendererCellAccessibleClass;
+typedef struct _GtkRendererCellAccessiblePrivate GtkRendererCellAccessiblePrivate;
 
 struct _GtkRendererCellAccessible
 {
   GtkCellAccessible  parent;
-  GtkCellRenderer   *renderer;
+
+  GtkRendererCellAccessiblePrivate *priv;
 };
 
 struct _GtkRendererCellAccessibleClass

@@ -105,11 +105,14 @@ gtk_boolean_cell_accessible_update_cache (GtkCellAccessible *cell)
   GtkBooleanCellAccessible *boolean_cell = GTK_BOOLEAN_CELL_ACCESSIBLE (cell);
   gboolean active;
   gboolean sensitive;
+  GtkCellRenderer *renderer;
 
-  g_object_get (G_OBJECT (GTK_RENDERER_CELL_ACCESSIBLE (cell)->renderer),
+  g_object_get (cell, "renderer", &renderer, NULL);
+  g_object_get (renderer,
                 "active", &active,
                 "sensitive", &sensitive,
                 NULL);
+  g_object_unref (renderer);
 
   if (boolean_cell->priv->cell_value != active)
     {

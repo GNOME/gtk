@@ -21,6 +21,10 @@
 #include "gtkrenderercellaccessible.h"
 #include "gtkintl.h"
 
+struct _GtkRendererCellAccessiblePrivate
+{
+  GtkCellRenderer *renderer;
+};
 
 enum {
   PROP_0,
@@ -40,7 +44,7 @@ gtk_renderer_cell_accessible_set_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_RENDERER:
-      accessible->renderer = g_value_dup_object (value);
+      accessible->priv->renderer = g_value_dup_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -59,7 +63,7 @@ gtk_renderer_cell_accessible_get_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_RENDERER:
-      g_value_set_object (value, accessible->renderer);
+      g_value_set_object (value, accessible->priv->renderer);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -72,8 +76,8 @@ gtk_renderer_cell_accessible_finalize (GObject *object)
 {
   GtkRendererCellAccessible *renderer_cell = GTK_RENDERER_CELL_ACCESSIBLE (object);
 
-  if (renderer_cell->renderer)
-    g_object_unref (renderer_cell->renderer);
+  if (renderer_cell->priv->renderer)
+    g_object_unref (renderer_cell->priv->renderer);
 
   G_OBJECT_CLASS (_gtk_renderer_cell_accessible_parent_class)->finalize (object);
 }
@@ -94,11 +98,16 @@ _gtk_renderer_cell_accessible_class_init (GtkRendererCellAccessibleClass *klass)
 							P_("The cell renderer represented by this accessible"),
 							GTK_TYPE_CELL_RENDERER,
 							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  g_type_class_add_private (klass, sizeof (GtkRendererCellAccessiblePrivate));
 }
 
 static void
 _gtk_renderer_cell_accessible_init (GtkRendererCellAccessible *renderer_cell)
 {
+  renderer_cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (renderer_cell,
+                                                     GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
+                                                     GtkRendererCellAccessiblePrivate);
 }
 
 AtkObject *
