@@ -31,6 +31,11 @@
 #include "gtktextviewaccessible.h"
 #include "gtk/gtkwidgetprivate.h"
 
+struct _GtkTextViewAccessiblePrivate
+{
+  gint insert_offset;
+  gint selection_bound;
+};
 
 static void       insert_text_cb       (GtkTextBuffer    *buffer,
                                                         GtkTextIter      *arg1,
@@ -152,11 +157,16 @@ _gtk_text_view_accessible_class_init (GtkTextViewAccessibleClass *klass)
   class->initialize = gtk_text_view_accessible_initialize;
 
   widget_class->notify_gtk = gtk_text_view_accessible_notify_gtk;
+
+  g_type_class_add_private (klass, sizeof (GtkTextViewAccessiblePrivate));
 }
 
 static void
 _gtk_text_view_accessible_init (GtkTextViewAccessible *accessible)
 {
+  accessible->priv = G_TYPE_INSTANCE_GET_PRIVATE (accessible,
+                                                  GTK_TYPE_TEXT_VIEW_ACCESSIBLE,
+                                                  GtkTextViewAccessiblePrivate);
 }
 
 static gchar *
@@ -568,7 +578,6 @@ gtk_text_view_accessible_get_run_attributes (AtkText *text,
   GSList *tags, *temp_tags;
   gdouble scale = 1;
   gboolean val_set = FALSE;
-
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -1715,8 +1724,8 @@ gtk_text_view_accessible_update_cursor (GtkTextViewAccessible *accessible,
   int insert_offset, selection_bound;
   GtkTextIter iter;
 
-  prev_insert_offset = accessible->insert_offset;
-  prev_selection_bound = accessible->selection_bound;
+  prev_insert_offset = accessible->priv->insert_offset;
+  prev_selection_bound = accessible->priv->selection_bound;
 
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert (buffer));
   insert_offset = gtk_text_iter_get_offset (&iter);
@@ -1726,8 +1735,8 @@ gtk_text_view_accessible_update_cursor (GtkTextViewAccessible *accessible,
   if (prev_insert_offset == insert_offset && prev_selection_bound == selection_bound)
     return;
 
-  accessible->insert_offset = insert_offset;
-  accessible->selection_bound = selection_bound;
+  accessible->priv->insert_offset = insert_offset;
+  accessible->priv->selection_bound = selection_bound;
 
   if (prev_insert_offset != insert_offset)
     g_signal_emit_by_name (accessible, "text-caret-moved", insert_offset);
