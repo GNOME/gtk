@@ -99,6 +99,8 @@ _gtk_image_accessible_class_init (GtkImageAccessibleClass *klass)
   gobject_class->finalize = gtk_image_accessible_finalize;
   class->initialize = gtk_image_accessible_initialize;
   class->get_name = gtk_image_accessible_get_name;
+
+  g_type_class_add_private (klass, sizeof (GtkImageAccessiblePrivate));
 }
 
 static void
