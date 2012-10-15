@@ -20,6 +20,11 @@
 #include "gtkmenuitemaccessible.h"
 #include "gtk/gtkmenuitemprivate.h"
 
+struct _GtkMenuItemAccessiblePrivate
+{
+  gchar *text;
+};
+
 #define KEYBINDING_SEPARATOR ";"
 
 static void menu_item_select   (GtkMenuItem *item);
@@ -193,10 +198,10 @@ gtk_menu_item_accessible_get_name (AtkObject *obj)
   accessible = GTK_MENU_ITEM_ACCESSIBLE (obj);
   label = get_label_from_container (widget);
 
-  g_free (accessible->text);
-  accessible->text = get_text_from_label_widget (label);
+  g_free (accessible->priv->text);
+  accessible->priv->text = get_text_from_label_widget (label);
 
-  return accessible->text;
+  return accessible->priv->text;
 }
 
 static void
@@ -204,7 +209,7 @@ gtk_menu_item_accessible_finalize (GObject *object)
 {
   GtkMenuItemAccessible *accessible = GTK_MENU_ITEM_ACCESSIBLE (object);
 
-  g_free (accessible->text);
+  g_free (accessible->priv->text);
 
   G_OBJECT_CLASS (_gtk_menu_item_accessible_parent_class)->finalize (object);
 }
@@ -244,11 +249,16 @@ _gtk_menu_item_accessible_class_init (GtkMenuItemAccessibleClass *klass)
   class->initialize = gtk_menu_item_accessible_initialize;
   class->get_name = gtk_menu_item_accessible_get_name;
   class->get_role = gtk_menu_item_accessible_get_role;
+
+  g_type_class_add_private (klass, sizeof (GtkMenuItemAccessiblePrivate));
 }
 
 static void
 _gtk_menu_item_accessible_init (GtkMenuItemAccessible *menu_item)
 {
+  menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (menu_item,
+                                                 GTK_TYPE_MENU_ITEM_ACCESSIBLE,
+                                                 GtkMenuItemAccessiblePrivate);
 }
 
 static GtkWidget *
