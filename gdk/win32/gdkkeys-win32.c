@@ -129,6 +129,8 @@ handle_special (guint  vk,
       *ksymp = GDK_Select; break;
     case VK_PRINT:
       *ksymp = GDK_Print; break;
+    case VK_SNAPSHOT:
+      *ksymp = GDK_Print; break;
     case VK_EXECUTE:
       *ksymp = GDK_Execute; break;
     case VK_INSERT:
