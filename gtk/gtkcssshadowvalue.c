@@ -363,6 +363,7 @@ gtk_css_shadow_value_finish_drawing (const GtkCssValue *shadow,
   cairo_paint (original_cr);
 
   cairo_destroy (cr);
+  cairo_surface_destroy (surface);
 
   return original_cr;
 }
