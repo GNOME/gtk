@@ -1,3 +1,36 @@
+Overview of Changes in GTK+ 3.6.1
+=================================
+
+* CSS:
+ - huge refactoring to avoid computing wrong values
+ - treeview: Invalidate children properly
+ - treeview: Fix computing child paths
+
+* Broadway:
+ - use binary websockets when available
+
+* Bugs fixed:
+ 646221 Imperfect Russian translation of 'Print preview'...
+ 682395 Nautilus tabs have black background
+ 684517 window: Delay showing auto mnemonics on focus in
+ 684639 GTK+ 3.5.18 makes Epiphany unusable
+ 684984 No focus rendering for Icon Views in SELECTION_N...
+ 685449 Non-uniform borders on GtkScrolledWindow break c...
+ 685996 trivial build fix: test uses = not ==
+        Fix a multi-display problem in touch handle code
+        App chooser: respect NoDisplay
+
+* Translation updates:
+ Catalan
+ Catalan (Valencian)
+ Italian
+ Japanese
+ Khmer
+ Norwegian bokmål
+ Russian
+ Slovak
+
+
 Overview of Changes in GTK+ 3.6.0
 =================================
 
