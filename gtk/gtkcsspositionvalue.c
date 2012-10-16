@@ -173,8 +173,8 @@ _gtk_css_position_value_new (GtkCssValue *x,
   return result;
 }
 
-GtkCssValue *
-_gtk_css_position_value_parse (GtkCssParser *parser)
+static GtkCssValue *
+position_value_parse (GtkCssParser *parser, gboolean try)
 {
   static const struct {
     const char *name;
@@ -225,7 +225,8 @@ _gtk_css_position_value_parse (GtkCssParser *parser)
         }
       else
         {
-          _gtk_css_parser_error (parser, "Unrecognized position value");
+          if (!try)
+            _gtk_css_parser_error (parser, "Unrecognized position value");
           return NULL;
         }
     }
@@ -245,7 +246,8 @@ _gtk_css_position_value_parse (GtkCssParser *parser)
         {
           if (missing != &y)
             {
-              _gtk_css_parser_error (parser, "Invalid combination of values");
+              if (!try)
+                _gtk_css_parser_error (parser, "Invalid combination of values");
               _gtk_css_value_unref (y);
               return NULL;
             }
@@ -269,7 +271,8 @@ _gtk_css_position_value_parse (GtkCssParser *parser)
       if ((names[first].horizontal && !names[second].vertical) ||
           (!names[first].horizontal && !names[second].horizontal))
         {
-          _gtk_css_parser_error (parser, "Invalid combination of values");
+          if (!try)
+            _gtk_css_parser_error (parser, "Invalid combination of values");
           _gtk_css_value_unref (x);
           _gtk_css_value_unref (y);
           return NULL;
@@ -277,6 +280,18 @@ _gtk_css_position_value_parse (GtkCssParser *parser)
     }
 
   return _gtk_css_position_value_new (x, y);
+}
+
+GtkCssValue *
+_gtk_css_position_value_parse (GtkCssParser *parser)
+{
+  return position_value_parse (parser, FALSE);
+}
+
+GtkCssValue *
+_gtk_css_position_value_try_parse (GtkCssParser *parser)
+{
+  return position_value_parse (parser, TRUE);
 }
 
 double

@@ -484,7 +484,7 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
           values[0] = _gtk_css_image_value_new (image);
         }
       else if (values[1] == NULL &&
-               (value = _gtk_css_position_value_parse (parser)))
+               (value = _gtk_css_position_value_try_parse (parser)))
         {
           values[1] = value;
           value = NULL;
