@@ -36,6 +36,8 @@ struct _GtkCssKeyframes {
   GtkCssValue **values;         /* 2D array: n_keyframes * n_properties of (value or NULL) for all the keyframes */
 };
 
+#define KEYFRAMES_VALUE(keyframes, k, p) ((keyframes)->values[(k) * (keyframes)->n_properties + (p)])
+
 GtkCssKeyframes *
 _gtk_css_keyframes_ref (GtkCssKeyframes *keyframes)
 {
@@ -49,6 +51,8 @@ _gtk_css_keyframes_ref (GtkCssKeyframes *keyframes)
 void
 _gtk_css_keyframes_unref (GtkCssKeyframes *keyframes)
 {
+  guint k, p;
+
   g_return_if_fail (keyframes != NULL);
 
   keyframes->ref_count--;
@@ -57,12 +61,19 @@ _gtk_css_keyframes_unref (GtkCssKeyframes *keyframes)
 
   g_free (keyframes->keyframe_progress);
   g_free (keyframes->property_ids);
+
+  for (k = 0; k < keyframes->n_keyframes; k++)
+    {
+      for (p = 0; p < keyframes->n_properties; p++)
+        {
+          _gtk_css_value_unref (KEYFRAMES_VALUE (keyframes, k, p));
+          KEYFRAMES_VALUE (keyframes, k, p) = NULL;
+        }
+    }
   g_free (keyframes->values);
 
   g_slice_free (GtkCssKeyframes, keyframes);
 }
-
-#define KEYFRAMES_VALUE(keyframes, k, p) ((keyframes)->values[(k) * (keyframes)->n_properties + (p)])
 
 static guint
 gtk_css_keyframes_add_keyframe (GtkCssKeyframes *keyframes,
