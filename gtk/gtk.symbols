@@ -738,7 +738,6 @@ gtk_container_set_reallocate_redraws
 gtk_container_set_resize_mode
 gtk_container_unset_focus_chain
 gtk_corner_type_get_type
-gtk_css_image_get_parser_type
 gtk_css_provider_error_get_type
 gtk_css_provider_error_quark
 gtk_css_provider_get_default
@@ -2662,7 +2661,6 @@ gtk_style_new
 gtk_style_properties_clear
 gtk_style_properties_get
 gtk_style_properties_get_property
-gtk_style_properties_get_style
 gtk_style_properties_get_type
 gtk_style_properties_get_valist
 gtk_style_properties_lookup_color
