@@ -186,6 +186,9 @@ EXTRA_DIST += \
 	label-small-ellipsized.ui \
 	label-wrap-justify.ref.ui \
 	label-wrap-justify.ui \
+	linear-gradient.css \
+	linear-gradient.ref.ui \
+	linear-gradient.ui \
 	messagedialog-secondarytext.ui \
 	messagedialog-secondarytext.ref.ui \
 	misc-alignment.css \
