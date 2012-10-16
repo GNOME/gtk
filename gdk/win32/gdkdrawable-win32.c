@@ -547,13 +547,10 @@ generic_draw (GdkDrawable    *drawable,
       HDC mask_hdc;
       HDC tile_hdc;
 
-      HGDIOBJ old_mask_hbm;
-      HGDIOBJ old_tile_hbm;
-
       GdkGCValues gcvalues;
 
       hdc = gdk_win32_hdc_get (drawable, gc, blitting_mask);
-      tile_hdc = CreateCompatibleDC (hdc);
+      tile_hdc = gdk_win32_hdc_get (tile_pixmap, tile_gc, blitting_mask);
 
       if (gcwin32->values_mask & GDK_GC_TS_X_ORIGIN)
 	ts_x_origin = gc->ts_x_origin;
@@ -633,32 +630,18 @@ generic_draw (GdkDrawable    *drawable,
 	  g_object_unref (stipple_gc);
 	}
 
-      g_object_unref (mask_gc);
-      g_object_unref (tile_gc);
-
-      mask_hdc = CreateCompatibleDC (hdc);
-
-      if ((old_mask_hbm = SelectObject (mask_hdc, GDK_PIXMAP_HBITMAP (mask_pixmap))) == NULL)
-	WIN32_GDI_FAILED ("SelectObject");
-
-      if ((old_tile_hbm = SelectObject (tile_hdc, GDK_PIXMAP_HBITMAP (tile_pixmap))) == NULL)
-	WIN32_GDI_FAILED ("SelectObject");
+      mask_hdc = gdk_win32_hdc_get (mask_pixmap, mask_gc, blitting_mask);
 
       if (fill_style == GDK_STIPPLED ||
 	  fill_style == GDK_OPAQUE_STIPPLED)
 	{
 	  HDC stipple_hdc;
-	  HGDIOBJ old_stipple_hbm;
 	  HBRUSH fg_brush;
 	  HGDIOBJ old_tile_brush;
+	  GdkGC *stipple_gc;
 
-	  if ((stipple_hdc = CreateCompatibleDC (hdc)) == NULL)
-	    WIN32_GDI_FAILED ("CreateCompatibleDC");
-
-	  if ((old_stipple_hbm =
-	       SelectObject (stipple_hdc,
-			     GDK_PIXMAP_HBITMAP (stipple_bitmap))) == NULL)
-	    WIN32_GDI_FAILED ("SelectObject");
+	  stipple_gc = gdk_gc_new (stipple_bitmap);
+	  stipple_hdc = gdk_win32_hdc_get (stipple_bitmap, stipple_gc, blitting_mask);
 
 	  if ((fg_brush = CreateSolidBrush
 	       (_gdk_win32_colormap_color (impl->colormap,
@@ -696,8 +679,8 @@ generic_draw (GdkDrawable    *drawable,
 
 	  GDI_CALL (SelectObject, (tile_hdc, old_tile_brush));
 	  GDI_CALL (DeleteObject, (fg_brush));
-	  GDI_CALL (SelectObject, (stipple_hdc, old_stipple_hbm));
-	  GDI_CALL (DeleteDC, (stipple_hdc));
+	  gdk_win32_hdc_release (stipple_bitmap, stipple_gc, blitting_mask);
+	  g_object_unref (stipple_gc);
 	  g_object_unref (stipple_bitmap);
 	}
 
@@ -712,11 +695,11 @@ generic_draw (GdkDrawable    *drawable,
 			  MAKEROP4 (rop2_to_rop3 (gcwin32->rop2), ROP3_D)));
 
       /* Cleanup */
-      GDI_CALL (SelectObject, (mask_hdc, old_mask_hbm));
-      GDI_CALL (SelectObject, (tile_hdc, old_tile_hbm));
-      GDI_CALL (DeleteDC, (mask_hdc));
-      GDI_CALL (DeleteDC, (tile_hdc));
+      gdk_win32_hdc_release (mask_pixmap, mask_gc, blitting_mask);
+      g_object_unref (mask_gc);
       g_object_unref (mask_pixmap);
+      gdk_win32_hdc_release (tile_pixmap, tile_gc, blitting_mask);
+      g_object_unref (tile_gc);
       g_object_unref (tile_pixmap);
 
       gdk_win32_hdc_release (drawable, gc, blitting_mask);
