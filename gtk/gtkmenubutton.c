@@ -516,22 +516,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                                                         P_("The dropdown menu."),
                                                         GTK_TYPE_MENU,
                                                         G_PARAM_READWRITE));
-   /**
-   * GtkMenuButton:menu:
-   *
-   * The #GtkMenu that will be popped up when the button is clicked.
-   * This property has been renamed to "popup".  "menu" will be
-   * removed before 3.6.0.
-   *
-   * Since: 3.6
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_POPUP, /* [sic] */
-                                   g_param_spec_object ("menu",
-                                                        P_("menu"),
-                                                        P_("The dropdown menu."),
-                                                        GTK_TYPE_MENU,
-                                                        G_PARAM_DEPRECATED | G_PARAM_READWRITE));
+
   /**
    * GtkMenuButton:menu-model:
    *
