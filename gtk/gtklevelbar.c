@@ -1301,7 +1301,7 @@ gtk_level_bar_get_inverted (GtkLevelBar *self)
 /**
  * gtk_level_bar_set_inverted:
  * @self: a #GtkLevelBar
- * @inverted: %TRUE to invert the progress bar
+ * @inverted: %TRUE to invert the level bar
  *
  * Sets the value of the #GtkLevelBar:inverted property.
  *
