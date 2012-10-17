@@ -684,7 +684,7 @@ _gtk_menu_button_set_popup_with_func (GtkMenuButton                 *menu_button
       gtk_widget_set_sensitive (GTK_WIDGET (menu_button), FALSE);
     }
 
-  g_object_notify (G_OBJECT (menu_button), "menu");
+  g_object_notify (G_OBJECT (menu_button), "popup");
   g_object_notify (G_OBJECT (menu_button), "menu-model");
 }
 
