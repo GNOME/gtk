@@ -96,7 +96,8 @@ static void
 output_handle_geometry(void *data,
 		       struct wl_output *wl_output,
 		       int x, int y, int physical_width, int physical_height,
-		       int subpixel, const char *make, const char *model)
+		       int subpixel, const char *make, const char *model,
+		       int32_t transform)
 {
   /*
     g_signal_emit_by_name (screen, "monitors-changed");
@@ -119,8 +120,8 @@ static const struct wl_output_listener output_listener = {
 };
 
 static void
-gdk_display_handle_global(struct wl_display *display, uint32_t id,
-			  const char *interface, uint32_t version, void *data)
+gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id,
+					const char *interface, uint32_t version)
 {
   GdkWaylandDisplay *display_wayland = data;
   GdkDisplay *gdk_display = GDK_DISPLAY_OBJECT (data);
@@ -128,27 +129,29 @@ gdk_display_handle_global(struct wl_display *display, uint32_t id,
 
   if (strcmp(interface, "wl_compositor") == 0) {
     display_wayland->compositor =
-      wl_display_bind(display, id, &wl_compositor_interface);
+	wl_registry_bind(display_wayland->wl_registry, id, &wl_compositor_interface, 1);
   } else if (strcmp(interface, "wl_shm") == 0) {
-    display_wayland->shm = wl_display_bind(display, id, &wl_shm_interface);
+   display_wayland->shm =
+	wl_registry_bind(display_wayland->wl_registry, id, &wl_shm_interface, 1);
 
     /* SHM interface is prerequisite */
     _gdk_wayland_display_load_cursor_theme(display_wayland);
   } else if (strcmp(interface, "wl_shell") == 0) {
-    display_wayland->shell = wl_display_bind(display, id, &wl_shell_interface);
+    display_wayland->shell =
+	wl_registry_bind(display_wayland->wl_registry, id, &wl_shell_interface, 1);
   } else if (strcmp(interface, "wl_output") == 0) {
     display_wayland->output =
-      wl_display_bind(display, id, &wl_output_interface);
+      wl_registry_bind(display_wayland->wl_registry, id, &wl_output_interface, 1);
     wl_output_add_listener(display_wayland->output,
 			   &output_listener, display_wayland);
   } else if (strcmp(interface, "wl_seat") == 0) {
-    seat = wl_display_bind (display, id, &wl_seat_interface);
+    seat = wl_registry_bind(display_wayland->wl_registry, id, &wl_seat_interface, 1);
     _gdk_wayland_device_manager_add_device (gdk_display->device_manager,
 					    seat);
   } else if (strcmp(interface, "wl_data_device_manager") == 0) {
       display_wayland->data_device_manager =
-        wl_display_bind(display, id,
-                        &wl_data_device_manager_interface);
+        wl_registry_bind(display_wayland->wl_registry, id,
+					&wl_data_device_manager_interface, 1);
   }
 }
 
@@ -210,6 +213,10 @@ gdk_display_init_egl(GdkDisplay *display)
 }
 #endif
 
+static const struct wl_registry_listener registry_listener = {
+	gdk_registry_handle_global
+};
+
 GdkDisplay *
 _gdk_wayland_display_open (const gchar *display_name)
 {
@@ -231,14 +238,13 @@ _gdk_wayland_display_open (const gchar *display_name)
   display->device_manager = _gdk_wayland_device_manager_new (display);
 
   /* Set up listener so we'll catch all events. */
-  wl_display_add_global_listener(display_wayland->wl_display,
-				 gdk_display_handle_global, display_wayland);
+  display_wayland->wl_registry = wl_display_get_registry(display_wayland->wl_display);
+  wl_registry_add_listener(display_wayland->wl_registry, &registry_listener, display_wayland);
 
 #ifdef GDK_WAYLAND_USE_EGL
   gdk_display_init_egl(display);
 #else
-  wl_display_iterate(wl_display, WL_DISPLAY_READABLE);
-  wl_display_roundtrip(wl_display);
+  wl_display_dispatch(display_wayland->wl_display);
 #endif
 
   display_wayland->event_source =
@@ -351,8 +357,7 @@ gdk_wayland_display_flush (GdkDisplay *display)
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   if (!display->closed)
-    _gdk_wayland_display_flush (display,
-				GDK_WAYLAND_DISPLAY (display)->event_source);
+    wl_display_flush(GDK_WAYLAND_DISPLAY (display)->wl_display);;
 }
 
 static gboolean
