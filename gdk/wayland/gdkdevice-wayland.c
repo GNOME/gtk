@@ -183,6 +183,7 @@ gdk_device_core_set_window_cursor (GdkDevice *device,
                          x, y);
   wl_surface_attach (wd->pointer_surface, buffer, 0, 0);
   wl_surface_damage (wd->pointer_surface,  0, 0, w, h);
+  wl_surface_commit(wd->pointer_surface);
 
   g_object_unref (cursor);
 }

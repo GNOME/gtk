@@ -44,8 +44,7 @@ gdk_event_source_prepare(GSource *base, gint *timeout)
   if (_gdk_event_queue_find_first (source->display) != NULL)
     return TRUE;
 
-  while (source->mask & WL_DISPLAY_WRITABLE)
-    wl_display_iterate(display->wl_display, WL_DISPLAY_WRITABLE);
+  wl_display_flush(display->wl_display);
 
   return FALSE;
 }
@@ -97,16 +96,6 @@ static GSourceFuncs wl_glib_source_funcs = {
   gdk_event_source_finalize
 };
 
-static int
-gdk_event_source_update(uint32_t mask, void *data)
-{
-  GdkWaylandEventSource *source = data;
-
-  source->mask = mask;
-
-  return 0;
-}
-
 void
 _gdk_wayland_display_deliver_event (GdkDisplay *display, GdkEvent *event)
 {
@@ -134,8 +123,7 @@ _gdk_wayland_display_event_source_new (GdkDisplay *display)
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
   wl_source->display = display;
-  wl_source->pfd.fd = wl_display_get_fd(display_wayland->wl_display,
-					gdk_event_source_update, source);
+  wl_source->pfd.fd = wl_display_get_fd(display_wayland->wl_display);
   wl_source->pfd.events = G_IO_IN | G_IO_ERR;
   g_source_add_poll(source, &wl_source->pfd);
 
@@ -149,16 +137,6 @@ _gdk_wayland_display_event_source_new (GdkDisplay *display)
 }
 
 void
-_gdk_wayland_display_flush (GdkDisplay *display, GSource *source)
-{
-  GdkWaylandEventSource *wayland_source = (GdkWaylandEventSource *) source;
-
-  while (wayland_source->mask & WL_DISPLAY_WRITABLE)
-    wl_display_iterate(GDK_WAYLAND_DISPLAY (display)->wl_display,
-		       WL_DISPLAY_WRITABLE);
-}
-
-void
 _gdk_wayland_display_queue_events (GdkDisplay *display)
 {
   GdkWaylandDisplay *display_wayland;
@@ -166,10 +144,9 @@ _gdk_wayland_display_queue_events (GdkDisplay *display)
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
   source = (GdkWaylandEventSource *) display_wayland->event_source;
-
   if (source->pfd.revents)
     {
-      wl_display_iterate(display_wayland->wl_display, WL_DISPLAY_READABLE);
-      source->pfd.revents = 0;
+	wl_display_dispatch(display_wayland->wl_display);
+	source->pfd.revents = 0;
     }
 }
