@@ -4189,11 +4189,9 @@ file_list_drag_motion_cb (GtkWidget             *widget,
 static void
 check_copy_file_location_sensitivity (GtkFileChooserDefault *impl)
 {
-  GtkTreeSelection *selection;
   gboolean active;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-  if (gtk_tree_selection_count_selected_rows (selection) == 0)
+  if (current_selection_count_selected_rows (impl) == 0)
     active = FALSE;
   else
     active = TRUE;
