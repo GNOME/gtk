@@ -4955,7 +4955,7 @@ view_mode_set (GtkFileChooserDefault *impl, ViewMode view_mode)
 
   /* Set model and selection */
   current_view_set_file_model (impl, impl->current_model);
-  current_view_set_multiple (impl, impl->select_multiple);
+  current_view_set_select_multiple (impl, impl->select_multiple);
   copy_old_selection_to_current_view (impl, old_view_mode);
 
   /* Destroy the old view */
