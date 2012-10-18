@@ -656,8 +656,7 @@ gtk_entry_completion_set_property (GObject      *object,
         break;
 
       case PROP_TEXT_COLUMN:
-	gtk_entry_completion_set_text_column (completion,
-					      g_value_get_int (value));
+        priv->text_column = g_value_get_int (value);
         break;
 
       case PROP_INLINE_COMPLETION:
