@@ -1996,7 +1996,7 @@ add_bookmark (GtkPlacesSidebar *sidebar)
 		}
 
 		location = g_file_new_for_uri (uri);
-		bookmark = nautilus_bookmark_new (location, name, NULL);
+		bookmark = nautilus_bookmark_new (location, name);
 
 		if (!nautilus_bookmark_list_contains (sidebar->bookmarks, bookmark)) {
 			nautilus_bookmark_list_append (sidebar->bookmarks, bookmark);
