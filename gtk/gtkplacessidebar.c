@@ -971,6 +971,10 @@ update_places (GtkPlacesSidebar *sidebar)
 			if (bookmark_name == NULL)
 				bookmark_name = g_strdup (g_file_info_get_display_name (info));
 
+			/* FIXME: in commit 0ed400b9c1692e42498bff3c10780073ec137f63, nautilus added the ability
+			 * to get a symbolic icon for bookmarks.  We don't have that machinery.  Should we
+			 * just copy that code?
+			 */
 			icon = g_file_info_get_icon (info);
 
 			mount_uri = g_file_get_uri (root);
