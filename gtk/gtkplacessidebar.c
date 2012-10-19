@@ -908,6 +908,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
 		if (!g_file_is_native (root)) {
 			network_mounts = g_list_prepend (network_mounts, mount);
+			g_object_unref (root);
 			continue;
 		}
 
