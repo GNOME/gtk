@@ -152,6 +152,7 @@ gtk_css_border_radius_grow (GtkRoundedBoxCorner *corner,
       corner->vertical = 0;
     }
 }
+
 void
 _gtk_rounded_box_grow (GtkRoundedBox *box,
                        double         top,

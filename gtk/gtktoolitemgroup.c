@@ -229,6 +229,7 @@ gtk_tool_item_group_screen_changed (GtkWidget *widget,
   if (old_settings)
   {
     g_signal_handler_disconnect (old_settings, priv->settings_connection);
+    priv->settings_connection = 0;
     g_object_unref (old_settings);
   }
 
@@ -518,6 +519,14 @@ gtk_tool_item_group_dispose (GObject *object)
       priv->focus_set_id = 0;
       priv->toplevel = NULL;
     }
+
+  if (priv->settings_connection > 0)
+    {
+      g_signal_handler_disconnect (priv->settings, priv->settings_connection);
+      priv->settings_connection = 0;
+    }
+
+  g_clear_object (&priv->settings);
 
   G_OBJECT_CLASS (gtk_tool_item_group_parent_class)->dispose (object);
 }

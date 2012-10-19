@@ -24,6 +24,8 @@
 #include "config.h"
 
 #include "gdkdisplay.h"
+#include "gdkmain.h"
+#include "gdkwindow.h"
 
 /**
  * gdk_pointer_ungrab:

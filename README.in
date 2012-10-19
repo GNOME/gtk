@@ -75,8 +75,17 @@ Patches should be in unified diff form. (The -up option to GNU diff.)
 Release notes for 3.6
 =====================
 
-* Now follows the XDG Base Directory specification for user
-  configuration and data files. In detail,
+* The accessibility bridge code that exports accessible objects
+  on the bus is now used by default; atk-bridge has been converted
+  into a library that GTK+ links against. To void the linking,
+  pass --without-atk-bridge when configuring GTK+.
+
+* GDK threading support has been deprecated. It is recommended to
+  use g_idle_add(), g_main_context_invoke() and similar funtions
+  to make all GTK+ calls from the main thread.
+
+* GTK+ now follows the XDG Base Directory specification for
+  user configuration and data files. In detail,
   * $XDG_CONFIG_HOME/gtk-3.0/custom-papers is the new location
     for $HOME/.gtk-custom-papers
   * $XDG_CONFIG_HOME/gtk-3.0/bookmarks is the new location

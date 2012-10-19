@@ -1319,8 +1319,6 @@ test_tag (void)
   g_object_unref (buffer);
 }
 
-extern void pixbuf_init (void);
-
 int
 main (int argc, char** argv)
 {
@@ -1328,7 +1326,6 @@ main (int argc, char** argv)
   gtk_set_debug_flags (gtk_get_debug_flags () | GTK_DEBUG_TEXT);
 
   gtk_test_init (&argc, &argv);
-  pixbuf_init ();
 
   g_test_add_func ("/TextBuffer/UTF8 unknown char", test_utf8);
   g_test_add_func ("/TextBuffer/Line separator", test_line_separator);

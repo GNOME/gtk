@@ -157,15 +157,17 @@ _gtk_css_lookup_set_computed (GtkCssLookup  *lookup,
  * an issue, go fix it.
  **/
 void
-_gtk_css_lookup_resolve (GtkCssLookup         *lookup,
-                         GtkStyleContext      *context,
-                         GtkCssComputedValues *values)
+_gtk_css_lookup_resolve (GtkCssLookup            *lookup,
+                         GtkStyleProviderPrivate *provider,
+                         GtkCssComputedValues    *values,
+                         GtkCssComputedValues    *parent_values)
 {
   guint i, n;
 
   g_return_if_fail (lookup != NULL);
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
   g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
+  g_return_if_fail (parent_values == NULL || GTK_IS_CSS_COMPUTED_VALUES (parent_values));
 
   n = _gtk_css_style_property_get_n_properties ();
 
@@ -180,7 +182,8 @@ _gtk_css_lookup_resolve (GtkCssLookup         *lookup,
       else if (lookup->values[i].value ||
                _gtk_bitmask_get (lookup->missing, i))
         _gtk_css_computed_values_compute_value (values,
-                                                context,
+                                                provider,
+                                                parent_values,
                                                 i,
                                                 lookup->values[i].value,
                                                 lookup->values[i].section);

@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_SCROLLBAR_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SCROLLBAR_ACCESSIBLE))
 #define GTK_SCROLLBAR_ACCESSIBLE_GET_CLASS(obj)           (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SCROLLBAR_ACCESSIBLE, GtkScrollbarAccessibleClass))
 
-typedef struct _GtkScrollbarAccessible      GtkScrollbarAccessible;
-typedef struct _GtkScrollbarAccessibleClass GtkScrollbarAccessibleClass;
+typedef struct _GtkScrollbarAccessible        GtkScrollbarAccessible;
+typedef struct _GtkScrollbarAccessibleClass   GtkScrollbarAccessibleClass;
+typedef struct _GtkScrollbarAccessiblePrivate GtkScrollbarAccessiblePrivate;
 
 struct _GtkScrollbarAccessible
 {
   GtkRangeAccessible parent;
+
+  GtkScrollbarAccessiblePrivate *priv;
 };
 
 struct _GtkScrollbarAccessibleClass

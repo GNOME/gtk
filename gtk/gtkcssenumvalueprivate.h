@@ -47,6 +47,18 @@ GtkCssValue *   _gtk_css_area_value_new               (GtkCssArea         area);
 GtkCssValue *   _gtk_css_area_value_try_parse         (GtkCssParser      *parser);
 GtkCssArea      _gtk_css_area_value_get               (const GtkCssValue *value);
 
+GtkCssValue *   _gtk_css_direction_value_new          (GtkCssDirection    direction);
+GtkCssValue *   _gtk_css_direction_value_try_parse    (GtkCssParser      *parser);
+GtkCssDirection _gtk_css_direction_value_get          (const GtkCssValue *value);
+
+GtkCssValue *   _gtk_css_play_state_value_new         (GtkCssPlayState    play_state);
+GtkCssValue *   _gtk_css_play_state_value_try_parse   (GtkCssParser      *parser);
+GtkCssPlayState _gtk_css_play_state_value_get         (const GtkCssValue *value);
+
+GtkCssValue *   _gtk_css_fill_mode_value_new          (GtkCssFillMode     fill_mode);
+GtkCssValue *   _gtk_css_fill_mode_value_try_parse    (GtkCssParser      *parser);
+GtkCssFillMode  _gtk_css_fill_mode_value_get          (const GtkCssValue *value);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_ENUM_VALUE_PRIVATE_H__ */

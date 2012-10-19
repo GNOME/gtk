@@ -18,43 +18,62 @@
 #include "config.h"
 #include <gtk/gtk.h>
 
+static gint num_windows = 0;
+
+static gboolean
+on_delete_event (GtkWidget *w,
+                 GdkEvent *event,
+                 gpointer user_data)
+{
+  num_windows--;
+  if (num_windows == 0)
+    gtk_main_quit ();
+
+  return FALSE;
+}
+
+static void
+prepare_window_for_orientation (GtkOrientation orientation)
+{
+  GtkWidget *window, *mainbox;
+  int max;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  g_signal_connect (window, "delete_event", G_CALLBACK (on_delete_event), NULL);
+
+  mainbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
+  gtk_container_add (GTK_CONTAINER (window), mainbox);
+
+  for (max = 9; max <= 999999999; max = max * 10 + 9)
+    {
+      GtkAdjustment *adj = gtk_adjustment_new (max,
+                                               1, max,
+                                               1,
+                                               (max + 1) / 10,
+                                               0.0);
+
+      GtkWidget *spin = gtk_spin_button_new (adj, 1.0, 0);
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (spin), orientation);
+      gtk_widget_set_halign (GTK_WIDGET (spin), GTK_ALIGN_CENTER);
+
+      GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
+      gtk_box_pack_start (GTK_BOX (hbox), spin, FALSE, FALSE, 2);
+      gtk_container_add (GTK_CONTAINER (mainbox), hbox);
+    }
+
+  gtk_widget_show_all (window);
+  num_windows++;
+}
+
 int
 main (int argc, char **argv)
 {
-        GtkWidget *window, *mainbox;
-	int max;
+  gtk_init (&argc, &argv);
 
-        gtk_init (&argc, &argv);
+  prepare_window_for_orientation (GTK_ORIENTATION_HORIZONTAL);
+  prepare_window_for_orientation (GTK_ORIENTATION_VERTICAL);
 
-        window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-        g_signal_connect (window, "delete_event", gtk_main_quit, NULL);
+  gtk_main ();
 
-        mainbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-        gtk_container_add (GTK_CONTAINER (window), mainbox);
-
-	for (max = 9; max <= 999999999; max = max * 10 + 9) {
-                GtkAdjustment *adj = gtk_adjustment_new (max,
-                                                         1, max,
-                                                         1,
-                                                         (max + 1) / 10,
-                                                         0.0);
-
-		GtkWidget *spin = gtk_spin_button_new (adj, 1.0, 0);
-		GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
-
-		gtk_box_pack_start (GTK_BOX (hbox),
-				    spin,
-				    FALSE,
-				    FALSE,
-				    2);
-
-		gtk_container_add (GTK_CONTAINER (mainbox), hbox);
-
-	}
-
-        gtk_widget_show_all (window);
-
-        gtk_main ();
-
-        return 0;
+  return 0;
 }

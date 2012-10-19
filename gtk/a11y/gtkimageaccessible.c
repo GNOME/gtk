@@ -21,6 +21,11 @@
 #include <gtk/gtk.h>
 #include "gtkimageaccessible.h"
 
+struct _GtkImageAccessiblePrivate
+{
+  gchar *image_description;
+  gchar *stock_name;
+};
 
 static void atk_image_interface_init (AtkImageIface  *iface);
 
@@ -41,8 +46,8 @@ gtk_image_accessible_finalize (GObject *object)
 {
   GtkImageAccessible *aimage = GTK_IMAGE_ACCESSIBLE (object);
 
-  g_free (aimage->image_description);
-  g_free (aimage->stock_name);
+  g_free (aimage->priv->image_description);
+  g_free (aimage->priv->stock_name);
 
   G_OBJECT_CLASS (_gtk_image_accessible_parent_class)->finalize (object);
 }
@@ -68,8 +73,8 @@ gtk_image_accessible_get_name (AtkObject *accessible)
   image = GTK_IMAGE (widget);
   image_accessible = GTK_IMAGE_ACCESSIBLE (accessible);
 
-  g_free (image_accessible->stock_name);
-  image_accessible->stock_name = NULL;
+  g_free (image_accessible->priv->stock_name);
+  image_accessible->priv->stock_name = NULL;
 
   if (gtk_image_get_storage_type (image) != GTK_IMAGE_STOCK)
     return NULL;
@@ -81,8 +86,8 @@ gtk_image_accessible_get_name (AtkObject *accessible)
   if (!gtk_stock_lookup (stock_id, &stock_item))
     return NULL;
 
-  image_accessible->stock_name = _gtk_toolbar_elide_underscores (stock_item.label);
-  return image_accessible->stock_name;
+  image_accessible->priv->stock_name = _gtk_toolbar_elide_underscores (stock_item.label);
+  return image_accessible->priv->stock_name;
 }
 
 static void
@@ -94,11 +99,16 @@ _gtk_image_accessible_class_init (GtkImageAccessibleClass *klass)
   gobject_class->finalize = gtk_image_accessible_finalize;
   class->initialize = gtk_image_accessible_initialize;
   class->get_name = gtk_image_accessible_get_name;
+
+  g_type_class_add_private (klass, sizeof (GtkImageAccessiblePrivate));
 }
 
 static void
 _gtk_image_accessible_init (GtkImageAccessible *image)
 {
+  image->priv = G_TYPE_INSTANCE_GET_PRIVATE (image,
+                                             GTK_TYPE_IMAGE_ACCESSIBLE,
+                                             GtkImageAccessiblePrivate);
 }
 
 static const gchar *
@@ -106,7 +116,7 @@ gtk_image_accessible_get_image_description (AtkImage *image)
 {
   GtkImageAccessible *accessible = GTK_IMAGE_ACCESSIBLE (image);
 
-  return accessible->image_description;
+  return accessible->priv->image_description;
 }
 
 static void
@@ -187,8 +197,8 @@ gtk_image_accessible_set_image_description (AtkImage    *image,
 {
   GtkImageAccessible* accessible = GTK_IMAGE_ACCESSIBLE (image);
 
-  g_free (accessible->image_description);
-  accessible->image_description = g_strdup (description);
+  g_free (accessible->priv->image_description);
+  accessible->priv->image_description = g_strdup (description);
 
   return TRUE;
 }

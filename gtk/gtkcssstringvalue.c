@@ -29,14 +29,17 @@ struct _GtkCssValue {
 static void
 gtk_css_value_string_free (GtkCssValue *value)
 {
+  g_free (value->string);
   g_slice_free (GtkCssValue, value);
 }
 
 static GtkCssValue *
-gtk_css_value_string_compute (GtkCssValue        *value,
-                              guint               property_id,
-                              GtkStyleContext    *context,
-                              GtkCssDependencies *dependencies)
+gtk_css_value_string_compute (GtkCssValue             *value,
+                              guint                    property_id,
+                              GtkStyleProviderPrivate *provider,
+                              GtkCssComputedValues    *values,
+                              GtkCssComputedValues    *parent_values,
+                              GtkCssDependencies      *dependencies)
 {
   return _gtk_css_value_ref (value);
 }
@@ -51,6 +54,7 @@ gtk_css_value_string_equal (const GtkCssValue *value1,
 static GtkCssValue *
 gtk_css_value_string_transition (GtkCssValue *start,
                                  GtkCssValue *end,
+                                 guint        property_id,
                                  double       progress)
 {
   return NULL;
@@ -62,6 +66,12 @@ gtk_css_value_string_print (const GtkCssValue *value,
 {
   char *string = value->string;
   gsize len;
+
+  if (string == NULL)
+    {
+      g_string_append (str, "none");
+      return;
+    }
 
   g_string_append_c (str, '"');
 

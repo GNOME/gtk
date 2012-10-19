@@ -18,6 +18,8 @@ demos =						\
 	css_accordion.c                         \
 	css_basics.c				\
 	css_multiplebgs.c			\
+	css_pixbufs.c				\
+	css_shadows.c				\
 	dialog.c				\
 	drawingarea.c				\
 	editable_cells.c			\
@@ -118,6 +120,8 @@ RESOURCES=	application.ui			\
 		css_accordion.css		\
 		css_basics.css			\
 		css_multiplebgs.css		\
+		css_pixbufs.css			\
+		css_shadows.css			\
 		cssview.css			\
 		fancy.css			\
 		reset.css

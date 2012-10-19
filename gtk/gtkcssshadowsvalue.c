@@ -48,10 +48,12 @@ gtk_css_value_shadows_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_shadows_compute (GtkCssValue        *value,
-                               guint               property_id,
-                               GtkStyleContext    *context,
-                               GtkCssDependencies *dependencies)
+gtk_css_value_shadows_compute (GtkCssValue             *value,
+                               guint                    property_id,
+                               GtkStyleProviderPrivate *provider,
+                               GtkCssComputedValues    *values,
+                               GtkCssComputedValues    *parent_values,
+                               GtkCssDependencies      *dependencies)
 {
   GtkCssValue *result;
   GtkCssDependencies child_deps;
@@ -63,7 +65,7 @@ gtk_css_value_shadows_compute (GtkCssValue        *value,
   result = gtk_css_shadows_value_new (value->values, value->len);
   for (i = 0; i < value->len; i++)
     {
-      result->values[i] = _gtk_css_value_compute (value->values[i], property_id, context, &child_deps);
+      result->values[i] = _gtk_css_value_compute (value->values[i], property_id, provider, values, parent_values, &child_deps);
       *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
     }
 
@@ -93,44 +95,67 @@ gtk_css_value_shadows_equal (const GtkCssValue *value1,
 static GtkCssValue *
 gtk_css_value_shadows_transition (GtkCssValue *start,
                                   GtkCssValue *end,
+                                  guint        property_id,
                                   double       progress)
 {
-  GtkCssValue *result;
-  guint i;
+  guint i, len;
+  GtkCssValue **values;
 
   /* catches the important case of 2 none values */
   if (start == end)
     return _gtk_css_value_ref (start);
 
   if (start->len > end->len)
-    result = gtk_css_shadows_value_new (start->values, start->len);
+    len = start->len;
   else
-    result = gtk_css_shadows_value_new (end->values, end->len);
+    len = end->len;
+
+  values = g_newa (GtkCssValue *, len);
 
   for (i = 0; i < MIN (start->len, end->len); i++)
     {
-      result->values[i] = _gtk_css_value_transition (start->values[i], end->values[i], progress);
+      values[i] = _gtk_css_value_transition (start->values[i], end->values[i], property_id, progress);
+      if (values[i] == NULL)
+        {
+          while (i--)
+            _gtk_css_value_unref (values[i]);
+          return NULL;
+        }
     }
   if (start->len > end->len)
     {
-      for (; i < result->len; i++)
+      for (; i < len; i++)
         {
           GtkCssValue *fill = _gtk_css_shadow_value_new_for_transition (start->values[i]);
-          result->values[i] = _gtk_css_value_transition (start->values[i], fill, progress);
+          values[i] = _gtk_css_value_transition (start->values[i], fill, property_id, progress);
           _gtk_css_value_unref (fill);
+
+          if (values[i] == NULL)
+            {
+              while (i--)
+                _gtk_css_value_unref (values[i]);
+              return NULL;
+            }
         }
     }
   else
     {
-      for (; i < result->len; i++)
+      for (; i < len; i++)
         {
           GtkCssValue *fill = _gtk_css_shadow_value_new_for_transition (end->values[i]);
-          result->values[i] = _gtk_css_value_transition (fill, end->values[i], progress);
+          values[i] = _gtk_css_value_transition (fill, end->values[i], property_id, progress);
           _gtk_css_value_unref (fill);
+
+          if (values[i] == NULL)
+            {
+              while (i--)
+                _gtk_css_value_unref (values[i]);
+              return NULL;
+            }
         }
     }
 
-  return result;
+  return gtk_css_shadows_value_new (values, len);
 }
 
 static void

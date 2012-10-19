@@ -21,6 +21,7 @@
 
 #include "gtkcssshadowvalueprivate.h"
 
+#include "gtkcairoblurprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -60,32 +61,34 @@ gtk_css_value_shadow_free (GtkCssValue *shadow)
 }
 
 static GtkCssValue *
-gtk_css_value_shadow_compute (GtkCssValue        *shadow,
-                              guint               property_id,
-                              GtkStyleContext    *context,
-                              GtkCssDependencies *dependencies)
+gtk_css_value_shadow_compute (GtkCssValue             *shadow,
+                              guint                    property_id,
+                              GtkStyleProviderPrivate *provider,
+                              GtkCssComputedValues    *values,
+                              GtkCssComputedValues    *parent_values,
+                              GtkCssDependencies      *dependencies)
 {
   GtkCssValue *hoffset, *voffset, *radius, *spread, *color;
   GtkCssDependencies child_deps;
 
   child_deps = 0;
-  hoffset = _gtk_css_value_compute (shadow->hoffset, property_id, context, &child_deps);
+  hoffset = _gtk_css_value_compute (shadow->hoffset, property_id, provider, values, parent_values, &child_deps);
   *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
 
   child_deps = 0;
-  voffset = _gtk_css_value_compute (shadow->voffset, property_id, context, &child_deps);
+  voffset = _gtk_css_value_compute (shadow->voffset, property_id, provider, values, parent_values, &child_deps);
   *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
 
   child_deps = 0;
-  radius = _gtk_css_value_compute (shadow->radius, property_id, context, &child_deps);
+  radius = _gtk_css_value_compute (shadow->radius, property_id, provider, values, parent_values, &child_deps);
   *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
 
   child_deps = 0;
-  spread = _gtk_css_value_compute (shadow->spread, property_id, context, &child_deps),
+  spread = _gtk_css_value_compute (shadow->spread, property_id, provider, values, parent_values, &child_deps),
   *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
 
   child_deps = 0;
-  color = _gtk_css_value_compute (shadow->color, property_id, context, &child_deps);
+  color = _gtk_css_value_compute (shadow->color, property_id, provider, values, parent_values, &child_deps);
   *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
 
   return gtk_css_shadow_value_new (hoffset, voffset, radius, spread, shadow->inset, color);
@@ -106,17 +109,18 @@ gtk_css_value_shadow_equal (const GtkCssValue *shadow1,
 static GtkCssValue *
 gtk_css_value_shadow_transition (GtkCssValue *start,
                                  GtkCssValue *end,
+                                 guint        property_id,
                                  double       progress)
 {
   if (start->inset != end->inset)
     return NULL;
 
-  return gtk_css_shadow_value_new (_gtk_css_value_transition (start->hoffset, end->hoffset, progress),
-                                   _gtk_css_value_transition (start->voffset, end->voffset, progress),
-                                   _gtk_css_value_transition (start->radius, end->radius, progress),
-                                   _gtk_css_value_transition (start->spread, end->spread, progress),
+  return gtk_css_shadow_value_new (_gtk_css_value_transition (start->hoffset, end->hoffset, property_id, progress),
+                                   _gtk_css_value_transition (start->voffset, end->voffset, property_id, progress),
+                                   _gtk_css_value_transition (start->radius, end->radius, property_id, progress),
+                                   _gtk_css_value_transition (start->spread, end->spread, property_id, progress),
                                    start->inset,
-                                   _gtk_css_value_transition (start->color, end->color, progress));
+                                   _gtk_css_value_transition (start->color, end->color, property_id, progress));
 }
 
 static void
@@ -301,6 +305,69 @@ fail:
   return NULL;
 }
 
+static const cairo_user_data_key_t shadow_key;
+
+static cairo_t *
+gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
+                                    cairo_t           *cr)
+{
+  cairo_rectangle_int_t clip_rect;
+  cairo_surface_t *surface;
+  cairo_t *blur_cr;
+  gdouble radius;
+
+  radius = _gtk_css_number_value_get (shadow->radius, 0);
+  if (radius == 0.0)
+    return cr;
+
+  gdk_cairo_get_clip_rectangle (cr, &clip_rect);
+
+  /* Create a larger surface to center the blur. */
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        clip_rect.width + 2 * radius,
+                                        clip_rect.height + 2 * radius);
+  cairo_surface_set_device_offset (surface, radius - clip_rect.x, radius - clip_rect.y);
+  blur_cr = cairo_create (surface);
+  cairo_set_user_data (blur_cr, &shadow_key, cairo_reference (cr), (cairo_destroy_func_t) cairo_destroy);
+
+  if (cairo_has_current_point (cr))
+    {
+      double x, y;
+      
+      cairo_get_current_point (cr, &x, &y);
+      cairo_move_to (blur_cr, x, y);
+    }
+
+  return blur_cr;
+}
+
+static cairo_t *
+gtk_css_shadow_value_finish_drawing (const GtkCssValue *shadow,
+                                     cairo_t           *cr)
+{
+  gdouble radius;
+  cairo_t *original_cr;
+  cairo_surface_t *surface;
+
+  radius = _gtk_css_number_value_get (shadow->radius, 0);
+  if (radius == 0.0)
+    return cr;
+
+  surface = cairo_get_target (cr);
+  original_cr = cairo_get_user_data (cr, &shadow_key);
+
+  /* Blur the surface. */
+  _gtk_cairo_blur_surface (surface, radius);
+
+  cairo_set_source_surface (original_cr, surface, 0, 0);
+  cairo_paint (original_cr);
+
+  cairo_destroy (cr);
+  cairo_surface_destroy (surface);
+
+  return original_cr;
+}
+
 void
 _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
                                     cairo_t           *cr,
@@ -316,8 +383,13 @@ _gtk_css_shadow_value_paint_layout (const GtkCssValue *shadow,
   cairo_rel_move_to (cr, 
                      _gtk_css_number_value_get (shadow->hoffset, 0),
                      _gtk_css_number_value_get (shadow->voffset, 0));
+
+  cr = gtk_css_shadow_value_start_drawing (shadow, cr);
+
   gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
   _gtk_pango_fill_layout (cr, layout);
+
+  cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
 
   cairo_rel_move_to (cr,
                      - _gtk_css_number_value_get (shadow->hoffset, 0),
@@ -335,12 +407,17 @@ _gtk_css_shadow_value_paint_icon (const GtkCssValue *shadow,
 
   cairo_save (cr);
   pattern = cairo_pattern_reference (cairo_get_source (cr));
+
+  cr = gtk_css_shadow_value_start_drawing (shadow, cr);
+
   gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
 
   cairo_translate (cr,
                    _gtk_css_number_value_get (shadow->hoffset, 0),
                    _gtk_css_number_value_get (shadow->voffset, 0));
   cairo_mask (cr, pattern);
+
+  cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
 
   cairo_restore (cr);
   cairo_pattern_destroy (pattern);
@@ -356,12 +433,16 @@ _gtk_css_shadow_value_paint_spinner (const GtkCssValue *shadow,
 
   cairo_save (cr);
 
+  cr = gtk_css_shadow_value_start_drawing (shadow, cr);
+
   cairo_translate (cr,
                    _gtk_css_number_value_get (shadow->hoffset, 0),
                    _gtk_css_number_value_get (shadow->voffset, 0));
   _gtk_theming_engine_paint_spinner (cr,
                                      radius, progress,
                                      _gtk_css_rgba_value_get_rgba (shadow->color));
+
+  cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
 
   cairo_restore (cr);
 }
@@ -371,13 +452,12 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
                                  cairo_t             *cr,
                                  const GtkRoundedBox *padding_box)
 {
-  GtkRoundedBox box;
-  double spread;
+  GtkRoundedBox box, clip_box;
+  double spread, radius;
 
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
   cairo_save (cr);
-  cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
 
   _gtk_rounded_box_path (padding_box, cr);
   cairo_clip (cr);
@@ -389,11 +469,20 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
   spread = _gtk_css_number_value_get (shadow->spread, 0);
   _gtk_rounded_box_shrink (&box, spread, spread, spread, spread);
 
+  clip_box = *padding_box;
+  radius = _gtk_css_number_value_get (shadow->radius, 0);
+  _gtk_rounded_box_shrink (&clip_box, -radius, -radius, -radius, -radius);
+
+  cr = gtk_css_shadow_value_start_drawing (shadow, cr);
+
+  cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
   _gtk_rounded_box_path (&box, cr);
-  _gtk_rounded_box_clip_path (padding_box, cr);
+  _gtk_rounded_box_clip_path (&clip_box, cr);
 
   gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
   cairo_fill (cr);
+
+  cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
 
   cairo_restore (cr);
 }

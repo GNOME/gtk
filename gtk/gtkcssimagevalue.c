@@ -34,10 +34,12 @@ gtk_css_value_image_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_image_compute (GtkCssValue        *value,
-                             guint               property_id,
-                             GtkStyleContext    *context,
-                             GtkCssDependencies *dependencies)
+gtk_css_value_image_compute (GtkCssValue             *value,
+                             guint                    property_id,
+                             GtkStyleProviderPrivate *provider,
+                             GtkCssComputedValues    *values,
+                             GtkCssComputedValues    *parent_values,
+                             GtkCssDependencies      *dependencies)
 {
   GtkCssImage *image, *computed;
   
@@ -46,7 +48,7 @@ gtk_css_value_image_compute (GtkCssValue        *value,
   if (image == NULL)
     return _gtk_css_value_ref (value);
 
-  computed = _gtk_css_image_compute (image, property_id, context, dependencies);
+  computed = _gtk_css_image_compute (image, property_id, provider, values, parent_values, dependencies);
 
   if (computed == image)
     {
@@ -67,15 +69,17 @@ gtk_css_value_image_equal (const GtkCssValue *value1,
 static GtkCssValue *
 gtk_css_value_image_transition (GtkCssValue *start,
                                 GtkCssValue *end,
+                                guint        property_id,
                                 double       progress)
 {
-  GtkCssImage *fade;
+  GtkCssImage *transition;
 
-  fade = _gtk_css_image_cross_fade_new (_gtk_css_image_value_get_image (start),
-                                        _gtk_css_image_value_get_image (end),
-                                        progress);
+  transition = _gtk_css_image_transition (_gtk_css_image_value_get_image (start),
+                                          _gtk_css_image_value_get_image (end),
+                                          property_id,
+                                          progress);
       
-  return _gtk_css_image_value_new (fade);
+  return _gtk_css_image_value_new (transition);
 }
 
 static void

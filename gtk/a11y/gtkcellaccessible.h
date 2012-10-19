@@ -30,12 +30,15 @@ G_BEGIN_DECLS
 #define GTK_IS_CELL_ACCESSIBLE_CLASS(klass)                (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CELL_ACCESSIBLE))
 #define GTK_CELL_ACCESSIBLE_GET_CLASS(obj)                 (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_ACCESSIBLE, GtkCellAccessibleClass))
 
-typedef struct _GtkCellAccessible      GtkCellAccessible;
-typedef struct _GtkCellAccessibleClass GtkCellAccessibleClass;
+typedef struct _GtkCellAccessible        GtkCellAccessible;
+typedef struct _GtkCellAccessibleClass   GtkCellAccessibleClass;
+typedef struct _GtkCellAccessiblePrivate GtkCellAccessiblePrivate;
 
 struct _GtkCellAccessible
 {
   GtkAccessible parent;
+
+  GtkCellAccessiblePrivate *priv;
 };
 
 struct _GtkCellAccessibleClass

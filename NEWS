@@ -1,3 +1,191 @@
+Overview of Changes in GTK+ 3.6.1
+=================================
+
+* CSS:
+ - huge refactoring to avoid computing wrong values
+ - treeview: Invalidate children properly
+ - treeview: Fix computing child paths
+
+* Broadway:
+ - use binary websockets when available
+
+* Bugs fixed:
+ 646221 Imperfect Russian translation of 'Print preview'...
+ 682395 Nautilus tabs have black background
+ 684517 window: Delay showing auto mnemonics on focus in
+ 684639 GTK+ 3.5.18 makes Epiphany unusable
+ 684984 No focus rendering for Icon Views in SELECTION_N...
+ 685449 Non-uniform borders on GtkScrolledWindow break c...
+ 685996 trivial build fix: test uses = not ==
+        Fix a multi-display problem in touch handle code
+        App chooser: respect NoDisplay
+
+* Translation updates:
+ Catalan
+ Catalan (Valencian)
+ Italian
+ Japanese
+ Khmer
+ Norwegian bokmål
+ Russian
+ Slovak
+
+
+Overview of Changes in GTK+ 3.6.0
+=================================
+
+* Add support for blur to CSS shadows
+
+* Bugs fixed:
+ 679883 When printing Custom paper sizes GTK Print Dialog...
+ 684258 Crash when calling gtk_application_set_menubar twice
+ 684606 GtkMenuButton: implement rtl flipping
+ 684607 GtkSearchEntry: flip the clear icon in rtl
+        Fix style context path for internal buttons
+
+* Translation updates:
+ Bengali
+ Brazilian Portuguese
+ Bulgarian
+ Catalan
+ Catalan (Valencian)
+ Czech
+ Galician
+ German
+ Gujarati
+ Hebrew
+ Hindi
+ Kannada
+ Kyrgyz
+ Latvian
+ Malayalam
+ Punjabi
+ Russian
+ Serbian
+ Telugu
+
+
+Overview of Changes in GTK+ 3.5.18
+==================================
+
+* GMenu:
+ - Support namespaces for actions
+ - Allow submenus to have actions for opening
+ - New function: gtk_menu_shell_bind_model
+
+* CSS:
+ - Parse and support CSS animations
+ - Support cross-fading and transitions
+
+* OS X:
+ - Adjust scrollbar and scale behavior according to platform
+
+* Bugs fixed
+ 643611 Leak on gail_widget_get_description
+ 658694 GtkAssistant: Unable to change current page in prepare...
+ 670390 -GtkMenuBar-shadow-type: none disables background inst...
+ 671786 Glade XML files cannot set an ImageMenuItem accelerato...
+ 674108 Hard crash due to wrong NSAutoreleasePool stacking
+ 676890 GtkButton are still highlighted after removing them fr...
+ 677559 argument of Gdk.Keymap.map_virtual_modifiers is not co...
+ 680962 GtkMenuButton doesn't display accelerators when used w...
+ 682630 GMenuModel attribute for an action to toggle on submen...
+ 682831 gtkmodelmenu: expose API for action namespace
+ 683474 Print dialog lists custom paper sizes twice for "Print...
+ 683627 Memory leak in style_data_lookup
+ 683718 box: Fix typo
+ 683738 Simplify GtkApplicationWindow accel handling
+ 683874 Load settings.ini also from XDG_CONFIG_DIRS
+ 683896 Clean up global resources when the display is closed
+ 684038 togglebutton: always set PRELIGHT state when in_button...
+ 684076 clean up a11y on shutdown
+ 684096 GtkWidget:drag-data-received code sample refers to rem...
+ 684156 fontchooserwidget: scroll to the currently selected row
+
+* Translation updates
+ Arabic
+ Assamese
+ Belarusian
+ Brazilian Portuguese
+ British English
+ Danish
+ Finnish
+ French
+ Galician
+ Greek
+ Hebrew
+ Hungarian
+ Indonesian
+ Korean
+ Lithuanian
+ Persian
+ Polish
+ Portuguese
+ Punjabi
+ Serbian
+ Slovenian
+ Thai
+ Spanish
+ Russian
+ Traditional Chinese
+
+
+Overview of Changes in GTK+ 3.5.16
+==================================
+
+* Fix critical warnings on startup in nautilus
+
+
+Overview of Changes in GTK+ 3.5.14
+==================================
+
+* Input method support
+ - Propagate input purpose and hints to individual IMs
+ - Add a hint to suppress on-screen keyboards
+
+* GtkEntry can now set Pango attributes for its text
+
+* GtkEntry and GtkTextView show 'selection handles' when
+  used with touch devices
+
+* GtkSpinButton can be oriented vertically
+
+* Bugs fixed
+ 645065 GtkFileChooserButton doesn't handle closing its dialo...
+ 661973 gtk+ reacts on F10 press incorrectly with xkeyboard-c...
+ 672046 Issues with widget state propagation
+ 672431 the alt+tab app switch makes mnemonics flash
+ 676787 Update printing demo to use new print setting
+ 679144 Gdk doesn't properly find the child area with alpha
+ 681617 radio button text isn't centered when draw indicator ...
+ 682129 Print Dialog / Improving "Print to file" option
+ 682291 GtkMenuButton .ui issues
+ 682552 Improve the layout of the mount operations dialog
+ 682662 GtkAspectFrame: vertical alignment should be top/bott...
+ 682724 Fix a typo in the the comments
+ 682825 Also compile gtkdbusgenerated.c on non-UNIX environme...
+ 682919 Crash in GTK+-3.x (3.0.x-3.5.12+) on Windows with CJK...
+ 683001 Make headings bold in message dialogs by default
+ 683168 Make spinbutton orientable
+
+* Translation updates
+ Assamese
+ French
+ Galician
+ Greek
+ Indonesian
+ Japanese
+ Kazakh
+ Latvian
+ Lithuanian
+ Norwegian bokmål
+ Persian
+ Polish
+ Punjabi
+ Spanish
+ Vietnamese
+
+
 Overview of Changes in GTK+ 3.5.12
 ==================================
 

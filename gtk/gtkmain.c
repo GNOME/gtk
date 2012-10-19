@@ -128,6 +128,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 
+#include "a11y/gail.h"
 #include "a11y/gailutil.h"
 
 /* Private type definitions
@@ -669,9 +670,6 @@ gettext_initialization (void)
 #endif  
 }
 
-/* XXX: Remove me after getting rid of gail */
-extern void _gtk_accessibility_init (void);
-
 static void
 do_post_parse_initialization (int    *argc,
                               char ***argv)
@@ -1172,11 +1170,15 @@ gtk_main (void)
 
   if (gtk_main_loop_level == 0)
     {
+      /* Keep this section in sync with gtk_application_shutdown() */
+
       /* Try storing all clipboard data we have */
       _gtk_clipboard_store_all ();
 
       /* Synchronize the recent manager singleton */
       _gtk_recent_manager_sync ();
+
+      _gtk_accessibility_shutdown ();
     }
 }
 
@@ -1698,7 +1700,12 @@ gtk_main_do_event (GdkEvent *event)
 
               window = gtk_widget_get_toplevel (grab_widget);
               if (GTK_IS_WINDOW (window))
-                gtk_window_set_mnemonics_visible (GTK_WINDOW (window), mnemonics_visible);
+                {
+                  if (mnemonics_visible)
+                    _gtk_window_set_auto_mnemonics_visible (GTK_WINDOW (window));
+                  else
+                    gtk_window_set_mnemonics_visible (GTK_WINDOW (window), FALSE);
+                }
             }
         }
       /* else fall through */

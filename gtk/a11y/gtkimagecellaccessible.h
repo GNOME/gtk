@@ -30,15 +30,15 @@ G_BEGIN_DECLS
 #define GTK_IS_IMAGE_CELL_ACCESSIBLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IMAGE_CELL_ACCESSIBLE))
 #define GTK_IMAGE_CELL_ACCESSIBLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IMAGE_CELL_ACCESSIBLE, GtkImageCellAccessibleClass))
 
-typedef struct _GtkImageCellAccessible      GtkImageCellAccessible;
-typedef struct _GtkImageCellAccessibleClass GtkImageCellAccessibleClass;
+typedef struct _GtkImageCellAccessible        GtkImageCellAccessible;
+typedef struct _GtkImageCellAccessibleClass   GtkImageCellAccessibleClass;
+typedef struct _GtkImageCellAccessiblePrivate GtkImageCellAccessiblePrivate;
 
 struct _GtkImageCellAccessible
 {
   GtkRendererCellAccessible parent;
 
-  gchar            *image_description;
-  gint             x, y;
+  GtkImageCellAccessiblePrivate *priv;
 };
 
 struct _GtkImageCellAccessibleClass

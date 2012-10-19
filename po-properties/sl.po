@@ -7,15 +7,15 @@
 # Matic Žgur <mr.zgur@gmail.com>, 2006.
 # Andrej Žnidaršič <andrej.znidarsic@gmail.com>, 2010.
 # Klemen Košir <klemen.kosir@gmx.com>, 2010 - 2011.
-# Martin Srebotnjak <miles@filmsi.net>, 2007 - 2012 .
+# Martin Srebotnjak <miles@filmsi.net>, 2007 - 2012.
 # Matej Urbančič <mateju@svn.gnome.org>, 2007 - 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-05-27 10:41+0000\n"
-"PO-Revision-Date: 2012-05-28 14:40+0100\n"
+"POT-Creation-Date: 2012-10-18 01:27+0000\n"
+"PO-Revision-Date: 2012-10-18 08:08+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: Slovenian\n"
@@ -120,24 +120,24 @@ msgstr "Privzeti prikaz"
 msgid "The default display for GDK"
 msgstr "Privzeti prikaz za GDK"
 
-#: ../gdk/gdkscreen.c:90
+#: ../gdk/gdkscreen.c:91
 msgid "Font options"
 msgstr "Možnosti pisave"
 
-#: ../gdk/gdkscreen.c:91
+#: ../gdk/gdkscreen.c:92
 msgid "The default font options for the screen"
 msgstr "Privzete možnosti pisave zaslona"
 
-#: ../gdk/gdkscreen.c:98
+#: ../gdk/gdkscreen.c:99
 msgid "Font resolution"
 msgstr "Ločljivost pisave"
 
-#: ../gdk/gdkscreen.c:99
+#: ../gdk/gdkscreen.c:100
 msgid "The resolution for fonts on the screen"
 msgstr "Ločljivost pisav na zaslonu"
 
-#: ../gdk/gdkwindow.c:366
-#: ../gdk/gdkwindow.c:367
+#: ../gdk/gdkwindow.c:384
+#: ../gdk/gdkwindow.c:385
 msgid "Cursor"
 msgstr "Kazalka"
 
@@ -173,11 +173,11 @@ msgstr "ID naprave"
 msgid "Device identifier"
 msgstr "Določilo naprave"
 
-#: ../gtk/a11y/gtkrenderercellaccessible.c:93
+#: ../gtk/a11y/gtkrenderercellaccessible.c:97
 msgid "Cell renderer"
 msgstr "Izrisovalnik celic"
 
-#: ../gtk/a11y/gtkrenderercellaccessible.c:94
+#: ../gtk/a11y/gtkrenderercellaccessible.c:98
 msgid "The cell renderer represented by this accessible"
 msgstr "Izrisovalnik celic, ki ga predstavlja ta dostopnica."
 
@@ -276,10 +276,10 @@ msgstr "Besedilo, ki se naj prikaže za predstavitev izbrane pisave"
 
 #: ../gtk/deprecated/gtkhandlebox.c:224
 #: ../gtk/gtkcombobox.c:1067
-#: ../gtk/gtkentry.c:894
+#: ../gtk/gtkentry.c:890
 #: ../gtk/gtkmenubar.c:216
 #: ../gtk/gtkstatusbar.c:182
-#: ../gtk/gtktoolbar.c:616
+#: ../gtk/gtktoolbar.c:631
 #: ../gtk/gtkviewport.c:155
 msgid "Shadow type"
 msgstr "Vrsta sence"
@@ -366,8 +366,8 @@ msgstr "Količina prostora med zaporednima stolpcema"
 
 #: ../gtk/deprecated/gtktable.c:227
 #: ../gtk/gtkbox.c:253
-#: ../gtk/gtktoolbar.c:566
-#: ../gtk/gtktoolitemgroup.c:1641
+#: ../gtk/gtktoolbar.c:563
+#: ../gtk/gtktoolitemgroup.c:1650
 msgid "Homogeneous"
 msgstr "Homogenost"
 
@@ -556,19 +556,19 @@ msgstr "Prelom dovoljenja"
 msgid "Whether to wrap the license text."
 msgstr "Ali naj bodo vrstice besedila dovoljenja prelomljene."
 
-#: ../gtk/gtkaccellabel.c:185
+#: ../gtk/gtkaccellabel.c:188
 msgid "Accelerator Closure"
 msgstr "Zaprtje pospeševalnika"
 
-#: ../gtk/gtkaccellabel.c:186
+#: ../gtk/gtkaccellabel.c:189
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Zaprtje naj bo nadzorovano za spremembe pospeševalnika"
 
-#: ../gtk/gtkaccellabel.c:192
+#: ../gtk/gtkaccellabel.c:195
 msgid "Accelerator Widget"
 msgstr "Gradnik pospeševalnika"
 
-#: ../gtk/gtkaccellabel.c:193
+#: ../gtk/gtkaccellabel.c:196
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Gradnik, nadzorovan za spremembe pospeševalnika"
 
@@ -598,10 +598,10 @@ msgid "The parameter for action invocations"
 msgstr "Parameter obujenja dejanja"
 
 #: ../gtk/gtkaction.c:220
-#: ../gtk/gtkactiongroup.c:226
+#: ../gtk/gtkactiongroup.c:228
 #: ../gtk/gtkprinter.c:123
 #: ../gtk/gtktextmark.c:126
-#: ../gtk/gtkthemingengine.c:255
+#: ../gtk/gtkthemingengine.c:257
 msgid "Name"
 msgstr "Ime"
 
@@ -610,13 +610,13 @@ msgid "A unique name for the action."
 msgstr "Edinstveno ime dejanja."
 
 #: ../gtk/gtkaction.c:239
-#: ../gtk/gtkbutton.c:236
+#: ../gtk/gtkbutton.c:232
 #: ../gtk/gtkexpander.c:288
 #: ../gtk/gtkframe.c:170
 #: ../gtk/gtklabel.c:726
-#: ../gtk/gtkmenuitem.c:375
+#: ../gtk/gtkmenuitem.c:430
 #: ../gtk/gtktoolbutton.c:239
-#: ../gtk/gtktoolitemgroup.c:1588
+#: ../gtk/gtktoolitemgroup.c:1597
 msgid "Label"
 msgstr "Oznaka"
 
@@ -665,7 +665,7 @@ msgstr "Prikazan predmet GIcon"
 #: ../gtk/gtkimage.c:291
 #: ../gtk/gtkprinter.c:172
 #: ../gtk/gtkstatusicon.c:247
-#: ../gtk/gtkwindow.c:779
+#: ../gtk/gtkwindow.c:783
 msgid "Icon Name"
 msgstr "Ime ikone"
 
@@ -722,9 +722,9 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Izbrana možnost omogoča, da so prazni predmeti menija skriti."
 
 #: ../gtk/gtkaction.c:379
-#: ../gtk/gtkactiongroup.c:233
+#: ../gtk/gtkactiongroup.c:235
 #: ../gtk/gtkcellrenderer.c:296
-#: ../gtk/gtkwidget.c:1023
+#: ../gtk/gtkwidget.c:1025
 msgid "Sensitive"
 msgstr "Občutljivo"
 
@@ -733,10 +733,10 @@ msgid "Whether the action is enabled."
 msgstr "Ali naj je dejanje omogočeno."
 
 #: ../gtk/gtkaction.c:386
-#: ../gtk/gtkactiongroup.c:240
+#: ../gtk/gtkactiongroup.c:242
 #: ../gtk/gtkstatusicon.c:298
 #: ../gtk/gtktreeviewcolumn.c:247
-#: ../gtk/gtkwidget.c:1016
+#: ../gtk/gtkwidget.c:1018
 msgid "Visible"
 msgstr "Vidno"
 
@@ -753,28 +753,36 @@ msgid "The GtkActionGroup this GtkAction is associated with, or NULL (for intern
 msgstr "GtkActionGroup, s katero je povezan ta GtkAction, ali NULL (za notranjo uporabo)."
 
 #: ../gtk/gtkaction.c:412
-#: ../gtk/gtkbutton.c:357
+#: ../gtk/gtkbutton.c:353
 #: ../gtk/gtkimagemenuitem.c:192
 msgid "Always show image"
 msgstr "Vedno pokaži sliko"
 
 #: ../gtk/gtkaction.c:413
-#: ../gtk/gtkbutton.c:358
+#: ../gtk/gtkbutton.c:354
 #: ../gtk/gtkimagemenuitem.c:193
 msgid "Whether the image will always be shown"
 msgstr "Ali bo slika vedno prikazana"
 
-#: ../gtk/gtkactiongroup.c:227
+#: ../gtk/gtkactiongroup.c:229
 msgid "A name for the action group."
 msgstr "Ime skupine dejanj."
 
-#: ../gtk/gtkactiongroup.c:234
+#: ../gtk/gtkactiongroup.c:236
 msgid "Whether the action group is enabled."
 msgstr "Ali naj bo skupina dejanj omogočena."
 
-#: ../gtk/gtkactiongroup.c:241
+#: ../gtk/gtkactiongroup.c:243
 msgid "Whether the action group is visible."
 msgstr "Ali naj bo skupina dejanj vidna."
+
+#: ../gtk/gtkactiongroup.c:249
+msgid "Accelerator Group"
+msgstr "Skupina pospeševalnika"
+
+#: ../gtk/gtkactiongroup.c:250
+msgid "The accelerator group the actions of this group should use."
+msgstr "Dejanja skupine pospeševalnika, ki naj bi jih skupina izvajala."
 
 #: ../gtk/gtkactivatable.c:287
 msgid "Related Action"
@@ -795,7 +803,7 @@ msgstr "Ali naj se uporabi lastnosti povezanega dejanja videza"
 #: ../gtk/gtkadjustment.c:121
 #: ../gtk/gtkcellrendererprogress.c:136
 #: ../gtk/gtkscalebutton.c:218
-#: ../gtk/gtkspinbutton.c:380
+#: ../gtk/gtkspinbutton.c:397
 msgid "Value"
 msgstr "Vrednost"
 
@@ -848,7 +856,7 @@ msgid "Horizontal alignment"
 msgstr "Vodoravna poravnava"
 
 #: ../gtk/gtkalignment.c:136
-#: ../gtk/gtkbutton.c:287
+#: ../gtk/gtkbutton.c:283
 msgid "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"
 msgstr "Vodoravni položaj podrejenega predmeta v razpoložljivem prostoru. 0,0 je poravnan levo, 1,0 je poravnan desno"
 
@@ -857,7 +865,7 @@ msgid "Vertical alignment"
 msgstr "Navpična poravnava"
 
 #: ../gtk/gtkalignment.c:146
-#: ../gtk/gtkbutton.c:306
+#: ../gtk/gtkbutton.c:302
 msgid "Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"
 msgstr "Navpični položaj podrejenega predmeta v razpoložljivem prostoru. 0,0 je poravnan na vrh, 1,0 je poravnan na dno."
 
@@ -951,83 +959,91 @@ msgstr "GFile"
 msgid "The GFile used by the app chooser dialog"
 msgstr "Predmet GFile, ki ga uporablja pogovorno okno za izbor programa"
 
-#: ../gtk/gtkappchooserwidget.c:1023
+#: ../gtk/gtkappchooserwidget.c:1026
 msgid "Show default app"
 msgstr "Pokaži privzeti program"
 
-#: ../gtk/gtkappchooserwidget.c:1024
+#: ../gtk/gtkappchooserwidget.c:1027
 msgid "Whether the widget should show the default application"
 msgstr "Ali naj gradnik pokaže privzete programe"
 
-#: ../gtk/gtkappchooserwidget.c:1038
+#: ../gtk/gtkappchooserwidget.c:1041
 msgid "Show recommended apps"
 msgstr "Pokaži priporočene programe"
 
-#: ../gtk/gtkappchooserwidget.c:1039
+#: ../gtk/gtkappchooserwidget.c:1042
 msgid "Whether the widget should show recommended applications"
 msgstr "Ali naj gradnik pokaže priporočene programe"
 
-#: ../gtk/gtkappchooserwidget.c:1053
+#: ../gtk/gtkappchooserwidget.c:1056
 msgid "Show fallback apps"
 msgstr "Pokaži nadomestne programe"
 
-#: ../gtk/gtkappchooserwidget.c:1054
+#: ../gtk/gtkappchooserwidget.c:1057
 msgid "Whether the widget should show fallback applications"
 msgstr "Ali naj gradnik pokaže nadomestne programe"
 
-#: ../gtk/gtkappchooserwidget.c:1066
+#: ../gtk/gtkappchooserwidget.c:1069
 msgid "Show other apps"
 msgstr "Pokaži druge programe"
 
-#: ../gtk/gtkappchooserwidget.c:1067
+#: ../gtk/gtkappchooserwidget.c:1070
 msgid "Whether the widget should show other applications"
 msgstr "Ali naj gradnik pokaže druge programe"
 
-#: ../gtk/gtkappchooserwidget.c:1080
+#: ../gtk/gtkappchooserwidget.c:1083
 msgid "Show all apps"
 msgstr "Pokaži vse programe"
 
-#: ../gtk/gtkappchooserwidget.c:1081
+#: ../gtk/gtkappchooserwidget.c:1084
 msgid "Whether the widget should show all applications"
 msgstr "Ali naj gradnik pokaže vse programe"
 
-#: ../gtk/gtkappchooserwidget.c:1095
+#: ../gtk/gtkappchooserwidget.c:1098
 msgid "Widget's default text"
 msgstr "Privzeto besedilo gradnika"
 
-#: ../gtk/gtkappchooserwidget.c:1096
+#: ../gtk/gtkappchooserwidget.c:1099
 msgid "The default text appearing when there are no applications"
 msgstr "Privzeto besedilo, ki je prikazano, ko ni zagnanih programov"
 
-#: ../gtk/gtkapplication.c:736
+#: ../gtk/gtkapplication.c:738
 msgid "Register session"
 msgstr "Vpiši sejo"
 
-#: ../gtk/gtkapplication.c:737
+#: ../gtk/gtkapplication.c:739
 msgid "Register with the session manager"
 msgstr "Vpiši sejo v upravljalnik sej"
 
-#: ../gtk/gtkapplication.c:742
+#: ../gtk/gtkapplication.c:744
 msgid "Application menu"
 msgstr "Programski meni"
 
-#: ../gtk/gtkapplication.c:743
+#: ../gtk/gtkapplication.c:745
 msgid "The GMenuModel for the application menu"
 msgstr "Predmet GMenuModel za meni programa"
 
-#: ../gtk/gtkapplication.c:749
+#: ../gtk/gtkapplication.c:751
 msgid "Menubar"
 msgstr "Menijska vrstica"
 
-#: ../gtk/gtkapplication.c:750
+#: ../gtk/gtkapplication.c:752
 msgid "The GMenuModel for the menubar"
 msgstr "GMenuModel za menijsko vrstico"
 
-#: ../gtk/gtkapplicationwindow.c:1002
+#: ../gtk/gtkapplication.c:758
+msgid "Active window"
+msgstr "Dejavno okno"
+
+#: ../gtk/gtkapplication.c:759
+msgid "The window which most recently had focus"
+msgstr "Okno, ki je bilo nazadnje v žarišču"
+
+#: ../gtk/gtkapplicationwindow.c:989
 msgid "Show a menubar"
 msgstr "Pokaži menijsko vrstico"
 
-#: ../gtk/gtkapplicationwindow.c:1003
+#: ../gtk/gtkapplicationwindow.c:990
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr "Izbrana možnost omogoča, da okno prikaže menijsko vrstico na vrhu okna."
 
@@ -1050,7 +1066,7 @@ msgstr "Videz sence, ki obkroža puščico"
 #: ../gtk/gtkarrow.c:127
 #: ../gtk/gtkcombobox.c:1051
 #: ../gtk/gtkmenu.c:764
-#: ../gtk/gtkmenuitem.c:438
+#: ../gtk/gtkmenuitem.c:496
 msgid "Arrow Scaling"
 msgstr "Prilagajanje velikosti puščice"
 
@@ -1059,7 +1075,7 @@ msgid "Amount of space used up by arrow"
 msgstr "Količina prostora, ki ga uporabi puščica"
 
 #: ../gtk/gtkaspectframe.c:107
-#: ../gtk/gtkwidget.c:1211
+#: ../gtk/gtkwidget.c:1213
 msgid "Horizontal Alignment"
 msgstr "Vodoravna poravnava"
 
@@ -1068,7 +1084,7 @@ msgid "X alignment of the child"
 msgstr "Poravnava podrejenega predmeta po X osi"
 
 #: ../gtk/gtkaspectframe.c:114
-#: ../gtk/gtkwidget.c:1227
+#: ../gtk/gtkwidget.c:1229
 msgid "Vertical Alignment"
 msgstr "Navpična poravnava"
 
@@ -1222,9 +1238,9 @@ msgstr "Ali naj so vsi podrejeni predmeti enake velikosti"
 
 #: ../gtk/gtkbox.c:274
 #: ../gtk/gtkcellareabox.c:335
-#: ../gtk/gtktoolbar.c:558
-#: ../gtk/gtktoolitemgroup.c:1648
-#: ../gtk/gtktoolpalette.c:1066
+#: ../gtk/gtktoolbar.c:555
+#: ../gtk/gtktoolitemgroup.c:1657
+#: ../gtk/gtktoolpalette.c:1075
 #: ../gtk/gtktreeviewcolumn.c:338
 msgid "Expand"
 msgstr "Razširi"
@@ -1234,7 +1250,7 @@ msgid "Whether the child should receive extra space when the parent grows"
 msgstr "Ali naj podrejeni predmet prejme dodaten prostor, ko se nadrejeni predmet poveča"
 
 #: ../gtk/gtkbox.c:291
-#: ../gtk/gtktoolitemgroup.c:1655
+#: ../gtk/gtktoolitemgroup.c:1664
 msgid "Fill"
 msgstr "Zapolni"
 
@@ -1262,7 +1278,7 @@ msgstr "GtkPackType, ki pove ali naj bo podrejeni predmet zložen s sklicem na z
 #: ../gtk/gtkbox.c:313
 #: ../gtk/gtknotebook.c:767
 #: ../gtk/gtkpaned.c:348
-#: ../gtk/gtktoolitemgroup.c:1669
+#: ../gtk/gtktoolitemgroup.c:1678
 msgid "Position"
 msgstr "Položaj"
 
@@ -1279,133 +1295,133 @@ msgstr "Domena prevajanja"
 msgid "The translation domain used by gettext"
 msgstr "Domena prevajanja, ki jo uporablja gettext"
 
-#: ../gtk/gtkbutton.c:237
+#: ../gtk/gtkbutton.c:233
 msgid "Text of the label widget inside the button, if the button contains a label widget"
 msgstr "Besedilo gradnika oznake v gumbu, če gumb vsebuje gradnik oznake"
 
-#: ../gtk/gtkbutton.c:244
+#: ../gtk/gtkbutton.c:240
 #: ../gtk/gtkexpander.c:296
 #: ../gtk/gtklabel.c:747
-#: ../gtk/gtkmenuitem.c:390
+#: ../gtk/gtkmenuitem.c:445
 #: ../gtk/gtktoolbutton.c:246
 msgid "Use underline"
 msgstr "Uporabi podčrtaj"
 
-#: ../gtk/gtkbutton.c:245
+#: ../gtk/gtkbutton.c:241
 #: ../gtk/gtkexpander.c:297
 #: ../gtk/gtklabel.c:748
-#: ../gtk/gtkmenuitem.c:391
+#: ../gtk/gtkmenuitem.c:446
 msgid "If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"
 msgstr "Izbrana možnost omogoča, da podčrtaj v besedilu označuje črko, ki je uporabljena kot menijska bližnjica"
 
-#: ../gtk/gtkbutton.c:252
+#: ../gtk/gtkbutton.c:248
 #: ../gtk/gtkimagemenuitem.c:173
 msgid "Use stock"
 msgstr "Uporabi sklad"
 
-#: ../gtk/gtkbutton.c:253
+#: ../gtk/gtkbutton.c:249
 msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "Izbrana možnost omogoča, da se oznaka uporabi za izbiro predmeta sklada, namesto, da bi bil prikazan"
 
-#: ../gtk/gtkbutton.c:260
+#: ../gtk/gtkbutton.c:256
 #: ../gtk/gtkcombobox.c:857
 #: ../gtk/gtkfilechooserbutton.c:425
 msgid "Focus on click"
 msgstr "Dejavnost ob kliku"
 
-#: ../gtk/gtkbutton.c:261
+#: ../gtk/gtkbutton.c:257
 #: ../gtk/gtkfilechooserbutton.c:426
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Ali lahko gumb prevzame dejavnost ob kliku z miško"
 
-#: ../gtk/gtkbutton.c:268
+#: ../gtk/gtkbutton.c:264
 msgid "Border relief"
 msgstr "Relief robu"
 
-#: ../gtk/gtkbutton.c:269
+#: ../gtk/gtkbutton.c:265
 msgid "The border relief style"
 msgstr "Slog reliefa robu"
 
-#: ../gtk/gtkbutton.c:286
+#: ../gtk/gtkbutton.c:282
 msgid "Horizontal alignment for child"
 msgstr "Vodoravna poravnava podrejenega predmeta"
 
-#: ../gtk/gtkbutton.c:305
+#: ../gtk/gtkbutton.c:301
 msgid "Vertical alignment for child"
 msgstr "Navpična poravnava podrejenega predmeta"
 
-#: ../gtk/gtkbutton.c:322
+#: ../gtk/gtkbutton.c:318
 #: ../gtk/gtkimagemenuitem.c:158
 msgid "Image widget"
 msgstr "Gradnik slike"
 
-#: ../gtk/gtkbutton.c:323
+#: ../gtk/gtkbutton.c:319
 msgid "Child widget to appear next to the button text"
 msgstr "Podrejeni gradnik, ki naj se pojavi ob besedilu gumba"
 
-#: ../gtk/gtkbutton.c:337
+#: ../gtk/gtkbutton.c:333
 msgid "Image position"
 msgstr "Položaj slike"
 
-#: ../gtk/gtkbutton.c:338
+#: ../gtk/gtkbutton.c:334
 msgid "The position of the image relative to the text"
 msgstr "Položaj slike glede na besedilo"
 
-#: ../gtk/gtkbutton.c:480
+#: ../gtk/gtkbutton.c:476
 msgid "Default Spacing"
 msgstr "Privzet razmik"
 
-#: ../gtk/gtkbutton.c:481
+#: ../gtk/gtkbutton.c:477
 msgid "Extra space to add for GTK_CAN_DEFAULT buttons"
 msgstr "Dodaten prostor, ki je dodan gumbom GTK_CAN_DEFAULT"
 
-#: ../gtk/gtkbutton.c:495
+#: ../gtk/gtkbutton.c:491
 msgid "Default Outside Spacing"
 msgstr "Privzet zunanji razmik"
 
-#: ../gtk/gtkbutton.c:496
+#: ../gtk/gtkbutton.c:492
 msgid "Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn outside the border"
 msgstr "Dodaten prostor, ki je dodan gumbom GTK_CAN_DEFAULT in je vedno narisan zunaj obrobe"
 
-#: ../gtk/gtkbutton.c:501
+#: ../gtk/gtkbutton.c:497
 msgid "Child X Displacement"
 msgstr "Premestitev podrejenega predmeta po X osi"
 
-#: ../gtk/gtkbutton.c:502
+#: ../gtk/gtkbutton.c:498
 msgid "How far in the x direction to move the child when the button is depressed"
 msgstr "Kako daleč v smeri X naj se premakne podrejeni predmet, ko je gumb spuščen"
 
-#: ../gtk/gtkbutton.c:509
+#: ../gtk/gtkbutton.c:505
 msgid "Child Y Displacement"
 msgstr "Premestitev podrejenega predmeta po Y osi"
 
-#: ../gtk/gtkbutton.c:510
+#: ../gtk/gtkbutton.c:506
 msgid "How far in the y direction to move the child when the button is depressed"
 msgstr "Kako daleč v smeri Y naj se premakne podrejeni predmet, ko je gumb spuščen"
 
-#: ../gtk/gtkbutton.c:526
+#: ../gtk/gtkbutton.c:522
 msgid "Displace focus"
 msgstr "Premakni dejavnost"
 
-#: ../gtk/gtkbutton.c:527
+#: ../gtk/gtkbutton.c:523
 msgid "Whether the child_displacement_x/_y properties should also affect the focus rectangle"
 msgstr "Ali lastnost child_displacement_x/_y vpliva na dejavnost pravokotnika"
 
-#: ../gtk/gtkbutton.c:543
-#: ../gtk/gtkentry.c:801
-#: ../gtk/gtkentry.c:1887
+#: ../gtk/gtkbutton.c:539
+#: ../gtk/gtkentry.c:797
+#: ../gtk/gtkentry.c:1941
 msgid "Inner Border"
 msgstr "Notranja obroba"
 
-#: ../gtk/gtkbutton.c:544
+#: ../gtk/gtkbutton.c:540
 msgid "Border between button edges and child."
 msgstr "Obroba med robovi gumba in podrejenim predmetom."
 
-#: ../gtk/gtkbutton.c:557
+#: ../gtk/gtkbutton.c:553
 msgid "Image spacing"
 msgstr "Razmik slike"
 
-#: ../gtk/gtkbutton.c:558
+#: ../gtk/gtkbutton.c:554
 msgid "Spacing in pixels between the image and label"
 msgstr "Razmik med sliko in oznako, v slikovnih točkah"
 
@@ -1851,7 +1867,7 @@ msgstr "Ali naj se izrisani medpomnilnik sličic obarva glede na stanje"
 
 #: ../gtk/gtkcellrendererpixbuf.c:245
 #: ../gtk/gtkimage.c:308
-#: ../gtk/gtkwindow.c:725
+#: ../gtk/gtkwindow.c:729
 msgid "Icon"
 msgstr "Ikona"
 
@@ -1862,7 +1878,7 @@ msgstr "Vrednost vrstice napredka"
 #: ../gtk/gtkcellrendererprogress.c:154
 #: ../gtk/gtkcellrenderertext.c:255
 #: ../gtk/gtkentrybuffer.c:350
-#: ../gtk/gtkentry.c:845
+#: ../gtk/gtkentry.c:841
 #: ../gtk/gtkmessagedialog.c:230
 #: ../gtk/gtkprogressbar.c:174
 #: ../gtk/gtktextbuffer.c:219
@@ -1899,6 +1915,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Navpična poravnava besedila, od 0 (zgoraj) do 1 (spodaj)."
 
 #: ../gtk/gtkcellrendererprogress.c:224
+#: ../gtk/gtklevelbar.c:991
 #: ../gtk/gtkprogressbar.c:150
 #: ../gtk/gtkrange.c:432
 msgid "Inverted"
@@ -1907,17 +1924,17 @@ msgstr "Preobrnjeno"
 #: ../gtk/gtkcellrendererprogress.c:225
 #: ../gtk/gtkprogressbar.c:151
 msgid "Invert the direction in which the progress bar grows"
-msgstr "Zamenjaj smer, v katero narašča vrstica napredka"
+msgstr "Obrni smer, v katero narašča vrstica napredka"
 
 #: ../gtk/gtkcellrendererspin.c:113
 #: ../gtk/gtkrange.c:424
 #: ../gtk/gtkscalebutton.c:237
-#: ../gtk/gtkspinbutton.c:319
+#: ../gtk/gtkspinbutton.c:336
 msgid "Adjustment"
 msgstr "Prilagoditev"
 
 #: ../gtk/gtkcellrendererspin.c:114
-#: ../gtk/gtkspinbutton.c:320
+#: ../gtk/gtkspinbutton.c:337
 msgid "The adjustment that holds the value of the spin button"
 msgstr "Prilagoditev, ki drži vrednost vrtilnega gumba"
 
@@ -1926,18 +1943,18 @@ msgid "Climb rate"
 msgstr "Pospešek"
 
 #: ../gtk/gtkcellrendererspin.c:130
-#: ../gtk/gtkspinbutton.c:328
+#: ../gtk/gtkspinbutton.c:345
 msgid "The acceleration rate when you hold down a button"
 msgstr "Pospešek, ko držite gumb pritisnjen"
 
 #: ../gtk/gtkcellrendererspin.c:143
 #: ../gtk/gtkscale.c:294
-#: ../gtk/gtkspinbutton.c:337
+#: ../gtk/gtkspinbutton.c:354
 msgid "Digits"
 msgstr "Števke"
 
 #: ../gtk/gtkcellrendererspin.c:144
-#: ../gtk/gtkspinbutton.c:338
+#: ../gtk/gtkspinbutton.c:355
 msgid "The number of decimal places to display"
 msgstr "Število prikazanih decimalnih mest"
 
@@ -1945,7 +1962,7 @@ msgstr "Število prikazanih decimalnih mest"
 #: ../gtk/gtkcheckmenuitem.c:120
 #: ../gtk/gtkmenu.c:554
 #: ../gtk/gtkspinner.c:114
-#: ../gtk/gtkswitch.c:910
+#: ../gtk/gtkswitch.c:834
 #: ../gtk/gtktoggleaction.c:131
 #: ../gtk/gtktogglebutton.c:173
 #: ../gtk/gtktoggletoolbutton.c:125
@@ -1977,6 +1994,7 @@ msgid "Marked up text to render"
 msgstr "Označeno besedilo za izris"
 
 #: ../gtk/gtkcellrenderertext.c:271
+#: ../gtk/gtkentry.c:1410
 #: ../gtk/gtklabel.c:733
 msgid "Attributes"
 msgstr "Atributi"
@@ -2058,15 +2076,15 @@ msgid "Foreground color as a GdkRGBA"
 msgstr "Barva ospredja (GdkRGBA)"
 
 #: ../gtk/gtkcellrenderertext.c:364
-#: ../gtk/gtkentry.c:759
+#: ../gtk/gtkentry.c:755
 #: ../gtk/gtktexttag.c:296
-#: ../gtk/gtktextview.c:684
+#: ../gtk/gtktextview.c:702
 msgid "Editable"
 msgstr "Uredljivo"
 
 #: ../gtk/gtkcellrenderertext.c:365
 #: ../gtk/gtktexttag.c:297
-#: ../gtk/gtktextview.c:685
+#: ../gtk/gtktextview.c:703
 msgid "Whether the text can be modified by the user"
 msgstr "Ali lahko uporabnik spremeni besedilo"
 
@@ -2245,7 +2263,7 @@ msgid "How to align the lines"
 msgstr "Kako naj bodo poravnane črte"
 
 #: ../gtk/gtkcellrenderertext.c:636
-#: ../gtk/gtkentry.c:1011
+#: ../gtk/gtkentry.c:1007
 msgid "Placeholder text"
 msgstr "Besedilo držala"
 
@@ -2467,7 +2485,7 @@ msgstr "Model za celični pogled"
 
 #: ../gtk/gtkcellview.c:252
 #: ../gtk/gtkcombobox.c:1010
-#: ../gtk/gtkentrycompletion.c:446
+#: ../gtk/gtkentrycompletion.c:451
 #: ../gtk/gtkiconview.c:642
 #: ../gtk/gtktreemenu.c:332
 #: ../gtk/gtktreeviewcolumn.c:426
@@ -2476,7 +2494,7 @@ msgstr "Območje celice"
 
 #: ../gtk/gtkcellview.c:253
 #: ../gtk/gtkcombobox.c:1011
-#: ../gtk/gtkentrycompletion.c:447
+#: ../gtk/gtkentrycompletion.c:452
 #: ../gtk/gtkiconview.c:643
 #: ../gtk/gtktreemenu.c:333
 #: ../gtk/gtktreeviewcolumn.c:427
@@ -2668,7 +2686,7 @@ msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Ali naj imajo spustni meniji odpenjalnike"
 
 #: ../gtk/gtkcombobox.c:849
-#: ../gtk/gtkentry.c:784
+#: ../gtk/gtkentry.c:780
 msgid "Has Frame"
 msgstr "Ima okvir"
 
@@ -2797,35 +2815,35 @@ msgstr "Podrejene lastnosti"
 msgid "The list of subproperties"
 msgstr "Seznam podrejenih lastnosti"
 
-#: ../gtk/gtkcssstyleproperty.c:188
+#: ../gtk/gtkcssstyleproperty.c:250
 msgid "Animated"
 msgstr "Animirano"
 
-#: ../gtk/gtkcssstyleproperty.c:189
+#: ../gtk/gtkcssstyleproperty.c:251
 msgid "Set if the value can be animated"
 msgstr "Nastavi, če naj je vrednost animirano"
 
-#: ../gtk/gtkcssstyleproperty.c:195
+#: ../gtk/gtkcssstyleproperty.c:257
 msgid "ID"
 msgstr "ID"
 
-#: ../gtk/gtkcssstyleproperty.c:196
+#: ../gtk/gtkcssstyleproperty.c:258
 msgid "The numeric id for quick access"
 msgstr "Številski ID hitrega dostopa"
 
-#: ../gtk/gtkcssstyleproperty.c:202
+#: ../gtk/gtkcssstyleproperty.c:264
 msgid "Inherit"
 msgstr "Prevzemi"
 
-#: ../gtk/gtkcssstyleproperty.c:203
+#: ../gtk/gtkcssstyleproperty.c:265
 msgid "Set if the value is inherited by default"
 msgstr "Določi, če je vrednost privzeto prevzeta"
 
-#: ../gtk/gtkcssstyleproperty.c:209
+#: ../gtk/gtkcssstyleproperty.c:271
 msgid "Initial value"
 msgstr "Začetna vrednost"
 
-#: ../gtk/gtkcssstyleproperty.c:210
+#: ../gtk/gtkcssstyleproperty.c:272
 msgid "The initial specified value used for this property"
 msgstr "Navedena začetna vrednost za to lastnost"
 
@@ -2871,7 +2889,7 @@ msgid "The contents of the buffer"
 msgstr "Vsebina medpomnilnika"
 
 #: ../gtk/gtkentrybuffer.c:365
-#: ../gtk/gtkentry.c:925
+#: ../gtk/gtkentry.c:921
 msgid "Text length"
 msgstr "Dolžina besedila"
 
@@ -2880,410 +2898,439 @@ msgid "Length of the text currently in the buffer"
 msgstr "Dolžina trenutnega besedila v medpomnilniku"
 
 #: ../gtk/gtkentrybuffer.c:380
-#: ../gtk/gtkentry.c:767
+#: ../gtk/gtkentry.c:763
 msgid "Maximum length"
 msgstr "Največja dolžina"
 
 #: ../gtk/gtkentrybuffer.c:381
-#: ../gtk/gtkentry.c:768
+#: ../gtk/gtkentry.c:764
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Največje število znakov v tem vnosu. Uporabite nič, če ni omejitve."
 
-#: ../gtk/gtkentry.c:731
+#: ../gtk/gtkentry.c:727
 msgid "Text Buffer"
 msgstr "Medpomnilnik besedila"
 
-#: ../gtk/gtkentry.c:732
+#: ../gtk/gtkentry.c:728
 msgid "Text buffer object which actually stores entry text"
 msgstr "Predmet medpomnilnika besedila, v katerem je shranjeno besedilo"
 
-#: ../gtk/gtkentry.c:739
+#: ../gtk/gtkentry.c:735
 #: ../gtk/gtklabel.c:821
 msgid "Cursor Position"
 msgstr "Položaj kazalke"
 
-#: ../gtk/gtkentry.c:740
+#: ../gtk/gtkentry.c:736
 #: ../gtk/gtklabel.c:822
 msgid "The current position of the insertion cursor in chars"
 msgstr "Trenutni položaj kazalke vstavljanja (v znakih)"
 
-#: ../gtk/gtkentry.c:749
+#: ../gtk/gtkentry.c:745
 #: ../gtk/gtklabel.c:831
 msgid "Selection Bound"
 msgstr "Drugi konec izbire"
 
-#: ../gtk/gtkentry.c:750
+#: ../gtk/gtkentry.c:746
 #: ../gtk/gtklabel.c:832
 msgid "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Lega drugega konca izbire kazalke (v znakih)"
 
-#: ../gtk/gtkentry.c:760
+#: ../gtk/gtkentry.c:756
 msgid "Whether the entry contents can be edited"
 msgstr "Ali naj je mogoče spremeniti vsebino vnosa"
 
-#: ../gtk/gtkentry.c:776
+#: ../gtk/gtkentry.c:772
 msgid "Visibility"
 msgstr "Vidnost"
 
-#: ../gtk/gtkentry.c:777
+#: ../gtk/gtkentry.c:773
 msgid "FALSE displays the \"invisible char\" instead of the actual text (password mode)"
 msgstr "Izbrana možnost omogoča, da se namesto \"nevidnih znakov\" (geselski način), prikaže dejansko vneseno besedilo"
 
-#: ../gtk/gtkentry.c:785
+#: ../gtk/gtkentry.c:781
 msgid "FALSE removes outside bevel from entry"
 msgstr "Izbrana možnost omogoča prikaz zunanje obrobe vnosa"
 
-#: ../gtk/gtkentry.c:802
+#: ../gtk/gtkentry.c:798
 msgid "Border between text and frame. Overrides the inner-border style property"
 msgstr "Rob med besedilom in okvirjem. Preglasi lastnost sloga notranjega roba."
 
-#: ../gtk/gtkentry.c:810
-#: ../gtk/gtkentry.c:1412
+#: ../gtk/gtkentry.c:806
+#: ../gtk/gtkentry.c:1465
 msgid "Invisible character"
 msgstr "Nevidni znak"
 
-#: ../gtk/gtkentry.c:811
-#: ../gtk/gtkentry.c:1413
+#: ../gtk/gtkentry.c:807
+#: ../gtk/gtkentry.c:1466
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Znak, ki naj se uporabi za maskiranje vsebine vnosa (za \"geselski način\")"
 
-#: ../gtk/gtkentry.c:818
+#: ../gtk/gtkentry.c:814
 msgid "Activates default"
 msgstr "Omogoči privzeto"
 
-#: ../gtk/gtkentry.c:819
+#: ../gtk/gtkentry.c:815
 msgid "Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"
 msgstr "Ali naj se zažene omogoči gradnik (na primer privzet gumb pogovornega okna), ko je pritisnjena vnosna tipka"
 
-#: ../gtk/gtkentry.c:825
+#: ../gtk/gtkentry.c:821
 msgid "Width in chars"
 msgstr "Širina (v znakih)"
 
-#: ../gtk/gtkentry.c:826
+#: ../gtk/gtkentry.c:822
 msgid "Number of characters to leave space for in the entry"
 msgstr "Število znakov vnosnega prostora, za katere naj se pusti prostor"
 
-#: ../gtk/gtkentry.c:835
+#: ../gtk/gtkentry.c:831
 msgid "Scroll offset"
 msgstr "Drsni odmik"
 
-#: ../gtk/gtkentry.c:836
+#: ../gtk/gtkentry.c:832
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Število točk vnosa, ki drsijo mimo zaslona na levo"
 
-#: ../gtk/gtkentry.c:846
+#: ../gtk/gtkentry.c:842
 msgid "The contents of the entry"
 msgstr "Vsebina vnosa"
 
-#: ../gtk/gtkentry.c:861
+#: ../gtk/gtkentry.c:857
 #: ../gtk/gtkmisc.c:103
 msgid "X align"
 msgstr "Poravnava X"
 
-#: ../gtk/gtkentry.c:862
+#: ../gtk/gtkentry.c:858
 #: ../gtk/gtkmisc.c:104
 msgid "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."
 msgstr "Vodoravna poravnava, od 0 (levo) do 1 (desno). Obratno za postavitev 'od desne proti levi'."
 
-#: ../gtk/gtkentry.c:878
+#: ../gtk/gtkentry.c:874
 msgid "Truncate multiline"
 msgstr "Prireži večvrstični vnos"
 
-#: ../gtk/gtkentry.c:879
+#: ../gtk/gtkentry.c:875
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Ali naj se večvrstični vnos prireže v eno vrstico."
 
-#: ../gtk/gtkentry.c:895
+#: ../gtk/gtkentry.c:891
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Kakšna vrsta sence naj se izriše, kadar je določena možnost \"Ima okvir\""
 
-#: ../gtk/gtkentry.c:910
-#: ../gtk/gtktextview.c:764
+#: ../gtk/gtkentry.c:906
+#: ../gtk/gtktextview.c:782
 msgid "Overwrite mode"
 msgstr "Način prepisovanja"
 
-#: ../gtk/gtkentry.c:911
+#: ../gtk/gtkentry.c:907
 msgid "Whether new text overwrites existing text"
 msgstr "Ali naj vneseno besedilo prepiše obstoječe"
 
-#: ../gtk/gtkentry.c:926
+#: ../gtk/gtkentry.c:922
 msgid "Length of the text currently in the entry"
 msgstr "Dolžina trenutno vnesenega besedila "
 
-#: ../gtk/gtkentry.c:941
+#: ../gtk/gtkentry.c:937
 msgid "Invisible character set"
 msgstr "Nastavi nevidni znak"
 
-#: ../gtk/gtkentry.c:942
+#: ../gtk/gtkentry.c:938
 msgid "Whether the invisible character has been set"
 msgstr "Ali je nevidni znak nastavljen"
 
-#: ../gtk/gtkentry.c:960
+#: ../gtk/gtkentry.c:956
 msgid "Caps Lock warning"
 msgstr "Opozorilo velikih črk"
 
-#: ../gtk/gtkentry.c:961
+#: ../gtk/gtkentry.c:957
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr "Ali naj se med vnašanjem gesla prikaže opozorilo o pritisnjeni tipki Caps Lock"
 
-#: ../gtk/gtkentry.c:975
+#: ../gtk/gtkentry.c:971
 msgid "Progress Fraction"
 msgstr "Del napredka"
 
-#: ../gtk/gtkentry.c:976
+#: ../gtk/gtkentry.c:972
 msgid "The current fraction of the task that's been completed"
 msgstr "Trenutni delež celotnega opravila, ki je bil opravljen"
 
-#: ../gtk/gtkentry.c:993
+#: ../gtk/gtkentry.c:989
 msgid "Progress Pulse Step"
 msgstr "Korak prikaza napredka"
 
-#: ../gtk/gtkentry.c:994
+#: ../gtk/gtkentry.c:990
 msgid "The fraction of total entry width to move the progress bouncing block for each call to gtk_entry_progress_pulse()"
 msgstr "Velikost premika celotne širine prikaza napredka za vsak klic gtk_entry_progress_pulse()"
 
-#: ../gtk/gtkentry.c:1012
+#: ../gtk/gtkentry.c:1008
 msgid "Show text in the entry when it's empty and unfocused"
 msgstr "Pokaži besedilo v vnosu, ko je neizpolnjeno in ni dejavno"
 
-#: ../gtk/gtkentry.c:1026
+#: ../gtk/gtkentry.c:1022
 msgid "Primary pixbuf"
 msgstr "Osnovni medpomnilnik sličic"
 
-#: ../gtk/gtkentry.c:1027
+#: ../gtk/gtkentry.c:1023
 msgid "Primary pixbuf for the entry"
 msgstr "Osnovni medpomnilnik sličic vnosa"
 
-#: ../gtk/gtkentry.c:1041
+#: ../gtk/gtkentry.c:1037
 msgid "Secondary pixbuf"
 msgstr "Drugotni medpomnilnik sličic"
 
-#: ../gtk/gtkentry.c:1042
+#: ../gtk/gtkentry.c:1038
 msgid "Secondary pixbuf for the entry"
 msgstr "Drugotni medpomnilnik sličic vnosa"
 
-#: ../gtk/gtkentry.c:1056
+#: ../gtk/gtkentry.c:1052
 msgid "Primary stock ID"
 msgstr "Osnovni ID sklada"
 
-#: ../gtk/gtkentry.c:1057
+#: ../gtk/gtkentry.c:1053
 msgid "Stock ID for primary icon"
 msgstr "ID sklada za osnovno ikono"
 
-#: ../gtk/gtkentry.c:1071
+#: ../gtk/gtkentry.c:1067
 msgid "Secondary stock ID"
 msgstr "Drugotni ID sklada"
 
-#: ../gtk/gtkentry.c:1072
+#: ../gtk/gtkentry.c:1068
 msgid "Stock ID for secondary icon"
 msgstr "ID sklada za drugotno ikono"
 
-#: ../gtk/gtkentry.c:1086
+#: ../gtk/gtkentry.c:1082
 msgid "Primary icon name"
 msgstr "Ime osnovne ikone"
 
-#: ../gtk/gtkentry.c:1087
+#: ../gtk/gtkentry.c:1083
 msgid "Icon name for primary icon"
 msgstr "Ime osnovne ikone"
 
-#: ../gtk/gtkentry.c:1101
+#: ../gtk/gtkentry.c:1097
 msgid "Secondary icon name"
 msgstr "Ime drugotne ikone"
 
-#: ../gtk/gtkentry.c:1102
+#: ../gtk/gtkentry.c:1098
 msgid "Icon name for secondary icon"
 msgstr "Ime drugotne ikone"
 
-#: ../gtk/gtkentry.c:1116
+#: ../gtk/gtkentry.c:1112
 msgid "Primary GIcon"
 msgstr "Osnovni GIcon"
 
-#: ../gtk/gtkentry.c:1117
+#: ../gtk/gtkentry.c:1113
 msgid "GIcon for primary icon"
 msgstr "GIcon osnovne ikone"
 
-#: ../gtk/gtkentry.c:1131
+#: ../gtk/gtkentry.c:1127
 msgid "Secondary GIcon"
 msgstr "Drugotni GIcon"
 
-#: ../gtk/gtkentry.c:1132
+#: ../gtk/gtkentry.c:1128
 msgid "GIcon for secondary icon"
 msgstr "GIcon drugotne ikone"
 
-#: ../gtk/gtkentry.c:1146
+#: ../gtk/gtkentry.c:1142
 msgid "Primary storage type"
 msgstr "Osnovna vrsta shranjevanja"
 
-#: ../gtk/gtkentry.c:1147
+#: ../gtk/gtkentry.c:1143
 msgid "The representation being used for primary icon"
 msgstr "Način predstavitve za osnovne ikone"
 
-#: ../gtk/gtkentry.c:1162
+#: ../gtk/gtkentry.c:1158
 msgid "Secondary storage type"
 msgstr "Drugotna vrsta shranjevanja"
 
-#: ../gtk/gtkentry.c:1163
+#: ../gtk/gtkentry.c:1159
 msgid "The representation being used for secondary icon"
 msgstr "Način predstavitve za drugotne ikone"
 
-#: ../gtk/gtkentry.c:1184
+#: ../gtk/gtkentry.c:1180
 msgid "Primary icon activatable"
 msgstr "Osnovno ikono je mogoče zagnati"
 
-#: ../gtk/gtkentry.c:1185
+#: ../gtk/gtkentry.c:1181
 msgid "Whether the primary icon is activatable"
 msgstr "Ali je osnovno ikono mogoče zagnati"
 
-#: ../gtk/gtkentry.c:1205
+#: ../gtk/gtkentry.c:1201
 msgid "Secondary icon activatable"
 msgstr "Drugotno ikono je mogoče zagnati"
 
-#: ../gtk/gtkentry.c:1206
+#: ../gtk/gtkentry.c:1202
 msgid "Whether the secondary icon is activatable"
 msgstr "Ali je drugotno ikono mogoče zagnati"
 
-#: ../gtk/gtkentry.c:1228
+#: ../gtk/gtkentry.c:1224
 msgid "Primary icon sensitive"
 msgstr "Občutljivost osnovne ikone"
 
-#: ../gtk/gtkentry.c:1229
+#: ../gtk/gtkentry.c:1225
 msgid "Whether the primary icon is sensitive"
 msgstr "Ali je osnovna ikona občutljiva"
 
-#: ../gtk/gtkentry.c:1250
+#: ../gtk/gtkentry.c:1246
 msgid "Secondary icon sensitive"
 msgstr "Občutljivost drugotne ikone"
 
-#: ../gtk/gtkentry.c:1251
+#: ../gtk/gtkentry.c:1247
 msgid "Whether the secondary icon is sensitive"
 msgstr "Ali je drugotna ikona občutljiva"
 
-#: ../gtk/gtkentry.c:1267
+#: ../gtk/gtkentry.c:1263
 msgid "Primary icon tooltip text"
 msgstr "Besedilo orodnega namiga osnovne ikone"
 
-#: ../gtk/gtkentry.c:1268
-#: ../gtk/gtkentry.c:1304
+#: ../gtk/gtkentry.c:1264
+#: ../gtk/gtkentry.c:1300
 msgid "The contents of the tooltip on the primary icon"
 msgstr "Vsebina orodnega namiga osnovne ikone"
 
-#: ../gtk/gtkentry.c:1284
+#: ../gtk/gtkentry.c:1280
 msgid "Secondary icon tooltip text"
 msgstr "Besedilo orodnega namiga drugotne ikone"
 
-#: ../gtk/gtkentry.c:1285
-#: ../gtk/gtkentry.c:1323
+#: ../gtk/gtkentry.c:1281
+#: ../gtk/gtkentry.c:1319
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "Vsebina orodnega namiga drugotne ikone"
 
-#: ../gtk/gtkentry.c:1303
+#: ../gtk/gtkentry.c:1299
 msgid "Primary icon tooltip markup"
 msgstr "Oznaka namiga osnovne ikone"
 
-#: ../gtk/gtkentry.c:1322
+#: ../gtk/gtkentry.c:1318
 msgid "Secondary icon tooltip markup"
 msgstr "Oznaka namiga drugotne ikone"
 
-#: ../gtk/gtkentry.c:1342
-#: ../gtk/gtktextview.c:792
+#: ../gtk/gtkentry.c:1338
+#: ../gtk/gtktextview.c:810
 msgid "IM module"
 msgstr "Enota načina vnosa"
 
-#: ../gtk/gtkentry.c:1343
-#: ../gtk/gtktextview.c:793
+#: ../gtk/gtkentry.c:1339
+#: ../gtk/gtktextview.c:811
 msgid "Which IM module should be used"
 msgstr "Katera enota načina vnosa naj bo privzeto uporabljena"
 
-#: ../gtk/gtkentry.c:1357
+#: ../gtk/gtkentry.c:1353
 msgid "Completion"
 msgstr "Dopolnjevanje"
 
-#: ../gtk/gtkentry.c:1358
+#: ../gtk/gtkentry.c:1354
 msgid "The auxiliary completion object"
 msgstr "DOdaten predmet dopolnjevanja"
 
-#: ../gtk/gtkentry.c:1372
+#: ../gtk/gtkentry.c:1375
+#: ../gtk/gtkimcontext.c:332
+#: ../gtk/gtktextview.c:828
+msgid "Purpose"
+msgstr "Namen"
+
+#: ../gtk/gtkentry.c:1376
+#: ../gtk/gtkimcontext.c:333
+#: ../gtk/gtktextview.c:829
+msgid "Purpose of the text field"
+msgstr "Namen besedilnega polja"
+
+#: ../gtk/gtkentry.c:1392
+#: ../gtk/gtkimcontext.c:340
+#: ../gtk/gtktextview.c:845
+msgid "hints"
+msgstr "namigi"
+
+#: ../gtk/gtkentry.c:1393
+#: ../gtk/gtkimcontext.c:341
+#: ../gtk/gtktextview.c:846
+msgid "Hints for the text field behaviour"
+msgstr "Namigi za vedenje besedilnih polj"
+
+#: ../gtk/gtkentry.c:1411
+#: ../gtk/gtklabel.c:734
+msgid "A list of style attributes to apply to the text of the label"
+msgstr "Seznam atributov sloga, ki naj se uveljavijo na besedilu te oznake"
+
+#: ../gtk/gtkentry.c:1425
 msgid "Icon Prelight"
 msgstr "Posvetlitev ikone"
 
-#: ../gtk/gtkentry.c:1373
+#: ../gtk/gtkentry.c:1426
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "Ali naj dejavne ikone posvetlijo, če miško premaknemo preko njih"
 
-#: ../gtk/gtkentry.c:1390
+#: ../gtk/gtkentry.c:1443
 msgid "Progress Border"
 msgstr "Obroba vrstice napredka"
 
-#: ../gtk/gtkentry.c:1391
+#: ../gtk/gtkentry.c:1444
 msgid "Border around the progress bar"
 msgstr "Obroba okoli vrstice napredka"
 
-#: ../gtk/gtkentry.c:1888
+#: ../gtk/gtkentry.c:1942
 msgid "Border between text and frame."
 msgstr "Obroba med besedilom in okvirjem."
 
-#: ../gtk/gtkentrycompletion.c:318
+#: ../gtk/gtkentrycompletion.c:323
 msgid "Completion Model"
 msgstr "Način dopolnjevanja"
 
-#: ../gtk/gtkentrycompletion.c:319
+#: ../gtk/gtkentrycompletion.c:324
 msgid "The model to find matches in"
 msgstr "Način za iskanje zadetkov"
 
-#: ../gtk/gtkentrycompletion.c:325
+#: ../gtk/gtkentrycompletion.c:330
 msgid "Minimum Key Length"
 msgstr "Najmanjša dolžina iskalnega niza"
 
-#: ../gtk/gtkentrycompletion.c:326
+#: ../gtk/gtkentrycompletion.c:331
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Najmanjša dolžina iskalnega niza za iskanje zadetkov"
 
-#: ../gtk/gtkentrycompletion.c:342
+#: ../gtk/gtkentrycompletion.c:347
 #: ../gtk/gtkiconview.c:438
 msgid "Text column"
 msgstr "Stolpec besedila"
 
-#: ../gtk/gtkentrycompletion.c:343
+#: ../gtk/gtkentrycompletion.c:348
 msgid "The column of the model containing the strings."
 msgstr "Stolpec modela, ki vsebuje nize."
 
-#: ../gtk/gtkentrycompletion.c:362
+#: ../gtk/gtkentrycompletion.c:367
 msgid "Inline completion"
 msgstr "Znotraj-vrstično dopolnjevanje"
 
-#: ../gtk/gtkentrycompletion.c:363
+#: ../gtk/gtkentrycompletion.c:368
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "Ali naj se običajna predpona vstavi samodejno"
 
-#: ../gtk/gtkentrycompletion.c:377
+#: ../gtk/gtkentrycompletion.c:382
 msgid "Popup completion"
 msgstr "Dopolnjevanje preko pojavnega okna"
 
-#: ../gtk/gtkentrycompletion.c:378
+#: ../gtk/gtkentrycompletion.c:383
 msgid "Whether the completions should be shown in a popup window"
 msgstr "Ali naj bodo nizi za dopolnjevanje prikazani v pojavnem oknu"
 
-#: ../gtk/gtkentrycompletion.c:393
+#: ../gtk/gtkentrycompletion.c:398
 msgid "Popup set width"
 msgstr "Širina pojavnega okna"
 
-#: ../gtk/gtkentrycompletion.c:394
+#: ../gtk/gtkentrycompletion.c:399
 msgid "If TRUE, the popup window will have the same size as the entry"
 msgstr "Izbrana možnost omogoča, da ima pojavno okno enako velikost kot vnos"
 
-#: ../gtk/gtkentrycompletion.c:412
+#: ../gtk/gtkentrycompletion.c:417
 msgid "Popup single match"
 msgstr "Enojno ujemanje pojavnega okna"
 
-#: ../gtk/gtkentrycompletion.c:413
+#: ../gtk/gtkentrycompletion.c:418
 msgid "If TRUE, the popup window will appear for a single match."
 msgstr "Izbrana možnost omogoča, da je pojavno okno prikazano za vsako ujemanje."
 
-#: ../gtk/gtkentrycompletion.c:427
+#: ../gtk/gtkentrycompletion.c:432
 msgid "Inline selection"
 msgstr "Znotraj-vrstična izbira"
 
-#: ../gtk/gtkentrycompletion.c:428
+#: ../gtk/gtkentrycompletion.c:433
 msgid "Your description here"
 msgstr "Vnos opisa"
 
@@ -3332,7 +3379,7 @@ msgstr "Prostor, vstavljen med oznako in podrejenim predmetom"
 #: ../gtk/gtkexpander.c:322
 #: ../gtk/gtkframe.c:205
 #: ../gtk/gtktoolbutton.c:253
-#: ../gtk/gtktoolitemgroup.c:1595
+#: ../gtk/gtktoolitemgroup.c:1604
 msgid "Label widget"
 msgstr "Gradnik oznake"
 
@@ -3357,13 +3404,13 @@ msgid "Whether the expander will resize the toplevel window upon expanding and c
 msgstr "Ali naj razširilnik razširi vrhnji del okna pri zlaganju in razširjanju"
 
 #: ../gtk/gtkexpander.c:353
-#: ../gtk/gtktoolitemgroup.c:1623
+#: ../gtk/gtktoolitemgroup.c:1632
 #: ../gtk/gtktreeview.c:1194
 msgid "Expander Size"
 msgstr "Velikost razširilnika"
 
 #: ../gtk/gtkexpander.c:354
-#: ../gtk/gtktoolitemgroup.c:1624
+#: ../gtk/gtktoolitemgroup.c:1633
 #: ../gtk/gtktreeview.c:1195
 msgid "Size of the expander arrow"
 msgstr "Velikost puščice razširilnika"
@@ -3795,8 +3842,8 @@ msgstr "Nabor ikon, ki naj se prikaže"
 
 #: ../gtk/gtkimage.c:249
 #: ../gtk/gtkscalebutton.c:228
-#: ../gtk/gtktoolbar.c:533
-#: ../gtk/gtktoolpalette.c:1004
+#: ../gtk/gtktoolbar.c:530
+#: ../gtk/gtktoolpalette.c:1013
 msgid "Icon size"
 msgstr "Velikost ikone"
 
@@ -3878,15 +3925,15 @@ msgid "Width of border around the action area"
 msgstr "Širina robu okoli območja dejanj"
 
 #: ../gtk/gtkinvisible.c:101
-#: ../gtk/gtkmountoperation.c:170
+#: ../gtk/gtkmountoperation.c:179
 #: ../gtk/gtkstatusicon.c:290
-#: ../gtk/gtkstylecontext.c:442
-#: ../gtk/gtkwindow.c:787
+#: ../gtk/gtkstylecontext.c:440
+#: ../gtk/gtkwindow.c:791
 msgid "Screen"
 msgstr "Zaslon"
 
 #: ../gtk/gtkinvisible.c:102
-#: ../gtk/gtkwindow.c:788
+#: ../gtk/gtkwindow.c:792
 msgid "The screen where this window will be displayed"
 msgstr "Zaslon, na katerem bo to okno prikazano"
 
@@ -3894,13 +3941,9 @@ msgstr "Zaslon, na katerem bo to okno prikazano"
 msgid "The text of the label"
 msgstr "Besedilo oznake"
 
-#: ../gtk/gtklabel.c:734
-msgid "A list of style attributes to apply to the text of the label"
-msgstr "Seznam atributov sloga, ki naj se uveljavijo na besedilu te oznake"
-
 #: ../gtk/gtklabel.c:755
 #: ../gtk/gtktexttag.c:404
-#: ../gtk/gtktextview.c:701
+#: ../gtk/gtktextview.c:719
 msgid "Justification"
 msgstr "Poravnava"
 
@@ -3992,6 +4035,58 @@ msgstr "Širina postavitve"
 msgid "The height of the layout"
 msgstr "Višina postavitve"
 
+#: ../gtk/gtklevelbar.c:927
+msgid "Currently filled value level"
+msgstr "Trenutno zapolnjena raven vrednosti"
+
+#: ../gtk/gtklevelbar.c:928
+msgid "Currently filled value level of the level bar"
+msgstr "Trenutno zapolnjena raven vrednosti, ki jo lahko prikaže vrstica"
+
+#: ../gtk/gtklevelbar.c:941
+msgid "Minimum value level for the bar"
+msgstr "Najmanjša raven vrednosti za vrstico"
+
+#: ../gtk/gtklevelbar.c:942
+msgid "Minimum value level that can be displayed by the bar"
+msgstr "Najmanjša raven vrednosti, ki jo lahko prikaže vrstica"
+
+#: ../gtk/gtklevelbar.c:955
+msgid "Maximum value level for the bar"
+msgstr "Največja raven vrednosti za vrstico"
+
+#: ../gtk/gtklevelbar.c:956
+msgid "Maximum value level that can be displayed by the bar"
+msgstr "Največja raven vrednosti, ki jo lahko prikaže vrstica"
+
+#: ../gtk/gtklevelbar.c:975
+msgid "The mode of the value indicator"
+msgstr "Način pokazatelja vrednosti"
+
+#: ../gtk/gtklevelbar.c:976
+msgid "The mode of the value indicator displayed by the bar"
+msgstr "Način pokazatelja vrednosti, prikazanega v vrstici"
+
+#: ../gtk/gtklevelbar.c:992
+msgid "Invert the direction in which the level bar grows"
+msgstr "Obrni smer, v katero narašča vrstica napredka"
+
+#: ../gtk/gtklevelbar.c:1006
+msgid "Minimum height for filling blocks"
+msgstr "Najmanjša višina polnilnih blokov"
+
+#: ../gtk/gtklevelbar.c:1007
+msgid "Minimum height for blocks that fill the bar"
+msgstr "Najmanjša višina blokov, ki zapolnijo vrstico"
+
+#: ../gtk/gtklevelbar.c:1020
+msgid "Minimum width for filling blocks"
+msgstr "Najmanjša širina polnilnih blokov"
+
+#: ../gtk/gtklevelbar.c:1021
+msgid "Minimum width for blocks that fill the bar"
+msgstr "Najmanjša širina blokov, ki zapolnijo vrstico"
+
 #: ../gtk/gtklinkbutton.c:175
 msgid "URI"
 msgstr "URI"
@@ -4008,51 +4103,51 @@ msgstr "Obiskano"
 msgid "Whether this link has been visited."
 msgstr "Ali je bila povezava obiskana."
 
-#: ../gtk/gtklockbutton.c:276
+#: ../gtk/gtklockbutton.c:280
 msgid "Permission"
 msgstr "Dovoljenje"
 
-#: ../gtk/gtklockbutton.c:277
+#: ../gtk/gtklockbutton.c:281
 msgid "The GPermission object controlling this button"
 msgstr "Predmet GPermission za nadzor nad gumbom"
 
-#: ../gtk/gtklockbutton.c:284
+#: ../gtk/gtklockbutton.c:288
 msgid "Lock Text"
 msgstr "Besedilo zaklepanja"
 
-#: ../gtk/gtklockbutton.c:285
+#: ../gtk/gtklockbutton.c:289
 msgid "The text to display when prompting the user to lock"
 msgstr "Besedilo, ki se izpiše ob zahtevi za zaklepanje."
 
-#: ../gtk/gtklockbutton.c:293
+#: ../gtk/gtklockbutton.c:297
 msgid "Unlock Text"
 msgstr "Besedilo odklepanja"
 
-#: ../gtk/gtklockbutton.c:294
+#: ../gtk/gtklockbutton.c:298
 msgid "The text to display when prompting the user to unlock"
 msgstr "Besedilo, ki se izpiše ob zahtevi za odklepanje."
 
-#: ../gtk/gtklockbutton.c:302
+#: ../gtk/gtklockbutton.c:306
 msgid "Lock Tooltip"
 msgstr "Orodni namig za zaklepanje"
 
-#: ../gtk/gtklockbutton.c:303
+#: ../gtk/gtklockbutton.c:307
 msgid "The tooltip to display when prompting the user to lock"
 msgstr "Orodni namig, ki se izpiše ob zahtevi za zaklepanje."
 
-#: ../gtk/gtklockbutton.c:311
+#: ../gtk/gtklockbutton.c:315
 msgid "Unlock Tooltip"
 msgstr "Orodni namig za odklepanje"
 
-#: ../gtk/gtklockbutton.c:312
+#: ../gtk/gtklockbutton.c:316
 msgid "The tooltip to display when prompting the user to unlock"
 msgstr "Orodni namig, ki se izpiše ob zahtevi za odklepanje."
 
-#: ../gtk/gtklockbutton.c:320
+#: ../gtk/gtklockbutton.c:324
 msgid "Not Authorized Tooltip"
 msgstr "Orodni namig stanja brez overitve"
 
-#: ../gtk/gtklockbutton.c:321
+#: ../gtk/gtklockbutton.c:325
 msgid "The tooltip to display when prompting the user cannot obtain authorization"
 msgstr "Orodni namig za prikaz podatkov, kdaj uporabnik nima pooblastila za overitev."
 
@@ -4077,13 +4172,45 @@ msgid "Style of bevel around the menubar"
 msgstr "Slog obrobe okoli menijske vrstice"
 
 #: ../gtk/gtkmenubar.c:224
-#: ../gtk/gtktoolbar.c:583
+#: ../gtk/gtktoolbar.c:589
 msgid "Internal padding"
 msgstr "Notranje blazinjenje"
 
 #: ../gtk/gtkmenubar.c:225
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Količina obrobe med senco menijske vrstice in predmeti menija"
+
+#: ../gtk/gtkmenubutton.c:515
+msgid "popup"
+msgstr "Pojavno okno"
+
+#: ../gtk/gtkmenubutton.c:516
+msgid "The dropdown menu."
+msgstr "Spustni meni."
+
+#: ../gtk/gtkmenubutton.c:532
+msgid "menu-model"
+msgstr "model menija"
+
+#: ../gtk/gtkmenubutton.c:533
+msgid "The dropdown menu's model."
+msgstr "Model spustnega menija."
+
+#: ../gtk/gtkmenubutton.c:546
+msgid "align-widget"
+msgstr "gradnik poravnave"
+
+#: ../gtk/gtkmenubutton.c:547
+msgid "The parent widget which the menu should align with."
+msgstr "Nadrejeni gradnik, s katerim naj se poravna meni."
+
+#: ../gtk/gtkmenubutton.c:561
+msgid "direction"
+msgstr "smer"
+
+#: ../gtk/gtkmenubutton.c:562
+msgid "The direction the arrow should point."
+msgstr "Smer, v katero naj kaže puščica."
 
 #: ../gtk/gtkmenu.c:555
 msgid "The currently selected menu item"
@@ -4094,7 +4221,7 @@ msgid "The accel group holding accelerators for the menu"
 msgstr "Pospeševalna skupina, ki drži pospeševalnike menija"
 
 #: ../gtk/gtkmenu.c:584
-#: ../gtk/gtkmenuitem.c:360
+#: ../gtk/gtkmenuitem.c:415
 msgid "Accel Path"
 msgstr "Pot pospeševalnika"
 
@@ -4214,39 +4341,39 @@ msgstr "Spodnja priloga"
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
 msgstr "Konstanta za prilagajanje velikosti puščice drsnika"
 
-#: ../gtk/gtkmenuitem.c:328
+#: ../gtk/gtkmenuitem.c:383
 msgid "Right Justified"
 msgstr "Desna poravnava"
 
-#: ../gtk/gtkmenuitem.c:329
+#: ../gtk/gtkmenuitem.c:384
 msgid "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr "Izbrana možnost omgoča, da je predmet menija poravnan na desni strani menijske vrstice"
 
-#: ../gtk/gtkmenuitem.c:343
+#: ../gtk/gtkmenuitem.c:398
 msgid "Submenu"
 msgstr "Podmeni"
 
-#: ../gtk/gtkmenuitem.c:344
+#: ../gtk/gtkmenuitem.c:399
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "Podmeni, pripet glavnemu meniju, ali prazna vrednost, če ga ni"
 
-#: ../gtk/gtkmenuitem.c:361
+#: ../gtk/gtkmenuitem.c:416
 msgid "Sets the accelerator path of the menu item"
 msgstr "Določi pot pospeševalnika predmeta menija"
 
-#: ../gtk/gtkmenuitem.c:376
+#: ../gtk/gtkmenuitem.c:431
 msgid "The text for the child label"
 msgstr "Besedilo podrejene oznake"
 
-#: ../gtk/gtkmenuitem.c:439
+#: ../gtk/gtkmenuitem.c:497
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "Velikost prostora, ki ga porabi puščica, v razmerju z velikostjo pisave predmeta"
 
-#: ../gtk/gtkmenuitem.c:452
+#: ../gtk/gtkmenuitem.c:510
 msgid "Width in Characters"
 msgstr "Širina v znakih"
 
-#: ../gtk/gtkmenuitem.c:453
+#: ../gtk/gtkmenuitem.c:511
 msgid "The minimum desired width of the menu item in characters"
 msgstr "Najmanjša želena širina predmeta menija v znakih"
 
@@ -4258,11 +4385,11 @@ msgstr "Prevzemi dejavnost"
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Logična spremenljivka, ki določa, ali meni prevzame dejavnost tipkovnice"
 
-#: ../gtk/gtkmenutoolbutton.c:290
+#: ../gtk/gtkmenutoolbutton.c:272
 msgid "Menu"
 msgstr "Meni"
 
-#: ../gtk/gtkmenutoolbutton.c:291
+#: ../gtk/gtkmenutoolbutton.c:273
 msgid "The dropdown menu"
 msgstr "Spustni meni"
 
@@ -4350,24 +4477,24 @@ msgstr "Blazinjenje Y"
 msgid "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Količina prostora, ki naj se doda na zgornjo in spodnjo stran gradnika, v slikovnih točkah"
 
-#: ../gtk/gtkmountoperation.c:154
-#: ../gtk/gtkstylecontext.c:465
+#: ../gtk/gtkmountoperation.c:163
+#: ../gtk/gtkstylecontext.c:463
 msgid "Parent"
 msgstr "Nadrejeni predmet"
 
-#: ../gtk/gtkmountoperation.c:155
+#: ../gtk/gtkmountoperation.c:164
 msgid "The parent window"
 msgstr "Nadrejeno okno"
 
-#: ../gtk/gtkmountoperation.c:162
+#: ../gtk/gtkmountoperation.c:171
 msgid "Is Showing"
 msgstr "Je prikazano"
 
-#: ../gtk/gtkmountoperation.c:163
+#: ../gtk/gtkmountoperation.c:172
 msgid "Are we showing a dialog"
 msgstr "Ali naj je pogovorno okno prikazano"
 
-#: ../gtk/gtkmountoperation.c:171
+#: ../gtk/gtkmountoperation.c:180
 msgid "The screen where this window will be displayed."
 msgstr "Zaslon, na katerem bo to okno prikazano."
 
@@ -4545,43 +4672,43 @@ msgstr "Začetni zamik"
 msgid "Initial gap before the first tab"
 msgstr "Začetni zamik pred prvim zavihkom"
 
-#: ../gtk/gtknumerableicon.c:652
+#: ../gtk/gtknumerableicon.c:653
 msgid "Icon's count"
 msgstr "Števec ikone"
 
-#: ../gtk/gtknumerableicon.c:653
+#: ../gtk/gtknumerableicon.c:654
 msgid "The count of the emblem currently displayed"
 msgstr "Števec značke, ki je trenutno prikazana"
 
-#: ../gtk/gtknumerableicon.c:659
+#: ../gtk/gtknumerableicon.c:660
 msgid "Icon's label"
 msgstr "Oznaka ikone"
 
-#: ../gtk/gtknumerableicon.c:660
+#: ../gtk/gtknumerableicon.c:661
 msgid "The label to be displayed over the icon"
 msgstr "Oznaka, ki je prikazan ob kazalniku, ko je ta nad ikono"
 
-#: ../gtk/gtknumerableicon.c:666
+#: ../gtk/gtknumerableicon.c:667
 msgid "Icon's style context"
 msgstr "Vsebinski slog ikone"
 
-#: ../gtk/gtknumerableicon.c:667
+#: ../gtk/gtknumerableicon.c:668
 msgid "The style context to theme the icon appearance"
 msgstr "Vsebinski slog ikone, ki pripada temi"
 
-#: ../gtk/gtknumerableicon.c:673
+#: ../gtk/gtknumerableicon.c:674
 msgid "Background icon"
 msgstr "Ikona ozadja"
 
-#: ../gtk/gtknumerableicon.c:674
+#: ../gtk/gtknumerableicon.c:675
 msgid "The icon for the number emblem background"
 msgstr "Ikona ozadja številske značke"
 
-#: ../gtk/gtknumerableicon.c:680
+#: ../gtk/gtknumerableicon.c:681
 msgid "Background icon name"
 msgstr "Ime ikone ozadja"
 
-#: ../gtk/gtknumerableicon.c:681
+#: ../gtk/gtknumerableicon.c:682
 msgid "The icon name for the number emblem background"
 msgstr "Ime ikone za ozadje številske značke"
 
@@ -4768,11 +4895,11 @@ msgstr "Vrednost možnosti"
 msgid "Value of the option"
 msgstr "Vrednost možnosti"
 
-#: ../gtk/gtkprinteroptionwidget.c:120
+#: ../gtk/gtkprinteroptionwidget.c:132
 msgid "Source option"
 msgstr "Izvorna možnost"
 
-#: ../gtk/gtkprinteroptionwidget.c:121
+#: ../gtk/gtkprinteroptionwidget.c:133
 msgid "The PrinterOption backing this widget"
 msgstr "PrinterOption, ki podpira ta gradnik"
 
@@ -4944,8 +5071,9 @@ msgid "Embed Page Setup"
 msgstr "Vstavi nastavljanje strani"
 
 #: ../gtk/gtkprintoperation.c:1403
-msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
-msgstr "Izbrana možnost določa, da so spustna okna nastavitve strani vstavljena v GtkPrintDialog"
+#: ../gtk/gtkprintunixdialog.c:426
+msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
+msgstr "Izbrana možnost določa, da so spustna okna nastavitve strani vstavljena v GtkPrintUnixDialog"
 
 #: ../gtk/gtkprintoperation.c:1424
 msgid "Number of Pages To Print"
@@ -4982,10 +5110,6 @@ msgstr "Ali pogovorno okno podpira izbiranje"
 #: ../gtk/gtkprintunixdialog.c:418
 msgid "Whether the application has a selection"
 msgstr "Ali ima program izbor"
-
-#: ../gtk/gtkprintunixdialog.c:426
-msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
-msgstr "Izbrana možnost določa, da so spustna okna nastavitve strani vstavljena v GtkPrintUnixDialog"
 
 #: ../gtk/gtkprogressbar.c:158
 msgid "Fraction"
@@ -5076,8 +5200,8 @@ msgid "The value returned by gtk_radio_action_get_current_value() when this acti
 msgstr "Vrnjena vrednost gtk_radio_action_get_current_value() kadar je dejanje del trenutnega dejanja izbrane skupine."
 
 #: ../gtk/gtkradioaction.c:133
-#: ../gtk/gtkradiobutton.c:162
-#: ../gtk/gtkradiomenuitem.c:425
+#: ../gtk/gtkradiobutton.c:163
+#: ../gtk/gtkradiomenuitem.c:426
 #: ../gtk/gtkradiotoolbutton.c:83
 msgid "Group"
 msgstr "Skupina"
@@ -5094,11 +5218,11 @@ msgstr "Trenutna vrednost"
 msgid "The value property of the currently active member of the group to which this action belongs."
 msgstr "Lastnost vrednosti trenutno dejavnega predmeta skupine, kateri dejanje pripada."
 
-#: ../gtk/gtkradiobutton.c:163
+#: ../gtk/gtkradiobutton.c:164
 msgid "The radio button whose group this widget belongs to."
 msgstr "Izbirni gumb, katerega skupini pripada gradnik."
 
-#: ../gtk/gtkradiomenuitem.c:426
+#: ../gtk/gtkradiomenuitem.c:427
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "Predmet izbirnega menija, katerega skupini pripada gradnik."
 
@@ -5112,7 +5236,7 @@ msgstr "GtkAdjustment, ki vsebuje trenutno vrednost tega predmeta"
 
 #: ../gtk/gtkrange.c:433
 msgid "Invert direction slider moves to increase range value"
-msgstr "Obrni smer v katero vodoravni drsnik povečuje obseg"
+msgstr "Obrni smer, v katero vodoravni drsnik povečuje obseg"
 
 #: ../gtk/gtkrange.c:440
 msgid "Lower stepper sensitivity"
@@ -5163,7 +5287,7 @@ msgid "The number of digits to round the value to."
 msgstr "Število števk za zaokroževanje vrednosti."
 
 #: ../gtk/gtkrange.c:527
-#: ../gtk/gtkswitch.c:945
+#: ../gtk/gtkswitch.c:868
 msgid "Slider Width"
 msgstr "Širina vodoravnega drsnika"
 
@@ -5434,99 +5558,99 @@ msgstr "Pokaži drugo puščico nazaj na nasprotnem koncu drsnika"
 msgid "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "Pokaži drugo puščico naprej na nasprotnem koncu drsnika"
 
-#: ../gtk/gtkscrolledwindow.c:366
+#: ../gtk/gtkscrolledwindow.c:367
 msgid "Horizontal Adjustment"
 msgstr "Vodoravna prilagoditev"
 
-#: ../gtk/gtkscrolledwindow.c:367
+#: ../gtk/gtkscrolledwindow.c:368
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "GtkAdjustment za vodoravni položaj"
 
-#: ../gtk/gtkscrolledwindow.c:373
+#: ../gtk/gtkscrolledwindow.c:374
 msgid "Vertical Adjustment"
 msgstr "Navpična prilagoditev"
 
-#: ../gtk/gtkscrolledwindow.c:374
+#: ../gtk/gtkscrolledwindow.c:375
 msgid "The GtkAdjustment for the vertical position"
 msgstr "GtkAdjustment za navpični položaj"
 
-#: ../gtk/gtkscrolledwindow.c:380
+#: ../gtk/gtkscrolledwindow.c:381
 msgid "Horizontal Scrollbar Policy"
 msgstr "Vedenje vodoravnega drsnika"
 
-#: ../gtk/gtkscrolledwindow.c:381
+#: ../gtk/gtkscrolledwindow.c:382
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Kdaj je prikazan vodoravni drsnik"
 
-#: ../gtk/gtkscrolledwindow.c:388
+#: ../gtk/gtkscrolledwindow.c:389
 msgid "Vertical Scrollbar Policy"
 msgstr "Vedenje navpičnega drsnika"
 
-#: ../gtk/gtkscrolledwindow.c:389
+#: ../gtk/gtkscrolledwindow.c:390
 msgid "When the vertical scrollbar is displayed"
 msgstr "Kdaj je prikazan navpični drsnik"
 
-#: ../gtk/gtkscrolledwindow.c:397
+#: ../gtk/gtkscrolledwindow.c:398
 msgid "Window Placement"
 msgstr "Postavitev okna"
 
-#: ../gtk/gtkscrolledwindow.c:398
+#: ../gtk/gtkscrolledwindow.c:399
 msgid "Where the contents are located with respect to the scrollbars. This property only takes effect if \"window-placement-set\" is TRUE."
 msgstr "Kje se nahaja vsebina glede na drsnike. Možnost je dejavna le, če je izbrana tudi možnost \"Nastavi postavitev okna\"."
 
-#: ../gtk/gtkscrolledwindow.c:415
+#: ../gtk/gtkscrolledwindow.c:416
 msgid "Window Placement Set"
 msgstr "Nastavi postavitev okna"
 
-#: ../gtk/gtkscrolledwindow.c:416
+#: ../gtk/gtkscrolledwindow.c:417
 msgid "Whether \"window-placement\" should be used to determine the location of the contents with respect to the scrollbars."
 msgstr "Ali naj bo uporabljena možnost \"Postavitev okna\" pri določevanju lege vsebine glede na drsnike."
 
-#: ../gtk/gtkscrolledwindow.c:422
+#: ../gtk/gtkscrolledwindow.c:423
 msgid "Shadow Type"
 msgstr "Vrsta sence"
 
-#: ../gtk/gtkscrolledwindow.c:423
+#: ../gtk/gtkscrolledwindow.c:424
 msgid "Style of bevel around the contents"
 msgstr "Vrsta obrobe okoli vsebine"
 
-#: ../gtk/gtkscrolledwindow.c:437
+#: ../gtk/gtkscrolledwindow.c:438
 msgid "Scrollbars within bevel"
 msgstr "Drsniki znotraj obrobe"
 
-#: ../gtk/gtkscrolledwindow.c:438
+#: ../gtk/gtkscrolledwindow.c:439
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Postavi drsnike znotraj obrobe drsečega okna"
 
-#: ../gtk/gtkscrolledwindow.c:444
+#: ../gtk/gtkscrolledwindow.c:445
 msgid "Scrollbar spacing"
 msgstr "Razmik do drsnika"
 
-#: ../gtk/gtkscrolledwindow.c:445
+#: ../gtk/gtkscrolledwindow.c:446
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Število slikovnih točk med drsnikom in drsenim oknom"
 
-#: ../gtk/gtkscrolledwindow.c:461
+#: ../gtk/gtkscrolledwindow.c:462
 msgid "Minimum Content Width"
 msgstr "Najmanjša širina vsebine"
 
-#: ../gtk/gtkscrolledwindow.c:462
+#: ../gtk/gtkscrolledwindow.c:463
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr "Najmanjša širina, ki jo okno z drsenjem dodeli svoji vsebini"
 
-#: ../gtk/gtkscrolledwindow.c:476
+#: ../gtk/gtkscrolledwindow.c:477
 msgid "Minimum Content Height"
 msgstr "Najmanjša višina vsebine"
 
-#: ../gtk/gtkscrolledwindow.c:477
+#: ../gtk/gtkscrolledwindow.c:478
 msgid "The minimum height that the scrolled window will allocate to its content"
 msgstr "Najmanjša višina vsebine, ki bo dodeljena vsebini okna z drsnikom"
 
-#: ../gtk/gtkscrolledwindow.c:492
+#: ../gtk/gtkscrolledwindow.c:493
 msgid "Kinetic Scrolling"
 msgstr "Drsenje z gibi"
 
-#: ../gtk/gtkscrolledwindow.c:493
+#: ../gtk/gtkscrolledwindow.c:494
 msgid "Kinetic scrolling mode."
 msgstr "Način drsenja s pomočjo gibov"
 
@@ -5538,585 +5662,593 @@ msgstr "Nariši"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Ali naj je ločilnik narisan ali samo prazen"
 
-#: ../gtk/gtksettings.c:343
+#: ../gtk/gtksettings.c:360
 msgid "Double Click Time"
 msgstr "Čas dvojnega klika"
 
-#: ../gtk/gtksettings.c:344
+#: ../gtk/gtksettings.c:361
 msgid "Maximum time allowed between two clicks for them to be considered a double click (in milliseconds)"
 msgstr "Največji dovoljen čas med dvema klikoma, da se obravnava kot dvoklik (v milisekundah)"
 
-#: ../gtk/gtksettings.c:351
+#: ../gtk/gtksettings.c:368
 msgid "Double Click Distance"
 msgstr "Razdalja dvojnega klika"
 
-#: ../gtk/gtksettings.c:352
+#: ../gtk/gtksettings.c:369
 msgid "Maximum distance allowed between two clicks for them to be considered a double click (in pixels)"
 msgstr "Največji dovoljena razdalja med dvema klikoma, da se dejanje obravnava kot dvoklik (v slikovnih točkah)"
 
-#: ../gtk/gtksettings.c:368
+#: ../gtk/gtksettings.c:385
 msgid "Cursor Blink"
 msgstr "Utripanje kazalke"
 
-#: ../gtk/gtksettings.c:369
+#: ../gtk/gtksettings.c:386
 msgid "Whether the cursor should blink"
 msgstr "Ali naj kazalka utripa"
 
-#: ../gtk/gtksettings.c:376
+#: ../gtk/gtksettings.c:393
 msgid "Cursor Blink Time"
 msgstr "Čas utripanja kazalke"
 
-#: ../gtk/gtksettings.c:377
+#: ../gtk/gtksettings.c:394
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "Dolžina cikla utripanja kazalke, v milisekundah"
 
-#: ../gtk/gtksettings.c:396
+#: ../gtk/gtksettings.c:413
 msgid "Cursor Blink Timeout"
 msgstr "Zakasnitev utripanja kazalke"
 
-#: ../gtk/gtksettings.c:397
+#: ../gtk/gtksettings.c:414
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "Čas po katerem kazalka preneha utripati, v sekundah"
 
-#: ../gtk/gtksettings.c:404
+#: ../gtk/gtksettings.c:421
 msgid "Split Cursor"
 msgstr "Razdeljena kazalka"
 
-#: ../gtk/gtksettings.c:405
+#: ../gtk/gtksettings.c:422
 msgid "Whether two cursors should be displayed for mixed left-to-right and right-to-left text"
 msgstr "Ali naj bosta pri mešanem besedilu prikazana dve kazalki ločeni za besedilo od leve proti desni in od desne proti levi"
 
-#: ../gtk/gtksettings.c:412
+#: ../gtk/gtksettings.c:429
 msgid "Theme Name"
 msgstr "Ime teme"
 
-#: ../gtk/gtksettings.c:413
+#: ../gtk/gtksettings.c:430
 msgid "Name of theme to load"
 msgstr "Ime teme z a nalaganje"
 
-#: ../gtk/gtksettings.c:425
+#: ../gtk/gtksettings.c:442
 msgid "Icon Theme Name"
 msgstr "Ime teme ikon"
 
-#: ../gtk/gtksettings.c:426
+#: ../gtk/gtksettings.c:443
 msgid "Name of icon theme to use"
 msgstr "Ime uporabljene teme ikon"
 
-#: ../gtk/gtksettings.c:434
+#: ../gtk/gtksettings.c:451
 msgid "Fallback Icon Theme Name"
 msgstr "Ime povrnitvene teme ikon"
 
-#: ../gtk/gtksettings.c:435
+#: ../gtk/gtksettings.c:452
 msgid "Name of a icon theme to fall back to"
 msgstr "Ime povrnitvene teme ikon"
 
-#: ../gtk/gtksettings.c:443
+#: ../gtk/gtksettings.c:460
 msgid "Key Theme Name"
 msgstr "Ime tipkovne teme"
 
-#: ../gtk/gtksettings.c:444
+#: ../gtk/gtksettings.c:461
 msgid "Name of key theme to load"
 msgstr "Ime ključne teme za nalaganje"
 
-#: ../gtk/gtksettings.c:452
+#: ../gtk/gtksettings.c:469
 msgid "Menu bar accelerator"
 msgstr "Pospeševalnik menijske vrstice"
 
-#: ../gtk/gtksettings.c:453
+#: ../gtk/gtksettings.c:470
 msgid "Keybinding to activate the menu bar"
 msgstr "Tipkovna bližnjica, ki zažene menijsko vrstico"
 
-#: ../gtk/gtksettings.c:461
+#: ../gtk/gtksettings.c:478
 msgid "Drag threshold"
 msgstr "Prag vlečenja"
 
-#: ../gtk/gtksettings.c:462
+#: ../gtk/gtksettings.c:479
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Koliko slikovnih točk se lahko premakne kazalka, preden je to obravnavano kot vleka"
 
-#: ../gtk/gtksettings.c:470
+#: ../gtk/gtksettings.c:487
 msgid "Font Name"
 msgstr "Ime pisave"
 
-#: ../gtk/gtksettings.c:471
+#: ../gtk/gtksettings.c:488
 msgid "Name of default font to use"
 msgstr "Ime privzete pisave"
 
-#: ../gtk/gtksettings.c:493
+#: ../gtk/gtksettings.c:510
 msgid "Icon Sizes"
 msgstr "Velikosti ikon"
 
-#: ../gtk/gtksettings.c:494
+#: ../gtk/gtksettings.c:511
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Seznam velikosti ikon (gtk-menu=16,16;gtk-button=20,20..."
 
-#: ../gtk/gtksettings.c:502
+#: ../gtk/gtksettings.c:519
 msgid "GTK Modules"
 msgstr "Moduli GTK"
 
-#: ../gtk/gtksettings.c:503
+#: ../gtk/gtksettings.c:520
 msgid "List of currently active GTK modules"
 msgstr "Seznam trenutno dejavnih modulov GTK"
 
-#: ../gtk/gtksettings.c:511
+#: ../gtk/gtksettings.c:528
 msgid "Xft Antialias"
 msgstr "Glajenje robov Xft"
 
-#: ../gtk/gtksettings.c:512
+#: ../gtk/gtksettings.c:529
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Ali se gladijo robovi pisav Xtf; 0=ne, 1=da, -1=privzeto"
 
-#: ../gtk/gtksettings.c:521
+#: ../gtk/gtksettings.c:538
 msgid "Xft Hinting"
 msgstr "Prilagajanje Xft"
 
-#: ../gtk/gtksettings.c:522
+#: ../gtk/gtksettings.c:539
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Ali naj se prilagodijo pisave Xft; 0=ne, 1=da, -1=privzeto"
 
-#: ../gtk/gtksettings.c:531
+#: ../gtk/gtksettings.c:548
 msgid "Xft Hint Style"
 msgstr "Slog prilagajanja Xft"
 
-#: ../gtk/gtksettings.c:532
+#: ../gtk/gtksettings.c:549
 msgid "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr "Raven prilagajanja pisave; hintnone, hintslight, hintmedium, or hintfull"
 
-#: ../gtk/gtksettings.c:541
+#: ../gtk/gtksettings.c:558
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: ../gtk/gtksettings.c:542
+#: ../gtk/gtksettings.c:559
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Vrsta podtočkovnega glajenja robov; brez, rgb, bgr, vrgb, vbgr"
 
-#: ../gtk/gtksettings.c:551
+#: ../gtk/gtksettings.c:568
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: ../gtk/gtksettings.c:552
+#: ../gtk/gtksettings.c:569
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Ločljivost Xtf, v 1024 * točk/palec. -1 za uporabo privzete vrednosti."
 
-#: ../gtk/gtksettings.c:561
+#: ../gtk/gtksettings.c:578
 msgid "Cursor theme name"
 msgstr "Ime teme kazalke"
 
-#: ../gtk/gtksettings.c:562
+#: ../gtk/gtksettings.c:579
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "Ime privzeto uporabljene teme kazalke; vrednost NULL za privzeto temo"
 
-#: ../gtk/gtksettings.c:570
+#: ../gtk/gtksettings.c:587
 msgid "Cursor theme size"
 msgstr "Velikost teme kazalke"
 
-#: ../gtk/gtksettings.c:571
+#: ../gtk/gtksettings.c:588
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "Določitev velikosti kazalk, vrednost 0 je privzeta vrednost"
 
-#: ../gtk/gtksettings.c:580
+#: ../gtk/gtksettings.c:597
 msgid "Alternative button order"
 msgstr "Nadomestni razpored gumbov"
 
-#: ../gtk/gtksettings.c:581
+#: ../gtk/gtksettings.c:598
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Ali naj gumbi v pogovornih oknih uporabljajo drugačen način razvrstitve gumbov"
 
-#: ../gtk/gtksettings.c:598
+#: ../gtk/gtksettings.c:615
 msgid "Alternative sort indicator direction"
 msgstr "Nadomestni smer kazalnika razvrščanja"
 
-#: ../gtk/gtksettings.c:599
+#: ../gtk/gtksettings.c:616
 msgid "Whether the direction of the sort indicators in list and tree views is inverted compared to the default (where down means ascending)"
 msgstr "Ali je smer kazalnikov razvrščanja v seznamu in drevesnih pogledih obrnjena v primerjavi s privzeto vrednostjo (kjer dol pomeni naraščajoče)"
 
-#: ../gtk/gtksettings.c:607
+#: ../gtk/gtksettings.c:624
 msgid "Show the 'Input Methods' menu"
 msgstr "Pokaži meni 'Način vnosa'"
 
-#: ../gtk/gtksettings.c:608
+#: ../gtk/gtksettings.c:625
 msgid "Whether the context menus of entries and text views should offer to change the input method"
 msgstr "Ali naj vsebinski meniji vnosov in pogledov besedila ponudijo možnost spreminjanja načina vnosa"
 
-#: ../gtk/gtksettings.c:616
+#: ../gtk/gtksettings.c:633
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "Pokaži meni 'Vstavi nadzorni znak Unicode'"
 
-#: ../gtk/gtksettings.c:617
+#: ../gtk/gtksettings.c:634
 msgid "Whether the context menus of entries and text views should offer to insert control characters"
 msgstr "Ali naj vsebinski meniji vnosov in pogledov besedila ponudijo možnost vstavljanja nadzornih znakov"
 
-#: ../gtk/gtksettings.c:625
+#: ../gtk/gtksettings.c:642
 msgid "Start timeout"
 msgstr "Začetna časovna omejitev"
 
-#: ../gtk/gtksettings.c:626
+#: ../gtk/gtksettings.c:643
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "Začetna vrednost za časovno omejitev, kadar je gumb pritisnjen."
 
-#: ../gtk/gtksettings.c:635
+#: ../gtk/gtksettings.c:652
 msgid "Repeat timeout"
 msgstr "Ponovi časovni zamik"
 
-#: ../gtk/gtksettings.c:636
+#: ../gtk/gtksettings.c:653
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Ponovi vrednost časovnih zamikov, kadar je pritisnjen gumb"
 
-#: ../gtk/gtksettings.c:645
+#: ../gtk/gtksettings.c:662
 msgid "Expand timeout"
 msgstr "Časovni zamik razširitve"
 
-#: ../gtk/gtksettings.c:646
+#: ../gtk/gtksettings.c:663
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr "Časovni zamik za razširitve, kadar gradnik razširi novo območje"
 
-#: ../gtk/gtksettings.c:681
+#: ../gtk/gtksettings.c:698
 msgid "Color scheme"
 msgstr "Barvna shema"
 
-#: ../gtk/gtksettings.c:682
+#: ../gtk/gtksettings.c:699
 msgid "A palette of named colors for use in themes"
 msgstr "Paleta imenovanih barv za uporabo v temah"
 
-#: ../gtk/gtksettings.c:691
+#: ../gtk/gtksettings.c:708
 msgid "Enable Animations"
 msgstr "Omogoči animacije"
 
-#: ../gtk/gtksettings.c:692
+#: ../gtk/gtksettings.c:709
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Ali naj bodo omogočene animacije v zbirki orodij."
 
-#: ../gtk/gtksettings.c:713
+#: ../gtk/gtksettings.c:730
 msgid "Enable Touchscreen Mode"
 msgstr "Omogoči način na dotik občutljivega zaslona"
 
-#: ../gtk/gtksettings.c:714
+#: ../gtk/gtksettings.c:731
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr "Izbrana možnost omogoča, da ni obvestil o dogodkih gibanja."
 
-#: ../gtk/gtksettings.c:731
+#: ../gtk/gtksettings.c:748
 msgid "Tooltip timeout"
 msgstr "Zakasnitev orodnega namiga"
 
-#: ../gtk/gtksettings.c:732
+#: ../gtk/gtksettings.c:749
 msgid "Timeout before tooltip is shown"
 msgstr "Časovni zamik preden se pokaže namig orodja"
 
-#: ../gtk/gtksettings.c:757
+#: ../gtk/gtksettings.c:774
 msgid "Tooltip browse timeout"
 msgstr "Zakasnitev brskanja namigov"
 
-#: ../gtk/gtksettings.c:758
+#: ../gtk/gtksettings.c:775
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr "Zakasnitev namigov preden se omogoči brskalni način"
 
-#: ../gtk/gtksettings.c:779
+#: ../gtk/gtksettings.c:796
 msgid "Tooltip browse mode timeout"
 msgstr "Zakasnitev načina brskanja namigov"
 
-#: ../gtk/gtksettings.c:780
+#: ../gtk/gtksettings.c:797
 msgid "Timeout after which browse mode is disabled"
 msgstr "Zakasnitev preden se onemogoči brskalni način"
 
-#: ../gtk/gtksettings.c:799
+#: ../gtk/gtksettings.c:816
 msgid "Keynav Cursor Only"
 msgstr "Upravljanje samo s smernimi tipkami"
 
-#: ../gtk/gtksettings.c:800
+#: ../gtk/gtksettings.c:817
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr "Izbrana možnost omogoča, da so na voljo le smerne tipke za upravljanje z gradniki"
 
-#: ../gtk/gtksettings.c:817
+#: ../gtk/gtksettings.c:834
 msgid "Keynav Wrap Around"
 msgstr "Prelom med upravljanjem s tipkovnico"
 
-#: ../gtk/gtksettings.c:818
+#: ../gtk/gtksettings.c:835
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "Ali naj pride do preloma, ko gradnik upravljamo s tipkovnico"
 
-#: ../gtk/gtksettings.c:838
+#: ../gtk/gtksettings.c:855
 msgid "Error Bell"
 msgstr "Pisk napake"
 
-#: ../gtk/gtksettings.c:839
+#: ../gtk/gtksettings.c:856
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr "Izbrana možnost omogoča, da sistem napako javi tudi s piskom"
 
-#: ../gtk/gtksettings.c:856
+#: ../gtk/gtksettings.c:873
 msgid "Color Hash"
 msgstr "Barvno razpršilo"
 
-#: ../gtk/gtksettings.c:857
+#: ../gtk/gtksettings.c:874
 msgid "A hash table representation of the color scheme."
 msgstr "Preglednica razpršil barvne sheme"
 
-#: ../gtk/gtksettings.c:865
+#: ../gtk/gtksettings.c:882
 msgid "Default file chooser backend"
 msgstr "Privzet ozadnji program izbirnika datotek"
 
-#: ../gtk/gtksettings.c:866
+#: ../gtk/gtksettings.c:883
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Ime privzetega zaledja GtkFileChooser"
 
-#: ../gtk/gtksettings.c:883
+#: ../gtk/gtksettings.c:900
 msgid "Default print backend"
 msgstr "Privzeto zaledje tiskanja"
 
-#: ../gtk/gtksettings.c:884
+#: ../gtk/gtksettings.c:901
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Seznam ozadnjih programov GtkPrintBackend, ki naj bodo privzeto uporabljeni"
 
-#: ../gtk/gtksettings.c:907
+#: ../gtk/gtksettings.c:924
 msgid "Default command to run when displaying a print preview"
 msgstr "Privzeti ukaz, ki naj se izvede ob prikazu predogleda tiskanja"
 
-#: ../gtk/gtksettings.c:908
+#: ../gtk/gtksettings.c:925
 msgid "Command to run when displaying a print preview"
 msgstr "Ukaz, ki naj se izvede, ko se prikaže predogled tiskanja"
 
-#: ../gtk/gtksettings.c:924
+#: ../gtk/gtksettings.c:941
 msgid "Enable Mnemonics"
 msgstr "Omogoči menijske bližnjice"
 
-#: ../gtk/gtksettings.c:925
+#: ../gtk/gtksettings.c:942
 msgid "Whether labels should have mnemonics"
 msgstr "Ali naj oznake vsebujejo menijske bližnjice"
 
-#: ../gtk/gtksettings.c:941
+#: ../gtk/gtksettings.c:958
 msgid "Enable Accelerators"
 msgstr "Omogoči pospeševalnike"
 
-#: ../gtk/gtksettings.c:942
+#: ../gtk/gtksettings.c:959
 msgid "Whether menu items should have accelerators"
 msgstr "Ali naj imajo predmeti menija pospeševalnike"
 
-#: ../gtk/gtksettings.c:959
+#: ../gtk/gtksettings.c:976
 msgid "Recent Files Limit"
 msgstr "Omejitev nedavnih datotek"
 
-#: ../gtk/gtksettings.c:960
+#: ../gtk/gtksettings.c:977
 msgid "Number of recently used files"
 msgstr "Število nedavno uporabljenih datotek"
 
-#: ../gtk/gtksettings.c:980
+#: ../gtk/gtksettings.c:997
 msgid "Default IM module"
 msgstr "Privzeta enota načina vnosa"
 
-#: ../gtk/gtksettings.c:981
+#: ../gtk/gtksettings.c:998
 msgid "Which IM module should be used by default"
 msgstr "Katera enota načina vnosa naj bo privzeto uporabljena"
 
-#: ../gtk/gtksettings.c:999
+#: ../gtk/gtksettings.c:1016
 msgid "Recent Files Max Age"
 msgstr "Največja starost nedavno uporabljenih datotek"
 
-#: ../gtk/gtksettings.c:1000
+#: ../gtk/gtksettings.c:1017
 msgid "Maximum age of recently used files, in days"
 msgstr "Največja starost nedavno uporabljenih datotek (v dneh)"
 
-#: ../gtk/gtksettings.c:1009
+#: ../gtk/gtksettings.c:1026
 msgid "Fontconfig configuration timestamp"
 msgstr "Časovni žig nastavitev fontconfig"
 
-#: ../gtk/gtksettings.c:1010
+#: ../gtk/gtksettings.c:1027
 msgid "Timestamp of current fontconfig configuration"
 msgstr "Časovni žig trenutne nastavitve fontconfig"
 
-#: ../gtk/gtksettings.c:1032
+#: ../gtk/gtksettings.c:1049
 msgid "Sound Theme Name"
 msgstr "Ime zvočne teme"
 
-#: ../gtk/gtksettings.c:1033
+#: ../gtk/gtksettings.c:1050
 msgid "XDG sound theme name"
 msgstr "Ime zvočne teme XDG"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: ../gtk/gtksettings.c:1055
+#: ../gtk/gtksettings.c:1072
 msgid "Audible Input Feedback"
 msgstr "Zvočni odziv na vnos"
 
-#: ../gtk/gtksettings.c:1056
+#: ../gtk/gtksettings.c:1073
 msgid "Whether to play event sounds as feedback to user input"
 msgstr "Ali se predvajajo zvočni odzivi na uporabniki vnos"
 
-#: ../gtk/gtksettings.c:1077
+#: ../gtk/gtksettings.c:1094
 msgid "Enable Event Sounds"
 msgstr "Omogoči zvoke dogodkov"
 
-#: ../gtk/gtksettings.c:1078
+#: ../gtk/gtksettings.c:1095
 msgid "Whether to play any event sounds at all"
 msgstr "Ali naj se predvajajo zvoki dogodkov"
 
-#: ../gtk/gtksettings.c:1093
+#: ../gtk/gtksettings.c:1110
 msgid "Enable Tooltips"
 msgstr "Omogoči orodne namige"
 
-#: ../gtk/gtksettings.c:1094
+#: ../gtk/gtksettings.c:1111
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Ali naj se na gradnikih prikažejo orodni namigi"
 
-#: ../gtk/gtksettings.c:1107
+#: ../gtk/gtksettings.c:1124
 msgid "Toolbar style"
 msgstr "Slog orodne vrstice"
 
-#: ../gtk/gtksettings.c:1108
+#: ../gtk/gtksettings.c:1125
 msgid "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "Ali imajo privzete orodne vrstice le besedilo, besedilo in ikone, samo ikone, itd."
 
-#: ../gtk/gtksettings.c:1122
+#: ../gtk/gtksettings.c:1139
 msgid "Toolbar Icon Size"
 msgstr "Velikost ikon orodne vrstice"
 
-#: ../gtk/gtksettings.c:1123
+#: ../gtk/gtksettings.c:1140
 msgid "The size of icons in default toolbars."
 msgstr "Velikost ikon v privzetih orodnih vrsticah."
 
-#: ../gtk/gtksettings.c:1140
+#: ../gtk/gtksettings.c:1157
 msgid "Auto Mnemonics"
 msgstr "Samodejne menijske bližnjice"
 
-#: ../gtk/gtksettings.c:1141
+#: ../gtk/gtksettings.c:1158
 msgid "Whether mnemonics should be automatically shown and hidden when the user presses the mnemonic activator."
 msgstr "Ali naj bodo pospeševalne tipke samodejno prikazane (in skrite), kadar uporabnik pritisne (spusti) ustrezno tipko."
 
-#: ../gtk/gtksettings.c:1157
+#: ../gtk/gtksettings.c:1174
+msgid "Primary button warps slider"
+msgstr "Osnovni gumb prikaže drsnik"
+
+#: ../gtk/gtksettings.c:1175
+msgid "Whether a primary click on the trough should warp the slider into position"
+msgstr "Ali naj osnovni klik na zarezo prikaže drsnik v položaju"
+
+#: ../gtk/gtksettings.c:1191
 msgid "Visible Focus"
 msgstr "Okno v žarišču"
 
-#: ../gtk/gtksettings.c:1158
+#: ../gtk/gtksettings.c:1192
 msgid "Whether 'focus rectangles' should be hidden until the user starts to use the keyboard."
 msgstr "Ali naj bodo 'pravokotniki žariščenja' skriti, dokler uporabnik ne začne uporabljati tipkovnice."
 
-#: ../gtk/gtksettings.c:1184
+#: ../gtk/gtksettings.c:1218
 msgid "Application prefers a dark theme"
 msgstr "Program daje prednost temnejši temi"
 
-#: ../gtk/gtksettings.c:1185
+#: ../gtk/gtksettings.c:1219
 msgid "Whether the application prefers to have a dark theme."
 msgstr "Ali program daje prednost temnejši temi."
 
-#: ../gtk/gtksettings.c:1200
+#: ../gtk/gtksettings.c:1234
 msgid "Show button images"
 msgstr "Pokaži slike gumbov"
 
-#: ../gtk/gtksettings.c:1201
+#: ../gtk/gtksettings.c:1235
 msgid "Whether images should be shown on buttons"
 msgstr "Ali naj bodo na gumbih prikazane slike"
 
-#: ../gtk/gtksettings.c:1209
-#: ../gtk/gtksettings.c:1303
+#: ../gtk/gtksettings.c:1243
+#: ../gtk/gtksettings.c:1337
 msgid "Select on focus"
 msgstr "Izbira ob dejavnosti"
 
-#: ../gtk/gtksettings.c:1210
+#: ../gtk/gtksettings.c:1244
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Ali naj bo izbrana vsebina vnosa, kadar je vnos dejaven"
 
-#: ../gtk/gtksettings.c:1227
+#: ../gtk/gtksettings.c:1261
 msgid "Password Hint Timeout"
 msgstr "Časovna omejitev namiga za geslo"
 
-#: ../gtk/gtksettings.c:1228
+#: ../gtk/gtksettings.c:1262
 msgid "How long to show the last input character in hidden entries"
 msgstr "Kako dolgo naj bo prikazan zadnji vneseni znak v skritih vnosih."
 
-#: ../gtk/gtksettings.c:1237
+#: ../gtk/gtksettings.c:1271
 msgid "Show menu images"
 msgstr "Pokaži slike v menijih"
 
-#: ../gtk/gtksettings.c:1238
+#: ../gtk/gtksettings.c:1272
 msgid "Whether images should be shown in menus"
 msgstr "Ali naj bodo v menijih prikazane slike ali ne"
 
-#: ../gtk/gtksettings.c:1246
+#: ../gtk/gtksettings.c:1280
 msgid "Delay before drop down menus appear"
 msgstr "Zakasnitev, preden se pojavijo spustni meniji"
 
-#: ../gtk/gtksettings.c:1247
+#: ../gtk/gtksettings.c:1281
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Zakasnitev, preden se pojavijo podmeniji menijske vrstice"
 
-#: ../gtk/gtksettings.c:1264
+#: ../gtk/gtksettings.c:1298
 msgid "Scrolled Window Placement"
 msgstr "Postavitev drsečega okna"
 
-#: ../gtk/gtksettings.c:1265
+#: ../gtk/gtksettings.c:1299
 msgid "Where the contents of scrolled windows are located with respect to the scrollbars, if not overridden by the scrolled window's own placement."
 msgstr "Kje leži vsebina drsnih oken glede na drsnike, kadar možnosti ne prepiše lega drsnega okna."
 
-#: ../gtk/gtksettings.c:1274
+#: ../gtk/gtksettings.c:1308
 msgid "Can change accelerators"
 msgstr "Lahko spremeni pospeševalnike"
 
-#: ../gtk/gtksettings.c:1275
+#: ../gtk/gtksettings.c:1309
 msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "Ali se lahko pospeševalniki menijev spremenijo s pritiskom tipke nad predmetom menija."
 
-#: ../gtk/gtksettings.c:1283
+#: ../gtk/gtksettings.c:1317
 msgid "Delay before submenus appear"
 msgstr "Zakasnitev, preden se prikažejo podmeniji"
 
-#: ../gtk/gtksettings.c:1284
+#: ../gtk/gtksettings.c:1318
 msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "Najmanjši čas, kolikor mora kazalec stati nad menijem, preden se prikaže podmeni"
 
-#: ../gtk/gtksettings.c:1293
+#: ../gtk/gtksettings.c:1327
 msgid "Delay before hiding a submenu"
 msgstr "Zakasnitev pred skritjem podmenija"
 
-#: ../gtk/gtksettings.c:1294
+#: ../gtk/gtksettings.c:1328
 msgid "The time before hiding a submenu when the pointer is moving towards the submenu"
 msgstr "Čas, preden se podmeni skrije, ko se kazalec premika proti njemu"
 
-#: ../gtk/gtksettings.c:1304
+#: ../gtk/gtksettings.c:1338
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "Ali naj bo izbrana vsebina izbirne oznake, kadar je ta v žarišču"
 
-#: ../gtk/gtksettings.c:1312
+#: ../gtk/gtksettings.c:1346
 msgid "Custom palette"
 msgstr "Paleta po meri"
 
-#: ../gtk/gtksettings.c:1313
+#: ../gtk/gtksettings.c:1347
 msgid "Palette to use in the color selector"
 msgstr "Paleta, ki naj se uporabi v izbirniku barv"
 
-#: ../gtk/gtksettings.c:1321
+#: ../gtk/gtksettings.c:1355
 msgid "IM Preedit style"
 msgstr "Predhodno urejevalni slog načina vnosa"
 
-#: ../gtk/gtksettings.c:1322
+#: ../gtk/gtksettings.c:1356
 msgid "How to draw the input method preedit string"
 msgstr "Kako naj se nariše predhodno urejevalni niz načina vnosa"
 
-#: ../gtk/gtksettings.c:1331
+#: ../gtk/gtksettings.c:1365
 msgid "IM Status style"
 msgstr "Slog stanja načina vnosa"
 
-#: ../gtk/gtksettings.c:1332
+#: ../gtk/gtksettings.c:1366
 msgid "How to draw the input method statusbar"
 msgstr "Kako naj se nariše vrstica stanja načina vnosa"
 
-#: ../gtk/gtksettings.c:1341
+#: ../gtk/gtksettings.c:1375
 msgid "Desktop shell shows app menu"
 msgstr "Lupina namizja prikaže meni programa"
 
-#: ../gtk/gtksettings.c:1342
+#: ../gtk/gtksettings.c:1376
 msgid "Set to TRUE if the desktop environment is displaying the app menu, FALSE if the app should display it itself."
 msgstr "Izbrana možnost omogoča, da okolje namizja prikaže meni programa, sicer ga mora prikazati sam program."
 
-#: ../gtk/gtksettings.c:1351
+#: ../gtk/gtksettings.c:1385
 msgid "Desktop shell shows the menubar"
 msgstr "Lupina namizja prikaže menijsko vrstico"
 
-#: ../gtk/gtksettings.c:1352
+#: ../gtk/gtksettings.c:1386
 msgid "Set to TRUE if the desktop environment is displaying the menubar, FALSE if the app should display it itself."
 msgstr "Izbrana možnost omogoča, da okolje namizja prikaže menijsko vrstico, sicer jo mora prikazati sam program."
 
-#: ../gtk/gtksettings.c:1369
+#: ../gtk/gtksettings.c:1403
 msgid "Enable primary paste"
 msgstr "Omogoči osnovno prilepljenje"
 
-#: ../gtk/gtksettings.c:1370
+#: ../gtk/gtksettings.c:1404
 msgid "Whether a middle click on a mouse should paste the 'PRIMARY' clipboard content at the cursor location."
 msgstr "Ali naj se s srednjim klikom prilepi 'OSNOVNA' vsebina odložišča na mestu kazalke."
 
@@ -6137,47 +6269,47 @@ msgstr "Prezri skrito"
 msgid "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr "Izbrana možnost omogoča, da so pri določanju velikosti skupine gradniki, ki niso preslikani, prezrti."
 
-#: ../gtk/gtkspinbutton.c:327
+#: ../gtk/gtkspinbutton.c:344
 msgid "Climb Rate"
 msgstr "Pospešek"
 
-#: ../gtk/gtkspinbutton.c:347
+#: ../gtk/gtkspinbutton.c:364
 msgid "Snap to Ticks"
 msgstr "Pripni na kljukice"
 
-#: ../gtk/gtkspinbutton.c:348
+#: ../gtk/gtkspinbutton.c:365
 msgid "Whether erroneous values are automatically changed to a spin button's nearest step increment"
 msgstr "Ali napačne vrednosti samodejno preskočijo na najbližje povečave korakov vrtilnega gumba"
 
-#: ../gtk/gtkspinbutton.c:355
+#: ../gtk/gtkspinbutton.c:372
 msgid "Numeric"
 msgstr "Številke"
 
-#: ../gtk/gtkspinbutton.c:356
+#: ../gtk/gtkspinbutton.c:373
 msgid "Whether non-numeric characters should be ignored"
 msgstr "Ali naj bodo ne-številčni znaki prezrti"
 
-#: ../gtk/gtkspinbutton.c:363
+#: ../gtk/gtkspinbutton.c:380
 msgid "Wrap"
 msgstr "Prelom"
 
-#: ../gtk/gtkspinbutton.c:364
+#: ../gtk/gtkspinbutton.c:381
 msgid "Whether a spin button should wrap upon reaching its limits"
 msgstr "Ali naj vrtilni gumb naredi prelom, ko doseže svojo mejo"
 
-#: ../gtk/gtkspinbutton.c:371
+#: ../gtk/gtkspinbutton.c:388
 msgid "Update Policy"
 msgstr "Pravila posodabljanja"
 
-#: ../gtk/gtkspinbutton.c:372
+#: ../gtk/gtkspinbutton.c:389
 msgid "Whether the spin button should update always, or only when the value is legal"
 msgstr "Ali naj se vrtilni gumb posodablja vedno, ali le takrat kadar je vrednost dovoljena"
 
-#: ../gtk/gtkspinbutton.c:381
+#: ../gtk/gtkspinbutton.c:398
 msgid "Reads the current value, or sets a new value"
 msgstr "Prebere trenutno vrednost ali nastavi novo"
 
-#: ../gtk/gtkspinbutton.c:390
+#: ../gtk/gtkspinbutton.c:411
 msgid "Style of bevel around the spin button"
 msgstr "Slog obrobe okoli vrtilnega gumba"
 
@@ -6211,7 +6343,7 @@ msgid "The orientation of the tray"
 msgstr "Usmerjenost sistemske vrstice"
 
 #: ../gtk/gtkstatusicon.c:358
-#: ../gtk/gtkwidget.c:1124
+#: ../gtk/gtkwidget.c:1126
 msgid "Has tooltip"
 msgstr "Ima orodni namig"
 
@@ -6220,18 +6352,18 @@ msgid "Whether this tray icon has a tooltip"
 msgstr "Ali naj ima ikona sistemske vrstice orodni namig"
 
 #: ../gtk/gtkstatusicon.c:384
-#: ../gtk/gtkwidget.c:1145
+#: ../gtk/gtkwidget.c:1147
 msgid "Tooltip Text"
 msgstr "Besedilo orodnega namiga"
 
 #: ../gtk/gtkstatusicon.c:385
-#: ../gtk/gtkwidget.c:1146
-#: ../gtk/gtkwidget.c:1167
+#: ../gtk/gtkwidget.c:1148
+#: ../gtk/gtkwidget.c:1169
 msgid "The contents of the tooltip for this widget"
 msgstr "Vsebina orodnega namiga tega gradnika"
 
 #: ../gtk/gtkstatusicon.c:408
-#: ../gtk/gtkwidget.c:1166
+#: ../gtk/gtkwidget.c:1168
 msgid "Tooltip markup"
 msgstr "Oblika orodnega namiga"
 
@@ -6243,20 +6375,20 @@ msgstr "Vsebina namiga za ikono v sistemski vrstici"
 msgid "The title of this tray icon"
 msgstr "Naslov ikone sistemske vrstice"
 
-#: ../gtk/gtkstylecontext.c:443
+#: ../gtk/gtkstylecontext.c:441
 msgid "The associated GdkScreen"
 msgstr "Povezan predmet GdkScreen"
 
-#: ../gtk/gtkstylecontext.c:449
+#: ../gtk/gtkstylecontext.c:447
 msgid "Direction"
 msgstr "Smer"
 
-#: ../gtk/gtkstylecontext.c:450
+#: ../gtk/gtkstylecontext.c:448
 #: ../gtk/gtktexttag.c:287
 msgid "Text direction"
 msgstr "Smer besedila"
 
-#: ../gtk/gtkstylecontext.c:466
+#: ../gtk/gtkstylecontext.c:464
 msgid "The parent style context"
 msgstr "Nadrejeni vsebinski slog"
 
@@ -6276,11 +6408,11 @@ msgstr "Vrsta vrednosti"
 msgid "The value type returned by GtkStyleContext"
 msgstr "Vrsta vrednosti, ki jo vrne predmet GtkStyleContext"
 
-#: ../gtk/gtkswitch.c:911
+#: ../gtk/gtkswitch.c:835
 msgid "Whether the switch is on or off"
 msgstr "Ali je preklop omogočen ali onemogočen"
 
-#: ../gtk/gtkswitch.c:946
+#: ../gtk/gtkswitch.c:869
 msgid "The minimum width of the handle"
 msgstr "Najmanjša širina ročnika"
 
@@ -6327,6 +6459,21 @@ msgstr "Prilepi seznam ciljev"
 #: ../gtk/gtktextbuffer.c:284
 msgid "The list of targets this buffer supports for clipboard pasting and DND destination"
 msgstr "Seznam ciljev katerih medpomnilnik podpira možnost lepljenja iz odložišča in DND cilje"
+
+#: ../gtk/gtktexthandle.c:470
+#: ../gtk/gtktexthandle.c:471
+#: ../gtk/gtkwidget.c:992
+msgid "Parent widget"
+msgstr "Nadrejeni gradnik"
+
+#: ../gtk/gtktexthandle.c:478
+#: ../gtk/gtkwidget.c:1183
+msgid "Window"
+msgstr "Okno"
+
+#: ../gtk/gtktexthandle.c:479
+msgid "Window the coordinates are based upon"
+msgstr "Okno, na katerem temeljijo koordinate"
 
 #: ../gtk/gtktextmark.c:127
 msgid "Mark name"
@@ -6393,7 +6540,7 @@ msgid "Font size as a scale factor relative to the default font size. This prope
 msgstr "Velikost pisave kot faktor povečave relativen na privzeto velikost pisave. Ta lastnost se prilagaja nastavitvam teme, zato je priporočena. Pango vnaprej navede nekatera merila, npr.: PANGO_SCALE_X_LARGE"
 
 #: ../gtk/gtktexttag.c:405
-#: ../gtk/gtktextview.c:702
+#: ../gtk/gtktextview.c:720
 msgid "Left, right, or center justification"
 msgstr "Poravnava levo, desno ali po sredini"
 
@@ -6406,7 +6553,7 @@ msgid "Left margin"
 msgstr "Levi rob"
 
 #: ../gtk/gtktexttag.c:432
-#: ../gtk/gtktextview.c:711
+#: ../gtk/gtktextview.c:729
 msgid "Width of the left margin in pixels"
 msgstr "Širina levega roba v slikovnih točkah"
 
@@ -6415,17 +6562,17 @@ msgid "Right margin"
 msgstr "Desni rob"
 
 #: ../gtk/gtktexttag.c:442
-#: ../gtk/gtktextview.c:721
+#: ../gtk/gtktextview.c:739
 msgid "Width of the right margin in pixels"
 msgstr "Širina desnega roba v slikovnih točkah"
 
 #: ../gtk/gtktexttag.c:452
-#: ../gtk/gtktextview.c:730
+#: ../gtk/gtktextview.c:748
 msgid "Indent"
 msgstr "Zamik"
 
 #: ../gtk/gtktexttag.c:453
-#: ../gtk/gtktextview.c:731
+#: ../gtk/gtktextview.c:749
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Zamik odstavka (v slikovnih točkah)"
 
@@ -6438,7 +6585,7 @@ msgid "Pixels above lines"
 msgstr "Slikovne točke nad vrsticami"
 
 #: ../gtk/gtktexttag.c:474
-#: ../gtk/gtktextview.c:655
+#: ../gtk/gtktextview.c:673
 msgid "Pixels of blank space above paragraphs"
 msgstr "Število slikovnih točk praznega prostora nad odstavki"
 
@@ -6447,7 +6594,7 @@ msgid "Pixels below lines"
 msgstr "Slikovne točke pod vrsticami"
 
 #: ../gtk/gtktexttag.c:484
-#: ../gtk/gtktextview.c:665
+#: ../gtk/gtktextview.c:683
 msgid "Pixels of blank space below paragraphs"
 msgstr "Število slikovnih točk praznega prostora pod odstavki"
 
@@ -6456,22 +6603,22 @@ msgid "Pixels inside wrap"
 msgstr "Slikovne točke znotraj preloma"
 
 #: ../gtk/gtktexttag.c:494
-#: ../gtk/gtktextview.c:675
+#: ../gtk/gtktextview.c:693
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Število slikovnih točk praznega prostora med prelomi vrstic znotraj odstavkov"
 
 #: ../gtk/gtktexttag.c:521
-#: ../gtk/gtktextview.c:693
+#: ../gtk/gtktextview.c:711
 msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Ali naj se vrstice prelomijo na meji besed, na meji znakov ali nikoli"
 
 #: ../gtk/gtktexttag.c:530
-#: ../gtk/gtktextview.c:740
+#: ../gtk/gtktextview.c:758
 msgid "Tabs"
 msgstr "Zavihki"
 
 #: ../gtk/gtktexttag.c:531
-#: ../gtk/gtktextview.c:741
+#: ../gtk/gtktextview.c:759
 msgid "Custom tabs for this text"
 msgstr "Poljubni zavihki za to besedilo"
 
@@ -6608,67 +6755,67 @@ msgstr "Nastavi barvo ozadja odstavka"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Ali naj ta oznaka vpliva na barvo ozadja odstavka"
 
-#: ../gtk/gtktextview.c:654
+#: ../gtk/gtktextview.c:672
 msgid "Pixels Above Lines"
 msgstr "Slikovne točke nad vrsticami"
 
-#: ../gtk/gtktextview.c:664
+#: ../gtk/gtktextview.c:682
 msgid "Pixels Below Lines"
 msgstr "Slikovne točke pod vrsticami"
 
-#: ../gtk/gtktextview.c:674
+#: ../gtk/gtktextview.c:692
 msgid "Pixels Inside Wrap"
 msgstr "Slikovne točke znotraj preloma"
 
-#: ../gtk/gtktextview.c:692
+#: ../gtk/gtktextview.c:710
 msgid "Wrap Mode"
 msgstr "Način preloma"
 
-#: ../gtk/gtktextview.c:710
+#: ../gtk/gtktextview.c:728
 msgid "Left Margin"
 msgstr "Levi rob"
 
-#: ../gtk/gtktextview.c:720
+#: ../gtk/gtktextview.c:738
 msgid "Right Margin"
 msgstr "Desni rob"
 
-#: ../gtk/gtktextview.c:748
+#: ../gtk/gtktextview.c:766
 msgid "Cursor Visible"
 msgstr "Vidna kazalka"
 
-#: ../gtk/gtktextview.c:749
+#: ../gtk/gtktextview.c:767
 msgid "If the insertion cursor is shown"
 msgstr "Ali je vstavitvena kazalka vidna"
 
-#: ../gtk/gtktextview.c:756
+#: ../gtk/gtktextview.c:774
 msgid "Buffer"
 msgstr "Medpomnilnik"
 
-#: ../gtk/gtktextview.c:757
+#: ../gtk/gtktextview.c:775
 msgid "The buffer which is displayed"
 msgstr "Prikazan medpomnilnik"
 
-#: ../gtk/gtktextview.c:765
+#: ../gtk/gtktextview.c:783
 msgid "Whether entered text overwrites existing contents"
 msgstr "Ali naj vneseno besedilo prepiše obstoječo vsebino"
 
-#: ../gtk/gtktextview.c:772
+#: ../gtk/gtktextview.c:790
 msgid "Accepts tab"
 msgstr "Sprejme tabulator"
 
-#: ../gtk/gtktextview.c:773
+#: ../gtk/gtktextview.c:791
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Ali naj pritisk na tipko Tab povzroči vnos tabulatorja"
 
-#: ../gtk/gtktextview.c:808
+#: ../gtk/gtktextview.c:862
 msgid "Error underline color"
 msgstr "Barva podčrtovanja napak"
 
-#: ../gtk/gtktextview.c:809
+#: ../gtk/gtktextview.c:863
 msgid "Color with which to draw error-indication underlines"
 msgstr "Barva, s katero naj bodo podčrtane nakazane napake"
 
-#: ../gtk/gtkthemingengine.c:256
+#: ../gtk/gtkthemingengine.c:258
 msgid "Theming engine name"
 msgstr "Ime programnika tem"
 
@@ -6701,83 +6848,83 @@ msgstr "Izriši kazalnik"
 msgid "If the toggle part of the button is displayed"
 msgstr "Ali je preklopni del gumba prikazan"
 
-#: ../gtk/gtktoolbar.c:504
-#: ../gtk/gtktoolpalette.c:1034
+#: ../gtk/gtktoolbar.c:501
+#: ../gtk/gtktoolpalette.c:1043
 msgid "Toolbar Style"
 msgstr "Slog orodne vrstice"
 
-#: ../gtk/gtktoolbar.c:505
+#: ../gtk/gtktoolbar.c:502
 msgid "How to draw the toolbar"
 msgstr "Kako naj se izriše orodna vrstica"
 
-#: ../gtk/gtktoolbar.c:512
+#: ../gtk/gtktoolbar.c:509
 msgid "Show Arrow"
 msgstr "Pokaži puščico"
 
-#: ../gtk/gtktoolbar.c:513
+#: ../gtk/gtktoolbar.c:510
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Ali naj bo puščica prikazana, če orodna vrstica ni ustreznih mer"
 
-#: ../gtk/gtktoolbar.c:534
+#: ../gtk/gtktoolbar.c:531
 msgid "Size of icons in this toolbar"
 msgstr "Velikost ikon te orodne vrstice"
 
-#: ../gtk/gtktoolbar.c:549
-#: ../gtk/gtktoolpalette.c:1020
+#: ../gtk/gtktoolbar.c:546
+#: ../gtk/gtktoolpalette.c:1029
 msgid "Icon size set"
 msgstr "Nastavitev velikosti ikone"
 
-#: ../gtk/gtktoolbar.c:550
-#: ../gtk/gtktoolpalette.c:1021
+#: ../gtk/gtktoolbar.c:547
+#: ../gtk/gtktoolpalette.c:1030
 msgid "Whether the icon-size property has been set"
 msgstr "Ali je določena lastnost velikosti ikone"
 
-#: ../gtk/gtktoolbar.c:559
+#: ../gtk/gtktoolbar.c:556
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Ali naj predmet dobi dodaten prostor, ko se orodna vrstica poveča"
 
-#: ../gtk/gtktoolbar.c:567
-#: ../gtk/gtktoolitemgroup.c:1642
+#: ../gtk/gtktoolbar.c:564
+#: ../gtk/gtktoolitemgroup.c:1651
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Ali naj bo predmet enake velikosti kot ostali predmeti"
 
-#: ../gtk/gtktoolbar.c:574
+#: ../gtk/gtktoolbar.c:571
 msgid "Spacer size"
 msgstr "Velikost ločilnikov"
 
-#: ../gtk/gtktoolbar.c:575
+#: ../gtk/gtktoolbar.c:572
 msgid "Size of spacers"
 msgstr "Velikost ločilnikov"
 
-#: ../gtk/gtktoolbar.c:584
+#: ../gtk/gtktoolbar.c:590
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Količina robnega prostora med senco orodne vrstice in gumbi"
 
-#: ../gtk/gtktoolbar.c:592
+#: ../gtk/gtktoolbar.c:598
 msgid "Maximum child expand"
 msgstr "Največja razširitev podrejenega predmeta"
 
-#: ../gtk/gtktoolbar.c:593
+#: ../gtk/gtktoolbar.c:599
 msgid "Maximum amount of space an expandable item will be given"
 msgstr "Največja količina prostora, ki jo ima na voljo raztegljivi predmet"
 
-#: ../gtk/gtktoolbar.c:601
+#: ../gtk/gtktoolbar.c:607
 msgid "Space style"
 msgstr "Slog ločilnikov"
 
-#: ../gtk/gtktoolbar.c:602
+#: ../gtk/gtktoolbar.c:608
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Ali naj so ločilniki navpične črte ali le prazen prostor"
 
-#: ../gtk/gtktoolbar.c:609
+#: ../gtk/gtktoolbar.c:615
 msgid "Button relief"
 msgstr "Sprostitev gumba"
 
-#: ../gtk/gtktoolbar.c:610
+#: ../gtk/gtktoolbar.c:616
 msgid "Type of bevel around toolbar buttons"
 msgstr "Vrsta obrobe okoli gumbov orodne vrstice"
 
-#: ../gtk/gtktoolbar.c:617
+#: ../gtk/gtktoolbar.c:632
 msgid "Style of bevel around the toolbar"
 msgstr "Slog obrobe okoli orodne vrstice"
 
@@ -6829,83 +6976,83 @@ msgstr "Razmik (v slikovnih točkah) med ikono in oznako"
 msgid "Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 msgstr "Ali je predmet orodne vrstice pomemben. Izbrana možnost omogoča, da gumbi orodne vrstice prikažejo besedilo v načinu GTK_TOOLBAR_BOTH_HORIZ"
 
-#: ../gtk/gtktoolitemgroup.c:1589
+#: ../gtk/gtktoolitemgroup.c:1598
 msgid "The human-readable title of this item group"
 msgstr "Človeku berljiv naziv skupine predmetov"
 
-#: ../gtk/gtktoolitemgroup.c:1596
+#: ../gtk/gtktoolitemgroup.c:1605
 msgid "A widget to display in place of the usual label"
 msgstr "Gradnik, ki naj se prikaže na mestu običajne oznake"
 
-#: ../gtk/gtktoolitemgroup.c:1602
+#: ../gtk/gtktoolitemgroup.c:1611
 msgid "Collapsed"
 msgstr "Zloženo"
 
-#: ../gtk/gtktoolitemgroup.c:1603
+#: ../gtk/gtktoolitemgroup.c:1612
 msgid "Whether the group has been collapsed and items are hidden"
 msgstr "Ali je bila skupina zložena in predmeti niso vidni"
 
-#: ../gtk/gtktoolitemgroup.c:1609
+#: ../gtk/gtktoolitemgroup.c:1618
 msgid "ellipsize"
 msgstr "okrajševanje"
 
-#: ../gtk/gtktoolitemgroup.c:1610
+#: ../gtk/gtktoolitemgroup.c:1619
 msgid "Ellipsize for item group headers"
 msgstr "Okrajšaj za glave skupin predmetov"
 
-#: ../gtk/gtktoolitemgroup.c:1616
+#: ../gtk/gtktoolitemgroup.c:1625
 msgid "Header Relief"
 msgstr "Sproščanje glave"
 
-#: ../gtk/gtktoolitemgroup.c:1617
+#: ../gtk/gtktoolitemgroup.c:1626
 msgid "Relief of the group header button"
 msgstr "Sproščanje gumba glave skupine"
 
-#: ../gtk/gtktoolitemgroup.c:1632
+#: ../gtk/gtktoolitemgroup.c:1641
 msgid "Header Spacing"
 msgstr "Prostor glave"
 
-#: ../gtk/gtktoolitemgroup.c:1633
+#: ../gtk/gtktoolitemgroup.c:1642
 msgid "Spacing between expander arrow and caption"
 msgstr "Razmik med nazivom in puščice razširilnika gumba"
 
-#: ../gtk/gtktoolitemgroup.c:1649
+#: ../gtk/gtktoolitemgroup.c:1658
 msgid "Whether the item should receive extra space when the group grows"
 msgstr "Ali naj predmet prejme dodaten prostor, ko se skupina poveča"
 
-#: ../gtk/gtktoolitemgroup.c:1656
+#: ../gtk/gtktoolitemgroup.c:1665
 msgid "Whether the item should fill the available space"
 msgstr "Ali naj predmet zapolni ves razpoložljiv prostor"
 
-#: ../gtk/gtktoolitemgroup.c:1662
+#: ../gtk/gtktoolitemgroup.c:1671
 msgid "New Row"
 msgstr "Nova vrstica"
 
-#: ../gtk/gtktoolitemgroup.c:1663
+#: ../gtk/gtktoolitemgroup.c:1672
 msgid "Whether the item should start a new row"
 msgstr "Ali naj predmet začne novo vrstico"
 
-#: ../gtk/gtktoolitemgroup.c:1670
+#: ../gtk/gtktoolitemgroup.c:1679
 msgid "Position of the item within this group"
 msgstr "Položaj predmeta znotraj te skupine"
 
-#: ../gtk/gtktoolpalette.c:1005
+#: ../gtk/gtktoolpalette.c:1014
 msgid "Size of icons in this tool palette"
 msgstr "Velikost ikon v tej paleti orodij"
 
-#: ../gtk/gtktoolpalette.c:1035
+#: ../gtk/gtktoolpalette.c:1044
 msgid "Style of items in the tool palette"
 msgstr "Slog predmetov v paleti orodij"
 
-#: ../gtk/gtktoolpalette.c:1051
+#: ../gtk/gtktoolpalette.c:1060
 msgid "Exclusive"
 msgstr "Izredno"
 
-#: ../gtk/gtktoolpalette.c:1052
+#: ../gtk/gtktoolpalette.c:1061
 msgid "Whether the item group should be the only expanded at a given time"
 msgstr "Ali naj bo skupina predmetov edina razširjena ob določenem času"
 
-#: ../gtk/gtktoolpalette.c:1067
+#: ../gtk/gtktoolpalette.c:1076
 msgid "Whether the item group should receive extra space when the palette grows"
 msgstr "Ali naj skupina predmetov prejme dodaten prostor, ko se paleta poveča"
 
@@ -7199,7 +7346,7 @@ msgid "Whether to display the column"
 msgstr "Ali naj je stolpec prikazan"
 
 #: ../gtk/gtktreeviewcolumn.c:255
-#: ../gtk/gtkwindow.c:657
+#: ../gtk/gtkwindow.c:661
 msgid "Resizable"
 msgstr "Spremenljive velikosti"
 
@@ -7319,613 +7466,615 @@ msgstr "Uporabi simbolne ikone"
 msgid "Whether to use symbolic icons"
 msgstr "Ali naj se uporabijo simbolne ikone"
 
-#: ../gtk/gtkwidget.c:983
+#: ../gtk/gtkwidget.c:985
 msgid "Widget name"
 msgstr "Ime gradnika"
 
-#: ../gtk/gtkwidget.c:984
+#: ../gtk/gtkwidget.c:986
 msgid "The name of the widget"
 msgstr "Ime gradnika"
 
-#: ../gtk/gtkwidget.c:990
-msgid "Parent widget"
-msgstr "Nadrejeni gradnik"
-
-#: ../gtk/gtkwidget.c:991
+#: ../gtk/gtkwidget.c:993
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Nadrejeni gradnik tega gradnika. Mora biti gradnik vrste Container (vsebovalnik)"
 
-#: ../gtk/gtkwidget.c:998
+#: ../gtk/gtkwidget.c:1000
 msgid "Width request"
 msgstr "Zahtevek po širini"
 
-#: ../gtk/gtkwidget.c:999
+#: ../gtk/gtkwidget.c:1001
 msgid "Override for width request of the widget, or -1 if natural request should be used"
 msgstr "Prezri gradnikov zahtevek po širini, ali -1, če naj bo uporabljen običajni zahtevek"
 
-#: ../gtk/gtkwidget.c:1007
+#: ../gtk/gtkwidget.c:1009
 msgid "Height request"
 msgstr "Zahtevek po višini"
 
-#: ../gtk/gtkwidget.c:1008
+#: ../gtk/gtkwidget.c:1010
 msgid "Override for height request of the widget, or -1 if natural request should be used"
 msgstr "Prezri gradnikov zahtevek po višini, ali -1, če naj bo uporabljen običajni zahtevek"
 
-#: ../gtk/gtkwidget.c:1017
+#: ../gtk/gtkwidget.c:1019
 msgid "Whether the widget is visible"
 msgstr "Ali naj je gradnik viden"
 
-#: ../gtk/gtkwidget.c:1024
+#: ../gtk/gtkwidget.c:1026
 msgid "Whether the widget responds to input"
 msgstr "Ali naj se gradnik odziva na vnos"
 
-#: ../gtk/gtkwidget.c:1030
+#: ../gtk/gtkwidget.c:1032
 msgid "Application paintable"
 msgstr "Program je izrisljiv"
 
-#: ../gtk/gtkwidget.c:1031
+#: ../gtk/gtkwidget.c:1033
 msgid "Whether the application will paint directly on the widget"
 msgstr "Ali se bo program risal neposredno na gradnik"
 
-#: ../gtk/gtkwidget.c:1037
+#: ../gtk/gtkwidget.c:1039
 msgid "Can focus"
 msgstr "Lahko prevzame dejavnost"
 
-#: ../gtk/gtkwidget.c:1038
+#: ../gtk/gtkwidget.c:1040
 msgid "Whether the widget can accept the input focus"
 msgstr "Ali lahko gradnik sprejme vnosno dejavnost"
 
-#: ../gtk/gtkwidget.c:1044
+#: ../gtk/gtkwidget.c:1046
 msgid "Has focus"
 msgstr "Je dejavno"
 
-#: ../gtk/gtkwidget.c:1045
+#: ../gtk/gtkwidget.c:1047
 msgid "Whether the widget has the input focus"
 msgstr "Ali vključuje gradnik vnosno dejavnost"
 
-#: ../gtk/gtkwidget.c:1051
+#: ../gtk/gtkwidget.c:1053
 msgid "Is focus"
 msgstr "Je dejaven"
 
-#: ../gtk/gtkwidget.c:1052
+#: ../gtk/gtkwidget.c:1054
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Ali je gradnik dejaven znotraj vrhnje ravni"
 
-#: ../gtk/gtkwidget.c:1058
+#: ../gtk/gtkwidget.c:1060
 msgid "Can default"
 msgstr "Je lahko privzet"
 
-#: ../gtk/gtkwidget.c:1059
+#: ../gtk/gtkwidget.c:1061
 msgid "Whether the widget can be the default widget"
 msgstr "Ali naj je gradnik lahko privzet gradnik"
 
-#: ../gtk/gtkwidget.c:1065
+#: ../gtk/gtkwidget.c:1067
 msgid "Has default"
 msgstr "Je privzet"
 
-#: ../gtk/gtkwidget.c:1066
+#: ../gtk/gtkwidget.c:1068
 msgid "Whether the widget is the default widget"
 msgstr "Ali naj je gradnik privzeti gradnik"
 
-#: ../gtk/gtkwidget.c:1072
+#: ../gtk/gtkwidget.c:1074
 msgid "Receives default"
 msgstr "Sprejema privzeto"
 
-#: ../gtk/gtkwidget.c:1073
+#: ../gtk/gtkwidget.c:1075
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "Izbrana možnost omogoča, da bo gradnik sprejemal privzeta dejanja, kadar bo dejaven"
 
-#: ../gtk/gtkwidget.c:1079
+#: ../gtk/gtkwidget.c:1081
 msgid "Composite child"
 msgstr "Sestavljen podrejeni predmet"
 
-#: ../gtk/gtkwidget.c:1080
+#: ../gtk/gtkwidget.c:1082
 msgid "Whether the widget is part of a composite widget"
 msgstr "Ali je gradnik del sestavljenega gradnika"
 
-#: ../gtk/gtkwidget.c:1086
+#: ../gtk/gtkwidget.c:1088
 msgid "Style"
 msgstr "Slog"
 
-#: ../gtk/gtkwidget.c:1087
+#: ../gtk/gtkwidget.c:1089
 msgid "The style of the widget, which contains information about how it will look (colors etc)"
 msgstr "Slog gradnika, ki vsebuje podatke o tem kako bo videti (barve, itn.)"
 
-#: ../gtk/gtkwidget.c:1093
+#: ../gtk/gtkwidget.c:1095
 msgid "Events"
 msgstr "Dogodki"
 
-#: ../gtk/gtkwidget.c:1094
+#: ../gtk/gtkwidget.c:1096
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "Maska dogodkov, ki določa katere vrste GdkEvents bo dobival ta gradnik"
 
-#: ../gtk/gtkwidget.c:1101
+#: ../gtk/gtkwidget.c:1103
 msgid "No show all"
 msgstr "Brez prikazovanja vseh"
 
-#: ../gtk/gtkwidget.c:1102
+#: ../gtk/gtkwidget.c:1104
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Ali možnost gtk_widget_show_all() ne vpliva na gradnik"
 
-#: ../gtk/gtkwidget.c:1125
+#: ../gtk/gtkwidget.c:1127
 msgid "Whether this widget has a tooltip"
 msgstr "Ali lahko gradniku določimo namig"
 
-#: ../gtk/gtkwidget.c:1181
-msgid "Window"
-msgstr "Okno"
-
-#: ../gtk/gtkwidget.c:1182
+#: ../gtk/gtkwidget.c:1184
 msgid "The widget's window if it is realized"
 msgstr "Udejanjeno okno gradnika"
 
-#: ../gtk/gtkwidget.c:1196
+#: ../gtk/gtkwidget.c:1198
 msgid "Double Buffered"
 msgstr "Dvojni medpomnilnik"
 
-#: ../gtk/gtkwidget.c:1197
+#: ../gtk/gtkwidget.c:1199
 msgid "Whether the widget is double buffered"
 msgstr "Ali gradnik uporablja dvojni medpomnilnik"
 
-#: ../gtk/gtkwidget.c:1212
+#: ../gtk/gtkwidget.c:1214
 msgid "How to position in extra horizontal space"
 msgstr "Določitev položaja v dodatnem vodoravnem prostoru"
 
-#: ../gtk/gtkwidget.c:1228
+#: ../gtk/gtkwidget.c:1230
 msgid "How to position in extra vertical space"
 msgstr "Določitev položaja v dodatnem navpičnem prostoru"
 
-#: ../gtk/gtkwidget.c:1247
+#: ../gtk/gtkwidget.c:1249
 msgid "Margin on Left"
 msgstr "Rob na levi strani"
 
-#: ../gtk/gtkwidget.c:1248
+#: ../gtk/gtkwidget.c:1250
 msgid "Pixels of extra space on the left side"
 msgstr "Število slikovnih točk praznega prostora na levi strani"
 
-#: ../gtk/gtkwidget.c:1268
+#: ../gtk/gtkwidget.c:1270
 msgid "Margin on Right"
 msgstr "Rob na desni strani"
 
-#: ../gtk/gtkwidget.c:1269
+#: ../gtk/gtkwidget.c:1271
 msgid "Pixels of extra space on the right side"
 msgstr "Število slikovnih točk praznega prostora na desni strani"
 
-#: ../gtk/gtkwidget.c:1289
+#: ../gtk/gtkwidget.c:1291
 msgid "Margin on Top"
 msgstr "Rob na vrhu"
 
-#: ../gtk/gtkwidget.c:1290
+#: ../gtk/gtkwidget.c:1292
 msgid "Pixels of extra space on the top side"
 msgstr "Število slikovnih točk praznega prostora na vrhu"
 
-#: ../gtk/gtkwidget.c:1310
+#: ../gtk/gtkwidget.c:1312
 msgid "Margin on Bottom"
 msgstr "Rob na dnu"
 
-#: ../gtk/gtkwidget.c:1311
+#: ../gtk/gtkwidget.c:1313
 msgid "Pixels of extra space on the bottom side"
 msgstr "Število slikovnih točk praznega prostora na dnu"
 
-#: ../gtk/gtkwidget.c:1328
+#: ../gtk/gtkwidget.c:1330
 msgid "All Margins"
 msgstr "Vsi robovi"
 
-#: ../gtk/gtkwidget.c:1329
+#: ../gtk/gtkwidget.c:1331
 msgid "Pixels of extra space on all four sides"
 msgstr "Število slikovnih točk praznega prostora na vseh štirih straneh"
 
-#: ../gtk/gtkwidget.c:1362
+#: ../gtk/gtkwidget.c:1364
 msgid "Horizontal Expand"
 msgstr "Vodoravno širjenje"
 
-#: ../gtk/gtkwidget.c:1363
+#: ../gtk/gtkwidget.c:1365
 msgid "Whether widget wants more horizontal space"
 msgstr "Ali naj gradnik zapolni celoten razpoložljiv vodoravni prostor"
 
-#: ../gtk/gtkwidget.c:1377
+#: ../gtk/gtkwidget.c:1379
 msgid "Horizontal Expand Set"
 msgstr "Določitev vodoravne razširitve"
 
-#: ../gtk/gtkwidget.c:1378
+#: ../gtk/gtkwidget.c:1380
 msgid "Whether to use the hexpand property"
 msgstr "Ali naj je uporabljena lastnost vodoravnega razširjanja"
 
-#: ../gtk/gtkwidget.c:1392
+#: ../gtk/gtkwidget.c:1394
 msgid "Vertical Expand"
 msgstr "Navpično širjenje"
 
-#: ../gtk/gtkwidget.c:1393
+#: ../gtk/gtkwidget.c:1395
 msgid "Whether widget wants more vertical space"
 msgstr "Ali naj gradnik zapolni celoten razpoložljiv navpični prostor"
 
-#: ../gtk/gtkwidget.c:1407
+#: ../gtk/gtkwidget.c:1409
 msgid "Vertical Expand Set"
 msgstr "Določitev navpične razširitve"
 
-#: ../gtk/gtkwidget.c:1408
+#: ../gtk/gtkwidget.c:1410
 msgid "Whether to use the vexpand property"
 msgstr "Ali naj je uporabljena lastnost navpičnega razširjanja"
 
-#: ../gtk/gtkwidget.c:1422
+#: ../gtk/gtkwidget.c:1424
 msgid "Expand Both"
 msgstr "Širjenje v vse smeri"
 
-#: ../gtk/gtkwidget.c:1423
+#: ../gtk/gtkwidget.c:1425
 msgid "Whether widget wants to expand in both directions"
 msgstr "Ali naj gradnik zapolni celoten razpoložljiv prostor"
 
-#: ../gtk/gtkwidget.c:3130
+#: ../gtk/gtkwidget.c:3146
 msgid "Interior Focus"
 msgstr "Notranja dejavnost"
 
-#: ../gtk/gtkwidget.c:3131
+#: ../gtk/gtkwidget.c:3147
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Ali naj se nariše pokazatelj dejavnosti znotraj gradnika"
 
-#: ../gtk/gtkwidget.c:3137
+#: ../gtk/gtkwidget.c:3153
 msgid "Focus linewidth"
 msgstr "Širina črte prikaza dejavnosti"
 
-#: ../gtk/gtkwidget.c:3138
+#: ../gtk/gtkwidget.c:3154
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Širina v točkah za črto kazalca dejavnosti"
 
-#: ../gtk/gtkwidget.c:3144
+#: ../gtk/gtkwidget.c:3160
 msgid "Focus line dash pattern"
 msgstr "Vzorec črtkane črte oznake dejavnosti"
 
-#: ../gtk/gtkwidget.c:3145
+#: ../gtk/gtkwidget.c:3161
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Črtkan vzorec, ki se uporabi za prikaz oznake dejavnosti predmeta"
 
-#: ../gtk/gtkwidget.c:3150
+#: ../gtk/gtkwidget.c:3166
 msgid "Focus padding"
 msgstr "Blazinjenje oznake dejavnosti"
 
-#: ../gtk/gtkwidget.c:3151
+#: ../gtk/gtkwidget.c:3167
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Širina v točkah med pokazateljem dejavnosti in okvirjem gradnika"
 
-#: ../gtk/gtkwidget.c:3156
+#: ../gtk/gtkwidget.c:3172
 msgid "Cursor color"
 msgstr "Barva kazalke"
 
-#: ../gtk/gtkwidget.c:3157
+#: ../gtk/gtkwidget.c:3173
 msgid "Color with which to draw insertion cursor"
 msgstr "Barva, s katero naj bo izrisana vnosna kazalka"
 
-#: ../gtk/gtkwidget.c:3162
+#: ../gtk/gtkwidget.c:3178
 msgid "Secondary cursor color"
 msgstr "Barva drugotne kazalke"
 
-#: ../gtk/gtkwidget.c:3163
+#: ../gtk/gtkwidget.c:3179
 msgid "Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text"
 msgstr "Barva, s katero bo izrisana drugotna kazalka vstavljanja, kadar se ureja mešano besedilo desno-proti-levi in levo-proti-desni."
 
-#: ../gtk/gtkwidget.c:3168
+#: ../gtk/gtkwidget.c:3184
 msgid "Cursor line aspect ratio"
 msgstr "Razmerje vrstice kazalke"
 
-#: ../gtk/gtkwidget.c:3169
+#: ../gtk/gtkwidget.c:3185
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Razmerje, v katerem naj se izriše vnosna kazalka"
 
-#: ../gtk/gtkwidget.c:3175
+#: ../gtk/gtkwidget.c:3191
 msgid "Window dragging"
 msgstr "Vleka okna"
 
-#: ../gtk/gtkwidget.c:3176
+#: ../gtk/gtkwidget.c:3192
 msgid "Whether windows can be dragged by clicking on empty areas"
 msgstr "Ali je mogoče okna potegniti s klikom na prazna območja"
 
-#: ../gtk/gtkwidget.c:3189
+#: ../gtk/gtkwidget.c:3205
 msgid "Unvisited Link Color"
 msgstr "Barva neobiskanih povezav"
 
-#: ../gtk/gtkwidget.c:3190
+#: ../gtk/gtkwidget.c:3206
 msgid "Color of unvisited links"
 msgstr "Barva neobiskanih povezav"
 
-#: ../gtk/gtkwidget.c:3203
+#: ../gtk/gtkwidget.c:3219
 msgid "Visited Link Color"
 msgstr "Barva obiskane povezave"
 
-#: ../gtk/gtkwidget.c:3204
+#: ../gtk/gtkwidget.c:3220
 msgid "Color of visited links"
 msgstr "Barva obiskanih povezav"
 
-#: ../gtk/gtkwidget.c:3218
+#: ../gtk/gtkwidget.c:3234
 msgid "Wide Separators"
 msgstr "Široki ločilniki"
 
-#: ../gtk/gtkwidget.c:3219
+#: ../gtk/gtkwidget.c:3235
 msgid "Whether separators have configurable width and should be drawn using a box instead of a line"
 msgstr "Ali je mogoče nastaviti širino ločilnika z izrisom okvirja namesto črte"
 
-#: ../gtk/gtkwidget.c:3233
+#: ../gtk/gtkwidget.c:3249
 msgid "Separator Width"
 msgstr "Širina ločilnika"
 
-#: ../gtk/gtkwidget.c:3234
+#: ../gtk/gtkwidget.c:3250
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Širina ločilnikov, kadar je izbrana možnost \"Široki ločilniki\""
 
-#: ../gtk/gtkwidget.c:3248
+#: ../gtk/gtkwidget.c:3264
 msgid "Separator Height"
 msgstr "Višina ločilnika"
 
-#: ../gtk/gtkwidget.c:3249
+#: ../gtk/gtkwidget.c:3265
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Višina ločilnikov, kadar je izbrana možnost \"Široki ločilniki\""
 
-#: ../gtk/gtkwidget.c:3263
+#: ../gtk/gtkwidget.c:3279
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Dolžina puščic vodoravnega drsnika"
 
-#: ../gtk/gtkwidget.c:3264
+#: ../gtk/gtkwidget.c:3280
 msgid "The length of horizontal scroll arrows"
 msgstr "Dolžina puščic vodoravnega drsnika"
 
-#: ../gtk/gtkwidget.c:3278
+#: ../gtk/gtkwidget.c:3294
 msgid "Vertical Scroll Arrow Length"
 msgstr "Dolžina puščic navpičnega drsnika"
 
-#: ../gtk/gtkwidget.c:3279
+#: ../gtk/gtkwidget.c:3295
 msgid "The length of vertical scroll arrows"
 msgstr "Dolžina puščic navpičnega drsnika"
 
-#: ../gtk/gtkwindow.c:615
+#: ../gtk/gtkwidget.c:3301
+#: ../gtk/gtkwidget.c:3302
+msgid "Width of text selection handles"
+msgstr "Širina ročic za izbor besedila"
+
+#: ../gtk/gtkwidget.c:3307
+#: ../gtk/gtkwidget.c:3308
+msgid "Height of text selection handles"
+msgstr "Višina ročic za izbor besedila"
+
+#: ../gtk/gtkwindow.c:619
 msgid "Window Type"
 msgstr "Vrsta okna"
 
-#: ../gtk/gtkwindow.c:616
+#: ../gtk/gtkwindow.c:620
 msgid "The type of the window"
 msgstr "Vrsta okna"
 
-#: ../gtk/gtkwindow.c:624
+#: ../gtk/gtkwindow.c:628
 msgid "Window Title"
 msgstr "Naziv okna"
 
-#: ../gtk/gtkwindow.c:625
+#: ../gtk/gtkwindow.c:629
 msgid "The title of the window"
 msgstr "Naziv okna"
 
-#: ../gtk/gtkwindow.c:632
+#: ../gtk/gtkwindow.c:636
 msgid "Window Role"
 msgstr "Vloga okna"
 
-#: ../gtk/gtkwindow.c:633
+#: ../gtk/gtkwindow.c:637
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Enoznačno določilo za okno pri ponovnem zagonu seje."
 
-#: ../gtk/gtkwindow.c:649
+#: ../gtk/gtkwindow.c:653
 msgid "Startup ID"
 msgstr "ID zagona"
 
-#: ../gtk/gtkwindow.c:650
+#: ../gtk/gtkwindow.c:654
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr "Enoznačno določilo zagona za okno, ki ga uporablja program obveščanja med zagonom."
 
-#: ../gtk/gtkwindow.c:658
+#: ../gtk/gtkwindow.c:662
 msgid "If TRUE, users can resize the window"
 msgstr "Izbrana možnost omogoča, da lahko uporabniki spreminjajo velikost okna"
 
-#: ../gtk/gtkwindow.c:665
+#: ../gtk/gtkwindow.c:669
 msgid "Modal"
 msgstr "Modalni"
 
-#: ../gtk/gtkwindow.c:666
+#: ../gtk/gtkwindow.c:670
 msgid "If TRUE, the window is modal (other windows are not usable while this one is up)"
 msgstr "Izbrana možnost omogoča, da je okno modalno (medtem, ko je to okno dejavno, drugih ni mogoče uporabljati)"
 
-#: ../gtk/gtkwindow.c:673
+#: ../gtk/gtkwindow.c:677
 msgid "Window Position"
 msgstr "Položaj okna"
 
-#: ../gtk/gtkwindow.c:674
+#: ../gtk/gtkwindow.c:678
 msgid "The initial position of the window"
 msgstr "Začetni položaj okna"
 
-#: ../gtk/gtkwindow.c:682
+#: ../gtk/gtkwindow.c:686
 msgid "Default Width"
 msgstr "Privzeta širina"
 
-#: ../gtk/gtkwindow.c:683
+#: ../gtk/gtkwindow.c:687
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Uporabljena privzeta širina okna, kadar se okno pokaže prvič"
 
-#: ../gtk/gtkwindow.c:692
+#: ../gtk/gtkwindow.c:696
 msgid "Default Height"
 msgstr "Privzeta višina"
 
-#: ../gtk/gtkwindow.c:693
+#: ../gtk/gtkwindow.c:697
 msgid "The default height of the window, used when initially showing the window"
 msgstr "Uporabljena privzeta višina okna, kadar se okno prikaže prvič"
 
-#: ../gtk/gtkwindow.c:702
+#: ../gtk/gtkwindow.c:706
 msgid "Destroy with Parent"
 msgstr "Zapri skupaj z nadrejenim predmetom"
 
-#: ../gtk/gtkwindow.c:703
+#: ../gtk/gtkwindow.c:707
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Ali naj se to okno zapre skupaj z nadrejenim predmetom"
 
-#: ../gtk/gtkwindow.c:717
+#: ../gtk/gtkwindow.c:721
 msgid "Hide the titlebar during maximization"
 msgstr "Skrij naslovno vrstico med razpenjanjem"
 
-#: ../gtk/gtkwindow.c:718
+#: ../gtk/gtkwindow.c:722
 msgid "If this window's titlebar should be hidden when the window is maximized"
 msgstr "Ali naj bo naslovna vrstica okna skrita, ko je okno povsem razprto"
 
-#: ../gtk/gtkwindow.c:726
+#: ../gtk/gtkwindow.c:730
 msgid "Icon for this window"
 msgstr "Ikona okna"
 
-#: ../gtk/gtkwindow.c:744
+#: ../gtk/gtkwindow.c:748
 msgid "Mnemonics Visible"
 msgstr "Menijske bližnjice so vidne"
 
-#: ../gtk/gtkwindow.c:745
+#: ../gtk/gtkwindow.c:749
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "Ali naj bodo menijske bližnjice v oknu trenutno vidne"
 
-#: ../gtk/gtkwindow.c:763
+#: ../gtk/gtkwindow.c:767
 msgid "Focus Visible"
 msgstr "Žarišče je vidno"
 
-#: ../gtk/gtkwindow.c:764
+#: ../gtk/gtkwindow.c:768
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr "Ali naj bodo pravokotniki žariščenja v oknu trenutno vidni"
 
-#: ../gtk/gtkwindow.c:780
+#: ../gtk/gtkwindow.c:784
 msgid "Name of the themed icon for this window"
 msgstr "Ime tematske ikone tega okna"
 
-#: ../gtk/gtkwindow.c:795
+#: ../gtk/gtkwindow.c:799
 msgid "Is Active"
 msgstr "Je dejavno"
 
-#: ../gtk/gtkwindow.c:796
+#: ../gtk/gtkwindow.c:800
 msgid "Whether the toplevel is the current active window"
 msgstr "Ali je na vrhu trenutno dejavno okno"
 
-#: ../gtk/gtkwindow.c:803
+#: ../gtk/gtkwindow.c:807
 msgid "Focus in Toplevel"
 msgstr "Dejavnost vrhnje ravni"
 
-#: ../gtk/gtkwindow.c:804
+#: ../gtk/gtkwindow.c:808
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Ali je dejavnost predmeta znotraj GtkWindow okna"
 
-#: ../gtk/gtkwindow.c:811
+#: ../gtk/gtkwindow.c:815
 msgid "Type hint"
 msgstr "Vrstni namig"
 
-#: ../gtk/gtkwindow.c:812
+#: ../gtk/gtkwindow.c:816
 msgid "Hint to help the desktop environment understand what kind of window this is and how to treat it."
 msgstr "Namig, ki pomaga okolju namizja razumeti, kakšna vrsta okna je odprta in kako z njim upravljati."
 
-#: ../gtk/gtkwindow.c:820
+#: ../gtk/gtkwindow.c:824
 msgid "Skip taskbar"
 msgstr "Preskoči opravilno vrstico"
 
-#: ../gtk/gtkwindow.c:821
+#: ../gtk/gtkwindow.c:825
 msgid "TRUE if the window should not be in the task bar."
 msgstr "Izbrana možnost onemogoči prikaz okna v opravilni vrstici"
 
-#: ../gtk/gtkwindow.c:828
+#: ../gtk/gtkwindow.c:832
 msgid "Skip pager"
 msgstr "Preskoči preklopnik"
 
-#: ../gtk/gtkwindow.c:829
+#: ../gtk/gtkwindow.c:833
 msgid "TRUE if the window should not be in the pager."
 msgstr "Izbrana možnost omogoča, da okno ni v preklopniku."
 
-#: ../gtk/gtkwindow.c:836
+#: ../gtk/gtkwindow.c:840
 msgid "Urgent"
 msgstr "Nujno"
 
-#: ../gtk/gtkwindow.c:837
+#: ../gtk/gtkwindow.c:841
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "Izbrana možnost omogoča, da okno zahteva uporabnikovo pozornost."
 
-#: ../gtk/gtkwindow.c:851
+#: ../gtk/gtkwindow.c:855
 msgid "Accept focus"
 msgstr "Sprejmi dejavnost"
 
-#: ../gtk/gtkwindow.c:852
+#: ../gtk/gtkwindow.c:856
 msgid "TRUE if the window should receive the input focus."
 msgstr "Izbrana možnost omogoča, da okno postane dejavno."
 
-#: ../gtk/gtkwindow.c:866
+#: ../gtk/gtkwindow.c:870
 msgid "Focus on map"
 msgstr "Dejavnost med preslikavo"
 
-#: ../gtk/gtkwindow.c:867
+#: ../gtk/gtkwindow.c:871
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "Izbrana možnost omogoča, da okno postane dejavno med preslikavo."
 
-#: ../gtk/gtkwindow.c:881
+#: ../gtk/gtkwindow.c:885
 msgid "Decorated"
 msgstr "Okrašeno"
 
-#: ../gtk/gtkwindow.c:882
+#: ../gtk/gtkwindow.c:886
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Ali naj bo okno izrisano v slogu upravljalnika oken."
 
-#: ../gtk/gtkwindow.c:896
+#: ../gtk/gtkwindow.c:900
 msgid "Deletable"
 msgstr "Izbrisljivo"
 
-#: ../gtk/gtkwindow.c:897
+#: ../gtk/gtkwindow.c:901
 msgid "Whether the window frame should have a close button"
 msgstr "Ali naj ima okvir okna gumb za zapiranje"
 
-#: ../gtk/gtkwindow.c:916
+#: ../gtk/gtkwindow.c:920
 msgid "Resize grip"
 msgstr "Oprijemalnik velikosti"
 
-#: ../gtk/gtkwindow.c:917
+#: ../gtk/gtkwindow.c:921
 msgid "Specifies whether the window should have a resize grip"
 msgstr "Določa ali ima okno oprijemalnik velikosti okna"
 
-#: ../gtk/gtkwindow.c:931
+#: ../gtk/gtkwindow.c:935
 msgid "Resize grip is visible"
 msgstr "Oprijemalnik velikosti je viden."
 
-#: ../gtk/gtkwindow.c:932
+#: ../gtk/gtkwindow.c:936
 msgid "Specifies whether the window's resize grip is visible."
 msgstr "Določa ali je oprijemalnik velikosti okna viden."
 
-#: ../gtk/gtkwindow.c:948
+#: ../gtk/gtkwindow.c:952
 msgid "Gravity"
 msgstr "Težnost"
 
-#: ../gtk/gtkwindow.c:949
+#: ../gtk/gtkwindow.c:953
 msgid "The window gravity of the window"
 msgstr "Težnost okna"
 
-#: ../gtk/gtkwindow.c:966
+#: ../gtk/gtkwindow.c:970
 msgid "Transient for Window"
 msgstr "Začasno opravilo okna"
 
-#: ../gtk/gtkwindow.c:967
+#: ../gtk/gtkwindow.c:971
 msgid "The transient parent of the dialog"
 msgstr "Začasno nadrejeno opravilo sporočila"
 
-#: ../gtk/gtkwindow.c:987
+#: ../gtk/gtkwindow.c:991
 msgid "Attached to Widget"
 msgstr "Pripeto gradniku"
 
-#: ../gtk/gtkwindow.c:988
+#: ../gtk/gtkwindow.c:992
 msgid "The widget where the window is attached"
 msgstr "Gradnik, kateremu je pripeto okno"
 
-#: ../gtk/gtkwindow.c:1003
+#: ../gtk/gtkwindow.c:1007
 msgid "Opacity for Window"
 msgstr "Prosojnost okna"
 
-#: ../gtk/gtkwindow.c:1004
+#: ../gtk/gtkwindow.c:1008
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Prosojnost okna določena med 0 in 1"
 
-#: ../gtk/gtkwindow.c:1014
-#: ../gtk/gtkwindow.c:1015
+#: ../gtk/gtkwindow.c:1018
+#: ../gtk/gtkwindow.c:1019
 msgid "Width of resize grip"
 msgstr "Širina oprijemalnika velikosti"
 
-#: ../gtk/gtkwindow.c:1020
-#: ../gtk/gtkwindow.c:1021
+#: ../gtk/gtkwindow.c:1024
+#: ../gtk/gtkwindow.c:1025
 msgid "Height of resize grip"
 msgstr "Višina oprijemalnika velikosti"
 
-#: ../gtk/gtkwindow.c:1043
+#: ../gtk/gtkwindow.c:1047
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: ../gtk/gtkwindow.c:1044
+#: ../gtk/gtkwindow.c:1048
 msgid "The GtkApplication for the window"
 msgstr "GtkApplication za okno"
 
@@ -7937,14 +8086,5 @@ msgstr "Naziv barvnega profila"
 msgid "The title of the color profile to use"
 msgstr "Naziv barvnega profila, ki bo uporabljen"
 
-#~ msgid "Specified type"
-#~ msgstr "Navedena vrsta"
-
-#~ msgid "The type of values after parsing"
-#~ msgstr "Vrsta vrednosti po razčlenjevanju"
-
-#~ msgid "Computed type"
-#~ msgstr "Izračunana vrsta"
-
-#~ msgid "The type of values after style lookup"
-#~ msgstr "Vrsta vrednosti po poizvedbi sloga"
+#~ msgid "menu"
+#~ msgstr "meni"

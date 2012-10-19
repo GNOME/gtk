@@ -191,7 +191,14 @@ bloat_pad_open (GApplication  *application,
     new_window (application, files[i]);
 }
 
-typedef GtkApplication BloatPad;
+typedef struct
+{
+  GtkApplication parent_instance;
+
+  GMenu *time;
+  guint timeout;
+} BloatPad;
+
 typedef GtkApplicationClass BloatPadClass;
 
 G_DEFINE_TYPE (BloatPad, bloat_pad, GTK_TYPE_APPLICATION)
@@ -234,15 +241,65 @@ quit_activated (GSimpleAction *action,
   g_application_quit (app);
 }
 
+static gboolean
+update_time (gpointer user_data)
+{
+  BloatPad *bloatpad = user_data;
+  GDateTime *now;
+  gchar *time;
+
+  while (g_menu_model_get_n_items (G_MENU_MODEL (bloatpad->time)))
+    g_menu_remove (bloatpad->time, 0);
+
+  g_message ("Updating the time menu (which should be open now)...");
+
+  now = g_date_time_new_now_local ();
+  time = g_date_time_format (now, "%c");
+  g_menu_append (bloatpad->time, time, NULL);
+  g_date_time_unref (now);
+  g_free (time);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+time_active_changed (GSimpleAction *action,
+                     GVariant      *state,
+                     gpointer       user_data)
+{
+  BloatPad *bloatpad = user_data;
+
+  if (g_variant_get_boolean (state))
+    {
+      if (!bloatpad->timeout)
+        {
+          bloatpad->timeout = g_timeout_add (1000, update_time, bloatpad);
+          update_time (bloatpad);
+        }
+    }
+  else
+    {
+      if (bloatpad->timeout)
+        {
+          g_source_remove (bloatpad->timeout);
+          bloatpad->timeout = 0;
+        }
+    }
+
+  g_simple_action_set_state (action, state);
+}
+
 static GActionEntry app_entries[] = {
   { "new", new_activated, NULL, NULL, NULL },
   { "about", about_activated, NULL, NULL, NULL },
   { "quit", quit_activated, NULL, NULL, NULL },
+  { "time-active", NULL, NULL, "false", time_active_changed }
 };
 
 static void
 bloat_pad_startup (GApplication *application)
 {
+  BloatPad *bloatpad = (BloatPad*) application;
   GtkBuilder *builder;
 
   G_APPLICATION_CLASS (bloat_pad_parent_class)
@@ -301,11 +358,32 @@ bloat_pad_startup (GApplication *application)
                                "        </item>"
                                "      </section>"
                                "    </submenu>"
+                               "    <submenu id='time-menu'>"
+                               "      <attribute name='label' translatable='yes'>Time</attribute>"
+                               "      <attribute name='submenu-action'>app.time-active</attribute>"
+                               "    </submenu>"
                                "  </menu>"
                                "</interface>", -1, NULL);
   gtk_application_set_app_menu (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
+  //gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
+  bloatpad->time = G_MENU (gtk_builder_get_object (builder, "time-menu"));
   g_object_unref (builder);
+}
+
+static void
+bloat_pad_shutdown (GApplication *application)
+{
+  BloatPad *bloatpad = (BloatPad *) application;
+
+  if (bloatpad->timeout)
+    {
+      g_source_remove (bloatpad->timeout);
+      bloatpad->timeout = 0;
+    }
+
+  G_APPLICATION_CLASS (bloat_pad_parent_class)
+    ->shutdown (application);
 }
 
 static void
@@ -320,6 +398,7 @@ bloat_pad_class_init (BloatPadClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   application_class->startup = bloat_pad_startup;
+  application_class->shutdown = bloat_pad_shutdown;
   application_class->activate = bloat_pad_activate;
   application_class->open = bloat_pad_open;
 
@@ -330,7 +409,7 @@ bloat_pad_class_init (BloatPadClass *class)
 BloatPad *
 bloat_pad_new (void)
 {
-  GtkApplication *bloat_pad;
+  BloatPad *bloat_pad;
 
   g_type_init ();
 

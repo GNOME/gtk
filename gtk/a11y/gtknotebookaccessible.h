@@ -29,23 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_NOTEBOOK_ACCESSIBLE_CLASS(klass)        (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_NOTEBOOK_ACCESSIBLE))
 #define GTK_NOTEBOOK_ACCESSIBLE_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_NOTEBOOK_ACCESSIBLE, GtkNotebookAccessibleClass))
 
-typedef struct _GtkNotebookAccessible      GtkNotebookAccessible;
-typedef struct _GtkNotebookAccessibleClass GtkNotebookAccessibleClass;
+typedef struct _GtkNotebookAccessible        GtkNotebookAccessible;
+typedef struct _GtkNotebookAccessibleClass   GtkNotebookAccessibleClass;
+typedef struct _GtkNotebookAccessiblePrivate GtkNotebookAccessiblePrivate;
 
 struct _GtkNotebookAccessible
 {
   GtkContainerAccessible parent;
 
-  /*
-   * page_cache maintains a list of pre-ref'd Notebook Pages.
-   * This cache is queried by gtk_notebook_accessible_ref_child().
-   * If the page is found in the list then a new page does not
-   * need to be created
-   */
-  GHashTable * pages;
-  gint         selected_page;
-  gint         focus_tab_page;
-  guint        idle_focus_id;
+  GtkNotebookAccessiblePrivate *priv;
 };
 
 struct _GtkNotebookAccessibleClass

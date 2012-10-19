@@ -90,6 +90,10 @@ void	   gtk_accel_label_set_accel_widget  (GtkAccelLabel *accel_label,
 void	   gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
 					      GClosure	    *accel_closure);
 gboolean   gtk_accel_label_refetch           (GtkAccelLabel *accel_label);
+GDK_AVAILABLE_IN_3_6
+void       gtk_accel_label_set_accel         (GtkAccelLabel   *accel_label,
+                                              guint            accelerator_key,
+                                              GdkModifierType  accelerator_mods);
 
 /* private */
 gchar *    _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,

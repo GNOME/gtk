@@ -65,7 +65,7 @@ typedef struct _ViewColumnModelClass ViewColumnModelClass;
 
 struct _ViewColumnModel
 {
-  GObject parent;
+  GtkListStore parent;
   GtkTreeView *view;
   GList *columns;
   gint stamp;
@@ -73,7 +73,7 @@ struct _ViewColumnModel
 
 struct _ViewColumnModelClass
 {
-  GObjectClass parent_class;
+  GtkListStoreClass parent_class;
 };
 
 static void view_column_model_init (ViewColumnModel *model)
@@ -365,61 +365,15 @@ view_column_model_drag_dest_init (GtkTreeDragDestIface *iface)
   iface->row_drop_possible = view_column_model_row_drop_possible;
 }
 
-GType
-view_column_model_get_type (void)
+static void
+view_column_model_class_init (ViewColumnModelClass *klass)
 {
-  static GType view_column_model_type = 0;
-
-  if (!view_column_model_type)
-    {
-      const GTypeInfo view_column_model_info =
-      {
-	sizeof (GtkListStoreClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-        NULL,		/* class_init */
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-        sizeof (GtkListStore),
-	0,
-        (GInstanceInitFunc) view_column_model_init,
-      };
-
-      const GInterfaceInfo tree_model_info =
-      {
-	(GInterfaceInitFunc) view_column_model_tree_model_init,
-	NULL,
-	NULL
-      };
-
-      const GInterfaceInfo drag_source_info =
-      {
-	(GInterfaceInitFunc) view_column_model_drag_source_init,
-	NULL,
-	NULL
-      };
-
-      const GInterfaceInfo drag_dest_info =
-      {
-	(GInterfaceInitFunc) view_column_model_drag_dest_init,
-	NULL,
-	NULL
-      };
-
-      view_column_model_type = g_type_register_static (G_TYPE_OBJECT, "ViewModelColumn", &view_column_model_info, 0);
-      g_type_add_interface_static (view_column_model_type,
-				   GTK_TYPE_TREE_MODEL,
-				   &tree_model_info);
-      g_type_add_interface_static (view_column_model_type,
-				   GTK_TYPE_TREE_DRAG_SOURCE,
-				   &drag_source_info);
-      g_type_add_interface_static (view_column_model_type,
-				   GTK_TYPE_TREE_DRAG_DEST,
-				   &drag_dest_info);
-    }
-
-  return view_column_model_type;
 }
+
+G_DEFINE_TYPE_WITH_CODE (ViewColumnModel, view_column_model, GTK_TYPE_LIST_STORE,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, view_column_model_tree_model_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE, view_column_model_drag_source_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_DEST, view_column_model_drag_dest_init))
 
 static void
 update_columns (GtkTreeView *view, ViewColumnModel *view_model)

@@ -206,7 +206,7 @@ gtk_tooltip_init (GtkTooltip *tooltip)
 
   tooltip->last_window = NULL;
 
-  window = g_object_ref (gtk_window_new (GTK_WINDOW_POPUP));
+  window = gtk_window_new (GTK_WINDOW_POPUP);
   screen = gtk_widget_get_screen (window);
   visual = gdk_screen_get_rgba_visual (screen);
 

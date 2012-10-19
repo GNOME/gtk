@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-08-20 22:55+0000\n"
-"PO-Revision-Date: 2012-08-13 15:36+0700\n"
+"POT-Creation-Date: 2012-09-03 23:58+0000\n"
+"PO-Revision-Date: 2012-09-04 17:36+0700\n"
 "Last-Translator: Dirgita <dirgitadevina@yahoo.co.id>\n"
-"Language-Team: Indonesian <gnome@i15n.org>\n"
+"Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -618,6 +618,7 @@ msgstr ""
 #.
 #: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:574
 #: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
+#: ../gtk/gtkprinteroptionwidget.c:550
 msgid "_Select"
 msgstr "_Pilih"
 
@@ -1314,7 +1315,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3264
+#: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3275
 msgid "Manage Custom Sizes"
 msgstr "Kelola Ukuran Sesuaian"
 
@@ -1367,15 +1368,15 @@ msgstr "_Kanan:"
 msgid "Paper Margins"
 msgstr "Margin Kertas"
 
-#: ../gtk/gtkentry.c:8848 ../gtk/gtktextview.c:8316
+#: ../gtk/gtkentry.c:9140 ../gtk/gtktextview.c:8583
 msgid "Input _Methods"
 msgstr "_Metode Input"
 
-#: ../gtk/gtkentry.c:8862 ../gtk/gtktextview.c:8330
+#: ../gtk/gtkentry.c:9154 ../gtk/gtktextview.c:8597
 msgid "_Insert Unicode Control Character"
 msgstr "_Isikan karakter kontrol Unicode"
 
-#: ../gtk/gtkentry.c:10336
+#: ../gtk/gtkentry.c:10107
 msgid "Caps Lock is on"
 msgstr "Caps Lock menyala"
 
@@ -1603,7 +1604,7 @@ msgid "Modified"
 msgstr "Diubah"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4595 ../gtk/gtkprinteroptionwidget.c:835
+#: ../gtk/gtkfilechooserdefault.c:4595
 msgid "_Name:"
 msgstr "_Nama:"
 
@@ -1762,17 +1763,17 @@ msgstr "Gagal memuat ikon"
 msgid "Simple"
 msgstr "Sederhana"
 
-#: ../gtk/gtkimmulticontext.c:600
+#: ../gtk/gtkimmulticontext.c:608
 msgctxt "input method menu"
 msgid "System"
 msgstr "Sistem"
 
-#: ../gtk/gtkimmulticontext.c:610
+#: ../gtk/gtkimmulticontext.c:618
 msgctxt "input method menu"
 msgid "None"
 msgstr "Nihil"
 
-#: ../gtk/gtkimmulticontext.c:693
+#: ../gtk/gtkimmulticontext.c:701
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -1920,52 +1921,56 @@ msgstr "Opsi GTK+"
 msgid "Show GTK+ Options"
 msgstr "Menampilkan Opsi GTK+"
 
-#: ../gtk/gtkmountoperation.c:518
+#: ../gtk/gtkmountoperation.c:532
 msgid "Co_nnect"
 msgstr "Sambu_ng"
 
-#: ../gtk/gtkmountoperation.c:588
-msgid "Connect _anonymously"
-msgstr "Menyambung _anonim"
+#: ../gtk/gtkmountoperation.c:606
+msgid "Connect As"
+msgstr "Sambung sebagai"
 
-#: ../gtk/gtkmountoperation.c:597
-msgid "Connect as u_ser:"
-msgstr "Terhubung _sebagai pengguna:"
+#: ../gtk/gtkmountoperation.c:615
+msgid "_Anonymous"
+msgstr "_Anonim"
 
-#: ../gtk/gtkmountoperation.c:632
-msgid "_Username:"
-msgstr "Nama Pengg_una:"
+#: ../gtk/gtkmountoperation.c:624
+msgid "Registered U_ser"
+msgstr "Pengguna _Terdaftar"
 
-#: ../gtk/gtkmountoperation.c:637
-msgid "_Domain:"
-msgstr "_Domain:"
+#: ../gtk/gtkmountoperation.c:635
+msgid "_Username"
+msgstr "Nama pengg_una"
 
-#: ../gtk/gtkmountoperation.c:643
-msgid "_Password:"
-msgstr "_Sandi:"
+#: ../gtk/gtkmountoperation.c:640
+msgid "_Domain"
+msgstr "_Domain"
 
-#: ../gtk/gtkmountoperation.c:662
+#: ../gtk/gtkmountoperation.c:646
+msgid "_Password"
+msgstr "_Sandi"
+
+#: ../gtk/gtkmountoperation.c:668
 msgid "Forget password _immediately"
 msgstr "Lupakan sandi seket_ika"
 
-#: ../gtk/gtkmountoperation.c:672
+#: ../gtk/gtkmountoperation.c:678
 msgid "Remember password until you _logout"
 msgstr "Ingat sandi sampai Anda _log keluar"
 
-#: ../gtk/gtkmountoperation.c:682
+#: ../gtk/gtkmountoperation.c:688
 msgid "Remember _forever"
 msgstr "Ingat sela_manya"
 
-#: ../gtk/gtkmountoperation.c:1071
+#: ../gtk/gtkmountoperation.c:1077
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Aplikasi Tak Dikenal (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1254
+#: ../gtk/gtkmountoperation.c:1260
 msgid "Unable to end process"
 msgstr "Tak bisa mengakhiri proses"
 
-#: ../gtk/gtkmountoperation.c:1291
+#: ../gtk/gtkmountoperation.c:1297
 msgid "_End Process"
 msgstr "Akhiri Pros_es"
 
@@ -2043,7 +2048,7 @@ msgstr ""
 " Atas: %s %s\n"
 " Bawah: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3318
+#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
 msgid "Manage Custom Sizes..."
 msgstr "Kelola Ukuran Sesuaian..."
 
@@ -2051,7 +2056,7 @@ msgstr "Kelola Ukuran Sesuaian..."
 msgid "_Format for:"
 msgstr "_Bentuk untuk:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3466
+#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3477
 msgid "_Paper size:"
 msgstr "_Ukuran kertas:"
 
@@ -2059,7 +2064,7 @@ msgstr "_Ukuran kertas:"
 msgid "_Orientation:"
 msgstr "_Orientasi:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3520
+#: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3531
 msgid "Page Setup"
 msgstr "Atur Halaman"
 
@@ -2079,17 +2084,13 @@ msgstr "Akar Sistem Berkas"
 msgid "Authentication"
 msgstr "Otentikasi"
 
-#: ../gtk/gtkprinteroptionwidget.c:728
+#: ../gtk/gtkprinteroptionwidget.c:546
+msgid "Select a filename"
+msgstr "Pilih nama berkas"
+
+#: ../gtk/gtkprinteroptionwidget.c:770
 msgid "Not available"
 msgstr "Tidak tersedia"
-
-#: ../gtk/gtkprinteroptionwidget.c:828
-msgid "Select a folder"
-msgstr "Pilih folder"
-
-#: ../gtk/gtkprinteroptionwidget.c:843
-msgid "_Save in folder:"
-msgstr "_Simpan pada folder:"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
@@ -2230,45 +2231,45 @@ msgstr "Kesalahan tidak jelas"
 msgid "Getting printer information failed"
 msgstr "Gagal memperoleh informasi pencetak"
 
-#: ../gtk/gtkprintunixdialog.c:1905
+#: ../gtk/gtkprintunixdialog.c:1916
 msgid "Getting printer information..."
 msgstr "Mengambil informasi pencetak..."
 
-#: ../gtk/gtkprintunixdialog.c:2173
+#: ../gtk/gtkprintunixdialog.c:2184
 msgid "Printer"
 msgstr "Pencetak"
 
 #. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2183
+#: ../gtk/gtkprintunixdialog.c:2194
 msgid "Location"
 msgstr "Lokasi"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2194
+#: ../gtk/gtkprintunixdialog.c:2205
 msgid "Status"
 msgstr "Status"
 
-#: ../gtk/gtkprintunixdialog.c:2220
+#: ../gtk/gtkprintunixdialog.c:2231
 msgid "Range"
 msgstr "Jangkauan"
 
-#: ../gtk/gtkprintunixdialog.c:2224
+#: ../gtk/gtkprintunixdialog.c:2235
 msgid "_All Pages"
 msgstr "Semu_a Halaman"
 
-#: ../gtk/gtkprintunixdialog.c:2229
+#: ../gtk/gtkprintunixdialog.c:2240
 msgid "C_urrent Page"
 msgstr "Halaman Sekarang"
 
-#: ../gtk/gtkprintunixdialog.c:2237
+#: ../gtk/gtkprintunixdialog.c:2248
 msgid "Se_lection"
 msgstr "Se_leksi"
 
-#: ../gtk/gtkprintunixdialog.c:2243
+#: ../gtk/gtkprintunixdialog.c:2254
 msgid "Pag_es:"
 msgstr "_Halaman:"
 
-#: ../gtk/gtkprintunixdialog.c:2244
+#: ../gtk/gtkprintunixdialog.c:2255
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2276,28 +2277,28 @@ msgstr ""
 "Nyatakan satu atau lebih rentang halaman,\n"
 "mis: 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:2253
+#: ../gtk/gtkprintunixdialog.c:2264
 msgid "Pages"
 msgstr "Halaman"
 
-#: ../gtk/gtkprintunixdialog.c:2264
+#: ../gtk/gtkprintunixdialog.c:2275
 msgid "Copies"
 msgstr "Rangkap"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2269
+#: ../gtk/gtkprintunixdialog.c:2280
 msgid "Copie_s:"
 msgstr "_Rangkap:"
 
-#: ../gtk/gtkprintunixdialog.c:2285
+#: ../gtk/gtkprintunixdialog.c:2296
 msgid "C_ollate"
 msgstr "K_olasi"
 
-#: ../gtk/gtkprintunixdialog.c:2291
+#: ../gtk/gtkprintunixdialog.c:2302
 msgid "_Reverse"
 msgstr "Te_rbalik"
 
-#: ../gtk/gtkprintunixdialog.c:2307
+#: ../gtk/gtkprintunixdialog.c:2318
 msgid "General"
 msgstr "Umum"
 
@@ -2307,42 +2308,42 @@ msgstr "Umum"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3047
+#: ../gtk/gtkprintunixdialog.c:3058
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
 msgid "Left to right, top to bottom"
 msgstr "Kiri ke kanan, puncak ke dasar"
 
-#: ../gtk/gtkprintunixdialog.c:3047
+#: ../gtk/gtkprintunixdialog.c:3058
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
 msgid "Left to right, bottom to top"
 msgstr "Kiri ke kanan, dasar ke puncak"
 
-#: ../gtk/gtkprintunixdialog.c:3048
+#: ../gtk/gtkprintunixdialog.c:3059
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Right to left, top to bottom"
 msgstr "Kanan ke kiri, puncak ke dasar"
 
-#: ../gtk/gtkprintunixdialog.c:3048
+#: ../gtk/gtkprintunixdialog.c:3059
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Right to left, bottom to top"
 msgstr "Kanan ke kiri, dasar ke puncak"
 
-#: ../gtk/gtkprintunixdialog.c:3049
+#: ../gtk/gtkprintunixdialog.c:3060
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
 msgid "Top to bottom, left to right"
 msgstr "Puncak ke dasar, kiri ke kanan"
 
-#: ../gtk/gtkprintunixdialog.c:3049
+#: ../gtk/gtkprintunixdialog.c:3060
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
 msgid "Top to bottom, right to left"
 msgstr "Puncak ke dasar, kanan ke kiri"
 
-#: ../gtk/gtkprintunixdialog.c:3050
+#: ../gtk/gtkprintunixdialog.c:3061
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
 msgid "Bottom to top, left to right"
 msgstr "Dasar ke puncak, kiri ke kanan"
 
-#: ../gtk/gtkprintunixdialog.c:3050
+#: ../gtk/gtkprintunixdialog.c:3061
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
 msgid "Bottom to top, right to left"
 msgstr "Dasar ke puncak, kanan ke kiri"
@@ -2350,125 +2351,125 @@ msgstr "Dasar ke puncak, kanan ke kiri"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3054 ../gtk/gtkprintunixdialog.c:3067
+#: ../gtk/gtkprintunixdialog.c:3065 ../gtk/gtkprintunixdialog.c:3078
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3766
 msgid "Page Ordering"
 msgstr "Urutan Halaman"
 
-#: ../gtk/gtkprintunixdialog.c:3083
+#: ../gtk/gtkprintunixdialog.c:3094
 msgid "Left to right"
 msgstr "Kiri ke kanan"
 
-#: ../gtk/gtkprintunixdialog.c:3084
+#: ../gtk/gtkprintunixdialog.c:3095
 msgid "Right to left"
 msgstr "Kanan ke kiri"
 
-#: ../gtk/gtkprintunixdialog.c:3096
+#: ../gtk/gtkprintunixdialog.c:3107
 msgid "Top to bottom"
 msgstr "Puncak ke dasar"
 
-#: ../gtk/gtkprintunixdialog.c:3097
+#: ../gtk/gtkprintunixdialog.c:3108
 msgid "Bottom to top"
 msgstr "Dasar ke puncak"
 
-#: ../gtk/gtkprintunixdialog.c:3341
+#: ../gtk/gtkprintunixdialog.c:3352
 msgid "Layout"
 msgstr "Tata letak"
 
-#: ../gtk/gtkprintunixdialog.c:3345
+#: ../gtk/gtkprintunixdialog.c:3356
 msgid "T_wo-sided:"
 msgstr "D_ua sisi:"
 
-#: ../gtk/gtkprintunixdialog.c:3357
+#: ../gtk/gtkprintunixdialog.c:3368
 msgid "Pages per _side:"
 msgstr "Halaman per _sisi:"
 
-#: ../gtk/gtkprintunixdialog.c:3371
+#: ../gtk/gtkprintunixdialog.c:3382
 msgid "Page or_dering:"
 msgstr "U_rutan halaman:"
 
-#: ../gtk/gtkprintunixdialog.c:3384
+#: ../gtk/gtkprintunixdialog.c:3395
 msgid "_Only print:"
 msgstr "_Hanya cetak:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3396
+#: ../gtk/gtkprintunixdialog.c:3407
 msgid "All sheets"
 msgstr "Semua lembar"
 
-#: ../gtk/gtkprintunixdialog.c:3397
+#: ../gtk/gtkprintunixdialog.c:3408
 msgid "Even sheets"
 msgstr "Halaman genap"
 
-#: ../gtk/gtkprintunixdialog.c:3398
+#: ../gtk/gtkprintunixdialog.c:3409
 msgid "Odd sheets"
 msgstr "Halaman Ganjil"
 
-#: ../gtk/gtkprintunixdialog.c:3401
+#: ../gtk/gtkprintunixdialog.c:3412
 msgid "Sc_ale:"
 msgstr "Sk_ala:"
 
-#: ../gtk/gtkprintunixdialog.c:3425
+#: ../gtk/gtkprintunixdialog.c:3436
 msgid "Paper"
 msgstr "Kertas"
 
-#: ../gtk/gtkprintunixdialog.c:3429
+#: ../gtk/gtkprintunixdialog.c:3440
 msgid "Paper _type:"
 msgstr "Jenis ker_tas:"
 
-#: ../gtk/gtkprintunixdialog.c:3441
+#: ../gtk/gtkprintunixdialog.c:3452
 msgid "Paper _source:"
 msgstr "_Sumber kertas"
 
-#: ../gtk/gtkprintunixdialog.c:3453
+#: ../gtk/gtkprintunixdialog.c:3464
 msgid "Output t_ray:"
 msgstr "Baki kelua_ran:"
 
-#: ../gtk/gtkprintunixdialog.c:3486
+#: ../gtk/gtkprintunixdialog.c:3497
 msgid "Or_ientation:"
 msgstr "Or_ientasi:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3498
+#: ../gtk/gtkprintunixdialog.c:3509
 msgid "Portrait"
 msgstr "Tegak"
 
-#: ../gtk/gtkprintunixdialog.c:3499
+#: ../gtk/gtkprintunixdialog.c:3510
 msgid "Landscape"
 msgstr "Tumbang"
 
-#: ../gtk/gtkprintunixdialog.c:3500
+#: ../gtk/gtkprintunixdialog.c:3511
 msgid "Reverse portrait"
 msgstr "Tegak terjungkir"
 
-#: ../gtk/gtkprintunixdialog.c:3501
+#: ../gtk/gtkprintunixdialog.c:3512
 msgid "Reverse landscape"
 msgstr "Tumbang terbalik"
 
-#: ../gtk/gtkprintunixdialog.c:3545
+#: ../gtk/gtkprintunixdialog.c:3556
 msgid "Job Details"
 msgstr "Rincian Tugas"
 
-#: ../gtk/gtkprintunixdialog.c:3549
+#: ../gtk/gtkprintunixdialog.c:3560
 msgid "Pri_ority:"
 msgstr "Pri_oritas:"
 
-#: ../gtk/gtkprintunixdialog.c:3561
+#: ../gtk/gtkprintunixdialog.c:3572
 msgid "_Billing info:"
 msgstr "Info _Billing:"
 
-#: ../gtk/gtkprintunixdialog.c:3576
+#: ../gtk/gtkprintunixdialog.c:3587
 msgid "Print Document"
 msgstr "Cetak Dokumen"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3583
+#: ../gtk/gtkprintunixdialog.c:3594
 msgid "_Now"
 msgstr "Sekara_ng"
 
-#: ../gtk/gtkprintunixdialog.c:3592
+#: ../gtk/gtkprintunixdialog.c:3603
 msgid "A_t:"
 msgstr "_Pada:"
 
@@ -2476,7 +2477,7 @@ msgstr "_Pada:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: ../gtk/gtkprintunixdialog.c:3598
+#: ../gtk/gtkprintunixdialog.c:3609
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2484,68 +2485,68 @@ msgstr ""
 "Nyatakan waktu pencetakan,\n"
 "mis: 15:30, 14:15:20, 4"
 
-#: ../gtk/gtkprintunixdialog.c:3606
+#: ../gtk/gtkprintunixdialog.c:3617
 msgid "Time of print"
 msgstr "Waktu cetak"
 
-#: ../gtk/gtkprintunixdialog.c:3620
+#: ../gtk/gtkprintunixdialog.c:3631
 msgid "On _hold"
 msgstr "_Tahan"
 
-#: ../gtk/gtkprintunixdialog.c:3621
+#: ../gtk/gtkprintunixdialog.c:3632
 msgid "Hold the job until it is explicitly released"
 msgstr "Tahan tugas sampai dilepas secara eksplisit"
 
-#: ../gtk/gtkprintunixdialog.c:3639
+#: ../gtk/gtkprintunixdialog.c:3650
 msgid "Add Cover Page"
 msgstr "Tambahkan Sampulan Halaman"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3646
+#: ../gtk/gtkprintunixdialog.c:3657
 msgid "Be_fore:"
 msgstr "_Sebelum:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3661
+#: ../gtk/gtkprintunixdialog.c:3672
 msgid "_After:"
 msgstr "Sesud_ah:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3676
+#: ../gtk/gtkprintunixdialog.c:3687
 msgid "Job"
 msgstr "Tugas"
 
-#: ../gtk/gtkprintunixdialog.c:3742
+#: ../gtk/gtkprintunixdialog.c:3753
 msgid "Advanced"
 msgstr "Diperluas"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3780
+#: ../gtk/gtkprintunixdialog.c:3791
 msgid "Image Quality"
 msgstr "Kualitas Gambar"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3784
+#: ../gtk/gtkprintunixdialog.c:3795
 msgid "Color"
 msgstr "Warna"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3789
+#: ../gtk/gtkprintunixdialog.c:3800
 msgid "Finishing"
 msgstr "Penyelesaian"
 
-#: ../gtk/gtkprintunixdialog.c:3799
+#: ../gtk/gtkprintunixdialog.c:3810
 msgid "Some of the settings in the dialog conflict"
 msgstr "Beberapa ketentuan pada dialog konflik"
 
-#: ../gtk/gtkprintunixdialog.c:3825
+#: ../gtk/gtkprintunixdialog.c:3836
 msgid "Print"
 msgstr "Cetak"
 
@@ -4810,3 +4811,4 @@ msgstr "keluaran.%s"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Cetak untuk Menguji Pencetak"
+

@@ -34,23 +34,25 @@ gtk_css_value_inherit_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_inherit_compute (GtkCssValue        *value,
-                               guint               property_id,
-                               GtkStyleContext    *context,
-                               GtkCssDependencies *dependencies)
+gtk_css_value_inherit_compute (GtkCssValue             *value,
+                               guint                    property_id,
+                               GtkStyleProviderPrivate *provider,
+                               GtkCssComputedValues    *values,
+                               GtkCssComputedValues    *parent_values,
+                               GtkCssDependencies      *dependencies)
 {
-  GtkStyleContext *parent = gtk_style_context_get_parent (context);
-
-  if (parent)
+  if (parent_values)
     {
       *dependencies = GTK_CSS_EQUALS_PARENT;
-      return _gtk_css_value_ref (_gtk_style_context_peek_property (parent, property_id));
+      return _gtk_css_value_ref (_gtk_css_computed_values_get_value (parent_values, property_id));
     }
   else
     {
       return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
                                      property_id,
-                                     context,
+                                     provider,
+                                     values,
+                                     parent_values,
                                      dependencies);
     }
 }
@@ -65,6 +67,7 @@ gtk_css_value_inherit_equal (const GtkCssValue *value1,
 static GtkCssValue *
 gtk_css_value_inherit_transition (GtkCssValue *start,
                                   GtkCssValue *end,
+                                  guint        property_id,
                                   double       progress)
 {
   return NULL;

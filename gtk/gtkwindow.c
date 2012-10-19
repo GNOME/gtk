@@ -98,6 +98,8 @@
  * </refsect2>
  */
 
+#define AUTO_MNEMONICS_DELAY 300 /* ms */
+
 typedef struct _GtkDeviceGrabInfo GtkDeviceGrabInfo;
 
 struct _GtkWindowPrivate
@@ -131,6 +133,8 @@ struct _GtkWindowPrivate
   guint32  initial_timestamp;
 
   guint16  configure_request_count;
+
+  guint    auto_mnemonics_timeout_id;
 
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves
@@ -1144,6 +1148,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 static void
 gtk_window_init (GtkWindow *window)
 {
+  GtkStyleContext *context;
   GtkWindowPrivate *priv;
 
   window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window,
@@ -1203,6 +1208,9 @@ gtk_window_init (GtkWindow *window)
                     "notify::gtk-application-prefer-dark-theme",
                     G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (window));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
 }
 
 static void
@@ -4783,6 +4791,12 @@ gtk_window_finalize (GObject *object)
 
   g_free (priv->startup_id);
 
+  if (priv->auto_mnemonics_timeout_id)
+    {
+      g_source_remove (priv->auto_mnemonics_timeout_id);
+      priv->auto_mnemonics_timeout_id = 0;
+    }
+
 #ifdef GDK_WINDOWING_X11
   g_signal_handlers_disconnect_by_func (gtk_settings_get_default (),
                                         gtk_window_on_theme_variant_changed,
@@ -6234,7 +6248,7 @@ maybe_set_mnemonics_visible (GtkWindow *window)
                                 NULL, &mask);
           if (window->priv->mnemonic_modifier == (mask & gtk_accelerator_get_default_mod_mask ()))
             {
-              gtk_window_set_mnemonics_visible (window, TRUE);
+              _gtk_window_set_auto_mnemonics_visible (window);
               break;
             }
         }
@@ -7665,14 +7679,9 @@ gtk_window_draw (GtkWidget *widget,
   if (!gtk_widget_get_app_paintable (widget) &&
       gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
-      gtk_style_context_save (context);
-
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
       gtk_render_background (context, cr, 0, 0,
 			     gtk_widget_get_allocated_width (widget),
 			     gtk_widget_get_allocated_height (widget));
-
-      gtk_style_context_restore (context);
     }
 
   if (GTK_WIDGET_CLASS (gtk_window_parent_class)->draw)
@@ -7689,6 +7698,7 @@ gtk_window_draw (GtkWidget *widget,
       gtk_cairo_transform_to_window (cr, widget, priv->grip_window);
       gtk_window_get_resize_grip_area (GTK_WINDOW (widget), &rect);
 
+      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BACKGROUND);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_GRIP);
       gtk_style_context_set_junction_sides (context, get_grip_junction (widget));
       gtk_render_handle (context, cr, 0, 0, rect.width, rect.height);
@@ -9758,7 +9768,37 @@ gtk_window_set_mnemonics_visible (GtkWindow *window,
       g_object_notify (G_OBJECT (window), "mnemonics-visible");
     }
 
+  if (priv->auto_mnemonics_timeout_id)
+    {
+      g_source_remove (priv->auto_mnemonics_timeout_id);
+      priv->auto_mnemonics_timeout_id = 0;
+    }
+
   priv->mnemonics_visible_set = TRUE;
+}
+
+static gboolean
+set_auto_mnemonics_visible_cb (gpointer data)
+{
+  GtkWindow *window = data;
+
+  gtk_window_set_mnemonics_visible (window, TRUE);
+
+  window->priv->auto_mnemonics_timeout_id = 0;
+
+  return FALSE;
+}
+
+void
+_gtk_window_set_auto_mnemonics_visible (GtkWindow *window)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (window->priv->auto_mnemonics_timeout_id)
+    return;
+
+  window->priv->auto_mnemonics_timeout_id =
+    gdk_threads_add_timeout (AUTO_MNEMONICS_DELAY, set_auto_mnemonics_visible_cb, window);
 }
 
 /**

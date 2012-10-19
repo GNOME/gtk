@@ -44,6 +44,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkorientable.h"
+#include "gtkorientableprivate.h"
 #include "gtkradiobutton.h"
 #include "gtkradiotoolbutton.h"
 #include "gtkseparatormenuitem.h"
@@ -2091,7 +2092,7 @@ gtk_toolbar_screen_changed (GtkWidget *widget,
   if (old_settings)
     {
       g_signal_handler_disconnect (old_settings, priv->settings_connection);
-
+      priv->settings_connection = 0;
       g_object_unref (old_settings);
     }
 
@@ -2578,6 +2579,7 @@ gtk_toolbar_orientation_changed (GtkToolbar    *toolbar,
       
       gtk_toolbar_reconfigured (toolbar);
       
+      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (toolbar));
       gtk_widget_queue_resize (GTK_WIDGET (toolbar));
       g_object_notify (G_OBJECT (toolbar), "orientation");
     }
@@ -3121,6 +3123,14 @@ gtk_toolbar_dispose (GObject *object)
       gtk_widget_destroy (GTK_WIDGET (priv->menu));
       priv->menu = NULL;
     }
+
+  if (priv->settings_connection > 0)
+    {
+      g_signal_handler_disconnect (priv->settings, priv->settings_connection);
+      priv->settings_connection = 0;
+    }
+
+  g_clear_object (&priv->settings);
 
  G_OBJECT_CLASS (gtk_toolbar_parent_class)->dispose (object);
 }

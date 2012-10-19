@@ -30,12 +30,15 @@ G_BEGIN_DECLS
 #define GTK_IS_MENU_ACCESSIBLE_CLASS(klass)               (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU_ACCESSIBLE))
 #define GTK_MENU_ACCESSIBLE_GET_CLASS(obj)                (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MENU_ACCESSIBLE, GtkMenuAccessibleClass))
 
-typedef struct _GtkMenuAccessible      GtkMenuAccessible;
-typedef struct _GtkMenuAccessibleClass GtkMenuAccessibleClass;
+typedef struct _GtkMenuAccessible        GtkMenuAccessible;
+typedef struct _GtkMenuAccessibleClass   GtkMenuAccessibleClass;
+typedef struct _GtkMenuAccessiblePrivate GtkMenuAccessiblePrivate;
 
 struct _GtkMenuAccessible
 {
   GtkMenuShellAccessible parent;
+
+  GtkMenuAccessiblePrivate *priv;
 };
 
 struct _GtkMenuAccessibleClass

@@ -105,10 +105,15 @@ struct _GtkEntryClass
   void (* paste_clipboard)    (GtkEntry             *entry);
   void (* toggle_overwrite)   (GtkEntry             *entry);
 
-  /* hook to add other objects beside the entry (like in GtkSpinButton) */
+  /* hooks to add other objects beside the entry (like in GtkSpinButton) */
   void (* get_text_area_size) (GtkEntry       *entry,
 			       gint           *x,
 			       gint           *y,
+			       gint           *width,
+			       gint           *height);
+  void (* get_frame_size)     (GtkEntry       *entry,
+                               gint           *x,
+                               gint           *y,
 			       gint           *width,
 			       gint           *height);
 
@@ -120,7 +125,6 @@ struct _GtkEntryClass
   void (*_gtk_reserved5)      (void);
   void (*_gtk_reserved6)      (void);
   void (*_gtk_reserved7)      (void);
-  void (*_gtk_reserved8)      (void);
 };
 
 GType      gtk_entry_get_type       		(void) G_GNUC_CONST;
@@ -289,6 +293,11 @@ void            gtk_entry_set_input_hints                    (GtkEntry          
 GDK_AVAILABLE_IN_3_6
 GtkInputHints   gtk_entry_get_input_hints                    (GtkEntry             *entry);
 
+GDK_AVAILABLE_IN_3_6
+void            gtk_entry_set_attributes                     (GtkEntry             *entry,
+                                                              PangoAttrList        *attrs);
+GDK_AVAILABLE_IN_3_6
+PangoAttrList  *gtk_entry_get_attributes                     (GtkEntry             *entry);
 
 G_END_DECLS
 

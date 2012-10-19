@@ -339,7 +339,7 @@ window1
               description: Amount of blue light in the color.
               controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Blue:
-              state: editable enabled focusable sensitive showing single-line visible
+              state: editable enabled focusable horizontal sensitive showing single-line visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
@@ -428,7 +428,7 @@ window1
               description: Amount of green light in the color.
               controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Green:
-              state: editable enabled focusable sensitive showing single-line visible
+              state: editable enabled focusable horizontal sensitive showing single-line visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
@@ -517,7 +517,7 @@ window1
               description: Amount of red light in the color.
               controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Red:
-              state: editable enabled focusable sensitive showing single-line visible
+              state: editable enabled focusable horizontal sensitive showing single-line visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
@@ -606,7 +606,7 @@ window1
               description: Brightness of the color.
               controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Value:
-              state: editable enabled focusable sensitive showing single-line visible
+              state: editable enabled focusable horizontal sensitive showing single-line visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
@@ -695,7 +695,7 @@ window1
               description: Intensity of the color.
               controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Saturation:
-              state: editable enabled focusable sensitive showing single-line visible
+              state: editable enabled focusable horizontal sensitive showing single-line visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
@@ -784,7 +784,7 @@ window1
               description: Position on the color wheel.
               controller-for: unnamed-GtkWidgetAccessible-4
               labelled-by: Hue:
-              state: editable enabled focusable sensitive showing single-line visible
+              state: editable enabled focusable horizontal sensitive showing single-line visible
               toolkit: gtk
               <AtkComponent>
               layer: widget

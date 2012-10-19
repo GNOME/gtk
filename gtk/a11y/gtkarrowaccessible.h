@@ -29,14 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_ARROW_ACCESSIBLE_CLASS(klass)           (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ARROW_ACCESSIBLE))
 #define GTK_ARROW_ACCESSIBLE_GET_CLASS(obj)            (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ARROW_ACCESSIBLE, GtkArrowAccessibleClass))
 
-typedef struct _GtkArrowAccessible      GtkArrowAccessible;
-typedef struct _GtkArrowAccessibleClass GtkArrowAccessibleClass;
+typedef struct _GtkArrowAccessible        GtkArrowAccessible;
+typedef struct _GtkArrowAccessibleClass   GtkArrowAccessibleClass;
+typedef struct _GtkArrowAccessiblePrivate GtkArrowAccessiblePrivate;
 
 struct _GtkArrowAccessible
 {
   GtkWidgetAccessible parent;
 
-  gchar *image_description;
+  GtkArrowAccessiblePrivate *priv;
 };
 
 struct _GtkArrowAccessibleClass

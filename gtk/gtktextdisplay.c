@@ -121,6 +121,8 @@ struct _GtkTextRendererClass
   PangoRendererClass parent_class;
 };
 
+GType _gtk_text_renderer_get_type (void);
+
 G_DEFINE_TYPE (GtkTextRenderer, _gtk_text_renderer, PANGO_TYPE_RENDERER)
 
 static void

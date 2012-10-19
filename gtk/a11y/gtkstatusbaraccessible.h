@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_STATUSBAR_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STATUSBAR_ACCESSIBLE))
 #define GTK_STATUSBAR_ACCESSIBLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STATUSBAR_ACCESSIBLE, GtkStatusbarAccessibleClass))
 
-typedef struct _GtkStatusbarAccessible      GtkStatusbarAccessible;
-typedef struct _GtkStatusbarAccessibleClass GtkStatusbarAccessibleClass;
+typedef struct _GtkStatusbarAccessible        GtkStatusbarAccessible;
+typedef struct _GtkStatusbarAccessibleClass   GtkStatusbarAccessibleClass;
+typedef struct _GtkStatusbarAccessiblePrivate GtkStatusbarAccessiblePrivate;
 
 struct _GtkStatusbarAccessible
 {
   GtkBoxAccessible parent;
+
+  GtkStatusbarAccessiblePrivate *priv;
 };
 
 struct _GtkStatusbarAccessibleClass

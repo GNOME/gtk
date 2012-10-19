@@ -89,25 +89,20 @@ Make sure that gtk-doc is the latest released version.
     it to download.gnome.org. If you don't have an account on master.gnome.org,
     find someone who can do it for you. The command for this looks like
 
-      scp gtk+-2.12.10.tar.gz matthiasc@master.gnome.org:
-      ssh matthiasc@master.gnome.org
-      install-module gtk+-2.12.10.tar.gz
+      scp gtk+-2.12.10.tar.xz matthiasc@master.gnome.org:
+      ssh matthiasc@master.gnome.org ftpadmin install gtk+-2.12.10.tar.xz
 
-15) Get the .bz2 tarball and the .md5sum files back from master.gnome.org
-    You can probably also create it locally, but I've experienced md5
-    mismatches when doing so.
+15) Upload the tarball and checksum to ftp.gtk.org and put them in the right
+    directory below /ftp/pub. Pay attention to correct ownership, and don't
+    forget to update the LATEST file in the directory.
 
-16) Upload the .gz and .bz2 tarballs and checksums to ftp.gtk.org and put
-    them in the right directory below /ftp/pub. Pay attention to correct
-    ownership, and don't forget to update the LATEST file in the directory.
-
-17) Go to the gnome-announce list archives, find the last announce message,
+16) Go to the gnome-announce list archives, find the last announce message,
     create a new message in the same form, replacing version numbers,
     commentary at the top about "what this release is about" and the
     summary of changes.
 
-18) Send it to gnome-announce-list, gtk-list, gtk-app-devel-list and
+17) Send it to gnome-announce-list, gtk-list, gtk-app-devel-list and
     gtk-devel-list. Set reply-to to desktop-devel-list.
 
-19) Add a link to the release announcement to www.gtk.org which lives
+18) Add a link to the release announcement to www.gtk.org which lives
     in the gtk-web git module.

@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 
 /**
- * SECTION:gdktesting
+ * SECTION:gdktestutils
  * @Short_description: Test utilities
  * @Title: Testing
  *

@@ -24,7 +24,6 @@
 
 #include "gtk/gtkbitmaskprivate.h"
 #include "gtk/gtkcsssection.h"
-#include "gtk/gtkstylecontext.h"
 #include "gtk/gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
@@ -36,19 +35,24 @@ G_BEGIN_DECLS
 #define GTK_IS_CSS_COMPUTED_VALUES_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_COMPUTED_VALUES))
 #define GTK_CSS_COMPUTED_VALUES_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_COMPUTED_VALUES, GtkCssComputedValuesClass))
 
-typedef struct _GtkCssComputedValues           GtkCssComputedValues;
+/* typedef struct _GtkCssComputedValues           GtkCssComputedValues; */
 typedef struct _GtkCssComputedValuesClass      GtkCssComputedValuesClass;
 
 struct _GtkCssComputedValues
 {
   GObject parent;
 
-  GPtrArray             *values;
-  GPtrArray             *sections;
-  GtkBitmask            *depends_on_parent;
-  GtkBitmask            *equals_parent;
-  GtkBitmask            *depends_on_color;
-  GtkBitmask            *depends_on_font_size;
+  GPtrArray             *values;               /* the unanimated (aka intrinsic) values */
+  GPtrArray             *sections;             /* sections the values are defined in */
+
+  GPtrArray             *animated_values;      /* NULL or array of animated values/NULL if not animated */
+  gint64                 current_time;         /* the current time in our world */
+  GSList                *animations;           /* the running animations, least important one first */
+
+  GtkBitmask            *depends_on_parent;    /* for intrinsic values */
+  GtkBitmask            *equals_parent;        /* dito */
+  GtkBitmask            *depends_on_color;     /* dito */
+  GtkBitmask            *depends_on_font_size; /* dito */
 };
 
 struct _GtkCssComputedValuesClass
@@ -61,7 +65,8 @@ GType                   _gtk_css_computed_values_get_type             (void) G_G
 GtkCssComputedValues *  _gtk_css_computed_values_new                  (void);
 
 void                    _gtk_css_computed_values_compute_value        (GtkCssComputedValues     *values,
-                                                                       GtkStyleContext          *context,
+                                                                       GtkStyleProviderPrivate  *provider,
+                                                                       GtkCssComputedValues     *parent_values,
                                                                        guint                     id,
                                                                        GtkCssValue              *specified,
                                                                        GtkCssSection            *section);
@@ -70,14 +75,28 @@ void                    _gtk_css_computed_values_set_value            (GtkCssCom
                                                                        GtkCssValue              *value,
                                                                        GtkCssDependencies        dependencies,
                                                                        GtkCssSection            *section);
+void                    _gtk_css_computed_values_set_animated_value   (GtkCssComputedValues     *values,
+                                                                       guint                     id,
+                                                                       GtkCssValue              *value);
                                                                         
 GtkCssValue *           _gtk_css_computed_values_get_value            (GtkCssComputedValues     *values,
                                                                        guint                     id);
 GtkCssSection *         _gtk_css_computed_values_get_section          (GtkCssComputedValues     *values,
                                                                        guint                     id);
+GtkCssValue *           _gtk_css_computed_values_get_intrinsic_value  (GtkCssComputedValues     *values,
+                                                                       guint                     id);
 GtkBitmask *            _gtk_css_computed_values_get_difference       (GtkCssComputedValues     *values,
                                                                        GtkCssComputedValues     *other);
 
+void                    _gtk_css_computed_values_create_animations    (GtkCssComputedValues     *values,
+                                                                       GtkCssComputedValues     *parent_values,
+                                                                       gint64                    timestamp,
+                                                                       GtkStyleProviderPrivate  *provider,
+                                                                       GtkCssComputedValues     *source);
+GtkBitmask *            _gtk_css_computed_values_advance              (GtkCssComputedValues     *values,
+                                                                       gint64                    timestamp);
+void                    _gtk_css_computed_values_cancel_animations    (GtkCssComputedValues     *values);
+gboolean                _gtk_css_computed_values_is_static            (GtkCssComputedValues     *values);
 
 G_END_DECLS
 

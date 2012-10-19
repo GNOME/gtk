@@ -274,9 +274,6 @@ static void  gtk_scrolled_window_realize               (GtkWidget           *wid
 static void  gtk_scrolled_window_unrealize             (GtkWidget           *widget);
 static void  gtk_scrolled_window_map                   (GtkWidget           *widget);
 static void  gtk_scrolled_window_unmap                 (GtkWidget           *widget);
-static void  gtk_scrolled_window_state_flags_changed   (GtkWidget           *widget,
-                                                        GtkStateFlags        previous_state);
-static void  gtk_scrolled_window_style_updated         (GtkWidget           *widget);
 
 static void  gtk_scrolled_window_grab_notify           (GtkWidget           *widget,
                                                         gboolean             was_grabbed);
@@ -352,8 +349,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->unrealize = gtk_scrolled_window_unrealize;
   widget_class->map = gtk_scrolled_window_map;
   widget_class->unmap = gtk_scrolled_window_unmap;
-  widget_class->state_flags_changed = gtk_scrolled_window_state_flags_changed;
-  widget_class->style_updated = gtk_scrolled_window_style_updated;
   widget_class->grab_notify = gtk_scrolled_window_grab_notify;
 
   container_class->add = gtk_scrolled_window_add;
@@ -1750,10 +1745,14 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
   gtk_widget_get_preferred_height (priv->hscrollbar, &sb_height, NULL);
   gtk_widget_get_preferred_width (priv->vscrollbar, &sb_width, NULL);
 
-  /* Subtract some things from our available allocation size */
+  gtk_widget_get_allocation (widget, &widget_allocation);
+
   allocation->x = 0;
   allocation->y = 0;
+  allocation->width = widget_allocation.width;
+  allocation->height = widget_allocation.height;
 
+  /* Subtract some things from our available allocation size */
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
       GtkStyleContext *context;
@@ -1771,13 +1770,11 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
 
       allocation->x += padding.left + border.left;
       allocation->y += padding.top + border.top;
+      allocation->width = MAX (1, allocation->width - (padding.left + border.left + padding.right + border.right));
+      allocation->height = MAX (1, allocation->height - (padding.top + border.top + padding.bottom + border.bottom));
 
       gtk_style_context_restore (context);
     }
-
-  gtk_widget_get_allocation (widget, &widget_allocation);
-  allocation->width = MAX (1, (gint) widget_allocation.width - allocation->x * 2);
-  allocation->height = MAX (1, (gint) widget_allocation.height - allocation->y * 2);
 
   if (priv->vscrollbar_visible)
     {
@@ -2172,11 +2169,9 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	  priv->real_window_placement == GTK_CORNER_TOP_RIGHT)
 	child_allocation.y = (relative_allocation.y +
 			      relative_allocation.height +
-			      sb_spacing +
-			      (priv->shadow_type == GTK_SHADOW_NONE ?
-			       0 : padding.top + border.top));
+			      sb_spacing);
       else
-	child_allocation.y = 0;
+	child_allocation.y = relative_allocation.y - sb_spacing - sb_height;
 
       child_allocation.width = relative_allocation.width;
       child_allocation.height = sb_height;
@@ -2189,15 +2184,12 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
             {
               child_allocation.x -= padding.left + border.left;
               child_allocation.width += padding.left + padding.right + border.left + border.right;
-            }
-          else if (GTK_CORNER_TOP_RIGHT == priv->real_window_placement ||
-                   GTK_CORNER_TOP_LEFT == priv->real_window_placement)
-            {
-              child_allocation.y -= padding.top + border.top;
-            }
-          else
-            {
-              child_allocation.y += padding.top + border.top;
+
+              if (priv->real_window_placement == GTK_CORNER_TOP_LEFT ||
+                  priv->real_window_placement == GTK_CORNER_TOP_RIGHT)
+                child_allocation.y += padding.bottom + border.bottom;
+              else
+                child_allocation.y -= padding.top + border.top;
             }
 	}
 
@@ -2219,11 +2211,9 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	    priv->real_window_placement == GTK_CORNER_BOTTOM_LEFT)))
 	child_allocation.x = (relative_allocation.x +
 			      relative_allocation.width +
-			      sb_spacing +
-			      (priv->shadow_type == GTK_SHADOW_NONE ?
-			       0 : padding.left + border.left));
+			      sb_spacing);
       else
-	child_allocation.x = 0;
+	child_allocation.x = relative_allocation.x - sb_spacing - sb_width;
 
       child_allocation.y = relative_allocation.y;
       child_allocation.width = sb_width;
@@ -2237,17 +2227,18 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
             {
               child_allocation.y -= padding.top + border.top;
 	      child_allocation.height += padding.top + padding.bottom + border.top + border.bottom;
+
+              if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL &&
+                   (priv->real_window_placement == GTK_CORNER_TOP_RIGHT ||
+                    priv->real_window_placement == GTK_CORNER_BOTTOM_RIGHT)) ||
+                  (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR &&
+                   (priv->real_window_placement == GTK_CORNER_TOP_LEFT ||
+                    priv->real_window_placement == GTK_CORNER_BOTTOM_LEFT)))
+                child_allocation.x += padding.right + border.right;
+              else
+                child_allocation.x -= padding.left + border.left;
             }
-          else if (GTK_CORNER_BOTTOM_LEFT == priv->real_window_placement ||
-                   GTK_CORNER_TOP_LEFT == priv->real_window_placement)
-            {
-              child_allocation.x -= padding.left + border.left;
-            }
-          else
-            {
-              child_allocation.x += padding.left + border.left;
-            }
-	}
+        }
 
       gtk_widget_size_allocate (priv->vscrollbar, &child_allocation);
     }
@@ -2895,6 +2886,9 @@ gtk_scrolled_window_captured_event (GtkWidget *widget,
   gboolean retval = FALSE;
   GtkScrolledWindowPrivate *priv = GTK_SCROLLED_WINDOW (widget)->priv;
 
+  if (gdk_window_get_window_type (event->any.window) == GDK_WINDOW_TEMP)
+    return FALSE;
+
   switch (event->type)
     {
     case GDK_TOUCH_BEGIN:
@@ -3380,14 +3374,13 @@ gtk_scrolled_window_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK |
-    GDK_BUTTON_MOTION_MASK | GDK_TOUCH_MASK;
+    GDK_BUTTON_MOTION_MASK | GDK_TOUCH_MASK | GDK_EXPOSURE_MASK;
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
   scrolled_window->priv->overshoot_window =
     gdk_window_new (gtk_widget_get_parent_window (widget),
                     &attributes, attributes_mask);
-
   gdk_window_set_user_data (scrolled_window->priv->overshoot_window, widget);
 
   child_widget = gtk_bin_get_child (GTK_BIN (widget));
@@ -3431,37 +3424,6 @@ gtk_scrolled_window_unmap (GtkWidget *widget)
   gdk_window_hide (scrolled_window->priv->overshoot_window);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unmap (widget);
-}
-
-static void
-_gtk_scrolled_window_update_background (GtkScrolledWindow *scrolled_window)
-{
-  GtkWidget *widget = GTK_WIDGET (scrolled_window);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      GtkStyleContext *context;
-
-      context = gtk_widget_get_style_context (widget);
-      gtk_style_context_set_background (context, scrolled_window->priv->overshoot_window);
-    }
-}
-
-static void
-gtk_scrolled_window_state_flags_changed (GtkWidget     *widget,
-                                         GtkStateFlags  previous_state)
-{
-  _gtk_scrolled_window_update_background (GTK_SCROLLED_WINDOW (widget));
-  gtk_widget_queue_draw (widget);
-}
-
-static void
-gtk_scrolled_window_style_updated (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->style_updated (widget);
-
-  _gtk_scrolled_window_update_background (GTK_SCROLLED_WINDOW (widget));
-  gtk_widget_queue_draw (widget);
 }
 
 static void

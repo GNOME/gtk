@@ -20,11 +20,27 @@
   </gresource>
   <gresource prefix="/css_multiplebgs">
     <file alias="gtk.css">css_multiplebgs.css</file>
+    <file>brick.png</file>
   </gresource>
   <gresource prefix="/theming_custom_css">
     <file alias="gtk.css">fancy.css</file>
   </gresource>
   <gresource prefix="/theming_style_classes">
     <file preprocess="xml-stripblanks">theming.ui</file>
+  </gresource>
+  <gresource prefix="/css_pixbufs">
+    <file alias="gtk.css">css_pixbufs.css</file>
+    <file>background.jpg</file>
+    <file>apple-red.png</file>
+    <file>gnome-applets.png</file>
+    <file>gnome-calendar.png</file>
+    <file>gnome-foot.png</file>
+    <file>gnome-gmush.png</file>
+    <file>gnome-gimp.png</file>
+    <file>gnome-gsame.png</file>
+    <file>gnu-keys.png</file>
+  </gresource>
+  <gresource prefix="/css_shadows">
+    <file alias="gtk.css">css_shadows.css</file>
   </gresource>
 </gresources>

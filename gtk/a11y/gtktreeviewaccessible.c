@@ -33,6 +33,11 @@
 #include "gtktextcellaccessible.h"
 #include "gtkcellaccessibleparent.h"
 
+struct _GtkTreeViewAccessiblePrivate
+{
+  GHashTable *cell_infos;
+};
+
 typedef struct _GtkTreeViewAccessibleCellInfo  GtkTreeViewAccessibleCellInfo;
 struct _GtkTreeViewAccessibleCellInfo
 {
@@ -142,7 +147,7 @@ gtk_tree_view_accessible_initialize (AtkObject *obj,
 
   accessible = GTK_TREE_VIEW_ACCESSIBLE (obj);
 
-  accessible->cell_infos = g_hash_table_new_full (cell_info_hash,
+  accessible->priv->cell_infos = g_hash_table_new_full (cell_info_hash,
       cell_info_equal, NULL, (GDestroyNotify) cell_info_free);
 
   widget = GTK_WIDGET (data);
@@ -163,8 +168,8 @@ gtk_tree_view_accessible_finalize (GObject *object)
 {
   GtkTreeViewAccessible *accessible = GTK_TREE_VIEW_ACCESSIBLE (object);
 
-  if (accessible->cell_infos)
-    g_hash_table_destroy (accessible->cell_infos);
+  if (accessible->priv->cell_infos)
+    g_hash_table_destroy (accessible->priv->cell_infos);
 
   G_OBJECT_CLASS (_gtk_tree_view_accessible_parent_class)->finalize (object);
 }
@@ -187,7 +192,7 @@ gtk_tree_view_accessible_notify_gtk (GObject    *obj,
       AtkRole role;
 
       tree_model = gtk_tree_view_get_model (tree_view);
-      g_hash_table_remove_all (accessible->cell_infos);
+      g_hash_table_remove_all (accessible->priv->cell_infos);
 
       if (tree_model)
         {
@@ -215,7 +220,7 @@ gtk_tree_view_accessible_widget_unset (GtkAccessible *gtkaccessible)
 {
   GtkTreeViewAccessible *accessible = GTK_TREE_VIEW_ACCESSIBLE (gtkaccessible);
 
-  g_hash_table_remove_all (accessible->cell_infos);
+  g_hash_table_remove_all (accessible->priv->cell_infos);
 
   GTK_ACCESSIBLE_CLASS (_gtk_tree_view_accessible_parent_class)->widget_unset (gtkaccessible);
 }
@@ -343,7 +348,7 @@ peek_cell (GtkTreeViewAccessible *accessible,
   lookup.node = node;
   lookup.cell_col_ref = column;
 
-  cell_info = g_hash_table_lookup (accessible->cell_infos, &lookup);
+  cell_info = g_hash_table_lookup (accessible->priv->cell_infos, &lookup);
   if (cell_info == NULL)
     return NULL;
 
@@ -521,11 +526,16 @@ _gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
   container_class->remove_gtk = NULL;
 
   gobject_class->finalize = gtk_tree_view_accessible_finalize;
+
+  g_type_class_add_private (klass, sizeof (GtkTreeViewAccessiblePrivate));
 }
 
 static void
 _gtk_tree_view_accessible_init (GtkTreeViewAccessible *view)
 {
+  view->priv = G_TYPE_INSTANCE_GET_PRIVATE (view,
+                                            GTK_TYPE_TREE_VIEW_ACCESSIBLE,
+                                            GtkTreeViewAccessiblePrivate);
 }
 
 /* atkcomponent.h */
@@ -1429,7 +1439,7 @@ cell_info_new (GtkTreeViewAccessible *accessible,
                       gtk_tree_view_accessible_get_data_quark (),
                       cell_info);
 
-  g_hash_table_replace (accessible->cell_infos, cell_info, cell_info);
+  g_hash_table_replace (accessible->priv->cell_infos, cell_info, cell_info);
 }
 
 /* Returns the column number of the specified GtkTreeViewColumn
@@ -1610,7 +1620,7 @@ _gtk_tree_view_accessible_remove (GtkTreeView *treeview,
           g_signal_emit_by_name (accessible, "children-changed::remove", i, NULL, NULL);
         }
 
-      g_hash_table_iter_init (&iter, accessible->cell_infos);
+      g_hash_table_iter_init (&iter, accessible->priv->cell_infos);
       while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&cell_info))
         {
           if (node == cell_info->node ||
@@ -1669,11 +1679,11 @@ to_visible_column_id (GtkTreeView *treeview,
   return id - invisible;
 }
 
-void
-_gtk_tree_view_accessible_do_add_column (GtkTreeViewAccessible *accessible,
-                                         GtkTreeView           *treeview,
-                                         GtkTreeViewColumn     *column,
-                                         guint                  id)
+static void
+gtk_tree_view_accessible_do_add_column (GtkTreeViewAccessible *accessible,
+                                        GtkTreeView           *treeview,
+                                        GtkTreeViewColumn     *column,
+                                        guint                  id)
 {
   guint row, n_rows, n_cols;
 
@@ -1706,17 +1716,17 @@ _gtk_tree_view_accessible_add_column (GtkTreeView       *treeview,
   if (obj == NULL)
     return;
 
-  _gtk_tree_view_accessible_do_add_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
-                                           treeview,
-                                           column,
-                                           to_visible_column_id (treeview, id));
+  gtk_tree_view_accessible_do_add_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                          treeview,
+                                          column,
+                                          to_visible_column_id (treeview, id));
 }
 
-void
-_gtk_tree_view_accessible_do_remove_column (GtkTreeViewAccessible *accessible,
-                                            GtkTreeView           *treeview,
-                                            GtkTreeViewColumn     *column,
-                                            guint                  id)
+static void
+gtk_tree_view_accessible_do_remove_column (GtkTreeViewAccessible *accessible,
+                                           GtkTreeView           *treeview,
+                                           GtkTreeViewColumn     *column,
+                                           guint                  id)
 {
   GtkTreeViewAccessibleCellInfo *cell_info;
   GHashTableIter iter;
@@ -1724,7 +1734,7 @@ _gtk_tree_view_accessible_do_remove_column (GtkTreeViewAccessible *accessible,
   guint row, n_rows, n_cols;
 
   /* Clean column from cache */
-  g_hash_table_iter_init (&iter, accessible->cell_infos);
+  g_hash_table_iter_init (&iter, accessible->priv->cell_infos);
   while (g_hash_table_iter_next (&iter, NULL, &value))
     {
       cell_info = value;
@@ -1761,10 +1771,10 @@ _gtk_tree_view_accessible_remove_column (GtkTreeView       *treeview,
   if (obj == NULL)
     return;
 
-  _gtk_tree_view_accessible_do_remove_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
-                                              treeview,
-                                              column,
-                                              to_visible_column_id (treeview, id));
+  gtk_tree_view_accessible_do_remove_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                             treeview,
+                                             column,
+                                             to_visible_column_id (treeview, id));
 }
 
 void
@@ -1795,10 +1805,10 @@ _gtk_tree_view_accessible_toggle_visibility (GtkTreeView       *treeview,
     {
       id = get_column_number (treeview, column);
 
-      _gtk_tree_view_accessible_do_add_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
-                                               treeview,
-                                               column,
-                                               id);
+      gtk_tree_view_accessible_do_add_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                              treeview,
+                                              column,
+                                              id);
     }
   else
     {
@@ -1815,10 +1825,10 @@ _gtk_tree_view_accessible_toggle_visibility (GtkTreeView       *treeview,
             break;
         }
 
-      _gtk_tree_view_accessible_do_remove_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
-                                                  treeview,
-                                                  column,
-                                                  id);
+      gtk_tree_view_accessible_do_remove_column (GTK_TREE_VIEW_ACCESSIBLE (obj),
+                                                 treeview,
+                                                 column,
+                                                 id);
     }
 }
 

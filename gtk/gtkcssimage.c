@@ -21,6 +21,8 @@
 
 #include "gtkcssimageprivate.h"
 
+#include "gtkcsscomputedvaluesprivate.h"
+
 /* for the types only */
 #include "gtk/gtkcssimagecrossfadeprivate.h"
 #include "gtk/gtkcssimagegradientprivate.h"
@@ -57,12 +59,28 @@ gtk_css_image_real_get_aspect_ratio (GtkCssImage *image)
 }
 
 static GtkCssImage *
-gtk_css_image_real_compute (GtkCssImage        *image,
-                            guint               property_id,
-                            GtkStyleContext    *context,
-                            GtkCssDependencies *dependencies)
+gtk_css_image_real_compute (GtkCssImage             *image,
+                            guint                    property_id,
+                            GtkStyleProviderPrivate *provider,
+                            GtkCssComputedValues    *values,
+                            GtkCssComputedValues    *parent_values,
+                            GtkCssDependencies      *dependencies)
 {
   return g_object_ref (image);
+}
+
+static GtkCssImage *
+gtk_css_image_real_transition (GtkCssImage *start,
+                               GtkCssImage *end,
+                               guint        property_id,
+                               double       progress)
+{
+  if (progress <= 0.0)
+    return g_object_ref (start);
+  else if (progress >= 1.0)
+    return end ? g_object_ref (end) : NULL;
+  else
+    return _gtk_css_image_cross_fade_new (start, end, progress);
 }
 
 static void
@@ -72,6 +90,7 @@ _gtk_css_image_class_init (GtkCssImageClass *klass)
   klass->get_height = gtk_css_image_real_get_height;
   klass->get_aspect_ratio = gtk_css_image_real_get_aspect_ratio;
   klass->compute = gtk_css_image_real_compute;
+  klass->transition = gtk_css_image_real_transition;
 }
 
 static void
@@ -116,16 +135,19 @@ _gtk_css_image_get_aspect_ratio (GtkCssImage *image)
 }
 
 GtkCssImage *
-_gtk_css_image_compute (GtkCssImage        *image,
-                        guint               property_id,
-                        GtkStyleContext    *context,
-                        GtkCssDependencies *dependencies)
+_gtk_css_image_compute (GtkCssImage             *image,
+                        guint                    property_id,
+                        GtkStyleProviderPrivate *provider,
+                        GtkCssComputedValues    *values,
+                        GtkCssComputedValues    *parent_values,
+                        GtkCssDependencies      *dependencies)
 {
   GtkCssDependencies unused;
   GtkCssImageClass *klass;
 
   g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
+  g_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_COMPUTED_VALUES (parent_values), NULL);
 
   if (dependencies == NULL)
     dependencies = &unused;
@@ -133,7 +155,37 @@ _gtk_css_image_compute (GtkCssImage        *image,
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
-  return klass->compute (image, property_id, context, dependencies);
+  return klass->compute (image, property_id, provider, values, parent_values, dependencies);
+}
+
+GtkCssImage *
+_gtk_css_image_transition (GtkCssImage *start,
+                           GtkCssImage *end,
+                           guint        property_id,
+                           double       progress)
+{
+  GtkCssImageClass *klass;
+
+  g_return_val_if_fail (start == NULL || GTK_IS_CSS_IMAGE (start), NULL);
+  g_return_val_if_fail (end == NULL || GTK_IS_CSS_IMAGE (end), NULL);
+
+  progress = CLAMP (progress, 0.0, 1.0);
+
+  if (start == NULL)
+    {
+      if (end == NULL)
+        return NULL;
+      else
+        {
+          start = end;
+          end = NULL;
+          progress = 1.0 - progress;
+        }
+    }
+
+  klass = GTK_CSS_IMAGE_GET_CLASS (start);
+
+  return klass->transition (start, end, property_id, progress);
 }
 
 void
@@ -323,7 +375,7 @@ _gtk_css_image_get_surface (GtkCssImage     *image,
   return result;
 }
 
-GType
+static GType
 gtk_css_image_get_parser_type (GtkCssParser *parser)
 {
   static const struct {

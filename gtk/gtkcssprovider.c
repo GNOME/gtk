@@ -27,11 +27,12 @@
 
 #include "gtkbitmaskprivate.h"
 #include "gtkcssarrayvalueprivate.h"
-#include "gtkcssstylefuncsprivate.h"
+#include "gtkcsskeyframesprivate.h"
 #include "gtkcssparserprivate.h"
 #include "gtkcsssectionprivate.h"
 #include "gtkcssselectorprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
+#include "gtkcssstylefuncsprivate.h"
 #include "gtksymboliccolor.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"
@@ -1007,6 +1008,7 @@ struct _GtkCssProviderPrivate
   GScanner *scanner;
 
   GHashTable *symbolic_colors;
+  GHashTable *keyframes;
 
   GArray *rulesets;
   GResource *resource;
@@ -1061,34 +1063,13 @@ gtk_css_provider_parsing_error (GtkCssProvider  *provider,
                                      0,
                                      TRUE))
     {
-      GFileInfo *info;
-      GFile *file;
-      const char *path;
+      char *s = _gtk_css_section_to_string (section);
 
-      file = gtk_css_section_get_file (section);
-      if (file)
-        {
-          info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
-
-          if (info)
-            path = g_file_info_get_display_name (info);
-          else
-            path = "<broken file>";
-        }
-      else
-        {
-          info = NULL;
-          path = "<data>";
-        }
-
-      g_warning ("Theme parsing error: %s:%u:%u: %s",
-                 path,
-                 gtk_css_section_get_end_line (section) + 1,
-                 gtk_css_section_get_end_position (section),
+      g_warning ("Theme parsing error: %s: %s",
+                 s,
                  error->message);
 
-      if (info)
-        g_object_unref (info);
+      g_free (s);
     }
 }
 
@@ -1423,6 +1404,9 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
   priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                  (GDestroyNotify) g_free,
                                                  (GDestroyNotify) gtk_symbolic_color_unref);
+  priv->keyframes = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                           (GDestroyNotify) g_free,
+                                           (GDestroyNotify) _gtk_css_value_unref);
 }
 
 static void
@@ -1568,6 +1552,15 @@ gtk_css_style_provider_get_color (GtkStyleProviderPrivate *provider,
   return g_hash_table_lookup (css_provider->priv->symbolic_colors, name);
 }
 
+static GtkCssKeyframes *
+gtk_css_style_provider_get_keyframes (GtkStyleProviderPrivate *provider,
+                                      const char              *name)
+{
+  GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
+
+  return g_hash_table_lookup (css_provider->priv->keyframes, name);
+}
+
 static void
 gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
                                const GtkCssMatcher     *matcher,
@@ -1647,6 +1640,7 @@ static void
 gtk_css_style_provider_private_iface_init (GtkStyleProviderPrivateInterface *iface)
 {
   iface->get_color = gtk_css_style_provider_get_color;
+  iface->get_keyframes = gtk_css_style_provider_get_keyframes;
   iface->lookup = gtk_css_style_provider_lookup;
   iface->get_change = gtk_css_style_provider_get_change;
 }
@@ -1666,8 +1660,8 @@ gtk_css_provider_finalize (GObject *object)
 
   g_array_free (priv->rulesets, TRUE);
 
-  if (priv->symbolic_colors)
-    g_hash_table_destroy (priv->symbolic_colors);
+  g_hash_table_destroy (priv->symbolic_colors);
+  g_hash_table_destroy (priv->keyframes);
 
   if (priv->resource)
     {
@@ -1797,6 +1791,7 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
     }
 
   g_hash_table_remove_all (priv->symbolic_colors);
+  g_hash_table_remove_all (priv->keyframes);
 
   for (i = 0; i < priv->rulesets->len; i++)
     gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
@@ -1810,32 +1805,14 @@ gtk_css_provider_propagate_error (GtkCssProvider  *provider,
                                   GError         **propagate_to)
 {
 
-  GFileInfo *info;
-  GFile *file;
-  const char *path;
-
-  file = gtk_css_section_get_file (section);
-  if (file)
-    {
-      info = g_file_query_info (file,G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
-
-      if (info)
-        path = g_file_info_get_display_name (info);
-      else
-        path = "<broken file>";
-    }
-  else
-    {
-      info = NULL;
-      path = "<unknown>";
-    }
+  char *s;
 
   /* don't fail for deprecations */
   if (g_error_matches (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED))
     {
-      g_warning ("Theme parsing error: %s:%u:%u: %s", path,
-                 gtk_css_section_get_end_line (section) + 1,
-                 gtk_css_section_get_end_position (section), error->message);
+      s = _gtk_css_section_to_string (section);
+      g_warning ("Theme parsing error: %s: %s", s, error->message);
+      g_free (s);
       return;
     }
 
@@ -1844,12 +1821,9 @@ gtk_css_provider_propagate_error (GtkCssProvider  *provider,
     return;
 
   *propagate_to = g_error_copy (error);
-  g_prefix_error (propagate_to, "%s:%u:%u: ", path,
-                  gtk_css_section_get_end_line (section) + 1,
-                  gtk_css_section_get_end_position (section));
-
-  if (info)
-    g_object_unref (info);
+  s = _gtk_css_section_to_string (section);
+  g_prefix_error (propagate_to, "%s", s);
+  g_free (s);
 }
 
 static gboolean
@@ -2083,6 +2057,71 @@ skip_semicolon:
   return TRUE;
 }
 
+static gboolean
+parse_keyframes (GtkCssScanner *scanner)
+{
+  GtkCssKeyframes *keyframes;
+  char *name;
+
+  gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
+
+  if (!_gtk_css_parser_try (scanner->parser, "@keyframes", TRUE))
+    {
+      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
+      return FALSE;
+    }
+
+  name = _gtk_css_parser_try_ident (scanner->parser, TRUE);
+  if (name == NULL)
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Expected name for keyframes");
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+      goto exit;
+    }
+
+  if (!_gtk_css_parser_try (scanner->parser, "{", TRUE))
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "Expected '{' for keyframes");
+      _gtk_css_parser_resync (scanner->parser, TRUE, 0);
+      g_free (name);
+      goto exit;
+    }
+
+  keyframes = _gtk_css_keyframes_parse (scanner->parser);
+  if (keyframes == NULL)
+    {
+      _gtk_css_parser_resync (scanner->parser, TRUE, '}');
+      g_free (name);
+      goto exit;
+    }
+
+  g_hash_table_insert (scanner->provider->priv->keyframes, name, keyframes);
+
+  if (!_gtk_css_parser_try (scanner->parser, "}", TRUE))
+    {
+      gtk_css_provider_error_literal (scanner->provider,
+                                      scanner,
+                                      GTK_CSS_PROVIDER_ERROR,
+                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      "expected '}' after declarations");
+      if (!_gtk_css_parser_is_eof (scanner->parser))
+        _gtk_css_parser_resync (scanner->parser, FALSE, 0);
+    }
+
+exit:
+  gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
+
+  return TRUE;
+}
+
 static void
 parse_at_keyword (GtkCssScanner *scanner)
 {
@@ -2091,6 +2130,8 @@ parse_at_keyword (GtkCssScanner *scanner)
   if (parse_color_definition (scanner))
     return;
   if (parse_binding_set (scanner))
+    return;
+  if (parse_keyframes (scanner))
     return;
 
   else
@@ -2484,7 +2525,10 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
  * Loads @data into @css_provider, making it clear any previously loaded
  * information.
  *
- * Returns: %TRUE if the data could be loaded.
+ * Returns: %TRUE. The return value is deprecated and %FALSE will only be
+ *     returned for backwards compatibility reasons if an @error is not 
+ *     %NULL and a loading error occured. To track errors while loading
+ *     CSS, connect to the GtkCssProvider::parsing-error signal.
  **/
 gboolean
 gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
@@ -2529,7 +2573,10 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
  * Loads the data contained in @file into @css_provider, making it
  * clear any previously loaded information.
  *
- * Returns: %TRUE if the data could be loaded.
+ * Returns: %TRUE. The return value is deprecated and %FALSE will only be
+ *     returned for backwards compatibility reasons if an @error is not 
+ *     %NULL and a loading error occured. To track errors while loading
+ *     CSS, connect to the GtkCssProvider::parsing-error signal.
  **/
 gboolean
 gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
@@ -2559,7 +2606,10 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
  * Loads the data contained in @path into @css_provider, making it clear
  * any previously loaded information.
  *
- * Returns: %TRUE if the data could be loaded.
+ * Returns: %TRUE. The return value is deprecated and %FALSE will only be
+ *     returned for backwards compatibility reasons if an @error is not 
+ *     %NULL and a loading error occured. To track errors while loading
+ *     CSS, connect to the GtkCssProvider::parsing-error signal.
  **/
 gboolean
 gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
@@ -2581,16 +2631,15 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
   return result;
 }
 
-static gboolean
-_gtk_css_provider_load_from_resource (GtkCssProvider  *css_provider,
-				      const gchar     *resource_path)
+static void
+gtk_css_provider_load_from_resource (GtkCssProvider  *css_provider,
+			             const gchar     *resource_path)
 {
   GFile *file;
   char *uri, *escaped;
-  gboolean result;
 
-  g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
-  g_return_val_if_fail (resource_path != NULL, FALSE);
+  g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
+  g_return_if_fail (resource_path != NULL);
 
   escaped = g_uri_escape_string (resource_path,
 				 G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, FALSE);
@@ -2600,11 +2649,9 @@ _gtk_css_provider_load_from_resource (GtkCssProvider  *css_provider,
   file = g_file_new_for_uri (uri);
   g_free (uri);
 
-  result = gtk_css_provider_load_from_file (css_provider, file, NULL);
+  gtk_css_provider_load_from_file (css_provider, file, NULL);
 
   g_object_unref (file);
-
-  return result;
 }
 
 /**
@@ -2668,7 +2715,6 @@ gtk_css_provider_get_named (const gchar *name,
     key = (gchar *)name;
   else
     key = g_strconcat (name, "-", variant, NULL);
-
   if (G_UNLIKELY (!themes))
     themes = g_hash_table_new (g_str_hash, g_str_equal);
 
@@ -2684,14 +2730,10 @@ gtk_css_provider_get_named (const gchar *name,
         resource_path = g_strdup_printf ("/org/gtk/libgtk/%s.css", name);
 
       if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
-	{
-	  provider = gtk_css_provider_new ();
-	  if (!_gtk_css_provider_load_from_resource (provider, resource_path))
-	    {
-	      g_object_unref (provider);
-	      provider = NULL;
-	    }
-	}
+        {
+          provider = gtk_css_provider_new ();
+          gtk_css_provider_load_from_resource (provider, resource_path);
+        }
       g_free (resource_path);
     }
 
@@ -2764,22 +2806,11 @@ gtk_css_provider_get_named (const gchar *name,
           if (resource != NULL)
             g_resources_register (resource);
 
-          if (!gtk_css_provider_load_from_path (provider, path, NULL))
-            {
-	      if (resource != NULL)
-		{
-		  g_resources_unregister (resource);
-		  g_resource_unref (resource);
-		}
-              g_object_unref (provider);
-              provider = NULL;
-            }
-          else
-	    {
-	      /* Only set this after load success, as load_from_path will clear it */
-	      provider->priv->resource = resource;
-	      g_hash_table_insert (themes, g_strdup (key), provider);
-	    }
+          gtk_css_provider_load_from_path (provider, path, NULL);
+
+          /* Only set this after load, as load_from_path will clear it */
+          provider->priv->resource = resource;
+          g_hash_table_insert (themes, g_strdup (key), provider);
 
           g_free (path);
           g_free (dir);
@@ -2900,6 +2931,33 @@ gtk_css_provider_print_colors (GHashTable *colors,
   g_list_free (keys);
 }
 
+static void
+gtk_css_provider_print_keyframes (GHashTable *keyframes,
+                                  GString    *str)
+{
+  GList *keys, *walk;
+
+  keys = g_hash_table_get_keys (keyframes);
+  /* so the output is identical for identical styles */
+  keys = g_list_sort (keys, (GCompareFunc) strcmp);
+
+  for (walk = keys; walk; walk = walk->next)
+    {
+      const char *name = walk->data;
+      GtkCssKeyframes *keyframe = g_hash_table_lookup (keyframes, (gpointer) name);
+
+      if (str->len > 0)
+        g_string_append (str, "\n");
+      g_string_append (str, "@keyframes ");
+      g_string_append (str, name);
+      g_string_append (str, " {\n");
+      _gtk_css_keyframes_print (keyframe, str);
+      g_string_append (str, "}\n");
+    }
+
+  g_list_free (keys);
+}
+
 /**
  * gtk_css_provider_to_string:
  * @provider: the provider to write to a string
@@ -2930,6 +2988,7 @@ gtk_css_provider_to_string (GtkCssProvider *provider)
   str = g_string_new ("");
 
   gtk_css_provider_print_colors (priv->symbolic_colors, str);
+  gtk_css_provider_print_keyframes (priv->keyframes, str);
 
   for (i = 0; i < priv->rulesets->len; i++)
     {

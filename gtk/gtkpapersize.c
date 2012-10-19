@@ -30,6 +30,10 @@
 #include "gtkprintoperation.h"  /* for GtkPrintError */
 #include "gtkintl.h"
 
+#ifdef G_OS_UNIX                /* _gtk_load_custom_papers() only on Unix so far  */
+#include "gtkcustompaperunixdialog.h"
+#endif
+
 #include "paper_names_offsets.c"
 
 
@@ -453,8 +457,6 @@ gtk_paper_size_is_equal (GtkPaperSize *size1,
   return strcmp (gtk_paper_size_get_name (size1),
                  gtk_paper_size_get_name (size2)) == 0;
 }
-
-GList * _gtk_load_custom_papers (void);
 
 /**
  * gtk_paper_size_get_paper_sizes:

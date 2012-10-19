@@ -198,7 +198,7 @@ _gtk_rbtree_test_structure (GtkRBTree *tree)
   _gtk_rbtree_test_structure_helper (tree, tree->root);
 }
 
-void
+static void
 _gtk_rbtree_test (GtkRBTree *tree)
 {
   GtkRBTree *tmp_tree;

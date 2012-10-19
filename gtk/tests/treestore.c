@@ -26,6 +26,8 @@
  *  - And we also need tests for creating these child levels, etc.
  */
 
+#include "treemodel.h"
+
 #include <gtk/gtk.h>
 
 static inline gboolean

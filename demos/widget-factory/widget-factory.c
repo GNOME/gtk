@@ -65,12 +65,26 @@ show_about (GtkMenuItem *item, GtkWidget *window)
   g_object_unref (pixbuf);
 }
 
+static void
+on_page_toggled (GtkToggleButton *button,
+                 GtkNotebook     *pages)
+{
+  gint page;
+
+  if (!gtk_toggle_button_get_active (button))
+    return;
+
+  page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "page"));
+  gtk_notebook_set_current_page (pages, page);
+}
+
 int
 main (int argc, char *argv[])
 {
   GtkBuilder *builder;
   GtkWidget  *window;
   GtkWidget  *widget;
+  GtkWidget  *notebook;
   gboolean    dark = FALSE;
 
   gtk_init (&argc, &argv);
@@ -87,6 +101,15 @@ main (int argc, char *argv[])
   widget = (GtkWidget*) gtk_builder_get_object (builder, "darkmenuitem");
   g_signal_connect (widget, "toggled", G_CALLBACK (dark_toggled), NULL);
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (widget), dark);
+
+  notebook = (GtkWidget*) gtk_builder_get_object (builder, "toplevel_notebook");
+  widget = (GtkWidget*) gtk_builder_get_object (builder, "togglepage1");
+  g_object_set_data (G_OBJECT (widget), "page", GINT_TO_POINTER (0));
+  g_signal_connect (widget, "toggled", G_CALLBACK (on_page_toggled), notebook);
+
+  widget = (GtkWidget*) gtk_builder_get_object (builder, "togglepage2");
+  g_object_set_data (G_OBJECT (widget), "page", GINT_TO_POINTER (1));
+  g_signal_connect (widget, "toggled", G_CALLBACK (on_page_toggled), notebook);
 
   widget = (GtkWidget*) gtk_builder_get_object (builder, "aboutmenuitem");
   g_signal_connect (widget, "activate", G_CALLBACK (show_about), window);

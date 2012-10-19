@@ -484,7 +484,7 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
           values[0] = _gtk_css_image_value_new (image);
         }
       else if (values[1] == NULL &&
-               (value = _gtk_css_position_value_parse (parser)))
+               (value = _gtk_css_position_value_try_parse (parser)))
         {
           values[1] = value;
           value = NULL;
@@ -691,6 +691,124 @@ parse_transition (GtkCssShorthandProperty  *shorthand,
       values[i] = _gtk_css_array_value_new_from_array ((GtkCssValue **) arrays[i]->pdata, arrays[i]->len);
       g_ptr_array_unref (arrays[i]);
     }
+
+  return TRUE;
+}
+
+static gboolean
+parse_one_animation (GtkCssShorthandProperty  *shorthand,
+                     GtkCssValue             **values,
+                     GtkCssParser             *parser)
+{
+  do
+    {
+      if (values[1] == NULL && _gtk_css_parser_try (parser, "infinite", TRUE))
+        {
+          values[1] = _gtk_css_number_value_new (HUGE_VAL, GTK_CSS_NUMBER);
+        }
+      else if ((values[1] == NULL || values[3] == NULL) &&
+          _gtk_css_parser_has_number (parser))
+        {
+          GtkCssValue *value;
+          
+          value = _gtk_css_number_value_parse (parser,
+                                               GTK_CSS_POSITIVE_ONLY
+                                               | (values[1] == NULL ? GTK_CSS_PARSE_NUMBER : 0)
+                                               | (values[3] == NULL ? GTK_CSS_PARSE_TIME : 0));
+          if (_gtk_css_number_value_get_unit (value) == GTK_CSS_NUMBER)
+            values[1] = value;
+          else if (values[2] == NULL)
+            values[2] = value;
+          else
+            values[3] = value;
+        }
+      else if (values[4] == NULL &&
+               _gtk_css_ease_value_can_parse (parser))
+        {
+          values[4] = _gtk_css_ease_value_parse (parser);
+
+          if (values[4] == NULL)
+            return FALSE;
+        }
+      else if (values[5] == NULL &&
+               (values[5] = _gtk_css_direction_value_try_parse (parser)))
+        {
+          /* nothing to do */
+        }
+      else if (values[6] == NULL &&
+               (values[6] = _gtk_css_fill_mode_value_try_parse (parser)))
+        {
+          /* nothing to do */
+        }
+      else if (values[0] == NULL &&
+               (values[0] = _gtk_css_ident_value_try_parse (parser)))
+        {
+          /* nothing to do */
+          /* keep in mind though that this needs to come last as fill modes, directions
+           * etc are valid idents */
+        }
+      else
+        {
+          /* We parsed everything and there's still stuff left?
+           * Pretend we didn't notice and let the normal code produce
+           * a 'junk at end of value' error */
+          break;
+        }
+    }
+  while (!value_is_done_parsing (parser));
+
+  return TRUE;
+}
+
+static gboolean
+parse_animation (GtkCssShorthandProperty  *shorthand,
+                 GtkCssValue             **values,
+                 GtkCssParser             *parser)
+{
+  GtkCssValue *step_values[7];
+  GPtrArray *arrays[6];
+  guint i;
+
+  for (i = 0; i < 6; i++)
+    {
+      arrays[i] = g_ptr_array_new ();
+      step_values[i] = NULL;
+    }
+  
+  step_values[6] = NULL;
+
+  do {
+    if (!parse_one_animation (shorthand, step_values, parser))
+      {
+        for (i = 0; i < 6; i++)
+          {
+            g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) _gtk_css_value_unref);
+            g_ptr_array_unref (arrays[i]);
+            return FALSE;
+          }
+      }
+
+      for (i = 0; i < 6; i++)
+        {
+          if (step_values[i] == NULL)
+            {
+              GtkCssValue *initial = _gtk_css_style_property_get_initial_value (
+                                         _gtk_css_shorthand_property_get_subproperty (shorthand, i));
+              step_values[i] = _gtk_css_value_ref (_gtk_css_array_value_get_nth (initial, 0));
+            }
+
+          g_ptr_array_add (arrays[i], step_values[i]);
+          step_values[i] = NULL;
+        }
+  } while (_gtk_css_parser_try (parser, ",", TRUE));
+
+  for (i = 0; i < 6; i++)
+    {
+      values[i] = _gtk_css_array_value_new_from_array ((GtkCssValue **) arrays[i]->pdata, arrays[i]->len);
+      g_ptr_array_unref (arrays[i]);
+    }
+
+  values[6] = step_values[6];
 
   return TRUE;
 }
@@ -996,6 +1114,8 @@ _gtk_css_shorthand_property_init_properties (void)
   const char *background_subproperties[] = { "background-image", "background-position", "background-size", "background-repeat", "background-clip", "background-origin",
                                              "background-color", NULL };
   const char *transition_subproperties[] = { "transition-property", "transition-duration", "transition-delay", "transition-timing-function", NULL };
+  const char *animation_subproperties[] = { "animation-name", "animation-iteration-count", "animation-duration", "animation-delay", 
+                                            "animation-timing-function", "animation-direction", "animation-fill-mode", NULL };
 
   _gtk_css_shorthand_property_register   ("font",
                                           PANGO_TYPE_FONT_DESCRIPTION,
@@ -1091,6 +1211,12 @@ _gtk_css_shorthand_property_init_properties (void)
                                           G_TYPE_NONE,
                                           transition_subproperties,
                                           parse_transition,
+                                          NULL,
+                                          NULL);
+  _gtk_css_shorthand_property_register   ("animation",
+                                          G_TYPE_NONE,
+                                          animation_subproperties,
+                                          parse_animation,
                                           NULL,
                                           NULL);
 }

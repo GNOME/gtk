@@ -36,10 +36,12 @@ gtk_css_value_enum_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_enum_compute (GtkCssValue        *value,
-                            guint               property_id,
-                            GtkStyleContext    *context,
-                            GtkCssDependencies *dependencies)
+gtk_css_value_enum_compute (GtkCssValue             *value,
+                            guint                    property_id,
+                            GtkStyleProviderPrivate *provider,
+                            GtkCssComputedValues    *values,
+                            GtkCssComputedValues    *parent_values,
+                            GtkCssDependencies      *dependencies)
 {
   return _gtk_css_value_ref (value);
 }
@@ -54,6 +56,7 @@ gtk_css_value_enum_equal (const GtkCssValue *enum1,
 static GtkCssValue *
 gtk_css_value_enum_transition (GtkCssValue *start,
                                GtkCssValue *end,
+                               guint        property_id,
                                double       progress)
 {
   return NULL;
@@ -334,6 +337,169 @@ GtkCssArea
 _gtk_css_area_value_get (const GtkCssValue *value)
 {
   g_return_val_if_fail (value->class == &GTK_CSS_VALUE_AREA, GTK_CSS_AREA_BORDER_BOX);
+
+  return value->value;
+}
+
+/* GtkCssDirection */
+
+static const GtkCssValueClass GTK_CSS_VALUE_DIRECTION = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue direction_values[] = {
+  { &GTK_CSS_VALUE_DIRECTION, 1, GTK_CSS_DIRECTION_NORMAL, "normal" },
+  { &GTK_CSS_VALUE_DIRECTION, 1, GTK_CSS_DIRECTION_REVERSE, "reverse" },
+  { &GTK_CSS_VALUE_DIRECTION, 1, GTK_CSS_DIRECTION_ALTERNATE, "alternate" },
+  { &GTK_CSS_VALUE_DIRECTION, 1, GTK_CSS_DIRECTION_ALTERNATE_REVERSE, "alternate-reverse" }
+};
+
+GtkCssValue *
+_gtk_css_direction_value_new (GtkCssDirection direction)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (direction_values); i++)
+    {
+      if (direction_values[i].value == direction)
+        return _gtk_css_value_ref (&direction_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_direction_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (direction_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, direction_values[i].name, TRUE))
+        return _gtk_css_value_ref (&direction_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssDirection
+_gtk_css_direction_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_DIRECTION, GTK_CSS_DIRECTION_NORMAL);
+
+  return value->value;
+}
+
+/* GtkCssPlayState */
+
+static const GtkCssValueClass GTK_CSS_VALUE_PLAY_STATE = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue play_state_values[] = {
+  { &GTK_CSS_VALUE_PLAY_STATE, 1, GTK_CSS_PLAY_STATE_RUNNING, "running" },
+  { &GTK_CSS_VALUE_PLAY_STATE, 1, GTK_CSS_PLAY_STATE_PAUSED, "paused" }
+};
+
+GtkCssValue *
+_gtk_css_play_state_value_new (GtkCssPlayState play_state)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (play_state_values); i++)
+    {
+      if (play_state_values[i].value == play_state)
+        return _gtk_css_value_ref (&play_state_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_play_state_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (play_state_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, play_state_values[i].name, TRUE))
+        return _gtk_css_value_ref (&play_state_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssPlayState
+_gtk_css_play_state_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_PLAY_STATE, GTK_CSS_PLAY_STATE_RUNNING);
+
+  return value->value;
+}
+
+/* GtkCssFillMode */
+
+static const GtkCssValueClass GTK_CSS_VALUE_FILL_MODE = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue fill_mode_values[] = {
+  { &GTK_CSS_VALUE_FILL_MODE, 1, GTK_CSS_FILL_NONE, "none" },
+  { &GTK_CSS_VALUE_FILL_MODE, 1, GTK_CSS_FILL_FORWARDS, "forwards" },
+  { &GTK_CSS_VALUE_FILL_MODE, 1, GTK_CSS_FILL_BACKWARDS, "backwards" },
+  { &GTK_CSS_VALUE_FILL_MODE, 1, GTK_CSS_FILL_BOTH, "both" }
+};
+
+GtkCssValue *
+_gtk_css_fill_mode_value_new (GtkCssFillMode fill_mode)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (fill_mode_values); i++)
+    {
+      if (fill_mode_values[i].value == fill_mode)
+        return _gtk_css_value_ref (&fill_mode_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_fill_mode_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (fill_mode_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, fill_mode_values[i].name, TRUE))
+        return _gtk_css_value_ref (&fill_mode_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssFillMode
+_gtk_css_fill_mode_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FILL_MODE, GTK_CSS_FILL_NONE);
 
   return value->value;
 }

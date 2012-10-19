@@ -383,6 +383,14 @@ gtk_tool_palette_dispose (GObject *object)
       palette->priv->text_size_group = NULL;
     }
 
+  if (palette->priv->settings_connection > 0)
+    {
+      g_signal_handler_disconnect (palette->priv->settings, palette->priv->settings_connection);
+      palette->priv->settings_connection = 0;
+    }
+
+  g_clear_object (&palette->priv->settings);
+
   G_OBJECT_CLASS (gtk_tool_palette_parent_class)->dispose (object);
 }
 
@@ -932,6 +940,7 @@ gtk_tool_palette_screen_changed (GtkWidget *widget,
   if (old_settings)
   {
     g_signal_handler_disconnect (old_settings, priv->settings_connection);
+    priv->settings_connection = 0;
     g_object_unref (old_settings);
   }
 
@@ -1289,9 +1298,9 @@ gtk_tool_palette_get_style (GtkToolPalette *palette)
   return palette->priv->style;
 }
 
-gint
-_gtk_tool_palette_compare_groups (gconstpointer a,
-                                  gconstpointer b)
+static gint
+gtk_tool_palette_compare_groups (gconstpointer a,
+                                 gconstpointer b)
 {
   const GtkToolItemGroupInfo *group_a = a;
   const GtkToolItemGroupInfo *group_b = b;
@@ -1342,7 +1351,7 @@ gtk_tool_palette_set_group_position (GtkToolPalette   *palette,
   group_new->pos = position;
   group_old->pos = old_position;
 
-  g_ptr_array_sort (palette->priv->groups, _gtk_tool_palette_compare_groups);
+  g_ptr_array_sort (palette->priv->groups, gtk_tool_palette_compare_groups);
 
   gtk_widget_queue_resize (GTK_WIDGET (palette));
 }

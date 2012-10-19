@@ -24,7 +24,8 @@ visuals_LDADD = $(LDADDS)
 visuals_SOURCES = visuals.c
 
 EXTRA_DIST = \
-	inline-toolbar.ui \
+	inline-toolbar-horizontal.ui \
+	inline-toolbar-vertical.ui \
 	level-bar.ui \
 	linked-buttons-horizontal.ui \
 	linked-buttons-vertical.ui \

@@ -20,6 +20,11 @@
 #include "gtkmenuitemaccessible.h"
 #include "gtk/gtkmenuitemprivate.h"
 
+struct _GtkMenuItemAccessiblePrivate
+{
+  gchar *text;
+};
+
 #define KEYBINDING_SEPARATOR ";"
 
 static void menu_item_select   (GtkMenuItem *item);
@@ -67,7 +72,7 @@ gtk_menu_item_accessible_initialize (AtkObject *obj,
         atk_object_set_parent (obj, gtk_widget_get_accessible (parent_widget));
     }
 
-  GTK_WIDGET_ACCESSIBLE (obj)->layer = ATK_LAYER_POPUP;
+  _gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_POPUP);
 
   obj->role = ATK_ROLE_MENU_ITEM;
 
@@ -193,10 +198,10 @@ gtk_menu_item_accessible_get_name (AtkObject *obj)
   accessible = GTK_MENU_ITEM_ACCESSIBLE (obj);
   label = get_label_from_container (widget);
 
-  g_free (accessible->text);
-  accessible->text = get_text_from_label_widget (label);
+  g_free (accessible->priv->text);
+  accessible->priv->text = get_text_from_label_widget (label);
 
-  return accessible->text;
+  return accessible->priv->text;
 }
 
 static void
@@ -204,7 +209,7 @@ gtk_menu_item_accessible_finalize (GObject *object)
 {
   GtkMenuItemAccessible *accessible = GTK_MENU_ITEM_ACCESSIBLE (object);
 
-  g_free (accessible->text);
+  g_free (accessible->priv->text);
 
   G_OBJECT_CLASS (_gtk_menu_item_accessible_parent_class)->finalize (object);
 }
@@ -244,11 +249,16 @@ _gtk_menu_item_accessible_class_init (GtkMenuItemAccessibleClass *klass)
   class->initialize = gtk_menu_item_accessible_initialize;
   class->get_name = gtk_menu_item_accessible_get_name;
   class->get_role = gtk_menu_item_accessible_get_role;
+
+  g_type_class_add_private (klass, sizeof (GtkMenuItemAccessiblePrivate));
 }
 
 static void
 _gtk_menu_item_accessible_init (GtkMenuItemAccessible *menu_item)
 {
+  menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (menu_item,
+                                                 GTK_TYPE_MENU_ITEM_ACCESSIBLE,
+                                                 GtkMenuItemAccessiblePrivate);
 }
 
 static GtkWidget *
@@ -811,26 +821,14 @@ menu_item_add_gtk (GtkContainer *container,
                    GtkWidget    *widget)
 {
   GtkWidget *parent_widget;
-  AtkObject *atk_parent;
-  AtkObject *atk_child;
-  GtkContainerAccessible *container_accessible;
-  gint index;
 
   g_return_val_if_fail (GTK_IS_MENU (container), 1);
 
   parent_widget = gtk_menu_get_attach_widget (GTK_MENU (container));
   if (GTK_IS_MENU_ITEM (parent_widget))
     {
-      atk_parent = gtk_widget_get_accessible (parent_widget);
-      atk_child = gtk_widget_get_accessible (widget);
+      GTK_CONTAINER_ACCESSIBLE_CLASS (_gtk_menu_item_accessible_parent_class)->add_gtk (container, widget, gtk_widget_get_accessible (parent_widget));
 
-      g_object_notify (G_OBJECT (atk_child), "accessible-parent");
-      container_accessible = GTK_CONTAINER_ACCESSIBLE (atk_parent);
-      g_list_free (container_accessible->children);
-      container_accessible->children = gtk_container_get_children (container);
-      index = g_list_index (container_accessible->children, widget);
-      g_signal_emit_by_name (atk_parent, "children-changed::add",
-                             index, atk_child, NULL);
     }
   return 1;
 }
@@ -840,30 +838,13 @@ menu_item_remove_gtk (GtkContainer *container,
                       GtkWidget    *widget)
 {
   GtkWidget *parent_widget;
-  AtkObject *atk_parent;
-  AtkObject *atk_child;
-  GtkContainerAccessible *container_accessible;
-  gint index;
-  gint list_length;
 
   g_return_val_if_fail (GTK_IS_MENU (container), 1);
 
   parent_widget = gtk_menu_get_attach_widget (GTK_MENU (container));
   if (GTK_IS_MENU_ITEM (parent_widget))
     {
-      atk_parent = gtk_widget_get_accessible (parent_widget);
-      atk_child = gtk_widget_get_accessible (widget);
-
-      g_object_notify (G_OBJECT (atk_child), "accessible-parent");
-
-      container_accessible = GTK_CONTAINER_ACCESSIBLE (atk_parent);
-      index = g_list_index (container_accessible->children, widget);
-      list_length = g_list_length (container_accessible->children);
-      g_list_free (container_accessible->children);
-      container_accessible->children = gtk_container_get_children (container);
-      if (index >= 0 && index <= list_length)
-        g_signal_emit_by_name (atk_parent, "children-changed::remove",
-                               index, atk_child, NULL);
+      GTK_CONTAINER_ACCESSIBLE_CLASS (_gtk_menu_item_accessible_parent_class)->remove_gtk (container, widget, gtk_widget_get_accessible (parent_widget));
     }
   return 1;
 }

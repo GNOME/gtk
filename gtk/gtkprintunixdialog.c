@@ -1206,10 +1206,10 @@ add_option_to_extension_point (GtkPrinterOption *option,
       gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
       gtk_widget_show (hbox);
 
-      gtk_box_pack_start (GTK_BOX (extension_point), hbox, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (extension_point), hbox, TRUE, TRUE, 0);
     }
   else
-    gtk_box_pack_start (GTK_BOX (extension_point), widget, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (extension_point), widget, TRUE, TRUE, 0);
 }
 
 static gint
@@ -1387,6 +1387,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
   GtkWidget *table, *frame;
   gboolean has_advanced, has_job;
   guint nrows;
+  GList *children;
 
   if (priv->current_printer == NULL)
     {
@@ -1439,6 +1440,16 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
                                            "GtkPrintDialogExtension",
                                            add_option_to_extension_point,
                                            priv->extension_point);
+
+  /* A bit of a hack, keep the last option flush right.
+   * This keeps the file format radios from moving as the
+   * filename changes.
+   */
+  children = gtk_container_get_children (GTK_CONTAINER (priv->extension_point));
+  l = g_list_last (children);
+  if (l && l != children)
+    gtk_widget_set_halign (GTK_WIDGET (l->data), GTK_ALIGN_END);
+  g_list_free (children);
 
   /* Put the rest of the groups in the advanced page */
   groups = gtk_printer_option_set_get_groups (priv->options);

@@ -1763,7 +1763,7 @@ gtk_box_set_child_packing (GtkBox      *box,
         pack_type = GTK_PACK_START;
       if (child_info->pack != pack_type)
         {
-	  child_info->pack = GTK_PACK_END;
+	  child_info->pack = pack_type;
           gtk_widget_child_notify (child, "pack-type");
           gtk_box_invalidate_order (box);
         }

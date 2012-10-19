@@ -418,7 +418,7 @@ iter_is_valid (GtkTreeIter  *iter,
  * in.  Note that only types derived from standard GObject fundamental types
  * are supported.
  *
- * As an example, <literal>gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
+ * As an example, <literal>gtk_list_store_new (3, G_TYPE_INT, G_TYPE_STRING,
  * GDK_TYPE_PIXBUF);</literal> will create a new #GtkListStore with three columns, of type
  * int, string and #GdkPixbuf respectively.
  *

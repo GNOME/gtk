@@ -104,6 +104,9 @@ struct _GtkAccelLabelPrivate
   gchar         *accel_string;       /* has set function */
   guint          accel_padding;      /* should be style property? */
   guint16        accel_string_width; /* seems to be private */
+
+  guint           accel_key;         /* manual accel key specification if != 0 */
+  GdkModifierType accel_mods;
 };
 
 static void         gtk_accel_label_set_property (GObject            *object,
@@ -903,30 +906,83 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
                 "gtk-enable-accels", &enable_accels,
                 NULL);
 
-  if (enable_accels && accel_label->priv->accel_closure)
+  if (enable_accels && (accel_label->priv->accel_closure || accel_label->priv->accel_key))
     {
-      GtkAccelKey *key = gtk_accel_group_find (accel_label->priv->accel_group, find_accel, accel_label->priv->accel_closure);
+      gboolean have_accel = FALSE;
+      guint accel_key;
+      GdkModifierType accel_mods;
 
-      if (key && key->accel_flags & GTK_ACCEL_VISIBLE)
+      /* First check for a manual accel set with _set_accel() */
+      if (accel_label->priv->accel_key)
+        {
+          accel_mods = accel_label->priv->accel_mods;
+          accel_key = accel_label->priv->accel_key;
+          have_accel = TRUE;
+        }
+
+      /* If we don't have a hardcoded value, check the accel group */
+      if (!have_accel)
+        {
+          GtkAccelKey *key;
+
+          key = gtk_accel_group_find (accel_label->priv->accel_group, find_accel, accel_label->priv->accel_closure);
+
+          if (key && key->accel_flags & GTK_ACCEL_VISIBLE)
+            {
+              accel_key = key->accel_key;
+              accel_mods = key->accel_mods;
+              have_accel = TRUE;
+            }
+        }
+
+      /* If we found a key using either method, set it */
+      if (have_accel)
 	{
 	  GtkAccelLabelClass *klass;
 	  gchar *tmp;
 
 	  klass = GTK_ACCEL_LABEL_GET_CLASS (accel_label);
-	  tmp = _gtk_accel_label_class_get_accelerator_label (klass,
-							      key->accel_key,
-							      key->accel_mods);
+	  tmp = _gtk_accel_label_class_get_accelerator_label (klass, accel_key, accel_mods);
 	  accel_label->priv->accel_string = g_strconcat ("   ", tmp, NULL);
 	  g_free (tmp);
 	}
-      if (!accel_label->priv->accel_string)
-	accel_label->priv->accel_string = g_strdup ("-/-");
+
+      else
+        /* Otherwise we have a closure with no key.  Show "-/-". */
+        accel_label->priv->accel_string = g_strdup ("-/-");
     }
-  
+
   if (!accel_label->priv->accel_string)
     accel_label->priv->accel_string = g_strdup ("");
 
   gtk_widget_queue_resize (GTK_WIDGET (accel_label));
 
   return FALSE;
+}
+
+/**
+ * gtk_accel_label_set_accel:
+ * @accel_label: a #GtkAccelLabel
+ * @accelerator_key: a keyval, or 0
+ * @accelerator_mods: the modifier mask for the accel
+ *
+ * Manually sets a keyval and modifier mask as the accelerator rendered
+ * by @accel_label.
+ *
+ * If a keyval and modifier are explicitly set then these values are
+ * used regardless of any associated accel closure or widget.
+ *
+ * Providing an @accelerator_key of 0 removes the manual setting.
+ *
+ * Since: 3.6
+ */
+void
+gtk_accel_label_set_accel (GtkAccelLabel   *accel_label,
+                           guint            accelerator_key,
+                           GdkModifierType  accelerator_mods)
+{
+  accel_label->priv->accel_key = accelerator_key;
+  accel_label->priv->accel_mods = accelerator_mods;
+
+  gtk_accel_label_reset (accel_label);
 }

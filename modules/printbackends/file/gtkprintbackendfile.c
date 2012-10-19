@@ -783,6 +783,7 @@ file_printer_prepare_for_print (GtkPrinter       *printer,
   GtkPrintPages pages;
   GtkPageRange *ranges;
   gint n_ranges;
+  OutputFormat format;
 
   pages = gtk_print_settings_get_print_pages (settings);
   gtk_print_job_set_pages (print_job, pages);
@@ -807,7 +808,19 @@ file_printer_prepare_for_print (GtkPrinter       *printer,
     gtk_print_job_set_scale (print_job, scale / 100.0);
 
   gtk_print_job_set_page_set (print_job, gtk_print_settings_get_page_set (settings));
-  gtk_print_job_set_rotate (print_job, TRUE);
+
+  format = format_from_settings (settings);
+  switch (format)
+    {
+      case FORMAT_PDF:
+	gtk_print_job_set_rotate (print_job, FALSE);
+        break;
+      default:
+      case FORMAT_PS:
+      case FORMAT_SVG:
+	gtk_print_job_set_rotate (print_job, TRUE);
+        break;
+    }
 }
 
 static GList *
@@ -817,7 +830,7 @@ file_printer_list_papers (GtkPrinter *printer)
   GList *papers, *p;
   GtkPageSetup *page_setup;
 
-  papers = gtk_paper_size_get_paper_sizes (TRUE);
+  papers = gtk_paper_size_get_paper_sizes (FALSE);
 
   for (p = papers; p; p = p->next)
     {

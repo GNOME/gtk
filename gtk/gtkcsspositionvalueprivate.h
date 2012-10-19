@@ -26,8 +26,9 @@
 G_BEGIN_DECLS
 
 GtkCssValue *   _gtk_css_position_value_new           (GtkCssValue            *x,
-                                                     GtkCssValue            *y);
+                                                       GtkCssValue            *y);
 GtkCssValue *   _gtk_css_position_value_parse         (GtkCssParser           *parser);
+GtkCssValue *   _gtk_css_position_value_try_parse     (GtkCssParser           *parser);
 
 double          _gtk_css_position_value_get_x         (const GtkCssValue      *position,
                                                      double                  one_hundred_percent);

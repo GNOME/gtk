@@ -395,8 +395,9 @@ gtk_appchooser_impl_c_sources = \
 	gtkappchooseronlinepk.c
 endif
 
-gtk_private_type_h_sources = \
-	gtkcsstypesprivate.h
+gtk_private_type_h_sources =	\
+	gtkcsstypesprivate.h	\
+	gtktexthandleprivate.h
 
 
 # GTK+ header files that don't get installed
@@ -420,6 +421,7 @@ gtk_private_h_sources =		\
 	gtkboxprivate.h         \
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
+	gtkcairoblurprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
 	gtkcolorswatchprivate.h	\
 	gtkcoloreditorprivate.h	\
@@ -427,7 +429,7 @@ gtk_private_h_sources =		\
 	gtkcolorscaleprivate.h	\
 	gtkcolorchooserprivate.h	\
 	gtkcontainerprivate.h   \
-	gtkcssanimatedvaluesprivate.h	\
+	gtkcssanimationprivate.h	\
 	gtkcssarrayvalueprivate.h	\
 	gtkcssbgsizevalueprivate.h	\
 	gtkcssbordervalueprivate.h	\
@@ -446,6 +448,7 @@ gtk_private_h_sources =		\
 	gtkcssimagewin32private.h	\
 	gtkcssinheritvalueprivate.h	\
 	gtkcssinitialvalueprivate.h	\
+	gtkcsskeyframesprivate.h	\
 	gtkcsslookupprivate.h	\
 	gtkcssmatcherprivate.h	\
 	gtkcssnumbervalueprivate.h	\
@@ -476,6 +479,7 @@ gtk_private_h_sources =		\
 	gtkfilesystemmodel.h	\
 	gtkfontchooserprivate.h	\
 	gtkfontchooserutils.h	\
+	gtkgradientprivate.h	\
 	gtkiconcache.h		\
 	gtkiconhelperprivate.h  \
 	gtkiconviewprivate.h	\
@@ -490,7 +494,6 @@ gtk_private_h_sources =		\
 	gtkmenuitemprivate.h	\
 	gtkmenushellprivate.h	\
 	gtkmnemonichash.h	\
-	gtkmodelmenu.h		\
 	gtkmodelmenuitem.h	\
 	gtkmodifierstyle.h	\
 	gtkmodulesprivate.h	\
@@ -527,6 +530,7 @@ gtk_private_h_sources =		\
 	gtktextbtree.h		\
 	gtktextbufferserialize.h \
 	gtktextchildprivate.h	\
+	gtktexthandleprivate.h	\
 	gtktextiterprivate.h	\
 	gtktextmarkprivate.h	\
 	gtktextsegment.h	\
@@ -616,6 +620,7 @@ gtk_base_c_sources = 		\
 	gtkbuilderparser.c	\
 	gtkbuilder-menus.c	\
 	gtkbutton.c		\
+	gtkcairoblur.c		\
 	gtkcalendar.c		\
 	gtkcellarea.c		\
 	gtkcellareabox.c	\
@@ -647,7 +652,7 @@ gtk_base_c_sources = 		\
 	gtkcombobox.c		\
 	gtkcomboboxtext.c	\
 	gtkcontainer.c		\
-	gtkcssanimatedvalues.c	\
+	gtkcssanimation.c	\
 	gtkcssarrayvalue.c	\
 	gtkcssbgsizevalue.c	\
 	gtkcssbordervalue.c	\
@@ -666,6 +671,7 @@ gtk_base_c_sources = 		\
 	gtkcssimagewin32.c	\
 	gtkcssinheritvalue.c	\
 	gtkcssinitialvalue.c	\
+	gtkcsskeyframes.c	\
 	gtkcsslookup.c		\
 	gtkcssmatcher.c		\
 	gtkcssnumbervalue.c	\
@@ -825,6 +831,7 @@ gtk_base_c_sources = 		\
 	gtktextbufferserialize.c \
 	gtktextchild.c		\
 	gtktextdisplay.c	\
+	gtktexthandle.c		\
 	gtktextiter.c		\
 	gtktextlayout.c		\
 	gtktextmark.c		\

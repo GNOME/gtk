@@ -536,6 +536,9 @@ gtk_app_chooser_widget_add_section (GtkAppChooserWidget *self,
           !g_app_info_supports_files (app))
         continue;
 
+      if (!g_app_info_should_show (app))
+        continue;
+
       if (g_list_find_custom (exclude_apps, app,
                               (GCompareFunc) compare_apps_func))
         continue;

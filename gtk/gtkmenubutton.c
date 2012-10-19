@@ -145,6 +145,9 @@
 #include "gtkmenubutton.h"
 #include "gtkmenubuttonprivate.h"
 #include "gtkarrow.h"
+#include "gtktypebuiltins.h"
+#include "gtkwindow.h"
+#include "gtkmain.h"
 
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -249,6 +252,7 @@ menu_position_up_down_func (GtkMenu       *menu,
 {
   GtkMenuButtonPrivate *priv = menu_button->priv;
   GtkWidget *widget = GTK_WIDGET (menu_button);
+  GtkWidget *toplevel;
   GtkRequisition menu_req;
   GtkTextDirection direction;
   GdkRectangle monitor;
@@ -257,6 +261,16 @@ menu_position_up_down_func (GtkMenu       *menu,
   GdkWindow *window;
   GtkAllocation allocation, arrow_allocation;
   GtkAlign align;
+
+  /* In the common case the menu button is showing a dropdown menu, set the
+   * corresponding type hint on the toplevel, so the WM can omit the top side
+   * of the shadows.
+   */
+  if (priv->arrow_type == GTK_ARROW_DOWN)
+    {
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (priv->popup));
+      gtk_window_set_type_hint (GTK_WINDOW (toplevel), GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU);
+    }
 
   gtk_widget_get_preferred_size (GTK_WIDGET (priv->popup),
                                  &menu_req, NULL);
@@ -325,12 +339,14 @@ menu_position_side_func (GtkMenu       *menu,
   GdkScreen *screen;
   GdkWindow *window;
   GtkAlign align;
+  GtkTextDirection direction;
 
   gtk_widget_get_preferred_size (GTK_WIDGET (priv->popup),
                                  &menu_req, NULL);
 
   window = gtk_widget_get_window (widget);
 
+  direction = gtk_widget_get_direction (widget);
   align = gtk_widget_get_valign (GTK_WIDGET (menu));
   screen = gtk_widget_get_screen (GTK_WIDGET (menu));
   monitor_num = gdk_screen_get_monitor_at_window (screen, window);
@@ -342,7 +358,9 @@ menu_position_side_func (GtkMenu       *menu,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  if (priv->arrow_type == GTK_ARROW_RIGHT)
+  if ((priv->arrow_type == GTK_ARROW_RIGHT && direction == GTK_TEXT_DIR_LTR) ||
+      (priv->arrow_type == GTK_ARROW_LEFT && direction == GTK_TEXT_DIR_RTL))
+
     {
       if (*x + allocation.width + menu_req.width <= monitor.x + monitor.width)
         *x += allocation.width;
@@ -439,10 +457,35 @@ gtk_menu_button_button_press_event (GtkWidget      *widget,
 }
 
 static void
+gtk_menu_button_add (GtkContainer *container,
+                     GtkWidget    *child)
+{
+  GtkMenuButton *button = GTK_MENU_BUTTON (container);
+
+  if (button->priv->arrow_widget)
+    gtk_container_remove (container, button->priv->arrow_widget);
+
+  GTK_CONTAINER_CLASS (gtk_menu_button_parent_class)->add (container, child);
+}
+
+static void
+gtk_menu_button_remove (GtkContainer *container,
+                        GtkWidget    *child)
+{
+  GtkMenuButton *button = GTK_MENU_BUTTON (container);
+
+  if (child == button->priv->arrow_widget)
+    button->priv->arrow_widget = NULL;
+
+  GTK_CONTAINER_CLASS (gtk_menu_button_parent_class)->remove (container, child);
+}
+
+static void
 gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkToggleButtonClass *toggle_button_class = GTK_TOGGLE_BUTTON_CLASS (klass);
 
   g_type_class_add_private (klass, sizeof (GtkMenuButtonPrivate));
@@ -453,6 +496,9 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 
   widget_class->state_flags_changed = gtk_menu_button_state_flags_changed;
   widget_class->button_press_event = gtk_menu_button_button_press_event;
+
+  container_class->add = gtk_menu_button_add;
+  container_class->remove = gtk_menu_button_remove;
 
   toggle_button_class->toggled = gtk_menu_button_toggled;
 
@@ -470,22 +516,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                                                         P_("The dropdown menu."),
                                                         GTK_TYPE_MENU,
                                                         G_PARAM_READWRITE));
-   /**
-   * GtkMenuButton:menu:
-   *
-   * The #GtkMenu that will be popped up when the button is clicked.
-   * This property has been renamed to "popup".  "menu" will be
-   * removed before 3.6.0.
-   *
-   * Since: 3.6
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_POPUP, /* [sic] */
-                                   g_param_spec_object ("menu",
-                                                        P_("menu"),
-                                                        P_("The dropdown menu."),
-                                                        GTK_TYPE_MENU,
-                                                        G_PARAM_DEPRECATED | G_PARAM_READWRITE));
+
   /**
    * GtkMenuButton:menu-model:
    *
@@ -653,7 +684,7 @@ _gtk_menu_button_set_popup_with_func (GtkMenuButton                 *menu_button
       gtk_widget_set_sensitive (GTK_WIDGET (menu_button), FALSE);
     }
 
-  g_object_notify (G_OBJECT (menu_button), "menu");
+  g_object_notify (G_OBJECT (menu_button), "popup");
   g_object_notify (G_OBJECT (menu_button), "menu-model");
 }
 
@@ -699,19 +730,6 @@ gtk_menu_button_get_popup (GtkMenuButton *menu_button)
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), NULL);
 
   return GTK_MENU (menu_button->priv->popup);
-}
-
-void
-gtk_menu_button_set_menu (GtkMenuButton *menu_button,
-                          GtkWidget     *menu)
-{
-  gtk_menu_button_set_popup (menu_button, menu);
-}
-
-GtkMenu *
-gtk_menu_button_get_menu (GtkMenuButton *menu_button)
-{
-  return gtk_menu_button_get_popup (menu_button);
 }
 
 /**

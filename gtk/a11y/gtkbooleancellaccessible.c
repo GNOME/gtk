@@ -20,6 +20,12 @@
 #include <gtk/gtk.h>
 #include "gtkbooleancellaccessible.h"
 
+struct _GtkBooleanCellAccessiblePrivate
+{
+  gboolean cell_value;
+  gboolean cell_sensitive;
+};
+
 static AtkActionIface *parent_action_iface;
 
 static gint
@@ -82,10 +88,10 @@ gtk_boolean_cell_accessible_ref_state_set (AtkObject *accessible)
 
   state_set = ATK_OBJECT_CLASS (_gtk_boolean_cell_accessible_parent_class)->ref_state_set (accessible);
 
-  if (cell->cell_value)
+  if (cell->priv->cell_value)
     atk_state_set_add_state (state_set, ATK_STATE_CHECKED);
 
-  if (cell->cell_sensitive)
+  if (cell->priv->cell_sensitive)
     atk_state_set_add_state (state_set, ATK_STATE_SENSITIVE);
   else
     atk_state_set_remove_state (state_set, ATK_STATE_SENSITIVE);
@@ -99,22 +105,25 @@ gtk_boolean_cell_accessible_update_cache (GtkCellAccessible *cell)
   GtkBooleanCellAccessible *boolean_cell = GTK_BOOLEAN_CELL_ACCESSIBLE (cell);
   gboolean active;
   gboolean sensitive;
+  GtkCellRenderer *renderer;
 
-  g_object_get (G_OBJECT (GTK_RENDERER_CELL_ACCESSIBLE (cell)->renderer),
+  g_object_get (cell, "renderer", &renderer, NULL);
+  g_object_get (renderer,
                 "active", &active,
                 "sensitive", &sensitive,
                 NULL);
+  g_object_unref (renderer);
 
-  if (boolean_cell->cell_value != active)
+  if (boolean_cell->priv->cell_value != active)
     {
-      boolean_cell->cell_value = !boolean_cell->cell_value;
+      boolean_cell->priv->cell_value = !boolean_cell->priv->cell_value;
 
       atk_object_notify_state_change (ATK_OBJECT (cell), ATK_STATE_CHECKED, active);
     }
 
-  if (boolean_cell->cell_sensitive != sensitive)
+  if (boolean_cell->priv->cell_sensitive != sensitive)
     {
-      boolean_cell->cell_sensitive = !boolean_cell->cell_sensitive;
+      boolean_cell->priv->cell_sensitive = !boolean_cell->priv->cell_sensitive;
 
       atk_object_notify_state_change (ATK_OBJECT (cell), ATK_STATE_CHECKED, sensitive);
     }
@@ -129,10 +138,15 @@ _gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
   atkobject_class->ref_state_set = gtk_boolean_cell_accessible_ref_state_set;
 
   cell_class->update_cache = gtk_boolean_cell_accessible_update_cache;
+
+  g_type_class_add_private (klass, sizeof (GtkBooleanCellAccessiblePrivate));
 }
 
 static void
 _gtk_boolean_cell_accessible_init (GtkBooleanCellAccessible *cell)
 {
+  cell->priv =  G_TYPE_INSTANCE_GET_PRIVATE (cell,
+                                             GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE,
+                                             GtkBooleanCellAccessiblePrivate);
 }
 

@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include "gdkinternals.h"
 #include "gdkscreenprivate.h"
 #include "gdkrectangle.h"
 #include "gdkwindow.h"

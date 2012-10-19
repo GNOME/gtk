@@ -279,7 +279,7 @@ gtk_style_properties_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_style_properties_parent_class)->finalize (object);
 }
 
-GtkStyleProperties *
+static GtkStyleProperties *
 gtk_style_properties_get_style (GtkStyleProvider *provider,
                                 GtkWidgetPath    *path)
 {

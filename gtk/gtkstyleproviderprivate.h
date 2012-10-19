@@ -19,6 +19,7 @@
 #define __GTK_STYLE_PROVIDER_PRIVATE_H__
 
 #include <glib-object.h>
+#include "gtk/gtkcsskeyframesprivate.h"
 #include "gtk/gtkcsslookupprivate.h"
 #include "gtk/gtkcssmatcherprivate.h"
 #include <gtk/gtkenums.h>
@@ -33,13 +34,15 @@ G_BEGIN_DECLS
 #define GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE(o)  (G_TYPE_INSTANCE_GET_INTERFACE ((o), GTK_TYPE_STYLE_PROVIDER_PRIVATE, GtkStyleProviderPrivateInterface))
 
 typedef struct _GtkStyleProviderPrivateInterface GtkStyleProviderPrivateInterface;
-typedef struct _GtkStyleProviderPrivate GtkStyleProviderPrivate; /* dummy typedef */
+/* typedef struct _GtkStyleProviderPrivate GtkStyleProviderPrivate; */ /* dummy typedef */
 
 struct _GtkStyleProviderPrivateInterface
 {
   GTypeInterface g_iface;
 
   GtkSymbolicColor *    (* get_color)           (GtkStyleProviderPrivate *provider,
+                                                 const char              *name);
+  GtkCssKeyframes *     (* get_keyframes)       (GtkStyleProviderPrivate *provider,
                                                  const char              *name);
   void                  (* lookup)              (GtkStyleProviderPrivate *provider,
                                                  const GtkCssMatcher     *matcher,
@@ -54,6 +57,8 @@ struct _GtkStyleProviderPrivateInterface
 GType                   _gtk_style_provider_private_get_type     (void) G_GNUC_CONST;
 
 GtkSymbolicColor *      _gtk_style_provider_private_get_color    (GtkStyleProviderPrivate *provider,
+                                                                  const char              *name);
+GtkCssKeyframes *       _gtk_style_provider_private_get_keyframes(GtkStyleProviderPrivate *provider,
                                                                   const char              *name);
 void                    _gtk_style_provider_private_lookup       (GtkStyleProviderPrivate *provider,
                                                                   const GtkCssMatcher     *matcher,

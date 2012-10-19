@@ -29,15 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_IMAGE_ACCESSIBLE_CLASS(klass)           (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IMAGE_ACCESSIBLE))
 #define GTK_IMAGE_ACCESSIBLE_GET_CLASS(obj)            (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IMAGE_ACCESSIBLE, GtkImageAccessibleClass))
 
-typedef struct _GtkImageAccessible      GtkImageAccessible;
-typedef struct _GtkImageAccessibleClass GtkImageAccessibleClass;
+typedef struct _GtkImageAccessible        GtkImageAccessible;
+typedef struct _GtkImageAccessibleClass   GtkImageAccessibleClass;
+typedef struct _GtkImageAccessiblePrivate GtkImageAccessiblePrivate;
 
 struct _GtkImageAccessible
 {
   GtkWidgetAccessible parent;
 
-  gchar*     image_description;
-  gchar*     stock_name;
+  GtkImageAccessiblePrivate *priv;
 };
 
 struct _GtkImageAccessibleClass

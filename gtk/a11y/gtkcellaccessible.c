@@ -83,7 +83,7 @@ gtk_cell_accessible_get_index_in_parent (AtkObject *obj)
 
   parent = atk_object_get_parent (obj);
   if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
-    return g_list_index (GTK_CONTAINER_CELL_ACCESSIBLE (parent)->children, obj);
+    return g_list_index (_gtk_container_cell_accessible_get_children (GTK_CONTAINER_CELL_ACCESSIBLE (parent)), obj);
 
   parent = gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)));
   if (parent == NULL)

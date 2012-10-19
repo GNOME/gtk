@@ -40,28 +40,36 @@ gtk_css_image_linear_get_start_end (GtkCssImageLinear *linear,
   double pos;
   guint i;
       
-  stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, 0);
-  if (stop->offset == NULL)
-    *start = 0;
-  else
-    *start = _gtk_css_number_value_get (stop->offset, length) / length;
-
-  *end = *start;
-
-  for (i = 0; i < linear->stops->len; i++)
+  if (linear->repeating)
     {
-      stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, i);
+      stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, 0);
+      if (stop->offset == NULL)
+        *start = 0;
+      else
+        *start = _gtk_css_number_value_get (stop->offset, length) / length;
+
+      *end = *start;
+
+      for (i = 0; i < linear->stops->len; i++)
+        {
+          stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, i);
+          
+          if (stop->offset == NULL)
+            continue;
+
+          pos = _gtk_css_number_value_get (stop->offset, length) / length;
+
+          *end = MAX (pos, *end);
+        }
       
       if (stop->offset == NULL)
-        continue;
-
-      pos = _gtk_css_number_value_get (stop->offset, length) / length;
-
-      *end = MAX (pos, *end);
+        *end = MAX (*end, 1.0);
     }
-  
-  if (stop->offset == NULL)
-    *end = MAX (*end, 1.0);
+  else
+    {
+      *start = 0;
+      *end = 1;
+    }
 }
 
 static void
@@ -409,10 +417,12 @@ gtk_css_image_linear_print (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_linear_compute (GtkCssImage        *image,
-                              guint               property_id,
-                              GtkStyleContext    *context,
-                              GtkCssDependencies *dependencies)
+gtk_css_image_linear_compute (GtkCssImage             *image,
+                              guint                    property_id,
+                              GtkStyleProviderPrivate *provider,
+                              GtkCssComputedValues    *values,
+                              GtkCssComputedValues    *parent_values,
+                              GtkCssDependencies      *dependencies)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
   GtkCssImageLinear *copy;
@@ -421,7 +431,7 @@ gtk_css_image_linear_compute (GtkCssImage        *image,
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_LINEAR, NULL);
   copy->repeating = linear->repeating;
 
-  copy->angle = _gtk_css_value_compute (linear->angle, property_id, context, dependencies);
+  copy->angle = _gtk_css_value_compute (linear->angle, property_id, provider, values, parent_values, dependencies);
   
   g_array_set_size (copy->stops, linear->stops->len);
   for (i = 0; i < linear->stops->len; i++)
@@ -432,12 +442,12 @@ gtk_css_image_linear_compute (GtkCssImage        *image,
       stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, i);
       scopy = &g_array_index (copy->stops, GtkCssImageLinearColorStop, i);
               
-      scopy->color = _gtk_css_value_compute (stop->color, property_id, context, &child_deps);
+      scopy->color = _gtk_css_value_compute (stop->color, property_id, provider, values, parent_values, &child_deps);
       *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
       
       if (stop->offset)
         {
-          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, context, &child_deps);
+          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, provider, values, parent_values, &child_deps);
           *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
         }
       else
@@ -447,6 +457,80 @@ gtk_css_image_linear_compute (GtkCssImage        *image,
     }
 
   return GTK_CSS_IMAGE (copy);
+}
+
+static GtkCssImage *
+gtk_css_image_linear_transition (GtkCssImage *start_image,
+                                 GtkCssImage *end_image,
+                                 guint        property_id,
+                                 double       progress)
+{
+  GtkCssImageLinear *start, *end, *result;
+  guint i;
+
+  start = GTK_CSS_IMAGE_LINEAR (start_image);
+
+  if (end_image == NULL)
+
+  if (!GTK_IS_CSS_IMAGE_LINEAR (end_image))
+    return GTK_CSS_IMAGE_CLASS (_gtk_css_image_linear_parent_class)->transition (start_image, end_image, property_id, progress);
+
+  end = GTK_CSS_IMAGE_LINEAR (end_image);
+
+  if ((start->repeating != end->repeating)
+      || (start->stops->len != end->stops->len))
+    return GTK_CSS_IMAGE_CLASS (_gtk_css_image_linear_parent_class)->transition (start_image, end_image, property_id, progress);
+
+  result = g_object_new (GTK_TYPE_CSS_IMAGE_LINEAR, NULL);
+  result->repeating = start->repeating;
+
+  result->angle = _gtk_css_value_transition (start->angle, end->angle, property_id, progress);
+  if (result->angle == NULL)
+    goto fail;
+  
+  for (i = 0; i < start->stops->len; i++)
+    {
+      GtkCssImageLinearColorStop stop, *start_stop, *end_stop;
+
+      start_stop = &g_array_index (start->stops, GtkCssImageLinearColorStop, i);
+      end_stop = &g_array_index (end->stops, GtkCssImageLinearColorStop, i);
+
+      if ((start_stop->offset != NULL) != (end_stop->offset != NULL))
+        goto fail;
+
+      if (start_stop->offset == NULL)
+        {
+          stop.offset = NULL;
+        }
+      else
+        {
+          stop.offset = _gtk_css_value_transition (start_stop->offset,
+                                                   end_stop->offset,
+                                                   property_id,
+                                                   progress);
+          if (stop.offset == NULL)
+            goto fail;
+        }
+
+      stop.color = _gtk_css_value_transition (start_stop->color,
+                                              end_stop->color,
+                                              property_id,
+                                              progress);
+      if (stop.color == NULL)
+        {
+          if (stop.offset)
+            _gtk_css_value_unref (stop.offset);
+          goto fail;
+        }
+
+      g_array_append_val (result->stops, stop);
+    }
+
+  return GTK_CSS_IMAGE (result);
+
+fail:
+  g_object_unref (result);
+  return GTK_CSS_IMAGE_CLASS (_gtk_css_image_linear_parent_class)->transition (start_image, end_image, property_id, progress);
 }
 
 static void
@@ -479,6 +563,7 @@ _gtk_css_image_linear_class_init (GtkCssImageLinearClass *klass)
   image_class->parse = gtk_css_image_linear_parse;
   image_class->print = gtk_css_image_linear_print;
   image_class->compute = gtk_css_image_linear_compute;
+  image_class->transition = gtk_css_image_linear_transition;
 
   object_class->dispose = gtk_css_image_linear_dispose;
 }

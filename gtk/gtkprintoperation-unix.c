@@ -106,6 +106,11 @@ unix_start_page (GtkPrintOperation *op,
          }
       else if (type == CAIRO_SURFACE_TYPE_PDF)
         {
+          if (!op->priv->manual_orientation)
+            {
+              w = gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_POINTS);
+              h = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
+            }
           cairo_pdf_surface_set_size (op_unix->surface, w, h);
         }
     }
@@ -829,12 +834,10 @@ _gtk_print_operation_platform_backend_resize_preview_surface (GtkPrintOperation 
 							      GtkPageSetup      *page_setup,
 							      cairo_surface_t   *surface)
 {
-  GtkPaperSize *paper_size;
   gdouble w, h;
   
-  paper_size = gtk_page_setup_get_paper_size (page_setup);
-  w = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
-  h = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
+  w = gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_POINTS);
+  h = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
   cairo_pdf_surface_set_size (surface, w, h);
 }
 

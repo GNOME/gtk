@@ -656,8 +656,7 @@ gtk_entry_completion_set_property (GObject      *object,
         break;
 
       case PROP_TEXT_COLUMN:
-	gtk_entry_completion_set_text_column (completion,
-					      g_value_get_int (value));
+        priv->text_column = g_value_get_int (value);
         break;
 
       case PROP_INLINE_COMPLETION:
@@ -1584,8 +1583,8 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   return above;
 }
 
-void
-_gtk_entry_completion_popup (GtkEntryCompletion *completion)
+static void
+gtk_entry_completion_popup (GtkEntryCompletion *completion)
 {
   GtkTreeViewColumn *column;
   GtkStyleContext *context;
@@ -2182,7 +2181,7 @@ gtk_entry_completion_timeout (gpointer data)
           if (gtk_widget_get_visible (completion->priv->popup_window))
             _gtk_entry_completion_resize_popup (completion);
           else
-            _gtk_entry_completion_popup (completion);
+            gtk_entry_completion_popup (completion);
         }
       else
         _gtk_entry_completion_popdown (completion);

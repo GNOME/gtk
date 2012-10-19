@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_SPIN_BUTTON_ACCESSIBLE_CLASS(klass)           (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SPIN_BUTTON_ACCESSIBLE))
 #define GTK_SPIN_BUTTON_ACCESSIBLE_GET_CLASS(obj)            (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SPIN_BUTTON_ACCESSIBLE, GtkSpinButtonAccessibleClass))
 
-typedef struct _GtkSpinButtonAccessible       GtkSpinButtonAccessible;
-typedef struct _GtkSpinButtonAccessibleClass  GtkSpinButtonAccessibleClass;
+typedef struct _GtkSpinButtonAccessible        GtkSpinButtonAccessible;
+typedef struct _GtkSpinButtonAccessibleClass   GtkSpinButtonAccessibleClass;
+typedef struct _GtkSpinButtonAccessiblePrivate GtkSpinButtonAccessiblePrivate;
 
 struct _GtkSpinButtonAccessible
 {
   GtkEntryAccessible parent;
+
+  GtkSpinButtonAccessiblePrivate *priv;
 };
 
 struct _GtkSpinButtonAccessibleClass

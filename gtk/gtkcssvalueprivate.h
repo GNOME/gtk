@@ -22,8 +22,6 @@
 
 #include <glib-object.h>
 #include "gtkcsstypesprivate.h"
-#include "gtksymboliccolor.h"
-#include "gtktypes.h"
 
 G_BEGIN_DECLS
 
@@ -44,12 +42,15 @@ struct _GtkCssValueClass {
 
   GtkCssValue * (* compute)                           (GtkCssValue                *value,
                                                        guint                       property_id,
-                                                       GtkStyleContext            *context,
+                                                       GtkStyleProviderPrivate    *provider,
+                                                       GtkCssComputedValues       *values,
+                                                       GtkCssComputedValues       *parent_values,
                                                        GtkCssDependencies         *dependencies);
   gboolean      (* equal)                             (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);
   GtkCssValue * (* transition)                        (GtkCssValue                *start,
                                                        GtkCssValue                *end,
+                                                       guint                       property_id,
                                                        double                      progress);
   void          (* print)                             (const GtkCssValue          *value,
                                                        GString                    *string);
@@ -66,7 +67,9 @@ void         _gtk_css_value_unref                     (GtkCssValue              
 
 GtkCssValue *_gtk_css_value_compute                   (GtkCssValue                *value,
                                                        guint                       property_id,
-                                                       GtkStyleContext            *context,
+                                                       GtkStyleProviderPrivate    *provider,
+                                                       GtkCssComputedValues       *values,
+                                                       GtkCssComputedValues       *parent_values,
                                                        GtkCssDependencies         *dependencies);
 gboolean     _gtk_css_value_equal                     (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);
@@ -74,6 +77,7 @@ gboolean     _gtk_css_value_equal0                    (const GtkCssValue        
                                                        const GtkCssValue          *value2);
 GtkCssValue *_gtk_css_value_transition                (GtkCssValue                *start,
                                                        GtkCssValue                *end,
+                                                       guint                       property_id,
                                                        double                      progress);
 
 char *       _gtk_css_value_to_string                 (const GtkCssValue          *value);

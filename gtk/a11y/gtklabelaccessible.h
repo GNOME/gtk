@@ -29,16 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_LABEL_ACCESSIBLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LABEL_ACCESSIBLE))
 #define GTK_LABEL_ACCESSIBLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LABEL_ACCESSIBLE, GtkLabelAccessibleClass))
 
-typedef struct _GtkLabelAccessible      GtkLabelAccessible;
-typedef struct _GtkLabelAccessibleClass GtkLabelAccessibleClass;
+typedef struct _GtkLabelAccessible        GtkLabelAccessible;
+typedef struct _GtkLabelAccessibleClass   GtkLabelAccessibleClass;
+typedef struct _GtkLabelAccessiblePrivate GtkLabelAccessiblePrivate;
 
 struct _GtkLabelAccessible
 {
   GtkWidgetAccessible parent;
 
-  gchar *text;
-  gint cursor_position;
-  gint selection_bound;
+  GtkLabelAccessiblePrivate *priv;
 };
 
 struct _GtkLabelAccessibleClass

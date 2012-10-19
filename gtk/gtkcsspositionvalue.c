@@ -37,16 +37,18 @@ gtk_css_value_position_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_position_compute (GtkCssValue        *position,
-                                guint               property_id,
-                                GtkStyleContext    *context,
-                                GtkCssDependencies *dependencies)
+gtk_css_value_position_compute (GtkCssValue             *position,
+                                guint                    property_id,
+                                GtkStyleProviderPrivate *provider,
+                                GtkCssComputedValues    *values,
+                                GtkCssComputedValues    *parent_values,
+                                GtkCssDependencies      *dependencies)
 {
   GtkCssValue *x, *y;
   GtkCssDependencies x_deps, y_deps;
 
-  x = _gtk_css_value_compute (position->x, property_id, context, &x_deps);
-  y = _gtk_css_value_compute (position->y, property_id, context, &y_deps);
+  x = _gtk_css_value_compute (position->x, property_id, provider, values, parent_values, &x_deps);
+  y = _gtk_css_value_compute (position->y, property_id, provider, values, parent_values, &y_deps);
   *dependencies = _gtk_css_dependencies_union (x_deps, y_deps);
   if (x == position->x && y == position->y)
     {
@@ -69,14 +71,15 @@ gtk_css_value_position_equal (const GtkCssValue *position1,
 static GtkCssValue *
 gtk_css_value_position_transition (GtkCssValue *start,
                                    GtkCssValue *end,
+                                   guint        property_id,
                                    double       progress)
 {
   GtkCssValue *x, *y;
 
-  x = _gtk_css_value_transition (start->x, end->x, progress);
+  x = _gtk_css_value_transition (start->x, end->x, property_id, progress);
   if (x == NULL)
     return NULL;
-  y = _gtk_css_value_transition (start->y, end->y, progress);
+  y = _gtk_css_value_transition (start->y, end->y, property_id, progress);
   if (y == NULL)
     {
       _gtk_css_value_unref (x);
@@ -170,8 +173,8 @@ _gtk_css_position_value_new (GtkCssValue *x,
   return result;
 }
 
-GtkCssValue *
-_gtk_css_position_value_parse (GtkCssParser *parser)
+static GtkCssValue *
+position_value_parse (GtkCssParser *parser, gboolean try)
 {
   static const struct {
     const char *name;
@@ -221,7 +224,11 @@ _gtk_css_position_value_parse (GtkCssParser *parser)
             return NULL;
         }
       else
-        return NULL;
+        {
+          if (!try)
+            _gtk_css_parser_error (parser, "Unrecognized position value");
+          return NULL;
+        }
     }
 
   for (second = 0; names[second].name != NULL; second++)
@@ -239,7 +246,8 @@ _gtk_css_position_value_parse (GtkCssParser *parser)
         {
           if (missing != &y)
             {
-              _gtk_css_parser_error (parser, "Invalid combination of values");
+              if (!try)
+                _gtk_css_parser_error (parser, "Invalid combination of values");
               _gtk_css_value_unref (y);
               return NULL;
             }
@@ -263,7 +271,8 @@ _gtk_css_position_value_parse (GtkCssParser *parser)
       if ((names[first].horizontal && !names[second].vertical) ||
           (!names[first].horizontal && !names[second].horizontal))
         {
-          _gtk_css_parser_error (parser, "Invalid combination of values");
+          if (!try)
+            _gtk_css_parser_error (parser, "Invalid combination of values");
           _gtk_css_value_unref (x);
           _gtk_css_value_unref (y);
           return NULL;
@@ -271,6 +280,18 @@ _gtk_css_position_value_parse (GtkCssParser *parser)
     }
 
   return _gtk_css_position_value_new (x, y);
+}
+
+GtkCssValue *
+_gtk_css_position_value_parse (GtkCssParser *parser)
+{
+  return position_value_parse (parser, FALSE);
+}
+
+GtkCssValue *
+_gtk_css_position_value_try_parse (GtkCssParser *parser)
+{
+  return position_value_parse (parser, TRUE);
 }
 
 double

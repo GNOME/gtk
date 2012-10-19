@@ -1563,6 +1563,7 @@ gdk_wayland_window_process_updates_recurse (GdkWindow      *window,
       cairo_region_get_rectangle (region, i, &rect);
       wl_surface_damage (impl->surface,
                          rect.x, rect.y, rect.width, rect.height);
+      wl_surface_commit(impl->surface);
     }
 
   _gdk_window_process_updates_recurse (window, region);

@@ -584,12 +584,11 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 /**
  * gdk_keymap_add_virtual_modifiers:
  * @keymap: a #GdkKeymap
- * @state: (out): pointer to the modifier mask to change
+ * @state: (inout): pointer to the modifier mask to change
  *
- * Adds virtual modifiers (i.e. Super, Hyper and Meta) which correspond
- * to the real modifiers (i.e Mod2, Mod3, ...) in @modifiers.
- * are set in @state to their non-virtual counterparts (i.e. Mod2,
- * Mod3,...) and set the corresponding bits in @state.
+ * Maps the non-virtual modifiers (i.e Mod2, Mod3, ...) which are set
+ * in @state to the virtual modifiers (i.e. Super, Hyper and Meta) and
+ * set the corresponding bits in @state.
  *
  * GDK already does this before delivering key events, but for
  * compatibility reasons, it only sets the first virtual modifier
@@ -612,7 +611,7 @@ gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
 /**
  * gdk_keymap_map_virtual_modifiers:
  * @keymap: a #GdkKeymap
- * @state: (out): pointer to the modifier state to map
+ * @state: (inout): pointer to the modifier state to map
  *
  * Maps the virtual modifiers (i.e. Super, Hyper and Meta) which
  * are set in @state to their non-virtual counterparts (i.e. Mod2,

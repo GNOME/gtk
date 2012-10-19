@@ -93,7 +93,7 @@ gtk_window_accessible_initialize (AtkObject *obj,
   ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->initialize (obj, data);
 
   g_signal_connect (data, "window-state-event", G_CALLBACK (window_state_event_cb), NULL);
-  GTK_WIDGET_ACCESSIBLE (obj)->layer = ATK_LAYER_WINDOW;
+  _gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_WINDOW);
 
   name = gtk_widget_get_name (widget);
 
@@ -190,7 +190,7 @@ gtk_window_accessible_get_index_in_parent (AtkObject *accessible)
       if (GTK_IS_TOPLEVEL_ACCESSIBLE (atk_obj))
         {
           GtkToplevelAccessible *toplevel = GTK_TOPLEVEL_ACCESSIBLE (atk_obj);
-          index = g_list_index (toplevel->window_list, window);
+          index = g_list_index (_gtk_toplevel_accessible_get_children (toplevel), window);
         }
       else
         {

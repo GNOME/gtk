@@ -22,7 +22,8 @@
 
 G_BEGIN_DECLS
 
-void _gail_util_install (void);
+void _gail_util_install   (void);
+void _gail_util_uninstall (void);
 
 gboolean  _gail_util_key_snooper (GtkWidget   *the_widget,
                                   GdkEventKey *event);

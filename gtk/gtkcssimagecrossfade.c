@@ -19,6 +19,7 @@
 
 #include "config.h"
 
+#include <math.h>
 #include <string.h>
 
 #include "gtkcssimagecrossfadeprivate.h"
@@ -105,36 +106,36 @@ gtk_css_image_cross_fade_draw (GtkCssImage        *image,
     }
   else
     {
-      cairo_surface_t *surface;
-
       if (cross_fade->start && cross_fade->end)
         {
           /* to reduce the group size */
-          cairo_rectangle (cr, 0, 0, width, height);
+          cairo_rectangle (cr, 0, 0, ceil (width), ceil (height));
           cairo_clip (cr);
 
           cairo_push_group (cr);
 
+          /* performance trick */
+          cairo_reset_clip (cr);
+
           _gtk_css_image_draw (cross_fade->start, cr, width, height);
 
-          surface = _gtk_css_image_get_surface (cross_fade->end,
-                                                cairo_get_target (cr),
-                                                width, height);
-          cairo_set_source_surface (cr, surface, 0, 0);
+          cairo_push_group (cr);
+          _gtk_css_image_draw (cross_fade->end, cr, width, height);
+          cairo_pop_group_to_source (cr);
+
+          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
           cairo_paint_with_alpha (cr, cross_fade->progress);
-          cairo_surface_destroy (surface);
 
           cairo_pop_group_to_source (cr);
           cairo_paint (cr);
         }
       else if (cross_fade->start || cross_fade->end)
         {
-          surface = _gtk_css_image_get_surface (cross_fade->start ? cross_fade->start : cross_fade->end,
-                                                cairo_get_target (cr),
-                                                width, height);
-          cairo_set_source_surface (cr, surface, 0, 0);
+          cairo_push_group (cr);
+          _gtk_css_image_draw (cross_fade->start ? cross_fade->start : cross_fade->end, cr, width, height);
+          cairo_pop_group_to_source (cr);
+
           cairo_paint_with_alpha (cr, cross_fade->start ? 1.0 - cross_fade->progress : cross_fade->progress);
-          cairo_surface_destroy (surface);
         }
     }
 }
@@ -144,32 +145,41 @@ gtk_css_image_cross_fade_parse (GtkCssImage  *image,
                                 GtkCssParser *parser)
 {
   GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
-  GtkCssValue *number;
-
   if (!_gtk_css_parser_try (parser, "cross-fade(", TRUE))
     {
       _gtk_css_parser_error (parser, "Expected 'cross-fade('");
       return FALSE;
     }
 
+  if (_gtk_css_parser_has_number (parser))
+    {
+      GtkCssValue *number;
+      
+      number = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_PERCENT | GTK_CSS_POSITIVE_ONLY);
+      if (number == NULL)
+        return FALSE;
+      cross_fade->progress = _gtk_css_number_value_get (number, 1);
+      _gtk_css_value_unref (number);
+
+      if (cross_fade->progress > 1.0)
+        {
+          _gtk_css_parser_error (parser, "Percentages over 100%% are not allowed");
+          return FALSE;
+        }
+    }
+  else
+    cross_fade->progress = 0.5;
+
   cross_fade->start = _gtk_css_image_new_parse (parser);
   if (cross_fade->start == NULL)
     return FALSE;
 
-  if (!_gtk_css_parser_try (parser, ",", TRUE))
+  if (_gtk_css_parser_try (parser, ",", TRUE))
     {
-      _gtk_css_parser_error (parser, "Missing comma after first image");
-      return FALSE;
-    }
-
-  cross_fade->end = _gtk_css_image_new_parse (parser);
-  if (cross_fade->end == NULL)
-    return FALSE;
-
-  if (!_gtk_css_parser_try (parser, ",", TRUE))
-    {
-      _gtk_css_parser_error (parser, "Missing comma after second image");
-      return FALSE;
+      /* XXX: allow parsing colors here */
+      cross_fade->end = _gtk_css_image_new_parse (parser);
+      if (cross_fade->end == NULL)
+        return FALSE;
     }
 
   if (!_gtk_css_parser_try (parser, ")", TRUE))
@@ -177,19 +187,6 @@ gtk_css_image_cross_fade_parse (GtkCssImage  *image,
       _gtk_css_parser_error (parser, "Missing closing bracket");
       return FALSE;
     }
-
-  number = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_PERCENT | GTK_CSS_POSITIVE_ONLY);
-  if (number == NULL)
-    return FALSE;
-  cross_fade->progress = _gtk_css_number_value_get (number, 1);
-  _gtk_css_value_unref (number);
-
-  if (cross_fade->progress > 100)
-    {
-      _gtk_css_parser_error (parser, "Percentages ovre 100%% are not allowed");
-      return FALSE;
-    }
-  cross_fade->progress /= 100.0;
 
   return TRUE;
 }
@@ -200,18 +197,21 @@ gtk_css_image_cross_fade_print (GtkCssImage *image,
 {
   GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
 
-  g_string_append (string, "cross_fade(");
+  g_string_append (string, "cross-fade(");
+  if (cross_fade->progress != 0.5)
+    {
+      g_string_append_printf (string, "%g%% ", cross_fade->progress * 100.0);
+    }
+
   if (cross_fade->start)
     _gtk_css_image_print (cross_fade->start, string);
   else
     g_string_append (string, "none");
-  g_string_append (string, ",");
   if (cross_fade->end)
-    _gtk_css_image_print (cross_fade->end, string);
-  else
-    g_string_append (string, "none");
-  g_string_append (string, ",");
-  g_string_append_printf (string, "%g%%", cross_fade->progress * 100.0);
+    {
+      g_string_append (string, ", ");
+      _gtk_css_image_print (cross_fade->end, string);
+    }
   g_string_append (string, ")");
 }
 

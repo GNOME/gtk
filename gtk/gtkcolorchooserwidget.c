@@ -761,6 +761,7 @@ gtk_color_chooser_widget_set_rgba (GtkColorChooser *chooser,
             {
               select_swatch (cc, swatch);
               g_list_free (children);
+              g_list_free (palettes);
               return;
             }
         }

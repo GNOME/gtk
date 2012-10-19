@@ -12,7 +12,7 @@
       The latest versions can be found online at
       <ulink role="online-location" url="http://developer.gnome.org/gdk3/">http://developer.gnome.org/gdk3/</ulink>.
       If you are looking for the older GDK 2 series of libraries,
-      see <ulink role="online-location" url="http://developer.gnome.org/gdk/">http://developer.gnome.org/gdk/</ulink>.
+      see <ulink role="online-location" url="http://developer.gnome.org/gdk2/">http://developer.gnome.org/gdk2/</ulink>.
     </releaseinfo>
   </bookinfo>
 
@@ -42,7 +42,7 @@
     <xi:include href="xml/cairo_interaction.xml" />
     <xi:include href="xml/x_interaction.xml" />
     <xi:include href="xml/gdkapplaunchcontext.xml" />
-    <xi:include href="xml/gdktesting.xml" />
+    <xi:include href="xml/gdktestutils.xml" />
   </reference>
 
   <index id="api-index-full">

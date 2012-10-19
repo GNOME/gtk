@@ -201,12 +201,19 @@ gtk_spinner_draw (GtkWidget *widget,
                   cairo_t   *cr)
 {
   GtkStyleContext *context;
+  gint width, height;
+  gint size;
 
   context = gtk_widget_get_style_context (widget);
 
-  gtk_render_activity (context, cr, 0, 0,
-                       gtk_widget_get_allocated_width (widget),
-                       gtk_widget_get_allocated_height (widget));
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+  size = MIN (width, height);
+
+  gtk_render_activity (context, cr,
+                       (width - size) / 2,
+                       (height - size) / 2,
+                       size, size);
 
   return FALSE;
 }

@@ -642,7 +642,6 @@ static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 static void             gtk_widget_invalidate_widget_windows    (GtkWidget        *widget,
 								 cairo_region_t        *region);
 static GdkScreen *      gtk_widget_get_screen_unchecked         (GtkWidget        *widget);
-static void		gtk_widget_queue_shallow_draw		(GtkWidget        *widget);
 static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
                                                                  guint      signal_id);
 
@@ -2516,7 +2515,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-leave:
    * @widget: the object which received the signal.
-   * @drag_context: the drag context
+   * @context: the drag context
    * @time: the timestamp of the motion event
    *
    * The ::drag-leave signal is emitted on the drop site when the cursor
@@ -2538,7 +2537,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-begin:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    *
    * The ::drag-begin signal is emitted on the drag source when a drag is
    * started. A typical reason to connect to this signal is to set up a
@@ -2561,7 +2560,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-end:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    *
    * The ::drag-end signal is emitted on the drag source when a drag is
    * finished.  A typical reason to connect to this signal is to undo
@@ -2580,7 +2579,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-data-delete:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    *
    * The ::drag-data-delete signal is emitted on the drag source when a drag
    * with the action %GDK_ACTION_MOVE is successfully completed. The signal
@@ -2600,7 +2599,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-failed:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    * @result: the result of the drag operation
    *
    * The ::drag-failed signal is emitted on the drag source when a drag has
@@ -2627,12 +2626,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-motion:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    * @x: the x coordinate of the current cursor position
    * @y: the y coordinate of the current cursor position
    * @time: the timestamp of the motion event
    *
-   * The drag-motion signal is emitted on the drop site when the user
+   * The ::drag-motion signal is emitted on the drop site when the user
    * moves the cursor over the widget during a drag. The signal handler
    * must determine whether the cursor position is in a drop zone or not.
    * If it is not in a drop zone, it returns %FALSE and no further processing
@@ -2655,11 +2654,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * the drop site with gtk_drag_highlight().
    * |[
    * static void
-   * drag_motion (GtkWidget *widget,
+   * drag_motion (GtkWidget      *widget,
    *              GdkDragContext *context,
-   *              gint x,
-   *              gint y,
-   *              guint time)
+   *              gint            x,
+   *              gint            y,
+   *              guint           time)
    * {
    *   GdkAtom target;
    *
@@ -2676,7 +2675,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *     gdk_drag_status (context, 0, time);
    *   else
    *    {
-   *      private_data->pending_status = context->suggested_action;
+   *      private_data->pending_status = gdk_drag_context_get_suggested_action (context);
    *      gtk_drag_get_data (widget, context, target, time);
    *    }
    *
@@ -2698,11 +2697,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *    {
    *      private_data->suggested_action = 0;
    *
-   *     /&ast; We are getting this data due to a request in drag_motion,
-   *      * rather than due to a request in drag_drop, so we are just
-   *      * supposed to call gdk_drag_status (), not actually paste in
-   *      * the data.
-   *      &ast;/
+   *      /&ast; We are getting this data due to a request in drag_motion,
+   *       * rather than due to a request in drag_drop, so we are just
+   *       * supposed to call gdk_drag_status(), not actually paste in
+   *       * the data.
+   *       &ast;/
    *      str = gtk_selection_data_get_text (selection_data);
    *      if (!data_is_acceptable (str))
    *        gdk_drag_status (context, 0, time);
@@ -2734,7 +2733,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-drop:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    * @x: the x coordinate of the current cursor position
    * @y: the y coordinate of the current cursor position
    * @time: the timestamp of the motion event
@@ -2768,7 +2767,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-data-get:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    * @data: the #GtkSelectionData to be filled with the dragged data
    * @info: the info that has been registered with the target in the
    *        #GtkTargetList
@@ -2796,7 +2795,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::drag-data-received:
    * @widget: the object which received the signal
-   * @drag_context: the drag context
+   * @context: the drag context
    * @x: where the drop happened
    * @y: where the drop happened
    * @data: the received data
@@ -2811,16 +2810,17 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * If the data was received in response to a #GtkWidget::drag-drop signal
    * (and this is the last target to be received), the handler for this
    * signal is expected to process the received data and then call
-   * gtk_drag_finish(), setting the @success parameter depending on whether
-   * the data was processed successfully.
+   * gtk_drag_finish(), setting the @success parameter depending on
+   * whether the data was processed successfully.
    *
-   * The handler may inspect and modify @drag_context->action before calling
-   * gtk_drag_finish(), e.g. to implement %GDK_ACTION_ASK as shown in the
-   * following example:
+   * The handler may inspect the selected action with
+   * gdk_drag_context_get_selected_action() before calling
+   * gtk_drag_finish(), e.g. to implement %GDK_ACTION_ASK as
+   * shown in the following example:
    * |[
    * void
    * drag_data_received (GtkWidget          *widget,
-   *                     GdkDragContext     *drag_context,
+   *                     GdkDragContext     *context,
    *                     gint                x,
    *                     gint                y,
    *                     GtkSelectionData   *data,
@@ -2829,7 +2829,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * {
    *   if ((data->length >= 0) && (data->format == 8))
    *     {
-   *       if (drag_context->action == GDK_ACTION_ASK)
+   *       GdkDragAction action;
+   *
+   *       /&ast; handle data here &ast;/
+   *
+   *       action = gdk_drag_context_get_selected_action (context);
+   *       if (action == GDK_ACTION_ASK)
    *         {
    *           GtkWidget *dialog;
    *           gint response;
@@ -2844,16 +2849,15 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *           gtk_widget_destroy (dialog);
    *
    *           if (response == GTK_RESPONSE_YES)
-   *             drag_context->action = GDK_ACTION_MOVE;
+   *             action = GDK_ACTION_MOVE;
    *           else
-   *             drag_context->action = GDK_ACTION_COPY;
+   *             action = GDK_ACTION_COPY;
    *          }
    *
-   *       gtk_drag_finish (drag_context, TRUE, FALSE, time);
-   *       return;
+   *       gtk_drag_finish (context, TRUE, action == GDK_ACTION_MOVE, time);
    *     }
-   *
-   *    gtk_drag_finish (drag_context, FALSE, FALSE, time);
+   *   else
+   *     gtk_drag_finish (context, FALSE, FALSE, time);
    *  }
    * ]|
    */
@@ -3290,6 +3294,19 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                              P_("Vertical Scroll Arrow Length"),
                                                              P_("The length of vertical scroll arrows"),
                                                              1, G_MAXINT, 16,
+                                                             GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_int ("text-handle-width",
+                                                             P_("Width of text selection handles"),
+                                                             P_("Width of text selection handles"),
+                                                             1, G_MAXINT, 16,
+                                                             GTK_PARAM_READABLE));
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_int ("text-handle-height",
+                                                             P_("Height of text selection handles"),
+                                                             P_("Height of text selection handles"),
+                                                             1, G_MAXINT, 20,
                                                              GTK_PARAM_READABLE));
 
   g_type_class_add_private (klass, sizeof (GtkWidgetPrivate));
@@ -4139,9 +4156,6 @@ gtk_widget_real_hide (GtkWidget *widget)
 
       if (gtk_widget_get_mapped (widget))
 	gtk_widget_unmap (widget);
-
-      if (widget->priv->context)
-        _gtk_style_context_stop_animations (widget->priv->context);
     }
 }
 
@@ -4222,6 +4236,9 @@ gtk_widget_map (GtkWidget *widget)
       if (!gtk_widget_get_has_window (widget))
         gdk_window_invalidate_rect (priv->window, &priv->allocation, FALSE);
 
+      if (widget->priv->context)
+        _gtk_style_context_update_animating (widget->priv->context);
+
       gtk_widget_pop_verify_invariants (widget);
     }
 }
@@ -4249,6 +4266,10 @@ gtk_widget_unmap (GtkWidget *widget)
       if (!gtk_widget_get_has_window (widget))
 	gdk_window_invalidate_rect (priv->window, &priv->allocation, FALSE);
       _gtk_tooltip_hide (widget);
+
+      if (widget->priv->context)
+        _gtk_style_context_update_animating (widget->priv->context);
+
       g_signal_emit (widget, widget_signals[UNMAP], 0);
 
       gtk_widget_pop_verify_invariants (widget);
@@ -4632,7 +4653,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (gtk_widget_get_realized (widget))
-    gtk_widget_queue_shallow_draw (widget);
+    gtk_widget_queue_draw (widget);
 
   _gtk_size_group_queue_resize (widget, 0);
 }
@@ -4752,29 +4773,6 @@ gtk_widget_invalidate_widget_windows (GtkWidget *widget,
 
   gdk_window_invalidate_maybe_recurse (priv->window, region,
 				       invalidate_predicate, widget);
-}
-
-/**
- * gtk_widget_queue_shallow_draw:
- * @widget: a #GtkWidget
- *
- * Like gtk_widget_queue_draw(), but only windows owned
- * by @widget are invalidated.
- **/
-static void
-gtk_widget_queue_shallow_draw (GtkWidget *widget)
-{
-  GdkRectangle rect;
-  cairo_region_t *region;
-
-  if (!gtk_widget_get_realized (widget))
-    return;
-
-  gtk_widget_get_allocation (widget, &rect);
-
-  region = cairo_region_create_rectangle (&rect);
-  gtk_widget_invalidate_widget_windows (widget, region);
-  cairo_region_destroy (region);
 }
 
 /**
@@ -5838,7 +5836,7 @@ static gboolean
 gtk_widget_real_focus_in_event (GtkWidget     *widget,
                                 GdkEventFocus *event)
 {
-  gtk_widget_queue_shallow_draw (widget);
+  gtk_widget_queue_draw (widget);
 
   return FALSE;
 }
@@ -5847,7 +5845,7 @@ static gboolean
 gtk_widget_real_focus_out_event (GtkWidget     *widget,
                                  GdkEventFocus *event)
 {
-  gtk_widget_queue_shallow_draw (widget);
+  gtk_widget_queue_draw (widget);
 
   return FALSE;
 }
@@ -9336,9 +9334,8 @@ gtk_widget_set_usize_internal (GtkWidget          *widget,
  * @height: height @widget should request, or -1 to unset
  *
  * Sets the minimum size of a widget; that is, the widget's size
- * request will be @width by @height. You can use this function to
- * force a widget to be either larger or smaller than it normally
- * would be.
+ * request will be at least @width by @height. You can use this 
+ * function to force a widget to be larger than it normally would be.
  *
  * In most cases, gtk_window_set_default_size() is a better choice for
  * toplevel windows than this function; setting the default size will
@@ -9361,9 +9358,6 @@ gtk_widget_set_usize_internal (GtkWidget          *widget,
  *
  * If the size request in a given direction is -1 (unset), then
  * the "natural" size request of the widget will be used instead.
- *
- * Widgets can't actually be allocated a size less than 1 by 1, but
- * you can pass 0,0 to this function to mean "as small as possible."
  *
  * The size request set here does not include any margin from the
  * #GtkWidget properties margin-left, margin-right, margin-top, and

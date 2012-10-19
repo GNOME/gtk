@@ -19,7 +19,8 @@ typedef enum {
 
 BroadwayOutput *broadway_output_new             (GOutputStream  *out,
 						 guint32         serial,
-						 gboolean        proto_v7_plus);
+						 gboolean        proto_v7_plus,
+						 gboolean        binary);
 void            broadway_output_free            (BroadwayOutput *output);
 int             broadway_output_flush           (BroadwayOutput *output);
 int             broadway_output_has_error       (BroadwayOutput *output);

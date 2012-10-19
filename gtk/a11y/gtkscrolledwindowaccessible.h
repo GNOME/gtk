@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_SCROLLED_WINDOW_ACCESSIBLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SCROLLED_WINDOW_ACCESSIBLE))
 #define GTK_SCROLLED_WINDOW_ACCESSIBLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SCROLLED_WINDOW_ACCESSIBLE, GtkScrolledWindowAccessibleClass))
 
-typedef struct _GtkScrolledWindowAccessible      GtkScrolledWindowAccessible;
-typedef struct _GtkScrolledWindowAccessibleClass GtkScrolledWindowAccessibleClass;
+typedef struct _GtkScrolledWindowAccessible        GtkScrolledWindowAccessible;
+typedef struct _GtkScrolledWindowAccessibleClass   GtkScrolledWindowAccessibleClass;
+typedef struct _GtkScrolledWindowAccessiblePrivate GtkScrolledWindowAccessiblePrivate;
 
 struct _GtkScrolledWindowAccessible
 {
   GtkContainerAccessible parent;
+
+  GtkScrolledWindowAccessiblePrivate *priv;
 };
 
 struct _GtkScrolledWindowAccessibleClass

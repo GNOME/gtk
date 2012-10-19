@@ -130,7 +130,7 @@ typedef struct HttpRequest {
   GString *request;
 }  HttpRequest;
 
-static void start_output (HttpRequest *request, gboolean proto_v7_plus);
+static void start_output (HttpRequest *request, gboolean proto_v7_plus, gboolean binary);
 
 static void
 http_request_free (HttpRequest *request)
@@ -149,6 +149,7 @@ struct BroadwayInput {
   gboolean seen_time;
   gint64 time_base;
   gboolean proto_v7_plus;
+  gboolean binary;
 };
 
 static void
@@ -691,7 +692,7 @@ generate_handshake_response_wsietf_v7 (const gchar *key)
 }
 
 static void
-start_input (HttpRequest *request)
+start_input (HttpRequest *request, gboolean binary)
 {
   char **lines;
   char *p;
@@ -867,6 +868,7 @@ start_input (HttpRequest *request)
   input->display = request->display;
   input->connection = g_object_ref (request->connection);
   input->proto_v7_plus = proto_v7_plus;
+  input->binary = binary;
 
   data_buffer = g_buffered_input_stream_peek_buffer (G_BUFFERED_INPUT_STREAM (request->data), &data_buffer_size);
   input->buffer = g_byte_array_sized_new (data_buffer_size);
@@ -874,7 +876,7 @@ start_input (HttpRequest *request)
 
   broadway_display->input = input;
 
-  start_output (request, proto_v7_plus);
+  start_output (request, proto_v7_plus, binary);
 
   /* This will free and close the data input stream, but we got all the buffered content already */
   http_request_free (request);
@@ -892,7 +894,7 @@ start_input (HttpRequest *request)
 }
 
 static void
-start_output (HttpRequest *request, gboolean proto_v7_plus)
+start_output (HttpRequest *request, gboolean proto_v7_plus, gboolean binary)
 {
   GSocket *socket;
   GdkBroadwayDisplay *broadway_display;
@@ -912,7 +914,7 @@ start_output (HttpRequest *request, gboolean proto_v7_plus)
 
   broadway_display->output =
     broadway_output_new (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
-			 broadway_display->saved_serial, proto_v7_plus);
+			 broadway_display->saved_serial, proto_v7_plus, binary);
 
   _gdk_broadway_resync_windows ();
 
@@ -985,7 +987,9 @@ got_request (HttpRequest *request)
   else if (strcmp (escaped, "/broadway.js") == 0)
     send_data (request, "text/javascript", broadway_js, G_N_ELEMENTS(broadway_js) - 1);
   else if (strcmp (escaped, "/socket") == 0)
-    start_input (request);
+    start_input (request, FALSE);
+  else if (strcmp (escaped, "/socket-bin") == 0)
+    start_input (request, TRUE);
   else
     send_error (request, 404, "File not found");
 

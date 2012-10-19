@@ -30,14 +30,15 @@ G_BEGIN_DECLS
 #define GTK_IS_BOOLEAN_CELL_ACCESSIBLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE))
 #define GTK_BOOLEAN_CELL_ACCESSIBLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE, GtkBooleanCellAccessibleClass))
 
-typedef struct _GtkBooleanCellAccessible      GtkBooleanCellAccessible;
-typedef struct _GtkBooleanCellAccessibleClass GtkBooleanCellAccessibleClass;
+typedef struct _GtkBooleanCellAccessible        GtkBooleanCellAccessible;
+typedef struct _GtkBooleanCellAccessibleClass   GtkBooleanCellAccessibleClass;
+typedef struct _GtkBooleanCellAccessiblePrivate GtkBooleanCellAccessiblePrivate;
 
 struct _GtkBooleanCellAccessible
 {
   GtkRendererCellAccessible parent;
-  gboolean cell_value;
-  gboolean cell_sensitive;
+
+  GtkBooleanCellAccessiblePrivate *priv;
 };
 
 struct _GtkBooleanCellAccessibleClass

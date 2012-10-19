@@ -304,8 +304,6 @@ widget_property_tests (gconstpointer test_data)
   g_object_unref (widget);
 }
 
-extern void pixbuf_init (void);
-
 /* --- main test program --- */
 int
 main (int   argc,
@@ -314,7 +312,6 @@ main (int   argc,
   const GType *otypes;
   guint i;
   /* initialize test program */
-  pixbuf_init ();
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types ();
   /* install a property test for each widget type */

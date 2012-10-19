@@ -19,6 +19,7 @@
 #define __GTK_STYLE_CONTEXT_PRIVATE_H__
 
 #include "gtkstylecontext.h"
+#include "gtkstyleproviderprivate.h"
 #include "gtksymboliccolor.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcssvalueprivate.h"
@@ -57,7 +58,7 @@ void           _gtk_style_context_get_cursor_color           (GtkStyleContext   
                                                               GdkRGBA            *primary_color,
                                                               GdkRGBA            *secondary_color);
 
-void           _gtk_style_context_stop_animations            (GtkStyleContext    *context);
+void           _gtk_style_context_update_animating           (GtkStyleContext    *context);
 
 G_END_DECLS
 

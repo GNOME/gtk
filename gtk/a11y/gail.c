@@ -17,6 +17,8 @@
 
 #include "config.h"
 
+#include "gail.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -76,6 +78,7 @@ static GtkWidget* focus_before_menu = NULL;
 static guint focus_notify_handler = 0;    
 static guint focus_tracker_id = 0;
 static GQuark quark_focus_object = 0;
+static int initialized = FALSE;
 
 static AtkObject*
 gail_get_accessible_for_widget (GtkWidget *widget,
@@ -795,9 +798,24 @@ gail_set_focus_object (AtkObject *focus_obj,
 }
 
 void
+_gtk_accessibility_shutdown (void)
+{
+  if (!initialized)
+    return;
+
+  initialized = FALSE;
+
+  g_clear_object (&atk_misc_instance);
+
+#ifdef GDK_WINDOWING_X11
+  atk_bridge_adaptor_cleanup ();
+#endif
+  _gail_util_uninstall ();
+}
+
+void
 _gtk_accessibility_init (void)
 {
-  static int initialized = FALSE;
 
   if (initialized)
     return;

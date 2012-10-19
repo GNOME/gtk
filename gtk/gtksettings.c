@@ -71,7 +71,9 @@
  * utilities that let the user change these settings. In the absence of
  * an Xsettings manager, GTK+ reads default values for settings from
  * <filename>settings.ini</filename> files in
- * <filename>/etc/gtk-3.0</filename> and <filename>$XDG_CONFIG_HOME/gtk-3.0</filename>. These files must be valid key files (see #GKeyFile), and have
+ * <filename>/etc/gtk-3.0</filename>, <filename>$XDG_CONFIG_DIRS/gtk-3.0</filename>
+ * and <filename>$XDG_CONFIG_HOME/gtk-3.0</filename>.
+ * These files must be valid key files (see #GKeyFile), and have
  * a section called Settings. Themes can also provide default values
  * for settings by installing a <filename>settings.ini</filename> file
  * next to their <filename>gtk.css</filename> file.
@@ -193,6 +195,7 @@ enum {
   PROP_TOOLBAR_STYLE,
   PROP_TOOLBAR_ICON_SIZE,
   PROP_AUTO_MNEMONICS,
+  PROP_PRIMARY_BUTTON_WARPS_SLIDER,
   PROP_VISIBLE_FOCUS,
   PROP_APPLICATION_PREFER_DARK_THEME,
   PROP_BUTTON_IMAGES,
@@ -250,6 +253,9 @@ static GHashTable *get_color_hash                (GtkSettings           *setting
 static void gtk_settings_load_from_key_file      (GtkSettings           *settings,
                                                   const gchar           *path,
                                                   GtkSettingsSource      source);
+static void settings_update_provider             (GdkScreen             *screen,
+                                                  GtkCssProvider       **old,
+                                                  GtkCssProvider        *new);
 
 /* the default palette for GtkColorSelelection */
 static const gchar default_color_palette[] =
@@ -276,6 +282,8 @@ gtk_settings_init (GtkSettings *settings)
   GParamSpec **pspecs, **p;
   guint i = 0;
   gchar *path;
+  const gchar * const *config_dirs;
+  const gchar *config_dir;
 
   priv = G_TYPE_INSTANCE_GET_PRIVATE (settings,
                                       GTK_TYPE_SETTINGS,
@@ -317,6 +325,15 @@ gtk_settings_init (GtkSettings *settings)
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
   g_free (path);
+
+  config_dirs = g_get_system_config_dirs ();
+  for (config_dir = *config_dirs; *config_dirs != NULL; config_dirs++)
+    {
+      path = g_build_filename (config_dir, "gtk-3.0", "settings.ini", NULL);
+      if (g_file_test (path, G_FILE_TEST_EXISTS))
+        gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
+      g_free (path);
+    }
 
   path = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "settings.ini", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
@@ -705,7 +722,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Since: 2.10
    *
-   * Deprecated: 3.4. Generally the behavior touchscreen input should be
+   * Deprecated: 3.4. Generally, the behavior for touchscreen input should be
    *             performed dynamically based on gdk_event_get_source_device().
    */
   result = settings_install_property_parser (class,
@@ -1145,6 +1162,23 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_AUTO_MNEMONICS);
 
   /**
+   * GtkSettings:gtk-primary-button-warps-slider:
+   *
+   * Whether a click in a #GtkRange trough should scroll to the click position or
+   * scroll by a single page in the respective direction.
+   *
+   * Since: 3.6
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-primary-button-warps-slider",
+                                                                   P_("Primary button warps slider"),
+                                                                   P_("Whether a primary click on the trough should warp the slider into position"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_PRIMARY_BUTTON_WARPS_SLIDER);
+
+  /**
    * GtkSettings:gtk-visible-focus:
    *
    * Whether 'focus rectangles' should be always visible, never visible,
@@ -1537,14 +1571,10 @@ gtk_settings_finalize (GObject *object)
 
   g_datalist_clear (&priv->queued_settings);
 
-  if (priv->theme_provider)
-    g_object_unref (priv->theme_provider);
+  settings_update_provider (priv->screen, &priv->theme_provider, NULL);
+  settings_update_provider (priv->screen, &priv->key_theme_provider, NULL);
 
-  if (priv->key_theme_provider)
-    g_object_unref (priv->key_theme_provider);
-
-  if (priv->style)
-    g_object_unref (priv->style);
+  g_clear_object (&priv->style);
 
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }

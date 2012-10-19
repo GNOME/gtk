@@ -6,6 +6,7 @@
  * This means that you cannot:
  * ... add extra color stops, even if they'd be invisible
  * ... mirror the gradient (ie 'to left, red, green' vs 'to right, green, red')
+ * ... test a repeating gradient against a non repeating one
  * and probably a bunch of other things.
  * These things can cause off-by-one rounding errors in pixman (and probably
  * your GPU, too) and that'd trigger test failures.
@@ -27,9 +28,17 @@
 }
 
 #c {
-  background-image: repeating-linear-gradient(3.5turn, red, green 10px, red 20px);
+  background-image: linear-gradient(3.5turn, red, green 10px, red 20px, green 30px, red 40px);
 }
 
 #reference #c {
   background-image: linear-gradient(to bottom, red, green 10px, red 20px, green 30px, red 40px);
+}
+
+#d {
+    background-image: repeating-linear-gradient(180deg, red, green 10px, red 20px);
+}
+
+#reference #d {
+    background-image: repeating-linear-gradient(to bottom, red, green 10px, red 20px);
 }

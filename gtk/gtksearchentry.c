@@ -79,7 +79,10 @@ search_entry_changed_cb (GtkEntry *entry,
     }
   else
     {
-      icon_name = "edit-clear-symbolic";
+      if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+        icon_name = "edit-clear-rtl-symbolic";
+      else
+        icon_name = "edit-clear-symbolic";
       active = TRUE;
     }
 

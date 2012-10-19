@@ -42,10 +42,12 @@ gtk_css_value_border_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_border_compute (GtkCssValue        *value,
-                              guint               property_id,
-                              GtkStyleContext    *context,
-                              GtkCssDependencies *dependencies)
+gtk_css_value_border_compute (GtkCssValue             *value,
+                              guint                    property_id,
+                              GtkStyleProviderPrivate *provider,
+                              GtkCssComputedValues    *values,
+                              GtkCssComputedValues    *parent_values,
+                              GtkCssDependencies       *dependencies)
 {
   GtkCssValue *computed;
   GtkCssDependencies child_deps;
@@ -59,7 +61,7 @@ gtk_css_value_border_compute (GtkCssValue        *value,
     {
       if (value->values[i])
         {
-          computed->values[i] = _gtk_css_value_compute (value->values[i], property_id, context, &child_deps);
+          computed->values[i] = _gtk_css_value_compute (value->values[i], property_id, provider, values, parent_values, &child_deps);
           *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
           changed |= (computed->values[i] != value->values[i]);
         }
@@ -95,6 +97,7 @@ gtk_css_value_border_equal (const GtkCssValue *value1,
 static GtkCssValue *
 gtk_css_value_border_transition (GtkCssValue *start,
                                  GtkCssValue *end,
+                                 guint        property_id,
                                  double       progress)
 {
   return NULL;

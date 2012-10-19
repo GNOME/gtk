@@ -208,6 +208,8 @@ struct GtkThemingModuleClass
 #define GTK_THEMING_MODULE(o)    (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_THEMING_MODULE, GtkThemingModule))
 #define GTK_IS_THEMING_MODULE(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_THEMING_MODULE))
 
+GType gtk_theming_module_get_type (void);
+
 G_DEFINE_TYPE (GtkThemingModule, gtk_theming_module, G_TYPE_TYPE_MODULE);
 
 static void
@@ -2644,13 +2646,18 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
                                     gdouble           width,
                                     gdouble           height)
 {
-  if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_SPINNER))
+  GtkThemingBackground bg;
+  
+  _gtk_theming_background_init (&bg, engine, x, y, width, height, 0);
+  
+  if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_SPINNER) &&
+      !_gtk_theming_background_has_background_image (&bg))
     {
       render_spinner (engine, cr, x, y, width, height);
     }
   else
     {
-      gtk_theming_engine_render_background (engine, cr, x, y, width, height);
+      _gtk_theming_background_render (&bg, cr);
       gtk_theming_engine_render_frame (engine, cr, x, y, width, height);
     }
 }

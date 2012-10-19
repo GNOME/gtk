@@ -152,6 +152,9 @@ EXTRA_DIST += \
 	background-position.css \
 	background-position.errors \
 	background-position.ref.css \
+	background-position-errors.css \
+	background-position-errors.errors \
+	background-position-errors.ref.css \
 	background-repeat.css \
 	background-repeat.ref.css \
 	background-shorthand.css \
@@ -181,6 +184,7 @@ EXTRA_DIST += \
 	colors-errors.ref.css \
 	colors-red.css \
 	colors-red.ref.css \
+	cross-fade-basic.css \
 	css-21-malformed-declarations.css \
 	css-21-malformed-declarations.errors \
 	css-21-malformed-declarations.ref.css \
@@ -278,6 +282,9 @@ EXTRA_DIST += \
 	font-family.css \
 	font-family.errors \
 	font-family.ref.css \
+	freed-string-in-error-messages.css \
+	freed-string-in-error-messages.errors \
+	freed-string-in-error-messages.ref.css \
 	import-cyclic-1.css \
 	import-cyclic-1.errors \
 	import-cyclic-1.ref.css \
@@ -296,6 +303,10 @@ EXTRA_DIST += \
 	integer.css \
 	integer.errors \
 	integer.ref.css \
+	keyframes-empty.css \
+	keyframes-empty.ref.css \
+	keyframes-ordering.css \
+	keyframes-ordering.ref.css \
 	linear-gradient.css \
 	linear-gradient.ref.css \
 	no-semicolon.css \

@@ -139,6 +139,7 @@ gtk_accel_label_set_accel_closure
 gtk_accel_label_get_accel_widget
 gtk_accel_label_set_accel_widget
 gtk_accel_label_get_accel_width
+gtk_accel_label_set_accel
 gtk_accel_label_refetch
 <SUBSECTION Standard>
 GTK_ACCEL_LABEL
@@ -263,6 +264,8 @@ gtk_action_group_get_sensitive
 gtk_action_group_set_sensitive
 gtk_action_group_get_visible
 gtk_action_group_set_visible
+gtk_action_group_get_accel_group
+gtk_action_group_set_accel_group
 gtk_action_group_get_action
 gtk_action_group_list_actions
 gtk_action_group_add_action
@@ -530,6 +533,7 @@ gtk_builder_add_from_resource
 gtk_builder_add_from_string
 gtk_builder_add_objects_from_file
 gtk_builder_add_objects_from_string
+gtk_builder_add_objects_from_resource
 gtk_builder_get_object
 gtk_builder_get_objects
 gtk_builder_connect_signals
@@ -583,6 +587,8 @@ gtk_button_set_image
 gtk_button_get_image
 gtk_button_set_image_position
 gtk_button_get_image_position
+gtk_button_set_always_show_image
+gtk_button_get_always_show_image
 gtk_button_get_event_window
 
 <SUBSECTION Standard>
@@ -1046,6 +1052,8 @@ gtk_entry_get_layout
 gtk_entry_get_layout_offsets
 gtk_entry_layout_index_to_text_index
 gtk_entry_text_index_to_layout_index
+gtk_entry_set_attributes
+gtk_entry_get_attributes
 gtk_entry_get_max_length
 gtk_entry_get_visibility
 gtk_entry_set_completion
@@ -1808,6 +1816,7 @@ gtk_image_new_from_stock
 gtk_image_new_from_animation
 gtk_image_new_from_icon_name
 gtk_image_new_from_gicon
+gtk_image_new_from_resource
 gtk_image_set_from_file
 gtk_image_set_from_icon_set
 gtk_image_set_from_pixbuf
@@ -1815,6 +1824,7 @@ gtk_image_set_from_stock
 gtk_image_set_from_animation
 gtk_image_set_from_icon_name
 gtk_image_set_from_gicon
+gtk_image_set_from_resource
 gtk_image_clear
 gtk_image_new
 gtk_image_set_pixel_size
@@ -2244,6 +2254,7 @@ gtk_menu_shell_set_take_focus
 gtk_menu_shell_get_take_focus
 gtk_menu_shell_get_selected_item
 gtk_menu_shell_get_parent_shell
+gtk_menu_shell_bind_model
 GtkMenuDirectionType
 <SUBSECTION Standard>
 GTK_MENU_SHELL
@@ -3270,6 +3281,8 @@ gtk_level_bar_set_min_value
 gtk_level_bar_get_min_value
 gtk_level_bar_set_max_value
 gtk_level_bar_get_max_value
+gtk_level_bar_set_inverted
+gtk_level_bar_get_inverted
 gtk_level_bar_add_offset_value
 gtk_level_bar_remove_offset_value
 gtk_level_bar_get_offset_value
@@ -5765,6 +5778,7 @@ GTK_STYLE_CLASS_LINKED
 GTK_STYLE_CLASS_ARROW
 GTK_STYLE_CLASS_OSD
 GTK_STYLE_CLASS_LEVEL_BAR
+GTK_STYLE_CLASS_CURSOR_HANDLE
 GTK_STYLE_REGION_COLUMN
 GTK_STYLE_REGION_COLUMN_HEADER
 GTK_STYLE_REGION_ROW
@@ -5974,6 +5988,7 @@ gtk_gradient_add_color_stop
 gtk_gradient_ref
 gtk_gradient_unref
 gtk_gradient_resolve
+gtk_gradient_resolve_for_context
 gtk_gradient_to_string
 
 <SUBSECTION Standard>
@@ -7106,6 +7121,7 @@ gtk_application_add_window
 gtk_application_remove_window
 gtk_application_get_windows
 gtk_application_get_window_by_id
+gtk_application_get_active_window
 
 <SUBSECTION>
 GtkApplicationInhibitFlags

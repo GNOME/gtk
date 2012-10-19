@@ -29,16 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_COMBO_BOX_ACCESSIBLE_CLASS(klass)           (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COMBO_BOX_ACCESSIBLE))
 #define GTK_COMBO_BOX_ACCESSIBLE_GET_CLASS(obj)            (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_COMBO_BOX_ACCESSIBLE, GtkComboBoxAccessibleClass))
 
-typedef struct _GtkComboBoxAccessible      GtkComboBoxAccessible;
-typedef struct _GtkComboBoxAccessibleClass GtkComboBoxAccessibleClass;
+typedef struct _GtkComboBoxAccessible        GtkComboBoxAccessible;
+typedef struct _GtkComboBoxAccessibleClass   GtkComboBoxAccessibleClass;
+typedef struct _GtkComboBoxAccessiblePrivate GtkComboBoxAccessiblePrivate;
 
 struct _GtkComboBoxAccessible
 {
   GtkContainerAccessible parent;
 
-  gchar         *name;
-  gint           old_selection;
-  gboolean       popup_set;
+  GtkComboBoxAccessiblePrivate *priv;
 };
 
 struct _GtkComboBoxAccessibleClass

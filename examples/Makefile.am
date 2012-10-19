@@ -55,6 +55,7 @@ noinst_PROGRAMS = \
 	bloatpad				\
 	plugman					\
 	sunny					\
+	action-namespace			\
 	grid-packing				\
 	drawing					\
 	builder

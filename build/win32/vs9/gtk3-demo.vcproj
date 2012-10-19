@@ -171,6 +171,8 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\combobox.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\css_accordion.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\css_basics.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\css_pixbufs.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\css_shadows.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\css_multiplebgs.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\demo_resources.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\dialog.c" />

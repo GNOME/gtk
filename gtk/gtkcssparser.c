@@ -669,15 +669,16 @@ _gtk_css_number_value_parse (GtkCssParser           *parser,
             break;
         }
 
-      g_free (unit_name);
-
       if (i >= G_N_ELEMENTS (units))
         {
           _gtk_css_parser_error (parser, "`%s' is not a valid unit.", unit_name);
+          g_free (unit_name);
           return NULL;
         }
 
       unit = units[i].unit;
+
+      g_free (unit_name);
     }
   else
     {
@@ -884,11 +885,11 @@ _gtk_css_parser_read_url (GtkCssParser *parser)
   return file;
 }
 
-void
-_gtk_css_parser_resync_internal (GtkCssParser *parser,
-                                 gboolean      sync_at_semicolon,
-                                 gboolean      read_sync_token,
-                                 char          terminator)
+static void
+gtk_css_parser_resync_internal (GtkCssParser *parser,
+                                gboolean      sync_at_semicolon,
+                                gboolean      read_sync_token,
+                                char          terminator)
 {
   gsize len;
 
@@ -983,7 +984,7 @@ _gtk_css_parser_read_value (GtkCssParser *parser)
   start = parser->data;
 
   /* This needs to be done better */
-  _gtk_css_parser_resync_internal (parser, TRUE, FALSE, '}');
+  gtk_css_parser_resync_internal (parser, TRUE, FALSE, '}');
 
   result = g_strndup (start, parser->data - start);
   if (result)
@@ -1009,5 +1010,5 @@ _gtk_css_parser_resync (GtkCssParser *parser,
 {
   g_return_if_fail (GTK_IS_CSS_PARSER (parser));
 
-  _gtk_css_parser_resync_internal (parser, sync_at_semicolon, TRUE, terminator);
+  gtk_css_parser_resync_internal (parser, sync_at_semicolon, TRUE, terminator);
 }

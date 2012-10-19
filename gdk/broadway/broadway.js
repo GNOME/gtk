@@ -725,76 +725,56 @@ function cmdUngrabPointer()
 	doUngrab();
 }
 
-function handleCommands(cmdObj)
+function handleCommands(cmd)
 {
-    var cmd = cmdObj.data;
-    var i = cmdObj.pos;
-
-    while (i < cmd.length) {
+    while (cmd.pos < cmd.length) {
 	var id, x, y, w, h, q;
-	var command = cmd[i++];
-	lastSerial = base64_32(cmd, i);
-	i = i + 6;
+	var command = cmd.get_char();
+	lastSerial = cmd.get_32();
 	switch (command) {
 	case 's': // create new surface
-	    id = base64_16(cmd, i);
-	    i = i + 3;
-	    x = base64_16s(cmd, i);
-	    i = i + 3;
-	    y = base64_16s(cmd, i);
-	    i = i + 3;
-	    w = base64_16(cmd, i);
-	    i = i + 3;
-	    h = base64_16(cmd, i);
-	    i = i + 3;
-	    var isTemp = cmd[i] == '1';
-	    i = i + 1;
+	    id = cmd.get_16();
+	    x = cmd.get_16s();
+	    y = cmd.get_16s();
+	    w = cmd.get_16();
+	    h = cmd.get_16();
+	    var isTemp = cmd.get_bool();
 	    cmdCreateSurface(id, x, y, w, h, isTemp);
 	    break;
 
 	case 'S': // Show a surface
-	    id = base64_16(cmd, i);
-	    i = i + 3;
+	    id = cmd.get_16();
 	    cmdShowSurface(id);
 	    break;
 
 	case 'H': // Hide a surface
-	    id = base64_16(cmd, i);
-	    i = i + 3;
+	    id = cmd.get_16();
 	    cmdHideSurface(id);
 	    break;
 
 	case 'p': // Set transient parent
-	    id = base64_16(cmd, i);
-	    i = i + 3;
-	    var parentId = base64_16(cmd, i);
-	    i = i + 3;
+	    id = cmd.get_16();
+	    var parentId = cmd.get_16();
 	    cmdSetTransientFor(id, parentId);
 	    break;
 
 	case 'd': // Delete surface
-	    id = base64_16(cmd, i);
-	    i = i + 3;
+	    id = cmd.get_16();
 	    cmdDeleteSurface(id);
 	    break;
 
 	case 'm': // Move a surface
-	    id = base64_16(cmd, i);
-	    i = i + 3;
-	    var ops = cmd.charCodeAt(i++) - 48;
+	    id = cmd.get_16();
+	    var ops = cmd.get_flags();
 	    var has_pos = ops & 1;
 	    if (has_pos) {
-		x = base64_16s(cmd, i);
-		i = i + 3;
-		y = base64_16s(cmd, i);
-		i = i + 3;
+		x = cmd.get_16s();
+		y = cmd.get_16s();
 	    }
 	    var has_size = ops & 2;
 	    if (has_size) {
-		w = base64_16(cmd, i);
-		i = i + 3;
-		h = base64_16(cmd, i);
-		i = i + 3;
+		w = cmd.get_16();
+		h = cmd.get_16();
 	    }
 	    cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h);
 	    break;
@@ -802,67 +782,50 @@ function handleCommands(cmdObj)
 	case 'i': // Put image data surface
 	    q = new Object();
 	    q.op = 'i';
-	    q.id = base64_16(cmd, i);
-	    i = i + 3;
-	    q.x = base64_16(cmd, i);
-	    i = i + 3;
-	    q.y = base64_16(cmd, i);
-	    i = i + 3;
-	    var size = base64_32(cmd, i);
-	    i = i + 6;
-	    var url = cmd.slice(i, i + size);
-	    i = i + size;
+	    q.id = cmd.get_16();
+	    q.x = cmd.get_16();
+	    q.y = cmd.get_16();
+	    var url = cmd.get_image_url ();
 	    q.img = new Image();
 	    q.img.src = url;
 	    surfaces[q.id].drawQueue.push(q);
 	    if (!q.img.complete) {
-		cmdObj.pos = i;
-		q.img.onload = function() { handleOutstanding(); };
+		q.img.onload = function() { cmd.free_image_url (url); handleOutstanding(); };
 		return false;
 	    }
+	    cmd.free_image_url (url);
 	    break;
 
 	case 'b': // Copy rects
 	    q = new Object();
 	    q.op = 'b';
-	    q.id = base64_16(cmd, i);
-	    i = i + 3;
-
-	    var nrects = base64_16(cmd, i);
-	    i = i + 3;
+	    q.id = cmd.get_16();
+	    var nrects = cmd.get_16();
 
 	    q.rects = [];
 	    for (var r = 0; r < nrects; r++) {
 		var rect = new Object();
-		rect.x = base64_16(cmd, i);
-		i = i + 3;
-		rect.y = base64_16(cmd, i);
-		i = i + 3;
-		rect.w = base64_16(cmd, i);
-		i = i + 3;
-		rect.h = base64_16(cmd, i);
-		i = i + 3;
+		rect.x = cmd.get_16();
+		rect.y = cmd.get_16();
+		rect.w = cmd.get_16();
+		rect.h = cmd.get_16();
 		q.rects.push (rect);
 	    }
 
-	    q.dx = base64_16s(cmd, i);
-	    i = i + 3;
-	    q.dy = base64_16s(cmd, i);
-	    i = i + 3;
+	    q.dx = cmd.get_16s();
+	    q.dy = cmd.get_16s();
 	    surfaces[q.id].drawQueue.push(q);
 	    break;
 
 	case 'f': // Flush surface
-	    id = base64_16(cmd, i);
-	    i = i + 3;
+	    id = cmd.get_16();
 
 	    cmdFlushSurface(id);
 	    break;
 
 	case 'g': // Grab
-	    id = base64_16(cmd, i);
-	    i = i + 3;
-	    var ownerEvents = cmd[i++] == '1';
+	    id = cmd.get_16();
+	    var ownerEvents = cmd.get_bool ();
 
 	    cmdGrabPointer(id, ownerEvents);
 	    break;
@@ -888,13 +851,103 @@ function handleOutstanding()
     }
 }
 
+function TextCommands(message) {
+    this.data = message;
+    this.length = message.length;
+    this.pos = 0;
+}
+
+TextCommands.prototype.get_char = function() {
+    return this.data[this.pos++];
+};
+TextCommands.prototype.get_bool = function() {
+    return this.get_char() == '1';
+};
+TextCommands.prototype.get_flags = function() {
+    return this.get_char() - 48;
+}
+TextCommands.prototype.get_16 = function() {
+    var n = base64_16(this.data, this.pos);
+    this.pos = this.pos + 3;
+    return n;
+};
+TextCommands.prototype.get_16s = function() {
+    var n = base64_16s(this.data, this.pos);
+    this.pos = this.pos + 3;
+    return n;
+};
+TextCommands.prototype.get_32 = function() {
+    var n = base64_32(this.data, this.pos);
+    this.pos = this.pos + 6;
+    return n;
+};
+TextCommands.prototype.get_image_url = function() {
+    var size = this.get_32();
+    var url = this.data.slice(this.pos, this.pos + size);
+    this.pos = this.pos + size;
+    return url;
+};
+TextCommands.prototype.free_image_url = function(url) {
+};
+
+function BinCommands(message) {
+    this.arraybuffer = message;
+    this.u8 = new Uint8Array(message);
+    this.length = this.u8.length;
+    this.pos = 0;
+}
+
+BinCommands.prototype.get_char = function() {
+    return String.fromCharCode(this.u8[this.pos++]);
+};
+BinCommands.prototype.get_bool = function() {
+    return this.u8[this.pos++] != 0;
+};
+BinCommands.prototype.get_flags = function() {
+    return this.u8[this.pos++];
+}
+BinCommands.prototype.get_16 = function() {
+    var v =
+	this.u8[this.pos] +
+	(this.u8[this.pos+1] << 8);
+    this.pos = this.pos + 2;
+    return v;
+};
+BinCommands.prototype.get_16s = function() {
+    var v = this.get_16 ();
+    if (v > 32767)
+	return v - 65536;
+    else
+	return v;
+};
+BinCommands.prototype.get_32 = function() {
+    var v =
+	this.u8[this.pos] +
+	(this.u8[this.pos+1] << 8) +
+	(this.u8[this.pos+2] << 16) +
+	(this.u8[this.pos+3] << 24);
+    this.pos = this.pos + 4;
+    return v;
+};
+BinCommands.prototype.get_image_url = function() {
+    var size = this.get_32();
+    var png_blob = new Blob ([this.arraybuffer.slice (this.pos, this.pos + size)], {type:"image/png"});
+    var url = URL.createObjectURL(png_blob, {oneTimeOnly: true});
+    this.pos = this.pos + size;
+    return url;
+};
+BinCommands.prototype.free_image_url = function(url) {
+    URL.revokeObjectURL(url);
+};
+
 function handleMessage(message)
 {
-    var cmdObj = {};
-    cmdObj.data = message;
-    cmdObj.pos = 0;
-
-    outstandingCommands.push(cmdObj);
+    var cmd;
+    if (message instanceof ArrayBuffer)
+	cmd = new BinCommands(message);
+    else
+	cmd = new TextCommands(message);
+    outstandingCommands.push(cmd);
     if (outstandingCommands.length == 1) {
 	handleOutstanding();
     }
@@ -2759,6 +2812,18 @@ function setupDocument(document)
     }
 }
 
+function newWS(loc) {
+    var ws = null;
+    if ("WebSocket" in window) {
+	ws = new WebSocket(loc, "broadway");
+    } else if ("MozWebSocket" in window) { // Firefox 6
+	ws = new MozWebSocket(loc);
+    } else {
+	alert("WebSocket not supported, broadway will not work!");
+    }
+    return ws;
+}
+
 function connect()
 {
     var url = window.location.toString();
@@ -2771,41 +2836,39 @@ function connect()
 
     var loc = window.location.toString().replace("http:", "ws:");
     loc = loc.substr(0, loc.lastIndexOf('/')) + "/socket";
-    var ws = null;
 
-    if ("WebSocket" in window) {
-	ws = new WebSocket(loc, "broadway");
-    } else if ("MozWebSocket" in window) { // Firefox 6
-	ws = new MozWebSocket(loc);
+    var supports_binary = newWS (loc + "-test").binaryType == "blob";
+    if (supports_binary) {
+	ws = newWS (loc + "-bin");
+	ws.binaryType = "arraybuffer";
     } else {
-	alert("WebSocket not supported, input will not work!");
-	return;
+	ws = newWS (loc);
     }
 
-	ws.onopen = function() {
-	    inputSocket = ws;
-	    var w, h;
-	    if (useToplevelWindows) {
-		w = window.screen.width;
-		h = window.screen.height;
-	    } else {
+    ws.onopen = function() {
+	inputSocket = ws;
+	var w, h;
+	if (useToplevelWindows) {
+	    w = window.screen.width;
+	    h = window.screen.height;
+	} else {
+	    w = window.innerWidth;
+	    h = window.innerHeight;
+	    window.onresize = function(ev) {
+		var w, h;
 		w = window.innerWidth;
 		h = window.innerHeight;
-		window.onresize = function(ev) {
-		    var w, h;
-		    w = window.innerWidth;
-		    h = window.innerHeight;
-		    sendInput ("d", [w, h]);
-		};
-	    }
-	    sendInput ("d", [w, h]);
-	};
-	ws.onclose = function() {
-	    inputSocket = null;
-	};
-	ws.onmessage = function(event) {
-	    handleMessage(event.data);
-	};
+		sendInput ("d", [w, h]);
+	    };
+	}
+	sendInput ("d", [w, h]);
+    };
+    ws.onclose = function() {
+	inputSocket = null;
+    };
+    ws.onmessage = function(event) {
+	handleMessage(event.data);
+    };
 
     setupDocument(document);
     window.onunload = function (ev) {

@@ -138,6 +138,7 @@ void             _gtk_print_context_set_page_setup                  (GtkPrintCon
 								     GtkPageSetup      *page_setup);
 void             _gtk_print_context_translate_into_margin           (GtkPrintContext   *context);
 void             _gtk_print_context_rotate_according_to_orientation (GtkPrintContext   *context);
+void             _gtk_print_context_reverse_according_to_orientation (GtkPrintContext *context);
 void             _gtk_print_context_set_hard_margins                (GtkPrintContext   *context,
 								     gdouble            top,
 								     gdouble            bottom,

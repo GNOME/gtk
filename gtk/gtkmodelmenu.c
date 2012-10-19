@@ -21,10 +21,10 @@
 
 #include "config.h"
 
-#include "gtkmodelmenu.h"
-
-#include "gtkmenu.h"
+#include "gtkmenushell.h"
 #include "gtkmenubar.h"
+#include "gtkmenu.h"
+
 #include "gtkseparatormenuitem.h"
 #include "gtkmodelmenuitem.h"
 #include "gtkapplicationprivate.h"
@@ -33,7 +33,6 @@
 
 typedef struct {
   GMenuModel        *model;
-  GtkAccelGroup     *accels;
   GtkMenuShell      *shell;
   guint              update_idle;
   GSList            *connected;
@@ -107,7 +106,7 @@ gtk_model_menu_binding_append_item (GtkModelMenuBinding  *binding,
     {
       GtkMenuItem *item;
 
-      item = gtk_model_menu_item_new (model, item_index, action_namespace, binding->accels);
+      item = gtk_model_menu_item_new (model, item_index, action_namespace);
       gtk_menu_shell_append (binding->shell, GTK_WIDGET (item));
       gtk_widget_show (GTK_WIDGET (item));
       binding->n_items++;
@@ -244,123 +243,80 @@ gtk_model_menu_binding_items_changed (GMenuModel *model,
     }
 }
 
-static void
-gtk_model_menu_bind (GtkMenuShell *shell,
-                     GMenuModel   *model,
-                     const gchar  *action_namespace,
-                     gboolean      with_separators)
-{
-  GtkModelMenuBinding *binding;
-
-  binding = g_slice_new (GtkModelMenuBinding);
-  binding->model = g_object_ref (model);
-  binding->accels = NULL;
-  binding->shell = shell;
-  binding->update_idle = 0;
-  binding->connected = NULL;
-  binding->with_separators = with_separators;
-  binding->action_namespace = g_strdup (action_namespace);
-
-  g_object_set_data_full (G_OBJECT (shell), "gtk-model-menu-binding", binding, gtk_model_menu_binding_free);
-}
-
-
-static void
-gtk_model_menu_populate (GtkMenuShell  *shell,
-                         GtkAccelGroup *accels)
-{
-  GtkModelMenuBinding *binding;
-
-  binding = (GtkModelMenuBinding*) g_object_get_data (G_OBJECT (shell), "gtk-model-menu-binding");
-
-  binding->accels = accels;
-
-  gtk_model_menu_binding_populate (binding);
-}
-
-GtkWidget *
-gtk_model_menu_create_menu (GMenuModel    *model,
-                            const gchar   *action_namespace,
-                            GtkAccelGroup *accels)
-{
-  GtkWidget *menu;
-
-  menu = gtk_menu_new ();
-  gtk_menu_set_accel_group (GTK_MENU (menu), accels);
-
-  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, action_namespace, TRUE);
-  gtk_model_menu_populate (GTK_MENU_SHELL (menu), accels);
-
-  return menu;
-}
-
 /**
- * gtk_menu_new_from_model:
- * @model: a #GMenuModel
+ * gtk_menu_shell_bind_model:
+ * @menu_shell: a #GtkMenuShell
+ * @model: (allow-none): the #GMenuModel to bind to or %NULL to remove
+ *   binding
+ * @action_namespace: (allow-none): the namespace for actions in @model
+ * @with_separators: %TRUE if toplevel items in @shell should have
+ *   separators between them
  *
- * Creates a #GtkMenu and populates it with menu items and
- * submenus according to @model.
+ * Establishes a binding between a #GtkMenuShell and a #GMenuModel.
  *
- * The created menu items are connected to actions found in the
- * #GtkApplicationWindow to which the menu belongs - typically
- * by means of being attached to a widget (see gtk_menu_attach_to_widget())
- * that is contained within the #GtkApplicationWindows widget hierarchy.
+ * The contents of @shell are removed and then refilled with menu items
+ * according to @model.  When @model changes, @shell is updated.
+ * Calling this function twice on @shell with different @model will
+ * cause the first binding to be replaced with a binding to the new
+ * model. If @model is %NULL then any previous binding is undone and
+ * all children are removed.
  *
- * Returns: a new #GtkMenu
+ * @with_separators determines if toplevel items (eg: sections) have
+ * separators inserted between them.  This is typically desired for
+ * menus but doesn't make sense for menubars.
  *
- * Since: 3.4
+ * If @action_namespace is non-%NULL then the effect is as if all
+ * actions mentioned in the @model have their names prefixed with the
+ * namespace, plus a dot.  For example, if the action "quit" is
+ * mentioned and @action_namespace is "app" then the effective action
+ * name is "app.quit".
+ *
+ * For most cases you are probably better off using
+ * gtk_menu_new_from_model() or gtk_menu_bar_new_from_model() or just
+ * directly passing the #GMenuModel to gtk_application_set_app_menu() or
+ * gtk_application_set_menu_bar().
+ *
+ * Since: 3.6
  */
-GtkWidget *
-gtk_menu_new_from_model (GMenuModel *model)
+void
+gtk_menu_shell_bind_model (GtkMenuShell *shell,
+                           GMenuModel   *model,
+                           const gchar  *action_namespace,
+                           gboolean      with_separators)
 {
-  GtkWidget *menu;
+  g_return_if_fail (GTK_IS_MENU_SHELL (shell));
+  g_return_if_fail (model == NULL || G_IS_MENU_MODEL (model));
 
-  menu = gtk_menu_new ();
-  gtk_model_menu_bind (GTK_MENU_SHELL (menu), model, NULL, TRUE);
-  gtk_model_menu_populate (GTK_MENU_SHELL (menu), NULL);
+  if (model)
+    {
+      GtkModelMenuBinding *binding;
 
-  return menu;
-}
+      binding = g_slice_new (GtkModelMenuBinding);
+      binding->model = g_object_ref (model);
+      binding->shell = shell;
+      binding->update_idle = 0;
+      binding->connected = NULL;
+      binding->with_separators = with_separators;
+      binding->action_namespace = g_strdup (action_namespace);
 
-GtkWidget *
-gtk_model_menu_create_menu_bar (GMenuModel    *model,
-                                GtkAccelGroup *accels)
-{
-  GtkWidget *menubar;
+      g_object_set_data_full (G_OBJECT (shell), "gtk-model-menu-binding", binding, gtk_model_menu_binding_free);
 
-  menubar = gtk_menu_bar_new ();
+      gtk_model_menu_binding_populate (binding);
+    }
 
-  gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, NULL, FALSE);
-  gtk_model_menu_populate (GTK_MENU_SHELL (menubar), accels);
+  else
+    {
+      GList *children;
 
-  return menubar;
-}
+      /* break existing binding */
+      g_object_set_data (G_OBJECT (shell), "gtk-model-menu-binding", NULL);
 
-/**
- * gtk_menu_bar_new_from_model:
- * @model: a #GMenuModel
- *
- * Creates a new #GtkMenuBar and populates it with menu items
- * and submenus according to @model.
- *
- * The created menu items are connected to actions found in the
- * #GtkApplicationWindow to which the menu bar belongs - typically
- * by means of being contained within the #GtkApplicationWindows
- * widget hierarchy.
- *
- * Returns: a new #GtkMenuBar
- *
- * Since: 3.4
- */
-GtkWidget *
-gtk_menu_bar_new_from_model (GMenuModel *model)
-{
-  GtkWidget *menubar;
-
-  menubar = gtk_menu_bar_new ();
-
-  gtk_model_menu_bind (GTK_MENU_SHELL (menubar), model, NULL, FALSE);
-  gtk_model_menu_populate (GTK_MENU_SHELL (menubar), NULL);
-
-  return menubar;
+      /* remove all children */
+      children = gtk_container_get_children (GTK_CONTAINER (shell));
+      while (children)
+        {
+          gtk_container_remove (GTK_CONTAINER (shell), children->data);
+          children = g_list_delete_link (children, children);
+        }
+    }
 }

@@ -1459,7 +1459,6 @@ _gdk_x11_display_open (const gchar *display_name)
     _gdk_x11_screen_setup (display_x11->screens[i]);
 
   g_signal_emit_by_name (display, "opened");
-  g_signal_emit_by_name (gdk_display_manager_get (), "display-opened", display);
 
   return display;
 }

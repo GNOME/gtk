@@ -206,6 +206,17 @@ do_window_event_initialization (void)
                     (GCallback) window_removed, NULL);
 }
 
+static void
+undo_window_event_initialization (void)
+{
+  AtkObject *root;
+
+  root = atk_get_root ();
+
+  g_signal_handlers_disconnect_by_func (root, (GCallback) window_added, NULL);
+  g_signal_handlers_disconnect_by_func (root, (GCallback) window_removed, NULL);
+}
+
 static AtkKeyEventStruct *
 atk_key_event_from_gdk_event_key (GdkEventKey *key)
 {
@@ -339,6 +350,12 @@ static const gchar *
 gail_util_get_toolkit_version (void)
 {
   return GTK_VERSION;
+}
+
+void
+_gail_util_uninstall (void)
+{
+  undo_window_event_initialization ();
 }
 
 void

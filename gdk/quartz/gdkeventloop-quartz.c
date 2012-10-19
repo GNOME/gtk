@@ -635,21 +635,6 @@ gdk_event_check (GSource *source)
 
   gdk_threads_enter ();
 
-  /* Refresh the autorelease pool if we're at the base CFRunLoop level
-   * (indicated by current_loop_level) and the base g_main_loop level
-   * (indicated by g_main_depth()). Messing with the autorelease pool at
-   * any level of nesting can cause access to deallocated memory because
-   * autorelease_pool is static and releasing a pool will cause all pools
-   * allocated inside of it to be released as well.
-   */
-  if (current_loop_level == 0 && g_main_depth() == 0)
-    {
-      if (autorelease_pool)
-        [autorelease_pool drain];
-
-      autorelease_pool = [[NSAutoreleasePool alloc] init];
-    }
-
   retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
 	    _gdk_quartz_event_loop_check_pending ());
 
@@ -666,6 +651,21 @@ gdk_event_dispatch (GSource     *source,
   GdkEvent *event;
 
   gdk_threads_enter ();
+
+  /* Refresh the autorelease pool if we're at the base CFRunLoop level
+   * (indicated by current_loop_level) and the base g_main_loop level
+   * (indicated by g_main_depth()). Messing with the autorelease pool at
+   * any level of nesting can cause access to deallocated memory because
+   * autorelease_pool is static and releasing a pool will cause all pools
+   * allocated inside of it to be released as well.
+   */
+  if (current_loop_level == 0 && g_main_depth() == 0)
+    {
+      if (autorelease_pool)
+        [autorelease_pool drain];
+
+      autorelease_pool = [[NSAutoreleasePool alloc] init];
+    }
 
   _gdk_quartz_display_queue_events (_gdk_display);
 
@@ -703,6 +703,10 @@ poll_func (GPollFD *ufds,
   NSDate *limit_date;
   gint n_ready;
 
+  static GPollFD *last_ufds;
+
+  last_ufds = ufds;
+
   n_ready = select_thread_start_poll (ufds, nfds, timeout_);
   if (n_ready > 0)
     timeout_ = 0;
@@ -721,7 +725,16 @@ poll_func (GPollFD *ufds,
                                dequeue: YES];
   getting_events--;
 
-  if (n_ready < 0)
+  /* We check if last_ufds did not change since the time this function was
+   * called. It is possible that a recursive main loop (and thus recursive
+   * invocation of this poll function) is triggered while in
+   * nextEventMatchingMask:. If during that time new fds are added,
+   * the cached fds array might be replaced in g_main_context_iterate().
+   * So, we should avoid accessing the old fd array (still pointed at by
+   * ufds) here in that case, since it might have been freed. We avoid this
+   * by not calling the collect stage.
+   */
+  if (last_ufds == ufds && n_ready < 0)
     n_ready = select_thread_collect_poll (ufds, nfds);
       
   if (event &&

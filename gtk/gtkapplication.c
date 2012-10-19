@@ -47,6 +47,8 @@
 #include <gdk/x11/gdkx.h>
 #endif
 
+extern void _gtk_accessibility_shutdown (void);
+
 /**
  * SECTION:gtkapplication
  * @title: GtkApplication
@@ -217,7 +219,6 @@ static void
 gtk_application_set_app_menu_x11 (GtkApplication *application,
                                   GMenuModel     *app_menu)
 {
-  g_free (application->priv->app_menu_path);
   gtk_application_x11_publish_menu (application, "appmenu", app_menu,
                                     &application->priv->app_menu_id,
                                     &application->priv->app_menu_path);
@@ -227,7 +228,6 @@ static void
 gtk_application_set_menubar_x11 (GtkApplication *application,
                                  GMenuModel     *menubar)
 {
-  g_free (application->priv->menubar_path);
   gtk_application_x11_publish_menu (application, "menubar", menubar,
                                     &application->priv->menubar_id,
                                     &application->priv->menubar_path);
@@ -292,13 +292,13 @@ gtk_application_shutdown_x11 (GtkApplication *application)
   application->priv->session_bus = NULL;
   application->priv->object_path = NULL;
 
+  gtk_application_set_app_menu_x11 (application, NULL);
+  gtk_application_set_menubar_x11 (application, NULL);
+
   g_clear_object (&application->priv->sm_proxy);
   g_clear_object (&application->priv->client_proxy);
   g_free (application->priv->app_id);
   g_free (application->priv->client_path);
-
-  g_free (application->priv->app_menu_path);
-  g_free (application->priv->menubar_path);
 }
 
 const gchar *
@@ -425,11 +425,15 @@ gtk_application_shutdown (GApplication *application)
   gtk_application_shutdown_quartz (GTK_APPLICATION (application));
 #endif
 
+  /* Keep this section in sync with gtk_main() */
+
   /* Try storing all clipboard data we have */
   _gtk_clipboard_store_all ();
 
   /* Synchronize the recent manager singleton */
   _gtk_recent_manager_sync ();
+
+  _gtk_accessibility_shutdown ();
 
   G_APPLICATION_CLASS (gtk_application_parent_class)
     ->shutdown (application);
@@ -892,7 +896,9 @@ gtk_application_get_windows (GtkApplication *application)
  * @application: a #GtkApplication
  * @id: an identifier number
  *
- * Returns: (transfer none): the #GtkApplicationWindow with ID @id, or
+ * Returns the #GtkApplicationWindow with the given ID.
+ *
+ * Returns: (transfer none): the window with ID @id, or
  *   %NULL if there is no window with this ID
  *
  * Since: 3.6

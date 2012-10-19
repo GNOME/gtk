@@ -247,11 +247,6 @@ clipboard_display_closed (GdkDisplay   *display,
   g_object_unref (clipboard);
 }
 
-/**
- * gtk_clipboard_get_for_display:
- * @display: the display for which the clipboard is to be retrieved or created
- * @selection: a #GdkAtom which identifies the clipboard to use.
- */
 GtkClipboard *
 gtk_clipboard_get_for_display (GdkDisplay *display,
 			       GdkAtom     selection)
@@ -262,10 +257,6 @@ gtk_clipboard_get_for_display (GdkDisplay *display,
   return clipboard_peek (display, selection, FALSE);
 }
 
-/**
- * gtk_clipboard_get:
- * @selection: a #GdkAtom which identifies the clipboard to use
- */
 GtkClipboard *
 gtk_clipboard_get (GdkAtom selection)
 {
@@ -389,18 +380,6 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
   return TRUE;
 }
 
-/**
- * gtk_clipboard_set_with_data: (skip)
- * @clipboard: a #GtkClipboard
- * @targets: (array length=n_targets): array containing information
- *     about the available forms for the clipboard data
- * @n_targets: number of elements in @targets
- * @get_func: (scope async): function to call to get the actual clipboard data
- * @clear_func: (scope async): when the clipboard contents are set again,
- *     this function will be called, and @get_func will not be subsequently
- *     called.
- * @user_data: user data to pass to @get_func and @clear_func.
- */
 gboolean
 gtk_clipboard_set_with_data (GtkClipboard          *clipboard,
 			     const GtkTargetEntry  *targets,
@@ -418,19 +397,6 @@ gtk_clipboard_set_with_data (GtkClipboard          *clipboard,
 				     FALSE);
 }
 
-/**
- * gtk_clipboard_set_with_owner: (skip)
- * @clipboard: a #GtkClipboard
- * @targets: (array length=n_targets): array containing information
- *     about the available forms for the clipboard data
- * @n_targets: number of elements in @targets
- * @get_func: (scope async): function to call to get the actual clipboard data
- * @clear_func: (scope async): when the clipboard contents are set again,
- *     this function will be called, and @get_func will not be subsequently
- *     called
- * @owner: an object that "owns" the data. This object will be passed
- *     to the callbacks when called
- */
 gboolean
 gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
 			      const GtkTargetEntry  *targets,
@@ -449,10 +415,6 @@ gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
 				     TRUE);
 }
 
-/**
- * gtk_clipboard_get_owner:
- * @clipboard: a #GtkClipboard
- */
 GObject *
 gtk_clipboard_get_owner (GtkClipboard *clipboard)
 {
@@ -508,10 +470,6 @@ clipboard_unset (GtkClipboard *clipboard)
     g_object_unref (old_data);
 }
 
-/**
- * gtk_clipboard_clear:
- * @clipboard:  a #GtkClipboard
- */
 void
 gtk_clipboard_clear (GtkClipboard *clipboard)
 {
@@ -534,13 +492,6 @@ text_clear_func (GtkClipboard *clipboard,
   g_free (data);
 }
 
-/**
- * gtk_clipboard_set_text:
- * @clipboard: a #GtkClipboard object
- * @text:      a UTF-8 string.
- * @len:       length of @text, in bytes, or -1, in which case
- *             the length will be determined with <function>strlen()</function>.
- */
 void 
 gtk_clipboard_set_text (GtkClipboard *clipboard,
 			const gchar  *text,
@@ -578,11 +529,6 @@ pixbuf_clear_func (GtkClipboard *clipboard,
   g_object_unref (data);
 }
 
-/**
- * gtk_clipboard_set_image:
- * @clipboard: a #GtkClipboard object
- * @pixbuf:    a #GdkPixbuf 
- */
 void
 gtk_clipboard_set_image (GtkClipboard *clipboard,
 			 GdkPixbuf    *pixbuf)
@@ -618,16 +564,6 @@ gtk_clipboard_set_image (GtkClipboard *clipboard,
   gtk_target_list_unref (list);
 }
 
-/**
- * gtk_clipboard_request_contents:
- * @clipboard: a #GtkClipboard
- * @target: an atom representing the form into which the clipboard
- *     owner should convert the selection.
- * @callback: (scope async): A function to call when the results are received
- *     (or the retrieval fails). If the retrieval fails the length field of
- *     @selection_data will be negative.
- * @user_data: user data to pass to @callback
- */
 void 
 gtk_clipboard_request_contents (GtkClipboard            *clipboard,
 				GdkAtom                  target,
@@ -643,13 +579,6 @@ gtk_clipboard_request_contents (GtkClipboard            *clipboard,
   gtk_selection_data_free (data);
 }
 
-/**
- * gtk_clipboard_request_text:
- * @clipboard: a #GtkClipboard
- * @callback: (scope async): a function to call when the text is received,
- *     or the retrieval fails. (It will always be called one way or the other.)
- * @user_data: user data to pass to @callback.
- */
 void 
 gtk_clipboard_request_text (GtkClipboard                *clipboard,
 			    GtkClipboardTextReceivedFunc callback,
@@ -662,14 +591,6 @@ gtk_clipboard_request_text (GtkClipboard                *clipboard,
   g_free (data);
 }
 
-/**
- * gtk_clipboard_request_rich_text:
- * @clipboard: a #GtkClipboard
- * @buffer: a #GtkTextBuffer
- * @callback: (scope async): a function to call when the text is received,
- *     or the retrieval fails. (It will always be called one way or the other.)
- * @user_data: user data to pass to @callback.
- */
 void
 gtk_clipboard_request_rich_text (GtkClipboard                    *clipboard,
                                  GtkTextBuffer                   *buffer,
@@ -690,13 +611,6 @@ gtk_clipboard_wait_for_rich_text (GtkClipboard  *clipboard,
   return NULL;
 }
 
-/**
- * gtk_clipboard_request_image:
- * @clipboard: a #GtkClipboard
- * @callback: (scope async): a function to call when the image is received,
- *     or the retrieval fails. (It will always be called one way or the other.)
- * @user_data: user data to pass to @callback.
- */
 void 
 gtk_clipboard_request_image (GtkClipboard                  *clipboard,
 			     GtkClipboardImageReceivedFunc  callback,
@@ -710,13 +624,6 @@ gtk_clipboard_request_image (GtkClipboard                  *clipboard,
     g_object_unref (pixbuf);
 }
 
-/**
- * gtk_clipboard_request_uris:
- * @clipboard: a #GtkClipboard
- * @callback: (scope async): a function to call when the URIs are received,
- *     or the retrieval fails. (It will always be called one way or the other.)
- * @user_data: user data to pass to @callback.
- */
 void 
 gtk_clipboard_request_uris (GtkClipboard                *clipboard,
 			    GtkClipboardURIReceivedFunc  callback,
@@ -729,14 +636,6 @@ gtk_clipboard_request_uris (GtkClipboard                *clipboard,
   g_strfreev (uris);
 }
 
-/**
- * gtk_clipboard_request_targets:
- * @clipboard: a #GtkClipboard
- * @callback: (scope async): a function to call when the targets are
- *     received, or the retrieval fails. (It will always be called
- *     one way or the other.)
- * @user_data: user data to pass to @callback.
- */
 void 
 gtk_clipboard_request_targets (GtkClipboard                *clipboard,
 			       GtkClipboardTargetsReceivedFunc callback,
@@ -750,13 +649,6 @@ gtk_clipboard_request_targets (GtkClipboard                *clipboard,
   callback (clipboard, targets, n_targets, user_data);
 }
 
-
-/**
- * gtk_clipboard_wait_for_contents:
- * @clipboard: a #GtkClipboard
- * @target: an atom representing the form into which the clipboard
- *          owner should convert the selection.
- */
 GtkSelectionData *
 gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
 				 GdkAtom       target)
@@ -802,10 +694,6 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
   return selection_data;
 }
 
-/**
- * gtk_clipboard_wait_for_text:
- * @clipboard: a #GtkClipboard
- */
 gchar *
 gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
 {
@@ -822,10 +710,6 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
   return result;
 }
 
-/**
- * gtk_clipboard_wait_for_image:
- * @clipboard: a #GtkClipboard
- */
 GdkPixbuf *
 gtk_clipboard_wait_for_image (GtkClipboard *clipboard)
 {
@@ -850,10 +734,6 @@ gtk_clipboard_wait_for_image (GtkClipboard *clipboard)
   return NULL;
 }
 
-/**
- * gtk_clipboard_wait_for_uris:
- * @clipboard: a #GtkClipboard
- */
 gchar **
 gtk_clipboard_wait_for_uris (GtkClipboard *clipboard)
 {
@@ -873,10 +753,6 @@ gtk_clipboard_wait_for_uris (GtkClipboard *clipboard)
   return NULL;
 }
 
-/**
- * gtk_clipboard_get_display:
- * @clipboard: a #GtkClipboard
- */
 GdkDisplay *
 gtk_clipboard_get_display (GtkClipboard *clipboard)
 {
@@ -885,10 +761,6 @@ gtk_clipboard_get_display (GtkClipboard *clipboard)
   return clipboard->display;
 }
 
-/**
- * gtk_clipboard_wait_is_text_available:
- * @clipboard: a #GtkClipboard
- */
 gboolean
 gtk_clipboard_wait_is_text_available (GtkClipboard *clipboard)
 {
@@ -905,11 +777,6 @@ gtk_clipboard_wait_is_text_available (GtkClipboard *clipboard)
   return result;
 }
 
-/**
- * gtk_clipboard_wait_is_rich_text_available:
- * @clipboard: a #GtkClipboard
- * @buffer: a #GtkTextBuffer
- */
 gboolean
 gtk_clipboard_wait_is_rich_text_available (GtkClipboard  *clipboard,
                                            GtkTextBuffer *buffer)
@@ -930,10 +797,6 @@ gtk_clipboard_wait_is_rich_text_available (GtkClipboard  *clipboard,
   return result;
 }
 
-/**
- * gtk_clipboard_wait_is_image_available:
- * @clipboard: a #GtkClipboard
- */
 gboolean
 gtk_clipboard_wait_is_image_available (GtkClipboard *clipboard)
 {
@@ -951,10 +814,6 @@ gtk_clipboard_wait_is_image_available (GtkClipboard *clipboard)
   return result;
 }
 
-/**
- * gtk_clipboard_wait_is_uris_available:
- * @clipboard: a #GtkClipboard
- */
 gboolean
 gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
 {
@@ -972,14 +831,6 @@ gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
   return result;
 }
 
-/**
- * gtk_clipboard_wait_for_targets:
- * @clipboard: a #GtkClipboard
- * @targets: (out) (array length=n_targets) (transfer container): location
- *           to store an array of targets. The result stored here must
- *           be freed with g_free().
- * @n_targets: location to store number of items in @targets.
- */
 gboolean
 gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard, 
 				GdkAtom      **targets,
@@ -1110,11 +961,6 @@ gtk_clipboard_owner_change (GtkClipboard        *clipboard,
     }
 }
 
-/**
- * gtk_clipboard_wait_is_target_available:
- * @clipboard: a #GtkClipboard
- * @target:    A #GdkAtom indicating which target to look for.
- */
 gboolean
 gtk_clipboard_wait_is_target_available (GtkClipboard *clipboard,
 					GdkAtom       target)
@@ -1140,23 +986,11 @@ gtk_clipboard_wait_is_target_available (GtkClipboard *clipboard,
   return retval;
 }
 
-/**
- * _gtk_clipboard_handle_event:
- * @event: a owner change event
- */
 void 
 _gtk_clipboard_handle_event (GdkEventOwnerChange *event)
 {
 }
 
-/**
- * gtk_clipboard_set_can_store:
- * @clipboard: a #GtkClipboard
- * @targets: (allow-none) (array length=n_targets): array containing
- *           information about which forms should be stored or %NULL
- *           to indicate that all forms should be stored.
- * @n_targets: number of elements in @targets
- */
 void
 gtk_clipboard_set_can_store (GtkClipboard         *clipboard,
  			     const GtkTargetEntry *targets,
@@ -1165,10 +999,6 @@ gtk_clipboard_set_can_store (GtkClipboard         *clipboard,
   /* FIXME: Implement */
 }
 
-/**
- * gtk_clipboard_store:
- * @clipboard: a #GtkClipboard
- */
 void
 gtk_clipboard_store (GtkClipboard *clipboard)
 {

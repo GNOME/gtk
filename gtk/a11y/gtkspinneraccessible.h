@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_SPINNER_ACCESSIBLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SPINNER_ACCESSIBLE))
 #define GTK_SPINNER_ACCESSIBLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SPINNER_ACCESSIBLE, GtkSpinnerAccessibleClass))
 
-typedef struct _GtkSpinnerAccessible      GtkSpinnerAccessible;
-typedef struct _GtkSpinnerAccessibleClass GtkSpinnerAccessibleClass;
+typedef struct _GtkSpinnerAccessible        GtkSpinnerAccessible;
+typedef struct _GtkSpinnerAccessibleClass   GtkSpinnerAccessibleClass;
+typedef struct _GtkSpinnerAccessiblePrivate GtkSpinnerAccessiblePrivate;
 
 struct _GtkSpinnerAccessible
 {
   GtkWidgetAccessible parent;
+
+  GtkSpinnerAccessiblePrivate *priv;
 };
 
 struct _GtkSpinnerAccessibleClass

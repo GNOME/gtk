@@ -1423,6 +1423,8 @@ static gboolean	gtk_scale_button_scale_press   (GtkWidget      *widget,
 static gboolean gtk_scale_button_scale_release (GtkWidget      *widget,
                                                 GdkEventButton *event);
 
+GType           _gtk_scale_button_scale_get_type (void);
+
 G_DEFINE_TYPE (GtkScaleButtonScale, _gtk_scale_button_scale, GTK_TYPE_SCALE)
 
 static void

@@ -109,6 +109,7 @@ struct _GtkActionGroupPrivate
   gboolean	   sensitive;
   gboolean	   visible;
   GHashTable      *actions;
+  GtkAccelGroup   *accel_group;
 
   GtkTranslateFunc translate_func;
   gpointer         translate_data;
@@ -129,7 +130,8 @@ enum
   PROP_0,
   PROP_NAME,
   PROP_SENSITIVE,
-  PROP_VISIBLE
+  PROP_VISIBLE,
+  PROP_ACCEL_GROUP
 };
 
 static void       gtk_action_group_init            (GtkActionGroup      *self);
@@ -241,6 +243,13 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 							 P_("Whether the action group is visible."),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_ACCEL_GROUP,
+				   g_param_spec_object ("accel-group",
+							P_("Accelerator Group"),
+							P_("The accelerator group the actions of this group should use."),
+							GTK_TYPE_ACCEL_GROUP,
+							GTK_PARAM_READWRITE));
 
   /**
    * GtkActionGroup::connect-proxy:
@@ -555,6 +564,8 @@ gtk_action_group_finalize (GObject *object)
   g_hash_table_destroy (private->actions);
   private->actions = NULL;
 
+  g_clear_object (&private->accel_group);
+
   if (private->translate_notify)
     private->translate_notify (private->translate_data);
 
@@ -587,6 +598,9 @@ gtk_action_group_set_property (GObject         *object,
     case PROP_VISIBLE:
       gtk_action_group_set_visible (self, g_value_get_boolean (value));
       break;
+    case PROP_ACCEL_GROUP:
+      gtk_action_group_set_accel_group (self, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -615,6 +629,9 @@ gtk_action_group_get_property (GObject    *object,
       break;
     case PROP_VISIBLE:
       g_value_set_boolean (value, private->visible);
+      break;
+    case PROP_ACCEL_GROUP:
+      g_value_set_object (value, private->accel_group);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -745,6 +762,25 @@ gtk_action_group_get_visible (GtkActionGroup *action_group)
   return private->visible;
 }
 
+/**
+ * gtk_action_group_get_accel_group:
+ * @action_group: a #GtkActionGroup
+ *
+ * Gets the accelerator group.
+ * 
+ * Returns: (transfer none): the accelerator group associated with this action
+ * group or %NULL if there is none.
+ *
+ * Since: 3.6
+ */
+GtkAccelGroup *
+gtk_action_group_get_accel_group (GtkActionGroup *action_group)
+{
+  g_return_val_if_fail (GTK_IS_ACTION_GROUP (action_group), FALSE);
+
+  return action_group->priv->accel_group;
+}
+
 static void
 cb_set_action_visiblity (const gchar *name, 
 			 GtkAction   *action)
@@ -782,6 +818,47 @@ gtk_action_group_set_visible (GtkActionGroup *action_group,
 
       g_object_notify (G_OBJECT (action_group), "visible");
     }
+}
+
+static void 
+gtk_action_group_accel_group_foreach (gpointer key, gpointer val, gpointer data)
+{
+  gtk_action_set_accel_group (val, data);
+}
+
+/**
+ * gtk_action_group_set_accel_group:
+ * @action_group: a #GtkActionGroup
+ * @accel_group: (allow-none): a #GtkAccelGroup to set or %NULL
+ *
+ * Sets the accelerator group to be used by every action in this group.
+ * 
+ * Since: 3.6
+ */
+void
+gtk_action_group_set_accel_group (GtkActionGroup *action_group,
+                                  GtkAccelGroup  *accel_group)
+{
+  GtkActionGroupPrivate *private;
+
+  g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
+
+  private = action_group->priv;
+
+  if (private->accel_group == accel_group)
+    return;
+
+  g_clear_object (&private->accel_group);
+
+  if (accel_group)
+    private->accel_group = g_object_ref (accel_group);
+
+  /* Set the new accel group on every action */
+  g_hash_table_foreach (private->actions,
+                        gtk_action_group_accel_group_foreach,
+                        accel_group);
+
+  g_object_notify (G_OBJECT (action_group), "accel-group");
 }
 
 /**
@@ -861,6 +938,9 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
 		       (gpointer) name,
                        g_object_ref (action));
   g_object_set (action, I_("action-group"), action_group, NULL);
+  
+  if (private->accel_group)
+    gtk_action_set_accel_group (action, private->accel_group);
 }
 
 /**

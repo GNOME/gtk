@@ -644,7 +644,7 @@ gtk_toggle_button_update_state (GtkButton *button)
   else
     depressed = priv->active;
 
-  if (button->priv->in_button && (!button->priv->button_down || priv->draw_indicator))
+  if (button->priv->in_button)
     new_state |= GTK_STATE_FLAG_PRELIGHT;
 
   if (depressed)

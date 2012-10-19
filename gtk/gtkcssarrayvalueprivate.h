@@ -30,8 +30,7 @@ GtkCssValue *       _gtk_css_array_value_new            (GtkCssValue           *
 GtkCssValue *       _gtk_css_array_value_new_from_array (GtkCssValue          **values,
                                                          guint                  n_values);
 GtkCssValue *       _gtk_css_array_value_parse          (GtkCssParser          *parser,
-                                                         GtkCssValue *          (* parse_func) (GtkCssParser *),
-                                                         gboolean               allow_none);
+                                                         GtkCssValue *          (* parse_func) (GtkCssParser *));
 
 GtkCssValue *       _gtk_css_array_value_get_nth        (const GtkCssValue     *value,
                                                          guint                  i);

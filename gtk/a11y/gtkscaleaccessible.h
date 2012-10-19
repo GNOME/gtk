@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_SCALE_ACCESSIBLE_CLASS(klass)              (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SCALE_ACCESSIBLE))
 #define GTK_SCALE_ACCESSIBLE_GET_CLASS(obj)             (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SCALE_ACCESSIBLE, GtkScaleAccessibleClass))
 
-typedef struct _GtkScaleAccessible      GtkScaleAccessible;
-typedef struct _GtkScaleAccessibleClass GtkScaleAccessibleClass;
+typedef struct _GtkScaleAccessible        GtkScaleAccessible;
+typedef struct _GtkScaleAccessibleClass   GtkScaleAccessibleClass;
+typedef struct _GtkScaleAccessiblePrivate GtkScaleAccessiblePrivate;
 
 struct _GtkScaleAccessible
 {
   GtkRangeAccessible parent;
+
+  GtkScaleAccessiblePrivate *priv;
 };
 
 struct _GtkScaleAccessibleClass

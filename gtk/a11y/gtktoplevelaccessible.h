@@ -29,13 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_TOPLEVEL_ACCESSIBLE_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOPLEVEL_ACCESSIBLE))
 #define GTK_TOPLEVEL_ACCESSIBLE_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TOPLEVEL_ACCESSIBLE, GtkToplevelAccessibleClass))
 
-typedef struct _GtkToplevelAccessible      GtkToplevelAccessible;
-typedef struct _GtkToplevelAccessibleClass GtkToplevelAccessibleClass;
+typedef struct _GtkToplevelAccessible        GtkToplevelAccessible;
+typedef struct _GtkToplevelAccessibleClass   GtkToplevelAccessibleClass;
+typedef struct _GtkToplevelAccessiblePrivate GtkToplevelAccessiblePrivate;
 
 struct _GtkToplevelAccessible
 {
   AtkObject parent;
-  GList *window_list;
+
+  GtkToplevelAccessiblePrivate *priv;
 };
 
 struct _GtkToplevelAccessibleClass
@@ -43,7 +45,8 @@ struct _GtkToplevelAccessibleClass
   AtkObjectClass parent_class;
 };
 
-GType _gtk_toplevel_accessible_get_type (void);
+GType  _gtk_toplevel_accessible_get_type     (void);
+GList *_gtk_toplevel_accessible_get_children (GtkToplevelAccessible *accessible);
 
 G_END_DECLS
 

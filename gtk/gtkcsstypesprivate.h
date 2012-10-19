@@ -23,6 +23,10 @@
 
 G_BEGIN_DECLS
 
+/* forward declaration for GtkCssValue */
+typedef struct _GtkCssComputedValues GtkCssComputedValues;
+typedef struct _GtkStyleProviderPrivate GtkStyleProviderPrivate; /* dummy typedef */
+
 typedef enum { /*< skip >*/
   GTK_CSS_CHANGE_CLASS                    = (1 <<  0),
   GTK_CSS_CHANGE_NAME                     = (1 <<  1),
@@ -36,6 +40,7 @@ typedef enum { /*< skip >*/
   GTK_CSS_CHANGE_SIBLING_STATE            = (1 <<  7),
   GTK_CSS_CHANGE_PARENT_CLASS             = (1 <<  8),
   GTK_CSS_CHANGE_PARENT_NAME              = (1 <<  9),
+  GTK_CSS_CHANGE_PARENT_REGION            = GTK_CSS_CHANGE_PARENT_NAME,
   GTK_CSS_CHANGE_PARENT_POSITION          = (1 << 10),
   GTK_CSS_CHANGE_PARENT_STATE             = (1 << 11),
   GTK_CSS_CHANGE_PARENT_SIBLING_CLASS     = (1 << 12),
@@ -116,6 +121,14 @@ enum { /*< skip >*/
   GTK_CSS_PROPERTY_TRANSITION_DURATION,
   GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION,
   GTK_CSS_PROPERTY_TRANSITION_DELAY,
+  GTK_CSS_PROPERTY_ANIMATION_NAME,
+  GTK_CSS_PROPERTY_ANIMATION_DURATION,
+  GTK_CSS_PROPERTY_ANIMATION_TIMING_FUNCTION,
+  GTK_CSS_PROPERTY_ANIMATION_ITERATION_COUNT,
+  GTK_CSS_PROPERTY_ANIMATION_DIRECTION,
+  GTK_CSS_PROPERTY_ANIMATION_PLAY_STATE,
+  GTK_CSS_PROPERTY_ANIMATION_DELAY,
+  GTK_CSS_PROPERTY_ANIMATION_FILL_MODE,
   GTK_CSS_PROPERTY_ENGINE,
   GTK_CSS_PROPERTY_GTK_KEY_BINDINGS,
   /* add more */
@@ -127,6 +140,25 @@ typedef enum /*< skip >*/ {
   GTK_CSS_AREA_PADDING_BOX,
   GTK_CSS_AREA_CONTENT_BOX
 } GtkCssArea;
+
+typedef enum /*< skip >*/ {
+  GTK_CSS_DIRECTION_NORMAL,
+  GTK_CSS_DIRECTION_REVERSE,
+  GTK_CSS_DIRECTION_ALTERNATE,
+  GTK_CSS_DIRECTION_ALTERNATE_REVERSE
+} GtkCssDirection;
+
+typedef enum /*< skip >*/ {
+  GTK_CSS_PLAY_STATE_RUNNING,
+  GTK_CSS_PLAY_STATE_PAUSED
+} GtkCssPlayState;
+
+typedef enum /*< skip >*/ {
+  GTK_CSS_FILL_NONE,
+  GTK_CSS_FILL_FORWARDS,
+  GTK_CSS_FILL_BACKWARDS,
+  GTK_CSS_FILL_BOTH
+} GtkCssFillMode;
 
 /* for the order in arrays */
 typedef enum /*< skip >*/ {

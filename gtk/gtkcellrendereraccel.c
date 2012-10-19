@@ -579,6 +579,8 @@ struct _GtkCellEditableEventBox
   gboolean editing_canceled;
 };
 
+GType _gtk_cell_editable_event_box_get_type (void);
+
 G_DEFINE_TYPE_WITH_CODE (GtkCellEditableEventBox, _gtk_cell_editable_event_box, GTK_TYPE_EVENT_BOX, { \
     G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE, _gtk_cell_editable_event_box_cell_editable_init)   \
       })

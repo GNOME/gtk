@@ -29,15 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_NOTEBOOK_PAGE_ACCESSIBLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_NOTEBOOK_PAGE_ACCESSIBLE))
 #define GTK_NOTEBOOK_PAGE_ACCESSIBLE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_NOTEBOOK_PAGE_ACCESSIBLE, GtkNotebookPageAccessibleClass))
 
-typedef struct _GtkNotebookPageAccessible      GtkNotebookPageAccessible;
-typedef struct _GtkNotebookPageAccessibleClass GtkNotebookPageAccessibleClass;
+typedef struct _GtkNotebookPageAccessible        GtkNotebookPageAccessible;
+typedef struct _GtkNotebookPageAccessibleClass   GtkNotebookPageAccessibleClass;
+typedef struct _GtkNotebookPageAccessiblePrivate GtkNotebookPageAccessiblePrivate;
 
 struct _GtkNotebookPageAccessible
 {
   AtkObject parent;
 
-  GtkAccessible *notebook;
-  GtkWidget *child;
+  GtkNotebookPageAccessiblePrivate *priv;
 };
 
 struct _GtkNotebookPageAccessibleClass

@@ -973,11 +973,11 @@ _gtk_rbtree_node_get_index (GtkRBTree *tree,
   return retval;
 }
 
-gint
-_gtk_rbtree_real_find_offset (GtkRBTree  *tree,
-			      gint        height,
-			      GtkRBTree **new_tree,
-			      GtkRBNode **new_node)
+static gint
+gtk_rbtree_real_find_offset (GtkRBTree  *tree,
+			     gint        height,
+			     GtkRBTree **new_tree,
+			     GtkRBNode **new_node)
 {
   GtkRBNode *tmp_node;
 
@@ -1021,14 +1021,14 @@ _gtk_rbtree_real_find_offset (GtkRBTree  *tree,
 	  *new_node = tmp_node;
 	  return (height - tmp_node->left->offset);
 	}
-      return _gtk_rbtree_real_find_offset (tmp_node->children,
-					   height - tmp_node->left->offset -
-					   (tmp_node->offset -
-					    tmp_node->left->offset -
-					    tmp_node->right->offset -
-					    tmp_node->children->root->offset),
-					   new_tree,
-					   new_node);
+      return gtk_rbtree_real_find_offset (tmp_node->children,
+					  height - tmp_node->left->offset -
+					  (tmp_node->offset -
+					   tmp_node->left->offset -
+					   tmp_node->right->offset -
+					   tmp_node->children->root->offset),
+					  new_tree,
+					  new_node);
     }
   *new_tree = tree;
   *new_node = tmp_node;
@@ -1037,9 +1037,9 @@ _gtk_rbtree_real_find_offset (GtkRBTree  *tree,
 
 gint
 _gtk_rbtree_find_offset (GtkRBTree  *tree,
-			      gint        height,
-			      GtkRBTree **new_tree,
-			      GtkRBNode **new_node)
+			 gint        height,
+			 GtkRBTree **new_tree,
+			 GtkRBNode **new_node)
 {
   g_assert (tree);
 
@@ -1051,7 +1051,7 @@ _gtk_rbtree_find_offset (GtkRBTree  *tree,
 
       return 0;
     }
-  return _gtk_rbtree_real_find_offset (tree, height, new_tree, new_node);
+  return gtk_rbtree_real_find_offset (tree, height, new_tree, new_node);
 }
 
 gboolean

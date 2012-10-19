@@ -25,7 +25,8 @@
 #ifndef __GTK_MENU_BUTTON_H__
 #define __GTK_MENU_BUTTON_H__
 
-#include <gtk/gtk.h>
+#include <gtk/gtktogglebutton.h>
+#include <gtk/gtkmenu.h>
 
 G_BEGIN_DECLS
 
@@ -69,12 +70,6 @@ void         gtk_menu_button_set_popup      (GtkMenuButton *menu_button,
                                              GtkWidget     *popup);
 GDK_AVAILABLE_IN_3_6
 GtkMenu     *gtk_menu_button_get_popup      (GtkMenuButton *menu_button);
-
-GDK_DEPRECATED_IN_3_6_FOR(gtk_menu_button_set_popup)
-void         gtk_menu_button_set_menu       (GtkMenuButton *menu_button,
-                                             GtkWidget     *menu);
-GDK_DEPRECATED_IN_3_6_FOR(gtk_menu_button_get_popup)
-GtkMenu     *gtk_menu_button_get_menu       (GtkMenuButton *menu_button);
 
 GDK_AVAILABLE_IN_3_6
 void         gtk_menu_button_set_direction  (GtkMenuButton *menu_button,

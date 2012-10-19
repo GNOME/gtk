@@ -43,6 +43,7 @@
 #include "gtksettings.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtkmenuitemaccessible.h"
+#include "deprecated/gtktearoffmenuitem.h"
 
 /**
  * SECTION:gtkmenuitem
@@ -604,6 +605,8 @@ gtk_menu_item_dispose (GObject *object)
   GtkMenuItem *menu_item = GTK_MENU_ITEM (object);
   GtkMenuItemPrivate *priv = menu_item->priv;
 
+  g_clear_object (&priv->action_helper);
+
   if (priv->action)
     {
       gtk_action_disconnect_accelerator (priv->action);
@@ -1154,7 +1157,50 @@ activatable_update_label (GtkMenuItem *menu_item, GtkAction *action)
     }
 }
 
-gboolean _gtk_menu_is_empty (GtkWidget *menu);
+/*
+ * gtk_menu_is_empty:
+ * @menu: (allow-none): a #GtkMenu or %NULL
+ * 
+ * Determines whether @menu is empty. A menu is considered empty if it
+ * the only visible children are tearoff menu items or "filler" menu 
+ * items which were inserted to mark the menu as empty.
+ * 
+ * This function is used by #GtkAction.
+ *
+ * Return value: whether @menu is empty.
+ **/
+static gboolean
+gtk_menu_is_empty (GtkWidget *menu)
+{
+  GList *children, *cur;
+  gboolean result = TRUE;
+
+  g_return_val_if_fail (menu == NULL || GTK_IS_MENU (menu), TRUE);
+
+  if (!menu)
+    return FALSE;
+
+  children = gtk_container_get_children (GTK_CONTAINER (menu));
+
+  cur = children;
+  while (cur) 
+    {
+      if (gtk_widget_get_visible (cur->data))
+	{
+	  if (!GTK_IS_TEAROFF_MENU_ITEM (cur->data) &&
+	      !g_object_get_data (cur->data, "gtk-empty-menu-item"))
+            {
+	      result = FALSE;
+              break;
+            }
+	}
+      cur = cur->next;
+    }
+  g_list_free (children);
+
+  return result;
+}
+
 
 static void
 gtk_menu_item_update (GtkActivatable *activatable,
@@ -1166,7 +1212,7 @@ gtk_menu_item_update (GtkActivatable *activatable,
 
   if (strcmp (property_name, "visible") == 0)
     _gtk_action_sync_menu_visible (action, GTK_WIDGET (menu_item),
-                                   _gtk_menu_is_empty (gtk_menu_item_get_submenu (menu_item)));
+                                   gtk_menu_is_empty (gtk_menu_item_get_submenu (menu_item)));
   else if (strcmp (property_name, "sensitive") == 0)
     gtk_widget_set_sensitive (GTK_WIDGET (menu_item), gtk_action_is_sensitive (action));
   else if (priv->use_action_appearance)
@@ -1196,7 +1242,7 @@ gtk_menu_item_sync_action_properties (GtkActivatable *activatable,
     return;
 
   _gtk_action_sync_menu_visible (action, GTK_WIDGET (menu_item),
-                                 _gtk_menu_is_empty (gtk_menu_item_get_submenu (menu_item)));
+                                 gtk_menu_is_empty (gtk_menu_item_get_submenu (menu_item)));
 
   gtk_widget_set_sensitive (GTK_WIDGET (menu_item), gtk_action_is_sensitive (action));
 

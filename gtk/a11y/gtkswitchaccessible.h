@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_SWITCH_ACCESSIBLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SWITCH_ACCESSIBLE))
 #define GTK_SWITCH_ACCESSIBLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SWITCH_ACCESSIBLE, GtkSwitchAccessibleClass))
 
-typedef struct _GtkSwitchAccessible      GtkSwitchAccessible;
-typedef struct _GtkSwitchAccessibleClass GtkSwitchAccessibleClass;
+typedef struct _GtkSwitchAccessible        GtkSwitchAccessible;
+typedef struct _GtkSwitchAccessibleClass   GtkSwitchAccessibleClass;
+typedef struct _GtkSwitchAccessiblePrivate GtkSwitchAccessiblePrivate;
 
 struct _GtkSwitchAccessible
 {
   GtkWidgetAccessible parent;
+
+  GtkSwitchAccessiblePrivate *priv;
 };
 
 struct _GtkSwitchAccessibleClass

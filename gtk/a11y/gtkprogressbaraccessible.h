@@ -29,12 +29,15 @@ G_BEGIN_DECLS
 #define GTK_IS_PROGRESS_BAR_ACCESSIBLE_CLASS(klass)               (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PROGRESS_BAR_ACCESSIBLE))
 #define GTK_PROGRESS_BAR_ACCESSIBLE_GET_CLASS(obj)              (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PROGRESS_BAR_ACCESSIBLE, GtkProgressBarAccessibleClass))
 
-typedef struct _GtkProgressBarAccessible      GtkProgressBarAccessible;
-typedef struct _GtkProgressBarAccessibleClass GtkProgressBarAccessibleClass;
+typedef struct _GtkProgressBarAccessible        GtkProgressBarAccessible;
+typedef struct _GtkProgressBarAccessibleClass   GtkProgressBarAccessibleClass;
+typedef struct _GtkProgressBarAccessiblePrivate GtkProgressBarAccessiblePrivate;
 
 struct _GtkProgressBarAccessible
 {
   GtkWidgetAccessible parent;
+
+  GtkProgressBarAccessiblePrivate *priv;
 };
 
 struct _GtkProgressBarAccessibleClass
