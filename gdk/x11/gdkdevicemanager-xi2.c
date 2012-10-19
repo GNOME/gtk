@@ -917,12 +917,14 @@ is_parent_of (GdkWindow *parent,
   return FALSE;
 }
 
-static GdkWindow *
+static gboolean
 get_event_window (GdkEventTranslator *translator,
-                  XIEvent            *ev)
+                  XIEvent            *ev,
+                  GdkWindow         **window_p)
 {
   GdkDisplay *display;
   GdkWindow *window = NULL;
+  gboolean should_have_window = TRUE;
 
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (translator));
 
@@ -976,9 +978,17 @@ get_event_window (GdkEventTranslator *translator,
         window = gdk_x11_window_lookup_for_display (display, xev->event);
       }
       break;
+    default:
+      should_have_window = FALSE;
+      break;
     }
 
-  return window;
+  *window_p = window;
+
+  if (should_have_window && !window)
+    return FALSE;
+
+  return TRUE;
 }
 
 static gboolean
@@ -1122,7 +1132,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   if (!ev)
     return FALSE;
 
-  window = get_event_window (translator, ev);
+  if (!get_event_window (translator, ev, &window))
+    return FALSE;
 
   if (window && GDK_WINDOW_DESTROYED (window))
     return FALSE;
@@ -1650,6 +1661,7 @@ gdk_x11_device_manager_xi2_get_window (GdkEventTranslator *translator,
 {
   GdkX11DeviceManagerXI2 *device_manager;
   XIEvent *ev;
+  GdkWindow *window = NULL;
 
   device_manager = (GdkX11DeviceManagerXI2 *) translator;
 
@@ -1659,7 +1671,8 @@ gdk_x11_device_manager_xi2_get_window (GdkEventTranslator *translator,
 
   ev = (XIEvent *) xevent->xcookie.data;
 
-  return get_event_window (translator, ev);
+  get_event_window (translator, ev, &window);
+  return window;
 }
 
 GdkDevice *
