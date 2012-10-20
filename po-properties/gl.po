@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-18 10:52+0200\n"
-"PO-Revision-Date: 2012-10-18 10:53+0200\n"
+"POT-Creation-Date: 2012-10-20 13:07+0200\n"
+"PO-Revision-Date: 2012-10-20 13:09+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -4055,7 +4055,6 @@ msgid "The mode of the value indicator displayed by the bar"
 msgstr "O modo do indicador do valor mostrado na barra"
 
 #: ../gtk/gtklevelbar.c:992
-#, fuzzy
 msgid "Invert the direction in which the level bar grows"
 msgstr "Inverter a dirección na que crece a barra de nivel"
 
