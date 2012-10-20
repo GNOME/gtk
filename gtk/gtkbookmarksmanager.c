@@ -277,15 +277,28 @@ _gtk_bookmarks_manager_list_bookmarks (GtkBookmarksManager *manager)
 }
 
 GSList *
-find_bookmark_link_for_file (GSList *bookmarks, GFile *file)
+find_bookmark_link_for_file (GSList *bookmarks, GFile *file, int *position_ret)
 {
+  int pos;
+
+  pos = 0;
   for (; bookmarks; bookmarks = bookmarks->next)
     {
       GtkBookmark *bookmark = bookmarks->data;
 
       if (g_file_equal (file, bookmark->file))
-	return bookmarks;
+	{
+	  if (position_ret)
+	    *position_ret = pos;
+
+	  return bookmarks;
+	}
+
+      pos++;
     }
+
+  if (position_ret)
+    *position_ret = -1;
 
   return NULL;
 }
@@ -303,7 +316,7 @@ _gtk_bookmarks_manager_insert_bookmark (GtkBookmarksManager *manager,
   g_return_val_if_fail (manager != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  link = find_bookmark_link_for_file (manager->bookmarks, file);
+  link = find_bookmark_link_for_file (manager->bookmarks, file, NULL);
 
   if (link)
     {
@@ -349,7 +362,7 @@ _gtk_bookmarks_manager_remove_bookmark (GtkBookmarksManager *manager,
   if (!manager->bookmarks)
     return FALSE;
 
-  link = find_bookmark_link_for_file (manager->bookmarks, file);
+  link = find_bookmark_link_for_file (manager->bookmarks, file, NULL);
   if (link)
     {
       GtkBookmark *bookmark = link->data;
@@ -390,20 +403,28 @@ _gtk_bookmarks_manager_reorder_bookmark (GtkBookmarksManager *manager,
 {
   GSList *link;
   GFile *bookmarks_file;
+  int old_position;
 
   g_return_val_if_fail (manager != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (new_position >= 0, FALSE);
 
   if (!manager->bookmarks)
     return FALSE;
 
-  link = find_bookmark_link_for_file (manager->bookmarks, file);
+  link = find_bookmark_link_for_file (manager->bookmarks, file, &old_position);
+  if (new_position == old_position)
+    return TRUE;
+
   if (link)
     {
       GtkBookmark *bookmark = link->data; 
 
       manager->bookmarks = g_slist_remove_link (manager->bookmarks, link);
       g_slist_free_1 (link);
+
+      if (new_position > old_position)
+	new_position--;
 
       manager->bookmarks = g_slist_insert (manager->bookmarks, bookmark, new_position);
     }
@@ -472,7 +493,7 @@ _gtk_bookmarks_manager_set_bookmark_label (GtkBookmarksManager *manager,
   g_return_val_if_fail (manager != NULL, FALSE);
   g_return_val_if_fail (file != NULL, FALSE);
 
-  link = find_bookmark_link_for_file (manager->bookmarks, file);
+  link = find_bookmark_link_for_file (manager->bookmarks, file, NULL);
   if (link)
     {
       GtkBookmark *bookmark = link->data;
