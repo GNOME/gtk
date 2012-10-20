@@ -509,7 +509,6 @@ sidebar_update_restore_selection (GtkPlacesSidebar *sidebar,
 static GIcon *
 special_directory_get_gicon (GUserDirectory directory)
 {
-
 #define ICON_CASE(x)				\
 	case G_USER_DIRECTORY_ ## x:					\
 		return g_themed_icon_new (ICON_NAME_FOLDER_ ## x);
