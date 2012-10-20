@@ -1415,31 +1415,20 @@ uri_list_from_selection (GList *selection)
 	return g_list_reverse (ret);
 }
 
-static GList*
-build_selection_list (const char *data)
+/* Takes an array of URIs and turns it into a list of string URIs */
+static GList *
+build_selection_list (char **uris)
 {
-#if DO_NOT_COMPILE
-	NautilusDragSelectionItem *item;
-#endif
 	GList *result;
-	char **uris;
-	char *uri;
 	int i;
 
-	uris = g_uri_list_extract_uris (data);
-
 	result = NULL;
-#if DO_NOT_COMPILE
 	for (i = 0; uris[i]; i++) {
-		uri = uris[i];
-		item = nautilus_drag_selection_item_new ();
-		item->uri = g_strdup (uri);
-		item->got_icon_position = FALSE;
-		result = g_list_prepend (result, item);
-	}
-#endif
+		char *uri;
 
-	g_strfreev (uris);
+		uri = g_strdup (uris[i]);
+		result = g_list_prepend (result, uri);
+	}
 
 	return g_list_reverse (result);
 }
@@ -1458,7 +1447,7 @@ get_selected_iter (GtkPlacesSidebar *sidebar,
 /* Reorders the selected bookmark to the specified position */
 static void
 reorder_bookmarks (GtkPlacesSidebar *sidebar,
-		   int                   new_position)
+		   int               new_position)
 {
 	GtkTreeIter iter;
 	char *uri;
@@ -1490,15 +1479,12 @@ drag_data_received_callback (GtkWidget *widget,
 			     unsigned int time,
 			     GtkPlacesSidebar *sidebar)
 {
-#if DO_NOT_COMPILE
 	GtkTreeView *tree_view;
 	GtkTreePath *tree_path;
 	GtkTreeViewDropPosition tree_pos;
 	GtkTreeIter iter;
 	int position;
 	GtkTreeModel *model;
-	char *drop_uri;
-	GList *selection_list, *uris;
 	PlaceType place_type;
 	SectionType section_type;
 	gboolean success;
@@ -1508,7 +1494,11 @@ drag_data_received_callback (GtkWidget *widget,
 	if (!sidebar->drag_data_received) {
 		if (gtk_selection_data_get_target (selection_data) != GDK_NONE &&
 		    info == TEXT_URI_LIST) {
-			sidebar->drag_list = build_selection_list ((const gchar *) gtk_selection_data_get_data (selection_data));
+			char **uris;
+
+			uris = gtk_selection_data_get_uris (selection_data);
+			sidebar->drag_list = build_selection_list (uris);
+			g_strfreev (uris);
 		} else {
 			sidebar->drag_list = NULL;
 		}
@@ -1562,7 +1552,11 @@ drag_data_received_callback (GtkWidget *widget,
 			break;
 		}
 	} else {
+#if DO_NOT_COMPILE
 		GdkDragAction real_action;
+		GList *selection_list;
+		GList *uris;
+		char *drop_uri;
 
 		/* file transfer requested */
 		real_action = gdk_drag_context_get_selected_action (context);
@@ -1602,6 +1596,7 @@ drag_data_received_callback (GtkWidget *widget,
 
 			g_free (drop_uri);
 		}
+#endif
 	}
 
 out:
@@ -1610,7 +1605,6 @@ out:
 	gtk_drag_finish (context, success, FALSE, time);
 
 	gtk_tree_path_free (tree_path);
-#endif
 }
 
 static gboolean
