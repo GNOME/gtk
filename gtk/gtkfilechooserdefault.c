@@ -3771,6 +3771,16 @@ places_sidebar_location_selected_cb (GtkPlacesSidebar *sidebar, GFile *location,
   change_folder_and_display_error (impl, location, clear_entry);
 }
 
+/* Callback used when the places sidebar needs us to display an error message */
+static void
+places_sidebar_show_error_message_cb (GtkPlacesSidebar *sidebar,
+				      const char       *primary,
+				      const char       *secondary,
+				      GtkFileChooserDefault *impl)
+{
+  error_message (impl, primary, secondary);
+}
+
 /* Creates the widgets for the shortcuts/bookmarks pane */
 static GtkWidget *
 shortcuts_pane_create (GtkFileChooserDefault *impl,
@@ -3780,6 +3790,9 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 
   g_signal_connect (impl->places_sidebar, "location-selected",
 		    G_CALLBACK (places_sidebar_location_selected_cb),
+		    impl);
+  g_signal_connect (impl->places_sidebar, "show-error-message",
+		    G_CALLBACK (places_sidebar_show_error_message_cb),
 		    impl);
 
   return impl->places_sidebar;
