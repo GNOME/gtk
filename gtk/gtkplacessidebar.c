@@ -136,6 +136,8 @@ struct _GtkPlacesSidebarClass {
 	void (* location_selected)     (GtkPlacesSidebar *sidebar,
 				        GFile            *location,
 				        GtkPlacesOpenMode open_mode);
+	void (* show_file_properties)  (GtkPlacesSidebar *sidebar,
+					GFile            *file);
 	void (* empty_trash_requested) (GtkPlacesSidebar *sidebar);
 	void (* initiated_unmount)     (GtkPlacesSidebar *sidebar,
 				        gboolean          initiated_unmount);
@@ -181,6 +183,7 @@ typedef enum {
 
 enum {
 	LOCATION_SELECTED,
+	SHOW_FILE_PROPERTIES,
 	EMPTY_TRASH_REQUESTED,
 	INITIATED_UNMOUNT,
 	SHOW_ERROR_MESSAGE,
@@ -278,6 +281,13 @@ emit_location_selected (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpe
 
 	g_signal_emit (sidebar, places_sidebar_signals[LOCATION_SELECTED], 0,
 		       location, open_mode);
+}
+
+static void
+emit_show_file_properties (GtkPlacesSidebar *sidebar, GFile *file)
+{
+	g_signal_emit (sidebar, places_sidebar_signals[SHOW_FILE_PROPERTIES], 0,
+		       file);
 }
 
 static void
@@ -2605,12 +2615,9 @@ static void
 properties_cb (GtkMenuItem      *item,
 	       GtkPlacesSidebar *sidebar)
 {
-#if DO_NOT_COMPILE
 	GtkTreeModel *model;
 	GtkTreePath *path = NULL;
 	GtkTreeIter iter;
-	GList *list;
-	NautilusFile *file;
 	char *uri;
 
 	model = gtk_tree_view_get_model (sidebar->tree_view);
@@ -2624,18 +2631,17 @@ properties_cb (GtkMenuItem      *item,
 	gtk_tree_model_get (model, &iter, PLACES_SIDEBAR_COLUMN_URI, &uri, -1);
 
 	if (uri != NULL) {
+		GFile *file;
 
-		file = nautilus_file_get_by_uri (uri);
-		list = g_list_prepend (NULL, nautilus_file_ref (file));
+		file = g_file_new_for_uri (uri);
 
-		nautilus_properties_window_present (list, GTK_WIDGET (sidebar), NULL);
+		emit_show_file_properties (sidebar, file);
 
-		nautilus_file_list_free (list);
+		g_object_unref (file);
 		g_free (uri);
 	}
 
 	gtk_tree_path_free (path);
-#endif
 }
 
 static gboolean
@@ -3562,6 +3568,16 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_NONE, 2,
 			      G_TYPE_OBJECT,
 			      GTK_TYPE_PLACES_OPEN_MODE);
+
+	places_sidebar_signals [SHOW_FILE_PROPERTIES] =
+		g_signal_new (I_("show-file-properties"),
+			      G_OBJECT_CLASS_TYPE (gobject_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, show_file_properties),
+			      NULL, NULL,
+			      _gtk_marshal_VOID__OBJECT,
+			      G_TYPE_NONE, 1,
+			      G_TYPE_OBJECT);
 
 	places_sidebar_signals [EMPTY_TRASH_REQUESTED] =
 		g_signal_new (I_("empty-trash-requested"),
