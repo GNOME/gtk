@@ -221,6 +221,21 @@ gtk_scale_notify (GObject    *object,
     G_OBJECT_CLASS (gtk_scale_parent_class)->notify (object, pspec);
 }
 
+static void
+gtk_scale_update_style (GtkScale *scale)
+{
+  gint slider_length;
+  GtkRange *range;
+
+  range = GTK_RANGE (scale);
+
+  gtk_widget_style_get (GTK_WIDGET (scale),
+                        "slider-length", &slider_length,
+                        NULL);
+
+  gtk_range_set_min_slider_size (range, slider_length);
+  _gtk_scale_clear_layout (scale);
+}
 
 #define add_slider_binding(binding_set, keyval, mask, scroll)              \
   gtk_binding_entry_add_signal (binding_set, keyval, mask,                 \
@@ -492,6 +507,7 @@ gtk_scale_init (GtkScale *scale)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE);
+  gtk_scale_update_style (scale);
 }
 
 static void
@@ -1020,18 +1036,7 @@ gtk_scale_get_mark_label_size (GtkScale        *scale,
 static void
 gtk_scale_style_updated (GtkWidget *widget)
 {
-  gint slider_length;
-  GtkRange *range;
-
-  range = GTK_RANGE (widget);
-  
-  gtk_widget_style_get (widget,
-                        "slider-length", &slider_length,
-                        NULL);
-
-  gtk_range_set_min_slider_size (range, slider_length);
-
-  _gtk_scale_clear_layout (GTK_SCALE (widget));
+  gtk_scale_update_style (GTK_SCALE (widget));
 
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->style_updated (widget);
 }
