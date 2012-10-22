@@ -105,13 +105,23 @@ static void
 gdk_pixmap_impl_win32_finalize (GObject *object)
 {
   GdkPixmapImplWin32 *impl = GDK_PIXMAP_IMPL_WIN32 (object);
-  GdkPixmap *wrapper = GDK_PIXMAP (GDK_DRAWABLE_IMPL_WIN32 (impl)->wrapper);
+  GdkDrawableImplWin32 *drawable_impl = GDK_DRAWABLE_IMPL_WIN32 (impl);
+  GdkPixmap *wrapper = GDK_PIXMAP (drawable_impl->wrapper);
 
   GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_impl_win32_finalize: %p\n",
 			     GDK_PIXMAP_HBITMAP (wrapper)));
 
   if (!impl->is_foreign)
-    GDK_DRAWABLE_IMPL_WIN32 (impl)->hdc_count--;
+    {
+      drawable_impl->hdc_count--;
+
+      /* Tell outstanding owners that the surface is useless */
+      cairo_surface_finish (drawable_impl->cairo_surface);
+
+      /* Drop our reference */
+      cairo_surface_destroy (drawable_impl->cairo_surface);
+      drawable_impl->cairo_surface = NULL;
+    }
 
   _gdk_win32_drawable_finish (GDK_DRAWABLE (object));
 
