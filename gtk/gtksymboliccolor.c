@@ -85,7 +85,7 @@ struct _GtkSymbolicColor
       gchar *theme_class;
       gint id;
     } win32;
-  };
+  } sym_col;
 };
 
 static void
@@ -97,20 +97,20 @@ gtk_css_value_symbolic_free (GtkCssValue *value)
   switch (color->type)
     {
     case COLOR_TYPE_NAME:
-      g_free (color->name);
+      g_free (color->sym_col.name);
       break;
     case COLOR_TYPE_SHADE:
-      gtk_symbolic_color_unref (color->shade.color);
+      gtk_symbolic_color_unref (color->sym_col.shade.color);
       break;
     case COLOR_TYPE_ALPHA:
-      gtk_symbolic_color_unref (color->alpha.color);
+      gtk_symbolic_color_unref (color->sym_col.alpha.color);
       break;
     case COLOR_TYPE_MIX:
-      gtk_symbolic_color_unref (color->mix.color1);
-      gtk_symbolic_color_unref (color->mix.color2);
+      gtk_symbolic_color_unref (color->sym_col.mix.color1);
+      gtk_symbolic_color_unref (color->sym_col.mix.color2);
       break;
     case COLOR_TYPE_WIN32:
-      g_free (color->win32.theme_class);
+      g_free (color->sym_col.win32.theme_class);
       break;
     default:
       break;
@@ -217,24 +217,24 @@ gtk_css_value_symbolic_equal (const GtkCssValue *value1,
     case COLOR_TYPE_LITERAL:
       return _gtk_css_value_equal (color1->last_value, color2->last_value);
     case COLOR_TYPE_NAME:
-      return g_str_equal (color1->name, color2->name);
+      return g_str_equal (color1->sym_col.name, color2->sym_col.name);
     case COLOR_TYPE_SHADE:
-      return color1->shade.factor == color2->shade.factor &&
-             _gtk_css_value_equal ((GtkCssValue *) color1->shade.color,
-                                   (GtkCssValue *) color2->shade.color);
+      return color1->sym_col.shade.factor == color2->sym_col.shade.factor &&
+             _gtk_css_value_equal ((GtkCssValue *) color1->sym_col.shade.color,
+                                   (GtkCssValue *) color2->sym_col.shade.color);
     case COLOR_TYPE_ALPHA:
-      return color1->alpha.factor == color2->alpha.factor &&
-             _gtk_css_value_equal ((GtkCssValue *) color1->alpha.color,
-                                   (GtkCssValue *) color2->alpha.color);
+      return color1->sym_col.alpha.factor == color2->sym_col.alpha.factor &&
+             _gtk_css_value_equal ((GtkCssValue *) color1->sym_col.alpha.color,
+                                   (GtkCssValue *) color2->sym_col.alpha.color);
     case COLOR_TYPE_MIX:
-      return color1->mix.factor == color2->mix.factor &&
-             _gtk_css_value_equal ((GtkCssValue *) color1->mix.color1,
-                                   (GtkCssValue *) color2->mix.color1) &&
-             _gtk_css_value_equal ((GtkCssValue *) color1->mix.color2,
-                                   (GtkCssValue *) color2->mix.color2);
+      return color1->sym_col.mix.factor == color2->sym_col.mix.factor &&
+             _gtk_css_value_equal ((GtkCssValue *) color1->sym_col.mix.color1,
+                                   (GtkCssValue *) color2->sym_col.mix.color1) &&
+             _gtk_css_value_equal ((GtkCssValue *) color1->sym_col.mix.color2,
+                                   (GtkCssValue *) color2->sym_col.mix.color2);
     case COLOR_TYPE_WIN32:
-      return g_str_equal (color1->win32.theme_class, color2->win32.theme_class) &&
-             color1->win32.id == color2->win32.id;
+      return g_str_equal (color1->sym_col.win32.theme_class, color2->sym_col.win32.theme_class) &&
+             color1->sym_col.win32.id == color2->sym_col.win32.id;
     case COLOR_TYPE_CURRENT_COLOR:
       return TRUE;
     default:
@@ -319,7 +319,7 @@ gtk_symbolic_color_new_name (const gchar *name)
 
   symbolic_color = _gtk_css_value_new (GtkSymbolicColor, &GTK_CSS_VALUE_SYMBOLIC);
   symbolic_color->type = COLOR_TYPE_NAME;
-  symbolic_color->name = g_strdup (name);
+  symbolic_color->sym_col.name = g_strdup (name);
 
   return symbolic_color;
 }
@@ -348,8 +348,8 @@ gtk_symbolic_color_new_shade (GtkSymbolicColor *color,
 
   symbolic_color = _gtk_css_value_new (GtkSymbolicColor, &GTK_CSS_VALUE_SYMBOLIC);
   symbolic_color->type = COLOR_TYPE_SHADE;
-  symbolic_color->shade.color = gtk_symbolic_color_ref (color);
-  symbolic_color->shade.factor = factor;
+  symbolic_color->sym_col.shade.color = gtk_symbolic_color_ref (color);
+  symbolic_color->sym_col.shade.factor = factor;
 
   return symbolic_color;
 }
@@ -378,8 +378,8 @@ gtk_symbolic_color_new_alpha (GtkSymbolicColor *color,
 
   symbolic_color = _gtk_css_value_new (GtkSymbolicColor, &GTK_CSS_VALUE_SYMBOLIC);
   symbolic_color->type = COLOR_TYPE_ALPHA;
-  symbolic_color->alpha.color = gtk_symbolic_color_ref (color);
-  symbolic_color->alpha.factor = factor;
+  symbolic_color->sym_col.alpha.color = gtk_symbolic_color_ref (color);
+  symbolic_color->sym_col.alpha.factor = factor;
 
   return symbolic_color;
 }
@@ -410,9 +410,9 @@ gtk_symbolic_color_new_mix (GtkSymbolicColor *color1,
 
   symbolic_color = _gtk_css_value_new (GtkSymbolicColor, &GTK_CSS_VALUE_SYMBOLIC);
   symbolic_color->type = COLOR_TYPE_MIX;
-  symbolic_color->mix.color1 = gtk_symbolic_color_ref (color1);
-  symbolic_color->mix.color2 = gtk_symbolic_color_ref (color2);
-  symbolic_color->mix.factor = factor;
+  symbolic_color->sym_col.mix.color1 = gtk_symbolic_color_ref (color1);
+  symbolic_color->sym_col.mix.color2 = gtk_symbolic_color_ref (color2);
+  symbolic_color->sym_col.mix.factor = factor;
 
   return symbolic_color;
 }
@@ -443,8 +443,8 @@ gtk_symbolic_color_new_win32 (const gchar *theme_class,
 
   symbolic_color = _gtk_css_value_new (GtkSymbolicColor, &GTK_CSS_VALUE_SYMBOLIC);
   symbolic_color->type = COLOR_TYPE_WIN32;
-  symbolic_color->win32.theme_class = g_strdup (theme_class);
-  symbolic_color->win32.id = id;
+  symbolic_color->sym_col.win32.theme_class = g_strdup (theme_class);
+  symbolic_color->sym_col.win32.id = id;
 
   return symbolic_color;
 }
@@ -758,7 +758,7 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor        *color,
       {
 	GtkSymbolicColor *named_color;
 
-        named_color = _gtk_style_provider_private_get_color (provider, color->name);
+        named_color = _gtk_style_provider_private_get_color (provider, color->sym_col.name);
 
 	if (!named_color)
 	  return NULL;
@@ -772,13 +772,13 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor        *color,
 	GtkCssValue *val;
 	GdkRGBA shade;
 
-	val = _gtk_symbolic_color_resolve_full (color->shade.color, provider, current, current_deps, dependencies);
+	val = _gtk_symbolic_color_resolve_full (color->sym_col.shade.color, provider, current, current_deps, dependencies);
 	if (val == NULL)
 	  return NULL;
 
         *dependencies = _gtk_css_dependencies_union (*dependencies, 0);
 	shade = *_gtk_css_rgba_value_get_rgba (val);
-	_shade_color (&shade, color->shade.factor);
+	_shade_color (&shade, color->sym_col.shade.factor);
 
 	_gtk_css_value_unref (val);
 
@@ -791,13 +791,13 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor        *color,
 	GtkCssValue *val;
 	GdkRGBA alpha;
 
-	val = _gtk_symbolic_color_resolve_full (color->alpha.color, provider, current, current_deps, dependencies);
+	val = _gtk_symbolic_color_resolve_full (color->sym_col.alpha.color, provider, current, current_deps, dependencies);
 	if (val == NULL)
 	  return NULL;
 
         *dependencies = _gtk_css_dependencies_union (*dependencies, 0);
 	alpha = *_gtk_css_rgba_value_get_rgba (val);
-	alpha.alpha = CLAMP (alpha.alpha * color->alpha.factor, 0, 1);
+	alpha.alpha = CLAMP (alpha.alpha * color->sym_col.alpha.factor, 0, 1);
 
 	_gtk_css_value_unref (val);
 
@@ -811,23 +811,23 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor        *color,
 	GdkRGBA color1, color2, res;
         GtkCssDependencies dep1, dep2;
 
-	val = _gtk_symbolic_color_resolve_full (color->mix.color1, provider, current, current_deps, &dep1);
+	val = _gtk_symbolic_color_resolve_full (color->sym_col.mix.color1, provider, current, current_deps, &dep1);
 	if (val == NULL)
 	  return NULL;
 	color1 = *_gtk_css_rgba_value_get_rgba (val);
 	_gtk_css_value_unref (val);
 
-	val = _gtk_symbolic_color_resolve_full (color->mix.color2, provider, current, current_deps, &dep2);
+	val = _gtk_symbolic_color_resolve_full (color->sym_col.mix.color2, provider, current, current_deps, &dep2);
 	if (val == NULL)
 	  return NULL;
 	color2 = *_gtk_css_rgba_value_get_rgba (val);
 	_gtk_css_value_unref (val);
 
         *dependencies = _gtk_css_dependencies_union (dep1, dep2);
-	res.red = CLAMP (color1.red + ((color2.red - color1.red) * color->mix.factor), 0, 1);
-	res.green = CLAMP (color1.green + ((color2.green - color1.green) * color->mix.factor), 0, 1);
-	res.blue = CLAMP (color1.blue + ((color2.blue - color1.blue) * color->mix.factor), 0, 1);
-	res.alpha = CLAMP (color1.alpha + ((color2.alpha - color1.alpha) * color->mix.factor), 0, 1);
+	res.red = CLAMP (color1.red + ((color2.red - color1.red) * color->sym_col.mix.factor), 0, 1);
+	res.green = CLAMP (color1.green + ((color2.green - color1.green) * color->sym_col.mix.factor), 0, 1);
+	res.blue = CLAMP (color1.blue + ((color2.blue - color1.blue) * color->sym_col.mix.factor), 0, 1);
+	res.alpha = CLAMP (color1.alpha + ((color2.alpha - color1.alpha) * color->sym_col.mix.factor), 0, 1);
 
 	value =_gtk_css_rgba_value_new_from_rgba (&res);
       }
@@ -837,8 +837,8 @@ _gtk_symbolic_color_resolve_full (GtkSymbolicColor        *color,
       {
 	GdkRGBA res;
 
-	if (!_gtk_win32_theme_color_resolve (color->win32.theme_class,
-					     color->win32.id,
+	if (!_gtk_win32_theme_color_resolve (color->sym_col.win32.theme_class,
+					     color->sym_col.win32.id,
 					     &res))
 	  return NULL;
 
@@ -906,35 +906,35 @@ gtk_symbolic_color_to_string (GtkSymbolicColor *color)
       s = gdk_rgba_to_string (_gtk_css_rgba_value_get_rgba (color->last_value));
       break;
     case COLOR_TYPE_NAME:
-      s = g_strconcat ("@", color->name, NULL);
+      s = g_strconcat ("@", color->sym_col.name, NULL);
       break;
     case COLOR_TYPE_SHADE:
       {
-        char *color_string = gtk_symbolic_color_to_string (color->shade.color);
+        char *color_string = gtk_symbolic_color_to_string (color->sym_col.shade.color);
         char factor[G_ASCII_DTOSTR_BUF_SIZE];
 
-        g_ascii_dtostr (factor, sizeof (factor), color->shade.factor);
+        g_ascii_dtostr (factor, sizeof (factor), color->sym_col.shade.factor);
         s = g_strdup_printf ("shade (%s, %s)", color_string, factor);
         g_free (color_string);
       }
       break;
     case COLOR_TYPE_ALPHA:
       {
-        char *color_string = gtk_symbolic_color_to_string (color->shade.color);
+        char *color_string = gtk_symbolic_color_to_string (color->sym_col.shade.color);
         char factor[G_ASCII_DTOSTR_BUF_SIZE];
 
-        g_ascii_dtostr (factor, sizeof (factor), color->alpha.factor);
+        g_ascii_dtostr (factor, sizeof (factor), color->sym_col.alpha.factor);
         s = g_strdup_printf ("alpha (%s, %s)", color_string, factor);
         g_free (color_string);
       }
       break;
     case COLOR_TYPE_MIX:
       {
-        char *color_string1 = gtk_symbolic_color_to_string (color->mix.color1);
-        char *color_string2 = gtk_symbolic_color_to_string (color->mix.color2);
+        char *color_string1 = gtk_symbolic_color_to_string (color->sym_col.mix.color1);
+        char *color_string2 = gtk_symbolic_color_to_string (color->sym_col.mix.color2);
         char factor[G_ASCII_DTOSTR_BUF_SIZE];
 
-        g_ascii_dtostr (factor, sizeof (factor), color->mix.factor);
+        g_ascii_dtostr (factor, sizeof (factor), color->sym_col.mix.factor);
         s = g_strdup_printf ("mix (%s, %s, %s)", color_string1, color_string2, factor);
         g_free (color_string1);
         g_free (color_string2);
@@ -943,7 +943,7 @@ gtk_symbolic_color_to_string (GtkSymbolicColor *color)
     case COLOR_TYPE_WIN32:
       {
         s = g_strdup_printf (GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME"(%s, %d)", 
-			     color->win32.theme_class, color->win32.id);
+			     color->sym_col.win32.theme_class, color->sym_col.win32.id);
       }
       break;
     case COLOR_TYPE_CURRENT_COLOR:
