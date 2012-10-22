@@ -151,8 +151,6 @@ gtk_scrollbar_init (GtkScrollbar *scrollbar)
 static void
 gtk_scrollbar_style_updated (GtkWidget *widget)
 {
-  GtkRange *range = GTK_RANGE (widget);
-
   gtk_scrollbar_update_style (GTK_SCROLLBAR (widget));
   GTK_WIDGET_CLASS (gtk_scrollbar_parent_class)->style_updated (widget);
 }
