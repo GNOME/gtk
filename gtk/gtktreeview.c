@@ -3289,7 +3289,7 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
   button = gtk_tree_view_column_get_button (tree_view->priv->drag_column);
 
   context = gtk_widget_get_style_context (button);
-  gtk_style_context_remove_class (context, STYLE_CLASS_DND);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_DND);
 
   g_object_ref (button);
   gtk_container_remove (GTK_CONTAINER (tree_view), button);
@@ -9807,7 +9807,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   button = gtk_tree_view_column_get_button (column);
 
   context = gtk_widget_get_style_context (button);
-  gtk_style_context_add_class (context, STYLE_CLASS_DND);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DND);
 
   gtk_widget_get_allocation (button, &button_allocation);
 
