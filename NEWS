@@ -1,3 +1,37 @@
+Overview of Changes in GTK+ 3.7.0
+=================================
+
+* Add an "inverted" property to GtkLevelBar
+
+* Support RTL flipping in GtkLevelBar
+
+* Various memory leak fixes
+
+* Wayland: Update for protocol changes
+
+* Bugs fixed:
+ 684288 level-bar: add an "inverted" property like GtkProgr...
+ 684415 Fix drag-motion event handling
+ 684980 Improve the appearance of the dragged header
+ 686013 CSS: crash drawing a GtkEntry in gedit
+ 686152 Calls gdk_window_get_frame_extents with a potential...
+ 686209 memleak with "text-shadow" css
+ 686265 scrolledwindow: set GDK_EXPOSURE_MASK on the oversh...
+ 686280 GtkScrollbar and GtkScale rendering broken in gtk 3.6
+ 686366 Use named union for _GtkSymbolicColor in gtk/gtksym...
+
+* Translation updates:
+ Czech
+ Estonian
+ Galician
+ Indonesian
+ Lithuanian
+ Serbian
+ Slovak
+ Slovenian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.6.1
 =================================
 
