@@ -1439,7 +1439,8 @@ gdk_event_translate (GdkEvent *event,
         if (dx != 0.0 || dy != 0.0)
           {
 #ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
-	    if (gdk_quartz_osx_version() >= GDK_OSX_LION &[nsevent hasPreciseScrollingDeltas])
+	    if (gdk_quartz_osx_version() >= GDK_OSX_LION &&
+		[nsevent hasPreciseScrollingDeltas])
               {
                 GdkEvent *emulated_event;
 
