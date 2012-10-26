@@ -35,11 +35,6 @@
  *
  * * Grep for "NULL-GError" and see if they should be taken care of
  *
- * * Nautilus needs to use gtk_places_sidebar_set_uri() instead of built-in
- *   notification from the NautilusWindowSlot.
- *
- * * Nautilus needs to handle "location-selected", "show-error-message".
- *
  * * Nautilus needs to do the following for trash handling:
  *
  *     * Call gtk_places_sidebar_set_show_trash().
