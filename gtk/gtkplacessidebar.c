@@ -34,15 +34,6 @@
  * * Fix FIXMEs
  *
  * * Grep for "NULL-GError" and see if they should be taken care of
- *
- * * Nautilus needs to do the following for trash handling:
- *
- *     * Call gtk_places_sidebar_set_show_trash().
- *
- *     * Set up a NautilusTrashMonitor and when its state changes, call
- *       gtk_places_sidebar_set_trash_is_full ().
- *
- *     * Connect to the "empty-trash-requested" signal on the sidebar and empty the trash when it is emitted.
  */
 
 #include "config.h"
