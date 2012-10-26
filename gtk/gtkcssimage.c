@@ -229,6 +229,8 @@ _gtk_css_image_draw (GtkCssImage        *image,
 
   g_return_if_fail (GTK_IS_CSS_IMAGE (image));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   cairo_save (cr);
 
