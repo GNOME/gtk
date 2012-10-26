@@ -136,7 +136,7 @@ gdk_wayland_display_manager_lookup_keyval (GdkDisplayManager *manager,
 {
   g_return_val_if_fail (keyval_name != NULL, 0);
 
-  return xkb_keysym_from_name(keyval_name);
+  return xkb_keysym_from_name (keyval_name, 0);
 }
 
 static gchar *
