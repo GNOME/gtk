@@ -122,8 +122,9 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
 }
 
 static void
-_gtk_text_handle_update_shape (GtkTextHandle *handle,
-                               GdkWindow     *window)
+_gtk_text_handle_update_shape (GtkTextHandle         *handle,
+                               GdkWindow             *window,
+                               GtkTextHandlePosition  pos)
 {
   GtkTextHandlePrivate *priv;
 
@@ -133,17 +134,9 @@ _gtk_text_handle_update_shape (GtkTextHandle *handle,
     gdk_window_shape_combine_region (window, NULL, 0, 0);
   else
     {
-      GtkTextHandlePosition pos;
       cairo_surface_t *surface;
       cairo_region_t *region;
       cairo_t *cr;
-
-      if (window == priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window)
-        pos = GTK_TEXT_HANDLE_POSITION_SELECTION_START;
-      else if (window == priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window)
-        pos = GTK_TEXT_HANDLE_POSITION_SELECTION_END;
-      else
-        return;
 
       surface =
         gdk_window_create_similar_surface (window,
@@ -164,7 +157,8 @@ _gtk_text_handle_update_shape (GtkTextHandle *handle,
 }
 
 static GdkWindow *
-_gtk_text_handle_create_window (GtkTextHandle *handle)
+_gtk_text_handle_create_window (GtkTextHandle         *handle,
+                                GtkTextHandlePosition  pos)
 {
   GtkTextHandlePrivate *priv;
   GdkRGBA bg = { 0, 0, 0, 0 };
@@ -200,7 +194,7 @@ _gtk_text_handle_create_window (GtkTextHandle *handle)
   gdk_window_set_user_data (window, priv->parent);
   gdk_window_set_background_rgba (window, &bg);
 
-  _gtk_text_handle_update_shape (handle, window);
+  _gtk_text_handle_update_shape (handle, window, pos);
 
   return window;
 }
@@ -307,7 +301,7 @@ _gtk_text_handle_update_window (GtkTextHandle         *handle,
   gdk_window_destroy (handle_window->window);
 
   /* Create new window and apply old state */
-  handle_window->window = _gtk_text_handle_create_window (handle);
+  handle_window->window = _gtk_text_handle_create_window (handle, pos);
 
   if (visible)
     {
@@ -531,9 +525,9 @@ _gtk_text_handle_set_relative_to (GtkTextHandle *handle,
     {
       priv->relative_to = g_object_ref (window);
       priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window =
-        _gtk_text_handle_create_window (handle);
+        _gtk_text_handle_create_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
       priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window =
-        _gtk_text_handle_create_window (handle);
+        _gtk_text_handle_create_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END);
       priv->realized = TRUE;
     }
   else
