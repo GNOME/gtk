@@ -149,156 +149,156 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
                                      GtkThemingBackgroundLayer *layer,
                                      cairo_t              *cr)
 {
+  GtkCssRepeatStyle hrepeat, vrepeat;
+  const GtkCssValue *pos, *repeat;
+  double image_width, image_height;
+  double width, height;
+
+  if (layer->image == NULL
+      || layer->image_rect.width <= 0
+      || layer->image_rect.height <= 0)
+    return;
+
   cairo_save (cr);
 
   _gtk_rounded_box_path (&layer->clip_box, cr);
   cairo_clip (cr);
 
-  if (layer->image
-      && layer->image_rect.width > 0
-      && layer->image_rect.height > 0)
+  pos = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION), layer->idx);
+  repeat = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_REPEAT), layer->idx);
+  hrepeat = _gtk_css_background_repeat_value_get_x (repeat);
+  vrepeat = _gtk_css_background_repeat_value_get_y (repeat);
+  width = layer->image_rect.width;
+  height = layer->image_rect.height;
+
+  _gtk_css_bg_size_value_compute_size (_gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE), layer->idx),
+                                       layer->image,
+                                       width,
+                                       height,
+                                       &image_width,
+                                       &image_height);
+
+  /* optimization */
+  if (image_width == width)
+    hrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
+  if (image_height == height)
+    vrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
+
+  cairo_translate (cr, layer->image_rect.x, layer->image_rect.y);
+
+  if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT && vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
     {
-      const GtkCssValue *pos, *repeat;
-      double image_width, image_height;
-      double width, height;
-      GtkCssRepeatStyle hrepeat, vrepeat;
+      cairo_translate (cr,
+                       _gtk_css_position_value_get_x (pos, width - image_width),
+                       _gtk_css_position_value_get_y (pos, height - image_height));
+      /* shortcut for normal case */
+      _gtk_css_image_draw (layer->image, cr, image_width, image_height);
+    }
+  else
+    {
+      int surface_width, surface_height;
+      cairo_rectangle_t fill_rect;
+      cairo_surface_t *surface;
+      cairo_t *cr2;
 
-      pos = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION), layer->idx);
-      repeat = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_REPEAT), layer->idx);
-      hrepeat = _gtk_css_background_repeat_value_get_x (repeat);
-      vrepeat = _gtk_css_background_repeat_value_get_y (repeat);
-      width = layer->image_rect.width;
-      height = layer->image_rect.height;
-
-      _gtk_css_bg_size_value_compute_size (_gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE), layer->idx),
-                                           layer->image,
-                                           width,
-                                           height,
-                                           &image_width,
-                                           &image_height);
-
-      /* optimization */
-      if (image_width == width)
-        hrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
-      if (image_height == height)
-        vrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
-
-      cairo_translate (cr, layer->image_rect.x, layer->image_rect.y);
-
-      if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT && vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
+      /* If ‘background-repeat’ is ‘round’ for one (or both) dimensions,
+       * there is a second step. The UA must scale the image in that
+       * dimension (or both dimensions) so that it fits a whole number of
+       * times in the background positioning area. In the case of the width
+       * (height is analogous):
+       *
+       * If X ≠ 0 is the width of the image after step one and W is the width
+       * of the background positioning area, then the rounded width
+       * X' = W / round(W / X) where round() is a function that returns the
+       * nearest natural number (integer greater than zero). 
+       *
+       * If ‘background-repeat’ is ‘round’ for one dimension only and if
+       * ‘background-size’ is ‘auto’ for the other dimension, then there is
+       * a third step: that other dimension is scaled so that the original
+       * aspect ratio is restored. 
+       */
+      if (hrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
         {
-	  cairo_translate (cr,
-			   _gtk_css_position_value_get_x (pos, width - image_width),
-			   _gtk_css_position_value_get_y (pos, height - image_height));
-          /* shortcut for normal case */
-          _gtk_css_image_draw (layer->image, cr, image_width, image_height);
+          double n = round (width / image_width);
+
+          n = MAX (1, n);
+
+          if (vrepeat != GTK_CSS_REPEAT_STYLE_ROUND
+              /* && vsize == auto (it is by default) */)
+            image_height *= width / (image_width * n);
+          image_width = width / n;
+        }
+      if (vrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
+        {
+          double n = round (height / image_height);
+
+          n = MAX (1, n);
+
+          if (hrepeat != GTK_CSS_REPEAT_STYLE_ROUND
+              /* && hsize == auto (it is by default) */)
+            image_width *= height / (image_height * n);
+          image_height = height / n;
+        }
+
+      /* if hrepeat or vrepeat is 'space', we create a somewhat larger surface
+       * to store the extra space. */
+      if (hrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
+        {
+          double n = floor (width / image_width);
+          surface_width = n ? round (width / n) : 0;
+        }
+      else
+        surface_width = round (image_width);
+
+      if (vrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
+        {
+          double n = floor (height / image_height);
+          surface_height = n ? round (height / n) : 0;
+        }
+      else
+        surface_height = round (image_height);
+
+      surface = cairo_surface_create_similar (cairo_get_target (cr),
+                                              CAIRO_CONTENT_COLOR_ALPHA,
+                                              surface_width, surface_height);
+      cr2 = cairo_create (surface);
+      cairo_translate (cr2,
+                       0.5 * (surface_width - image_width),
+                       0.5 * (surface_height - image_height));
+      _gtk_css_image_draw (layer->image, cr2, image_width, image_height);
+      cairo_destroy (cr2);
+
+      cairo_set_source_surface (cr, surface,
+                                _gtk_css_position_value_get_x (pos, width - image_width),
+                                _gtk_css_position_value_get_y (pos, height - image_height));
+      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
+      cairo_surface_destroy (surface);
+
+      if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
+        {
+          fill_rect.x = _gtk_css_position_value_get_x (pos, width - image_width);
+          fill_rect.width = image_width;
         }
       else
         {
-          int surface_width, surface_height;
-          cairo_rectangle_t fill_rect;
-          cairo_surface_t *surface;
-          cairo_t *cr2;
-
-          /* If ‘background-repeat’ is ‘round’ for one (or both) dimensions,
-           * there is a second step. The UA must scale the image in that
-           * dimension (or both dimensions) so that it fits a whole number of
-           * times in the background positioning area. In the case of the width
-           * (height is analogous):
-           *
-           * If X ≠ 0 is the width of the image after step one and W is the width
-           * of the background positioning area, then the rounded width
-           * X' = W / round(W / X) where round() is a function that returns the
-           * nearest natural number (integer greater than zero). 
-           *
-           * If ‘background-repeat’ is ‘round’ for one dimension only and if
-           * ‘background-size’ is ‘auto’ for the other dimension, then there is
-           * a third step: that other dimension is scaled so that the original
-           * aspect ratio is restored. 
-           */
-          if (hrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
-            {
-              double n = round (width / image_width);
-
-              n = MAX (1, n);
-
-              if (vrepeat != GTK_CSS_REPEAT_STYLE_ROUND
-                  /* && vsize == auto (it is by default) */)
-                image_height *= width / (image_width * n);
-              image_width = width / n;
-            }
-          if (vrepeat == GTK_CSS_REPEAT_STYLE_ROUND)
-            {
-              double n = round (height / image_height);
-
-              n = MAX (1, n);
-
-              if (hrepeat != GTK_CSS_REPEAT_STYLE_ROUND
-                  /* && hsize == auto (it is by default) */)
-                image_width *= height / (image_height * n);
-              image_height = height / n;
-            }
-
-          /* if hrepeat or vrepeat is 'space', we create a somewhat larger surface
-           * to store the extra space. */
-          if (hrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
-            {
-              double n = floor (width / image_width);
-              surface_width = n ? round (width / n) : 0;
-            }
-          else
-            surface_width = round (image_width);
-
-          if (vrepeat == GTK_CSS_REPEAT_STYLE_SPACE)
-            {
-              double n = floor (height / image_height);
-              surface_height = n ? round (height / n) : 0;
-            }
-          else
-            surface_height = round (image_height);
-
-          surface = cairo_surface_create_similar (cairo_get_target (cr),
-                                                  CAIRO_CONTENT_COLOR_ALPHA,
-                                                  surface_width, surface_height);
-          cr2 = cairo_create (surface);
-          cairo_translate (cr2,
-                           0.5 * (surface_width - image_width),
-                           0.5 * (surface_height - image_height));
-          _gtk_css_image_draw (layer->image, cr2, image_width, image_height);
-          cairo_destroy (cr2);
-
-          cairo_set_source_surface (cr, surface,
-                                    _gtk_css_position_value_get_x (pos, width - image_width),
-                                    _gtk_css_position_value_get_y (pos, height - image_height));
-          cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
-          cairo_surface_destroy (surface);
-
-          if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
-            {
-              fill_rect.x = _gtk_css_position_value_get_x (pos, width - image_width);
-              fill_rect.width = image_width;
-            }
-          else
-            {
-              fill_rect.x = 0;
-              fill_rect.width = width;
-            }
-
-          if (vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
-            {
-              fill_rect.y = _gtk_css_position_value_get_y (pos, height - image_height);
-              fill_rect.height = image_height;
-            }
-          else
-            {
-              fill_rect.y = 0;
-              fill_rect.height = height;
-            }
-
-          cairo_rectangle (cr, fill_rect.x, fill_rect.y,
-                           fill_rect.width, fill_rect.height);
-          cairo_fill (cr);
+          fill_rect.x = 0;
+          fill_rect.width = width;
         }
+
+      if (vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
+        {
+          fill_rect.y = _gtk_css_position_value_get_y (pos, height - image_height);
+          fill_rect.height = image_height;
+        }
+      else
+        {
+          fill_rect.y = 0;
+          fill_rect.height = height;
+        }
+
+      cairo_rectangle (cr, fill_rect.x, fill_rect.y,
+                       fill_rect.width, fill_rect.height);
+      cairo_fill (cr);
     }
 
   cairo_restore (cr);
