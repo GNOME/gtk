@@ -39,7 +39,6 @@ struct _GtkThemingBackground {
   GtkRoundedBox padding_box;
 
   GtkJunctionSides junction;
-  GtkStateFlags flags;
   GtkBorder border;
   GtkBorder padding;
   GdkRGBA bg_color;
