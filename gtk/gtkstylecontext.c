@@ -3264,22 +3264,12 @@ gtk_style_context_set_background (GtkStyleContext *context,
                                   GdkWindow       *window)
 {
   GtkStateFlags state;
-  cairo_pattern_t *pattern;
   GdkRGBA *color;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   state = gtk_style_context_get_state (context);
-  gtk_style_context_get (context, state,
-                         "background-image", &pattern,
-                         NULL);
-  if (pattern)
-    {
-      gdk_window_set_background_pattern (window, pattern);
-      cairo_pattern_destroy (pattern);
-      return;
-    }
 
   gtk_style_context_get (context, state,
                          "background-color", &color,
