@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkiconhelperprivate.h"
+#include "string.h"
 
 G_DEFINE_TYPE (GtkIconHelper, _gtk_icon_helper, G_TYPE_OBJECT)
 
@@ -466,7 +467,8 @@ _gtk_icon_helper_set_stock_id (GtkIconHelper *self,
 {
   _gtk_icon_helper_clear (self);
 
-  if (stock_id != NULL)
+  if (stock_id != NULL &&
+      g_strcmp0 (stock_id, "") != 0)
     {
       self->priv->storage_type = GTK_IMAGE_STOCK;
       self->priv->stock_id = g_strdup (stock_id);
