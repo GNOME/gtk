@@ -154,15 +154,8 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
   double image_width, image_height;
   double width, height;
 
-  if (layer->image == NULL
-      || layer->image_rect.width <= 0
-      || layer->image_rect.height <= 0)
+  if (layer->image == NULL)
     return;
-
-  cairo_save (cr);
-
-  _gtk_rounded_box_path (&layer->clip_box, cr);
-  cairo_clip (cr);
 
   pos = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION), layer->idx);
   repeat = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_REPEAT), layer->idx);
@@ -171,6 +164,9 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
   width = layer->image_rect.width;
   height = layer->image_rect.height;
 
+  if (width <= 0 || height <= 0)
+    return;
+
   _gtk_css_bg_size_value_compute_size (_gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE), layer->idx),
                                        layer->image,
                                        width,
@@ -178,11 +174,21 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
                                        &image_width,
                                        &image_height);
 
+  if (image_width <= 0 || image_height <= 0)
+    return;
+
   /* optimization */
   if (image_width == width)
     hrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
   if (image_height == height)
     vrepeat = GTK_CSS_REPEAT_STYLE_NO_REPEAT;
+
+
+  cairo_save (cr);
+
+  _gtk_rounded_box_path (&layer->clip_box, cr);
+  cairo_clip (cr);
+
 
   cairo_translate (cr, layer->image_rect.x, layer->image_rect.y);
 
@@ -300,6 +306,7 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
                        fill_rect.width, fill_rect.height);
       cairo_fill (cr);
     }
+
 
   cairo_restore (cr);
 }
