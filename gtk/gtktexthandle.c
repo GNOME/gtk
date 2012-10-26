@@ -127,33 +127,33 @@ _gtk_text_handle_update_shape (GtkTextHandle         *handle,
                                GtkTextHandlePosition  pos)
 {
   GtkTextHandlePrivate *priv;
+  cairo_surface_t *surface;
+  cairo_region_t *region;
+  cairo_t *cr;
 
   priv = handle->priv;
+
+  surface =
+    gdk_window_create_similar_surface (window,
+                                       CAIRO_CONTENT_COLOR_ALPHA,
+                                       gdk_window_get_width (window),
+                                       gdk_window_get_height (window));
+
+  cr = cairo_create (surface);
+  _gtk_text_handle_draw (handle, cr, pos);
+  cairo_destroy (cr);
+
+  region = gdk_cairo_region_create_from_surface (surface);
 
   if (gtk_widget_is_composited (priv->parent))
     gdk_window_shape_combine_region (window, NULL, 0, 0);
   else
-    {
-      cairo_surface_t *surface;
-      cairo_region_t *region;
-      cairo_t *cr;
+    gdk_window_shape_combine_region (window, region, 0, 0);
 
-      surface =
-        gdk_window_create_similar_surface (window,
-                                           CAIRO_CONTENT_COLOR_ALPHA,
-                                           gdk_window_get_width (window),
-                                           gdk_window_get_height (window));
+  gdk_window_input_shape_combine_region (window, region, 0, 0);
 
-      cr = cairo_create (surface);
-      _gtk_text_handle_draw (handle, cr, pos);
-      cairo_destroy (cr);
-
-      region = gdk_cairo_region_create_from_surface (surface);
-      gdk_window_shape_combine_region (window, region, 0, 0);
-
-      cairo_surface_destroy (surface);
-      cairo_region_destroy (region);
-    }
+  cairo_surface_destroy (surface);
+  cairo_region_destroy (region);
 }
 
 static GdkWindow *
@@ -574,6 +574,10 @@ _gtk_text_handle_set_mode (GtkTextHandle     *handle,
     }
 
   priv->mode = mode;
+
+  _gtk_text_handle_update_shape (handle,
+                                 priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window,
+                                 GTK_TEXT_HANDLE_POSITION_CURSOR);
 }
 
 GtkTextHandleMode
