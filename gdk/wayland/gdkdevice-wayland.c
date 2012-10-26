@@ -1241,14 +1241,14 @@ static GdkModifierType
 get_modifier (struct xkb_state *state)
 {
   GdkModifierType modifiers = 0;
-  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_SHIFT, XKB_STATE_EFFECTIVE) > 0)?GDK_SHIFT_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_CAPS, XKB_STATE_EFFECTIVE) > 0)?GDK_LOCK_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_CTRL, XKB_STATE_EFFECTIVE) > 0)?GDK_CONTROL_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_ALT, XKB_STATE_EFFECTIVE) > 0)?GDK_MOD1_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, "Mod2", XKB_STATE_EFFECTIVE) > 0)?GDK_MOD2_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, "Mod3", XKB_STATE_EFFECTIVE) > 0)?GDK_MOD3_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_LOGO, XKB_STATE_EFFECTIVE) > 0)?GDK_MOD4_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, "Mod5", XKB_STATE_EFFECTIVE) > 0)?GDK_MOD5_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_SHIFT, XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_SHIFT_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_CAPS, XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_LOCK_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_CTRL, XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_CONTROL_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_ALT, XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_MOD1_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, "Mod2", XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_MOD2_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, "Mod3", XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_MOD3_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_LOGO, XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_MOD4_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, "Mod5", XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_MOD5_MASK:0;
 
   return modifiers;
 }
@@ -1325,16 +1325,11 @@ deliver_key_event(GdkWaylandDevice *device,
   struct xkb_state *xkb_state;
   GdkKeymap *keymap;
   xkb_keysym_t sym;
-  uint32_t num_syms;
-  const xkb_keysym_t *syms;
 
   keymap = device->keymap;
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
 
-  num_syms = xkb_key_get_syms (xkb_state, key, &syms);
-  sym = XKB_KEY_NoSymbol;
-  if (num_syms == 1)
-    sym = syms[0];
+  sym = xkb_state_key_get_one_sym (xkb_state, key);
 
   device->time = time;
   device->modifiers = get_modifier (xkb_state);

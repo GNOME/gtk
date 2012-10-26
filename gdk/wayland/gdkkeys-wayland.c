@@ -221,7 +221,7 @@ _gdk_wayland_keymap_new ()
   names.layout = "us";
   names.variant = "";
   names.options = "";
-  keymap->xkb_keymap = xkb_map_new_from_names(context, &names, XKB_MAP_COMPILE_PLACEHOLDER);
+  keymap->xkb_keymap = xkb_keymap_new_from_names (context, &names, 0);
   keymap->xkb_state = xkb_state_new (keymap->xkb_keymap);
   xkb_context_unref (context);
 
@@ -246,7 +246,7 @@ _gdk_wayland_keymap_new_from_fd (uint32_t format,
     return NULL;
   }
 
-  keymap->xkb_keymap = xkb_map_new_from_string (context, map_str, format, XKB_MAP_COMPILE_PLACEHOLDER);
+  keymap->xkb_keymap = xkb_keymap_new_from_string (context, map_str, format, 0);
   munmap (map_str, size);
   close (fd);
   keymap->xkb_state = xkb_state_new (keymap->xkb_keymap);
