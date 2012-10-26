@@ -56,6 +56,9 @@ EXTRA_DIST += \
 	background-size-keywords.css \
 	background-size-keywords.ref.ui \
 	background-size-keywords.ui \
+	background-size-zero.css \
+	background-size-zero.ref.ui \
+	background-size-zero.ui \
 	background-window-transparent.css \
 	background-window-transparent.ref.ui \
 	background-window-transparent.ui \
