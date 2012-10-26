@@ -108,8 +108,14 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
                                GTK_STYLE_CLASS_CURSOR_HANDLE);
 
   if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
-    gtk_style_context_add_class (priv->style_context,
-                                 GTK_STYLE_CLASS_BOTTOM);
+    {
+      gtk_style_context_add_class (priv->style_context,
+                                   GTK_STYLE_CLASS_BOTTOM);
+
+      if (priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
+        gtk_style_context_add_class (priv->style_context,
+                                     GTK_STYLE_CLASS_INSERTION_CURSOR);
+    }
   else
     gtk_style_context_add_class (priv->style_context,
                                  GTK_STYLE_CLASS_TOP);

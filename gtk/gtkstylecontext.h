@@ -709,6 +709,15 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_CURSOR_HANDLE "cursor-handle"
 
+/**
+ * GTK_STYLE_CLASS_INSERTION_CURSOR:
+ *
+ * A CSS class used when rendering a drag handle for
+ * the insertion cursor position.
+ */
+#define GTK_STYLE_CLASS_INSERTION_CURSOR "insertion-cursor"
+
+
 /* Predefined set of widget regions */
 
 /**
