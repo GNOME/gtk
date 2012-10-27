@@ -373,12 +373,37 @@ _gdk_quartz_window_set_needs_display_in_rect (GdkWindow    *window,
 }
 
 void
-_gdk_windowing_window_process_updates_recurse (GdkWindow *window,
-                                               GdkRegion *region)
+_gdk_quartz_window_set_needs_display_in_region (GdkWindow    *window,
+                                                GdkRegion    *region)
 {
+  GdkWindowObject *private;
+  GdkWindowImplQuartz *impl;
   int i, n_rects;
   GdkRectangle *rects;
 
+  private = GDK_WINDOW_OBJECT (window);
+  impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  if (!impl->needs_display_region)
+    impl->needs_display_region = gdk_region_new ();
+
+  gdk_region_union (impl->needs_display_region, region);
+
+  gdk_region_get_rectangles (region, &rects, &n_rects);
+
+  for (i = 0; i < n_rects; i++)
+    [impl->view setNeedsDisplayInRect:NSMakeRect (rects[i].x, rects[i].y,
+                                                  rects[i].width,
+                                                  rects[i].height)];
+
+  g_free (rects);
+
+}
+
+void
+_gdk_windowing_window_process_updates_recurse (GdkWindow *window,
+                                               GdkRegion *region)
+{
   /* Make sure to only flush each toplevel at most once if we're called
    * from process_all_updates.
    */
@@ -410,14 +435,7 @@ _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
     }
 
   if (WINDOW_IS_TOPLEVEL (window))
-    {
-      gdk_region_get_rectangles (region, &rects, &n_rects);
-
-      for (i = 0; i < n_rects; i++)
-        _gdk_quartz_window_set_needs_display_in_rect (window, &rects[i]);
-
-      g_free (rects);
-    }
+    _gdk_quartz_window_set_needs_display_in_region (window, region);
   else
     _gdk_window_process_updates_recurse (window, region);
 
