@@ -32,7 +32,7 @@
 }
 
 #reference #c {
-  background-image: linear-gradient(to bottom, red, green 10px, red 20px, green 30px, red 40px);
+  background-image: repeating-linear-gradient(to bottom, red, green 10px, red 20px, green 30px, red 40px);
 }
 
 #d {
