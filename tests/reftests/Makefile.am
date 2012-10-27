@@ -66,6 +66,9 @@ EXTRA_DIST += \
 	border-color-default.css \
 	border-color-default.ref.ui \
 	border-color-default.ui \
+	border-half-pixel.css \
+	border-half-pixel.ref.ui \
+	border-half-pixel.ui \
 	border-image-ball-green.png \
 	border-image-ball-red.png \
 	border-image-ball-yellow.png \
