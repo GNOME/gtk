@@ -44,7 +44,6 @@
 
 typedef struct {
   cairo_rectangle_t image_rect;
-  GtkRoundedBox clip_box;
 
   gint idx;
 } GtkThemingBackgroundLayer;
@@ -87,35 +86,21 @@ _gtk_theming_background_layer_apply_origin (GtkThemingBackground *bg,
   layer->image_rect = image_rect;
 }
 
-static void
-_gtk_theming_background_apply_clip (GtkThemingBackground *bg,
-                                    GtkRoundedBox *box,
-                                    GtkCssArea clip)
+static const GtkRoundedBox *
+gtk_theming_background_get_box (GtkThemingBackground *bg,
+                                GtkCssArea            area)
 {
-  if (clip == GTK_CSS_AREA_PADDING_BOX)
+  switch (area)
     {
-      _gtk_rounded_box_shrink (box,
-			       bg->border.top, bg->border.right,
-			       bg->border.bottom, bg->border.left);
-    }
-  else if (clip == GTK_CSS_AREA_CONTENT_BOX)
-    {
-      _gtk_rounded_box_shrink (box,
-			       bg->border.top + bg->padding.top,
-			       bg->border.right + bg->padding.right,
-			       bg->border.bottom + bg->padding.bottom,
-			       bg->border.left + bg->padding.left);
-    }
-}
-
-static void
-_gtk_theming_background_layer_apply_clip (GtkThemingBackground *bg,
-                                          GtkThemingBackgroundLayer *layer)
-{
-  GtkCssValue *value = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP);
-  GtkCssArea clip = _gtk_css_area_value_get (_gtk_css_array_value_get_nth (value, layer->idx));
-
-  _gtk_theming_background_apply_clip (bg, &layer->clip_box, clip);
+    case GTK_CSS_AREA_BORDER_BOX:
+      return &bg->border_box;
+    case GTK_CSS_AREA_PADDING_BOX:
+      return &bg->padding_box;
+    case GTK_CSS_AREA_CONTENT_BOX:
+      return &bg->content_box;
+    default:
+      g_return_val_if_reached (&bg->border_box);
+  }
 }
 
 static void
@@ -123,18 +108,14 @@ _gtk_theming_background_paint_color (GtkThemingBackground *bg,
                                      cairo_t              *cr,
                                      GtkCssValue          *background_image)
 {
-  GtkRoundedBox clip_box;
   gint n_values = _gtk_css_array_value_get_n_values (background_image);
   GtkCssArea clip = _gtk_css_area_value_get 
     (_gtk_css_array_value_get_nth 
      (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP), 
       n_values - 1));
 
-  clip_box = bg->border_box;
-  _gtk_theming_background_apply_clip (bg, &clip_box, clip);
-
   cairo_save (cr);
-  _gtk_rounded_box_path (&clip_box, cr);
+  _gtk_rounded_box_path (gtk_theming_background_get_box (bg, clip), cr);
   cairo_clip (cr);
 
   gdk_cairo_set_source_rgba (cr, &bg->bg_color);
@@ -187,7 +168,14 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
 
   cairo_save (cr);
 
-  _gtk_rounded_box_path (&layer->clip_box, cr);
+  _gtk_rounded_box_path (
+      gtk_theming_background_get_box (
+          bg,
+          _gtk_css_area_value_get (
+              _gtk_css_array_value_get_nth (
+                  _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP),
+                  layer->idx))),
+      cr);
   cairo_clip (cr);
 
 
@@ -327,9 +315,7 @@ _gtk_theming_background_init_layer (GtkThemingBackground *bg,
                                     gint idx)
 {
   layer->idx = idx;
-  layer->clip_box = bg->border_box;
 
-  _gtk_theming_background_layer_apply_clip (bg, layer);
   _gtk_theming_background_layer_apply_origin (bg, layer);
 }
 
