@@ -40,8 +40,6 @@ struct _GtkThemingBackground {
   GtkRoundedBox content_box;
 
   GtkJunctionSides junction;
-  GtkBorder border;
-  GtkBorder padding;
   GdkRGBA bg_color;
 };
 

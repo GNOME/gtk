@@ -276,9 +276,10 @@ static void
 _gtk_theming_background_init_context (GtkThemingBackground *bg)
 {
   GtkStateFlags flags = gtk_style_context_get_state (bg->context);
+  GtkBorder border, padding;
 
-  gtk_style_context_get_border (bg->context, flags, &bg->border);
-  gtk_style_context_get_padding (bg->context, flags, &bg->padding);
+  gtk_style_context_get_border (bg->context, flags, &border);
+  gtk_style_context_get_padding (bg->context, flags, &padding);
   gtk_style_context_get_background_color (bg->context, flags, &bg->bg_color);
 
   /* In the CSS box model, by default the background positioning area is
@@ -294,13 +295,13 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
 
   bg->padding_box = bg->border_box;
   _gtk_rounded_box_shrink (&bg->padding_box,
-			   bg->border.top, bg->border.right,
-			   bg->border.bottom, bg->border.left);
+			   border.top, border.right,
+			   border.bottom, border.left);
 
   bg->content_box = bg->padding_box;
   _gtk_rounded_box_shrink (&bg->content_box,
-			   bg->padding.top, bg->padding.right,
-			   bg->padding.bottom, bg->padding.left);
+			   padding.top, padding.right,
+			   padding.bottom, padding.left);
 }
 
 void
