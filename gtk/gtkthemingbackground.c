@@ -43,48 +43,8 @@
 #include "fallback-c89.c"
 
 typedef struct {
-  cairo_rectangle_t image_rect;
-
   gint idx;
 } GtkThemingBackgroundLayer;
-
-static void
-_gtk_theming_background_layer_apply_origin (GtkThemingBackground *bg,
-                                            GtkThemingBackgroundLayer *layer)
-{
-  cairo_rectangle_t image_rect;
-  GtkCssValue *value = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN);
-  GtkCssArea origin = _gtk_css_area_value_get (_gtk_css_array_value_get_nth (value, layer->idx));
-
-  /* The default size of the background image depends on the
-     background-origin value as this affects the top left
-     and the bottom right corners. */
-  switch (origin) {
-  case GTK_CSS_AREA_BORDER_BOX:
-    image_rect.x = 0;
-    image_rect.y = 0;
-    image_rect.width = bg->paint_area.width;
-    image_rect.height = bg->paint_area.height;
-    break;
-  case GTK_CSS_AREA_CONTENT_BOX:
-    image_rect.x = bg->border.left + bg->padding.left;
-    image_rect.y = bg->border.top + bg->padding.top;
-    image_rect.width = bg->paint_area.width - bg->border.left - bg->border.right - bg->padding.left - bg->padding.right;
-    image_rect.height = bg->paint_area.height - bg->border.top - bg->border.bottom - bg->padding.top - bg->padding.bottom;
-    break;
-  case GTK_CSS_AREA_PADDING_BOX:
-  default:
-    image_rect.x = bg->border.left;
-    image_rect.y = bg->border.top;
-    image_rect.width = bg->paint_area.width - bg->border.left - bg->border.right;
-    image_rect.height = bg->paint_area.height - bg->border.top - bg->border.bottom;
-    break;
-  }
-
-  /* XXX: image_rect might have negative width/height here.
-   * Do we need to do something about it? */
-  layer->image_rect = image_rect;
-}
 
 static const GtkRoundedBox *
 gtk_theming_background_get_box (GtkThemingBackground *bg,
@@ -132,6 +92,7 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
   GtkCssRepeatStyle hrepeat, vrepeat;
   const GtkCssValue *pos, *repeat;
   GtkCssImage *image;
+  const GtkRoundedBox *origin;
   double image_width, image_height;
   double width, height;
 
@@ -143,8 +104,14 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
               _gtk_css_array_value_get_nth (
                   _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE),
                   layer->idx));
-  width = layer->image_rect.width;
-  height = layer->image_rect.height;
+  origin = gtk_theming_background_get_box (
+               bg,
+               _gtk_css_area_value_get (
+                   _gtk_css_array_value_get_nth (
+                       _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN),
+                       layer->idx)));
+  width = origin->box.width;
+  height = origin->box.height;
 
   if (image == NULL || width <= 0 || height <= 0)
     return;
@@ -179,7 +146,7 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
   cairo_clip (cr);
 
 
-  cairo_translate (cr, layer->image_rect.x, layer->image_rect.y);
+  cairo_translate (cr, origin->box.x, origin->box.y);
 
   if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT && vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
     {
@@ -315,8 +282,6 @@ _gtk_theming_background_init_layer (GtkThemingBackground *bg,
                                     gint idx)
 {
   layer->idx = idx;
-
-  _gtk_theming_background_layer_apply_origin (bg, layer);
 }
 
 static void
