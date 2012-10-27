@@ -42,10 +42,6 @@
  */
 #include "fallback-c89.c"
 
-typedef struct {
-  gint idx;
-} GtkThemingBackgroundLayer;
-
 static const GtkRoundedBox *
 gtk_theming_background_get_box (GtkThemingBackground *bg,
                                 GtkCssArea            area)
@@ -86,7 +82,7 @@ _gtk_theming_background_paint_color (GtkThemingBackground *bg,
 
 static void
 _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
-                                     GtkThemingBackgroundLayer *layer,
+                                     guint                 idx,
                                      cairo_t              *cr)
 {
   GtkCssRepeatStyle hrepeat, vrepeat;
@@ -96,27 +92,27 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
   double image_width, image_height;
   double width, height;
 
-  pos = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION), layer->idx);
-  repeat = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_REPEAT), layer->idx);
+  pos = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_POSITION), idx);
+  repeat = _gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_REPEAT), idx);
   hrepeat = _gtk_css_background_repeat_value_get_x (repeat);
   vrepeat = _gtk_css_background_repeat_value_get_y (repeat);
   image = _gtk_css_image_value_get_image (
               _gtk_css_array_value_get_nth (
                   _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE),
-                  layer->idx));
+                  idx));
   origin = gtk_theming_background_get_box (
                bg,
                _gtk_css_area_value_get (
                    _gtk_css_array_value_get_nth (
                        _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN),
-                       layer->idx)));
+                       idx)));
   width = origin->box.width;
   height = origin->box.height;
 
   if (image == NULL || width <= 0 || height <= 0)
     return;
 
-  _gtk_css_bg_size_value_compute_size (_gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE), layer->idx),
+  _gtk_css_bg_size_value_compute_size (_gtk_css_array_value_get_nth (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_SIZE), idx),
                                        image,
                                        width,
                                        height,
@@ -141,7 +137,7 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
           _gtk_css_area_value_get (
               _gtk_css_array_value_get_nth (
                   _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP),
-                  layer->idx))),
+                  idx))),
       cr);
   cairo_clip (cr);
 
@@ -277,14 +273,6 @@ _gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
 }
 
 static void
-_gtk_theming_background_init_layer (GtkThemingBackground *bg,
-                                    GtkThemingBackgroundLayer *layer,
-                                    gint idx)
-{
-  layer->idx = idx;
-}
-
-static void
 _gtk_theming_background_init_context (GtkThemingBackground *bg)
 {
   GtkStateFlags flags = gtk_style_context_get_state (bg->context);
@@ -362,7 +350,6 @@ _gtk_theming_background_render (GtkThemingBackground *bg,
                                 cairo_t              *cr)
 {
   gint idx;
-  GtkThemingBackgroundLayer layer;
   GtkCssValue *background_image;
 
   background_image = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
@@ -374,8 +361,7 @@ _gtk_theming_background_render (GtkThemingBackground *bg,
 
   for (idx = _gtk_css_array_value_get_n_values (background_image) - 1; idx >= 0; idx--)
     {
-      _gtk_theming_background_init_layer (bg, &layer, idx);
-      _gtk_theming_background_paint_layer (bg, &layer, cr);
+      _gtk_theming_background_paint_layer (bg, idx, cr);
     }
 
   _gtk_theming_background_apply_shadow (bg, cr);
