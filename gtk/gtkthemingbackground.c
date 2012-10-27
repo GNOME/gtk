@@ -357,6 +357,11 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
   _gtk_rounded_box_shrink (&bg->padding_box,
 			   bg->border.top, bg->border.right,
 			   bg->border.bottom, bg->border.left);
+
+  bg->content_box = bg->padding_box;
+  _gtk_rounded_box_shrink (&bg->content_box,
+			   bg->padding.top, bg->padding.right,
+			   bg->padding.bottom, bg->padding.left);
 }
 
 void

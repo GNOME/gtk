@@ -37,6 +37,7 @@ struct _GtkThemingBackground {
   cairo_rectangle_t paint_area;
   GtkRoundedBox border_box;
   GtkRoundedBox padding_box;
+  GtkRoundedBox content_box;
 
   GtkJunctionSides junction;
   GtkBorder border;
