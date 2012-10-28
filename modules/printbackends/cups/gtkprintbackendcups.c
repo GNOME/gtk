@@ -3169,7 +3169,7 @@ value_is_off (const char *value)
 static char *
 ppd_group_name (ppd_group_t *group)
 {
-  return group->text;
+  return group->name;
 }
 
 static int
