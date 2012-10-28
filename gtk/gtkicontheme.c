@@ -202,6 +202,7 @@ struct _GtkIconInfo
   /* Information about the source
    */
   gchar *filename;
+  GFile *icon_file;
   GLoadableIcon *loadable;
   GSList *emblem_infos;
 
@@ -1409,6 +1410,8 @@ choose_icon (GtkIconTheme       *icon_theme,
       else if (unthemed_icon->no_svg_filename)
 	icon_info->filename = g_strdup (unthemed_icon->no_svg_filename);
 
+      icon_info->icon_file = g_file_new_for_path (icon_info->filename);
+
       icon_info->dir_type = ICON_THEME_DIR_UNTHEMED;
       icon_info->dir_size = size;
     }
@@ -2291,11 +2294,13 @@ theme_lookup_icon (IconTheme          *theme,
         {
           file = g_strconcat (icon_name, string_from_suffix (suffix), NULL);
           icon_info->filename = g_build_filename (min_dir->dir, file, NULL);
+          icon_info->icon_file = g_file_new_for_path (icon_info->filename);
           g_free (file);
         }
       else
         {
           icon_info->filename = NULL;
+          icon_info->icon_file = NULL;
         }
       
       if (min_dir->icon_data != NULL)
@@ -2732,6 +2737,8 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
     return;
  
   g_free (icon_info->filename);
+  g_clear_object (&icon_info->icon_file);
+
   if (icon_info->loadable)
     g_object_unref (icon_info->loadable);
   g_slist_free_full (icon_info->emblem_infos, (GDestroyNotify) gtk_icon_info_free);
@@ -2937,14 +2944,8 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
   /* SVG icons are a special case - we just immediately scale them
    * to the desired size
    */
-  if (icon_info->filename && !icon_info->loadable) 
-    {
-      GFile *file;
-
-      file = g_file_new_for_path (icon_info->filename);
-      icon_info->loadable = G_LOADABLE_ICON (g_file_icon_new (file));
-      g_object_unref (file);
-    }
+  if (icon_info->icon_file && !icon_info->loadable)
+    icon_info->loadable = G_LOADABLE_ICON (g_file_icon_new (icon_info->icon_file));
 
   is_svg = FALSE;
   if (G_IS_FILE_ICON (icon_info->loadable))
@@ -3173,7 +3174,7 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
   GdkPixbuf *pixbuf;
   gchar *data;
   gchar *success, *warning, *err;
-  gchar *width, *height;
+  gchar *width, *height, *uri;
 
   /* css_fg can't possibly have failed, otherwise
    * that would mean we have a broken style */
@@ -3199,8 +3200,14 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
 
   if (!icon_info->symbolic_pixbuf_size)
     {
+      stream = G_INPUT_STREAM (g_file_read (icon_info->icon_file, NULL, error));
+
+      if (!stream)
+        return NULL;
+
       /* Fetch size from the original icon */
-      pixbuf = gdk_pixbuf_new_from_file (icon_info->filename, error);
+      pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
+      g_object_unref (stream);
 
       if (!pixbuf)
         return NULL;
@@ -3213,6 +3220,7 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
 
   width = g_strdup_printf ("%d", icon_info->symbolic_pixbuf_size->width);
   height = g_strdup_printf ("%d", icon_info->symbolic_pixbuf_size->height);
+  uri = g_file_get_uri (icon_info->icon_file);
 
   data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
                       "<svg version=\"1.1\"\n"
@@ -3234,7 +3242,7 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
                       "      fill: ", css_success ? css_success : success," !important;\n"
                       "    }\n"
                       "  </style>\n"
-                      "  <xi:include href=\"", icon_info->filename, "\"/>\n"
+                      "  <xi:include href=\"", uri, "\"/>\n"
                       "</svg>",
                       NULL);
   g_free (warning);
@@ -3242,6 +3250,7 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
   g_free (success);
   g_free (width);
   g_free (height);
+  g_free (uri);
 
   stream = g_memory_input_stream_new_from_data (data, -1, g_free);
   pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
@@ -3306,19 +3315,23 @@ gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
   gchar *css_success;
   gchar *css_warning;
   gchar *css_error;
+  gchar *icon_uri;
+  gboolean is_symbolic;
 
   g_return_val_if_fail (fg != NULL, NULL);
 
-  if (!icon_info->filename ||
-      !g_str_has_suffix (icon_info->filename, "-symbolic.svg"))
-    {
-      if (was_symbolic)
-        *was_symbolic = FALSE;
-      return gtk_icon_info_load_icon (icon_info, error);
-    }
+  icon_uri = NULL;
+  if (icon_info->icon_file)
+    icon_uri = g_file_get_uri (icon_info->icon_file);
+
+  is_symbolic = (icon_uri != NULL) && (g_str_has_suffix (icon_uri, "-symbolic.svg"));
+  g_free (icon_uri);
 
   if (was_symbolic)
-    *was_symbolic = TRUE;
+    *was_symbolic = is_symbolic;
+
+  if (!is_symbolic)
+    return gtk_icon_info_load_icon (icon_info, error);
 
   css_fg = gdk_rgba_to_css (fg);
 
@@ -3382,17 +3395,21 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
   gchar *css_fg = NULL, *css_success;
   gchar *css_warning, *css_error;
   GtkStateFlags state;
+  gchar *icon_uri;
+  gboolean is_symbolic;
 
-  if (!icon_info->filename ||
-      !g_str_has_suffix (icon_info->filename, "-symbolic.svg"))
-    {
-      if (was_symbolic)
-        *was_symbolic = FALSE;
-      return gtk_icon_info_load_icon (icon_info, error);
-    }
+  icon_uri = NULL;
+  if (icon_info->icon_file)
+    icon_uri = g_file_get_uri (icon_info->icon_file);
+
+  is_symbolic = (icon_uri != NULL) && (g_str_has_suffix (icon_uri, "-symbolic.svg"));
+  g_free (icon_uri);
 
   if (was_symbolic)
-    *was_symbolic = TRUE;
+    *was_symbolic = is_symbolic;
+
+  if (!is_symbolic)
+    return gtk_icon_info_load_icon (icon_info, error);
 
   state = gtk_style_context_get_state (context);
   gtk_style_context_get (context, state, "color", &color, NULL);
@@ -3465,17 +3482,21 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
   GdkColor *fg;
   gchar *css_fg, *css_success;
   gchar *css_warning, *css_error;
+  gchar *icon_uri;
+  gboolean is_symbolic;
 
-  if (!icon_info->filename ||
-      !g_str_has_suffix (icon_info->filename, "-symbolic.svg"))
-    {
-      if (was_symbolic)
-        *was_symbolic = FALSE;
-      return gtk_icon_info_load_icon (icon_info, error);
-    }
+  icon_uri = NULL;
+  if (icon_info->icon_file)
+    icon_uri = g_file_get_uri (icon_info->icon_file);
+
+  is_symbolic = (icon_uri != NULL) && (g_str_has_suffix (icon_uri, "-symbolic.svg"));
+  g_free (icon_uri);
 
   if (was_symbolic)
-    *was_symbolic = TRUE;
+    *was_symbolic = is_symbolic;
+
+  if (!is_symbolic)
+    return gtk_icon_info_load_icon (icon_info, error);
 
   fg = &style->fg[state];
   css_fg = gdk_color_to_css (fg);
@@ -3889,7 +3910,10 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
         {
           GFile *file = g_file_icon_get_file (G_FILE_ICON (icon));
           if (file != NULL)
-            info->filename = g_file_get_path (file);
+            {
+              info->icon_file = g_object_ref (file);
+              info->filename = g_file_get_path (file);
+            }
         }
 
       info->dir_type = ICON_THEME_DIR_UNTHEMED;
