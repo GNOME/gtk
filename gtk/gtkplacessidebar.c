@@ -3295,6 +3295,8 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 	GtkCellRenderer   *cell;
 	GtkTreeSelection  *selection;
 
+	gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (sidebar)), GTK_STYLE_CLASS_SIDEBAR);
+
 	create_volume_monitor (sidebar);
 
 	sidebar->bookmarks_manager = _gtk_bookmarks_manager_new (bookmarks_changed_cb, sidebar);
