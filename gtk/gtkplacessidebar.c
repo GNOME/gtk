@@ -1823,29 +1823,6 @@ bookmarks_selection_changed_cb (GtkTreeSelection      *selection,
 }
 
 static void
-volume_mounted_cb (GVolume *volume,
-		   GObject *user_data)
-{
-	GMount *mount;
-	GtkPlacesSidebar *sidebar;
-
-	sidebar = GTK_PLACES_SIDEBAR (user_data);
-
-	sidebar->mounting = FALSE;
-
-	mount = g_volume_get_mount (volume);
-	if (mount != NULL) {
-		GFile *location;
-
-		location = g_mount_get_default_location (mount);
-		emit_location_selected (sidebar, location, sidebar->go_to_after_mount_open_mode);
-
-		g_object_unref (G_OBJECT (location));
-		g_object_unref (G_OBJECT (mount));
-	}
-}
-
-static void
 drive_start_from_bookmark_cb (GObject      *source_object,
 			      GAsyncResult *res,
 			      gpointer      user_data)
@@ -1868,6 +1845,61 @@ drive_start_from_bookmark_cb (GObject      *source_object,
 		}
 		g_error_free (error);
 	}
+}
+
+/* Callback from g_volume_mount() */
+static void
+volume_mount_cb (GObject *source_object, GAsyncResult *result, gpointer user_data)
+{
+	GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
+	GVolume *volume;
+	GError *error;
+	char *primary;
+	char *name;
+	GMount *mount;
+
+	volume = G_VOLUME (source_object);
+
+	error = NULL;
+	if (!g_volume_mount_finish (volume, result, &error)) {
+		if (error->code != G_IO_ERROR_FAILED_HANDLED &&
+                    error->code != G_IO_ERROR_ALREADY_MOUNTED) {
+			name = g_volume_get_name (G_VOLUME (source_object));
+			primary = g_strdup_printf (_("Unable to access “%s”"), name);
+			g_free (name);
+			emit_show_error_message (sidebar, primary, error->message);
+			g_free (primary);
+		}
+		g_error_free (error);
+	}
+
+	sidebar->mounting = FALSE;
+
+	mount = g_volume_get_mount (volume);
+	if (mount != NULL) {
+		GFile *location;
+
+		location = g_mount_get_default_location (mount);
+		emit_location_selected (sidebar, location, sidebar->go_to_after_mount_open_mode);
+
+		g_object_unref (G_OBJECT (location));
+		g_object_unref (G_OBJECT (mount));
+	}
+
+	g_object_unref (sidebar);
+}
+
+/* This was nautilus_file_operations_mount_volume_full() */
+static void
+mount_volume (GtkPlacesSidebar *sidebar, GVolume *volume)
+{
+	GMountOperation *mount_op;
+
+	mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
+	g_mount_operation_set_password_save (mount_op, G_PASSWORD_SAVE_FOR_SESSION);
+
+	g_object_ref (sidebar);
+	g_volume_mount (volume, 0, mount_op, NULL, volume_mount_cb, sidebar);
 }
 
 static void
@@ -1906,11 +1938,7 @@ open_selected_bookmark (GtkPlacesSidebar *sidebar,
 
 			sidebar->go_to_after_mount_open_mode = open_mode;
 
-#if DO_NOT_COMPILE
-			nautilus_file_operations_mount_volume_full (NULL, volume,
-								    volume_mounted_cb,
-								    G_OBJECT (sidebar));
-#endif
+			mount_volume (sidebar, volume);
 		} else if (volume == NULL && drive != NULL &&
 			   (g_drive_can_start (drive) || g_drive_can_start_degraded (drive))) {
 			GMountOperation *mount_op;
@@ -2106,10 +2134,8 @@ mount_shortcut_cb (GtkMenuItem           *item,
 			    -1);
 
 	if (volume != NULL) {
-#if DO_NOT_COMPILE
-		nautilus_file_operations_mount_volume (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))), volume);
+		mount_volume (sidebar, volume);
 		g_object_unref (volume);
-#endif
 	}
 }
 
