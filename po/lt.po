@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-01 02:50+0000\n"
-"PO-Revision-Date: 2012-09-02 15:41+0300\n"
+"POT-Creation-Date: 2012-10-29 15:58+0000\n"
+"PO-Revision-Date: 2012-10-29 22:06+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <>\n"
 "Language: lt\n"
@@ -77,8 +77,8 @@ msgstr "GDK derinimo parametrai, kuriuos naudoti"
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:214
 #: ../gdk/gdk.c:217
-#: ../gtk/gtkmain.c:453
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:454
+#: ../gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "PARAMETRAI"
 
@@ -694,7 +694,7 @@ msgstr "Apipavidalino"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:156
+#: ../gtk/gtkaccellabel.c:159
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Lyg2"
@@ -704,7 +704,7 @@ msgstr "Lyg2"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:162
+#: ../gtk/gtkaccellabel.c:165
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Vald"
@@ -714,7 +714,7 @@ msgstr "Vald"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:168
+#: ../gtk/gtkaccellabel.c:171
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -724,7 +724,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:802
+#: ../gtk/gtkaccellabel.c:805
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -734,7 +734,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:815
+#: ../gtk/gtkaccellabel.c:818
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hiper"
@@ -744,17 +744,17 @@ msgstr "Hiper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:829
+#: ../gtk/gtkaccellabel.c:832
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:845
+#: ../gtk/gtkaccellabel.c:848
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Tarpas"
 
-#: ../gtk/gtkaccellabel.c:848
+#: ../gtk/gtkaccellabel.c:851
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -791,7 +791,7 @@ msgid "Select an application to open \"%s\""
 msgstr "Pasirinkite programą atverti „%s“"
 
 #: ../gtk/gtkappchooserdialog.c:398
-#: ../gtk/gtkappchooserwidget.c:654
+#: ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "Nera programų „%s“ atverimui"
@@ -819,23 +819,23 @@ msgstr "Pamiršti susiejimą"
 msgid "Show other applications"
 msgstr "Rodyti kitas programas"
 
-#: ../gtk/gtkappchooserwidget.c:603
+#: ../gtk/gtkappchooserwidget.c:606
 msgid "Default Application"
 msgstr "Numatytoji programa"
 
-#: ../gtk/gtkappchooserwidget.c:741
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Recommended Applications"
 msgstr "Rekomenduojama programa"
 
-#: ../gtk/gtkappchooserwidget.c:756
+#: ../gtk/gtkappchooserwidget.c:759
 msgid "Related Applications"
 msgstr "Susijusios programos"
 
-#: ../gtk/gtkappchooserwidget.c:770
+#: ../gtk/gtkappchooserwidget.c:773
 msgid "Other Applications"
 msgstr "Kitos programos"
 
-#: ../gtk/gtkapplication.c:1552
+#: ../gtk/gtkapplication.c:1558
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -847,20 +847,20 @@ msgstr ""
 "%s"
 
 #: ../gtk/gtkapplicationwindow.c:333
-#: ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "Programa"
 
-#: ../gtk/gtkassistant.c:1004
+#: ../gtk/gtkassistant.c:1008
 msgid "C_ontinue"
 msgstr "_Tęsti"
 
-#: ../gtk/gtkassistant.c:1007
+#: ../gtk/gtkassistant.c:1011
 msgid "Go _Back"
 msgstr "At_gal"
 
-#: ../gtk/gtkassistant.c:1011
+#: ../gtk/gtkassistant.c:1015
 msgid "_Finish"
 msgstr "_Baigti"
 
@@ -1002,7 +1002,7 @@ msgstr "Netinkamas"
 #. * acelerator.
 #.
 #: ../gtk/gtkcellrendereraccel.c:416
-#: ../gtk/gtkcellrendereraccel.c:745
+#: ../gtk/gtkcellrendereraccel.c:747
 msgid "New accelerator..."
 msgstr "Naujas akseleratorius…"
 
@@ -1352,17 +1352,17 @@ msgstr "_Dešinė:"
 msgid "Paper Margins"
 msgstr "Popieriaus paraštės"
 
-#: ../gtk/gtkentry.c:8832
-#: ../gtk/gtktextview.c:8316
+#: ../gtk/gtkentry.c:9140
+#: ../gtk/gtktextview.c:8583
 msgid "Input _Methods"
 msgstr "Įvesties _metodai"
 
-#: ../gtk/gtkentry.c:8846
-#: ../gtk/gtktextview.c:8330
+#: ../gtk/gtkentry.c:9154
+#: ../gtk/gtktextview.c:8597
 msgid "_Insert Unicode Control Character"
 msgstr "Įterpti _Unicode valdymo simbolį"
 
-#: ../gtk/gtkentry.c:9799
+#: ../gtk/gtkentry.c:10107
 msgid "Caps Lock is on"
 msgstr "Caps Lock įjungtas"
 
@@ -1412,7 +1412,7 @@ msgid "Select a File"
 msgstr "Pasirinkite failą"
 
 #: ../gtk/gtkfilechooserbutton.c:105
-#: ../gtk/gtkfilechooserdefault.c:1817
+#: ../gtk/gtkfilechooserdefault.c:1819
 msgid "Desktop"
 msgstr "Darbastalis"
 
@@ -1428,44 +1428,44 @@ msgstr "Kita…"
 msgid "Type name of new folder"
 msgstr "Įveskite naujo aplanko pavadinimą"
 
-#: ../gtk/gtkfilechooserdefault.c:968
+#: ../gtk/gtkfilechooserdefault.c:970
 msgid "Could not retrieve information about the file"
 msgstr "Nepavyko gauti informacijos apie šį failą"
 
-#: ../gtk/gtkfilechooserdefault.c:979
+#: ../gtk/gtkfilechooserdefault.c:981
 msgid "Could not add a bookmark"
 msgstr "Nepavyko pridėti žymelės"
 
-#: ../gtk/gtkfilechooserdefault.c:990
+#: ../gtk/gtkfilechooserdefault.c:992
 msgid "Could not remove bookmark"
 msgstr "Nepavyko pašalinti žymelės"
 
-#: ../gtk/gtkfilechooserdefault.c:1001
+#: ../gtk/gtkfilechooserdefault.c:1003
 msgid "The folder could not be created"
 msgstr "Nepavyko sukurti aplanko"
 
-#: ../gtk/gtkfilechooserdefault.c:1014
+#: ../gtk/gtkfilechooserdefault.c:1016
 msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
 msgstr "Šio aplanko sukurti nepavyko, nes jau yra failas tokiu pat pavadinimu. Pabandykite naudoti kitą aplanko pavadinimą, arba pirma pervadinkite failą."
 
-#: ../gtk/gtkfilechooserdefault.c:1028
+#: ../gtk/gtkfilechooserdefault.c:1030
 msgid "You need to choose a valid filename."
 msgstr "Reikia pasirinkti tinkamą failo pavadinimą."
 
-#: ../gtk/gtkfilechooserdefault.c:1031
+#: ../gtk/gtkfilechooserdefault.c:1033
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Nepavyko sukurti failo %s viduje, nes tai nėra aplankas"
 
-#: ../gtk/gtkfilechooserdefault.c:1043
+#: ../gtk/gtkfilechooserdefault.c:1045
 msgid "You may only select folders.  The item that you selected is not a folder; try using a different item."
 msgstr "Galite pasirinkti tik aplankus. Jūsų pasirinktas elementas nėra aplankas; pasirinkite kitą elementą."
 
-#: ../gtk/gtkfilechooserdefault.c:1053
+#: ../gtk/gtkfilechooserdefault.c:1055
 msgid "Invalid file name"
 msgstr "Netinkamas failo vardas"
 
-#: ../gtk/gtkfilechooserdefault.c:1063
+#: ../gtk/gtkfilechooserdefault.c:1065
 msgid "The folder contents could not be displayed"
 msgstr "Nepavyko parodyti aplanko turinio"
 
@@ -1473,223 +1473,223 @@ msgstr "Nepavyko parodyti aplanko turinio"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1589
+#: ../gtk/gtkfilechooserdefault.c:1591
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s kompiuteryje %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1738
+#: ../gtk/gtkfilechooserdefault.c:1740
 msgid "Search"
 msgstr "Paieška"
 
-#: ../gtk/gtkfilechooserdefault.c:1762
-#: ../gtk/gtkfilechooserdefault.c:4988
+#: ../gtk/gtkfilechooserdefault.c:1764
+#: ../gtk/gtkfilechooserdefault.c:4990
 msgid "Recently Used"
 msgstr "Vėliausiai naudotieji"
 
-#: ../gtk/gtkfilechooserdefault.c:2361
+#: ../gtk/gtkfilechooserdefault.c:2363
 msgid "Select which types of files are shown"
 msgstr "Pasirinkite kokių tipų failus rodyti"
 
-#: ../gtk/gtkfilechooserdefault.c:2720
+#: ../gtk/gtkfilechooserdefault.c:2722
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Įdėti aplanką „%s“ į žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:2764
+#: ../gtk/gtkfilechooserdefault.c:2766
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Įdėti esamą aplanką į žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:2766
+#: ../gtk/gtkfilechooserdefault.c:2768
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Įdėti pažymėtus aplankus į žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:2804
+#: ../gtk/gtkfilechooserdefault.c:2806
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Pašalinti žymelę „%s“"
 
-#: ../gtk/gtkfilechooserdefault.c:2806
+#: ../gtk/gtkfilechooserdefault.c:2808
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Žymelė „%s“ negali būti pašalinta"
 
-#: ../gtk/gtkfilechooserdefault.c:2813
-#: ../gtk/gtkfilechooserdefault.c:3699
+#: ../gtk/gtkfilechooserdefault.c:2815
+#: ../gtk/gtkfilechooserdefault.c:3701
 msgid "Remove the selected bookmark"
 msgstr "Pašalinti pažymėtas žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:3377
+#: ../gtk/gtkfilechooserdefault.c:3379
 msgid "Remove"
 msgstr "Pašalinti"
 
-#: ../gtk/gtkfilechooserdefault.c:3386
+#: ../gtk/gtkfilechooserdefault.c:3388
 msgid "Rename..."
 msgstr "Pervadinti…"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3550
+#: ../gtk/gtkfilechooserdefault.c:3552
 msgid "Places"
 msgstr "Vietos"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3607
+#: ../gtk/gtkfilechooserdefault.c:3609
 msgid "_Places"
 msgstr "_Vietos"
 
-#: ../gtk/gtkfilechooserdefault.c:3687
+#: ../gtk/gtkfilechooserdefault.c:3689
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Įdėti pažymėtą aplanką į žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:3948
+#: ../gtk/gtkfilechooserdefault.c:3950
 msgid "Could not select file"
 msgstr "Failo pasirinkti nepavyko"
 
-#: ../gtk/gtkfilechooserdefault.c:4173
+#: ../gtk/gtkfilechooserdefault.c:4175
 msgid "_Visit this file"
 msgstr "_Aplankyti šį failą"
 
-#: ../gtk/gtkfilechooserdefault.c:4176
+#: ../gtk/gtkfilechooserdefault.c:4178
 msgid "_Copy file's location"
 msgstr "_Kopijuoti failo vietą"
 
-#: ../gtk/gtkfilechooserdefault.c:4179
+#: ../gtk/gtkfilechooserdefault.c:4181
 msgid "_Add to Bookmarks"
 msgstr "Į_dėti į žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:4186
+#: ../gtk/gtkfilechooserdefault.c:4188
 msgid "Show _Hidden Files"
 msgstr "Rod_yti paslėptus failus"
 
-#: ../gtk/gtkfilechooserdefault.c:4189
+#: ../gtk/gtkfilechooserdefault.c:4191
 msgid "Show _Size Column"
 msgstr "Rodydi _dydžio stulpelį"
 
-#: ../gtk/gtkfilechooserdefault.c:4414
+#: ../gtk/gtkfilechooserdefault.c:4416
 msgid "Files"
 msgstr "Failai"
 
-#: ../gtk/gtkfilechooserdefault.c:4465
+#: ../gtk/gtkfilechooserdefault.c:4467
 msgid "Name"
 msgstr "Pavadinimas"
 
-#: ../gtk/gtkfilechooserdefault.c:4488
+#: ../gtk/gtkfilechooserdefault.c:4490
 msgid "Size"
 msgstr "Dydis"
 
-#: ../gtk/gtkfilechooserdefault.c:4502
+#: ../gtk/gtkfilechooserdefault.c:4504
 msgid "Modified"
 msgstr "Pakeista"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4595
+#: ../gtk/gtkfilechooserdefault.c:4597
 msgid "_Name:"
 msgstr "_Pavadinimas:"
 
-#: ../gtk/gtkfilechooserdefault.c:4826
+#: ../gtk/gtkfilechooserdefault.c:4828
 msgid "Type a file name"
 msgstr "Įveskite failo pavadinimą"
 
-#: ../gtk/gtkfilechooserdefault.c:4873
-#: ../gtk/gtkfilechooserdefault.c:4884
+#: ../gtk/gtkfilechooserdefault.c:4875
+#: ../gtk/gtkfilechooserdefault.c:4886
 msgid "Please select a folder below"
 msgstr "Pasirinkite aplanką žemiau"
 
-#: ../gtk/gtkfilechooserdefault.c:4879
+#: ../gtk/gtkfilechooserdefault.c:4881
 msgid "Please type a file name"
 msgstr "Įveskite failo pavadinimą"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4950
+#: ../gtk/gtkfilechooserdefault.c:4952
 msgid "Create Fo_lder"
 msgstr "Sukurti ap_lanką"
 
-#: ../gtk/gtkfilechooserdefault.c:4998
+#: ../gtk/gtkfilechooserdefault.c:5000
 msgid "Search:"
 msgstr "Ieškoti:"
 
-#: ../gtk/gtkfilechooserdefault.c:5049
+#: ../gtk/gtkfilechooserdefault.c:5051
 msgid "_Location:"
 msgstr "Vi_eta:"
 
-#: ../gtk/gtkfilechooserdefault.c:5500
+#: ../gtk/gtkfilechooserdefault.c:5502
 msgid "Save in _folder:"
 msgstr "Išsaugoti _aplanke:"
 
-#: ../gtk/gtkfilechooserdefault.c:5502
+#: ../gtk/gtkfilechooserdefault.c:5504
 msgid "Create in _folder:"
 msgstr "Sukurti _aplanke:"
 
-#: ../gtk/gtkfilechooserdefault.c:6589
+#: ../gtk/gtkfilechooserdefault.c:6591
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nepavyko perskaityti %s turinio"
 
-#: ../gtk/gtkfilechooserdefault.c:6593
+#: ../gtk/gtkfilechooserdefault.c:6595
 msgid "Could not read the contents of the folder"
 msgstr "Nepavyko perskaityti aplanko turinio"
 
-#: ../gtk/gtkfilechooserdefault.c:6686
-#: ../gtk/gtkfilechooserdefault.c:6754
-#: ../gtk/gtkfilechooserdefault.c:6934
+#: ../gtk/gtkfilechooserdefault.c:6688
+#: ../gtk/gtkfilechooserdefault.c:6756
+#: ../gtk/gtkfilechooserdefault.c:6936
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: ../gtk/gtkfilechooserdefault.c:6701
+#: ../gtk/gtkfilechooserdefault.c:6703
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6703
+#: ../gtk/gtkfilechooserdefault.c:6705
 msgid "Yesterday at %H:%M"
 msgstr "Vakar %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7405
+#: ../gtk/gtkfilechooserdefault.c:7407
 msgid "Cannot change to folder because it is not local"
 msgstr "Negalima pakeisti į nurodytą aplanką, nes jis nėra vietinis"
 
-#: ../gtk/gtkfilechooserdefault.c:8009
-#: ../gtk/gtkfilechooserdefault.c:8030
+#: ../gtk/gtkfilechooserdefault.c:8011
+#: ../gtk/gtkfilechooserdefault.c:8032
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Nuoroda %s jau egzistuoja"
 
-#: ../gtk/gtkfilechooserdefault.c:8120
+#: ../gtk/gtkfilechooserdefault.c:8122
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Nuoroda %s neegzistuoja"
 
-#: ../gtk/gtkfilechooserdefault.c:8366
+#: ../gtk/gtkfilechooserdefault.c:8368
 #: ../gtk/gtkprintunixdialog.c:548
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Failas pavadinimu „%s“ jau egzistuoja. Ar norite jį perrašyti?"
 
-#: ../gtk/gtkfilechooserdefault.c:8369
+#: ../gtk/gtkfilechooserdefault.c:8371
 #: ../gtk/gtkprintunixdialog.c:552
 #, c-format
 msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Failas vietoje „%s“ jau egzistuoja. Pakeitus jį, jo turinys bus perrašytas."
 
-#: ../gtk/gtkfilechooserdefault.c:8374
+#: ../gtk/gtkfilechooserdefault.c:8376
 #: ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
 msgstr "_Pakeisti"
 
-#: ../gtk/gtkfilechooserdefault.c:9181
+#: ../gtk/gtkfilechooserdefault.c:9183
 msgid "Could not start the search process"
 msgstr "Nepavyko paleisti paieškos proceso"
 
-#: ../gtk/gtkfilechooserdefault.c:9182
+#: ../gtk/gtkfilechooserdefault.c:9184
 msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
 msgstr "Programai nepavyko sukurti ryšio su indeksavimo posisteme. Įsitikinkite, kad ji veikia."
 
-#: ../gtk/gtkfilechooserdefault.c:9196
+#: ../gtk/gtkfilechooserdefault.c:9198
 msgid "Could not send the search request"
 msgstr "Nepavyko išsiųsti paieškos užklausos"
 
-#: ../gtk/gtkfilechooserdefault.c:9806
+#: ../gtk/gtkfilechooserdefault.c:9808
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nepavyko prijungti %s"
@@ -1767,13 +1767,13 @@ msgstr "_Atverti nuorodą"
 msgid "Copy _Link Address"
 msgstr "Kopijuoti _nuorodos adresą"
 
-#: ../gtk/gtk-launch.c:69
+#: ../gtk/gtk-launch.c:73
 msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
 msgstr "PROGRAMA [URI...] - paleisti PROGRAMĄ su URI."
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
-#: ../gtk/gtk-launch.c:73
+#: ../gtk/gtk-launch.c:77
 msgid ""
 "Launch specified application by its desktop file info\n"
 "optionally passing list of URIs as arguments."
@@ -1781,34 +1781,39 @@ msgstr ""
 "Paleisti nurodytą programą su desktop failo informacija\n"
 "papildomai perduodant URI sąrašą kaip argumentus."
 
-#: ../gtk/gtk-launch.c:85
+#: ../gtk/gtk-launch.c:89
 #, c-format
 msgid "Error parsing commandline options: %s\n"
 msgstr "Klaida skaitant komandų eilutės parinktis: %s\n"
 
-#: ../gtk/gtk-launch.c:87
-#: ../gtk/gtk-launch.c:100
+#: ../gtk/gtk-launch.c:91
+#: ../gtk/gtk-launch.c:104
 #, c-format
 msgid "Try \"%s --help\" for more information."
 msgstr "Daugiau informacijos gausite įvykdę „%s --help“"
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
-#: ../gtk/gtk-launch.c:98
+#: ../gtk/gtk-launch.c:102
 #, c-format
 msgid "%s: missing application name"
 msgstr "%s: trūksta programos pavadinimo"
 
+#: ../gtk/gtk-launch.c:123
+#, c-format
+msgid "Creating AppInfo from id not supported on non unix operating systems"
+msgstr "AppInfo kūrimas iš id  nepalaikomas ne unix operacinėse sistemose"
+
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
-#: ../gtk/gtk-launch.c:122
+#: ../gtk/gtk-launch.c:131
 #, c-format
 msgid "%s: no such application %s"
 msgstr "%s: nėra tokios programos %s"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
-#: ../gtk/gtk-launch.c:140
+#: ../gtk/gtk-launch.c:149
 #, c-format
 msgid "%s: error launching application: %s\n"
 msgstr "%s: klaida paleidžiant programą: %s\n"
@@ -1854,27 +1859,27 @@ msgstr ""
 "Susisiekite su sistemos administratoriumi"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:446
+#: ../gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "Įkelti papildomus GTK+ modulius"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "MODULIAI"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:449
+#: ../gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "Visi perspėjimai yra „mirtini“"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:452
+#: ../gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ derinimo parametrai, kuriuos naudoti"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:455
+#: ../gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ derinimo parametrai, kuriu nenaudoti"
 
@@ -1883,73 +1888,73 @@ msgstr "GTK+ derinimo parametrai, kuriu nenaudoti"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:706
+#: ../gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:774
+#: ../gtk/gtkmain.c:772
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nepavyko atverti displėjaus: „%s“"
 
-#: ../gtk/gtkmain.c:840
+#: ../gtk/gtkmain.c:838
 msgid "GTK+ Options"
 msgstr "GTK+ parinktys"
 
-#: ../gtk/gtkmain.c:840
+#: ../gtk/gtkmain.c:838
 msgid "Show GTK+ Options"
 msgstr "Rodyti GTK+ parinktis"
 
-#: ../gtk/gtkmountoperation.c:532
+#: ../gtk/gtkmountoperation.c:535
 msgid "Co_nnect"
 msgstr "Prisi_jungti"
 
-#: ../gtk/gtkmountoperation.c:606
+#: ../gtk/gtkmountoperation.c:609
 msgid "Connect As"
 msgstr "Prisijungti kaip"
 
-#: ../gtk/gtkmountoperation.c:615
+#: ../gtk/gtkmountoperation.c:618
 msgid "_Anonymous"
 msgstr "_Anonimas"
 
-#: ../gtk/gtkmountoperation.c:624
+#: ../gtk/gtkmountoperation.c:627
 msgid "Registered U_ser"
 msgstr "Registruotas na_udotojas"
 
-#: ../gtk/gtkmountoperation.c:635
+#: ../gtk/gtkmountoperation.c:638
 msgid "_Username"
 msgstr "Na_udotojo vardas"
 
-#: ../gtk/gtkmountoperation.c:640
+#: ../gtk/gtkmountoperation.c:643
 msgid "_Domain"
 msgstr "S_ritis"
 
-#: ../gtk/gtkmountoperation.c:646
+#: ../gtk/gtkmountoperation.c:649
 msgid "_Password"
 msgstr "_Slaptažodis"
 
-#: ../gtk/gtkmountoperation.c:668
+#: ../gtk/gtkmountoperation.c:671
 msgid "Forget password _immediately"
 msgstr "_Neįsiminti slaptažodžio"
 
-#: ../gtk/gtkmountoperation.c:678
+#: ../gtk/gtkmountoperation.c:681
 msgid "Remember password until you _logout"
 msgstr "Įsiminti slaptažodį iki _atsijungsite"
 
-#: ../gtk/gtkmountoperation.c:688
+#: ../gtk/gtkmountoperation.c:691
 msgid "Remember _forever"
 msgstr "Įsiminti _visam laikui"
 
-#: ../gtk/gtkmountoperation.c:1077
+#: ../gtk/gtkmountoperation.c:1080
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Nežinoma programa (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1260
+#: ../gtk/gtkmountoperation.c:1263
 msgid "Unable to end process"
 msgstr "Nepavyko užbaigti proceso"
 
-#: ../gtk/gtkmountoperation.c:1297
+#: ../gtk/gtkmountoperation.c:1300
 msgid "_End Process"
 msgstr "_Užbaigti procesą"
 
@@ -1984,8 +1989,8 @@ msgstr "Z aplinka"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nepavyko užbaigti proceso su PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5051
-#: ../gtk/gtknotebook.c:7705
+#: ../gtk/gtknotebook.c:5067
+#: ../gtk/gtknotebook.c:7721
 #, c-format
 msgid "Page %u"
 msgstr "%u puslapis"
@@ -1993,15 +1998,15 @@ msgstr "%u puslapis"
 #. Translators: the format here is used to build the string that will be rendered
 #. * in the number emblem.
 #.
-#: ../gtk/gtknumerableicon.c:481
+#: ../gtk/gtknumerableicon.c:482
 #, c-format
 msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
 
 #: ../gtk/gtkpagesetup.c:646
-#: ../gtk/gtkpapersize.c:846
-#: ../gtk/gtkpapersize.c:886
+#: ../gtk/gtkpapersize.c:848
+#: ../gtk/gtkpapersize.c:888
 msgid "Not a valid page setup file"
 msgstr "Netinkamas puslapio sąrankos failas"
 
@@ -2063,12 +2068,11 @@ msgstr "Žemyn keliu"
 msgid "File System Root"
 msgstr "Failų sistemos šakninis aplankas"
 
-#: ../gtk/gtkprintbackend.c:748
+#: ../gtk/gtkprintbackend.c:750
 msgid "Authentication"
 msgstr "Tapatybės patvirtinimas"
 
 #: ../gtk/gtkprinteroptionwidget.c:546
-#| msgid "Select a File"
 msgid "Select a filename"
 msgstr "Pasirinkite failo pavadinimą"
 
@@ -2130,30 +2134,30 @@ msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Baigta su klaida"
 
-#: ../gtk/gtkprintoperation.c:2352
+#: ../gtk/gtkprintoperation.c:2349
 #, c-format
 msgid "Preparing %d"
 msgstr "Ruošiamasi %d"
 
-#: ../gtk/gtkprintoperation.c:2354
-#: ../gtk/gtkprintoperation.c:2984
+#: ../gtk/gtkprintoperation.c:2351
+#: ../gtk/gtkprintoperation.c:2983
 msgid "Preparing"
 msgstr "Ruošiamasi"
 
-#: ../gtk/gtkprintoperation.c:2357
+#: ../gtk/gtkprintoperation.c:2354
 #, c-format
 msgid "Printing %d"
 msgstr "Spausdinama %d"
 
-#: ../gtk/gtkprintoperation.c:3014
+#: ../gtk/gtkprintoperation.c:3013
 msgid "Error creating print preview"
 msgstr "Klaida formuojant spaudinio peržiūrą"
 
-#: ../gtk/gtkprintoperation.c:3017
+#: ../gtk/gtkprintoperation.c:3016
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Labiausiai tikėtina priežastis – nepavyko sukurti laikinojo failo."
 
-#: ../gtk/gtkprintoperation-unix.c:302
+#: ../gtk/gtkprintoperation-unix.c:307
 msgid "Error launching preview"
 msgstr "Klaida paleidžiant peržiūrą"
 
@@ -3334,7 +3338,7 @@ msgstr "Netinkama pradžios žymė „%s“ eilutės %d stulpelyje %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Neleistini simboliniai duomenys eilutės %d stulpelyje %d"
 
-#: ../gtk/gtkuimanager.c:2738
+#: ../gtk/gtkuimanager.c:2694
 msgid "Empty"
 msgstr "Tuščias"
 
@@ -4813,8 +4817,3 @@ msgstr "bandomasis-dokumentas.%s"
 msgid "Print to Test Printer"
 msgstr "Spausdinti į bandomąjį spausdintuvą"
 
-#~ msgid "Select a folder"
-#~ msgstr "Pasirinkite aplanką"
-
-#~ msgid "_Save in folder:"
-#~ msgstr "Iš_saugoti aplanke:"
