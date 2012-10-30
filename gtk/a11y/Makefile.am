@@ -5,6 +5,7 @@ noinst_LTLIBRARIES = libgtka11y.la
 gtka11y_c_sources =			\
 	gtkaccessibility.c		\
 	gtkaccessibilityutil.c		\
+	gtkaccessibilitymisc.c 		\
 	gtkarrowaccessible.c		\
 	gtkbooleancellaccessible.c	\
 	gtkboxaccessible.c		\
@@ -50,8 +51,7 @@ gtka11y_c_sources =			\
 	gtktoplevelaccessible.c		\
 	gtktreeviewaccessible.c		\
 	gtkwidgetaccessible.c		\
-	gtkwindowaccessible.c		\
-	gailmisc.c
+	gtkwindowaccessible.c
 
 gtka11yincludedir = $(includedir)/gtk-3.0/gtk/a11y
 gtka11yinclude_HEADERS =			\
@@ -102,16 +102,16 @@ gtka11yinclude_HEADERS =			\
 	gtkwindowaccessible.h
 
 gtka11y_private_h_sources =		\
+	gtkaccessibility.h		\
+	gtkaccessibilityutil.h		\
+	gtkaccessibilitymisc.h		\
 	gtkcolorswatchaccessible.h	\
 	gtkcellaccessibleprivate.h	\
 	gtklockbuttonaccessibleprivate.h \
 	gtkiconviewaccessibleprivate.h	\
 	gtktreeviewaccessibleprivate.h	\
 	gtktextviewaccessibleprivate.h  \
-	gtkwidgetaccessibleprivate.h 	\
-	gtkaccessibility.h		\
-	gtkaccessibilityutil.h		\
-	gailmisc.h
+	gtkwidgetaccessibleprivate.h
 
 libgtka11y_la_SOURCES = 		\
 	$(gtka11y_c_sources)		\

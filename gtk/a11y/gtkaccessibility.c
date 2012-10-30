@@ -19,6 +19,8 @@
 
 #include "gtkaccessibility.h"
 #include "gtkaccessibilityutil.h"
+#include "gtkaccessibilitymisc.h"
+
 #include "gtkwindowaccessible.h"
 
 #include <stdio.h>
@@ -34,7 +36,6 @@
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkaccessible.h>
-#include "gailmisc.h"
 
 #ifdef GDK_WINDOWING_X11
 #include <atk-bridge.h>
@@ -1014,5 +1015,5 @@ _gtk_accessibility_init (void)
   atk_bridge_adaptor_init (NULL, NULL);
 #endif
 
-  atk_misc_instance = g_object_new (GAIL_TYPE_MISC, NULL);
+  atk_misc_instance = g_object_new (GTK_TYPE_MISC_IMPL, NULL);
 }

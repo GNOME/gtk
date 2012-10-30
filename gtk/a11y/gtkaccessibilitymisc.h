@@ -15,35 +15,30 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GAIL_MISC_H__
-#define __GAIL_MISC_H__
+#ifndef __GTK_ACCESSIBILITY_MISC_H__
+#define __GTK_ACCESSIBILITY_MISC_H__
 
 #include <atk/atk.h>
 
 G_BEGIN_DECLS
 
-#define GAIL_TYPE_MISC                           (_gail_misc_get_type ())
-#define GAIL_MISC(obj)                           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GAIL_TYPE_MISC, GailMisc))
-#define GAIL_MISC_CLASS(klass)                   (G_TYPE_CHECK_CLASS_CAST ((klass), GAIL_TYPE_MISC, GailMiscClass))
-#define GAIL_IS_MISC(obj)                        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GAIL_TYPE_MISC))
-#define GAIL_IS_MISC_CLASS(klass)                (G_TYPE_CHECK_CLASS_TYPE ((klass), GAIL_TYPE_MISC))
-#define GAIL_MISC_GET_CLASS(obj)                 (G_TYPE_INSTANCE_GET_CLASS ((obj), GAIL_TYPE_MISC, GailMiscClass))
+#define GTK_TYPE_MISC_IMPL (_gtk_misc_impl_get_type ())
 
-typedef struct _GailMisc      GailMisc;
-typedef struct _GailMiscClass GailMiscClass;
+typedef struct _GtkMiscImpl      GtkMiscImpl;
+typedef struct _GtkMiscImplClass GtkMiscImplClass;
 
-struct _GailMisc
+struct _GtkMiscImpl
 {
   AtkMisc parent;
 };
 
-struct _GailMiscClass
+struct _GtkMiscImplClass
 {
   AtkMiscClass parent_class;
 };
 
-GType _gail_misc_get_type (void);
+GType _gtk_misc_impl_get_type (void);
 
 G_END_DECLS
 
-#endif /* __GAIL_MISC_H__ */
+#endif /* __GTK_ACCESSIBILITY_MISC_H__ */
