@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-10-20 18:46+0000\n"
-"PO-Revision-Date: 2012-10-18 02:36+0300\n"
+"POT-Creation-Date: 2012-10-29 21:33+0000\n"
+"PO-Revision-Date: 2012-10-30 00:02+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "Language: et\n"
@@ -1475,6 +1475,11 @@ msgstr "Täpsema info jaoks kirjuta \"%s --help\"."
 #, c-format
 msgid "%s: missing application name"
 msgstr "%s: puudub rakenduse nimi"
+
+#, c-format
+msgid "Creating AppInfo from id not supported on non unix operating systems"
+msgstr ""
+"AppInfo loomine loomine id järgi pole unix operatsioonisüsteemides toetatud"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
