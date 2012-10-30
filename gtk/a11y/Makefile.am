@@ -4,6 +4,7 @@ noinst_LTLIBRARIES = libgtka11y.la
 
 gtka11y_c_sources =			\
 	gtkaccessibility.c		\
+	gtkaccessibilityutil.c		\
 	gtkarrowaccessible.c		\
 	gtkbooleancellaccessible.c	\
 	gtkboxaccessible.c		\
@@ -50,7 +51,6 @@ gtka11y_c_sources =			\
 	gtktreeviewaccessible.c		\
 	gtkwidgetaccessible.c		\
 	gtkwindowaccessible.c		\
-	gailutil.c			\
 	gailmisc.c
 
 gtka11yincludedir = $(includedir)/gtk-3.0/gtk/a11y
@@ -110,7 +110,7 @@ gtka11y_private_h_sources =		\
 	gtktextviewaccessibleprivate.h  \
 	gtkwidgetaccessibleprivate.h 	\
 	gtkaccessibility.h		\
-	gailutil.h			\
+	gtkaccessibilityutil.h		\
 	gailmisc.h
 
 libgtka11y_la_SOURCES = 		\

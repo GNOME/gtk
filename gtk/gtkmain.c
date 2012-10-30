@@ -129,7 +129,6 @@
 #include "gtkwindowprivate.h"
 
 #include "a11y/gtkaccessibility.h"
-#include "a11y/gailutil.h"
 
 /* Private type definitions
  */
@@ -2244,7 +2243,7 @@ gtk_invoke_key_snoopers (GtkWidget *grab_widget,
   GSList *slist;
   gint return_val = FALSE;
 
-  return_val = _gail_util_key_snooper (grab_widget, (GdkEventKey *) event);
+  return_val = _gtk_accessibility_key_snooper (grab_widget, (GdkEventKey *) event);
 
   slist = key_snoopers;
   while (slist && !return_val)
