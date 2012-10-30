@@ -845,7 +845,7 @@ gtk_widget_accessible_all_parents_visible (GtkWidget *widget)
 }
 
 void
-gtk_widget_accessible_set_layer (GtkWidgetAccessible *accessible,
+_gtk_widget_accessible_set_layer (GtkWidgetAccessible *accessible,
                                   AtkLayer             layer)
 {
   accessible->priv->layer = layer;
