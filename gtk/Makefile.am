@@ -176,6 +176,7 @@ deprecated_private_h_sources =			\
 gtk_public_h_sources = 		\
 	gtk.h			\
 	gtkx.h			\
+	gtk-a11y.h		\
 	gtkaboutdialog.h	\
 	gtkaccelgroup.h		\
 	gtkaccellabel.h		\
