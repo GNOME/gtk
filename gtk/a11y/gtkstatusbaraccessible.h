@@ -22,7 +22,7 @@
 #ifndef __GTK_STATUSBAR_ACCESSIBLE_H__
 #define __GTK_STATUSBAR_ACCESSIBLE_H__
 
-#include "gtkboxaccessible.h"
+#include <gtk/a11y/gtkboxaccessible.h>
 
 G_BEGIN_DECLS
 

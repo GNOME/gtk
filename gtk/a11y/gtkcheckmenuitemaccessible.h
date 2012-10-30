@@ -22,7 +22,7 @@
 #ifndef __GTK_CHECK_MENU_ITEM_ACCESSIBLE_H__
 #define __GTK_CHECK_MENU_ITEM_ACCESSIBLE_H__
 
-#include "gtkmenuitemaccessible.h"
+#include <gtk/a11y/gtkmenuitemaccessible.h>
 
 G_BEGIN_DECLS
 

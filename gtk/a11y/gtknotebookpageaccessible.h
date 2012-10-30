@@ -22,7 +22,7 @@
 #ifndef __GTK_NOTEBOOK_PAGE_ACCESSIBLE_H__
 #define __GTK_NOTEBOOK_PAGE_ACCESSIBLE_H__
 
-#include "gtknotebookaccessible.h"
+#include <gtk/a11y/gtknotebookaccessible.h>
 
 G_BEGIN_DECLS
 

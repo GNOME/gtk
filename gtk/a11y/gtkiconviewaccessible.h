@@ -22,8 +22,8 @@
 #ifndef __GTK_ICON_VIEW_ACCESSIBLE_H__
 #define __GTK_ICON_VIEW_ACCESSIBLE_H__
 
-#include "gtkcontaineraccessible.h"
-#include "gtk/gtkiconview.h"
+#include <gtk/gtkiconview.h>
+#include <gtk/a11y/gtkcontaineraccessible.h>
 
 G_BEGIN_DECLS
 

@@ -22,7 +22,7 @@
 #ifndef __GTK_LINK_BUTTON_ACCESSIBLE_H__
 #define __GTK_LINK_BUTTON_ACCESSIBLE_H__
 
-#include "gtkbuttonaccessible.h"
+#include <gtk/a11y/gtkbuttonaccessible.h>
 
 G_BEGIN_DECLS
 

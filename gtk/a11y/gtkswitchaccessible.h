@@ -22,7 +22,7 @@
 #ifndef __GTK_SWITCH_ACCESSIBLE_H__
 #define __GTK_SWITCH_ACCESSIBLE_H__
 
-#include "gtkwidgetaccessible.h"
+#include <gtk/a11y/gtkwidgetaccessible.h>
 
 G_BEGIN_DECLS
 

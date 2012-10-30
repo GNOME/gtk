@@ -22,8 +22,8 @@
 #ifndef __GTK_MENU_ACCESSIBLE_H__
 #define __GTK_MENU_ACCESSIBLE_H__
 
-#include "gtkmenu.h"
-#include "gtkmenushellaccessible.h"
+#include <gtk/gtkmenu.h>
+#include <gtk/a11y/gtkmenushellaccessible.h>
 
 G_BEGIN_DECLS
 

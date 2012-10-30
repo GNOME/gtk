@@ -22,7 +22,7 @@
 #ifndef __GTK_SCROLLED_WINDOW_ACCESSIBLE_H__
 #define __GTK_SCROLLED_WINDOW_ACCESSIBLE_H__
 
-#include "gtkcontaineraccessible.h"
+#include <gtk/a11y/gtkcontaineraccessible.h>
 
 G_BEGIN_DECLS
 

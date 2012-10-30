@@ -23,7 +23,7 @@
 #define __GTK_TEXT_CELL_ACCESSIBLE_H__
 
 #include <atk/atk.h>
-#include "gtkrenderercellaccessible.h"
+#include <gtk/a11y/gtkrenderercellaccessible.h>
 
 G_BEGIN_DECLS
 
