@@ -248,6 +248,52 @@
 #include <gtk/deprecated/gtkvscrollbar.h>
 #include <gtk/deprecated/gtkvseparator.h>
 
+#include <gtk/a11y/gtkarrowaccessible.h>
+#include <gtk/a11y/gtkbooleancellaccessible.h>
+#include <gtk/a11y/gtkboxaccessible.h>
+#include <gtk/a11y/gtkbuttonaccessible.h>
+#include <gtk/a11y/gtkcellaccessible.h>
+#include <gtk/a11y/gtkcellaccessibleparent.h>
+#include <gtk/a11y/gtkcheckmenuitemaccessible.h>
+#include <gtk/a11y/gtkcomboboxaccessible.h>
+#include <gtk/a11y/gtkcontaineraccessible.h>
+#include <gtk/a11y/gtkcontainercellaccessible.h>
+#include <gtk/a11y/gtkentryaccessible.h>
+#include <gtk/a11y/gtkexpanderaccessible.h>
+#include <gtk/a11y/gtkframeaccessible.h>
+#include <gtk/a11y/gtkiconviewaccessible.h>
+#include <gtk/a11y/gtkimageaccessible.h>
+#include <gtk/a11y/gtkimagecellaccessible.h>
+#include <gtk/a11y/gtklabelaccessible.h>
+#include <gtk/a11y/gtklinkbuttonaccessible.h>
+#include <gtk/a11y/gtklockbuttonaccessible.h>
+#include <gtk/a11y/gtkmenuaccessible.h>
+#include <gtk/a11y/gtkmenuitemaccessible.h>
+#include <gtk/a11y/gtkmenushellaccessible.h>
+#include <gtk/a11y/gtknotebookaccessible.h>
+#include <gtk/a11y/gtknotebookpageaccessible.h>
+#include <gtk/a11y/gtkpanedaccessible.h>
+#include <gtk/a11y/gtkprogressbaraccessible.h>
+#include <gtk/a11y/gtkradiobuttonaccessible.h>
+#include <gtk/a11y/gtkradiomenuitemaccessible.h>
+#include <gtk/a11y/gtkrangeaccessible.h>
+#include <gtk/a11y/gtkrenderercellaccessible.h>
+#include <gtk/a11y/gtkscaleaccessible.h>
+#include <gtk/a11y/gtkscalebuttonaccessible.h>
+#include <gtk/a11y/gtkscrollbaraccessible.h>
+#include <gtk/a11y/gtkscrolledwindowaccessible.h>
+#include <gtk/a11y/gtkspinbuttonaccessible.h>
+#include <gtk/a11y/gtkspinneraccessible.h>
+#include <gtk/a11y/gtkstatusbaraccessible.h>
+#include <gtk/a11y/gtkswitchaccessible.h>
+#include <gtk/a11y/gtktextcellaccessible.h>
+#include <gtk/a11y/gtktextviewaccessible.h>
+#include <gtk/a11y/gtktogglebuttonaccessible.h>
+#include <gtk/a11y/gtktoplevelaccessible.h>
+#include <gtk/a11y/gtktreeviewaccessible.h>
+#include <gtk/a11y/gtkwidgetaccessible.h>
+#include <gtk/a11y/gtkwindowaccessible.h>
+
 #undef __GTK_H_INSIDE__
 
 #endif /* __GTK_H__ */
