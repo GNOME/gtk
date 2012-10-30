@@ -15,6 +15,10 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
 #ifndef __GTK_RADIO_BUTTON_ACCESSIBLE_H__
 #define __GTK_RADIO_BUTTON_ACCESSIBLE_H__
 
