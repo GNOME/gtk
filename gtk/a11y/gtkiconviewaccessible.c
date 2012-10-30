@@ -1,4 +1,4 @@
-/* gtkiconview.c
+/* GTK+ - accessibility implementations
  * Copyright (C) 2002, 2004  Anders Carlsson <andersca@gnu.org>
  *
  * This library is free software; you can redistribute it and/or

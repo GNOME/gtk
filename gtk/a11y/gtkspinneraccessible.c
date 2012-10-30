@@ -1,5 +1,4 @@
-/* GTK - The GIMP Toolkit
- *
+/* GTK+ - accessibility implementations
  * Copyright (C) 2007 John Stowers, Neil Jagdish Patel.
  * Copyright (C) 2009 Bastien Nocera, David Zeuthen
  *

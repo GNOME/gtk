@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2011, F123 Consulting & Mais Diferenças
  * Copyright 2001, 2002, 2003 Sun Microsystems Inc.
  *

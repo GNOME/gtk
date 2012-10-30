@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2008 Jan Arne Petersen
  *
  * This library is free software; you can redistribute it and/or
