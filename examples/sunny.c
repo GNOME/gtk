@@ -191,8 +191,6 @@ menu_button_class_init (MenuButtonClass *class)
 MenuButton *
 menu_button_new (void)
 {
-  g_type_init ();
-
   return g_object_new (menu_button_get_type (),
                        "application-id", "org.gtk.Test.Sunny",
                        "flags", G_APPLICATION_HANDLES_OPEN,

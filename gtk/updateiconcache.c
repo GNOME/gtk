@@ -1736,7 +1736,6 @@ main (int argc, char **argv)
   if (!force_update && is_cache_up_to_date (path))
     return 0;
 
-  g_type_init ();
   build_cache (path);
 
   if (strcmp (var_name, "-") != 0)

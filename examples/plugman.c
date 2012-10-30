@@ -465,8 +465,6 @@ plug_man_class_init (PlugManClass *class)
 PlugMan *
 plug_man_new (void)
 {
-  g_type_init ();
-
   return g_object_new (plug_man_get_type (),
                        "application-id", "org.gtk.Test.plugman",
                        "flags", G_APPLICATION_HANDLES_OPEN,

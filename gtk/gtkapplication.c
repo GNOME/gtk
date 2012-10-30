@@ -768,8 +768,9 @@ gtk_application_class_init (GtkApplicationClass *class)
  *
  * Creates a new #GtkApplication instance.
  *
- * This function calls g_type_init() for you. gtk_init() is called
- * as soon as the application gets registered as the primary instance.
+ * When using #GtkApplication, it is not necessary to call gtk_init()
+ * manually. It is called as soon as the application gets registered as
+ * the primary instance.
  *
  * Concretely, gtk_init() is called in the default handler for the
  * #GApplication::startup signal. Therefore, #GtkApplication subclasses should
@@ -799,8 +800,6 @@ gtk_application_new (const gchar       *application_id,
                      GApplicationFlags  flags)
 {
   g_return_val_if_fail (application_id == NULL || g_application_id_is_valid (application_id), NULL);
-
-  g_type_init ();
 
   return g_object_new (GTK_TYPE_APPLICATION,
                        "application-id", application_id,

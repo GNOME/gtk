@@ -411,8 +411,6 @@ bloat_pad_new (void)
 {
   BloatPad *bloat_pad;
 
-  g_type_init ();
-
   g_set_application_name ("Bloatpad");
 
   bloat_pad = g_object_new (bloat_pad_get_type (),

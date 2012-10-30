@@ -65,8 +65,6 @@ main (int argc, char *argv[])
 #endif
 #endif
 
-  g_type_init ();
-
   /* Translators: this message will appear immediately after the */
   /* usage string - Usage: COMMAND [OPTION]... <THIS_MESSAGE>    */
   context =

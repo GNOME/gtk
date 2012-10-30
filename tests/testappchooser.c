@@ -155,7 +155,6 @@ main (int argc, char **argv)
   GtkWidget *w1;
   gchar *path;
 
-  g_type_init ();
   gtk_init (&argc, &argv);
 
   toplevel = gtk_window_new (GTK_WINDOW_TOPLEVEL);

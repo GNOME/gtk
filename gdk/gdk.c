@@ -274,8 +274,6 @@ gdk_pre_parse_libgtk_only (void)
         _gdk_rendering_mode = GDK_RENDERING_MODE_RECORDING;
     }
 
-  g_type_init ();
-
   /* Do any setup particular to the windowing system */
   gdk_display_manager_get ();
 }
