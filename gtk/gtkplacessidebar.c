@@ -34,6 +34,12 @@
  * * Fix FIXMEs
  *
  * * Grep for "NULL-GError" and see if they should be taken care of
+ *
+ * * Although we do g_mount_unmount_with_operation(), Nautilus used to do
+ *   nautilus_file_operations_unmount_mount_full() to unmount a volume.  With
+ *   that, Nautilus does the "volume has trash, empty it first?" dance.  Cosimo
+ *   suggests that this logic should be part of GtkMountOperation, which can
+ *   have Unix-specific code for emptying trash.
  */
 
 #include "config.h"
