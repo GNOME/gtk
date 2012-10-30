@@ -128,7 +128,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 
-#include "a11y/gail.h"
+#include "a11y/gtkaccessibility.h"
 #include "a11y/gailutil.h"
 
 /* Private type definitions

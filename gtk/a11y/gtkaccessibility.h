@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -15,16 +15,16 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_GAIL_H__
-#define __GTK_GAIL_H__
+#ifndef __GTK_ACCESSIBILITY_H__
+#define __GTK_ACCESSIBILITY_H__
 
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-void            _gtk_accessibility_shutdown             (void);
-void            _gtk_accessibility_init                 (void);
+void _gtk_accessibility_shutdown (void);
+void _gtk_accessibility_init     (void);
 
 G_END_DECLS
 
-#endif /* __GTK_GAIL_H__ */
+#endif /* __GTK_ACCESSIBILITY_H__ */
