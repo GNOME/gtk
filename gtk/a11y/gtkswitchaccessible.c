@@ -1,5 +1,4 @@
-/* GTK - The GIMP Toolkit
- *
+/* GTK+ - accessibility implementations
  * Copyright (C) 2010  Intel Corporation
  * Copyright (C) 2010  RedHat, Inc.
  *
