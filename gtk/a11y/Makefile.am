@@ -75,8 +75,8 @@ gtka11yinclude_HEADERS =			\
 	gtklinkbuttonaccessible.h	\
 	gtklockbuttonaccessible.h	\
 	gtkmenuaccessible.h		\
-	gtkmenushellaccessible.h	\
 	gtkmenuitemaccessible.h		\
+	gtkmenushellaccessible.h	\
 	gtknotebookaccessible.h		\
 	gtknotebookpageaccessible.h	\
 	gtkpanedaccessible.h		\
