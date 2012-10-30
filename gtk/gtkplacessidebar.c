@@ -2139,13 +2139,72 @@ mount_shortcut_cb (GtkMenuItem           *item,
 	}
 }
 
+/* Callback used from g_mount_unmount_with_operation() */
 static void
-unmount_done (gpointer data)
+unmount_mount_cb (GObject *source_object,
+		  GAsyncResult *result,
+		  gpointer user_data)
 {
-	GtkPlacesSidebar *sidebar;
+	GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
+	GMount *mount;
+	GError *error;
 
-	sidebar = data;
+	mount = G_MOUNT (source_object);
+
+	error = NULL;
+	if (!g_mount_unmount_with_operation_finish (mount, result, &error)) {
+		if (error->code != G_IO_ERROR_FAILED_HANDLED) {
+			char *name;
+			char *primary;
+
+			name = g_mount_get_name (mount);
+			primary = g_strdup_printf (_("Unable to unmount %s"), name);
+			g_free (name);
+			emit_show_error_message (sidebar, primary, error->message);
+			g_free (primary);
+		}
+
+		g_error_free (error);
+	}
+
+	/* FIXME: we need to switch to a path that is available now - $HOME? */
+
 	g_object_unref (sidebar);
+	g_object_unref (mount);
+}
+
+static void
+show_unmount_progress_cb (GMountOperation *op,
+			  const gchar *message,
+			  gint64 time_left,
+			  gint64 bytes_left,
+			  gpointer user_data)
+{
+	/* FIXME: These are just libnotify notifications, but GTK+ doesn't do notifications right now.
+	 * Should we just call D-Bus directly?
+	 */
+#if DO_NOT_COMPILE
+	NautilusApplication *app = NAUTILUS_APPLICATION (g_application_get_default ());
+
+	if (bytes_left == 0) {
+		nautilus_application_notify_unmount_done (app, message);
+	} else {
+		nautilus_application_notify_unmount_show (app, message);
+	}
+#endif
+}
+
+static void
+show_unmount_progress_aborted_cb (GMountOperation *op,
+				  gpointer user_data)
+{
+	/* FIXME: These are just libnotify notifications, but GTK+ doesn't do notifications right now.
+	 * Should we just call D-Bus directly?
+	 */
+#if DO_NOT_COMPILE
+	NautilusApplication *app = NAUTILUS_APPLICATION (g_application_get_default ());
+	nautilus_application_notify_unmount_done (app, NULL);
+#endif
 }
 
 static void
@@ -2153,11 +2212,23 @@ do_unmount (GMount *mount,
 	    GtkPlacesSidebar *sidebar)
 {
 	if (mount != NULL) {
-#if DO_NOT_COMPILE
-		nautilus_file_operations_unmount_mount_full (NULL, mount, FALSE, TRUE,
-							     unmount_done,
-							     g_object_ref (sidebar));
-#endif
+		GMountOperation *mount_op;
+
+		g_object_ref (mount);
+
+		mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
+
+		g_mount_unmount_with_operation (mount,
+						0,
+						mount_op,
+						NULL,
+						unmount_mount_cb,
+						g_object_ref (sidebar));
+		g_signal_connect (mount_op, "show-unmount-progress",
+				  G_CALLBACK (show_unmount_progress_cb), sidebar);
+		g_signal_connect (mount_op, "aborted",
+				  G_CALLBACK (show_unmount_progress_aborted_cb), sidebar);
+		g_object_unref (mount_op);
 	}
 }
 
@@ -2186,34 +2257,6 @@ unmount_shortcut_cb (GtkMenuItem           *item,
 		     GtkPlacesSidebar *sidebar)
 {
 	do_unmount_selection (sidebar);
-}
-
-static void
-show_unmount_progress_cb (GMountOperation *op,
-			  const gchar *message,
-			  gint64 time_left,
-			  gint64 bytes_left,
-			  gpointer user_data)
-{
-#if DO_NOT_COMPILE
-	NautilusApplication *app = NAUTILUS_APPLICATION (g_application_get_default ());
-
-	if (bytes_left == 0) {
-		nautilus_application_notify_unmount_done (app, message);
-	} else {
-		nautilus_application_notify_unmount_show (app, message);
-	}
-#endif
-}
-
-static void
-show_unmount_progress_aborted_cb (GMountOperation *op,
-				  gpointer user_data)
-{
-#if DO_NOT_COMPILE
-	NautilusApplication *app = NAUTILUS_APPLICATION (g_application_get_default ());
-	nautilus_application_notify_unmount_done (app, NULL);
-#endif
 }
 
 static void
