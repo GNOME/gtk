@@ -25,7 +25,7 @@
 static void atk_action_interface_init (AtkActionIface *iface);
 static void atk_image_interface_init  (AtkImageIface  *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkButtonAccessible, _gtk_button_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkButtonAccessible, gtk_button_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
@@ -55,7 +55,7 @@ gtk_button_accessible_initialize (AtkObject *obj,
 {
   GtkWidget *parent;
 
-  ATK_OBJECT_CLASS (_gtk_button_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_button_accessible_parent_class)->initialize (obj, data);
 
   g_signal_connect (data, "state-flags-changed", G_CALLBACK (state_changed_cb), NULL);
 
@@ -143,7 +143,7 @@ gtk_button_accessible_get_name (AtkObject *obj)
   if (widget == NULL)
     return NULL;
 
-  name = ATK_OBJECT_CLASS (_gtk_button_accessible_parent_class)->get_name (obj);
+  name = ATK_OBJECT_CLASS (gtk_button_accessible_parent_class)->get_name (obj);
   if (name != NULL)
     return name;
 
@@ -190,7 +190,7 @@ gtk_button_accessible_ref_state_set (AtkObject *obj)
   if (widget == NULL)
     return NULL;
 
-  state_set = ATK_OBJECT_CLASS (_gtk_button_accessible_parent_class)->ref_state_set (obj);
+  state_set = ATK_OBJECT_CLASS (gtk_button_accessible_parent_class)->ref_state_set (obj);
 
   if ((gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_ACTIVE) != 0)
     atk_state_set_add_state (state_set, ATK_STATE_ARMED);
@@ -216,11 +216,11 @@ gtk_button_accessible_notify_gtk (GObject    *obj,
       g_signal_emit_by_name (atk_obj, "visible-data-changed");
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_button_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_button_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
-_gtk_button_accessible_class_init (GtkButtonAccessibleClass *klass)
+gtk_button_accessible_class_init (GtkButtonAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
@@ -239,7 +239,7 @@ _gtk_button_accessible_class_init (GtkButtonAccessibleClass *klass)
 }
 
 static void
-_gtk_button_accessible_init (GtkButtonAccessible *button)
+gtk_button_accessible_init (GtkButtonAccessible *button)
 {
 }
 

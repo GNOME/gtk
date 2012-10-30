@@ -27,14 +27,14 @@ struct _GtkArrowAccessiblePrivate
 
 static void atk_image_interface_init (AtkImageIface  *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkArrowAccessible, _gtk_arrow_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkArrowAccessible, gtk_arrow_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
 static void
 gtk_arrow_accessible_initialize (AtkObject *accessible,
                                  gpointer   data)
 {
-  ATK_OBJECT_CLASS (_gtk_arrow_accessible_parent_class)->initialize (accessible, data);
+  ATK_OBJECT_CLASS (gtk_arrow_accessible_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_ICON;
 }
@@ -46,11 +46,11 @@ gtk_arrow_accessible_finalize (GObject *object)
 
   g_free (arrow->priv->image_description);
 
-  G_OBJECT_CLASS (_gtk_arrow_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_arrow_accessible_parent_class)->finalize (object);
 }
 
 static void
-_gtk_arrow_accessible_class_init (GtkArrowAccessibleClass *klass)
+gtk_arrow_accessible_class_init (GtkArrowAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
@@ -63,7 +63,7 @@ _gtk_arrow_accessible_class_init (GtkArrowAccessibleClass *klass)
 }
 
 static void
-_gtk_arrow_accessible_init (GtkArrowAccessible *arrow)
+gtk_arrow_accessible_init (GtkArrowAccessible *arrow)
 {
   arrow->priv = G_TYPE_INSTANCE_GET_PRIVATE (arrow,
                                              GTK_TYPE_ARROW_ACCESSIBLE,

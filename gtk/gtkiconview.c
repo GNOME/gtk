@@ -44,7 +44,7 @@
 #include "gtktreednd.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
-#include "a11y/gtkiconviewaccessible.h"
+#include "a11y/gtkiconviewaccessibleprivate.h"
 
 /**
  * SECTION:gtkiconview
@@ -2859,7 +2859,7 @@ gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
 
       if (icon_view->priv->doing_rubberband)
         gtk_icon_view_update_rubberband (GTK_WIDGET (icon_view));
-      
+
       _gtk_icon_view_accessible_adjustment_changed (icon_view);
     }
 }

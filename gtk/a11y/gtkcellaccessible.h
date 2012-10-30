@@ -23,7 +23,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_CELL_ACCESSIBLE                           (_gtk_cell_accessible_get_type ())
+#define GTK_TYPE_CELL_ACCESSIBLE                           (gtk_cell_accessible_get_type ())
 #define GTK_CELL_ACCESSIBLE(obj)                           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CELL_ACCESSIBLE, GtkCellAccessible))
 #define GTK_CELL_ACCESSIBLE_CLASS(klass)                   (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CELL_ACCESSIBLE, GtkCellAccessibleClass))
 #define GTK_IS_CELL_ACCESSIBLE(obj)                        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CELL_ACCESSIBLE))
@@ -47,24 +47,7 @@ struct _GtkCellAccessibleClass
   void (*update_cache) (GtkCellAccessible *cell);
 };
 
-GType    _gtk_cell_accessible_get_type      (void);
-
-GtkCellRendererState
-         _gtk_cell_accessible_get_state     (GtkCellAccessible *cell);
-void     _gtk_cell_accessible_state_changed (GtkCellAccessible *cell,
-                                             GtkCellRendererState added,
-                                             GtkCellRendererState removed);
-void     _gtk_cell_accessible_update_cache  (GtkCellAccessible *cell);
-
-void     _gtk_cell_accessible_initialise    (GtkCellAccessible *cell,
-                                             GtkWidget         *widget,
-                                             AtkObject         *parent);
-gboolean _gtk_cell_accessible_add_state     (GtkCellAccessible *cell,
-                                             AtkStateType       state_type,
-                                             gboolean           emit_signal);
-gboolean _gtk_cell_accessible_remove_state  (GtkCellAccessible *cell,
-                                             AtkStateType       state_type,
-                                             gboolean           emit_signal);
+GType    gtk_cell_accessible_get_type      (void);
 
 G_END_DECLS
 

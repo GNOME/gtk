@@ -27,7 +27,7 @@ struct _GtkImageCellAccessiblePrivate
 
 static void atk_image_interface_init (AtkImageIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkImageCellAccessible, _gtk_image_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkImageCellAccessible, gtk_image_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
 static void
@@ -36,11 +36,11 @@ gtk_image_cell_accessible_finalize (GObject *object)
   GtkImageCellAccessible *image_cell = GTK_IMAGE_CELL_ACCESSIBLE (object);
 
   g_free (image_cell->priv->image_description);
-  G_OBJECT_CLASS (_gtk_image_cell_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_image_cell_accessible_parent_class)->finalize (object);
 }
 
 static void
-_gtk_image_cell_accessible_class_init (GtkImageCellAccessibleClass *klass)
+gtk_image_cell_accessible_class_init (GtkImageCellAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
@@ -50,7 +50,7 @@ _gtk_image_cell_accessible_class_init (GtkImageCellAccessibleClass *klass)
 }
 
 static void
-_gtk_image_cell_accessible_init (GtkImageCellAccessible *image_cell)
+gtk_image_cell_accessible_init (GtkImageCellAccessible *image_cell)
 {
   image_cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (image_cell,
                                                   GTK_TYPE_IMAGE_CELL_ACCESSIBLE,

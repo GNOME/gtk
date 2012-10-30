@@ -52,7 +52,7 @@
 #include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtkwidgetpath.h"
-#include "a11y/gtktreeviewaccessible.h"
+#include "a11y/gtktreeviewaccessibleprivate.h"
 
 
 /**

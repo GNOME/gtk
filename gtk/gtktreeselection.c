@@ -23,7 +23,7 @@
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
-#include "a11y/gtktreeviewaccessible.h"
+#include "a11y/gtktreeviewaccessibleprivate.h"
 
 
 /**

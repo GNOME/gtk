@@ -23,7 +23,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_TEXT_CELL_ACCESSIBLE            (_gtk_text_cell_accessible_get_type ())
+#define GTK_TYPE_TEXT_CELL_ACCESSIBLE            (gtk_text_cell_accessible_get_type ())
 #define GTK_TEXT_CELL_ACCESSIBLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT_CELL_ACCESSIBLE, GtkTextCellAccessible))
 #define GTK_TEXT_CELL_ACCESSIBLE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TEXT_CELL_ACCESSIBLE, GtkTextCellAccessibleClass))
 #define GTK_IS_TEXT_CELL_ACCESSIBLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TEXT_CELL_ACCESSIBLE))
@@ -46,7 +46,7 @@ struct _GtkTextCellAccessibleClass
   GtkRendererCellAccessibleClass parent_class;
 };
 
-GType      _gtk_text_cell_accessible_get_type (void);
+GType gtk_text_cell_accessible_get_type (void);
 
 G_END_DECLS
 

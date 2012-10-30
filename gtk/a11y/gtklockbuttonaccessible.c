@@ -17,12 +17,12 @@
 
 #include "config.h"
 
-#include "gtklockbuttonaccessible.h"
+#include "gtklockbuttonaccessibleprivate.h"
 
 #include "gtk/gtklockbuttonprivate.h"
 #include "gtk/gtkwidgetprivate.h"
 
-G_DEFINE_TYPE (GtkLockButtonAccessible, _gtk_lock_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE)
+G_DEFINE_TYPE (GtkLockButtonAccessible, gtk_lock_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE)
 
 static const gchar *
 gtk_lock_button_accessible_get_name (AtkObject *obj)
@@ -37,7 +37,7 @@ gtk_lock_button_accessible_get_name (AtkObject *obj)
 }
 
 static void
-_gtk_lock_button_accessible_class_init (GtkLockButtonAccessibleClass *klass)
+gtk_lock_button_accessible_class_init (GtkLockButtonAccessibleClass *klass)
 {
   AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
 
@@ -45,7 +45,7 @@ _gtk_lock_button_accessible_class_init (GtkLockButtonAccessibleClass *klass)
 }
 
 static void
-_gtk_lock_button_accessible_init (GtkLockButtonAccessible *lockbutton)
+gtk_lock_button_accessible_init (GtkLockButtonAccessible *lockbutton)
 {
 }
 
