@@ -7771,6 +7771,9 @@ add_shortcut_get_info_cb (GCancellable *cancellable,
 
   shortcuts_insert_file (data->impl, pos, SHORTCUT_TYPE_FILE, NULL, data->file, NULL, FALSE, SHORTCUTS_SHORTCUTS);
 
+  /* need to call shortcuts_add_bookmarks to flush out any duplicates bug #577806 */
+  shortcuts_add_bookmarks (data->impl);
+
 out:
   g_object_unref (data->impl);
   g_object_unref (data->file);
