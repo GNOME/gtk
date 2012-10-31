@@ -533,6 +533,34 @@ fail:
   return GTK_CSS_IMAGE_CLASS (_gtk_css_image_linear_parent_class)->transition (start_image, end_image, property_id, progress);
 }
 
+static gboolean
+gtk_css_image_linear_equal (GtkCssImage *image1,
+                            GtkCssImage *image2)
+{
+  GtkCssImageLinear *linear1 = GTK_CSS_IMAGE_LINEAR (image1);
+  GtkCssImageLinear *linear2 = GTK_CSS_IMAGE_LINEAR (image2);
+  guint i;
+
+  if (linear1->repeating != linear2->repeating ||
+      !_gtk_css_value_equal (linear1->angle, linear2->angle) ||
+      linear1->stops->len != linear2->stops->len)
+    return FALSE;
+
+  for (i = 0; i < linear1->stops->len; i++)
+    {
+      GtkCssImageLinearColorStop *stop1, *stop2;
+
+      stop1 = &g_array_index (linear1->stops, GtkCssImageLinearColorStop, i);
+      stop2 = &g_array_index (linear2->stops, GtkCssImageLinearColorStop, i);
+
+      if (!_gtk_css_value_equal0 (stop1->offset, stop2->offset) ||
+          !_gtk_css_value_equal (stop1->color, stop2->color))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 gtk_css_image_linear_dispose (GObject *object)
 {
@@ -563,6 +591,7 @@ _gtk_css_image_linear_class_init (GtkCssImageLinearClass *klass)
   image_class->parse = gtk_css_image_linear_parse;
   image_class->print = gtk_css_image_linear_print;
   image_class->compute = gtk_css_image_linear_compute;
+  image_class->equal = gtk_css_image_linear_equal;
   image_class->transition = gtk_css_image_linear_transition;
 
   object_class->dispose = gtk_css_image_linear_dispose;
