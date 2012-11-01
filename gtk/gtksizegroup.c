@@ -746,6 +746,11 @@ compute_dimension (GtkWidget        *widget,
 		  min_dimension = *minimum;
 		  nat_dimension = *natural;
 		}
+              else if (!gtk_widget_get_mapped (tmp_widget) && priv->ignore_hidden)
+		{
+		  min_dimension = 0;
+		  nat_dimension = 0;
+		}
 	      else
 		{
 		  if (mode == GTK_SIZE_GROUP_HORIZONTAL)
@@ -754,11 +759,8 @@ compute_dimension (GtkWidget        *widget,
 		    gtk_widget_get_preferred_height (tmp_widget, &min_dimension, &nat_dimension);
 		}
 
-	      if (gtk_widget_get_mapped (tmp_widget) || !priv->ignore_hidden)
-		{
-		  min_result = MAX (min_result, min_dimension);
-		  nat_result = MAX (nat_result, nat_dimension);
-		}
+              min_result = MAX (min_result, min_dimension);
+              nat_result = MAX (nat_result, nat_dimension);
 
 	      tmp_list = tmp_list->next;
 	    }
