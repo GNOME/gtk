@@ -45,6 +45,9 @@
  *      the special kind of usage for "search" and "recent-files", where the file chooser gives the model the
  *      files to be displayed.
  *
+ * Internal data structure
+ * -----------------------
+ *
  * Each file is kept in a FileModelNode structure.  Each FileModelNode holds a GFile* and other data.  All the
  * node structures have the same size, determined at runtime, depending on the number of columns that were passed
  * to _gtk_file_system_model_new() or _gtk_file_system_model_new_for_directory() (that is, the size of a node is
@@ -69,7 +72,14 @@
  *
  * Each FileModelNode has a node->visible field, which indicates whether the node is visible in the GtkTreeView.
  * A node may be invisible if, for example, it corresponds to a hidden file and the file chooser is not showing
- * hidden files.
+ * hidden files.  Also, a file filter may be explicitly set onto the model, for example, to only show files that
+ * match "*.jpg".  In this case, node->filtered_out says whether the node failed the filter.  The ultimate
+ * decision on whether a node is visible or not in the treeview is distilled into the node->visible field.
+ * The reason for having a separate node->filtered_out field is so that the file chooser can query whether
+ * a (filtered-out) folder should be made sensitive in the GUI.
+ *
+ * Visible rows vs. possibly-invisible nodes
+ * -----------------------------------------
  *
  * Since not all nodes in the model->files array may be visible, we need a way to map visible row indexes from
  * the treeview to array indexes in our array of files.  And thus we introduce a bit of terminology:
@@ -98,6 +108,16 @@
  *
  * You never access a node->row directly.  Instead, call node_get_tree_row().  That function will validate the nodes
  * up to the sought one if the node is not valid yet, and it will return a proper 0-based row.
+ *
+ * Sorting
+ * -------
+ *
+ * The model implements the GtkTreeSortable interface.  To avoid re-sorting
+ * every time a node gets added (which would lead to O(n^2) performance during
+ * the initial population of the model), the model can freeze itself (with
+ * freeze_updates()) during the intial population process.  When the model is
+ * frozen, sorting will not happen.  The model will sort itself when the freeze
+ * count goes back to zero, via corresponding calls to thaw_updates().
  */
 
 /*** DEFINES ***/
