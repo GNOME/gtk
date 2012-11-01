@@ -115,7 +115,6 @@ struct _GtkSizeGroupPrivate
   guint8          mode;
 
   guint           ignore_hidden : 1;
-  guint           visited       : 1;
 };
 
 enum {
@@ -135,11 +134,9 @@ static void gtk_size_group_get_property (GObject      *object,
 
 static void add_group_to_closure  (GtkSizeGroup      *group,
 				   GtkSizeGroupMode   mode,
-				   GSList           **groups,
 				   GSList           **widgets);
 static void add_widget_to_closure (GtkWidget         *widget,
 				   GtkSizeGroupMode   mode,
-				   GSList           **groups,
 				   GSList           **widgets);
 
 /* GtkBuildable */
@@ -157,12 +154,6 @@ static void gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
 						      gpointer       user_data);
 
 static void
-mark_group_unvisited (GtkSizeGroup *group)
-{
-  group->priv->visited = FALSE;
-}
-
-static void
 mark_widget_unvisited (GtkWidget *widget)
 {
   _gtk_widget_set_sizegroup_visited (widget, FALSE);
@@ -171,30 +162,22 @@ mark_widget_unvisited (GtkWidget *widget)
 static void
 add_group_to_closure (GtkSizeGroup    *group,
 		      GtkSizeGroupMode mode,
-		      GSList         **groups,
 		      GSList         **widgets)
 {
   GtkSizeGroupPrivate *priv = group->priv;
   GSList *tmp_widgets;
   
-  if (priv->visited)
-    return;
-
-  *groups = g_slist_prepend (*groups, group);
-  priv->visited = TRUE;
-
   for (tmp_widgets = priv->widgets; tmp_widgets; tmp_widgets = tmp_widgets->next)
     {
       GtkWidget *tmp_widget = tmp_widgets->data;
       
-      add_widget_to_closure (tmp_widget, mode, groups, widgets);
+      add_widget_to_closure (tmp_widget, mode, widgets);
     }
 }
 
 static void
 add_widget_to_closure (GtkWidget       *widget,
 		       GtkSizeGroupMode mode,
-		       GSList         **groups,
 		       GSList         **widgets)
 {
   GSList *tmp_groups;
@@ -216,7 +199,7 @@ add_widget_to_closure (GtkWidget       *widget,
         continue;
 
       if (tmp_priv->mode == GTK_SIZE_GROUP_BOTH || tmp_priv->mode == mode)
-	add_group_to_closure (tmp_group, mode, groups, widgets);
+	add_group_to_closure (tmp_group, mode, widgets);
     }
 }
 
@@ -255,7 +238,6 @@ queue_resize_on_widget (GtkWidget          *widget,
   while (parent)
     {
       GSList *widget_groups;
-      GSList *groups;
       GSList *widgets;
       
       if (widget == parent && !check_siblings)
@@ -275,12 +257,10 @@ queue_resize_on_widget (GtkWidget          *widget,
 	  continue;
 	}
 
-      groups = NULL;
       widgets = NULL;
 	  
-      add_widget_to_closure (parent, GTK_SIZE_GROUP_HORIZONTAL, &groups, &widgets);
+      add_widget_to_closure (parent, GTK_SIZE_GROUP_HORIZONTAL, &widgets);
       g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
-      g_slist_foreach (groups, (GFunc)mark_group_unvisited, NULL);
 
       for (tmp_list = widgets; tmp_list; tmp_list = tmp_list->next)
 	{
@@ -298,14 +278,11 @@ queue_resize_on_widget (GtkWidget          *widget,
 	}
       
       g_slist_free (widgets);
-      g_slist_free (groups);
 	      
-      groups = NULL;
       widgets = NULL;
 	      
-      add_widget_to_closure (parent, GTK_SIZE_GROUP_VERTICAL, &groups, &widgets);
+      add_widget_to_closure (parent, GTK_SIZE_GROUP_VERTICAL, &widgets);
       g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
-      g_slist_foreach (groups, (GFunc)mark_group_unvisited, NULL);
 
       for (tmp_list = widgets; tmp_list; tmp_list = tmp_list->next)
 	{
@@ -323,7 +300,6 @@ queue_resize_on_widget (GtkWidget          *widget,
 	}
       
       g_slist_free (widgets);
-      g_slist_free (groups);
 
       parent = gtk_widget_get_parent (parent);
     }
@@ -388,7 +364,6 @@ gtk_size_group_init (GtkSizeGroup *size_group)
   priv->widgets = NULL;
   priv->mode = GTK_SIZE_GROUP_HORIZONTAL;
   priv->ignore_hidden = FALSE;
-  priv->visited  = FALSE;
 }
 
 static void
@@ -673,13 +648,11 @@ compute_dimension (GtkWidget        *widget,
 		   gint             *natural) /* in-out */
 {
   GSList *widgets = NULL;
-  GSList *groups = NULL;
   GSList *tmp_list;
   gint    min_result = 0, nat_result = 0;
 
-  add_widget_to_closure (widget, mode, &groups, &widgets);
+  add_widget_to_closure (widget, mode, &widgets);
   g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
-  g_slist_foreach (groups, (GFunc)mark_group_unvisited, NULL);
 
   g_slist_foreach (widgets, (GFunc)g_object_ref, NULL);
   
@@ -708,7 +681,6 @@ compute_dimension (GtkWidget        *widget,
   g_slist_foreach (widgets, (GFunc)g_object_unref, NULL);
 
   g_slist_free (widgets);
-  g_slist_free (groups);
 
   *minimum = min_result;
   *natural = nat_result;
