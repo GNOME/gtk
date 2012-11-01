@@ -3708,6 +3708,7 @@ gtk_widget_is_composited
 gtk_widget_is_drawable
 gtk_widget_is_focus
 gtk_widget_is_sensitive
+gtk_widget_is_visible
 gtk_widget_is_toplevel
 gtk_widget_keynav_failed
 gtk_widget_list_accel_closures

@@ -7484,9 +7484,11 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
  * gtk_widget_get_visible:
  * @widget: a #GtkWidget
  *
- * Determines whether the widget is visible. Note that this doesn't
- * take into account whether the widget's parent is also visible
- * or the widget is obscured in any way.
+ * Determines whether the widget is visible. If you want to
+ * take into account whether the widget's parent is also marked as
+ * visible, use gtk_widget_is_visible() instead.
+ *
+ * This function does not check if the widget is obscured in any way.
  *
  * See gtk_widget_set_visible().
  *
@@ -7500,6 +7502,39 @@ gtk_widget_get_visible (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   return widget->priv->visible;
+}
+
+/**
+ * gtk_widget_is_visible:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether the widget and all its parents are marked as
+ * visible.
+ *
+ * This function does not check if the widget is obscured in any way.
+ *
+ * See also gtk_widget_get_visible() and gtk_widget_set_visible()
+ *
+ * Return value: %TRUE if the widget and all its parents are visible
+ *
+ * Since: 3.8
+ **/
+gboolean
+gtk_widget_is_visible (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  while (widget)
+    {
+      GtkWidgetPrivate *priv = widget->priv;
+
+      if (!priv->visible)
+        return FALSE;
+
+      widget = priv->parent;
+    }
+
+  return TRUE;
 }
 
 /**

@@ -589,6 +589,7 @@ gboolean              gtk_widget_is_sensitive           (GtkWidget    *widget);
 void                  gtk_widget_set_visible            (GtkWidget    *widget,
                                                          gboolean      visible);
 gboolean              gtk_widget_get_visible            (GtkWidget    *widget);
+gboolean              gtk_widget_is_visible             (GtkWidget    *widget);
 
 void                  gtk_widget_set_has_window         (GtkWidget    *widget,
                                                          gboolean      has_window);
