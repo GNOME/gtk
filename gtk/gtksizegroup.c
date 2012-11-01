@@ -165,7 +165,7 @@ add_widget_to_closure (GtkWidget       *widget,
 
   *widgets = g_slist_prepend (*widgets, widget);
   _gtk_widget_set_sizegroup_visited (widget, TRUE);
-  hidden = !gtk_widget_get_mapped (widget);
+  hidden = !gtk_widget_is_visible (widget);
 
   for (tmp_groups = _gtk_widget_get_sizegroups (widget); tmp_groups; tmp_groups = tmp_groups->next)
     {
