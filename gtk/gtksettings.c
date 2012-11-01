@@ -1848,6 +1848,9 @@ gtk_settings_notify (GObject    *object,
       if (settings_update_fontconfig (settings))
         gtk_style_context_reset_widgets (priv->screen);
       break;
+    case PROP_ENABLE_ANIMATIONS:
+      gtk_style_context_reset_widgets (priv->screen);
+      break;
     case PROP_CURSOR_THEME_NAME:
     case PROP_CURSOR_THEME_SIZE:
       settings_update_cursor_theme (settings);
