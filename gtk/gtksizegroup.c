@@ -110,15 +110,10 @@
 
 struct _GtkSizeGroupPrivate
 {
-  GtkRequisition  minimum_req;
-  GtkRequisition  natural_req;
-
   GSList         *widgets;
 
   guint8          mode;
 
-  guint           have_width    : 1;
-  guint           have_height   : 1;
   guint           ignore_hidden : 1;
   guint           visited       : 1;
 };
@@ -247,22 +242,6 @@ real_queue_resize (GtkWidget          *widget,
 }
 
 static void
-reset_group_sizes (GSList *groups)
-{
-  GSList *tmp_list = groups;
-  while (tmp_list)
-    {
-      GtkSizeGroup *tmp_group = tmp_list->data;
-      GtkSizeGroupPrivate *tmp_priv = tmp_group->priv;
-
-      tmp_priv->have_width = FALSE;
-      tmp_priv->have_height = FALSE;
-
-      tmp_list = tmp_list->next;
-    }
-}
-
-static void
 queue_resize_on_widget (GtkWidget          *widget,
 			gboolean            check_siblings,
 			GtkQueueResizeFlags flags)
@@ -300,8 +279,6 @@ queue_resize_on_widget (GtkWidget          *widget,
       g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
       g_slist_foreach (groups, (GFunc)mark_group_unvisited, NULL);
 
-      reset_group_sizes (groups);
-	      
       tmp_list = widgets;
       while (tmp_list)
 	{
@@ -330,8 +307,6 @@ queue_resize_on_widget (GtkWidget          *widget,
       g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
       g_slist_foreach (groups, (GFunc)mark_group_unvisited, NULL);
 
-      reset_group_sizes (groups);
-	      
       tmp_list = widgets;
       while (tmp_list)
 	{
@@ -415,9 +390,7 @@ gtk_size_group_init (GtkSizeGroup *size_group)
 
   priv->widgets = NULL;
   priv->mode = GTK_SIZE_GROUP_HORIZONTAL;
-  priv->have_width = 0;
-  priv->have_height = 0;
-  priv->ignore_hidden = 0;
+  priv->ignore_hidden = FALSE;
   priv->visited  = FALSE;
 }
 
@@ -723,70 +696,35 @@ compute_dimension (GtkWidget        *widget,
       GtkSizeGroup *group = groups->data;
       GtkSizeGroupPrivate *priv = group->priv;
 
-      if (mode == GTK_SIZE_GROUP_HORIZONTAL && priv->have_width)
-	{
-	  min_result = priv->minimum_req.width;
-	  nat_result = priv->natural_req.width;
-	}
-      else if (mode == GTK_SIZE_GROUP_VERTICAL && priv->have_height)
-	{
-	  min_result = priv->minimum_req.height;
-	  nat_result = priv->natural_req.height;
-	}
-      else
-	{
-	  tmp_list = widgets;
-	  while (tmp_list)
-	    {
-	      GtkWidget *tmp_widget = tmp_list->data;
-	      gint min_dimension, nat_dimension;
+      tmp_list = widgets;
+      while (tmp_list)
+        {
+          GtkWidget *tmp_widget = tmp_list->data;
+          gint min_dimension, nat_dimension;
 
-	      if (tmp_widget == widget)
-		{
-		  min_dimension = *minimum;
-		  nat_dimension = *natural;
-		}
-              else if (!gtk_widget_get_mapped (tmp_widget) && priv->ignore_hidden)
-		{
-		  min_dimension = 0;
-		  nat_dimension = 0;
-		}
-	      else
-		{
-		  if (mode == GTK_SIZE_GROUP_HORIZONTAL)
-		    gtk_widget_get_preferred_width (tmp_widget, &min_dimension, &nat_dimension);
-		  else
-		    gtk_widget_get_preferred_height (tmp_widget, &min_dimension, &nat_dimension);
-		}
+          if (tmp_widget == widget)
+            {
+              min_dimension = *minimum;
+              nat_dimension = *natural;
+            }
+          else if (!gtk_widget_get_mapped (tmp_widget) && priv->ignore_hidden)
+            {
+              min_dimension = 0;
+              nat_dimension = 0;
+            }
+          else
+            {
+              if (mode == GTK_SIZE_GROUP_HORIZONTAL)
+                gtk_widget_get_preferred_width (tmp_widget, &min_dimension, &nat_dimension);
+              else
+                gtk_widget_get_preferred_height (tmp_widget, &min_dimension, &nat_dimension);
+            }
 
-              min_result = MAX (min_result, min_dimension);
-              nat_result = MAX (nat_result, nat_dimension);
+          min_result = MAX (min_result, min_dimension);
+          nat_result = MAX (nat_result, nat_dimension);
 
-	      tmp_list = tmp_list->next;
-	    }
-
-	  tmp_list = groups;
-	  while (tmp_list)
-	    {
-	      GtkSizeGroup *tmp_group = tmp_list->data;
-              GtkSizeGroupPrivate *tmp_priv = tmp_group->priv;
-
-	      if (mode == GTK_SIZE_GROUP_HORIZONTAL)
-		{
-		  tmp_priv->have_width = TRUE;
-		  tmp_priv->minimum_req.width = min_result;
-		  tmp_priv->natural_req.width = nat_result;
-		}
-	      else
-		{
-		  tmp_priv->have_height = TRUE;
-		  tmp_priv->minimum_req.height = min_result;
-		  tmp_priv->natural_req.height = nat_result;
-		}
-	      
-	      tmp_list = tmp_list->next;
-	    }
-	}
+          tmp_list = tmp_list->next;
+        }
     }
 
   g_slist_foreach (widgets, (GFunc)g_object_unref, NULL);
