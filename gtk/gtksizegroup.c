@@ -630,6 +630,7 @@ gtk_size_group_get_widgets (GtkSizeGroup *size_group)
 static void
 compute_dimension (GtkWidget        *widget,
 		   GtkSizeGroupMode  mode,
+                   gint              for_size,
 		   gint             *minimum, /* in-out */
 		   gint             *natural) /* in-out */
 {
@@ -654,9 +655,19 @@ compute_dimension (GtkWidget        *widget,
       else
         {
           if (mode == GTK_SIZE_GROUP_HORIZONTAL)
-            gtk_widget_get_preferred_width (tmp_widget, &min_dimension, &nat_dimension);
+            {
+              if (for_size < 0)
+                gtk_widget_get_preferred_width (tmp_widget, &min_dimension, &nat_dimension);
+              else
+                gtk_widget_get_preferred_width_for_height (tmp_widget, for_size, &min_dimension, &nat_dimension);
+            }
           else
-            gtk_widget_get_preferred_height (tmp_widget, &min_dimension, &nat_dimension);
+            {
+              if (for_size < 0)
+                gtk_widget_get_preferred_height (tmp_widget, &min_dimension, &nat_dimension);
+              else
+                gtk_widget_get_preferred_height_for_width (tmp_widget, for_size, &min_dimension, &nat_dimension);
+            }
         }
 
       min_result = MAX (min_result, min_dimension);
@@ -676,6 +687,7 @@ compute_dimension (GtkWidget        *widget,
  * @widget: a #GtkWidget
  * @mode: either %GTK_SIZE_GROUP_HORIZONTAL or %GTK_SIZE_GROUP_VERTICAL, depending
  *        on the dimension in which to bump the size.
+ * @for_size: Size to request minimum and natural size for
  * @minimum: a pointer to the widget's minimum size
  * @natural: a pointer to the widget's natural size
  *
@@ -689,6 +701,7 @@ compute_dimension (GtkWidget        *widget,
 void
 _gtk_size_group_bump_requisition (GtkWidget        *widget,
 				  GtkSizeGroupMode  mode,
+                                  gint              for_size,
 				  gint             *minimum,
 				  gint             *natural)
 {
@@ -698,7 +711,7 @@ _gtk_size_group_bump_requisition (GtkWidget        *widget,
       _gtk_widget_set_sizegroup_bumping (widget, TRUE);
 
       if (_gtk_widget_get_sizegroups (widget))
-	compute_dimension (widget, mode, minimum, natural);
+	compute_dimension (widget, mode, for_size, minimum, natural);
 
       _gtk_widget_set_sizegroup_bumping (widget, FALSE);
     }

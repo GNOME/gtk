@@ -39,6 +39,7 @@ typedef enum
 
 void _gtk_size_group_bump_requisition (GtkWidget           *widget,
                                        GtkSizeGroupMode     mode,
+                                       gint                 for_size,
                                        gint                *minimum,
                                        gint                *natural);
 void _gtk_size_group_queue_resize     (GtkWidget           *widget,

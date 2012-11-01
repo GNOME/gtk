@@ -469,6 +469,7 @@ compute_size_for_orientation (GtkWidget         *widget,
        */
       _gtk_size_group_bump_requisition (widget,
 					orientation,
+                                        for_size,
 					&min_size,
 					&nat_size);
 
