@@ -207,6 +207,9 @@ struct _GtkFileSystemModelClass
   void (*finished_loading) (GtkFileSystemModel *model, GError *error);
 };
 
+static void freeze_updates (GtkFileSystemModel *model);
+static void thaw_updates (GtkFileSystemModel *model);
+
 static guint node_get_for_file (GtkFileSystemModel *model,
 				GFile              *file);
 
@@ -1123,7 +1126,7 @@ thaw_func (gpointer data)
 {
   GtkFileSystemModel *model = data;
 
-  _gtk_file_system_model_thaw_updates (model);
+  thaw_updates (model);
   model->dir_thaw_source = 0;
 
   return FALSE;
@@ -1145,7 +1148,7 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
     {
       if (model->dir_thaw_source == 0)
         {
-          _gtk_file_system_model_freeze_updates (model);
+          freeze_updates (model);
           model->dir_thaw_source = gdk_threads_add_timeout_full (IO_PRIORITY + 1,
                                                                  50,
                                                                  thaw_func,
@@ -1194,7 +1197,7 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
             {
               g_source_remove (model->dir_thaw_source);
               model->dir_thaw_source = 0;
-              _gtk_file_system_model_thaw_updates (model);
+              thaw_updates (model);
             }
 
           g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0, error);
@@ -1465,14 +1468,14 @@ gtk_file_system_model_refilter_all (GtkFileSystemModel *model)
       return;
     }
 
-  _gtk_file_system_model_freeze_updates (model);
+  freeze_updates (model);
 
   /* start at index 1, don't change the editable */
   for (i = 1; i < model->files->len; i++)
     node_compute_visibility_and_filters (model, i);
 
   model->filter_on_thaw = FALSE;
-  _gtk_file_system_model_thaw_updates (model);
+  thaw_updates (model);
 }
 
 /**
@@ -1994,17 +1997,16 @@ _gtk_file_system_model_remove_editable (GtkFileSystemModel *model)
 }
 
 /**
- * _gtk_file_system_model_freeze_updates:
+ * freeze_updates:
  * @model: a #GtkFileSystemModel
  *
- * Freezes most updates on the model, so that performing multiple 
- * operations on the files in the model do not cause any events.
- * Use _gtk_file_system_model_thaw_updates() to resume proper 
- * operations. It is fine to call this function multiple times as
- * long as freeze and thaw calls are balanced.
+ * Freezes most updates on the model, so that performing multiple operations on
+ * the files in the model do not cause any events.  Use thaw_updates() to resume
+ * proper operations. It is fine to call this function multiple times as long as
+ * freeze and thaw calls are balanced.
  **/
-void
-_gtk_file_system_model_freeze_updates (GtkFileSystemModel *model)
+static void
+freeze_updates (GtkFileSystemModel *model)
 {
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
 
@@ -2012,14 +2014,13 @@ _gtk_file_system_model_freeze_updates (GtkFileSystemModel *model)
 }
 
 /**
- * _gtk_file_system_model_thaw_updates:
+ * thaw_updates:
  * @model: a #GtkFileSystemModel
  *
- * Undoes the effect of a previous call to
- * _gtk_file_system_model_freeze_updates() 
+ * Undoes the effect of a previous call to freeze_updates() 
  **/
-void
-_gtk_file_system_model_thaw_updates (GtkFileSystemModel *model)
+static void
+thaw_updates (GtkFileSystemModel *model)
 {
   gboolean stuff_added;
 
