@@ -132,13 +132,6 @@ static void gtk_size_group_get_property (GObject      *object,
 					 GValue       *value,
 					 GParamSpec   *pspec);
 
-static void add_group_to_closure  (GtkSizeGroup      *group,
-				   GtkSizeGroupMode   mode,
-				   GSList           **widgets);
-static void add_widget_to_closure (GtkWidget         *widget,
-				   GtkSizeGroupMode   mode,
-				   GSList           **widgets);
-
 /* GtkBuildable */
 static void gtk_size_group_buildable_init (GtkBuildableIface *iface);
 static gboolean gtk_size_group_buildable_custom_tag_start (GtkBuildable  *buildable,
@@ -160,27 +153,11 @@ mark_widget_unvisited (GtkWidget *widget)
 }
 
 static void
-add_group_to_closure (GtkSizeGroup    *group,
-		      GtkSizeGroupMode mode,
-		      GSList         **widgets)
-{
-  GtkSizeGroupPrivate *priv = group->priv;
-  GSList *tmp_widgets;
-  
-  for (tmp_widgets = priv->widgets; tmp_widgets; tmp_widgets = tmp_widgets->next)
-    {
-      GtkWidget *tmp_widget = tmp_widgets->data;
-      
-      add_widget_to_closure (tmp_widget, mode, widgets);
-    }
-}
-
-static void
 add_widget_to_closure (GtkWidget       *widget,
 		       GtkSizeGroupMode mode,
 		       GSList         **widgets)
 {
-  GSList *tmp_groups;
+  GSList *tmp_groups, *tmp_widgets;
   gboolean hidden;
 
   if (_gtk_widget_get_sizegroup_visited (widget))
@@ -198,11 +175,26 @@ add_widget_to_closure (GtkWidget       *widget,
       if (tmp_priv->ignore_hidden && hidden)
         continue;
 
-      if (tmp_priv->mode == GTK_SIZE_GROUP_BOTH || tmp_priv->mode == mode)
-	add_group_to_closure (tmp_group, mode, widgets);
+      if (tmp_priv->mode != GTK_SIZE_GROUP_BOTH && tmp_priv->mode != mode)
+        continue;
+
+      for (tmp_widgets = tmp_priv->widgets; tmp_widgets; tmp_widgets = tmp_widgets->next)
+        add_widget_to_closure (tmp_widgets->data, mode, widgets);
     }
 }
 
+static GSList *
+widget_get_size_group_peers (GtkWidget        *widget,
+                             GtkSizeGroupMode  mode)
+{
+  GSList *result = NULL;
+
+  add_widget_to_closure (widget, mode, &result);
+  g_slist_foreach (result, (GFunc) mark_widget_unvisited, NULL);
+
+  return result;
+}
+                                     
 static void
 real_queue_resize (GtkWidget          *widget,
 		   GtkQueueResizeFlags flags)
@@ -257,10 +249,7 @@ queue_resize_on_widget (GtkWidget          *widget,
 	  continue;
 	}
 
-      widgets = NULL;
-	  
-      add_widget_to_closure (parent, GTK_SIZE_GROUP_HORIZONTAL, &widgets);
-      g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
+      widgets = widget_get_size_group_peers (parent, GTK_SIZE_GROUP_HORIZONTAL);
 
       for (tmp_list = widgets; tmp_list; tmp_list = tmp_list->next)
 	{
@@ -279,10 +268,7 @@ queue_resize_on_widget (GtkWidget          *widget,
       
       g_slist_free (widgets);
 	      
-      widgets = NULL;
-	      
-      add_widget_to_closure (parent, GTK_SIZE_GROUP_VERTICAL, &widgets);
-      g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
+      widgets = widget_get_size_group_peers (parent, GTK_SIZE_GROUP_VERTICAL);
 
       for (tmp_list = widgets; tmp_list; tmp_list = tmp_list->next)
 	{
@@ -647,12 +633,11 @@ compute_dimension (GtkWidget        *widget,
 		   gint             *minimum, /* in-out */
 		   gint             *natural) /* in-out */
 {
-  GSList *widgets = NULL;
+  GSList *widgets;
   GSList *tmp_list;
   gint    min_result = 0, nat_result = 0;
 
-  add_widget_to_closure (widget, mode, &widgets);
-  g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
+  widgets = widget_get_size_group_peers (widget, mode);
 
   g_slist_foreach (widgets, (GFunc)g_object_ref, NULL);
   
