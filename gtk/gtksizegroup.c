@@ -198,17 +198,22 @@ add_widget_to_closure (GtkWidget       *widget,
 		       GSList         **widgets)
 {
   GSList *tmp_groups;
+  gboolean hidden;
 
   if (_gtk_widget_get_sizegroup_visited (widget))
     return;
 
   *widgets = g_slist_prepend (*widgets, widget);
   _gtk_widget_set_sizegroup_visited (widget, TRUE);
+  hidden = !gtk_widget_get_mapped (widget);
 
   for (tmp_groups = _gtk_widget_get_sizegroups (widget); tmp_groups; tmp_groups = tmp_groups->next)
     {
       GtkSizeGroup        *tmp_group = tmp_groups->data;
       GtkSizeGroupPrivate *tmp_priv  = tmp_group->priv;
+
+      if (tmp_priv->ignore_hidden && hidden)
+        continue;
 
       if (tmp_priv->mode == GTK_SIZE_GROUP_BOTH || tmp_priv->mode == mode)
 	add_group_to_closure (tmp_group, mode, groups, widgets);
@@ -678,42 +683,26 @@ compute_dimension (GtkWidget        *widget,
 
   g_slist_foreach (widgets, (GFunc)g_object_ref, NULL);
   
-  if (!groups)
+  for (tmp_list = widgets; tmp_list; tmp_list = tmp_list->next)
     {
-      min_result = *minimum;
-      nat_result = *natural;
-    }
-  else
-    {
-      GtkSizeGroup *group = groups->data;
-      GtkSizeGroupPrivate *priv = group->priv;
+      GtkWidget *tmp_widget = tmp_list->data;
+      gint min_dimension, nat_dimension;
 
-      for (tmp_list = widgets; tmp_list; tmp_list = tmp_list->next)
+      if (tmp_widget == widget)
         {
-          GtkWidget *tmp_widget = tmp_list->data;
-          gint min_dimension, nat_dimension;
-
-          if (tmp_widget == widget)
-            {
-              min_dimension = *minimum;
-              nat_dimension = *natural;
-            }
-          else if (!gtk_widget_get_mapped (tmp_widget) && priv->ignore_hidden)
-            {
-              min_dimension = 0;
-              nat_dimension = 0;
-            }
-          else
-            {
-              if (mode == GTK_SIZE_GROUP_HORIZONTAL)
-                gtk_widget_get_preferred_width (tmp_widget, &min_dimension, &nat_dimension);
-              else
-                gtk_widget_get_preferred_height (tmp_widget, &min_dimension, &nat_dimension);
-            }
-
-          min_result = MAX (min_result, min_dimension);
-          nat_result = MAX (nat_result, nat_dimension);
+          min_dimension = *minimum;
+          nat_dimension = *natural;
         }
+      else
+        {
+          if (mode == GTK_SIZE_GROUP_HORIZONTAL)
+            gtk_widget_get_preferred_width (tmp_widget, &min_dimension, &nat_dimension);
+          else
+            gtk_widget_get_preferred_height (tmp_widget, &min_dimension, &nat_dimension);
+        }
+
+      min_result = MAX (min_result, min_dimension);
+      nat_result = MAX (nat_result, nat_dimension);
     }
 
   g_slist_foreach (widgets, (GFunc)g_object_unref, NULL);
