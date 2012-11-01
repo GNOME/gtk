@@ -177,6 +177,9 @@ add_group_to_closure (GtkSizeGroup    *group,
   GtkSizeGroupPrivate *priv = group->priv;
   GSList *tmp_widgets;
   
+  if (priv->visited)
+    return;
+
   *groups = g_slist_prepend (*groups, group);
   priv->visited = TRUE;
 
@@ -185,8 +188,7 @@ add_group_to_closure (GtkSizeGroup    *group,
     {
       GtkWidget *tmp_widget = tmp_widgets->data;
       
-      if (!_gtk_widget_get_sizegroup_visited (tmp_widget))
-	add_widget_to_closure (tmp_widget, mode, groups, widgets);
+      add_widget_to_closure (tmp_widget, mode, groups, widgets);
       
       tmp_widgets = tmp_widgets->next;
     }
@@ -200,6 +202,9 @@ add_widget_to_closure (GtkWidget       *widget,
 {
   GSList *tmp_groups;
 
+  if (_gtk_widget_get_sizegroup_visited (widget))
+    return;
+
   *widgets = g_slist_prepend (*widgets, widget);
   _gtk_widget_set_sizegroup_visited (widget, TRUE);
 
@@ -209,8 +214,7 @@ add_widget_to_closure (GtkWidget       *widget,
       GtkSizeGroup        *tmp_group = tmp_groups->data;
       GtkSizeGroupPrivate *tmp_priv  = tmp_group->priv;
 
-      if ((tmp_priv->mode == GTK_SIZE_GROUP_BOTH || tmp_priv->mode == mode) &&
-	  !tmp_group->priv->visited)
+      if (tmp_priv->mode == GTK_SIZE_GROUP_BOTH || tmp_priv->mode == mode)
 	add_group_to_closure (tmp_group, mode, groups, widgets);
 
       tmp_groups = tmp_groups->next;
