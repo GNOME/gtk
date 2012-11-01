@@ -266,13 +266,13 @@ node_invalidate_index (GtkFileSystemModel *model, guint id)
 }
 
 static GtkTreePath *
-gtk_tree_path_new_from_node (GtkFileSystemModel *model, guint id)
+tree_path_new_from_node (GtkFileSystemModel *model, guint id)
 {
-  guint i = node_get_tree_row (model, id);
+  guint r = node_get_tree_row (model, id);
 
-  g_assert (i < model->files->len);
+  g_assert (r < model->files->len);
 
-  return gtk_tree_path_new_from_indices (i, -1);
+  return gtk_tree_path_new_from_indices (r, -1);
 }
 
 static void
@@ -281,7 +281,7 @@ emit_row_inserted_for_node (GtkFileSystemModel *model, guint id)
   GtkTreePath *path;
   GtkTreeIter iter;
 
-  path = gtk_tree_path_new_from_node (model, id);
+  path = tree_path_new_from_node (model, id);
   ITER_INIT_FROM_INDEX (model, &iter, id);
   gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
   gtk_tree_path_free (path);
@@ -293,7 +293,7 @@ emit_row_changed_for_node (GtkFileSystemModel *model, guint id)
   GtkTreePath *path;
   GtkTreeIter iter;
 
-  path = gtk_tree_path_new_from_node (model, id);
+  path = tree_path_new_from_node (model, id);
   ITER_INIT_FROM_INDEX (model, &iter, id);
   gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
   gtk_tree_path_free (path);
@@ -573,7 +573,7 @@ gtk_file_system_model_get_path (GtkTreeModel *tree_model,
       
   g_return_val_if_fail (ITER_IS_VALID (model, iter), NULL);
 
-  return gtk_tree_path_new_from_node (model, ITER_INDEX (iter));
+  return tree_path_new_from_node (model, ITER_INDEX (iter));
 }
 
 static void
