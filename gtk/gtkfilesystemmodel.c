@@ -1810,6 +1810,33 @@ _gtk_file_system_model_get_iter_for_file (GtkFileSystemModel *model,
   return TRUE;
 }
 
+/* When an element is added or removed to the model->files array, we need to
+ * update the model->file_lookup mappings of (node, index), as the indexes
+ * change.  This function adds the specified increment to the index in that pair
+ * if the index is equal or after the specified id.  We use this to slide the
+ * mappings up or down when a node is added or removed, respectively.
+ */
+static void
+adjust_file_lookup (GtkFileSystemModel *model, guint id, int increment)
+{
+  GHashTableIter iter;
+  gpointer key;
+  gpointer value;
+
+  g_hash_table_iter_init (&iter, model->file_lookup);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      guint index = GPOINTER_TO_UINT (value);
+
+      if (index >= id)
+	{
+	  index += increment;
+	  g_hash_table_iter_replace (&iter, GUINT_TO_POINTER (index));
+	}
+    }
+}
+
 /**
  * add_file:
  * @model: the model
@@ -1860,6 +1887,7 @@ remove_file (GtkFileSystemModel *model,
 {
   FileModelNode *node;
   guint id;
+  guint row;
 
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (G_IS_FILE (file));
@@ -1869,17 +1897,22 @@ remove_file (GtkFileSystemModel *model,
     return;
 
   node = get_node (model, id);
-  node_set_visible_and_filtered_out (model, id, FALSE, FALSE);
+  row = node_get_tree_row (model, id);
+
+  node_invalidate_index (model, id);
 
   g_hash_table_remove (model->file_lookup, file);
   g_object_unref (node->file);
+  adjust_file_lookup (model, id, -1);
 
   if (node->info)
     g_object_unref (node->info);
 
   g_array_remove_index (model->files, id);
-  g_hash_table_remove_all (model->file_lookup);
-  /* We don't need to resort, as removing a row doesn't change the sorting order */
+
+  /* We don't need to resort, as removing a row doesn't change the sorting order of the other rows */
+
+  emit_row_deleted_for_row (model, row);
 }
 
 /**
