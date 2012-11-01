@@ -464,15 +464,6 @@ compute_size_for_orientation (GtkWidget         *widget,
           nat_size = adjusted_natural;
         }
 
-      /* Update size-groups with our request and update our cached requests
-       * with the size-group values in a single pass.
-       */
-      _gtk_size_group_bump_requisition (widget,
-					orientation,
-                                        for_size,
-					&min_size,
-					&nat_size);
-
       commit_cached_size (widget, orientation, for_size, min_size, nat_size);
     }
   else
@@ -480,6 +471,12 @@ compute_size_for_orientation (GtkWidget         *widget,
       min_size = cached_size->minimum_size;
       nat_size = cached_size->natural_size;
     }
+
+  _gtk_size_group_bump_requisition (widget,
+                                    orientation,
+                                    for_size,
+                                    &min_size,
+                                    &nat_size);
 
   if (minimum_size)
     *minimum_size = min_size;
