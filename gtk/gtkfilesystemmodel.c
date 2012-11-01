@@ -187,6 +187,9 @@ struct _GtkFileSystemModelClass
   void (*finished_loading) (GtkFileSystemModel *model, GError *error);
 };
 
+static guint node_get_for_file (GtkFileSystemModel *model,
+				GFile              *file);
+
 static void add_file (GtkFileSystemModel *model,
 		      GFile              *file,
 		      GFileInfo          *info);
@@ -1192,13 +1195,19 @@ gtk_file_system_model_query_done (GObject *     object,
   GtkFileSystemModel *model = data; /* only a valid pointer if not cancelled */
   GFile *file = G_FILE (object);
   GFileInfo *info;
+  guint id;
 
   info = g_file_query_info_finish (file, res, NULL);
   if (info == NULL)
     return;
 
   gdk_threads_enter ();
-  _gtk_file_system_model_update_file (model, file, info, TRUE);
+
+  _gtk_file_system_model_update_file (model, file, info);
+
+  id = node_get_for_file (model, file);
+  gtk_file_system_model_sort_node (model, id);
+
   gdk_threads_leave ();
 }
 
@@ -1855,7 +1864,6 @@ remove_file (GtkFileSystemModel *model,
  * @model: the model
  * @file: the file
  * @info: the new file info
- * @requires_resort: FIXME: get rid of this argument
  *
  * Tells the file system model that the file changed and that the 
  * new @info should be used for it now.  If the file is not part of 
@@ -1864,8 +1872,7 @@ remove_file (GtkFileSystemModel *model,
 void
 _gtk_file_system_model_update_file (GtkFileSystemModel *model,
                                     GFile              *file,
-                                    GFileInfo          *info,
-                                    gboolean            requires_resort)
+                                    GFileInfo          *info)
 {
   FileModelNode *node;
   guint i, id;
@@ -1897,9 +1904,6 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
 
   if (node->visible)
     emit_row_changed_for_node (model, id);
-
-  if (requires_resort)
-    gtk_file_system_model_sort_node (model, id);
 }
 
 /**

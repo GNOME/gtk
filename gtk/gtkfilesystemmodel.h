@@ -73,8 +73,7 @@ void                _gtk_file_system_model_add_and_query_file (GtkFileSystemMode
                                                              const char         *attributes);
 void                _gtk_file_system_model_update_file      (GtkFileSystemModel *model,
                                                              GFile              *file,
-                                                             GFileInfo          *info,
-                                                             gboolean            requires_resort);
+                                                             GFileInfo          *info);
 
 void                _gtk_file_system_model_set_show_hidden  (GtkFileSystemModel *model,
 							     gboolean            show_hidden);

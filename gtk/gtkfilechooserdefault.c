@@ -6675,7 +6675,7 @@ file_system_model_got_thumbnail (GObject *object, GAsyncResult *res, gpointer da
   copy_attribute (info, queried, G_FILE_ATTRIBUTE_THUMBNAILING_FAILED);
   copy_attribute (info, queried, G_FILE_ATTRIBUTE_STANDARD_ICON);
 
-  _gtk_file_system_model_update_file (model, file, info, FALSE);
+  _gtk_file_system_model_update_file (model, file, info);
 
   g_object_unref (info);
 
