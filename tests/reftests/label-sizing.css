@@ -3,6 +3,6 @@
   padding: 0;
 }
 
-GtkPaned GtkEventBox {
+GtkPaned GtkLabel {
   background-color: pink
 }
