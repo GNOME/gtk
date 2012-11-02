@@ -625,8 +625,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">A
-&#x2026;</property>
+                    <property name="label" translatable="yes">&#x2026;</property>
                     <attributes>
                       <attribute name="font-desc" value="Monospace"/>
                     </attributes>
@@ -1257,8 +1256,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCD
-ABCD</property>
+                    <property name="label" translatable="yes">ABC&#x2026;</property>
                     <property name="width_chars">4</property>
                     <attributes>
                       <attribute name="font-desc" value="Monospace"/>
@@ -1892,8 +1890,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCDE   
-ABCD</property>
+                    <property name="label" translatable="yes">ABCDE A&#x2026;</property>
                     <property name="width_chars">8</property>
                     <attributes>
                       <attribute name="font-desc" value="Monospace"/>
@@ -3161,8 +3158,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">A
-&#x2026;</property>
+                    <property name="label" translatable="yes">&#x2026;</property>
                     <property name="max_width_chars">4</property>
                     <attributes>
                       <attribute name="font-desc" value="Monospace"/>
@@ -3209,8 +3205,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCD
-ABCD</property>
+                    <property name="label" translatable="yes">ABC&#x2026;</property>
                     <property name="max_width_chars">4</property>
                     <attributes>
                       <attribute name="font-desc" value="Monospace"/>
@@ -3812,8 +3807,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCD
-ABCD</property>
+                    <property name="label" translatable="yes">ABC&#x2026;</property>
                     <property name="width_chars">4</property>
                     <property name="max_width_chars">4</property>
                     <attributes>
@@ -3862,8 +3856,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCD
-ABCD</property>
+                    <property name="label" translatable="yes">ABC&#x2026;</property>
                     <property name="width_chars">4</property>
                     <property name="max_width_chars">4</property>
                     <attributes>
@@ -4466,8 +4459,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCDE   
-ABCD</property>
+                    <property name="label" translatable="yes">ABCDE A&#x2026;</property>
                     <property name="width_chars">8</property>
                     <property name="max_width_chars">4</property>
                     <attributes>
@@ -4516,8 +4508,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCDE   
-ABCD</property>
+                    <property name="label" translatable="yes">ABCDE A&#x2026;</property>
                     <property name="width_chars">8</property>
                     <property name="max_width_chars">4</property>
                     <attributes>
@@ -5755,8 +5746,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">A
-&#x2026;</property>
+                    <property name="label" translatable="yes">&#x2026;</property>
                     <property name="max_width_chars">8</property>
                     <attributes>
                       <attribute name="font-desc" value="Monospace"/>
@@ -5803,8 +5793,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCDE   
-ABCD</property>
+                    <property name="label" translatable="yes">ABCDE A&#x2026;</property>
                     <property name="max_width_chars">8</property>
                     <attributes>
                       <attribute name="font-desc" value="Monospace"/>
@@ -6406,8 +6395,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCD
-ABCD</property>
+                    <property name="label" translatable="yes">ABC&#x2026;</property>
                     <property name="width_chars">4</property>
                     <property name="max_width_chars">8</property>
                     <attributes>
@@ -6456,8 +6444,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCDE   
-ABCD</property>
+                    <property name="label" translatable="yes">ABCDE A&#x2026;</property>
                     <property name="width_chars">4</property>
                     <property name="max_width_chars">8</property>
                     <attributes>
@@ -7060,8 +7047,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCDE   
-ABCD</property>
+                    <property name="label" translatable="yes">ABCDE A&#x2026;</property>
                     <property name="width_chars">8</property>
                     <property name="max_width_chars">8</property>
                     <attributes>
@@ -7110,8 +7096,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCDE   
-ABCD</property>
+                    <property name="label" translatable="yes">ABCDE A&#x2026;</property>
                     <property name="width_chars">8</property>
                     <property name="max_width_chars">8</property>
                     <attributes>
@@ -8347,8 +8332,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">A
-&#x2026;</property>
+                    <property name="label" translatable="yes">&#x2026;</property>
                     <property name="max_width_chars">12</property>
                     <attributes>
                       <attribute name="font-desc" value="Monospace"/>
@@ -8995,8 +8979,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCD
-ABCD</property>
+                    <property name="label" translatable="yes">ABC&#x2026;</property>
                     <property name="width_chars">4</property>
                     <property name="max_width_chars">12</property>
                     <attributes>
@@ -9646,8 +9629,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCDE   
-ABCD</property>
+                    <property name="label" translatable="yes">ABCDE A&#x2026;</property>
                     <property name="width_chars">8</property>
                     <property name="max_width_chars">12</property>
                     <attributes>
