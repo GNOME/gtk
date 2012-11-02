@@ -894,6 +894,43 @@ gtk_builder_new (void)
   return g_object_new (GTK_TYPE_BUILDER, NULL);
 }
 
+static guint
+gtk_builder_add_from_file_real (GtkBuilder   *builder,
+                                GObject      *parent,
+                                const gchar  *template_id,
+                                const gchar  *filename,
+                                gchar       **object_ids,
+                                GError      **error)
+{
+  GError *tmp_error = NULL;
+  gchar *buffer;
+  gsize length;
+
+  if (!g_file_get_contents (filename, &buffer, &length, &tmp_error))
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+  
+  g_free (builder->priv->filename);
+  g_free (builder->priv->resource_prefix);
+  builder->priv->filename = g_strdup (filename);
+  builder->priv->resource_prefix = NULL;
+
+  _gtk_builder_parser_parse_buffer (builder, parent, template_id, filename,
+                                    buffer, length, object_ids, &tmp_error);
+
+  g_free (buffer);
+
+  if (tmp_error != NULL)
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+
+  return 1;
+}
+
 /**
  * gtk_builder_add_from_file:
  * @builder: a #GtkBuilder
@@ -916,20 +953,25 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
                            const gchar  *filename,
                            GError      **error)
 {
-  return gtk_builder_add_to_parent_from_file (builder, NULL, filename, error);
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
+  g_return_val_if_fail (filename != NULL, 0);
+  g_return_val_if_fail (error == NULL || *error == NULL, 0);
+  
+  return gtk_builder_add_from_file_real (builder, NULL, NULL, filename,
+                                         NULL, error);
 }
 
 /**
  * gtk_builder_add_to_parent_from_file:
  * @builder: a #GtkBuilder
- * @parent: the parent object to be assumed in context while parsing the file
+ * @parent: the parent container where children will be added, or %NULL
+ * @template_id: the template id to use, or %NULL
  * @filename: the name of the file to parse
  * @error: (allow-none): return location for an error, or %NULL
  *
  * Like gtk_builder_add_from_file() except the format will expect
- * <child> instead of <object> as its first elements and expose
- * @parent in the build context, children defined in the UI fragment
- * will be added to @parent.
+ * <template> instead of <object> with id @template_id.
+ * The children defined in the UI fragment will be added to @parent.
  * 
  * Returns: A positive value on success, 0 if an error occurred
  *
@@ -938,44 +980,18 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
 guint
 gtk_builder_add_to_parent_from_file (GtkBuilder   *builder,
                                      GObject      *parent,
+                                     const gchar  *template_id,
                                      const gchar  *filename,
                                      GError      **error)
 {
-  gchar *buffer;
-  gsize length;
-  GError *tmp_error;
-
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
+  g_return_val_if_fail (GTK_IS_CONTAINER (parent), 0);
+  g_return_val_if_fail (template_id != NULL, 0);
   g_return_val_if_fail (filename != NULL, 0);
   g_return_val_if_fail (error == NULL || *error == NULL, 0);
 
-  tmp_error = NULL;
-
-  if (!g_file_get_contents (filename, &buffer, &length, &tmp_error))
-    {
-      g_propagate_error (error, tmp_error);
-      return 0;
-    }
-  
-  g_free (builder->priv->filename);
-  g_free (builder->priv->resource_prefix);
-  builder->priv->filename = g_strdup (filename);
-  builder->priv->resource_prefix = NULL;
-
-  _gtk_builder_parser_parse_buffer (builder, parent, filename,
-                                    buffer, length,
-                                    NULL,
-                                    &tmp_error);
-
-  g_free (buffer);
-
-  if (tmp_error != NULL)
-    {
-      g_propagate_error (error, tmp_error);
-      return 0;
-    }
-
-  return 1;
+  return gtk_builder_add_from_file_real (builder, parent, template_id,
+                                         filename, NULL, error);
 }
 
 /**
@@ -1009,34 +1025,55 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
                                    gchar       **object_ids,
                                    GError      **error)
 {
-  gchar *buffer;
-  gsize length;
-  GError *tmp_error;
-
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
   g_return_val_if_fail (filename != NULL, 0);
   g_return_val_if_fail (object_ids != NULL && object_ids[0] != NULL, 0);
   g_return_val_if_fail (error == NULL || *error == NULL, 0);
 
+  return gtk_builder_add_from_file_real (builder, NULL, NULL, filename,
+                                         object_ids, error);
+}
+
+static guint
+gtk_builder_add_from_resource_real (GtkBuilder   *builder,
+                                    GObject      *parent,
+                                    const gchar  *template_id,
+                                    const gchar  *path,
+                                    gchar       **object_ids,
+                                    GError      **error)
+{
+  GError *tmp_error;
+  GBytes *data;
+  char *filename_for_errors;
+  char *slash;
+
   tmp_error = NULL;
 
-  if (!g_file_get_contents (filename, &buffer, &length, &tmp_error))
+  data = g_resources_lookup_data (path, 0, &tmp_error);
+  if (data == NULL)
     {
       g_propagate_error (error, tmp_error);
       return 0;
     }
-  
+
   g_free (builder->priv->filename);
   g_free (builder->priv->resource_prefix);
-  builder->priv->filename = g_strdup (filename);
-  builder->priv->resource_prefix = NULL;
+  builder->priv->filename = g_strdup (".");
 
-  _gtk_builder_parser_parse_buffer (builder, NULL, filename,
-                                    buffer, length,
-                                    object_ids,
-                                    &tmp_error);
+  slash = strrchr (path, '/');
+  if (slash != NULL)
+    builder->priv->resource_prefix = g_strndup (path, slash - path + 1);
+  else
+    builder->priv->resource_prefix = g_strdup ("/");
 
-  g_free (buffer);
+  filename_for_errors = g_strconcat ("<resource>", path, NULL);
+
+  _gtk_builder_parser_parse_buffer (builder, parent, template_id, filename_for_errors,
+                                    g_bytes_get_data (data, NULL), g_bytes_get_size (data),
+                                    object_ids, &tmp_error);
+
+  g_free (filename_for_errors);
+  g_bytes_unref (data);
 
   if (tmp_error != NULL)
     {
@@ -1069,20 +1106,26 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
 			       const gchar  *resource_path,
 			       GError      **error)
 {
-  return gtk_builder_add_to_parent_from_resource (builder, NULL, resource_path, error);
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
+  g_return_val_if_fail (resource_path != NULL, 0);
+  g_return_val_if_fail (error == NULL || *error == NULL, 0);
+
+  return gtk_builder_add_from_resource_real (builder, NULL, NULL,
+                                             resource_path, NULL,
+                                             error);
 }
 
 /**
  * gtk_builder_add_to_parent_from_resource:
  * @builder: a #GtkBuilder
- * @parent: the parent object to be assumed in context while parsing the file
- * @path: the resource path to parse
+ * @parent: the parent container where children will be added, or %NULL
+ * @template_id: the template id to use, or %NULL
+ * @resource_path: the resource path to parse
  * @error: (allow-none): return location for an error, or %NULL
  *
- * Like gtk_builder_add_from_file() except the format will expect
- * <child> instead of <object> as its first elements and expose
- * @parent in the build context, children defined in the UI fragment
- * will be added to @parent.
+ * Like gtk_builder_add_from_resource() except the format will expect
+ * <template> instead of <object> with id @template_id.
+ * The children defined in the UI fragment will be added to @parent.
  * 
  * Returns: A positive value on success, 0 if an error occurred
  *
@@ -1091,54 +1134,18 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
 guint
 gtk_builder_add_to_parent_from_resource (GtkBuilder   *builder,
                                          GObject      *parent,
-                                         const gchar  *path,
+                                         const gchar  *template_id,
+                                         const gchar  *resource_path,
                                          GError      **error)
 {
-  GError *tmp_error;
-  GBytes *data;
-  char *filename_for_errors;
-  char *slash;
-
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
-  g_return_val_if_fail (path != NULL, 0);
+  g_return_val_if_fail (GTK_IS_CONTAINER (parent), 0);
+  g_return_val_if_fail (template_id != NULL, 0);
+  g_return_val_if_fail (resource_path != NULL, 0);
   g_return_val_if_fail (error == NULL || *error == NULL, 0);
 
-  tmp_error = NULL;
-
-  data = g_resources_lookup_data (path, 0, &tmp_error);
-  if (data == NULL)
-    {
-      g_propagate_error (error, tmp_error);
-      return 0;
-    }
-
-  g_free (builder->priv->filename);
-  g_free (builder->priv->resource_prefix);
-  builder->priv->filename = g_strdup (".");
-
-  slash = strrchr (path, '/');
-  if (slash != NULL)
-    builder->priv->resource_prefix = g_strndup (path, slash - path + 1);
-  else
-    builder->priv->resource_prefix = g_strdup ("/");
-
-  filename_for_errors = g_strconcat ("<resource>", path, NULL);
-
-  _gtk_builder_parser_parse_buffer (builder, parent, filename_for_errors,
-                                    g_bytes_get_data (data, NULL), g_bytes_get_size (data),
-                                    NULL,
-                                    &tmp_error);
-
-  g_free (filename_for_errors);
-  g_bytes_unref (data);
-
-  if (tmp_error != NULL)
-    {
-      g_propagate_error (error, tmp_error);
-      return 0;
-    }
-
-  return 1;
+  return gtk_builder_add_from_resource_real (builder, parent, template_id,
+                                             resource_path, NULL, error);
 }
 
 /**
@@ -1172,46 +1179,34 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
 				       gchar       **object_ids,
 				       GError      **error)
 {
-  GError *tmp_error;
-  GBytes *data;
-  char *filename_for_errors;
-  char *slash;
-
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
   g_return_val_if_fail (resource_path != NULL, 0);
   g_return_val_if_fail (object_ids != NULL && object_ids[0] != NULL, 0);
   g_return_val_if_fail (error == NULL || *error == NULL, 0);
 
-  tmp_error = NULL;
+  return gtk_builder_add_from_resource_real (builder, NULL, NULL,
+                                             resource_path, object_ids,
+                                             error);
+}
 
-  data = g_resources_lookup_data (resource_path, 0, &tmp_error);
-  if (data == NULL)
-    {
-      g_propagate_error (error, tmp_error);
-      return 0;
-    }
+static guint
+gtk_builder_add_from_string_real (GtkBuilder   *builder,
+                                  GObject      *parent,
+                                  const gchar  *template_id,
+                                  const gchar  *buffer,
+                                  gsize         length,
+                                  gchar       **object_ids,
+                                  GError      **error)
+{
+  GError *tmp_error = NULL;
 
   g_free (builder->priv->filename);
   g_free (builder->priv->resource_prefix);
   builder->priv->filename = g_strdup (".");
+  builder->priv->resource_prefix = NULL;
 
-  slash = strrchr (resource_path, '/');
-  if (slash != NULL)
-    builder->priv->resource_prefix =
-      g_strndup (resource_path, slash - resource_path + 1);
-  else
-    builder->priv->resource_prefix =
-      g_strdup ("/");
-
-  filename_for_errors = g_strconcat ("<resource>", resource_path, NULL);
-
-  _gtk_builder_parser_parse_buffer (builder, NULL, filename_for_errors,
-                                    g_bytes_get_data (data, NULL), g_bytes_get_size (data),
-                                    object_ids,
-                                    &tmp_error);
-  g_free (filename_for_errors);
-  g_bytes_unref (data);
-
+  _gtk_builder_parser_parse_buffer (builder, parent, template_id, "<input>",
+                                    buffer, length, object_ids, &tmp_error);
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
@@ -1244,22 +1239,28 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
                              gsize         length,
                              GError      **error)
 {
-  return gtk_builder_add_to_parent_from_string (builder, NULL, buffer, length, error);
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
+  g_return_val_if_fail (buffer != NULL, 0);
+  g_return_val_if_fail (error == NULL || *error == NULL, 0);
+  
+  return gtk_builder_add_from_string_real (builder, NULL, NULL,
+                                           buffer, length,
+                                           NULL, error);
 }
 
 
 /**
  * gtk_builder_add_to_parent_from_string:
  * @builder: a #GtkBuilder
- * @parent: the parent object to be assumed in context while parsing
+ * @parent: the parent container where children will be added, or %NULL
+ * @template_id: the template id to use, or %NULL
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
  * @error: (allow-none): return location for an error, or %NULL
  *
  * Like gtk_builder_add_from_string() except the format will expect
- * <child> instead of <object> as its first elements and expose
- * @parent in the build context, children defined in the UI fragment
- * will be added to @parent.
+ * <template> instead of <object> with id @template_id.
+ * The children defined in the UI fragment will be added to @parent.
  * 
  * Returns: A positive value on success, 0 if an error occurred
  *
@@ -1268,34 +1269,20 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
 guint
 gtk_builder_add_to_parent_from_string (GtkBuilder   *builder,
                                        GObject      *parent,
+                                       const gchar  *template_id,
                                        const gchar  *buffer,
                                        gsize         length,
                                        GError      **error)
 {
-  GError *tmp_error;
-
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
+  g_return_val_if_fail (GTK_IS_CONTAINER (parent), 0);
+  g_return_val_if_fail (template_id != NULL, 0);
   g_return_val_if_fail (buffer != NULL, 0);
   g_return_val_if_fail (error == NULL || *error == NULL, 0);
 
-  tmp_error = NULL;
-
-  g_free (builder->priv->filename);
-  g_free (builder->priv->resource_prefix);
-  builder->priv->filename = g_strdup (".");
-  builder->priv->resource_prefix = NULL;
-
-  _gtk_builder_parser_parse_buffer (builder, parent, "<input>",
-                                    buffer, length,
-                                    NULL,
-                                    &tmp_error);
-  if (tmp_error != NULL)
-    {
-      g_propagate_error (error, tmp_error);
-      return 0;
-    }
-
-  return 1;
+  return gtk_builder_add_from_string_real (builder, parent, template_id,
+                                           buffer, length,
+                                           NULL, error);
 }
 
 /**
@@ -1330,32 +1317,14 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
                                      gchar       **object_ids,
                                      GError      **error)
 {
-  GError *tmp_error;
-
   g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
   g_return_val_if_fail (buffer != NULL, 0);
   g_return_val_if_fail (object_ids != NULL && object_ids[0] != NULL, 0);
   g_return_val_if_fail (error == NULL || *error == NULL, 0);
 
-  tmp_error = NULL;
-
-  g_free (builder->priv->filename);
-  g_free (builder->priv->resource_prefix);
-  builder->priv->filename = g_strdup (".");
-  builder->priv->resource_prefix = NULL;
-
-  _gtk_builder_parser_parse_buffer (builder, NULL, "<input>",
-                                    buffer, length,
-                                    object_ids,
-                                    &tmp_error);
-
-  if (tmp_error != NULL)
-    {
-      g_propagate_error (error, tmp_error);
-      return 0;
-    }
-
-  return 1;
+  return gtk_builder_add_from_string_real (builder, NULL, NULL,
+                                           buffer, length,
+                                           object_ids, error);
 }
 
 /**

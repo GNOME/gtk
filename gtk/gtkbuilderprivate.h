@@ -110,18 +110,20 @@ typedef struct {
 
   GHashTable *object_ids;
   GObject *template_object;
+  gboolean inside_requested_template;
 } ParserData;
 
 typedef GType (*GTypeGetFunc) (void);
 
 /* Things only GtkBuilder should use */
-void _gtk_builder_parser_parse_buffer (GtkBuilder *builder,
-                                       GObject     *parent,
-                                       const gchar *filename,
-                                       const gchar *buffer,
-                                       gsize length,
-                                       gchar **requested_objs,
-                                       GError **error);
+void _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
+                                       GObject      *parent,
+                                       const gchar  *template_id,
+                                       const gchar  *filename,
+                                       const gchar  *buffer,
+                                       gsize         length,
+                                       gchar       **requested_objs,
+                                       GError      **error);
 GObject * _gtk_builder_construct (GtkBuilder *builder,
                                   ObjectInfo *info,
 				  GError    **error);

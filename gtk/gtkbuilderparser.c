@@ -327,8 +327,9 @@ parse_object (GMarkupParseContext  *context,
   GType object_type = G_TYPE_INVALID;
   ObjectInfo *object_info;
   ChildInfo *child_info;
-  gchar *object_id = NULL;
-  gchar *constructor = NULL;
+  const gchar *object_class = NULL;
+  const gchar *object_id = NULL;
+  const gchar *constructor = NULL;
   gint i, line, line2;
 
   child_info = state_peek_info (data, ChildInfo);
@@ -341,12 +342,11 @@ parse_object (GMarkupParseContext  *context,
   for (i = 0; names[i] != NULL; i++)
     {
       if (strcmp (names[i], "class") == 0)
-        /* Make sure the class is initialized so we have intern string available */
-        object_type = gtk_builder_get_type_from_name (data->builder, values[i]);
+        object_class = values[i];
       else if (strcmp (names[i], "id") == 0)
-        object_id = g_strdup (values[i]);
+        object_id = values[i];
       else if (strcmp (names[i], "constructor") == 0)
-        constructor = g_strdup (values[i]);
+        constructor = values[i];
       else if (strcmp (names[i], "type-func") == 0)
         {
 	  /* Call the GType function, and return the name of the GType,
@@ -371,7 +371,7 @@ parse_object (GMarkupParseContext  *context,
 	}
     }
 
-  if (object_type == G_TYPE_INVALID)
+  if (object_type == G_TYPE_INVALID && !object_class)
     {
       error_missing_attribute (data, element_name, "class", error);
       return;
@@ -381,6 +381,20 @@ parse_object (GMarkupParseContext  *context,
     {
       error_missing_attribute (data, element_name, "id", error);
       return;
+    }
+
+  if (object_type == G_TYPE_INVALID)
+    {
+      /* Make sure the class is initialized so we have intern string available */
+      object_type = gtk_builder_get_type_from_name (data->builder, object_class);
+
+      if (object_type == G_TYPE_INVALID)
+	{
+	  g_set_error (error, GTK_BUILDER_ERROR,
+	               GTK_BUILDER_ERROR_INVALID_VALUE,
+	               _("Invalid class: '%s'"), object_class);
+	  return;
+	}
     }
 
   ++data->cur_object_level;
@@ -400,16 +414,16 @@ parse_object (GMarkupParseContext  *context,
         }
       else
         {
-          g_free (object_id);
-          g_free (constructor);
           return;
         }
     }
+  else if (data->template_object && !data->inside_requested_template)
+    return;
 
   object_info = g_slice_new0 (ObjectInfo);
   object_info->object_type = object_type;
-  object_info->id = object_id;
-  object_info->constructor = constructor;
+  object_info->id = g_strdup (object_id);
+  object_info->constructor = g_strdup (constructor);
   state_push (data, object_info);
   object_info->tag.name = element_name;
 
@@ -680,15 +694,7 @@ parse_template (ParserData   *data,
   const gchar *parent_class = NULL;
   const gchar *class_name = NULL;
   const gchar *id = NULL;
-  GType parent_type, class_type;
-  ObjectInfo *object_info;
   gint i;
-
-  if (parent == NULL)
-    {
-      error_invalid_tag (data, element_name, NULL, error);
-      return;
-    }
 
   for (i = 0; names[i] != NULL; i++)
     {
@@ -711,58 +717,62 @@ parse_template (ParserData   *data,
       return;
     }
 
-  if (!parent_class)
-    {
-      error_missing_attribute (data, element_name, "parent", error);
-      return;
-    }
-
   if (!id)
     {
       error_missing_attribute (data, element_name, "id", error);
       return;
     }
 
-  if (strcmp (id, "this"))
+  if (parent)
     {
-      error_generic (error, GTK_BUILDER_ERROR_INVALID_VALUE, data,
-                     element_name, "%s template should be named 'this' not %s '%s'",
-                     class_name, id);
+      const gchar *template_name= _gtk_builder_object_get_name (parent);
+      GType class_type, parent_type = G_OBJECT_TYPE (parent);
+      ObjectInfo *object_info;
+
+      if (!data->inside_requested_template && g_strcmp0 (template_name, id) == 0)
+        data->inside_requested_template = TRUE;
+      else
+        return;
+
+      if (!(class_type = g_type_from_name (class_name)))
+        {
+          error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
+                         element_name, "invalid class type found '%s'", class_name);
+          return;
+        }
+
+      if (!g_type_is_a (parent_type, class_type))
+        {
+          error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
+                         element_name, "this template is for a class type %s not for %s",
+                         class_name, G_OBJECT_TYPE_NAME (parent));
+          return;
+        }
+
+      if (parent_class && 
+          !g_type_is_a (class_type, g_type_from_name (parent_class)))
+        {
+          error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
+                         element_name, "class %s should derive from parent %s",
+                         class_name, parent_class);
+          return;
+        }
+
+      /* push parent to build its children from the template */
+      object_info = g_slice_new0 (ObjectInfo);
+      object_info->object = parent;
+      object_info->object_type = parent_type;
+      object_info->id = g_strdup (_gtk_builder_object_get_name (parent));
+      object_info->tag.name = "object";
+
+      state_push (data, object_info);
+    }
+  else
+    {
+      error_invalid_tag (data, element_name, NULL, error);
       return;
     }
 
-  if ((class_type = g_type_from_name (class_name)) == G_TYPE_INVALID)
-    {
-      error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
-                     element_name, "invalid class type found '%s'", class_name);
-      return;
-    }
-
-  parent_type = G_OBJECT_TYPE (parent);
-  
-  if (!g_type_is_a (parent_type, class_type))
-    {
-      error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
-                     element_name, "this template is for a class type %s not for %s",
-                     class_name, G_OBJECT_TYPE_NAME (parent));
-      return;
-    }
-
-  if (!g_type_is_a (class_type, g_type_from_name (parent_class)))
-    {
-      error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
-                     element_name, "class %s should derive from parent %s",
-                     class_name, parent_class);
-      return;
-    }
-    
-  object_info = g_slice_new0 (ObjectInfo);
-  object_info->object = parent;
-  object_info->object_type = parent_type;
-  object_info->id = g_strdup (_gtk_builder_object_get_name (parent));
-  object_info->tag.name = "object";
-
-  state_push (data, object_info);
 }
 
 /* Called by GtkBuilder */
@@ -1010,6 +1020,13 @@ start_element (GMarkupParseContext *context,
 
   if (strcmp (element_name, "requires") == 0)
     parse_requires (data, element_name, names, values, error);
+  else if (strcmp (element_name, "template") == 0)
+    parse_template (data, element_name, names, values, error);
+  else if (data->template_object && !data->inside_requested_template)
+    {
+      /* If outside a requested template, ignore this tag */
+      return;
+    }
   else if (strcmp (element_name, "object") == 0)
     parse_object (context, data, element_name, names, values, error);
   else if (data->requested_objects && !data->inside_requested_object)
@@ -1027,8 +1044,6 @@ start_element (GMarkupParseContext *context,
     parse_interface (data, element_name, names, values, error);
   else if (strcmp (element_name, "menu") == 0)
     _gtk_builder_menu_start (data, element_name, names, values, error);
-  else if (strcmp (element_name, "template") == 0)
-    parse_template (data, element_name, names, values, error);
   else if (strcmp (element_name, "placeholder") == 0)
     {
       /* placeholder has no special treatmeant, but it needs an
@@ -1100,9 +1115,10 @@ end_element (GMarkupParseContext *context,
   else if (strcmp (element_name, "interface") == 0)
     {
     }
-  else if (data->requested_objects && !data->inside_requested_object)
+  else if ((data->requested_objects && !data->inside_requested_object) ||
+           (data->template_object && !data->inside_requested_template))
     {
-      /* If outside a requested object, simply ignore this tag */
+      /* If outside a requested object or template, simply ignore this tag */
       return;
     }
   else if (strcmp (element_name, "menu") == 0)
@@ -1193,7 +1209,7 @@ end_element (GMarkupParseContext *context,
     }
   else if (strcmp (element_name, "template") == 0)
     {
-      if (data->template_object)
+      if (data->template_object && data->inside_requested_template)
         {
           ObjectInfo *object_info = state_pop_info (data, ObjectInfo);
 
@@ -1208,6 +1224,8 @@ end_element (GMarkupParseContext *context,
           free_object_info (object_info);
 
           data->template_object = NULL;
+
+          data->inside_requested_template = FALSE;
         }
     }
   else
@@ -1283,6 +1301,7 @@ static const GMarkupParser parser = {
 void
 _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
                                   GObject      *parent,
+                                  const gchar  *template_id,
                                   const gchar  *filename,
                                   const gchar  *buffer,
                                   gsize         length,
@@ -1306,13 +1325,6 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   data->domain = g_strdup (domain);
   data->object_ids = g_hash_table_new_full (g_str_hash, g_str_equal,
 					    (GDestroyNotify)g_free, NULL);
-
-  if (parent)
-    {
-      GTK_NOTE (BUILDER, g_print ("parsing with contextual parent %s ptr %p\n", G_OBJECT_TYPE_NAME (parent), parent));
-      data->template_object = parent;
-    }
-
   data->requested_objects = NULL;
   if (requested_objs)
     {
@@ -1329,6 +1341,20 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
     {
       /* get all the objects */
       data->inside_requested_object = TRUE;
+    }
+
+  if (parent)
+    {
+      data->inside_requested_template = FALSE;
+      
+      if (template_id)
+        {
+          GTK_NOTE (BUILDER, g_print ("parsing with contextual parent %s class %s ptr %p\n",
+                                      template_id, G_OBJECT_TYPE_NAME (parent), parent));
+
+          data->template_object = parent;
+          gtk_builder_expose_object (builder, template_id, parent);
+        }
     }
 
   data->ctx = g_markup_parse_context_new (&parser, 

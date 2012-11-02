@@ -1668,15 +1668,20 @@ gtk_container_constructor (GType                  type,
       guint ret;
         
       builder = gtk_builder_new ();
-      gtk_builder_expose_object (builder, "this", object);
 
       switch (cpriv->tmpl_type)
         {
           case TMPL_STRING:
-            ret = gtk_builder_add_to_parent_from_string (builder, object, cpriv->tmpl, -1, &error);
+            ret = gtk_builder_add_to_parent_from_string (builder, object,
+                                                         "this",
+                                                         cpriv->tmpl,
+                                                         -1, &error);
           break;
           case TMPL_RESOURCE:
-            ret = gtk_builder_add_to_parent_from_resource (builder, object, cpriv->tmpl, &error);
+            ret = gtk_builder_add_to_parent_from_resource (builder, object,
+                                                           "this",
+                                                           cpriv->tmpl,
+                                                           &error);
           break;
           default:
             ret = 0;
