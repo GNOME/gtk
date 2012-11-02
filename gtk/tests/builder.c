@@ -2715,6 +2715,91 @@ test_level_bar (void)
   g_object_unref (builder);
 }
 
+static void
+test_add_to_parent (void)
+{
+  GError *error = NULL;
+  GtkBuilder *builder;
+  GtkWidget *mybox;
+  gboolean expand = FALSE, fill = FALSE;
+  GtkPackType pack_type = GTK_PACK_START;
+  guint padding = 0;
+  const gchar buffer[] =
+    "<interface>\n"
+    /* This template should get ignored */
+    "  <template class=\"GtkGrid\" id=\"mygrid\">\n"
+    "    <property name=\"visible\">True</property>\n"
+    "    <child>\n"
+    "      <object class=\"GtkLabel\" id=\"label\">\n"
+    "        <property name=\"visible\">True</property>\n"
+    "      </object>\n"
+    "   </child>\n"
+    "  </template>\n"
+    /* This is the template we are interested in! */
+    "  <template class=\"GtkBox\" id=\"mybox\">\n"
+    "    <property name=\"visible\">True</property>\n"
+    "    <property name=\"can_focus\">False</property>\n"
+    "    <property name=\"orientation\">vertical</property>\n"
+    "    <property name=\"spacing\">8</property>\n"
+    "    <child>\n"
+    "      <object class=\"GtkLabel\" id=\"label\">\n"
+    "        <property name=\"visible\">True</property>\n"
+    "        <property name=\"can_focus\">False</property>\n"
+    "        <property name=\"label\" translatable=\"yes\">label</property>\n"
+    "      </object>\n"
+    "      <packing>\n"
+    "        <property name=\"expand\">True</property>\n"
+    "        <property name=\"fill\">True</property>\n"
+    "        <property name=\"padding\">16</property>\n"
+    "        <property name=\"pack-type\">GTK_PACK_END</property>\n"
+    "        <property name=\"position\">0</property>\n"
+    "     </packing>\n"
+    "   </child>\n"
+    "   <child>\n"
+    "      <object class=\"GtkButton\" id=\"button\">\n"
+    "        <property name=\"label\" translatable=\"yes\">button</property>\n"
+    "        <property name=\"visible\">True</property>\n"
+    "        <property name=\"can_focus\">True</property>\n"
+    "        <property name=\"receives_default\">True</property>\n"
+    "      </object>\n"
+    "      <packing>\n"
+    "        <property name=\"expand\">False</property>\n"
+    "        <property name=\"fill\">True</property>\n"
+    "        <property name=\"position\">1</property>\n"
+    "      </packing>\n"
+    "    </child>\n"
+    "  </template>\n"
+    "</interface>";
+
+  builder = gtk_builder_new ();
+  mybox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  g_object_ref_sink (mybox);
+  gtk_builder_add_to_parent_from_string (builder, G_OBJECT (mybox), "mybox",
+                                         buffer, -1, &error);
+  if (error) g_warning ("%s", error->message);
+  g_assert (error == NULL);
+
+  /* Check template properties */
+  g_assert (gtk_box_get_spacing (GTK_BOX (mybox)) == 8);
+  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (mybox)) == GTK_ORIENTATION_VERTICAL);
+
+  /* Check if children are built */
+  g_assert (GTK_IS_LABEL (gtk_builder_get_object (builder, "label")));
+  g_assert (GTK_IS_BUTTON (gtk_builder_get_object (builder, "button")));
+
+  /* Check child packing properties */
+  gtk_box_query_child_packing (GTK_BOX (mybox),
+                               GTK_WIDGET (gtk_builder_get_object (builder, "label")),
+                               &expand, &fill, &padding, &pack_type);
+  g_assert (expand);
+  g_assert (fill);
+  g_assert (padding == 16);
+  g_assert (pack_type == GTK_PACK_END);
+
+  g_object_unref (builder);
+  g_object_unref (mybox);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2763,6 +2848,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/MessageDialog", test_message_dialog);
   g_test_add_func ("/Builder/GMenu", test_gmenu);
   g_test_add_func ("/Builder/LevelBar", test_level_bar);
+  g_test_add_func ("/Builder/Add to Parent", test_add_to_parent);
 
   return g_test_run();
 }
