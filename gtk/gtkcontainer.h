@@ -44,6 +44,7 @@ G_BEGIN_DECLS
 #define GTK_IS_CONTAINER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CONTAINER))
 #define GTK_CONTAINER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CONTAINER, GtkContainerClass))
 
+
 typedef struct _GtkContainer              GtkContainer;
 typedef struct _GtkContainerPrivate       GtkContainerPrivate;
 typedef struct _GtkContainerClass         GtkContainerClass;
@@ -90,6 +91,7 @@ struct _GtkContainerClass
 
 
   /*< private >*/
+
   unsigned int _handle_border_width : 1;
 
   GtkContainerClassPrivate *priv;

@@ -132,9 +132,9 @@ guint        gtk_builder_add_objects_from_file   (GtkBuilder    *builder,
                                                   GError       **error);
 GDK_AVAILABLE_IN_3_4
 guint        gtk_builder_add_objects_from_resource(GtkBuilder    *builder,
-                                                   const gchar   *resource_path,
-                                                   gchar        **object_ids,
-                                                   GError       **error);
+                                                  const gchar   *resource_path,
+                                                  gchar        **object_ids,
+                                                  GError       **error);
 guint        gtk_builder_add_objects_from_string (GtkBuilder    *builder,
                                                   const gchar   *buffer,
                                                   gsize          length,
@@ -163,10 +163,10 @@ void         gtk_builder_expose_object           (GtkBuilder    *builder,
                                                   const gchar   *name,
                                                   GObject       *object);
 void         gtk_builder_connect_signals         (GtkBuilder    *builder,
-                                                  gpointer       user_data);
+						  gpointer       user_data);
 void         gtk_builder_connect_signals_full    (GtkBuilder    *builder,
                                                   GtkBuilderConnectFunc func,
-                                                  gpointer       user_data);
+						  gpointer       user_data);
 void         gtk_builder_set_translation_domain  (GtkBuilder   	*builder,
                                                   const gchar  	*domain);
 const gchar* gtk_builder_get_translation_domain  (GtkBuilder   	*builder);
@@ -174,15 +174,15 @@ GType        gtk_builder_get_type_from_name      (GtkBuilder   	*builder,
                                                   const char   	*type_name);
 
 gboolean     gtk_builder_value_from_string       (GtkBuilder    *builder,
-                                                  GParamSpec   	*pspec,
+						  GParamSpec   	*pspec,
                                                   const gchar  	*string,
                                                   GValue       	*value,
-                                                  GError       **error);
+						  GError       **error);
 gboolean     gtk_builder_value_from_string_type  (GtkBuilder    *builder,
-                                                  GType        	 type,
+						  GType        	 type,
                                                   const gchar  	*string,
                                                   GValue       	*value,
-                                                  GError       **error);
+						  GError       **error);
 
 /**
  * GTK_BUILDER_WARN_INVALID_CHILD_TYPE:

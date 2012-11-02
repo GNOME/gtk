@@ -473,7 +473,7 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
   GObjectClass *oclass;
   DelayedProperty *property;
   GError *error = NULL;
-
+  
   oclass = g_type_class_ref (object_type);
   g_assert (oclass != NULL);
 
@@ -543,13 +543,13 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
             }
         }
       else if (!gtk_builder_value_from_string (builder, pspec,
-                                               prop->data, &parameter.value, &error))
+					       prop->data, &parameter.value, &error))
         {
           g_warning ("Failed to set property %s.%s to %s: %s",
                      g_type_name (object_type), prop->name, prop->data,
-                     error->message);
-          g_error_free (error);
-          error = NULL;
+		     error->message);
+	  g_error_free (error);
+	  error = NULL;
           continue;
         }
 
@@ -566,7 +566,7 @@ static GObject *
 gtk_builder_get_internal_child (GtkBuilder  *builder,
                                 ObjectInfo  *info,
                                 const gchar *childname,
-                                GError      **error)
+				GError      **error)
 {
   GObject *obj = NULL;
 
@@ -1491,6 +1491,7 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
     g_signal_connect_data (object, signal_name, func, args->data, NULL, flags);
 }
 
+
 /**
  * gtk_builder_connect_signals:
  * @builder: a #GtkBuilder
@@ -1608,11 +1609,11 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
 						  signal->connect_object_name);
 
 	  if (!connect_object)
-	    g_warning ("Could not lookup object %s on signal %s of object %s.",
-		       signal->connect_object_name, signal->name,
-		       signal->object_name);
+	      g_warning ("Could not lookup object %s on signal %s of object %s",
+			 signal->connect_object_name, signal->name,
+			 signal->object_name);
 	}
-      
+						  
       func (builder, object, signal->name, signal->handler, 
 	    connect_object, signal->flags, user_data);
     }

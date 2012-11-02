@@ -476,7 +476,6 @@ parse_child (ParserData   *data,
 {
   ObjectInfo* object_info;
   ChildInfo *child_info;
-  GObject  *object;
   guint i;
 
   object_info = state_peek_info (data, ObjectInfo);
@@ -485,9 +484,6 @@ parse_child (ParserData   *data,
       error_invalid_tag (data, element_name, NULL, error);
       return;
     }
-
-  GTK_NOTE (BUILDER, g_print ("parsing child of parent type %s\n", 
-			      object_info->object ? G_OBJECT_TYPE_NAME (object_info->object) : "(none)"));
   
   child_info = g_slice_new0 (ChildInfo);
   state_push (data, child_info);
@@ -504,9 +500,7 @@ parse_child (ParserData   *data,
 
   child_info->parent = (CommonInfo*)object_info;
 
-  object = builder_construct (data, object_info, error);
-  object_info->object = object;
-
+  object_info->object = builder_construct (data, object_info, error);
 }
 
 static void
@@ -1325,6 +1319,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   data->domain = g_strdup (domain);
   data->object_ids = g_hash_table_new_full (g_str_hash, g_str_equal,
 					    (GDestroyNotify)g_free, NULL);
+
   data->requested_objects = NULL;
   if (requested_objs)
     {
