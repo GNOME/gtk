@@ -58,23 +58,6 @@ struct _GtkSizeGroupClass
   void (*_gtk_reserved4) (void);
 };
 
-/**
- * GtkSizeGroupMode:
- * @GTK_SIZE_GROUP_NONE: group has no effect
- * @GTK_SIZE_GROUP_HORIZONTAL: group affects horizontal requisition
- * @GTK_SIZE_GROUP_VERTICAL: group affects vertical requisition
- * @GTK_SIZE_GROUP_BOTH: group affects both horizontal and vertical requisition
- *
- * The mode of the size group determines the directions in which the size
- * group affects the requested sizes of its component widgets.
- **/
-typedef enum {
-  GTK_SIZE_GROUP_NONE,
-  GTK_SIZE_GROUP_HORIZONTAL,
-  GTK_SIZE_GROUP_VERTICAL,
-  GTK_SIZE_GROUP_BOTH
-} GtkSizeGroupMode;
-
 GType            gtk_size_group_get_type      (void) G_GNUC_CONST;
 
 GtkSizeGroup *   gtk_size_group_new           (GtkSizeGroupMode  mode);

@@ -804,6 +804,23 @@ typedef enum
 } GtkDragResult;
 
 /**
+ * GtkSizeGroupMode:
+ * @GTK_SIZE_GROUP_NONE: group has no effect
+ * @GTK_SIZE_GROUP_HORIZONTAL: group affects horizontal requisition
+ * @GTK_SIZE_GROUP_VERTICAL: group affects vertical requisition
+ * @GTK_SIZE_GROUP_BOTH: group affects both horizontal and vertical requisition
+ *
+ * The mode of the size group determines the directions in which the size
+ * group affects the requested sizes of its component widgets.
+ **/
+typedef enum {
+  GTK_SIZE_GROUP_NONE,
+  GTK_SIZE_GROUP_HORIZONTAL,
+  GTK_SIZE_GROUP_VERTICAL,
+  GTK_SIZE_GROUP_BOTH
+} GtkSizeGroupMode;
+
+/**
  * GtkSizeRequestMode:
  * @GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH: Prefer height-for-width geometry management
  * @GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT: Prefer width-for-height geometry management
