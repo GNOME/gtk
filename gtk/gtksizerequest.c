@@ -331,12 +331,13 @@ get_vfunc_name (GtkSizeGroupMode orientation,
  * not cached. If the for_size here is -1, then get_preferred_width()
  * or get_preferred_height() will be used.
  */
-static void
-compute_size_for_orientation (GtkWidget         *widget,
-                              GtkSizeGroupMode   orientation,
-                              gint               for_size,
-                              gint              *minimum_size,
-                              gint              *natural_size)
+void
+_gtk_widget_compute_size_for_orientation (GtkWidget         *widget,
+                                          GtkSizeGroupMode   orientation,
+                                          gboolean           ignore_size_groups,
+                                          gint               for_size,
+                                          gint              *minimum_size,
+                                          gint              *natural_size)
 {
   CachedSize       *cached_size;
   gboolean          found_in_cache = FALSE;
@@ -472,11 +473,12 @@ compute_size_for_orientation (GtkWidget         *widget,
       nat_size = cached_size->natural_size;
     }
 
-  _gtk_size_group_bump_requisition (widget,
-                                    orientation,
-                                    for_size,
-                                    &min_size,
-                                    &nat_size);
+  if (!ignore_size_groups)
+    _gtk_size_group_bump_requisition (widget,
+                                      orientation,
+                                      for_size,
+                                      &min_size,
+                                      &nat_size);
 
   if (minimum_size)
     *minimum_size = min_size;
@@ -487,12 +489,13 @@ compute_size_for_orientation (GtkWidget         *widget,
   g_assert (min_size <= nat_size);
 
   GTK_NOTE (SIZE_REQUEST,
-            g_print ("[%p] %s\t%s: %d is minimum %d and natural: %d (hit cache: %s)\n",
+            g_print ("[%p] %s\t%s: %d is minimum %d and natural: %d (hit cache: %s, ignore size groups: %s)\n",
                      widget, G_OBJECT_TYPE_NAME (widget),
                      orientation == GTK_SIZE_GROUP_HORIZONTAL ?
                      "width for height" : "height for width" ,
                      for_size, min_size, nat_size,
-                     found_in_cache ? "yes" : "no"));
+                     found_in_cache ? "yes" : "no",
+                     ignore_size_groups ? "yes" : "no"));
 
 }
 
@@ -547,8 +550,12 @@ gtk_widget_get_preferred_width (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (minimum_width != NULL || natural_width != NULL);
 
-  compute_size_for_orientation (widget, GTK_SIZE_GROUP_HORIZONTAL,
-                                -1, minimum_width, natural_width);
+  _gtk_widget_compute_size_for_orientation (widget,
+                                            GTK_SIZE_GROUP_HORIZONTAL,
+                                            FALSE,
+                                            -1,
+                                            minimum_width,
+                                            natural_width);
 }
 
 
@@ -578,8 +585,12 @@ gtk_widget_get_preferred_height (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (minimum_height != NULL || natural_height != NULL);
 
-  compute_size_for_orientation (widget, GTK_SIZE_GROUP_VERTICAL,
-                                -1, minimum_height, natural_height);
+  _gtk_widget_compute_size_for_orientation (widget,
+                                            GTK_SIZE_GROUP_VERTICAL,
+                                            FALSE,
+                                            -1,
+                                            minimum_height,
+                                            natural_height);
 }
 
 
@@ -613,11 +624,19 @@ gtk_widget_get_preferred_width_for_height (GtkWidget *widget,
   g_return_if_fail (height >= 0);
 
   if (GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
-    compute_size_for_orientation (widget, GTK_SIZE_GROUP_HORIZONTAL,
-				  -1, minimum_width, natural_width);
+    _gtk_widget_compute_size_for_orientation (widget,
+                                              GTK_SIZE_GROUP_HORIZONTAL,
+                                              FALSE,
+                                              -1,
+                                              minimum_width,
+                                              natural_width);
   else
-    compute_size_for_orientation (widget, GTK_SIZE_GROUP_HORIZONTAL,
-				  height, minimum_width, natural_width);
+    _gtk_widget_compute_size_for_orientation (widget,
+                                              GTK_SIZE_GROUP_HORIZONTAL,
+                                              FALSE,
+                                              height,
+                                              minimum_width,
+                                              natural_width);
 }
 
 /**
@@ -649,11 +668,19 @@ gtk_widget_get_preferred_height_for_width (GtkWidget *widget,
   g_return_if_fail (width >= 0);
 
   if (GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
-    compute_size_for_orientation (widget, GTK_SIZE_GROUP_VERTICAL,
-				  -1, minimum_height, natural_height);
+    _gtk_widget_compute_size_for_orientation (widget,
+                                              GTK_SIZE_GROUP_VERTICAL,
+                                              FALSE,
+                                              -1,
+                                              minimum_height,
+                                              natural_height);
   else
-    compute_size_for_orientation (widget, GTK_SIZE_GROUP_VERTICAL,
-				  width, minimum_height, natural_height);
+    _gtk_widget_compute_size_for_orientation (widget,
+                                              GTK_SIZE_GROUP_VERTICAL,
+                                              FALSE,
+                                              width,
+                                              minimum_height,
+                                              natural_height);
 }
 
 /**

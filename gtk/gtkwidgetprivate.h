@@ -112,6 +112,12 @@ void _gtk_widget_override_size_request (GtkWidget *widget,
 void _gtk_widget_restore_size_request  (GtkWidget *widget,
                                         int        old_width,
                                         int        old_height);
+void _gtk_widget_compute_size_for_orientation  (GtkWidget         *widget,
+                                                GtkSizeGroupMode   orientation,
+                                                gboolean           ignore_size_groups,
+                                                gint               for_size,
+                                                gint              *minimum_size,
+                                                gint              *natural_size);
 
 gboolean _gtk_widget_get_translation_to_window (GtkWidget      *widget,
                                                 GdkWindow      *window,
