@@ -354,7 +354,7 @@ _gtk_widget_compute_size_for_orientation (GtkWidget         *widget,
 
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
         {
-          if (for_size < 0)
+          if (for_size < 0 || gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
             {
 	      push_recursion_check (widget, orientation, for_size);
               GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_size, &nat_size);
@@ -387,7 +387,7 @@ _gtk_widget_compute_size_for_orientation (GtkWidget         *widget,
         }
       else
         {
-          if (for_size < 0)
+          if (for_size < 0 || gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
             {
 	      push_recursion_check (widget, orientation, for_size);
               GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, &min_size, &nat_size);
@@ -623,20 +623,12 @@ gtk_widget_get_preferred_width_for_height (GtkWidget *widget,
   g_return_if_fail (minimum_width != NULL || natural_width != NULL);
   g_return_if_fail (height >= 0);
 
-  if (GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
-    _gtk_widget_compute_size_for_orientation (widget,
-                                              GTK_SIZE_GROUP_HORIZONTAL,
-                                              FALSE,
-                                              -1,
-                                              minimum_width,
-                                              natural_width);
-  else
-    _gtk_widget_compute_size_for_orientation (widget,
-                                              GTK_SIZE_GROUP_HORIZONTAL,
-                                              FALSE,
-                                              height,
-                                              minimum_width,
-                                              natural_width);
+  _gtk_widget_compute_size_for_orientation (widget,
+                                            GTK_SIZE_GROUP_HORIZONTAL,
+                                            FALSE,
+                                            height,
+                                            minimum_width,
+                                            natural_width);
 }
 
 /**
@@ -667,20 +659,12 @@ gtk_widget_get_preferred_height_for_width (GtkWidget *widget,
   g_return_if_fail (minimum_height != NULL || natural_height != NULL);
   g_return_if_fail (width >= 0);
 
-  if (GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
-    _gtk_widget_compute_size_for_orientation (widget,
-                                              GTK_SIZE_GROUP_VERTICAL,
-                                              FALSE,
-                                              -1,
-                                              minimum_height,
-                                              natural_height);
-  else
-    _gtk_widget_compute_size_for_orientation (widget,
-                                              GTK_SIZE_GROUP_VERTICAL,
-                                              FALSE,
-                                              width,
-                                              minimum_height,
-                                              natural_height);
+  _gtk_widget_compute_size_for_orientation (widget,
+                                            GTK_SIZE_GROUP_VERTICAL,
+                                            FALSE,
+                                            width,
+                                            minimum_height,
+                                            natural_height);
 }
 
 /**
