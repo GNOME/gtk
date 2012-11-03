@@ -5457,7 +5457,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCDE   
+                    <property name="label" translatable="yes">ABCDE
 ABCD</property>
                     <property name="max_width_chars">8</property>
                     <attributes>
@@ -5476,7 +5476,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCDE   
+                    <property name="label" translatable="yes">ABCDE
 ABCD</property>
                     <property name="max_width_chars">8</property>
                     <attributes>
@@ -6099,7 +6099,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCDE   
+                    <property name="label" translatable="yes">ABCDE
 ABCD</property>
                     <property name="width_chars">4</property>
                     <property name="max_width_chars">8</property>
@@ -6119,7 +6119,7 @@ ABCD</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">ABCDE   
+                    <property name="label" translatable="yes">ABCDE
 ABCD</property>
                     <property name="width_chars">4</property>
                     <property name="max_width_chars">8</property>
