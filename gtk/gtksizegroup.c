@@ -627,61 +627,6 @@ gtk_size_group_get_widgets (GtkSizeGroup *size_group)
   return size_group->priv->widgets;
 }
 
-static void
-compute_dimension (GtkWidget        *widget,
-		   GtkSizeGroupMode  mode,
-                   gint              for_size,
-		   gint             *minimum, /* in-out */
-		   gint             *natural) /* in-out */
-{
-  GSList *widgets;
-  GSList *tmp_list;
-  gint    min_result = 0, nat_result = 0;
-
-  widgets = widget_get_size_group_peers (widget, mode);
-
-  g_slist_foreach (widgets, (GFunc)g_object_ref, NULL);
-  
-  for (tmp_list = widgets; tmp_list; tmp_list = tmp_list->next)
-    {
-      GtkWidget *tmp_widget = tmp_list->data;
-      gint min_dimension, nat_dimension;
-
-      if (tmp_widget == widget)
-        {
-          min_dimension = *minimum;
-          nat_dimension = *natural;
-        }
-      else
-        {
-          if (mode == GTK_SIZE_GROUP_HORIZONTAL)
-            {
-              if (for_size < 0)
-                gtk_widget_get_preferred_width (tmp_widget, &min_dimension, &nat_dimension);
-              else
-                gtk_widget_get_preferred_width_for_height (tmp_widget, for_size, &min_dimension, &nat_dimension);
-            }
-          else
-            {
-              if (for_size < 0)
-                gtk_widget_get_preferred_height (tmp_widget, &min_dimension, &nat_dimension);
-              else
-                gtk_widget_get_preferred_height_for_width (tmp_widget, for_size, &min_dimension, &nat_dimension);
-            }
-        }
-
-      min_result = MAX (min_result, min_dimension);
-      nat_result = MAX (nat_result, nat_dimension);
-    }
-
-  g_slist_foreach (widgets, (GFunc)g_object_unref, NULL);
-
-  g_slist_free (widgets);
-
-  *minimum = min_result;
-  *natural = nat_result;
-}
-
 /**
  * _gtk_size_group_bump_requisition:
  * @widget: a #GtkWidget
@@ -705,19 +650,43 @@ _gtk_size_group_bump_requisition (GtkWidget        *widget,
 				  gint             *minimum,
 				  gint             *natural)
 {
-  if (!_gtk_widget_get_sizegroup_bumping (widget))
+  GSList *widgets;
+  GSList *tmp_list;
+  gint    min_result = 0, nat_result = 0;
+
+  if (!_gtk_widget_get_sizegroups (widget))
+    return;
+
+  widgets = widget_get_size_group_peers (widget, mode);
+
+  g_slist_foreach (widgets, (GFunc)g_object_ref, NULL);
+  
+  for (tmp_list = widgets; tmp_list; tmp_list = tmp_list->next)
     {
-      /* Avoid recursion here */
-      _gtk_widget_set_sizegroup_bumping (widget, TRUE);
+      GtkWidget *tmp_widget = tmp_list->data;
+      gint min_dimension, nat_dimension;
 
-      if (_gtk_widget_get_sizegroups (widget))
-	compute_dimension (widget, mode, for_size, minimum, natural);
+      if (tmp_widget == widget)
+        {
+          min_dimension = *minimum;
+          nat_dimension = *natural;
+        }
+      else
+        {
+          _gtk_widget_compute_size_for_orientation (tmp_widget, mode, TRUE, for_size, &min_dimension, &nat_dimension);
+        }
 
-      _gtk_widget_set_sizegroup_bumping (widget, FALSE);
+      min_result = MAX (min_result, min_dimension);
+      nat_result = MAX (nat_result, nat_dimension);
     }
+
+  g_slist_foreach (widgets, (GFunc)g_object_unref, NULL);
+
+  g_slist_free (widgets);
+
+  *minimum = min_result;
+  *natural = nat_result;
 }
-
-
 
 /**
  * _gtk_size_group_queue_resize:

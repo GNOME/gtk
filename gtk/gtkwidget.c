@@ -357,7 +357,6 @@ struct _GtkWidgetPrivate
 
   /* SizeGroup related flags */
   guint sizegroup_visited     : 1;
-  guint sizegroup_bumping     : 1;
   guint have_size_groups      : 1;
 
   /* The widget's name. If the widget does not have a name
@@ -13829,19 +13828,6 @@ _gtk_widget_set_sizegroup_visited (GtkWidget    *widget,
 				   gboolean      visited)
 {
   widget->priv->sizegroup_visited = visited;
-}
-
-gboolean
-_gtk_widget_get_sizegroup_bumping (GtkWidget    *widget)
-{
-  return widget->priv->sizegroup_bumping;
-}
-
-void
-_gtk_widget_set_sizegroup_bumping (GtkWidget    *widget,
-				   gboolean      bumping)
-{
-  widget->priv->sizegroup_bumping = bumping;
 }
 
 void
