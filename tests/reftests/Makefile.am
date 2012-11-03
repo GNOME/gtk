@@ -224,6 +224,9 @@ EXTRA_DIST += \
 	shorthand-entry-border.ui \
 	simple.ref.ui \
 	simple.ui \
+	sizegroups-basics.css \
+	sizegroups-basics.ui \
+	sizegroups-basics.ref.ui \
 	style-properties-nth-child.css \
 	style-properties-nth-child.ref.ui \
 	style-properties-nth-child.ui \
