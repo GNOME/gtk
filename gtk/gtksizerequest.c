@@ -528,8 +528,11 @@ _gtk_widget_compute_size_for_orientation (GtkWidget        *widget,
 
   g_hash_table_destroy (widgets);
 
-  *minimum = min_result;
-  *natural = nat_result;
+  if (minimum)
+    *minimum = min_result;
+
+  if (natural)
+    *natural = nat_result;
 }
 
 /**
