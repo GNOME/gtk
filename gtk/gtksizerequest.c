@@ -326,86 +326,17 @@ get_vfunc_name (GtkSizeGroupMode orientation,
     return for_size < 0 ? "get_preferred_height" : "get_preferred_height_for_width";
 }
 
-/**
- * _gtk_size_group_bump_requisition:
- * @widget: a #GtkWidget
- * @mode: either %GTK_SIZE_GROUP_HORIZONTAL or %GTK_SIZE_GROUP_VERTICAL, depending
- *        on the dimension in which to bump the size.
- * @for_size: Size to request minimum and natural size for
- * @minimum: a pointer to the widget's minimum size
- * @natural: a pointer to the widget's natural size
- *
- * Refreshes the sizegroup while returning the groups requested
- * value in the dimension @mode.
- *
- * This function is used both to update sizegroup minimum and natural size 
- * information and widget minimum and natural sizes in multiple passes from 
- * the size request apis.
- */
 static void
-gtk_size_group_bump_requisition (GtkWidget        *widget,
-				 GtkSizeGroupMode  mode,
-                                 gint              for_size,
-				 gint             *minimum,
-				 gint             *natural)
+gtk_widget_query_size_for_orientation (GtkWidget        *widget,
+                                       GtkSizeGroupMode  orientation,
+                                       gint              for_size,
+                                       gint             *minimum_size,
+                                       gint             *natural_size)
 {
-  GHashTable *widgets;
-  GHashTableIter iter;
-  gpointer key;
-  gint    min_result = 0, nat_result = 0;
-
-  if (!_gtk_widget_get_sizegroups (widget))
-    return;
-
-  widgets = _gtk_size_group_get_widget_peers (widget, mode);
-
-  g_hash_table_foreach (widgets, (GHFunc) g_object_ref, NULL);
-  
-  g_hash_table_iter_init (&iter, widgets);
-  while (g_hash_table_iter_next (&iter, &key, NULL))
-    {
-      GtkWidget *tmp_widget = key;
-      gint min_dimension, nat_dimension;
-
-      if (tmp_widget == widget)
-        {
-          min_dimension = *minimum;
-          nat_dimension = *natural;
-        }
-      else
-        {
-          _gtk_widget_compute_size_for_orientation (tmp_widget, mode, TRUE, for_size, &min_dimension, &nat_dimension);
-        }
-
-      min_result = MAX (min_result, min_dimension);
-      nat_result = MAX (nat_result, nat_dimension);
-    }
-
-  g_hash_table_foreach (widgets, (GHFunc) g_object_unref, NULL);
-
-  g_hash_table_destroy (widgets);
-
-  *minimum = min_result;
-  *natural = nat_result;
-}
-
-/* This is the main function that checks for a cached size and
- * possibly queries the widget class to compute the size if it's
- * not cached. If the for_size here is -1, then get_preferred_width()
- * or get_preferred_height() will be used.
- */
-void
-_gtk_widget_compute_size_for_orientation (GtkWidget         *widget,
-                                          GtkSizeGroupMode   orientation,
-                                          gboolean           ignore_size_groups,
-                                          gint               for_size,
-                                          gint              *minimum_size,
-                                          gint              *natural_size)
-{
-  CachedSize       *cached_size;
-  gboolean          found_in_cache = FALSE;
-  gint              min_size = 0;
-  gint              nat_size = 0;
+  CachedSize *cached_size;
+  gboolean    found_in_cache = FALSE;
+  gint        min_size = 0;
+  gint        nat_size = 0;
 
   found_in_cache = get_cached_size (widget, orientation, for_size, &cached_size);
 
@@ -536,13 +467,6 @@ _gtk_widget_compute_size_for_orientation (GtkWidget         *widget,
       nat_size = cached_size->natural_size;
     }
 
-  if (!ignore_size_groups)
-    gtk_size_group_bump_requisition (widget,
-                                     orientation,
-                                     for_size,
-                                     &min_size,
-                                     &nat_size);
-
   if (minimum_size)
     *minimum_size = min_size;
 
@@ -552,14 +476,60 @@ _gtk_widget_compute_size_for_orientation (GtkWidget         *widget,
   g_assert (min_size <= nat_size);
 
   GTK_NOTE (SIZE_REQUEST,
-            g_print ("[%p] %s\t%s: %d is minimum %d and natural: %d (hit cache: %s, ignore size groups: %s)\n",
+            g_print ("[%p] %s\t%s: %d is minimum %d and natural: %d (hit cache: %s)\n",
                      widget, G_OBJECT_TYPE_NAME (widget),
                      orientation == GTK_SIZE_GROUP_HORIZONTAL ?
                      "width for height" : "height for width" ,
                      for_size, min_size, nat_size,
-                     found_in_cache ? "yes" : "no",
-                     ignore_size_groups ? "yes" : "no"));
+                     found_in_cache ? "yes" : "no"));
 
+}
+
+/* This is the main function that checks for a cached size and
+ * possibly queries the widget class to compute the size if it's
+ * not cached. If the for_size here is -1, then get_preferred_width()
+ * or get_preferred_height() will be used.
+ */
+void
+_gtk_widget_compute_size_for_orientation (GtkWidget        *widget,
+                                          GtkSizeGroupMode  mode,
+                                          gint              for_size,
+                                          gint             *minimum,
+                                          gint             *natural)
+{
+  GHashTable *widgets;
+  GHashTableIter iter;
+  gpointer key;
+  gint    min_result = 0, nat_result = 0;
+
+  if (G_LIKELY (!_gtk_widget_get_sizegroups (widget)))
+    {
+      gtk_widget_query_size_for_orientation (widget, mode, for_size, minimum, natural);
+      return;
+    }
+
+  widgets = _gtk_size_group_get_widget_peers (widget, mode);
+
+  g_hash_table_foreach (widgets, (GHFunc) g_object_ref, NULL);
+  
+  g_hash_table_iter_init (&iter, widgets);
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    {
+      GtkWidget *tmp_widget = key;
+      gint min_dimension, nat_dimension;
+
+      gtk_widget_query_size_for_orientation (tmp_widget, mode, for_size, &min_dimension, &nat_dimension);
+
+      min_result = MAX (min_result, min_dimension);
+      nat_result = MAX (nat_result, nat_dimension);
+    }
+
+  g_hash_table_foreach (widgets, (GHFunc) g_object_unref, NULL);
+
+  g_hash_table_destroy (widgets);
+
+  *minimum = min_result;
+  *natural = nat_result;
 }
 
 /**
@@ -615,7 +585,6 @@ gtk_widget_get_preferred_width (GtkWidget *widget,
 
   _gtk_widget_compute_size_for_orientation (widget,
                                             GTK_SIZE_GROUP_HORIZONTAL,
-                                            FALSE,
                                             -1,
                                             minimum_width,
                                             natural_width);
@@ -650,7 +619,6 @@ gtk_widget_get_preferred_height (GtkWidget *widget,
 
   _gtk_widget_compute_size_for_orientation (widget,
                                             GTK_SIZE_GROUP_VERTICAL,
-                                            FALSE,
                                             -1,
                                             minimum_height,
                                             natural_height);
@@ -688,7 +656,6 @@ gtk_widget_get_preferred_width_for_height (GtkWidget *widget,
 
   _gtk_widget_compute_size_for_orientation (widget,
                                             GTK_SIZE_GROUP_HORIZONTAL,
-                                            FALSE,
                                             height,
                                             minimum_width,
                                             natural_width);
@@ -724,7 +691,6 @@ gtk_widget_get_preferred_height_for_width (GtkWidget *widget,
 
   _gtk_widget_compute_size_for_orientation (widget,
                                             GTK_SIZE_GROUP_VERTICAL,
-                                            FALSE,
                                             width,
                                             minimum_height,
                                             natural_height);
