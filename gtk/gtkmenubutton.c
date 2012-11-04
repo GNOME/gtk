@@ -806,6 +806,23 @@ gtk_menu_button_get_menu_model (GtkMenuButton *menu_button)
   return menu_button->priv->model;
 }
 
+static void
+set_align_widget_pointer (GtkMenuButton *menu_button,
+                          GtkWidget     *align_widget)
+{
+  GtkMenuButtonPrivate *priv;
+
+  priv = menu_button->priv;
+
+  if (priv->align_widget)
+    g_object_remove_weak_pointer (G_OBJECT (priv->align_widget), (gpointer *) &priv->align_widget);
+
+  priv->align_widget = align_widget;
+
+  if (align_widget)
+    g_object_add_weak_pointer (G_OBJECT (priv->align_widget), (gpointer *) &priv->align_widget);
+}
+
 /**
  * gtk_menu_button_set_align_widget:
  * @menu_button: a #GtkMenuButton
@@ -832,10 +849,7 @@ gtk_menu_button_set_align_widget (GtkMenuButton *menu_button,
   if (priv->align_widget == align_widget)
     return;
 
-  priv->align_widget = align_widget;
-
-  if (priv->align_widget)
-    g_object_add_weak_pointer (G_OBJECT (priv->align_widget), (gpointer *) &priv->align_widget);
+  set_align_widget_pointer (menu_button, align_widget);
 
   g_object_notify (G_OBJECT (menu_button), "align-widget");
 }
@@ -928,6 +942,8 @@ gtk_menu_button_dispose (GObject *object)
       gtk_menu_detach (GTK_MENU (priv->popup));
       priv->popup = NULL;
     }
+
+  set_align_widget_pointer (GTK_MENU_BUTTON (object), NULL);
 
   g_clear_object (&priv->model);
 
