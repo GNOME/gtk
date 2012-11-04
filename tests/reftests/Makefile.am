@@ -229,6 +229,8 @@ EXTRA_DIST += \
 	sizegroups-basics.ref.ui \
 	sizegroups-evolution-identity-page.ui \
 	sizegroups-evolution-identity-page.ref.ui \
+	sizegroups-get-preferred-null.ui \
+	sizegroups-get-preferred-null.ref.ui \
 	style-properties-nth-child.css \
 	style-properties-nth-child.ref.ui \
 	style-properties-nth-child.ui \
