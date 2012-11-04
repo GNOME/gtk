@@ -911,6 +911,7 @@ gtk_menu_button_dispose (GObject *object)
                                             menu_deactivate_cb,
                                             object);
       gtk_menu_detach (GTK_MENU (priv->popup));
+      priv->popup = NULL;
     }
 
   g_clear_object (&priv->model);
