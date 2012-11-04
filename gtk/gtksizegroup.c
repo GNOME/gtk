@@ -147,24 +147,17 @@ static void gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
 						      gpointer       user_data);
 
 static void
-mark_widget_unvisited (GtkWidget *widget)
-{
-  _gtk_widget_set_sizegroup_visited (widget, FALSE);
-}
-
-static void
-add_widget_to_closure (GtkWidget       *widget,
-		       GtkSizeGroupMode mode,
-		       GSList         **widgets)
+add_widget_to_closure (GHashTable       *set,
+                       GtkWidget        *widget,
+		       GtkSizeGroupMode  mode)
 {
   GSList *tmp_groups, *tmp_widgets;
   gboolean hidden;
 
-  if (_gtk_widget_get_sizegroup_visited (widget))
+  if (g_hash_table_lookup (set, widget))
     return;
 
-  *widgets = g_slist_prepend (*widgets, widget);
-  _gtk_widget_set_sizegroup_visited (widget, TRUE);
+  g_hash_table_insert (set, widget, widget);
   hidden = !gtk_widget_is_visible (widget);
 
   for (tmp_groups = _gtk_widget_get_sizegroups (widget); tmp_groups; tmp_groups = tmp_groups->next)
@@ -179,18 +172,19 @@ add_widget_to_closure (GtkWidget       *widget,
         continue;
 
       for (tmp_widgets = tmp_priv->widgets; tmp_widgets; tmp_widgets = tmp_widgets->next)
-        add_widget_to_closure (tmp_widgets->data, mode, widgets);
+        add_widget_to_closure (set, tmp_widgets->data, mode);
     }
 }
 
-static GSList *
+static GHashTable *
 widget_get_size_group_peers (GtkWidget        *widget,
                              GtkSizeGroupMode  mode)
 {
-  GSList *result = NULL;
+  GHashTable *result;
 
-  add_widget_to_closure (widget, mode, &result);
-  g_slist_foreach (result, (GFunc) mark_widget_unvisited, NULL);
+  result = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  add_widget_to_closure (result, widget, mode);
 
   return result;
 }
@@ -225,12 +219,13 @@ queue_resize_on_widget (GtkWidget          *widget,
 			GtkQueueResizeFlags flags)
 {
   GtkWidget *parent = widget;
-  GSList *tmp_list;
 
   while (parent)
     {
       GSList *widget_groups;
-      GSList *widgets;
+      GHashTable *widgets;
+      GHashTableIter iter;
+      gpointer current;
       
       if (widget == parent && !check_siblings)
 	{
@@ -251,41 +246,43 @@ queue_resize_on_widget (GtkWidget          *widget,
 
       widgets = widget_get_size_group_peers (parent, GTK_SIZE_GROUP_HORIZONTAL);
 
-      for (tmp_list = widgets; tmp_list; tmp_list = tmp_list->next)
+      g_hash_table_iter_init (&iter, widgets);
+      while (g_hash_table_iter_next (&iter, &current, NULL))
 	{
-	  if (tmp_list->data == parent)
+	  if (current == parent)
 	    {
 	      if (widget == parent)
 		real_queue_resize (parent, flags);
 	    }
-	  else if (tmp_list->data == widget)
+	  else if (current == widget)
             {
               g_warning ("A container and its child are part of this SizeGroup");
             }
 	  else
-	    queue_resize_on_widget (tmp_list->data, FALSE, flags);
+	    queue_resize_on_widget (current, FALSE, flags);
 	}
       
-      g_slist_free (widgets);
-	      
+      g_hash_table_destroy (widgets);
+      
       widgets = widget_get_size_group_peers (parent, GTK_SIZE_GROUP_VERTICAL);
 
-      for (tmp_list = widgets; tmp_list; tmp_list = tmp_list->next)
+      g_hash_table_iter_init (&iter, widgets);
+      while (g_hash_table_iter_next (&iter, &current, NULL))
 	{
-	  if (tmp_list->data == parent)
+	  if (current == parent)
 	    {
 	      if (widget == parent)
 		real_queue_resize (parent, flags);
 	    }
-	  else if (tmp_list->data == widget)
+	  else if (current == widget)
             {
               g_warning ("A container and its child are part of this SizeGroup");
             }
 	  else
-	    queue_resize_on_widget (tmp_list->data, FALSE, flags);
+	    queue_resize_on_widget (current, FALSE, flags);
 	}
       
-      g_slist_free (widgets);
+      g_hash_table_destroy (widgets);
 
       parent = gtk_widget_get_parent (parent);
     }
@@ -650,8 +647,9 @@ _gtk_size_group_bump_requisition (GtkWidget        *widget,
 				  gint             *minimum,
 				  gint             *natural)
 {
-  GSList *widgets;
-  GSList *tmp_list;
+  GHashTable *widgets;
+  GHashTableIter iter;
+  gpointer key;
   gint    min_result = 0, nat_result = 0;
 
   if (!_gtk_widget_get_sizegroups (widget))
@@ -659,11 +657,12 @@ _gtk_size_group_bump_requisition (GtkWidget        *widget,
 
   widgets = widget_get_size_group_peers (widget, mode);
 
-  g_slist_foreach (widgets, (GFunc)g_object_ref, NULL);
+  g_hash_table_foreach (widgets, (GHFunc) g_object_ref, NULL);
   
-  for (tmp_list = widgets; tmp_list; tmp_list = tmp_list->next)
+  g_hash_table_iter_init (&iter, widgets);
+  while (g_hash_table_iter_next (&iter, &key, NULL))
     {
-      GtkWidget *tmp_widget = tmp_list->data;
+      GtkWidget *tmp_widget = key;
       gint min_dimension, nat_dimension;
 
       if (tmp_widget == widget)
@@ -680,9 +679,9 @@ _gtk_size_group_bump_requisition (GtkWidget        *widget,
       nat_result = MAX (nat_result, nat_dimension);
     }
 
-  g_slist_foreach (widgets, (GFunc)g_object_unref, NULL);
+  g_hash_table_foreach (widgets, (GHFunc) g_object_unref, NULL);
 
-  g_slist_free (widgets);
+  g_hash_table_destroy (widgets);
 
   *minimum = min_result;
   *natural = nat_result;

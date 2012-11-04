@@ -356,7 +356,6 @@ struct _GtkWidgetPrivate
   guint vexpand_set           : 1; /* instead of computing from children */
 
   /* SizeGroup related flags */
-  guint sizegroup_visited     : 1;
   guint have_size_groups      : 1;
 
   /* The widget's name. If the widget does not have a name
@@ -13815,19 +13814,6 @@ _gtk_widget_set_height_request_needed (GtkWidget *widget,
                                        gboolean   height_request_needed)
 {
   widget->priv->height_request_needed = height_request_needed;
-}
-
-gboolean
-_gtk_widget_get_sizegroup_visited (GtkWidget    *widget)
-{
-  return widget->priv->sizegroup_visited;
-}
-
-void
-_gtk_widget_set_sizegroup_visited (GtkWidget    *widget,
-				   gboolean      visited)
-{
-  widget->priv->sizegroup_visited = visited;
 }
 
 void
