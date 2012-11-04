@@ -326,6 +326,69 @@ get_vfunc_name (GtkSizeGroupMode orientation,
     return for_size < 0 ? "get_preferred_height" : "get_preferred_height_for_width";
 }
 
+/**
+ * _gtk_size_group_bump_requisition:
+ * @widget: a #GtkWidget
+ * @mode: either %GTK_SIZE_GROUP_HORIZONTAL or %GTK_SIZE_GROUP_VERTICAL, depending
+ *        on the dimension in which to bump the size.
+ * @for_size: Size to request minimum and natural size for
+ * @minimum: a pointer to the widget's minimum size
+ * @natural: a pointer to the widget's natural size
+ *
+ * Refreshes the sizegroup while returning the groups requested
+ * value in the dimension @mode.
+ *
+ * This function is used both to update sizegroup minimum and natural size 
+ * information and widget minimum and natural sizes in multiple passes from 
+ * the size request apis.
+ */
+static void
+gtk_size_group_bump_requisition (GtkWidget        *widget,
+				 GtkSizeGroupMode  mode,
+                                 gint              for_size,
+				 gint             *minimum,
+				 gint             *natural)
+{
+  GHashTable *widgets;
+  GHashTableIter iter;
+  gpointer key;
+  gint    min_result = 0, nat_result = 0;
+
+  if (!_gtk_widget_get_sizegroups (widget))
+    return;
+
+  widgets = _gtk_size_group_get_widget_peers (widget, mode);
+
+  g_hash_table_foreach (widgets, (GHFunc) g_object_ref, NULL);
+  
+  g_hash_table_iter_init (&iter, widgets);
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    {
+      GtkWidget *tmp_widget = key;
+      gint min_dimension, nat_dimension;
+
+      if (tmp_widget == widget)
+        {
+          min_dimension = *minimum;
+          nat_dimension = *natural;
+        }
+      else
+        {
+          _gtk_widget_compute_size_for_orientation (tmp_widget, mode, TRUE, for_size, &min_dimension, &nat_dimension);
+        }
+
+      min_result = MAX (min_result, min_dimension);
+      nat_result = MAX (nat_result, nat_dimension);
+    }
+
+  g_hash_table_foreach (widgets, (GHFunc) g_object_unref, NULL);
+
+  g_hash_table_destroy (widgets);
+
+  *minimum = min_result;
+  *natural = nat_result;
+}
+
 /* This is the main function that checks for a cached size and
  * possibly queries the widget class to compute the size if it's
  * not cached. If the for_size here is -1, then get_preferred_width()
@@ -474,11 +537,11 @@ _gtk_widget_compute_size_for_orientation (GtkWidget         *widget,
     }
 
   if (!ignore_size_groups)
-    _gtk_size_group_bump_requisition (widget,
-                                      orientation,
-                                      for_size,
-                                      &min_size,
-                                      &nat_size);
+    gtk_size_group_bump_requisition (widget,
+                                     orientation,
+                                     for_size,
+                                     &min_size,
+                                     &nat_size);
 
   if (minimum_size)
     *minimum_size = min_size;
