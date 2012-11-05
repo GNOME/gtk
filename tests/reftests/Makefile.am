@@ -182,6 +182,8 @@ EXTRA_DIST += \
 	label-attribute-preference.css \
 	label-attribute-preference.ref.ui \
 	label-attribute-preference.ui \
+	label-ellipsize-with-big.ref.ui \
+	label-ellipsize-with-big.ui \
 	label-shadows.css \
 	label-shadows.ref.ui \
 	label-shadows.ui \
