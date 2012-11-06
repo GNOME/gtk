@@ -468,7 +468,7 @@ gtk_gradient_fade (GtkGradient *gradient,
 
       stop = &g_array_index (gradient->stops, ColorStop, i);
       color = gtk_symbolic_color_new_alpha (stop->color, opacity);
-      gtk_gradient_add_color_stop (gradient, stop->offset, color);
+      gtk_gradient_add_color_stop (faded, stop->offset, color);
       gtk_symbolic_color_unref (color);
     }
 
