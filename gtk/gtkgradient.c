@@ -327,6 +327,7 @@ _gtk_gradient_resolve_full (GtkGradient             *gradient,
         {
           rgba = *_gtk_css_rgba_value_get_rgba (val);
           *dependencies = _gtk_css_dependencies_union (*dependencies, stop_deps);
+          _gtk_css_value_unref (val);
         }
       else
         {
