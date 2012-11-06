@@ -79,7 +79,7 @@ fade_pattern (cairo_pattern_t *pattern,
       cairo_pattern_add_color_stop_rgba (result, o, r, g, b, a * opacity);
     }
 
-  return pattern;
+  return result;
 }
 
 static cairo_pattern_t *
