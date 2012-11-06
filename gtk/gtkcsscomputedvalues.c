@@ -499,6 +499,8 @@ gtk_css_computed_values_create_css_animations (GtkCssComputedValues    *values,
                                               _gtk_css_play_state_value_get (_gtk_css_array_value_get_nth (play_states, i)),
                                               _gtk_css_fill_mode_value_get (_gtk_css_array_value_get_nth (fill_modes, i)),
                                               _gtk_css_number_value_get (_gtk_css_array_value_get_nth (iteration_counts, i), 100));
+
+          _gtk_css_keyframes_unref (keyframes);
         }
       values->animations = g_slist_prepend (values->animations, animation);
     }
