@@ -714,7 +714,6 @@ AM_PATH_GLIB_2_0(glib_required_version, :,
 *** GLIB is always available from ftp://ftp.gtk.org/pub/gtk/.]),
   gobject gmodule-no-export)
 
-dnl
 dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
 dnl
 gtk_save_LIBS=$LIBS
@@ -748,6 +747,19 @@ else
     AC_MSG_RESULT([no])
 fi
 
+#
+# Disable deprecation checks for all libraries we depend on on stable branches.
+# This is so newer versions of those libraries don't cause more warnings with
+# a stable GTK version.
+# We don't ever want to turn off deprecation warnings for master however, because
+# that's where we get rid of deprecated API we use.
+#
+if test m4_eval(gtk_minor_version % 2) = 0 ; then
+  AC_DEFINE_UNQUOTED(GLIB_DISABLE_DEPRECATION_WARNINGS, 1,
+                     [Disable deprecation warnings from glib])
+fi
+
+dnl
 saved_cflags="$CFLAGS"
 saved_ldflags="$LDFLAGS"
 
