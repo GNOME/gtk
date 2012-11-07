@@ -46,6 +46,9 @@ struct _HandleWindow
   gint dx;
   gint dy;
   guint dragged : 1;
+  guint mode_visible : 1;
+  guint user_visible : 1;
+  guint has_point : 1;
 };
 
 struct _GtkTextHandlePrivate
@@ -282,13 +285,11 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
 }
 
 static void
-_gtk_text_handle_update_window (GtkTextHandle         *handle,
-                                GtkTextHandlePosition  pos)
+_gtk_text_handle_update_window_state (GtkTextHandle         *handle,
+                                      GtkTextHandlePosition  pos)
 {
   GtkTextHandlePrivate *priv;
   HandleWindow *handle_window;
-  gboolean visible;
-  gint x, y;
 
   priv = handle->priv;
   handle_window = &priv->windows[pos];
@@ -296,30 +297,51 @@ _gtk_text_handle_update_window (GtkTextHandle         *handle,
   if (!handle_window->window)
     return;
 
-  /* Get current state and destroy */
-  visible = gdk_window_is_visible (handle_window->window);
-
-  if (visible)
+  if (handle_window->has_point &&
+      handle_window->mode_visible && handle_window->user_visible)
     {
-      gint width;
+      gint x, y, width, height;
 
-      _gtk_text_handle_get_size (handle, &width, NULL);
-      gdk_window_get_root_coords (handle_window->window,
-                                  width / 2, 0, &x, &y);
-    }
+      x = handle_window->pointing_to.x;
+      y = handle_window->pointing_to.y;
+      _gtk_text_handle_get_size (handle, &width, &height);
 
-  gtk_widget_unregister_window (priv->parent, handle_window->window);
-  gdk_window_destroy (handle_window->window);
+      if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR)
+        y += handle_window->pointing_to.height;
+      else
+        y -= height;
 
-  /* Create new window and apply old state */
-  handle_window->window = _gtk_text_handle_create_window (handle, pos);
+      x -= width / 2;
 
-  if (visible)
-    {
+      gdk_window_move_resize (handle_window->window, x, y, width, height);
       gdk_window_show (handle_window->window);
-      _gtk_text_handle_set_position (handle, pos,
-                                     &handle_window->pointing_to);
     }
+  else
+    gdk_window_hide (handle_window->window);
+}
+
+static void
+_gtk_text_handle_update_window (GtkTextHandle         *handle,
+                                GtkTextHandlePosition  pos,
+                                gboolean               recreate)
+{
+  GtkTextHandlePrivate *priv;
+  HandleWindow *handle_window;
+
+  priv = handle->priv;
+  handle_window = &priv->windows[pos];
+
+  if (!handle_window->window)
+    return;
+
+  if (recreate)
+    {
+      gtk_widget_unregister_window (priv->parent, handle_window->window);
+      gdk_window_destroy (handle_window->window);
+      handle_window->window = _gtk_text_handle_create_window (handle, pos);
+    }
+
+  _gtk_text_handle_update_window_state (handle, pos);
 }
 
 static void
@@ -328,8 +350,15 @@ _gtk_text_handle_update_windows (GtkTextHandle *handle)
   GtkTextHandlePrivate *priv = handle->priv;
 
   gtk_style_context_invalidate (priv->style_context);
-  _gtk_text_handle_update_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
-  _gtk_text_handle_update_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END);
+  _gtk_text_handle_update_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START, FALSE);
+  _gtk_text_handle_update_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END, FALSE);
+}
+
+static void
+_gtk_text_handle_composited_changed (GtkTextHandle *handle)
+{
+  _gtk_text_handle_update_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START, TRUE);
+  _gtk_text_handle_update_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END, TRUE);
 }
 
 static void
@@ -350,7 +379,7 @@ gtk_text_handle_constructed (GObject *object)
                       object);
   priv->composited_changed_id =
     g_signal_connect_swapped (priv->parent, "composited-changed",
-                              G_CALLBACK (_gtk_text_handle_update_windows),
+                              G_CALLBACK (_gtk_text_handle_composited_changed),
                               object);
   priv->style_updated_id =
     g_signal_connect_swapped (priv->parent, "style-updated",
@@ -577,30 +606,31 @@ _gtk_text_handle_set_mode (GtkTextHandle     *handle,
   if (priv->mode == mode)
     return;
 
+  priv->mode = mode;
+
   switch (mode)
     {
     case GTK_TEXT_HANDLE_MODE_CURSOR:
-      /* Only display one handle */
-      gdk_window_show (priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window);
-      gdk_window_hide (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
+      priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].mode_visible = TRUE;
+      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].mode_visible = FALSE;
       break;
-      case GTK_TEXT_HANDLE_MODE_SELECTION:
-        /* Display both handles */
-      gdk_window_show (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
-      gdk_window_show (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window);
+    case GTK_TEXT_HANDLE_MODE_SELECTION:
+      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].mode_visible = TRUE;
+      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].mode_visible = TRUE;
       break;
     case GTK_TEXT_HANDLE_MODE_NONE:
     default:
-      gdk_window_hide (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
-      gdk_window_hide (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window);
+      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].mode_visible = FALSE;
+      priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].mode_visible = FALSE;
       break;
     }
-
-  priv->mode = mode;
 
   _gtk_text_handle_update_shape (handle,
                                  priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window,
                                  GTK_TEXT_HANDLE_POSITION_CURSOR);
+
+  _gtk_text_handle_update_window_state (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
+  _gtk_text_handle_update_window_state (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END);
 }
 
 GtkTextHandleMode
@@ -620,7 +650,6 @@ _gtk_text_handle_set_position (GtkTextHandle         *handle,
                                GdkRectangle          *rect)
 {
   GtkTextHandlePrivate *priv;
-  gint x, y, width, height;
   HandleWindow *handle_window;
 
   g_return_if_fail (GTK_IS_TEXT_HANDLE (handle));
@@ -628,6 +657,7 @@ _gtk_text_handle_set_position (GtkTextHandle         *handle,
   priv = handle->priv;
   pos = CLAMP (pos, GTK_TEXT_HANDLE_POSITION_CURSOR,
                GTK_TEXT_HANDLE_POSITION_SELECTION_START);
+  handle_window = &priv->windows[pos];
 
   if (!priv->realized)
     return;
@@ -637,21 +667,14 @@ _gtk_text_handle_set_position (GtkTextHandle         *handle,
        pos != GTK_TEXT_HANDLE_POSITION_CURSOR))
     return;
 
+  handle_window->pointing_to = *rect;
+  handle_window->has_point = TRUE;
   gdk_window_get_root_coords (priv->relative_to,
                               rect->x, rect->y,
-                              &x, &y);
-  _gtk_text_handle_get_size (handle, &width, &height);
-  handle_window = &priv->windows[pos];
+                              &handle_window->pointing_to.x,
+                              &handle_window->pointing_to.y);
 
-  if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR)
-    y += rect->height;
-  else
-    y -= height;
-
-  x -= width / 2;
-
-  gdk_window_move (handle_window->window, x, y);
-  handle_window->pointing_to = *rect;
+  _gtk_text_handle_update_window_state (handle, pos);
 }
 
 void
@@ -676,18 +699,8 @@ _gtk_text_handle_set_visible (GtkTextHandle         *handle,
   if (!window)
     return;
 
-  if (!visible)
-    gdk_window_hide (window);
-  else
-    {
-      if (priv->mode == GTK_TEXT_HANDLE_MODE_NONE ||
-          (priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR &&
-           pos != GTK_TEXT_HANDLE_POSITION_CURSOR))
-        return;
-
-      if (!gdk_window_is_visible (window))
-        gdk_window_show (window);
-    }
+  priv->windows[pos].user_visible = visible;
+  _gtk_text_handle_update_window_state (handle, pos);
 }
 
 gboolean
