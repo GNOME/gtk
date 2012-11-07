@@ -2752,7 +2752,7 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
                                                       MAX (rect->height, 1));
   cairo_surface_set_device_offset (paint->surface, -rect->x, -rect->y);
 
-  window->implicit_paint = paint;
+  window->implicit_paint = g_slist_prepend (window->implicit_paint, paint);
 
   return TRUE;
 }
@@ -2807,7 +2807,7 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
   if (impl_window->implicit_paint == NULL)
     return;
 
-  paint = impl_window->implicit_paint;
+  paint = impl_window->implicit_paint->data;
 
   region = cairo_region_copy (window->clip_region_with_children);
   cairo_region_translate (region, window->abs_x, window->abs_y);
@@ -2838,9 +2838,10 @@ gdk_window_end_implicit_paint (GdkWindow *window)
 
   g_assert (window->implicit_paint != NULL);
 
-  paint = window->implicit_paint;
+  paint = window->implicit_paint->data;
 
-  window->implicit_paint = NULL;
+  window->implicit_paint = g_slist_delete_link (window->implicit_paint,
+						window->implicit_paint);
 
   if (!GDK_WINDOW_DESTROYED (window) && !cairo_region_is_empty (paint->region))
     {
@@ -2957,7 +2958,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
     }
 
   impl_window = gdk_window_get_impl_window (window);
-  implicit_paint = impl_window->implicit_paint;
+  implicit_paint = impl_window->implicit_paint != NULL ? impl_window->implicit_paint->data : NULL;
 
   paint = g_new (GdkWindowPaint, 1);
   paint->region = cairo_region_copy (region);
@@ -3325,6 +3326,8 @@ move_region_on_impl (GdkWindow *impl_window,
 		     cairo_region_t *region, /* In impl window coords */
 		     int dx, int dy)
 {
+  GSList *l;
+
   if ((dx == 0 && dy == 0) ||
       cairo_region_is_empty (region))
     {
@@ -3363,9 +3366,9 @@ move_region_on_impl (GdkWindow *impl_window,
   /* If we're currently exposing this window, don't copy to this
      destination, as it will be overdrawn when the expose is done,
      instead invalidate it and repaint later. */
-  if (impl_window->implicit_paint)
+  for (l = impl_window->implicit_paint; l != NULL; l = l->next)
     {
-      GdkWindowPaint *implicit_paint = impl_window->implicit_paint;
+      GdkWindowPaint *implicit_paint = l->data;
       cairo_region_t *exposing;
 
       exposing = cairo_region_copy (implicit_paint->region);
@@ -4083,7 +4086,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	       * be to late to anti-expose now. Since this is merely an
 	       * optimization we just avoid doing it at all in that case.
 	       */
-	      if (window->implicit_paint != NULL && !window->implicit_paint->flushed)
+	      if (window->implicit_paint != NULL && !((GdkWindowPaint *)window->implicit_paint->data)->flushed)
                 save_region = impl_class->queue_antiexpose (window, update_area);
 
 	      gdk_window_end_implicit_paint (window);

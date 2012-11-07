@@ -247,7 +247,7 @@ struct _GdkWindow
   GdkCursor *cursor;
   GHashTable *device_cursor;
 
-  GdkWindowPaint *implicit_paint;
+  GSList *implicit_paint;
 
   GList *outstanding_moves;
 
