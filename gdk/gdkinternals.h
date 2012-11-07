@@ -200,6 +200,7 @@ struct _GdkWindow
   guint8 resize_count;
 
   gint8 toplevel_window_type;
+  guint8 alpha;
 
   GdkWindowState state;
 
