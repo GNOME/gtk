@@ -1346,15 +1346,29 @@ cells_from_object (GObject *object)
   return sw;
 }
 
+static void
+open_parent_widget (GtkWidget *button,
+		    GObject   *object)
+{
+  GtkWidget *parent;
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (object));
+  if (parent != NULL)
+    create_prop_editor (G_OBJECT (parent), 0);
+}
+
+
 /* Pass zero for type if you want all properties */
 GtkWidget*
 create_prop_editor (GObject   *object,
                     GType      type)
 {
-  GtkWidget *win;
+  GtkWidget *win, *parent;
   GtkWidget *notebook;
   GtkWidget *properties;
   GtkWidget *label;
+  GtkWidget *button;
+  GtkWidget *vbox;
   gchar *title;
   GType *ifaces;
   guint n_ifaces;
@@ -1374,12 +1388,15 @@ create_prop_editor (GObject   *object,
   g_object_set_data_full (G_OBJECT (object), "prop-editor-win", win, model_destroy);
   g_object_set_data_full (G_OBJECT (win), "model-object", object, window_destroy);
 
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_add (GTK_CONTAINER (win), vbox);
+
   if (type == 0)
     {
       notebook = gtk_notebook_new ();
       gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_LEFT);
 
-      gtk_container_add (GTK_CONTAINER (win), notebook);
+      gtk_box_pack_start (GTK_BOX (vbox), notebook, TRUE, TRUE, 0);
 
       type = G_TYPE_FROM_INSTANCE (object);
 
@@ -1437,11 +1454,24 @@ create_prop_editor (GObject   *object,
           gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
                                     properties, label);
         }
+
+      if (GTK_IS_WIDGET (object))
+	{
+	  parent = gtk_widget_get_parent (GTK_WIDGET (object));
+	  if (parent != NULL)
+	    {
+	      button = gtk_button_new_with_label ("Parent widget");
+	      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+	      g_signal_connect (button, "clicked",
+				G_CALLBACK (open_parent_widget),
+				object);
+	    }
+	}
     }
   else
     {
       properties = properties_from_type (object, type);
-      gtk_container_add (GTK_CONTAINER (win), properties);
+      gtk_box_pack_start (GTK_BOX (vbox), properties, TRUE, TRUE, 0);
       title = g_strdup_printf ("Properties of %s", g_type_name (type));
       gtk_window_set_title (GTK_WINDOW (win), title);
       g_free (title);
