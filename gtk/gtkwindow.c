@@ -118,8 +118,6 @@ struct _GtkWindowPrivate
   GdkModifierType        mnemonic_modifier;
   GdkWindowTypeHint      gdk_type_hint;
 
-  gdouble  opacity;
-
   GdkWindow *grip_window;
 
   gchar   *startup_id;
@@ -166,7 +164,6 @@ struct _GtkWindowPrivate
   guint    mnemonics_visible_set     : 1;
   guint    focus_visible             : 1;
   guint    modal                     : 1;
-  guint    opacity_set               : 1;
   guint    position                  : 3;
   guint    reset_type_hint           : 1;
   guint    resizable                 : 1;
@@ -228,7 +225,6 @@ enum {
   PROP_GRAVITY,
   PROP_TRANSIENT_FOR,
   PROP_ATTACHED_TO,
-  PROP_OPACITY,
   PROP_HAS_RESIZE_GRIP,
   PROP_RESIZE_GRIP_VISIBLE,
   PROP_APPLICATION,
@@ -983,24 +979,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
-  /**
-   * GtkWindow:opacity:
-   *
-   * The requested opacity of the window. See gtk_window_set_opacity() for
-   * more details about window opacity.
-   *
-   * Since: 2.12
-   */
-  g_object_class_install_property (gobject_class,
-				   PROP_OPACITY,
-				   g_param_spec_double ("opacity",
-							P_("Opacity for Window"),
-							P_("The opacity of the window, from 0 to 1"),
-							0.0,
-							1.0,
-							1.0,
-							GTK_PARAM_READWRITE));
-
   /* Style properties.
    */
   gtk_widget_class_install_style_property (widget_class,
@@ -1178,7 +1156,6 @@ gtk_window_init (GtkWindow *window)
   priv->focus_on_map = TRUE;
   priv->deletable = TRUE;
   priv->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
-  priv->opacity = 1.0;
   priv->startup_id = NULL;
   priv->initial_timestamp = GDK_CURRENT_TIME;
   priv->has_resize_grip = TRUE;
@@ -1300,9 +1277,6 @@ gtk_window_set_property (GObject      *object,
     case PROP_ATTACHED_TO:
       gtk_window_set_attached_to (window, g_value_get_object (value));
       break;
-    case PROP_OPACITY:
-      gtk_window_set_opacity (window, g_value_get_double (value));
-      break;
     case PROP_HAS_RESIZE_GRIP:
       gtk_window_set_has_resize_grip (window, g_value_get_boolean (value));
       break;
@@ -1423,9 +1397,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_ATTACHED_TO:
       g_value_set_object (value, gtk_window_get_attached_to (window));
-      break;
-    case PROP_OPACITY:
-      g_value_set_double (value, gtk_window_get_opacity (window));
       break;
     case PROP_HAS_RESIZE_GRIP:
       g_value_set_boolean (value, priv->has_resize_grip);
@@ -2707,28 +2678,13 @@ gtk_window_get_attached_to (GtkWindow *window)
  * shown causes it to flicker once on Windows.
  *
  * Since: 2.12
+ * Deprecated: 3.8: Use gtk_widget_set_opacity instead.
  **/
 void       
 gtk_window_set_opacity  (GtkWindow *window, 
 			 gdouble    opacity)
 {
-  GtkWindowPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv = window->priv;
-
-  if (opacity < 0.0)
-    opacity = 0.0;
-  else if (opacity > 1.0)
-    opacity = 1.0;
-
-  priv->opacity_set = TRUE;
-  priv->opacity = opacity;
-
-  if (gtk_widget_get_realized (GTK_WIDGET (window)))
-    gdk_window_set_opacity (gtk_widget_get_window (GTK_WIDGET (window)),
-                            priv->opacity);
+  gtk_widget_set_opacity (GTK_WIDGET (window), opacity);
 }
 
 /**
@@ -2741,13 +2697,14 @@ gtk_window_set_opacity  (GtkWindow *window,
  * Return value: the requested opacity for this window.
  *
  * Since: 2.12
+ * Deprecated: 3.8: Use gtk_widget_get_opacity instead.
  **/
 gdouble
 gtk_window_get_opacity (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), 0.0);
 
-  return window->priv->opacity;
+  return gtk_widget_get_opacity (GTK_WIDGET (window));
 }
 
 /**
@@ -5280,9 +5237,6 @@ gtk_window_realize (GtkWidget *widget)
 
   gdk_window = gdk_window_new (parent_window, &attributes, attributes_mask);
   gtk_widget_set_window (widget, gdk_window);
-
-  if (priv->opacity_set)
-    gdk_window_set_opacity (gdk_window, priv->opacity);
 
   gdk_window_enable_synchronized_configure (gdk_window);
 

@@ -3720,6 +3720,7 @@ gtk_widget_get_modifier_style
 gtk_widget_get_name
 gtk_widget_get_no_show_all
 gtk_widget_get_pango_context
+gtk_widget_get_opacity
 gtk_widget_get_parent
 gtk_widget_get_parent_window
 gtk_widget_get_path
@@ -3874,6 +3875,7 @@ gtk_widget_set_margin_right
 gtk_widget_set_margin_top
 gtk_widget_set_name
 gtk_widget_set_no_show_all
+gtk_widget_set_opacity
 gtk_widget_set_parent
 gtk_widget_set_parent_window
 gtk_widget_set_realized

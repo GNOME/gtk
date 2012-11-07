@@ -27,6 +27,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <locale.h>
+#include <math.h>
 
 #include <gobject/gvaluecollector.h>
 #include <gobject/gobjectnotifyqueue.c>
@@ -357,6 +358,11 @@ struct _GtkWidgetPrivate
   /* SizeGroup related flags */
   guint have_size_groups      : 1;
 
+  guint norender_children     : 1;
+  guint norender              : 1; /* Don't expose windows, instead recurse via draw */
+
+  guint8 alpha;
+
   /* The widget's name. If the widget does not have a name
    * (the name is NULL), then its name (as returned by
    * "gtk_widget_get_name") is its class's name.
@@ -508,6 +514,7 @@ enum {
   PROP_TOOLTIP_MARKUP,
   PROP_TOOLTIP_TEXT,
   PROP_WINDOW,
+  PROP_OPACITY,
   PROP_DOUBLE_BUFFERED,
   PROP_HALIGN,
   PROP_VALIGN,
@@ -700,6 +707,9 @@ static void gtk_widget_set_device_enabled_internal (GtkWidget *widget,
                                                     gboolean   recurse,
                                                     gboolean   enabled);
 static gboolean event_window_is_still_viewable (GdkEvent *event);
+static void gtk_cairo_set_event (cairo_t        *cr,
+				 GdkEventExpose *event);
+static void gtk_widget_update_norender (GtkWidget *widget);
 
 /* --- variables --- */
 static gpointer         gtk_widget_parent_class = NULL;
@@ -809,9 +819,23 @@ gtk_widget_draw_marshaller (GClosure     *closure,
                             gpointer      invocation_hint,
                             gpointer      marshal_data)
 {
+  GtkWidget *widget = g_value_get_object (&param_values[0]);
+  GdkEventExpose *tmp_event;
+  gboolean push_group;
   cairo_t *cr = g_value_get_boxed (&param_values[1]);
 
   cairo_save (cr);
+  tmp_event = _gtk_cairo_get_event (cr);
+
+  push_group =
+    widget->priv->alpha != 255 &&
+    (!gtk_widget_get_has_window (widget) || tmp_event == NULL);
+
+  if (push_group)
+    {
+      cairo_push_group (cr);
+      gtk_cairo_set_event (cr, NULL);
+    }
 
   _gtk_marshal_BOOLEAN__BOXED (closure,
                                return_value,
@@ -820,6 +844,15 @@ gtk_widget_draw_marshaller (GClosure     *closure,
                                invocation_hint,
                                marshal_data);
 
+
+  if (push_group)
+    {
+      cairo_pop_group_to_source (cr);
+      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+      cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
+    }
+
+  gtk_cairo_set_event (cr, tmp_event);
   cairo_restore (cr);
 }
 
@@ -832,6 +865,9 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
 			     int           n_params,
 			     GType        *param_types)
 {
+  GtkWidget *widget = GTK_WIDGET (instance);
+  GdkEventExpose *tmp_event;
+  gboolean push_group;
   cairo_t *cr;
   va_list args_copy;
 
@@ -839,6 +875,17 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
   cr = va_arg (args_copy, gpointer);
 
   cairo_save (cr);
+  tmp_event = _gtk_cairo_get_event (cr);
+
+  push_group =
+    widget->priv->alpha != 255 &&
+    (!gtk_widget_get_has_window (widget) || tmp_event == NULL);
+
+  if (push_group)
+    {
+      cairo_push_group (cr);
+      gtk_cairo_set_event (cr, NULL);
+    }
 
   _gtk_marshal_BOOLEAN__BOXEDv (closure,
 				return_value,
@@ -848,6 +895,15 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
 				n_params,
 				param_types);
 
+
+  if (push_group)
+    {
+      cairo_pop_group_to_source (cr);
+      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+      cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
+    }
+
+  gtk_cairo_set_event (cr, tmp_event);
   cairo_restore (cr);
 
   va_end (args_copy);
@@ -1420,6 +1476,25 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
+  /**
+   * GtkWidget:opacity:
+   *
+   * The requested opacity of the widget. See gtk_widget_set_opacity() for
+   * more details about window opacity.
+   *
+   * Before 3.8 this was only availible in GtkWindow
+   *
+   * Since: 3.8
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_OPACITY,
+				   g_param_spec_double ("opacity",
+							P_("Opacity for Widget"),
+							P_("The opacity of the widget, from 0 to 1"),
+							0.0,
+							1.0,
+							1.0,
+							GTK_PARAM_READWRITE));
   /**
    * GtkWidget::show:
    * @widget: the object which received the signal.
@@ -3484,6 +3559,9 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_vexpand (widget, g_value_get_boolean (value));
       g_object_thaw_notify (G_OBJECT (widget));
       break;
+    case PROP_OPACITY:
+      gtk_widget_set_opacity (widget, g_value_get_double (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3640,6 +3718,9 @@ gtk_widget_get_property (GObject         *object,
                            gtk_widget_get_hexpand (widget) &&
                            gtk_widget_get_vexpand (widget));
       break;
+    case PROP_OPACITY:
+      g_value_set_double (value, gtk_widget_get_opacity (widget));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3662,6 +3743,7 @@ gtk_widget_init (GtkWidget *widget)
   priv->allocation.y = -1;
   priv->allocation.width = 1;
   priv->allocation.height = 1;
+  priv->alpha = 255;
   priv->window = NULL;
   priv->parent = NULL;
 
@@ -3951,6 +4033,8 @@ gtk_widget_unparent (GtkWidget *widget)
   if (!priv->parent)
     g_object_notify_queue_clear (G_OBJECT (widget), nqueue);
   g_object_notify_queue_thaw (G_OBJECT (widget), nqueue);
+
+  gtk_widget_update_norender (widget);
 
   gtk_widget_pop_verify_invariants (widget);
   g_object_unref (widget);
@@ -8078,6 +8162,8 @@ gtk_widget_set_parent (GtkWidget *widget,
     {
       gtk_widget_queue_compute_expand (parent);
     }
+
+  gtk_widget_update_norender (widget);
 
   gtk_widget_pop_verify_invariants (widget);
 }
@@ -13634,6 +13720,11 @@ gtk_widget_set_window (GtkWidget *widget,
   if (priv->window != window)
     {
       priv->window = window;
+
+      if (gtk_widget_get_has_window (widget) && window != NULL && !gdk_window_has_native (window))
+	gdk_window_set_opacity (window,
+				priv->norender ? 0 : priv->alpha / 255.0);
+
       g_object_notify (G_OBJECT (widget), "window");
     }
 }
@@ -13671,6 +13762,10 @@ gtk_widget_register_window (GtkWidget    *widget,
 
   gdk_window_set_user_data (window, widget);
   priv->registered_windows = g_list_prepend (priv->registered_windows, window);
+
+  if (!gtk_widget_get_has_window (widget) && !gdk_window_has_native (window))
+    gdk_window_set_opacity (window,
+			    (priv->norender || priv->norender_children) ? 0.0 : 1.0);
 }
 
 /**
@@ -13762,6 +13857,170 @@ gtk_widget_set_support_multidevice (GtkWidget *widget,
 
   if (gtk_widget_get_realized (widget))
     gdk_window_set_support_multidevice (priv->window, support_multidevice);
+}
+
+static void apply_norender (GtkWidget *widget, gboolean norender);
+
+static void
+apply_norender_cb (GtkWidget *widget, gpointer norender)
+{
+  apply_norender (widget, GPOINTER_TO_INT (norender));
+}
+
+static void
+propagate_norender_non_window (GtkWidget *widget, gboolean norender)
+{
+  GList *l;
+
+  g_assert (!gtk_widget_get_has_window (widget));
+
+  for (l = widget->priv->registered_windows; l != NULL; l = l->next)
+    gdk_window_set_opacity (l->data,
+			    norender ? 0 : widget->priv->alpha / 255.0);
+
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget), apply_norender_cb,
+			  GINT_TO_POINTER (norender));
+}
+
+static void
+apply_norender (GtkWidget *widget, gboolean norender)
+{
+  if (widget->priv->norender == norender)
+    return;
+
+  widget->priv->norender = norender;
+
+  if (gtk_widget_get_has_window (widget))
+    {
+      if (widget->priv->window != NULL)
+	gdk_window_set_opacity (widget->priv->window,
+				norender ? 0 : widget->priv->alpha / 255.0);
+    }
+  else
+    propagate_norender_non_window (widget, norender | widget->priv->norender_children);
+}
+
+/* This is called when the norender_children state of a non-window widget changes,
+ * its parent changes, or its has_window state changes. It means we need
+ * to update the norender of all the windows owned by the widget and those
+ * of child widgets, up to and including the first windowed widgets in the hierarchy.
+ */
+static void
+gtk_widget_update_norender (GtkWidget *widget)
+{
+  gboolean norender;
+  GtkWidget *parent;
+
+  parent = widget->priv->parent;
+
+  norender =
+    parent != NULL &&
+    (parent->priv->norender_children ||
+     (parent->priv->norender && !gtk_widget_get_has_window (parent)));
+
+  apply_norender (widget, norender);
+
+  /* The above may not have propagated to children if norender_children changed but
+     not norender, so we need to enforce propagation. */
+  if (!gtk_widget_get_has_window (widget))
+    propagate_norender_non_window (widget, norender | widget->priv->norender_children);
+}
+
+/**
+ * gtk_widget_set_opacity:
+ * @widget: a #GtkWidget
+ * @opacity: desired opacity, between 0 and 1
+ *
+ * Request the @widget to be rendered partially transparent,
+ * with opacity 0 being fully transparent and 1 fully opaque. (Opacity values
+ * are clamped to the [0,1] range.).
+ * This works on both toplevel widget, and child widgets, although there
+ * are some limitations:
+ *
+ * For toplevel widgets this depends on the capabilities of the windowing
+ * system. On X11 this has any effect only on X screens with a compositing manager
+ * running. See gtk_widget_is_composited(). On Windows it should work
+ * always, although setting a window's opacity after the window has been
+ * shown causes it to flicker once on Windows.
+ *
+ * For child widgets it doesn't work if any affected widget has a native window, or
+ * disables double buffering.
+ *
+ * Since: 3.8
+ **/
+void
+gtk_widget_set_opacity  (GtkWidget *widget,
+			 gdouble    opacity)
+{
+  GtkWidgetPrivate *priv;
+  guint8 alpha;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = widget->priv;
+
+  if (opacity < 0.0)
+    opacity = 0.0;
+  else if (opacity > 1.0)
+    opacity = 1.0;
+
+  alpha = round (opacity * 255);
+  if (alpha == priv->alpha)
+    return;
+
+  priv->alpha = alpha;
+
+  if (gtk_widget_get_has_window (widget))
+    {
+      if (priv->window != NULL)
+	gdk_window_set_opacity (priv->window,
+				priv->norender ? 0 : opacity);
+    }
+  else
+    {
+      /* For non windowed widgets we can't use gdk_window_set_opacity() directly, as there is
+	 no GdkWindow at the right place in the hierarchy. For no-window widget this is not a problem,
+	 as we just push an opacity group in the draw marshaller.
+
+	 However, that only works for non-window descendant widgets. If any descendant has a
+	 window that window will not normally be rendered in the draw signal, so the opacity
+	 group will not work for it.
+
+	 To fix this we set all such windows to a zero opacity, meaning they don't get drawn
+	 by gdk, and instead we set a NULL _gtk_cairo_get_event during expose so that the draw
+	 handler recurses into windowed widgets.
+
+	 We do this by setting "norender_children", which means that any windows in this widget
+	 or its ancestors (stopping at the first such windows at each branch in the hierarchy)
+	 are set to zero opacity. This is then propagated into all necessary children as norender,
+	 which controls whether a window should be exposed or not.
+      */
+      priv->norender_children = priv->alpha != 255;
+      gtk_widget_update_norender (widget);
+    }
+
+  if (gtk_widget_get_realized (widget))
+    gtk_widget_queue_draw (widget);
+}
+
+/**
+ * gtk_widget_get_opacity:
+ * @widget: a #GtkWidget
+ *
+ * Fetches the requested opacity for this widget. See
+ * gtk_widget_set_opacity().
+ *
+ * Return value: the requested opacity for this widget.
+ *
+ * Since: 3.8
+ **/
+gdouble
+gtk_widget_get_opacity (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0.0);
+
+  return widget->priv->alpha / 255.0;
 }
 
 static void

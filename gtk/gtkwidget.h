@@ -670,6 +670,11 @@ void	   gtk_widget_set_device_events	  (GtkWidget	       *widget,
 void       gtk_widget_add_device_events   (GtkWidget           *widget,
                                            GdkDevice           *device,
 					   GdkEventMask         events);
+GDK_AVAILABLE_IN_3_8
+void	   gtk_widget_set_opacity	  (GtkWidget	       *widget,
+					   double		opacity);
+GDK_AVAILABLE_IN_3_8
+double	   gtk_widget_get_opacity	  (GtkWidget	       *widget);
 
 void       gtk_widget_set_device_enabled  (GtkWidget    *widget,
                                            GdkDevice    *device,
