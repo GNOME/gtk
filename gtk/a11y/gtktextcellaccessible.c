@@ -552,7 +552,6 @@ gtk_text_cell_accessible_get_character_extents (AtkText      *text,
   gail_renderer = GTK_RENDERER_CELL_ACCESSIBLE (text);
   g_object_get (gail_renderer, "renderer", &gtk_renderer, NULL);
   g_object_get (gtk_renderer, "text", &renderer_text, NULL);
-  g_object_unref (gtk_renderer);
   if (renderer_text == NULL)
     {
       g_object_unref (gtk_renderer);
