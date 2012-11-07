@@ -668,6 +668,13 @@ gdk_window_has_no_impl (GdkWindow *window)
   return window->impl_window != window;
 }
 
+static gboolean
+gdk_window_has_alpha (GdkWindow *window)
+{
+  return !gdk_window_has_impl (window) &&
+    window->has_alpha_background;
+}
+
 static void
 remove_layered_child_area (GdkWindow *window,
 			   cairo_region_t *region)
@@ -695,7 +702,7 @@ remove_layered_child_area (GdkWindow *window,
 	continue;
 
       /* Only non-impl children with alpha add to the layered region */
-      if (!child->has_alpha_background && gdk_window_has_impl (child))
+      if (!gdk_window_has_alpha (child))
 	continue;
 
       r.x = child->x;
@@ -797,7 +804,7 @@ remove_child_area (GdkWindow *window,
 	    }
 	}
 
-      if (child->has_alpha_background)
+      if (gdk_window_has_alpha (child))
 	{
 	  if (layered_region != NULL)
 	    cairo_region_union (layered_region, child_region);
@@ -2989,8 +2996,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
      by being drawn in back to front order. However, if implicit paints are not used, for
      instance if it was flushed due to a non-double-buffered paint in the middle of the
      expose we need to copy in the existing data here. */
-  if (!gdk_window_has_impl (window) &&
-      window->has_alpha_background &&
+  if (gdk_window_has_alpha (window) &&
       (!implicit_paint ||
        (implicit_paint && implicit_paint->flushed != NULL && !cairo_region_is_empty (implicit_paint->flushed))))
     {
@@ -6161,7 +6167,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
        * Everything in the old and new regions that is not copied must be
        * invalidated (including children) as this is newly exposed
        */
-      if (window->has_alpha_background)
+      if (gdk_window_has_alpha (window))
 	copy_area = cairo_region_create (); /* Copy nothing for alpha windows */
       else
 	copy_area = cairo_region_copy (new_region);
@@ -6385,7 +6391,7 @@ gdk_window_scroll (GdkWindow *window,
   impl_window = gdk_window_get_impl_window (window);
 
   /* Calculate the area that can be gotten by copying the old area */
-  if (window->has_alpha_background)
+  if (gdk_window_has_alpha (window))
     copy_area = cairo_region_create (); /* Copy nothing for alpha windows */
   else
     copy_area = cairo_region_copy (window->clip_region);
@@ -6473,7 +6479,7 @@ gdk_window_move_region (GdkWindow       *window,
   impl_window = gdk_window_get_impl_window (window);
 
   /* compute source regions */
-  if (window->has_alpha_background)
+  if (gdk_window_has_alpha (window))
     copy_area = cairo_region_create (); /* Copy nothing for alpha windows */
   else
     copy_area = cairo_region_copy (region);
