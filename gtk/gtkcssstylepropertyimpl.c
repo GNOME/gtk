@@ -42,6 +42,7 @@
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssbgsizevalueprivate.h"
 #include "gtkcssbordervalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsseasevalueprivate.h"
 #include "gtkcssenginevalueprivate.h"
@@ -55,7 +56,6 @@
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
-#include "gtksymboliccolorprivate.h"
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
 #include "gtkwin32themeprivate.h"
@@ -171,7 +171,7 @@ static GtkCssValue *
 color_parse (GtkCssStyleProperty *property,
              GtkCssParser        *parser)
 {
-  return _gtk_css_symbolic_value_new (parser);
+  return _gtk_css_color_value_parse (parser);
 }
 
 static void
@@ -853,17 +853,6 @@ background_position_parse (GtkCssStyleProperty *property,
 
 /*** REGISTRATION ***/
 
-static GtkSymbolicColor *
-gtk_symbolic_color_new_rgba (double red,
-                             double green,
-                             double blue,
-                             double alpha)
-{
-  GdkRGBA rgba = { red, green, blue, alpha };
-
-  return gtk_symbolic_color_new_literal (&rgba);
-}
-
 void
 _gtk_css_style_property_init_properties (void)
 {
@@ -878,8 +867,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           color_query,
                                           color_assign,
-                                          _gtk_css_symbolic_value_new_take_symbolic_color (
-                                            gtk_symbolic_color_new_rgba (1, 1, 1, 1)));
+                                          _gtk_css_color_value_new_rgba (1, 1, 1, 1));
   gtk_css_style_property_register        ("font-size",
                                           GTK_CSS_PROPERTY_FONT_SIZE,
                                           G_TYPE_DOUBLE,
@@ -899,8 +887,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           color_query,
                                           color_assign,
-                                          _gtk_css_symbolic_value_new_take_symbolic_color (
-                                            gtk_symbolic_color_new_rgba (0, 0, 0, 0)));
+                                          _gtk_css_color_value_new_rgba (0, 0, 0, 0));
 
   gtk_css_style_property_register        ("font-family",
                                           GTK_CSS_PROPERTY_FONT_FAMILY,
@@ -1197,9 +1184,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           color_query,
                                           color_assign,
-                                          _gtk_css_symbolic_value_new_take_symbolic_color (
-                                            gtk_symbolic_color_ref (
-                                              _gtk_symbolic_color_get_current_color ())));
+                                          _gtk_css_color_value_new_current_color ());
   gtk_css_style_property_register        ("border-right-color",
                                           GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR,
                                           GDK_TYPE_RGBA,
@@ -1207,9 +1192,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           color_query,
                                           color_assign,
-                                          _gtk_css_symbolic_value_new_take_symbolic_color (
-                                            gtk_symbolic_color_ref (
-                                              _gtk_symbolic_color_get_current_color ())));
+                                          _gtk_css_color_value_new_current_color ());
   gtk_css_style_property_register        ("border-bottom-color",
                                           GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR,
                                           GDK_TYPE_RGBA,
@@ -1217,9 +1200,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           color_query,
                                           color_assign,
-                                          _gtk_css_symbolic_value_new_take_symbolic_color (
-                                            gtk_symbolic_color_ref (
-                                              _gtk_symbolic_color_get_current_color ())));
+                                          _gtk_css_color_value_new_current_color ());
   gtk_css_style_property_register        ("border-left-color",
                                           GTK_CSS_PROPERTY_BORDER_LEFT_COLOR,
                                           GDK_TYPE_RGBA,
@@ -1227,9 +1208,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           color_query,
                                           color_assign,
-                                          _gtk_css_symbolic_value_new_take_symbolic_color (
-                                            gtk_symbolic_color_ref (
-                                              _gtk_symbolic_color_get_current_color ())));
+                                          _gtk_css_color_value_new_current_color ());
   gtk_css_style_property_register        ("outline-color",
                                           GTK_CSS_PROPERTY_OUTLINE_COLOR,
                                           GDK_TYPE_RGBA,
@@ -1237,9 +1216,7 @@ _gtk_css_style_property_init_properties (void)
                                           color_parse,
                                           color_query,
                                           color_assign,
-                                          _gtk_css_symbolic_value_new_take_symbolic_color (
-                                            gtk_symbolic_color_ref (
-                                              _gtk_symbolic_color_get_current_color ())));
+                                          _gtk_css_color_value_new_current_color ());
 
   gtk_css_style_property_register        ("background-repeat",
                                           GTK_CSS_PROPERTY_BACKGROUND_REPEAT,

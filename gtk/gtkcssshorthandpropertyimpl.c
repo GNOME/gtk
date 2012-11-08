@@ -27,6 +27,7 @@
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssbgsizevalueprivate.h"
 #include "gtkcssbordervalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsseasevalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
@@ -39,7 +40,6 @@
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtkstylepropertiesprivate.h"
-#include "gtksymboliccolorprivate.h"
 #include "gtktypebuiltins.h"
 
 /* this is in case round() is not provided by the compiler, 
@@ -217,7 +217,7 @@ parse_border_color (GtkCssShorthandProperty  *shorthand,
 
   for (i = 0; i < 4; i++)
     {
-      values[i] = _gtk_css_symbolic_value_new (parser);
+      values[i] = _gtk_css_color_value_parse (parser);
       if (values[i] == NULL)
         return FALSE;
 
@@ -349,7 +349,7 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
       }
     else if (values[2] == NULL)
       {
-        values[2] = _gtk_css_symbolic_value_new (parser);
+        values[2] = _gtk_css_color_value_parse (parser);
         if (values[2] == NULL)
           return FALSE;
       }
@@ -388,7 +388,7 @@ parse_border (GtkCssShorthandProperty  *shorthand,
       }
     else if (!G_IS_VALUE (&values[8]))
       {
-        values[8] = _gtk_css_symbolic_value_new (parser);
+        values[8] = _gtk_css_color_value_parse (parser);
         if (values[8] == NULL)
           return FALSE;
 
@@ -516,7 +516,7 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
         }
       else if (values[6] == NULL)
         {
-          value = _gtk_css_symbolic_value_new (parser);
+          value = _gtk_css_color_value_parse (parser);
           if (value == NULL)
             values[6] = _gtk_css_value_ref (_gtk_css_style_property_get_initial_value 
                                             (_gtk_css_shorthand_property_get_subproperty (shorthand, 6)));
