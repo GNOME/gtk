@@ -478,6 +478,7 @@ gtk_private_h_sources =		\
 	gtkfontchooserprivate.h	\
 	gtkfontchooserutils.h	\
 	gtkgradientprivate.h	\
+	gtkhslaprivate.h	\
 	gtkiconcache.h		\
 	gtkiconhelperprivate.h  \
 	gtkiconviewprivate.h	\
@@ -719,6 +720,7 @@ gtk_base_c_sources = 		\
 	gtkframe.c		\
 	gtkgradient.c		\
 	gtkgrid.c		\
+	gtkhsla.c		\
 	gtkiconcache.c		\
 	gtkiconcachevalidator.c	\
 	gtkiconfactory.c	\
