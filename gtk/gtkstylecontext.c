@@ -2701,25 +2701,6 @@ gtk_style_context_get_junction_sides (GtkStyleContext *context)
   return context->priv->info->junction_sides;
 }
 
-GtkCssValue *
-_gtk_style_context_resolve_color_value (GtkStyleContext    *context,
-                                        GtkCssValue        *current,
-                                        GtkCssDependencies  current_deps,
-					GtkCssValue        *color,
-                                        GtkCssDependencies *dependencies)
-{
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
-  g_return_val_if_fail (current != NULL, FALSE);
-  g_return_val_if_fail (color != NULL, FALSE);
-
-  return _gtk_symbolic_color_resolve_full ((GtkSymbolicColor *) color,
-                                           GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade),
-                                           current,
-                                           current_deps,
-                                           dependencies);
-}
-
-
 gboolean
 _gtk_style_context_resolve_color (GtkStyleContext    *context,
                                   GtkSymbolicColor   *color,
