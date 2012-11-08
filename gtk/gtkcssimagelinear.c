@@ -23,10 +23,10 @@
 
 #include <math.h>
 
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssprovider.h"
-#include "gtksymboliccolorprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageLinear, _gtk_css_image_linear, GTK_TYPE_CSS_IMAGE)
 
@@ -323,7 +323,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
   do {
     GtkCssImageLinearColorStop stop;
 
-    stop.color = _gtk_css_symbolic_value_new (parser);
+    stop.color = _gtk_css_color_value_parse (parser);
     if (stop.color == NULL)
       return FALSE;
 
