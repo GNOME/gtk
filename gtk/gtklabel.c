@@ -3557,7 +3557,8 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
       *smallest = *widest;
     }
 
-  g_assert (widest->width >= smallest->width);
+  if (widest->width < smallest->width)
+    *smallest = *widest;
 
   g_object_unref (layout);
 }
