@@ -551,7 +551,7 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
       CGContextSetStrokeColorWithColor (context, color);
       CGColorRelease (color);
 
-      CGContextSetLineWidth (context, MAX (G_MINFLOAT, private->line_width));
+      CGContextSetLineWidth (context, MAX (1.0, private->line_width));
 
       switch (private->line_style)
 	{
