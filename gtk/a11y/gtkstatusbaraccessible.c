@@ -22,7 +22,7 @@
 #include "gtkstatusbaraccessible.h"
 
 
-G_DEFINE_TYPE (GtkStatusbarAccessible, _gtk_statusbar_accessible, GTK_TYPE_BOX_ACCESSIBLE)
+G_DEFINE_TYPE (GtkStatusbarAccessible, _gtk_statusbar_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
 
 static void
 text_changed (GtkStatusbar *statusbar,

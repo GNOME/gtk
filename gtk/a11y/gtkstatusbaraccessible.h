@@ -18,7 +18,7 @@
 #ifndef __GTK_STATUSBAR_ACCESSIBLE_H__
 #define __GTK_STATUSBAR_ACCESSIBLE_H__
 
-#include "gtkboxaccessible.h"
+#include "gtkcontaineraccessible.h"
 
 G_BEGIN_DECLS
 
@@ -35,14 +35,14 @@ typedef struct _GtkStatusbarAccessiblePrivate GtkStatusbarAccessiblePrivate;
 
 struct _GtkStatusbarAccessible
 {
-  GtkBoxAccessible parent;
+  GtkContainerAccessible parent;
 
   GtkStatusbarAccessiblePrivate *priv;
 };
 
 struct _GtkStatusbarAccessibleClass
 {
-  GtkBoxAccessibleClass parent_class;
+  GtkContainerAccessibleClass parent_class;
 };
 
 GType _gtk_statusbar_accessible_get_type (void);

@@ -87,7 +87,7 @@
 #include "gtksizerequest.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
-#include "a11y/gtkboxaccessible.h"
+#include "a11y/gtkcontaineraccessible.h"
 
 
 enum {
@@ -317,7 +317,7 @@ gtk_box_class_init (GtkBoxClass *class)
 
   g_type_class_add_private (object_class, sizeof (GtkBoxPrivate));
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_BOX_ACCESSIBLE);
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
 }
 
 static void
