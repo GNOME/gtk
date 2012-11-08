@@ -144,6 +144,10 @@
 
 -(void)checkSendEnterNotify
 {
+  GdkWindow *window = [[self contentView] gdkWindow];
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
   /* When a new window has been created, and the mouse
    * is in the window area, we will not receive an NSMouseEntered
    * event.  Therefore, we synthesize an enter notify event manually.
@@ -154,8 +158,19 @@
 
       if (NSPointInRect ([NSEvent mouseLocation], [self frame]))
         {
-          GdkWindow *window = [[self contentView] gdkWindow];
-          _gdk_quartz_events_send_enter_notify_event (window);
+          NSEvent *event;
+
+          event = [NSEvent enterExitEventWithType: NSMouseEntered
+                                         location: [self mouseLocationOutsideOfEventStream]
+                                    modifierFlags: 0
+                                        timestamp: [[NSApp currentEvent] timestamp]
+                                     windowNumber: [impl->toplevel windowNumber]
+                                          context: NULL
+                                      eventNumber: 0
+                                   trackingNumber: [impl->view trackingRect]
+                                         userData: nil];
+
+          [NSApp postEvent:event atStart:NO];
         }
     }
 }
@@ -311,6 +326,8 @@
     [impl->toplevel orderFront:nil];
 
   inShowOrHide = NO;
+
+  [self checkSendEnterNotify];
 }
 
 - (void)hide
@@ -322,6 +339,8 @@
   inShowOrHide = YES;
   [impl->toplevel orderOut:nil];
   inShowOrHide = NO;
+
+  initialPositionKnown = NO;
 }
 
 - (BOOL)trackManualMove

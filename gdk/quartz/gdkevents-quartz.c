@@ -642,37 +642,6 @@ _gdk_quartz_events_update_focus_window (GdkWindow *window,
 }
 
 void
-_gdk_quartz_events_send_enter_notify_event (GdkWindow *window)
-{
-  NSPoint screen_point;
-  GdkEvent *event;
-  gint x, y, x_root, y_root;
-
-  event = gdk_event_new (GDK_ENTER_NOTIFY);
-  event->any.window = NULL;
-  event->any.send_event = FALSE;
-
-  screen_point = [NSEvent mouseLocation];
-
-  _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &x_root, &y_root);
-  get_window_point_from_screen_point (window, screen_point, &x, &y);
-
-  event->crossing.window = window;
-  event->crossing.subwindow = NULL;
-  event->crossing.time = GDK_CURRENT_TIME;
-  event->crossing.x = x;
-  event->crossing.y = y;
-  event->crossing.x_root = x_root;
-  event->crossing.y_root = y_root;
-  event->crossing.mode = GDK_CROSSING_NORMAL;
-  event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-  event->crossing.state = _gdk_quartz_events_get_current_keyboard_modifiers () |
-                          _gdk_quartz_events_get_current_mouse_modifiers ();
-
-  append_event (event, TRUE);
-}
-
-void
 _gdk_quartz_events_send_map_event (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
