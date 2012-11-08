@@ -757,7 +757,7 @@ gtk_symbolic_color_to_string (GtkSymbolicColor *color)
         char factor[G_ASCII_DTOSTR_BUF_SIZE];
 
         g_ascii_dtostr (factor, sizeof (factor), color->sym_col.shade.factor);
-        s = g_strdup_printf ("shade (%s, %s)", color_string, factor);
+        s = g_strdup_printf ("shade(%s, %s)", color_string, factor);
         g_free (color_string);
       }
       break;
@@ -767,7 +767,7 @@ gtk_symbolic_color_to_string (GtkSymbolicColor *color)
         char factor[G_ASCII_DTOSTR_BUF_SIZE];
 
         g_ascii_dtostr (factor, sizeof (factor), color->sym_col.alpha.factor);
-        s = g_strdup_printf ("alpha (%s, %s)", color_string, factor);
+        s = g_strdup_printf ("alpha(%s, %s)", color_string, factor);
         g_free (color_string);
       }
       break;
@@ -778,7 +778,7 @@ gtk_symbolic_color_to_string (GtkSymbolicColor *color)
         char factor[G_ASCII_DTOSTR_BUF_SIZE];
 
         g_ascii_dtostr (factor, sizeof (factor), color->sym_col.mix.factor);
-        s = g_strdup_printf ("mix (%s, %s, %s)", color_string1, color_string2, factor);
+        s = g_strdup_printf ("mix(%s, %s, %s)", color_string1, color_string2, factor);
         g_free (color_string1);
         g_free (color_string2);
       }
