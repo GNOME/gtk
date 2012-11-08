@@ -2960,6 +2960,8 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
         changes = _gtk_bitmask_union (changes, data->store->depends_on_font_size);
 
       build_properties (context, data->store, info, changes);
+
+      _gtk_bitmask_free (changes);
     }
 }
 
