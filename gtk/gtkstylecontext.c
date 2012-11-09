@@ -2962,6 +2962,9 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
   GHashTableIter iter;
   gpointer key, value;
 
+  if (_gtk_bitmask_is_empty (parent_changes))
+    return;
+
   priv = context->priv;
 
   g_hash_table_iter_init (&iter, priv->style_data);
@@ -2978,7 +2981,8 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
       if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_FONT_SIZE))
         changes = _gtk_bitmask_union (changes, data->store->depends_on_font_size);
 
-      build_properties (context, data->store, info, changes);
+      if (!_gtk_bitmask_is_empty (changes))
+	build_properties (context, data->store, info, changes);
     }
 }
 

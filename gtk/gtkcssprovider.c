@@ -1603,6 +1603,9 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
                                ruleset->styles[j].section,
                                ruleset->styles[j].value);
         }
+
+      if (_gtk_bitmask_is_empty (_gtk_css_lookup_get_missing (lookup)))
+        break;
     }
 }
 
