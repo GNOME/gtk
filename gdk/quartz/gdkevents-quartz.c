@@ -1121,8 +1121,9 @@ synthesize_crossing_event (GdkWindow *window,
   switch ([nsevent type])
     {
     case NSMouseEntered:
-      /* Enter events are considered always to be from the root window as we
-       * can't know for sure from what window we enter.
+      /* Enter events are considered always to be from another toplevel
+       * window, this shouldn't negatively affect any app or gtk code,
+       * and is the only way to make GtkMenu work. EEK EEK EEK.
        */
       if (!(private->event_mask & GDK_ENTER_NOTIFY_MASK))
         return FALSE;
@@ -1132,14 +1133,11 @@ synthesize_crossing_event (GdkWindow *window,
                            x_root, y_root,
                            GDK_ENTER_NOTIFY,
                            GDK_CROSSING_NORMAL,
-                           GDK_NOTIFY_ANCESTOR);
+                           GDK_NOTIFY_NONLINEAR);
       return TRUE;
 
     case NSMouseExited:
-      /* Exited always is to the root window as far as we are concerned,
-       * since there is no way to reliably get information about what new
-       * window is entered when exiting one.
-       */
+      /* See above */
       if (!(private->event_mask & GDK_LEAVE_NOTIFY_MASK))
         return FALSE;
 
@@ -1148,7 +1146,7 @@ synthesize_crossing_event (GdkWindow *window,
                            x_root, y_root,
                            GDK_LEAVE_NOTIFY,
                            GDK_CROSSING_NORMAL,
-                           GDK_NOTIFY_ANCESTOR);
+                           GDK_NOTIFY_NONLINEAR);
       return TRUE;
 
     default:
