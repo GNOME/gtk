@@ -1568,18 +1568,19 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
 {
   GtkCssProvider *css_provider;
   GtkCssProviderPrivate *priv;
-  int i;
+  GtkCssRuleset *ruleset;
   guint j;
 
   css_provider = GTK_CSS_PROVIDER (provider);
   priv = css_provider->priv;
 
-  for (i = priv->rulesets->len - 1; i >= 0; i--)
+  if (priv->rulesets->len == 0)
+    return;
+
+  for (ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, priv->rulesets->len - 1);
+       ruleset >= &g_array_index (priv->rulesets, GtkCssRuleset, 0);
+       ruleset--)
     {
-      GtkCssRuleset *ruleset;
-
-      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
-
       if (ruleset->styles == NULL)
         continue;
 
