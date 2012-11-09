@@ -62,6 +62,8 @@ tests/reftests/inherit-and-initial.ref.ui
 tests/reftests/inherit-and-initial.ui
 tests/reftests/label-attribute-preference.ref.ui
 tests/reftests/label-attribute-preference.ui
+tests/reftests/label-ellipsize-small.ref.ui
+tests/reftests/label-ellipsize-small.ui
 tests/reftests/label-ellipsize-with-big.ref.ui
 tests/reftests/label-ellipsize-with-big.ui
 tests/reftests/label-shadows.ref.ui
