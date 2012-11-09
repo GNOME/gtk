@@ -521,8 +521,8 @@ _shade_color (GdkRGBA *color,
   hsla.lightness *= factor;
   hsla.lightness = CLAMP (hsla.lightness, 0.0, 1.0);
 
-  hsla.hue *= factor;
-  hsla.hue = CLAMP (hsla.hue, 0.0, 1.0);
+  hsla.saturation *= factor;
+  hsla.saturation = CLAMP (hsla.saturation, 0.0, 1.0);
 
   _gdk_rgba_init_from_hsla (color, &hsla);
 }
