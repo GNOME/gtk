@@ -204,6 +204,9 @@ EXTRA_DIST += \
 	misc-alignment.css \
 	misc-alignment.ref.ui \
 	misc-alignment.ui \
+	named-colors.css \
+	named-colors.ref.ui \
+	named-colors.ui \
 	no-colors.css \
 	no-colors.ref.ui \
 	no-colors.ui \
