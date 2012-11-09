@@ -3318,6 +3318,7 @@ gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
   gchar *icon_uri;
   gboolean is_symbolic;
 
+  g_return_val_if_fail (icon_info != NULL, NULL);
   g_return_val_if_fail (fg != NULL, NULL);
 
   icon_uri = NULL;
@@ -3397,6 +3398,9 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
   GtkStateFlags state;
   gchar *icon_uri;
   gboolean is_symbolic;
+
+  g_return_val_if_fail (icon_info != NULL, NULL);
+  g_return_val_if_fail (context != NULL, NULL);
 
   icon_uri = NULL;
   if (icon_info->icon_file)
@@ -3484,6 +3488,9 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
   gchar *css_warning, *css_error;
   gchar *icon_uri;
   gboolean is_symbolic;
+
+  g_return_val_if_fail (icon_info != NULL, NULL);
+  g_return_val_if_fail (style != NULL, NULL);
 
   icon_uri = NULL;
   if (icon_info->icon_file)
