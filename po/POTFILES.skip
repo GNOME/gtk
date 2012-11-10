@@ -79,6 +79,8 @@ tests/reftests/messagedialog-secondarytext.ref.ui
 tests/reftests/messagedialog-secondarytext.ui
 tests/reftests/misc-alignment.ref.ui
 tests/reftests/misc-alignment.ui
+tests/reftests/named-colors.ref.ui
+tests/reftests/named-colors.ui
 tests/reftests/no-colors.ref.ui
 tests/reftests/no-colors.ui
 tests/reftests/nonresizable-size.ref.ui
