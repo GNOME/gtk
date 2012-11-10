@@ -163,5 +163,5 @@ _gtk_bitmask_intersects (const GtkBitmask *mask,
       _gtk_bitmask_is_allocated (other))
     return _gtk_allocated_bitmask_intersects (mask, other);
   else
-    return _gtk_bitmask_to_bits (mask) & _gtk_bitmask_to_bits (other);
+    return _gtk_bitmask_to_bits (mask) & _gtk_bitmask_to_bits (other) ? TRUE : FALSE;
 }
