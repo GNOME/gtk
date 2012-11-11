@@ -248,4 +248,6 @@ EXTRA_DIST += \
 	toplevel-vs-popup.ui \
 	unresolvable.css \
 	unresolvable.ref.ui \
-	unresolvable.ui
+	unresolvable.ui \
+	window-border-width.ref.ui \
+	window-border-width.ui
