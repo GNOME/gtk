@@ -8807,6 +8807,9 @@ gtk_entry_set_icon_tooltip_text (GtkEntry             *entry,
   icon_info->tooltip = tooltip ? g_markup_escape_text (tooltip, -1) : NULL;
 
   ensure_has_tooltip (entry);
+
+  g_object_notify (G_OBJECT (entry),
+                   icon_pos == GTK_ENTRY_ICON_PRIMARY ? "primary-icon-tooltip-text" : "secondary-icon-tooltip-text");
 }
 
 /**
