@@ -23,6 +23,12 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+typedef struct
+{
+  GtkWidget *widget;
+  gpointer child[3];
+} STATE;
+
 static void
 test_scrolled_window_child_count (void)
 {
@@ -70,16 +76,38 @@ add_child (GtkWidget *container,
 }
 
 static void
-remove_child (GtkWidget *container,
-              GtkWidget *child)
+remove_child (STATE *state,
+              gint i)
 {
-  if (GTK_IS_SCROLLED_WINDOW (container))
+  GtkWidget *child;
+
+  if (GTK_IS_ENTRY (state->widget))
     {
-      if (gtk_widget_get_parent (child) != container)
+      switch (i)
+        {
+        case 0:
+          gtk_entry_set_icon_from_gicon (GTK_ENTRY (state->widget),
+                                         GTK_ENTRY_ICON_PRIMARY,
+                                         NULL);
+        return;
+        case 1:
+          gtk_entry_set_icon_from_gicon (GTK_ENTRY (state->widget),
+                                         GTK_ENTRY_ICON_SECONDARY,
+                                         NULL);
+        return;
+        default:
+          return;
+        }
+    }
+
+  child = state->child [i];
+  if (GTK_IS_SCROLLED_WINDOW (state->widget))
+    {
+      if (gtk_widget_get_parent (child) != state->widget)
         child = gtk_widget_get_parent (child);
     }
 
-  gtk_container_remove (GTK_CONTAINER (container), child);
+  gtk_container_remove (GTK_CONTAINER (state->widget), child);
 }
 
 static void
@@ -87,6 +115,34 @@ parent_notify (AtkObject *obj, GParamSpec *pspec, SignalData *data)
 {
   data->count++;
   data->parent = atk_object_get_parent (obj);
+}
+
+gboolean
+do_create_child (STATE *state, gint i)
+{
+  if (GTK_IS_ENTRY (state->widget))
+    {
+      switch (i)
+        {
+        case 0:
+          gtk_entry_set_icon_from_stock (GTK_ENTRY (state->widget),
+                                         GTK_ENTRY_ICON_PRIMARY,
+                                         GTK_STOCK_CAPS_LOCK_WARNING);
+        return TRUE;
+        case 1:
+          gtk_entry_set_icon_from_stock (GTK_ENTRY (state->widget),
+                                         GTK_ENTRY_ICON_SECONDARY,
+                                         GTK_STOCK_CLEAR);
+        return TRUE;
+        default:
+          return FALSE;
+        }
+    }
+  else if (gtk_container_child_type (GTK_CONTAINER (state->widget)) == G_TYPE_NONE)
+    return FALSE;
+
+  state->child[i] = gtk_label_new ("bla");
+  return TRUE;
 }
 
 static void
@@ -97,10 +153,11 @@ test_add_remove (GtkWidget *widget)
   SignalData add_data;
   SignalData remove_data;
   SignalData parent_data[3];
-  GtkWidget *child[3];
+  STATE state;
   gint i, j;
   gint step_children;
 
+  state.widget = widget;
   accessible = gtk_widget_get_accessible (widget);
 
   add_data.count = 0;
@@ -114,35 +171,44 @@ test_add_remove (GtkWidget *widget)
 
   for (i = 0; i < 3; i++)
     {
-      if (gtk_container_child_type (GTK_CONTAINER (widget)) == G_TYPE_NONE)
+      if (!do_create_child (&state, i))
         break;
-
-      child[i] = gtk_label_new ("bla");
-      parent_data[i].count = 0;
-      child_accessible = gtk_widget_get_accessible (child[i]);
-      g_signal_connect (child_accessible, "notify::accessible-parent",
-                        G_CALLBACK (parent_notify), &(parent_data[i]));
-      add_child (widget, child[i]);
+      if (!GTK_IS_ENTRY (widget))
+        {
+          parent_data[i].count = 0;
+          child_accessible = gtk_widget_get_accessible (state.child[i]);
+          g_signal_connect (child_accessible, "notify::accessible-parent",
+                            G_CALLBACK (parent_notify), &(parent_data[i]));
+          add_child (widget, state.child[i]);
+        }
+      else
+        child_accessible = atk_object_ref_accessible_child (accessible, i);
 
       g_assert_cmpint (add_data.count, ==, i + 1);
       g_assert_cmpint (add_data.n_children, ==, step_children + i + 1);
       g_assert_cmpint (remove_data.count, ==, 0);
-      g_assert_cmpint (parent_data[i].count, ==, 1);
+      if (!GTK_IS_ENTRY (widget))
+        g_assert_cmpint (parent_data[i].count, ==, 1);
       if (GTK_IS_SCROLLED_WINDOW (widget) ||
           GTK_IS_NOTEBOOK (widget))
         g_assert (atk_object_get_parent (ATK_OBJECT (parent_data[i].parent)) == accessible);
+      else if (GTK_IS_ENTRY (widget))
+        g_assert (atk_object_get_parent (child_accessible) == accessible);
       else
         g_assert (parent_data[i].parent == accessible);
+
+      if (GTK_IS_ENTRY (widget))
+        g_object_unref (child_accessible);
     }
   for (j = 0 ; j < i; j++)
     {
-      remove_child (widget, child[j]);
+      remove_child (&state, j);
       g_assert_cmpint (add_data.count, ==, i);
       g_assert_cmpint (remove_data.count, ==, j + 1);
       g_assert_cmpint (remove_data.n_children, ==, step_children + i - j - 1);
       if (parent_data[j].count == 2)
         g_assert (parent_data[j].parent == NULL);
-      else
+      else if (!GTK_IS_ENTRY (widget))
         {
           AtkStateSet *set;
           set = atk_object_ref_state_set (ATK_OBJECT (parent_data[j].parent));
@@ -205,6 +271,7 @@ main (int argc, char *argv[])
   add_child_tests (gtk_statusbar_new ());
 #endif
   add_child_tests (gtk_notebook_new ());
+  add_child_tests (gtk_entry_new ());
 
   return g_test_run ();
 }
