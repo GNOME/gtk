@@ -1918,32 +1918,11 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
 
   container = GTK_CONTAINER (widget);
 
-  if (!GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
+  if (GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
     {
-      parent_class->adjust_size_allocation (widget, orientation,
-                                            minimum_size, natural_size, allocated_pos,
-                                            allocated_size);
-      return;
-    }
+      border_width = container->priv->border_width;
 
-  border_width = container->priv->border_width;
-
-  *allocated_size -= border_width * 2;
-
-  /* If we get a pathological too-small allocation to hold
-   * even the border width, leave all allocation to the actual
-   * widget, and leave x,y unchanged. (GtkWidget's min size is
-   * 1x1 if you're wondering why <1 and not <0)
-   *
-   * As long as we have space, set x,y properly.
-   */
-
-  if (*allocated_size < 1)
-    {
-      *allocated_size += border_width * 2;
-    }
-  else
-    {
+      *allocated_size -= border_width * 2;
       *allocated_pos += border_width;
       *minimum_size -= border_width * 2;
       *natural_size -= border_width * 2;
