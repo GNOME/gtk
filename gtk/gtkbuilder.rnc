@@ -1,6 +1,6 @@
 start = element interface {
   attribute domain { text } ?,
-  ( requires | object | menu ) *
+  ( requires | object | template | menu ) *
 }
 
 requires = element requires {
@@ -16,9 +16,17 @@ object = element object {
   (property | signal | child | ANY) *
 }
 
+object = element template {
+  attribute id { xsd:ID },
+  attribute class { text },
+  attribute parent { text } ?,
+  (property | signal | child | ANY) *
+}
+
 property = element property {
   attribute name { text },
   attribute translatable { "yes" | "no" } ?,
+  attribute external-object { "yes" | "no" } ?,
   attribute comments { text } ?,
   attribute context { text } ?,
   text ?

@@ -140,22 +140,6 @@ guint        gtk_builder_add_objects_from_string (GtkBuilder    *builder,
                                                   gsize          length,
                                                   gchar        **object_ids,
                                                   GError       **error);
-guint        gtk_builder_add_to_parent_from_file     (GtkBuilder   *builder,
-                                                      GObject      *parent,
-                                                      const gchar  *template_id,
-                                                      const gchar  *filename,
-                                                      GError      **error);
-guint        gtk_builder_add_to_parent_from_string   (GtkBuilder   *builder,
-                                                      GObject      *parent,
-                                                      const gchar  *template_id,
-                                                      const gchar  *buffer,
-                                                      gsize         length,
-                                                      GError      **error);
-guint        gtk_builder_add_to_parent_from_resource (GtkBuilder   *builder,
-                                                      GObject      *parent,
-                                                      const gchar  *template_id,
-                                                      const gchar  *resource_path,
-                                                      GError      **error);
 GObject*     gtk_builder_get_object              (GtkBuilder    *builder,
                                                   const gchar   *name);
 GSList*      gtk_builder_get_objects             (GtkBuilder    *builder);

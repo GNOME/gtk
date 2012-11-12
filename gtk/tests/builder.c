@@ -2716,21 +2716,29 @@ test_level_bar (void)
 }
 
 static void
-test_add_to_parent (void)
+test_template_real (gboolean use_add_objects)
 {
   GError *error = NULL;
   GtkBuilder *builder;
-  GtkWidget *mybox;
+  GtkWidget *mybox, *mygrid;
   gboolean expand = FALSE, fill = FALSE;
   GtkPackType pack_type = GTK_PACK_START;
   guint padding = 0;
   const gchar buffer[] =
     "<interface>\n"
-    /* This template should get ignored */
     "  <template class=\"GtkGrid\" id=\"mygrid\">\n"
     "    <property name=\"visible\">True</property>\n"
     "    <child>\n"
-    "      <object class=\"GtkLabel\" id=\"label\">\n"
+    "      <object class=\"GtkLabel\" id=\"gridlabel\">\n"
+    "        <property name=\"visible\">True</property>\n"
+    "      </object>\n"
+    "   </child>\n"
+    "  </template>\n"
+    /* This template should get ignored */
+    "  <template class=\"GtkGrid\" id=\"mygrid2\">\n"
+    "    <property name=\"visible\">True</property>\n"
+    "    <child>\n"
+    "      <object class=\"GtkLabel\" id=\"grid2label\">\n"
     "        <property name=\"visible\">True</property>\n"
     "      </object>\n"
     "   </child>\n"
@@ -2742,7 +2750,7 @@ test_add_to_parent (void)
     "    <property name=\"orientation\">vertical</property>\n"
     "    <property name=\"spacing\">8</property>\n"
     "    <child>\n"
-    "      <object class=\"GtkLabel\" id=\"label\">\n"
+    "      <object class=\"GtkLabel\" id=\"boxlabel\">\n"
     "        <property name=\"visible\">True</property>\n"
     "        <property name=\"can_focus\">False</property>\n"
     "        <property name=\"label\" translatable=\"yes\">label</property>\n"
@@ -2769,35 +2777,98 @@ test_add_to_parent (void)
     "      </packing>\n"
     "    </child>\n"
     "  </template>\n"
+    "  <object class=\"GtkWindow\" id=\"window\">"
+    "    <child>\n"
+    "      <object class=\"GtkLabel\" id=\"winlabel\">\n"
+    "        <property name=\"visible\">True</property>\n"
+    "      </object>\n"
+    "   </child>\n"
+    "  </object>"
     "</interface>";
 
   builder = gtk_builder_new ();
   mybox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   g_object_ref_sink (mybox);
-  gtk_builder_add_to_parent_from_string (builder, G_OBJECT (mybox), "mybox",
-                                         buffer, -1, &error);
-  if (error) g_warning ("%s", error->message);
-  g_assert (error == NULL);
 
-  /* Check template properties */
-  g_assert (gtk_box_get_spacing (GTK_BOX (mybox)) == 8);
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (mybox)) == GTK_ORIENTATION_VERTICAL);
+  mygrid = gtk_grid_new ();
+  g_object_ref_sink (mygrid);
+  
+  gtk_builder_expose_object (builder, "mybox", G_OBJECT (mybox));
 
-  /* Check if children are built */
-  g_assert (GTK_IS_LABEL (gtk_builder_get_object (builder, "label")));
-  g_assert (GTK_IS_BUTTON (gtk_builder_get_object (builder, "button")));
+  if (use_add_objects)
+    {
+      gchar *objs[] = {"window", NULL};
+      gtk_builder_add_objects_from_string (builder, buffer, -1, objs, &error);
 
-  /* Check child packing properties */
-  gtk_box_query_child_packing (GTK_BOX (mybox),
-                               GTK_WIDGET (gtk_builder_get_object (builder, "label")),
-                               &expand, &fill, &padding, &pack_type);
-  g_assert (expand);
-  g_assert (fill);
-  g_assert (padding == 16);
-  g_assert (pack_type == GTK_PACK_END);
+      if (error) g_warning ("%s", error->message);
+      
+      /* Check if requested object creation works */
+      g_assert (GTK_IS_WINDOW (gtk_builder_get_object (builder, "window")));
+
+      /* Templates should be ignored if we requested a specific object */
+      g_assert (gtk_builder_get_object (builder, "winlabel"));
+    }
+  else
+    {
+      gtk_builder_add_from_string (builder, buffer, -1, &error);
+
+      if (error) g_warning ("%s", error->message);
+      g_assert (error == NULL);
+
+      /* Check template properties */
+      g_assert (gtk_box_get_spacing (GTK_BOX (mybox)) == 8);
+      g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (mybox)) == GTK_ORIENTATION_VERTICAL);
+
+      /* Check if children are built */
+      g_assert (GTK_IS_LABEL (gtk_builder_get_object (builder, "boxlabel")));
+      g_assert (GTK_IS_BUTTON (gtk_builder_get_object (builder, "button")));
+
+      /* Check child packing properties */
+      gtk_box_query_child_packing (GTK_BOX (mybox),
+                                   GTK_WIDGET (gtk_builder_get_object (builder, "boxlabel")),
+                                   &expand, &fill, &padding, &pack_type);
+      g_assert (expand);
+      g_assert (fill);
+      g_assert (padding == 16);
+      g_assert (pack_type == GTK_PACK_END);        
+    }
 
   g_object_unref (builder);
   g_object_unref (mybox);
+  g_object_unref (mygrid);
+}
+
+static void
+test_template (void)
+{
+  test_template_real (FALSE);
+  test_template_real (TRUE);
+}
+
+static void
+test_expose_object (void)
+{
+  GtkBuilder *builder;
+  GError *error = NULL;
+  GtkWidget *image;
+  GObject *obj;
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class=\"GtkButton\" id=\"button\">"
+    "    <property name=\"image\" external-object=\"True\">external_image</property>"
+    "  </object>"
+    "</interface>";
+
+  image = gtk_image_new ();
+  builder = gtk_builder_new ();
+  gtk_builder_expose_object (builder, "external_image", G_OBJECT (image));
+  gtk_builder_add_from_string (builder, buffer, -1, &error);
+  g_assert (error == NULL);
+
+  obj = gtk_builder_get_object (builder, "button");
+  g_assert (GTK_IS_BUTTON (obj));
+
+  g_assert (gtk_button_get_image (GTK_BUTTON (obj)) == image);
 }
 
 int
@@ -2848,7 +2919,8 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/MessageDialog", test_message_dialog);
   g_test_add_func ("/Builder/GMenu", test_gmenu);
   g_test_add_func ("/Builder/LevelBar", test_level_bar);
-  g_test_add_func ("/Builder/Add to Parent", test_add_to_parent);
+  g_test_add_func ("/Builder/Template", test_template);
+  g_test_add_func ("/Builder/Expose Object", test_expose_object);
 
   return g_test_run();
 }

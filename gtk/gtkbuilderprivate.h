@@ -109,16 +109,15 @@ typedef struct {
   gint cur_object_level;
 
   GHashTable *object_ids;
+
   GObject *template_object;
-  gboolean inside_requested_template;
+  gint template_level;
 } ParserData;
 
 typedef GType (*GTypeGetFunc) (void);
 
 /* Things only GtkBuilder should use */
 void _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
-                                       GObject      *parent,
-                                       const gchar  *template_id,
                                        const gchar  *filename,
                                        const gchar  *buffer,
                                        gsize         length,
@@ -165,6 +164,8 @@ void      _gtk_builder_menu_start (ParserData   *parser_data,
                                    GError      **error);
 void      _gtk_builder_menu_end   (ParserData  *parser_data);
 
+GObject * _gtk_builder_get_external_object (GtkBuilder    *builder,
+                                            const gchar   *name);
 const gchar * _gtk_builder_object_get_name (GObject *object);
 
 #endif /* __GTK_BUILDER_PRIVATE_H__ */

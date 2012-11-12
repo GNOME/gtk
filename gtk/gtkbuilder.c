@@ -140,7 +140,7 @@
  * a custom #GtkBuilderConnectFunc to gtk_builder_connect_signals_full(). The
  * attributes "after", "swapped" and "object", have the same meaning
  * as the corresponding parameters of the g_signal_connect_object() or
- * g_signal_connect_data() functions.  Extenral objects can also be referred 
+ * g_signal_connect_data() functions.  External objects can also be referred 
  * to by specifying the "external-object" attribute in the same way as described 
  * with the &lt;property&gt; element. A "last_modification_time" attribute is also 
  * allowed, but it does not have a meaning to the builder.
@@ -896,8 +896,6 @@ gtk_builder_new (void)
 
 static guint
 gtk_builder_add_from_file_real (GtkBuilder   *builder,
-                                GObject      *parent,
-                                const gchar  *template_id,
                                 const gchar  *filename,
                                 gchar       **object_ids,
                                 GError      **error)
@@ -917,8 +915,8 @@ gtk_builder_add_from_file_real (GtkBuilder   *builder,
   builder->priv->filename = g_strdup (filename);
   builder->priv->resource_prefix = NULL;
 
-  _gtk_builder_parser_parse_buffer (builder, parent, template_id, filename,
-                                    buffer, length, object_ids, &tmp_error);
+  _gtk_builder_parser_parse_buffer (builder, filename, buffer, length,
+                                    object_ids, &tmp_error);
 
   g_free (buffer);
 
@@ -957,41 +955,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
   g_return_val_if_fail (filename != NULL, 0);
   g_return_val_if_fail (error == NULL || *error == NULL, 0);
   
-  return gtk_builder_add_from_file_real (builder, NULL, NULL, filename,
-                                         NULL, error);
-}
-
-/**
- * gtk_builder_add_to_parent_from_file:
- * @builder: a #GtkBuilder
- * @parent: the parent container where children will be added, or %NULL
- * @template_id: the template id to use, or %NULL
- * @filename: the name of the file to parse
- * @error: (allow-none): return location for an error, or %NULL
- *
- * Like gtk_builder_add_from_file() except the format will expect
- * <template> instead of <object> with id @template_id.
- * The children defined in the UI fragment will be added to @parent.
- * 
- * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: ...
- **/
-guint
-gtk_builder_add_to_parent_from_file (GtkBuilder   *builder,
-                                     GObject      *parent,
-                                     const gchar  *template_id,
-                                     const gchar  *filename,
-                                     GError      **error)
-{
-  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
-  g_return_val_if_fail (GTK_IS_CONTAINER (parent), 0);
-  g_return_val_if_fail (template_id != NULL, 0);
-  g_return_val_if_fail (filename != NULL, 0);
-  g_return_val_if_fail (error == NULL || *error == NULL, 0);
-
-  return gtk_builder_add_from_file_real (builder, parent, template_id,
-                                         filename, NULL, error);
+  return gtk_builder_add_from_file_real (builder, filename, NULL, error);
 }
 
 /**
@@ -1030,14 +994,11 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
   g_return_val_if_fail (object_ids != NULL && object_ids[0] != NULL, 0);
   g_return_val_if_fail (error == NULL || *error == NULL, 0);
 
-  return gtk_builder_add_from_file_real (builder, NULL, NULL, filename,
-                                         object_ids, error);
+  return gtk_builder_add_from_file_real (builder, filename, object_ids, error);
 }
 
 static guint
 gtk_builder_add_from_resource_real (GtkBuilder   *builder,
-                                    GObject      *parent,
-                                    const gchar  *template_id,
                                     const gchar  *path,
                                     gchar       **object_ids,
                                     GError      **error)
@@ -1068,7 +1029,7 @@ gtk_builder_add_from_resource_real (GtkBuilder   *builder,
 
   filename_for_errors = g_strconcat ("<resource>", path, NULL);
 
-  _gtk_builder_parser_parse_buffer (builder, parent, template_id, filename_for_errors,
+  _gtk_builder_parser_parse_buffer (builder, filename_for_errors,
                                     g_bytes_get_data (data, NULL), g_bytes_get_size (data),
                                     object_ids, &tmp_error);
 
@@ -1110,42 +1071,7 @@ gtk_builder_add_from_resource (GtkBuilder   *builder,
   g_return_val_if_fail (resource_path != NULL, 0);
   g_return_val_if_fail (error == NULL || *error == NULL, 0);
 
-  return gtk_builder_add_from_resource_real (builder, NULL, NULL,
-                                             resource_path, NULL,
-                                             error);
-}
-
-/**
- * gtk_builder_add_to_parent_from_resource:
- * @builder: a #GtkBuilder
- * @parent: the parent container where children will be added, or %NULL
- * @template_id: the template id to use, or %NULL
- * @resource_path: the resource path to parse
- * @error: (allow-none): return location for an error, or %NULL
- *
- * Like gtk_builder_add_from_resource() except the format will expect
- * <template> instead of <object> with id @template_id.
- * The children defined in the UI fragment will be added to @parent.
- * 
- * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: ...
- **/
-guint
-gtk_builder_add_to_parent_from_resource (GtkBuilder   *builder,
-                                         GObject      *parent,
-                                         const gchar  *template_id,
-                                         const gchar  *resource_path,
-                                         GError      **error)
-{
-  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
-  g_return_val_if_fail (GTK_IS_CONTAINER (parent), 0);
-  g_return_val_if_fail (template_id != NULL, 0);
-  g_return_val_if_fail (resource_path != NULL, 0);
-  g_return_val_if_fail (error == NULL || *error == NULL, 0);
-
-  return gtk_builder_add_from_resource_real (builder, parent, template_id,
-                                             resource_path, NULL, error);
+  return gtk_builder_add_from_resource_real (builder, resource_path, NULL, error);
 }
 
 /**
@@ -1184,15 +1110,12 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
   g_return_val_if_fail (object_ids != NULL && object_ids[0] != NULL, 0);
   g_return_val_if_fail (error == NULL || *error == NULL, 0);
 
-  return gtk_builder_add_from_resource_real (builder, NULL, NULL,
-                                             resource_path, object_ids,
-                                             error);
+  return gtk_builder_add_from_resource_real (builder, resource_path,
+                                             object_ids, error);
 }
 
 static guint
 gtk_builder_add_from_string_real (GtkBuilder   *builder,
-                                  GObject      *parent,
-                                  const gchar  *template_id,
                                   const gchar  *buffer,
                                   gsize         length,
                                   gchar       **object_ids,
@@ -1205,8 +1128,8 @@ gtk_builder_add_from_string_real (GtkBuilder   *builder,
   builder->priv->filename = g_strdup (".");
   builder->priv->resource_prefix = NULL;
 
-  _gtk_builder_parser_parse_buffer (builder, parent, template_id, "<input>",
-                                    buffer, length, object_ids, &tmp_error);
+  _gtk_builder_parser_parse_buffer (builder, "<input>", buffer, length,
+                                    object_ids, &tmp_error);
   if (tmp_error != NULL)
     {
       g_propagate_error (error, tmp_error);
@@ -1243,46 +1166,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
   g_return_val_if_fail (buffer != NULL, 0);
   g_return_val_if_fail (error == NULL || *error == NULL, 0);
   
-  return gtk_builder_add_from_string_real (builder, NULL, NULL,
-                                           buffer, length,
-                                           NULL, error);
-}
-
-
-/**
- * gtk_builder_add_to_parent_from_string:
- * @builder: a #GtkBuilder
- * @parent: the parent container where children will be added, or %NULL
- * @template_id: the template id to use, or %NULL
- * @buffer: the string to parse
- * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
- * @error: (allow-none): return location for an error, or %NULL
- *
- * Like gtk_builder_add_from_string() except the format will expect
- * <template> instead of <object> with id @template_id.
- * The children defined in the UI fragment will be added to @parent.
- * 
- * Returns: A positive value on success, 0 if an error occurred
- *
- * Since: ...
- **/
-guint
-gtk_builder_add_to_parent_from_string (GtkBuilder   *builder,
-                                       GObject      *parent,
-                                       const gchar  *template_id,
-                                       const gchar  *buffer,
-                                       gsize         length,
-                                       GError      **error)
-{
-  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
-  g_return_val_if_fail (GTK_IS_CONTAINER (parent), 0);
-  g_return_val_if_fail (template_id != NULL, 0);
-  g_return_val_if_fail (buffer != NULL, 0);
-  g_return_val_if_fail (error == NULL || *error == NULL, 0);
-
-  return gtk_builder_add_from_string_real (builder, parent, template_id,
-                                           buffer, length,
-                                           NULL, error);
+  return gtk_builder_add_from_string_real (builder, buffer, length, NULL, error);
 }
 
 /**
@@ -1322,9 +1206,23 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
   g_return_val_if_fail (object_ids != NULL && object_ids[0] != NULL, 0);
   g_return_val_if_fail (error == NULL || *error == NULL, 0);
 
-  return gtk_builder_add_from_string_real (builder, NULL, NULL,
-                                           buffer, length,
+  return gtk_builder_add_from_string_real (builder, buffer, length,
                                            object_ids, error);
+}
+
+GObject *
+_gtk_builder_get_external_object (GtkBuilder    *builder,
+                                  const gchar   *name)
+{
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
+
+  if (builder->priv->external_objects)
+    {
+      g_return_val_if_fail (name != NULL, NULL);
+      return g_hash_table_lookup (builder->priv->external_objects, name);
+    }
+  else
+    return NULL;
 }
 
 /**
@@ -1434,10 +1332,19 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
  * @name: the name of the object exposed to the builder
  * @object: the object to expose
  *
- * Adds @object to a pool of objects external to the
- * objects built by builder. Objects exposed in the pool
- * can be referred to by xml fragments in the builder.
- */
+ * Adds @object to a pool of objects external to the objects built by builder.
+ * Objects exposed in this pool can be referred to by xml fragments by 
+ * specifying the "external-object" boolean attribute.
+ *
+ * To make this function even more useful a new special entry point element
+ * &lt;template&gt; is defined. It is similar to &lt;object&gt; with the only difference
+ * it can only be defined as a toplevel element (that is it has to be a child of
+ * &lt;interface&gt;) and its id has to reference an external object exposed with this
+ * function. This way you can change properties and even add children to an
+ * external object using builder, not just reference it.
+ *
+ * Since: 3.8
+ **/
 void         
 gtk_builder_expose_object (GtkBuilder    *builder,
                            const gchar   *name,

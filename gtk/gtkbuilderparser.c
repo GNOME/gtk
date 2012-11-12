@@ -417,7 +417,7 @@ parse_object (GMarkupParseContext  *context,
           return;
         }
     }
-  else if (data->template_object && !data->inside_requested_template)
+  else if (data->template_level && !data->template_object)
     return;
 
   object_info = g_slice_new0 (ObjectInfo);
@@ -684,11 +684,23 @@ parse_template (ParserData   *data,
                 const gchar **values,
                 GError      **error)
 {
-  GObject *parent = data->template_object;
   const gchar *parent_class = NULL;
   const gchar *class_name = NULL;
   const gchar *id = NULL;
+  const GSList *l, *p;
+  GObject *parent;
   gint i;
+
+  data->template_level++;
+
+  if (data->template_level > 1 ||
+      !((l = g_markup_parse_context_get_element_stack (data->ctx)) &&
+      (p = g_slist_next (l)) && g_strcmp0 (p->data, "interface") == 0))
+    {
+      error_generic (error, GTK_BUILDER_ERROR_INVALID_TAG, data,
+                     element_name, "non toplevel template found");
+      return;
+    }
 
   for (i = 0; names[i] != NULL; i++)
     {
@@ -717,16 +729,11 @@ parse_template (ParserData   *data,
       return;
     }
 
-  if (parent)
+  if (data->requested_objects == NULL &&
+      (parent = _gtk_builder_get_external_object (data->builder, id)))
     {
-      const gchar *template_name= _gtk_builder_object_get_name (parent);
       GType class_type, parent_type = G_OBJECT_TYPE (parent);
       ObjectInfo *object_info;
-
-      if (!data->inside_requested_template && g_strcmp0 (template_name, id) == 0)
-        data->inside_requested_template = TRUE;
-      else
-        return;
 
       if (!(class_type = g_type_from_name (class_name)))
         {
@@ -754,19 +761,13 @@ parse_template (ParserData   *data,
 
       /* push parent to build its children from the template */
       object_info = g_slice_new0 (ObjectInfo);
-      object_info->object = parent;
+      object_info->object = data->template_object = parent;
       object_info->object_type = parent_type;
       object_info->id = g_strdup (_gtk_builder_object_get_name (parent));
       object_info->tag.name = "object";
 
       state_push (data, object_info);
     }
-  else
-    {
-      error_invalid_tag (data, element_name, NULL, error);
-      return;
-    }
-
 }
 
 /* Called by GtkBuilder */
@@ -1016,14 +1017,10 @@ start_element (GMarkupParseContext *context,
     parse_requires (data, element_name, names, values, error);
   else if (strcmp (element_name, "template") == 0)
     parse_template (data, element_name, names, values, error);
-  else if (data->template_object && !data->inside_requested_template)
-    {
-      /* If outside a requested template, ignore this tag */
-      return;
-    }
   else if (strcmp (element_name, "object") == 0)
     parse_object (context, data, element_name, names, values, error);
-  else if (data->requested_objects && !data->inside_requested_object)
+  else if ((data->requested_objects && !data->inside_requested_object) ||
+           (data->template_level && !data->template_object))
     {
       /* If outside a requested object, simply ignore this tag */
       return;
@@ -1109,8 +1106,29 @@ end_element (GMarkupParseContext *context,
   else if (strcmp (element_name, "interface") == 0)
     {
     }
+  else if (strcmp (element_name, "template") == 0)
+    {
+      data->template_level--;
+
+      /* Yes its a template! */
+      if (data->template_object)
+        {
+          ObjectInfo *object_info = state_pop_info (data, ObjectInfo);
+
+          object_info->properties = g_slist_reverse (object_info->properties);
+
+          /* This is just to apply properties to the external object */
+          _gtk_builder_construct (data->builder, object_info, error);
+
+          if (object_info->signals)
+            _gtk_builder_add_signals (data->builder, object_info->signals);
+
+          free_object_info (object_info);
+          data->template_object = NULL;
+        }
+    }
   else if ((data->requested_objects && !data->inside_requested_object) ||
-           (data->template_object && !data->inside_requested_template))
+           (data->template_level && !data->template_object)) 
     {
       /* If outside a requested object or template, simply ignore this tag */
       return;
@@ -1201,27 +1219,6 @@ end_element (GMarkupParseContext *context,
   else if (strcmp (element_name, "placeholder") == 0)
     {
     }
-  else if (strcmp (element_name, "template") == 0)
-    {
-      if (data->template_object && data->inside_requested_template)
-        {
-          ObjectInfo *object_info = state_pop_info (data, ObjectInfo);
-
-          object_info->properties = g_slist_reverse (object_info->properties);
-
-          /* This is just to apply properties to the external object */
-          _gtk_builder_construct (data->builder, object_info, error);
-
-          if (object_info->signals)
-            _gtk_builder_add_signals (data->builder, object_info->signals);
-
-          free_object_info (object_info);
-
-          data->template_object = NULL;
-
-          data->inside_requested_template = FALSE;
-        }
-    }
   else
     {
       g_assert_not_reached ();
@@ -1294,8 +1291,6 @@ static const GMarkupParser parser = {
 
 void
 _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
-                                  GObject      *parent,
-                                  const gchar  *template_id,
                                   const gchar  *filename,
                                   const gchar  *buffer,
                                   gsize         length,
@@ -1336,20 +1331,6 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
     {
       /* get all the objects */
       data->inside_requested_object = TRUE;
-    }
-
-  if (parent)
-    {
-      data->inside_requested_template = FALSE;
-      
-      if (template_id)
-        {
-          GTK_NOTE (BUILDER, g_print ("parsing with contextual parent %s class %s ptr %p\n",
-                                      template_id, G_OBJECT_TYPE_NAME (parent), parent));
-
-          data->template_object = parent;
-          gtk_builder_expose_object (builder, template_id, parent);
-        }
     }
 
   data->ctx = g_markup_parse_context_new (&parser, 
