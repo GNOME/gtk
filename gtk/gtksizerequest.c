@@ -27,6 +27,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksizegroup-private.h"
+#include "gtksizerequestcacheprivate.h"
 #include "gtkwidgetprivate.h"
 #include "deprecated/gtkstyle.h"
 

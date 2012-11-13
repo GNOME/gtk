@@ -519,6 +519,7 @@ gtk_private_h_sources =		\
 	gtkselectionprivate.h	\
 	gtksettingsprivate.h	\
 	gtksizegroup-private.h	\
+	gtksizerequestcacheprivate.h	\
 	gtksocketprivate.h	\
 	gtkstyleanimationprivate.h \
 	gtkstylecascadeprivate.h \

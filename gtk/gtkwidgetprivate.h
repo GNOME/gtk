@@ -31,41 +31,6 @@
 
 G_BEGIN_DECLS
 
-/* Cache as many ranges of height-for-width
- * (or width-for-height) as can be rational
- * for a said widget to have, if a label can
- * only wrap to 3 lines, only 3 caches will
- * ever be allocated for it.
- */
-#define GTK_SIZE_REQUEST_CACHED_SIZES   (5)
-
-typedef struct {
-  gint minimum_size;
-  gint natural_size;
-} CachedSize;
-
-typedef struct
-{
-  gint       lower_for_size; /* The minimum for_size with the same result */
-  gint       upper_for_size; /* The maximum for_size with the same result */
-  CachedSize cached_size;
-} SizeRequest;
-
-typedef struct {
-  SizeRequest **widths;
-  SizeRequest **heights;
-
-  CachedSize  cached_width;
-  CachedSize  cached_height;
-
-  guint       cached_widths      : 3;
-  guint       cached_heights     : 3;
-  guint       last_cached_width  : 3;
-  guint       last_cached_height : 3;
-  guint       cached_base_width  : 1;
-  guint       cached_base_height : 1;
-} SizeRequestCache;
-
 void         _gtk_widget_set_visible_flag   (GtkWidget *widget,
                                              gboolean   visible);
 gboolean     _gtk_widget_get_in_reparent    (GtkWidget *widget);
