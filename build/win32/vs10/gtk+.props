@@ -5,7 +5,7 @@
     <CopyDir>$(GlibEtcInstallRoot)</CopyDir>
     <DefDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)</DefDir>
     <GtkApiVersion>3.0</GtkApiVersion>
-    <GtkBinaryVersion>2.10.0</GtkBinaryVersion>
+    <GtkBinaryVersion>3.0.0</GtkBinaryVersion>
     <GtkDummyPrefix>\"/dummy\"</GtkDummyPrefix>
     <GtkPrefixDefine>GTK_PREFIX="\"$(GtkDummyPrefix)\""</GtkPrefixDefine>
     <GdkDefines>GDK_COMPILATION;G_LOG_DOMAIN="\"Gdk\""</GdkDefines>
