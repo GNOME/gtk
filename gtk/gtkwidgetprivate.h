@@ -45,12 +45,6 @@ void         _gtk_widget_set_shadowed       (GtkWidget *widget,
 gboolean     _gtk_widget_get_alloc_needed   (GtkWidget *widget);
 void         _gtk_widget_set_alloc_needed   (GtkWidget *widget,
                                              gboolean   alloc_needed);
-gboolean     _gtk_widget_get_width_request_needed  (GtkWidget *widget);
-void         _gtk_widget_set_width_request_needed  (GtkWidget *widget,
-                                                    gboolean   width_request_needed);
-gboolean     _gtk_widget_get_height_request_needed (GtkWidget *widget);
-void         _gtk_widget_set_height_request_needed (GtkWidget *widget,
-                                                    gboolean   height_request_needed);
 
 void         _gtk_widget_add_sizegroup         (GtkWidget    *widget,
 						gpointer      group);

@@ -197,8 +197,6 @@ real_queue_resize (GtkWidget          *widget,
   GtkWidget *container;
 
   _gtk_widget_set_alloc_needed (widget, TRUE);
-  _gtk_widget_set_width_request_needed (widget, TRUE);
-  _gtk_widget_set_height_request_needed (widget, TRUE);
   _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (widget));
 
   container = gtk_widget_get_parent (widget);

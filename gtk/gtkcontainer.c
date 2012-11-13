@@ -1754,8 +1754,6 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
   do
     {
       _gtk_widget_set_alloc_needed (widget, TRUE);
-      _gtk_widget_set_width_request_needed (widget, TRUE);
-      _gtk_widget_set_height_request_needed (widget, TRUE);
       _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (widget));
 
       if (GTK_IS_RESIZE_CONTAINER (widget))

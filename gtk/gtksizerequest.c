@@ -354,11 +354,6 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                      G_OBJECT_TYPE_NAME (widget), widget, min_size, nat_size, get_vfunc_name (orientation, for_size));
         }
 
-      if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-          _gtk_widget_set_width_request_needed (widget, FALSE);
-      else
-          _gtk_widget_set_height_request_needed (widget, FALSE);
-
       adjusted_min     = min_size;
       adjusted_natural = nat_size;
       GTK_WIDGET_GET_CLASS (widget)->adjust_size_request (widget,
