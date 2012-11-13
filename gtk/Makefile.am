@@ -809,6 +809,7 @@ gtk_base_c_sources = 		\
 	gtksettings.c		\
 	gtksizegroup.c		\
 	gtksizerequest.c	\
+	gtksizerequestcache.c	\
 	gtkshow.c		\
 	gtkspinbutton.c		\
 	gtkspinner.c		\

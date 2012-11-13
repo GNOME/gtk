@@ -84,52 +84,6 @@ pop_recursion_check (GtkWidget       *widget,
 }
 
 
-static void
-clear_cache (SizeRequestCache   *cache,
-	     GtkSizeGroupMode    orientation)
-{
-  SizeRequest **sizes;
-  gint          i;
-
-  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-    {
-      sizes = cache->widths;
-
-      cache->widths            = NULL;
-      cache->cached_widths     = 0;
-      cache->last_cached_width = 0;
-      cache->cached_base_width = FALSE;
-    }
-  else
-    {
-      sizes = cache->heights;
-
-      cache->heights            = NULL;
-      cache->cached_heights     = 0;
-      cache->last_cached_height = 0; 
-      cache->cached_base_height = FALSE;
-   }
-
-  if (sizes)
-    {
-      for (i = 0; i < GTK_SIZE_REQUEST_CACHED_SIZES && sizes[i] != NULL; i++)
-	g_slice_free (SizeRequest, sizes[i]);
-      
-      g_slice_free1 (sizeof (SizeRequest *) * GTK_SIZE_REQUEST_CACHED_SIZES, sizes);
-    }
-}
-
-void
-_gtk_widget_free_cached_sizes (GtkWidget *widget)
-{
-  SizeRequestCache   *cache;
-
-  cache = _gtk_widget_peek_request_cache (widget);
-
-  clear_cache (cache, GTK_SIZE_GROUP_HORIZONTAL);
-  clear_cache (cache, GTK_SIZE_GROUP_VERTICAL);
-}
-
 /* This function checks if 'request_needed' flag is present
  * and resets the cache state if a request is needed for
  * a given orientation.
@@ -142,10 +96,10 @@ init_cache (GtkWidget        *widget)
   cache = _gtk_widget_peek_request_cache (widget);
 
   if (_gtk_widget_get_width_request_needed (widget))
-    clear_cache (cache, GTK_SIZE_GROUP_HORIZONTAL);
+    _gtk_size_request_cache_clear (cache, GTK_SIZE_GROUP_HORIZONTAL);
   
   if (_gtk_widget_get_height_request_needed (widget))
-    clear_cache (cache, GTK_SIZE_GROUP_VERTICAL);
+    _gtk_size_request_cache_clear (cache, GTK_SIZE_GROUP_VERTICAL);
 
   return cache;
 }

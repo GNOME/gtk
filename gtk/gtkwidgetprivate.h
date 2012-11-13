@@ -81,7 +81,6 @@ gboolean _gtk_widget_get_translation_to_window (GtkWidget      *widget,
                                                 GdkWindow      *window,
                                                 int            *x,
                                                 int            *y);
-void     _gtk_widget_free_cached_sizes (GtkWidget *widget);
 
 const gchar*      _gtk_widget_get_accel_path               (GtkWidget *widget,
                                                             gboolean  *locked);

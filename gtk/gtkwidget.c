@@ -3687,6 +3687,8 @@ gtk_widget_init (GtkWidget *widget)
    */
   priv->need_compute_expand = FALSE;
 
+  _gtk_size_request_cache_init (&priv->requests);
+
   priv->style = gtk_widget_get_default_style ();
   g_object_ref (priv->style);
 }
@@ -10373,7 +10375,7 @@ gtk_widget_finalize (GObject *object)
       g_object_unref (priv->context);
     }
 
-  _gtk_widget_free_cached_sizes (widget);
+  _gtk_size_request_cache_free (&priv->requests);
 
   if (g_object_is_floating (object))
     g_warning ("A floating object was finalized. This means that someone\n"
