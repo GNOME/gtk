@@ -2315,8 +2315,8 @@ gdk_quartz_window_focus (GdkWindow *window,
     }
 }
 
-static
-gint window_type_hint_to_level (GdkWindowTypeHint hint)
+static gint
+window_type_hint_to_level (GdkWindowTypeHint hint)
 {
   switch (hint)
     {
@@ -2330,9 +2330,9 @@ gint window_type_hint_to_level (GdkWindowTypeHint hint)
 
     case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
     case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
       return NSStatusWindowLevel;
 
-    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
     case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
     case GDK_WINDOW_TYPE_HINT_COMBO:
     case GDK_WINDOW_TYPE_HINT_DND:
@@ -2351,7 +2351,7 @@ gint window_type_hint_to_level (GdkWindowTypeHint hint)
   return NSNormalWindowLevel;
 }
 
-static gboolean 
+static gboolean
 window_type_hint_to_shadow (GdkWindowTypeHint hint)
 {
   switch (hint)
