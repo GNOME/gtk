@@ -1,7 +1,7 @@
 @import "reset-to-defaults.css";
 
 * {
-  background-color: green;
+  background-color: lime;
 }
 
 GtkGrid {

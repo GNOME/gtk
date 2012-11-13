@@ -1,6 +1,6 @@
 GtkLabel:active,
 #reference:insensitive {
-  color: green;
+  color: lime;
 }
 
 GtkLabel:insensitive,
