@@ -31,46 +31,31 @@ _gtk_size_request_cache_init (SizeRequestCache *cache)
   memset (cache, 0, sizeof (SizeRequestCache));
 }
 
-void
-_gtk_size_request_cache_free (SizeRequestCache *cache)
+static void
+free_sizes (SizeRequest **sizes)
 {
-  _gtk_size_request_cache_clear (cache, GTK_SIZE_GROUP_HORIZONTAL);
-  _gtk_size_request_cache_clear (cache, GTK_SIZE_GROUP_VERTICAL);
+  gint i;
+
+  for (i = 0; i < GTK_SIZE_REQUEST_CACHED_SIZES && sizes[i] != NULL; i++)
+    g_slice_free (SizeRequest, sizes[i]);
+      
+  g_slice_free1 (sizeof (SizeRequest *) * GTK_SIZE_REQUEST_CACHED_SIZES, sizes);
 }
 
 void
-_gtk_size_request_cache_clear (SizeRequestCache *cache,
-	                       GtkSizeGroupMode  orientation)
+_gtk_size_request_cache_free (SizeRequestCache *cache)
+{
+  if (cache->widths)
+    free_sizes (cache->widths);
+  if (cache->heights)
+    free_sizes (cache->heights);
+}
+
+void
+_gtk_size_request_cache_clear (SizeRequestCache *cache)
                                
 {
-  SizeRequest **sizes;
-  gint          i;
-
-  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-    {
-      sizes = cache->widths;
-
-      cache->widths            = NULL;
-      cache->cached_widths     = 0;
-      cache->last_cached_width = 0;
-      cache->cached_base_width = FALSE;
-    }
-  else
-    {
-      sizes = cache->heights;
-
-      cache->heights            = NULL;
-      cache->cached_heights     = 0;
-      cache->last_cached_height = 0; 
-      cache->cached_base_height = FALSE;
-   }
-
-  if (sizes)
-    {
-      for (i = 0; i < GTK_SIZE_REQUEST_CACHED_SIZES && sizes[i] != NULL; i++)
-	g_slice_free (SizeRequest, sizes[i]);
-      
-      g_slice_free1 (sizeof (SizeRequest *) * GTK_SIZE_REQUEST_CACHED_SIZES, sizes);
-    }
+  _gtk_size_request_cache_free (cache);
+  _gtk_size_request_cache_init (cache);
 }
 

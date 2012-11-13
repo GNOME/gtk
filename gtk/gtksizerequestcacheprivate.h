@@ -26,7 +26,6 @@
 #define __GTK_SIZE_REQUEST_CACHE_PRIVATE_H__
 
 #include <glib.h>
-#include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
 
@@ -68,8 +67,7 @@ typedef struct {
 void            _gtk_size_request_cache_init                    (SizeRequestCache       *cache);
 void            _gtk_size_request_cache_free                    (SizeRequestCache       *cache);
 
-void            _gtk_size_request_cache_clear                   (SizeRequestCache       *cache,
-	                                                         GtkSizeGroupMode        orientation);
+void            _gtk_size_request_cache_clear                   (SizeRequestCache       *cache);
 
 G_END_DECLS
 
