@@ -42,7 +42,7 @@ feature of the shell. If you enclose a command in backticks
 substituted into the command line before execution. So to compile
 a GTK+ Hello, World, you would type the following:
 <programlisting>
-$ cc `pkg-config --cflags --libs gtk+-3.0` hello.c -o hello
+$ cc `pkg-config --cflags gtk+-3.0` hello.c -o hello `pkg-config --libs gtk+-3.0`
 </programlisting>
 </para>
 
@@ -67,7 +67,7 @@ this range will trigger compiler warnings.
 Here is how you would compile hello.c if you want to allow it
 to use symbols that were not deprecated in 3.2:
 <programlisting>
-$ cc -DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_2 `pkg-config --cflags --libs gtk+-3.0` hello.c -o hello
+$ cc `pkg-config --cflags gtk+-3.0` -DGDK_VERSION_MIN_REQIRED=GDK_VERSION_3_2 hello.c -o hello `pkg-config --libs gtk+-3.0`
 </programlisting>
 </para>
 
@@ -75,7 +75,7 @@ $ cc -DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_2 `pkg-config --cflags --libs gtk+
 And here is how you would compile hello.c if you don't want
 it to use any symbols that were introduced after 3.4:
 <programlisting>
-$ cc -DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_3_4 `pkg-config --cflags --libs gtk+-3.0` hello.c -o hello
+$ cc `pkg-config --cflags gtk+-3.0` -DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_3_4 hello.c -o hello `pkg-config --libs gtk+-3.0`
 </programlisting>
 </para>
 
