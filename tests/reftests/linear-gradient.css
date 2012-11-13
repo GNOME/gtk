@@ -5,31 +5,40 @@
  *   The start and end points must be identical when drawing
  * This means that you cannot:
  * ... add extra color stops, even if they'd be invisible
- * ... mirror the gradient (ie 'to left, red, green' vs 'to right, green, red')
+ * ... mirror the gradient (ie 'to left, red, lime' vs 'to right, lime, red')
+ * ... test a repeating gradient against a non repeating one
  * and probably a bunch of other things.
  * These things can cause off-by-one rounding errors in pixman (and probably
  * your GPU, too) and that'd trigger test failures.
  */
 #a {
-  background-image: linear-gradient(to bottom, blue 0%, green 15px, red 100%);
+  background-image: linear-gradient(to bottom, blue 0%, lime 15px, red 100%);
 }
 
 #reference #a {
-  background-image: linear-gradient(blue, green, red);
+  background-image: linear-gradient(blue, lime, red);
 }
 
 #b {
-  background-image: linear-gradient(to left, pink 0, cyan, red 0, green 50%, blue 40px, violet -10em);
+  background-image: linear-gradient(to left, pink 0, cyan, red 0, lime 50%, blue 40px, violet -10em);
 }
 
 #reference #b {
-  background-image: linear-gradient(270deg, red, green, blue);
+  background-image: linear-gradient(270deg, red, lime, blue);
 }
 
 #c {
-  background-image: repeating-linear-gradient(3.5turn, red, green 10px, red 20px);
+  background-image: linear-gradient(3.5turn, red, lime 10px, red 20px, green 30px, red 40px);
 }
 
 #reference #c {
-  background-image: linear-gradient(to bottom, red, green 10px, red 20px, green 30px, red 40px);
+  background-image: repeating-linear-gradient(to bottom, red, lime 10px, red 20px, green 30px, red 40px);
+}
+
+#d {
+    background-image: repeating-linear-gradient(180deg, red, lime 10px, red 20px);
+}
+
+#reference #d {
+    background-image: repeating-linear-gradient(to bottom, red, lime 10px, red 20px);
 }

@@ -10,7 +10,7 @@
 }
 
 GtkGrid * {
-  background-color: green;
+  background-color: lime;
   border-style: none;
   border-width: 0;
 }

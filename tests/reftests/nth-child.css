@@ -25,7 +25,7 @@
 
 :nth-child(11n+11),
 :nth-last-child(-11n+1100) {
-  text-shadow: green 1px 1px;
+  text-shadow: lime 1px 1px;
 }
 
 #ref1 {
@@ -42,7 +42,7 @@
 
 #ref4 {
   color: blue;
-  text-shadow: green 1px 1px;
+  text-shadow: lime 1px 1px;
 }
 
 #ref5 {
@@ -96,7 +96,7 @@
 #ref15 {
   font-weight: bold;
   font-style: italic;
-  text-shadow: green 1px 1px;
+  text-shadow: lime 1px 1px;
 }
 
 #ref16 {
@@ -131,7 +131,7 @@
 
 #ref22 {
   color: blue;
-  text-shadow: green 1px 1px;
+  text-shadow: lime 1px 1px;
 }
 
 #ref23 {
