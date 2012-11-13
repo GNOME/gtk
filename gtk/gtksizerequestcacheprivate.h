@@ -71,6 +71,11 @@ void            _gtk_size_request_cache_init                    (SizeRequestCach
 void            _gtk_size_request_cache_free                    (SizeRequestCache       *cache);
 
 void            _gtk_size_request_cache_clear                   (SizeRequestCache       *cache);
+void            _gtk_size_request_cache_commit                  (SizeRequestCache       *cache,
+                                                                 GtkSizeGroupMode        orientation,
+                                                                 gint                    for_size,
+                                                                 gint                    minimum_size,
+                                                                 gint                    natural_size);
 
 G_END_DECLS
 
