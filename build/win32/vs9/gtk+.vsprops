@@ -41,7 +41,7 @@ copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h&#x0D;&#x0A;
 	/>
 	<UserMacro
 		Name="GtkBinaryVersion"
-		Value="2.10.0"
+		Value="3.0.0"
 	/>
 	<UserMacro
 		Name="GtkDummyPrefix"
