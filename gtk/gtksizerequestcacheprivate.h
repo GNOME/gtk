@@ -39,14 +39,14 @@ G_BEGIN_DECLS
 #define GTK_SIZE_REQUEST_CACHED_SIZES   (5)
 
 typedef struct {
-  gint minimum_size;
-  gint natural_size;
+  gfloat minimum_size;
+  gfloat natural_size;
 } CachedSize;
 
 typedef struct
 {
-  gint       lower_for_size; /* The minimum for_size with the same result */
-  gint       upper_for_size; /* The maximum for_size with the same result */
+  gfloat     lower_for_size; /* The minimum for_size with the same result */
+  gfloat     upper_for_size; /* The maximum for_size with the same result */
   CachedSize cached_size;
 } SizeRequest;
 
@@ -70,14 +70,14 @@ void            _gtk_size_request_cache_free                    (SizeRequestCach
 void            _gtk_size_request_cache_clear                   (SizeRequestCache       *cache);
 void            _gtk_size_request_cache_commit                  (SizeRequestCache       *cache,
                                                                  GtkOrientation          orientation,
-                                                                 gint                    for_size,
-                                                                 gint                    minimum_size,
-                                                                 gint                    natural_size);
+                                                                 gfloat                  for_size,
+                                                                 gfloat                  minimum_size,
+                                                                 gfloat                  natural_size);
 gboolean        _gtk_size_request_cache_lookup                  (SizeRequestCache       *cache,
                                                                  GtkOrientation          orientation,
-                                                                 gint                    for_size,
-                                                                 gint                   *minimum,
-                                                                 gint                   *natural);
+                                                                 gfloat                  for_size,
+                                                                 gfloat                 *minimum,
+                                                                 gfloat                 *natural);
 
 G_END_DECLS
 

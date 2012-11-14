@@ -65,9 +65,9 @@ _gtk_size_request_cache_clear (SizeRequestCache *cache)
 void
 _gtk_size_request_cache_commit (SizeRequestCache *cache,
                                 GtkOrientation    orientation,
-                                gint              for_size,
-                                gint              minimum_size,
-                                gint              natural_size)
+                                gfloat            for_size,
+                                gfloat            minimum_size,
+                                gfloat            natural_size)
 {
   SizeRequest **cached_sizes;
   SizeRequest  *cached_size;
@@ -135,9 +135,9 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
 gboolean
 _gtk_size_request_cache_lookup (SizeRequestCache *cache,
                                 GtkOrientation    orientation,
-                                gint              for_size,
-                                gint             *minimum,
-                                gint             *natural)
+                                gfloat            for_size,
+                                gfloat           *minimum,
+                                gfloat           *natural)
 {
   CachedSize *result = NULL;
 

@@ -103,6 +103,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
   SizeRequestCache *cache;
   gint min_size = 0;
   gint nat_size = 0;
+  gfloat min_float, nat_float;
   gboolean found_in_cache;
 
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
@@ -112,8 +113,8 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
   found_in_cache = _gtk_size_request_cache_lookup (cache,
                                                    orientation,
                                                    for_size,
-                                                   &min_size,
-                                                   &nat_size);
+                                                   &min_float,
+                                                   &nat_float);
   
   if (!found_in_cache)
     {
@@ -232,6 +233,11 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                       for_size,
                                       min_size,
                                       nat_size);
+    }
+  else
+    {
+      min_size = min_float;
+      nat_size = nat_float;
     }
 
   if (minimum_size)
