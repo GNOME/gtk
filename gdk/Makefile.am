@@ -75,6 +75,8 @@ gdk_public_h_sources = 				\
 	gdkdisplaymanager.h			\
 	gdkdnd.h				\
 	gdkevents.h				\
+	gdkframehistory.h			\
+	gdkframetimings.h			\
 	gdkkeys.h				\
 	gdkkeysyms.h				\
 	gdkkeysyms-compat.h			\
@@ -123,6 +125,8 @@ gdk_c_sources = 				\
 	gdkdisplaymanager.c			\
 	gdkdnd.c				\
 	gdkevents.c     			\
+	gdkframehistory.c			\
+	gdkframetimings.c			\
 	gdkglobals.c				\
 	gdkkeys.c				\
 	gdkkeyuni.c				\

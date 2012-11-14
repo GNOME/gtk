@@ -33,6 +33,7 @@
 
 struct _GdkFrameClockIdlePrivate
 {
+  GdkFrameHistory *history;
   GTimer *timer;
   /* timer_base is used to avoid ever going backward */
   guint64 timer_base;
@@ -77,6 +78,7 @@ gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
                                                         GdkFrameClockIdlePrivate);
   priv = frame_clock_idle->priv;
 
+  priv->history = gdk_frame_history_new ();
   priv->timer = g_timer_new ();
   priv->freeze_count = 0;
 }
@@ -229,7 +231,14 @@ gdk_frame_clock_paint_idle (void *data)
         case GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT:
           if (priv->freeze_count == 0)
             {
+              GdkFrameTimings *timings;
+              gint64 frame_counter;
+
               priv->frame_time = compute_frame_time (clock_idle);
+              gdk_frame_history_begin_frame (priv->history);
+              frame_counter = gdk_frame_history_get_frame_counter (priv->history);
+              timings = gdk_frame_history_get_timings (priv->history, frame_counter);
+              gdk_frame_timings_set_frame_time (timings, priv->frame_time);
 
               priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
 
@@ -370,6 +379,15 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
     }
 }
 
+static GdkFrameHistory *
+gdk_frame_clock_idle_get_history (GdkFrameClock *clock)
+{
+  GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
+  GdkFrameClockIdlePrivate *priv = clock_idle->priv;
+
+  return priv->history;
+}
+
 static void
 gdk_frame_clock_idle_interface_init (GdkFrameClockInterface *iface)
 {
@@ -378,6 +396,7 @@ gdk_frame_clock_idle_interface_init (GdkFrameClockInterface *iface)
   iface->get_requested = gdk_frame_clock_idle_get_requested;
   iface->freeze = gdk_frame_clock_idle_freeze;
   iface->thaw = gdk_frame_clock_idle_thaw;
+  iface->get_history = gdk_frame_clock_idle_get_history;
 }
 
 GdkFrameClock *

@@ -305,6 +305,23 @@ gdk_frame_clock_thaw (GdkFrameClock *clock)
 }
 
 /**
+ * gdk_frame_clock_get_history:
+ * @clock: the clock
+ *
+ * Gets the #GdkFrameHistory for the frame clock.
+ *
+ * Since: 3.8
+ * Return value: (transfer none): the frame history object
+ */
+GdkFrameHistory *
+gdk_frame_clock_get_history (GdkFrameClock *clock)
+{
+  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), NULL);
+
+  return GDK_FRAME_CLOCK_GET_IFACE (clock)->get_history (clock);
+}
+
+/**
  * gdk_frame_clock_get_requested:
  * @clock: the clock
  *
