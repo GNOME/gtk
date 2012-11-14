@@ -49,10 +49,11 @@ typedef enum { /*< skip >*/
   GTK_CSS_CHANGE_PARENT_SIBLING_STATE     = (1 << 15),
   /* add more */
   GTK_CSS_CHANGE_SOURCE                   = (1 << 16),
-  GTK_CSS_CHANGE_ANIMATE                  = (1 << 17)
+  GTK_CSS_CHANGE_ANIMATE                  = (1 << 17),
+  GTK_CSS_CHANGE_FORCE_INVALIDATE         = (1 << 18)
 } GtkCssChange;
 
-#define GTK_CSS_CHANGE_ANY ((1 << 18) - 1)
+#define GTK_CSS_CHANGE_ANY ((1 << 19) - 1)
 #define GTK_CSS_CHANGE_ANY_SELF (GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_STATE)
 #define GTK_CSS_CHANGE_ANY_SIBLING (GTK_CSS_CHANGE_SIBLING_CLASS | GTK_CSS_CHANGE_SIBLING_NAME | \
                                     GTK_CSS_CHANGE_SIBLING_POSITION | GTK_CSS_CHANGE_SIBLING_STATE)
