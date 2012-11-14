@@ -328,6 +328,8 @@ static void gtk_window_map                (GtkWidget         *widget);
 static void gtk_window_unmap              (GtkWidget         *widget);
 static void gtk_window_realize            (GtkWidget         *widget);
 static void gtk_window_unrealize          (GtkWidget         *widget);
+static void gtk_window_size_allocate      (GtkWidget         *widget,
+					   GtkAllocation     *allocation);
 static gboolean gtk_window_map_event      (GtkWidget         *widget,
                                            GdkEventAny       *event);
 static gint gtk_window_configure_event    (GtkWidget         *widget,
@@ -473,7 +475,6 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 						      const gchar   *tagname,
 						      gpointer       user_data);
 
-
 static void ensure_state_flag_backdrop (GtkWidget *widget);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
@@ -574,6 +575,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->unmap = gtk_window_unmap;
   widget_class->realize = gtk_window_realize;
   widget_class->unrealize = gtk_window_unrealize;
+  widget_class->size_allocate = gtk_window_size_allocate;
   widget_class->configure_event = gtk_window_configure_event;
   widget_class->key_press_event = gtk_window_key_press_event;
   widget_class->key_release_event = gtk_window_key_release_event;
@@ -5583,6 +5585,30 @@ _gtk_window_set_allocation (GtkWindow     *window,
           update_grip_visibility (window);
           set_grip_position (window);
         }
+    }
+}
+
+static void
+gtk_window_size_allocate (GtkWidget     *widget,
+                          GtkAllocation *allocation)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkAllocation child_allocation;
+  GtkWidget *child;
+  guint border_width;
+
+  _gtk_window_set_allocation (window, allocation);
+
+  child = gtk_bin_get_child (&(window->bin));
+  if (child && gtk_widget_get_visible (child))
+    {
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+      child_allocation.x = border_width;
+      child_allocation.y = border_width;
+      child_allocation.width = MAX (1, allocation->width - border_width * 2);
+      child_allocation.height = MAX (1, allocation->height - border_width * 2);
+
+      gtk_widget_size_allocate (child, &child_allocation);
     }
 }
 
