@@ -3,6 +3,8 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
+#define RADIUS 64
+#define DIAMETER (2*RADIUS)
 #define WIDTH 600
 #define HEIGHT 600
 #define WINDOW_SIZE_JITTER 200
@@ -28,7 +30,8 @@ ensure_resources(cairo_surface_t *target)
   if (source_surface != NULL)
     return;
 
-  source_surface = cairo_surface_create_similar (target, CAIRO_CONTENT_COLOR_ALPHA, 2048, 2048);
+  source_surface = cairo_surface_create_similar (target, CAIRO_CONTENT_COLOR_ALPHA,
+                                                 16 * DIAMETER, 16 * DIAMETER);
   cr = cairo_create(source_surface);
 
   cairo_save(cr);
@@ -48,8 +51,8 @@ ensure_resources(cairo_surface_t *target)
                               ((i * 23) % 16) / 15.,
                               0.25);
         cairo_arc(cr,
-                  i * 128 + 64, j * 128 + 64,
-                  64 - 0.5, 0, 2 * M_PI);
+                  i * DIAMETER + RADIUS, j * DIAMETER + RADIUS,
+                  RADIUS - 0.5, 0, 2 * M_PI);
         cairo_fill_preserve(cr);
         cairo_set_source_rgba(cr,
                               ((i * 41) % 16) / 15.,
@@ -86,18 +89,18 @@ on_window_draw (GtkWidget *widget,
     {
       int source = g_rand_int_range(rand, 0, 255);
       double phi = g_rand_double_range(rand, 0, 2 * M_PI) + angle;
-      double r = g_rand_double_range(rand, 0, width / 2 - 64);
+      double r = g_rand_double_range(rand, 0, width / 2 - RADIUS);
       int x, y;
 
-      int source_x = (source % 16) * 128;
-      int source_y = (source / 16) * 128;
+      int source_x = (source % 16) * DIAMETER;
+      int source_y = (source / 16) * DIAMETER;
 
-      x = round(width / 2 + r * cos(phi) - 64);
-      y = round(height / 2 - r * sin(phi) - 64);
+      x = round(width / 2 + r * cos(phi) - RADIUS);
+      y = round(height / 2 - r * sin(phi) - RADIUS);
 
       cairo_set_source_surface(cr, source_surface,
                                x - source_x, y - source_y);
-      cairo_rectangle(cr, x, y, 128, 128);
+      cairo_rectangle(cr, x, y, DIAMETER, DIAMETER);
       cairo_fill(cr);
     }
 
