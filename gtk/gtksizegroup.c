@@ -147,6 +147,10 @@ static void gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
 						      const gchar   *tagname,
 						      gpointer       user_data);
 
+G_STATIC_ASSERT (GTK_SIZE_GROUP_HORIZONTAL == (1 << GTK_ORIENTATION_HORIZONTAL));
+G_STATIC_ASSERT (GTK_SIZE_GROUP_VERTICAL == (1 << GTK_ORIENTATION_VERTICAL));
+G_STATIC_ASSERT (GTK_SIZE_GROUP_BOTH == (GTK_SIZE_GROUP_HORIZONTAL | GTK_SIZE_GROUP_VERTICAL));
+
 static void
 add_widget_to_closure (GHashTable     *set,
                        GtkWidget      *widget,
@@ -169,9 +173,7 @@ add_widget_to_closure (GHashTable     *set,
       if (tmp_priv->ignore_hidden && hidden)
         continue;
 
-      if (tmp_priv->mode != GTK_SIZE_GROUP_BOTH &&
-          (!(tmp_priv->mode == GTK_SIZE_GROUP_HORIZONTAL && orientation == GTK_ORIENTATION_HORIZONTAL)) &&
-          (!(tmp_priv->mode == GTK_SIZE_GROUP_VERTICAL && orientation == GTK_ORIENTATION_VERTICAL)))
+      if (!(tmp_priv->mode & (1 << orientation)))
         continue;
 
       for (tmp_widgets = tmp_priv->widgets; tmp_widgets; tmp_widgets = tmp_widgets->next)
