@@ -101,6 +101,8 @@ tests/reftests/sizegroups-get-preferred-null.ref.ui
 tests/reftests/sizegroups-get-preferred-null.ui
 tests/reftests/toplevel-vs-popup.ref.ui
 tests/reftests/toplevel-vs-popup.ui
+tests/reftests/window-border-width.ref.ui
+tests/reftests/window-border-width.ui
 tests/testfilechooser.c
 tests/visuals/inline-toolbar-horizontal.ui
 tests/visuals/inline-toolbar.ui
