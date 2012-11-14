@@ -46,6 +46,8 @@ struct _GdkFrameClockIdlePrivate
 
   GdkFrameClockPhase requested;
   GdkFrameClockPhase phase;
+
+  guint in_paint_idle : 1;
 };
 
 static gboolean gdk_frame_clock_flush_idle (void *data);
@@ -170,6 +172,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
         }
 
       if (priv->paint_idle_id == 0 &&
+          !priv->in_paint_idle &&
           (priv->requested & ~GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS) != 0)
         {
           priv->paint_idle_id = gdk_threads_add_timeout_full (GDK_PRIORITY_REDRAW,
@@ -217,6 +220,7 @@ gdk_frame_clock_paint_idle (void *data)
   gboolean skip_to_resume_events;
 
   priv->paint_idle_id = 0;
+  priv->in_paint_idle = TRUE;
 
   skip_to_resume_events =
     (priv->requested & ~(GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS | GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS)) == 0;
@@ -299,7 +303,10 @@ gdk_frame_clock_paint_idle (void *data)
       g_signal_emit_by_name (G_OBJECT (clock), "resume-events");
     }
 
-  priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+  if (priv->freeze_count == 0)
+    priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+
+  priv->in_paint_idle = FALSE;
 
   if (priv->freeze_count == 0 && priv->requested != 0)
     {
