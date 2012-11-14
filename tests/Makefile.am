@@ -253,6 +253,11 @@ testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
 testgmenu_DEPENDENCIES = $(TEST_DEPS)
 testlogout_DEPENDENCIES = $(TEST_DEPS)
 
+animated_resizing_SOURCES = 	\
+	animated-resizing.c	\
+	variable.c		\
+	variable.h
+
 testboxcss_SOURCES =	\
 	testboxcss.c	\
 	prop-editor.c

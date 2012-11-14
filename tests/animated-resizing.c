@@ -2,6 +2,9 @@
 
 #include <gtk/gtk.h>
 #include <math.h>
+#include <string.h>
+
+#include "variable.h"
 
 #define RADIUS 64
 #define DIAMETER (2*RADIUS)
@@ -14,10 +17,12 @@ static GtkWidget *window;
 static int window_width = WIDTH, window_height = HEIGHT;
 
 static double angle;
-static int frames_since_last_print = 0;
 
+static int max_stats = -1;
+static double statistics_time = 5.;
 static double load_factor = 1.0;
 static double cb_no_resize = FALSE;
+static gboolean machine_readable = FALSE;
 
 static cairo_surface_t *source_surface;
 
@@ -108,25 +113,117 @@ on_window_draw (GtkWidget *widget,
 }
 
 static void
-on_frame (GtkTimeline *timeline,
-          double       progress)
+print_double (const char *description,
+              double      value)
 {
-  int jitter;
-  double current_time;
-  static double last_print_time = 0;
+  if (machine_readable)
+    g_print ("%g\t", value);
+  else
+    g_print ("%s: %g\n", description, value);
+}
 
-  current_time = g_get_monotonic_time () / 1000000.;
-  if (current_time >= last_print_time + 5)
+static void
+print_variable (const char *description,
+                Variable *variable)
+{
+  if (variable->weight != 0)
     {
-      if (frames_since_last_print != 0)
+      if (machine_readable)
+        g_print ("%g\t%g\t",
+                 variable_mean (variable),
+                 variable_standard_deviation (variable));
+      else
+        g_print ("%s: %g +/- %g\n", description,
+                 variable_mean (variable),
+                 variable_standard_deviation (variable));
+    }
+  else
+    {
+      if (machine_readable)
+        g_print ("-\t-\t");
+      else
+        g_print ("%s: <n/a>\n", description);
+    }
+}
+
+static void
+handle_frame_stats (GdkFrameHistory *frame_history)
+{
+  static int num_stats = 0;
+  static double last_print_time = 0;
+  static int frames_since_last_print = 0;
+  static gint64 frame_counter;
+  static gint64 last_handled_frame = -1;
+
+  static Variable latency = VARIABLE_INIT;
+
+  double current_time;
+
+  current_time = g_get_monotonic_time ();
+  if (current_time >= last_print_time + 1000000 * statistics_time)
+    {
+      if (frames_since_last_print)
         {
-          g_print ("%g\n", frames_since_last_print / (current_time - last_print_time));
-          frames_since_last_print = 0;
+          if (num_stats == 0 && machine_readable)
+            {
+              g_print ("# load_factor frame_rate latency\n");
+            }
+
+          num_stats++;
+          if (machine_readable)
+            g_print ("%g	", load_factor);
+          print_double ("Frame rate ",
+                        frames_since_last_print / ((current_time - last_print_time) / 1000000.));
+
+          print_variable ("Latency", &latency);
+
+          g_print ("\n");
         }
 
       last_print_time = current_time;
+      frames_since_last_print = 0;
+      variable_reset (&latency);
+
+      if (num_stats == max_stats)
+        gtk_main_quit ();
     }
+
   frames_since_last_print++;
+
+  for (frame_counter = last_handled_frame;
+       frame_counter < gdk_frame_history_get_frame_counter (frame_history);
+       frame_counter++)
+    {
+      GdkFrameTimings *timings = gdk_frame_history_get_timings (frame_history, frame_counter);
+      GdkFrameTimings *previous_timings = gdk_frame_history_get_timings (frame_history, frame_counter - 1);
+
+      if (!timings || gdk_frame_timings_get_complete (timings))
+        last_handled_frame = frame_counter;
+
+      if (timings && gdk_frame_timings_get_complete (timings) && previous_timings &&
+          gdk_frame_timings_get_presentation_time (timings) != 0 &&
+          gdk_frame_timings_get_presentation_time (previous_timings) != 0)
+        {
+          double display_time = (gdk_frame_timings_get_presentation_time (timings) - gdk_frame_timings_get_presentation_time (previous_timings)) / 1000.;
+          double frame_latency = (gdk_frame_timings_get_presentation_time (previous_timings) - gdk_frame_timings_get_frame_time (previous_timings)) / 1000. + display_time / 2;
+
+          variable_add_weighted (&latency, frame_latency, display_time);
+        }
+    }
+}
+
+static void
+on_frame (GtkTimeline *timeline,
+          double       progress)
+{
+  GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (window);
+  int jitter;
+
+  if (frame_clock)
+    {
+      GdkFrameHistory *history = gdk_frame_clock_get_history (frame_clock);
+      handle_frame_stats (history);
+    }
 
   angle = 2 * M_PI * progress;
   jitter = WINDOW_SIZE_JITTER * sin(angle);
@@ -143,9 +240,22 @@ on_frame (GtkTimeline *timeline,
   gtk_widget_queue_draw (window);
 }
 
+static gboolean
+on_map_event (GtkWidget	  *widget,
+              GdkEventAny *event,
+              GtkTimeline *timeline)
+{
+  gtk_timeline_start (timeline);
+
+  return FALSE;
+}
+
 static GOptionEntry options[] = {
   { "factor", 'f', 0, G_OPTION_ARG_DOUBLE, &load_factor, "Load factor", "FACTOR" },
+  { "max-statistics", 'm', 0, G_OPTION_ARG_INT, &max_stats, "Maximum statistics printed", NULL },
+  { "machine-readable", 0, 0, G_OPTION_ARG_NONE, &machine_readable, "Print statistics in columns", NULL },
   { "no-resize", 'n', 0, G_OPTION_ARG_NONE, &cb_no_resize, "No Resize", NULL },
+  { "statistics-time", 's', 0, G_OPTION_ARG_DOUBLE, &statistics_time, "Statistics accumulation time", "TIME" },
   { NULL }
 };
 
@@ -158,11 +268,18 @@ main(int argc, char **argv)
   GtkTimeline *timeline;
 
   if (!gtk_init_with_args (&argc, &argv, "",
-                           options, NULL, NULL))
+                           options, NULL, &error))
     {
-      g_printerr ("Option parsing failed: %s", error->message);
+      g_printerr ("Option parsing failed: %s\n", error->message);
       return 1;
     }
+
+  g_print ("%sLoad factor: %g\n",
+           machine_readable ? "# " : "",
+           load_factor);
+  g_print ("%sResizing?: %s\n",
+           machine_readable ? "# " : "",
+           cb_no_resize ? "no" : "yes");
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_keep_above (GTK_WINDOW (window), TRUE);
@@ -180,8 +297,9 @@ main(int argc, char **argv)
 
   g_signal_connect (timeline, "frame",
                     G_CALLBACK (on_frame), NULL);
+  g_signal_connect (window, "map-event",
+                    G_CALLBACK (on_map_event), timeline);
   on_frame (timeline, 0.);
-  gtk_timeline_start (timeline);
 
   screen = gtk_widget_get_screen (window);
   gdk_screen_get_monitor_geometry (screen,
