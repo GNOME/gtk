@@ -39,6 +39,7 @@ struct _GdkFrameClockIdlePrivate
   guint64 timer_base;
   guint64 frame_time;
   guint64 min_next_frame_time;
+  gint64 sleep_serial;
 
   guint flush_idle_id;
   guint paint_idle_id;
@@ -59,6 +60,58 @@ static void gdk_frame_clock_idle_interface_init       (GdkFrameClockInterface *i
 G_DEFINE_TYPE_WITH_CODE (GdkFrameClockIdle, gdk_frame_clock_idle, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GDK_TYPE_FRAME_CLOCK,
 						gdk_frame_clock_idle_interface_init))
+
+static gint64 sleep_serial;
+static gint64 sleep_source_prepare_time;
+static GSource *sleep_source;
+
+gboolean
+sleep_source_prepare (GSource *source,
+                      gint    *timeout)
+{
+  sleep_source_prepare_time = g_source_get_time (source);
+  *timeout = -1;
+  return FALSE;
+}
+
+gboolean
+sleep_source_check (GSource *source)
+{
+  if (g_source_get_time (source) != sleep_source_prepare_time)
+    sleep_serial++;
+
+  return FALSE;
+}
+
+gboolean
+sleep_source_dispatch (GSource     *source,
+                       GSourceFunc  callback,
+                       gpointer     user_data)
+{
+  return TRUE;
+}
+
+static GSourceFuncs sleep_source_funcs = {
+  sleep_source_prepare,
+  sleep_source_check,
+  sleep_source_dispatch,
+  NULL /* finalize */
+};
+
+static gint64
+get_sleep_serial (void)
+{
+  if (sleep_source == NULL)
+    {
+      sleep_source = g_source_new (&sleep_source_funcs, sizeof (GSource));
+
+      g_source_set_priority (sleep_source, G_PRIORITY_HIGH);
+      g_source_attach (sleep_source, NULL);
+      g_source_unref (sleep_source);
+    }
+
+  return sleep_serial;
+}
 
 static void
 gdk_frame_clock_idle_class_init (GdkFrameClockIdleClass *klass)
@@ -244,6 +297,9 @@ gdk_frame_clock_paint_idle (void *data)
               timings = gdk_frame_history_get_timings (priv->history, frame_counter);
               gdk_frame_timings_set_frame_time (timings, priv->frame_time);
 
+              gdk_frame_timings_set_slept_before (timings,
+                                                  priv->sleep_serial != get_sleep_serial ());
+
               priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
 
               /* We always emit ::before-paint and ::after-paint if
@@ -322,6 +378,9 @@ gdk_frame_clock_paint_idle (void *data)
       priv->min_next_frame_time = 0;
     }
 
+  if (priv->freeze_count == 0)
+    priv->sleep_serial = get_sleep_serial ();
+
   return FALSE;
 }
 
@@ -383,6 +442,8 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
        * run and do it for us. */
       if (priv->paint_idle_id == 0)
         priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+
+      priv->sleep_serial = get_sleep_serial ();
     }
 }
 

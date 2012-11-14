@@ -23,13 +23,15 @@ struct _GdkFrameTimings
 {
   guint ref_count;
 
-  gboolean complete;
   gint64 frame_counter;
   guint64 cookie;
   gint64 frame_time;
   gint64 drawn_time;
   gint64 presentation_time;
   gint64 refresh_interval;
+
+  guint complete : 1;
+  guint slept_before : 1;
 };
 
 G_DEFINE_BOXED_TYPE (GdkFrameTimings, gdk_frame_timings,
@@ -109,6 +111,23 @@ gdk_frame_timings_set_complete (GdkFrameTimings *timings,
   g_return_if_fail (timings != NULL);
 
   timings->complete = complete;
+}
+
+gboolean
+gdk_frame_timings_get_slept_before (GdkFrameTimings *timings)
+{
+  g_return_val_if_fail (timings != NULL, FALSE);
+
+  return timings->slept_before;
+}
+
+void
+gdk_frame_timings_set_slept_before (GdkFrameTimings *timings,
+                                    gboolean         slept_before)
+{
+  g_return_if_fail (timings != NULL);
+
+  timings->slept_before = slept_before;
 }
 
 gint64
