@@ -125,8 +125,7 @@
  * e.g. "GTK_VISIBLE|GTK_REALIZED")  and colors (in a format understood by
  * gdk_color_parse()). Pixbufs can be specified as a filename of an image file to load. 
  * Objects can be referred to by their name and by default refer to objects declared
- * in the local xml fragment, however external objects exposed via gtk_builder_expose_object()
- * can be referred to by specifying the "external-object" attribute.
+ * in the local xml fragment and objects exposed via gtk_builder_expose_object().
  * 
  * In general, GtkBuilder allows forward references to objects &mdash declared
  * in the local xml; an object doesn't have to be constructed before it can be referred to. 
@@ -140,9 +139,7 @@
  * a custom #GtkBuilderConnectFunc to gtk_builder_connect_signals_full(). The
  * attributes "after", "swapped" and "object", have the same meaning
  * as the corresponding parameters of the g_signal_connect_object() or
- * g_signal_connect_data() functions.  External objects can also be referred 
- * to by specifying the "external-object" attribute in the same way as described 
- * with the &lt;property&gt; element. A "last_modification_time" attribute is also 
+ * g_signal_connect_data() functions. A "last_modification_time" attribute is also 
  * allowed, but it does not have a meaning to the builder.
  *
  * Sometimes it is necessary to refer to widgets which have implicitly been
@@ -273,7 +270,6 @@ struct _GtkBuilderPrivate
 {
   gchar *domain;
   GHashTable *objects;
-  GHashTable *external_objects;
   GSList *delayed_properties;
   GSList *signals;
   gchar *filename;
@@ -324,7 +320,6 @@ gtk_builder_init (GtkBuilder *builder)
   builder->priv->domain = NULL;
   builder->priv->objects = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   g_free, g_object_unref);
-  builder->priv->external_objects = NULL;
 }
 
 
@@ -342,8 +337,6 @@ gtk_builder_finalize (GObject *object)
   g_free (priv->resource_prefix);
   
   g_hash_table_destroy (priv->objects);
-  if (priv->external_objects)
-    g_hash_table_destroy (priv->external_objects);
 
   g_slist_foreach (priv->signals, (GFunc) _free_signal_info, NULL);
   g_slist_free (priv->signals);
@@ -501,22 +494,7 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
         {
           GObject *object;
 
-          if (prop->external)
-            {
-              object = g_hash_table_lookup (builder->priv->external_objects, prop->data);
-
-              if (!object)
-                {
-                  g_warning ("Failed to get external object property "
-                             "%s of %s with value `%s'",
-                             prop->name, object_name, prop->data);
-                  continue;
-                }
-
-              g_value_init (&parameter.value, G_OBJECT_TYPE (object));
-              g_value_set_object (&parameter.value, object);
-            }
-          else if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+          if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
             {
               object = gtk_builder_get_object (builder, prop->data);
 
@@ -1210,21 +1188,6 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
                                            object_ids, error);
 }
 
-GObject *
-_gtk_builder_get_external_object (GtkBuilder    *builder,
-                                  const gchar   *name)
-{
-  g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
-
-  if (builder->priv->external_objects)
-    {
-      g_return_val_if_fail (name != NULL, NULL);
-      return g_hash_table_lookup (builder->priv->external_objects, name);
-    }
-  else
-    return NULL;
-}
-
 /**
  * gtk_builder_get_object:
  * @builder: a #GtkBuilder
@@ -1332,9 +1295,8 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
  * @name: the name of the object exposed to the builder
  * @object: the object to expose
  *
- * Adds @object to a pool of objects external to the objects built by builder.
- * Objects exposed in this pool can be referred to by xml fragments by 
- * specifying the "external-object" boolean attribute.
+ * Add @object to the @builder object pool so it can be references just like any
+ * other object buiolt by builder.
  *
  * To make this function even more useful a new special entry point element
  * &lt;template&gt; is defined. It is similar to &lt;object&gt; with the only difference
@@ -1357,15 +1319,9 @@ gtk_builder_expose_object (GtkBuilder    *builder,
   g_return_if_fail (G_IS_OBJECT (object));
 
   priv = builder->priv;
-
-  /* We do not create the table in _init() because this is not used very much */
-  if (priv->external_objects == NULL)
-    priv->external_objects = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                    g_free, g_object_unref);
   
   object_set_name (object, name);
-  g_hash_table_insert (priv->external_objects, 
-		       g_strdup (name), g_object_ref (object));
+  g_hash_table_insert (priv->objects, g_strdup (name), g_object_ref (object));
 }
 
 
@@ -1508,12 +1464,8 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
       
       if (signal->connect_object_name)
 	{
-          if (signal->external)
-	    connect_object = g_hash_table_lookup (builder->priv->external_objects,
-						  signal->connect_object_name);
-	  else
-	    connect_object = g_hash_table_lookup (builder->priv->objects,
-						  signal->connect_object_name);
+	  connect_object = g_hash_table_lookup (builder->priv->objects,
+                                                signal->connect_object_name);
 
 	  if (!connect_object)
 	      g_warning ("Could not lookup object %s on signal %s of object %s",

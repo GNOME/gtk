@@ -63,7 +63,6 @@ typedef struct {
   gchar *data;
   gchar *context;
   guint8 translatable : 1;
-  guint8 external : 1;
 } PropertyInfo;
 
 typedef struct {
@@ -71,7 +70,6 @@ typedef struct {
   gchar *object_name;
   const gchar *name; /* Intern string */
   gchar *handler;
-  gboolean external;
   GConnectFlags flags;
   gchar *connect_object_name;
 } SignalInfo;
@@ -164,8 +162,6 @@ void      _gtk_builder_menu_start (ParserData   *parser_data,
                                    GError      **error);
 void      _gtk_builder_menu_end   (ParserData  *parser_data);
 
-GObject * _gtk_builder_get_external_object (GtkBuilder    *builder,
-                                            const gchar   *name);
 const gchar * _gtk_builder_object_get_name (GObject *object);
 
 #endif /* __GTK_BUILDER_PRIVATE_H__ */

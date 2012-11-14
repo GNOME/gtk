@@ -316,6 +316,29 @@ is_requested_object (const gchar *object,
   return FALSE;
 }
 
+static gboolean
+parser_add_object_id (ParserData *data,
+                      const gchar *object_id,
+                      GError **error)
+{
+  gint line, line2;
+    
+  g_markup_parse_context_get_position (data->ctx, &line, NULL);
+  line2 = GPOINTER_TO_INT (g_hash_table_lookup (data->object_ids, object_id));
+  if (line2 != 0)
+    {
+      g_set_error (error, GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_DUPLICATE_ID,
+                   _("Duplicate object ID '%s' on line %d (previously on line %d)"),
+                   object_id, line, line2);
+      return TRUE;
+    }
+
+  g_hash_table_insert (data->object_ids, g_strdup (object_id), GINT_TO_POINTER (line));
+
+  return FALSE;
+}
+
 static void
 parse_object (GMarkupParseContext  *context,
               ParserData           *data,
@@ -330,7 +353,7 @@ parse_object (GMarkupParseContext  *context,
   const gchar *object_class = NULL;
   const gchar *object_id = NULL;
   const gchar *constructor = NULL;
-  gint i, line, line2;
+  gint i, line;
 
   child_info = state_peek_info (data, ChildInfo);
   if (child_info && strcmp (child_info->tag.name, "object") == 0)
@@ -430,19 +453,7 @@ parse_object (GMarkupParseContext  *context,
   if (child_info)
     object_info->parent = (CommonInfo*)child_info;
 
-  g_markup_parse_context_get_position (context, &line, NULL);
-  line2 = GPOINTER_TO_INT (g_hash_table_lookup (data->object_ids, object_id));
-  if (line2 != 0)
-    {
-      g_set_error (error, GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_DUPLICATE_ID,
-                   _("Duplicate object ID '%s' on line %d (previously on line %d)"),
-                   object_id, line, line2);
-      return;
-    }
-
-
-  g_hash_table_insert (data->object_ids, g_strdup (object_id), GINT_TO_POINTER (line));
+  parser_add_object_id (data, object_id, error);
 }
 
 static void
@@ -522,7 +533,6 @@ parse_property (ParserData   *data,
   gchar *name = NULL;
   gchar *context = NULL;
   gboolean translatable = FALSE;
-  gboolean external = FALSE;
   ObjectInfo *object_info;
   int i;
 
@@ -551,11 +561,6 @@ parse_property (ParserData   *data,
         {
           context = g_strdup (values[i]);
         }
-      else if (strcmp (names[i], "external-object") == 0)
-	{
-	  if (!_gtk_builder_boolean_from_string (values[i], &external, error))
-	    return;
-	}
       else
 	{
 	  error_invalid_attribute (data, element_name, names[i], error);
@@ -574,7 +579,6 @@ parse_property (ParserData   *data,
   info->translatable = translatable;
   info->context      = context;
   info->text         = g_string_new ("");
-  info->external     = external;
   state_push (data, info);
 
   info->tag.name = element_name;
@@ -603,7 +607,6 @@ parse_signal (ParserData   *data,
   gboolean after = FALSE;
   gboolean swapped = FALSE;
   gboolean swapped_set = FALSE;
-  gboolean external = FALSE;
   ObjectInfo *object_info;
   int i;
 
@@ -630,11 +633,6 @@ parse_signal (ParserData   *data,
 	  if (!_gtk_builder_boolean_from_string (values[i], &swapped, error))
 	    return;
 	  swapped_set = TRUE;
-	}
-      else if (strcmp (names[i], "external-object") == 0)
-	{
-	  if (!_gtk_builder_boolean_from_string (values[i], &external, error))
-	    return;
 	}
       else if (strcmp (names[i], "object") == 0)
         object = g_strdup (values[i]);
@@ -670,7 +668,6 @@ parse_signal (ParserData   *data,
     info->flags |= G_CONNECT_AFTER;
   if (swapped)
     info->flags |= G_CONNECT_SWAPPED;
-  info->external = external;
   info->connect_object_name = object;
   state_push (data, info);
 
@@ -730,7 +727,7 @@ parse_template (ParserData   *data,
     }
 
   if (data->requested_objects == NULL &&
-      (parent = _gtk_builder_get_external_object (data->builder, id)))
+      (parent = gtk_builder_get_object (data->builder, id)))
     {
       GType class_type, parent_type = G_OBJECT_TYPE (parent);
       ObjectInfo *object_info;
@@ -767,6 +764,8 @@ parse_template (ParserData   *data,
       object_info->tag.name = "object";
 
       state_push (data, object_info);
+
+      parser_add_object_id (data, object_info->id, error);
     }
 }
 

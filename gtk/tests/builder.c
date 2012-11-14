@@ -2869,9 +2869,9 @@ test_expose_object (void)
   const gchar buffer[] =
     "<interface>"
     "  <object class=\"GtkButton\" id=\"button\">"
-    "    <property name=\"image\" external-object=\"True\">external_image</property>"
-    "    <signal name=\"clicked\" handler=\"on_button_clicked\" object=\"builder\" external-object=\"yes\" swapped=\"no\"/>"
-    "    <signal name=\"clicked\" handler=\"on_button_clicked_swapped\" object=\"builder\" external-object=\"yes\"/>"
+    "    <property name=\"image\">external_image</property>"
+    "    <signal name=\"clicked\" handler=\"on_button_clicked\" object=\"builder\" swapped=\"no\"/>"
+    "    <signal name=\"clicked\" handler=\"on_button_clicked_swapped\" object=\"builder\"/>"
     "  </object>"
     "</interface>";
 
