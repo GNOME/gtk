@@ -105,6 +105,9 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
   gint nat_size = 0;
   gboolean found_in_cache;
 
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
+    for_size = -1;
+
   cache = _gtk_widget_peek_request_cache (widget);
   found_in_cache = _gtk_size_request_cache_lookup (cache,
                                                    orientation,
@@ -120,7 +123,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          if (for_size < 0 || gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
+          if (for_size < 0)
             {
 	      push_recursion_check (widget, orientation, for_size);
               GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_size, &nat_size);
@@ -153,7 +156,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
         }
       else
         {
-          if (for_size < 0 || gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
+          if (for_size < 0)
             {
 	      push_recursion_check (widget, orientation, for_size);
               GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, &min_size, &nat_size);
