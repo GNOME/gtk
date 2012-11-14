@@ -298,6 +298,10 @@ gdk_x11_window_begin_frame (GdkWindow *window)
 static void
 gdk_x11_window_end_frame (GdkWindow *window)
 {
+  GdkFrameClock *clock;
+  GdkFrameHistory *history;
+  gint64 frame_counter;
+  GdkFrameTimings *timings;
   GdkWindowImplX11 *impl;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -309,11 +313,24 @@ gdk_x11_window_end_frame (GdkWindow *window)
       !impl->toplevel->in_frame)
     return;
 
+  clock = gdk_window_get_frame_clock (window);
+  history = gdk_frame_clock_get_history (clock);
+  frame_counter = gdk_frame_history_get_frame_counter (history);
+  timings = gdk_frame_history_get_timings (history, frame_counter);
+
   impl->toplevel->in_frame = FALSE;
 
   if (impl->toplevel->current_counter_value % 2 == 1)
     {
-      impl->toplevel->current_counter_value += 1;
+      /* An increment of 3 means that the frame was not drawn as fast as possible,
+       * but rather at a particular time. This can trigger different handling from
+       * the compositor.
+       */
+      if (gdk_frame_timings_get_slept_before (timings))
+        impl->toplevel->current_counter_value += 3;
+      else
+        impl->toplevel->current_counter_value += 1;
+
       set_sync_counter(GDK_WINDOW_XDISPLAY (impl->wrapper),
 		       impl->toplevel->extended_update_counter,
 		       impl->toplevel->current_counter_value);
@@ -323,10 +340,15 @@ gdk_x11_window_end_frame (GdkWindow *window)
         {
           impl->toplevel->frame_pending = TRUE;
           gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
+          gdk_frame_timings_set_cookie (timings,
+                                        impl->toplevel->current_counter_value);
         }
     }
 
   unhook_surface_changed (window);
+
+  if (!impl->toplevel->frame_pending)
+    gdk_frame_timings_set_complete (timings, TRUE);
 }
 
 /*****************************************************
@@ -853,17 +875,8 @@ static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
                             GdkWindow     *window)
 {
-  GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
-  GdkFrameHistory *history = gdk_frame_clock_get_history (clock);
-  gint64 frame_counter = gdk_frame_history_get_frame_counter (history);
-  GdkFrameTimings *timings = gdk_frame_history_get_timings (history, frame_counter);
-
   gdk_x11_window_end_frame (window);
 
-  if (toplevel->frame_pending)
-    gdk_frame_timings_set_cookie (timings, toplevel->current_counter_value);
-  else
-    gdk_frame_timings_set_complete (timings, TRUE);
 }
 
 void
