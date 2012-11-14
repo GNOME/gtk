@@ -166,3 +166,68 @@ _gtk_size_request_cache_commit (SizeRequestCache  *cache,
     }
 }
 
+/* looks for a cached size request for this for_size.
+ *
+ * Note that this caching code was originally derived from
+ * the Clutter toolkit but has evolved for other GTK+ requirements.
+ */
+gboolean
+_gtk_size_request_cache_lookup (SizeRequestCache *cache,
+                                GtkSizeGroupMode  orientation,
+                                gint              for_size,
+                                gint             *minimum,
+                                gint             *natural)
+{
+  CachedSize *result = NULL;
+
+  if (for_size < 0)
+    {
+      if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+	{
+          if (cache->cached_base_width)
+	    result = &cache->cached_width;
+	}
+      else
+	{
+	  if (cache->cached_base_height)
+	    result = &cache->cached_height;
+	}
+    }
+  else
+    {
+      SizeRequest      **cached_sizes;
+      guint              i, n_sizes;
+
+      if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+        {
+          cached_sizes = cache->widths;
+          n_sizes      = cache->cached_widths;
+        }
+      else
+        {
+          cached_sizes = cache->heights;
+          n_sizes      = cache->cached_heights;
+        }
+
+      /* Search for an already cached size */
+      for (i = 0; i < n_sizes; i++)
+        {
+          if (cached_sizes[i]->lower_for_size <= for_size &&
+              cached_sizes[i]->upper_for_size >= for_size)
+            {
+              result = &cached_sizes[i]->cached_size;
+              break;
+            }
+        }
+    }
+
+  if (result)
+    {
+      *minimum = result->minimum_size;
+      *natural = result->natural_size;
+      return TRUE;
+    }
+  else
+    return FALSE;
+}
+

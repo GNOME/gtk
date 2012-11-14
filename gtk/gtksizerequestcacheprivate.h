@@ -76,6 +76,11 @@ void            _gtk_size_request_cache_commit                  (SizeRequestCach
                                                                  gint                    for_size,
                                                                  gint                    minimum_size,
                                                                  gint                    natural_size);
+gboolean        _gtk_size_request_cache_lookup                  (SizeRequestCache       *cache,
+                                                                 GtkSizeGroupMode        orientation,
+                                                                 gint                    for_size,
+                                                                 gint                   *minimum,
+                                                                 gint                   *natural);
 
 G_END_DECLS
 

@@ -83,64 +83,6 @@ pop_recursion_check (GtkWidget       *widget,
 #endif
 }
 
-
-/* looks for a cached size request for this for_size. If not
- * found, returns the oldest entry so it can be overwritten
- *
- * Note that this caching code was originally derived from
- * the Clutter toolkit but has evolved for other GTK+ requirements.
- */
-static gboolean
-get_cached_size (GtkWidget         *widget,
-		 GtkSizeGroupMode   orientation,
-		 gint               for_size,
-		 CachedSize       **result)
-{
-  SizeRequestCache  *cache;
-  SizeRequest      **cached_sizes;
-  guint              i, n_sizes;
-
-  cache = _gtk_widget_peek_request_cache (widget);
-
-  if (for_size < 0)
-    {
-      if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-	{
-	  *result = &cache->cached_width;
-	  return cache->cached_base_width;
-	}
-      else
-	{
-	  *result = &cache->cached_height;
-	  return cache->cached_base_height;
-	}
-    }
-
-  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-    {
-      cached_sizes = cache->widths;
-      n_sizes      = cache->cached_widths;
-    }
-  else
-    {
-      cached_sizes = cache->heights;
-      n_sizes      = cache->cached_heights;
-    }
-
-  /* Search for an already cached size */
-  for (i = 0; i < n_sizes; i++)
-    {
-      if (cached_sizes[i]->lower_for_size <= for_size &&
-	  cached_sizes[i]->upper_for_size >= for_size)
-	{
-	  *result = &cached_sizes[i]->cached_size;
-	  return TRUE;
-	}
-    }
-
-  return FALSE;
-}
-
 static const char *
 get_vfunc_name (GtkSizeGroupMode orientation,
                 gint             for_size)
@@ -158,13 +100,18 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                        gint             *minimum_size,
                                        gint             *natural_size)
 {
-  CachedSize *cached_size;
-  gboolean    found_in_cache = FALSE;
-  gint        min_size = 0;
-  gint        nat_size = 0;
+  SizeRequestCache *cache;
+  gint min_size = 0;
+  gint nat_size = 0;
+  gboolean found_in_cache;
 
-  found_in_cache = get_cached_size (widget, orientation, for_size, &cached_size);
-
+  cache = _gtk_widget_peek_request_cache (widget);
+  found_in_cache = _gtk_size_request_cache_lookup (cache,
+                                                   orientation,
+                                                   for_size,
+                                                   &min_size,
+                                                   &nat_size);
+  
   if (!found_in_cache)
     {
       gint adjusted_min, adjusted_natural, adjusted_for_size = for_size;
@@ -279,16 +226,11 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           nat_size = adjusted_natural;
         }
 
-      _gtk_size_request_cache_commit (_gtk_widget_peek_request_cache (widget),
+      _gtk_size_request_cache_commit (cache,
                                       orientation,
                                       for_size,
                                       min_size,
                                       nat_size);
-    }
-  else
-    {
-      min_size = cached_size->minimum_size;
-      nat_size = cached_size->natural_size;
     }
 
   if (minimum_size)
@@ -306,7 +248,6 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                      "width for height" : "height for width" ,
                      for_size, min_size, nat_size,
                      found_in_cache ? "yes" : "no"));
-
 }
 
 /* This is the main function that checks for a cached size and
