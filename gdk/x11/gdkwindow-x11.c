@@ -214,6 +214,70 @@ set_sync_counter(Display     *display,
 }
 
 static void
+window_pre_damage (GdkWindow *window)
+{
+  GdkWindow *toplevel_window = gdk_window_get_toplevel (window);
+  GdkWindowImplX11 *impl;
+
+  if (!toplevel_window || !WINDOW_IS_TOPLEVEL (toplevel_window))
+    return;
+
+  impl = GDK_WINDOW_IMPL_X11 (toplevel_window->impl);
+
+  if (impl->toplevel->in_frame &&
+      impl->toplevel->current_counter_value % 2 == 0)
+    {
+      impl->toplevel->current_counter_value += 1;
+      set_sync_counter(GDK_WINDOW_XDISPLAY (impl->wrapper),
+		       impl->toplevel->extended_update_counter,
+		       impl->toplevel->current_counter_value);
+    }
+}
+
+static void
+on_surface_changed (void *data)
+{
+  GdkWindow *window = data;
+
+  window_pre_damage (window);
+}
+
+/* We want to know when cairo drawing causes damage to the window,
+ * so we engage in the _NET_WM_FRAME_DRAWN protocol with the
+ * window only when there actually is drawing. To do that we use
+ * a technique (hack) suggested by Uli Schlachter - if we set
+ * a dummy "mime data" on the cairo surface (this facility is
+ * used to attach JPEG data to an imager), then cairo wil flush
+ * and remove the mime data before making any changes to the window.
+ */
+
+static void
+hook_surface_changed (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+  if (impl->cairo_surface)
+    cairo_surface_set_mime_data (impl->cairo_surface,
+                                 "x-gdk/change-notify",
+                                 (unsigned char *)"X",
+                                 1,
+                                 on_surface_changed,
+                                 window);
+}
+
+static void
+unhook_surface_changed (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+  if (impl->cairo_surface)
+    cairo_surface_set_mime_data (impl->cairo_surface,
+                                 "x-gdk/change-notify",
+                                 NULL, 0,
+                                 NULL, NULL);
+}
+
+static void
 gdk_x11_window_begin_frame (GdkWindow *window)
 {
   GdkWindowImplX11 *impl;
@@ -226,13 +290,9 @@ gdk_x11_window_begin_frame (GdkWindow *window)
       impl->toplevel->extended_update_counter == None)
     return;
 
-  if (impl->toplevel->current_counter_value % 2 == 0)
-    {
-      impl->toplevel->current_counter_value += 1;
-      set_sync_counter(GDK_WINDOW_XDISPLAY (impl->wrapper),
-		       impl->toplevel->extended_update_counter,
-		       impl->toplevel->current_counter_value);
-    }
+  impl->toplevel->in_frame = TRUE;
+
+  hook_surface_changed (window);
 }
 
 static void
@@ -245,8 +305,11 @@ gdk_x11_window_end_frame (GdkWindow *window)
   impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
   if (!WINDOW_IS_TOPLEVEL (window) ||
-      impl->toplevel->extended_update_counter == None)
+      impl->toplevel->extended_update_counter == None ||
+      !impl->toplevel->in_frame)
     return;
+
+  impl->toplevel->in_frame = FALSE;
 
   if (impl->toplevel->current_counter_value % 2 == 1)
     {
@@ -262,6 +325,8 @@ gdk_x11_window_end_frame (GdkWindow *window)
           gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
         }
     }
+
+  unhook_surface_changed (window);
 }
 
 /*****************************************************
@@ -307,6 +372,9 @@ gdk_x11_ref_cairo_surface (GdkWindow *window)
       if (impl->cairo_surface)
 	cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
 				     impl, gdk_x11_cairo_surface_destroy);
+
+      if (WINDOW_IS_TOPLEVEL (window) && impl->toplevel->in_frame)
+        hook_surface_changed (window);
     }
   else
     cairo_surface_reference (impl->cairo_surface);
@@ -325,6 +393,9 @@ gdk_window_impl_x11_finalize (GObject *object)
   impl = GDK_WINDOW_IMPL_X11 (object);
 
   wrapper = impl->wrapper;
+
+  if (WINDOW_IS_TOPLEVEL (wrapper) && impl->toplevel->in_frame)
+    unhook_surface_changed (wrapper);
 
   _gdk_x11_window_grab_check_destroy (wrapper);
 
@@ -1569,6 +1640,8 @@ window_x11_move (GdkWindow *window,
 
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
     {
+      /* The window isn't actually damaged, but it's parent is */
+      window_pre_damage (window);
       _gdk_x11_window_move_resize_child (window,
                                          x, y,
                                          window->width, window->height);
@@ -1597,6 +1670,8 @@ window_x11_resize (GdkWindow *window,
 
   if (height < 1)
     height = 1;
+
+  window_pre_damage (window);
 
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
     {
@@ -1640,6 +1715,8 @@ window_x11_move_resize (GdkWindow *window,
 
   if (height < 1)
     height = 1;
+
+  window_pre_damage (window);
 
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
     {
