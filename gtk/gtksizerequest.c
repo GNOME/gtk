@@ -38,7 +38,7 @@ static GQuark recursion_check_quark = 0;
 
 static void
 push_recursion_check (GtkWidget       *widget,
-                      GtkSizeGroupMode orientation,
+                      GtkOrientation   orientation,
                       gint             for_size)
 {
 #ifndef G_DISABLE_CHECKS
@@ -50,7 +50,7 @@ push_recursion_check (GtkWidget       *widget,
 
   previous_method = g_object_get_qdata (G_OBJECT (widget), recursion_check_quark);
 
-  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       method = for_size < 0 ? "get_width" : "get_width_for_height";
     }
@@ -76,7 +76,7 @@ push_recursion_check (GtkWidget       *widget,
 
 static void
 pop_recursion_check (GtkWidget       *widget,
-                     GtkSizeGroupMode orientation)
+                     GtkOrientation   orientation)
 {
 #ifndef G_DISABLE_CHECKS
   g_object_set_qdata (G_OBJECT (widget), recursion_check_quark, NULL);
@@ -84,10 +84,10 @@ pop_recursion_check (GtkWidget       *widget,
 }
 
 static const char *
-get_vfunc_name (GtkSizeGroupMode orientation,
-                gint             for_size)
+get_vfunc_name (GtkOrientation orientation,
+                gint           for_size)
 {
-  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     return for_size < 0 ? "get_preferred_width" : "get_preferred_width_for_height";
   else
     return for_size < 0 ? "get_preferred_height" : "get_preferred_height_for_width";
@@ -95,7 +95,7 @@ get_vfunc_name (GtkSizeGroupMode orientation,
 
 static void
 gtk_widget_query_size_for_orientation (GtkWidget        *widget,
-                                       GtkSizeGroupMode  orientation,
+                                       GtkOrientation    orientation,
                                        gint              for_size,
                                        gint             *minimum_size,
                                        gint             *natural_size)
@@ -118,7 +118,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 
       gtk_widget_ensure_style (widget);
 
-      if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           if (for_size < 0 || gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
             {
@@ -194,9 +194,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
       adjusted_min     = min_size;
       adjusted_natural = nat_size;
       GTK_WIDGET_GET_CLASS (widget)->adjust_size_request (widget,
-                                                          orientation == GTK_SIZE_GROUP_HORIZONTAL ?
-                                                          GTK_ORIENTATION_HORIZONTAL :
-                                                          GTK_ORIENTATION_VERTICAL,
+                                                          orientation,
                                                           &adjusted_min,
                                                           &adjusted_natural);
 
@@ -205,7 +203,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
         {
           g_warning ("%s %p adjusted size %s min %d natural %d must not decrease below min %d natural %d",
                      G_OBJECT_TYPE_NAME (widget), widget,
-                     orientation == GTK_SIZE_GROUP_VERTICAL ? "vertical" : "horizontal",
+                     orientation == GTK_ORIENTATION_VERTICAL ? "vertical" : "horizontal",
                      adjusted_min, adjusted_natural,
                      min_size, nat_size);
           /* don't use the adjustment */
@@ -214,7 +212,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
         {
           g_warning ("%s %p adjusted size %s min %d natural %d original min %d natural %d has min greater than natural",
                      G_OBJECT_TYPE_NAME (widget), widget,
-                     orientation == GTK_SIZE_GROUP_VERTICAL ? "vertical" : "horizontal",
+                     orientation == GTK_ORIENTATION_VERTICAL ? "vertical" : "horizontal",
                      adjusted_min, adjusted_natural,
                      min_size, nat_size);
           /* don't use the adjustment */
@@ -244,7 +242,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
   GTK_NOTE (SIZE_REQUEST,
             g_print ("[%p] %s\t%s: %d is minimum %d and natural: %d (hit cache: %s)\n",
                      widget, G_OBJECT_TYPE_NAME (widget),
-                     orientation == GTK_SIZE_GROUP_HORIZONTAL ?
+                     orientation == GTK_ORIENTATION_HORIZONTAL ?
                      "width for height" : "height for width" ,
                      for_size, min_size, nat_size,
                      found_in_cache ? "yes" : "no"));
@@ -257,7 +255,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
  */
 void
 _gtk_widget_compute_size_for_orientation (GtkWidget        *widget,
-                                          GtkSizeGroupMode  mode,
+                                          GtkOrientation    orientation,
                                           gint              for_size,
                                           gint             *minimum,
                                           gint             *natural)
@@ -269,11 +267,11 @@ _gtk_widget_compute_size_for_orientation (GtkWidget        *widget,
 
   if (G_LIKELY (!_gtk_widget_get_sizegroups (widget)))
     {
-      gtk_widget_query_size_for_orientation (widget, mode, for_size, minimum, natural);
+      gtk_widget_query_size_for_orientation (widget, orientation, for_size, minimum, natural);
       return;
     }
 
-  widgets = _gtk_size_group_get_widget_peers (widget, mode);
+  widgets = _gtk_size_group_get_widget_peers (widget, orientation);
 
   g_hash_table_foreach (widgets, (GHFunc) g_object_ref, NULL);
   
@@ -283,7 +281,7 @@ _gtk_widget_compute_size_for_orientation (GtkWidget        *widget,
       GtkWidget *tmp_widget = key;
       gint min_dimension, nat_dimension;
 
-      gtk_widget_query_size_for_orientation (tmp_widget, mode, for_size, &min_dimension, &nat_dimension);
+      gtk_widget_query_size_for_orientation (tmp_widget, orientation, for_size, &min_dimension, &nat_dimension);
 
       min_result = MAX (min_result, min_dimension);
       nat_result = MAX (nat_result, nat_dimension);
@@ -362,7 +360,7 @@ gtk_widget_get_preferred_width (GtkWidget *widget,
   g_return_if_fail (minimum_width != NULL || natural_width != NULL);
 
   _gtk_widget_compute_size_for_orientation (widget,
-                                            GTK_SIZE_GROUP_HORIZONTAL,
+                                            GTK_ORIENTATION_HORIZONTAL,
                                             -1,
                                             minimum_width,
                                             natural_width);
@@ -396,7 +394,7 @@ gtk_widget_get_preferred_height (GtkWidget *widget,
   g_return_if_fail (minimum_height != NULL || natural_height != NULL);
 
   _gtk_widget_compute_size_for_orientation (widget,
-                                            GTK_SIZE_GROUP_VERTICAL,
+                                            GTK_ORIENTATION_VERTICAL,
                                             -1,
                                             minimum_height,
                                             natural_height);
@@ -433,7 +431,7 @@ gtk_widget_get_preferred_width_for_height (GtkWidget *widget,
   g_return_if_fail (height >= 0);
 
   _gtk_widget_compute_size_for_orientation (widget,
-                                            GTK_SIZE_GROUP_HORIZONTAL,
+                                            GTK_ORIENTATION_HORIZONTAL,
                                             height,
                                             minimum_width,
                                             natural_width);
@@ -468,7 +466,7 @@ gtk_widget_get_preferred_height_for_width (GtkWidget *widget,
   g_return_if_fail (width >= 0);
 
   _gtk_widget_compute_size_for_orientation (widget,
-                                            GTK_SIZE_GROUP_VERTICAL,
+                                            GTK_ORIENTATION_VERTICAL,
                                             width,
                                             minimum_height,
                                             natural_height);

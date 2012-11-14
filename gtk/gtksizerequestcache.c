@@ -60,11 +60,11 @@ _gtk_size_request_cache_clear (SizeRequestCache *cache)
 }
 
 void
-_gtk_size_request_cache_commit (SizeRequestCache  *cache,
-                                GtkSizeGroupMode   orientation,
-                                gint               for_size,
-                                gint               minimum_size,
-                                gint               natural_size)
+_gtk_size_request_cache_commit (SizeRequestCache *cache,
+                                GtkOrientation    orientation,
+                                gint              for_size,
+                                gint              minimum_size,
+                                gint              natural_size)
 {
   SizeRequest      **cached_sizes;
   guint              i, n_sizes;
@@ -72,7 +72,7 @@ _gtk_size_request_cache_commit (SizeRequestCache  *cache,
   /* First handle caching of the base requests */
   if (for_size < 0)
     {
-      if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
 	  cache->cached_width.minimum_size = minimum_size;
 	  cache->cached_width.natural_size = natural_size;
@@ -91,7 +91,7 @@ _gtk_size_request_cache_commit (SizeRequestCache  *cache,
    * in the cache and if this result can be used to extend
    * that cache entry 
    */
-  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       cached_sizes = cache->widths;
       n_sizes = cache->cached_widths;
@@ -116,7 +116,7 @@ _gtk_size_request_cache_commit (SizeRequestCache  *cache,
   /* If not found, pull a new size from the cache, the returned size cache
    * will immediately be used to cache the new computed size so we go ahead
    * and increment the last_cached_width/height right away */
-  if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (cache->cached_widths < GTK_SIZE_REQUEST_CACHED_SIZES)
 	{
@@ -140,7 +140,7 @@ _gtk_size_request_cache_commit (SizeRequestCache  *cache,
       cache->widths[cache->last_cached_width]->cached_size.minimum_size = minimum_size;
       cache->widths[cache->last_cached_width]->cached_size.natural_size = natural_size;
     }
-  else /* GTK_SIZE_GROUP_VERTICAL */
+  else /* GTK_ORIENTATION_VERTICAL */
     {
       if (cache->cached_heights < GTK_SIZE_REQUEST_CACHED_SIZES)
 	{
@@ -173,7 +173,7 @@ _gtk_size_request_cache_commit (SizeRequestCache  *cache,
  */
 gboolean
 _gtk_size_request_cache_lookup (SizeRequestCache *cache,
-                                GtkSizeGroupMode  orientation,
+                                GtkOrientation    orientation,
                                 gint              for_size,
                                 gint             *minimum,
                                 gint             *natural)
@@ -182,7 +182,7 @@ _gtk_size_request_cache_lookup (SizeRequestCache *cache,
 
   if (for_size < 0)
     {
-      if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
           if (cache->cached_base_width)
 	    result = &cache->cached_width;
@@ -198,7 +198,7 @@ _gtk_size_request_cache_lookup (SizeRequestCache *cache,
       SizeRequest      **cached_sizes;
       guint              i, n_sizes;
 
-      if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           cached_sizes = cache->widths;
           n_sizes      = cache->cached_widths;

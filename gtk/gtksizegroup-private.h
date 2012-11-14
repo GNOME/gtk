@@ -38,7 +38,7 @@ typedef enum
 } GtkQueueResizeFlags;
 
 GHashTable * _gtk_size_group_get_widget_peers (GtkWidget           *for_widget,
-                                               GtkSizeGroupMode     mode);
+                                               GtkOrientation       orientation);
 void _gtk_size_group_queue_resize             (GtkWidget           *widget,
                                                GtkQueueResizeFlags  flags);
 

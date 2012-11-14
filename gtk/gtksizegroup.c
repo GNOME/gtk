@@ -148,9 +148,9 @@ static void gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
 						      gpointer       user_data);
 
 static void
-add_widget_to_closure (GHashTable       *set,
-                       GtkWidget        *widget,
-		       GtkSizeGroupMode  mode)
+add_widget_to_closure (GHashTable     *set,
+                       GtkWidget      *widget,
+		       GtkOrientation  orientation)
 {
   GSList *tmp_groups, *tmp_widgets;
   gboolean hidden;
@@ -169,23 +169,25 @@ add_widget_to_closure (GHashTable       *set,
       if (tmp_priv->ignore_hidden && hidden)
         continue;
 
-      if (tmp_priv->mode != GTK_SIZE_GROUP_BOTH && tmp_priv->mode != mode)
+      if (tmp_priv->mode != GTK_SIZE_GROUP_BOTH &&
+          (!(tmp_priv->mode == GTK_SIZE_GROUP_HORIZONTAL && orientation == GTK_ORIENTATION_HORIZONTAL)) &&
+          (!(tmp_priv->mode == GTK_SIZE_GROUP_VERTICAL && orientation == GTK_ORIENTATION_VERTICAL)))
         continue;
 
       for (tmp_widgets = tmp_priv->widgets; tmp_widgets; tmp_widgets = tmp_widgets->next)
-        add_widget_to_closure (set, tmp_widgets->data, mode);
+        add_widget_to_closure (set, tmp_widgets->data, orientation);
     }
 }
 
 GHashTable *
-_gtk_size_group_get_widget_peers (GtkWidget        *for_widget,
-                                  GtkSizeGroupMode  mode)
+_gtk_size_group_get_widget_peers (GtkWidget      *for_widget,
+                                  GtkOrientation  orientation)
 {
   GHashTable *result;
 
   result = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  add_widget_to_closure (result, for_widget, mode);
+  add_widget_to_closure (result, for_widget, orientation);
 
   return result;
 }
@@ -244,7 +246,7 @@ queue_resize_on_widget (GtkWidget          *widget,
 	  continue;
 	}
 
-      widgets = _gtk_size_group_get_widget_peers (parent, GTK_SIZE_GROUP_HORIZONTAL);
+      widgets = _gtk_size_group_get_widget_peers (parent, GTK_ORIENTATION_HORIZONTAL);
 
       g_hash_table_iter_init (&iter, widgets);
       while (g_hash_table_iter_next (&iter, &current, NULL))
@@ -264,7 +266,7 @@ queue_resize_on_widget (GtkWidget          *widget,
       
       g_hash_table_destroy (widgets);
       
-      widgets = _gtk_size_group_get_widget_peers (parent, GTK_SIZE_GROUP_VERTICAL);
+      widgets = _gtk_size_group_get_widget_peers (parent, GTK_ORIENTATION_VERTICAL);
 
       g_hash_table_iter_init (&iter, widgets);
       while (g_hash_table_iter_next (&iter, &current, NULL))

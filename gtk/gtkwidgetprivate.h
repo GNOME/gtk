@@ -66,7 +66,7 @@ void _gtk_widget_restore_size_request  (GtkWidget *widget,
                                         int        old_width,
                                         int        old_height);
 void _gtk_widget_compute_size_for_orientation  (GtkWidget         *widget,
-                                                GtkSizeGroupMode   orientation,
+                                                GtkOrientation     orientation,
                                                 gint               for_size,
                                                 gint              *minimum_size,
                                                 gint              *natural_size);
