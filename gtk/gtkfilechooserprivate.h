@@ -166,6 +166,7 @@ struct _GtkFileChooserDefault
 
   /* The file browsing widgets */
   GtkWidget *browse_widgets_box;
+  GtkWidget *browse_widgets_hpaned;
   GtkWidget *browse_header_box;
   GtkWidget *browse_shortcuts_tree_view;
   GtkWidget *browse_shortcuts_add_button;

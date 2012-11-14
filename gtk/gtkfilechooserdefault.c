@@ -264,6 +264,7 @@ typedef enum {
 #define SETTINGS_KEY_SORT_ORDER          "sort-order"
 #define SETTINGS_KEY_WINDOW_POSITION     "window-position"
 #define SETTINGS_KEY_WINDOW_SIZE         "window-size"
+#define SETTINGS_KEY_SIDEBAR_WIDTH       "sidebar-width"
 
 static void gtk_file_chooser_default_iface_init       (GtkFileChooserIface        *iface);
 static void gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface   *iface);
@@ -5057,7 +5058,7 @@ browse_widgets_create (GtkFileChooserDefault *impl)
 
   /* Paned widget */
 
-  hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
+  hpaned = impl->browse_widgets_hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_widget_show (hpaned);
   gtk_box_pack_start (GTK_BOX (impl->browse_widgets_box), hpaned, TRUE, TRUE, 0);
 
@@ -5065,7 +5066,6 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   gtk_paned_pack1 (GTK_PANED (hpaned), widget, FALSE, FALSE);
   widget = file_pane_create (impl, size_group);
   gtk_paned_pack2 (GTK_PANED (hpaned), widget, TRUE, FALSE);
-  gtk_paned_set_position (GTK_PANED (hpaned), 148);
   g_object_unref (size_group);
 }
 
@@ -6037,6 +6037,7 @@ settings_load (GtkFileChooserDefault *impl)
   gboolean show_size_column;
   gint sort_column;
   GtkSortType sort_order;
+  gint sidebar_width;
 
   settings_ensure (impl);
 
@@ -6045,6 +6046,7 @@ settings_load (GtkFileChooserDefault *impl)
   show_size_column = g_settings_get_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN);
   sort_column = g_settings_get_enum (impl->settings, SETTINGS_KEY_SORT_COLUMN);
   sort_order = g_settings_get_enum (impl->settings, SETTINGS_KEY_SORT_ORDER);
+  sidebar_width = g_settings_get_int (impl->settings, SETTINGS_KEY_SIDEBAR_WIDTH);
 
   location_mode_set (impl, location_mode, TRUE);
 
@@ -6059,6 +6061,8 @@ settings_load (GtkFileChooserDefault *impl)
    * created yet.  The individual functions that create and set the models will
    * call set_sort_column() themselves.
    */
+
+  gtk_paned_set_position (GTK_PANED (impl->browse_widgets_hpaned), sidebar_width);
 }
 
 static void
@@ -6106,6 +6110,8 @@ settings_save (GtkFileChooserDefault *impl)
   g_settings_set_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN, impl->show_size_column);
   g_settings_set_enum (impl->settings, SETTINGS_KEY_SORT_COLUMN, impl->sort_column);
   g_settings_set_enum (impl->settings, SETTINGS_KEY_SORT_ORDER, impl->sort_order);
+  g_settings_set_int (impl->settings, SETTINGS_KEY_SIDEBAR_WIDTH,
+                     gtk_paned_get_position (GTK_PANED (impl->browse_widgets_hpaned)));
 
   save_dialog_geometry (impl);
 
