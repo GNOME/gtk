@@ -45,10 +45,13 @@ free_sizes (SizeRequest **sizes)
 void
 _gtk_size_request_cache_free (SizeRequestCache *cache)
 {
-  if (cache->widths)
-    free_sizes (cache->widths);
-  if (cache->heights)
-    free_sizes (cache->heights);
+  guint i;
+
+  for (i = 0; i < 2; i++)
+    {
+      if (cache->requests[i])
+        free_sizes (cache->requests[i]);
+    }
 }
 
 void
@@ -66,8 +69,9 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
                                 gint              minimum_size,
                                 gint              natural_size)
 {
-  SizeRequest      **cached_sizes;
-  guint              i, n_sizes;
+  SizeRequest **cached_sizes;
+  SizeRequest  *cached_size;
+  guint         i, n_sizes;
 
   /* First handle caching of the base requests */
   if (for_size < 0)
@@ -82,16 +86,8 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
    * in the cache and if this result can be used to extend
    * that cache entry 
    */
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      cached_sizes = cache->widths;
-      n_sizes = cache->cached_widths;
-    }
-  else
-    {
-      cached_sizes = cache->heights;
-      n_sizes = cache->cached_heights;
-    }
+  cached_sizes = cache->requests[orientation];
+  n_sizes = cache->flags[orientation].n_cached_requests;
 
   for (i = 0; i < n_sizes; i++)
     {
@@ -106,55 +102,29 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
 
   /* If not found, pull a new size from the cache, the returned size cache
    * will immediately be used to cache the new computed size so we go ahead
-   * and increment the last_cached_width/height right away */
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+   * and increment the last_cached_request right away */
+  if (n_sizes < GTK_SIZE_REQUEST_CACHED_SIZES)
     {
-      if (cache->cached_widths < GTK_SIZE_REQUEST_CACHED_SIZES)
-	{
-	  cache->cached_widths++;
-	  cache->last_cached_width = cache->cached_widths - 1;
-	}
-      else
-	{
-	  if (++cache->last_cached_width == GTK_SIZE_REQUEST_CACHED_SIZES)
-	    cache->last_cached_width = 0;
-	}
-
-      if (!cache->widths)
-	cache->widths = g_slice_alloc0 (sizeof (SizeRequest *) * GTK_SIZE_REQUEST_CACHED_SIZES);
-
-      if (!cache->widths[cache->last_cached_width])
-	cache->widths[cache->last_cached_width] = g_slice_new (SizeRequest);
-
-      cache->widths[cache->last_cached_width]->lower_for_size = for_size;
-      cache->widths[cache->last_cached_width]->upper_for_size = for_size;
-      cache->widths[cache->last_cached_width]->cached_size.minimum_size = minimum_size;
-      cache->widths[cache->last_cached_width]->cached_size.natural_size = natural_size;
+      cache->flags[orientation].n_cached_requests++;
+      cache->flags[orientation].last_cached_request = cache->flags[orientation].n_cached_requests - 1;
     }
-  else /* GTK_ORIENTATION_VERTICAL */
+  else
     {
-      if (cache->cached_heights < GTK_SIZE_REQUEST_CACHED_SIZES)
-	{
-	  cache->cached_heights++;
-	  cache->last_cached_height = cache->cached_heights - 1;
-	}
-      else
-	{
-	  if (++cache->last_cached_height == GTK_SIZE_REQUEST_CACHED_SIZES)
-	    cache->last_cached_height = 0;
-	}
-
-      if (!cache->heights)
-	cache->heights = g_slice_alloc0 (sizeof (SizeRequest *) * GTK_SIZE_REQUEST_CACHED_SIZES);
-
-      if (!cache->heights[cache->last_cached_height])
-	cache->heights[cache->last_cached_height] = g_slice_new (SizeRequest);
-
-      cache->heights[cache->last_cached_height]->lower_for_size = for_size;
-      cache->heights[cache->last_cached_height]->upper_for_size = for_size;
-      cache->heights[cache->last_cached_height]->cached_size.minimum_size = minimum_size;
-      cache->heights[cache->last_cached_height]->cached_size.natural_size = natural_size;
+      if (++cache->flags[orientation].last_cached_request == GTK_SIZE_REQUEST_CACHED_SIZES)
+        cache->flags[orientation].last_cached_request = 0;
     }
+
+  if (cache->requests[orientation] == NULL)
+    cache->requests[orientation] = g_slice_alloc0 (sizeof (SizeRequest *) * GTK_SIZE_REQUEST_CACHED_SIZES);
+
+  if (cache->requests[orientation][cache->flags[orientation].last_cached_request] == NULL)
+    cache->requests[orientation][cache->flags[orientation].last_cached_request] = g_slice_new (SizeRequest);
+
+  cached_size = cache->requests[orientation][cache->flags[orientation].last_cached_request];
+  cached_size->lower_for_size = for_size;
+  cached_size->upper_for_size = for_size;
+  cached_size->cached_size.minimum_size = minimum_size;
+  cached_size->cached_size.natural_size = natural_size;
 }
 
 /* looks for a cached size request for this for_size.
@@ -178,27 +148,17 @@ _gtk_size_request_cache_lookup (SizeRequestCache *cache,
     }
   else
     {
-      SizeRequest      **cached_sizes;
-      guint              i, n_sizes;
-
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        {
-          cached_sizes = cache->widths;
-          n_sizes      = cache->cached_widths;
-        }
-      else
-        {
-          cached_sizes = cache->heights;
-          n_sizes      = cache->cached_heights;
-        }
+      guint i;
 
       /* Search for an already cached size */
-      for (i = 0; i < n_sizes; i++)
+      for (i = 0; i < cache->flags[orientation].n_cached_requests; i++)
         {
-          if (cached_sizes[i]->lower_for_size <= for_size &&
-              cached_sizes[i]->upper_for_size >= for_size)
+          SizeRequest *cur = cache->requests[orientation][i];
+
+          if (cur->lower_for_size <= for_size &&
+              cur->upper_for_size >= for_size)
             {
-              result = &cached_sizes[i]->cached_size;
+              result = &cur->cached_size;
               break;
             }
         }
