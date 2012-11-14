@@ -3180,7 +3180,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
       _gtk_bitmask_free (animation_changes);
     }
 
-  if (!_gtk_bitmask_is_empty (changes))
+  if (!_gtk_bitmask_is_empty (changes) || (change & GTK_CSS_CHANGE_FORCE_INVALIDATE))
     gtk_style_context_do_invalidate (context);
 
   change = _gtk_css_change_for_child (change);
