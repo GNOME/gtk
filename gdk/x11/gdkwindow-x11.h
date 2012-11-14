@@ -127,6 +127,8 @@ struct _GdkToplevelX11
    */
   guint have_focused : 1;
 
+  guint in_frame : 1;
+
   /* If we're expecting a response from the compositor after painting a frame */
   guint frame_pending : 1;
   
