@@ -72,18 +72,9 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
   /* First handle caching of the base requests */
   if (for_size < 0)
     {
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	{
-	  cache->cached_width.minimum_size = minimum_size;
-	  cache->cached_width.natural_size = natural_size;
-	  cache->cached_base_width = TRUE;
-	}
-      else
-	{
-	  cache->cached_height.minimum_size = minimum_size;
-	  cache->cached_height.natural_size = natural_size;
-	  cache->cached_base_height = TRUE;
-	}
+      cache->cached_size[orientation].minimum_size = minimum_size;
+      cache->cached_size[orientation].natural_size = natural_size;
+      cache->flags[orientation].cached_size_valid = TRUE;
       return;
     }
 
@@ -182,16 +173,8 @@ _gtk_size_request_cache_lookup (SizeRequestCache *cache,
 
   if (for_size < 0)
     {
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	{
-          if (cache->cached_base_width)
-	    result = &cache->cached_width;
-	}
-      else
-	{
-	  if (cache->cached_base_height)
-	    result = &cache->cached_height;
-	}
+      if (cache->flags[orientation].cached_size_valid)
+	result = &cache->cached_size[orientation];
     }
   else
     {

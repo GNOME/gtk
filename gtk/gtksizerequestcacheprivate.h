@@ -54,8 +54,7 @@ typedef struct {
   SizeRequest **widths;
   SizeRequest **heights;
 
-  CachedSize  cached_width;
-  CachedSize  cached_height;
+  CachedSize  cached_size[2];
 
   GtkSizeRequestMode request_mode: 3;
   guint       request_mode_valid : 1;
@@ -63,8 +62,9 @@ typedef struct {
   guint       cached_heights     : 3;
   guint       last_cached_width  : 3;
   guint       last_cached_height : 3;
-  guint       cached_base_width  : 1;
-  guint       cached_base_height : 1;
+  struct {
+    guint       cached_size_valid  : 1;
+  }           flags[2];
 } SizeRequestCache;
 
 void            _gtk_size_request_cache_init                    (SizeRequestCache       *cache);
