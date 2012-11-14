@@ -853,7 +853,17 @@ static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
                             GdkWindow     *window)
 {
+  GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
+  GdkFrameHistory *history = gdk_frame_clock_get_history (clock);
+  gint64 frame_counter = gdk_frame_history_get_frame_counter (history);
+  GdkFrameTimings *timings = gdk_frame_history_get_timings (history, frame_counter);
+
   gdk_x11_window_end_frame (window);
+
+  if (toplevel->frame_pending)
+    gdk_frame_timings_set_cookie (timings, toplevel->current_counter_value);
+  else
+    gdk_frame_timings_set_complete (timings, TRUE);
 }
 
 void

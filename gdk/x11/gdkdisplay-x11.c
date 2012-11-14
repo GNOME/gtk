@@ -1056,6 +1056,26 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   return return_val;
 }
 
+static GdkFrameTimings *
+find_frame_timings (GdkFrameClock *clock,
+                    guint64        serial)
+{
+  GdkFrameHistory *history = gdk_frame_clock_get_history (clock);
+  gint64 start_frame, end_frame, i;
+
+  start_frame = gdk_frame_history_get_start (history);
+  end_frame = gdk_frame_history_get_frame_counter (history);
+  for (i = end_frame; i >= start_frame; i--)
+    {
+      GdkFrameTimings *timings = gdk_frame_history_get_timings (history, i);
+
+      if (gdk_frame_timings_get_cookie (timings) == serial)
+        return timings;
+    }
+
+  return NULL;
+}
+
 GdkFilterReturn
 _gdk_wm_protocols_filter (GdkXEvent *xev,
 			  GdkEvent  *event,
@@ -1073,6 +1093,71 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
     return GDK_FILTER_CONTINUE;
 
   display = GDK_WINDOW_DISPLAY (win);
+
+  /* This isn't actually WM_PROTOCOLS because that wouldn't leave enough space
+   * in the message for everything that gets stuffed in */
+  if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_FRAME_DRAWN"))
+    {
+      GdkWindowImplX11 *window_impl;
+      window_impl = GDK_WINDOW_IMPL_X11 (event->any.window->impl);
+      if (window_impl->toplevel)
+        {
+          guint32 d0 = xevent->xclient.data.l[0];
+          guint32 d1 = xevent->xclient.data.l[1];
+          guint32 d2 = xevent->xclient.data.l[2];
+          guint32 d3 = xevent->xclient.data.l[3];
+
+          guint64 serial = ((guint64)d0 << 32) | d1;
+
+          GdkFrameClock *clock = gdk_window_get_frame_clock (event->any.window);
+          GdkFrameTimings *timings = find_frame_timings (clock, serial);
+
+          if (timings)
+            gdk_frame_timings_set_drawn_time (timings, ((guint64)d2 << 32) | d3);
+
+          if (window_impl->toplevel->frame_pending)
+            {
+              window_impl->toplevel->frame_pending = FALSE;
+              gdk_frame_clock_thaw (clock);
+            }
+        }
+
+      return GDK_FILTER_REMOVE;
+    }
+
+  if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_FRAME_TIMINGS"))
+    {
+      GdkWindowImplX11 *window_impl;
+      window_impl = GDK_WINDOW_IMPL_X11 (event->any.window->impl);
+      if (window_impl->toplevel)
+        {
+          guint32 d0 = xevent->xclient.data.l[0];
+          guint32 d1 = xevent->xclient.data.l[1];
+          guint32 d2 = xevent->xclient.data.l[2];
+          guint32 d3 = xevent->xclient.data.l[3];
+
+          guint64 serial = ((guint64)d0 << 32) | d1;
+
+          GdkFrameClock *clock = gdk_window_get_frame_clock (event->any.window);
+          GdkFrameTimings *timings = find_frame_timings (clock, serial);
+
+          if (timings)
+            {
+              gint64 drawn_time = gdk_frame_timings_get_drawn_time (timings);
+              gint32 presentation_time_offset = (gint32)d2;
+              gint32 refresh_interval = d3;
+
+              if (drawn_time && presentation_time_offset)
+                gdk_frame_timings_set_presentation_time (timings,
+                                                         drawn_time + presentation_time_offset);
+
+              if (refresh_interval)
+                gdk_frame_timings_set_refresh_interval (timings, refresh_interval);
+
+              gdk_frame_timings_set_complete (timings, TRUE);
+            }
+        }
+    }
 
   if (xevent->xclient.message_type != gdk_x11_get_xatom_by_name_for_display (display, "WM_PROTOCOLS"))
     return GDK_FILTER_CONTINUE;
@@ -1142,21 +1227,6 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
 	  toplevel->pending_counter_value = xevent->xclient.data.l[2] + ((gint64)xevent->xclient.data.l[3] << 32);
 #endif
 	}
-      return GDK_FILTER_REMOVE;
-    }
-
-  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_FRAME_DRAWN"))
-    {
-      GdkWindowImplX11 *window_impl;
-
-      window_impl = GDK_WINDOW_IMPL_X11 (event->any.window->impl);
-      if (window_impl->toplevel &&
-          window_impl->toplevel->frame_pending)
-        {
-          window_impl->toplevel->frame_pending = FALSE;
-          gdk_frame_clock_thaw (gdk_window_get_frame_clock (event->any.window));
-        }
-
       return GDK_FILTER_REMOVE;
     }
 
