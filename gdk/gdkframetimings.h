@@ -45,6 +45,10 @@ gboolean         gdk_frame_timings_get_complete          (GdkFrameTimings *timin
 void             gdk_frame_timings_set_complete          (GdkFrameTimings *timings,
                                                           gboolean         complete);
 
+gboolean         gdk_frame_timings_get_slept_before      (GdkFrameTimings *timings);
+void             gdk_frame_timings_set_slept_before      (GdkFrameTimings *timings,
+                                                          gboolean         slept_before);
+
 gint64           gdk_frame_timings_get_frame_time        (GdkFrameTimings *timings);
 void             gdk_frame_timings_set_frame_time        (GdkFrameTimings *timings,
                                                           gint64           frame_time);
