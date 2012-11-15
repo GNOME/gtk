@@ -34,6 +34,29 @@
  * in a list which can be navigated, selected, and activated by the
  * user to perform application functions. A #GtkMenuItem can have a
  * submenu associated with it, allowing for nested hierarchical menus.
+ *
+ * <refsect2 id="GtkMenuShell-Terminology">
+ * <title>Terminology</title>
+ * <para>
+ * A menu item can be "selected", this means that it is displayed
+ * in the prelight state, and if it has a submenu, that submenu
+ * will be popped up.
+ *
+ * A menu is "active" when it is visible onscreen and the user
+ * is selecting from it. A menubar is not active until the user
+ * clicks on one of its menuitems. When a menu is active,
+ * passing the mouse over a submenu will pop it up.
+ *
+ * There is also is a concept of the current menu and a current
+ * menu item. The current menu item is the selected menu item
+ * that is furthest down in the hierarchy. (Every active menu shell
+ * does not necessarily contain a selected menu item, but if
+ * it does, then the parent menu shell must also contain
+ * a selected menu item.) The current menu is the menu that
+ * contains the current menu item. It will always have a GTK
+ * grab and receive all key presses.
+ * </para>
+ * </refsect2>
  */
 #include "config.h"
 
@@ -84,65 +107,6 @@ enum {
   PROP_0,
   PROP_TAKE_FOCUS
 };
-
-/* Terminology:
- * 
- * A menu item can be "selected", this means that it is displayed
- * in the prelight state, and if it has a submenu, that submenu
- * will be popped up. 
- * 
- * A menu is "active" when it is visible onscreen and the user
- * is selecting from it. A menubar is not active until the user
- * clicks on one of its menuitems. When a menu is active,
- * passing the mouse over a submenu will pop it up.
- *
- * menu_shell->active_menu_item, is however, not an "active"
- * menu item (there is no such thing) but rather, the selected
- * menu item in that MenuShell, if there is one.
- *
- * There is also is a concept of the current menu and a current
- * menu item. The current menu item is the selected menu item
- * that is furthest down in the hierarchy. (Every active menu_shell
- * does not necessarily contain a selected menu item, but if
- * it does, then menu_shell->parent_menu_shell must also contain
- * a selected menu item. The current menu is the menu that 
- * contains the current menu_item. It will always have a GTK
- * grab and receive all key presses.
- *
- *
- * Action signals:
- *
- *  ::move_current (GtkMenuDirection *dir)
- *     Moves the current menu item in direction 'dir':
- *
- *       GTK_MENU_DIR_PARENT: To the parent menu shell
- *       GTK_MENU_DIR_CHILD: To the child menu shell (if this item has
- *          a submenu.
- *       GTK_MENU_DIR_NEXT/PREV: To the next or previous item
- *          in this menu.
- * 
- *     As a a bit of a hack to get movement between menus and
- *     menubars working, if submenu_placement is different for
- *     the menu and its MenuShell then the following apply:
- * 
- *       - For 'parent' the current menu is not just moved to
- *         the parent, but moved to the previous entry in the parent
- *       - For 'child', if there is no child, then current is
- *         moved to the next item in the parent.
- *
- *    Note that the above explanation of ::move_current was written
- *    before menus and menubars had support for RTL flipping and
- *    different packing directions, and therefore only applies for
- *    when text direction and packing direction are both left-to-right.
- * 
- *  ::activate_current (GBoolean *force_hide)
- *     Activate the current item. If 'force_hide' is true, hide
- *     the current menu item always. Otherwise, only hide
- *     it if menu_item->klass->hide_on_activate is true.
- *
- *  ::cancel ()
- *     Cancels the current selection
- */
 
 
 static void gtk_menu_shell_set_property      (GObject           *object,
@@ -1588,6 +1552,26 @@ gtk_menu_shell_select_submenu_first (GtkMenuShell *menu_shell)
   return FALSE;
 }
 
+/* Moves the current menu item in direction 'direction':
+ *
+ * - GTK_MENU_DIR_PARENT: To the parent menu shell
+ * - GTK_MENU_DIR_CHILD: To the child menu shell (if this item has a submenu).
+ * - GTK_MENU_DIR_NEXT/PREV: To the next or previous item in this menu.
+ *
+ * As a bit of a hack to get movement between menus and
+ * menubars working, if submenu_placement is different for
+ * the menu and its MenuShell then the following apply:
+ *
+ * - For 'parent' the current menu is not just moved to
+ *   the parent, but moved to the previous entry in the parent
+ * - For 'child', if there is no child, then current is
+ *   moved to the next item in the parent.
+ *
+ * Note that the above explanation of ::move_current was written
+ * before menus and menubars had support for RTL flipping and
+ * different packing directions, and therefore only applies for
+ * when text direction and packing direction are both left-to-right.
+ */
 static void
 gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
                                   GtkMenuDirectionType  direction)
@@ -1678,6 +1662,10 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
     }
 }
 
+/* Activate the current item. If 'force_hide' is true, hide
+ * the current menu item always. Otherwise, only hide
+ * it if menu_item->klass->hide_on_activate is true.
+ */
 static void
 gtk_real_menu_shell_activate_current (GtkMenuShell *menu_shell,
                                       gboolean      force_hide)

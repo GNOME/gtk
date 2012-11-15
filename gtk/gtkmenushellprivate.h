@@ -36,7 +36,12 @@ typedef enum
 struct _GtkMenuShellPrivate
 {
   GList *children;
-  GtkWidget *active_menu_item;
+
+  GtkWidget *active_menu_item; /* This is not an "active" menu item
+                                * (there is no such thing) but rather,
+                                * the selected menu item in that MenuShell,
+                                * if there is one.
+                                */
   GtkWidget *parent_menu_shell;
   GtkMenuTracker *tracker;    // if bound to a GMenuModel
 
