@@ -274,6 +274,8 @@ struct _GtkBuilderPrivate
   GSList *signals;
   gchar *filename;
   gchar *resource_prefix;
+
+  GType ignore_type;
 };
 
 G_DEFINE_TYPE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
@@ -627,6 +629,10 @@ _gtk_builder_construct (GtkBuilder *builder,
 		   g_type_name (object_type));
       return NULL;
     }
+
+  /* Safeguard to avoid recursion if we are building a new type with builder */
+  if (object_type == builder->priv->ignore_type)
+    return NULL;
 
   gtk_builder_get_parameters (builder, info->object_type,
                               info->id,
@@ -2080,4 +2086,16 @@ _gtk_builder_get_absolute_filename (GtkBuilder *builder, const gchar *string)
   g_free (dirname);
   
   return filename;
+}
+
+void
+_gtk_builder_set_ignore_type (GtkBuilder *builder, GType ignore_type)
+{
+  builder->priv->ignore_type = ignore_type;
+}
+
+GType
+_gtk_builder_get_ignore_type (GtkBuilder *builder)
+{
+  return builder->priv->ignore_type;
 }

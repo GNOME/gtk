@@ -1682,6 +1682,8 @@ gtk_container_constructor (GType                  type,
         
       builder = gtk_builder_new ();
       gtk_builder_expose_object (builder, cpriv->tmpl_id, object);
+      /* Safeguard to avoid recursion */
+      _gtk_builder_set_ignore_type (builder, type);
 
       if (cpriv->tmpl_type == TMPL_STRING)
         ret = gtk_builder_add_from_string (builder, cpriv->tmpl, cpriv->tmpl_len, &error);

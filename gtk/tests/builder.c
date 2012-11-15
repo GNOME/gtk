@@ -2845,6 +2845,53 @@ test_template (void)
   test_template_real (TRUE);
 }
 
+static void
+test_inline_template ()
+{
+  GError *error = NULL;
+  GtkBuilder *builder;
+  const gchar buffer[] =
+    "<interface>\n"
+    "  <template class=\"MyGtkGrid\" parent=\"GtkGrid\" id=\"mygrid_tmpl\">\n"
+    "    <property name=\"visible\">True</property>\n"
+    "    <child>\n"
+    "      <object class=\"GtkLabel\" id=\"gridlabel\">\n"
+    "        <property name=\"visible\">True</property>\n"
+    "      </object>\n"
+    "   </child>\n"
+    "  </template>\n"
+    "</interface>\n"
+    "<interface>\n"
+    "  <object class=\"GtkWindow\" id=\"window\">"
+    "    <child>\n"
+    "      <object class=\"MyGtkGrid\" id=\"mygrid\">\n"
+    "        <property name=\"visible\">True</property>\n"
+    "      </object>\n"
+    "   </child>\n"
+    "  </object>\n"
+    "</interface>\n";
+
+  builder = gtk_builder_new ();
+
+  /* make sure the type we are trying to register does not exist */
+  g_assert (!g_type_from_name ("MyGtkGrid"));
+
+  gtk_builder_add_from_string (builder, buffer, -1, &error);
+
+  if (error) g_warning ("%s", error->message);
+  g_assert (error == NULL);
+
+  /* Check if new type was registered on the fly! */
+  g_assert (g_type_from_name ("MyGtkGrid"));
+
+  g_assert (GTK_IS_WINDOW (gtk_builder_get_object (builder, "window")));
+
+  /* Check if inline derived child was built */
+  g_assert (GTK_IS_GRID (gtk_builder_get_object (builder, "mygrid")));
+
+  g_object_unref (builder);
+}
+
 static GObject *external_object = NULL, *external_object_swapped = NULL;
 
 void
@@ -2944,6 +2991,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/GMenu", test_gmenu);
   g_test_add_func ("/Builder/LevelBar", test_level_bar);
   g_test_add_func ("/Builder/Template", test_template);
+  g_test_add_func ("/Builder/Inline Template", test_inline_template);
   g_test_add_func ("/Builder/Expose Object", test_expose_object);
 
   return g_test_run();

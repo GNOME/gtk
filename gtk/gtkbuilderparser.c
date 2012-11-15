@@ -29,7 +29,7 @@
 #include "gtkversion.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
-
+#include "gtkcontainer.h"
 
 static void free_property_info (PropertyInfo *info);
 static void free_object_info (ObjectInfo *info);
@@ -216,6 +216,13 @@ builder_construct (ParserData  *data,
   if (object_info->object)
     return object_info->object;
 
+  /* Safeguard to avoid recursion if we are building a new type with builder
+   * _gtk_builder_construct() also checks for this, but there is no need to
+   * reverse the property list if we are not going to build the object.
+   */
+  if (object_info->object_type == _gtk_builder_get_ignore_type (data->builder))
+    return NULL;
+  
   object_info->properties = g_slist_reverse (object_info->properties);
 
   object = _gtk_builder_construct (data->builder, object_info, error);
@@ -674,6 +681,150 @@ parse_signal (ParserData   *data,
   info->tag.name = element_name;
 }
 
+typedef struct
+{
+  const gchar *tmpl_class, *tmpl_id;
+
+  gboolean tmpl_found, done;
+  
+  GString *xml;
+} TemplateParseData;
+
+static void
+extract_template_start_element (GMarkupParseContext  *context,
+                                const gchar          *element_name,
+                                const gchar         **attribute_names,
+                                const gchar         **attribute_values,
+                                gpointer              user_data,
+                                GError              **error)
+{
+  TemplateParseData *state = user_data;
+  gint i;
+
+  if (state->done) return;
+  
+  if (g_strcmp0 (element_name, "template") == 0)
+    {
+      gboolean right_class = FALSE, right_id = FALSE;
+
+      for (i = 0; attribute_names[i]; i++)
+        {
+          if (!g_strcmp0 (attribute_names[i], "class"))
+            right_class = (g_strcmp0 (attribute_values[i], state->tmpl_class) == 0);
+	  else if (!g_strcmp0 (attribute_names[i], "id"))
+	    right_id = (g_strcmp0 (attribute_values[i], state->tmpl_id) == 0);
+        }
+
+      if (right_class && right_id)
+        state->tmpl_found = TRUE;
+    }
+
+  g_string_append_printf (state->xml, "<%s", element_name);
+  for (i = 0; attribute_names[i]; i++)
+    {
+      g_string_append_printf (state->xml, " %s=\"%s\"", 
+                              attribute_names[i], attribute_values[i]);
+    }
+  g_string_append_printf (state->xml, ">");
+}
+
+static void
+extract_template_end_element (GMarkupParseContext *context,
+                              const gchar         *element_name,
+                              gpointer             user_data,
+                              GError             **error)
+{
+  TemplateParseData *state = user_data;
+
+  if (state->done) return;
+  
+  g_string_append_printf (state->xml, "</%s>", element_name);
+
+  if (g_strcmp0 (element_name, "interface") == 0 && state->tmpl_found)
+    state->done = TRUE;
+}
+
+static void
+extract_template_text (GMarkupParseContext *context,
+                       const gchar         *text,
+                       gsize                text_len,
+                       gpointer             user_data,
+                       GError             **error)
+{
+  TemplateParseData *state = user_data;
+
+  if (state->done) return;
+  
+  g_string_append_len (state->xml, text, text_len);
+}
+
+static gchar *
+extract_template (const gchar *buffer, const gchar *class_name, const gchar *class_id)
+{
+  GMarkupParser parser = { extract_template_start_element, extract_template_end_element, extract_template_text };
+  TemplateParseData state = { class_name, class_id, FALSE, FALSE, g_string_new ("")};
+  GMarkupParseContext *context;
+
+  context = g_markup_parse_context_new (&parser,
+                                        G_MARKUP_TREAT_CDATA_AS_TEXT |
+                                        G_MARKUP_PREFIX_ERROR_POSITION,
+                                        &state, NULL);
+
+  g_markup_parse_context_parse (context, buffer, -1, NULL);
+  g_markup_parse_context_end_parse (context, NULL);
+  g_markup_parse_context_free (context);
+
+  if (state.done)
+    {
+      gchar *retval = state.xml->str;
+      g_string_free (state.xml, FALSE);
+      g_file_set_contents ("/tmp/a.dump", retval, -1, NULL);
+      return retval; 
+    }
+
+  g_string_free (state.xml, TRUE);
+  return NULL;
+}
+
+typedef struct
+{
+  GTypeInfo *info;
+  gchar *tmpl;
+  gchar *id;
+} TmplClassData;
+
+static void
+composite_template_derived_class_init (gpointer g_class, gpointer class_data)
+{
+  TmplClassData *data = class_data;
+  gtk_container_class_set_template_from_string (g_class, data->tmpl, data->id);
+}
+
+static GType
+create_inline_type (GType parent_type,
+                    const gchar *class_name,
+                    const gchar *class_id,
+                    const gchar *template_xml)
+{
+  TmplClassData *tmpl;
+  GTypeQuery query;
+  GTypeInfo *info;
+
+  g_type_query (parent_type, &query);
+
+  tmpl = g_new0 (TmplClassData, 1);
+  tmpl->info = info = g_new0 (GTypeInfo, 1);
+  tmpl->tmpl = extract_template (template_xml, class_name, class_id);
+  tmpl->id = g_strdup (class_id);
+
+  info->class_size = query.class_size;
+  info->class_init = composite_template_derived_class_init;
+  info->class_data = tmpl; /* Let it leak! */
+  info->instance_size = query.instance_size;
+
+  return g_type_register_static (parent_type, class_name, info, 0);
+}
+
 static void
 parse_template (ParserData   *data,
                 const gchar  *element_name,
@@ -766,6 +917,27 @@ parse_template (ParserData   *data,
       state_push (data, object_info);
 
       parser_add_object_id (data, object_info->id, error);
+    }
+  else if (parent_class)
+    {
+      GType parent_type;
+
+      if (g_type_from_name (class_name))
+        {
+          error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
+                         element_name, "template class '%s' already registered", class_name);
+          return;
+        }
+
+      if (!(parent_type = gtk_builder_get_type_from_name (data->builder, parent_class)))
+        {
+          error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
+                         element_name, "invalid parent class type found '%s'", parent_class);
+          return;
+        }
+
+      /* Generate inline type */
+      create_inline_type (parent_type, class_name, id, data->buffer);
     }
 }
 
@@ -1308,6 +1480,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   domain = gtk_builder_get_translation_domain (builder);
 
   data = g_new0 (ParserData, 1);
+  data->buffer = buffer;
   data->builder = builder;
   data->filename = filename;
   data->domain = g_strdup (domain);

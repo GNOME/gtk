@@ -91,6 +91,7 @@ typedef struct {
 } SubParser;
 
 typedef struct {
+  const gchar *buffer;
   const gchar *last_element;
   GtkBuilder *builder;
   gchar *domain;
@@ -163,5 +164,8 @@ void      _gtk_builder_menu_start (ParserData   *parser_data,
 void      _gtk_builder_menu_end   (ParserData  *parser_data);
 
 const gchar * _gtk_builder_object_get_name (GObject *object);
+
+void  _gtk_builder_set_ignore_type (GtkBuilder *builder, GType ignore_type);
+GType _gtk_builder_get_ignore_type (GtkBuilder *builder);
 
 #endif /* __GTK_BUILDER_PRIVATE_H__ */
