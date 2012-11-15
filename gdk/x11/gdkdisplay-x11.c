@@ -1108,18 +1108,27 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
           guint32 d3 = xevent->xclient.data.l[3];
 
           guint64 serial = ((guint64)d0 << 32) | d1;
+          gint64 frame_drawn_time = ((guint64)d2 << 32) | d3;
+          gint64 refresh_interval, presentation_time;
 
           GdkFrameClock *clock = gdk_window_get_frame_clock (event->any.window);
           GdkFrameTimings *timings = find_frame_timings (clock, serial);
 
           if (timings)
-            gdk_frame_timings_set_drawn_time (timings, ((guint64)d2 << 32) | d3);
+            gdk_frame_timings_set_drawn_time (timings, frame_drawn_time);
 
           if (window_impl->toplevel->frame_pending)
             {
               window_impl->toplevel->frame_pending = FALSE;
               gdk_frame_clock_thaw (clock);
             }
+
+          gdk_frame_clock_get_refresh_info (clock,
+                                            frame_drawn_time,
+                                            &refresh_interval,
+                                            &presentation_time);
+          if (presentation_time != 0)
+            window_impl->toplevel->throttled_presentation_time = presentation_time + refresh_interval;
         }
 
       return GDK_FILTER_REMOVE;

@@ -156,6 +156,10 @@ struct _GdkToplevelX11
 				 * ConfigureNotify
 				 */
   gint64 current_counter_value;
+
+  /* After a _NET_WM_FRAME_DRAWN message, this is the soonest that we think
+   * frame after will be presented */
+  gint64 throttled_presentation_time;
 #endif
 };
 

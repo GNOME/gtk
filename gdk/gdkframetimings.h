@@ -62,6 +62,10 @@ gint64           gdk_frame_timings_get_refresh_interval  (GdkFrameTimings *timin
 void             gdk_frame_timings_set_refresh_interval  (GdkFrameTimings *timings,
                                                           gint64           refresh_interval);
 
+gint64           gdk_frame_timings_get_predicted_presentation_time (GdkFrameTimings *timings);
+void             gdk_frame_timings_set_predicted_presentation_time (GdkFrameTimings *timings,
+                                                                    gint64           predicted_presentation_time);
+
 G_END_DECLS
 
 #endif /* __GDK_FRAME_TIMINGS_H__ */
