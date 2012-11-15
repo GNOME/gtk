@@ -1825,9 +1825,12 @@ gtk_css_provider_propagate_error (GtkCssProvider  *provider,
     return;
 
   *propagate_to = g_error_copy (error);
-  s = _gtk_css_section_to_string (section);
-  g_prefix_error (propagate_to, "%s", s);
-  g_free (s);
+  if (section)
+    {
+      s = _gtk_css_section_to_string (section);
+      g_prefix_error (propagate_to, "%s", s);
+      g_free (s);
+    }
 }
 
 static gboolean
