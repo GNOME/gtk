@@ -154,6 +154,7 @@ _gdk_frame_history_debug_print (GdkFrameHistory *history,
   gint64 frame_end_time = _gdk_frame_timings_get_frame_end_time (timings);
   gint64 frame_time = gdk_frame_timings_get_frame_time (timings);
   gint64 presentation_time = gdk_frame_timings_get_presentation_time (timings);
+  gint64 predicted_presentation_time = gdk_frame_timings_get_predicted_presentation_time (timings);
   gint64 refresh_interval = gdk_frame_timings_get_refresh_interval (timings);
   gint64 previous_frame_time = 0;
   gboolean slept_before = gdk_frame_timings_get_slept_before (timings);
@@ -177,6 +178,8 @@ _gdk_frame_history_debug_print (GdkFrameHistory *history,
     g_print (" frame_end=%-4.1f", (frame_end_time - frame_time) / 1000.);
   if (presentation_time != 0)
     g_print (" present=%-4.1f", (presentation_time - frame_time) / 1000.);
+  if (predicted_presentation_time != 0)
+    g_print (" predicted=%-4.1f", (predicted_presentation_time - frame_time) / 1000.);
   if (refresh_interval != 0)
     g_print (" refresh_interval=%-4.1f", refresh_interval / 1000.);
   g_print ("\n");

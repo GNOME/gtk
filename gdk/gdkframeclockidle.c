@@ -204,7 +204,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
 {
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
-  if (priv->freeze_count == 0)
+  if (priv->freeze_count == 0 && priv->requested != 0)
     {
       guint min_interval = 0;
 
@@ -238,6 +238,23 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
           gdk_frame_clock_frame_requested (GDK_FRAME_CLOCK (clock_idle));
         }
     }
+}
+
+static gint64
+compute_min_next_frame_time (GdkFrameClockIdle *clock_idle,
+                             gint64             last_frame_time)
+{
+  gint64 presentation_time;
+  gint64 refresh_interval;
+
+  gdk_frame_clock_get_refresh_info (GDK_FRAME_CLOCK (clock_idle),
+                                    last_frame_time,
+                                    &refresh_interval, &presentation_time);
+
+  if (presentation_time == 0)
+    return last_frame_time + refresh_interval;
+  else
+    return presentation_time + refresh_interval / 2;
 }
 
 static gboolean
@@ -277,6 +294,7 @@ gdk_frame_clock_paint_idle (void *data)
 
   priv->paint_idle_id = 0;
   priv->in_paint_idle = TRUE;
+  priv->min_next_frame_time = 0;
 
   skip_to_resume_events =
     (priv->requested & ~(GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS | GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS)) == 0;
@@ -403,18 +421,15 @@ gdk_frame_clock_paint_idle (void *data)
 
   priv->in_paint_idle = FALSE;
 
-  if (priv->freeze_count == 0 && priv->requested != 0)
+  /* If there is throttling in the backend layer, then we'll do another
+   * update as soon as the backend unthrottles (if there is work to do),
+   * otherwise we need to figure when the next frame should be.
+   */
+  if (priv->freeze_count == 0)
     {
-      /* We need to start over again immediately - this implies that there is no
-       * throttling at the backend layer, so we need to back-off ourselves.
-       */
-      gdk_flush ();
-      priv->min_next_frame_time = priv->frame_time + FRAME_INTERVAL;
+      priv->min_next_frame_time = compute_min_next_frame_time (clock_idle,
+                                                               priv->frame_time);
       maybe_start_idle (clock_idle);
-    }
-  else
-    {
-      priv->min_next_frame_time = 0;
     }
 
   if (priv->freeze_count == 0)

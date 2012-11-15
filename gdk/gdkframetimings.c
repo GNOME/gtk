@@ -29,6 +29,7 @@ struct _GdkFrameTimings
   gint64 drawn_time;
   gint64 presentation_time;
   gint64 refresh_interval;
+  gint64 predicted_presentation_time;
 
 #ifdef G_ENABLE_DEBUG
   gint64 layout_start_time;
@@ -185,6 +186,23 @@ gdk_frame_timings_set_presentation_time (GdkFrameTimings *timings,
   g_return_if_fail (timings != NULL);
 
   timings->presentation_time = presentation_time;
+}
+
+gint64
+gdk_frame_timings_get_predicted_presentation_time (GdkFrameTimings *timings)
+{
+  g_return_val_if_fail (timings != NULL, 0);
+
+  return timings->predicted_presentation_time;
+}
+
+void
+gdk_frame_timings_set_predicted_presentation_time (GdkFrameTimings *timings,
+                                                   gint64           predicted_presentation_time)
+{
+  g_return_if_fail (timings != NULL);
+
+  timings->predicted_presentation_time = predicted_presentation_time;
 }
 
 gint64

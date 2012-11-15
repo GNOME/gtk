@@ -78,7 +78,7 @@ struct _GdkFrameClockInterface
 {
   GTypeInterface		   base_iface;
 
-  guint64  (* get_frame_time)      (GdkFrameClock *clock);
+  guint64  (* get_frame_time)            (GdkFrameClock *clock);
 
   void               (* request_phase) (GdkFrameClock      *clock,
                                         GdkFrameClockPhase  phase);
@@ -102,7 +102,7 @@ struct _GdkFrameClockInterface
 
 GType    gdk_frame_clock_get_type             (void) G_GNUC_CONST;
 
-guint64  gdk_frame_clock_get_frame_time      (GdkFrameClock *clock);
+guint64  gdk_frame_clock_get_frame_time            (GdkFrameClock *clock);
 
 void               gdk_frame_clock_request_phase (GdkFrameClock      *clock,
                                                   GdkFrameClockPhase  phase);
@@ -116,6 +116,13 @@ GdkFrameHistory *gdk_frame_clock_get_history (GdkFrameClock *clock);
 /* Convenience API */
 void  gdk_frame_clock_get_frame_time_val (GdkFrameClock  *clock,
                                           GTimeVal       *timeval);
+
+void gdk_frame_clock_get_refresh_info (GdkFrameClock *clock,
+                                       gint64         base_time,
+                                       gint64        *refresh_interval_return,
+                                       gint64        *presentation_time_return);
+
+GdkFrameTimings *gdk_frame_clock_get_current_frame_timings (GdkFrameClock *clock);
 
 /* Signal emitters (used in frame clock implementations) */
 void     gdk_frame_clock_frame_requested     (GdkFrameClock *clock);

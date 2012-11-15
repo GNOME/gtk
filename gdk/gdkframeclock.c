@@ -378,3 +378,76 @@ gdk_frame_clock_frame_requested (GdkFrameClock *clock)
   g_signal_emit (G_OBJECT (clock),
                  signals[FRAME_REQUESTED], 0);
 }
+
+GdkFrameTimings *
+gdk_frame_clock_get_current_frame_timings (GdkFrameClock *clock)
+{
+  GdkFrameHistory *history;
+  gint64 frame_counter;
+
+  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), 0);
+
+  history = gdk_frame_clock_get_history (clock);
+  frame_counter = gdk_frame_history_get_frame_counter (history);
+  return gdk_frame_history_get_timings (history, frame_counter);
+}
+
+
+#define DEFAULT_REFRESH_INTERVAL 16667 /* 16.7ms (1/60th second) */
+#define MAX_HISTORY_AGE 150000         /* 150ms */
+
+void
+gdk_frame_clock_get_refresh_info (GdkFrameClock *clock,
+                                  gint64         base_time,
+                                  gint64        *refresh_interval_return,
+                                  gint64        *presentation_time_return)
+{
+  GdkFrameHistory *history;
+  gint64 frame_counter;
+
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
+
+  history = gdk_frame_clock_get_history (clock);
+  frame_counter = gdk_frame_history_get_frame_counter (history);
+
+  if (presentation_time_return)
+    *presentation_time_return = 0;
+  if (refresh_interval_return)
+    *refresh_interval_return = DEFAULT_REFRESH_INTERVAL;
+
+  while (TRUE)
+    {
+      GdkFrameTimings *timings = gdk_frame_history_get_timings (history, frame_counter);
+      gint64 presentation_time;
+      gint64 refresh_interval;
+
+      if (timings == NULL)
+        return;
+
+      refresh_interval = gdk_frame_timings_get_refresh_interval (timings);
+      presentation_time = gdk_frame_timings_get_presentation_time (timings);
+
+      if (presentation_time != 0)
+        {
+          if (presentation_time > base_time - MAX_HISTORY_AGE &&
+              presentation_time_return)
+            {
+              if (refresh_interval == 0)
+                refresh_interval = DEFAULT_REFRESH_INTERVAL;
+
+              if (refresh_interval_return)
+                *refresh_interval_return = refresh_interval;
+
+              while (presentation_time < base_time)
+                presentation_time += refresh_interval;
+
+              if (presentation_time_return)
+                *presentation_time_return = presentation_time;
+            }
+
+          return;
+        }
+
+      frame_counter--;
+    }
+}

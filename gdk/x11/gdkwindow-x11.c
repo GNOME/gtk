@@ -278,6 +278,58 @@ unhook_surface_changed (GdkWindow *window)
 }
 
 static void
+gdk_x11_window_predict_presentation_time (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+  GdkFrameClock *clock;
+  GdkFrameTimings *timings;
+  gint64 frame_time;
+  gint64 presentation_time;
+  gint64 refresh_interval;
+  gboolean slept_before;
+
+  if (!WINDOW_IS_TOPLEVEL (window))
+    return;
+
+  clock = gdk_window_get_frame_clock (window);
+
+  timings = gdk_frame_clock_get_current_frame_timings (clock);
+  frame_time = gdk_frame_timings_get_frame_time (timings);
+  slept_before = gdk_frame_timings_get_slept_before (timings);
+
+  gdk_frame_clock_get_refresh_info (clock,
+                                    frame_time,
+                                    &refresh_interval, &presentation_time);
+
+  if (presentation_time != 0)
+    {
+      if (slept_before)
+        {
+          presentation_time += refresh_interval;
+        }
+      else
+        {
+          if (presentation_time < frame_time + refresh_interval / 2)
+            presentation_time += refresh_interval;
+        }
+    }
+  else
+    {
+      if (slept_before)
+        presentation_time = frame_time + refresh_interval + refresh_interval / 2;
+      else
+        presentation_time = frame_time + refresh_interval;
+    }
+
+  if (presentation_time < impl->toplevel->throttled_presentation_time)
+    presentation_time = impl->toplevel->throttled_presentation_time;
+
+  gdk_frame_timings_set_predicted_presentation_time (timings,
+                                                     presentation_time);
+
+}
+
+static void
 gdk_x11_window_begin_frame (GdkWindow *window)
 {
   GdkWindowImplX11 *impl;
@@ -299,8 +351,6 @@ static void
 gdk_x11_window_end_frame (GdkWindow *window)
 {
   GdkFrameClock *clock;
-  GdkFrameHistory *history;
-  gint64 frame_counter;
   GdkFrameTimings *timings;
   GdkWindowImplX11 *impl;
 
@@ -314,9 +364,7 @@ gdk_x11_window_end_frame (GdkWindow *window)
     return;
 
   clock = gdk_window_get_frame_clock (window);
-  history = gdk_frame_clock_get_history (clock);
-  frame_counter = gdk_frame_history_get_frame_counter (history);
-  timings = gdk_frame_history_get_timings (history, frame_counter);
+  timings = gdk_frame_clock_get_current_frame_timings (clock);
 
   impl->toplevel->in_frame = FALSE;
 
@@ -880,6 +928,7 @@ static void
 on_frame_clock_before_paint (GdkFrameClock *clock,
                              GdkWindow     *window)
 {
+  gdk_x11_window_predict_presentation_time (window);
   gdk_x11_window_begin_frame (window);
 }
 
