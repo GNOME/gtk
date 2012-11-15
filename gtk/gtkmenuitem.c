@@ -1378,7 +1378,7 @@ gtk_menu_item_activate (GtkMenuItem *menu_item)
 /**
  * gtk_menu_item_toggle_size_request:
  * @menu_item: the menu item
- * @requisition: the requisition to use as signal data.
+ * @requisition: (inout): the requisition to use as signal data.
  *
  * Emits the #GtkMenuItem::toggle-size-request signal on the given item.
  */
