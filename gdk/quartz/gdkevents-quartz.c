@@ -455,19 +455,34 @@ get_window_point_from_screen_point (GdkWindow *window,
   *y = private->height - point.y;
 }
 
+static gboolean
+is_mouse_button_press_event (NSEventType type)
+{
+  switch (type)
+    {
+      case NSLeftMouseDown:
+      case NSRightMouseDown:
+      case NSOtherMouseDown:
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static GdkWindow *
 get_toplevel_from_ns_event (NSEvent *nsevent,
                             NSPoint *screen_point,
                             gint    *x,
                             gint    *y)
 {
-  GdkWindow *toplevel;
+  GdkWindow *toplevel = NULL;
 
   if ([nsevent window])
     {
       GdkQuartzView *view;
       GdkWindowObject *private;
-      NSPoint point;
+      NSPoint point, view_point;
+      NSRect view_frame;
 
       view = (GdkQuartzView *)[[nsevent window] contentView];
 
@@ -475,16 +490,56 @@ get_toplevel_from_ns_event (NSEvent *nsevent,
       private = GDK_WINDOW_OBJECT (toplevel);
 
       point = [nsevent locationInWindow];
-      *screen_point = [[nsevent window] convertBaseToScreen:point];
+      view_point = [view convertPoint:point fromView:nil];
+      view_frame = [view frame];
 
-      *x = point.x;
-      *y = private->height - point.y;
+      /* NSEvents come in with a window set, but with window coordinates
+       * out of window bounds. For e.g. moved events this is fine, we use
+       * this information to properly handle enter/leave notify and motion
+       * events. For mouse button press/release, we want to avoid forwarding
+       * these events however, because the window they relate to is not the
+       * window set in the event. This situation appears to occur when button
+       * presses come in just before (or just after?) a window is resized and
+       * also when a button press occurs on the OS X window titlebar.
+       *
+       * By setting toplevel to NULL, we do another attempt to get the right
+       * toplevel window below.
+       */
+      if (is_mouse_button_press_event ([nsevent type]) &&
+          (view_point.x < view_frame.origin.x ||
+           view_point.x >= view_frame.origin.x + view_frame.size.width ||
+           view_point.y < view_frame.origin.y ||
+           view_point.y >= view_frame.origin.y + view_frame.size.height))
+        {
+          toplevel = NULL;
+
+          /* This is a hack for button presses to break all grabs. E.g. if
+           * a menu is open and one clicks on the title bar (or anywhere
+           * out of window bounds), we really want to pop down the menu (by
+           * breaking the grabs) before OS X handles the action of the title
+           * bar button.
+           *
+           * Because we cannot ingest this event into GDK, we have to do it
+           * here, not very nice.
+           */
+          _gdk_quartz_events_break_all_grabs (get_time_from_ns_event (nsevent));
+        }
+      else
+        {
+          *screen_point = [[nsevent window] convertBaseToScreen:point];
+
+          *x = point.x;
+          *y = private->height - point.y;
+        }
     }
-  else
+
+  if (!toplevel)
     {
       /* Fallback used when no NSWindow set.  This happens e.g. when
        * we allow motion events without a window set in gdk_event_translate()
        * that occur immediately after the main menu bar was clicked/used.
+       * This fallback will not return coordinates contained in a window's
+       * titlebar.
        */
       *screen_point = [NSEvent mouseLocation];
       toplevel = find_toplevel_under_pointer (_gdk_display,
@@ -649,6 +704,19 @@ find_toplevel_under_pointer (GdkDisplay *display,
   if (toplevel && WINDOW_IS_TOPLEVEL (toplevel))
     get_window_point_from_screen_point (toplevel, screen_point, x, y);
 
+  if (toplevel)
+    {
+      /* If the coordinates are out of window bounds, this toplevel is not
+       * under the pointer and we thus return NULL. This can occur when
+       * toplevel under pointer has not yet been updated due to a very recent
+       * window resize. Alternatively, we should no longer be relying on
+       * the toplevel_under_pointer value which is maintained in gdkwindow.c.
+       */
+      GdkWindowObject *private = GDK_WINDOW_OBJECT (toplevel);
+      if (*x < 0 || *y < 0 || *x >= private->width || *y >= private->height)
+        return NULL;
+    }
+
   return toplevel;
 }
 
@@ -670,6 +738,8 @@ find_window_for_ns_event (NSEvent *nsevent,
   view = (GdkQuartzView *)[[nsevent window] contentView];
 
   toplevel = get_toplevel_from_ns_event (nsevent, &screen_point, x, y);
+  if (!toplevel)
+    return NULL;
   _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, x_root, y_root);
 
   event_type = [nsevent type];
