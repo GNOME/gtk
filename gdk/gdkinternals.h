@@ -82,7 +82,8 @@ typedef enum {
   GDK_DEBUG_MULTIHEAD     = 1 <<  7,
   GDK_DEBUG_XINERAMA      = 1 <<  8,
   GDK_DEBUG_DRAW          = 1 <<  9,
-  GDK_DEBUG_EVENTLOOP     = 1 << 10
+  GDK_DEBUG_EVENTLOOP     = 1 << 10,
+  GDK_DEBUG_FRAMES        = 1 << 11
 } GdkDebugFlag;
 
 typedef enum {
@@ -428,6 +429,26 @@ cairo_surface_t * _gdk_offscreen_window_create_surface (GdkWindow *window,
                                                         gint       width,
                                                         gint       height);
 
+/********************************
+ *  Debug-only frame statistics *
+ ********************************/
+
+#ifdef G_ENABLE_DEBUG
+
+gint64           _gdk_frame_timings_get_layout_start_time (GdkFrameTimings *timings);
+void             _gdk_frame_timings_set_layout_start_time (GdkFrameTimings *timings,
+                                                           gint64           layout_start_time);
+gint64           _gdk_frame_timings_get_paint_start_time (GdkFrameTimings *timings);
+void             _gdk_frame_timings_set_paint_start_time (GdkFrameTimings *timings,
+                                                          gint64           paint_time);
+gint64           _gdk_frame_timings_get_frame_end_time  (GdkFrameTimings *timings);
+void             _gdk_frame_timings_set_frame_end_time  (GdkFrameTimings *timings,
+                                                         gint64           frame_end_time);
+
+void             _gdk_frame_history_debug_print         (GdkFrameHistory *history,
+                                                         GdkFrameTimings *timings);
+
+#endif /* G_ENABLE_DEBUG */
 
 G_END_DECLS
 

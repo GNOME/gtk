@@ -30,6 +30,12 @@ struct _GdkFrameTimings
   gint64 presentation_time;
   gint64 refresh_interval;
 
+#ifdef G_ENABLE_DEBUG
+  gint64 layout_start_time;
+  gint64 paint_start_time;
+  gint64 frame_end_time;
+#endif /* G_ENABLE_DEBUG */
+
   guint complete : 1;
   guint slept_before : 1;
 };
@@ -197,3 +203,57 @@ gdk_frame_timings_set_refresh_interval (GdkFrameTimings *timings,
 
   timings->refresh_interval = refresh_interval;
 }
+
+#ifdef G_ENABLE_DEBUG
+gint64
+_gdk_frame_timings_get_layout_start_time (GdkFrameTimings *timings)
+{
+  g_return_val_if_fail (timings != NULL, 0);
+
+  return timings->layout_start_time;
+}
+
+void
+_gdk_frame_timings_set_layout_start_time (GdkFrameTimings *timings,
+                                          gint64           layout_start_time)
+{
+  g_return_if_fail (timings != NULL);
+
+  timings->layout_start_time = layout_start_time;
+}
+
+gint64
+_gdk_frame_timings_get_paint_start_time (GdkFrameTimings *timings)
+{
+  g_return_val_if_fail (timings != NULL, 0);
+
+  return timings->paint_start_time;
+}
+
+void
+_gdk_frame_timings_set_paint_start_time (GdkFrameTimings *timings,
+                                         gint64           paint_start_time)
+{
+  g_return_if_fail (timings != NULL);
+
+  timings->paint_start_time = paint_start_time;
+}
+
+gint64
+_gdk_frame_timings_get_frame_end_time (GdkFrameTimings *timings)
+{
+  g_return_val_if_fail (timings != NULL, 0);
+
+  return timings->frame_end_time;
+}
+
+void
+_gdk_frame_timings_set_frame_end_time (GdkFrameTimings *timings,
+                                       gint64           frame_end_time)
+{
+  g_return_if_fail (timings != NULL);
+
+  timings->frame_end_time = frame_end_time;
+}
+
+#endif /* G_ENABLE_DEBUG */
