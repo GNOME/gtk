@@ -289,11 +289,11 @@ gtk_application_startup_x11 (GtkApplication *application)
 static void
 gtk_application_shutdown_x11 (GtkApplication *application)
 {
-  application->priv->session_bus = NULL;
-  application->priv->object_path = NULL;
-
   gtk_application_set_app_menu_x11 (application, NULL);
   gtk_application_set_menubar_x11 (application, NULL);
+
+  application->priv->session_bus = NULL;
+  application->priv->object_path = NULL;
 
   g_clear_object (&application->priv->sm_proxy);
   g_clear_object (&application->priv->client_proxy);
