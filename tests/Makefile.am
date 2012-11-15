@@ -30,6 +30,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	simple				\
 	flicker				\
 	print-editor			\
+	video-timer			\
 	testaccel			\
 	testadjustsize			\
 	testappchooser			\
@@ -156,6 +157,7 @@ flicker_DEPENDENCIES = $(TEST_DEPS)
 motion_compression_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
+video_timer_DEPENDENCIES = $(TEST_DEPS)
 testheightforwidth_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
@@ -256,6 +258,11 @@ testlogout_DEPENDENCIES = $(TEST_DEPS)
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
 	variable.c		\
+	variable.h
+
+video_timer_SOURCES = 	\
+	video-timer.c	\
+	variable.c	\
 	variable.h
 
 testboxcss_SOURCES =	\
