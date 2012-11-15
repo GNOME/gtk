@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gdkframehistory.h"
+#include "gdkinternals.h"
 
 #define FRAME_HISTORY_MAX_LENGTH 16
 
@@ -141,3 +142,43 @@ gdk_frame_history_get_last_complete (GdkFrameHistory *history)
 
   return NULL;
 }
+
+#ifdef G_ENABLE_DEBUG
+void
+_gdk_frame_history_debug_print (GdkFrameHistory *history,
+                                GdkFrameTimings *timings)
+{
+  gint64 frame_counter = gdk_frame_timings_get_frame_counter (timings);
+  gint64 layout_start_time = _gdk_frame_timings_get_layout_start_time (timings);
+  gint64 paint_start_time = _gdk_frame_timings_get_paint_start_time (timings);
+  gint64 frame_end_time = _gdk_frame_timings_get_frame_end_time (timings);
+  gint64 frame_time = gdk_frame_timings_get_frame_time (timings);
+  gint64 presentation_time = gdk_frame_timings_get_presentation_time (timings);
+  gint64 refresh_interval = gdk_frame_timings_get_refresh_interval (timings);
+  gint64 previous_frame_time = 0;
+  gboolean slept_before = gdk_frame_timings_get_slept_before (timings);
+  GdkFrameTimings *previous_timings = gdk_frame_history_get_timings (history,
+                                                                     frame_counter - 1);
+
+  if (previous_timings != NULL)
+    previous_frame_time = gdk_frame_timings_get_frame_time (previous_timings);
+
+  g_print ("%5" G_GINT64_FORMAT ":", frame_counter);
+  if (previous_frame_time != 0)
+    {
+      g_print (" interval=%-4.1f", (frame_time - previous_frame_time) / 1000.);
+      g_print (slept_before ?  " (sleep)" : "        ");
+    }
+  if (layout_start_time != 0)
+    g_print (" layout_start=%-4.1f", (layout_start_time - frame_time) / 1000.);
+  if (paint_start_time != 0)
+    g_print (" paint_start=%-4.1f", (paint_start_time - frame_time) / 1000.);
+  if (frame_end_time != 0)
+    g_print (" frame_end=%-4.1f", (frame_end_time - frame_time) / 1000.);
+  if (presentation_time != 0)
+    g_print (" present=%-4.1f", (presentation_time - frame_time) / 1000.);
+  if (refresh_interval != 0)
+    g_print (" refresh_interval=%-4.1f", refresh_interval / 1000.);
+  g_print ("\n");
+}
+#endif /* G_ENABLE_DEBUG */

@@ -138,7 +138,8 @@ static const GDebugKey gdk_debug_keys[] = {
   {"multihead",     GDK_DEBUG_MULTIHEAD},
   {"xinerama",      GDK_DEBUG_XINERAMA},
   {"draw",          GDK_DEBUG_DRAW},
-  {"eventloop",     GDK_DEBUG_EVENTLOOP}
+  {"eventloop",     GDK_DEBUG_EVENTLOOP},
+  {"frames",        GDK_DEBUG_FRAMES}
 };
 
 static gboolean

@@ -26,6 +26,7 @@
 
 #include "config.h"
 
+#include "gdkinternals.h"
 #include "gdkframeclockidle.h"
 #include "gdk.h"
 
@@ -271,12 +272,20 @@ gdk_frame_clock_paint_idle (void *data)
   GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
   gboolean skip_to_resume_events;
+  GdkFrameTimings *timings = NULL;
+  gint64 frame_counter = 0;
 
   priv->paint_idle_id = 0;
   priv->in_paint_idle = TRUE;
 
   skip_to_resume_events =
     (priv->requested & ~(GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS | GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS)) == 0;
+
+  if (priv->phase > GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT)
+    {
+      frame_counter = gdk_frame_history_get_frame_counter (priv->history);
+      timings = gdk_frame_history_get_timings (priv->history, frame_counter);
+    }
 
   if (!skip_to_resume_events)
     {
@@ -288,13 +297,12 @@ gdk_frame_clock_paint_idle (void *data)
         case GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT:
           if (priv->freeze_count == 0)
             {
-              GdkFrameTimings *timings;
-              gint64 frame_counter;
-
               priv->frame_time = compute_frame_time (clock_idle);
+
               gdk_frame_history_begin_frame (priv->history);
               frame_counter = gdk_frame_history_get_frame_counter (priv->history);
               timings = gdk_frame_history_get_timings (priv->history, frame_counter);
+
               gdk_frame_timings_set_frame_time (timings, priv->frame_time);
 
               gdk_frame_timings_set_slept_before (timings,
@@ -322,6 +330,15 @@ gdk_frame_clock_paint_idle (void *data)
         case GDK_FRAME_CLOCK_PHASE_LAYOUT:
           if (priv->freeze_count == 0)
             {
+#ifdef G_ENABLE_DEBUG
+              if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+                {
+                  if (priv->phase != GDK_FRAME_CLOCK_PHASE_LAYOUT &&
+                      (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT))
+                    _gdk_frame_timings_set_layout_start_time (timings, g_get_monotonic_time ());
+                }
+#endif /* G_ENABLE_DEBUG */
+
               priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
               if (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT)
                 {
@@ -332,6 +349,15 @@ gdk_frame_clock_paint_idle (void *data)
         case GDK_FRAME_CLOCK_PHASE_PAINT:
           if (priv->freeze_count == 0)
             {
+#ifdef G_ENABLE_DEBUG
+              if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+                {
+                  if (priv->phase != GDK_FRAME_CLOCK_PHASE_PAINT &&
+                      (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT))
+                    _gdk_frame_timings_set_paint_start_time (timings, g_get_monotonic_time ());
+                }
+#endif /* G_ENABLE_DEBUG */
+
               priv->phase = GDK_FRAME_CLOCK_PHASE_PAINT;
               if (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT)
                 {
@@ -347,11 +373,24 @@ gdk_frame_clock_paint_idle (void *data)
               /* the ::after-paint phase doesn't get repeated on freeze/thaw,
                */
               priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
+
+#ifdef G_ENABLE_DEBUG
+              if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+                _gdk_frame_timings_set_frame_end_time (timings, g_get_monotonic_time ());
+#endif /* G_ENABLE_DEBUG */
             }
         case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
           ;
         }
     }
+
+#ifdef G_ENABLE_DEBUG
+  if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+    {
+      if (gdk_frame_timings_get_complete (timings))
+        _gdk_frame_history_debug_print (priv->history, timings);
+    }
+#endif /* G_ENABLE_DEBUG */
 
   if (priv->requested & GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS)
     {

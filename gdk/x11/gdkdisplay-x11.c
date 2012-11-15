@@ -1155,6 +1155,11 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
                 gdk_frame_timings_set_refresh_interval (timings, refresh_interval);
 
               gdk_frame_timings_set_complete (timings, TRUE);
+#ifdef G_ENABLE_DEBUG
+              if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+                _gdk_frame_history_debug_print (gdk_frame_clock_get_history (clock),
+                                                timings);
+#endif /* G_ENABLE_DEBUG */
             }
         }
     }
