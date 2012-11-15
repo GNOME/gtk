@@ -225,9 +225,11 @@ void    gtk_container_class_handle_border_width (GtkContainerClass *klass);
 
 /* Class-level functions */
 void    gtk_container_class_set_template_from_string   (GtkContainerClass *container_class,
-                                                        const gchar       *template_string);
+                                                        const gchar       *template_string,
+                                                        const gchar       *template_id);
 void    gtk_container_class_set_template_from_resource (GtkContainerClass *container_class,
-                                                        const gchar       *resource_path);
+                                                        const gchar       *resource_path,
+                                                        const gchar       *template_id);
 void    gtk_container_class_set_connect_func           (GtkContainerClass *container_class,
                                                         GtkBuilderConnectFunc connect_func);
 void    gtk_container_class_declare_internal_child     (GtkContainerClass *container_class,

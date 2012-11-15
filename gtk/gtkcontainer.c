@@ -255,7 +255,8 @@ struct _GtkContainerClassPrivate
 {
   GSList *tmpl_classes;
 
-  const gchar *tmpl;
+  const gchar *tmpl, *tmpl_id;
+  glong tmpl_len;
   GtkContainerTemplateType tmpl_type;
   GtkBuilderConnectFunc connect_func;
   GList *internal_children; /* InternalChildData list */
@@ -442,6 +443,7 @@ gtk_container_base_class_init (GtkContainerClass *class)
                                                   GtkContainerClassPrivate);
 
   priv->tmpl = NULL;
+  priv->tmpl_id = NULL;
   priv->tmpl_classes = NULL;
   priv->connect_func = NULL;
   priv->internal_children = NULL;
@@ -1400,12 +1402,15 @@ gtk_container_class_list_child_properties (GObjectClass *cclass,
 static void
 gtk_container_class_set_template (GtkContainerClass *container_class,
                                   const gchar       *tmpl,
+                                  const gchar       *template_id,
                                   GtkContainerTemplateType tmpl_type)
 {
   GtkContainerClassPrivate *priv = container_class->priv;
   GObjectClass  *oclass;
 
   priv->tmpl = tmpl;
+  priv->tmpl_len = g_utf8_strlen (tmpl, -1);
+  priv->tmpl_id = template_id;
   priv->tmpl_type = tmpl_type;
 
   if (priv->tmpl_classes)
@@ -1430,26 +1435,31 @@ gtk_container_class_set_template (GtkContainerClass *container_class,
  * gtk_container_class_set_template_from_string:
  * @container_class: a #GtkContainerClass
  * @template_string: the #GtkBuilder xml string
+ * @template_id: the template id
  *
  * For type implementations it is recommended to use #gtk_container_class_set_template_from_resource
  * instead of this function.
  * 
- * Since: 3.6
+ * Since: 3.8
  */
 void
 gtk_container_class_set_template_from_string (GtkContainerClass *container_class,
-                                              const gchar       *template_string)
+                                              const gchar       *template_string,
+                                              const gchar       *template_id)
 {
   g_return_if_fail (GTK_IS_CONTAINER_CLASS (container_class));
   g_return_if_fail (template_string && template_string[0]);
+  g_return_if_fail (template_id && template_id[0]);
 
-  gtk_container_class_set_template (container_class, template_string, TMPL_STRING);
+  gtk_container_class_set_template (container_class, template_string,
+                                    template_id, TMPL_STRING);
 }
 
 /**
  * gtk_container_class_set_template_from_resource:
  * @container_class: a #GtkContainerClass
  * @resource_path: the #GtkBuilder xml resource path
+ * @template_id: the template id
  *
  * This is used when implementing new composite widget types
  * to specify a UI template for instances of this type.
@@ -1458,23 +1468,26 @@ gtk_container_class_set_template_from_string (GtkContainerClass *container_class
  * format and are used to implement composite widget types in
  * an automated way. 
  *
- * Instances with an assigned template will have thier children
- * built at object construct time.
+ * Instances with an assigned template will have their children built at object
+ * construct time.
  *
  * The provided xml is expected to have a <template> tag instead of <object> 
- * with id="this" and an extra 'parent' property specifying from with type 
+ * with id=@template_id and an extra 'parent' property specifying from which type 
  * the new class derives from.
  * 
- * Since: 3.6
+ * Since: 3.8
  */
 void
 gtk_container_class_set_template_from_resource (GtkContainerClass *container_class,
-                                                const gchar       *resource_path)
+                                                const gchar       *resource_path,
+                                                const gchar       *template_id)
 {
   g_return_if_fail (GTK_IS_CONTAINER_CLASS (container_class));
   g_return_if_fail (resource_path && resource_path[0]);
+  g_return_if_fail (template_id && template_id[0]);
 
-  gtk_container_class_set_template (container_class, resource_path, TMPL_RESOURCE);
+  gtk_container_class_set_template (container_class, resource_path,
+                                    template_id, TMPL_RESOURCE);
 }
 
 /**
@@ -1668,10 +1681,10 @@ gtk_container_constructor (GType                  type,
       guint ret;
         
       builder = gtk_builder_new ();
-      gtk_builder_expose_object (builder, "this", object);
+      gtk_builder_expose_object (builder, cpriv->tmpl_id, object);
 
       if (cpriv->tmpl_type == TMPL_STRING)
-        ret = gtk_builder_add_from_string (builder, cpriv->tmpl, -1, &error);
+        ret = gtk_builder_add_from_string (builder, cpriv->tmpl, cpriv->tmpl_len, &error);
       else if (cpriv->tmpl_type == TMPL_RESOURCE)
         ret = gtk_builder_add_from_resource (builder, cpriv->tmpl, &error);
       else
