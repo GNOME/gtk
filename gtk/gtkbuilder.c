@@ -1295,8 +1295,8 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
  * @name: the name of the object exposed to the builder
  * @object: the object to expose
  *
- * Add @object to the @builder object pool so it can be references just like any
- * other object buiolt by builder.
+ * Add @object to the @builder object pool so it can be referenced just like any
+ * other object built by builder.
  *
  * To make this function even more useful a new special entry point element
  * &lt;template&gt; is defined. It is similar to &lt;object&gt; with the only difference
@@ -1305,23 +1305,30 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
  * function. This way you can change properties and even add children to an
  * external object using builder, not just reference it.
  *
+ * Returns: True if object was exposed.
+ * 
  * Since: 3.8
  **/
-void         
+gboolean
 gtk_builder_expose_object (GtkBuilder    *builder,
                            const gchar   *name,
                            GObject       *object)
 {
   GtkBuilderPrivate *priv;
 
-  g_return_if_fail (GTK_IS_BUILDER (builder));
-  g_return_if_fail (name && name[0]);
-  g_return_if_fail (G_IS_OBJECT (object));
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), FALSE);
+  g_return_val_if_fail (name && name[0], FALSE);
+  g_return_val_if_fail (G_IS_OBJECT (object), FALSE);
 
   priv = builder->priv;
-  
+
+  if (g_hash_table_contains (priv->objects, name))
+    return FALSE;
+    
   object_set_name (object, name);
   g_hash_table_insert (priv->objects, g_strdup (name), g_object_ref (object));
+
+  return TRUE;
 }
 
 
