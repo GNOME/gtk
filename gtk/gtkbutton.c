@@ -2066,15 +2066,19 @@ _gtk_button_set_depressed (GtkButton *button,
 static void
 gtk_button_update_state (GtkButton *button)
 {
-  gboolean depressed;
+  gboolean depressed, touchscreen;
   GtkStateType new_state;
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (button)),
+                "gtk-touchscreen-mode", &touchscreen,
+                NULL);
 
   if (button->activate_timeout)
     depressed = button->depress_on_activate;
   else
     depressed = button->in_button && button->button_down;
 
-  if (button->in_button && (!button->button_down || !depressed))
+  if (!touchscreen && button->in_button && (!button->button_down || !depressed))
     new_state = GTK_STATE_PRELIGHT;
   else
     new_state = depressed ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL;
