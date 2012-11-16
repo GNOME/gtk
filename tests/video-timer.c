@@ -14,9 +14,11 @@ static FrameData *displayed_frame;
 static GtkWidget *window;
 static GList *past_frames;
 static Variable latency_error = VARIABLE_INIT;
+static Variable time_factor_stats = VARIABLE_INIT;
 static int dropped_frames = 0;
 static int n_frames = 0;
 
+static gboolean pll;
 static int fps = 24;
 
 /* Thread-safe frame queue */
@@ -116,16 +118,74 @@ create_frames_thread (gpointer data)
   return NULL;
 }
 
-/* Clock management */
-
+/* Clock management:
+ *
+ * The logic here, which is activated by the --pll argument
+ * demonstrates adjusting the playback rate so that the frames exactly match
+ * when they are displayed both frequency and phase. If there was an
+ * accompanying audio track, you would need to resample the audio to match
+ * the clock.
+ *
+ * The algorithm isn't exactly a PLL - I wrote it first that way, but
+ * it oscillicated before coming into sync and this approach was easier than
+ * fine-tuning the PLL filter.
+ *
+ * A more complicated algorithm could also establish sync when the playback
+ * rate isn't exactly an integral divisor of the VBlank rate, such as 24fps
+ * video on a 60fps display.
+ */
 #define PRE_BUFFER_TIME 500000
 
-static gint64 start_time;
+static gint64 stream_time_base;
+static gint64 clock_time_base;
+static double time_factor = 1.0;
+static double frequency_time_factor = 1.0;
+static double phase_time_factor = 1.0;
 
 static gint64
 stream_time_to_clock_time (gint64 stream_time)
 {
-  return start_time + stream_time + PRE_BUFFER_TIME;
+  return clock_time_base + (stream_time - stream_time_base) * time_factor;
+}
+
+static void
+adjust_clock_for_phase (gint64 frame_clock_time,
+                        gint64 presentation_time)
+{
+  static gint count = 0;
+  static gint64 previous_frame_clock_time;
+  static gint64 previous_presentation_time;
+  gint64 phase = presentation_time - frame_clock_time;
+
+  count++;
+  if (count >= fps) /* Give a second of warmup */
+    {
+      gint64 time_delta = frame_clock_time - previous_frame_clock_time;
+      gint64 previous_phase = previous_presentation_time - previous_frame_clock_time;
+
+      double expected_phase_delta;
+
+      stream_time_base += (frame_clock_time - clock_time_base) / time_factor;
+      clock_time_base = frame_clock_time;
+
+      expected_phase_delta = time_delta * (1 - phase_time_factor);
+
+      /* If the phase is increasing that means the computed clock times are
+       * increasing too slowly. We increase the frequency time factor to compensate,
+       * but decrease the compensation so that it takes effect over 1 second to
+       * avoid jitter */
+      frequency_time_factor += (phase - previous_phase - expected_phase_delta) / (double)time_delta / fps;
+
+      /* We also want to increase or decrease the frequency to bring the phase
+       * into sync. We do that again so that the phase should sync up over 1 seconds
+       */
+      phase_time_factor = 1 + phase / 2000000.;
+
+      time_factor = frequency_time_factor * phase_time_factor;
+    }
+
+  previous_frame_clock_time = frame_clock_time;
+  previous_presentation_time = presentation_time;
 }
 
 /* Drawing */
@@ -189,7 +249,15 @@ collect_old_frames (void)
         }
       else if (gdk_frame_timings_get_complete (timings))
         {
-          gint64 presentation_time = gdk_frame_timings_get_presentation_time (timings);
+          gint64 presentation_time = gdk_frame_timings_get_predicted_presentation_time (timings);
+          gint64 refresh_interval = gdk_frame_timings_get_refresh_interval (timings);
+
+          if (pll &&
+              presentation_time && refresh_interval &&
+              presentation_time > frame_data->clock_time - refresh_interval / 2 &&
+              presentation_time < frame_data->clock_time + refresh_interval / 2)
+            adjust_clock_for_phase (frame_data->clock_time, presentation_time);
+
           if (presentation_time)
             variable_add (&latency_error,
                           presentation_time - frame_data->clock_time);
@@ -222,7 +290,12 @@ print_statistics (void)
       g_print ("latency_error: %g +/- %g\n",
                variable_mean (&latency_error),
                variable_standard_deviation (&latency_error));
+      if (pll)
+        g_print ("playback rate adjustment: %g +/- %g %%\n",
+                 (variable_mean (&time_factor_stats) - 1) * 100,
+                 variable_standard_deviation (&time_factor_stats) * 100);
       variable_reset (&latency_error);
+      variable_reset (&time_factor_stats);
       dropped_frames = 0;
       n_frames = 0;
       last_print_time = now;
@@ -239,8 +312,8 @@ on_update (GdkFrameClock *frame_clock,
   gint64 refresh_interval;
   FrameData *pending_frame;
 
-  if (start_time == 0)
-    start_time = frame_time;
+  if (clock_time_base == 0)
+    clock_time_base = frame_time + PRE_BUFFER_TIME;
 
   gdk_frame_clock_get_refresh_info (frame_clock, frame_time,
                                     &refresh_interval, NULL);
@@ -271,7 +344,9 @@ on_update (GdkFrameClock *frame_clock,
       n_frames++;
       displayed_frame = unqueue_frame ();
       displayed_frame->clock_time = stream_time_to_clock_time (displayed_frame->stream_time);
+
       displayed_frame->frame_counter = gdk_frame_timings_get_frame_counter (timings);
+      variable_add (&time_factor_stats, time_factor);
 
       collect_old_frames ();
       print_statistics ();
@@ -283,6 +358,7 @@ on_update (GdkFrameClock *frame_clock,
 }
 
 static GOptionEntry options[] = {
+  { "pll", 'p', 0, G_OPTION_ARG_NONE, &pll, "Sync frame rate to refresh", NULL },
   { "fps", 'f', 0, G_OPTION_ARG_INT, &fps, "Frame rate", "FPS" },
   { NULL }
 };
