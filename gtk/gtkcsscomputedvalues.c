@@ -604,3 +604,21 @@ _gtk_css_computed_values_cancel_animations (GtkCssComputedValues *values)
   values->animations = NULL;
 }
 
+GtkBitmask *
+_gtk_css_computed_values_compute_dependencies (GtkCssComputedValues *values,
+                                               const GtkBitmask     *parent_changes)
+{
+  GtkBitmask *changes;
+
+  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), _gtk_bitmask_new ());
+
+  changes = _gtk_bitmask_copy (parent_changes);
+  changes = _gtk_bitmask_intersect (changes, values->depends_on_parent);
+  if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_COLOR))
+    changes = _gtk_bitmask_union (changes, values->depends_on_color);
+  if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_FONT_SIZE))
+    changes = _gtk_bitmask_union (changes, values->depends_on_font_size);
+
+  return changes;
+}
+

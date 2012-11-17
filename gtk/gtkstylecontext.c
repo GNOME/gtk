@@ -2955,12 +2955,7 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
       StyleData *data = value;
       GtkBitmask *changes;
 
-      changes = _gtk_bitmask_copy (parent_changes);
-      changes = _gtk_bitmask_intersect (changes, data->store->depends_on_parent);
-      if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_COLOR))
-        changes = _gtk_bitmask_union (changes, data->store->depends_on_color);
-      if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_FONT_SIZE))
-        changes = _gtk_bitmask_union (changes, data->store->depends_on_font_size);
+      changes = _gtk_css_computed_values_compute_dependencies (data->store, parent_changes);
 
       if (!_gtk_bitmask_is_empty (changes))
 	build_properties (context, data->store, info, changes);
@@ -3157,12 +3152,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     }
   else
     {
-      changes = _gtk_bitmask_copy (parent_changes);
-      changes = _gtk_bitmask_intersect (changes, current->store->depends_on_parent);
-      if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_COLOR))
-        changes = _gtk_bitmask_union (changes, current->store->depends_on_color);
-      if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_FONT_SIZE))
-        changes = _gtk_bitmask_union (changes, current->store->depends_on_font_size);
+      changes = _gtk_css_computed_values_compute_dependencies (current->store, parent_changes);
 
       gtk_style_context_update_cache (context, parent_changes);
     }
