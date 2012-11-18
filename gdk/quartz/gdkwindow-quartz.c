@@ -2318,25 +2318,28 @@ gdk_quartz_window_focus (GdkWindow *window,
 static gint
 window_type_hint_to_level (GdkWindowTypeHint hint)
 {
+  /*  the order in this switch statement corresponds to the actual
+   *  stacking order: the first group is top, the last group is bottom
+   */
   switch (hint)
     {
-    case GDK_WINDOW_TYPE_HINT_DOCK:
-    case GDK_WINDOW_TYPE_HINT_UTILITY:
-      return NSFloatingWindowLevel;
+    case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
+    case GDK_WINDOW_TYPE_HINT_COMBO:
+    case GDK_WINDOW_TYPE_HINT_DND:
+    case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+      return NSPopUpMenuWindowLevel;
+
+    case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
+    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+      return NSStatusWindowLevel;
 
     case GDK_WINDOW_TYPE_HINT_MENU: /* Torn-off menu */
     case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: /* Menu from menubar */
       return NSTornOffMenuWindowLevel;
 
-    case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
-    case GDK_WINDOW_TYPE_HINT_TOOLTIP:
-    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
-      return NSStatusWindowLevel;
-
-    case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
-    case GDK_WINDOW_TYPE_HINT_COMBO:
-    case GDK_WINDOW_TYPE_HINT_DND:
-      return NSPopUpMenuWindowLevel;
+    case GDK_WINDOW_TYPE_HINT_DOCK:
+    case GDK_WINDOW_TYPE_HINT_UTILITY:
+      return NSFloatingWindowLevel;
 
     case GDK_WINDOW_TYPE_HINT_NORMAL:  /* Normal toplevel window */
     case GDK_WINDOW_TYPE_HINT_DIALOG:  /* Dialog window */
