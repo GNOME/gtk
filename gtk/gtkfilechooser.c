@@ -1498,10 +1498,18 @@ gtk_file_chooser_get_uri (GtkFileChooser *chooser)
   if (file)
     {
       if (gtk_file_chooser_get_local_only (chooser))
-	  result = file_to_uri_with_native_path (file);
+        {
+           gchar *local = g_file_get_path (file);
+           if (local)
+             {
+               result = g_filename_to_uri (local, NULL, NULL);
+               g_free (local);
+             }
+        }
       else 
+        {
           result = g_file_get_uri (file);
-
+        }
       g_object_unref (file);
     }
 

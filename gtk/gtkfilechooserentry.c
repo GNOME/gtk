@@ -561,7 +561,7 @@ set_completion_folder (GtkFileChooserEntry *chooser_entry,
 {
   if (folder_file &&
       chooser_entry->local_only
-      && !g_file_is_native (folder_file))
+      && !_gtk_file_has_native_path (folder_file))
     folder_file = NULL;
 
   if ((chooser_entry->current_folder_file
