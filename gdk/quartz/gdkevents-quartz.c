@@ -582,7 +582,7 @@ generate_motion_event (GdkWindow *window)
 
   event->any.type = GDK_MOTION_NOTIFY;
   event->motion.window = window;
-  event->motion.time = GDK_CURRENT_TIME;
+  event->motion.time = get_time_from_ns_event ([NSApp currentEvent]);
   event->motion.x = x;
   event->motion.y = y;
   event->motion.x_root = x_root;
