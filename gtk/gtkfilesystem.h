@@ -128,6 +128,9 @@ GdkPixbuf *     _gtk_file_info_render_icon (GFileInfo *info,
 
 gboolean	_gtk_file_info_consider_as_directory (GFileInfo *info);
 
+/* GFile helper functions */
+gboolean	_gtk_file_is_path_not_local (GFile *file);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_SYSTEM_H__ */

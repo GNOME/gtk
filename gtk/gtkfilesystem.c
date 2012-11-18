@@ -1273,3 +1273,17 @@ _gtk_file_info_consider_as_directory (GFileInfo *info)
           type == G_FILE_TYPE_SHORTCUT);
 }
 
+gboolean
+_gtk_file_is_path_not_local (GFile *file)
+{
+  char *local_file_path;
+  gboolean is_not_local;
+
+  /* Don't use is_native(), as we want to support fuse paths if available */
+  local_file_path = g_file_get_path (file);
+  is_not_local = (local_file_path == NULL);
+  g_free (local_file_path);
+
+  return is_not_local;
+}
+
