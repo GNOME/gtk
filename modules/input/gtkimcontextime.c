@@ -354,11 +354,14 @@ gtk_im_context_ime_reset (GtkIMContext *context)
   if (!himc)
     return;
 
-  if (context_ime->preediting && ImmGetOpenStatus (himc))
-    ImmNotifyIME (himc, NI_COMPOSITIONSTR, CPS_CANCEL, 0);
+  if (context_ime->preediting)
+    {
+      if (ImmGetOpenStatus (himc))
+        ImmNotifyIME (himc, NI_COMPOSITIONSTR, CPS_CANCEL, 0);
 
-  context_ime->preediting = FALSE;
-  g_signal_emit_by_name (context, "preedit-changed");
+      context_ime->preediting = FALSE;
+      g_signal_emit_by_name (context, "preedit-changed");
+    }
 
   ImmReleaseContext (hwnd, himc);
 }
